@@ -1,79 +1,101 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=4Xag=EZ=lists.ozlabs.org=openbmc-bounces+openbmc=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E152C56201
-	for <linux-devicetree@archiver.kernel.org>; Thu, 19 Nov 2020 18:40:49 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3976122255
-	for <linux-devicetree@archiver.kernel.org>; Thu, 19 Nov 2020 18:40:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70046C56201
+	for <openbmc@archiver.kernel.org>; Thu, 19 Nov 2020 18:42:14 +0000 (UTC)
+Received: from lists.ozlabs.org (lists.ozlabs.org [203.11.71.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 5416922255
+	for <openbmc@archiver.kernel.org>; Thu, 19 Nov 2020 18:42:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C6mhW7KC"
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727778AbgKSSk2 (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Thu, 19 Nov 2020 13:40:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729640AbgKSSk2 (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Thu, 19 Nov 2020 13:40:28 -0500
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32359C0613D4
-        for <devicetree@vger.kernel.org>; Thu, 19 Nov 2020 10:40:28 -0800 (PST)
-Received: by mail-il1-x141.google.com with SMTP id y18so6223217ilp.13
-        for <devicetree@vger.kernel.org>; Thu, 19 Nov 2020 10:40:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PvBOcBzyg+eaLhpr35x3ip38QjdZlKmVc5mM+8taPHE=;
-        b=C6mhW7KCNFK2+hF2yTFbwgR4Hb2BSiSkENk1iQgAHCifiyZwkapsVC6SULC6UZ5/5Q
-         MuxYOBRSLZ2fOcfQyIMgYaJXGn+LgYjGrkIaQNPr6qyDRYr4ITWlcE0SLbBGZbhJXwwS
-         hWzTlYMWnMHUTXTprJASQTlPO6Pf0h6kpIYdVbDvAqCepDAl3g2S5TVAIoPWPB6wQcLw
-         QhD3yYh6J0USuXo7o3gIYzhPHFpc22mK0CNSwTGssQ405lzyGfS31oq5WZxKiTjJoc70
-         02FuPV42opH7PSClyZSKhr+0bPC71r0TnddDkAKLNpk0xZvUhGR0PGCH13Q7WQBC6aJU
-         AHUg==
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="C6mhW7KC"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5416922255
+Authentication-Results: mail.kernel.org; dmarc=fail (p=reject dis=none) header.from=google.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
+Received: from bilbo.ozlabs.org (lists.ozlabs.org [IPv6:2401:3900:2:1::3])
+	by lists.ozlabs.org (Postfix) with ESMTP id 4CcT762r89zDqnR
+	for <openbmc@archiver.kernel.org>; Fri, 20 Nov 2020 05:42:10 +1100 (AEDT)
+Authentication-Results: lists.ozlabs.org; spf=pass (sender SPF authorized)
+ smtp.mailfrom=google.com (client-ip=2607:f8b0:4864:20::142;
+ helo=mail-il1-x142.google.com; envelope-from=benjaminfair@google.com;
+ receiver=<UNKNOWN>)
+Authentication-Results: lists.ozlabs.org;
+ dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: lists.ozlabs.org; dkim=pass (2048-bit key;
+ unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256
+ header.s=20161025 header.b=C6mhW7KC; dkim-atps=neutral
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com
+ [IPv6:2607:f8b0:4864:20::142])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by lists.ozlabs.org (Postfix) with ESMTPS id 4CcT5J5tsMzDqnR
+ for <openbmc@lists.ozlabs.org>; Fri, 20 Nov 2020 05:40:31 +1100 (AEDT)
+Received: by mail-il1-x142.google.com with SMTP id l12so6305053ilo.1
+ for <openbmc@lists.ozlabs.org>; Thu, 19 Nov 2020 10:40:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=20161025;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=PvBOcBzyg+eaLhpr35x3ip38QjdZlKmVc5mM+8taPHE=;
+ b=C6mhW7KCNFK2+hF2yTFbwgR4Hb2BSiSkENk1iQgAHCifiyZwkapsVC6SULC6UZ5/5Q
+ MuxYOBRSLZ2fOcfQyIMgYaJXGn+LgYjGrkIaQNPr6qyDRYr4ITWlcE0SLbBGZbhJXwwS
+ hWzTlYMWnMHUTXTprJASQTlPO6Pf0h6kpIYdVbDvAqCepDAl3g2S5TVAIoPWPB6wQcLw
+ QhD3yYh6J0USuXo7o3gIYzhPHFpc22mK0CNSwTGssQ405lzyGfS31oq5WZxKiTjJoc70
+ 02FuPV42opH7PSClyZSKhr+0bPC71r0TnddDkAKLNpk0xZvUhGR0PGCH13Q7WQBC6aJU
+ AHUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PvBOcBzyg+eaLhpr35x3ip38QjdZlKmVc5mM+8taPHE=;
-        b=BJuNdSLf4/OtdFAxSCabD+3jV+NKK5Pr2OUKhjytSwoOydBov0fYu4tLFtonrOq7SP
-         XCtutlhtyPrHrfWC6pRGXy1flwa6yDzcjL/QMngmiSMPS00YJl+tlqD7bX2z0VP++jX7
-         /FjzpA7hWdoUIuMYariuDfQHYsOhZhiA/pTSiGwRfx+/Zm/dvDtLMPjlhpXIs8ATeMhs
-         RNLs4yqGnC3+YP9zO4mgzeAHjDJ/f+1ceKknAhn90d5i1/CK1aJ1Vj+H4elvhYMnvqQr
-         QUj07KoCTq7qzjeNVTjkt6oIl1N12WaxpZdk4vAj2R2fssJFAjOY/7a6kjW8r3hoPzmC
-         h+dw==
-X-Gm-Message-State: AOAM5308M1+lIhC/XRakLIKnNDvXXB7b3xYe3na78McOeG4JLiNW9pXf
-        vZnrNZx+3qefoHDzRNu8kP9UuDm3IHAOlX3iEubopQ==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=PvBOcBzyg+eaLhpr35x3ip38QjdZlKmVc5mM+8taPHE=;
+ b=KU7niIP6U88jhVj+1R1t6NdY2Mn6C+mq6run1LAQnHO3YtgW6f+2EbAeoigjGhg0fU
+ vWrFx1atjq2qxsCt1bVEpcx9G8HpqIeN3dk+VXdLXm2pwxgZD9ypzAMCcmqTHYU0DdbU
+ HErFbCedVDJ7E693nzha6SXOXSPDiUDEBA0nU+nnF85IimuCuRl3kSZzRrb4Xy6pUGPF
+ 6gXrQ+D/CxQgMUooYCMEvH3xIuTe+tLEXplsrgAuj5DhLKqJJwv6BdlaKrlPJYVnXKWZ
+ Kev1vWJ0RK39upKIceY2hyxsmrROVgZfozqjntd8XB7L0TucdTIwcUoeo7ZN1+FPWsY5
+ tRVQ==
+X-Gm-Message-State: AOAM5316NJ6ObZmour6+C6jucpMVofwcvHVEkPsauTFZB//ZKLw08egy
+ X2EACNGQPjKSMQ3alhOvI9ndViqWk+Fs2OD5VlKSEA==
 X-Google-Smtp-Source: ABdhPJyxBFnoi5YnxmRXEWi3RyOT8zK9WD++uul35NAXdT0Y4CBYSq0+BgknePDAlzmhd8jRWTJRg0Pw5651ggprPVM=
-X-Received: by 2002:a05:6e02:1348:: with SMTP id k8mr20739743ilr.154.1605811227390;
+X-Received: by 2002:a05:6e02:1348:: with SMTP id
+ k8mr20739743ilr.154.1605811227390; 
  Thu, 19 Nov 2020 10:40:27 -0800 (PST)
 MIME-Version: 1.0
 References: <20201119080002.100342-1-tmaimon77@gmail.com>
 In-Reply-To: <20201119080002.100342-1-tmaimon77@gmail.com>
-From:   Benjamin Fair <benjaminfair@google.com>
-Date:   Thu, 19 Nov 2020 10:39:48 -0800
+From: Benjamin Fair <benjaminfair@google.com>
+Date: Thu, 19 Nov 2020 10:39:48 -0800
 Message-ID: <CADKL2t45q907QGpq9rqjnGgMx=43Gz4RRGbyRLZUozYD0kt-DQ@mail.gmail.com>
 Subject: Re: [PATCH v1] ARM: dts: add Nuvoton NPCM730 device tree
-To:     Tomer Maimon <tmaimon77@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc:     Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
-        olof@lixom.net, arm@kernel.org, soc@kernel.org,
-        avifishman70@gmail.com, Rob Herring <robh+dt@kernel.org>,
-        mark.rutland@arm.com, Nancy Yuen <yuenn@google.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+To: Tomer Maimon <tmaimon77@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20201119183948.HOug4UfIxiT2ep8KZ6G0GfHGk2qr7LqD_asqOyyTyCs@z>
+X-BeenThere: openbmc@lists.ozlabs.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: Development list for OpenBMC <openbmc.lists.ozlabs.org>
+List-Unsubscribe: <https://lists.ozlabs.org/options/openbmc>,
+ <mailto:openbmc-request@lists.ozlabs.org?subject=unsubscribe>
+List-Archive: <http://lists.ozlabs.org/pipermail/openbmc/>
+List-Post: <mailto:openbmc@lists.ozlabs.org>
+List-Help: <mailto:openbmc-request@lists.ozlabs.org?subject=help>
+List-Subscribe: <https://lists.ozlabs.org/listinfo/openbmc>,
+ <mailto:openbmc-request@lists.ozlabs.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: mark.rutland@arm.com, devicetree@vger.kernel.org,
+ Arnd Bergmann <arnd@arndb.de>, avifishman70@gmail.com,
+ OpenBMC Maillist <openbmc@lists.ozlabs.org>, linux-kernel@vger.kernel.org,
+ Rob Herring <robh+dt@kernel.org>, soc@kernel.org, arm@kernel.org,
+ olof@lixom.net
+Errors-To: openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
+Sender: "openbmc"
+ <openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org>
+Message-ID: <20201119183948.ZGXdazSKNfqm3kOQt7Ia-YzVADnmmIjhU9u0mtdux0E@z>
 
 On Thu, 19 Nov 2020 at 00:00, Tomer Maimon <tmaimon77@gmail.com> wrote:
 >
