@@ -1,65 +1,106 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=HoMm=EZ=nuvoton.com=Tomer.Maimon@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 446A3C56201
-	for <soc@archiver.kernel.org>; Wed, 18 Nov 2020 19:33:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2FD2C2D0E4
+	for <soc@archiver.kernel.org>; Thu, 19 Nov 2020 08:34:30 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 018D624248; Wed, 18 Nov 2020 19:33:04 +0000 (UTC)
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id B49F4246B0; Thu, 19 Nov 2020 08:34:30 +0000 (UTC)
+X-Greylist: delayed 2016 seconds by postgrey-1.34 at mail.kernel.org; Thu, 19 Nov 2020 08:34:29 UTC
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 79BB324655
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=Tomer.Maimon@nuvoton.com
+Received: from herzl.nuvoton.co.il (212.199.177.27.static.012.net.il [212.199.177.27])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPSA id C50D1238E6
-	for <soc@kernel.org>; Wed, 18 Nov 2020 19:33:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1605727983;
-	bh=YVRPp5/bWstjMGhwoIJRBLWZxy8EDIE1/NKrQi2o73A=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=zlHG5pqstAhybs5RhNvZqDcG7fWbF5AS47Cnezg4sPSilqiJeqbfg8ykerJjvzaLI
-	 8gJ4mWD6NkCiSvOFEv4jY3BOLCZ0MIi5L1+J4eD205WJrfdyUMFDrUT1O24A73s9KB
-	 k7LX9nxxhd0VF2mAwAtnQch0okGIpczy21ydNHig=
-Received: by mail-ot1-f48.google.com with SMTP id y22so2912338oti.10
-        for <soc@kernel.org>; Wed, 18 Nov 2020 11:33:03 -0800 (PST)
-X-Gm-Message-State: AOAM531o+8O0i4oFIfc2a0RafJPAbGuPhYRzsOM50xfhYCkSPzYqPRJj
-	rBT79PBRRu4kOupkv38ss62lVFg4RwlzF8ykyJQ=
-X-Google-Smtp-Source: ABdhPJzo3AFVt6jZtW8sNaWLI122/DGCiSfq+6hhv9tcsWC8+wk1S+N1ioRqpYxdnSDG1cKbdXaPgRyCfps1LJrQ37Y=
-X-Received: by 2002:a9d:65d5:: with SMTP id z21mr7042049oth.251.1605727983009;
- Wed, 18 Nov 2020 11:33:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20201118183358.itb4xmsbapztzmoq@chatter.i7.local>
-In-Reply-To: <20201118183358.itb4xmsbapztzmoq@chatter.i7.local>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Wed, 18 Nov 2020 20:32:47 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2asxKk7kTk6pJv+DCLm=QKhAVGjoV2+XnhtsVQ3w6AJQ@mail.gmail.com>
-Message-ID: <CAK8P3a2asxKk7kTk6pJv+DCLm=QKhAVGjoV2+XnhtsVQ3w6AJQ@mail.gmail.com>
-Subject: Re: soc@kernel.org is now on lore
-To: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+	by mail.kernel.org (Postfix) with ESMTPS id 79BB324655;
+	Thu, 19 Nov 2020 08:34:29 +0000 (UTC)
+Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
+	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 0AJ80EK4010231;
+	Thu, 19 Nov 2020 10:00:14 +0200
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+	id 7C18B63A09; Thu, 19 Nov 2020 10:00:14 +0200 (IST)
+From: Tomer Maimon <tmaimon77@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To: joel@jms.id.au, arnd@arndb.de, olof@lixom.net, arm@kernel.org,
+        soc@kernel.org, avifishman70@gmail.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, yuenn@google.com, benjaminfair@google.com
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v1] ARM: dts: add Nuvoton NPCM730 device tree
+Date: Thu, 19 Nov 2020 10:00:02 +0200
+Message-Id: <20201119080002.100342-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.22.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 18, 2020 at 7:33 PM Konstantin Ryabitsev
-<konstantin@linuxfoundation.org> wrote:
->
-> Hi, all:
->
-> I know that nobody requested it, but we're changing how mail is
-> delivered to patchwork and it is now a requirement that all patchwork
-> projects are delivered via lore.kernel.org. So, you get that part for
-> free now. :)
->
-> Assuming this works and everything gets properly delivered, it should
-> initialize the following location:
->
-> https://lore.kernel.org/soc
+Add Nuvoton NPCM730 SoC device tree.
 
-Awesome, thanks a lot! I guess this means that I can now reliable
-combine pwclient (to look for incoming pull requests) with 'b4 pr'
-and 'b4 ty' for applying them without requiring each mail to be
-Cc:linux-arm-kernel.
+The Nuvoton NPCN730 SoC is a part of the
+Nuvoton NPCM7xx SoCs family.
 
-       Arnd
+Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+---
+ arch/arm/boot/dts/nuvoton-npcm730.dtsi | 44 ++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 arch/arm/boot/dts/nuvoton-npcm730.dtsi
+
+diff --git a/arch/arm/boot/dts/nuvoton-npcm730.dtsi b/arch/arm/boot/dts/nuvoton-npcm730.dtsi
+new file mode 100644
+index 000000000000..86ec12ec2b50
+--- /dev/null
++++ b/arch/arm/boot/dts/nuvoton-npcm730.dtsi
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Nuvoton Technology
++
++#include "nuvoton-common-npcm7xx.dtsi"
++
++/ {
++	#address-cells = <1>;
++	#size-cells = <1>;
++	interrupt-parent = <&gic>;
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		enable-method = "nuvoton,npcm750-smp";
++
++		cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a9";
++			clocks = <&clk NPCM7XX_CLK_CPU>;
++			clock-names = "clk_cpu";
++			reg = <0>;
++			next-level-cache = <&l2>;
++		};
++
++		cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a9";
++			clocks = <&clk NPCM7XX_CLK_CPU>;
++			clock-names = "clk_cpu";
++			reg = <1>;
++			next-level-cache = <&l2>;
++		};
++	};
++
++	soc {
++		timer@3fe600 {
++			compatible = "arm,cortex-a9-twd-timer";
++			reg = <0x3fe600 0x20>;
++			interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(2) |
++						  IRQ_TYPE_LEVEL_HIGH)>;
++			clocks = <&clk NPCM7XX_CLK_AHB>;
++		};
++	};
++};
+-- 
+2.22.0
+
