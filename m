@@ -1,28 +1,32 @@
-Return-Path: <SRS0=p3VM=EZ=google.com=benjaminfair@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75987C56201
-	for <soc@archiver.kernel.org>; Thu, 19 Nov 2020 18:40:29 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 1B10D24655; Thu, 19 Nov 2020 18:40:29 +0000 (UTC)
-Received: from mail-il1-f193.google.com (mail-il1-f193.google.com [209.85.166.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9EFF322259
-	for <soc@kernel.org>; Thu, 19 Nov 2020 18:40:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E152C56201
+	for <linux-devicetree@archiver.kernel.org>; Thu, 19 Nov 2020 18:40:49 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 3976122255
+	for <linux-devicetree@archiver.kernel.org>; Thu, 19 Nov 2020 18:40:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
 	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C6mhW7KC"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9EFF322259
-Authentication-Results: mail.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=benjaminfair@google.com
-Received: by mail-il1-f193.google.com with SMTP id y18so6223218ilp.13
-        for <soc@kernel.org>; Thu, 19 Nov 2020 10:40:28 -0800 (PST)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1727778AbgKSSk2 (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Thu, 19 Nov 2020 13:40:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729640AbgKSSk2 (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Thu, 19 Nov 2020 13:40:28 -0500
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32359C0613D4
+        for <devicetree@vger.kernel.org>; Thu, 19 Nov 2020 10:40:28 -0800 (PST)
+Received: by mail-il1-x141.google.com with SMTP id y18so6223217ilp.13
+        for <devicetree@vger.kernel.org>; Thu, 19 Nov 2020 10:40:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -39,31 +43,37 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=PvBOcBzyg+eaLhpr35x3ip38QjdZlKmVc5mM+8taPHE=;
-        b=JIUDEhawoNGIML0NFC6LCXqdLrLzXIBEr8eX0a/cqk3AVqty+8DF8hctKu3j7JEed3
-         sJ4Y9IPZIAenAdQ7MmgpD4HpIBIDVCxgaHUW40HKtTmUjQoDVXkiXSk1jy8F5jR/+Zlv
-         on9dDwzMK65tkR4c6uld1+VqAb/M2bSw2BHuL+3wkCKVMdTa0AHkr//QGogUfwolE5fB
-         FMmbAl4hYTH0NHviDBSnYEPVTehNaV35mmFB7DjDmSXDD+0wipnd+aFwEreJaG+Vm8XO
-         Utw5rSlewU8MhcxLp9aLt6Ysp/WG8mQj7mzTmPLSJLF4VHY4mPmvKvHETugfMJeO3MFU
-         VmWQ==
-X-Gm-Message-State: AOAM530/8JO+s33xsk2n8TIahUlpDPB4NoCQSggjY0KGahacGuKjuiR/
-	hi/KvzPxO1+rQa6Ig/x5YR1YcKqq0uDyEKFeyBcnCA==
+        b=BJuNdSLf4/OtdFAxSCabD+3jV+NKK5Pr2OUKhjytSwoOydBov0fYu4tLFtonrOq7SP
+         XCtutlhtyPrHrfWC6pRGXy1flwa6yDzcjL/QMngmiSMPS00YJl+tlqD7bX2z0VP++jX7
+         /FjzpA7hWdoUIuMYariuDfQHYsOhZhiA/pTSiGwRfx+/Zm/dvDtLMPjlhpXIs8ATeMhs
+         RNLs4yqGnC3+YP9zO4mgzeAHjDJ/f+1ceKknAhn90d5i1/CK1aJ1Vj+H4elvhYMnvqQr
+         QUj07KoCTq7qzjeNVTjkt6oIl1N12WaxpZdk4vAj2R2fssJFAjOY/7a6kjW8r3hoPzmC
+         h+dw==
+X-Gm-Message-State: AOAM5308M1+lIhC/XRakLIKnNDvXXB7b3xYe3na78McOeG4JLiNW9pXf
+        vZnrNZx+3qefoHDzRNu8kP9UuDm3IHAOlX3iEubopQ==
 X-Google-Smtp-Source: ABdhPJyxBFnoi5YnxmRXEWi3RyOT8zK9WD++uul35NAXdT0Y4CBYSq0+BgknePDAlzmhd8jRWTJRg0Pw5651ggprPVM=
 X-Received: by 2002:a05:6e02:1348:: with SMTP id k8mr20739743ilr.154.1605811227390;
  Thu, 19 Nov 2020 10:40:27 -0800 (PST)
 MIME-Version: 1.0
 References: <20201119080002.100342-1-tmaimon77@gmail.com>
 In-Reply-To: <20201119080002.100342-1-tmaimon77@gmail.com>
-From: Benjamin Fair <benjaminfair@google.com>
-Date: Thu, 19 Nov 2020 10:39:48 -0800
+From:   Benjamin Fair <benjaminfair@google.com>
+Date:   Thu, 19 Nov 2020 10:39:48 -0800
 Message-ID: <CADKL2t45q907QGpq9rqjnGgMx=43Gz4RRGbyRLZUozYD0kt-DQ@mail.gmail.com>
 Subject: Re: [PATCH v1] ARM: dts: add Nuvoton NPCM730 device tree
-To: Tomer Maimon <tmaimon77@gmail.com>
+To:     Tomer Maimon <tmaimon77@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>, olof@lixom.net, arm@kernel.org, 
-	soc@kernel.org, avifishman70@gmail.com, Rob Herring <robh+dt@kernel.org>, 
-	mark.rutland@arm.com, Nancy Yuen <yuenn@google.com>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Cc:     Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
+        olof@lixom.net, arm@kernel.org, soc@kernel.org,
+        avifishman70@gmail.com, Rob Herring <robh+dt@kernel.org>,
+        mark.rutland@arm.com, Nancy Yuen <yuenn@google.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20201119183948.HOug4UfIxiT2ep8KZ6G0GfHGk2qr7LqD_asqOyyTyCs@z>
 
 On Thu, 19 Nov 2020 at 00:00, Tomer Maimon <tmaimon77@gmail.com> wrote:
 >
