@@ -1,44 +1,73 @@
-Return-Path: <SRS0=HoMm=EZ=nuvoton.com=Tomer.Maimon@kernel.org>
+Return-Path: <SRS0=4Xag=EZ=lists.ozlabs.org=openbmc-bounces+openbmc=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2FD2C2D0E4
-	for <soc@archiver.kernel.org>; Thu, 19 Nov 2020 08:34:30 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id B49F4246B0; Thu, 19 Nov 2020 08:34:30 +0000 (UTC)
-X-Greylist: delayed 2016 seconds by postgrey-1.34 at mail.kernel.org; Thu, 19 Nov 2020 08:34:29 UTC
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 79BB324655
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=Tomer.Maimon@nuvoton.com
-Received: from herzl.nuvoton.co.il (212.199.177.27.static.012.net.il [212.199.177.27])
-	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB97AC2D0E4
+	for <openbmc@archiver.kernel.org>; Thu, 19 Nov 2020 08:36:12 +0000 (UTC)
+Received: from lists.ozlabs.org (lists.ozlabs.org [203.11.71.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 79BB324655;
-	Thu, 19 Nov 2020 08:34:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 89F9E24248
+	for <openbmc@archiver.kernel.org>; Thu, 19 Nov 2020 08:36:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 89F9E24248
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
+Received: from bilbo.ozlabs.org (lists.ozlabs.org [IPv6:2401:3900:2:1::3])
+	by lists.ozlabs.org (Postfix) with ESMTP id 4CcCgr2gGpzDqkG
+	for <openbmc@archiver.kernel.org>; Thu, 19 Nov 2020 19:36:08 +1100 (AEDT)
+Authentication-Results: lists.ozlabs.org;
+ spf=none (no SPF record) smtp.mailfrom=nuvoton.com
+ (client-ip=212.199.177.27; helo=herzl.nuvoton.co.il;
+ envelope-from=tomer.maimon@nuvoton.com; receiver=<UNKNOWN>)
+Authentication-Results: lists.ozlabs.org;
+ dmarc=fail (p=none dis=none) header.from=gmail.com
+X-Greylist: delayed 2017 seconds by postgrey-1.36 at bilbo;
+ Thu, 19 Nov 2020 19:34:41 AEDT
+Received: from herzl.nuvoton.co.il (212.199.177.27.static.012.net.il
+ [212.199.177.27])
+ (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+ (No client certificate requested)
+ by lists.ozlabs.org (Postfix) with ESMTPS id 4CcCf90xjgzDqdW
+ for <openbmc@lists.ozlabs.org>; Thu, 19 Nov 2020 19:34:36 +1100 (AEDT)
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 0AJ80EK4010231;
-	Thu, 19 Nov 2020 10:00:14 +0200
+ by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 0AJ80EK4010231;
+ Thu, 19 Nov 2020 10:00:14 +0200
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-	id 7C18B63A09; Thu, 19 Nov 2020 10:00:14 +0200 (IST)
+ id 7C18B63A09; Thu, 19 Nov 2020 10:00:14 +0200 (IST)
 From: Tomer Maimon <tmaimon77@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: joel@jms.id.au, arnd@arndb.de, olof@lixom.net, arm@kernel.org,
-        soc@kernel.org, avifishman70@gmail.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, yuenn@google.com, benjaminfair@google.com
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, Tomer Maimon <tmaimon77@gmail.com>
+ soc@kernel.org, avifishman70@gmail.com, robh+dt@kernel.org,
+ mark.rutland@arm.com, yuenn@google.com, benjaminfair@google.com
 Subject: [PATCH v1] ARM: dts: add Nuvoton NPCM730 device tree
 Date: Thu, 19 Nov 2020 10:00:02 +0200
-Message-Id: <20201119080002.100342-1-tmaimon77@gmail.com>
+Message-ID: <20201119080002.100342-1-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-BeenThere: openbmc@lists.ozlabs.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: Development list for OpenBMC <openbmc.lists.ozlabs.org>
+List-Unsubscribe: <https://lists.ozlabs.org/options/openbmc>,
+ <mailto:openbmc-request@lists.ozlabs.org?subject=unsubscribe>
+List-Archive: <http://lists.ozlabs.org/pipermail/openbmc/>
+List-Post: <mailto:openbmc@lists.ozlabs.org>
+List-Help: <mailto:openbmc-request@lists.ozlabs.org?subject=help>
+List-Subscribe: <https://lists.ozlabs.org/listinfo/openbmc>,
+ <mailto:openbmc-request@lists.ozlabs.org?subject=subscribe>
+Cc: devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, Tomer Maimon <tmaimon77@gmail.com>
+Errors-To: openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
+Sender: "openbmc"
+ <openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org>
+Message-ID: <20201119080002.0IQZkgGbVgVVhL53qz23JOdAeLsIkJseQA8bVWiP64Q@z>
 
 Add Nuvoton NPCM730 SoC device tree.
 
