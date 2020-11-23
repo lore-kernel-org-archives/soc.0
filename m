@@ -1,111 +1,95 @@
-Return-Path: <SRS0=45Hb=E5=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=Uzhw=E5=lists.ozlabs.org=openbmc-bounces+openbmc=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0CCEC2D0E4
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 23 Nov 2020 16:53:41 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54058C56202
+	for <openbmc@archiver.kernel.org>; Mon, 23 Nov 2020 16:54:01 +0000 (UTC)
+Received: from lists.ozlabs.org (lists.ozlabs.org [203.11.71.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 311AE20756
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 23 Nov 2020 16:53:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 532A3206CA
+	for <openbmc@archiver.kernel.org>; Mon, 23 Nov 2020 16:54:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="fAseRvS5";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="rONtCpaM"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 311AE20756
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="hXj/yv9u"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 532A3206CA
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=/ziRUyIM/6cX4eg3e7u8a0DvtobGI4I9h2AMUEsGWu8=; b=fAseRvS5f1PYpBaoxYnti/WHS
-	0I/55CdAf3iszIl6rnTYtdqvEiBmb46soSH/FPaOunfDZshTbT8phZk/0EJ+6OWy72APR6M6gEL8L
-	z5+Tvq9kyKbP8gVJq9OYSDZquxN2dvG7LKh8bR58Crf8JiR+sSgoyYEW0ixsvuhxAkapmiZwm7Nzz
-	w0U/1jDwjmlOBauaaUTdDt4Pu8PGKycwyIcMuxtmkGvDj2jHDPPXv9ksbuWt7LPeHyfKYbY/i+NPg
-	stNNRbZfFXqo4nAMFOoLZ/ujidoBvkQHTPr7JOhMNFjjsIMDBdUXiY5RFE19x3ZikHiW8ZYx3ygHk
-	9NqccfMOQ==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1khF4k-00036d-V0; Mon, 23 Nov 2020 16:52:27 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1khF4U-00030e-QN
- for linux-arm-kernel@lists.infradead.org; Mon, 23 Nov 2020 16:52:11 +0000
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
+Received: from bilbo.ozlabs.org (lists.ozlabs.org [IPv6:2401:3900:2:1::3])
+	by lists.ozlabs.org (Postfix) with ESMTP id 4CftXP50CMzDqR1
+	for <openbmc@archiver.kernel.org>; Tue, 24 Nov 2020 03:53:57 +1100 (AEDT)
+Authentication-Results: lists.ozlabs.org; spf=pass (sender SPF authorized)
+ smtp.mailfrom=kernel.org (client-ip=198.145.29.99; helo=mail.kernel.org;
+ envelope-from=arnd@kernel.org; receiver=<UNKNOWN>)
+Authentication-Results: lists.ozlabs.org;
+ dmarc=pass (p=none dis=none) header.from=kernel.org
+Authentication-Results: lists.ozlabs.org; dkim=pass (1024-bit key;
+ unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
+ header.s=default header.b=hXj/yv9u; dkim-atps=neutral
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by lists.ozlabs.org (Postfix) with ESMTPS id 4CftVX0vsNzDqQm
+ for <openbmc@lists.ozlabs.org>; Tue, 24 Nov 2020 03:52:19 +1100 (AEDT)
 Received: from threadripper.lan
  (HSI-KBW-46-223-126-90.hsi.kabel-badenwuerttemberg.de [46.223.126.90])
  (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
  (No client certificate requested)
- by mail.kernel.org (Postfix) with ESMTPSA id 7256222202;
- Mon, 23 Nov 2020 16:52:08 +0000 (UTC)
+ by mail.kernel.org (Postfix) with ESMTPSA id 2E10C221FE;
+ Mon, 23 Nov 2020 16:52:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=default; t=1606150330;
- bh=0KRw8QIfbHyS8hXZ4+Vre9RrFfEs20GpDCyyYTxcj9A=;
+ s=default; t=1606150336;
+ bh=ZbQO0wa84CKGmqS3FOl4uLA3+qgQpN0+P3FceI0HToQ=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=rONtCpaMQmyk18/A9cqpHtNMaIrMCDH+RMtZuI1eJ27kPTKBy+dAvPU85vUoEjQsr
- XpynGDqfeUEk30dGo7r5k5hAvesxQvqWjn07dXZmGBxtwNn6GlfxqG2PCJ/jXYkxoe
- 6p1KfxigNY9t7DunSvfZ1M4qv78LQYTZZA+m+ObQ=
+ b=hXj/yv9uz5UzttE6VGWWc6FV1Xg1QQMrWsYmjHNRzvVeoNeszOwuGFUdjQCnccSsX
+ /+n8SE44mbIgPz1rdAJgxUkAtruQ6dWN3sY+11rUBXvZPc/XNBuMCeNeXwkjiSDPyv
+ J6/XM2g2xs/sgUQo5I/yZFZoPAzH5ZRUDdYTR5G8=
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>,
- arm-soc <soc@kernel.org>
-Subject: Re: [GIT PULL 4/4] Renesas DT binding updates for v5.11
-Date: Mon, 23 Nov 2020 17:51:59 +0100
-Message-ID: <160615031083.69876.6945333656572147951.b4-ty@arndb.de>
+To: mark.rutland@arm.com, soc@kernel.org, olof@lixom.net,
+ benjaminfair@google.com, avifishman70@gmail.com, arm@kernel.org,
+ joel@jms.id.au, robh+dt@kernel.org, yuenn@google.com,
+ Tomer Maimon <tmaimon77@gmail.com>
+Subject: Re: [PATCH v1] ARM: dts: add Nuvoton NPCM730 device tree
+Date: Mon, 23 Nov 2020 17:52:02 +0100
+Message-ID: <160615031117.69876.2661433561026777420.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201113150854.3923885-5-geert+renesas@glider.be>
-References: <20201113150854.3923885-1-geert+renesas@glider.be>
- <20201113150854.3923885-5-geert+renesas@glider.be>
+In-Reply-To: <20201119080002.100342-1-tmaimon77@gmail.com>
+References: <20201119080002.100342-1-tmaimon77@gmail.com>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201123_115210_966977_77AED6D7 
-X-CRM114-Status: GOOD (  12.12  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
+Content-Transfer-Encoding: 8bit
+X-BeenThere: openbmc@lists.ozlabs.org
 X-Mailman-Version: 2.1.29
 Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: linux-renesas-soc@vger.kernel.org, Magnus Damm <magnus.damm@gmail.com>,
- linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201123165159.2RU1pafq73l0MNPoyMgNp2NmCpkLC3I6fAZqz87pwiE@z>
+List-Id: Development list for OpenBMC <openbmc.lists.ozlabs.org>
+List-Unsubscribe: <https://lists.ozlabs.org/options/openbmc>,
+ <mailto:openbmc-request@lists.ozlabs.org?subject=unsubscribe>
+List-Archive: <http://lists.ozlabs.org/pipermail/openbmc/>
+List-Post: <mailto:openbmc@lists.ozlabs.org>
+List-Help: <mailto:openbmc-request@lists.ozlabs.org?subject=help>
+List-Subscribe: <https://lists.ozlabs.org/listinfo/openbmc>,
+ <mailto:openbmc-request@lists.ozlabs.org?subject=subscribe>
+Cc: devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Errors-To: openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
+Sender: "openbmc"
+ <openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org>
+Message-ID: <20201123165202.5jDl7WiD1Dpfa4OLJ6dOHdCSmm7AcyNHBz8fJt9GSHs@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 13 Nov 2020 16:08:54 +0100, Geert Uytterhoeven wrote:
-> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+On Thu, 19 Nov 2020 10:00:02 +0200, Tomer Maimon wrote:
+> Add Nuvoton NPCM730 SoC device tree.
 > 
->   Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v5.11-tag1
-> 
-> [...]
+> The Nuvoton NPCN730 SoC is a part of the
+> Nuvoton NPCM7xx SoCs family.
 
-Merged into arm/dt, thanks!
+Applied to arm/dt, thanks!
 
-merge commit: 019d70bffd35bc721482ef8312d9dbb7c9702436
+[1/1] ARM: dts: add Nuvoton NPCM730 device tree
+      commit: b2d91953b66c724eaf8d7f84f37c006d966f67ac
 
        Arnd
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
