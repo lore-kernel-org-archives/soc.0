@@ -1,148 +1,120 @@
-Return-Path: <SRS0=Sdul=E6=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=FTHW=E6=monstr.eu=monstr@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7978C2D0E4
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 24 Nov 2020 12:25:33 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81FE0C56201
+	for <soc@archiver.kernel.org>; Tue, 24 Nov 2020 14:22:42 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 4F1012083E; Tue, 24 Nov 2020 14:22:42 +0000 (UTC)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 28C98206B5
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 24 Nov 2020 12:25:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 4D70C2076E
+	for <soc@kernel.org>; Tue, 24 Nov 2020 14:22:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="2q/VVRjl"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 28C98206B5
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Message-Id:Date:Subject:To:From:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=ZnQGuHUEC5iB+l53qT+/6KNHAufgx1lM4aK8rYv6U5A=; b=2q/VVRjlejVUzxwS390BoF4Dif
-	eSSMJN9Gr+DM+PlrQwccaldrGQE3hcV5q+XjJR1sjDCVE8EaM7TjifXApt4JeM4SLdh167wmJ/w5d
-	PGV8n5yXG7GmKAXMHm6wKDieBK+ZI82WcNTf22K9WOGa0BubxA5LGh7RPuij76FInikEx3Uktd7NJ
-	FriyKLS4lzJoF+AIeyv3bAW0Kivh5MW+WeqW6KssfzOM/qNyTCHeWriD4YptKnFZOHidcS8yCWGrr
-	xjgPdANH+C5u720QLLfkNmgGsf4BHOtbWYRlG/Lx99I1jVjW42F9XfO/Gam1gp87aC5pVLw7kIq2q
-	JuVcFPxA==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1khXMu-0001it-66; Tue, 24 Nov 2020 12:24:24 +0000
-Received: from foss.arm.com ([217.140.110.172])
- by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
- id 1khXMr-0001iN-GY
- for linux-arm-kernel@lists.infradead.org; Tue, 24 Nov 2020 12:24:22 +0000
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A94E101E;
- Tue, 24 Nov 2020 04:24:19 -0800 (PST)
-Received: from usa.arm.com (unknown [10.57.54.72])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 09B663F70D;
- Tue, 24 Nov 2020 04:24:17 -0800 (PST)
-From: Sudeep Holla <sudeep.holla@arm.com>
+	dkim=pass (2048-bit key) header.d=monstr-eu.20150623.gappssmtp.com header.i=@monstr-eu.20150623.gappssmtp.com header.b="mB6B2Z41"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4D70C2076E
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=monstr@monstr.eu
+Received: by mail-ej1-f50.google.com with SMTP id o9so28782520ejg.1
+        for <soc@kernel.org>; Tue, 24 Nov 2020 06:22:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=XgA7dRUgZq1U1Lw2+UbHeJMi1CKFatrYfIOTV6USWs4=;
+        b=mB6B2Z41dd5ksxPUzqmkce6ygCYmT6wO835k+Xk30JfyDAebyX72XgT/hIU3k6WVJt
+         zeBqsgMhiKnVmk3E96SU66nwR+mGbOx3vz4lpFa6j5MLalZOL5Gyit9fK7OQ/XDojG21
+         oPsKlQCHE6XZlh2t18NNht8PCyCaX38UqRoCgtj/LhXie8ajMd8Li3xFNoEY4MQCGDbp
+         igWfYizN3VcB6SaTdMoKvH5ukS8KvxPnhKtg4gCwn83kVPazF58RbUOM5aC5revdAKQv
+         4gzke2NrYblkSaoOm/gpCJTMeH65o1BZ+3D8v+HSwI0oHAoFZ6aF7qFzlFhijMJbwknz
+         m1/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=XgA7dRUgZq1U1Lw2+UbHeJMi1CKFatrYfIOTV6USWs4=;
+        b=amfuzORrqSTp1NN5cbaaxegI4A3eBHniBzQabDlNjLO8OQroG98c3EdIPasU1ZiQko
+         DXLOj95AGf0ayf4NlJEa2FSd0Zn8rCgViGvTF5XaS5Hcu8GSIYvihXx8DMEikWTyP5Ge
+         tIz5yS2NRrzGfwZ3j1xZncAqhaREZkV9WMv1PLoY3L5fsB6YLoqhB3JRv1guE9Nt7zzS
+         tZsT9V8W9ODyDb0hzdwjlgm6V5w6itLunOrTzUYFLaaQfyJzc7zb4IN9B9KEzQHMhThn
+         ICPELfFYHtClR4G1q6xRnEV8HTY9VZIYoQ8Y2oxS042+R0c7a2565NRtjaes1VkY77ds
+         saqA==
+X-Gm-Message-State: AOAM531VoJFbngRjLg8NnPveysCAuKRaaJzitNtE6PzB7ODN4UGaXDtp
+	bHYdox5mYD01PqaaKwWvwid0QWcLzH9vo7rg
+X-Google-Smtp-Source: ABdhPJyKxuXzaKHcyLWtl7TLT72FAw0wMZs/6bbqitlBRp7OGrz+mHTwohoupizMbSLqz69tJRJWkA==
+X-Received: by 2002:a17:906:e082:: with SMTP id gh2mr4315963ejb.406.1606227759258;
+        Tue, 24 Nov 2020 06:22:39 -0800 (PST)
+Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id 22sm2813991ejx.115.2020.11.24.06.22.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Nov 2020 06:22:38 -0800 (PST)
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>, ARM SoC Team <arm@kernel.org>,
- ALKML <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v5.11
-Date: Tue, 24 Nov 2020 12:24:12 +0000
-Message-ID: <20201124122412.22386-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.17.1
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201124_072421_605817_E041EC79 
-X-CRM114-Status: GOOD (  11.61  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Sudeep Holla <sudeep.holla@arm.com>
+To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
+From: Michal Simek <monstr@monstr.eu>
+Subject: [GIT PULL] arm64: soc: zynqmp: Xilinx SoC fixes for v5.10-rc6
+Message-ID: <fd5ab967-f3cf-95fb-7947-5477ff85f97e@monstr.eu>
+Date: Tue, 24 Nov 2020 15:22:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201124122412.CzKMdkoFYrH32PaUVub3HQzmRRjeemFScpWdgQVoHLI@z>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 
-Hi ARM SoC Team,
+Hi guys,
 
-Please pull ! The tag is based on v5.10-rc2 to avoid conflicts with
-the fixes that got merged in -rc2.
+please pull these two fixes to the soc fixes branch. It would be great
+if we can get it to v5.10.
+The branch is based on v5.10-rc4 because Arnd's first patch was applied
+to rc4 by Greg which is causing panic on Xilinx Versal SoC.
+The second patch is fixing issue with SD reset by using proper ID.
 
-Note the hwmon is acked by Guenter to take the changes together.
-Also note that the SCMI regulator driver itself is getting queued by
-Mark Brown separately and hence I have sent him pull request with
-'scmi-voltage-5.11' tag which I have also merged here.
+Thanks,
+Michal
 
-Regards,
-Sudeep
 
--->8
+The following changes since commit 09162bc32c880a791c6c0668ce0745cf7958f576:
 
-The following changes since commit 3cea11cd5e3b00d91caf0b4730194039b45c5891:
-
-  Linux 5.10-rc2 (2020-11-01 14:43:51 -0800)
+  Linux 5.10-rc4 (2020-11-15 16:44:31 -0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-5.11
+  https://github.com/Xilinx/linux-xlnx.git
+tags/zynqmp-soc-fixes-for-v5.10-rc6
 
-for you to fetch changes up to f83eb664cdb45169338b9633f22eaafc23764f05:
+for you to fetch changes up to acfdd18591eaac25446e976a0c0d190f8b3dbfb1:
 
-  Merge tag 'scmi-voltage-5.11' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-next/scmi (2020-11-23 16:37:27 +0000)
-
-----------------------------------------------------------------
-ARM SCMI updates for v5.11
-
-Two main additions this time:
-1. Support for SCMI v3.0 sensor extensions
-2. Support for voltage domain management protocol added newly to SCMI v3.0
+  firmware: xilinx: Use hash-table for api feature check (2020-11-24
+15:13:54 +0100)
 
 ----------------------------------------------------------------
-Cristian Marussi (10):
-      firmware: arm_scmi: Rework scmi_sensors_protocol_init
-      firmware: arm_scmi: Add SCMI v3.0 sensors descriptors extensions
-      dt-bindings: arm: Add support for SCMI Regulators
-      firmware: arm_scmi: Add voltage domain management protocol support
-      firmware: arm_scmi: Add support to enumerated SCMI voltage domain device
-      hwmon: (scmi) Update hwmon internal scale data type
-      firmware: arm_scmi: Add SCMI v3.0 sensors timestamped reads
-      firmware: arm_scmi: Add SCMI v3.0 sensor configuration support
-      firmware: arm_scmi: Add SCMI v3.0 sensor notifications
-      firmware: arm_scmi: Remove residual _le structs naming
+arm64: soc: ZynqMP SoC fixes for v5.10-rc6
 
-Qinglang Miao (1):
-      firmware: arm_scmi: Fix missing destroy_workqueue()
+- Fix SD dll reset issue by using proper macro
+- Fix PM feature checking for Xilinx Versal SoC
 
-Sudeep Holla (2):
-      firmware: arm_scmi: Add full list of sensor type enumeration
-      Merge tag 'scmi-voltage-5.11' of git://git.kernel.org/.../sudeep.holla/linux into for-next/scmi
+----------------------------------------------------------------
+Amit Sunil Dhamne (1):
+      firmware: xilinx: Use hash-table for api feature check
 
- Documentation/devicetree/bindings/arm/arm,scmi.txt |  43 ++
- drivers/firmware/arm_scmi/Makefile                 |   2 +-
- drivers/firmware/arm_scmi/common.h                 |   1 +
- drivers/firmware/arm_scmi/driver.c                 |   3 +
- drivers/firmware/arm_scmi/notify.c                 |  10 +-
- drivers/firmware/arm_scmi/sensors.c                | 720 +++++++++++++++++++--
- drivers/firmware/arm_scmi/voltage.c                | 380 +++++++++++
- drivers/hwmon/scmi-hwmon.c                         |   2 +-
- include/linux/scmi_protocol.h                      | 352 +++++++++-
- 9 files changed, 1450 insertions(+), 63 deletions(-)
- create mode 100644 drivers/firmware/arm_scmi/voltage.c
+Manish Narani (1):
+      firmware: xilinx: Fix SD DLL node reset issue
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ drivers/firmware/xilinx/zynqmp.c     | 65
+++++++++++++++++++++++++++++++++++++++++++++++++++---------------
+ include/linux/firmware/xlnx-zynqmp.h |  4 ----
+ 2 files changed, 50 insertions(+), 19 deletions(-)
+
+-- 
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+
