@@ -6,57 +6,48 @@ X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2828C2D0E4
-	for <soc@archiver.kernel.org>; Tue, 24 Nov 2020 11:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C512DC56201
+	for <soc@archiver.kernel.org>; Tue, 24 Nov 2020 11:01:58 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 7D66A2076B; Tue, 24 Nov 2020 11:01:55 +0000 (UTC)
+	id 8677520782; Tue, 24 Nov 2020 11:01:58 +0000 (UTC)
 Received: from threadripper.lan (HSI-KBW-46-223-126-90.hsi.kabel-badenwuerttemberg.de [46.223.126.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPSA id A81D92076E;
-	Tue, 24 Nov 2020 11:01:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPSA id 3F72A20857;
+	Tue, 24 Nov 2020 11:01:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1606215715;
-	bh=rcPwwNyOgnoFK0hn92mtxvr7+2z4fh+XCF5CV9YDXqU=;
+	s=default; t=1606215718;
+	bh=I95pbgJatRC7byPCt1unVZCiiAycqDpUz4/X3Opnm0U=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=A1HJE3h7Pc2ltNpTtPZ6L8FRqTwwXe280m0aHj4EEES8GGX8Z636xZyQRGtL0JkUw
-	 HY5HQtLYCKw0jDzVtGHGOWDUbjRAWomQFKBfCvcO9G45jtLKCS8q/ZszwEONi/5w7t
-	 Sv3YZ33wgNfX5lf3/SomXM+HExGGerzgW6KEHqWo=
+	b=0q6KmBBFSlKHiZEEN2Cpgv1upG5N8JsV22VsqHoEsfESdsxIHIDj0UTOJwPpIb9q1
+	 ysngpoqi07iu+yXo1zmJ+Ald+oVBLB0cqagKGnJ7kSyAUo1nMz3OwsYaeifhwvvyhI
+	 DQRZSz/7eGQIkqWCrB3swQ69rGSS2i+4hLnnGcn4=
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	soc@kernel.org,
-	Olof Johansson <olof@lixom.net>
+To: Maxime Ripard <maxime@cerno.tech>,
+	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 1/2] samsung: Drivers for v5.11
-Date: Tue, 24 Nov 2020 12:01:49 +0100
-Message-Id: <160621564539.128147.2478803979700391709.b4-ty@arndb.de>
+	linux-arm-kernel@lists.infradead.org,
+	Chen-Yu Tsai <wens@csie.org>
+Subject: Re: [PATCH] soc: sunxi: Fix compilation of sunxi_mbus
+Date: Tue, 24 Nov 2020 12:01:50 +0100
+Message-Id: <160621564607.128147.1507965938951028693.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201113162211.10020-1-krzk@kernel.org>
-References: <20201113162211.10020-1-krzk@kernel.org>
+In-Reply-To: <20201124103546.839711-1-maxime@cerno.tech>
+References: <20201124103546.839711-1-maxime@cerno.tech>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 13 Nov 2020 17:22:10 +0100, Krzysztof Kozlowski wrote:
-> Two early pull requests to flush my queue. I will have definitely some more
-> pulls later.
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
-> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
-> 
-> [...]
+On Tue, 24 Nov 2020 11:35:46 +0100, Maxime Ripard wrote:
+> dma_direct_set_offset has been moved from dma-mapping.h to
+> dma-map-ops.h, but our driver hasn't been updated resulting in a build
+> breakage. Let's change the header to fix the build.
 
-Merged into arm/drivers, thanks!
+Applied to arm/drivers, thanks for the update!
 
-merge commit: 4ce4be5d28deeeb6aa3f724c3fcb3c1627e40f10
+[1/1] soc: sunxi: Fix compilation of sunxi_mbus
+      commit: e24f7fac3b973ad24b0fd96f6de47695c90f6528
 
        Arnd
