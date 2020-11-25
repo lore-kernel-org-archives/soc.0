@@ -2,22 +2,22 @@ Return-Path: <SRS0=UpL1=E7=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74714C56202
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 25 Nov 2020 17:09:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18440C56201
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 25 Nov 2020 17:10:14 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A1F5D2063A
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 25 Nov 2020 17:09:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 90230206CA
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 25 Nov 2020 17:10:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="f4WY1F6k"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A1F5D2063A
+	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="ink1k252"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 90230206CA
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=nxp.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -26,42 +26,42 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=r3zCanEhoNYWhg4La2CNyX6+QcMBB2KgcECfk2Ivkf4=; b=f4WY1F6kqDKHROTDDUMOLP7L/F
-	G0H0j4A4ts/F+Rox+4s2ppZnlVqzVg+xS+FGk98mvlzU/RjH9RVYYQ7+pYjhPh1HzQ65e1M3RXTA1
-	CfcsJwtKZmtLE/S15k2TXHNqOyHgmGv4V6RNAyU5oM+vcymZ2ZsD5VGHiguYIVF+CGUUM0mOa5hza
-	gC5CJpuwRBONnLlp2DSeFlawnQM4avQkY9GVmNemj+bxujyZkUE2OjipF/UYpREcrHbmReQDmmzDN
-	oGAjrrrUklC7k0hOJhChadd0/jrxceTRd2JfWImt+zhRrAlGlIlML24s4qt5g9OY6HDPjNb5Ir0If
-	O5YZ5s2Q==;
+	bh=rG4Nsj9xYktob4GHRugs3NDRFsMzKVLZd2/4eWYpxco=; b=ink1k252eJB340VDm7dz6jkpt4
+	dOlExb5udVNe15JKycUamvD8bsF3GqSAoEiNx/qlOrSgiB6vd+lhXaZqBcTmN7UyaXeNoggIqBqJ+
+	d4eKUUoopfJkHQ08V4xmc9QaeF8rWRyaWf2TK2Ij7dzNEtMS3ICrPeApaT4AUWymKQKEGof2ty2M3
+	KgVfHF2KR2D0++jZ3wOz44PVNknz5+ypgXLQlw/NVRhZ5VEwwRu/kv6cKy0akIp1hqIaFxi8KKZjA
+	+UDK6dPQZDck9SBbMnETyNUFQ1yZPSfb5RCJ+4rQ9xG8EF7WNzujXOG6iF6TpAP/3uybJ+dxG/gvm
+	bjLj08gw==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1khyGy-0000gT-Vu; Wed, 25 Nov 2020 17:08:05 +0000
-Received: from inva021.nxp.com ([92.121.34.21])
+	id 1khyHE-0000l8-7b; Wed, 25 Nov 2020 17:08:20 +0000
+Received: from inva020.nxp.com ([92.121.34.13])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1khy8V-0004Ye-5m
- for linux-arm-kernel@lists.infradead.org; Wed, 25 Nov 2020 16:59:24 +0000
-Received: from inva021.nxp.com (localhost [127.0.0.1])
- by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EC05A200A53;
- Wed, 25 Nov 2020 17:59:14 +0100 (CET)
+ id 1khy8c-0004cx-Bg
+ for linux-arm-kernel@lists.infradead.org; Wed, 25 Nov 2020 16:59:28 +0000
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+ by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C6C851A1897;
+ Wed, 25 Nov 2020 17:59:23 +0100 (CET)
 Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com
  [134.27.49.11])
- by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B461D2009E6;
- Wed, 25 Nov 2020 17:59:14 +0100 (CET)
+ by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 8E9121A189F;
+ Wed, 25 Nov 2020 17:59:23 +0100 (CET)
 Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.70])
  by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id
- EA5BC40011; Wed, 25 Nov 2020 09:59:13 -0700 (MST)
+ C4C6640011; Wed, 25 Nov 2020 09:59:22 -0700 (MST)
 From: Li Yang <leoyang.li@nxp.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
-Subject: [GIT PULL] soc/fsl driver changes for next (v5.11)
-Date: Wed, 25 Nov 2020 10:59:13 -0600
-Message-ID: <20201125165913.15441-1-leoyang.li@nxp.com>
+Subject: [GIT PULL] soc/fsl driver fix for 5.10
+Date: Wed, 25 Nov 2020 10:59:22 -0600
+Message-ID: <20201125165922.15487-1-leoyang.li@nxp.com>
 X-Mailer: git-send-email 2.25.1.377.g2d2118b
 MIME-Version: 1.0
 X-Virus-Scanned: ClamAV using ClamSMTP
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201125_115919_360856_CA8C9117 
-X-CRM114-Status: UNSURE (   8.91  )
+X-CRM114-CacheID: sfid-20201125_115926_549894_8A2976F6 
+X-CRM114-Status: UNSURE (   8.51  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
@@ -80,7 +80,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201125165913.-xRbkLDTXpYJGGCkcyuYnIOvWj_PziMclFfxlYkC9j4@z>
+Message-ID: <20201125165922.lT9cUT54NEf1UaQdHjWIq2Tu8Pl4HZaSkPXsu6nok4c@z>
 
 Hi arm-soc maintainers,
 
@@ -95,32 +95,24 @@ The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/leo/linux.git tags/soc-fsl-next-v5.11
+  git://git.kernel.org/pub/scm/linux/kernel/git/leo/linux.git tags/soc-fsl-fix-v5.10
 
-for you to fetch changes up to e95f287deed2454b8cad5b27859271db30130b2b:
+for you to fetch changes up to 2663b3388551230cbc4606a40fabf3331ceb59e4:
 
-  soc: fsl: handle RCPM errata A-008646 on SoC LS1021A (2020-11-23 19:16:02 -0600)
-
-----------------------------------------------------------------
-NXP/FSL SoC driver updates for v5.11
-
-- Add RCPM errata workaround for A-008646 on LS1021A
-- Various W=1 warning fixes for fsl/soc drivers
+  soc: fsl: dpio: Get the cpumask through cpumask_of(cpu) (2020-11-23 19:27:45 -0600)
 
 ----------------------------------------------------------------
-Biwen Li (1):
-      soc: fsl: handle RCPM errata A-008646 on SoC LS1021A
+NXP/FSL SoC driver fix for 5.10
 
-Lee Jones (3):
-      soc: fsl: dpio: qbman-portal: Fix a bunch of kernel-doc misdemeanours
-      soc: fsl: qe: qe_common: Fix misnamed function attribute 'addr'
-      soc: fsl: qbman: qman: Remove unused variable 'dequeue_wq'
+DPAA2 DPIO driver
+- Fix non-static cpumask for irq affinity setting
 
- drivers/soc/fsl/dpio/qbman-portal.c | 18 +++++++++++++-----
- drivers/soc/fsl/qbman/qman.c        |  8 ++------
- drivers/soc/fsl/qe/qe_common.c      |  2 +-
- drivers/soc/fsl/rcpm.c              | 35 ++++++++++++++++++++++++++++++++++-
- 4 files changed, 50 insertions(+), 13 deletions(-)
+----------------------------------------------------------------
+Hao Si (1):
+      soc: fsl: dpio: Get the cpumask through cpumask_of(cpu)
+
+ drivers/soc/fsl/dpio/dpio-driver.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
 _______________________________________________
 linux-arm-kernel mailing list
