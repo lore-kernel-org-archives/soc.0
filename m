@@ -1,120 +1,102 @@
-Return-Path: <SRS0=FTHW=E6=monstr.eu=monstr@kernel.org>
+Return-Path: <SRS0=uveA=E7=huawei.com=xuwei5@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81FE0C56201
-	for <soc@archiver.kernel.org>; Tue, 24 Nov 2020 14:22:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04C5BC2D0E4
+	for <soc@archiver.kernel.org>; Wed, 25 Nov 2020 02:37:07 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 4F1012083E; Tue, 24 Nov 2020 14:22:42 +0000 (UTC)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 9559B21527; Wed, 25 Nov 2020 02:37:06 +0000 (UTC)
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4D70C2076E
-	for <soc@kernel.org>; Tue, 24 Nov 2020 14:22:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=monstr-eu.20150623.gappssmtp.com header.i=@monstr-eu.20150623.gappssmtp.com header.b="mB6B2Z41"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4D70C2076E
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=monstr@monstr.eu
-Received: by mail-ej1-f50.google.com with SMTP id o9so28782520ejg.1
-        for <soc@kernel.org>; Tue, 24 Nov 2020 06:22:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
-        h=to:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=XgA7dRUgZq1U1Lw2+UbHeJMi1CKFatrYfIOTV6USWs4=;
-        b=mB6B2Z41dd5ksxPUzqmkce6ygCYmT6wO835k+Xk30JfyDAebyX72XgT/hIU3k6WVJt
-         zeBqsgMhiKnVmk3E96SU66nwR+mGbOx3vz4lpFa6j5MLalZOL5Gyit9fK7OQ/XDojG21
-         oPsKlQCHE6XZlh2t18NNht8PCyCaX38UqRoCgtj/LhXie8ajMd8Li3xFNoEY4MQCGDbp
-         igWfYizN3VcB6SaTdMoKvH5ukS8KvxPnhKtg4gCwn83kVPazF58RbUOM5aC5revdAKQv
-         4gzke2NrYblkSaoOm/gpCJTMeH65o1BZ+3D8v+HSwI0oHAoFZ6aF7qFzlFhijMJbwknz
-         m1/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=XgA7dRUgZq1U1Lw2+UbHeJMi1CKFatrYfIOTV6USWs4=;
-        b=amfuzORrqSTp1NN5cbaaxegI4A3eBHniBzQabDlNjLO8OQroG98c3EdIPasU1ZiQko
-         DXLOj95AGf0ayf4NlJEa2FSd0Zn8rCgViGvTF5XaS5Hcu8GSIYvihXx8DMEikWTyP5Ge
-         tIz5yS2NRrzGfwZ3j1xZncAqhaREZkV9WMv1PLoY3L5fsB6YLoqhB3JRv1guE9Nt7zzS
-         tZsT9V8W9ODyDb0hzdwjlgm6V5w6itLunOrTzUYFLaaQfyJzc7zb4IN9B9KEzQHMhThn
-         ICPELfFYHtClR4G1q6xRnEV8HTY9VZIYoQ8Y2oxS042+R0c7a2565NRtjaes1VkY77ds
-         saqA==
-X-Gm-Message-State: AOAM531VoJFbngRjLg8NnPveysCAuKRaaJzitNtE6PzB7ODN4UGaXDtp
-	bHYdox5mYD01PqaaKwWvwid0QWcLzH9vo7rg
-X-Google-Smtp-Source: ABdhPJyKxuXzaKHcyLWtl7TLT72FAw0wMZs/6bbqitlBRp7OGrz+mHTwohoupizMbSLqz69tJRJWkA==
-X-Received: by 2002:a17:906:e082:: with SMTP id gh2mr4315963ejb.406.1606227759258;
-        Tue, 24 Nov 2020 06:22:39 -0800 (PST)
-Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id 22sm2813991ejx.115.2020.11.24.06.22.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Nov 2020 06:22:38 -0800 (PST)
+	by mail.kernel.org (Postfix) with ESMTPS id 2EE0F20872;
+	Wed, 25 Nov 2020 02:37:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2EE0F20872
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=hisilicon.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=xuwei5@huawei.com
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CglQD4yLPzkdg3;
+	Wed, 25 Nov 2020 10:36:36 +0800 (CST)
+Received: from [10.57.101.250] (10.57.101.250) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.487.0; Wed, 25 Nov 2020 10:36:55 +0800
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
-From: Michal Simek <monstr@monstr.eu>
-Subject: [GIT PULL] arm64: soc: zynqmp: Xilinx SoC fixes for v5.10-rc6
-Message-ID: <fd5ab967-f3cf-95fb-7947-5477ff85f97e@monstr.eu>
-Date: Tue, 24 Nov 2020 15:22:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+To: <soc@kernel.org>, "arm@kernel.org" <arm@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+CC: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, Wei Xu
+	<xuwei5@hisilicon.com>, "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+	Linuxarm <linuxarm@huawei.com>, Zhangyi ac <zhangyi.ac@huawei.com>,
+	"Liguozhu (Kenneth)" <liguozhu@hisilicon.com>, Tangkunshan
+	<tangkunshan@huawei.com>, huangdaode <huangdaode@hisilicon.com>, "Jonathan
+ Cameron" <jonathan.cameron@huawei.com>, John Garry <john.garry@huawei.com>,
+	Salil Mehta <salil.mehta@huawei.com>, Shiju Jose <shiju.jose@huawei.com>,
+	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+From: Wei Xu <xuwei5@hisilicon.com>
+Subject: [GIT PULL] arm: dts: hisilicon dts updates for v5.11
+Message-ID: <5FBDC347.4050102@hisilicon.com>
+Date: Wed, 25 Nov 2020 10:36:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.57.101.250]
+X-CFilter-Loop: Reflected
 
-Hi guys,
+Hi ARM-SoC team,
 
-please pull these two fixes to the soc fixes branch. It would be great
-if we can get it to v5.10.
-The branch is based on v5.10-rc4 because Arnd's first patch was applied
-to rc4 by Greg which is causing panic on Xilinx Versal SoC.
-The second patch is fixing issue with SD reset by using proper ID.
+Please consider to pull the following changes.
+Thanks!
 
-Thanks,
-Michal
+Best Regards,
+Wei
 
+---
 
-The following changes since commit 09162bc32c880a791c6c0668ce0745cf7958f576:
+The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
-  Linux 5.10-rc4 (2020-11-15 16:44:31 -0800)
+  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 
-are available in the Git repository at:
+are available in the git repository at:
 
-  https://github.com/Xilinx/linux-xlnx.git
-tags/zynqmp-soc-fixes-for-v5.10-rc6
+  git://github.com/hisilicon/linux-hisi.git tags/hisi-arm32-dt-for-5.11
 
-for you to fetch changes up to acfdd18591eaac25446e976a0c0d190f8b3dbfb1:
+for you to fetch changes up to d48b6ef74ab06c5b29bd9ee9e830bdc639b196ee:
 
-  firmware: xilinx: Use hash-table for api feature check (2020-11-24
-15:13:54 +0100)
+  ARM: dts: hisilicon: fix errors detected by syscon.yaml (2020-11-24 19:43:18 +0800)
 
 ----------------------------------------------------------------
-arm64: soc: ZynqMP SoC fixes for v5.10-rc6
+ARM: DT: Hisilicon ARM32 DT updates for 5.11
 
-- Fix SD dll reset issue by using proper macro
-- Fix PM feature checking for Xilinx Versal SoC
+- Cleanups of the hisilicon DTS to align with the dtschema including
+  serial, usb, amba-bus, memory, mmc, spi and syscon. All of them do not
+  have any functional effect except passing dtschema checks or dtc W=2
+  builds.
 
 ----------------------------------------------------------------
-Amit Sunil Dhamne (1):
-      firmware: xilinx: Use hash-table for api feature check
+Zhen Lei (8):
+      ARM: dts: hisilicon: fix errors detected by snps-dw-apb-uart.yaml
+      ARM: dts: hisilicon: fix errors detected by pl011.yaml
+      ARM: dts: hisilicon: fix errors detected by usb yaml
+      ARM: dts: hisilicon: fix errors detected by simple-bus.yaml
+      ARM: dts: hisilicon: fix errors detected by root-node.yaml
+      ARM: dts: hisilicon: fix errors detected by synopsys-dw-mshc.yaml
+      ARM: dts: hisilicon: fix errors detected by spi-pl022.yaml
+      ARM: dts: hisilicon: fix errors detected by syscon.yaml
 
-Manish Narani (1):
-      firmware: xilinx: Fix SD DLL node reset issue
-
- drivers/firmware/xilinx/zynqmp.c     | 65
-++++++++++++++++++++++++++++++++++++++++++++++++++---------------
- include/linux/firmware/xlnx-zynqmp.h |  4 ----
- 2 files changed, 50 insertions(+), 19 deletions(-)
-
--- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
-
+ arch/arm/boot/dts/hi3519-demb.dts    |  2 +-
+ arch/arm/boot/dts/hi3519.dtsi        | 32 +++++++++++++--------------
+ arch/arm/boot/dts/hi3620-hi4511.dts  | 24 ++++++++++-----------
+ arch/arm/boot/dts/hi3620.dtsi        | 32 +++++++++++++--------------
+ arch/arm/boot/dts/hip01-ca9x2.dts    |  2 +-
+ arch/arm/boot/dts/hip01.dtsi         | 26 +++++++++++-----------
+ arch/arm/boot/dts/hip04-d01.dts      |  2 +-
+ arch/arm/boot/dts/hip04.dtsi         |  6 +++---
+ arch/arm/boot/dts/hisi-x5hd2-dkb.dts |  2 +-
+ arch/arm/boot/dts/hisi-x5hd2.dtsi    | 42 ++++++++++++++++++------------------
+ 10 files changed, 85 insertions(+), 85 deletions(-)
