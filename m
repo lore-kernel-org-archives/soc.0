@@ -6,61 +6,54 @@ X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CA22C63798
-	for <soc@archiver.kernel.org>; Thu, 26 Nov 2020 21:18:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77F71C63777
+	for <soc@archiver.kernel.org>; Thu, 26 Nov 2020 21:18:43 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 449F2221E9; Thu, 26 Nov 2020 21:18:02 +0000 (UTC)
+	id 4427A21D93; Thu, 26 Nov 2020 21:18:43 +0000 (UTC)
 Received: from threadripper.lan (HSI-KBW-46-223-126-90.hsi.kabel-badenwuerttemberg.de [46.223.126.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPSA id 14E70221F7;
-	Thu, 26 Nov 2020 21:17:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPSA id E441821D1A;
+	Thu, 26 Nov 2020 21:18:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1606425482;
-	bh=BMGFCM9Rj5zeyt57Oiu4DCwCB26U4lTp003oqrGFbLg=;
+	s=default; t=1606425523;
+	bh=D/Vv9ohlcWtBibcu7HMsp2X81XWsBXQ+PE64KH8vPao=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=i+fbwxZpjqkVw/txIC6NtkKYEXaws24ufgDu75TY7BVuFDaJMet8helPKRbArrUFJ
-	 lpIbE8Y2K/r+gQChmnciHXIDir53yVdAD0UnUi0QiTvxe/OGJ769QTp0/Q5SjQIhYs
-	 G//17Qh+9o8vcAfghWDn3YVHXe63rfmrHbjJ8qps=
+	b=q+LiHsxw1rkMPvI2/eda+fCzhJ/0fp+A7vWbGJArI83lBzwifl9e8VwvuU6JSoiK5
+	 pMf+Usfa9mb2maYY5BWcOyfKui7XTTq4btL5ezfs6FLP6o7HmQz0mHXnwuOMKeWztt
+	 oUYm/HT8el8jFWvTHkWTiWMoxzU6EyWMbCBv49oc=
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: "arm@kernel.org" <arm@kernel.org>,
-	soc@kernel.org,
-	Wei Xu <xuwei5@hisilicon.com>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-	"Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+To: arm@kernel.org,
 	Olof Johansson <olof@lixom.net>,
-	huangdaode <huangdaode@hisilicon.com>,
-	John Garry <john.garry@huawei.com>,
-	"Liguozhu (Kenneth)" <liguozhu@hisilicon.com>,
-	Tangkunshan <tangkunshan@huawei.com>,
-	Zhangyi ac <zhangyi.ac@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Shiju Jose <shiju.jose@huawei.com>
-Subject: Re: [GIT PULL] arm: dts: hisilicon dts updates for v5.11
-Date: Thu, 26 Nov 2020 22:17:51 +0100
-Message-Id: <160642546617.1426861.9109722588377522115.b4-ty@arndb.de>
+	soc@kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL 1/2] memory: Memory controller for v5.11
+Date: Thu, 26 Nov 2020 22:18:36 +0100
+Message-Id: <160642550448.1427126.9578170268675699142.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <5FBDC347.4050102@hisilicon.com>
-References: <5FBDC347.4050102@hisilicon.com>
+In-Reply-To: <20201125184529.5392-1-krzk@kernel.org>
+References: <20201125184529.5392-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 25 Nov 2020 10:36:55 +0800, Wei Xu wrote:
-> Please consider to pull the following changes.
-> Thanks!
+On Wed, 25 Nov 2020 19:45:28 +0100, Krzysztof Kozlowski wrote:
+> Few early changes for v5.11.
 > 
-> Best Regards,
-> Wei
+> Best regards,
+> Krzysztof
+> 
+> 
+> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+> 
+> [...]
 
-Merged into arm/dt, thanks!
+Merged into arm/drivers, thanks!
 
-merge commit: 3319f1489ef8516981a153ca4c96c442b356dc2c
+merge commit: 0a3251a174018be76b14aa5857e2fef9e6993a53
 
        Arnd
