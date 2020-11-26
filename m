@@ -6,56 +6,53 @@ X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35647C63798
-	for <soc@archiver.kernel.org>; Thu, 26 Nov 2020 21:17:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70441C6379D
+	for <soc@archiver.kernel.org>; Thu, 26 Nov 2020 21:17:20 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id B205F221F7; Thu, 26 Nov 2020 21:17:18 +0000 (UTC)
+	id 25043221F9; Thu, 26 Nov 2020 21:17:20 +0000 (UTC)
 Received: from threadripper.lan (HSI-KBW-46-223-126-90.hsi.kabel-badenwuerttemberg.de [46.223.126.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPSA id 0DA1221D1A;
-	Thu, 26 Nov 2020 21:17:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPSA id 07E3B221F8;
+	Thu, 26 Nov 2020 21:17:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1606425438;
-	bh=u7BH5L4eK0u62SL9mIlU3zK5mJXaMoRqQvowEE7Quls=;
+	s=default; t=1606425440;
+	bh=8RibYTxN9NKIZJFzmsGiuRGKtEvzbiANmrNvuXigIOY=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UR26oyB+rjFuzsCB2vcev8xkFrFECltLmcIUPDjwfTjs3Chh7QeRifrAJcigQFaBd
-	 h9VcssTNMYZwZzI/8jHEj4BOnJaLNNVxU0EXLLrZtXW1/E9xuTr1OqcxUaKx4RrYL/
-	 9GJ/cH+MoMW6LMp9dPUTTc1N2ryhFNu0JEZf4EaE=
+	b=dXvTXr6jXabq27uBTcfQkf0Pw1haUSPr2E4RPUU7s+LThajhdwHX7FVigdSVPgs2q
+	 +rDqzdF4EJ2qq48NOSz5SnE/8yeHiSWWMcETPKg+1yKZGNha9SmGuFAIC/+++QOzu6
+	 2vNoBqhIeU9Ia5iL1W6dzdsi5wQ2Qt7wapAEKDog=
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Li Yang <leoyang.li@nxp.com>,
-	arm@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-kernel@lists.infradead.org,
-	shawnguo@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] soc/fsl driver fix for 5.10
-Date: Thu, 26 Nov 2020 22:17:11 +0100
-Message-Id: <160642540713.1426580.10622135995409567904.b4-ty@arndb.de>
+To: Michal Simek <monstr@monstr.eu>,
+	SoC Team <soc@kernel.org>,
+	arm-soc <arm@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [GIT PULL] arm64: soc: zynqmp: Xilinx SoC fixes for v5.10-rc6
+Date: Thu, 26 Nov 2020 22:17:12 +0100
+Message-Id: <160642540697.1426580.7594704023420469334.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201125165922.15487-1-leoyang.li@nxp.com>
-References: <20201125165922.15487-1-leoyang.li@nxp.com>
+In-Reply-To: <fd5ab967-f3cf-95fb-7947-5477ff85f97e@monstr.eu>
+References: <fd5ab967-f3cf-95fb-7947-5477ff85f97e@monstr.eu>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 25 Nov 2020 10:59:22 -0600, Li Yang wrote:
-> Please find the pull request for NXP/FSL SoC drivers.
+On Tue, 24 Nov 2020 15:22:37 +0100, Michal Simek wrote:
+> please pull these two fixes to the soc fixes branch. It would be great
+> if we can get it to v5.10.
+> The branch is based on v5.10-rc4 because Arnd's first patch was applied
+> to rc4 by Greg which is causing panic on Xilinx Versal SoC.
+> The second patch is fixing issue with SD reset by using proper ID.
 > 
-> Regards,
-> Leo
-> 
-> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
-> 
->   Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+> Thanks,
+> Michal
 > 
 > [...]
 
 Merged into arm/fixes, thanks!
 
-merge commit: 3a18293e4a0fa75366087c683bb959a8ff55111b
+merge commit: dbae2736fd9f131111d3e826396b45c36d1de211
 
        Arnd
