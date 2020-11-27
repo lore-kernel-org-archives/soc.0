@@ -1,137 +1,95 @@
-Return-Path: <SRS0=Z36m=FB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=O9Bn=FB=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DD22C63777
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 27 Nov 2020 07:00:37 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7589DC2D0E4
+	for <soc@archiver.kernel.org>; Fri, 27 Nov 2020 07:15:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 118AB221FF; Fri, 27 Nov 2020 07:15:11 +0000 (UTC)
+Received: from mail-oo1-f66.google.com (mail-oo1-f66.google.com [209.85.161.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 92E5D21D81
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 27 Nov 2020 07:00:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id A72CB21D81
+	for <soc@kernel.org>; Fri, 27 Nov 2020 07:15:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="Ed9RLKXw"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 92E5D21D81
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=zajL1DnIskx6w0uMs/3cX9GT+5UhF2lTGY9wzWTRBuY=; b=Ed9RLKXwB/JzJdCDswzTzOdf1S
-	6Prrljkdr0Vag1t8vUXXxBkyubg9lGeVEYTSfCzp1NRmlmJB9wK1asRm17FmR2ugC66Egf4MzzQFj
-	QBvXVYaocHj9QmtfauEiKkWiTuE/ow7AJsYmKwVLBcReUfQpYnkqqr+lc5ag2/VIeU3cmwBWjhZ7c
-	dkroaLWb+bPWv8zecDbby85YmtckyWm8BSPQHaz9ScYH4H+aYISeIwKLNHaietRkoXcbZwnt+l8Rt
-	mIqMvYmxjfEWzCm0aGc3visq63ZchQ9ZFWLThN/vmQ5myh+9+bb66Q+ny5SS0JaeBELtobp0NWCjY
-	J4Lz4vtw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kiXiK-0003ll-Ro; Fri, 27 Nov 2020 06:58:42 +0000
-Received: from muru.com ([72.249.23.125])
- by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kiXiC-0003k0-7a
- for linux-arm-kernel@lists.infradead.org; Fri, 27 Nov 2020 06:58:33 +0000
-Received: from hillo.muru.com (localhost [127.0.0.1])
- by muru.com (Postfix) with ESMTP id 2F21D8063;
- Fri, 27 Nov 2020 06:58:38 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: [GIT PULL] Fixes for omaps for v5.10-rc cycle
-Date: Fri, 27 Nov 2020 08:58:21 +0200
-Message-ID: <pull-1606460270-864284@atomide.com>
-X-Mailer: git-send-email 2.29.2
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aLY3U6MT"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A72CB21D81
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=jens.wiklander@linaro.org
+Received: by mail-oo1-f66.google.com with SMTP id y3so900396ooq.2
+        for <soc@kernel.org>; Thu, 26 Nov 2020 23:15:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yaxtEmqvmorbGKJnkkOGAi0ROIbuHga/om0nivkkb44=;
+        b=aLY3U6MTUL5dWJ51yx3EqCGeVIF57s3SnrwJbIRRWHH1wUjzpWGvhbxj7+9L8qkAU4
+         WFVkHwVupp1lxevjJtNOAMyDzwPNsxVnIhoXQOMIZYWO8T5OJGRf1Nxi5UA5etOWAGKW
+         hjA1KC2oJmcYo1OpRvgw2V2Wl4C2Ry0l9nM/UUIeiILMD+n7GiLOh66BXBAZ+7+XtLp0
+         +YELbcmEOAQnnvL03qfBtucnfXw21h/kZXqyPQwbcbQMbet1TOfguLjVZtP5PopZT8H5
+         jES04bkn9ADkCO7hjLaAuCx8MLL7+e4r72MVV9aYBit52kFHYQx4lmUuy2yMvfk1VWyS
+         zZKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yaxtEmqvmorbGKJnkkOGAi0ROIbuHga/om0nivkkb44=;
+        b=hgeQAsHCFPUcez4guwpSOxRL4eHeERxLUoVMpPfpi6LqbXU6nWhLFOXcs6ZC+Gr4dm
+         EXZx2W49oeUzLFDGnEZsxkovb+Hx0Mq+IzhWR5bW4IuF9U/NDC9cbSAxiZ7In1omgdBM
+         Jw9V3WkIKeIle1uIjZwP30X5sgRSGIRFKVMFb4omd3FRBlxVg6u6gR0IlHvM+M+qHnPY
+         Y/5HuqTeCtfFjkF7Mft/RhzbdjnM8a/x/AbkvdJP8v+jd5rgyAQmuUofRuOX099WZxYu
+         xmXtOWe/B5kqMCXSmt121sMEVktfeeLqnPAIUDzfPSNJ1N3LhArX9JbIo9gfsTBPSEGh
+         AxfQ==
+X-Gm-Message-State: AOAM532J40TC70UOjEIfXn7H0bNFuovcj8lbWbGhTdB9VMYDnN0kwscI
+	nv3MSCbmoB+jrzaPo8L3Ocx5EWyTuOgnHR9YUnhBlQ==
+X-Google-Smtp-Source: ABdhPJzaQ7O+e2Jbc1bKrR0f+Mraefm0He/WricXD5DvEREyOW1QEFDqCYH+RUzETNr0QT8k5tlI+7JXq4ssDiMD0no=
+X-Received: by 2002:a4a:de87:: with SMTP id v7mr4592060oou.6.1606461309608;
+ Thu, 26 Nov 2020 23:15:09 -0800 (PST)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201127_015832_382535_33DBE5E7 
-X-CRM114-Status: GOOD (  11.72  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
- arm@kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201127065821.c5zSm_E4thRLf98AHCy6r5wRpUAqZQImM81bbhtssSM@z>
+References: <20201125120134.GA1642471@jade> <CAK8P3a2CDp0KwCZjffA78fXUqOfAkvUb8Q=R64830fvvn_WG2w@mail.gmail.com>
+In-Reply-To: <CAK8P3a2CDp0KwCZjffA78fXUqOfAkvUb8Q=R64830fvvn_WG2w@mail.gmail.com>
+From: Jens Wiklander <jens.wiklander@linaro.org>
+Date: Fri, 27 Nov 2020 08:14:59 +0100
+Message-ID: <CAHUa44Fnj4zQ_3O+kdzVopVAggUOdb34KGnA8+r=Rp-4+etWbw@mail.gmail.com>
+Subject: Re: [GIT PULL] OP-TEE driver for v5.11
+To: Arnd Bergmann <arnd@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, op-tee@lists.trustedfirmware.org, 
+	Rui Miguel Silva <rui.silva@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-From: "Tony Lindgren" <tony@atomide.com>
+Hi Arnd,
 
-The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+On Thu, Nov 26, 2020 at 10:00 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> On Wed, Nov 25, 2020 at 1:01 PM Jens Wiklander
+> <jens.wiklander@linaro.org> wrote:
+> >
+> > Hello arm-soc maintainers,
+> >
+> > Please pull this small patch which allows the OP-TEE driver to work with
+> > ARMv7 based single CPU systems.
+>
+> Can you rebase that branch onto -rc1? I had started the arm/drivers
+> branch early on top of that, so I'd prefer to avoid a backmerged.
+>
+> For the commit itself, shouldn't that be marked as a bugfix and get
+> merged into v5.10 instead? If it should, you don't have to rebase
+> since the arm/fixes branch is already ahead.
 
-  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+Yes it is a bit of a bugfix, so if you don't mind taking it as that
+I'm sure that Rui would be happy to get it in this release.
 
-are available in the Git repository at:
+>
+> Also, it would be nice to Cc linux-arm-kernel on the pull request
+> in addition to linux-kernel.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.10/fixes-rc5-signed
+I'll keep that in mind the next time. Thanks for the feedback.
 
-for you to fetch changes up to 05d5de6ba7dbe490dd413b5ca11d0875bd2bc006:
-
-  ARM: dts: dra76x: m_can: fix order of clocks (2020-11-19 11:37:57 +0200)
-
-----------------------------------------------------------------
-Fixes for omaps for various issues noticed during the -rc cycle:
-
-- Earlier omap4 cpuidle fix was incomplete and needs to use a
-  configured idle state instead
-
-- Fix am4 cpsw driver compatible to avoid invalid resource error
-  for the legacy driver
-
-- Two kconfig fixes for genpd support that we added for for v5.10
-  for proper location of the option and adding missing option
-
-- Fix ti-sysc reset status checking on enabling modules to ignore
-  quirky modules with reset status only usable when the quirk is
-  activated during reset. Also fix bogus resetdone warning for
-  cpsw and modules with no sysst register reset status bit
-
-- Suppress a ti-sysc warning for timers reserved as system timers
-
-- Fix the ordering of clocks for dra7 m_can
-
-----------------------------------------------------------------
-Grygorii Strashko (2):
-      ARM: dts: am437x-l4: fix compatible for cpsw switch dt node
-      bus: ti-sysc: suppress err msg for timers used as clockevent/source
-
-Marc Kleine-Budde (1):
-      ARM: dts: dra76x: m_can: fix order of clocks
-
-Tony Lindgren (6):
-      ARM: OMAP2+: Fix location for select PM_GENERIC_DOMAINS
-      ARM: OMAP2+: Fix missing select PM_GENERIC_DOMAINS_OF
-      bus: ti-sysc: Fix reset status check for modules with quirks
-      bus: ti-sysc: Fix bogus resetdone warning on enable for cpsw
-      ARM: OMAP2+: Manage MPU state properly for omap_enter_idle_coupled()
-      Merge tag 'ti-sysc-fixes' into fixes
-
- arch/arm/boot/dts/am437x-l4.dtsi      |  2 +-
- arch/arm/boot/dts/dra76x.dtsi         |  4 ++--
- arch/arm/mach-omap2/Kconfig           |  3 ++-
- arch/arm/mach-omap2/cpuidle44xx.c     |  8 +++++---
- drivers/bus/ti-sysc.c                 | 29 +++++++++++++++++++----------
- include/linux/platform_data/ti-sysc.h |  1 +
- 6 files changed, 30 insertions(+), 17 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Cheers,
+Jens
