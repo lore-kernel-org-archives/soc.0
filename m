@@ -1,27 +1,33 @@
-Return-Path: <SRS0=O9Bn=FB=linaro.org=jens.wiklander@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7589DC2D0E4
-	for <soc@archiver.kernel.org>; Fri, 27 Nov 2020 07:15:11 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 118AB221FF; Fri, 27 Nov 2020 07:15:11 +0000 (UTC)
-Received: from mail-oo1-f66.google.com (mail-oo1-f66.google.com [209.85.161.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A72CB21D81
-	for <soc@kernel.org>; Fri, 27 Nov 2020 07:15:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A155C63777
+	for <linux-kernel@archiver.kernel.org>; Fri, 27 Nov 2020 07:15:17 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 4993921D93
+	for <linux-kernel@archiver.kernel.org>; Fri, 27 Nov 2020 07:15:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
 	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aLY3U6MT"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A72CB21D81
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=jens.wiklander@linaro.org
-Received: by mail-oo1-f66.google.com with SMTP id y3so900396ooq.2
-        for <soc@kernel.org>; Thu, 26 Nov 2020 23:15:10 -0800 (PST)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S2392689AbgK0HPO (ORCPT
+        <rfc822;linux-kernel@archiver.kernel.org>);
+        Fri, 27 Nov 2020 02:15:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726408AbgK0HPK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 27 Nov 2020 02:15:10 -0500
+Received: from mail-oo1-xc43.google.com (mail-oo1-xc43.google.com [IPv6:2607:f8b0:4864:20::c43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81480C0613D1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Nov 2020 23:15:10 -0800 (PST)
+Received: by mail-oo1-xc43.google.com with SMTP id r11so892054oos.12
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Nov 2020 23:15:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -38,30 +44,35 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=yaxtEmqvmorbGKJnkkOGAi0ROIbuHga/om0nivkkb44=;
-        b=hgeQAsHCFPUcez4guwpSOxRL4eHeERxLUoVMpPfpi6LqbXU6nWhLFOXcs6ZC+Gr4dm
-         EXZx2W49oeUzLFDGnEZsxkovb+Hx0Mq+IzhWR5bW4IuF9U/NDC9cbSAxiZ7In1omgdBM
-         Jw9V3WkIKeIle1uIjZwP30X5sgRSGIRFKVMFb4omd3FRBlxVg6u6gR0IlHvM+M+qHnPY
-         Y/5HuqTeCtfFjkF7Mft/RhzbdjnM8a/x/AbkvdJP8v+jd5rgyAQmuUofRuOX099WZxYu
-         xmXtOWe/B5kqMCXSmt121sMEVktfeeLqnPAIUDzfPSNJ1N3LhArX9JbIo9gfsTBPSEGh
-         AxfQ==
-X-Gm-Message-State: AOAM532J40TC70UOjEIfXn7H0bNFuovcj8lbWbGhTdB9VMYDnN0kwscI
-	nv3MSCbmoB+jrzaPo8L3Ocx5EWyTuOgnHR9YUnhBlQ==
+        b=mO3VzwQrp2gI+UBAteKNAbcTtx3vARRiMDz/Heg+98B84RYgcEobRvDdBJ5zq29Q8m
+         3/jYXZIYUsSRJ0f8IMV8KYTuylxOjhxI4nWEzkCbtaPn/HKh3IFmM2IxpHAR+eX41RAD
+         dXBEVWn2qYEygL8vowiQkwV6CtSO47LvpKaJLnL+pYBlSSP35oIDGoQzEx5bnu+ePVLq
+         zGTwe8m9gTnVH7hFw3X/oyJEeICqL+jwWaiwSw5xaNy94YRjMcmrnOFo4bnkTGEbnwcC
+         lum1X3zFS1Hp1RHdaAvpCk8LXllyFKLQMSqHiozPreaHHcf2cORuvXl1K9GCyEvb4G2q
+         EEEA==
+X-Gm-Message-State: AOAM5310d68kDIkBn7dRkZZDZBB4H2/9gsdWNZJ71MuVQSViRya79yLu
+        TBLtYD0ywrqoMsvn6Wzw+iwEzHdS11xyK3/aLLjtkQ==
 X-Google-Smtp-Source: ABdhPJzaQ7O+e2Jbc1bKrR0f+Mraefm0He/WricXD5DvEREyOW1QEFDqCYH+RUzETNr0QT8k5tlI+7JXq4ssDiMD0no=
 X-Received: by 2002:a4a:de87:: with SMTP id v7mr4592060oou.6.1606461309608;
  Thu, 26 Nov 2020 23:15:09 -0800 (PST)
 MIME-Version: 1.0
 References: <20201125120134.GA1642471@jade> <CAK8P3a2CDp0KwCZjffA78fXUqOfAkvUb8Q=R64830fvvn_WG2w@mail.gmail.com>
 In-Reply-To: <CAK8P3a2CDp0KwCZjffA78fXUqOfAkvUb8Q=R64830fvvn_WG2w@mail.gmail.com>
-From: Jens Wiklander <jens.wiklander@linaro.org>
-Date: Fri, 27 Nov 2020 08:14:59 +0100
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Fri, 27 Nov 2020 08:14:59 +0100
 Message-ID: <CAHUa44Fnj4zQ_3O+kdzVopVAggUOdb34KGnA8+r=Rp-4+etWbw@mail.gmail.com>
 Subject: Re: [GIT PULL] OP-TEE driver for v5.11
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, op-tee@lists.trustedfirmware.org, 
-	Rui Miguel Silva <rui.silva@linaro.org>
+Cc:     arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        op-tee@lists.trustedfirmware.org,
+        Rui Miguel Silva <rui.silva@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20201127071459.I4pi-AGHCR8TUw3Or4ImJsCnzgwnvakyARt7G-juGAQ@z>
 
 Hi Arnd,
 
