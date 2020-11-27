@@ -1,120 +1,221 @@
-Return-Path: <SRS0=Z36m=FB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=KWJk=FB=foss.st.com=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-21.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C816AC2D0E4
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 27 Nov 2020 07:41:15 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76789C2D0E4
+	for <soc@archiver.kernel.org>; Fri, 27 Nov 2020 08:55:40 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 004B42224A; Fri, 27 Nov 2020 08:55:40 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 18AD922228
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 27 Nov 2020 07:40:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id CE6A922249;
+	Fri, 27 Nov 2020 08:55:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="kZYTrMV7"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 18AD922228
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=ZgqfvUXM6F/YWHifEUtVyafi/OvPmOrE17AF+j138Co=; b=kZYTrMV7Lf5HzgwKS0io5tiH5s
-	z876R61DexjD8zaMEIYYMbrF26JVBzmMlrqlURRrl8LI5DTkx8um4EUehf79aY0My0QTCKlnxZxIX
-	vzbSs6bHgSTgg6uk2aAANrobm4Sz/OZLz+sct8ZYH7y7Mt2Mfdhae5VR+Wli6leD4vZHMDMecWEUP
-	khrgM/pYPmOBHoYt4ZMEIYvlBAjBaJ8D4xzVFjW8OprGpUXttDoql97qN4suOZPNO7altA78TCs12
-	1o9RnkKDXUtmeCMrMunf0WbjTnHq+ZzZp3SQ6RUdqO+xiWyCA85WQ8zmIaHUaSyb6/5q5NH5Zttfg
-	eJBxw5Iw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kiYL3-0000Db-Js; Fri, 27 Nov 2020 07:38:42 +0000
-Received: from muru.com ([72.249.23.125])
- by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kiYKr-00009q-No
- for linux-arm-kernel@lists.infradead.org; Fri, 27 Nov 2020 07:38:33 +0000
-Received: from hillo.muru.com (localhost [127.0.0.1])
- by muru.com (Postfix) with ESMTP id B8FD68063;
- Fri, 27 Nov 2020 07:38:34 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="xTrcSJXr"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CE6A922249
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=alexandre.torgue@foss.st.com
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0AR8mLXT012685;
+	Fri, 27 Nov 2020 09:55:32 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : subject
+ : cc : message-id : date : mime-version : content-type :
+ content-transfer-encoding; s=selector1;
+ bh=lKZtEEJs6oE6nKSZWYxPWDTxfHvmpYFR5P6c/mMJiw8=;
+ b=xTrcSJXr7SWendXVGZKxuffDGiJZHQ5Vm61LRorqLOtvQZ3jOO0BZRS5lmNXcxcdJ4ly
+ OWVrHq8tyzoVOjwFRLEoAnCdp1Q0EGybw6i0Dmqo9tHVcrwThGEHWQYONpKz13k5LOLq
+ EXjs5+R2YAw/GNhZ56NSNdnOPsDtK2Qg2AqhTxyphC0MENojFvso3WSj/2n6CZTPJkn1
+ qPQc0mELPB/WZBULIuyndwB7bAe1HkELXxGRhiHaiCqKMF3jE2pXRlCT6OtjppDp2M0U
+ NS46PYuG+UjYp9s9TyuUEYplPUZRkauBttyTUAxH7g826FM81+wbAO7CQ2qVUmoxygKM 4A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com with ESMTP id 34y01d1epp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Nov 2020 09:55:31 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 43F85100039;
+	Fri, 27 Nov 2020 09:55:31 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 28F64230CDE;
+	Fri, 27 Nov 2020 09:55:31 +0100 (CET)
+Received: from lmecxl0912.lme.st.com (10.75.127.49) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 27 Nov
+ 2020 09:55:30 +0100
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: [GIT PULL 1/3] SoC changes for omaps for v5.11 merge window
-Date: Fri, 27 Nov 2020 09:38:19 +0200
-Message-ID: <pull-1606462656-588116@atomide.com>
-X-Mailer: git-send-email 2.29.2
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Kevin
+ Hilman <khilman@baylibre.com>, SoC Team <soc@kernel.org>,
+        arm-soc
+	<arm@kernel.org>
+Subject: [GIT PULL] STM32 DT changes for v5.11 #1
+CC: Maxime Coquelin <mcoquelin.stm32@gmail.com>, Marek Vasut <marex@denx.de>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Alexandre TORGUE
+	<alexandre.torgue@st.com>
+Message-ID: <873c17a5-28d5-9261-f691-1b917611c932@foss.st.com>
+Date: Fri, 27 Nov 2020 09:54:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201127_023831_412302_950F969C 
-X-CRM114-Status: UNSURE (   9.40  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
- arm@kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201127073819.rRli8T7YtD_voc107FvgiboMkMEgFlgbfi70duEMw4A@z>
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG4NODE3.st.com (10.75.127.12) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-27_04:2020-11-26,2020-11-27 signatures=0
 
-From: "Tony Lindgren" <tony@atomide.com>
+Hi ARM SoC maintainers,
 
-The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
-  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+Please consider this first round of STM32 DT updates for v5.11. As usual 
+main changed concern MPU part. Various fixes have been done, a new board 
+has been added for DH and USB type C support has been added for ST DK 
+boards.
+
+Due to company IT changes, for upstream "process" my mail address in no 
+longer alexandre.torgue@st.com but alexandre.torgue@foss.st.com. Let me 
+know if it causes issue for tag signature. On my side I updated GPG key 
+with this new address and it seems ok.
+
+regards
+Alex
+
+The following changes since commit f4c7fa39415da6db1fa0bc26162ac23a0fbae8bb:
+
+   ARM: dts: stm32: Keep VDDA LDO1 always on on DHCOM (2020-11-09 
+14:36:50 +0100)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.11/soc-signed
+   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
+tags/stm32-dt-for-v5.11-1
 
-for you to fetch changes up to 2e023b938048c9857af09b96ce672e9a31dbfb38:
+for you to fetch changes up to 6660e2445523a57410de008a9b137d2c0a66e94a:
 
-  ARM: OMAP1: clock: Use IS_ERR_OR_NULL() to clean code (2020-11-19 11:45:42 +0200)
-
-----------------------------------------------------------------
-SoC changes for omaps for v5.11 merge window:
-
-Several non-urgent fixes for various issues found by automated tests.
-So far we have not been hitting any of these so these can wait for the
-merge window no problem.
+   ARM: dts: stm32: lxa-mc1: add OSD32MP15x to list of compatibles 
+(2020-11-26 14:42:41 +0100)
 
 ----------------------------------------------------------------
-Jing Xiangfeng (1):
-      ARM: OMAP2+: Remove redundant assignment to variable ret
+STM32 DT updates for v5.11, round 1
 
-Tang Bin (1):
-      ARM: OMAP1: clock: Use IS_ERR_OR_NULL() to clean code
+Highlights:
+----------
 
-Xu Wang (1):
-      ARM: OMAP2+: Remove redundant null check before clk_prepare_enable/clk_disable_unprepare
+MCU part:
+  -Fix dmamux reg property (length) on stm32h743.
+  -Explicitly set DCMI bus type on stm32429i eval board.
 
-Youling Tang (2):
-      ARM: OMAP2+: Fix memleak in omap2xxx_clkt_vps_init
-      ARM: OMAP2+: Fix kfree NULL pointer in omap2xxx_clkt_vps_init
+MPU part:
+  -Enable FIFO mode with half-full threshold for DCMI.
+  -Harmonize EHCI/OHCI nodes.
+  -Move SDMMC IP version to v2.0 to get features improvements.
+  -Add LP-timer wakeup support.
+  -Enable crypto/hash/crc support.
+  -Explicitly set DCMI bus type on stm32mp157 eval board.
+  -Add USB type-c controller (STUSB1600) on stm32mp15 DK boards
+   (It is connected to I2C4).
+  -Fix dmamux reg property (length) on stm32mp151.
+  -Optimize USB OTG FIFO sizes on stm32mp151.
+  -Declare tamp node also as "simple-mfd".
 
- arch/arm/mach-omap1/clock.c                  | 14 +++++++-------
- arch/arm/mach-omap2/clkt2xxx_virt_prcm_set.c | 11 +++++++----
- arch/arm/mach-omap2/display.c                |  6 ++----
- arch/arm/mach-omap2/omap_device.c            |  5 ++---
- 4 files changed, 18 insertions(+), 18 deletions(-)
+  -LXA:
+   -Document Octavo vendor-prefixes yaml file.
+   -Document lxa,stm32mp157c-mc1 in STM32 yaml file.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+  -DH:
+   -Connect PHY IRQ line on DH SoM.
+   -Add KS8851 Ethernet support on DHCOM which is mapped to FMC2.
+   -Document all DH compatible strings in STM32 yaml file.
+   -Add DHCOM based PicoITX board. This board embeds ethernet port,
+    USB, CAN LEDS and a custom board-to-board connector.
+
+----------------------------------------------------------------
+Ahmad Fatoum (5):
+       dt-bindings: arm: stm32: add simple-mfd compatible for tamp node
+       ARM: dts: stm32: support child mfd cells for the stm32mp1 TAMP syscon
+       dt-bindings: vendor-prefixes: document Octavo Systems oct prefix
+       dt-bindings: arm: stm32: add extra SiP compatible for 
+lxa,stm32mp157c-mc1
+       ARM: dts: stm32: lxa-mc1: add OSD32MP15x to list of compatibles
+
+Amelie Delaunay (7):
+       dt-bindings: connector: add typec-power-opmode property to 
+usb-connector
+       dt-bindings: usb: Add DT bindings for STUSB160x Type-C controller
+       ARM: dts: stm32: add STUSB1600 Type-C using I2C4 on stm32mp15xx-dkx
+       ARM: dts: stm32: fix mdma1 clients channel priority level on 
+stm32mp151
+       ARM: dts: stm32: fix dmamux reg property on stm32mp151
+       ARM: dts: stm32: fix dmamux reg property on stm32h743
+       ARM: dts: stm32: adjust USB OTG gadget fifo sizes in stm32mp151
+
+Arnaud Pouliquen (1):
+       ARM: dts: stm32: update stm32mp151 for remote proc 
+synchronization support
+
+Fabrice Gasnier (2):
+       ARM: dts: stm32: Add LP timer irqs on stm32mp151
+       ARM: dts: stm32: Add LP timer wakeup-source on stm32mp151
+
+Hugues Fruchet (3):
+       ARM: dts: stm32: fix DCMI DMA features on stm32mp15 family
+       ARM: dts: stm32: set bus-type in DCMI endpoint for 
+stm32mp157c-ev1 board
+       ARM: dts: stm32: set bus-type in DCMI endpoint for stm32429i-eval 
+board
+
+Lionel Debieve (2):
+       ARM: dts: stm32: enable HASH by default on stm32mp15
+       ARM: dts: stm32: enable CRYP by default on stm32mp15
+
+Marek Vasut (5):
+       ARM: dts: stm32: Connect PHY IRQ line on DH STM32MP1 SoM
+       ARM: dts: stm32: Add alternate pinmux for FMC EBI bus
+       ARM: dts: stm32: Add KS8851 on FMC2 to STM32MP1 DHCOM
+       dt-bindings: arm: stm32: Add compatible strings for DH SoMs and 
+boards
+       ARM: dts: stm32: Add DHCOM based PicoITX board
+
+Nicolas Toromanoff (1):
+       ARM: dts: stm32: enable CRC1 by default on stm32mp15
+
+Patrick Delaunay (1):
+       ARM: dts: stm32: reorder spi4 within stm32mp15-pinctrl
+
+Serge Semin (1):
+       ARM: dts: stm32: Harmonize EHCI/OHCI DT nodes name on stm32mp15
+
+Yann Gautier (1):
+       ARM: dts: stm32: update sdmmc IP version for STM32MP15
+
+  .../bindings/arm/stm32/st,stm32-syscon.yaml        |   4 +
+  .../devicetree/bindings/arm/stm32/stm32.yaml       |  23 +++-
+  .../bindings/connector/usb-connector.yaml          |  24 ++++
+  .../devicetree/bindings/usb/st,stusb160x.yaml      |  87 +++++++++++++
+  .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+  arch/arm/boot/dts/Makefile                         |   1 +
+  arch/arm/boot/dts/stm32429i-eval.dts               |   1 +
+  arch/arm/boot/dts/stm32h743.dtsi                   |   2 +-
+  arch/arm/boot/dts/stm32mp15-pinctrl.dtsi           |  90 +++++++++++--
+  arch/arm/boot/dts/stm32mp151.dtsi                  |  41 ++++--
+  arch/arm/boot/dts/stm32mp157c-dhcom-picoitx.dts    |  35 +++++
+  arch/arm/boot/dts/stm32mp157c-dk2.dts              |   4 +
+  arch/arm/boot/dts/stm32mp157c-ed1.dts              |  12 ++
+  arch/arm/boot/dts/stm32mp157c-ev1.dts              |   1 +
+  arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts          |   2 +-
+  arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi   | 143 
++++++++++++++++++++++
+  arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi       |  37 ++++++
+  arch/arm/boot/dts/stm32mp15xx-dkx.dtsi             |  38 ++++++
+  18 files changed, 517 insertions(+), 30 deletions(-)
+  create mode 100644 Documentation/devicetree/bindings/usb/st,stusb160x.yaml
+  create mode 100644 arch/arm/boot/dts/stm32mp157c-dhcom-picoitx.dts
+  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi
