@@ -9,17 +9,17 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23A2CC63798
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 27 Nov 2020 14:44:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5324C2D0E4
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 27 Nov 2020 14:44:56 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A5D9A20B1F
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 27 Nov 2020 14:44:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 5933E20B1F
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 27 Nov 2020 14:44:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="E36Ebg9H";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H9SqskTS"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A5D9A20B1F
+	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="xLBs8H2+";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sBlnwK92"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5933E20B1F
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -28,67 +28,66 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=V/b8+BZ0Aqt+bVCZAMlRjLH6ZIodHg56ne/uCuwOZoU=; b=E36Ebg9HA/HxkvZJ1epVVsVMD
-	1QhaUA1xF2zFSqUIVTxpdIkkDDoXWdNFF1v43snKqugA/+fZiTMqwXUVXl3iNocSXpbaO2VlhpDM1
-	HRqbJlqsgqCsy/d6dslgd+cg5X2d6xSxz6ki0+eJSD837+2EPkE/HTca8M2R1hwWgLa6UYes1MYal
-	exJBtd0Z56Vo3eD32yvzTFFTgKmMmdyw7jsKbeMPjuOTXrwZO7HlRBVhumtD3Y9wbM+yu9gIzuSbt
-	emYutFuD/NPtm8VX/B0AKiMM0vEKMjqArz+vXf5BGdm9d/RkkRfGW9ypXUvkDB9ABwvRf2FaZyh31
-	VRXOvVfKg==;
+	 bh=/1fRiOKQcrIlxq1hDqdrqHmlhOXRxKeDQ7HGzkX60w8=; b=xLBs8H2+VMewefbHCIOpjCj9s
+	dbE58JFgrM//ui3Coqok5slAjhh6n8sm68ibLOtoy8Gw7BLf8vJ8J3gd54BBqv6e29R8C7/phzVkp
+	KGHIDSyDJRMH3t12cr6kGFWVA5NhSE7R2jVZbl/4e/tYZHdRUPtUQeVRqxvmJimryVKinynVNo4f+
+	MH2+8cP9R4wc79skFLIk/A7oY/XALwYq1VW8nZlkzXX8dR/ZDKMolIzxdoBVSbeG+LoX/d/QaPIil
+	LR72XfCNrBgD8iyG/8QyqgheCDaZGQ5C2VlVPTrZWJal92i/Ur16wR4UVgcUDJJyc3fk+ScOLAweO
+	y7zypyeRQ==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kieyN-0005PJ-DY; Fri, 27 Nov 2020 14:43:43 +0000
-Received: from mail-wm1-x335.google.com ([2a00:1450:4864:20::335])
+	id 1kieyR-0005Qh-OH; Fri, 27 Nov 2020 14:43:47 +0000
+Received: from mail-wr1-x42d.google.com ([2a00:1450:4864:20::42d])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kieyF-0005NE-WB
- for linux-arm-kernel@lists.infradead.org; Fri, 27 Nov 2020 14:43:37 +0000
-Received: by mail-wm1-x335.google.com with SMTP id p22so5330095wmg.3
+ id 1kieyI-0005Nm-1J
+ for linux-arm-kernel@lists.infradead.org; Fri, 27 Nov 2020 14:43:39 +0000
+Received: by mail-wr1-x42d.google.com with SMTP id t4so5793911wrr.12
  for <linux-arm-kernel@lists.infradead.org>;
- Fri, 27 Nov 2020 06:43:35 -0800 (PST)
+ Fri, 27 Nov 2020 06:43:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=kmILkMTyoFSh8KUN/oBiKweVuctrEgzCw8JtH2R1a8E=;
- b=H9SqskTS/zs6NgiGlTwctg9G3N+OwvL6AStD7fUJIVKzsPFM1iLkeHiFMb+Hts3hsJ
- sqT5kTKbrs5G6RYDT+I+LTZbyuXoI1MZojE7ieaTncG6jx+7sjCBoPNRoXIO71CwkG/b
- S/mMWl6821V5Wat2szh5VkYc8LI6SiMliC8jbrx+q6GiDF5dkoSKvisuqfmX4d42cZk6
- FEDutGX5atvyxpgZaGA2uTW5NP516NaCJDEs6882IJpLMSjKc+RC9hK5hB99Og5uBozA
- e5CFSNziK0Ufmwk+fo/7xzp5XoOVlGHcNfp2+T9c5jpnRohTBw34rQaS+WW3Kr83GiAK
- yaNA==
+ bh=KEKSlpfgpbLCs7hwatanNSP8US33gujVVxIHTOMhDYo=;
+ b=sBlnwK92jyAt/OQ350OygpGMZnhlU48PAlUqKkAjF66DgKP4v+G6YcpCEng54vcb40
+ 20KzalTs5LizLFMhwEpbAEzuWGrx7cKQxSFEgSDOG2tC2RCaL1d2rNtiQIP4EjmjCOK2
+ N8hf93NzX5pNnqbXPcrIu4eAztOyS+MYjrYFOfnCLqDaUVddZf1cVSyybhX6XFKCOTPs
+ f9S0OqpsokQrziT1AT9amePClJILR2fMvVUjctHsk19pItAINMRweIbpDBwO9BpOcA7p
+ etmQ1iy+QSK6yHVtkOc8+62+cUbvoyHOyEGx+QSAHdhLZxJasfpwHJEaOoq0hivHgV85
+ 5Npg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=kmILkMTyoFSh8KUN/oBiKweVuctrEgzCw8JtH2R1a8E=;
- b=AmaBYU5dd2VBcbkMvr8nrhSukVaNSTWUvPIGpalvZmkrjl45nK9VFFu93D3A0TvU+p
- 1izTDT7/q/clleItobZTWxihIHIRL3j6706SxTUgKD3AMy2BMhSaZldTmLItZrDI+Pwv
- TpwY9OXhYzXTOU0DhMuSxAI9LdWw6bAuAlPc6RBtsuYWPKLxgiefrLsNpw4to1fd8tqX
- xB0VjAmoKC2qoGqL0Tnunaxf8ruXOkw0MtP5N81yvh1X8VQTCpOkm/9A8nd7fbVpDyGX
- VXwityihrj0l17N8CnK57ebip4sODQCVdU1OZ+i5PhYTuglo+GVef4SzYemfi0ecMi0e
- ZBDw==
-X-Gm-Message-State: AOAM531XDr3vjIb+aVxRqRP4OsR6hLxCBYRrpa7blpJ0JkdD5gHn8vG+
- x1QT9W0XIq523yl+po0uobA=
-X-Google-Smtp-Source: ABdhPJxq0c+uoa2BKNWyG9kqene0iZGI5CKPKW3iTmgscQI7KT4rOSfergEXR3rrSEhOOeNymtyvTg==
-X-Received: by 2002:a05:600c:219a:: with SMTP id
- e26mr9667529wme.168.1606488214360; 
- Fri, 27 Nov 2020 06:43:34 -0800 (PST)
+ bh=KEKSlpfgpbLCs7hwatanNSP8US33gujVVxIHTOMhDYo=;
+ b=LmQslKUpOzvLn3r4SYtqLUq8+FQ8s6XzbvxyRSxEJG2dBfb0VOgcND+/2yvZ4NF0Xm
+ wNjeMUPkJ29FkvUqf5k+Hw/8BisgcehiiieAdr8m0OnlY4lSKGXyE7Rn20spF4fs72z7
+ iLVhS2Gd2RGJo7o0n5Qb2emmBzW/Q7ZKbfmDyLGP9Unfgh9FEKWyeg46shfP3dW/Dkn3
+ BIWMei5WrPTmmKHpX8U7SvoTjwgEh5LcczUhnWiuhC4GJKffbu3bOQuSnszYGNe2ayLY
+ J0xCmCObcW/Nue1DkcwTPuYC/kMl1dmGsw8V0PA3KcYamsGmqFmdV1ANqZlQ/3uoOhnV
+ qAVw==
+X-Gm-Message-State: AOAM530JVkA7U/MvpNcjys36Lrdl4jgFgN2F5meBwaK1gRabQHMKW5Jv
+ xljc2iNZMvorWaQb6QmRpCQ=
+X-Google-Smtp-Source: ABdhPJwpGWTkgzcQN4p6Qs7NL384aOExPblrvngk8bGoyYH3HKpuBmjn4V3udouj2HkRyHehxLR/tw==
+X-Received: by 2002:a5d:4604:: with SMTP id t4mr10867775wrq.411.1606488216389; 
+ Fri, 27 Nov 2020 06:43:36 -0800 (PST)
 Received: from localhost ([62.96.65.119])
- by smtp.gmail.com with ESMTPSA id p11sm15368298wrj.14.2020.11.27.06.43.33
+ by smtp.gmail.com with ESMTPSA id f18sm14839458wru.42.2020.11.27.06.43.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Nov 2020 06:43:33 -0800 (PST)
+ Fri, 27 Nov 2020 06:43:35 -0800 (PST)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
-Subject: [GIT PULL 2/6] soc/tegra: Changes for v5.11-rc1
-Date: Fri, 27 Nov 2020 15:43:25 +0100
-Message-ID: <20201127144329.124891-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/6] firmware: tegra: Changes for v5.11-rc1
+Date: Fri, 27 Nov 2020 15:43:26 +0100
+Message-ID: <20201127144329.124891-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201127144329.124891-1-thierry.reding@gmail.com>
 References: <20201127144329.124891-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201127_094336_429641_9FC9E3EA 
-X-CRM114-Status: GOOD (  12.13  )
+X-CRM114-CacheID: sfid-20201127_094338_152881_849052E8 
+X-CRM114-Status: GOOD (  11.98  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,7 +105,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201127144325.NsP5VizdGBVNsqWaBKbtwLa6j9o58YPSOCNJL8xRgjE@z>
+Message-ID: <20201127144326.VAxlZn64H0yVYkBqj9EBmkYfNxPO53je5tGWPnidEAI@z>
 
 Hi ARM SoC maintainers,
 
@@ -116,32 +115,27 @@ The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.11-soc
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.11-firmware
 
-for you to fetch changes up to b9ce9b0f83b536a4ac7de7567a265d28d13e5bea:
+for you to fetch changes up to 9294996f0be40e9da818ed891c82397ab63c00d0:
 
-  soc/tegra: fuse: Fix index bug in get_process_id (2020-11-19 11:43:49 +0100)
+  firmware: tegra: fix strncpy()/strncat() confusion (2020-11-10 20:15:17 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-soc/tegra: Changes for v5.11-rc1
+firmware: tegra: Changes for v5.11-rc1
 
-This contains a couple of warning fixes and a fix for a mostly harmless
-bug in the process ID retrieval code.
+Contains a single fix for a strncpy()/strncat() issue that some versions
+of GCC are reporting.
 
 ----------------------------------------------------------------
-Lee Jones (2):
-      soc: tegra: fuse: speedo-tegra124: Remove some set but unused variables
-      soc: tegra: fuse: speedo-tegra210: Remove a group of set but unused variables
+Arnd Bergmann (1):
+      firmware: tegra: fix strncpy()/strncat() confusion
 
-Nicolin Chen (1):
-      soc/tegra: fuse: Fix index bug in get_process_id
-
- drivers/soc/tegra/fuse/speedo-tegra124.c | 21 ++++++---------------
- drivers/soc/tegra/fuse/speedo-tegra210.c |  8 ++------
- 2 files changed, 8 insertions(+), 21 deletions(-)
+ drivers/firmware/tegra/bpmp-debugfs.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 _______________________________________________
 linux-arm-kernel mailing list
