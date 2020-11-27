@@ -6,52 +6,49 @@ X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD237C64E90
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCCAAC64E7C
 	for <soc@archiver.kernel.org>; Fri, 27 Nov 2020 17:10:28 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 7268A2224B; Fri, 27 Nov 2020 17:10:28 +0000 (UTC)
+	id 6631C2224A; Fri, 27 Nov 2020 17:10:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1606497028;
-	bh=A91ROk+084pIa9vYWiKyRIHNFluQiqpCqhVbbsohZls=;
+	bh=bF3SHMaGukx/3am6D2CJZzBTqIHqlXSZDwgdKfPNcvk=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=FOr9LqeOV2J93dwZ4Y3nIwLcncZhVp/ESSneNnkGcmpNP1g0GYOOILNqUXQfWilFE
-	 4rh6GLtq/UgfruF/PvBOJ8WFQpklLBpWLgiM1ZFo/OOW2B6fRIyZ/31N5CRDjLpjF2
-	 FCD7+vD73qUwYA1FjjhJLoQG6nJPFrTqIG3d3tB0=
+	b=S3laNE82+Zn1nODby9/EWwIDbjyCIZCHA07T22Tww3cv9iiWXuQcyI3eQwfmaLymu
+	 ZwjRBGLegJYBmXDDgRDujNF2konT9QvxuueBr2a5FziAutqgZlvk8cpE1teEnps3pN
+	 N1I47Y9inUagDRjw9W3swq6se/R/pFQxGOapMNUI=
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 0/3] Renesas ARM SoC updates for v5.11 (take two)
+Subject: Re: [GIT PULL] OP-TEE driver for v5.11
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <160649702832.7685.1480566177231338902.git-patchwork-notify@kernel.org>
+ <160649702828.7685.6858114051915132759.git-patchwork-notify@kernel.org>
 Date: Fri, 27 Nov 2020 17:10:28 +0000
-References: <20201127132155.77418-1-geert@linux-m68k.org>
-In-Reply-To: <20201127132155.77418-1-geert@linux-m68k.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20201125120134.GA1642471@jade>
+In-Reply-To: <20201125120134.GA1642471@jade>
+To: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (refs/heads/for-next):
+This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Fri, 27 Nov 2020 14:21:52 +0100 you wrote:
-> Hi arm-soc folks,
+On Wed, 25 Nov 2020 13:01:34 +0100 you wrote:
+> Hello arm-soc maintainers,
 > 
-> This is my second pull request for the inclusion of Renesas SoC updates
-> for v5.11.
+> Please pull this small patch which allows the OP-TEE driver to work with
+> ARMv7 based single CPU systems.
 > 
-> It consists of 3 parts:
+> Thanks,
+> Jens
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/3] Renesas ARM DT updates for v5.11 (take two)
-    https://git.kernel.org/soc/soc/c/eb149c927d58
-  - [GIT,PULL,2/3] Renesas ARM SoC updates for v5.11
-    https://git.kernel.org/soc/soc/c/334d09c218c1
-  - [GIT,PULL,3/3] Renesas driver updates for v5.11 (take two)
-    https://git.kernel.org/soc/soc/c/72c7b0857069
+  - [GIT,PULL] OP-TEE driver for v5.11
+    https://git.kernel.org/soc/soc/c/ae597565d13f
 
 You are awesome, thank you!
 --
