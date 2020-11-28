@@ -1,38 +1,87 @@
-Return-Path: <mripard@kernel.org>
+Return-Path: <SRS0=CKL9=FC=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9575C63697
-	for <soc@archiver.kernel.org>; Sat, 28 Nov 2020 11:28:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id A7E26222C2; Sat, 28 Nov 2020 11:28:05 +0000 (UTC)
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5A84C63697
+	for <linux-arm-kernel@archiver.kernel.org>; Sat, 28 Nov 2020 11:29:50 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPSA id 23BC522268;
-	Sat, 28 Nov 2020 11:28:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 2FD5822268
+	for <linux-arm-kernel@archiver.kernel.org>; Sat, 28 Nov 2020 11:29:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="WSaUd0Uo";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="EItJU/b6"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2FD5822268
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:Cc:
+	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
+	MIME-Version:Message-ID:Subject:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+	References:List-Owner; bh=QyYHGf2jC9ZgPx9qZ29P6Mu6i4RZcaVA+XVvyH8ap9U=; b=WSa
+	Ud0UolG4BOeYJ9XiPwh7L2aqi3YCVGah0Mmn3wV/WZFKdnLOh+r/f5F6y7n1HqdhJWaHPeCty6w7L
+	nplnAaHKG3BWpFnPmbi01cHG0Rekl05MvqO/HmsITbtPCU6JDPvJrdOpRE+PRpV2UcJ0ayYb0rewY
+	SRF+7doTjMVbuV0uSkvru41DYX+OXg91i1mktpr5RSo6+eu2YvwcXahhcBFtjGqAHgiJZ+YMRONi1
+	sA2DeGbpQfkqIuDFaSGN/k1YZ4kANVDKnoLqn9COyMgr7nx2B1Bo09dSQHyS4I5eK3Z0gMYcHPUr0
+	C1WgYSGUruNcMoLTb8drh5eA6HMdGSw==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kiyOf-0004cm-2j; Sat, 28 Nov 2020 11:28:15 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kiyOc-0004cN-L2
+ for linux-arm-kernel@lists.infradead.org; Sat, 28 Nov 2020 11:28:07 +0000
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr
+ [90.89.68.76])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.kernel.org (Postfix) with ESMTPSA id 23BC522268;
+ Sat, 28 Nov 2020 11:28:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1606562885;
-	bh=yL6yOiJsoBs8VnuA353EZ2heqALtChgfYWsGqfzPpvQ=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=EItJU/b61FIDeC8XcLqHZ0CjASC/BWE9Jnhv0w7yCbC8zPtPJZDkSU22nO5JB0SZE
-	 w8XuIPTDv22UsN4VtMGtbDUqBlCI2TPetD4bpVxG96UwJY0TM5R5V5YDbgcXeZXMH8
-	 ogSEpKm5lvXOw1l0fHCro7g0+SCjnY7zrTsGQjxQ=
+ s=default; t=1606562885;
+ bh=yL6yOiJsoBs8VnuA353EZ2heqALtChgfYWsGqfzPpvQ=;
+ h=Date:From:List-Id:To:Cc:Subject:From;
+ b=EItJU/b61FIDeC8XcLqHZ0CjASC/BWE9Jnhv0w7yCbC8zPtPJZDkSU22nO5JB0SZE
+ w8XuIPTDv22UsN4VtMGtbDUqBlCI2TPetD4bpVxG96UwJY0TM5R5V5YDbgcXeZXMH8
+ ogSEpKm5lvXOw1l0fHCro7g0+SCjnY7zrTsGQjxQ=
 Date: Sat, 28 Nov 2020 12:28:03 +0100
 From: Maxime Ripard <mripard@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org, soc@kernel.org
-Cc: Maxime Ripard <mripard@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@siol.net>
 Subject: [GIT PULL] Allwinner Device Tree Changes for 5.11
 Message-ID: <551fdf4f-8a0b-4a22-ba49-b4f61520a9ab.lettre@localhost>
 MIME-Version: 1.0
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201128_062806_916479_C189B304 
+X-CRM114-Status: GOOD (  15.66  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: Jernej Skrabec <jernej.skrabec@siol.net>, Chen-Yu Tsai <wens@csie.org>,
+ linux-arm-kernel@lists.infradead.org, Maxime Ripard <mripard@kernel.org>
+Content-Type: multipart/mixed; boundary="===============0619144131073045386=="
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201128112803.rXXFIWZzYXFj2MiNlagljeOlqmqJDNHIQuKdgutOZD0@z>
+
+
+--===============0619144131073045386==
 Content-Type: multipart/signed; micalg=pgp-sha256;
 	protocol="application/pgp-signature"; boundary="y0ulUmNC+osPPQO6"
 Content-Disposition: inline
@@ -149,3 +198,18 @@ uDg92AymSG5Ebgv+gMebiPtjI9oTZgs=
 -----END PGP SIGNATURE-----
 
 --y0ulUmNC+osPPQO6--
+
+
+--===============0619144131073045386==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+--===============0619144131073045386==--
+
