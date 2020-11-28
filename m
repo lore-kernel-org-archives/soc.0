@@ -1,106 +1,82 @@
-Return-Path: <SRS0=Z36m=FB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=0D7X=FC=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 335CFC6379D
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 27 Nov 2020 23:31:48 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B7C1120885
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 27 Nov 2020 23:31:47 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="ZNBnSs4Z";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="HWX4qv9Q"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B7C1120885
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Date:Message-Id:References:In-Reply-To:From:
-	Subject:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=3B4rgIBwsXR7qsfq3NZfmFVXR8T47EkxDVbDBSXnHkE=; b=ZNBnSs4ZjU41U9GingSQhy8Cfd
-	OD00yZgQaF6uxXdGRPVDayP9RB6NXqKwIzGfPtQ3RuW7KYF/jP0JjYpslYGCKwukDrH8exw2FbBU4
-	tamGWt68cvl1rbS4/NhBG6DkI/DFGYDrspUWDaMYh3Fv6izHs2IyhKiOKQLKWrW6ms8HK79T6EO9Y
-	FANpSGJQvoXQZXtqeqtpwLvlG2Ba6By6A+eSfnW6ld/xdtLjVKpcc041cwRVEW3ssjsrKzRlejzjD
-	87cVlJLLzTclqL6IVKvJWuIcfA1KK/F+/cF5M8tcxrYlck3UblKloklm826pAaU4CzhLYpyfAlOCs
-	oTTQyXGw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kinBq-0004Mw-2r; Fri, 27 Nov 2020 23:30:10 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kinBf-0004Kp-Pz
- for linux-arm-kernel@lists.infradead.org; Fri, 27 Nov 2020 23:30:01 +0000
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=default; t=1606519799;
- bh=odBZsXzhtmwpQwNUqeWXKjwv0rU3WQpAR6B8J4GXyyw=;
- h=From:In-Reply-To:References:Date:To:List-Id:Cc:From;
- b=HWX4qv9Q2bO0OxEKwa8/vS2/IVJTLHSfQwHUM865iPy6Coirz3xNsvKLkSCvhQa1a
- /dZhuGiqo6MyF2Watw9YLarI41GusxA/hx4mp0o3dtcvCLMQ3RvY1P6ydA32aY3VGz
- frj44h+cOjksY3V4qa/WSRUow8FYCqR7yAgrTtvA=
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
-References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
- tags/arm-soc-fixes-v5.10-3
-X-PR-Tracked-Commit-Id: ae597565d13febc73b9066c05935c1003a57a03e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 303bc934722b53163bfb1c25da7db5d35c0e51b6
-Message-ID: <160651979900.32137.11200973603883765915.pr-tracker-bot@kernel.org>
-Date: Fri, 27 Nov 2020 23:29:59 +0000
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CE3DC63697
+	for <soc@archiver.kernel.org>; Sat, 28 Nov 2020 08:34:47 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 17CC122280; Sat, 28 Nov 2020 08:34:47 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by mail.kernel.org (Postfix) with ESMTP id 6F0D6208CA;
+	Sat, 28 Nov 2020 08:34:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6F0D6208CA
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=sudeep.holla@arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C09D831B;
+	Sat, 28 Nov 2020 00:34:45 -0800 (PST)
+Received: from bogus (unknown [10.57.59.53])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2DC793F71F;
+	Sat, 28 Nov 2020 00:34:43 -0800 (PST)
+Date: Sat, 28 Nov 2020 08:34:36 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
 To: Arnd Bergmann <arnd@kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201127_183000_298903_C5318F1A 
-X-CRM114-Status: UNSURE (   5.31  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc: SoC Team <soc@kernel.org>, ARM SoC Team <arm@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>,
+	Arnd Bergmann <arnd@arndb.de>, Kevin Hilman <khilman@kernel.org>,
+	Olof Johansson <olof@lixom.net>,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [GIT PULL] firmware: arm_scmi: Updates for v5.11
+Message-ID: <20201128083436.c5cgygkas34mtnkd@bogus>
+References: <20201124122412.22386-1-sudeep.holla@arm.com>
+ <CAK8P3a3xN70zumQ-gwiBxGwoia2bkfGF-c5r=KY3ihhXy4F89g@mail.gmail.com>
+ <20201127100007.iu657u63jnoeg6g2@bogus>
+ <CAK8P3a07J7dUxd4v9ks0uV6RB5gbzC84f1rBRpuXVrtbXSE9mQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201127232959.rXNFsilPdPE6x1PnNk5sJ7zi-7eEXtUMp1KQRsy8jOE@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a07J7dUxd4v9ks0uV6RB5gbzC84f1rBRpuXVrtbXSE9mQ@mail.gmail.com>
+User-Agent: NeoMutt/20171215
 
-The pull request you sent on Fri, 27 Nov 2020 21:51:05 +0100:
+On Fri, Nov 27, 2020 at 09:09:27PM +0100, Arnd Bergmann wrote:
+> On Fri, Nov 27, 2020 at 11:00 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > On Thu, Nov 26, 2020 at 09:54:50PM +0100, Arnd Bergmann wrote:
+> > > On Tue, Nov 24, 2020 at 1:24 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > > >
+> > > > Hi ARM SoC Team,
+> > > >
+> > > > Please pull ! The tag is based on v5.10-rc2 to avoid conflicts with
+> > > > the fixes that got merged in -rc2.
+> > >
+> > > Is there no way to avoid this? I would really prefer not to have to backmerge
+> > > rc2 into my existing branch if it's just about the bugfix.
+> > >
+> > > I tried rebasing your branch onto -rc2 and only got a trivial conflict
+> > > in one line, and even that could be avoided by merging in your
+> > > bugfix branch instead of the whole -rc2.
+> > >
+> >
+> > Unfortunately the branch/tag I shared with Mark Brown to merge the voltage
+> > regulator part is also based on -rc2. I might have to drop those patches
+> > from this pull request if I need to rebase on -rc1. If that's OK, I can
+> > send fresh/new PR based on -rc1. Sorry for the trouble.
+> 
+> I ended up doing the backmerge of v5.10-rc2 into arm/drivers and merged
+> your tag on top of that. I'll have to remember filtering out the changes
+> when I send my pull request to Linus, but otherwise this seems like
+> the lesser evil.
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-soc-fixes-v5.10-3
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/303bc934722b53163bfb1c25da7db5d35c0e51b6
-
-Thank you!
+Thanks and extremely sorry for the trouble. I always try to base on -rc1.
+Since I had seen Arm SoC pull requests on -rc2 sometimes due to other
+dependencies, I thought -rc2 wasn't too bad. I will try to stick with -rc1
+or fixes tag in future to keep it simple.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Regards,
+Sudeep
