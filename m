@@ -1,96 +1,46 @@
-Return-Path: <SRS0=CKL9=FC=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <mripard@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 380DAC63697
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 28 Nov 2020 11:26:02 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9575C63697
+	for <soc@archiver.kernel.org>; Sat, 28 Nov 2020 11:28:05 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A7E26222C2; Sat, 28 Nov 2020 11:28:05 +0000 (UTC)
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CCF2F2225B
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 28 Nov 2020 11:26:01 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="Wsp3QIOQ";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="x+gWyFvl"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CCF2F2225B
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:Cc:
-	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
-	MIME-Version:Message-ID:Subject:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-	References:List-Owner; bh=wLwdflZEIdQokpWGQYi+nbaAq5aURlqG+mrDU59DRDI=; b=Wsp
-	3QIOQlr3tmM/v3GXlthaFlf0s2isqoTlzS+Gl7HujThd+Ly1CuW3+zcyjumIsO4VoJT/hKwsHODNQ
-	iXNvBzsPhskfVbaUJ0s92rTTYAdCcNqGaMqbMBcrcHavDsjjAOXT5n7uL5Tx2Nhz+kI0KvlnFiulU
-	rCGgnVnbN9KBZWhPyIlo6YaE91R9juLv5XJ4PC1gFhhttLtKnvWaaJ0G6xfpeNA8r3XJGeRP0V3i4
-	HpqrRA2F4f6ARsJreNjlGCzvgUz/2YmJTFomrY/TeScOfj9FISryWkTw3N3/Y+DfHNslDPrEei+4J
-	Ee0ytkTXeYWCEGrC5HByPWRAjJSOJ/Q==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kiyLD-0004Jf-QL; Sat, 28 Nov 2020 11:24:35 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kiyLB-0004Iw-7q
- for linux-arm-kernel@lists.infradead.org; Sat, 28 Nov 2020 11:24:34 +0000
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr
- [90.89.68.76])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.kernel.org (Postfix) with ESMTPSA id E90A82225B;
- Sat, 28 Nov 2020 11:24:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPSA id 23BC522268;
+	Sat, 28 Nov 2020 11:28:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=default; t=1606562672;
- bh=l5VaVAUHW2WhwZ3kOPXLkWqghbtPx8Xk8vffBHP7pME=;
- h=Date:From:List-Id:To:Cc:Subject:From;
- b=x+gWyFvljzi6k50hI/6u41O2XHyr5zxNztD0h1j2Hfec0eUff/cCEyTQmGERIJXLg
- QQMKP5n1OFMLf0zQgnLPssg31+RBXlfYt4ycXVG1hl/1Q1neCoio7Ldx0hxzpRB3oP
- OHQ4FmNuqriXpyAyVy4YVzmicssYea3j4UGB9oBs=
-Date: Sat, 28 Nov 2020 12:24:30 +0100
+	s=default; t=1606562885;
+	bh=yL6yOiJsoBs8VnuA353EZ2heqALtChgfYWsGqfzPpvQ=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=EItJU/b61FIDeC8XcLqHZ0CjASC/BWE9Jnhv0w7yCbC8zPtPJZDkSU22nO5JB0SZE
+	 w8XuIPTDv22UsN4VtMGtbDUqBlCI2TPetD4bpVxG96UwJY0TM5R5V5YDbgcXeZXMH8
+	 ogSEpKm5lvXOw1l0fHCro7g0+SCjnY7zrTsGQjxQ=
+Date: Sat, 28 Nov 2020 12:28:03 +0100
 From: Maxime Ripard <mripard@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org, soc@kernel.org
-Subject: [GIT PULL] Allwinner arm64 Defconfig Changes for 5.11
-Message-ID: <5ddf5486-a20c-467a-bc67-d5e8fbc38856.lettre@localhost>
+Cc: Maxime Ripard <mripard@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@siol.net>
+Subject: [GIT PULL] Allwinner Device Tree Changes for 5.11
+Message-ID: <551fdf4f-8a0b-4a22-ba49-b4f61520a9ab.lettre@localhost>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201128_062433_372146_4C6BB92A 
-X-CRM114-Status: GOOD (  11.66  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Jernej Skrabec <jernej.skrabec@siol.net>, Chen-Yu Tsai <wens@csie.org>,
- linux-arm-kernel@lists.infradead.org, Maxime Ripard <mripard@kernel.org>
-Content-Type: multipart/mixed; boundary="===============5040102087902758816=="
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201128112430.rQHD0tTTpRP3GwpEGmBsVapXAYQZKNuFTiZtxGm6Xg8@z>
-
-
---===============5040102087902758816==
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="2fHTh5uZTiUOsy+g"
+	protocol="application/pgp-signature"; boundary="y0ulUmNC+osPPQO6"
 Content-Disposition: inline
 
 
---2fHTh5uZTiUOsy+g
-Content-Type: text/plain; charset=iso-8859-1
+--y0ulUmNC+osPPQO6
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
 Hi Arnd, Olof,
 
@@ -105,50 +55,97 @@ The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git refs/tags=
-/sunxi-config64-for-5.11
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git refs/tags/sunxi-dt-for-5.11
 
-for you to fetch changes up to 0536f70989601c64c162107354a03112ab1bb9e6:
+for you to fetch changes up to 036b7334ee6dc10115fbaebd8b04c9e4a17eccb2:
 
-  arm64: defconfig: Enable Allwinner i2s driver (2020-11-02 15:09:53 +0100)
-
-----------------------------------------------------------------
-One patch to enable the Allwinner I2S controller on arm64's defconfig
+  ARM: dts: sun8i-h2-plus-bananapi-m2-zero: add gpio-line-names (2020-11-24 15:24:59 +0100)
 
 ----------------------------------------------------------------
-Cl=E9ment P=E9ron (1):
-      arm64: defconfig: Enable Allwinner i2s driver
+Our usual bunch of patches to support the Allwinner SoCs, this time
+adding:
+  - Some nice pinephone additions
+  - I2S support for the A64, H3, H5 and H6
+  - New boards: Elimo Impetus, Elimo Initium, FriendlyArm ZeroPi, NanoPi R1
+
+----------------------------------------------------------------
+Jernej Skrabec (2):
+      arm64: dts: allwinner: h6: PineH64 model B: Add wifi
+      arm64: dts: allwinner: h6: Add I2S1 node
+
+Luca Weiss (1):
+      arm64: dts: allwinner: pinephone: Add LED flash
+
+Marcus Cooper (2):
+      arm64: dts: allwinner: a64: Add I2S2 node
+      arm: dts: sunxi: h3/h5: Add I2S2 node
+
+Matteo Scordino (5):
+      dt-bindings: vendors: add Elimo Engineering vendor prefix
+      ARM: dts: sun8i: V3/S3: Add UART1 pin definitions to the V3/S3 dtsi
+      ARM: dts: sun8i: s3: Add dtsi for the Elimo Impetus SoM
+      dt-bindings: arm: sunxi: add Elimo bindings
+      ARM: dts: sun8i: s3: Add dts for the Elimo Initium SBC
+
+Michael Klein (1):
+      ARM: dts: sun8i-h2-plus-bananapi-m2-zero: add gpio-line-names
+
+Ondrej Jirman (3):
+      arm64: dts: allwinner: pinephone: Add light/proximity sensor
+      arm64: dts: allwinner: pinephone: Add WiFi support
+      arm64: dts: allwinner: pinephone: Add Bluetooth support
+
+Paul Kocialkowski (1):
+      ARM: dts: sun8i-v3s: Add I2C1 PB pins description
+
+Samuel Holland (3):
+      arm64: dts: allwinner: pinephone: Remove AC power supply
+      arm64: dts: allwinner: pinephone: Set ALDO3 to exactly 3v0
+      arm64: dts: allwinner: pinephone: Use generic sensor node names
+
+Serge Semin (1):
+      arm64: dts: allwinner: h6: Harmonize DWC USB3 DT nodes name
+
+Yu-Tung Chang (2):
+      ARM: dts: sun8i: add FriendlyArm ZeroPi support
+      ARM: dts: sun8i: h3: Add initial NanoPi R1 support
 
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/arm/sunxi.yaml             |  23 ++-
+ Documentation/devicetree/bindings/vendor-prefixes.yaml       |   2 +-
+ arch/arm/boot/dts/Makefile                                   |   3 +-
+ arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts         |  64 +++++-
+ arch/arm/boot/dts/sun8i-h3-nanopi-r1.dts                     | 169 ++++++++++++-
+ arch/arm/boot/dts/sun8i-h3-zeropi.dts                        |  85 ++++++-
+ arch/arm/boot/dts/sun8i-s3-elimo-impetus.dtsi                |  44 +++-
+ arch/arm/boot/dts/sun8i-s3-elimo-initium.dts                 |  29 ++-
+ arch/arm/boot/dts/sun8i-v3.dtsi                              |   5 +-
+ arch/arm/boot/dts/sun8i-v3s.dtsi                             |   6 +-
+ arch/arm/boot/dts/sunxi-h3-h5.dtsi                           |  13 +-
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dts   |   5 +-
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dts   |   5 +-
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dts   |  14 +-
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi      |  68 ++++-
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi                |  14 +-
+ arch/arm64/boot/dts/allwinner/sun50i-h6-pine-h64-model-b.dts |  15 +-
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi                 |  15 +-
+ 18 files changed, 570 insertions(+), 9 deletions(-)
+ create mode 100644 arch/arm/boot/dts/sun8i-h3-nanopi-r1.dts
+ create mode 100644 arch/arm/boot/dts/sun8i-h3-zeropi.dts
+ create mode 100644 arch/arm/boot/dts/sun8i-s3-elimo-impetus.dtsi
+ create mode 100644 arch/arm/boot/dts/sun8i-s3-elimo-initium.dts
 
 
 
---2fHTh5uZTiUOsy+g
+--y0ulUmNC+osPPQO6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX8IzbgAKCRDj7w1vZxhR
-xfbiAP40iLCU1EivEBOQxmISITs8GZaOeZaQ7Cp1Gbp7m7cR3wD/WLb9zSsSJW6R
-DTdJPmSi8pgMr4j/YqsQfYYccwy5Owk=
-=oOEs
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX8I0QwAKCRDj7w1vZxhR
+xZVmAP9CIl9EMkFZpij9BIoaDI0HQebi8atwLDof2GSNqEZZrgD/dc3QFXV8oeAB
+uDg92AymSG5Ebgv+gMebiPtjI9oTZgs=
+=gicQ
 -----END PGP SIGNATURE-----
 
---2fHTh5uZTiUOsy+g--
-
-
---===============5040102087902758816==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
---===============5040102087902758816==--
-
+--y0ulUmNC+osPPQO6--
