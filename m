@@ -1,126 +1,117 @@
-Return-Path: <SRS0=CKL9=FC=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <mripard@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-20.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48041C63697
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 28 Nov 2020 08:36:49 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 558A2C63697
+	for <soc@archiver.kernel.org>; Sat, 28 Nov 2020 10:57:12 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id DD49222363; Sat, 28 Nov 2020 10:57:11 +0000 (UTC)
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D25FD21534
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 28 Nov 2020 08:36:48 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="skMA7/kC"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D25FD21534
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=MdGQfZUAQmp4GSfT4Mkdo5goroYuPlDJlIV8ZYdAupI=; b=skMA7/kCMKq707bSaqmMVsQk/
-	msbACZFTq9xypN+wH1fH63gfDo6z/LVIqyJhsieYe+0IrRAeS+/ltZknjmVa1fipjC8xZRsaXAvTa
-	zHTKLe+irrlyINS4fI0mutFwAV79UNgs1/0/KKgR0t1Y9JTvJ/yZ+ZXmdFZgNurXq3kuezMHtmQia
-	1WGfvGK1SeXHPx3xj7jRhhavSpbrekO6A5aZbwZB13LUr3Q/nlz/oVafpFyRlhBmUE0rp5vrLfi2W
-	BAffQh51cDQcFLYoHqt3Qh0xmdvZenQr38zMLFXfj19936789xp/hr9LosL5zUcYA3BpNGeRtSWn7
-	0/0GWaO2Q==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kivh4-00019U-Sf; Sat, 28 Nov 2020 08:34:58 +0000
-Received: from foss.arm.com ([217.140.110.172])
- by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kivgx-00018s-DB
- for linux-arm-kernel@lists.infradead.org; Sat, 28 Nov 2020 08:34:52 +0000
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C09D831B;
- Sat, 28 Nov 2020 00:34:45 -0800 (PST)
-Received: from bogus (unknown [10.57.59.53])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2DC793F71F;
- Sat, 28 Nov 2020 00:34:43 -0800 (PST)
-Date: Sat, 28 Nov 2020 08:34:36 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Subject: Re: [GIT PULL] firmware: arm_scmi: Updates for v5.11
-Message-ID: <20201128083436.c5cgygkas34mtnkd@bogus>
-References: <20201124122412.22386-1-sudeep.holla@arm.com>
- <CAK8P3a3xN70zumQ-gwiBxGwoia2bkfGF-c5r=KY3ihhXy4F89g@mail.gmail.com>
- <20201127100007.iu657u63jnoeg6g2@bogus>
- <CAK8P3a07J7dUxd4v9ks0uV6RB5gbzC84f1rBRpuXVrtbXSE9mQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a07J7dUxd4v9ks0uV6RB5gbzC84f1rBRpuXVrtbXSE9mQ@mail.gmail.com>
-User-Agent: NeoMutt/20171215
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201128_033451_593964_34AD1DA4 
-X-CRM114-Status: GOOD (  25.38  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by mail.kernel.org (Postfix) with ESMTPSA id 4EA3C21534;
+	Sat, 28 Nov 2020 10:57:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1606561031;
+	bh=/cYCB9ubtMCYTyW8pXjqV4uW11YWkL9TfmjWd+n+iag=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=ionA9ywttwYEAEJVyHYxwU4L0L0Gp3+elpQ9ISYpew0EXy+MQk92MbJCjNMTpJnmE
+	 1/JgQrrxEJnAv5LzFFmXrs1WpRU1TiPZyPMwUvV5nCAhrsfwzgVNPBZ5GBEfJQMbFx
+	 59xU9AC8aUM4OZyGuDVDrU1b146NlgQs77tnHQVc=
+Date: Sat, 28 Nov 2020 11:57:09 +0100
+From: Maxime Ripard <mripard@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Kevin Hilman <khilman@kernel.org>,
- SoC Team <soc@kernel.org>, ARM SoC Team <arm@kernel.org>,
- Sudeep Holla <sudeep.holla@arm.com>, Olof Johansson <olof@lixom.net>,
- ALKML <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201128083436.TzoIgyg0ItXmUV8Lw-Q6Mj_ZNHCnet0R8TdbUXeMMIE@z>
+To: arm@kernel.org, soc@kernel.org
+Cc: Maxime Ripard <mripard@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>
+Subject: [GIT PULL] Allwinner Fixes for 5.10
+Message-ID: <1280f1de-1b6d-4cc2-8448-e5a9096a41e8.lettre@localhost>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="ew6BAiZeqk4r7MaW"
+Content-Disposition: inline
 
-On Fri, Nov 27, 2020 at 09:09:27PM +0100, Arnd Bergmann wrote:
-> On Fri, Nov 27, 2020 at 11:00 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > On Thu, Nov 26, 2020 at 09:54:50PM +0100, Arnd Bergmann wrote:
-> > > On Tue, Nov 24, 2020 at 1:24 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > >
-> > > > Hi ARM SoC Team,
-> > > >
-> > > > Please pull ! The tag is based on v5.10-rc2 to avoid conflicts with
-> > > > the fixes that got merged in -rc2.
-> > >
-> > > Is there no way to avoid this? I would really prefer not to have to backmerge
-> > > rc2 into my existing branch if it's just about the bugfix.
-> > >
-> > > I tried rebasing your branch onto -rc2 and only got a trivial conflict
-> > > in one line, and even that could be avoided by merging in your
-> > > bugfix branch instead of the whole -rc2.
-> > >
-> >
-> > Unfortunately the branch/tag I shared with Mark Brown to merge the voltage
-> > regulator part is also based on -rc2. I might have to drop those patches
-> > from this pull request if I need to rebase on -rc1. If that's OK, I can
-> > send fresh/new PR based on -rc1. Sorry for the trouble.
-> 
-> I ended up doing the backmerge of v5.10-rc2 into arm/drivers and merged
-> your tag on top of that. I'll have to remember filtering out the changes
-> when I send my pull request to Linus, but otherwise this seems like
-> the lesser evil.
-> 
 
-Thanks and extremely sorry for the trouble. I always try to base on -rc1.
-Since I had seen Arm SoC pull requests on -rc2 sometimes due to other
-dependencies, I thought -rc2 wasn't too bad. I will try to stick with -rc1
-or fixes tag in future to keep it simple.
+--ew6BAiZeqk4r7MaW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Regards,
-Sudeep
+Hi Arnd, Olof,
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Please pull the following changes for the current release.
+
+Thanks!
+Maxime
+
+The following changes since commit 107954afc5df667da438644aa4982606663f9b17:
+
+  arm64: dts: allwinner: h5: OrangePi Prime: Fix ethernet node (2020-10-29 10:29:49 +0100)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git refs/tags/sunxi-fixes-for-5.10-2
+
+for you to fetch changes up to a7361b9c4615951f52ffd2b1afa09a1384c7b4e4:
+
+  ARM: dts: sun7i: pcduino3-nano: enable RGMII RX/TX delay on PHY (2020-11-24 15:24:28 +0100)
+
+----------------------------------------------------------------
+A few more RGMII-ID fixes, and a bunch of other more random fixes
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX8Is4AAKCRDj7w1vZxhR
+xbAjAP4ohHei2PZ3mHF6wU9kBv4lM2aV60mqvKDFirMdfQBNoAD/Y5fMBAVp6yJn
+lRECtoJdPWI4x97ZNZMR4xX1XVSXoQk=
+=aO5k
+-----END PGP SIGNATURE-----
+
+----------------------------------------------------------------
+Adam Sampson (1):
+      ARM: dts: sun7i: pcduino3-nano: enable RGMII RX/TX delay on PHY
+
+Icenowy Zheng (1):
+      ARM: dts: sun8i: v3s: fix GIC node memory range
+
+Jernej Skrabec (1):
+      arm64: dts: allwinner: h6: orangepi-one-plus: Fix ethernet
+
+Matteo Scordino (1):
+      ARM: dts: s3: pinecube: align compatible property to other S3 boards
+
+Pablo Greco (3):
+      ARM: dts: sun7i: bananapi: Enable RGMII RX/TX delay on Ethernet PHY
+      ARM: dts: sun8i: r40: bananapi-m2-berry: Fix dcdc1 regulator
+      ARM: dts: sun8i: v40: bananapi-m2-berry: Fix ethernet node
+
+Paul Kocialkowski (1):
+      ARM: sunxi: Add machine match for the Allwinner V3 SoC
+
+
+ arch/arm/boot/dts/sun7i-a20-bananapi.dts                      |  2 +-
+ arch/arm/boot/dts/sun7i-a20-pcduino3-nano.dts                 |  4 ++--
+ arch/arm/boot/dts/sun8i-s3-pinecube.dts                       |  2 +-
+ arch/arm/boot/dts/sun8i-v3s.dtsi                              |  2 +-
+ arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts             | 12 ++++++------
+ arch/arm/mach-sunxi/sunxi.c                                   |  1 +-
+ arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-one-plus.dts |  2 +-
+ 7 files changed, 13 insertions(+), 12 deletions(-)
+
+
+
+--ew6BAiZeqk4r7MaW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX8ItBQAKCRDj7w1vZxhR
+xRJrAPoDDYc5fQDvi9gismOGix+4mdxZuVMpmRjezPkIhjGMgAD7B9Z9mZBTXkDS
+CG1stNc0tv7CouM0c895t9wAe4rsWQg=
+=63O7
+-----END PGP SIGNATURE-----
+
+--ew6BAiZeqk4r7MaW--
