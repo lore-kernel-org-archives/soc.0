@@ -1,146 +1,136 @@
-Return-Path: <SRS0=CKL9=FC=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=LVh9=FD=0x0f.com=daniel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D512AC63777
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 28 Nov 2020 16:36:32 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8467BC3E8C5
+	for <soc@archiver.kernel.org>; Sun, 29 Nov 2020 11:08:15 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 4B50320771; Sun, 29 Nov 2020 11:08:15 +0000 (UTC)
+Received: from mail-pg1-f194.google.com (mail-pg1-f194.google.com [209.85.215.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 827A924682
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 28 Nov 2020 16:36:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 8025E207BC
+	for <soc@kernel.org>; Sun, 29 Nov 2020 11:08:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="Mx/WKV4u";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j947Wy9p"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 827A924682
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=6AeP20GW1R4qGhWVxjXcPBZsqDNyHr8Z8QWS30dQQps=; b=Mx/WKV4uLDZqCbNbaiRC/I/Mz
-	4NfWJKyh1hJx72jK99VbChizyrXVZYwFuklhG7ZxPfqqNFo4NZtzElmbZ8X/AgIdFfWT6PNP9Et2j
-	QiDGa/TpJMiqKQp85k0sLJubTnkuzh+KJfZ1p7ZJaEq2V654EhdIRIuaTsQ5EaTEsvYUWi64VPlUm
-	Uv2UHWLzJAyEekf1LLFjQ2YY6fs5dlC6jUrjo6kEio7CPdyWF2eprOmgVze7k6eRa7WrvOiPjhGC7
-	Ozqktk1zbZfU7KfqiGvGh56uOSHclXhvRQDDuF4oWmH6kHCPIrDaj3GYCoranzjOSvOTWbVy9s44P
-	Yg7cQtnJg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kj3Bf-0002PK-AH; Sat, 28 Nov 2020 16:35:04 +0000
-Received: from mail-pl1-x634.google.com ([2607:f8b0:4864:20::634])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kj3B1-0002A5-LA
- for linux-arm-kernel@lists.infradead.org; Sat, 28 Nov 2020 16:34:26 +0000
-Received: by mail-pl1-x634.google.com with SMTP id k5so4146483plt.6
- for <linux-arm-kernel@lists.infradead.org>;
- Sat, 28 Nov 2020 08:34:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=wc0nyS8dzfOavbOXrqC7eni+mcCu2FOMeKW4jeT7vyw=;
- b=j947Wy9p0q+rAUjgkMm8kdMwwdNbzshmIu7FSEn/IDz8zavpWSpLXmKD5VsTgRV2iY
- fb43v4xzcP/oEWoPzuvBd2TYhPmsNWNBMSD+YN+PIibF/+rbDKwFGK3Gt4BFgc5fUqRe
- dmh4z1bASeUI49SAfrKupeFSTVxuFsL50Ir+V9LcQxs8Qyj78CF1neVlgYG9rWtsfklf
- EmeF+5aaAWw6LGem+LbpVkSxpvEzUDWvGC/1HRupC34lNBXA1V2HwC+XINP3N7fzZVB+
- kKyt12yNVR4IiWDAozr2JeDhNTe3C/aywEBQrD++ahGF1rrANka/KYQHOn2AJf1bDUVx
- wjSw==
+	dkim=pass (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b="sKo2DUTD"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8025E207BC
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=daniel@0x0f.com
+Received: by mail-pg1-f194.google.com with SMTP id t3so8040312pgi.11
+        for <soc@kernel.org>; Sun, 29 Nov 2020 03:08:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hfG3IJYFfaN+LLPLPN9u5BA6DY35eu9G1j5saJ10vaQ=;
+        b=sKo2DUTDonDaiIv9hFnn0BJLMzL4XqOt+FgwsQebG2oxgVCSSgvueeNbnkq00vT/fn
+         +0IqL36Aqs6B5P0bRgcN1eD8JTPI7oVWWM4a0a5ecelIheCW185xNziicy/8GGXGr0gG
+         KsEW3oC0jkfxgG0hmRVy/gDIT9GmgXLnZNyMA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=wc0nyS8dzfOavbOXrqC7eni+mcCu2FOMeKW4jeT7vyw=;
- b=dDSJRS7x/aD0SdfjzXHUYaNXtHi9zgaeb8c6dCBo3KYnZDFRU9/xnAD6XcbGhBgtkz
- ugjNMrXWk10AvoRhUQyFDAMl26TNH0HpUO8lZwAFHvLof86G3npF3jxTk4VwiajBmMh9
- mCYqrjBa2nxX2D5Hr7YiNYZQk4ZTQV72On8QlhY/N6/1kbYWxqdFH+MnEnje+GNsI7QO
- MGsQ1bY9l4iP+u+bP1WJDNcTJYNYbuqONSnDXqisRVIj9yY6NgE/B888gaDhXjL4AXF+
- a4x5sadIbjKYKi3B7LKpPOVeJglc3+ETiklWnTntXmsB35e6NhM3b8dYVYxvbuSNPvwx
- DiJA==
-X-Gm-Message-State: AOAM530kF7lBOCSXOuKKkLdK6Ao6fOv2ZSCz4C0CB33zRStFyq3xhRpv
- lONQFXam5dIkOVwBjFmH6yo=
-X-Google-Smtp-Source: ABdhPJzukg0n15WSZduzQOD6MIK+fRpeh6hDf9gLa77zVnqELS2lAC2JfcamQIDpFo/ea7FlCnCrsQ==
-X-Received: by 2002:a17:902:bb8b:b029:da:beb:b81e with SMTP id
- m11-20020a170902bb8bb02900da0bebb81emr11855775pls.44.1606581261175; 
- Sat, 28 Nov 2020 08:34:21 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
- by smtp.gmail.com with ESMTPSA id c3sm10909209pfn.67.2020.11.28.08.34.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 28 Nov 2020 08:34:20 -0800 (PST)
-From: Florian Fainelli <f.fainelli@gmail.com>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hfG3IJYFfaN+LLPLPN9u5BA6DY35eu9G1j5saJ10vaQ=;
+        b=C81Z4QbDjlDiV6T5uh47raNbgeobObEpatwHuq8e0EwokwjmcSsLCt+GwlaIvSN7sJ
+         AiK/SvHWTTUh1BwnCS44oFNxuqA5ABo13UWX+vl7txaso9lesOsSJc+THz+MzV+ghHbs
+         34wkPq9aw49xL5tBlDEewOQ4Tm9yxQ2CIpRobMFMfuk/XSzwaKOZML2eLFfJ5ujxTdDI
+         ZShG1C+rEFiN5GwAV3FFeQ6mzlvzNtuYzcy/8+7JoJplwNqxNFiPPz2c/8vLCZ6OgIuF
+         JqE4aVI7SAsy8gGMIT8V8xumI8r7rz5xxGYqVEFGnCEdNSlseuGP9CjJ8I5tK/z1Eaqf
+         LX5w==
+X-Gm-Message-State: AOAM532TmVEF7H5hi2r85YwleokgFD4lFCDYycywKx44sbjqyKwP9wWg
+	rJfxezQXxSa+ilBuFIjoT2kmrX5KDLLD0A==
+X-Google-Smtp-Source: ABdhPJx2TWa65jQIOPR1bVgac6u1Qz7JaJNyTfwd5Cu71RgjmSi4gPQzIEb34BD6JhIN/Kg5vSRbgg==
+X-Received: by 2002:a17:90b:203:: with SMTP id fy3mr18895929pjb.231.1606648093633;
+        Sun, 29 Nov 2020 03:08:13 -0800 (PST)
+Received: from shiro.work (p1268123-ipngn200803sizuokaden.shizuoka.ocn.ne.jp. [118.13.124.123])
+        by smtp.googlemail.com with ESMTPSA id 21sm13095653pfw.105.2020.11.29.03.08.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Nov 2020 03:08:13 -0800 (PST)
+From: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: [GIT PULL 4/5] Broadcom devicetree-arm64 changes for 5.11
-Date: Sat, 28 Nov 2020 08:34:09 -0800
-Message-ID: <20201128163410.1691529-4-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201128163410.1691529-1-f.fainelli@gmail.com>
-References: <20201128163410.1691529-1-f.fainelli@gmail.com>
+To: soc@kernel.org,
+	linux-gpio@vger.kernel.org
+Cc: devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linus.walleij@linaro.org,
+	robh@kernel.org,
+	w@1wt.eu,
+	daniel@0x0f.com
+Subject: [PATCH v4 0/5] Add GPIO support for MStar/SigmaStar ARMv7
+Date: Sun, 29 Nov 2020 20:07:57 +0900
+Message-Id: <20201129110803.2461700-1-daniel@0x0f.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201128_113423_883393_B9806040 
-X-CRM114-Status: GOOD (  12.97  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Florian Fainelli <f.fainelli@gmail.com>, arnd@arndb.de, khilman@kernel.org,
- olof@lixom.net, bcm-kernel-feedback-list@broadcom.com,
- =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201128163409.8c0zSSITGXmnYMVweho4y2RfOc0sCRmdmBBjrwZsloY@z>
+Content-Transfer-Encoding: 8bit
 
-VGhlIGZvbGxvd2luZyBjaGFuZ2VzIHNpbmNlIGNvbW1pdCAzNjUwYjIyOGY4M2FkZGE3ZTVlZTUz
-MmUyYjkwNDI5YzAzZjdiOWVjOgoKICBMaW51eCA1LjEwLXJjMSAoMjAyMC0xMC0yNSAxNToxNDox
-MSAtMDcwMCkKCmFyZSBhdmFpbGFibGUgaW4gdGhlIEdpdCByZXBvc2l0b3J5IGF0OgoKICBodHRw
-czovL2dpdGh1Yi5jb20vQnJvYWRjb20vc3RibGludXguZ2l0IHRhZ3MvYXJtLXNvYy9mb3ItNS4x
-MS9kZXZpY2V0cmVlLWFybTY0Cgpmb3IgeW91IHRvIGZldGNoIGNoYW5nZXMgdXAgdG8gZGNjYjIy
-ZDA3OGViZDA5ODExNWU0ZjY2YmRlMWVlMjI0OWM4NjQwYjoKCiAgYXJtNjQ6IGFkZCBjb25maWcg
-Zm9yIEJyb2FkY29tIEJDTTQ5MDggU29DcyAoMjAyMC0xMS0yNSAwOTowNzo0OSAtMDgwMCkKCi0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0KVGhpcyBwdWxsIHJlcXVlc3QgY29udGFpbnMgQnJvYWRjb20gQVJNNjQtYmFzZWQgU29D
-cyBEZXZpY2UgVHJlZSBjaGFuZ2VzCmZvciA1LjExLCBwbGVhc2UgcHVsbCB0aGUgZm9sbG93aW5n
-OgoKLSBSYWZhbCBhZGRzIGluaXRpYWwgc3VwcG9ydCBmb3IgdGhlIEJyb2FkY29tIDQ5MDggd2hp
-Y2ggYXJlIFNvQ3MgdXNlZAogIGluIGhvbWUgcm91dGVycyBhbmQgYXJlIGJhc2VkIG9uIHRoZSBE
-U0wgYXJjaGl0ZWN0dXJlIGFuZCB1c2luZwogIEJyb2FkY29tIEJyYWhtYS1CNTMgQ1BVcy4KCi0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0KUmFmYcWCIE1pxYJlY2tpICgzKToKICAgICAgZHQtYmluZGluZ3M6IGFybTogYmNtOiBk
-b2N1bWVudCBCQ000OTA4IGJpbmRpbmdzCiAgICAgIGFybTY0OiBkdHM6IGJyb2FkY29tOiBhZGQg
-QkNNNDkwOCBhbmQgQXN1cyBHVC1BQzUzMDAgZWFybHkgRFRTIGZpbGVzCiAgICAgIGFybTY0OiBh
-ZGQgY29uZmlnIGZvciBCcm9hZGNvbSBCQ000OTA4IFNvQ3MKCiAuLi4vZGV2aWNldHJlZS9iaW5k
-aW5ncy9hcm0vYmNtL2JyY20sYmNtNDkwOC55YW1sICB8ICAzOCArKysrKwogYXJjaC9hcm02NC9L
-Y29uZmlnLnBsYXRmb3JtcyAgICAgICAgICAgICAgICAgICAgICAgfCAgIDggKwogYXJjaC9hcm02
-NC9ib290L2R0cy9icm9hZGNvbS9NYWtlZmlsZSAgICAgICAgICAgICAgfCAgIDEgKwogYXJjaC9h
-cm02NC9ib290L2R0cy9icm9hZGNvbS9iY200OTA4L01ha2VmaWxlICAgICAgfCAgIDIgKwogLi4u
-L2Jyb2FkY29tL2JjbTQ5MDgvYmNtNDkwOC1hc3VzLWd0LWFjNTMwMC5kdHMgICAgfCAgNjYgKysr
-KysrKysKIGFyY2gvYXJtNjQvYm9vdC9kdHMvYnJvYWRjb20vYmNtNDkwOC9iY200OTA4LmR0c2kg
-IHwgMTg3ICsrKysrKysrKysrKysrKysrKysrKwogYXJjaC9hcm02NC9jb25maWdzL2RlZmNvbmZp
-ZyAgICAgICAgICAgICAgICAgICAgICAgfCAgIDEgKwogNyBmaWxlcyBjaGFuZ2VkLCAzMDMgaW5z
-ZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
-aW5kaW5ncy9hcm0vYmNtL2JyY20sYmNtNDkwOC55YW1sCiBjcmVhdGUgbW9kZSAxMDA2NDQgYXJj
-aC9hcm02NC9ib290L2R0cy9icm9hZGNvbS9iY200OTA4L01ha2VmaWxlCiBjcmVhdGUgbW9kZSAx
-MDA2NDQgYXJjaC9hcm02NC9ib290L2R0cy9icm9hZGNvbS9iY200OTA4L2JjbTQ5MDgtYXN1cy1n
-dC1hYzUzMDAuZHRzCiBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9hcm02NC9ib290L2R0cy9icm9h
-ZGNvbS9iY200OTA4L2JjbTQ5MDguZHRzaQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KbGludXgtYXJtLWtlcm5lbCBtYWlsaW5nIGxpc3QKbGludXgtYXJt
-LWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnCmh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21h
-aWxtYW4vbGlzdGluZm8vbGludXgtYXJtLWtlcm5lbAo=
+At the moment the MStar/SigmaStar support is only really
+capable of shell from an initramfs and not much else.
+
+Most of the interesting drivers are blocked on clock and pinctrl
+drivers and those are going to take me a little while to get cleaned
+up.
+
+Clock and pinctrl aren't needed for basic GPIO to work (all pins
+start off as GPIOs..) and it makes it possible to actually do something
+so this series adds everything that is needed for the main GPIO
+block in these chips.
+
+Changes since v3:
+- Remove unneeded "gpio-ranges-group-names" property from binding yaml.
+
+Changes since v2:
+
+- Numerous style and code cleanups as suggested by Andy Shevchenko,
+  Linus Walleij, Marc Zyngier and Rob Herring.
+
+- Pad names moved out of the binding header because they are no longer
+  needed there. The pin/pad numbers are still there as I couldn't think
+  of a better way to do this. meson8b-gpio.h seems to be similar.
+
+Changes since v1:
+
+- Moves the binding header commit before the yaml commit
+  
+- Fixes the license on the binding header to include BSD-2-Clause
+
+- The driver has been reworked to use the gpiolib irqchip functionality
+  as suggested by Linus[0]. I think I got this right. The gpio controller
+  doesn't actually do anything with interrupts itself.. It just happens
+  to have 4 lines that are also wired to lines on one of the interrupt
+  controllers.
+
+- Now that the driver is an interrupt controller in it's own right for
+  the gpio lines that have associated interrupts the binding description
+  has been updated to add the interrupt-controller bits and remove the
+  description of the interrupt-names that described how the interrupts
+  used to be passed in.
+
+Daniel Palmer (5):
+  dt-bindings: gpio: Add a binding header for the MSC313 GPIO driver
+  dt-bindings: gpio: Binding for MStar MSC313 GPIO controller
+  gpio: msc313: MStar MSC313 GPIO driver
+  ARM: mstar: Add gpio controller to MStar base dtsi
+  ARM: mstar: Fill in GPIO controller properties for infinity
+
+ .../bindings/gpio/mstar,msc313-gpio.yaml      |  59 +++
+ MAINTAINERS                                   |   3 +
+ arch/arm/boot/dts/mstar-infinity.dtsi         |   7 +
+ arch/arm/boot/dts/mstar-v7.dtsi               |  10 +
+ drivers/gpio/Kconfig                          |  11 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-msc313.c                    | 460 ++++++++++++++++++
+ include/dt-bindings/gpio/msc313-gpio.h        |  53 ++
+ 8 files changed, 604 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/gpio/mstar,msc313-gpio.yaml
+ create mode 100644 drivers/gpio/gpio-msc313.c
+ create mode 100644 include/dt-bindings/gpio/msc313-gpio.h
+
+-- 
+2.29.2
+
