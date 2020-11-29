@@ -1,658 +1,211 @@
-Return-Path: <SRS0=TN87=FD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=ALrW=FD=gmail.com=matthias.bgg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3563C5519F
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 29 Nov 2020 11:10:02 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A5F6C5519F
+	for <soc@archiver.kernel.org>; Sun, 29 Nov 2020 21:16:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id CF66320809; Sun, 29 Nov 2020 21:16:15 +0000 (UTC)
+Received: from mail-ed1-f65.google.com (mail-ed1-f65.google.com [209.85.208.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 837FD20771
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 29 Nov 2020 11:10:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 51E092078D;
+	Sun, 29 Nov 2020 21:16:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="oVNUPw3o";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b="qKDXnEqp"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 837FD20771
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=Od4bHQjS3og7nURL4uI6zClS6p9AiuM9Z8m/BfqTFHE=; b=oVNUPw3oPbPfg6PciaMYWl857
-	+yVBbxpQIHHcb5a3BmJsez/llMqoRUrpv4vWXsxetsNhZh/6WbF7GHxWM0SUkjMvrGfZrrGt9p5dI
-	JQfstLHADHz4ihiBBYlnXTpa1fRWz6GIu7iK3W5YXt1bF4ehaeIRN39napN1AW/qO8203XNlZITWb
-	srg3/16Sb1hUm/a5iOx6E+bClsDW6H8rVNBryjJDnZMzYuPgcpZcMwu6v8XUSZH2yO7mgrW5sANto
-	iN1k5xmg1pzrre4z4fercUpw8dJZ9qR8EtqjytPTTcHWuDm9C2MiOa5LDH019DZmstS09otcrtKwB
-	vkh7uHy1Q==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kjKZN-0006H5-7N; Sun, 29 Nov 2020 11:08:41 +0000
-Received: from mail-pg1-x541.google.com ([2607:f8b0:4864:20::541])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kjKZ5-0006DS-Sl
- for linux-arm-kernel@lists.infradead.org; Sun, 29 Nov 2020 11:08:26 +0000
-Received: by mail-pg1-x541.google.com with SMTP id l17so8075520pgk.1
- for <linux-arm-kernel@lists.infradead.org>;
- Sun, 29 Nov 2020 03:08:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=qD7LoSGCYgJa2P5ZS/t0OzNswBjKZXAbddj6ZQ3y3ec=;
- b=qKDXnEqp6WtH+qqmoFlb3IoyxoLlpfKkf+R1Z+YzLMOlDIUFJFR6Q7czyoff32ajwe
- kcgSeHfdfjXrRWOYZUMEql+pDypo4VRzil9+AaUStBo+teDrOkaeuqhON8ys6+I+j1iG
- UpWrSKydUTt0WQLk2DK3KTTp9CO2aJI1IMtJ8=
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WXAKKnzW"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 51E092078D
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=matthias.bgg@gmail.com
+Received: by mail-ed1-f65.google.com with SMTP id d18so12691716edt.7;
+        Sun, 29 Nov 2020 13:16:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=Wzet6YIBcFXIXVjhyotb3WolYA/AVJvDgx1lWrdlNFA=;
+        b=WXAKKnzWawzpwaTo42EU1aSJn+Tc7blnHCWoQkVGoZdpM6hba7V+r2FVQLHJqPyqTs
+         eQpSFbAeBrm+BX130MyHog/kzs+04MhZ0PODPZiDWjsG4RAeDeWr5pSVaqXULTZjRcgE
+         OKD61cXUoTbbq1Qfp0NGRF0UKYvhqNTu6Y4nEQgsUTCJaYE0hxlJ49qONsFqNawPWwRo
+         KabhX2nb9D3ktNlKQFCMmUcW6/4+P6A0UypsQLw6zOOPYkGkrc78X8Y7xrKYuvQviwFd
+         5xs83o90g/gh/zoDYy5EdLWsKsITCacD+57nVZN3Hx2hyYwyEJXG6o0hBrhLnQiCzScb
+         Q9Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=qD7LoSGCYgJa2P5ZS/t0OzNswBjKZXAbddj6ZQ3y3ec=;
- b=pebPde4Zd678PbpKXe9PV5cLNxPm4AUZkI6O7nn1joyEphtQuIyUenV/zEeqXQOOHx
- esS+9QdFCXEy7QmrUBP/jaMe8KMLW1X5T+vEWBtP/aGyVYFhE5yk1LtIDcN+0d4ZsSyB
- 6QlaMnkTclD8h7qdRqJQ9NjSPezyagIRbNVppwRr2BYs5Jhw+SiO+8SM7oA1ndfpmeyq
- 00fPdsWVZ6eeXB5x7w0Y0WDKGMK1RdoZe+rbgr5JnUbp/tRGPBFFf8RTdRdzuSeL67rL
- DzIYPxMBtFJ96catRC0TmXrHMsHxgQcYyHIcDtkPl+pVFCqegog0x+q8kvET/UvlhvMP
- tVVg==
-X-Gm-Message-State: AOAM530VxubqZS7z+PKCXuiODlhvtBQzvcJALmjSf0T3F5TgtXLwXWCV
- pMvfB4KqMGzNNloAM9Eb5o/Pow==
-X-Google-Smtp-Source: ABdhPJy2Lf8y8uKaD7dpKtuIfkw4NnFymkSIUHHIFQkfTZ9xjKh9pxhWR1/9ISO+xyDzBcF83oTO4w==
-X-Received: by 2002:a65:4683:: with SMTP id h3mr13660685pgr.167.1606648101628; 
- Sun, 29 Nov 2020 03:08:21 -0800 (PST)
-Received: from shiro.work (p1268123-ipngn200803sizuokaden.shizuoka.ocn.ne.jp.
- [118.13.124.123])
- by smtp.googlemail.com with ESMTPSA id 21sm13095653pfw.105.2020.11.29.03.08.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 Nov 2020 03:08:21 -0800 (PST)
-From: Daniel Palmer <daniel@0x0f.com>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=Wzet6YIBcFXIXVjhyotb3WolYA/AVJvDgx1lWrdlNFA=;
+        b=tahDM1kQjsNmp9AjYvfXZ8GCs5ejCiEe5a3ZbzvnBIpGQ9BZhz0muzGzE09BuVUYgu
+         P22Ws42BJcb/FYqkey9kJ1sPGGB5k62GZwqq8+/DKo43o0LvC8jKI5uZdRPOSRJVv0eB
+         IU56q1KznrrIeJrwQYD8dgRY2euNvshDq45jAyEjSeIrtoiPNYS0aBvN0XKMiHgIVenJ
+         UpIO0fjhXchXEkhI+ZGRerXB8bhF+84f7P21hzdTtnScfiy0QgTStVf6IQphV8DcxXSR
+         YiZSyzwitCougafFjiNN8SIil+x+5E9c5b7Sq1W8MfBgyrWpBflsFkId39pzR4DSZvXx
+         5KlA==
+X-Gm-Message-State: AOAM532YJecuq4o5PZyq9sNjXMp3mXzl4+Fw9ATyaSN4C7pZLC8wYsLl
+	vvtVx13VhzOgOQ5Kz2ywJoM=
+X-Google-Smtp-Source: ABdhPJxbZdS9blYIpT7OBFHB2Ihl7v8kwNwSXIxqZfxUD5+w2A4rIq+dgRDAFgq57ybPbQYHSwR/Kg==
+X-Received: by 2002:a05:6402:c96:: with SMTP id cm22mr18352434edb.121.1606684573856;
+        Sun, 29 Nov 2020 13:16:13 -0800 (PST)
+Received: from ziggy.stardust ([213.195.126.134])
+        by smtp.gmail.com with ESMTPSA id k3sm7861373ejd.36.2020.11.29.13.16.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Nov 2020 13:16:13 -0800 (PST)
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	linux-gpio@vger.kernel.org
-Subject: [PATCH v4 3/5] gpio: msc313: MStar MSC313 GPIO driver
-Date: Sun, 29 Nov 2020 20:08:00 +0900
-Message-ID: <20201129110803.2461700-4-daniel@0x0f.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201129110803.2461700-1-daniel@0x0f.com>
-References: <20201129110803.2461700-1-daniel@0x0f.com>
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "moderated list:ARM/Mediatek SoC support"
+ <linux-mediatek@lists.infradead.org>,
+ Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+ Frank Wunderlich <frank-w@public-files.de>,
+ Hanks Chen <hanks.chen@mediatek.com>, Hsin-Yi Wang <hsinyi@chromium.org>,
+ Jitao Shi <jitao.shi@mediatek.com>, Krzysztof Kozlowski <krzk@kernel.org>,
+ Seiya Wang <seiya.wang@mediatek.com>, Weiyi Lu <weiyi.lu@mediatek.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [GIT PULL] arm64: mediatek: devicetree changes for v5.11
+Message-ID: <72fe1c4f-f27c-c455-dfd9-66bde90bb295@gmail.com>
+Date: Sun, 29 Nov 2020 22:16:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201129_060824_327174_4B0AA1CB 
-X-CRM114-Status: GOOD (  29.50  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: devicetree@vger.kernel.org, robh@kernel.org, linus.walleij@linaro.org,
- daniel@0x0f.com, linux-kernel@vger.kernel.org, w@1wt.eu,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201129110800.atbEgPKHKhhVgtOhUVeSrC0GXViAB0gaDT6_RgWBWUg@z>
 
-This adds a driver that supports the GPIO block found in
-MStar/SigmaStar ARMv7 SoCs.
+Hi Arnd and Olof,
 
-The controller seems to have enough register for 128 lines
-but where they are wired up differs between chips and
-no currently known chip uses anywhere near 128 lines so there
-needs to be some per-chip data to collect together what lines
-actually have physical pins attached and map the right names to them.
+Please have a look at the following devicetree changes for v5.11.
 
-The core peripherals seem to use the same lines on the
-currently known chips but the lines used for the sensor
-interface, lcd controller etc pins seem to be totally
-different between the infinity and mercury chips
+The most remarkable changes are support for three (!) new MediaTek boards, the 
+AiOT chip mt8167, the smart phone chip mt6779 and the tablet/laptop chip mt8192.
 
-The code tries to collect all of the re-usable names,
-offsets etc together so that it's easy to build the extra
-per-chip data for other chips in the future.
+Beware that I had to create a stable branch to share the binding includes for 
+the new power domain driver found on mt8183 and mt8192.
 
-So far this only supports the MSC313 and MSC313E chips.
-
-Support for the SSC8336N (mercury5) is trivial to add once
-all of the lines have been mapped out.
-
-Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+Regards,
+Matthias
 ---
- MAINTAINERS                |   1 +
- drivers/gpio/Kconfig       |  11 +
- drivers/gpio/Makefile      |   1 +
- drivers/gpio/gpio-msc313.c | 460 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 473 insertions(+)
- create mode 100644 drivers/gpio/gpio-msc313.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 56a5392b88aa..28283d165aac 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2136,6 +2136,7 @@ F:	Documentation/devicetree/bindings/arm/mstar/*
- F:	Documentation/devicetree/bindings/gpio/mstar,msc313-gpio.yaml
- F:	arch/arm/boot/dts/mstar-*
- F:	arch/arm/mach-mstar/
-+F:	drivers/gpio/gpio-msc313.c
- F:	include/dt-bindings/gpio/msc313-gpio.h
- 
- ARM/NEC MOBILEPRO 900/c MACHINE SUPPORT
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 5d4de5cd6759..22ad5902299a 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -737,6 +737,17 @@ config GPIO_AMD_FCH
- 	  Note: This driver doesn't registers itself automatically, as it
- 	  needs to be provided with platform specific configuration.
- 	  (See eg. CONFIG_PCENGINES_APU2.)
-+
-+config GPIO_MSC313
-+	bool "MStar MSC313 GPIO support"
-+	depends on ARCH_MSTARV7
-+	default ARCH_MSTARV7
-+	select GPIOLIB_IRQCHIP
-+	select IRQ_DOMAIN_HIERARCHY
-+	help
-+	  Say Y here to support the main GPIO block on MStar/SigmaStar
-+	  ARMv7 based SoCs.
-+
- endmenu
- 
- menu "Port-mapped I/O GPIO drivers"
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index 09dada80ac34..b6c116a7c785 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -101,6 +101,7 @@ obj-$(CONFIG_GPIO_MOCKUP)		+= gpio-mockup.o
- obj-$(CONFIG_GPIO_MOXTET)		+= gpio-moxtet.o
- obj-$(CONFIG_GPIO_MPC5200)		+= gpio-mpc5200.o
- obj-$(CONFIG_GPIO_MPC8XXX)		+= gpio-mpc8xxx.o
-+obj-$(CONFIG_GPIO_MSC313)		+= gpio-msc313.o
- obj-$(CONFIG_GPIO_MSIC)			+= gpio-msic.o
- obj-$(CONFIG_GPIO_MT7621)		+= gpio-mt7621.o
- obj-$(CONFIG_GPIO_MVEBU)		+= gpio-mvebu.o
-diff --git a/drivers/gpio/gpio-msc313.c b/drivers/gpio/gpio-msc313.c
-new file mode 100644
-index 000000000000..da31a5ff7a2b
---- /dev/null
-+++ b/drivers/gpio/gpio-msc313.c
-@@ -0,0 +1,460 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2020 Daniel Palmer<daniel@thingy.jp> */
-+
-+#include <linux/bitops.h>
-+#include <linux/kernel.h>
-+#include <linux/types.h>
-+#include <linux/io.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/of_irq.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+
-+#include <dt-bindings/gpio/msc313-gpio.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+#define DRIVER_NAME "gpio-msc313"
-+
-+#define MSC313_GPIO_IN  BIT(0)
-+#define MSC313_GPIO_OUT BIT(4)
-+#define MSC313_GPIO_OEN BIT(5)
-+
-+/*
-+ * These bits need to be saved to correctly restore the
-+ * gpio state when resuming from suspend to memory.
-+ */
-+#define MSC313_GPIO_BITSTOSAVE (MSC313_GPIO_OUT | MSC313_GPIO_OEN)
-+
-+/* pad names for fuart, same for all SoCs so far */
-+#define MSC313_PINNAME_FUART_RX		"fuart_rx"
-+#define MSC313_PINNAME_FUART_TX		"fuart_tx"
-+#define MSC313_PINNAME_FUART_CTS	"fuart_cts"
-+#define MSC313_PINNAME_FUART_RTS	"fuart_rts"
-+
-+/* pad names for sr, mercury5 is different */
-+#define MSC313_PINNAME_SR_IO2		"sr_io2"
-+#define MSC313_PINNAME_SR_IO3		"sr_io3"
-+#define MSC313_PINNAME_SR_IO4		"sr_io4"
-+#define MSC313_PINNAME_SR_IO5		"sr_io5"
-+#define MSC313_PINNAME_SR_IO6		"sr_io6"
-+#define MSC313_PINNAME_SR_IO7		"sr_io7"
-+#define MSC313_PINNAME_SR_IO8		"sr_io8"
-+#define MSC313_PINNAME_SR_IO9		"sr_io9"
-+#define MSC313_PINNAME_SR_IO10		"sr_io10"
-+#define MSC313_PINNAME_SR_IO11		"sr_io11"
-+#define MSC313_PINNAME_SR_IO12		"sr_io12"
-+#define MSC313_PINNAME_SR_IO13		"sr_io13"
-+#define MSC313_PINNAME_SR_IO14		"sr_io14"
-+#define MSC313_PINNAME_SR_IO15		"sr_io15"
-+#define MSC313_PINNAME_SR_IO16		"sr_io16"
-+#define MSC313_PINNAME_SR_IO17		"sr_io17"
-+
-+/* pad names for sd, same for all SoCs so far */
-+#define MSC313_PINNAME_SD_CLK		"sd_clk"
-+#define MSC313_PINNAME_SD_CMD		"sd_cmd"
-+#define MSC313_PINNAME_SD_D0		"sd_d0"
-+#define MSC313_PINNAME_SD_D1		"sd_d1"
-+#define MSC313_PINNAME_SD_D2		"sd_d2"
-+#define MSC313_PINNAME_SD_D3		"sd_d3"
-+
-+/* pad names for i2c1, same for all SoCs so for */
-+#define MSC313_PINNAME_I2C1_SCL		"i2c1_scl"
-+#define MSC313_PINNAME_I2C1_SCA		"i2c1_sda"
-+
-+/* pad names for spi0, same for all SoCs so far */
-+#define MSC313_PINNAME_SPI0_CZ		"spi0_cz"
-+#define MSC313_PINNAME_SPI0_CK		"spi0_ck"
-+#define MSC313_PINNAME_SPI0_DI		"spi0_di"
-+#define MSC313_PINNAME_SPI0_DO		"spi0_do"
-+
-+#define FUART_NAMES			\
-+	MSC313_PINNAME_FUART_RX,	\
-+	MSC313_PINNAME_FUART_TX,	\
-+	MSC313_PINNAME_FUART_CTS,	\
-+	MSC313_PINNAME_FUART_RTS
-+
-+#define OFF_FUART_RX	0x50
-+#define OFF_FUART_TX	0x54
-+#define OFF_FUART_CTS	0x58
-+#define OFF_FUART_RTS	0x5c
-+
-+#define FUART_OFFSETS	\
-+	OFF_FUART_RX,	\
-+	OFF_FUART_TX,	\
-+	OFF_FUART_CTS,	\
-+	OFF_FUART_RTS
-+
-+#define SR_NAMES		\
-+	MSC313_PINNAME_SR_IO2,	\
-+	MSC313_PINNAME_SR_IO3,	\
-+	MSC313_PINNAME_SR_IO4,	\
-+	MSC313_PINNAME_SR_IO5,	\
-+	MSC313_PINNAME_SR_IO6,	\
-+	MSC313_PINNAME_SR_IO7,	\
-+	MSC313_PINNAME_SR_IO8,	\
-+	MSC313_PINNAME_SR_IO9,	\
-+	MSC313_PINNAME_SR_IO10,	\
-+	MSC313_PINNAME_SR_IO11,	\
-+	MSC313_PINNAME_SR_IO12,	\
-+	MSC313_PINNAME_SR_IO13,	\
-+	MSC313_PINNAME_SR_IO14,	\
-+	MSC313_PINNAME_SR_IO15,	\
-+	MSC313_PINNAME_SR_IO16,	\
-+	MSC313_PINNAME_SR_IO17
-+
-+#define OFF_SR_IO2	0x88
-+#define OFF_SR_IO3	0x8c
-+#define OFF_SR_IO4	0x90
-+#define OFF_SR_IO5	0x94
-+#define OFF_SR_IO6	0x98
-+#define OFF_SR_IO7	0x9c
-+#define OFF_SR_IO8	0xa0
-+#define OFF_SR_IO9	0xa4
-+#define OFF_SR_IO10	0xa8
-+#define OFF_SR_IO11	0xac
-+#define OFF_SR_IO12	0xb0
-+#define OFF_SR_IO13	0xb4
-+#define OFF_SR_IO14	0xb8
-+#define OFF_SR_IO15	0xbc
-+#define OFF_SR_IO16	0xc0
-+#define OFF_SR_IO17	0xc4
-+
-+#define SR_OFFSETS	\
-+	OFF_SR_IO2,	\
-+	OFF_SR_IO3,	\
-+	OFF_SR_IO4,	\
-+	OFF_SR_IO5,	\
-+	OFF_SR_IO6,	\
-+	OFF_SR_IO7,	\
-+	OFF_SR_IO8,	\
-+	OFF_SR_IO9,	\
-+	OFF_SR_IO10,	\
-+	OFF_SR_IO11,	\
-+	OFF_SR_IO12,	\
-+	OFF_SR_IO13,	\
-+	OFF_SR_IO14,	\
-+	OFF_SR_IO15,	\
-+	OFF_SR_IO16,	\
-+	OFF_SR_IO17
-+
-+#define SD_NAMES		\
-+	MSC313_PINNAME_SD_CLK,	\
-+	MSC313_PINNAME_SD_CMD,	\
-+	MSC313_PINNAME_SD_D0,	\
-+	MSC313_PINNAME_SD_D1,	\
-+	MSC313_PINNAME_SD_D2,	\
-+	MSC313_PINNAME_SD_D3
-+
-+#define OFF_SD_CLK	0x140
-+#define OFF_SD_CMD	0x144
-+#define OFF_SD_D0	0x148
-+#define OFF_SD_D1	0x14c
-+#define OFF_SD_D2	0x150
-+#define OFF_SD_D3	0x154
-+
-+#define SD_OFFSETS	\
-+	OFF_SD_CLK,	\
-+	OFF_SD_CMD,	\
-+	OFF_SD_D0,	\
-+	OFF_SD_D1,	\
-+	OFF_SD_D2,	\
-+	OFF_SD_D3
-+
-+#define I2C1_NAMES			\
-+	MSC313_PINNAME_I2C1_SCL,	\
-+	MSC313_PINNAME_I2C1_SCA
-+
-+#define OFF_I2C1_SCL	0x188
-+#define OFF_I2C1_SCA	0x18c
-+
-+#define I2C1_OFFSETS	\
-+	OFF_I2C1_SCL,	\
-+	OFF_I2C1_SCA
-+
-+#define SPI0_NAMES		\
-+	MSC313_PINNAME_SPI0_CZ,	\
-+	MSC313_PINNAME_SPI0_CK,	\
-+	MSC313_PINNAME_SPI0_DI,	\
-+	MSC313_PINNAME_SPI0_DO
-+
-+#define OFF_SPI0_CZ	0x1c0
-+#define OFF_SPI0_CK	0x1c4
-+#define OFF_SPI0_DI	0x1c8
-+#define OFF_SPI0_DO	0x1cc
-+
-+#define SPI0_OFFSETS	\
-+	OFF_SPI0_CZ,	\
-+	OFF_SPI0_CK,	\
-+	OFF_SPI0_DI,	\
-+	OFF_SPI0_DO
-+
-+struct msc313_gpio_data {
-+	const char * const *names;
-+	const unsigned int *offsets;
-+	const unsigned int num;
-+};
-+
-+#define MSC313_GPIO_CHIPDATA(_chip) \
-+static const struct msc313_gpio_data _chip##_data = { \
-+	.names = _chip##_names, \
-+	.offsets = _chip##_offsets, \
-+	.num = ARRAY_SIZE(_chip##_offsets), \
-+}
-+
-+#ifdef CONFIG_MACH_INFINITY
-+static const char * const msc313_names[] = {
-+	FUART_NAMES,
-+	SR_NAMES,
-+	SD_NAMES,
-+	I2C1_NAMES,
-+	SPI0_NAMES,
-+};
-+
-+static const unsigned int msc313_offsets[] = {
-+	FUART_OFFSETS,
-+	SR_OFFSETS,
-+	SD_OFFSETS,
-+	I2C1_OFFSETS,
-+	SPI0_OFFSETS,
-+};
-+
-+MSC313_GPIO_CHIPDATA(msc313);
-+#endif
-+
-+struct msc313_gpio {
-+	void __iomem *base;
-+	const struct msc313_gpio_data *gpio_data;
-+	u8 *saved;
-+};
-+
-+static void msc313_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
-+{
-+	struct msc313_gpio *gpio = gpiochip_get_data(chip);
-+	u8 gpioreg = readb_relaxed(gpio->base + gpio->gpio_data->offsets[offset]);
-+
-+	if (value)
-+		gpioreg |= MSC313_GPIO_OUT;
-+	else
-+		gpioreg &= ~MSC313_GPIO_OUT;
-+
-+	writeb_relaxed(gpioreg, gpio->base + gpio->gpio_data->offsets[offset]);
-+}
-+
-+static int msc313_gpio_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct msc313_gpio *gpio = gpiochip_get_data(chip);
-+
-+	return readb_relaxed(gpio->base + gpio->gpio_data->offsets[offset]) & MSC313_GPIO_IN;
-+}
-+
-+static int msc313_gpio_direction_input(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct msc313_gpio *gpio = gpiochip_get_data(chip);
-+	u8 gpioreg = readb_relaxed(gpio->base + gpio->gpio_data->offsets[offset]);
-+
-+	gpioreg |= MSC313_GPIO_OEN;
-+	writeb_relaxed(gpioreg, gpio->base + gpio->gpio_data->offsets[offset]);
-+
-+	return 0;
-+}
-+
-+static int msc313_gpio_direction_output(struct gpio_chip *chip, unsigned int offset, int value)
-+{
-+	struct msc313_gpio *gpio = gpiochip_get_data(chip);
-+	u8 gpioreg = readb_relaxed(gpio->base + gpio->gpio_data->offsets[offset]);
-+
-+	gpioreg &= ~MSC313_GPIO_OEN;
-+	if (value)
-+		gpioreg |= MSC313_GPIO_OUT;
-+	else
-+		gpioreg &= ~MSC313_GPIO_OUT;
-+	writeb_relaxed(gpioreg, gpio->base + gpio->gpio_data->offsets[offset]);
-+
-+	return 0;
-+}
-+
-+/*
-+ * The interrupt handling happens in the parent interrupt controller,
-+ * we don't do anything here.
-+ */
-+static struct irq_chip msc313_gpio_irqchip = {
-+	.name = "GPIO",
-+	.irq_eoi = irq_chip_eoi_parent,
-+	.irq_mask = irq_chip_mask_parent,
-+	.irq_unmask = irq_chip_unmask_parent,
-+	.irq_set_type = irq_chip_set_type_parent,
-+	.irq_set_affinity = irq_chip_set_affinity_parent,
-+};
-+
-+/*
-+ * The parent interrupt controller needs the GIC interrupt type set to GIC_SPI
-+ * so we need to provide the fwspec. Essentially gpiochip_populate_parent_fwspec_twocell
-+ * that puts GIC_SPI into the first cell.
-+ */
-+static void *msc313_gpio_populate_parent_fwspec(struct gpio_chip *gc,
-+					     unsigned int parent_hwirq,
-+					     unsigned int parent_type)
-+{
-+	struct irq_fwspec *fwspec;
-+
-+	fwspec = kmalloc(sizeof(*fwspec), GFP_KERNEL);
-+	if (!fwspec)
-+		return NULL;
-+
-+	fwspec->fwnode = gc->irq.parent_domain->fwnode;
-+	fwspec->param_count = 3;
-+	fwspec->param[0] = GIC_SPI;
-+	fwspec->param[1] = parent_hwirq;
-+	fwspec->param[2] = parent_type;
-+
-+	return fwspec;
-+}
-+
-+static int msc313e_gpio_child_to_parent_hwirq(struct gpio_chip *chip,
-+					     unsigned int child,
-+					     unsigned int child_type,
-+					     unsigned int *parent,
-+					     unsigned int *parent_type)
-+{
-+	struct msc313_gpio *priv = gpiochip_get_data(chip);
-+	unsigned int offset = priv->gpio_data->offsets[child];
-+
-+	/*
-+	 * only the spi0 pins have interrupts on the parent
-+	 * on all of the known chips and so far they are all
-+	 * mapped to the same place
-+	 */
-+	if (offset >= OFF_SPI0_CZ && offset <= OFF_SPI0_DO) {
-+		*parent_type = child_type;
-+		*parent = ((offset - OFF_SPI0_CZ) >> 2) + 28;
-+		return 0;
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int msc313_gpio_probe(struct platform_device *pdev)
-+{
-+	const struct msc313_gpio_data *match_data;
-+	struct msc313_gpio *gpio;
-+	struct gpio_chip *gpiochip;
-+	struct gpio_irq_chip *gpioirqchip;
-+	struct irq_domain *parent_domain;
-+	struct device_node *parent_node;
-+	struct device *dev = &pdev->dev;
-+	int ret;
-+
-+	match_data = of_device_get_match_data(dev);
-+	if (!match_data)
-+		return -EINVAL;
-+
-+	parent_node = of_irq_find_parent(dev->of_node);
-+	if (!parent_node)
-+		return -ENODEV;
-+
-+	parent_domain = irq_find_host(parent_node);
-+	if (!parent_domain)
-+		return -ENODEV;
-+
-+	gpio = devm_kzalloc(dev, sizeof(*gpio), GFP_KERNEL);
-+	if (!gpio)
-+		return -ENOMEM;
-+
-+	gpio->gpio_data = match_data;
-+
-+	gpio->saved = devm_kcalloc(dev, gpio->gpio_data->num, sizeof(*gpio->saved), GFP_KERNEL);
-+	if (!gpio->saved)
-+		return -ENOMEM;
-+
-+	gpio->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(gpio->base))
-+		return PTR_ERR(gpio->base);
-+
-+	platform_set_drvdata(pdev, gpio);
-+
-+	gpiochip = devm_kzalloc(dev, sizeof(*gpiochip), GFP_KERNEL);
-+	if (!gpiochip)
-+		return -ENOMEM;
-+
-+	gpiochip->label = DRIVER_NAME;
-+	gpiochip->parent = dev;
-+	gpiochip->request = gpiochip_generic_request;
-+	gpiochip->free = gpiochip_generic_free;
-+	gpiochip->direction_input = msc313_gpio_direction_input;
-+	gpiochip->direction_output = msc313_gpio_direction_output;
-+	gpiochip->get = msc313_gpio_get;
-+	gpiochip->set = msc313_gpio_set;
-+	gpiochip->base = -1;
-+	gpiochip->ngpio = gpio->gpio_data->num;
-+	gpiochip->names = gpio->gpio_data->names;
-+
-+	gpioirqchip = &gpiochip->irq;
-+	gpioirqchip->chip = &msc313_gpio_irqchip;
-+	gpioirqchip->fwnode = of_node_to_fwnode(dev->of_node);
-+	gpioirqchip->parent_domain = parent_domain;
-+	gpioirqchip->child_to_parent_hwirq = msc313e_gpio_child_to_parent_hwirq;
-+	gpioirqchip->populate_parent_alloc_arg = msc313_gpio_populate_parent_fwspec;
-+	gpioirqchip->handler = handle_bad_irq;
-+	gpioirqchip->default_type = IRQ_TYPE_NONE;
-+
-+	ret = devm_gpiochip_add_data(dev, gpiochip, gpio);
-+	return ret;
-+}
-+
-+static int msc313_gpio_remove(struct platform_device *pdev)
-+{
-+	return 0;
-+}
-+
-+static const struct of_device_id msc313_gpio_of_match[] = {
-+#ifdef CONFIG_MACH_INFINITY
-+	{
-+		.compatible = "mstar,msc313-gpio",
-+		.data = &msc313_data,
-+	},
-+#endif
-+	{ }
-+};
-+
-+/*
-+ * The GPIO controller loses the state of the registers when the
-+ * SoC goes into suspend to memory mode so we need to save some
-+ * of the register bits before suspending and put it back when resuming
-+ */
-+static int __maybe_unused msc313_gpio_suspend(struct device *dev)
-+{
-+	struct msc313_gpio *gpio = dev_get_drvdata(dev);
-+	int i;
-+
-+	for (i = 0; i < gpio->gpio_data->num; i++)
-+		gpio->saved[i] = readb_relaxed(gpio->base + gpio->gpio_data->offsets[i]) & MSC313_GPIO_BITSTOSAVE;
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused msc313_gpio_resume(struct device *dev)
-+{
-+	struct msc313_gpio *gpio = dev_get_drvdata(dev);
-+	int i;
-+
-+	for (i = 0; i < gpio->gpio_data->num; i++)
-+		writeb_relaxed(gpio->saved[i], gpio->base + gpio->gpio_data->offsets[i]);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(msc313_gpio_ops, msc313_gpio_suspend, msc313_gpio_resume);
-+
-+static struct platform_driver msc313_gpio_driver = {
-+	.driver = {
-+		.name = DRIVER_NAME,
-+		.of_match_table = msc313_gpio_of_match,
-+		.pm = &msc313_gpio_ops,
-+	},
-+	.probe = msc313_gpio_probe,
-+	.remove = msc313_gpio_remove,
-+};
-+
-+builtin_platform_driver(msc313_gpio_driver);
--- 
-2.29.2
+The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
+   Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+are available in the Git repository at:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/ 
+tags/v5.10-next-dts64
+
+for you to fetch changes up to 5833bc6c7319dd59441562d853b8e435e3bc8ac2:
+
+   dts64: mt7622: disable spi1 and uart2 because pins are used by pwm 
+(2020-11-27 17:05:32 +0100)
+
+----------------------------------------------------------------
+mt8173:
+- add new power domain controller node
+
+mt8183:
+- add new power domain controller
+- add display, iommu and dsi nodes
+
+mt8192:
+- add basic support, pinctrl, uart, spi, i2c and timer
+
+mt8516:
+- add auxadc, efuse and usb nodes
+
+mt8167:
+- add basic support for the SoC
+- add support for the pumkin board
+
+mt6779:
+- add initial support, interrupt controller, clocks, uart
+
+mt7622:
+-  PWM node for all available PWM channels
+
+----------------------------------------------------------------
+Enric Balletbo i Serra (7):
+       arm64: dts: mt8173-elm: Remove ddc property from panel
+       dt-bindings: power: Add bindings for the Mediatek SCPSYS power domains 
+controller
+       dt-bindings: power: Add MT8183 power domains
+       arm64: dts: mediatek: Add mt8173 power domain controller
+       arm64: dts: mediatek: Add smi_common node for MT8183
+       arm64: dts: mt8183: Add iommu and larb nodes
+       arm64: dts: mt8183: Add display nodes for MT8183
+
+Fabien Parent (9):
+       arm64: dts: mediatek: mt8183: fix gce incorrect mbox-cells value
+       dt-bindings: iio: adc: auxadc: add doc for MT8516 SoC
+       arm64: dts: mediatek: mt8516: add auxadc node
+       arm64: dts: mediatek: mt8516: rename usb phy
+       arm64: dts: mediatek: mt8516: add usb1 node
+       arm64: dts: mediatek: mt8516: add efuse node
+       dt-bindings: arm64: dts: mediatek: Add mt8167-pumpkin board
+       arm64: dts: mediatek: add dtsi for MT8167
+       arm64: dts: mediatek: add MT8167 pumpkin board dts
+
+Frank Wunderlich (2):
+       dts64: mt7622: enable all pwm for bananapi r64
+       dts64: mt7622: disable spi1 and uart2 because pins are used by pwm
+
+Hanks Chen (1):
+       arm64: dts: add dts nodes for MT6779
+
+Hsin-Yi Wang (1):
+       arm64: dts: mt8183: Add pwm and backlight node
+
+Jitao Shi (1):
+       arm64: dts: mt8183: Add dsi node
+
+Krzysztof Kozlowski (1):
+       arm64: dts: mediatek: align GPIO hog names with dtschema
+
+Matthias Brugger (2):
+       Merge tag 'v5.10-next-pm-domains-stable' into HEAD
+       arm64: dts: mediatek: Add mt8183 power domains controller
+
+Seiya Wang (1):
+       arm64: dts: Add Mediatek SoC MT8192 and evaluation board dts and Makefile
+
+Weiyi Lu (1):
+       dt-bindings: power: Add MT8192 power domains
+
+  .../devicetree/bindings/arm/mediatek.yaml          |   4 +
+  .../devicetree/bindings/iio/adc/mt6577_auxadc.txt  |   1 +
+  .../bindings/power/mediatek,power-controller.yaml  | 293 ++++++++
+  arch/arm64/boot/dts/mediatek/Makefile              |   3 +
+  arch/arm64/boot/dts/mediatek/mt6779-evb.dts        |  31 +
+  arch/arm64/boot/dts/mediatek/mt6779.dtsi           | 271 ++++++++
+  .../boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts  |  13 +-
+  arch/arm64/boot/dts/mediatek/mt8167-pinfunc.h      | 744 +++++++++++++++++++++
+  arch/arm64/boot/dts/mediatek/mt8167-pumpkin.dts    |  20 +
+  arch/arm64/boot/dts/mediatek/mt8167.dtsi           |  61 ++
+  arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi       |   1 -
+  arch/arm64/boot/dts/mediatek/mt8173.dtsi           | 164 +++--
+  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi     |  28 +
+  arch/arm64/boot/dts/mediatek/mt8183.dtsi           | 408 ++++++++++-
+  arch/arm64/boot/dts/mediatek/mt8192-evb.dts        |  29 +
+  arch/arm64/boot/dts/mediatek/mt8192.dtsi           | 512 ++++++++++++++
+  arch/arm64/boot/dts/mediatek/mt8516.dtsi           |  40 +-
+  arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi   |  28 +-
+  include/dt-bindings/power/mt8183-power.h           |  26 +
+  include/dt-bindings/power/mt8192-power.h           |  32 +
+  20 files changed, 2638 insertions(+), 71 deletions(-)
+  create mode 100644 
+Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+  create mode 100644 arch/arm64/boot/dts/mediatek/mt6779-evb.dts
+  create mode 100644 arch/arm64/boot/dts/mediatek/mt6779.dtsi
+  create mode 100644 arch/arm64/boot/dts/mediatek/mt8167-pinfunc.h
+  create mode 100644 arch/arm64/boot/dts/mediatek/mt8167-pumpkin.dts
+  create mode 100644 arch/arm64/boot/dts/mediatek/mt8167.dtsi
+  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-evb.dts
+  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192.dtsi
+  create mode 100644 include/dt-bindings/power/mt8183-power.h
+  create mode 100644 include/dt-bindings/power/mt8192-power.h
