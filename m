@@ -1,128 +1,98 @@
-Return-Path: <SRS0=TN87=FD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=ALrW=FD=gmail.com=matthias.bgg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24BADC5519F
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 29 Nov 2020 21:17:41 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55BA4C3E8C5
+	for <soc@archiver.kernel.org>; Sun, 29 Nov 2020 21:22:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id F0E6320829; Sun, 29 Nov 2020 21:22:25 +0000 (UTC)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C6B182078D
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 29 Nov 2020 21:17:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 695402078D;
+	Sun, 29 Nov 2020 21:22:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="PRJqv/CM";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WXAKKnzW"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C6B182078D
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:
-	Content-Transfer-Encoding:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Subject:From:To:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=ZV93+2WVbn0IWxRupnIqM/H3P9zL+szJcmB7PDgkaWo=; b=PRJqv/CM8TdRgScFWdYNfuFb6m
-	plKT8BaNUFPO3lG9FznQj3pcUQGm64S8WpoqB1fjxet3AFEdvq/CHTyaBuhbaVRqkYKMJzC7EFGVp
-	/MtGZRcrxaOirD+4t9sv8XaAG6QT5uB4nFC5qfBUO8quSE9z8MSFdxH+xQepXV/A4KauwwmRxmPCF
-	VNej7JM7u3hUwTDRswIkAYoOev0gPz6sMT0M2WnePTnNyAzi0seWoI/UMNBtQXCyncFdYNFutiHSa
-	SyfFm8PqMrU8zrkcl4gNv+rgV6CakHcVep3OG+QpxQVqcyVwn3OYYGQpPILCxGNO0jt/6hLPURtZ5
-	iU0JwPxw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kjU3Q-0006fo-DP; Sun, 29 Nov 2020 21:16:20 +0000
-Received: from mail-ed1-x541.google.com ([2a00:1450:4864:20::541])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kjU3M-0006f4-QU; Sun, 29 Nov 2020 21:16:17 +0000
-Received: by mail-ed1-x541.google.com with SMTP id k4so12768952edl.0;
- Sun, 29 Nov 2020 13:16:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=to:cc:from:subject:message-id:date:user-agent:mime-version
- :content-language:content-transfer-encoding;
- bh=Wzet6YIBcFXIXVjhyotb3WolYA/AVJvDgx1lWrdlNFA=;
- b=WXAKKnzWawzpwaTo42EU1aSJn+Tc7blnHCWoQkVGoZdpM6hba7V+r2FVQLHJqPyqTs
- eQpSFbAeBrm+BX130MyHog/kzs+04MhZ0PODPZiDWjsG4RAeDeWr5pSVaqXULTZjRcgE
- OKD61cXUoTbbq1Qfp0NGRF0UKYvhqNTu6Y4nEQgsUTCJaYE0hxlJ49qONsFqNawPWwRo
- KabhX2nb9D3ktNlKQFCMmUcW6/4+P6A0UypsQLw6zOOPYkGkrc78X8Y7xrKYuvQviwFd
- 5xs83o90g/gh/zoDYy5EdLWsKsITCacD+57nVZN3Hx2hyYwyEJXG6o0hBrhLnQiCzScb
- Q9Zg==
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hKr1UKx0"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 695402078D
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=matthias.bgg@gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id s13so1775416ejr.1;
+        Sun, 29 Nov 2020 13:22:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=8zPXm1FBDR9qfVumeaUOjP3wuQsBIpEAySwImCtGpPc=;
+        b=hKr1UKx0pDGx7PEAKapmxdpIOuF2VjB1mXd8MGEMMRIiGtzYAE6nFsiF1BfySdyhEC
+         Ur2OuyrAghYdfNvDuTAkcz5yfvgVdYob8+pgIO/nVjWpiC8KY0xUYf8gcNE5fVBhxu36
+         yN6szorqQHIgYCA2qV1Cbc01Nqm+I8F6AFSmcoUFARbiXdY7oIrHXzA811OHViAoUYLf
+         ys+ysh4t42DKS9ebj1xYv5tWZjf4k8bokJXamj9TlfmYrTRBPBOctAOLMSog57IuXj2W
+         Fz34D9ewvbEKTslczDOaWo82Ut1RJDBf70a4jd23jlMAqnnTeWR+5gTcS6kVVogFob/b
+         wbrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
- :mime-version:content-language:content-transfer-encoding;
- bh=Wzet6YIBcFXIXVjhyotb3WolYA/AVJvDgx1lWrdlNFA=;
- b=SxvfEQsHxWM3X5uxnEqMOUsXhAzL8ZCL97NeLl7TIEfXX+4jJlTz9e9BjHrhNAbI9r
- I8T+1ouXOvq99q4GCKQX8uW5gzh0eCK/r8YAOdK1417xwN52rcXu6E/IBl/ZzJWmQFjm
- RXK/VQ5+P74WU9nZ4YNGN35ax9xM5+9U6xJB+zRRcR+Wk524vUX3X963wZmso3fCJS4v
- 8d6uLlKftUiWgFxsf6WD/zmpiAaUXrFzzNekqnZjrdTA4ssWP0MiPz+ZIZAmu9TWKzSQ
- s4wqTJgMeflx/7oHIlBb5KG+DlKEtP5MOjFklwV5iYQhX8LDMmyv4maT0uHV/wkH3H9o
- tx+w==
-X-Gm-Message-State: AOAM533yMZCL/0O+JF75DDcoHAnr2PTn37jmu3rPtCm8fGtKzjzgdau0
- V5Go1RX1DuAW5Rnf75CBIgo=
-X-Google-Smtp-Source: ABdhPJxbZdS9blYIpT7OBFHB2Ihl7v8kwNwSXIxqZfxUD5+w2A4rIq+dgRDAFgq57ybPbQYHSwR/Kg==
-X-Received: by 2002:a05:6402:c96:: with SMTP id
- cm22mr18352434edb.121.1606684573856; 
- Sun, 29 Nov 2020 13:16:13 -0800 (PST)
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=8zPXm1FBDR9qfVumeaUOjP3wuQsBIpEAySwImCtGpPc=;
+        b=bjm1Mn14DgpLaP42urZDYNFhLZs/hkYt1uHnN4EBmflagZNJnSqn2Y8YO6eeNsixNW
+         dxsmtNyRvy2LDdoQzalHDj2WE+Dnj3F4FvdMn1b+PoqBsjsi2gHLl6P6VPlpnCr3c3Bo
+         1tw6Ob0kbh/lMuRM26kDHbkEU8ODqc5fBnCbfxtChdTiSyJdHYJLPjpCZkHGigKz12Iu
+         V6Y/BM6xS6rRM2uBw918EsGvtrNRmUiYsjTs+Gj6mSjs5xTGZsku+GlBXeAMFqF3lIho
+         tJc3gI9t5ZyXbCQfLPyNq4EI8WAj2Uxc7VWw7fXX5SFiOAsCh2WyV2MeOxRKCr864itx
+         VzKg==
+X-Gm-Message-State: AOAM531PvY78s8pTCM2cvB3LKCr1eH6LrJz0OL44Hj0Itz0vjIEjHY5y
+	tdFXDMaVtioe9PpTFwJ5ej0uDORbaLFxig==
+X-Google-Smtp-Source: ABdhPJzevcx/WzHeFiw1cNVO5mrWErqDpdFenCCaJuFtBmfR2FpmE6dpM9+NTHxiR3b2EerILyZfaw==
+X-Received: by 2002:a17:906:3899:: with SMTP id q25mr2796412ejd.173.1606684943998;
+        Sun, 29 Nov 2020 13:22:23 -0800 (PST)
 Received: from ziggy.stardust ([213.195.126.134])
- by smtp.gmail.com with ESMTPSA id k3sm7861373ejd.36.2020.11.29.13.16.12
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 29 Nov 2020 13:16:13 -0800 (PST)
+        by smtp.gmail.com with ESMTPSA id z29sm8169733edi.1.2020.11.29.13.22.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Nov 2020 13:22:23 -0800 (PST)
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
+Cc: "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "moderated list:ARM/Mediatek SoC support"
+ <linux-mediatek@lists.infradead.org>, Chun-Kuang Hu
+ <chunkuang.hu@kernel.org>,
+ Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+ Neal Liu <neal.liu@mediatek.com>, Nicolas Boichat <drinkcat@chromium.org>,
+ Weiyi Lu <weiyi.lu@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>
 From: Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [GIT PULL] arm64: mediatek: devicetree changes for v5.11
-Message-ID: <72fe1c4f-f27c-c455-dfd9-66bde90bb295@gmail.com>
-Date: Sun, 29 Nov 2020 22:16:11 +0100
+Subject: [GIT PULL] soc: mediatek: changes for v5.11
+Message-ID: <b03fe343-e183-c6f3-f2dc-4c58aae3146b@gmail.com>
+Date: Sun, 29 Nov 2020 22:22:22 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.5.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201129_161616_959304_51C8CC43 
-X-CRM114-Status: GOOD (  21.37  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Jitao Shi <jitao.shi@mediatek.com>, Weiyi Lu <weiyi.lu@mediatek.com>,
- Frank Wunderlich <frank-w@public-files.de>,
- Seiya Wang <seiya.wang@mediatek.com>, Hanks Chen <hanks.chen@mediatek.com>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- "moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
- Hsin-Yi Wang <hsinyi@chromium.org>,
- Enric Balletbo i Serra <enric.balletbo@collabora.com>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201129211611.efC4RINGHE1c2EokH6P3nNJIyb5BDblITM9ObdQMdC8@z>
 
-Hi Arnd and Olof,
+Hi Olof and Arnd,
 
-Please have a look at the following devicetree changes for v5.11.
+Please find below the commit for the MediaTek SoC drivers. The most important 
+changes are the inclusion of two new drivers. Devapc is an TrustZone interface 
+found on the mobile phone chips to identify malicious accesses from bus 
+controllers. Apart from that you can find a new power domain driver. We have the 
+old scpsys driver for quite some time around, But it has some limitations, that 
+we could only overcome with a brand new driver with a new binding. Right now 
+these new driver supports mt8192 and mt8183 but the plan is, to move all SoCs to 
+the new driver model and later on retire the old driver.
 
-The most remarkable changes are support for three (!) new MediaTek boards, the 
-AiOT chip mt8167, the smart phone chip mt6779 and the tablet/laptop chip mt8192.
-
-Beware that I had to create a stable branch to share the binding includes for 
-the new power domain driver found on mt8183 and mt8192.
+Please beware that I had to create a stable branch to share some include files 
+for the driver between the dts64 and this branch.
 
 Regards,
 Matthias
+
 ---
 
 The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
@@ -132,119 +102,103 @@ The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 are available in the Git repository at:
 
    https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/ 
-tags/v5.10-next-dts64
+tags/v5.10-next-soc
 
-for you to fetch changes up to 5833bc6c7319dd59441562d853b8e435e3bc8ac2:
+for you to fetch changes up to cc6576029aedc79ce87b9fcb22cbd396d47f2852:
 
-   dts64: mt7622: disable spi1 and uart2 because pins are used by pwm 
-(2020-11-27 17:05:32 +0100)
-
-----------------------------------------------------------------
-mt8173:
-- add new power domain controller node
-
-mt8183:
-- add new power domain controller
-- add display, iommu and dsi nodes
-
-mt8192:
-- add basic support, pinctrl, uart, spi, i2c and timer
-
-mt8516:
-- add auxadc, efuse and usb nodes
-
-mt8167:
-- add basic support for the SoC
-- add support for the pumkin board
-
-mt6779:
-- add initial support, interrupt controller, clocks, uart
-
-mt7622:
--  PWM node for all available PWM channels
+   soc: mediatek: mmsys: Use devm_platform_ioremap_resource() (2020-11-28 
+00:37:12 +0100)
 
 ----------------------------------------------------------------
-Enric Balletbo i Serra (7):
-       arm64: dts: mt8173-elm: Remove ddc property from panel
+power-domains:
+- add support for new power domain driver.
+- add support for mt8183 and mt8192
+
+devapc:
+- add support for the devapc device found on mt6779 to identify of
+   malicious bus accesses from a controller to a device
+
+mmsys:
+- move DDP routing IDs into the driver
+
+cmdq:
+- drop timeout handler support as not usefull
+
+scpsys:
+- print warning on theoretical error
+
+----------------------------------------------------------------
+Chun-Kuang Hu (1):
+       soc / drm: mediatek: cmdq: Remove timeout handler in helper function
+
+Enric Balletbo i Serra (5):
+       mfd: syscon: Add syscon_regmap_lookup_by_phandle_optional() function.
        dt-bindings: power: Add bindings for the Mediatek SCPSYS power domains 
 controller
        dt-bindings: power: Add MT8183 power domains
-       arm64: dts: mediatek: Add mt8173 power domain controller
-       arm64: dts: mediatek: Add smi_common node for MT8183
-       arm64: dts: mt8183: Add iommu and larb nodes
-       arm64: dts: mt8183: Add display nodes for MT8183
+       soc: mediatek: Add MediaTek SCPSYS power domains
+       soc: mediatek: mmsys: Use devm_platform_ioremap_resource()
 
-Fabien Parent (9):
-       arm64: dts: mediatek: mt8183: fix gce incorrect mbox-cells value
-       dt-bindings: iio: adc: auxadc: add doc for MT8516 SoC
-       arm64: dts: mediatek: mt8516: add auxadc node
-       arm64: dts: mediatek: mt8516: rename usb phy
-       arm64: dts: mediatek: mt8516: add usb1 node
-       arm64: dts: mediatek: mt8516: add efuse node
-       dt-bindings: arm64: dts: mediatek: Add mt8167-pumpkin board
-       arm64: dts: mediatek: add dtsi for MT8167
-       arm64: dts: mediatek: add MT8167 pumpkin board dts
-
-Frank Wunderlich (2):
-       dts64: mt7622: enable all pwm for bananapi r64
-       dts64: mt7622: disable spi1 and uart2 because pins are used by pwm
-
-Hanks Chen (1):
-       arm64: dts: add dts nodes for MT6779
-
-Hsin-Yi Wang (1):
-       arm64: dts: mt8183: Add pwm and backlight node
-
-Jitao Shi (1):
-       arm64: dts: mt8183: Add dsi node
-
-Krzysztof Kozlowski (1):
-       arm64: dts: mediatek: align GPIO hog names with dtschema
-
-Matthias Brugger (2):
+Matthias Brugger (10):
+       MAINTAINERS: change mediatek wiki page
+       Merge tag 'ib-mfd-mediatek-v5.11' into HEAD
        Merge tag 'v5.10-next-pm-domains-stable' into HEAD
-       arm64: dts: mediatek: Add mt8183 power domains controller
+       soc: mediatek: pm-domains: Add bus protection protocol
+       soc: mediatek: pm_domains: Make bus protection generic
+       soc: mediatek: pm-domains: Add SMI block as bus protection block
+       soc: mediatek: pm-domains: Add extra sram control
+       soc: mediatek: pm-domains: Add subsystem clocks
+       soc: mediatek: pm-domains: Allow bus protection to ignore clear ack
+       soc: mediatek: pm-domains: Add support for mt8183
 
-Seiya Wang (1):
-       arm64: dts: Add Mediatek SoC MT8192 and evaluation board dts and Makefile
+Neal Liu (2):
+       dt-bindings: devapc: add bindings for mtk-devapc
+       soc: mediatek: add mt6779 devapc driver
 
-Weiyi Lu (1):
+Nicolas Boichat (1):
+       soc: mediatek: Check if power domains can be powered on at boot time
+
+Weiyi Lu (3):
        dt-bindings: power: Add MT8192 power domains
+       soc: mediatek: pm-domains: Add default power off flag
+       soc: mediatek: pm-domains: Add support for mt8192
 
-  .../devicetree/bindings/arm/mediatek.yaml          |   4 +
-  .../devicetree/bindings/iio/adc/mt6577_auxadc.txt  |   1 +
-  .../bindings/power/mediatek,power-controller.yaml  | 293 ++++++++
-  arch/arm64/boot/dts/mediatek/Makefile              |   3 +
-  arch/arm64/boot/dts/mediatek/mt6779-evb.dts        |  31 +
-  arch/arm64/boot/dts/mediatek/mt6779.dtsi           | 271 ++++++++
-  .../boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts  |  13 +-
-  arch/arm64/boot/dts/mediatek/mt8167-pinfunc.h      | 744 +++++++++++++++++++++
-  arch/arm64/boot/dts/mediatek/mt8167-pumpkin.dts    |  20 +
-  arch/arm64/boot/dts/mediatek/mt8167.dtsi           |  61 ++
-  arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi       |   1 -
-  arch/arm64/boot/dts/mediatek/mt8173.dtsi           | 164 +++--
-  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi     |  28 +
-  arch/arm64/boot/dts/mediatek/mt8183.dtsi           | 408 ++++++++++-
-  arch/arm64/boot/dts/mediatek/mt8192-evb.dts        |  29 +
-  arch/arm64/boot/dts/mediatek/mt8192.dtsi           | 512 ++++++++++++++
-  arch/arm64/boot/dts/mediatek/mt8516.dtsi           |  40 +-
-  arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi   |  28 +-
+Yongqiang Niu (1):
+       soc / drm: mediatek: Move DDP component defines into mtk-mmsys.h
+
+  .../bindings/power/mediatek,power-controller.yaml  | 293 ++++++++++
+  .../devicetree/bindings/soc/mediatek/devapc.yaml   |  58 ++
+  MAINTAINERS                                        |   2 +-
+  drivers/gpu/drm/mediatek/mtk_drm_crtc.c            |   3 +-
+  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h        |  34 +-
+  drivers/mfd/syscon.c                               |  18 +
+  drivers/soc/mediatek/Kconfig                       |  21 +
+  drivers/soc/mediatek/Makefile                      |   2 +
+  drivers/soc/mediatek/mt8173-pm-domains.h           |  94 ++++
+  drivers/soc/mediatek/mt8183-pm-domains.h           | 221 ++++++++
+  drivers/soc/mediatek/mt8192-pm-domains.h           | 292 ++++++++++
+  drivers/soc/mediatek/mtk-cmdq-helper.c             |  41 +-
+  drivers/soc/mediatek/mtk-devapc.c                  | 308 +++++++++++
+  drivers/soc/mediatek/mtk-infracfg.c                |   5 -
+  drivers/soc/mediatek/mtk-mmsys.c                   |  11 +-
+  drivers/soc/mediatek/mtk-pm-domains.c              | 614 +++++++++++++++++++++
+  drivers/soc/mediatek/mtk-pm-domains.h              | 102 ++++
+  drivers/soc/mediatek/mtk-scpsys.c                  |   5 +-
   include/dt-bindings/power/mt8183-power.h           |  26 +
-  include/dt-bindings/power/mt8192-power.h           |  32 +
-  20 files changed, 2638 insertions(+), 71 deletions(-)
+  include/dt-bindings/power/mt8192-power.h           |  32 ++
+  include/linux/mfd/syscon.h                         |  11 +
+  include/linux/soc/mediatek/infracfg.h              | 107 ++++
+  include/linux/soc/mediatek/mtk-cmdq.h              |  10 +-
+  include/linux/soc/mediatek/mtk-mmsys.h             |  33 ++
+  24 files changed, 2243 insertions(+), 100 deletions(-)
   create mode 100644 
 Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-  create mode 100644 arch/arm64/boot/dts/mediatek/mt6779-evb.dts
-  create mode 100644 arch/arm64/boot/dts/mediatek/mt6779.dtsi
-  create mode 100644 arch/arm64/boot/dts/mediatek/mt8167-pinfunc.h
-  create mode 100644 arch/arm64/boot/dts/mediatek/mt8167-pumpkin.dts
-  create mode 100644 arch/arm64/boot/dts/mediatek/mt8167.dtsi
-  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192.dtsi
+  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/devapc.yaml
+  create mode 100644 drivers/soc/mediatek/mt8173-pm-domains.h
+  create mode 100644 drivers/soc/mediatek/mt8183-pm-domains.h
+  create mode 100644 drivers/soc/mediatek/mt8192-pm-domains.h
+  create mode 100644 drivers/soc/mediatek/mtk-devapc.c
+  create mode 100644 drivers/soc/mediatek/mtk-pm-domains.c
+  create mode 100644 drivers/soc/mediatek/mtk-pm-domains.h
   create mode 100644 include/dt-bindings/power/mt8183-power.h
   create mode 100644 include/dt-bindings/power/mt8192-power.h
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
