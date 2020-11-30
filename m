@@ -1,45 +1,81 @@
-Return-Path: <SRS0=f5Ih=FE=bootlin.com=gregory.clement@kernel.org>
+Return-Path: <SRS0=GSTU=FE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 093B7C63777
-	for <soc@archiver.kernel.org>; Mon, 30 Nov 2020 16:00:38 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id CDC3F2076E; Mon, 30 Nov 2020 16:00:37 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC77AC63777
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 16:01:22 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 35C5F205F4;
-	Mon, 30 Nov 2020 16:00:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 35C5F205F4
+	by mail.kernel.org (Postfix) with ESMTPS id 400CF20659
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 16:01:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="wjeq0eHl"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 400CF20659
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gregory.clement@bootlin.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=R6lOSH9O/Msbpuc78PMrMDUsyKtm/98LZmn5vmpW6Gc=; b=wjeq0eHlR3F7/3Q7yVw4VVLh5l
+	KtQ4KaI3Qw0dfYwAswK1d+zn4PhvKcNsW8lEQ3Zou3YI0thRuNiKSWPZd0vyT7VPzX1cAFZFE7avH
+	CTuiLV6HuF01NDuOMzCCgHpnlaEY642/Boc6wpurSjKxqCm72QU67wlCeP32K/wafBF6Ei1FUMijb
+	w5Im/EWz86uqw5Jhy1iGeDJ+n7SofJRn1XnhmdNd88JAESIrxJLqzYLEXdt0ul+pFLcXE0c/XTiTV
+	Modovv71IkFJqaYGAJrpcodNDX1TvCpeJrRc0RT1GAgr0uDTllgdH4wruUzotkUG4zSbA6kFDNIJ/
+	rzzjNlKQ==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kjlav-00062P-Ch; Mon, 30 Nov 2020 16:00:05 +0000
+Received: from relay9-d.mail.gandi.net ([217.70.183.199])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kjlaq-0005zT-Eg
+ for linux-arm-kernel@lists.infradead.org; Mon, 30 Nov 2020 16:00:01 +0000
 X-Originating-IP: 91.175.115.186
 Received: from localhost (91-175-115-186.subs.proxad.net [91.175.115.186])
-	(Authenticated sender: gregory.clement@bootlin.com)
-	by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 5E00660015;
-	Mon, 30 Nov 2020 16:00:32 +0000 (UTC)
+ (Authenticated sender: gregory.clement@bootlin.com)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 0CC21FF80B;
+ Mon, 30 Nov 2020 15:59:56 +0000 (UTC)
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  <arm@kernel.org>, soc@kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>,  Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt for v5.11 (#1)
-Date: Mon, 30 Nov 2020 17:00:32 +0100
-Message-ID: <87h7p6j0m7.fsf@BL-laptop>
+Subject: [GIT PULL] ARM: mvebu: arm for v5.11 (#1)
+Date: Mon, 30 Nov 2020 16:59:56 +0100
+Message-ID: <87k0u2j0n7.fsf@BL-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201130_110000_647047_F9854B10 
+X-CRM114-Status: GOOD (  10.38  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: Andrew Lunn <andrew@lunn.ch>, linux-arm-kernel@lists.infradead.org,
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201130155956._GCFIKJViz8_bBZ6A_lTWyu0oBouw8F_OHZ3qQIOgSo@z>
 
 Hi,
 
-Here is the first pull request for dt for mvebu for v5.11.
+Here is the first pull request for arm for mvebu for v5.11.
 
 Gregory
 
@@ -49,100 +85,35 @@ The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
-bu-dt-5.11-1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-arm-5.11-1
 
-for you to fetch changes up to 51b632c713d50586a844259c56048a280f375406:
+for you to fetch changes up to d7ce8739f50e9e8c55a3c7651ebfbca57199553f:
 
-  ARM: dts: mvebu: Add device tree for RD-AC3X-48G4X2XL board (2020-11-30 1=
-5:26:01 +0100)
+  MAINTAINERS: switch mvebu tree to kernel.org (2020-11-29 11:59:17 +0100)
 
 ----------------------------------------------------------------
-mvebu dt for 5.11 (part 1)
+mvebu arm for 5.11 (part 1)
 
- - Add support for MikroTik CRS3xx switches
- - Add support for RD-AC3X-48G4X2XL board : Armada 382 SoC connected
-   to Prestera AC3X ASIC through PCI
- - Clean-up kirkwood device tree: replace "ok" by "okay"
- - Improve device tree for PCA953x gpio expander nodes
- - Use compliant node name for USB3 on armada 375
- - 98dx3236 SoCs:
-    - remove non-existent i2c1
-    - add i2c0 pinctrl information
- - Improve device tree for Turris Omnia
+Update MAINTAINER file:
+ - add new 98DX3236 based boards
+ - point new git repository for mvebu
 
 ----------------------------------------------------------------
-Adrian Schmutzler (1):
-      ARM: dts: kirkwood: replace status value "ok" by "okay"
+Gregory CLEMENT (1):
+      MAINTAINERS: switch mvebu tree to kernel.org
 
-Aryan Srivastava (1):
-      ARM: dts: mvebu: Add device tree for RD-AC3X-48G4X2XL board
+Luka Kovacic (1):
+      MAINTAINERS: Add an entry for MikroTik CRS3xx 98DX3236 boards
 
-Chris Packham (2):
-      ARM: dts: Remove non-existent i2c1 from 98dx3236
-      ARM: dts: Add i2c0 pinctrl information for 98dx3236
+ MAINTAINERS | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-Krzysztof Kozlowski (2):
-      ARM: dts: dove: fix PCA95xx GPIO expander properties on A510
-      ARM: dts: armada: align GPIO hog names with dtschema
-
-Luka Kovacic (3):
-      ARM: dts: mvebu: Add CRS326-24G-2S board
-      ARM: dts: mvebu: Add CRS305-1G-4S board
-      ARM: dts: mvebu: Add CRS328-4C-20S-4S board
-
-Marek Beh=C3=BAn (7):
-      ARM: dts: turris-omnia: enable HW buffer management
-      ARM: dts: turris-omnia: add comphy handle to eth2
-      ARM: dts: turris-omnia: describe switch interrupt
-      ARM: dts: turris-omnia: add SFP node
-      ARM: dts: turris-omnia: add LED controller node
-      ARM: dts: turris-omnia: update ethernet-phy node and handle name
-      ARM: dts: turris-omnia: remove unneeded status =3D "okay" properties
-
-Serge Semin (1):
-      arm: dts: marvell: armada-375: Harmonize DWC USB3 DT nodes name
-
- arch/arm/boot/dts/Makefile                         |   7 +
- arch/arm/boot/dts/armada-375.dtsi                  |   2 +-
- arch/arm/boot/dts/armada-382-rd-ac3x-48g4x2xl.dts  | 112 +++++++++++++
- arch/arm/boot/dts/armada-385-turris-omnia.dts      | 179 +++++++++++++++++=
-+++-
- arch/arm/boot/dts/armada-388-clearfog.dts          |   4 +-
- arch/arm/boot/dts/armada-388-clearfog.dtsi         |  10 +-
- arch/arm/boot/dts/armada-388-helios4.dts           |   6 +-
- arch/arm/boot/dts/armada-xp-98dx3236.dtsi          |  12 +-
- arch/arm/boot/dts/armada-xp-crs305-1g-4s-bit.dts   |  43 +++++
- arch/arm/boot/dts/armada-xp-crs305-1g-4s.dts       |  17 ++
- arch/arm/boot/dts/armada-xp-crs305-1g-4s.dtsi      | 104 ++++++++++++
- arch/arm/boot/dts/armada-xp-crs326-24g-2s-bit.dts  |  43 +++++
- arch/arm/boot/dts/armada-xp-crs326-24g-2s.dts      |  17 ++
- arch/arm/boot/dts/armada-xp-crs326-24g-2s.dtsi     | 104 ++++++++++++
- .../boot/dts/armada-xp-crs328-4c-20s-4s-bit.dts    |  43 +++++
- arch/arm/boot/dts/armada-xp-crs328-4c-20s-4s.dts   |  17 ++
- arch/arm/boot/dts/armada-xp-crs328-4c-20s-4s.dtsi  | 104 ++++++++++++
- arch/arm/boot/dts/dove-sbc-a510.dts                |   1 +
- arch/arm/boot/dts/kirkwood-dockstar.dts            |   2 +-
- arch/arm/boot/dts/kirkwood-dreamplug.dts           |   2 +-
- arch/arm/boot/dts/kirkwood-goflexnet.dts           |   2 +-
- .../arm/boot/dts/kirkwood-guruplug-server-plus.dts |   2 +-
- arch/arm/boot/dts/kirkwood-iconnect.dts            |   2 +-
- arch/arm/boot/dts/kirkwood-iomega_ix2_200.dts      |   2 +-
- arch/arm/boot/dts/kirkwood-nsa3x0-common.dtsi      |   2 +-
- arch/arm/boot/dts/kirkwood.dtsi                    |   4 +-
- 26 files changed, 810 insertions(+), 33 deletions(-)
- create mode 100644 arch/arm/boot/dts/armada-382-rd-ac3x-48g4x2xl.dts
- create mode 100644 arch/arm/boot/dts/armada-xp-crs305-1g-4s-bit.dts
- create mode 100644 arch/arm/boot/dts/armada-xp-crs305-1g-4s.dts
- create mode 100644 arch/arm/boot/dts/armada-xp-crs305-1g-4s.dtsi
- create mode 100644 arch/arm/boot/dts/armada-xp-crs326-24g-2s-bit.dts
- create mode 100644 arch/arm/boot/dts/armada-xp-crs326-24g-2s.dts
- create mode 100644 arch/arm/boot/dts/armada-xp-crs326-24g-2s.dtsi
- create mode 100644 arch/arm/boot/dts/armada-xp-crs328-4c-20s-4s-bit.dts
- create mode 100644 arch/arm/boot/dts/armada-xp-crs328-4c-20s-4s.dts
- create mode 100644 arch/arm/boot/dts/armada-xp-crs328-4c-20s-4s.dtsi
-
---=20
+-- 
 Gregory Clement, Bootlin
 Embedded Linux and Kernel engineering
 http://bootlin.com
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
