@@ -1,161 +1,133 @@
-Return-Path: <SRS0=GSTU=FE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=f5Ih=FE=bootlin.com=gregory.clement@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4E3AC63777
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 16:02:04 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80C59C63777
+	for <soc@archiver.kernel.org>; Mon, 30 Nov 2020 16:03:03 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 308272073C; Mon, 30 Nov 2020 16:03:03 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5D70E20665
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 16:02:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="dPvyIe5R"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5D70E20665
+	by mail.kernel.org (Postfix) with ESMTPS id DE6F620665;
+	Mon, 30 Nov 2020 16:03:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DE6F620665
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=vImbOn1S3Vz2aX1mKnBiH6yHzJG+MreCnJQE+O4I6ds=; b=dPvyIe5RrcF/LIgLtgWHbjLbkP
-	M7OQXMUnRSJ2sMFQjKOL/xqXLebRzQRw+479s1N0aDSZoZGUgJVK0qvUeNZX2yUzxmLuOEMKDT9xy
-	mbrK8BPDL1AI9nX55A4qFxLcJu4lhRs3KQL1bn1fKAjaSxDmKyjkwn3ntt9W/Tdwizr5X5oFYSiDV
-	wehZ9CkP09cifdLLBmNAln+PEmRt6eKVjjRIAtlR0kTqDGx/TIorgaN7c+WBHrKvPvE8SssOK/np3
-	jyl8avN2doP4UByPl14TjwVZUVfIamM7ukGrRLbbkU3w7HXMjgfCp3ukuJkO9Uq1eCtz6r3fLvoxZ
-	VSmSYw/g==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kjlbU-0006Dm-Rv; Mon, 30 Nov 2020 16:00:40 +0000
-Received: from relay3-d.mail.gandi.net ([217.70.183.195])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kjlbQ-0006Bk-Jh
- for linux-arm-kernel@lists.infradead.org; Mon, 30 Nov 2020 16:00:38 +0000
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gregory.clement@bootlin.com
 X-Originating-IP: 91.175.115.186
 Received: from localhost (91-175-115-186.subs.proxad.net [91.175.115.186])
- (Authenticated sender: gregory.clement@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 5E00660015;
- Mon, 30 Nov 2020 16:00:32 +0000 (UTC)
+	(Authenticated sender: gregory.clement@bootlin.com)
+	by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 5E6A9E0010;
+	Mon, 30 Nov 2020 16:02:59 +0000 (UTC)
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  <arm@kernel.org>, soc@kernel.org
-Subject: [GIT PULL] ARM: mvebu: dt for v5.11 (#1)
-Date: Mon, 30 Nov 2020 17:00:32 +0100
-Message-ID: <87h7p6j0m7.fsf@BL-laptop>
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: dt64 for v5.11 (#1)
+Date: Mon, 30 Nov 2020 17:02:59 +0100
+Message-ID: <87eekaj0i4.fsf@BL-laptop>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201130_110036_922262_10DC5572 
-X-CRM114-Status: GOOD (  14.49  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Andrew Lunn <andrew@lunn.ch>, linux-arm-kernel@lists.infradead.org,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201130160032.w6ZxMZmiCZUnnNBXBQ_0pDvL2kpGp-hnOWDJoyEqiNc@z>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-SGksCgpIZXJlIGlzIHRoZSBmaXJzdCBwdWxsIHJlcXVlc3QgZm9yIGR0IGZvciBtdmVidSBmb3Ig
-djUuMTEuCgpHcmVnb3J5CgpUaGUgZm9sbG93aW5nIGNoYW5nZXMgc2luY2UgY29tbWl0IDM2NTBi
-MjI4ZjgzYWRkYTdlNWVlNTMyZTJiOTA0MjljMDNmN2I5ZWM6CgogIExpbnV4IDUuMTAtcmMxICgy
-MDIwLTEwLTI1IDE1OjE0OjExIC0wNzAwKQoKYXJlIGF2YWlsYWJsZSBpbiB0aGUgR2l0IHJlcG9z
-aXRvcnkgYXQ6CgogIGdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dp
-dC9nY2xlbWVudC9tdmVidS5naXQgdGFncy9tdmVidS1kdC01LjExLTEKCmZvciB5b3UgdG8gZmV0
-Y2ggY2hhbmdlcyB1cCB0byA1MWI2MzJjNzEzZDUwNTg2YTg0NDI1OWM1NjA0OGEyODBmMzc1NDA2
-OgoKICBBUk06IGR0czogbXZlYnU6IEFkZCBkZXZpY2UgdHJlZSBmb3IgUkQtQUMzWC00OEc0WDJY
-TCBib2FyZCAoMjAyMC0xMS0zMCAxNToyNjowMSArMDEwMCkKCi0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KbXZlYnUgZHQgZm9y
-IDUuMTEgKHBhcnQgMSkKCiAtIEFkZCBzdXBwb3J0IGZvciBNaWtyb1RpayBDUlMzeHggc3dpdGNo
-ZXMKIC0gQWRkIHN1cHBvcnQgZm9yIFJELUFDM1gtNDhHNFgyWEwgYm9hcmQgOiBBcm1hZGEgMzgy
-IFNvQyBjb25uZWN0ZWQKICAgdG8gUHJlc3RlcmEgQUMzWCBBU0lDIHRocm91Z2ggUENJCiAtIENs
-ZWFuLXVwIGtpcmt3b29kIGRldmljZSB0cmVlOiByZXBsYWNlICJvayIgYnkgIm9rYXkiCiAtIElt
-cHJvdmUgZGV2aWNlIHRyZWUgZm9yIFBDQTk1M3ggZ3BpbyBleHBhbmRlciBub2RlcwogLSBVc2Ug
-Y29tcGxpYW50IG5vZGUgbmFtZSBmb3IgVVNCMyBvbiBhcm1hZGEgMzc1CiAtIDk4ZHgzMjM2IFNv
-Q3M6CiAgICAtIHJlbW92ZSBub24tZXhpc3RlbnQgaTJjMQogICAgLSBhZGQgaTJjMCBwaW5jdHJs
-IGluZm9ybWF0aW9uCiAtIEltcHJvdmUgZGV2aWNlIHRyZWUgZm9yIFR1cnJpcyBPbW5pYQoKLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLQpBZHJpYW4gU2NobXV0emxlciAoMSk6CiAgICAgIEFSTTogZHRzOiBraXJrd29vZDogcmVw
-bGFjZSBzdGF0dXMgdmFsdWUgIm9rIiBieSAib2theSIKCkFyeWFuIFNyaXZhc3RhdmEgKDEpOgog
-ICAgICBBUk06IGR0czogbXZlYnU6IEFkZCBkZXZpY2UgdHJlZSBmb3IgUkQtQUMzWC00OEc0WDJY
-TCBib2FyZAoKQ2hyaXMgUGFja2hhbSAoMik6CiAgICAgIEFSTTogZHRzOiBSZW1vdmUgbm9uLWV4
-aXN0ZW50IGkyYzEgZnJvbSA5OGR4MzIzNgogICAgICBBUk06IGR0czogQWRkIGkyYzAgcGluY3Ry
-bCBpbmZvcm1hdGlvbiBmb3IgOThkeDMyMzYKCktyenlzenRvZiBLb3psb3dza2kgKDIpOgogICAg
-ICBBUk06IGR0czogZG92ZTogZml4IFBDQTk1eHggR1BJTyBleHBhbmRlciBwcm9wZXJ0aWVzIG9u
-IEE1MTAKICAgICAgQVJNOiBkdHM6IGFybWFkYTogYWxpZ24gR1BJTyBob2cgbmFtZXMgd2l0aCBk
-dHNjaGVtYQoKTHVrYSBLb3ZhY2ljICgzKToKICAgICAgQVJNOiBkdHM6IG12ZWJ1OiBBZGQgQ1JT
-MzI2LTI0Ry0yUyBib2FyZAogICAgICBBUk06IGR0czogbXZlYnU6IEFkZCBDUlMzMDUtMUctNFMg
-Ym9hcmQKICAgICAgQVJNOiBkdHM6IG12ZWJ1OiBBZGQgQ1JTMzI4LTRDLTIwUy00UyBib2FyZAoK
-TWFyZWsgQmVow7puICg3KToKICAgICAgQVJNOiBkdHM6IHR1cnJpcy1vbW5pYTogZW5hYmxlIEhX
-IGJ1ZmZlciBtYW5hZ2VtZW50CiAgICAgIEFSTTogZHRzOiB0dXJyaXMtb21uaWE6IGFkZCBjb21w
-aHkgaGFuZGxlIHRvIGV0aDIKICAgICAgQVJNOiBkdHM6IHR1cnJpcy1vbW5pYTogZGVzY3JpYmUg
-c3dpdGNoIGludGVycnVwdAogICAgICBBUk06IGR0czogdHVycmlzLW9tbmlhOiBhZGQgU0ZQIG5v
-ZGUKICAgICAgQVJNOiBkdHM6IHR1cnJpcy1vbW5pYTogYWRkIExFRCBjb250cm9sbGVyIG5vZGUK
-ICAgICAgQVJNOiBkdHM6IHR1cnJpcy1vbW5pYTogdXBkYXRlIGV0aGVybmV0LXBoeSBub2RlIGFu
-ZCBoYW5kbGUgbmFtZQogICAgICBBUk06IGR0czogdHVycmlzLW9tbmlhOiByZW1vdmUgdW5uZWVk
-ZWQgc3RhdHVzID0gIm9rYXkiIHByb3BlcnRpZXMKClNlcmdlIFNlbWluICgxKToKICAgICAgYXJt
-OiBkdHM6IG1hcnZlbGw6IGFybWFkYS0zNzU6IEhhcm1vbml6ZSBEV0MgVVNCMyBEVCBub2RlcyBu
-YW1lCgogYXJjaC9hcm0vYm9vdC9kdHMvTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgICAgICAg
-fCAgIDcgKwogYXJjaC9hcm0vYm9vdC9kdHMvYXJtYWRhLTM3NS5kdHNpICAgICAgICAgICAgICAg
-ICAgfCAgIDIgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2FybWFkYS0zODItcmQtYWMzeC00OGc0eDJ4
-bC5kdHMgIHwgMTEyICsrKysrKysrKysrKysKIGFyY2gvYXJtL2Jvb3QvZHRzL2FybWFkYS0zODUt
-dHVycmlzLW9tbmlhLmR0cyAgICAgIHwgMTc5ICsrKysrKysrKysrKysrKysrKysrLQogYXJjaC9h
-cm0vYm9vdC9kdHMvYXJtYWRhLTM4OC1jbGVhcmZvZy5kdHMgICAgICAgICAgfCAgIDQgKy0KIGFy
-Y2gvYXJtL2Jvb3QvZHRzL2FybWFkYS0zODgtY2xlYXJmb2cuZHRzaSAgICAgICAgIHwgIDEwICst
-CiBhcmNoL2FybS9ib290L2R0cy9hcm1hZGEtMzg4LWhlbGlvczQuZHRzICAgICAgICAgICB8ICAg
-NiArLQogYXJjaC9hcm0vYm9vdC9kdHMvYXJtYWRhLXhwLTk4ZHgzMjM2LmR0c2kgICAgICAgICAg
-fCAgMTIgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2FybWFkYS14cC1jcnMzMDUtMWctNHMtYml0LmR0
-cyAgIHwgIDQzICsrKysrCiBhcmNoL2FybS9ib290L2R0cy9hcm1hZGEteHAtY3JzMzA1LTFnLTRz
-LmR0cyAgICAgICB8ICAxNyArKwogYXJjaC9hcm0vYm9vdC9kdHMvYXJtYWRhLXhwLWNyczMwNS0x
-Zy00cy5kdHNpICAgICAgfCAxMDQgKysrKysrKysrKysrCiBhcmNoL2FybS9ib290L2R0cy9hcm1h
-ZGEteHAtY3JzMzI2LTI0Zy0ycy1iaXQuZHRzICB8ICA0MyArKysrKwogYXJjaC9hcm0vYm9vdC9k
-dHMvYXJtYWRhLXhwLWNyczMyNi0yNGctMnMuZHRzICAgICAgfCAgMTcgKysKIGFyY2gvYXJtL2Jv
-b3QvZHRzL2FybWFkYS14cC1jcnMzMjYtMjRnLTJzLmR0c2kgICAgIHwgMTA0ICsrKysrKysrKysr
-KwogLi4uL2Jvb3QvZHRzL2FybWFkYS14cC1jcnMzMjgtNGMtMjBzLTRzLWJpdC5kdHMgICAgfCAg
-NDMgKysrKysKIGFyY2gvYXJtL2Jvb3QvZHRzL2FybWFkYS14cC1jcnMzMjgtNGMtMjBzLTRzLmR0
-cyAgIHwgIDE3ICsrCiBhcmNoL2FybS9ib290L2R0cy9hcm1hZGEteHAtY3JzMzI4LTRjLTIwcy00
-cy5kdHNpICB8IDEwNCArKysrKysrKysrKysKIGFyY2gvYXJtL2Jvb3QvZHRzL2RvdmUtc2JjLWE1
-MTAuZHRzICAgICAgICAgICAgICAgIHwgICAxICsKIGFyY2gvYXJtL2Jvb3QvZHRzL2tpcmt3b29k
-LWRvY2tzdGFyLmR0cyAgICAgICAgICAgIHwgICAyICstCiBhcmNoL2FybS9ib290L2R0cy9raXJr
-d29vZC1kcmVhbXBsdWcuZHRzICAgICAgICAgICB8ICAgMiArLQogYXJjaC9hcm0vYm9vdC9kdHMv
-a2lya3dvb2QtZ29mbGV4bmV0LmR0cyAgICAgICAgICAgfCAgIDIgKy0KIC4uLi9hcm0vYm9vdC9k
-dHMva2lya3dvb2QtZ3VydXBsdWctc2VydmVyLXBsdXMuZHRzIHwgICAyICstCiBhcmNoL2FybS9i
-b290L2R0cy9raXJrd29vZC1pY29ubmVjdC5kdHMgICAgICAgICAgICB8ICAgMiArLQogYXJjaC9h
-cm0vYm9vdC9kdHMva2lya3dvb2QtaW9tZWdhX2l4Ml8yMDAuZHRzICAgICAgfCAgIDIgKy0KIGFy
-Y2gvYXJtL2Jvb3QvZHRzL2tpcmt3b29kLW5zYTN4MC1jb21tb24uZHRzaSAgICAgIHwgICAyICst
-CiBhcmNoL2FybS9ib290L2R0cy9raXJrd29vZC5kdHNpICAgICAgICAgICAgICAgICAgICB8ICAg
-NCArLQogMjYgZmlsZXMgY2hhbmdlZCwgODEwIGluc2VydGlvbnMoKyksIDMzIGRlbGV0aW9ucygt
-KQogY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtL2Jvb3QvZHRzL2FybWFkYS0zODItcmQtYWMz
-eC00OGc0eDJ4bC5kdHMKIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2FybS9ib290L2R0cy9hcm1h
-ZGEteHAtY3JzMzA1LTFnLTRzLWJpdC5kdHMKIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2FybS9i
-b290L2R0cy9hcm1hZGEteHAtY3JzMzA1LTFnLTRzLmR0cwogY3JlYXRlIG1vZGUgMTAwNjQ0IGFy
-Y2gvYXJtL2Jvb3QvZHRzL2FybWFkYS14cC1jcnMzMDUtMWctNHMuZHRzaQogY3JlYXRlIG1vZGUg
-MTAwNjQ0IGFyY2gvYXJtL2Jvb3QvZHRzL2FybWFkYS14cC1jcnMzMjYtMjRnLTJzLWJpdC5kdHMK
-IGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2FybS9ib290L2R0cy9hcm1hZGEteHAtY3JzMzI2LTI0
-Zy0ycy5kdHMKIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2FybS9ib290L2R0cy9hcm1hZGEteHAt
-Y3JzMzI2LTI0Zy0ycy5kdHNpCiBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9hcm0vYm9vdC9kdHMv
-YXJtYWRhLXhwLWNyczMyOC00Yy0yMHMtNHMtYml0LmR0cwogY3JlYXRlIG1vZGUgMTAwNjQ0IGFy
-Y2gvYXJtL2Jvb3QvZHRzL2FybWFkYS14cC1jcnMzMjgtNGMtMjBzLTRzLmR0cwogY3JlYXRlIG1v
-ZGUgMTAwNjQ0IGFyY2gvYXJtL2Jvb3QvZHRzL2FybWFkYS14cC1jcnMzMjgtNGMtMjBzLTRzLmR0
-c2kKCi0tIApHcmVnb3J5IENsZW1lbnQsIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5l
-bCBlbmdpbmVlcmluZwpodHRwOi8vYm9vdGxpbi5jb20KCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmxpbnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0Cmxp
-bnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZwpodHRwOi8vbGlzdHMuaW5mcmFkZWFk
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFybS1rZXJuZWwK
+Hi,
+
+Here is the first pull request for dt64 for mvebu for v5.11.
+
+It is based on v5.10-rc2 because some fixes on the device tree has been
+merged after v5.10-rc1.
+
+Gregory
+
+The following changes since commit 3cea11cd5e3b00d91caf0b4730194039b45c5891:
+
+  Linux 5.10-rc2 (2020-11-01 14:43:51 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
+bu-dt64-5.11-1
+
+for you to fetch changes up to a2081c09d7410c3e55d902a09602b833dc96c58a:
+
+  arm64: dts: armada-3720-turris-mox: add 3W power capability to SFP cage (=
+2020-11-30 16:46:30 +0100)
+
+----------------------------------------------------------------
+mvebu dt64 for 5.11 (part 1)
+
+ - Add support for IEI Puzzle-M801 board (Armada 8040 based)
+ - Add support ESPRESSObin-Ultra (Armada 3720 based)
+ - Clean-up and improve espressobin device tree
+ - Switch to per-port SATA interrupts on CP110 based SoC
+ - Use compliant node name for USB3  on CP110 based SoC
+ - Add heartbeat LED on mcbin singleshot
+ - Disable SMMU by default for Armada 7040 and 8040 to continued
+   supporting custom bot firmware
+ - Turris mox:
+   - add 3W power capability to SFP cage
+   - update ethernet-phy handle name
+
+----------------------------------------------------------------
+Andre Heider (2):
+      arm64: dts: marvell: espressobin: Simplify v7 ethernet port labeling
+      arm64: dts: marvell: espressobin: Get rid of duplicate serial aliases
+
+Luka Kovacic (1):
+      arm64: dts: marvell: Add a device tree for the IEI Puzzle-M801 board
+
+Marek Beh=C3=BAn (2):
+      arm64: dts: armada-3720-turris-mox: update ethernet-phy handle name
+      arm64: dts: armada-3720-turris-mox: add 3W power capability to SFP ca=
+ge
+
+Pali Roh=C3=A1r (3):
+      arm64: dts: marvell: espressobin: De-duplicate eMMC definitions
+      arm64: dts: marvell: espressobin: Add support for LED2
+      arm64: dts: marvell: espressobin: Update link to V7 schematic
+
+Serge Semin (1):
+      arm64: dts: marvell: cp11x: Harmonize xHCI DT nodes name
+
+Sven Auhagen (1):
+      arm64: dts: marvell: armada-cp110: Switch to per-port SATA interrupts
+
+Tomasz Maciej Nowak (1):
+      arm64: dts: mcbin-singleshot: add heartbeat LED
+
+Tomasz Nowicki (1):
+      arm64: dts: marvell: keep SMMU disabled by default for Armada 7040 an=
+d 8040
+
+Vladimir Vid (1):
+      arm64: dts: marvell: add DT for ESPRESSObin-Ultra
+
+ arch/arm64/boot/dts/marvell/Makefile               |   2 +
+ .../dts/marvell/armada-3720-espressobin-emmc.dts   |  18 -
+ .../dts/marvell/armada-3720-espressobin-ultra.dts  | 165 +++++++
+ .../marvell/armada-3720-espressobin-v7-emmc.dts    |  40 +-
+ .../dts/marvell/armada-3720-espressobin-v7.dts     |  24 +-
+ .../boot/dts/marvell/armada-3720-espressobin.dtsi  |  39 +-
+ .../boot/dts/marvell/armada-3720-turris-mox.dts    |   3 +-
+ arch/arm64/boot/dts/marvell/armada-7040.dtsi       |   4 -
+ .../dts/marvell/armada-8040-mcbin-singleshot.dts   |  22 +
+ .../boot/dts/marvell/armada-8040-puzzle-m801.dts   | 523 +++++++++++++++++=
+++++
+ arch/arm64/boot/dts/marvell/armada-8040.dtsi       |   4 -
+ arch/arm64/boot/dts/marvell/armada-cp11x.dtsi      |  10 +-
+ 12 files changed, 775 insertions(+), 79 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/marvell/armada-3720-espressobin-ult=
+ra.dts
+ create mode 100644 arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts
+
+--=20
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
