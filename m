@@ -1,147 +1,161 @@
-Return-Path: <SRS0=GSTU=FE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=ChmJ=FE=chromium.org=dianders@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AE8BC63777
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 18:06:49 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5E82C64E7B
+	for <soc@archiver.kernel.org>; Mon, 30 Nov 2020 18:11:34 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 9F13F2074A; Mon, 30 Nov 2020 18:11:34 +0000 (UTC)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DB69A2067C
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 18:06:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 212CF207F7
+	for <soc@kernel.org>; Mon, 30 Nov 2020 18:11:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="lLAK+E+y";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="JsQVEEQ7"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DB69A2067C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=t7B/RQQ3QOhZPvrjTVKd2wqChjoeo2DzssNo/GNPXc0=; b=lLAK+E+yde6159Fq+hLLneGRj
-	uBzqE2aE/vBLPpISo6zgHv8Zxol9F8eerhDzTx2BAL1hznrMGsobz1alIzGo+nn9YMD+CfZxw4tHk
-	dQvQ8mbRLG8upqAywGEKHAJIc4vhjtZDjXQ1LenuT4+jECh4BpnVsYXMBAEeS5PibJBgyzP+8W4fD
-	TcEo2ltb1gSChoKOXb2xkeXSgPV8bWZYlmH/NqJlLEnI9GgsPEj9NT6dcrI5caMJpxlPzUsj48tUp
-	IlGTsHanKxzd1+LmBH1LpQUPKR+wEnv9lrjAOy2y+VFOJSzgWz+vsKzjbzvlhdGxMKLk+nHRo3sSp
-	TpN05guFw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kjnYL-0008QI-K1; Mon, 30 Nov 2020 18:05:33 +0000
-Received: from pandora.armlinux.org.uk ([2001:4d48:ad52:32c8:5054:ff:fe00:142])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kjnYI-0008PW-QL
- for linux-arm-kernel@lists.infradead.org; Mon, 30 Nov 2020 18:05:31 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
- MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
- Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
- Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
- List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
- bh=U/dq4XBKLjIj8o+Y1ijdonAPuVA02wsCQ9Xrid3YVv8=; b=JsQVEEQ7J0mZEkLPjCIxwK5WW
- wc9G9f4ifbWp8TKDAgLPZOOe3Fb2OsOhiyfEYgZ7fO1TnaSagY37SkpCMGxKDyrLHjIkPHHn3SG6s
- 0teQKL/DneiDNSVZZaWQ1o2hWrJ17+u1s1DDaP/OTOg0ud8a1NZaqy7i6al7ORzC3YikovIimbbyg
- D6tRbmWabLpSKuPC89FzKRThltwZm69SGfjXmuwZRwI8N3vfypSjcMCTI/qVlSpf5uOqCDs92oqzW
- 0UWuvjUF4fGBKiUuXC0BsEFdHj7/GnIEURUWr9dQnDCYPkaWC+s+KQIIrGUnWavbNQeAiFGQJBLHB
- 7k8mkew0Q==;
-Received: from shell.armlinux.org.uk
- ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38084)
- by pandora.armlinux.org.uk with esmtpsa
- (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim 4.92)
- (envelope-from <linux@armlinux.org.uk>)
- id 1kjnYD-0007Lg-SN; Mon, 30 Nov 2020 18:05:25 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
- (envelope-from <linux@shell.armlinux.org.uk>)
- id 1kjnYC-0005Cs-RS; Mon, 30 Nov 2020 18:05:25 +0000
-Date: Mon, 30 Nov 2020 18:05:24 +0000
-From: Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
-Message-ID: <20201130180523.GZ1551@shell.armlinux.org.uk>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ZXrbIa/8"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 212CF207F7
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=dianders@chromium.org
+Received: by mail-ua1-f41.google.com with SMTP id x13so4043443uar.4
+        for <soc@kernel.org>; Mon, 30 Nov 2020 10:11:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4Dq7wgs7NqFyUi65GhuLYJFO9sNtbbe65SBXiBnvq+4=;
+        b=ZXrbIa/8DaIaxmun2H25fsWAS8RLe2N5gq5Imr/04QzbQ609MMqEkHkKQVTlL3DDdN
+         LUe/cPX1bzXE0eBBl/Is1JV0qVGOzczWmxGBmmS31c1P20iMuERtLDJzbD/4Hgk3a9TT
+         ock7ND/J5damPnyRysPzK8apdxzkIZDbtNqOo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4Dq7wgs7NqFyUi65GhuLYJFO9sNtbbe65SBXiBnvq+4=;
+        b=p0x5o6SvDP0ush/ymMpeUwZNXkmWW4YFMO5sSWBq2Ga3WVR5eymVbyXu3QqPtd+Amx
+         yWkFhzXUxakLZIbTeNkJg+k/RLAVpyZeF7yie1aEGXRe91scTvGRxPEHghVdDASkwcNr
+         Nbphhzxr/W79bxW9hyZs4y4IzzxAWqDFke7Vva+fCZG0T3k0YN9u9mLRJKuVLJ07RAVZ
+         ZPdqsMZ7nQCF1na+l9hyA6Jhm9+FDNiEMW+6XTR7O6djGS+PEU3xzW4HJ3x7urzpQEhk
+         Bi+SwEZSHtst2n+J4sWYAPczGAd/ze0dC0TAVNdGfJ61eY8aA6fUL0HD2Q+s6eSo6hkO
+         SIdg==
+X-Gm-Message-State: AOAM533hBSo0Rv1cyxH9AihdPua4Y2m6qa2tcUmZhYNdvZnm+QkkzHku
+	95/GTGzZmNvDhLphqNgL7ZgDMnAmT771Vw==
+X-Google-Smtp-Source: ABdhPJyXwA78cem3bvZDGFEAYOQyLLuhl+shhyXxxuLQUUEfF2cmeDJRkXdWFaXNz4ZVmPketXdEQQ==
+X-Received: by 2002:ab0:4ad7:: with SMTP id t23mr16398391uae.117.1606759892525;
+        Mon, 30 Nov 2020 10:11:32 -0800 (PST)
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com. [209.85.217.44])
+        by smtp.gmail.com with ESMTPSA id t7sm4019872vkk.43.2020.11.30.10.11.31
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Nov 2020 10:11:32 -0800 (PST)
+Received: by mail-vs1-f44.google.com with SMTP id v8so6829260vso.2
+        for <soc@kernel.org>; Mon, 30 Nov 2020 10:11:31 -0800 (PST)
+X-Received: by 2002:a67:4242:: with SMTP id p63mr16948698vsa.34.1606759890976;
+ Mon, 30 Nov 2020 10:11:30 -0800 (PST)
+MIME-Version: 1.0
 References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
  <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
- <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
- <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
+ <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com> <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
 In-Reply-To: <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201130_130530_870233_5C6D4CA8 
-X-CRM114-Status: GOOD (  20.37  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+From: Doug Anderson <dianders@chromium.org>
+Date: Mon, 30 Nov 2020 10:11:19 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=Up-JW8RtMLQ_pAG3e0d8NnpT+rDiguxcz3DnVUz_7Jbw@mail.gmail.com>
+Message-ID: <CAD=FV=Up-JW8RtMLQ_pAG3e0d8NnpT+rDiguxcz3DnVUz_7Jbw@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
+To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Doug Anderson <dianders@chromium.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201130180524.nd8RE49EOD0U-x8aTOB0lRzvjfNdXdYik1Ur_ok0qYQ@z>
+Cc: Arnd Bergmann <arnd@kernel.org>, SoC Team <soc@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 30, 2020 at 09:44:03AM -0800, Linus Torvalds wrote:
-> On Mon, Nov 30, 2020 at 9:04 AM Doug Anderson <dianders@chromium.org> wrote:
-> >
-> > Without static assignment, maybe we could do numbering of MMC devices
-> > in some type of a pre-probe routine?  Is that what you're suggesting?
-> 
-> Yes.
-> 
+Hi,
+
+On Mon, Nov 30, 2020 at 9:44 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
 > So basically, the way the async probing works for say SCSI is that we
 > have multiple "layers of asynchroniety". We have the usual "init calls
 > done asynchronously", but then within the init calls themselves you
 > can start sub-scans asynchronously.
-> 
+>
 > In order to get reliable ordering between multiple controllers, the
 > PCI bus is probed in order in pci_init() (or whatever), so each SCSI
 > controller gets called in a fixed order.
-> 
+>
 > That then gets to scsi_scan_host() does that async_schedule() thing to
 > actually scan the SCSI buses on that host.
+>
+> > If so, it seems like it might be a pretty big change to figure out how
+> > that ought to work (if it can be made to work).
+>
+> Try to start out doing discovery synchronously, but then any extra
+> work (actual IO like partition scanning etc) with an "async_work()".
 
-I'm afraid that you don't get stable device numbering on x86. You get
-something that _looks_ like stable device numbering, but it really
-isn't.
+Right, so basically this is like how MMC did it before my patches.  I
+was just trying to save the extra 40 ms.
 
-If you think that /dev/sda for example is always the machine's internal
-HDD, that is wrong.
 
-I have a HP Pavilion laptop with its internal HDD with a Windows
-installation. Because I didn't want to destroy that in any way, I
-bought an external USB3 SATA enclosure and SSD, and installed Debian
-Stable on there.
+> > Just to confirm, I assume you are specifically excluding all block
+> > devices attached via USB, right?
+>
+> I have this memory that we tried to scan the root bus in order, just
+> because people will have internal USB devices that way, and it makes
+> it *much* easier if they show up in predetermined places.
+>
+> Note that it really is only the internal devices that matter. Once you
+> start plugging in an external USB hug and random devices, ordering
+> clearly won't be reliable.
 
-When I installed Debian stable, the HDD was /dev/sda and the SSD was
-/dev/sdb. When I boot Debian, the SSD is /dev/sda and the internal
-HDD is /dev/sdb.
+I guess that's more of a heuristic though, right?  There may be
+computers with an internal USB hub before the storage.  There may also
+be computers (small embedded raspberry-pi-type-things) where the
+primary storage for the system is expected to be an external USB
+device, possibly connected through a hub.
 
-Maybe /dev/sda through /dev/sdd should be reserved for internal
-motherboard drives?
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> So this is not a "everything must be ordered". But people who think
+> that that then means "everythinbg can be random" are wrong. It's
+> really really inconvenient, because things like disk labels and
+> various device IDs are not reliable either, and can be very confusing
+> when two otherwise identical machines look different before you've
+> installed a full system on them, for example.
+>
+> So you should strive very hard to make everything that is directly
+> connected to one SoC always come up in the same order, for example.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+So I guess the answer here is: strive very hard but you don't have to
+guarantee that every corner case is covered?
+
+
+> And storage devices are special. As Dmitry points out, it doesn't much
+> matter in what order something like a mouse is scanned. Who cares? If
+> you have multiple pointer devices, you'll either use them
+> interchangably, or you'll have some other way to identify them. But
+> storage is a _lot_ more basic than basically stateless input devices
+> are.
+
+Yes, storage devices are special, but the point I was trying to make
+is that with SoCs there may be a whole lot of devices (with complex
+dependencies) in the path of storage devices.  They can need clocks,
+regulators, GPIOs, etc and any of those things could be slow to probe
+and we might want to speed up boot by making them async.  They also
+could be parented on busses that could be slow to probe or might
+themselves have dependencies on clocks, regulators, GPIOs, etc.  It
+won't always be obvious which of these things are in the path of a
+block device.
+
+In a traditional PC I think there are fewer dependencies?
+
+
+I guess the question is: why is static assignment of numbers not an
+acceptable solution to the problem?  It gives us the desired fixed
+numbers and automatically avoids all weird probe ordering / dependency
+problems.
+
+-Doug
