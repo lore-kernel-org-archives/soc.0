@@ -1,176 +1,133 @@
-Return-Path: <SRS0=GSTU=FE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=42zo=FE=ti.com=nm@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB4B3C64E7B
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 17:45:39 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D48F5C63777
+	for <soc@archiver.kernel.org>; Mon, 30 Nov 2020 17:48:54 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 9F6F32076E; Mon, 30 Nov 2020 17:48:54 +0000 (UTC)
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 76D01206E3
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 17:45:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 27D7C206E3;
+	Mon, 30 Nov 2020 17:48:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="gJPaiShh";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="OpbVqC/7"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 76D01206E3
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=+JZsxFwbosTBE61WuhKMLItJ3zWVh1mxm9xW+IUHH6E=; b=gJPaiShhIXT07sRmW9WQ22V6Z
-	6DBRIh5IlIqfAYyVlTKJSh946OXt7n9r9sSl3XqMaBrJvoK3IBMBuKvsUBNowBD0lnU9t21HOxA2u
-	+nTJTrLcZVsJGumHrRfOZxvTr4J5O82AYXwMOMmg4klpBCWXa58Aqie8rUFMdgAnh2A5L7fLrJ/fN
-	mnJidUI/FL/0HYSDbiq6wjNutkY5vqMHjPLYbwcUPLzDIN9oYMVsJLLxIRd6SMOX0V7VRYAN6Yojw
-	7tkW3kQhmXWGz/YXUIs9Go4H4ddTIUOgeXkTJtkQ4juy7h0pvATt3/R+C+n8Fq8xrgcKxGD+4rdxU
-	qD8Xv3wYA==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kjnDw-0004Zq-FX; Mon, 30 Nov 2020 17:44:28 +0000
-Received: from mail-lf1-x143.google.com ([2a00:1450:4864:20::143])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kjnDs-0004Z2-M9
- for linux-arm-kernel@lists.infradead.org; Mon, 30 Nov 2020 17:44:25 +0000
-Received: by mail-lf1-x143.google.com with SMTP id s27so23238553lfp.5
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 30 Nov 2020 09:44:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=linux-foundation.org; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=hGGnCVO25VOQfg1PzcbDjqG+MdPgry8c2i2t7+r3Ezo=;
- b=OpbVqC/70CdGr9YEoMNyq56qEVPpQmbjvAsLgtlaJoyII6eswjqe7S4biOHSMstc3n
- YUniZkwX7b1I+uUfHDRpPTPw6l9kKhL20qsHluB+J4/sDH3RuD+1IjpWNP6qBnTTMw50
- sHR3xPzr7wC9l6SkL4QQkuixNxBs9xBM105nM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=hGGnCVO25VOQfg1PzcbDjqG+MdPgry8c2i2t7+r3Ezo=;
- b=DU4yXyLEByOHc20cgw2DfB8gbu/GX9PzEna0xbZWOHXUhXY66GVJkMf84e7z48ECO8
- boFax+V1HklLDtUcbk0MwLsn0gYHqaAru7RSGSYg/hhIPyolWJbgUPMUfn7sNuc7Pg8z
- NPzgy67236abYZE0bhFvsvK6XYYamipExtC6FLugiy4utU2wPHKfj1J12NhdOlT/AdMx
- 3UYoiFrbyC+ywvI/S2WN+wH1irOUA+H5VLSR0179eEEMEKaSX7pNSuk4rotGzv9JTZn+
- MNKcv5pZxvlDV+9PQjedH6vyCVc0fIfGrgdwwkLIblf+fzLtb8tF6O9trNZz0ZWFbg/K
- SK4Q==
-X-Gm-Message-State: AOAM533uchP5m+7bA7p8/CtM4uGmV/tR3WlwU2z6ef8Yga8E0MUZFe4O
- ZFhL2GX/k2uKxwoYoJQ1n8GKG+QuXdC6Dg==
-X-Google-Smtp-Source: ABdhPJxA3EoXDotNCorSYVigMCaYMLCUneZbiDdNjvRPF1kjmovOJE/JpDSJ/SaOU8HB/BB+rEKFiQ==
-X-Received: by 2002:a05:6512:3690:: with SMTP id
- d16mr10705691lfs.321.1606758261201; 
- Mon, 30 Nov 2020 09:44:21 -0800 (PST)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com.
- [209.85.208.182])
- by smtp.gmail.com with ESMTPSA id c14sm2528383lfr.105.2020.11.30.09.44.19
- for <linux-arm-kernel@lists.infradead.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 30 Nov 2020 09:44:20 -0800 (PST)
-Received: by mail-lj1-f182.google.com with SMTP id j10so19252344lja.5
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 30 Nov 2020 09:44:19 -0800 (PST)
-X-Received: by 2002:a2e:50c:: with SMTP id 12mr9985564ljf.371.1606758259392;
- Mon, 30 Nov 2020 09:44:19 -0800 (PST)
-MIME-Version: 1.0
-References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
- <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
- <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
-In-Reply-To: <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 30 Nov 2020 09:44:03 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
-Message-ID: <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
-To: Doug Anderson <dianders@chromium.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201130_124424_841073_F7E5B053 
-X-CRM114-Status: GOOD (  18.89  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ePa+4aHi"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 27D7C206E3
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=nm@ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0AUHmp5b089033;
+	Mon, 30 Nov 2020 11:48:51 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1606758531;
+	bh=CDMfYwJTEEpmraRLwLrOTZ6QOJKuNRPry5I3XVLN82Y=;
+	h=Date:From:To:CC:Subject;
+	b=ePa+4aHiZhpEVzShMPg/qJd0s6+LGa2smIW0uQtBFU8ES70xhcjFrxDF4MJMkLVUv
+	 nF104hTb5yTQVj6D/kDgNPwWxJiDt2NVl4gUBDF4ExDgHKPGfKNTt12rHec9pBeGCR
+	 6ynAkez1CFsDf3xt8/c9a+MetYwgHH+6kC9EgLRU=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0AUHmpAS088520
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 30 Nov 2020 11:48:51 -0600
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 30
+ Nov 2020 11:48:50 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 30 Nov 2020 11:48:50 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0AUHmoGC052653;
+	Mon, 30 Nov 2020 11:48:50 -0600
+Date: Mon, 30 Nov 2020 11:48:50 -0600
+From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, SoC Team <soc@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201130174403.ojrvTK74Era9s-xuXGmI5fzrDVcUL4XofwkuBaKVMJE@z>
+To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC: <t-kristo@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] arm64: TI K3 SoC configs changes for v5.11
+Message-ID: <20201130174850.ni4sdyz3qp67j3sz@upstart>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4g2iotpgkw34fuo3"
+Content-Disposition: inline
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Mon, Nov 30, 2020 at 9:04 AM Doug Anderson <dianders@chromium.org> wrote:
->
-> Without static assignment, maybe we could do numbering of MMC devices
-> in some type of a pre-probe routine?  Is that what you're suggesting?
+--4g2iotpgkw34fuo3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes.
+Hi,
 
-So basically, the way the async probing works for say SCSI is that we
-have multiple "layers of asynchroniety". We have the usual "init calls
-done asynchronously", but then within the init calls themselves you
-can start sub-scans asynchronously.
+Here is a config changes for TI K3 SoCs. This is needed for booting
+the J721E board from an SD card.
 
-In order to get reliable ordering between multiple controllers, the
-PCI bus is probed in order in pci_init() (or whatever), so each SCSI
-controller gets called in a fixed order.
+I do have a follow up cleanup patch[1] once drivers/soc/ti merges are in,
+which I think I will need to request later on.
 
-That then gets to scsi_scan_host() does that async_schedule() thing to
-actually scan the SCSI buses on that host.
+[1] https://lore.kernel.org/linux-arm-kernel/20201112215438.31432-1-nm@ti.c=
+om/
 
-> If so, it seems like it might be a pretty big change to figure out how
-> that ought to work (if it can be made to work).
+The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
-Try to start out doing discovery synchronously, but then any extra
-work (actual IO like partition scanning etc) with an "async_work()".
+  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 
-> Just to confirm, I assume you are specifically excluding all block
-> devices attached via USB, right?
+are available in the Git repository at:
 
-I have this memory that we tried to scan the root bus in order, just
-because people will have internal USB devices that way, and it makes
-it *much* easier if they show up in predetermined places.
+  git://git.kernel.org/pub/scm/linux/kernel/git/nmenon/linux.git tags/ti-k3=
+-config-for-v5.11
 
-Note that it really is only the internal devices that matter. Once you
-start plugging in an external USB hug and random devices, ordering
-clearly won't be reliable.
+for you to fetch changes up to 6b133f475a97a0839f02e3c0b937886b9adc2933:
 
-So this is not a "everything must be ordered". But people who think
-that that then means "everythinbg can be random" are wrong. It's
-really really inconvenient, because things like disk labels and
-various device IDs are not reliable either, and can be very confusing
-when two otherwise identical machines look different before you've
-installed a full system on them, for example.
+  arm64: defconfig: Enable GPIO and I2C configs for TI's J721e platform (20=
+20-11-12 11:50:18 -0600)
 
-So you should strive very hard to make everything that is directly
-connected to one SoC always come up in the same order, for example.
+----------------------------------------------------------------
+ARM64 defconfig changes for TI K3 platforms for v5.11 merge window:
 
-And storage devices are special. As Dmitry points out, it doesn't much
-matter in what order something like a mouse is scanned. Who cares? If
-you have multiple pointer devices, you'll either use them
-interchangably, or you'll have some other way to identify them. But
-storage is a _lot_ more basic than basically stateless input devices
-are.
+- GPIO and I2C for J721E SD card support to be functional
 
-And no, disk labels really don't always exist. Never ever say "but but
-but disk labels".
+----------------------------------------------------------------
+Faiz Abbas (1):
+      arm64: defconfig: Enable GPIO and I2C configs for TI's J721e platform
 
-               Linus
+ arch/arm64/configs/defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
+
+--4g2iotpgkw34fuo3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAl/FMHsACgkQ3bWEnRc2
+JJ1VqQ/9FllCYAB83WehU2D6WJaLFqxFTkX1ux7ZFk5igKT4J2shaDSGYp8D/Jwy
+zUW4CEHmHLoAzk3+IxqlQZrDjDHw82DlvVp/fVH/jP61DudAtmjlENWifPOQORJf
+ghj0vsdnJxBSGggUj/9G+inEwAxf4Xc4Ap9wNeQDjpvXJ8FVhKFK+MyANJ0PvHnB
+vG/NO3jF2h5tt/H4RJkcximhUYJByfV+HabWMfHGbVoEGhXkd5Lnja0Y5dWVESIw
+Hm21krtDHzetX3wyyUOLfMfLkITgYlbFGDeVgYHK2KOvLwodg0fpexX9MNP/DYJA
+dNrHSB2K8f3LfBD1yWiou7f5AJRdiI8rFZPOQK4QdH3fCOkQoOsaUC6BeCx3f6dA
+RJmicNZiSaueM5/kMlFgZKaG6QLCnHCC1B68GlIJOumqVyyHe9/p06nGTu+W0Ieu
+KFUyvlPe4WJuV02R5RZUQUyXiCVaPXX/9lIofk1jq4JcjJvmAgJIGULVLaeZ333Q
+fpS30bkUSOtEVQifASGF1nut8GN4uaVtNsXkWt1mW7r1jPqVFVKJ+ydI+OyJ54vd
+WyIx5ZDFg+1cb6z1lOuPD/X4yo2GfMdRXVqKFowtwvSOVBAWDskQ5gRfBHJ83Uud
+aB0CXD52JvOw6416hIo6+d++aKmK/4K+fYooOJi8Xr7TsGp1uJY=
+=wI3K
+-----END PGP SIGNATURE-----
+
+--4g2iotpgkw34fuo3--
