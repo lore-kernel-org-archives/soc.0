@@ -8,17 +8,17 @@ X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8394DC64E7B
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 19:03:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FF34C64E7B
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 19:03:06 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1E3402076E
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 19:03:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 35BDC206CB
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 19:03:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="rXdMxoIr";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lV05iSx4"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1E3402076E
+	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="BKkqaAUt";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VxBgtU2j"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 35BDC206CB
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -27,66 +27,65 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=Xs9gd0fxl+5XwQ4TkG+0iv/IhF6DrgPj+9UUugn5Qmc=; b=rXdMxoIrA5ZI8dCMSNeMuIKGmY
-	OLfz7Zg4SDXbp2uNX5Il6vTO48pVi+5R4JT3YKG0xKb3wNKI/9u71Uce3mKmFueA1DndLljgsA+7S
-	c2SaEJUMoNwGSOuu7WCeCXvU0CutreCfkb5XmqJfKOuUnP0JCVS/d1LVJ0doz3r3UJQYIMQ+gKlyq
-	rdW2/yeldYmtfVAx7YBrQmrnH8pmKfqnm6TrExS2HOTs1a6YN/bVcFyrGHeLC5y0y1XH4bOU+0IXb
-	pEgxpKf77qcY0UDGvjP/UenoJEV+xqOzw0DqlGgQkp2a9Mh9d7AJbPtoRGXt843GM1zmEF9VAFZky
-	A4I2+cBg==;
+	bh=MTaU2pN8pjA44Vzea2191SseDlI78ltEx7yBFTUc0lE=; b=BKkqaAUtKJi/TaJkXk1Q/LDzxJ
+	4X2B+dvAd8VlN29yGSAVcJVP+Tw6AvxNwozDlh/1jAIOaFtXFh9zzvo84jV2fuINk2ysMV4nVhYeT
+	Xtj8kQEp2dmDb033Zuoi3T7rTzAlW+H0x9vkefa2RHDDqXs9nZbKPk5MgcpMdR053UmplXfXBNJKL
+	6GvfCznrGbSxGZ9H2CwJLUYy3WN8puHsqhjxwdh0xnvljrn04e2cikDOeCbJx4bWs9S/NQYtuD0Sj
+	qdn5QiErEDowuQjSBSBsdjYJs6ov/qqQNZ5G5BX6QR7a8bvV+XWUD8F5/X7grGCyYkr7ci+qNDuAw
+	+sMbS6QA==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kjoQe-0007qn-EF; Mon, 30 Nov 2020 19:01:40 +0000
-Received: from mail-ot1-x32d.google.com ([2607:f8b0:4864:20::32d])
+	id 1kjoQt-0007vQ-Vr; Mon, 30 Nov 2020 19:01:56 +0000
+Received: from mail-ot1-x330.google.com ([2607:f8b0:4864:20::330])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kjoQZ-0007pR-P0
- for linux-arm-kernel@lists.infradead.org; Mon, 30 Nov 2020 19:01:38 +0000
-Received: by mail-ot1-x32d.google.com with SMTP id f48so3857213otf.8
+ id 1kjoQk-0007sJ-0q
+ for linux-arm-kernel@lists.infradead.org; Mon, 30 Nov 2020 19:01:53 +0000
+Received: by mail-ot1-x330.google.com with SMTP id t18so3912915otk.2
  for <linux-arm-kernel@lists.infradead.org>;
- Mon, 30 Nov 2020 11:01:35 -0800 (PST)
+ Mon, 30 Nov 2020 11:01:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=KkCGSdcUL2UomBwrpQhjXD4WVaPI4vhnvCHRxZI5DQY=;
- b=lV05iSx4I9iLORQ+IK5wKzzvrunx2t5J6Oj1cCvylHoi3p8ZJkhgZGiWnf370lMEYY
- GWgfecQNlHyNGOB7uB9SM2yqS8jk76xVP6NWaYUEYt/wrkQIw9MKn/6sP7fKraTPZC9t
- AS3sG3LRbcJB4h5464BBCrQ+E9EAKVsh4cbYEJVbUeIPoN3k964xhQRfWRCiQWE+Gqkg
- P70/IwjifsfFDmR7E2QRxQGYOnyiz4Z8dopEC2ZSDY7TeRFPbTWDJhS9CMfsf/W+XtIW
- VySeASNoHgU3vKG4Alr5t/MC2ajH2VKDlTWwlcCjwIn5mmL1yJVCuH7cO9hjwlEWNH23
- P2ZQ==
+ bh=u81Ska0R+CUYdnKTy+CfOIKLjODnyWA0F8zFjGBm5oI=;
+ b=VxBgtU2jEy5eAB+4/oCVI7S2GlqdZ9S4zFbzph8TyNUMuB9E+9c21h3EV4aaVUGCrz
+ KVLea1EzFvq8n8SrUvgBXUzH0bPrEoMVTWm5i7b9JgolXv6BgzHvYimP8dccfA1K33R8
+ z9py9+9KUeDV9p56ft0kP6qsmipRn/YOztonj6/PTOEfh8JiMvIGw32r1LEBt3jk/OI0
+ be5GdU8ZjXd1exSuukbmLYwSUqgjEQaGlpfoMjNvnq+SELrpr9JdfVwYJ0X3kZDzJFWX
+ zh+au+bWHV/X9CVymPltv1Gu+Bj9sX0zhszS0VXusPSpZt4Yqcd3CbV2ZgvFvwkscvJ9
+ cVgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=KkCGSdcUL2UomBwrpQhjXD4WVaPI4vhnvCHRxZI5DQY=;
- b=SK4IGTTjy9wy8hYhgbSQh1ztuJ672Q0GKQg8oNMexJxLCvBe0SNV2xqOdFOHQgPgZV
- lcN4XgjuWXpbaUaycvCVqdUjIcJQ6Mqp1wsYwi9Ha/tOxUfH6EebmBAjnOnGR+ABfZkE
- JS5KlAvjvKa5CGkqcs4Ixr6XNovQMBDg7rCJy4Iqi73WAZOYl/MKje1oc/vpGpkIsSSE
- pBiLbY6V5IbUQJGWdoQdp+S89Y18L+h8ZbtUtjCVdYNyYTA+UZH1U3Pp9BNSXnDgPN4y
- LMljd677nPuNWYqXEpub23MUvWY+5zeIzKO3zlDWmsTvjwTBKdf9IF/Gs1ldRRTcbDJO
- qVhg==
-X-Gm-Message-State: AOAM533kyDHo4uW6/JY6MJJIIQZ8pkYIQuKLe+LafaS14Tv1dCrJt17v
- EY4Yge6PxdzvzWwkBnq78uLClA==
-X-Google-Smtp-Source: ABdhPJwP5mEseuzXRMtsc7cX8nL3hz6cJW4XgncfSmHxiZM4W7ml3bE2nBgNNMpcrmsF8+F+kBBi0w==
-X-Received: by 2002:a05:6830:1589:: with SMTP id
- i9mr17710247otr.273.1606762893426; 
- Mon, 30 Nov 2020 11:01:33 -0800 (PST)
+ bh=u81Ska0R+CUYdnKTy+CfOIKLjODnyWA0F8zFjGBm5oI=;
+ b=sl4lTF4lxcuHkHyBbcjzACvhmcO7kD61UXt6lleh7XKbe+QPy86Y8y2yp576USDXXB
+ BTAgwaU9gxGMua6+8HQ/KF5qMVrUb0cpQil4P36a1Ger9H3+8M0mR3OfKBmOdAGLg3ZZ
+ Zqpq9dn0YF0mrqx0WjgTbVnIL0fGvK75zcYNgc3FYT0HVpveXMVKKBwTL8nhDslPZ9Kw
+ DYnw79n/XFy9MgSSvBB1zJbUm9YMT1UHMfPPM7EqyUHr8Rpuixo/Ae+muC76EqSEnNrB
+ csQ1by7oi1N0qoNa1e0+NZbOdOCZlo6FhG84Zpgtitoqfx8FIaBxUb4HQ8zNGNNHmyyO
+ i4tA==
+X-Gm-Message-State: AOAM532WLnZtiK1I8HK5Harv7edRXWCyHzgzHJ+jw0WWxEDSXgcy04XU
+ TfK3vwZHsjq7O2jaq/rjfYoNZw==
+X-Google-Smtp-Source: ABdhPJxsd97RZ49muWOa9Fs75h7isj49j6gp/9d/SczbZf99DIP0w/Pl38H7q49Mkb6njY4qFIbRRQ==
+X-Received: by 2002:a9d:2967:: with SMTP id d94mr17306137otb.11.1606762903671; 
+ Mon, 30 Nov 2020 11:01:43 -0800 (PST)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net.
  [104.57.184.186])
- by smtp.gmail.com with ESMTPSA id h8sm9886797oom.41.2020.11.30.11.01.31
+ by smtp.gmail.com with ESMTPSA id r4sm9241452otg.46.2020.11.30.11.01.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 30 Nov 2020 11:01:32 -0800 (PST)
+ Mon, 30 Nov 2020 11:01:43 -0800 (PST)
 From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
-Subject: [GIT PULL] Qualcomm ARM64 DT updates for 5.11
-Date: Mon, 30 Nov 2020 13:01:31 -0600
-Message-ID: <20201130190131.345187-1-bjorn.andersson@linaro.org>
+Subject: [GIT PULL] Qualcomm driver updates for v5.11
+Date: Mon, 30 Nov 2020 13:01:42 -0600
+Message-ID: <20201130190142.345246-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201130_140135_934289_C56A810C 
-X-CRM114-Status: GOOD (  21.87  )
+X-CRM114-CacheID: sfid-20201130_140146_128903_CF28D988 
+X-CRM114-Status: GOOD (  15.99  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,290 +97,145 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Taniya Das <tdas@codeaurora.org>, Jishnu Prakash <jprakash@codeaurora.org>,
- Akhil P Oommen <akhilpo@codeaurora.org>, Ajit Pandey <ajitp@codeaurora.org>,
- Kathiravan T <kathirav@codeaurora.org>,
- Antony Wang <antony_wang@compal.corp-partner.google.com>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Nikita Travkin <nikitos.tr@gmail.com>, Rob Clark <robdclark@chromium.org>,
+Cc: Maulik Shah <mkshah@codeaurora.org>, Tom Rix <trix@redhat.com>,
+ Lina Iyer <ilina@codeaurora.org>, Lee Jones <lee.jones@linaro.org>,
  Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
- Arnd Bergmann <arnd@arndb.de>, Jonathan Marek <jonathan@marek.ca>,
- Kevin Hilman <khilman@baylibre.com>, Konrad Dybcio <konradybcio@gmail.com>,
- Evan Green <evgreen@chromium.org>, Matthias Kaehlcke <mka@chromium.org>,
- Andy Gross <agross@kernel.org>, Alex Elder <elder@linaro.org>,
- Souradeep Chowdhury <schowdhu@codeaurora.org>, Terry Hsiao <a804335@gmail.com>,
- Sibi Sankar <sibis@codeaurora.org>, Alexandru Stan <amstan@chromium.org>,
- Stephan Gerhold <stephan@gerhold.net>, linux-arm-msm@vger.kernel.org,
- Stephen Boyd <swboyd@chromium.org>, Olof Johansson <olof@lixom.net>,
- Jordan Crouse <jcrouse@codeaurora.org>,
- Stanimir Varbanov <stanimir.varbanov@linaro.org>,
- Zhen Lei <thunder.leizhen@huawei.com>, linux-arm-kernel@lists.infradead.org,
- Douglas Anderson <dianders@chromium.org>,
- Thara Gopinath <thara.gopinath@linaro.org>,
- Michael Srba <Michael.Srba@seznam.cz>, Vinod Koul <vkoul@kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Georgi Djakov <georgi.djakov@linaro.org>
+ Arnd Bergmann <arnd@arndb.de>, Kevin Hilman <khilman@baylibre.com>,
+ Konrad Dybcio <konradybcio@gmail.com>, Evan Green <evgreen@chromium.org>,
+ Andy Gross <agross@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Souradeep Chowdhury <schowdhu@codeaurora.org>,
+ Vladimir Lypak <junak.pub@gmail.com>, Stephan Gerhold <stephan@gerhold.net>,
+ linux-arm-msm@vger.kernel.org, Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+ John Stultz <john.stultz@linaro.org>, linux-arm-kernel@lists.infradead.org,
+ "Isaac J . Manjarres" <isaacm@codeaurora.org>,
+ Roja Rani Yarubandi <rojay@codeaurora.org>, Vinod Koul <vkoul@kernel.org>,
+ Olof Johansson <olof@lixom.net>, Jun Nie <jun.nie@linaro.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201130190131.PkAFsuE-VALku98Kr_IoUaezIA4lUESttZz5PPt8rbg@z>
+Message-ID: <20201130190142.oYWfgiGaA_Wb2iITx1WU9V07B3bGkz_H744SJejTiLw@z>
 
-The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+The following changes since commit 80e8eaab5e98fc013fd4afb4aab1fceeb049cbfd:
 
-  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+  soc: qcom: geni: Optimize/comment select fifo/dma mode (2020-10-26 10:29:19 -0500)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.11
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-5.11
 
-for you to fetch changes up to 956e9c85f47bfe874d58d96c85471f2e2ebae626:
+for you to fetch changes up to 9c45662675b38e80fff48397506cf9fd9936b6f3:
 
-  arm64: dts: qcom: c630: Define eDP bridge and panel (2020-11-30 11:30:30 -0600)
-
-----------------------------------------------------------------
-Qualcomm ARM64 DT updates for 5.11
-
-For SM8250 the recently introduced support for handling boot-loader
-stream mappings in the ARM SMMU allow us to enable this, and thereby USB
-controller and PHY, SDHCI controller and FastRPC, as well as support for
-the SM8250 HDK board has been added. Additionally PRNG and RTC is
-enabled.
-
-Similarly for SM8150, the ARM SMMU could be added which allows the
-secondary USB controller and PHYs, as well as WiFi to be added and
-support for the SM8150 HDK board to be introduced. Additionally
-Coresight and support for the last-level cache controller was added.
-
-MSM8916 finally has VDDCX and VDDMX removed as regulators and are now
-handled by the rpmpd driver for the devices controlling them. The
-Longsheer L8150 gains touchscreen, sensors, vibrator and LED support.
-
-MSM8992 gains USB and SDHCI support as well as an I2C controller and the
-associated RMI4 based touchscreen for the Lumia 950.
-
-MSM8994 also gains USB and SDHCI support, as well as VADC and temp-alarm
-support. Then support for the Lumia 950 XL is added.
-
-SDM845 gains interconnect properties for a number of devices and the
-GENI wrappers gains iommu stream configuration, which means DMA
-operations on e.g. I2C now works. The Lenovo Yoga C630 finally has the
-SMMU enabled, a few fixes and the description of the eDP bridge and
-panel means that the laptop can now boot mainline with working display,
-GPU, WiFi and audio.
-
-SC7180 gains a slew of smaller improvements and fixes.
+  soc: qcom: rpmhpd: Add SDX55 power domains (2020-11-26 11:50:31 -0600)
 
 ----------------------------------------------------------------
-Ajit Pandey (1):
-      arm64: dts: qcom: sc7180: Add lpass cpu node for I2S driver
+Qualcomm driver updates for v5.11
 
-Akhil P Oommen (1):
-      arm64: dts: qcom: sc7180: Add gpu cooling support
+This adds support for the core power domains on MSM8916, MSM8939, SDM660
+and SDX55. It adds SM8150 support to the last-level cache controller
+driver and it makes it possible to build the Command DB and RPMh drivers
+as modules.
 
-Alex Elder (3):
-      arm64: dts: qcom: sc7180: limit IPA iommu streams
-      arm64: dts: qcom: sc7180: use GIC_SPI for IPA interrupts
-      arm64: dts: qcom: sdm845: use GIC_SPI for IPA interrupts
+It also contains a slew of smaller cleanups, style and bug fixes
+throughout the various drivers.
 
-Alexandru Stan (1):
-      arm64: dts: qcom: trogdor: Add brightness-levels
-
-Antony Wang (1):
-      arm64: qcom: sc7180: trogdor: Add ADC nodes and thermal zone for charger thermistor
-
-Bjorn Andersson (7):
-      arm64: dts: qcom: sm8150-mtp: Specify remoteproc firmware
-      arm64: dts: qcom: sdm845: Limit ipa iommu streams
-      arm64: dts: qcom: c630: Re-enable apps_smmu
-      arm64: dts: qcom: c630: Expose LID events
-      arm64: dts: qcom: c630: Polish i2c-hid devices
-      arm64: dts: qcom: c630: Fix pinctrl pins properties
-      arm64: dts: qcom: c630: Define eDP bridge and panel
-
-Dmitry Baryshkov (4):
-      arm64: dts: qcom: enable rtc on qrb5165-rb5 board
-      arm64: dts: qcom: enable rtc on sm8250-mtp board
-      arm64: dts: qcom: sm8250: add iommus entry to QUP nodes
-      arm64: dts: qcom: sm8250: correct compatible for sm8250-mtp
-
-Douglas Anderson (4):
-      arm64: dts: qcom: sc7180: Fix one forgotten interconnect reference
-      arm64: dts: qcom: sc7180: Provide pinconf for SPI to use GPIO for CS
-      arm64: dts: qcom: Switch sc7180-trogdor to control SPI CS via GPIO
-      arm64: dts: qcom: sc7180: Assign numbers to eMMC and SD
+----------------------------------------------------------------
+Bjorn Andersson (1):
+      Merge tag '20201013212531.428538-1-dianders@chromium.org' into drivers-for-5.11
 
 Evan Green (1):
-      arm64: dts: qcom: sc7180: Add soc-specific qfprom compat string
+      soc: qcom: smp2p: Safely acquire spinlock without IRQs
 
-Georgi Djakov (3):
-      dt-bindings: interconnect: sdm845: Add IDs for the QUP ports
-      interconnect: qcom: sdm845: Add the missing nodes for QUP
-      arm64: dts: sdm845: Add interconnect properties for QUP
+Isaac J. Manjarres (1):
+      soc: qcom: llcc: Support chipsets that can write to llcc
 
-Jishnu Prakash (1):
-      arm64: dts: qcom: pm6150x: add ADC_TM definitions
+John Stultz (1):
+      soc: qcom: rpmh: Allow RPMH driver to be loaded as a module
 
-Jonathan Marek (12):
-      arm64: dts: qcom: sm8150: add apps_smmu node
-      arm64: dts: qcom: sm8250: add apps_smmu node
-      arm64: dts: qcom: sm8150: Add secondary USB and PHY nodes
-      arm64: dts: qcom: sm8250: Add USB and PHY device nodes
-      arm64: dts: qcom: add sm8150 hdk dts
-      arm64: dts: qcom: add sm8250 hdk dts
-      arm64: dts: qcom: add sm8250 fastrpc nodes
-      arm64: dts: qcom: fix serial output for sm8250-hdk
-      arm64: dts: qcom: sort sm8150 usb_2 node
-      arm64: dts: qcom: sm8150: Add wifi node
-      arm64: dts: qcom: sm8150-mtp: Enable WiFi node
-      arm64: dts: qcom: fix indentation error in sm8250 cpu nodes
+Jun Nie (2):
+      dt-bindings: power: rpmpd: Add MSM8939 RPM power domains
+      soc: qcom: rpmpd: Add MSM8939 power-domains
 
-Jordan Crouse (1):
-      arm: dts: qcom: sm845: Set the compatible string for the GPU SMMU
+Konrad Dybcio (2):
+      dt-bindings: power: rpmpd: Add SDM660 power-domains bindings
+      soc: qcom: rpmpd: Add SDM660 power-domains
 
-Kathiravan T (1):
-      arm64: dts: ipq6018: update the reserved-memory node
+Lee Jones (11):
+      soc: qcom: qcom_aoss: Remove set but unused variable 'tlen'
+      soc: qcom: qcom_aoss: Add missing description for 'cooling_devs'
+      soc: qcom: qcom-geni-se: Fix misnamed function parameter 'rx_rfr'
+      soc: qcom: smem: Fix formatting and missing documentation issues
+      soc: qcom: smsm: Fix some kernel-doc formatting and naming problems
+      soc: qcom: wcnss_ctrl: Demote non-conformant struct header and fix function headers
+      soc: qcom: smp2p: Remove unused struct attribute provide another
+      soc: qcom: llcc-qcom: Fix expected kernel-doc formatting
+      soc: qcom: rpmhpd: Provide some missing struct member descriptions
+      soc: qcom: kryo-l2-accessors: Fix misnaming of 'val'
+      soc: qcom: rpmh: Fix possible doc-rot in rpmh_write()'s header
 
-Konrad Dybcio (11):
-      arm64: dts: qcom: pm8994: Add VADC node
-      arm64: dts: qcom: pm8994: Add temperature alarm node
-      arm64: dts: qcom: pm8994: Add thermal-zones for temp alarm
-      arm64: dts: qcom: pm8994: Fix up spmi-gpio node
-      arm64: dts: qcom: msm8992: Add support for SDHCI2
-      arm64: dts: qcom: msm8994: Add SDHCI2 node
-      arm64: dts: qcom: msm8992: Add BLSP_I2C1 support
-      arm64: dts: qcom: talkman: Add Synaptics RMI4 touchscreen
-      arm64: dts: qcom: msm8994: Add USB support
-      arm64: dts: qcom: msm8992: Add USB support
-      arm64: dts: qcom: Add support for Microsoft Lumia 950 XL (Cityman)
+Lina Iyer (2):
+      soc: qcom: cmd-db: allow loading as a module
+      soc: qcom: Kconfig: make RPMH match Command DB setting
 
-Manivannan Sadhasivam (5):
-      arm64: dts: qcom: sm8250: Add support for SDC2
-      arm64: dts: qcom: rb5: Add support for uSD card
-      arm64: dts: qcom: sm8250: Add support for PRNG EE
-      arm64: dts: qcom: qrb5165-rb5: Add USB support
-      arm64: dts: qcom: qrb5165-rb5: Add support for MCP2518FD
+Maulik Shah (2):
+      Revert "drivers: qcom: rpmh-rsc: Use rcuidle tracepoints for rpmh"
+      soc: qcom: rpmh: Use __fill_rpmh_msg API during rpmh_write()
 
-Matthias Kaehlcke (3):
-      arm64: dts: qcom: sc7180: Add sc7180-lazor-r2/r3
-      arm64: dts: qcom: sc7180: Set 'polling-delay-passive' for thermal zones back to 250 ms
-      arm64: dts: qcom: sc7180-trogdor: Make pp3300_a the default supply for pp3300_hub
+Rikard Falkeborn (2):
+      soc: qcom: pdr: Constify static qmi structs
+      samples: qmi: Constify static qmi ops
 
-Michael Srba (1):
-      arm64: dts: qcom: msm8916-samsung-a3u: add nodes for touchscreen
-
-Nikita Travkin (6):
-      arm64: dts: qcom: msm8916-longcheer-l8150: Enable PM8916 vibrator
-      arm64: dts: msm8916-longcheer-l8150: Add touchscreen
-      arm64: dts: msm8916-longcheer-l8150: Add position sensors
-      arm64: dts: qcom: msm8916-longcheer-l8150: Add flash LED
-      arm64: dts: qcom: msm8916-longcheer-l8150: Add notification LED
-      arm64: dts: qcom: msm8916-samsung-a2015: Disable muic i2c pin bias
-
-Rob Clark (1):
-      arm: dts: qcom: sc7180: Set the compatible string for the GPU SMMU
+Roja Rani Yarubandi (1):
+      soc: qcom: geni: Remove "iova" check
 
 Sai Prakash Ranjan (1):
-      arm64: dts: qcom: sm8150: Add Coresight support
+      soc: qcom: llcc: Move llcc configuration to its own function
 
-Sibi Sankar (3):
-      arm64: dts: qcom: sc7180-trogdor: Fixup modem memory region
-      arm64: dts: qcom: sc7180-lite: Tweak DDR/L3 scaling on SC7180-lite
-      arm64: dts: qcom: sc7180: Add DDR/L3 votes for the pro variant
-
-Souradeep Chowdhury (1):
-      arm64: dts: qcom: sm8150: Add LLC support for sm8150
-
-Stanimir Varbanov (1):
-      arm64: dts: sdm845: Add interconnect properties for Venus
+Souradeep Chowdhury (2):
+      dt-bindings: msm: Add LLCC for SM8150
+      soc: qcom: llcc: Add configuration data for SM8150
 
 Stephan Gerhold (3):
-      arm64: dts: qcom: msm8916: Add RPM power domains
-      arm64: dts: qcom: msm8916: Use power domains for MSS/WCNSS remoteprocs
-      arm64: dts: qcom: msm8916-pm8916: Stop using s1/l3 as regulators
+      soc: qcom: rpmpd: Rename MAX_8996_RPMPD_STATE to MAX_CORNER_RPMPD_STATE
+      dt-bindings: power: rpmpd: Add MSM8916 RPM power domains
+      soc: qcom: rpmpd: Add MSM8916 power domains
 
-Stephen Boyd (3):
-      arm64: dts: qcom: sc7180: Remove double pull-up on p-sensor-int-l
-      arm64: dts: qcom: sc7180: Add prox sensor to LTE sku Lazor boards
-      arm64: dts: sdm845: Add iommus property to qup
+Tom Rix (1):
+      soc: qcom: initialize local variable
 
-Taniya Das (1):
-      arm64: dts: sc7180: Add camera clock controller node
+Vinod Koul (2):
+      dt-bindings: power: Add rpm power domain bindings for sdx55
+      soc: qcom: rpmhpd: Add SDX55 power domains
 
-Terry Hsiao (1):
-      arm64: dts: qcom: sc7180-trogdor: add "pen-insert" label for trogdor
+Viresh Kumar (1):
+      qcom-geni-se: remove has_opp_table
 
-Thara Gopinath (1):
-      dts: qcom: sdm845: Add dt entries to support crypto engine.
+Vladimir Lypak (1):
+      soc: qcom: socinfo: add soc ids for msm8953 variants
 
-Vinod Koul (9):
-      arm64: dts: sdm845: Fix dma node name
-      arm64: dts: sdm630: Fix dma node name
-      arm64: dts: qcs404: Fix dma node name
-      arm64: dts: msm8916: Fix dma node name
-      arm64: dts: msm8994: Fix dma node name
-      arm64: dts: msm8996: Fix dma node name
-      arm64: dts: msm8998: Fix dma node name
-      arm64: dts: ipq6018: Fix dma node name
-      arm64: dts: ipq8074: Fix dma node name
-
-Zhen Lei (1):
-      arm64: dts: qcom: clear the warnings caused by empty dma-ranges
-
- arch/arm64/boot/dts/qcom/Makefile                  |   6 +
- arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi          |  10 -
- arch/arm64/boot/dts/qcom/ipq6018.dtsi              |  82 +--
- arch/arm64/boot/dts/qcom/ipq8074.dtsi              |   4 +-
- .../boot/dts/qcom/msm8916-longcheer-l8150.dts      | 181 ++++-
- arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi       |   7 +-
- .../dts/qcom/msm8916-samsung-a2015-common.dtsi     |  21 +-
- .../boot/dts/qcom/msm8916-samsung-a3u-eur.dts      |  29 +
- arch/arm64/boot/dts/qcom/msm8916.dtsi              |  40 +-
- .../boot/dts/qcom/msm8992-msft-lumia-talkman.dts   |  28 +
- arch/arm64/boot/dts/qcom/msm8992.dtsi              | 120 +++
- .../boot/dts/qcom/msm8994-msft-lumia-cityman.dts   |  73 ++
- arch/arm64/boot/dts/qcom/msm8994.dtsi              |  94 ++-
- arch/arm64/boot/dts/qcom/msm8996.dtsi              |   2 +-
- arch/arm64/boot/dts/qcom/msm8998.dtsi              |   2 +-
- arch/arm64/boot/dts/qcom/pm6150.dtsi               |  10 +
- arch/arm64/boot/dts/qcom/pm6150l.dtsi              |  24 +
- arch/arm64/boot/dts/qcom/pm8150.dtsi               |   2 +-
- arch/arm64/boot/dts/qcom/pm8994.dtsi               |  96 ++-
- arch/arm64/boot/dts/qcom/qcs404.dtsi               |   4 +-
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts           | 108 +++
- arch/arm64/boot/dts/qcom/sc7180-lite.dtsi          |  18 +
- .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts      |  11 +
- .../boot/dts/qcom/sc7180-trogdor-lazor-r1-kb.dts   |   4 +-
- .../boot/dts/qcom/sc7180-trogdor-lazor-r1-lte.dts  |  12 +-
- .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts      |  15 +-
- .../boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dts   |  17 +
- .../boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts  |  26 +
- .../boot/dts/qcom/sc7180-trogdor-lazor-r3.dts      |  15 +
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi |   7 +-
- .../boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi      |   4 +
- arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts     |  16 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       | 106 ++-
- arch/arm64/boot/dts/qcom/sc7180.dtsi               | 281 +++++++-
- arch/arm64/boot/dts/qcom/sdm630.dtsi               |   4 +-
- arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi         |  11 +
- arch/arm64/boot/dts/qcom/sdm845.dtsi               | 206 +++++-
- .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      | 183 ++++-
- arch/arm64/boot/dts/qcom/sm8150-hdk.dts            | 463 ++++++++++++
- arch/arm64/boot/dts/qcom/sm8150-mtp.dts            |  17 +
- arch/arm64/boot/dts/qcom/sm8150.dtsi               | 801 +++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sm8250-hdk.dts            | 454 ++++++++++++
- arch/arm64/boot/dts/qcom/sm8250-mtp.dts            |   6 +-
- arch/arm64/boot/dts/qcom/sm8250.dtsi               | 491 ++++++++++++-
- drivers/interconnect/qcom/sdm845.c                 |   3 +
- include/dt-bindings/interconnect/qcom,sdm845.h     |   2 +
- 46 files changed, 3899 insertions(+), 217 deletions(-)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8994-msft-lumia-cityman.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sm8150-hdk.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sm8250-hdk.dts
+ .../devicetree/bindings/arm/msm/qcom,llcc.yaml     |   1 +
+ .../devicetree/bindings/power/qcom,rpmpd.yaml      |   4 +
+ drivers/soc/qcom/Kconfig                           |   5 +-
+ drivers/soc/qcom/cmd-db.c                          |   8 +-
+ drivers/soc/qcom/kryo-l2-accessors.c               |   2 +-
+ drivers/soc/qcom/llcc-qcom.c                       | 147 +++++++++++++++------
+ drivers/soc/qcom/pdr_interface.c                   |   8 +-
+ drivers/soc/qcom/qcom-geni-se.c                    |   9 +-
+ drivers/soc/qcom/qcom_aoss.c                       |   4 +-
+ drivers/soc/qcom/rpmh-rsc.c                        |   7 +-
+ drivers/soc/qcom/rpmh.c                            |  14 +-
+ drivers/soc/qcom/rpmhpd.c                          |  16 +++
+ drivers/soc/qcom/rpmpd.c                           |  85 +++++++++++-
+ drivers/soc/qcom/smem.c                            |   3 +-
+ drivers/soc/qcom/smp2p.c                           |   6 +-
+ drivers/soc/qcom/smsm.c                            |   4 +-
+ drivers/soc/qcom/socinfo.c                         |   6 +
+ drivers/soc/qcom/wcnss_ctrl.c                      |   8 +-
+ include/dt-bindings/power/qcom-rpmpd.h             |  34 +++++
+ include/linux/qcom-geni-se.h                       |   2 -
+ include/linux/soc/qcom/llcc-qcom.h                 |   6 +
+ samples/qmi/qmi_sample_client.c                    |   4 +-
+ 22 files changed, 302 insertions(+), 81 deletions(-)
 
 _______________________________________________
 linux-arm-kernel mailing list
