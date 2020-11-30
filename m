@@ -1,80 +1,105 @@
-Return-Path: <linux-kernel-owner@kernel.org>
+Return-Path: <SRS0=GSTU=FE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E842C63777
-	for <linux-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 17:28:39 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AF4C82076E
-	for <linux-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 17:28:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C393C64E7B
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 17:29:11 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id B16D12076E
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 17:29:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HPx1RZXZ"
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729115AbgK3R2W (ORCPT
-        <rfc822;linux-kernel@archiver.kernel.org>);
-        Mon, 30 Nov 2020 12:28:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728321AbgK3R2W (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Nov 2020 12:28:22 -0500
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17864C0613CF
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Nov 2020 09:27:42 -0800 (PST)
-Received: by mail-il1-x141.google.com with SMTP id v3so12067494ilo.5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Nov 2020 09:27:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c1Vd/fR6g8wKCZaURanPYDdeMR44y3LFyKTjW1Typqg=;
-        b=HPx1RZXZNsy8M//eK/7kOCaSUaWAAX7fONUWyezM24Q2XUD0+BKVnoisJ0C4vGJAHb
-         dpSYTjfScL0RG8De+OgMc4aBzQgOeaAScILDnBnSbZ6IYY5M5FdoGUJO9AhN24u8PqJ2
-         //nIYs1U1gwGRjsRz8mWlNYQSuv+a0JUT/FUlar/szHwD5pMn525jAyIj0Lh4ISmrrnR
-         yV+YjJNmM3Vg+8AiOLhZ3h3eX2eq+JKwdkaeElXR4FgkS57ZidtEVyXXTgRDDGKbX1wk
-         +T6CJB8C4eCz6+7TxiF5ht0jijdg+yTIDFYbBsjIrOGSgLf2cGFPDFQHc7JpIp4QUdsQ
-         7MlA==
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="x+O5c0+z";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HPx1RZXZ"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B16D12076E
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
+	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=LshZdP/uRxjAmQ+iUnD0QN9vi2FeoSqEugvGAhp7l54=; b=x+O5c0+zTe227LZTKs7uzc8g2
+	CK0sZZPq06t/6wvn3cOqadLGO9Ggb0ByAyh6FubTqIsAybuoJpGmJ+MnViKFVvn73iIMoH9cmyMyd
+	zj4vCKzslOLCHsBVOHWX03B6Aj0EDjyg9rvmmk1ZiaD5u8zmso4qg/a6jnakIMuMKyH4Fb5cZYD9p
+	kJBhBGnfsPJhiTlNk9ycJIaQye5PSDe2zp2+Ao5ycTvnuQ6ruAi7StpJePZX1Kl9HgrNiiPUqmO5K
+	a1FbOF4MPtjEbEIe+w9lpJO3XksxV042YLavtgtR4r/U9bXLfkqAmcJf5/aFcQYHBK8NqTXXCpKTP
+	7e0yq6rfg==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kjmxo-0001ah-8J; Mon, 30 Nov 2020 17:27:48 +0000
+Received: from mail-il1-x141.google.com ([2607:f8b0:4864:20::141])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kjmxl-0001Yg-Ou
+ for linux-arm-kernel@lists.infradead.org; Mon, 30 Nov 2020 17:27:46 +0000
+Received: by mail-il1-x141.google.com with SMTP id z10so3614444ilu.3
+ for <linux-arm-kernel@lists.infradead.org>;
+ Mon, 30 Nov 2020 09:27:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=c1Vd/fR6g8wKCZaURanPYDdeMR44y3LFyKTjW1Typqg=;
+ b=HPx1RZXZNsy8M//eK/7kOCaSUaWAAX7fONUWyezM24Q2XUD0+BKVnoisJ0C4vGJAHb
+ dpSYTjfScL0RG8De+OgMc4aBzQgOeaAScILDnBnSbZ6IYY5M5FdoGUJO9AhN24u8PqJ2
+ //nIYs1U1gwGRjsRz8mWlNYQSuv+a0JUT/FUlar/szHwD5pMn525jAyIj0Lh4ISmrrnR
+ yV+YjJNmM3Vg+8AiOLhZ3h3eX2eq+JKwdkaeElXR4FgkS57ZidtEVyXXTgRDDGKbX1wk
+ +T6CJB8C4eCz6+7TxiF5ht0jijdg+yTIDFYbBsjIrOGSgLf2cGFPDFQHc7JpIp4QUdsQ
+ 7MlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c1Vd/fR6g8wKCZaURanPYDdeMR44y3LFyKTjW1Typqg=;
-        b=m8vetBomDno+i0Y6oHyyrO5o7xAKIm6lL13qrk5Aw9wl4SrOUyuQjEi0ErKHAIN6Sa
-         oklKrtq6fYOP0Ed1WD22Tuycsv8vaTrxyT+oq/IwQXLKSyywreHA0zl0oXCoHqNWFM6s
-         bnmsLOptWXraxmsQFt9b9sVcuhi0tFS65d6F8hgMdMjD8vR0oPgRKxHp76Mk1vz0M+ST
-         YUjRJKDmkF9vAtZQm3iYXopkPeciHzwyPbkt9PYWBeBZZ7CtuG4199tTCQCzz1tj58Qa
-         nvQqKqVQTyBZ6FcX/CD55o0kxeMhX/yUJjWjvyPu8G0WEuehNzIwJ2izwbo5AVVI0zIH
-         zMVQ==
-X-Gm-Message-State: AOAM532ehTy4CHFwaX86RQ6ucGDP838CeZCdP/K7nkGSOyET/jQDrDT4
-        EzuvHiXi6nlvFXZvWsDP6UebuQZVbUhTc4Um3qs=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=c1Vd/fR6g8wKCZaURanPYDdeMR44y3LFyKTjW1Typqg=;
+ b=LBIGA4rngwHI9mw0l+iG0dXwFcMLQKNp0rKHi22yXsXlQ+gyCjn6ouDKWtSu8e5fwV
+ iTGeL5IY/2fnGLBT9hkfSc3ZQlhdH+9a9YEGSIrA7pOyFmS7bsxqjg1vPv6ZMuBRnSc/
+ 1+vrePF9YYfU7/U0Bn4RJPd3QTLHoXPgdBQnwA+xMI3oS5J4Pi0qWmaj9Dd2UKfgBJQc
+ ErNDt25+PnMYFVyLgCekqSYQzzSyn5xn57GRn8pgRcijxPUeuVrkkDQ4Dk1AuDqbBloA
+ fxG/ik0Zao7/jBmPDUeeL8zMYs7LWzr9N/hTlOrkWXU+U31Xpvm3aSUH2xQpvy7ynLA1
+ XLvA==
+X-Gm-Message-State: AOAM530NX1HnT7oOgMxowx8WXP33aZRFGFenANYRHcriVC3gInkp9nDy
+ uintrr+WWdxunRFj87/wmYZNUEd5AtPaRlkeeKo=
 X-Google-Smtp-Source: ABdhPJzc1TmhusDdrQNhIh4x01OuKc5+8edgdoreT8fMqA8YQZsrXmqQSAslZWMfzsvzZ3iuByUoOGEhdE/6dOkpDm4=
-X-Received: by 2002:a92:d203:: with SMTP id y3mr19643539ily.206.1606757261315;
+X-Received: by 2002:a92:d203:: with SMTP id y3mr19643539ily.206.1606757261315; 
  Mon, 30 Nov 2020 09:27:41 -0800 (PST)
 MIME-Version: 1.0
 References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
  <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
 In-Reply-To: <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Date:   Mon, 30 Nov 2020 09:27:30 -0800
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Date: Mon, 30 Nov 2020 09:27:30 -0800
 Message-ID: <CAKdAkRRq=GK7N1PDJ4zLfJVSsrd1BB=u69aXtJHh=sW4vn5LOg@mail.gmail.com>
 Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201130_122745_821375_A6911FE8 
+X-CRM114-Status: GOOD (  20.39  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <linux-kernel.vger.kernel.org>
-X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20201130172730.G1j4F6bq1tCu4YC-ubpdqeXlNLT22ejB3uvHIFLh9ZE@z>
+Cc: Arnd Bergmann <arnd@kernel.org>, SoC Team <soc@kernel.org>,
+ Douglas Anderson <dianders@chromium.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201130172730.o6Jk1BkV0CRX4hckmL9uQvVGpCRV1iLs3l7oJDUnqaw@z>
 
 Hi Linus,
 
@@ -131,3 +156,8 @@ Thanks.
 
 -- 
 Dmitry
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
