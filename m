@@ -1,163 +1,193 @@
-Return-Path: <SRS0=GSTU=FE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=42zo=FE=ti.com=nm@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C393C64E7B
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 17:29:11 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B44AC63777
+	for <soc@archiver.kernel.org>; Mon, 30 Nov 2020 17:43:02 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 4DB742074A; Mon, 30 Nov 2020 17:43:02 +0000 (UTC)
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B16D12076E
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 17:29:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 9EC43206E3;
+	Mon, 30 Nov 2020 17:43:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="x+O5c0+z";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HPx1RZXZ"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B16D12076E
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=LshZdP/uRxjAmQ+iUnD0QN9vi2FeoSqEugvGAhp7l54=; b=x+O5c0+zTe227LZTKs7uzc8g2
-	CK0sZZPq06t/6wvn3cOqadLGO9Ggb0ByAyh6FubTqIsAybuoJpGmJ+MnViKFVvn73iIMoH9cmyMyd
-	zj4vCKzslOLCHsBVOHWX03B6Aj0EDjyg9rvmmk1ZiaD5u8zmso4qg/a6jnakIMuMKyH4Fb5cZYD9p
-	kJBhBGnfsPJhiTlNk9ycJIaQye5PSDe2zp2+Ao5ycTvnuQ6ruAi7StpJePZX1Kl9HgrNiiPUqmO5K
-	a1FbOF4MPtjEbEIe+w9lpJO3XksxV042YLavtgtR4r/U9bXLfkqAmcJf5/aFcQYHBK8NqTXXCpKTP
-	7e0yq6rfg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kjmxo-0001ah-8J; Mon, 30 Nov 2020 17:27:48 +0000
-Received: from mail-il1-x141.google.com ([2607:f8b0:4864:20::141])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kjmxl-0001Yg-Ou
- for linux-arm-kernel@lists.infradead.org; Mon, 30 Nov 2020 17:27:46 +0000
-Received: by mail-il1-x141.google.com with SMTP id z10so3614444ilu.3
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 30 Nov 2020 09:27:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=c1Vd/fR6g8wKCZaURanPYDdeMR44y3LFyKTjW1Typqg=;
- b=HPx1RZXZNsy8M//eK/7kOCaSUaWAAX7fONUWyezM24Q2XUD0+BKVnoisJ0C4vGJAHb
- dpSYTjfScL0RG8De+OgMc4aBzQgOeaAScILDnBnSbZ6IYY5M5FdoGUJO9AhN24u8PqJ2
- //nIYs1U1gwGRjsRz8mWlNYQSuv+a0JUT/FUlar/szHwD5pMn525jAyIj0Lh4ISmrrnR
- yV+YjJNmM3Vg+8AiOLhZ3h3eX2eq+JKwdkaeElXR4FgkS57ZidtEVyXXTgRDDGKbX1wk
- +T6CJB8C4eCz6+7TxiF5ht0jijdg+yTIDFYbBsjIrOGSgLf2cGFPDFQHc7JpIp4QUdsQ
- 7MlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=c1Vd/fR6g8wKCZaURanPYDdeMR44y3LFyKTjW1Typqg=;
- b=LBIGA4rngwHI9mw0l+iG0dXwFcMLQKNp0rKHi22yXsXlQ+gyCjn6ouDKWtSu8e5fwV
- iTGeL5IY/2fnGLBT9hkfSc3ZQlhdH+9a9YEGSIrA7pOyFmS7bsxqjg1vPv6ZMuBRnSc/
- 1+vrePF9YYfU7/U0Bn4RJPd3QTLHoXPgdBQnwA+xMI3oS5J4Pi0qWmaj9Dd2UKfgBJQc
- ErNDt25+PnMYFVyLgCekqSYQzzSyn5xn57GRn8pgRcijxPUeuVrkkDQ4Dk1AuDqbBloA
- fxG/ik0Zao7/jBmPDUeeL8zMYs7LWzr9N/hTlOrkWXU+U31Xpvm3aSUH2xQpvy7ynLA1
- XLvA==
-X-Gm-Message-State: AOAM530NX1HnT7oOgMxowx8WXP33aZRFGFenANYRHcriVC3gInkp9nDy
- uintrr+WWdxunRFj87/wmYZNUEd5AtPaRlkeeKo=
-X-Google-Smtp-Source: ABdhPJzc1TmhusDdrQNhIh4x01OuKc5+8edgdoreT8fMqA8YQZsrXmqQSAslZWMfzsvzZ3iuByUoOGEhdE/6dOkpDm4=
-X-Received: by 2002:a92:d203:: with SMTP id y3mr19643539ily.206.1606757261315; 
- Mon, 30 Nov 2020 09:27:41 -0800 (PST)
-MIME-Version: 1.0
-References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
- <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
-In-Reply-To: <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Date: Mon, 30 Nov 2020 09:27:30 -0800
-Message-ID: <CAKdAkRRq=GK7N1PDJ4zLfJVSsrd1BB=u69aXtJHh=sW4vn5LOg@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
-To: Linus Torvalds <torvalds@linux-foundation.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201130_122745_821375_A6911FE8 
-X-CRM114-Status: GOOD (  20.39  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="EiABBD0j"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9EC43206E3
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=nm@ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0AUHgwKd087139;
+	Mon, 30 Nov 2020 11:42:58 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1606758178;
+	bh=ebyvGHgxYnsMErdJ7gl06ypcszQPPlEmdBFZ0QPGf0U=;
+	h=Date:From:To:CC:Subject;
+	b=EiABBD0jP87tzD9BLjSF7xJCPEH8/OQhsIvpGRcGijW0P53GLquyehIXvuRdeUEZl
+	 SGrDBPNixvZFUew7UJWoMLX14BLmsQhx3V4kP2hSd4+iig7jHTYcAtOka/LHIUnOhH
+	 wSUVkgnjudvmRn2H9BMEFDB93OlCQEXHdVA+UHMA=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0AUHgwmu084893
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 30 Nov 2020 11:42:58 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 30
+ Nov 2020 11:42:58 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 30 Nov 2020 11:42:58 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+	by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0AUHgwIn011091;
+	Mon, 30 Nov 2020 11:42:58 -0600
+Date: Mon, 30 Nov 2020 11:42:58 -0600
+From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, SoC Team <soc@kernel.org>,
- Douglas Anderson <dianders@chromium.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201130172730.o6Jk1BkV0CRX4hckmL9uQvVGpCRV1iLs3l7oJDUnqaw@z>
+To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC: <t-kristo@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] arm64: TI K3 DT updates for v5.11
+Message-ID: <20201130174258.ljsiokkyr7x7tsbd@covenant>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="lc77dsi6dcg2y3ab"
+Content-Disposition: inline
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi Linus,
+--lc77dsi6dcg2y3ab
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 27, 2020 at 3:02 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Nov 27, 2020 at 12:51 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> >  - Some DT patches for the Rockchip RK3399 platform,
-> >    in particular fixing the MMC device ordering that
-> >    recently became nondeterministic with async probe.
->
-> Uhhuh.
->
-> I didn't realize this MMC breakage happened.
->
-> That's just an MMC bug. Other subsystems have been able to do async
-> probing without making device ordering be random.
->
-> So this really smells wrong, and I just never realized.
->
-> Added Douglas Anderson to the cc - the whole PROBE_PREFER_ASYNCHRONOUS
-> behavior appears broken.
->
-> You basically should do the device numbering synchronously (or better
-> yet - asynchronously, but single-threaded for the subsystem), and then
-> asynchronously probe the actual device details after you've numbered
-> them reliably.
+Hi,
 
-Generally speaking it is either unnecessary for a lot of devices where
-we do not care what number they get, harmful (why do I need to probe
-i2c touchscreen and touchpad sequentially if I do not care which one
-comes first but my boot will take 0.5 seconds longer if I serialize),
-or impossible (if device is hit-pluggable). For many years userspace
-has been moving away from static device assignments and we should not
-be going back.
+Please pull the following for TI K3 dts changes for v5.11 window.
 
-There are some devices that are special because it is hard to deal
-with devices shifting during early boot, and for them maintaining
-static ordering might be beneficial for now, but they are exceptions.
+The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
->
-> This is not something new - we do this for pretty much all the other
-> block devices, and MMC is just doing things wrong.
->
-> See SCSI probing for the traditional horrible cases (where just
-> spinning up a disk could take tens of seconds).  "Slow probing" is not
-> an excuse of "random ordering".
+  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 
-And still my external USB disk will get a "random" /dev/sdX depending
-on when I plug it in relative to all other USB sticks.
+are available in the Git repository at:
 
-Thanks.
+  git://git.kernel.org/pub/scm/linux/kernel/git/nmenon/linux.git tags/ti-k3=
+-dt-for-v5.11
 
--- 
-Dmitry
+for you to fetch changes up to cd48ce86a4d0c1ffec86aa46a26da993c9af5f53:
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+  arm64: dts: ti: k3-j721e-common-proc-board: Add support for SD card UHS m=
+odes (2020-11-30 07:12:54 -0600)
+
+----------------------------------------------------------------
+Devicetree changes for TI K3 platforms for v5.11 merge window:
+
+- Standardized usage of "disabled" only in board.dts files, #interrupt-cell=
+s warning fixups, node format error fixes
+
+- J721E: R5F support, MMC/SD UHS mode added
+
+- AM654: R5F support, dss marked coherent, drop unused dma-ring-reset-quirk=
+ property
+
+- J7200: ADC support, Mailbox, hwspinlock
+
+----------------------------------------------------------------
+Faiz Abbas (2):
+      arm64: dts: ti: k3-j721e-main: Add output tap delay values
+      arm64: dts: ti: k3-j721e-common-proc-board: Add support for SD card U=
+HS modes
+
+Grygorii Strashko (1):
+      arm64: dts: ti: k3-am65: ringacc: drop ti, dma-ring-reset-quirk
+
+Nishanth Menon (6):
+      arm64: dts: ti: k3-am65*/j721e*: Fix unit address format error for ds=
+s node
+      arm64: dts: ti: k3-am65*: Cleanup disabled nodes at SoC dtsi level
+      arm64: dts: ti: k3-j721e*: Cleanup disabled nodes at SoC dtsi level
+      arm64: dts: ti: am65/j721e: Fix up un-necessary status set to "okay" =
+for crypto
+      arm64: dts: ti: k3-am654-base-board: Fix up un-necessary status set t=
+o "okay" for USB
+      arm64: dts: ti: am65/j721e/j7200: Mark firmware used uart as "reserve=
+d"
+
+Peter Ujfalusi (2):
+      arm64: dts: ti: k3-j7200-som-p0: main_i2c0 have an ioexpander on the =
+SOM
+      arm64: dts: ti: k3-j7200-common-proc-board: Correct the name of io ex=
+pander on main_i2c1
+
+Sekhar Nori (1):
+      arm64: dts: ti: k3: squelch warning about lack of #interrupt-cells
+
+Suman Anna (11):
+      arm64: dts: ti: k3-am65-mcu: Add MCU domain R5F cluster node
+      arm64: dts: ti: k3-am654-base-board: Add mailboxes to R5Fs
+      arm64: dts: ti: k3-am654-base-board: Add DDR carveout memory nodes fo=
+r R5Fs
+      arm64: dts: ti: k3-am654-base-board: Reserve memory for IPC between R=
+5F cores
+      arm64: dts: ti: k3-j721e-mcu: Add MCU domain R5F cluster node
+      arm64: dts: ti: k3-j721e-main: Add MAIN domain R5F cluster nodes
+      arm64: dts: ti: k3-j721e-som-p0: Add mailboxes to R5Fs
+      arm64: dts: ti: k3-j721e-som-p0: Add DDR carveout memory nodes for R5=
+Fs
+      arm64: dts: ti: k3-j7200-main: Add hwspinlock node
+      arm64: dts: ti: k3-j7200-main: Add mailbox cluster nodes
+      arm64: dts: ti: k3-j7200-som-p0: Add IPC sub-mailbox nodes
+
+Tomi Valkeinen (1):
+      arm64: dts: ti: k3-am65: mark dss as dma-coherent
+
+Vignesh Raghavendra (1):
+      arm64: dts: ti: k3-j7200-mcu-wakeup: Enable ADC support
+
+ arch/arm64/boot/dts/ti/k3-am65-main.dtsi           |  13 +-
+ arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi            |  43 ++++++-
+ arch/arm64/boot/dts/ti/k3-am654-base-board.dts     |  71 +++++++++--
+ .../boot/dts/ti/k3-j7200-common-proc-board.dts     |  33 ++---
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi          | 114 +++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi    |  19 +++
+ arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi        |  94 ++++++++++++++
+ .../boot/dts/ti/k3-j721e-common-proc-board.dts     |  83 ++++++++++++-
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi          | 135 +++++++++++++++--=
+----
+ arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi    |  42 ++++++-
+ arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi        | 110 ++++++++++++++++-
+ 11 files changed, 682 insertions(+), 75 deletions(-)
+
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
+
+--lc77dsi6dcg2y3ab
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAl/FLxoACgkQ3bWEnRc2
+JJ0dwQ/9E6A8kNv/FLxk0bcnYo56UgXVIdmiJu2H2jz0XnbfBMPUoZAYRsCTwqpQ
+6qRAzv3lePH0hm0741TnocgPliPm9tAKcuJaw3y3poc7LKR77B8vL1H6tKnHXqxh
+6/ZB6Pk+IN390PukCvoE1yfpevTmPRxn5FqKYKgVWPTSHdkEKSeRj1Ea2YVDRzL1
+jH4UOVLaJ7OtQyTjWbRP1u/FxhZhKZ5eSb/pW36zx5dJXkybhJlzyb+yCDWylwrN
+p8iRaZTnKswqVhu1b8VO/tknzNnUFGfM0n1ShMnKASpkIIpgKTfLEPIVz/VMvYLA
+wXW+XrMUGLq/vj3fvl9uUV5yWA2tMeEUDSbxHsH1s3ArZt0HdCr6f2s9cTaPGv4M
+QAN38Geh5xfzjWJupEeg9kGeB1ZG2y/spkx0Za/ZE2BnIAuKyEZpyNd24OiE86mc
+Td414CUSdPOFpL/HcZ4udneo1qYT50Xx+5wxH4TOFyiJwsmWgZsa3mjhxgyDxB3D
+p1DDymBJy1qT9+/jtH49ko0gw3ype7GivYUm8o8tk2F/qCgQAqMxY1/uoMrL69BE
+qp9lOzhYXJK4A+tr2yDWb5L6usU3DVyQiw+8hfH84ljjxoPqvXuejNrpNKvZg/SW
+zoeaStQs+10EUsk4A3IJVenS/u12oDQrs16QOOmJfiFZ1qN4xiE=
+=hR4o
+-----END PGP SIGNATURE-----
+
+--lc77dsi6dcg2y3ab--
