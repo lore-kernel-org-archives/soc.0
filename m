@@ -1,138 +1,214 @@
-Return-Path: <SRS0=GSTU=FE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=ChmJ=FE=chromium.org=dianders@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4F26C63777
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 16:04:32 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C47A0C63777
+	for <soc@archiver.kernel.org>; Mon, 30 Nov 2020 17:04:32 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 80899207F7; Mon, 30 Nov 2020 17:04:32 +0000 (UTC)
+Received: from mail-vs1-f68.google.com (mail-vs1-f68.google.com [209.85.217.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 549E12076E
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 30 Nov 2020 16:04:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id EF2392073C
+	for <soc@kernel.org>; Mon, 30 Nov 2020 17:04:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="lf/95Z+X"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 549E12076E
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=oGOZT595j+d7lX3AEmAlcYYYjmq2RNm10c0ELfbHvIg=; b=lf/95Z+X7XqQCgEK1PPVJRXVy5
-	mibnWYgdP6RsJ3NGKKdarYBqL4J4h8elnaf1O4+dx2LpMgGMYLifJPbsPv3IxD36ddbmOLDLK2a1v
-	yEp3I6IoEnUNCp/NHPuBLE6GW/DkkvsUWgrMSNcoHAo+dNd5jaUnPl75DutnSv/25iLXyFHfibdYb
-	fVNvTBYkexH55TX/IRI3Z+/W/NTtfO8yNf6xs4DLhztATz7NXUn8q3pwV14630pEXUzReQeW2uald
-	LG3PgFRbldtyP7zJnmVlGP3favHIhHWz4q/sr86DEjxoGDGRTHAUQAZycH3UpRQcquHXzw5Q3N8xm
-	nGxv75aQ==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kjldq-0006xX-LZ; Mon, 30 Nov 2020 16:03:06 +0000
-Received: from relay4-d.mail.gandi.net ([217.70.183.196])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kjldm-0006vs-7a
- for linux-arm-kernel@lists.infradead.org; Mon, 30 Nov 2020 16:03:03 +0000
-X-Originating-IP: 91.175.115.186
-Received: from localhost (91-175-115-186.subs.proxad.net [91.175.115.186])
- (Authenticated sender: gregory.clement@bootlin.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 5E6A9E0010;
- Mon, 30 Nov 2020 16:02:59 +0000 (UTC)
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, soc@kernel.org
-Subject: [GIT PULL] ARM: mvebu: dt64 for v5.11 (#1)
-Date: Mon, 30 Nov 2020 17:02:59 +0100
-Message-ID: <87eekaj0i4.fsf@BL-laptop>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="jiz89VUf"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EF2392073C
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=dianders@chromium.org
+Received: by mail-vs1-f68.google.com with SMTP id q5so4217411vsg.0
+        for <soc@kernel.org>; Mon, 30 Nov 2020 09:04:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4msmqDOfKObIFWARrlUIAyeyp98c2WbJXAojFWVjL5Q=;
+        b=jiz89VUfVeu6ZDf1HTb9VDFHMU/JtuGtS7QbPW+TCJsD5d7Ktvd3+evJiC5uQzeHQ6
+         iW/+sn42aeXM9qqI8VyKe00YdzXPlXKqyAY0r4Dq46nXjsDxbhLeaB0ayB1PPttRqdv+
+         FFF92mLkFds4vC356CH15VY01XN4vX5nd2HRg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4msmqDOfKObIFWARrlUIAyeyp98c2WbJXAojFWVjL5Q=;
+        b=eLm2a0vs+CbbE0GZokQW2VwHqCkBy5QeuEnsNKlnqPL+PKcZaFd0K1PPckMcYLBiPo
+         z05cIVNpDzg5Vib6ASyfigOMGz7TxxCXLOpbWCqSefB94UAfEJV2LSyaWa6LEevI2pih
+         fSXLoPMeidDtxBSaSWM5lOdSCF0QgEG6VIPQhj0KYG9fUwhBaVAsAoTOFzAUDnj6uQYe
+         pa7U91T3ECkv/1RnGj8hTZAPQjEWdnhSZjD57mYipLWtIshVot+mAVTc8gj6jeXmplFz
+         qljqSdqdQiwLbaD9+5lJZwZckfVCuWEDTjA69YFRJXipNnD9QH7A4/ySJpAhqV1DlgEp
+         4jmg==
+X-Gm-Message-State: AOAM530X3+BEeFsziX/M+oGod/9z2WSAkVMIQP+blIigIRPF7bkO3xjk
+	qoxClliMiVQ6pY15Eh5SwfiMxAswqQy0wg==
+X-Google-Smtp-Source: ABdhPJzomh+cl/+Om/1zM4JKIAfXowsLOj2aMEXxYfXvcMOGoXbVzaIA6/LP2bNGlCkIA5U6+XY42w==
+X-Received: by 2002:a67:f406:: with SMTP id p6mr6069250vsn.40.1606755870263;
+        Mon, 30 Nov 2020 09:04:30 -0800 (PST)
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
+        by smtp.gmail.com with ESMTPSA id w6sm3922558vkm.40.2020.11.30.09.04.29
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Nov 2020 09:04:30 -0800 (PST)
+Received: by mail-ua1-f42.google.com with SMTP id h26so3954662uan.10
+        for <soc@kernel.org>; Mon, 30 Nov 2020 09:04:29 -0800 (PST)
+X-Received: by 2002:a9f:36a1:: with SMTP id p30mr14987150uap.64.1606755867146;
+ Mon, 30 Nov 2020 09:04:27 -0800 (PST)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201130_110302_486097_AA23034B 
-X-CRM114-Status: GOOD (  15.04  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Andrew Lunn <andrew@lunn.ch>, linux-arm-kernel@lists.infradead.org,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201130160259.dd5yG6iQJvM4fQv4i5V7uXRixwgf5INtGWqh92fXwQw@z>
+References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
+ <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
+In-Reply-To: <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
+From: Doug Anderson <dianders@chromium.org>
+Date: Mon, 30 Nov 2020 09:04:15 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
+Message-ID: <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
+To: Linus Torvalds <torvalds@linux-foundation.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, SoC Team <soc@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-SGksCgpIZXJlIGlzIHRoZSBmaXJzdCBwdWxsIHJlcXVlc3QgZm9yIGR0NjQgZm9yIG12ZWJ1IGZv
-ciB2NS4xMS4KCkl0IGlzIGJhc2VkIG9uIHY1LjEwLXJjMiBiZWNhdXNlIHNvbWUgZml4ZXMgb24g
-dGhlIGRldmljZSB0cmVlIGhhcyBiZWVuCm1lcmdlZCBhZnRlciB2NS4xMC1yYzEuCgpHcmVnb3J5
-CgpUaGUgZm9sbG93aW5nIGNoYW5nZXMgc2luY2UgY29tbWl0IDNjZWExMWNkNWUzYjAwZDkxY2Fm
-MGI0NzMwMTk0MDM5YjQ1YzU4OTE6CgogIExpbnV4IDUuMTAtcmMyICgyMDIwLTExLTAxIDE0OjQz
-OjUxIC0wODAwKQoKYXJlIGF2YWlsYWJsZSBpbiB0aGUgR2l0IHJlcG9zaXRvcnkgYXQ6CgogIGdp
-dDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9nY2xlbWVudC9tdmVi
-dS5naXQgdGFncy9tdmVidS1kdDY0LTUuMTEtMQoKZm9yIHlvdSB0byBmZXRjaCBjaGFuZ2VzIHVw
-IHRvIGEyMDgxYzA5ZDc0MTBjM2U1NWQ5MDJhMDk2MDJiODMzZGM5NmM1OGE6CgogIGFybTY0OiBk
-dHM6IGFybWFkYS0zNzIwLXR1cnJpcy1tb3g6IGFkZCAzVyBwb3dlciBjYXBhYmlsaXR5IHRvIFNG
-UCBjYWdlICgyMDIwLTExLTMwIDE2OjQ2OjMwICswMTAwKQoKLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQptdmVidSBkdDY0IGZv
-ciA1LjExIChwYXJ0IDEpCgogLSBBZGQgc3VwcG9ydCBmb3IgSUVJIFB1enpsZS1NODAxIGJvYXJk
-IChBcm1hZGEgODA0MCBiYXNlZCkKIC0gQWRkIHN1cHBvcnQgRVNQUkVTU09iaW4tVWx0cmEgKEFy
-bWFkYSAzNzIwIGJhc2VkKQogLSBDbGVhbi11cCBhbmQgaW1wcm92ZSBlc3ByZXNzb2JpbiBkZXZp
-Y2UgdHJlZQogLSBTd2l0Y2ggdG8gcGVyLXBvcnQgU0FUQSBpbnRlcnJ1cHRzIG9uIENQMTEwIGJh
-c2VkIFNvQwogLSBVc2UgY29tcGxpYW50IG5vZGUgbmFtZSBmb3IgVVNCMyAgb24gQ1AxMTAgYmFz
-ZWQgU29DCiAtIEFkZCBoZWFydGJlYXQgTEVEIG9uIG1jYmluIHNpbmdsZXNob3QKIC0gRGlzYWJs
-ZSBTTU1VIGJ5IGRlZmF1bHQgZm9yIEFybWFkYSA3MDQwIGFuZCA4MDQwIHRvIGNvbnRpbnVlZAog
-ICBzdXBwb3J0aW5nIGN1c3RvbSBib3QgZmlybXdhcmUKIC0gVHVycmlzIG1veDoKICAgLSBhZGQg
-M1cgcG93ZXIgY2FwYWJpbGl0eSB0byBTRlAgY2FnZQogICAtIHVwZGF0ZSBldGhlcm5ldC1waHkg
-aGFuZGxlIG5hbWUKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0KQW5kcmUgSGVpZGVyICgyKToKICAgICAgYXJtNjQ6IGR0czog
-bWFydmVsbDogZXNwcmVzc29iaW46IFNpbXBsaWZ5IHY3IGV0aGVybmV0IHBvcnQgbGFiZWxpbmcK
-ICAgICAgYXJtNjQ6IGR0czogbWFydmVsbDogZXNwcmVzc29iaW46IEdldCByaWQgb2YgZHVwbGlj
-YXRlIHNlcmlhbCBhbGlhc2VzCgpMdWthIEtvdmFjaWMgKDEpOgogICAgICBhcm02NDogZHRzOiBt
-YXJ2ZWxsOiBBZGQgYSBkZXZpY2UgdHJlZSBmb3IgdGhlIElFSSBQdXp6bGUtTTgwMSBib2FyZAoK
-TWFyZWsgQmVow7puICgyKToKICAgICAgYXJtNjQ6IGR0czogYXJtYWRhLTM3MjAtdHVycmlzLW1v
-eDogdXBkYXRlIGV0aGVybmV0LXBoeSBoYW5kbGUgbmFtZQogICAgICBhcm02NDogZHRzOiBhcm1h
-ZGEtMzcyMC10dXJyaXMtbW94OiBhZGQgM1cgcG93ZXIgY2FwYWJpbGl0eSB0byBTRlAgY2FnZQoK
-UGFsaSBSb2jDoXIgKDMpOgogICAgICBhcm02NDogZHRzOiBtYXJ2ZWxsOiBlc3ByZXNzb2Jpbjog
-RGUtZHVwbGljYXRlIGVNTUMgZGVmaW5pdGlvbnMKICAgICAgYXJtNjQ6IGR0czogbWFydmVsbDog
-ZXNwcmVzc29iaW46IEFkZCBzdXBwb3J0IGZvciBMRUQyCiAgICAgIGFybTY0OiBkdHM6IG1hcnZl
-bGw6IGVzcHJlc3NvYmluOiBVcGRhdGUgbGluayB0byBWNyBzY2hlbWF0aWMKClNlcmdlIFNlbWlu
-ICgxKToKICAgICAgYXJtNjQ6IGR0czogbWFydmVsbDogY3AxMXg6IEhhcm1vbml6ZSB4SENJIERU
-IG5vZGVzIG5hbWUKClN2ZW4gQXVoYWdlbiAoMSk6CiAgICAgIGFybTY0OiBkdHM6IG1hcnZlbGw6
-IGFybWFkYS1jcDExMDogU3dpdGNoIHRvIHBlci1wb3J0IFNBVEEgaW50ZXJydXB0cwoKVG9tYXN6
-IE1hY2llaiBOb3dhayAoMSk6CiAgICAgIGFybTY0OiBkdHM6IG1jYmluLXNpbmdsZXNob3Q6IGFk
-ZCBoZWFydGJlYXQgTEVECgpUb21hc3ogTm93aWNraSAoMSk6CiAgICAgIGFybTY0OiBkdHM6IG1h
-cnZlbGw6IGtlZXAgU01NVSBkaXNhYmxlZCBieSBkZWZhdWx0IGZvciBBcm1hZGEgNzA0MCBhbmQg
-ODA0MAoKVmxhZGltaXIgVmlkICgxKToKICAgICAgYXJtNjQ6IGR0czogbWFydmVsbDogYWRkIERU
-IGZvciBFU1BSRVNTT2Jpbi1VbHRyYQoKIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9NYWtl
-ZmlsZSAgICAgICAgICAgICAgIHwgICAyICsKIC4uLi9kdHMvbWFydmVsbC9hcm1hZGEtMzcyMC1l
-c3ByZXNzb2Jpbi1lbW1jLmR0cyAgIHwgIDE4IC0KIC4uLi9kdHMvbWFydmVsbC9hcm1hZGEtMzcy
-MC1lc3ByZXNzb2Jpbi11bHRyYS5kdHMgIHwgMTY1ICsrKysrKysKIC4uLi9tYXJ2ZWxsL2FybWFk
-YS0zNzIwLWVzcHJlc3NvYmluLXY3LWVtbWMuZHRzICAgIHwgIDQwICstCiAuLi4vZHRzL21hcnZl
-bGwvYXJtYWRhLTM3MjAtZXNwcmVzc29iaW4tdjcuZHRzICAgICB8ICAyNCArLQogLi4uL2Jvb3Qv
-ZHRzL21hcnZlbGwvYXJtYWRhLTM3MjAtZXNwcmVzc29iaW4uZHRzaSAgfCAgMzkgKy0KIC4uLi9i
-b290L2R0cy9tYXJ2ZWxsL2FybWFkYS0zNzIwLXR1cnJpcy1tb3guZHRzICAgIHwgICAzICstCiBh
-cmNoL2FybTY0L2Jvb3QvZHRzL21hcnZlbGwvYXJtYWRhLTcwNDAuZHRzaSAgICAgICB8ICAgNCAt
-CiAuLi4vZHRzL21hcnZlbGwvYXJtYWRhLTgwNDAtbWNiaW4tc2luZ2xlc2hvdC5kdHMgICB8ICAy
-MiArCiAuLi4vYm9vdC9kdHMvbWFydmVsbC9hcm1hZGEtODA0MC1wdXp6bGUtbTgwMS5kdHMgICB8
-IDUyMyArKysrKysrKysrKysrKysrKysrKysKIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9h
-cm1hZGEtODA0MC5kdHNpICAgICAgIHwgICA0IC0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVs
-bC9hcm1hZGEtY3AxMXguZHRzaSAgICAgIHwgIDEwICstCiAxMiBmaWxlcyBjaGFuZ2VkLCA3NzUg
-aW5zZXJ0aW9ucygrKSwgNzkgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9h
-cm02NC9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS0zNzIwLWVzcHJlc3NvYmluLXVsdHJhLmR0cwog
-Y3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9hcm1hZGEtODA0
-MC1wdXp6bGUtbTgwMS5kdHMKCi0tIApHcmVnb3J5IENsZW1lbnQsIEJvb3RsaW4KRW1iZWRkZWQg
-TGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwOi8vYm9vdGxpbi5jb20KCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmxpbnV4LWFybS1rZXJuZWwg
-bWFpbGluZyBsaXN0CmxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZwpodHRwOi8v
-bGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFybS1rZXJuZWwK
+Hi,
+
+On Fri, Nov 27, 2020 at 2:56 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Fri, Nov 27, 2020 at 12:51 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> >  - Some DT patches for the Rockchip RK3399 platform,
+> >    in particular fixing the MMC device ordering that
+> >    recently became nondeterministic with async probe.
+>
+> Uhhuh.
+>
+> I didn't realize this MMC breakage happened.
+>
+> That's just an MMC bug. Other subsystems have been able to do async
+> probing without making device ordering be random.
+>
+> So this really smells wrong, and I just never realized.
+>
+> Added Douglas Anderson to the cc - the whole PROBE_PREFER_ASYNCHRONOUS
+> behavior appears broken.
+>
+> You basically should do the device numbering synchronously (or better
+> yet - asynchronously, but single-threaded for the subsystem), and then
+> asynchronously probe the actual device details after you've numbered
+> them reliably.
+
++Ulf too
+
+IMO if a sane/consistent ordering is needed for MMC devices that the
+correct solution is that they should be assigned statically and not
+rely on the happenstance of which drivers happened to probe in the
+system in which order.  Assigning numbers statically is exactly what
+we can do now in the device tree and I believe that the patches you
+were merging from Arnd were doing exactly that.  To me it feels like
+this is the correct long term solution here.
+
+Without static assignment, maybe we could do numbering of MMC devices
+in some type of a pre-probe routine?  Is that what you're suggesting?
+If so, it seems like it might be a pretty big change to figure out how
+that ought to work (if it can be made to work).
+
+If numbering is done by a probe routine then I think we can't
+guarantee order.  Among other things, I think EPROBE_DEFER could cause
+us problems, like in this example:
+
+1. A regulator driver starts probing, but runs async to allow other
+drivers to load.
+
+2. The MMC driver's probe routine runs.
+
+3. In the MMC driver's probe routine, we try to get the regulator.
+Depending on how far the regulator driver has run (which may depend on
+external factors), we might get it or we might be told EPROBE_DEFER.
+Let's assume EPROBE_DEFER.
+
+4. A second MMC driver's probe routine runs.
+
+5. The regulator finishes loading.
+
+6. The first MMC driver's probe routine runs again and works this time.
+
+In this case the first MMC driver's probe routine ran _after_ the
+second MMC driver's probe routine even without the MMC drivers being
+async.
+
+I believe there are other examples.
+
+Now, of course, it should be noted that on a given board with a given
+kernel configuration it might be impossible to ever hit a case where
+the order was inconsistent.  However, I believe that there are
+legitimate cases where the order would have been inconsistent.  Also
+note that code changes to other parts of the system (like adding async
+to the regulator subsystem) could suddenly introduce different
+ordering even if it was previously impossible.
+
+
+> This is not something new - we do this for pretty much all the other
+> block devices, and MMC is just doing things wrong.
+
+Just to confirm, I assume you are specifically excluding all block
+devices attached via USB, right?  I believe that, by its very nature,
+it's nearly impossible to guarantee the ordering of USB device
+enumeration especially with complex USB hierarchies, but I certainly
+could be wrong.  Until devices are enumerated, we can't necessarily
+know how many block devices will be provided.
+
+
+> See SCSI probing for the traditional horrible cases (where just
+> spinning up a disk could take tens of seconds).  "Slow probing" is not
+> an excuse of "random ordering".
+
+It's odd that you say that.  I actually fought for static numbering
+years ago and one of the arguments _against_ allowing static numbering
+for MMC devices [1] was that, to quote:
+
+> Exactly the same issue arises if you have more than one ATA or SCSI
+> adapter in your PC - things can be probed out of order and end up
+> in different /dev/sd* slots.
+
+That was over 4 years ago now, so perhaps things have changed in the
+meantime, or perhaps the person who said that was wrong.
+
+Ah, I just re-read more of the old thread and you're probably talking
+about what Peter refers to [2].  I guess, though, that must rely on
+all parent devices (like PCIe) doing their probes in a fast enough and
+synchronous way, right?  ...and I guess it relies on parent devices
+not running into problems like the EPROBE_DEFER problem that I talked
+about above?  Specifically, someone could have a MMC or SCSI adapter
+in a PCIe slot, right?  Until we probe the PCIe slot we don't know if
+it provides any block devices.
+
+
+> Behaving randomly is simply not acceptable.
+
+Agreed, which is why I'm a fan of the static assignment solution.
+
+
+In the end, I believe that we could revert my patches and go back to
+numbering being consistent for most (but not all) use cases.  Even
+before my patches, MMC already did most of its slow stuff async and my
+patches only save ~40ms of boot time per MMC device, so the solution
+you talked about for SCSI was already there, but I wanted to save the
+extra 40 ms.  If we revert, though, I'm not sure how we will ever get
+to the goal of "async probe by default" then, but maybe that was a
+pipe dream?  ...presumably we'd also agree that we'll be limiting how
+much async work can happen at boot in general since anything in the
+path that might lead to a block device needs to be synchronous /
+ordered, right?
+
+
+In any cases, I'm interested to hear thoughts from you and others on the above.
+
+
+[1] https://lore.kernel.org/r/20160429181248.GW19428@n2100.arm.linux.org.uk/
+[2] https://lore.kernel.org/r/5723FCE3.9070308@hurleysoftware.com/
+
+
+-Doug
