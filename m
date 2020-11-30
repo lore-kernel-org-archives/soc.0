@@ -1,193 +1,130 @@
-Return-Path: <SRS0=42zo=FE=ti.com=nm@kernel.org>
+Return-Path: <torvalds@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B44AC63777
-	for <soc@archiver.kernel.org>; Mon, 30 Nov 2020 17:43:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4640CC63777
+	for <soc@archiver.kernel.org>; Mon, 30 Nov 2020 17:44:24 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 4DB742074A; Mon, 30 Nov 2020 17:43:02 +0000 (UTC)
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 0500920855; Mon, 30 Nov 2020 17:44:24 +0000 (UTC)
+Received: from mail-lf1-f68.google.com (mail-lf1-f68.google.com [209.85.167.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9EC43206E3;
-	Mon, 30 Nov 2020 17:43:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 5DF42206E3
+	for <soc@kernel.org>; Mon, 30 Nov 2020 17:44:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="EiABBD0j"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9EC43206E3
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=nm@ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0AUHgwKd087139;
-	Mon, 30 Nov 2020 11:42:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1606758178;
-	bh=ebyvGHgxYnsMErdJ7gl06ypcszQPPlEmdBFZ0QPGf0U=;
-	h=Date:From:To:CC:Subject;
-	b=EiABBD0jP87tzD9BLjSF7xJCPEH8/OQhsIvpGRcGijW0P53GLquyehIXvuRdeUEZl
-	 SGrDBPNixvZFUew7UJWoMLX14BLmsQhx3V4kP2hSd4+iig7jHTYcAtOka/LHIUnOhH
-	 wSUVkgnjudvmRn2H9BMEFDB93OlCQEXHdVA+UHMA=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0AUHgwmu084893
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 30 Nov 2020 11:42:58 -0600
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 30
- Nov 2020 11:42:58 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Mon, 30 Nov 2020 11:42:58 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-	by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0AUHgwIn011091;
-	Mon, 30 Nov 2020 11:42:58 -0600
-Date: Mon, 30 Nov 2020 11:42:58 -0600
-From: Nishanth Menon <nm@ti.com>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        <arm@kernel.org>, <soc@kernel.org>
-CC: <t-kristo@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] arm64: TI K3 DT updates for v5.11
-Message-ID: <20201130174258.ljsiokkyr7x7tsbd@covenant>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="OpbVqC/7"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5DF42206E3
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=torvalds@linuxfoundation.org
+Received: by mail-lf1-f68.google.com with SMTP id z21so23206988lfe.12
+        for <soc@kernel.org>; Mon, 30 Nov 2020 09:44:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hGGnCVO25VOQfg1PzcbDjqG+MdPgry8c2i2t7+r3Ezo=;
+        b=OpbVqC/70CdGr9YEoMNyq56qEVPpQmbjvAsLgtlaJoyII6eswjqe7S4biOHSMstc3n
+         YUniZkwX7b1I+uUfHDRpPTPw6l9kKhL20qsHluB+J4/sDH3RuD+1IjpWNP6qBnTTMw50
+         sHR3xPzr7wC9l6SkL4QQkuixNxBs9xBM105nM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hGGnCVO25VOQfg1PzcbDjqG+MdPgry8c2i2t7+r3Ezo=;
+        b=SNT+of35iBfACXGN8pHv8Sa4yTU7bfs70NIgruVgx0cB1iTPZDReCPfupIii3FFI8o
+         xKdpBT0vjrG5534T6XUPswGx91WPuQ5xecCuyLk25miSPcMCZFWSxw3rT8awdcE67oEa
+         VOOM4u5kreH/w4DgvXi3KfQMcovCWTbkvHYZNv2B1yDRCygKYlelU4cGalq/KG0OmgHL
+         FnlFTREYPbUOeTYPfO6aLk1J3an+cocCpEjJD7mx5POVNPXg294UUBJ6YzXkXFyo6VRW
+         uxCY+djMbY5j+qJOdL/BxzG7O71UHoESsLidhXE0cV4w5niGSr0oqzf36qomBq8M+gpG
+         96VQ==
+X-Gm-Message-State: AOAM530II6W+5VNtAnxY6EbejPBqBBD2VPxprX2MxoQpZvVgHPP5oljJ
+	YlDACZsHGjTugCIivX5taWcd+BbzwuCliw==
+X-Google-Smtp-Source: ABdhPJysw6RdLT3mft3ieUFTGw/boRIqTtpclmXQPzQydXumisPJGtQbW1MI0hWGKDboaISaneSraw==
+X-Received: by 2002:a19:418e:: with SMTP id o136mr10541528lfa.80.1606758261071;
+        Mon, 30 Nov 2020 09:44:21 -0800 (PST)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
+        by smtp.gmail.com with ESMTPSA id f3sm2517173lfc.124.2020.11.30.09.44.19
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Nov 2020 09:44:20 -0800 (PST)
+Received: by mail-lj1-f172.google.com with SMTP id y7so19213682lji.8
+        for <soc@kernel.org>; Mon, 30 Nov 2020 09:44:19 -0800 (PST)
+X-Received: by 2002:a2e:50c:: with SMTP id 12mr9985564ljf.371.1606758259392;
+ Mon, 30 Nov 2020 09:44:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="lc77dsi6dcg2y3ab"
-Content-Disposition: inline
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
+ <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com> <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
+In-Reply-To: <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 30 Nov 2020 09:44:03 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
+Message-ID: <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
+To: Doug Anderson <dianders@chromium.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, SoC Team <soc@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
---lc77dsi6dcg2y3ab
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 30, 2020 at 9:04 AM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Without static assignment, maybe we could do numbering of MMC devices
+> in some type of a pre-probe routine?  Is that what you're suggesting?
 
-Hi,
+Yes.
 
-Please pull the following for TI K3 dts changes for v5.11 window.
+So basically, the way the async probing works for say SCSI is that we
+have multiple "layers of asynchroniety". We have the usual "init calls
+done asynchronously", but then within the init calls themselves you
+can start sub-scans asynchronously.
 
-The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+In order to get reliable ordering between multiple controllers, the
+PCI bus is probed in order in pci_init() (or whatever), so each SCSI
+controller gets called in a fixed order.
 
-  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+That then gets to scsi_scan_host() does that async_schedule() thing to
+actually scan the SCSI buses on that host.
 
-are available in the Git repository at:
+> If so, it seems like it might be a pretty big change to figure out how
+> that ought to work (if it can be made to work).
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/nmenon/linux.git tags/ti-k3=
--dt-for-v5.11
+Try to start out doing discovery synchronously, but then any extra
+work (actual IO like partition scanning etc) with an "async_work()".
 
-for you to fetch changes up to cd48ce86a4d0c1ffec86aa46a26da993c9af5f53:
+> Just to confirm, I assume you are specifically excluding all block
+> devices attached via USB, right?
 
-  arm64: dts: ti: k3-j721e-common-proc-board: Add support for SD card UHS m=
-odes (2020-11-30 07:12:54 -0600)
+I have this memory that we tried to scan the root bus in order, just
+because people will have internal USB devices that way, and it makes
+it *much* easier if they show up in predetermined places.
 
-----------------------------------------------------------------
-Devicetree changes for TI K3 platforms for v5.11 merge window:
+Note that it really is only the internal devices that matter. Once you
+start plugging in an external USB hug and random devices, ordering
+clearly won't be reliable.
 
-- Standardized usage of "disabled" only in board.dts files, #interrupt-cell=
-s warning fixups, node format error fixes
+So this is not a "everything must be ordered". But people who think
+that that then means "everythinbg can be random" are wrong. It's
+really really inconvenient, because things like disk labels and
+various device IDs are not reliable either, and can be very confusing
+when two otherwise identical machines look different before you've
+installed a full system on them, for example.
 
-- J721E: R5F support, MMC/SD UHS mode added
+So you should strive very hard to make everything that is directly
+connected to one SoC always come up in the same order, for example.
 
-- AM654: R5F support, dss marked coherent, drop unused dma-ring-reset-quirk=
- property
+And storage devices are special. As Dmitry points out, it doesn't much
+matter in what order something like a mouse is scanned. Who cares? If
+you have multiple pointer devices, you'll either use them
+interchangably, or you'll have some other way to identify them. But
+storage is a _lot_ more basic than basically stateless input devices
+are.
 
-- J7200: ADC support, Mailbox, hwspinlock
+And no, disk labels really don't always exist. Never ever say "but but
+but disk labels".
 
-----------------------------------------------------------------
-Faiz Abbas (2):
-      arm64: dts: ti: k3-j721e-main: Add output tap delay values
-      arm64: dts: ti: k3-j721e-common-proc-board: Add support for SD card U=
-HS modes
-
-Grygorii Strashko (1):
-      arm64: dts: ti: k3-am65: ringacc: drop ti, dma-ring-reset-quirk
-
-Nishanth Menon (6):
-      arm64: dts: ti: k3-am65*/j721e*: Fix unit address format error for ds=
-s node
-      arm64: dts: ti: k3-am65*: Cleanup disabled nodes at SoC dtsi level
-      arm64: dts: ti: k3-j721e*: Cleanup disabled nodes at SoC dtsi level
-      arm64: dts: ti: am65/j721e: Fix up un-necessary status set to "okay" =
-for crypto
-      arm64: dts: ti: k3-am654-base-board: Fix up un-necessary status set t=
-o "okay" for USB
-      arm64: dts: ti: am65/j721e/j7200: Mark firmware used uart as "reserve=
-d"
-
-Peter Ujfalusi (2):
-      arm64: dts: ti: k3-j7200-som-p0: main_i2c0 have an ioexpander on the =
-SOM
-      arm64: dts: ti: k3-j7200-common-proc-board: Correct the name of io ex=
-pander on main_i2c1
-
-Sekhar Nori (1):
-      arm64: dts: ti: k3: squelch warning about lack of #interrupt-cells
-
-Suman Anna (11):
-      arm64: dts: ti: k3-am65-mcu: Add MCU domain R5F cluster node
-      arm64: dts: ti: k3-am654-base-board: Add mailboxes to R5Fs
-      arm64: dts: ti: k3-am654-base-board: Add DDR carveout memory nodes fo=
-r R5Fs
-      arm64: dts: ti: k3-am654-base-board: Reserve memory for IPC between R=
-5F cores
-      arm64: dts: ti: k3-j721e-mcu: Add MCU domain R5F cluster node
-      arm64: dts: ti: k3-j721e-main: Add MAIN domain R5F cluster nodes
-      arm64: dts: ti: k3-j721e-som-p0: Add mailboxes to R5Fs
-      arm64: dts: ti: k3-j721e-som-p0: Add DDR carveout memory nodes for R5=
-Fs
-      arm64: dts: ti: k3-j7200-main: Add hwspinlock node
-      arm64: dts: ti: k3-j7200-main: Add mailbox cluster nodes
-      arm64: dts: ti: k3-j7200-som-p0: Add IPC sub-mailbox nodes
-
-Tomi Valkeinen (1):
-      arm64: dts: ti: k3-am65: mark dss as dma-coherent
-
-Vignesh Raghavendra (1):
-      arm64: dts: ti: k3-j7200-mcu-wakeup: Enable ADC support
-
- arch/arm64/boot/dts/ti/k3-am65-main.dtsi           |  13 +-
- arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi            |  43 ++++++-
- arch/arm64/boot/dts/ti/k3-am654-base-board.dts     |  71 +++++++++--
- .../boot/dts/ti/k3-j7200-common-proc-board.dts     |  33 ++---
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi          | 114 +++++++++++++++++
- arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi    |  19 +++
- arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi        |  94 ++++++++++++++
- .../boot/dts/ti/k3-j721e-common-proc-board.dts     |  83 ++++++++++++-
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi          | 135 +++++++++++++++--=
-----
- arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi    |  42 ++++++-
- arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi        | 110 ++++++++++++++++-
- 11 files changed, 682 insertions(+), 75 deletions(-)
-
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
-
---lc77dsi6dcg2y3ab
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAl/FLxoACgkQ3bWEnRc2
-JJ0dwQ/9E6A8kNv/FLxk0bcnYo56UgXVIdmiJu2H2jz0XnbfBMPUoZAYRsCTwqpQ
-6qRAzv3lePH0hm0741TnocgPliPm9tAKcuJaw3y3poc7LKR77B8vL1H6tKnHXqxh
-6/ZB6Pk+IN390PukCvoE1yfpevTmPRxn5FqKYKgVWPTSHdkEKSeRj1Ea2YVDRzL1
-jH4UOVLaJ7OtQyTjWbRP1u/FxhZhKZ5eSb/pW36zx5dJXkybhJlzyb+yCDWylwrN
-p8iRaZTnKswqVhu1b8VO/tknzNnUFGfM0n1ShMnKASpkIIpgKTfLEPIVz/VMvYLA
-wXW+XrMUGLq/vj3fvl9uUV5yWA2tMeEUDSbxHsH1s3ArZt0HdCr6f2s9cTaPGv4M
-QAN38Geh5xfzjWJupEeg9kGeB1ZG2y/spkx0Za/ZE2BnIAuKyEZpyNd24OiE86mc
-Td414CUSdPOFpL/HcZ4udneo1qYT50Xx+5wxH4TOFyiJwsmWgZsa3mjhxgyDxB3D
-p1DDymBJy1qT9+/jtH49ko0gw3ype7GivYUm8o8tk2F/qCgQAqMxY1/uoMrL69BE
-qp9lOzhYXJK4A+tr2yDWb5L6usU3DVyQiw+8hfH84ljjxoPqvXuejNrpNKvZg/SW
-zoeaStQs+10EUsk4A3IJVenS/u12oDQrs16QOOmJfiFZ1qN4xiE=
-=hR4o
------END PGP SIGNATURE-----
-
---lc77dsi6dcg2y3ab--
+               Linus
