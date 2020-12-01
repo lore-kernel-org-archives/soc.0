@@ -7,17 +7,17 @@ X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A18E8C83014
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 13:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC676C64E7B
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 13:45:29 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2EC162080A
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 13:45:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 354E920770
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 13:45:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="kVYz7YpR";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b="t6q6uhfF"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2EC162080A
+	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="lUw6Vge4";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b="f/2IpXak"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 354E920770
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -26,65 +26,65 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=JZE/hfsRyXG84FP0woMXd4ipmHnCgi1v2uaV+GbpnFM=; b=kVYz7YpRiRXjtxGG9F1DtMwif
-	WcPS2iMEN8e6FP1nyBwZIx2Qzt5PR4YwGpwgXlDj17a0bzjI9hUgA5Rdd9B/mHz6UwXDHt61qJUqE
-	XO4XR2Z+v2g92VMceWbChKr0g57jh2sdCsJJNN5wyNGxIrxTtHFg1vIFnP3B0bPbzLisuodRgB+64
-	U4dpKJnR0hEDhueU5Q8Sws+kujMyF6xaRjfUCT3JWzK1KZ3maMWQp5E1eXqpsw1P4XixcIrZAMlBY
-	ep5JVmCLEbvSAQtpcv1B+oHKMvsJaqW+NszBro5kkB92SnTJqFXrQNMbZN0PYtwKyA3zYHHgRe5nq
-	pl3TIbahQ==;
+	 bh=UgEtie4aHL48mw9nXAp4bZCCvSgwptHQZJnvan9ZVtg=; b=lUw6Vge4kksPm6r6z9jaJp5p6
+	sL4DZdcuW6Tn7AAv1ZVoIju5aTH+a5TczPTS1jRwhN5XXK+yONhE4H1p3iuo6JR/K4LbIdaO88ntJ
+	VyDTp5VetS8rccJcC0W8fl3q1PVSE0UUEHQ8xtdyfKKdd//Aqlz4T2GKXPaH62csojZ4m3MTgRrsA
+	AzmWROsnyjUwVpc8/Huh+eii6I+RdG3IhQnRMrGmg9DnTvjLujFJisTyPBbKg/IjeFASGjFFYHd1P
+	4mtqeYOnb3E/0omoTVlcub5LbYhUYgF9iZwGzwrueDW68Fxq8xohFpNzWUQZiLqB6M2MpgpveoJ87
+	J8Ngy6Q3w==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kk5wp-00072W-Uu; Tue, 01 Dec 2020 13:44:04 +0000
-Received: from mail-pl1-x643.google.com ([2607:f8b0:4864:20::643])
+	id 1kk5ws-00073B-Kd; Tue, 01 Dec 2020 13:44:06 +0000
+Received: from mail-pl1-x644.google.com ([2607:f8b0:4864:20::644])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kk5wi-0006zo-B7
- for linux-arm-kernel@lists.infradead.org; Tue, 01 Dec 2020 13:43:57 +0000
-Received: by mail-pl1-x643.google.com with SMTP id t18so1182416plo.0
+ id 1kk5wl-00070Q-St
+ for linux-arm-kernel@lists.infradead.org; Tue, 01 Dec 2020 13:44:00 +0000
+Received: by mail-pl1-x644.google.com with SMTP id x4so1147137pln.8
  for <linux-arm-kernel@lists.infradead.org>;
- Tue, 01 Dec 2020 05:43:56 -0800 (PST)
+ Tue, 01 Dec 2020 05:43:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=ZmXMtKJx+N4tYwcvtUovyBiKEQa6t+IIEkwiQ3K9Kyk=;
- b=t6q6uhfFqDAV+Gpt9MD0/6YR8au50Pju9fWCyH2hnyNEP9wJiJPqna+SH1c5DoAYUX
- s1a+2RKgaD8aqVVp2TFcKKf2+RYPuIlugkr+VezgnCx+YhZ1uLSoBB7vL1bU9e5NRnO2
- 1EoptdP+uf1iEIO00tkEZQeXawKJ0PGcHCViQ=
+ bh=nZs3cd4haoA+TDqA6POpYN8YC7m6XfHT6GH0HjPmBjM=;
+ b=f/2IpXakdLzHmPBxF37xXRsHxu3TP7ceBiybQPbSxCHdq/+YZHfI4Pf00ORWxGOiqp
+ Is9Kyvb3TV2BBX7H43WL0S+TeanOTIv6tlKJtOR5EwwfO50rjF5lUlwYAhLknKSxgH4s
+ 4GQSPSEFK6eYi+B9KWj3sJm3GwqQA7eMt3/5s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=ZmXMtKJx+N4tYwcvtUovyBiKEQa6t+IIEkwiQ3K9Kyk=;
- b=gmq4ZYl5dAGT5IAhRagf0E4bbeTStTkargCKITrHr/hESvzadS8Z+jZaJ9daOzOFcy
- rDaWQhHRLE9Er8hBVIVut+mFV7fp/88NPuvFKhXxMJUyVYp9CAkR5PnTaAezx15Qe6CI
- 3kJrZjhvR3DuLKCwrGCMq7YMEfTcpyUeyWlVVK0fpF90BXhZvsxI4NycT0vgaXX/B/Hk
- DC/+NeZv3GvU1hTdYGn0US18wH7KnKURqob1J6CRnGJg6myf6rxXMK/8NmA8frjgrWQ/
- nkh1/TlD7mN1ByEsU9K1LCoPg5C6UZhBWG13aim0ny4m2wJVXlFrJwQPnAaS6Jl8DEg9
- ul9Q==
-X-Gm-Message-State: AOAM532LHkZ9JOtgWQOqn/2xJCsNsu4n0wJgcrCL8WDPM53zsIhL6G8f
- utOwNB36Hx4on9N+X0mulBUlPA==
-X-Google-Smtp-Source: ABdhPJzL6sz8FhzIj/VnR2T4URGqVwifM9uOLkrsNrYxoV7xuyu2esfcbIqT9WWHFPe7wKzSDADh3w==
-X-Received: by 2002:a17:902:7b97:b029:d8:ec6e:5c28 with SMTP id
- w23-20020a1709027b97b02900d8ec6e5c28mr2848453pll.40.1606830234662; 
- Tue, 01 Dec 2020 05:43:54 -0800 (PST)
+ bh=nZs3cd4haoA+TDqA6POpYN8YC7m6XfHT6GH0HjPmBjM=;
+ b=T6Ci7ez1rWpqipmGOC74gHHHYgCOgnDCg3UMSJRSKLJ3/epN2IpZwV3irEzPiNo2Dk
+ ZvI4wR8uvioR2IbZOSk5j1nIMZklGLY/eNuO7//rB1OxWrar7xWKe2QyWZSozEawTy9E
+ Zm2CDFSqyBsvKwgs1TjCya9CTOUO2S6R4iPdXxXkctg0CPs2Rs2GE/NPK9nP4b+i6IOU
+ 8X+UZUqJVUxV/YuxEZsWtRSx1flIUS1pDzDh54JidJDGFmGuiVR9D6OPxrFvpRcv+4LS
+ HNO2Q/x6yEZJy5rTyJsbXmhH/3zavjiyZYaPLMT3+o8cbeZIEbYE5drlqQ8SrXvJoyPX
+ vp2g==
+X-Gm-Message-State: AOAM533ALSCaefJWvPe3fnOLuA25NitNnjFi2WF+dkOpFYQpmk9S1ONU
+ MvtfRxPm2IkJj93pBT22Kz/zkw==
+X-Google-Smtp-Source: ABdhPJzlpZrs7tYCs+bVPPekgHDRENk2SgSkvvOa2zESTJWo07869xM/hna2VCsk8cT9VcgBPLJ3cw==
+X-Received: by 2002:a17:90a:a487:: with SMTP id
+ z7mr2838802pjp.102.1606830237578; 
+ Tue, 01 Dec 2020 05:43:57 -0800 (PST)
 Received: from shiro.work (p1268123-ipngn200803sizuokaden.shizuoka.ocn.ne.jp.
  [118.13.124.123])
- by smtp.googlemail.com with ESMTPSA id g14sm2839248pji.32.2020.12.01.05.43.52
+ by smtp.googlemail.com with ESMTPSA id g14sm2839248pji.32.2020.12.01.05.43.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Dec 2020 05:43:54 -0800 (PST)
+ Tue, 01 Dec 2020 05:43:56 -0800 (PST)
 From: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
 To: devicetree@vger.kernel.org, soc@kernel.org,
  linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 06/10] ARM: mstar: Add chip level dtsi for SSD202D
-Date: Tue,  1 Dec 2020 22:43:26 +0900
-Message-ID: <20201201134330.3037007-7-daniel@0x0f.com>
+Subject: [PATCH v2 07/10] ARM: mstar: Add dts for Honestar ssd201htv2
+Date: Tue,  1 Dec 2020 22:43:27 +0900
+Message-ID: <20201201134330.3037007-8-daniel@0x0f.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201201134330.3037007-1-daniel@0x0f.com>
 References: <20201201134330.3037007-1-daniel@0x0f.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201201_084356_411249_7B857E8C 
-X-CRM114-Status: GOOD (  14.25  )
+X-CRM114-CacheID: sfid-20201201_084400_032146_BD5E1E22 
+X-CRM114-Status: GOOD (  16.68  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,35 +102,60 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201201134326.SUAvJisxvnjdcuwFG0gjEVGmMoCBhAKXOBb0-Pm1Ui4@z>
+Message-ID: <20201201134327.3f5WBNiIViVEmL0IHnz_1143OLPzBgVPQuktDbdCVl0@z>
 
-Add a chip level dtsi for the SigmaStar SSD202D
+Add a dts for the Honestar ssd201htv2 devkit.
+This is for the board populated with a SSD202D.
 
 Signed-off-by: Daniel Palmer <daniel@0x0f.com>
 ---
- arch/arm/boot/dts/mstar-infinity2m-ssd202d.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
- create mode 100644 arch/arm/boot/dts/mstar-infinity2m-ssd202d.dtsi
+ arch/arm/boot/dts/Makefile                    |  1 +
+ .../mstar-infinity2m-ssd202d-ssd201htv2.dts   | 25 +++++++++++++++++++
+ 2 files changed, 26 insertions(+)
+ create mode 100644 arch/arm/boot/dts/mstar-infinity2m-ssd202d-ssd201htv2.dts
 
-diff --git a/arch/arm/boot/dts/mstar-infinity2m-ssd202d.dtsi b/arch/arm/boot/dts/mstar-infinity2m-ssd202d.dtsi
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index ce66ffd5a1bb..ccbf44b6f32a 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1372,6 +1372,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += \
+ dtb-$(CONFIG_ARCH_MILBEAUT) += milbeaut-m10v-evb.dtb
+ dtb-$(CONFIG_ARCH_MSTARV7) += \
+ 	mstar-infinity-msc313-breadbee_crust.dtb \
++	mstar-infinity2m-ssd202d-ssd201htv2.dtb \
+ 	mstar-infinity3-msc313e-breadbee.dtb \
+ 	mstar-mercury5-ssc8336n-midrived08.dtb
+ dtb-$(CONFIG_ARCH_ZX) += zx296702-ad1.dtb
+diff --git a/arch/arm/boot/dts/mstar-infinity2m-ssd202d-ssd201htv2.dts b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-ssd201htv2.dts
 new file mode 100644
-index 000000000000..176e10a29896
+index 000000000000..5d81641414a2
 --- /dev/null
-+++ b/arch/arm/boot/dts/mstar-infinity2m-ssd202d.dtsi
-@@ -0,0 +1,14 @@
++++ b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-ssd201htv2.dts
+@@ -0,0 +1,25 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
 + * Copyright (c) 2020 thingy.jp.
 + * Author: Daniel Palmer <daniel@thingy.jp>
 + */
 +
-+#include "mstar-infinity2m-ssd20xd.dtsi"
++/dts-v1/;
++#include "mstar-infinity2m-ssd202d.dtsi"
 +
 +/ {
-+	memory {
-+		device_type = "memory";
-+		reg = <0x20000000 0x8000000>;
++	model = "SSD201_HT_V2";
++	compatible = "honestar,ssd201htv2", "mstar,infinity2m";
++
++	aliases {
++		serial0 = &pm_uart;
 +	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++};
++
++&pm_uart {
++	status = "okay";
 +};
 -- 
 2.29.2
