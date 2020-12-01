@@ -1,66 +1,104 @@
-Return-Path: <SRS0=1iVd=FF=baylibre.com=khilman@kernel.org>
+Return-Path: <SRS0=AMvF=FF=lists.infradead.org=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B310C64E7A
-	for <soc@archiver.kernel.org>; Tue,  1 Dec 2020 22:34:07 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id CE06920870; Tue,  1 Dec 2020 22:34:06 +0000 (UTC)
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CC53C64E7A
+	for <linux-amlogic@archiver.kernel.org>; Tue,  1 Dec 2020 22:34:21 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 673AB208C3
-	for <soc@kernel.org>; Tue,  1 Dec 2020 22:34:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id C7C1520671
+	for <linux-amlogic@archiver.kernel.org>; Tue,  1 Dec 2020 22:34:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="nNzt78S5"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 673AB208C3
+	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="UKa7Pa6b";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="nNzt78S5"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C7C1520671
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=khilman@baylibre.com
-Received: by mail-pg1-f172.google.com with SMTP id g18so2137747pgk.1
-        for <soc@kernel.org>; Tue, 01 Dec 2020 14:34:05 -0800 (PST)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=lcFnIR50e9cl5grlc3OpQOA4XYgM/uqM2IhUVjSR4lk=; b=UKa7Pa6bq/4sTYB2P4GQWCF5HX
+	qpoqkGUBIwZSSuJ811kyfgs1Egv1Q7+q0fy2xNFQd85jL8gkshiYVeAFtzOfxn6VW6g/eljDXOBnG
+	+6NMop8KYSuStEjyuYHU6QjfG/i3fkMBjybNQKnIdGw42t5AdGgwE6E27/iqfkr/jA1TRrgerRnbf
+	TQLsNVwLomMomxh9qUbq5U9ZPpTf0xUg0/Y/DXmgQph/PIXs/yArjUgFyx7L8QIa60jbyrLk9e5pn
+	zgS1KTK6LQevwEuHumUNfRwCQlDUDjiwRBh1c38MYP7j7eOTGJXdk9P+x7vq0JHYLf4ZrPbKYZLFZ
+	wP+W8oWQ==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kkEDs-0006z0-I1; Tue, 01 Dec 2020 22:34:12 +0000
+Received: from mail-pf1-x42a.google.com ([2607:f8b0:4864:20::42a])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kkEDm-0006wY-Q0
+ for linux-amlogic@lists.infradead.org; Tue, 01 Dec 2020 22:34:08 +0000
+Received: by mail-pf1-x42a.google.com with SMTP id q10so2142818pfn.0
+ for <linux-amlogic@lists.infradead.org>; Tue, 01 Dec 2020 14:34:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=VyzfJ/61zrG7IqqeZutV6Kfadw97Jz4TS784b21IDMU=;
-        b=nNzt78S5S48ZE/IcUMAwdahKLVZjBUFIuQCRYrD4KrxZIdtdww6bR2Fkz6BGspJDZw
-         6c43QemXoqYl96hnBfF/FkXY16wo46YNiLIS5ilW/Ja13FEwgQWyTFp2ed+ZYG7J4rIN
-         dly3YV3utx5BLHrZ/lK6ZNCwUf3capvAr/0SjlJAkWuT3CSHzpJqBuZv/iZtuTc/xcEq
-         FsjhcKMaepOVDzYWk1WAPx5B3elWyOqHU4nAzpTruyMn8OiqAhzvlhnrk1kUe6yVP5pv
-         369V4IkybhxupTFJOMXY87Y36U2WvE4Buje7fbvGoee+YPPI7YGSFJprGxqQF8snmBgP
-         uYmQ==
+ d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+ h=from:to:cc:subject:date:message-id:mime-version;
+ bh=VyzfJ/61zrG7IqqeZutV6Kfadw97Jz4TS784b21IDMU=;
+ b=nNzt78S5S48ZE/IcUMAwdahKLVZjBUFIuQCRYrD4KrxZIdtdww6bR2Fkz6BGspJDZw
+ 6c43QemXoqYl96hnBfF/FkXY16wo46YNiLIS5ilW/Ja13FEwgQWyTFp2ed+ZYG7J4rIN
+ dly3YV3utx5BLHrZ/lK6ZNCwUf3capvAr/0SjlJAkWuT3CSHzpJqBuZv/iZtuTc/xcEq
+ FsjhcKMaepOVDzYWk1WAPx5B3elWyOqHU4nAzpTruyMn8OiqAhzvlhnrk1kUe6yVP5pv
+ 369V4IkybhxupTFJOMXY87Y36U2WvE4Buje7fbvGoee+YPPI7YGSFJprGxqQF8snmBgP
+ uYmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=VyzfJ/61zrG7IqqeZutV6Kfadw97Jz4TS784b21IDMU=;
-        b=Rl2rsbexFGqaDyFaWY90l+qnm6ioW+Q2S8UlfCamFIVazNToiGglT42gA+RDeJzTZ+
-         8eQRI6RSlov0z9AKqtlLkNqsBrv9yRF7INXCDXUwzbKHd8RbWx6W2MAoKCDmB0dNz+L/
-         JBkaRxYdoCXttHXw0iPkQcOZYSHueo80FBFcLA8B8eOpLZ8tnuxnghU3EJ1q2+G1wv96
-         K4/IrzhujSaeD5Kx5YUFxKvd7KDk/qpVgoMeoUgo5pW8mrCJ+i9Aa7eimoQ1gojNoDQV
-         +71V3G0uEzaKz7dpbHIE/T7Rd/ICE71jSkx8i523EoLzpEXNE4z/mCb2vQNEkzihbCHu
-         Tn9Q==
-X-Gm-Message-State: AOAM530tLB9AZGcgt38Yx/6G+FRcIrhYXPRg64y1+ejvVnyD5faw0hvF
-	0d0N2K3N5zoFCYxc2gBClp+WWHOZNIpKoC9U
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+ bh=VyzfJ/61zrG7IqqeZutV6Kfadw97Jz4TS784b21IDMU=;
+ b=a/H5gm1K+GY3XWEW4XXDqD02rkU44wnIfrZbZ2Lsk0OUybJV0m8oKVMOlMIwGOAKPq
+ nJUQ7mNyByk1oBXfS5aj3ZCqnVOWxFe/BT+JMK7D21W9CTAoS26AoWyUG6N0m/xX4hVm
+ EITlNnnbY23AKvuCEN2wxIu6e9AON9Ce4j54NSLs01Lqewvgni1lEmXPgE1kfOGKIfJP
+ +gOm+lKp4ckyV/Ich/UTlXkeJmGJ3HCdowphHcQsJE2cEwFnEITdbQlSw1Sleog3SZnF
+ SJidDn6ec0ePgtoPmoQvu2IJLp8cKboY/hrs0QMrRb/tgi7YP0KPrvEp6lklae8QamvM
+ 7aAA==
+X-Gm-Message-State: AOAM5329ORzSHdM7e3Wq7U+Q2Q2/9f6lGvvGUlGTQAENbzc+uNbbNq65
+ AJcHyEf+iBk5gNb3mh+sJ8Frgw==
 X-Google-Smtp-Source: ABdhPJxBd1oN35igDNqmACXUehdFdQoZ9jvY2+9kX/+z0H8mYfOJtWiRC0fu6GepFnx4poTHsv477w==
-X-Received: by 2002:a63:fc5b:: with SMTP id r27mr4188310pgk.100.1606862044394;
-        Tue, 01 Dec 2020 14:34:04 -0800 (PST)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id h7sm736014pfq.76.2020.12.01.14.34.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Dec 2020 14:34:03 -0800 (PST)
+X-Received: by 2002:a63:fc5b:: with SMTP id r27mr4188310pgk.100.1606862044394; 
+ Tue, 01 Dec 2020 14:34:04 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net.
+ [71.197.186.152])
+ by smtp.gmail.com with ESMTPSA id h7sm736014pfq.76.2020.12.01.14.34.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 01 Dec 2020 14:34:03 -0800 (PST)
 From: Kevin Hilman <khilman@baylibre.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org, arm@kernel.org
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
 Subject: [GIT PULL] arm64: Kconfig.platform: amlogic updates for v5.11
 Date: Tue, 01 Dec 2020 14:34:03 -0800
 Message-ID: <7hlfehjgv8.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201201_173406_997048_17D061AF 
+X-CRM114-Status: UNSURE (   6.54  )
+X-CRM114-Notice: Please train this message.
+X-BeenThere: linux-amlogic@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-amlogic.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-amlogic>, 
+ <mailto:linux-amlogic-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-amlogic/>
+List-Post: <mailto:linux-amlogic@lists.infradead.org>
+List-Help: <mailto:linux-amlogic-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-amlogic>,
+ <mailto:linux-amlogic-request@lists.infradead.org?subject=subscribe>
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-amlogic" <linux-amlogic-bounces@lists.infradead.org>
+Errors-To: linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201201223403.f5y-7O24VetMaQybv0sWR4YhPnmFnQJN-c-nhIAmOdI@z>
 
 The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
@@ -84,3 +122,8 @@ Jerome Brunet (1):
 
  arch/arm64/Kconfig.platforms | 3 ---
  1 file changed, 3 deletions(-)
+
+_______________________________________________
+linux-amlogic mailing list
+linux-amlogic@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-amlogic
