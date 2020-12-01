@@ -8,17 +8,17 @@ X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C07E9C71156
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 22:32:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F4A2C71155
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 22:32:31 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 57EC820671
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 22:32:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id B1B3B20671
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 22:32:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="lecX4C8W";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b="YD7AkX/g"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 57EC820671
+	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="WQhkXiTM";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b="RKedLQs9"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B1B3B20671
 Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=leica-geosystems.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -27,27 +27,27 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:To:From:
 	Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=Legyl/qyZ12qIYECPMv5M1bCqTSsCbMwokmdkcuVwXg=; b=lecX4C8WLzfVPehTrRNpu5If2B
-	ciyN1RZARqnNAWmJLTB1FYZuWVTwhecxfr8FUg4Knh+WDtn4/xuCsdGhtu7p7yQ2L3VpbBuA6OGbB
-	P4PeThF5sgegUdqSiCcIuPgcDxnV1pfxXJzE4obRCbESDyzNySLfPEcCCDBFhdLfK21mGfCxUKmbk
-	E5vJUYDUuKbdffEC5MN7fep9mTFW94JwadNepjQMdTtGbuTW4tfpe3mmXCLHOxNvsB90+o9I5xYkN
-	QlQgG8PiJgXk3pqw2kflhsBoxi95hI/FkDLaU85xpUSpSAC/mTMgaO/wEdpV/mJ9zHYhSJbqdIMIk
-	Mu4PvZ/w==;
+	bh=UJky1l8A08weUMZ8xcN09nJtPubQCJ1PoyO46wcN5k4=; b=WQhkXiTMiiJ8CwXQLSO8qaGfeK
+	Q8fF8FgvfxKBkNLuc1mgDOBwq0yRdOBU4/swWbeUunenlqRd3nwQNjqlSC9ABXR49T5hsuh4kQQdr
+	KuUVePFvFZxQDDChgwg7bSrTwPZjWShkWMAxd2pSOWgNCwAIhptz87Ph0eLzO3B33GKUrclE+eInU
+	3oDcIKmJDJKsULt458vsv84JZ5qiab2xDy0J/8tZAGrZI9DOXJ90PT9d3v5RnLCwgYl81zNMZ+g/G
+	8V1ZWVF2KQDXJY32lxln/DOElTOi09opfNnNyE66HdcU+g/0B9nLEKKIhtaXd3vWd87zN/6Z8K2Dv
+	BTEYi9ZQ==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kkEAi-0005nW-Eb; Tue, 01 Dec 2020 22:30:56 +0000
-Received: from mail-eopbgr60122.outbound.protection.outlook.com
- ([40.107.6.122] helo=EUR04-DB3-obe.outbound.protection.outlook.com)
+	id 1kkEB5-0005vB-5U; Tue, 01 Dec 2020 22:31:19 +0000
+Received: from mail-eopbgr60090.outbound.protection.outlook.com ([40.107.6.90]
+ helo=EUR04-DB3-obe.outbound.protection.outlook.com)
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kkEAf-0005mo-6u
- for linux-arm-kernel@lists.infradead.org; Tue, 01 Dec 2020 22:30:54 +0000
+ id 1kkEAt-0005pu-Gl
+ for linux-arm-kernel@lists.infradead.org; Tue, 01 Dec 2020 22:31:09 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fIOz3WMHUvjdLhmxE2uEBzzbdx4V55BoI6Ygfp6RazOKIWimvNee3aO8vc4S0/DFlRbO4MpDk2DgrSzZhqLBHoujssG1unmwZRkuK3PN+Y7Pqk8+QgMm8YI5AqNdCzn/LBHttEWkHqexomHysTkRvbeMmhaSCMOUME8nssRQ83mNzuKiGfmSERLnO/XOfLj1C906gHHJx+2zE5iU6YAonp7jKy02PS5A9GH+pdRqeED+D+QOuhsO2yhgh3kIn74xkkrJ9HjNhvj7Ajfx+wzxDe+ErjgOf7vXytsfvr0NfCU6A/8N0wD/VhEsIXJNEJXTQ1xjb26tWrqSpHniDxX4tg==
+ b=SBUrrbk7VnWffW4/z8HHc56QJ6hcKEoQGFzbLXNZdsSPeteC6ZgdTk6WXIY1WrgPi/aKmvh0Zqu/lTKrQCl6EL6g1pWc9xsYkCi4xZr5qhetnaL0bEFykSWbtTVDpShlTcZKxuXHo51eD8Gr6OrghWOCWvdZjH7nSspt7D9pe8H2fGj23NO/bgnXWCSuVr/3kGP3nokXjoVi7b6NAPDLEtd4tQdaakdYY92q94NMxtwQJg2QAf5dRCXjddhJxlUJQPFDfegflW2fvbRHX3LZFKq2jirWstzlG38fiIstWEAiaCrc5W9zmjMqeqP3oM85MHS3EEfl4ot19SUmlFnhBw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0wJjQAZHI5NHAdE2q6LEx8sK4q6pN8M0elUMSYPsAqg=;
- b=HCptyY6r28ExFIx1N9Xrcchn8YiDLgCbe+UqDKupMfYuKsm+M+d2YDPIV5HUw18oAAKFrHVkO3/v4aWrJTMUGinNyAkq7KJ1iiGpHbABmq4tFicoG7Y08z376ZQQVxgpLOEo9iS2ZjiHChwvPRYfbT0UzVSwAeAeFqzZoGzV811fEcL2XNBpmc1POnJQ5jhsYtx5LFsSJpcfxiBAEiudcwfLz+FqBUktIh6VNjI+SKPb2PDsyAwuiR56SFbaoZoxJ7VGwgSZSRfJMU9pp+Nu22TRExKFu47LFFyUAVlXm3n5GZ8WgmiiBdvhZiYTXoaKRu+kyv+AarS7n47fXCeHZA==
+ bh=D6jNaCDbQ2iCNvKDA8zVKbBQLowkiZO4HZctSGu660w=;
+ b=MFGSY4vP9qFqLazE0L5yy1QsQTTkC9xDUCcaoZsm9ycGHudFKH5NiS7DqHUVyI6TCTFYZQtszcVyVLQegPPgKGNNgxKm3lofeDzIwHsRqBTk7aBWDKz5VIOu9mHn1cUV3D1t8+oHeu/42jXSe4DhXlzSzDYlJzaJ6QMVGlTR0hEXOoZJNUODmpy+w48j58CRYdfU5zO7KsRbmUMbQMU595CEbJQojRPY0fSMeoUOs9bjfDXH1mL4k8JXM2gz+f7KnxFTIVf/MwGB3nebSgQdOizeTG8afRCsxPaLoQDtKCconDwkjMBrOiZKMGNLzgAX0t3BAk2AhpeaeHY7/tyJFw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
  header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
@@ -55,8 +55,8 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com; 
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0wJjQAZHI5NHAdE2q6LEx8sK4q6pN8M0elUMSYPsAqg=;
- b=YD7AkX/g+iGwK60sH5ekUZqua9ZiQ18JmtHmO8ub07iY9GCTHqiGujaUBCzUH052f+HHg9BWK9BkymdRJeNef9dSGXASW7CprGmfEmV2YTG2bylbKkAEOsXjzDveE3CPaphtkfnao/Ddh9/eJDQPxwpwRWMP7UFz5SJGPOdliF0=
+ bh=D6jNaCDbQ2iCNvKDA8zVKbBQLowkiZO4HZctSGu660w=;
+ b=RKedLQs9SmXyQHw6gsHTTgAaGEPxPWci4fdo0zdwBL/B3B+PSJldLas5IH6eJ/F8fpHeMm8VumAp536dKB4Zm+0h8hkp2hBkbBj6LCYYfttbLsYdIkZ15jbjlsIHQ9/jLmt79FQhPFicOgkCbS5uHjJMFjhPJWhTc91rokqfPkg=
 Authentication-Results: armlinux.org.uk; dkim=none (message not signed)
  header.d=none;armlinux.org.uk; dmarc=none action=none
  header.from=leica-geosystems.com;
@@ -64,11 +64,11 @@ Received: from DB6PR0602MB2886.eurprd06.prod.outlook.com (2603:10a6:4:9b::11)
  by DB8PR06MB6236.eurprd06.prod.outlook.com (2603:10a6:10:10a::26)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Tue, 1 Dec
- 2020 22:30:50 +0000
+ 2020 22:31:06 +0000
 Received: from DB6PR0602MB2886.eurprd06.prod.outlook.com
  ([fe80::49c3:4b5b:289c:d62c]) by DB6PR0602MB2886.eurprd06.prod.outlook.com
  ([fe80::49c3:4b5b:289c:d62c%12]) with mapi id 15.20.3611.025; Tue, 1 Dec 2020
- 22:30:50 +0000
+ 22:31:06 +0000
 From: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
 List-Id: <soc.lore.kernel.org>
 To: linux@armlinux.org.uk, nicolas.ferre@microchip.com,
@@ -83,9 +83,9 @@ To: linux@armlinux.org.uk, nicolas.ferre@microchip.com,
  linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
  linux-tegra@vger.kernel.org, linux-mips@vger.kernel.org,
  linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, soc@kernel.org
-Subject: [PATCH v2 2/5] arm64: defconfig: drop unused BACKLIGHT_GENERIC option
-Date: Tue,  1 Dec 2020 22:29:19 +0000
-Message-ID: <20201201222922.3183-3-andrey.zhizhikin@leica-geosystems.com>
+Subject: [PATCH v2 5/5] powerpc/configs: drop unused BACKLIGHT_GENERIC option
+Date: Tue,  1 Dec 2020 22:29:22 +0000
+Message-ID: <20201201222922.3183-6-andrey.zhizhikin@leica-geosystems.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201201222922.3183-1-andrey.zhizhikin@leica-geosystems.com>
 References: <20201201222922.3183-1-andrey.zhizhikin@leica-geosystems.com>
@@ -98,51 +98,51 @@ X-MS-Exchange-MessageSentRepresentingType: 1
 Received: from aherlnxbspsrv01.lgs-net.com (193.8.40.112) by
  ZR0P278CA0080.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:22::13) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3632.17 via Frontend Transport; Tue, 1 Dec 2020 22:30:49 +0000
+ 15.20.3632.17 via Frontend Transport; Tue, 1 Dec 2020 22:31:04 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 031b3484-b95f-4d4d-1198-08d89648c1c7
+X-MS-Office365-Filtering-Correlation-Id: 26943727-d419-41aa-f39d-08d89648caf9
 X-MS-TrafficTypeDiagnostic: DB8PR06MB6236:
-X-Microsoft-Antispam-PRVS: <DB8PR06MB623656568E000446D98C9392A6F40@DB8PR06MB6236.eurprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1107;
+X-Microsoft-Antispam-PRVS: <DB8PR06MB6236DFBDD0F0762D6DC719B1A6F40@DB8PR06MB6236.eurprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1284;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 28UMAZ9JvRCAXWzGWSSmUqPul0y1yOLmgkzkqJIRnmPPecJ7eZFOqzEjnRkTDjbIYd1zRR4iGcI/7SHR16M2l2eCTcpvsQiN4qXZPp9fvnBnzI7xrF4Q6jYG0o+waj/U0YGxphYMu8wi3Zv+brhsGucAVNZBavQ+9OmJy/nkcZCrTZdX2eY8tZ03kQEvGwcJgUJJymecYhvqyOCHLSN6VQS+8op7bncOT5HT8d2chlTQpdTksGE4hJrhCD8cHTMdQfmeP8C/4BgZy4CQWCypvk9LZY/Gg/t5rKICYszMsGv/anBINyCg0hA+7/4/fn9dumMBo5AcaSz5mB3Bn/rtFCmaKgYzFCfla3h0HBMIRctr5PiOf5+bjeB/IOQf72gMwVsGPPjkkxexg2l2kxR3cw==
+X-Microsoft-Antispam-Message-Info: gxLw28SdW9jTITcpro/GTMTeG/u40sqv+iGbwQX2ZS/Yy8qlRjRYC/G95hc/FgSboQzFmdgneKNFoz0Y3sMRhuAIcjxkLvSH2bsdBppvAw1P+KoXbXuFrVWVg9y0ZuXXBOCnDAnJxakyb0TCSnI9EkO+Np4P0nZ/rMdcIHff5x/8U+U0Rg0kCOOIkbFOxzlFQH0YvddY7VxT/txnIZgr/hy/k39wOgqe49nY8CyVF9KJxnnDJ0n58jEqAyGp3rezSptdnMAmPmL6oCW0datJryRG1ZAD2nfw700eN1FFqyqRCGQBvoExSGJwFjgAUvjdo3cCaiTJKmprqtVxBv2g4HHnITZFPxl9wN3sciIhi/Cnp9aftF48xhtlu5epc8B/YDCxxaPAQ14MdCS2MWw/YQ==
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:DB6PR0602MB2886.eurprd06.prod.outlook.com; PTR:; CAT:NONE;
  SFS:(4636009)(346002)(136003)(366004)(39860400002)(396003)(376002)(66476007)(6666004)(66556008)(86362001)(66946007)(26005)(1076003)(186003)(36756003)(8676002)(16526019)(83380400001)(2906002)(6512007)(478600001)(8936002)(7406005)(316002)(7416002)(2616005)(52116002)(921005)(956004)(44832011)(5660300002)(6486002)(6506007)(41533002);
  DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?/CgIwPcpPaZ9PNI8HHVOFGlFtyykQWC7uLaFAg5pgBrX9x320VOnvOtN6txR?=
- =?us-ascii?Q?AgQbO5Ij1PKHeHWFftxPX6XnCEOcx3DRz4I7n1HE98Hel9lQUkgq7nWKp4EZ?=
- =?us-ascii?Q?wmdvoX2nepVK0SCT+svDbxf3RRpSV7UfCi+SRh0Wa0p+qbTijloHi6anCYuZ?=
- =?us-ascii?Q?iIPULIAMYWl1zRks64W0exIWf4J4MENoRtMvA8U7so/+0MtZPKax//pJi1W1?=
- =?us-ascii?Q?eF9x8heH3DOGc99by4n+PaZlB+necHk1jXzJbaH7iLdAd+J/2JkH7iAI/t2D?=
- =?us-ascii?Q?440t7PtYUYBnI3frJXdQ4Yx42jEh4DlW2EK7uHeEqZ/E441dYfoD9t5RXtFg?=
- =?us-ascii?Q?fzauNQBU1U0sx9UbuoCaAVsaL2xN51xUAnyGvAs/TDwfcmEitDQNkFQbYWz8?=
- =?us-ascii?Q?sZpQeLtLljCenuNvL/r/Dp2kvwihr760VkxlnprFOig/En3YWX5NwFpePSg4?=
- =?us-ascii?Q?aCLO8pDHtwHxI+INn2HBih/312A0n/MaKHRTiR0tiuudSSkYU9x2KeNuHnik?=
- =?us-ascii?Q?yJQcWpuH2RzK1nRGWTPPgscKRzFdxWsAxxEuT2+mIxkakhnVWhhhavma2vBg?=
- =?us-ascii?Q?2XnyqSEECqJi6ZX2WMGNzo/wA84ZxHFz2EKbYXz7rfZ1/SFZ5FmoCL1GbDwO?=
- =?us-ascii?Q?o1vfuRGvUCvD9f7au4I1G4t7eZos1HTzY5yCjJMebiE2IRJjEPqyo1LPEez6?=
- =?us-ascii?Q?9yfYwLsB6qz9/xKX6tN7eywDCeYdsUhVPh7fX4MDrGFhxEYdH1TS58xZz7yB?=
- =?us-ascii?Q?ingdwS57fJIfi+EsvBFCpWA/y42ojOBT1PNtU8eh3TaoksHT9OUVihrhDlGf?=
- =?us-ascii?Q?CIToiY/WFjGjc0krGtQyz+kJSAroxofyB9VBZ772uRy7vqQunXg2C9iD3E5L?=
- =?us-ascii?Q?3KgKvxehCy2TF/aqdtLxZeEnA4maouWgaNCykN//G6+SzmTB0fhiQLG7sZz+?=
- =?us-ascii?Q?jNIGQY+TW/LRhCEJXP5npL0UxZSurF1SQbnRZJa2C74vXNyt5GzyVtHkfM0T?=
- =?us-ascii?Q?i4Qn?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?gIgy2COpXhjB0e80DwgmeEnGFiwx8Lied7vzGV/UaDaZHgTQf+7VDA02Kj6Z?=
+ =?us-ascii?Q?pZAgxtXqQhHqfKW5C84H2bHNtVH4ErBeYjatLuVUKPeGyL7wSQM3tMuz//9B?=
+ =?us-ascii?Q?IQpdysOla7ipcwDESRi7rI5FnNth3RtjCnEekFO8H2aCAwEhnQJ16O01Bn8X?=
+ =?us-ascii?Q?MjUKtbZqLRKP7LQCDpAapGeP+cIVkXKB/l3kup3tf4UFDNn3rTVNsfOBXYQy?=
+ =?us-ascii?Q?FM79rhLMJwgT0bWy2IR3UUgH327XtZA5X/LV9gjGAn9OtT63qd5dwd0Kn1u8?=
+ =?us-ascii?Q?OUN/6wuJ0uWJQqopxNpo6mg93RebFGpVzQGcERZikplvDzLd42UCBOUDz/qT?=
+ =?us-ascii?Q?T6QJLSnoAWwbbC40Hd+8H1rQAyiLX4nY9HUeIAjEo+5aRzVgy4+BEs7DMkMM?=
+ =?us-ascii?Q?zIrK8QvWtTd4f1fCKeTzal66K4LoOfcvy2knuaEj43AF5mQ+rb2UHuI5bthN?=
+ =?us-ascii?Q?7P7n708r/eV0dG+FehAtmWjClXKLqQwCS0sTQPdYkyqONsqKfdvdE/dWPlzU?=
+ =?us-ascii?Q?d4YO9aXnS7PrpGZL7FWlfrj5MLkflGytY3V/FOGC8X8mKy7g2WmEfpjMieXj?=
+ =?us-ascii?Q?PCoC+t+VQ5kDAczd+J1wXRCO8mxu92rR3km+UYYgjflkXqRsr+MkjqdcqFcs?=
+ =?us-ascii?Q?KocmjJfoLtxrZDnQ6feihtPzRfp2JV6v+1uAV5ZDspS2js8z/dd5NBDJvhMH?=
+ =?us-ascii?Q?jCFDD+xXmtvhlxImEtk41ec375PGIIF/5yvJVQtV91GM1vjHOlq+cjrfnri+?=
+ =?us-ascii?Q?glUSbUATUvtJxnokbMGwg+2QuAPGdLOpCI4c0JAxeKVPdvMZWGZsxBX+ghrc?=
+ =?us-ascii?Q?Z+olWtLmQMJccaKjMQ9WBs+VmrdnXlfrPHkN+CYfCEOHiubkVOzMlD48wFCW?=
+ =?us-ascii?Q?beuAc019eaC5QQDTvy+M/y8HqL1Lyva1XHmNam3yITzJ+aa4y+xVpTEKjHDS?=
+ =?us-ascii?Q?Qbpoj8P9rZ6sqc/lrz7FzlLmyPskc6n+TAH2uoo/GVRSe+hHZ0fLxLlXo9Es?=
+ =?us-ascii?Q?tzc/?=
 X-OriginatorOrg: leica-geosystems.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 031b3484-b95f-4d4d-1198-08d89648c1c7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26943727-d419-41aa-f39d-08d89648caf9
 X-MS-Exchange-CrossTenant-AuthSource: DB6PR0602MB2886.eurprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2020 22:30:50.7704 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2020 22:31:06.2214 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7AcqWtNvkWv0dzQtolZvMGWqvDiRGT3Cg10crUO2d/T0JwEFNRE6mwP2unNYdb1QelATQ+02tHGGDNmSimGkFXYzqQeyoajedXI31nBNZ/0=
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8hvTi5gQyn5MnIOmFFcnxQipq1vPxjZbziVQb9o+Mc4BHmpB/WyX04O1nzkMNT5MaDnHMQ4tbi+Fgba5LJ42Vgpmc4gjsNBC1pHSELMuwzY=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR06MB6236
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201201_173053_920168_41EA1C28 
-X-CRM114-Status: GOOD (  11.12  )
+X-CRM114-CacheID: sfid-20201201_173107_663360_3B5B1FE2 
+X-CRM114-Status: GOOD (  11.66  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -158,13 +158,13 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201201222919.U_PS0EvjdWjKErTjCw7Sz-TzkM2hEIq67VGO28MNFEE@z>
+Message-ID: <20201201222922.czrXl53hRSZyM6NTWYuq2KfUSeZCk4c4UXKjmi2QFSA@z>
 
 Commit 7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is
 unused") removed geenric_bl driver from the tree, together with
 corresponding config option.
 
-Remove BACKLIGHT_GENERIC config item from arm64 configuration.
+Remove BACKLIGHT_GENERIC config item from generic-64bit_defconfig.
 
 Fixes: 7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is unused")
 Cc: Sam Ravnborg <sam@ravnborg.org>
@@ -172,22 +172,23 @@ Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
 Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
 Acked-by: Sam Ravnborg <sam@ravnborg.org>
+Acked-by: Michael Ellerman <mpe@ellerman.id.au>
 ---
- arch/arm64/configs/defconfig | 1 -
+ arch/powerpc/configs/powernv_defconfig | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 8e3f7ae71de5..280ed7404a1d 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -681,7 +681,6 @@ CONFIG_DRM_PANFROST=m
- CONFIG_FB=y
- CONFIG_FB_MODE_HELPERS=y
- CONFIG_FB_EFI=y
+diff --git a/arch/powerpc/configs/powernv_defconfig b/arch/powerpc/configs/powernv_defconfig
+index cf30fc24413b..60a30fffeda0 100644
+--- a/arch/powerpc/configs/powernv_defconfig
++++ b/arch/powerpc/configs/powernv_defconfig
+@@ -208,7 +208,6 @@ CONFIG_FB_MATROX_G=y
+ CONFIG_FB_RADEON=m
+ CONFIG_FB_IBM_GXT4500=m
+ CONFIG_LCD_PLATFORM=m
 -CONFIG_BACKLIGHT_GENERIC=m
- CONFIG_BACKLIGHT_PWM=m
- CONFIG_BACKLIGHT_LP855X=m
+ # CONFIG_VGA_CONSOLE is not set
  CONFIG_LOGO=y
+ CONFIG_HID_A4TECH=m
 -- 
 2.17.1
 
