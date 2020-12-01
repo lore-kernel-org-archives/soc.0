@@ -7,17 +7,17 @@ X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B60EC64E7A
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 13:45:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08F2EC64E7A
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 13:45:40 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 07DD12151B
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 13:45:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 685E620770
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 13:45:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="zZb03JZh";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b="ZKQNqj4k"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 07DD12151B
+	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="ATElxr/J";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b="vpT3Woau"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 685E620770
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -26,65 +26,65 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=3rhdSCKrjEb4CcQz7drfjWhBkGFx5hsuihqESUMnArQ=; b=zZb03JZhj+4e4eHvn/5mt+UMk
-	iujMRjPV1snHqjBhhHvzq/f+M8LZ9TvIIo0/FdvxbdvUYqRZYk+mNiBT/16lBrZZ7Ld0dsA2aEA2B
-	JFx+OASCQprt7bKyNGPlbYJmelPcf8EaXyNXM9G0KODIZfBPjd7CouJz830MTFdH6n/DouKFA+CcW
-	k/O4QIvBtLmNlZ+tin5virpQGIcTIhd9Em0TJrN7VfldXEldTPNYOgCouXHf9eWGEM0yUF0+U72jp
-	y9l5grGR0DEBePenIzrr0pLF9LCnVI04mD4mqPtpM56Et8BjxTMw5mDgMYYxCExBmhDPeK/eIDHy3
-	VYp4LKmEQ==;
+	 bh=mZWhGEH3UgLQc1G69Ibh9xqRbX+6PI5HqT2/KX7BqUY=; b=ATElxr/J7S6YGWeGX15Sp8A/G
+	5QripFloU1UCQpz29GQ7yBqH1tjKiJnnCQK/nh1vyt/8GJ2qH7FwiX4HUlf5mh2jgEZvl8kLWYRvb
+	dqmJy0VbBSIWQOtXPfiq3a+/5DXMnC2FgL1mXCF0uIDt0SOkqhPh5ift8MzyCpHDlhuJV7mspoaRq
+	sgmIM77h+2QaNfZCT9XxyxLFCAdCX/YWK9LA3fwVbk+lcXAJLnW9nPJaQlJ6SL7vdDxk9YguWZQhv
+	mMIbBP9SgGX/mCareceTq1CrJsqLiNWxANv2mPKHVp5uU1denUgBsSE6g/4eCScZ4G0LuDQHTvnOk
+	q7x1gb9cA==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kk5wz-00074s-UL; Tue, 01 Dec 2020 13:44:14 +0000
-Received: from mail-pf1-x444.google.com ([2607:f8b0:4864:20::444])
+	id 1kk5xE-00079x-WD; Tue, 01 Dec 2020 13:44:29 +0000
+Received: from mail-pj1-x1034.google.com ([2607:f8b0:4864:20::1034])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kk5wo-00071J-3d
- for linux-arm-kernel@lists.infradead.org; Tue, 01 Dec 2020 13:44:02 +0000
-Received: by mail-pf1-x444.google.com with SMTP id s21so1118715pfu.13
+ id 1kk5ws-00072a-79
+ for linux-arm-kernel@lists.infradead.org; Tue, 01 Dec 2020 13:44:07 +0000
+Received: by mail-pj1-x1034.google.com with SMTP id h7so780925pjk.1
  for <linux-arm-kernel@lists.infradead.org>;
- Tue, 01 Dec 2020 05:44:01 -0800 (PST)
+ Tue, 01 Dec 2020 05:44:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=QhVjwYmrLBjTere/8qkNqVKV4ikj/p2zvRp7BGZNQtM=;
- b=ZKQNqj4kph80u620UibIsXqnoxPNGtFGOt3TTEBC1XaRy09V888raF64Bhtgz6sOrk
- /xsiR+FATTTTccnyGAELk8Rpj6AtHWRWuMh2AfHFqkq5kWkU+ulQ/TWjrrDD6s7tRalu
- qw2CkzHrvL83jj/ehKW3ddp347z7u5c7ZQH80=
+ bh=Mfswc8PEaRtag64wvufOaanDCqQevd/LVNeXXXGVpMk=;
+ b=vpT3Woau4ZWljZ1nCO99FgLu7buS9p6fLSz7J6xJT+ocVzNUie5zI31MXRs+6OCZ1R
+ jV2WVqfd05kEbhnikrSi8OI0ATaYmS94opgt+7zLoS4r+gDlUtk+EA9gVLOkFBa9rsO8
+ n5vU2AioWdAkQRqtivql3S5ah/G9lzjQ1eZes=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=QhVjwYmrLBjTere/8qkNqVKV4ikj/p2zvRp7BGZNQtM=;
- b=fYBeayspXCW7uqMI3Hi7jrPbtvDHKOb3lQpwDoSQDp687rDO6SMIIcbnvMi/WZUa8u
- qyoytleYCKMtlS9jSqmJw9OWAQXnHJqJopld7N/MBh8GU3ErjoWXi5/vrct4V+FOmgI0
- MSJXNhjD/Vg3u2+0oliHc3YQL67H0s8YYDZ2F3kd+cDj+dlKZg1wodSuCFsUiwkev+Kr
- 3CqXHrdbg33mtqEjo8e567vdVNi4qf6mlWimvMoX/6A1Jo9gjS9jXIp8qM6EXP7FYs1F
- 44uI/f7fwoxJp+pz0Dkm+NzSJFOTYHmznSTzbXBuUBSv+W47ZUe3+9cWyjCTUqLONmWY
- wGoA==
-X-Gm-Message-State: AOAM530Tm5zeBX9B9M0AMezqaRQtXPNIOmngAzHSm8FCqIiG/yOBP1Yi
- pmEbt0aMbyyzsSFn9j1JAXsJDQ==
-X-Google-Smtp-Source: ABdhPJzSqLPkSH7u9yo7acIkChjMg0tnTuSVTqrelaL8V1sTewnWOzC6QPFtGj395NrAKbryp/7J/A==
-X-Received: by 2002:aa7:8055:0:b029:19b:694:34b2 with SMTP id
- y21-20020aa780550000b029019b069434b2mr2601424pfm.2.1606830240351; 
- Tue, 01 Dec 2020 05:44:00 -0800 (PST)
+ bh=Mfswc8PEaRtag64wvufOaanDCqQevd/LVNeXXXGVpMk=;
+ b=cy8myFY+iVS3goVGsYfjNuHabWbHMxzcgKurRXQ9QsZcLiqy2sn7Bv+knbcQURLFhz
+ 6ZxYbKmSdOnoTkrueoY/i7ZjNDW/ZmyNPrhMPRGZTDHXcSUDXDzPIbU93KViauzHg997
+ sfcKQFuKSa8jA0gTd9D0l6yROZeKT32IoyXleILHMrJACBi5PbJ78w51B91WffcpQc3q
+ 47RO5V/X6Jr5JDOh+a4NFJVntt+8+gYqyoADf//IxbhzumOPiioOHkRl7OHrCLNIkITX
+ yD2m2+RFjsX5QyKmNwyEXw98W/TG/3Um8hGUujfUYa4b7spDzLYfFupBgaNU546h6t/x
+ OlnA==
+X-Gm-Message-State: AOAM531W9b9SFemUwvwICMuMnq6/bGCf7BBRf3vyjGXAtKm3oF4XpC+T
+ +om2MnjzGwCv5Ax5JGpk4/giUQ==
+X-Google-Smtp-Source: ABdhPJwnn6rmrGvU0u1/dzlVI7LKYNnPN9/BPUhuah7+Sf97+hAv2LvRqgmfqktN5dXOVn5IwRMcbA==
+X-Received: by 2002:a17:90a:1782:: with SMTP id
+ q2mr2835569pja.189.1606830243094; 
+ Tue, 01 Dec 2020 05:44:03 -0800 (PST)
 Received: from shiro.work (p1268123-ipngn200803sizuokaden.shizuoka.ocn.ne.jp.
  [118.13.124.123])
- by smtp.googlemail.com with ESMTPSA id g14sm2839248pji.32.2020.12.01.05.43.57
+ by smtp.googlemail.com with ESMTPSA id g14sm2839248pji.32.2020.12.01.05.44.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Dec 2020 05:43:59 -0800 (PST)
+ Tue, 01 Dec 2020 05:44:02 -0800 (PST)
 From: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
 To: devicetree@vger.kernel.org, soc@kernel.org,
  linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 08/10] ARM: mstar: Add smp ctrl registers to infinity2m dtsi
-Date: Tue,  1 Dec 2020 22:43:28 +0900
-Message-ID: <20201201134330.3037007-9-daniel@0x0f.com>
+Subject: [PATCH v2 09/10] ARM: mstar: Wire up smpctrl for SSD201/SSD202D
+Date: Tue,  1 Dec 2020 22:43:29 +0900
+Message-ID: <20201201134330.3037007-10-daniel@0x0f.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201201134330.3037007-1-daniel@0x0f.com>
 References: <20201201134330.3037007-1-daniel@0x0f.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201201_084402_241106_31A16865 
-X-CRM114-Status: GOOD (  11.57  )
+X-CRM114-CacheID: sfid-20201201_084406_379441_26AAB864 
+X-CRM114-Status: GOOD (  11.51  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,30 +102,28 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201201134328.P77N8d1769FcEmgxWkpobZO08TMj8xDJMZ07HrZ2wGo@z>
+Message-ID: <20201201134329.8H-lgMQAW6t0Qy6je4DXPWL071n4g_6kWDIfszZ2qDM@z>
 
-Add the smpctrl registers to the infinity2m dtsi so that the
-second CPU can be enabled on chips in this family.
+Add the specific compat string for the smpctrl registers to the
+SSD201/SSD202D common dtsi.
 
 Signed-off-by: Daniel Palmer <daniel@0x0f.com>
 ---
- arch/arm/boot/dts/mstar-infinity2m.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/arm/boot/dts/mstar-infinity2m-ssd20xd.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm/boot/dts/mstar-infinity2m.dtsi b/arch/arm/boot/dts/mstar-infinity2m.dtsi
-index 02adb9fe9d3c..6d4d1d224e96 100644
---- a/arch/arm/boot/dts/mstar-infinity2m.dtsi
-+++ b/arch/arm/boot/dts/mstar-infinity2m.dtsi
-@@ -13,3 +13,10 @@ cpu1: cpu@1 {
- 		reg = <0x1>;
- 	};
- };
+diff --git a/arch/arm/boot/dts/mstar-infinity2m-ssd20xd.dtsi b/arch/arm/boot/dts/mstar-infinity2m-ssd20xd.dtsi
+index 0811220f0a79..7a5e28b33f96 100644
+--- a/arch/arm/boot/dts/mstar-infinity2m-ssd20xd.dtsi
++++ b/arch/arm/boot/dts/mstar-infinity2m-ssd20xd.dtsi
+@@ -5,3 +5,8 @@
+  */
+ 
+ #include "mstar-infinity2m.dtsi"
 +
-+&riu {
-+	smpctrl: smpctrl@204000 {
-+		reg = <0x204000 0x200>;
-+		status = "disabled";
-+	};
++&smpctrl {
++	compatible = "sstar,ssd201-smpctrl", "mstar,smpctrl";
++	status = "okay";
 +};
 -- 
 2.29.2
