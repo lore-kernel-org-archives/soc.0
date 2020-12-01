@@ -1,188 +1,150 @@
-Return-Path: <SRS0=H/Sv=FF=lists.ozlabs.org=linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=1iVd=FF=baylibre.com=khilman@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15891C71155
-	for <linuxppc-dev@archiver.kernel.org>; Tue,  1 Dec 2020 22:37:05 +0000 (UTC)
-Received: from lists.ozlabs.org (lists.ozlabs.org [203.11.71.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D29D0C71156
+	for <soc@archiver.kernel.org>; Tue,  1 Dec 2020 22:37:54 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7FEBA2087C; Tue,  1 Dec 2020 22:37:54 +0000 (UTC)
+Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3262520671
-	for <linuxppc-dev@archiver.kernel.org>; Tue,  1 Dec 2020 22:37:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id CAE1D208C3
+	for <soc@kernel.org>; Tue,  1 Dec 2020 22:37:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b="YD7AkX/g"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3262520671
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=leica-geosystems.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org
-Received: from bilbo.ozlabs.org (lists.ozlabs.org [IPv6:2401:3900:2:1::3])
-	by lists.ozlabs.org (Postfix) with ESMTP id 4ClxmY5VRnzDqSr
-	for <linuxppc-dev@archiver.kernel.org>; Wed,  2 Dec 2020 09:37:01 +1100 (AEDT)
-Authentication-Results: lists.ozlabs.org; spf=pass (sender SPF authorized)
- smtp.mailfrom=leica-geosystems.com (client-ip=40.107.6.104;
- helo=eur04-db3-obe.outbound.protection.outlook.com;
- envelope-from=andrey.zhizhikin@leica-geosystems.com; receiver=<UNKNOWN>)
-Authentication-Results: lists.ozlabs.org; dmarc=pass (p=quarantine dis=none)
- header.from=leica-geosystems.com
-Authentication-Results: lists.ozlabs.org; dkim=pass (1024-bit key;
- unprotected) header.d=leica-geosystems.com header.i=@leica-geosystems.com
- header.a=rsa-sha256 header.s=selector1 header.b=YD7AkX/g; 
- dkim-atps=neutral
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com
- (mail-eopbgr60104.outbound.protection.outlook.com [40.107.6.104])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by lists.ozlabs.org (Postfix) with ESMTPS id 4ClxdZ1cn0zDqsC
- for <linuxppc-dev@lists.ozlabs.org>; Wed,  2 Dec 2020 09:30:58 +1100 (AEDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fIOz3WMHUvjdLhmxE2uEBzzbdx4V55BoI6Ygfp6RazOKIWimvNee3aO8vc4S0/DFlRbO4MpDk2DgrSzZhqLBHoujssG1unmwZRkuK3PN+Y7Pqk8+QgMm8YI5AqNdCzn/LBHttEWkHqexomHysTkRvbeMmhaSCMOUME8nssRQ83mNzuKiGfmSERLnO/XOfLj1C906gHHJx+2zE5iU6YAonp7jKy02PS5A9GH+pdRqeED+D+QOuhsO2yhgh3kIn74xkkrJ9HjNhvj7Ajfx+wzxDe+ErjgOf7vXytsfvr0NfCU6A/8N0wD/VhEsIXJNEJXTQ1xjb26tWrqSpHniDxX4tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0wJjQAZHI5NHAdE2q6LEx8sK4q6pN8M0elUMSYPsAqg=;
- b=HCptyY6r28ExFIx1N9Xrcchn8YiDLgCbe+UqDKupMfYuKsm+M+d2YDPIV5HUw18oAAKFrHVkO3/v4aWrJTMUGinNyAkq7KJ1iiGpHbABmq4tFicoG7Y08z376ZQQVxgpLOEo9iS2ZjiHChwvPRYfbT0UzVSwAeAeFqzZoGzV811fEcL2XNBpmc1POnJQ5jhsYtx5LFsSJpcfxiBAEiudcwfLz+FqBUktIh6VNjI+SKPb2PDsyAwuiR56SFbaoZoxJ7VGwgSZSRfJMU9pp+Nu22TRExKFu47LFFyUAVlXm3n5GZ8WgmiiBdvhZiYTXoaKRu+kyv+AarS7n47fXCeHZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
- header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com; 
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0wJjQAZHI5NHAdE2q6LEx8sK4q6pN8M0elUMSYPsAqg=;
- b=YD7AkX/g+iGwK60sH5ekUZqua9ZiQ18JmtHmO8ub07iY9GCTHqiGujaUBCzUH052f+HHg9BWK9BkymdRJeNef9dSGXASW7CprGmfEmV2YTG2bylbKkAEOsXjzDveE3CPaphtkfnao/Ddh9/eJDQPxwpwRWMP7UFz5SJGPOdliF0=
-Authentication-Results: armlinux.org.uk; dkim=none (message not signed)
- header.d=none;armlinux.org.uk; dmarc=none action=none
- header.from=leica-geosystems.com;
-Received: from DB6PR0602MB2886.eurprd06.prod.outlook.com (2603:10a6:4:9b::11)
- by DB8PR06MB6236.eurprd06.prod.outlook.com (2603:10a6:10:10a::26)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Tue, 1 Dec
- 2020 22:30:50 +0000
-Received: from DB6PR0602MB2886.eurprd06.prod.outlook.com
- ([fe80::49c3:4b5b:289c:d62c]) by DB6PR0602MB2886.eurprd06.prod.outlook.com
- ([fe80::49c3:4b5b:289c:d62c%12]) with mapi id 15.20.3611.025; Tue, 1 Dec 2020
- 22:30:50 +0000
-From: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="UNKpHjbd"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CAE1D208C3
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=khilman@baylibre.com
+Received: by mail-pj1-f68.google.com with SMTP id r20so2237008pjp.1
+        for <soc@kernel.org>; Tue, 01 Dec 2020 14:37:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=KdghF0122FkdkajYNIvGjUxGJDb5bbiau51gZyMHydI=;
+        b=UNKpHjbdsMYXdbfn/uoRrsVxy0NpYYnKpjEP3/cHRDLlr1/X5TEF9n59jfFdsU7Iq7
+         +osUCQmEg3FGjnaTYoJ2G1yROuO0X6IYtgAsewj3n/XvI4XYB9smGAC4jt5mWoT3xXE/
+         4HxgxVpxsPHbyhMtD0px6LaGpVZ8XDMTkl+brvW/b7wlHTscjp1CRfnKSpqiiX0zIENs
+         EiYUNlfa929747mS9KSQuNxLZ6anDl87fsl9txIIhoxrFdXAnVEsCRBg0n6hHJEziiWU
+         MnTCwh6y0kfteIRnlk2XICd7Ho7AUeHx4NPGCzqU/G5izR3xgjBQ1saHvKzJW1AmJis7
+         O29A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=KdghF0122FkdkajYNIvGjUxGJDb5bbiau51gZyMHydI=;
+        b=q1D998MNAuo9pJHZxWm5Hg/9W78d2SDuYzVIzv8o50jDeZ0wPuMSsPEcRHoVWCDV8N
+         NLSWTGavxc2EruJi2BX+7v4yHH4HFZMrEfP9dKSmzamSDsSQShQTIy7GhxoFpC13T4Hu
+         VFfQ3xwSyLC8JRnxVg2rB0FTAUOBPxfVREnHgV+i6S/hNPFT4iChqVJnAiRi6yAeh1JR
+         h+iYq4MI2yrj4loGLkpwXgBX8kSAkIHS4SUReez3P+VWaRFiNA7BYeb95AsLOjsMcfdW
+         7VLoMlqiju/yytaP29KJncTrYa6+gPQO8I00jG5huq3ofE3R5zsGdz9wbHchRww6KMTC
+         hXQw==
+X-Gm-Message-State: AOAM531fgugHhsfwVrBoa92diw9i7FH7ilYbRu2vhehRFhbIeaPkMR6A
+	iQg2fhUSS8SGL1fbEi7MsYMl3EjNGxR4t1gr
+X-Google-Smtp-Source: ABdhPJzkFrwLX0tr6PJuC6PMOnBnNCFePCKm0vfgHnd5DQROHh+YdCAmIbZ44sKIAzPlTQo5A+je8A==
+X-Received: by 2002:a17:902:bc86:b029:da:9da4:3092 with SMTP id bb6-20020a170902bc86b02900da9da43092mr3976245plb.71.1606862272720;
+        Tue, 01 Dec 2020 14:37:52 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id q5sm785613pff.36.2020.12.01.14.37.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Dec 2020 14:37:51 -0800 (PST)
+From: Kevin Hilman <khilman@baylibre.com>
 List-Id: <soc.lore.kernel.org>
-To: linux@armlinux.org.uk, nicolas.ferre@microchip.com,
- alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
- tony@atomide.com, mripard@kernel.org, wens@csie.org,
- jernej.skrabec@siol.net, thierry.reding@gmail.com, jonathanh@nvidia.com,
- catalin.marinas@arm.com, will@kernel.org, tsbogend@alpha.franken.de,
- James.Bottomley@HansenPartnership.com, deller@gmx.de, mpe@ellerman.id.au,
- benh@kernel.crashing.org, paulus@samba.org, lee.jones@linaro.org,
- sam@ravnborg.org, emil.l.velikov@gmail.com, daniel.thompson@linaro.org,
- krzk@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, soc@kernel.org
-Subject: [PATCH v2 2/5] arm64: defconfig: drop unused BACKLIGHT_GENERIC option
-Date: Tue,  1 Dec 2020 22:29:19 +0000
-Message-ID: <20201201222922.3183-3-andrey.zhizhikin@leica-geosystems.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201201222922.3183-1-andrey.zhizhikin@leica-geosystems.com>
-References: <20201201222922.3183-1-andrey.zhizhikin@leica-geosystems.com>
-Content-Type: text/plain
-X-Originating-IP: [193.8.40.112]
-X-ClientProxiedBy: ZR0P278CA0080.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:22::13) To DB6PR0602MB2886.eurprd06.prod.outlook.com
- (2603:10a6:4:9b::11)
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] arm64: dts: amlogic updates for v5.11
+Date: Tue, 01 Dec 2020 14:37:50 -0800
+Message-ID: <7heek9jgox.fsf@baylibre.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from aherlnxbspsrv01.lgs-net.com (193.8.40.112) by
- ZR0P278CA0080.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:22::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3632.17 via Frontend Transport; Tue, 1 Dec 2020 22:30:49 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 031b3484-b95f-4d4d-1198-08d89648c1c7
-X-MS-TrafficTypeDiagnostic: DB8PR06MB6236:
-X-Microsoft-Antispam-PRVS: <DB8PR06MB623656568E000446D98C9392A6F40@DB8PR06MB6236.eurprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1107;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 28UMAZ9JvRCAXWzGWSSmUqPul0y1yOLmgkzkqJIRnmPPecJ7eZFOqzEjnRkTDjbIYd1zRR4iGcI/7SHR16M2l2eCTcpvsQiN4qXZPp9fvnBnzI7xrF4Q6jYG0o+waj/U0YGxphYMu8wi3Zv+brhsGucAVNZBavQ+9OmJy/nkcZCrTZdX2eY8tZ03kQEvGwcJgUJJymecYhvqyOCHLSN6VQS+8op7bncOT5HT8d2chlTQpdTksGE4hJrhCD8cHTMdQfmeP8C/4BgZy4CQWCypvk9LZY/Gg/t5rKICYszMsGv/anBINyCg0hA+7/4/fn9dumMBo5AcaSz5mB3Bn/rtFCmaKgYzFCfla3h0HBMIRctr5PiOf5+bjeB/IOQf72gMwVsGPPjkkxexg2l2kxR3cw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DB6PR0602MB2886.eurprd06.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(4636009)(346002)(136003)(366004)(39860400002)(396003)(376002)(66476007)(6666004)(66556008)(86362001)(66946007)(26005)(1076003)(186003)(36756003)(8676002)(16526019)(83380400001)(2906002)(6512007)(478600001)(8936002)(7406005)(316002)(7416002)(2616005)(52116002)(921005)(956004)(44832011)(5660300002)(6486002)(6506007)(41533002);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?/CgIwPcpPaZ9PNI8HHVOFGlFtyykQWC7uLaFAg5pgBrX9x320VOnvOtN6txR?=
- =?us-ascii?Q?AgQbO5Ij1PKHeHWFftxPX6XnCEOcx3DRz4I7n1HE98Hel9lQUkgq7nWKp4EZ?=
- =?us-ascii?Q?wmdvoX2nepVK0SCT+svDbxf3RRpSV7UfCi+SRh0Wa0p+qbTijloHi6anCYuZ?=
- =?us-ascii?Q?iIPULIAMYWl1zRks64W0exIWf4J4MENoRtMvA8U7so/+0MtZPKax//pJi1W1?=
- =?us-ascii?Q?eF9x8heH3DOGc99by4n+PaZlB+necHk1jXzJbaH7iLdAd+J/2JkH7iAI/t2D?=
- =?us-ascii?Q?440t7PtYUYBnI3frJXdQ4Yx42jEh4DlW2EK7uHeEqZ/E441dYfoD9t5RXtFg?=
- =?us-ascii?Q?fzauNQBU1U0sx9UbuoCaAVsaL2xN51xUAnyGvAs/TDwfcmEitDQNkFQbYWz8?=
- =?us-ascii?Q?sZpQeLtLljCenuNvL/r/Dp2kvwihr760VkxlnprFOig/En3YWX5NwFpePSg4?=
- =?us-ascii?Q?aCLO8pDHtwHxI+INn2HBih/312A0n/MaKHRTiR0tiuudSSkYU9x2KeNuHnik?=
- =?us-ascii?Q?yJQcWpuH2RzK1nRGWTPPgscKRzFdxWsAxxEuT2+mIxkakhnVWhhhavma2vBg?=
- =?us-ascii?Q?2XnyqSEECqJi6ZX2WMGNzo/wA84ZxHFz2EKbYXz7rfZ1/SFZ5FmoCL1GbDwO?=
- =?us-ascii?Q?o1vfuRGvUCvD9f7au4I1G4t7eZos1HTzY5yCjJMebiE2IRJjEPqyo1LPEez6?=
- =?us-ascii?Q?9yfYwLsB6qz9/xKX6tN7eywDCeYdsUhVPh7fX4MDrGFhxEYdH1TS58xZz7yB?=
- =?us-ascii?Q?ingdwS57fJIfi+EsvBFCpWA/y42ojOBT1PNtU8eh3TaoksHT9OUVihrhDlGf?=
- =?us-ascii?Q?CIToiY/WFjGjc0krGtQyz+kJSAroxofyB9VBZ772uRy7vqQunXg2C9iD3E5L?=
- =?us-ascii?Q?3KgKvxehCy2TF/aqdtLxZeEnA4maouWgaNCykN//G6+SzmTB0fhiQLG7sZz+?=
- =?us-ascii?Q?jNIGQY+TW/LRhCEJXP5npL0UxZSurF1SQbnRZJa2C74vXNyt5GzyVtHkfM0T?=
- =?us-ascii?Q?i4Qn?=
-X-OriginatorOrg: leica-geosystems.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 031b3484-b95f-4d4d-1198-08d89648c1c7
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR0602MB2886.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2020 22:30:50.7704 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7AcqWtNvkWv0dzQtolZvMGWqvDiRGT3Cg10crUO2d/T0JwEFNRE6mwP2unNYdb1QelATQ+02tHGGDNmSimGkFXYzqQeyoajedXI31nBNZ/0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR06MB6236
-X-BeenThere: linuxppc-dev@lists.ozlabs.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
-List-Unsubscribe: <https://lists.ozlabs.org/options/linuxppc-dev>,
- <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=unsubscribe>
-List-Archive: <http://lists.ozlabs.org/pipermail/linuxppc-dev/>
-List-Post: <mailto:linuxppc-dev@lists.ozlabs.org>
-List-Help: <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=help>
-List-Subscribe: <https://lists.ozlabs.org/listinfo/linuxppc-dev>,
- <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=subscribe>
-Errors-To: linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org
-Sender: "Linuxppc-dev"
- <linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org>
-Message-ID: <20201201222919.GfwcbCanHp5OfZV_cvIiObLc0NbwC6YBsHSYhoIzXVQ@z>
+Content-Type: text/plain
 
-Commit 7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is
-unused") removed geenric_bl driver from the tree, together with
-corresponding config option.
+Arnd, Olof,
 
-Remove BACKLIGHT_GENERIC config item from arm64 configuration.
+Note that this branch pulls in a tag from the clk-meson tree which has
+already been queued for clk-next.  This is for a couple new clock IDs.
+I also included my amlogic-fixes tag (which you've already pulled) to
+fix up potential conflicts.
 
-Fixes: 7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is unused")
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
----
- arch/arm64/configs/defconfig | 1 -
- 1 file changed, 1 deletion(-)
+Kevin
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 8e3f7ae71de5..280ed7404a1d 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -681,7 +681,6 @@ CONFIG_DRM_PANFROST=m
- CONFIG_FB=y
- CONFIG_FB_MODE_HELPERS=y
- CONFIG_FB_EFI=y
--CONFIG_BACKLIGHT_GENERIC=m
- CONFIG_BACKLIGHT_PWM=m
- CONFIG_BACKLIGHT_LP855X=m
- CONFIG_LOGO=y
--- 
-2.17.1
 
+The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+
+  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic.git tags/amlogic-dt64
+
+for you to fetch changes up to b6a1c8a1eaa73b1e2ae251399308e9445d74cef7:
+
+  arm64: dts: meson-sm1: fix typo in opp table (2020-11-30 16:12:46 -0800)
+
+----------------------------------------------------------------
+arm64: dts: amlogic updates for v5.11
+- AXG SoCs: add/enable PCIe & USB OTG support
+- AXG SoCs: add MIPI DSI support
+- Khadas VIM: add RTC
+- several cleanups & fixups
+
+----------------------------------------------------------------
+Anand Moon (1):
+      arm64: dts: amlogic: add missing ethernet reset ID
+
+Artem Lapkin (1):
+      arm64: dts: meson: fix spi-max-frequency on Khadas VIM2
+
+Christian Hewitt (7):
+      arm64: dts: meson: remove empty lines from aml-s905x-cc v2 dts
+      arm64: dts: meson: add watchdog to g12-common dtsi
+      arm64: dts: meson: enable rtc node on Khadas VIM1/VIM2 boards
+      arm64: dts: meson: Add capacity-dmips-mhz attributes to GXM
+      arm64: dts: meson: add rtc aliases to meson-khadas-vim3.dtsi
+      arm64: dts: meson: update the Khadas VIM3/3L LED bindings
+      arm64: dts: meson: add KHAMSIN IR remote node to SML5442TW
+
+Dongjin Kim (1):
+      arm64: dts: meson-sm1: fix typo in opp table
+
+Jerome Brunet (1):
+      arm64: dts: meson: odroid-n2 plus: fix vddcpu_a pwm
+
+Kevin Hilman (2):
+      Merge tag 'amlogic-fixes' into v5.11/dt64
+      Merge tag 'clk-meson-v5.11-headers-1' of git://github.com/BayLibre/clk-meson into v5.11/dt64-deps
+
+Martin Blumenstingl (2):
+      arm64: dts: amlogic: meson-g12: use the G12A specific dwmac compatible
+      ARM: dts: meson8: remove two invalid interrupt lines from the GPU node
+
+Neil Armstrong (8):
+      arm64: dts: meson-axg: add USB nodes
+      arm64: dts: meson-axg-s400: enable USB OTG
+      dt-bindings: clk: axg-clkc: add Video Clocks
+      dt-bindings: clk: axg-clkc: add MIPI DSI Host clock binding
+      arm64: dts: meson-axg: add PWRC node
+      arm64: dts: meson-axg: add MIPI DSI PHY nodes
+      arm64: dts: meson-axg: add PCIe nodes
+      arm64: dts: meson-axg-s400: enable PCIe M.2 Key E slots
+
+Scott K Logan (1):
+      arm64: dts: meson: add missing g12 rng clock
+
+ arch/arm64/boot/dts/amlogic/meson-axg-s400.dts                  |  16 +++
+ arch/arm64/boot/dts/amlogic/meson-axg.dtsi                      | 174 +++++++++++++++++++++++++++++++
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi               |  12 ++-
+ arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2-plus.dts       |   2 +-
+ arch/arm64/boot/dts/amlogic/meson-gx.dtsi                       |   3 +
+ arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dts       |   4 +
+ arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dts      |   3 +-
+ arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc-v2.dts |   4 -
+ arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dts           |   5 +-
+ arch/arm64/boot/dts/amlogic/meson-gxm.dtsi                      |  20 ++++
+ arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi              |  15 ++-
+ arch/arm64/boot/dts/amlogic/meson-sm1.dtsi                      |   2 +-
+ include/dt-bindings/clock/axg-clkc.h                            |  25 +++++
+ 13 files changed, 268 insertions(+), 17 deletions(-)
