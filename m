@@ -5,49 +5,49 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C357C8300F
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 22:32:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81C99C71155
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 22:32:15 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D5AD820870
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 22:32:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id EB3E520671
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 22:32:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="Oq/MJdca";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b="eQ09sOk7"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D5AD820870
+	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="UXjbHczp";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b="PzLaCUF2"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EB3E520671
 Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=leica-geosystems.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
 	Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe
-	:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:Reply-To:Cc:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=jdaQf+XhYEPOuyfgNrP8nqRS8tnWgXR7oVjcLPe68q8=; b=Oq/MJdca8CTamaIsvTPzr1+vsk
-	8b90lKPGDR+s0YobvyMdiSCbwQK+Tc4AQoohljMqOOIP3ghOwo0V8euLWWpmAgz/bmO7c7+JH6hPs
-	lc+hGawVbsI4xpoIPL/IckkvGOlaliSzGUq26Xx0PjdMidqNwFEgIq1pnfD34hZvqkfZyRIoEnu37
-	EHu3xES4JPL6PJvjhMKdtUu8013GHieA98WPR0MdPy2X+wLCFFYN74NOhJRmXePnpLxyN5/Zp+nBY
-	cDbUZ6CfQ/9SsN6KJV5Oy526SOtSZwWVHy/ySHYx4Lcqo4kTFvwYXdLMs7z5wLVQ2lkr9SBD12w3q
-	Tg0BLxuA==;
+	:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:To:From:
+	Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	bh=eC+RnWL57KCFs7uYTdpvgbKGmUs1w131Y3lFWsX7lXk=; b=UXjbHczpxdB7BmOEqBdXSqHvaQ
+	dIZwmmHtWm8UKrzFuStqvYexRnQyjSosBWiNYZah7gQEhlq5C5MXwILWh+/Mh0r8xoE6VyqZP2o/g
+	nGnU988M4Iv4cRXA4ukSme2Sy6qwYTA3Y5BPFvFNMRyc2xUfshdlj6ZCtUsgpmZ/vK8rQEhUKRY9s
+	xesmwI0jaRgw8bR6wEQHQggRV5/PtkohVABSrKIMxuGRu8Q99fc7E6OqEOS4+PmKIsFBg48rpHo4L
+	4nmCgLLVNoyHM4fshW0NXhPnMZ1v5c2MhtB/8GJyOZzKJBdgwFeU2XIhZ5BFXYH+431Oa2VhSIg/l
+	x7WWU1VA==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kkEAQ-0005lA-9x; Tue, 01 Dec 2020 22:30:38 +0000
-Received: from mail-eopbgr40136.outbound.protection.outlook.com
- ([40.107.4.136] helo=EUR03-DB5-obe.outbound.protection.outlook.com)
+	id 1kkEAd-0005mn-RO; Tue, 01 Dec 2020 22:30:51 +0000
+Received: from mail-eopbgr60121.outbound.protection.outlook.com
+ ([40.107.6.121] helo=EUR04-DB3-obe.outbound.protection.outlook.com)
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kkEAM-0005kh-NI
- for linux-arm-kernel@lists.infradead.org; Tue, 01 Dec 2020 22:30:36 +0000
+ id 1kkEAb-0005mN-OV
+ for linux-arm-kernel@lists.infradead.org; Tue, 01 Dec 2020 22:30:50 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I2c0WH89Y8pIqElsF5MM4xB6UZlgcXBeGESFjLP3qkNOy1onL/xjQYEtJhw48yt+huRo9yNmF5LsV3N8pE4B6odYDFJWwz5IVEdZ5mvVzWstleqMurgyYH1O6uiDqtk+CU1LGkaI/q8QiNF7KoVLmP+sTTE+9LP1dljcYyUNDYhsNQeKPYbdWubMcwdnzlg5s12X5AeSGKU7ic6Eoh9ucvQuP7S+YnM6q6TvYJatLANr/ovddNJX6KC2/TBkNK3/gIg2eSW0vLfX669FrXTpvDbnpCQZHQEp5htF3e9Xl+sRYiAdz3Z1yEVtjZjnfD+jGdtAdrJFLLl4076PfnVjKg==
+ b=mgZwiMM1Snra1VgFMCHLcqVvHYx2aL5AcqXn32DTkFLv9pHBWVUTKIDrbdeKlxr6JCybhMq5Ty7DmanUzHzFafl6GGn9hyRP4RTX9jwQ+VGUFiOBg0U+CkrFQrKTFVPtJlN5GFhrV/r2aFlZkptD22fP3sF6Ax1kofvAA9BxyjHtchimQsn0zkrqfW03MUEuIIyWeYxKaWgVqUXZ+NhPLBQX6CplxdY6iU9m5U/I3oi3Q4P+VWKeH2zEYROH52RAqLb3AsyoSyDWZ0LHS5pMHzjbON+Rjr+pNQHGb8aGdsDZ2BGN/LTn7E+7iNx5x2P8YZyh7P15nsfTv0WSsjz3Gw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wQNbewLV3VO5tnqMlf4O+K3vo3WTGO6NgmUHjhgup+Y=;
- b=NQ3384f/XGAJY9LXV/n5Qkt/sMBr0GC1SoDn0xuA28BTc/3Jsk6OvhndakT/LijqLQrhyWtW/e4Jjy4XJRP/uyxYQ+c9S7hkIiXIVZ4klsSgiX3EMwJDBtE/TGXZYiRZ85fhKBjR5b5U44yjhk/h96V4VMQd/va1T/uKpbGnH2q/0Vr6/5mGg8vY5wy/eLFCw/4GKhRjRjmpJFM2k/0tLszPffRs0AVOn71aNHP2xuyg9j5qC/gZwlyol1h47R3tAYg4GfzN2VUK/8zqxuB9awM/qUjVKNye0cXXcr/yZjp0wXrTOFig0qrXOid8/q8zZZ4wobiYD+J2nHMWHZcUqw==
+ bh=vVlzB1NfNYmdC6Y6Zd9qfd122vLOH4dW4xgAde2H9TA=;
+ b=Ppb82mCZVPcfLvHFbZWsPmgEOcQ90u2SsNrZdFD+YbOtCflNaaB+P+Ny0IkzWeNh/+HMxlzXR8mthdtB+lLH7xd3la/SvfNwt48P/d4uWn6FzyIsfotwhuAm3j73Gm1XBthIymwbmL2TcDyAgTEWCU4LaLay/dsGPTRxMkRWhuXhFfaQl0CFGD0EjtIBG3pFB8+74QzBGHymwWAbSOaEt0aa7NP9XqQdHdTwf6smH5ibHQXmVbPkHfxoUYz7AqI1hBUbrYY4ok2yeN+VZRgLnivVOlbpQK6tbmgDNKdD+OUDO1xL/RBY+7RBwBLuIsn/bL1I3RqAVlbO1KMKMZNa3Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
  header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
@@ -55,8 +55,8 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com; 
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wQNbewLV3VO5tnqMlf4O+K3vo3WTGO6NgmUHjhgup+Y=;
- b=eQ09sOk70ynAV45V+xnhcLw4G0yUnkXSVjHAQhy31jobfhGPfl2SRLEmc5TcbM2KjUjMwBbwiw7tcnM7wESzcHocHTcMSUK4UJMa2SLcwWfSUNu0sBqXk8qldzIZOcqj8aRcvKXFM7/SvMSBhALhgykR2gVaf4VCD84THifQfrw=
+ bh=vVlzB1NfNYmdC6Y6Zd9qfd122vLOH4dW4xgAde2H9TA=;
+ b=PzLaCUF2yFvXKcqMnEGY37t2PZ7l+HRcDytWk6fUBCCX9zYdJgV/k3KSbu8lf/bS7V8+BnlLhVsBEhoRCx6P7QDBK0z3gU6YD7cq5EJv6zF4u7F/HKatcRRyP9+1UZ0aKEbtQ9rZwkb4u9NRex06UT0wQs3SjCksJdJYHgT4FHI=
 Authentication-Results: armlinux.org.uk; dkim=none (message not signed)
  header.d=none;armlinux.org.uk; dmarc=none action=none
  header.from=leica-geosystems.com;
@@ -64,11 +64,11 @@ Received: from DB6PR0602MB2886.eurprd06.prod.outlook.com (2603:10a6:4:9b::11)
  by DB8PR06MB6236.eurprd06.prod.outlook.com (2603:10a6:10:10a::26)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Tue, 1 Dec
- 2020 22:30:31 +0000
+ 2020 22:30:46 +0000
 Received: from DB6PR0602MB2886.eurprd06.prod.outlook.com
  ([fe80::49c3:4b5b:289c:d62c]) by DB6PR0602MB2886.eurprd06.prod.outlook.com
  ([fe80::49c3:4b5b:289c:d62c%12]) with mapi id 15.20.3611.025; Tue, 1 Dec 2020
- 22:30:31 +0000
+ 22:30:46 +0000
 From: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
 List-Id: <soc.lore.kernel.org>
 To: linux@armlinux.org.uk, nicolas.ferre@microchip.com,
@@ -83,10 +83,12 @@ To: linux@armlinux.org.uk, nicolas.ferre@microchip.com,
  linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
  linux-tegra@vger.kernel.org, linux-mips@vger.kernel.org,
  linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, soc@kernel.org
-Subject: [PATCH v2 0/5] drop unused BACKLIGHT_GENERIC option
-Date: Tue,  1 Dec 2020 22:29:17 +0000
-Message-ID: <20201201222922.3183-1-andrey.zhizhikin@leica-geosystems.com>
+Subject: [PATCH v2 1/5] ARM: configs: drop unused BACKLIGHT_GENERIC option
+Date: Tue,  1 Dec 2020 22:29:18 +0000
+Message-ID: <20201201222922.3183-2-andrey.zhizhikin@leica-geosystems.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201201222922.3183-1-andrey.zhizhikin@leica-geosystems.com>
+References: <20201201222922.3183-1-andrey.zhizhikin@leica-geosystems.com>
 X-Originating-IP: [193.8.40.112]
 X-ClientProxiedBy: ZR0P278CA0080.CHEP278.PROD.OUTLOOK.COM
  (2603:10a6:910:22::13) To DB6PR0602MB2886.eurprd06.prod.outlook.com
@@ -96,52 +98,51 @@ X-MS-Exchange-MessageSentRepresentingType: 1
 Received: from aherlnxbspsrv01.lgs-net.com (193.8.40.112) by
  ZR0P278CA0080.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:22::13) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3632.17 via Frontend Transport; Tue, 1 Dec 2020 22:30:30 +0000
+ 15.20.3632.17 via Frontend Transport; Tue, 1 Dec 2020 22:30:44 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 6d365363-08b1-4c89-53ed-08d89648b657
+X-MS-Office365-Filtering-Correlation-Id: b906cc89-bc5e-4f55-f70a-08d89648bee3
 X-MS-TrafficTypeDiagnostic: DB8PR06MB6236:
-X-Microsoft-Antispam-PRVS: <DB8PR06MB623630EB4354F1D60BA7FD44A6F40@DB8PR06MB6236.eurprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1169;
+X-Microsoft-Antispam-PRVS: <DB8PR06MB62361B1377CB942D51779C2EA6F40@DB8PR06MB6236.eurprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:153;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LMo6z8928fES3UzxAxn2rkjR/2DcWyNdmFlZuZsjMi56KGuIM3Nx2fWh6p7xbSDjIdki39DSUBYYVpJl4Q2+1Xzv5aAA7xsLMGPNxG+AJ6PMMgoTQ4nt1fWUtlDfjsNvhG9dvTplrQ/2/JWfSPG2jLDfh5WOwP4/nFQ3jGQMbcN2Gq3vz9f04qqZZlJU9swyjcQJ9vqEMF5BD+7Y5GPWFZzvcNrmYLqstUrulPaIqxbofPKfeOc1SJviIa/z+yDzDnZZXYY9hY0GfN4aSYwFTDJOlcdKrdxlKCq2tmEtjtXRMQxyLV0e4uUVfr69Ioh0UUF+n8eW5NAbyyRMhhuk/0jGKg4L6rlXDglnr27pFfT2GPq4G6e5nvpszs2f2fKWymPOShj5hpQy6Wh4mmf7Kw==
+X-Microsoft-Antispam-Message-Info: oCk67c2jgGsoSOSrbm8OnGHxB4Dc9sDKmH83oUJK1pggLNcNidVkPnPskQHWntXiBuOka822AO8+YoYIX5zUfPxFTmWCnneWAzrq2Gkv/W6oAIUbb0BKaMvdKtuq4sHkGojXwKVNROHVKmoqGWjVpjCdBBq4vSNE06SsLKIGUmPTT1QzG+Fxlo12A8pc6KPrThXMYa9/PGEpp31QNCPRkmyPr0idDPO6Zhz9LFTcnAFeUUVrSMAk8zyG3+rpAH6KJOWoNpZSvFRgiRoCO2gEllxU351I5WHqAjEZpSjbdkfIBM4mPBEcOfsnAq0zuD0Unbgvq8HMb8Eb0ZJ1M8f3Pt+vJdCx6PTfS0iOSq03TY67cSCyO8HUb92MeMT1d+l3JeUmR8GdMGtYjNQvxb0ctg==
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:DB6PR0602MB2886.eurprd06.prod.outlook.com; PTR:; CAT:NONE;
  SFS:(4636009)(346002)(136003)(366004)(39860400002)(396003)(376002)(66476007)(6666004)(66556008)(86362001)(66946007)(26005)(1076003)(186003)(36756003)(8676002)(16526019)(83380400001)(2906002)(6512007)(478600001)(8936002)(7406005)(316002)(7416002)(2616005)(52116002)(921005)(956004)(44832011)(5660300002)(6486002)(6506007)(41533002);
  DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?ORbQbhIKfN1uqEBuSZvSCSxgb7ianXlDOp0P935hlkpkr7kTX1hsYWb0pvsk?=
- =?us-ascii?Q?JuWjrSrpzpyVQ9EG7jGC8GOncR3Bj83cFQAQJYBkcDUVoleD01yRzMJ6ItN1?=
- =?us-ascii?Q?bIQMi1HV469ZA4r33emxW0fbMlIJwoKmlGuiOJFE59n1ja4nXfVM0+FU220Y?=
- =?us-ascii?Q?2cwKNn0zLdgRZ0nKO7xEmFzGML3mtfpmXkwvn5y4jeXvFSvqVahFWdSGmVsI?=
- =?us-ascii?Q?VvciL6JAGFmhS3xL0dyIQ3iuqhkd3nvu2QgQQjVF3ZpOneFDLdEW1NjJ79qf?=
- =?us-ascii?Q?H01pVTrjbpdjzCJLDR4hWbf+pKrxqxKhhel5VXUXdMvhHUpmnjQGSudEsS7y?=
- =?us-ascii?Q?Hp24mTsX8eSZT16Ac2pNF2Lkl3RL65Uas4sjE96G9+irKOOTxyzTo8o5OxWz?=
- =?us-ascii?Q?uyYh9Gz0FQ/gfstpXNVaU4vHcJL3FM+PWxVDUWjjUzMZVN2rpKth8FSSYQkS?=
- =?us-ascii?Q?4yj+ciu9rwzposHj41msORGbW1LPpB8/Sas+uWt2spdue96FuuoVfW6A0Uzq?=
- =?us-ascii?Q?8ZWLeZi1KQJSzxQIeNrlJPRhQLHF/VNDXEIWd/7gNcFqGtxvJxf4YRxbPYiY?=
- =?us-ascii?Q?9u6WA/cLn8t/4sxV8H3VT10OCeKimY6e3xBLj44rTKdPsqTiISIN2Yuiaejd?=
- =?us-ascii?Q?Gcyw8CCboP0MWxAJzPkNF9ujISn0qENneo//DVhBqf+hR0gSnCOlCzZOr4H5?=
- =?us-ascii?Q?5WcpPjjzLJTdhc0UijW4VoNAd6YNhnWFd8zC1A21N/t5qDMSEKrQxJONK+lF?=
- =?us-ascii?Q?BTunrekVkhREA5wb1CVnkFa3v4+NS+Jj9F7jCFpE2epNdFUgc7Jv8zpn++eD?=
- =?us-ascii?Q?hx8xskKW4jtzwfVcg1PG7nDuqBRvJcyrfo6BIuGvejSPfPgKDSgdYZ33gFq9?=
- =?us-ascii?Q?ospqmsyZxxqIcHAA8ljPJrOCdF+U0Bx9e5nBa+CcdkC9NMpKJPviqy4Jhypk?=
- =?us-ascii?Q?mAaEXKrRaJ8J/xWuHnh3WIb4hiQeJYfG70gpgXhqdPJxqA8DdQw0RWiDecF8?=
- =?us-ascii?Q?6n5u?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?2eCM3zkNBddbv4VxSIVNg6so3b/Y5C4tYp0kpO3VXcH+fo96TLsUr4mUf8ST?=
+ =?us-ascii?Q?nRs7ty4U2VkLFNP+eRtcaQnzPzOcdapXTqtv2l9aaMZtfqweVBVxFpCSNzXO?=
+ =?us-ascii?Q?GA/vFQq4OyZtsLSZ0/HnQryg66f7U3v20os483QTdkKJ93cORPWOAtVYvFQs?=
+ =?us-ascii?Q?zewNzaH8arVqIZmf2dijWNLYr7SsDbonZidU3QSWZjHQzqnPIdZz8e8G9GM/?=
+ =?us-ascii?Q?y9JFwCSjySO0oepFL645C/IJ9TAaJiSAMp+dfA667VZyDNj2gF1lQ3c0jInA?=
+ =?us-ascii?Q?1i5JPOODy4lNNJOGd4xVOBiXegn1l7ucUJfnlIIUuBsD3iHnFzEy1V7+tZvF?=
+ =?us-ascii?Q?u6ristyh7dbijUiDIbfuB6wFL/V+r1fGrEeodqJ/niwKuLmT+6gwoRiAIz7T?=
+ =?us-ascii?Q?4qheABEDL4jA+MzLE1DUqSaE2thwz09VbbdLHEYqzZBavm/8rAVw2sz49t5N?=
+ =?us-ascii?Q?MHuFiMGOeDOTHwVBCd9Y1Fr50OKprRZr6OJLy8AoeKF3N3SXhPt7rnYA8USC?=
+ =?us-ascii?Q?HNc8v3YeB8lZ2/pIU6ySzHTEtzvorGJbz1GH1NowOq/OFZXZGMyWnqQkyvIT?=
+ =?us-ascii?Q?Dlc2/SnbKkmhWvy+lQ7Bn9fV4Ud10n5vy69iJpZxtYOlSV2p3l8b9mEhN7hI?=
+ =?us-ascii?Q?lwMxAtQscwR7LCUTFCFPBGmKAJX+rIDKd2MJ4I1yB/zXNqNZnGiICPQXaoyP?=
+ =?us-ascii?Q?CKmFM4qCmEb+3bauLLlWIB4fBuiDjL3bmoaM0qw7xEUFZxglqItXXLA3i7M2?=
+ =?us-ascii?Q?WuUXkRS814WZUPFatWbTh2nUBe9IA3PYqVcJOdqjRDPPBeMBJHzPE7LFY3We?=
+ =?us-ascii?Q?8vUaklyJMxMEMNeqGs2rdflhdxHA1eSD/DvebAOmVEN4ddi96IntXnnDlHuv?=
+ =?us-ascii?Q?kHp++i+8XCAjO3UqdSN9tHd6GzoruRGU9jKV15TA8q0KYLL3wPn8bV6UTKqn?=
+ =?us-ascii?Q?pNsQGsNtFCpx7tvlOBobRkkbzNlkUJb1dAL2qgWJuwE5qVaQ5qubxgOOdr/A?=
+ =?us-ascii?Q?7a+n?=
 X-OriginatorOrg: leica-geosystems.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d365363-08b1-4c89-53ed-08d89648b657
+X-MS-Exchange-CrossTenant-Network-Message-Id: b906cc89-bc5e-4f55-f70a-08d89648bee3
 X-MS-Exchange-CrossTenant-AuthSource: DB6PR0602MB2886.eurprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2020 22:30:31.7441 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2020 22:30:46.1006 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: g4iryKvc/eLM0i/wx6VOtknRmR0+bG26X4MggU95m8d0ngemwHphKtAlGhrxFPDWnhGYIjwuVneZ4bPk9qlbNl7SwzdJO7P9F/kZklGPS7s=
+X-MS-Exchange-CrossTenant-UserPrincipalName: KPjBIfw65gRJOD6dLHqB3J8apgkNNY2niuAndYbhU9PrlOhrbk7/iSJPDkg2VjVNPMicc7mI5In2nunwkW6u3qTdVixM7rRWsusmVZssKk0=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR06MB6236
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201201_173035_027426_AD89CA3B 
-X-CRM114-Status: UNSURE (   9.78  )
-X-CRM114-Notice: Please train this message.
+X-CRM114-CacheID: sfid-20201201_173049_852828_223CF901 
+X-CRM114-Status: GOOD (  12.55  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -157,53 +158,193 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201201222917._s7nt7JpSD0aJ0o9ljFCAXm3gD-RaHc5awDgmLbhsYI@z>
+Message-ID: <20201201222918.Wmo4dw6ZYL8kunpbI8miqfoksjqhj5uEKMpqk9sgtS4@z>
 
-Since the removal of generic_bl driver from the source tree in commit
-7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is
-unused") BACKLIGHT_GENERIC config option became obsolete as well and
-therefore subject to clean-up from all configuration files.
+Commit 7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is
+unused") removed geenric_bl driver from the tree, together with
+corresponding config option.
 
-This series introduces patches to address this removal, separated by
-architectures in the kernel tree.
+Remove BACKLIGHT_GENERIC config item from all ARM configurations.
 
-Changes in v2:
-- Collect all Acked-by: and Reviewed-by: tags
-- Include ARM SOC maintainer list to recipients
+Fixes: 7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is unused")
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
+---
+ arch/arm/configs/at91_dt_defconfig        | 1 -
+ arch/arm/configs/cm_x300_defconfig        | 1 -
+ arch/arm/configs/colibri_pxa300_defconfig | 1 -
+ arch/arm/configs/jornada720_defconfig     | 1 -
+ arch/arm/configs/magician_defconfig       | 1 -
+ arch/arm/configs/mini2440_defconfig       | 1 -
+ arch/arm/configs/omap2plus_defconfig      | 1 -
+ arch/arm/configs/pxa3xx_defconfig         | 1 -
+ arch/arm/configs/qcom_defconfig           | 1 -
+ arch/arm/configs/sama5_defconfig          | 1 -
+ arch/arm/configs/sunxi_defconfig          | 1 -
+ arch/arm/configs/tegra_defconfig          | 1 -
+ arch/arm/configs/u8500_defconfig          | 1 -
+ 13 files changed, 13 deletions(-)
 
-Andrey Zhizhikin (5):
-  ARM: configs: drop unused BACKLIGHT_GENERIC option
-  arm64: defconfig: drop unused BACKLIGHT_GENERIC option
-  MIPS: configs: drop unused BACKLIGHT_GENERIC option
-  parisc: configs: drop unused BACKLIGHT_GENERIC option
-  powerpc/configs: drop unused BACKLIGHT_GENERIC option
-
- arch/arm/configs/at91_dt_defconfig          | 1 -
- arch/arm/configs/cm_x300_defconfig          | 1 -
- arch/arm/configs/colibri_pxa300_defconfig   | 1 -
- arch/arm/configs/jornada720_defconfig       | 1 -
- arch/arm/configs/magician_defconfig         | 1 -
- arch/arm/configs/mini2440_defconfig         | 1 -
- arch/arm/configs/omap2plus_defconfig        | 1 -
- arch/arm/configs/pxa3xx_defconfig           | 1 -
- arch/arm/configs/qcom_defconfig             | 1 -
- arch/arm/configs/sama5_defconfig            | 1 -
- arch/arm/configs/sunxi_defconfig            | 1 -
- arch/arm/configs/tegra_defconfig            | 1 -
- arch/arm/configs/u8500_defconfig            | 1 -
- arch/arm64/configs/defconfig                | 1 -
- arch/mips/configs/gcw0_defconfig            | 1 -
- arch/mips/configs/gpr_defconfig             | 1 -
- arch/mips/configs/lemote2f_defconfig        | 1 -
- arch/mips/configs/loongson3_defconfig       | 1 -
- arch/mips/configs/mtx1_defconfig            | 1 -
- arch/mips/configs/rs90_defconfig            | 1 -
- arch/parisc/configs/generic-64bit_defconfig | 1 -
- arch/powerpc/configs/powernv_defconfig      | 1 -
- 22 files changed, 22 deletions(-)
-
-
-base-commit: b65054597872ce3aefbc6a666385eabdf9e288da
+diff --git a/arch/arm/configs/at91_dt_defconfig b/arch/arm/configs/at91_dt_defconfig
+index 4a0ba2ae1a25..6e52c9c965e6 100644
+--- a/arch/arm/configs/at91_dt_defconfig
++++ b/arch/arm/configs/at91_dt_defconfig
+@@ -132,7 +132,6 @@ CONFIG_DRM_ATMEL_HLCDC=y
+ CONFIG_DRM_PANEL_SIMPLE=y
+ CONFIG_FB_ATMEL=y
+ CONFIG_BACKLIGHT_ATMEL_LCDC=y
+-# CONFIG_BACKLIGHT_GENERIC is not set
+ CONFIG_BACKLIGHT_PWM=y
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_LOGO=y
+diff --git a/arch/arm/configs/cm_x300_defconfig b/arch/arm/configs/cm_x300_defconfig
+index 2f7acde2d921..502a9d870ca4 100644
+--- a/arch/arm/configs/cm_x300_defconfig
++++ b/arch/arm/configs/cm_x300_defconfig
+@@ -87,7 +87,6 @@ CONFIG_FB=y
+ CONFIG_FB_PXA=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_LCD_TDO24M=y
+-# CONFIG_BACKLIGHT_GENERIC is not set
+ CONFIG_BACKLIGHT_DA903X=m
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
+diff --git a/arch/arm/configs/colibri_pxa300_defconfig b/arch/arm/configs/colibri_pxa300_defconfig
+index 0dae3b185284..26e5a67f8e2d 100644
+--- a/arch/arm/configs/colibri_pxa300_defconfig
++++ b/arch/arm/configs/colibri_pxa300_defconfig
+@@ -34,7 +34,6 @@ CONFIG_FB=y
+ CONFIG_FB_PXA=y
+ # CONFIG_LCD_CLASS_DEVICE is not set
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-# CONFIG_BACKLIGHT_GENERIC is not set
+ # CONFIG_VGA_CONSOLE is not set
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_LOGO=y
+diff --git a/arch/arm/configs/jornada720_defconfig b/arch/arm/configs/jornada720_defconfig
+index 9f079be2b84b..069f60ffdcd8 100644
+--- a/arch/arm/configs/jornada720_defconfig
++++ b/arch/arm/configs/jornada720_defconfig
+@@ -48,7 +48,6 @@ CONFIG_FB=y
+ CONFIG_FB_S1D13XXX=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-# CONFIG_BACKLIGHT_GENERIC is not set
+ # CONFIG_VGA_CONSOLE is not set
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
+diff --git a/arch/arm/configs/magician_defconfig b/arch/arm/configs/magician_defconfig
+index d2e684f6565a..b4670d42f378 100644
+--- a/arch/arm/configs/magician_defconfig
++++ b/arch/arm/configs/magician_defconfig
+@@ -95,7 +95,6 @@ CONFIG_FB_PXA_OVERLAY=y
+ CONFIG_FB_W100=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-# CONFIG_BACKLIGHT_GENERIC is not set
+ CONFIG_BACKLIGHT_PWM=y
+ # CONFIG_VGA_CONSOLE is not set
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+diff --git a/arch/arm/configs/mini2440_defconfig b/arch/arm/configs/mini2440_defconfig
+index 301f29a1fcc3..898490aaa39e 100644
+--- a/arch/arm/configs/mini2440_defconfig
++++ b/arch/arm/configs/mini2440_defconfig
+@@ -158,7 +158,6 @@ CONFIG_FB_S3C2410=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_LCD_PLATFORM=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-# CONFIG_BACKLIGHT_GENERIC is not set
+ CONFIG_BACKLIGHT_PWM=y
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
+diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
+index de3b7813a1ce..7eae097a75d2 100644
+--- a/arch/arm/configs/omap2plus_defconfig
++++ b/arch/arm/configs/omap2plus_defconfig
+@@ -388,7 +388,6 @@ CONFIG_FB_TILEBLITTING=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_LCD_PLATFORM=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-CONFIG_BACKLIGHT_GENERIC=m
+ CONFIG_BACKLIGHT_PWM=m
+ CONFIG_BACKLIGHT_PANDORA=m
+ CONFIG_BACKLIGHT_GPIO=m
+diff --git a/arch/arm/configs/pxa3xx_defconfig b/arch/arm/configs/pxa3xx_defconfig
+index 06bbc7a59b60..f0c34017f2aa 100644
+--- a/arch/arm/configs/pxa3xx_defconfig
++++ b/arch/arm/configs/pxa3xx_defconfig
+@@ -74,7 +74,6 @@ CONFIG_FB_PXA=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_LCD_TDO24M=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-# CONFIG_BACKLIGHT_GENERIC is not set
+ CONFIG_BACKLIGHT_DA903X=y
+ # CONFIG_VGA_CONSOLE is not set
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
+index c882167e1496..d6733e745b80 100644
+--- a/arch/arm/configs/qcom_defconfig
++++ b/arch/arm/configs/qcom_defconfig
+@@ -159,7 +159,6 @@ CONFIG_FB=y
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ # CONFIG_LCD_CLASS_DEVICE is not set
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-# CONFIG_BACKLIGHT_GENERIC is not set
+ CONFIG_BACKLIGHT_LM3630A=y
+ CONFIG_BACKLIGHT_LP855X=y
+ CONFIG_SOUND=y
+diff --git a/arch/arm/configs/sama5_defconfig b/arch/arm/configs/sama5_defconfig
+index 037d3a718a60..0a167891eb05 100644
+--- a/arch/arm/configs/sama5_defconfig
++++ b/arch/arm/configs/sama5_defconfig
+@@ -161,7 +161,6 @@ CONFIG_DRM_ATMEL_HLCDC=y
+ CONFIG_DRM_PANEL_SIMPLE=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-# CONFIG_BACKLIGHT_GENERIC is not set
+ CONFIG_BACKLIGHT_PWM=y
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_SOUND=y
+diff --git a/arch/arm/configs/sunxi_defconfig b/arch/arm/configs/sunxi_defconfig
+index 244126172fd6..af6e80d1a0f2 100644
+--- a/arch/arm/configs/sunxi_defconfig
++++ b/arch/arm/configs/sunxi_defconfig
+@@ -111,7 +111,6 @@ CONFIG_DRM_SIMPLE_BRIDGE=y
+ CONFIG_DRM_LIMA=y
+ CONFIG_FB_SIMPLE=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-# CONFIG_BACKLIGHT_GENERIC is not set
+ CONFIG_BACKLIGHT_PWM=y
+ CONFIG_SOUND=y
+ CONFIG_SND=y
+diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
+index fff5fae0db30..74739a52a8ad 100644
+--- a/arch/arm/configs/tegra_defconfig
++++ b/arch/arm/configs/tegra_defconfig
+@@ -205,7 +205,6 @@ CONFIG_DRM_PANEL_SIMPLE=y
+ CONFIG_DRM_LVDS_CODEC=y
+ # CONFIG_LCD_CLASS_DEVICE is not set
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-# CONFIG_BACKLIGHT_GENERIC is not set
+ CONFIG_BACKLIGHT_PWM=y
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
+diff --git a/arch/arm/configs/u8500_defconfig b/arch/arm/configs/u8500_defconfig
+index 28dd7cf56048..24aacc255021 100644
+--- a/arch/arm/configs/u8500_defconfig
++++ b/arch/arm/configs/u8500_defconfig
+@@ -92,7 +92,6 @@ CONFIG_DRM_PANEL_SONY_ACX424AKP=y
+ CONFIG_DRM_LIMA=y
+ CONFIG_DRM_MCDE=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-CONFIG_BACKLIGHT_GENERIC=m
+ CONFIG_BACKLIGHT_GPIO=y
+ CONFIG_LOGO=y
+ CONFIG_SOUND=y
 -- 
 2.17.1
 
