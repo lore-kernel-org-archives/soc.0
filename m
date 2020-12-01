@@ -5,19 +5,19 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 782B7C71156
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72BBFC64E90
 	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 13:45:26 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ECF39207FF
+	by mail.kernel.org (Postfix) with ESMTPS id E953620770
 	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 13:45:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="s+2dqXSD";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b="WF6NTtrl"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org ECF39207FF
+	dkim=pass (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="ZKb0VOJK";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b="mrbeoE9E"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E953620770
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -26,65 +26,66 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=nhwMvDVWB3qHjCVhwhET6/s+bcla/U1+graDZX3VuUE=; b=s+2dqXSDp9HXg2bdLcpr2JVZf
-	WY7lmUswdq+M4Zm0yrN3qrudHxFMC3tF9wPMA9hDhiTLAwG0M1wdiTyfVzKb36dpOJkbjvwiSxCA/
-	j2GDZIiKszzXXQz+FVE4/MXmR9B4U1711DXHXjGkNXtOQ5IaXm0fFuciEOVAvD8rjnGVNH78Rl7n3
-	URjy7ikUMk1RMrK2j99Kf2nii9hXFvanObEB1eB93ngYca2GLFcLHQ5YUnnxo4f2Sp4z77ioOTGW6
-	AncPVGWAmN5ZAbmyTUFgznspUcfqKP9PGTtocxP+hGjkwjS6m60S9W52aBFj/JEcKrauncUluTilq
-	JNs9ePkZA==;
+	 bh=86eU8EAAR4W8YBkmQuY1FCIrPooL7Nnk7+5NENM5vKI=; b=ZKb0VOJK9PIeqe8gwxwQwvcHn
+	rY9TLlH2ayJwLv6PXAdxzYD1aFfam5LEh0WakWLbfP7fsrwqLk7C5nkTHtsZVQO3s9l9T8alc9/0H
+	tZVjdcNcHmizgFb7ODmtRcp6NVmJxwstT+BQKm0DZxtsx8UxlsJ7Mr4i2VRm6G9jy+L3bzf12XsJV
+	rFxAFdeGYFgQjDVZOvg0PcMNMNA9qXjnQI1SICdtmv3E773MHLpwHdoJ2xPRJmoPuNcm7efz9uLU8
+	i+on51gwupcyTAjHF8QNAECjyysQrTzkuXFW1JdwSKyvl5iKGaFE2xoXOjaRVyYzOwC5mSPQD+d/m
+	/b6sHikMw==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kk5wk-00070U-OR; Tue, 01 Dec 2020 13:43:58 +0000
-Received: from mail-pj1-x1030.google.com ([2607:f8b0:4864:20::1030])
+	id 1kk5wd-0006y9-Cs; Tue, 01 Dec 2020 13:43:51 +0000
+Received: from mail-pg1-x532.google.com ([2607:f8b0:4864:20::532])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kk5wd-0006xv-N7
- for linux-arm-kernel@lists.infradead.org; Tue, 01 Dec 2020 13:43:52 +0000
-Received: by mail-pj1-x1030.google.com with SMTP id hk16so1257674pjb.4
+ id 1kk5wZ-0006w1-Fq
+ for linux-arm-kernel@lists.infradead.org; Tue, 01 Dec 2020 13:43:49 +0000
+Received: by mail-pg1-x532.google.com with SMTP id t37so1213829pga.7
  for <linux-arm-kernel@lists.infradead.org>;
- Tue, 01 Dec 2020 05:43:50 -0800 (PST)
+ Tue, 01 Dec 2020 05:43:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=hOB84R26CoZQA91b93xytogHngTBkirbQivQiUAvSZ8=;
- b=WF6NTtrljoUI8VDrrXKRQNZMUo3sZpPtwXncI77Eh5b/yLWbwXVVDd2e5GxzmBehWM
- iLJgca6ShKHyZ+hteIe0wcmc4NmhcpaYU4vdpEt3HE20RVTDJDvtId2319wiU4s7OuST
- cywS02e7AegSTmHZMU4BhxjYvObD7HE5zCKOk=
+ bh=plvQeaUD9wIIwbJapMgxHoz9Nu1G0OxoMzRow/yYT1o=;
+ b=mrbeoE9Eh+XfdYw5G5mGNFmFb6DualPxipg3j34VULsY5vvlx0f86/9u7So6M5fPcK
+ Ah0c4EN/OHfQqaHSrJ+93s7QOmADJNuZX4X5XDU18uSXKQBf7AmCsaQNx4C3d519+0MB
+ Ybu/T+58N1UvvhXJ6BdtanFw3QUy4wJSvIlFk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=hOB84R26CoZQA91b93xytogHngTBkirbQivQiUAvSZ8=;
- b=D0qR1v07nBFZfe5Kv2YdM2+zO8YvHJ5FI4ZpySSOimKTWX2uCoHwWzbsp8jjKPAbMd
- KgNySKbobJpjVcX2YNzUZ89JGLVSLxUujZalZNDVRCq2N4pJeS13YTJcl77LD3oA7LaD
- mme0k8WseCnPhvATeBePpU3H9dYwex3gtwzuBteE3kXJnqQL+ggCqugewPlaB4ncCVks
- nnN4XJbZ6aDBDhDhGlt10BPREGQ6gSJOlq2nBTK34Avmi+nbakj6YdGFZ751Hu2lSQZY
- uh5RCKJYxF2GK3vY+Fi+bnhPjzmJ4oA+tImcIGvo7zeKQ7BuSQF8/dbCshYagJwPMAth
- C5FQ==
-X-Gm-Message-State: AOAM533CHPiJ0aK46299nKBi7CXMzDjg+7NFu8U/2qtDTz1xmwepIcqu
- Qr3ia+oQW9Ss9bbop0oaItwzbw==
-X-Google-Smtp-Source: ABdhPJwc0NvZ68gepyb5EB381x8XYKBVMFc2+YBBRdd8e2c6Zew+ZunZVzKA2CFEiB5+u1J7MgYlAw==
-X-Received: by 2002:a17:90b:4b11:: with SMTP id
- lx17mr2824634pjb.154.1606830229035; 
- Tue, 01 Dec 2020 05:43:49 -0800 (PST)
+ bh=plvQeaUD9wIIwbJapMgxHoz9Nu1G0OxoMzRow/yYT1o=;
+ b=F+8zfh4U9pGnfLZRR24JJSFsbzJUN8Ki2uq+RoniBOqahX16cSn6IDr24t9Q3CDP5k
+ vBePK7g2H983jtd0FRBYahVL1/s9f01+g0VazTI/FS0XYpj3j0//ylqxLlTp+TabVbuS
+ QlhiWdiGEnql3EcdN66xT6NeODWlu+qJWNjpIhuOB8SKWltvu0yEhTeuBwFPM101D5hq
+ SJnPqmrISqcpdo4g8Z2MKC2Twy2MLcVrDC+40qEeqO5AR22aasUirQuNemB32uUW1RbU
+ HdH5/hOsWsBZ5bwXiWOvHLg8xzl4zY4yO/rrkhxAUDQxL54cOadoEr9rC/bvDE2oUAnP
+ 99Mw==
+X-Gm-Message-State: AOAM5332ood8cJChWBdDd2dhPRVbMov1as+QdwhbG9N+EFWnyRgShUkG
+ /+ktf4/4PpEJ6J6QSZXWpjkC8w==
+X-Google-Smtp-Source: ABdhPJzxeEuwbvL+1kRV6+uUT7mx09UASek8f5bclJNvTywXMbmSqEQERWDw7AskMIvw+oaxcr+v9g==
+X-Received: by 2002:aa7:96ca:0:b029:19a:8ccd:895 with SMTP id
+ h10-20020aa796ca0000b029019a8ccd0895mr2498359pfq.61.1606830220296; 
+ Tue, 01 Dec 2020 05:43:40 -0800 (PST)
 Received: from shiro.work (p1268123-ipngn200803sizuokaden.shizuoka.ocn.ne.jp.
  [118.13.124.123])
- by smtp.googlemail.com with ESMTPSA id g14sm2839248pji.32.2020.12.01.05.43.46
+ by smtp.googlemail.com with ESMTPSA id g14sm2839248pji.32.2020.12.01.05.43.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Dec 2020 05:43:48 -0800 (PST)
+ Tue, 01 Dec 2020 05:43:39 -0800 (PST)
 From: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
 To: devicetree@vger.kernel.org, soc@kernel.org,
  linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 04/10] ARM: mstar: Add infinity2m support
-Date: Tue,  1 Dec 2020 22:43:24 +0900
-Message-ID: <20201201134330.3037007-5-daniel@0x0f.com>
+Subject: [PATCH v2 01/10] dt-bindings: mstar: Add binding details for mstar,
+ smpctrl
+Date: Tue,  1 Dec 2020 22:43:21 +0900
+Message-ID: <20201201134330.3037007-2-daniel@0x0f.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201201134330.3037007-1-daniel@0x0f.com>
 References: <20201201134330.3037007-1-daniel@0x0f.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201201_084351_789215_F427586E 
-X-CRM114-Status: GOOD (  18.26  )
+X-CRM114-CacheID: sfid-20201201_084347_555521_EBE55228 
+X-CRM114-Status: GOOD (  15.43  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,73 +103,63 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201201134324.NGDTR3U5hzXSUPyEMhVsn93sBg2_QOZUdxbdo3sSV7c@z>
+Message-ID: <20201201134321.Pa9mvBNDQ2b3i8B33NU0uUajeMhTITEDCGcd78dWcMc@z>
 
-The infinity2m series of chips are like the other Mstar/Sigmastar
-chips in that they have a Cortex A7 system with DDR memory integrated
-in a single package.
-
-The infinity2m chips are intended for recording the incoming streams
-from IP cameras. So instead of video encoders they have video decoders,
-instead of a camera interface they have display hardware and so on.
-
-Aside from the above points the big difference about these chips is that
-they include a second Cortex A7 core.
+This adds a YAML description of the smpctrl node needed by the
+platform code for the MStar/SigmaStar Armv7 SoCs to boot secondary cpus.
 
 Signed-off-by: Daniel Palmer <daniel@0x0f.com>
 ---
- arch/arm/boot/dts/mstar-infinity2m.dtsi | 15 +++++++++++++++
- arch/arm/boot/dts/mstar-v7.dtsi         |  2 +-
- arch/arm/mach-mstar/mstarv7.c           |  1 +
- 3 files changed, 17 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/boot/dts/mstar-infinity2m.dtsi
+ .../bindings/arm/mstar/mstar,smpctrl.yaml     | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/mstar/mstar,smpctrl.yaml
 
-diff --git a/arch/arm/boot/dts/mstar-infinity2m.dtsi b/arch/arm/boot/dts/mstar-infinity2m.dtsi
+diff --git a/Documentation/devicetree/bindings/arm/mstar/mstar,smpctrl.yaml b/Documentation/devicetree/bindings/arm/mstar/mstar,smpctrl.yaml
 new file mode 100644
-index 000000000000..02adb9fe9d3c
+index 000000000000..599c65980f5d
 --- /dev/null
-+++ b/arch/arm/boot/dts/mstar-infinity2m.dtsi
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (c) 2020 thingy.jp.
-+ * Author: Daniel Palmer <daniel@thingy.jp>
-+ */
++++ b/Documentation/devicetree/bindings/arm/mstar/mstar,smpctrl.yaml
+@@ -0,0 +1,40 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright 2020 thingy.jp.
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/arm/mstar/mstar,smpctrl.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+#include "mstar-infinity.dtsi"
++title: MStar/SigmaStar Armv7 SoC SMP control registers
 +
-+&cpus {
-+	cpu1: cpu@1 {
-+		device_type = "cpu";
-+		compatible = "arm,cortex-a7";
-+		reg = <0x1>;
-+	};
-+};
-diff --git a/arch/arm/boot/dts/mstar-v7.dtsi b/arch/arm/boot/dts/mstar-v7.dtsi
-index 07fc46c7b4d4..2862b32c7f63 100644
---- a/arch/arm/boot/dts/mstar-v7.dtsi
-+++ b/arch/arm/boot/dts/mstar-v7.dtsi
-@@ -13,7 +13,7 @@ / {
- 	#size-cells = <1>;
- 	interrupt-parent = <&gic>;
- 
--	cpus {
-+	cpus: cpus {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 
-diff --git a/arch/arm/mach-mstar/mstarv7.c b/arch/arm/mach-mstar/mstarv7.c
-index 81a4cbcab206..1aa748fa006e 100644
---- a/arch/arm/mach-mstar/mstarv7.c
-+++ b/arch/arm/mach-mstar/mstarv7.c
-@@ -35,6 +35,7 @@ static void __iomem *l3bridge;
- 
- static const char * const mstarv7_board_dt_compat[] __initconst = {
- 	"mstar,infinity",
-+	"mstar,infinity2m",
- 	"mstar,infinity3",
- 	"mstar,mercury5",
- 	NULL,
++maintainers:
++  - Daniel Palmer <daniel@thingy.jp>
++
++description: |
++  MStar/SigmaStar's Armv7 SoCs that have more than one processor
++  have a region of registers that allow setting the boot address
++  and a magic number that allows secondary processors to leave
++  the loop they are parked in by the boot ROM.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - sstar,ssd201-smpctrl # SSD201/SSD202D
++      - const: mstar,smpctrl
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    smpctrl@204000 {
++        compatible = "sstar,ssd201-smpctrl", "mstar,smpctrl";
++        reg = <0x204000 0x200>;
++    };
 -- 
 2.29.2
 
