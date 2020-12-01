@@ -1,121 +1,71 @@
-Return-Path: <SRS0=r2Hb=FF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=LF0C=FF=armlinux.org.uk=linux+soc=kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 793EDC64E7B
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 14:01:46 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BD32C64E7A
+	for <soc@archiver.kernel.org>; Tue,  1 Dec 2020 15:04:33 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id DBCE520758; Tue,  1 Dec 2020 15:04:32 +0000 (UTC)
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EEF4420857
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Dec 2020 14:01:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id CF70420691
+	for <soc@kernel.org>; Tue,  1 Dec 2020 15:04:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=lists.infradead.org header.i=@lists.infradead.org header.b="n4bi8YOD";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="kI7nVeKl"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EEF4420857
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="hktHOsbo"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CF70420691
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux+soc=kernel.org@armlinux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=BxmAuLu5jb78cABIJoe4s/GZd8Z1HKI0s/GrFHYpx6E=; b=n4bi8YOD9iLw0d3a8Akx4er12
-	5Ow+cTDQ63O2wG8OtlL6GfBAEsXAwGAZL+Y2j5EuKGCWglzJxNspVD6jZ3Edr0OLVJSHRJyGbzXZh
-	R/0YEdkwIVZ6UW7aLNu4tKUgZCsJ7a30kF6ZINU0MOiKRxU6XQni4c4o6e318IHHRR56vAvBf6l4w
-	3uzy+nQSiuxuQixZ03aVz3P3XCrJ8Z9SZGMJhsSxCPz1h93QD/r13nt/rAyxg2mgNSdHum1KFnV1f
-	VVlF+Z83x5C+D9yTE6ogcgbCbFBcCqid7qUrxKKq5QF5wsRljyyyIQ4FvIcJ2zGVafoNoJfcBxtlE
-	NkMP5WA2Q==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kk6Cp-0003hR-3p; Tue, 01 Dec 2020 14:00:35 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kk6Cm-0003go-W9
- for linux-arm-kernel@lists.infradead.org; Tue, 01 Dec 2020 14:00:33 +0000
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com
- [209.85.210.43])
- (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
- (No client certificate requested)
- by mail.kernel.org (Postfix) with ESMTPSA id 0BDBD206A5
- for <linux-arm-kernel@lists.infradead.org>;
- Tue,  1 Dec 2020 14:00:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=default; t=1606831231;
- bh=O62Ley1kLgnTGTTtBIkFeZkMguvT9Z/11bFZt3zB93E=;
- h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
- b=kI7nVeKljT/HagHl8ZBEIAbG1WKI8mRkrxQdrGPzx5kt8b6xQX07CQJ+dNvYpQ3CN
- tUQDIIXVPRs3F9KmYgrHoDKjkocdyIzq/jMa6KtEnfDQSHB7XrUiExdKF4qTLf3f7M
- U5gunmNPpQy8TqwVK3zUHkLAc6hKs7mCr0pBb9lM=
-Received: by mail-ot1-f43.google.com with SMTP id f12so1679260oto.10
- for <linux-arm-kernel@lists.infradead.org>;
- Tue, 01 Dec 2020 06:00:31 -0800 (PST)
-X-Gm-Message-State: AOAM533h4WgadeyeqfJWMW2TeHiEXNjw0DGc7uuaWICBz8PqNK9LIubk
- HflX7zT9CUXokbMis2UZTUD0D/+qTnXHzmiqKgw=
-X-Google-Smtp-Source: ABdhPJyWPnX9nI4ha3PJDswUnA6kjjA6J59qgRIPH68lp4Fm8BI3J6i4bXD0oi3uahD826C21DnBK2AVDKYdpBCjlrc=
-X-Received: by 2002:a05:6830:22d2:: with SMTP id
- q18mr1731360otc.305.1606831230265; 
- Tue, 01 Dec 2020 06:00:30 -0800 (PST)
-MIME-Version: 1.0
-References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
- <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
- <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
- <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
- <CAD=FV=Up-JW8RtMLQ_pAG3e0d8NnpT+rDiguxcz3DnVUz_7Jbw@mail.gmail.com>
- <CAHk-=wi2CQwAnKucLwE8vNZgXxyRy6L+DcgjGqxKHwbacKgaMQ@mail.gmail.com>
- <CAPDyKFp9L+L9VeUD038G3mBTLBuPJsMtv7JhxCcSGb3iY=eq5A@mail.gmail.com>
-In-Reply-To: <CAPDyKFp9L+L9VeUD038G3mBTLBuPJsMtv7JhxCcSGb3iY=eq5A@mail.gmail.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Tue, 1 Dec 2020 15:00:13 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1Va_xJzk8qqJM1VBWfSKpomKbQh_NpPO20aoORoe0SWQ@mail.gmail.com>
-Message-ID: <CAK8P3a1Va_xJzk8qqJM1VBWfSKpomKbQh_NpPO20aoORoe0SWQ@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
-To: Ulf Hansson <ulf.hansson@linaro.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201201_090033_168955_9858B952 
-X-CRM114-Status: GOOD (  15.47  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	 bh=lQkIAITTxB6dPbZfefyPfQUOz6UBfNpX4sJm/fCoIDk=; b=hktHOsboRi8yvEDCwuTZGRu/0
+	Ic45sRVJ42vTGFqx8/jXtEmFwBV0B1wnH0dWmOEYag1ty1hoLdZOR3luxSy7fiPPomQqz9XYOdXg2
+	hCqAhFf16vnwili4UqxZsz+JU9GU02mX5mWZt2ughzQN0XemGkSN3XGC9QChj3S68TFYtuT3uaeE8
+	ybi19YOI746dhucIHRDgV2lkWktLam4uc+HwMr7grrBw/9fVmrTD6d8MrSJAZ3x90t9fvQ/yXgwi5
+	ku9iAeKsc2OAyDTTxrnnXw8on8WSl2riYClmz4jBqJ66JxlrO5XwXNJtFxI893mExu01ZfDB7YMet
+	rfOZ+rTMg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38450)
+	by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1kk7Cc-0000Ec-PQ; Tue, 01 Dec 2020 15:04:26 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1kk7Cb-00066C-Hx; Tue, 01 Dec 2020 15:04:25 +0000
+Date: Tue, 1 Dec 2020 15:04:25 +0000
+From: Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Doug Anderson <dianders@chromium.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201201140013.S8C36Kp4nXI9JbsI4EtYbROFHThG-Vzq-CsdHsxxEmM@z>
+Cc: devicetree@vger.kernel.org, soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	olof@lixom.net, arnd@arndb.de, robh@kernel.org, w@1wt.eu
+Subject: Re: [PATCH v2 10/10] ARM: mstar: SMP support
+Message-ID: <20201201150425.GC1551@shell.armlinux.org.uk>
+References: <20201201134330.3037007-1-daniel@0x0f.com>
+ <20201201134330.3037007-11-daniel@0x0f.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201201134330.3037007-11-daniel@0x0f.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King - ARM Linux admin <linux@armlinux.org.uk>
 
-On Tue, Dec 1, 2020 at 12:39 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> So, I think we have two options. If people are willing to move to
-> "disk labels" or to patch their DTBs with mmc aliases, things can stay
-> as is. Otherwise, we can revert the async probe parts of the mmc host
-> drivers, but that would still leave us in a fragile situation.
+On Tue, Dec 01, 2020 at 10:43:30PM +0900, Daniel Palmer wrote:
+> +	np = of_find_compatible_node(NULL, NULL, "mstar,smpctrl");
+> +	smpctrl = of_iomap(np, 0);
+> +
+> +	if (!smpctrl)
+> +		return -ENODEV;
 
-Can you reliably detect whether the mmc aliases in the dt exist?
-If that's possible, maybe the async flag could be masked out to only have
-an effect when the device number is known.
-
-       Arnd
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Wouldn't -ENOMEM be more appropriate here?
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
