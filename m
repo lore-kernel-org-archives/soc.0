@@ -7,51 +7,50 @@ X-Spam-Status: No, score=-23.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD470C64E8A
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  2 Dec 2020 14:29:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9967AC64E7C
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  2 Dec 2020 14:29:40 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 655B221D42
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  2 Dec 2020 14:29:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 655B221D42
+	by mail.kernel.org (Postfix) with ESMTPS id 341AA21D42
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  2 Dec 2020 14:29:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 341AA21D42
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=v+MgrhqlBIP4M6V5LMLLndcHV9Rl8SAybz9XhO06OB0=; b=zB4e0vBFJUOjwS0/Zw13dfZFu
-	Oy6Krpizx/eHKPYzWYYuobltlC0vCfOsHTJdEtEBrP7eKFu/wuoJ3IRuv0DMoxmlj1u0jJ8Fv2/ia
-	QijcbkZ7J8zeVd9Uq0XQVpem8sxp9Hm8It0JhSIjKaYWcX1yPjVyS4fjDCSJEjSy0B5H5sFs8g+R8
-	SlhkWFWtfjFEcHdcwMWkEdMUouwDwEJbzP+4Y5HXATRahKSYJ+f+G4Xe7W+5r1zLNWB6Fi07LOXiQ
-	u7rDzMLlQXlxinSUD+sueQc0eUEvYdghVxntfawshSpVIVLnnj9+TnntVJiE8c8dGw0ZmnAZ2148x
-	xGtGQxGiw==;
+	Content-Type:MIME-Version:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:References:In-Reply-To:Message-Id:Date:Subject:To:
+	From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	bh=sA8g90wVz9pgym14adn1R1dLtXR8sxsvmEV7mQ1j6nI=; b=l8Yi9UpPaCRsbDGVhV35zxd6p/
+	HZwnfgzTQ+Ip+T35+nK06Ltg3KCox1SFfGBTapL1c7KzXq3m3ZsRFUULhZaj3ccsNhbSnUcr8ci7b
+	MiaobnEruHNZifr8rmkXz9qYli/8/a0UuXfxXJ3XeQuGuYHOTQyVYB9ZZmtvY4b1WD6HBonDDiqxD
+	Cr4dwMIxnEOCeLQNEnKhPnjwDSLD20tpULR41gN9rKfeCEX2apviWaJ68VfoIcEACpqPzR8FgnN3B
+	BTyI72RpDV7scbyLqV6zS++yrXHSVa3kfB5Z2ehR9qRZhCobN9/e8A0PPbWrF87DEy9zWwq1IRb3n
+	335uMEjg==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kkT6s-0005Ny-D4; Wed, 02 Dec 2020 14:27:58 +0000
+	id 1kkT6v-0005P0-D1; Wed, 02 Dec 2020 14:28:01 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kkT6n-0005Lp-6A
- for linux-arm-kernel@lists.infradead.org; Wed, 02 Dec 2020 14:27:54 +0000
+ id 1kkT6p-0005ND-PZ
+ for linux-arm-kernel@lists.infradead.org; Wed, 02 Dec 2020 14:27:58 +0000
 From: Shawn Guo <shawnguo@kernel.org>
 Authentication-Results: mail.kernel.org;
  dkim=permerror (bad message/signature format)
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
 	arm@kernel.org
-Subject: [GIT PULL 4/6] i.MX device tree update for 5.11
-Date: Wed,  2 Dec 2020 22:27:15 +0800
-Message-Id: <20201202142717.9262-4-shawnguo@kernel.org>
+Subject: [GIT PULL 5/6] i.MX arm64 device tree change for 5.11
+Date: Wed,  2 Dec 2020 22:27:16 +0800
+Message-Id: <20201202142717.9262-5-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201202142717.9262-1-shawnguo@kernel.org>
 References: <20201202142717.9262-1-shawnguo@kernel.org>
-MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201202_092753_491440_9DFF9D68 
-X-CRM114-Status: GOOD (  12.99  )
+X-CRM114-CacheID: sfid-20201202_092756_034003_5CF19FB7 
+X-CRM114-Status: GOOD (  14.59  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,154 +65,160 @@ List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>,
 Cc: Shawn Guo <shawnguo@kernel.org>, Stefan Agner <stefan@agner.ch>,
  Li Yang <leoyang.li@nxp.com>, linux-imx@nxp.com, kernel@pengutronix.de,
  Fabio Estevam <festevam@gmail.com>, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 
-VGhlIGZvbGxvd2luZyBjaGFuZ2VzIHNpbmNlIGNvbW1pdCAzNjUwYjIyOGY4M2FkZGE3ZTVlZTUz
-MmUyYjkwNDI5YzAzZjdiOWVjOgoKICBMaW51eCA1LjEwLXJjMSAoMjAyMC0xMC0yNSAxNToxNDox
-MSAtMDcwMCkKCmFyZSBhdmFpbGFibGUgaW4gdGhlIEdpdCByZXBvc2l0b3J5IGF0OgoKICBnaXQ6
-Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc2hhd25ndW8vbGludXgu
-Z2l0IHRhZ3MvaW14LWR0LTUuMTEKCmZvciB5b3UgdG8gZmV0Y2ggY2hhbmdlcyB1cCB0byAzMjcx
-MDZlNDIxN2I4ZWY0Zjc0NjQwZDdkZTE1YTBhMjg3NjkwYWJhOgoKICBBUk06IGR0czogaW14Mjg6
-IEZpeCBsYWJlbCBuYW1lIGZvciBMMiBzd2l0Y2ggKDIwMjAtMTItMDEgMDk6NDI6MTEgKzA4MDAp
-CgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tCmkuTVggZGV2aWNlIHRyZWUgdXBkYXRlIGZvciA1LjExOgoKLSBOZXcgYm9hcmQg
-c3VwcG9ydDogaW14NmRsLWFsdGk2cCwgaW14NmRsLWxhbm1jdSwgbXg2cXAtcHJ0d2QzLAogIGlt
-eDZ1bC1waHl0ZWMtc2VnaW4gYW5kIGlteDdkLWZsZXgtY29uY2VudHJhdG9yLgotIEZpeCBzY2hl
-bWEgd2FybmluZ3MgZm9yIHB3bS1sZWRzLCB3YXRjaGRvZyBhbmQgR1BJTyBob2cgZGV2aWNlcy4K
-LSBBIGZldyBwYXRjaGVzIGZyb20gS3J6eXN6dG9mIEtvemxvd3NraSB0byBjb3JyZWN0IGNvbXBh
-dGlibGVzIGZvcgogIGkuTVg2LzcgYm9hcmRzLgotIEEgc2VyaWVzIGZyb20gTWF0dGhpYXMgU2No
-aWZmZXIgdG8gcG9saXNoIGlteDctbWJhNyBib2FyZCBzdXBwb3J0LgotIFVwZGF0ZSBpLk1YNi83
-IGRldmljZSB0cmVlcyBmb3IgZnNsLHN0b3AtbW9kZSBzdXBwb3J0LgotIENvcnJlY3QgZnNsLHJj
-cG0td2FrZXVwIG9mIExTMTAyMUEgdG8gZ2V0IGZsZXh0aW1lciB3YWtlLXVwIHdvcmsuCi0gQSBz
-ZXJpZXMgb2YgcGF0Y2ggZnJvbSBTdGVmYW4gUmllZG11ZWxsZXIgdG8gdXBkYXRlIHBoeXRlYyBh
-bmQgc2VnaW4KICBkZXZpY2VzLgotIE90aGVyIHNtYWxsIGFuZCByYW5kb20gY2hhbmdlcy4KCi0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0KQWxleGFuZGVyIERhaGwgKDEpOgogICAgICBBUk06IGR0czogaW14OiBGaXggc2NoZW1h
-IHdhcm5pbmdzIGZvciBwd20tbGVkcwoKQnJ1bm8gVGhvbXNlbiAoMSk6CiAgICAgIEFSTTogZHRz
-OiBpbXg3OiBhZGQgc3VwcG9ydCBmb3Iga2Ftc3RydXAgZmxleCBjb25jZW50cmF0b3IKCkphZ2Fu
-IFRla2kgKDEpOgogICAgICBBUk06IGR0czogaW14NnEtaWNvcmUtb2ZjYXAxMDogVXNlIDEwLjEi
-IEFtcGlyZSBwYW5lbCBjb21wYXRpYmxlCgpKb25hdGhhbiBOZXVzY2jDpGZlciAoMik6CiAgICAg
-IEFSTTogZHRzOiBpbXg1MC1rb2JvLWF1cmE6IEFkZCAnZ3JwJyBzdWZmaXggdG8gcGluY3RybCBu
-b2RlIG5hbWVzCiAgICAgIEFSTTogZHRzOiBpbXg1MC1rb2JvLWF1cmE6IEVuYWJsZSBlS1RGMjEz
-MiB0b3VjaHNjcmVlbgoKS3J6eXN6dG9mIEtvemxvd3NraSAoOCk6CiAgICAgIEFSTTogZHRzOiBp
-bXg6IGFsaWduIEdQSU8gaG9nIG5hbWVzIHdpdGggZHRzY2hlbWEKICAgICAgQVJNOiBkdHM6IGlt
-eDogYWxpZ24gd2F0Y2hkb2cgbm9kZSBuYW1lIHdpdGggZHRzY2hlbWEKICAgICAgQVJNOiBkdHM6
-IHZmOiBhbGlnbiB3YXRjaGRvZyBub2RlIG5hbWUgd2l0aCBkdHNjaGVtYQogICAgICBBUk06IGR0
-czogaW14NmRsLXBpY286IGZpeCBib2FyZCBjb21wYXRpYmxlcwogICAgICBBUk06IGR0czogaW14
-NmRsOiBhZGQgY29tcGF0aWJsZXMgZm9yIEFyaXN0YWluZXRvcyBib2FyZHMKICAgICAgQVJNOiBk
-dHM6IGlteDZzbC13YXJwOiBjb3JyZWN0IHZlbmRvciBpbiBjb21wYXRpYmxlIHRvIFJldm90aWNz
-CiAgICAgIEFSTTogZHRzOiBpbXg3cy13YXJwOiBjb3JyZWN0IHZlbmRvciBpbiBjb21wYXRpYmxl
-IHRvIEVsZW1lbnQxNAogICAgICBBUk06IGR0czogaW14NnEtcGljbzogZml4IGJvYXJkIGNvbXBh
-dGlibGVzCgpMdWthc3ogTWFqZXdza2kgKDEpOgogICAgICBBUk06IGR0czogaW14Mjg6IEZpeCBs
-YWJlbCBuYW1lIGZvciBMMiBzd2l0Y2gKCk1hcmMgS2xlaW5lLUJ1ZGRlICgxKToKICAgICAgQVJN
-OiBkdHM6IGlteDogQ2hhbmdlIGZsZXhjYW4gbm9kZSBuYW1lIHRvICJjYW4iCgpNYXJjbyBGZWxz
-Y2ggKDEpOgogICAgICBBUk06IGR0czogaW14NnFkbC1rb250cm9uLXNhbXg2aTogaW5jcmVhc2Ug
-aTJjLWZyZXF1ZW5jeQoKTWF0dGhpYXMgU2NoaWZmZXIgKDEwKToKICAgICAgQVJNOiBkdHM6IGlt
-eDctbWJhNzogdXBkYXRlIGNvbXBhdGlibGUgc3RyaW5ncwogICAgICBBUk06IGR0czogaW14Ny1t
-YmE3OiBkcm9wIGluY29ycmVjdCBudW0tY2hpcHNlbGVjdHMgcHJvcGVydHkKICAgICAgQVJNOiBk
-dHM6IGlteDctbWJhNzogcmVtb3ZlIHVuc3VwcG9ydGVkIFBIWSBMRUQgc2V0dXAKICAgICAgQVJN
-OiBkdHM6IGlteDctbWJhNzogZGlzYWJsZSBldGhlcm5ldCBQSFkgY2xvY2sgb3V0cHV0cwogICAg
-ICBBUk06IGR0czogaW14Ny1tYmE3OiBjb25maWd1cmUgd2F0Y2hkb2cKICAgICAgQVJNOiBkdHM6
-IGlteDctbWJhNzogdXBkYXRlIE1NQyBhbGlhc2VzCiAgICAgIEFSTTogZHRzOiBpbXg3LW1iYTc6
-IGFkZCBhdWRpbyBzdXBwb3J0CiAgICAgIEFSTTogZHRzOiBpbXg3LW1iYTc6IGVuYWJsZSBSUzQ4
-NSBvbiBVQVJUNwogICAgICBBUk06IGR0czogaW14Ny1tYmE3OiBzcGVjaWZ5IFVTQiBvdmVyLWN1
-cnJlbnQgcG9sYXJpdHkKICAgICAgQVJNOiBkdHM6IGlteDctbWJhNzogc2V0IGRyX21vZGUgdG8g
-b3RnIG9uIHVzYm90ZzEKCk9sZWtzaWogUmVtcGVsICg0KToKICAgICAgQVJNOiBkdHM6IGlteDYv
-Nzogc3luYyBmc2wsc3RvcC1tb2RlIHdpdGggY3VycmVudCBmbGV4Y2FuIGRyaXZlcgogICAgICBB
-Uk06IGR0czogYWRkIEFsdGVzY28gSTZQIGJvYXJkCiAgICAgIEFSTTogZHRzOiBhZGQgVmFuIGRl
-ciBMYWFuIExBTk1DVSBib2FyZAogICAgICBBUk06IGR0czogYWRkIFByb3RvbmljIFdEMyBib2Fy
-ZAoKUGVuZyBGYW4gKDEpOgogICAgICBBUk06IGR0czogaW14OiBhZGQgdXNiIGFsaWFzCgpSYW4g
-V2FuZyAoMik6CiAgICAgIEFSTTogZHRzOiBsczEwMjFhOiBmaXggZmxleHRpbWVyIGZhaWxlZCB0
-byB3YWtlIHN5c3RlbQogICAgICBBUk06IGR0czogbHMxMDIxYTogZml4IHJjcG0gZmFpbGVkIHRv
-IGNsYWltIHJlc291cmNlCgpTdGVmYW4gUmllZG11ZWxsZXIgKDUpOgogICAgICBBUk06IGR0czog
-aW14NnVsOiBzZWdpbjogRml4IHN0bXBlIHRvdWNoc2NyZWVuIHN1Ym5vZGUgbmFtZQogICAgICBB
-Uk06IGR0czogaW14NjogcGh5dGVjOiBTZXQgY29ycmVjdCBlZXByb20gY29tcGF0aWJsZQogICAg
-ICBBUk06IGR0czogaW14NjogcGh5dGVjOiBBZGQgZWVwcm9tIHBhZ2VzaXplCiAgICAgIEFSTTog
-ZHRzOiBpbXg2dWw6IHBoeXRlYzogQWRkIHN1cHBvcnQgZm9yIG9wdGlvbmFsIFBFQi1BVi0wMiBM
-Q0QgYWRhcHRlcgogICAgICBBUk06IGR0czogaW14NnVsOiBzZWdpbjogcGViLWF2LTAyOiBNYXJr
-IHN0bXBlIHRvdWNoIGFzIHdha2V1cC1zb3VyY2UKCll1YW50aWFuIFRhbmcgKDEpOgogICAgICBB
-Uk06IGR0czogbHMxMDIxYTogdXBkYXRlIGNhbGlicmF0aW9uIHRhYmxlIGZvciBUTVUgbW9kdWxl
-CgpZdW51cyBCYXMgKDEpOgogICAgICBBUk06IGR0czogaW14NnVsOiBzZWdpbjogQWRkIHBoeUJP
-QVJELVNlZ2luIHdpdGggZU1NQyBwaHlDT1JFLWkuTVg2VUwKCiBhcmNoL2FybS9ib290L2R0cy9N
-YWtlZmlsZSAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgNiArCiBhcmNoL2FybS9ib290L2R0
-cy9pbXgyNS5kdHNpICAgICAgICAgICAgICAgICAgICAgICB8ICAgMiArLQogYXJjaC9hcm0vYm9v
-dC9kdHMvaW14MjcuZHRzaSAgICAgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KIGFyY2gvYXJt
-L2Jvb3QvZHRzL2lteDI4LmR0c2kgICAgICAgICAgICAgICAgICAgICAgIHwgICAyICstCiBhcmNo
-L2FybS9ib290L2R0cy9pbXgzMS5kdHNpICAgICAgICAgICAgICAgICAgICAgICB8ICAgMyArLQog
-YXJjaC9hcm0vYm9vdC9kdHMvaW14MzUuZHRzaSAgICAgICAgICAgICAgICAgICAgICAgfCAgIDIg
-Ky0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDUwLWtvYm8tYXVyYS5kdHMgICAgICAgICAgICAgIHwg
-IDQxICstCiBhcmNoL2FybS9ib290L2R0cy9pbXg1MC5kdHNpICAgICAgICAgICAgICAgICAgICAg
-ICB8ICAgMiArLQogYXJjaC9hcm0vYm9vdC9kdHMvaW14NTEtemlpLXJkdTEuZHRzICAgICAgICAg
-ICAgICAgfCAgIDIgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDUxLmR0c2kgICAgICAgICAgICAg
-ICAgICAgICAgIHwgICA0ICstCiBhcmNoL2FybS9ib290L2R0cy9pbXg1My1wcGQuZHRzICAgICAg
-ICAgICAgICAgICAgICB8ICAxNSArLQogYXJjaC9hcm0vYm9vdC9kdHMvaW14NTMuZHRzaSAgICAg
-ICAgICAgICAgICAgICAgICAgfCAgIDQgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZkbC1hbHRp
-NnAuZHRzICAgICAgICAgICAgICAgIHwgNTY0ICsrKysrKysrKysrKysrKysrKysrKwogYXJjaC9h
-cm0vYm9vdC9kdHMvaW14NmRsLWFyaXN0YWluZXRvczJfNC5kdHMgICAgICAgfCAgIDIgKy0KIGFy
-Y2gvYXJtL2Jvb3QvZHRzL2lteDZkbC1hcmlzdGFpbmV0b3MyXzcuZHRzICAgICAgIHwgICAyICst
-CiBhcmNoL2FybS9ib290L2R0cy9pbXg2ZGwtYXJpc3RhaW5ldG9zXzQuZHRzICAgICAgICB8ICAg
-MiArLQogYXJjaC9hcm0vYm9vdC9kdHMvaW14NmRsLWFyaXN0YWluZXRvc183LmR0cyAgICAgICAg
-fCAgIDIgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZkbC1sYW5tY3UuZHRzICAgICAgICAgICAg
-ICAgIHwgNDcwICsrKysrKysrKysrKysrKysrCiBhcmNoL2FybS9ib290L2R0cy9pbXg2ZGwtcGlj
-by1kd2FyZi5kdHMgICAgICAgICAgICB8ICAgMiArLQogYXJjaC9hcm0vYm9vdC9kdHMvaW14NmRs
-LXBpY28taG9iYml0LmR0cyAgICAgICAgICAgfCAgIDIgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lt
-eDZkbC1waWNvLW55bXBoLmR0cyAgICAgICAgICAgIHwgICAyICstCiBhcmNoL2FybS9ib290L2R0
-cy9pbXg2ZGwtcGljby1waS5kdHMgICAgICAgICAgICAgICB8ICAgMiArLQogYXJjaC9hcm0vYm9v
-dC9kdHMvaW14NnEtaWNvcmUtb2ZjYXAxMC5kdHMgICAgICAgICAgfCAgMjggKy0KIGFyY2gvYXJt
-L2Jvb3QvZHRzL2lteDZxLXBpY28tZHdhcmYuZHRzICAgICAgICAgICAgIHwgICAyICstCiBhcmNo
-L2FybS9ib290L2R0cy9pbXg2cS1waWNvLWhvYmJpdC5kdHMgICAgICAgICAgICB8ICAgMiArLQog
-YXJjaC9hcm0vYm9vdC9kdHMvaW14NnEtcGljby1ueW1waC5kdHMgICAgICAgICAgICAgfCAgIDIg
-Ky0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZxLXBpY28tcGkuZHRzICAgICAgICAgICAgICAgIHwg
-ICAyICstCiBhcmNoL2FybS9ib290L2R0cy9pbXg2cWRsLWN1Ym94LWkuZHRzaSAgICAgICAgICAg
-ICB8ICAgNCArLQogYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFkbC1rb250cm9uLXNhbXg2aS5kdHNp
-ICAgICAgfCAgIDYgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZxZGwtcGh5dGVjLXBmbGEwMi5k
-dHNpICAgICAgIHwgICAzICstCiBhcmNoL2FybS9ib290L2R0cy9pbXg2cWRsLXBoeXRlYy1waHlj
-b3JlLXNvbS5kdHNpICB8ICAgMyArLQogYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFkbC16aWktcmR1
-Mi5kdHNpICAgICAgICAgICAgfCAgIDggKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZxZGwuZHRz
-aSAgICAgICAgICAgICAgICAgICAgIHwgIDEyICstCiBhcmNoL2FybS9ib290L2R0cy9pbXg2cXAt
-cHJ0d2QzLmR0cyAgICAgICAgICAgICAgICB8IDU1MyArKysrKysrKysrKysrKysrKysrKwogYXJj
-aC9hcm0vYm9vdC9kdHMvaW14NnNsLXdhcnAuZHRzICAgICAgICAgICAgICAgICAgfCAgIDQgKy0K
-IGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZzbC5kdHNpICAgICAgICAgICAgICAgICAgICAgIHwgICAz
-ICsKIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZzbGwuZHRzaSAgICAgICAgICAgICAgICAgICAgIHwg
-ICAyICsKIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZzeC1zb2Z0aW5nLXZpbmluZy0yMDAwLmR0cyAg
-IHwgICA4ICstCiBhcmNoL2FybS9ib290L2R0cy9pbXg2c3guZHRzaSAgICAgICAgICAgICAgICAg
-ICAgICB8ICAgNyArLQogYXJjaC9hcm0vYm9vdC9kdHMvaW14NnVsLWNjaW14NnVsc2JjcHJvLmR0
-cyAgICAgICAgfCAgIDIgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZ1bC1waHl0ZWMtcGh5Y29y
-ZS1zb20uZHRzaSAgIHwgICAxICsKIC4uLi9ib290L2R0cy9pbXg2dWwtcGh5dGVjLXNlZ2luLWZm
-LXJkay1lbW1jLmR0cyAgIHwgIDk0ICsrKysKIC4uLi9ib290L2R0cy9pbXg2dWwtcGh5dGVjLXNl
-Z2luLWZmLXJkay1uYW5kLmR0cyAgIHwgICAxICsKIC4uLi9ib290L2R0cy9pbXg2dWwtcGh5dGVj
-LXNlZ2luLXBlYi1hdi0wMi5kdHNpICAgIHwgMTUxICsrKysrKwogYXJjaC9hcm0vYm9vdC9kdHMv
-aW14NnVsLXBoeXRlYy1zZWdpbi5kdHNpICAgICAgICAgfCAgNDMgLS0KIGFyY2gvYXJtL2Jvb3Qv
-ZHRzL2lteDZ1bC5kdHNpICAgICAgICAgICAgICAgICAgICAgIHwgIDEwICstCiAuLi4vYm9vdC9k
-dHMvaW14NnVsbC1waHl0ZWMtc2VnaW4tZmYtcmRrLWVtbWMuZHRzICB8ICAgMSArCiAuLi4vYm9v
-dC9kdHMvaW14NnVsbC1waHl0ZWMtc2VnaW4tZmYtcmRrLW5hbmQuZHRzICB8ICAgMSArCiAuLi4v
-Ym9vdC9kdHMvaW14NnVsbC1waHl0ZWMtc2VnaW4tcGViLWF2LTAyLmR0c2kgICB8ICAyNiArCiBh
-cmNoL2FybS9ib290L2R0cy9pbXg2dWxsLXBoeXRlYy1zZWdpbi5kdHNpICAgICAgICB8ICAgNyAt
-CiBhcmNoL2FybS9ib290L2R0cy9pbXg3LW1iYTcuZHRzaSAgICAgICAgICAgICAgICAgICB8ICA2
-OSArKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDdkLWZsZXgtY29uY2VudHJhdG9yLW1mZy5kdHMg
-IHwgIDI1ICsKIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDdkLWZsZXgtY29uY2VudHJhdG9yLmR0cyAg
-ICAgIHwgMzE0ICsrKysrKysrKysrKwogYXJjaC9hcm0vYm9vdC9kdHMvaW14N2QtbWJhNy5kdHMg
-ICAgICAgICAgICAgICAgICAgfCAgIDcgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDdkLmR0c2kg
-ICAgICAgICAgICAgICAgICAgICAgIHwgICA2ICsKIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDdzLW1i
-YTcuZHRzICAgICAgICAgICAgICAgICAgIHwgICAyICstCiBhcmNoL2FybS9ib290L2R0cy9pbXg3
-cy13YXJwLmR0cyAgICAgICAgICAgICAgICAgICB8ICAgNCArLQogYXJjaC9hcm0vYm9vdC9kdHMv
-aW14N3MuZHRzaSAgICAgICAgICAgICAgICAgICAgICAgfCAgIDYgKy0KIGFyY2gvYXJtL2Jvb3Qv
-ZHRzL2xzMTAyMWEuZHRzaSAgICAgICAgICAgICAgICAgICAgIHwgIDgxICsrLQogYXJjaC9hcm0v
-Ym9vdC9kdHMvdmZ4eHguZHRzaSAgICAgICAgICAgICAgICAgICAgICAgfCAgIDYgKy0KIDYwIGZp
-bGVzIGNoYW5nZWQsIDI0NDUgaW5zZXJ0aW9ucygrKSwgMTk2IGRlbGV0aW9ucygtKQogY3JlYXRl
-IG1vZGUgMTAwNjQ0IGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZkbC1hbHRpNnAuZHRzCiBjcmVhdGUg
-bW9kZSAxMDA2NDQgYXJjaC9hcm0vYm9vdC9kdHMvaW14NmRsLWxhbm1jdS5kdHMKIGNyZWF0ZSBt
-b2RlIDEwMDY0NCBhcmNoL2FybS9ib290L2R0cy9pbXg2cXAtcHJ0d2QzLmR0cwogY3JlYXRlIG1v
-ZGUgMTAwNjQ0IGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZ1bC1waHl0ZWMtc2VnaW4tZmYtcmRrLWVt
-bWMuZHRzCiBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9hcm0vYm9vdC9kdHMvaW14NnVsLXBoeXRl
-Yy1zZWdpbi1wZWItYXYtMDIuZHRzaQogY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtL2Jvb3Qv
-ZHRzL2lteDZ1bGwtcGh5dGVjLXNlZ2luLXBlYi1hdi0wMi5kdHNpCiBjcmVhdGUgbW9kZSAxMDA2
-NDQgYXJjaC9hcm0vYm9vdC9kdHMvaW14N2QtZmxleC1jb25jZW50cmF0b3ItbWZnLmR0cwogY3Jl
-YXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtL2Jvb3QvZHRzL2lteDdkLWZsZXgtY29uY2VudHJhdG9y
-LmR0cwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbGlu
-dXgtYXJtLWtlcm5lbCBtYWlsaW5nIGxpc3QKbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRl
-YWQub3JnCmh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgt
-YXJtLWtlcm5lbAo=
+The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+
+  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt64-5.11
+
+for you to fetch changes up to 0b84862688951ad5f6ad8990dd9a44e1363c4a2b:
+
+  arm64: dts: imx8mm-beacon-som: Assign PMIC clock (2020-12-01 09:49:49 +0800)
+
+----------------------------------------------------------------
+i.MX arm64 device tree changes for 5.11:
+
+- New board support: LX2162A QDS, Kontron i.MX8M Mini SoMs and
+  baseboards.
+- A number of patches from Adam Ford to add various audio devices for
+  i.MX8MM/MN and update imx8mm-beacon-som board on QSPI NOR and RTC.
+- Correct WDOG_B pin configuration for i.MX8MM/MN/MP.
+- A series from Ioana Ciornei complete the MAC/PCS/PHY representation
+  on DPAA2 devices.
+- Add PMU device for i.MX8MP/MN.
+- Add IR and CAN support for i.MX8MP/MN/MM EVK board.
+- Adjust GIC CPU mask to match number of CPUs for i.MX8MP/MN/MM.
+- A series of patch from Michael Walle to update LS1028A support with
+  addition of CAN and OPTEE, also ENETC PTP and FlexSPI clock input
+  correction.
+- Add SPDIF sound card support on imx8mq-evk board.
+- Misc random updates and device additions.
+
+----------------------------------------------------------------
+Adam Ford (11):
+      arm64: dts: imx8mm-beacon-som: Configure supplies on secondary cpus
+      arm64: dts: imx8mm-beacon-som: Add QSPI NOR flash support
+      arm64: dts: imx8mm: Add support for micfil
+      arm64: dts: imx8mm: Add node for SPDIF
+      arm64: dts: imx8mm-beacon-som: Fix whitespace issue
+      arm64: dts: imx8mn: Enable Asynchronous Sample Rate Converter
+      arm64: dts: imx8mn: Add SAI nodes
+      arm64: dts: imx8mn: Add support for micfil
+      arm64: dts: imx8mn: Add node for SPDIF
+      arm64: dts: imx8mm-beacon-som: Configure RTC aliases
+      arm64: dts: imx8mm-beacon-som: Assign PMIC clock
+
+Anson Huang (4):
+      arm64: dts: imx8mn-evk: Add cpu-supply to enable cpufreq
+      arm64: dts: imx8mm: Correct WDOG_B pin configuration
+      arm64: dts: imx8mn: Correct WDOG_B pin configuration
+      arm64: dts: imx8mp-evk: Correct WDOG_B pin configuration
+
+Frieder Schrempf (1):
+      arm64: dts: Add the Kontron i.MX8M Mini SoMs and baseboards
+
+Ioana Ciornei (9):
+      arm64: dts: ls1088a: add external MDIO device nodes
+      arm64: dts: ls1088ardb: add QSGMII PHY nodes
+      arm64: dts: ls1088ardb: add necessary DTS nodes for DPMAC2
+      arm64: dts: ls208xa: add the external MDIO nodes
+      arm64: dts: ls2088ardb: add PHY nodes for the CS4340 PHYs
+      arm64: dts: ls2088ardb: add PHY nodes for the AQR405 PHYs
+      arm64: dts: ls208xa: add PCS MDIO and PCS PHY nodes
+      arm64: dts: lx2160a: add PCS MDIO and PCS PHY nodes
+      arm64: dts: lx2160ardb: add nodes for the AQR107 PHYs
+
+Jacky Bai (2):
+      arm64: dts: freescale: Add pmu support on imx8mp
+      arm64: dts: freescale: Add pmu support on imx8mn
+
+Joakim Zhang (4):
+      arm64: dts: imx8mp-evk: add CAN support
+      arm64: dts: imx8mq-evk: add linux,autosuspend-period property for IR
+      arm64: dts: imx8mm-evk: add IR support
+      arm64: dts: imx8mn-evk: add IR support
+
+Krzysztof Kozlowski (5):
+      arm64: dts: imx8mq-librem5: align GPIO hog names with dtschema
+      arm64: dts: freescale: align watchdog node name with dtschema
+      arm64: dts: imx8mm: adjust GIC CPU mask to match number of CPUs
+      arm64: dts: imx8mn: adjust GIC CPU mask to match number of CPUs
+      arm64: dts: imx8mp: adjust GIC CPU mask to match number of CPUs
+
+Meenakshi Aggarwal (1):
+      arm64: dts: lx2160a: add device tree for lx2162aqds board
+
+Michael Walle (6):
+      arm64: dts: ls1028a: add missing CAN nodes
+      arm64: dts: freescale: sl28: add CAN node
+      arm64: dts: ls1028a: fix ENETC PTP clock input
+      arm64: dts: ls1028a: fix FlexSPI clock input
+      arm64: dts: ls1028a: add optee node
+      arm64: dts: freescale: sl28: combine SPI MTD partitions
+
+Nathan Chancellor (1):
+      arm64: dts: imx: Fix imx8mm-kontron-n801x-s.dtb target
+
+Serge Semin (1):
+      arm64: dts: layerscape: Harmonize DWC USB3 DT nodes name
+
+Shengjiu Wang (2):
+      arm64: dts: imx8mq: Configure clock rate for audio plls
+      arm64: dts: imx8mq-evk: Add spdif sound card support
+
+Vladimir Oltean (1):
+      arm64: dts: ls1028a: make the eMMC and SD card controllers use fixed indices
+
+Xiaowei Bao (1):
+      arm64: dts: layerscape: Add PCIe EP node for ls1088a
+
+Yuantian Tang (1):
+      arm64: dts: freescale: update calibration table for TMU module
+
+ arch/arm64/boot/dts/freescale/Makefile             |   2 +
+ arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi     |  69 +++--
+ .../dts/freescale/fsl-ls1028a-kontron-sl28.dts     |  18 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts  |   2 +
+ arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts  |   2 +
+ arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi     |  30 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi     |  86 +++---
+ arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi     |  72 ++---
+ arch/arm64/boot/dts/freescale/fsl-ls1088a-rdb.dts  | 119 ++++++++
+ arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi     | 136 ++++++++-
+ arch/arm64/boot/dts/freescale/fsl-ls2088a-rdb.dts  | 120 ++++++++
+ arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi     | 278 +++++++++++++++--
+ arch/arm64/boot/dts/freescale/fsl-lx2160a-rdb.dts  |  32 ++
+ arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi     | 288 ++++++++++++++++--
+ arch/arm64/boot/dts/freescale/fsl-lx2162a-qds.dts  | 334 +++++++++++++++++++++
+ .../boot/dts/freescale/imx8mm-beacon-som.dtsi      | 326 +++++++++++---------
+ arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi      |  16 +-
+ .../boot/dts/freescale/imx8mm-kontron-n801x-s.dts  | 322 ++++++++++++++++++++
+ .../dts/freescale/imx8mm-kontron-n801x-som.dtsi    | 294 ++++++++++++++++++
+ arch/arm64/boot/dts/freescale/imx8mm-var-som.dtsi  |   2 +-
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi          |  53 +++-
+ arch/arm64/boot/dts/freescale/imx8mn-evk.dts       |  32 +-
+ arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi      |  16 +-
+ arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi  |   2 +-
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi          | 158 +++++++++-
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts       |  64 +++-
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi          |  45 ++-
+ arch/arm64/boot/dts/freescale/imx8mq-evk.dts       |  39 +++
+ arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi  |   2 +-
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi          |  68 ++++-
+ 30 files changed, 2681 insertions(+), 346 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/fsl-lx2162a-qds.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
