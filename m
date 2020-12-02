@@ -1,25 +1,30 @@
-Return-Path: <SRS0=JWeQ=FG=0x0f.com=daniel@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2661C64E7C
-	for <soc@archiver.kernel.org>; Wed,  2 Dec 2020 09:10:56 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 9E90222245; Wed,  2 Dec 2020 09:10:56 +0000 (UTC)
-Received: from mail-qv1-f68.google.com (mail-qv1-f68.google.com [209.85.219.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AC4D420709
-	for <soc@kernel.org>; Wed,  2 Dec 2020 09:10:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AC4D420709
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=daniel@0x0f.com
-Received: by mail-qv1-f68.google.com with SMTP id q7so354120qvt.12
-        for <soc@kernel.org>; Wed, 02 Dec 2020 01:10:55 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91539C64E8A
+	for <linux-devicetree@archiver.kernel.org>; Wed,  2 Dec 2020 09:12:02 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 2AAB820709
+	for <linux-devicetree@archiver.kernel.org>; Wed,  2 Dec 2020 09:12:02 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S2388051AbgLBJLl (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Wed, 2 Dec 2020 04:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387961AbgLBJLl (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Wed, 2 Dec 2020 04:11:41 -0500
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B802C0613D4
+        for <devicetree@vger.kernel.org>; Wed,  2 Dec 2020 01:10:55 -0800 (PST)
+Received: by mail-qv1-xf41.google.com with SMTP id es6so364820qvb.7
+        for <devicetree@vger.kernel.org>; Wed, 02 Dec 2020 01:10:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=0x0f.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -33,14 +38,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=jHXxAEFihpGexQosJgOwtA1rTxwRBPimbOCJs6PdyiQ=;
-        b=b56lct2HbCOFQGBjS3F0tX3iX9whUzqsEa4kFk/m2MpAeUcHIUFyp3weg1HnHHJRfP
-         q+/rXRZtOW6PIkKfkAdI4nvx5otEhrX9/iGwxklVX1b5ix0IQ+yapb24WHMArJPzbsRu
-         MtS3SVIOzxfzb1NSz3dIKS4XazmJU5uQHT3GoCeR+yMmJd9/CVc5x/CL74AfNmScrJrD
-         AjyuO9WNhwrpLDpgVltEEv7HdJlY2VuDOjEmRofj4LKcdSIry9G4OlT5qtzeiTeO8k6g
-         yKMoiaAt7QzJfPu47K9jo6pSFlGNoYXIZh4Dv8jJqSV5zgOnLOmQRXIg1C48FQsEjosF
-         2BrA==
-X-Gm-Message-State: AOAM531/ev2VHBofDdbbeyThXMx0aqNHtZWkvLMXSezWZjDFD8yxMmk0
-	2J9LE/piWW48f0jQtRM4hlQOdtLkV7k0Adhve8bgRw==
+        b=EU/o1dt9DwDmnvS/qZOUWzE/XkXoBrYcTrVeLib+qXFFlmwh/l/EAQlKDYn7ulBZFV
+         nI1zDdh8XSx8gMKyDUf8S7H4/FOdJXGUzPGK/cy7pGzF/va5KjreAINt2RD4BdB3Ur4w
+         dGwLTQM3uHmAcfsA8969jN5Z2Kc41Ga2Ei0JTxhwJFTDgrD/3Rsfqqrwyi26wKb9Gnv/
+         t89h/Fl8EP03DNztBqAv3kNvekoSakfffn9jflPZtuyEBZjVrUTiXiA4ZBj5D/6uJO1Q
+         ceiLK648JZ5y5rXH84br1lK/RaRkVDgdwed2hx4z4thCZryabMHj5ZIcaOxTWivbHmtG
+         RL/w==
+X-Gm-Message-State: AOAM530+WtP3WarWbXpadjkA7506I6M8ZXyX0xKB533AhioYP+bqQOcd
+        0DxLyXzGAGZyDMdGn90eSy96H1MztQWpwNEelzQXfA==
 X-Google-Smtp-Source: ABdhPJytwEIZuRyGn05kO7fcdgPdlwgix3LuGPG61AnTa6cEDH4lUg49k1PEGAjiN9bs36DCjIusI58CiLW25Da9z0Y=
 X-Received: by 2002:a0c:8e47:: with SMTP id w7mr1540726qvb.55.1606900254283;
  Wed, 02 Dec 2020 01:10:54 -0800 (PST)
@@ -48,17 +53,22 @@ MIME-Version: 1.0
 References: <20201201134330.3037007-1-daniel@0x0f.com> <20201201134330.3037007-11-daniel@0x0f.com>
  <20201201150425.GC1551@shell.armlinux.org.uk>
 In-Reply-To: <20201201150425.GC1551@shell.armlinux.org.uk>
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Wed, 2 Dec 2020 18:10:43 +0900
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Wed, 2 Dec 2020 18:10:43 +0900
 Message-ID: <CAFr9PXnME5UCyOdkRGFO2+=gv27grcq35Adrtio3ex4hq0CWEQ@mail.gmail.com>
 Subject: Re: [PATCH v2 10/10] ARM: mstar: SMP support
-To: Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
 List-Id: <soc.lore.kernel.org>
-Cc: DTML <devicetree@vger.kernel.org>, SoC Team <soc@kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, olof@lixom.net, 
-	Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
+Cc:     DTML <devicetree@vger.kernel.org>, SoC Team <soc@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        olof@lixom.net, Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20201202091043.m8t_h0n7hco7moJ4Hk_z3SXt_iE5HnpHY0SyEAwzhn4@z>
 
 Hi Russell,
 
