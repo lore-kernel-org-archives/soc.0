@@ -1,128 +1,139 @@
-Return-Path: <SRS0=P2QD=FG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=Iefh=FG=foss.st.com=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87AF2C64E8A
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  2 Dec 2020 09:12:20 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 154C3C64E7C
+	for <soc@archiver.kernel.org>; Wed,  2 Dec 2020 11:02:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id C54D42222A; Wed,  2 Dec 2020 11:02:06 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0A19522202
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  2 Dec 2020 09:12:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0A19522202
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=7ZC5cGmSlXtFGBCECibTkoP3rYz/6Tm46HVXEgWYgmE=; b=p2FL2lLL/wODk16WPY/EJHe36
-	fOVomiiLlsOXGsMB8gaq+1iLkM6e6Y6nyXX9oz0CNb2Ygg7UoVBGBCicoUH4V7Tyihzdf19zLUXW9
-	+TNVkApBpCQqxHZVRkIzS4ZWy4c/yClVd+jNPwMYcCBrGnDdAyvRe3KH0EwPLWbHj7rH1omm0Gbxa
-	/dM05DdObhDWqaFDjCHN7GAGfCqeW7hhARZZPTdua0+k/NraPUxxLV7oUETY+Ty7EEuRtWI0Fxx0H
-	3bVPaEi/9tq0EY7KViPniz5DHZln8jjuLon8pdhZht1r2ges9o4L3l8JLt3s2baaa8mYeaGhhCZkU
-	uA6X086Ig==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kkOA7-0000HK-Km; Wed, 02 Dec 2020 09:10:59 +0000
-Received: from mail-qv1-xf41.google.com ([2607:f8b0:4864:20::f41])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kkOA5-0000GF-0J
- for linux-arm-kernel@lists.infradead.org; Wed, 02 Dec 2020 09:10:58 +0000
-Received: by mail-qv1-xf41.google.com with SMTP id 62so357637qva.11
- for <linux-arm-kernel@lists.infradead.org>;
- Wed, 02 Dec 2020 01:10:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=jHXxAEFihpGexQosJgOwtA1rTxwRBPimbOCJs6PdyiQ=;
- b=Y5QtHYdkrX6aP/Zfes2Iz6RXNnojW27vyX/5CgTqb+ITygoCCJ2dfDbg2zQfOXAiic
- PF4gIiC7/Pfg7hZ/9b5KyW8cmfjNRwejA5zB5Pca6v0+vP80S/2MNkkd29UrKFoqUPwY
- EGUNWFX4S8E1fm9eVVgvgwraAIP7bfzNE460M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=jHXxAEFihpGexQosJgOwtA1rTxwRBPimbOCJs6PdyiQ=;
- b=GJqF6R/vsVBI/8QPSRuyDzOl2OkzaOBm0Qxoq4yXySxUp4wMSoX59aTViXFT34wxl2
- TvFPuHO1VWaOgOI29GgT1AQKr/oToSAH8qIWun37tTpDsrbzhQJvRDXHzhRW2Es3zQ+C
- izcse1hUAjmzdClVSK87hWqzgdx70rz+mlu8zXFaDNfICyg0twvwvahovdpyPkbh+pTb
- kK+mzAf+UypE9DsmnecGldR9OeGiyttIiZu31i+tdXpgPrjHSQTncu9yZAH8xcg7eQox
- kGmlto97H2BIOvDo2NIc57sEaywIzw+OAjGaJuDq+0Lcxalo8p5sb95N+76EkBcl9Pv4
- zxeQ==
-X-Gm-Message-State: AOAM530hazFLRqRrWV1eGIgwbbSUBjd4gbTxcLWy/n9qifELlbRipy35
- UEghBfH3UIVCvbMjB07Em+HWIbnqoPRf8FhwPPuOqSswqQ53lw==
-X-Google-Smtp-Source: ABdhPJytwEIZuRyGn05kO7fcdgPdlwgix3LuGPG61AnTa6cEDH4lUg49k1PEGAjiN9bs36DCjIusI58CiLW25Da9z0Y=
-X-Received: by 2002:a0c:8e47:: with SMTP id w7mr1540726qvb.55.1606900254283;
- Wed, 02 Dec 2020 01:10:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20201201134330.3037007-1-daniel@0x0f.com>
- <20201201134330.3037007-11-daniel@0x0f.com>
- <20201201150425.GC1551@shell.armlinux.org.uk>
-In-Reply-To: <20201201150425.GC1551@shell.armlinux.org.uk>
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Wed, 2 Dec 2020 18:10:43 +0900
-Message-ID: <CAFr9PXnME5UCyOdkRGFO2+=gv27grcq35Adrtio3ex4hq0CWEQ@mail.gmail.com>
-Subject: Re: [PATCH v2 10/10] ARM: mstar: SMP support
-To: Russell King - ARM Linux admin <linux@armlinux.org.uk>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201202_041057_213374_F773C015 
-X-CRM114-Status: GOOD (  15.53  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by mail.kernel.org (Postfix) with ESMTPS id 730C3221FB;
+	Wed,  2 Dec 2020 11:02:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 730C3221FB
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=alexandre.torgue@foss.st.com
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0B2Av8Pi018684;
+	Wed, 2 Dec 2020 12:01:58 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=8qjveVABJQqJ9WY7XH8g9MbnLHgI/mcblC2MJUgSUe8=;
+ b=buVMJIIkvs8RxSPPCVFHuV9X6VkPJLCLam8OK6BUqGbEuv5G5UZ8Z6TQX5zM0/xci0uV
+ 4Zca8Okf4hJhthKInVvChbyIPHeY+elGnaIWfbUlCLGgkJpWhFnic7FEa73hsSfsAR9C
+ rXYZ/Zh5b1I741ui5mbrrqfMQCLxv8y+MPpH/npjvP3gWamFNkoAAV0xKITjZ+ViKZzG
+ NiT5wcP/eArWe4zOyzPTCGcAV4dzp77+8We9x2cUtNjR2lf8OEYAsfAY32xCtZs5i9Rf
+ kG8zOPSL5f35MgzS9iSmCmszfk7FwfoK7dMPyvky2AyB14I3Nwr8vDFPvd3up8B7R3pp VQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com with ESMTP id 355w3e2pu7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 02 Dec 2020 12:01:58 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 20EEB100038;
+	Wed,  2 Dec 2020 12:01:57 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0AB0624A99C;
+	Wed,  2 Dec 2020 12:01:57 +0100 (CET)
+Received: from lmecxl0912.lme.st.com (10.75.127.44) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 2 Dec
+ 2020 12:01:56 +0100
+Subject: Re: [GIT PULL] STM32 DT changes for v5.11 #1
+To: Arnd Bergmann <arnd@kernel.org>,
+        Alexandre TORGUE
+	<alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-Cc: DTML <devicetree@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Rob Herring <robh@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>, olof@lixom.net, Willy Tarreau <w@1wt.eu>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
+CC: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Kevin
+ Hilman <khilman@baylibre.com>, SoC Team <soc@kernel.org>,
+        arm-soc
+	<arm@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Marek Vasut
+	<marex@denx.de>, Ahmad Fatoum <a.fatoum@pengutronix.de>
+References: <873c17a5-28d5-9261-f691-1b917611c932@foss.st.com>
+ <CAK8P3a1o6Dt0wakXB=sUC-t9DkFqSe=ZwSMYtYKsoZNaNfXUew@mail.gmail.com>
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Message-ID: <bb576e8d-cf11-4f3d-6b9c-6944e6795c2a@foss.st.com>
+Date: Wed, 2 Dec 2020 12:00:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAK8P3a1o6Dt0wakXB=sUC-t9DkFqSe=ZwSMYtYKsoZNaNfXUew@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201202091043.BKZN4U637M-rw7to6LHt-d0O9xFk65sHTYoE-8lyqAs@z>
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-12-02_04:2020-11-30,2020-12-02 signatures=0
 
-Hi Russell,
+Hi Arnd
 
-On Wed, 2 Dec 2020 at 00:04, Russell King - ARM Linux admin
-<linux@armlinux.org.uk> wrote:
->
-> On Tue, Dec 01, 2020 at 10:43:30PM +0900, Daniel Palmer wrote:
-> > +     np = of_find_compatible_node(NULL, NULL, "mstar,smpctrl");
-> > +     smpctrl = of_iomap(np, 0);
-> > +
-> > +     if (!smpctrl)
-> > +             return -ENODEV;
->
-> Wouldn't -ENOMEM be more appropriate here?
+On 11/27/20 8:42 PM, Arnd Bergmann wrote:
+> On Fri, Nov 27, 2020 at 9:54 AM Alexandre TORGUE
+> <alexandre.torgue@foss.st.com> wrote:
+>>
+>> Please consider this first round of STM32 DT updates for v5.11. As usual
+>> main changed concern MPU part. Various fixes have been done, a new board
+>> has been added for DH and USB type C support has been added for ST DK
+>> boards.
+> 
+> Out of curiosity, what is your impression of the state of the MCU port?
+> 
+> It seems to me that STM32H7/STM32F7 is by far the most active NOMMU
+> platform in mainline Linux (with some activity for j2 and recently rv64), but
+> it's also much less active than it was a few years ago and slowly winding down
+> further, presumably as other OSs are getting better and full-featured MPUs
+> are getting almost as cheap.
 
-There seems to be examples of both -ENOMEM and -ENODEV in other ARM platforms.
-arch/arm/mach-aspeed/platsmp.c uses -ENODEV for example.
+There is 2 kinds of activity around our MCU products: one coming from ST 
+team (as most of peripherals are common with our MPU, changes done for 
+MPU are reported to MCU). And another coming from external people using 
+those MCU boards (few people).
+There are still improvements to do for those platforms like adding dma 
+support on cortex-M7 (which implies to use dedicated MPU region ...) but 
+I don't have as much time as I would like to work on this subject so it 
+is still pending.
+I would say that stm32 mcu linux support continues to survive with 
+incoming patches and at rhythm of the incoming patches.
 
-I went with -ENODEV there as the source of the error is most likely
-the node not being in the device tree.
-I didn't check the result of of_find_compatible_node() because for the
-memory barrier code in the same file I was told it wasn't necessary.
+> I also tried to find modern distro support, but I couldn't find anything that
+> has the elf-fdpic changes that were merged into mainline gcc, instead
+> it seems any user space is either on binfmt-flat or using elf-fdpic with
+> ancient patched compilers that can build user space but no longer
+> build the kernel (which now requires gcc-4.9 or higher), so I wonder if
+> I'm looking in the wrong places, or if this just doesn't work.
 
-Thanks,
+Some STM32 MCU are supported in buildroot (not all), using u-boot as 
+bootloader and binfmt-flat for user space. Concerning fdpic, IIRC 
+support has been added in buildroot but we don't use it yet for our STM32.
 
-Daniel
+> Overall, is this something where you only support existing users for
+> as long as they are around, or do you keep seeing new products based
+> on STM32F4/F7/H7?
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+I just continue to support existing users and I don't plan to push 
+another STM32 MCU.
+
+Do you think we should better promote/support NOMMU platform in  mainline?
+
+regards
+Alex
+
+> 
+>> Due to company IT changes, for upstream "process" my mail address in no
+>> longer alexandre.torgue@st.com but alexandre.torgue@foss.st.com. Let me
+>> know if it causes issue for tag signature. On my side I updated GPG key
+>> with this new address and it seems ok.
+> 
+> It's no problem on my end, thanks for letting me know.
+> 
+>         Arnd
+> 
