@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-23.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7067C64E8A
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  2 Dec 2020 14:29:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F12EC71156
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  2 Dec 2020 14:29:22 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 821DF21D42
+	by mail.kernel.org (Postfix) with ESMTPS id E76F6221EB
 	for <linux-arm-kernel@archiver.kernel.org>; Wed,  2 Dec 2020 14:29:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 821DF21D42
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E76F6221EB
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,35 +23,34 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:References:In-Reply-To:Message-Id:Date:Subject:To:
 	From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=ZY/6KG5cf5Ekrn6a/VG5WY94gXAteQTir7BBzagBegw=; b=l2LSg7UW8XFqINkKFEUaPbpzcB
-	l1c5NKrpAShw/lBQy8OqFb/LcSxIjdqPzOKwJflJkokk3kDfK8oRt2qS61sUIb5aZFerAbNbNQ30X
-	72jxrUbIYmM9TzuUQWeF9J5R/sqvMU0O7aCF/rvN27dsIALIz6vcKmCZyUnenNsshrVXB5BUOQN1J
-	Xgy8vKeZk8ehJuztJsHxvd5Mrog965Qza5RktC2nkisn15CiBSVntlAjV83AVzsVeVSoKTk5tMkVW
-	5T3yvnryYEaGpmSKyOUFJAgspLgHoR46QQcYj9oCXLti+rOvdxNNAlsNZ4V8SWIT9GUY6RM/mMqD9
-	AdUtJlHw==;
+	bh=TafCFhmUvvNO82Wp5yPbfxSVgqYy4aWbBfmCpqn0Jwg=; b=1yesP3SEPtlHZCUGBG/k5R1Bld
+	Fdnz0+rvcZUu8VYxixurVbH8nxuO/jAY0yC23NQe7xpQ+R8Ti1ss9kKwMPRcb+IGCfPEW9Dide/Do
+	ftHYwpZdbRefs0cZhb/SDdhoxeG9uZ8wbOSBFC5OaumJcfpCQYm5+FEOLzf3K4KPtV4FN6i+VmF9r
+	uxT7dkE16J1IYgYGjDrJC5H8oU1Xi9JN5p+I4+DsCYPJk1QUjx0PjWh+9Ky6haiG9wGQr6h7sNL1O
+	SDbLQtjRh5k2bAPPhQpldmLoIX2YRthiVDx5qQwsBTKkofU9cWRANw5/0On9VTT/ntcphqCoag2UI
+	cNLC/DOg==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kkT6k-0005LH-H3; Wed, 02 Dec 2020 14:27:50 +0000
+	id 1kkT6o-0005MQ-F4; Wed, 02 Dec 2020 14:27:54 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kkT6h-0005KF-3h
- for linux-arm-kernel@lists.infradead.org; Wed, 02 Dec 2020 14:27:48 +0000
+ id 1kkT6j-0005Kr-G5
+ for linux-arm-kernel@lists.infradead.org; Wed, 02 Dec 2020 14:27:50 +0000
 From: Shawn Guo <shawnguo@kernel.org>
 Authentication-Results: mail.kernel.org;
  dkim=permerror (bad message/signature format)
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
 	arm@kernel.org
-Subject: [GIT PULL 2/6] i.MX SoC update for 5.11
-Date: Wed,  2 Dec 2020 22:27:13 +0800
-Message-Id: <20201202142717.9262-2-shawnguo@kernel.org>
+Subject: [GIT PULL 3/6] i.MX DT bindings update for 5.11
+Date: Wed,  2 Dec 2020 22:27:14 +0800
+Message-Id: <20201202142717.9262-3-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201202142717.9262-1-shawnguo@kernel.org>
 References: <20201202142717.9262-1-shawnguo@kernel.org>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201202_092747_601505_9B1C334C 
-X-CRM114-Status: UNSURE (   8.15  )
-X-CRM114-Notice: Please train this message.
+X-CRM114-CacheID: sfid-20201202_092749_717954_984881FF 
+X-CRM114-Status: GOOD (  10.29  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,37 +77,86 @@ The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-5.11
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-5.11
 
-for you to fetch changes up to 4ba79e25d7f1a7394021ba4c215a7ecdcc270fb6:
+for you to fetch changes up to 747ec53ea72a548693d0664817776d3634e9b63a:
 
-  ARM: mxs: Add serial number support for i.MX23, i.MX28 SoCs (2020-11-30 17:31:29 +0800)
-
-----------------------------------------------------------------
-i.MX SoC update for 5.11:
-
-- Add revision detection support for i.MX7ULP revision 2.2.
-- Add a little document for i.MX7ULP B2 silicon version.
-- Add serial number support for i.MX23, i.MX28 SoCs through soc_device.
-- Improve the identifying of i.MX6QP SoCs.
+  dt-bindings: arm: fsl: add Protonic WD3 board (2020-12-01 09:27:55 +0800)
 
 ----------------------------------------------------------------
-Anson Huang (1):
-      ARM: imx: Add revision support for i.MX7ULP revision 2.2
+i.MX DT bindings update for 5.11:
 
-Fabio Estevam (1):
-      ARM: imx: imx7ulp: Add a comment explaining the B2 silicon version
+- Quite some patches that update vendor-prefixes.yaml and fsl.yaml to
+  document missing board compatibles and add new board compatibles.
+- A couple of patches from Dong Aisheng to update imx-scu firmware and
+  imx-lpcg clock bindings for new SCU two cells clock support.
+- A couple of net bindings update from Ioana Ciornei to complete the
+  MAC/PCS/PHY representation on DPAA2 devices.
+- Document watchdog compatibles for all i.MX and Layerscape devices.
 
-Ivan Zaentsev (1):
-      ARM: mxs: Add serial number support for i.MX23, i.MX28 SoCs
+----------------------------------------------------------------
+Bruno Thomsen (1):
+      dt-bindings: fsl: add kamstrup flex concentrator to schema
 
-Sven Van Asbroeck (1):
-      ARM: imx: mach-imx6q: correctly identify i.MX6QP SoCs
+Dong Aisheng (2):
+      dt-bindings: firmware: imx-scu: new binding to parse clocks from device tree
+      dt-bindings: clock: imx-lpcg: add support to parse clocks from device tree
 
- arch/arm/mach-imx/mach-imx6q.c   |  9 +++++++--
- arch/arm/mach-imx/mach-imx7ulp.c |  4 ++++
- arch/arm/mach-mxs/mach-mxs.c     | 19 +++++++++++++++++++
- 3 files changed, 30 insertions(+), 2 deletions(-)
+Frieder Schrempf (1):
+      dt-bindings: arm: fsl: Add Kontron i.MX8M Mini SoMs and boards
+
+Ioana Ciornei (2):
+      dt-bindings: net: add the DPAA2 MAC DTS definition
+      dt-bindings: net: add the 10gbase-r connection type
+
+Krzysztof Kozlowski (21):
+      dt-bindings: arm: fsl: document i.MX25 and i.MX27 boards
+      dt-bindings: watchdog: fsl-imx: document NXP compatibles
+      dt-bindings: vendor-prefixes: add MicroSys
+      dt-bindings: vendor-prefixes: add Revotics
+      dt-bindings: arm: fsl: document i.MX51 boards
+      dt-bindings: arm: fsl: document i.MX53 boards
+      dt-bindings: arm: fsl: document VF boards
+      dt-bindings: arm: fsl: document i.MX6DL boards
+      dt-bindings: vendor-prefixes: add ABB
+      dt-bindings: arm: fsl: document i.MX6DL Aristainetos boards
+      dt-bindings: vendor-prefixes: add Element14
+      dt-bindings: arm: fsl: document i.MX6Q boards
+      dt-bindings: arm: fsl: document i.MX6QP boards
+      dt-bindings: arm: fsl: document i.MX6SL boards
+      dt-bindings: arm: fsl: document i.MX6SX boards
+      dt-bindings: arm: fsl: document i.MX6UL boards
+      dt-bindings: arm: fsl: document i.MX6ULL boards
+      dt-bindings: arm: fsl: document i.MX7D boards
+      dt-bindings: arm: fsl: document LS1012A FRWY board
+      dt-bindings: arm: fsl: document SolidRun LX2160A boards
+      dt-bindings: arm: fsl: document i.MX7S boards
+
+Matthias Schiffer (1):
+      dt-bindings: arm: fsl: update TQ-Systems SoMs and boards based on i.MX7
+
+Meenakshi Aggarwal (1):
+      dt-bindings: fsl: add compatible for LX2162A QDS Board
+
+Oleksij Rempel (6):
+      dt-bindings: vendor-prefixes: Add an entry for Van der Laan b.v.
+      dt-bindings: vendor-prefixes: Add an entry for Altus-Escon-Company
+      dt-bindings: arm: fsl: add Altesco I6P board
+      dt-bindings: arm: fsl: add Van der Laan LANMCU board
+      dt-bindings: vendor-prefixes: add "virtual" prefix
+      dt-bindings: arm: fsl: add Protonic WD3 board
+
+ .../devicetree/bindings/arm/freescale/fsl,scu.txt  |  12 +-
+ Documentation/devicetree/bindings/arm/fsl.yaml     | 360 +++++++++++++++++++--
+ .../devicetree/bindings/clock/imx8qxp-lpcg.yaml    |  79 +++--
+ .../bindings/net/ethernet-controller.yaml          |   1 +
+ .../bindings/net/fsl,qoriq-mc-dpmac.yaml           |  60 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml       |  14 +
+ .../devicetree/bindings/watchdog/fsl-imx-wdt.yaml  |  16 +
+ include/dt-bindings/clock/imx8-lpcg.h              |  14 +
+ 8 files changed, 502 insertions(+), 54 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/fsl,qoriq-mc-dpmac.yaml
+ create mode 100644 include/dt-bindings/clock/imx8-lpcg.h
 
 _______________________________________________
 linux-arm-kernel mailing list
