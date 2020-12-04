@@ -1,117 +1,103 @@
-Return-Path: <SRS0=glJB=FH=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=HQex=FI=oracle.com=santosh.shilimkar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07ABDC4361A
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  3 Dec 2020 23:20:11 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFA7EC4361A
+	for <soc@archiver.kernel.org>; Fri,  4 Dec 2020 02:00:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 8A19E22511; Fri,  4 Dec 2020 02:00:07 +0000 (UTC)
+Received: from aserp2130.oracle.com (aserp2130.oracle.com [141.146.126.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9DA122245C
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  3 Dec 2020 23:20:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9DA122245C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=IgBVpjxp76s2WXA8T/KyN5+CImDAguQWHSUOt09tiiY=; b=x1Ojf2DB7/9UfU5ont+BoVXZDK
-	OimDIzJEoM5gEY+HkC8vqM7AiGnmH3g5MYk6dzA+lOz+Vfm/t2SjnE0uvLwopNZ5bWPYW/x33HpR/
-	3RbmobUj/lTGw9fXFpsCX4sLNvYUvhqoz6eUefKLVQ6U8/Jlr5+3NnRYAY0T7v4K7MDK2ZvY+kSap
-	jIm7nmSJr0e3gcFY8O4oSRNI5z2X5+LF3E6/Rsfx9hWUxXGWZVceLTu3UCL1fwt4VvkEfvUu7zvPD
-	dH/15qjEii8oeo19ruTzGkAsqUFNy3xNTVGV2OgFHvZ+5Dl+cnAFWCT3D4NtmP1CsVJl+rz0v2NVg
-	5O2T3FWQ==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kkxsD-0001Wh-TI; Thu, 03 Dec 2020 23:18:53 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kkxsB-0001WK-HC
- for linux-arm-kernel@lists.infradead.org; Thu, 03 Dec 2020 23:18:52 +0000
-From: Arnd Bergmann <arnd@kernel.org>
-Authentication-Results: mail.kernel.org;
- dkim=permerror (bad message/signature format)
+	by mail.kernel.org (Postfix) with ESMTPS id 2390D22509;
+	Fri,  4 Dec 2020 02:00:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2390D22509
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=oracle.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=santosh.shilimkar@oracle.com
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+	by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B41xnZ5083677;
+	Fri, 4 Dec 2020 02:00:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=kgQwytX7qXW/GdrGFnGsdVO9wDu/0QUsSPDjuT8pMz4=;
+ b=orYrYk1CsgmCBUTuinqF31VlB0vCKmbysrP2yt0EpThq/bUcbpb1JPEc/RrqyjlD3d6o
+ 2XPcoRct1zOP3XBrSh4qdEtCOoWhzCMEQfB/nvGuusltV+UParw4KBXMgEgR3FMgV7PE
+ zKj1YyLUkWZob531o/24Rq1IiyU4ybe6kerm3dMSYBl2mbzpI9q6UTTXLF03jehq1yIb
+ mnjW5XHYf0dVQr8d4gdOuO1X+RJoO3QHX9e6mJgJ0dDE0495Pwc7VdMRccXFz3tNeSWp
+ ZyFoxWMFXK1ho4xMtSu1Lo6kBKI047SPjrGLlGc/p0E38X8w4aWOWpsVsZKnHN0nMYMn vg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+	by aserp2130.oracle.com with ESMTP id 353c2b95yu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 04 Dec 2020 02:00:00 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+	by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B41oW8s185524;
+	Fri, 4 Dec 2020 01:58:00 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+	by aserp3030.oracle.com with ESMTP id 35404rpbfj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 04 Dec 2020 01:57:59 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+	by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B41vtwa015627;
+	Fri, 4 Dec 2020 01:57:55 GMT
+Received: from [10.74.107.25] (/10.74.107.25)
+	by default (Oracle Beehive Gateway v4.0)
+	with ESMTP ; Thu, 03 Dec 2020 17:57:54 -0800
+Subject: Re: [PATCH] ARM: keystone: remove SECTION_SIZE_BITS/MAX_PHYSMEM_BITS
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Santosh Shilimkar <ssantosh@kernel.org>
-Subject: [PATCH] ARM: keystone: remove SECTION_SIZE_BITS/MAX_PHYSMEM_BITS
-Date: Fri,  4 Dec 2020 00:18:40 +0100
-Message-ID: <20201203231847.1484900-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.27.0
+To: Arnd Bergmann <arnd@kernel.org>, soc@kernel.org,
+        Santosh Shilimkar <ssantosh@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20201203231847.1484900-1-arnd@kernel.org>
+From: santosh.shilimkar@oracle.com
+Organization: Oracle Corporation
+Message-ID: <9f49bc96-57ac-e06e-535e-659c4cb3dfea@oracle.com>
+Date: Thu, 3 Dec 2020 17:57:52 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.12.1
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201203_181851_660413_538ADC53 
-X-CRM114-Status: GOOD (  11.31  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
- linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <20201203231847.1484900-1-arnd@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201203231840.FHKZ4cfHDXlvBi_0HaKkvL6yWhIwh1g2cvOKLdNYukg@z>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9824 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
+ malwarescore=0 mlxscore=0 mlxlogscore=999 phishscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012040008
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9824 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1011 bulkscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ spamscore=0 adultscore=0 mlxscore=0 priorityscore=1501 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012040009
 
-From: Arnd Bergmann <arnd@arndb.de>
-
-These definitions are evidently left over from the days when
-sparsemem settings were platform specific. This was no longer
-the case when the platform got merged.
-
-There was no warning in the past, but now the asm/sparsemem.h
-header ends up being included indirectly, causing this warning:
-
-In file included from /git/arm-soc/arch/arm/mach-keystone/keystone.c:24:
-arch/arm/mach-keystone/memory.h:10:9: warning: 'SECTION_SIZE_BITS' macro redefined [-Wmacro-redefined]
- #define SECTION_SIZE_BITS       34
-        ^
-arch/arm/include/asm/sparsemem.h:23:9: note: previous definition is here
- #define SECTION_SIZE_BITS       28
-        ^
-
-Clearly the definitions never had any effect here, so remove them.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/mach-keystone/memory.h | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/arch/arm/mach-keystone/memory.h b/arch/arm/mach-keystone/memory.h
-index 9147565d0581..1b9ed1271e05 100644
---- a/arch/arm/mach-keystone/memory.h
-+++ b/arch/arm/mach-keystone/memory.h
-@@ -6,9 +6,6 @@
- #ifndef __MEMORY_H
- #define __MEMORY_H
- 
--#define MAX_PHYSMEM_BITS	36
--#define SECTION_SIZE_BITS	34
--
- #define KEYSTONE_LOW_PHYS_START		0x80000000ULL
- #define KEYSTONE_LOW_PHYS_SIZE		0x80000000ULL /* 2G */
- #define KEYSTONE_LOW_PHYS_END		(KEYSTONE_LOW_PHYS_START + \
--- 
-2.27.0
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+On 12/3/20 3:18 PM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> These definitions are evidently left over from the days when
+> sparsemem settings were platform specific. This was no longer
+> the case when the platform got merged.
+> 
+> There was no warning in the past, but now the asm/sparsemem.h
+> header ends up being included indirectly, causing this warning:
+> 
+> In file included from /git/arm-soc/arch/arm/mach-keystone/keystone.c:24:
+> arch/arm/mach-keystone/memory.h:10:9: warning: 'SECTION_SIZE_BITS' macro redefined [-Wmacro-redefined]
+>   #define SECTION_SIZE_BITS       34
+>          ^
+> arch/arm/include/asm/sparsemem.h:23:9: note: previous definition is here
+>   #define SECTION_SIZE_BITS       28
+>          ^
+> 
+> Clearly the definitions never had any effect here, so remove them.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+Acked-by: Santosh Shilimkar <ssantosh@kernel.org>
