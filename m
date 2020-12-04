@@ -1,104 +1,96 @@
-Return-Path: <SRS0=tbgD=FI=lists.ozlabs.org=linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=vACc=FI=pengutronix.de=p.zabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91A40C4361A
-	for <linuxppc-dev@archiver.kernel.org>; Fri,  4 Dec 2020 12:25:27 +0000 (UTC)
-Received: from lists.ozlabs.org (lists.ozlabs.org [203.11.71.2])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3A5CC433FE
+	for <soc@archiver.kernel.org>; Fri,  4 Dec 2020 14:25:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 9645122B39; Fri,  4 Dec 2020 14:25:06 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 943B5227BF
-	for <linuxppc-dev@archiver.kernel.org>; Fri,  4 Dec 2020 12:25:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 943B5227BF
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org
-Received: from bilbo.ozlabs.org (lists.ozlabs.org [IPv6:2401:3900:2:1::3])
-	by lists.ozlabs.org (Postfix) with ESMTP id 4CnX3Q6v45zDqRf
-	for <linuxppc-dev@archiver.kernel.org>; Fri,  4 Dec 2020 23:25:22 +1100 (AEDT)
-Authentication-Results: lists.ozlabs.org; spf=pass (sender SPF authorized)
- smtp.helo=elvis.franken.de (client-ip=193.175.24.41; helo=elvis.franken.de;
- envelope-from=tsbogend@alpha.franken.de; receiver=<UNKNOWN>)
-Authentication-Results: lists.ozlabs.org; dmarc=none (p=none dis=none)
- header.from=alpha.franken.de
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
- by lists.ozlabs.org (Postfix) with ESMTP id 4CnWkM2nnbzDrJq
- for <linuxppc-dev@lists.ozlabs.org>; Fri,  4 Dec 2020 23:10:34 +1100 (AEDT)
-Received: from uucp (helo=alpha)
- by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
- id 1kl9ud-0005Nb-00; Fri, 04 Dec 2020 13:10:11 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
- id 596D6C02CF; Fri,  4 Dec 2020 13:06:32 +0100 (CET)
-Date: Fri, 4 Dec 2020 13:06:32 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-Subject: Re: [PATCH v2 3/5] MIPS: configs: drop unused BACKLIGHT_GENERIC option
-Message-ID: <20201204120632.GA10011@alpha.franken.de>
-References: <20201201222922.3183-1-andrey.zhizhikin@leica-geosystems.com>
- <20201201222922.3183-4-andrey.zhizhikin@leica-geosystems.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201201222922.3183-4-andrey.zhizhikin@leica-geosystems.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-BeenThere: linuxppc-dev@lists.ozlabs.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
-List-Unsubscribe: <https://lists.ozlabs.org/options/linuxppc-dev>,
- <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=unsubscribe>
-List-Archive: <http://lists.ozlabs.org/pipermail/linuxppc-dev/>
-List-Post: <mailto:linuxppc-dev@lists.ozlabs.org>
-List-Help: <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=help>
-List-Subscribe: <https://lists.ozlabs.org/listinfo/linuxppc-dev>,
- <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=subscribe>
+	by mail.kernel.org (Postfix) with ESMTPS id 5D45A22B37
+	for <soc@kernel.org>; Fri,  4 Dec 2020 14:25:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5D45A22B37
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=p.zabel@pengutronix.de
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1klC19-00021M-98; Fri, 04 Dec 2020 15:25:03 +0100
+Received: from pza by lupine with local (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1klC18-0002Tj-VB; Fri, 04 Dec 2020 15:25:02 +0100
+Message-ID: <d586ada0073f2ac50a02274f42bf07bfb0603835.camel@pengutronix.de>
+Subject: [GIT PULL] Reset controller changes for v5.11
+From: Philipp Zabel <p.zabel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-Cc: alexandre.belloni@bootlin.com, tony@atomide.com,
- linux-kernel@vger.kernel.org, James.Bottomley@HansenPartnership.com,
- thierry.reding@gmail.com, paulus@samba.org, sam@ravnborg.org,
- daniel.thompson@linaro.org, linux-omap@vger.kernel.org, deller@gmx.de,
- linux@armlinux.org.uk, krzk@kernel.org, jonathanh@nvidia.com,
- ludovic.desroches@microchip.com, catalin.marinas@arm.com,
- linux-mips@vger.kernel.org, will@kernel.org, mripard@kernel.org,
- soc@kernel.org, linux-tegra@vger.kernel.org, lee.jones@linaro.org,
- wens@csie.org, linux-arm-kernel@lists.infradead.org, jernej.skrabec@siol.net,
- linux-parisc@vger.kernel.org, emil.l.velikov@gmail.com,
- nicolas.ferre@microchip.com, linuxppc-dev@lists.ozlabs.org
-Errors-To: linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org
-Sender: "Linuxppc-dev"
- <linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org>
-Message-ID: <20201204120632.zYRo8VuUW25avQWXAA-02Qvv_seN7VbfsDWuBE1mkHU@z>
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
+Date: Fri, 04 Dec 2020 15:25:02 +0100
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.30.5-1.1 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-On Tue, Dec 01, 2020 at 10:29:20PM +0000, Andrey Zhizhikin wrote:
-> Commit 7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is
-> unused") removed geenric_bl driver from the tree, together with
-> corresponding config option.
-> 
-> Remove BACKLIGHT_GENERIC config item from all MIPS configurations.
-> 
-> Fixes: 7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is unused")
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
-> Acked-by: Sam Ravnborg <sam@ravnborg.org>
-> ---
->  arch/mips/configs/gcw0_defconfig      | 1 -
->  arch/mips/configs/gpr_defconfig       | 1 -
->  arch/mips/configs/lemote2f_defconfig  | 1 -
->  arch/mips/configs/loongson3_defconfig | 1 -
->  arch/mips/configs/mtx1_defconfig      | 1 -
->  arch/mips/configs/rs90_defconfig      | 1 -
->  6 files changed, 6 deletions(-)
+Dear SoC maintainers,
 
-applied to mips-next.
+The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec=
+:
 
-Thomas.
+  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+are available in the Git repository at:
+
+  git://git.pengutronix.de/pza/linux tags/reset-for-v5.11
+
+for you to fetch changes up to d06c4dec98b655e2808d2a59681ec24197c59c9d:
+
+  reset-controller: ti: force the write operation when assert or deassert (=
+2020-12-03 08:44:57 +0100)
+
+----------------------------------------------------------------
+Reset controller updates for v5.11
+
+This tag adds support for sharing pulsed resets under certain
+conditions. For example, when multiple drivers go through a
+suspend-resume cycle, a reset line they share can be triggered
+again during resume.
+Further, the reset-meson driver now can be built as a module, the
+reset-socfpga driver properly releases its memory region in the
+probe error path, and reset-ti-syscon driver uses regmap_write_bits()
+instead of regmap_update_bits() to support devices without status
+readback.
+
+----------------------------------------------------------------
+Amjad Ouled-Ameur (1):
+      reset: make shared pulsed reset controls re-triggerable
+
+Crystal Guo (1):
+      reset-controller: ti: force the write operation when assert or deasse=
+rt
+
+Dinh Nguyen (1):
+      reset: socfpga: add error handling and release mem-region
+
+Neil Armstrong (1):
+      reset: meson: make it possible to build as a module
+
+ drivers/reset/Kconfig           |  3 +-
+ drivers/reset/core.c            | 73 +++++++++++++++++++++++++++++++++++++=
+++++
+ drivers/reset/reset-meson.c     |  8 ++++-
+ drivers/reset/reset-socfpga.c   | 11 +++++--
+ drivers/reset/reset-ti-syscon.c |  4 +--
+ include/linux/reset.h           |  1 +
+ 6 files changed, 94 insertions(+), 6 deletions(-)
