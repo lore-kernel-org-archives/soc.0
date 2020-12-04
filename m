@@ -1,41 +1,33 @@
-Return-Path: <SRS0=P42T=FI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=tbgD=FI=lists.ozlabs.org=linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 146E4C4361B
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  4 Dec 2020 12:12:13 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91A40C4361A
+	for <linuxppc-dev@archiver.kernel.org>; Fri,  4 Dec 2020 12:25:27 +0000 (UTC)
+Received: from lists.ozlabs.org (lists.ozlabs.org [203.11.71.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 80024225A9
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  4 Dec 2020 12:12:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 80024225A9
+	by mail.kernel.org (Postfix) with ESMTPS id 943B5227BF
+	for <linuxppc-dev@archiver.kernel.org>; Fri,  4 Dec 2020 12:25:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 943B5227BF
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=mk1PPTbTzXklbWpRAtx/Cm9cDGgGJzhmYLoB+5Bqv0k=; b=yoNWRJY3tTF6ZOg4AS2g4hqkf
-	BXhOi3vlgceYA49dZKzsRUblh/gPxVbIeqkX/Hpc3rlolMKwC5+qaM6Wf4J1gJvKsUDjpBlUc+/ce
-	iTYbsSrXIS5rNrc7vzWvTkUuMqvMrlsUvbQiVpoGY3vwTPNu5eJysgnepkPAxsQO0LlhZ4/K/IqsT
-	MRO03cJt3wlHqMkp42lk0yJy2Uw+IOoxghLd3PE/RPIdaguFOXAxN910VCeUoNr9whQ0deaMqguFt
-	3Ug8yrpwi3wOMuRpLMfgRvoQgLqbqma5HARDDL0CyybGTWtzowOYtTMq/mm3miwkNsInkybr97YHR
-	bIWsptLVQ==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kl9uz-0003qY-H4; Fri, 04 Dec 2020 12:10:33 +0000
-Received: from elvis.franken.de ([193.175.24.41])
- by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kl9ux-0003pq-KE
- for linux-arm-kernel@lists.infradead.org; Fri, 04 Dec 2020 12:10:32 +0000
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org
+Received: from bilbo.ozlabs.org (lists.ozlabs.org [IPv6:2401:3900:2:1::3])
+	by lists.ozlabs.org (Postfix) with ESMTP id 4CnX3Q6v45zDqRf
+	for <linuxppc-dev@archiver.kernel.org>; Fri,  4 Dec 2020 23:25:22 +1100 (AEDT)
+Authentication-Results: lists.ozlabs.org; spf=pass (sender SPF authorized)
+ smtp.helo=elvis.franken.de (client-ip=193.175.24.41; helo=elvis.franken.de;
+ envelope-from=tsbogend@alpha.franken.de; receiver=<UNKNOWN>)
+Authentication-Results: lists.ozlabs.org; dmarc=none (p=none dis=none)
+ header.from=alpha.franken.de
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+ by lists.ozlabs.org (Postfix) with ESMTP id 4CnWkM2nnbzDrJq
+ for <linuxppc-dev@lists.ozlabs.org>; Fri,  4 Dec 2020 23:10:34 +1100 (AEDT)
 Received: from uucp (helo=alpha)
  by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
  id 1kl9ud-0005Nb-00; Fri, 04 Dec 2020 13:10:11 +0100
@@ -49,40 +41,37 @@ Message-ID: <20201204120632.GA10011@alpha.franken.de>
 References: <20201201222922.3183-1-andrey.zhizhikin@leica-geosystems.com>
  <20201201222922.3183-4-andrey.zhizhikin@leica-geosystems.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20201201222922.3183-4-andrey.zhizhikin@leica-geosystems.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201204_071031_793183_AC769217 
-X-CRM114-Status: GOOD (  12.51  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-BeenThere: linuxppc-dev@lists.ozlabs.org
 X-Mailman-Version: 2.1.29
 Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
+List-Unsubscribe: <https://lists.ozlabs.org/options/linuxppc-dev>,
+ <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=unsubscribe>
+List-Archive: <http://lists.ozlabs.org/pipermail/linuxppc-dev/>
+List-Post: <mailto:linuxppc-dev@lists.ozlabs.org>
+List-Help: <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=help>
+List-Subscribe: <https://lists.ozlabs.org/listinfo/linuxppc-dev>,
+ <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: alexandre.belloni@bootlin.com, tony@atomide.com, benh@kernel.crashing.org,
+Cc: alexandre.belloni@bootlin.com, tony@atomide.com,
  linux-kernel@vger.kernel.org, James.Bottomley@HansenPartnership.com,
  thierry.reding@gmail.com, paulus@samba.org, sam@ravnborg.org,
- daniel.thompson@linaro.org, linux-omap@vger.kernel.org, mpe@ellerman.id.au,
- deller@gmx.de, linux@armlinux.org.uk, krzk@kernel.org, jonathanh@nvidia.com,
+ daniel.thompson@linaro.org, linux-omap@vger.kernel.org, deller@gmx.de,
+ linux@armlinux.org.uk, krzk@kernel.org, jonathanh@nvidia.com,
  ludovic.desroches@microchip.com, catalin.marinas@arm.com,
  linux-mips@vger.kernel.org, will@kernel.org, mripard@kernel.org,
  soc@kernel.org, linux-tegra@vger.kernel.org, lee.jones@linaro.org,
  wens@csie.org, linux-arm-kernel@lists.infradead.org, jernej.skrabec@siol.net,
  linux-parisc@vger.kernel.org, emil.l.velikov@gmail.com,
- linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201204120632.eGRkbn4aRsU1Cn3IQKOBzWGwqPIE9TrqT1TpJ-lVIGc@z>
+ nicolas.ferre@microchip.com, linuxppc-dev@lists.ozlabs.org
+Errors-To: linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org
+Sender: "Linuxppc-dev"
+ <linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org>
+Message-ID: <20201204120632.zYRo8VuUW25avQWXAA-02Qvv_seN7VbfsDWuBE1mkHU@z>
 
 On Tue, Dec 01, 2020 at 10:29:20PM +0000, Andrey Zhizhikin wrote:
 > Commit 7ecdea4a0226 ("backlight: generic_bl: Remove this driver as it is
@@ -113,8 +102,3 @@ Thomas.
 -- 
 Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
 good idea.                                                [ RFC1925, 2.3 ]
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
