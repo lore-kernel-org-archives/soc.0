@@ -1,165 +1,88 @@
-Return-Path: <SRS0=JfSO=FJ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=ZQjm=FJ=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70938C4361A
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  5 Dec 2020 20:50:29 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B69CC4361A
+	for <soc@archiver.kernel.org>; Sat,  5 Dec 2020 21:43:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id DB6332310B; Sat,  5 Dec 2020 21:43:07 +0000 (UTC)
+Received: from mail-lj1-f193.google.com (mail-lj1-f193.google.com [209.85.208.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0AF6E230F9
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  5 Dec 2020 20:50:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0AF6E230F9
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ucw.cz
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:Cc:
-	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
-	In-Reply-To:MIME-Version:References:Message-ID:Subject:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=DxQPdLIjECRneF/4xvkQ9qxyyXqDcRhROs1rrQE+nT4=; b=tZO4lxTve/lfKszUfgYNJ4L9X
-	7Y2BDMNugjucXK0icBnN38RdzZA0ZMnZSYuiWStiC1UqCK/cpfccuRUG7gTVB1LqKslv/+k+pBRHd
-	prH+398yKwotJdkKES+ryuQyDFJt8KdhIYzrD39qPugENfOdH7H4gUH81DFcFYadjDHZISX6XU6Zr
-	a9zKP7tTgJdoivbNbgBhCM4oAQ7eyhFa5aaEQYFVr6Ll1oYwd5HoDKcVL8cvP/SO2F3jzOSig9rDB
-	PHq8m0aIWgeG3gnYv74G/HKc23svML1lFWHiaAXFj1YhGgSHISFdX7NHulCfiY+25Xtp5U657Hv4e
-	rxUdhPQ0w==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kleTw-0002gJ-5N; Sat, 05 Dec 2020 20:48:40 +0000
-Received: from jabberwock.ucw.cz ([46.255.230.98])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kleTs-0002fV-7s
- for linux-arm-kernel@lists.infradead.org; Sat, 05 Dec 2020 20:48:37 +0000
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
- id 326FA1C0B8D; Sat,  5 Dec 2020 21:48:35 +0100 (CET)
-Date: Sat, 5 Dec 2020 21:48:34 +0100
-From: Pavel Machek <pavel@ucw.cz>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
-Message-ID: <20201205204834.GC8578@amd>
-References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
- <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
- <CAKdAkRRq=GK7N1PDJ4zLfJVSsrd1BB=u69aXtJHh=sW4vn5LOg@mail.gmail.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 8227B230FF
+	for <soc@kernel.org>; Sat,  5 Dec 2020 21:43:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8227B230FF
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linus.walleij@linaro.org
+Received: by mail-lj1-f193.google.com with SMTP id s9so10692276ljo.11
+        for <soc@kernel.org>; Sat, 05 Dec 2020 13:43:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=700HkyTVIFp9nZiWIVsyfYqFVm65sXEMC2ghItegDYE=;
+        b=YafReqCUo5/xizSfSIS3eP6fIPD2UUW2x4UkHHsy1SSLo8OE8qcD9agG/wfCEVdrAG
+         SxObFlizYVZ3nb6EqQyXyKNsVjQF6A/GwwsFLTbqirAR4miX3Em8ffTq7XUGZiIe5uT0
+         uxqUeG/gaUj+pmjrQsHQrtxKVaeZHzld9tPg4ZGin61fb166k92rwaWcNR4o1rN1tnwV
+         7hJj3ivRoqBOwgfqvdyGFgaNMIoFzKCXO2FgHx9F7hF28iGduKGjHT7llzihQF+/dF54
+         T8D/ADXwaIOUnrxzXrz3RNTCbpux8yUVY+6aXwNRnEtMGuWBO0ZcoLRT1WZE5XacEm1L
+         8c/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=700HkyTVIFp9nZiWIVsyfYqFVm65sXEMC2ghItegDYE=;
+        b=E7WN6DVkCdmMPqOCnpGl0+39OvF+FiBZaRYTd8FKlp86EjThYEwbbAZWxqVu8RaXru
+         AscumMU5hcZ1vEBb4SWnrDrXvhhWJoTdpGk5XSpL2BMzG2FvaRcAWCwgQwIM1oSWvzbG
+         4mTa8mTS+m2VLkBQmNZLahaFvS8dTL+u9OnhoOn4F43EljI46s+lNUseyhK98ZDEbHB6
+         M5q0MJ460TRDst1wnuzYODgfH5ejdhECiw6+ipBBV+hiJyRTqvJZGd/axDvjd4+D4md4
+         tvUY++0eoGiZ1gzz8mvh3pHkiKfhBdn07KQCDOAXYT5jUWkf9nCutiWtxOapv7fMjdTI
+         0kJA==
+X-Gm-Message-State: AOAM530gGKYmXkuU7tOGUCDQmLjEIaTSz13MUOsk1oMpTbwGw0QR20pV
+	ZmHgpEUutiiwNRjeh0pQUVvWvS5p1xE1zls3+F7R5g==
+X-Google-Smtp-Source: ABdhPJxOBXULP7OBc7vXFcwbfQDybB9Vs66oJlYkEGsjHLd3VRw9w9OMx28IXZxfzQVww4oMJ5ir7VUoAimLdzmSMDU=
+X-Received: by 2002:a2e:998e:: with SMTP id w14mr6262208lji.100.1607204585830;
+ Sat, 05 Dec 2020 13:43:05 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAKdAkRRq=GK7N1PDJ4zLfJVSsrd1BB=u69aXtJHh=sW4vn5LOg@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201205_154836_605964_F341F56E 
-X-CRM114-Status: GOOD (  22.00  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+References: <20201129110803.2461700-1-daniel@0x0f.com>
+In-Reply-To: <20201129110803.2461700-1-daniel@0x0f.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Sat, 5 Dec 2020 22:42:54 +0100
+Message-ID: <CACRpkdYEzFYw=CbBFCs9=DfarsCQKD0zA2WvE95nF8ehA_2i1g@mail.gmail.com>
+Subject: Re: [PATCH v4 0/5] Add GPIO support for MStar/SigmaStar ARMv7
+To: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Douglas Anderson <dianders@chromium.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: multipart/mixed; boundary="===============2628849776943824646=="
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201205204834.HyiYdiWZ3Ib4UVWbphQfyWt6KHkLSDLvZ0zvg6yIg1w@z>
+Cc: SoC Team <soc@kernel.org>, "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
+Content-Type: text/plain; charset="UTF-8"
 
+On Sun, Nov 29, 2020 at 12:08 PM Daniel Palmer <daniel@0x0f.com> wrote:
 
---===============2628849776943824646==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="8X7/QrJGcKSMr1RN"
-Content-Disposition: inline
+> At the moment the MStar/SigmaStar support is only really
+> capable of shell from an initramfs and not much else.
+>
+> Most of the interesting drivers are blocked on clock and pinctrl
+> drivers and those are going to take me a little while to get cleaned
+> up.
+>
+> Clock and pinctrl aren't needed for basic GPIO to work (all pins
+> start off as GPIOs..) and it makes it possible to actually do something
+> so this series adds everything that is needed for the main GPIO
+> block in these chips.
+>
+> Changes since v3:
+> - Remove unneeded "gpio-ranges-group-names" property from binding yaml.
 
+OK finished!
+Patches 1, 2 & 3 applied to the GPIO tree for v5.11.
 
---8X7/QrJGcKSMr1RN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for the good work!
 
-Hi!
-
-> > On Fri, Nov 27, 2020 at 12:51 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> > >
-> > >  - Some DT patches for the Rockchip RK3399 platform,
-> > >    in particular fixing the MMC device ordering that
-> > >    recently became nondeterministic with async probe.
-> >
-> > Uhhuh.
-> >
-> > I didn't realize this MMC breakage happened.
-> >
-> > That's just an MMC bug. Other subsystems have been able to do async
-> > probing without making device ordering be random.
-> >
-> > So this really smells wrong, and I just never realized.
-> >
-> > Added Douglas Anderson to the cc - the whole PROBE_PREFER_ASYNCHRONOUS
-> > behavior appears broken.
-> >
-> > You basically should do the device numbering synchronously (or better
-> > yet - asynchronously, but single-threaded for the subsystem), and then
-> > asynchronously probe the actual device details after you've numbered
-> > them reliably.
->=20
-> Generally speaking it is either unnecessary for a lot of devices where
-> we do not care what number they get, harmful (why do I need to probe
-> i2c touchscreen and touchpad sequentially if I do not care which one
-> comes first but my boot will take 0.5 seconds longer if I serialize),
-> or impossible (if device is hit-pluggable). For many years userspace
-> has been moving away from static device assignments and we should not
-> be going back.
-
-Lets not make userspace's life harder than it should be.
-
-You can't break existing configurations, and people still use
-root=3D/dev/mmcblkX. Recently kernel on Droid 4 switched from MMC on
-mmcblk0 and mmcblk1 to MMC on mmcblk0 and mmcblk2. Of course that
-broke my config.
-
-And I'm fairly sure I'm not alone.
-
-(And it may not be this bug, and I do have workaround now.)
-
-Best regards,
-								Pavel
-
---=20
-http://www.livejournal.com/~pavelmachek
-
---8X7/QrJGcKSMr1RN
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl/L8iIACgkQMOfwapXb+vJiEACgn18v+/EzhNIclf1Mh8seK6kI
-JIoAnikMuD1kNbKhB4/JxIujWDxJxAvD
-=Ro3a
------END PGP SIGNATURE-----
-
---8X7/QrJGcKSMr1RN--
-
-
---===============2628849776943824646==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
---===============2628849776943824646==--
-
+Yours,
+Linus Walleij
