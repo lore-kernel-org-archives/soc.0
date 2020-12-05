@@ -1,133 +1,112 @@
-Return-Path: <SRS0=P42T=FI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=mdI1=FJ=ucw.cz=pavel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79ACAC4361A
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  4 Dec 2020 14:26:16 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 843ADC433FE
+	for <soc@archiver.kernel.org>; Sat,  5 Dec 2020 20:48:38 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 347CE23106; Sat,  5 Dec 2020 20:48:38 +0000 (UTC)
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 37DBA22B37
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  4 Dec 2020 14:26:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 37DBA22B37
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Date:To:From:Subject:Message-ID:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=h4eLSGNGBEzIAh9Qi1xigGPqjrM6URS0PphfShTOBp0=; b=Nl8/DsFggUjqqNJVPKSpgw4eXz
-	bi7uAMtKh7WD07oEkenOe0bwQ4jFGD9OH8i2kh4ZxvwlyiTjiy1mQt6j7Xz/yLuyaNk6+LgDSBuWa
-	Lt1CcydPYUL2FtDNmJ27W94WhcyXjjkt16QNu3bdjhzbMveT5FOxz3Xs4wXuODtdU4Ttcft5TOIt3
-	2NnQR61Ajf2aIji7m1F+QoyOU1tI8jFxLcKCxsxkbqAjL+aPYh03A0qWkD9K/d35orLHSlo1c6zgT
-	6aKLbuwQ7hhf9rqbR0M6RSPMdv0UpAOzdjxIWsrMpbMkH1ganbk8bSWKmpccK6nSc4KmTP/2GwNLF
-	zQJNEpBg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1klC1D-0004iH-21; Fri, 04 Dec 2020 14:25:07 +0000
-Received: from metis.ext.pengutronix.de ([2001:67c:670:201:290:27ff:fe1d:cc33])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1klC1B-0004hl-2p
- for linux-arm-kernel@lists.infradead.org; Fri, 04 Dec 2020 14:25:06 +0000
-Received: from lupine.hi.pengutronix.de
- ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
- by metis.ext.pengutronix.de with esmtps
- (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim 4.92)
- (envelope-from <p.zabel@pengutronix.de>)
- id 1klC19-00021M-98; Fri, 04 Dec 2020 15:25:03 +0100
-Received: from pza by lupine with local (Exim 4.92)
- (envelope-from <p.zabel@pengutronix.de>)
- id 1klC18-0002Tj-VB; Fri, 04 Dec 2020 15:25:02 +0100
-Message-ID: <d586ada0073f2ac50a02274f42bf07bfb0603835.camel@pengutronix.de>
-Subject: [GIT PULL] Reset controller changes for v5.11
-From: Philipp Zabel <p.zabel@pengutronix.de>
+	by mail.kernel.org (Postfix) with ESMTPS id 7E663230F9;
+	Sat,  5 Dec 2020 20:48:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7E663230F9
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ucw.cz
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=pavel@ucw.cz
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+	id 326FA1C0B8D; Sat,  5 Dec 2020 21:48:35 +0100 (CET)
+Date: Sat, 5 Dec 2020 21:48:34 +0100
+From: Pavel Machek <pavel@ucw.cz>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Date: Fri, 04 Dec 2020 15:25:02 +0100
-User-Agent: Evolution 3.30.5-1.1 
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Douglas Anderson <dianders@chromium.org>, SoC Team <soc@kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
+Message-ID: <20201205204834.GC8578@amd>
+References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
+ <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
+ <CAKdAkRRq=GK7N1PDJ4zLfJVSsrd1BB=u69aXtJHh=sW4vn5LOg@mail.gmail.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de);
- SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-arm-kernel@lists.infradead.org
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201204_092505_165789_7BA05C02 
-X-CRM114-Status: GOOD (  10.54  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201204142502.sWBrNAdvDCMr3nm_N-Gv1sXxGDjweeAHKynlxyGuSto@z>
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="8X7/QrJGcKSMr1RN"
+Content-Disposition: inline
+In-Reply-To: <CAKdAkRRq=GK7N1PDJ4zLfJVSsrd1BB=u69aXtJHh=sW4vn5LOg@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 
-Dear SoC maintainers,
 
-The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+--8X7/QrJGcKSMr1RN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+Hi!
 
-are available in the Git repository at:
+> > On Fri, Nov 27, 2020 at 12:51 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > >
+> > >  - Some DT patches for the Rockchip RK3399 platform,
+> > >    in particular fixing the MMC device ordering that
+> > >    recently became nondeterministic with async probe.
+> >
+> > Uhhuh.
+> >
+> > I didn't realize this MMC breakage happened.
+> >
+> > That's just an MMC bug. Other subsystems have been able to do async
+> > probing without making device ordering be random.
+> >
+> > So this really smells wrong, and I just never realized.
+> >
+> > Added Douglas Anderson to the cc - the whole PROBE_PREFER_ASYNCHRONOUS
+> > behavior appears broken.
+> >
+> > You basically should do the device numbering synchronously (or better
+> > yet - asynchronously, but single-threaded for the subsystem), and then
+> > asynchronously probe the actual device details after you've numbered
+> > them reliably.
+>=20
+> Generally speaking it is either unnecessary for a lot of devices where
+> we do not care what number they get, harmful (why do I need to probe
+> i2c touchscreen and touchpad sequentially if I do not care which one
+> comes first but my boot will take 0.5 seconds longer if I serialize),
+> or impossible (if device is hit-pluggable). For many years userspace
+> has been moving away from static device assignments and we should not
+> be going back.
 
-  git://git.pengutronix.de/pza/linux tags/reset-for-v5.11
+Lets not make userspace's life harder than it should be.
 
-for you to fetch changes up to d06c4dec98b655e2808d2a59681ec24197c59c9d:
+You can't break existing configurations, and people still use
+root=3D/dev/mmcblkX. Recently kernel on Droid 4 switched from MMC on
+mmcblk0 and mmcblk1 to MMC on mmcblk0 and mmcblk2. Of course that
+broke my config.
 
-  reset-controller: ti: force the write operation when assert or deassert (2020-12-03 08:44:57 +0100)
+And I'm fairly sure I'm not alone.
 
-----------------------------------------------------------------
-Reset controller updates for v5.11
+(And it may not be this bug, and I do have workaround now.)
 
-This tag adds support for sharing pulsed resets under certain
-conditions. For example, when multiple drivers go through a
-suspend-resume cycle, a reset line they share can be triggered
-again during resume.
-Further, the reset-meson driver now can be built as a module, the
-reset-socfpga driver properly releases its memory region in the
-probe error path, and reset-ti-syscon driver uses regmap_write_bits()
-instead of regmap_update_bits() to support devices without status
-readback.
+Best regards,
+								Pavel
 
-----------------------------------------------------------------
-Amjad Ouled-Ameur (1):
-      reset: make shared pulsed reset controls re-triggerable
+--=20
+http://www.livejournal.com/~pavelmachek
 
-Crystal Guo (1):
-      reset-controller: ti: force the write operation when assert or deassert
+--8X7/QrJGcKSMr1RN
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-Dinh Nguyen (1):
-      reset: socfpga: add error handling and release mem-region
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
-Neil Armstrong (1):
-      reset: meson: make it possible to build as a module
+iEYEARECAAYFAl/L8iIACgkQMOfwapXb+vJiEACgn18v+/EzhNIclf1Mh8seK6kI
+JIoAnikMuD1kNbKhB4/JxIujWDxJxAvD
+=Ro3a
+-----END PGP SIGNATURE-----
 
- drivers/reset/Kconfig           |  3 +-
- drivers/reset/core.c            | 73 +++++++++++++++++++++++++++++++++++++++++
- drivers/reset/reset-meson.c     |  8 ++++-
- drivers/reset/reset-socfpga.c   | 11 +++++--
- drivers/reset/reset-ti-syscon.c |  4 +--
- include/linux/reset.h           |  1 +
- 6 files changed, 94 insertions(+), 6 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+--8X7/QrJGcKSMr1RN--
