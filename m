@@ -1,45 +1,83 @@
-Return-Path: <SRS0=mdI1=FJ=ucw.cz=pavel@kernel.org>
+Return-Path: <SRS0=JfSO=FJ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 843ADC433FE
-	for <soc@archiver.kernel.org>; Sat,  5 Dec 2020 20:48:38 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 347CE23106; Sat,  5 Dec 2020 20:48:38 +0000 (UTC)
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70938C4361A
+	for <linux-arm-kernel@archiver.kernel.org>; Sat,  5 Dec 2020 20:50:29 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7E663230F9;
-	Sat,  5 Dec 2020 20:48:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7E663230F9
+	by mail.kernel.org (Postfix) with ESMTPS id 0AF6E230F9
+	for <linux-arm-kernel@archiver.kernel.org>; Sat,  5 Dec 2020 20:50:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0AF6E230F9
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ucw.cz
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=pavel@ucw.cz
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:Cc:
+	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
+	In-Reply-To:MIME-Version:References:Message-ID:Subject:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=DxQPdLIjECRneF/4xvkQ9qxyyXqDcRhROs1rrQE+nT4=; b=tZO4lxTve/lfKszUfgYNJ4L9X
+	7Y2BDMNugjucXK0icBnN38RdzZA0ZMnZSYuiWStiC1UqCK/cpfccuRUG7gTVB1LqKslv/+k+pBRHd
+	prH+398yKwotJdkKES+ryuQyDFJt8KdhIYzrD39qPugENfOdH7H4gUH81DFcFYadjDHZISX6XU6Zr
+	a9zKP7tTgJdoivbNbgBhCM4oAQ7eyhFa5aaEQYFVr6Ll1oYwd5HoDKcVL8cvP/SO2F3jzOSig9rDB
+	PHq8m0aIWgeG3gnYv74G/HKc23svML1lFWHiaAXFj1YhGgSHISFdX7NHulCfiY+25Xtp5U657Hv4e
+	rxUdhPQ0w==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kleTw-0002gJ-5N; Sat, 05 Dec 2020 20:48:40 +0000
+Received: from jabberwock.ucw.cz ([46.255.230.98])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kleTs-0002fV-7s
+ for linux-arm-kernel@lists.infradead.org; Sat, 05 Dec 2020 20:48:37 +0000
 Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id 326FA1C0B8D; Sat,  5 Dec 2020 21:48:35 +0100 (CET)
+ id 326FA1C0B8D; Sat,  5 Dec 2020 21:48:35 +0100 (CET)
 Date: Sat, 5 Dec 2020 21:48:34 +0100
 From: Pavel Machek <pavel@ucw.cz>
 To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Douglas Anderson <dianders@chromium.org>, SoC Team <soc@kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
 Message-ID: <20201205204834.GC8578@amd>
 References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
  <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
  <CAKdAkRRq=GK7N1PDJ4zLfJVSsrd1BB=u69aXtJHh=sW4vn5LOg@mail.gmail.com>
 MIME-Version: 1.0
+In-Reply-To: <CAKdAkRRq=GK7N1PDJ4zLfJVSsrd1BB=u69aXtJHh=sW4vn5LOg@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201205_154836_605964_F341F56E 
+X-CRM114-Status: GOOD (  22.00  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, Douglas Anderson <dianders@chromium.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ SoC Team <soc@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: multipart/mixed; boundary="===============2628849776943824646=="
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201205204834.HyiYdiWZ3Ib4UVWbphQfyWt6KHkLSDLvZ0zvg6yIg1w@z>
+
+
+--===============2628849776943824646==
 Content-Type: multipart/signed; micalg=pgp-sha1;
 	protocol="application/pgp-signature"; boundary="8X7/QrJGcKSMr1RN"
 Content-Disposition: inline
-In-Reply-To: <CAKdAkRRq=GK7N1PDJ4zLfJVSsrd1BB=u69aXtJHh=sW4vn5LOg@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
 
 
 --8X7/QrJGcKSMr1RN
@@ -110,3 +148,18 @@ JIoAnikMuD1kNbKhB4/JxIujWDxJxAvD
 -----END PGP SIGNATURE-----
 
 --8X7/QrJGcKSMr1RN--
+
+
+--===============2628849776943824646==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+--===============2628849776943824646==--
+
