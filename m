@@ -1,132 +1,154 @@
-Return-Path: <SRS0=0k5v=FK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=v9WN=FK=sntech.de=heiko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 993EEC433FE
-	for <linux-arm-kernel@archiver.kernel.org>; Sun,  6 Dec 2020 01:40:49 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00767C433FE
+	for <soc@archiver.kernel.org>; Sun,  6 Dec 2020 18:30:10 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A92072312F; Sun,  6 Dec 2020 18:30:09 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 17C3622D2A
-	for <linux-arm-kernel@archiver.kernel.org>; Sun,  6 Dec 2020 01:40:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 17C3622D2A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Subject:To:From:Date:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=aGv3XxWVMXMRYHCcW54SRwvemksS9wng92LoA2qwXD4=; b=CrOYNLzc0sCTIYZjxA47Jl0sXk
-	RmT7LcTN5Wv7QSuQCBUlnTBVJ9M0tOuk5PLg4OFkZ1WfcToLF9f0sMrW1ZMPffHnmuAnI7O3bQ9VF
-	l6t7mk5FLiJbHk+/DYSOAtW7EQNdRlKl2uJnx3aYZKOo3EvP42TYbvgwczKoVi8SJn4wUhSlyVMPR
-	JrLJnsfZFCBKIKrJ3kleJB8Hq1zV5fQ/vK12Mhq5cAPe2bz0gfJXJv6FKiBh3XRreCO8C9CQsXMGV
-	GI/L7VNP7QGJO/GAiesHFADnHr/mZuuaxCM/OGDnG35y/rjbF2emArv9+4zBM/gbjqGP5tZnUKlje
-	WuoWCzZQ==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1klj0k-0000Ps-Os; Sun, 06 Dec 2020 01:38:50 +0000
-Received: from relay11.mail.gandi.net ([217.70.178.231])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1klj0g-0000PP-UE
- for linux-arm-kernel@lists.infradead.org; Sun, 06 Dec 2020 01:38:48 +0000
-Received: from localhost (lfbn-lyo-1-997-19.w86-194.abo.wanadoo.fr
- [86.194.74.19]) (Authenticated sender: alexandre.belloni@bootlin.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id 61E80100003;
- Sun,  6 Dec 2020 01:38:40 +0000 (UTC)
-Date: Sun, 6 Dec 2020 02:38:40 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+	by mail.kernel.org (Postfix) with ESMTPS id C9AD32311B;
+	Sun,  6 Dec 2020 18:30:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C9AD32311B
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=sntech.de
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=heiko@sntech.de
+Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <heiko@sntech.de>)
+	id 1klynP-0003vj-B9; Sun, 06 Dec 2020 19:30:07 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- arm@kernel.org, soc@kernel.org
-Subject: [GIT PULL] ARM: at91: DT for 5.11 #2
-Message-ID: <20201206013840.GA627225@piout.net>
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts64 changes for 5.11
+Date: Sun, 06 Dec 2020 19:30:06 +0100
+Message-ID: <4278011.LvFx2qVVIh@phil>
 MIME-Version: 1.0
-Content-Disposition: inline
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201205_203847_125600_ECA19B4C 
-X-CRM114-Status: GOOD (  11.88  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201206013840.qUZRQXquX33kxg7iYOgB5DeppO77NTCvMp1cKPuNl74@z>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-Arnd, Olof,
+Hi Arnd, Kevin, Olof,
 
-Here is a second round of DT updates, Some are following patches series
-that made it in other subsystems and it would be nice to have them in
-the same release. Other are fixes worth having in v5.11.
+please find below and in the following pull-requests Rockchip-changes
+aimed at 5.11
+Please pull!
 
-The following changes since commit e1062fa7292f1e3744db0a487c4ac0109e09b03d:
+Thanks
+Heiko
 
-  ARM: dts: at91: sama5d3_xplained: add pincontrol for USB Host (2020-11-24 12:11:27 +0100)
+The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+
+  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux tags/at91-dt-5.11-2
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git ta=
+gs/v5.11-rockchip-dts64-1
 
-for you to fetch changes up to 85b8350ae99d1300eb6dc072459246c2649a8e50:
+for you to fetch changes up to e12f67fe83446432ef16704c22ec23bd1dbcd094:
 
-  ARM: dts: at91: sama5d2: fix CAN message ram offset and size (2020-12-03 21:44:36 +0100)
+  arm64: dts: rockchip: use USB host by default on rk3399-rock-pi-4 (2020-1=
+2-04 11:23:52 +0100)
 
-----------------------------------------------------------------
-AT91 DT for 5.11 #2:
+=2D---------------------------------------------------------------
+Newly added boards are the PX30 SOM system from Engicam and Kobol Helios64.
+The Scarlet tablet finally gets support for its cameras, now that the
+the rk3399-isp moved out of staging.
+The Odroid-Go-Advance got its joystick support now that the adc-joystick
+driver was merged and misc omprovements to the RockPi4, rk3328-roc-cc
+and orange-pi.
 
- - switch to new TCB PWM bindings
- - rework ADC bindings
- - fix sama5d2 securam and can1
+=2D---------------------------------------------------------------
+Alexis Ballier (1):
+      arm64: dts: rockchip: Properly define the type C connector on rk3399-=
+orangepi
 
-----------------------------------------------------------------
-Alexandre Belloni (4):
-      ARM: dts: at91: kizbox: switch to new pwm-atmel-tcb binding
-      ARM: dts: at91: sama5d3: use proper ADC compatible
-      ARM: dts: at91: at91sam9rl: fix ADC triggers
-      ARM: dts: at91: remove deprecated ADC properties
+Chen-Yu Tsai (4):
+      arm64: dts: rockchip: Set dr_mode to "host" for OTG on rk3328-roc-cc
+      arm64: dts: rockchip: Enable HDMI audio on rk3328-roc-cc
+      arm64: dts: rockchip: Enable analog audio on rk3328-roc-cc
+      arm64: dts: rockchip: Fix UART pull-ups on rk3328
 
-Claudiu Beznea (2):
-      ARM: dts: at91: sam9x60ek: remove bypass property
-      ARM: dts: at91: sama5d2: map securam as device
+Eddie Cai (1):
+      arm64: dts: rockchip: add isp and sensors for Scarlet
 
-Nicolas Ferre (1):
-      ARM: dts: at91: sama5d2: fix CAN message ram offset and size
+Heiko Stuebner (1):
+      arm64: dts: rockchip: add adc joystick to Odroid Go Advance
 
- arch/arm/boot/dts/at91-kizbox.dts    | 45 ++++++++++++++++++++++++------------
- arch/arm/boot/dts/at91-sam9x60ek.dts |  4 ----
- arch/arm/boot/dts/at91sam9260.dtsi   | 25 --------------------
- arch/arm/boot/dts/at91sam9g45.dtsi   | 27 ----------------------
- arch/arm/boot/dts/at91sam9rl.dtsi    | 25 --------------------
- arch/arm/boot/dts/at91sam9x5.dtsi    | 28 ----------------------
- arch/arm/boot/dts/sama5d2.dtsi       |  7 +++---
- arch/arm/boot/dts/sama5d3.dtsi       | 26 +--------------------
- arch/arm/boot/dts/sama5d4.dtsi       | 22 ------------------
- 9 files changed, 35 insertions(+), 174 deletions(-)
+Jagan Teki (10):
+      dt-bindings: arm: rockchip: Add Engicam PX30.Core EDIMM2.2 Starter Kit
+      arm64: dts: rockchip: Add Engicam EDIMM2.2 Starter Kit
+      arm64: dts: rockchip: Add Engicam PX30.Core EDIMM2.2 Starter Kit
+      dt-bindings: arm: rockchip: Add Engicam PX30.Core C.TOUCH 2.0
+      arm64: dts: rockchip: Add Engicam C.TOUCH 2.0
+      arm64: dts: rockchip: Add Engicam PX30.Core C.TOUCH 2.0
+      arm64: dts: rockchip: Enable USB Host, OTG on px30-enagicam
+      arm64: dts: rockchip: Enable LVDS panel on px30-engicam-edimm2.2
+      dt-bindings: arm: rockchip: Add Engicam PX30.Core C.TOUCH 2.0 10.1" OF
+      arm64: dts: rockchip: Add Engicam PX30.Core C.TOUCH 2.0 10.1" OF
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Johan Jonker (1):
+      arm64: dts: rockchip: rename sdhci nodename to mmc on rk3399
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Michael Trimarchi (1):
+      arm64: dts: rockchip: Add Engicam PX30.Core SOM
+
+Shunqian Zheng (1):
+      arm64: dts: rockchip: add isp0 node for rk3399
+
+Suniel Mahesh (2):
+      arm64: dts: rockchip: Add WiFi support on px30-engicam
+      arm64: dts: rockchip: Add BT support on px30-engicam
+
+Uwe Kleine-K=F6nig (3):
+      dt-bindings: vendor-prefixes: Add kobol prefix
+      arm64: dts: rockchip: Add basic support for Kobol's Helios64
+      dt-bindings: arm: rockchip: Add Kobol Helios64
+
+Vicente Bergas (3):
+      arm64: dts: rockchip: fix supplies on rk3399-rock-pi-4
+      arm64: dts: rockchip: fix I2S conflict on rk3399-rock-pi-4
+      arm64: dts: rockchip: use USB host by default on rk3399-rock-pi-4
+
+ .../devicetree/bindings/arm/rockchip.yaml          |  23 ++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ arch/arm64/boot/dts/rockchip/Makefile              |   4 +
+ .../boot/dts/rockchip/px30-engicam-common.dtsi     | 124 +++++++
+ .../boot/dts/rockchip/px30-engicam-ctouch2.dtsi    |  30 ++
+ .../boot/dts/rockchip/px30-engicam-edimm2.2.dtsi   |  66 ++++
+ .../px30-engicam-px30-core-ctouch2-of10.dts        |  77 +++++
+ .../rockchip/px30-engicam-px30-core-ctouch2.dts    |  22 ++
+ .../rockchip/px30-engicam-px30-core-edimm2.2.dts   |  43 +++
+ .../boot/dts/rockchip/px30-engicam-px30-core.dtsi  | 237 +++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts |  24 ++
+ arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dts     |  21 ++
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi           |  16 +-
+ .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi      |  74 ++++
+ .../boot/dts/rockchip/rk3399-kobol-helios64.dts    | 372 +++++++++++++++++=
+++++
+ arch/arm64/boot/dts/rockchip/rk3399-orangepi.dts   |  62 +++-
+ arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi |  15 +-
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi           |  28 +-
+ 18 files changed, 1219 insertions(+), 21 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/px30-engicam-common.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/px30-engicam-ctouch2.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/px30-engicam-edimm2.2.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/px30-engicam-px30-core-cto=
+uch2-of10.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/px30-engicam-px30-core-cto=
+uch2.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/px30-engicam-px30-core-edi=
+mm2.2.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/px30-engicam-px30-core.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-kobol-helios64.dts
+
+
+
