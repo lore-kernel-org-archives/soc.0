@@ -1,25 +1,31 @@
-Return-Path: <SRS0=bCa/=FL=0x0f.com=daniel@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 456D2C4361B
-	for <soc@archiver.kernel.org>; Mon,  7 Dec 2020 10:55:57 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 1548323356; Mon,  7 Dec 2020 10:55:57 +0000 (UTC)
-Received: from mail-qk1-f196.google.com (mail-qk1-f196.google.com [209.85.222.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3F62020809
-	for <soc@kernel.org>; Mon,  7 Dec 2020 10:55:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3F62020809
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=daniel@0x0f.com
-Received: by mail-qk1-f196.google.com with SMTP id n142so1894852qkn.2
-        for <soc@kernel.org>; Mon, 07 Dec 2020 02:55:55 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87B21C433FE
+	for <linux-kernel@archiver.kernel.org>; Mon,  7 Dec 2020 10:56:37 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 4ADD820809
+	for <linux-kernel@archiver.kernel.org>; Mon,  7 Dec 2020 10:56:37 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1726320AbgLGK4g (ORCPT
+        <rfc822;linux-kernel@archiver.kernel.org>);
+        Mon, 7 Dec 2020 05:56:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726148AbgLGK4g (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 7 Dec 2020 05:56:36 -0500
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02E8C0613D2
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Dec 2020 02:55:55 -0800 (PST)
+Received: by mail-qk1-x744.google.com with SMTP id q5so12035782qkc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Dec 2020 02:55:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=0x0f.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -33,31 +39,39 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=5ia12m9uDX+0LNlAEFwkrOarHwftjJKLgewl2oTIgrE=;
-        b=qOqxrMHf7dXYa+TRu89ImFP5a9nEpNUw7e0xEDq3zkm4y3oK/l3O56ZWfKlD2t+02i
-         DnZhrKQDPX0selgMq2+GIDYT8yr0bujRSm5fKFf4CcTQRz8ymfyqjNfjeOv4++wdrYx1
-         LHlUVfeQnWyFz1OCViz3DTTILm8qEQ0xs0Gn9Fn+vahC/CsIvAH/oKszbwLI8JcUwSz/
-         t6u3clZeMz26l08lulTh7rs4hFmJpdtpEcWBU4kiCiwSqdgtroqz7wkkbmDxZQTCiubF
-         djXVj9ppkrOUUMMtjYBZO70yGlv2b/ZlJYD9rG+Wwks1MPU1fw+qQlt+4dKWPTWK2Dsu
-         48Mg==
-X-Gm-Message-State: AOAM533oAI6DI01GEO4nZH4JkXWAokMMQz1aLogNzav4QNNWL3BbUdcu
-	muTxj1nxX6qVAKAKU81Lz9FDKqzz57ycAQLdKsOvUQ==
+        b=GvVjTvElir4xcEqeA2o2nzi60WKf7/dxd6iVY9XAHlKfQ8Bw4PYwV6IdLbOPWIRQTJ
+         0bfMQUfTM3EOz2s6K/Gl7bSjVLkSFmeBTeqkdHSv7lWErnmKG9ybQ896bYoIsFM0Oqf2
+         XBmisKK2Jeynjl4eEiJH9BryE2iBdLHPdPUOu07RBW0AY+PbEfT4p+utgcTayYlFIWv6
+         4mrAuMfEoNqPoOkD39TMGMdSyN7fqyxYYBjS2yfkMt17UZCnAGvuxImVb+9v7k3fabPT
+         5aJGw+JFSLIuxNpsSAUDOQYqcSKObM4ct2SqT64uSAyp6/TP+RpwTFzWtGaL+jo05Lbg
+         keUA==
+X-Gm-Message-State: AOAM532EO4WWDK8DEsrhFGwkrH6X9f4ROReoQBkU5vzFJZjI4bWFWA5b
+        bAZLigovNqEC6uadgIsobFx8XcpNQMKRhVFNqKYDEw==
 X-Google-Smtp-Source: ABdhPJz5LN12jxi1tLmMe+C2qEWEij3QetZAtETxe63ezdGfiuGGd8prNeyfZ8+OZ//s1SFdN8nthpHV6T5ni1agtns=
 X-Received: by 2002:a37:8681:: with SMTP id i123mr22759135qkd.54.1607338554890;
  Mon, 07 Dec 2020 02:55:54 -0800 (PST)
 MIME-Version: 1.0
 References: <20201129110803.2461700-1-daniel@0x0f.com> <CACRpkdYEzFYw=CbBFCs9=DfarsCQKD0zA2WvE95nF8ehA_2i1g@mail.gmail.com>
 In-Reply-To: <CACRpkdYEzFYw=CbBFCs9=DfarsCQKD0zA2WvE95nF8ehA_2i1g@mail.gmail.com>
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Mon, 7 Dec 2020 19:55:44 +0900
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Mon, 7 Dec 2020 19:55:44 +0900
 Message-ID: <CAFr9PXmx1XZmVOp8mLygnDUfEKPpo6=ZQPMKSCnZf0i23mNqVw@mail.gmail.com>
 Subject: Re: [PATCH v4 0/5] Add GPIO support for MStar/SigmaStar ARMv7
-To: Linus Walleij <linus.walleij@linaro.org>, Arnd Bergmann <arnd@kernel.org>, olof@lixom.net
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@kernel.org>, olof@lixom.net
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
+Cc:     SoC Team <soc@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20201207105544.TPaj2BeRLMuMtGKvfFMcyQaWC-sVpEpBWdGP0Q3Q1cg@z>
 
 Hi Linus,
 
