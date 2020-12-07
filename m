@@ -1,58 +1,92 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=D1/I=FL=gmail.com=geert.uytterhoeven@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 727B0C4361B
-	for <soc@archiver.kernel.org>; Mon,  7 Dec 2020 16:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E191C433FE
+	for <soc@archiver.kernel.org>; Mon,  7 Dec 2020 20:20:05 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 1643F2388D; Mon,  7 Dec 2020 16:32:06 +0000 (UTC)
-X-Gm-Message-State: AOAM5312LrotLijigboMfQH3GlNshJkxQYN1iRL1O0cK4H15zDXVOgm4
-	32fi9WXBQgXqiJfgez0gRzPZqFGS84SCPAQPAvI=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1607358726;
-	bh=Vot2jVn4kv6LhBGwafMmgNCOpgn5PO0D943PaqN+D8E=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=As41Mm8K1BkpgEa2ym/6zxX0lqaGuLriHrCziPaBGjd6W556Vj7H0idoyYnlml4ka
-	 TFTrR+S9lUTyg5E7mhohm077V5rKzm5WKywmGZXVBsAkGwjSAOaB0PnyS0icVr5WU6
-	 1AtTOHUy+z1GFz/q84knrZ26TnKqN+PPty6JvBuEPPxKpCwBv9d21tdeNv08aNUUK6
-	 sOfXfVQ5Fp9De39Aa0vzS+K8Lar6DoJ/Wsh2BLEo5mZWRFvwJUDSuEWLNrpn95TFpy
-	 b5GZ0ODqk0Z7wVfAVrAyZC7aJyxnFxzF1auy4mqnW5B6fh5hwayvsqlVP9NiNpmdnz
-	 v8AAtnzEYOE7w==
-X-Google-Smtp-Source: ABdhPJwMX2VF9sMMQJM2oT3x0JMYAcPgdUYN7tv0dgRVk/6A4/+eok8dLgXRQYrQ7O9JWU0dlMgDRUeUTe67I1WGueo=
-X-Received: by 2002:aca:bd0b:: with SMTP id n11mr6946529oif.11.1607358725231;
- Mon, 07 Dec 2020 08:32:05 -0800 (PST)
+	id 01FF32332A; Mon,  7 Dec 2020 20:20:05 +0000 (UTC)
+Received: from mail-ot1-f65.google.com (mail-ot1-f65.google.com [209.85.210.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 61E242311A;
+	Mon,  7 Dec 2020 20:20:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 61E242311A
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=geert.uytterhoeven@gmail.com
+Received: by mail-ot1-f65.google.com with SMTP id w3so13108984otp.13;
+        Mon, 07 Dec 2020 12:20:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+8fj10nDje2x93+KcCvXW7CIv2lqtiTGkIsq3PGAkpQ=;
+        b=ERZ1AipjbyK06rk/0qbWpC2xNGlB/QPOVG2XvweEO/hFDtykA6uBaUfmzAcXvaFgwj
+         mwZ8bq3ZXjrPq1GhcMZvLY8NnLwIhHjEKwJJMkpTIhF6uCaBYbaF1r3h2ImKNKBJalAG
+         EsnLHEgjuR4mBqS5ybEGb9LkietWc+d1Bfprm/bojXWvVXx04q6oFyExtQY8SkdPsDG3
+         yIjfxxbKuGp8A6jczdR5sQC+MnT5E+TapG97ZoWhtwQS/FCppfw8ymxsG/eTxUDkaauB
+         T5M90PR1w+h810KbX82d9Fj3XTGH31hrZDaP1Zriqwg2Vkc6VKuClrbgWhEU8CcAEDdE
+         ROSQ==
+X-Gm-Message-State: AOAM530fFO56B6lilT702MQuY4OoViqKHG167oOpLTATEM9VuKYGiKkj
+	e8OPvo3/90paE853aYXoRhteV1lqt6Ole//RIOXwVGsX
+X-Google-Smtp-Source: ABdhPJy2xXJ31q/f+prT+1t1V3CRJwLEpaT1rJWaISAdMh4ZqnS5NVqYeodB/wICppPMsAb4jFStHycuOjYZ7aK37g8=
+X-Received: by 2002:a05:6830:1f5a:: with SMTP id u26mr14394879oth.250.1607372403410;
+ Mon, 07 Dec 2020 12:20:03 -0800 (PST)
 MIME-Version: 1.0
-References: <873c17a5-28d5-9261-f691-1b917611c932@foss.st.com>
- <CAK8P3a1o6Dt0wakXB=sUC-t9DkFqSe=ZwSMYtYKsoZNaNfXUew@mail.gmail.com>
- <bb576e8d-cf11-4f3d-6b9c-6944e6795c2a@foss.st.com> <CAK8P3a11yRgy9x-cHNDsuYfLPcg0YFs92T+BxzfNisOqjNCjNw@mail.gmail.com>
- <3bc1fce7-0c51-38a9-407b-5aa105d1162b@foss.st.com>
-In-Reply-To: <3bc1fce7-0c51-38a9-407b-5aa105d1162b@foss.st.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Mon, 7 Dec 2020 17:31:49 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3Pw+c=yg13E1-_dN8RH78U-X1Uyc4W2PnT6941ZCZ70A@mail.gmail.com>
-Message-ID: <CAK8P3a3Pw+c=yg13E1-_dN8RH78U-X1Uyc4W2PnT6941ZCZ70A@mail.gmail.com>
-Subject: Re: [GIT PULL] STM32 DT changes for v5.11 #1
-To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
+ <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
+ <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
+ <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
+ <CAD=FV=Up-JW8RtMLQ_pAG3e0d8NnpT+rDiguxcz3DnVUz_7Jbw@mail.gmail.com>
+ <CAHk-=wi2CQwAnKucLwE8vNZgXxyRy6L+DcgjGqxKHwbacKgaMQ@mail.gmail.com>
+ <CAPDyKFp9L+L9VeUD038G3mBTLBuPJsMtv7JhxCcSGb3iY=eq5A@mail.gmail.com> <CAK8P3a1Va_xJzk8qqJM1VBWfSKpomKbQh_NpPO20aoORoe0SWQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a1Va_xJzk8qqJM1VBWfSKpomKbQh_NpPO20aoORoe0SWQ@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 7 Dec 2020 21:19:52 +0100
+Message-ID: <CAMuHMdUT83EkE-phUX2Z431AtGPfZvXeKwQriDKEHJKfr2R40A@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@baylibre.com>, 
-	SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Marek Vasut <marex@denx.de>, 
-	Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Doug Anderson <dianders@chromium.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Dec 7, 2020 at 5:20 PM Alexandre TORGUE
-<alexandre.torgue@foss.st.com> wrote:
-> On 12/2/20 2:32 PM, Arnd Bergmann wrote:
-> > On Wed, Dec 2, 2020 at 12:00 PM Alexandre TORGUE
+CC devicetree
+
+On Tue, Dec 1, 2020 at 3:06 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> On Tue, Dec 1, 2020 at 12:39 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > So, I think we have two options. If people are willing to move to
+> > "disk labels" or to patch their DTBs with mmc aliases, things can stay
+> > as is. Otherwise, we can revert the async probe parts of the mmc host
+> > drivers, but that would still leave us in a fragile situation.
 >
-> So let's continue like that for now. I'll keep you aware if I get new
-> inputs on my side and if we observe some PR without MCU patches we could
-> reconsider the question.
+> Can you reliably detect whether the mmc aliases in the dt exist?
+> If that's possible, maybe the async flag could be masked out to only have
+> an effect when the device number is known.
 
-Yes, sounds good to me.
+IMHO DT aliases are not a proper solution for this.
 
-      Arnd
+Yes, you can detect reliably if an alias exists in the DT.
+The problems start when having multiple devices, some with aliases,
+some without.  And when devices can appear dynamically (without
+aliases, as there is no support for dynamically updating the aliases
+list).
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
