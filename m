@@ -1,26 +1,30 @@
-Return-Path: <SRS0=+zUr=FL=chromium.org=dianders@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57032C433FE
-	for <soc@archiver.kernel.org>; Mon,  7 Dec 2020 22:15:30 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 2CB7D23976; Mon,  7 Dec 2020 22:15:30 +0000 (UTC)
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D1F7C2396F
-	for <soc@kernel.org>; Mon,  7 Dec 2020 22:15:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D1F7C2396F
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=dianders@chromium.org
-Received: by mail-ua1-f44.google.com with SMTP id p2so283569uac.3
-        for <soc@kernel.org>; Mon, 07 Dec 2020 14:15:29 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8AD1C433FE
+	for <linux-devicetree@archiver.kernel.org>; Mon,  7 Dec 2020 22:16:23 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 89BA7239A1
+	for <linux-devicetree@archiver.kernel.org>; Mon,  7 Dec 2020 22:16:23 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1727932AbgLGWQK (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Mon, 7 Dec 2020 17:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726603AbgLGWQK (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Mon, 7 Dec 2020 17:16:10 -0500
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046B1C061794
+        for <devicetree@vger.kernel.org>; Mon,  7 Dec 2020 14:15:29 -0800 (PST)
+Received: by mail-ua1-x929.google.com with SMTP id f16so5010446uav.12
+        for <devicetree@vger.kernel.org>; Mon, 07 Dec 2020 14:15:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -34,24 +38,24 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=zba0muHnPBIN4bYfIYdIe1tLp1gTKybFphRm3inPByQ=;
-        b=oCWLCeydnggoDXbWl8qtvAnE8ZRD0s5bNeNTac22xUBMeMYftNr5BjZQKxBg/UBsek
-         s7+MGgwBH3N+TKuplsNZWVlD7iDHvTd27LI2cM9b5NgPLtvl0ujt/jgfA52dNXaNGU9l
-         AIZyuRxRyEKDSSRjIulBS9NiP3d/ogBX3wOIDA2PN7M6fHBAgr4z1+3H6Fcamdv6tu/g
-         YR5DcAoZ97IbiV+eTENEv9LTwWJFCXc3PmiwrJXhg4vVfppIe1GJigf6r2Ipuzs6dhmU
-         xBl6MstBmi/i0oin++Pil0X9gyTEWjleMERYDdMg6aZH41mudX52kYg17XlWReymyGzH
-         ZDHw==
-X-Gm-Message-State: AOAM531xm8+4/4dtkAmtMYp/a7u3VML+pI6SuldEXLu/Gahub7WRVv12
-	+P1vORmw+xUFlc85F2gL6tmCl3FM1rNP3g==
-X-Google-Smtp-Source: ABdhPJyk1oRKydlEzsSuLL8xp7g8VnvRLUEHnVsmMUuHN4JE+AUh/+TbmScXcQ5OwDBSlnjR7oODwg==
-X-Received: by 2002:ab0:5e98:: with SMTP id y24mr11845413uag.108.1607379328559;
+        b=Yjmhp7NDPmp8a+Ds42fefSLu6s1pRPYsVqhz7KRtCrcTAVxLofp3ARuCi1Ef8JXFfL
+         xeRG/Zfz8oyIYOLGnr/TgqQoj/kDHMvUIpIpXTXMHzS5YXc3eg0U/xGdbeT7FVBwxBJg
+         bPVXlJV4Gs4isHsJrLZuGftertAD1MPT6Tl7QuDZVY+9p+TUtEuQPU9GmS2DILuaoQAr
+         GHXA72ZZW1SH+83uYOt80nSP3D32i7Ds/q9GvFbTLmCzyrhzcqYVhZEerP+JSqdxjT9Y
+         /q/Cxq+EH1gqqaYHzZYVp/02ey3D3vFQ3WIG7HR1zFDmoXQPNrlye5J2NR5lJxaosWcH
+         EsKQ==
+X-Gm-Message-State: AOAM532n/wH1b6BfPV3KO0F2YtgGbnbI1TFpmVuggnou6B+mt331UyED
+        odKRVy+otGUME9a+cQwQquRn+eHrzu3npA==
+X-Google-Smtp-Source: ABdhPJzQWuuINlZsk8C214zX6MnQNDdDHC3hM3LbbMYr68XGyjQq6Ifk7RmgNT+57ZM5oBQrc51mvA==
+X-Received: by 2002:ab0:6456:: with SMTP id j22mr13392509uap.57.1607379328672;
         Mon, 07 Dec 2020 14:15:28 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id l26sm1705993vsi.12.2020.12.07.14.15.27
-        for <soc@kernel.org>
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
+        by smtp.gmail.com with ESMTPSA id j12sm1304263vke.52.2020.12.07.14.15.27
+        for <devicetree@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Mon, 07 Dec 2020 14:15:27 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id t19so5019929uaq.1
-        for <soc@kernel.org>; Mon, 07 Dec 2020 14:15:27 -0800 (PST)
+Received: by mail-ua1-f51.google.com with SMTP id s42so1111224uad.11
+        for <devicetree@vger.kernel.org>; Mon, 07 Dec 2020 14:15:27 -0800 (PST)
 X-Received: by 2002:ab0:227:: with SMTP id 36mr458027uas.64.1607379327280;
  Mon, 07 Dec 2020 14:15:27 -0800 (PST)
 MIME-Version: 1.0
@@ -65,20 +69,27 @@ References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
  <CAK8P3a1Va_xJzk8qqJM1VBWfSKpomKbQh_NpPO20aoORoe0SWQ@mail.gmail.com>
  <CAMuHMdUT83EkE-phUX2Z431AtGPfZvXeKwQriDKEHJKfr2R40A@mail.gmail.com> <CAK8P3a3xqqT7mcroY+-fg4T39msw72SB0NbbVKfBghmOFTNZqw@mail.gmail.com>
 In-Reply-To: <CAK8P3a3xqqT7mcroY+-fg4T39msw72SB0NbbVKfBghmOFTNZqw@mail.gmail.com>
-From: Doug Anderson <dianders@chromium.org>
-Date: Mon, 7 Dec 2020 14:15:15 -0800
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 7 Dec 2020 14:15:15 -0800
 X-Gmail-Original-Message-ID: <CAD=FV=WXcSBkN2y97xNma0P9C6DEPfwkprZe=+0+0iuKYNwwZA@mail.gmail.com>
 Message-ID: <CAD=FV=WXcSBkN2y97xNma0P9C6DEPfwkprZe=+0+0iuKYNwwZA@mail.gmail.com>
 Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SoC Team <soc@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20201207221515.ilfGOUVFHnc-NMItkhoLxtn37uvRKxoKucp_Wy9amA8@z>
 
 Hi,
 
