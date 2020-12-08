@@ -2,49 +2,49 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,
+	INCLUDES_PULL_REQUEST,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 174DFC4361B
-	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 23:11:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD979C433FE
+	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 23:11:05 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E04D723B1F; Tue,  8 Dec 2020 23:11:02 +0000 (UTC)
+	id 96EC223B1A; Tue,  8 Dec 2020 23:11:05 +0000 (UTC)
 From: Arnd Bergmann <arnd@kernel.org>
 Authentication-Results:mail.kernel.org; dkim=permerror (bad message/signature format)
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
-	Maxime Ripard <mripard@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
+	Olof Johansson <olof@lixom.net>,
 	arm@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-arm-kernel@lists.infradead.org,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@siol.net>
-Subject: Re: [GIT PULL] Allwinner Device Tree Changes for 5.11
-Date: Wed,  9 Dec 2020 00:09:51 +0100
-Message-Id: <160746884416.2839681.2198798832347662406.b4-ty@arndb.de>
+	t-kristo@ti.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] arm64: TI K3 DT updates for v5.11
+Date: Wed,  9 Dec 2020 00:09:52 +0100
+Message-Id: <160746884594.2839681.8722391797476584584.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <551fdf4f-8a0b-4a22-ba49-b4f61520a9ab.lettre@localhost>
-References: <551fdf4f-8a0b-4a22-ba49-b4f61520a9ab.lettre@localhost>
+In-Reply-To: <20201130174258.ljsiokkyr7x7tsbd@covenant>
+References: <20201130174258.ljsiokkyr7x7tsbd@covenant>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sat, 28 Nov 2020 12:28:03 +0100, Maxime Ripard wrote:
-> Please pull the following changes for the next release.
-> 
-> Thanks!
-> Maxime
+On Mon, 30 Nov 2020 11:42:58 -0600, Nishanth Menon wrote:
+> Please pull the following for TI K3 dts changes for v5.11 window.
 > 
 > The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 > 
 >   Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 > 
+> are available in the Git repository at:
+> 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 915a39191503359531fd92339bfe74ca3defe271
+merge commit: e40917e4664e490d5f5b7a4cbd83ee9f46d27113
 
        Arnd
