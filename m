@@ -3,47 +3,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FAECC433FE
-	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 23:10:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B400AC433FE
+	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 23:10:43 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 5D11623B16; Tue,  8 Dec 2020 23:10:40 +0000 (UTC)
+	id 8897923AFB; Tue,  8 Dec 2020 23:10:43 +0000 (UTC)
 From: Arnd Bergmann <arnd@kernel.org>
 Authentication-Results:mail.kernel.org; dkim=permerror (bad message/signature format)
-To: Heiko Stuebner <heiko@sntech.de>,
-	arm@kernel.org
 List-Id: <soc.lore.kernel.org>
+To: arm <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Joel Stanley <joel@jms.id.au>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org
-Subject: Re: [GIT PULL] Rockchip dts64 changes for 5.11
-Date: Wed,  9 Dec 2020 00:09:43 +0100
-Message-Id: <160746884873.2839681.1674742367162235185.b4-ty@arndb.de>
+	Avi Fishman <avifishman70@gmail.com>,
+	Patrick Venture <venture@google.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Nancy Yuen <yuenn@google.com>
+Subject: Re: [GIT PULL] ARM: nuvoton: devicetree changes for 5.11
+Date: Wed,  9 Dec 2020 00:09:44 +0100
+Message-Id: <160746884519.2839681.4377431235055917877.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <4278011.LvFx2qVVIh@phil>
-References: <4278011.LvFx2qVVIh@phil>
+In-Reply-To: <CACPK8Xd8RaLv_p6t9ckBwCwtZww+2YYOAoAYQdvni0dxc2mS7A@mail.gmail.com>
+References: <CACPK8Xd8RaLv_p6t9ckBwCwtZww+2YYOAoAYQdvni0dxc2mS7A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sun, 06 Dec 2020 19:30:06 +0100, Heiko Stuebner wrote:
-> please find below and in the following pull-requests Rockchip-changes
-> aimed at 5.11
-> Please pull!
-> 
-> Thanks
-> Heiko
-> 
-> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
-> 
-> [...]
+On Mon, 30 Nov 2020 06:57:59 +0000, Joel Stanley wrote:
+> Here's a different one from me. A little while back during a
+> discussion about the OpenBMC ventor kernel tree, and how we could get
+> the Nuvoton patches upstream, Tomer asked if I could help prepare a
+> pull request.
+
+Sure, that works for me.
+
+> Here it is! These patches have been sitting in the OpenBMC tree for
+> varying amounts of time, sometimes dating back to 2018. The Nuvoton
+> team is still working on upstreaming their drivers, so the device
+> trees are reduced versions that only describe hardware that is in the
+> mainline kernel.
 
 Merged into arm/dt, thanks!
 
-merge commit: 261078ab9002d0b5aff807b374425ef8120a84f4
+merge commit: f458d69bf7cac5da16a9133d226a71e88b33042d
 
        Arnd
