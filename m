@@ -2,18 +2,19 @@ Return-Path: <SRS0=ZKTK=FM=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA6C9C433FE
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:13:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DA99C433FE
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:14:12 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9BEB023B19
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:13:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9BEB023B19
+	by mail.kernel.org (Postfix) with ESMTPS id B7B23206B2
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:14:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B7B23206B2
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,36 +23,36 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=0gNqucDORy6c7dMAaAvEmhKVVAKvgeanFD7yqpDAz3M=; b=J052oy34xI+8C8Nc0871vEvoM
-	MCcbg16qLKz52xs7k72wna1soLgLLPFvLE6Eu2TpUR6FtYXfd8z3cM/usy8kQdy8dQCUGq7PC2eJP
-	HjUQRTQ/JxdHCfoB9k5IgGZwPqgSkEOd2+9DV7ZMao4rE5W2Yg3ozHkV97di7PuIPILe3OlAjWXbo
-	I6YvUxD72cH+o0HXAi4swRDoxh60Gw9Hyo7SXteyFr9MRGhhElPcH5/divYmBSVAS7MAw/H2APEvo
-	WWg0IlnYfYzlnRnBk49jv/LF7Ds9n/4HzWuMIFhz/GGfc6PNmhaL0nSDFyVApKBlIZRbY+S+O2RGv
-	8DaH4B7RQ==;
+	 bh=dSCLF4Xi9aX0JERR45eX9g74LmUzHt+SAdhKxe93ZHc=; b=eDof4TWtuBKEK8HO8wznDq6s9
+	MPmc7gq8t6lWkciEojK5SoqH/j7DLzODd6qh3R0HBW+gBv5jinnOebXwCxI3S/DXMUxHztubiDD2S
+	OgjgFN0WFUVeTlF1r9Nt6tsThLKYDHpqYj7xMjN/Je6zYSyXHO/Q0GOrwvDnyRXVXJDg2F/8ytbfw
+	AgyiYaWm8pYIVu/ATTcEfURq1KcGA70zWAF6geZiEfjeeCKSDJlpFUQuR7nwZkmiCH62a/CpUqe9s
+	oDe7P9XQO8Zm6zZEBjIIZzLaHhYIAXLIwTnS9rBjAzFOknUzDzwvEiYoCqmd6+8lCvdr8YxXAiTIp
+	o4WVkAdFg==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kmm9X-0006JB-6d; Tue, 08 Dec 2020 23:12:15 +0000
+	id 1kmm9n-0006Sr-Ma; Tue, 08 Dec 2020 23:12:32 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kmm8E-0005eV-6X
- for linux-arm-kernel@lists.infradead.org; Tue, 08 Dec 2020 23:10:55 +0000
+ id 1kmm8H-0005fv-Bo
+ for linux-arm-kernel@lists.infradead.org; Tue, 08 Dec 2020 23:10:58 +0000
 From: Arnd Bergmann <arnd@kernel.org>
 Authentication-Results: mail.kernel.org;
  dkim=permerror (bad message/signature format)
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org, Olof Johansson <olof@lixom.net>,
  Krzysztof Kozlowski <krzk@kernel.org>, arm@kernel.org
-Subject: Re: [GIT PULL 2/4] ARM: dts: samsung for v5.11
-Date: Wed,  9 Dec 2020 00:09:48 +0100
-Message-ID: <160746884696.2839681.13212246100507043257.b4-ty@arndb.de>
+Subject: Re: [GIT PULL 3/4] arm64: dts: exynos: Pull for v5.11
+Date: Wed,  9 Dec 2020 00:09:49 +0100
+Message-ID: <160746884722.2839681.4543735976917657954.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201201204404.22675-2-krzk@kernel.org>
+In-Reply-To: <20201201204404.22675-3-krzk@kernel.org>
 References: <20201201204404.22675-1-krzk@kernel.org>
- <20201201204404.22675-2-krzk@kernel.org>
+ <20201201204404.22675-3-krzk@kernel.org>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201208_181054_345676_E42B4B99 
-X-CRM114-Status: UNSURE (   9.38  )
+X-CRM114-CacheID: sfid-20201208_181057_646470_AC38024F 
+X-CRM114-Status: UNSURE (   9.26  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
@@ -70,24 +71,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201208230948.L5_smYq_ROCCgkbn3JnTHrNi8FIxcvFr8ed0bmoCeW4@z>
+Message-ID: <20201208230949.kKTjn5p9PF4y1tq6ZDwRaCF9gnA2XviPs_zZ5bBMQMQ@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 1 Dec 2020 22:44:02 +0200, Krzysztof Kozlowski wrote:
-> Samsung changes, on top of previous pull request.
+On Tue, 1 Dec 2020 22:44:03 +0200, Krzysztof Kozlowski wrote:
+> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 > 
-> Best regards,
-> Krzysztof
+>   Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 > 
+> are available in the Git repository at:
 > 
-> The following changes since commit 73f882a0f3a833d589c1a0b6b83045567244e71e:
+>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.11
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 8523df80815bc438b6e6aa9db959c0eed0185695
+merge commit: 96631a0d116528a1ab4b399bcd8b6b491394905c
 
        Arnd
 
