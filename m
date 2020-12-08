@@ -6,31 +6,31 @@ X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D9C0C1B0D8
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6308BC4167B
 	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 17:10:33 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 0B51723B28; Tue,  8 Dec 2020 17:10:33 +0000 (UTC)
+	id 1B50A23B2F; Tue,  8 Dec 2020 17:10:33 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1607447432;
-	bh=mxfa3fMUw38JJ/IYO7QDfdPITlepU6s4DTdRP+lZvBM=;
+	s=k20201202; t=1607447433;
+	bh=CjZaXOqOov8nllwS5why2oLF81AszUyJtxGT7BWLKdo=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=mFr9cyeaBIjztWstUg/oM/R2fc4UsxRm6Z2h91JHDDxk1hJPf0/j442LE1w/ssPhp
-	 qneJEhzzASbODksDsikSbFpVR5wlL300xJXmRXupxREImb1e5KvdkuwSjEvsHzg0At
-	 CrqAeGCtLljvfjLoK4GqZAD+PkO4bXqYkz/xgAoLQJPRdiYSzSc9gHLG2k+srfsS/v
-	 Q30QyZ3NNxY81NAgJvcYMmzjKENpNweks7SeINGFeyDSeMF60AM+ahqYkR8VGqiaLv
-	 qPZKEiDMrFEen/zKD28Pkg/B7efORz50uDpFeqQwNzUko64peG36Yw/KMstjAs9W6a
-	 bRuypsYuneD8Q==
+	b=g4dNekOw0bFdK41syO5LJktHGCsSMHctqQo57ipGKT4WSh9s+LJ1by7IQ7nAQ+kTz
+	 CLC7rCV2shC9PDLEFqNjypu+e3aO2hiItsLWeZYWNvAOB+RRScRfSj0aFdAIKsI3/l
+	 naxvl4bqFh7epJm0lwVYCy6Uk60nF9tf+eZHkoe1XpK6Q0jdvZ4JzIvyxCvb/Hl7Ht
+	 mPFBGmOnkDxUw089E7/RnnK9Ab+mfyfSDGGyfjUdoA/0Gk85A0FybqFEAy1FS771FL
+	 P4rQnST+qw7n+iF5oth9Boqd/FvTZ9jjlVsGvGuw3+L1TmZZkiQoAbFfEkY7ZERNer
+	 c8+wpCjt+DLkg==
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: aspeed: actually the soc changes for 5.11
+Subject: Re: [GIT PULL] ARM: at91: defconfig for 5.11
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <160744743290.1206.7208506250143270854.git-patchwork-notify@kernel.org>
+ <160744743299.1206.2193835761292574073.git-patchwork-notify@kernel.org>
 Date: Tue, 08 Dec 2020 17:10:32 +0000
-References: <CACPK8Xe=9ezhyWRMqVOEQr7SU1YoYfVBGGdGzjmE4SiBr--vJQ@mail.gmail.com>
-In-Reply-To: <CACPK8Xe=9ezhyWRMqVOEQr7SU1YoYfVBGGdGzjmE4SiBr--vJQ@mail.gmail.com>
-To: Joel Stanley <joel@jms.id.au>
+References: <20201127215517.GA1733715@piout.net>
+In-Reply-To: <20201127215517.GA1733715@piout.net>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -38,20 +38,20 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Mon, 30 Nov 2020 06:41:35 +0000 you wrote:
-> Hello Soc maintainers,
+On Fri, 27 Nov 2020 22:55:17 +0100 you wrote:
+> Arnd, Olof,
 > 
-> Here are some ASPEED SoC changes for the v5.11 merge window.
+> Two patches limiting the number of compiled media drivers.
 > 
-> These are mostly the 5.10 changes without the XDMA driver, which I
-> didn't get a response on my question about where we wanted that to
-> live[1]
+> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+> 
+>   Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: aspeed: actually the soc changes for 5.11
-    https://git.kernel.org/soc/soc/c/00c543f6f3f4
+  - [GIT,PULL] ARM: at91: defconfig for 5.11
+    https://git.kernel.org/soc/soc/c/d4ff08d6e222
 
 You are awesome, thank you!
 --
