@@ -6,47 +6,50 @@ X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,
 	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4456C4361B
-	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 23:32:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A4A7C433FE
+	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 23:32:42 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 7CB7223AC9; Tue,  8 Dec 2020 23:32:38 +0000 (UTC)
+	id 4AD3123AC8; Tue,  8 Dec 2020 23:32:42 +0000 (UTC)
 From: Arnd Bergmann <arnd@kernel.org>
 Authentication-Results:mail.kernel.org; dkim=permerror (bad message/signature format)
 List-Id: <soc.lore.kernel.org>
-To: Shawn Guo <shawnguo@kernel.org>,
-	soc@kernel.org,
-	arm@kernel.org
+To: soc@kernel.org,
+	Tony Lindgren <tony@atomide.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
+	Tero Kristo <t-kristo@ti.com>,
+	Santosh Shilimkar <ssantosh@kernel.org>,
+	Ohad Ben-Cohen <ohad@wizery.com>,
+	linux-omap@vger.kernel.org,
+	arm@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	Stefan Agner <stefan@agner.ch>,
-	kernel@pengutronix.de,
-	Fabio Estevam <festevam@gmail.com>,
-	Li Yang <leoyang.li@nxp.com>,
-	linux-imx@nxp.com
-Subject: Re: [GIT PULL 1/6] i.MX drivers change for 5.11
-Date: Wed,  9 Dec 2020 00:31:43 +0100
-Message-Id: <160747024200.3766805.7597792225760770106.b4-ty@arndb.de>
+	Stephen Boyd <sboyd@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [GIT PULL 1/4] Driver changes for omaps for genpd support
+Date: Wed,  9 Dec 2020 00:31:44 +0100
+Message-Id: <160747024154.3766805.2738479830140196782.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201202142717.9262-1-shawnguo@kernel.org>
-References: <20201202142717.9262-1-shawnguo@kernel.org>
+In-Reply-To: <pull-1606806458-694517@atomide.com>
+References: <pull-1606806458-694517@atomide.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 2 Dec 2020 22:27:12 +0800, Shawn Guo wrote:
-> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+On Tue, 1 Dec 2020 09:18:46 +0200, Tony Lindgren wrote:
+> The following changes since commit e7ae08d398e094e1305dee823435b1f996d39106:
 > 
->   Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+>   bus: ti-sysc: Fix bogus resetdone warning on enable for cpsw (2020-10-26 10:08:53 +0200)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-5.11
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.11/genpd-drivers-signed
 > 
 > [...]
 
 Merged into arm/drivers, thanks!
 
-merge commit: 9492840ddeed7d982b604a5fcdf40cf0f4ebffd3
+merge commit: e5b14e46a2ad023fbb388c42e24ff7117d0f135a
 
        Arnd
