@@ -2,18 +2,18 @@ Return-Path: <SRS0=ZKTK=FM=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C6FBC4361B
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:12:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 262ADC433FE
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:12:54 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 21B3323B19
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:12:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 21B3323B19
+	by mail.kernel.org (Postfix) with ESMTPS id 94D4723B16
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:12:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 94D4723B16
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,33 +22,35 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=FQ4h0HpneUThrC/KbPSbNuahRNvdB8UTs5iuoCKP8vk=; b=SRwiViXlh0hxH1fv8Kz7IMM/d
-	yfmmQDqqBBgREMrw3Y3dnnBTg7QdMUmhKGzA0UgP6ndzyFjVDKrlHUOcve85ZVNd8xU1CH7JSyOsv
-	hCENNomc8Xq57vb4d1O4Z0ATbVg9kb5XicgqXyDaVtEMeOZUZ0xx3YtHO6kyiHAF5VNVEk5Otdh8c
-	pdicLhWrtpwjpuz0pVqCgXQsHyIwFKdFOp7xa04/g78uMMNFnfcE0clsbHTVliIkptu0VW3jRcMrC
-	MGIkTiOC1Q76/HfsWFy0wAFBy0ufdTmyariDlPnMxwWh6TZravaxfzLkPyH07m2ke9DoJ+WcjncMZ
-	iZGoxAP/A==;
+	 bh=fA7AJhkzvj5gawnQ+DDGzAkT346UrTUfk1U1hXCiZCo=; b=ymc56/mZte02i1dDqM21aeutN
+	dXQpp9Zs1GSVn5DcGqykBYxtr07PHzA+W4iy7Z9gvi81Hkcv/T6jBK7p3cCnE2PLrb9Gb1JlqghP4
+	wrhtiY1v/XyRdinVBDuASho8Gib0ZF/mYcRQzT13wHav5a+ju5WsCRhV8/aDk1rsBPTX0dboqL/9q
+	qtS/4u16S8MRZbwvrJBFCGsJQL4egBl680JtSOISQkYjixmYteXKiEBkAXtvnD07iv9lkMF1BY+8N
+	8/mkHZwoJTQNWdb6yOwp230kX/iP7uU0y0wlotY6X8F3aF2SlF7nd9e7mrvACwbwSikHerzGeZ9Gy
+	p09EHEL7A==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kmm8D-0005e8-6N; Tue, 08 Dec 2020 23:10:54 +0000
+	id 1kmm8l-0005sR-PV; Tue, 08 Dec 2020 23:11:27 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kmm80-0005af-UW; Tue, 08 Dec 2020 23:10:41 +0000
+ id 1kmm86-0005c5-Jq; Tue, 08 Dec 2020 23:10:47 +0000
 From: Arnd Bergmann <arnd@kernel.org>
 Authentication-Results: mail.kernel.org;
  dkim=permerror (bad message/signature format)
-To: Heiko Stuebner <heiko@sntech.de>,
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org,
+	Kevin Hilman <khilman@baylibre.com>,
 	arm@kernel.org
-Subject: Re: [GIT PULL] Rockchip dts64 changes for 5.11
-Date: Wed,  9 Dec 2020 00:09:43 +0100
-Message-ID: <160746884873.2839681.1674742367162235185.b4-ty@arndb.de>
+Subject: Re: [GIT PULL] arm64: dts: amlogic updates for v5.11
+Date: Wed,  9 Dec 2020 00:09:45 +0100
+Message-ID: <160746884747.2839681.8297968608115515510.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <4278011.LvFx2qVVIh@phil>
-References: <4278011.LvFx2qVVIh@phil>
+In-Reply-To: <7heek9jgox.fsf@baylibre.com>
+References: <7heek9jgox.fsf@baylibre.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201208_181041_111964_8235AFF2 
-X-CRM114-Status: UNSURE (   8.20  )
+X-CRM114-CacheID: sfid-20201208_181046_926226_BDBD2956 
+X-CRM114-Status: UNSURE (   8.96  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
@@ -61,32 +63,31 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-List-Id: <soc.lore.kernel.org>
-Cc: linux-rockchip@lists.infradead.org, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201208230943.uMqa6q4YACGNiHK89_FaSSSiT0sKL5h5BXiO6_rWJNM@z>
+Message-ID: <20201208230945.qQfOEoX4qrVKLqwOk7eVi1Y0wggod_fo4BGc-LPbB64@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sun, 06 Dec 2020 19:30:06 +0100, Heiko Stuebner wrote:
-> please find below and in the following pull-requests Rockchip-changes
-> aimed at 5.11
-> Please pull!
+On Tue, 01 Dec 2020 14:37:50 -0800, Kevin Hilman wrote:
+> Arnd, Olof,
 > 
-> Thanks
-> Heiko
+> Note that this branch pulls in a tag from the clk-meson tree which has
+> already been queued for clk-next.  This is for a couple new clock IDs.
+> I also included my amlogic-fixes tag (which you've already pulled) to
+> fix up potential conflicts.
 > 
-> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+> Kevin
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 261078ab9002d0b5aff807b374425ef8120a84f4
+merge commit: b03455ae3c8a7e7999f9cc43ad87c63b44a89344
 
        Arnd
 
