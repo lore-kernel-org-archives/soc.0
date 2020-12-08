@@ -6,31 +6,31 @@ X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05545C1B0D9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10239C2BB9A
 	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 23:50:30 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 74A8D23B1F; Tue,  8 Dec 2020 23:50:29 +0000 (UTC)
+	id 88E0223B31; Tue,  8 Dec 2020 23:50:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1607471429;
-	bh=j8i0TSkFud+IoeSB/GLdo+IbU+k41cB4YRohV+NwGl0=;
+	bh=S+eHlZi5s4y88sssP503Dl0Lb/0IH3yf9zzocORD4b4=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=KoKAXgYkVXFZamQwWHavwkOee1GGx2QYbmsU4vyjjgGNaYm1N49N+pbzQ4cDrYTE9
-	 kR1TvQSardpoButp6vXpwKzBPb+sCE0+NcwyjsKv47XWIar47OiOQpZHMLmwQ1w+U5
-	 vtVJWLMjZ2gspOwgUlD75BC3kJ2wOWzT+KVRY8uuKGOHXvsOhfG+N736I6Zb/o5zcl
-	 esXwUzoVa2qwcGYJotTq+G/0wsb8KdOm/hLXd6tY5tnI/wOOdFjg+Z01SgInvdxwY9
-	 6cmoyJ/hlOz+ldesbTfDGzyzQaryQ6v1RFtNwne5joFdeLApEaRJUQjKxflnJ/walh
-	 30pVN+VhtFdmw==
+	b=o16/KV8WC1GlnmIF7lFE03Scy/i54gSDMBo1KWaHY4fvsIsRZ22tAilJELufYvOry
+	 EbmEKwkR299TSE5T6mZNj8J6e6jqdjJXo/0G+y7ZjJBmY4XViJYtGk5zaEaHsISowm
+	 Aj748kbuXV9QWD93NkBYGHybFO2Fz7Q+IK59vtwmqJU7YccuTzEhHtXOHmQlp50dme
+	 uuvVYJxBOQG7TE78oXqZFwoVJiFFi6q5Bh/hf07axfVXiA/w1wUfOqf/v9F/aOvHqA
+	 BWpsqZkimf5MQdn5u2d+4CgHICOJUxywGS7u4MhN/cmuSUgAAuVPMxqQ+nouWb4ZsY
+	 +burtw5HJH5HQ==
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: nuvoton: devicetree changes for 5.11
+Subject: Re: [GIT PULL] arm64: TI K3 DT updates for v5.11
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <160747142933.19687.11638825485884587667.git-patchwork-notify@kernel.org>
+ <160747142941.19687.8041808438910906151.git-patchwork-notify@kernel.org>
 Date: Tue, 08 Dec 2020 23:50:29 +0000
-References: <CACPK8Xd8RaLv_p6t9ckBwCwtZww+2YYOAoAYQdvni0dxc2mS7A@mail.gmail.com>
-In-Reply-To: <CACPK8Xd8RaLv_p6t9ckBwCwtZww+2YYOAoAYQdvni0dxc2mS7A@mail.gmail.com>
-To: Joel Stanley <joel@jms.id.au>
+References: <20201130174258.ljsiokkyr7x7tsbd@covenant>
+In-Reply-To: <20201130174258.ljsiokkyr7x7tsbd@covenant>
+To: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -38,19 +38,20 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Mon, 30 Nov 2020 06:57:59 +0000 you wrote:
-> Hello Soc maintainers,
+On Mon, 30 Nov 2020 11:42:58 -0600 you wrote:
+> Hi,
 > 
-> Here's a different one from me. A little while back during a
-> discussion about the OpenBMC ventor kernel tree, and how we could get
-> the Nuvoton patches upstream, Tomer asked if I could help prepare a
-> pull request.
+> Please pull the following for TI K3 dts changes for v5.11 window.
+> 
+> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+> 
+>   Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: nuvoton: devicetree changes for 5.11
-    https://git.kernel.org/soc/soc/c/f458d69bf7ca
+  - [GIT,PULL] arm64: TI K3 DT updates for v5.11
+    https://git.kernel.org/soc/soc/c/e40917e4664e
 
 You are awesome, thank you!
 --
