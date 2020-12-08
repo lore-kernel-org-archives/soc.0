@@ -6,14 +6,14 @@ X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 657C4C433FE
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:14:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2047CC4361B
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:14:39 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1FEB0223DB
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:14:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1FEB0223DB
+	by mail.kernel.org (Postfix) with ESMTPS id BC3A2223DB
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:14:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BC3A2223DB
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,34 +22,37 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=EJWVln6T7DIufxcb5zDpAeOnmRKCXqIpnIr3fT1G5vs=; b=XcluBpHY/dgT/IxwiMwz/pYy0
-	tvuPcaHDzCnZryrm4wDT04XXZKAriCwHYRwKWMg0jWHLIBCbQql2Z6Zm7fkuytw+R0HLNHdGDzjue
-	2v3W70SBzlAifVKAKobuBelS/Wvt1cQ9LRkdhr7ONolmc/C+662rGl/7dDOHGwWnsj+ihWi56Refh
-	zWBHkcr7rwQ0C9lGOqfJvzupeM6ks3XS3+bfA1Inc8QzyGbzgLVTrpuqRwljxRRln9nMx6tV7+DNp
-	pvg6IFkAHC5yxQeWKVbnasJqik4FDw9YW53q2ojFI8WOkudihrEYOpURnotCNfXMyOVTG4i7Yi6KV
-	DdKDBSWbA==;
+	 bh=8apCIp2xMDB+Ttph7vuXOGnPuDfiT0zI/24JhmjOFr8=; b=Ke/baW/wZt7AL8D06dP9lwHxK
+	deCGdAxF0oqx7/KqT9Wmk0IjXSeZsG6y90iREojXpa5/zH41neN0/607IsM53yCo6bS62O4w+NLn9
+	AyfOzRWr1ZVM/JWXZvQoRElKa0hWwzKRhQ0lyWrCO3Prrty1K3EV3IAjqa6+RcWTXXpk2Ds6QNxXy
+	N1iyu1Ws50lmBkhoFyTiCksCXLBxxxc3FHH9YWvX0EBX7RhDRLKqs0va1Agy45/RQx/JDXktSfsZm
+	OX/jhb3RHPWlsx3+vKbiQnTARsQcmZ9WZLVHWiEnFfoXtUv3wEBXAXKd9WHChk9sLlJQqs2nkjYzf
+	E57kHkq5w==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kmmA0-0006eU-SD; Tue, 08 Dec 2020 23:12:45 +0000
+	id 1kmmAL-0006qO-2f; Tue, 08 Dec 2020 23:13:13 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kmm8L-0005hT-54; Tue, 08 Dec 2020 23:11:02 +0000
+ id 1kmm8N-0005iu-Os
+ for linux-arm-kernel@lists.infradead.org; Tue, 08 Dec 2020 23:11:04 +0000
 From: Arnd Bergmann <arnd@kernel.org>
 Authentication-Results: mail.kernel.org;
  dkim=permerror (bad message/signature format)
 List-Id: <soc.lore.kernel.org>
-To: Matthias Brugger <matthias.bgg@gmail.com>, SoC Team <soc@kernel.org>,
- arm-soc <arm@kernel.org>
-Subject: Re: [GIT PULL] arm64: mediatek: devicetree changes for v5.11
-Date: Wed,  9 Dec 2020 00:09:50 +0100
-Message-ID: <160746884493.2839681.12401038433447118676.b4-ty@arndb.de>
+To: soc@kernel.org,
+	Maxime Ripard <mripard@kernel.org>,
+	arm@kernel.org
+Subject: Re: [GIT PULL] Allwinner Device Tree Changes for 5.11
+Date: Wed,  9 Dec 2020 00:09:51 +0100
+Message-ID: <160746884416.2839681.2198798832347662406.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <72fe1c4f-f27c-c455-dfd9-66bde90bb295@gmail.com>
-References: <72fe1c4f-f27c-c455-dfd9-66bde90bb295@gmail.com>
+In-Reply-To: <551fdf4f-8a0b-4a22-ba49-b4f61520a9ab.lettre@localhost>
+References: <551fdf4f-8a0b-4a22-ba49-b4f61520a9ab.lettre@localhost>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201208_181101_362886_D8980BA6 
-X-CRM114-Status: GOOD (  11.39  )
+X-CRM114-CacheID: sfid-20201208_181103_948788_ED7120AC 
+X-CRM114-Status: UNSURE (   8.61  )
+X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,39 +64,31 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Jitao Shi <jitao.shi@mediatek.com>, Arnd Bergmann <arnd@arndb.de>,
- Weiyi Lu <weiyi.lu@mediatek.com>, Frank Wunderlich <frank-w@public-files.de>,
- Seiya Wang <seiya.wang@mediatek.com>, Hanks Chen <hanks.chen@mediatek.com>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- "moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
- Hsin-Yi Wang <hsinyi@chromium.org>,
- Enric Balletbo i Serra <enric.balletbo@collabora.com>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Cc: Jernej Skrabec <jernej.skrabec@siol.net>, Chen-Yu Tsai <wens@csie.org>,
+ linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201208230950.gftGvqBQhj9zs1Sd0DXV48PNKJKaPW9rnvXt1o2BylY@z>
+Message-ID: <20201208230951.E6EbS8pM3UyoWybo5snMlaTHQZS0NoWj4zco4sCIwoA@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sun, 29 Nov 2020 22:16:11 +0100, Matthias Brugger wrote:
-> Please have a look at the following devicetree changes for v5.11.
+On Sat, 28 Nov 2020 12:28:03 +0100, Maxime Ripard wrote:
+> Please pull the following changes for the next release.
 > 
-> The most remarkable changes are support for three (!) new MediaTek boards, the
-> AiOT chip mt8167, the smart phone chip mt6779 and the tablet/laptop chip mt8192.
-
-Very happy to see the mt8192 get merged, looking forward to seeing actual
-Chromebooks with that one ;-)
- 
-> Beware that I had to create a stable branch to share the binding includes for
-> the new power domain driver found on mt8183 and mt8192.
+> Thanks!
+> Maxime
+> 
+> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+> 
+>   Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 5161540797589eacad9b309416b1d15729306c00
+merge commit: 915a39191503359531fd92339bfe74ca3defe271
 
        Arnd
 
