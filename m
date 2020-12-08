@@ -6,10 +6,10 @@ X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A14DDC4361B
-	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 16:35:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22914C4361B
+	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 16:35:29 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 81D0F23B06; Tue,  8 Dec 2020 16:35:26 +0000 (UTC)
+	id EF20223B04; Tue,  8 Dec 2020 16:35:28 +0000 (UTC)
 From: Arnd Bergmann <arnd@kernel.org>
 Authentication-Results:mail.kernel.org; dkim=permerror (bad message/signature format)
 List-Id: <soc.lore.kernel.org>
@@ -17,21 +17,21 @@ To: arm@kernel.org,
 	Maxime Ripard <mripard@kernel.org>,
 	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
+	Chen-Yu Tsai <wens@csie.org>,
 	Jernej Skrabec <jernej.skrabec@siol.net>,
-	linux-arm-kernel@lists.infradead.org,
-	Chen-Yu Tsai <wens@csie.org>
-Subject: Re: [GIT PULL] Allwinner arm64 Defconfig Changes for 5.11
-Date: Tue,  8 Dec 2020 17:34:52 +0100
-Message-Id: <160744514034.359082.2437493310457379108.b4-ty@arndb.de>
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] Allwinner arm Defconfig Changes for 5.11
+Date: Tue,  8 Dec 2020 17:34:53 +0100
+Message-Id: <160744514011.359082.5475905621967584578.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <5ddf5486-a20c-467a-bc67-d5e8fbc38856.lettre@localhost>
-References: <5ddf5486-a20c-467a-bc67-d5e8fbc38856.lettre@localhost>
+In-Reply-To: <dffb8a7e-27ea-4025-868a-caa5868eb1ef.lettre@localhost>
+References: <dffb8a7e-27ea-4025-868a-caa5868eb1ef.lettre@localhost>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sat, 28 Nov 2020 12:24:30 +0100, Maxime Ripard wrote:
+On Sat, 28 Nov 2020 12:23:20 +0100, Maxime Ripard wrote:
 > Please pull the following changes for the next release.
 > 
 > Thanks!
@@ -45,6 +45,6 @@ On Sat, 28 Nov 2020 12:24:30 +0100, Maxime Ripard wrote:
 
 Merged into arm/defconfig, thanks!
 
-merge commit: 69f7aeee06674daa1950e04dc61de0c6e70586fc
+merge commit: 11de454b4cac7ac92e93d3e3853c7ab8ad00a2c9
 
        Arnd
