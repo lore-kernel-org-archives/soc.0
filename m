@@ -2,55 +2,59 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E86A6C4361B
-	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 17:10:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E032C4167B
+	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 17:10:23 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id B36D623B16; Tue,  8 Dec 2020 17:10:22 +0000 (UTC)
+	id C081023B05; Tue,  8 Dec 2020 17:10:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1607447422;
-	bh=gtoN9v1swEWZtA3TCVwynbER75CD5fkODb1tdqEPMvs=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=hIwQtMci2OOrWIBHxQMvw7Z0NS61eiTopX9VxPbOZgimc/TQ4DuMPYzX2vpT9eFKc
-	 sM27cH6olK+E792BdA8SDi0Iw11KiDBMELm35W5XZZK146LBlUbfBxbtoDytBzUv1/
-	 64w/8tHEsktdIlxeEb/bjetaAUR11D8fNuD/i3t1EjVFJXkwcrpI3A+BR+kcq6Ynm5
-	 jE4HuvE7Q80wNcbpkyPKQ22h4TfIS9/RqZI5ugVgffOh5HgzPgDUCSQq9DcQxaihVP
-	 RFe/0KPqCG4Tancv37Js9cdBusApBNLcpftlRuENjKUWrX57x8/DXl9ALFIFJuQIAi
-	 RiF0y8hFnBatQ==
+	bh=0L6pBi5Wf/UZoxZExKTpQCBDEWdj1HhkLqLH+5tW8T0=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=o7xvLRnZMoZjMzE+NekivnlL/9Qvc8gYW4GroVd5rKJ7gx+0Om/4WgngjuXEJredZ
+	 BtbJz0VxNgv70UJ9U04225bTRPMbry5jHgdR7fHRzAHCzjY0Z/EFIWHNM68RGPwKxG
+	 /ecHA9QwDStErpwI6avCvw/W3CfqAWMcHNbDfeso4AMOv7aCLE+cCgs3yE2pjBOGwf
+	 8oP6A39C+PfUqhURi2oOWQm+5oSndUcKQI9NdaNiVqFDEDE5SCaGDjzm/nCLJYsAkR
+	 lIg6Xda5syjHZwRbi4ZYEFEE1DJ/CKLz+VoelZaEBxCtOYp4Bm62l23MHXoF9l14pk
+	 JDSJ4DkLU8kgA==
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [PATCH] ARM: keystone: remove SECTION_SIZE_BITS/MAX_PHYSMEM_BITS
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <160744742249.1206.4957450424368902900.git-patchwork-summary@kernel.org>
+ <160744742265.1206.3751396139503019127.git-patchwork-notify@kernel.org>
 Date: Tue, 08 Dec 2020 17:10:22 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20201203231847.1484900-1-arnd@kernel.org>
+In-Reply-To: <20201203231847.1484900-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (refs/heads/arm/fixes):
+This patch was applied to soc/soc.git (refs/heads/arm/fixes):
 
-Series: [RFC,1/2] MAINTAINERS: correct SoC Git address (formerly: arm-soc)
-  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=394225
-  Lore link: https://lore.kernel.org/r/20201201211516.24921-1-krzk@kernel.org
-    Patches: [RFC,1/2] MAINTAINERS: correct SoC Git address (formerly: arm-soc)
-             [RFC,2/2] MAINTAINERS: add a limited ARM and ARM64 SoC entry
-Patch: ARM: keystone: remove SECTION_SIZE_BITS/MAX_PHYSMEM_BITS
-  Submitter: Arnd Bergmann <arnd@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=395875
-  Lore link: https://lore.kernel.org/r/20201203231847.1484900-1-arnd@kernel.org
+On Fri,  4 Dec 2020 00:18:40 +0100 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> These definitions are evidently left over from the days when
+> sparsemem settings were platform specific. This was no longer
+> the case when the platform got merged.
+> 
+> There was no warning in the past, but now the asm/sparsemem.h
+> header ends up being included indirectly, causing this warning:
+> 
+> [...]
 
-Total patches: 3
+Here is the summary with links:
+  - ARM: keystone: remove SECTION_SIZE_BITS/MAX_PHYSMEM_BITS
+    https://git.kernel.org/soc/soc/c/9280f726097b
 
+You are awesome, thank you!
 --
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
