@@ -1,98 +1,64 @@
-Return-Path: <SRS0=ZKTK=FM=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A247DC4361B
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:44:05 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3DA68238EE
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 23:44:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3DA68238EE
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=4A2vluiXmltdO2KEFmaIBM3CGpxzvhlLv1Lsx0EX9eY=; b=GNsqdyUfFfQSPytMg1rBPhUSH
-	IH+23hDmf7O0DEr3/+vFdvqO3kEMaBc4exVKUU+A9aNKD7CttBwmEfdS/2s0k5Gv0aqIbl8Fp8dds
-	95zdSyS7U8oFLxK7+OAyDC7s5JKf8wF8glPI6xSMejbpRNZV5KIAXyHGL+58IVoJPa1x377dFGKfv
-	vaBSQlGvtGaGdHTydrdS3Td0jcvhFLpYRCaaNZtLs3Yytiy8vaeZ/+G4T/Ua1J7hzD4a97wbaHxUl
-	fgjJKc6e7FYu9DrhUpM8G+gZph+C7r5k9uQIAXDgarVad3MuImRkw/RVLcI14G9sziTo6HaRDHJ93
-	PpUrfA29g==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kmmd7-0004w5-HD; Tue, 08 Dec 2020 23:42:49 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kmmd4-0004vO-MH
- for linux-arm-kernel@lists.infradead.org; Tue, 08 Dec 2020 23:42:47 +0000
-From: Arnd Bergmann <arnd@kernel.org>
-Authentication-Results: mail.kernel.org;
- dkim=permerror (bad message/signature format)
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	arm@kernel.org,
-	Maxime Ripard <mripard@kernel.org>
-Subject: Re: [GIT PULL] Allwinner Fixes for 5.10, Take 3
-Date: Wed,  9 Dec 2020 00:42:40 +0100
-Message-ID: <160747095310.4097848.5073060870110923550.b4-ty@arndb.de>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <2a351c9c-470f-4c5e-ba37-80065ae0586d.lettre@localhost>
-References: <2a351c9c-470f-4c5e-ba37-80065ae0586d.lettre@localhost>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E3C3C433FE
+	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 23:50:29 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 5839823AC4; Tue,  8 Dec 2020 23:50:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1607471429;
+	bh=UXwMysa3bQDHZra5qo42KU6577gwNy95NMNyyS7WDd0=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=nVbGup/N5eIMuPIQd8naYmUn0/Pv2OynsZeAvZfHXpNVPzSTbaEbjo64xUWF17uti
+	 hYfKJh9S7EoIRK7t+24ltCqHvG39GiunuTZiijIBsgarrh6SFy4wOvN76SntefShXr
+	 OHGhGu/adxg8XhprM6kNhpufEnnhMPRsy4DWdN7hHwejWOLkC4XPxkmSlH9enph+2A
+	 IgmjazeZDHJQhP0Jq/6/5KZaFn+aTYuRRerMZXCkCjVEhf36zi/GOWNQmpSauS3mg4
+	 mCdAwKyvcWhC+s5PPjjFtXzC5WM7VdgOY/LqAdIhEc+LrIJYa5yvt6F5J031JsDXD5
+	 nSg3sYfALVeMg==
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201208_184246_818187_B6412672 
-X-CRM114-Status: UNSURE (   8.32  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Jernej Skrabec <jernej.skrabec@siol.net>, Chen-Yu Tsai <wens@csie.org>,
- linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201208234240.xe0SjFcmnWw8WdSwUE940hp8LK0xLuhtCrf-rTxBhhw@z>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL 1/2] drivers: soc: TI SOC changes for 5.11
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <160747142920.19687.181485141588122287.git-patchwork-notify@kernel.org>
+Date: Tue, 08 Dec 2020 23:50:29 +0000
+References: <1606851405-26338-1-git-send-email-santosh.shilimkar@oracle.com>
+In-Reply-To: <1606851405-26338-1-git-send-email-santosh.shilimkar@oracle.com>
+To: Santosh Shilimkar <santosh.shilimkar@oracle.com>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hello:
 
-On Tue, 8 Dec 2020 17:23:32 +0100, Maxime Ripard wrote:
-> Please pull the following changes for the current release.
+This pull request was applied to soc/soc.git (refs/heads/for-next):
+
+On Tue,  1 Dec 2020 11:36:45 -0800 you wrote:
+> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 > 
-> Thanks!
-> Maxime
+>   Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 > 
-> The following changes since commit a7361b9c4615951f52ffd2b1afa09a1384c7b4e4:
+> are available in the git repository at:
 > 
->   ARM: dts: sun7i: pcduino3-nano: enable RGMII RX/TX delay on PHY (2020-11-24 15:24:28 +0100)
+>   git://git.kernel.org/pub/scm/linux/kernel/git/ssantosh/linux-keystone.git tags/drivers_soc_for_5.11
 > 
 > [...]
 
-Merged into arm/fixes, thanks!
+Here is the summary with links:
+  - [GIT,PULL,1/2] drivers: soc: TI SOC changes for 5.11
+    https://git.kernel.org/soc/soc/c/8dc0aac1ccd5
+  - [GIT,PULL,2/2] ARM: dts: Keystone DTS update for v5.11
+    https://git.kernel.org/soc/soc/c/30912c3ce6b1
 
-merge commit: d23e6297176453a247b83b3a476e33d75bf2968a
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-       Arnd
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
