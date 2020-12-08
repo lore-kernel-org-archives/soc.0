@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46DA9C433FE
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 16:36:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF1EBC433FE
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 16:37:00 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EF205233CF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 16:36:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EF205233CF
+	by mail.kernel.org (Postfix) with ESMTPS id 840ED233CF
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Dec 2020 16:37:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 840ED233CF
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,35 +23,35 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=UTdzMflRfCdHGIM9oetDHyjEpw7PNjGA6Nk9/JoN1yQ=; b=iUj0ZK07hvrHgOCCyNMh328VJ
-	X1Zd4/lQE6vU/HkmRWB8zXVRcq3B0L+f90SmP4UptP46lRj+O88XXcI9ZeTEsH47FTfdoOmCqqaIW
-	PnC+xQlPruSJqvQ33HTjsYj7rv4MLfxz20BNPJyw9fVp2X25grQ0VSGAYQvWTLzjfIKrcCoTtpir1
-	GCcmfO6yzlqMeDcEwak0Acj5kqRGQxXTRbt41PQeINXJkiwTd3rYy0uUgSr0+XNJ9rFNgn3JndWZm
-	q7u4H4b1Ajdq2J4HzmocJfpS8oEyV+oZVNLMFO1R6CREBOu6CUlRNmianYmXlRUaegIjtO1oElrAQ
-	oxcyiI0zw==;
+	 bh=aTxPaTTBLZKFCger78lJi2spgJ8oBuRqPI+PuvlWXGc=; b=VarmiYOo042ii+jha7uLlYWgc
+	lenqHp8g2ZP4LeHZeQMMfZja6mTIfvvsBNw28LzsOB1FjtbMv64Q5NJ5x9UDhEbYnEovJBo+J7XsL
+	EKjDXFE3ZHQ+gaun/ePllPLHZgkdxyHKcl1cgUi3DcaIWclohlu315gBFgReeGRrgjsWeiCLK5gbS
+	Qqy9RAH9X5zPqkVV5s1UP4io5i5D50i3een3lTg1rbaB8RwmJP9gOzbG4U/HYKsCCGz89xogl+C2N
+	hMBxXQksELYtdTGtvMpejR6o3VmagpTCxMx4j6J3ATqCJr/4Y0NMvMjkTd8h3T9eGoozuCgHoyd2k
+	qhciBQK5g==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kmfxY-0001PD-Uw; Tue, 08 Dec 2020 16:35:29 +0000
+	id 1kmfxk-0001Ss-Sf; Tue, 08 Dec 2020 16:35:40 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kmfxK-0001KE-D6
- for linux-arm-kernel@lists.infradead.org; Tue, 08 Dec 2020 16:35:16 +0000
+ id 1kmfxN-0001LR-8T
+ for linux-arm-kernel@lists.infradead.org; Tue, 08 Dec 2020 16:35:18 +0000
 From: Arnd Bergmann <arnd@kernel.org>
 Authentication-Results: mail.kernel.org;
  dkim=permerror (bad message/signature format)
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, Bjorn Andersson <bjorn.andersson@linaro.org>,
- soc@kernel.org
-Subject: Re: [GIT PULL] Qualcomm defconfig updates for 5.11
-Date: Tue,  8 Dec 2020 17:34:47 +0100
-Message-ID: <160744514128.359082.16148095886879676130.b4-ty@arndb.de>
+To: Florian Fainelli <f.fainelli@gmail.com>,
+	soc@kernel.org
+Subject: Re: [GIT PULL 1/5] Broadcom defconfig changes for 5.11
+Date: Tue,  8 Dec 2020 17:34:48 +0100
+Message-ID: <160744514058.359082.15272896881061887097.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201130190124.345127-1-bjorn.andersson@linaro.org>
-References: <20201130190124.345127-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20201128163410.1691529-1-f.fainelli@gmail.com>
+References: <20201128163410.1691529-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201208_113514_587261_1DC1BE81 
-X-CRM114-Status: UNSURE (   8.25  )
+X-CRM114-CacheID: sfid-20201208_113517_484438_267CBE8E 
+X-CRM114-Status: UNSURE (   8.27  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
@@ -64,31 +64,31 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org,
- Andy Gross <agross@kernel.org>, Kevin Hilman <khilman@baylibre.com>,
- Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
+Cc: Arnd Bergmann <arnd@arndb.de>, khilman@kernel.org,
+ bcm-kernel-feedback-list@broadcom.com, Sudeep Holla <sudeep.holla@arm.com>,
+ olof@lixom.net, linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201208163447.sN6k7aYKXzkGQnnK1J8xJgW6xjphRp2fZehE_u4IGv8@z>
+Message-ID: <20201208163448.-ox3cGW7EFICFPcIvV4zua91-5vnZ647wcTYkdkfnbM@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 30 Nov 2020 13:01:24 -0600, Bjorn Andersson wrote:
+On Sat, 28 Nov 2020 08:34:06 -0800, Florian Fainelli wrote:
 > The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 > 
 >   Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-5.11
+>   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.11/defconfig
 > 
 > [...]
 
 Merged into arm/defconfig, thanks!
 
-merge commit: 786e484016e6f317da6e5e6db6422594fbc09c44
+merge commit: 6f7cdd2fbfffbeb9de3d2bd1855c2ef72f0e7ef0
 
        Arnd
 
