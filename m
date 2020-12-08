@@ -1,137 +1,126 @@
-Return-Path: <SRS0=a8bK=FL=lists.infradead.org=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=PKIp=FM=gmail.com=geert.uytterhoeven@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A789C433FE
-	for <linux-amlogic@archiver.kernel.org>; Mon,  7 Dec 2020 23:02:10 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22821C433FE
+	for <soc@archiver.kernel.org>; Tue,  8 Dec 2020 07:32:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id E411823A6A; Tue,  8 Dec 2020 07:32:10 +0000 (UTC)
+Received: from mail-ot1-f68.google.com (mail-ot1-f68.google.com [209.85.210.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AADC1239EC
-	for <linux-amlogic@archiver.kernel.org>; Mon,  7 Dec 2020 23:02:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AADC1239EC
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=t3hwFCUUbkjdOgwkV3aPUD+xdwmZlVZoehs8mGSWPiQ=; b=E2Bot3vfOoEbR8KjlxqzXL7vnk
-	q8GibQZd6ktAXb8kKNzxSQx++9PVkZ6sXhYM+I9QfSceDu7YlERZLWsJ5OhH8Zw/iJ4hiTuTVXjU2
-	CTvATR+Hap5qXKg167fqZMwVlhnJyXjsWestSUKO4cPxjci/MSAZE2Ql7DW1TfS6Hcy6RofuI0fns
-	mtd+oin0f5vruo8A+HKsafgSsVuYSjuxVKeosSzg+vxAsMZEj36kzRMz+4sUy1volhpsXyCmH3yMm
-	S24SImrYLJlTwiE+fKXR5rb+n/t+cfqA8K2E1MDctWxp7BCaWMIQM7Mk1RRhnH7vTZ9MvLQjc3t8Q
-	7zOLLI8A==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kmPW9-0000YC-N6; Mon, 07 Dec 2020 23:02:05 +0000
-Received: from mail-pg1-x544.google.com ([2607:f8b0:4864:20::544])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kmPW4-0000Uq-KZ
- for linux-amlogic@lists.infradead.org; Mon, 07 Dec 2020 23:02:02 +0000
-Received: by mail-pg1-x544.google.com with SMTP id q3so10385964pgr.3
- for <linux-amlogic@lists.infradead.org>; Mon, 07 Dec 2020 15:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=baylibre-com.20150623.gappssmtp.com; s=20150623;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=c20XgdAWTsbcAzOG9E8OkNi+KNaONEX/6aLRj6TsWxc=;
- b=EwegfNBs5entoa8RTWbuxqCh6BwUofBPgf/qE0SkOI2Rn4Ks9HFcPKGdutUm4fOK3r
- OxFPkkBQmo+IdmnmopgCqhCuLXHk4K3vp+MEyXCGhu7vEuJ3USoh8Q6N7FKsZNIaj0cr
- PH8zTu0NmtOB5Xfk+80FEj1l35HdEswCDNmd8WlfAnmKaJn1rfPUZulzcDpR7iqeKh2e
- bfqKs4uVFpVUbqx7Q0sFJoMCwWK7wAiQedXlVX0nfYJDvioOsddaP6Z2B1PBE6PKAkiW
- NwVz/RIxQtAZKgRf4LwOxscMmlyjPUtK+rZAEV2BfGPoVdoRTmKEf+jb4Aunuh6ugfPr
- e/AA==
+	by mail.kernel.org (Postfix) with ESMTPS id 2FAAF23A69;
+	Tue,  8 Dec 2020 07:32:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2FAAF23A69
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=geert.uytterhoeven@gmail.com
+Received: by mail-ot1-f68.google.com with SMTP id q25so3257054otn.10;
+        Mon, 07 Dec 2020 23:32:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=c20XgdAWTsbcAzOG9E8OkNi+KNaONEX/6aLRj6TsWxc=;
- b=iaCJa52TrP8PNpN0ZuJQ93sYSqHdvNQiTYmLi3yt7oFXpB79xmf20TwIqM7FwJQ9Jy
- o8KNFbl/93QB6PY10OL2TauQcxrQSOlO/+G47J9O0koQ++fnb1D6qqBrnAU88hF7XRgk
- 1yrLF7+wQlKssTxTcd1cnv5JoAU/rclkjvH/SznxX0/ePt9SpBOiW854D3Jycbs6OD9O
- K+o+5yw34e9liMiwGr8dT7tztFfromCxfPUTFg/HdOqnVIlXIPvS/N/xv45SQiQDPiBH
- +7acGiTT6tOIO6F616/mhyZTdz5/dJBFjViMJwWebimJkWboRbf3mudZXwzxD7e15rlr
- 8AHQ==
-X-Gm-Message-State: AOAM532gSZvlyhvhiUopmCECEM3o43ZQqw0yBSfFQVrsRkOXuvrTIkxL
- IcoF/iCd2YFfaxuPqzuVPLvcoQ==
-X-Google-Smtp-Source: ABdhPJzdlIcWNokZmEVIhqX/HKCaktB+kahUWRkXhiz1gQdn+o6cyqzyt1mMCYVeVkfPXxUvnHu81A==
-X-Received: by 2002:a17:90a:c38e:: with SMTP id
- h14mr1074311pjt.10.1607382117377; 
- Mon, 07 Dec 2020 15:01:57 -0800 (PST)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net.
- [71.197.186.152])
- by smtp.gmail.com with ESMTPSA id z17sm396704pjn.46.2020.12.07.15.01.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 07 Dec 2020 15:01:56 -0800 (PST)
-From: Kevin Hilman <khilman@baylibre.com>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: [PATCH] arm64: Kconfig: meson: drop pinctrl
-Date: Mon,  7 Dec 2020 15:01:56 -0800
-Message-ID: <20201207230156.10198-1-khilman@baylibre.com>
-X-Mailer: git-send-email 2.28.0
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/ntm5kX2/68W+Rb853G9+JOfMY9ZEj0sbIzeYrRjxZk=;
+        b=f0M1yWstT8WqIRtVFwsIaQ2bLYEuyZw+F/nBbJbLHy+bRRjdf3aD6lhwfU/s1P2SZd
+         eeQRM37BacdpZNdsEFrklqvxyEEPF0JOtDBx1MbankyJRpbvTLXpDdkal/W3+ci+GfFC
+         9JJHUUYBY22c6IGUrqkSthR/EHLKXzslkjVMGaLrgkCoKUfG0kl2Au0A1iVjxrGSlVEC
+         NTyhYDVqTwDKvQp4Aab2MEaoXENn4NWhcbc+KSOTusJjINMO7pBIICKj0HAw9LNELR0z
+         eMAEQX+VJI5cSiZ1jek1vOKtvUSL0Y/UjQ0CMEvOgKIg+3urZ2gHQX4hzp7kezOtvAk7
+         Yieg==
+X-Gm-Message-State: AOAM533JbstSzBCpMOTGV4TlrrBDY+qmkDSy3eGVXAGuDmMG7MXFOMfN
+	7V4/+o8fvGoIwMZXACLTDMUABkQ7OlQarmlWGvs=
+X-Google-Smtp-Source: ABdhPJzP3zsmCeQZJGI7WUQZGhFTcbnh1RiZSiteZgaVGYQqSLbzhPDTO9A8RxzKoxXx6hYzxTPBjTUhJJRQIgbFnHI=
+X-Received: by 2002:a05:6830:1f5a:: with SMTP id u26mr15841607oth.250.1607412729258;
+ Mon, 07 Dec 2020 23:32:09 -0800 (PST)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201207_180200_806407_596E29CA 
-X-CRM114-Status: UNSURE (   9.56  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-amlogic@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-amlogic.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-amlogic>, 
- <mailto:linux-amlogic-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-amlogic/>
-List-Post: <mailto:linux-amlogic@lists.infradead.org>
-List-Help: <mailto:linux-amlogic-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-amlogic>,
- <mailto:linux-amlogic-request@lists.infradead.org?subject=subscribe>
-Cc: linux-amlogic@lists.infradead.org, Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-amlogic" <linux-amlogic-bounces@lists.infradead.org>
-Errors-To: linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201207230156.kfQlDUFZdTwYi8xZOeYNxs3kw5mGZcP2zM7GBGPHZUI@z>
+References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
+ <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
+ <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
+ <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
+ <CAD=FV=Up-JW8RtMLQ_pAG3e0d8NnpT+rDiguxcz3DnVUz_7Jbw@mail.gmail.com>
+ <CAHk-=wi2CQwAnKucLwE8vNZgXxyRy6L+DcgjGqxKHwbacKgaMQ@mail.gmail.com>
+ <CAPDyKFp9L+L9VeUD038G3mBTLBuPJsMtv7JhxCcSGb3iY=eq5A@mail.gmail.com>
+ <CAK8P3a1Va_xJzk8qqJM1VBWfSKpomKbQh_NpPO20aoORoe0SWQ@mail.gmail.com>
+ <CAMuHMdUT83EkE-phUX2Z431AtGPfZvXeKwQriDKEHJKfr2R40A@mail.gmail.com>
+ <CAK8P3a3xqqT7mcroY+-fg4T39msw72SB0NbbVKfBghmOFTNZqw@mail.gmail.com> <CAD=FV=WXcSBkN2y97xNma0P9C6DEPfwkprZe=+0+0iuKYNwwZA@mail.gmail.com>
+In-Reply-To: <CAD=FV=WXcSBkN2y97xNma0P9C6DEPfwkprZe=+0+0iuKYNwwZA@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 8 Dec 2020 08:31:57 +0100
+Message-ID: <CAMuHMdWEuzUTg+f_SBqvT1zFYVFL=odgMLz68DjcvaTrbtd94g@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
+To: Doug Anderson <dianders@chromium.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Don't automatically select pinctrl drivers, leave it up to defaults in
-drivers/pinctrl/meson, which default to built-in, but are also now
-optionally configurable as modules as of
-commit 9c65441ec823 ("pinctrl/meson: enable building as modules")
+Hi Doug,
 
-Signed-off-by: Kevin Hilman <khilman@baylibre.com>
----
-Arnd, Olof: I missed this in my earlier PR for arm-soc core changes.
-Please apply directly.
+On Mon, Dec 7, 2020 at 11:15 PM Doug Anderson <dianders@chromium.org> wrote:
+> On Mon, Dec 7, 2020 at 1:55 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > On Mon, Dec 7, 2020 at 9:23 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > On Tue, Dec 1, 2020 at 3:06 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > > > On Tue, Dec 1, 2020 at 12:39 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > > So, I think we have two options. If people are willing to move to
+> > > > > "disk labels" or to patch their DTBs with mmc aliases, things can stay
+> > > > > as is. Otherwise, we can revert the async probe parts of the mmc host
+> > > > > drivers, but that would still leave us in a fragile situation.
+> > > >
+> > > > Can you reliably detect whether the mmc aliases in the dt exist?
+> > > > If that's possible, maybe the async flag could be masked out to only have
+> > > > an effect when the device number is known.
+> > >
+> > > IMHO DT aliases are not a proper solution for this.
+> > >
+> > > Yes, you can detect reliably if an alias exists in the DT.
+> > > The problems start when having multiple devices, some with aliases,
+> > > some without.  And when devices can appear dynamically (without
+> > > aliases, as there is no support for dynamically updating the aliases
+> > > list).
+> >
+> > Actually you hit a problem earlier than that: the async probe is a
+> > property of the host controller driver, which may be a pci_driver,
+> > platform_driver, usb_driver, or anything else really. To figure out
+> > whether to probe it asynchronously, it would have to be the driver
+> > core, or each bus type that can host these to understand which
+> > device driver is responsible for probing an eMMC device attached
+> > to the host.
+>
+> From what I've seen so far, my current thought on this issue is that
+> it's up to Ulf as the MMC maintainer what the next steps are.  For me,
+> at least, his argument that MMC block numbers have already shuffled
+> around several times in the last several years is at least some
+> evidence that they weren't exactly stable to begin with.  While we
+> could go back to the numbers that happened to be chosen as of kernel
+> v5.9, if someone was updating from a much older kernel then they may
+> have different expectations of what numbers are good / bad I think.
+>
+> I will also offer one possible suggestion: what about a KConfig option
+> here?  In theory we could add a KConfig option like
+> "CONFIG_MMC_LEGACY_PROBE" or something that.  One can argue about what
+> the default ought to be, but maybe that would satisfy folks?  If you
+> were happy giving up a little bit of boot speed to get the v5.9 block
+> numbers then you could set this.
 
- arch/arm64/Kconfig.platforms | 2 --
- 1 file changed, 2 deletions(-)
+This is not limited to MMC.
+The same is true for sdX, ethX (e* these days), ttyS*, i2cX, spiX, ...
+The rule has always been to handle it by udev, disklabels, ...
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index e4e74e0b5b01..6c4d7356d918 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -152,8 +152,6 @@ config ARCH_MEDIATEK
- 
- config ARCH_MESON
- 	bool "Amlogic Platforms"
--	select PINCTRL
--	select PINCTRL_MESON
- 	select MESON_IRQ_GPIO
- 	help
- 	  This enables support for the arm64 based Amlogic SoCs
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.28.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
-_______________________________________________
-linux-amlogic mailing list
-linux-amlogic@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-amlogic
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
