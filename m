@@ -1,65 +1,82 @@
-Return-Path: <SRS0=zSrM=FN=monstr.eu=monstr@kernel.org>
+Return-Path: <SRS0=W7ES=FN=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13BCBC433FE
-	for <soc@archiver.kernel.org>; Wed,  9 Dec 2020 14:59:08 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id DDE5423A5A; Wed,  9 Dec 2020 14:59:07 +0000 (UTC)
-Received: from mail-ed1-f65.google.com (mail-ed1-f65.google.com [209.85.208.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15854C4361B
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 15:00:18 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3D1CE23A22
-	for <soc@kernel.org>; Wed,  9 Dec 2020 14:59:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3D1CE23A22
+	by mail.kernel.org (Postfix) with ESMTPS id B985B23A5A
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 15:00:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B985B23A5A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=monstr@monstr.eu
-Received: by mail-ed1-f65.google.com with SMTP id b73so1855610edf.13
-        for <soc@kernel.org>; Wed, 09 Dec 2020 06:59:06 -0800 (PST)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:References:
+	To:From:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=5zB38zUBJSjCpfl0L/KEkgD+VY9IrMthlOBNWWhpXHE=; b=AOfhU6GeO7C6BgS7cgo61k2Ls
+	a44cgxn05rqAcKB97F2w+2AT7C63+EA8UkK21xgzlTH127PTphWCFhvCRoD21su5x9UHHQAWBYeCI
+	SEkwXGaK/vl6D4sAKRiooyMYhkEL4tPUOBG4Hd8U7JyXsu8Qq6y1cTwUBb8HldK+mrYWQKUfCEryc
+	+l/jOdKKcixAHXKTTF9PawyuABstH+sZNF828JiEeSlak9CrOJZRl0FkTgoJ4nh3oxMk600CkySCd
+	u6tBarDkemqK9AmwFu5pYTEUEvamq7cFmy6MKt4UM0bwnCIQ3QtvV5FeJ93PtJLwmDc6Udjt4fIT8
+	d5U6IDYhQ==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kn0vt-0000SR-7R; Wed, 09 Dec 2020 14:59:09 +0000
+Received: from mail-ed1-x544.google.com ([2a00:1450:4864:20::544])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kn0vq-0000Re-NW
+ for linux-arm-kernel@lists.infradead.org; Wed, 09 Dec 2020 14:59:07 +0000
+Received: by mail-ed1-x544.google.com with SMTP id c7so1883268edv.6
+ for <linux-arm-kernel@lists.infradead.org>;
+ Wed, 09 Dec 2020 06:59:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KL0awVMGq+7AIaF+tfYIdv1gdKJRQiKFD7DSD7bud5M=;
-        b=icE3s25uMMbyNDXGP1rV9fLEuhx5cWNCtRFlTPu7bViPOUIpQJVQBCYUbUvdzF6vts
-         TMa7NfnOK3/IKZ3+2SFre/aOypskVfucRprNdNKII0Y2hY/RNZ75nMzeFAG8iMbdxIrV
-         l41x1XTCMgcdwUy1KxPLdsHkw+JW03zdpmZrEV4hu62Ljr0CppAC3PpPP4mA9Sg3r43o
-         1SvU7iwe/vGR4IlkSSkyYqfJHWqsHG68olhiaEUy3E7+ZLW8UtlzHC+6hi6kjiIiYZw0
-         bSVyH7k/3dOS41CFfjD4lc64jKb5bbSQmeGrv2P7fFOqAUSMSt0SOGW+j5qCTIpvHXhj
-         tvKQ==
+ d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+ h=subject:from:to:cc:references:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=KL0awVMGq+7AIaF+tfYIdv1gdKJRQiKFD7DSD7bud5M=;
+ b=icE3s25uMMbyNDXGP1rV9fLEuhx5cWNCtRFlTPu7bViPOUIpQJVQBCYUbUvdzF6vts
+ TMa7NfnOK3/IKZ3+2SFre/aOypskVfucRprNdNKII0Y2hY/RNZ75nMzeFAG8iMbdxIrV
+ l41x1XTCMgcdwUy1KxPLdsHkw+JW03zdpmZrEV4hu62Ljr0CppAC3PpPP4mA9Sg3r43o
+ 1SvU7iwe/vGR4IlkSSkyYqfJHWqsHG68olhiaEUy3E7+ZLW8UtlzHC+6hi6kjiIiYZw0
+ bSVyH7k/3dOS41CFfjD4lc64jKb5bbSQmeGrv2P7fFOqAUSMSt0SOGW+j5qCTIpvHXhj
+ tvKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KL0awVMGq+7AIaF+tfYIdv1gdKJRQiKFD7DSD7bud5M=;
-        b=TUn2lMACoFzFtv38wSqIa7tKv5Rp+GdgIexdl6FRt5HEOrHhT/h0UJy0793UbKFHWB
-         gMWio9xtjt6oG5Ng8b55gc5jPz7tLI+TNkNI/5Y/Et5yyGkNsqmALHWfwt6bFs0qkDCg
-         JEJhXkQPbPsHyKvlRYfnl5WCVfzshTLftzYBbq8DZponUZjtRlHiJUutDTX8q/zaggaH
-         R8D1tKgr8O59Nsx3HJaSw4H1a0lcbp6eE82NsJpIpQw+cSwOK3wwC0utZMEqwjWnzMhT
-         fMZ11sP8THlrAx8UQLTSf9U930nXxqJi5swLdc6JS/Xc+X/C0JT6qER+ckt48HHy0Z+h
-         gHYw==
-X-Gm-Message-State: AOAM530pAZ65QdS67fgxbfPq5T0RzBTuB3xdfkDfastsRph9hsK/NZLa
-	QDt79pgTCfnJxleHAzqo0dAiXVaZPZIgKsBM
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=KL0awVMGq+7AIaF+tfYIdv1gdKJRQiKFD7DSD7bud5M=;
+ b=dHNTKoZ2DXCp2YhJyRG9zReE6N2ae1FM5v2OzIOYUl1d37OasuOvXTbDIMEVsysCn7
+ 2VYyU57SUHwElQ4XgFfHWVk6r7ZbRkfDlZ1vD0RTaryERR4ZgKOI0QWTIcEywyI0YoR8
+ EatzIn8m3Lqh10ziK93BnLQVmLRL0DLZqdhPwtz8EUR6YWAYaAXEoeN275v6TZQB6vIf
+ 4SL8NdXj9moMFR6G9e5O6V0QNAB3JIdQI7k42MvCGLNRLqf4cjT2lNIdqKSCplZFUoR/
+ OA2EtupNA6sMD/lGr/wYUyJSA9aDkke/XtscixL+ILLyQF1MPiLPZc24b5b31bDzC8J0
+ jabA==
+X-Gm-Message-State: AOAM530dwcgoS/9abeirsKoI+LieKZXloe8kzZ1XIDVyvgFG4pOg/jE/
+ dhYyKcft6V4Bg/8kkRY+cSVdCw==
 X-Google-Smtp-Source: ABdhPJxphQMAX3SOytIqoZp+DlI4PcCk/oJtY0lB2iJjnb9Yw0CIrFtAhYmctqtle48I1KowIBa0QQ==
-X-Received: by 2002:a50:e00b:: with SMTP id e11mr2367934edl.303.1607525945660;
-        Wed, 09 Dec 2020 06:59:05 -0800 (PST)
+X-Received: by 2002:a50:e00b:: with SMTP id e11mr2367934edl.303.1607525945660; 
+ Wed, 09 Dec 2020 06:59:05 -0800 (PST)
 Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id h15sm1768858ejq.29.2020.12.09.06.59.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Dec 2020 06:59:05 -0800 (PST)
+ by smtp.gmail.com with ESMTPSA id h15sm1768858ejq.29.2020.12.09.06.59.04
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 09 Dec 2020 06:59:05 -0800 (PST)
 Subject: [GIT PULL] arm64: soc: ZynqMP changes for v5.11 (was Re: [GIT PULL]
  ARM: dts zynq: Xilinx DT changes for v5.11)
 From: Michal Simek <monstr@monstr.eu>
 List-Id: <soc.lore.kernel.org>
 To: SoC Team <soc@kernel.org>
-Cc: linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- arm-soc <arm@kernel.org>
 References: <752fc10f-c2eb-736e-8a11-13e770f50c90@monstr.eu>
 Message-ID: <075b91c3-a434-4894-d4aa-d10329645980@monstr.eu>
 Date: Wed, 9 Dec 2020 15:59:04 +0100
@@ -67,9 +84,28 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.5.1
 MIME-Version: 1.0
 In-Reply-To: <752fc10f-c2eb-736e-8a11-13e770f50c90@monstr.eu>
-Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201209_095906_795597_01EE3C6A 
+X-CRM114-Status: GOOD (  21.16  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: arm-soc <arm@kernel.org>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201209145904.cYGw9X-p_o5pz6pWcQJj_Tz7XMTqEOx0hC_QLrdVv38@z>
 
 Hi,
 
@@ -157,3 +193,8 @@ Maintainer of Linux kernel - Xilinx Microblaze
 Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
 U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
