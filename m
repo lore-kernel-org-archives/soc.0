@@ -1,25 +1,30 @@
-Return-Path: <torvalds@linuxfoundation.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 765E3C433FE
-	for <soc@archiver.kernel.org>; Wed,  9 Dec 2020 22:52:29 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 4A61E23A22; Wed,  9 Dec 2020 22:52:29 +0000 (UTC)
-Received: from mail-lf1-f66.google.com (mail-lf1-f66.google.com [209.85.167.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C002E23770
-	for <soc@kernel.org>; Wed,  9 Dec 2020 22:52:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C002E23770
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=torvalds@linuxfoundation.org
-Received: by mail-lf1-f66.google.com with SMTP id o17so2502254lfg.4
-        for <soc@kernel.org>; Wed, 09 Dec 2020 14:52:28 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B3EAC4167B
+	for <linux-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 22:53:10 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 42E4B23770
+	for <linux-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 22:53:10 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S2388628AbgLIWxJ (ORCPT
+        <rfc822;linux-kernel@archiver.kernel.org>);
+        Wed, 9 Dec 2020 17:53:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725965AbgLIWxJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 9 Dec 2020 17:53:09 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B640AC0613D6
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Dec 2020 14:52:28 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id m19so5449842lfb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Dec 2020 14:52:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -33,40 +38,46 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=LoZxe45tfXr4/FDvc4CABuzQn5OyKXJcb52tHgb8yL0=;
-        b=oXnxSEkUTStTqOX6jyIjJSzgvVYAZABmgihhU5td06lqHHN5HxJOQi/V4ZlzV6seDr
-         EBpLMQl9UU+T8ul5KMwgXGqsH1eV+8LWwRJ2Sxq72vasQIpw7NW+Bp62A9bOg0lYIlx6
-         Kc19oOFL6CajTCNeGYFzbh1p8JUq2g2IViSGqeVAD2ivDamBaQBWtny+EP9RHbx+XXY9
-         F6gcCgi3JIXTZ8u8qvB95i12BdQYcQZ5SF/Q/E56vTHYUn3b7zj6PnvQx1SEZeyvBJ38
-         mll0FT3weVictVBRMfLZXHUDPPRKbwETbSPWpgf6JfUyEe7OntinpkCFPJZNArlGuimL
-         4sKg==
-X-Gm-Message-State: AOAM532KYYgos3ISpHGfh171MzDkmbAGTRGO1Nwe/FpSNJGwG2ktnyjE
-	O36Rx3BByIkF0R58MkxNML6hSTx6IlDEqA==
-X-Google-Smtp-Source: ABdhPJxqMI7NTmrrqK90oxkrHWKslL18zmix4fCGAmRRbT4lpEZcXdgD7g5caI+FxsPFjpVKmUDTdg==
-X-Received: by 2002:ac2:46cf:: with SMTP id p15mr1634747lfo.628.1607554346845;
+        b=oOh3TJIRsvTesLVONT8cVss4wjjiMuJ8pQ5R1Omirid9Qn9jk7FzH6uUS1nxQAg60D
+         GEL4pVlpDJPio1lesHermegEtzO5ymFLktWy8kt1AYL7/z7VE5WH5s24OROt15Ec02t7
+         sfQuc/WGeI/OHBDHvBO6MIPSZTzJt7ZeXz98Zz1VUIHI1E8G0T9yHn+xZZTHflwjgqd9
+         9ZGP5R1/w+Ow4CyASeosoraXP4PitHjBQ8wWFAV8Soa3/jCoXPxlhz6yxl3o3FrHDbXy
+         3uKmubpk2F+zwhuTziouFWKcr5iWAugbskXEFKEl1nl6MJLsRYjMOMA7qrz1ABxZX8r5
+         FDHg==
+X-Gm-Message-State: AOAM530VWJ04tclnwtQNV5EgMYkHvakFlXKsNMTCWmWip4CMs+pvWX6h
+        2rRTWl8CuS1trorgrXa97BA6A9RUKz/xgQ==
+X-Google-Smtp-Source: ABdhPJxZJ/cM3RH4/8fb3A0ekZ8ZxYAQEt5mjXshxwBbkBAbZMUwyWR0J5D0N7zVE9236FURaktTMg==
+X-Received: by 2002:a19:be16:: with SMTP id o22mr542705lff.109.1607554346934;
         Wed, 09 Dec 2020 14:52:26 -0800 (PST)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
-        by smtp.gmail.com with ESMTPSA id t5sm307723lfc.79.2020.12.09.14.52.25
-        for <soc@kernel.org>
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id t11sm306779lfc.204.2020.12.09.14.52.25
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Wed, 09 Dec 2020 14:52:25 -0800 (PST)
-Received: by mail-lf1-f41.google.com with SMTP id r24so5406628lfm.8
-        for <soc@kernel.org>; Wed, 09 Dec 2020 14:52:25 -0800 (PST)
+Received: by mail-lf1-f47.google.com with SMTP id a9so5446496lfh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Dec 2020 14:52:25 -0800 (PST)
 X-Received: by 2002:ac2:4987:: with SMTP id f7mr1565679lfl.41.1607554345273;
  Wed, 09 Dec 2020 14:52:25 -0800 (PST)
 MIME-Version: 1.0
 References: <CAK8P3a04h2KA6s-m_O2MJ098frTSmxvAg-ngrdP4d9=9YLXmyw@mail.gmail.com>
  <CAK8P3a2piZwSjDudPu8mOEBnRHFAXRBMcRZsqS8b6YD3Kjwsow@mail.gmail.com>
 In-Reply-To: <CAK8P3a2piZwSjDudPu8mOEBnRHFAXRBMcRZsqS8b6YD3Kjwsow@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 9 Dec 2020 14:52:09 -0800
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 9 Dec 2020 14:52:09 -0800
 X-Gmail-Original-Message-ID: <CAHk-=wgkby5F6EpGxN3kXaxf8YPkXKb+873hSE7Ly+zEJZrXrg@mail.gmail.com>
 Message-ID: <CAHk-=wgkby5F6EpGxN3kXaxf8YPkXKb+873hSE7Ly+zEJZrXrg@mail.gmail.com>
 Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 4
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20201209225209.cvx3mAfxbKh1qQxwqydexca2J6p7sQELrmcS8hHt9x0@z>
 
 On Wed, Dec 9, 2020 at 2:07 PM Arnd Bergmann <arnd@kernel.org> wrote:
 >
