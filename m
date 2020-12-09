@@ -6,10 +6,10 @@ X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,
 	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EF62C433FE
-	for <soc@archiver.kernel.org>; Wed,  9 Dec 2020 20:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67028C433FE
+	for <soc@archiver.kernel.org>; Wed,  9 Dec 2020 20:27:26 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 6A92023CD0; Wed,  9 Dec 2020 20:27:23 +0000 (UTC)
+	id 3DD1B23CD2; Wed,  9 Dec 2020 20:27:26 +0000 (UTC)
 From: Arnd Bergmann <arnd@kernel.org>
 Authentication-Results:mail.kernel.org; dkim=permerror (bad message/signature format)
 List-Id: <soc.lore.kernel.org>
@@ -26,34 +26,30 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Bjorn Andersson <bjorn.andersson@linaro.org>,
 	Ohad Ben-Cohen <ohad@wizery.com>,
 	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 2/4] Update am335x to boot without platform data
-Date: Wed,  9 Dec 2020 21:27:16 +0100
-Message-ID: <160754553209.2241259.6092930072303562425.b4-ty@arndb.de>
+Subject: Re: [GIT PULL 3/4] Update am437x to boot without platform data
+Date: Wed,  9 Dec 2020 21:27:17 +0100
+Message-Id: <160754553210.2241259.15387534181695041690.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <pull-1606806458-694517@atomide.com-2>
-References: <pull-1606806458-694517@atomide.com> <pull-1606806458-694517@atomide.com-2>
+In-Reply-To: <pull-1606806458-694517@atomide.com-3>
+References: <pull-1606806458-694517@atomide.com> <pull-1606806458-694517@atomide.com-3>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Message-ID: <20201209202716.5jSswPxHCPWT1Sys2GI3fJSj7bC6MzoqXb6gdEa7lMY@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 1 Dec 2020 09:18:47 +0200, Tony Lindgren wrote:
-> The following changes since commit 57df7e370d2ab83a64c07acd157acfed4169f114:
+On Tue, 1 Dec 2020 09:18:48 +0200, Tony Lindgren wrote:
+> The following changes since commit 133ad7ab7005dc951fb66d3de9e29a8259fe9744:
 > 
->   remoteproc/wkup_m3: Use reset control driver if available (2020-11-16 12:57:40 +0200)
+>   ARM: OMAP2+: Build hwmod related code as needed (2020-11-16 12:58:21 +0200)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.11/genpd-am335x-signed
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.11/genpd-am437x-signed
 > 
 > [...]
 
-I ended up making a top-level branch "arm/omap-genpd" for the omap
-genpd changes, as they touch both code and DT files.
-
 Merged into arm/omap-genpd, thanks!
 
-merge commit: d36edb048f48babb3fbf9a4b249df115b7fab152
+merge commit: 3614fb09f998c8f710142fb722ba216ddc79db24
 
        Arnd
