@@ -1,30 +1,55 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=W7ES=FN=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-25.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56728C4167B
-	for <soc@archiver.kernel.org>; Wed,  9 Dec 2020 21:14:53 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 10AD723C91; Wed,  9 Dec 2020 21:14:53 +0000 (UTC)
-X-Gm-Message-State: AOAM532P1BvbuPoSHJqYnAT+c4YOtkchGCb4tGCIDKfJjjSEqA6XG4Jj
-	eve14CHs7KRuU8dZfrknB7a8O8cr9uj7eGnm/sw=
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DACEBC433FE
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 21:16:25 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 98B6E23B77
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 21:16:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 98B6E23B77
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:MIME-Version:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=zalX25NwbaBBs9cJ1ukeMYXTeELIY8hkv0TIKsN57To=; b=CNSTzwnSqmo3h0SRGaOYa4LW7d
+	xkzFiwzf1yxQSHFN8gDyTUqJEVqkoQbdkXCNFBt9ZtSOi93xS8W5xeowDSfNwDbzsTyPfP5TJp23s
+	paTCo/yxE+wBSdgxryuSzktVrJbAVunHi8uTkzGrV9qB1hWV0MH3tT/7XAs2i0i57WmvZlMvzVaq4
+	8D4OYe75EHswSjFdjThiNlVjwKUGemJj5vZrxsddZfwcs3NMaSnw7rVEIrqu5MSj3nctBOzl70Rff
+	LpdaALbgVlQFnSJZNtwh837QFR2T06CvEA0Qzhi2lCmYVN/cI53deMTf1b82Hqgf+e7v47Q0f7DTt
+	qEq7jM7A==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kn6nY-0003n3-2W; Wed, 09 Dec 2020 21:14:56 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kn6nV-0003mj-SM
+ for linux-arm-kernel@lists.infradead.org; Wed, 09 Dec 2020 21:14:54 +0000
+X-Gm-Message-State: AOAM531Vni3O+dOPMjOqMOGXe/J52fKMRizGC2JZ/UAZFVeIA/mo0huI
+ NRaB47LF+o+T+EwPERIYI1DUh7jgS65Qj/x+i6g=
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1607548493;
-	bh=nK49LQSyPmLc4NNqKy4a2bxFojevJ0HeB1P9xY5nsH8=;
-	h=From:Date:Subject:To:List-Id:Cc:From;
-	b=fmJ/CnujlBiM/yiMIyR8DS7CmaLaX4yLYONGV5lsNarTAtfyM9vZ9XCLLm3zpzapW
-	 O6sBPB+D7c7r5npBUGIQrezDG/lLnizmu6EknOsa+HuzdYLb2CE8Y9yGEynH7YMxxZ
-	 VHluY+Q+6vkusGLyoE01WAVxHxQ+4zXjvLp7vPpcj0fVAW71e2MMT0qK0bGK8ycLzZ
-	 w0wZCMx9YhoaV9loOL/Q2+f/sEz+s3FSZJDCwoaEKoABwUKXRyY4cFXGScYrb7gjGx
-	 /LfDE0lDq7gZG/E1lqewzucOtWm7rLZEIJBgK7EDRRXqLtpl4aHCZ4hFcCxnk41a9i
-	 Kj2fPV/kzsaZA==
+ s=k20201202; t=1607548493;
+ bh=nK49LQSyPmLc4NNqKy4a2bxFojevJ0HeB1P9xY5nsH8=;
+ h=From:Date:Subject:To:List-Id:Cc:From;
+ b=fmJ/CnujlBiM/yiMIyR8DS7CmaLaX4yLYONGV5lsNarTAtfyM9vZ9XCLLm3zpzapW
+ O6sBPB+D7c7r5npBUGIQrezDG/lLnizmu6EknOsa+HuzdYLb2CE8Y9yGEynH7YMxxZ
+ VHluY+Q+6vkusGLyoE01WAVxHxQ+4zXjvLp7vPpcj0fVAW71e2MMT0qK0bGK8ycLzZ
+ w0wZCMx9YhoaV9loOL/Q2+f/sEz+s3FSZJDCwoaEKoABwUKXRyY4cFXGScYrb7gjGx
+ /LfDE0lDq7gZG/E1lqewzucOtWm7rLZEIJBgK7EDRRXqLtpl4aHCZ4hFcCxnk41a9i
+ Kj2fPV/kzsaZA==
 X-Google-Smtp-Source: ABdhPJwFZvDeNeklcG1rc3mj6GPDrQ0V5wvuKc5Uv4i4DAGt0oWdPas3ShsATYc0GmagY9Gwce7iAUDHgBraU7079TA=
-X-Received: by 2002:a9d:7a4b:: with SMTP id z11mr3472609otm.305.1607548492131;
+X-Received: by 2002:a9d:7a4b:: with SMTP id z11mr3472609otm.305.1607548492131; 
  Wed, 09 Dec 2020 13:14:52 -0800 (PST)
 MIME-Version: 1.0
 From: Arnd Bergmann <arnd@kernel.org>
@@ -33,10 +58,29 @@ X-Gmail-Original-Message-ID: <CAK8P3a04h2KA6s-m_O2MJ098frTSmxvAg-ngrdP4d9=9YLXmy
 Message-ID: <CAK8P3a04h2KA6s-m_O2MJ098frTSmxvAg-ngrdP4d9=9YLXmyw@mail.gmail.com>
 Subject: [GIT PULL] ARM: SoC fixes for v5.10, part 4
 To: Linus Torvalds <torvalds@linux-foundation.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201209_161454_076292_4794B3A5 
+X-CRM114-Status: GOOD (  15.18  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: SoC Team <soc@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201209211436.hOuyGv8StsbRmhdywwaaQEyvxN_duaFkZaqc2pgBd1c@z>
 
 The following changes since commit 0477e92881850d44910a7e94fc2c46f96faa131f:
 
@@ -152,3 +196,8 @@ Zou Wei (1):
  .../arm64/boot/dts/allwinner/sun50i-h6-orangepi-one-plus.dts |  2 +-
  drivers/firmware/xilinx/zynqmp.c                             |  2 +-
  16 files changed, 30 insertions(+), 24 deletions(-)
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
