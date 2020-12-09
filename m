@@ -1,90 +1,51 @@
-Return-Path: <linux-kernel-owner@kernel.org>
+Return-Path: <pr-tracker-bot@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B3EAC4167B
-	for <linux-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 22:53:10 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42E4B23770
-	for <linux-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 22:53:10 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388628AbgLIWxJ (ORCPT
-        <rfc822;linux-kernel@archiver.kernel.org>);
-        Wed, 9 Dec 2020 17:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbgLIWxJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Dec 2020 17:53:09 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B640AC0613D6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Dec 2020 14:52:28 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id m19so5449842lfb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Dec 2020 14:52:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LoZxe45tfXr4/FDvc4CABuzQn5OyKXJcb52tHgb8yL0=;
-        b=byRPSi/mKwHLY2fdQcTNrRj6YvGbp+G5DCe532S8h9jvM5zGWe6bGFkBgJLn8a8efh
-         wNR1E46A1xONxrnSS6D5a1rIQTyJswuGS7bQtK2cELi3Z4KHz3Uv0BX+UljIjb4CQ0pD
-         OkiO0DcVdNYHZ9vc4BJEeAjyOABQDyJ8appoA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LoZxe45tfXr4/FDvc4CABuzQn5OyKXJcb52tHgb8yL0=;
-        b=oOh3TJIRsvTesLVONT8cVss4wjjiMuJ8pQ5R1Omirid9Qn9jk7FzH6uUS1nxQAg60D
-         GEL4pVlpDJPio1lesHermegEtzO5ymFLktWy8kt1AYL7/z7VE5WH5s24OROt15Ec02t7
-         sfQuc/WGeI/OHBDHvBO6MIPSZTzJt7ZeXz98Zz1VUIHI1E8G0T9yHn+xZZTHflwjgqd9
-         9ZGP5R1/w+Ow4CyASeosoraXP4PitHjBQ8wWFAV8Soa3/jCoXPxlhz6yxl3o3FrHDbXy
-         3uKmubpk2F+zwhuTziouFWKcr5iWAugbskXEFKEl1nl6MJLsRYjMOMA7qrz1ABxZX8r5
-         FDHg==
-X-Gm-Message-State: AOAM530VWJ04tclnwtQNV5EgMYkHvakFlXKsNMTCWmWip4CMs+pvWX6h
-        2rRTWl8CuS1trorgrXa97BA6A9RUKz/xgQ==
-X-Google-Smtp-Source: ABdhPJxZJ/cM3RH4/8fb3A0ekZ8ZxYAQEt5mjXshxwBbkBAbZMUwyWR0J5D0N7zVE9236FURaktTMg==
-X-Received: by 2002:a19:be16:: with SMTP id o22mr542705lff.109.1607554346934;
-        Wed, 09 Dec 2020 14:52:26 -0800 (PST)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id t11sm306779lfc.204.2020.12.09.14.52.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Dec 2020 14:52:25 -0800 (PST)
-Received: by mail-lf1-f47.google.com with SMTP id a9so5446496lfh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Dec 2020 14:52:25 -0800 (PST)
-X-Received: by 2002:ac2:4987:: with SMTP id f7mr1565679lfl.41.1607554345273;
- Wed, 09 Dec 2020 14:52:25 -0800 (PST)
-MIME-Version: 1.0
-References: <CAK8P3a04h2KA6s-m_O2MJ098frTSmxvAg-ngrdP4d9=9YLXmyw@mail.gmail.com>
- <CAK8P3a2piZwSjDudPu8mOEBnRHFAXRBMcRZsqS8b6YD3Kjwsow@mail.gmail.com>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35F14C4361B
+	for <soc@archiver.kernel.org>; Wed,  9 Dec 2020 22:53:50 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id F19E923B97; Wed,  9 Dec 2020 22:53:49 +0000 (UTC)
+Subject: Re: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1607554429;
+	bh=v0W/536EuIwh5aALHFkG9IPXvhDkuTFU0QwHlbagWqE=;
+	h=From:In-Reply-To:References:Date:To:List-Id:Cc:From;
+	b=StcjxCCb+HMfclTfuWrBEOxq0vk0XU+3trq453jLfzyozQNtqohZlQpLnRH4IXcjZ
+	 NQrHiNRDcDqo+hGI2t4c4Bt12RWnukBBeZr30Ent4u4+qGuxM5kednskL3FsxhhqAC
+	 gCUKfT0QPWy+QAh0QXJXmQIgBa1NOothE5jIEVIk4W5GgZXVxI8CDX6B5plYBfE0tY
+	 uzJ1fUZdtUTB9+66/KmGRHq+dS3XvNLc0o46EtzUGih8HOoLWVwQQCwJD3RZXBUXwk
+	 KK4Ig/yWx+ieRooaouTqB9FH6TQMDdAQEpcyUKUqKM6zElX6olhtoAJ/3zoxHWLNzc
+	 K8qnC9wcpH+qw==
+From: pr-tracker-bot@kernel.org
 In-Reply-To: <CAK8P3a2piZwSjDudPu8mOEBnRHFAXRBMcRZsqS8b6YD3Kjwsow@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 9 Dec 2020 14:52:09 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgkby5F6EpGxN3kXaxf8YPkXKb+873hSE7Ly+zEJZrXrg@mail.gmail.com>
-Message-ID: <CAHk-=wgkby5F6EpGxN3kXaxf8YPkXKb+873hSE7Ly+zEJZrXrg@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 4
-To:     Arnd Bergmann <arnd@kernel.org>
+References: <CAK8P3a04h2KA6s-m_O2MJ098frTSmxvAg-ngrdP4d9=9YLXmyw@mail.gmail.com> <CAK8P3a2piZwSjDudPu8mOEBnRHFAXRBMcRZsqS8b6YD3Kjwsow@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
+X-PR-Tracked-Message-Id: <CAK8P3a2piZwSjDudPu8mOEBnRHFAXRBMcRZsqS8b6YD3Kjwsow@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-soc-fixes-v5.10-4b
+X-PR-Tracked-Commit-Id: 69fe24d1d80feac4289778582cf0a15256d59baf
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a2f5ea9e314ba6778f885c805c921e9362ec0420
+Message-Id: <160755442971.8086.12518743666156254013.pr-tracker-bot@kernel.org>
+Date: Wed, 09 Dec 2020 22:53:49 +0000
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc:     SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <linux-kernel.vger.kernel.org>
-X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20201209225209.cvx3mAfxbKh1qQxwqydexca2J6p7sQELrmcS8hHt9x0@z>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Stephen Rothwell <sfr@canb.auug.org.au>, SoC Team <soc@kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>
 
-On Wed, Dec 9, 2020 at 2:07 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> Stephen Rothwell just pointed out that one of the fixes I added today
-> was missing a Signed-off-by. I corrected that and uploaded a new tag
+The pull request you sent on Wed, 9 Dec 2020 23:07:10 +0100:
 
-Gaah. I had already pulled, but since I hadn't pushed out, I undid it
-and re-pulled..
+> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-soc-fixes-v5.10-4b
 
-          Linus
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a2f5ea9e314ba6778f885c805c921e9362ec0420
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
