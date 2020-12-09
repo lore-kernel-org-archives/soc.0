@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 772EDC4361B
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 20:28:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C29A4C4361B
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 20:29:30 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 337FD22B39
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 20:28:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 337FD22B39
+	by mail.kernel.org (Postfix) with ESMTPS id 0DAC523B99
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 20:29:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0DAC523B99
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,19 +23,19 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=wCT6jx8VK+3CVMAmeSWKLrTe3oP0VOMHic9sy7WVUq0=; b=dAp7/oyxVPaQVCD/PBUrtBwZz
-	US7OGW4sgTPcnwmK9PrkgMHVH0nIurapFJ7rsaUjSLIiEla9fJSdT7jr9uy4Ya3R0WK7XjH/tqPNH
-	2BnHCNt6nYiJ5V3A2muO05hnjPosuIFs6V2sWPhrTbJ8u2zToRibfCUswqWHttxIAdXEJun6PcWsS
-	nTE0spxgVPi16jtoaXqXqZQyh4Agxsc28BvtG/ZRxYH1lT3UDXIIxUwWkkRl/Azjf+JzQFhmGvzNI
-	TSDQRQCl8wqmFvqVufmsRRECVkAoJI5UXFX2qCGQaq+dCEcSJNLd7mGAUTrJhlincRL3vdRfBn0/1
-	CxZE37wTw==;
+	 bh=wCT6jx8VK+3CVMAmeSWKLrTe3oP0VOMHic9sy7WVUq0=; b=LBiEHGmxULLCmb1sPbL2lChCe
+	P9gKn086Y9UuhMefRNui9oFFUlNJb9GxOvAgvauh4RPauXmMSYYXrK0Auwnfl9aTWVQy3MCW36Sti
+	RdmrxKUplaIxcIMjVcPzMHSXmhx0w00fvTE0/Om7vJyxmzhWqoS+YRb6K90gHR/A/uvSFxFTp/h0W
+	R2277PNcGhvw6tDiE1ai/gkZVQefxpm8JDw4bruU6/bsPJ0GwIhndMLvvhE31sBnObzFWhrzkw8R8
+	LQlU+aN113jme8PAVIRGMMfHz4RiT2PaoHClabYV2Ws7YURydCGQ98+t/+te7JVFTu9S9Ya3tFvXs
+	p/Rs1mZUg==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kn63I-0002s4-HL; Wed, 09 Dec 2020 20:27:08 +0000
+	id 1kn63e-0002xA-PI; Wed, 09 Dec 2020 20:27:31 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kn63E-0002r7-SM
- for linux-arm-kernel@lists.infradead.org; Wed, 09 Dec 2020 20:27:05 +0000
+ id 1kn63Y-0002vc-4f
+ for linux-arm-kernel@lists.infradead.org; Wed, 09 Dec 2020 20:27:25 +0000
 From: Arnd Bergmann <arnd@kernel.org>
 Authentication-Results: mail.kernel.org;
  dkim=permerror (bad message/signature format)
@@ -43,7 +43,7 @@ List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
 	Tony Lindgren <tony@atomide.com>
 Subject: Re: [GIT PULL 2/4] Update am335x to boot without platform data
-Date: Wed,  9 Dec 2020 21:26:56 +0100
+Date: Wed,  9 Dec 2020 21:27:16 +0100
 Message-ID: <160754553209.2241259.6092930072303562425.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <pull-1606806458-694517@atomide.com-2>
@@ -51,8 +51,8 @@ References: <pull-1606806458-694517@atomide.com>
  <pull-1606806458-694517@atomide.com-2>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201209_152705_019613_1CA71587 
-X-CRM114-Status: UNSURE (   9.29  )
+X-CRM114-CacheID: sfid-20201209_152724_832471_BE3A74D3 
+X-CRM114-Status: UNSURE (   9.39  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
@@ -75,7 +75,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201209202656.Wqrn83Qamsfj2Wv7Ou-jylIL3e5D7h9DUPKZWqaMD1Y@z>
+Message-ID: <20201209202716.fczNEOVe0Dd1LAnsx-JpVfYztIWMbe62-QsVKS7QLPo@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
