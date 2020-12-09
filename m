@@ -1,26 +1,31 @@
-Return-Path: <SRS0=kFSR=FN=gmail.com=joel.stan@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70AEBC4361B
-	for <soc@archiver.kernel.org>; Wed,  9 Dec 2020 02:17:55 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 3F38C23A53; Wed,  9 Dec 2020 02:17:55 +0000 (UTC)
-Received: from mail-qk1-f196.google.com (mail-qk1-f196.google.com [209.85.222.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1C0B523975
-	for <soc@kernel.org>; Wed,  9 Dec 2020 02:17:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1C0B523975
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=joel.stan@gmail.com
-Received: by mail-qk1-f196.google.com with SMTP id h20so1996qkk.4
-        for <soc@kernel.org>; Tue, 08 Dec 2020 18:17:53 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEE3AC433FE
+	for <linux-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 02:18:50 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 83A64238EE
+	for <linux-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 02:18:50 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1726535AbgLICSe (ORCPT
+        <rfc822;linux-kernel@archiver.kernel.org>);
+        Tue, 8 Dec 2020 21:18:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbgLICSe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 8 Dec 2020 21:18:34 -0500
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD4AC0613D6
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Dec 2020 18:17:53 -0800 (PST)
+Received: by mail-qk1-x742.google.com with SMTP id 143so671026qke.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Dec 2020 18:17:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=jms.id.au; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -34,36 +39,47 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=RchfEUxlIXCvXQN3+UYuWNoN8tixWT1ubeZpsHm4KC0=;
-        b=ef4DtX8/gMDRMQ1ds2t+wcHKt8OtsujoZlE993uU15CodmuDfAY/QudUxIlz1UKIPW
-         qJ3NCLmOpnMrJrEEsI3RvBQwgPcdRndhobom2mjph/7TvwJZGkVvvuLJ1RllGV2HtBtS
-         +bs7F2tXszUFEyqBLTnHnQoTOJOAvBfaw+Bu45sv389/olv56LWsswZnRb4wRwuXn4im
-         ssG+kLKkEr+PeEMnXPkzBQtsvNYwe/XTf0+6RDjJJIZUON9IxWpJ5kvQq5Y4PPibDZcj
-         qZUHZ17jBkpPEKrJdouS6djms3k5xwJ8fjzrgFJmJ7jNrCdWXn82Z9L4+2mfbsTsDhEz
-         w1FQ==
-X-Gm-Message-State: AOAM531sEM/zEz99MaL9TDw2BhFyvcozhPKMW0rDfDLa+5obFId6iT/8
-	AkyLU2sPfEKmZUSohOzDFvtQPuBkACP1SRU5onY=
+        b=jVAbXJeiKj1OG4zP3ABPDGDHwvwJfe0B74il79NomMFaG/oU0mLYaiA6cuVjNsMaL3
+         GAlGRLbF1gaJkW29v3oRRQt89ZtzFj6qHCLLQ/HpIfU0Qi9ussB0uhD+vbYn8wGzGYhT
+         T4XHXLz2Zsr3dBn9DZpdDdty0NZ0Br65ZVLWa87eqLHYPtt1ctQfO9Sbk1HDlf9VPnm3
+         cAevIQHQSWpeVxGMLZAxcr5ZC73IidWrIDDf8lCdVypPfYngxXDPSHeYNl+GzXnWsURp
+         6lPyyGw2veOc1EIj8fD3CR9Wxbq7sc9P/DL3JWf3jfnzlNx8X+OFIEr5XBX01oD4hYUB
+         /fXw==
+X-Gm-Message-State: AOAM531OGRhnt8N6dPCJWKk/CSYkqh2jf4mbG0DjKrlbmDPulmVYDbzX
+        Ccd8CSI5J+tm+R/y5ukb4ove4uqvaXnIjDg4Vlo=
 X-Google-Smtp-Source: ABdhPJz5VfxoBA7BSnjZ4eLGjv3bDURJD0HjKPP58xDqbDJFGYMxaK4pEo4lCBNohZLLeaxSa5yV2CU0Q5gc9fj3TKo=
 X-Received: by 2002:a37:a085:: with SMTP id j127mr289877qke.273.1607480273131;
  Tue, 08 Dec 2020 18:17:53 -0800 (PST)
 MIME-Version: 1.0
 References: <20201208091748.1920-1-wangzhiqiang.bj@bytedance.com>
 In-Reply-To: <20201208091748.1920-1-wangzhiqiang.bj@bytedance.com>
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 9 Dec 2020 02:17:40 +0000
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 9 Dec 2020 02:17:40 +0000
 Message-ID: <CACPK8XePhJj8HzbLB4QgJQCjTuH_kPq=sWyOhdcGPmptqD6Aqw@mail.gmail.com>
 Subject: Re: [PATCH v2 1/2] misc: Add clock control logic into Aspeed LPC
  SNOOP driver
 List-Id: <soc.lore.kernel.org>
-To: John Wang <wangzhiqiang.bj@bytedance.com>, SoC Team <soc@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>
-Cc: xuxiaohan@bytedance.com, =?UTF-8?B?6YOB6Zu3?= <yulei.sh@bytedance.com>, 
-	Jae Hyun Yoo <jae.hyun.yoo@intel.com>, Vernon Mauery <vernon.mauery@linux.intel.com>, 
-	Andrew Jeffery <andrew@aj.id.au>, Patrick Venture <venture@google.com>, 
-	Robert Lippert <rlippert@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Benjamin Fair <benjaminfair@google.com>, 
-	"moderated list:ARM/ASPEED MACHINE SUPPORT" <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/ASPEED MACHINE SUPPORT" <linux-aspeed@lists.ozlabs.org>, open list <linux-kernel@vger.kernel.org>
+To:     John Wang <wangzhiqiang.bj@bytedance.com>,
+        SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     xuxiaohan@bytedance.com,
+        =?UTF-8?B?6YOB6Zu3?= <yulei.sh@bytedance.com>,
+        Jae Hyun Yoo <jae.hyun.yoo@intel.com>,
+        Vernon Mauery <vernon.mauery@linux.intel.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Patrick Venture <venture@google.com>,
+        Robert Lippert <rlippert@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20201209021740.Jk35dIyWitTu-P_tLrU_lfw306xMKDwPMzyN_swW5-Q@z>
 
 On Tue, 8 Dec 2020 at 09:17, John Wang <wangzhiqiang.bj@bytedance.com> wrote:
 >
