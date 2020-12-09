@@ -1,102 +1,70 @@
-Return-Path: <SRS0=W7ES=FN=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 170BCC433FE
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 20:30:09 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C701123CD1
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 20:30:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C701123CD1
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=uChZ2NWpgX6bXCFy1VzFuhiwVw+xb1CHP5iaikd1B8U=; b=dUhQ2ayO7y86fxE+sC38K05gD
-	Xm9Vm1MWWfG2EQDGbsgwUXcgNTLgWaS27qxaRstrZh/OxFK3QV7kvi2iIzMOs5E6JWKwNGws9xmTK
-	0CW8UdydinePqre6jSj7JWwouIiaNFbdFO6IRYQclJpQUV5wT71B+deg7HfyLwAIniAk0KPcIWbqw
-	4SgtCd+yB6GpXmW99lHIZQ7QYD9FixtRx2GwKNAYINillJw4/M7DMfmH89j1CdA9Vrr4uLeSrcQAi
-	GTIomVq9Zywf+2BHJcHbyBlJ0Au0Rmg+vj0+kabjok7Ktv4mosv0LMVY+JzyXjgdgbViQrZjWCfRf
-	pAZlAk3DA==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kn64C-00033z-Co; Wed, 09 Dec 2020 20:28:05 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kn63d-0002y2-S3
- for linux-arm-kernel@lists.infradead.org; Wed, 09 Dec 2020 20:27:31 +0000
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C262C433FE
+	for <soc@archiver.kernel.org>; Wed,  9 Dec 2020 20:30:45 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 1A09B23CD4; Wed,  9 Dec 2020 20:30:45 +0000 (UTC)
 From: Arnd Bergmann <arnd@kernel.org>
-Authentication-Results: mail.kernel.org;
- dkim=permerror (bad message/signature format)
+Authentication-Results:mail.kernel.org; dkim=permerror (bad message/signature format)
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
-	Tony Lindgren <tony@atomide.com>
-Subject: Re: [GIT PULL 4/4] Remaining genpd changes for omaps for v5.11
-Date: Wed,  9 Dec 2020 21:27:18 +0100
-Message-ID: <160754553212.2241259.9032518428414266749.b4-ty@arndb.de>
+	Daniel Palmer <daniel@0x0f.com>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	robh@kernel.org,
+	w@1wt.eu,
+	olof@lixom.net,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/10] ARM: mstar: Add basic support for i2m and SMP
+Date: Wed,  9 Dec 2020 21:30:36 +0100
+Message-Id: <160754580092.2405127.3766119889615848962.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <pull-1606806458-694517@atomide.com-4>
-References: <pull-1606806458-694517@atomide.com>
- <pull-1606806458-694517@atomide.com-4>
+In-Reply-To: <20201201134330.3037007-1-daniel@0x0f.com>
+References: <20201201134330.3037007-1-daniel@0x0f.com>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201209_152730_113962_E9551E3E 
-X-CRM114-Status: UNSURE (   9.19  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Ohad Ben-Cohen <ohad@wizery.com>, Arnd Bergmann <arnd@arndb.de>,
- Stephen Boyd <sboyd@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
- Bjorn Andersson <bjorn.andersson@linaro.org>, Tero Kristo <t-kristo@ti.com>,
- arm@kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
- Santosh Shilimkar <ssantosh@kernel.org>, linux-omap@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201209202718.bkSaMFnzC0yZw9XdvDwdpwsHg2uB95Jptmdi6dYhYr4@z>
+Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 1 Dec 2020 09:18:49 +0200, Tony Lindgren wrote:
-> The following changes since commit df6c2ec872a62cf81dff86ef62818dea89cc9d98:
+On Tue, 1 Dec 2020 22:43:20 +0900, Daniel Palmer wrote:
+> Sorry for spamming this. I wanted to fix the DT parts
+> before anyone spent time looking at the DT related commits
+> in v1.
 > 
->   ARM: OMAP2+: Drop legacy remaining legacy platform data for am4 (2020-11-16 13:11:17 +0200)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.11/genpd-rest-signed
+> This series adds basic support for the infinity2m series
+> of chips. For now the SigmaStar SSD202D which is a dual
+> Cortex A7 in a QFN128 package.
 > 
 > [...]
 
-Merged into arm/omap-genpd, thanks!
+Applied to arm/dt, thanks!
 
-merge commit: 7fbee7e3386cb51e5ebc60c4d7cea13ffeab31d6
+[01/10] dt-bindings: mstar: Add binding details for mstar,smpctrl
+        commit: 80e73332ee829cd55d86272b7d3d4d5f0fc4c4ff
+[02/10] dt-bindings: vendor-prefixes: Add honestar vendor prefix
+        commit: 43181b5d8072dd92513dca995789a1a1123ffc8a
+[03/10] dt-bindings: mstar: Add Honestar SSD201_HT_V2 to mstar boards
+        commit: 8c50a8b359c4f262a05ed5fb05373177d11bd20c
+[04/10] ARM: mstar: Add infinity2m support
+        commit: ba2290b1b7505b28912092a0976e071a447ee18c
+[05/10] ARM: mstar: Add common dtsi for SSD201/SSD202D
+        commit: 572ef97bc7341b45c721d79f98262c4adb25919c
+[06/10] ARM: mstar: Add chip level dtsi for SSD202D
+        commit: dbbaf35d589e554d5956780282feb5d62d7f2af6
+[07/10] ARM: mstar: Add dts for Honestar ssd201htv2
+        commit: 418cb58b45661724ba145bd769e53910ad9324b0
+[08/10] ARM: mstar: Add smp ctrl registers to infinity2m dtsi
+        commit: 570e471ce0540165aed5bc638e462de7c1110a28
+[09/10] ARM: mstar: Wire up smpctrl for SSD201/SSD202D
+        commit: ecaafac1eb73de8209680ec030769a2def4801e5
+[10/10] ARM: mstar: SMP support
+        commit: 5919eec0f09214901b09faeaf6341addebc57a89
 
        Arnd
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
