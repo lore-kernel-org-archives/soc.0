@@ -1,61 +1,58 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27C26C4167B
-	for <soc@archiver.kernel.org>; Wed,  9 Dec 2020 17:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED990C433FE
+	for <soc@archiver.kernel.org>; Wed,  9 Dec 2020 17:45:49 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id D669623C81; Wed,  9 Dec 2020 17:10:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id C24CA23D22; Wed,  9 Dec 2020 17:45:49 +0000 (UTC)
+X-Gm-Message-State: AOAM531a7XyejWrLHkE9qRPqAnE91uXdhWSE6ayckqki9lX0/T6H0sB+
+	DQ9n2TYxLRHxaKNE/2dG+rpYZ0zPB+sjI0zGPSs=
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1607533810;
-	bh=CuPFNrjG+nJa9Wlu/ousTWqSqjZ2pb9LEFXBvEn7Hc8=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=tFNmvXua25Ql7wiDhySYd+negV7MMMlOBtmD6CDq/JIbuyhu3swSK5637JH4prSjV
-	 2Q3tzjiIS89gU6U3J+80qNjMwc0/9Na3pxJLkx897P51t8aV/VCPp1jwvpFtYOeRt5
-	 vAj3MnQWlaq1cpFM8VEv76mqygOTu1jVZc1RjH05Dq5oDpz56vZ4AN4i2P5PN3aVy5
-	 I6eOlI0eC8COhlYe2q/JzkxBIu3IqIv2BK6XDdFKPcMDDeYJZhrJJv5ziJ1LRSP53J
-	 OM18iQAxywotEmie5iLRZzSfXJgJ/55TTOSCdDu9A4SRyE1P6lDvnFdbhHdEmTSiX5
-	 jeaYA2MZCOzdg==
+	s=k20201202; t=1607535949;
+	bh=fIc3D8aOxqtezDWTUeH5a6/4xchyDWUNEXST3nSLAkw=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=Bpe7vKouCkRSyQ1Ipr/XuR/qzTh2MMID46Nb2CAP3lvmFw/jv/fpWNEXiFwzk3xkr
+	 52B1pw0+CEuyMfniqkIGXLkPAFjSdh2gqw1RYIHXZctv+5miWc6db/aqP0wynF+YSa
+	 urp+IReGbC4s7/C3w8j0mhMed9aqDCvZANY2cVCrbK8oc3Z7CYeKjievfw5OLlGG+6
+	 T0cvfK1iLGvTMBRkKuSmhkSiS2VGYSEXz0IqekscmYA4dfgf1xpFEKa5MHRs1PT2IN
+	 656X4hLElqW9TTzkRxoBalD/V0S+/MZ+j5nyGpYE9ukbCkL3GoFgFWyr9NyQAaUPj2
+	 QJerZqeaD3OVA==
+X-Google-Smtp-Source: ABdhPJxI4CSXg4rYiEkbPRmEtP+i77kAz27CFNAUQJLWmwro9f063ABQy2CEN1uI6TSE7xm3IWLb5F0LaDw8Ek7pHaU=
+X-Received: by 2002:a9d:7a4b:: with SMTP id z11mr2759576otm.305.1607535948906;
+ Wed, 09 Dec 2020 09:45:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] arm64: Kconfig: meson: drop pinctrl
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <160753381073.14869.12843431611502849491.git-patchwork-notify@kernel.org>
-Date: Wed, 09 Dec 2020 17:10:10 +0000
-References: <20201207230156.10198-1-khilman@baylibre.com>
-In-Reply-To: <20201207230156.10198-1-khilman@baylibre.com>
-To: Kevin Hilman <khilman@baylibre.com>
+References: <20201201134330.3037007-1-daniel@0x0f.com> <20201201134330.3037007-2-daniel@0x0f.com>
+ <20201209163536.GB566058@robh.at.kernel.org>
+In-Reply-To: <20201209163536.GB566058@robh.at.kernel.org>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Wed, 9 Dec 2020 18:45:32 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0D+XQREm7Gw5-7-byiz7eufYGT_r-XC3H6_whdOB0a1w@mail.gmail.com>
+Message-ID: <CAK8P3a0D+XQREm7Gw5-7-byiz7eufYGT_r-XC3H6_whdOB0a1w@mail.gmail.com>
+Subject: Re: [PATCH v2 01/10] dt-bindings: mstar: Add binding details for mstar,smpctrl
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: Daniel Palmer <daniel@0x0f.com>, DTML <devicetree@vger.kernel.org>, 
+	SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Olof Johansson <olof@lixom.net>, 
+	Arnd Bergmann <arnd@arndb.de>, Willy Tarreau <w@1wt.eu>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+On Wed, Dec 9, 2020 at 5:35 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, Dec 01, 2020 at 10:43:21PM +0900, Daniel Palmer wrote:
+> > This adds a YAML description of the smpctrl node needed by the
+> > platform code for the MStar/SigmaStar Armv7 SoCs to boot secondary cpus.
+>
+> You need an 'enable-method' string defined too.
 
-This patch was applied to soc/soc.git (refs/heads/for-next):
+I had already applied the series by the time I saw this reply.
 
-On Mon,  7 Dec 2020 15:01:56 -0800 you wrote:
-> Don't automatically select pinctrl drivers, leave it up to defaults in
-> drivers/pinctrl/meson, which default to built-in, but are also now
-> optionally configurable as modules as of
-> commit 9c65441ec823 ("pinctrl/meson: enable building as modules")
-> 
-> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
-> 
-> [...]
+Daniel, please send patches on top of this series to address Rob's
+comments.
 
-Here is the summary with links:
-  - arm64: Kconfig: meson: drop pinctrl
-    https://git.kernel.org/soc/soc/c/dcb11100cd5d
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+       Arnd
