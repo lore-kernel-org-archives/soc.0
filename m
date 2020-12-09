@@ -1,123 +1,79 @@
-Return-Path: <SRS0=W7ES=FN=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <torvalds@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18EB8C433FE
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 22:08:42 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 765E3C433FE
+	for <soc@archiver.kernel.org>; Wed,  9 Dec 2020 22:52:29 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 4A61E23A22; Wed,  9 Dec 2020 22:52:29 +0000 (UTC)
+Received: from mail-lf1-f66.google.com (mail-lf1-f66.google.com [209.85.167.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C52F823D1C
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  9 Dec 2020 22:08:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C52F823D1C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=wHoShdlMLdtaJQuJ6Nh2Bq7gL7z/2p/RjmRzPAQG1SU=; b=B1JkHH3EvLkvC/uEj+UfWrAVq
-	399fllkfdrbG6S4UyNcxqf0YysDuyx32kq0f/N2VDHg4vzpAC/k85xTXC7+HYYW80ECyRZDtjgCMD
-	ikFLlqPispWA9G1NPKgpGjZGFGSkroCpL7m8QKBkMhxeKI7CVAYAuPLUeKHbRebjNAsOwdVt+QY52
-	ihPLXTrsB7jAVTJhsQGx9S0VXaDrobdNF4uROmhCEJSzjiP6+iety5813L0Vi1BtAIO4abqHWxWsP
-	RPA77aDdWiSND1TRjgHjh3syOhfTG2fnrhP+6sLIRmM730SGGD6PlDSLqwRs1scmbzcRWmA+KY3UC
-	oQqttRRnA==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kn7cS-0000yt-Bv; Wed, 09 Dec 2020 22:07:32 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kn7cP-0000yS-ND
- for linux-arm-kernel@lists.infradead.org; Wed, 09 Dec 2020 22:07:30 +0000
-X-Gm-Message-State: AOAM532lVNC4tJBUix8CCllM4dYl06ehK2gZQkEcuYChJMgTUmjCjZqR
- GnVG1jBe1jq76LA84q8Vrlq2g6WwnBjXAeYAjTo=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1607551647;
- bh=gPmQMQEImLWPvAjaFsGIPTOSRzUDA+6UU1BaItnv6ys=;
- h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
- b=e/AvN8Ypejn2MmfW6qyx0Rn59iHHmUhYF5ZGwDmEQNfWUvw5d2s6Q/u6aawV4CrDa
- jefRjJklOi5ns2tcRW5hG6g7OqUdz+voRP6xB0nT83iyFCZLMh8D9basDnSYGUTjN9
- 5s3zIfMWKxjAebKYLj8A+USJL9NCxsjC8Ox+3ttDrss0BAia1r7XHuuefoTfYc/lYi
- 5fIg9GsdbcJH/esi88RMEk+0CWvnrOgCAYZm2mJBDCnum4YrUnFqtFWe/YU7D4UiJr
- I0wD9xKANtztgYphjFLZMB+AK3CnxDaetKc0tLBDWT+gPgQnxNavsVopPTxsCW+HGP
- JzpWQvirfOT3w==
-X-Google-Smtp-Source: ABdhPJyUJyv3UGMfoQHaB8VACaJj065fMta9S1/6u7U1l8vdriFarOSmG+mvHYs9He/Olwiu7qS7RhpCXwqEb4+ckA8=
-X-Received: by 2002:a9d:6317:: with SMTP id q23mr3657222otk.251.1607551646244; 
- Wed, 09 Dec 2020 14:07:26 -0800 (PST)
+	by mail.kernel.org (Postfix) with ESMTPS id C002E23770
+	for <soc@kernel.org>; Wed,  9 Dec 2020 22:52:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C002E23770
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=torvalds@linuxfoundation.org
+Received: by mail-lf1-f66.google.com with SMTP id o17so2502254lfg.4
+        for <soc@kernel.org>; Wed, 09 Dec 2020 14:52:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LoZxe45tfXr4/FDvc4CABuzQn5OyKXJcb52tHgb8yL0=;
+        b=byRPSi/mKwHLY2fdQcTNrRj6YvGbp+G5DCe532S8h9jvM5zGWe6bGFkBgJLn8a8efh
+         wNR1E46A1xONxrnSS6D5a1rIQTyJswuGS7bQtK2cELi3Z4KHz3Uv0BX+UljIjb4CQ0pD
+         OkiO0DcVdNYHZ9vc4BJEeAjyOABQDyJ8appoA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LoZxe45tfXr4/FDvc4CABuzQn5OyKXJcb52tHgb8yL0=;
+        b=oXnxSEkUTStTqOX6jyIjJSzgvVYAZABmgihhU5td06lqHHN5HxJOQi/V4ZlzV6seDr
+         EBpLMQl9UU+T8ul5KMwgXGqsH1eV+8LWwRJ2Sxq72vasQIpw7NW+Bp62A9bOg0lYIlx6
+         Kc19oOFL6CajTCNeGYFzbh1p8JUq2g2IViSGqeVAD2ivDamBaQBWtny+EP9RHbx+XXY9
+         F6gcCgi3JIXTZ8u8qvB95i12BdQYcQZ5SF/Q/E56vTHYUn3b7zj6PnvQx1SEZeyvBJ38
+         mll0FT3weVictVBRMfLZXHUDPPRKbwETbSPWpgf6JfUyEe7OntinpkCFPJZNArlGuimL
+         4sKg==
+X-Gm-Message-State: AOAM532KYYgos3ISpHGfh171MzDkmbAGTRGO1Nwe/FpSNJGwG2ktnyjE
+	O36Rx3BByIkF0R58MkxNML6hSTx6IlDEqA==
+X-Google-Smtp-Source: ABdhPJxqMI7NTmrrqK90oxkrHWKslL18zmix4fCGAmRRbT4lpEZcXdgD7g5caI+FxsPFjpVKmUDTdg==
+X-Received: by 2002:ac2:46cf:: with SMTP id p15mr1634747lfo.628.1607554346845;
+        Wed, 09 Dec 2020 14:52:26 -0800 (PST)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id t5sm307723lfc.79.2020.12.09.14.52.25
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Dec 2020 14:52:25 -0800 (PST)
+Received: by mail-lf1-f41.google.com with SMTP id r24so5406628lfm.8
+        for <soc@kernel.org>; Wed, 09 Dec 2020 14:52:25 -0800 (PST)
+X-Received: by 2002:ac2:4987:: with SMTP id f7mr1565679lfl.41.1607554345273;
+ Wed, 09 Dec 2020 14:52:25 -0800 (PST)
 MIME-Version: 1.0
 References: <CAK8P3a04h2KA6s-m_O2MJ098frTSmxvAg-ngrdP4d9=9YLXmyw@mail.gmail.com>
-In-Reply-To: <CAK8P3a04h2KA6s-m_O2MJ098frTSmxvAg-ngrdP4d9=9YLXmyw@mail.gmail.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Wed, 9 Dec 2020 23:07:10 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2piZwSjDudPu8mOEBnRHFAXRBMcRZsqS8b6YD3Kjwsow@mail.gmail.com>
-Message-ID: <CAK8P3a2piZwSjDudPu8mOEBnRHFAXRBMcRZsqS8b6YD3Kjwsow@mail.gmail.com>
+ <CAK8P3a2piZwSjDudPu8mOEBnRHFAXRBMcRZsqS8b6YD3Kjwsow@mail.gmail.com>
+In-Reply-To: <CAK8P3a2piZwSjDudPu8mOEBnRHFAXRBMcRZsqS8b6YD3Kjwsow@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 9 Dec 2020 14:52:09 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgkby5F6EpGxN3kXaxf8YPkXKb+873hSE7Ly+zEJZrXrg@mail.gmail.com>
+Message-ID: <CAHk-=wgkby5F6EpGxN3kXaxf8YPkXKb+873hSE7Ly+zEJZrXrg@mail.gmail.com>
 Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 4
-To: Linus Torvalds <torvalds@linux-foundation.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201209_170729_862783_C10C3E1B 
-X-CRM114-Status: GOOD (  12.30  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, SoC Team <soc@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201209220710.uEjYS-VHd3VinR7HOteBptAvSEPX1uhAD9438tUN4vU@z>
+Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Dec 9, 2020 at 10:14 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Wed, Dec 9, 2020 at 2:07 PM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> The following changes since commit 0477e92881850d44910a7e94fc2c46f96faa131f:
->
->   Linux 5.10-rc7 (2020-12-06 14:25:12 -0800)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-> tags/arm-soc-fixes-v5.10-4
->
-> for you to fetch changes up to a0cab089baf3048020de7bee53bccd598747126a:
->
->   ARM: dts: mmp2-olpc-xo-1-75: clear the warnings when make dtbs
-> (2020-12-09 20:43:13 +0100)
->
-> ----------------------------------------------------------------
-> ARM: SoC fixes for v5.10, part 4
+> Stephen Rothwell just pointed out that one of the fixes I added today
+> was missing a Signed-off-by. I corrected that and uploaded a new tag
 
-Stephen Rothwell just pointed out that one of the fixes I added today
-was missing a Signed-off-by. I corrected that and uploaded a new tag
+Gaah. I had already pulled, but since I hadn't pushed out, I undid it
+and re-pulled..
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-tags/arm-soc-fixes-v5.10-4b
-
-in its place. The contents are the same, but the new
-HEAD commit is 69fe24d1d80feac4289778582cf0a15256d59baf
-
-If you haven't already pulled it, please use that one instead. Sorry
-for my mistake.
-
-       Arnd
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+          Linus
