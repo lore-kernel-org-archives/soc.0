@@ -1,77 +1,104 @@
-Return-Path: <linux-gpio-owner@kernel.org>
+Return-Path: <SRS0=rNyZ=FO=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E5A3C4361B
-	for <linux-gpio@archiver.kernel.org>; Thu, 10 Dec 2020 14:22:55 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 448CD23D22
-	for <linux-gpio@archiver.kernel.org>; Thu, 10 Dec 2020 14:22:55 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732232AbgLJOWy (ORCPT <rfc822;linux-gpio@archiver.kernel.org>);
-        Thu, 10 Dec 2020 09:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729076AbgLJOWy (ORCPT
-        <rfc822;linux-gpio@vger.kernel.org>); Thu, 10 Dec 2020 09:22:54 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64352C0613CF;
-        Thu, 10 Dec 2020 06:22:14 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id s21so4192510pfu.13;
-        Thu, 10 Dec 2020 06:22:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7gvh3enTyM7r16asGFsXp25EQVi9nM03JLF3FLpI4e8=;
-        b=g8KiW139pOV2susxo8HdW/YCjk7r0bCJ4v1VqLcaQGdS+kugolJyuTrKNLYE02M5Oy
-         hwO0pFh3VRMHS9xsoL4zKAssx6DcQGdsUPQWjDb8Ms2QdI/RaFjWvBMAs3LlajEYLm7B
-         E/A2Nm7BKrKcghKE4sxxyC17d2pz3yJPxpj7vgNOtGlyOeLGfWzS+Yh+MQnFrYW4XKPv
-         Et7xQ/S87ZeU5xl/3i8CHeYDwkhdvTgBFJG+CL1zBOYmJ35bV5D/W9PFODHWO9hTZGHF
-         +ffG/RBD1oTr9lZrJf6/aM81EXYASfnDpjNY7jdq5a4j15se5zsQCeoNQNwtCZaeEsNH
-         DC2w==
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46ACCC4361B
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Dec 2020 14:23:26 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id EA62923D57
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Dec 2020 14:23:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EA62923D57
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
+	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=OXpAqyaUmxKVZeKrgPPLIe88jdcG+Nkkg3XCR1JLi1s=; b=VzSlg8JzpG610Ot6fTtoVJerM
+	Yk0JhC6GLkuWYSKMSp/vCTu/VQ/LOUiJDOKc3lupKN2dJRQoParn5rh+LQ4yHrzTLV3f7g125ztzo
+	IOfVdr/yUHtnGOLfOqdq22s1fk522+FAsuhZldEE4VVJTqGsNEtzlP5AZ/+9DlSYwftyu5Z7GRNlz
+	NfnQL7Vp9tIdIHJ3BZdQ2RvcNxNuc35Klsgs63bW1zI5kOHyq/pmT4vFUWRl9L7/jJ3v/QAc+U8TH
+	Jb5SOah2gE4WnhI5zH2aWOTUvJenrRCd3svLdE750yVGjgQeL1phzCyxSm9p97vsBntfgzdBM1kdr
+	w+oDrllig==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1knMpn-0003Mf-4f; Thu, 10 Dec 2020 14:22:19 +0000
+Received: from mail-pf1-x443.google.com ([2607:f8b0:4864:20::443])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1knMpk-0003M8-7I
+ for linux-arm-kernel@lists.infradead.org; Thu, 10 Dec 2020 14:22:16 +0000
+Received: by mail-pf1-x443.google.com with SMTP id i3so4214639pfd.6
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 10 Dec 2020 06:22:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=7gvh3enTyM7r16asGFsXp25EQVi9nM03JLF3FLpI4e8=;
+ b=g8KiW139pOV2susxo8HdW/YCjk7r0bCJ4v1VqLcaQGdS+kugolJyuTrKNLYE02M5Oy
+ hwO0pFh3VRMHS9xsoL4zKAssx6DcQGdsUPQWjDb8Ms2QdI/RaFjWvBMAs3LlajEYLm7B
+ E/A2Nm7BKrKcghKE4sxxyC17d2pz3yJPxpj7vgNOtGlyOeLGfWzS+Yh+MQnFrYW4XKPv
+ Et7xQ/S87ZeU5xl/3i8CHeYDwkhdvTgBFJG+CL1zBOYmJ35bV5D/W9PFODHWO9hTZGHF
+ +ffG/RBD1oTr9lZrJf6/aM81EXYASfnDpjNY7jdq5a4j15se5zsQCeoNQNwtCZaeEsNH
+ DC2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7gvh3enTyM7r16asGFsXp25EQVi9nM03JLF3FLpI4e8=;
-        b=RxNOZ8c2DaW7OAjXAX4uI0VkrK2w73os6XVXydFmlRywHnvJLlXEGAKL7e8unjb/g5
-         1dE6LEZsIyjiQM44dxi6imrY0RyKRXnM5OA++HnrI0Z9IRCYahE6NTEBI45yB+xu85Vb
-         3qrCcDJ3DLwtSZW8QRF6YlfoVeYluMoIOs95oonsQ9GV+zRyA04+fA78NjCkGWXvIZ8n
-         DeLlXDulxdHNGwf8l3R7v9xIv4zkMEZrZ7gy6ijhaXK/nMrW//IgtR6o3Rjv91uL2lWm
-         7Wo5qnbc/h5bYVoaMO9KlaxNieApy9mrFE1SXzOO8NKQQgPKfr4diQUR2447fCAPcLBi
-         gOQg==
-X-Gm-Message-State: AOAM533/AF1mlq4+McGx7acs5oB96QqnR5CHy67AwLd3W0Iqj0AzXF3h
-        IJOY8udV9/MmewAvBoxRP03yjADHdCPgsSxCToA=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=7gvh3enTyM7r16asGFsXp25EQVi9nM03JLF3FLpI4e8=;
+ b=R0/05KXdHMpWHZUc8sasFD37eAPaqvYFe4X41bUTAFu6Q7Ue9QsJABjGROlGUiUz3Y
+ FANiqgPEk8z8AEfhdn6wTK/n87R3JP3jH+ZyjPJTl7hTJlbiO7zrIrmscfiy9gm5ybOu
+ ZCwz5UiXGIC5Jp61L3sYqQYpOh5VzC3aGQXGFUYFxv5kEK6X6dBVzvA2kjGcVZfsAAae
+ wUpHTFZ/8jzae3njAEABwBcQpQjRaKXgqf5xMTXBo92m6xjUilCnoMeDllTcqQuCmavt
+ kN3JG0fGPC5xPZ5daUnBfkFIWZ3WxAE2Q5+ROIGZMRc7We94TRWhbfqtNY8cJyVvFFG5
+ LS8A==
+X-Gm-Message-State: AOAM531X/t1Txm5HZcUN55z9wTF0njk8sz+LAkgg+Zi2zGPKMc10YMaM
+ RyAqblF65LShHdu6LLudfRaSdM7kL9pmprPlI6vekgYZeyg=
 X-Google-Smtp-Source: ABdhPJxVp8EjIZlO70I74O7fyXpVy6WLFzWzXDg3HsS2ENh9tXjZCbb5x1gDs1oxITNXtrQMaWhjZVC5PijATGv5ts4=
 X-Received: by 2002:a63:4002:: with SMTP id n2mr6926113pga.4.1607610133882;
  Thu, 10 Dec 2020 06:22:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20201129110803.2461700-1-daniel@0x0f.com> <20201129110803.2461700-4-daniel@0x0f.com>
+References: <20201129110803.2461700-1-daniel@0x0f.com>
+ <20201129110803.2461700-4-daniel@0x0f.com>
 In-Reply-To: <20201129110803.2461700-4-daniel@0x0f.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 10 Dec 2020 16:23:02 +0200
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Thu, 10 Dec 2020 16:23:02 +0200
 Message-ID: <CAHp75Vdy9rBgJhyYXjUKapYdeMfsNhbX9Zi3Jtxb4H8H279V-A@mail.gmail.com>
 Subject: Re: [PATCH v4 3/5] gpio: msc313: MStar MSC313 GPIO driver
-To:     Daniel Palmer <daniel@0x0f.com>
+To: Daniel Palmer <daniel@0x0f.com>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201210_092216_296346_CD1C15BB 
+X-CRM114-Status: GOOD (  24.83  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc:     SoC Team <soc@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
-Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <linux-gpio.vger.kernel.org>
-X-Mailing-List: linux-gpio@vger.kernel.org
-Message-ID: <20201210142302.EAzUrLAEcJTO8znMQl1gR3J-aQARzxvxcGPmWAF7wqM@z>
+Cc: devicetree <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ SoC Team <soc@kernel.org>, Willy Tarreau <w@1wt.eu>,
+ linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201210142302.DGDdYH-99-3GzsznhCkwP62wTb4DztJ13_TApR4qRY0@z>
 
 On Sun, Nov 29, 2020 at 1:10 PM Daniel Palmer <daniel@0x0f.com> wrote:
 >
@@ -192,3 +219,8 @@ Redundant blank line.
 -- 
 With Best Regards,
 Andy Shevchenko
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
