@@ -1,75 +1,101 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=rNyZ=FO=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60BEEC4361B
-	for <linux-devicetree@archiver.kernel.org>; Thu, 10 Dec 2020 10:30:16 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2EE3E23B77
-	for <linux-devicetree@archiver.kernel.org>; Thu, 10 Dec 2020 10:30:16 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727767AbgLJKaJ (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Thu, 10 Dec 2020 05:30:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731968AbgLJKaC (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Thu, 10 Dec 2020 05:30:02 -0500
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0441C0613CF
-        for <devicetree@vger.kernel.org>; Thu, 10 Dec 2020 02:29:20 -0800 (PST)
-Received: by mail-qk1-x744.google.com with SMTP id q22so4238206qkq.6
-        for <devicetree@vger.kernel.org>; Thu, 10 Dec 2020 02:29:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b0knabE4pLiyMjkoiksYG/IB8kMycYTPeC8EyBeBTFk=;
-        b=miRhMRcVYRU8W2s9H83rcF+aFhaacPuIK1msFRh8h6eJwvU0WCRwa9ZzdaBW9vYaSM
-         5XrEfOOQ5WKR+Vi4i3eQCuBJOhhTI4d+IymcP5l/zOl4TfKm6+/MK8E1yiXqqFv+VhNz
-         gc7Zw1UEvharuOq3E/DRhmUxt30EVJiLe85UY=
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 470A6C4361B
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Dec 2020 10:30:36 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id EF09123B31
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Dec 2020 10:30:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EF09123B31
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
+	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=Msd7Qh5EpFjosF6Mpw7/bRVHXxih2Hw2JHNSA2H8G0w=; b=nBfCG9v9nuZ8CedqVJa6afhyY
+	t61uf2hWRTOD18vZpKwgtjVT/ETiYumywsiVOiWAKBt+Ff0qM1Zzj2MuAJDQl3yAi4SygaTOXzocx
+	xMu4G7FAL80w9+V1TgN8tnf+sjUBR3wW9xHlFu6qnSJAoCnbX5QRvXVANbd1E40eRXOojo0j8YgVS
+	0bsELTTHslqpxdGPHBbobFTLYQcGIrfa+9gDyfJutpm7XaA46Xxvt8VOeLaklKDPdHWIPkD9Sfiy9
+	dNUHUf+yaxsVT0/evren714CQqdFlPQV2pYnH3ZuFwiqGS/MoS85VrdHDpn27suApiomV5h1cxYJl
+	+Z4fdrj6Q==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1knJCQ-0006hO-Nz; Thu, 10 Dec 2020 10:29:26 +0000
+Received: from mail-qk1-x744.google.com ([2607:f8b0:4864:20::744])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1knJCN-0006fi-5p
+ for linux-arm-kernel@lists.infradead.org; Thu, 10 Dec 2020 10:29:24 +0000
+Received: by mail-qk1-x744.google.com with SMTP id z11so4237160qkj.7
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 10 Dec 2020 02:29:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=b0knabE4pLiyMjkoiksYG/IB8kMycYTPeC8EyBeBTFk=;
+ b=miRhMRcVYRU8W2s9H83rcF+aFhaacPuIK1msFRh8h6eJwvU0WCRwa9ZzdaBW9vYaSM
+ 5XrEfOOQ5WKR+Vi4i3eQCuBJOhhTI4d+IymcP5l/zOl4TfKm6+/MK8E1yiXqqFv+VhNz
+ gc7Zw1UEvharuOq3E/DRhmUxt30EVJiLe85UY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b0knabE4pLiyMjkoiksYG/IB8kMycYTPeC8EyBeBTFk=;
-        b=rEC8aWkflGT8rCylD+iEkM7izcXk+S0jyGUHVEHpFVk4HdXS2duDydpSCGLEfu0D5z
-         q/SAIFUOU1AX6C2c1aCdQ8xMUpm7CjOm78oFFDx78B3jSdj8rkYxODbw7IM4F7P+to4y
-         v+4cZwPi6aWFqjID74VCgbi9OsFm1lOSQS70nExSZW7Sca1e0VWJx0Ahy/nVcJ+tSZb/
-         mffJYjNEtwOMhcK3DVPTmB6bsojoL1Y1lzi7XyFNcSGsrk7FwDDQAIFh5fyp7Ikd1KpB
-         9uyGrqVFpl3SVjUlug00N/BFY3SYr+SgUJa4VgaTK1zXLV2G/u9d9+R2c2RHNEi6fXWP
-         +LhA==
-X-Gm-Message-State: AOAM531kuWSkW+NBx7IMwwai7Cp8y9HuHa9YVxjb1devgdAKN1lyHxFT
-        1l/g9OFTqjgGrpTRVnaayk+lvcyY9hD/aCM8ZAcuWA==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=b0knabE4pLiyMjkoiksYG/IB8kMycYTPeC8EyBeBTFk=;
+ b=POa/cC/S4i5Jxz1Oi2LAhkDfHtaQu2GY/Vc73YO72YeLIQAivR+A4BQKdPEvqfsYOx
+ 2NHgcAaLA5hCWp2cWhotPVcA9FAeyz012xRc8oSmlR6T+E3TNEND/xFeC7EBwHxnmRvt
+ NpcJQeM8tVShCzylgwkl/ZXRDzNRsZ6ZDr4wvB8Gf2Rr7QTLP6C9mWdgkj+U18P8FJvE
+ tmHajwhEiZJQ8Y4r8xAgPLhCivSBXmp28YzXem8N3Udzn9AqLpRR3Nzn3aUEYrmHlEd0
+ BnMnArawICx8KmrWlsC5sLdmqACbUYlZkoxlMXaE2knx9Pvi6fEx9EMCu3VOHx89Cau9
+ 8Png==
+X-Gm-Message-State: AOAM531Tdjdn3z2XAV6y0DhI/qC1je29GxTaPiJvku/KmWu+eRBO1bsr
+ 3KSNWBcFHI/Q0NnyBen3gT6D0pGUj33BE5rA8Hss2Q==
 X-Google-Smtp-Source: ABdhPJwOZUi2Sl1Yd/f5v6x5SU7/RnsNHC6u16neZmVHJ04GokosGXeljSbqswV/Mein4PrK5Or0sFRoiVO0l3ifl/U=
-X-Received: by 2002:a37:8681:: with SMTP id i123mr7867752qkd.54.1607596159936;
+X-Received: by 2002:a37:8681:: with SMTP id i123mr7867752qkd.54.1607596159936; 
  Thu, 10 Dec 2020 02:29:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20201129110803.2461700-1-daniel@0x0f.com> <20201129110803.2461700-4-daniel@0x0f.com>
+References: <20201129110803.2461700-1-daniel@0x0f.com>
+ <20201129110803.2461700-4-daniel@0x0f.com>
  <CAK8P3a2DGLfkOEm3JeXN-jWvDfxberaXXqOtu4wKdtYzqDWiNQ@mail.gmail.com>
 In-Reply-To: <CAK8P3a2DGLfkOEm3JeXN-jWvDfxberaXXqOtu4wKdtYzqDWiNQ@mail.gmail.com>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Thu, 10 Dec 2020 19:29:09 +0900
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Thu, 10 Dec 2020 19:29:09 +0900
 Message-ID: <CAFr9PX=fhKiZF80iKaGeBWOONm3VpwtzgbB+yBHk8MHdTotaHg@mail.gmail.com>
 Subject: Re: [PATCH v4 3/5] gpio: msc313: MStar MSC313 GPIO driver
-To:     Arnd Bergmann <arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201210_052923_418829_85255E9E 
+X-CRM114-Status: GOOD (  30.35  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc:     SoC Team <soc@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
-Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20201210102909.k56ESRYpYjwWt82baxVJcnRiApkWtteQd7N2UfdGOQg@z>
+Cc: DTML <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ SoC Team <soc@kernel.org>, Willy Tarreau <w@1wt.eu>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201210102909.Q406cy-MXZN00mz7oT80jf4bn4yDReUg-0OyNbe51Ug@z>
 
 Hi Arnd,
 
@@ -172,3 +198,8 @@ This was discussed and I think Linus said it was ok.
 Thanks,
 
 Daniel
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
