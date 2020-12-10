@@ -1,25 +1,28 @@
-Return-Path: <SRS0=oGzf=FO=gmail.com=andy.shevchenko@kernel.org>
+Return-Path: <linux-gpio-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3680AC4361B
-	for <soc@archiver.kernel.org>; Thu, 10 Dec 2020 14:22:15 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 033E223D39; Thu, 10 Dec 2020 14:22:15 +0000 (UTC)
-Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ADC5E23D22;
-	Thu, 10 Dec 2020 14:22:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org ADC5E23D22
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=andy.shevchenko@gmail.com
-Received: by mail-pf1-f195.google.com with SMTP id b26so4220637pfi.3;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E5A3C4361B
+	for <linux-gpio@archiver.kernel.org>; Thu, 10 Dec 2020 14:22:55 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 448CD23D22
+	for <linux-gpio@archiver.kernel.org>; Thu, 10 Dec 2020 14:22:55 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1732232AbgLJOWy (ORCPT <rfc822;linux-gpio@archiver.kernel.org>);
+        Thu, 10 Dec 2020 09:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729076AbgLJOWy (ORCPT
+        <rfc822;linux-gpio@vger.kernel.org>); Thu, 10 Dec 2020 09:22:54 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64352C0613CF;
+        Thu, 10 Dec 2020 06:22:14 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id s21so4192510pfu.13;
         Thu, 10 Dec 2020 06:22:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
@@ -37,32 +40,38 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=7gvh3enTyM7r16asGFsXp25EQVi9nM03JLF3FLpI4e8=;
-        b=I/Fzx4F+E/hiCYymlPF9yd/AlyDzN/PClcmqtxuOI0tgZKyMv/t7MZ7z5yXu2oIPV8
-         XcOPSFsP3MekZEkCM8KqZgSLzwpQr1kkRS23QRgfprlKdJy6fLGz8VPYWs+v9D5l+jWa
-         6CoSAMd+Y3u+I7TVr0ppu4My/XHmNNy+NQgJ9AOcp87m9V+XlpM6BadpVvAZAwalpydR
-         pn1HNEqJ9QyvJVS2h6Dh1KUbt2sGZSdAtFKEA75LTlNT1z0rGjC3/Pqh5M+LOP0i9aFE
-         Mn5djCkdr7zTHInxeOkLnJVFqimt3TCQB53KJsmZFpL90VgA+EBYjAxm6mSvwYkgT4Ir
-         eZ5g==
-X-Gm-Message-State: AOAM532/+M19BsZvhROg3z6rYIcxCHA2i7QIfa1yF/kTlthvlb6XTspi
-	jjX1b3UhBZlmaI0/K6s3BBiytu6CbeOsniukPoI=
+        b=RxNOZ8c2DaW7OAjXAX4uI0VkrK2w73os6XVXydFmlRywHnvJLlXEGAKL7e8unjb/g5
+         1dE6LEZsIyjiQM44dxi6imrY0RyKRXnM5OA++HnrI0Z9IRCYahE6NTEBI45yB+xu85Vb
+         3qrCcDJ3DLwtSZW8QRF6YlfoVeYluMoIOs95oonsQ9GV+zRyA04+fA78NjCkGWXvIZ8n
+         DeLlXDulxdHNGwf8l3R7v9xIv4zkMEZrZ7gy6ijhaXK/nMrW//IgtR6o3Rjv91uL2lWm
+         7Wo5qnbc/h5bYVoaMO9KlaxNieApy9mrFE1SXzOO8NKQQgPKfr4diQUR2447fCAPcLBi
+         gOQg==
+X-Gm-Message-State: AOAM533/AF1mlq4+McGx7acs5oB96QqnR5CHy67AwLd3W0Iqj0AzXF3h
+        IJOY8udV9/MmewAvBoxRP03yjADHdCPgsSxCToA=
 X-Google-Smtp-Source: ABdhPJxVp8EjIZlO70I74O7fyXpVy6WLFzWzXDg3HsS2ENh9tXjZCbb5x1gDs1oxITNXtrQMaWhjZVC5PijATGv5ts4=
 X-Received: by 2002:a63:4002:: with SMTP id n2mr6926113pga.4.1607610133882;
  Thu, 10 Dec 2020 06:22:13 -0800 (PST)
 MIME-Version: 1.0
 References: <20201129110803.2461700-1-daniel@0x0f.com> <20201129110803.2461700-4-daniel@0x0f.com>
 In-Reply-To: <20201129110803.2461700-4-daniel@0x0f.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Thu, 10 Dec 2020 16:23:02 +0200
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 10 Dec 2020 16:23:02 +0200
 Message-ID: <CAHp75Vdy9rBgJhyYXjUKapYdeMfsNhbX9Zi3Jtxb4H8H279V-A@mail.gmail.com>
 Subject: Re: [PATCH v4 3/5] gpio: msc313: MStar MSC313 GPIO driver
-To: Daniel Palmer <daniel@0x0f.com>
+To:     Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	devicetree <devicetree@vger.kernel.org>, 
-	linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
+Cc:     SoC Team <soc@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-gpio.vger.kernel.org>
+X-Mailing-List: linux-gpio@vger.kernel.org
+Message-ID: <20201210142302.EAzUrLAEcJTO8znMQl1gR3J-aQARzxvxcGPmWAF7wqM@z>
 
 On Sun, Nov 29, 2020 at 1:10 PM Daniel Palmer <daniel@0x0f.com> wrote:
 >
