@@ -1,25 +1,28 @@
-Return-Path: <SRS0=Y1pW=FO=0x0f.com=daniel@kernel.org>
+Return-Path: <linux-gpio-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC754C4167B
-	for <soc@archiver.kernel.org>; Thu, 10 Dec 2020 15:21:06 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 8917F23B26; Thu, 10 Dec 2020 15:21:06 +0000 (UTC)
-Received: from mail-qk1-f195.google.com (mail-qk1-f195.google.com [209.85.222.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CF0712310E
-	for <soc@kernel.org>; Thu, 10 Dec 2020 15:21:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CF0712310E
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=daniel@0x0f.com
-Received: by mail-qk1-f195.google.com with SMTP id y18so5046911qki.11
-        for <soc@kernel.org>; Thu, 10 Dec 2020 07:21:05 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20E4AC0018C
+	for <linux-gpio@archiver.kernel.org>; Thu, 10 Dec 2020 15:22:15 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id D6D7B23B26
+	for <linux-gpio@archiver.kernel.org>; Thu, 10 Dec 2020 15:22:14 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1733200AbgLJPVw (ORCPT <rfc822;linux-gpio@archiver.kernel.org>);
+        Thu, 10 Dec 2020 10:21:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391562AbgLJPVq (ORCPT
+        <rfc822;linux-gpio@vger.kernel.org>); Thu, 10 Dec 2020 10:21:46 -0500
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677C9C0613D6
+        for <linux-gpio@vger.kernel.org>; Thu, 10 Dec 2020 07:21:05 -0800 (PST)
+Received: by mail-qk1-x743.google.com with SMTP id h4so172533qkk.4
+        for <linux-gpio@vger.kernel.org>; Thu, 10 Dec 2020 07:21:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=0x0f.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -33,14 +36,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=lzQQMikD25mHaOvU70fXFtFueunUhFhKwR7BFI8Wd2E=;
-        b=p/18QG9Fg5xaSEmrtZSD/Za+ja9pt4sEVakpgaDr8rbfcJALQZvMfgN3+lDKoVM/7Q
-         T+T6ONwpI3csp3rs7Hr8xVkjONEgdkAO3xD10wnEgZJzyxOTVZw6i7SeJjW8wGBBAPmp
-         OlBx4UmxmSZXW09A2BMrNUwi3uH5gl1QgD5sPa/DMH0xzMYttc2D+9yJQpfOyZcREBeL
-         lzLBb9vTc7v12Q6rRmDv34+BBDwQrylOQCuJNEREKu3jFvB1CHEKQAxSoXVs12Q6m2g9
-         Gb0W+o28tmMWqNaABLwQPdW/XmQCZy37YnQNkzBsF2q+PcfbJc9HOxw4xTY5a/RiLLPm
-         bj5Q==
-X-Gm-Message-State: AOAM530NS+VmNZH9m4op6+N4lEXhwjSTUq/kiuucfbOqmcH22+d7pDQL
-	IGURwQMkBczGqC20NkDaZe+ECVks6m2edownZTKWpg==
+        b=Z6GRaZqCPCe75t7OR2O8z23UoxzSMYUXMsTC1PjXld7pdocUm4O3PC+dadKqdOliuT
+         0UoW+SbvWVgUOOP+PlCM6UIKFQvseTbKGrnyic+0Qh0fak2QBdu4Qqr1z1j5wc5v/Tfm
+         PG/4tDLhZL4DzMWg8l1vHmMzu4qB4+6lOa7gRtxymIPdIhVjO9FXJeufuosfiBQ6wQqH
+         6XdF6GwbM8n2XJaN/Ds0cP4Or6P9RMJf6ORWp/dN5NndHblqLsZ71iKwQYUgrX1BdJKd
+         rCpfNvodud/NkBLOuRS3rsxVqoRv+lNwq5CyIfiFz1zJfY65TKOteVhFb1Zz38ba+vJB
+         PLIg==
+X-Gm-Message-State: AOAM533aDtFc91FQlNO8k/0isRHkdv8z/uUbu15LOboFEVBW2uHC0y3k
+        UCmgS8W7rwlVxxtiSP/vbITYfL+l2sKDZp/TaHg8TA==
 X-Google-Smtp-Source: ABdhPJxPU/4SCy7/rE3UgsP7U/aCV3swWmca2vtLjkgy3KaDHEnkpgdsyXm48xf4KUJ4++imK7n8+UBiYOo9V42wb9w=
 X-Received: by 2002:ae9:e219:: with SMTP id c25mr1251874qkc.443.1607613664449;
  Thu, 10 Dec 2020 07:21:04 -0800 (PST)
@@ -48,18 +51,24 @@ MIME-Version: 1.0
 References: <20201129110803.2461700-1-daniel@0x0f.com> <20201129110803.2461700-4-daniel@0x0f.com>
  <CAHp75Vdy9rBgJhyYXjUKapYdeMfsNhbX9Zi3Jtxb4H8H279V-A@mail.gmail.com>
 In-Reply-To: <CAHp75Vdy9rBgJhyYXjUKapYdeMfsNhbX9Zi3Jtxb4H8H279V-A@mail.gmail.com>
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Fri, 11 Dec 2020 00:21:44 +0900
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Fri, 11 Dec 2020 00:21:44 +0900
 Message-ID: <CAFr9PX=GTHQvwkCMU6ocK+5=QoEGXK6UAFH4ZUF4zq19ds06wQ@mail.gmail.com>
 Subject: Re: [PATCH v4 3/5] gpio: msc313: MStar MSC313 GPIO driver
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	devicetree <devicetree@vger.kernel.org>, 
-	linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
+Cc:     SoC Team <soc@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-gpio.vger.kernel.org>
+X-Mailing-List: linux-gpio@vger.kernel.org
+Message-ID: <20201210152144.Mp6tvl4l3dfpluNcNktcal9RDBpmqyeYl3qD8ZR07ss@z>
 
 Hi Andy,
 
