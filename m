@@ -1,25 +1,29 @@
-Return-Path: <SRS0=Y1pW=FO=0x0f.com=daniel@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FC31C4361B
-	for <soc@archiver.kernel.org>; Thu, 10 Dec 2020 10:29:22 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 13D7D23BE5; Thu, 10 Dec 2020 10:29:22 +0000 (UTC)
-Received: from mail-qk1-f194.google.com (mail-qk1-f194.google.com [209.85.222.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3AE4223B77
-	for <soc@kernel.org>; Thu, 10 Dec 2020 10:29:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3AE4223B77
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=daniel@0x0f.com
-Received: by mail-qk1-f194.google.com with SMTP id 1so4257105qka.0
-        for <soc@kernel.org>; Thu, 10 Dec 2020 02:29:20 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60BEEC4361B
+	for <linux-devicetree@archiver.kernel.org>; Thu, 10 Dec 2020 10:30:16 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 2EE3E23B77
+	for <linux-devicetree@archiver.kernel.org>; Thu, 10 Dec 2020 10:30:16 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1727767AbgLJKaJ (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Thu, 10 Dec 2020 05:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731968AbgLJKaC (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Thu, 10 Dec 2020 05:30:02 -0500
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0441C0613CF
+        for <devicetree@vger.kernel.org>; Thu, 10 Dec 2020 02:29:20 -0800 (PST)
+Received: by mail-qk1-x744.google.com with SMTP id q22so4238206qkq.6
+        for <devicetree@vger.kernel.org>; Thu, 10 Dec 2020 02:29:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=0x0f.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -33,14 +37,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=b0knabE4pLiyMjkoiksYG/IB8kMycYTPeC8EyBeBTFk=;
-        b=BEZyf1vT195d1c1p1Jge38qXnQnRdLEn67JvmMFi8uT9pN/M92dQ4P+u9xhNT5WKp1
-         BhGIbbNTgFyKremIbnHwgELJELCA2/VPFcRfbSeevDrzbTw7JfEor136u2zVkfJSfq9z
-         DkzwS7tRwTvKjmB6wbL8raYcl96XbYukyYKDMatzA7KhnCIUTEX9uYToOdyZHNyhzQ8r
-         l20ul5jEVQwnSR74F/dwcFngQPkWvuN5KfNXWmjU1C87vnkKcmDkNu1JekrX+dwex404
-         7aJMNebcmsXbMGNPfgJxP19nMyhQj4hFYHhlYMtw/8we/IjvJhQ0137ekkcPTLAlKA8I
-         2Zuw==
-X-Gm-Message-State: AOAM530Y72ti/uVRsERakQ88EY+tL3sV3qKCpzwcdObVnPWhMXGcb+Y7
-	zkFWUuSmhdrfrfpLkPQXVlE/7DE6CWnQQArNCWffDQ==
+        b=rEC8aWkflGT8rCylD+iEkM7izcXk+S0jyGUHVEHpFVk4HdXS2duDydpSCGLEfu0D5z
+         q/SAIFUOU1AX6C2c1aCdQ8xMUpm7CjOm78oFFDx78B3jSdj8rkYxODbw7IM4F7P+to4y
+         v+4cZwPi6aWFqjID74VCgbi9OsFm1lOSQS70nExSZW7Sca1e0VWJx0Ahy/nVcJ+tSZb/
+         mffJYjNEtwOMhcK3DVPTmB6bsojoL1Y1lzi7XyFNcSGsrk7FwDDQAIFh5fyp7Ikd1KpB
+         9uyGrqVFpl3SVjUlug00N/BFY3SYr+SgUJa4VgaTK1zXLV2G/u9d9+R2c2RHNEi6fXWP
+         +LhA==
+X-Gm-Message-State: AOAM531kuWSkW+NBx7IMwwai7Cp8y9HuHa9YVxjb1devgdAKN1lyHxFT
+        1l/g9OFTqjgGrpTRVnaayk+lvcyY9hD/aCM8ZAcuWA==
 X-Google-Smtp-Source: ABdhPJwOZUi2Sl1Yd/f5v6x5SU7/RnsNHC6u16neZmVHJ04GokosGXeljSbqswV/Mein4PrK5Or0sFRoiVO0l3ifl/U=
 X-Received: by 2002:a37:8681:: with SMTP id i123mr7867752qkd.54.1607596159936;
  Thu, 10 Dec 2020 02:29:19 -0800 (PST)
@@ -48,18 +52,24 @@ MIME-Version: 1.0
 References: <20201129110803.2461700-1-daniel@0x0f.com> <20201129110803.2461700-4-daniel@0x0f.com>
  <CAK8P3a2DGLfkOEm3JeXN-jWvDfxberaXXqOtu4wKdtYzqDWiNQ@mail.gmail.com>
 In-Reply-To: <CAK8P3a2DGLfkOEm3JeXN-jWvDfxberaXXqOtu4wKdtYzqDWiNQ@mail.gmail.com>
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Thu, 10 Dec 2020 19:29:09 +0900
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Thu, 10 Dec 2020 19:29:09 +0900
 Message-ID: <CAFr9PX=fhKiZF80iKaGeBWOONm3VpwtzgbB+yBHk8MHdTotaHg@mail.gmail.com>
 Subject: Re: [PATCH v4 3/5] gpio: msc313: MStar MSC313 GPIO driver
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	DTML <devicetree@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
+Cc:     SoC Team <soc@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20201210102909.k56ESRYpYjwWt82baxVJcnRiApkWtteQd7N2UfdGOQg@z>
 
 Hi Arnd,
 
