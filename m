@@ -1,226 +1,140 @@
-Return-Path: <SRS0=rNyZ=FO=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46ACCC4361B
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Dec 2020 14:23:26 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EA62923D57
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Dec 2020 14:23:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EA62923D57
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=OXpAqyaUmxKVZeKrgPPLIe88jdcG+Nkkg3XCR1JLi1s=; b=VzSlg8JzpG610Ot6fTtoVJerM
-	Yk0JhC6GLkuWYSKMSp/vCTu/VQ/LOUiJDOKc3lupKN2dJRQoParn5rh+LQ4yHrzTLV3f7g125ztzo
-	IOfVdr/yUHtnGOLfOqdq22s1fk522+FAsuhZldEE4VVJTqGsNEtzlP5AZ/+9DlSYwftyu5Z7GRNlz
-	NfnQL7Vp9tIdIHJ3BZdQ2RvcNxNuc35Klsgs63bW1zI5kOHyq/pmT4vFUWRl9L7/jJ3v/QAc+U8TH
-	Jb5SOah2gE4WnhI5zH2aWOTUvJenrRCd3svLdE750yVGjgQeL1phzCyxSm9p97vsBntfgzdBM1kdr
-	w+oDrllig==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1knMpn-0003Mf-4f; Thu, 10 Dec 2020 14:22:19 +0000
-Received: from mail-pf1-x443.google.com ([2607:f8b0:4864:20::443])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1knMpk-0003M8-7I
- for linux-arm-kernel@lists.infradead.org; Thu, 10 Dec 2020 14:22:16 +0000
-Received: by mail-pf1-x443.google.com with SMTP id i3so4214639pfd.6
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 10 Dec 2020 06:22:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=7gvh3enTyM7r16asGFsXp25EQVi9nM03JLF3FLpI4e8=;
- b=g8KiW139pOV2susxo8HdW/YCjk7r0bCJ4v1VqLcaQGdS+kugolJyuTrKNLYE02M5Oy
- hwO0pFh3VRMHS9xsoL4zKAssx6DcQGdsUPQWjDb8Ms2QdI/RaFjWvBMAs3LlajEYLm7B
- E/A2Nm7BKrKcghKE4sxxyC17d2pz3yJPxpj7vgNOtGlyOeLGfWzS+Yh+MQnFrYW4XKPv
- Et7xQ/S87ZeU5xl/3i8CHeYDwkhdvTgBFJG+CL1zBOYmJ35bV5D/W9PFODHWO9hTZGHF
- +ffG/RBD1oTr9lZrJf6/aM81EXYASfnDpjNY7jdq5a4j15se5zsQCeoNQNwtCZaeEsNH
- DC2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=7gvh3enTyM7r16asGFsXp25EQVi9nM03JLF3FLpI4e8=;
- b=R0/05KXdHMpWHZUc8sasFD37eAPaqvYFe4X41bUTAFu6Q7Ue9QsJABjGROlGUiUz3Y
- FANiqgPEk8z8AEfhdn6wTK/n87R3JP3jH+ZyjPJTl7hTJlbiO7zrIrmscfiy9gm5ybOu
- ZCwz5UiXGIC5Jp61L3sYqQYpOh5VzC3aGQXGFUYFxv5kEK6X6dBVzvA2kjGcVZfsAAae
- wUpHTFZ/8jzae3njAEABwBcQpQjRaKXgqf5xMTXBo92m6xjUilCnoMeDllTcqQuCmavt
- kN3JG0fGPC5xPZ5daUnBfkFIWZ3WxAE2Q5+ROIGZMRc7We94TRWhbfqtNY8cJyVvFFG5
- LS8A==
-X-Gm-Message-State: AOAM531X/t1Txm5HZcUN55z9wTF0njk8sz+LAkgg+Zi2zGPKMc10YMaM
- RyAqblF65LShHdu6LLudfRaSdM7kL9pmprPlI6vekgYZeyg=
-X-Google-Smtp-Source: ABdhPJxVp8EjIZlO70I74O7fyXpVy6WLFzWzXDg3HsS2ENh9tXjZCbb5x1gDs1oxITNXtrQMaWhjZVC5PijATGv5ts4=
-X-Received: by 2002:a63:4002:: with SMTP id n2mr6926113pga.4.1607610133882;
- Thu, 10 Dec 2020 06:22:13 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 601D1C4167B
+	for <soc@archiver.kernel.org>; Thu, 10 Dec 2020 14:28:09 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 23D5623EB1; Thu, 10 Dec 2020 14:28:09 +0000 (UTC)
+X-Gm-Message-State: AOAM530RyepmzTSXCMR9qYKxvltDAWusY2U6K+daiwAouvn1FdjwgGRI
+	o1RGaSVwSTLXx5uxrUfyBSDTcHkN2UFBLhTwtzc=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1607610489;
+	bh=lDk2Ia3HxK344sL8W2jrkCsA5fzuUPgyja44zN4sI7M=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=TtnfyMTFyPqDgPTpWHlWj5KJKEdSrrZrMh8I6A/SRBmuvFtmOnbBlIs3u1VTGL/Nv
+	 v11zvnrAdfBcn6TbiFVlu+7RoioIV4uswtQJM1CeOWtg3nraWB5IL0ZCvX1y54oHOm
+	 PphRejMxRvMQ25R+Nlid+oQLZ3fsvVPH4gRCfcMPMOI8EqplYBsUqMOfQACRjy21OH
+	 qgUweVJ6wI22mr4BBBLpdJa7fu5GBQRCmlaE/M/3hCjvIDk7LUwkrojrwyfW+S3tF6
+	 wNnRj2KVbX5NBPAqiZfvTArDjHTWA5SFK9rCzihrlHQiZ00z0OkvaWsel3TjwnSWdJ
+	 rsDgOkeJTz5Aw==
+X-Google-Smtp-Source: ABdhPJxtvwBwNOJNo7rPClOcGn9+fTP9XwRw88J7XmrkAe3M0WGXoGyhktsKN/KSXnL+IzFNlcIjP0tcnL73rMhVEEQ=
+X-Received: by 2002:aca:418b:: with SMTP id o133mr5362790oia.67.1607610488096;
+ Thu, 10 Dec 2020 06:28:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20201129110803.2461700-1-daniel@0x0f.com>
- <20201129110803.2461700-4-daniel@0x0f.com>
-In-Reply-To: <20201129110803.2461700-4-daniel@0x0f.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Thu, 10 Dec 2020 16:23:02 +0200
-Message-ID: <CAHp75Vdy9rBgJhyYXjUKapYdeMfsNhbX9Zi3Jtxb4H8H279V-A@mail.gmail.com>
+References: <20201129110803.2461700-1-daniel@0x0f.com> <20201129110803.2461700-4-daniel@0x0f.com>
+ <CAK8P3a2DGLfkOEm3JeXN-jWvDfxberaXXqOtu4wKdtYzqDWiNQ@mail.gmail.com> <CAFr9PX=fhKiZF80iKaGeBWOONm3VpwtzgbB+yBHk8MHdTotaHg@mail.gmail.com>
+In-Reply-To: <CAFr9PX=fhKiZF80iKaGeBWOONm3VpwtzgbB+yBHk8MHdTotaHg@mail.gmail.com>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Thu, 10 Dec 2020 15:27:50 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0zCa0Dq8uUDoSbu64sGLeNWrSk=6i4pKzgwerRseXfnA@mail.gmail.com>
+Message-ID: <CAK8P3a0zCa0Dq8uUDoSbu64sGLeNWrSk=6i4pKzgwerRseXfnA@mail.gmail.com>
 Subject: Re: [PATCH v4 3/5] gpio: msc313: MStar MSC313 GPIO driver
 To: Daniel Palmer <daniel@0x0f.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201210_092216_296346_CD1C15BB 
-X-CRM114-Status: GOOD (  24.83  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- SoC Team <soc@kernel.org>, Willy Tarreau <w@1wt.eu>,
- linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201210142302.DGDdYH-99-3GzsznhCkwP62wTb4DztJ13_TApR4qRY0@z>
+Cc: SoC Team <soc@kernel.org>, "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
+	DTML <devicetree@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	Rob Herring <robh@kernel.org>, Willy Tarreau <w@1wt.eu>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Nov 29, 2020 at 1:10 PM Daniel Palmer <daniel@0x0f.com> wrote:
+On Thu, Dec 10, 2020 at 11:29 AM Daniel Palmer <daniel@0x0f.com> wrote:
+> On Thu, 10 Dec 2020 at 06:58, Arnd Bergmann <arnd@kernel.org> wrote:
+> > > +#define MSC313_GPIO_CHIPDATA(_chip) \
+> > > static const struct msc313_gpio_data _chip##_data = { \
+> > > +       .names = _chip##_names, \
+> > > +       .offsets = _chip##_offsets, \
+> > > +       .num = ARRAY_SIZE(_chip##_offsets), \
+> > > +}
+> >
+> > > +#ifdef CONFIG_MACH_INFINITY
+> > > +static const char * const msc313_names[] = {
+> > > +       FUART_NAMES,
+> > > +       SR_NAMES,
+> >
+> > I would try to avoid the #ifdefs and the macros here, don't overthink
+> > it. The macro really hurts readability with the ## concatenation
+> > making it impossible to grep for where things are defined, and
+> > the #ifdef means you get worse compile test coverage compared
+> > to an if(IS_ENABLED()) check in the place where the identifiers
+> > are actually used.
 >
-> This adds a driver that supports the GPIO block found in
-> MStar/SigmaStar ARMv7 SoCs.
+> Ok. I was really just trying to enforce some sort of pattern there so
+> that each chip that gets added follows the same convention.
+
+> > Even better would be to completely avoid the lookup tables here,
+> > and have one driver that is instantiated based on settings from
+> > the DT.
 >
-> The controller seems to have enough register for 128 lines
-> but where they are wired up differs between chips and
-> no currently known chip uses anywhere near 128 lines so there
-> needs to be some per-chip data to collect together what lines
-> actually have physical pins attached and map the right names to them.
+> I did think about this and I did this with the clk mux driver I
+> haven't pushed yet. In that case there is a random lump of registers
+> with some muxes mixed into it so I decided to make the lump a syscon
+> and then have a node for each clk mux in the lump and some properties
+> for the muxes within. The driver is certainly less complex but the
+> device tree is pretty unmanageable as there are probably 30 or more
+> muxes.
+
+Right, for clk drivers, the trade-off is often different, it's not
+unusual that they are a bit of a mess and require a separate driver for
+each cheap.
+
+> > > +static void msc313_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
+> > > +{
+> > > +       struct msc313_gpio *gpio = gpiochip_get_data(chip);
+> > > +       u8 gpioreg = readb_relaxed(gpio->base + gpio->gpio_data->offsets[offset]);
+> > > +
+> > > +       if (value)
+> > > +               gpioreg |= MSC313_GPIO_OUT;
+> > > +       else
+> > > +               gpioreg &= ~MSC313_GPIO_OUT;
+> > > +
+> > > +       writeb_relaxed(gpioreg, gpio->base + gpio->gpio_data->offsets[offset]);
+> > > +}
+> >
+> > It would be helpful here to replace all the readb_relaxed/writeb_relaxed()
+> > with normal readb()/writeb(). Don't use _relaxed() unless there is a strong
+> > reason why you have to do it, and if you do, explain it in a comment what
+> > the reason is.
 >
-> The core peripherals seem to use the same lines on the
-> currently known chips but the lines used for the sensor
-> interface, lcd controller etc pins seem to be totally
-> different between the infinity and mercury chips
+> The reason is that readb()/writeb() will invoke the heavy memory
+> barrier even though it's not needed for peripheral registers.
+> I guess it doesn't actually make all that much difference in reality.
+
+Ah, I forgot you had that heavy barrier. It depends a bit on what you
+use the GPIOs for then. For most uses I think the overhead does not
+matter, but if there is any bit-banged I/O it might make a difference.
+
+> > > +static int msc313_gpio_direction_output(struct gpio_chip *chip, unsigned int offset, int value)
+> > > +{
+> > > +       struct msc313_gpio *gpio = gpiochip_get_data(chip);
+> > > +       u8 gpioreg = readb_relaxed(gpio->base + gpio->gpio_data->offsets[offset]);
+> > > +
+> > > +       gpioreg &= ~MSC313_GPIO_OEN;
+> > > +       if (value)
+> > > +               gpioreg |= MSC313_GPIO_OUT;
+> > > +       else
+> > > +               gpioreg &= ~MSC313_GPIO_OUT;
+> > > +       writeb_relaxed(gpioreg, gpio->base + gpio->gpio_data->offsets[offset]);
+> >
+> > These look like they also need a spinlock to avoid races between concurrent
+> > read-modify-write cycles on the same register.
 >
-> The code tries to collect all of the re-usable names,
-> offsets etc together so that it's easy to build the extra
-> per-chip data for other chips in the future.
+> Noted. I'll fix this and the readb and send a patch at some point.
+
+Ok
+
+> > > +builtin_platform_driver(msc313_gpio_driver);
+> >
+> > There is a trend to make all drivers optionally loadable modules these days.
+> > Is there a reason this has to be built-in?
 >
-> So far this only supports the MSC313 and MSC313E chips.
->
-> Support for the SSC8336N (mercury5) is trivial to add once
-> all of the lines have been mapped out.
+> This was discussed and I think Linus said it was ok.
 
-...
+Ok.
 
-> +#include <linux/io.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-
-Perhaps ordered?
-
-...
-
-> +       /*
-> +        * only the spi0 pins have interrupts on the parent
-> +        * on all of the known chips and so far they are all
-> +        * mapped to the same place
-> +        */
-
-You have a different comment style here (no capital letter, no period).
-
-> +       if (offset >= OFF_SPI0_CZ && offset <= OFF_SPI0_DO) {
-
-Why not traditional pattern, i.e.
-
-if (...)
-  return -EINVAL;
-...
-
-?
-
-> +               *parent_type = child_type;
-> +               *parent = ((offset - OFF_SPI0_CZ) >> 2) + 28;
-> +               return 0;
-> +       }
-> +
-> +       return -EINVAL;
-
-...
-
-> +       ret = devm_gpiochip_add_data(dev, gpiochip, gpio);
-> +       return ret;
-
-Purpose?
-
-return devm_...(...);
-
-...
-
-> +static int msc313_gpio_remove(struct platform_device *pdev)
-> +{
-> +       return 0;
-> +}
-
-Purpose?
-
-...
-
-> +static const struct of_device_id msc313_gpio_of_match[] = {
-
-> +#ifdef CONFIG_MACH_INFINITY
-
-What's the point? Are you expecting two drivers for the same IP?
-
-> +       {
-> +               .compatible = "mstar,msc313-gpio",
-> +               .data = &msc313_data,
-> +       },
-> +#endif
-> +       { }
-> +};
-
-...
-
-> +static struct platform_driver msc313_gpio_driver = {
-> +       .driver = {
-> +               .name = DRIVER_NAME,
-> +               .of_match_table = msc313_gpio_of_match,
-> +               .pm = &msc313_gpio_ops,
-> +       },
-> +       .probe = msc313_gpio_probe,
-> +       .remove = msc313_gpio_remove,
-> +};
-
-> +
-
-Redundant blank line.
-
-> +builtin_platform_driver(msc313_gpio_driver);
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+       Arnd
