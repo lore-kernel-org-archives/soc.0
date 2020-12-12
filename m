@@ -1,70 +1,105 @@
-Return-Path: <SRS0=KgY5=FQ=0x0f.com=daniel@kernel.org>
+Return-Path: <SRS0=pZgq=FQ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70269C4361B
-	for <soc@archiver.kernel.org>; Sat, 12 Dec 2020 02:47:03 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 1CE102343E; Sat, 12 Dec 2020 02:47:03 +0000 (UTC)
-Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E2B0C4361B
+	for <linux-arm-kernel@archiver.kernel.org>; Sat, 12 Dec 2020 02:48:49 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8C9B122D06
-	for <soc@kernel.org>; Sat, 12 Dec 2020 02:47:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8C9B122D06
+	by mail.kernel.org (Postfix) with ESMTPS id BC72922DFB
+	for <linux-arm-kernel@archiver.kernel.org>; Sat, 12 Dec 2020 02:48:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BC72922DFB
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=daniel@0x0f.com
-Received: by mail-pj1-f65.google.com with SMTP id v1so3160533pjr.2
-        for <soc@kernel.org>; Fri, 11 Dec 2020 18:47:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KR85+Gtdem0Gv7clmGZtNq8Ahg6SgE54nF/g8Upvyss=;
-        b=mTEvr0VibOqLvEug3aL4pUxFPYKXn81LJv+anjADWxWMeadNR+t4ymtJcICySr0CAS
-         t8GW7rzl5l5Vv3KThySNl54AU+15VaBRpQCHjX/9csYX46yl0KWQOLVbZbEOezA15Bvf
-         ayWh1/T9c4EjSIyQ1b38MZXG9yrBhTKLlV8T8=
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=9UceKFmO0PKf1mMwkl9SUdQWE2TUGuO58D1Tr07HgTU=; b=VHZmvFmAQ3MLYxqYW+Q6DR7hgK
+	OEUtL1kwhb4UPG2nkyDpA+aTMRUnQlNJNLi9JIT/3M70Gihb4/uAc80ndYuc6LvoKagBkekH7+VYh
+	2Se4X394NJBe1hoPb/JjDQhryqmtZcueXPruL2qsXD6kVO2PEjxx5C6dbFsHw7UVLb9kxM4WEkPQ9
+	HME3sRCF4rHZv0u1FFGVlP/OJei560/AHK3+MDXVyDkLsIjw7VGEL0z5zbIXRtsd31HcBHjiP0lZ3
+	LwxrWe75aAGRHTkBjB6s2p0WBGzYCMc/uiojXUDclVhVXzNZl0ofRuIgH9scO7ibgNgpsPAJw99s8
+	JEYH78Aw==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1knuwB-0006XJ-Ep; Sat, 12 Dec 2020 02:47:11 +0000
+Received: from mail-pl1-x642.google.com ([2607:f8b0:4864:20::642])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1knuw7-0006Wq-IF
+ for linux-arm-kernel@lists.infradead.org; Sat, 12 Dec 2020 02:47:09 +0000
+Received: by mail-pl1-x642.google.com with SMTP id r4so5579216pls.11
+ for <linux-arm-kernel@lists.infradead.org>;
+ Fri, 11 Dec 2020 18:47:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=KR85+Gtdem0Gv7clmGZtNq8Ahg6SgE54nF/g8Upvyss=;
+ b=mTEvr0VibOqLvEug3aL4pUxFPYKXn81LJv+anjADWxWMeadNR+t4ymtJcICySr0CAS
+ t8GW7rzl5l5Vv3KThySNl54AU+15VaBRpQCHjX/9csYX46yl0KWQOLVbZbEOezA15Bvf
+ ayWh1/T9c4EjSIyQ1b38MZXG9yrBhTKLlV8T8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KR85+Gtdem0Gv7clmGZtNq8Ahg6SgE54nF/g8Upvyss=;
-        b=VdwjEciTkEmQ9/1YAR75CpNVgpn5CmGHHcvVxibOgo2LinJlGZOZRyijoZBZKobEKD
-         guUl9xgrR7CwC2EKxo1asBztRJ61B42i2k9TVnVJHbtXvtijSCH3sxEiYKfQxKEW1kqS
-         dlB3OrL1Uldwq7Udrz3D8wr5U4/F4mSq1SU53lmRCa+YfyOLlulI2dWGqO3SzzQ7ayTh
-         cKzM3XoL5HPEG1LBICOqNXWRtrmaL7t7V0ZDhLTi8WokcQePLNtAEmhJ8vaakQFNE8Ss
-         TndLLDCpPO6YTPKLayFCM7ePDPYUFXQWEFkvOo/+Ir7uXPKpyXzP0/CjCmqtMzO1C54Z
-         T1ZA==
-X-Gm-Message-State: AOAM533wljCc1cL2fGivsxA9m6uZl193YIlf3C8e1bAWzJTNsd3BdGgy
-	e2L7eLlBuS8Brdao/O0nJBx/ULlvdBHdXA==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=KR85+Gtdem0Gv7clmGZtNq8Ahg6SgE54nF/g8Upvyss=;
+ b=oMFhfzQfj3CruqxijPrXPBMsSk6pt8bhGOhX2c/BgaEet/zupCgMuHySKpl9RJVZYA
+ 6WTm2vjncohhXLN77fPpCIYaLiDlCA2Wet4xEQLHF2GNvaka17Vhs5e31HIDTFq1lFO1
+ wE0OcM30MGtxvM2Ksz/0cr/THau1GcDgwKIXOTY2rGIJMWNTQIHyyvxDVOSDCMw913mN
+ jEnucnwAsniE2neHoduz4FvePs/6r7FhwsOpWMd+ezvnsx43qW7umldRT7Yj4Z6T8Y5o
+ EBn/CUWnsTjk+zi7htUeJqybZ3F299/zOssF7AWaZwzQnSh0Bl5qE27+XY1Y5Yidvl2N
+ +LLg==
+X-Gm-Message-State: AOAM530kc8TWXT4VxZhM4vnw0TaiW5FLfhP0/qaBm75OJYuPU3Q4ngeD
+ qG3MQvwni4VHZRQaACSXw4xSDA==
 X-Google-Smtp-Source: ABdhPJyjojuUBUF+16+qT8N4gkR7nSxLeaPZz06+71H6fSnt3My242D0AUcUZ/bKNOvhtp0B5MAePA==
-X-Received: by 2002:a17:902:8b89:b029:d6:df6e:54df with SMTP id ay9-20020a1709028b89b02900d6df6e54dfmr13759213plb.0.1607741221516;
-        Fri, 11 Dec 2020 18:47:01 -0800 (PST)
-Received: from shiro.work (p1268123-ipngn200803sizuokaden.shizuoka.ocn.ne.jp. [118.13.124.123])
-        by smtp.googlemail.com with ESMTPSA id q12sm12020086pgv.91.2020.12.11.18.46.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Dec 2020 18:47:00 -0800 (PST)
+X-Received: by 2002:a17:902:8b89:b029:d6:df6e:54df with SMTP id
+ ay9-20020a1709028b89b02900d6df6e54dfmr13759213plb.0.1607741221516; 
+ Fri, 11 Dec 2020 18:47:01 -0800 (PST)
+Received: from shiro.work (p1268123-ipngn200803sizuokaden.shizuoka.ocn.ne.jp.
+ [118.13.124.123])
+ by smtp.googlemail.com with ESMTPSA id q12sm12020086pgv.91.2020.12.11.18.46.59
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 11 Dec 2020 18:47:00 -0800 (PST)
 From: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
 	devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	w@1wt.eu,
-	Daniel Palmer <daniel@0x0f.com>
-Subject: [PATCH 1/7] ARM: mstar: Unify common parts of BreadBee boards into a dtsi
+Subject: [PATCH 1/7] ARM: mstar: Unify common parts of BreadBee boards into a
+ dtsi
 Date: Sat, 12 Dec 2020 11:46:43 +0900
-Message-Id: <20201212024643.388335-1-daniel@0x0f.com>
+Message-ID: <20201212024643.388335-1-daniel@0x0f.com>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201211_214707_996308_9F2D1E91 
+X-CRM114-Status: GOOD (  15.99  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: arnd@arndb.de, Daniel Palmer <daniel@0x0f.com>,
+ linux-kernel@vger.kernel.org, olof@lixom.net, w@1wt.eu,
+ linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201212024643.ObTXIEXyz9Cq8OPsevXkZHcelXs4Q2lqIlTDMUAmrbA@z>
 
 The BreadBee and the BreadBee Crust are the same PCB with a different
 SoC mounted. There are two top level dts to handle this.
@@ -161,3 +196,8 @@ index f0eda80a95cc..e64ca4ce1830 100644
 -- 
 2.29.2
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
