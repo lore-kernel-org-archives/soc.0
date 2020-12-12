@@ -1,136 +1,163 @@
-Return-Path: <SRS0=pZgq=FQ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=KgY5=FQ=0x0f.com=daniel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF079C433FE
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 12 Dec 2020 01:24:40 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70269C4361B
+	for <soc@archiver.kernel.org>; Sat, 12 Dec 2020 02:47:03 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 1CE102343E; Sat, 12 Dec 2020 02:47:03 +0000 (UTC)
+Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A211020DD4
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 12 Dec 2020 01:24:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A211020DD4
+	by mail.kernel.org (Postfix) with ESMTPS id 8C9B122D06
+	for <soc@kernel.org>; Sat, 12 Dec 2020 02:47:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8C9B122D06
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=y/tPWC2UX/4Azp/5PfmKRJfuXBUgap2RGXAanNDLrGY=; b=Rg3nvGGBwleOMyPgkViNc40l++
-	CpsMaRPOfC7lGU+1yX9XSJK6Uba87lh/TAnglTzaGVNqdw+mpMov7iCIIm/Vnrw60qjzjVcHbDtmE
-	2P5xPzyubneDlIaGStY7/3+P3e7iyxzqZoPYlq/BjQf7lgcijVK4wTF1l07YmZ8NJmMTSA1wb3THM
-	MpLv9K0LuD+wF9Y1LDwd1/B1yesMesZrIwDvGk/0JWQutuecn3NKs5IUia26OeCCb0ctv9XPVY5nQ
-	wbRuHOYXXFqOea8bKXOyZc58zUuIvvKEcpw2ZThFJBDSyCk52NyG24tWPl/tq4Jf1DbIXfnR8hDR4
-	c3FAdP8w==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kntd3-0003NW-GK; Sat, 12 Dec 2020 01:23:21 +0000
-Received: from mail-pl1-x643.google.com ([2607:f8b0:4864:20::643])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kntd0-0003Ln-G7
- for linux-arm-kernel@lists.infradead.org; Sat, 12 Dec 2020 01:23:19 +0000
-Received: by mail-pl1-x643.google.com with SMTP id u4so5487862plr.12
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 11 Dec 2020 17:23:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=vBtSCo2aiVK+Pe61Pe1iCNpVRoVlE9vowQAOup0zUVo=;
- b=dYSqgqy5cEveG6dzM6glJgQcweYN29Jm+7P3TivHfgKnveCQwCxxrnWF2dKcStcQpJ
- 3+oEJsl6Sq5GkXwsmx03Xjlu+yrt4/+pPZiv/LSMfL+BDxmwWGKQx4/jWqS8fgJupmQ/
- w9cAUX4Jbd3eo+7K5KTIy4Q0MKjyvVzZ7nXs0=
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=daniel@0x0f.com
+Received: by mail-pj1-f65.google.com with SMTP id v1so3160533pjr.2
+        for <soc@kernel.org>; Fri, 11 Dec 2020 18:47:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KR85+Gtdem0Gv7clmGZtNq8Ahg6SgE54nF/g8Upvyss=;
+        b=mTEvr0VibOqLvEug3aL4pUxFPYKXn81LJv+anjADWxWMeadNR+t4ymtJcICySr0CAS
+         t8GW7rzl5l5Vv3KThySNl54AU+15VaBRpQCHjX/9csYX46yl0KWQOLVbZbEOezA15Bvf
+         ayWh1/T9c4EjSIyQ1b38MZXG9yrBhTKLlV8T8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=vBtSCo2aiVK+Pe61Pe1iCNpVRoVlE9vowQAOup0zUVo=;
- b=VLn4uRUraIiFwBUT7sWWJtjiUx2ycLZ0D4E8LDvTRJFoKXIfUDQVM7opBhN3zMns/b
- 4dA72VxrTKUoKWFdIpRVik8iqwUVdjlssJyM+bS/Oh5qI8/zWdkCRy9LxULqbbqGswIb
- aG5K9DHUv2f89tDEFY6Z/Nnfz5qBeiZMaIxM9xaPcu214OrFRpZhywfpndHuDnixqXAu
- XELEwlnvBY/vgl47Q1EYYVwEiccbSl01roCDwRcv97rvIl5leejPeFVX+GfoPJ5zqCwV
- anmX8RsWDKWZ6DfeV6YS02mMrXwFKKcFANHu9XvTPHDk+rLuWmPZTFjL0sGMiV7nlVPc
- P4Ew==
-X-Gm-Message-State: AOAM532qNZCpBqbmV9HMzNovUezb444A7Ev+CaFutySvR/OlBphV+Ozy
- GPb6RLtbUEv2uOq/leBxRKdcyw==
-X-Google-Smtp-Source: ABdhPJy0Omx3Bd/nYZtQzkm1h7saxbiLpbRzdG7yoONL2juuSNDiJMIvVeh0TdIIKVu6urt97ZoSww==
-X-Received: by 2002:a17:90a:ead1:: with SMTP id
- ev17mr15819352pjb.51.1607736193819; 
- Fri, 11 Dec 2020 17:23:13 -0800 (PST)
-Received: from shiro.work (p1268123-ipngn200803sizuokaden.shizuoka.ocn.ne.jp.
- [118.13.124.123])
- by smtp.googlemail.com with ESMTPSA id c2sm11623071pfa.59.2020.12.11.17.23.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Dec 2020 17:23:13 -0800 (PST)
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KR85+Gtdem0Gv7clmGZtNq8Ahg6SgE54nF/g8Upvyss=;
+        b=VdwjEciTkEmQ9/1YAR75CpNVgpn5CmGHHcvVxibOgo2LinJlGZOZRyijoZBZKobEKD
+         guUl9xgrR7CwC2EKxo1asBztRJ61B42i2k9TVnVJHbtXvtijSCH3sxEiYKfQxKEW1kqS
+         dlB3OrL1Uldwq7Udrz3D8wr5U4/F4mSq1SU53lmRCa+YfyOLlulI2dWGqO3SzzQ7ayTh
+         cKzM3XoL5HPEG1LBICOqNXWRtrmaL7t7V0ZDhLTi8WokcQePLNtAEmhJ8vaakQFNE8Ss
+         TndLLDCpPO6YTPKLayFCM7ePDPYUFXQWEFkvOo/+Ir7uXPKpyXzP0/CjCmqtMzO1C54Z
+         T1ZA==
+X-Gm-Message-State: AOAM533wljCc1cL2fGivsxA9m6uZl193YIlf3C8e1bAWzJTNsd3BdGgy
+	e2L7eLlBuS8Brdao/O0nJBx/ULlvdBHdXA==
+X-Google-Smtp-Source: ABdhPJyjojuUBUF+16+qT8N4gkR7nSxLeaPZz06+71H6fSnt3My242D0AUcUZ/bKNOvhtp0B5MAePA==
+X-Received: by 2002:a17:902:8b89:b029:d6:df6e:54df with SMTP id ay9-20020a1709028b89b02900d6df6e54dfmr13759213plb.0.1607741221516;
+        Fri, 11 Dec 2020 18:47:01 -0800 (PST)
+Received: from shiro.work (p1268123-ipngn200803sizuokaden.shizuoka.ocn.ne.jp. [118.13.124.123])
+        by smtp.googlemail.com with ESMTPSA id q12sm12020086pgv.91.2020.12.11.18.46.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Dec 2020 18:47:00 -0800 (PST)
 From: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
-	arnd@arndb.de
-Subject: [PATCH] dt-bindings: vendor-prefixes: Fix misordering introduced by
- honestar prefix
-Date: Sat, 12 Dec 2020 10:22:53 +0900
-Message-ID: <20201212012253.373074-1-daniel@0x0f.com>
+	devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	w@1wt.eu,
+	Daniel Palmer <daniel@0x0f.com>
+Subject: [PATCH 1/7] ARM: mstar: Unify common parts of BreadBee boards into a dtsi
+Date: Sat, 12 Dec 2020 11:46:43 +0900
+Message-Id: <20201212024643.388335-1-daniel@0x0f.com>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201211_202318_795867_E28D0708 
-X-CRM114-Status: GOOD (  11.47  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: devicetree@vger.kernel.org, Daniel Palmer <daniel@0x0f.com>,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201212012253.s1KZGvmlI351v98hCgqr7Q0BGFUM-IFAEHrV1PoC1g0@z>
+Content-Transfer-Encoding: 8bit
 
-The prefix for honestar should come before honeywell.
+The BreadBee and the BreadBee Crust are the same PCB with a different
+SoC mounted. There are two top level dts to handle this.
 
-Fixes: 43181b5d8072 ("dt-bindings: vendor-prefixes: Add honestar vendor prefix")
-Link: https://lore.kernel.org/linux-arm-kernel/CAFr9PXmwOEuHHA-kDeL1YS8bWvovrt43MXxyy1J+hGbXwPUFSA@mail.gmail.com/
+To avoid deduplicating the parts that are more related to the PCB than
+the SoC (i.e. the voltage regs and LEDs) add a common dtsi that can
+be included in both top level dts.
+
 Signed-off-by: Daniel Palmer <daniel@0x0f.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../dts/mstar-infinity-breadbee-common.dtsi   | 47 +++++++++++++++++++
+ .../mstar-infinity-msc313-breadbee_crust.dts  |  1 +
+ .../dts/mstar-infinity3-msc313e-breadbee.dts  |  1 +
+ 3 files changed, 49 insertions(+)
+ create mode 100644 arch/arm/boot/dts/mstar-infinity-breadbee-common.dtsi
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index a6cf2cef6f89..5f9bb0c152af 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -449,10 +449,10 @@ patternProperties:
-     description: Hitex Development Tools
-   "^holt,.*":
-     description: Holt Integrated Circuits, Inc.
--  "^honeywell,.*":
--    description: Honeywell
-   "^honestar,.*":
-     description: Honestar Technologies Co., Ltd.
-+  "^honeywell,.*":
-+    description: Honeywell
-   "^hoperun,.*":
-     description: Jiangsu HopeRun Software Co., Ltd.
-   "^hp,.*":
+diff --git a/arch/arm/boot/dts/mstar-infinity-breadbee-common.dtsi b/arch/arm/boot/dts/mstar-infinity-breadbee-common.dtsi
+new file mode 100644
+index 000000000000..53244b399126
+--- /dev/null
++++ b/arch/arm/boot/dts/mstar-infinity-breadbee-common.dtsi
+@@ -0,0 +1,47 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2020 thingy.jp.
++ * Author: Daniel Palmer <daniel@thingy.jp>
++ */
++
++/ {
++	vcc_core: fixedregulator@0 {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc_core";
++		regulator-min-microvolt = <1000000>;
++		regulator-max-microvolt = <1000000>;
++		regulator-boot-on;
++	};
++
++	vcc_dram: fixedregulator@1 {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc_dram";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		regulator-boot-on;
++	};
++
++	vcc_io: fixedregulator@2 {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc_io";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-boot-on;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		red {
++			gpios = <&gpio MSC313_GPIO_SR_IO16 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "activity";
++		};
++		yellow {
++			gpios = <&gpio MSC313_GPIO_SR_IO17 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "heartbeat";
++		};
++	};
++};
++
++&cpu0 {
++	cpu-supply = <&vcc_core>;
++};
+diff --git a/arch/arm/boot/dts/mstar-infinity-msc313-breadbee_crust.dts b/arch/arm/boot/dts/mstar-infinity-msc313-breadbee_crust.dts
+index f9db2ff86f2d..db4910dcb8a7 100644
+--- a/arch/arm/boot/dts/mstar-infinity-msc313-breadbee_crust.dts
++++ b/arch/arm/boot/dts/mstar-infinity-msc313-breadbee_crust.dts
+@@ -6,6 +6,7 @@
+ 
+ /dts-v1/;
+ #include "mstar-infinity-msc313.dtsi"
++#include "mstar-infinity-breadbee-common.dtsi"
+ 
+ / {
+ 	model = "BreadBee Crust";
+diff --git a/arch/arm/boot/dts/mstar-infinity3-msc313e-breadbee.dts b/arch/arm/boot/dts/mstar-infinity3-msc313e-breadbee.dts
+index f0eda80a95cc..e64ca4ce1830 100644
+--- a/arch/arm/boot/dts/mstar-infinity3-msc313e-breadbee.dts
++++ b/arch/arm/boot/dts/mstar-infinity3-msc313e-breadbee.dts
+@@ -6,6 +6,7 @@
+ 
+ /dts-v1/;
+ #include "mstar-infinity3-msc313e.dtsi"
++#include "mstar-infinity-breadbee-common.dtsi"
+ 
+ / {
+ 	model = "BreadBee";
 -- 
 2.29.2
 
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
