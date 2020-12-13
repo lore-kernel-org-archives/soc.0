@@ -1,169 +1,273 @@
-Return-Path: <SRS0=QZdI=FR=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=qRig=FR=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 614A2C4361B
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 13 Dec 2020 16:26:58 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CD20C4361B
+	for <soc@archiver.kernel.org>; Sun, 13 Dec 2020 22:55:24 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id DCE42230FA; Sun, 13 Dec 2020 22:55:23 +0000 (UTC)
+Received: from mail-lf1-f65.google.com (mail-lf1-f65.google.com [209.85.167.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 182BD23359
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 13 Dec 2020 16:26:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 182BD23359
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jamieiles.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=7WRJKyEm94bgLgwakGIpsd6EMcg5jRVWSrPeAdjcMHo=; b=s8jS7+qcsDtKA6V0o8T0wro9o
-	u70TkNTVoxu+KrLTE4z3mFkN/I5BsautfGPV8pr9xxftzqHdcDMc4bOC43+uA/m8TGW5nbPVPgegT
-	ETLeBEiTA8l4QU+Vv3Qak8vhfPcIzmZ4oCw5bGeG8i10NdH+m1v5na2QNBPN3nCcOfv6gn63tTVOY
-	keR7bhu5ySRKg8yoIpAskTJ3NXwLBQjjSp1+yZZZNupuCeI7MdEAbXHnNIA9kkHGcmW2xkG+4HOEc
-	/EI5v9/N6lTTcMPq+e7xBJChwe+0ThdE3kqbptUbzRhsXCbkLEesa24GCqw81uLqkWIz3hlHDdm87
-	seDvJiVQQ==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1koUBi-0000tN-J0; Sun, 13 Dec 2020 16:25:34 +0000
-Received: from mail-wr1-x441.google.com ([2a00:1450:4864:20::441])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1koUBf-0000sc-6n
- for linux-arm-kernel@lists.infradead.org; Sun, 13 Dec 2020 16:25:32 +0000
-Received: by mail-wr1-x441.google.com with SMTP id t16so13998232wra.3
- for <linux-arm-kernel@lists.infradead.org>;
- Sun, 13 Dec 2020 08:25:28 -0800 (PST)
+	by mail.kernel.org (Postfix) with ESMTPS id 597F522DFA
+	for <soc@kernel.org>; Sun, 13 Dec 2020 22:55:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 597F522DFA
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linus.walleij@linaro.org
+Received: by mail-lf1-f65.google.com with SMTP id 23so25546315lfg.10
+        for <soc@kernel.org>; Sun, 13 Dec 2020 14:55:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=jamieiles-com.20150623.gappssmtp.com; s=20150623;
- h=date:from:to:cc:subject:message-id:references:mime-version
- :content-disposition:in-reply-to;
- bh=Rf+b9N2htku5WJ9Hu0NGJ+c4uKlPgFBYFEnRhIM8Uhs=;
- b=S2Ty7Lhn1rwak6hdqcbPARjAEnxxvMgu6mXc9eqNXbZ4hVjaGEqQB8pMUoe4zTi1a7
- 9K5iVrrFK26itWqBcEUcsB426J87wE6+0bdUwlzGPyaQAK7WJ2mi8EEN38iGxMFmnrsP
- RvAbxMjbqNfxeOib8SiOEhiZQlK2QiETI6lZECSO98DeQC4x86MPTvAar80gTr8fHlo9
- Me754RKBSGlMI4siQAk6QGOOJKPhpOHTAHbm+6yPlQO+KD153S9F2Nau3c/43mdt5Cbk
- efxE27ZeDqsyw9BQh3/7tvmX/sjx5PrOfXZJKnEygqAclqItBdi4Ow5kpP0d/zx2xj9h
- cClA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EJzcPpylnKaiFhjUaTGCdHTSB4HDtxk1bXFCHW9lZ18=;
+        b=UNjGuQdEso2eA+quGXUi3dqpChaI3xl6pywwJHljSQn4Amqp6x7Sd37UVYaN8iIKK1
+         pD6VgfTfObaIg00FmW5G8pIySxGYjW6a/t2vk7fNNY1nPqa99PQpE3bCCuxuUY8gj85b
+         +rJuSvTQ2Sd/8mzzPTfzo8iuTokluufuWvYxhx7pUSzIb8zQ7LDLbGQd2OKQXDVsG+fw
+         3LG16SSkaIypmOdZN+85m1Zf5MUr2aaAt4cc6y488qm2nHO8rcg4UpgqIPTKMhrBlnDW
+         jc4cSg6z1Q3U8MEgNpW0Uzs/UnIj2H6lmjZ4Xh4xMACFP+30ZMUSaxrWK5ROeF6Um7NQ
+         doPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=Rf+b9N2htku5WJ9Hu0NGJ+c4uKlPgFBYFEnRhIM8Uhs=;
- b=GpC5NIk6iCC+XSGSO2nGEteWTUcKvOjMEzAJk0xbVPlolZj5AY4DR5q8QNCml5FMc9
- t7p8aYrNwRRVzec90wPJdILjPxQEHt0OarFgvgRRPXmlkzARFBLRRXUzUaHxvU+bMktL
- YvuoUC+URdqhMdC2NcVVoEZEIYlrmvHfU+mDr68R70izV5N86F1epkFQ3wKiDIRlpsKB
- fUJQNN8aL/mpWEwv7veiuApZOKnaCttpRbMwQwPU0a+OOl415WKARCd2od87NvD265Fd
- QBEEDIGmSlGbVomIwDonJH26TgNnfojuAaZ5Qti6Gt4mhIlLN/AXpXYkPEJGrjaAk5gO
- q6yA==
-X-Gm-Message-State: AOAM532XC6Lq1q36kGhEIGqmsSNQzOFivtaRbRZOjfIenFtoYJefgN8k
- gUcZvRLBREUmqjN9DmjwgxeIWw==
-X-Google-Smtp-Source: ABdhPJzLE3t6E6T+7CANIDVOP3RTPKz+wUMY/WJbm93kEjoOQjfqOkI5aZIByNISKdCoVp6ig7p5VA==
-X-Received: by 2002:a5d:5005:: with SMTP id e5mr24119814wrt.279.1607876727343; 
- Sun, 13 Dec 2020 08:25:27 -0800 (PST)
-Received: from localhost ([82.44.17.50])
- by smtp.gmail.com with ESMTPSA id z2sm27245655wml.23.2020.12.13.08.25.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 13 Dec 2020 08:25:26 -0800 (PST)
-Date: Sun, 13 Dec 2020 16:25:25 +0000
-From: Jamie Iles <jamie@jamieiles.com>
-To: Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 0/4] Remove PicoXcell
-Message-ID: <20201213162525.GA223635@willow>
-References: <20201210200315.2965567-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20201210200315.2965567-1-robh@kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201213_112531_375204_B10E0655 
-X-CRM114-Status: GOOD (  16.53  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EJzcPpylnKaiFhjUaTGCdHTSB4HDtxk1bXFCHW9lZ18=;
+        b=rGKT10i50qZwoV3YxegISyYY0GbtMrIa09xG+tSGAkRJyAxJaABN1Q+F5OKGjwBc0n
+         mqQLhAZJmYiH4Ek/YSLpT+ihUgC/oeARrIgYn7eDHNApew92vr12y5VY/LEBM+RefLN6
+         TNKzHtyLOp1XZBdns9CRCUaga9W0BaslBQXKjRL5326M0Q3+wwAZ3ZNHLCRkKwavnWJP
+         4OOiHcnot3oDLte0MlTBVXsu+Aifx7Rf4bE+qf1OqclSmu2G1nxAu0JAspskoDt9rhZS
+         WIYBpVrt32n0x8c1WQg83cmlbQzax/Y0EGSi96y7R3yj/VN8FjTgN347eiOohAiKdwwj
+         J27g==
+X-Gm-Message-State: AOAM53191+uUPXC3JTc+tlckb3Db7u3SAb3Qe2mzaTOjh0qjKgqO6sv1
+	zHiFA8dBsOzBrIDe7FYRyzoqPA==
+X-Google-Smtp-Source: ABdhPJzIkRam6r3ZhdelkPNNTAZ2SBJCyzMf1RRdtAFLV12V8gU3HTlsHA6xTT5vGOz0RyAzFzXEAw==
+X-Received: by 2002:a19:848f:: with SMTP id g137mr3929696lfd.622.1607900121382;
+        Sun, 13 Dec 2020 14:55:21 -0800 (PST)
+Received: from localhost.bredbandsbolaget (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
+        by smtp.gmail.com with ESMTPSA id q9sm1074545ljm.113.2020.12.13.14.55.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Dec 2020 14:55:20 -0800 (PST)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
- linux-kernel@vger.kernel.org, soc@kernel.org, linux-crypto@vger.kernel.org,
- Jamie Iles <jamie@jamieiles.com>, "David S. Miller" <davem@davemloft.net>,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201213162525.R4zi46M75LuoZbstI9UipmF7IZnireSj-KkWUAgDEPo@z>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	stable@vger.kernel.org,
+	David Hildenbrand <david@redhat.com>
+Subject: [PATCH] ARM: dts: ux500: Reserve memory carveouts
+Date: Sun, 13 Dec 2020 23:55:17 +0100
+Message-Id: <20201213225517.3838501-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Acked-by: Jamie Iles <jamie@jamieiles.com>
+The Ux500 platforms have some memory carveouts set aside for
+communicating with the modem and for the initial secure software
+(ISSW). These areas are protected by the memory controller
+and will result in an external abort if accessed like common
+read/write memory.
 
-for the series.  Intel EOLd this product now, good idea to remove it.
+On the legacy boot loaders, these were set aside by using
+cmdline arguments such as this:
 
-Thanks,
+  mem=96M@0 mem_mtrace=15M@96M mem_mshared=1M@111M
+  mem_modem=16M@112M mali.mali_mem=32M@128M mem=96M@160M
+  hwmem=127M@256M mem_issw=1M@383M mem_ram_console=1M@384M
+  mem=638M@385M
 
-Jamie
+Reserve the relevant areas in the device tree instead. The
+"mali", "hwmem", "mem_ram_console" and the trailing 1MB at the
+end of the memory reservations in the list are not relevant for
+the upstream kernel as these are nowadays replaced with
+upstream technologies such as CMA. The modem and ISSW
+reservations are necessary.
 
-On Thu, Dec 10, 2020 at 02:03:11PM -0600, Rob Herring wrote:
-> PicoXcell has had nothing but treewide cleanups for at least the last 8
-> years and no signs of activity. The most recent activity is a yocto vendor
-> kernel based on v3.0 in 2015.
-> 
-> These patches can go via the respective maintainers' trees.
-> 
-> Rob
-> 
-> Rob Herring (4):
->   ARM: dts: Remove PicoXcell platforms
->   ARM: Remove PicoXcell platform support
->   crypto: Remove PicoXcell driver
->   dt-bindings: Remove PicoXcell bindings
-> 
->  .../devicetree/bindings/arm/picoxcell.txt     |   24 -
->  .../bindings/crypto/picochip-spacc.txt        |   21 -
->  .../devicetree/bindings/net/macb.txt          |    2 -
->  .../bindings/timer/snps,dw-apb-timer.yaml     |    7 -
->  MAINTAINERS                                   |    9 -
->  arch/arm/Kconfig                              |    2 -
->  arch/arm/Kconfig.debug                        |   13 +-
->  arch/arm/Makefile                             |    1 -
->  arch/arm/boot/dts/Makefile                    |    3 -
->  arch/arm/boot/dts/picoxcell-pc3x2.dtsi        |  239 ---
->  arch/arm/boot/dts/picoxcell-pc3x3.dtsi        |  355 ----
->  arch/arm/boot/dts/picoxcell-pc7302-pc3x2.dts  |   78 -
->  arch/arm/boot/dts/picoxcell-pc7302-pc3x3.dts  |   84 -
->  arch/arm/mach-picoxcell/Kconfig               |    9 -
->  arch/arm/mach-picoxcell/Makefile              |    2 -
->  arch/arm/mach-picoxcell/common.c              |   81 -
->  drivers/crypto/Kconfig                        |   18 -
->  drivers/crypto/Makefile                       |    1 -
->  drivers/crypto/picoxcell_crypto.c             | 1806 -----------------
->  drivers/crypto/picoxcell_crypto_regs.h        |  115 --
->  20 files changed, 1 insertion(+), 2869 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/picoxcell.txt
->  delete mode 100644 Documentation/devicetree/bindings/crypto/picochip-spacc.txt
->  delete mode 100644 arch/arm/boot/dts/picoxcell-pc3x2.dtsi
->  delete mode 100644 arch/arm/boot/dts/picoxcell-pc3x3.dtsi
->  delete mode 100644 arch/arm/boot/dts/picoxcell-pc7302-pc3x2.dts
->  delete mode 100644 arch/arm/boot/dts/picoxcell-pc7302-pc3x3.dts
->  delete mode 100644 arch/arm/mach-picoxcell/Kconfig
->  delete mode 100644 arch/arm/mach-picoxcell/Makefile
->  delete mode 100644 arch/arm/mach-picoxcell/common.c
->  delete mode 100644 drivers/crypto/picoxcell_crypto.c
->  delete mode 100644 drivers/crypto/picoxcell_crypto_regs.h
-> 
-> --
-> 2.25.1
+This was manifested in a bug that surfaced in response to
+commit 7fef431be9c9 ("mm/page_alloc: place pages to tail in __free_pages_core()")
+which changes the behaviour of memory allocations
+in such a way that the platform will sooner run into these
+dangerous areas, with "Unhandled fault: imprecise external
+abort (0xc06) at 0xb6fd83dc" or similar: the real reason
+turns out to be that the PTE is pointing right into one of
+the reserved memory areas. We were just lucky until now.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+We need to augment the DB8500 and DB8520 SoCs similarly
+and also create a new include for the DB9500 used in the
+Snowball since this does not have a modem and thus does
+not need the modem memory reservation, albeit it needs
+the ISSW reservation.
+
+Cc: stable@vger.kernel.org
+Cc: David Hildenbrand <david@redhat.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ARM SoC folks: please apply this directly for fixes.
+
+David: just FYI if you run into more of these type of
+regressions. Actually the patch is unintentionally good
+at smoking out other bugs :D
+---
+ arch/arm/boot/dts/ste-db8500.dtsi  | 38 ++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/ste-db8520.dtsi  | 38 ++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/ste-db9500.dtsi  | 35 +++++++++++++++++++++++++++
+ arch/arm/boot/dts/ste-snowball.dts |  2 +-
+ 4 files changed, 112 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/ste-db9500.dtsi
+
+diff --git a/arch/arm/boot/dts/ste-db8500.dtsi b/arch/arm/boot/dts/ste-db8500.dtsi
+index d309fad32229..344d29853bf7 100644
+--- a/arch/arm/boot/dts/ste-db8500.dtsi
++++ b/arch/arm/boot/dts/ste-db8500.dtsi
+@@ -12,4 +12,42 @@ cpu@300 {
+ 					    200000 0>;
+ 		};
+ 	};
++
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		/* Modem trace memory */
++		ram@06000000 {
++			reg = <0x06000000 0x00f00000>;
++			no-map;
++		};
++
++		/* Modem shared memory */
++		ram@06f00000 {
++			reg = <0x06f00000 0x00100000>;
++			no-map;
++		};
++
++		/* Modem private memory */
++		ram@07000000 {
++			reg = <0x07000000 0x01000000>;
++			no-map;
++		};
++
++		/*
++		 * Initial Secure Software ISSW memory
++		 *
++		 * This is probably only used if the kernel tries
++		 * to actually call into trustzone to run secure
++		 * applications, which the mainline kernel probably
++		 * will not do on this old chipset. But you can never
++		 * be too careful, so reserve this memory anyway.
++		 */
++		ram@17f00000 {
++			reg = <0x17f00000 0x00100000>;
++			no-map;
++		};
++	};
+ };
+diff --git a/arch/arm/boot/dts/ste-db8520.dtsi b/arch/arm/boot/dts/ste-db8520.dtsi
+index 48bd8728ae27..287804e9e183 100644
+--- a/arch/arm/boot/dts/ste-db8520.dtsi
++++ b/arch/arm/boot/dts/ste-db8520.dtsi
+@@ -12,4 +12,42 @@ cpu@300 {
+ 					    200000 0>;
+ 		};
+ 	};
++
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		/* Modem trace memory */
++		ram@06000000 {
++			reg = <0x06000000 0x00f00000>;
++			no-map;
++		};
++
++		/* Modem shared memory */
++		ram@06f00000 {
++			reg = <0x06f00000 0x00100000>;
++			no-map;
++		};
++
++		/* Modem private memory */
++		ram@07000000 {
++			reg = <0x07000000 0x01000000>;
++			no-map;
++		};
++
++		/*
++		 * Initial Secure Software ISSW memory
++		 *
++		 * This is probably only used if the kernel tries
++		 * to actually call into trustzone to run secure
++		 * applications, which the mainline kernel probably
++		 * will not do on this old chipset. But you can never
++		 * be too careful, so reserve this memory anyway.
++		 */
++		ram@17f00000 {
++			reg = <0x17f00000 0x00100000>;
++			no-map;
++		};
++	};
+ };
+diff --git a/arch/arm/boot/dts/ste-db9500.dtsi b/arch/arm/boot/dts/ste-db9500.dtsi
+new file mode 100644
+index 000000000000..0afff703191c
+--- /dev/null
++++ b/arch/arm/boot/dts/ste-db9500.dtsi
+@@ -0,0 +1,35 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include "ste-dbx5x0.dtsi"
++
++/ {
++	cpus {
++		cpu@300 {
++			/* cpufreq controls */
++			operating-points = <1152000 0
++					    800000 0
++					    400000 0
++					    200000 0>;
++		};
++	};
++
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		/*
++		 * Initial Secure Software ISSW memory
++		 *
++		 * This is probably only used if the kernel tries
++		 * to actually call into trustzone to run secure
++		 * applications, which the mainline kernel probably
++		 * will not do on this old chipset. But you can never
++		 * be too careful, so reserve this memory anyway.
++		 */
++		ram@17f00000 {
++			reg = <0x17f00000 0x00100000>;
++			no-map;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/ste-snowball.dts b/arch/arm/boot/dts/ste-snowball.dts
+index be90e73c923e..27d8a07718a0 100644
+--- a/arch/arm/boot/dts/ste-snowball.dts
++++ b/arch/arm/boot/dts/ste-snowball.dts
+@@ -4,7 +4,7 @@
+  */
+ 
+ /dts-v1/;
+-#include "ste-db8500.dtsi"
++#include "ste-db9500.dtsi"
+ #include "ste-href-ab8500.dtsi"
+ #include "ste-href-family-pinctrl.dtsi"
+ 
+-- 
+2.26.2
+
