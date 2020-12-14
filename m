@@ -1,53 +1,68 @@
-Return-Path: <SRS0=bAPf=FS=redhat.com=david@kernel.org>
+Return-Path: <SRS0=HHLn=FS=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81A68C1B0D8
-	for <soc@archiver.kernel.org>; Mon, 14 Dec 2020 09:21:46 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 48819207B0; Mon, 14 Dec 2020 09:21:46 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [63.128.21.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0DCFC4361B
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 14 Dec 2020 09:24:46 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E7A1620771
-	for <soc@kernel.org>; Mon, 14 Dec 2020 09:21:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E7A1620771
+	by mail.kernel.org (Postfix) with ESMTPS id 1E2C5207B0
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 14 Dec 2020 09:24:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1E2C5207B0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=redhat.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=david@redhat.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
+	References:To:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=ME3YkTUlNfv+eQmcwtErVO7Nty9FRW1vpXapYBajSDo=; b=fGMRiYrpCKDhoP/evc/yVaec7
+	xTWzmD9VpL2cngZ7yvbMhj5xMBJ3eS4UBD5jgikuTPi5pA4G7GKpELKWmfVFZeoMZtWgXNmyhKo+0
+	/Mz+CLyIXNW6Qf2b8xUGApQo1JOs3fVA3sSySlutqN4xelyKPT+RF/1LDI8THYCv3XPkGmyMgsfyw
+	OXrpaMvEuwlO+KU15qS764TA4vPdKXiGJa5u3IOZpbw2ghpQGmrRNCLzUP7ul1xsnbb5GqV6cQG6t
+	j9eP8Ax7CHDKMjQEYh/jcG9Uf7WLLdNmCdUf5SgXS43MCK2Tpx+CX6tBNGpy6j89E8T/qTbQar+KG
+	01U5z8Qgw==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kok3T-0004jI-FQ; Mon, 14 Dec 2020 09:22:07 +0000
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kok39-0004ZZ-8M
+ for linux-arm-kernel@lists.infradead.org; Mon, 14 Dec 2020 09:21:49 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1607937704;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/ExG60KKlF27+8sDgoAULeoQK5L/9Xh4S1a/pTyDpoc=;
-	b=Rmy6ri6oOQ3rz6vST6191/dktRKklZtXnrAdotfHBtDGK3ZTnN0Anx7Tyh3Yj4mPtdRyGG
-	Rk0ZFEwHAx9Klyz6HIgJTfumwIVDGwMl/anGpS+hPXpTeIWMjhd4mGQg19UIc+jlFqeCMx
-	hLTN9LWjKltoPdywJMaw5I2wlHkSSjk=
+ s=mimecast20190719; t=1607937704;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=/ExG60KKlF27+8sDgoAULeoQK5L/9Xh4S1a/pTyDpoc=;
+ b=Rmy6ri6oOQ3rz6vST6191/dktRKklZtXnrAdotfHBtDGK3ZTnN0Anx7Tyh3Yj4mPtdRyGG
+ Rk0ZFEwHAx9Klyz6HIgJTfumwIVDGwMl/anGpS+hPXpTeIWMjhd4mGQg19UIc+jlFqeCMx
+ hLTN9LWjKltoPdywJMaw5I2wlHkSSjk=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
  us-mta-14-HC01vjxcOq2wGt7rQy6bSA-1; Mon, 14 Dec 2020 04:21:41 -0500
 X-MC-Unique: HC01vjxcOq2wGt7rQy6bSA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 671CD801817;
-	Mon, 14 Dec 2020 09:21:38 +0000 (UTC)
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com
+ [10.5.11.22])
+ (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+ (No client certificate requested)
+ by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 671CD801817;
+ Mon, 14 Dec 2020 09:21:38 +0000 (UTC)
 Received: from [10.36.114.184] (ovpn-114-184.ams2.redhat.com [10.36.114.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 86E9210016F6;
-	Mon, 14 Dec 2020 09:21:35 +0000 (UTC)
+ by smtp.corp.redhat.com (Postfix) with ESMTP id 86E9210016F6;
+ Mon, 14 Dec 2020 09:21:35 +0000 (UTC)
 Subject: Re: [PATCH] ARM: dts: ux500: Reserve memory carveouts
 List-Id: <soc.lore.kernel.org>
 To: Linus Walleij <linus.walleij@linaro.org>, arm@kernel.org, soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
- Kalle Valo <kvalo@codeaurora.org>,
- Pavel Procopiuc <pavel.procopiuc@gmail.com>, Vlastimil Babka
- <vbabka@suse.cz>, wi nk <wink@technolu.st>
 References: <20201213225517.3838501-1-linus.walleij@linaro.org>
 From: David Hildenbrand <david@redhat.com>
 Organization: Red Hat GmbH
@@ -57,10 +72,30 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.4.0
 MIME-Version: 1.0
 In-Reply-To: <20201213225517.3838501-1-linus.walleij@linaro.org>
-Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201214_042147_491488_E7812A37 
+X-CRM114-Status: GOOD (  36.49  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: linux-arm-kernel@lists.infradead.org, wi nk <wink@technolu.st>,
+ Pavel Procopiuc <pavel.procopiuc@gmail.com>, stable@vger.kernel.org,
+ Vlastimil Babka <vbabka@suse.cz>, Kalle Valo <kvalo@codeaurora.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201214092134.xdZElaZL7_Cc8DTR125-94QtUHa12Go8MWupij1H7ao@z>
 
 On 13.12.20 23:55, Linus Walleij wrote:
 > The Ux500 platforms have some memory carveouts set aside for
@@ -283,3 +318,8 @@ Thanks,
 
 David / dhildenb
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
