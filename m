@@ -1,124 +1,150 @@
-Return-Path: <SRS0=HHLn=FS=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=zbMx=FS=linaro.org=ulf.hansson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49A3FC4361B
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 14 Dec 2020 14:36:20 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35E4AC4361B
+	for <soc@archiver.kernel.org>; Mon, 14 Dec 2020 20:23:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id EDB192247F; Mon, 14 Dec 2020 20:23:12 +0000 (UTC)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E95C02226A
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 14 Dec 2020 14:36:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E95C02226A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=xrN/l9QJSqQoewih5b6yJ2aI96OMJwYUceBwnOPxM0Q=; b=brovW1V9sHzHkEM9N4wLqwZP1
-	zHQfu9mhrIJhSxYqN4iWa43oAXO97Qbhro3ph/rqkLX3ewas4H46ymI/E6AI68LeWalB/V40V3nLF
-	jqUWXKdGkuwsT90PQzByQCXj7FPu7Z2Zec+xZbpxtBH3u/mJImIHOOvqLgLR1hq8RUDngcq5ZVk0N
-	M44JnIJRIDlsEsmrqCCe30g1YStxNh1Aco89Xg4u/78uqD8h567I0OKoR3bfQYqMN6j8DZ7vH9515
-	eFwSQTdjg1pPqlKFckXdGtD5+1kkshc6GpjyrVyA254ovopyTVBbSEdwWT/kVm9aO1LbJEsoJZdTt
-	TyZEa7qwg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1koowD-0003kG-HQ; Mon, 14 Dec 2020 14:34:57 +0000
-Received: from mail-oi1-f194.google.com ([209.85.167.194])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1koowB-0003jt-C5
- for linux-arm-kernel@lists.infradead.org; Mon, 14 Dec 2020 14:34:56 +0000
-Received: by mail-oi1-f194.google.com with SMTP id w124so16226267oia.6
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 14 Dec 2020 06:34:55 -0800 (PST)
+	by mail.kernel.org (Postfix) with ESMTPS id A3A832168B
+	for <soc@kernel.org>; Mon, 14 Dec 2020 20:23:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A3A832168B
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=ulf.hansson@linaro.org
+Received: by mail-vs1-f51.google.com with SMTP id p7so9707669vsf.8
+        for <soc@kernel.org>; Mon, 14 Dec 2020 12:23:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qemVwS3A1TNGUMdxCtwvfGT3Y17qMtJiy4ra8p4sq1Y=;
+        b=lVWkvwBKzHTtPjibBLUe3+b1OsiC3s9T2X27UCHwCMTWzy/shD9mndOiYoc1BNXKM7
+         dCJypQpSPnw7SmqPi7VjaCdXpBvhuAJpsDvR+BSmZ/fmPut/kXpBvc52hzes8DQGKgnq
+         iw3EFQQMb2FJL/acs5+LcMLX6in5eD3GA9PGN6YLmHR6YJqCMatwxPmRSjVuH8DaKvNO
+         jXyKptm7RmvWup5/xyrjNxSyinSNkr/bfW+gxLQ9KGYAeoR9O+0FXBCksDgs6jL4KyS9
+         Fc8Eq1/T6ujVQKhJ32GmFJBDe82bO3oLsh/Cc5YUCzzQ6pBc6sF3JAlYjMHDpsI5R4lP
+         Uqhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=pmYimdHqPZCmGoKy+QfoCbZ6cMjYvJ9Ol9TiMKbqo5U=;
- b=TGSt5Y+S8UWWCI0qiRBTKC2upB4ab+8/sZmgHcYLuhZCVIVT2DFjbjBU9zkoF2hHhb
- TbJoWxJ6yAE8OlC0jVxdx0dyU+70qEH40VlVN1RemwDTvdFv8DNyD0q4n+XcXnlLzZDo
- fkbdXDuJZ1CLdIOCeRHlCYGkJkk9gr+JYPuNKzwIk+BDvAkYnEbwUQzO135syAk2LJVX
- 982IrslJGml4SDpctXdsbkwBcbewE/XPJzS525Xw2WGZVbsET7lurSgXXH3m4/LCotn9
- fwksC+pMulVXXPINR/sdbiIb7QNd9TXWd7tA5IivdgAvx0lRN4+ZZQLMoxqmtrVu+gIk
- qdPA==
-X-Gm-Message-State: AOAM531m9x/uEi7G7NfgLykAQZLH19qqSji9AqEdtsSlknEKGNPc3FDJ
- udLfIE4/cmnIdHC6Y6Bm5g==
-X-Google-Smtp-Source: ABdhPJxIZjyrGjwvcSupSDPeypUPaJjXZrJg/DEAYpaJ6OrhlsJtNXtsfhunBmocYWyjVbBoZqy2LQ==
-X-Received: by 2002:aca:bc41:: with SMTP id m62mr18229830oif.16.1607956494486; 
- Mon, 14 Dec 2020 06:34:54 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
- by smtp.gmail.com with ESMTPSA id d13sm4354186oti.74.2020.12.14.06.34.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Dec 2020 06:34:53 -0800 (PST)
-Received: (nullmailer pid 1883746 invoked by uid 1000);
- Mon, 14 Dec 2020 14:34:52 -0000
-Date: Mon, 14 Dec 2020 08:34:52 -0600
-From: Rob Herring <robh@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 4/4] dt-bindings: Remove PicoXcell bindings
-Message-ID: <20201214143452.GA1883626@robh.at.kernel.org>
-References: <20201210200315.2965567-1-robh@kernel.org>
- <20201210200315.2965567-5-robh@kernel.org>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qemVwS3A1TNGUMdxCtwvfGT3Y17qMtJiy4ra8p4sq1Y=;
+        b=DIAB2CKGE5oVTlsmIp/nQNO+3rsRLT0plg3GEkT3YP6HBqcsTd+NJMumD6GbEbTM7R
+         0kHzqvXKBI6N7Kjwq8K6GmnMZ7iK3HRp19Iy84Vrcf1TtkyoUSo1xMIqex3h8E7YjwT7
+         /6/T9DZRo7fYkZyEiQwI0oAxRZIRlrTA+w3K3R57ugqTlIjdVPqVusaT5svejx1LvmQN
+         2Agy/9nXZMzQ8Bqs/DToDEn/dQstLiqh7mwnP3VpYtwRpWiyysbCk3x7ZyuG4IHmijjc
+         5e8PSNoOd6cqXpQeEBeVZZ/p8NHZBJMkcXuo7KIn217fWB/LzsqdhAZeQw6YIv63dbpg
+         dCEA==
+X-Gm-Message-State: AOAM532wXYYtEC36DEybtCH1RH3dINy49/1jn7RkUlgOaGrsB0O4UemP
+	Ez9b1DB4Cp+yDCH2k/auUB1vTLf03cr5Tn0Df0t0+A==
+X-Google-Smtp-Source: ABdhPJzf6tl7vK/G2uNALFfDiSu3tqFx1Q3ZvfjSeph3O9cndzHePiJ9fRqUV2uTvmfBjtjIqdOZMxZdUcVV3ABpq+g=
+X-Received: by 2002:a67:7f41:: with SMTP id a62mr1604403vsd.55.1607977391606;
+ Mon, 14 Dec 2020 12:23:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20201210200315.2965567-5-robh@kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201214_093455_421606_35636D1F 
-X-CRM114-Status: GOOD (  13.55  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
+ <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
+ <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
+ <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
+ <CAD=FV=Up-JW8RtMLQ_pAG3e0d8NnpT+rDiguxcz3DnVUz_7Jbw@mail.gmail.com>
+ <CAHk-=wi2CQwAnKucLwE8vNZgXxyRy6L+DcgjGqxKHwbacKgaMQ@mail.gmail.com>
+ <CAPDyKFp9L+L9VeUD038G3mBTLBuPJsMtv7JhxCcSGb3iY=eq5A@mail.gmail.com>
+ <CAK8P3a1Va_xJzk8qqJM1VBWfSKpomKbQh_NpPO20aoORoe0SWQ@mail.gmail.com>
+ <CAMuHMdUT83EkE-phUX2Z431AtGPfZvXeKwQriDKEHJKfr2R40A@mail.gmail.com>
+ <CAK8P3a3xqqT7mcroY+-fg4T39msw72SB0NbbVKfBghmOFTNZqw@mail.gmail.com>
+ <CAD=FV=WXcSBkN2y97xNma0P9C6DEPfwkprZe=+0+0iuKYNwwZA@mail.gmail.com> <CAMuHMdWEuzUTg+f_SBqvT1zFYVFL=odgMLz68DjcvaTrbtd94g@mail.gmail.com>
+In-Reply-To: <CAMuHMdWEuzUTg+f_SBqvT1zFYVFL=odgMLz68DjcvaTrbtd94g@mail.gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 14 Dec 2020 21:22:34 +0100
+Message-ID: <CAPDyKFpG2JZ6riZo=fFJa7q16bvhFyx2kR1K-s3aSfwZ9NDo6A@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
+To: Geert Uytterhoeven <geert@linux-m68k.org>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
- linux-kernel@vger.kernel.org, soc@kernel.org, linux-crypto@vger.kernel.org,
- Jamie Iles <jamie@jamieiles.com>, "David S. Miller" <davem@davemloft.net>,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201214143452.G4PVdkczwyJevKoIQo8-HQs9z1zVt5KhxUZnzOMoSNs@z>
+Cc: Doug Anderson <dianders@chromium.org>, Arnd Bergmann <arnd@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 10 Dec 2020 14:03:15 -0600, Rob Herring wrote:
-> PicoXcell has had nothing but treewide cleanups for at least the last 8
-> years and no signs of activity. The most recent activity is a yocto vendor
-> kernel based on v3.0 in 2015.
-> 
-> Cc: Jamie Iles <jamie@jamieiles.com>
-> Cc: linux-crypto@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> I'll take this via the DT tree.
-> 
->  .../devicetree/bindings/arm/picoxcell.txt     | 24 -------------------
->  .../bindings/crypto/picochip-spacc.txt        | 21 ----------------
->  .../devicetree/bindings/net/macb.txt          |  2 --
->  .../bindings/timer/snps,dw-apb-timer.yaml     |  7 ------
->  4 files changed, 54 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/picoxcell.txt
->  delete mode 100644 Documentation/devicetree/bindings/crypto/picochip-spacc.txt
-> 
+On Tue, 8 Dec 2020 at 08:32, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Doug,
+>
+> On Mon, Dec 7, 2020 at 11:15 PM Doug Anderson <dianders@chromium.org> wrote:
+> > On Mon, Dec 7, 2020 at 1:55 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > > On Mon, Dec 7, 2020 at 9:23 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > On Tue, Dec 1, 2020 at 3:06 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > > > > On Tue, Dec 1, 2020 at 12:39 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > > > So, I think we have two options. If people are willing to move to
+> > > > > > "disk labels" or to patch their DTBs with mmc aliases, things can stay
+> > > > > > as is. Otherwise, we can revert the async probe parts of the mmc host
+> > > > > > drivers, but that would still leave us in a fragile situation.
+> > > > >
+> > > > > Can you reliably detect whether the mmc aliases in the dt exist?
+> > > > > If that's possible, maybe the async flag could be masked out to only have
+> > > > > an effect when the device number is known.
+> > > >
+> > > > IMHO DT aliases are not a proper solution for this.
+> > > >
+> > > > Yes, you can detect reliably if an alias exists in the DT.
+> > > > The problems start when having multiple devices, some with aliases,
+> > > > some without.  And when devices can appear dynamically (without
+> > > > aliases, as there is no support for dynamically updating the aliases
+> > > > list).
+> > >
+> > > Actually you hit a problem earlier than that: the async probe is a
+> > > property of the host controller driver, which may be a pci_driver,
+> > > platform_driver, usb_driver, or anything else really. To figure out
+> > > whether to probe it asynchronously, it would have to be the driver
+> > > core, or each bus type that can host these to understand which
+> > > device driver is responsible for probing an eMMC device attached
+> > > to the host.
+> >
+> > From what I've seen so far, my current thought on this issue is that
+> > it's up to Ulf as the MMC maintainer what the next steps are.  For me,
+> > at least, his argument that MMC block numbers have already shuffled
+> > around several times in the last several years is at least some
+> > evidence that they weren't exactly stable to begin with.  While we
+> > could go back to the numbers that happened to be chosen as of kernel
+> > v5.9, if someone was updating from a much older kernel then they may
+> > have different expectations of what numbers are good / bad I think.
+> >
+> > I will also offer one possible suggestion: what about a KConfig option
+> > here?  In theory we could add a KConfig option like
+> > "CONFIG_MMC_LEGACY_PROBE" or something that.  One can argue about what
+> > the default ought to be, but maybe that would satisfy folks?  If you
+> > were happy giving up a little bit of boot speed to get the v5.9 block
+> > numbers then you could set this.
+>
+> This is not limited to MMC.
+> The same is true for sdX, ethX (e* these days), ttyS*, i2cX, spiX, ...
+> The rule has always been to handle it by udev, disklabels, ...
 
-Applied, thanks!
+That's right.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Although, those rules haven't been sufficient for some cases, which
+has been discussed many many times by now. I can dig out some of the
+old threads from the mail archive, just tell me and will help to find
+them.
+
+For mmc we have decided to improve the situation by adding support for
+aliases in DT. The support seems robust enough to me, but if you think
+there are problems with it, please tell me and I am happy to help to
+improve it.
+
+In regards to adding a new Kconfig option for "legacy probe", I am
+open to this if that's what people think is needed. Although, as
+pointed out earlier in this thread, it won't move us into a stable
+situation. The only solution to get to that point, is either to use
+udev/disklabel rules or the mmc aliases in DT.
+
+Kind regards
+Uffe
