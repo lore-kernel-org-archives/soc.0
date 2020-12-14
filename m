@@ -1,109 +1,79 @@
-Return-Path: <stable-owner@kernel.org>
+Return-Path: <SRS0=tYx/=FS=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 512C6C4361B
-	for <stable@archiver.kernel.org>; Mon, 14 Dec 2020 10:04:20 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0253D225A9
-	for <stable@archiver.kernel.org>; Mon, 14 Dec 2020 10:04:19 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392056AbgLNKDg (ORCPT <rfc822;stable@archiver.kernel.org>);
-        Mon, 14 Dec 2020 05:03:36 -0500
-Received: from m43-15.mailgun.net ([69.72.43.15]:46539 "EHLO
-        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406294AbgLNKC5 (ORCPT
-        <rfc822;stable@vger.kernel.org>); Mon, 14 Dec 2020 05:02:57 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1607940149; h=Content-Type: MIME-Version: Message-ID:
- In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
- bh=yGhYtL6foUyLuEeIMQV5SXrQIq8elvpV73k2G+sb9vs=; b=on/Vi9NJCJGOJ4WywRFj47cqSLT0thophOoen8LEZCtCE1yralYwZkNAuO3U8sQxJZ06ewai
- l8JN0XlavT0AYulLW6N48Cbxg+18y8RSFFZcz8n8vJnH39GL7rYivWNUYrsUzKT+OIpL1b6d
- KQnZJF0ZKDfa+ldM9EspQfkAwwA=
-X-Mailgun-Sending-Ip: 69.72.43.15
-X-Mailgun-Sid: WyI1ZjI4MyIsICJzdGFibGVAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n08.prod.us-west-2.postgun.com with SMTP id
- 5fd7383553d7c5ba60a10d51 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 14 Dec 2020 10:02:29
- GMT
-Sender: kvalo=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 160A8C43463; Mon, 14 Dec 2020 10:02:29 +0000 (UTC)
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id D6097C433C6;
-        Mon, 14 Dec 2020 10:02:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D6097C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61442C4361B
+	for <soc@archiver.kernel.org>; Mon, 14 Dec 2020 14:34:56 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 2CE5C22473; Mon, 14 Dec 2020 14:34:56 +0000 (UTC)
+Received: from mail-oi1-f195.google.com (mail-oi1-f195.google.com [209.85.167.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id C92852226A;
+	Mon, 14 Dec 2020 14:34:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C92852226A
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=robherring2@gmail.com
+Received: by mail-oi1-f195.google.com with SMTP id d27so19369477oic.0;
+        Mon, 14 Dec 2020 06:34:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pmYimdHqPZCmGoKy+QfoCbZ6cMjYvJ9Ol9TiMKbqo5U=;
+        b=H1fUeFy65rn9OzpsTQJvpRanq7CmoJuwwe9cjXINLby2yg54pOoJQsFJiT/nw2YlmI
+         Gs+UGzqbPSMFTI2RdPnaPwlPd/cjciBV+j8+HhIof1vsEv4Qw1+GwH+TuN85GLPI9UhW
+         rKnnVdEONbiVt9eTi6WKjTW0frO4d43dxn0XeSQdWNDV1n5DQ8R9fIzp7VE/c3tl2yzB
+         iyX8+Iv77lnzaQHw1Xrad56stlpRrwwwHnGmaSgbsWIzyMg+znDPiUpPjkmE/zyhTjM0
+         I32WI8Wc0cG0daVDqAVuTCaXyEy6zsV+5HQAEKJjMn0EIA+ymLXmbQVj35G70jjE1yVf
+         8D9w==
+X-Gm-Message-State: AOAM530JZhae6FrWIgh9HlZXL3wtYa4/b9dlUUPIm7LDee479Syur/b4
+	j/5+a+oQrq5a5ks2tyN46D5RdfLeQQ==
+X-Google-Smtp-Source: ABdhPJxIZjyrGjwvcSupSDPeypUPaJjXZrJg/DEAYpaJ6OrhlsJtNXtsfhunBmocYWyjVbBoZqy2LQ==
+X-Received: by 2002:aca:bc41:: with SMTP id m62mr18229830oif.16.1607956494486;
+        Mon, 14 Dec 2020 06:34:54 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id d13sm4354186oti.74.2020.12.14.06.34.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Dec 2020 06:34:53 -0800 (PST)
+Received: (nullmailer pid 1883746 invoked by uid 1000);
+	Mon, 14 Dec 2020 14:34:52 -0000
+Date: Mon, 14 Dec 2020 08:34:52 -0600
+From: Rob Herring <robh@kernel.org>
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>, arm-soc <arm@kernel.org>,
-        SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        stable <stable@vger.kernel.org>,
-        Pavel Procopiuc <pavel.procopiuc@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>, wi nk <wink@technolu.st>
-Subject: Re: [PATCH] ARM: dts: ux500: Reserve memory carveouts
-References: <20201213225517.3838501-1-linus.walleij@linaro.org>
-        <cc06e06b-ff24-68a2-f5f3-c8533118a34d@redhat.com>
-        <CACRpkdZp+gnJAo02OJkiN_KUX3bOPc2vzQGWHLZF2hQHvuQQkw@mail.gmail.com>
-Date:   Mon, 14 Dec 2020 12:02:23 +0200
-In-Reply-To: <CACRpkdZp+gnJAo02OJkiN_KUX3bOPc2vzQGWHLZF2hQHvuQQkw@mail.gmail.com>
-        (Linus Walleij's message of "Mon, 14 Dec 2020 10:27:28 +0100")
-Message-ID: <877dpk3du8.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, linux-kernel@vger.kernel.org, Jamie Iles <jamie@jamieiles.com>, Herbert Xu <herbert@gondor.apana.org.au>, soc@kernel.org, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH 4/4] dt-bindings: Remove PicoXcell bindings
+Message-ID: <20201214143452.GA1883626@robh.at.kernel.org>
+References: <20201210200315.2965567-1-robh@kernel.org>
+ <20201210200315.2965567-5-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-Precedence: bulk
-List-ID: <stable.vger.kernel.org>
-X-Mailing-List: stable@vger.kernel.org
-Message-ID: <20201214100223.sMDf6-moA4lVB4amRJLbTOsVFyhTNmt-CPVFeM7ejFo@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201210200315.2965567-5-robh@kernel.org>
 
-Linus Walleij <linus.walleij@linaro.org> writes:
+On Thu, 10 Dec 2020 14:03:15 -0600, Rob Herring wrote:
+> PicoXcell has had nothing but treewide cleanups for at least the last 8
+> years and no signs of activity. The most recent activity is a yocto vendor
+> kernel based on v3.0 in 2015.
+> 
+> Cc: Jamie Iles <jamie@jamieiles.com>
+> Cc: linux-crypto@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> I'll take this via the DT tree.
+> 
+>  .../devicetree/bindings/arm/picoxcell.txt     | 24 -------------------
+>  .../bindings/crypto/picochip-spacc.txt        | 21 ----------------
+>  .../devicetree/bindings/net/macb.txt          |  2 --
+>  .../bindings/timer/snps,dw-apb-timer.yaml     |  7 ------
+>  4 files changed, 54 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/picoxcell.txt
+>  delete mode 100644 Documentation/devicetree/bindings/crypto/picochip-spacc.txt
+> 
 
-> On Mon, Dec 14, 2020 at 10:21 AM David Hildenbrand <david@redhat.com> wrote:
->
->> > ARM SoC folks: please apply this directly for fixes.
->>
->> Can we come up with a Fixes: tag or has this been broken forever?
->> (assuming modern boot loaders)
->
-> It's been broken forever :/
->
->> > David: just FYI if you run into more of these type of
->> > regressions. Actually the patch is unintentionally good
->> > at smoking out other bugs :D
->>
->> Thanks for CCing - I'm adding some people that ran into similar issues,
->> but not sure if the other bugreports are related (or have similar root
->> causes).
->
-> Yeah we first were convinced there was something wrong with
-> the patch you made but I read it over and over again and there
-> is nothing wrong with it at all. It just alters the behaviour pattern of
-> memory management in some apparently drastic ways.
->
-> After a lot of silent crashes I finally got an external abort with
-> a reasonable backtrace showing the PTE pointing to this
-> modem memory and then we figured it out.
-
-We had similar experiences with ath11k (Wi-Fi 6) and QCA6390 firmware.
-So indeed commit 7fef431be9c9 ("mm/page_alloc: place pages to tail in
-__free_pages_core()") is a great way to catch odd firmware or hardware
-problems, which most likely would have gone unnoticed otherwise and
-users would have end up experiencing random crashes.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Applied, thanks!
