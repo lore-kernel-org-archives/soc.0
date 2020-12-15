@@ -1,56 +1,67 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=hCuz=FT=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A719C4361B
-	for <linux-devicetree@archiver.kernel.org>; Tue, 15 Dec 2020 09:54:48 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB88E207CC
-	for <linux-devicetree@archiver.kernel.org>; Tue, 15 Dec 2020 09:54:47 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727850AbgLOJy0 (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Tue, 15 Dec 2020 04:54:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727153AbgLOJyV (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Tue, 15 Dec 2020 04:54:21 -0500
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88325C06179C
-        for <devicetree@vger.kernel.org>; Tue, 15 Dec 2020 01:53:41 -0800 (PST)
-Received: by mail-vs1-xe44.google.com with SMTP id e15so9131931vsa.0
-        for <devicetree@vger.kernel.org>; Tue, 15 Dec 2020 01:53:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OI5+AJWSwdA8qVAOofTdmeYq5WpDo/US6jBkWpa07uc=;
-        b=RIcgqj1D8rLIpMYChvvIIzfyUjk/FOJnn5jA+EldpSezdMOf3jjoNPIEzmvdWDeT1q
-         aPOw5fQHgEzCST11jORDRfH6g53jMARVGIq8xRkmFjFBSidkYVsw6S/GzwZbkUl6pbCo
-         F4YLJYud76eS21IMHPRN+0ZlkcA3lcmVRyUzewleK1Q59tqSBKh8vEXy8rTGg41wv5Kp
-         jL+Uwh1RpdEfb+wOQ/vTTXB4uWktHCEGjXMeS0qKTcVbbQfvCzzpGFzsqMbJPVTQPrK7
-         WQSpyiVzwpfBXLSkZy5kQyhQB1brXnLpcCgiANnkThCEZ1oNqnLJn0fPqQ8d7YD59GEa
-         6S3A==
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81A65C2BB48
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 15 Dec 2020 09:55:00 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 2FF44207CC
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 15 Dec 2020 09:55:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2FF44207CC
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
+	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=zu77TZk7xdSCHPsUs6mh4xiayMuBjyzJb4ZBpe70Vc8=; b=PDjlbQJzSJ0oLCNb3cXh0426v
+	hJVcVB5ttxmP5NRPw7/bkdPy8jHOTu1EDPWpmQecBMCei/ALSbbPehiU61iCbutBQGbtkKvLbMcgh
+	UK45k2peRZFp0vME/mFutpihHzHfBIjIUh/O2BV5UKDdmtsIR45l/PrsxPXAZsiV60uYJXY7je/pD
+	5AqPo149122i4IQcUMs9o7N5eYkBs9JOPeqJgehc+3lG8gkquYRzgHQ+AiavC4l4Gac1lYsM/mfin
+	2Hhgs38/4Q1B5+Yxf5uqtL6wbvhsWKl7KniwqpqzoOaCtAXe+wnwM5MmLR6KeCLFxaVxeI8lic78O
+	6+bBZ4rhA==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kp71d-0005ef-0k; Tue, 15 Dec 2020 09:53:45 +0000
+Received: from mail-vs1-xe42.google.com ([2607:f8b0:4864:20::e42])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kp71a-0005dz-P6
+ for linux-arm-kernel@lists.infradead.org; Tue, 15 Dec 2020 09:53:44 +0000
+Received: by mail-vs1-xe42.google.com with SMTP id q10so10621626vsr.13
+ for <linux-arm-kernel@lists.infradead.org>;
+ Tue, 15 Dec 2020 01:53:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=OI5+AJWSwdA8qVAOofTdmeYq5WpDo/US6jBkWpa07uc=;
+ b=RIcgqj1D8rLIpMYChvvIIzfyUjk/FOJnn5jA+EldpSezdMOf3jjoNPIEzmvdWDeT1q
+ aPOw5fQHgEzCST11jORDRfH6g53jMARVGIq8xRkmFjFBSidkYVsw6S/GzwZbkUl6pbCo
+ F4YLJYud76eS21IMHPRN+0ZlkcA3lcmVRyUzewleK1Q59tqSBKh8vEXy8rTGg41wv5Kp
+ jL+Uwh1RpdEfb+wOQ/vTTXB4uWktHCEGjXMeS0qKTcVbbQfvCzzpGFzsqMbJPVTQPrK7
+ WQSpyiVzwpfBXLSkZy5kQyhQB1brXnLpcCgiANnkThCEZ1oNqnLJn0fPqQ8d7YD59GEa
+ 6S3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OI5+AJWSwdA8qVAOofTdmeYq5WpDo/US6jBkWpa07uc=;
-        b=W+fVv3JFKKv/bzfPKIlcGYH60ZgXl0U7ZhMkhTFxxgm8L6LO7TYc4ZUvolm3gmIU/+
-         niNME1jYj4hsGDF3M7UbAnX1MYlPDVIS95+s2MbI/YxXemjVTOBrduT4rTJsHiBSburu
-         9x6BWQDmFEbIgZdU7PYJaAddRT6VF/CFIqcqotSaLuN1+EXWF8l4eTX7+BRLzzRZP7Hd
-         inD5DOJhCtFCT8HsQ/ZJUNpkTynk/Espt6CxNM4jdA27Mprv26S5G1cSoQez7qtjHOLN
-         tE8d4m1WbwDnfOxO9YYkWjjzphFM0lqm4djuS6pS7J+jpO7MlSuTCAcIHWb5fCqgij1u
-         zmUA==
-X-Gm-Message-State: AOAM531qQZK8d70nR8RaYv6xkEKsYFclmY69omIPzySCqio6JmRgR13C
-        HHTyjK/sZWCOMBo8uFkxvOJ9MEBCGxZPbZubjSYLYQ==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=OI5+AJWSwdA8qVAOofTdmeYq5WpDo/US6jBkWpa07uc=;
+ b=iZH0mnTzpil017+CaxX/NQu73lW9F4jCaEFb7ZExkRcad8ZN49X4Md1g1ZDO4It1kT
+ mugqFaNG+07eKaQI9ZIwoUqpWCmwd0XugR2uINxUjTC4Q4t3Z3ndgm6Q6z1yy/zi5EUe
+ uMTlEoO6AKs5FW0EbkaPQ8YaiveCKawHSkrssSDAdzQcILcxYeb6Gu3z5KKRPFYOD77S
+ fh0bfKcZ4l8K7V3lmrlTUTH/s71lJsZ0dyiNuBE8iZ/N/GF0E+ujxSFBt6frdufJM12p
+ HEEQj/74HaJhwnzGxowfU1WG9CKDL53Tve92XPpA81x9yLgd7jgwmc5Pwboh69WtsCxp
+ A5/A==
+X-Gm-Message-State: AOAM530frAo3ZDgqTXGRL5yPbw2CE+zmTzK1/N1YyEQIQeQ+A+GmsHsA
+ crQxWfUTlLf5rfdJ+iwMUT3srfbDLhRFhPFQXrJUAw==
 X-Google-Smtp-Source: ABdhPJzfIj1qnq7tCCnnbUDL2YFGisHI7QMHjJKeJz9nnU70YzQ2UI23tkePA2bkS4ZhZE8tY+yJkYF3Aii2l+3kI0g=
-X-Received: by 2002:a67:e286:: with SMTP id g6mr28189547vsf.42.1608026020738;
+X-Received: by 2002:a67:e286:: with SMTP id g6mr28189547vsf.42.1608026020738; 
  Tue, 15 Dec 2020 01:53:40 -0800 (PST)
 MIME-Version: 1.0
 References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
@@ -65,28 +76,41 @@ References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
  <CAK8P3a3xqqT7mcroY+-fg4T39msw72SB0NbbVKfBghmOFTNZqw@mail.gmail.com>
  <CAD=FV=WXcSBkN2y97xNma0P9C6DEPfwkprZe=+0+0iuKYNwwZA@mail.gmail.com>
  <CAMuHMdWEuzUTg+f_SBqvT1zFYVFL=odgMLz68DjcvaTrbtd94g@mail.gmail.com>
- <CAPDyKFpG2JZ6riZo=fFJa7q16bvhFyx2kR1K-s3aSfwZ9NDo6A@mail.gmail.com> <CAMuHMdVOxdYQD6qTF08NFiw4bRg3xscX=rRW1m9ix1AGEm3DGQ@mail.gmail.com>
+ <CAPDyKFpG2JZ6riZo=fFJa7q16bvhFyx2kR1K-s3aSfwZ9NDo6A@mail.gmail.com>
+ <CAMuHMdVOxdYQD6qTF08NFiw4bRg3xscX=rRW1m9ix1AGEm3DGQ@mail.gmail.com>
 In-Reply-To: <CAMuHMdVOxdYQD6qTF08NFiw4bRg3xscX=rRW1m9ix1AGEm3DGQ@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 15 Dec 2020 10:53:03 +0100
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 15 Dec 2020 10:53:03 +0100
 Message-ID: <CAPDyKFptyEQNJu8cqzMt2WRFZcwEdjDiytMBp96nkoZyprTgmA@mail.gmail.com>
 Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201215_045343_171895_2BD212FC 
+X-CRM114-Status: GOOD (  48.38  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        SoC Team <soc@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20201215095303.5sVi9r8dWRgOFWbHUS4Tcc7SJ-lxygsyOPdHvmPkMvw@z>
+Cc: Arnd Bergmann <arnd@kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Doug Anderson <dianders@chromium.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ SoC Team <soc@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201215095303.DvodZ74w1aYeq5VxArubm_ggXJYJ9sTBDlKEK4CxYzA@z>
 
 On Tue, 15 Dec 2020 at 09:19, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
@@ -203,3 +227,8 @@ seem like a good way forward.
 
 Kind regards
 Uffe
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
