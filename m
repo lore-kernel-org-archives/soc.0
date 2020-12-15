@@ -1,38 +1,39 @@
-Return-Path: <SRS0=qq/e=FT=gmail.com=geert.uytterhoeven@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DDF3C4361B
-	for <soc@archiver.kernel.org>; Tue, 15 Dec 2020 08:19:44 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id AF7B42229C; Tue, 15 Dec 2020 08:19:43 +0000 (UTC)
-Received: from mail-oi1-f195.google.com (mail-oi1-f195.google.com [209.85.167.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 03C7B22273;
-	Tue, 15 Dec 2020 08:19:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 03C7B22273
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=geert.uytterhoeven@gmail.com
-Received: by mail-oi1-f195.google.com with SMTP id d189so22435705oig.11;
-        Tue, 15 Dec 2020 00:19:42 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 016C8C4361B
+	for <linux-devicetree@archiver.kernel.org>; Tue, 15 Dec 2020 08:20:57 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 949E122273
+	for <linux-devicetree@archiver.kernel.org>; Tue, 15 Dec 2020 08:20:56 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1726266AbgLOIUa (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Tue, 15 Dec 2020 03:20:30 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:38115 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725907AbgLOIUX (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Tue, 15 Dec 2020 03:20:23 -0500
+Received: by mail-oi1-f194.google.com with SMTP id x13so13422728oic.5;
+        Tue, 15 Dec 2020 00:20:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=p5+R1X9QLX+TWZajWd6rwkHGcp4/zZugTwvmGgE1C/E=;
-        b=aW648odXIRf4kOzaGPSKXX65xMpcJTCcuhesJfcpvxT/0qWndzxCQ44UKBGHXqttAw
-         36fIBO72xKwpydlNU3z3kRza/Hq4PBvspURe/RKDDlTi+D/IbNWTzS+XTfuEdZmJSG+8
-         HeYnkgcchtX/P0t1XFIN3F7+/siD0qm4XtaB4uMjQY/kY/38KnAHfTzjf3ih91Qhw/DP
-         fWdspiIxtbHZsayrg+/IPaosF2T6QWDBFjLqokzP8Vbf81lLlth2CYxfMuxx51ab7RoS
-         FiF4XaCoB6/DIiPIE2qvbnaUrLnv69mv0w7v0kWVjklT25J3SrhrgeYo7AvO0dcw7+rH
-         XRRA==
-X-Gm-Message-State: AOAM5318ub54H/H1Q2bHIKSHq97bzALreVzZAPr6ODZiYY1F3YQHupix
-	zb/qe8pj8YThFKOgBVdwdxmbaJSKD90ZMp+cCwxtBpP/UCE=
+        b=T9WSOAbw969S4Xx206lZ+Oeu+alOXnPWtGozqhbDAcWCmQPXDjfSkyjA5Y9ZsfgFKS
+         395e3X4dJ7yCPbIOLqILstk8bPLL7nKFrMCZ3xAJxAtIBnnPCZQMAvSVxnAq1SBqSXKT
+         npwWHrXXtW5Z6KufJQJaSBSEoThX4Vu4DuY7L0aYqvamN1YgKbr8ueBcYjnn7Tq5sQKu
+         ptT1t6mXzrTrW7iInqm8+4bLuEN4sJFaiZZDHasLjROI/Fq1W1OaDLLGObhR9GOzKOcK
+         S2+OGFTh+owHdQjLAUbWN6Whh5HWwsJe+hvRvUqzMuh7se70cH6ppivthz2yFRNpvgBu
+         Cpxg==
+X-Gm-Message-State: AOAM5326pkMMRWWY0ZwLbc7QxpXQUHKnJ3SZhXQZ78F1u/hBt7CcluLN
+        7He6qdex8ucODW6wtZo2aarYXan9KSkoDCBOwy0=
 X-Google-Smtp-Source: ABdhPJz2pvYZqfA8u5YYKQGqP229v9Ys4lCyr+I39Cq9R2A+meSohQnYHADUaHDjX3vEgLH9FA5ZHXAF8UXP8OULghk=
 X-Received: by 2002:aca:4b16:: with SMTP id y22mr20674491oia.148.1608020381818;
  Tue, 15 Dec 2020 00:19:41 -0800 (PST)
@@ -50,19 +51,26 @@ References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
  <CAD=FV=WXcSBkN2y97xNma0P9C6DEPfwkprZe=+0+0iuKYNwwZA@mail.gmail.com>
  <CAMuHMdWEuzUTg+f_SBqvT1zFYVFL=odgMLz68DjcvaTrbtd94g@mail.gmail.com> <CAPDyKFpG2JZ6riZo=fFJa7q16bvhFyx2kR1K-s3aSfwZ9NDo6A@mail.gmail.com>
 In-Reply-To: <CAPDyKFpG2JZ6riZo=fFJa7q16bvhFyx2kR1K-s3aSfwZ9NDo6A@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 15 Dec 2020 09:19:30 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Dec 2020 09:19:30 +0100
 Message-ID: <CAMuHMdVOxdYQD6qTF08NFiw4bRg3xscX=rRW1m9ix1AGEm3DGQ@mail.gmail.com>
 Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
-To: Ulf Hansson <ulf.hansson@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Doug Anderson <dianders@chromium.org>, Arnd Bergmann <arnd@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SoC Team <soc@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20201215081930.t20lPTcWlM0rMO47AimizSaZOP_siA-ynd5DMg_H76o@z>
 
 Hi Ulf,
 
