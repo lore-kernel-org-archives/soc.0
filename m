@@ -1,135 +1,174 @@
-Return-Path: <SRS0=HHLn=FS=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=qq/e=FT=gmail.com=geert.uytterhoeven@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF8D0C4361B
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 14 Dec 2020 22:36:15 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DDF3C4361B
+	for <soc@archiver.kernel.org>; Tue, 15 Dec 2020 08:19:44 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id AF7B42229C; Tue, 15 Dec 2020 08:19:43 +0000 (UTC)
+Received: from mail-oi1-f195.google.com (mail-oi1-f195.google.com [209.85.167.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1FA9A22507
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 14 Dec 2020 22:36:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1FA9A22507
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=G0DrbpnktDJGDR/3mQJ86h/H66oKmoCJKRDeeCDVvs4=; b=iXxjMjrvgdmWsO/CMcJ1SIDpuB
-	LSzTRd7DfPZR3ROeGleSzVn4TrlmAlZvaJ3DqYb++7n9qvVZiKoXzazRVv7Rs1yZgG5uSrQf/vkWc
-	k+xiwDK2KT3C0L3dWO8Mkz8gh1mPY/CysZjPBSzX7nlNKh01NWLmybMTbkuH4yO/0rrS/BfvYvf2w
-	esl56jaTSv/DZK2HGeeNYfWjf3dYRmIkPOFqwpRPZF1hzk3JNFd1hiV5qtxTii5kXdjo2HUJkvzSy
-	0gZUAyJWxNqm76pa2v0vKH8B9Q+4jM2WX9a2NAvYwVCjkHakwReQwysyrA16bwPR+7lYRwk8XDMY/
-	X2pCbExQ==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kowQD-0006zf-Fc; Mon, 14 Dec 2020 22:34:25 +0000
-Received: from mail-lf1-x141.google.com ([2a00:1450:4864:20::141])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kowQA-0006zM-7X
- for linux-arm-kernel@lists.infradead.org; Mon, 14 Dec 2020 22:34:23 +0000
-Received: by mail-lf1-x141.google.com with SMTP id a12so34342678lfl.6
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 14 Dec 2020 14:34:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zjPRCaFVWCdnn8mYG/NgP5hckqyQZLYagjkTOv6AH+8=;
- b=V0OF3VO9JvUWUPkBwWm6izGfSiPnbJcZY7ehsOFCZhl7Ak7yD7X67p9jDf18BlB+AK
- RZ8u48LJeIX2FyYadZaFOQn4E2bOzyX0a2t0dWaEYVbJjBJQxfZJUKAJfUwlJpNV80l0
- vP1e9iqTBF3uuY1jG1avhzvlAuLgXQrjMImxP22ophQ2viALF5efqvcZ7dKO4BGsx09n
- ZK/3FMv+koCSIiTt7Ox6P7XqILaCbIBB2I+s6i6nK9pUdJWf2JaG1XG6GrAE3+qbQ8cN
- qSchtFxj16+6orZFgc+tVgVJte6IPPFoElHs87ypO32xBJ6SR8aZv9taVIJLoWtl7hVb
- 7X+w==
+	by mail.kernel.org (Postfix) with ESMTPS id 03C7B22273;
+	Tue, 15 Dec 2020 08:19:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 03C7B22273
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=geert.uytterhoeven@gmail.com
+Received: by mail-oi1-f195.google.com with SMTP id d189so22435705oig.11;
+        Tue, 15 Dec 2020 00:19:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=zjPRCaFVWCdnn8mYG/NgP5hckqyQZLYagjkTOv6AH+8=;
- b=MS96DdG/e4dwma5tR72+bVFlgq+psZ92kLdj6mNyIonrYNqrPoK6b+sPWb9V2cJalg
- 6UDrkc6MHKhRbv4Eepin2p/CS8xQx3IpXaCW+scuY4gsBhIidSbVD1AzFClV2jiXB2z3
- Obt1P3qs6cAF+kFxqcEPHOBrIdRnDmN3ivcQRo3bSn8upBGVNMapxN6toq/7eK8RUgbC
- kFrfMmF6gUHS7yfKLH9ccmr0sET/qVhFgq7TSQpkDXpxO3WDNIWsOMkoKQVxEX+sI9FK
- i26dZoOdLBaXD1a1bD8N7btkcIQLBLc/ALRf4OzIZcHZD5SS4PmxkwQm/X7elmVZhmIm
- j90g==
-X-Gm-Message-State: AOAM533qdUpGQGqb0+I4kIlOcPOfnMUraae+bldN5ZC7G/ZUHvU9KFTp
- CAPKV8SYUZBL1bz86MsNuLjBMw==
-X-Google-Smtp-Source: ABdhPJxLgf69N3lYnZ/m5cqOfohxF2Nq7HVjQMQUi10x9lJxyiyhfNtiuJ+VDuE2EsH6D8OUXf4IYA==
-X-Received: by 2002:a2e:b00c:: with SMTP id y12mr11024356ljk.85.1607985260460; 
- Mon, 14 Dec 2020 14:34:20 -0800 (PST)
-Received: from localhost.localdomain
- (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
- by smtp.gmail.com with ESMTPSA id w9sm543421lfl.168.2020.12.14.14.34.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Dec 2020 14:34:19 -0800 (PST)
-From: Linus Walleij <linus.walleij@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Subject: [PATCH] ARM: dts: ux500/golden: Set display max brightness
-Date: Mon, 14 Dec 2020 23:34:13 +0100
-Message-ID: <20201214223413.253893-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.29.2
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p5+R1X9QLX+TWZajWd6rwkHGcp4/zZugTwvmGgE1C/E=;
+        b=aW648odXIRf4kOzaGPSKXX65xMpcJTCcuhesJfcpvxT/0qWndzxCQ44UKBGHXqttAw
+         36fIBO72xKwpydlNU3z3kRza/Hq4PBvspURe/RKDDlTi+D/IbNWTzS+XTfuEdZmJSG+8
+         HeYnkgcchtX/P0t1XFIN3F7+/siD0qm4XtaB4uMjQY/kY/38KnAHfTzjf3ih91Qhw/DP
+         fWdspiIxtbHZsayrg+/IPaosF2T6QWDBFjLqokzP8Vbf81lLlth2CYxfMuxx51ab7RoS
+         FiF4XaCoB6/DIiPIE2qvbnaUrLnv69mv0w7v0kWVjklT25J3SrhrgeYo7AvO0dcw7+rH
+         XRRA==
+X-Gm-Message-State: AOAM5318ub54H/H1Q2bHIKSHq97bzALreVzZAPr6ODZiYY1F3YQHupix
+	zb/qe8pj8YThFKOgBVdwdxmbaJSKD90ZMp+cCwxtBpP/UCE=
+X-Google-Smtp-Source: ABdhPJz2pvYZqfA8u5YYKQGqP229v9Ys4lCyr+I39Cq9R2A+meSohQnYHADUaHDjX3vEgLH9FA5ZHXAF8UXP8OULghk=
+X-Received: by 2002:aca:4b16:: with SMTP id y22mr20674491oia.148.1608020381818;
+ Tue, 15 Dec 2020 00:19:41 -0800 (PST)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201214_173422_606011_448EE8BC 
-X-CRM114-Status: GOOD (  12.07  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
- Stephan Gerhold <stephan@gerhold.net>, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201214223413.eoiPXx1QFirOnVyRUkU4U8BsaBLNtNF5VeBFWxQjhA8@z>
+References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
+ <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
+ <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
+ <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
+ <CAD=FV=Up-JW8RtMLQ_pAG3e0d8NnpT+rDiguxcz3DnVUz_7Jbw@mail.gmail.com>
+ <CAHk-=wi2CQwAnKucLwE8vNZgXxyRy6L+DcgjGqxKHwbacKgaMQ@mail.gmail.com>
+ <CAPDyKFp9L+L9VeUD038G3mBTLBuPJsMtv7JhxCcSGb3iY=eq5A@mail.gmail.com>
+ <CAK8P3a1Va_xJzk8qqJM1VBWfSKpomKbQh_NpPO20aoORoe0SWQ@mail.gmail.com>
+ <CAMuHMdUT83EkE-phUX2Z431AtGPfZvXeKwQriDKEHJKfr2R40A@mail.gmail.com>
+ <CAK8P3a3xqqT7mcroY+-fg4T39msw72SB0NbbVKfBghmOFTNZqw@mail.gmail.com>
+ <CAD=FV=WXcSBkN2y97xNma0P9C6DEPfwkprZe=+0+0iuKYNwwZA@mail.gmail.com>
+ <CAMuHMdWEuzUTg+f_SBqvT1zFYVFL=odgMLz68DjcvaTrbtd94g@mail.gmail.com> <CAPDyKFpG2JZ6riZo=fFJa7q16bvhFyx2kR1K-s3aSfwZ9NDo6A@mail.gmail.com>
+In-Reply-To: <CAPDyKFpG2JZ6riZo=fFJa7q16bvhFyx2kR1K-s3aSfwZ9NDo6A@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 15 Dec 2020 09:19:30 +0100
+Message-ID: <CAMuHMdVOxdYQD6qTF08NFiw4bRg3xscX=rRW1m9ix1AGEm3DGQ@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
+To: Ulf Hansson <ulf.hansson@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Doug Anderson <dianders@chromium.org>, Arnd Bergmann <arnd@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-A too high brightness by default (default is max) makes the
-screen go blank. Set this to 15 as in the Vendor tree.
+Hi Ulf,
 
-Cc: Stephan Gerhold <stephan@gerhold.net>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-SoC folks: this is a plain regression fix, please apply
-it directly for fixes.
----
- arch/arm/boot/dts/ste-ux500-samsung-golden.dts | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, Dec 14, 2020 at 9:23 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> On Tue, 8 Dec 2020 at 08:32, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Mon, Dec 7, 2020 at 11:15 PM Doug Anderson <dianders@chromium.org> wrote:
+> > > On Mon, Dec 7, 2020 at 1:55 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > > > On Mon, Dec 7, 2020 at 9:23 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > > On Tue, Dec 1, 2020 at 3:06 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > > > > > On Tue, Dec 1, 2020 at 12:39 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > > > > So, I think we have two options. If people are willing to move to
+> > > > > > > "disk labels" or to patch their DTBs with mmc aliases, things can stay
+> > > > > > > as is. Otherwise, we can revert the async probe parts of the mmc host
+> > > > > > > drivers, but that would still leave us in a fragile situation.
+> > > > > >
+> > > > > > Can you reliably detect whether the mmc aliases in the dt exist?
+> > > > > > If that's possible, maybe the async flag could be masked out to only have
+> > > > > > an effect when the device number is known.
+> > > > >
+> > > > > IMHO DT aliases are not a proper solution for this.
+> > > > >
+> > > > > Yes, you can detect reliably if an alias exists in the DT.
+> > > > > The problems start when having multiple devices, some with aliases,
+> > > > > some without.  And when devices can appear dynamically (without
+> > > > > aliases, as there is no support for dynamically updating the aliases
+> > > > > list).
+> > > >
+> > > > Actually you hit a problem earlier than that: the async probe is a
+> > > > property of the host controller driver, which may be a pci_driver,
+> > > > platform_driver, usb_driver, or anything else really. To figure out
+> > > > whether to probe it asynchronously, it would have to be the driver
+> > > > core, or each bus type that can host these to understand which
+> > > > device driver is responsible for probing an eMMC device attached
+> > > > to the host.
+> > >
+> > > From what I've seen so far, my current thought on this issue is that
+> > > it's up to Ulf as the MMC maintainer what the next steps are.  For me,
+> > > at least, his argument that MMC block numbers have already shuffled
+> > > around several times in the last several years is at least some
+> > > evidence that they weren't exactly stable to begin with.  While we
+> > > could go back to the numbers that happened to be chosen as of kernel
+> > > v5.9, if someone was updating from a much older kernel then they may
+> > > have different expectations of what numbers are good / bad I think.
+> > >
+> > > I will also offer one possible suggestion: what about a KConfig option
+> > > here?  In theory we could add a KConfig option like
+> > > "CONFIG_MMC_LEGACY_PROBE" or something that.  One can argue about what
+> > > the default ought to be, but maybe that would satisfy folks?  If you
+> > > were happy giving up a little bit of boot speed to get the v5.9 block
+> > > numbers then you could set this.
+> >
+> > This is not limited to MMC.
+> > The same is true for sdX, ethX (e* these days), ttyS*, i2cX, spiX, ...
+> > The rule has always been to handle it by udev, disklabels, ...
+>
+> That's right.
+>
+> Although, those rules haven't been sufficient for some cases, which
+> has been discussed many many times by now. I can dig out some of the
+> old threads from the mail archive, just tell me and will help to find
+> them.
+>
+> For mmc we have decided to improve the situation by adding support for
+> aliases in DT. The support seems robust enough to me, but if you think
+> there are problems with it, please tell me and I am happy to help to
+> improve it.
 
-diff --git a/arch/arm/boot/dts/ste-ux500-samsung-golden.dts b/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
-index 939360c05713..73b09a49c55a 100644
---- a/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
-+++ b/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
-@@ -326,6 +326,7 @@ dsi@a0351000 {
- 				panel@0 {
- 					compatible = "samsung,s6e63m0";
- 					reg = <0>;
-+					max-brightness = <15>;
- 					vdd3-supply = <&panel_reg_3v0>;
- 					vci-supply = <&panel_reg_1v8>;
- 					reset-gpios = <&gpio4 11 GPIO_ACTIVE_LOW>;
--- 
-2.29.2
+DT rule #1: DT is hardware description (device naming is software
+policy).
+
+The only generally accepted aliases are "serial0" (the first serial
+port, as such labeled on the board, to be used for the console;  there
+may be more labeled ports, and thus more "serialX" aliases), and
+"ethernet0" (the first Ethernet port, so U-Boot knows to which port to
+add an appropriate "local-mac-address" property, when booting over the
+network).  So yeah, you can claim the first SD card slot is labeled as
+such, and thus deserves an alias.  Then the issue is what you do with
+the remaining slots, which can be added either statically or
+dynamically.  And what if for some reason the labeled MMC slot is not
+probed first...
+
+The description of commit 7678f4c20fa7670f ("serial: sh-sci: Add support
+for dynamic instances") mentions some background and remaining
+issues w.r.t. aliases.
+
+> In regards to adding a new Kconfig option for "legacy probe", I am
+> open to this if that's what people think is needed. Although, as
+> pointed out earlier in this thread, it won't move us into a stable
+> situation. The only solution to get to that point, is either to use
+> udev/disklabel rules or the mmc aliases in DT.
+
+IMHO that will be a fragile solution, too: over time, it may become
+harder and harder to maintain the original probe order.
+
+And if it will be an option, it means there will be two code paths to
+maintain, increasing the burden.
 
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
