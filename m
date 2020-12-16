@@ -7,24 +7,23 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F2F3C4361B
-	for <soc@archiver.kernel.org>; Wed, 16 Dec 2020 13:45:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A208C4361B
+	for <soc@archiver.kernel.org>; Wed, 16 Dec 2020 16:25:55 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id CFCE7233CF; Wed, 16 Dec 2020 13:45:10 +0000 (UTC)
-X-Greylist: delayed 581 seconds by postgrey-1.34 at mail.kernel.org; Wed, 16 Dec 2020 13:45:10 UTC
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2D7FD2255F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=rouven@czerwinskis.de
+	id 12193233E2; Wed, 16 Dec 2020 16:25:55 +0000 (UTC)
 Received: from magratgarlick.emantor.de (magratgarlick.emantor.de [78.46.208.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2D7FD2255F;
-	Wed, 16 Dec 2020 13:45:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 485792339E;
+	Wed, 16 Dec 2020 16:25:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 485792339E
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=rouven@czerwinskis.de
 Received: by magratgarlick.emantor.de (Postfix, from userid 114)
-	id CB0A0103A57; Wed, 16 Dec 2020 14:35:50 +0100 (CET)
+	id 0F4D3103ADC; Wed, 16 Dec 2020 17:25:53 +0100 (CET)
 Received: from localhost (unknown [IPv6:2001:9e8:79:5902:c0d3:dbff:fefe:ff70])
-	by magratgarlick.emantor.de (Postfix) with ESMTPSA id 033AB1039D7;
-	Wed, 16 Dec 2020 14:35:43 +0100 (CET)
+	by magratgarlick.emantor.de (Postfix) with ESMTPSA id 416CA103AD4;
+	Wed, 16 Dec 2020 17:25:47 +0100 (CET)
 From: Rouven Czerwinski <r.czerwinski@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
@@ -36,13 +35,14 @@ To: Arnd Bergmann <arnd@arndb.de>,
 	Pengutronix Kernel Team <kernel@pengutronix.de>,
 	Fabio Estevam <festevam@gmail.com>,
 	NXP Linux Team <linux-imx@nxp.com>
-Cc: Rouven Czerwinski <r.czerwinski@pengutronix.de>
-Subject: [PATCH 2/3] ARM: dts: add Webasto ccbv2
-Date: Wed, 16 Dec 2020 14:35:00 +0100
-Message-Id: <20201216133501.28135-3-r.czerwinski@pengutronix.de>
+Cc: Rouven Czerwinski <r.czerwinski@pengutronix.de>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/3] ARM: dts: add Webasto ccbv2
+Date: Wed, 16 Dec 2020 17:25:43 +0100
+Message-Id: <20201216162544.9629-1-r.czerwinski@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201216133501.28135-1-r.czerwinski@pengutronix.de>
-References: <20201216133501.28135-1-r.czerwinski@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
