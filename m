@@ -1,211 +1,164 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=5nc+=FU=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-25.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CFE2C4361B
-	for <soc@archiver.kernel.org>; Wed, 16 Dec 2020 23:23:40 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 6FC3D238E5; Wed, 16 Dec 2020 23:23:40 +0000 (UTC)
-X-Gm-Message-State: AOAM530/rF4ock+v/mdfbWkLH87TzDsQYCD6m4oT4AEc5ZoBzS+3lC9I
-	FEnQSmICCUS97+bdvruSNiezPW7vloQSnZHNlew=
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44DC5C4361B
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 16 Dec 2020 23:24:18 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id F162922D2C
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 16 Dec 2020 23:24:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F162922D2C
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:MIME-Version:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=vn3dsFOHSZCaWNwMxP3MWqB+qO/gOSSLv+6O8w60MYI=; b=c2e62A9bpx+AIxPp1Wab7RMtyj
+	fV62HCCPyXgVXcE57q3IAsCRXmP3WqLVflGGfjooRfMW+MSuxbOG2WHXA1acFHw7XiaBAHRp4BKoN
+	V46Vlk3cuJtDfWYq0iZBQXy8XQu1Bvf742GKRo5AaWZLb3sRsqaeiq7kpe4T64uVHhw+2aB6lFegc
+	Cs8YlUKG2shoRPCK4mFBgApu4MDshTzpSmGfN0/jfvzV/itw+nU8SOs3EYZdvv8JbG6O/jpgtWpB8
+	kvnLM7ezwm9+TQuPvw0/Agmc8z0l1D6/vJEiddX+htQl96H1ysZ49Y8frMWAs0by1D5l/WQoLWh8K
+	k3pl5zHg==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kpg8B-0005bh-Dk; Wed, 16 Dec 2020 23:22:51 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kpg88-0005bO-9G
+ for linux-arm-kernel@lists.infradead.org; Wed, 16 Dec 2020 23:22:49 +0000
+X-Gm-Message-State: AOAM531YMtnXFYlMAasF+ysEVlkvZs+9n0NoSOWpS0sbWzmo4eGgN9Ti
+ 5sYct3GDZPOhzKbAFUSyQSLZbe39SDb5yxYyqRs=
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1608161020;
-	bh=ghhC8IltaF7MusxmPQXrDWcS5VXbbg2fQw3GaW9GsDs=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=KZQlPZBax1YvaQh1QPL8gnej/3+OjBFtsAh6yeZdLFP5cIq9LN6dJs9szXm7dwKCO
-	 aAQWvuJBtOPXjsMW9FinbCOgbYMyKnvIa6/D4DO/ikQT4BadSlXcyFoEf991KuRVjc
-	 pjdGAnBVm2rAoMsHf9fVmBxab5+zoyHP4GTx8VasN3pRvddT2EQoRXFix/YV14/yzd
-	 3GDNCOXyBzqGiQ6ChwOGJQP8mMEBo0royH5cM3BCd5r4iPcafuX+YMucVEvHerPFfL
-	 XsDHXwwbguAZxMH9nLRKCeHSkuppTaEoqyV0AVuXNOYfb1VzTYOvUmUvCTMzVIK4Dr
-	 zac/uFeRoaD1Q==
-X-Google-Smtp-Source: ABdhPJxVupd+sJRvhuknfWzZVmgESJ5+2TvfN9uNCfdz2Mn2hCHNqOHBISUB7CL5Kv9XLW3TzIVpWVJITWQhWnwtE6Y=
-X-Received: by 2002:aca:fd91:: with SMTP id b139mr1763389oii.67.1608161019639;
- Wed, 16 Dec 2020 15:23:39 -0800 (PST)
+ s=k20201202; t=1608160966;
+ bh=+lNMaYbXYGXWkDwMu9IjPGWOqpbhn96RJGM+3XQRUZc=;
+ h=From:Date:Subject:To:List-Id:Cc:From;
+ b=rFkmZPX9xGkO5EV2lidU89SPZaPE/UFyLX/sTMaFas5itVvmtK4rdhDzYxDgUbtmU
+ PIdIrmbo2XbakjdQXc+kc+GiLM4jd8SovaKrfHrfE9jbs5HibusQPkHAimVUT3/w86
+ fY4MQNG/s81MCSgH3BLKJiQF+GL0EccLpDBXgn4Fq23Q96s+SziNHGsdCV15+GMUpz
+ 5RKlXYZ7bYne+9na7I9LPqwerBTKxDyq0yX9ALbGUkvKbgB3Ehgi+ozgHqP0m58m8f
+ Ie+G+K2gmFMJuJ4XAUo5evLI38Ta6ejNXC0dBbXldMIs9TvrYiu5Gw/lTEg+y0vV2F
+ JVPViI3S00oNg==
+X-Google-Smtp-Source: ABdhPJxsnAxWpiQMDFsndwKqYAZko45gP1sG6W9DZCEyCqNl45+SQLYY7sk37t8yhYr9qgO2loPMTCKm01O12ZVCLSg=
+X-Received: by 2002:a9d:be1:: with SMTP id 88mr27724016oth.210.1608160965975; 
+ Wed, 16 Dec 2020 15:22:45 -0800 (PST)
 MIME-Version: 1.0
-References: <CAK8P3a009=T3WorioFWX8d=tEK78_o6ZHM6TGSmWmd37-_izug@mail.gmail.com>
-In-Reply-To: <CAK8P3a009=T3WorioFWX8d=tEK78_o6ZHM6TGSmWmd37-_izug@mail.gmail.com>
 From: Arnd Bergmann <arnd@kernel.org>
-Date: Thu, 17 Dec 2020 00:23:23 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0zh6RKR6rRm93hCb1VVpb86LxWeL9U4-3eGJm9+TPJVw@mail.gmail.com>
-Message-ID: <CAK8P3a0zh6RKR6rRm93hCb1VVpb86LxWeL9U4-3eGJm9+TPJVw@mail.gmail.com>
-Subject: [GIT PULL 2/5] ARM: SoC defconfigs for 5.11
+Date: Thu, 17 Dec 2020 00:22:29 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a009=T3WorioFWX8d=tEK78_o6ZHM6TGSmWmd37-_izug@mail.gmail.com>
+Message-ID: <CAK8P3a009=T3WorioFWX8d=tEK78_o6ZHM6TGSmWmd37-_izug@mail.gmail.com>
+Subject: [GIT PULL 1/5] ARM: SoC updates for 5.11
 To: Linus Torvalds <torvalds@linux-foundation.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201216_182248_453012_FE062B9E 
+X-CRM114-Status: GOOD (  12.35  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: SoC Team <soc@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201216232229.Nu8Z4EUooP01SanJ_AktG5UdAr_mOPNKnM7IViwNTcE@z>
 
-The following changes since commit f8394f232b1eab649ce2df5c5f15b0e528c92091=
-:
-
-  Linux 5.10-rc3 (2020-11-08 16:10:16 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-tags/arm-soc-defconfig-5.11
-
-for you to fetch changes up to acf689134a66cc9c85e571d33b6bd5d72e4078cf:
-
-  powerpc/configs: drop unused BACKLIGHT_GENERIC option (2020-12-08
-22:03:37 +0100)
-
-----------------------------------------------------------------
-ARM: SoC defconfigs for 5.11
-
-These are the usual defconfig updates, adding support for additional
-modules and updating some files according to changes in Kconfig.
-
-I also include the removal of CONFIG_BACKLIGHT_GENERIC across multiple
-architectures, after the driver was removed.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-----------------------------------------------------------------
-Adam Ford (3):
-      arm64: defconfig: Enable additional sound drivers on i.MX8M Mini
-      arm64: defconfig: Enable ASRC and EASRC
-      ARM: omap2plus_defconfig: Enable OMAP3_THERMAL
-
-Amelie Delaunay (1):
-      ARM: multi_v7_defconfig: enable STUSB160X Type-C port controller supp=
-ort
-
-Andrey Zhizhikin (4):
-      ARM: configs: drop unused BACKLIGHT_GENERIC option
-      arm64: defconfig: drop unused BACKLIGHT_GENERIC option
-      parisc: configs: drop unused BACKLIGHT_GENERIC option
-      powerpc/configs: drop unused BACKLIGHT_GENERIC option
-
-Arnd Bergmann (14):
-      Merge tag 'renesas-arm-defconfig-for-v5.11-tag1' of
-git://git.kernel.org/.../geert/renesas-devel into arm/defconfig
-      Merge tag 'omap-for-v5.11/defconfig-signed' of
-git://git.kernel.org/.../tmlind/linux-omap into arm/defconfig
-      Merge tag 'stm32-config-for-v5.11-1' of
-git://git.kernel.org/.../atorgue/stm32 into arm/defconfig
-      Merge tag 'tegra-for-5.11-arm64-defconfig' of
-git://git.kernel.org/.../tegra/linux into arm/defconfig
-      Merge tag 'at91-defconfig-5.11' of
-git://git.kernel.org/.../at91/linux into arm/defconfig
-      Merge tag 'sunxi-config-for-5.11' of
-git://git.kernel.org/.../sunxi/linux into arm/defconfig
-      Merge tag 'sunxi-config64-for-5.11' of
-git://git.kernel.org/.../sunxi/linux into arm/defconfig
-      Merge tag 'arm-soc/for-5.11/defconfig' of
-https://github.com/Broadcom/stblinux into arm/defconfig
-      Merge tag 'arm-soc/for-5.11/defconfig-arm64' of
-https://github.com/Broadcom/stblinux into arm/defconfig
-      Merge tag 'ti-k3-config-for-v5.11' of
-git://git.kernel.org/.../nmenon/linux into arm/defconfig
-      Merge tag 'qcom-arm64-defconfig-for-5.11' of
-git://git.kernel.org/.../qcom/linux into arm/defconfig
-      Merge tag 'samsung-defconfig-5.11' of
-git://git.kernel.org/.../krzk/linux into arm/defconfig
-      Merge tag 'imx-defconfig-5.11' of
-git://git.kernel.org/.../shawnguo/linux into arm/defconfig
-      Merge tag 'v5.11-rockchip-defconfig64-1' of
-git://git.kernel.org/.../mmind/linux-rockchip into arm/defconfig
-
-Bjorn Andersson (4):
-      arm64: defconfig: Enable Qualcomm Command DB driver
-      arm64: defconfig: Enable Qualcomm OSM L3 driver
-      arm64: defconfig: Enable QCOM_SCM as builtin
-      arm64: defconfig: Enable Qualcomm PON driver
-
-Carl Philipp Klemm (1):
-      ARM: omap2plus_defconfig: add CONFIG_AK8975=3Dm and CONFIG_KXCJK1013=
-=3Dm
-
-Cl=C3=A9ment P=C3=A9ron (1):
-      arm64: defconfig: Enable Allwinner i2s driver
-
-Corentin Labbe (1):
-      ARM: configs: sunxi: enable Realtek PHY
-
-David Lechner (1):
-      ARM: omap2plus_defconfig: Enable TI eQEP counter driver
-
-Eugen Hristev (2):
-      ARM: configs: at91: sama5: resync with media changes
-      ARM: configs: at91_dt: resync with media changes
-
-Fabrice Gasnier (1):
-      ARM: multi_v7_defconfig: enable counter subsystem and stm32
-counter drivers
-
-Faiz Abbas (1):
-      arm64: defconfig: Enable GPIO and I2C configs for TI's J721e platform
-
-Florian Fainelli (2):
-      ARM: multi_v7_defconfig: Enable ARM SCMI protocol and drivers
-      arm64: defconfig: Enable ARM SCMI protocol and drivers
-
-Geert Uytterhoeven (2):
-      ARM: shmobile: defconfig: Refresh for v5.10-rc1
-      arm64: defconfig: Enable R8A779A0 SoC
-
-Grygorii Strashko (1):
-      ARM: multi_v7_defconfig: ti: Enable networking options for nfs boot
-
-Guido G=C3=BCnther (1):
-      arm64: defconfig: Enable more Librem 5 hardware
-
-Jagan Teki (4):
-      arm64: defconfig: Enable ROCKCHIP_LVDS
-      arm64: defconfig: Enable PHY_ROCKCHIP_INNO_DSIDPHY
-      arm64: defconfig: Enable USB_SERIAL_CP210X
-      arm64: defconfig: Enable RTC_DRV_HYM8563
-
-Linus Walleij (1):
-      ARM: config: ux500: Update U8500 defconfig
-
-Lionel Debieve (1):
-      ARM: multi_v7_defconfig: add STM32 crypto support
-
-Marek Szyprowski (3):
-      ARM: exynos_defconfig: enable sound driver for Midas platform
-      ARM: multi_v7_defconfig: enable sound driver for Midas platform
-      ARM: multi_v7_defconfig: make Samsung Exynos EHCI driver a module
-
-Martin J=C3=BCcker (2):
-      ARM: defconfig: add STMPE ADC driver for P4 Note
-      ARM: exynos_defconfig: compile Atmel MXT touchscreeen as module
-
-Olivier Moysan (2):
-      ARM: multi_v7_defconfig: enable STM32 spdifrx support
-      ARM: multi_v7_defconfig: enable STM32 dfsdm audio support
-
-Thierry Reding (1):
-      arm64: defconfig: Enable Tegra234 support
-
-=C5=81ukasz Stelmach (1):
-      ARM: defconfig: Enable ax88796c driver for Exynos boards
-
- arch/arm/configs/at91_dt_defconfig          |  6 ++++-
- arch/arm/configs/cm_x300_defconfig          |  1 -
- arch/arm/configs/colibri_pxa300_defconfig   |  1 -
- arch/arm/configs/exynos_defconfig           |  8 ++++++-
- arch/arm/configs/jornada720_defconfig       |  1 -
- arch/arm/configs/magician_defconfig         |  1 -
- arch/arm/configs/mini2440_defconfig         |  1 -
- arch/arm/configs/multi_v7_defconfig         | 26 ++++++++++++++++++++-
- arch/arm/configs/omap2plus_defconfig        |  6 ++++-
- arch/arm/configs/pxa3xx_defconfig           |  1 -
- arch/arm/configs/qcom_defconfig             |  1 -
- arch/arm/configs/sama5_defconfig            | 10 +++++++-
- arch/arm/configs/shmobile_defconfig         | 22 +++++++++---------
- arch/arm/configs/sunxi_defconfig            |  2 +-
- arch/arm/configs/tegra_defconfig            |  1 -
- arch/arm/configs/u8500_defconfig            | 10 ++++----
- arch/arm64/configs/defconfig                | 36 +++++++++++++++++++++++++=
-+++-
- arch/parisc/configs/generic-64bit_defconfig |  1 -
- arch/powerpc/configs/powernv_defconfig      |  1 -
- 19 files changed, 104 insertions(+), 32 deletions(-)
+VGhlIGZvbGxvd2luZyBjaGFuZ2VzIHNpbmNlIGNvbW1pdCA0MThiYWYyYzI4ZjM0NzMwMzlmMmY3
+Mzc3NzYwYmQ4ZjY4OTdhZTE4OgoKICBMaW51eCA1LjEwLXJjNSAoMjAyMC0xMS0yMiAxNTozNjow
+OCAtMDgwMCkKCmFyZSBhdmFpbGFibGUgaW4gdGhlIEdpdCByZXBvc2l0b3J5IGF0OgoKICBnaXQ6
+Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc29jL3NvYy5naXQgdGFn
+cy9hcm0tc29jLTUuMTEKCmZvciB5b3UgdG8gZmV0Y2ggY2hhbmdlcyB1cCB0byBkY2IxMTEwMGNk
+NWQzZjVhMTkxYjdmYmE3NTQyMmUzZGY3OTJmM2ZmOgoKICBhcm02NDogS2NvbmZpZzogbWVzb246
+IGRyb3AgcGluY3RybCAoMjAyMC0xMi0wOSAxNzozNjo0NiArMDEwMCkKCi0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KQVJNOiBT
+b0MgdXBkYXRlcyBmb3IgNS4xMQoKVGhlc2UgYXJlIHVwZGF0ZSBmb3IgU29DIHNwZWNpZmljIGNv
+ZGUsIG1vc3RseSBpbiB0aGUKMzItYml0IGFyY2hpdGVjdHVyZToKCiAtIEEgcmV3b3JrIGZvciBo
+YW5kbGluZyBNTUlPIGFjY2Vzc2VzIGluIFJlbmVzYXMgU29DcwogICBpbiBhIG1vcmUgcG9ydGFi
+bGUgd2F5CgogLSBVcGRhdGVzIHRvIFNvQyB2ZXJzaW9uIGRldGVjdGlvbiBpbiBOWFAgaS5NWCBT
+b0NzLgoKIC0gU21hbGxlciBidWcgZml4ZXMgZm9yIE9NQVAsIFNhbXN1bmcsIE1hcnZlbGwsIEFt
+bG9naWMsCgpTaWduZWQtb2ZmLWJ5OiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPgoKLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLQpBbnNvbiBIdWFuZyAoMSk6CiAgICAgIEFSTTogaW14OiBBZGQgcmV2aXNpb24gc3VwcG9y
+dCBmb3IgaS5NWDdVTFAgcmV2aXNpb24gMi4yCgpBcm5kIEJlcmdtYW5uICg2KToKICAgICAgTWVy
+Z2UgdGFnICdvbWFwLWZvci12NS4xMS9zb2Mtc2lnbmVkJyBvZgpnaXQ6Ly9naXQua2VybmVsLm9y
+Zy8uLi4vdG1saW5kL2xpbnV4LW9tYXAgaW50byBhcm0vc29jCiAgICAgIE1lcmdlIHRhZyAncmVu
+ZXNhcy1hcm0tc29jLWZvci12NS4xMS10YWcxJyBvZgpnaXQ6Ly9naXQua2VybmVsLm9yZy8uLi4v
+Z2VlcnQvcmVuZXNhcy1kZXZlbCBpbnRvIGFybS9zb2MKICAgICAgTWVyZ2UgdGFnICdzYW1zdW5n
+LXNvYy01LjExJyBvZgpnaXQ6Ly9naXQua2VybmVsLm9yZy8uLi4va3J6ay9saW51eCBpbnRvIGFy
+bS9zb2MKICAgICAgTWVyZ2UgdGFnICdtdmVidS1hcm0tNS4xMS0xJyBvZgpnaXQ6Ly9naXQua2Vy
+bmVsLm9yZy8uLi4vZ2NsZW1lbnQvbXZlYnUgaW50byBhcm0vc29jCiAgICAgIE1lcmdlIHRhZyAn
+YW1sb2dpYy1zb2MnIG9mCmdpdDovL2dpdC5rZXJuZWwub3JnLy4uLi9raGlsbWFuL2xpbnV4LWFt
+bG9naWMgaW50byBhcm0vc29jCiAgICAgIE1lcmdlIHRhZyAnaW14LXNvYy01LjExJyBvZgpnaXQ6
+Ly9naXQua2VybmVsLm9yZy8uLi4vc2hhd25ndW8vbGludXggaW50byBhcm0vc29jCgpGYWJpbyBF
+c3RldmFtICgxKToKICAgICAgQVJNOiBpbXg6IGlteDd1bHA6IEFkZCBhIGNvbW1lbnQgZXhwbGFp
+bmluZyB0aGUgQjIgc2lsaWNvbiB2ZXJzaW9uCgpHZWVydCBVeXR0ZXJob2V2ZW4gKDgpOgogICAg
+ICBBUk06IHNobW9iaWxlOiByOGE3Nzc4OiBJbnRyb2R1Y2UgSFBCUkVHX0JBU0UKICAgICAgQVJN
+OiBzaG1vYmlsZTogcjhhNzc3OTogVXNlIGlvcmVtYXAoKSB0byBtYXAgSU5UQzIgcmVnaXN0ZXJz
+CiAgICAgIEFSTTogc2htb2JpbGU6IHI4YTc3Nzk6IFVzZSBpb3JlbWFwKCkgdG8gbWFwIFNNUCBy
+ZWdpc3RlcnMKICAgICAgQVJNOiBzaG1vYmlsZTogcjhhNzc3OTogUmVtb3ZlIG9ic29sZXRlIHN0
+YXRpYyBtYXBwaW5ncwogICAgICBBUk06IHNobW9iaWxlOiBzaDczYTA6IFVzZSBpb3JlbWFwKCkg
+dG8gbWFwIEwyQyByZWdpc3RlcnMKICAgICAgQVJNOiBzaG1vYmlsZTogc2g3M2EwOiBVc2UgaW9y
+ZW1hcCgpIHRvIG1hcCBTTVAgcmVnaXN0ZXJzCiAgICAgIEFSTTogc2htb2JpbGU6IHNoNzNhMDog
+UmVtb3ZlIG9ic29sZXRlIHN0YXRpYyBtYXBwaW5nCiAgICAgIEFSTTogc2htb2JpbGU6IFN0b3Ag
+dXNpbmcgX19yYXdfKigpIEkvTyBhY2Nlc3NvcnMKCkdyZWdvcnkgQ0xFTUVOVCAoMSk6CiAgICAg
+IE1BSU5UQUlORVJTOiBzd2l0Y2ggbXZlYnUgdHJlZSB0byBrZXJuZWwub3JnCgpHdWlsbGF1bWUg
+VHVja2VyICgxKToKICAgICAgQVJNOiBleHlub3M6IGNsZWFyIHByZWZldGNoIGJpdHMgaW4gZGVm
+YXVsdCBsMmNfYXV4X3ZhbAoKSXZhbiBaYWVudHNldiAoMSk6CiAgICAgIEFSTTogbXhzOiBBZGQg
+c2VyaWFsIG51bWJlciBzdXBwb3J0IGZvciBpLk1YMjMsIGkuTVgyOCBTb0NzCgpKZXJvbWUgQnJ1
+bmV0ICgxKToKICAgICAgYXJtNjQ6IG1lc29uOiBzaGlwIG9ubHkgdGhlIG5lY2Vzc2FyeSBjbG9j
+ayBjb250cm9sbGVycwoKSmluZyBYaWFuZ2ZlbmcgKDEpOgogICAgICBBUk06IE9NQVAyKzogUmVt
+b3ZlIHJlZHVuZGFudCBhc3NpZ25tZW50IHRvIHZhcmlhYmxlIHJldAoKS2V2aW4gSGlsbWFuICgx
+KToKICAgICAgYXJtNjQ6IEtjb25maWc6IG1lc29uOiBkcm9wIHBpbmN0cmwKCkx1a2EgS292YWNp
+YyAoMSk6CiAgICAgIE1BSU5UQUlORVJTOiBBZGQgYW4gZW50cnkgZm9yIE1pa3JvVGlrIENSUzN4
+eCA5OERYMzIzNiBib2FyZHMKCk1hcmVrIFN6eXByb3dza2kgKDEpOgogICAgICBBUk06IGV4eW5v
+czogU2ltcGxpZnkgY29kZSBpbiBFeHlub3MzMjUwIENQVSBjb3JlIHJlc3RhcnQgcGF0aAoKTWFy
+dGluIErDvGNrZXIgKDEpOgogICAgICBBUk06IGV4eW5vczogZXh0ZW5kIGNwdWlkbGUgc3VwcG9y
+dCB0byBQNCBOb3RlIGJvYXJkcwoKU3ZlbiBWYW4gQXNicm9lY2sgKDEpOgogICAgICBBUk06IGlt
+eDogbWFjaC1pbXg2cTogY29ycmVjdGx5IGlkZW50aWZ5IGkuTVg2UVAgU29DcwoKVGFuZyBCaW4g
+KDEpOgogICAgICBBUk06IE9NQVAxOiBjbG9jazogVXNlIElTX0VSUl9PUl9OVUxMKCkgdG8gY2xl
+YW4gY29kZQoKWHUgV2FuZyAoMSk6CiAgICAgIEFSTTogT01BUDIrOiBSZW1vdmUgcmVkdW5kYW50
+IG51bGwgY2hlY2sgYmVmb3JlCmNsa19wcmVwYXJlX2VuYWJsZS9jbGtfZGlzYWJsZV91bnByZXBh
+cmUKCllvdWxpbmcgVGFuZyAoMik6CiAgICAgIEFSTTogT01BUDIrOiBGaXggbWVtbGVhayBpbiBv
+bWFwMnh4eF9jbGt0X3Zwc19pbml0CiAgICAgIEFSTTogT01BUDIrOiBGaXgga2ZyZWUgTlVMTCBw
+b2ludGVyIGluIG9tYXAyeHh4X2Nsa3RfdnBzX2luaXQKCiBNQUlOVEFJTkVSUyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICB8IDE1ICsrKysrKystCiBhcmNoL2FybS9tYWNoLWV4eW5v
+cy9leHlub3MuYyAgICAgICAgICAgICAgICB8ICA3ICsrLS0KIGFyY2gvYXJtL21hY2gtZXh5bm9z
+L3BsYXRzbXAuYyAgICAgICAgICAgICAgIHwgIDIgKy0KIGFyY2gvYXJtL21hY2gtaW14L21hY2gt
+aW14NnEuYyAgICAgICAgICAgICAgIHwgIDkgKysrKy0KIGFyY2gvYXJtL21hY2gtaW14L21hY2gt
+aW14N3VscC5jICAgICAgICAgICAgIHwgIDQgKysKIGFyY2gvYXJtL21hY2gtbXhzL21hY2gtbXhz
+LmMgICAgICAgICAgICAgICAgIHwgMTkgKysrKysrKysrKwogYXJjaC9hcm0vbWFjaC1vbWFwMS9j
+bG9jay5jICAgICAgICAgICAgICAgICAgfCAxNCArKystLS0tCiBhcmNoL2FybS9tYWNoLW9tYXAy
+L2Nsa3QyeHh4X3ZpcnRfcHJjbV9zZXQuYyB8IDExICsrKystLQogYXJjaC9hcm0vbWFjaC1vbWFw
+Mi9kaXNwbGF5LmMgICAgICAgICAgICAgICAgfCAgNiArLS0KIGFyY2gvYXJtL21hY2gtb21hcDIv
+b21hcF9kZXZpY2UuYyAgICAgICAgICAgIHwgIDUgKy0tCiBhcmNoL2FybS9tYWNoLXNobW9iaWxl
+L3BsYXRzbXAtc2N1LmMgICAgICAgICB8ICAyICstCiBhcmNoL2FybS9tYWNoLXNobW9iaWxlL3Nl
+dHVwLXI4YTc3NzguYyAgICAgICB8IDEyICsrKy0tLQogYXJjaC9hcm0vbWFjaC1zaG1vYmlsZS9z
+ZXR1cC1yOGE3Nzc5LmMgICAgICAgfCA1NiArKysrKysrKysrLS0tLS0tLS0tLS0tLS0tLS0tCiBh
+cmNoL2FybS9tYWNoLXNobW9iaWxlL3NldHVwLXNoNzNhMC5jICAgICAgICB8IDIxICstLS0tLS0t
+LS0tCiBhcmNoL2FybS9tYWNoLXNobW9iaWxlL3NtcC1yOGE3Nzc5LmMgICAgICAgICB8IDEyICsr
+KystLQogYXJjaC9hcm0vbWFjaC1zaG1vYmlsZS9zbXAtc2g3M2EwLmMgICAgICAgICAgfCAzMyAr
+KysrKysrKysrLS0tLS0tCiBhcmNoL2FybTY0L0tjb25maWcucGxhdGZvcm1zICAgICAgICAgICAg
+ICAgICB8ICA1IC0tLQogMTcgZmlsZXMgY2hhbmdlZCwgMTI1IGluc2VydGlvbnMoKyksIDEwOCBk
+ZWxldGlvbnMoLSkKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmxpbnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0CmxpbnV4LWFybS1rZXJuZWxAbGlzdHMu
+aW5mcmFkZWFkLm9yZwpodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZv
+L2xpbnV4LWFybS1rZXJuZWwK
