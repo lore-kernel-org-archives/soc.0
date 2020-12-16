@@ -1,234 +1,551 @@
-Return-Path: <SRS0=hCuz=FT=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=dlKc=FU=czerwinskis.de=rouven@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81A65C2BB48
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 15 Dec 2020 09:55:00 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F2F3C4361B
+	for <soc@archiver.kernel.org>; Wed, 16 Dec 2020 13:45:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id CFCE7233CF; Wed, 16 Dec 2020 13:45:10 +0000 (UTC)
+X-Greylist: delayed 581 seconds by postgrey-1.34 at mail.kernel.org; Wed, 16 Dec 2020 13:45:10 UTC
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2D7FD2255F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=rouven@czerwinskis.de
+Received: from magratgarlick.emantor.de (magratgarlick.emantor.de [78.46.208.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2FF44207CC
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 15 Dec 2020 09:55:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2FF44207CC
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=zu77TZk7xdSCHPsUs6mh4xiayMuBjyzJb4ZBpe70Vc8=; b=PDjlbQJzSJ0oLCNb3cXh0426v
-	hJVcVB5ttxmP5NRPw7/bkdPy8jHOTu1EDPWpmQecBMCei/ALSbbPehiU61iCbutBQGbtkKvLbMcgh
-	UK45k2peRZFp0vME/mFutpihHzHfBIjIUh/O2BV5UKDdmtsIR45l/PrsxPXAZsiV60uYJXY7je/pD
-	5AqPo149122i4IQcUMs9o7N5eYkBs9JOPeqJgehc+3lG8gkquYRzgHQ+AiavC4l4Gac1lYsM/mfin
-	2Hhgs38/4Q1B5+Yxf5uqtL6wbvhsWKl7KniwqpqzoOaCtAXe+wnwM5MmLR6KeCLFxaVxeI8lic78O
-	6+bBZ4rhA==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kp71d-0005ef-0k; Tue, 15 Dec 2020 09:53:45 +0000
-Received: from mail-vs1-xe42.google.com ([2607:f8b0:4864:20::e42])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kp71a-0005dz-P6
- for linux-arm-kernel@lists.infradead.org; Tue, 15 Dec 2020 09:53:44 +0000
-Received: by mail-vs1-xe42.google.com with SMTP id q10so10621626vsr.13
- for <linux-arm-kernel@lists.infradead.org>;
- Tue, 15 Dec 2020 01:53:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=OI5+AJWSwdA8qVAOofTdmeYq5WpDo/US6jBkWpa07uc=;
- b=RIcgqj1D8rLIpMYChvvIIzfyUjk/FOJnn5jA+EldpSezdMOf3jjoNPIEzmvdWDeT1q
- aPOw5fQHgEzCST11jORDRfH6g53jMARVGIq8xRkmFjFBSidkYVsw6S/GzwZbkUl6pbCo
- F4YLJYud76eS21IMHPRN+0ZlkcA3lcmVRyUzewleK1Q59tqSBKh8vEXy8rTGg41wv5Kp
- jL+Uwh1RpdEfb+wOQ/vTTXB4uWktHCEGjXMeS0qKTcVbbQfvCzzpGFzsqMbJPVTQPrK7
- WQSpyiVzwpfBXLSkZy5kQyhQB1brXnLpcCgiANnkThCEZ1oNqnLJn0fPqQ8d7YD59GEa
- 6S3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=OI5+AJWSwdA8qVAOofTdmeYq5WpDo/US6jBkWpa07uc=;
- b=iZH0mnTzpil017+CaxX/NQu73lW9F4jCaEFb7ZExkRcad8ZN49X4Md1g1ZDO4It1kT
- mugqFaNG+07eKaQI9ZIwoUqpWCmwd0XugR2uINxUjTC4Q4t3Z3ndgm6Q6z1yy/zi5EUe
- uMTlEoO6AKs5FW0EbkaPQ8YaiveCKawHSkrssSDAdzQcILcxYeb6Gu3z5KKRPFYOD77S
- fh0bfKcZ4l8K7V3lmrlTUTH/s71lJsZ0dyiNuBE8iZ/N/GF0E+ujxSFBt6frdufJM12p
- HEEQj/74HaJhwnzGxowfU1WG9CKDL53Tve92XPpA81x9yLgd7jgwmc5Pwboh69WtsCxp
- A5/A==
-X-Gm-Message-State: AOAM530frAo3ZDgqTXGRL5yPbw2CE+zmTzK1/N1YyEQIQeQ+A+GmsHsA
- crQxWfUTlLf5rfdJ+iwMUT3srfbDLhRFhPFQXrJUAw==
-X-Google-Smtp-Source: ABdhPJzfIj1qnq7tCCnnbUDL2YFGisHI7QMHjJKeJz9nnU70YzQ2UI23tkePA2bkS4ZhZE8tY+yJkYF3Aii2l+3kI0g=
-X-Received: by 2002:a67:e286:: with SMTP id g6mr28189547vsf.42.1608026020738; 
- Tue, 15 Dec 2020 01:53:40 -0800 (PST)
-MIME-Version: 1.0
-References: <CAK8P3a2Habmz95y+J+-4NiT5SGYhO_Fia-SHhapX-3NYRbEMmw@mail.gmail.com>
- <CAHk-=wjA2Der39e_SWZ6S-DoVCJTu-Zwf6jn2wxmGTKzNPV1Dw@mail.gmail.com>
- <CAD=FV=Vow5_jv=-O=f2v4_5Nb4DiOUB1sQUx6r=-y5A-6rP4hw@mail.gmail.com>
- <CAHk-=whtySEgkH+VFy9oW8Q-+iuivGBo0hOUcee3DvrsBAQUrA@mail.gmail.com>
- <CAD=FV=Up-JW8RtMLQ_pAG3e0d8NnpT+rDiguxcz3DnVUz_7Jbw@mail.gmail.com>
- <CAHk-=wi2CQwAnKucLwE8vNZgXxyRy6L+DcgjGqxKHwbacKgaMQ@mail.gmail.com>
- <CAPDyKFp9L+L9VeUD038G3mBTLBuPJsMtv7JhxCcSGb3iY=eq5A@mail.gmail.com>
- <CAK8P3a1Va_xJzk8qqJM1VBWfSKpomKbQh_NpPO20aoORoe0SWQ@mail.gmail.com>
- <CAMuHMdUT83EkE-phUX2Z431AtGPfZvXeKwQriDKEHJKfr2R40A@mail.gmail.com>
- <CAK8P3a3xqqT7mcroY+-fg4T39msw72SB0NbbVKfBghmOFTNZqw@mail.gmail.com>
- <CAD=FV=WXcSBkN2y97xNma0P9C6DEPfwkprZe=+0+0iuKYNwwZA@mail.gmail.com>
- <CAMuHMdWEuzUTg+f_SBqvT1zFYVFL=odgMLz68DjcvaTrbtd94g@mail.gmail.com>
- <CAPDyKFpG2JZ6riZo=fFJa7q16bvhFyx2kR1K-s3aSfwZ9NDo6A@mail.gmail.com>
- <CAMuHMdVOxdYQD6qTF08NFiw4bRg3xscX=rRW1m9ix1AGEm3DGQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdVOxdYQD6qTF08NFiw4bRg3xscX=rRW1m9ix1AGEm3DGQ@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 15 Dec 2020 10:53:03 +0100
-Message-ID: <CAPDyKFptyEQNJu8cqzMt2WRFZcwEdjDiytMBp96nkoZyprTgmA@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.10, part 3
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20201215_045343_171895_2BD212FC 
-X-CRM114-Status: GOOD (  48.38  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by mail.kernel.org (Postfix) with ESMTPS id 2D7FD2255F;
+	Wed, 16 Dec 2020 13:45:10 +0000 (UTC)
+Received: by magratgarlick.emantor.de (Postfix, from userid 114)
+	id CB0A0103A57; Wed, 16 Dec 2020 14:35:50 +0100 (CET)
+Received: from localhost (unknown [IPv6:2001:9e8:79:5902:c0d3:dbff:fefe:ff70])
+	by magratgarlick.emantor.de (Postfix) with ESMTPSA id 033AB1039D7;
+	Wed, 16 Dec 2020 14:35:43 +0100 (CET)
+From: Rouven Czerwinski <r.czerwinski@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Doug Anderson <dianders@chromium.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20201215095303.DvodZ74w1aYeq5VxArubm_ggXJYJ9sTBDlKEK4CxYzA@z>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>
+Cc: Rouven Czerwinski <r.czerwinski@pengutronix.de>
+Subject: [PATCH 2/3] ARM: dts: add Webasto ccbv2
+Date: Wed, 16 Dec 2020 14:35:00 +0100
+Message-Id: <20201216133501.28135-3-r.czerwinski@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201216133501.28135-1-r.czerwinski@pengutronix.de>
+References: <20201216133501.28135-1-r.czerwinski@pengutronix.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 15 Dec 2020 at 09:19, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Ulf,
->
-> On Mon, Dec 14, 2020 at 9:23 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > On Tue, 8 Dec 2020 at 08:32, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Mon, Dec 7, 2020 at 11:15 PM Doug Anderson <dianders@chromium.org> wrote:
-> > > > On Mon, Dec 7, 2020 at 1:55 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> > > > > On Mon, Dec 7, 2020 at 9:23 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > > > On Tue, Dec 1, 2020 at 3:06 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> > > > > > > On Tue, Dec 1, 2020 at 12:39 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > > > > > > So, I think we have two options. If people are willing to move to
-> > > > > > > > "disk labels" or to patch their DTBs with mmc aliases, things can stay
-> > > > > > > > as is. Otherwise, we can revert the async probe parts of the mmc host
-> > > > > > > > drivers, but that would still leave us in a fragile situation.
-> > > > > > >
-> > > > > > > Can you reliably detect whether the mmc aliases in the dt exist?
-> > > > > > > If that's possible, maybe the async flag could be masked out to only have
-> > > > > > > an effect when the device number is known.
-> > > > > >
-> > > > > > IMHO DT aliases are not a proper solution for this.
-> > > > > >
-> > > > > > Yes, you can detect reliably if an alias exists in the DT.
-> > > > > > The problems start when having multiple devices, some with aliases,
-> > > > > > some without.  And when devices can appear dynamically (without
-> > > > > > aliases, as there is no support for dynamically updating the aliases
-> > > > > > list).
-> > > > >
-> > > > > Actually you hit a problem earlier than that: the async probe is a
-> > > > > property of the host controller driver, which may be a pci_driver,
-> > > > > platform_driver, usb_driver, or anything else really. To figure out
-> > > > > whether to probe it asynchronously, it would have to be the driver
-> > > > > core, or each bus type that can host these to understand which
-> > > > > device driver is responsible for probing an eMMC device attached
-> > > > > to the host.
-> > > >
-> > > > From what I've seen so far, my current thought on this issue is that
-> > > > it's up to Ulf as the MMC maintainer what the next steps are.  For me,
-> > > > at least, his argument that MMC block numbers have already shuffled
-> > > > around several times in the last several years is at least some
-> > > > evidence that they weren't exactly stable to begin with.  While we
-> > > > could go back to the numbers that happened to be chosen as of kernel
-> > > > v5.9, if someone was updating from a much older kernel then they may
-> > > > have different expectations of what numbers are good / bad I think.
-> > > >
-> > > > I will also offer one possible suggestion: what about a KConfig option
-> > > > here?  In theory we could add a KConfig option like
-> > > > "CONFIG_MMC_LEGACY_PROBE" or something that.  One can argue about what
-> > > > the default ought to be, but maybe that would satisfy folks?  If you
-> > > > were happy giving up a little bit of boot speed to get the v5.9 block
-> > > > numbers then you could set this.
-> > >
-> > > This is not limited to MMC.
-> > > The same is true for sdX, ethX (e* these days), ttyS*, i2cX, spiX, ...
-> > > The rule has always been to handle it by udev, disklabels, ...
-> >
-> > That's right.
-> >
-> > Although, those rules haven't been sufficient for some cases, which
-> > has been discussed many many times by now. I can dig out some of the
-> > old threads from the mail archive, just tell me and will help to find
-> > them.
-> >
-> > For mmc we have decided to improve the situation by adding support for
-> > aliases in DT. The support seems robust enough to me, but if you think
-> > there are problems with it, please tell me and I am happy to help to
-> > improve it.
->
-> DT rule #1: DT is hardware description (device naming is software
-> policy).
+The Webasto Common Communication Board Version 2 is a i.MX6UL based
+board.
 
-I do admit, the use of aliases in DT, for *all* cases including mmc is
-a bit of a stretch. Anyway, it's there.
+Signed-off-by: Rouven Czerwinski <r.czerwinski@pengutronix.de>
+---
+ arch/arm/boot/dts/Makefile                 |   1 +
+ arch/arm/boot/dts/imx6ul-webasto-ccbv2.dts | 472 +++++++++++++++++++++
+ 2 files changed, 473 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imx6ul-webasto-ccbv2.dts
 
->
-> The only generally accepted aliases are "serial0" (the first serial
-> port, as such labeled on the board, to be used for the console;  there
-> may be more labeled ports, and thus more "serialX" aliases), and
-> "ethernet0" (the first Ethernet port, so U-Boot knows to which port to
-> add an appropriate "local-mac-address" property, when booting over the
-> network).  So yeah, you can claim the first SD card slot is labeled as
-> such, and thus deserves an alias.  Then the issue is what you do with
-> the remaining slots, which can be added either statically or
-> dynamically.  And what if for some reason the labeled MMC slot is not
-> probed first...
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index ce66ffd5a1bb..757e415a7979 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -626,6 +626,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
+ 	imx6ul-tx6ul-0010.dtb \
+ 	imx6ul-tx6ul-0011.dtb \
+ 	imx6ul-tx6ul-mainboard.dtb \
++	imx6ul-webasto-ccbV2.dtb \
+ 	imx6ull-14x14-evk.dtb \
+ 	imx6ull-colibri-eval-v3.dtb \
+ 	imx6ull-colibri-wifi-eval-v3.dtb \
+diff --git a/arch/arm/boot/dts/imx6ul-webasto-ccbv2.dts b/arch/arm/boot/dts/imx6ul-webasto-ccbv2.dts
+new file mode 100644
+index 000000000000..5c3bca6d2698
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6ul-webasto-ccbv2.dts
+@@ -0,0 +1,472 @@
++// SPDX-License-Identifier: GPL-2.0 OR MIT
++/*
++ * Copyright (C) 2019, Webasto SE
++ */
++
++/dts-v1/;
++
++#include "imx6ul.dtsi"
++
++/ {
++	model = "Webasto common communication board version 2";
++	compatible = "webasto,imx6ul-ccbv2", "fsl,imx6ul";
++
++	chosen {
++		stdout-path = &uart7;
++	};
++
++	reg_4v: regulator-4v {
++		compatible = "regulator-fixed";
++		regulator-name = "V_+4V";
++		regulator-min-microvolt = <4000000>;
++		regulator-max-microvolt = <4000000>;
++		regulator-boot-on;
++		regulator-always-on;
++	};
++
++	reg_wl18xx_vmmc: regulator-wl18xx {
++		compatible = "regulator-fixed";
++		regulator-name = "wl1837";
++		vin-supply = <&reg_4v>;
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpio = <&gpio4 22 GPIO_ACTIVE_HIGH>;
++		startup-delay-us = <70000>;
++		enable-active-high;
++	};
++
++	reg_dp83822_en: regulator-dp83822 {
++		compatible = "regulator-fixed";
++		regulator-name = "dp83822";
++		vin-supply = <&vcc_eth>;
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		gpio = <&gpio1 8 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
++};
++
++&fec1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_enet1>;
++	phy-mode = "rmii";
++	phy-supply = <&reg_dp83822_en>;
++	phy-handle = <&dp83822i>;
++	phy-reset-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
++	status = "okay";
++
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		dp83822i: ethernet-phy@1 {
++			compatible = "ethernet-phy-ieee802.3-c22";
++			reg = <1>;
++			clocks = <&clks IMX6UL_CLK_ENET_REF>;
++			clock-names = "rmii-ref";
++		};
++	};
++};
++
++&i2c2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c2>;
++	clock-frequency = <100000>;
++	status = "okay";
++
++	pmic: mc34pf3000@8 {
++		compatible = "fsl,pfuze3000";
++		reg = <0x08>;
++		regulators {
++			sw1a_reg: sw1a {
++				regulator-name = "V_+3V3_SW1A";
++				vin-supply = <&reg_4v>;
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <6250>;
++			};
++			vdd_soc_in: sw1b {
++				regulator-name = "V_+1V4_SW1B";
++				vin-supply = <&reg_4v>;
++				regulator-min-microvolt = <700000>;
++				regulator-max-microvolt = <1475000>;
++				regulator-ramp-delay = <6250>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++			sw2_reg: sw2 {
++				regulator-name = "V_+3V3_SW2";
++				vin-supply = <&reg_4v>;
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++			vcc_ddr3: sw3 {
++				regulator-name = "V_+1V35_SW3";
++				vin-supply = <&reg_4v>;
++				regulator-min-microvolt = <1350000>;
++				regulator-max-microvolt = <1350000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++			swbst_reg: swbst {
++				regulator-name = "V_+5V0_SWBST";
++				vin-supply = <&reg_4v>;
++				regulator-min-microvolt = <5000000>;
++				regulator-max-microvolt = <5150000>;
++			};
++			vdd_snvs: vsnvs {
++				regulator-name = "V_+3V0_SNVS";
++				vin-supply = <&reg_4v>;
++				regulator-min-microvolt = <1000000>;
++				regulator-max-microvolt = <3000000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++			vrefddr: vrefddr {
++				regulator-name = "V_+0V675_VREFDDR";
++				vin-supply = <&vcc_ddr3>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++			/* 3V3 Supply: i.MX6 modules */
++			vgen1_reg: vldo1 {
++				regulator-name = "V_+3V3_LDO1";
++				vin-supply = <&reg_4v>;
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++			vgen2_reg: vldo2 {
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <1550000>;
++			};
++			vgen3_reg: vccsd {
++				regulator-min-microvolt = <2850000>;
++				regulator-max-microvolt = <3300000>;
++			};
++			vdd_high_in: v33 {
++				regulator-name = "V_+3V3_V33";
++				vin-supply = <&reg_4v>;
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++			vcc_eth: vldo3 {
++				regulator-name = "V_+1V8_LDO3";
++				vin-supply = <&reg_4v>;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++			vgen6_reg: vldo4 {
++				regulator-name = "V_+1V8_LDO4";
++				vin-supply = <&reg_4v>;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++		};
++	};
++};
++
++&ecspi1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_spi1>;
++	cs-gpios = <
++		&gpio3 26 GPIO_ACTIVE_LOW
++		&gpio3 10 GPIO_ACTIVE_LOW
++		&gpio3 12 GPIO_ACTIVE_LOW
++	>;
++	status = "okay";
++
++	cc2520: spi@0 {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_cc2520>;
++		compatible = "ti,cc2520";
++		reg = <0>;
++		spi-max-frequency = <4000000>;
++		fifo-gpio = <&gpio3 15 0>;
++		fifop-gpio = <&gpio3 16 0>;
++		sfd-gpio = <&gpio3 24 0>;
++		cca-gpio = <&gpio3 20 0>;
++		vreg-gpio = <&gpio3 19 0>;
++		reset-gpio = <&gpio3 23 0>;
++		vin-supply = <&sw2_reg>;
++		status = "okay";
++	};
++	qca7000: spi@1 {
++		compatible = "qca,qca7000";
++		reg = <1>;
++		spi-max-frequency = <8000000>;
++		interrupt-parent = <&gpio4>;
++		interrupts = <16 0x1>;
++		spi-cpha;
++		spi-cpol;
++		status = "okay";
++	};
++	tfr7970: spi@2 {
++		compatible = "ti,trf7970a";
++		reg = <3>;
++		spi-max-frequency = <2000000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_trf7970>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <14 0>;
++		ti,enable-gpios = <&gpio3 7 GPIO_ACTIVE_HIGH>, <&gpio3 17 GPIO_ACTIVE_HIGH>;
++		vin-supply = <&reg_4v>;
++		vdd-io-supply = <&sw2_reg>;
++		autosuspend-delay = <30000>;
++		clock-frequency = <27120000>;
++		status = "okay";
++	};
++};
++
++&uart3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart3>;
++	uart-has-rtscts;
++	status = "okay";
++};
++
++&uart4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart4>;
++	status = "okay";
++};
++
++&uart6 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart6>;
++	uart-has-rtscts;
++	status = "okay";
++	bluetooth {
++		compatible = "ti,wl1835-st";
++		enable-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
++		vin-supply = <&reg_4v>;
++	};
++};
++
++&uart7 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart7>;
++	status = "okay";
++};
++
++&usdhc1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usdhc1>;
++	bus-width = <4>;
++	vmmc-supply = <&reg_wl18xx_vmmc>;
++	non-removable;
++	keep-power-in-suspend;
++	cap-power-off-card;
++	max-frequency = <25000000>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	wlcore: wlcore@2 {
++		compatible = "ti,wl1837";
++		reg = <2>;
++		interrupt-parent = <&gpio4>;
++		interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
++		tcxo-clock-frequency = <26000000>;
++	};
++};
++
++&usdhc2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usdhc2>;
++	bus-width = <8>;
++	vmmc-supply = <&sw1a_reg>;
++	no-1-8-v;
++	non-removable;
++	no-sd;
++	no-sdio;
++	keep-power-in-suspend;
++	status = "okay";
++};
++
++&usbotg1 {
++	dr_mode = "otg";
++	status = "okay";
++};
++
++&usbotg2 {
++	dr_mode = "host";
++	disable-over-current;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_minipcie>;
++	status = "okay";
++};
++
++&wdog1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wdog>;
++	fsl,ext-reset-output;
++	status = "okay";
++};
++
++&reg_arm {
++	vin-supply = <&vdd_soc_in>;
++	regulator-allow-bypass;
++};
++
++&reg_soc {
++	vin-supply = <&vdd_soc_in>;
++	regulator-allow-bypass;
++};
++
++&iomuxc {
++	pinctrl-names = "default";
++
++	pinctrl_enet1: enet1grp {
++		fsl,pins = <
++			MX6UL_PAD_GPIO1_IO06__ENET1_MDIO	0x1b0b0
++			MX6UL_PAD_GPIO1_IO07__ENET1_MDC		0x1b0b0
++			MX6UL_PAD_ENET1_RX_EN__ENET1_RX_EN	0x1b0b0
++			MX6UL_PAD_ENET1_RX_ER__ENET1_RX_ER	0x1b0b0
++			MX6UL_PAD_ENET1_RX_DATA0__ENET1_RDATA00	0x1b0b0
++			MX6UL_PAD_ENET1_RX_DATA1__ENET1_RDATA01	0x1b0b0
++			MX6UL_PAD_ENET1_TX_EN__ENET1_TX_EN	0x1b0b0
++			MX6UL_PAD_ENET1_TX_DATA0__ENET1_TDATA00	0x1b0b0
++			MX6UL_PAD_ENET1_TX_DATA1__ENET1_TDATA01	0x1b0b0
++			MX6UL_PAD_ENET1_TX_CLK__ENET1_REF_CLK1	0x4001b031
++			MX6UL_PAD_GPIO1_IO08__GPIO1_IO08	0x13030
++			MX6UL_PAD_GPIO1_IO09__GPIO1_IO09	0x13030
++		>;
++	};
++
++	pinctrl_i2c2: i2c2grp {
++		fsl,pins = <
++			MX6UL_PAD_UART5_TX_DATA__I2C2_SCL   0x4001b8b0
++			MX6UL_PAD_UART5_RX_DATA__I2C2_SDA   0x4001b8b0
++			MX6UL_PAD_UART4_RX_DATA__GPIO1_IO29 0x10000
++		>;
++	};
++
++	pinctrl_minipcie: minipciegrp {
++		fsl,pins = <
++			/* HYS=1, 100k PullDown, 50MHz, R0/6 */
++			MX6UL_PAD_LCD_HSYNC__GPIO3_IO02   0x13030
++			MX6UL_PAD_LCD_VSYNC__GPIO3_IO03   0x13030
++			MX6UL_PAD_LCD_RESET__GPIO3_IO04   0x13030
++			MX6UL_PAD_LCD_DATA03__GPIO3_IO08  0x13030
++			MX6UL_PAD_LCD_DATA04__GPIO3_IO09  0x13030
++		>;
++	};
++
++	pinctrl_spi1: spi1grp {
++		fsl,pins = <
++			MX6UL_PAD_LCD_DATA20__ECSPI1_SCLK 0x1b0b0
++			MX6UL_PAD_LCD_DATA22__ECSPI1_MOSI 0x1b0b0
++			MX6UL_PAD_LCD_DATA23__ECSPI1_MISO 0x1b0b0
++			MX6UL_PAD_LCD_DATA05__GPIO3_IO10  0x17030
++			MX6UL_PAD_NAND_DQS__GPIO4_IO16    0x17030
++			MX6UL_PAD_LCD_DATA06__GPIO3_IO11  0x17030
++			MX6UL_PAD_LCD_DATA13__GPIO3_IO18  0x10030
++		>;
++	};
++
++	pinctrl_cc2520: cc2520grp {
++		fsl,pins = <
++			MX6UL_PAD_LCD_DATA10__GPIO3_IO15  0x13030
++			MX6UL_PAD_LCD_DATA11__GPIO3_IO16  0x13030
++			MX6UL_PAD_LCD_DATA14__GPIO3_IO19  0x13030
++			MX6UL_PAD_LCD_DATA15__GPIO3_IO20  0x13030
++			MX6UL_PAD_LCD_DATA18__GPIO3_IO23  0x13030
++			MX6UL_PAD_LCD_DATA19__GPIO3_IO24  0x13030
++			MX6UL_PAD_LCD_DATA21__GPIO3_IO26  0x17030
++
++		>;
++	};
++
++	pinctrl_trf7970: trf7970grp {
++		fsl,pins = <
++			MX6UL_PAD_LCD_DATA07__GPIO3_IO12  0x17030
++			MX6UL_PAD_LCD_DATA02__GPIO3_IO07  0x10030
++			MX6UL_PAD_LCD_DATA12__GPIO3_IO17  0x10030
++			MX6UL_PAD_LCD_DATA09__GPIO3_IO14  0x17000
++		>;
++	};
++
++	pinctrl_uart3: uart3grp {
++		fsl,pins = <
++			MX6UL_PAD_NAND_READY_B__UART3_DCE_TX  0x1b0b0
++			MX6UL_PAD_NAND_CE0_B__UART3_DCE_RX    0x1b0b0
++			MX6UL_PAD_NAND_CE1_B__UART3_DCE_CTS   0x1b0b0
++			MX6UL_PAD_NAND_CLE__UART3_DCE_RTS     0x1b0b0
++			MX6UL_PAD_LCD_DATA08__GPIO3_IO13      0x13030
++			MX6UL_PAD_NAND_WP_B__GPIO4_IO11       0x13030
++			MX6UL_PAD_NAND_DQS__GPIO4_IO16        0x13030
++		>;
++	};
++
++	pinctrl_uart4: uart4grp {
++		fsl,pins = <
++			MX6UL_PAD_LCD_CLK__UART4_DCE_TX	      0x1b0b0
++			MX6UL_PAD_LCD_ENABLE__UART4_DCE_RX    0x1b0b0
++		>;
++	};
++
++	pinctrl_uart6: uart6grp {
++		fsl,pins = <
++			MX6UL_PAD_CSI_MCLK__UART6_DCE_TX      0x1b0b0
++			MX6UL_PAD_CSI_PIXCLK__UART6_DCE_RX    0x1b0b0
++			MX6UL_PAD_CSI_VSYNC__UART6_DCE_RTS    0x1b0b0
++			MX6UL_PAD_CSI_HSYNC__UART6_DCE_CTS    0x1b0b0
++			MX6UL_PAD_ENET2_TX_DATA0__GPIO2_IO11  0x10030
++			MX6UL_PAD_GPIO1_IO03__OSC32K_32K_OUT  0x00010
++		>;
++	};
++
++	pinctrl_uart7: uart7grp {
++		fsl,pins = <
++			MX6UL_PAD_LCD_DATA16__UART7_DCE_TX    0x1b0b0
++			MX6UL_PAD_LCD_DATA17__UART7_DCE_RX    0x1b0b0
++		>;
++	};
++
++	pinctrl_usdhc1: usdhc1grp {
++		fsl,pins = <
++			MX6UL_PAD_SD1_CMD__USDHC1_CMD        0x10059
++			MX6UL_PAD_SD1_CLK__USDHC1_CLK        0x10059
++			MX6UL_PAD_SD1_DATA0__USDHC1_DATA0    0x10059
++			MX6UL_PAD_SD1_DATA1__USDHC1_DATA1    0x10059
++			MX6UL_PAD_SD1_DATA2__USDHC1_DATA2    0x10059
++			MX6UL_PAD_SD1_DATA3__USDHC1_DATA3    0x10059
++			MX6UL_PAD_CSI_DATA00__GPIO4_IO21     0x17000
++			MX6UL_PAD_CSI_DATA01__GPIO4_IO22     0x10030
++		>;
++	};
++
++	pinctrl_usdhc2: usdhc2grp {
++		fsl,pins = <
++			MX6UL_PAD_NAND_RE_B__USDHC2_CLK      0x100e9
++			MX6UL_PAD_NAND_WE_B__USDHC2_CMD      0x100e9
++			MX6UL_PAD_NAND_DATA00__USDHC2_DATA0  0x100e9
++			MX6UL_PAD_NAND_DATA01__USDHC2_DATA1  0x100e9
++			MX6UL_PAD_NAND_DATA02__USDHC2_DATA2  0x100e9
++			MX6UL_PAD_NAND_DATA03__USDHC2_DATA3  0x100e9
++			MX6UL_PAD_NAND_DATA04__USDHC2_DATA4  0x100e9
++			MX6UL_PAD_NAND_DATA05__USDHC2_DATA5  0x100e9
++			MX6UL_PAD_NAND_DATA06__USDHC2_DATA6  0x100e9
++			MX6UL_PAD_NAND_DATA07__USDHC2_DATA7  0x100e9
++			MX6UL_PAD_NAND_ALE__GPIO4_IO10       0x10030
++		>;
++	};
++
++	pinctrl_wdog: wdoggrp {
++		fsl,pins = <
++			MX6UL_PAD_GPIO1_IO01__WDOG1_WDOG_B	0x00b0
++		>;
++	};
++};
+-- 
+2.29.2
 
-The probe order shouldn't matter. By pre-parsing all mmc aliases (for
-all slots) existing in the DTB we can keep track of reserved ids. In
-this way, for the non-alias case, we can dynamically select a
-non-reserved id.
-
-Although, perhaps more improvements can be made.
-
->
-> The description of commit 7678f4c20fa7670f ("serial: sh-sci: Add support
-> for dynamic instances") mentions some background and remaining
-> issues w.r.t. aliases.
->
-> > In regards to adding a new Kconfig option for "legacy probe", I am
-> > open to this if that's what people think is needed. Although, as
-> > pointed out earlier in this thread, it won't move us into a stable
-> > situation. The only solution to get to that point, is either to use
-> > udev/disklabel rules or the mmc aliases in DT.
->
-> IMHO that will be a fragile solution, too: over time, it may become
-> harder and harder to maintain the original probe order.
->
-> And if it will be an option, it means there will be two code paths to
-> maintain, increasing the burden.
-
-Alright, sounds like we can conclude that the Kconfig option doesn't
-seem like a good way forward.
-
-Kind regards
-Uffe
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
