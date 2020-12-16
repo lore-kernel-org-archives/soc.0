@@ -1,50 +1,79 @@
-Return-Path: <SRS0=dlKc=FU=czerwinskis.de=rouven@kernel.org>
+Return-Path: <SRS0=5nc+=FU=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A208C4361B
-	for <soc@archiver.kernel.org>; Wed, 16 Dec 2020 16:25:55 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 12193233E2; Wed, 16 Dec 2020 16:25:55 +0000 (UTC)
-Received: from magratgarlick.emantor.de (magratgarlick.emantor.de [78.46.208.201])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82EEEC4361B
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 16 Dec 2020 16:27:15 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 485792339E;
-	Wed, 16 Dec 2020 16:25:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 485792339E
+	by mail.kernel.org (Postfix) with ESMTPS id 0CFCC233F6
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 16 Dec 2020 16:27:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0CFCC233F6
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=rouven@czerwinskis.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=Iy14iiy6Th6UNq/XvNKVOPiajoB0rgpmCHBwdXMH40M=; b=hmkhKGWLhUfIRMtp9GETUf5Ef7
+	VbaKdIZANn+Eia39BQupE2MRc7XKGfzWFHNarGg3MJ1eq/djrGXEvPpm5/ERqCzHxHVGloYBI1Gl3
+	HS5h8WHns50VKUH36xLxcRe9DJ4gH4MGAeBabJKSXcuFfGl3uKjZgdnTBK6JpBWBY0PPzjuwDAEgQ
+	nq+fuqyHBdVuvE8NAFacJyyQH6i0IHG1HaUNKSFp895/nggSsWO4N9yViE/9MwkFWNmkzWiIQzY3e
+	/GvT1VhNLuZ8OvJa4l4DmAqZWG/SdJSR/OappaWgaJdGUd4W+6BJWYD2GivycrhMYmY+wmBkJjDnw
+	4nPG6Biw==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kpZch-00018s-MX; Wed, 16 Dec 2020 16:25:55 +0000
+Received: from magratgarlick.emantor.de ([78.46.208.201])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kpZce-000181-A9
+ for linux-arm-kernel@lists.infradead.org; Wed, 16 Dec 2020 16:25:53 +0000
 Received: by magratgarlick.emantor.de (Postfix, from userid 114)
-	id 0F4D3103ADC; Wed, 16 Dec 2020 17:25:53 +0100 (CET)
+ id 5D09E103AE0; Wed, 16 Dec 2020 17:25:49 +0100 (CET)
 Received: from localhost (unknown [IPv6:2001:9e8:79:5902:c0d3:dbff:fefe:ff70])
-	by magratgarlick.emantor.de (Postfix) with ESMTPSA id 416CA103AD4;
-	Wed, 16 Dec 2020 17:25:47 +0100 (CET)
+ by magratgarlick.emantor.de (Postfix) with ESMTPSA id 416CA103AD4;
+ Wed, 16 Dec 2020 17:25:47 +0100 (CET)
 From: Rouven Czerwinski <r.czerwinski@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>
-Cc: Rouven Czerwinski <r.czerwinski@pengutronix.de>,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>
 Subject: [PATCH v2 2/3] ARM: dts: add Webasto ccbv2
 Date: Wed, 16 Dec 2020 17:25:43 +0100
-Message-Id: <20201216162544.9629-1-r.czerwinski@pengutronix.de>
+Message-ID: <20201216162544.9629-1-r.czerwinski@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201216_112552_638239_2FA38B74 
+X-CRM114-Status: GOOD (  16.58  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: devicetree@vger.kernel.org, Rouven Czerwinski <r.czerwinski@pengutronix.de>,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201216162543.mfGJ9zFP6mxUL78oe2lqDBT6A2l_MOJ2guQDMbJDcA0@z>
 
 The Webasto Common Communication Board Version 2 is a i.MX6UL based
 board.
@@ -549,3 +578,8 @@ index 000000000000..5c3bca6d2698
 -- 
 2.29.2
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
