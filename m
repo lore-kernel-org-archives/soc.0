@@ -1,29 +1,45 @@
-Return-Path: <linux-kernel-owner@kernel.org>
+Return-Path: <SRS0=H5mR=FY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DF6DC4361B
-	for <linux-kernel@archiver.kernel.org>; Sun, 20 Dec 2020 15:09:12 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 554E622511
-	for <linux-kernel@archiver.kernel.org>; Sun, 20 Dec 2020 15:09:12 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727665AbgLTPIv (ORCPT
-        <rfc822;linux-kernel@archiver.kernel.org>);
-        Sun, 20 Dec 2020 10:08:51 -0500
-Received: from mail-eopbgr80127.outbound.protection.outlook.com ([40.107.8.127]:40789
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726977AbgLTPIu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Dec 2020 10:08:50 -0500
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F1BCC4361B
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 20 Dec 2020 15:10:38 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 584952251D
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 20 Dec 2020 15:10:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 584952251D
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=leica-geosystems.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe
+	:List-Id:MIME-Version:In-Reply-To:References:Message-ID:Date:Subject:To:From:
+	Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	bh=ryYlLoUMLkoDyfk+7yJ6mJ3hVsjkIzO8e29jQIxHxmU=; b=GBEPY7zkPg3TgFXJpxqyyOSg6h
+	BzbzF3iz5TSK1096KYbXUAG/CoOB6Zz9r/weyjtqA7sUOx6t/vnqqPDFlHNlrhzqNWOG1D59elNXB
+	4dIW8cu8fq1JP0/iP1RF7R2C7ZcCdhVh1V4iLk3Qi1Vx5hrFGpjk9LKtD0h5jdsvmXDrI7mF27Iqn
+	XD92M1+VS8wEWwTVASiYsnx38CUz8pAGFPLj2GIoFmloGqzuDn9c3kMRl6K7J19ZiJPYZM/t95qCA
+	cvoet4oEQ9aSTv2EwJYaM2mXuERMnjkGtPzXdQNmKGeyMAykvYjrkc7503b10UCqkKtwymgfR/8z0
+	QkVnZJig==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kr0Jg-0003By-5t; Sun, 20 Dec 2020 15:08:12 +0000
+Received: from mail-eopbgr80103.outbound.protection.outlook.com
+ ([40.107.8.103] helo=EUR04-VI1-obe.outbound.protection.outlook.com)
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kr0JY-0003BL-Vl
+ for linux-arm-kernel@lists.infradead.org; Sun, 20 Dec 2020 15:08:06 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=Cmf8yR9P2aArYbkrQiloe2/sQmKLBLwAx7XA9A8J93nDmicM8FhTrYhsgDpRzq5hQeCkBcGQWXNgzZsvglwsdIUMUMz2KegAodyQj19Ca4gZlo/uPdVRWaVZK/HJY058mUFIbbCF8cr5MFdCi1oojQg/dFf0xkPvKsUyNRv1E6yrVhwIPtQko8DESnex3MXY7bqr7kZaWYSFvEjUHHPv++7jW+ObthwjAusnUtqsWVSmEr6SSL5RgJ3YW+QMGpYxgum+PZp4r6/+vN87stZT3hxKfld5tUxsmQMjc1mVPh5CezHjDVIo2VTEg0L5z5x3KzpLT0BHmd8aQQDDYE0gVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
  bh=HLlkerezhXVnu7URcUV/Pwpz7ZLot/3yHJb6bD2N8UI=;
@@ -32,42 +48,37 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
  header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
  arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com; 
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
  bh=HLlkerezhXVnu7URcUV/Pwpz7ZLot/3yHJb6bD2N8UI=;
  b=ZLSP4RROJCaPL23qAkFl236GFJtYn226gzYOxdSH9LX3JUaINltj3nGz3eIgbLZCFKFfjSlVDKDSKVmWtQJuRFgccXcKxz4s/cHUvKg2tOX/rdIg39DJ/vK8LIp49qobGQT/+Eed/e09JCUX1Yw7HMH/afklM4XjFSOInTV/bFU=
 Received: from AM6PR06MB4691.eurprd06.prod.outlook.com (2603:10a6:20b:37::25)
- by AM6PR06MB4692.eurprd06.prod.outlook.com (2603:10a6:20b:58::25) with
- Microsoft SMTP Server (version=TLS1_2,
+ by AM6PR06MB4692.eurprd06.prod.outlook.com (2603:10a6:20b:58::25)
+ with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3676.29; Sun, 20 Dec
  2020 15:07:58 +0000
 Received: from AM6PR06MB4691.eurprd06.prod.outlook.com
  ([fe80::b073:9747:410c:12c6]) by AM6PR06MB4691.eurprd06.prod.outlook.com
  ([fe80::b073:9747:410c:12c6%6]) with mapi id 15.20.3676.033; Sun, 20 Dec 2020
  15:07:57 +0000
-From:   ZHIZHIKIN Andrey <andrey.zhizhikin@leica-geosystems.com>
+From: ZHIZHIKIN Andrey <andrey.zhizhikin@leica-geosystems.com>
 List-Id: <soc.lore.kernel.org>
-To:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "leoyang.li@nxp.com" <leoyang.li@nxp.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "Anson.Huang@nxp.com" <Anson.Huang@nxp.com>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "krzk@kernel.org" <krzk@kernel.org>,
-        "olof@lixom.net" <olof@lixom.net>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "soc@kernel.org" <soc@kernel.org>
+To: "catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org"
+ <will@kernel.org>, "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>, 
+ "shawnguo@kernel.org" <shawnguo@kernel.org>, "leoyang.li@nxp.com"
+ <leoyang.li@nxp.com>, "vkoul@kernel.org" <vkoul@kernel.org>,
+ "geert+renesas@glider.be" <geert+renesas@glider.be>, "Anson.Huang@nxp.com"
+ <Anson.Huang@nxp.com>, "michael@walle.cc" <michael@walle.cc>,
+ "krzk@kernel.org" <krzk@kernel.org>, "olof@lixom.net" <olof@lixom.net>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+ "soc@kernel.org" <soc@kernel.org>
 Subject: RE: [PATCH 0/2] drop unused POWER_AVS option for ARM/ARM64 config
 Thread-Topic: [PATCH 0/2] drop unused POWER_AVS option for ARM/ARM64 config
 Thread-Index: AQHWxwvPy9duOhNVsEeWqGLmfybe2qoAMVNA
-Date:   Sun, 20 Dec 2020 15:07:57 +0000
+Date: Sun, 20 Dec 2020 15:07:57 +0000
 Message-ID: <AM6PR06MB469153A8A3A1FCB576E9E215A6C10@AM6PR06MB4691.eurprd06.prod.outlook.com>
 References: <20201130112731.30599-1-andrey.zhizhikin@leica-geosystems.com>
 In-Reply-To: <20201130112731.30599-1-andrey.zhizhikin@leica-geosystems.com>
@@ -88,7 +99,10 @@ x-ms-oob-tlc-oobclassifiers: OLM:4714;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
 x-microsoft-antispam-message-info: ZyPdi2hgjSrGqtzrWd2nKKX8RG55ASRDB8zBzrmk9MdxyVn7Lem8n3es+mKlcEkSz4mExNwmsnwX+k09xFTNERJ174+smZfFt8yqSzxkjZnPZ8ggZbAZGJFhvbUOUFSLc1SwLAgyoJ069amWp4oqsly8CqpzL6SUH2g8dPwGEBiY0oXLF10qP9JClvzv/bShcjxy4VwSvBOKPfCQBhHgVohDQLBm247jNMIfYnONZbxq3v8HaqQVwl7Tz9J9oBz0BI/05qMZCSCbEkpUNPbyzLbXtvosxYjYA6u2FbYiNEwXrJwawsmwHrZ2qGRwLjcKyv0bxTL/1LOTDLDTNNCKto+Elm/avVt7JAe3xcwkC1qZXnUbkn/wim5Dnsni28u7wJDuGj/Iw6oRO/sj5AEw54XbrHramCmlKvgW+uIJmmlkxJc386NUMBFpmOteZ4I4ovmOgN3MC2qauRk3y4NSTv72YQb9eknBd3CeICGBJ826HklzmW6XRZDFoUxC2bDFlFm48ldjIs8vDA7fefqtSg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR06MB4691.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(39860400002)(366004)(396003)(136003)(83380400001)(921005)(8676002)(9686003)(76116006)(110136005)(316002)(478600001)(966005)(26005)(66556008)(66476007)(186003)(53546011)(2906002)(55016002)(64756008)(52536014)(6506007)(66946007)(33656002)(7416002)(86362001)(71200400001)(5660300002)(66446008)(8936002)(7696005);DIR:OUT;SFP:1102;
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AM6PR06MB4691.eurprd06.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(4636009)(376002)(346002)(39860400002)(366004)(396003)(136003)(83380400001)(921005)(8676002)(9686003)(76116006)(110136005)(316002)(478600001)(966005)(26005)(66556008)(66476007)(186003)(53546011)(2906002)(55016002)(64756008)(52536014)(6506007)(66946007)(33656002)(7416002)(86362001)(71200400001)(5660300002)(66446008)(8936002)(7696005);
+ DIR:OUT; SFP:1102; 
 x-ms-exchange-antispam-messagedata: =?utf-8?B?ZExjdWs0dThocTFML1B1bFo3NnQ3MjQxYkVYdEEwemttenVYNnp1eTBrdklQ?=
  =?utf-8?B?UTBMM2VrNTVGK0FJZW0xSThLejNXdHZPeENiNDBZMTZ0Z1JQbUxFWHlhSUpq?=
  =?utf-8?B?VWsyMWNLL01md3RuanNPd3NwdnVaTVhjUHBrQWRNaFhIWm93SGJReVhqRFpp?=
@@ -113,62 +127,90 @@ x-ms-exchange-antispam-messagedata: =?utf-8?B?ZExjdWs0dThocTFML1B1bFo3NnQ3MjQxYk
  =?utf-8?B?UEVhbmc3MnJnK0JMVENvZ3JmVjEzc1ZZZW9qZVFzL0lwTmt3UDA0dXZsdTQw?=
  =?utf-8?Q?q0cnRj7XRqLxM=3D?=
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-OriginatorOrg: leica-geosystems.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR06MB4691.eurprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-Network-Message-Id: 10e9a89d-0365-47d7-349c-08d8a4f908df
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2020 15:07:57.4033
- (UTC)
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2020 15:07:57.4033 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: Pf/UUpKOuZgCpm3j0DDL8rl+glpLPjJmz2IM3XoVsDAcR0l0U8HEVrBJ727C3SbcMMuATm7WigGhDlhnP9+KJoRhPt29Z9YGyzGXwods+xA2tXmCLgsnl/ODOY0Chi4o
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR06MB4692
-Precedence: bulk
-List-ID: <linux-kernel.vger.kernel.org>
-X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20201220150757.Lmo1arrZmsPURGjRR5UOQdBIw-s8DRE6MvMTukxh018@z>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20201220_100805_517274_EA6D92C7 
+X-CRM114-Status: GOOD (  17.38  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20201220150757.EoPdCEcyxTivqZVIAqRFcPw0wXSHszUaOVJAnuzSU48@z>
 
-SGVsbG8gQXJuZCwNCg0KQSB3aGlsZSBhZ28sIEkndmUgc3VibWl0dGVkIHRoaXMgc2VyaWVzIHRv
-IGNsZWFuLXVwIHRoZSB1bnVzZWQgUE9XRVJfQVZTIGNvbmZpZyBvcHRpb24sIGFuZA0KSXQgbG9v
-a3MgbGlrZSBpdCBkaWQgbm90IGxhbmQgaW4gYW55b25lJ3MgdHJlZSB1bnRpbCBub3cuDQoNClNp
-bWlsYXIgcGF0Y2ggdG8gY2xlYW4tdXAgdGhlIHNhbWUgb3B0aW9uIGluIG9tYXAycGx1c19kZWZj
-b25maWcgaGFzIGJlZW4gYWxyZWFkeSBwaWNrZWQgdXANCmJ5IFRvbnkgTGluZGdyZW4gYW5kIGlz
-IGFscmVhZHkgcHJlc2VudCBpbiB0aGUgbGludXgtbmV4dCB0cmVlLCBjb21taXQgMDQzNzE0MWI0
-ZTIyICgiQVJNOg0KY29uZmlnczogZHJvcCB1bnVzZWQgQkFDS0xJR0hUX0dFTkVSSUMgb3B0aW9u
-IikuDQoNClNlcmllcyBoYXMgYmVlbiBhbHJlYWR5IHJldmlld2VkIGJ5IEtyenlzenRvZiBhbmQg
-TmlzaGFudGgsIGJ1dCBub2JvZHkgc2VlbXMgdG8gcGljayBpdCB1cCBmdXJ0aGVyLg0KDQpTaW5j
-ZSBhdCB0aGUgdGltZSBvZiBzZW5kaW5nIHRoaXMgc2VyaWVzLCBJIHdhcyBub3QgYXdhcmUgdGhh
-dCBBUk0gU09DIGxpc3Qgc2hvdWxkIGFsc28gYmUgaW5jbHVkZWQNCihzYW1lIHRoaW5nIGFzIGZv
-ciBCQUNLTElHSFRfR0VORVJJQyBzZXJpZXMgWzFdKSwgSSB3YW50ZWQgdG8gYXNrIHlvdSBpZiB5
-b3UgY2FuIHRha2UgY2FyZSBvZiB0aGlzDQpzZXJpZXMgZnVydGhlciBhcyBpdCBkb2VzIHRvdWNo
-IHRoZSBtdWx0aSBjb25maWcgZm9yIGFybTMyIGFuZCBhYXJjaDY0Lg0KDQpPciBzaG91bGQgSSBy
-ZS1zZW5kIHRoZSBzZXJpZXMgd2l0aCBjb2xsZWN0ZWQgdGFncyBhbmQgaW5jbHVkZSBBUk0gU09D
-IGxpc3QgKHNhbWUgYXMgSSBkaWQgZm9yIA0KQkFDS0xJR0hUX0dFTkVSSUMgWzFdKT8NCg0KPiAt
-LS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBaSElaSElLSU4gQW5kcmV5IDxhbmRy
-ZXkuemhpemhpa2luQGxlaWNhLWdlb3N5c3RlbXMuY29tPg0KPiBTZW50OiBNb25kYXksIE5vdmVt
-YmVyIDMwLCAyMDIwIDEyOjI3IFBNDQo+IFRvOiBjYXRhbGluLm1hcmluYXNAYXJtLmNvbTsgd2ls
-bEBrZXJuZWwub3JnOyBiam9ybi5hbmRlcnNzb25AbGluYXJvLm9yZzsNCj4gc2hhd25ndW9Aa2Vy
-bmVsLm9yZzsgbGVveWFuZy5saUBueHAuY29tOyB2a291bEBrZXJuZWwub3JnOw0KPiBnZWVydCty
-ZW5lc2FzQGdsaWRlci5iZTsgQW5zb24uSHVhbmdAbnhwLmNvbTsgbWljaGFlbEB3YWxsZS5jYzsN
-Cj4ga3J6a0BrZXJuZWwub3JnOyBvbG9mQGxpeG9tLm5ldDsgbGludXgtYXJtLWtlcm5lbEBsaXN0
-cy5pbmZyYWRlYWQub3JnOyBsaW51eC0NCj4ga2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBDYzog
-WkhJWkhJS0lOIEFuZHJleSA8YW5kcmV5LnpoaXpoaWtpbkBsZWljYS1nZW9zeXN0ZW1zLmNvbT4N
-Cj4gU3ViamVjdDogW1BBVENIIDAvMl0gZHJvcCB1bnVzZWQgUE9XRVJfQVZTIG9wdGlvbiBmb3Ig
-QVJNL0FSTTY0IGNvbmZpZw0KPiANCj4gVGhpcyBzZXJpZXMgY2xlYW5zIHVwIGtlcm5lbCBjb25m
-aWcgZmlsZXMsIHJlbW92aW5nIHRoZSB1bnVzZWQgUE9XRVJfQVZTDQo+IG9wdGlvbi4NCj4gDQo+
-IEl0IGhhcyBiZWVuIHJlbW92ZWQgaW4gY29tbWl0IDc4NWI1YmI0MWIwYSAoIlBNOiBBVlM6IERy
-b3AgdGhlIGF2cw0KPiBkaXJlY3RvcnkgYW5kIHRoZSBjb3JyZXNwb25kaW5nIEtjb25maWciKSwg
-ZnJvbSB0aGUgdHJlZSBhbmQNCj4gdGhlcmVmb3JlIHNob3VsZCBiZSByZW1vdmVkIGZyb3JtIGRl
-ZmF1bHQgY29uZmlnIGZpbGVzIGRlbGl2ZXJlZCBmb3IgQVJNDQo+IGFuZCBBUk02NCBidWlsZHMu
-DQo+IA0KPiBBbmRyZXkgWmhpemhpa2luICgyKToNCj4gICBhcm02NDogZGVmY29uZmlnOiBkcm9w
-IHVudXNlZCBQT1dFUl9BVlMgb3B0aW9uDQo+ICAgQVJNOiBtdWx0aV92N19kZWZjb25maWc6IGRy
-b3AgdW51c2VkIFBPV0VSX0FWUyBvcHRpb24NCj4gDQo+ICBhcmNoL2FybS9jb25maWdzL211bHRp
-X3Y3X2RlZmNvbmZpZyB8IDEgLQ0KPiAgYXJjaC9hcm02NC9jb25maWdzL2RlZmNvbmZpZyAgICAg
-ICAgfCAxIC0NCj4gIDIgZmlsZXMgY2hhbmdlZCwgMiBkZWxldGlvbnMoLSkNCj4gDQo+IC0tDQo+
-IDIuMTcuMQ0KDQpMaW5rOiBbMV06IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LWFybS1r
-ZXJuZWwvMjAyMDEyMDEyMjI5MjIuMzE4My0xLWFuZHJleS56aGl6aGlraW5AbGVpY2EtZ2Vvc3lz
-dGVtcy5jb20vDQoNCi0tIEFuZHJleQ0KDQo=
+Hello Arnd,
+
+A while ago, I've submitted this series to clean-up the unused POWER_AVS config option, and
+It looks like it did not land in anyone's tree until now.
+
+Similar patch to clean-up the same option in omap2plus_defconfig has been already picked up
+by Tony Lindgren and is already present in the linux-next tree, commit 0437141b4e22 ("ARM:
+configs: drop unused BACKLIGHT_GENERIC option").
+
+Series has been already reviewed by Krzysztof and Nishanth, but nobody seems to pick it up further.
+
+Since at the time of sending this series, I was not aware that ARM SOC list should also be included
+(same thing as for BACKLIGHT_GENERIC series [1]), I wanted to ask you if you can take care of this
+series further as it does touch the multi config for arm32 and aarch64.
+
+Or should I re-send the series with collected tags and include ARM SOC list (same as I did for 
+BACKLIGHT_GENERIC [1])?
+
+> -----Original Message-----
+> From: ZHIZHIKIN Andrey <andrey.zhizhikin@leica-geosystems.com>
+> Sent: Monday, November 30, 2020 12:27 PM
+> To: catalin.marinas@arm.com; will@kernel.org; bjorn.andersson@linaro.org;
+> shawnguo@kernel.org; leoyang.li@nxp.com; vkoul@kernel.org;
+> geert+renesas@glider.be; Anson.Huang@nxp.com; michael@walle.cc;
+> krzk@kernel.org; olof@lixom.net; linux-arm-kernel@lists.infradead.org; linux-
+> kernel@vger.kernel.org
+> Cc: ZHIZHIKIN Andrey <andrey.zhizhikin@leica-geosystems.com>
+> Subject: [PATCH 0/2] drop unused POWER_AVS option for ARM/ARM64 config
+> 
+> This series cleans up kernel config files, removing the unused POWER_AVS
+> option.
+> 
+> It has been removed in commit 785b5bb41b0a ("PM: AVS: Drop the avs
+> directory and the corresponding Kconfig"), from the tree and
+> therefore should be removed frorm default config files delivered for ARM
+> and ARM64 builds.
+> 
+> Andrey Zhizhikin (2):
+>   arm64: defconfig: drop unused POWER_AVS option
+>   ARM: multi_v7_defconfig: drop unused POWER_AVS option
+> 
+>  arch/arm/configs/multi_v7_defconfig | 1 -
+>  arch/arm64/configs/defconfig        | 1 -
+>  2 files changed, 2 deletions(-)
+> 
+> --
+> 2.17.1
+
+Link: [1]: https://lore.kernel.org/linux-arm-kernel/20201201222922.3183-1-andrey.zhizhikin@leica-geosystems.com/
+
+-- Andrey
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
