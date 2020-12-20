@@ -1,23 +1,26 @@
-Return-Path: <SRS0=xz2+=FY=leica-geosystems.com=andrey.zhizhikin@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72BF0C4361B
-	for <soc@archiver.kernel.org>; Sun, 20 Dec 2020 15:08:04 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 29D87230FE; Sun, 20 Dec 2020 15:08:04 +0000 (UTC)
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10090.outbound.protection.outlook.com [40.107.1.90])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 464732251D;
-	Sun, 20 Dec 2020 15:08:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 464732251D
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=leica-geosystems.com
-Authentication-Results: mail.kernel.org; spf=fail smtp.mailfrom=andrey.zhizhikin@leica-geosystems.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DF6DC4361B
+	for <linux-kernel@archiver.kernel.org>; Sun, 20 Dec 2020 15:09:12 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 554E622511
+	for <linux-kernel@archiver.kernel.org>; Sun, 20 Dec 2020 15:09:12 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1727665AbgLTPIv (ORCPT
+        <rfc822;linux-kernel@archiver.kernel.org>);
+        Sun, 20 Dec 2020 10:08:51 -0500
+Received: from mail-eopbgr80127.outbound.protection.outlook.com ([40.107.8.127]:40789
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726977AbgLTPIu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 20 Dec 2020 10:08:50 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=Cmf8yR9P2aArYbkrQiloe2/sQmKLBLwAx7XA9A8J93nDmicM8FhTrYhsgDpRzq5hQeCkBcGQWXNgzZsvglwsdIUMUMz2KegAodyQj19Ca4gZlo/uPdVRWaVZK/HJY058mUFIbbCF8cr5MFdCi1oojQg/dFf0xkPvKsUyNRv1E6yrVhwIPtQko8DESnex3MXY7bqr7kZaWYSFvEjUHHPv++7jW+ObthwjAusnUtqsWVSmEr6SSL5RgJ3YW+QMGpYxgum+PZp4r6/+vN87stZT3hxKfld5tUxsmQMjc1mVPh5CezHjDVIo2VTEg0L5z5x3KzpLT0BHmd8aQQDDYE0gVw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
@@ -43,31 +46,35 @@ Received: from AM6PR06MB4691.eurprd06.prod.outlook.com
  ([fe80::b073:9747:410c:12c6]) by AM6PR06MB4691.eurprd06.prod.outlook.com
  ([fe80::b073:9747:410c:12c6%6]) with mapi id 15.20.3676.033; Sun, 20 Dec 2020
  15:07:57 +0000
-From: ZHIZHIKIN Andrey <andrey.zhizhikin@leica-geosystems.com>
+From:   ZHIZHIKIN Andrey <andrey.zhizhikin@leica-geosystems.com>
 List-Id: <soc.lore.kernel.org>
-To: "catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org"
-	<will@kernel.org>, "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-	"shawnguo@kernel.org" <shawnguo@kernel.org>, "leoyang.li@nxp.com"
-	<leoyang.li@nxp.com>, "vkoul@kernel.org" <vkoul@kernel.org>,
-	"geert+renesas@glider.be" <geert+renesas@glider.be>, "Anson.Huang@nxp.com"
-	<Anson.Huang@nxp.com>, "michael@walle.cc" <michael@walle.cc>,
-	"krzk@kernel.org" <krzk@kernel.org>, "olof@lixom.net" <olof@lixom.net>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@kernel.org>,
-	"soc@kernel.org" <soc@kernel.org>
+To:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "leoyang.li@nxp.com" <leoyang.li@nxp.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "Anson.Huang@nxp.com" <Anson.Huang@nxp.com>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "olof@lixom.net" <olof@lixom.net>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        "soc@kernel.org" <soc@kernel.org>
 Subject: RE: [PATCH 0/2] drop unused POWER_AVS option for ARM/ARM64 config
 Thread-Topic: [PATCH 0/2] drop unused POWER_AVS option for ARM/ARM64 config
 Thread-Index: AQHWxwvPy9duOhNVsEeWqGLmfybe2qoAMVNA
-Date: Sun, 20 Dec 2020 15:07:57 +0000
-Message-ID:
- <AM6PR06MB469153A8A3A1FCB576E9E215A6C10@AM6PR06MB4691.eurprd06.prod.outlook.com>
+Date:   Sun, 20 Dec 2020 15:07:57 +0000
+Message-ID: <AM6PR06MB469153A8A3A1FCB576E9E215A6C10@AM6PR06MB4691.eurprd06.prod.outlook.com>
 References: <20201130112731.30599-1-andrey.zhizhikin@leica-geosystems.com>
 In-Reply-To: <20201130112731.30599-1-andrey.zhizhikin@leica-geosystems.com>
 Accept-Language: en-US
 Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
 authentication-results: arm.com; dkim=none (message not signed)
  header.d=none;arm.com; dmarc=none action=none
  header.from=leica-geosystems.com;
@@ -76,17 +83,13 @@ x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
 x-ms-office365-filtering-correlation-id: 10e9a89d-0365-47d7-349c-08d8a4f908df
 x-ms-traffictypediagnostic: AM6PR06MB4692:
-x-microsoft-antispam-prvs:
- <AM6PR06MB469220E987CB21DEF93CA422A6C10@AM6PR06MB4692.eurprd06.prod.outlook.com>
+x-microsoft-antispam-prvs: <AM6PR06MB469220E987CB21DEF93CA422A6C10@AM6PR06MB4692.eurprd06.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:4714;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- ZyPdi2hgjSrGqtzrWd2nKKX8RG55ASRDB8zBzrmk9MdxyVn7Lem8n3es+mKlcEkSz4mExNwmsnwX+k09xFTNERJ174+smZfFt8yqSzxkjZnPZ8ggZbAZGJFhvbUOUFSLc1SwLAgyoJ069amWp4oqsly8CqpzL6SUH2g8dPwGEBiY0oXLF10qP9JClvzv/bShcjxy4VwSvBOKPfCQBhHgVohDQLBm247jNMIfYnONZbxq3v8HaqQVwl7Tz9J9oBz0BI/05qMZCSCbEkpUNPbyzLbXtvosxYjYA6u2FbYiNEwXrJwawsmwHrZ2qGRwLjcKyv0bxTL/1LOTDLDTNNCKto+Elm/avVt7JAe3xcwkC1qZXnUbkn/wim5Dnsni28u7wJDuGj/Iw6oRO/sj5AEw54XbrHramCmlKvgW+uIJmmlkxJc386NUMBFpmOteZ4I4ovmOgN3MC2qauRk3y4NSTv72YQb9eknBd3CeICGBJ826HklzmW6XRZDFoUxC2bDFlFm48ldjIs8vDA7fefqtSg==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR06MB4691.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(39860400002)(366004)(396003)(136003)(83380400001)(921005)(8676002)(9686003)(76116006)(110136005)(316002)(478600001)(966005)(26005)(66556008)(66476007)(186003)(53546011)(2906002)(55016002)(64756008)(52536014)(6506007)(66946007)(33656002)(7416002)(86362001)(71200400001)(5660300002)(66446008)(8936002)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata:
- =?utf-8?B?ZExjdWs0dThocTFML1B1bFo3NnQ3MjQxYkVYdEEwemttenVYNnp1eTBrdklQ?=
+x-microsoft-antispam-message-info: ZyPdi2hgjSrGqtzrWd2nKKX8RG55ASRDB8zBzrmk9MdxyVn7Lem8n3es+mKlcEkSz4mExNwmsnwX+k09xFTNERJ174+smZfFt8yqSzxkjZnPZ8ggZbAZGJFhvbUOUFSLc1SwLAgyoJ069amWp4oqsly8CqpzL6SUH2g8dPwGEBiY0oXLF10qP9JClvzv/bShcjxy4VwSvBOKPfCQBhHgVohDQLBm247jNMIfYnONZbxq3v8HaqQVwl7Tz9J9oBz0BI/05qMZCSCbEkpUNPbyzLbXtvosxYjYA6u2FbYiNEwXrJwawsmwHrZ2qGRwLjcKyv0bxTL/1LOTDLDTNNCKto+Elm/avVt7JAe3xcwkC1qZXnUbkn/wim5Dnsni28u7wJDuGj/Iw6oRO/sj5AEw54XbrHramCmlKvgW+uIJmmlkxJc386NUMBFpmOteZ4I4ovmOgN3MC2qauRk3y4NSTv72YQb9eknBd3CeICGBJ826HklzmW6XRZDFoUxC2bDFlFm48ldjIs8vDA7fefqtSg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR06MB4691.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(39860400002)(366004)(396003)(136003)(83380400001)(921005)(8676002)(9686003)(76116006)(110136005)(316002)(478600001)(966005)(26005)(66556008)(66476007)(186003)(53546011)(2906002)(55016002)(64756008)(52536014)(6506007)(66946007)(33656002)(7416002)(86362001)(71200400001)(5660300002)(66446008)(8936002)(7696005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?ZExjdWs0dThocTFML1B1bFo3NnQ3MjQxYkVYdEEwemttenVYNnp1eTBrdklQ?=
  =?utf-8?B?UTBMM2VrNTVGK0FJZW0xSThLejNXdHZPeENiNDBZMTZ0Z1JQbUxFWHlhSUpq?=
  =?utf-8?B?VWsyMWNLL01md3RuanNPd3NwdnVaTVhjUHBrQWRNaFhIWm93SGJReVhqRFpp?=
  =?utf-8?B?RGwrdlllSjlCaHV4U1JENmh5RFNoY1BjZ1BtRW5UOTNXZ01wc1BEeTRwTkt2?=
@@ -124,6 +127,10 @@ X-MS-Exchange-CrossTenant-id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: Pf/UUpKOuZgCpm3j0DDL8rl+glpLPjJmz2IM3XoVsDAcR0l0U8HEVrBJ727C3SbcMMuATm7WigGhDlhnP9+KJoRhPt29Z9YGyzGXwods+xA2tXmCLgsnl/ODOY0Chi4o
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR06MB4692
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20201220150757.Lmo1arrZmsPURGjRR5UOQdBIw-s8DRE6MvMTukxh018@z>
 
 SGVsbG8gQXJuZCwNCg0KQSB3aGlsZSBhZ28sIEkndmUgc3VibWl0dGVkIHRoaXMgc2VyaWVzIHRv
 IGNsZWFuLXVwIHRoZSB1bnVzZWQgUE9XRVJfQVZTIGNvbmZpZyBvcHRpb24sIGFuZA0KSXQgbG9v
