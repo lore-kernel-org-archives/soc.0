@@ -3,61 +3,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84041C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6AFAC433E6
 	for <soc@archiver.kernel.org>; Tue, 22 Dec 2020 17:00:07 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 3789123103; Tue, 22 Dec 2020 17:00:07 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 1FE8B23105;
+	id 47AE323137; Tue, 22 Dec 2020 17:00:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 2FAB22311D;
 	Tue, 22 Dec 2020 17:00:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1608656407;
-	bh=0z2kOrJWmp4rwTVzTO7e+cRY6gOg+s5KPTJupRJCwbU=;
+	bh=dp1bXPqL33b5EXDNW1h4qCbCuEu3ZVSioresO7HMsgY=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=rjsWLmysKWz5xoDtQhwYneRX4jxCOuilCBa2oomnniXpT270bPO/FmVe/vxjegnlS
-	 71uYUraaJaULZ7PWlwzwxi2q/d5peKi/W+OkGGlH18GeXjfXXUu/lLngVgNyRNnXal
-	 MN4PD0h5WggrUItqlTUUh/IsEIpNCoimUj7QudFcDX6lUDwnxhcr499XEoxQtPMGpZ
-	 5vGomL8lm5zjbpdrQ7kr3Mfuyj/zVKjpHZUgT5kyDWzXidvTP3bzFUISHAe9Ord0o6
-	 Nhpcwdz4+wp1cofCiBuWdUaXL9w84QXHj6wF/UaLE51b9INfoyp1mDUWEW7DAr+arW
-	 Pv+Ht8wRAcCsA==
+	b=l/M+isxsRbWa2fhakiPxtCPTxMSzUnnjsbqL4w+du/jKuTTPFj24ofJh5vQGZCpe6
+	 Lr4yNY/J/+8lQQLUdrYdzKybfmR11CjMdRtRrbeApFH/ITKX/iTNODNRHJx4Wuqq14
+	 7jG2JrvVoAaVOtvtJtko3OfCwC44zZonvMsW9BvefDDyH5dJkrdTPrpWIYGd233w+c
+	 i5zCotEOf+13yBoS8W7G+yJqxAxJ20oPqLXGJ4H8Rzh3ihh+YJyghfk0gTYk7hHzAS
+	 /dfO1W532pN11Zf8zlb9F99n1SaXDsGzMqtTWpKMrbJkSjmqnwevmrsyenvtewBXuE
+	 zYV/S3J+w/0Mg==
 Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id 1030D6019C;
+	by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id 20FED60591;
 	Tue, 22 Dec 2020 17:00:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: dts: ux500/golden: Set display max brightness
+Subject: Re: [GIT PULL] Few regression fixes for omaps
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <160865640706.31426.9253439790508104050.git-patchwork-notify@kernel.org>
+ <160865640712.31426.2766875858341450889.git-patchwork-notify@kernel.org>
 Date: Tue, 22 Dec 2020 17:00:07 +0000
-References: <20201214223413.253893-1-linus.walleij@linaro.org>
-In-Reply-To: <20201214223413.253893-1-linus.walleij@linaro.org>
-To: Linus Walleij <linus.walleij@linaro.org>
+References: <pull-1607674932-973902@atomide.com>
+In-Reply-To: <pull-1607674932-973902@atomide.com>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (refs/heads/for-next):
+This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Mon, 14 Dec 2020 23:34:13 +0100 you wrote:
-> A too high brightness by default (default is max) makes the
-> screen go blank. Set this to 15 as in the Vendor tree.
+On Fri, 11 Dec 2020 10:22:54 +0200 you wrote:
+> From: "Tony Lindgren" <tony@atomide.com>
 > 
-> Cc: Stephan Gerhold <stephan@gerhold.net>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> SoC folks: this is a plain regression fix, please apply
-> it directly for fixes.
+> The following changes since commit 05d5de6ba7dbe490dd413b5ca11d0875bd2bc006:
+> 
+>   ARM: dts: dra76x: m_can: fix order of clocks (2020-11-19 11:37:57 +0200)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: dts: ux500/golden: Set display max brightness
-    https://git.kernel.org/soc/soc/c/f012afb6af3d
+  - [GIT,PULL] Few regression fixes for omaps
+    https://git.kernel.org/soc/soc/c/062fa6b8ef15
 
 You are awesome, thank you!
 --
