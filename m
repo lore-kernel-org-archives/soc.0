@@ -1,109 +1,113 @@
-Return-Path: <SRS0=5DOh=GF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=MJ2f=GH=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C5EFC433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  2 Jan 2021 22:05:52 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84D49C433DB
+	for <soc@archiver.kernel.org>; Mon,  4 Jan 2021 16:28:46 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 4C833224D2; Mon,  4 Jan 2021 16:28:46 +0000 (UTC)
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 92EFC207A1
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  2 Jan 2021 22:05:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 92EFC207A1
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=gondor.apana.org.au
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=Kxv0g1ukeZ+/EsN738TyUdL0D3/jcC5vza9tO2RBbrs=; b=rqnvWklrYkuTTyElDhod+yO3n
-	vzGiWGCxLft1bqm7z2vIcuyXoTL4rWHmTvhClrYZAkjC9/Octm+ppC/YOKAMspo9pkAGyh4dVpsyZ
-	W9jARG6IkwqPqmvyez5DQu4vbuM8T1Gk8Ei/qPPOy9OXJbaQ2ZmwMwq4PKqHFXEGeWY9zW0RJIyaE
-	aWHOTGYJw49di3Fz3Zy7NJhvt0EJ8eTt0+cmPQIfT3AeJcBQob37Ye0+UHnLxHFeMhTJJXbxrWoPj
-	IUZwcYRO0QB5cSqIFNBV2iK25S9MvacG9ytTMS6or3KYQ3cuK6tP9/kq48DyF1hdF7Q9slkDMT6Xz
-	F1Fxkl5AA==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kvp0l-0001KZ-Ty; Sat, 02 Jan 2021 22:04:35 +0000
-Received: from helcar.hmeau.com ([216.24.177.18] helo=fornost.hmeau.com)
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kvp0j-0001K1-D3
- for linux-arm-kernel@lists.infradead.org; Sat, 02 Jan 2021 22:04:34 +0000
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
- by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
- id 1kvp0a-0000ZI-Uo; Sun, 03 Jan 2021 09:04:26 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation);
- Sun, 03 Jan 2021 09:04:24 +1100
-Date: Sun, 3 Jan 2021 09:04:24 +1100
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 3/4] crypto: Remove PicoXcell driver
-Message-ID: <20210102220424.GF12767@gondor.apana.org.au>
-References: <20201210200315.2965567-1-robh@kernel.org>
- <20201210200315.2965567-4-robh@kernel.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20201210200315.2965567-4-robh@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210102_170433_461424_77A7CEB6 
-X-CRM114-Status: GOOD (  11.42  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by mail.kernel.org (Postfix) with ESMTPS id 0B4462245C
+	for <soc@kernel.org>; Mon,  4 Jan 2021 16:28:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0B4462245C
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=robherring2@gmail.com
+Received: by mail-il1-f180.google.com with SMTP id x15so25840990ilq.1
+        for <soc@kernel.org>; Mon, 04 Jan 2021 08:28:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6BE0bLFnBbRxZQebjCFcYcAXRZ2Cug808cMEhBnkBjQ=;
+        b=UFT0EWS6N/k3n+VsZY1C5JZBGMj3kSztMPUsp0GtKpBNavsAxG/tsEIUksd1ab2+Cz
+         65fPm3LJO9Qo74NkRk1gI6aMAq20tHuRphvuqh/xSBy/PKavagVylmEtVUQBHQx/+JT7
+         SBXGv8evnrowyAV6oQFVrvQhZE6/KwB4y0IgOqR9wUHI/lHrG5VzMggIwkYeCCcl3t2C
+         KMifCYj/whERqC7Wal+eTovKefLh1txerEf2x8a90gNjNVSIeYTqxwrg00xu0U8WeGZ6
+         zN1zIIdc7dAS9MCcfOE+eSqA4at9v+hVi1ACcDUnf+2iKjh4sjIkS4ErqYi2wJtQygqy
+         6pQg==
+X-Gm-Message-State: AOAM533XzQsMlnESQAUSCfLs+0RkSW0R1eJLuQr9wNEj6oBH6fyg+KwW
+	eNNlalPdnLZh3Nl0r/YUc9dh32Np4A==
+X-Google-Smtp-Source: ABdhPJzRl+1dDFvpecCYtgp1pt4LNgqtUQWMaq4z26IKHkGBVToNJOC7zkPShcm4TERSM4BP/cFMJg==
+X-Received: by 2002:a05:6e02:ecc:: with SMTP id i12mr68736490ilk.0.1609777725189;
+        Mon, 04 Jan 2021 08:28:45 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id o7sm42568788iov.1.2021.01.04.08.28.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jan 2021 08:28:44 -0800 (PST)
+Received: (nullmailer pid 2106078 invoked by uid 1000);
+	Mon, 04 Jan 2021 16:28:43 -0000
+Date: Mon, 4 Jan 2021 09:28:43 -0700
+From: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, soc@kernel.org,
- linux-crypto@vger.kernel.org, Jamie Iles <jamie@jamieiles.com>,
- "David S. Miller" <davem@davemloft.net>, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210102220424.Vt6OYp23WmRl15R6I8nYefuZjF0S9c36MXHGkTGT2bA@z>
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, devicetree@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, Jamie Iles <jamie@jamieiles.com>
+Subject: Re: [PATCH 0/4] Remove PicoXcell
+Message-ID: <20210104162843.GA1875909@robh.at.kernel.org>
+References: <20201210200315.2965567-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201210200315.2965567-1-robh@kernel.org>
 
-On Thu, Dec 10, 2020 at 02:03:14PM -0600, Rob Herring wrote:
+On Thu, Dec 10, 2020 at 02:03:11PM -0600, Rob Herring wrote:
 > PicoXcell has had nothing but treewide cleanups for at least the last 8
 > years and no signs of activity. The most recent activity is a yocto vendor
 > kernel based on v3.0 in 2015.
 > 
-> Cc: Jamie Iles <jamie@jamieiles.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: linux-crypto@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> This can go in via crypto tree.
+> These patches can go via the respective maintainers' trees.
+
+Arnd, Olof,
+
+Can you apply patches 1 and 2. The others have been applied.
+
+Rob
+
 > 
->  drivers/crypto/Kconfig                 |   18 -
->  drivers/crypto/Makefile                |    1 -
->  drivers/crypto/picoxcell_crypto.c      | 1806 ------------------------
->  drivers/crypto/picoxcell_crypto_regs.h |  115 --
->  4 files changed, 1940 deletions(-)
+> Rob
+> 
+> Rob Herring (4):
+>   ARM: dts: Remove PicoXcell platforms
+>   ARM: Remove PicoXcell platform support
+>   crypto: Remove PicoXcell driver
+>   dt-bindings: Remove PicoXcell bindings
+> 
+>  .../devicetree/bindings/arm/picoxcell.txt     |   24 -
+>  .../bindings/crypto/picochip-spacc.txt        |   21 -
+>  .../devicetree/bindings/net/macb.txt          |    2 -
+>  .../bindings/timer/snps,dw-apb-timer.yaml     |    7 -
+>  MAINTAINERS                                   |    9 -
+>  arch/arm/Kconfig                              |    2 -
+>  arch/arm/Kconfig.debug                        |   13 +-
+>  arch/arm/Makefile                             |    1 -
+>  arch/arm/boot/dts/Makefile                    |    3 -
+>  arch/arm/boot/dts/picoxcell-pc3x2.dtsi        |  239 ---
+>  arch/arm/boot/dts/picoxcell-pc3x3.dtsi        |  355 ----
+>  arch/arm/boot/dts/picoxcell-pc7302-pc3x2.dts  |   78 -
+>  arch/arm/boot/dts/picoxcell-pc7302-pc3x3.dts  |   84 -
+>  arch/arm/mach-picoxcell/Kconfig               |    9 -
+>  arch/arm/mach-picoxcell/Makefile              |    2 -
+>  arch/arm/mach-picoxcell/common.c              |   81 -
+>  drivers/crypto/Kconfig                        |   18 -
+>  drivers/crypto/Makefile                       |    1 -
+>  drivers/crypto/picoxcell_crypto.c             | 1806 -----------------
+>  drivers/crypto/picoxcell_crypto_regs.h        |  115 --
+>  20 files changed, 1 insertion(+), 2869 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/picoxcell.txt
+>  delete mode 100644 Documentation/devicetree/bindings/crypto/picochip-spacc.txt
+>  delete mode 100644 arch/arm/boot/dts/picoxcell-pc3x2.dtsi
+>  delete mode 100644 arch/arm/boot/dts/picoxcell-pc3x3.dtsi
+>  delete mode 100644 arch/arm/boot/dts/picoxcell-pc7302-pc3x2.dts
+>  delete mode 100644 arch/arm/boot/dts/picoxcell-pc7302-pc3x3.dts
+>  delete mode 100644 arch/arm/mach-picoxcell/Kconfig
+>  delete mode 100644 arch/arm/mach-picoxcell/Makefile
+>  delete mode 100644 arch/arm/mach-picoxcell/common.c
 >  delete mode 100644 drivers/crypto/picoxcell_crypto.c
 >  delete mode 100644 drivers/crypto/picoxcell_crypto_regs.h
-
-Patch applied.  Thanks.
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
+> --
+> 2.25.1
