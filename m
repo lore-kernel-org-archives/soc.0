@@ -2,53 +2,53 @@ Return-Path: <SRS0=SDro=GL=fujitsu.com=misono.tomohiro@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75702C433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2158C43381
 	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 10:40:40 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 31C01238A0; Fri,  8 Jan 2021 10:40:40 +0000 (UTC)
+	id 8B454238E5; Fri,  8 Jan 2021 10:40:40 +0000 (UTC)
 Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1813A2388C;
-	Fri,  8 Jan 2021 10:40:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1813A2388C
+	by mail.kernel.org (Postfix) with ESMTPS id B20D623899;
+	Fri,  8 Jan 2021 10:40:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B20D623899
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jp.fujitsu.com
 Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=misono.tomohiro@fujitsu.com
-IronPort-SDR: Lzc61TjJe4rdBqE9caK+3gw91Vn/UipeqMGV3JCVUXG2kbq7IJ2H/wCYiu2BHrGuKhVVOrGbEE
- iySy/InvIX8GnxhFrA87E+KG3uE01Q2dTqSdOnrsU9q7W5vbhjfPIKPSKw6oYEs8sjhlcKuvA3
- kG81wo3yDfMM/+mbAYD3D8pdmXFMHZMHEAMaIcR/FsexZRZpNE8cNdn0hB5ClyOTqvSG/YG+cu
- bIyiJR3xwOPcxHQHUiWQA5W4PvE1MEl7U1RJE4Dz5aQ0qfpbPav0Xc1ldaAEFJpoxQyib+N10T
- Eqk=
-X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="2149512"
+IronPort-SDR: HuYweS7UwqsWgpU1NK/ODMxOYQF95zFSW50CLLlxecn7ujhTCE3jI4bXCJg8XjS4gnvaxY7N7l
+ pfxWesxSMxVvCmtjYMt59PJqOWIpFwtTzWAoi4/9xQWiNS1jG+wI0HrpMTkEJxeRc+P4xA6Hiq
+ 1PzAX6vzRcMmw1sf77bBd0E7SMzUKAOui0IvIlRaAphRsoc8kIVSl3dusXtXHzYTAn9HrwdOKR
+ xHW82uF1TykK0n/TMdtr4oNBE5kKNsNeXbJswb9YLHn4LLkf6waLJxrgcMMfN8M5ny6ZIJgMAQ
+ fIE=
+X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="2149515"
 X-IronPort-AV: E=Sophos;i="5.79,330,1602514800"; 
-   d="scan'208";a="2149512"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:40:35 +0900
-Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
-	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id F30E31FB303;
-	Fri,  8 Jan 2021 19:40:34 +0900 (JST)
-Received: from g01jpfmpwkw03.exch.g01.fujitsu.local (g01jpfmpwkw03.exch.g01.fujitsu.local [10.0.193.57])
-	by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 48DA9207B46;
-	Fri,  8 Jan 2021 19:40:34 +0900 (JST)
+   d="scan'208";a="2149515"
+Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:40:36 +0900
+Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
+	by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 6863AA80C2;
+	Fri,  8 Jan 2021 19:40:36 +0900 (JST)
+Received: from g01jpfmpwkw01.exch.g01.fujitsu.local (g01jpfmpwkw01.exch.g01.fujitsu.local [10.0.193.38])
+	by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id B5065AB1A3;
+	Fri,  8 Jan 2021 19:40:35 +0900 (JST)
 Received: from G01JPEXCHKW14.g01.fujitsu.local (G01JPEXCHKW14.g01.fujitsu.local [10.0.194.53])
-	by g01jpfmpwkw03.exch.g01.fujitsu.local (Postfix) with ESMTP id 3CF3BBD6867;
-	Fri,  8 Jan 2021 19:40:33 +0900 (JST)
+	by g01jpfmpwkw01.exch.g01.fujitsu.local (Postfix) with ESMTP id B82DC692763;
+	Fri,  8 Jan 2021 19:40:34 +0900 (JST)
 Received: from luna3.soft.fujitsu.com (10.124.196.199) by
  G01JPEXCHKW14.g01.fujitsu.local (10.0.194.53) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 8 Jan 2021 19:40:31 +0900
+ 14.3.487.0; Fri, 8 Jan 2021 19:40:32 +0900
 From: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 List-Id: <soc.lore.kernel.org>
 To: <linux-arm-kernel@lists.infradead.org>, <soc@kernel.org>
 CC: <will@kernel.org>, <catalin.marinas@arm.com>, <arnd@arndb.de>,
 	<olof@lixom.net>, <misono.tomohiro@jp.fujitsu.com>
-Subject: [PATCH 02/10] soc: fujtisu: hwb: Add open operation
-Date: Fri, 8 Jan 2021 19:52:33 +0900
-Message-ID: <20210108105241.1757799-3-misono.tomohiro@jp.fujitsu.com>
+Subject: [PATCH 07/10] soc: fujitsu: hwb: Add IOC_GET_PE_INFO ioctl
+Date: Fri, 8 Jan 2021 19:52:38 +0900
+Message-ID: <20210108105241.1757799-8-misono.tomohiro@jp.fujitsu.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
 References: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
@@ -58,46 +58,75 @@ Content-Type: text/plain
 X-SecurityPolicyCheck-GC: OK by FENCE-Mail
 X-TM-AS-GCONF: 00
 
-Nothing special. Just preparing private_data for this FD.
+This is an infomative ioctl to tell users CMG/PE number of currently
+running PE.
 
 Signed-off-by: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 ---
- drivers/soc/fujitsu/fujitsu_hwb.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/soc/fujitsu/fujitsu_hwb.c      | 18 ++++++++++++++++++
+ include/uapi/linux/fujitsu_hpc_ioctl.h |  7 +++++++
+ 2 files changed, 25 insertions(+)
 
 diff --git a/drivers/soc/fujitsu/fujitsu_hwb.c b/drivers/soc/fujitsu/fujitsu_hwb.c
-index 44c32c1683df..1dec3d3c652f 100644
+index 2535942cc0d7..1132cb74b13b 100644
 --- a/drivers/soc/fujitsu/fujitsu_hwb.c
 +++ b/drivers/soc/fujitsu/fujitsu_hwb.c
-@@ -142,8 +142,28 @@ struct bb_info {
- };
- static struct kmem_cache *bb_info_cachep;
+@@ -733,6 +733,21 @@ static int ioc_bb_free(struct file *filp,  void __user *argp)
+ 	return 0;
+ }
  
-+static int fujitsu_hwb_dev_open(struct inode *inode, struct file *filp)
++static int ioc_get_pe_info(struct file *filp, void __user *argp)
 +{
-+	struct hwb_private_data *pdata;
++	struct fujitsu_hwb_ioc_pe_info pe_info = {0};
++	int cpu = smp_processor_id();
 +
-+	pdata = kzalloc(sizeof(*pdata), GFP_KERNEL);
-+	if (!pdata)
-+		return -ENOMEM;
-+	INIT_LIST_HEAD(&pdata->bb_list);
-+	spin_lock_init(&pdata->list_lock);
++	pe_info.cmg = _hwinfo.core_map[cpu].cmg;
++	pe_info.ppe = _hwinfo.core_map[cpu].ppe;
 +
-+	/*
-+	 * misc_open() sets pointer of the miscdevice to filp->private_data.
-+	 * Just override it since barrier fops does not use it
-+	 */
-+	filp->private_data = pdata;
++	if (copy_to_user((struct fujitsu_hwb_ioc_pe_info __user *)argp, &pe_info,
++						sizeof(struct fujitsu_hwb_ioc_pe_info)))
++		return -EFAULT;
 +
 +	return 0;
 +}
 +
- static const struct file_operations fujitsu_hwb_dev_fops = {
- 	.owner          = THIS_MODULE,
-+	.open           = fujitsu_hwb_dev_open,
+ static long fujitsu_hwb_dev_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ {
+ 	void __user *argp = (void __user *)arg;
+@@ -751,6 +766,9 @@ static long fujitsu_hwb_dev_ioctl(struct file *filp, unsigned int cmd, unsigned
+ 	case FUJITSU_HWB_IOC_BB_FREE:
+ 		ret = ioc_bb_free(filp, argp);
+ 		break;
++	case FUJITSU_HWB_IOC_GET_PE_INFO:
++		ret = ioc_get_pe_info(filp, argp);
++		break;
+ 	default:
+ 		ret = -ENOTTY;
+ 		break;
+diff --git a/include/uapi/linux/fujitsu_hpc_ioctl.h b/include/uapi/linux/fujitsu_hpc_ioctl.h
+index 7a285d8db0a9..1226014d97c4 100644
+--- a/include/uapi/linux/fujitsu_hpc_ioctl.h
++++ b/include/uapi/linux/fujitsu_hpc_ioctl.h
+@@ -22,6 +22,11 @@ struct fujitsu_hwb_ioc_bw_ctl {
+ 	__s8 window;
  };
  
- static struct miscdevice bar_miscdev = {
++struct fujitsu_hwb_ioc_pe_info {
++	__u8 cmg;
++	__u8 ppe;
++};
++
+ #define FUJITSU_HWB_IOC_BB_ALLOC _IOWR(__FUJITSU_IOCTL_MAGIC, \
+ 	0x00, struct fujitsu_hwb_ioc_bb_ctl)
+ #define FUJITSU_HWB_IOC_BW_ASSIGN _IOWR(__FUJITSU_IOCTL_MAGIC, \
+@@ -30,5 +35,7 @@ struct fujitsu_hwb_ioc_bw_ctl {
+ 	0x02, struct fujitsu_hwb_ioc_bw_ctl)
+ #define FUJITSU_HWB_IOC_BB_FREE _IOW(__FUJITSU_IOCTL_MAGIC, \
+ 	0x03, struct fujitsu_hwb_ioc_bb_ctl)
++#define FUJITSU_HWB_IOC_GET_PE_INFO _IOR(__FUJITSU_IOCTL_MAGIC, \
++	0x04, struct fujitsu_hwb_ioc_pe_info)
+ 
+ #endif /* _UAPI_LINUX_FUJITSU_HPC_IOC_H */
 -- 
 2.26.2
 
