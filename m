@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A5E1C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECA52C433E9
 	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 10:40:42 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 06B7A238E1; Fri,  8 Jan 2021 10:40:42 +0000 (UTC)
-Received: from esa1.hc1455-7.c3s2.iphmx.com (esa1.hc1455-7.c3s2.iphmx.com [207.54.90.47])
+	id B3E1B238E9; Fri,  8 Jan 2021 10:40:42 +0000 (UTC)
+Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 43C23238E7;
-	Fri,  8 Jan 2021 10:40:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 43C23238E7
+	by mail.kernel.org (Postfix) with ESMTPS id D8B46238D6;
+	Fri,  8 Jan 2021 10:40:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D8B46238D6
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jp.fujitsu.com
 Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=misono.tomohiro@fujitsu.com
-IronPort-SDR: mQkEtnu9yC/nUJiWS5qNKDnTdnmbnGhum9Cl/VBzHaVxiM7zl9y6wiAvNHM7wGDHktE0JZXUM9
- tI8ueBP2rUlOC+46SIQRGtr12IPq1W3tmuh6+rSbIYoJLADWmYjzDrc1aQNj1BSS0kvFyWH2s2
- L9cPJ53/6gBgOGI+HAiNBtc09P/azBXZ8xlTr+41VmGOr/9UG7VIvc8efEX3D2a7/k5OuZn+uO
- CctSByypLBhC1epwrDmto2Zbhr7fDK4V3V5/3xI5WynbDH4x1QZ7dxXncs2Vmnmt35NDC24BiX
- rmU=
-X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="14111426"
+IronPort-SDR: YWrvLBTXYPRQM5hZ7WZ3PgI3YkND5tpcHM6hS9gJbngAtFb65rU9+dzNapZ4Nfp8JZ7b7fDFGL
+ /wH5AYNuUZ/4CV9YmM1FtBBRQ5/4tH6m5wfWuDrcktrcK1u7ueP/Jmfe6UT5R3jELEDwL8s4ly
+ 92IZIbRdwAgW6296q6SV/DCkdM25vQz6Xte6DRFmTAAROjCqrmzKTLDswknyn+HCyncJFINmUv
+ N+mtsHc7bKBVenU2Bh1CO3CMjhwNxQAacTNlDVTHKiVBQL4bTJJf0Z6aViyyAGZuG/zvgEgn7f
+ Fqo=
+X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="2149307"
 X-IronPort-AV: E=Sophos;i="5.79,330,1602514800"; 
-   d="scan'208";a="14111426"
-Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
-  by esa1.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:40:37 +0900
-Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
-	by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 5212321EC63;
-	Fri,  8 Jan 2021 19:40:36 +0900 (JST)
-Received: from g01jpfmpwkw03.exch.g01.fujitsu.local (g01jpfmpwkw03.exch.g01.fujitsu.local [10.0.193.57])
-	by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 91E2EAB1AD;
+   d="scan'208";a="2149307"
+Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
+  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:40:36 +0900
+Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
+	by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id A88FE32F7C6;
 	Fri,  8 Jan 2021 19:40:35 +0900 (JST)
-Received: from G01JPEXCHKW14.g01.fujitsu.local (G01JPEXCHKW14.g01.fujitsu.local [10.0.194.53])
-	by g01jpfmpwkw03.exch.g01.fujitsu.local (Postfix) with ESMTP id 81047BD6867;
+Received: from g01jpfmpwkw03.exch.g01.fujitsu.local (g01jpfmpwkw03.exch.g01.fujitsu.local [10.0.193.57])
+	by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id F2C9BB4E35;
 	Fri,  8 Jan 2021 19:40:34 +0900 (JST)
+Received: from G01JPEXCHKW14.g01.fujitsu.local (G01JPEXCHKW14.g01.fujitsu.local [10.0.194.53])
+	by g01jpfmpwkw03.exch.g01.fujitsu.local (Postfix) with ESMTP id E298EBD685E;
+	Fri,  8 Jan 2021 19:40:33 +0900 (JST)
 Received: from luna3.soft.fujitsu.com (10.124.196.199) by
  G01JPEXCHKW14.g01.fujitsu.local (10.0.194.53) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 8 Jan 2021 19:40:32 +0900
+ 14.3.487.0; Fri, 8 Jan 2021 19:40:31 +0900
 From: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 List-Id: <soc.lore.kernel.org>
 To: <linux-arm-kernel@lists.infradead.org>, <soc@kernel.org>
 CC: <will@kernel.org>, <catalin.marinas@arm.com>, <arnd@arndb.de>,
 	<olof@lixom.net>, <misono.tomohiro@jp.fujitsu.com>
-Subject: [PATCH 06/10] soc: fujitsu: hwb: Add IOC_BB_FREE ioctl
-Date: Fri, 8 Jan 2021 19:52:37 +0900
-Message-ID: <20210108105241.1757799-7-misono.tomohiro@jp.fujitsu.com>
+Subject: [PATCH 03/10] soc: fujitsu: hwb: Add IOC_BB_ALLOC ioctl
+Date: Fri, 8 Jan 2021 19:52:34 +0900
+Message-ID: <20210108105241.1757799-4-misono.tomohiro@jp.fujitsu.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
 References: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
@@ -58,238 +58,299 @@ Content-Type: text/plain
 X-SecurityPolicyCheck-GC: OK by FENCE-Mail
 X-TM-AS-GCONF: 00
 
-IOC_BB_FREE ioctl resets what IOC_BB_ALLOC ioctl did.
+IOC_BB_ALLOC ioctl initialize INIT_SYNC register which represents
+PEs in a CMG joining synchronization. Although we get cpumask of
+PEs from userspace, INIT_SYNC register requires mask value based
+on physical PE number which is written in each PE's BST register.
+So we perform conversion of cpumask value in validate_and_conver_pemask().
 
-We need to forbid assign/unassign operation happens during free
-operation, so we set the flag to indicate it and also wait
-ongoing assign/unassign to finish first.
-
-If there exist PEs on which IOC_BW_UNASSIGN is not called,
-we send IPI to do effectively the same operation as IOC_BW_UNASSIGN.
+Since INIT_SYNC register is a shared resource per CMG, we pick
+up one PE and send IPI to it to write the register.
 
 Signed-off-by: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 ---
- drivers/soc/fujitsu/fujitsu_hwb.c      | 125 ++++++++++++++++++++++++-
- include/uapi/linux/fujitsu_hpc_ioctl.h |   2 +
- 2 files changed, 122 insertions(+), 5 deletions(-)
+ drivers/soc/fujitsu/fujitsu_hwb.c      | 223 +++++++++++++++++++++++++
+ include/uapi/linux/fujitsu_hpc_ioctl.h |  23 +++
+ 2 files changed, 246 insertions(+)
+ create mode 100644 include/uapi/linux/fujitsu_hpc_ioctl.h
 
 diff --git a/drivers/soc/fujitsu/fujitsu_hwb.c b/drivers/soc/fujitsu/fujitsu_hwb.c
-index 8c4cabd60872..2535942cc0d7 100644
+index 1dec3d3c652f..24d1bb00f55c 100644
 --- a/drivers/soc/fujitsu/fujitsu_hwb.c
 +++ b/drivers/soc/fujitsu/fujitsu_hwb.c
-@@ -196,6 +196,12 @@ static struct bb_info *get_bb_info(struct hwb_private_data *pdata, u8 cmg, u8 bb
- 	spin_lock(&pdata->list_lock);
- 	list_for_each_entry(bb_info, &pdata->bb_list, node) {
- 		if (bb_info->cmg == cmg && bb_info->bb == bb) {
-+			if (test_bit(BB_FREEING,  &bb_info->flag)) {
-+				pr_err("BB is currently being freed: %u/%u\n", cmg, bb);
-+				spin_unlock(&pdata->list_lock);
-+				return ERR_PTR(-EPERM);
-+			}
+@@ -38,6 +38,8 @@
+ #include <linux/slab.h>
+ #include <linux/wait.h>
+ 
++#include <linux/fujitsu_hpc_ioctl.h>
 +
- 			kref_get(&bb_info->kref);
- 			spin_unlock(&pdata->list_lock);
- 			return bb_info;
-@@ -389,6 +395,11 @@ static int is_bw_assignable(struct bb_info *bb_info, struct fujitsu_hwb_ioc_bw_c
- {
- 	int i;
+ #ifdef pr_fmt
+ #undef pr_fmt
+ #endif
+@@ -142,6 +144,226 @@ struct bb_info {
+ };
+ static struct kmem_cache *bb_info_cachep;
  
-+	if (test_bit(BB_FREEING, &bb_info->flag)) {
-+		pr_err("BB is currently being freed: %u/%u/%d\n", bb_info->cmg, bb_info->bb, cpu);
-+		return -EPERM;
-+	}
-+
- 	if (!cpumask_test_cpu(cpu, bb_info->pemask)) {
- 		pr_err("This pe is not supposed to join sync, %u/%u/%d\n",
- 						bb_info->cmg, bb_info->bb, cpu);
-@@ -490,6 +501,7 @@ static int ioc_bw_assign(struct file *filp, void __user *argp)
- 	struct hwb_private_data *pdata = (struct hwb_private_data *)filp->private_data;
- 	struct fujitsu_hwb_ioc_bw_ctl bw_ctl;
- 	struct bb_info *bb_info;
-+	unsigned long flags;
- 	int ret;
- 	int cpu;
- 	u8 cmg;
-@@ -507,18 +519,27 @@ static int ioc_bw_assign(struct file *filp, void __user *argp)
- 	if (IS_ERR(bb_info))
- 		return PTR_ERR(bb_info);
- 
-+	/* Increment counter to avoid this BB being freed during assign operation */
-+	atomic_inc(&bb_info->ongoing_assign_count);
-+
- 	/*
- 	 * Barrier window register and control register is each PE's resource.
- 	 * context switch is not supported and mutual exclusion is needed for
--	 * assign and unassign on this PE
-+	 * assign and unassign on this PE. As cleanup_bw() might be executed
-+	 * in interrupt context via on_each_cpu_mask, disabling irq is needed
- 	 */
--	preempt_disable();
-+	local_irq_save(flags);
- 	ret = is_bw_assignable(bb_info, &bw_ctl, cpu);
- 	if (!ret) {
- 		setup_ctl_reg(bb_info, cpu);
- 		setup_bw(bb_info, &bw_ctl, cpu);
- 	}
--	preempt_enable();
-+	local_irq_restore(flags);
-+
-+	/* Wakeup if there is a process waiting in ioc_bb_free() */
-+	if (atomic_dec_and_test(&bb_info->ongoing_assign_count) &&
-+					test_bit(BB_FREEING, &bb_info->flag))
-+		wake_up(&bb_info->wq);
- 
- 	put_bb_info(bb_info);
- 
-@@ -535,6 +556,12 @@ static int is_bw_unassignable(struct bb_info *bb_info, int cpu)
- {
- 	u8 ppe;
- 
-+	if (test_bit(BB_FREEING, &bb_info->flag)) {
-+		pr_err("This bb is currently being freed: %u/%u/%d\n",
-+							bb_info->cmg, bb_info->bb, cpu);
-+		return -EPERM;
-+	}
-+
- 	if (!cpumask_test_and_clear_cpu(cpu, bb_info->assigned_pemask)) {
- 		pr_err("This pe is not assigned: %u/%u/%d\n", bb_info->cmg, bb_info->bb, cpu);
- 		return -EINVAL;
-@@ -590,6 +617,7 @@ static int ioc_bw_unassign(struct file *filp, void __user *argp)
- 	struct hwb_private_data *pdata = (struct hwb_private_data *)filp->private_data;
- 	struct fujitsu_hwb_ioc_bw_ctl bw_ctl;
- 	struct bb_info *bb_info;
-+	unsigned long flags;
- 	int cpu;
- 	int ret;
- 	u8 cmg;
-@@ -608,19 +636,103 @@ static int ioc_bw_unassign(struct file *filp, void __user *argp)
- 		return PTR_ERR(bb_info);
- 
- 	/* See comments in ioc_bw_assign() */
--	preempt_disable();
-+	atomic_inc(&bb_info->ongoing_assign_count);
-+
-+	local_irq_save(flags);
- 	ret = is_bw_unassignable(bb_info, cpu);
- 	if (!ret) {
- 		teardown_bw(bb_info, cpu);
- 		teardown_ctl_reg(bb_info, cpu);
- 	}
--	preempt_enable();
-+	local_irq_restore(flags);
-+
-+	if (atomic_dec_and_test(&bb_info->ongoing_assign_count) &&
-+					test_bit(BB_FREEING, &bb_info->flag))
-+		wake_up(&bb_info->wq);
- 
- 	put_bb_info(bb_info);
- 
- 	return ret;
- }
- 
-+static void cleanup_bw_func(void *args)
++static void free_bb_info(struct kref *kref)
 +{
-+	struct bb_info *bb_info = (struct bb_info *)args;
-+	int cpu = smp_processor_id();
++	struct bb_info *bb_info = container_of(kref, struct bb_info, kref);
 +
-+	teardown_bw(bb_info, cpu);
-+	teardown_ctl_reg(bb_info, cpu);
++	free_cpumask_var(bb_info->assigned_pemask);
++	free_cpumask_var(bb_info->pemask);
++	kfree(bb_info->bw);
++	kmem_cache_free(bb_info_cachep, bb_info);
 +}
 +
-+/* Send IPI to reset INIT_SYNC register */
-+static void teardown_bb(struct bb_info *bb_info)
++static struct bb_info *alloc_bb_info(void)
++{
++	struct bb_info *bb_info;
++
++	bb_info = kmem_cache_zalloc(bb_info_cachep, GFP_KERNEL);
++	if (!bb_info)
++		return NULL;
++
++	bb_info->bw = kcalloc(_hwinfo.max_pe_per_cmg, sizeof(u8), GFP_KERNEL);
++	if (!bb_info->bw) {
++		free_bb_info(&bb_info->kref);
++		return NULL;
++	}
++	if (!zalloc_cpumask_var(&bb_info->pemask, GFP_KERNEL) ||
++		!zalloc_cpumask_var(&bb_info->assigned_pemask, GFP_KERNEL)) {
++		free_bb_info(&bb_info->kref);
++		return NULL;
++	}
++
++	init_waitqueue_head(&bb_info->wq);
++	kref_init(&bb_info->kref);
++
++	return bb_info;
++}
++
++static inline void put_bb_info(struct bb_info *bb_info)
++{
++	kref_put(&bb_info->kref, free_bb_info);
++}
++
++/* Validate pemask's range and convert it to a mask based on physical PE number */
++static int validate_and_convert_pemask(struct bb_info *bb_info, unsigned long *phys_pemask)
++{
++	int cpu;
++	u8 cmg;
++
++	if (cpumask_weight(bb_info->pemask) < 2) {
++		pr_err("pemask needs at least two bit set: %*pbl\n",
++						cpumask_pr_args(bb_info->pemask));
++		return -EINVAL;
++	}
++
++	if (!cpumask_subset(bb_info->pemask, cpu_online_mask)) {
++		pr_err("pemask needs to be subset of online cpu: %*pbl, %*pbl\n",
++			cpumask_pr_args(bb_info->pemask), cpumask_pr_args(cpu_online_mask));
++		return -EINVAL;
++	}
++
++	/*
++	 * INIT_SYNC register requires a mask value based on physical PE number.
++	 * So convert pemask to it while checking if all PEs belongs to the same CMG
++	 */
++	cpu = cpumask_first(bb_info->pemask);
++	cmg = _hwinfo.core_map[cpu].cmg;
++	*phys_pemask = 0;
++	for_each_cpu(cpu, bb_info->pemask) {
++		if (_hwinfo.core_map[cpu].cmg != cmg) {
++			pr_err("All PEs must belong to the same CMG: %*pbl\n",
++							cpumask_pr_args(bb_info->pemask));
++			return -EINVAL;
++		}
++		set_bit(_hwinfo.core_map[cpu].ppe, phys_pemask);
++	}
++	bb_info->cmg = cmg;
++
++	pr_debug("pemask: %*pbl, physical_pemask: %lx\n",
++					cpumask_pr_args(bb_info->pemask), *phys_pemask);
++
++	return 0;
++}
++
++/* Search free BB in_hwinfo->used_bb_bitmap[cmg] */
++static int search_free_bb(u8 cmg)
++{
++	int i;
++
++	for (i = 0; i < _hwinfo.num_bb; i++) {
++		if (!test_and_set_bit(i, &_hwinfo.used_bb_bmap[cmg])) {
++			pr_debug("Use BB %u in CMG %u, bitmap: %lx\n",
++							i, cmg, _hwinfo.used_bb_bmap[cmg]);
++			return i;
++		}
++	}
++
++	pr_err("All barrier blade is currently used in CMG %u\n", cmg);
++	return -EBUSY;
++}
++
++struct init_sync_args {
++	u64 val;
++	u8 bb;
++};
++
++static void write_init_sync_reg(void *args)
++{
++	struct init_sync_args *sync_args = (struct init_sync_args *)args;
++
++	switch (sync_args->bb) {
++	case 0:
++		write_sysreg_s(sync_args->val, FHWB_INIT_SYNC_BB0_EL1);
++		break;
++	case 1:
++		write_sysreg_s(sync_args->val, FHWB_INIT_SYNC_BB1_EL1);
++		break;
++	case 2:
++		write_sysreg_s(sync_args->val, FHWB_INIT_SYNC_BB2_EL1);
++		break;
++	case 3:
++		write_sysreg_s(sync_args->val, FHWB_INIT_SYNC_BB3_EL1);
++		break;
++	case 4:
++		write_sysreg_s(sync_args->val, FHWB_INIT_SYNC_BB4_EL1);
++		break;
++	case 5:
++		write_sysreg_s(sync_args->val, FHWB_INIT_SYNC_BB5_EL1);
++		break;
++	}
++}
++
++/* Send IPI to initialize INIT_SYNC register */
++static void setup_bb(struct bb_info *bb_info, unsigned long phys_pemask)
 +{
 +	struct init_sync_args args = {0};
 +	int cpu;
 +
-+	/* Reset BW on each PE if IOC_BW_UNASSIGN is not called properly  */
-+	if (cpumask_weight(bb_info->assigned_pemask) != 0) {
-+		pr_warn("unassign is not called properly. CMG: %d, BB: %d, unassigned PE: %*pbl\n",
-+			bb_info->cmg, bb_info->bb, cpumask_pr_args(bb_info->assigned_pemask));
-+		on_each_cpu_mask(bb_info->assigned_pemask, cleanup_bw_func, bb_info, 1);
-+	}
-+
-+	/* INIT_SYNC register is shared resource in CMG. Pick one PE */
++	/* INIT_SYNC register is shared resource in CMG. Pick one PE to set it up */
 +	cpu = cpumask_any(bb_info->pemask);
 +
 +	args.bb = bb_info->bb;
-+	/* Just clear all bits */
-+	args.val = 0;
++	args.val = FIELD_PREP(FHWB_INIT_SYNC_BB_EL1_MASK_FIELD, phys_pemask);
 +	on_each_cpu_mask(cpumask_of(cpu), write_init_sync_reg, &args, 1);
 +
-+	clear_bit(bb_info->bb, &_hwinfo.used_bb_bmap[bb_info->cmg]);
-+
-+	pr_debug("Teardown bb: cpu: %d, CMG: %u, BB: %u, bitmap: %lx\n",
++	pr_debug("Setup bb. cpu: %d, CMG: %u, BB: %u, bimtap: %lx\n",
 +			cpu, bb_info->cmg, bb_info->bb, _hwinfo.used_bb_bmap[bb_info->cmg]);
 +}
 +
-+static int ioc_bb_free(struct file *filp,  void __user *argp)
++static int ioc_bb_alloc(struct file *filp, void __user *argp)
 +{
 +	struct hwb_private_data *pdata = (struct hwb_private_data *)filp->private_data;
 +	struct fujitsu_hwb_ioc_bb_ctl bb_ctl;
 +	struct bb_info *bb_info;
++	unsigned long physical_pemask;
++	unsigned int size;
++	int ret;
 +
 +	if (copy_from_user(&bb_ctl, (struct fujitsu_hwb_ioc_bb_ctl __user *)argp,
 +						sizeof(struct fujitsu_hwb_ioc_bb_ctl)))
 +		return -EFAULT;
 +
-+	bb_info = get_bb_info(pdata, bb_ctl.cmg, bb_ctl.bb);
-+	if (IS_ERR(bb_info))
-+		return PTR_ERR(bb_info);
++	bb_info = alloc_bb_info();
++	if (!bb_info)
++		return -ENOMEM;
 +
-+	/* Forbid free/assign/unassign operation from now on */
-+	if (test_and_set_bit(BB_FREEING, &bb_info->flag)) {
-+		pr_err("IOC_BB_FREE is already called. CMG: %u, BB: %u\n", bb_ctl.cmg, bb_ctl.bb);
-+		put_bb_info(bb_info);
-+		return -EPERM;
++	/* cpumask size may vary in user and kernel space. Use the smaller one */
++	size = min(cpumask_size(), bb_ctl.size);
++	if (copy_from_user(bb_info->pemask, bb_ctl.pemask, size)) {
++		ret = -EFAULT;
++		goto put_bb_info;
 +	}
 +
-+	/* Wait current ongoing assign/unassign operation to finish */
-+	if (wait_event_interruptible(bb_info->wq,
-+					(atomic_read(&bb_info->ongoing_assign_count) == 0))) {
-+		clear_bit(BB_FREEING, &bb_info->flag);
-+		put_bb_info(bb_info);
-+		pr_debug("IOC_BB_FREE is interrupted. CMG: %u, BB: %u\n", bb_ctl.cmg, bb_ctl.bb);
-+		return -EINTR;
++	ret = validate_and_convert_pemask(bb_info, &physical_pemask);
++	if (ret < 0)
++		goto put_bb_info;
++
++	ret = search_free_bb(bb_info->cmg);
++	if (ret < 0)
++		goto put_bb_info;
++	bb_info->bb = ret;
++
++	/* Copy back CMG/BB number to be used to user */
++	bb_ctl.cmg = bb_info->cmg;
++	bb_ctl.bb  = bb_info->bb;
++	if (copy_to_user((struct fujitsu_hwb_ioc_bb_ctl __user *)argp, &bb_ctl,
++						sizeof(struct fujitsu_hwb_ioc_bb_ctl))) {
++		ret = -EFAULT;
++		clear_bit(bb_ctl.bb, &_hwinfo.used_bb_bmap[bb_ctl.cmg]);
++		goto put_bb_info;
 +	}
 +
-+	teardown_bb(bb_info);
++	setup_bb(bb_info, physical_pemask);
++
 +	spin_lock(&pdata->list_lock);
-+	list_del_init(&bb_info->node);
++	list_add_tail(&bb_info->node, &pdata->bb_list);
 +	spin_unlock(&pdata->list_lock);
 +
-+	/* 1 put for get_bb_info, 1 for alloc_bb_info */
-+	put_bb_info(bb_info);
++	return 0;
++
++put_bb_info:
 +	put_bb_info(bb_info);
 +
-+	return 0;
++	return ret;
 +}
 +
- static long fujitsu_hwb_dev_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- {
- 	void __user *argp = (void __user *)arg;
-@@ -636,6 +748,9 @@ static long fujitsu_hwb_dev_ioctl(struct file *filp, unsigned int cmd, unsigned
- 	case FUJITSU_HWB_IOC_BW_UNASSIGN:
- 		ret = ioc_bw_unassign(filp, argp);
- 		break;
-+	case FUJITSU_HWB_IOC_BB_FREE:
-+		ret = ioc_bb_free(filp, argp);
++static long fujitsu_hwb_dev_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
++{
++	void __user *argp = (void __user *)arg;
++	int ret;
++
++	switch (cmd) {
++	case FUJITSU_HWB_IOC_BB_ALLOC:
++		ret = ioc_bb_alloc(filp, argp);
 +		break;
- 	default:
- 		ret = -ENOTTY;
- 		break;
-diff --git a/include/uapi/linux/fujitsu_hpc_ioctl.h b/include/uapi/linux/fujitsu_hpc_ioctl.h
-index 396029f2bc0d..7a285d8db0a9 100644
---- a/include/uapi/linux/fujitsu_hpc_ioctl.h
-+++ b/include/uapi/linux/fujitsu_hpc_ioctl.h
-@@ -28,5 +28,7 @@ struct fujitsu_hwb_ioc_bw_ctl {
- 	0x01, struct fujitsu_hwb_ioc_bw_ctl)
- #define FUJITSU_HWB_IOC_BW_UNASSIGN _IOW(__FUJITSU_IOCTL_MAGIC, \
- 	0x02, struct fujitsu_hwb_ioc_bw_ctl)
-+#define FUJITSU_HWB_IOC_BB_FREE _IOW(__FUJITSU_IOCTL_MAGIC, \
-+	0x03, struct fujitsu_hwb_ioc_bb_ctl)
++	default:
++		ret = -ENOTTY;
++		break;
++	}
++
++	return ret;
++}
++
+ static int fujitsu_hwb_dev_open(struct inode *inode, struct file *filp)
+ {
+ 	struct hwb_private_data *pdata;
+@@ -164,6 +386,7 @@ static int fujitsu_hwb_dev_open(struct inode *inode, struct file *filp)
+ static const struct file_operations fujitsu_hwb_dev_fops = {
+ 	.owner          = THIS_MODULE,
+ 	.open           = fujitsu_hwb_dev_open,
++	.unlocked_ioctl = fujitsu_hwb_dev_ioctl,
+ };
  
- #endif /* _UAPI_LINUX_FUJITSU_HPC_IOC_H */
+ static struct miscdevice bar_miscdev = {
+diff --git a/include/uapi/linux/fujitsu_hpc_ioctl.h b/include/uapi/linux/fujitsu_hpc_ioctl.h
+new file mode 100644
+index 000000000000..c87a5bad3f59
+--- /dev/null
++++ b/include/uapi/linux/fujitsu_hpc_ioctl.h
+@@ -0,0 +1,23 @@
++/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
++/* Copyright 2020 FUJITSU LIMITED */
++#ifndef _UAPI_LINUX_FUJITSU_HPC_IOC_H
++#define _UAPI_LINUX_FUJITSU_HPC_IOC_H
++
++#include <linux/ioctl.h>
++#include <asm/types.h>
++
++#define __FUJITSU_IOCTL_MAGIC 'F'
++
++/* ioctl definitions for hardware barrier driver */
++struct fujitsu_hwb_ioc_bb_ctl {
++	__u8 cmg;
++	__u8 bb;
++	__u8 unused[2];
++	__u32 size;
++	unsigned long __user *pemask;
++};
++
++#define FUJITSU_HWB_IOC_BB_ALLOC _IOWR(__FUJITSU_IOCTL_MAGIC, \
++	0x00, struct fujitsu_hwb_ioc_bb_ctl)
++
++#endif /* _UAPI_LINUX_FUJITSU_HPC_IOC_H */
 -- 
 2.26.2
 
