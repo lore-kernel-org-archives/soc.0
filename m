@@ -2,128 +2,102 @@ Return-Path: <SRS0=SDro=GL=fujitsu.com=misono.tomohiro@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD899C433E6
-	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 10:40:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75702C433E9
+	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 10:40:40 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 774C12389B; Fri,  8 Jan 2021 10:40:39 +0000 (UTC)
-Received: from esa4.hc1455-7.c3s2.iphmx.com (esa4.hc1455-7.c3s2.iphmx.com [68.232.139.117])
+	id 31C01238A0; Fri,  8 Jan 2021 10:40:40 +0000 (UTC)
+Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8392423899;
+	by mail.kernel.org (Postfix) with ESMTPS id 1813A2388C;
 	Fri,  8 Jan 2021 10:40:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8392423899
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1813A2388C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jp.fujitsu.com
 Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=misono.tomohiro@fujitsu.com
-IronPort-SDR: yDEBBFsB/sFJyHH7vEbC1A6MfRNnsCFLfM8dkvbj570vjSpWQTYwMERPulv+7ZUWf2fzr1Yf0k
- 2HVIdZ6qW5Kexko79SHEG10p1cMezh3QPIiLFpfeKm87SKQFmM/CColikbgp6kWIaciOCUbnVc
- EZNTgDNwQrXu+eTMtKUzRoaqqQQlhaDKR+HY81gpdszLbuQVY7nUXHBjl8MGJ4lDGXTPc6PFet
- WbvL8w1Zs1WO5nhJHIywYDAyF1Oe7Hwdt21/+OD92tT7SYZErg8P2xU7QYQz/XbGhikBD7TYyI
- hYE=
-X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="14108083"
+IronPort-SDR: Lzc61TjJe4rdBqE9caK+3gw91Vn/UipeqMGV3JCVUXG2kbq7IJ2H/wCYiu2BHrGuKhVVOrGbEE
+ iySy/InvIX8GnxhFrA87E+KG3uE01Q2dTqSdOnrsU9q7W5vbhjfPIKPSKw6oYEs8sjhlcKuvA3
+ kG81wo3yDfMM/+mbAYD3D8pdmXFMHZMHEAMaIcR/FsexZRZpNE8cNdn0hB5ClyOTqvSG/YG+cu
+ bIyiJR3xwOPcxHQHUiWQA5W4PvE1MEl7U1RJE4Dz5aQ0qfpbPav0Xc1ldaAEFJpoxQyib+N10T
+ Eqk=
+X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="2149512"
 X-IronPort-AV: E=Sophos;i="5.79,330,1602514800"; 
-   d="scan'208";a="14108083"
-Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
-  by esa4.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:40:35 +0900
-Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
-	by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 3833E1F50C2;
+   d="scan'208";a="2149512"
+Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:40:35 +0900
+Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
+	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id F30E31FB303;
 	Fri,  8 Jan 2021 19:40:34 +0900 (JST)
-Received: from g01jpfmpwkw01.exch.g01.fujitsu.local (g01jpfmpwkw01.exch.g01.fujitsu.local [10.0.193.38])
-	by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 92BEC5ADBF7;
-	Fri,  8 Jan 2021 19:40:33 +0900 (JST)
+Received: from g01jpfmpwkw03.exch.g01.fujitsu.local (g01jpfmpwkw03.exch.g01.fujitsu.local [10.0.193.57])
+	by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 48DA9207B46;
+	Fri,  8 Jan 2021 19:40:34 +0900 (JST)
 Received: from G01JPEXCHKW14.g01.fujitsu.local (G01JPEXCHKW14.g01.fujitsu.local [10.0.194.53])
-	by g01jpfmpwkw01.exch.g01.fujitsu.local (Postfix) with ESMTP id 9D944692403;
-	Fri,  8 Jan 2021 19:40:32 +0900 (JST)
+	by g01jpfmpwkw03.exch.g01.fujitsu.local (Postfix) with ESMTP id 3CF3BBD6867;
+	Fri,  8 Jan 2021 19:40:33 +0900 (JST)
 Received: from luna3.soft.fujitsu.com (10.124.196.199) by
  G01JPEXCHKW14.g01.fujitsu.local (10.0.194.53) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 8 Jan 2021 19:40:30 +0900
+ 14.3.487.0; Fri, 8 Jan 2021 19:40:31 +0900
 From: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 List-Id: <soc.lore.kernel.org>
 To: <linux-arm-kernel@lists.infradead.org>, <soc@kernel.org>
 CC: <will@kernel.org>, <catalin.marinas@arm.com>, <arnd@arndb.de>,
 	<olof@lixom.net>, <misono.tomohiro@jp.fujitsu.com>
-Subject: [RFC PATCH 00/10] Add Fujitsu A64FX soc entry/hardware barrier driver
-Date: Fri, 8 Jan 2021 19:52:31 +0900
-Message-ID: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
+Subject: [PATCH 02/10] soc: fujtisu: hwb: Add open operation
+Date: Fri, 8 Jan 2021 19:52:33 +0900
+Message-ID: <20210108105241.1757799-3-misono.tomohiro@jp.fujitsu.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
+References: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-SecurityPolicyCheck-GC: OK by FENCE-Mail
 X-TM-AS-GCONF: 00
 
-(Resend as cover letter title was missing in the first time. Sorry for noise)
+Nothing special. Just preparing private_data for this FD.
 
-Hello,
+Signed-off-by: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
+---
+ drivers/soc/fujitsu/fujitsu_hwb.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-This series adds Fujitsu A64FX SoC entry in drivers/soc and hardware
-barrier driver for it.
-
-[Driver Description]
- A64FX CPU has several functions for HPC workload and hardware barrier
- is one of them. It is a mechanism to realize fast synchronization by
- PEs belonging to the same L3 cache domain by using implementation
- defined hardware registers.
- For more details, see A64FX HPC extension specification in
- https://github.com/fujitsu/A64FX
+diff --git a/drivers/soc/fujitsu/fujitsu_hwb.c b/drivers/soc/fujitsu/fujitsu_hwb.c
+index 44c32c1683df..1dec3d3c652f 100644
+--- a/drivers/soc/fujitsu/fujitsu_hwb.c
++++ b/drivers/soc/fujitsu/fujitsu_hwb.c
+@@ -142,8 +142,28 @@ struct bb_info {
+ };
+ static struct kmem_cache *bb_info_cachep;
  
- The driver mainly offers a set of ioctls to manipulate related registers.
- Patch 1-9 implements driver code and patch 10 finally adds kconfig,
- Makefile and MAINTAINER entry for the driver.  
-
- Also, C library and test program for this driver is available on: 
- https://github.com/fujitsu/hardware_barrier
-
- The driver is based on v5.11-rc2 and tested on FX700 environment.
-
-[RFC]
- This is the first time we upstream drivers for our chip and I want to
- confirm driver location and patch submission process.
-
- Based on my observation it seems drivers/soc folder is right place to put
- this driver, so I added Kconfig entry for arm64 platform config, created
- soc/fujitsu folder and updated MAINTAINER entry accordingly (last patch).
- Is it right?
-
- Also for final submission I think I need to 1) create some public git
- tree to push driver code (github or something), 2) make pull request to
- SOC team (soc@kernel.org). Is it a correct procedure?
-
- I will appreciate any help/comments.
-
-sidenote: We plan to post other drivers for A64FX HPC extension
-(prefetch control and cache control) too anytime soon.
-
-Misono Tomohiro (10):
-  soc: fujitsu: hwb: Add hardware barrier driver init/exit code
-  soc: fujtisu: hwb: Add open operation
-  soc: fujitsu: hwb: Add IOC_BB_ALLOC ioctl
-  soc: fujitsu: hwb: Add IOC_BW_ASSIGN ioctl
-  soc: fujitsu: hwb: Add IOC_BW_UNASSIGN ioctl
-  soc: fujitsu: hwb: Add IOC_BB_FREE ioctl
-  soc: fujitsu: hwb: Add IOC_GET_PE_INFO ioctl
-  soc: fujitsu: hwb: Add release operation
-  soc: fujitsu: hwb: Add sysfs entry
-  soc: fujitsu: hwb: Add Kconfig/Makefile to build fujitsu_hwb driver
-
- MAINTAINERS                            |    7 +
- arch/arm64/Kconfig.platforms           |    5 +
- drivers/soc/Kconfig                    |    1 +
- drivers/soc/Makefile                   |    1 +
- drivers/soc/fujitsu/Kconfig            |   24 +
- drivers/soc/fujitsu/Makefile           |    2 +
- drivers/soc/fujitsu/fujitsu_hwb.c      | 1253 ++++++++++++++++++++++++
- include/uapi/linux/fujitsu_hpc_ioctl.h |   41 +
- 8 files changed, 1334 insertions(+)
- create mode 100644 drivers/soc/fujitsu/Kconfig
- create mode 100644 drivers/soc/fujitsu/Makefile
- create mode 100644 drivers/soc/fujitsu/fujitsu_hwb.c
- create mode 100644 include/uapi/linux/fujitsu_hpc_ioctl.h
-
++static int fujitsu_hwb_dev_open(struct inode *inode, struct file *filp)
++{
++	struct hwb_private_data *pdata;
++
++	pdata = kzalloc(sizeof(*pdata), GFP_KERNEL);
++	if (!pdata)
++		return -ENOMEM;
++	INIT_LIST_HEAD(&pdata->bb_list);
++	spin_lock_init(&pdata->list_lock);
++
++	/*
++	 * misc_open() sets pointer of the miscdevice to filp->private_data.
++	 * Just override it since barrier fops does not use it
++	 */
++	filp->private_data = pdata;
++
++	return 0;
++}
++
+ static const struct file_operations fujitsu_hwb_dev_fops = {
+ 	.owner          = THIS_MODULE,
++	.open           = fujitsu_hwb_dev_open,
+ };
+ 
+ static struct miscdevice bar_miscdev = {
 -- 
 2.26.2
 
