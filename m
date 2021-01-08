@@ -1,82 +1,117 @@
-Return-Path: <SRS0=PP/6=GL=gmail.com=oliver.graute@kernel.org>
+Return-Path: <SRS0=l7M8=GL=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69569C433E0
-	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 22:23:02 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 2146623AA3; Fri,  8 Jan 2021 22:23:02 +0000 (UTC)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4279AC433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  8 Jan 2021 22:24:29 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BECAA23A74;
-	Fri,  8 Jan 2021 22:23:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BECAA23A74
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=oliver.graute@gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id b2so12762347edm.3;
-        Fri, 08 Jan 2021 14:23:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=gNxzFNqbWsEoxvd5hUYEh9CS2a9TiGl9iYU80iFZq/c=;
-        b=Rc+Slxw5u/BLDxpe3bFn0msChFQGW9ZzWGKR+5qmlmi4k9eyvegNY0NnER/9esPPAR
-         5qWuYfjmcqBaYc7QM7Q1QVTkDUBVzK7M61yq9GtL3LpumCpAW8WSGaCkOIcGnEf/0vLI
-         7h2lP0DdnTqmUodCwUEAZQnvgEY1KTw/GmkHCoSqiJtCdN4dYbjZZvBwd1xWYF1Fq7X6
-         zWQ1KmZtFDRSUGr5UsgrSUigvUtkTD/IVwUeMCcSUi28yD7oJL9iN3dVYvfgG8XMiAgu
-         C7gJqYgFapabs811GSaA0ubWhHz8OYfuA2UHU8xliU6pO6FoMlbNIUVOuEIluALNOGvk
-         7MOg==
+	by mail.kernel.org (Postfix) with ESMTPS id 01C4223A74
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  8 Jan 2021 22:24:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 01C4223A74
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:References:In-Reply-To:Message-Id:Date:Subject:To:
+	From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	bh=JTeK0HdeDg1U6DUo3Egh8EmxNY8YuhghnOKHfZKb2x8=; b=rUaltfMaeE53w9k51/whHzyEhK
+	6leEPvDmJTTwnwEuzV2hSeAUrVAkeLtBIH0KxvTTcNLQacl9k/PRk0fIFyjrUXF7kdg0dA+cOPf6w
+	OSnzkCs4baDibyxf3BRiV0v0aadrD3v5g449BldnvgCjN8iVDVC6UN2IWuEWC3rB9OooGaFki4XdJ
+	9fW93LVfoSQ9Jz38bjzlfDe/SQww+jUfpl5BNMjisqLkZlydLHxADADSohsnR+MIYYa6OMn50iig/
+	iHTw2H3Q3lqfSDlFCNFP07IOzMvz4LAZu3VJcDmZemAXKUfQDHnmsVHOGXQvYLTCe1jD/tytojUNX
+	8pEw73vg==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1ky09y-0000wU-OC; Fri, 08 Jan 2021 22:23:06 +0000
+Received: from mail-ed1-x52f.google.com ([2a00:1450:4864:20::52f])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1ky09t-0000uO-AK
+ for linux-arm-kernel@lists.infradead.org; Fri, 08 Jan 2021 22:23:02 +0000
+Received: by mail-ed1-x52f.google.com with SMTP id i24so12692130edj.8
+ for <linux-arm-kernel@lists.infradead.org>;
+ Fri, 08 Jan 2021 14:23:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:in-reply-to:references;
+ bh=gNxzFNqbWsEoxvd5hUYEh9CS2a9TiGl9iYU80iFZq/c=;
+ b=Rc+Slxw5u/BLDxpe3bFn0msChFQGW9ZzWGKR+5qmlmi4k9eyvegNY0NnER/9esPPAR
+ 5qWuYfjmcqBaYc7QM7Q1QVTkDUBVzK7M61yq9GtL3LpumCpAW8WSGaCkOIcGnEf/0vLI
+ 7h2lP0DdnTqmUodCwUEAZQnvgEY1KTw/GmkHCoSqiJtCdN4dYbjZZvBwd1xWYF1Fq7X6
+ zWQ1KmZtFDRSUGr5UsgrSUigvUtkTD/IVwUeMCcSUi28yD7oJL9iN3dVYvfgG8XMiAgu
+ C7gJqYgFapabs811GSaA0ubWhHz8OYfuA2UHU8xliU6pO6FoMlbNIUVOuEIluALNOGvk
+ 7MOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=gNxzFNqbWsEoxvd5hUYEh9CS2a9TiGl9iYU80iFZq/c=;
-        b=H36OycFlb+52ug+DAHtLvWBd0XfAyg5EHNsXL3ezwW0CK+00JQFht+D3W9YK8rAMK4
-         R+KmmtmPsOQhhnOUnNeO6VKo2aQYEnTyhZ5vwwuTCmBIo21zAolNDikM0jU+UGzmVdWO
-         v4uP5n1RQwYLFDlz2EweHhBi+5kfnFpe0l+n+dOOKLGvKbB7A8j+IeLJTv+RyTr+itsE
-         aVbeuzwO+qHGoTQbWvqPwkP8J2FXWdONdrbgjVuaFnGVQa1A9y359vSw3v1hQ41dvWEX
-         NEB4tw4o1PLyr+3cEz2h9fEb19/8VCG7dlZlzREGHACosxDYq9RejOBDHYVWaCY/OFGk
-         pPIQ==
-X-Gm-Message-State: AOAM530C5nyOPEf/kAvpaJFf6uZl6SLrA8q8Vv2enBr/y6fSMxYAIEAw
-	MAq/kSDa3oW5YL8Ox1TCVo4h9JWAXc3kow==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references;
+ bh=gNxzFNqbWsEoxvd5hUYEh9CS2a9TiGl9iYU80iFZq/c=;
+ b=XVKjeO2H35jEiaIWnLib7XbqJWZXyjYku/xhvW1iOQ6EOyipueut1wIV+Pj07fTRBU
+ LeHzjEZhv5SoeOreoiUE6M0oMdGqSKbnapXp7dmpXZ3kXk4vYAE4Tvhhn1GJ5qjPgQ5+
+ LKonZyIl9ZZgzQAGhN9iFc9cbv0dkp/2z+fs0NBiQEY7TalB8DdYI7Bmb79w4QvpNFLP
+ h/xC90bdF2qOlTCqRa/o10hcG+etPoeK+SVpg8k0uo6TEeBJkUW87BU4DNxXAD+HvVT/
+ 4wUvMIgdO9eKQptD5k1BduV1eNu8CseSqteA9mR4wm8OrItkquJOitUd+i/Zi2T1kU/o
+ 54+w==
+X-Gm-Message-State: AOAM53170jf5xwuvfW41NbZ97FygNo+FNd8Zq9oLeNAjayx+BjxxgvKg
+ ySg8d/jRcVw8FMCxQm7bo+M=
 X-Google-Smtp-Source: ABdhPJyIjvmBEdKv3ertakQ4oZxsld9jibQF7cBNI+/4SxqcYwJqetZnza/qLyKs+RpYkewC3wO/bA==
-X-Received: by 2002:a50:9e8b:: with SMTP id a11mr6602542edf.276.1610144579910;
-        Fri, 08 Jan 2021 14:22:59 -0800 (PST)
-Received: from localhost (ipv6-8dfc3ce26bc50b06.ost.clients.hamburg.freifunk.net. [2a03:2267:4:0:8dfc:3ce2:6bc5:b06])
-        by smtp.gmail.com with ESMTPSA id pv24sm3907798ejb.101.2021.01.08.14.22.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 08 Jan 2021 14:22:59 -0800 (PST)
+X-Received: by 2002:a50:9e8b:: with SMTP id a11mr6602542edf.276.1610144579910; 
+ Fri, 08 Jan 2021 14:22:59 -0800 (PST)
+Received: from localhost
+ (ipv6-8dfc3ce26bc50b06.ost.clients.hamburg.freifunk.net.
+ [2a03:2267:4:0:8dfc:3ce2:6bc5:b06])
+ by smtp.gmail.com with ESMTPSA id pv24sm3907798ejb.101.2021.01.08.14.22.58
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Fri, 08 Jan 2021 14:22:59 -0800 (PST)
 From: Oliver Graute <oliver.graute@gmail.com>
 To: shawnguo@kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: m.felsch@pengutronix.de,
-	narmstrong@baylibre.com,
-	parthitce@gmail.com,
-	Oliver Graute <oliver.graute@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v8 2/3] ARM: dts: Add support for i.MX6 UltraLite DART Variscite Customboard
+Subject: [PATCH v8 2/3] ARM: dts: Add support for i.MX6 UltraLite DART
+ Variscite Customboard
 Date: Fri,  8 Jan 2021 23:21:45 +0100
-Message-Id: <1610144511-19018-3-git-send-email-oliver.graute@gmail.com>
+Message-ID: <1610144511-19018-3-git-send-email-oliver.graute@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1610144511-19018-1-git-send-email-oliver.graute@gmail.com>
 References: <1610144511-19018-1-git-send-email-oliver.graute@gmail.com>
 X-Patchwork-Bot: notify
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210108_172301_380260_B54BF21A 
+X-CRM114-Status: GOOD (  21.10  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: devicetree@vger.kernel.org, parthitce@gmail.com,
+ Arnd Bergmann <arnd@arndb.de>, narmstrong@baylibre.com,
+ Sascha Hauer <s.hauer@pengutronix.de>, m.felsch@pengutronix.de,
+ linux-kernel@vger.kernel.org, Oliver Graute <oliver.graute@gmail.com>,
+ soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ NXP Linux Team <linux-imx@nxp.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Olof Johansson <olof@lixom.net>, Fabio Estevam <festevam@gmail.com>,
+ linux-arm-kernel@lists.infradead.org
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210108222145.6PMDpLSeVBa7VW9q1HQmgpwVTd6kxsw-jAb-G7HTMys@z>
 
 This patch adds DeviceTree Source for the i.MX6 UltraLite DART NAND/WIFI
 
@@ -397,3 +432,8 @@ index 00000000..e647d22
 -- 
 2.7.4
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
