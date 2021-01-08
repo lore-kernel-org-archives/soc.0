@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C2C3C433E9
-	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 10:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65351C433E0
+	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 10:21:46 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 2BB2D23715; Fri,  8 Jan 2021 10:21:45 +0000 (UTC)
+	id 3A8672376F; Fri,  8 Jan 2021 10:21:46 +0000 (UTC)
 Received: from esa3.hc1455-7.c3s2.iphmx.com (esa3.hc1455-7.c3s2.iphmx.com [207.54.90.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 587BE23770;
-	Fri,  8 Jan 2021 10:21:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 587BE23770
+	by mail.kernel.org (Postfix) with ESMTPS id 7778023770;
+	Fri,  8 Jan 2021 10:21:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7778023770
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jp.fujitsu.com
 Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=misono.tomohiro@fujitsu.com
-IronPort-SDR: glHBZ7U6pLDJ0jKq7pYhG+AZ9d7ML00JlbaYH3LXZFqQptV44nSzH1QbYzQn2rXBPLw65Q9EUq
- ApxUHcBEM8HelbU3D12bGOJymIrx0a2eMX9XKas42ASWfU6FIjFaAfghQDtb92dy+6pyPUQW0q
- S4ET37vc3n/XSZaE6pTSETXKs8Fwq09r9iyXL3vHwUBxmLAB83KnehEKM164oPKp4j59Q6UQI+
- OsfiLGkxvASpYMCdCR5o+ajoGBeAIJ+drLVZbtUZhbLEidRtAOQb/QtmO8B1jPc60xeCFs/2mj
- rx8=
-X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="14207576"
+IronPort-SDR: gQmomiUtzokNoWGphHi+Ku3/O6jKF4Wzq/3K9P9sM+giO4QW/kRIvp65pdULc/Bc5GBXc+6jlL
+ s54BbE3dQczXzorU2W0zJp6LZlgaETIoKZRhON+UrTbHSzXiQe/tF5o/3SUVgsOQ6+2EYmetH4
+ 8F/CAOHBthBv2YYWWCRtCTu5YFR3HiJs2xmfygsBGRHSiNYii5b7LLmo4HYkSUdxeu4WFSeLSL
+ 6bGmOLf3ZTBEUFZZE9Q7Be1CMc9t+1b0mJbpBwKKYhU/tE+ZVme8I/UE5M6hjcHnokZyi7NuOL
+ HQ0=
+X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="14207583"
 X-IronPort-AV: E=Sophos;i="5.79,330,1602514800"; 
-   d="scan'208";a="14207576"
-Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
-  by esa3.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:20:34 +0900
-Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
-	by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id E55B91F50C4;
-	Fri,  8 Jan 2021 19:20:32 +0900 (JST)
-Received: from g01jpfmpwyt03.exch.g01.fujitsu.local (g01jpfmpwyt03.exch.g01.fujitsu.local [10.128.193.57])
-	by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 4040A9BB1B;
-	Fri,  8 Jan 2021 19:20:32 +0900 (JST)
+   d="scan'208";a="14207583"
+Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
+  by esa3.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:20:35 +0900
+Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
+	by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 0832EE037D;
+	Fri,  8 Jan 2021 19:20:34 +0900 (JST)
+Received: from g01jpfmpwyt02.exch.g01.fujitsu.local (g01jpfmpwyt02.exch.g01.fujitsu.local [10.128.193.56])
+	by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 4A46944B090;
+	Fri,  8 Jan 2021 19:20:33 +0900 (JST)
 Received: from g01jpexchyt35.g01.fujitsu.local (unknown [10.128.193.4])
-	by g01jpfmpwyt03.exch.g01.fujitsu.local (Postfix) with ESMTP id 2E03E46E556;
-	Fri,  8 Jan 2021 19:20:31 +0900 (JST)
+	by g01jpfmpwyt02.exch.g01.fujitsu.local (Postfix) with ESMTP id 3129B58438D;
+	Fri,  8 Jan 2021 19:20:32 +0900 (JST)
 Received: from luna3.soft.fujitsu.com (10.124.196.199) by
  g01jpexchyt35.g01.fujitsu.local (10.128.193.50) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 8 Jan 2021 19:20:29 +0900
+ 14.3.487.0; Fri, 8 Jan 2021 19:20:30 +0900
 From: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 List-Id: <soc.lore.kernel.org>
 To: <linux-arm-kernel@lists.infradead.org>, <soc@kernel.org>
 CC: <will@kernel.org>, <catalin.marinas@arm.com>, <arnd@arndb.de>,
 	<olof@lixom.net>, <misono.tomohiro@jp.fujitsu.com>
-Subject: [PATCH 06/10] soc: fujitsu: hwb: Add IOC_BB_FREE ioctl
-Date: Fri, 8 Jan 2021 19:32:23 +0900
-Message-ID: <20210108103227.1740865-7-misono.tomohiro@jp.fujitsu.com>
+Subject: [PATCH 09/10] soc: fujitsu: hwb: Add sysfs entry
+Date: Fri, 8 Jan 2021 19:32:26 +0900
+Message-ID: <20210108103227.1740865-10-misono.tomohiro@jp.fujitsu.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210108103227.1740865-1-misono.tomohiro@jp.fujitsu.com>
 References: <20210108103227.1740865-1-misono.tomohiro@jp.fujitsu.com>
@@ -58,238 +58,318 @@ Content-Type: text/plain
 X-SecurityPolicyCheck-GC: OK by FENCE-Mail
 X-TM-AS-GCONF: 00
 
-IOC_BB_FREE ioctl resets what IOC_BB_ALLOC ioctl did.
+This adds sysfs entry per CMG to show running barrier driver status
+for debugging user application. The following entries will be created:
 
-We need to forbid assign/unassign operation happens during free
-operation, so we set the flag to indicate it and also wait
-ongoing assign/unassign to finish first.
-
-If there exist PEs on which IOC_BW_UNASSIGN is not called,
-we send IPI to do effectively the same operation as IOC_BW_UNASSIGN.
+/sys/class/misc/fujitsu_hwb
+ |- hwinfo ... number of CMG/BB/BW/pe_per_cmg on running system
+ |- CMG0
+     |- core_map      ... cpuid belonging to this CMG
+     |- used_bb_bmap  ... bitmap of currently allocated BB
+     |- used_bw_bmap  ... bitmap of currently allocated BW
+     |- init_sync_bb0 ... current value of INIT_SYNC register 0
+     |- init_sync_bb1 ... current value of INIT_SYNC register 1
+     ...
+ |- CMG1
+  ...
 
 Signed-off-by: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 ---
- drivers/soc/fujitsu/fujitsu_hwb.c      | 125 ++++++++++++++++++++++++-
- include/uapi/linux/fujitsu_hpc_ioctl.h |   2 +
- 2 files changed, 122 insertions(+), 5 deletions(-)
+ drivers/soc/fujitsu/fujitsu_hwb.c | 258 ++++++++++++++++++++++++++++++
+ 1 file changed, 258 insertions(+)
 
 diff --git a/drivers/soc/fujitsu/fujitsu_hwb.c b/drivers/soc/fujitsu/fujitsu_hwb.c
-index 8c4cabd60872..2535942cc0d7 100644
+index 46f1f244f93a..a3a0e314f63a 100644
 --- a/drivers/soc/fujitsu/fujitsu_hwb.c
 +++ b/drivers/soc/fujitsu/fujitsu_hwb.c
-@@ -196,6 +196,12 @@ static struct bb_info *get_bb_info(struct hwb_private_data *pdata, u8 cmg, u8 bb
- 	spin_lock(&pdata->list_lock);
- 	list_for_each_entry(bb_info, &pdata->bb_list, node) {
- 		if (bb_info->cmg == cmg && bb_info->bb == bb) {
-+			if (test_bit(BB_FREEING,  &bb_info->flag)) {
-+				pr_err("BB is currently being freed: %u/%u\n", cmg, bb);
-+				spin_unlock(&pdata->list_lock);
-+				return ERR_PTR(-EPERM);
-+			}
-+
- 			kref_get(&bb_info->kref);
- 			spin_unlock(&pdata->list_lock);
- 			return bb_info;
-@@ -389,6 +395,11 @@ static int is_bw_assignable(struct bb_info *bb_info, struct fujitsu_hwb_ioc_bw_c
- {
- 	int i;
- 
-+	if (test_bit(BB_FREEING, &bb_info->flag)) {
-+		pr_err("BB is currently being freed: %u/%u/%d\n", bb_info->cmg, bb_info->bb, cpu);
-+		return -EPERM;
-+	}
-+
- 	if (!cpumask_test_cpu(cpu, bb_info->pemask)) {
- 		pr_err("This pe is not supposed to join sync, %u/%u/%d\n",
- 						bb_info->cmg, bb_info->bb, cpu);
-@@ -490,6 +501,7 @@ static int ioc_bw_assign(struct file *filp, void __user *argp)
- 	struct hwb_private_data *pdata = (struct hwb_private_data *)filp->private_data;
- 	struct fujitsu_hwb_ioc_bw_ctl bw_ctl;
- 	struct bb_info *bb_info;
-+	unsigned long flags;
- 	int ret;
- 	int cpu;
- 	u8 cmg;
-@@ -507,18 +519,27 @@ static int ioc_bw_assign(struct file *filp, void __user *argp)
- 	if (IS_ERR(bb_info))
- 		return PTR_ERR(bb_info);
- 
-+	/* Increment counter to avoid this BB being freed during assign operation */
-+	atomic_inc(&bb_info->ongoing_assign_count);
-+
- 	/*
- 	 * Barrier window register and control register is each PE's resource.
- 	 * context switch is not supported and mutual exclusion is needed for
--	 * assign and unassign on this PE
-+	 * assign and unassign on this PE. As cleanup_bw() might be executed
-+	 * in interrupt context via on_each_cpu_mask, disabling irq is needed
- 	 */
--	preempt_disable();
-+	local_irq_save(flags);
- 	ret = is_bw_assignable(bb_info, &bw_ctl, cpu);
- 	if (!ret) {
- 		setup_ctl_reg(bb_info, cpu);
- 		setup_bw(bb_info, &bw_ctl, cpu);
- 	}
--	preempt_enable();
-+	local_irq_restore(flags);
-+
-+	/* Wakeup if there is a process waiting in ioc_bb_free() */
-+	if (atomic_dec_and_test(&bb_info->ongoing_assign_count) &&
-+					test_bit(BB_FREEING, &bb_info->flag))
-+		wake_up(&bb_info->wq);
- 
- 	put_bb_info(bb_info);
- 
-@@ -535,6 +556,12 @@ static int is_bw_unassignable(struct bb_info *bb_info, int cpu)
- {
- 	u8 ppe;
- 
-+	if (test_bit(BB_FREEING, &bb_info->flag)) {
-+		pr_err("This bb is currently being freed: %u/%u/%d\n",
-+							bb_info->cmg, bb_info->bb, cpu);
-+		return -EPERM;
-+	}
-+
- 	if (!cpumask_test_and_clear_cpu(cpu, bb_info->assigned_pemask)) {
- 		pr_err("This pe is not assigned: %u/%u/%d\n", bb_info->cmg, bb_info->bb, cpu);
- 		return -EINVAL;
-@@ -590,6 +617,7 @@ static int ioc_bw_unassign(struct file *filp, void __user *argp)
- 	struct hwb_private_data *pdata = (struct hwb_private_data *)filp->private_data;
- 	struct fujitsu_hwb_ioc_bw_ctl bw_ctl;
- 	struct bb_info *bb_info;
-+	unsigned long flags;
- 	int cpu;
- 	int ret;
- 	u8 cmg;
-@@ -608,19 +636,103 @@ static int ioc_bw_unassign(struct file *filp, void __user *argp)
- 		return PTR_ERR(bb_info);
- 
- 	/* See comments in ioc_bw_assign() */
--	preempt_disable();
-+	atomic_inc(&bb_info->ongoing_assign_count);
-+
-+	local_irq_save(flags);
- 	ret = is_bw_unassignable(bb_info, cpu);
- 	if (!ret) {
- 		teardown_bw(bb_info, cpu);
- 		teardown_ctl_reg(bb_info, cpu);
- 	}
--	preempt_enable();
-+	local_irq_restore(flags);
-+
-+	if (atomic_dec_and_test(&bb_info->ongoing_assign_count) &&
-+					test_bit(BB_FREEING, &bb_info->flag))
-+		wake_up(&bb_info->wq);
- 
- 	put_bb_info(bb_info);
- 
- 	return ret;
+@@ -32,6 +32,7 @@
+ #include <linux/cpu.h>
+ #include <linux/cpumask.h>
+ #include <linux/kernel.h>
++#include <linux/kobject.h>
+ #include <linux/miscdevice.h>
+ #include <linux/module.h>
+ #include <linux/spinlock.h>
+@@ -931,6 +932,254 @@ static int hwb_cpu_online(unsigned int cpu)
+ 	return 0;
  }
  
-+static void cleanup_bw_func(void *args)
++static void read_init_sync_reg(void *args)
 +{
-+	struct bb_info *bb_info = (struct bb_info *)args;
-+	int cpu = smp_processor_id();
++	struct init_sync_args *sync_args = (struct init_sync_args *)args;
++	u64 val = 0;
 +
-+	teardown_bw(bb_info, cpu);
-+	teardown_ctl_reg(bb_info, cpu);
++	switch (sync_args->bb) {
++	case 0:
++		val = read_sysreg_s(FHWB_INIT_SYNC_BB0_EL1);
++		break;
++	case 1:
++		val = read_sysreg_s(FHWB_INIT_SYNC_BB1_EL1);
++		break;
++	case 2:
++		val = read_sysreg_s(FHWB_INIT_SYNC_BB2_EL1);
++		break;
++	case 3:
++		val = read_sysreg_s(FHWB_INIT_SYNC_BB3_EL1);
++		break;
++	case 4:
++		val = read_sysreg_s(FHWB_INIT_SYNC_BB4_EL1);
++		break;
++	case 5:
++		val = read_sysreg_s(FHWB_INIT_SYNC_BB5_EL1);
++		break;
++	}
++
++	sync_args->val = val;
 +}
 +
-+/* Send IPI to reset INIT_SYNC register */
-+static void teardown_bb(struct bb_info *bb_info)
++struct hwb_attr {
++	struct kobj_attribute attr;
++	u8 bb;
++};
++static struct hwb_attr *battr;
++
++/* kobject for each CMG */
++static struct kobject **cmg_kobj;
++
++/* Get CMG number based on index value of cmg_kobj */
++static int get_cmg_from_kobj(struct kobject *kobj)
 +{
-+	struct init_sync_args args = {0};
-+	int cpu;
++	int i;
 +
-+	/* Reset BW on each PE if IOC_BW_UNASSIGN is not called properly  */
-+	if (cpumask_weight(bb_info->assigned_pemask) != 0) {
-+		pr_warn("unassign is not called properly. CMG: %d, BB: %d, unassigned PE: %*pbl\n",
-+			bb_info->cmg, bb_info->bb, cpumask_pr_args(bb_info->assigned_pemask));
-+		on_each_cpu_mask(bb_info->assigned_pemask, cleanup_bw_func, bb_info, 1);
++	for (i = 0; i < _hwinfo.num_cmg; i++) {
++		if (cmg_kobj[i] == kobj)
++			return i;
 +	}
-+
-+	/* INIT_SYNC register is shared resource in CMG. Pick one PE */
-+	cpu = cpumask_any(bb_info->pemask);
-+
-+	args.bb = bb_info->bb;
-+	/* Just clear all bits */
-+	args.val = 0;
-+	on_each_cpu_mask(cpumask_of(cpu), write_init_sync_reg, &args, 1);
-+
-+	clear_bit(bb_info->bb, &_hwinfo.used_bb_bmap[bb_info->cmg]);
-+
-+	pr_debug("Teardown bb: cpu: %d, CMG: %u, BB: %u, bitmap: %lx\n",
-+			cpu, bb_info->cmg, bb_info->bb, _hwinfo.used_bb_bmap[bb_info->cmg]);
-+}
-+
-+static int ioc_bb_free(struct file *filp,  void __user *argp)
-+{
-+	struct hwb_private_data *pdata = (struct hwb_private_data *)filp->private_data;
-+	struct fujitsu_hwb_ioc_bb_ctl bb_ctl;
-+	struct bb_info *bb_info;
-+
-+	if (copy_from_user(&bb_ctl, (struct fujitsu_hwb_ioc_bb_ctl __user *)argp,
-+						sizeof(struct fujitsu_hwb_ioc_bb_ctl)))
-+		return -EFAULT;
-+
-+	bb_info = get_bb_info(pdata, bb_ctl.cmg, bb_ctl.bb);
-+	if (IS_ERR(bb_info))
-+		return PTR_ERR(bb_info);
-+
-+	/* Forbid free/assign/unassign operation from now on */
-+	if (test_and_set_bit(BB_FREEING, &bb_info->flag)) {
-+		pr_err("IOC_BB_FREE is already called. CMG: %u, BB: %u\n", bb_ctl.cmg, bb_ctl.bb);
-+		put_bb_info(bb_info);
-+		return -EPERM;
-+	}
-+
-+	/* Wait current ongoing assign/unassign operation to finish */
-+	if (wait_event_interruptible(bb_info->wq,
-+					(atomic_read(&bb_info->ongoing_assign_count) == 0))) {
-+		clear_bit(BB_FREEING, &bb_info->flag);
-+		put_bb_info(bb_info);
-+		pr_debug("IOC_BB_FREE is interrupted. CMG: %u, BB: %u\n", bb_ctl.cmg, bb_ctl.bb);
-+		return -EINTR;
-+	}
-+
-+	teardown_bb(bb_info);
-+	spin_lock(&pdata->list_lock);
-+	list_del_init(&bb_info->node);
-+	spin_unlock(&pdata->list_lock);
-+
-+	/* 1 put for get_bb_info, 1 for alloc_bb_info */
-+	put_bb_info(bb_info);
-+	put_bb_info(bb_info);
-+
++	/* should not happen */
++	WARN_ON_ONCE("cmg_kobj not found\n");
 +	return 0;
 +}
 +
- static long fujitsu_hwb_dev_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
++static ssize_t hwb_init_sync_bb_show(struct kobject *kobj,
++					 struct kobj_attribute *attr, char *buf)
++{
++	struct hwb_attr *battr = container_of(attr, struct hwb_attr, attr);
++	struct init_sync_args args = {0};
++	ssize_t written = 0;
++	int cpu;
++	int cmg;
++	u64 mask;
++	u64 bst;
++
++	/* Find online cpu in target cmg */
++	cmg = get_cmg_from_kobj(kobj);
++	for_each_online_cpu(cpu) {
++		if (_hwinfo.core_map[cpu].cmg == cmg)
++			break;
++	}
++	if (cpu >= nr_cpu_ids)
++		return 0;
++
++	/* Send IPI to read INIT_SYNC register */
++	args.bb = battr->bb;
++	on_each_cpu_mask(cpumask_of(cpu), read_init_sync_reg, &args, 1);
++
++	mask = FIELD_GET(FHWB_INIT_SYNC_BB_EL1_MASK_FIELD, args.val);
++	bst = FIELD_GET(FHWB_INIT_SYNC_BB_EL1_BST_FIELD, args.val);
++
++	written += scnprintf(buf, PAGE_SIZE, "%04llx\n", mask);
++	written += scnprintf(buf + written, PAGE_SIZE - written, "%04llx\n", bst);
++
++	return written;
++}
++
++#define BARRIER_ATTR(name) \
++static struct kobj_attribute hwb_##name##_attribute = \
++	__ATTR(name, 0444, hwb_##name##_show, NULL)
++
++static ssize_t hwb_hwinfo_show(struct kobject *kobj,
++				   struct kobj_attribute *attr, char *buf)
++{
++	return scnprintf(buf, PAGE_SIZE, "%d %d %d %d\n",
++				_hwinfo.num_cmg, _hwinfo.num_bb,
++				_hwinfo.num_bw, _hwinfo.max_pe_per_cmg);
++}
++BARRIER_ATTR(hwinfo);
++
++static ssize_t hwb_used_bb_bmap_show(struct kobject *kobj,
++					 struct kobj_attribute *attr, char *buf)
++{
++	int cmg;
++
++	cmg = get_cmg_from_kobj(kobj);
++
++	return scnprintf(buf, PAGE_SIZE, "%04lx\n", _hwinfo.used_bb_bmap[cmg]);
++}
++BARRIER_ATTR(used_bb_bmap);
++
++static ssize_t hwb_used_bw_bmap_show(struct kobject *kobj,
++					 struct kobj_attribute *attr, char *buf)
++{
++	ssize_t written = 0;
++	int cmg;
++	int cpu;
++
++	cmg = get_cmg_from_kobj(kobj);
++	for (cpu = 0; cpu < num_possible_cpus(); cpu++) {
++		if (_hwinfo.core_map[cpu].cmg == cmg)
++			written += scnprintf(buf + written, PAGE_SIZE - written, "%d %04lx\n",
++						 cpu, _hwinfo.used_bw_bmap[cpu]);
++	}
++
++	return written;
++}
++BARRIER_ATTR(used_bw_bmap);
++
++static ssize_t hwb_core_map_show(struct kobject *kobj,
++				     struct kobj_attribute *attr, char *buf)
++{
++	ssize_t written = 0;
++	int cmg;
++	int cpu;
++
++	cmg = get_cmg_from_kobj(kobj);
++	for (cpu = 0; cpu < num_possible_cpus(); cpu++) {
++		if (_hwinfo.core_map[cpu].cmg == cmg)
++			written += scnprintf(buf + written, PAGE_SIZE - written, "%d %d\n",
++				cpu, _hwinfo.core_map[cpu].ppe);
++	}
++
++	return written;
++}
++BARRIER_ATTR(core_map);
++
++static struct attribute *hwb_attrs[] = {
++	&hwb_used_bb_bmap_attribute.attr,
++	&hwb_used_bw_bmap_attribute.attr,
++	&hwb_core_map_attribute.attr,
++	NULL,
++};
++
++static const struct attribute_group hwb_attribute = {
++	.attrs = hwb_attrs,
++};
++
++static void destroy_sysfs(void)
++{
++	int cmg;
++	int bb;
++	int i;
++
++	sysfs_remove_file(&bar_miscdev.this_device->kobj, &hwb_hwinfo_attribute.attr);
++
++	for (cmg = 0; cmg < _hwinfo.num_cmg; cmg++) {
++		for (bb = 0; bb < _hwinfo.num_bb; bb++) {
++			i = (cmg * _hwinfo.num_bb) + bb;
++			if (battr[i].attr.attr.name)
++				sysfs_remove_file(cmg_kobj[cmg], &battr[i].attr.attr);
++		}
++	}
++	kfree(battr);
++
++	for (cmg = 0; cmg < _hwinfo.num_cmg; cmg++) {
++		if (cmg_kobj[cmg]) {
++			sysfs_remove_group(cmg_kobj[cmg], &hwb_attribute);
++			kobject_put(cmg_kobj[cmg]);
++		}
++	}
++	kfree(cmg_kobj);
++}
++
++/* Create sysfs file under /sys/class/misc/fujitsu_hwb */
++#define NAME_LEN 16
++static int __init init_sysfs(void)
++{
++	char name[NAME_LEN];
++	int ret;
++	int cmg;
++	int bb;
++	int i;
++
++	/* Create file to show number of CMG/BB/BW/pe_per_cmg */
++	ret = sysfs_create_file(&bar_miscdev.this_device->kobj, &hwb_hwinfo_attribute.attr);
++	if (ret)
++		return ret;
++
++	cmg_kobj = kcalloc(_hwinfo.num_cmg, sizeof(struct kobject *), GFP_KERNEL);
++	battr = kcalloc(_hwinfo.num_cmg * _hwinfo.num_bb, sizeof(struct hwb_attr), GFP_KERNEL);
++	if (!cmg_kobj || !battr) {
++		kfree(cmg_kobj);
++		kfree(battr);
++		return -ENOMEM;
++	}
++
++	/* Create folder for each CMG and create core_map/bitmap file */
++	for (cmg = 0; cmg < _hwinfo.num_cmg; cmg++) {
++		scnprintf(name, NAME_LEN, "CMG%d", cmg);
++		cmg_kobj[cmg] = kobject_create_and_add(name, &bar_miscdev.this_device->kobj);
++		if (!cmg_kobj[cmg]) {
++			ret = -ENOMEM;
++			goto fail;
++		}
++
++		ret = sysfs_create_group(cmg_kobj[cmg], &hwb_attribute);
++		if (ret)
++			goto fail;
++	}
++
++	/* Create files for INIT_SYNC register */
++	for (cmg = 0; cmg < _hwinfo.num_cmg; cmg++) {
++		for (bb = 0; bb < _hwinfo.num_bb; bb++) {
++			i = (cmg * _hwinfo.num_bb) + bb;
++
++			scnprintf(name, NAME_LEN, "init_sync_bb%d", bb);
++			battr[i].bb = bb;
++			battr[i].attr.attr.name = kstrdup(name, GFP_KERNEL);
++			if (!battr[i].attr.attr.name) {
++				ret = -ENOMEM;
++				goto fail;
++			}
++			battr[i].attr.attr.mode = 0400; /* root only */
++			battr[i].attr.show = hwb_init_sync_bb_show;
++
++			sysfs_attr_init(&battr[i].attr.attr);
++			ret = sysfs_create_file(cmg_kobj[cmg], &battr[i].attr.attr);
++			if (ret < 0)
++				goto fail;
++		}
++	}
++
++	return 0;
++
++fail:
++	destroy_sysfs();
++	return ret;
++}
++
+ static int __init hwb_init(void)
  {
- 	void __user *argp = (void __user *)arg;
-@@ -636,6 +748,9 @@ static long fujitsu_hwb_dev_ioctl(struct file *filp, unsigned int cmd, unsigned
- 	case FUJITSU_HWB_IOC_BW_UNASSIGN:
- 		ret = ioc_bw_unassign(filp, argp);
- 		break;
-+	case FUJITSU_HWB_IOC_BB_FREE:
-+		ret = ioc_bb_free(filp, argp);
-+		break;
- 	default:
- 		ret = -ENOTTY;
- 		break;
-diff --git a/include/uapi/linux/fujitsu_hpc_ioctl.h b/include/uapi/linux/fujitsu_hpc_ioctl.h
-index 396029f2bc0d..7a285d8db0a9 100644
---- a/include/uapi/linux/fujitsu_hpc_ioctl.h
-+++ b/include/uapi/linux/fujitsu_hpc_ioctl.h
-@@ -28,5 +28,7 @@ struct fujitsu_hwb_ioc_bw_ctl {
- 	0x01, struct fujitsu_hwb_ioc_bw_ctl)
- #define FUJITSU_HWB_IOC_BW_UNASSIGN _IOW(__FUJITSU_IOCTL_MAGIC, \
- 	0x02, struct fujitsu_hwb_ioc_bw_ctl)
-+#define FUJITSU_HWB_IOC_BB_FREE _IOW(__FUJITSU_IOCTL_MAGIC, \
-+	0x03, struct fujitsu_hwb_ioc_bb_ctl)
+ 	int ret;
+@@ -967,8 +1216,16 @@ static int __init hwb_init(void)
+ 		goto out3;
+ 	}
  
- #endif /* _UAPI_LINUX_FUJITSU_HPC_IOC_H */
++	ret = init_sysfs();
++	if (ret < 0) {
++		pr_err("sysfs creation failed: %d\n", ret);
++		goto out4;
++	}
++
+ 	return 0;
+ 
++out4:
++	misc_deregister(&bar_miscdev);
+ out3:
+ 	cpuhp_remove_state(_hp_state);
+ out2:
+@@ -981,6 +1238,7 @@ static int __init hwb_init(void)
+ 
+ static void __exit hwb_exit(void)
+ {
++	destroy_sysfs();
+ 	misc_deregister(&bar_miscdev);
+ 	cpuhp_remove_state(_hp_state);
+ 	destroy_bb_info_cachep();
 -- 
 2.26.2
 
