@@ -1,116 +1,112 @@
-Return-Path: <SRS0=l7M8=GL=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-25.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C013C433E9
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  8 Jan 2021 15:53:51 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 14DA323888
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  8 Jan 2021 15:53:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 14DA323888
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=xn+cuOHxRp5TrFKIbR9LqvphYCgg0zl9XDiuBUrbNus=; b=aUFYmEK5zkJMIRurC8xBZktf9
-	RhtlrZbxYFTWXZqNaLgxuQE6JC/RAhpCGDkD3JkBwuRtDI7oDG+8fmKnjdpHCxWF68ukptdNDHyca
-	TCIHWFr5XhSScOA5GlBAt2InYWVJnyfW2ACWbI0jsxnbK6b7bgX2rjS57L0mYoImfiN/eOKfLFsyg
-	KnXJPvhDHvA9fpcoid1ooLPt9sWIceJOMqiEImxBDoXuKvaStr1hTSMIRCYaOmwbBPOeD3o13mKxC
-	7XFrrsrIaGZ5ui+gZigWEoWtV7xV+uEWrlzEVPShQpgzhsD+FeB4FpdMMmgfDk4qUSFGj1LPoytbw
-	VW+lHCFXw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kxu3G-0007KT-T0; Fri, 08 Jan 2021 15:51:47 +0000
-Received: from foss.arm.com ([217.140.110.172])
- by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kxu2s-0007Jt-MS
- for linux-arm-kernel@lists.infradead.org; Fri, 08 Jan 2021 15:51:23 +0000
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7E07ED1;
- Fri,  8 Jan 2021 07:51:14 -0800 (PST)
-Received: from C02TD0UTHF1T.local (unknown [10.57.36.117])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1040C3F70D;
- Fri,  8 Jan 2021 07:51:12 -0800 (PST)
-Date: Fri, 8 Jan 2021 15:51:10 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Subject: Re: [RFC PATCH 00/10] Add Fujitsu A64FX soc entry/hardware barrier
- driver
-Message-ID: <20210108155110.GC84941@C02TD0UTHF1T.local>
-References: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
- <20210108125410.GA84941@C02TD0UTHF1T.local>
- <CAK8P3a34aPUwjAXoh20E-PT6vG6gbW_itAXVQAYrhsHZbzqRsQ@mail.gmail.com>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE10C433DB
+	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 17:11:04 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 77FFC23A01; Fri,  8 Jan 2021 17:11:04 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 515FE2368A
+	for <soc@kernel.org>; Fri,  8 Jan 2021 17:11:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1610125864;
+	bh=Xc4j0qz7H2FXRAjtz1+jJpsThB7uINBxmDddnINUDgQ=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=H9mgeSuHAnONTu+HvY/y2k+dWJA+LknMnJTuKqQ5QZvXJnwl3Op9UVx+WbRuFxJvr
+	 bIyTVu7dImUJZCs8cv87SGbJsyqanEV4kshqJKrduVOo5KQl/oryBRIhSdQOBJG6Tf
+	 vWutANr+mJALKG3v66B1GKPovGtYfrhM20KU4v9ANujnj056EfwyVGiHmmQ9GzwqEs
+	 22tUuuce5Em6EBNJJlPtw8Jz4cXTjiMm/7f/XT6mpRSaUViTC3nWJLY1ZsDeaVzka5
+	 Z/DT/Ce/16OOS0EDxhnruT/50PlSwzDKI5BzC138hO1/5PO6U1cSpLYtBq6+B4WCRZ
+	 7PGB/a+AGKnKA==
+Received: by mail-ot1-f45.google.com with SMTP id i6so10320975otr.2
+        for <soc@kernel.org>; Fri, 08 Jan 2021 09:11:04 -0800 (PST)
+X-Gm-Message-State: AOAM5321N2M6Mz25Rx4OTpV9Uv4qzBNI1CsMe/uqIavw7rUccYmKuK+M
+	ynrc9LO2WD9VMutMviMVlR+B/gqww36jbVk5cb8=
+X-Google-Smtp-Source: ABdhPJz7qkGenCk7YSSFXPr9juATtboGHKXhOj6RkWr3T33mheh2GHCv/XF3NzC2n3RzgebVnoXyPQB8IW3/qS8iYZY=
+X-Received: by 2002:a9d:7a4b:: with SMTP id z11mr3297026otm.305.1610125863473;
+ Fri, 08 Jan 2021 09:11:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a34aPUwjAXoh20E-PT6vG6gbW_itAXVQAYrhsHZbzqRsQ@mail.gmail.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210108_105122_809925_922F667F 
-X-CRM114-Status: GOOD (  17.52  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Fri, 8 Jan 2021 18:10:47 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3aQwtP9kpujNeErTVHDOxALMtEpg5QQgKJMfQ+ZaFn4w@mail.gmail.com>
+Message-ID: <CAK8P3a3aQwtP9kpujNeErTVHDOxALMtEpg5QQgKJMfQ+ZaFn4w@mail.gmail.com>
+Subject: [GIT PULL] ARM: SoC fixes for v5.11
+To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>,
- Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>, SoC Team <soc@kernel.org>,
- Olof Johansson <olof@lixom.net>, Will Deacon <will@kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210108155110.alH64ShFmD4-q_VP5Hgw2ulQ1dh4Y1l3HZ5ASQ4QQdY@z>
+Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Tony Lindgren <tony@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Jan 08, 2021 at 03:23:23PM +0100, Arnd Bergmann wrote:
-> On Fri, Jan 8, 2021 at 1:54 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> > As a general rule, we avoid the use of IMPLEMENTATION DEFINED features
-> > in Linux, as they pose a number of correctness/safety challenges and
-> > come with a potentially significan long term maintenance burden that is
-> > generally not justified by the features themselves. For example, such
-> > features are not usable under virtualization (where a hypervisor may set
-> > HCR_EL2.TIDCP, or fail to context-switch state that it is unaware of).
-> 
-> I am somewhat less concerned about the feature being implementation
-> defined than I am about adding a custom user interface for one
-> platform.
+The following changes since commit 69fe24d1d80feac4289778582cf0a15256d59baf:
 
-I completely agree that adding a custom interface that's platform
-specific is undesireable.
+  firmware: xilinx: Mark pm_api_features_map with static keyword
+(2020-12-09 23:00:22 +0100)
 
-> In the end, anything outside of the CPU core that ends up in a SoC
-> is implementation defined, and this is usually not a problem as long
-> as we have an abstraction in the kernel that hides the details from
-> the user, and the system is still functional if the implementation is
-> turned off for whatever reason.
+are available in the Git repository at:
 
-I think that peripherals and other bits out in the SoC are quite
-different to things built into the CPU, where there's inevitably most
-significant and subtle interactions with the architecture, and can be so
-closely coupled as to not have a good point to apply abstraction. We
-have common ways of abstracting storage devices, but the same is not as
-true for userspace instructions.
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+tags/arm-fixes-5.11-1
 
-Thanks,
-Mark.
+for you to fetch changes up to bac717171971176b78c72d15a8b6961764ab197f:
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+  ARM: picoxcell: fix missing interrupt-parent properties (2021-01-08
+16:23:37 +0100)
+
+----------------------------------------------------------------
+ARM: SoC fixes for v5.11
+
+These are a small number of bug fixes that all came in before or during
+the merge window, most for the omap platform:
+
+ - One boot regression fix for Nokia N9 (OMAP3).
+
+ - Two small defconfig changes for omap2, to reflect changes in drivers
+
+ - Warning fixes for DT issues on omap2, picoxcell and bitmap SoCs.
+   The picoxcell platform will be removed in v5.12, but fixing it
+   first makes it easier to backport to the fix to stable kernels
+   and get a clean build with new dtc versions
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+----------------------------------------------------------------
+Aaro Koskinen (1):
+      ARM: dts: OMAP3: disable AES on N950/N9
+
+Andreas Kemnade (2):
+      ARM: OMAP2+: omap_device: fix idling of devices during probe
+      ARM: omap2plus_defconfig: enable SPI GPIO
+
+Andrey Zhizhikin (1):
+      ARM: omap2plus_defconfig: drop unused POWER_AVS option
+
+Arnd Bergmann (3):
+      Merge tag 'omap-for-v5.10/fixes-rc6-signed' of
+git://git.kernel.org/.../tmlind/linux-omap into arm/fixes
+      Merge tag 'omap-for-v5.11/defconfig-late-signed' of
+git://git.kernel.org/.../tmlind/linux-omap into arm/fixes
+      ARM: picoxcell: fix missing interrupt-parent properties
+
+Carl Philipp Klemm (1):
+      ARM: omap2: pmic-cpcap: fix maximum voltage to be consistent
+with defaults on xt875
+
+Jisheng Zhang (1):
+      arm64: dts: bitmain: Use generic "ngpios" rather than "snps,nr-gpios"
+
+Linus Walleij (1):
+      ARM: dts: ux500/golden: Set display max brightness
+
+ arch/arm/boot/dts/omap3-n950-n9.dtsi           | 8 ++++++++
+ arch/arm/boot/dts/picoxcell-pc3x2.dtsi         | 4 ++++
+ arch/arm/boot/dts/ste-ux500-samsung-golden.dts | 1 +
+ arch/arm/configs/omap2plus_defconfig           | 7 ++++++-
+ arch/arm/mach-omap2/omap_device.c              | 8 +++++---
+ arch/arm/mach-omap2/pmic-cpcap.c               | 2 +-
+ arch/arm64/boot/dts/bitmain/bm1880.dtsi        | 6 +++---
+ 7 files changed, 28 insertions(+), 8 deletions(-)
