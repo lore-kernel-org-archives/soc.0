@@ -1,123 +1,130 @@
-Return-Path: <SRS0=l7M8=GL=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=SDro=GL=fujitsu.com=misono.tomohiro@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 384F1C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  8 Jan 2021 13:29:52 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C741BC433E0
+	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 10:21:39 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 9BB0B236FB; Fri,  8 Jan 2021 10:21:39 +0000 (UTC)
+X-Greylist: delayed 64 seconds by postgrey-1.34 at mail.kernel.org; Fri, 08 Jan 2021 10:21:38 UTC
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BE63A23716
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jp.fujitsu.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=misono.tomohiro@fujitsu.com
+Received: from esa4.hc1455-7.c3s2.iphmx.com (esa4.hc1455-7.c3s2.iphmx.com [68.232.139.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DBCC322E02
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  8 Jan 2021 13:29:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DBCC322E02
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=PPwU22Cm1AMMbD2S2TbAmYBC7U+TjYfuB8b9XIrsOjI=; b=poKacSaoMDVFwDtbnjJgE54i/
-	Z1LA115gzsDzxE8miashU7O3oAAIYjdGdNH3EYNIg3ZvzTBakgqEyVyDRwFruOixNWLqsZ6XQtcaG
-	qEUewkjKW5Mb4VqJ7Z6T8qcY850yVheZjly2Ue09eIlBslAbpGrgtitR9p/a7r27ruAGX4aXa6u4M
-	Zd1zJ5CPwJZuoaVTfGmq2FmSbe84iFIkeoOMMkqAA1UvzTVegovBe0a+8O03ml47BUythioFianJY
-	2AqDJjb8CTVqlRs8tTQvJyBUG47MwqdV6o2h6UWAttLyk+AJUpEgL0imC5o82AnLkhfqtrJz03SIW
-	wXHUMJVQw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kxroN-0008JW-KD; Fri, 08 Jan 2021 13:28:15 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kxrnz-0008Ix-MQ
- for linux-arm-kernel@lists.infradead.org; Fri, 08 Jan 2021 13:27:52 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C04852396F
- for <linux-arm-kernel@lists.infradead.org>;
- Fri,  8 Jan 2021 13:27:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1610112470;
- bh=nt6ziUzHkm3hfrCQXU1yzp/8m62e8IE7ZOVrqdMhV9Y=;
- h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
- b=o8BBVlEkk/2DOJqPrlhzkqXZDSFqZkIHtaZVaSWJBtjJYBm3aZHSnc2KDZOMB0Cso
- IIOqtKc5XT9Gk29lj+idvFh5nOdwceLvPiOwEswduR8kanWQx8cwlB9nG2nA+MOTQJ
- XxIGLD8KXiCYgpzJvGGBvqWLkUATQPCfM2zqK5LUXYVonb+lQAML0tJQTCYASBf9km
- k9C5pWfblV2/0ki0QNrCd6tstEIdtZMMHHPUIN4+Lb1bOgGJwYtM5V+C+NegCwD0zT
- wUztvyMBFKOd4Gv8UEu2UP3vwTGan5rCFRHuskuedmM+3JBqPy5nb5lh9qnXimmwiY
- zs6sL+pC0ogrg==
-Received: by mail-oi1-f182.google.com with SMTP id q25so11282493oij.10
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 08 Jan 2021 05:27:50 -0800 (PST)
-X-Gm-Message-State: AOAM531vDgnms9A04kcv6o47ROAhMSnXEguroWqEF4Aj4GW9K/MfFYHu
- lrTP8enmUZvfqFBsIi+z9l+jOVlyHDfks+lQqRc=
-X-Google-Smtp-Source: ABdhPJxzS4h2MK5B78Iv8vYCQh0roQTlfXNRTBFIfep0yXLkz/Fy/e07HKL+4g3po6EkgtmvS53fH+uipK43dKV2JYk=
-X-Received: by 2002:aca:fd91:: with SMTP id b139mr2185199oii.67.1610112470141; 
- Fri, 08 Jan 2021 05:27:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
- <20210108105241.1757799-10-misono.tomohiro@jp.fujitsu.com>
-In-Reply-To: <20210108105241.1757799-10-misono.tomohiro@jp.fujitsu.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 8 Jan 2021 14:27:34 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a22Cc4J6pr7h357p70k2eJ2dNxkHLWYC-2bMh7A1+ZhTA@mail.gmail.com>
-Message-ID: <CAK8P3a22Cc4J6pr7h357p70k2eJ2dNxkHLWYC-2bMh7A1+ZhTA@mail.gmail.com>
-Subject: Re: [PATCH 09/10] soc: fujitsu: hwb: Add sysfs entry
-To: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210108_082751_811341_33D4D831 
-X-CRM114-Status: GOOD (  12.49  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by mail.kernel.org (Postfix) with ESMTPS id BE63A23716;
+	Fri,  8 Jan 2021 10:21:38 +0000 (UTC)
+IronPort-SDR: WMi5P1biufm1bkdh/YEAsALgKvHvgQRPJ6vy+xNi9e35Z0fCfXQ2rS/hUyWL5Lsn+QmpIxbVKi
+ 50dKrvcbaJAeS5oPTYjuxNw5LwNp96vKn07+iWRWYnUJkT/Qz9Uu/V5cyapUCFL/uxDhMXtnbv
+ kM/ZSgpmLUZcpeSZFFnMBbx/4Wch7pssWnK2ZyfeUP6dmrDkN8Sx+GqQg2Yp4e56BmQmCFbQv8
+ 05AA8H7sElSUqrFF8Hc0r3sPMPw1mHRg6NaMCuU1YYR3kGtyeFpPKDRWZBF6+hgcqvnC6VE1/z
+ saw=
+X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="14106180"
+X-IronPort-AV: E=Sophos;i="5.79,330,1602514800"; 
+   d="scan'208";a="14106180"
+Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
+  by esa4.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:20:31 +0900
+Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
+	by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 6BEB8DF09E;
+	Fri,  8 Jan 2021 19:20:30 +0900 (JST)
+Received: from g01jpfmpwyt03.exch.g01.fujitsu.local (g01jpfmpwyt03.exch.g01.fujitsu.local [10.128.193.57])
+	by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id B0C9F44C080;
+	Fri,  8 Jan 2021 19:20:29 +0900 (JST)
+Received: from g01jpexchyt35.g01.fujitsu.local (unknown [10.128.193.4])
+	by g01jpfmpwyt03.exch.g01.fujitsu.local (Postfix) with ESMTP id A623546E556;
+	Fri,  8 Jan 2021 19:20:28 +0900 (JST)
+Received: from luna3.soft.fujitsu.com (10.124.196.199) by
+ g01jpexchyt35.g01.fujitsu.local (10.128.193.50) with Microsoft SMTP Server id
+ 14.3.487.0; Fri, 8 Jan 2021 19:20:26 +0900
+From: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>,
- SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>,
- Will Deacon <will@kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210108132734.DKDbfphePu3xWiDfNGR_VX2mVg1__tC9KZYsG2cPn2E@z>
+To: <linux-arm-kernel@lists.infradead.org>, <soc@kernel.org>
+CC: <will@kernel.org>, <catalin.marinas@arm.com>, <arnd@arndb.de>,
+	<olof@lixom.net>, <misono.tomohiro@jp.fujitsu.com>
+Subject:
+Date: Fri, 8 Jan 2021 19:32:17 +0900
+Message-ID: <20210108103227.1740865-1-misono.tomohiro@jp.fujitsu.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-SecurityPolicyCheck-GC: OK by FENCE-Mail
+X-TM-AS-GCONF: 00
 
-On Fri, Jan 8, 2021 at 11:52 AM Misono Tomohiro
-<misono.tomohiro@jp.fujitsu.com> wrote:
->
-> This adds sysfs entry per CMG to show running barrier driver status
-> for debugging user application. The following entries will be created:
->
-> /sys/class/misc/fujitsu_hwb
->  |- hwinfo ... number of CMG/BB/BW/pe_per_cmg on running system
->  |- CMG0
->      |- core_map      ... cpuid belonging to this CMG
->      |- used_bb_bmap  ... bitmap of currently allocated BB
->      |- used_bw_bmap  ... bitmap of currently allocated BW
->      |- init_sync_bb0 ... current value of INIT_SYNC register 0
->      |- init_sync_bb1 ... current value of INIT_SYNC register 1
->      ...
->  |- CMG1
->   ...
+Subject: [RFC PATCH 00/10] Add Fujitsu A64FX soc entry/hardware barrier driver
 
-If this is meant as a stable interface, it should be documented in
-Documentation/ABI/
+Hello,
 
-However, if it's purely for debugging and may not get maintained
-forever, you might want to use debugfs instead.
+This series adds Fujitsu A64FX SoC entry in drivers/soc and hardware
+barrier driver for it.
 
-      Arnd
+[Driver Description]
+ A64FX CPU has several functions for HPC workload and hardware barrier
+ is one of them. It is a mechanism to realize fast synchronization by
+ PEs belonging to the same L3 cache domain by using implementation
+ defined hardware registers.
+ For more details, see A64FX HPC extension specification in
+ https://github.com/fujitsu/A64FX
+ 
+ The driver mainly offers a set of ioctls to manipulate related registers.
+ Patch 1-9 implements driver code and patch 10 finally adds kconfig,
+ Makefile and MAINTAINER entry for the driver.  
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ Also, C library and test program for this driver is available on: 
+ https://github.com/fujitsu/hardware_barrier
+
+ The driver is based on v5.11-rc2 and tested on FX700 environment.
+
+[RFC]
+ This is the first time we upstream drivers for our chip and I want to
+ confirm driver location and patch submission process.
+
+ Based on my observation it seems drivers/soc folder is right place to put
+ this driver, so I added Kconfig entry for arm64 platform config, created
+ soc/fujitsu folder and updated MAINTAINER entry accordingly (last patch).
+ Is it right?
+
+ Also for final submission I think I need to 1) create some public git
+ tree to push driver code (github or something), 2) make pull request to
+ SOC team (soc@kernel.org). Is it a correct procedure?
+
+ I will appreciate any help/comments.
+
+sidenote: We plan to post other drivers for A64FX HPC extension
+(prefetch control and cache control) too anytime soon.
+
+Misono Tomohiro (10):
+  soc: fujitsu: hwb: Add hardware barrier driver init/exit code
+  soc: fujtisu: hwb: Add open operation
+  soc: fujitsu: hwb: Add IOC_BB_ALLOC ioctl
+  soc: fujitsu: hwb: Add IOC_BW_ASSIGN ioctl
+  soc: fujitsu: hwb: Add IOC_BW_UNASSIGN ioctl
+  soc: fujitsu: hwb: Add IOC_BB_FREE ioctl
+  soc: fujitsu: hwb: Add IOC_GET_PE_INFO ioctl
+  soc: fujitsu: hwb: Add release operation
+  soc: fujitsu: hwb: Add sysfs entry
+  soc: fujitsu: hwb: Add Kconfig/Makefile to build fujitsu_hwb driver
+
+ MAINTAINERS                            |    7 +
+ arch/arm64/Kconfig.platforms           |    5 +
+ drivers/soc/Kconfig                    |    1 +
+ drivers/soc/Makefile                   |    1 +
+ drivers/soc/fujitsu/Kconfig            |   24 +
+ drivers/soc/fujitsu/Makefile           |    2 +
+ drivers/soc/fujitsu/fujitsu_hwb.c      | 1253 ++++++++++++++++++++++++
+ include/uapi/linux/fujitsu_hpc_ioctl.h |   41 +
+ 8 files changed, 1334 insertions(+)
+ create mode 100644 drivers/soc/fujitsu/Kconfig
+ create mode 100644 drivers/soc/fujitsu/Makefile
+ create mode 100644 drivers/soc/fujitsu/fujitsu_hwb.c
+ create mode 100644 include/uapi/linux/fujitsu_hpc_ioctl.h
+
+-- 
+2.26.2
+
