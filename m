@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFA9DC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  8 Jan 2021 10:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40315C433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  8 Jan 2021 10:46:26 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5B84622D01
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  8 Jan 2021 10:46:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5B84622D01
+	by mail.kernel.org (Postfix) with ESMTPS id AF14622D01
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  8 Jan 2021 10:46:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AF14622D01
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jp.fujitsu.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,51 +23,51 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-ID:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=KhouV4J/+yZJKKIOrppaVebmx/ljIWWOfVMZJ4LzaSw=; b=M2GVD3NUCpc6jWRxxUVDJwMu0
-	h0PnlpU1wOArtVddiOCBbe1+pZpZ8Wm6S7zZafa+/zFqTSWfoWFkeOYvGmw03Zy2bH5BFJIvj7zHu
-	L6naWw5rSrcCnUoZyAJBgqnXgVpNuDEy2PkypuVuFJpgvPyMBzQpGHGIe021T9iHeo4tgoDiZT+XW
-	utNvpcw2ZFatf5zxfi9Ng+/jMHAWgTv3NxPAuHTUOu0iD/TVxzp1ZNaeVdHDgm1b+0ZcYvcu6mQn+
-	QedUERHPzgL5pPnzjl6NciF+pIIe0HX9OYk2y3HZjhf+uWEUszUMYgjzCvNsDVu+Q6Q3vmvMFRz15
-	bXwABlZSw==;
+	 bh=GScNKLWZ3IJwHV1vZvkurcj6K9uCZAx5o2B1IpzZYDQ=; b=rP+TbO7WqZoROQ8E71hkIMS22
+	DwMewbN+Bb/nWdkq3fQGILq08MPwuW9Usaz07Xi7HYVdOO1m01g6/oxd7YWISXTjh+88EOv8EF3Nc
+	9i2uLm4wdwahOoDIPo5T1RV6odaJTdIhXNMNz4vTZAd2Ra53d0GLKGJbvybIqqaGi7w18tbjLOZha
+	Hb9PV3xPSCLbmLTnpOFCFMj3y0aVTHunH5Jep9IVr+K5VfK50/G+0JRjXf2n/qwvLxG4/j9UmsGlF
+	QRNF6bh+ALsW49FGKfF2nWzfgdIub2VFrbe8rwyzt8EdUtZv4mUI8d4SGsmKLiQLHrlRBHGfFWbZG
+	KM0D7zriQ==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kxpFC-0003SQ-1s; Fri, 08 Jan 2021 10:43:46 +0000
+	id 1kxpFb-0003Zh-G3; Fri, 08 Jan 2021 10:44:11 +0000
 Received: from esa5.hc1455-7.c3s2.iphmx.com ([68.232.139.130])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kxpCB-0002oj-Rj
+ id 1kxpCB-0002nx-7o
  for linux-arm-kernel@lists.infradead.org; Fri, 08 Jan 2021 10:40:43 +0000
-IronPort-SDR: ykOS+vD7AhMEqXR0zQVtU91y6v9IP2JbmJyG/z+CiZENnpxO2ZtokHV6i5+t6TUK8DVSrOY0hs
- /ODKsEvyqVZgmbeady8xJQDKG71+N6gSJfnkuZ+1jz3W+W6wrT6WYX0PJ3g/nWVWLMi3j6+AMA
- gXoGBFJ940of5bVE2Wwl/qfj/U4CLP0HvxgPRhRT5TEIt7CWY2ooLREf/cSDZqOr7Ss10SddcA
- lrsUahsAAoyxR4S4J7fcRfdgnKRiDRxkj97WZpRpSOuQtzqWIMKZW1ukNUqiVp2EXk91frXVoT
- 3l0=
-X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="14051030"
-X-IronPort-AV: E=Sophos;i="5.79,330,1602514800"; d="scan'208";a="14051030"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
- by esa5.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:40:38 +0900
+IronPort-SDR: 6yJEyTght7Dd55ApmVPOH1YodTzS0d7+yxiBgyx67ohtXwO2BrrjS4ZzGIcAn/k5vvKWnUo+P0
+ ea6Bfx0EI+8FwysLDSi0XHMJxOrBBQ1AeshYKRzowZkYgvGKq7VqmRUtXHKU6iXsUpCELqMx+X
+ gcxPGDZL8KjxmKhvL3pDYV0Z99Aa/tXuoZ6UxRZZaXkC1dq1m/lotoVHfMxgQzt1sStZnwf3Bp
+ fqUf+VNVBcgdYRmHZUjqxZYpVxji9BGzDR3ZQETMgELYvCkdQzFJmlKRM7TY8THtYmCqOpfDlG
+ By8=
+X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="14051028"
+X-IronPort-AV: E=Sophos;i="5.79,330,1602514800"; d="scan'208";a="14051028"
+Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
+ by esa5.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:40:37 +0900
 Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com
  [192.168.87.61])
- by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 2CA9F1FB301
+ by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id E7C4497F23
  for <linux-arm-kernel@lists.infradead.org>;
- Fri,  8 Jan 2021 19:40:37 +0900 (JST)
+ Fri,  8 Jan 2021 19:40:35 +0900 (JST)
 Received: from g01jpfmpwkw02.exch.g01.fujitsu.local
  (g01jpfmpwkw02.exch.g01.fujitsu.local [10.0.193.56])
- by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 76F3F44C081
+ by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 32B9E44C081
  for <linux-arm-kernel@lists.infradead.org>;
- Fri,  8 Jan 2021 19:40:36 +0900 (JST)
+ Fri,  8 Jan 2021 19:40:35 +0900 (JST)
 Received: from G01JPEXCHKW14.g01.fujitsu.local
  (G01JPEXCHKW14.g01.fujitsu.local [10.0.194.53])
- by g01jpfmpwkw02.exch.g01.fujitsu.local (Postfix) with ESMTP id 58514328871;
- Fri,  8 Jan 2021 19:40:35 +0900 (JST)
+ by g01jpfmpwkw02.exch.g01.fujitsu.local (Postfix) with ESMTP id 1EA4B32887B;
+ Fri,  8 Jan 2021 19:40:34 +0900 (JST)
 Received: from luna3.soft.fujitsu.com (10.124.196.199) by
  G01JPEXCHKW14.g01.fujitsu.local (10.0.194.53) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 8 Jan 2021 19:40:32 +0900
+ 14.3.487.0; Fri, 8 Jan 2021 19:40:31 +0900
 From: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 List-Id: <soc.lore.kernel.org>
 To: <linux-arm-kernel@lists.infradead.org>, <soc@kernel.org>
-Subject: [PATCH 09/10] soc: fujitsu: hwb: Add sysfs entry
-Date: Fri, 8 Jan 2021 19:52:40 +0900
-Message-ID: <20210108105241.1757799-10-misono.tomohiro@jp.fujitsu.com>
+Subject: [PATCH 04/10] soc: fujitsu: hwb: Add IOC_BW_ASSIGN ioctl
+Date: Fri, 8 Jan 2021 19:52:35 +0900
+Message-ID: <20210108105241.1757799-5-misono.tomohiro@jp.fujitsu.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
 References: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
@@ -75,8 +75,8 @@ MIME-Version: 1.0
 X-SecurityPolicyCheck-GC: OK by FENCE-Mail
 X-TM-AS-GCONF: 00
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210108_054040_156590_09FD328F 
-X-CRM114-Status: GOOD (  19.95  )
+X-CRM114-CacheID: sfid-20210108_054039_540771_2219F9F2 
+X-CRM114-Status: GOOD (  20.38  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,320 +94,257 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210108105240.R9GeOqWP6IxCWnV2A04FQTd6fvGXXS2MEmKe3XdYbDI@z>
+Message-ID: <20210108105235.NKDWB69E_gnMJB6LT1LUSgNhXCwQ4EcBGUoFilimRek@z>
 
-This adds sysfs entry per CMG to show running barrier driver status
-for debugging user application. The following entries will be created:
+IOC_BW_ASSIGN ioctl sets up control register and window register on each
+PE. Therefore, this ioctl will be called as many times as the number of
+PEs joining synchronization. Also, the caller thread is expected to be
+bound to one PE at this point.
 
-/sys/class/misc/fujitsu_hwb
- |- hwinfo ... number of CMG/BB/BW/pe_per_cmg on running system
- |- CMG0
-     |- core_map      ... cpuid belonging to this CMG
-     |- used_bb_bmap  ... bitmap of currently allocated BB
-     |- used_bw_bmap  ... bitmap of currently allocated BW
-     |- init_sync_bb0 ... current value of INIT_SYNC register 0
-     |- init_sync_bb1 ... current value of INIT_SYNC register 1
-     ...
- |- CMG1
-  ...
+Since barrier window and control register is per-PE resource and
+context switch is not supported at this point, we forbid concurrent
+running of ioc_bw_assign() on the same PE by disabling preemption.
+
+After this ioctl returns successfully, user program (EL0) can access
+BST_SYNC/LBSY_SYNC registers directly to realize synchronization.
 
 Signed-off-by: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 ---
- drivers/soc/fujitsu/fujitsu_hwb.c | 258 ++++++++++++++++++++++++++++++
- 1 file changed, 258 insertions(+)
+ drivers/soc/fujitsu/fujitsu_hwb.c      | 187 +++++++++++++++++++++++++
+ include/uapi/linux/fujitsu_hpc_ioctl.h |   7 +
+ 2 files changed, 194 insertions(+)
 
 diff --git a/drivers/soc/fujitsu/fujitsu_hwb.c b/drivers/soc/fujitsu/fujitsu_hwb.c
-index 46f1f244f93a..a3a0e314f63a 100644
+index 24d1bb00f55c..85ffc1642dd9 100644
 --- a/drivers/soc/fujitsu/fujitsu_hwb.c
 +++ b/drivers/soc/fujitsu/fujitsu_hwb.c
-@@ -32,6 +32,7 @@
- #include <linux/cpu.h>
- #include <linux/cpumask.h>
- #include <linux/kernel.h>
-+#include <linux/kobject.h>
- #include <linux/miscdevice.h>
- #include <linux/module.h>
- #include <linux/spinlock.h>
-@@ -931,6 +932,254 @@ static int hwb_cpu_online(unsigned int cpu)
- 	return 0;
+@@ -179,6 +179,34 @@ static struct bb_info *alloc_bb_info(void)
+ 	return bb_info;
  }
  
-+static void read_init_sync_reg(void *args)
++static struct bb_info *get_bb_info(struct hwb_private_data *pdata, u8 cmg, u8 bb)
 +{
-+	struct init_sync_args *sync_args = (struct init_sync_args *)args;
-+	u64 val = 0;
++	struct bb_info *bb_info;
 +
-+	switch (sync_args->bb) {
++	if (cmg >= _hwinfo.num_cmg || bb >= _hwinfo.num_bb) {
++		pr_err("CMG/BB number is invalid: %u/%u\n", cmg, bb);
++		return ERR_PTR(-EINVAL);
++	}
++
++	if (!test_bit(bb, &_hwinfo.used_bb_bmap[cmg])) {
++		pr_err("BB is not allocated: %u/%u\n", cmg, bb);
++		return ERR_PTR(-ENOENT);
++	}
++
++	spin_lock(&pdata->list_lock);
++	list_for_each_entry(bb_info, &pdata->bb_list, node) {
++		if (bb_info->cmg == cmg && bb_info->bb == bb) {
++			kref_get(&bb_info->kref);
++			spin_unlock(&pdata->list_lock);
++			return bb_info;
++		}
++	}
++	spin_unlock(&pdata->list_lock);
++
++	pr_err("BB is not allocated by this process: %u/%u\n", cmg, bb);
++	return ERR_PTR(-EPERM);
++}
++
+ static inline void put_bb_info(struct bb_info *bb_info)
+ {
+ 	kref_put(&bb_info->kref, free_bb_info);
+@@ -347,6 +375,162 @@ static int ioc_bb_alloc(struct file *filp, void __user *argp)
+ 	return ret;
+ }
+ 
++static bool is_bound_only_one_pe(void)
++{
++	if (current->nr_cpus_allowed == 1)
++		return true;
++
++	pr_err("Thread must be bound to one PE between assign and unassign\n");
++	return false;
++}
++
++/* Check if this PE can be assignable and set window number to be used to @bw_ctl->window */
++static int is_bw_assignable(struct bb_info *bb_info, struct fujitsu_hwb_ioc_bw_ctl *bw_ctl, int cpu)
++{
++	int i;
++
++	if (!cpumask_test_cpu(cpu, bb_info->pemask)) {
++		pr_err("This pe is not supposed to join sync, %u/%u/%d\n",
++						bb_info->cmg, bb_info->bb, cpu);
++		return -EINVAL;
++	}
++
++	if (cpumask_test_cpu(cpu, bb_info->assigned_pemask)) {
++		pr_err("This pe is already assigned to window: %u/%u/%d\n",
++						bb_info->cmg, bb_info->bb, cpu);
++		return -EINVAL;
++	}
++
++	if (bw_ctl->window >= 0) {
++		/* User specifies window number to use. Check if available */
++		if (bw_ctl->window >= _hwinfo.num_bw) {
++			pr_err("Window number is invalid: %u/%u/%d/%u\n",
++						bb_info->cmg, bb_info->bb, cpu, bw_ctl->window);
++			return -EINVAL;
++		}
++
++		if (test_bit(bw_ctl->window, &_hwinfo.used_bw_bmap[cpu])) {
++			pr_err("Window is already used: %u/%u/%d/%u\n",
++						bb_info->cmg, bb_info->bb, cpu, bw_ctl->window);
++			return -EBUSY;
++		}
++	} else {
++		/* User does not specify window number. Use free window */
++		i = ffz(_hwinfo.used_bw_bmap[cpu]);
++		if (i == _hwinfo.num_bw) {
++			pr_err("There is no free window: %u/%u/%d\n",
++					bb_info->cmg, bb_info->bb, cpu);
++			return -EBUSY;
++		}
++
++		bw_ctl->window = i;
++	}
++
++	return 0;
++}
++
++static void setup_ctl_reg(struct bb_info *bb_info, int cpu)
++{
++	u64 val;
++
++	if (_hwinfo.used_bw_bmap[cpu] != 0)
++		/* Already setup. Nothing todo */
++		return;
++
++	/*
++	 * This is the first assign on this PE.
++	 * Setup ctrl reg to allow access to BST_SYNC/LBSY_SYNC from EL0
++	 */
++	val = (FHWB_CTRL_EL1_EL1AE | FHWB_CTRL_EL1_EL0AE);
++	write_sysreg_s(val, FHWB_CTRL_EL1);
++
++	pr_debug("Setup ctl reg. cpu: %d\n", cpu);
++}
++
++static void write_bw_reg(u8 window, u64 val)
++{
++	switch (window) {
 +	case 0:
-+		val = read_sysreg_s(FHWB_INIT_SYNC_BB0_EL1);
++		write_sysreg_s(val, FHWB_ASSIGN_SYNC_W0_EL1);
 +		break;
 +	case 1:
-+		val = read_sysreg_s(FHWB_INIT_SYNC_BB1_EL1);
++		write_sysreg_s(val, FHWB_ASSIGN_SYNC_W1_EL1);
 +		break;
 +	case 2:
-+		val = read_sysreg_s(FHWB_INIT_SYNC_BB2_EL1);
++		write_sysreg_s(val, FHWB_ASSIGN_SYNC_W2_EL1);
 +		break;
 +	case 3:
-+		val = read_sysreg_s(FHWB_INIT_SYNC_BB3_EL1);
-+		break;
-+	case 4:
-+		val = read_sysreg_s(FHWB_INIT_SYNC_BB4_EL1);
-+		break;
-+	case 5:
-+		val = read_sysreg_s(FHWB_INIT_SYNC_BB5_EL1);
++		write_sysreg_s(val, FHWB_ASSIGN_SYNC_W3_EL1);
 +		break;
 +	}
-+
-+	sync_args->val = val;
 +}
 +
-+struct hwb_attr {
-+	struct kobj_attribute attr;
-+	u8 bb;
-+};
-+static struct hwb_attr *battr;
-+
-+/* kobject for each CMG */
-+static struct kobject **cmg_kobj;
-+
-+/* Get CMG number based on index value of cmg_kobj */
-+static int get_cmg_from_kobj(struct kobject *kobj)
++static void setup_bw(struct bb_info *bb_info, struct fujitsu_hwb_ioc_bw_ctl *bw_ctl, int cpu)
 +{
-+	int i;
++	u64 val;
++	u8 ppe;
 +
-+	for (i = 0; i < _hwinfo.num_cmg; i++) {
-+		if (cmg_kobj[i] == kobj)
-+			return i;
-+	}
-+	/* should not happen */
-+	WARN_ON_ONCE("cmg_kobj not found\n");
-+	return 0;
++	/* Set valid bit and bb number */
++	val = (FHWB_ASSIGN_SYNC_W_EL1_VALID | bw_ctl->bb);
++	write_bw_reg(bw_ctl->window, val);
++
++	/* Update bitmap info */
++	ppe = _hwinfo.core_map[cpu].ppe;
++	set_bit(bw_ctl->window, &_hwinfo.used_bw_bmap[cpu]);
++	cpumask_set_cpu(cpu, bb_info->assigned_pemask);
++	bb_info->bw[ppe] = bw_ctl->window;
++
++	pr_debug("Setup bw. cpu: %d, window: %u, BB: %u, bw_bmap: %lx, assigned_pemask: %*pbl\n",
++			cpu, bw_ctl->window, bw_ctl->bb,
++			_hwinfo.used_bw_bmap[cpu], cpumask_pr_args(bb_info->assigned_pemask));
 +}
 +
-+static ssize_t hwb_init_sync_bb_show(struct kobject *kobj,
-+					 struct kobj_attribute *attr, char *buf)
++static int ioc_bw_assign(struct file *filp, void __user *argp)
 +{
-+	struct hwb_attr *battr = container_of(attr, struct hwb_attr, attr);
-+	struct init_sync_args args = {0};
-+	ssize_t written = 0;
-+	int cpu;
-+	int cmg;
-+	u64 mask;
-+	u64 bst;
-+
-+	/* Find online cpu in target cmg */
-+	cmg = get_cmg_from_kobj(kobj);
-+	for_each_online_cpu(cpu) {
-+		if (_hwinfo.core_map[cpu].cmg == cmg)
-+			break;
-+	}
-+	if (cpu >= nr_cpu_ids)
-+		return 0;
-+
-+	/* Send IPI to read INIT_SYNC register */
-+	args.bb = battr->bb;
-+	on_each_cpu_mask(cpumask_of(cpu), read_init_sync_reg, &args, 1);
-+
-+	mask = FIELD_GET(FHWB_INIT_SYNC_BB_EL1_MASK_FIELD, args.val);
-+	bst = FIELD_GET(FHWB_INIT_SYNC_BB_EL1_BST_FIELD, args.val);
-+
-+	written += scnprintf(buf, PAGE_SIZE, "%04llx\n", mask);
-+	written += scnprintf(buf + written, PAGE_SIZE - written, "%04llx\n", bst);
-+
-+	return written;
-+}
-+
-+#define BARRIER_ATTR(name) \
-+static struct kobj_attribute hwb_##name##_attribute = \
-+	__ATTR(name, 0444, hwb_##name##_show, NULL)
-+
-+static ssize_t hwb_hwinfo_show(struct kobject *kobj,
-+				   struct kobj_attribute *attr, char *buf)
-+{
-+	return scnprintf(buf, PAGE_SIZE, "%d %d %d %d\n",
-+				_hwinfo.num_cmg, _hwinfo.num_bb,
-+				_hwinfo.num_bw, _hwinfo.max_pe_per_cmg);
-+}
-+BARRIER_ATTR(hwinfo);
-+
-+static ssize_t hwb_used_bb_bmap_show(struct kobject *kobj,
-+					 struct kobj_attribute *attr, char *buf)
-+{
-+	int cmg;
-+
-+	cmg = get_cmg_from_kobj(kobj);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%04lx\n", _hwinfo.used_bb_bmap[cmg]);
-+}
-+BARRIER_ATTR(used_bb_bmap);
-+
-+static ssize_t hwb_used_bw_bmap_show(struct kobject *kobj,
-+					 struct kobj_attribute *attr, char *buf)
-+{
-+	ssize_t written = 0;
-+	int cmg;
-+	int cpu;
-+
-+	cmg = get_cmg_from_kobj(kobj);
-+	for (cpu = 0; cpu < num_possible_cpus(); cpu++) {
-+		if (_hwinfo.core_map[cpu].cmg == cmg)
-+			written += scnprintf(buf + written, PAGE_SIZE - written, "%d %04lx\n",
-+						 cpu, _hwinfo.used_bw_bmap[cpu]);
-+	}
-+
-+	return written;
-+}
-+BARRIER_ATTR(used_bw_bmap);
-+
-+static ssize_t hwb_core_map_show(struct kobject *kobj,
-+				     struct kobj_attribute *attr, char *buf)
-+{
-+	ssize_t written = 0;
-+	int cmg;
-+	int cpu;
-+
-+	cmg = get_cmg_from_kobj(kobj);
-+	for (cpu = 0; cpu < num_possible_cpus(); cpu++) {
-+		if (_hwinfo.core_map[cpu].cmg == cmg)
-+			written += scnprintf(buf + written, PAGE_SIZE - written, "%d %d\n",
-+				cpu, _hwinfo.core_map[cpu].ppe);
-+	}
-+
-+	return written;
-+}
-+BARRIER_ATTR(core_map);
-+
-+static struct attribute *hwb_attrs[] = {
-+	&hwb_used_bb_bmap_attribute.attr,
-+	&hwb_used_bw_bmap_attribute.attr,
-+	&hwb_core_map_attribute.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group hwb_attribute = {
-+	.attrs = hwb_attrs,
-+};
-+
-+static void destroy_sysfs(void)
-+{
-+	int cmg;
-+	int bb;
-+	int i;
-+
-+	sysfs_remove_file(&bar_miscdev.this_device->kobj, &hwb_hwinfo_attribute.attr);
-+
-+	for (cmg = 0; cmg < _hwinfo.num_cmg; cmg++) {
-+		for (bb = 0; bb < _hwinfo.num_bb; bb++) {
-+			i = (cmg * _hwinfo.num_bb) + bb;
-+			if (battr[i].attr.attr.name)
-+				sysfs_remove_file(cmg_kobj[cmg], &battr[i].attr.attr);
-+		}
-+	}
-+	kfree(battr);
-+
-+	for (cmg = 0; cmg < _hwinfo.num_cmg; cmg++) {
-+		if (cmg_kobj[cmg]) {
-+			sysfs_remove_group(cmg_kobj[cmg], &hwb_attribute);
-+			kobject_put(cmg_kobj[cmg]);
-+		}
-+	}
-+	kfree(cmg_kobj);
-+}
-+
-+/* Create sysfs file under /sys/class/misc/fujitsu_hwb */
-+#define NAME_LEN 16
-+static int __init init_sysfs(void)
-+{
-+	char name[NAME_LEN];
++	struct hwb_private_data *pdata = (struct hwb_private_data *)filp->private_data;
++	struct fujitsu_hwb_ioc_bw_ctl bw_ctl;
++	struct bb_info *bb_info;
 +	int ret;
-+	int cmg;
-+	int bb;
-+	int i;
++	int cpu;
++	u8 cmg;
 +
-+	/* Create file to show number of CMG/BB/BW/pe_per_cmg */
-+	ret = sysfs_create_file(&bar_miscdev.this_device->kobj, &hwb_hwinfo_attribute.attr);
-+	if (ret)
-+		return ret;
++	if (!is_bound_only_one_pe())
++		return -EPERM;
 +
-+	cmg_kobj = kcalloc(_hwinfo.num_cmg, sizeof(struct kobject *), GFP_KERNEL);
-+	battr = kcalloc(_hwinfo.num_cmg * _hwinfo.num_bb, sizeof(struct hwb_attr), GFP_KERNEL);
-+	if (!cmg_kobj || !battr) {
-+		kfree(cmg_kobj);
-+		kfree(battr);
-+		return -ENOMEM;
++	if (copy_from_user(&bw_ctl, (struct fujitsu_hwb_ioc_bw_ctl __user *)argp,
++						sizeof(struct fujitsu_hwb_ioc_bw_ctl)))
++		return -EFAULT;
++
++	cpu = smp_processor_id();
++	cmg = _hwinfo.core_map[cpu].cmg;
++	bb_info = get_bb_info(pdata, cmg, bw_ctl.bb);
++	if (IS_ERR(bb_info))
++		return PTR_ERR(bb_info);
++
++	/*
++	 * Barrier window register and control register is each PE's resource.
++	 * context switch is not supported and mutual exclusion is needed for
++	 * assign and unassign on this PE
++	 */
++	preempt_disable();
++	ret = is_bw_assignable(bb_info, &bw_ctl, cpu);
++	if (!ret) {
++		setup_ctl_reg(bb_info, cpu);
++		setup_bw(bb_info, &bw_ctl, cpu);
 +	}
++	preempt_enable();
 +
-+	/* Create folder for each CMG and create core_map/bitmap file */
-+	for (cmg = 0; cmg < _hwinfo.num_cmg; cmg++) {
-+		scnprintf(name, NAME_LEN, "CMG%d", cmg);
-+		cmg_kobj[cmg] = kobject_create_and_add(name, &bar_miscdev.this_device->kobj);
-+		if (!cmg_kobj[cmg]) {
-+			ret = -ENOMEM;
-+			goto fail;
-+		}
++	put_bb_info(bb_info);
 +
-+		ret = sysfs_create_group(cmg_kobj[cmg], &hwb_attribute);
-+		if (ret)
-+			goto fail;
-+	}
++	/* Copy back window number to be used to user */
++	if (!ret && copy_to_user((struct fujitsu_hwb_ioc_bw_ctl __user *)argp, &bw_ctl,
++						sizeof(struct fujitsu_hwb_ioc_bw_ctl)))
++		/* Leave cleanup to f_op->release() */
++		return -EFAULT;
 +
-+	/* Create files for INIT_SYNC register */
-+	for (cmg = 0; cmg < _hwinfo.num_cmg; cmg++) {
-+		for (bb = 0; bb < _hwinfo.num_bb; bb++) {
-+			i = (cmg * _hwinfo.num_bb) + bb;
-+
-+			scnprintf(name, NAME_LEN, "init_sync_bb%d", bb);
-+			battr[i].bb = bb;
-+			battr[i].attr.attr.name = kstrdup(name, GFP_KERNEL);
-+			if (!battr[i].attr.attr.name) {
-+				ret = -ENOMEM;
-+				goto fail;
-+			}
-+			battr[i].attr.attr.mode = 0400; /* root only */
-+			battr[i].attr.show = hwb_init_sync_bb_show;
-+
-+			sysfs_attr_init(&battr[i].attr.attr);
-+			ret = sysfs_create_file(cmg_kobj[cmg], &battr[i].attr.attr);
-+			if (ret < 0)
-+				goto fail;
-+		}
-+	}
-+
-+	return 0;
-+
-+fail:
-+	destroy_sysfs();
 +	return ret;
 +}
 +
- static int __init hwb_init(void)
+ static long fujitsu_hwb_dev_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
  {
- 	int ret;
-@@ -967,8 +1216,16 @@ static int __init hwb_init(void)
- 		goto out3;
- 	}
+ 	void __user *argp = (void __user *)arg;
+@@ -356,6 +540,9 @@ static long fujitsu_hwb_dev_ioctl(struct file *filp, unsigned int cmd, unsigned
+ 	case FUJITSU_HWB_IOC_BB_ALLOC:
+ 		ret = ioc_bb_alloc(filp, argp);
+ 		break;
++	case FUJITSU_HWB_IOC_BW_ASSIGN:
++		ret = ioc_bw_assign(filp, argp);
++		break;
+ 	default:
+ 		ret = -ENOTTY;
+ 		break;
+diff --git a/include/uapi/linux/fujitsu_hpc_ioctl.h b/include/uapi/linux/fujitsu_hpc_ioctl.h
+index c87a5bad3f59..ad90f8f3ae9a 100644
+--- a/include/uapi/linux/fujitsu_hpc_ioctl.h
++++ b/include/uapi/linux/fujitsu_hpc_ioctl.h
+@@ -17,7 +17,14 @@ struct fujitsu_hwb_ioc_bb_ctl {
+ 	unsigned long __user *pemask;
+ };
  
-+	ret = init_sysfs();
-+	if (ret < 0) {
-+		pr_err("sysfs creation failed: %d\n", ret);
-+		goto out4;
-+	}
++struct fujitsu_hwb_ioc_bw_ctl {
++	__u8 bb;
++	__s8 window;
++};
 +
- 	return 0;
+ #define FUJITSU_HWB_IOC_BB_ALLOC _IOWR(__FUJITSU_IOCTL_MAGIC, \
+ 	0x00, struct fujitsu_hwb_ioc_bb_ctl)
++#define FUJITSU_HWB_IOC_BW_ASSIGN _IOWR(__FUJITSU_IOCTL_MAGIC, \
++	0x01, struct fujitsu_hwb_ioc_bw_ctl)
  
-+out4:
-+	misc_deregister(&bar_miscdev);
- out3:
- 	cpuhp_remove_state(_hp_state);
- out2:
-@@ -981,6 +1238,7 @@ static int __init hwb_init(void)
- 
- static void __exit hwb_exit(void)
- {
-+	destroy_sysfs();
- 	misc_deregister(&bar_miscdev);
- 	cpuhp_remove_state(_hp_state);
- 	destroy_bb_info_cachep();
+ #endif /* _UAPI_LINUX_FUJITSU_HPC_IOC_H */
 -- 
 2.26.2
 
