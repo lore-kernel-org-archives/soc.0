@@ -2,177 +2,294 @@ Return-Path: <SRS0=SDro=GL=fujitsu.com=misono.tomohiro@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E51C6C433DB
-	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 10:21:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C2C3C433E9
+	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 10:21:45 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id B630C23731; Fri,  8 Jan 2021 10:21:42 +0000 (UTC)
-Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
+	id 2BB2D23715; Fri,  8 Jan 2021 10:21:45 +0000 (UTC)
+Received: from esa3.hc1455-7.c3s2.iphmx.com (esa3.hc1455-7.c3s2.iphmx.com [207.54.90.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D288823715;
+	by mail.kernel.org (Postfix) with ESMTPS id 587BE23770;
 	Fri,  8 Jan 2021 10:21:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D288823715
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 587BE23770
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jp.fujitsu.com
 Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=misono.tomohiro@fujitsu.com
-IronPort-SDR: KMel4eloqNrjbX08lgSNHyBeiUrbyjC3ADjJ+WbbialDLAKEGxg58N1t6rJ42ml0dbUwAhtZ6U
- ne6MKkNoFprsn3CEyIujKU8MN4LJc+JvPodJYmpekSkeC+HU9swgAzQj2xTHPfS3UZzEyXlAEK
- K+pRWb8M17Sob3vM+o6dsi1e8zaVKsWgvlfgE8uB9DVJAGIUR/9NlNEk7/xLDSecJ6U8vaVN3E
- qJQSjRdxYpmwmJSX0aMLhCf4I7HYBBysPuSCxaUnloWC816EMZaAQNHxamS/4sXOvRmVHS7/5b
- pSw=
-X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="14145339"
+IronPort-SDR: glHBZ7U6pLDJ0jKq7pYhG+AZ9d7ML00JlbaYH3LXZFqQptV44nSzH1QbYzQn2rXBPLw65Q9EUq
+ ApxUHcBEM8HelbU3D12bGOJymIrx0a2eMX9XKas42ASWfU6FIjFaAfghQDtb92dy+6pyPUQW0q
+ S4ET37vc3n/XSZaE6pTSETXKs8Fwq09r9iyXL3vHwUBxmLAB83KnehEKM164oPKp4j59Q6UQI+
+ OsfiLGkxvASpYMCdCR5o+ajoGBeAIJ+drLVZbtUZhbLEidRtAOQb/QtmO8B1jPc60xeCFs/2mj
+ rx8=
+X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="14207576"
 X-IronPort-AV: E=Sophos;i="5.79,330,1602514800"; 
-   d="scan'208";a="14145339"
-Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
-  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:20:36 +0900
-Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
-	by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 1285AEC7AB;
-	Fri,  8 Jan 2021 19:20:34 +0900 (JST)
-Received: from g01jpfmpwyt03.exch.g01.fujitsu.local (g01jpfmpwyt03.exch.g01.fujitsu.local [10.128.193.57])
-	by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 67CAF5AEECB;
-	Fri,  8 Jan 2021 19:20:33 +0900 (JST)
-Received: from g01jpexchyt35.g01.fujitsu.local (unknown [10.128.193.4])
-	by g01jpfmpwyt03.exch.g01.fujitsu.local (Postfix) with ESMTP id 6BF0246E556;
+   d="scan'208";a="14207576"
+Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
+  by esa3.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:20:34 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+	by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id E55B91F50C4;
 	Fri,  8 Jan 2021 19:20:32 +0900 (JST)
+Received: from g01jpfmpwyt03.exch.g01.fujitsu.local (g01jpfmpwyt03.exch.g01.fujitsu.local [10.128.193.57])
+	by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 4040A9BB1B;
+	Fri,  8 Jan 2021 19:20:32 +0900 (JST)
+Received: from g01jpexchyt35.g01.fujitsu.local (unknown [10.128.193.4])
+	by g01jpfmpwyt03.exch.g01.fujitsu.local (Postfix) with ESMTP id 2E03E46E556;
+	Fri,  8 Jan 2021 19:20:31 +0900 (JST)
 Received: from luna3.soft.fujitsu.com (10.124.196.199) by
  g01jpexchyt35.g01.fujitsu.local (10.128.193.50) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 8 Jan 2021 19:20:30 +0900
+ 14.3.487.0; Fri, 8 Jan 2021 19:20:29 +0900
 From: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 List-Id: <soc.lore.kernel.org>
 To: <linux-arm-kernel@lists.infradead.org>, <soc@kernel.org>
 CC: <will@kernel.org>, <catalin.marinas@arm.com>, <arnd@arndb.de>,
 	<olof@lixom.net>, <misono.tomohiro@jp.fujitsu.com>
-Subject: [PATCH 10/10] soc: fujitsu: hwb: Add Kconfig/Makefile to build fujitsu_hwb driver
-Date: Fri, 8 Jan 2021 19:32:27 +0900
-Message-ID: <20210108103227.1740865-11-misono.tomohiro@jp.fujitsu.com>
+Subject: [PATCH 06/10] soc: fujitsu: hwb: Add IOC_BB_FREE ioctl
+Date: Fri, 8 Jan 2021 19:32:23 +0900
+Message-ID: <20210108103227.1740865-7-misono.tomohiro@jp.fujitsu.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210108103227.1740865-1-misono.tomohiro@jp.fujitsu.com>
 References: <20210108103227.1740865-1-misono.tomohiro@jp.fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-SecurityPolicyCheck-GC: OK by FENCE-Mail
 X-TM-AS-GCONF: 00
 
-This adds kconfig/Makefile to build fujitsu hardware barrier driver
-(fujitsu_hwb.ko when built as module).
+IOC_BB_FREE ioctl resets what IOC_BB_ALLOC ioctl did.
 
-Note that this is the first time to add A64FX specific driver,
-this also adds A64FX entry in Kconfig.platforms of arm64 Kconfig.
-Also add MAINTAINERS entry for ARM/A64FX accordingly.
+We need to forbid assign/unassign operation happens during free
+operation, so we set the flag to indicate it and also wait
+ongoing assign/unassign to finish first.
+
+If there exist PEs on which IOC_BW_UNASSIGN is not called,
+we send IPI to do effectively the same operation as IOC_BW_UNASSIGN.
 
 Signed-off-by: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 ---
- MAINTAINERS                  |  7 +++++++
- arch/arm64/Kconfig.platforms |  5 +++++
- drivers/soc/Kconfig          |  1 +
- drivers/soc/Makefile         |  1 +
- drivers/soc/fujitsu/Kconfig  | 24 ++++++++++++++++++++++++
- drivers/soc/fujitsu/Makefile |  2 ++
- 6 files changed, 40 insertions(+)
- create mode 100644 drivers/soc/fujitsu/Kconfig
- create mode 100644 drivers/soc/fujitsu/Makefile
+ drivers/soc/fujitsu/fujitsu_hwb.c      | 125 ++++++++++++++++++++++++-
+ include/uapi/linux/fujitsu_hpc_ioctl.h |   2 +
+ 2 files changed, 122 insertions(+), 5 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6eff4f720c72..d57ec44ceaed 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1508,6 +1508,13 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
- F:	arch/arm/mach-*/
- F:	arch/arm/plat-*/
+diff --git a/drivers/soc/fujitsu/fujitsu_hwb.c b/drivers/soc/fujitsu/fujitsu_hwb.c
+index 8c4cabd60872..2535942cc0d7 100644
+--- a/drivers/soc/fujitsu/fujitsu_hwb.c
++++ b/drivers/soc/fujitsu/fujitsu_hwb.c
+@@ -196,6 +196,12 @@ static struct bb_info *get_bb_info(struct hwb_private_data *pdata, u8 cmg, u8 bb
+ 	spin_lock(&pdata->list_lock);
+ 	list_for_each_entry(bb_info, &pdata->bb_list, node) {
+ 		if (bb_info->cmg == cmg && bb_info->bb == bb) {
++			if (test_bit(BB_FREEING,  &bb_info->flag)) {
++				pr_err("BB is currently being freed: %u/%u\n", cmg, bb);
++				spin_unlock(&pdata->list_lock);
++				return ERR_PTR(-EPERM);
++			}
++
+ 			kref_get(&bb_info->kref);
+ 			spin_unlock(&pdata->list_lock);
+ 			return bb_info;
+@@ -389,6 +395,11 @@ static int is_bw_assignable(struct bb_info *bb_info, struct fujitsu_hwb_ioc_bw_c
+ {
+ 	int i;
  
-+ARM/A64FX SOC SUPPORT
-+M:	Tomohiro Misono <misono.tomohiro@jp.fujitsu.com>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Maintained
-+F:	drivers/soc/fujitsu/
-+F:	include/uapi/linux/fujitsu_hpc_ioctl.h
++	if (test_bit(BB_FREEING, &bb_info->flag)) {
++		pr_err("BB is currently being freed: %u/%u/%d\n", bb_info->cmg, bb_info->bb, cpu);
++		return -EPERM;
++	}
 +
- ARM/ACTIONS SEMI ARCHITECTURE
- M:	Andreas Färber <afaerber@suse.de>
- M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 6eecdef538bd..41fb214adaff 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -1,6 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0-only
- menu "Platform selection"
+ 	if (!cpumask_test_cpu(cpu, bb_info->pemask)) {
+ 		pr_err("This pe is not supposed to join sync, %u/%u/%d\n",
+ 						bb_info->cmg, bb_info->bb, cpu);
+@@ -490,6 +501,7 @@ static int ioc_bw_assign(struct file *filp, void __user *argp)
+ 	struct hwb_private_data *pdata = (struct hwb_private_data *)filp->private_data;
+ 	struct fujitsu_hwb_ioc_bw_ctl bw_ctl;
+ 	struct bb_info *bb_info;
++	unsigned long flags;
+ 	int ret;
+ 	int cpu;
+ 	u8 cmg;
+@@ -507,18 +519,27 @@ static int ioc_bw_assign(struct file *filp, void __user *argp)
+ 	if (IS_ERR(bb_info))
+ 		return PTR_ERR(bb_info);
  
-+config ARCH_A64FX
-+	bool "Fujitsu A64FX Platforms"
-+	help
-+	  This enables support for Fujitsu A64FX SoC family.
++	/* Increment counter to avoid this BB being freed during assign operation */
++	atomic_inc(&bb_info->ongoing_assign_count);
 +
- config ARCH_ACTIONS
- 	bool "Actions Semi Platforms"
- 	select OWL_TIMER
-diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-index d097d070f579..7a52b5dc4c96 100644
---- a/drivers/soc/Kconfig
-+++ b/drivers/soc/Kconfig
-@@ -7,6 +7,7 @@ source "drivers/soc/aspeed/Kconfig"
- source "drivers/soc/atmel/Kconfig"
- source "drivers/soc/bcm/Kconfig"
- source "drivers/soc/fsl/Kconfig"
-+source "drivers/soc/fujitsu/Kconfig"
- source "drivers/soc/imx/Kconfig"
- source "drivers/soc/ixp4xx/Kconfig"
- source "drivers/soc/litex/Kconfig"
-diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index 699b758d28e4..57c0dddc4d23 100644
---- a/drivers/soc/Makefile
-+++ b/drivers/soc/Makefile
-@@ -10,6 +10,7 @@ obj-y				+= bcm/
- obj-$(CONFIG_ARCH_DOVE)		+= dove/
- obj-$(CONFIG_MACH_DOVE)		+= dove/
- obj-y				+= fsl/
-+obj-y				+= fujitsu/
- obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
- obj-y				+= imx/
- obj-$(CONFIG_ARCH_IXP4XX)	+= ixp4xx/
-diff --git a/drivers/soc/fujitsu/Kconfig b/drivers/soc/fujitsu/Kconfig
-new file mode 100644
-index 000000000000..cbba0c939e62
---- /dev/null
-+++ b/drivers/soc/fujitsu/Kconfig
-@@ -0,0 +1,24 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# FUJITSU SoC drivers
-+#
-+menuconfig SOC_FUJITSU
-+	bool "FUJITSU SoC drivers"
-+	depends on ARCH_A64FX || COMPILE_TEST
+ 	/*
+ 	 * Barrier window register and control register is each PE's resource.
+ 	 * context switch is not supported and mutual exclusion is needed for
+-	 * assign and unassign on this PE
++	 * assign and unassign on this PE. As cleanup_bw() might be executed
++	 * in interrupt context via on_each_cpu_mask, disabling irq is needed
+ 	 */
+-	preempt_disable();
++	local_irq_save(flags);
+ 	ret = is_bw_assignable(bb_info, &bw_ctl, cpu);
+ 	if (!ret) {
+ 		setup_ctl_reg(bb_info, cpu);
+ 		setup_bw(bb_info, &bw_ctl, cpu);
+ 	}
+-	preempt_enable();
++	local_irq_restore(flags);
 +
-+if SOC_FUJITSU
++	/* Wakeup if there is a process waiting in ioc_bb_free() */
++	if (atomic_dec_and_test(&bb_info->ongoing_assign_count) &&
++					test_bit(BB_FREEING, &bb_info->flag))
++		wake_up(&bb_info->wq);
+ 
+ 	put_bb_info(bb_info);
+ 
+@@ -535,6 +556,12 @@ static int is_bw_unassignable(struct bb_info *bb_info, int cpu)
+ {
+ 	u8 ppe;
+ 
++	if (test_bit(BB_FREEING, &bb_info->flag)) {
++		pr_err("This bb is currently being freed: %u/%u/%d\n",
++							bb_info->cmg, bb_info->bb, cpu);
++		return -EPERM;
++	}
 +
-+config FUJITSU_HARDWARE_BARRIER
-+	tristate "FUJITSU HPC Hardware Barrier Driver"
-+	depends on ARM64_VHE || COMPILE_TEST
-+	help
-+	  FUJITSU HPC Hardware Barrier Driver
+ 	if (!cpumask_test_and_clear_cpu(cpu, bb_info->assigned_pemask)) {
+ 		pr_err("This pe is not assigned: %u/%u/%d\n", bb_info->cmg, bb_info->bb, cpu);
+ 		return -EINVAL;
+@@ -590,6 +617,7 @@ static int ioc_bw_unassign(struct file *filp, void __user *argp)
+ 	struct hwb_private_data *pdata = (struct hwb_private_data *)filp->private_data;
+ 	struct fujitsu_hwb_ioc_bw_ctl bw_ctl;
+ 	struct bb_info *bb_info;
++	unsigned long flags;
+ 	int cpu;
+ 	int ret;
+ 	u8 cmg;
+@@ -608,19 +636,103 @@ static int ioc_bw_unassign(struct file *filp, void __user *argp)
+ 		return PTR_ERR(bb_info);
+ 
+ 	/* See comments in ioc_bw_assign() */
+-	preempt_disable();
++	atomic_inc(&bb_info->ongoing_assign_count);
 +
-+	  This driver offers hardware barrier functions for A64FX system
-+	  which realizes synchronization by PEs in the same CMG (L3 cache
-+	  domain) by using implementation defined registers. As control
-+	  registers can only be accessed from EL2 on reset, this driver
-+	  needs support of VHE.
-+	  When built as a module, this will be called as "fujitsu_hwb".
++	local_irq_save(flags);
+ 	ret = is_bw_unassignable(bb_info, cpu);
+ 	if (!ret) {
+ 		teardown_bw(bb_info, cpu);
+ 		teardown_ctl_reg(bb_info, cpu);
+ 	}
+-	preempt_enable();
++	local_irq_restore(flags);
 +
-+endif # SOC_FUJITSU
-diff --git a/drivers/soc/fujitsu/Makefile b/drivers/soc/fujitsu/Makefile
-new file mode 100644
-index 000000000000..1b8e4c947f7f
---- /dev/null
-+++ b/drivers/soc/fujitsu/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_FUJITSU_HARDWARE_BARRIER) +=	fujitsu_hwb.o
++	if (atomic_dec_and_test(&bb_info->ongoing_assign_count) &&
++					test_bit(BB_FREEING, &bb_info->flag))
++		wake_up(&bb_info->wq);
+ 
+ 	put_bb_info(bb_info);
+ 
+ 	return ret;
+ }
+ 
++static void cleanup_bw_func(void *args)
++{
++	struct bb_info *bb_info = (struct bb_info *)args;
++	int cpu = smp_processor_id();
++
++	teardown_bw(bb_info, cpu);
++	teardown_ctl_reg(bb_info, cpu);
++}
++
++/* Send IPI to reset INIT_SYNC register */
++static void teardown_bb(struct bb_info *bb_info)
++{
++	struct init_sync_args args = {0};
++	int cpu;
++
++	/* Reset BW on each PE if IOC_BW_UNASSIGN is not called properly  */
++	if (cpumask_weight(bb_info->assigned_pemask) != 0) {
++		pr_warn("unassign is not called properly. CMG: %d, BB: %d, unassigned PE: %*pbl\n",
++			bb_info->cmg, bb_info->bb, cpumask_pr_args(bb_info->assigned_pemask));
++		on_each_cpu_mask(bb_info->assigned_pemask, cleanup_bw_func, bb_info, 1);
++	}
++
++	/* INIT_SYNC register is shared resource in CMG. Pick one PE */
++	cpu = cpumask_any(bb_info->pemask);
++
++	args.bb = bb_info->bb;
++	/* Just clear all bits */
++	args.val = 0;
++	on_each_cpu_mask(cpumask_of(cpu), write_init_sync_reg, &args, 1);
++
++	clear_bit(bb_info->bb, &_hwinfo.used_bb_bmap[bb_info->cmg]);
++
++	pr_debug("Teardown bb: cpu: %d, CMG: %u, BB: %u, bitmap: %lx\n",
++			cpu, bb_info->cmg, bb_info->bb, _hwinfo.used_bb_bmap[bb_info->cmg]);
++}
++
++static int ioc_bb_free(struct file *filp,  void __user *argp)
++{
++	struct hwb_private_data *pdata = (struct hwb_private_data *)filp->private_data;
++	struct fujitsu_hwb_ioc_bb_ctl bb_ctl;
++	struct bb_info *bb_info;
++
++	if (copy_from_user(&bb_ctl, (struct fujitsu_hwb_ioc_bb_ctl __user *)argp,
++						sizeof(struct fujitsu_hwb_ioc_bb_ctl)))
++		return -EFAULT;
++
++	bb_info = get_bb_info(pdata, bb_ctl.cmg, bb_ctl.bb);
++	if (IS_ERR(bb_info))
++		return PTR_ERR(bb_info);
++
++	/* Forbid free/assign/unassign operation from now on */
++	if (test_and_set_bit(BB_FREEING, &bb_info->flag)) {
++		pr_err("IOC_BB_FREE is already called. CMG: %u, BB: %u\n", bb_ctl.cmg, bb_ctl.bb);
++		put_bb_info(bb_info);
++		return -EPERM;
++	}
++
++	/* Wait current ongoing assign/unassign operation to finish */
++	if (wait_event_interruptible(bb_info->wq,
++					(atomic_read(&bb_info->ongoing_assign_count) == 0))) {
++		clear_bit(BB_FREEING, &bb_info->flag);
++		put_bb_info(bb_info);
++		pr_debug("IOC_BB_FREE is interrupted. CMG: %u, BB: %u\n", bb_ctl.cmg, bb_ctl.bb);
++		return -EINTR;
++	}
++
++	teardown_bb(bb_info);
++	spin_lock(&pdata->list_lock);
++	list_del_init(&bb_info->node);
++	spin_unlock(&pdata->list_lock);
++
++	/* 1 put for get_bb_info, 1 for alloc_bb_info */
++	put_bb_info(bb_info);
++	put_bb_info(bb_info);
++
++	return 0;
++}
++
+ static long fujitsu_hwb_dev_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ {
+ 	void __user *argp = (void __user *)arg;
+@@ -636,6 +748,9 @@ static long fujitsu_hwb_dev_ioctl(struct file *filp, unsigned int cmd, unsigned
+ 	case FUJITSU_HWB_IOC_BW_UNASSIGN:
+ 		ret = ioc_bw_unassign(filp, argp);
+ 		break;
++	case FUJITSU_HWB_IOC_BB_FREE:
++		ret = ioc_bb_free(filp, argp);
++		break;
+ 	default:
+ 		ret = -ENOTTY;
+ 		break;
+diff --git a/include/uapi/linux/fujitsu_hpc_ioctl.h b/include/uapi/linux/fujitsu_hpc_ioctl.h
+index 396029f2bc0d..7a285d8db0a9 100644
+--- a/include/uapi/linux/fujitsu_hpc_ioctl.h
++++ b/include/uapi/linux/fujitsu_hpc_ioctl.h
+@@ -28,5 +28,7 @@ struct fujitsu_hwb_ioc_bw_ctl {
+ 	0x01, struct fujitsu_hwb_ioc_bw_ctl)
+ #define FUJITSU_HWB_IOC_BW_UNASSIGN _IOW(__FUJITSU_IOCTL_MAGIC, \
+ 	0x02, struct fujitsu_hwb_ioc_bw_ctl)
++#define FUJITSU_HWB_IOC_BB_FREE _IOW(__FUJITSU_IOCTL_MAGIC, \
++	0x03, struct fujitsu_hwb_ioc_bb_ctl)
+ 
+ #endif /* _UAPI_LINUX_FUJITSU_HPC_IOC_H */
 -- 
 2.26.2
 
