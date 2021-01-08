@@ -1,36 +1,49 @@
-Return-Path: <SRS0=EmFY=GL=arm.com=mark.rutland@kernel.org>
+Return-Path: <SRS0=l7M8=GL=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F8A9C433E0
-	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 15:51:16 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id ED75323888; Fri,  8 Jan 2021 15:51:15 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by mail.kernel.org (Postfix) with ESMTP id 9323423884;
-	Fri,  8 Jan 2021 15:51:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9323423884
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C013C433E9
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  8 Jan 2021 15:53:51 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 14DA323888
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  8 Jan 2021 15:53:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 14DA323888
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=mark.rutland@arm.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
+	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=xn+cuOHxRp5TrFKIbR9LqvphYCgg0zl9XDiuBUrbNus=; b=aUFYmEK5zkJMIRurC8xBZktf9
+	RhtlrZbxYFTWXZqNaLgxuQE6JC/RAhpCGDkD3JkBwuRtDI7oDG+8fmKnjdpHCxWF68ukptdNDHyca
+	TCIHWFr5XhSScOA5GlBAt2InYWVJnyfW2ACWbI0jsxnbK6b7bgX2rjS57L0mYoImfiN/eOKfLFsyg
+	KnXJPvhDHvA9fpcoid1ooLPt9sWIceJOMqiEImxBDoXuKvaStr1hTSMIRCYaOmwbBPOeD3o13mKxC
+	7XFrrsrIaGZ5ui+gZigWEoWtV7xV+uEWrlzEVPShQpgzhsD+FeB4FpdMMmgfDk4qUSFGj1LPoytbw
+	VW+lHCFXw==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kxu3G-0007KT-T0; Fri, 08 Jan 2021 15:51:47 +0000
+Received: from foss.arm.com ([217.140.110.172])
+ by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kxu2s-0007Jt-MS
+ for linux-arm-kernel@lists.infradead.org; Fri, 08 Jan 2021 15:51:23 +0000
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7E07ED1;
-	Fri,  8 Jan 2021 07:51:14 -0800 (PST)
+ by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7E07ED1;
+ Fri,  8 Jan 2021 07:51:14 -0800 (PST)
 Received: from C02TD0UTHF1T.local (unknown [10.57.36.117])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1040C3F70D;
-	Fri,  8 Jan 2021 07:51:12 -0800 (PST)
+ by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1040C3F70D;
+ Fri,  8 Jan 2021 07:51:12 -0800 (PST)
 Date: Fri, 8 Jan 2021 15:51:10 +0000
 From: Mark Rutland <mark.rutland@arm.com>
 To: Arnd Bergmann <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
 Subject: Re: [RFC PATCH 00/10] Add Fujitsu A64FX soc entry/hardware barrier
  driver
 Message-ID: <20210108155110.GC84941@C02TD0UTHF1T.local>
@@ -38,9 +51,32 @@ References: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
  <20210108125410.GA84941@C02TD0UTHF1T.local>
  <CAK8P3a34aPUwjAXoh20E-PT6vG6gbW_itAXVQAYrhsHZbzqRsQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <CAK8P3a34aPUwjAXoh20E-PT6vG6gbW_itAXVQAYrhsHZbzqRsQ@mail.gmail.com>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210108_105122_809925_922F667F 
+X-CRM114-Status: GOOD (  17.52  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>,
+ Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>, SoC Team <soc@kernel.org>,
+ Olof Johansson <olof@lixom.net>, Will Deacon <will@kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210108155110.alH64ShFmD4-q_VP5Hgw2ulQ1dh4Y1l3HZ5ASQ4QQdY@z>
 
 On Fri, Jan 08, 2021 at 03:23:23PM +0100, Arnd Bergmann wrote:
 > On Fri, Jan 8, 2021 at 1:54 PM Mark Rutland <mark.rutland@arm.com> wrote:
@@ -73,3 +109,8 @@ true for userspace instructions.
 
 Thanks,
 Mark.
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
