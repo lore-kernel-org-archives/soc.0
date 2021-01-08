@@ -1,133 +1,104 @@
-Return-Path: <SRS0=86FG=GK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=SDro=GL=fujitsu.com=misono.tomohiro@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58217C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  7 Jan 2021 13:23:58 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCC39C433DB
+	for <soc@archiver.kernel.org>; Fri,  8 Jan 2021 10:21:39 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 8A48523719; Fri,  8 Jan 2021 10:21:39 +0000 (UTC)
+X-Greylist: delayed 63 seconds by postgrey-1.34 at mail.kernel.org; Fri, 08 Jan 2021 10:21:38 UTC
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A1D0F236FB
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jp.fujitsu.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=misono.tomohiro@fujitsu.com
+Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0B6FF22B45
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  7 Jan 2021 13:23:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0B6FF22B45
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=J6werhmYpmv3mjUUezzcn6NECLkK7YLxkBdINWlRpr8=; b=BT3+dA5Ci2SO41ph8qLr53QaVI
-	Lw3CVPD+uAkXpQy3ii+pMdyWoruVEEbzI81SOi2tMMEzyrABJXa7BzhUfuwYkfEhK5HQxbtkubszo
-	aHvpmUdKEX0tWY61cYMFZbo31LVewVH4vKqtnLHF42hsmG5saal0szUrq/V9qFXsHjVnToOLtSEx3
-	2u5cCG/YR/bEinsG3oAVTIrBx8HGmO4cnR13NRopBARhBgCowjLpRIQxEqQ7qCELwDaXygWk8qevW
-	lgPwLJPIw0VFXkH5niFZeapFkZB06H3PWjclSSsb8iHpTUhldAd48zGThpJ/Su/FsdbM/5RR3RQVq
-	pR/NiULw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1kxVFT-0001WX-8V; Thu, 07 Jan 2021 13:22:43 +0000
-Received: from fllv0015.ext.ti.com ([198.47.19.141])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1kxVFQ-0001Vm-7j
- for linux-arm-kernel@lists.infradead.org; Thu, 07 Jan 2021 13:22:41 +0000
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
- by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 107DMW21124013;
- Thu, 7 Jan 2021 07:22:32 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
- s=ti-com-17Q1; t=1610025752;
- bh=zx9n/lsjA2NjYjIEY+6vD1Q829vq5WkYbOvLXJLYazQ=;
- h=From:To:CC:Subject:Date;
- b=so5eldP1tdbR50ccHACYp3hVNo0vsx2DwkL50Hp/9DkBHVpZsH9V511oxTAjDUyZ3
- ju8IO5e8wg9cADUhDLl056KKxfE8KmTfqD3PS4U1CQ//Mem3tPBzCYTf3n7vUPQLsl
- anZl0/iqh4BgwdA2TY0sQ4kjnLU9bQqCeC3LBsmA=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
- by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 107DMW09101024
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Thu, 7 Jan 2021 07:22:32 -0600
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 7 Jan
- 2021 07:22:32 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 7 Jan 2021 07:22:32 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
- by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 107DMWwS095650;
- Thu, 7 Jan 2021 07:22:32 -0600
-From: Nishanth Menon <nm@ti.com>
+	by mail.kernel.org (Postfix) with ESMTPS id A1D0F236FB;
+	Fri,  8 Jan 2021 10:21:38 +0000 (UTC)
+IronPort-SDR: rTnOMLuNw2TfWOKAw0qk6TT0wPkquNVzT70dEunFGZuRpa+kfE5ajmsWFV/ZLSz61B+H56Jls5
+ VwE5cGmGDIcN//OoEWdnPD0XAIzabG3LrEV9tQUCx4dOQchVvTCWITHjxurQtB7bAhg0gCvZZW
+ zKmR7Lj9ScLWzfoqNJnjQLsV+QkeznlEOYW2/dwREfRRE3Pe0VklHoSHLo+Sw8ybHgmgFpcODG
+ oarXABKtozDLxBXVbRx/s+ELxxy/4GTIA9hZ3DqsAWvY0JvMbznPN90gaI4/HIn2f0QZvYU5ur
+ 5WI=
+X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="2147761"
+X-IronPort-AV: E=Sophos;i="5.79,330,1602514800"; 
+   d="scan'208";a="2147761"
+Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP; 08 Jan 2021 19:20:32 +0900
+Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
+	by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 42BC1A80C3;
+	Fri,  8 Jan 2021 19:20:31 +0900 (JST)
+Received: from g01jpfmpwyt03.exch.g01.fujitsu.local (g01jpfmpwyt03.exch.g01.fujitsu.local [10.128.193.57])
+	by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 9B413AA81E;
+	Fri,  8 Jan 2021 19:20:30 +0900 (JST)
+Received: from g01jpexchyt35.g01.fujitsu.local (unknown [10.128.193.4])
+	by g01jpfmpwyt03.exch.g01.fujitsu.local (Postfix) with ESMTP id 8D31346E890;
+	Fri,  8 Jan 2021 19:20:29 +0900 (JST)
+Received: from luna3.soft.fujitsu.com (10.124.196.199) by
+ g01jpexchyt35.g01.fujitsu.local (10.128.193.50) with Microsoft SMTP Server id
+ 14.3.487.0; Fri, 8 Jan 2021 19:20:27 +0900
+From: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, <soc@kernel.org>, Olof Johansson
- <olof@lixom.net>
-Subject: [PATCH V2] arm64: defconfig: Drop unused K3 SoC specific options
-Date: Thu, 7 Jan 2021 07:22:28 -0600
-Message-ID: <20210107132228.6577-1-nm@ti.com>
-X-Mailer: git-send-email 2.29.2
+To: <linux-arm-kernel@lists.infradead.org>, <soc@kernel.org>
+CC: <will@kernel.org>, <catalin.marinas@arm.com>, <arnd@arndb.de>,
+	<olof@lixom.net>, <misono.tomohiro@jp.fujitsu.com>
+Subject: [PATCH 02/10] soc: fujtisu: hwb: Add open operation
+Date: Fri, 8 Jan 2021 19:32:19 +0900
+Message-ID: <20210108103227.1740865-3-misono.tomohiro@jp.fujitsu.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210108103227.1740865-1-misono.tomohiro@jp.fujitsu.com>
+References: <20210108103227.1740865-1-misono.tomohiro@jp.fujitsu.com>
 MIME-Version: 1.0
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210107_082240_378972_DC7F3185 
-X-CRM114-Status: GOOD (  10.25  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Nishanth Menon <nm@ti.com>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210107132228.i7oxmmBqe7POuVS-dp165MKyWCtr8Xz5KKThj1lEqgw@z>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-SecurityPolicyCheck-GC: OK by FENCE-Mail
+X-TM-AS-GCONF: 00
 
-With [1] integrated and all users of the config symbols removed, we
-can safely remove the options from defconfig.
+Nothing special. Just preparing private_data for this FD.
 
-[1] https://patchwork.kernel.org/project/linux-arm-kernel/patch/20201026170624.24241-1-nm@ti.com/
-
-Signed-off-by: Nishanth Menon <nm@ti.com>
+Signed-off-by: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 ---
+ drivers/soc/fujitsu/fujitsu_hwb.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-Could ARM SoC maintainers pick this up for the 5.11 cycle?
-unfortunately, this dropped through the cracks as dependencies were
-getting pulled together. I dont have any other patches for 5.11 rcs
-
-V1: https://lore.kernel.org/linux-arm-kernel/20201112215438.31432-1-nm@ti.com/
-
- arch/arm64/configs/defconfig | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 838301650a79..a0bcf0201261 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -991,8 +991,6 @@ CONFIG_ARCH_TEGRA_210_SOC=y
- CONFIG_ARCH_TEGRA_186_SOC=y
- CONFIG_ARCH_TEGRA_194_SOC=y
- CONFIG_ARCH_TEGRA_234_SOC=y
--CONFIG_ARCH_K3_AM6_SOC=y
--CONFIG_ARCH_K3_J721E_SOC=y
- CONFIG_TI_SCI_PM_DOMAINS=y
- CONFIG_EXTCON_PTN5150=m
- CONFIG_EXTCON_USB_GPIO=y
+diff --git a/drivers/soc/fujitsu/fujitsu_hwb.c b/drivers/soc/fujitsu/fujitsu_hwb.c
+index 44c32c1683df..1dec3d3c652f 100644
+--- a/drivers/soc/fujitsu/fujitsu_hwb.c
++++ b/drivers/soc/fujitsu/fujitsu_hwb.c
+@@ -142,8 +142,28 @@ struct bb_info {
+ };
+ static struct kmem_cache *bb_info_cachep;
+ 
++static int fujitsu_hwb_dev_open(struct inode *inode, struct file *filp)
++{
++	struct hwb_private_data *pdata;
++
++	pdata = kzalloc(sizeof(*pdata), GFP_KERNEL);
++	if (!pdata)
++		return -ENOMEM;
++	INIT_LIST_HEAD(&pdata->bb_list);
++	spin_lock_init(&pdata->list_lock);
++
++	/*
++	 * misc_open() sets pointer of the miscdevice to filp->private_data.
++	 * Just override it since barrier fops does not use it
++	 */
++	filp->private_data = pdata;
++
++	return 0;
++}
++
+ static const struct file_operations fujitsu_hwb_dev_fops = {
+ 	.owner          = THIS_MODULE,
++	.open           = fujitsu_hwb_dev_open,
+ };
+ 
+ static struct miscdevice bar_miscdev = {
 -- 
-2.29.2
+2.26.2
 
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
