@@ -1,25 +1,29 @@
-Return-Path: <SRS0=Dw/n=GM=gmail.com=festevam@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7217BC433E6
-	for <soc@archiver.kernel.org>; Sat,  9 Jan 2021 19:53:19 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 4620C23A82; Sat,  9 Jan 2021 19:53:19 +0000 (UTC)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AE92B23A7F;
-	Sat,  9 Jan 2021 19:53:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AE92B23A7F
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=festevam@gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id o10so20395122lfl.13;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25A5FC433DB
+	for <linux-devicetree@archiver.kernel.org>; Sat,  9 Jan 2021 19:54:15 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id E3F7523A7F
+	for <linux-devicetree@archiver.kernel.org>; Sat,  9 Jan 2021 19:54:14 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1726154AbhAITx7 (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Sat, 9 Jan 2021 14:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726132AbhAITx6 (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Sat, 9 Jan 2021 14:53:58 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C387C061786;
+        Sat,  9 Jan 2021 11:53:18 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id s26so31264277lfc.8;
         Sat, 09 Jan 2021 11:53:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
@@ -37,35 +41,45 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=Cl+kCq9RgNjHFtJ0jMkOqkZFX0EZ3i6SD4sOc9QasOE=;
-        b=FiyS7dl0QfDEN3OFo10iinLznL5ky6K72d40X1UVIjw3aOZLPLoe0LVOcziNkEV7vB
-         YjvAUhZVDp1DFQQ1ZVhL7ZhU31VxT7iLi5klks4EO0NFeuPffRvq41Zmgsd5HKBEBss0
-         AdmWAIINUVaVOMrc/LrMAbVcuFY5CJwLtaQTOyfIZnLwSQheub0qFDGkiXQcuAS+joNY
-         oCuEddysEPyy6FUJh9BSOUR+P1dKzogAo12dzTnv6cOMEnd3jTkKUtoRWVCpLVbcRvW0
-         7iYTgNlv4+jG5YGODQOsYkrojWsoODhq7QAwX3wRY/9mh8TjtoBzWabpfr/zmpTe4Mq4
-         nMHA==
-X-Gm-Message-State: AOAM531KL8TGADTHMiSw39KiZnVnMM/+DJs6nkxB6480GrhKCOgJ8Kze
-	YBV9pRDzNetK+PoCt2TQc4/RCS7S0l1MQxwFH+Q=
+        b=hf70PhX7AAx3Af0Y/P8DA2nxrv2+MdYjBBKeK2L3jrUXSw27rdx/nunPmdOps1s0DT
+         f6ra+3pSk38SVByMk4sUPjKfookwzEDgdFvkDGqMW1r+A8xqUIdpLdsCf0LfNx47miHB
+         EvZ/b+hCyYGc3he/JkapgG4stJWZbML9bn5l5OmmFFnWnSxvb63xyHU2sA6nmUEJJzF+
+         +FdypAaAkYNazh5aXnSvx0++9krOd0T9pKjrIoUDVMzq15cmninfPnhufsN8znvI/qfZ
+         6gSWYCtCYq2NaU53QXvaC2kdhM5qSxeCYQKf+ZmT02MjBogyl9vchTM2HXEqN2zrCK0e
+         NwQA==
+X-Gm-Message-State: AOAM531bEgULvSk1n/M2b/HsQn2PTg2wm6J4AwpoXFIN0Tka1cPziCwZ
+        W85uzdv+/6ZEinKYr5uzL6R1oOG0AVgwzugElFVhZxvNZFY=
 X-Google-Smtp-Source: ABdhPJzU1r2eTx3+DSxC1CZupRwItg9PZXkK2YTXlGkB10rcIe0vN6ZbKdYWFs0pXmzFjK5gqvhzT0eUA5VBrbbEbe4=
 X-Received: by 2002:a19:e20a:: with SMTP id z10mr4568621lfg.295.1610221996906;
  Sat, 09 Jan 2021 11:53:16 -0800 (PST)
 MIME-Version: 1.0
 References: <1610144511-19018-1-git-send-email-oliver.graute@gmail.com> <1610144511-19018-3-git-send-email-oliver.graute@gmail.com>
 In-Reply-To: <1610144511-19018-3-git-send-email-oliver.graute@gmail.com>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 9 Jan 2021 16:53:05 -0300
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Sat, 9 Jan 2021 16:53:05 -0300
 Message-ID: <CAOMZO5AGro=rGTPV0CAWPh_=Q9KqCYWO199FWn57xBc=eUWdog@mail.gmail.com>
 Subject: Re: [PATCH v8 2/3] ARM: dts: Add support for i.MX6 UltraLite DART
  Variscite Customboard
-To: Oliver Graute <oliver.graute@gmail.com>
+To:     Oliver Graute <oliver.graute@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Shawn Guo <shawnguo@kernel.org>, Marco Felsch <m.felsch@pengutronix.de>, 
-	Neil Armstrong <narmstrong@baylibre.com>, parthitce@gmail.com, 
-	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
-	Rob Herring <robh+dt@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP Linux Team <linux-imx@nxp.com>, 
-	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Neil Armstrong <narmstrong@baylibre.com>, parthitce@gmail.com,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210109195305.iwN2hsO2-4vHOK6bbGne16hGH39QiwulZSx6KR8gHIo@z>
 
 On Fri, Jan 8, 2021 at 7:23 PM Oliver Graute <oliver.graute@gmail.com> wrote:
 
