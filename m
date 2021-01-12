@@ -1,38 +1,55 @@
-Return-Path: <SRS0=bXzz=GP=fujitsu.com=misono.tomohiro@kernel.org>
+Return-Path: <SRS0=gmZ6=GP=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A782DC433E0
-	for <soc@archiver.kernel.org>; Tue, 12 Jan 2021 10:38:21 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 6A66A23105; Tue, 12 Jan 2021 10:38:21 +0000 (UTC)
-X-Greylist: delayed 63 seconds by postgrey-1.34 at mail.kernel.org; Tue, 12 Jan 2021 10:38:20 UTC
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 829FC222B3
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=fujitsu.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=misono.tomohiro@fujitsu.com
-Received: from esa2.fujitsucc.c3s2.iphmx.com (esa2.fujitsucc.c3s2.iphmx.com [68.232.152.246])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F251EC433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 12 Jan 2021 10:39:00 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 829FC222B3;
-	Tue, 12 Jan 2021 10:38:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 80EC123105
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 12 Jan 2021 10:39:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 80EC123105
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=fujitsu.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:In-Reply-To:References:Message-ID:Date:
+	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=782MTNxvDi7X+MvL/HD4/FRdoCI3OxtxcJWdBwZltfc=; b=MjL3LoVJ8o5Q1utg0kPYPmfk7
+	Grqd3SKwhc64VsHrHuVVgFoXMGk1wxJ0hilHwMEnQT1XdLsc2G1fyu2+mYYRV60lPSiaZ7phK+tHD
+	IHY6ifxNXAtMybGUO3pgzRQ5OAxzw0LF6XGGQJyP5wygreEg1ioewiloZifjTE73bBgohdWn1zsRE
+	F7JGHpfQ/ICITvJSfSLdoJxs/NNSKVA1opcsljbpUj4KDne9Tv8YBiqkifx08RpPl6Q+CWnVLsUpY
+	7oDXCUeNO4OaGWa1gUK6xTzYiwFcB2DhS6QhTnveljZB5i2iUl3k3koxF0ILYhOJWZmJVYQP7+Lb8
+	TTRiOmKOQ==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1kzH3B-0007VD-5t; Tue, 12 Jan 2021 10:37:21 +0000
+Received: from esa2.fujitsucc.c3s2.iphmx.com ([68.232.152.246])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1kzH37-0007Ti-Ft
+ for linux-arm-kernel@lists.infradead.org; Tue, 12 Jan 2021 10:37:19 +0000
 IronPort-SDR: bmc4o/bL2sh9NIXm/XrZmREt8WIJb50ZYcf23WZ8XgFYUdlG7bZYIWlN6u8lD8ipniQbD9SfYE
  ti7LpfJqYHEgA1XHfB45QrGkeoc2prWcSX0LGhyXXHBah2w+ipFuF1iy5N21anWBZf0+fSSVNg
  DeuXH27k02oomnHE5gt4ug/Id44psAKjtiDmeLQ+PAFL8G6/MQcBYz8pf9S2zlFpH9caD+M1r7
  xayZ1Kf+WpcC23YeHNAJUI5VeurRGAS5ulH5GBYTl3gETNWzOFaa964p9tCiLo9T3vHJCf11HD
  D2k=
 X-IronPort-AV: E=McAfee;i="6000,8403,9861"; a="32407615"
-X-IronPort-AV: E=Sophos;i="5.79,341,1602514800"; 
-   d="scan'208";a="32407615"
-Received: from mail-os2jpn01lp2051.outbound.protection.outlook.com (HELO JPN01-OS2-obe.outbound.protection.outlook.com) ([104.47.92.51])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2021 19:37:12 +0900
+X-IronPort-AV: E=Sophos;i="5.79,341,1602514800"; d="scan'208";a="32407615"
+Received: from mail-os2jpn01lp2051.outbound.protection.outlook.com (HELO
+ JPN01-OS2-obe.outbound.protection.outlook.com) ([104.47.92.51])
+ by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 12 Jan 2021 19:37:12 +0900
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=A4CzQGEg+nfhbGpIBXWvOiL09fDqNF1fKRDjLxPLs5/VoUGQ1VpeDytRGOHQgyEDOB/cng/2UDVh3YIvZF9S0bK21AOYeM2aWChcynrDxG/Z83vlXxAA62lKNl4VFvOX8JfofLcWe6MaznG0J6YPvwcWFzQOKoGkT/w3w0WI+i//gY8tWqPMCGLpZRmZqyCGUfET9pta7E9OwcFEicKaBfNUJ9dZO2abXsvdefyt1JM9p4R0jYAfTVypjxmBZq0QQ1LMCpCddHGyCcKDRWGEgIAOZDGKbQm0Thh3AKzXxXzqk6MBAIyr82z5Lh7wgOTeNY77rEQ73hnpN0icAUNIzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
  bh=RMTqRpPvyaIKkj/f6Eary2gXh/NYZR6ito/pxzSaRlw=;
@@ -46,8 +63,8 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  bh=RMTqRpPvyaIKkj/f6Eary2gXh/NYZR6ito/pxzSaRlw=;
  b=D9YNxp3IARANH1bjHFHHUcB3IEx0tMGaoqkuiLYllo2ZaV4if4QKhsbpAYI5Npkk1HHUdWZaJ+D6nAjQSo9orIlqiau6M/SNOxcTS6t0rHzGs+uxMCTsZ0ozYDyh5FzRQv77GZgCi/czTEd3nz3yiMv8xzYkURBjQfOwx3PKbZY=
 Received: from OSBPR01MB4582.jpnprd01.prod.outlook.com (2603:1096:604:74::21)
- by OSBPR01MB2181.jpnprd01.prod.outlook.com (2603:1096:603:26::16) with
- Microsoft SMTP Server (version=TLS1_2,
+ by OSBPR01MB2181.jpnprd01.prod.outlook.com (2603:1096:603:26::16)
+ with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6; Tue, 12 Jan
  2021 10:37:10 +0000
 Received: from OSBPR01MB4582.jpnprd01.prod.outlook.com
@@ -56,12 +73,6 @@ Received: from OSBPR01MB4582.jpnprd01.prod.outlook.com
  10:37:10 +0000
 From: "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
 To: 'Jonathan Cameron' <Jonathan.Cameron@Huawei.com>
-List-Id: <soc.lore.kernel.org>
-CC: "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "soc@kernel.org" <soc@kernel.org>,
-	"olof@lixom.net" <olof@lixom.net>, "catalin.marinas@arm.com"
-	<catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>,
-	"arnd@arndb.de" <arnd@arndb.de>
 Subject: RE: [PATCH 01/10] soc: fujitsu: hwb: Add hardware barrier driver
  init/exit code
 Thread-Topic: [PATCH 01/10] soc: fujitsu: hwb: Add hardware barrier driver
@@ -69,16 +80,15 @@ Thread-Topic: [PATCH 01/10] soc: fujitsu: hwb: Add hardware barrier driver
 Thread-Index: AQHW5afs5N54s+MgtEWWkkqkCyxp9qodh8MAgAAX9wCABZUDEA==
 Date: Tue, 12 Jan 2021 10:35:59 +0000
 Deferred-Delivery: Tue, 12 Jan 2021 10:36:58 +0000
-Message-ID:
- <OSBPR01MB4582AE3802469001F5F5A4AAE5AA0@OSBPR01MB4582.jpnprd01.prod.outlook.com>
+Message-ID: <OSBPR01MB4582AE3802469001F5F5A4AAE5AA0@OSBPR01MB4582.jpnprd01.prod.outlook.com>
 References: <20210108103227.1740865-1-misono.tomohiro@jp.fujitsu.com>
-	<20210108103227.1740865-2-misono.tomohiro@jp.fujitsu.com>
+ <20210108103227.1740865-2-misono.tomohiro@jp.fujitsu.com>
  <20210108115804.00000594@Huawei.com>
 In-Reply-To: <20210108115804.00000594@Huawei.com>
 Accept-Language: ja-JP, en-US
 Content-Language: ja-JP
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
 x-shieldmailcheckermailid: 06c732a7f885417f8cabe34bfdaafd0f
 x-securitypolicycheck: OK by SHieldMailChecker v2.6.3
 authentication-results: Huawei.com; dkim=none (message not signed)
@@ -87,17 +97,16 @@ x-originating-ip: [218.44.52.179]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-correlation-id: 8c7ef96b-51dd-4ba6-62a6-08d8b6e6041d
 x-ms-traffictypediagnostic: OSBPR01MB2181:
-x-microsoft-antispam-prvs:
- <OSBPR01MB218129E676E4FA1768174BAEE5AA0@OSBPR01MB2181.jpnprd01.prod.outlook.com>
+x-microsoft-antispam-prvs: <OSBPR01MB218129E676E4FA1768174BAEE5AA0@OSBPR01MB2181.jpnprd01.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:595;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- +ytaaKnHXqncAP1YC8xtB0VBmhjoVpDY0249qChRfNIIh67ZXm32fFZu1DxRpExOcCNMP3JlNsMpgub8Jko4j5U84h9lfj1Jp5KduhwBXL9fz4c/RlNz325B/z36Y44zNRA7xRVJD0obxlPt/Ju3f1DJSOf4zfP6JPZb+caBQPqm4lLeGrtZpPIELlOPqb3ieRrBBs/uX+3agUejkpA/rvXIc6xFvZTMgcTbsydM7JL5FEtAeD1QWOrTbYTSN8g9AZ5sYpVyU8UPsuGqjnmMTdywb6xviq7vIgYrv0x49TVcX1L1z3CLXw8qEVri3FnbwATX62JTINbhXVLqf3by9Rte0/u+rsGcG5DiqYaKieUNYFfnxVMRVPjuV59o8HTVc134HLO+bbbEJ91CI8Ck6CWKOxfUf6K1xow0peTiUIcIwvLe1p2GufZdo8RJR252
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB4582.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(136003)(346002)(376002)(39860400002)(6666004)(66476007)(76116006)(30864003)(66556008)(7696005)(5660300002)(8936002)(52536014)(64756008)(66446008)(66946007)(55016002)(85182001)(6506007)(9686003)(2906002)(83380400001)(186003)(478600001)(4326008)(26005)(6916009)(316002)(33656002)(8676002)(86362001)(71200400001)(54906003)(777600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata:
- =?iso-2022-jp?B?alZ0M3hrdXV6bnhlSFpmUTgydE5WS01icFNucmNOVHB2aVV0ek9sb3Ny?=
+x-microsoft-antispam-message-info: +ytaaKnHXqncAP1YC8xtB0VBmhjoVpDY0249qChRfNIIh67ZXm32fFZu1DxRpExOcCNMP3JlNsMpgub8Jko4j5U84h9lfj1Jp5KduhwBXL9fz4c/RlNz325B/z36Y44zNRA7xRVJD0obxlPt/Ju3f1DJSOf4zfP6JPZb+caBQPqm4lLeGrtZpPIELlOPqb3ieRrBBs/uX+3agUejkpA/rvXIc6xFvZTMgcTbsydM7JL5FEtAeD1QWOrTbYTSN8g9AZ5sYpVyU8UPsuGqjnmMTdywb6xviq7vIgYrv0x49TVcX1L1z3CLXw8qEVri3FnbwATX62JTINbhXVLqf3by9Rte0/u+rsGcG5DiqYaKieUNYFfnxVMRVPjuV59o8HTVc134HLO+bbbEJ91CI8Ck6CWKOxfUf6K1xow0peTiUIcIwvLe1p2GufZdo8RJR252
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:OSBPR01MB4582.jpnprd01.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(4636009)(396003)(366004)(136003)(346002)(376002)(39860400002)(6666004)(66476007)(76116006)(30864003)(66556008)(7696005)(5660300002)(8936002)(52536014)(64756008)(66446008)(66946007)(55016002)(85182001)(6506007)(9686003)(2906002)(83380400001)(186003)(478600001)(4326008)(26005)(6916009)(316002)(33656002)(8676002)(86362001)(71200400001)(54906003)(777600001);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata: =?iso-2022-jp?B?alZ0M3hrdXV6bnhlSFpmUTgydE5WS01icFNucmNOVHB2aVV0ek9sb3Ny?=
  =?iso-2022-jp?B?TmYwLytXNEhRc0Zxdk9kamRqNitCQmRVeDIxVDZpYWI0V0xHSGRmemVr?=
  =?iso-2022-jp?B?eG94R29qY3dZWEZkS3RXUG1JcnVzcVRIOG5tYjlLcXFCQ1NBZmRBcFJm?=
  =?iso-2022-jp?B?NnYrU3VDbnVjTXlvMTgwN0IxQ0JncHVaMkRRNHhHV0JyWmpLaVNoOWlW?=
@@ -122,36 +131,58 @@ x-ms-exchange-antispam-messagedata:
  =?iso-2022-jp?B?NVNVQ0VvNk5KWGRxOGVrM3hMWmMyL3Iza0dOdFFHTU9TOGEvejJiSkp1?=
  =?iso-2022-jp?B?L2RNWU53aEkyYTJjTnRnRmQ2cEhVMUw4UW1RQWp2VmVPRThQUT0=?=
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: fujitsu.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB4582.jpnprd01.prod.outlook.com
 X-MS-Exchange-CrossTenant-Network-Message-Id: 8c7ef96b-51dd-4ba6-62a6-08d8b6e6041d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2021 10:37:09.9873
- (UTC)
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2021 10:37:09.9873 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: KnmoSJmnJOlVkUxj1WMYtvyWGoRLtTk7LlPkyeQ9EdsFGEZJSWgP88FlgK2uZfnnetckdZmw5VksaRPeMxEjt9PLd7aEa9SnGH+EQq3XzZk=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB2181
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210112_053717_931171_C0B20EA3 
+X-CRM114-Status: GOOD (  34.71  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: "arnd@arndb.de" <arnd@arndb.de>,
+ "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+ "soc@kernel.org" <soc@kernel.org>, "olof@lixom.net" <olof@lixom.net>,
+ "will@kernel.org" <will@kernel.org>,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210112103559.o7wn5knNKrvpBnGqPtHaC3p7ubuCZZO_iWGffO1DWtI@z>
 
 > On Fri, 8 Jan 2021 19:32:18 +0900
 > Misono Tomohiro <misono.tomohiro@jp.fujitsu.com> wrote:
->=20
+> 
 > > This adds hardware barrier driver's struct definitions and module
 > > init/exit code. We use miscdeice for barrier driver ioctl
->=20
+> 
 > device
->=20
+> 
 > > and /dev/fujitsu_hwb will be created upon module load.
 > > Following commits will add each ioctl definition.
 > >
 > > Signed-off-by: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
->=20
+> 
 > Hi Misono,
->=20
+> 
 > I was taking a look out of curiosity so the following is definitely
 > not a full review but a few general comments inline.
 
@@ -159,11 +190,11 @@ Hi Jonathan,
 Thanks for all reviews. I will update accordingly if I send v2
 (each comments follows below).
 
->=20
+> 
 > Thanks,
->=20
+> 
 > Jonathan
->=20
+> 
 > > ---
 > >  drivers/soc/fujitsu/fujitsu_hwb.c | 313
 > > ++++++++++++++++++++++++++++++
@@ -183,32 +214,26 @@ Thanks for all reviews. I will update accordingly if I send v2
 > > + *
 > > + * This hardware barrier (HWB) driver provides a set of ioctls to
 > > +realize synchronization
-> > + * by PEs in the same Come Memory Group (CMG) by using implementation =
-defined registers.
+> > + * by PEs in the same Come Memory Group (CMG) by using implementation defined registers.
 > > + * On A64FX, CMG is the same as L3 cache domain.
 > > + *
 > > + * The main purpose of the driver is setting up registers which
 > > +cannot be accessed
 > > + * from EL0. However, after initialization, BST_SYNC/LBSY_SYNC
 > > +registers which is used
-> > + * in synchronization main logic can be accessed from EL0 (therefore i=
-t is fast).
+> > + * in synchronization main logic can be accessed from EL0 (therefore it is fast).
 > > + *
-> > + * Simplified barrier operation flow of user application is as follows=
-:
+> > + * Simplified barrier operation flow of user application is as follows:
 > > + *  (one PE)
-> > + *    1. Call IOC_BB_ALLOC to setup INIT_SYNC register which is shared=
- in a CMG.
+> > + *    1. Call IOC_BB_ALLOC to setup INIT_SYNC register which is shared in a CMG.
 > > + *       This specifies which PEs join synchronization
 > > + *  (on each PE joining synchronization)
 > > + *    2. Call IOC_BW_ASSIGN to setup ASSIGN_SYNC register per PE
 > > + *    3. Barrier main logic (all logic runs in EL0)
 > > + *      a) Write 1 to BST_SYNC register
 > > + *      b) Read LBSY_SYNC register
-> > + *      c) If LBSY_SYNC value is 1, sync is finished, otherwise go bac=
-k to b
-> > + *         (If all PEs joining synchronization write 1 to BST_SYNC, LB=
-SY_SYNC becomes 1)
+> > + *      c) If LBSY_SYNC value is 1, sync is finished, otherwise go back to b
+> > + *         (If all PEs joining synchronization write 1 to BST_SYNC, LBSY_SYNC becomes 1)
 > > + *    4. Call IOC_BW_UNASSIGN to reset ASSIGN_SYNC register
 > > + *  (one PE)
 > > + *    5. Call IOC_BB_FREE to reset INIT_SYNC register
@@ -263,10 +288,8 @@ SY_SYNC becomes 1)
 > > +static enum cpuhp_state _hp_state;
 > > +
 > > +/*
-> > + * Each PE has its own CMG and Physical PE number (determined by BST_B=
-IT_EL1 register).
-> > + * Barrier operation can be performed by PEs which belong to the same =
-CMG.
+> > + * Each PE has its own CMG and Physical PE number (determined by BST_BIT_EL1 register).
+> > + * Barrier operation can be performed by PEs which belong to the same CMG.
 > > + */
 > > +struct pe_info {
 > > +	/* CMG number of this PE */
@@ -286,10 +309,8 @@ CMG.
 > > +	u8 num_bw;
 > > +	/*
 > > +	 * Maximum number of PE per CMG.
-> > +	 * Depending on BIOS configuration, each CMG has up to max_pe_per_cmg=
- PEs
-> > +	 * and each PE has unique physical PE number between 0 ~ (max_pe_per_=
-cmg-1)
+> > +	 * Depending on BIOS configuration, each CMG has up to max_pe_per_cmg PEs
+> > +	 * and each PE has unique physical PE number between 0 ~ (max_pe_per_cmg-1)
 > > +	 */
 > > +	u8 max_pe_per_cmg;
 > > +
@@ -319,39 +340,36 @@ cmg-1)
 > > +	struct list_head node;
 > > +	/* For indicating if this bb is currently being freed or not */
 > > +	unsigned long flag;
-> > +	/* For waiting ongoing assign/unassign operation to finish before fre=
-eing BB */
+> > +	/* For waiting ongoing assign/unassign operation to finish before freeing BB */
 > > +	wait_queue_head_t wq;
 > > +	/* Track ongoing assign/unassign operation count */
 > > +	atomic_t ongoing_assign_count;
 > > +	/* CMG  number of this blade */
->=20
+> 
 > nitpick: Double space currently after CMG that looks inconsistent.
 
 Right. I will fix it.
 
->=20
+> 
 > > +	u8 cmg;
 > > +	/* BB number of this blade */
 > > +	u8 bb;
-> > +	/* Hold assigned window number of each PE corresponding to @assigned_=
-pemask */
+> > +	/* Hold assigned window number of each PE corresponding to @assigned_pemask */
 > > +	u8 *bw;
-> > +	/* Track usage count as IOC_BB_FREE and IOC_BW_[UN]ASSIGN might be ru=
-n in parallel */
+> > +	/* Track usage count as IOC_BB_FREE and IOC_BW_[UN]ASSIGN might be run in parallel */
 > > +	struct kref kref;
 > > +};
 > > +static struct kmem_cache *bb_info_cachep;
 > > +
-> > +static const struct file_operations fujitsu_hwb_dev_fops =3D {
-> > +	.owner          =3D THIS_MODULE,
+> > +static const struct file_operations fujitsu_hwb_dev_fops = {
+> > +	.owner          = THIS_MODULE,
 > > +};
 > > +
-> > +static struct miscdevice bar_miscdev =3D {
-> > +	.fops  =3D &fujitsu_hwb_dev_fops,
-> > +	.minor =3D MISC_DYNAMIC_MINOR,
-> > +	.mode  =3D 0666,
-> > +	.name  =3D FHWB_DEV_NAME,
+> > +static struct miscdevice bar_miscdev = {
+> > +	.fops  = &fujitsu_hwb_dev_fops,
+> > +	.minor = MISC_DYNAMIC_MINOR,
+> > +	.mode  = 0666,
+> > +	.name  = FHWB_DEV_NAME,
 > > +};
 > > +
 > > +static void destroy_bb_info_cachep(void) {
@@ -360,24 +378,20 @@ n in parallel */
 > > +
 > > +static int __init init_bb_info_cachep(void) {
 > > +	/*
-> > +	 * Since cpumask value will be copied from userspace to the beginning=
- of
-> > +	 * struct bb_info, use kmem_cache_create_usercopy to mark that region=
-.
+> > +	 * Since cpumask value will be copied from userspace to the beginning of
+> > +	 * struct bb_info, use kmem_cache_create_usercopy to mark that region.
 > > +	 * Otherwise CONFIG_HARDENED_USERCOPY gives user_copy_warn.
 > > +	 */
-> > +	bb_info_cachep =3D kmem_cache_create_usercopy("bb_info_cache", sizeof=
-(struct bb_info),
+> > +	bb_info_cachep = kmem_cache_create_usercopy("bb_info_cache", sizeof(struct bb_info),
 > > +			0, SLAB_HWCACHE_ALIGN, 0, sizeof(cpumask_var_t), NULL);
-> > +	if (bb_info_cachep =3D=3D NULL)
->=20
-> inconsistent on ! vs =3D=3D NULL checks.  I personally don't care which y=
-ou use, but better to chose one style and use if
+> > +	if (bb_info_cachep == NULL)
+> 
+> inconsistent on ! vs == NULL checks.  I personally don't care which you use, but better to chose one style and use if
 > everywhere in a given driver.
 
 OK. I will use "if (!var)" style in everywhere.
 
->=20
+> 
 > > +		return -ENOMEM;
 > > +
 > > +	return 0;
@@ -391,54 +405,43 @@ OK. I will use "if (!var)" style in everywhere.
 > > +}
 > > +
 > > +static int __init alloc_map(void)
->=20
-> For generic sounding function names, it is better to prefix with somethin=
-g driver specific.
-> perhaps hwb_alloc_map() or similar?  Both avoids possible clashes of nami=
-ng in future and leads to more readable code
+> 
+> For generic sounding function names, it is better to prefix with something driver specific.
+> perhaps hwb_alloc_map() or similar?  Both avoids possible clashes of naming in future and leads to more readable code
 > as people then know the function is local.
 
 OK. I will unify to use "hwb" prefix.
 
->=20
+> 
 > > +{
-> > +	_hwinfo.core_map =3D kcalloc(num_possible_cpus(), sizeof(struct
+> > +	_hwinfo.core_map = kcalloc(num_possible_cpus(), sizeof(struct
 > > +pe_info), GFP_KERNEL);
->=20
-> preferred to use sizeof(*_hwinfo.core_map) as saves reviewer checking the=
- types.  Note applies in other places as well.
+> 
+> preferred to use sizeof(*_hwinfo.core_map) as saves reviewer checking the types.  Note applies in other places as well.
 OK. I will fix it.
 
-> Whilst it's nice to make these flexible in size, the separate allocations=
- do add overheads.
-> Given num_possible_cpus is probably constrained, perhaps better to just m=
-ake these fixed size and big enough for all
+> Whilst it's nice to make these flexible in size, the separate allocations do add overheads.
+> Given num_possible_cpus is probably constrained, perhaps better to just make these fixed size and big enough for all
 > plausible usecases?
 
-Well, it might be possible that the number of CPUs may vary in systems (tho=
-ugh currently all system has 1 CPU),
+Well, it might be possible that the number of CPUs may vary in systems (though currently all system has 1 CPU),
 I'd rather keep current notation.
 
->=20
->=20
-> > +	_hwinfo.used_bb_bmap =3D kcalloc(_hwinfo.num_cmg, sizeof(unsigned lon=
-g), GFP_KERNEL);
-> > +	_hwinfo.used_bw_bmap =3D kcalloc(num_possible_cpus(), sizeof(unsigned=
- long), GFP_KERNEL);
-> > +	if (!_hwinfo.core_map || !_hwinfo.used_bb_bmap || !_hwinfo.used_bw_bm=
-ap)
+> 
+> 
+> > +	_hwinfo.used_bb_bmap = kcalloc(_hwinfo.num_cmg, sizeof(unsigned long), GFP_KERNEL);
+> > +	_hwinfo.used_bw_bmap = kcalloc(num_possible_cpus(), sizeof(unsigned long), GFP_KERNEL);
+> > +	if (!_hwinfo.core_map || !_hwinfo.used_bb_bmap || !_hwinfo.used_bw_bmap)
 > > +		goto fail;
->=20
-> I'd prefer you check these individually and handle the frees explicitly. =
- Makes for easier reviewing as we can match each
+> 
+> I'd prefer you check these individually and handle the frees explicitly.  Makes for easier reviewing as we can match each
 > fail against the clean up.
 
 OK, I will separate them.
 
->=20
+> 
 > > +
-> > +	/* 0 is valid number for both CMG/PE. Set all bits to 1 to represents=
- uninitialized state */
+> > +	/* 0 is valid number for both CMG/PE. Set all bits to 1 to represents uninitialized state */
 > > +	memset(_hwinfo.core_map, 0xFF, sizeof(struct pe_info) *
 > > +num_possible_cpus());
 > > +
@@ -451,16 +454,14 @@ OK, I will separate them.
 > > +
 > > +/* Get this system's CPU type (part number). If it is not fujitsu
 > > +CPU, return -1 */ static int __init get_cpu_type(void) {
-> > +	if (read_cpuid_implementor() !=3D ARM_CPU_IMP_FUJITSU)
+> > +	if (read_cpuid_implementor() != ARM_CPU_IMP_FUJITSU)
 > > +		return -1;
->=20
-> Better to return a meaningful error code from here, then pass it on at th=
-e caller.
+> 
+> Better to return a meaningful error code from here, then pass it on at the caller.
 
-OK. I will incorporate this code into hwinfo_setup() and return -ENODEV for=
- error.
+OK. I will incorporate this code into hwinfo_setup() and return -ENODEV for error.
 
->=20
+> 
 > > +
 > > +	return read_cpuid_part_number();
 > > +}
@@ -469,20 +470,20 @@ OK. I will incorporate this code into hwinfo_setup() and return -ENODEV for=
 > > +{
 > > +	int type;
 > > +
-> > +	type =3D get_cpu_type();
+> > +	type = get_cpu_type();
 > > +	if (type < 0)
->=20
-> As above, I'd expect to see return type; here.=09
->=20
+> 
+> As above, I'd expect to see return type; here.	
+> 
 > > +		return -ENODEV;
 > > +
-> > +	_hwinfo.type =3D type;
+> > +	_hwinfo.type = type;
 > > +	switch (type) {
 > > +	case FUJITSU_CPU_PART_A64FX:
-> > +		_hwinfo.num_cmg =3D 4;
-> > +		_hwinfo.num_bb =3D 6;
-> > +		_hwinfo.num_bw =3D 4;
-> > +		_hwinfo.max_pe_per_cmg =3D 13;
+> > +		_hwinfo.num_cmg = 4;
+> > +		_hwinfo.num_bb = 6;
+> > +		_hwinfo.num_bw = 4;
+> > +		_hwinfo.max_pe_per_cmg = 13;
 > > +		break;
 > > +	default:
 > > +		return -ENODEV;
@@ -496,15 +497,13 @@ OK. I will incorporate this code into hwinfo_setup() and return -ENODEV for=
 > > +	int i;
 > > +
 > > +	/* Setup core_map by reading BST_BIT_EL1 register of each PE */
-> > +	val =3D read_sysreg_s(FHWB_BST_BIT_EL1);
-> > +	_hwinfo.core_map[cpu].cmg =3D FIELD_GET(FHWB_BST_BIT_EL1_CMG_FILED, v=
-al);
-> > +	_hwinfo.core_map[cpu].ppe =3D FIELD_GET(FHWB_BST_BIT_EL1_PE_FILED,
+> > +	val = read_sysreg_s(FHWB_BST_BIT_EL1);
+> > +	_hwinfo.core_map[cpu].cmg = FIELD_GET(FHWB_BST_BIT_EL1_CMG_FILED, val);
+> > +	_hwinfo.core_map[cpu].ppe = FIELD_GET(FHWB_BST_BIT_EL1_PE_FILED,
 > > +val);
 > > +
-> > +	/* Since these registers' values are UNKNOWN on reset, explicitly cle=
-ar all */
-> > +	for (i =3D 0; i < _hwinfo.num_bw; i++)
+> > +	/* Since these registers' values are UNKNOWN on reset, explicitly clear all */
+> > +	for (i = 0; i < _hwinfo.num_bw; i++)
 > > +		write_bw_reg(i, 0);
 > > +
 > > +	write_sysreg_s(0, FHWB_CTRL_EL1);
@@ -516,48 +515,44 @@ ar all */
 > > +{
 > > +	int ret;
 > > +
-> > +	ret =3D setup_hwinfo();
+> > +	ret = setup_hwinfo();
 > > +	if (ret < 0) {
->=20
-> As it's not obvious from the function name that the only thing it is doin=
-g is checking the cpu type, I'd move this error print
+> 
+> As it's not obvious from the function name that the only thing it is doing is checking the cpu type, I'd move this error print
 > into that function call or rename setup_hwinfo()
 
-I will remove this error print as following arnd's comment in a different t=
-hread.
+I will remove this error print as following arnd's comment in a different thread.
 
 Thanks,
 Misono
 
->=20
->=20
+> 
+> 
 > > +		pr_err("Unsupported CPU type\n");
 > > +		return ret;
 > > +	}
 > > +
-> > +	ret =3D alloc_map();
+> > +	ret = alloc_map();
 > > +	if (ret < 0)
 > > +		return ret;
 > > +
-> > +	ret =3D init_bb_info_cachep();
+> > +	ret = init_bb_info_cachep();
 > > +	if (ret < 0)
 > > +		goto out1;
 > > +
 > > +	/*
-> > +	 * Setup cpuhp callback to ensure each PE's resource will be initiali=
-zed
+> > +	 * Setup cpuhp callback to ensure each PE's resource will be initialized
 > > +	 * even if some PEs are offline at this point
 > > +	 */
-> > +	ret =3D cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "soc/fujitsu_hwb:onlin=
-e",
+> > +	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "soc/fujitsu_hwb:online",
 > > +		hwb_cpu_online, NULL);
 > > +	if (ret < 0) {
 > > +		pr_err("cpuhp setup failed: %d\n", ret);
 > > +		goto out2;
 > > +	}
-> > +	_hp_state =3D ret;
+> > +	_hp_state = ret;
 > > +
-> > +	ret =3D misc_register(&bar_miscdev);
+> > +	ret = misc_register(&bar_miscdev);
 > > +	if (ret < 0) {
 > > +		pr_err("misc_register failed: %d\n", ret);
 > > +		goto out3;
@@ -590,3 +585,8 @@ e",
 > > +MODULE_AUTHOR("FUJITSU LIMITED");
 > > +MODULE_DESCRIPTION("FUJITSU HPC Hardware Barrier Driver");
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
