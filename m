@@ -7,37 +7,39 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5A88C43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0C93C433E9
 	for <soc@archiver.kernel.org>; Fri, 15 Jan 2021 15:51:36 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 87CA2238EC; Fri, 15 Jan 2021 15:51:36 +0000 (UTC)
+	id 6D80C2389B; Fri, 15 Jan 2021 15:51:36 +0000 (UTC)
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3662B238E3
-	for <soc@kernel.org>; Fri, 15 Jan 2021 15:51:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3662B238E3
+	by mail.kernel.org (Postfix) with ESMTPS id 866442388E
+	for <soc@kernel.org>; Fri, 15 Jan 2021 15:51:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 866442388E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=ukl@pengutronix.de
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
 	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1l0RNu-0003OM-56; Fri, 15 Jan 2021 16:51:34 +0100
+	id 1l0RNs-0003NM-PD; Fri, 15 Jan 2021 16:51:32 +0100
 Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1l0RNt-0008Lc-Qt; Fri, 15 Jan 2021 16:51:33 +0100
+	id 1l0RNs-0008LN-Ee; Fri, 15 Jan 2021 16:51:32 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>
+	Olof Johansson <olof@lixom.net>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] MAINTAINERS: Remove deleted platform efm32
-Date: Fri, 15 Jan 2021 16:51:30 +0100
-Message-Id: <20210115155130.185010-8-u.kleine-koenig@pengutronix.de>
+	linux-clk@vger.kernel.org
+Subject: [PATCH v2 2/7] clk: Drop unused efm32gg driver
+Date: Fri, 15 Jan 2021 16:51:25 +0100
+Message-Id: <20210115155130.185010-3-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210115155130.185010-1-u.kleine-koenig@pengutronix.de>
 References: <20210115155130.185010-1-u.kleine-koenig@pengutronix.de>
@@ -49,32 +51,118 @@ X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: soc@kernel.org
 
-There are no files left to be maintained, to remove the maintainer
-entry, too.
+Support for this machine was just removed, so drop the now unused clk
+driver, too.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- MAINTAINERS | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/clk/Makefile      |  1 -
+ drivers/clk/clk-efm32gg.c | 84 ---------------------------------------
+ 2 files changed, 85 deletions(-)
+ delete mode 100644 drivers/clk/clk-efm32gg.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 546aa66428c9..93e56233c6de 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1807,13 +1807,6 @@ F:	drivers/firmware/turris-mox-rwtm.c
- F:	drivers/gpio/gpio-moxtet.c
- F:	include/linux/moxtet.h
- 
--ARM/ENERGY MICRO (SILICON LABS) EFM32 SUPPORT
--M:	Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
--R:	Pengutronix Kernel Team <kernel@pengutronix.de>
--L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--S:	Maintained
--N:	efm32
+diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+index dbdc590e7de3..a1197d753d82 100644
+--- a/drivers/clk/Makefile
++++ b/drivers/clk/Makefile
+@@ -27,7 +27,6 @@ obj-$(CONFIG_COMMON_CLK_CDCE706)	+= clk-cdce706.o
+ obj-$(CONFIG_COMMON_CLK_CDCE925)	+= clk-cdce925.o
+ obj-$(CONFIG_ARCH_CLPS711X)		+= clk-clps711x.o
+ obj-$(CONFIG_COMMON_CLK_CS2000_CP)	+= clk-cs2000-cp.o
+-obj-$(CONFIG_ARCH_EFM32)		+= clk-efm32gg.o
+ obj-$(CONFIG_ARCH_SPARX5)		+= clk-sparx5.o
+ obj-$(CONFIG_COMMON_CLK_FIXED_MMIO)	+= clk-fixed-mmio.o
+ obj-$(CONFIG_COMMON_CLK_FSL_FLEXSPI)	+= clk-fsl-flexspi.o
+diff --git a/drivers/clk/clk-efm32gg.c b/drivers/clk/clk-efm32gg.c
+deleted file mode 100644
+index 85beaacb4088..000000000000
+--- a/drivers/clk/clk-efm32gg.c
++++ /dev/null
+@@ -1,84 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Copyright (C) 2013 Pengutronix
+- * Uwe Kleine-Koenig <u.kleine-koenig@pengutronix.de>
+- */
+-#include <linux/io.h>
+-#include <linux/clk-provider.h>
+-#include <linux/of.h>
+-#include <linux/of_address.h>
+-#include <linux/slab.h>
 -
- ARM/EZX SMARTPHONES (A780, A910, A1200, E680, ROKR E2 and ROKR E6)
- M:	Robert Jarzmik <robert.jarzmik@free.fr>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+-#include <dt-bindings/clock/efm32-cmu.h>
+-
+-#define CMU_HFPERCLKEN0		0x44
+-#define CMU_MAX_CLKS		37
+-
+-static struct clk_hw_onecell_data *clk_data;
+-
+-static void __init efm32gg_cmu_init(struct device_node *np)
+-{
+-	int i;
+-	void __iomem *base;
+-	struct clk_hw **hws;
+-
+-	clk_data = kzalloc(struct_size(clk_data, hws, CMU_MAX_CLKS),
+-			   GFP_KERNEL);
+-
+-	if (!clk_data)
+-		return;
+-
+-	hws = clk_data->hws;
+-
+-	for (i = 0; i < CMU_MAX_CLKS; ++i)
+-		hws[i] = ERR_PTR(-ENOENT);
+-
+-	base = of_iomap(np, 0);
+-	if (!base) {
+-		pr_warn("Failed to map address range for efm32gg,cmu node\n");
+-		return;
+-	}
+-
+-	hws[clk_HFXO] = clk_hw_register_fixed_rate(NULL, "HFXO", NULL, 0,
+-						   48000000);
+-
+-	hws[clk_HFPERCLKUSART0] = clk_hw_register_gate(NULL, "HFPERCLK.USART0",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 0, 0, NULL);
+-	hws[clk_HFPERCLKUSART1] = clk_hw_register_gate(NULL, "HFPERCLK.USART1",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 1, 0, NULL);
+-	hws[clk_HFPERCLKUSART2] = clk_hw_register_gate(NULL, "HFPERCLK.USART2",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 2, 0, NULL);
+-	hws[clk_HFPERCLKUART0] = clk_hw_register_gate(NULL, "HFPERCLK.UART0",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 3, 0, NULL);
+-	hws[clk_HFPERCLKUART1] = clk_hw_register_gate(NULL, "HFPERCLK.UART1",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 4, 0, NULL);
+-	hws[clk_HFPERCLKTIMER0] = clk_hw_register_gate(NULL, "HFPERCLK.TIMER0",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 5, 0, NULL);
+-	hws[clk_HFPERCLKTIMER1] = clk_hw_register_gate(NULL, "HFPERCLK.TIMER1",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 6, 0, NULL);
+-	hws[clk_HFPERCLKTIMER2] = clk_hw_register_gate(NULL, "HFPERCLK.TIMER2",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 7, 0, NULL);
+-	hws[clk_HFPERCLKTIMER3] = clk_hw_register_gate(NULL, "HFPERCLK.TIMER3",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 8, 0, NULL);
+-	hws[clk_HFPERCLKACMP0] = clk_hw_register_gate(NULL, "HFPERCLK.ACMP0",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 9, 0, NULL);
+-	hws[clk_HFPERCLKACMP1] = clk_hw_register_gate(NULL, "HFPERCLK.ACMP1",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 10, 0, NULL);
+-	hws[clk_HFPERCLKI2C0] = clk_hw_register_gate(NULL, "HFPERCLK.I2C0",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 11, 0, NULL);
+-	hws[clk_HFPERCLKI2C1] = clk_hw_register_gate(NULL, "HFPERCLK.I2C1",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 12, 0, NULL);
+-	hws[clk_HFPERCLKGPIO] = clk_hw_register_gate(NULL, "HFPERCLK.GPIO",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 13, 0, NULL);
+-	hws[clk_HFPERCLKVCMP] = clk_hw_register_gate(NULL, "HFPERCLK.VCMP",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 14, 0, NULL);
+-	hws[clk_HFPERCLKPRS] = clk_hw_register_gate(NULL, "HFPERCLK.PRS",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 15, 0, NULL);
+-	hws[clk_HFPERCLKADC0] = clk_hw_register_gate(NULL, "HFPERCLK.ADC0",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 16, 0, NULL);
+-	hws[clk_HFPERCLKDAC0] = clk_hw_register_gate(NULL, "HFPERCLK.DAC0",
+-			"HFXO", 0, base + CMU_HFPERCLKEN0, 17, 0, NULL);
+-
+-	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_data);
+-}
+-CLK_OF_DECLARE(efm32ggcmu, "efm32gg,cmu", efm32gg_cmu_init);
 -- 
 2.29.2
 
