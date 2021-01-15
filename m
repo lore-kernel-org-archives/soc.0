@@ -2,51 +2,60 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44586C433E0
-	for <soc@archiver.kernel.org>; Fri, 15 Jan 2021 17:24:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EA92C433DB
+	for <soc@archiver.kernel.org>; Fri, 15 Jan 2021 17:24:47 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 2CD7C2343B; Fri, 15 Jan 2021 17:24:45 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CCA3D23382;
-	Fri, 15 Jan 2021 17:24:43 +0000 (UTC)
+	id 016F8235F7; Fri, 15 Jan 2021 17:24:47 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7A30F235DD;
+	Fri, 15 Jan 2021 17:24:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1610731485;
-	bh=n2hBOFeDu37LHCmefgAJ85SO0w5t39jbH+HguNvqYYw=;
+	s=k20201202; t=1610731486;
+	bh=OQsLRT05ZNF0znQn5QLJSm7CabOyjrFTY8JiQ2EO8c8=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JRIPnRBMOqJKCTQRhCz1KFVq5M0AIRVT12v2LHuUuV2pTkm49nHvwzRqrsVSdu1KH
-	 bLJgSRtJa5SOPW3y2IOnpodJMl0o2qilZFKRtr1XPPKystbhqlE/oLwDn/tBvv+LgY
-	 u6wXrCikv+USHWr2w2SE89zZsmwCSO6MlQo18N+p61dLY/E4anUkoc/ahGLURFvUIb
-	 2ahnudtJ0cp9fUE88rDo+r/FNGsqbLtJYlXb4HmXuL4jnvPtalROPlHjT2IC0YuLch
-	 VTz93M9Jzi6Rpq4HU8G7gPVRt6aLRWaZjj2ZT8j0kmLPdHOHWxObNFgt1XelhIneMa
-	 2/vBTGaiN0YMA==
+	b=S0ZJCLlmInHg4fRIX4Ti743cmpAqAAFElooOsJJcPVK/zBXmtCVItQ3vGJ5aCcpiz
+	 5NRqIw9pZrANNbQFd1U2AYOJoBYlDTKMqNOck8Gemf/sFlzKGVTK3su8R960SS6WLs
+	 9ajogrEWvXN7DxnMkOGA1R6vHdojhmeTrPNOChcNz0KATgcz67hnAlcK+6ylL0XcxA
+	 5SKkae7z87KXDOTKydeyzNuCl7JF2bJJEA3kwzgMbHVuP1rir/fHbMGVdEuuL8gNSg
+	 S8pY1YOkK3Ogx8mGG+FoKalZAVczE6KLbZt9FDxIH9jFXkVGrsuifTnnBa/tgHyuZ8
+	 oj+yFlIELDTkQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Daniel Palmer <daniel@0x0f.com>,
-	soc@kernel.org
+To: arm-soc <soc@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	arm-soc <arm@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: vendor-prefixes: Fix misordering introduced by honestar prefix
-Date: Fri, 15 Jan 2021 18:24:36 +0100
-Message-Id: <161073140457.707311.6221640071925135025.b4-ty@arndb.de>
+Subject: Re: [GIT PULL 1/2] Renesas ARM DT updates for v5.12
+Date: Fri, 15 Jan 2021 18:24:37 +0100
+Message-Id: <161073140429.707311.9431331517406763943.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201212012253.373074-1-daniel@0x0f.com>
-References: <20201212012253.373074-1-daniel@0x0f.com>
+In-Reply-To: <20210115094610.2334058-2-geert+renesas@glider.be>
+References: <20210115094610.2334058-1-geert+renesas@glider.be> <20210115094610.2334058-2-geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sat, 12 Dec 2020 10:22:53 +0900, Daniel Palmer wrote:
-> The prefix for honestar should come before honeywell.
+On Fri, 15 Jan 2021 10:46:09 +0100, Geert Uytterhoeven wrote:
+> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+> 
+>   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.12-tag1
+> 
+> [...]
 
-Applied to arm/dt, thanks!
+Merged into arm/dt, thanks!
 
-[1/1] dt-bindings: vendor-prefixes: Fix misordering introduced by honestar prefix
-      commit: f791f1a498fbef783e7711db9f597de7d85b661a
+merge commit: 2555a610906b741e2f399401e39111db91c07c6c
 
        Arnd
