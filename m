@@ -1,37 +1,54 @@
-Return-Path: <SRS0=eJPh=GS=fujitsu.com=misono.tomohiro@kernel.org>
+Return-Path: <SRS0=ftTf=GS=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49A70C433E0
-	for <soc@archiver.kernel.org>; Fri, 15 Jan 2021 11:12:51 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 14CC2236FB; Fri, 15 Jan 2021 11:12:51 +0000 (UTC)
-X-Greylist: delayed 65 seconds by postgrey-1.34 at mail.kernel.org; Fri, 15 Jan 2021 11:12:50 UTC
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0D665235F9
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=fujitsu.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=misono.tomohiro@fujitsu.com
-Received: from esa11.fujitsucc.c3s2.iphmx.com (esa11.fujitsucc.c3s2.iphmx.com [216.71.156.121])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75D3FC433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 15 Jan 2021 11:13:37 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0D665235F9;
-	Fri, 15 Jan 2021 11:12:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 2738823603
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 15 Jan 2021 11:13:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2738823603
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=fujitsu.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:In-Reply-To:References:Message-ID:Date:
+	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=bNSfNfrRIwVVWvPGTX5JTlPSNRfjd6LR3Gi9MH+JmRg=; b=nlFSmTm6euuVwaQZ/M0WMTHlE
+	U+blLaSfSQMNtzZRU4EDpv0luw6dekSAMD8p4f2q5kkPihVrcPZHNMpgeAUAKTxMvpFJuivd01gcW
+	cUONDD+kGg2YCLw91NOkxyfz37T7szu8IPNasImbNzNuBQ6SjgyKozr89qHS5gCKz6u4D1nuRP94d
+	uEluJXXBEJRjLjMlW2gS3XbR5HJlZh3WpiF5BVzcZn1WdLnnrg8vnu36mHxwlHxFo4okspA3Cu7l4
+	kKmPbWSkIvNunnfRi17Zxc3KDhLXyc4pUe7Wer9ZB/GbI9s85gK18BJcebysF6gdO4duTZ8cDpl6S
+	7DSXuPmNA==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l0N1J-0007N5-Ss; Fri, 15 Jan 2021 11:11:57 +0000
+Received: from esa11.fujitsucc.c3s2.iphmx.com ([216.71.156.121])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l0N1D-0007LY-Th
+ for linux-arm-kernel@lists.infradead.org; Fri, 15 Jan 2021 11:11:53 +0000
 IronPort-SDR: P5EwokHdyUs9UzVMuaYnmPYFv8gJfVgoLOi5HVIFrE+Hfm5QYvfbWio5k51dE6PDR4WIMqTXs9
  AclIxqiIPwFNqYvgoAeGWHVvI+sLXsb2rIjGnfUDCH6ZwERjcpXmWAEljdA0R/Swks80KTnZvz
  luqrytK8jBC9DkWix8AeVP9/xfPopC9NufbvHbLDXh/o2xGI/ecvXukvuDk7TMjr6BIz1C7I7h
  37P5rk9XJ4FJbDn03mI2nsYbL/Lo8RcfDdbkGe3ESrTvhVeBCqV3odbYaH83XfuoSFymtgUsxT
  tFY=
 X-IronPort-AV: E=McAfee;i="6000,8403,9864"; a="24545174"
-X-IronPort-AV: E=Sophos;i="5.79,349,1602514800"; 
-   d="scan'208";a="24545174"
-Received: from mail-ty1jpn01lp2050.outbound.protection.outlook.com (HELO JPN01-TY1-obe.outbound.protection.outlook.com) ([104.47.93.50])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2021 20:11:43 +0900
+X-IronPort-AV: E=Sophos;i="5.79,349,1602514800"; d="scan'208";a="24545174"
+Received: from mail-ty1jpn01lp2050.outbound.protection.outlook.com (HELO
+ JPN01-TY1-obe.outbound.protection.outlook.com) ([104.47.93.50])
+ by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 15 Jan 2021 20:11:43 +0900
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=HMaUuT5dxGnIKdoP7zs2btqIaYFbpwtrPSVZbWPl2Pl6AOBTU/5987Z6pzFlX2XHOofndlgkmv4g/vva1l20wrdVO4TH781zVqjtBeMRo9zpia3sf9kUtusAjMjfM9cx5B9+FXbJ0aBJS5uZaL9Q5243zZg5meHtROsx36tlCMV6E0fmgS6uZp5XJb+M8UCYqXHj97iLqwWQIYngqLd3V7nv1RHjephSMfARAud/LANv5Y0oFTllXMJWEJ3lTxj6yJ14mqmOiDsFabMks2HRlmjkO0AeRppmOeo7trfhCH4Ma/O88omvJE3y+19C0K79jYBXf5jKzlPwCzjkutF2bg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
  bh=a497YMnWWA5UqgJjAMTgrSxHtPSr/Y12pDoUP0e1wMk=;
@@ -55,11 +72,6 @@ Received: from OSBPR01MB4582.jpnprd01.prod.outlook.com
  11:11:39 +0000
 From: "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
 To: 'Arnd Bergmann' <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-CC: Mark Rutland <mark.rutland@arm.com>, Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>, SoC Team <soc@kernel.org>, Olof
- Johansson <olof@lixom.net>, Will Deacon <will@kernel.org>, Linux ARM
-	<linux-arm-kernel@lists.infradead.org>
 Subject: RE: [RFC PATCH 00/10] Add Fujitsu A64FX soc entry/hardware barrier
  driver
 Thread-Topic: [RFC PATCH 00/10] Add Fujitsu A64FX soc entry/hardware barrier
@@ -67,19 +79,17 @@ Thread-Topic: [RFC PATCH 00/10] Add Fujitsu A64FX soc entry/hardware barrier
 Thread-Index: AQHW5aq63O/w5e6x+kOClsfWvFvpM6odr2EAgAAY7YCABfnJ8IAATzYAgAE118A=
 Date: Fri, 15 Jan 2021 11:10:13 +0000
 Deferred-Delivery: Fri, 15 Jan 2021 11:11:12 +0000
-Message-ID:
- <OSBPR01MB45821D2CFA8285A3FFDE6B1CE5A70@OSBPR01MB4582.jpnprd01.prod.outlook.com>
+Message-ID: <OSBPR01MB45821D2CFA8285A3FFDE6B1CE5A70@OSBPR01MB4582.jpnprd01.prod.outlook.com>
 References: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
  <20210108125410.GA84941@C02TD0UTHF1T.local>
  <CAK8P3a34aPUwjAXoh20E-PT6vG6gbW_itAXVQAYrhsHZbzqRsQ@mail.gmail.com>
  <OSBPR01MB4582283E56A13D03A778150FE5AA0@OSBPR01MB4582.jpnprd01.prod.outlook.com>
  <CAK8P3a2BbCtZG=+fi1mtrhMtBKHcaZa=gvfiKJVdnsq6N3yG4A@mail.gmail.com>
-In-Reply-To:
- <CAK8P3a2BbCtZG=+fi1mtrhMtBKHcaZa=gvfiKJVdnsq6N3yG4A@mail.gmail.com>
+In-Reply-To: <CAK8P3a2BbCtZG=+fi1mtrhMtBKHcaZa=gvfiKJVdnsq6N3yG4A@mail.gmail.com>
 Accept-Language: ja-JP, en-US
 Content-Language: ja-JP
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
 x-shieldmailcheckermailid: 41dd7f68a53248baace3fccdee57a88c
 x-securitypolicycheck: OK by SHieldMailChecker v2.6.3
 authentication-results: kernel.org; dkim=none (message not signed)
@@ -88,17 +98,16 @@ x-originating-ip: [218.44.52.176]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-correlation-id: 40e78fe4-6697-44f1-ed4c-08d8b94654cd
 x-ms-traffictypediagnostic: OSBPR01MB1576:
-x-microsoft-antispam-prvs:
- <OSBPR01MB157665666629618AEE1DA174E5A70@OSBPR01MB1576.jpnprd01.prod.outlook.com>
+x-microsoft-antispam-prvs: <OSBPR01MB157665666629618AEE1DA174E5A70@OSBPR01MB1576.jpnprd01.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- J8X2ksida/jWlUES2/M9dQ3mxyNTUFNvkg5HVsXXtXwx95xO3EvzK4pFElRGCwLS5btGKtD5RFwvVv5JOovjAHTC0AdRN7rEkw3CPaWrxrUuCMgLhchtdpOA18d08dWfiIIVIRJu3clG8Wy+te91uIilQgZguorYmPvicsd6ZaFdx3Fp+vcAJNnEfE2eBYxNLWSrOHXIhTM9o/TUPLy9mGkfXoBeBh+zlUy/5S+EP6cl09Ytz4QdwMhiFr8Xh+DsmvrLeBywO7/zFivN93Qpr9uXt/hIbhqAxl0rOPjS2w6Q+dUtQnpxVz9MZ+VPWcmnquTSnolx2IL/k4+0hPIDaqeHsSAtRSSFKYAhhpsvjwxf618lKGTYLaOeKSExf6CjQzNaO9AfEcTMgfP8tb1CKkiPFNQXG142GekbajaLaADf7lAW2V6X2cTr/JFRgOuf
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB4582.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(39860400002)(366004)(346002)(136003)(396003)(83380400001)(7696005)(66556008)(6666004)(478600001)(5660300002)(76116006)(66446008)(66946007)(4326008)(6506007)(66476007)(8936002)(64756008)(9686003)(33656002)(54906003)(86362001)(8676002)(53546011)(316002)(85182001)(52536014)(186003)(2906002)(26005)(55016002)(6916009)(71200400001)(777600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata:
- =?utf-8?B?b2R0NjQyYWFxa0srVXVjS2VKQTlJWjBCcDNxeXg1d2ZLcTBtM3ZES2ZwNXFB?=
+x-microsoft-antispam-message-info: J8X2ksida/jWlUES2/M9dQ3mxyNTUFNvkg5HVsXXtXwx95xO3EvzK4pFElRGCwLS5btGKtD5RFwvVv5JOovjAHTC0AdRN7rEkw3CPaWrxrUuCMgLhchtdpOA18d08dWfiIIVIRJu3clG8Wy+te91uIilQgZguorYmPvicsd6ZaFdx3Fp+vcAJNnEfE2eBYxNLWSrOHXIhTM9o/TUPLy9mGkfXoBeBh+zlUy/5S+EP6cl09Ytz4QdwMhiFr8Xh+DsmvrLeBywO7/zFivN93Qpr9uXt/hIbhqAxl0rOPjS2w6Q+dUtQnpxVz9MZ+VPWcmnquTSnolx2IL/k4+0hPIDaqeHsSAtRSSFKYAhhpsvjwxf618lKGTYLaOeKSExf6CjQzNaO9AfEcTMgfP8tb1CKkiPFNQXG142GekbajaLaADf7lAW2V6X2cTr/JFRgOuf
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:OSBPR01MB4582.jpnprd01.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(4636009)(376002)(39860400002)(366004)(346002)(136003)(396003)(83380400001)(7696005)(66556008)(6666004)(478600001)(5660300002)(76116006)(66446008)(66946007)(4326008)(6506007)(66476007)(8936002)(64756008)(9686003)(33656002)(54906003)(86362001)(8676002)(53546011)(316002)(85182001)(52536014)(186003)(2906002)(26005)(55016002)(6916009)(71200400001)(777600001);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata: =?utf-8?B?b2R0NjQyYWFxa0srVXVjS2VKQTlJWjBCcDNxeXg1d2ZLcTBtM3ZES2ZwNXFB?=
  =?utf-8?B?SElFdk8vRXlRQ0hhak1WRVRzRGpRZ2ZpWUhUUjZNVXhFb2RpSG96bDZkdlpW?=
  =?utf-8?B?MFRiejFnby9BdzE2SWR4bGVJbVoxUGlrdGVWbHdyWGU2YUNPRzJFK3dDRVcr?=
  =?utf-8?B?SFVZSDd3NnM2YjhUVXRKbnlwdDR6ajQ0S0J1RlNUUG5HaEtJSGlEbFdsRElq?=
@@ -122,99 +131,130 @@ x-ms-exchange-antispam-messagedata:
  =?utf-8?B?eVhzWTJibVB3QWg4NzVJSW9zRkE1TTZsQ2lXMHhZTStENU1lQS9oaHh4UlQz?=
  =?utf-8?Q?EWOjw1mGmjYSs=3D?=
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-OriginatorOrg: fujitsu.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB4582.jpnprd01.prod.outlook.com
 X-MS-Exchange-CrossTenant-Network-Message-Id: 40e78fe4-6697-44f1-ed4c-08d8b94654cd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2021 11:11:39.3786
- (UTC)
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2021 11:11:39.3786 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: L6mgJZQf1ZfSXjW8eU6bxrEvygm4JZzuOOh0H8AklkN212Azf0/kLLskK4NQyzc2zQ4mQyQPgvS1b481RUsEUOG45LKxmi7Aj6njVgN4fEs=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB1576
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210115_061152_238751_D88D9A7C 
+X-CRM114-Status: GOOD (  42.75  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, Arnd Bergmann <arnd@arndb.de>,
+ Catalin Marinas <catalin.marinas@arm.com>, SoC Team <soc@kernel.org>,
+ Olof Johansson <olof@lixom.net>, Will Deacon <will@kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210115111013.KNWG3_kFLFmUQJ2_NJjQ5iKt-9O9Jebg3gs5t0f2QJo@z>
 
-PiBPbiBUdWUsIEphbiAxMiwgMjAyMSBhdCAxMToyNCBBTSBtaXNvbm8udG9tb2hpcm9AZnVqaXRz
-dS5jb20NCj4gPG1pc29uby50b21vaGlyb0BmdWppdHN1LmNvbT4gd3JvdGU6DQo+ID4gPiBPbiBG
-cmksIEphbiA4LCAyMDIxIGF0IDE6NTQgUE0gTWFyayBSdXRsYW5kIDxtYXJrLnJ1dGxhbmRAYXJt
-LmNvbT4gd3JvdGU6DQo+ID4gSG93ZXZlciwgSSBkb24ndCBrbm93IGFueSBvdGhlciBwcm9jZXNz
-b3JzIGhhdmluZyBzaW1pbGFyDQo+ID4gZmVhdHVyZXMgYXQgdGhpcyBwb2ludCBhbmQgaXQgaXMg
-aGFyZCB0byBwcm92aWRlIGNvbW1vbiBhYnN0cmFjdGlvbiBpbnRlcmZhY2UuDQo+ID4gSSB3b3Vs
-ZCBhcHByZWNpYXRlIHNob3VsZCBhbnlvbmUgaGF2ZSBhbnkgaW5mb3JtYXRpb24uDQo+IA0KPiBU
-aGUgc3BlY2lmaWNhdGlvbiB5b3UgcG9pbnRlZCB0byBtZW50aW9ucyB0aGUgU1BBUkM2NCBYSWZ4
-LCBzbw0KPiBhdCBhIG1pbmltdW0sIGEgdXNlciBpbnRlcmZhY2Ugc2hvdWxkIGJlIGRlc2lnbmVk
-IHRvIGFsc28gd29yayBvbg0KPiB3aGF0ZXZlciByZWdpc3Rlci1sZXZlbCBpbnRlcmZhY2UgdGhh
-dCBwcm92aWRlcy4NCg0KVGhvc2Ugb3VyIHByZXZpb3VzIENQVXMgaGF2ZSBoYXJkd2FyZSBiYXJy
-aWVyIGZ1bmN0aW9uIHRvbywgYnV0IHRoZXkgYXJlDQpub3QgY3VycmVudGx5IHVzZWQgKEkgYmVs
-aWV2ZSB0aGUgaGFyZHdhcmUgZGVzaWduIHNoYXJlcyBjb21tb24gaWRlYSBhbmQgDQp0aGlzIGRy
-aXZlciBsb2dpYy9pb2N0bCBpbnRlcmZhY2UgY291bGQgYmUgYXBwbGljYWJsZSB0byBib3RoKS4N
-Cg0KPiA+ID4gPiBTZWNvbmRseSwgdGhlIGludGVuZGVkIHVzYWdlIG1vZGVsIGFwcGVhcnMgdG8g
-ZXhwb3NlIHRoaXMgdG8gRUwwIGZvcg0KPiA+ID4gPiBkaXJlY3QgYWNjZXNzLCBhbmQgdGhlIGNv
-ZGUgc2VlbXMgdG8gZGVwZW5kIG9uIHRocmVhZHMgYmVpbmcgcGlubmVkLCBidXQNCj4gPiA+ID4g
-QUZBSUNUIHRoaXMgaXMgbm90IGVuZm9yY2VkIGFuZCB0aGVyZSBpcyBubyBwcm92aXNpb24gZm9y
-DQo+ID4gPiA+IGNvbnRleHQtc3dpdGNoLCB0aHJlYWQgbWlncmF0aW9uLCBvciBpbnRlcmFjdGlv
-biB3aXRoIHB0cmFjZS4gSSBmZWFyDQo+ID4gPiA+IHRoaXMgaXMgZ29pbmcgdG8gYmUgdmVyeSBm
-cmFnaWxlIGluIHByYWN0aWNlLCBhbmQgdGhhdCBleHRlbmRpbmcgdGhhdA0KPiA+ID4gPiBzdXBw
-b3J0IGluIGZ1dHVyZSB3aWxsIHJlcXVpcmUgbXVjaCBtb3JlIGNvbXBsZXhpdHkgdGhhbiBpcyBj
-dXJyZW50bHkNCj4gPiA+ID4gYXBwYXJlbnQsIHdpdGggcG90ZW50aWFsbHkgaW52YXNpdmUgY2hh
-bmdlcyB0byBhcmNoIGNvZGUuDQo+ID4gPg0KPiA+ID4gUmlnaHQsIHRoaXMgaXMgdGhlIG1haW4g
-cHJvYmxlbSBJIHNlZSwgdG9vLiBJIGhhZCBub3QgZXZlbiByZWFsaXplZA0KPiA+ID4gdGhhdCB0
-aGlzIHdpbGwgaGF2ZSB0byB0aWUgaW4gd2l0aCB1c2VyIHNwYWNlIHRocmVhZHMgaW4gc29tZSBm
-b3JtLCBidXQNCj4gPiA+IHlvdSBhcmUgcmlnaHQgdGhhdCBvbmNlIHRoaXMgaGFzIHRvIGludGVy
-YWN0IHdpdGggdGhlIENQVSBzY2hlZHVsZXIsDQo+ID4gPiBpdCBhbGwgYnJlYWtzIGRvd24uDQo+
-ID4NCj4gPiBUaGlzIG9ic2VydmF0aW9uIGlzIHJpZ2h0LiBJIHRob3VnaHQgYWRkaW5nIGNvbnRl
-eHQgc3dpdGNoIGV0Yy4gc3VwcG9ydCBmb3INCj4gPiBpbXBsZW1lbnRhdGlvbiBkZWZpbmVkIHJl
-Z2lzdGVycyByZXF1aXJlcyBjb3JlIGFyY2ggY29kZSBjaGFuZ2VzIGFuZA0KPiA+IGl0IGlzIGZh
-ciBsZXNzIGFjY2VwdGFibGUuIFNvLCBJIHRyaWVkIHRvIGNvbmZpbmUgY29kZSBjaGFuZ2UgaW4g
-YSBtb2R1bGUgd2l0aA0KPiA+IHRoZXNlIHJlc3RyaWN0aW9ucy4NCj4gDQo+IE15IGZlZWxpbmcg
-aXMgdGhhdCBoYXZpbmcgdGhlIGNvZGUgc2VwYXJhdGUgZnJvbSB3aGVyZSBpdCB3b3VsZCBiZWxv
-bmcNCj4gaW4gYW4gb3BlcmF0aW5nIHN5c3RlbSB0aGF0IHdhcyBkZXNpZ25lZCBzcGVjaWZpY2Fs
-bHkgZm9yIHRoaXMgZmVhdHVyZQ0KPiBlbmRzIHVwIGJlaW5nIG5vIGJldHRlciB0aGFuIHJld3Jp
-dGluZyB0aGUgY29yZSBzY2hlZHVsaW5nIGNvZGUuDQo+IA0KPiBBcyBNYXJrIHNhaWQsIGl0IG1h
-eSB3ZWxsIGJlIHRoYXQgbmVpdGhlciBhcHByb2FjaCB3b3VsZCBiZSBzdWZmaWNpZW50DQo+IGZv
-ciBhbiB1cHN0cmVhbSBtZXJnZS4gT24gdGhlIG90aGVyIGhhbmQsIGtlZXBpbmcgdGhlIGNvZGUg
-aW4gYQ0KPiBzZXBhcmF0ZSBsb2FkYWJsZSBtb2R1bGUgZG9lcyBtYWtlIG1vc3Qgc2Vuc2UgaWYg
-d2UgZW5kIHVwDQo+IG5vdCBtZXJnaW5nIGl0IGF0IGFsbCwgaW4gd2hpY2ggY2FzZSB0aGlzIGlz
-IHRoZSBlYXNpZXN0IHRvIHBvcnQNCj4gYmV0d2VlbiBrZXJuZWwgdmVyc2lvbnMuDQo+IA0KPiA+
-IFJlZ2FyZGluZyBkaXJlY3QgYWNjZXNzIGZyb20gRUwwLCBpdCBpcyBuZWNlc3NhcnkgZm9yIHJl
-YWxpemluZyBmYXN0IHN5bmNocm9uaXphdGlvbg0KPiA+IGFzIHRoaXMgZW5hYmxlcyBzeW5jaHJv
-bml6YXRpb24gbG9naWMgaW4gdXNlciBhcHBsaWNhdGlvbiBjaGVjayBpZiBhbGwgdGhyZWFkcyBo
-YXZlDQo+ID4gcmVhY2hlZCBhdCBzeW5jaHJvbml6YXRpb24gcG9pbnQgd2l0aG91dCBzd2l0Y2hp
-bmcgdG8ga2VybmVsLg0KPiANCj4gT2ssIEkgc2VlLg0KPiANCj4gPiBBbHNvLCBJdCBpcyBjb21t
-b24gdXNhZ2UgdGhhdCBlYWNoIHJ1bm5pbmcgdGhyZWFkIGlzIGJvdW5kIHRvIG9uZSBQRSBpbg0K
-PiA+IG11bHRpLXRocmVhZGVkIEhQQyBhcHBsaWNhdGlvbnMuDQo+IA0KPiBJIHRoaW5rIHRoZSBl
-eHBlY3RhdGlvbiB0aGF0IGFsbCB0aHJlYWRzIGFyZSBib3VuZCB0byBhIHBoeXNpY2FsIENQVQ0K
-PiBtYWtlcyBzZW5zZSBmb3IgdXNpbmcgdGhpcyBmZWF0dXJlLCBidXQgSSB0aGluayBpdCB3b3Vs
-ZCBiZSBuZWNlc3NhcnkNCj4gdG8gZW5mb3JjZSB0aGF0LCBlLmcuIGJ5IGFsbG93aW5nIG9ubHkg
-dGhyZWFkcyB0byBlbmFibGUgaXQgYWZ0ZXIgdGhleQ0KPiBhcmUgaXNvbGF0ZWQgdG8gYSBub24t
-c2hhcmVkIENQVSwgYW5kIGF1dG9tYXRpY2FsbHkgZGlzYWJsaW5nIGl0DQo+IGlmIHRoZSBDUFUg
-aXNvbGF0aW9uIGlzIGNoYW5nZWQuDQo+IA0KPiBGb3IgdGhlIHVzZXIgc3BhY2UgaW50ZXJmYWNl
-LCBzb21ldGhpbmcgYmFzZWQgb24gcHJvY2VzcyBJRHMNCj4gc2VlbXMgdG8gbWFrZSBtb3JlIHNl
-bnNlIHRvIG1lIHRoYW4gc29tZXRoaW5nIGJhc2VkIG9uIENQVQ0KPiBudW1iZXJzLiBBbGwgb2Yg
-dGhlIGFib3ZlIGRvZXMgcmVxdWlyZSBzb21lIGxldmVsIG9mIGludGVncmF0aW9uDQo+IHdpdGgg
-dGhlIGNvcmUga2VybmVsIG9mIGNvdXJzZS4NCj4gDQo+IEkgdGhpbmsgdGhlIG5leHQgc3RlcCB3
-b3VsZCBiZSB0byB0cnkgdG8gY29tZSB1cCB3aXRoIGEgaGlnaC1sZXZlbA0KPiB1c2VyIGludGVy
-ZmFjZSBkZXNpZ24gdGhhdCBoYXMgYSBjaGFuY2UgdG8gZ2V0IG1lcmdlZCwgcmF0aGVyIHRoYW4N
-Cj4gYWRkcmVzc2luZyB0aGUgcmV2aWV3IGNvbW1lbnRzIGZvciB0aGUgY3VycmVudCBpbXBsZW1l
-bnRhdGlvbi4NCg0KVW5kZXJzdG9vZC4gT25lIHF1ZXN0aW9uIGlzIHRoYXQgaGlnaC1sZXZlbCBp
-bnRlcmZhY2Ugc3VjaCBhcyBwcm9jZXNzDQpiYXNlZCBjb250cm9sIGNvdWxkIHNvbHZlIHNldmVy
-YWwgcHJvYmxlbXMgKGkuZS4gYWNjZXNzIGNvbnRyb2wvZm9yY2UgYmluZGluZyksDQpJIGNhbm5v
-dCBlbGltaW5hdGUgYWNjZXNzIHRvIElNUC1ERUYgcmVnaXN0ZXJzIGZyb20gRUwwIGFzIEkgZXhh
-cGxhaW5lZA0KYWJvdmUuIElzIGl0IGFjY2VwdGFibGUgaW4geW91ciBzZW5zZT8NCg0KPiBBc2lk
-ZSBmcm9tIHRoZSB1c2VyIGludGVyZmFjZSBxdWVzdGlvbiwgaXQgd291bGQgYmUgZ29vZCB0bw0K
-PiB1bmRlcnN0YW5kIHRoZSBwZXJmb3JtYW5jZSBpbXBhY3Qgb2YgdGhlIGZlYXR1cmUuDQo+IEFz
-IEkgdW5kZXJzdGFuZCBpdCwgdGhlIGVudGlyZSBwdXJwb3NlIGlzIHRvIG1ha2UgdGhpbmdzIGZh
-c3Rlciwgc28NCj4gdG8gcHV0IGl0IGluIHBlcnNwZWN0aXZlIGNvbXBhcmVkIHRvIHRoZSBidXJk
-ZW4gb2YgYWRkaW5nIGFuDQo+IGludGVyZmFjZSwgdGhlcmUgc2hvdWxkIGJlIHNvbWUgbnVtYmVy
-czogV2hhdCBhcmUgdGhlIGtpbmRzIG9mDQo+IGFwcGxpY2F0aW9ucyB0aGF0IHdvdWxkIHVzZSBp
-dCBpbiBwcmFjdGljZSwgYW5kIGhvdyBtdWNoIGZhc3RlciBhcmUNCj4gdGhleSBjb21wYXJlZCB0
-byBub3QgaGF2aW5nIGl0Pw0KDQpNaWNyb2JlbmNobWFyayBzaG93cyBpdCB0YWtlcyBhcm91bmQg
-MjUwbnMgZm9yIDEgc3luY2hyb25pemF0aW9uIGZvcg0KMTIgUEVzIHdpdGggaGFyZHdhcmUgYmFy
-cmllciBhbmQgaXQgaXMgbXVsdGlwbGUgdGltZXMgZmFzdGVyIHRoYW4gc29mdHdhcmUNCmJhcnJp
-ZXIgKG9ubHkgbWVhc3VyaW5nIGNvcmUgc3luY2hyb25pemF0aW9uIGxvZ2ljIGFuZCBleGNsdWRp
-bmcgc2V0dXAgdGltZSkuDQpJIGRvbid0IGhhdmUgYXBwbGljYXRpb24gcmVzdWx0cyBhdCB0aGlz
-IHBvaW50IGFuZCB3aWxsIHNoYXJlIHdoZW4gSSBjb3VsZCBnZXQgc29tZS4NCg0KUmVnYXJkcywN
-ClRvbW9oaXJvDQo=
+> On Tue, Jan 12, 2021 at 11:24 AM misono.tomohiro@fujitsu.com
+> <misono.tomohiro@fujitsu.com> wrote:
+> > > On Fri, Jan 8, 2021 at 1:54 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> > However, I don't know any other processors having similar
+> > features at this point and it is hard to provide common abstraction interface.
+> > I would appreciate should anyone have any information.
+> 
+> The specification you pointed to mentions the SPARC64 XIfx, so
+> at a minimum, a user interface should be designed to also work on
+> whatever register-level interface that provides.
+
+Those our previous CPUs have hardware barrier function too, but they are
+not currently used (I believe the hardware design shares common idea and 
+this driver logic/ioctl interface could be applicable to both).
+
+> > > > Secondly, the intended usage model appears to expose this to EL0 for
+> > > > direct access, and the code seems to depend on threads being pinned, but
+> > > > AFAICT this is not enforced and there is no provision for
+> > > > context-switch, thread migration, or interaction with ptrace. I fear
+> > > > this is going to be very fragile in practice, and that extending that
+> > > > support in future will require much more complexity than is currently
+> > > > apparent, with potentially invasive changes to arch code.
+> > >
+> > > Right, this is the main problem I see, too. I had not even realized
+> > > that this will have to tie in with user space threads in some form, but
+> > > you are right that once this has to interact with the CPU scheduler,
+> > > it all breaks down.
+> >
+> > This observation is right. I thought adding context switch etc. support for
+> > implementation defined registers requires core arch code changes and
+> > it is far less acceptable. So, I tried to confine code change in a module with
+> > these restrictions.
+> 
+> My feeling is that having the code separate from where it would belong
+> in an operating system that was designed specifically for this feature
+> ends up being no better than rewriting the core scheduling code.
+> 
+> As Mark said, it may well be that neither approach would be sufficient
+> for an upstream merge. On the other hand, keeping the code in a
+> separate loadable module does make most sense if we end up
+> not merging it at all, in which case this is the easiest to port
+> between kernel versions.
+> 
+> > Regarding direct access from EL0, it is necessary for realizing fast synchronization
+> > as this enables synchronization logic in user application check if all threads have
+> > reached at synchronization point without switching to kernel.
+> 
+> Ok, I see.
+> 
+> > Also, It is common usage that each running thread is bound to one PE in
+> > multi-threaded HPC applications.
+> 
+> I think the expectation that all threads are bound to a physical CPU
+> makes sense for using this feature, but I think it would be necessary
+> to enforce that, e.g. by allowing only threads to enable it after they
+> are isolated to a non-shared CPU, and automatically disabling it
+> if the CPU isolation is changed.
+> 
+> For the user space interface, something based on process IDs
+> seems to make more sense to me than something based on CPU
+> numbers. All of the above does require some level of integration
+> with the core kernel of course.
+> 
+> I think the next step would be to try to come up with a high-level
+> user interface design that has a chance to get merged, rather than
+> addressing the review comments for the current implementation.
+
+Understood. One question is that high-level interface such as process
+based control could solve several problems (i.e. access control/force binding),
+I cannot eliminate access to IMP-DEF registers from EL0 as I exaplained
+above. Is it acceptable in your sense?
+
+> Aside from the user interface question, it would be good to
+> understand the performance impact of the feature.
+> As I understand it, the entire purpose is to make things faster, so
+> to put it in perspective compared to the burden of adding an
+> interface, there should be some numbers: What are the kinds of
+> applications that would use it in practice, and how much faster are
+> they compared to not having it?
+
+Microbenchmark shows it takes around 250ns for 1 synchronization for
+12 PEs with hardware barrier and it is multiple times faster than software
+barrier (only measuring core synchronization logic and excluding setup time).
+I don't have application results at this point and will share when I could get some.
+
+Regards,
+Tomohiro
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
