@@ -1,65 +1,80 @@
-Return-Path: <SRS0=UEPf=GV=linaro.org=daniel.lezcano@kernel.org>
+Return-Path: <SRS0=lYfA=GV=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4700EC433E0
-	for <soc@archiver.kernel.org>; Mon, 18 Jan 2021 15:18:16 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 0FCE922BF3; Mon, 18 Jan 2021 15:18:16 +0000 (UTC)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA6FCC433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 18 Jan 2021 15:19:42 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8824022BEA
-	for <soc@kernel.org>; Mon, 18 Jan 2021 15:18:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8824022BEA
+	by mail.kernel.org (Postfix) with ESMTPS id 8C4CF223DB
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 18 Jan 2021 15:19:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8C4CF223DB
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=daniel.lezcano@linaro.org
-Received: by mail-wr1-f49.google.com with SMTP id q18so16840056wrn.1
-        for <soc@kernel.org>; Mon, 18 Jan 2021 07:18:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Qjv19k04grVyL++mTjxAHL93Qat5biYKcYp1ydD3ptI=;
-        b=I1zpemq8aCg+0SDHGJY0EEKfjaQcKt+Q+zB2gCM1YtR08I9dJpgey+b4+paKPk+qC0
-         tEvlVLfUZ0v76TT0Ul+GVuTtqsRxcTk15iVRtT2QZXBvfJkDecHKYvFbmqcDEdCy4vqf
-         SGmgMRfzldXkvH0uQggHwTS8Yq3CJc5uJ1YNK5YGWG7lCqROV4HdjBFZd0aZN2ILoUJP
-         PTysyygdtsa4K0UBwJ1qr6Ax/NoxRcns3QvUiRY1PH2dXJnUfnm/E9OSbWKlj+U7hK1A
-         1jQXryzulBA12ChwV6lwQrUCArj5Aw4NwTQd8L50s/VQDh59NfWXCaPkV6dtP7agWnJr
-         LOMg==
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
+	References:To:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=LGZ0tGNmAYay7nw+KAopQBio7SiluUYA/2dQ/+GmlX8=; b=vt4CafJE7Alvkei3JDvS4OANG
+	2HnQ5Or17MQ0MayfH6hezqTt9HcsRkulTAdJzWvNZMm21KkdUucfUoX92zyP8+qIpis0XePSpSx0s
+	13816+xIyvX+gg9ezRTK7/LbB0yr5lGnp1422/BprNGbGJ6pa4dzdwiemVNpt+fuFkk0BRzmb3vm6
+	wXslcHuu5YrKgx96CXE+vhHfagfW60zA3wc73L+0sggPPbOwA9ElkT5Os03e/viETSx2irCKljkN5
+	12bOhLE783ztxfAWQepKFoqW3KWqUSjvlpRn0hHtmn1VmqCW/Yl09meDMKWtT3harLFyXl6kg37V2
+	FpL2i6CwA==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l1WIM-0003PX-Pp; Mon, 18 Jan 2021 15:18:18 +0000
+Received: from mail-wr1-x430.google.com ([2a00:1450:4864:20::430])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l1WIJ-0003P6-Iz
+ for linux-arm-kernel@lists.infradead.org; Mon, 18 Jan 2021 15:18:16 +0000
+Received: by mail-wr1-x430.google.com with SMTP id 91so16823785wrj.7
+ for <linux-arm-kernel@lists.infradead.org>;
+ Mon, 18 Jan 2021 07:18:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
+ h=subject:to:cc:references:from:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=Qjv19k04grVyL++mTjxAHL93Qat5biYKcYp1ydD3ptI=;
+ b=I1zpemq8aCg+0SDHGJY0EEKfjaQcKt+Q+zB2gCM1YtR08I9dJpgey+b4+paKPk+qC0
+ tEvlVLfUZ0v76TT0Ul+GVuTtqsRxcTk15iVRtT2QZXBvfJkDecHKYvFbmqcDEdCy4vqf
+ SGmgMRfzldXkvH0uQggHwTS8Yq3CJc5uJ1YNK5YGWG7lCqROV4HdjBFZd0aZN2ILoUJP
+ PTysyygdtsa4K0UBwJ1qr6Ax/NoxRcns3QvUiRY1PH2dXJnUfnm/E9OSbWKlj+U7hK1A
+ 1jQXryzulBA12ChwV6lwQrUCArj5Aw4NwTQd8L50s/VQDh59NfWXCaPkV6dtP7agWnJr
+ LOMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Qjv19k04grVyL++mTjxAHL93Qat5biYKcYp1ydD3ptI=;
-        b=WX99F+Qy0jNBZFLnRNs0XLmnm4FXkq91aw1hqpl85CnVOELEi73gMrf2/jE+OsW7Vg
-         5B6VNCagLufTbsX2xk/6qYcQZEkKSxTAdl+byF8MZNvz+iUm31SrVfN5tW01Xw6nzkSJ
-         A6zj/P1iDuaJ2kRkggcGEjz17LvJuV8wxpoRZ+4bdXEW4y9yevRe1GvaC7I1aZObWpEb
-         VESL5LCK60TsHIzLYIplSJNuOtfdngnVUpd5zuFKaJLp2U6tokm24qzmPstNssOJMZZY
-         S5m2eOuvvFLboODypL1LRY/pNo/QOK+WYeEagyt4hMMOwXfNOl1ELNH0iDvesQnxA0Bx
-         mjNQ==
-X-Gm-Message-State: AOAM533J/NFq1V+e1p0lOa1jgLLG7nuaXBUkY7Y6o/iqvJhI/6R78pEF
-	zt0uaNVTwh2IGlAFCgtMjCJaSQ==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=Qjv19k04grVyL++mTjxAHL93Qat5biYKcYp1ydD3ptI=;
+ b=cwtZFhRRCrDjvj4Ygukb9Gty+MC8EfgQUIZhMRZEKzsJcO37w+gCh5VQFlLcv7bU/6
+ AW2n8xT6EXadpdkVZiQsLgB784aCZCItURCK6bWWcohO9i10bBcwaqN08wQ51RvDLC1r
+ 7R/wUXXH1Y2VXGY1I8Bo4TPZrNwyArh/zxkr9SqBlizQTQeiLyg8JjvcA37KCKeTxZI7
+ /vvZ2p0auB2+kXjp+F3SSBzIiLn5KQAgK5zLLmXC9zisFGlrnITE/dy5c0c6xwyf3odz
+ 7iLNgEgpFgod0Uy9gh+ONzGYVZYP1iNXIHxV1J/XaScsjH/3rUjyUM5juWAcNfeBTIkv
+ /r7w==
+X-Gm-Message-State: AOAM532qFBONykZw/LUsNB+Ydl/NSSmdG0KrZNSR7MF/UUWdQAM+iT7f
+ QC6L1T2zPwaq31dSACQeNKQVIg==
 X-Google-Smtp-Source: ABdhPJwVHHQHp310ADSltNPgvjnrJmusCQ/7Hb54/nsBkXvHxD5fLzlVJ/FN/rWwpNex5WPhTvXEcw==
-X-Received: by 2002:a5d:4a09:: with SMTP id m9mr26699271wrq.359.1610983093752;
-        Mon, 18 Jan 2021 07:18:13 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:2095:8614:d69:136f? ([2a01:e34:ed2f:f020:2095:8614:d69:136f])
-        by smtp.googlemail.com with ESMTPSA id l8sm7169275wmi.8.2021.01.18.07.18.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jan 2021 07:18:13 -0800 (PST)
+X-Received: by 2002:a5d:4a09:: with SMTP id m9mr26699271wrq.359.1610983093752; 
+ Mon, 18 Jan 2021 07:18:13 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:2095:8614:d69:136f?
+ ([2a01:e34:ed2f:f020:2095:8614:d69:136f])
+ by smtp.googlemail.com with ESMTPSA id l8sm7169275wmi.8.2021.01.18.07.18.12
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 18 Jan 2021 07:18:13 -0800 (PST)
 Subject: Re: [PATCH v2 3/7] clocksource: Drop unused efm32 timer code
 To: =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
  Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  Thomas Gleixner <tglx@linutronix.de>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
- kernel@pengutronix.de, linux-kernel@vger.kernel.org
 References: <20210115155130.185010-1-u.kleine-koenig@pengutronix.de>
  <20210115155130.185010-4-u.kleine-koenig@pengutronix.de>
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
@@ -69,347 +84,204 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
 In-Reply-To: <20210115155130.185010-4-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210118_101815_686194_25E4DABD 
+X-CRM114-Status: GOOD (  28.03  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210118151811.gtCzTh_id3zC_3Jyuq4TUOAhk04K8e_LjoqWw68xPv8@z>
 
-On 15/01/2021 16:51, Uwe Kleine-König wrote:
-> Support for this machine was just removed, so drop the now unused timer
-> code, too.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-
-Shall I take it through my tree ?
-
-> ---
->  drivers/clocksource/Kconfig       |   9 -
->  drivers/clocksource/Makefile      |   1 -
->  drivers/clocksource/timer-efm32.c | 278 ------------------------------
->  3 files changed, 288 deletions(-)
->  delete mode 100644 drivers/clocksource/timer-efm32.c
-> 
-> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-> index 14c7c4712478..1416a32140c5 100644
-> --- a/drivers/clocksource/Kconfig
-> +++ b/drivers/clocksource/Kconfig
-> @@ -242,15 +242,6 @@ config INTEGRATOR_AP_TIMER
->  	help
->  	  Enables support for the Integrator-AP timer.
->  
-> -config CLKSRC_EFM32
-> -	bool "Clocksource for Energy Micro's EFM32 SoCs" if !ARCH_EFM32
-> -	depends on OF && ARM && (ARCH_EFM32 || COMPILE_TEST)
-> -	select CLKSRC_MMIO
-> -	default ARCH_EFM32
-> -	help
-> -	  Support to use the timers of EFM32 SoCs as clock source and clock
-> -	  event device.
-> -
->  config CLKSRC_LPC32XX
->  	bool "Clocksource for LPC32XX" if COMPILE_TEST
->  	depends on HAS_IOMEM
-> diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
-> index 3c75cbbf8533..08173383f2d9 100644
-> --- a/drivers/clocksource/Makefile
-> +++ b/drivers/clocksource/Makefile
-> @@ -43,7 +43,6 @@ obj-$(CONFIG_VT8500_TIMER)	+= timer-vt8500.o
->  obj-$(CONFIG_NSPIRE_TIMER)	+= timer-zevio.o
->  obj-$(CONFIG_BCM_KONA_TIMER)	+= bcm_kona_timer.o
->  obj-$(CONFIG_CADENCE_TTC_TIMER)	+= timer-cadence-ttc.o
-> -obj-$(CONFIG_CLKSRC_EFM32)	+= timer-efm32.o
->  obj-$(CONFIG_CLKSRC_STM32)	+= timer-stm32.o
->  obj-$(CONFIG_CLKSRC_STM32_LP)	+= timer-stm32-lp.o
->  obj-$(CONFIG_CLKSRC_EXYNOS_MCT)	+= exynos_mct.o
-> diff --git a/drivers/clocksource/timer-efm32.c b/drivers/clocksource/timer-efm32.c
-> deleted file mode 100644
-> index 441a4b916841..000000000000
-> --- a/drivers/clocksource/timer-efm32.c
-> +++ /dev/null
-> @@ -1,278 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0-only
-> -/*
-> - * Copyright (C) 2013 Pengutronix
-> - * Uwe Kleine-Koenig <u.kleine-koenig@pengutronix.de>
-> - */
-> -
-> -#define pr_fmt(fmt)	KBUILD_MODNAME ": " fmt
-> -
-> -#include <linux/kernel.h>
-> -#include <linux/clocksource.h>
-> -#include <linux/clockchips.h>
-> -#include <linux/irq.h>
-> -#include <linux/interrupt.h>
-> -#include <linux/of.h>
-> -#include <linux/of_address.h>
-> -#include <linux/of_irq.h>
-> -#include <linux/clk.h>
-> -
-> -#define TIMERn_CTRL			0x00
-> -#define TIMERn_CTRL_PRESC(val)			(((val) & 0xf) << 24)
-> -#define TIMERn_CTRL_PRESC_1024			TIMERn_CTRL_PRESC(10)
-> -#define TIMERn_CTRL_CLKSEL(val)			(((val) & 0x3) << 16)
-> -#define TIMERn_CTRL_CLKSEL_PRESCHFPERCLK	TIMERn_CTRL_CLKSEL(0)
-> -#define TIMERn_CTRL_OSMEN			0x00000010
-> -#define TIMERn_CTRL_MODE(val)			(((val) & 0x3) <<  0)
-> -#define TIMERn_CTRL_MODE_UP			TIMERn_CTRL_MODE(0)
-> -#define TIMERn_CTRL_MODE_DOWN			TIMERn_CTRL_MODE(1)
-> -
-> -#define TIMERn_CMD			0x04
-> -#define TIMERn_CMD_START			0x00000001
-> -#define TIMERn_CMD_STOP				0x00000002
-> -
-> -#define TIMERn_IEN			0x0c
-> -#define TIMERn_IF			0x10
-> -#define TIMERn_IFS			0x14
-> -#define TIMERn_IFC			0x18
-> -#define TIMERn_IRQ_UF				0x00000002
-> -
-> -#define TIMERn_TOP			0x1c
-> -#define TIMERn_CNT			0x24
-> -
-> -struct efm32_clock_event_ddata {
-> -	struct clock_event_device evtdev;
-> -	void __iomem *base;
-> -	unsigned periodic_top;
-> -};
-> -
-> -static int efm32_clock_event_shutdown(struct clock_event_device *evtdev)
-> -{
-> -	struct efm32_clock_event_ddata *ddata =
-> -		container_of(evtdev, struct efm32_clock_event_ddata, evtdev);
-> -
-> -	writel_relaxed(TIMERn_CMD_STOP, ddata->base + TIMERn_CMD);
-> -	return 0;
-> -}
-> -
-> -static int efm32_clock_event_set_oneshot(struct clock_event_device *evtdev)
-> -{
-> -	struct efm32_clock_event_ddata *ddata =
-> -		container_of(evtdev, struct efm32_clock_event_ddata, evtdev);
-> -
-> -	writel_relaxed(TIMERn_CMD_STOP, ddata->base + TIMERn_CMD);
-> -	writel_relaxed(TIMERn_CTRL_PRESC_1024 |
-> -		       TIMERn_CTRL_CLKSEL_PRESCHFPERCLK |
-> -		       TIMERn_CTRL_OSMEN |
-> -		       TIMERn_CTRL_MODE_DOWN,
-> -		       ddata->base + TIMERn_CTRL);
-> -	return 0;
-> -}
-> -
-> -static int efm32_clock_event_set_periodic(struct clock_event_device *evtdev)
-> -{
-> -	struct efm32_clock_event_ddata *ddata =
-> -		container_of(evtdev, struct efm32_clock_event_ddata, evtdev);
-> -
-> -	writel_relaxed(TIMERn_CMD_STOP, ddata->base + TIMERn_CMD);
-> -	writel_relaxed(ddata->periodic_top, ddata->base + TIMERn_TOP);
-> -	writel_relaxed(TIMERn_CTRL_PRESC_1024 |
-> -		       TIMERn_CTRL_CLKSEL_PRESCHFPERCLK |
-> -		       TIMERn_CTRL_MODE_DOWN,
-> -		       ddata->base + TIMERn_CTRL);
-> -	writel_relaxed(TIMERn_CMD_START, ddata->base + TIMERn_CMD);
-> -	return 0;
-> -}
-> -
-> -static int efm32_clock_event_set_next_event(unsigned long evt,
-> -					    struct clock_event_device *evtdev)
-> -{
-> -	struct efm32_clock_event_ddata *ddata =
-> -		container_of(evtdev, struct efm32_clock_event_ddata, evtdev);
-> -
-> -	writel_relaxed(TIMERn_CMD_STOP, ddata->base + TIMERn_CMD);
-> -	writel_relaxed(evt, ddata->base + TIMERn_CNT);
-> -	writel_relaxed(TIMERn_CMD_START, ddata->base + TIMERn_CMD);
-> -
-> -	return 0;
-> -}
-> -
-> -static irqreturn_t efm32_clock_event_handler(int irq, void *dev_id)
-> -{
-> -	struct efm32_clock_event_ddata *ddata = dev_id;
-> -
-> -	writel_relaxed(TIMERn_IRQ_UF, ddata->base + TIMERn_IFC);
-> -
-> -	ddata->evtdev.event_handler(&ddata->evtdev);
-> -
-> -	return IRQ_HANDLED;
-> -}
-> -
-> -static struct efm32_clock_event_ddata clock_event_ddata = {
-> -	.evtdev = {
-> -		.name = "efm32 clockevent",
-> -		.features = CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_PERIODIC,
-> -		.set_state_shutdown = efm32_clock_event_shutdown,
-> -		.set_state_periodic = efm32_clock_event_set_periodic,
-> -		.set_state_oneshot = efm32_clock_event_set_oneshot,
-> -		.set_next_event = efm32_clock_event_set_next_event,
-> -		.rating = 200,
-> -	},
-> -};
-> -
-> -static int __init efm32_clocksource_init(struct device_node *np)
-> -{
-> -	struct clk *clk;
-> -	void __iomem *base;
-> -	unsigned long rate;
-> -	int ret;
-> -
-> -	clk = of_clk_get(np, 0);
-> -	if (IS_ERR(clk)) {
-> -		ret = PTR_ERR(clk);
-> -		pr_err("failed to get clock for clocksource (%d)\n", ret);
-> -		goto err_clk_get;
-> -	}
-> -
-> -	ret = clk_prepare_enable(clk);
-> -	if (ret) {
-> -		pr_err("failed to enable timer clock for clocksource (%d)\n",
-> -		       ret);
-> -		goto err_clk_enable;
-> -	}
-> -	rate = clk_get_rate(clk);
-> -
-> -	base = of_iomap(np, 0);
-> -	if (!base) {
-> -		ret = -EADDRNOTAVAIL;
-> -		pr_err("failed to map registers for clocksource\n");
-> -		goto err_iomap;
-> -	}
-> -
-> -	writel_relaxed(TIMERn_CTRL_PRESC_1024 |
-> -		       TIMERn_CTRL_CLKSEL_PRESCHFPERCLK |
-> -		       TIMERn_CTRL_MODE_UP, base + TIMERn_CTRL);
-> -	writel_relaxed(TIMERn_CMD_START, base + TIMERn_CMD);
-> -
-> -	ret = clocksource_mmio_init(base + TIMERn_CNT, "efm32 timer",
-> -				    DIV_ROUND_CLOSEST(rate, 1024), 200, 16,
-> -				    clocksource_mmio_readl_up);
-> -	if (ret) {
-> -		pr_err("failed to init clocksource (%d)\n", ret);
-> -		goto err_clocksource_init;
-> -	}
-> -
-> -	return 0;
-> -
-> -err_clocksource_init:
-> -
-> -	iounmap(base);
-> -err_iomap:
-> -
-> -	clk_disable_unprepare(clk);
-> -err_clk_enable:
-> -
-> -	clk_put(clk);
-> -err_clk_get:
-> -
-> -	return ret;
-> -}
-> -
-> -static int __init efm32_clockevent_init(struct device_node *np)
-> -{
-> -	struct clk *clk;
-> -	void __iomem *base;
-> -	unsigned long rate;
-> -	int irq;
-> -	int ret;
-> -
-> -	clk = of_clk_get(np, 0);
-> -	if (IS_ERR(clk)) {
-> -		ret = PTR_ERR(clk);
-> -		pr_err("failed to get clock for clockevent (%d)\n", ret);
-> -		goto err_clk_get;
-> -	}
-> -
-> -	ret = clk_prepare_enable(clk);
-> -	if (ret) {
-> -		pr_err("failed to enable timer clock for clockevent (%d)\n",
-> -		       ret);
-> -		goto err_clk_enable;
-> -	}
-> -	rate = clk_get_rate(clk);
-> -
-> -	base = of_iomap(np, 0);
-> -	if (!base) {
-> -		ret = -EADDRNOTAVAIL;
-> -		pr_err("failed to map registers for clockevent\n");
-> -		goto err_iomap;
-> -	}
-> -
-> -	irq = irq_of_parse_and_map(np, 0);
-> -	if (!irq) {
-> -		ret = -ENOENT;
-> -		pr_err("failed to get irq for clockevent\n");
-> -		goto err_get_irq;
-> -	}
-> -
-> -	writel_relaxed(TIMERn_IRQ_UF, base + TIMERn_IEN);
-> -
-> -	clock_event_ddata.base = base;
-> -	clock_event_ddata.periodic_top = DIV_ROUND_CLOSEST(rate, 1024 * HZ);
-> -
-> -	clockevents_config_and_register(&clock_event_ddata.evtdev,
-> -					DIV_ROUND_CLOSEST(rate, 1024),
-> -					0xf, 0xffff);
-> -
-> -	ret = request_irq(irq, efm32_clock_event_handler, IRQF_TIMER,
-> -			  "efm32 clockevent", &clock_event_ddata);
-> -	if (ret) {
-> -		pr_err("Failed setup irq\n");
-> -		goto err_setup_irq;
-> -	}
-> -
-> -	return 0;
-> -
-> -err_setup_irq:
-> -err_get_irq:
-> -
-> -	iounmap(base);
-> -err_iomap:
-> -
-> -	clk_disable_unprepare(clk);
-> -err_clk_enable:
-> -
-> -	clk_put(clk);
-> -err_clk_get:
-> -
-> -	return ret;
-> -}
-> -
-> -/*
-> - * This function asserts that we have exactly one clocksource and one
-> - * clock_event_device in the end.
-> - */
-> -static int __init efm32_timer_init(struct device_node *np)
-> -{
-> -	static int has_clocksource, has_clockevent;
-> -	int ret = 0;
-> -
-> -	if (!has_clocksource) {
-> -		ret = efm32_clocksource_init(np);
-> -		if (!ret) {
-> -			has_clocksource = 1;
-> -			return 0;
-> -		}
-> -	}
-> -
-> -	if (!has_clockevent) {
-> -		ret = efm32_clockevent_init(np);
-> -		if (!ret) {
-> -			has_clockevent = 1;
-> -			return 0;
-> -		}
-> -	}
-> -
-> -	return ret;
-> -}
-> -TIMER_OF_DECLARE(efm32compat, "efm32,timer", efm32_timer_init);
-> -TIMER_OF_DECLARE(efm32, "energymicro,efm32-timer", efm32_timer_init);
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+T24gMTUvMDEvMjAyMSAxNjo1MSwgVXdlIEtsZWluZS1Lw7ZuaWcgd3JvdGU6Cj4gU3VwcG9ydCBm
+b3IgdGhpcyBtYWNoaW5lIHdhcyBqdXN0IHJlbW92ZWQsIHNvIGRyb3AgdGhlIG5vdyB1bnVzZWQg
+dGltZXIKPiBjb2RlLCB0b28uCj4gCj4gU2lnbmVkLW9mZi1ieTogVXdlIEtsZWluZS1Lw7ZuaWcg
+PHUua2xlaW5lLWtvZW5pZ0BwZW5ndXRyb25peC5kZT4KClNoYWxsIEkgdGFrZSBpdCB0aHJvdWdo
+IG15IHRyZWUgPwoKPiAtLS0KPiAgZHJpdmVycy9jbG9ja3NvdXJjZS9LY29uZmlnICAgICAgIHwg
+ICA5IC0KPiAgZHJpdmVycy9jbG9ja3NvdXJjZS9NYWtlZmlsZSAgICAgIHwgICAxIC0KPiAgZHJp
+dmVycy9jbG9ja3NvdXJjZS90aW1lci1lZm0zMi5jIHwgMjc4IC0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLQo+ICAzIGZpbGVzIGNoYW5nZWQsIDI4OCBkZWxldGlvbnMoLSkKPiAgZGVsZXRl
+IG1vZGUgMTAwNjQ0IGRyaXZlcnMvY2xvY2tzb3VyY2UvdGltZXItZWZtMzIuYwo+IAo+IGRpZmYg
+LS1naXQgYS9kcml2ZXJzL2Nsb2Nrc291cmNlL0tjb25maWcgYi9kcml2ZXJzL2Nsb2Nrc291cmNl
+L0tjb25maWcKPiBpbmRleCAxNGM3YzQ3MTI0NzguLjE0MTZhMzIxNDBjNSAxMDA2NDQKPiAtLS0g
+YS9kcml2ZXJzL2Nsb2Nrc291cmNlL0tjb25maWcKPiArKysgYi9kcml2ZXJzL2Nsb2Nrc291cmNl
+L0tjb25maWcKPiBAQCAtMjQyLDE1ICsyNDIsNiBAQCBjb25maWcgSU5URUdSQVRPUl9BUF9USU1F
+Ugo+ICAJaGVscAo+ICAJICBFbmFibGVzIHN1cHBvcnQgZm9yIHRoZSBJbnRlZ3JhdG9yLUFQIHRp
+bWVyLgo+ICAKPiAtY29uZmlnIENMS1NSQ19FRk0zMgo+IC0JYm9vbCAiQ2xvY2tzb3VyY2UgZm9y
+IEVuZXJneSBNaWNybydzIEVGTTMyIFNvQ3MiIGlmICFBUkNIX0VGTTMyCj4gLQlkZXBlbmRzIG9u
+IE9GICYmIEFSTSAmJiAoQVJDSF9FRk0zMiB8fCBDT01QSUxFX1RFU1QpCj4gLQlzZWxlY3QgQ0xL
+U1JDX01NSU8KPiAtCWRlZmF1bHQgQVJDSF9FRk0zMgo+IC0JaGVscAo+IC0JICBTdXBwb3J0IHRv
+IHVzZSB0aGUgdGltZXJzIG9mIEVGTTMyIFNvQ3MgYXMgY2xvY2sgc291cmNlIGFuZCBjbG9jawo+
+IC0JICBldmVudCBkZXZpY2UuCj4gLQo+ICBjb25maWcgQ0xLU1JDX0xQQzMyWFgKPiAgCWJvb2wg
+IkNsb2Nrc291cmNlIGZvciBMUEMzMlhYIiBpZiBDT01QSUxFX1RFU1QKPiAgCWRlcGVuZHMgb24g
+SEFTX0lPTUVNCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2xvY2tzb3VyY2UvTWFrZWZpbGUgYi9k
+cml2ZXJzL2Nsb2Nrc291cmNlL01ha2VmaWxlCj4gaW5kZXggM2M3NWNiYmY4NTMzLi4wODE3MzM4
+M2YyZDkgMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy9jbG9ja3NvdXJjZS9NYWtlZmlsZQo+ICsrKyBi
+L2RyaXZlcnMvY2xvY2tzb3VyY2UvTWFrZWZpbGUKPiBAQCAtNDMsNyArNDMsNiBAQCBvYmotJChD
+T05GSUdfVlQ4NTAwX1RJTUVSKQkrPSB0aW1lci12dDg1MDAubwo+ICBvYmotJChDT05GSUdfTlNQ
+SVJFX1RJTUVSKQkrPSB0aW1lci16ZXZpby5vCj4gIG9iai0kKENPTkZJR19CQ01fS09OQV9USU1F
+UikJKz0gYmNtX2tvbmFfdGltZXIubwo+ICBvYmotJChDT05GSUdfQ0FERU5DRV9UVENfVElNRVIp
+CSs9IHRpbWVyLWNhZGVuY2UtdHRjLm8KPiAtb2JqLSQoQ09ORklHX0NMS1NSQ19FRk0zMikJKz0g
+dGltZXItZWZtMzIubwo+ICBvYmotJChDT05GSUdfQ0xLU1JDX1NUTTMyKQkrPSB0aW1lci1zdG0z
+Mi5vCj4gIG9iai0kKENPTkZJR19DTEtTUkNfU1RNMzJfTFApCSs9IHRpbWVyLXN0bTMyLWxwLm8K
+PiAgb2JqLSQoQ09ORklHX0NMS1NSQ19FWFlOT1NfTUNUKQkrPSBleHlub3NfbWN0Lm8KPiBkaWZm
+IC0tZ2l0IGEvZHJpdmVycy9jbG9ja3NvdXJjZS90aW1lci1lZm0zMi5jIGIvZHJpdmVycy9jbG9j
+a3NvdXJjZS90aW1lci1lZm0zMi5jCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXgg
+NDQxYTRiOTE2ODQxLi4wMDAwMDAwMDAwMDAKPiAtLS0gYS9kcml2ZXJzL2Nsb2Nrc291cmNlL3Rp
+bWVyLWVmbTMyLmMKPiArKysgL2Rldi9udWxsCj4gQEAgLTEsMjc4ICswLDAgQEAKPiAtLy8gU1BE
+WC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAtb25seQo+IC0vKgo+IC0gKiBDb3B5cmlnaHQg
+KEMpIDIwMTMgUGVuZ3V0cm9uaXgKPiAtICogVXdlIEtsZWluZS1Lb2VuaWcgPHUua2xlaW5lLWtv
+ZW5pZ0BwZW5ndXRyb25peC5kZT4KPiAtICovCj4gLQo+IC0jZGVmaW5lIHByX2ZtdChmbXQpCUtC
+VUlMRF9NT0ROQU1FICI6ICIgZm10Cj4gLQo+IC0jaW5jbHVkZSA8bGludXgva2VybmVsLmg+Cj4g
+LSNpbmNsdWRlIDxsaW51eC9jbG9ja3NvdXJjZS5oPgo+IC0jaW5jbHVkZSA8bGludXgvY2xvY2tj
+aGlwcy5oPgo+IC0jaW5jbHVkZSA8bGludXgvaXJxLmg+Cj4gLSNpbmNsdWRlIDxsaW51eC9pbnRl
+cnJ1cHQuaD4KPiAtI2luY2x1ZGUgPGxpbnV4L29mLmg+Cj4gLSNpbmNsdWRlIDxsaW51eC9vZl9h
+ZGRyZXNzLmg+Cj4gLSNpbmNsdWRlIDxsaW51eC9vZl9pcnEuaD4KPiAtI2luY2x1ZGUgPGxpbnV4
+L2Nsay5oPgo+IC0KPiAtI2RlZmluZSBUSU1FUm5fQ1RSTAkJCTB4MDAKPiAtI2RlZmluZSBUSU1F
+Um5fQ1RSTF9QUkVTQyh2YWwpCQkJKCgodmFsKSAmIDB4ZikgPDwgMjQpCj4gLSNkZWZpbmUgVElN
+RVJuX0NUUkxfUFJFU0NfMTAyNAkJCVRJTUVSbl9DVFJMX1BSRVNDKDEwKQo+IC0jZGVmaW5lIFRJ
+TUVSbl9DVFJMX0NMS1NFTCh2YWwpCQkJKCgodmFsKSAmIDB4MykgPDwgMTYpCj4gLSNkZWZpbmUg
+VElNRVJuX0NUUkxfQ0xLU0VMX1BSRVNDSEZQRVJDTEsJVElNRVJuX0NUUkxfQ0xLU0VMKDApCj4g
+LSNkZWZpbmUgVElNRVJuX0NUUkxfT1NNRU4JCQkweDAwMDAwMDEwCj4gLSNkZWZpbmUgVElNRVJu
+X0NUUkxfTU9ERSh2YWwpCQkJKCgodmFsKSAmIDB4MykgPDwgIDApCj4gLSNkZWZpbmUgVElNRVJu
+X0NUUkxfTU9ERV9VUAkJCVRJTUVSbl9DVFJMX01PREUoMCkKPiAtI2RlZmluZSBUSU1FUm5fQ1RS
+TF9NT0RFX0RPV04JCQlUSU1FUm5fQ1RSTF9NT0RFKDEpCj4gLQo+IC0jZGVmaW5lIFRJTUVSbl9D
+TUQJCQkweDA0Cj4gLSNkZWZpbmUgVElNRVJuX0NNRF9TVEFSVAkJCTB4MDAwMDAwMDEKPiAtI2Rl
+ZmluZSBUSU1FUm5fQ01EX1NUT1AJCQkJMHgwMDAwMDAwMgo+IC0KPiAtI2RlZmluZSBUSU1FUm5f
+SUVOCQkJMHgwYwo+IC0jZGVmaW5lIFRJTUVSbl9JRgkJCTB4MTAKPiAtI2RlZmluZSBUSU1FUm5f
+SUZTCQkJMHgxNAo+IC0jZGVmaW5lIFRJTUVSbl9JRkMJCQkweDE4Cj4gLSNkZWZpbmUgVElNRVJu
+X0lSUV9VRgkJCQkweDAwMDAwMDAyCj4gLQo+IC0jZGVmaW5lIFRJTUVSbl9UT1AJCQkweDFjCj4g
+LSNkZWZpbmUgVElNRVJuX0NOVAkJCTB4MjQKPiAtCj4gLXN0cnVjdCBlZm0zMl9jbG9ja19ldmVu
+dF9kZGF0YSB7Cj4gLQlzdHJ1Y3QgY2xvY2tfZXZlbnRfZGV2aWNlIGV2dGRldjsKPiAtCXZvaWQg
+X19pb21lbSAqYmFzZTsKPiAtCXVuc2lnbmVkIHBlcmlvZGljX3RvcDsKPiAtfTsKPiAtCj4gLXN0
+YXRpYyBpbnQgZWZtMzJfY2xvY2tfZXZlbnRfc2h1dGRvd24oc3RydWN0IGNsb2NrX2V2ZW50X2Rl
+dmljZSAqZXZ0ZGV2KQo+IC17Cj4gLQlzdHJ1Y3QgZWZtMzJfY2xvY2tfZXZlbnRfZGRhdGEgKmRk
+YXRhID0KPiAtCQljb250YWluZXJfb2YoZXZ0ZGV2LCBzdHJ1Y3QgZWZtMzJfY2xvY2tfZXZlbnRf
+ZGRhdGEsIGV2dGRldik7Cj4gLQo+IC0Jd3JpdGVsX3JlbGF4ZWQoVElNRVJuX0NNRF9TVE9QLCBk
+ZGF0YS0+YmFzZSArIFRJTUVSbl9DTUQpOwo+IC0JcmV0dXJuIDA7Cj4gLX0KPiAtCj4gLXN0YXRp
+YyBpbnQgZWZtMzJfY2xvY2tfZXZlbnRfc2V0X29uZXNob3Qoc3RydWN0IGNsb2NrX2V2ZW50X2Rl
+dmljZSAqZXZ0ZGV2KQo+IC17Cj4gLQlzdHJ1Y3QgZWZtMzJfY2xvY2tfZXZlbnRfZGRhdGEgKmRk
+YXRhID0KPiAtCQljb250YWluZXJfb2YoZXZ0ZGV2LCBzdHJ1Y3QgZWZtMzJfY2xvY2tfZXZlbnRf
+ZGRhdGEsIGV2dGRldik7Cj4gLQo+IC0Jd3JpdGVsX3JlbGF4ZWQoVElNRVJuX0NNRF9TVE9QLCBk
+ZGF0YS0+YmFzZSArIFRJTUVSbl9DTUQpOwo+IC0Jd3JpdGVsX3JlbGF4ZWQoVElNRVJuX0NUUkxf
+UFJFU0NfMTAyNCB8Cj4gLQkJICAgICAgIFRJTUVSbl9DVFJMX0NMS1NFTF9QUkVTQ0hGUEVSQ0xL
+IHwKPiAtCQkgICAgICAgVElNRVJuX0NUUkxfT1NNRU4gfAo+IC0JCSAgICAgICBUSU1FUm5fQ1RS
+TF9NT0RFX0RPV04sCj4gLQkJICAgICAgIGRkYXRhLT5iYXNlICsgVElNRVJuX0NUUkwpOwo+IC0J
+cmV0dXJuIDA7Cj4gLX0KPiAtCj4gLXN0YXRpYyBpbnQgZWZtMzJfY2xvY2tfZXZlbnRfc2V0X3Bl
+cmlvZGljKHN0cnVjdCBjbG9ja19ldmVudF9kZXZpY2UgKmV2dGRldikKPiAtewo+IC0Jc3RydWN0
+IGVmbTMyX2Nsb2NrX2V2ZW50X2RkYXRhICpkZGF0YSA9Cj4gLQkJY29udGFpbmVyX29mKGV2dGRl
+diwgc3RydWN0IGVmbTMyX2Nsb2NrX2V2ZW50X2RkYXRhLCBldnRkZXYpOwo+IC0KPiAtCXdyaXRl
+bF9yZWxheGVkKFRJTUVSbl9DTURfU1RPUCwgZGRhdGEtPmJhc2UgKyBUSU1FUm5fQ01EKTsKPiAt
+CXdyaXRlbF9yZWxheGVkKGRkYXRhLT5wZXJpb2RpY190b3AsIGRkYXRhLT5iYXNlICsgVElNRVJu
+X1RPUCk7Cj4gLQl3cml0ZWxfcmVsYXhlZChUSU1FUm5fQ1RSTF9QUkVTQ18xMDI0IHwKPiAtCQkg
+ICAgICAgVElNRVJuX0NUUkxfQ0xLU0VMX1BSRVNDSEZQRVJDTEsgfAo+IC0JCSAgICAgICBUSU1F
+Um5fQ1RSTF9NT0RFX0RPV04sCj4gLQkJICAgICAgIGRkYXRhLT5iYXNlICsgVElNRVJuX0NUUkwp
+Owo+IC0Jd3JpdGVsX3JlbGF4ZWQoVElNRVJuX0NNRF9TVEFSVCwgZGRhdGEtPmJhc2UgKyBUSU1F
+Um5fQ01EKTsKPiAtCXJldHVybiAwOwo+IC19Cj4gLQo+IC1zdGF0aWMgaW50IGVmbTMyX2Nsb2Nr
+X2V2ZW50X3NldF9uZXh0X2V2ZW50KHVuc2lnbmVkIGxvbmcgZXZ0LAo+IC0JCQkJCSAgICBzdHJ1
+Y3QgY2xvY2tfZXZlbnRfZGV2aWNlICpldnRkZXYpCj4gLXsKPiAtCXN0cnVjdCBlZm0zMl9jbG9j
+a19ldmVudF9kZGF0YSAqZGRhdGEgPQo+IC0JCWNvbnRhaW5lcl9vZihldnRkZXYsIHN0cnVjdCBl
+Zm0zMl9jbG9ja19ldmVudF9kZGF0YSwgZXZ0ZGV2KTsKPiAtCj4gLQl3cml0ZWxfcmVsYXhlZChU
+SU1FUm5fQ01EX1NUT1AsIGRkYXRhLT5iYXNlICsgVElNRVJuX0NNRCk7Cj4gLQl3cml0ZWxfcmVs
+YXhlZChldnQsIGRkYXRhLT5iYXNlICsgVElNRVJuX0NOVCk7Cj4gLQl3cml0ZWxfcmVsYXhlZChU
+SU1FUm5fQ01EX1NUQVJULCBkZGF0YS0+YmFzZSArIFRJTUVSbl9DTUQpOwo+IC0KPiAtCXJldHVy
+biAwOwo+IC19Cj4gLQo+IC1zdGF0aWMgaXJxcmV0dXJuX3QgZWZtMzJfY2xvY2tfZXZlbnRfaGFu
+ZGxlcihpbnQgaXJxLCB2b2lkICpkZXZfaWQpCj4gLXsKPiAtCXN0cnVjdCBlZm0zMl9jbG9ja19l
+dmVudF9kZGF0YSAqZGRhdGEgPSBkZXZfaWQ7Cj4gLQo+IC0Jd3JpdGVsX3JlbGF4ZWQoVElNRVJu
+X0lSUV9VRiwgZGRhdGEtPmJhc2UgKyBUSU1FUm5fSUZDKTsKPiAtCj4gLQlkZGF0YS0+ZXZ0ZGV2
+LmV2ZW50X2hhbmRsZXIoJmRkYXRhLT5ldnRkZXYpOwo+IC0KPiAtCXJldHVybiBJUlFfSEFORExF
+RDsKPiAtfQo+IC0KPiAtc3RhdGljIHN0cnVjdCBlZm0zMl9jbG9ja19ldmVudF9kZGF0YSBjbG9j
+a19ldmVudF9kZGF0YSA9IHsKPiAtCS5ldnRkZXYgPSB7Cj4gLQkJLm5hbWUgPSAiZWZtMzIgY2xv
+Y2tldmVudCIsCj4gLQkJLmZlYXR1cmVzID0gQ0xPQ0tfRVZUX0ZFQVRfT05FU0hPVCB8IENMT0NL
+X0VWVF9GRUFUX1BFUklPRElDLAo+IC0JCS5zZXRfc3RhdGVfc2h1dGRvd24gPSBlZm0zMl9jbG9j
+a19ldmVudF9zaHV0ZG93biwKPiAtCQkuc2V0X3N0YXRlX3BlcmlvZGljID0gZWZtMzJfY2xvY2tf
+ZXZlbnRfc2V0X3BlcmlvZGljLAo+IC0JCS5zZXRfc3RhdGVfb25lc2hvdCA9IGVmbTMyX2Nsb2Nr
+X2V2ZW50X3NldF9vbmVzaG90LAo+IC0JCS5zZXRfbmV4dF9ldmVudCA9IGVmbTMyX2Nsb2NrX2V2
+ZW50X3NldF9uZXh0X2V2ZW50LAo+IC0JCS5yYXRpbmcgPSAyMDAsCj4gLQl9LAo+IC19Owo+IC0K
+PiAtc3RhdGljIGludCBfX2luaXQgZWZtMzJfY2xvY2tzb3VyY2VfaW5pdChzdHJ1Y3QgZGV2aWNl
+X25vZGUgKm5wKQo+IC17Cj4gLQlzdHJ1Y3QgY2xrICpjbGs7Cj4gLQl2b2lkIF9faW9tZW0gKmJh
+c2U7Cj4gLQl1bnNpZ25lZCBsb25nIHJhdGU7Cj4gLQlpbnQgcmV0Owo+IC0KPiAtCWNsayA9IG9m
+X2Nsa19nZXQobnAsIDApOwo+IC0JaWYgKElTX0VSUihjbGspKSB7Cj4gLQkJcmV0ID0gUFRSX0VS
+UihjbGspOwo+IC0JCXByX2VycigiZmFpbGVkIHRvIGdldCBjbG9jayBmb3IgY2xvY2tzb3VyY2Ug
+KCVkKVxuIiwgcmV0KTsKPiAtCQlnb3RvIGVycl9jbGtfZ2V0Owo+IC0JfQo+IC0KPiAtCXJldCA9
+IGNsa19wcmVwYXJlX2VuYWJsZShjbGspOwo+IC0JaWYgKHJldCkgewo+IC0JCXByX2VycigiZmFp
+bGVkIHRvIGVuYWJsZSB0aW1lciBjbG9jayBmb3IgY2xvY2tzb3VyY2UgKCVkKVxuIiwKPiAtCQkg
+ICAgICAgcmV0KTsKPiAtCQlnb3RvIGVycl9jbGtfZW5hYmxlOwo+IC0JfQo+IC0JcmF0ZSA9IGNs
+a19nZXRfcmF0ZShjbGspOwo+IC0KPiAtCWJhc2UgPSBvZl9pb21hcChucCwgMCk7Cj4gLQlpZiAo
+IWJhc2UpIHsKPiAtCQlyZXQgPSAtRUFERFJOT1RBVkFJTDsKPiAtCQlwcl9lcnIoImZhaWxlZCB0
+byBtYXAgcmVnaXN0ZXJzIGZvciBjbG9ja3NvdXJjZVxuIik7Cj4gLQkJZ290byBlcnJfaW9tYXA7
+Cj4gLQl9Cj4gLQo+IC0Jd3JpdGVsX3JlbGF4ZWQoVElNRVJuX0NUUkxfUFJFU0NfMTAyNCB8Cj4g
+LQkJICAgICAgIFRJTUVSbl9DVFJMX0NMS1NFTF9QUkVTQ0hGUEVSQ0xLIHwKPiAtCQkgICAgICAg
+VElNRVJuX0NUUkxfTU9ERV9VUCwgYmFzZSArIFRJTUVSbl9DVFJMKTsKPiAtCXdyaXRlbF9yZWxh
+eGVkKFRJTUVSbl9DTURfU1RBUlQsIGJhc2UgKyBUSU1FUm5fQ01EKTsKPiAtCj4gLQlyZXQgPSBj
+bG9ja3NvdXJjZV9tbWlvX2luaXQoYmFzZSArIFRJTUVSbl9DTlQsICJlZm0zMiB0aW1lciIsCj4g
+LQkJCQkgICAgRElWX1JPVU5EX0NMT1NFU1QocmF0ZSwgMTAyNCksIDIwMCwgMTYsCj4gLQkJCQkg
+ICAgY2xvY2tzb3VyY2VfbW1pb19yZWFkbF91cCk7Cj4gLQlpZiAocmV0KSB7Cj4gLQkJcHJfZXJy
+KCJmYWlsZWQgdG8gaW5pdCBjbG9ja3NvdXJjZSAoJWQpXG4iLCByZXQpOwo+IC0JCWdvdG8gZXJy
+X2Nsb2Nrc291cmNlX2luaXQ7Cj4gLQl9Cj4gLQo+IC0JcmV0dXJuIDA7Cj4gLQo+IC1lcnJfY2xv
+Y2tzb3VyY2VfaW5pdDoKPiAtCj4gLQlpb3VubWFwKGJhc2UpOwo+IC1lcnJfaW9tYXA6Cj4gLQo+
+IC0JY2xrX2Rpc2FibGVfdW5wcmVwYXJlKGNsayk7Cj4gLWVycl9jbGtfZW5hYmxlOgo+IC0KPiAt
+CWNsa19wdXQoY2xrKTsKPiAtZXJyX2Nsa19nZXQ6Cj4gLQo+IC0JcmV0dXJuIHJldDsKPiAtfQo+
+IC0KPiAtc3RhdGljIGludCBfX2luaXQgZWZtMzJfY2xvY2tldmVudF9pbml0KHN0cnVjdCBkZXZp
+Y2Vfbm9kZSAqbnApCj4gLXsKPiAtCXN0cnVjdCBjbGsgKmNsazsKPiAtCXZvaWQgX19pb21lbSAq
+YmFzZTsKPiAtCXVuc2lnbmVkIGxvbmcgcmF0ZTsKPiAtCWludCBpcnE7Cj4gLQlpbnQgcmV0Owo+
+IC0KPiAtCWNsayA9IG9mX2Nsa19nZXQobnAsIDApOwo+IC0JaWYgKElTX0VSUihjbGspKSB7Cj4g
+LQkJcmV0ID0gUFRSX0VSUihjbGspOwo+IC0JCXByX2VycigiZmFpbGVkIHRvIGdldCBjbG9jayBm
+b3IgY2xvY2tldmVudCAoJWQpXG4iLCByZXQpOwo+IC0JCWdvdG8gZXJyX2Nsa19nZXQ7Cj4gLQl9
+Cj4gLQo+IC0JcmV0ID0gY2xrX3ByZXBhcmVfZW5hYmxlKGNsayk7Cj4gLQlpZiAocmV0KSB7Cj4g
+LQkJcHJfZXJyKCJmYWlsZWQgdG8gZW5hYmxlIHRpbWVyIGNsb2NrIGZvciBjbG9ja2V2ZW50ICgl
+ZClcbiIsCj4gLQkJICAgICAgIHJldCk7Cj4gLQkJZ290byBlcnJfY2xrX2VuYWJsZTsKPiAtCX0K
+PiAtCXJhdGUgPSBjbGtfZ2V0X3JhdGUoY2xrKTsKPiAtCj4gLQliYXNlID0gb2ZfaW9tYXAobnAs
+IDApOwo+IC0JaWYgKCFiYXNlKSB7Cj4gLQkJcmV0ID0gLUVBRERSTk9UQVZBSUw7Cj4gLQkJcHJf
+ZXJyKCJmYWlsZWQgdG8gbWFwIHJlZ2lzdGVycyBmb3IgY2xvY2tldmVudFxuIik7Cj4gLQkJZ290
+byBlcnJfaW9tYXA7Cj4gLQl9Cj4gLQo+IC0JaXJxID0gaXJxX29mX3BhcnNlX2FuZF9tYXAobnAs
+IDApOwo+IC0JaWYgKCFpcnEpIHsKPiAtCQlyZXQgPSAtRU5PRU5UOwo+IC0JCXByX2VycigiZmFp
+bGVkIHRvIGdldCBpcnEgZm9yIGNsb2NrZXZlbnRcbiIpOwo+IC0JCWdvdG8gZXJyX2dldF9pcnE7
+Cj4gLQl9Cj4gLQo+IC0Jd3JpdGVsX3JlbGF4ZWQoVElNRVJuX0lSUV9VRiwgYmFzZSArIFRJTUVS
+bl9JRU4pOwo+IC0KPiAtCWNsb2NrX2V2ZW50X2RkYXRhLmJhc2UgPSBiYXNlOwo+IC0JY2xvY2tf
+ZXZlbnRfZGRhdGEucGVyaW9kaWNfdG9wID0gRElWX1JPVU5EX0NMT1NFU1QocmF0ZSwgMTAyNCAq
+IEhaKTsKPiAtCj4gLQljbG9ja2V2ZW50c19jb25maWdfYW5kX3JlZ2lzdGVyKCZjbG9ja19ldmVu
+dF9kZGF0YS5ldnRkZXYsCj4gLQkJCQkJRElWX1JPVU5EX0NMT1NFU1QocmF0ZSwgMTAyNCksCj4g
+LQkJCQkJMHhmLCAweGZmZmYpOwo+IC0KPiAtCXJldCA9IHJlcXVlc3RfaXJxKGlycSwgZWZtMzJf
+Y2xvY2tfZXZlbnRfaGFuZGxlciwgSVJRRl9USU1FUiwKPiAtCQkJICAiZWZtMzIgY2xvY2tldmVu
+dCIsICZjbG9ja19ldmVudF9kZGF0YSk7Cj4gLQlpZiAocmV0KSB7Cj4gLQkJcHJfZXJyKCJGYWls
+ZWQgc2V0dXAgaXJxXG4iKTsKPiAtCQlnb3RvIGVycl9zZXR1cF9pcnE7Cj4gLQl9Cj4gLQo+IC0J
+cmV0dXJuIDA7Cj4gLQo+IC1lcnJfc2V0dXBfaXJxOgo+IC1lcnJfZ2V0X2lycToKPiAtCj4gLQlp
+b3VubWFwKGJhc2UpOwo+IC1lcnJfaW9tYXA6Cj4gLQo+IC0JY2xrX2Rpc2FibGVfdW5wcmVwYXJl
+KGNsayk7Cj4gLWVycl9jbGtfZW5hYmxlOgo+IC0KPiAtCWNsa19wdXQoY2xrKTsKPiAtZXJyX2Ns
+a19nZXQ6Cj4gLQo+IC0JcmV0dXJuIHJldDsKPiAtfQo+IC0KPiAtLyoKPiAtICogVGhpcyBmdW5j
+dGlvbiBhc3NlcnRzIHRoYXQgd2UgaGF2ZSBleGFjdGx5IG9uZSBjbG9ja3NvdXJjZSBhbmQgb25l
+Cj4gLSAqIGNsb2NrX2V2ZW50X2RldmljZSBpbiB0aGUgZW5kLgo+IC0gKi8KPiAtc3RhdGljIGlu
+dCBfX2luaXQgZWZtMzJfdGltZXJfaW5pdChzdHJ1Y3QgZGV2aWNlX25vZGUgKm5wKQo+IC17Cj4g
+LQlzdGF0aWMgaW50IGhhc19jbG9ja3NvdXJjZSwgaGFzX2Nsb2NrZXZlbnQ7Cj4gLQlpbnQgcmV0
+ID0gMDsKPiAtCj4gLQlpZiAoIWhhc19jbG9ja3NvdXJjZSkgewo+IC0JCXJldCA9IGVmbTMyX2Ns
+b2Nrc291cmNlX2luaXQobnApOwo+IC0JCWlmICghcmV0KSB7Cj4gLQkJCWhhc19jbG9ja3NvdXJj
+ZSA9IDE7Cj4gLQkJCXJldHVybiAwOwo+IC0JCX0KPiAtCX0KPiAtCj4gLQlpZiAoIWhhc19jbG9j
+a2V2ZW50KSB7Cj4gLQkJcmV0ID0gZWZtMzJfY2xvY2tldmVudF9pbml0KG5wKTsKPiAtCQlpZiAo
+IXJldCkgewo+IC0JCQloYXNfY2xvY2tldmVudCA9IDE7Cj4gLQkJCXJldHVybiAwOwo+IC0JCX0K
+PiAtCX0KPiAtCj4gLQlyZXR1cm4gcmV0Owo+IC19Cj4gLVRJTUVSX09GX0RFQ0xBUkUoZWZtMzJj
+b21wYXQsICJlZm0zMix0aW1lciIsIGVmbTMyX3RpbWVyX2luaXQpOwo+IC1USU1FUl9PRl9ERUNM
+QVJFKGVmbTMyLCAiZW5lcmd5bWljcm8sZWZtMzItdGltZXIiLCBlZm0zMl90aW1lcl9pbml0KTsK
+PiAKCgotLSAKPGh0dHA6Ly93d3cubGluYXJvLm9yZy8+IExpbmFyby5vcmcg4pSCIE9wZW4gc291
+cmNlIHNvZnR3YXJlIGZvciBBUk0gU29DcwoKRm9sbG93IExpbmFybzogIDxodHRwOi8vd3d3LmZh
+Y2Vib29rLmNvbS9wYWdlcy9MaW5hcm8+IEZhY2Vib29rIHwKPGh0dHA6Ly90d2l0dGVyLmNvbS8j
+IS9saW5hcm9vcmc+IFR3aXR0ZXIgfAo8aHR0cDovL3d3dy5saW5hcm8ub3JnL2xpbmFyby1ibG9n
+Lz4gQmxvZwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+bGludXgtYXJtLWtlcm5lbCBtYWlsaW5nIGxpc3QKbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZy
+YWRlYWQub3JnCmh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGlu
+dXgtYXJtLWtlcm5lbAo=
