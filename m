@@ -7,32 +7,33 @@ X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39B97C433E6
-	for <soc@archiver.kernel.org>; Wed, 20 Jan 2021 12:48:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97A38C433E0
+	for <soc@archiver.kernel.org>; Wed, 20 Jan 2021 12:48:43 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E5D2A23380; Wed, 20 Jan 2021 12:48:40 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A1EFC2336D;
-	Wed, 20 Jan 2021 12:48:39 +0000 (UTC)
+	id 6714923381; Wed, 20 Jan 2021 12:48:43 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EAFD423371;
+	Wed, 20 Jan 2021 12:48:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1611146920;
-	bh=ClLWbeiD8d9T54L86cDfKFNCd1yqeq4mnSEVdHCmKL0=;
+	s=k20201202; t=1611146923;
+	bh=/Wl34/jHn9mrIFox4YO2TVo/JCUUjHA0k/OxWK3F5AE=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BvtUdvOIcQ28YH2Z6JGj620/DmVahnRIU+VBHoW20AnTUlZSI6Xzi+6knPxNv8fiS
-	 VwOWONNEO+iZ6+3RogV54XmmmbfvVYZQyIdUsGWbHpnCEGYk7LdYA9qvRwAFdKoOjZ
-	 8yGSTzl8dMcp9uVgL2yogdYGzp+5+yx1Tkr9nsNVRRVse740n4BWufL8Op0oiE+rxN
-	 akzCXrgwFiQL2x+wbychIq3fV1hjBg5FeMNIFfGGiX/8fupSRmNkfu/b3AVNoNNmqj
-	 ve6sFPdc7u4gYlb+VW6fGiwuG+bar+4FZhKVtWkYGGTMCmv4bIg+a6B9m/+u1GObia
-	 EbIrQF1xpfiPA==
+	b=FCoxzWvexWDhnhbLRvae28eh7x/aERpfpG1hbpXUjhVX1NmW1xS4JYs3a5D1LBpaW
+	 JX1BZGHvlV/ANbxJMhieW2PcVAvFYgS6a1DofNMZfeSqkJ2JwN2wFB4bfOvuhKCPbc
+	 c2iVcdRPRfAf7V88FUimKANN2qm5gaRaGAZsm9XRrHTsaRrXsMAbFr+vwIEa+u2dVu
+	 QDILCkA2YV84/pX+m44gVWALQNxfHwhysq4LAeJTABJAEBXirm4S9EHnF1Gf6VBi53
+	 8kFq2l8d7nPknMeVFRzKmpB4NfOKBj5m5eO8lfRLbLmSMzLc6knIwevsTbOIJYbpwd
+	 IWQLHoMSjWFBw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Barry Song <baohua@kernel.org>
-Subject: [PATCH 2/5] ARM: remove sirf prima2/atlas platforms
-Date: Wed, 20 Jan 2021 13:48:09 +0100
-Message-Id: <20210120124812.2800027-3-arnd@kernel.org>
+	Jun Nie <jun.nie@linaro.org>,
+	Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH 3/5] ARM: remove zte zx platform
+Date: Wed, 20 Jan 2021 13:48:10 +0100
+Message-Id: <20210120124812.2800027-4-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210120124812.2800027-1-arnd@kernel.org>
 References: <20210120124812.2800027-1-arnd@kernel.org>
@@ -41,315 +42,375 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The SiRF Prima2 and Atlas platform code was contributed by Cambridge
-Silicon Radio (CSR) after aquiring the original SiRF company, and
-maintained by Barry Song. CSR was subsequently acquired by Qualcomm,
-who no longer have an interest in maintaining the SoC platform but
-instead have released more recent SoCs for the same market in the
-Snapdragon family.
+The ZTE ZX set-top-box SoC platform was added in 2015 by Jun Nie, with
+Baoyou Xie and Shawn Guo subsequently becoming maintainers after the
+addition of the 64-bit variant.
 
-As Barry is no longer working for the company, nobody else there
-wants to maintain it, and there are no third-party users, the
-best way forward seems to be to completely remove it.
+However, the only machines that were ever supported upstream are the
+reference designs, not actual set-top-box devices that would benefit
+from this support. All ZTE set-top-boxes from the past few years seem
+to be based on third-party SoCs. While there is very little information
+about zx296702 and zx296718 on the web, I found some references to other
+chips from the same family, such as zx296716 and zx296719, which were
+never submitted for upstream support. Finally, there is no support for
+the GPU on either of them, with the lima and panfrost device drivers
+having been added after work on the zx platform had stopped.
 
-Thanks to Barry for maintaining the platform for the past ten years.
+Shawn confirmed that he has not seen any interest in this platform for
+the past four years, and that it can be removed.
 
-Cc: Barry Song <baohua@kernel.org>
-Link: https://lore.kernel.org/lkml/c969392572604b98bcb3be44048c3165@hisilicon.com/
+Thanks to Jun and Shawn for maintaining this platform over the past
+five years.
+
+Cc: Jun Nie <jun.nie@linaro.org>
+Cc: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- .../devicetree/bindings/arm/sirf.yaml         |   30 -
- .../devicetree/bindings/reset/sirf,rstc.txt   |   42 -
- MAINTAINERS                                   |   13 -
- arch/arm/Kconfig                              |    2 -
- arch/arm/Kconfig.debug                        |   41 +-
- arch/arm/Makefile                             |    1 -
- arch/arm/boot/dts/Makefile                    |    6 -
- arch/arm/boot/dts/atlas6-evb.dts              |   78 -
- arch/arm/boot/dts/atlas6.dtsi                 |  800 -------
- arch/arm/boot/dts/atlas7-evb.dts              |  127 --
- arch/arm/boot/dts/atlas7.dtsi                 | 1955 -----------------
- arch/arm/boot/dts/prima2-evb.dts              |   37 -
- arch/arm/boot/dts/prima2.dtsi                 |  838 -------
- arch/arm/configs/prima2_defconfig             |   72 -
- arch/arm/include/debug/sirf.S                 |   40 -
- arch/arm/mach-prima2/Kconfig                  |   48 -
- arch/arm/mach-prima2/Makefile                 |    9 -
- arch/arm/mach-prima2/common.c                 |   64 -
- arch/arm/mach-prima2/common.h                 |   32 -
- arch/arm/mach-prima2/headsmp.S                |   36 -
- arch/arm/mach-prima2/hotplug.c                |   38 -
- arch/arm/mach-prima2/platsmp.c                |  123 --
- arch/arm/mach-prima2/pm.c                     |  153 --
- arch/arm/mach-prima2/pm.h                     |   28 -
- arch/arm/mach-prima2/rstc.c                   |  107 -
- arch/arm/mach-prima2/rtciobrg.c               |  179 --
- arch/arm/mach-prima2/sleep.S                  |   63 -
- 27 files changed, 2 insertions(+), 4960 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/sirf.yaml
- delete mode 100644 Documentation/devicetree/bindings/reset/sirf,rstc.txt
- delete mode 100644 arch/arm/boot/dts/atlas6-evb.dts
- delete mode 100644 arch/arm/boot/dts/atlas6.dtsi
- delete mode 100644 arch/arm/boot/dts/atlas7-evb.dts
- delete mode 100644 arch/arm/boot/dts/atlas7.dtsi
- delete mode 100644 arch/arm/boot/dts/prima2-evb.dts
- delete mode 100644 arch/arm/boot/dts/prima2.dtsi
- delete mode 100644 arch/arm/configs/prima2_defconfig
- delete mode 100644 arch/arm/include/debug/sirf.S
- delete mode 100644 arch/arm/mach-prima2/Kconfig
- delete mode 100644 arch/arm/mach-prima2/Makefile
- delete mode 100644 arch/arm/mach-prima2/common.c
- delete mode 100644 arch/arm/mach-prima2/common.h
- delete mode 100644 arch/arm/mach-prima2/headsmp.S
- delete mode 100644 arch/arm/mach-prima2/hotplug.c
- delete mode 100644 arch/arm/mach-prima2/platsmp.c
- delete mode 100644 arch/arm/mach-prima2/pm.c
- delete mode 100644 arch/arm/mach-prima2/pm.h
- delete mode 100644 arch/arm/mach-prima2/rstc.c
- delete mode 100644 arch/arm/mach-prima2/rtciobrg.c
- delete mode 100644 arch/arm/mach-prima2/sleep.S
+ .../devicetree/bindings/arm/zte,sysctrl.txt   |  30 -
+ .../devicetree/bindings/arm/zte.yaml          |  28 -
+ .../bindings/reset/zte,zx2967-reset.txt       |  20 -
+ .../devicetree/bindings/serial/pl011.yaml     |   2 -
+ .../devicetree/bindings/soc/zte/pd-2967xx.txt |  19 -
+ MAINTAINERS                                   |  42 --
+ arch/arm/Kconfig                              |   2 -
+ arch/arm/Kconfig.debug                        |  14 -
+ arch/arm/Makefile                             |   1 -
+ arch/arm/boot/dts/Makefile                    |   1 -
+ arch/arm/boot/dts/zx296702-ad1.dts            |  48 --
+ arch/arm/boot/dts/zx296702.dtsi               | 142 ----
+ arch/arm/configs/zx_defconfig                 | 122 ----
+ arch/arm/mach-zx/Kconfig                      |  21 -
+ arch/arm/mach-zx/Makefile                     |   3 -
+ arch/arm/mach-zx/core.h                       |  16 -
+ arch/arm/mach-zx/headsmp.S                    |  30 -
+ arch/arm/mach-zx/platsmp.c                    | 186 ------
+ arch/arm/mach-zx/zx296702-pm-domain.c         | 202 ------
+ arch/arm/mach-zx/zx296702.c                   |  22 -
+ arch/arm64/Kconfig.platforms                  |   6 -
+ arch/arm64/boot/dts/Makefile                  |   1 -
+ arch/arm64/boot/dts/zte/Makefile              |   3 -
+ arch/arm64/boot/dts/zte/zx296718-evb.dts      | 144 ----
+ arch/arm64/boot/dts/zte/zx296718-pcbox.dts    | 143 ----
+ arch/arm64/boot/dts/zte/zx296718.dtsi         | 627 ------------------
+ drivers/reset/Kconfig                         |   2 +-
+ drivers/soc/Kconfig                           |   1 -
+ drivers/soc/Makefile                          |   1 -
+ drivers/soc/zte/Kconfig                       |  15 -
+ drivers/soc/zte/Makefile                      |   6 -
+ drivers/soc/zte/zx296718_pm_domains.c         | 181 -----
+ drivers/soc/zte/zx2967_pm_domains.c           | 141 ----
+ drivers/soc/zte/zx2967_pm_domains.h           |  44 --
+ 34 files changed, 1 insertion(+), 2265 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/zte,sysctrl.txt
+ delete mode 100644 Documentation/devicetree/bindings/arm/zte.yaml
+ delete mode 100644 Documentation/devicetree/bindings/reset/zte,zx2967-reset.txt
+ delete mode 100644 Documentation/devicetree/bindings/soc/zte/pd-2967xx.txt
+ delete mode 100644 arch/arm/boot/dts/zx296702-ad1.dts
+ delete mode 100644 arch/arm/boot/dts/zx296702.dtsi
+ delete mode 100644 arch/arm/configs/zx_defconfig
+ delete mode 100644 arch/arm/mach-zx/Kconfig
+ delete mode 100644 arch/arm/mach-zx/Makefile
+ delete mode 100644 arch/arm/mach-zx/core.h
+ delete mode 100644 arch/arm/mach-zx/headsmp.S
+ delete mode 100644 arch/arm/mach-zx/platsmp.c
+ delete mode 100644 arch/arm/mach-zx/zx296702-pm-domain.c
+ delete mode 100644 arch/arm/mach-zx/zx296702.c
+ delete mode 100644 arch/arm64/boot/dts/zte/Makefile
+ delete mode 100644 arch/arm64/boot/dts/zte/zx296718-evb.dts
+ delete mode 100644 arch/arm64/boot/dts/zte/zx296718-pcbox.dts
+ delete mode 100644 arch/arm64/boot/dts/zte/zx296718.dtsi
+ delete mode 100644 drivers/soc/zte/Kconfig
+ delete mode 100644 drivers/soc/zte/Makefile
+ delete mode 100644 drivers/soc/zte/zx296718_pm_domains.c
+ delete mode 100644 drivers/soc/zte/zx2967_pm_domains.c
+ delete mode 100644 drivers/soc/zte/zx2967_pm_domains.h
 
-diff --git a/Documentation/devicetree/bindings/arm/sirf.yaml b/Documentation/devicetree/bindings/arm/sirf.yaml
+diff --git a/Documentation/devicetree/bindings/arm/zte,sysctrl.txt b/Documentation/devicetree/bindings/arm/zte,sysctrl.txt
 deleted file mode 100644
-index b25eb35d1b66..000000000000
-diff --git a/Documentation/devicetree/bindings/reset/sirf,rstc.txt b/Documentation/devicetree/bindings/reset/sirf,rstc.txt
+index 7e66b7f7ba96..000000000000
+diff --git a/Documentation/devicetree/bindings/arm/zte.yaml b/Documentation/devicetree/bindings/arm/zte.yaml
 deleted file mode 100644
-index 0505de742d30..000000000000
+index 672f8129cd31..000000000000
+diff --git a/Documentation/devicetree/bindings/reset/zte,zx2967-reset.txt b/Documentation/devicetree/bindings/reset/zte,zx2967-reset.txt
+deleted file mode 100644
+index b015508f9780..000000000000
+diff --git a/Documentation/devicetree/bindings/serial/pl011.yaml b/Documentation/devicetree/bindings/serial/pl011.yaml
+index c23c93b400f0..1a51c532e8d2 100644
+--- a/Documentation/devicetree/bindings/serial/pl011.yaml
++++ b/Documentation/devicetree/bindings/serial/pl011.yaml
+@@ -19,7 +19,6 @@ select:
+       contains:
+         enum:
+           - arm,pl011
+-          - zte,zx296702-uart
+   required:
+     - compatible
+ 
+@@ -30,7 +29,6 @@ properties:
+           - const: arm,pl011
+           - const: arm,primecell
+       - items:
+-          - const: zte,zx296702-uart
+           - const: arm,primecell
+ 
+   reg:
+diff --git a/Documentation/devicetree/bindings/soc/zte/pd-2967xx.txt b/Documentation/devicetree/bindings/soc/zte/pd-2967xx.txt
+deleted file mode 100644
+index 7629de1c2c72..000000000000
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 7c3eadb185f9..aeef69cbc7ec 100644
+index aeef69cbc7ec..54b5e6dee017 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -1779,19 +1779,6 @@ F:	drivers/net/ethernet/cortina/
- F:	drivers/pinctrl/pinctrl-gemini.c
- F:	drivers/rtc/rtc-ftrtc010.c
+@@ -2704,40 +2704,6 @@ S:	Maintained
+ F:	arch/arm/mach-pxa/include/mach/z2.h
+ F:	arch/arm/mach-pxa/z2.c
  
--ARM/CSR SIRFPRIMA2 MACHINE SUPPORT
--M:	Barry Song <baohua@kernel.org>
+-ARM/ZTE ARCHITECTURE
+-M:	Jun Nie <jun.nie@linaro.org>
+-M:	Shawn Guo <shawnguo@kernel.org>
 -L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
 -S:	Maintained
--T:	git git://git.kernel.org/pub/scm/linux/kernel/git/baohua/linux.git
--F:	arch/arm/boot/dts/prima2*
--F:	arch/arm/mach-prima2/
--F:	drivers/clk/sirf/
--F:	drivers/clocksource/timer-atlas7.c
--F:	drivers/clocksource/timer-prima2.c
--X:	drivers/gnss
--N:	[^a-z]sirf
+-F:	Documentation/devicetree/bindings/arm/zte.yaml
+-F:	Documentation/devicetree/bindings/clock/zx2967*.txt
+-F:	Documentation/devicetree/bindings/dma/zxdma.txt
+-F:	Documentation/devicetree/bindings/gpio/zx296702-gpio.txt
+-F:	Documentation/devicetree/bindings/i2c/i2c-zx2967.txt
+-F:	Documentation/devicetree/bindings/mmc/zx-dw-mshc.txt
+-F:	Documentation/devicetree/bindings/pinctrl/pinctrl-zx.txt
+-F:	Documentation/devicetree/bindings/reset/zte,zx2967-reset.txt
+-F:	Documentation/devicetree/bindings/soc/zte/
+-F:	Documentation/devicetree/bindings/sound/zte,*.txt
+-F:	Documentation/devicetree/bindings/thermal/zx2967-thermal.txt
+-F:	Documentation/devicetree/bindings/watchdog/zte,zx2967-wdt.txt
+-F:	arch/arm/boot/dts/zx2967*
+-F:	arch/arm/mach-zx/
+-F:	arch/arm64/boot/dts/zte/
+-F:	drivers/clk/zte/
+-F:	drivers/dma/zx_dma.c
+-F:	drivers/gpio/gpio-zx.c
+-F:	drivers/i2c/busses/i2c-zx2967.c
+-F:	drivers/mmc/host/dw_mmc-zx.*
+-F:	drivers/pinctrl/zte/
+-F:	drivers/soc/zte/
+-F:	drivers/thermal/zx2967_thermal.c
+-F:	drivers/watchdog/zx2967_wdt.c
+-F:	include/dt-bindings/clock/zx2967*.h
+-F:	include/dt-bindings/soc/zte,*.h
+-F:	sound/soc/codecs/zx_aud96p22.c
+-F:	sound/soc/zte/
 -
- ARM/CZ.NIC TURRIS MOX SUPPORT
- M:	Marek Behun <marek.behun@nic.cz>
- S:	Maintained
+ ARM/ZYNQ ARCHITECTURE
+ M:	Michal Simek <michal.simek@xilinx.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+@@ -6029,14 +5995,6 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
+ F:	Documentation/devicetree/bindings/display/xlnx/
+ F:	drivers/gpu/drm/xlnx/
+ 
+-DRM DRIVERS FOR ZTE ZX
+-M:	Shawn Guo <shawnguo@kernel.org>
+-L:	dri-devel@lists.freedesktop.org
+-S:	Maintained
+-T:	git git://anongit.freedesktop.org/drm/drm-misc
+-F:	Documentation/devicetree/bindings/display/zte,vou.txt
+-F:	drivers/gpu/drm/zte/
+-
+ DRM PANEL DRIVERS
+ M:	Thierry Reding <thierry.reding@gmail.com>
+ R:	Sam Ravnborg <sam@ravnborg.org>
 diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 96f153c5639b..9d9a7060d365 100644
+index 9d9a7060d365..9f605ab54570 100644
 --- a/arch/arm/Kconfig
 +++ b/arch/arm/Kconfig
-@@ -671,8 +671,6 @@ source "arch/arm/mach-orion5x/Kconfig"
+@@ -718,8 +718,6 @@ source "arch/arm/mach-vexpress/Kconfig"
  
- source "arch/arm/mach-oxnas/Kconfig"
+ source "arch/arm/mach-vt8500/Kconfig"
  
--source "arch/arm/mach-prima2/Kconfig"
+-source "arch/arm/mach-zx/Kconfig"
 -
- source "arch/arm/mach-pxa/Kconfig"
- source "arch/arm/plat-pxa/Kconfig"
+ source "arch/arm/mach-zynq/Kconfig"
  
+ # ARMv7-M architecture
 diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index 23264f7bff72..fe8b95069d31 100644
+index fe8b95069d31..543e29068c08 100644
 --- a/arch/arm/Kconfig.debug
 +++ b/arch/arm/Kconfig.debug
-@@ -1142,32 +1142,6 @@ choice
- 		  Say Y here if you want kernel low-level debugging support
- 		  on Allwinner A31/A23 based platforms on the R_UART.
+@@ -1353,18 +1353,6 @@ choice
+ 		  This option selects UART0 on VIA/Wondermedia System-on-a-chip
+ 		  devices, including VT8500, WM8505, WM8650 and WM8850.
  
--	config DEBUG_SIRFPRIMA2_UART1
--		bool "Kernel low-level debugging messages via SiRFprimaII UART1"
--		depends on ARCH_PRIMA2
--		select DEBUG_SIRFSOC_UART
+-	config DEBUG_ZTE_ZX
+-		bool "Use ZTE ZX UART"
+-		select DEBUG_UART_PL01X
+-		depends on ARCH_ZX
 -		help
--		  Say Y here if you want the debug print routines to direct
--		  their output to the uart1 port on SiRFprimaII devices.
+-		  Say Y here if you are enabling ZTE ZX296702 SOC and need
+-		  debug uart support.
 -
--	config DEBUG_SIRFATLAS7_UART0
--		bool "Kernel low-level debugging messages via SiRFatlas7 UART0"
--		depends on ARCH_ATLAS7
--		select DEBUG_SIRFSOC_UART
--		help
--		  Say Y here if you want the debug print routines to direct
--		  their output to the uart0 port on SiRFATLAS7 devices.The uart0
--		  is used on SiRFATLAS7 as a extra debug port.sometimes an extra
--		  debug port can be very useful.
+-		  This option is preferred over the platform specific
+-		  options; the platform specific options are deprecated
+-		  and will be soon removed.
 -
--	config DEBUG_SIRFATLAS7_UART1
--		bool "Kernel low-level debugging messages via SiRFatlas7 UART1"
--		depends on ARCH_ATLAS7
--		select DEBUG_SIRFSOC_UART
--		help
--		  Say Y here if you want the debug print routines to direct
--		  their output to the uart1 port on SiRFATLAS7 devices.
--
- 	config DEBUG_SPEAR3XX
- 		bool "Kernel low-level debugging messages via ST SPEAr 3xx/6xx UART"
- 		depends on ARCH_SPEAR3XX || ARCH_SPEAR6XX
-@@ -1538,10 +1512,6 @@ config DEBUG_STM32_UART
- 	bool
- 	depends on ARCH_STM32
- 
--config DEBUG_SIRFSOC_UART
--	bool
--	depends on ARCH_SIRF
--
- config DEBUG_UART_FLOW_CONTROL
- 	bool "Enable flow control (CTS) for the debug UART"
- 	depends on DEBUG_LL
-@@ -1596,7 +1566,6 @@ config DEBUG_LL_INCLUDE
- 	default "debug/renesas-scif.S" if DEBUG_RMOBILE_SCIFA4
- 	default "debug/s3c24xx.S" if DEBUG_S3C24XX_UART || DEBUG_S3C64XX_UART
- 	default "debug/s5pv210.S" if DEBUG_S5PV210_UART
--	default "debug/sirf.S" if DEBUG_SIRFSOC_UART
- 	default "debug/sti.S" if DEBUG_STI_UART
- 	default "debug/stm32.S" if DEBUG_STM32_UART
- 	default "debug/tegra.S" if DEBUG_TEGRA_UART
-@@ -1648,8 +1617,6 @@ config DEBUG_UART_PHYS
- 	default 0x1600d000 if DEBUG_SD5203_UART
- 	default 0x18000300 if DEBUG_BCM_5301X
- 	default 0x18000400 if DEBUG_BCM_HR2
--	default 0x18010000 if DEBUG_SIRFATLAS7_UART0
--	default 0x18020000 if DEBUG_SIRFATLAS7_UART1
- 	default 0x18023000 if DEBUG_BCM_IPROC_UART3
- 	default 0x1c090000 if DEBUG_VEXPRESS_UART0_RS1
- 	default 0x20001000 if DEBUG_HIP01_UART
-@@ -1695,7 +1662,6 @@ config DEBUG_UART_PHYS
- 	default 0x80074000 if DEBUG_IMX28_UART
- 	default 0x808c0000 if DEBUG_EP93XX || ARCH_EP93XX
- 	default 0x90020000 if DEBUG_NSPIRE_CLASSIC_UART || DEBUG_NSPIRE_CX_UART
--	default 0xb0060000 if DEBUG_SIRFPRIMA2_UART1
- 	default 0xb0090000 if DEBUG_VEXPRESS_UART0_CRX
- 	default 0xc0013000 if DEBUG_U300_UART
- 	default 0xc8000000 if ARCH_IXP4XX && !CPU_BIG_ENDIAN
-@@ -1754,7 +1720,7 @@ config DEBUG_UART_PHYS
- 		DEBUG_RMOBILE_SCIFA4 || DEBUG_S3C24XX_UART || \
- 		DEBUG_S3C64XX_UART || \
- 		DEBUG_BCM63XX_UART || DEBUG_ASM9260_UART || \
--		DEBUG_SIRFSOC_UART || DEBUG_DIGICOLOR_UA0 || \
-+		DEBUG_DIGICOLOR_UA0 || \
- 		DEBUG_AT91_UART || DEBUG_STM32_UART
- 
- config DEBUG_UART_VIRT
-@@ -1836,10 +1802,7 @@ config DEBUG_UART_VIRT
- 	default 0xfec03000 if DEBUG_SOCFPGA_CYCLONE5_UART1
- 	default 0xfec12000 if DEBUG_MVEBU_UART0 || DEBUG_MVEBU_UART0_ALTERNATE
- 	default 0xfec12100 if DEBUG_MVEBU_UART1_ALTERNATE
--	default 0xfec10000 if DEBUG_SIRFATLAS7_UART0
- 	default 0xfec20000 if DEBUG_DAVINCI_DMx_UART0
--	default 0xfec20000 if DEBUG_SIRFATLAS7_UART1
--	default 0xfec60000 if DEBUG_SIRFPRIMA2_UART1
- 	default 0xfec90000 if DEBUG_RK32_UART2
- 	default 0xfed0c000 if DEBUG_DAVINCI_DA8XX_UART1
- 	default 0xfed0d000 if DEBUG_DAVINCI_DA8XX_UART2 || DEBUG_SD5203_UART
-@@ -1863,7 +1826,7 @@ config DEBUG_UART_VIRT
- 		DEBUG_QCOM_UARTDM || DEBUG_S3C24XX_UART || \
- 		DEBUG_S3C64XX_UART || \
- 		DEBUG_BCM63XX_UART || DEBUG_ASM9260_UART || \
--		DEBUG_SIRFSOC_UART || DEBUG_DIGICOLOR_UA0 || \
-+		DEBUG_DIGICOLOR_UA0 || \
- 		DEBUG_AT91_UART || DEBUG_STM32_UART
- 
- config DEBUG_UART_8250_SHIFT
+ 	config DEBUG_ZYNQ_UART0
+ 		bool "Kernel low-level debugging on Xilinx Zynq using UART0"
+ 		depends on ARCH_ZYNQ
+@@ -1599,7 +1587,6 @@ config DEBUG_UART_PHYS
+ 	default 0x02531000 if DEBUG_KEYSTONE_UART1
+ 	default 0x03010fe0 if ARCH_RPC
+ 	default 0x07000000 if DEBUG_SUN9I_UART0
+-	default 0x09405000 if DEBUG_ZTE_ZX
+ 	default 0x10009000 if DEBUG_REALVIEW_STD_PORT || \
+ 				DEBUG_VEXPRESS_UART0_CA9
+ 	default 0x1010c000 if DEBUG_REALVIEW_PB1176_PORT
+@@ -1782,7 +1769,6 @@ config DEBUG_UART_VIRT
+ 	default 0xfb020000 if DEBUG_OMAP3UART3
+ 	default 0xfb042000 if DEBUG_OMAP3UART4
+ 	default 0xfb10c000 if DEBUG_REALVIEW_PB1176_PORT
+-	default 0xfc705000 if DEBUG_ZTE_ZX
+ 	default 0xfcfe8600 if DEBUG_BCM63XX_UART
+ 	default 0xfd000000 if DEBUG_SPEAR3XX || DEBUG_SPEAR13XX
+ 	default 0xfd883000 if DEBUG_ALPINE_UART0
 diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index dd51416cdcd9..7c4b50852a78 100644
+index 7c4b50852a78..7b8eed93f1fa 100644
 --- a/arch/arm/Makefile
 +++ b/arch/arm/Makefile
-@@ -209,7 +209,6 @@ machine-$(CONFIG_PLAT_SAMSUNG)		+= s3c
- machine-$(CONFIG_ARCH_S5PV210)		+= s5pv210
- machine-$(CONFIG_ARCH_SA1100)		+= sa1100
- machine-$(CONFIG_ARCH_RENESAS)	 	+= shmobile
--machine-$(CONFIG_ARCH_SIRF)		+= prima2
- machine-$(CONFIG_ARCH_SOCFPGA)		+= socfpga
- machine-$(CONFIG_ARCH_STI)		+= sti
- machine-$(CONFIG_ARCH_STM32)		+= stm32
+@@ -220,7 +220,6 @@ machine-$(CONFIG_ARCH_U8500)		+= ux500
+ machine-$(CONFIG_ARCH_VERSATILE)	+= versatile
+ machine-$(CONFIG_ARCH_VEXPRESS)		+= vexpress
+ machine-$(CONFIG_ARCH_VT8500)		+= vt8500
+-machine-$(CONFIG_ARCH_ZX)		+= zx
+ machine-$(CONFIG_ARCH_ZYNQ)		+= zynq
+ machine-$(CONFIG_PLAT_SPEAR)		+= spear
+ 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 2c02cb4c71cb..da413b4d5c3f 100644
+index da413b4d5c3f..5fcae846aa00 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -74,10 +74,6 @@ dtb-$(CONFIG_SOC_SAM_V7) += \
- 	at91-sama5d4_xplained.dtb \
- 	at91-sama5d4ek.dtb \
- 	at91-vinco.dtb
--dtb-$(CONFIG_ARCH_ATLAS6) += \
--	atlas6-evb.dtb
--dtb-$(CONFIG_ARCH_ATLAS7) += \
--	atlas7-evb.dtb
- dtb-$(CONFIG_ARCH_AXXIA) += \
- 	axm5516-amarillo.dtb
- dtb-$(CONFIG_ARCH_BCM2835) += \
-@@ -886,8 +882,6 @@ dtb-$(CONFIG_ARCH_ACTIONS) += \
- 	owl-s500-labrador-base-m.dtb \
- 	owl-s500-roseapplepi.dtb \
- 	owl-s500-sparky.dtb
--dtb-$(CONFIG_ARCH_PRIMA2) += \
--	prima2-evb.dtb
- dtb-$(CONFIG_ARCH_PXA) += \
- 	pxa300-raumfeld-connector.dtb \
- 	pxa300-raumfeld-controller.dtb \
-diff --git a/arch/arm/boot/dts/atlas6-evb.dts b/arch/arm/boot/dts/atlas6-evb.dts
+@@ -1387,7 +1387,6 @@ dtb-$(CONFIG_ARCH_MSTARV7) += \
+ 	mstar-infinity2m-ssd202d-ssd201htv2.dtb \
+ 	mstar-infinity3-msc313e-breadbee.dtb \
+ 	mstar-mercury5-ssc8336n-midrived08.dtb
+-dtb-$(CONFIG_ARCH_ZX) += zx296702-ad1.dtb
+ dtb-$(CONFIG_ARCH_ASPEED) += \
+ 	aspeed-ast2500-evb.dtb \
+ 	aspeed-ast2600-evb.dtb \
+diff --git a/arch/arm/boot/dts/zx296702-ad1.dts b/arch/arm/boot/dts/zx296702-ad1.dts
 deleted file mode 100644
-index 89e430392f26..000000000000
-diff --git a/arch/arm/boot/dts/atlas6.dtsi b/arch/arm/boot/dts/atlas6.dtsi
+index bd9400840023..000000000000
+diff --git a/arch/arm/boot/dts/zx296702.dtsi b/arch/arm/boot/dts/zx296702.dtsi
 deleted file mode 100644
-index 8ac5d1524a43..000000000000
-diff --git a/arch/arm/boot/dts/atlas7-evb.dts b/arch/arm/boot/dts/atlas7-evb.dts
+index f378c661b3bf..000000000000
+diff --git a/arch/arm/configs/zx_defconfig b/arch/arm/configs/zx_defconfig
 deleted file mode 100644
-index e0515043d145..000000000000
-diff --git a/arch/arm/boot/dts/atlas7.dtsi b/arch/arm/boot/dts/atlas7.dtsi
+index a046a492bfa7..000000000000
+diff --git a/arch/arm/mach-zx/Kconfig b/arch/arm/mach-zx/Kconfig
 deleted file mode 100644
-index 99c9d9d9267f..000000000000
-diff --git a/arch/arm/boot/dts/prima2-evb.dts b/arch/arm/boot/dts/prima2-evb.dts
+index ea29c84a7849..000000000000
+diff --git a/arch/arm/mach-zx/Makefile b/arch/arm/mach-zx/Makefile
 deleted file mode 100644
-index 7394f764df65..000000000000
-diff --git a/arch/arm/boot/dts/prima2.dtsi b/arch/arm/boot/dts/prima2.dtsi
+index 6f8930cdb8fb..000000000000
+diff --git a/arch/arm/mach-zx/core.h b/arch/arm/mach-zx/core.h
 deleted file mode 100644
-index 7d3d93c22ed9..000000000000
-diff --git a/arch/arm/configs/prima2_defconfig b/arch/arm/configs/prima2_defconfig
+index 25fe873892c9..000000000000
+diff --git a/arch/arm/mach-zx/headsmp.S b/arch/arm/mach-zx/headsmp.S
 deleted file mode 100644
-index be19aa127595..000000000000
-diff --git a/arch/arm/include/debug/sirf.S b/arch/arm/include/debug/sirf.S
+index 0846859b0573..000000000000
+diff --git a/arch/arm/mach-zx/platsmp.c b/arch/arm/mach-zx/platsmp.c
 deleted file mode 100644
-index 3612c7b9cbe7..000000000000
-diff --git a/arch/arm/mach-prima2/Kconfig b/arch/arm/mach-prima2/Kconfig
+index d4e1d3792224..000000000000
+diff --git a/arch/arm/mach-zx/zx296702-pm-domain.c b/arch/arm/mach-zx/zx296702-pm-domain.c
 deleted file mode 100644
-index ea077f66372d..000000000000
-diff --git a/arch/arm/mach-prima2/Makefile b/arch/arm/mach-prima2/Makefile
+index 7a08bf9dd792..000000000000
+diff --git a/arch/arm/mach-zx/zx296702.c b/arch/arm/mach-zx/zx296702.c
 deleted file mode 100644
-index 0fd2763031e9..000000000000
-diff --git a/arch/arm/mach-prima2/common.c b/arch/arm/mach-prima2/common.c
+index fd8fa3a074fa..000000000000
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 6eecdef538bd..ec3c0cb27d1e 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -317,12 +317,6 @@ config ARCH_XGENE
+ 	help
+ 	  This enables support for AppliedMicro X-Gene SOC Family
+ 
+-config ARCH_ZX
+-	bool "ZTE ZX SoC Family"
+-	select PINCTRL
+-	help
+-	  This enables support for ZTE ZX SoC Family
+-
+ config ARCH_ZYNQMP
+ 	bool "Xilinx ZynqMP Family"
+ 	help
+diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
+index 9b1170658d60..f1173cd93594 100644
+--- a/arch/arm64/boot/dts/Makefile
++++ b/arch/arm64/boot/dts/Makefile
+@@ -29,4 +29,3 @@ subdir-y += synaptics
+ subdir-y += ti
+ subdir-y += toshiba
+ subdir-y += xilinx
+-subdir-y += zte
+diff --git a/arch/arm64/boot/dts/zte/Makefile b/arch/arm64/boot/dts/zte/Makefile
 deleted file mode 100644
-index e2d158e331e2..000000000000
-diff --git a/arch/arm/mach-prima2/common.h b/arch/arm/mach-prima2/common.h
+index 126896144bda..000000000000
+diff --git a/arch/arm64/boot/dts/zte/zx296718-evb.dts b/arch/arm64/boot/dts/zte/zx296718-evb.dts
 deleted file mode 100644
-index 3bab7e571ded..000000000000
-diff --git a/arch/arm/mach-prima2/headsmp.S b/arch/arm/mach-prima2/headsmp.S
+index cb2519ecd724..000000000000
+diff --git a/arch/arm64/boot/dts/zte/zx296718-pcbox.dts b/arch/arm64/boot/dts/zte/zx296718-pcbox.dts
 deleted file mode 100644
-index 88ea1243942a..000000000000
-diff --git a/arch/arm/mach-prima2/hotplug.c b/arch/arm/mach-prima2/hotplug.c
+index e02509f7082b..000000000000
+diff --git a/arch/arm64/boot/dts/zte/zx296718.dtsi b/arch/arm64/boot/dts/zte/zx296718.dtsi
 deleted file mode 100644
-index bc0d957e89ac..000000000000
-diff --git a/arch/arm/mach-prima2/platsmp.c b/arch/arm/mach-prima2/platsmp.c
+index cc54837ff4ba..000000000000
+diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+index 71ab75a46491..8dd99ca2192c 100644
+--- a/drivers/reset/Kconfig
++++ b/drivers/reset/Kconfig
+@@ -173,7 +173,7 @@ config RESET_SCMI
+ 
+ config RESET_SIMPLE
+ 	bool "Simple Reset Controller Driver" if COMPILE_TEST
+-	default ARCH_AGILEX || ARCH_ASPEED || ARCH_BITMAIN || ARCH_REALTEK || ARCH_STM32 || ARCH_STRATIX10 || ARCH_SUNXI || ARCH_ZX || ARC
++	default ARCH_AGILEX || ARCH_ASPEED || ARCH_BITMAIN || ARCH_REALTEK || ARCH_STM32 || ARCH_STRATIX10 || ARCH_SUNXI || ARC
+ 	help
+ 	  This enables a simple reset controller driver for reset lines that
+ 	  that can be asserted and deasserted by toggling bits in a contiguous,
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index d097d070f579..f357c6c659d2 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -22,7 +22,6 @@ source "drivers/soc/ti/Kconfig"
+ source "drivers/soc/ux500/Kconfig"
+ source "drivers/soc/versatile/Kconfig"
+ source "drivers/soc/xilinx/Kconfig"
+-source "drivers/soc/zte/Kconfig"
+ source "drivers/soc/kendryte/Kconfig"
+ 
+ endmenu
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index 699b758d28e4..9bceb12b291d 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -28,5 +28,4 @@ obj-y				+= ti/
+ obj-$(CONFIG_ARCH_U8500)	+= ux500/
+ obj-$(CONFIG_PLAT_VERSATILE)	+= versatile/
+ obj-y				+= xilinx/
+-obj-$(CONFIG_ARCH_ZX)		+= zte/
+ obj-$(CONFIG_SOC_KENDRYTE)	+= kendryte/
+diff --git a/drivers/soc/zte/Kconfig b/drivers/soc/zte/Kconfig
 deleted file mode 100644
-index 8f7bbb57fb20..000000000000
-diff --git a/arch/arm/mach-prima2/pm.c b/arch/arm/mach-prima2/pm.c
+index 1cf1938da541..000000000000
+diff --git a/drivers/soc/zte/Makefile b/drivers/soc/zte/Makefile
 deleted file mode 100644
-index c24bc89f320b..000000000000
-diff --git a/arch/arm/mach-prima2/pm.h b/arch/arm/mach-prima2/pm.h
+index 728c677addcd..000000000000
+diff --git a/drivers/soc/zte/zx296718_pm_domains.c b/drivers/soc/zte/zx296718_pm_domains.c
 deleted file mode 100644
-index 0aff6cb876be..000000000000
-diff --git a/arch/arm/mach-prima2/rstc.c b/arch/arm/mach-prima2/rstc.c
+index 4daab06bbc26..000000000000
+diff --git a/drivers/soc/zte/zx2967_pm_domains.c b/drivers/soc/zte/zx2967_pm_domains.c
 deleted file mode 100644
-index 9d56606ac87f..000000000000
-diff --git a/arch/arm/mach-prima2/rtciobrg.c b/arch/arm/mach-prima2/rtciobrg.c
+index a4503e31b616..000000000000
+diff --git a/drivers/soc/zte/zx2967_pm_domains.h b/drivers/soc/zte/zx2967_pm_domains.h
 deleted file mode 100644
-index 97c0e333e3b9..000000000000
-diff --git a/arch/arm/mach-prima2/sleep.S b/arch/arm/mach-prima2/sleep.S
-deleted file mode 100644
-index d9bbc5ca39ef..000000000000
+index f586c02410ff..000000000000
 -- 
 2.29.2
 
