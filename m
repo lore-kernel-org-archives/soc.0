@@ -2,19 +2,19 @@ Return-Path: <SRS0=0ZpT=GX=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42710C433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE551C433E6
 	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Jan 2021 12:50:20 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D602923340
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Jan 2021 12:50:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D602923340
+	by mail.kernel.org (Postfix) with ESMTPS id 833C323340
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Jan 2021 12:50:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 833C323340
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,45 +23,45 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=gVowmczNdY+isLAWND5Cek2W8GK78e5Y922FMon+1p4=; b=kyn5ub4V7KrnCzqIrBG7s+xvZ
-	RqDNSz68GP/9KZiCdrfj7ZcMCqVys3thrvbD3Vg+x60PyokKgWB6Pt82qhcOoLEdwku3EkdoUaP90
-	H6N90NKiHSIQgKb/W+RhXf4XQ41A317sxe6XYtgB3iZLn9QroOve30A3SO4R5VA3vcume80Cv2UAh
-	49rLjOSH7n6NG1+/BSCIuWq7D9guTeTl+SsMkJM3g80g/OavF7mMNBsBgOFIQ3yJC3iroZrCRfzbD
-	+YxvqUzRWhVxErs73SLqIFPv3oya+VMbFARq2/h0msSpDc45NVn1pXqHN8ZOR+5mR+5Dvnt5nQ098
-	G2cj+5f7A==;
+	 bh=F1G+OhxkS0uVoWZMSodapKpL2meL8tzbIQ24EGJksU4=; b=lakui2KzbWyr6KxpP1BeYPPEy
+	4gsoqRcTnkqHqQevXQ74Fk0K9RZadz0jiCqz0JI4DQaAiYr2JLnDyrXyeQD8c83wQ3CH4I2BC/cXf
+	djxRdrVJ7uqi2pMDFgyDtjjpzRuPCajEl9ReAvBPCbIK3IHCM6uNbhbH2V4bVOa0PhvdxXfEpdik2
+	Ny339+j7NFMV5f1tJc9zx8ViOUF/qbIsIy6GCE+is5+vfRSWbZXPW1NMH8K/GdnMqrActuOoUCya3
+	RRxTTGVtoGqjlGpSzytBWsBE+UnvXP7t1W4Y3lhAery+rx2sARSN1m15H13IzyffLXsoyML47W/cL
+	6kTlEGeiA==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l2Cuj-0002D1-W8; Wed, 20 Jan 2021 12:48:46 +0000
+	id 1l2Cuy-0002HD-2h; Wed, 20 Jan 2021 12:49:01 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l2Cuf-0002BW-K2
- for linux-arm-kernel@lists.infradead.org; Wed, 20 Jan 2021 12:48:43 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A1EFC2336D;
- Wed, 20 Jan 2021 12:48:39 +0000 (UTC)
+ id 1l2Cum-0002Df-6y
+ for linux-arm-kernel@lists.infradead.org; Wed, 20 Jan 2021 12:48:50 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D201E23380;
+ Wed, 20 Jan 2021 12:48:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1611146920;
- bh=ClLWbeiD8d9T54L86cDfKFNCd1yqeq4mnSEVdHCmKL0=;
+ s=k20201202; t=1611146927;
+ bh=4BxAf1FTOYShE682lWGMYU0CsMqPExM7BYzadGDryks=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=BvtUdvOIcQ28YH2Z6JGj620/DmVahnRIU+VBHoW20AnTUlZSI6Xzi+6knPxNv8fiS
- VwOWONNEO+iZ6+3RogV54XmmmbfvVYZQyIdUsGWbHpnCEGYk7LdYA9qvRwAFdKoOjZ
- 8yGSTzl8dMcp9uVgL2yogdYGzp+5+yx1Tkr9nsNVRRVse740n4BWufL8Op0oiE+rxN
- akzCXrgwFiQL2x+wbychIq3fV1hjBg5FeMNIFfGGiX/8fupSRmNkfu/b3AVNoNNmqj
- ve6sFPdc7u4gYlb+VW6fGiwuG+bar+4FZhKVtWkYGGTMCmv4bIg+a6B9m/+u1GObia
- EbIrQF1xpfiPA==
+ b=iXskoELhldg0eFmx6sfXmYtXpg8a2TmXIX2aa6JCvBpRLR+uCmSQrMax+9W8rKvnL
+ seCdje87i63xUTF80XylUusgVjHdH5zulPMYvNWsa6w6TKB9aQPC75dyTKeJeAmvLR
+ x3LfDGRn7IsCjrNEXke3PRIdmIegHW9eJOxXDHQgYQHD0ZMuFtawk6SDtSJ+t+6bNO
+ jwvTaSgxQsHPwRI24frZYAmyk98Nx4z+NrFQqegotLhVijuVDZ1LnZTrhA535TfWQ0
+ UO78x1id2rkVV3wqMgT3FRdiI5meR2JVypcf96NxHp19gB2/GFqEQJqTYd6nefnf/n
+ PJ6ECkc0CW/zA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  soc@kernel.org
-Subject: [PATCH 2/5] ARM: remove sirf prima2/atlas platforms
-Date: Wed, 20 Jan 2021 13:48:09 +0100
-Message-ID: <20210120124812.2800027-3-arnd@kernel.org>
+Subject: [PATCH 4/5] ARM: remove tango platform
+Date: Wed, 20 Jan 2021 13:48:11 +0100
+Message-ID: <20210120124812.2800027-5-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210120124812.2800027-1-arnd@kernel.org>
 References: <20210120124812.2800027-1-arnd@kernel.org>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210120_074841_830262_DA55A710 
-X-CRM114-Status: GOOD (  19.12  )
+X-CRM114-CacheID: sfid-20210120_074848_465269_521CB025 
+X-CRM114-Status: GOOD (  16.15  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,329 +73,129 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Barry Song <baohua@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Mans Rullgard <mans@mansr.com>, Arnd Bergmann <arnd@arndb.de>,
+ Marc Gonzalez <marc.w.gonzalez@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210120124809.Lwa5v7TCWP0QBZaAaACnWFhU0vJmTUbzg5xvifIL-Ls@z>
+Message-ID: <20210120124811.84EVOCOlvThhutoEgMZYNUJXe_9qy4UXXns7dQzMC5c@z>
 
-From: Arnd Bergmann <arnd@arndb.de>
-
-The SiRF Prima2 and Atlas platform code was contributed by Cambridge
-Silicon Radio (CSR) after aquiring the original SiRF company, and
-maintained by Barry Song. CSR was subsequently acquired by Qualcomm,
-who no longer have an interest in maintaining the SoC platform but
-instead have released more recent SoCs for the same market in the
-Snapdragon family.
-
-As Barry is no longer working for the company, nobody else there
-wants to maintain it, and there are no third-party users, the
-best way forward seems to be to completely remove it.
-
-Thanks to Barry for maintaining the platform for the past ten years.
-
-Cc: Barry Song <baohua@kernel.org>
-Link: https://lore.kernel.org/lkml/c969392572604b98bcb3be44048c3165@hisilicon.com/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- .../devicetree/bindings/arm/sirf.yaml         |   30 -
- .../devicetree/bindings/reset/sirf,rstc.txt   |   42 -
- MAINTAINERS                                   |   13 -
- arch/arm/Kconfig                              |    2 -
- arch/arm/Kconfig.debug                        |   41 +-
- arch/arm/Makefile                             |    1 -
- arch/arm/boot/dts/Makefile                    |    6 -
- arch/arm/boot/dts/atlas6-evb.dts              |   78 -
- arch/arm/boot/dts/atlas6.dtsi                 |  800 -------
- arch/arm/boot/dts/atlas7-evb.dts              |  127 --
- arch/arm/boot/dts/atlas7.dtsi                 | 1955 -----------------
- arch/arm/boot/dts/prima2-evb.dts              |   37 -
- arch/arm/boot/dts/prima2.dtsi                 |  838 -------
- arch/arm/configs/prima2_defconfig             |   72 -
- arch/arm/include/debug/sirf.S                 |   40 -
- arch/arm/mach-prima2/Kconfig                  |   48 -
- arch/arm/mach-prima2/Makefile                 |    9 -
- arch/arm/mach-prima2/common.c                 |   64 -
- arch/arm/mach-prima2/common.h                 |   32 -
- arch/arm/mach-prima2/headsmp.S                |   36 -
- arch/arm/mach-prima2/hotplug.c                |   38 -
- arch/arm/mach-prima2/platsmp.c                |  123 --
- arch/arm/mach-prima2/pm.c                     |  153 --
- arch/arm/mach-prima2/pm.h                     |   28 -
- arch/arm/mach-prima2/rstc.c                   |  107 -
- arch/arm/mach-prima2/rtciobrg.c               |  179 --
- arch/arm/mach-prima2/sleep.S                  |   63 -
- 27 files changed, 2 insertions(+), 4960 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/sirf.yaml
- delete mode 100644 Documentation/devicetree/bindings/reset/sirf,rstc.txt
- delete mode 100644 arch/arm/boot/dts/atlas6-evb.dts
- delete mode 100644 arch/arm/boot/dts/atlas6.dtsi
- delete mode 100644 arch/arm/boot/dts/atlas7-evb.dts
- delete mode 100644 arch/arm/boot/dts/atlas7.dtsi
- delete mode 100644 arch/arm/boot/dts/prima2-evb.dts
- delete mode 100644 arch/arm/boot/dts/prima2.dtsi
- delete mode 100644 arch/arm/configs/prima2_defconfig
- delete mode 100644 arch/arm/include/debug/sirf.S
- delete mode 100644 arch/arm/mach-prima2/Kconfig
- delete mode 100644 arch/arm/mach-prima2/Makefile
- delete mode 100644 arch/arm/mach-prima2/common.c
- delete mode 100644 arch/arm/mach-prima2/common.h
- delete mode 100644 arch/arm/mach-prima2/headsmp.S
- delete mode 100644 arch/arm/mach-prima2/hotplug.c
- delete mode 100644 arch/arm/mach-prima2/platsmp.c
- delete mode 100644 arch/arm/mach-prima2/pm.c
- delete mode 100644 arch/arm/mach-prima2/pm.h
- delete mode 100644 arch/arm/mach-prima2/rstc.c
- delete mode 100644 arch/arm/mach-prima2/rtciobrg.c
- delete mode 100644 arch/arm/mach-prima2/sleep.S
-
-diff --git a/Documentation/devicetree/bindings/arm/sirf.yaml b/Documentation/devicetree/bindings/arm/sirf.yaml
-deleted file mode 100644
-index b25eb35d1b66..000000000000
-diff --git a/Documentation/devicetree/bindings/reset/sirf,rstc.txt b/Documentation/devicetree/bindings/reset/sirf,rstc.txt
-deleted file mode 100644
-index 0505de742d30..000000000000
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7c3eadb185f9..aeef69cbc7ec 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1779,19 +1779,6 @@ F:	drivers/net/ethernet/cortina/
- F:	drivers/pinctrl/pinctrl-gemini.c
- F:	drivers/rtc/rtc-ftrtc010.c
- 
--ARM/CSR SIRFPRIMA2 MACHINE SUPPORT
--M:	Barry Song <baohua@kernel.org>
--L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--S:	Maintained
--T:	git git://git.kernel.org/pub/scm/linux/kernel/git/baohua/linux.git
--F:	arch/arm/boot/dts/prima2*
--F:	arch/arm/mach-prima2/
--F:	drivers/clk/sirf/
--F:	drivers/clocksource/timer-atlas7.c
--F:	drivers/clocksource/timer-prima2.c
--X:	drivers/gnss
--N:	[^a-z]sirf
--
- ARM/CZ.NIC TURRIS MOX SUPPORT
- M:	Marek Behun <marek.behun@nic.cz>
- S:	Maintained
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 96f153c5639b..9d9a7060d365 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -671,8 +671,6 @@ source "arch/arm/mach-orion5x/Kconfig"
- 
- source "arch/arm/mach-oxnas/Kconfig"
- 
--source "arch/arm/mach-prima2/Kconfig"
--
- source "arch/arm/mach-pxa/Kconfig"
- source "arch/arm/plat-pxa/Kconfig"
- 
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index 23264f7bff72..fe8b95069d31 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -1142,32 +1142,6 @@ choice
- 		  Say Y here if you want kernel low-level debugging support
- 		  on Allwinner A31/A23 based platforms on the R_UART.
- 
--	config DEBUG_SIRFPRIMA2_UART1
--		bool "Kernel low-level debugging messages via SiRFprimaII UART1"
--		depends on ARCH_PRIMA2
--		select DEBUG_SIRFSOC_UART
--		help
--		  Say Y here if you want the debug print routines to direct
--		  their output to the uart1 port on SiRFprimaII devices.
--
--	config DEBUG_SIRFATLAS7_UART0
--		bool "Kernel low-level debugging messages via SiRFatlas7 UART0"
--		depends on ARCH_ATLAS7
--		select DEBUG_SIRFSOC_UART
--		help
--		  Say Y here if you want the debug print routines to direct
--		  their output to the uart0 port on SiRFATLAS7 devices.The uart0
--		  is used on SiRFATLAS7 as a extra debug port.sometimes an extra
--		  debug port can be very useful.
--
--	config DEBUG_SIRFATLAS7_UART1
--		bool "Kernel low-level debugging messages via SiRFatlas7 UART1"
--		depends on ARCH_ATLAS7
--		select DEBUG_SIRFSOC_UART
--		help
--		  Say Y here if you want the debug print routines to direct
--		  their output to the uart1 port on SiRFATLAS7 devices.
--
- 	config DEBUG_SPEAR3XX
- 		bool "Kernel low-level debugging messages via ST SPEAr 3xx/6xx UART"
- 		depends on ARCH_SPEAR3XX || ARCH_SPEAR6XX
-@@ -1538,10 +1512,6 @@ config DEBUG_STM32_UART
- 	bool
- 	depends on ARCH_STM32
- 
--config DEBUG_SIRFSOC_UART
--	bool
--	depends on ARCH_SIRF
--
- config DEBUG_UART_FLOW_CONTROL
- 	bool "Enable flow control (CTS) for the debug UART"
- 	depends on DEBUG_LL
-@@ -1596,7 +1566,6 @@ config DEBUG_LL_INCLUDE
- 	default "debug/renesas-scif.S" if DEBUG_RMOBILE_SCIFA4
- 	default "debug/s3c24xx.S" if DEBUG_S3C24XX_UART || DEBUG_S3C64XX_UART
- 	default "debug/s5pv210.S" if DEBUG_S5PV210_UART
--	default "debug/sirf.S" if DEBUG_SIRFSOC_UART
- 	default "debug/sti.S" if DEBUG_STI_UART
- 	default "debug/stm32.S" if DEBUG_STM32_UART
- 	default "debug/tegra.S" if DEBUG_TEGRA_UART
-@@ -1648,8 +1617,6 @@ config DEBUG_UART_PHYS
- 	default 0x1600d000 if DEBUG_SD5203_UART
- 	default 0x18000300 if DEBUG_BCM_5301X
- 	default 0x18000400 if DEBUG_BCM_HR2
--	default 0x18010000 if DEBUG_SIRFATLAS7_UART0
--	default 0x18020000 if DEBUG_SIRFATLAS7_UART1
- 	default 0x18023000 if DEBUG_BCM_IPROC_UART3
- 	default 0x1c090000 if DEBUG_VEXPRESS_UART0_RS1
- 	default 0x20001000 if DEBUG_HIP01_UART
-@@ -1695,7 +1662,6 @@ config DEBUG_UART_PHYS
- 	default 0x80074000 if DEBUG_IMX28_UART
- 	default 0x808c0000 if DEBUG_EP93XX || ARCH_EP93XX
- 	default 0x90020000 if DEBUG_NSPIRE_CLASSIC_UART || DEBUG_NSPIRE_CX_UART
--	default 0xb0060000 if DEBUG_SIRFPRIMA2_UART1
- 	default 0xb0090000 if DEBUG_VEXPRESS_UART0_CRX
- 	default 0xc0013000 if DEBUG_U300_UART
- 	default 0xc8000000 if ARCH_IXP4XX && !CPU_BIG_ENDIAN
-@@ -1754,7 +1720,7 @@ config DEBUG_UART_PHYS
- 		DEBUG_RMOBILE_SCIFA4 || DEBUG_S3C24XX_UART || \
- 		DEBUG_S3C64XX_UART || \
- 		DEBUG_BCM63XX_UART || DEBUG_ASM9260_UART || \
--		DEBUG_SIRFSOC_UART || DEBUG_DIGICOLOR_UA0 || \
-+		DEBUG_DIGICOLOR_UA0 || \
- 		DEBUG_AT91_UART || DEBUG_STM32_UART
- 
- config DEBUG_UART_VIRT
-@@ -1836,10 +1802,7 @@ config DEBUG_UART_VIRT
- 	default 0xfec03000 if DEBUG_SOCFPGA_CYCLONE5_UART1
- 	default 0xfec12000 if DEBUG_MVEBU_UART0 || DEBUG_MVEBU_UART0_ALTERNATE
- 	default 0xfec12100 if DEBUG_MVEBU_UART1_ALTERNATE
--	default 0xfec10000 if DEBUG_SIRFATLAS7_UART0
- 	default 0xfec20000 if DEBUG_DAVINCI_DMx_UART0
--	default 0xfec20000 if DEBUG_SIRFATLAS7_UART1
--	default 0xfec60000 if DEBUG_SIRFPRIMA2_UART1
- 	default 0xfec90000 if DEBUG_RK32_UART2
- 	default 0xfed0c000 if DEBUG_DAVINCI_DA8XX_UART1
- 	default 0xfed0d000 if DEBUG_DAVINCI_DA8XX_UART2 || DEBUG_SD5203_UART
-@@ -1863,7 +1826,7 @@ config DEBUG_UART_VIRT
- 		DEBUG_QCOM_UARTDM || DEBUG_S3C24XX_UART || \
- 		DEBUG_S3C64XX_UART || \
- 		DEBUG_BCM63XX_UART || DEBUG_ASM9260_UART || \
--		DEBUG_SIRFSOC_UART || DEBUG_DIGICOLOR_UA0 || \
-+		DEBUG_DIGICOLOR_UA0 || \
- 		DEBUG_AT91_UART || DEBUG_STM32_UART
- 
- config DEBUG_UART_8250_SHIFT
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index dd51416cdcd9..7c4b50852a78 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -209,7 +209,6 @@ machine-$(CONFIG_PLAT_SAMSUNG)		+= s3c
- machine-$(CONFIG_ARCH_S5PV210)		+= s5pv210
- machine-$(CONFIG_ARCH_SA1100)		+= sa1100
- machine-$(CONFIG_ARCH_RENESAS)	 	+= shmobile
--machine-$(CONFIG_ARCH_SIRF)		+= prima2
- machine-$(CONFIG_ARCH_SOCFPGA)		+= socfpga
- machine-$(CONFIG_ARCH_STI)		+= sti
- machine-$(CONFIG_ARCH_STM32)		+= stm32
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 2c02cb4c71cb..da413b4d5c3f 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -74,10 +74,6 @@ dtb-$(CONFIG_SOC_SAM_V7) += \
- 	at91-sama5d4_xplained.dtb \
- 	at91-sama5d4ek.dtb \
- 	at91-vinco.dtb
--dtb-$(CONFIG_ARCH_ATLAS6) += \
--	atlas6-evb.dtb
--dtb-$(CONFIG_ARCH_ATLAS7) += \
--	atlas7-evb.dtb
- dtb-$(CONFIG_ARCH_AXXIA) += \
- 	axm5516-amarillo.dtb
- dtb-$(CONFIG_ARCH_BCM2835) += \
-@@ -886,8 +882,6 @@ dtb-$(CONFIG_ARCH_ACTIONS) += \
- 	owl-s500-labrador-base-m.dtb \
- 	owl-s500-roseapplepi.dtb \
- 	owl-s500-sparky.dtb
--dtb-$(CONFIG_ARCH_PRIMA2) += \
--	prima2-evb.dtb
- dtb-$(CONFIG_ARCH_PXA) += \
- 	pxa300-raumfeld-connector.dtb \
- 	pxa300-raumfeld-controller.dtb \
-diff --git a/arch/arm/boot/dts/atlas6-evb.dts b/arch/arm/boot/dts/atlas6-evb.dts
-deleted file mode 100644
-index 89e430392f26..000000000000
-diff --git a/arch/arm/boot/dts/atlas6.dtsi b/arch/arm/boot/dts/atlas6.dtsi
-deleted file mode 100644
-index 8ac5d1524a43..000000000000
-diff --git a/arch/arm/boot/dts/atlas7-evb.dts b/arch/arm/boot/dts/atlas7-evb.dts
-deleted file mode 100644
-index e0515043d145..000000000000
-diff --git a/arch/arm/boot/dts/atlas7.dtsi b/arch/arm/boot/dts/atlas7.dtsi
-deleted file mode 100644
-index 99c9d9d9267f..000000000000
-diff --git a/arch/arm/boot/dts/prima2-evb.dts b/arch/arm/boot/dts/prima2-evb.dts
-deleted file mode 100644
-index 7394f764df65..000000000000
-diff --git a/arch/arm/boot/dts/prima2.dtsi b/arch/arm/boot/dts/prima2.dtsi
-deleted file mode 100644
-index 7d3d93c22ed9..000000000000
-diff --git a/arch/arm/configs/prima2_defconfig b/arch/arm/configs/prima2_defconfig
-deleted file mode 100644
-index be19aa127595..000000000000
-diff --git a/arch/arm/include/debug/sirf.S b/arch/arm/include/debug/sirf.S
-deleted file mode 100644
-index 3612c7b9cbe7..000000000000
-diff --git a/arch/arm/mach-prima2/Kconfig b/arch/arm/mach-prima2/Kconfig
-deleted file mode 100644
-index ea077f66372d..000000000000
-diff --git a/arch/arm/mach-prima2/Makefile b/arch/arm/mach-prima2/Makefile
-deleted file mode 100644
-index 0fd2763031e9..000000000000
-diff --git a/arch/arm/mach-prima2/common.c b/arch/arm/mach-prima2/common.c
-deleted file mode 100644
-index e2d158e331e2..000000000000
-diff --git a/arch/arm/mach-prima2/common.h b/arch/arm/mach-prima2/common.h
-deleted file mode 100644
-index 3bab7e571ded..000000000000
-diff --git a/arch/arm/mach-prima2/headsmp.S b/arch/arm/mach-prima2/headsmp.S
-deleted file mode 100644
-index 88ea1243942a..000000000000
-diff --git a/arch/arm/mach-prima2/hotplug.c b/arch/arm/mach-prima2/hotplug.c
-deleted file mode 100644
-index bc0d957e89ac..000000000000
-diff --git a/arch/arm/mach-prima2/platsmp.c b/arch/arm/mach-prima2/platsmp.c
-deleted file mode 100644
-index 8f7bbb57fb20..000000000000
-diff --git a/arch/arm/mach-prima2/pm.c b/arch/arm/mach-prima2/pm.c
-deleted file mode 100644
-index c24bc89f320b..000000000000
-diff --git a/arch/arm/mach-prima2/pm.h b/arch/arm/mach-prima2/pm.h
-deleted file mode 100644
-index 0aff6cb876be..000000000000
-diff --git a/arch/arm/mach-prima2/rstc.c b/arch/arm/mach-prima2/rstc.c
-deleted file mode 100644
-index 9d56606ac87f..000000000000
-diff --git a/arch/arm/mach-prima2/rtciobrg.c b/arch/arm/mach-prima2/rtciobrg.c
-deleted file mode 100644
-index 97c0e333e3b9..000000000000
-diff --git a/arch/arm/mach-prima2/sleep.S b/arch/arm/mach-prima2/sleep.S
-deleted file mode 100644
-index d9bbc5ca39ef..000000000000
--- 
-2.29.2
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+RnJvbTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4KClRoZSBzbXA4NzU4ICh0YW5nbzQp
+IFNvQyB3YXMgdGhlIGxhc3QgZ2VuZXJhdGlvbiBvZiBzZXQtdG9wLWJveCBjaGlwcwp0byBjb21l
+IG91dCBvZiBTaWdtYSBEZXNpZ25zLCBhbmQgc3VwcG9ydCB3YXMgYWRkZWQgYnkgTWFyYyBHb256
+YWxlegphbmQgTcOlbnMgUnVsbGfDpXJkIGJldHdlZW4gMjAxNSBhbmQgMjAxNywgYmVmb3JlIHRo
+ZSBjb21wYW55IHdlbnQgb3V0IG9mCmJ1c2luZXNzIGFuZCB0aGUgcHJvZHVjdHMgd2VyZSBhYmFu
+ZG9uZWQuCgpUaGUgY2hpcCBpcyB1c2VkIGluIHNvbWUgc2V0LXRvcC1ib3hlcyBzdWNoIGFzIHRo
+ZSBQb3Bjb3JuIEhvdXIgQS01MDAsCndoaWNoIGNvdWxkIGhhdmUgc2VlbiBzb21lIGFkb3B0aW9u
+IGJ5IGhvYmJ5aXN0cy4gVGhpcyBoYXMgbm90IGhhcHBlbmVkCmluIHRoZSBwYXN0IGZvdXIgeWVh
+cnMsIGFuZCBzdXBwb3J0IGZvciB0aGUgbW9yZSB3aWRlbHkgdXNlZCBNSVBTIGJhc2VkClNvQ3Mg
+d2FzIG5ldmVyIG1lcmdlZCBhdCBhbGwuCgpUaGFua3MgdG8gTWFyYyBhbmQgTcOlbnMgZm9yIG1h
+aW50YWluaW5nIGZvciB0aGUgcGFzdCB5ZWFycyBldmVuIGFmdGVyIHRoZQpkZWF0aCBvZiB0aGUg
+cGxhdGZvcm0uCgpDYzogTWFyYyBHb256YWxleiA8bWFyYy53LmdvbnphbGV6QGZyZWUuZnI+CkNj
+OiBNYW5zIFJ1bGxnYXJkIDxtYW5zQG1hbnNyLmNvbT4KTGluazogaHR0cHM6Ly9sb3JlLmtlcm5l
+bC5vcmcvbGttbC8yZDY0M2ViYy0wOWFmLWE4MDktZWIzZi0yYWVjOGVjZWU1MDFAZnJlZS5mci8K
+U2lnbmVkLW9mZi1ieTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4KLS0tCiBNQUlOVEFJ
+TkVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgNyAtCiBhcmNoL2FybS9LY29u
+ZmlnICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMiAtCiBhcmNoL2FybS9NYWtlZmlsZSAg
+ICAgICAgICAgICAgICAgICAgICAgICB8ICAgMSAtCiBhcmNoL2FybS9ib290L2R0cy9NYWtlZmls
+ZSAgICAgICAgICAgICAgICB8ICAgMiAtCiBhcmNoL2FybS9ib290L2R0cy90YW5nbzQtY29tbW9u
+LmR0c2kgICAgICB8IDE4NCAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiBhcmNoL2FybS9ib290L2R0
+cy90YW5nbzQtc21wODc1OC5kdHNpICAgICB8ICA1NyAtLS0tLS0tCiBhcmNoL2FybS9ib290L2R0
+cy90YW5nbzQtdmFudGFnZS0xMTcyLmR0cyB8ICA0MiAtLS0tLQogYXJjaC9hcm0vY29uZmlncy90
+YW5nbzRfZGVmY29uZmlnICAgICAgICAgfCAgOTMgLS0tLS0tLS0tLS0KIGFyY2gvYXJtL21hY2gt
+dGFuZ28vS2NvbmZpZyAgICAgICAgICAgICAgIHwgIDEzIC0tCiBhcmNoL2FybS9tYWNoLXRhbmdv
+L01ha2VmaWxlICAgICAgICAgICAgICB8ICAgNCAtCiBhcmNoL2FybS9tYWNoLXRhbmdvL3BsYXRz
+bXAuYyAgICAgICAgICAgICB8ICA1MiAtLS0tLS0KIGFyY2gvYXJtL21hY2gtdGFuZ28vcG0uYyAg
+ICAgICAgICAgICAgICAgIHwgIDMxIC0tLS0KIGFyY2gvYXJtL21hY2gtdGFuZ28vcG0uaCAgICAg
+ICAgICAgICAgICAgIHwgICA3IC0KIGFyY2gvYXJtL21hY2gtdGFuZ28vc2V0dXAuYyAgICAgICAg
+ICAgICAgIHwgIDIwIC0tLQogYXJjaC9hcm0vbWFjaC10YW5nby9zbWMuUyAgICAgICAgICAgICAg
+ICAgfCAgMTIgLS0KIGFyY2gvYXJtL21hY2gtdGFuZ28vc21jLmggICAgICAgICAgICAgICAgIHwg
+ICA5IC0tCiBkcml2ZXJzL2kyYy9idXNzZXMvS2NvbmZpZyAgICAgICAgICAgICAgICB8ICAgNCAr
+LQogMTcgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCA1MzggZGVsZXRpb25zKC0pCiBk
+ZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9hcm0vYm9vdC9kdHMvdGFuZ280LWNvbW1vbi5kdHNpCiBk
+ZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9hcm0vYm9vdC9kdHMvdGFuZ280LXNtcDg3NTguZHRzaQog
+ZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtL2Jvb3QvZHRzL3RhbmdvNC12YW50YWdlLTExNzIu
+ZHRzCiBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9hcm0vY29uZmlncy90YW5nbzRfZGVmY29uZmln
+CiBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9hcm0vbWFjaC10YW5nby9LY29uZmlnCiBkZWxldGUg
+bW9kZSAxMDA2NDQgYXJjaC9hcm0vbWFjaC10YW5nby9NYWtlZmlsZQogZGVsZXRlIG1vZGUgMTAw
+NjQ0IGFyY2gvYXJtL21hY2gtdGFuZ28vcGxhdHNtcC5jCiBkZWxldGUgbW9kZSAxMDA2NDQgYXJj
+aC9hcm0vbWFjaC10YW5nby9wbS5jCiBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9hcm0vbWFjaC10
+YW5nby9wbS5oCiBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9hcm0vbWFjaC10YW5nby9zZXR1cC5j
+CiBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9hcm0vbWFjaC10YW5nby9zbWMuUwogZGVsZXRlIG1v
+ZGUgMTAwNjQ0IGFyY2gvYXJtL21hY2gtdGFuZ28vc21jLmgKCmRpZmYgLS1naXQgYS9NQUlOVEFJ
+TkVSUyBiL01BSU5UQUlORVJTCmluZGV4IDU0YjVlNmRlZTAxNy4uYmIyYTE1M2Y3NmQ3IDEwMDY0
+NAotLS0gYS9NQUlOVEFJTkVSUworKysgYi9NQUlOVEFJTkVSUwpAQCAtMjUzOCwxMyArMjUzOCw2
+IEBAIEY6CWFyY2gvYXJtL2Jvb3QvZHRzL2JlcmxpbioKIEY6CWFyY2gvYXJtL21hY2gtYmVybGlu
+LwogRjoJYXJjaC9hcm02NC9ib290L2R0cy9zeW5hcHRpY3MvCiAKLUFSTS9UQU5HTyBBUkNISVRF
+Q1RVUkUKLU06CU1hcmMgR29uemFsZXogPG1hcmMudy5nb256YWxlekBmcmVlLmZyPgotTToJTWFu
+cyBSdWxsZ2FyZCA8bWFuc0BtYW5zci5jb20+Ci1MOglsaW51eC1hcm0ta2VybmVsQGxpc3RzLmlu
+ZnJhZGVhZC5vcmcKLVM6CU9kZCBGaXhlcwotTjoJdGFuZ28KLQogQVJNL1RFQ0hOT0xPR0lDIFNZ
+U1RFTVMgVFM3MjUwIE1BQ0hJTkUgU1VQUE9SVAogTToJTGVubmVydCBCdXl0ZW5oZWsgPGtlcm5l
+bEB3YW50c3RvZmx5Lm9yZz4KIEw6CWxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9y
+ZyAobW9kZXJhdGVkIGZvciBub24tc3Vic2NyaWJlcnMpCmRpZmYgLS1naXQgYS9hcmNoL2FybS9L
+Y29uZmlnIGIvYXJjaC9hcm0vS2NvbmZpZwppbmRleCA5ZjYwNWFiNTQ1NzAuLjcwZDZiZmJjZDE2
+NCAxMDA2NDQKLS0tIGEvYXJjaC9hcm0vS2NvbmZpZworKysgYi9hcmNoL2FybS9LY29uZmlnCkBA
+IC03MDIsOCArNzAyLDYgQEAgc291cmNlICJhcmNoL2FybS9tYWNoLXN0bTMyL0tjb25maWciCiAK
+IHNvdXJjZSAiYXJjaC9hcm0vbWFjaC1zdW54aS9LY29uZmlnIgogCi1zb3VyY2UgImFyY2gvYXJt
+L21hY2gtdGFuZ28vS2NvbmZpZyIKLQogc291cmNlICJhcmNoL2FybS9tYWNoLXRlZ3JhL0tjb25m
+aWciCiAKIHNvdXJjZSAiYXJjaC9hcm0vbWFjaC11MzAwL0tjb25maWciCmRpZmYgLS1naXQgYS9h
+cmNoL2FybS9NYWtlZmlsZSBiL2FyY2gvYXJtL01ha2VmaWxlCmluZGV4IDdiOGVlZDkzZjFmYS4u
+MTI5MWZkYzg2OWYyIDEwMDY0NAotLS0gYS9hcmNoL2FybS9NYWtlZmlsZQorKysgYi9hcmNoL2Fy
+bS9NYWtlZmlsZQpAQCAtMjEzLDcgKzIxMyw2IEBAIG1hY2hpbmUtJChDT05GSUdfQVJDSF9TT0NG
+UEdBKQkJKz0gc29jZnBnYQogbWFjaGluZS0kKENPTkZJR19BUkNIX1NUSSkJCSs9IHN0aQogbWFj
+aGluZS0kKENPTkZJR19BUkNIX1NUTTMyKQkJKz0gc3RtMzIKIG1hY2hpbmUtJChDT05GSUdfQVJD
+SF9TVU5YSSkJCSs9IHN1bnhpCi1tYWNoaW5lLSQoQ09ORklHX0FSQ0hfVEFOR08pCQkrPSB0YW5n
+bwogbWFjaGluZS0kKENPTkZJR19BUkNIX1RFR1JBKQkJKz0gdGVncmEKIG1hY2hpbmUtJChDT05G
+SUdfQVJDSF9VMzAwKQkJKz0gdTMwMAogbWFjaGluZS0kKENPTkZJR19BUkNIX1U4NTAwKQkJKz0g
+dXg1MDAKZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL01ha2VmaWxlIGIvYXJjaC9hcm0v
+Ym9vdC9kdHMvTWFrZWZpbGUKaW5kZXggNWZjYWU4NDZhYTAwLi5hMTMxMTJmODczMGMgMTAwNjQ0
+Ci0tLSBhL2FyY2gvYXJtL2Jvb3QvZHRzL01ha2VmaWxlCisrKyBiL2FyY2gvYXJtL2Jvb3QvZHRz
+L01ha2VmaWxlCkBAIC0xMjIxLDggKzEyMjEsNiBAQCBkdGItJChDT05GSUdfTUFDSF9TVU45SSkg
+Kz0gXAogCXN1bjlpLWE4MC1jdWJpZWJvYXJkNC5kdGIKIGR0Yi0kKENPTkZJR19NQUNIX1NVTklW
+KSArPSBcCiAJc3VuaXYtZjFjMTAwcy1saWNoZWVwaS1uYW5vLmR0YgotZHRiLSQoQ09ORklHX0FS
+Q0hfVEFOR08pICs9IFwKLQl0YW5nbzQtdmFudGFnZS0xMTcyLmR0YgogZHRiLSQoQ09ORklHX0FS
+Q0hfVEVHUkFfMnhfU09DKSArPSBcCiAJdGVncmEyMC1hY2VyLWE1MDAtcGljYXNzby5kdGIgXAog
+CXRlZ3JhMjAtaGFybW9ueS5kdGIgXApkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvdGFu
+Z280LWNvbW1vbi5kdHNpIGIvYXJjaC9hcm0vYm9vdC9kdHMvdGFuZ280LWNvbW1vbi5kdHNpCmRl
+bGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCBkNTg0ZGEzMTQ1MDAuLjAwMDAwMDAwMDAwMApk
+aWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvdGFuZ280LXNtcDg3NTguZHRzaSBiL2FyY2gv
+YXJtL2Jvb3QvZHRzL3RhbmdvNC1zbXA4NzU4LmR0c2kKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0
+CmluZGV4IDFjNmE1YmYxYTg2Yi4uMDAwMDAwMDAwMDAwCmRpZmYgLS1naXQgYS9hcmNoL2FybS9i
+b290L2R0cy90YW5nbzQtdmFudGFnZS0xMTcyLmR0cyBiL2FyY2gvYXJtL2Jvb3QvZHRzL3Rhbmdv
+NC12YW50YWdlLTExNzIuZHRzCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCBkMjM3ZDdm
+MDJjNTEuLjAwMDAwMDAwMDAwMApkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vY29uZmlncy90YW5nbzRf
+ZGVmY29uZmlnIGIvYXJjaC9hcm0vY29uZmlncy90YW5nbzRfZGVmY29uZmlnCmRlbGV0ZWQgZmls
+ZSBtb2RlIDEwMDY0NAppbmRleCBjYmM5YWRlNzhmMTQuLjAwMDAwMDAwMDAwMApkaWZmIC0tZ2l0
+IGEvYXJjaC9hcm0vbWFjaC10YW5nby9LY29uZmlnIGIvYXJjaC9hcm0vbWFjaC10YW5nby9LY29u
+ZmlnCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCBhOWVlZGEzNmFlYjEuLjAwMDAwMDAw
+MDAwMApkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vbWFjaC10YW5nby9NYWtlZmlsZSBiL2FyY2gvYXJt
+L21hY2gtdGFuZ28vTWFrZWZpbGUKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDk3Y2Qw
+NDUwOGZhMS4uMDAwMDAwMDAwMDAwCmRpZmYgLS1naXQgYS9hcmNoL2FybS9tYWNoLXRhbmdvL3Bs
+YXRzbXAuYyBiL2FyY2gvYXJtL21hY2gtdGFuZ28vcGxhdHNtcC5jCmRlbGV0ZWQgZmlsZSBtb2Rl
+IDEwMDY0NAppbmRleCA2NTAxMmFmYmMxYTMuLjAwMDAwMDAwMDAwMApkaWZmIC0tZ2l0IGEvYXJj
+aC9hcm0vbWFjaC10YW5nby9wbS5jIGIvYXJjaC9hcm0vbWFjaC10YW5nby9wbS5jCmRlbGV0ZWQg
+ZmlsZSBtb2RlIDEwMDY0NAppbmRleCBhMzJjM2I2MzE0ODQuLjAwMDAwMDAwMDAwMApkaWZmIC0t
+Z2l0IGEvYXJjaC9hcm0vbWFjaC10YW5nby9wbS5oIGIvYXJjaC9hcm0vbWFjaC10YW5nby9wbS5o
+CmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAzNWVhNzA1YTBlZTIuLjAwMDAwMDAwMDAw
+MApkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vbWFjaC10YW5nby9zZXR1cC5jIGIvYXJjaC9hcm0vbWFj
+aC10YW5nby9zZXR1cC5jCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCA4MjRmOTA3Mzdi
+MDQuLjAwMDAwMDAwMDAwMApkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vbWFjaC10YW5nby9zbWMuUyBi
+L2FyY2gvYXJtL21hY2gtdGFuZ28vc21jLlMKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
+IGIxNzUyYWFhNzJiYy4uMDAwMDAwMDAwMDAwCmRpZmYgLS1naXQgYS9hcmNoL2FybS9tYWNoLXRh
+bmdvL3NtYy5oIGIvYXJjaC9hcm0vbWFjaC10YW5nby9zbWMuaApkZWxldGVkIGZpbGUgbW9kZSAx
+MDA2NDQKaW5kZXggNDU1Y2UzZTA2ZGFmLi4wMDAwMDAwMDAwMDAKZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvaTJjL2J1c3Nlcy9LY29uZmlnIGIvZHJpdmVycy9pMmMvYnVzc2VzL0tjb25maWcKaW5kZXgg
+ZDRkNjBhZDBlZGEwLi4wZTI4NGZiNzUwZTUgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvaTJjL2J1c3Nl
+cy9LY29uZmlnCisrKyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9LY29uZmlnCkBAIC0xMTc0LDggKzEx
+NzQsOCBAQCBjb25maWcgSTJDX1hJTElOWAogCSAgd2lsbCBiZSBjYWxsZWQgeGlsaW54X2kyYy4K
+IAogY29uZmlnIEkyQ19YTFIKLQl0cmlzdGF0ZSAiTmV0bG9naWMgWExSIGFuZCBTaWdtYSBEZXNp
+Z25zIEkyQyBzdXBwb3J0IgotCWRlcGVuZHMgb24gQ1BVX1hMUiB8fCBBUkNIX1RBTkdPIHx8IENP
+TVBJTEVfVEVTVAorCXRyaXN0YXRlICJOZXRsb2dpYyBYTFIgSTJDIHN1cHBvcnQiCisJZGVwZW5k
+cyBvbiBDUFVfWExSIHx8IENPTVBJTEVfVEVTVAogCWhlbHAKIAkgIFRoaXMgZHJpdmVyIGVuYWJs
+ZXMgc3VwcG9ydCBmb3IgdGhlIG9uLWNoaXAgSTJDIGludGVyZmFjZSBvZgogCSAgdGhlIE5ldGxv
+Z2ljIFhMUi9YTFMgTUlQUyBwcm9jZXNzb3JzIGFuZCBTaWdtYSBEZXNpZ25zIFNPQ3MuCi0tIAoy
+LjI5LjIKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+aW51eC1hcm0ta2VybmVsIG1haWxpbmcgbGlzdApsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJh
+ZGVhZC5vcmcKaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51
+eC1hcm0ta2VybmVsCg==
