@@ -1,254 +1,807 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=0ZpT=GX=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A66D9C433E0
-	for <soc@archiver.kernel.org>; Wed, 20 Jan 2021 12:48:49 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 6161923383; Wed, 20 Jan 2021 12:48:49 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2AC3A23381;
-	Wed, 20 Jan 2021 12:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C0CDC433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Jan 2021 12:50:14 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 1FEBF23340
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Jan 2021 12:50:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1FEBF23340
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
+	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=sbbxeQSnjWbg1RZO4tZAypwmytEjw9n4Mmd3A7TuCqc=; b=Q9pp4AzQ68sTB2o4B1b3DI89S
+	NTK5gIwSowzzP/k5P/XlA+PivIj7MNq9LJmtAsD60ocwUyDvfcasNzbw62datbdVfrhF58IF4KnEL
+	KyZytV7PiB7M4Y3b/RBA4FxZ/t4GaIKBrK3YuS4JJgXDoquWEaMCdOrMv+2TkFlmHZekDq7fJmBb3
+	MoyYw1uW1chtuhMdM8BCfbtb4M76eQb18LfxmeexGAKcs7E9Kz7qOiedNnf3J8Iea2vmrcicvVfkB
+	dwPSXzuYOshk8j/vcsf8xonJCVGno7l3lp6dOdKXxDhtak5WLkKNevG95BBLjcl4Jp8O315hpjGT9
+	cWNU0Sleg==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l2Cud-0002Aw-HB; Wed, 20 Jan 2021 12:48:39 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l2CuZ-0002A7-8b
+ for linux-arm-kernel@lists.infradead.org; Wed, 20 Jan 2021 12:48:37 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BFFA223359;
+ Wed, 20 Jan 2021 12:48:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1611146929;
-	bh=BWyv/u7vwlOEx4k7nYHY2DCVRTpFdi7p6xzsWlNF87Q=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KW7dK1jumBIReL+LgPdnfG1xv64plTaR9D0i450ktpQwktP2lwamswOyux2Oj9znY
-	 dvFWwtgtA3XOLUkvZrvgy8G7DWv1bpWZ0cVrXGRxIX21x+DvTDKo4gVeEH3rUWekX/
-	 YOKClnysTB4uExfbuBEx6TMuVB/QjMFIpa7DvzCT4hKVthm5sfE7jfO6GaA024qpPy
-	 Hn4xxSi6FbCaBTLQ6iGBrb2ht3fqrX06+UlBr/JjTzGkyGP2xAny0vXXZRQda6ewaL
-	 UCSTmDgflsBto43Mpc1qw3mYXzq0RwTphT5D/yjS8DRQE0rk9KHucj1bx9vvKJaVpM
-	 dbfCTW8nDu9oQ==
+ s=k20201202; t=1611146914;
+ bh=MZeAhQfFaf4CD1zpd2poTvI1ZzBOMTH/g48ULLCsDFc=;
+ h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=IEYlHC2x6XiJY/ESDwFVnOHQLGVs/Daxu+JqeBpBpQTBsbPi+1QiN3Ec9sP5TyB6t
+ oopJXzUKr0Ps7py8fJesFJktZZUMZikfIdkUu4PaFJHOM+OfU93+aCe7WRdbvvYZJ8
+ 1jxYMTT9bqGO5Kx3xwqeej0EQaGJUyHzPURg8BhyHDb7Ls8LYB1UWo8N+0ZDMnpYbK
+ k/mgYSy7yWs92CjGk0x0tEjr4uLqJrahjRkyILd2WPTuVdv2daSSkaaYAtBddBgbuH
+ OawXbYnM45/QOdwuRJA6a8qBdzi3/6ro8MbckTCWr4+kJfCt3BSxmKkKH+swC+acRo
+ Yqb15jd/A2Omg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5/5] ARM: remove u300 platform
-Date: Wed, 20 Jan 2021 13:48:12 +0100
-Message-Id: <20210120124812.2800027-6-arnd@kernel.org>
+To: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ soc@kernel.org
+Subject: [PATCH 1/5] c6x: remove architecture
+Date: Wed, 20 Jan 2021 13:48:08 +0100
+Message-ID: <20210120124812.2800027-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210120124812.2800027-1-arnd@kernel.org>
 References: <20210120124812.2800027-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210120_074835_448398_409A720A 
+X-CRM114-Status: GOOD (  16.41  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
+ linux-c6x-dev@linux-c6x.org, Arnd Bergmann <arnd@arndb.de>,
+ Mark Salter <msalter@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210120124808.CgbfG8nRUSruoqqL-bFvUF7yIZtWu4vYylA-DtwHT0w@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The Ericsson U300 platform was one of two ARM929 based SoC platforms for
-mobile phones in ST-Ericsson after the merger of Ericsson with ST-NXP
-into ST-Ericsson, the other one being the ST Nomadik.
+The c6x architecture was added to the kernel in 2011 at a time when
+running Linux on DSPs was widely seen as the logical evolution.
+It appears the trend has gone back to running Linux on Arm based SoCs
+with DSP, using a better supported software ecosystem, and having better
+real-time behavior for the DSP code. An example of this is TI's own
+Keystone2 platform.
 
-The platform was not widely adopted in Linux based systems and was
-replaced with the far superior ST-Ericsson U8500 in 2011, but Linus
-Walleij kept maintaining the code for the whole time.
+The upstream kernel port appears to no longer have any users. Mark
+Salter remained avaialable to review patches, but mentioned that
+he no longer has access to working hardware himself. Without any
+users, it's best to just remove the code completely to reduce the
+work for cross-architecture code changes.
 
-Linus continues to use the Nomadik machine, but decided to drop
-u300 from the kernel as part of this year's spring cleaning.
-Thanks for having maintained it all these years.
+Many thanks to Mark for maintaining the code for the past ten years.
 
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/lkml/CACRpkdbJkiHR9FSfJTH_5d_qRU1__dRXHM1TL40iqNRKbGQfrQ@mail.gmail.com/
+Link: https://lore.kernel.org/lkml/41dc7795afda9f776d8cd0d3075f776cf586e97c.camel@redhat.com/
+Cc: Mark Salter <msalter@redhat.com>
+Cc: Aurelien Jacquiot <jacquiot.aurelien@gmail.com>
+Cc: linux-c6x-dev@linux-c6x.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- .../devicetree/bindings/arm/ste-u300.txt      |  46 --
- MAINTAINERS                                   |  14 +-
- arch/arm/Kconfig                              |   2 -
- arch/arm/Kconfig.debug                        |  10 -
- arch/arm/Makefile                             |   1 -
- arch/arm/boot/dts/Makefile                    |   2 -
- arch/arm/boot/dts/ste-u300.dts                | 464 ------------------
- arch/arm/configs/u300_defconfig               |  65 ---
- arch/arm/mach-u300/Kconfig                    |  32 --
- arch/arm/mach-u300/Makefile                   |   8 -
- arch/arm/mach-u300/core.c                     | 413 ----------------
- arch/arm/mach-u300/regulator.c                | 134 -----
- drivers/mtd/nand/raw/Kconfig                  |   3 +-
- drivers/spi/Kconfig                           |   1 -
- 14 files changed, 2 insertions(+), 1193 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/ste-u300.txt
- delete mode 100644 arch/arm/boot/dts/ste-u300.dts
- delete mode 100644 arch/arm/configs/u300_defconfig
- delete mode 100644 arch/arm/mach-u300/Kconfig
- delete mode 100644 arch/arm/mach-u300/Makefile
- delete mode 100644 arch/arm/mach-u300/core.c
- delete mode 100644 arch/arm/mach-u300/regulator.c
+ .../devicetree/bindings/c6x/clocks.txt        |  40 -
+ .../devicetree/bindings/c6x/dscr.txt          | 127 ---
+ .../devicetree/bindings/c6x/emifa.txt         |  62 --
+ Documentation/devicetree/bindings/c6x/soc.txt |  28 -
+ .../ti,c64x+megamod-pic.txt                   | 103 ---
+ .../bindings/timer/ti,c64x+timer64.txt        |  25 -
+ MAINTAINERS                                   |   8 -
+ arch/c6x/Kconfig                              | 113 ---
+ arch/c6x/Kconfig.debug                        |  10 -
+ arch/c6x/Makefile                             |  60 --
+ arch/c6x/boot/Makefile                        |  11 -
+ arch/c6x/boot/dts/Makefile                    |  16 -
+ arch/c6x/boot/dts/dsk6455.dts                 |  57 --
+ arch/c6x/boot/dts/evmc6457.dts                |  43 -
+ arch/c6x/boot/dts/evmc6472.dts                |  68 --
+ arch/c6x/boot/dts/evmc6474.dts                |  53 --
+ arch/c6x/boot/dts/evmc6678.dts                |  78 --
+ arch/c6x/boot/dts/tms320c6455.dtsi            |  97 ---
+ arch/c6x/boot/dts/tms320c6457.dtsi            |  69 --
+ arch/c6x/boot/dts/tms320c6472.dtsi            | 135 ----
+ arch/c6x/boot/dts/tms320c6474.dtsi            |  90 ---
+ arch/c6x/boot/dts/tms320c6678.dtsi            | 147 ----
+ arch/c6x/configs/dsk6455_defconfig            |  42 -
+ arch/c6x/configs/evmc6457_defconfig           |  39 -
+ arch/c6x/configs/evmc6472_defconfig           |  40 -
+ arch/c6x/configs/evmc6474_defconfig           |  40 -
+ arch/c6x/configs/evmc6678_defconfig           |  40 -
+ arch/c6x/include/asm/Kbuild                   |   5 -
+ arch/c6x/include/asm/asm-offsets.h            |   1 -
+ arch/c6x/include/asm/bitops.h                 |  95 ---
+ arch/c6x/include/asm/bug.h                    |  20 -
+ arch/c6x/include/asm/cache.h                  |  94 ---
+ arch/c6x/include/asm/cacheflush.h             |  45 --
+ arch/c6x/include/asm/checksum.h               |  34 -
+ arch/c6x/include/asm/clock.h                  | 145 ----
+ arch/c6x/include/asm/cmpxchg.h                |  63 --
+ arch/c6x/include/asm/delay.h                  |  64 --
+ arch/c6x/include/asm/dscr.h                   |  30 -
+ arch/c6x/include/asm/elf.h                    | 117 ---
+ arch/c6x/include/asm/flat.h                   |  19 -
+ arch/c6x/include/asm/ftrace.h                 |   6 -
+ arch/c6x/include/asm/hardirq.h                |  17 -
+ arch/c6x/include/asm/irq.h                    |  50 --
+ arch/c6x/include/asm/irqflags.h               |  68 --
+ arch/c6x/include/asm/linkage.h                |  31 -
+ arch/c6x/include/asm/megamod-pic.h            |  10 -
+ arch/c6x/include/asm/mmu_context.h            |   6 -
+ arch/c6x/include/asm/module.h                 |  20 -
+ arch/c6x/include/asm/page.h                   |   9 -
+ arch/c6x/include/asm/pgtable.h                |  66 --
+ arch/c6x/include/asm/processor.h              | 114 ---
+ arch/c6x/include/asm/procinfo.h               |  24 -
+ arch/c6x/include/asm/ptrace.h                 |  32 -
+ arch/c6x/include/asm/sections.h               |  12 -
+ arch/c6x/include/asm/setup.h                  |  31 -
+ arch/c6x/include/asm/soc.h                    |  35 -
+ arch/c6x/include/asm/special_insns.h          |  60 --
+ arch/c6x/include/asm/string.h                 |  18 -
+ arch/c6x/include/asm/switch_to.h              |  30 -
+ arch/c6x/include/asm/syscall.h                |  75 --
+ arch/c6x/include/asm/syscalls.h               |  46 --
+ arch/c6x/include/asm/thread_info.h            |  94 ---
+ arch/c6x/include/asm/timer64.h                |   7 -
+ arch/c6x/include/asm/timex.h                  |  30 -
+ arch/c6x/include/asm/tlb.h                    |   7 -
+ arch/c6x/include/asm/traps.h                  |  33 -
+ arch/c6x/include/asm/uaccess.h                |  97 ---
+ arch/c6x/include/asm/unaligned.h              | 104 ---
+ arch/c6x/include/asm/vmalloc.h                |   4 -
+ arch/c6x/include/uapi/asm/Kbuild              |   2 -
+ arch/c6x/include/uapi/asm/byteorder.h         |  13 -
+ arch/c6x/include/uapi/asm/ptrace.h            | 164 ----
+ arch/c6x/include/uapi/asm/setup.h             |   7 -
+ arch/c6x/include/uapi/asm/sigcontext.h        |  81 --
+ arch/c6x/include/uapi/asm/swab.h              |  55 --
+ arch/c6x/include/uapi/asm/unistd.h            |  29 -
+ arch/c6x/kernel/Makefile                      |  13 -
+ arch/c6x/kernel/asm-offsets.c                 | 123 ---
+ arch/c6x/kernel/c6x_ksyms.c                   |  62 --
+ arch/c6x/kernel/devicetree.c                  |  14 -
+ arch/c6x/kernel/entry.S                       | 736 ------------------
+ arch/c6x/kernel/head.S                        |  81 --
+ arch/c6x/kernel/irq.c                         | 127 ---
+ arch/c6x/kernel/module.c                      | 119 ---
+ arch/c6x/kernel/process.c                     | 151 ----
+ arch/c6x/kernel/ptrace.c                      | 139 ----
+ arch/c6x/kernel/setup.c                       | 476 -----------
+ arch/c6x/kernel/signal.c                      | 322 --------
+ arch/c6x/kernel/soc.c                         |  87 ---
+ arch/c6x/kernel/switch_to.S                   |  71 --
+ arch/c6x/kernel/sys_c6x.c                     |  71 --
+ arch/c6x/kernel/time.c                        |  63 --
+ arch/c6x/kernel/traps.c                       | 409 ----------
+ arch/c6x/kernel/vectors.S                     |  78 --
+ arch/c6x/kernel/vmlinux.lds.S                 | 151 ----
+ arch/c6x/lib/Makefile                         |   8 -
+ arch/c6x/lib/checksum.c                       |  11 -
+ arch/c6x/lib/csum_64plus.S                    | 414 ----------
+ arch/c6x/lib/divi.S                           |  41 -
+ arch/c6x/lib/divremi.S                        |  34 -
+ arch/c6x/lib/divremu.S                        |  75 --
+ arch/c6x/lib/divu.S                           |  86 --
+ arch/c6x/lib/llshl.S                          |  25 -
+ arch/c6x/lib/llshr.S                          |  26 -
+ arch/c6x/lib/llshru.S                         |  26 -
+ arch/c6x/lib/memcpy_64plus.S                  |  43 -
+ arch/c6x/lib/mpyll.S                          |  37 -
+ arch/c6x/lib/negll.S                          |  19 -
+ arch/c6x/lib/pop_rts.S                        |  20 -
+ arch/c6x/lib/push_rts.S                       |  19 -
+ arch/c6x/lib/remi.S                           |  52 --
+ arch/c6x/lib/remu.S                           |  70 --
+ arch/c6x/lib/strasgi.S                        |  77 --
+ arch/c6x/lib/strasgi_64plus.S                 |  27 -
+ arch/c6x/mm/Makefile                          |   6 -
+ arch/c6x/mm/dma-coherent.c                    | 173 ----
+ arch/c6x/mm/init.c                            |  65 --
+ arch/c6x/platforms/Kconfig                    |  21 -
+ arch/c6x/platforms/Makefile                   |  13 -
+ arch/c6x/platforms/cache.c                    | 444 -----------
+ arch/c6x/platforms/dscr.c                     | 595 --------------
+ arch/c6x/platforms/emif.c                     |  84 --
+ arch/c6x/platforms/megamod-pic.c              | 344 --------
+ arch/c6x/platforms/pll.c                      | 440 -----------
+ arch/c6x/platforms/plldata.c                  | 467 -----------
+ arch/c6x/platforms/timer64.c                  | 241 ------
+ drivers/bus/Kconfig                           |   2 +-
+ fs/Kconfig.binfmt                             |   2 +-
+ include/asm-generic/page.h                    |   4 -
+ 129 files changed, 2 insertions(+), 11162 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/c6x/clocks.txt
+ delete mode 100644 Documentation/devicetree/bindings/c6x/dscr.txt
+ delete mode 100644 Documentation/devicetree/bindings/c6x/emifa.txt
+ delete mode 100644 Documentation/devicetree/bindings/c6x/soc.txt
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/ti,c64x+megamod-pic.txt
+ delete mode 100644 Documentation/devicetree/bindings/timer/ti,c64x+timer64.txt
+ delete mode 100644 arch/c6x/Kconfig
+ delete mode 100644 arch/c6x/Kconfig.debug
+ delete mode 100644 arch/c6x/Makefile
+ delete mode 100644 arch/c6x/boot/Makefile
+ delete mode 100644 arch/c6x/boot/dts/Makefile
+ delete mode 100644 arch/c6x/boot/dts/dsk6455.dts
+ delete mode 100644 arch/c6x/boot/dts/evmc6457.dts
+ delete mode 100644 arch/c6x/boot/dts/evmc6472.dts
+ delete mode 100644 arch/c6x/boot/dts/evmc6474.dts
+ delete mode 100644 arch/c6x/boot/dts/evmc6678.dts
+ delete mode 100644 arch/c6x/boot/dts/tms320c6455.dtsi
+ delete mode 100644 arch/c6x/boot/dts/tms320c6457.dtsi
+ delete mode 100644 arch/c6x/boot/dts/tms320c6472.dtsi
+ delete mode 100644 arch/c6x/boot/dts/tms320c6474.dtsi
+ delete mode 100644 arch/c6x/boot/dts/tms320c6678.dtsi
+ delete mode 100644 arch/c6x/configs/dsk6455_defconfig
+ delete mode 100644 arch/c6x/configs/evmc6457_defconfig
+ delete mode 100644 arch/c6x/configs/evmc6472_defconfig
+ delete mode 100644 arch/c6x/configs/evmc6474_defconfig
+ delete mode 100644 arch/c6x/configs/evmc6678_defconfig
+ delete mode 100644 arch/c6x/include/asm/Kbuild
+ delete mode 100644 arch/c6x/include/asm/asm-offsets.h
+ delete mode 100644 arch/c6x/include/asm/bitops.h
+ delete mode 100644 arch/c6x/include/asm/bug.h
+ delete mode 100644 arch/c6x/include/asm/cache.h
+ delete mode 100644 arch/c6x/include/asm/cacheflush.h
+ delete mode 100644 arch/c6x/include/asm/checksum.h
+ delete mode 100644 arch/c6x/include/asm/clock.h
+ delete mode 100644 arch/c6x/include/asm/cmpxchg.h
+ delete mode 100644 arch/c6x/include/asm/delay.h
+ delete mode 100644 arch/c6x/include/asm/dscr.h
+ delete mode 100644 arch/c6x/include/asm/elf.h
+ delete mode 100644 arch/c6x/include/asm/flat.h
+ delete mode 100644 arch/c6x/include/asm/ftrace.h
+ delete mode 100644 arch/c6x/include/asm/hardirq.h
+ delete mode 100644 arch/c6x/include/asm/irq.h
+ delete mode 100644 arch/c6x/include/asm/irqflags.h
+ delete mode 100644 arch/c6x/include/asm/linkage.h
+ delete mode 100644 arch/c6x/include/asm/megamod-pic.h
+ delete mode 100644 arch/c6x/include/asm/mmu_context.h
+ delete mode 100644 arch/c6x/include/asm/module.h
+ delete mode 100644 arch/c6x/include/asm/page.h
+ delete mode 100644 arch/c6x/include/asm/pgtable.h
+ delete mode 100644 arch/c6x/include/asm/processor.h
+ delete mode 100644 arch/c6x/include/asm/procinfo.h
+ delete mode 100644 arch/c6x/include/asm/ptrace.h
+ delete mode 100644 arch/c6x/include/asm/sections.h
+ delete mode 100644 arch/c6x/include/asm/setup.h
+ delete mode 100644 arch/c6x/include/asm/soc.h
+ delete mode 100644 arch/c6x/include/asm/special_insns.h
+ delete mode 100644 arch/c6x/include/asm/string.h
+ delete mode 100644 arch/c6x/include/asm/switch_to.h
+ delete mode 100644 arch/c6x/include/asm/syscall.h
+ delete mode 100644 arch/c6x/include/asm/syscalls.h
+ delete mode 100644 arch/c6x/include/asm/thread_info.h
+ delete mode 100644 arch/c6x/include/asm/timer64.h
+ delete mode 100644 arch/c6x/include/asm/timex.h
+ delete mode 100644 arch/c6x/include/asm/tlb.h
+ delete mode 100644 arch/c6x/include/asm/traps.h
+ delete mode 100644 arch/c6x/include/asm/uaccess.h
+ delete mode 100644 arch/c6x/include/asm/unaligned.h
+ delete mode 100644 arch/c6x/include/asm/vmalloc.h
+ delete mode 100644 arch/c6x/include/uapi/asm/Kbuild
+ delete mode 100644 arch/c6x/include/uapi/asm/byteorder.h
+ delete mode 100644 arch/c6x/include/uapi/asm/ptrace.h
+ delete mode 100644 arch/c6x/include/uapi/asm/setup.h
+ delete mode 100644 arch/c6x/include/uapi/asm/sigcontext.h
+ delete mode 100644 arch/c6x/include/uapi/asm/swab.h
+ delete mode 100644 arch/c6x/include/uapi/asm/unistd.h
+ delete mode 100644 arch/c6x/kernel/Makefile
+ delete mode 100644 arch/c6x/kernel/asm-offsets.c
+ delete mode 100644 arch/c6x/kernel/c6x_ksyms.c
+ delete mode 100644 arch/c6x/kernel/devicetree.c
+ delete mode 100644 arch/c6x/kernel/entry.S
+ delete mode 100644 arch/c6x/kernel/head.S
+ delete mode 100644 arch/c6x/kernel/irq.c
+ delete mode 100644 arch/c6x/kernel/module.c
+ delete mode 100644 arch/c6x/kernel/process.c
+ delete mode 100644 arch/c6x/kernel/ptrace.c
+ delete mode 100644 arch/c6x/kernel/setup.c
+ delete mode 100644 arch/c6x/kernel/signal.c
+ delete mode 100644 arch/c6x/kernel/soc.c
+ delete mode 100644 arch/c6x/kernel/switch_to.S
+ delete mode 100644 arch/c6x/kernel/sys_c6x.c
+ delete mode 100644 arch/c6x/kernel/time.c
+ delete mode 100644 arch/c6x/kernel/traps.c
+ delete mode 100644 arch/c6x/kernel/vectors.S
+ delete mode 100644 arch/c6x/kernel/vmlinux.lds.S
+ delete mode 100644 arch/c6x/lib/Makefile
+ delete mode 100644 arch/c6x/lib/checksum.c
+ delete mode 100644 arch/c6x/lib/csum_64plus.S
+ delete mode 100644 arch/c6x/lib/divi.S
+ delete mode 100644 arch/c6x/lib/divremi.S
+ delete mode 100644 arch/c6x/lib/divremu.S
+ delete mode 100644 arch/c6x/lib/divu.S
+ delete mode 100644 arch/c6x/lib/llshl.S
+ delete mode 100644 arch/c6x/lib/llshr.S
+ delete mode 100644 arch/c6x/lib/llshru.S
+ delete mode 100644 arch/c6x/lib/memcpy_64plus.S
+ delete mode 100644 arch/c6x/lib/mpyll.S
+ delete mode 100644 arch/c6x/lib/negll.S
+ delete mode 100644 arch/c6x/lib/pop_rts.S
+ delete mode 100644 arch/c6x/lib/push_rts.S
+ delete mode 100644 arch/c6x/lib/remi.S
+ delete mode 100644 arch/c6x/lib/remu.S
+ delete mode 100644 arch/c6x/lib/strasgi.S
+ delete mode 100644 arch/c6x/lib/strasgi_64plus.S
+ delete mode 100644 arch/c6x/mm/Makefile
+ delete mode 100644 arch/c6x/mm/dma-coherent.c
+ delete mode 100644 arch/c6x/mm/init.c
+ delete mode 100644 arch/c6x/platforms/Kconfig
+ delete mode 100644 arch/c6x/platforms/Makefile
+ delete mode 100644 arch/c6x/platforms/cache.c
+ delete mode 100644 arch/c6x/platforms/dscr.c
+ delete mode 100644 arch/c6x/platforms/emif.c
+ delete mode 100644 arch/c6x/platforms/megamod-pic.c
+ delete mode 100644 arch/c6x/platforms/pll.c
+ delete mode 100644 arch/c6x/platforms/plldata.c
+ delete mode 100644 arch/c6x/platforms/timer64.c
 
-diff --git a/Documentation/devicetree/bindings/arm/ste-u300.txt b/Documentation/devicetree/bindings/arm/ste-u300.txt
+diff --git a/Documentation/devicetree/bindings/c6x/clocks.txt b/Documentation/devicetree/bindings/c6x/clocks.txt
 deleted file mode 100644
-index d11d80006a19..000000000000
+index a04f5fd30122..000000000000
+diff --git a/Documentation/devicetree/bindings/c6x/dscr.txt b/Documentation/devicetree/bindings/c6x/dscr.txt
+deleted file mode 100644
+index 92672235de57..000000000000
+diff --git a/Documentation/devicetree/bindings/c6x/emifa.txt b/Documentation/devicetree/bindings/c6x/emifa.txt
+deleted file mode 100644
+index 0ff6e9b9a13f..000000000000
+diff --git a/Documentation/devicetree/bindings/c6x/soc.txt b/Documentation/devicetree/bindings/c6x/soc.txt
+deleted file mode 100644
+index b1e4973b5769..000000000000
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/ti,c64x+megamod-pic.txt b/Documentation/devicetree/bindings/interrupt-controller/ti,c64x+megamod-pic.txt
+deleted file mode 100644
+index ee3f9c351501..000000000000
+diff --git a/Documentation/devicetree/bindings/timer/ti,c64x+timer64.txt b/Documentation/devicetree/bindings/timer/ti,c64x+timer64.txt
+deleted file mode 100644
+index d96c1e283e73..000000000000
 diff --git a/MAINTAINERS b/MAINTAINERS
-index bb2a153f76d7..908e03f0ed3a 100644
+index fb971f5f6f0c..7c3eadb185f9 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2136,7 +2136,7 @@ ARM/NEC MOBILEPRO 900/c MACHINE SUPPORT
- M:	Michael Petchkovsky <mkpetch@internode.on.net>
- S:	Maintained
+@@ -3837,14 +3837,6 @@ F:	drivers/irqchip/irq-csky-*
+ N:	csky
+ K:	csky
  
--ARM/NOMADIK/U300/Ux500 ARCHITECTURES
-+ARM/NOMADIK/Ux500 ARCHITECTURES
- M:	Linus Walleij <linus.walleij@linaro.org>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
-@@ -2145,35 +2145,23 @@ F:	Documentation/devicetree/bindings/arm/ste-*
- F:	Documentation/devicetree/bindings/arm/ux500.yaml
- F:	Documentation/devicetree/bindings/arm/ux500/
- F:	Documentation/devicetree/bindings/i2c/i2c-nomadik.txt
--F:	Documentation/devicetree/bindings/i2c/i2c-stu300.txt
- F:	arch/arm/boot/dts/ste-*
- F:	arch/arm/mach-nomadik/
--F:	arch/arm/mach-u300/
- F:	arch/arm/mach-ux500/
- F:	drivers/clk/clk-nomadik.c
--F:	drivers/clk/clk-u300.c
- F:	drivers/clocksource/clksrc-dbx500-prcmu.c
--F:	drivers/clocksource/timer-u300.c
--F:	drivers/dma/coh901318*
- F:	drivers/dma/ste_dma40*
- F:	drivers/hwspinlock/u8500_hsem.c
- F:	drivers/i2c/busses/i2c-nomadik.c
--F:	drivers/i2c/busses/i2c-stu300.c
- F:	drivers/iio/adc/ab8500-gpadc.c
--F:	drivers/mfd/ab3100*
- F:	drivers/mfd/ab8500*
- F:	drivers/mfd/abx500*
- F:	drivers/mfd/db8500*
- F:	drivers/mfd/dbx500*
- F:	drivers/pinctrl/nomadik/
--F:	drivers/pinctrl/pinctrl-coh901*
--F:	drivers/pinctrl/pinctrl-u300.c
--F:	drivers/rtc/rtc-ab3100.c
- F:	drivers/rtc/rtc-ab8500.c
--F:	drivers/rtc/rtc-coh901331.c
- F:	drivers/rtc/rtc-pl031.c
- F:	drivers/soc/ux500/
--F:	drivers/watchdog/coh901327_wdt.c
- 
- ARM/NUVOTON NPCM ARCHITECTURE
- M:	Avi Fishman <avifishman70@gmail.com>
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 70d6bfbcd164..6c423ee402ae 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -704,8 +704,6 @@ source "arch/arm/mach-sunxi/Kconfig"
- 
- source "arch/arm/mach-tegra/Kconfig"
- 
--source "arch/arm/mach-u300/Kconfig"
+-C6X ARCHITECTURE
+-M:	Mark Salter <msalter@redhat.com>
+-M:	Aurelien Jacquiot <jacquiot.aurelien@gmail.com>
+-L:	linux-c6x-dev@linux-c6x.org
+-S:	Maintained
+-W:	http://www.linux-c6x.org/wiki/index.php/Main_Page
+-F:	arch/c6x/
 -
- source "arch/arm/mach-uniphier/Kconfig"
+ CA8210 IEEE-802.15.4 RADIO DRIVER
+ M:	Harry Morris <h.morris@cascoda.com>
+ L:	linux-wpan@vger.kernel.org
+diff --git a/arch/c6x/Kconfig b/arch/c6x/Kconfig
+deleted file mode 100644
+index bdeeac28b1be..000000000000
+diff --git a/arch/c6x/Kconfig.debug b/arch/c6x/Kconfig.debug
+deleted file mode 100644
+index c299e0d8eca3..000000000000
+diff --git a/arch/c6x/Makefile b/arch/c6x/Makefile
+deleted file mode 100644
+index b7aa854f7008..000000000000
+diff --git a/arch/c6x/boot/Makefile b/arch/c6x/boot/Makefile
+deleted file mode 100644
+index 842b7b0bfe80..000000000000
+diff --git a/arch/c6x/boot/dts/Makefile b/arch/c6x/boot/dts/Makefile
+deleted file mode 100644
+index f438285c3640..000000000000
+diff --git a/arch/c6x/boot/dts/dsk6455.dts b/arch/c6x/boot/dts/dsk6455.dts
+deleted file mode 100644
+index fa904f2916b5..000000000000
+diff --git a/arch/c6x/boot/dts/evmc6457.dts b/arch/c6x/boot/dts/evmc6457.dts
+deleted file mode 100644
+index 73e1d43b51ce..000000000000
+diff --git a/arch/c6x/boot/dts/evmc6472.dts b/arch/c6x/boot/dts/evmc6472.dts
+deleted file mode 100644
+index 4878b78919fa..000000000000
+diff --git a/arch/c6x/boot/dts/evmc6474.dts b/arch/c6x/boot/dts/evmc6474.dts
+deleted file mode 100644
+index d10746453217..000000000000
+diff --git a/arch/c6x/boot/dts/evmc6678.dts b/arch/c6x/boot/dts/evmc6678.dts
+deleted file mode 100644
+index 5e6c0961e7b2..000000000000
+diff --git a/arch/c6x/boot/dts/tms320c6455.dtsi b/arch/c6x/boot/dts/tms320c6455.dtsi
+deleted file mode 100644
+index 0b21cb30343b..000000000000
+diff --git a/arch/c6x/boot/dts/tms320c6457.dtsi b/arch/c6x/boot/dts/tms320c6457.dtsi
+deleted file mode 100644
+index e49f7ae19124..000000000000
+diff --git a/arch/c6x/boot/dts/tms320c6472.dtsi b/arch/c6x/boot/dts/tms320c6472.dtsi
+deleted file mode 100644
+index 9dd4b04e78ef..000000000000
+diff --git a/arch/c6x/boot/dts/tms320c6474.dtsi b/arch/c6x/boot/dts/tms320c6474.dtsi
+deleted file mode 100644
+index 0ef5333629a6..000000000000
+diff --git a/arch/c6x/boot/dts/tms320c6678.dtsi b/arch/c6x/boot/dts/tms320c6678.dtsi
+deleted file mode 100644
+index da1e3f2bf062..000000000000
+diff --git a/arch/c6x/configs/dsk6455_defconfig b/arch/c6x/configs/dsk6455_defconfig
+deleted file mode 100644
+index d764ea4cce7f..000000000000
+diff --git a/arch/c6x/configs/evmc6457_defconfig b/arch/c6x/configs/evmc6457_defconfig
+deleted file mode 100644
+index 05d0b4a25ab1..000000000000
+diff --git a/arch/c6x/configs/evmc6472_defconfig b/arch/c6x/configs/evmc6472_defconfig
+deleted file mode 100644
+index 8d81fcf86b0e..000000000000
+diff --git a/arch/c6x/configs/evmc6474_defconfig b/arch/c6x/configs/evmc6474_defconfig
+deleted file mode 100644
+index 8156a98f3958..000000000000
+diff --git a/arch/c6x/configs/evmc6678_defconfig b/arch/c6x/configs/evmc6678_defconfig
+deleted file mode 100644
+index c4f433c25b69..000000000000
+diff --git a/arch/c6x/include/asm/Kbuild b/arch/c6x/include/asm/Kbuild
+deleted file mode 100644
+index a4ef93a1f7ae..000000000000
+diff --git a/arch/c6x/include/asm/asm-offsets.h b/arch/c6x/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+diff --git a/arch/c6x/include/asm/bitops.h b/arch/c6x/include/asm/bitops.h
+deleted file mode 100644
+index 50e618f38a11..000000000000
+diff --git a/arch/c6x/include/asm/bug.h b/arch/c6x/include/asm/bug.h
+deleted file mode 100644
+index 1a68676256ee..000000000000
+diff --git a/arch/c6x/include/asm/cache.h b/arch/c6x/include/asm/cache.h
+deleted file mode 100644
+index 0fa8bf77c954..000000000000
+diff --git a/arch/c6x/include/asm/cacheflush.h b/arch/c6x/include/asm/cacheflush.h
+deleted file mode 100644
+index 10922d528de6..000000000000
+diff --git a/arch/c6x/include/asm/checksum.h b/arch/c6x/include/asm/checksum.h
+deleted file mode 100644
+index 934918def632..000000000000
+diff --git a/arch/c6x/include/asm/clock.h b/arch/c6x/include/asm/clock.h
+deleted file mode 100644
+index 7b6c42a52ec9..000000000000
+diff --git a/arch/c6x/include/asm/cmpxchg.h b/arch/c6x/include/asm/cmpxchg.h
+deleted file mode 100644
+index 6eed628a9e7f..000000000000
+diff --git a/arch/c6x/include/asm/delay.h b/arch/c6x/include/asm/delay.h
+deleted file mode 100644
+index 455fc713ae54..000000000000
+diff --git a/arch/c6x/include/asm/dscr.h b/arch/c6x/include/asm/dscr.h
+deleted file mode 100644
+index f6b095c3d3f5..000000000000
+diff --git a/arch/c6x/include/asm/elf.h b/arch/c6x/include/asm/elf.h
+deleted file mode 100644
+index ca88acbf560b..000000000000
+diff --git a/arch/c6x/include/asm/flat.h b/arch/c6x/include/asm/flat.h
+deleted file mode 100644
+index 9e6544b51386..000000000000
+diff --git a/arch/c6x/include/asm/ftrace.h b/arch/c6x/include/asm/ftrace.h
+deleted file mode 100644
+index 3701958d3d1c..000000000000
+diff --git a/arch/c6x/include/asm/hardirq.h b/arch/c6x/include/asm/hardirq.h
+deleted file mode 100644
+index f37d07d31040..000000000000
+diff --git a/arch/c6x/include/asm/irq.h b/arch/c6x/include/asm/irq.h
+deleted file mode 100644
+index 9da4d1afd0d7..000000000000
+diff --git a/arch/c6x/include/asm/irqflags.h b/arch/c6x/include/asm/irqflags.h
+deleted file mode 100644
+index d6cd71c02629..000000000000
+diff --git a/arch/c6x/include/asm/linkage.h b/arch/c6x/include/asm/linkage.h
+deleted file mode 100644
+index 1ad615da6479..000000000000
+diff --git a/arch/c6x/include/asm/megamod-pic.h b/arch/c6x/include/asm/megamod-pic.h
+deleted file mode 100644
+index a0a6d596bf9b..000000000000
+diff --git a/arch/c6x/include/asm/mmu_context.h b/arch/c6x/include/asm/mmu_context.h
+deleted file mode 100644
+index d2659d0a3297..000000000000
+diff --git a/arch/c6x/include/asm/module.h b/arch/c6x/include/asm/module.h
+deleted file mode 100644
+index 9fc9f4a8ecc2..000000000000
+diff --git a/arch/c6x/include/asm/page.h b/arch/c6x/include/asm/page.h
+deleted file mode 100644
+index 40079899084d..000000000000
+diff --git a/arch/c6x/include/asm/pgtable.h b/arch/c6x/include/asm/pgtable.h
+deleted file mode 100644
+index 8a91ceda39fa..000000000000
+diff --git a/arch/c6x/include/asm/processor.h b/arch/c6x/include/asm/processor.h
+deleted file mode 100644
+index 1456f5e11de3..000000000000
+diff --git a/arch/c6x/include/asm/procinfo.h b/arch/c6x/include/asm/procinfo.h
+deleted file mode 100644
+index aaa3cb902c43..000000000000
+diff --git a/arch/c6x/include/asm/ptrace.h b/arch/c6x/include/asm/ptrace.h
+deleted file mode 100644
+index 7cbae382cf37..000000000000
+diff --git a/arch/c6x/include/asm/sections.h b/arch/c6x/include/asm/sections.h
+deleted file mode 100644
+index dc2f15eb3bde..000000000000
+diff --git a/arch/c6x/include/asm/setup.h b/arch/c6x/include/asm/setup.h
+deleted file mode 100644
+index 5496bccecaa0..000000000000
+diff --git a/arch/c6x/include/asm/soc.h b/arch/c6x/include/asm/soc.h
+deleted file mode 100644
+index 43f50159e59b..000000000000
+diff --git a/arch/c6x/include/asm/special_insns.h b/arch/c6x/include/asm/special_insns.h
+deleted file mode 100644
+index d233160aefd4..000000000000
+diff --git a/arch/c6x/include/asm/string.h b/arch/c6x/include/asm/string.h
+deleted file mode 100644
+index b290ead40f68..000000000000
+diff --git a/arch/c6x/include/asm/switch_to.h b/arch/c6x/include/asm/switch_to.h
+deleted file mode 100644
+index 36c5332fadae..000000000000
+diff --git a/arch/c6x/include/asm/syscall.h b/arch/c6x/include/asm/syscall.h
+deleted file mode 100644
+index 38f3e2284ecd..000000000000
+diff --git a/arch/c6x/include/asm/syscalls.h b/arch/c6x/include/asm/syscalls.h
+deleted file mode 100644
+index df3d05feb153..000000000000
+diff --git a/arch/c6x/include/asm/thread_info.h b/arch/c6x/include/asm/thread_info.h
+deleted file mode 100644
+index dd8913d57189..000000000000
+diff --git a/arch/c6x/include/asm/timer64.h b/arch/c6x/include/asm/timer64.h
+deleted file mode 100644
+index b850dfef1f79..000000000000
+diff --git a/arch/c6x/include/asm/timex.h b/arch/c6x/include/asm/timex.h
+deleted file mode 100644
+index f946ce297e13..000000000000
+diff --git a/arch/c6x/include/asm/tlb.h b/arch/c6x/include/asm/tlb.h
+deleted file mode 100644
+index 240ba0febb57..000000000000
+diff --git a/arch/c6x/include/asm/traps.h b/arch/c6x/include/asm/traps.h
+deleted file mode 100644
+index 7e1d31c47680..000000000000
+diff --git a/arch/c6x/include/asm/uaccess.h b/arch/c6x/include/asm/uaccess.h
+deleted file mode 100644
+index 585adf9201b7..000000000000
+diff --git a/arch/c6x/include/asm/unaligned.h b/arch/c6x/include/asm/unaligned.h
+deleted file mode 100644
+index d628cc170564..000000000000
+diff --git a/arch/c6x/include/asm/vmalloc.h b/arch/c6x/include/asm/vmalloc.h
+deleted file mode 100644
+index 26c6c6696bbd..000000000000
+diff --git a/arch/c6x/include/uapi/asm/Kbuild b/arch/c6x/include/uapi/asm/Kbuild
+deleted file mode 100644
+index e78470141932..000000000000
+diff --git a/arch/c6x/include/uapi/asm/byteorder.h b/arch/c6x/include/uapi/asm/byteorder.h
+deleted file mode 100644
+index ab61f867391c..000000000000
+diff --git a/arch/c6x/include/uapi/asm/ptrace.h b/arch/c6x/include/uapi/asm/ptrace.h
+deleted file mode 100644
+index 9b51110a0842..000000000000
+diff --git a/arch/c6x/include/uapi/asm/setup.h b/arch/c6x/include/uapi/asm/setup.h
+deleted file mode 100644
+index e90548cebec3..000000000000
+diff --git a/arch/c6x/include/uapi/asm/sigcontext.h b/arch/c6x/include/uapi/asm/sigcontext.h
+deleted file mode 100644
+index 4e5a9a260861..000000000000
+diff --git a/arch/c6x/include/uapi/asm/swab.h b/arch/c6x/include/uapi/asm/swab.h
+deleted file mode 100644
+index c407c0497718..000000000000
+diff --git a/arch/c6x/include/uapi/asm/unistd.h b/arch/c6x/include/uapi/asm/unistd.h
+deleted file mode 100644
+index 79b724c39d9b..000000000000
+diff --git a/arch/c6x/kernel/Makefile b/arch/c6x/kernel/Makefile
+deleted file mode 100644
+index fbe74174de87..000000000000
+diff --git a/arch/c6x/kernel/asm-offsets.c b/arch/c6x/kernel/asm-offsets.c
+deleted file mode 100644
+index 4a264ef87dcb..000000000000
+diff --git a/arch/c6x/kernel/c6x_ksyms.c b/arch/c6x/kernel/c6x_ksyms.c
+deleted file mode 100644
+index 5a39f52f9db4..000000000000
+diff --git a/arch/c6x/kernel/devicetree.c b/arch/c6x/kernel/devicetree.c
+deleted file mode 100644
+index a0c73f0545b2..000000000000
+diff --git a/arch/c6x/kernel/entry.S b/arch/c6x/kernel/entry.S
+deleted file mode 100644
+index fb154d19625b..000000000000
+diff --git a/arch/c6x/kernel/head.S b/arch/c6x/kernel/head.S
+deleted file mode 100644
+index fecbeef827bc..000000000000
+diff --git a/arch/c6x/kernel/irq.c b/arch/c6x/kernel/irq.c
+deleted file mode 100644
+index e4c53d185b62..000000000000
+diff --git a/arch/c6x/kernel/module.c b/arch/c6x/kernel/module.c
+deleted file mode 100644
+index 09b4c6bfe877..000000000000
+diff --git a/arch/c6x/kernel/process.c b/arch/c6x/kernel/process.c
+deleted file mode 100644
+index 9f4fd6a40a10..000000000000
+diff --git a/arch/c6x/kernel/ptrace.c b/arch/c6x/kernel/ptrace.c
+deleted file mode 100644
+index 3cdaa8cf0ed6..000000000000
+diff --git a/arch/c6x/kernel/setup.c b/arch/c6x/kernel/setup.c
+deleted file mode 100644
+index 9254c3b794a5..000000000000
+diff --git a/arch/c6x/kernel/signal.c b/arch/c6x/kernel/signal.c
+deleted file mode 100644
+index 862460c3b183..000000000000
+diff --git a/arch/c6x/kernel/soc.c b/arch/c6x/kernel/soc.c
+deleted file mode 100644
+index 8362f9390e03..000000000000
+diff --git a/arch/c6x/kernel/switch_to.S b/arch/c6x/kernel/switch_to.S
+deleted file mode 100644
+index b7f9f607042e..000000000000
+diff --git a/arch/c6x/kernel/sys_c6x.c b/arch/c6x/kernel/sys_c6x.c
+deleted file mode 100644
+index 600277f057cf..000000000000
+diff --git a/arch/c6x/kernel/time.c b/arch/c6x/kernel/time.c
+deleted file mode 100644
+index f3ec91a87f4f..000000000000
+diff --git a/arch/c6x/kernel/traps.c b/arch/c6x/kernel/traps.c
+deleted file mode 100644
+index 2b9121c755be..000000000000
+diff --git a/arch/c6x/kernel/vectors.S b/arch/c6x/kernel/vectors.S
+deleted file mode 100644
+index ad3dc006a6d3..000000000000
+diff --git a/arch/c6x/kernel/vmlinux.lds.S b/arch/c6x/kernel/vmlinux.lds.S
+deleted file mode 100644
+index ac99ba0864bf..000000000000
+diff --git a/arch/c6x/lib/Makefile b/arch/c6x/lib/Makefile
+deleted file mode 100644
+index e182004f82fe..000000000000
+diff --git a/arch/c6x/lib/checksum.c b/arch/c6x/lib/checksum.c
+deleted file mode 100644
+index dff2e2ec6e64..000000000000
+diff --git a/arch/c6x/lib/csum_64plus.S b/arch/c6x/lib/csum_64plus.S
+deleted file mode 100644
+index 57148866d8d3..000000000000
+diff --git a/arch/c6x/lib/divi.S b/arch/c6x/lib/divi.S
+deleted file mode 100644
+index d1764ae0b519..000000000000
+diff --git a/arch/c6x/lib/divremi.S b/arch/c6x/lib/divremi.S
+deleted file mode 100644
+index 575fc57a8a76..000000000000
+diff --git a/arch/c6x/lib/divremu.S b/arch/c6x/lib/divremu.S
+deleted file mode 100644
+index 5f6a6a2997ae..000000000000
+diff --git a/arch/c6x/lib/divu.S b/arch/c6x/lib/divu.S
+deleted file mode 100644
+index f0f6082944c2..000000000000
+diff --git a/arch/c6x/lib/llshl.S b/arch/c6x/lib/llshl.S
+deleted file mode 100644
+index 3272499618e0..000000000000
+diff --git a/arch/c6x/lib/llshr.S b/arch/c6x/lib/llshr.S
+deleted file mode 100644
+index 6bfaacd15e73..000000000000
+diff --git a/arch/c6x/lib/llshru.S b/arch/c6x/lib/llshru.S
+deleted file mode 100644
+index 103128f50770..000000000000
+diff --git a/arch/c6x/lib/memcpy_64plus.S b/arch/c6x/lib/memcpy_64plus.S
+deleted file mode 100644
+index 157a30486bfd..000000000000
+diff --git a/arch/c6x/lib/mpyll.S b/arch/c6x/lib/mpyll.S
+deleted file mode 100644
+index d07c13ec4fd4..000000000000
+diff --git a/arch/c6x/lib/negll.S b/arch/c6x/lib/negll.S
+deleted file mode 100644
+index 9ba434db5366..000000000000
+diff --git a/arch/c6x/lib/pop_rts.S b/arch/c6x/lib/pop_rts.S
+deleted file mode 100644
+index f129e32943c5..000000000000
+diff --git a/arch/c6x/lib/push_rts.S b/arch/c6x/lib/push_rts.S
+deleted file mode 100644
+index 40b0a4fe937c..000000000000
+diff --git a/arch/c6x/lib/remi.S b/arch/c6x/lib/remi.S
+deleted file mode 100644
+index 96a1335eac20..000000000000
+diff --git a/arch/c6x/lib/remu.S b/arch/c6x/lib/remu.S
+deleted file mode 100644
+index 428feb9c06c0..000000000000
+diff --git a/arch/c6x/lib/strasgi.S b/arch/c6x/lib/strasgi.S
+deleted file mode 100644
+index 715aeb200792..000000000000
+diff --git a/arch/c6x/lib/strasgi_64plus.S b/arch/c6x/lib/strasgi_64plus.S
+deleted file mode 100644
+index d10aa2dc3249..000000000000
+diff --git a/arch/c6x/mm/Makefile b/arch/c6x/mm/Makefile
+deleted file mode 100644
+index 19d05e972dd1..000000000000
+diff --git a/arch/c6x/mm/dma-coherent.c b/arch/c6x/mm/dma-coherent.c
+deleted file mode 100644
+index 03df07a831fc..000000000000
+diff --git a/arch/c6x/mm/init.c b/arch/c6x/mm/init.c
+deleted file mode 100644
+index a97e51a3e26d..000000000000
+diff --git a/arch/c6x/platforms/Kconfig b/arch/c6x/platforms/Kconfig
+deleted file mode 100644
+index f3a9ae6e0e82..000000000000
+diff --git a/arch/c6x/platforms/Makefile b/arch/c6x/platforms/Makefile
+deleted file mode 100644
+index b320f1c68884..000000000000
+diff --git a/arch/c6x/platforms/cache.c b/arch/c6x/platforms/cache.c
+deleted file mode 100644
+index fff027b72513..000000000000
+diff --git a/arch/c6x/platforms/dscr.c b/arch/c6x/platforms/dscr.c
+deleted file mode 100644
+index 4571615b589f..000000000000
+diff --git a/arch/c6x/platforms/emif.c b/arch/c6x/platforms/emif.c
+deleted file mode 100644
+index 6142ecc2cd88..000000000000
+diff --git a/arch/c6x/platforms/megamod-pic.c b/arch/c6x/platforms/megamod-pic.c
+deleted file mode 100644
+index 56189e50728c..000000000000
+diff --git a/arch/c6x/platforms/pll.c b/arch/c6x/platforms/pll.c
+deleted file mode 100644
+index 6fdf20d64dc7..000000000000
+diff --git a/arch/c6x/platforms/plldata.c b/arch/c6x/platforms/plldata.c
+deleted file mode 100644
+index a799e04edefe..000000000000
+diff --git a/arch/c6x/platforms/timer64.c b/arch/c6x/platforms/timer64.c
+deleted file mode 100644
+index 661f4c7c6ef6..000000000000
+diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
+index 0c262c2aeaf2..e7f7eee6ee9a 100644
+--- a/drivers/bus/Kconfig
++++ b/drivers/bus/Kconfig
+@@ -80,7 +80,7 @@ config MOXTET
  
- source "arch/arm/mach-ux500/Kconfig"
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index 543e29068c08..c36c5d4c6e9c 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -1280,14 +1280,6 @@ choice
- 		  Say Y here if you want kernel low-level debugging support
- 		  on Tegra based platforms.
- 
--	config DEBUG_U300_UART
--		bool "Kernel low-level debugging messages via U300 UART0"
--		depends on ARCH_U300
--		select DEBUG_UART_PL01X
--		help
--		  Say Y here if you want the debug print routines to direct
--		  their output to the uart port on U300 devices.
--
- 	config DEBUG_UX500_UART
- 		depends on ARCH_U8500
- 		bool "Use Ux500 UART for low-level debug"
-@@ -1650,7 +1642,6 @@ config DEBUG_UART_PHYS
- 	default 0x808c0000 if DEBUG_EP93XX || ARCH_EP93XX
- 	default 0x90020000 if DEBUG_NSPIRE_CLASSIC_UART || DEBUG_NSPIRE_CX_UART
- 	default 0xb0090000 if DEBUG_VEXPRESS_UART0_CRX
--	default 0xc0013000 if DEBUG_U300_UART
- 	default 0xc8000000 if ARCH_IXP4XX && !CPU_BIG_ENDIAN
- 	default 0xc8000003 if ARCH_IXP4XX && CPU_BIG_ENDIAN
- 	default 0xd0000000 if DEBUG_SPEAR3XX
-@@ -1804,7 +1795,6 @@ config DEBUG_UART_VIRT
- 	default 0xfefb0000 if DEBUG_OMAP1UART1 || DEBUG_OMAP7XXUART1
- 	default 0xfefb0800 if DEBUG_OMAP1UART2 || DEBUG_OMAP7XXUART2
- 	default 0xfefb9800 if DEBUG_OMAP1UART3 || DEBUG_OMAP7XXUART3
--	default 0xff003000 if DEBUG_U300_UART
- 	default 0xffd01000 if DEBUG_HIP01_UART
- 	default DEBUG_UART_PHYS if !MMU
- 	depends on DEBUG_LL_UART_8250 || DEBUG_LL_UART_PL01X || \
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index 1291fdc869f2..5887de173fc9 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -214,7 +214,6 @@ machine-$(CONFIG_ARCH_STI)		+= sti
- machine-$(CONFIG_ARCH_STM32)		+= stm32
- machine-$(CONFIG_ARCH_SUNXI)		+= sunxi
- machine-$(CONFIG_ARCH_TEGRA)		+= tegra
--machine-$(CONFIG_ARCH_U300)		+= u300
- machine-$(CONFIG_ARCH_U8500)		+= ux500
- machine-$(CONFIG_ARCH_VERSATILE)	+= versatile
- machine-$(CONFIG_ARCH_VEXPRESS)		+= vexpress
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index a13112f8730c..6d8abff55238 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1255,8 +1255,6 @@ dtb-$(CONFIG_ARCH_TEGRA_124_SOC) += \
- 	tegra124-nyan-big.dtb \
- 	tegra124-nyan-blaze.dtb \
- 	tegra124-venice2.dtb
--dtb-$(CONFIG_ARCH_U300) += \
--	ste-u300.dtb
- dtb-$(CONFIG_ARCH_U8500) += \
- 	ste-snowball.dtb \
- 	ste-hrefprev60-stuib.dtb \
-diff --git a/arch/arm/boot/dts/ste-u300.dts b/arch/arm/boot/dts/ste-u300.dts
-deleted file mode 100644
-index f4e7660fead7..000000000000
-diff --git a/arch/arm/configs/u300_defconfig b/arch/arm/configs/u300_defconfig
-deleted file mode 100644
-index 543f07338100..000000000000
-diff --git a/arch/arm/mach-u300/Kconfig b/arch/arm/mach-u300/Kconfig
-deleted file mode 100644
-index c3c8bf54f033..000000000000
-diff --git a/arch/arm/mach-u300/Makefile b/arch/arm/mach-u300/Makefile
-deleted file mode 100644
-index 67f71ae45dfc..000000000000
-diff --git a/arch/arm/mach-u300/core.c b/arch/arm/mach-u300/core.c
-deleted file mode 100644
-index a1694d977ec9..000000000000
-diff --git a/arch/arm/mach-u300/regulator.c b/arch/arm/mach-u300/regulator.c
-deleted file mode 100644
-index c0cc1d82e1b9..000000000000
-diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-index 442a039b92f3..4b84fd36e384 100644
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -331,8 +331,7 @@ source "drivers/mtd/nand/raw/ingenic/Kconfig"
- config MTD_NAND_FSMC
- 	tristate "ST Micros FSMC NAND controller"
- 	depends on OF && HAS_IOMEM
--	depends on PLAT_SPEAR || ARCH_NOMADIK || ARCH_U8500 || MACH_U300 || \
--		   COMPILE_TEST
-+	depends on PLAT_SPEAR || ARCH_NOMADIK || ARCH_U8500 || COMPILE_TEST
+ config HISILICON_LPC
+ 	bool "Support for ISA I/O space on HiSilicon Hip06/7"
+-	depends on (ARM64 && ARCH_HISI) || (COMPILE_TEST && !ALPHA && !HEXAGON && !PARISC && !C6X)
++	depends on (ARM64 && ARCH_HISI) || (COMPILE_TEST && !ALPHA && !HEXAGON && !PARISC)
+ 	depends on HAS_IOMEM
+ 	select INDIRECT_PIO if ARM64
  	help
- 	  Enables support for NAND Flash chips on the ST Microelectronics
- 	  Flexible Static Memory Controller (FSMC)
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index aadaea052f51..74ea73a05981 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -601,7 +601,6 @@ config SPI_PIC32_SQI
- config SPI_PL022
- 	tristate "ARM AMBA PL022 SSP controller"
- 	depends on ARM_AMBA
--	default y if MACH_U300
- 	default y if ARCH_REALVIEW
- 	default y if INTEGRATOR_IMPD1
- 	default y if ARCH_VERSATILE
+diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
+index 885da6d983b4..647439c2c05a 100644
+--- a/fs/Kconfig.binfmt
++++ b/fs/Kconfig.binfmt
+@@ -45,7 +45,7 @@ config ARCH_USE_GNU_PROPERTY
+ config BINFMT_ELF_FDPIC
+ 	bool "Kernel support for FDPIC ELF binaries"
+ 	default y if !BINFMT_ELF
+-	depends on (ARM || (SUPERH && !MMU) || C6X)
++	depends on (ARM || (SUPERH && !MMU))
+ 	select ELFCORE
+ 	help
+ 	  ELF FDPIC binaries are based on ELF, but allow the individual load
+diff --git a/include/asm-generic/page.h b/include/asm-generic/page.h
+index fe801f01625e..6fc47561814c 100644
+--- a/include/asm-generic/page.h
++++ b/include/asm-generic/page.h
+@@ -63,11 +63,7 @@ extern unsigned long memory_end;
+ 
+ #endif /* !__ASSEMBLY__ */
+ 
+-#ifdef CONFIG_KERNEL_RAM_BASE_ADDRESS
+-#define PAGE_OFFSET		(CONFIG_KERNEL_RAM_BASE_ADDRESS)
+-#else
+ #define PAGE_OFFSET		(0)
+-#endif
+ 
+ #ifndef ARCH_PFN_OFFSET
+ #define ARCH_PFN_OFFSET		(PAGE_OFFSET >> PAGE_SHIFT)
 -- 
 2.29.2
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
