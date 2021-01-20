@@ -2,70 +2,68 @@ Return-Path: <SRS0=0ZpT=GX=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E811C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E67DEC433DB
 	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Jan 2021 19:42:04 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 865CC2343B
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Jan 2021 19:42:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 865CC2343B
+	by mail.kernel.org (Postfix) with ESMTPS id 842DF2343B
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Jan 2021 19:42:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 842DF2343B
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
 	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=HLDvQZ+NNEm92TsPmUFA4U3X/0kXtb1VWVjx9sjb1Zc=; b=JmVfO67IAK71/rHcYfE2ojRpV
-	5qANdSBMXCmG8/DD8aF5oqpzsW1X8dOb2bLteRsjcMtmDLRTmipv+mbJgUR/ngIebZOP6IUroclbD
-	qIbRV155eutk1cB0CJ2Cv61LSkSIUvzYrPRx6C4FHU01tLQoj605758SSPJzh1jfJILA7qjLhZwvk
-	YI2RHhQBOVA1lP+Idl7E/Zj+WP7zhXFk4+P6+bsWfrbUYMr8GfSN8cRmB+ECHCJ0LZkcJRs6t4v3R
-	XfekbUL0dy5kmhDrqGT9vAdBiqokPoF8H17/iJw4l9nMJuYDLKjZl1ylCPVJlXXXBA0DdOS5UPIky
-	+9GmfL5sQ==;
+	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=O0S7gogBNQlQkhdZlRJbBEdf6S3Yi0DpyK7AIXnBUV8=; b=XFN7FR/cajswtnSTsWqint0KQ8
+	uvc4tUz4Y/na5X8bHJPPGU84RLtlyyHAseL9ca1UVidiCpmv24Bgjv6qCZvMDsKVDybABgVQW10mN
+	fSx7btrRdtbK9Ue+un7L80zdZu3QgzHg1tP4ai96FNge0IWFCis8I+vGobVLD9062AsuEHC4xQ2Xf
+	guibKes3/N81E6czaZ518iG+OFYhSwIHCMLxxyC/CTCSIKZEvUboPMpofod6Cx1xQi/epV3aYwyvP
+	rzBfbpsHvW0ldOjQbVOYGfqxudtkDnU0oYPFZXwW1doKxX5Fp4mP50/MlZoRpHpr9BsTUzzunDPLc
+	fHWWIdFA==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l2JLg-0006l8-5X; Wed, 20 Jan 2021 19:41:00 +0000
-Received: from ssl.serverraum.org ([176.9.125.105])
+	id 1l2JLW-0006j2-8r; Wed, 20 Jan 2021 19:40:50 +0000
+Received: from ssl.serverraum.org ([2a01:4f8:151:8464::1:2])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l2JLU-0006id-9e
- for linux-arm-kernel@lists.infradead.org; Wed, 20 Jan 2021 19:40:49 +0000
+ id 1l2JLR-0006hU-Hw
+ for linux-arm-kernel@lists.infradead.org; Wed, 20 Jan 2021 19:40:46 +0000
 Received: from mwalle01.fritz.box (unknown
  [IPv6:2a02:810c:c200:2e91:fa59:71ff:fe9b:b851])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest
  SHA256) (No client certificate requested)
- by ssl.serverraum.org (Postfix) with ESMTPSA id 9D2F422F2E;
- Wed, 20 Jan 2021 20:40:46 +0100 (CET)
+ by ssl.serverraum.org (Postfix) with ESMTPSA id 68A3822727;
+ Wed, 20 Jan 2021 20:40:43 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc;
- s=mail2016061301; t=1611171646;
+ s=mail2016061301; t=1611171644;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=TUNEdX1xsXS+xaqEvGcbFxFXSQhaIVG++G28Ywp3eJM=;
- b=FBuXTD1dmS90BuqPQyyFO2hpk8Ww6JjN1cuCvjA+UcmF0vesXkG74WtaD0WY7K6qaazNdt
- zBMnBfdGs7yZa2s6tnysQhpTe/4OpCuEozzlsgRvUJ0b/Tp2gavEz1xrey5NN8c+sgDR6a
- xNth+PTuSpquIZ0vYk7Y6U8CFXcHiSY=
+ content-transfer-encoding:content-transfer-encoding;
+ bh=tlKQp8qtg7ZoARKjR0krCyCtHtuqS8eLJSkS8h5Iy+Q=;
+ b=Hkmt4GpEE9/lMp95snLoV+wwqAyxIEbTWRW0zi6nwA+ZcjVqGKufBoel3qAQJd/qWrNZRQ
+ csZv1jkZB1/uttJKjXEPLGk6VJK8Yf6AYMNl6TJ+OnTZqpysmQ/imYQdfjWwjtxbzzKjVX
+ H223mRARsbIL8lqGNkZeAvN9nc0yCJ8=
 From: Michael Walle <michael@walle.cc>
 To: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] dt-bindings: arm: add Ebang EBAZ4205 board
-Date: Wed, 20 Jan 2021 20:40:32 +0100
-Message-ID: <20210120194033.26970-3-michael@walle.cc>
+Subject: [PATCH 0/3] add Ebang EBAZ4205 support
+Date: Wed, 20 Jan 2021 20:40:30 +0100
+Message-ID: <20210120194033.26970-1-michael@walle.cc>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210120194033.26970-1-michael@walle.cc>
-References: <20210120194033.26970-1-michael@walle.cc>
 MIME-Version: 1.0
+X-Spam: Yes
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210120_144048_517408_8F258F01 
-X-CRM114-Status: GOOD (  12.37  )
+X-CRM114-CacheID: sfid-20210120_144045_815779_C9A12DD0 
+X-CRM114-Status: GOOD (  12.19  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,27 +83,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210120194032.Bk_w6gHN7cJ4am-HBsXSnrqkHOesqytGH23cyAl2Mcg@z>
+Message-ID: <20210120194030.5K5xOfGSGw04I-NW5Xn7Xltf4snY64J8cA0G6fqueYk@z>
 
-Add the Ebang EBAZ4205 board to the Zynq-7000 board category.
+Add support for the Ebang EBAZ4205 board. This board was once used as a
+control board for a bitcoin mining device. Nowawdays it is sold as a cheap
+Zynq-7000 eval board.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- Documentation/devicetree/bindings/arm/xilinx.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Michael Walle (3):
+  dt-bindings: add ebang vendor prefix
+  dt-bindings: arm: add Ebang EBAZ4205 board
+  ARM: dts: add Ebang EBAZ4205 device tree
 
-diff --git a/Documentation/devicetree/bindings/arm/xilinx.yaml b/Documentation/devicetree/bindings/arm/xilinx.yaml
-index e0c6787f6e94..aaca69d0199f 100644
---- a/Documentation/devicetree/bindings/arm/xilinx.yaml
-+++ b/Documentation/devicetree/bindings/arm/xilinx.yaml
-@@ -22,6 +22,7 @@ properties:
-               - adapteva,parallella
-               - digilent,zynq-zybo
-               - digilent,zynq-zybo-z7
-+              - ebang,ebaz4205
-               - xlnx,zynq-cc108
-               - xlnx,zynq-zc702
-               - xlnx,zynq-zc706
+ .../devicetree/bindings/arm/xilinx.yaml       |   1 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/zynq-ebaz4205.dts           | 109 ++++++++++++++++++
+ 4 files changed, 113 insertions(+)
+ create mode 100644 arch/arm/boot/dts/zynq-ebaz4205.dts
+
 -- 
 2.20.1
 
