@@ -1,107 +1,152 @@
-Return-Path: <linux-kernel-owner@kernel.org>
+Return-Path: <SRS0=scM1=GY=xilinx.com=michals@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F65BC433DB
-	for <linux-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 08:38:00 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D84DB23788
-	for <linux-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 08:37:59 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727972AbhAUIhk (ORCPT
-        <rfc822;linux-kernel@archiver.kernel.org>);
-        Thu, 21 Jan 2021 03:37:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727818AbhAUIfi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jan 2021 03:35:38 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2C9C061757
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jan 2021 00:34:57 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id u11so1485980ljo.13
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jan 2021 00:34:56 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 727D4C433DB
+	for <soc@archiver.kernel.org>; Thu, 21 Jan 2021 09:26:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 38B1F2399A; Thu, 21 Jan 2021 09:26:07 +0000 (UTC)
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2065.outbound.protection.outlook.com [40.107.237.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 604202395A;
+	Thu, 21 Jan 2021 09:26:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 604202395A
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=xilinx.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=michals@xilinx.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kg4QNJNRH6AZKn3MtMBxN6uY+jJC49XBaFOAcA3h5+aCJBtFXgDAlLiFPp6RMSwoGZ5hJJQh4pUNt/VLORzoMxuIXdWGHJR7/dQfqfuf4ejSJcTTd3FoA4hnMIRUkDYRGjm+bgCQ0e33W5Hr1B+323MnKIi7OB6+mnTbZ0HNQMscoDjTH2SWBjPxcTwOuSNMFjvvyijFLHJuAMvqOStiP3MjpARto3e6VS1wDFn4GzWooBmfdJi3B2AF4sgeTVsGEdv1sl6ALFXDzuHCGj6shM4/oeIS3fnB3kVkXxG96Qo8fr9QLTsuj4Hewjc5xmvCUExTZDy1ztLdTD6kOQsxtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BQ3Gg+3Zn7mYCMiSxlvE6gso6Eeb6ZCM/zCkVKOW0Y8=;
+ b=k2GTdH6Mc7cfLkLZWq1zNgik0Uexuv0kI+50FgcmGqLAqMcHzzj4Esepl+9WbEWco+Ww95Q09xuKqbvl5JR/o3KGICT60R6s4ZftT48nE+gvZMKDReY1ZjyqESdcKitESanmpp3ZM4wyR+VbQaeQNAkuTmsrfmvthRbpSrUJFmv4ckTGyd6EhonQ6fFpP9oLtYX3W3lCiHC91bF3yPiku/zRagdFWFpUX5401Get5cY5uexC93SQWt1ldR59SC/40xSlRIzeoCofFjTZXvYv2C12lvfR37bPgyViCATjsCDkPQqLD4WE4dcgi/lSk9r1aNQs+jc3Ww8eG2vGdqClhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lS8yS4z5gTRHyWYZ/MorqH00QDK2F6AOgR3jNZjO6uw=;
-        b=BPXcee2xlc4t3zVun2eTfkyri06k5pl6h7fkauTSz0bMHzX51jxkZGvUWY4HmCBHfU
-         Uqos+y9JB+nfRQXjsyU+fk7JyjMM/PI+94oZGRP4bEToOrt0vz4OgIUj2WqYPU5MTQ2R
-         5YzLNlb/3NrRjd7nZOfVCtQD8MZLu7Ift+AacsLu2R2thwngH4IxM/2eABKE3/kiP/kN
-         6RmQcR/yIW31FDZQrU8qJ+ViMK58pM+f5C80rGqK/lkl1AvWmMwXGH5by8rSwK8cs160
-         mTcFLMuvN9xyAMiVc6emqDMHJrosXy13tNeBMWbkFJMQ5iV9aHlUZ/zzRRq5Ok71qehj
-         cVIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lS8yS4z5gTRHyWYZ/MorqH00QDK2F6AOgR3jNZjO6uw=;
-        b=YNK1ar56lIqW8NMP28aesejgOOqw55jXojb0+yKu9nE6PwE4TiSob5AMFj3rZ+VtUb
-         GVAm0cyGpfA+ZPzw4g+fR5jY5iE7wEgwdUOPR1H6Ty8LHBFFCSCwGxAlDzqo6IAnkqAK
-         fnSoOpjn+vWFJL9Aul/Tu3VQctrI6XC0zUvOL9X+Gnwb1Rj9QtA6Hj+qWI+WQVMxV7TA
-         g1YEdhUnq8nwmO3Msl6ib0tVCWXC1l68MwkEjnIxb+tBcVmeLx/xCmkp7iOkzzPZ1Qmi
-         gdd/6gxcLwNvZJ4c8i3bMSxPcgJKbylkfcXIceNRTExlm8zUCFIcVhXh5Vniqmfegp2L
-         /r9w==
-X-Gm-Message-State: AOAM5327bZ3IODamYOzg9NS/Nq+E+xTIkopkOfCnazH8fn4zht8DibaQ
-        kMPZBtUzb4sVSiDtZr1R582fESnUW/D1VSw0LDyT7QCBfDXMZg==
-X-Google-Smtp-Source: ABdhPJxMfoLva9Z9+4Vk5RdQNogIN4B9DKEC7RABIHA5mu0hvaAFjmZSPKffe1TCkudstO+9cv1RdOfrQh93Tq/e4jQ=
-X-Received: by 2002:a05:651c:205b:: with SMTP id t27mr6291564ljo.368.1611218095600;
- Thu, 21 Jan 2021 00:34:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20210120124812.2800027-1-arnd@kernel.org> <20210120124812.2800027-6-arnd@kernel.org>
-In-Reply-To: <20210120124812.2800027-6-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 21 Jan 2021 09:34:44 +0100
-Message-ID: <CACRpkdaMZdUebQy7KOeAQz9wqGUWW3_PJUcD8N500NQZ0wXX2Q@mail.gmail.com>
-Subject: Re: [PATCH 5/5] ARM: remove u300 platform
-To:     Arnd Bergmann <arnd@kernel.org>
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BQ3Gg+3Zn7mYCMiSxlvE6gso6Eeb6ZCM/zCkVKOW0Y8=;
+ b=SwPWxKWrKOMoL2lAz1YgQjnkngqMuJJfT68cegFRAleqxTQm+vgXVZerlmhQNZT0lv0mS1B8IXDw3IqAvDmIEZ8iS14LxXUJltWbbne7/lCIMulRPSyYa1c0hT9qmSKkSq0Rp4ejEoMDqkXizotVlaWTbrztxSZy7kd2r69a+CU=
+Received: from DM6PR08CA0016.namprd08.prod.outlook.com (2603:10b6:5:80::29) by
+ SJ0PR02MB7472.namprd02.prod.outlook.com (2603:10b6:a03:29d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9; Thu, 21 Jan
+ 2021 09:26:04 +0000
+Received: from CY1NAM02FT060.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:80:cafe::78) by DM6PR08CA0016.outlook.office365.com
+ (2603:10b6:5:80::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.12 via Frontend
+ Transport; Thu, 21 Jan 2021 09:26:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ CY1NAM02FT060.mail.protection.outlook.com (10.152.74.252) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3784.12 via Frontend Transport; Thu, 21 Jan 2021 09:26:03 +0000
+Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Thu, 21 Jan 2021 01:26:03 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Thu, 21 Jan 2021 01:26:03 -0800
+Envelope-to: michal.simek@xilinx.com,
+ soc@kernel.org,
+ olof@lixom.net,
+ arnd@arndb.de,
+ robh+dt@kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org,
+ michael@walle.cc
+Received: from [172.30.17.109] (port=42074)
+	by smtp.xilinx.com with esmtp (Exim 4.90)
+	(envelope-from <michal.simek@xilinx.com>)
+	id 1l2WE6-0002OZ-SM; Thu, 21 Jan 2021 01:26:03 -0800
+To: Michael Walle <michael@walle.cc>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <linux-kernel.vger.kernel.org>
-X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20210121083444.UohlLdVoCkBhkfx_Ws3UQKcAkWw9nlk2znPyF4GJsMQ@z>
+CC: Rob Herring <robh+dt@kernel.org>, Michal Simek <michal.simek@xilinx.com>,
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<soc@kernel.org>
+References: <20210120194033.26970-1-michael@walle.cc>
+From: Michal Simek <michal.simek@xilinx.com>
+Subject: Re: [PATCH 0/3] add Ebang EBAZ4205 support
+Message-ID: <fff420d1-fc9a-23ce-0d07-58a3c6f10c4d@xilinx.com>
+Date: Thu, 21 Jan 2021 10:25:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+MIME-Version: 1.0
+In-Reply-To: <20210120194033.26970-1-michael@walle.cc>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f52d5e02-6271-4036-c2c9-08d8bdee930a
+X-MS-TrafficTypeDiagnostic: SJ0PR02MB7472:
+X-Microsoft-Antispam-PRVS:
+	<SJ0PR02MB7472AFF50948F47461AB390EC6A10@SJ0PR02MB7472.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	0oMKDQ9Uxa8T/TysGswLKfrmWWbmyduxicZk6xOkHpaOiVb6GG4RQgpLhp6TOhigrTdLAbJeEqP1dnyFGvsQBFBSANfB8Is4yzqcW05kdz7NERT8HrTIx1nrLVCa9liXsXDm2JNvwB5H6MtkekazQWcdvJEgxuC3CWqt3MuQDYgzf6/NshuKKL1MHmuGoGb6JJ9aKHr97DG0lxgSJHS6XM4NuThcICOCXpk+a6lXNeBPMVlttTb8vl4hQO23DV6bWPv1okxHucu29U4HaBnHr7rJ/f0wdz+e4K6q0ygZUOaTSf5aX5Q5ZIRryBX8AleWz5Rc6879xHty+Hj4eL/6x0+wGpwhcH/3TxBzdoMTRDKq5BQl1g+4v7mVjwj8kOQAttn7EC/zsaNDhKI9m+z+SgZ95Zs55Y/J5lbBwRfKph9X1XSmDZwr7TGAynXkUgKrYN221JYrKim10DQ0NMFMN46I4s2VF4xYmEjkFxcP5Q98TpH88w5z5dVqVRga2uuv3lGG/JLw3elFGhLj0kFvA3ywGQzAq4CFYOvUzfuKiUU=
+X-Forefront-Antispam-Report:
+	CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(136003)(396003)(39860400002)(346002)(46966006)(478600001)(82740400003)(426003)(44832011)(53546011)(36756003)(7636003)(70206006)(336012)(66574015)(4744005)(6666004)(9786002)(356005)(31696002)(31686004)(8676002)(83380400001)(8936002)(2616005)(70586007)(5660300002)(2906002)(82310400003)(316002)(54906003)(26005)(47076005)(4326008)(110136005)(186003)(50156003)(2101003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2021 09:26:03.9107
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f52d5e02-6271-4036-c2c9-08d8bdee930a
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY1NAM02FT060.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7472
 
-On Wed, Jan 20, 2021 at 1:48 PM Arnd Bergmann <arnd@kernel.org> wrote:
+Hi
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The Ericsson U300 platform was one of two ARM929 based SoC platforms for
-> mobile phones in ST-Ericsson after the merger of Ericsson with ST-NXP
-> into ST-Ericsson, the other one being the ST Nomadik.
->
-> The platform was not widely adopted in Linux based systems and was
-> replaced with the far superior ST-Ericsson U8500 in 2011, but Linus
-> Walleij kept maintaining the code for the whole time.
->
-> Linus continues to use the Nomadik machine, but decided to drop
-> u300 from the kernel as part of this year's spring cleaning.
-> Thanks for having maintained it all these years.
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Link: https://lore.kernel.org/lkml/CACRpkdbJkiHR9FSfJTH_5d_qRU1__dRXHM1TL40iqNRKbGQfrQ@mail.gmail.com/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On 1/20/21 8:40 PM, Michael Walle wrote:
+> Add support for the Ebang EBAZ4205 board. This board was once used as a
+> control board for a bitcoin mining device. Nowawdays it is sold as a cheap
+> Zynq-7000 eval board.
+> 
+> Michael Walle (3):
+>   dt-bindings: add ebang vendor prefix
+>   dt-bindings: arm: add Ebang EBAZ4205 board
+>   ARM: dts: add Ebang EBAZ4205 device tree
+> 
+>  .../devicetree/bindings/arm/xilinx.yaml       |   1 +
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>  arch/arm/boot/dts/Makefile                    |   1 +
+>  arch/arm/boot/dts/zynq-ebaz4205.dts           | 109 ++++++++++++++++++
+>  4 files changed, 113 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/zynq-ebaz4205.dts
+> 
 
-I was planning to do this but you got there first :)
+any link with schematics?
 
-The reason I cannot work on it anymore is that the device
-requires a special signing server to flash new kernels and
-I don't have access to that, and we never created a U-boot or
-similar for this device so anything needed to go in through
-that flashing tool.
+I will let dt guys to comment 1/3 but series look good to me.
+The board doesn't look interesting from description point of view that's
+why all the time thinking if makes sense to add it to kernel.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Thanks,
+Michal
 
-Will you queue the patch for ARM SoC?
-
-Yours,
-Linus Walleij
