@@ -1,132 +1,167 @@
-Return-Path: <SRS0=2LUn=GY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=scM1=GY=xilinx.com=michals@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 364DAC433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 10:43:12 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8C71C433E0
+	for <soc@archiver.kernel.org>; Thu, 21 Jan 2021 13:16:47 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 5F3FB23A04; Thu, 21 Jan 2021 13:16:47 +0000 (UTC)
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2051.outbound.protection.outlook.com [40.107.93.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A9B78207CC
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 10:43:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A9B78207CC
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:
-	Content-Transfer-Encoding:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Message-ID:References:In-Reply-To:Subject:To:From:
-	Date:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=a36nT65+jxuTp6s1d15vC4Ynv4l4SXRsOH/rsJy5eoI=; b=MG3/Q2NP+OMB6IiQXdCl1kuYW
-	xvWFz6AbHQyaLbqEGJsngovnjaf/tvvPamNQbII30HBMsittFcw16E6W9FsI9WGDraIPLVrDYeTN2
-	Vi3xoQVUFLVDPdIIi+w71We4oCP9uECl9RG71LSTDNhC8xvCNQuT30PKuERfAG07bXQB50MBXCgn3
-	sra1SDi7QhPfXP3GCX99BP4wKoNXVnRrFCRCHZ7j6W33eP+2+kfEj43EGW9SjY0jUpqOJpg5lUxBJ
-	foAZdy4cIh1AQsR8aoa14FnfJfmpZ2l1J8Mt7orkgN23URp+VBOvq2Wuo3j2kzowuQtIyZI9ODMY4
-	4uKcEpF0w==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l2XPC-0008BR-TR; Thu, 21 Jan 2021 10:41:34 +0000
-Received: from ssl.serverraum.org ([176.9.125.105])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l2XPA-0008Ab-Cw
- for linux-arm-kernel@lists.infradead.org; Thu, 21 Jan 2021 10:41:33 +0000
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by ssl.serverraum.org (Postfix) with ESMTPSA id 0B01622FAD;
- Thu, 21 Jan 2021 11:41:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc;
- s=mail2016061301; t=1611225687;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=JDILWN2Qt0CRRMnHqdXZCjQvogas/S8Dy2MJuaJxQKk=;
- b=jC+SKLV/orq38gIrVKvQRdKd4J76RPnn0LqF4Vr8EwOfVD+f7XzPpnSFWHjDxMBql+/Ieb
- SUfOJajVatGzvLP2keWDGOdIYF9LNZAo00vXfO4Hil4mGO+XRb/PAOiOw1/hH5jsZbW4jp
- fyYxBLtSI35wjK6PQLFjp3ngBkrfckQ=
-MIME-Version: 1.0
-Date: Thu, 21 Jan 2021 11:41:26 +0100
-From: Michael Walle <michael@walle.cc>
-To: Michal Simek <michal.simek@xilinx.com>
+	by mail.kernel.org (Postfix) with ESMTPS id A4B3A239FD;
+	Thu, 21 Jan 2021 13:16:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A4B3A239FD
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=xilinx.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=michals@xilinx.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bz8u95dt58gqTHOSgHayp0CH/FWEKRMMfsWHn/v56H4tHMmvp7Dvz6sNL2OLbayjywPIcnYyjqv1VjA2GNqe5N50cN0o0pS+N325T6IfSegoFnu9nEPnuwZ8CTUnakabYQN2L47ce6TvZkZtnP1fBgQJiBQNcwT+TU6wqrovU80+L0DgVZwsTwHsBO5PWF+S6hYWpKY6cQlEeEpu7+ZrCzpJhVsFmTrJQFd9J8jiuhmtmh+D6yP+F5ch4t1AGhYkK4jVlR4GM/AUMx4WSnk4FS9Llza5mxRC8xBUjK2piGP3FmXcw2J42od7scVL8u9UojY+CTvQdx1Kpo3Zopjgsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W4iV8JlrChXVwJNcCPnJ3slBnEfdEFuAvc3z0g4cwaM=;
+ b=LsFOG8XstqG+FNtolkda8EVlXDeOmTPowtMSdUivpPyRSEzZxepmSPPveqE77BFYlFk6b0aIHY6k+cW1zjat7qbeCj8O/ULlys/b0BAbNQD5s1upfXTR4tB5VKJUhgd3dS/m0SX7IquMmR9Rfj4Gv2mQXI2ViOCy7ZO/5c/3ZY+i3b7HCZgq5EjOD7qfPylzji1AN/DMRib8S0TxNtYYIOtt39D1LuYd0jeV8jtWR1zyT1sALynF7iDQU+ljkm6jFt8R8EZtD87qxjwHhBU+4L+KpsPtsCowy494c3yRyAJJLsR3lrK2iLC/nKH64iS+PbjdAXma8ZTUpwk728dpNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W4iV8JlrChXVwJNcCPnJ3slBnEfdEFuAvc3z0g4cwaM=;
+ b=Z/mv30mWdNXHitSxklq5eynbdBC+YQqQDpOlyjEij3diYuVtxEreq9lQAD9Zec8P55pBtv+A+iIobeX8k45A1OwFEiYk0oKx6t8L9pgUqjE/ISZMMEUQkm4v2lfzWw/TsAAyGi+oqc3wS6iY4U9ieU6L6v/MjubZo2o8Hc6byz0=
+Received: from CY4PR03CA0021.namprd03.prod.outlook.com (2603:10b6:903:33::31)
+ by CH2PR02MB6822.namprd02.prod.outlook.com (2603:10b6:610:a5::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.10; Thu, 21 Jan
+ 2021 13:16:44 +0000
+Received: from CY1NAM02FT024.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:903:33:cafe::79) by CY4PR03CA0021.outlook.office365.com
+ (2603:10b6:903:33::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.11 via Frontend
+ Transport; Thu, 21 Jan 2021 13:16:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ CY1NAM02FT024.mail.protection.outlook.com (10.152.74.210) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3784.12 via Frontend Transport; Thu, 21 Jan 2021 13:16:44 +0000
+Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Thu, 21 Jan 2021 05:16:43 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Thu, 21 Jan 2021 05:16:43 -0800
+Envelope-to: michal.simek@xilinx.com,
+ soc@kernel.org,
+ olof@lixom.net,
+ arnd@arndb.de,
+ robh+dt@kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org,
+ michael@walle.cc
+Received: from [172.30.17.109] (port=33970)
+	by smtp.xilinx.com with esmtp (Exim 4.90)
+	(envelope-from <michal.simek@xilinx.com>)
+	id 1l2ZpL-0005T1-Ej; Thu, 21 Jan 2021 05:16:43 -0800
 Subject: Re: [PATCH 0/3] add Ebang EBAZ4205 support
-In-Reply-To: <8917c9a1-09e9-0a39-5732-da7f555ae9ad@xilinx.com>
+To: Michael Walle <michael@walle.cc>, Michal Simek <michal.simek@xilinx.com>
+List-Id: <soc.lore.kernel.org>
+CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>, "Arnd
+ Bergmann" <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, <soc@kernel.org>
 References: <20210120194033.26970-1-michael@walle.cc>
  <fff420d1-fc9a-23ce-0d07-58a3c6f10c4d@xilinx.com>
  <aa96fcaa362181d4b6fef9f1de0aa914@walle.cc>
  <0a1c6ebf-1d5b-4f06-56db-f04e87d2ae9a@xilinx.com>
  <bd86194a13882ce472764d0c91029e33@walle.cc>
  <8917c9a1-09e9-0a39-5732-da7f555ae9ad@xilinx.com>
-User-Agent: Roundcube Webmail/1.4.10
-Message-ID: <df072e37bb6f3500d713be565cfa1328@walle.cc>
-X-Sender: michael@walle.cc
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210121_054132_553210_730607B7 
-X-CRM114-Status: GOOD (  19.87  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-kernel@vger.kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
+ <df072e37bb6f3500d713be565cfa1328@walle.cc>
+From: Michal Simek <michal.simek@xilinx.com>
+Message-ID: <cbfc4899-eb92-938a-95f2-23ca9485beaf@xilinx.com>
+Date: Thu, 21 Jan 2021 14:16:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+MIME-Version: 1.0
+In-Reply-To: <df072e37bb6f3500d713be565cfa1328@walle.cc>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210121104126.krUQxd6zyZssXprTnk7fuY_blI9lqcwDtfGxkVtEC5g@z>
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8c605587-92dc-48a9-593b-08d8be0ecc76
+X-MS-TrafficTypeDiagnostic: CH2PR02MB6822:
+X-Microsoft-Antispam-PRVS:
+	<CH2PR02MB68225FF1E0499E7E055F2C23C6A10@CH2PR02MB6822.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	w0ejWB0UxGQmDvvC45adH/vso9xDsSKzNutt0RMx877DGCXJ78BCDU6cVYvYjTve0B8e7EVoPQspMJjd763l7787d3aXePr0RnrFF6DfVWnl710ABEY6rqpNjvtV1qg3qxGDZLkpQIEVz01I1WoQTB1up+pjtcy71ajRdBa857xyAA0Tis+i70vOlKiT24tIOGreW0eXVnhiakZ+n03ZAl58PObLorXRkBdEFYtw9a9wjeop/Utuva96UPMmzReZ0onTMmtWLXP0op0ZZl5MojogNOyU57UyeW6Y9TAD52zn62rLhYhVrPh66izSuzOJzzuFx/KXzMfkVaTTvNJ+1vkRbseQmpnWN9LInEuESZ5plMBeXKINyqn0JE8NWHgYz/9eMWrQj+TyZjF62yPW4fgnfiFTiYZSUA+5pOiyd/p2FbJdpjiKdhFXOJiUso4+WjfplkXjAEcswmhV0N0iEYiIfk4dwz1nLTOsnZWPliIGv/IyHFV0iEt1dFnke+9IQ8sbNjbvRg87Ae5+93ZNqw==
+X-Forefront-Antispam-Report:
+	CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(136003)(346002)(396003)(39860400002)(46966006)(4326008)(70586007)(9786002)(82310400003)(70206006)(82740400003)(110136005)(83380400001)(336012)(44832011)(31686004)(54906003)(2616005)(31696002)(36906005)(356005)(8936002)(186003)(478600001)(7636003)(53546011)(5660300002)(2906002)(8676002)(47076005)(316002)(36756003)(26005)(426003)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2021 13:16:44.1423
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c605587-92dc-48a9-593b-08d8be0ecc76
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY1NAM02FT024.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6822
 
-Hi,
 
-Am 2021-01-21 11:23, schrieb Michal Simek:
->>> Back to your case. Board is cheap which is not all the time case for 
->>> any
->>> xilinx board but you have only uart, sd and partially described 
->>> ethernet
->>> which doesn't work without PL. Is it worth to have this described?
->> 
->> I got your point. But it is at least a jump start for the users if 
->> that
->> board boots out of the box. And yes, its unfortunate, that ethernet
->> just works if the PL is configured. This is already done by the
->> bootloader, because there I do have the same problem.
+
+On 1/21/21 11:41 AM, Michael Walle wrote:
+> Hi,
 > 
-> Zynq/ZynqMP boards can use U-Boot SPL. "Advantage" of this solution
-> especially for Zynq is that in u-boot there is open a way for adding
-> ps7_init file which is determined by device tree name.
-> I think it would make sense to add these DTs and also ps7_init to 
-> U-Boot
-> project and wire it up with zynq_virt platform and then you can boot
-> Linux with using U-Boot's DT pointed by $fdtcontroladdr.
-> Then you will get support from scratch to be able to boot.
+> Am 2021-01-21 11:23, schrieb Michal Simek:
+>>>> Back to your case. Board is cheap which is not all the time case for
+>>>> any
+>>>> xilinx board but you have only uart, sd and partially described
+>>>> ethernet
+>>>> which doesn't work without PL. Is it worth to have this described?
+>>>
+>>> I got your point. But it is at least a jump start for the users if that
+>>> board boots out of the box. And yes, its unfortunate, that ethernet
+>>> just works if the PL is configured. This is already done by the
+>>> bootloader, because there I do have the same problem.
+>>
+>> Zynq/ZynqMP boards can use U-Boot SPL. "Advantage" of this solution
+>> especially for Zynq is that in u-boot there is open a way for adding
+>> ps7_init file which is determined by device tree name.
+>> I think it would make sense to add these DTs and also ps7_init to U-Boot
+>> project and wire it up with zynq_virt platform and then you can boot
+>> Linux with using U-Boot's DT pointed by $fdtcontroladdr.
+>> Then you will get support from scratch to be able to boot.
+> 
+> I already have patches for u-boot (using SPL). But my impression was
+> that linux is the master for the device trees. Esp. if there are some
+> problems with the board its often useful to have an in-tree device
+> tree.
+> 
+> What is the difference between this board and the other zynq boards
+> in the kernel?
+> 
+> In any case, please make this decision now: will you accept this
+> device tree or not?
 
-I already have patches for u-boot (using SPL). But my impression was
-that linux is the master for the device trees. Esp. if there are some
-problems with the board its often useful to have an in-tree device
-tree.
+If you promise to regularly test it I am fine with it.
 
-What is the difference between this board and the other zynq boards
-in the kernel?
-
-In any case, please make this decision now: will you accept this
-device tree or not?
-
--michael
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Thanks,
+Michal
