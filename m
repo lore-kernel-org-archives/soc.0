@@ -1,157 +1,223 @@
-Return-Path: <SRS0=2LUn=GY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=scM1=GY=xilinx.com=michals@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6042C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 10:15:23 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48F0EC433DB
+	for <soc@archiver.kernel.org>; Thu, 21 Jan 2021 10:23:54 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id E858F233EF; Thu, 21 Jan 2021 10:23:53 +0000 (UTC)
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2068.outbound.protection.outlook.com [40.107.243.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 68447239D4
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 10:15:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 68447239D4
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:
-	Content-Transfer-Encoding:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Message-ID:References:In-Reply-To:Subject:To:From:
-	Date:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=tEv5r4+2YafmTpEi6KAfokXbQLxzZzWPTLNzCQtRWHw=; b=dO/l/Y9nK+3bM7yrwoqvRTnKp
-	gwqILaEKsLFLtGRCo5/4eKTqHF4Zg12ZFEKNs31W5KMSXCze26Nvf0e5+7BDz6FOSsZkXzEmdLCk9
-	79BibikTViTPZsO3c6tPXqWVOpwZYKbCbUWADB+sXMUhS1dfA+T98SQx09D6XRgtAYrtCY1fo6kzH
-	YOk5m7ShzQwKGTG8A16BCdYIYa+1GXag90fVxe+C69hEZf5X/R2V1QpOq9xPtwvqjLXMNgNzcZCyd
-	huW53hrK7/u3LZLCq5+pAfPERFsaoA9vO6Tynzm7G1c7xvAcQkx7NKHL/mBbaMk9cDQ9KN7SFi1zB
-	tpIxYxUTA==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l2WyD-0002Sl-TT; Thu, 21 Jan 2021 10:13:41 +0000
-Received: from ssl.serverraum.org ([176.9.125.105])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l2WyB-0002SI-Ba
- for linux-arm-kernel@lists.infradead.org; Thu, 21 Jan 2021 10:13:40 +0000
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by ssl.serverraum.org (Postfix) with ESMTPSA id EBF8522FAD;
- Thu, 21 Jan 2021 11:13:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc;
- s=mail2016061301; t=1611224018;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=I4dLSkqJXtXHKLU0U+8YrniJxd+5nWGvaigg4fV1hAc=;
- b=SaKNVZKxfgcGcg2JHt7BBiGpOI/zUgMnud/Si+cf7OFIUUWbsZUaKmESPwdKR2Iu8A+krE
- fKxfc4D4j84vWKYeiLatvNJ9GKYzRrN6GKvGjXGiWZvHvB2TYRW4dnJi1NkwCOR9Nd2zNX
- H/6+PYgGfZ0RWFUsxIdOsdRXDzHXckc=
-MIME-Version: 1.0
-Date: Thu, 21 Jan 2021 11:13:37 +0100
-From: Michael Walle <michael@walle.cc>
-To: Michal Simek <michal.simek@xilinx.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 5070B2313E;
+	Thu, 21 Jan 2021 10:23:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5070B2313E
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=xilinx.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=michals@xilinx.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gVmfN/yAxN+P87RfHFz2TS0vVoNy5hbhC8E1xxvtzW4TkEM8pqKh5itWQxaSaYYMjSgttwA/x5uAVSkj01O/KzddohuzHVxou6sMqDnebyOxvK/UuWQV30kQFYABFJ0paCv/rEA92j00DbAYyZzbIivhTwryz9YBKRWccht3aZ8ldJ0Hv3SpRunGA39e63dd6OX7zMKnMpsmK1GQgrNF/RbPezOSAz62QQAU1dceqtxk47+lrTVO3D5UPJhka1sSHNaHER0ALYEW4bYFi/U9dw7qgGuKjuCkwS22FrNZnvHHTlpG+62eBvP6rHkGIOTtJ+ML++BwCAQZwmtvzXHebA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UcWfjobAP4g+siZtsrLWHUdUVopaAVe8BkuAbpIU3Vw=;
+ b=QLenOiKRYfw/5j4XJOEIqzDjZmCOHZDeoe1KqTCjTh39jhQmy9V76XfDXtYUKfeATc+jhLZAt3vHyhIRyZK1SMB994yPdtWo20o7XDOpZxNwH4jHtaZYf04Jy2DG3G3tuBRhAUmfSOmWHMs6fTW4+hhAgu4vCOpceV7Omu1iUzLU+418MyPP4NMlEd/axmlvakeolEbUBChF1GJTEwqyCF8GjFleAMGgDo0CKwROuMg7n/lChz8uO8CAG+vG0EU220pJrdT/q3sK+rZHvJqYVuPlbZigHE2x/hHSn+B0kCkZwlmAYGPnN+AM8dj0k3jlSuAMEOxegHltb00G//JWdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UcWfjobAP4g+siZtsrLWHUdUVopaAVe8BkuAbpIU3Vw=;
+ b=pRU6pnvOUSGZ1golE+NB0+kGQgu++wiLcMOVuyr84qpuC7Hlgjmzg8ukmS+qBiSiYZw/g/QIg+10Kd3a1ZH6YJ7zhiiTk9tlPnkXUzDoMUnuo4Dk5RrOJRHvLGJ/2r1d+oW6IUC6qCQRz0I1EXauC1je8ae3fjK80hMha8mtNTU=
+Received: from CY4PR01CA0012.prod.exchangelabs.com (2603:10b6:903:1f::22) by
+ MWHPR02MB2400.namprd02.prod.outlook.com (2603:10b6:300:60::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3763.9; Thu, 21 Jan 2021 10:23:51 +0000
+Received: from CY1NAM02FT007.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:903:1f:cafe::6c) by CY4PR01CA0012.outlook.office365.com
+ (2603:10b6:903:1f::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.12 via Frontend
+ Transport; Thu, 21 Jan 2021 10:23:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ CY1NAM02FT007.mail.protection.outlook.com (10.152.75.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3784.12 via Frontend Transport; Thu, 21 Jan 2021 10:23:51 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Thu, 21 Jan 2021 02:23:49 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Thu, 21 Jan 2021 02:23:49 -0800
+Envelope-to: michal.simek@xilinx.com,
+ soc@kernel.org,
+ olof@lixom.net,
+ arnd@arndb.de,
+ robh+dt@kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org,
+ michael@walle.cc
+Received: from [172.30.17.109] (port=47132)
+	by smtp.xilinx.com with esmtp (Exim 4.90)
+	(envelope-from <michal.simek@xilinx.com>)
+	id 1l2X81-0005LW-59; Thu, 21 Jan 2021 02:23:49 -0800
 Subject: Re: [PATCH 0/3] add Ebang EBAZ4205 support
-In-Reply-To: <0a1c6ebf-1d5b-4f06-56db-f04e87d2ae9a@xilinx.com>
+To: Michael Walle <michael@walle.cc>, Michal Simek <michal.simek@xilinx.com>
+List-Id: <soc.lore.kernel.org>
+CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>, "Arnd
+ Bergmann" <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, <soc@kernel.org>
 References: <20210120194033.26970-1-michael@walle.cc>
  <fff420d1-fc9a-23ce-0d07-58a3c6f10c4d@xilinx.com>
  <aa96fcaa362181d4b6fef9f1de0aa914@walle.cc>
  <0a1c6ebf-1d5b-4f06-56db-f04e87d2ae9a@xilinx.com>
-User-Agent: Roundcube Webmail/1.4.10
-Message-ID: <bd86194a13882ce472764d0c91029e33@walle.cc>
-X-Sender: michael@walle.cc
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210121_051339_515033_7044BB55 
-X-CRM114-Status: GOOD (  31.88  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-kernel@vger.kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210121101337.yYhcTqfpYQDXzKV_qQpsgwUyIx2ko7kh1KhEeah-DL0@z>
+ <bd86194a13882ce472764d0c91029e33@walle.cc>
+From: Michal Simek <michal.simek@xilinx.com>
+Message-ID: <8917c9a1-09e9-0a39-5732-da7f555ae9ad@xilinx.com>
+Date: Thu, 21 Jan 2021 11:23:46 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+MIME-Version: 1.0
+In-Reply-To: <bd86194a13882ce472764d0c91029e33@walle.cc>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cbd60919-86c8-49f2-53b2-08d8bdf6a5af
+X-MS-TrafficTypeDiagnostic: MWHPR02MB2400:
+X-Microsoft-Antispam-PRVS:
+	<MWHPR02MB24009EADD74F5A34C870181AC6A10@MWHPR02MB2400.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	kDwu1VGyURR8KzMvkl6GblpjG3GSZPHw43jiCPxoMk+4H4PdNcqE0Yj4zij6NuexgHq/klJw+N+JQKmHSCRaxLoIO9MgoyIrVR5IeC8dN82e+zTL57cBLTTZy+pD/kV2cdSSh170onEgFARwxmzHpPN0iXT9e7rQx9mHKL8xXJuWTove9R9ADP59wMAiqguMI+Wm9DyGiu0Djidt8qkgIWFlOzh4t+g08XnwUqKogLkCasPsCqZftHTRhhkKxtJiAl5abosOCsrLpJb68Nc4wRuR5IBVbY2fUsYu6izyD92w4+DWr/sx8WGK9KtOnjOPaVb6InSW5D9vxdSsek8Sbs5N7EG1OrgnuNR9b8DweF6/JpxhJnqT27qNusvuLuXx1VjaLP9vVh3Tq3wMw6D52tbukL8fmKdvTiRS3C4q+BhgIU9vdriFzjOwLipSBJPApkM9UP8apU/2MGMgFdyzHcWPXccxi6aHE4s+ZbvHrBqYe8ZUMudQ1WA7QLaw3r8yDgk/SS2O9ZhnL33w+tNVCNhbBDGDgPRp32W3Ows5g6lGUCsURt4yOvytV8/S/Le2uIOYzgOa0IRE7gIUF48A172SsMpJKAxYPar1U9ZAcfQ=
+X-Forefront-Antispam-Report:
+	CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(396003)(376002)(136003)(39860400002)(46966006)(70586007)(4326008)(478600001)(44832011)(36906005)(82310400003)(336012)(47076005)(82740400003)(8676002)(36756003)(70206006)(5660300002)(356005)(83380400001)(66574015)(316002)(9786002)(966005)(54906003)(31696002)(31686004)(26005)(2616005)(186003)(110136005)(7636003)(53546011)(2906002)(426003)(8936002)(6666004)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2021 10:23:51.1640
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cbd60919-86c8-49f2-53b2-08d8bdf6a5af
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY1NAM02FT007.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2400
 
-SGksCgpBbSAyMDIxLTAxLTIxIDEwOjU3LCBzY2hyaWViIE1pY2hhbCBTaW1lazoKPiBIaSwKPiAK
-PiBPbiAxLzIxLzIxIDEwOjM1IEFNLCBNaWNoYWVsIFdhbGxlIHdyb3RlOgo+PiBIaSBNaWNoYWws
-Cj4+IAo+PiBBbSAyMDIxLTAxLTIxIDEwOjI1LCBzY2hyaWViIE1pY2hhbCBTaW1lazoKPj4+IE9u
-IDEvMjAvMjEgODo0MCBQTSwgTWljaGFlbCBXYWxsZSB3cm90ZToKPj4+PiBBZGQgc3VwcG9ydCBm
-b3IgdGhlIEViYW5nIEVCQVo0MjA1IGJvYXJkLiBUaGlzIGJvYXJkIHdhcyBvbmNlIHVzZWQgCj4+
-Pj4gYXMgYQo+Pj4+IGNvbnRyb2wgYm9hcmQgZm9yIGEgYml0Y29pbiBtaW5pbmcgZGV2aWNlLiBO
-b3dhd2RheXMgaXQgaXMgc29sZCBhcyBhCj4+Pj4gY2hlYXAKPj4+PiBaeW5xLTcwMDAgZXZhbCBi
-b2FyZC4KPj4+PiAKPj4+PiBNaWNoYWVsIFdhbGxlICgzKToKPj4+PiDCoCBkdC1iaW5kaW5nczog
-YWRkIGViYW5nIHZlbmRvciBwcmVmaXgKPj4+PiDCoCBkdC1iaW5kaW5nczogYXJtOiBhZGQgRWJh
-bmcgRUJBWjQyMDUgYm9hcmQKPj4+PiDCoCBBUk06IGR0czogYWRkIEViYW5nIEVCQVo0MjA1IGRl
-dmljZSB0cmVlCj4+Pj4gCj4+Pj4gwqAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0veGlsaW54
-LnlhbWzCoMKgwqDCoMKgwqAgfMKgwqAgMSArCj4+Pj4gwqAuLi4vZGV2aWNldHJlZS9iaW5kaW5n
-cy92ZW5kb3ItcHJlZml4ZXMueWFtbMKgIHzCoMKgIDIgKwo+Pj4+IMKgYXJjaC9hcm0vYm9vdC9k
-dHMvTWFrZWZpbGXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoCAx
-ICsKPj4+PiDCoGFyY2gvYXJtL2Jvb3QvZHRzL3p5bnEtZWJhejQyMDUuZHRzwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgfCAxMDkgCj4+Pj4gKysrKysrKysrKysrKysrKysrCj4+Pj4gwqA0IGZpbGVzIGNo
-YW5nZWQsIDExMyBpbnNlcnRpb25zKCspCj4+Pj4gwqBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9h
-cm0vYm9vdC9kdHMvenlucS1lYmF6NDIwNS5kdHMKPj4+PiAKPj4+IAo+Pj4gYW55IGxpbmsgd2l0
-aCBzY2hlbWF0aWNzPwo+PiAKPj4gaHR0cHM6Ly9naXRodWIuY29tL3hqdHVlY2hvL0VCQVo0MjA1
-LCBsb29rcyBsaWtlIHRoZXNlIGFyZQo+PiByZXZlcnNlIGVuZ2luZWVyZWQgKGZyb20gYSBsYXlv
-dXQgZmlsZT8pIHRob3VnaC4KPiAKPiBJbnRlcmVzdGluZyBidXQgYXQgbGVhc3Qgc29tZXRoaW5n
-Lgo+IAo+PiAKPj4+IEkgd2lsbCBsZXQgZHQgZ3V5cyB0byBjb21tZW50IDEvMyBidXQgc2VyaWVz
-IGxvb2sgZ29vZCB0byBtZS4KPj4+IFRoZSBib2FyZCBkb2Vzbid0IGxvb2sgaW50ZXJlc3Rpbmcg
-ZnJvbSBkZXNjcmlwdGlvbiBwb2ludCBvZiB2aWV3IAo+Pj4gdGhhdCdzCj4+PiB3aHkgYWxsIHRo
-ZSB0aW1lIHRoaW5raW5nIGlmIG1ha2VzIHNlbnNlIHRvIGFkZCBpdCB0byBrZXJuZWwuCj4+IAo+
-PiBXaGF0IGRvIHlvdSB3YW50IHRvIHRlbGwgbWU/IFRoYXQgZm9yIHRoZSB0aW1lIGJlaW5nLCBp
-dCBkaWRuJ3QKPj4gYXBwZWFyIHRvIHlvdSB0byBhZGQgdGhlIGJvYXJkIHlvdXJzZWxmIC0gb3Ig
-ZG8geW91IHRoaW5nIGl0Cj4+IGRvZXNuJ3QgbWFrZSBzZW5zZSBhdCBhbGwuIElmIGl0cyB0aGUg
-bGF0dGVyLCB3aGF0IHdvdWxkIGJlCj4+IGFjdHVhbCByZWFzb24gdG8gaGF2ZSBhIGJvYXJkIGlu
-IG1haW5saW5lPwo+IAo+IEkgaGF2ZSBiYWQgZXhwZXJpZW5jZSB3aXRoIGZvciBleGFtcGxlIEF2
-bmV0IGJvYXJkcyB3aGljaCBwZW9wbGUgYWRkIAo+IGFuZAo+IG5vbmUgaXMgcmVhbGx5IHVwZGF0
-aW5nIHRoZW0gYW5kIHRoZXkgYXJlIGluIHRoZSBzYW1lIHN0YXRlIGZvciB5ZWFycy4KCldvdWxk
-bid0IGl0IGJlIGJldHRlciB0aGVuIHRvIHB1bGwgdGhlIHBsdWcgYXQgc29tZSB0aW1lIGFuZCBy
-ZW1vdmUgCnRoZXNlCmJvYXJkcy4KClRCSCBJIHdhcyBhIGJpdCBkaXNhcHBvaW50ZWQgYnkgeW91
-ciBzdGF0ZW1lbnQuIEl0IHNvdW5kZWQgbGlrZSAibmFoCnRoaXMgYm9hcmQgaXNuJ3Qgd29ydGgg
-aXQiLiBFc3AuIGJlY2F1c2UgaXQgaXMganVzdCBvbmUgKHNtYWxsKSBmaWxlLgpCdXQgbW9yZSBi
-ZWxvdy4KCj4gTG9uZyB0aW1lIGFnbyB3ZSBhZ3JlZWQgdGhhdCBkb2Vzbid0IG1ha2Ugc2Vuc2Ug
-dG8gZGVzY3JpYmUgUEwgaW4KPiB1cHN0cmVhbSBwcm9qZWN0cyBhbmQgd2Ugb25seSBkZXNjcmli
-ZSBQUyBwYXJ0LiBJdCBtZWFucyB5b3UgbGlrZWx5IAo+IG1pc3MKPiBzZXZlcmFsIHRoaW5ncyB3
-aGljaCBhcmUgdXNlZnVsIGFuZCB0aGUgcmVhc29uIGZvciB1c2luZyB0aGVzZSBTb0NzIGlzIAo+
-IFBMLgo+IAo+IEFzIHlvdSBsaWtlbHkga25vdyBYaWxpbnggaGFzIFZlcnNhbCBkZXZpY2UgYW5k
-IEkgZGlkbid0IHB1c2ggYW55IAo+IGRldmljZQo+IHRyZWUgdG8gYW55IHVwc3RyZWFtIHByb2pl
-Y3QgYW5kIHRoaW5raW5nIG5vdCB0byBhZGQgYW55IGRlc2NyaXB0aW9uIAo+IGZvcgo+IGJvYXJk
-cyBhbmQgc3RheSBpbiBzb3J0IG9mIHNwYWNlIHRoYXQgInZpcnR1YWwiIGRlc2NyaXB0aW9uIGZv
-ciBTb0MKPiBzaG91bGQgYmUgZW5vdWdoLiBNYXliZSBqdXN0IHZlcnNhbC5kdHNpIGFuZCBvbmUg
-a2l0Y2hlbiBzaW5rIERUIHNob3VsZAo+IGJlIGFkZGVkIGJ1dCBub3QgZGVzY3JpcHRpb24gZm9y
-IGFsbCBib2FyZHMuCj4gCj4gVGhlIHNhbWUgaXMgaWYgbWFrZSBzZW5zZSB0byBwdXNoIGFsbCBE
-VHMgZm9yIGFsbCBzdGFuZGFyZCB4aWxpbnggCj4genlucW1wCj4gZXZhbHVhdGlvbiBib2FyZHMu
-IElmIHRoZXJlIGlzIHNvbWV0aGluZyBpbnRlcmVzdGluZy9uZXcgSSB0aG91Z2h0IGl0Cj4gbWFr
-ZXMgc2Vuc2UgdG8gYWRkIGl0IGFzIHBhdHRlcm4gdG8gZm9sbG93LiBCdXQgZm9yIGJvYXJkcyB3
-aGljaCBsb29rcwo+IHZlcnkgc2ltaWxhciBmcm9tIFBTIHBvaW50IG9mIHZpZXcgSSBkb24ndCB0
-aGluayB0aGVyZSBpcyByZWFsIHZhbHVlIHRvCj4gYWRkIGFuZCBpbnZlc3QgdGltZSBmb3IgbWFp
-bnRhaW5pbmcuCj4gCj4gQmFjayB0byB5b3VyIGNhc2UuIEJvYXJkIGlzIGNoZWFwIHdoaWNoIGlz
-IG5vdCBhbGwgdGhlIHRpbWUgY2FzZSBmb3IgCj4gYW55Cj4geGlsaW54IGJvYXJkIGJ1dCB5b3Ug
-aGF2ZSBvbmx5IHVhcnQsIHNkIGFuZCBwYXJ0aWFsbHkgZGVzY3JpYmVkIAo+IGV0aGVybmV0Cj4g
-d2hpY2ggZG9lc24ndCB3b3JrIHdpdGhvdXQgUEwuIElzIGl0IHdvcnRoIHRvIGhhdmUgdGhpcyBk
-ZXNjcmliZWQ/CgpJIGdvdCB5b3VyIHBvaW50LiBCdXQgaXQgaXMgYXQgbGVhc3QgYSBqdW1wIHN0
-YXJ0IGZvciB0aGUgdXNlcnMgaWYgdGhhdApib2FyZCBib290cyBvdXQgb2YgdGhlIGJveC4gQW5k
-IHllcywgaXRzIHVuZm9ydHVuYXRlLCB0aGF0IGV0aGVybmV0Cmp1c3Qgd29ya3MgaWYgdGhlIFBM
-IGlzIGNvbmZpZ3VyZWQuIFRoaXMgaXMgYWxyZWFkeSBkb25lIGJ5IHRoZQpib290bG9hZGVyLCBi
-ZWNhdXNlIHRoZXJlIEkgZG8gaGF2ZSB0aGUgc2FtZSBwcm9ibGVtLgoKPiBFc3BlY2lhbGx5IHdo
-ZW4gaXQgaXMgdmlzaWJsZSB0aGF0IHlvdSBuZWVkIHRvIGRlc2NyaWJlIGN1c3RvbSBQTCBhbmQg
-Cj4gRFQKPiBvdmVybGF5cyBhcmUgbm90IHNvbGlkIHlldC4KPiAKPiBUaGFua3MsCj4gTWljaGFs
-CgotLSAKLW1pY2hhZWwKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmxpbnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0CmxpbnV4LWFybS1rZXJuZWxAbGlz
-dHMuaW5mcmFkZWFkLm9yZwpodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2xpbnV4LWFybS1rZXJuZWwK
+Hi,
+
+On 1/21/21 11:13 AM, Michael Walle wrote:
+> Hi,
+> 
+> Am 2021-01-21 10:57, schrieb Michal Simek:
+>> Hi,
+>>
+>> On 1/21/21 10:35 AM, Michael Walle wrote:
+>>> Hi Michal,
+>>>
+>>> Am 2021-01-21 10:25, schrieb Michal Simek:
+>>>> On 1/20/21 8:40 PM, Michael Walle wrote:
+>>>>> Add support for the Ebang EBAZ4205 board. This board was once used
+>>>>> as a
+>>>>> control board for a bitcoin mining device. Nowawdays it is sold as a
+>>>>> cheap
+>>>>> Zynq-7000 eval board.
+>>>>>
+>>>>> Michael Walle (3):
+>>>>>   dt-bindings: add ebang vendor prefix
+>>>>>   dt-bindings: arm: add Ebang EBAZ4205 board
+>>>>>   ARM: dts: add Ebang EBAZ4205 device tree
+>>>>>
+>>>>>  .../devicetree/bindings/arm/xilinx.yaml       |   1 +
+>>>>>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>>>>>  arch/arm/boot/dts/Makefile                    |   1 +
+>>>>>  arch/arm/boot/dts/zynq-ebaz4205.dts           | 109
+>>>>> ++++++++++++++++++
+>>>>>  4 files changed, 113 insertions(+)
+>>>>>  create mode 100644 arch/arm/boot/dts/zynq-ebaz4205.dts
+>>>>>
+>>>>
+>>>> any link with schematics?
+>>>
+>>> https://github.com/xjtuecho/EBAZ4205, looks like these are
+>>> reverse engineered (from a layout file?) though.
+>>
+>> Interesting but at least something.
+>>
+>>>
+>>>> I will let dt guys to comment 1/3 but series look good to me.
+>>>> The board doesn't look interesting from description point of view
+>>>> that's
+>>>> why all the time thinking if makes sense to add it to kernel.
+>>>
+>>> What do you want to tell me? That for the time being, it didn't
+>>> appear to you to add the board yourself - or do you thing it
+>>> doesn't make sense at all. If its the latter, what would be
+>>> actual reason to have a board in mainline?
+>>
+>> I have bad experience with for example Avnet boards which people add and
+>> none is really updating them and they are in the same state for years.
+> 
+> Wouldn't it be better then to pull the plug at some time and remove these
+> boards.
+> 
+> TBH I was a bit disappointed by your statement. It sounded like "nah
+> this board isn't worth it". Esp. because it is just one (small) file.
+> But more below.
+> 
+>> Long time ago we agreed that doesn't make sense to describe PL in
+>> upstream projects and we only describe PS part. It means you likely miss
+>> several things which are useful and the reason for using these SoCs is
+>> PL.
+>>
+>> As you likely know Xilinx has Versal device and I didn't push any device
+>> tree to any upstream project and thinking not to add any description for
+>> boards and stay in sort of space that "virtual" description for SoC
+>> should be enough. Maybe just versal.dtsi and one kitchen sink DT should
+>> be added but not description for all boards.
+>>
+>> The same is if make sense to push all DTs for all standard xilinx zynqmp
+>> evaluation boards. If there is something interesting/new I thought it
+>> makes sense to add it as pattern to follow. But for boards which looks
+>> very similar from PS point of view I don't think there is real value to
+>> add and invest time for maintaining.
+>>
+>> Back to your case. Board is cheap which is not all the time case for any
+>> xilinx board but you have only uart, sd and partially described ethernet
+>> which doesn't work without PL. Is it worth to have this described?
+> 
+> I got your point. But it is at least a jump start for the users if that
+> board boots out of the box. And yes, its unfortunate, that ethernet
+> just works if the PL is configured. This is already done by the
+> bootloader, because there I do have the same problem.
+
+Zynq/ZynqMP boards can use U-Boot SPL. "Advantage" of this solution
+especially for Zynq is that in u-boot there is open a way for adding
+ps7_init file which is determined by device tree name.
+I think it would make sense to add these DTs and also ps7_init to U-Boot
+project and wire it up with zynq_virt platform and then you can boot
+Linux with using U-Boot's DT pointed by $fdtcontroladdr.
+Then you will get support from scratch to be able to boot.
+
+Thanks,
+Michal
+
