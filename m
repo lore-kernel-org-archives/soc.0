@@ -1,162 +1,101 @@
-Return-Path: <SRS0=PS89=GY=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=fsuH=GY=walle.cc=michael@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D700BC433E0
-	for <soc@archiver.kernel.org>; Thu, 21 Jan 2021 15:02:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A60F6C433DB
+	for <soc@archiver.kernel.org>; Thu, 21 Jan 2021 15:14:59 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id A2014238EC; Thu, 21 Jan 2021 15:02:57 +0000 (UTC)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 72F7A239EB; Thu, 21 Jan 2021 15:14:59 +0000 (UTC)
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 35E78235FF;
-	Thu, 21 Jan 2021 15:02:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 35E78235FF
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=thierry.reding@gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id q7so2038146wre.13;
-        Thu, 21 Jan 2021 07:02:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=rn7bqja/hjsV21hhP4YsXCz0nt90F/2AcPINKmzjka4=;
-        b=fLi2Z8Eq7UWNXbf6WeWQ1hMalTKrb04/uKUUzxuMGodhDFxwjEITBjrIqw9j+gEl8H
-         GrJmYP/czPbpT0RmNoheSK7ADRmW4nSY4Hh7LxaIjGvQZkAkkHBQYwhHAoR7i1EKxlyb
-         TTpJoF9oSKBQEFG/m7IVwEXJmmnmeLYNpuktoEHTdrnp+BOYVcbbiq7aSYBQJ8gbJOMV
-         wezedunwgyFtP8iR7k61bgqCFiC9QEv4rEihwIx8n5Jv/2/y+nNOVnWlWNW+I+qXRWMh
-         d/dEpnLTjQovmFjMI4Rr+zCC3qPLm7rwR1VjJZHrNsizEwpnMnsPfjdhw8LdSUkrm3B1
-         itUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rn7bqja/hjsV21hhP4YsXCz0nt90F/2AcPINKmzjka4=;
-        b=DhIA2ATors6hjBHg0muOy4s/KqDc5lD8ynVh/+Lf/QtkzmU2G19AslaAhFQBiLj8ld
-         sm0SgIKlTlsHGr40eYA//opfNntSD4IknvTUxTEJqPTQlnn1+heW5eOdZf/tH8oQZMEM
-         n+ZrLwZ4oYTtquJ8HdWuW2M3LKp+GlViQpF81DZsL5239u94gsWYekkiRdh24sA5zaTh
-         ubcg0VZuDDJooEaLUGyzYgR41kwoS2x5bFA4w2DgZr9OJtvnPW373axWhqRMofkeTYsQ
-         3B385cpWmmzDgs9HVtLSam8WaPfHiYi619Kn2TxwS0gM6WCmR/3nRh47uyQeBPr0Fn/B
-         OjCg==
-X-Gm-Message-State: AOAM5314HQwUhiBW6W5RXRtYbPZ7yEbCN8G+0PWZE8A+7XrBlQmD4wog
-	vnEowP9WTgXWAcBp4la1Xa3E47GIyKs=
-X-Google-Smtp-Source: ABdhPJxDLK6FDyVY8vrSC9WiRz1lqEbbiMMYfloHXLfXaIfgIZXqxlsdX2Q97Ky1u1gFkxt2ntO8ag==
-X-Received: by 2002:a5d:4443:: with SMTP id x3mr13248358wrr.409.1611241374905;
-        Thu, 21 Jan 2021 07:02:54 -0800 (PST)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id l20sm9524242wrh.82.2021.01.21.07.02.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jan 2021 07:02:53 -0800 (PST)
-Date: Thu, 21 Jan 2021 16:02:52 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org, Peter Geis <pgwipeout@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Jonathan Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Matt Merhar <mattmerhar@protonmail.com>
-Subject: Re: [PATCH v3] ARM: tegra: ouya: Fix eMMC on specific bootloaders
-Message-ID: <YAmXnCSPVTcNrJxx@ulmo>
-References: <20210107165658.1354191-1-pgwipeout@gmail.com>
+	by mail.kernel.org (Postfix) with ESMTPS id B55C3239D4;
+	Thu, 21 Jan 2021 15:14:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B55C3239D4
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=michael@walle.cc
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ssl.serverraum.org (Postfix) with ESMTPSA id AD5FD22F99;
+	Thu, 21 Jan 2021 16:14:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+	t=1611242092;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NCqhHiLG+HIy/KpgWMep43uHSdTreIHEy2UEo+8BPmQ=;
+	b=HNjygoJezksRVrvq/4vj1sKQDQb5mPiv2rc55WUhpe3aopQ7M2LIyyuEPBUtf9o03Zl113
+	ma8PB8ark1Pj8VS9ssD5D8gx0rIK3rVUkV83Aqzl/lPBfBF8KGHwKC+ZlgMxM6GkFwpo+/
+	IOYx1Od4kLHNbdITzw+8WcWLZ9lTJNU=
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="fGGnx9KInWbJddqW"
-Content-Disposition: inline
-In-Reply-To: <20210107165658.1354191-1-pgwipeout@gmail.com>
-User-Agent: Mutt/2.0.4 (26f41dd1) (2020-12-30)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date: Thu, 21 Jan 2021 16:14:52 +0100
+From: Michael Walle <michael@walle.cc>
+To: Michal Simek <michal.simek@xilinx.com>
+List-Id: <soc.lore.kernel.org>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>, Arnd
+ Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org
+Subject: Re: [PATCH 0/3] add Ebang EBAZ4205 support
+In-Reply-To: <cbfc4899-eb92-938a-95f2-23ca9485beaf@xilinx.com>
+References: <20210120194033.26970-1-michael@walle.cc>
+ <fff420d1-fc9a-23ce-0d07-58a3c6f10c4d@xilinx.com>
+ <aa96fcaa362181d4b6fef9f1de0aa914@walle.cc>
+ <0a1c6ebf-1d5b-4f06-56db-f04e87d2ae9a@xilinx.com>
+ <bd86194a13882ce472764d0c91029e33@walle.cc>
+ <8917c9a1-09e9-0a39-5732-da7f555ae9ad@xilinx.com>
+ <df072e37bb6f3500d713be565cfa1328@walle.cc>
+ <cbfc4899-eb92-938a-95f2-23ca9485beaf@xilinx.com>
+User-Agent: Roundcube Webmail/1.4.10
+Message-ID: <a346e761397a14d2effd4806e53395e5@walle.cc>
+X-Sender: michael@walle.cc
 
+Am 2021-01-21 14:16, schrieb Michal Simek:
+> On 1/21/21 11:41 AM, Michael Walle wrote:
+>> Am 2021-01-21 11:23, schrieb Michal Simek:
+>>>>> Back to your case. Board is cheap which is not all the time case 
+>>>>> for
+>>>>> any
+>>>>> xilinx board but you have only uart, sd and partially described
+>>>>> ethernet
+>>>>> which doesn't work without PL. Is it worth to have this described?
+>>>> 
+>>>> I got your point. But it is at least a jump start for the users if 
+>>>> that
+>>>> board boots out of the box. And yes, its unfortunate, that ethernet
+>>>> just works if the PL is configured. This is already done by the
+>>>> bootloader, because there I do have the same problem.
+>>> 
+>>> Zynq/ZynqMP boards can use U-Boot SPL. "Advantage" of this solution
+>>> especially for Zynq is that in u-boot there is open a way for adding
+>>> ps7_init file which is determined by device tree name.
+>>> I think it would make sense to add these DTs and also ps7_init to 
+>>> U-Boot
+>>> project and wire it up with zynq_virt platform and then you can boot
+>>> Linux with using U-Boot's DT pointed by $fdtcontroladdr.
+>>> Then you will get support from scratch to be able to boot.
+>> 
+>> I already have patches for u-boot (using SPL). But my impression was
+>> that linux is the master for the device trees. Esp. if there are some
+>> problems with the board its often useful to have an in-tree device
+>> tree.
+>> 
+>> What is the difference between this board and the other zynq boards
+>> in the kernel?
+>> 
+>> In any case, please make this decision now: will you accept this
+>> device tree or not?
+> 
+> If you promise to regularly test it I am fine with it.
 
---fGGnx9KInWbJddqW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I might even integrate it into our lava lab.
 
-On Thu, Jan 07, 2021 at 04:56:59PM +0000, Peter Geis wrote:
-> Ouya fails to detect the eMMC module when booted via certain bootloaders.
-> Fastboot and hard-kexec bootloaders fail while u-boot does not. It was
-> discovered that the issue manifests if the sdmmc4 alternate configuration
-> clock pin is input disabled.
->=20
-> Ouya uses sdmmc4 in the primary pin configuration. It is unknown why this
-> occurs, though it is likely related to other eMMC limitations experienced
-> on Ouya.
->=20
-> For now, fix it by enabling input on cam_mclk_pcc0.
->=20
-> Fixes: d7195ac5c9c5 ("ARM: tegra: Add device-tree for Ouya")
-> Reported-by: Matt Merhar <mattmerhar@protonmail.com>
-> Tested-by: Matt Merhar <mattmerhar@protonmail.com>
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> ---
-> Changes v3:
-> Removed stable tag, applies to v5.11+ only
->=20
-> Changes v2:
-> -Added stable tag.
-> -Improved commit message.
->=20
->  arch/arm/boot/dts/tegra30-ouya.dts | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-
-Acked-by: Thierry Reding <treding@nvidia.com>
-
-Arnd, Olof,
-
-can you guys pick this up directly for v5.11, since I don't currently
-have any other fixes queued up?
-
-Here's a patchwork link:
-
-	http://patchwork.ozlabs.org/project/linux-tegra/patch/20210107165658.13541=
-91-1-pgwipeout@gmail.com/
-
-Thanks,
-Thierry
-
-> diff --git a/arch/arm/boot/dts/tegra30-ouya.dts b/arch/arm/boot/dts/tegra=
-30-ouya.dts
-> index 74da1360d297..0368b3b816ef 100644
-> --- a/arch/arm/boot/dts/tegra30-ouya.dts
-> +++ b/arch/arm/boot/dts/tegra30-ouya.dts
-> @@ -4352,8 +4352,8 @@ cam_mclk_pcc0 {
->  		nvidia,pins =3D "cam_mclk_pcc0";
->  		nvidia,function =3D "vi_alt3";
->  		nvidia,pull =3D <TEGRA_PIN_PULL_NONE>;
-> -		nvidia,tristate =3D <TEGRA_PIN_ENABLE>;
-> -		nvidia,enable-input =3D <TEGRA_PIN_DISABLE>;
-> +		nvidia,tristate =3D <TEGRA_PIN_DISABLE>;
-> +		nvidia,enable-input =3D <TEGRA_PIN_ENABLE>;
->  	};
->  	pcc1 {
->  		nvidia,pins =3D "pcc1";
-> --=20
-> 2.25.1
->=20
-
---fGGnx9KInWbJddqW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmAJl5kACgkQ3SOs138+
-s6EKPA/8CPZIippS9fE8NcFsxBz/e79qQJtdtCEE9x1jcmpCe+59A71pXnkvD2W6
-iEUGXkfZUrYzmS4tbe36d36qqx9Z592uKMw4SSEQidNPUUvO8uxVDgXvXcSQhvAB
-5rN+PJ/uOfl6HVdyO5/uZR83ipk5EtWX78F12QkAst9oc0AgAgGvkvtiS/hKZ+QV
-qbdG7sre7EKIiYUaN6zY8v3P75a2lYglqmlVevdnyFDzoK2OTUIZmrMbeUQ4vsJ/
-a6yzqKXUdnOGAi7ePHPc/BHizzZxN2x5BqFS+HlOCqI7c0tmnhFq3A7VycSEvBce
-DHxkyXZuhWYb+4JT0VLwYMmtZ1vjWoc9FhjBh1c3pho0t5nAoSKbd7IRSF6pLGrz
-AFQIzS/jY+A2BJ2W8otkWb7+ciNUqooXQzaCHmEmDgklM2vzRE+Gtu3QHVAczi19
-a091GUMYWbqV4reh80rZN23HlrCMczzcd/SkVzvDeMSSbk8buSY/aKS3XEKuoQMN
-Q12unnwncq76ux0MH+k2iFWp89g9S77/QNLINunNxuzuowJ0QMKwx3MpBeJ3Xr3H
-9BzgY5+r9/mXAheD44d9JSXzepTuURITqRbKdVitAil1FqnShOM/WbvMDWTPWle9
-/y87+qUOYY1IV0TxWAlvXwB1GvJQOvXw0A1I6i+35JdoM8etc2E=
-=Y5ex
------END PGP SIGNATURE-----
-
---fGGnx9KInWbJddqW--
+-michael
