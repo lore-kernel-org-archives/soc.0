@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 619CDC433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 03:43:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 773C5C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 03:43:37 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0A13E2389A
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 03:43:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0A13E2389A
+	by mail.kernel.org (Postfix) with ESMTPS id 2309E2389A
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 03:43:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2309E2389A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=v3.sk
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,48 +23,49 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=m80TbT5h6zd95rUnL0WFSrP9zg6EDE3zWzWEnjw2sQw=; b=B3eK6arSKfkYSoo2cfRlFjqen
-	v6WU1v0aLdd7XNyRcjpSciKBqyciUS0uL+xqnBSuwioLVMlbHrzlwDBMdCj0e95kRqHtvkk0Qgud5
-	ywrS249IShyTvLfKemxjc2v16w+nvO74iOlIw0kVVVUDosRRoxx9C6N+EXnv1WB0YZh31w4YYtL7T
-	m/rrH5mhGSANAAuSVPb4WEaZHtYgM4v0cNbU41CN+fP4ef/Y6jI4euhmDKgZAWUeGO7ShcZZm/3lC
-	O237fAyRxtkxPGR0ylORcZ15zWMoMZCQWcs9mWwyNZwgyiSCZ2tjdoPjFEIZIf+pUZSd7LS5JZuy9
-	dndz7oNzA==;
+	 bh=43LBI80IxIPSTEtGrCN5Kox3uVMg8erFKbqNHnWrb4I=; b=jt2oTNXAL+sqLH4NqSKMMDup1
+	wYPKfNZ4+n9lambwZm1CRmJB8IoM8qptmXK/ULdidvEg1369LQWAcnmmFf8l+OJTsSmF1MRZmyUxA
+	STER2ehHtIZWK6vT+hG0cRAA0wiZzfWMdADJP7Kg64zxnSirFvl+/82qGP9qBcSpzXrZXVOSFs2QC
+	BZD2K1T5VeDVww/m3UJpct83atpPu2jMgOxfsBd5p88qLSGjS2HLwebcNSr3CjXI3YcPU5D0xiJ4S
+	44oiBl/7nuU+5BJrJ5Ur1t026udl/q9R7AKm+LrYx8ocex7xrmTg5CcJ1qArqHllehZX7oEOh1rXt
+	i7ui0SIjg==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l2QrB-0006DC-0m; Thu, 21 Jan 2021 03:42:01 +0000
+	id 1l2Qr4-0006BF-AN; Thu, 21 Jan 2021 03:41:54 +0000
 Received: from mail.v3.sk ([167.172.186.51] helo=shell.v3.sk)
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l2Qqo-000655-Mq
- for linux-arm-kernel@lists.infradead.org; Thu, 21 Jan 2021 03:41:42 +0000
+ id 1l2Qqo-000651-Ln
+ for linux-arm-kernel@lists.infradead.org; Thu, 21 Jan 2021 03:41:39 +0000
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by zimbra.v3.sk (Postfix) with ESMTP id CD3BBE0A6E;
- Thu, 21 Jan 2021 03:37:40 +0000 (UTC)
+ by zimbra.v3.sk (Postfix) with ESMTP id D8528DF892;
+ Thu, 21 Jan 2021 03:37:39 +0000 (UTC)
 Received: from shell.v3.sk ([127.0.0.1])
  by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id UQC7bHQG0sMr; Thu, 21 Jan 2021 03:37:40 +0000 (UTC)
+ with ESMTP id TV5t0yC6OOVg; Thu, 21 Jan 2021 03:37:39 +0000 (UTC)
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by zimbra.v3.sk (Postfix) with ESMTP id 8E104E0A82;
- Thu, 21 Jan 2021 03:37:40 +0000 (UTC)
+ by zimbra.v3.sk (Postfix) with ESMTP id 03B79DF8E6;
+ Thu, 21 Jan 2021 03:37:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at zimbra.v3.sk
 Received: from shell.v3.sk ([127.0.0.1])
  by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id 7XerKyXchpDh; Thu, 21 Jan 2021 03:37:40 +0000 (UTC)
+ with ESMTP id zZr-gO1SsUBE; Thu, 21 Jan 2021 03:37:38 +0000 (UTC)
 Received: from localhost (unknown [109.183.109.54])
- by zimbra.v3.sk (Postfix) with ESMTPSA id 59AA9E0A6E;
- Thu, 21 Jan 2021 03:37:40 +0000 (UTC)
+ by zimbra.v3.sk (Postfix) with ESMTPSA id 6484EDF892;
+ Thu, 21 Jan 2021 03:37:38 +0000 (UTC)
 From: Lubomir Rintel <lkundrak@v3.sk>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>
-Subject: [PATCH 03/12] ARM: dts: mmp2-olpc-xo-1-75: Fix memory node name
-Date: Thu, 21 Jan 2021 04:41:21 +0100
-Message-ID: <20210121034130.1381872-4-lkundrak@v3.sk>
+Subject: [PATCH 01/12] dt-bindings: gpio: mrvl-gpio: Fix the gpio-ranges
+ property
+Date: Thu, 21 Jan 2021 04:41:19 +0100
+Message-ID: <20210121034130.1381872-2-lkundrak@v3.sk>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210121034130.1381872-1-lkundrak@v3.sk>
 References: <20210121034130.1381872-1-lkundrak@v3.sk>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210120_224138_889125_3C52DBF2 
-X-CRM114-Status: GOOD (  11.37  )
+X-CRM114-CacheID: sfid-20210120_224138_881107_DD889103 
+X-CRM114-Status: GOOD (  10.94  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,28 +85,30 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210121034121.k2wIxLgfVWNUz12ABexeR-ePU6PNefX8vg28UN1BXrU@z>
+Message-ID: <20210121034119.37-U0uTqj8CAdZH2ciRDbpigWuVwQ4oxUCpOKvNWuDg@z>
 
-It contains a reg property. Add its base to the node name.
+The property specifies a list of GPIO-capable pins. Don't limit it to a
+single element as there's  presumably more than one GPIO pin.
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/gpio/mrvl-gpio.yaml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts b/arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts
-index 342304f5653af..e16171ddd93ec 100644
---- a/arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts
-+++ b/arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts
-@@ -32,7 +32,7 @@ framebuffer@1fc00000 {
- 		};
- 	};
+diff --git a/Documentation/devicetree/bindings/gpio/mrvl-gpio.yaml b/Documentation/devicetree/bindings/gpio/mrvl-gpio.yaml
+index 4db3b8a3332c2..9cf6137dd5241 100644
+--- a/Documentation/devicetree/bindings/gpio/mrvl-gpio.yaml
++++ b/Documentation/devicetree/bindings/gpio/mrvl-gpio.yaml
+@@ -82,8 +82,7 @@ properties:
+   '#gpio-cells':
+     const: 2
  
--	memory {
-+	memory@0 {
- 		linux,usable-memory = <0x0 0x1f800000>;
- 		available = <0xcf000 0x1ef31000 0x1000 0xbf000>;
- 		reg = <0x0 0x20000000>;
+-  gpio-ranges:
+-    maxItems: 1
++  gpio-ranges: true
+ 
+   interrupts: true
+ 
 -- 
 2.29.2
 
