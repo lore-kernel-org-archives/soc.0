@@ -1,78 +1,48 @@
-Return-Path: <SRS0=2LUn=GY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=BbOH=GY=mansr.com=mans@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8B40C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 13:48:40 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 127AFC433DB
+	for <soc@archiver.kernel.org>; Thu, 21 Jan 2021 13:54:32 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id CC0A8239D4; Thu, 21 Jan 2021 13:54:31 +0000 (UTC)
+X-Greylist: delayed 447 seconds by postgrey-1.34 at mail.kernel.org; Thu, 21 Jan 2021 13:54:31 UTC
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7DE3E233F8
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mansr.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=mans@mansr.com
+Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 97DA9238EC
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 13:48:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 97DA9238EC
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mansr.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-ID:In-Reply-To:Date:References:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=yuYDF7To3EK6mm2IqD8P4e+pwGjpzOk/tY/45rpGo+c=; b=WWyyV0OZ/If9Qg0Zd/5M8B4ny
-	IbWXDFEzXYfYvSrgTwtotm2pX8+Qk9Xj7l3CBGafOtwr2yDnLzBurVtvMyzZ+dE2IvCJzsZC16YSD
-	Pvjjczp1+Pw6YPdpPL5vepeEIB04FTLquYE1EWynm29ly3qv77W7mLWLDk+T8uGf4egtnaY2kxjm7
-	2m4OLmzExHII53xER0mey0xvsR8XpJddnddXCw+AV4YC2VL8C31l5JcnJFB/cJReqU5cS3IfVEihq
-	X/yq+4Kh/Ioi1MctGjig6MoBt4lN6f2Rpw+pTUYmJ4N+zck5bwpTkbBtsxJtEfl39XteDdFiVRTJP
-	FMTqXdvhw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l2aIs-00017l-PC; Thu, 21 Jan 2021 13:47:14 +0000
-Received: from unicorn.mansr.com ([81.2.72.234])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l2aIp-00016d-PT
- for linux-arm-kernel@lists.infradead.org; Thu, 21 Jan 2021 13:47:13 +0000
+	by mail.kernel.org (Postfix) with ESMTPS id 7DE3E233F8
+	for <soc@kernel.org>; Thu, 21 Jan 2021 13:54:31 +0000 (UTC)
 Received: from raven.mansr.com (raven.mansr.com [81.2.72.235])
- by unicorn.mansr.com (Postfix) with ESMTPS id 9118E15360;
- Thu, 21 Jan 2021 13:47:01 +0000 (GMT)
+	by unicorn.mansr.com (Postfix) with ESMTPS id 9118E15360;
+	Thu, 21 Jan 2021 13:47:01 +0000 (GMT)
 Received: by raven.mansr.com (Postfix, from userid 51770)
- id 2B0A221A3D9; Thu, 21 Jan 2021 13:47:01 +0000 (GMT)
+	id 2B0A221A3D9; Thu, 21 Jan 2021 13:47:01 +0000 (GMT)
 From: =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
 To: Arnd Bergmann <arnd@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, Marc Gonzalez
+ <marc.w.gonzalez@free.fr>
 Subject: Re: [PATCH 4/5] ARM: remove tango platform
 References: <20210120124812.2800027-1-arnd@kernel.org>
- <20210120124812.2800027-5-arnd@kernel.org>
+	<20210120124812.2800027-5-arnd@kernel.org>
 Date: Thu, 21 Jan 2021 13:47:01 +0000
 In-Reply-To: <20210120124812.2800027-5-arnd@kernel.org> (Arnd Bergmann's
- message of "Wed, 20 Jan 2021 13:48:11 +0100")
+	message of "Wed, 20 Jan 2021 13:48:11 +0100")
 Message-ID: <yw1xwnw6z9ka.fsf@mansr.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210121_084711_970305_7D2C3F17 
-X-CRM114-Status: GOOD (  21.58  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, Marc Gonzalez <marc.w.gonzalez@free.fr>
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Transfer-Encoding: quoted-printable
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210121134701.8O7JR0QMyvqsHRaqb27pv9hZn9fpkFkv73bJPZLmTG4@z>
 
 Arnd Bergmann <arnd@kernel.org> writes:
 
@@ -250,11 +220,5 @@ same silicon shows up also in some Rockchip devices and probably others
 yet to be identified.  It's too bad we don't know which library they're
 all using.
 
--- =
-
+--=20
 M=E5ns Rullg=E5rd
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
