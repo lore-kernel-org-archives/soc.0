@@ -1,27 +1,45 @@
-Return-Path: <SRS0=scM1=GY=xilinx.com=michals@kernel.org>
+Return-Path: <SRS0=2LUn=GY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12C62C433E6
-	for <soc@archiver.kernel.org>; Thu, 21 Jan 2021 09:57:37 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id D6DE3239D3; Thu, 21 Jan 2021 09:57:36 +0000 (UTC)
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2079.outbound.protection.outlook.com [40.107.244.79])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47101C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 09:59:27 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4C9BC239A4;
-	Thu, 21 Jan 2021 09:57:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4C9BC239A4
+	by mail.kernel.org (Postfix) with ESMTPS id BDAFA20725
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 09:59:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BDAFA20725
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=xilinx.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=michals@xilinx.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:Subject:
+	From:References:To:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=X6A1M4oXlmj8XHDejwIsZVDq191t2bU5i7CGcDln0Mg=; b=LyTIwSnQBCUk/5kOXsr8TNUON
+	KWodTwFjx8gW+7ZrwfzyWJZW6teyAL7WI/SGlVZRYrA+uizHpO9P/8yt5VOG62dHp0QKUkXbRMASy
+	5cvBRG/SvBHMi4ELJbSsYNyo+8J0wrLbgRtsbDHDAInlbV6wPM2Tz8HWsefXNr1x+WEoA0AdNeyKu
+	kTy1JwemZ0i9UFh0shClFpMsOYNMMBWeFKK8QRut167Kq0Qb6GJ+09pRO38LcbW4D0s5vhIsgi0Gb
+	R/cp5Z3OC6W59SaqweX5DyKj585qI4i2XzlIoUTvA8U56UOHhGLAroIg4kQvYvxWnd5K/QHJ9AVmR
+	sVJP3KXEA==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l2Wik-0000bL-Qn; Thu, 21 Jan 2021 09:57:42 +0000
+Received: from mail-mw2nam12on2040.outbound.protection.outlook.com
+ ([40.107.244.40] helo=NAM12-MW2-obe.outbound.protection.outlook.com)
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l2Wig-0000aR-NT
+ for linux-arm-kernel@lists.infradead.org; Thu, 21 Jan 2021 09:57:40 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=mJxvou6Kwjc1FmmkLhB79y/2/b3yoTvA9M4hI5dgmU5lpzkGNZkB4416tTM24Tzycd27WrU69FVULq5gyHT40eYtCknvEPM6aGyvYzFNJa/sGCYFyusj42uCJQI7UUzqF6cys3hiDvnH9b8GLmYgW67XxZcL8ZVz7olfDWWwK6rLLlouath8YXMhptNqtRPh7NTSpQrieiNh29QKdAH8p0iRvZxA5D2bporTM0qgMWNYfm6yT6CGS9iqYltkbbGcY/QjwcaZinXfjWlR9g9tuYcoCD57tOE7WhK8oLGBX0sqnfH91FHiGmSBpc2o84uhBKyn3M6u1cAzeJCArakAyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
  bh=9YcGb+nlMqM4stOPyw++a32wO/5HqCo1BBZ3WOHTSYA=;
@@ -63,24 +81,11 @@ Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
  15.1.1913.5 via Frontend Transport; Thu, 21 Jan 2021 01:57:32 -0800
-Envelope-to: michal.simek@xilinx.com,
- soc@kernel.org,
- olof@lixom.net,
- arnd@arndb.de,
- robh+dt@kernel.org,
- linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org,
- michael@walle.cc
 Received: from [172.30.17.109] (port=44700)
-	by smtp.xilinx.com with esmtp (Exim 4.90)
-	(envelope-from <michal.simek@xilinx.com>)
-	id 1l2WiZ-00069C-Rh; Thu, 21 Jan 2021 01:57:32 -0800
+ by smtp.xilinx.com with esmtp (Exim 4.90)
+ (envelope-from <michal.simek@xilinx.com>)
+ id 1l2WiZ-00069C-Rh; Thu, 21 Jan 2021 01:57:32 -0800
 To: Michael Walle <michael@walle.cc>, Michal Simek <michal.simek@xilinx.com>
-List-Id: <soc.lore.kernel.org>
-CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>, "Arnd
- Bergmann" <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, <soc@kernel.org>
 References: <20210120194033.26970-1-michael@walle.cc>
  <fff420d1-fc9a-23ce-0d07-58a3c6f10c4d@xilinx.com>
  <aa96fcaa362181d4b6fef9f1de0aa914@walle.cc>
@@ -92,102 +97,109 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.1
 MIME-Version: 1.0
 In-Reply-To: <aa96fcaa362181d4b6fef9f1de0aa914@walle.cc>
-Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-Correlation-Id: 2908f50d-fc97-4138-16a0-08d8bdf2f98c
 X-MS-TrafficTypeDiagnostic: DM5PR02MB3846:
-X-Microsoft-Antispam-PRVS:
-	<DM5PR02MB384660FA4C99F59A7AAD310FC6A10@DM5PR02MB3846.namprd02.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <DM5PR02MB384660FA4C99F59A7AAD310FC6A10@DM5PR02MB3846.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	SYbHzeuE5fuaJ2JwhbVqNTpkkLe5qaXcDWeyy9G+nkMNd9EWUF/jSC3A13RbMpaITgOCM/68sFqt6axJ0RpNI44YfoDa9vouIecsp7sVmdzAkQshuZjG8UIdvkGXYkYJyTefIe4+NR+TEGtSxvgCTwZppYLUYSTMoTBFe6YhZpZakPkgXChC3+AgeoHXdmUnRfJ5EgGCYBjX1mlgF/nuLL5M/JelB49H+DHTBnLBlF7PVMy1hAJgOl5jz/vHLB5yXBTnp9so+jVRLbVc/SYnVeET7qS002qsmc5I9DZXOP78ymjoabyuVwBi5j8bL3bRQzMIi6aYdz2ZuRE4NU7mvAN7pOua0Z7pBWjngBtdvXMfIrr9wUYyr+wxHO94oj6d2K+6xbwGIPEZJXimmi/o3qODSsGXaHfy+vPV6wjLeLbRBsYQDPEDZ4Pb4GvLM+WqfGkAu7iM4Ngq57qvsai7e8h4qRMpkKJb6ECX1L9WatlWCy77w3S4seOVNlVMmPT1DDJnJ6a1plf7f/IgCMjNzXhlM5o02TH7QdrTKGvqcAyUAhfAEHSh46vpYjXT9HJQOnBGs97fBy95EYA4lCj6orlEjaIJ6Y7yAitNSG7gCcE=
-X-Forefront-Antispam-Report:
-	CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(39860400002)(136003)(396003)(376002)(346002)(46966006)(54906003)(4326008)(966005)(5660300002)(356005)(36756003)(110136005)(66574015)(82310400003)(6666004)(47076005)(478600001)(336012)(9786002)(7636003)(83380400001)(53546011)(8936002)(186003)(26005)(426003)(44832011)(2906002)(82740400003)(8676002)(31696002)(70206006)(2616005)(316002)(31686004)(70586007)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: SYbHzeuE5fuaJ2JwhbVqNTpkkLe5qaXcDWeyy9G+nkMNd9EWUF/jSC3A13RbMpaITgOCM/68sFqt6axJ0RpNI44YfoDa9vouIecsp7sVmdzAkQshuZjG8UIdvkGXYkYJyTefIe4+NR+TEGtSxvgCTwZppYLUYSTMoTBFe6YhZpZakPkgXChC3+AgeoHXdmUnRfJ5EgGCYBjX1mlgF/nuLL5M/JelB49H+DHTBnLBlF7PVMy1hAJgOl5jz/vHLB5yXBTnp9so+jVRLbVc/SYnVeET7qS002qsmc5I9DZXOP78ymjoabyuVwBi5j8bL3bRQzMIi6aYdz2ZuRE4NU7mvAN7pOua0Z7pBWjngBtdvXMfIrr9wUYyr+wxHO94oj6d2K+6xbwGIPEZJXimmi/o3qODSsGXaHfy+vPV6wjLeLbRBsYQDPEDZ4Pb4GvLM+WqfGkAu7iM4Ngq57qvsai7e8h4qRMpkKJb6ECX1L9WatlWCy77w3S4seOVNlVMmPT1DDJnJ6a1plf7f/IgCMjNzXhlM5o02TH7QdrTKGvqcAyUAhfAEHSh46vpYjXT9HJQOnBGs97fBy95EYA4lCj6orlEjaIJ6Y7yAitNSG7gCcE=
+X-Forefront-Antispam-Report: CIP:149.199.62.198; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:xsj-pvapexch01.xlnx.xilinx.com;
+ PTR:unknown-62-198.xilinx.com; CAT:NONE;
+ SFS:(4636009)(39860400002)(136003)(396003)(376002)(346002)(46966006)(54906003)(4326008)(966005)(5660300002)(356005)(36756003)(110136005)(66574015)(82310400003)(6666004)(47076005)(478600001)(336012)(9786002)(7636003)(83380400001)(53546011)(8936002)(186003)(26005)(426003)(44832011)(2906002)(82740400003)(8676002)(31696002)(70206006)(2616005)(316002)(31686004)(70586007)(50156003)(43740500002);
+ DIR:OUT; SFP:1101; 
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2021 09:57:33.7948
- (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2021 09:57:33.7948 (UTC)
 X-MS-Exchange-CrossTenant-Network-Message-Id: 2908f50d-fc97-4138-16a0-08d8bdf2f98c
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL2NAM02FT031.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c; Ip=[149.199.62.198];
+ Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT031.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB3846
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210121_045739_085393_DDFDC576 
+X-CRM114-Status: GOOD (  25.19  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: devicetree@vger.kernel.org, Arnd
+ Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>, Olof Johansson <olof@lixom.net>,
+ linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210121095728.WYWMvGtDjaW2CtN-xJ2lfY1FjAEUAaA4cBS637MbF_M@z>
 
-Hi,
-
-On 1/21/21 10:35 AM, Michael Walle wrote:
-> Hi Michal,
-> 
-> Am 2021-01-21 10:25, schrieb Michal Simek:
->> On 1/20/21 8:40 PM, Michael Walle wrote:
->>> Add support for the Ebang EBAZ4205 board. This board was once used as a
->>> control board for a bitcoin mining device. Nowawdays it is sold as a
->>> cheap
->>> Zynq-7000 eval board.
->>>
->>> Michael Walle (3):
->>>   dt-bindings: add ebang vendor prefix
->>>   dt-bindings: arm: add Ebang EBAZ4205 board
->>>   ARM: dts: add Ebang EBAZ4205 device tree
->>>
->>>  .../devicetree/bindings/arm/xilinx.yaml       |   1 +
->>>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
->>>  arch/arm/boot/dts/Makefile                    |   1 +
->>>  arch/arm/boot/dts/zynq-ebaz4205.dts           | 109 ++++++++++++++++++
->>>  4 files changed, 113 insertions(+)
->>>  create mode 100644 arch/arm/boot/dts/zynq-ebaz4205.dts
->>>
->>
->> any link with schematics?
-> 
-> https://github.com/xjtuecho/EBAZ4205, looks like these are
-> reverse engineered (from a layout file?) though.
-
-Interesting but at least something.
-
-> 
->> I will let dt guys to comment 1/3 but series look good to me.
->> The board doesn't look interesting from description point of view that's
->> why all the time thinking if makes sense to add it to kernel.
-> 
-> What do you want to tell me? That for the time being, it didn't
-> appear to you to add the board yourself - or do you thing it
-> doesn't make sense at all. If its the latter, what would be
-> actual reason to have a board in mainline?
-
-I have bad experience with for example Avnet boards which people add and
-none is really updating them and they are in the same state for years.
-
-Long time ago we agreed that doesn't make sense to describe PL in
-upstream projects and we only describe PS part. It means you likely miss
-several things which are useful and the reason for using these SoCs is PL.
-
-As you likely know Xilinx has Versal device and I didn't push any device
-tree to any upstream project and thinking not to add any description for
-boards and stay in sort of space that "virtual" description for SoC
-should be enough. Maybe just versal.dtsi and one kitchen sink DT should
-be added but not description for all boards.
-
-The same is if make sense to push all DTs for all standard xilinx zynqmp
-evaluation boards. If there is something interesting/new I thought it
-makes sense to add it as pattern to follow. But for boards which looks
-very similar from PS point of view I don't think there is real value to
-add and invest time for maintaining.
-
-Back to your case. Board is cheap which is not all the time case for any
-xilinx board but you have only uart, sd and partially described ethernet
-which doesn't work without PL. Is it worth to have this described?
-Especially when it is visible that you need to describe custom PL and DT
-overlays are not solid yet.
-
-Thanks,
-Michal
+SGksCgpPbiAxLzIxLzIxIDEwOjM1IEFNLCBNaWNoYWVsIFdhbGxlIHdyb3RlOgo+IEhpIE1pY2hh
+bCwKPiAKPiBBbSAyMDIxLTAxLTIxIDEwOjI1LCBzY2hyaWViIE1pY2hhbCBTaW1lazoKPj4gT24g
+MS8yMC8yMSA4OjQwIFBNLCBNaWNoYWVsIFdhbGxlIHdyb3RlOgo+Pj4gQWRkIHN1cHBvcnQgZm9y
+IHRoZSBFYmFuZyBFQkFaNDIwNSBib2FyZC4gVGhpcyBib2FyZCB3YXMgb25jZSB1c2VkIGFzIGEK
+Pj4+IGNvbnRyb2wgYm9hcmQgZm9yIGEgYml0Y29pbiBtaW5pbmcgZGV2aWNlLiBOb3dhd2RheXMg
+aXQgaXMgc29sZCBhcyBhCj4+PiBjaGVhcAo+Pj4gWnlucS03MDAwIGV2YWwgYm9hcmQuCj4+Pgo+
+Pj4gTWljaGFlbCBXYWxsZSAoMyk6Cj4+PiDCoCBkdC1iaW5kaW5nczogYWRkIGViYW5nIHZlbmRv
+ciBwcmVmaXgKPj4+IMKgIGR0LWJpbmRpbmdzOiBhcm06IGFkZCBFYmFuZyBFQkFaNDIwNSBib2Fy
+ZAo+Pj4gwqAgQVJNOiBkdHM6IGFkZCBFYmFuZyBFQkFaNDIwNSBkZXZpY2UgdHJlZQo+Pj4KPj4+
+IMKgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL3hpbGlueC55YW1swqDCoMKgwqDCoMKgIHzC
+oMKgIDEgKwo+Pj4gwqAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy92ZW5kb3ItcHJlZml4ZXMueWFt
+bMKgIHzCoMKgIDIgKwo+Pj4gwqBhcmNoL2FybS9ib290L2R0cy9NYWtlZmlsZcKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDEgKwo+Pj4gwqBhcmNoL2FybS9ib290
+L2R0cy96eW5xLWViYXo0MjA1LmR0c8KgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMTA5ICsrKysrKysr
+KysrKysrKysrKwo+Pj4gwqA0IGZpbGVzIGNoYW5nZWQsIDExMyBpbnNlcnRpb25zKCspCj4+PiDC
+oGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2FybS9ib290L2R0cy96eW5xLWViYXo0MjA1LmR0cwo+
+Pj4KPj4KPj4gYW55IGxpbmsgd2l0aCBzY2hlbWF0aWNzPwo+IAo+IGh0dHBzOi8vZ2l0aHViLmNv
+bS94anR1ZWNoby9FQkFaNDIwNSwgbG9va3MgbGlrZSB0aGVzZSBhcmUKPiByZXZlcnNlIGVuZ2lu
+ZWVyZWQgKGZyb20gYSBsYXlvdXQgZmlsZT8pIHRob3VnaC4KCkludGVyZXN0aW5nIGJ1dCBhdCBs
+ZWFzdCBzb21ldGhpbmcuCgo+IAo+PiBJIHdpbGwgbGV0IGR0IGd1eXMgdG8gY29tbWVudCAxLzMg
+YnV0IHNlcmllcyBsb29rIGdvb2QgdG8gbWUuCj4+IFRoZSBib2FyZCBkb2Vzbid0IGxvb2sgaW50
+ZXJlc3RpbmcgZnJvbSBkZXNjcmlwdGlvbiBwb2ludCBvZiB2aWV3IHRoYXQncwo+PiB3aHkgYWxs
+IHRoZSB0aW1lIHRoaW5raW5nIGlmIG1ha2VzIHNlbnNlIHRvIGFkZCBpdCB0byBrZXJuZWwuCj4g
+Cj4gV2hhdCBkbyB5b3Ugd2FudCB0byB0ZWxsIG1lPyBUaGF0IGZvciB0aGUgdGltZSBiZWluZywg
+aXQgZGlkbid0Cj4gYXBwZWFyIHRvIHlvdSB0byBhZGQgdGhlIGJvYXJkIHlvdXJzZWxmIC0gb3Ig
+ZG8geW91IHRoaW5nIGl0Cj4gZG9lc24ndCBtYWtlIHNlbnNlIGF0IGFsbC4gSWYgaXRzIHRoZSBs
+YXR0ZXIsIHdoYXQgd291bGQgYmUKPiBhY3R1YWwgcmVhc29uIHRvIGhhdmUgYSBib2FyZCBpbiBt
+YWlubGluZT8KCkkgaGF2ZSBiYWQgZXhwZXJpZW5jZSB3aXRoIGZvciBleGFtcGxlIEF2bmV0IGJv
+YXJkcyB3aGljaCBwZW9wbGUgYWRkIGFuZApub25lIGlzIHJlYWxseSB1cGRhdGluZyB0aGVtIGFu
+ZCB0aGV5IGFyZSBpbiB0aGUgc2FtZSBzdGF0ZSBmb3IgeWVhcnMuCgpMb25nIHRpbWUgYWdvIHdl
+IGFncmVlZCB0aGF0IGRvZXNuJ3QgbWFrZSBzZW5zZSB0byBkZXNjcmliZSBQTCBpbgp1cHN0cmVh
+bSBwcm9qZWN0cyBhbmQgd2Ugb25seSBkZXNjcmliZSBQUyBwYXJ0LiBJdCBtZWFucyB5b3UgbGlr
+ZWx5IG1pc3MKc2V2ZXJhbCB0aGluZ3Mgd2hpY2ggYXJlIHVzZWZ1bCBhbmQgdGhlIHJlYXNvbiBm
+b3IgdXNpbmcgdGhlc2UgU29DcyBpcyBQTC4KCkFzIHlvdSBsaWtlbHkga25vdyBYaWxpbnggaGFz
+IFZlcnNhbCBkZXZpY2UgYW5kIEkgZGlkbid0IHB1c2ggYW55IGRldmljZQp0cmVlIHRvIGFueSB1
+cHN0cmVhbSBwcm9qZWN0IGFuZCB0aGlua2luZyBub3QgdG8gYWRkIGFueSBkZXNjcmlwdGlvbiBm
+b3IKYm9hcmRzIGFuZCBzdGF5IGluIHNvcnQgb2Ygc3BhY2UgdGhhdCAidmlydHVhbCIgZGVzY3Jp
+cHRpb24gZm9yIFNvQwpzaG91bGQgYmUgZW5vdWdoLiBNYXliZSBqdXN0IHZlcnNhbC5kdHNpIGFu
+ZCBvbmUga2l0Y2hlbiBzaW5rIERUIHNob3VsZApiZSBhZGRlZCBidXQgbm90IGRlc2NyaXB0aW9u
+IGZvciBhbGwgYm9hcmRzLgoKVGhlIHNhbWUgaXMgaWYgbWFrZSBzZW5zZSB0byBwdXNoIGFsbCBE
+VHMgZm9yIGFsbCBzdGFuZGFyZCB4aWxpbnggenlucW1wCmV2YWx1YXRpb24gYm9hcmRzLiBJZiB0
+aGVyZSBpcyBzb21ldGhpbmcgaW50ZXJlc3RpbmcvbmV3IEkgdGhvdWdodCBpdAptYWtlcyBzZW5z
+ZSB0byBhZGQgaXQgYXMgcGF0dGVybiB0byBmb2xsb3cuIEJ1dCBmb3IgYm9hcmRzIHdoaWNoIGxv
+b2tzCnZlcnkgc2ltaWxhciBmcm9tIFBTIHBvaW50IG9mIHZpZXcgSSBkb24ndCB0aGluayB0aGVy
+ZSBpcyByZWFsIHZhbHVlIHRvCmFkZCBhbmQgaW52ZXN0IHRpbWUgZm9yIG1haW50YWluaW5nLgoK
+QmFjayB0byB5b3VyIGNhc2UuIEJvYXJkIGlzIGNoZWFwIHdoaWNoIGlzIG5vdCBhbGwgdGhlIHRp
+bWUgY2FzZSBmb3IgYW55CnhpbGlueCBib2FyZCBidXQgeW91IGhhdmUgb25seSB1YXJ0LCBzZCBh
+bmQgcGFydGlhbGx5IGRlc2NyaWJlZCBldGhlcm5ldAp3aGljaCBkb2Vzbid0IHdvcmsgd2l0aG91
+dCBQTC4gSXMgaXQgd29ydGggdG8gaGF2ZSB0aGlzIGRlc2NyaWJlZD8KRXNwZWNpYWxseSB3aGVu
+IGl0IGlzIHZpc2libGUgdGhhdCB5b3UgbmVlZCB0byBkZXNjcmliZSBjdXN0b20gUEwgYW5kIERU
+Cm92ZXJsYXlzIGFyZSBub3Qgc29saWQgeWV0LgoKVGhhbmtzLApNaWNoYWwKCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmxpbnV4LWFybS1rZXJuZWwgbWFp
+bGluZyBsaXN0CmxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZwpodHRwOi8vbGlz
+dHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFybS1rZXJuZWwK
