@@ -6,53 +6,57 @@ X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39EE7C433DB
-	for <soc@archiver.kernel.org>; Fri, 22 Jan 2021 22:44:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C213C433DB
+	for <soc@archiver.kernel.org>; Fri, 22 Jan 2021 22:44:35 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 0F03923AAC; Fri, 22 Jan 2021 22:44:33 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 21BD723AA1;
-	Fri, 22 Jan 2021 22:44:30 +0000 (UTC)
+	id 51CD723B06; Fri, 22 Jan 2021 22:44:35 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6262323AC0;
+	Fri, 22 Jan 2021 22:44:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1611355473;
-	bh=5pmgZHFoZbj9OlZfnTbzEza85I+nAheQ0hjOO9tqwDQ=;
+	s=k20201202; t=1611355475;
+	bh=9YP7ipLErGJnRUfQLW6l/YKDJtN6RrzTjBy0SDIPAB4=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=U03IQo21QL0cMlU71LaSQMvwIWTOlaKiYWx0ZbFyUFZk9oCxqJnfwknXycALDAsg6
-	 Xaxg5sdTUI6QOlkRNRpl+wEY/Rb6jbhW6i3esGAp27aPzASa0A3KMFVzdg87Kzk8pE
-	 brSvHV11Z1qjNMkwjJqlwmeSvGdXvC86Hn2C9xPp0kD/7JChvwIAuEniaRytXEWiJ8
-	 IPVPMZfJhFgSAsJvDEJhh9KXE1zlBG5h06XRaNODqU57175eM37cELLSJwL4fxZm/h
-	 1P4QtuD9DmxkSPun+Lj0j8bbP2KD3surVDI/0/3uhYFdpNuhHZddhqNnicMWFSvqmh
-	 r1ZLbqBjOS4aQ==
+	b=tbN8DHecNOxjhPFst6WlVkzRxuqcS0lDOPSjfic6RDm32+9cDZ3DQbhcGzv7MBbCJ
+	 0cZhadOEXCRIzjAXFIdJ4nwC9BAYAFmksXUTUcQv/3yhqjnlPcwSJ9Vmb0IEilhVFN
+	 SrIKS/WWgbV42tZ2xKanWUbdYxbXinNWb3yDEaDRCOo15R9pJjQ5+Da2RVwKYAIiRB
+	 I05iUMJ+0+mmNEnmYbPzGsbZ3NK4Q8nuu1C+X7MRAYtPROc0aLj11gIx2T1p7BvYLZ
+	 Pau2XWy3IAgRWIBEYrK6D56n2TXe5gpCTYs14AiTqV9PIw/TbeCt8uRfwgXaaE4Fpd
+	 dQNAZI1I7rwTA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+To: Olof Johansson <olof@lixom.net>,
 	soc@kernel.org,
-	linux@armlinux.org.uk
+	"nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+	arm@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-actions@lists.infradead.org,
-	cristian.ciocaltea@gmail.com,
-	linux-kernel@vger.kernel.org,
-	afaerber@suse.de,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] ARM: multi_v7_defconfig: Enable Actions Semi platform and drivers
-Date: Fri, 22 Jan 2021 23:44:26 +0100
-Message-Id: <161135545365.1320625.6993812983016804731.b4-ty@arndb.de>
+	Linux Kernel list <linux-kernel@vger.kernel.org>,
+	Ludovic Desroches <ludovic.desroches@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [GIT PULL] ARM: at91: defconfig for 5.12
+Date: Fri, 22 Jan 2021 23:44:27 +0100
+Message-Id: <161135545374.1320625.12711401805152999993.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210121061447.26517-1-manivannan.sadhasivam@linaro.org>
-References: <20210121061447.26517-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20210122144638.170565-1-nicolas.ferre@microchip.com>
+References: <20210122144638.170565-1-nicolas.ferre@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Thu, 21 Jan 2021 11:44:47 +0530, Manivannan Sadhasivam wrote:
-> The support for Actions Semi ARM32 platform has matured enough in the
-> mainline. So let's enable it in multi_v7_defconfig along with the
-> relevant drivers. The platform can now boot a distro from eMMC or uSD
-> without any out of tree patch.
+On Fri, 22 Jan 2021 15:46:38 +0100, nicolas.ferre@microchip.com wrote:
+> Arnd, Olof,
+> 
+> Here are the defconfig changes for 5.12 which contains the removal of old
+> wrapper code that we called tclib. No such config option to be used anymore in
+> next kernel.
+> 
+> Thanks, best regards,
+> 
+> [...]
 
-Applied to arm/defconfig, thanks!
+Merged into arm/defconfig, thanks!
 
-[1/1] ARM: multi_v7_defconfig: Enable Actions Semi platform and drivers
-      commit: 26ba4a474aec5998e52826319c4d7a1c98e8fab5
+merge commit: 2cb2b2c9d9f06356d8b00e8afdfc3d8449c3dd95
 
        Arnd
