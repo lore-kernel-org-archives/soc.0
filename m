@@ -6,53 +6,47 @@ X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9D7DC433E0
-	for <soc@archiver.kernel.org>; Fri, 22 Jan 2021 22:43:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58EFCC433E6
+	for <soc@archiver.kernel.org>; Fri, 22 Jan 2021 22:43:42 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id AC56623B1A; Fri, 22 Jan 2021 22:43:40 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9D87023B18;
-	Fri, 22 Jan 2021 22:43:39 +0000 (UTC)
+	id 35CD923AAC; Fri, 22 Jan 2021 22:43:42 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0638723B1C;
+	Fri, 22 Jan 2021 22:43:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1611355420;
-	bh=r/9FK7ElZ/FBm+aBmpUfW/PcFO9K4iXTCjqpvu6A6rE=;
+	s=k20201202; t=1611355422;
+	bh=57EbRnivljg6xRuDuPzY8uwa7RZ6p5vUA+cjf2TDp9k=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GhQVDBoUWE/YPO0tSGeQu9DP4saB4kWTHKiDU95bYT23vJetJsEAF/Jay5yvQHF9o
-	 PodExNG2rk2n0Z4/Pv/WLPY8W2Q0zE0KEz7i5qwDQCczk9KEj5fED+QctbdmaJXk1z
-	 kRfG/8YsqhvikqHrfpQzI8bVkTvYXGeP3mykjIo0XKXcYT5LXzd+XbOxtmK1kMONeC
-	 1EnWPlf/bVAIGZFOAiu+j516IZm2vo5ceSnVwTPa/zB30mTd/ELWE/hATjbcUvPmSH
-	 0lAUXcv8aBptsg61JEcfYemGtoHSGmJm09yEiviXZiDhCfa97E0zRatQMoFrTuRVZY
-	 0np4ggcVseK0A==
+	b=Rj4vUoHwZGFCwckyq9bhhBikOsef1yI0fVtsR5NBjChVf8gkKSTnoUKGHBP8BD+oW
+	 jSpA3jvTCSULl5g21FBey/pseD3Sr7ry8c6OsCOjbS2F2kG+0qksunleHZwk/mqhKa
+	 v5c6bZK6z05ruO7Dgr2cJ8g46kjffr0NgIwvYtmSJmm6Yr1XaVVSNConVlgNJp5I27
+	 oiRsT9JCdlkouj+Z+Raw4wiZvmdumR2dhC4zcgCMp3RzDyyA4zlvtg7L2ONZJtKAYR
+	 DgoTJXGufb6zZx5Hm7sm3LPfqNq+1Uoh4+W8Ix+8/0T20lxHcLPUrKz4OY/iDQOfrL
+	 kaaFGksVvnH9w==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
+To: soc@kernel.org,
+	arm@kernel.org,
 	Linus Walleij <linus.walleij@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [GIT PULL] Ux500 DTS updates for the v5.12 kernel cycle
-Date: Fri, 22 Jan 2021 23:43:30 +0100
-Message-Id: <161135518054.1310202.13935421445644015382.b4-ty@arndb.de>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] ARM: dts: nomadik: Fix up MMC node names
+Date: Fri, 22 Jan 2021 23:43:31 +0100
+Message-Id: <161135518055.1310202.2511846197804284625.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <CACRpkdbn=P63V9aEO2wKu2DwvVUcbjwCEV_JvKwWZ0netT75ig@mail.gmail.com>
-References: <CACRpkdbn=P63V9aEO2wKu2DwvVUcbjwCEV_JvKwWZ0netT75ig@mail.gmail.com>
+In-Reply-To: <20210122222038.2888747-1-linus.walleij@linaro.org>
+References: <20210122222038.2888747-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 22 Jan 2021 22:02:43 +0100, Linus Walleij wrote:
-> here are some DTS updates for the v5.12 kernel cycle.
-> 
-> The details are in the signed tag.
-> 
-> Please pull it in!
-> 
-> Yours,
-> Linus Walleij
-> 
-> [...]
+On Fri, 22 Jan 2021 23:20:38 +0100, Linus Walleij wrote:
+> Fix the node names for the MMC/SD card controller to conform
+> to the standard node name mmc@..
 
-Merged into arm/dt, thanks!
+Applied to arm/dt, thanks!
 
-merge commit: 0c09604d1e5bb9e0f0600e4e172ee0b7a8393090
+[1/1] ARM: dts: nomadik: Fix up MMC node names
+      commit: f5e4bf9060d34f93519e319d71ee71d779a41084
 
        Arnd
