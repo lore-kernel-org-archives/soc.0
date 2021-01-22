@@ -1,138 +1,98 @@
-Return-Path: <SRS0=2LUn=GY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=m7oM=GZ=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05F87C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 20:35:00 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD2BCC433E0
+	for <soc@archiver.kernel.org>; Fri, 22 Jan 2021 07:42:39 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 4118323106; Fri, 22 Jan 2021 07:42:39 +0000 (UTC)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B678623A58
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Jan 2021 20:34:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B678623A58
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=zh3yA2KYw7ZW/ntJlZhPiwpVY6xcr3+sGd1O/DKD44w=; b=Up775QNJQE5eIsRsLPnPfqKM8n
-	JeGFozsnPbBkisuMkvHTH4RNp02Evb1Le3VkPHTvG3uf/2p9HSrsoREC6gy5M0/8QIRHMZnjE6krx
-	v/BL1gBAw6srH34MDL5oHjfQGY266lKFhrrtzk5X6WY02/w1jaYY5qq23gxfBmt6XGEKITcsmXdVS
-	pEnepb9eBdUc1Rp/dM4BXIVzxdQJw209ZszQqC8My36v9LReh3yH4NgeHq0Ms+DaZoKk0ljksak5I
-	XfDexDnMhOJOUYGwkGhy/t8goSiJ9zbYX1pdWb/16qaL0vjnA8VgsmvwJw7GDSH8becuZpIDhCRdT
-	uth0nidg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l2gdk-00050h-GB; Thu, 21 Jan 2021 20:33:12 +0000
-Received: from mail-pl1-x62b.google.com ([2607:f8b0:4864:20::62b])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l2gdg-0004zw-Ki
- for linux-arm-kernel@lists.infradead.org; Thu, 21 Jan 2021 20:33:09 +0000
-Received: by mail-pl1-x62b.google.com with SMTP id s15so1937714plr.9
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 21 Jan 2021 12:33:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=RhTIj+lZ0U9Y9dF9HBJCT1hiEYvd3Uh23ercbE0Xjo0=;
- b=oE65Bo7C917+XskX8Pp4BR0rgNBGq0OHyMlohwEVBhL7BlMY/RovX6x5bv4nsrQKR+
- NafNFj3VcTr+nuVQ2IZlVJnn5YzOXoMSk4wFInhwn9w6gdodwrtDvL4E+CKvppAW5lZT
- ys2NFFCsvRGcjS+NNrLaHiKc5M5ihMxwgNDoblc0og81cxsR8/D/cUqjot6M3gCeVGRw
- U0qujxCGfw4xbqsJP9DRBSydnJjkiTPK1TVFo0l32b8Meet3WwZoRbwwOqS2Cp63MOwk
- 5fswfFkHPViDiLZvE9KocBb11cgFCa6i7T7CxmeibDdKZcV8RAMcnydsMkl4jGasNfSD
- J4vg==
+	by mail.kernel.org (Postfix) with ESMTPS id 915E722DBF
+	for <soc@kernel.org>; Fri, 22 Jan 2021 07:42:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 915E722DBF
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=jens.wiklander@linaro.org
+Received: by mail-lj1-f181.google.com with SMTP id f2so246927ljp.11
+        for <soc@kernel.org>; Thu, 21 Jan 2021 23:42:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=nVvrd/4gPehvCF1j59+Xexug3ddL/zOX6NDGUcJwgnA=;
+        b=T8m1a84twNCsjiFCdRXVr+AliLEZ0NT1IUG0uFOYs6b4CTpDZyDNk8B+ZxpziV6TNb
+         Rk84Zr8oOhv0+x6+XymTDp2nedh88MAfMQPJagT4V0tiLJsO3mU76PeCZS6AmrZBFS0P
+         fLRzkxlXYrAbyMflhrFIbO0tgtLsyWm4SWKrA0ZLZhYNxtiTUu7ROwvkrS+N6fIid1X9
+         7QOM1KMH26+IKhEUwKTdXXLwE1BwW8uhm+8SyivDAW43K7evLXGQv/QrFGCe/Pv12lw5
+         Rb+xa5UHiyvIgxGA9N7UpYn5b1ipLYGBnYnZzS7iEeF4AQ9dKGAvfmy4wdBsf8xeQHOj
+         GcVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=RhTIj+lZ0U9Y9dF9HBJCT1hiEYvd3Uh23ercbE0Xjo0=;
- b=DKpeSFERHPoDIDkImqRpjsNC549BVHi7rv5Ms4zCGgEuiMmmJhU7yITKREWvz0eBxv
- M44gfc0hVL2l2jCaNSKk5xttwfQSifwvBKQaBNELrTTTzjFjhl7Dfawd/s4dm+PxXEHV
- HQ6O7RpTR08VKzC7e1CGCi2sa+FEl+1kz3cq8hrxa+GmvG5UKHIDgBJwNaoh2EyhLVXZ
- UTyuJpUQBf8W7Zx4NXAA4wTFXeIJMGdnSEZsIulo1zy9t1g5WBhDztFuRPSBWITJ9CwY
- ZGECtaiZl8Vvl/XT47ELdKmVyV7iENMJJaGZdkvxDyJPn1C3hHjNVc+Ll7hMmLX00HkF
- s0Ig==
-X-Gm-Message-State: AOAM532k8TOVAoVQvRW1vcw0SORcmZdRQqllmSB84XPwShYFLnk3a/2o
- Pk6aDvk07uWhSyGroQmDYQM=
-X-Google-Smtp-Source: ABdhPJxlpobMVpdkg95ov70WGAWklTsqgkos4FjFcvwxNJyscXkKc253ymA8WNP8+5as+yuKyYxrlQ==
-X-Received: by 2002:a17:90a:9318:: with SMTP id
- p24mr1304995pjo.123.1611261186191; 
- Thu, 21 Jan 2021 12:33:06 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
- by smtp.gmail.com with ESMTPSA id q12sm6305667pgj.24.2021.01.21.12.33.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 21 Jan 2021 12:33:05 -0800 (PST)
-From: Florian Fainelli <f.fainelli@gmail.com>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=nVvrd/4gPehvCF1j59+Xexug3ddL/zOX6NDGUcJwgnA=;
+        b=QG+We8CsB+tGj2BYheafQWsZW/14rObBI49GB1MZSskewhxN1FavAhoYE4ntHvAinL
+         LbmpmE69ASe/drEx4vKCI6b9Luw63C24D3Nt/1yJaN31ZTnAAdBFuMxhDFu7mjzQamf6
+         NLsIbDquLKStz8MKEdEq7jxRoJXManRZBBYR1Rr68ZwWQ8YGRKxU9ii+aht97iF5dZI+
+         e8ybkoqT6pMkfbfAAPtGwXi1bNGwrfflIdBTqkJzaiIZjkRsqz0OLGc7UcQOi7WvG2cB
+         SZOF1lff2PSQoEm+R1UduV5jFJC/uzU6oOOhsCKjognC0HdP8nu9WMT/m9lmDzH3ty38
+         1PwA==
+X-Gm-Message-State: AOAM532ijyDXiE87Mvi9DetnUAXTskyLQG1rwYmQBfdlq9xlW5b92K+o
+	OJFWy2/gTxoBF/vr5iGc+lDz+A==
+X-Google-Smtp-Source: ABdhPJyz7Ix+zgmc7bZkms0yQWWIpAnIgekw7RmjQEOk+bEuvZBV774uADhHu+N3XM8H8ImsiobPhg==
+X-Received: by 2002:a2e:8118:: with SMTP id d24mr1718148ljg.105.1611301356768;
+        Thu, 21 Jan 2021 23:42:36 -0800 (PST)
+Received: from jade (h-249-223.A175.priv.bahnhof.se. [98.128.249.223])
+        by smtp.gmail.com with ESMTPSA id r29sm850730ljd.54.2021.01.21.23.42.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jan 2021 23:42:36 -0800 (PST)
+Date: Fri, 22 Jan 2021 08:42:34 +0100
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: [GIT PULL 1/2] Broadcom devicetree-arm64 fixes for 5.11
-Date: Thu, 21 Jan 2021 12:33:00 -0800
-Message-ID: <20210121203302.3639841-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+To: arm@kernel.org, soc@kernel.org
+Cc: op-tee@lists.trustedfirmware.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Rouven Czerwinski <r.czerwinski@pengutronix.de>
+Subject: [GIT PULL] OP-TEE driver fix for v5.11
+Message-ID: <20210122074234.GA1074747@jade>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210121_153308_889627_C6F0F531 
-X-CRM114-Status: UNSURE (   9.06  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
- Bharat Gooty <bharat.gooty@broadcom.com>, Arnd Bergmann <arnd@arndb.de>,
- khilman@kernel.org, Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
- Ray Jui <ray.jui@broadcom.com>, olof@lixom.net,
- bcm-kernel-feedback-list@broadcom.com, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210121203300.i81LO7Zje9RZCp5G49MHEkigz1djiI3YKNbaqVRa0G4@z>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-The following changes since commit 19c329f6808995b142b3966301f217c831e7cf31:
+Hello arm-soc maintainers,
 
-  Linux 5.11-rc4 (2021-01-17 16:37:05 -0800)
+Please pull this small patch taking care of a rcu_sched trace in some
+corner cases when OP-TEE is invoked.
+
+Thanks,
+Jens
+
+The following changes since commit e71ba9452f0b5b2e8dc8aa5445198cd9214a6a62:
+
+  Linux 5.11-rc2 (2021-01-03 15:55:30 -0800)
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.11/devicetree-arm64-fixes
+  git://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-rcu-sched-trace-for-v5.11
 
-for you to fetch changes up to d68aecc153ea4bd55ff32f083f05e9bc5610ec78:
+for you to fetch changes up to dcb3b06d9c34f33a249f65c08805461fb0c4325b:
 
-  arm64: dts: broadcom: Fix USB DMA address translation for Stingray (2021-01-20 10:45:56 -0800)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM64 SoC fixes for 5.11, please
-pull the following:
-
-- Bharat fixes the Stingray USB controllers ability to DMA by providing
-  an appropriate 'dma-ranges' property for the interconnect
+  tee: optee: replace might_sleep with cond_resched (2021-01-21 10:36:48 +0100)
 
 ----------------------------------------------------------------
-Bharat Gooty (1):
-      arm64: dts: broadcom: Fix USB DMA address translation for Stingray
+Fix rcu_sched trace from OP-TEE invoke
 
- arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Replaces might_sleep() with a conditional call to cond_resched()
+in order to avoid the rcu_sched trace in some corner cases.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+----------------------------------------------------------------
+Rouven Czerwinski (1):
+      tee: optee: replace might_sleep with cond_resched
+
+ drivers/tee/optee/call.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
