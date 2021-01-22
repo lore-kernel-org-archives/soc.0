@@ -6,56 +6,54 @@ X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF31EC433DB
-	for <soc@archiver.kernel.org>; Fri, 22 Jan 2021 22:43:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DC04C433E6
+	for <soc@archiver.kernel.org>; Fri, 22 Jan 2021 22:43:39 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id BF2BF23AAC; Fri, 22 Jan 2021 22:43:37 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 13FC123AA1;
-	Fri, 22 Jan 2021 22:43:35 +0000 (UTC)
+	id 51A9E23B09; Fri, 22 Jan 2021 22:43:39 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1921723AC0;
+	Fri, 22 Jan 2021 22:43:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1611355417;
-	bh=aKy7LaMFG+ANnZN2hwJUm432fjidcvV4+l9/BWaHuqU=;
+	s=k20201202; t=1611355419;
+	bh=s91XCBpC8P8/y4FCZn2nGVMSYA7tTMQBH5hBvwq0wW0=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oY3cRHhe87GtB5KCDc6FdWuXnwCh+mwcSe0/XQlLNIlgbOks0fGnJBjWo2BMLYcjF
-	 MlMy5FKvDTgW9Yz/s+xGFb3ayXKuT2S+oeB7uDdWXXpYt5k6iH5IqmAfB+V2ZSBw+S
-	 7M+hXzveZ+2etO4VgmX9PRfCYPQW8sEfU8hHRsDBxn27M3SuZ+Lx3Gf4xzz00xeMkc
-	 zJFlYdSDNhoytSeMMtsdQ/k5uBGnW8gWaJuP8xC0/i8q0YR0TTpLyssgHhkRi6mKN4
-	 d1W1hu5y8wD+lXmvurQXdKqFADNaICzArpIF2INdgh00aL1sHWcijtztbMZD7EkAgm
-	 142JXRWtiujZA==
+	b=fzHzCzFzYRraXKa0Nm2G8eXIKLPNxSjhEpbJpy04mnfQNRWTYdV9ESyGrloDu3fL8
+	 TcG7XXkfblmjqmJpWm5I96hQ60+SW25Y3t/8ydg2zBYry4w+b96+cQBkFuRsVmHSLu
+	 Mwt5s2yR4x6MNSfENFFwXCPcEWzjoSkFvCaDGvWb0vunKpkHcM1hfL+3Y1DvEBzg0t
+	 iw1aADlyjbr6ePkCouThUND8RzzPjWEEM5NVmVdQ6e1fJkbRfq1gH+6PcJ/WTaB/D2
+	 XA50821wkMAsah0G1KxvRytF7SiB/RJIFMiW34QZItesiH4VqddfgWOMaSx7Dk9avf
+	 J+t0wNdb/zNpA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: devicetree@vger.kernel.org,
+To: Dinh Nguyen <dinguyen@kernel.org>,
 	soc@kernel.org,
-	Daniel Palmer <daniel@0x0f.com>
+	arm@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	w@1wt.eu,
-	olof@lixom.net,
-	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] ARM: mstar: Unify common parts of BreadBee boards into a dtsi
-Date: Fri, 22 Jan 2021 23:43:28 +0100
-Message-Id: <161135518046.1310202.10096061681770610448.b4-ty@arndb.de>
+Subject: Re: [GIT PULL] SoCFPGA DTS updates for v5.12
+Date: Fri, 22 Jan 2021 23:43:29 +0100
+Message-Id: <161135518023.1310202.693022920264235745.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201224020354.2212037-1-daniel@0x0f.com>
-References: <20201224020354.2212037-1-daniel@0x0f.com>
+In-Reply-To: <20210120012334.25730-1-dinguyen@kernel.org>
+References: <20210120012334.25730-1-dinguyen@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Thu, 24 Dec 2020 11:03:54 +0900, Daniel Palmer wrote:
-> The BreadBee and the BreadBee Crust are the same PCB with a different
-> SoC mounted. There are two top level dts to handle this.
+On Tue, 19 Jan 2021 19:23:34 -0600, Dinh Nguyen wrote:
+> Please pull in this SoCFPGA DTS fix for v5.122.
 > 
-> To avoid deduplicating the parts that are more related to the PCB than
-> the SoC (i.e. the voltage regs and LEDs) add a common dtsi that can
-> be included in both top level dts.
+> Thanks,
+> Dinh
+> 
+> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+> 
+>   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+> 
+> [...]
 
-This was missing in my earlier merges, sorry about that.
+Merged into arm/dt, thanks!
 
-Now applied to arm/dt for v5.12, thanks!
-
-[1/1] ARM: mstar: Unify common parts of BreadBee boards into a dtsi
-      commit: 8367611892442ea788139ea1063308b6e7b6f04f
+merge commit: 7c348d8de831a7934ad0ea47ce4c7fe9dd7a7203
 
        Arnd
