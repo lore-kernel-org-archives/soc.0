@@ -6,14 +6,14 @@ X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24799C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 22 Jan 2021 22:45:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 977CAC433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 22 Jan 2021 22:46:12 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CD01C23AAC
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 22 Jan 2021 22:45:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CD01C23AAC
+	by mail.kernel.org (Postfix) with ESMTPS id 457B123AA1
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 22 Jan 2021 22:46:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 457B123AA1
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,45 +22,46 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=8DcFGbKK4yIr846/UCcW/FGEc99/9RikOsgUoKrQQQ8=; b=PtrI9OlIrqhMV8j+SOY/IlIXO
-	aeigpkr3Yfky9ycQGCv8SfWvJFeVsdV784LBEHfKSYZFO/7oJmbXA6djimJ9sNyKuAph6Nd/Zurlb
-	T9JZcQblbQnhpU87/b0NW1h3EgdUVXqP8N6unNl05fpHoIbZJaoc64yHzVFMYMJ9JoY1Yc8BtsfKV
-	XBkZqVgPlNcML/AIgkKAD7ChJeTc6wcib7c9LPp2MTzjO/ZEeohlNokl3YkBd8wfs57w6cit8X+HC
-	NNeCkRDzv3cHu+fe+2933Wyfg9INdJZ/On7ZQb6XhrLilutvV62xSrrhQMfBaPlYcj7J+ZcJykQkX
-	ccWVed37g==;
+	 bh=yHjkvzQWXMzNmGatKbHV1M8YVLY5PnG9y6p8GNMDyUo=; b=hISoRWT0TzXQDOnq7Ar7uQRXN
+	Rosu+Mx65CQpICzCHm2VivALRZ1J45InyvB9iK+DDOh5/uLAeSIIx2NWi1NW5vQpa2v6B9LnzWnDF
+	reMQZiKvy5bvhgfLFegDr3wSVRlfk21x1dLOAYT8/x78Hu3yF4DTwwZhmBJrWOPwSdsUTKPKYp7iC
+	gWhSEACWGrgV9iOAsuU6xAxB9HvIGGrAaYgxwHW2MzOERUdz5vme/GzDnyrCPjlx94ZZG9ysLoi63
+	4KdKEqGrZOo79P/mR882Cva9BvLAfSjBIEIxpDr1LncjgpuvWbkW1vEC3pgyi4eloersgTun51EKM
+	NHpvDCX5A==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l359n-0001nT-O1; Fri, 22 Jan 2021 22:43:55 +0000
+	id 1l35AW-0001xd-E4; Fri, 22 Jan 2021 22:44:40 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l359c-0001lv-WB
- for linux-arm-kernel@lists.infradead.org; Fri, 22 Jan 2021 22:43:46 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 86FA123AC0;
- Fri, 22 Jan 2021 22:43:42 +0000 (UTC)
+ id 1l35AP-0001w2-V7; Fri, 22 Jan 2021 22:44:35 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 21BD723AA1;
+ Fri, 22 Jan 2021 22:44:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1611355424;
- bh=lIUCnRg6dYAJCci9bt5hPR4IqWkf7HhR8SiytZTy/lI=;
+ s=k20201202; t=1611355473;
+ bh=5pmgZHFoZbj9OlZfnTbzEza85I+nAheQ0hjOO9tqwDQ=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=rNVQlw2MsGLvK6SCIOVp76zzOzpE86VLKn8730JMCARGuTg6xDAyTospAxj69qZdj
- 8XXzR0YcXZSYCRv+VzC070A/a2hof4jqkob3pe3Z7O7uh5aAEYhkSiuOATpszJEe3F
- zOk3Rd0Qp7NBiU4a841QaMTD/76vdXBL+JJIOwvSrWX/iUWXy6QJgYunTW/6IRPxEY
- LHDirmAGXgFfJ/UeHbXJyUPqkWBIFaxEigMkt/PVVeAedzKrw08wBoURhD+X6AqsqB
- IKEwEzrS+fT4sgiKPWw2bO871Vpnx9zzoKySnMfCosanNiMi5duca3Tii7k2oPapFQ
- gro802w/n+WPg==
+ b=U03IQo21QL0cMlU71LaSQMvwIWTOlaKiYWx0ZbFyUFZk9oCxqJnfwknXycALDAsg6
+ Xaxg5sdTUI6QOlkRNRpl+wEY/Rb6jbhW6i3esGAp27aPzASa0A3KMFVzdg87Kzk8pE
+ brSvHV11Z1qjNMkwjJqlwmeSvGdXvC86Hn2C9xPp0kD/7JChvwIAuEniaRytXEWiJ8
+ IPVPMZfJhFgSAsJvDEJhh9KXE1zlBG5h06XRaNODqU57175eM37cELLSJwL4fxZm/h
+ 1P4QtuD9DmxkSPun+Lj0j8bbP2KD3surVDI/0/3uhYFdpNuhHZddhqNnicMWFSvqmh
+ r1ZLbqBjOS4aQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
- soc@kernel.org, arm@kernel.org, Olof Johansson <olof@lixom.net>
-Subject: Re: [GIT PULL] ARM: at91: dt for 5.12
-Date: Fri, 22 Jan 2021 23:43:32 +0100
-Message-ID: <161135518031.1310202.4648608354529852901.b4-ty@arndb.de>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, soc@kernel.org,
+ linux@armlinux.org.uk
+Subject: Re: [PATCH] ARM: multi_v7_defconfig: Enable Actions Semi platform and
+ drivers
+Date: Fri, 22 Jan 2021 23:44:26 +0100
+Message-ID: <161135545365.1320625.6993812983016804731.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210122145056.171283-1-nicolas.ferre@microchip.com>
-References: <20210122145056.171283-1-nicolas.ferre@microchip.com>
+In-Reply-To: <20210121061447.26517-1-manivannan.sadhasivam@linaro.org>
+References: <20210121061447.26517-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210122_174345_118090_FDA36603 
-X-CRM114-Status: GOOD (  10.49  )
+X-CRM114-CacheID: sfid-20210122_174434_071719_ADAE66D4 
+X-CRM114-Status: UNSURE (   7.62  )
+X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,34 +73,27 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- Arnd Bergmann <arnd@arndb.de>,
- Linux Kernel list <linux-kernel@vger.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-actions@lists.infradead.org,
+ linux-kernel@vger.kernel.org, cristian.ciocaltea@gmail.com, afaerber@suse.de,
+ linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210122224332.mKNJxbKl7iIj_w8mXWQ5bNi9E0n4P9KwGgaigPkHJQk@z>
+Message-ID: <20210122224426.u-KmwzfitGo8HdNPboDrd0F9y_0GygF9gA5TP5XpnZM@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 22 Jan 2021 15:50:56 +0100, nicolas.ferre@microchip.com wrote:
-> Arnd, Olof,
-> 
-> Here is the first batch of dt changes for 5.12. As for the SoC PR, I plan to do
-> another one by mid-next-week. Tell me if it's fine with you.
-> 
-> Thanks, best regards,
-> 
-> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-> 
-> [...]
+On Thu, 21 Jan 2021 11:44:47 +0530, Manivannan Sadhasivam wrote:
+> The support for Actions Semi ARM32 platform has matured enough in the
+> mainline. So let's enable it in multi_v7_defconfig along with the
+> relevant drivers. The platform can now boot a distro from eMMC or uSD
+> without any out of tree patch.
 
-Merged into arm/dt, thanks!
+Applied to arm/defconfig, thanks!
 
-merge commit: 8a4e89a16aa4b11711ba01de180c4e29cb5d21f7
+[1/1] ARM: multi_v7_defconfig: Enable Actions Semi platform and drivers
+      commit: 26ba4a474aec5998e52826319c4d7a1c98e8fab5
 
        Arnd
 
