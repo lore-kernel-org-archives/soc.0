@@ -3,61 +3,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75D02C4332D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 847A2C4332E
 	for <soc@archiver.kernel.org>; Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 2E6D923B23; Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 16C6A23ACA;
+	id 5F85E23B42; Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 43D0423B31;
 	Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1611356413;
-	bh=UnDTJZAkU7vAf6koXp2uQifwzVbLgRuyjVOFEmKTDY0=;
+	bh=SuKttW/XhrhFCeFVb+IJOhlWqDkfKynCy72SghjzHTk=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=u7xhH7rWnEVk5774KkJnW1V8D+aZ0vuYEmmcts2883YJL8ECvgjZo6LFFmpdJKUMW
-	 V5gd8SF9QhHA1L0+HbaJaktFz/087nrkMTA4dzRsCCJhn0XJibyN+UkZlMbvT+L7te
-	 gWvVUymjsFXC4n1bFS9x6fW0JAJe4/jejZr+ZuH7t2C+SERbQhN4v9QNCFns/WkFNE
-	 ub6hs3+5V7k2qg87cRZwa3L/P2DYDcTfIKfxn9ztgi/w7UtmNvcBBMuNk8kFDkewya
-	 KsmQAw4o3FaZFqsoKBmtbOY2WArwazxSWXPY2+yane5GcX9Cp5xKNEx8VNRr9J5gNs
-	 PPG6u5wV9KXEA==
+	b=nMk88Rh90TPzDuxQw+6mDXnSu4ec9YuGzPq4YQnidwmsu1oyQemnYcMDaEqW+qnoA
+	 Wg1kVRi9r8um7S7GiJrXGZnj3FTh41IJdALmBxyVZch0ugPkH4tQZz444mbJKgYvOL
+	 iYRTlQRyQ2W6RAIeHBjR4MveAvq7GnHgA2BTy97QRybmZ1bPZaW1riH7FQmUX6v5lc
+	 H1rzFzFUbu9+M9001hAcPwaif/fbvVFZefzDfbE5PzeA0dgTeSDq1Q9v/+gKxep+rA
+	 S5HcNrCYomwT7Orm9+SflrRF1EYRqIT9hrEvJQ8uX06zjZVwQ7k3bvrBjSbx9UGjjl
+	 0mzkxwKXZzTYQ==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0F221652DA;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3C954652D9;
 	Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 5.11, round 2
+Subject: Re: [PATCH] ARM: multi_v7_defconfig: Enable Actions Semi platform and
+ drivers
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <161135641305.29035.1337787696924649345.git-patchwork-notify@kernel.org>
+ <161135641324.29035.15729262214542417693.git-patchwork-notify@kernel.org>
 Date: Fri, 22 Jan 2021 23:00:13 +0000
-References: <20210119091949.GD4356@dragon>
-In-Reply-To: <20210119091949.GD4356@dragon>
-To: Shawn Guo <shawnguo@kernel.org>
+References: <20210121061447.26517-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20210121061447.26517-1-manivannan.sadhasivam@linaro.org>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (refs/heads/for-next):
+This patch was applied to soc/soc.git (refs/heads/for-next):
 
-On Tue, 19 Jan 2021 17:19:49 +0800 you wrote:
-> The following changes since commit 5a22747b76ca2384057d8e783265404439d31d7f:
+On Thu, 21 Jan 2021 11:44:47 +0530 you wrote:
+> The support for Actions Semi ARM32 platform has matured enough in the
+> mainline. So let's enable it in multi_v7_defconfig along with the
+> relevant drivers. The platform can now boot a distro from eMMC or uSD
+> without any out of tree patch.
 > 
->   ARM: dts: imx6qdl-gw52xx: fix duplicate regulator naming (2021-01-11 11:41:17 +0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.11-2
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 5.11, round 2
-    https://git.kernel.org/soc/soc/c/e49c24c8cd00
+  - ARM: multi_v7_defconfig: Enable Actions Semi platform and drivers
+    https://git.kernel.org/soc/soc/c/26ba4a474aec
 
 You are awesome, thank you!
 --
