@@ -2,62 +2,60 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9829C433E9
-	for <soc@archiver.kernel.org>; Fri, 22 Jan 2021 23:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DD02C43381
+	for <soc@archiver.kernel.org>; Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 5D9AD23B09; Fri, 22 Jan 2021 23:00:11 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4650623AF8;
-	Fri, 22 Jan 2021 23:00:11 +0000 (UTC)
+	id 1751123B1A; Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 003F623AF8;
+	Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1611356411;
-	bh=UtOLDJJ5iJRaLgt7ccWYqX/sOwFbO/hj/xSwnHhTzas=;
+	s=k20201202; t=1611356413;
+	bh=5JtWli4haAPzN1HweX5jyKQZz3/xljVL5ezPgMwTbfg=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=tO9N1Tc5G2JUxPKQpEuRIThyW/P9nTcYnWA+lUSQCBNXJt/U/LZp/Xc9nJUMFIkYD
-	 kOD68BeKSLIomQmu8oxOfkMt68KTe/o6T+3phm7ceLX2EtZTYunO/Tcg2jWTnfQPGZ
-	 Vm0ceUOy53EOA9N1zAjuwVnlAAC0VaIC67UzhNo6UFrM2Zs+hSbX4XEGaZ8FlLawFm
-	 WcDYUFj55CbQKi8ooGuq4QVoSKjzb3xA+HT2nu5AXYF0O49qNGbghEGLJLmBz9wwvg
-	 TcvGuXv/Is7CYqcQbWDcye8tRkdquncDBG3eFUuw3+gWo+w8fmS4ceaqXp6FW8Fma3
-	 li0N91ILDh6Rg==
+	b=r48KpcmCFYva8VvfQK4OOlFgTm6Pj/YW1lCqp4Enm6d9/WbVucDwUf/BGsnQMmYQn
+	 Wh2ZbQtPnMD0wNmeYjOcQonzSJA7Thl91/c8kvMpXYfsLiHf4s04kKlnhAIHKwJhz/
+	 VcYhjYjy5ZNedn0+ma0TeGClAsWSl6uNqmaaOl9aFND3vYsRjlv6iTZlbmyO087CB6
+	 sFVfDy15TdPgwuyBh/JM9GM85hnVuqIybFVq1ZQPpZQAJFsCfdLWMulykWpXd2liKE
+	 HPtBwLXQHiidtKSC33BKOkpWts/MJvXf/g0H+rpTAJyIwUFJZoKtkoY+/DgrRQ0iVw
+	 i9mU7j0ox1QjA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 352A3652D8;
-	Fri, 22 Jan 2021 23:00:11 +0000 (UTC)
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id F045F652D9;
+	Fri, 22 Jan 2021 23:00:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 5.11, round 2
+Subject: Re: [GIT PULL] firmware: arm_scmi: Updates for v5.12
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <161135641121.29035.3441602141055876432.git-patchwork-notify@kernel.org>
-Date: Fri, 22 Jan 2021 23:00:11 +0000
-References: <20210119091949.GD4356@dragon>
-In-Reply-To: <20210119091949.GD4356@dragon>
-To: Shawn Guo <shawnguo@kernel.org>
+ <161135641297.29035.4110821958792262645.git-patchwork-notify@kernel.org>
+Date: Fri, 22 Jan 2021 23:00:12 +0000
+References: <20210120174356.cnxopzjjpqo5e3ws@bogus>
+In-Reply-To: <20210120174356.cnxopzjjpqo5e3ws@bogus>
+To: Sudeep Holla <Sudeep.Holla@arm.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (refs/heads/arm/fixes):
+This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Tue, 19 Jan 2021 17:19:49 +0800 you wrote:
-> The following changes since commit 5a22747b76ca2384057d8e783265404439d31d7f:
+On Wed, 20 Jan 2021 17:43:56 +0000 you wrote:
+> Hi ARM SoC Team,
 > 
->   ARM: dts: imx6qdl-gw52xx: fix duplicate regulator naming (2021-01-11 11:41:17 +0800)
+> Please pull !
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.11-2
+> Regards,
+> Sudeep
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 5.11, round 2
-    https://git.kernel.org/soc/soc/c/e49c24c8cd00
+  - [GIT,PULL] firmware: arm_scmi: Updates for v5.12
+    https://git.kernel.org/soc/soc/c/e6babd8dded3
 
 You are awesome, thank you!
 --
