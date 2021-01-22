@@ -4,38 +4,38 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90224C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B695C43333
 	for <soc@archiver.kernel.org>; Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 4BE0023B32; Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 2BBE923B21;
+	id 567E123B40; Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 3547F23B2A;
 	Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1611356413;
-	bh=3hOC5BV3MQLqb5nr5TGLW8Q2W8HRhcacLQtYsymSu6s=;
+	bh=p9hPMRn9LKCmU+4fYMkcbz5tuk3dBOqSi4Uhnx1d6iA=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ufQUv6iSDLoQMiyv2RNCBPbvser0z2HvjJOpkeEZjbZ9ASTadzEbIr29QT8rW3RpE
-	 kwjS131JWfNEpaZn4Yrorffj8mTX3e0ttfXc4MzABokZOPXNHQgf6wzWDWeqaT98kn
-	 /u6yP/RdIAdHhsMcysU8z9VbE6DZH0hsTEw2Q/vpp2ILQuQAeaT+G7H3z2ENFZjG5S
-	 rX4RcbcG+dOc2f5QX1iPmUN3wh4jp6dhUIsW9tIkCRfWBJ0UHoeUFKdCWBn4KM3VUy
-	 PBVfvHKX3GL3B3UvzXchANe9EJxEkzmyhTxkhkzboVEqIJVFCPvSLFLtXUFoHVaaVx
-	 Ks8CTwC2WaiLQ==
+	b=NGp1IyP94pxi/aDlRaG3XWVnHOagoapCNfWOB+XS7McDfMKYrf/2+qg89ptrmZwbp
+	 G4KzjwThKXTnjxDgsYYhuffIKcAVO2QOPkdUsLf0tivX6lOQUDpat/abLFwgKg6gHt
+	 w8PbOTpVraGzRbJO3QKTkZ6tW9uo6dVsFQ7JQuTQaKRR7LVgTTWnCHiZ7tUki6wG2L
+	 P4JrCjosShO+DYyJ4iaAsAOoa9tC4mD4x+pwLHIbZyQrM/EI2S5n9ZhwCbguTl+jPQ
+	 9LoHjE5o29hKlZEUHws4xZfOqfRSdTzsAAa3r0Z2vveSOp9sM+bw146I5UpqRjYkQR
+	 9rEB6cLRQA74w==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 28CE7652DB;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 30CA0652D1;
 	Fri, 22 Jan 2021 23:00:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Ux500 DTS updates for the v5.12 kernel cycle
+Subject: Re: [GIT PULL] ARM: at91: defconfig for 5.12
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <161135641316.29035.524515378494768882.git-patchwork-notify@kernel.org>
+ <161135641319.29035.6447259511390614088.git-patchwork-notify@kernel.org>
 Date: Fri, 22 Jan 2021 23:00:13 +0000
-References: <CACRpkdbn=P63V9aEO2wKu2DwvVUcbjwCEV_JvKwWZ0netT75ig@mail.gmail.com>
-In-Reply-To: <CACRpkdbn=P63V9aEO2wKu2DwvVUcbjwCEV_JvKwWZ0netT75ig@mail.gmail.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+References: <20210122144638.170565-1-nicolas.ferre@microchip.com>
+In-Reply-To: <20210122144638.170565-1-nicolas.ferre@microchip.com>
+To: Nicolas Ferre <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -43,20 +43,20 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Fri, 22 Jan 2021 22:02:43 +0100 you wrote:
-> Hi SoC maintainers,
+On Fri, 22 Jan 2021 15:46:38 +0100 you wrote:
+> From: Nicolas Ferre <nicolas.ferre@microchip.com>
 > 
-> here are some DTS updates for the v5.12 kernel cycle.
+> Arnd, Olof,
 > 
-> The details are in the signed tag.
-> 
-> Please pull it in!
+> Here are the defconfig changes for 5.12 which contains the removal of old
+> wrapper code that we called tclib. No such config option to be used anymore in
+> next kernel.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Ux500 DTS updates for the v5.12 kernel cycle
-    https://git.kernel.org/soc/soc/c/0c09604d1e5b
+  - [GIT,PULL] ARM: at91: defconfig for 5.12
+    https://git.kernel.org/soc/soc/c/2cb2b2c9d9f0
 
 You are awesome, thank you!
 --
