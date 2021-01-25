@@ -1,124 +1,95 @@
-Return-Path: <SRS0=q8Yd=G4=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=HjQG=G4=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2543DC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 25 Jan 2021 00:35:51 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB179C433E0
+	for <soc@archiver.kernel.org>; Mon, 25 Jan 2021 07:22:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 868A7229C5; Mon, 25 Jan 2021 07:22:07 +0000 (UTC)
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C12C322C9C
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 25 Jan 2021 00:35:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C12C322C9C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=toshiba.co.jp
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Subject:To:From:Date:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=evpVRmuxA6TLMX1AJ30HJEVNVpt/q2Uv5ECWHc3bLJ4=; b=Re9JAZ4nIVI300cpIvRPlaeNgZ
-	V1/2f4rOmAXX4tpS0VeN57GoMMHihg6w9XHckdsBL58jrWA/+eczAfuaz1dQvTsMwLQZTe5KcVTVn
-	Raoz0VAgAr18oTsDyQmQzJSoaIRW8xgfohc12yiGcs5KxFyfZojENrEGyKeg25cg3XnM+5eNRmZcV
-	tfX0K2EFcozVq9JLelIk3Wqu7VPIKEHZLd1ZhcRKH9Ht+g/O6IVWSFiawOe2mA/V/7uMCm+Xm5ZTX
-	0EVT/jD8jK9wIYrWc5oUgoIP/XqJYHe8/m/tHWskhLvRWyMORo6fxIdoq+g3YaHn62S1F5rEmMkcd
-	k0ZonQ4w==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l3ppn-0003cV-Mz; Mon, 25 Jan 2021 00:34:23 +0000
-Received: from mo-csw1516.securemx.jp ([210.130.202.155]
- helo=mo-csw.securemx.jp)
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l3ppk-0003bk-EV
- for linux-arm-kernel@lists.infradead.org; Mon, 25 Jan 2021 00:34:21 +0000
-Received: by mo-csw.securemx.jp (mx-mo-csw1516) id 10P0Y8fI018826;
- Mon, 25 Jan 2021 09:34:08 +0900
-X-Iguazu-Qid: 34tMK0YvimSKTYMrtD
-X-Iguazu-QSIG: v=2; s=0; t=1611534848; q=34tMK0YvimSKTYMrtD;
- m=b7kM4uAU537iUyGKBTU1kvS/Ro32Ql6mfFF1bf4k0lg=
-Received: from imx2.toshiba.co.jp (imx2.toshiba.co.jp [106.186.93.51])
- by relay.securemx.jp (mx-mr1511) id 10P0Y7nC008972;
- Mon, 25 Jan 2021 09:34:07 +0900
-Received: from enc01.toshiba.co.jp ([106.186.93.100])
- by imx2.toshiba.co.jp  with ESMTP id 10P0Y7tj004060;
- Mon, 25 Jan 2021 09:34:07 +0900 (JST)
-Received: from hop001.toshiba.co.jp ([133.199.164.63])
- by enc01.toshiba.co.jp  with ESMTP id 10P0Y6b9008805;
- Mon, 25 Jan 2021 09:34:07 +0900
-Date: Mon, 25 Jan 2021 09:33:57 +0900
-From: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, olof@lixom.net, arnd@arndb.de
-Subject: [GIT PULL] ARM: Visconti: device tree changes for 5.11 / 2nd
-X-TSB-HOP: ON
-Message-ID: <20210125003357.yd72y4f5vcdnvhnr@toshiba.co.jp>
+	by mail.kernel.org (Postfix) with ESMTPS id 40DEC22482
+	for <soc@kernel.org>; Mon, 25 Jan 2021 07:22:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 40DEC22482
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=jens.wiklander@linaro.org
+Received: by mail-oi1-f173.google.com with SMTP id h6so12424975oie.5
+        for <soc@kernel.org>; Sun, 24 Jan 2021 23:22:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2BPYYmLlG/S95JyYI2DrALsiu06td2e2+btxJ0vaZGI=;
+        b=QWc0yh73sc7zPQoUr7JYK9oMhm4+Kj2LguvuuPoTy7rAWW/jMVTL4R7A0dhupulOl+
+         zBbeSIl1y0y/1gGXPtBFPH7PAMiKFWlFqpSgqjz9rMUNh0Sb8xJ+AcHcMy8wllDGDERo
+         eT5hHFOT0A6DhheqwMRoykLqSKRdu9paTO3cGSI1AZrj3CNmlxdjlfLSvrDTdByjMOLD
+         csQeRxV1nhzP/5vAVFYdgdph6pfR0QExemFE+TcxuALNzphEQOt/NpUjfT0EZQjjrdMY
+         hEqU0QY6xieWK543ybPiOj6yGx7szMmil+skXeu2mpkmjby2rzEB2nb2VFFt6QOp1/JT
+         mpUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2BPYYmLlG/S95JyYI2DrALsiu06td2e2+btxJ0vaZGI=;
+        b=rhFgiQ/jI2M/rydS4rNFoGzmUgiQaZZ35SX4dyWsIk9YgSCj2TzHbzyeeFZUffn0ue
+         8t3FriqElwMN6JC8rNXJH3fC5LykfqtV6HJlFZsGz8oN3/vWOhl2VWw4mPRB75C/P1b0
+         bC2YwuIHS3761zzkvPncWeY0KWueP0JrCNqTAbZ1ca69yQVP3cCb3FEfLx982ySgYZcV
+         XULFP+8y7mWN+JUMzII5xGTMFv7TWhuuvrdrh3qgnwUG4e6I4mBh9teNjM/llTyTy1dX
+         Q8J5rRvJlnVX1wFMgjOWpDSDXuZ3g4jH0mrjOhQeLbLv0GBZDU3xFzdUl2P/dq21ZqwT
+         pZLQ==
+X-Gm-Message-State: AOAM5338V85gzJbbNXv+2LihZIs1FmlTdrBgxXrkhTLun6+K/kf1Zx/p
+	UxFWBgJrukX7/2djRYdUCaWzKAlidfd99K70/auiFQ==
+X-Google-Smtp-Source: ABdhPJx4MHOUPwaBpHp/IXHEZTGrYlIxfdHd8Hn/UJb+QfnU3jH9SzFKbTmPBo5wYPbBaCZ1aHv30cL5v7+OInzFSAQ=
+X-Received: by 2002:aca:7252:: with SMTP id p79mr714697oic.47.1611559326153;
+ Sun, 24 Jan 2021 23:22:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210124_193420_832836_756215B2 
-X-CRM114-Status: UNSURE (   8.67  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: yuji2.ishikawa@toshiba.co.jp, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210125003357.bgNI6LNJZT2g1ernEUlYK_nZlo2_0xDY8YBYNIP0BNA@z>
+References: <20210122074234.GA1074747@jade> <161135641124.29035.6761157228532077144.git-patchwork-notify@kernel.org>
+In-Reply-To: <161135641124.29035.6761157228532077144.git-patchwork-notify@kernel.org>
+From: Jens Wiklander <jens.wiklander@linaro.org>
+Date: Mon, 25 Jan 2021 08:21:54 +0100
+Message-ID: <CAHUa44HCnzgYndTccs=SSb1BQ9nk05k8vUQ-TO6Z2ZukwQcUPA@mail.gmail.com>
+Subject: Re: [GIT PULL] OP-TEE driver fix for v5.11
+To: Arnd Bergmann <arnd@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, SoC team,
+Hi Arnd,
 
-This request includes the WDT / DT patch for the Visconti SoC.
-Please pull for v5.11 kernel cycle.
+Was this merged by mistake? You had some concerns about the need_resched() test.
 
-The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+Thanks,
+Jens
 
-  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/iwamatsu/linux-visconti.git
-tags/visconti-arm-dt-for-v5.11-tag2
-
-for you to fetch changes up to 4fd18fc38757217c746aa063ba9e4729814dc737:
-
-  arm64: dts: visconti: Add watchdog support for TMPV7708 SoC
-(2021-01-25 09:20:47 +0900)
-
-----------------------------------------------------------------
-Visconti device tree updates for 5.11
-
-- Add watchdog support for TMPV7708 SoC
-- Add entries for Toshiba Visconti5 watchdog driver
-
-----------------------------------------------------------------
-Nobuhiro Iwamatsu (2):
-      MAINTAINERS: Add entries for Toshiba Visconti5 watchdog driver
-      arm64: dts: visconti: Add watchdog support for TMPV7708 SoC
-
- MAINTAINERS                                      |  2 ++
- arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts |  5 +++++
- arch/arm64/boot/dts/toshiba/tmpv7708.dtsi        | 12 ++++++++++++
- 3 files changed, 19 insertions(+)
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+On Sat, Jan 23, 2021 at 12:00 AM <patchwork-bot+linux-soc@kernel.org> wrote:
+>
+> Hello:
+>
+> This pull request was applied to soc/soc.git (refs/heads/arm/fixes):
+>
+> On Fri, 22 Jan 2021 08:42:34 +0100 you wrote:
+> > Hello arm-soc maintainers,
+> >
+> > Please pull this small patch taking care of a rcu_sched trace in some
+> > corner cases when OP-TEE is invoked.
+> >
+> > Thanks,
+> > Jens
+> >
+> > [...]
+>
+> Here is the summary with links:
+>   - [GIT,PULL] OP-TEE driver fix for v5.11
+>     https://git.kernel.org/soc/soc/c/156d02914b7d
+>
+> You are awesome, thank you!
+> --
+> Deet-doot-dot, I am a bot.
+> https://korg.docs.kernel.org/patchwork/pwbot.html
+>
+>
