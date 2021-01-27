@@ -1,93 +1,96 @@
-Return-Path: <SRS0=Ur2y=G6=linaro.org=jens.wiklander@kernel.org>
+Return-Path: <SRS0=OhkM=G6=baylibre.com=khilman@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95CC0C433DB
-	for <soc@archiver.kernel.org>; Wed, 27 Jan 2021 07:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59B96C433DB
+	for <soc@archiver.kernel.org>; Wed, 27 Jan 2021 18:04:08 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 6A5232074F; Wed, 27 Jan 2021 07:50:31 +0000 (UTC)
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+	id 212A564DA0; Wed, 27 Jan 2021 18:04:08 +0000 (UTC)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2726520724
-	for <soc@kernel.org>; Wed, 27 Jan 2021 07:50:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2726520724
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=jens.wiklander@linaro.org
-Received: by mail-oi1-f178.google.com with SMTP id w8so1287493oie.2
-        for <soc@kernel.org>; Tue, 26 Jan 2021 23:50:30 -0800 (PST)
+	by mail.kernel.org (Postfix) with ESMTPS id 2CACB64DAB
+	for <soc@kernel.org>; Wed, 27 Jan 2021 18:04:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2CACB64DAB
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=khilman@baylibre.com
+Received: by mail-wr1-f53.google.com with SMTP id m13so2851001wro.12
+        for <soc@kernel.org>; Wed, 27 Jan 2021 10:04:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g8OubAhTN/FBQdhO7MDq1GqB/O5DeyzyzVaszDHHBlw=;
-        b=CylHfKQfND0ZaUPjRGelQmAttTLMWiaTOama/0Vy7y3wYmRArkRRnEovnBqO31wE15
-         ST+3niaQmTW0s9hvPemAvrR+2mFfkWFnE5C3sAjGqTWRHmospgtuu3XU3IDydyOuzKPo
-         74QM1XTz6uadFWveqUS/i3xamF0OPGzAiSWBcHjGrKrEBb+5QDljqoyK+KmycwIxKG2A
-         cWhT1IY37KRb6/gDuXalY/6bRIEDtBkKd9SFd7lk2lMYYheNVq19mBTWe4D28+4N7fwx
-         TstRzmlwUXhIWcfdJLmaEc33YRqe0lSX0ik57nF/CyPnLE8mxpUk6SuLwNaydk1hEij9
-         uaOg==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=KWqNh8H9jxNujMamWE5tQ90c+C/64uDI1+7zlC8RlOU=;
+        b=FvHguWbJZsfCtr97HAU4oObBcCxwx8i+tTMOp3CL+atazyIAjaiOB1RrudyWlAdY0P
+         6YcbcYvX1RLD9UI35zd4tMLXT+pS0dpmnYQF2Hk5nFWYu5bcD9sfdPuAjmBaeR1ccC2w
+         yxMQjX4QGcULH4wzCX8ODJTC29fQYxXULmPQs9YbTcwK9tUx0pv0gMAHtffGavGsdraq
+         +cLjMwr0xEorOHm/zarnjJkmMlPtSnfBHNbTxD0h5gmBEO4iwNAJw0+Qqi2+yw+JbnHw
+         AS/qBAwDjenxh7UDo+vv4+NlmEtO/eAtK5UH2s6/v8ovnUEz9OQ5mi38/4NPI9Xj5cGT
+         4HuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g8OubAhTN/FBQdhO7MDq1GqB/O5DeyzyzVaszDHHBlw=;
-        b=Dq1cia7B7biG+8uY0k3eRS8oXRwaHnzdSR9e9ZsNjuPhfY7cv3nm3sWBEWzXIhbzYS
-         0dcZIEqc/qcsO80G8XKwVvkaHaevZwbqZmiBVVS09iBD2xM5JezuuwLKM27sNTiHvNAw
-         w+gDc6VMLk1NBNSYVc63mYIV1PG210hZYkn3fb3C20l6tOSLrkJ7A6WUayaknhv5AElu
-         aoeOikL6L7aE4mi6Mo1cZOwIbQmCMuApSRT101vY1h+dR9qkotQvjsxY4vilUh1t2opu
-         /xHQW3+gGNGNjAmHYEZeDKdliLOJuniT821WmwSeTbMCEN9XjC1w/Z4nB09U0sywqEEt
-         cymQ==
-X-Gm-Message-State: AOAM5316LdO19WFWzLuBIc6clKBFGm3gsfqfN4EbosTmpat9RC7Hy7vb
-	zMCufyONMUB4EKFoG3KB/Z1NDmbS0a7w/wB2YAN62F9+LIA=
-X-Google-Smtp-Source: ABdhPJzF47qYkC6IcX6+RreAhty5H5Rb9MDtGH4NvnpaAXbNmbpprAizvrlxNQdB2qmGI2OH3qlsNqwtePo9exXrf4o=
-X-Received: by 2002:aca:6702:: with SMTP id z2mr2325437oix.149.1611733830187;
- Tue, 26 Jan 2021 23:50:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20210122074234.GA1074747@jade> <161135641124.29035.6761157228532077144.git-patchwork-notify@kernel.org>
- <CAHUa44HCnzgYndTccs=SSb1BQ9nk05k8vUQ-TO6Z2ZukwQcUPA@mail.gmail.com>
- <CAK8P3a3gbLPsSz1c95ExBqnZ=y-4p=b9awpDQjVSEXXUTr13LQ@mail.gmail.com> <CAK8P3a2G9q+fu7jir7AvmsZuBY3kz7rKCCVKg4o8oDyPE34pfg@mail.gmail.com>
-In-Reply-To: <CAK8P3a2G9q+fu7jir7AvmsZuBY3kz7rKCCVKg4o8oDyPE34pfg@mail.gmail.com>
-From: Jens Wiklander <jens.wiklander@linaro.org>
-Date: Wed, 27 Jan 2021 08:50:19 +0100
-Message-ID: <CAHUa44HwHWjARDbyOBAcOA_4kzgwwUAsToGzA_YiN-f1s4h_mQ@mail.gmail.com>
-Subject: Re: [GIT PULL] OP-TEE driver fix for v5.11
-To: Arnd Bergmann <arnd@kernel.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=KWqNh8H9jxNujMamWE5tQ90c+C/64uDI1+7zlC8RlOU=;
+        b=XR0I+X2Z17HlyydGPDIAXm5FxyqHC3KArQevCEBVa/YXSq/rLNqS/z3x4FmooPQd+I
+         o9LbKJgJlp8v/Qw4bTD9ywuZnkl6MwWK4glpjKrqRbBPfqsybg2OHAzYVwXeI6bfN9mT
+         RF4lY/Tdz4j8NNp5zghaCtGAuXnNp3X1ldMJyQ6ni/SiHx0lnBYbDy3rXHgrDfjaz5Z4
+         AiEf2pw8C3Tsn541zTss+l8EZLHHW0vzigCAViBRBuCR31/VW2YFgOiXj2vOdMnzs6u4
+         OVmL/xug/Q3jjAZP+9t1c8TqPi9N7fgcZcw0+1ibJgDTrjLbO5Tdlm1mfPNslp8r+32m
+         2rFw==
+X-Gm-Message-State: AOAM532BWhXrm6kRCs8p8VGRh7ddQGNewMldnCRe4zQWlBaI3m93YxM2
+	5B3e/MUykMll29cvDNglcW7shuMs0OXvmYq4/9U=
+X-Google-Smtp-Source: ABdhPJzoVQF8wAyVtyXUunZs+vFdUnlobMjssvzSGi9p305OKTw5SJ11zXiYlUrdWtE/784foYAKWA==
+X-Received: by 2002:adf:dd0d:: with SMTP id a13mr12423872wrm.143.1611770644971;
+        Wed, 27 Jan 2021 10:04:04 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id r13sm3457725wmh.9.2021.01.27.10.04.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jan 2021 10:04:04 -0800 (PST)
+From: Kevin Hilman <khilman@baylibre.com>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] arm64: dts: amlogic fixes for v5.11-rc (round 2)
+Date: Wed, 27 Jan 2021 10:04:01 -0800
+Message-ID: <7ho8hai7e6.fsf@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 
-On Tue, Jan 26, 2021 at 9:22 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> On Mon, Jan 25, 2021 at 10:30 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > On Mon, Jan 25, 2021 at 8:21 AM Jens Wiklander
-> > <jens.wiklander@linaro.org> wrote:
-> > >
-> > > Was this merged by mistake? You had some concerns about the need_resched() test.
-> > >
-> >
-> > Indeed, thanks for noticing!
-> >
-> > Could you send a fixup to remove the need_resched() check after verifying that
-> > it works? Alternatively I can remove the patch I merged by accident and send
-> > my next pull request without it, but I'd prefer to avoid rebasing the fixes I
-> > merged later.
->
-> I need to send out the fixes branch for upstream. As it was my mistake to
-> merge the fix while complaining about it, and the it's also harmless, I'll
-> leave the version I pulled now.
+Arnd, Olof,
 
-Thanks, it seems it takes a little time to get the updating patch verified.
-
->
-> It would be nice to get a follow-up in your pull request for v5.12 though.
-
-I'll see to that.
+We found one more regression in networking on amlogic SoCs needing a
+fix.  Please pull for v5.11.
 
 Thanks,
-Jens
+
+Kevin
+
+
+The following changes since commit 7386a559caa6414e74578172c2bc4e636d6bd0a0:
+
+  arm64: dts: amlogic: meson-g12: Set FL-adj property value (2021-01-04 08:03:49 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic.git tags/amlogic-fixes-2
+
+for you to fetch changes up to 19f6fe976a61f9afc289b062b7ef67f99b72e7b9:
+
+  Revert "arm64: dts: amlogic: add missing ethernet reset ID" (2021-01-26 08:02:35 -0800)
+
+----------------------------------------------------------------
+arm64: dts: amlogic fixes for v5.11-rc (round 2)
+- fix ethernet resets
+
+----------------------------------------------------------------
+Neil Armstrong (1):
+      Revert "arm64: dts: amlogic: add missing ethernet reset ID"
+
+ arch/arm64/boot/dts/amlogic/meson-axg.dtsi        | 2 --
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi | 2 --
+ arch/arm64/boot/dts/amlogic/meson-gx.dtsi         | 3 ---
+ 3 files changed, 7 deletions(-)
