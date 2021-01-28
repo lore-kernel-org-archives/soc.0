@@ -1,135 +1,112 @@
-Return-Path: <SRS0=JtRh=G6=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=FeCC=G7=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB719C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 27 Jan 2021 18:19:13 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5501664D9A
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 27 Jan 2021 18:19:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5501664D9A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=8Fg29eKLAyvbknrbP2lu0Q2Z015g/Nnp+R4ot6UptpY=; b=FACATECMuO+aqYCmjFg72Iwn2z
-	/0qyLukOPeJbbpHRMnyu0BzdRgYivJ/6kX9v+SiaoCs0/Wjx3WGJJzNtpUiCcLzE/NVj4h6RFre2R
-	TyC0pzYW2y5PNpAleHXPscnIUwhGztQgRtLmpYFGy1ALbaXdZEE5wXeHVBzF0sKXb2nSFSbzxpnpz
-	Bmhs2fzItstw8HrBiIIVfn4MwHk3h0X5Opqt0teaGepLFYVaznzwdx7A/qFjVLToDmHKlLtavutwj
-	1NjuDvkYEK98A5NyMhEvocsppZTeUNjplnWvwufuKtFgGP1zlbdzgD2+fXrx1Wla9nQnkPryqiQjx
-	W6ndVWow==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l4pNp-0000YP-W0; Wed, 27 Jan 2021 18:17:39 +0000
-Received: from mail-wr1-x432.google.com ([2a00:1450:4864:20::432])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l4pNj-0000U0-Ss
- for linux-arm-kernel@lists.infradead.org; Wed, 27 Jan 2021 18:17:33 +0000
-Received: by mail-wr1-x432.google.com with SMTP id 7so2934435wrz.0
- for <linux-arm-kernel@lists.infradead.org>;
- Wed, 27 Jan 2021 10:17:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=baylibre-com.20150623.gappssmtp.com; s=20150623;
- h=from:to:cc:subject:date:message-id:mime-version;
- bh=1oeGqh4Jrc94bfT+wFZwebaOgOsWZ3ivDgAIGGVunNM=;
- b=tlpEpfncF8mm3OaZ0/rdNUCvL05RxWQu8Yhctk4X9w0Pkf7M6/8oSqqmSPRSOJKYtU
- rijgrrhMHiH6XHwEt2bI+T48OxqgiTLn5KfBPFRmZL7K3l2GMVGfLzsNFQRHDh9xtmma
- t72o6IimVpuTUI3ft1dYul/vtUsBf9OH3a3r448EKwNwFkVWlxlDXbamNnijQZgNyzBd
- JsiS8piEd+SjhM0FiWTPOG7R30qOFAYENHyB1kbKd/AO5nXaYwgGQaLNN/CS4dEZ3fSB
- FE+xB9MOtvb4k1u14wzF7ricBJWYVNwOD4hBgutrHPrgB7XLE7hHycQT6HhcjedscbbL
- /YDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
- bh=1oeGqh4Jrc94bfT+wFZwebaOgOsWZ3ivDgAIGGVunNM=;
- b=g0wSVOs+qFWTkLYSAPmX96g5WxVgXRF1/uuK0q78tD+2+pGeyh3LnXn7J1e0egxt9g
- 1Ji67evHygpaOKsHYfuGUipRgMx1J+vUMQG/XJX6jWawlGS6mWFxRDtm44X2EVFKUjqH
- GXNfmAaLfXMpbOI5MC80fngx0Jum1NrOh9nwwKKXhP+BPYgIGUQ/Wm3M0P1pcD7K2L1Y
- jXtUJ47TPcsz51Iz7URRzX+uggJdBrbuDS0pnboMDWzmBNzDYhhCkAIcOn/gzugEtjZu
- o/BHMxTX9Vh91UT+IMDgTz1VaM4OkxRKXDsSHxogn+azr7xogtSnmgwbU/bCYPjY/I4d
- tblg==
-X-Gm-Message-State: AOAM532ErxNx0zHG04qkHSGLrzUjH9ynsbJY88Z4d1z32ve9ZCHZPY04
- yZYsLZzqivJOa0z2vesOoGWaCw==
-X-Google-Smtp-Source: ABdhPJyWER0YZAkUDZj791YwNslilcokXiTQNNsCISEi95mcteENqItETLxcJ3yyUvOTjJiAS10QNw==
-X-Received: by 2002:adf:f303:: with SMTP id i3mr12341050wro.60.1611771450328; 
- Wed, 27 Jan 2021 10:17:30 -0800 (PST)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net.
- [71.197.186.152])
- by smtp.gmail.com with ESMTPSA id r16sm3950631wrx.36.2021.01.27.10.17.29
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Jan 2021 10:17:29 -0800 (PST)
-From: Kevin Hilman <khilman@baylibre.com>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE18AC433DB
+	for <soc@archiver.kernel.org>; Thu, 28 Jan 2021 07:43:58 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 93C4364DD9; Thu, 28 Jan 2021 07:43:58 +0000 (UTC)
+Received: from muru.com (muru.com [72.249.23.125])
+	by mail.kernel.org (Postfix) with ESMTP id ECC1764DD1;
+	Thu, 28 Jan 2021 07:43:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org ECC1764DD1
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=tony@atomide.com
+Received: from hillo.muru.com (localhost [127.0.0.1])
+	by muru.com (Postfix) with ESMTP id 22A2180A9;
+	Thu, 28 Jan 2021 07:44:01 +0000 (UTC)
+From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Subject: [GIT PULL] arm64: dts: amlogic fixes for v5.11-rc (round 3)
-Date: Wed, 27 Jan 2021 10:17:27 -0800
-Message-ID: <7hk0ryi6rs.fsf@baylibre.com>
+To: soc@kernel.org
+Cc: arm@kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"Tony Lindgren" <tony@atomide.com>
+Subject: [GIT PULL] Fixes for omaps for v5.11-rc cycle
+Date: Thu, 28 Jan 2021 09:43:50 +0200
+Message-Id: <pull-1611818709-243493@atomide.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210127_131732_021439_FCE69440 
-X-CRM114-Status: GOOD (  10.83  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210127181727.VNqEew_QxLrBkapmxcmwLQbagh4A-zMB3F02VxECv5k@z>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Arnd, Olof,
+From: "Tony Lindgren" <tony@atomide.com>
 
-Sorry for all the one-off fixes this round, but here's one more fix for
-v5.11-rc.
+The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
-Kevin
-
-
-
-The following changes since commit 19f6fe976a61f9afc289b062b7ef67f99b72e7b9:
-
-  Revert "arm64: dts: amlogic: add missing ethernet reset ID" (2021-01-26 08:02:35 -0800)
+  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic.git tags/amlogic-fixes-3
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.11/fixes-rc5
 
-for you to fetch changes up to daf12bee07b9e2f38216f58aca7ac4e4e66a7146:
+for you to fetch changes up to 177d8f1f7f47fe7c18ceb1d87893890d7e9c95a7:
 
-  arm64: dts: meson: switch TFLASH_VDD_EN pin to open drain on Odroid-C4 (2021-01-27 10:08:23 -0800)
-
-----------------------------------------------------------------
-arm64: dts: amlogic fixes for v5.11-rc (round 3)
-- fix reboot issue on odroid C4
+  ARM: dts: omap4-droid4: Fix lost keypad slide interrupts for droid4 (2021-01-25 10:24:26 +0200)
 
 ----------------------------------------------------------------
-Marek Szyprowski (1):
-      arm64: dts: meson: switch TFLASH_VDD_EN pin to open drain on Odroid-C4
+Fixes for omaps for v5.11-rc cycle
 
- arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The recent changes to switch SoCs to boot with ti-sysc interconnect
+target module driver and genpd caused few regressions:
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+- The omap_prm reset driver needs to clear any reset bits deasserted by
+  the bootloader or kexec boot for the three reset bit cases. Otherwise
+  we can have an oops with accelerators starting to boot with potentially
+  unconfigured MMU for example
+
+- Custom kernel configs are not automatically selecting simple-pm-bus
+  driver that we now need to probe interconnects so we need to select it
+  always
+
+- We are not passing legacy platform data in auxdata with simple-pm-bus
+  like we do for simple-bus. We need to pass auxdata to simple-pm-bus so
+  it can pass it to of_platform_populate()
+
+Then recent RCU changes started causing splats for cpuidle44xx that now
+need RCU_NONIDLE added to the calls in several places
+
+And then we have few device specific fixes:
+
+- We need to remove legacy spi-cs-hig for gta04 display to work, and
+  set the gpio to active low
+
+- Omap1 specific ohci-omap needs to call gpio_free()
+
+- Droid4 needs to use padconf interrupt for the slider as the edge
+  gpio interrupts may be lost for deeper idle states
+
+----------------------------------------------------------------
+H. Nikolaus Schaller (2):
+      DTS: ARM: gta04: remove legacy spi-cs-high to make display work again
+      ARM: dts; gta04: SPI panel chip select is active low
+
+Linus Walleij (1):
+      ARM: OMAP1: OSK: fix ohci-omap breakage
+
+Tony Lindgren (7):
+      Merge branch 'fixes-omap3' into fixes
+      soc: ti: omap-prm: Fix boot time errors for rst_map_012 bits 0 and 1
+      ARM: OMAP2+: Fix suspcious RCU usage splats for omap_enter_idle_coupled
+      Merge branch 'cpuidle-fix' into fixes
+      ARM: OMAP2+: Fix booting for am335x after moving to simple-pm-bus
+      drivers: bus: simple-pm-bus: Fix compatibility with simple-bus for auxdata
+      ARM: dts: omap4-droid4: Fix lost keypad slide interrupts for droid4
+
+ arch/arm/boot/dts/omap3-gta04.dtsi       |  3 +--
+ arch/arm/boot/dts/omap3-n950-n9.dtsi     |  8 ++++++++
+ arch/arm/boot/dts/omap4-droid4-xt894.dts |  5 +++++
+ arch/arm/mach-omap1/board-osk.c          |  2 ++
+ arch/arm/mach-omap2/Kconfig              | 28 ++++++++++++++--------------
+ arch/arm/mach-omap2/cpuidle44xx.c        | 16 ++++++++--------
+ arch/arm/mach-omap2/omap_device.c        |  8 +++++---
+ arch/arm/mach-omap2/pdata-quirks.c       |  1 +
+ arch/arm/mach-omap2/pmic-cpcap.c         |  2 +-
+ drivers/bus/simple-pm-bus.c              |  3 ++-
+ drivers/soc/ti/omap_prm.c                | 11 +++++++++++
+ 11 files changed, 58 insertions(+), 29 deletions(-)
