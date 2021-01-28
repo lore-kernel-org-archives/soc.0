@@ -1,32 +1,59 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=ZyEH=G7=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-25.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17477C433DB
-	for <soc@archiver.kernel.org>; Thu, 28 Jan 2021 15:32:26 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id CEA7964DEF; Thu, 28 Jan 2021 15:32:25 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A2CD964DF6;
-	Thu, 28 Jan 2021 15:32:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFB69C433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 15:33:39 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 45BFE60235
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 15:33:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 45BFE60235
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:MIME-Version:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=UIV8iS5n0FaSaSRJfyLF+MLd0iShqLHwO9w/w/4m+v0=; b=QHLNwtUkOYG4918n6duCPWB9JU
+	577H+XKR7XqtuAFZwqRDJxjbp0WQTe19Er2gZZR6s4nyjMelRWIteJvOIGQ3UkbmJOIc7vhX7exXw
+	KwmGIcVSXOApB3VEzkKJCCCjuqAnMGAoBuKl9Keb5IHM1+iIJyJ0P2Xm1gDLULM2+5pfAcMH3XQ6A
+	s7/nTaWQphZgSeTJfU+pLSvxPMKgYWJVUInRMMbwIpYU2orHj/L7vhr3Q8NhxgMVD6my+/AePcrI+
+	MI6ufOSLKxA3tVnPy5PWrLdz0DM0BUD2/9Nn1NyDLQDf6ykbe1JDKU8xNdaS1erXtumJgcyBqTt5V
+	7pcKrkmQ==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l59HZ-0000Tu-8O; Thu, 28 Jan 2021 15:32:29 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l59HW-0000TI-M7
+ for linux-arm-kernel@lists.infradead.org; Thu, 28 Jan 2021 15:32:27 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A055864DF3
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 28 Jan 2021 15:32:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1611847945;
-	bh=j8VYZaDkny/13GAvSgE0GZn6Jy3cZ1XnAChK90bIjFk=;
-	h=From:Date:Subject:To:List-Id:Cc:From;
-	b=OZ0iFAIOqTxNPcS+6rDkvfUYd2mqwAWxvn8uwuJc92atezOi4HPLsvKptZlc0Vk69
-	 +VkxKysEqUKlBL2PVzlFEkrHznw4DsthygD3+r4E2c5GuRB1ypTirwEAsUd+Avagae
-	 ARKXeKq2sEFv4NWyjFJDx0GJKlZacrgheuP5xwUA5r3GbeIBwc1emdrNvFEH9gf1kV
-	 Q13ZXQhq2q0kxWekRZMbg0E61aUURzTZOq+KsXHlpxzvFDvGu9laBWb8OGevTFIwCT
-	 WqJ+0Xda2eu5mzepgutcD3K5V3vr7TKIwGhHuwPRKptCoB76U8EI5EEl++ftmzCZUt
-	 /FwUnh/XCDvdA==
-Received: by mail-oi1-f171.google.com with SMTP id k25so6375684oik.13;
-        Thu, 28 Jan 2021 07:32:25 -0800 (PST)
-X-Gm-Message-State: AOAM531EU1V6Bq2ldIK8zQssWK49lV38kKqUDQSt6bmWS0R+5dEOzRWC
-	QlA3rFpsJ3A3KWG93cukifdy1S7fuLn3WQc7SQY=
+ s=k20201202; t=1611847945;
+ bh=j8VYZaDkny/13GAvSgE0GZn6Jy3cZ1XnAChK90bIjFk=;
+ h=From:Date:Subject:To:List-Id:Cc:From;
+ b=OZ0iFAIOqTxNPcS+6rDkvfUYd2mqwAWxvn8uwuJc92atezOi4HPLsvKptZlc0Vk69
+ +VkxKysEqUKlBL2PVzlFEkrHznw4DsthygD3+r4E2c5GuRB1ypTirwEAsUd+Avagae
+ ARKXeKq2sEFv4NWyjFJDx0GJKlZacrgheuP5xwUA5r3GbeIBwc1emdrNvFEH9gf1kV
+ Q13ZXQhq2q0kxWekRZMbg0E61aUURzTZOq+KsXHlpxzvFDvGu9laBWb8OGevTFIwCT
+ WqJ+0Xda2eu5mzepgutcD3K5V3vr7TKIwGhHuwPRKptCoB76U8EI5EEl++ftmzCZUt
+ /FwUnh/XCDvdA==
+Received: by mail-oi1-f176.google.com with SMTP id w124so6405714oia.6
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 28 Jan 2021 07:32:25 -0800 (PST)
+X-Gm-Message-State: AOAM532qXNga1kI5mcmS3xwOQUSobyij772YtXQXgt2OzNl9lEOXdHd5
+ 3XwvD/4guQKR/nYpvu39xKfv51TgIuI+F1wkI5Y=
 X-Google-Smtp-Source: ABdhPJx9Lt/tNh84/I1y1o9IIYtZa3vJHCgCJYGV2vK82P4KLSxBooMmtPcUx3ctRqGMaCZVjgiEq9f6UQOEte8GSZU=
 X-Received: by 2002:aca:d908:: with SMTP id q8mr301303oig.67.1611847944830;
  Thu, 28 Jan 2021 07:32:24 -0800 (PST)
@@ -37,10 +64,29 @@ X-Gmail-Original-Message-ID: <CAK8P3a2Ku8ummmKWSZZ+kUHxVxvqGnoB4YSTLj9zo4ntkDO3U
 Message-ID: <CAK8P3a2Ku8ummmKWSZZ+kUHxVxvqGnoB4YSTLj9zo4ntkDO3UQ@mail.gmail.com>
 Subject: [GIT PULL] ARM: SoC fixes for v5.11, #2
 To: Linus Torvalds <torvalds@linux-foundation.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210128_103226_901077_E9A2A927 
+X-CRM114-Status: GOOD (  15.72  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Shawn Guo <shawnguo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: SoC Team <soc@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210128153208.ml9sDfLoS6yyYvTow9AUY802b3oTWC9MMWuPVzisObY@z>
 
 The following changes since commit 7c53f6b671f4aba70ff15e1b05148b10d58c2837:
 
@@ -182,3 +228,8 @@ Sumera Priyadarsini (1):
  drivers/tee/optee/call.c                           |  4 ++-
  21 files changed, 164 insertions(+), 16 deletions(-)
  create mode 100644 arch/arm/boot/dts/ste-db9500.dtsi
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
