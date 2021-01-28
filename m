@@ -1,152 +1,184 @@
-Return-Path: <SRS0=ZyEH=G7=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-25.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5371AC433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 14:46:38 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E6C4764DF8
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 14:46:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E6C4764DF8
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=9mUSi+zh6MlL+OzP/aTlKNJpMefwj0VMfUKxZbfPyWA=; b=xPFE2CHhx1/gV9ySLuD0KH98S
-	hfF3NdXiFWMOboPIciuqXedi3XJadRbruvMl8NqTsKZWmkRUgb1jW04/tF8+Iu5UueBbaM2yG0Hwx
-	HGOeM2PCSHLdfe3WuOkFzE7cDXPgK4dYPwXZUUp1zx2VNF7wdjo53Oph3r8RMcBwgCdMWUVKFLR5U
-	Hdka6MQ9RC+dWzNPnthEIIomTOD+J3ALTY/h6ok3w/c1k/EWegsxvzURJtZgrqptpxzuDnbUMyrWo
-	hAK0uxyjgE4FLbyUQYGM+geKhsDxl6uNmRGnEbZ+uNcPOGoppGxNcH4vrDZZhl/JuaHvm766q9jig
-	ldFWg0zQg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l58Xt-00004r-34; Thu, 28 Jan 2021 14:45:17 +0000
-Received: from muru.com ([72.249.23.125])
- by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l58Xo-0008Vd-Sz
- for linux-arm-kernel@lists.infradead.org; Thu, 28 Jan 2021 14:45:13 +0000
-Received: from hillo.muru.com (localhost [127.0.0.1])
- by muru.com (Postfix) with ESMTP id 30B9F80F1;
- Thu, 28 Jan 2021 14:45:18 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: [GIT PULL 2/2] Devicetree changes for omaps for v5.12
-Date: Thu, 28 Jan 2021 16:45:02 +0200
-Message-ID: <pull-1611845066-809577@atomide.com-2>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <pull-1611845066-809577@atomide.com>
-References: <pull-1611845066-809577@atomide.com>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17477C433DB
+	for <soc@archiver.kernel.org>; Thu, 28 Jan 2021 15:32:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id CEA7964DEF; Thu, 28 Jan 2021 15:32:25 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A2CD964DF6;
+	Thu, 28 Jan 2021 15:32:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1611847945;
+	bh=j8VYZaDkny/13GAvSgE0GZn6Jy3cZ1XnAChK90bIjFk=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=OZ0iFAIOqTxNPcS+6rDkvfUYd2mqwAWxvn8uwuJc92atezOi4HPLsvKptZlc0Vk69
+	 +VkxKysEqUKlBL2PVzlFEkrHznw4DsthygD3+r4E2c5GuRB1ypTirwEAsUd+Avagae
+	 ARKXeKq2sEFv4NWyjFJDx0GJKlZacrgheuP5xwUA5r3GbeIBwc1emdrNvFEH9gf1kV
+	 Q13ZXQhq2q0kxWekRZMbg0E61aUURzTZOq+KsXHlpxzvFDvGu9laBWb8OGevTFIwCT
+	 WqJ+0Xda2eu5mzepgutcD3K5V3vr7TKIwGhHuwPRKptCoB76U8EI5EEl++ftmzCZUt
+	 /FwUnh/XCDvdA==
+Received: by mail-oi1-f171.google.com with SMTP id k25so6375684oik.13;
+        Thu, 28 Jan 2021 07:32:25 -0800 (PST)
+X-Gm-Message-State: AOAM531EU1V6Bq2ldIK8zQssWK49lV38kKqUDQSt6bmWS0R+5dEOzRWC
+	QlA3rFpsJ3A3KWG93cukifdy1S7fuLn3WQc7SQY=
+X-Google-Smtp-Source: ABdhPJx9Lt/tNh84/I1y1o9IIYtZa3vJHCgCJYGV2vK82P4KLSxBooMmtPcUx3ctRqGMaCZVjgiEq9f6UQOEte8GSZU=
+X-Received: by 2002:aca:d908:: with SMTP id q8mr301303oig.67.1611847944830;
+ Thu, 28 Jan 2021 07:32:24 -0800 (PST)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210128_094512_999508_2C312170 
-X-CRM114-Status: GOOD (  13.54  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
- arm@kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210128144502.EEiRHFLryIbfVLOYBoyuMaiXuuz2mopc8tbClbshASA@z>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Thu, 28 Jan 2021 16:32:08 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2Ku8ummmKWSZZ+kUHxVxvqGnoB4YSTLj9zo4ntkDO3UQ@mail.gmail.com>
+Message-ID: <CAK8P3a2Ku8ummmKWSZZ+kUHxVxvqGnoB4YSTLj9zo4ntkDO3UQ@mail.gmail.com>
+Subject: [GIT PULL] ARM: SoC fixes for v5.11, #2
+To: Linus Torvalds <torvalds@linux-foundation.org>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-RnJvbTogIlRvbnkgTGluZGdyZW4iIDx0b255QGF0b21pZGUuY29tPgoKVGhlIGZvbGxvd2luZyBj
-aGFuZ2VzIHNpbmNlIGNvbW1pdCA1YzhmZTU4M2NjZTU0MmFhMGI4NGFkYzkzOWNlODUyOTNkZTM2
-ZTVlOgoKICBMaW51eCA1LjExLXJjMSAoMjAyMC0xMi0yNyAxNTozMDoyMiAtMDgwMCkKCmFyZSBh
-dmFpbGFibGUgaW4gdGhlIEdpdCByZXBvc2l0b3J5IGF0OgoKICBnaXQ6Ly9naXQua2VybmVsLm9y
-Zy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG1saW5kL2xpbnV4LW9tYXAgdGFncy9vbWFwLWZv
-ci12NS4xMi9kdC1zaWduZWQKCmZvciB5b3UgdG8gZmV0Y2ggY2hhbmdlcyB1cCB0byA0MjMxZjNh
-NzJmOWFjN2Y4NzM4ZDAwM2I3YWQ1NmZhOTk4NTc0ZmI4OgoKICBBUk06IGR0czogYW0zMzV4LW15
-aXJ0ZWNoLSo6IEFkZCBEVCBmb3IgQU0zMzVYIE1ZSVIgVGVjaCBMaW1pdGVkIGJvYXJkICgyMDIx
-LTAxLTI2IDEzOjIxOjMxICswMjAwKQoKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpEZXZpY2V0cmVlIGNoYW5nZXMgZm9yIG9t
-YXBzIGZvciB2NS4xMiBtZXJnZSB3aW5kb3cKClRoaXMgaW5jbHVkZXMgdGhlIGZvbGxvd2luZyBl
-YXJsaWVyIHBhdGNoZXMgdGhhdCB3ZXJlIGNvbnNpZGVyZWQgdG9vCmxhdGUgZm9yIHY1LjExIGFz
-IGRpc2N1c3NlZCBiZXR3ZWVuIEFybmQgYW5kIG1lIG9uIGZyZWVub2RlICNhcm1saW51eAppbiBE
-ZWNlbWJlcjoKCi0gTW9yZSB1cGRhdGVzIHRvIHVzZSBjcHN3IHN3aXRjaGRldiBkcml2ZXIKCi0g
-RW5hYmxlIGd0YTA0IFBNSUMgcG93ZXIgbWFuYWdlbWVudAoKLSBVcGRhdGVzIGZvciBkcmE3IGZv
-ciBFQ0Mgc3VwcG9ydCwgMS44R0h6IHNwZWVkIGFuZCBrZWVwIHRoZQogIGxkbzAgcmVndWxhdG9y
-IGFsd2F5cyBvbiBhcyBzcGVjaWZpZWQgaW4gdGhlIGRhdGEgbWFudWFsCgpBbmQgdGhlbiB3ZSBo
-YXZlIHRoZSBuZXcgZGV2aWNldHJlZSBjaGFuZ2VzOgoKLSBDb25maWd1cmUgdGhlIG9yaWdpbmFs
-IEFtYXpvbiBFY2hvIHRvIGZvciBhdWRpbwoKLSBDb25maWd1cmUgbWlzc2luZyB0aGVybWFsIGlu
-dGVycnVwdCBmb3Igb21hcDQ0MzAKCi0gQ29uZmlndXJlIG1hcHBob25lIGRldmljZXMgZm9yIHBh
-c3NpdmUgdGhlcm1hbCBjb29saW5nLCBhbmQgYWRkCiAgMS4yR0h6IG1vZGUuCgotIENvcnJlY3Qg
-b21hcDQ0MzAgc2d4IGNsb2NrIHJhdGUgdG8gdXNlIHRoZSBydW50aW1lIEFuZHJvaWQga2VybmVs
-CiAgdmFsdWUsIHRoZSBlYXJsaWVyIHZhbHVlIHdhcyBmb3IgYSBsb3dlciBwb3dlciBvcGVyYXRp
-bmcgcG9pbnQKCi0gRHJvcCB0dXJibyBtb2RlIGZvciAxR0h6IG9tYXAzIHZhcmlhbnRzIGFzIHdl
-IG5vdyBoYXZlIHBhc3NpdmUKICBjb29saW5nIGNvbmZpZ3VyZWQKCi0gVXBkYXRlIGVtYWlsIGFk
-ZHJlc3MgZm9yIEphdmllcgoKLSBBZGQgbmV3IE1ZSVIgVGVjaCBMaW1pdGVkIGJvYXJkIHN1cHBv
-cnQKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0KQWRhbSBGb3JkICgxKToKICAgICAgQVJNOiBkdHM6IG9tYXAzNnh4OiBSZW1v
-dmUgdHVyYm8gbW9kZSBmb3IgMUdIeiB2YXJpYW50cwoKQWxleGFuZGVyIFNoaXlhbiAoMSk6CiAg
-ICAgIEFSTTogZHRzOiBhbTMzNXgtbXlpcnRlY2gtKjogQWRkIERUIGZvciBBTTMzNVggTVlJUiBU
-ZWNoIExpbWl0ZWQgYm9hcmQKCkFuZHJlYXMgS2VtbmFkZSAoMSk6CiAgICAgIEFSTTogZHRzOiBv
-bWFwMy1ndGEwNDogZml4IHR3bDQwMzAtcG93ZXIgc2V0dGluZ3MKCkFuZHLDqSBIZW50c2NoZWwg
-KDEpOgogICAgICBBUk06IGR0czogb21hcDMtZWNobzogQWRkIHNwZWFrZXIgc291bmQgY2FyZCBz
-dXBwb3J0CgpDYXJsIFBoaWxpcHAgS2xlbW0gKDIpOgogICAgICBBUk06IGR0czogbW90b3JvbGEt
-bWFwcGhvbmU6IEFkZCAxLjJHSHogT1BQCiAgICAgIEFSTTogZHRzOiBvbWFwNDQzeDogQ29ycmVj
-dCBzZ3ggY2xvY2sgdG8gMzA3LjJNSHogYXMgdXNlZCBvbiBtb3Rvcm9sYSB2ZW5kb3Iga2VybmVs
-CgpHcnlnb3JpaSBTdHJhc2hrbyAoMik6CiAgICAgIEFSTTogZHRzOiBhbTMzeHgtbDQ6IGFkZCBk
-dCBub2RlIGZvciBuZXcgY3BzdyBzd2l0Y2hkZXYgZHJpdmVyCiAgICAgIEFSTTogZHRzOiBhbTMz
-NXgtZXZtL2V2bXNrL2ljZXYyOiBzd2l0Y2ggdG8gbmV3IGNwc3cgc3dpdGNoIGRydgoKSmF2aWVy
-IE1hcnRpbmV6IENhbmlsbGFzICgxKToKICAgICAgQVJNOiBkdHM6IG9tYXAzLWlnZXA6IENoYW5n
-ZSBlbWFpbCBhZGRyZXNzIGluIGNvcHlyaWdodCBub3RpY2UKClRlcm8gS3Jpc3RvICgzKToKICAg
-ICAgQVJNOiBkdHM6IGFtNTc0eC1pZGs6IGFkZCBzdXBwb3J0IGZvciBFTUlGMSBFQ0MKICAgICAg
-QVJNOiBkdHM6IGRyYTc2eDogYWRkIHN1cHBvcnQgZm9yIE9QUF9QTFVTCiAgICAgIEFSTTogZHRz
-OiBkcmE3MS1ldm06IG1hcmsgbGRvMCByZWd1bGF0b3IgYXMgYWx3YXlzIG9uCgpUb255IExpbmRn
-cmVuICgzKToKICAgICAgTWVyZ2UgdGFnICdvbWFwLWZvci12NS4xMS9kdC1sYXRlLXNpZ25lZCcg
-aW50byBvbWFwLWZvci12NS4xMi1kdAogICAgICBBUk06IGR0czogQ29uZmlndXJlIG1pc3Npbmcg
-dGhlcm1hbCBpbnRlcnJ1cHQgZm9yIDQ0MzAKICAgICAgQVJNOiBkdHM6IG1vdG9yb2xhLW1hcHBo
-b25lOiBDb25maWd1cmUgbG93ZXIgdGVtcGVyYXR1cmUgcGFzc2l2ZSBjb29saW5nCgogYXJjaC9h
-cm0vYm9vdC9kdHMvTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgICAgfCAgIDEgKwogYXJjaC9h
-cm0vYm9vdC9kdHMvYW0zMzV4LWV2bS5kdHMgICAgICAgICAgICAgICAgfCAgMTMgKy0KIGFyY2gv
-YXJtL2Jvb3QvZHRzL2FtMzM1eC1ldm1zay5kdHMgICAgICAgICAgICAgIHwgIDE0ICstCiBhcmNo
-L2FybS9ib290L2R0cy9hbTMzNXgtaWNldjIuZHRzICAgICAgICAgICAgICB8ICAxNCArLQogYXJj
-aC9hcm0vYm9vdC9kdHMvYW0zMzV4LW15aXJ0ZWNoLW15Yy5kdHNpICAgICAgfCAyNjcgKysrKysr
-KysrKysrCiBhcmNoL2FybS9ib290L2R0cy9hbTMzNXgtbXlpcnRlY2gtbXlkLmR0cyAgICAgICB8
-IDUzNiArKysrKysrKysrKysrKysrKysrKysrKysKIGFyY2gvYXJtL2Jvb3QvZHRzL2FtMzN4eC1s
-NC5kdHNpICAgICAgICAgICAgICAgIHwgIDQ5ICsrKwogYXJjaC9hcm0vYm9vdC9kdHMvYW01NzR4
-LWlkay5kdHMgICAgICAgICAgICAgICAgfCAgIDQgKwogYXJjaC9hcm0vYm9vdC9kdHMvZHJhNzEt
-ZXZtLmR0cyAgICAgICAgICAgICAgICAgfCAgIDIgKwogYXJjaC9hcm0vYm9vdC9kdHMvZHJhNzZ4
-LmR0c2kgICAgICAgICAgICAgICAgICAgfCAgMzYgKysKIGFyY2gvYXJtL2Jvb3QvZHRzL21vdG9y
-b2xhLW1hcHBob25lLWNvbW1vbi5kdHNpIHwgIDIzICsKIGFyY2gvYXJtL2Jvb3QvZHRzL29tYXAz
-LWVjaG8uZHRzICAgICAgICAgICAgICAgIHwgIDY3ICsrKwogYXJjaC9hcm0vYm9vdC9kdHMvb21h
-cDMtZ3RhMDQuZHRzaSAgICAgICAgICAgICAgfCAgIDQgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL29t
-YXAzLWlnZXAuZHRzaSAgICAgICAgICAgICAgIHwgICAyICstCiBhcmNoL2FybS9ib290L2R0cy9v
-bWFwMy1pZ2VwMDAyMC1jb21tb24uZHRzaSAgICB8ICAgMiArLQogYXJjaC9hcm0vYm9vdC9kdHMv
-b21hcDMtaWdlcDAwMjAtcmV2LWYuZHRzICAgICAgfCAgIDIgKy0KIGFyY2gvYXJtL2Jvb3QvZHRz
-L29tYXAzLWlnZXAwMDIwLmR0cyAgICAgICAgICAgIHwgICAyICstCiBhcmNoL2FybS9ib290L2R0
-cy9vbWFwMy1pZ2VwMDAzMC1jb21tb24uZHRzaSAgICB8ICAgMiArLQogYXJjaC9hcm0vYm9vdC9k
-dHMvb21hcDMtaWdlcDAwMzAtcmV2LWcuZHRzICAgICAgfCAgIDIgKy0KIGFyY2gvYXJtL2Jvb3Qv
-ZHRzL29tYXAzLWlnZXAwMDMwLmR0cyAgICAgICAgICAgIHwgICAyICstCiBhcmNoL2FybS9ib290
-L2R0cy9vbWFwMzZ4eC5kdHNpICAgICAgICAgICAgICAgICB8ICAgMSAtCiBhcmNoL2FybS9ib290
-L2R0cy9vbWFwNDQzeC5kdHNpICAgICAgICAgICAgICAgICB8ICAgNiArLQogMjIgZmlsZXMgY2hh
-bmdlZCwgMTAxOCBpbnNlcnRpb25zKCspLCAzMyBkZWxldGlvbnMoLSkKIGNyZWF0ZSBtb2RlIDEw
-MDY0NCBhcmNoL2FybS9ib290L2R0cy9hbTMzNXgtbXlpcnRlY2gtbXljLmR0c2kKIGNyZWF0ZSBt
-b2RlIDEwMDY0NCBhcmNoL2FybS9ib290L2R0cy9hbTMzNXgtbXlpcnRlY2gtbXlkLmR0cwoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbGludXgtYXJtLWtl
-cm5lbCBtYWlsaW5nIGxpc3QKbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnCmh0
-dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtYXJtLWtlcm5l
-bAo=
+The following changes since commit 7c53f6b671f4aba70ff15e1b05148b10d58c2837:
+
+  Linux 5.11-rc3 (2021-01-10 14:34:50 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+tags/arm-soc-fixes-v5.11-2
+
+for you to fetch changes up to e49c24c8cd00ea9d7471520fff562fb4e7e9f61a:
+
+  Merge tag 'imx-fixes-5.11-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
+arm/fixes (2021-01-22 23:52:42 +0100)
+
+----------------------------------------------------------------
+ARM: SoC fixes for v5.11, part 2
+
+These are the current arm-soc bug fixes for linux-5.11. I already merged
+a larger set that just came in during the past three days but has not
+had much exposure in linux-next, so these are the ones I merged last week.
+
+Most of these are for the NXP i.MX platform (descriptions from their
+pull request):
+
+ - Fix pcf2127 reset for imx7d-flex-concentrator board.
+ - Fix i.MX6 suspend with Thumb-2 kernel.
+ - Fix ethernet-phy address issue on imx6qdl-sr-som board.
+ - Fix GPIO3 `gpio-ranges` on i.MX8MP.
+ - Select SOC_BUS for IMX_SCU driver to fix build issue.
+ - Fix backlight pwm on imx6qdl-kontron-samx6i which is lost from
+   #pwm-cells conversion.
+ - Fix duplicated bus node name for i.MX8MN SoC.
+ - Fix reset register offset on LS1028A SoC.
+ - Rename MMC node aliases for imx6q-tbs2910 to keep the MMC device
+   index consistent with previous kernel version.
+ - Selecting ARM_GIC_V3 on non-CP15 processors to fix one build failure
+   with i.MX8M SoC driver.
+ - Fix typos with status property on imx6qdl-kontron-samx6i board.
+ - Fix duplicated regulator-name on imx6qdl-gw52xx board.
+
+Aside from i.MX, the bugfixes are all over the place:
+
+ - Coccinelle found a refcount imbalance on integrator
+ - defconfig fix for TI K3
+ - A boot regression fix for ST ux500
+ - A code preemption fix for the optee driver
+ - USB DMA regression on Broadcom Stingray
+ - A bogus boot time warning fix for at91 code
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+----------------------------------------------------------------
+Arnd Bergmann (4):
+      ARM: imx: fix imx8m dependencies
+      Merge tag 'imx-fixes-5.11' of
+git://git.kernel.org/.../shawnguo/linux into arm/fixes
+      Merge tag 'optee-rcu-sched-trace-for-v5.11' of
+git://git.linaro.org/people/jens.wiklander/linux-tee into arm/fixes
+      Merge tag 'imx-fixes-5.11-2' of
+git://git.kernel.org/.../shawnguo/linux into arm/fixes
+
+Bharat Gooty (1):
+      arm64: dts: broadcom: Fix USB DMA address translation for Stingray
+
+Bruno Thomsen (1):
+      ARM: dts: imx7d-flex-concentrator: fix pcf2127 reset
+
+Claudiu Beznea (1):
+      drivers: soc: atmel: add null entry at the end of at91_soc_allowed_list[]
+
+Jacky Bai (1):
+      arm64: dts: imx8mp: Correct the gpio ranges of gpio3
+
+Koen Vandeputte (1):
+      ARM: dts: imx6qdl-gw52xx: fix duplicate regulator naming
+
+Linus Walleij (1):
+      ARM: dts: ux500: Reserve memory carveouts
+
+Marco Felsch (2):
+      ARM: dts: imx6qdl-kontron-samx6i: fix pwms for lcd-backlight
+      ARM: dts: imx6qdl-kontron-samx6i: fix i2c_lcd/cam default status
+
+Max Krummenacher (1):
+      ARM: imx: build suspend-imx6.S with arm instruction set
+
+Michael Walle (1):
+      arm64: dts: ls1028a: fix the offset of the reset register
+
+Nishanth Menon (1):
+      arm64: defconfig: Drop unused K3 SoC specific options
+
+Randy Dunlap (1):
+      firmware: imx: select SOC_BUS to fix firmware build
+
+Rouven Czerwinski (1):
+      tee: optee: replace might_sleep with cond_resched
+
+Russell King (1):
+      ARM: dts: imx6qdl-sr-som: fix some cubox-i platforms
+
+Shengjiu Wang (1):
+      arm64: dts: imx8mn: Fix duplicate node name
+
+Soeren Moch (1):
+      ARM: dts: tbs2910: rename MMC node aliases
+
+Stefan Wahren (1):
+      MAINTAINERS: Include bcm2835 subsequents into search
+
+Sudeep Holla (1):
+      drivers: soc: atmel: Avoid calling at91_soc_init on non AT91 SoCs
+
+Sumera Priyadarsini (1):
+      bus: arm-integrator-lm: Add of_node_put() before return statement
+
+ MAINTAINERS                                        |  2 +-
+ arch/arm/boot/dts/imx6q-tbs2910.dts                |  7 ++++
+ arch/arm/boot/dts/imx6qdl-gw52xx.dtsi              |  2 +-
+ arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi      |  6 ++--
+ arch/arm/boot/dts/imx6qdl-sr-som.dtsi              | 12 +++++--
+ arch/arm/boot/dts/imx7d-flex-concentrator.dts      |  1 +
+ arch/arm/boot/dts/ste-db8500.dtsi                  | 38 ++++++++++++++++++++++
+ arch/arm/boot/dts/ste-db8520.dtsi                  | 38 ++++++++++++++++++++++
+ arch/arm/boot/dts/ste-db9500.dtsi                  | 35 ++++++++++++++++++++
+ arch/arm/boot/dts/ste-snowball.dts                 |  2 +-
+ arch/arm/mach-imx/suspend-imx6.S                   |  1 +
+ .../boot/dts/broadcom/stingray/stingray-usb.dtsi   |  7 +++-
+ arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi     |  2 +-
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi          |  2 +-
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi          |  2 +-
+ arch/arm64/configs/defconfig                       |  2 --
+ drivers/bus/arm-integrator-lm.c                    |  1 +
+ drivers/firmware/imx/Kconfig                       |  1 +
+ drivers/soc/atmel/soc.c                            | 13 ++++++++
+ drivers/soc/imx/Kconfig                            |  2 +-
+ drivers/tee/optee/call.c                           |  4 ++-
+ 21 files changed, 164 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm/boot/dts/ste-db9500.dtsi
