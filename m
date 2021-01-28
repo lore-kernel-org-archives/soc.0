@@ -1,108 +1,129 @@
-Return-Path: <SRS0=ZyEH=G7=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=c65O=G7=me.com=avolmat@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BAE2C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 18:18:13 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C29DC433DB
+	for <soc@archiver.kernel.org>; Thu, 28 Jan 2021 21:18:19 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id CE1D364DEB; Thu, 28 Jan 2021 21:18:18 +0000 (UTC)
+Received: from st43p00im-ztbu10073601.me.com (st43p00im-ztbu10073601.me.com [17.58.63.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DD09664E70
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 18:18:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DD09664E70
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Date:Message-Id:References:In-Reply-To:From:
-	Subject:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=LuExjFbV38TfS6HhwtbwbRbKCWYyAT315+r3PEOyp2s=; b=gzf3cXKBnFIIkShFU0MgAQtces
-	VWvatKnqx6EfQf/GOgo96jv2csOwdfQ/r4Xqo2AqfVyMelno8lF9A+xPSNORLbm8CgsSy8wflXFBI
-	X50py0d7S8wyJPee7gpQ32dIiDdDhHtFd0fP/Y+l0RxWi0EXVQs6aJOhlS1hZ6d/Jk70t+xD/5vs5
-	EYvKS7dPtAnOi4M2QpSErGoAF7dwGAnOfmKvQ+vI9HGIls3zE26Ap5rN+6ISo9VANlRIh/7u6Jbka
-	u1CYbva2b+L8zAT6vV/McIkQWsw7CwhmS+mMXRS6E9d/aP5awps4KMNjroFxT/ZjcqBHDIqaUlQsp
-	9nh5Aggg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l5Bqk-0000Gx-5b; Thu, 28 Jan 2021 18:16:58 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l5Bqh-0000G0-Kx
- for linux-arm-kernel@lists.infradead.org; Thu, 28 Jan 2021 18:16:56 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPS id CD44964E0E;
- Thu, 28 Jan 2021 18:16:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1611857813;
- bh=aSAdEmxoax5vPvdLbJz+b+C7Xg7zNbyTjWEf3znnDAE=;
- h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
- b=M+EW73sCgf/aSCm4bnyn2v5Uuq49pX4WhR1yj8W1h1QgUsY5u8tjImo0ksjGSdYLT
- r/fZTFXbunpn315hPheGqdJszOl/OzxjemJ95GX7lIhifhuiMZA9c/8jEFAXvHWXwF
- HAss6l5e4TGbnday0EVnwWzMdd9H4gKFVxlQmV7/+V5K6JotFULpehfI+AL8wCeCAw
- pwQWGwHuUTWZ4U+amT9961wEj2QrCwbb1lFk0YTFalANZHrnHg0u8+6aAKXeqjvqZb
- 46DZ5uZgSBD7BijpFo75disrwPaET+agB0TL4k9g0xTm9iZ+Xt8UwNtVQ0gfoBq3l6
- SX8WektR3W9NQ==
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.11, #2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAK8P3a2Ku8ummmKWSZZ+kUHxVxvqGnoB4YSTLj9zo4ntkDO3UQ@mail.gmail.com>
-References: <CAK8P3a2Ku8ummmKWSZZ+kUHxVxvqGnoB4YSTLj9zo4ntkDO3UQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <CAK8P3a2Ku8ummmKWSZZ+kUHxVxvqGnoB4YSTLj9zo4ntkDO3UQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
- tags/arm-soc-fixes-v5.11-2
-X-PR-Tracked-Commit-Id: e49c24c8cd00ea9d7471520fff562fb4e7e9f61a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7485e08eec4c84b2e140aed5fccc36b6846789ec
-Message-ID: <161185781380.19532.3901554449864546513.pr-tracker-bot@kernel.org>
-Date: Thu, 28 Jan 2021 18:16:53 +0000
+	by mail.kernel.org (Postfix) with ESMTPS id 9AF1864DD9
+	for <soc@kernel.org>; Thu, 28 Jan 2021 21:18:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9AF1864DD9
+Authentication-Results: mail.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=me.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=avolmat@me.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+	t=1611868696; bh=ciV1++1D+OLCgxRRqznQGe+RYOrt49WBPH7f6XfbotU=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	b=ZQg5ltqK84t/9xNXnvyu4NFbQU1yTz8VaClkIymGEG2sVUziMyLeKFsbxKsO/dJlh
+	 8W7XULtR9wf/ToLNn9E8mP2ksLyvIqBssNnOBqJLAGO84Mi+iGYpQlxb2kQN7BynJd
+	 01H8JcWW3jDIlLZsShPzGQZP2BTCdDJqJlSAMKEq3Ao2llovf/E/Kgvo5Te39zHCnQ
+	 vw4H/2y6KFAzrTIpBvG7bUo7bgS7Qr4ojhoxuBnkhf6SsZrbfzvxmRsI/oh0UGkuYS
+	 N2NLstugYbmqhuizC/1E10DtthMGemgxxRZR/qpBGKVxV1BZfZogMGH+n1gY6Axdx5
+	 Bb2vdV2Io848w==
+Received: from gnbcxl0029.gnb.st.com (101.220.150.77.rev.sfr.net [77.150.220.101])
+	by st43p00im-ztbu10073601.me.com (Postfix) with ESMTPSA id 979AF8201B8;
+	Thu, 28 Jan 2021 21:18:12 +0000 (UTC)
+Date: Thu, 28 Jan 2021 22:18:08 +0100
+From: Alain Volmat <avolmat@me.com>
 To: Arnd Bergmann <arnd@kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210128_131655_774278_BAC1D117 
-X-CRM114-Status: UNSURE (   5.70  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: Shawn Guo <shawnguo@kernel.org>, SoC Team <soc@kernel.org>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Patrice Chotard <patrice.chotard@st.com>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	DTML <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] ARM: dts: sti: Introduce 4KOpen (stih418-b2264) board
+Message-ID: <20210128211807.GA15542@gnbcxl0029.gnb.st.com>
+Mail-Followup-To: Arnd Bergmann <arnd@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Patrice Chotard <patrice.chotard@st.com>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	DTML <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20210128075825.10368-1-avolmat@me.com>
+ <CAK8P3a2TxPHc60c7+FoLm831rTPvyftRixL+BQfeVf3p_szopA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210128181653.2OobF9-R95h6s4J7NTMfN6Vj6LK5C0-jZ-UNEXIa_Xg@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2TxPHc60c7+FoLm831rTPvyftRixL+BQfeVf3p_szopA@mail.gmail.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-28_12:2021-01-28,2021-01-28 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 clxscore=1011 mlxscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-2006250000 definitions=main-2101280104
 
-The pull request you sent on Thu, 28 Jan 2021 16:32:08 +0100:
+Hi Arnd,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-soc-fixes-v5.11-2
+thanks for the comments and sorry for the large 'To' list. In my v2 I'll
+limit to Patrice Chotard (STi maintainer).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7485e08eec4c84b2e140aed5fccc36b6846789ec
+On Thu, Jan 28, 2021 at 02:08:51PM +0100, Arnd Bergmann wrote:
+> On Thu, Jan 28, 2021 at 8:58 AM Alain Volmat <avolmat@me.com> wrote:
+> >
+> > 4KOpen (B2264) is a board based on the STMicroelectronics STiH418 soc:
+> >   - 2GB DDR
+> >   - HDMI
+> >   - Ethernet 1000-BaseT
+> >   - PCIe (mini PCIe connector)
+> >   - MicroSD slot
+> >   - USB2 and USB3 connectors
+> >   - Sata
+> >   - 40 pins GPIO header
+> >
+> > Signed-off-by: Alain Volmat <avolmat@me.com>
+> 
+> The changelog text seems fine here.
+> 
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (C) 2021 STMicroelectronics
+> > + * Author: Alain Volmat <avolmat@me.com>
+> > + */
+> > +/dts-v1/;
+> > +#include "stih418.dtsi"
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +/ {
+> > +       model = "STiH418 B2264";
+> > +       compatible = "st,stih418-b2264", "st,stih418";
+> > +
+> > +       chosen {
+> > +               bootargs = "console=ttyAS0,115200 clk_ignore_unused";
+> > +               stdout-path = &sbc_serial0;
+> > +       };
+> 
+> I don't think the bootargs should be there, both are just hacks
+> when things don't work correctly. If they don't, then try to fix them
+> first, by making sure that all clocks are properly listed, and that the
+> stdou-path points the working console.
 
-Thank you!
+Indeed, bootargs can be cleaned up. console is not necessary, however
+it's going to be hard to get rid of the clk_ignore_unused now and I'd
+prefer to keep it now, in the same way as for the other sti DTs.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> 
+> > +&rng11 {
+> > +       status = "disabled";
+> > +};
+> 
+> Why do you disable the random number generator?
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+I shouldn't have putted this within the board DT. This rng11 is not
+available on the STiH418.
+In the v2 serie I'll had a separate commit to fix the stih418.dtsi instead.
+
+Alain
+
+> 
+>        Arnd
+
