@@ -1,41 +1,75 @@
-Return-Path: <SRS0=FeCC=G7=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=ZyEH=G7=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3B5DC433E0
-	for <soc@archiver.kernel.org>; Thu, 28 Jan 2021 14:45:13 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id A4C4964DEE; Thu, 28 Jan 2021 14:45:13 +0000 (UTC)
-Received: from muru.com (muru.com [72.249.23.125])
-	by mail.kernel.org (Postfix) with ESMTP id 1090F64DEC;
-	Thu, 28 Jan 2021 14:45:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1090F64DEC
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24D6EC433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 14:46:34 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id B407E64DEC
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 14:46:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B407E64DEC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=tony@atomide.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=EF9k/eJXhqIiXWw/Rko0wKMUAuKVQvE0OirV9hzpNlk=; b=ArNIA9geUmELvFEm4W/ZFqZH6B
+	8L0u28zUcdn3HjIt50//CtjqBY91bh1/YL7hOJCeJuRmzmVWx+k3bbSSVvwtEjnpUGZYStlVLcsQl
+	kTUlNgBo4rqmLfbDp2BPDlZxy9jnKb4KE4ZUFVMRK8qYy4Oqv2JKHAlKNYbel6lGTDLW2ynYtNvWj
+	wnNIa7H44fp3lSIx6lKGd4nUdzxGW0yIIx8GXCTomIWuKQ909adYf7pxB8obEd3NF1DzYM51rBqRc
+	LQC16MV6YeWqS/auQzr4Zj1qeyX8BTYK1xUY1J+uAImqX8vitbn0/nTFie8l+DugfwACXGkgqge7o
+	TCO3AH9w==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l58Xr-0008WK-MV; Thu, 28 Jan 2021 14:45:15 +0000
+Received: from muru.com ([72.249.23.125])
+ by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l58Xo-0008VL-No
+ for linux-arm-kernel@lists.infradead.org; Thu, 28 Jan 2021 14:45:13 +0000
 Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id 30B9F80F1;
-	Thu, 28 Jan 2021 14:45:18 +0000 (UTC)
+ by muru.com (Postfix) with ESMTP id 6F24A80A9;
+ Thu, 28 Jan 2021 14:45:13 +0000 (UTC)
 From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: arm@kernel.org,
-	linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL 2/2] Devicetree changes for omaps for v5.12
-Date: Thu, 28 Jan 2021 16:45:02 +0200
-Message-Id: <pull-1611845066-809577@atomide.com-2>
+Subject: [GIT PULL 1/2] SoC changes for omaps for v5.12
+Date: Thu, 28 Jan 2021 16:45:01 +0200
+Message-ID: <pull-1611845066-809577@atomide.com>
 X-Mailer: git-send-email 2.30.0
-In-Reply-To: <pull-1611845066-809577@atomide.com>
-References: <pull-1611845066-809577@atomide.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210128_094512_863522_FACC6802 
+X-CRM114-Status: UNSURE (   7.29  )
+X-CRM114-Notice: Please train this message.
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
+ arm@kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210128144501.wZTZYvkp4u02xU2ugz3nJg6jDw9noJpsBJqgT-DaWt8@z>
 
 From: "Tony Lindgren" <tony@atomide.com>
 
@@ -45,101 +79,29 @@ The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.12/dt-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.12/soc-signed
 
-for you to fetch changes up to 4231f3a72f9ac7f8738d003b7ad56fa998574fb8:
+for you to fetch changes up to 320f6f90cbe4818cf0d0f9441772d23aa441c506:
 
-  ARM: dts: am335x-myirtech-*: Add DT for AM335X MYIR Tech Limited board (2021-01-26 13:21:31 +0200)
-
-----------------------------------------------------------------
-Devicetree changes for omaps for v5.12 merge window
-
-This includes the following earlier patches that were considered too
-late for v5.11 as discussed between Arnd and me on freenode #armlinux
-in December:
-
-- More updates to use cpsw switchdev driver
-
-- Enable gta04 PMIC power management
-
-- Updates for dra7 for ECC support, 1.8GHz speed and keep the
-  ldo0 regulator always on as specified in the data manual
-
-And then we have the new devicetree changes:
-
-- Configure the original Amazon Echo to for audio
-
-- Configure missing thermal interrupt for omap4430
-
-- Configure mapphone devices for passive thermal cooling, and add
-  1.2GHz mode.
-
-- Correct omap4430 sgx clock rate to use the runtime Android kernel
-  value, the earlier value was for a lower power operating point
-
-- Drop turbo mode for 1GHz omap3 variants as we now have passive
-  cooling configured
-
-- Update email address for Javier
-
-- Add new MYIR Tech Limited board support
+  ARM: OMAP2+: fix spellint typo (2021-01-26 13:43:17 +0200)
 
 ----------------------------------------------------------------
-Adam Ford (1):
-      ARM: dts: omap36xx: Remove turbo mode for 1GHz variants
+SoC changes for omaps for v5.12 merge window
 
-Alexander Shiyan (1):
-      ARM: dts: am335x-myirtech-*: Add DT for AM335X MYIR Tech Limited board
+Update email address for Roger and fix a typo
 
-Andreas Kemnade (1):
-      ARM: dts: omap3-gta04: fix twl4030-power settings
+----------------------------------------------------------------
+Roger Quadros (1):
+      MAINTAINERS: Update address for OMAP GPMC driver
 
-André Hentschel (1):
-      ARM: dts: omap3-echo: Add speaker sound card support
+Wang Qing (1):
+      ARM: OMAP2+: fix spellint typo
 
-Carl Philipp Klemm (2):
-      ARM: dts: motorola-mapphone: Add 1.2GHz OPP
-      ARM: dts: omap443x: Correct sgx clock to 307.2MHz as used on motorola vendor kernel
+ MAINTAINERS                       | 2 +-
+ arch/arm/mach-omap2/clockdomain.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Grygorii Strashko (2):
-      ARM: dts: am33xx-l4: add dt node for new cpsw switchdev driver
-      ARM: dts: am335x-evm/evmsk/icev2: switch to new cpsw switch drv
-
-Javier Martinez Canillas (1):
-      ARM: dts: omap3-igep: Change email address in copyright notice
-
-Tero Kristo (3):
-      ARM: dts: am574x-idk: add support for EMIF1 ECC
-      ARM: dts: dra76x: add support for OPP_PLUS
-      ARM: dts: dra71-evm: mark ldo0 regulator as always on
-
-Tony Lindgren (3):
-      Merge tag 'omap-for-v5.11/dt-late-signed' into omap-for-v5.12-dt
-      ARM: dts: Configure missing thermal interrupt for 4430
-      ARM: dts: motorola-mapphone: Configure lower temperature passive cooling
-
- arch/arm/boot/dts/Makefile                      |   1 +
- arch/arm/boot/dts/am335x-evm.dts                |  13 +-
- arch/arm/boot/dts/am335x-evmsk.dts              |  14 +-
- arch/arm/boot/dts/am335x-icev2.dts              |  14 +-
- arch/arm/boot/dts/am335x-myirtech-myc.dtsi      | 267 ++++++++++++
- arch/arm/boot/dts/am335x-myirtech-myd.dts       | 536 ++++++++++++++++++++++++
- arch/arm/boot/dts/am33xx-l4.dtsi                |  49 +++
- arch/arm/boot/dts/am574x-idk.dts                |   4 +
- arch/arm/boot/dts/dra71-evm.dts                 |   2 +
- arch/arm/boot/dts/dra76x.dtsi                   |  36 ++
- arch/arm/boot/dts/motorola-mapphone-common.dtsi |  23 +
- arch/arm/boot/dts/omap3-echo.dts                |  67 +++
- arch/arm/boot/dts/omap3-gta04.dtsi              |   4 +-
- arch/arm/boot/dts/omap3-igep.dtsi               |   2 +-
- arch/arm/boot/dts/omap3-igep0020-common.dtsi    |   2 +-
- arch/arm/boot/dts/omap3-igep0020-rev-f.dts      |   2 +-
- arch/arm/boot/dts/omap3-igep0020.dts            |   2 +-
- arch/arm/boot/dts/omap3-igep0030-common.dtsi    |   2 +-
- arch/arm/boot/dts/omap3-igep0030-rev-g.dts      |   2 +-
- arch/arm/boot/dts/omap3-igep0030.dts            |   2 +-
- arch/arm/boot/dts/omap36xx.dtsi                 |   1 -
- arch/arm/boot/dts/omap443x.dtsi                 |   6 +-
- 22 files changed, 1018 insertions(+), 33 deletions(-)
- create mode 100644 arch/arm/boot/dts/am335x-myirtech-myc.dtsi
- create mode 100644 arch/arm/boot/dts/am335x-myirtech-myd.dts
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
