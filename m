@@ -7,19 +7,19 @@ X-Spam-Status: No, score=-20.7 required=3.0 tests=BAYES_00,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2AFBC433DB
-	for <soc@archiver.kernel.org>; Thu, 28 Jan 2021 14:45:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3B5DC433E0
+	for <soc@archiver.kernel.org>; Thu, 28 Jan 2021 14:45:13 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id BA11964DEF; Thu, 28 Jan 2021 14:45:09 +0000 (UTC)
+	id A4C4964DEE; Thu, 28 Jan 2021 14:45:13 +0000 (UTC)
 Received: from muru.com (muru.com [72.249.23.125])
-	by mail.kernel.org (Postfix) with ESMTP id 285BE64DEC;
-	Thu, 28 Jan 2021 14:45:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 285BE64DEC
+	by mail.kernel.org (Postfix) with ESMTP id 1090F64DEC;
+	Thu, 28 Jan 2021 14:45:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1090F64DEC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=tony@atomide.com
 Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id 6F24A80A9;
-	Thu, 28 Jan 2021 14:45:13 +0000 (UTC)
+	by muru.com (Postfix) with ESMTP id 30B9F80F1;
+	Thu, 28 Jan 2021 14:45:18 +0000 (UTC)
 From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -27,10 +27,12 @@ Cc: arm@kernel.org,
 	linux-omap@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL 1/2] SoC changes for omaps for v5.12
-Date: Thu, 28 Jan 2021 16:45:01 +0200
-Message-Id: <pull-1611845066-809577@atomide.com>
+Subject: [GIT PULL 2/2] Devicetree changes for omaps for v5.12
+Date: Thu, 28 Jan 2021 16:45:02 +0200
+Message-Id: <pull-1611845066-809577@atomide.com-2>
 X-Mailer: git-send-email 2.30.0
+In-Reply-To: <pull-1611845066-809577@atomide.com>
+References: <pull-1611845066-809577@atomide.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -43,24 +45,101 @@ The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.12/soc-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.12/dt-signed
 
-for you to fetch changes up to 320f6f90cbe4818cf0d0f9441772d23aa441c506:
+for you to fetch changes up to 4231f3a72f9ac7f8738d003b7ad56fa998574fb8:
 
-  ARM: OMAP2+: fix spellint typo (2021-01-26 13:43:17 +0200)
-
-----------------------------------------------------------------
-SoC changes for omaps for v5.12 merge window
-
-Update email address for Roger and fix a typo
+  ARM: dts: am335x-myirtech-*: Add DT for AM335X MYIR Tech Limited board (2021-01-26 13:21:31 +0200)
 
 ----------------------------------------------------------------
-Roger Quadros (1):
-      MAINTAINERS: Update address for OMAP GPMC driver
+Devicetree changes for omaps for v5.12 merge window
 
-Wang Qing (1):
-      ARM: OMAP2+: fix spellint typo
+This includes the following earlier patches that were considered too
+late for v5.11 as discussed between Arnd and me on freenode #armlinux
+in December:
 
- MAINTAINERS                       | 2 +-
- arch/arm/mach-omap2/clockdomain.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+- More updates to use cpsw switchdev driver
+
+- Enable gta04 PMIC power management
+
+- Updates for dra7 for ECC support, 1.8GHz speed and keep the
+  ldo0 regulator always on as specified in the data manual
+
+And then we have the new devicetree changes:
+
+- Configure the original Amazon Echo to for audio
+
+- Configure missing thermal interrupt for omap4430
+
+- Configure mapphone devices for passive thermal cooling, and add
+  1.2GHz mode.
+
+- Correct omap4430 sgx clock rate to use the runtime Android kernel
+  value, the earlier value was for a lower power operating point
+
+- Drop turbo mode for 1GHz omap3 variants as we now have passive
+  cooling configured
+
+- Update email address for Javier
+
+- Add new MYIR Tech Limited board support
+
+----------------------------------------------------------------
+Adam Ford (1):
+      ARM: dts: omap36xx: Remove turbo mode for 1GHz variants
+
+Alexander Shiyan (1):
+      ARM: dts: am335x-myirtech-*: Add DT for AM335X MYIR Tech Limited board
+
+Andreas Kemnade (1):
+      ARM: dts: omap3-gta04: fix twl4030-power settings
+
+André Hentschel (1):
+      ARM: dts: omap3-echo: Add speaker sound card support
+
+Carl Philipp Klemm (2):
+      ARM: dts: motorola-mapphone: Add 1.2GHz OPP
+      ARM: dts: omap443x: Correct sgx clock to 307.2MHz as used on motorola vendor kernel
+
+Grygorii Strashko (2):
+      ARM: dts: am33xx-l4: add dt node for new cpsw switchdev driver
+      ARM: dts: am335x-evm/evmsk/icev2: switch to new cpsw switch drv
+
+Javier Martinez Canillas (1):
+      ARM: dts: omap3-igep: Change email address in copyright notice
+
+Tero Kristo (3):
+      ARM: dts: am574x-idk: add support for EMIF1 ECC
+      ARM: dts: dra76x: add support for OPP_PLUS
+      ARM: dts: dra71-evm: mark ldo0 regulator as always on
+
+Tony Lindgren (3):
+      Merge tag 'omap-for-v5.11/dt-late-signed' into omap-for-v5.12-dt
+      ARM: dts: Configure missing thermal interrupt for 4430
+      ARM: dts: motorola-mapphone: Configure lower temperature passive cooling
+
+ arch/arm/boot/dts/Makefile                      |   1 +
+ arch/arm/boot/dts/am335x-evm.dts                |  13 +-
+ arch/arm/boot/dts/am335x-evmsk.dts              |  14 +-
+ arch/arm/boot/dts/am335x-icev2.dts              |  14 +-
+ arch/arm/boot/dts/am335x-myirtech-myc.dtsi      | 267 ++++++++++++
+ arch/arm/boot/dts/am335x-myirtech-myd.dts       | 536 ++++++++++++++++++++++++
+ arch/arm/boot/dts/am33xx-l4.dtsi                |  49 +++
+ arch/arm/boot/dts/am574x-idk.dts                |   4 +
+ arch/arm/boot/dts/dra71-evm.dts                 |   2 +
+ arch/arm/boot/dts/dra76x.dtsi                   |  36 ++
+ arch/arm/boot/dts/motorola-mapphone-common.dtsi |  23 +
+ arch/arm/boot/dts/omap3-echo.dts                |  67 +++
+ arch/arm/boot/dts/omap3-gta04.dtsi              |   4 +-
+ arch/arm/boot/dts/omap3-igep.dtsi               |   2 +-
+ arch/arm/boot/dts/omap3-igep0020-common.dtsi    |   2 +-
+ arch/arm/boot/dts/omap3-igep0020-rev-f.dts      |   2 +-
+ arch/arm/boot/dts/omap3-igep0020.dts            |   2 +-
+ arch/arm/boot/dts/omap3-igep0030-common.dtsi    |   2 +-
+ arch/arm/boot/dts/omap3-igep0030-rev-g.dts      |   2 +-
+ arch/arm/boot/dts/omap3-igep0030.dts            |   2 +-
+ arch/arm/boot/dts/omap36xx.dtsi                 |   1 -
+ arch/arm/boot/dts/omap443x.dtsi                 |   6 +-
+ 22 files changed, 1018 insertions(+), 33 deletions(-)
+ create mode 100644 arch/arm/boot/dts/am335x-myirtech-myc.dtsi
+ create mode 100644 arch/arm/boot/dts/am335x-myirtech-myd.dts
