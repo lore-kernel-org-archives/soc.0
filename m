@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3366C433E0
-	for <soc@archiver.kernel.org>; Fri, 29 Jan 2021 19:33:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7F93C433E0
+	for <soc@archiver.kernel.org>; Fri, 29 Jan 2021 19:33:10 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 97FA364DFB; Fri, 29 Jan 2021 19:33:07 +0000 (UTC)
+	id 7F00A64E09; Fri, 29 Jan 2021 19:33:10 +0000 (UTC)
 Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3D26264DE3;
-	Fri, 29 Jan 2021 19:33:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3D26264DE3
+	by mail.kernel.org (Postfix) with ESMTPS id 1DB0164E06;
+	Fri, 29 Jan 2021 19:33:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1DB0164E06
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=thierry.reding@gmail.com
-Received: by mail-qk1-f179.google.com with SMTP id a7so9835883qkb.13;
-        Fri, 29 Jan 2021 11:33:06 -0800 (PST)
+Received: by mail-qk1-f179.google.com with SMTP id x81so9886273qkb.0;
+        Fri, 29 Jan 2021 11:33:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UF1FuT9xzOslp9BVbzccUgOHaBgiNbyOucfQV9Cc5yo=;
-        b=p7Bxm9vXWp1Jsk7ePN8o05nMake6NtcSCHPOUp4IBM8uA6cRJMVtj/PQ2f8JT+w2yN
-         S1zS0LbAiVE6LteP/hEaHXYE5QWLHzkZ66rOrOAc49BNUQ4UwtFqZbQjjI9a5fA7euvE
-         tHj7f4UXx2/DEJzqcFdArsL+9FIk5PgrF4A/Goxznvjd4vvmeMprDgaruLqthn+2aSLY
-         oeMnOzsTHqfZq7gi04uI+ugWd7+KqwJc9tLjf6d55wrqrRioHVz3JHcOGzGAcNZ7x8fD
-         Ab6Ol8yUSisOuF7llSasEenm2TwZ52VvyEo4nhXrfOKubM84dLxMPOhMx6MPmXb/Qjif
-         C4TQ==
+        bh=bqVdY6Y1Pq6EnP728WEfCslQJrqbbJH/OzjLm3CcFak=;
+        b=frlSKUglNEaK6Zpvp86GtgN++a9yOZ+2aO/YgJHiBy5G2bESsrJHWyNI2fyjx3vG8k
+         36MAdBp+4c7E3fDNpL0vQtOPHajP3DYI7sJw4kH4iPjWTWkKPGr1HW2IeE/3NUUQPLnr
+         mhr8CQvXb/jEl5SVirY4jZrvGzz7ussoXU9QYtuGzAjXsUjRs2258+JRMYJ+7sqdOnp2
+         iQR8/b9kimu0cg4uqhZa9/KTqXm/16i96G7ea7be05PasQqDomlBcbcju9uk6ChGgXZu
+         ZOE/XO4pzNNdazf3bFB5grzxkAYj3mD6CDwGkirWuwdcwkBcTuqkhvdObrFVw1sUt4oN
+         UpEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UF1FuT9xzOslp9BVbzccUgOHaBgiNbyOucfQV9Cc5yo=;
-        b=IKBoYJm7p0ES729RkBBlNgNYq/hLMEvw1FjYbKlwoQu+RJ9GIEYMUJhipEQCyEIz8A
-         9o+QugLzB2iXFV6Sn0Vw8RNSLprFN4TyIy7AhYO0OZx90blCpiQIPakMyXbj2x+or+fB
-         czrKBPDp4cTJXNx7+5skIm5GWmXGTVw+UmSZJcFagwSSmF7sCIs2xbcOQyGcc38zBrB9
-         CKhTkuCQQtPQu7kxtIVrduZQb2tkGmguh3Q5JYLV6UKmMH1QR2AJv3amqk00i1tJ409Y
-         o5ETEThKVw57J7eidfpjbQV61MweQcO7Uce1TutHM/+Z7KSWXhClPr1xRkA5Xpjsssc1
-         pbtA==
-X-Gm-Message-State: AOAM530eE3DyqIepRWhuvw9ugU5iC5uzGSbel1ekEPWEPHFazLoJmBKR
-	L6gHvmQqY+aGx4CiT4n8o6xbZka8Vww=
-X-Google-Smtp-Source: ABdhPJzjSr3CRtJQQqcROceNY8YzqlkRQ25Fs6knj39dqXcwFByXRuKueo1b3ldP5TkneR94nG3FAw==
-X-Received: by 2002:a37:67d6:: with SMTP id b205mr5464511qkc.69.1611948785521;
-        Fri, 29 Jan 2021 11:33:05 -0800 (PST)
+        bh=bqVdY6Y1Pq6EnP728WEfCslQJrqbbJH/OzjLm3CcFak=;
+        b=dS9xueiOlvHp69pLXScPobs6NTjCfmJIneOlTHAiZSwtFVEs6l8l12SPU+pqoUZFMl
+         FcwlmNELT2yV8GoIDUwh9vt1eX+DfVb87OMDvaYXSfeakhKzNIWDZKqMawhMx95uzCKC
+         tC1ubH174xSb0ytxjrGoxzQvbFvC0yx+bc3qMw9w4JSRoyVCA7ncbeiNxyChWnxQ0En0
+         vQtpX4f7GW2grIaH9TXpEPlykVJQLvPy8ssvJMbI6HZRyGu7IQUv6J/Gx2AOWfkuqk9T
+         QVEiVAMTD+2xmwckZxHpMSEhQDFZdfLyvw6TnpsaYrJf+0WNIA709oWasDYjC2WG1jEk
+         fw8g==
+X-Gm-Message-State: AOAM532p0s/PzaFIVs3wItHXrJpTj9oe6hJ8NUozu9DeCFa+Dbm00VRp
+	+8tct27CLNHwOkU+lK/38eTXIZtcUiE=
+X-Google-Smtp-Source: ABdhPJyNcVv2s6OfH0LXqQSxzBg0bM2teWMMrnalWOh+8lH382eWJR2cTxp36jtmwKB0alXh5vStVg==
+X-Received: by 2002:a37:a70c:: with SMTP id q12mr5811740qke.25.1611948788759;
+        Fri, 29 Jan 2021 11:33:08 -0800 (PST)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id h25sm6766606qkh.133.2021.01.29.11.33.04
+        by smtp.gmail.com with ESMTPSA id h25sm6766744qkh.133.2021.01.29.11.33.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jan 2021 11:33:04 -0800 (PST)
+        Fri, 29 Jan 2021 11:33:07 -0800 (PST)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -61,9 +61,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 3/6] ARM: tegra: Device tree changes for v5.12-rc1
-Date: Fri, 29 Jan 2021 20:32:51 +0100
-Message-Id: <20210129193254.3610492-3-thierry.reding@gmail.com>
+Subject: [GIT PULL 4/6] ARM: tegra: Default configuration changes for v5.12-rc1
+Date: Fri, 29 Jan 2021 20:32:52 +0100
+Message-Id: <20210129193254.3610492-4-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210129193254.3610492-1-thierry.reding@gmail.com>
 References: <20210129193254.3610492-1-thierry.reding@gmail.com>
@@ -79,24 +79,25 @@ The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.12-arm-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.12-arm-defconfig
 
-for you to fetch changes up to 3029a563ac0ccd39b9dc53eadfb9c0e3fb57a449:
+for you to fetch changes up to 760f9c2b84106fd02de701c964e7989c9802791b:
 
-  ARM: tegra: ouya: Fix eMMC on specific bootloaders (2021-01-29 17:08:03 +0100)
+  ARM: config: Enable Tegra SoC Thermal driver (2021-01-19 16:54:49 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-ARM: tegra: Device tree changes for v5.12-rc1
+ARM: tegra: Default configuration changes for v5.12-rc1
 
-Fixes the pinmux configuration for the eMMC on the Ouya to fix issues
-with certain bootloaders.
+Enables the Tegra SoC thermal driver on 32-bit platforms such as
+Tegra124.
 
 ----------------------------------------------------------------
-Peter Geis (1):
-      ARM: tegra: ouya: Fix eMMC on specific bootloaders
+Jon Hunter (1):
+      ARM: config: Enable Tegra SoC Thermal driver
 
- arch/arm/boot/dts/tegra30-ouya.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/configs/multi_v7_defconfig | 1 +
+ arch/arm/configs/tegra_defconfig    | 1 +
+ 2 files changed, 2 insertions(+)
