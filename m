@@ -9,14 +9,14 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 214A0C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 29 Jan 2021 19:34:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57595C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 29 Jan 2021 19:34:22 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C267361477
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 29 Jan 2021 19:34:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C267361477
+	by mail.kernel.org (Postfix) with ESMTPS id 219BB61477
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 29 Jan 2021 19:34:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 219BB61477
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -25,67 +25,66 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=jK+NnC4u+NjGsmmU7+/3BSzrmQTvb63hU4aY3Ck7wsM=; b=fyBtsysETRvGytWO7vWvDpHZM
-	CvsmbA+myqe2yis4MippgoXzRSJ8MsnI5B7ibTo3496Lb1JYhrI7pKc3EVeplg9DJpZO0k0Mno5CT
-	sT6+p7RVBkTrHFbOKUQqLhoyy4wqx71UYiGvOP4cwtw5UYwhRMQJ0fXgUe3jFJQojMDC/zRmDQ0sg
-	1hiBCASCxXKuJAfJxE+HiAf8Ayz+zPcjxHMBy3BXWxXLu31PeKT1Zcj6jgwNLeVfKXsSCiRrc+UVg
-	87zk3fQbB0e5B9ghZ0O3OiL94zmszuvFGl6zw1e5rfwJ5UmbmgluOkseBVqU8CvnnWdqQUG0t9GnX
-	m3eE+ngDw==;
+	 bh=ev3KIXmoJZt15/TvK5bqHe/WatWOHYxFlK89kg0k0X8=; b=H9iKHhVzhjSUShyV/2WKQcpOt
+	bwQa19RcsF4pibjIwQO0JuUz1IS4SL9r/2DwCh0DZPXyyL2wVrhM5JQAQ5rnSLHoj+qhwi/maBOGj
+	Ez9uUZXO5v0ez9Ania1J7pEpXVk+8q7fVSUH3oX7HvScb7xeuoX5jI3Y2oPdQ8t1xoAR9gPIJetqc
+	eGrBQRdr1NCZP9QKQhG5UJLmx31BzaiLtvsCtJ9txklqfAk6F6nFugRVg49IgcroAdLlqwMtDahom
+	T6ZY7vZXP6fwOE9xUANIjDItjtL2wsASR347mzu+MmECfA59MXVN4JknpcdhfgEx5miOoVpWgEesu
+	d0RkJQR6A==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l5ZW1-00022H-1B; Fri, 29 Jan 2021 19:33:09 +0000
-Received: from mail-qv1-xf33.google.com ([2607:f8b0:4864:20::f33])
+	id 1l5ZW3-00022Y-1U; Fri, 29 Jan 2021 19:33:11 +0000
+Received: from mail-qk1-x730.google.com ([2607:f8b0:4864:20::730])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l5ZVv-00020v-Lg
- for linux-arm-kernel@lists.infradead.org; Fri, 29 Jan 2021 19:33:04 +0000
-Received: by mail-qv1-xf33.google.com with SMTP id h21so5004184qvb.8
+ id 1l5ZVz-00021l-5r
+ for linux-arm-kernel@lists.infradead.org; Fri, 29 Jan 2021 19:33:08 +0000
+Received: by mail-qk1-x730.google.com with SMTP id k193so9860869qke.6
  for <linux-arm-kernel@lists.infradead.org>;
- Fri, 29 Jan 2021 11:33:03 -0800 (PST)
+ Fri, 29 Jan 2021 11:33:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=mwt6PYt422RZr5pAeACM9vyiMCyLXs8GJeF9XZ1Ku/4=;
- b=XvEoFspRjc44ZPN01jRZgrDB0RcoMQx30OGPldUb0GekBNzzbbWHmmokWKb1QpDcY0
- zT8sD6jjRTNCsPDMtwG13pdDrr+UsKufx70NWQhm4z0PZxMWhsUxu64Pil/833RPbD4w
- moUi/1sJbECYY9mXtGpFubfV4066tSJKNGKRWmTCj3uOr1+p16awkyTBKK7HD/Woz1HT
- vVAK0mNtCgAzuQqSh8EXnkGt/bS0QMEesvVIN56zlBp3xGVLvvoINi8JRieE+x/R5+6Q
- 3ctFEHB8o2/qAzYwfHbAKspZnEicA0Zr5ed5yWApu6wZMBPCi3W2sFnfpIx53UbJQIsz
- BqlA==
+ bh=UF1FuT9xzOslp9BVbzccUgOHaBgiNbyOucfQV9Cc5yo=;
+ b=p7Bxm9vXWp1Jsk7ePN8o05nMake6NtcSCHPOUp4IBM8uA6cRJMVtj/PQ2f8JT+w2yN
+ S1zS0LbAiVE6LteP/hEaHXYE5QWLHzkZ66rOrOAc49BNUQ4UwtFqZbQjjI9a5fA7euvE
+ tHj7f4UXx2/DEJzqcFdArsL+9FIk5PgrF4A/Goxznvjd4vvmeMprDgaruLqthn+2aSLY
+ oeMnOzsTHqfZq7gi04uI+ugWd7+KqwJc9tLjf6d55wrqrRioHVz3JHcOGzGAcNZ7x8fD
+ Ab6Ol8yUSisOuF7llSasEenm2TwZ52VvyEo4nhXrfOKubM84dLxMPOhMx6MPmXb/Qjif
+ C4TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=mwt6PYt422RZr5pAeACM9vyiMCyLXs8GJeF9XZ1Ku/4=;
- b=uZd0zrKU/fs0Ymhm4W3CmstQSq+xTTZvFVFxw6Vb8u41sitF7NfPUrjGccF1j1JTpO
- pQhUEfd+Q2/IaFyWGRgrdfzYpNg4EImwrTkD2q3kqQtkZLgcocZF4KilxKFBOzCXC/xL
- pF62Ragwmk8E/TUov5Wv4VMy+giGnmN2mv70AdLW5exRpVATGAtSl7RieMLCleRL7YHV
- Tmf7za7YzGf7ZLnAADxPPFgAqqZKvgBsGRR0gNRJAeU71h9Q90EWxW69HFiPGAJq5nBw
- lyHpD7C35zu5JBnUvY7ewXpIlVjiUsLnCFbF/dm2gP/FMfbY0jhhDQj8JB5pKc/XxTJ/
- XPaA==
-X-Gm-Message-State: AOAM532XT8XDDSJzPYjAr3WoKZYdi/SC4BGpHfVlBS0XT9JIw33cWLQt
- RPrl1UA0bRlFmcdt+Wy6C4o=
-X-Google-Smtp-Source: ABdhPJz6//JxPflubp5RhH+Qrff2wJYD+9lPMkoqu3M/SZu9QEK9EVrKezOiEwB1HQiXJU1P+wJCkQ==
-X-Received: by 2002:a05:6214:7aa:: with SMTP id
- v10mr5405656qvz.2.1611948781910; 
- Fri, 29 Jan 2021 11:33:01 -0800 (PST)
+ bh=UF1FuT9xzOslp9BVbzccUgOHaBgiNbyOucfQV9Cc5yo=;
+ b=jTBjwt5grTYRwcEzg6PFnEefE07Dq12j2eDyZIRj5WOF+tqc+blZ4ORsubkdp66XYc
+ yaZcwuikMByCd/g0qGd77i4sDmzvYONtXQsyqzbuZaUSg/J5FfEEuvbe0RBkiQtVfExI
+ gFI/5HUZviV+n5A0Dgigefg9pdU/bNxhgAqX+HLrodDPxxZYzRlnpt2PE19AjaH6520/
+ L161kuFJZxaNhK1Ps7jtg4KA5FIm93p7r8UR0pbdQwkP5ABPfXkJRvyjk8lc/JSmcsyo
+ jIKNfYPoFKqfQW2sJLH92JlU9N6jk6vZ2p5HGdI3yqO1dzBemzwz2BrkcOnm2uY+ZWFe
+ k5jQ==
+X-Gm-Message-State: AOAM530aUx4jSFT+/1kJysQxe/WtabO4AigogSe+qidbbhb61nTvLoyU
+ uWe1gW2cgKPEKfFVEnL01KQ=
+X-Google-Smtp-Source: ABdhPJzjSr3CRtJQQqcROceNY8YzqlkRQ25Fs6knj39dqXcwFByXRuKueo1b3ldP5TkneR94nG3FAw==
+X-Received: by 2002:a37:67d6:: with SMTP id b205mr5464511qkc.69.1611948785521; 
+ Fri, 29 Jan 2021 11:33:05 -0800 (PST)
 Received: from localhost ([62.96.65.119])
- by smtp.gmail.com with ESMTPSA id m10sm2615314qtp.72.2021.01.29.11.33.00
+ by smtp.gmail.com with ESMTPSA id h25sm6766606qkh.133.2021.01.29.11.33.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 Jan 2021 11:33:01 -0800 (PST)
+ Fri, 29 Jan 2021 11:33:04 -0800 (PST)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
-Subject: [GIT PULL 2/6] dt-bindings: tegra: Changes for v5.12-rc1
-Date: Fri, 29 Jan 2021 20:32:50 +0100
-Message-ID: <20210129193254.3610492-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/6] ARM: tegra: Device tree changes for v5.12-rc1
+Date: Fri, 29 Jan 2021 20:32:51 +0100
+Message-ID: <20210129193254.3610492-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210129193254.3610492-1-thierry.reding@gmail.com>
 References: <20210129193254.3610492-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210129_143303_746420_B520ABC3 
-X-CRM114-Status: GOOD (  10.93  )
+X-CRM114-CacheID: sfid-20210129_143307_311350_B647D719 
+X-CRM114-Status: GOOD (  11.74  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,7 +102,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210129193250.M3z-B0WgM1NSDJIcL10SBqqixEnnEmcXHaOVHYu0S9Q@z>
+Message-ID: <20210129193251.VtlC5ZB32TQxW0UYpCwYf1xd83Vu_dfT3aOyuKPX9Qw@z>
 
 Hi ARM SoC maintainers,
 
@@ -113,31 +112,27 @@ The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.12-dt-bindings
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.12-arm-dt
 
-for you to fetch changes up to 6c50321fd65135a28450f16b5745b72368d61006:
+for you to fetch changes up to 3029a563ac0ccd39b9dc53eadfb9c0e3fb57a449:
 
-  dt-bindings: arm: tegra: Document Jetson Xavier NX eMMC SKU (2021-01-29 16:56:47 +0100)
+  ARM: tegra: ouya: Fix eMMC on specific bootloaders (2021-01-29 17:08:03 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-dt-bindings: tegra: Changes for v5.12-rc1
+ARM: tegra: Device tree changes for v5.12-rc1
 
-Exposed a new QSPI clock to DT on Tegra210 and documents the eMMC SKU of
-the Jetson Xavier NX board.
+Fixes the pinmux configuration for the eMMC on the Ouya to fix issues
+with certain bootloaders.
 
 ----------------------------------------------------------------
-Sowjanya Komatineni (1):
-      dt-bindings: clock: tegra: Add clock ID TEGRA210_CLK_QSPI_PM
+Peter Geis (1):
+      ARM: tegra: ouya: Fix eMMC on specific bootloaders
 
-Thierry Reding (1):
-      dt-bindings: arm: tegra: Document Jetson Xavier NX eMMC SKU
-
- Documentation/devicetree/bindings/arm/tegra.yaml | 8 ++++++++
- include/dt-bindings/clock/tegra210-car.h         | 2 +-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/tegra30-ouya.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 _______________________________________________
 linux-arm-kernel mailing list
