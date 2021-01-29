@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B2B1C433E0
-	for <soc@archiver.kernel.org>; Fri, 29 Jan 2021 19:33:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3366C433E0
+	for <soc@archiver.kernel.org>; Fri, 29 Jan 2021 19:33:07 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E6FE164E09; Fri, 29 Jan 2021 19:33:03 +0000 (UTC)
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	id 97FA364DFB; Fri, 29 Jan 2021 19:33:07 +0000 (UTC)
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 877DE64DE3;
-	Fri, 29 Jan 2021 19:33:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 877DE64DE3
+	by mail.kernel.org (Postfix) with ESMTPS id 3D26264DE3;
+	Fri, 29 Jan 2021 19:33:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3D26264DE3
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=thierry.reding@gmail.com
-Received: by mail-qv1-f42.google.com with SMTP id u20so973258qvx.7;
-        Fri, 29 Jan 2021 11:33:03 -0800 (PST)
+Received: by mail-qk1-f179.google.com with SMTP id a7so9835883qkb.13;
+        Fri, 29 Jan 2021 11:33:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mwt6PYt422RZr5pAeACM9vyiMCyLXs8GJeF9XZ1Ku/4=;
-        b=XvEoFspRjc44ZPN01jRZgrDB0RcoMQx30OGPldUb0GekBNzzbbWHmmokWKb1QpDcY0
-         zT8sD6jjRTNCsPDMtwG13pdDrr+UsKufx70NWQhm4z0PZxMWhsUxu64Pil/833RPbD4w
-         moUi/1sJbECYY9mXtGpFubfV4066tSJKNGKRWmTCj3uOr1+p16awkyTBKK7HD/Woz1HT
-         vVAK0mNtCgAzuQqSh8EXnkGt/bS0QMEesvVIN56zlBp3xGVLvvoINi8JRieE+x/R5+6Q
-         3ctFEHB8o2/qAzYwfHbAKspZnEicA0Zr5ed5yWApu6wZMBPCi3W2sFnfpIx53UbJQIsz
-         BqlA==
+        bh=UF1FuT9xzOslp9BVbzccUgOHaBgiNbyOucfQV9Cc5yo=;
+        b=p7Bxm9vXWp1Jsk7ePN8o05nMake6NtcSCHPOUp4IBM8uA6cRJMVtj/PQ2f8JT+w2yN
+         S1zS0LbAiVE6LteP/hEaHXYE5QWLHzkZ66rOrOAc49BNUQ4UwtFqZbQjjI9a5fA7euvE
+         tHj7f4UXx2/DEJzqcFdArsL+9FIk5PgrF4A/Goxznvjd4vvmeMprDgaruLqthn+2aSLY
+         oeMnOzsTHqfZq7gi04uI+ugWd7+KqwJc9tLjf6d55wrqrRioHVz3JHcOGzGAcNZ7x8fD
+         Ab6Ol8yUSisOuF7llSasEenm2TwZ52VvyEo4nhXrfOKubM84dLxMPOhMx6MPmXb/Qjif
+         C4TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mwt6PYt422RZr5pAeACM9vyiMCyLXs8GJeF9XZ1Ku/4=;
-        b=hWxLGP0ozsYvuVEkgIPSEW8/Zt4zX/8bqQhhXEG4rqokeg4LMxv9GAFt0kYHtfQDih
-         6xNsCQq/Blf2k4dMJMzdG1yX8Id5oiU/BmmMuOG5+jJFOcTSAIbUqB5SvMniifDxnX4+
-         3/DieCeseyW7bZL7+geSezxKNFpDgNGH3mlv7Vq+/XmXKLFP5XYOLF19xC7vtCpuZXuP
-         h9/4ZVFPdDPURkt4ZJUXJkrN0y3Sh+Bcak5Gx1U/KuCFNbEUG4YGiZzSwLdhRX6qMRUE
-         w6ev+vFKPc1u4hqzI3e6jLRIbK+IGt7kj5F3DJG8mHHUDus5YY4iBXI6w+115LQjim+I
-         Ap6A==
-X-Gm-Message-State: AOAM5320CxJxt+l2wr3VSQvW4jKbhk6uGJ1mYhH5VQk1tiBY4B+JfE89
-	k3JatJtGmRh5VBVZQQyCQjoLO58rTlY=
-X-Google-Smtp-Source: ABdhPJz6//JxPflubp5RhH+Qrff2wJYD+9lPMkoqu3M/SZu9QEK9EVrKezOiEwB1HQiXJU1P+wJCkQ==
-X-Received: by 2002:a05:6214:7aa:: with SMTP id v10mr5405656qvz.2.1611948781910;
-        Fri, 29 Jan 2021 11:33:01 -0800 (PST)
+        bh=UF1FuT9xzOslp9BVbzccUgOHaBgiNbyOucfQV9Cc5yo=;
+        b=IKBoYJm7p0ES729RkBBlNgNYq/hLMEvw1FjYbKlwoQu+RJ9GIEYMUJhipEQCyEIz8A
+         9o+QugLzB2iXFV6Sn0Vw8RNSLprFN4TyIy7AhYO0OZx90blCpiQIPakMyXbj2x+or+fB
+         czrKBPDp4cTJXNx7+5skIm5GWmXGTVw+UmSZJcFagwSSmF7sCIs2xbcOQyGcc38zBrB9
+         CKhTkuCQQtPQu7kxtIVrduZQb2tkGmguh3Q5JYLV6UKmMH1QR2AJv3amqk00i1tJ409Y
+         o5ETEThKVw57J7eidfpjbQV61MweQcO7Uce1TutHM/+Z7KSWXhClPr1xRkA5Xpjsssc1
+         pbtA==
+X-Gm-Message-State: AOAM530eE3DyqIepRWhuvw9ugU5iC5uzGSbel1ekEPWEPHFazLoJmBKR
+	L6gHvmQqY+aGx4CiT4n8o6xbZka8Vww=
+X-Google-Smtp-Source: ABdhPJzjSr3CRtJQQqcROceNY8YzqlkRQ25Fs6knj39dqXcwFByXRuKueo1b3ldP5TkneR94nG3FAw==
+X-Received: by 2002:a37:67d6:: with SMTP id b205mr5464511qkc.69.1611948785521;
+        Fri, 29 Jan 2021 11:33:05 -0800 (PST)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id m10sm2615314qtp.72.2021.01.29.11.33.00
+        by smtp.gmail.com with ESMTPSA id h25sm6766606qkh.133.2021.01.29.11.33.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jan 2021 11:33:01 -0800 (PST)
+        Fri, 29 Jan 2021 11:33:04 -0800 (PST)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -61,9 +61,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/6] dt-bindings: tegra: Changes for v5.12-rc1
-Date: Fri, 29 Jan 2021 20:32:50 +0100
-Message-Id: <20210129193254.3610492-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/6] ARM: tegra: Device tree changes for v5.12-rc1
+Date: Fri, 29 Jan 2021 20:32:51 +0100
+Message-Id: <20210129193254.3610492-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210129193254.3610492-1-thierry.reding@gmail.com>
 References: <20210129193254.3610492-1-thierry.reding@gmail.com>
@@ -79,28 +79,24 @@ The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.12-dt-bindings
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.12-arm-dt
 
-for you to fetch changes up to 6c50321fd65135a28450f16b5745b72368d61006:
+for you to fetch changes up to 3029a563ac0ccd39b9dc53eadfb9c0e3fb57a449:
 
-  dt-bindings: arm: tegra: Document Jetson Xavier NX eMMC SKU (2021-01-29 16:56:47 +0100)
+  ARM: tegra: ouya: Fix eMMC on specific bootloaders (2021-01-29 17:08:03 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-dt-bindings: tegra: Changes for v5.12-rc1
+ARM: tegra: Device tree changes for v5.12-rc1
 
-Exposed a new QSPI clock to DT on Tegra210 and documents the eMMC SKU of
-the Jetson Xavier NX board.
+Fixes the pinmux configuration for the eMMC on the Ouya to fix issues
+with certain bootloaders.
 
 ----------------------------------------------------------------
-Sowjanya Komatineni (1):
-      dt-bindings: clock: tegra: Add clock ID TEGRA210_CLK_QSPI_PM
+Peter Geis (1):
+      ARM: tegra: ouya: Fix eMMC on specific bootloaders
 
-Thierry Reding (1):
-      dt-bindings: arm: tegra: Document Jetson Xavier NX eMMC SKU
-
- Documentation/devicetree/bindings/arm/tegra.yaml | 8 ++++++++
- include/dt-bindings/clock/tegra210-car.h         | 2 +-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/tegra30-ouya.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
