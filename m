@@ -1,138 +1,125 @@
-Return-Path: <SRS0=/U+x=HA=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=NtjV=HA=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C974DC433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 29 Jan 2021 08:50:12 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2B4FC433DB
+	for <soc@archiver.kernel.org>; Fri, 29 Jan 2021 09:00:52 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7253C64E22; Fri, 29 Jan 2021 09:00:52 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5E3E064DEB
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 29 Jan 2021 08:50:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5E3E064DEB
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=foss.st.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=vwbyGFu34o6hvN2UxbIXRGqfSqKjGEQiC2fqOiB9XdI=; b=oRirnjuO1B+ap9IgpaKq40ITUd
-	Gw9coG/OgxOI78wmSr9QIvy/OsbfhthqEhSdndcjxKh3Gv3xOGPq/KeGtYYi73+kuynPvsYxDEppG
-	JEU4Vw4Bu7uUrz3c5SYzdbrIDTt/B1Nd5ZctCMhygsSWoFbiPQkBOA8ud15kQfB8jR+EEbLbIFvjH
-	JEC1stxO40FgR3WD7feMTSlRr4xCLvEe9g2yTF1rzLjoRH5SYmgGoH/H/n0/T6ozVsM+OrAFnmGBr
-	5Z8bYqRo5Gip9gz58/ir9C90h/gLO82rNPnQt+nmU7zRwdB/yRcsactCGLrbn73Ua4g7NTmmfERZg
-	Lt9f3MAw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l5PSa-0007jH-2L; Fri, 29 Jan 2021 08:48:56 +0000
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]
- helo=mx07-00178001.pphosted.com)
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l5PSW-0007ho-PL
- for linux-arm-kernel@lists.infradead.org; Fri, 29 Jan 2021 08:48:53 +0000
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
- by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id
- 10T8g12F019183; Fri, 29 Jan 2021 09:48:43 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
- h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=Y4R51dVXYytMnFJd2sUfWLMCXjGfjNB5brYNmHLmDQk=;
- b=Yq/PxWDu5sf7DH0+reXTpSM3J9xRUoGahlkRq5Zdr8e4DNjzFoojVhMQuS0mY7fkEkjl
- n97cBZeDVEMWLF2wo0U4BmPwl1ySvrU7E3lfENqOtcWJk8d7RamdhRXf/9pkYZVrj/VM
- gw9sja9qfckbY3a2zZyC8ThElzBxcHcH98ZRE6n3rmmcq2bYl0jSZv9KJONmgsyd7BwK
- FX/cUYTooMEOtTJiZAp/b25dWuZXlb0YW1filO5w6+jLirVZvFU6/JeM4pjtzVLJ7ZsJ
- qsfiYiU3g9keIipg6I1JKjqHcOwXpt1fm0Zmj4aVfD0DAxMXklLvE966rIMqwSCz0GDe Vg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
- by mx07-00178001.pphosted.com with ESMTP id 3689tec64r-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Fri, 29 Jan 2021 09:48:43 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
- by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F1A5310002A;
- Fri, 29 Jan 2021 09:48:42 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
- by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E1408221793;
- Fri, 29 Jan 2021 09:48:42 +0100 (CET)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 29 Jan 2021 09:48:42
- +0100
-From: Alexandre Torgue <alexandre.torgue@foss.st.com>
+	by mail.kernel.org (Postfix) with ESMTPS id E9C3864E20;
+	Fri, 29 Jan 2021 09:00:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E9C3864E20
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=Nicolas.Ferre@microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1611910852; x=1643446852;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=b6vV06zCZmgKZ/7BPwxq3c9K7YNtOdwxJzxTQOWp68U=;
+  b=gbL3/Hoq+VKLhvrEJQGW2O7WBkB/3yfT6yEtsUHl1DqRgvDw0orEbOll
+   z5vYKRtw8a389QhgM8dCSZl2W0NxCbIJygihOTxRfFgRZ995WB0kWBr9d
+   po535MWcTB8gip5/ZsaYGi2gk69NjLd0l3xCqfC1No4KYbfJt+fCa7plL
+   ZKQUnWOERWENQ9kGvNHF1rP+jMKl71MWNR8aL0DA/ywks1PfFIhPDQgMx
+   rn2hjeaTkR/Ub8MdPdDHzrxZ6qqHcL5KQh+ij4953q4NZKPPQZasxkXBU
+   1YVoRW9fZA2Q6vEWwVmkzhszAVEmVLEG7Sb+B9jjl2VauKrB3tiO5Fodl
+   A==;
+IronPort-SDR: Y8Pv7I4JiuAuAUr1Oc07mAGISxUvodaHAuOGNbtUXVctw1jNRmwnG9e18PLIcD9UpsjdzUhhod
+ EyyS6o0LCJB+TKLjLZZF0gnDRfvE14KwTW2IDsAYn+L9GXqJcbsrMcLh/UQIZU+Xpxk8zEsp51
+ J4YtvSydIfYQwP5Twjd+LHMxxS9e4NF3np/4hxhsIlhtKYOzUr1KORekjvz1huauA+T0KWOheg
+ oUg7f6aRu+CsOzMeSRQkoMxHVziulqyNa+cArYMRQs8KIA7U+lOuEITMAd7x1oobUsvY/RDMSK
+ fIU=
+X-IronPort-AV: E=Sophos;i="5.79,385,1602572400"; 
+   d="scan'208";a="101890434"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Jan 2021 02:00:49 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 29 Jan 2021 02:00:49 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.1979.3 via Frontend Transport; Fri, 29 Jan 2021 02:00:47 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Kevin
- Hilman <khilman@baylibre.com>,
- <linux-arm-kernel@lists.infradead.org>, <soc@kernel.org>, <arm@kernel.org>
-Subject: [PATCH] ARM: multi_v7_defconfig: add STM32 CEC support
-Date: Fri, 29 Jan 2021 09:48:42 +0100
-Message-ID: <20210129084842.29123-1-alexandre.torgue@foss.st.com>
-X-Mailer: git-send-email 2.17.1
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Ludovic Desroches
+	<ludovic.desroches@microchip.com>, Claudiu Beznea
+	<claudiu.beznea@microchip.com>
+Subject: [GIT PULL] ARM: at91: soc for 5.12 #2
+Date: Fri, 29 Jan 2021 10:00:30 +0100
+Message-ID: <20210129090030.26976-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG3NODE2.st.com (10.75.127.8) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343, 18.0.737
- definitions=2021-01-29_03:2021-01-28,
- 2021-01-29 signatures=0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210129_034853_163019_9C4BE921 
-X-CRM114-Status: GOOD (  13.19  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210129084842.gjst1O_hwIqca0hBCdH1PNr5CMYGHuTmzSNKQ1_85JU@z>
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: Yannick Fertre <yannick.fertre@foss.st.com>
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Enable CEC support for STMicroelectronics as loadable module.
+Arnd, Olof,
 
-Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
-Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Here is the second batch of soc changes for 5.12. Actually first batch was
+consumed as "fixes" following our discussion here:
+https://lore.kernel.org/linux-arm-kernel/CAK8P3a1v=_4E40cZjZ-ff7vs84XE9XaxwdoGW7Rf+LYiA+TCTw@mail.gmail.com/
+Note that v5.11-rc1 is the root of this Pull-Request so the 2 first patches are
+the ones already taken as fixes.
 
----
+The fixes are now in Linus' tree and this branch is merged in linux-next for an
+handful of days.
+However, tell me if you'd prefer that I merge the arm-soc "arm/fixes" branch before
+adding the at91 soc patches on top.
 
-Hi,
+Thanks, best regards,
+  Nicolas
 
-I only have this patch for stm32 config v5.12 PR. Can you merge it please ?
+The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
-Thanks
-Alex
+  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index c5f25710fedc..05cc0607a9ad 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -656,6 +656,7 @@ CONFIG_V4L_TEST_DRIVERS=y
- CONFIG_VIDEO_VIVID=m
- CONFIG_CEC_PLATFORM_DRIVERS=y
- CONFIG_CEC_SAMSUNG_S5P=m
-+CONFIG_CEC_STM32=m
- CONFIG_VIDEO_ADV7180=m
- CONFIG_VIDEO_ADV7604=m
- CONFIG_VIDEO_ADV7604_CEC=y
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-soc-5.12-2
+
+for you to fetch changes up to cd9168b4377932a6494d464db1ddd3f63e41fce3:
+
+  drivers: soc: atmel: add spdx license identifier (2021-01-26 11:25:08 +0100)
+
+----------------------------------------------------------------
+AT91 SoC for 5.12 #2
+
+- addition of SAMA7G5 identification to soc.c driver
+- enhancements to this soc.c driver
+
+----------------------------------------------------------------
+Claudiu Beznea (7):
+      drivers: soc: atmel: add null entry at the end of at91_soc_allowed_list[]
+      drivers: soc: atmel: use GENMASK
+      drivers: soc: atmel: fix "__initconst should be placed after socs[]" warning
+      drivers: soc: atmel: add per soc id and version match masks
+      dt-bindings: atmel-sysreg: add "microchip, sama7g5-chipid"
+      drivers: soc: atmel: add support for sama7g5
+      drivers: soc: atmel: add spdx license identifier
+
+Sudeep Holla (1):
+      drivers: soc: atmel: Avoid calling at91_soc_init on non AT91 SoCs
+
+ .../devicetree/bindings/arm/atmel-sysregs.txt      |   2 +-
+ drivers/soc/atmel/soc.c                            | 240 ++++++++++++++-------
+ drivers/soc/atmel/soc.h                            |  19 +-
+ 3 files changed, 182 insertions(+), 79 deletions(-)
+
 -- 
-2.17.1
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Nicolas Ferre
