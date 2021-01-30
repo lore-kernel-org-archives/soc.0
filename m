@@ -6,57 +6,58 @@ X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89293C43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1331C4332B
 	for <soc@archiver.kernel.org>; Sat, 30 Jan 2021 00:00:10 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 90C5F64E0E; Sat, 30 Jan 2021 00:00:09 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 73C3664E06;
+	id AD0FC64E0F; Sat, 30 Jan 2021 00:00:09 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 890CF64E0B;
 	Sat, 30 Jan 2021 00:00:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1611964809;
-	bh=KCQji4thmVFgRw0f+sWdSmQZUKayhUK6qc+dy19q7u0=;
+	bh=fqZ3U32DAB4BRiEuiIrP592V/497adx2IFu+UaFhmrs=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=DbYV0CK9D0D6mThqTJzQlMc+D8J6L67YDsVaNtCA7S3OTDftFErDg4Gq1ktE6w3pn
-	 sNcbKMH/dlbj1JGpGPzmucNAD1zmMu/0vpUexEhTngZknosMaCnOwhqiES7FqWVRIK
-	 XCXwaZTAXL6cy1IwSNa80E9WNF+YFYP2W9JTbrQBBMBIyWzMbpIDZlTgVkVjbmi3sz
-	 2OGa6mYTC2YShFtKrH+8Q4S6lNvuTExMk/KOa3WyDExb0/o2lqlZCTVSSiQReHfzIB
-	 op1HgzSZskVLlASso3mjRa4flsk5k+3XbFJ1e/EdPqx+HUO9G3CuKwUxH+tH6jNm7y
-	 orIEZkwCKV19Q==
+	b=uYfUtGsxGwblWIqR2rXwPpf1a2xyd/lwaaCIfT14KfgUJHU1wN5d1NOLlBUPxX3M9
+	 3Y/CDCAIpndaxlOBFiKQkv5foWDoI0HRzFe3UpGXGAzbKuAtYZixp8Hmo3NvK5Mt/D
+	 dBIXqmcsneAlC09EpW4aOAE/P7Ayo+kmBO3jAJwYfvNsv0Ru15ihp766n/CgOS/ubx
+	 2Pso+WYhz0gJYcOSgL6HlDeEgGKMWsK6k1yvWApdo1rnb8M6xCw+iy1s+Wh2V10rro
+	 pPD6qHxFjs/fDsKqrLmpioSgh5stsNmEv8GHMH+xm469xk7FNkOlT6i9b/tO7KfOQQ
+	 j9ALqymJdQLFQ==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 726EC60964;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 798F960963;
 	Sat, 30 Jan 2021 00:00:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL v2] arm64: dts: hisilicon dts updates for v5.12
+Subject: Re: [GIT PULL 0/2] Renesas ARM SoC updates for v5.12 (take two)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <161196480946.10199.8659838849503934289.git-patchwork-notify@kernel.org>
+ <161196480949.10199.9514190081534299956.git-patchwork-notify@kernel.org>
 Date: Sat, 30 Jan 2021 00:00:09 +0000
-References: <6013D1C7.90902@hisilicon.com>
-In-Reply-To: <6013D1C7.90902@hisilicon.com>
-To: Wei Xu <xuwei5@hisilicon.com>
+References: <20210129090815.2552425-1-geert+renesas@glider.be>
+In-Reply-To: <20210129090815.2552425-1-geert+renesas@glider.be>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (refs/heads/for-next):
+This series was applied to soc/soc.git (refs/heads/for-next):
 
-On Fri, 29 Jan 2021 17:13:43 +0800 you wrote:
-> Hi ARM-SoC team,
+On Fri, 29 Jan 2021 10:08:13 +0100 you wrote:
+> Hi arm-soc folks,
 > 
-> Please consider to pull the following changes.
-> Thanks!
+> This is my second pull request for the inclusion of Renesas SoC updates
+> for v5.12.
 > 
-> Best Regards,
-> Wei
+> It consists of 2 parts:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,v2] arm64: dts: hisilicon dts updates for v5.12
-    https://git.kernel.org/soc/soc/c/0b9c5cdda98c
+  - [GIT,PULL,1/2] Renesas ARM DT updates for v5.12 (take two)
+    https://git.kernel.org/soc/soc/c/af91156490c2
+  - [GIT,PULL,2/2] Renesas driver updates for v5.12
+    https://git.kernel.org/soc/soc/c/e53686bbdfd2
 
 You are awesome, thank you!
 --
