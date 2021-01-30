@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C0EEC433DB
-	for <soc@archiver.kernel.org>; Sat, 30 Jan 2021 11:34:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C326C433DB
+	for <soc@archiver.kernel.org>; Sat, 30 Jan 2021 11:34:30 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 4682064E0F; Sat, 30 Jan 2021 11:34:28 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BD22664E04;
-	Sat, 30 Jan 2021 11:34:26 +0000 (UTC)
+	id 1D96964E0B; Sat, 30 Jan 2021 11:34:30 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9400A64DDF;
+	Sat, 30 Jan 2021 11:34:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612006468;
-	bh=d8GcrjGDLIwrGWLphhWZs9SU7wZ1m4dEn+3+Vn4+5yo=;
+	s=k20201202; t=1612006470;
+	bh=c3GEQT6oF9+wQR9UrszOyvn7CwWaAsxfZPnG9Fw3y5k=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OvXEvTuMyhIWSg2gB8+xRttkph8DEHfL0nz4jm0E3SwDKczLvw2TIqTdOQKGR1C8D
-	 VR4qTrrnPDPIHVTcDMbPcmO8dTINF3m1LfQTwgnUjd+YGvzvRZK14wuQcOgD4Ex0Y0
-	 UQhpJuVZ9dkZtI4KIId/nNEyADOoMFtYNdy4Qv9PVeCvbDBoAtkwuqzcnBduyKcqL1
-	 mZc835QGLLlKqbLMYQr1IQfDr74RfPj+n/GBnjqljxLerFIodGLoVS9T6sZKmbMqSz
-	 XZRw9pYRIGU5sq1v19rWvjRfFtIENKlfrVYkIp0qh5JryN4I1FbpBVHcQM71rggopm
-	 1eo60qRV3+3Uw==
+	b=uhBSM8+kB3ldiLDr9je46/nAXbfiZbUElDmzIFQbewJccel1VemPA8Uc1y8xF6mZX
+	 WLcEvfr8PxNkD9nm5CUo4cNmVZzR8tmBYRNlbg9lpVZkprGntSSVWX8NsKosA3dM65
+	 eFOPcvHMfkRoXembeLQj3HW/QOyUsryePS2eXsAmwgwJkpveZ6pmBOp5ttIGXF2r5R
+	 W8OaRppiXMBQKwVeOalH0k7gtFfNO5NOj/27iK1n89zy9uSWc8wXMgjhkwcmuDYo3R
+	 XSlR64W3yJo5l/291x91PNCs77EL/a4+Q2KnAkOtddj55xLq/ia97KQrGW5VQFWbo/
+	 BCjoE7qFOCSGg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -32,30 +32,30 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Jon Hunter <jonathanh@nvidia.com>
-Subject: Re: [GIT PULL 3/6] ARM: tegra: Device tree changes for v5.12-rc1
-Date: Sat, 30 Jan 2021 12:34:12 +0100
-Message-Id: <161200641711.2316427.8570821957670465504.b4-ty@arndb.de>
+Subject: Re: [GIT PULL 5/6] arm64: tegra: Device tree changes for v5.12-rc1
+Date: Sat, 30 Jan 2021 12:34:13 +0100
+Message-Id: <161200641725.2316427.6123673465143311055.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210129193254.3610492-3-thierry.reding@gmail.com>
-References: <20210129193254.3610492-1-thierry.reding@gmail.com> <20210129193254.3610492-3-thierry.reding@gmail.com>
+In-Reply-To: <20210129193254.3610492-5-thierry.reding@gmail.com>
+References: <20210129193254.3610492-1-thierry.reding@gmail.com> <20210129193254.3610492-5-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 29 Jan 2021 20:32:51 +0100, Thierry Reding wrote:
+On Fri, 29 Jan 2021 20:32:53 +0100, Thierry Reding wrote:
 > The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 > 
 >   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.12-arm-dt
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.12-arm64-dt
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 7b76b46d07e0eb754e9517717227595637dc4a46
+merge commit: 3161160c8a1c9978dc8d5ab79f2a467d59a312d9
 
        Arnd
