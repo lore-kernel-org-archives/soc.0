@@ -1,108 +1,61 @@
-Return-Path: <SRS0=N7fp=HB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08F1BC433E6
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 30 Jan 2021 11:27:35 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B74C664DDB
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 30 Jan 2021 11:27:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B74C664DDB
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=v1zkRPJjLs46oi2ViuLngULkctZl5c+a9LPTG6gH8ig=; b=O3KtnqaTBZHpBduf5zJX7bJI7
-	ANd6k+VlYzEDtp/ljxpFuBkOrWKIi2EtHblHzQsewEuprogMhDBRZfjqQe1IpZPlN1/hFDUAo8vkE
-	305XJ6uCMG7foSUtTo44uHBgpMAVVelT5eEraaq6RVqvQeLCcYbZhH+le4cS+CG0atWBNOmIjPV8G
-	6P1eqLS3Bx4cN86ERQ5SBk5F+R+M8wjbx2/UaVcvxOABXXTbopbyqNFt7Knw8+zR+7i3uGa/NTu5B
-	cZMNdBSlUul15Zk3FParXZhzUmecmJ0QAu7p2XyN/L3tD35nzhdzmWljqFIyeOztz698l+57geWA6
-	REj+hKxmQ==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l5oOl-0007CI-OZ; Sat, 30 Jan 2021 11:26:39 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l5oOe-0007Ai-22
- for linux-arm-kernel@lists.infradead.org; Sat, 30 Jan 2021 11:26:32 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1973D64E0A;
- Sat, 30 Jan 2021 11:26:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEFFCC433E0
+	for <soc@archiver.kernel.org>; Sat, 30 Jan 2021 11:28:41 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A430264E0C; Sat, 30 Jan 2021 11:28:41 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2446D64DDB;
+	Sat, 30 Jan 2021 11:28:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612005991;
- bh=mOmeB4tPT9hhBNqlsMvRo2GOSWwEIsv3ihHCaa9+WRw=;
- h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=aiXw8hjxtAqoDsQ6d1LQeLZFhKvq/3HdDHWl8Uj256WoFN0/v4kvXJqNPuIneHxEi
- g05+ZD6eAZ4o9IE4gYnyugB5zlhF0OKzknQFPEt5gtx9w/4PKAwPYpIewWDR8PGRxX
- 2CCGQRDYs0N7zf3ZZTtoFaScAac9lHZCLCabyf2V+vZHonCE/UovvlTbweOYtpekMO
- akxo8mE25k1UW3PVat5zfQHzuFSIaqsmGsGUfOh5WwOrdph3M4QWdaaNeckX7WStid
- +bQTeOSbfOtSwD0603LE6G0GrvTz43URpoSfbOohGBOSYmVsKoOXMWwnxCPLpT05Yy
- p6Alm6gr75s+Q==
+	s=k20201202; t=1612006121;
+	bh=sJ6k915t31lh60VVbOKTS3HtZV3mY7oeFzQO+vgrMjg=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=jUx2xuGHzVmHQtAcYDdTNnOSQY36rNGuozeHwmBEsgO76sTauQXrvvuGC/EOVrFRq
+	 dP7H2A+8BQ99Qns/5C50UFjm+EM2QEcF2tHd8DK9pFNM/aBYMStwfx9gA1s1lHwEc+
+	 Q4DPDP6pHiwTB2z7+iI/bS+Sc9fCgC3pgVMB/YVAsfr9aHXEKbv9RgiO2KVp2LAy2A
+	 3eimsdxpq0zg6Uc8Robe519diohAWOZSgkKpPNviSLlewgzKteInDzIflWijoz1GN7
+	 KTWbTE3t44GLfzz+OPBXisfyyrmWcQpja5OFVPJP9bN8E+BrQ3LXnlEqZ/7FCYgAxj
+	 ZEZ1tS7xyOa9Q==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org, Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [GIT PULL 6/6] arm64: tegra: Default configuration changes for
- v5.12-rc1
-Date: Sat, 30 Jan 2021 12:26:25 +0100
-Message-ID: <161200598073.2029918.576266600186123573.b4-ty@arndb.de>
+To: arm-soc <arm@kernel.org>,
+	arm-soc <soc@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	linux-renesas-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Magnus Damm <magnus.damm@gmail.com>
+Subject: Re: [GIT PULL 2/2] Renesas driver updates for v5.12
+Date: Sat, 30 Jan 2021 12:28:33 +0100
+Message-Id: <161200610107.2091874.1073052310080757493.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210129193254.3610492-6-thierry.reding@gmail.com>
-References: <20210129193254.3610492-1-thierry.reding@gmail.com>
- <20210129193254.3610492-6-thierry.reding@gmail.com>
+In-Reply-To: <20210129090815.2552425-3-geert+renesas@glider.be>
+References: <20210129090815.2552425-1-geert+renesas@glider.be> <20210129090815.2552425-3-geert+renesas@glider.be>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210130_062632_192059_D107DBF3 
-X-CRM114-Status: UNSURE (   8.81  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Arnd Bergmann <arnd@arndb.de>, Jon Hunter <jonathanh@nvidia.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210130112625.Wyy-j9D1japRE3QS4_Veoc-jmqi8bPrjcZu4mmxOIgM@z>
+Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 29 Jan 2021 20:32:54 +0100, Thierry Reding wrote:
+On Fri, 29 Jan 2021 10:08:15 +0100, Geert Uytterhoeven wrote:
 > The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 > 
 >   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.12-arm64-defconfig
+>   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-drivers-for-v5.12-tag1
 > 
 > [...]
 
-Merged into arm/defconfig, thanks!
+Merged into arm/soc, thanks!
 
-merge commit: ee29b84a1dfecc32925037871ed18d9af61529b4
+merge commit: e53686bbdfd2af7e63e3c0f296632c3a428c317a
 
        Arnd
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
