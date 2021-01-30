@@ -2,62 +2,59 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5491C433DB
-	for <soc@archiver.kernel.org>; Sat, 30 Jan 2021 11:25:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 508B2C433E6
+	for <soc@archiver.kernel.org>; Sat, 30 Jan 2021 11:25:05 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 7280564DDB; Sat, 30 Jan 2021 11:25:03 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7460164DDD;
-	Sat, 30 Jan 2021 11:25:01 +0000 (UTC)
+	id 1FEEC64E0A; Sat, 30 Jan 2021 11:25:05 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BE4FB64DDF;
+	Sat, 30 Jan 2021 11:25:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612005903;
-	bh=WSYKOJu9J70X52xF17YT4q3tFjXR3LzaFrcvnDbDj2s=;
+	s=k20201202; t=1612005905;
+	bh=Cx/wV+Y/fgtydB153xG1RMAFwtjtQQZMqie8uEQTpho=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mIdxqaMUwMNszEXZ0n2/zW68kDnXxAjbBo/uVV+N1jMafaH0ATPBQmEnH/S0C9mK4
-	 AMNegppHEyLLUof28VMbQQgYL43qU/dC5trc8Axbr3Gkwy3SZ8Ffv17VXQEd3fINBD
-	 kUfS4/adwGQoz68SYfduSyep3MB/PjuQOXczpmAaWQK87pcJ/a8QxwtCZFm2VakHIk
-	 pd9HOjgr7dDfaKYVYf3S65mufNjKiwsK4JoalpBiKIN202Y4bBnbqzeeY+JzpYiLk5
-	 aegcraWLPN4975FRUIhB0xnvi+99ORkgkesrvynCy3dSEdjZjDp0SFGDZcl9uNHANT
-	 NiYdS/8bbYW0g==
+	b=kXldFouDDSljdXXah2p6lu1v92loEQHvo6ULiwSZjlLpfTL5XF3wLXBx1i5WWlZXb
+	 oadVTgVoLcIsl79rkb0afMy4Ih7p+xrh+88szlVprx0UNUY+TrB849GFzNl0Ng6Q0I
+	 fR8UwWJVucuFpdOviwccq0JpU72qLEJfCphUie5/78ppnycOrOE5/cQtEW9es8lLZe
+	 /OWNnjJTp7Gsmar0F8kAax8TcbEZ5aFtukJw4MlT3S4KBJggU8ZpgLu6VlrOzI2A7k
+	 10mCuHXUDWKqWI92cIVrdEAVitBhr931lfi0/It979/ousAzhxUd06AQmLrs9Mq45v
+	 5ATM8bJl2zygw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	"nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-	arm@kernel.org,
-	Olof Johansson <olof@lixom.net>
+To: Philipp Zabel <pza@pengutronix.de>,
+	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Ludovic Desroches <ludovic.desroches@microchip.com>,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	Linux Kernel list <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] ARM: at91: soc for 5.12 #2
-Date: Sat, 30 Jan 2021 12:24:56 +0100
-Message-Id: <161200588882.1995370.4365069809706581847.b4-ty@arndb.de>
+	kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] Reset controller updates for v5.12
+Date: Sat, 30 Jan 2021 12:24:57 +0100
+Message-Id: <161200588866.1995370.6659304756660517573.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210129090030.26976-1-nicolas.ferre@microchip.com>
-References: <20210129090030.26976-1-nicolas.ferre@microchip.com>
+In-Reply-To: <20210129153108.GA26994@pengutronix.de>
+References: <20210129153108.GA26994@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 29 Jan 2021 10:00:30 +0100, nicolas.ferre@microchip.com wrote:
-> Arnd, Olof,
+On Fri, 29 Jan 2021 16:31:08 +0100, Philipp Zabel wrote:
+> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 > 
-> Here is the second batch of soc changes for 5.12. Actually first batch was
-> consumed as "fixes" following our discussion here:
-> https://lore.kernel.org/linux-arm-kernel/CAK8P3a1v=_4E40cZjZ-ff7vs84XE9XaxwdoGW7Rf+LYiA+TCTw@mail.gmail.com/
-> Note that v5.11-rc1 is the root of this Pull-Request so the 2 first patches are
-> the ones already taken as fixes.
+>   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.pengutronix.de/pza/linux.git tags/reset-for-v5.12
 > 
 > [...]
 
 Merged into arm/drivers, thanks!
 
-merge commit: 4940b9919119906ba37b3f00611fd5e9be587946
+merge commit: 7cc623b85aef7a336152f5cfc28ef5622ded1351
 
        Arnd
