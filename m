@@ -1,107 +1,124 @@
-Return-Path: <SRS0=N7fp=HB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=gXKw=HB=ti.com=nm@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8192C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 30 Jan 2021 11:38:04 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68A24C433DB
+	for <soc@archiver.kernel.org>; Sat, 30 Jan 2021 13:14:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 13CEE64E0F; Sat, 30 Jan 2021 13:14:16 +0000 (UTC)
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9F01564DDF
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 30 Jan 2021 11:38:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9F01564DDF
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=uPaMnOWDpj4L9jnYwSoC4MWBsh2DuPo1I0bq4S//EVM=; b=SuvLhRncYMo0SBa8o90dW26e8
-	P4NNrSCxT0bkLte3W/GQw0jg4nhK33l5LYlFZW4IE+s+g1bd2az3FJauuGmEgIXjCjjCwd6r+YwyL
-	r6Dqu9eyrVznZNbXQqKNEqyxJhzRiyJqP8weMjtmI0qYnhM5Pg/NJhDgWCwbb7hjawqg5noTpC1WP
-	It3a8WAhCIQjMfioAh0l6uAfjnpX7WBRFBemHSq09J3sfgbCAfhrMScVJiU6mWL/6WoT+JUCTVuvt
-	Sb/8boe/ieo/57pUXlK9ZepWJkiO6Bu5qo3iPg+Cw6x4jND+iEvF/jZ8X5VBd+JzW0VfoatR3ee9x
-	6LxYngp+g==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l5oYj-0002PE-5N; Sat, 30 Jan 2021 11:36:58 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l5oYe-0002NX-W1
- for linux-arm-kernel@lists.infradead.org; Sat, 30 Jan 2021 11:36:53 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EFEAA64DE7;
- Sat, 30 Jan 2021 11:36:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612006612;
- bh=0BmqgNkFIayug654qP6zSh3IMYPIZwHpy2DU2XcmwmM=;
- h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=pNiWSlR20+bCSNZa8PcaZjNSZw8e/GL59crl5H2InHgwcGi/ZrsRVBIz9H2LHwym5
- 4hcGuN2HdSqb2MQjcOgcUo1SYBr/KseIa8syfK0m+Pfo3DRP5/UgDds+h8mLsBhcH+
- P4Qszegsou0FJrmNDhoEqrSQbXu24DCdKGVwr1uXPd/eMfRWPSVBklANdfaf2MVmHK
- 7ZC5ir7xSVWym1lGP1Is+x03tntzK9sU9JjfsjD10ctkN4m5YdNm2lnoPIfakgiYfJ
- RVF6WtaB540bvuj4h8C32mCZX8Yv7rFSiuuWrzie910AddQTzV9PKsRqFE15XaPn6f
- mGrmZIxiLyuvQ==
-From: Arnd Bergmann <arnd@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id CD66B64D9F;
+	Sat, 30 Jan 2021 13:14:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CD66B64D9F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=nm@ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 10UDECvx011905;
+	Sat, 30 Jan 2021 07:14:12 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1612012452;
+	bh=XFymvdCm4O53NxcLqDM99zA8H+6HJ83huZq37r3iRCk=;
+	h=Date:From:To:CC:Subject;
+	b=u/WjIbL9/5cK3i+lfz3CS2fB0bmK1+VQ7tj23FMJu22LWTE4e1rlHKHE8tAZ6DGvP
+	 oGPdQfv7lJgENzW4oL15yhpI86pmzPenBg8MTh/LvhOMK8Ov3vGv0IHTtGwsu+CmFh
+	 VUK+CehysLzKu9OVf+RxLZKkqSwXl5Y7XgfRNGfU=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 10UDEC1k105703
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Sat, 30 Jan 2021 07:14:12 -0600
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Sat, 30
+ Jan 2021 07:14:11 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Sat, 30 Jan 2021 07:14:11 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+	by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 10UDEB3Q020590;
+	Sat, 30 Jan 2021 07:14:11 -0600
+Date: Sat, 30 Jan 2021 07:14:11 -0600
+From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Tony Lindgren <tony@atomide.com>
-Subject: Re: [GIT PULL] Fixes for omaps for v5.11-rc cycle
-Date: Sat, 30 Jan 2021 12:36:48 +0100
-Message-ID: <161200659667.2416228.1843955519499955570.b4-ty@arndb.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <pull-1611818709-243493@atomide.com>
-References: <pull-1611818709-243493@atomide.com>
+To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL 1/2] MAINTAINERS: Update to TI maintainer for v5.12
+Message-ID: <20210130131411.afna4wj72r7xscqn@skinny>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210130_063653_105466_2572CCEB 
-X-CRM114-Status: UNSURE (   8.72  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Arnd Bergmann <arnd@arndb.de>, arm@kernel.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210130113648.wCSpFme6DGmrywoZptYHUqrnOLApCMYYqFuV-PHwR00@z>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="gicpp6a64sa3muot"
+Content-Disposition: inline
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-From: Arnd Bergmann <arnd@arndb.de>
+--gicpp6a64sa3muot
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 28 Jan 2021 09:43:50 +0200, Tony Lindgren wrote:
-> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-> 
->   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.11/fixes-rc5
-> 
-> [...]
+Hi,
 
-Merged into arm/fixes, thanks!
+Please pull the following MAINTAINERS file update for v5.12 cycle. Made
+sense to send via ARM path since the main PR path was for TI platforms.
 
-merge commit: 2a3e487a3e538b3a87d0a4ea71f185437c38e55e
+The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
-       Arnd
+  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/nmenon/linux.git tags/ti-k3=
+-maintainer-for-v5.12
+
+for you to fetch changes up to 2672b94d730c4b69a17ce297dc3fa60b980e72dc:
+
+  MAINTAINERS: Update my email address and maintainer level status (2021-01=
+-12 07:47:13 -0600)
+
+----------------------------------------------------------------
+Maintainer changes for TI for v5.12 merge window:
+
+- Tero switches to kernel.org address
+
+----------------------------------------------------------------
+Tero Kristo (1):
+      MAINTAINERS: Update my email address and maintainer level status
+
+ MAINTAINERS | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
+
+--gicpp6a64sa3muot
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmAVW5wACgkQ3bWEnRc2
+JJ3W5Q/+LP/xOm51phhdMlrCBpXa4epd3z2NZRUt//bp/ObWcF6VtSliPxLOHfUI
+7ro89eDzNj0ZtBIXEbipnOjlCvBSMsABs/d6jb3IxjiSdxrllj+IOfM+s4m7+50Y
+7qgYBNIRLCOctY42QWaffkCuYAS/IFaFKgZv4HmZSoACdwoRVPSPkeDu9+vPAMtb
+RRzvcQo19WwtkYEgvHUMSg4WU8YLd4XQES9tXxHuc9CG5P+THkXk/JDkpMIC9Ky8
+sSo0k54JFgcJ+T9Cg1/bePMLP5cs9E/vkdf3bcsYAufjjTQh/MThQk6pBeH5h/ic
+xrvlrRPteUjSyuzzhUIfUflnungio5+Q4oWIbUrxOpCaKt/6aaBOEmbvG3x3lzd5
+rZUWP2LIkOjO4NYdMWGsLkIo0x9OmaiJRIDws8NqXN+XXLZQrw4eUQa9XBA8Mx1f
+S7w6FXoGurGFRibMmMJ0N6HqmFyWoEus8YytSfx+1LGDZ4/CricNvXmzpVAGtZ7S
+SHAWzK82SyFB00Fv6G87bBqFhSwaJHN5CnlzPLic13lrp2EWcCfgLuUvpQJv92Xk
++rgF6itAHf7uKUFmJ8JRG/uXpN7yTA0NIIkvwx7yagBBh6ITdlYjA0LtKtL3Qzyr
+TZGoCaIdEe8Qg9fjgxfdnJ40tlLXTSYTOwMAwzmTsizg0j2Q/hk=
+=bgUI
+-----END PGP SIGNATURE-----
+
+--gicpp6a64sa3muot--
