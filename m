@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E2E6C433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89293C43381
 	for <soc@archiver.kernel.org>; Sat, 30 Jan 2021 00:00:10 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 8C34B64E00; Sat, 30 Jan 2021 00:00:09 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 6DF7664E05;
+	id 90C5F64E0E; Sat, 30 Jan 2021 00:00:09 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 73C3664E06;
 	Sat, 30 Jan 2021 00:00:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1611964809;
-	bh=itMZdp7ACNUwmmb47RlDu2hLqNpfDCJSBfXRZausR9U=;
+	bh=KCQji4thmVFgRw0f+sWdSmQZUKayhUK6qc+dy19q7u0=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=gHgX0YTmvlcADxRJNo5tSLKu6Sp0oryjCSUtyEjl4+bDWlCjTpADmwdsO/VdbX2KO
-	 hR4e7y4EIra/Rtv4rZXdC/5AD+MxMeRITa10gi9gHFLw/XdpV/fvOlJ/LPROkgoylk
-	 O1DUnYsmTaPhuoXS/7FSg3zEbHnX6iIEKNhk/M1Uo0ioOgOBY2IH0LkUiDQqydA4T/
-	 rvyRidpWY79S0fqfut5kneWYTcurxLo0kfkFYyxryClMAUxPWnlWL8gaox8TPuWpPO
-	 0I+h2OZdNzmM4b+z2Z3p8CgM+8ParUWh/6iCzNZB1Eid8kuRydqXQOEWBlyAxCdQ4c
-	 qBY0OpGlT58qA==
+	b=DbYV0CK9D0D6mThqTJzQlMc+D8J6L67YDsVaNtCA7S3OTDftFErDg4Gq1ktE6w3pn
+	 sNcbKMH/dlbj1JGpGPzmucNAD1zmMu/0vpUexEhTngZknosMaCnOwhqiES7FqWVRIK
+	 XCXwaZTAXL6cy1IwSNa80E9WNF+YFYP2W9JTbrQBBMBIyWzMbpIDZlTgVkVjbmi3sz
+	 2OGa6mYTC2YShFtKrH+8Q4S6lNvuTExMk/KOa3WyDExb0/o2lqlZCTVSSiQReHfzIB
+	 op1HgzSZskVLlASso3mjRa4flsk5k+3XbFJ1e/EdPqx+HUO9G3CuKwUxH+tH6jNm7y
+	 orIEZkwCKV19Q==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6AD896095C;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 726EC60964;
 	Sat, 30 Jan 2021 00:00:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] STM32 DT changes for v5.12 #1
+Subject: Re: [GIT PULL v2] arm64: dts: hisilicon dts updates for v5.12
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <161196480943.10199.2849606760319976673.git-patchwork-notify@kernel.org>
+ <161196480946.10199.8659838849503934289.git-patchwork-notify@kernel.org>
 Date: Sat, 30 Jan 2021 00:00:09 +0000
-References: <5e8897a0-8f68-5e41-bfa0-ccdf1e23a3c1@foss.st.com>
-In-Reply-To: <5e8897a0-8f68-5e41-bfa0-ccdf1e23a3c1@foss.st.com>
-To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+References: <6013D1C7.90902@hisilicon.com>
+In-Reply-To: <6013D1C7.90902@hisilicon.com>
+To: Wei Xu <xuwei5@hisilicon.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -43,20 +43,20 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Fri, 29 Jan 2021 09:42:37 +0100 you wrote:
-> Hi ARM SoC maintainers,
+On Fri, 29 Jan 2021 17:13:43 +0800 you wrote:
+> Hi ARM-SoC team,
 > 
-> Please consider this first round of STM32 DT updates for v5.12. As usual
-> main changed concern MPU part. Main changes concern DHCOM SDMMC1.
+> Please consider to pull the following changes.
+> Thanks!
 > 
-> regards
-> Alex
+> Best Regards,
+> Wei
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] STM32 DT changes for v5.12 #1
-    https://git.kernel.org/soc/soc/c/86a24899c2db
+  - [GIT,PULL,v2] arm64: dts: hisilicon dts updates for v5.12
+    https://git.kernel.org/soc/soc/c/0b9c5cdda98c
 
 You are awesome, thank you!
 --
