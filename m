@@ -2,62 +2,60 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41E73C433E0
-	for <soc@archiver.kernel.org>; Sat, 30 Jan 2021 11:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0132FC433DB
+	for <soc@archiver.kernel.org>; Sat, 30 Jan 2021 11:34:23 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E278964E04; Sat, 30 Jan 2021 11:34:20 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E526364DDF;
-	Sat, 30 Jan 2021 11:34:18 +0000 (UTC)
+	id B8E8864E0C; Sat, 30 Jan 2021 11:34:22 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3B59B64DE7;
+	Sat, 30 Jan 2021 11:34:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612006460;
-	bh=Q8F+qBTC0HQUUMOXQcmJvGqSdv+trzUZuSsMttv4SD8=;
+	s=k20201202; t=1612006462;
+	bh=Bso/4fJToGtAt2kHxrbQGJO9hmxtdFSmmqvFwHPj8wU=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qczh69jq/uvFak1dNS3kcSWUEnRWIVV/P7VDb8Gtd33FkxB31gXXgKx+zH2n1c8cL
-	 9UbB4S8xVUz9iN5G+SsPxZBmQSCDvcRpkHmU3uKEhhlnr+v08IILtt3a6NVNH8sZpN
-	 wbQvHieUwtlGJtCFp5sE5lDrtXu0NUa360jeom33/lZNzgvVNNiPwsgbK5Li7XCRsr
-	 nqeqD0xNpNCCs8FKJGp+1Tk+60/tZbmMsgUOoUKDxMK8SevH4GHcqntBAOjvKSDflb
-	 6plIRgvH9PzmWf71+3ew6pcgvg/yjQgplE+clWdhnU7ctM6ALc3eiLZAZPCU3d2CP0
-	 4LhHqs4DuOe+A==
+	b=snO1dLtv7dI4cuRf+qKgdPVwHeyGQ4QpSkGJC+3BeAPHwzTzwsQURrhyFixtr4PJI
+	 SQ+k85eNVIWfvW4k6LFcQ/AOw8xEy33rwOg8RXPl9SccfKnKxRCZRH3MA0XR47wGCh
+	 0/rXxx4fLACu55t+8NdAzL2SpIR+YUZEgJw06sTRxcqqZG7zTpQ6InZ+TB488HKuYW
+	 guyzE4H1eZLbSGHbKpeU5JiQmyukTHdM7pcvnhk0IWz88ws+QcTwkoJ61JBzxhMa21
+	 aF5mrjXiUpXSphY6ftHNowlIVNHLLN2SFU0X6MTtJOYyy5f5Dz8wrytmaDwNxA/hbv
+	 w8mnzW1Vj8a0A==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Kevin Hilman <khilman@baylibre.com>,
-	Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-	Olof Johansson <olof@lixom.net>,
-	SoC Team <soc@kernel.org>,
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+	arm-soc <soc@kernel.org>,
 	arm-soc <arm@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Marek Vasut <marex@denx.de>,
-	"linux-stm32@st-md-mailman.stormreply.com" <linux-stm32@st-md-mailman.stormreply.com>
-Subject: Re: [GIT PULL] STM32 DT changes for v5.12 #1
-Date: Sat, 30 Jan 2021 12:34:08 +0100
-Message-Id: <161200641681.2316427.4971661443078699062.b4-ty@arndb.de>
+	linux-renesas-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Magnus Damm <magnus.damm@gmail.com>
+Subject: Re: [GIT PULL 1/2] Renesas ARM DT updates for v5.12 (take two)
+Date: Sat, 30 Jan 2021 12:34:09 +0100
+Message-Id: <161200641665.2316427.877722063324058010.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <5e8897a0-8f68-5e41-bfa0-ccdf1e23a3c1@foss.st.com>
-References: <5e8897a0-8f68-5e41-bfa0-ccdf1e23a3c1@foss.st.com>
+In-Reply-To: <20210129090815.2552425-2-geert+renesas@glider.be>
+References: <20210129090815.2552425-1-geert+renesas@glider.be> <20210129090815.2552425-2-geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 29 Jan 2021 09:42:37 +0100, Alexandre TORGUE wrote:
-> Please consider this first round of STM32 DT updates for v5.12. As usual
-> main changed concern MPU part. Main changes concern DHCOM SDMMC1.
+On Fri, 29 Jan 2021 10:08:14 +0100, Geert Uytterhoeven wrote:
+> The following changes since commit 1f4449e12c5c6682a6f4f8dbc7288c19c1c844f1:
 > 
-> regards
-> Alex
+>   arm64: dts: renesas: r8a779a0: Add SYS-DMAC nodes (2021-01-14 12:13:00 +0100)
 > 
-> The following changes since commit 83d411224025ac1baab981e3d2f5d29e7761541d:
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.12-tag2
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 86a24899c2dbf12a6ce80cc48eea48ac60d053ce
+merge commit: af91156490c2eee7da65e75c10e2457beb9145d8
 
        Arnd
