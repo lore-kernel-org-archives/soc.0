@@ -8,72 +8,72 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F9DEC433DB
-	for <soc@archiver.kernel.org>; Sun, 31 Jan 2021 22:18:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5B78C433E6
+	for <soc@archiver.kernel.org>; Sun, 31 Jan 2021 22:18:08 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 3293B64E2D; Sun, 31 Jan 2021 22:18:07 +0000 (UTC)
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	id A370D64E2E; Sun, 31 Jan 2021 22:18:08 +0000 (UTC)
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E7E6C64E29;
-	Sun, 31 Jan 2021 22:18:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E7E6C64E29
+	by mail.kernel.org (Postfix) with ESMTPS id 6A15264E29;
+	Sun, 31 Jan 2021 22:18:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6A15264E29
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=f.fainelli@gmail.com
-Received: by mail-pg1-f171.google.com with SMTP id v19so10702589pgj.12;
-        Sun, 31 Jan 2021 14:18:06 -0800 (PST)
+Received: by mail-pf1-f173.google.com with SMTP id w18so10298984pfu.9;
+        Sun, 31 Jan 2021 14:18:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/T4k3lHLOO0wbkrdlTk7LJ/Zq3cU4QuNjq3JxsvSkzI=;
-        b=vKhTi+vt9kmaVJxEWqdDljyxw1IDyGAWPjig29O4Mtmq5ZW8PoXkvv9XY4dnQvgdg1
-         WuAc6h+2PPxjCY1JleSHB22sUVO516wS8ALsjlnwaG5bgmDGO3ji1VVIU7ZW+Zy1rL+k
-         mHIU8WosjPPfvY5ya8E8/bmGEuHAHsJ+lB95cMKO8PdH/CDahfX9AxVGccYjpUqTKqFu
-         0gfP80iecVHZSTSR/W8ARwB8KG/DQoCw0pZDrU2pSSk+u8CtTXe5kPw4cV5+W6qeb1Mb
-         4q3amRIVmjK3Q1cToVaq/lKzn9EnbvMG9gC/NCJoT2EQ8aiojwoy/kog65uNiE+f12qm
-         qn1A==
+        bh=iyBcxz1AdCnAU2zDHjpyBeoUWMJV2JNVfPF+J8J9nbs=;
+        b=sMjYBWQ+SHyOHtaUUhZM8uoEBphLBxTMJCneGzh7XLBx9+g5hsmXM/W8tPQRKrCmaU
+         hEVsWBhb7AkFMVf0RRY8iUOozLdeSuhjvr8xuC71vImP3OarhZKWIuXcnktdLn/WERWR
+         Azy7st10Lt5adps9OURI5mwjNzF3Mwd6SMeWfaa5TWGCNUk4/Ykmm2xgmvN1fnTmXQzI
+         hI+QMBN62K8v8uT++rmwVwCt703cC4DgqY9xRKJagW6m6ZFwEHj5aqyaPiyok3qxJ8Mm
+         G6H3OfzRhX4nzQovKBiaZMuiVdCapGM1BIoBy9gG9oXhZHm8V67MldP2CxZmoQoDVJgE
+         ggnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/T4k3lHLOO0wbkrdlTk7LJ/Zq3cU4QuNjq3JxsvSkzI=;
-        b=CwO138EZLN/Af/ziqgarJ3Bx9qHW0GryYbuVv5k74L9UafLwDdpbS/O6RVnEZ4bmNR
-         C8iCc9eU5YoumS1ibPznR9+LAKTHglzYiV6DOnuMdB0twLEZUgV58i1yhQ+H+yi1liB8
-         xAFKB/ZRZ4C5jrO4ME4lW1ve1Z6Ok+TkLfJoirbQt5eAXwrt61Ai/c4BOhtjkld3RzfZ
-         VfLwjmeCrArpZHMo7fCXRXVxW5WH29jMoJjSKBXexPIksepKGd7KBCMfKq3s8HTqQunj
-         Bxo3G2xRlY2T07u2PVP2eOwdu50pkm5C1RKaw8vTzkMfJwJBWPYDOZNUfPrBnzn3VLkT
-         b7lw==
-X-Gm-Message-State: AOAM532Z6zskWPRl67d/9o/ILlDfpc6YkQYSJV8djlYaEn1ZA3aUePIf
-	EO4YQQufFamynflkciL6dVG5CsjDkk4=
-X-Google-Smtp-Source: ABdhPJw7X+KfMsWTD+sT71vXZQHMKegPfX4Vw1H8la5IOlD7h3laKVPBBYkNHxx83qcSRxD/HyYJgA==
-X-Received: by 2002:aa7:8b0f:0:b029:1c0:e782:ba29 with SMTP id f15-20020aa78b0f0000b02901c0e782ba29mr13246799pfd.37.1612131486122;
-        Sun, 31 Jan 2021 14:18:06 -0800 (PST)
+        bh=iyBcxz1AdCnAU2zDHjpyBeoUWMJV2JNVfPF+J8J9nbs=;
+        b=Nn6Z8mXVQrLWo4883fIfkX1eSjKq24ZBSwF1WK/iQC4K+fufnWF2+/crpCqtDTmoiI
+         XzU/K7aKWy/KVJdJ7Z7AOCQlzBYFERIAqGL7yCW2EgEeAkr2pGxYaWvdNgi8LKc9S832
+         1H2N0sUTDQmhXEIO20b+YIyxaGtMY6EFNuoPx2u02OZ7P7hqG9IKlGuq108Q0/Cen2J+
+         gvLJmzbgX/m9VFMCV63BuFBLQUqn+8g8C59f1UXKKumFGt0EqBfkuiRSirTuesYJCl4G
+         pm2vXGbJBe33H2eJVH2CO0GkK5Rx/0/NUtJ7vQSMhhPP6/iODJzoZykIyQBeXg1AkrOr
+         l/PA==
+X-Gm-Message-State: AOAM531L2px/eFeEmsu/bC/5tVkP6F5U6bGD+DfdJSClQW4SFbeAgcr4
+	UsO0mwUN1Rx3xfmId9JfmwRE3qSCx0I=
+X-Google-Smtp-Source: ABdhPJyHDVMURxHBhEzSVrY2Yyb4BwtBvMYt7WlcytcBnBNSspJv5KAxC3OEd/HXdX9NO2tA3+/okw==
+X-Received: by 2002:aa7:93a2:0:b029:1bf:23a3:a945 with SMTP id x2-20020aa793a20000b02901bf23a3a945mr13481777pff.70.1612131487631;
+        Sun, 31 Jan 2021 14:18:07 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a4sm15512177pfg.41.2021.01.31.14.18.04
+        by smtp.gmail.com with ESMTPSA id a4sm15512177pfg.41.2021.01.31.14.18.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jan 2021 14:18:05 -0800 (PST)
+        Sun, 31 Jan 2021 14:18:06 -0800 (PST)
 From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
-	Maxime Ripard <maxime@cerno.tech>,
-	Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-	Stanislav Jakubek <stano.jakubek@gmail.com>,
-	Tim Gover <tim.gover@raspberrypi.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+Cc: Scott Branden <scott.branden@broadcom.com>,
+	Ray Jui <ray.jui@broadcom.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+	Rob Herring <robh@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 3/6] Broadcom devicetree changes for 5.12
-Date: Sun, 31 Jan 2021 14:17:17 -0800
-Message-Id: <20210131221721.685974-3-f.fainelli@gmail.com>
+Subject: [GIT PULL 4/6] Broadcom devicetree-arm64 changes for 5.12
+Date: Sun, 31 Jan 2021 14:17:18 -0800
+Message-Id: <20210131221721.685974-4-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210131221721.685974-1-f.fainelli@gmail.com>
 References: <20210131221721.685974-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
@@ -82,46 +82,48 @@ The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.12/devicetree
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.12/devicetree-arm64
 
-for you to fetch changes up to a0610b409fc9f90b4861c021ebe853bfcc310bb3:
+for you to fetch changes up to fe119977677e7dd3ddb4ab52678b46b804148eb5:
 
-  Merge tag 'tags/bcm2835-dt-next-2021-01-28' into devicetree/next (2021-01-28 20:11:44 -0800)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM-based SoCs Device Tree changes
-for 5.12, please pull the following:
-
-- Dave adds a proper compatile string for the DSI1 panel on 2711
-  (Raspberry Pi 4) to permit adequate driver differentiation
-
-- Nicolas declares reserved memory regions filed by the Rasbperry Pi
-  bootloader to indicate the running system configuration
-
-- Maxime declares the BSC (HDMI I2C controller) and CEC interrupt
-  controllers
-
-- Stanislav fixes a tab vs. space issue in the BCM21664 DTS
+  arm64: dts: broadcom: Remove SATA from Stingray (2021-01-26 16:26:33 -0800)
 
 ----------------------------------------------------------------
-Dave Stevenson (1):
-      ARM: dts: bcm2711: Use compatible string for BCM2711 DSI1
+This pull request contains Broadcom ARM64-based SoCs Device Tree changes
+for 5.12 please pull the following:
 
-Florian Fainelli (2):
-      Merge tag 'tags/bcm2835-dt-next-2021-01-25' into devicetree/next
-      Merge tag 'tags/bcm2835-dt-next-2021-01-28' into devicetree/next
+- Rafal continues to add support for the 4906/4908 SoC family and adds
+  a Device Tree for the Netgear R8000P router (4906-based), describes
+  the NAND controller of the 4908 more appropriately (based on the older
+  63138 DSL SoC), describes the 4908 PCIe reset controller, internal
+  Ethernet switch (Starfighter 2 switch) and finally the Power
+  Management Bus (PMB)
 
-Maxime Ripard (2):
-      ARM: dts: bcm2711: Add the BSC interrupt controller
-      ARM: dts: bcm2711: Add the CEC interrupt controller
+- Scott removes all of the SATA-related Device Tree nodes since SATA
+  is unused on the Stingray product line
 
-Nicolas Saenz Julienne (1):
-      ARM: dts: bcm2711: Add reserved memory template to hold firmware configuration
+----------------------------------------------------------------
+Rafał Miłecki (6):
+      dt-bindings: arm: bcm: document Netgear R8000P binding
+      arm64: dts: broadcom: bcm4908: add BCM4906 Netgear R8000P DTS files
+      arm64: dts: broadcom: bcm4908: use proper NAND binding
+      arm64: dts: broadcom: bcm4908: describe PCIe reset controller
+      arm64: dts: broadcom: bcm4908: describe internal switch
+      arm64: dts: broadcom: bcm4908: describe PMB block
 
-Stanislav Jakubek (1):
-      ARM: dts: bcm21664: Replace spaces with a tab
+Scott Branden (1):
+      arm64: dts: broadcom: Remove SATA from Stingray
 
- arch/arm/boot/dts/bcm21664.dtsi       |  2 +-
- arch/arm/boot/dts/bcm2711-rpi-4-b.dts | 17 +++++++++++++++++
- arch/arm/boot/dts/bcm2711.dtsi        | 31 +++++++++++++++++++++++++++++++
- 3 files changed, 49 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/arm/bcm/brcm,bcm4908.yaml  |   2 +
+ arch/arm64/boot/dts/broadcom/bcm4908/Makefile      |   1 +
+ .../broadcom/bcm4908/bcm4906-netgear-r8000p.dts    |  52 ++++
+ arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi  |  18 ++
+ .../broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts    |  51 ++++
+ arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi  | 117 ++++++++-
+ .../boot/dts/broadcom/stingray/bcm958742-base.dtsi |  64 -----
+ .../boot/dts/broadcom/stingray/stingray-sata.dtsi  | 278 ---------------------
+ .../arm64/boot/dts/broadcom/stingray/stingray.dtsi |   7 -
+ 9 files changed, 239 insertions(+), 351 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts
+ create mode 100644 arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi
+ delete mode 100644 arch/arm64/boot/dts/broadcom/stingray/stingray-sata.dtsi
