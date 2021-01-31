@@ -1,100 +1,42 @@
-Return-Path: <SRS0=Fj/g=HC=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <krzk@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-23.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10A4FC433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 18:00:12 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AE4F061492
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 18:00:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AE4F061492
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:Cc:
-	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
-	MIME-Version:Message-ID:Subject:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-	References:List-Owner; bh=vh9etdvA2E/h+aPc8i01Ptu8bpCiTcWJw4kd4P3lhMI=; b=JQR
-	LgaYtsuY6smvrVJm+K9WM2yxodY9QEwRM39kzU1QvY3lGMFT5V+jv5hTWmGuohDkqL2SJXyNc3//v
-	xlqLTU6NWq4zsO+Q0R0lqcChVl3VBXA6ev4ObSIa8GAvSkspEMUxaz756IVIjIBEhwcrQfbcjP60t
-	3xXywL3WL9GaD8UGOhFYxlor0SdtFiYI9S3XW64N+5HxRaEBQrbaP4Sbs4oFw0XF7am81jEXPPF2/
-	kOtnZiDFxOqn59+aj1CliHO6V709H9JYsFgXKL2ua2VKL/DTHbAi5o3xJtolp+qRSyggxkU7GbgIg
-	yu/0Ch5RBw100P4w3wd20daBJw/G+lw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l6H03-0004TU-9S; Sun, 31 Jan 2021 17:59:03 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l6H01-0004Sr-1P
- for linux-arm-kernel@lists.infradead.org; Sun, 31 Jan 2021 17:59:01 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7CA0764E43;
- Sun, 31 Jan 2021 17:58:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F46DC433DB
+	for <soc@archiver.kernel.org>; Sun, 31 Jan 2021 18:01:15 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 8711764E43; Sun, 31 Jan 2021 18:01:14 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E8F661492;
+	Sun, 31 Jan 2021 18:01:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612115939;
- bh=tOIxTGcXlIsZPlM/axqMMBVDJKMuW295OToS+3m6rfY=;
- h=Date:From:List-Id:To:Cc:Subject:From;
- b=GFxyAcgublKxyHZhC0EOlY39FQusllGDrEoXZNOq8ei+guxJHkbe2t8Zpm3GhLUI7
- Xq2lKcwFhKjo+eVR+lKI0dXYtmP+kT9SaQU7ZNbOxPfb9FELOGlw+dhuyLWB0wIfAC
- q8cYkhMv7EyecReFy2tZliifFlRUy1CMZm/2k2WrLIm0z63+3h/+1c/Pp3ZTDqwSJB
- mLP3N5B0b89SI3HBIjiqm3q5LHzFE6vyaUGZtQUb4pb77Nmcu8SPRHmbJaE6BWg3pP
- n2eLjLgA5X6g2gkEizuXTV4IPCGYgAdgFb2CJLbUPMgTinsLIXbgUqjZf9LsF6cU38
- POGmI4UQimAiA==
-Date: Sun, 31 Jan 2021 18:58:57 +0100
-From: Maxime Ripard <mripard@kernel.org>
+	s=k20201202; t=1612116074;
+	bh=PIUWQfJpT2o52uB0dgKxgKPINo8Pd54gqjDjt+c2HHY=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=pJFjRIXblvoTfFNz0pTp2gIGly1+wO/Dxv3DrxP/SZOJkLny+8XimNFFKLIot4Aw0
+	 yjMYa67efXNzKodv/2XMGk6hYjKpKoqM6+k4iNdVzvVJO96FZQ0sWZxr4oE3b5QOas
+	 rKfKT38N0K0WhWpAl6ofLreaWaEiafzETB6Et3tQ+Ydm1pCxBbRTaBNn5AW0Ruk+Di
+	 g3702hwK+4ksq/WomzJ8YZKlq30WCCBK8/KaBFMuDMQGViKZ3FGMw3QTZl+uMlUg1l
+	 koWEIOU4rqNynbMtgREduZwHnLl99GXTLWj88X4zFd+CptwZ3ypvYBeu6x3HaeDAY0
+	 il/CdcranpBjQ==
+From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Subject: [GIT PULL] Allwinner Drivers Changes for 5.12
-Message-ID: <91f2980f-266f-41f2-ba10-5a395625498c.lettre@localhost>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL 1/2] memory: drivers for v5.12
+Date: Sun, 31 Jan 2021 19:01:08 +0100
+Message-Id: <20210131180109.11510-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210131_125901_254724_D357FCED 
-X-CRM114-Status: UNSURE (   9.68  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Jernej Skrabec <jernej.skrabec@siol.net>, Chen-Yu Tsai <wens@csie.org>,
- linux-arm-kernel@lists.infradead.org, Maxime Ripard <mripard@kernel.org>
-Content-Type: multipart/mixed; boundary="===============0832117332219180988=="
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210131175857.LMv6DQWguiJH4tmHSadfVG49ZueWLX153mfsWdAcdtI@z>
-
-
---===============0832117332219180988==
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="XsQoSWH+UP9D9v3l"
-Content-Disposition: inline
-
-
---XsQoSWH+UP9D9v3l
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Arnd, Olof,
-
-Please pull the following changes for the next release.
-
-Thanks!
-Maxime
+Content-Transfer-Encoding: 8bit
 
 The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
@@ -102,86 +44,41 @@ The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git refs/tags=
-/sunxi-drivers-for-5.12
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.12
 
-for you to fetch changes up to 308e78946a73e2bfe0ebd4ca9559c153c80bd45f:
+for you to fetch changes up to 50fc8d9232cdc64b9e9d1b9488452f153de52b69:
 
-  dt-bindings: bus: rsb: Add H616 compatible string (2021-01-28 11:20:12 +0=
-100)
+  memory: mtk-smi: Allow building as module (2021-01-26 20:47:51 +0100)
 
 ----------------------------------------------------------------
-Some new drivers changes for the Allwinner SoCs, but mostly runtime_pm and
-suspend / resume  support for our RSB bus, and support for the H616
+Memory controller drivers for v5.12
 
+1. Mediatek SMI: fix PM usage counter and make the driver modular.
+2. Renesas RPC-IF: add support for RZ/G2 series.
+3. Minor fixes.
 
 ----------------------------------------------------------------
-Andre Przywara (3):
-      dt-bindings: sram: sunxi-sram: Add H616 compatible string
-      soc: sunxi: sram: Add support for more than one EMAC clock
-      dt-bindings: bus: rsb: Add H616 compatible string
+Adam Ford (2):
+      dt-bindings: memory: renesas,rpc-if: Add support for RZ/G2 Series
+      memory: renesas-rpc-if: Add RZ/G2 to Kconfig description
 
-Chen-Yu Tsai (1):
-      Merge remote-tracking branch 'mfd/ib-mfd-bus-5.12' into sunxi/drivers=
--for-5.12
+Pan Bian (1):
+      memory: ti-aemif: Drop child node when jumping out loop
 
-Samuel Holland (4):
-      bus: sunxi-rsb: Move OF match table
-      bus: sunxi-rsb: Split out controller init/exit functions
-      bus: sunxi-rsb: Implement suspend/resume/shutdown callbacks
-      bus: sunxi-rsb: Implement runtime power management
+Yong Wu (2):
+      memory: mtk-smi: Use platform_register_drivers
+      memory: mtk-smi: Allow building as module
 
-Uwe Kleine-K=F6nig (1):
-      mfd/bus: sunxi-rsb: Make .remove() callback return void
+Zhang Qilong (1):
+      memory: mtk-smi: Fix PM usage counter unbalance in mtk_smi ops
 
+Zheng Yongjun (1):
+      memory: emif: Use DEFINE_SPINLOCK() for spinlock
 
- Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml        =
-     |   4 +-
- Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.=
-yaml |   1 +-
- drivers/bus/sunxi-rsb.c                                                   =
-     | 215 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++--------=
-----------------
- drivers/mfd/axp20x-i2c.c                                                  =
-     |   4 +-
- drivers/mfd/axp20x-rsb.c                                                  =
-     |   4 +-
- drivers/mfd/axp20x.c                                                      =
-     |   4 +-
- drivers/soc/sunxi/sunxi_sram.c                                            =
-     |  31 ++++++++----
- include/linux/mfd/axp20x.h                                                =
-     |   2 +-
- include/linux/sunxi-rsb.h                                                 =
-     |   2 +-
- 9 files changed, 188 insertions(+), 79 deletions(-)
-
-
-
---XsQoSWH+UP9D9v3l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYBbv4QAKCRDj7w1vZxhR
-xXsaAQDM+gtsf7QFU6d4Dl5HfZJL1cxx+5wqJLKLEvznyq7R1gD7Bc5PxCWOXL8r
-OGD96cunddq+Tnna66oICSXa0U/CEgc=
-=tTu/
------END PGP SIGNATURE-----
-
---XsQoSWH+UP9D9v3l--
-
-
---===============0832117332219180988==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
---===============0832117332219180988==--
-
+ .../memory-controllers/renesas,rpc-if.yaml         |  6 +++-
+ drivers/memory/Kconfig                             |  8 ++---
+ drivers/memory/emif.c                              |  3 +-
+ drivers/memory/mtk-smi.c                           | 36 ++++++++++------------
+ drivers/memory/ti-aemif.c                          |  8 +++--
+ include/soc/mediatek/smi.h                         |  2 +-
+ 6 files changed, 33 insertions(+), 30 deletions(-)
