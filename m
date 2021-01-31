@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-23.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F46DC433DB
-	for <soc@archiver.kernel.org>; Sun, 31 Jan 2021 18:01:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AF60C433E6
+	for <soc@archiver.kernel.org>; Sun, 31 Jan 2021 18:01:16 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 8711764E43; Sun, 31 Jan 2021 18:01:14 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E8F661492;
-	Sun, 31 Jan 2021 18:01:13 +0000 (UTC)
+	id 3EC9864E10; Sun, 31 Jan 2021 18:01:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C924D64E4C;
+	Sun, 31 Jan 2021 18:01:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612116074;
-	bh=PIUWQfJpT2o52uB0dgKxgKPINo8Pd54gqjDjt+c2HHY=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=pJFjRIXblvoTfFNz0pTp2gIGly1+wO/Dxv3DrxP/SZOJkLny+8XimNFFKLIot4Aw0
-	 yjMYa67efXNzKodv/2XMGk6hYjKpKoqM6+k4iNdVzvVJO96FZQ0sWZxr4oE3b5QOas
-	 rKfKT38N0K0WhWpAl6ofLreaWaEiafzETB6Et3tQ+Ydm1pCxBbRTaBNn5AW0Ruk+Di
-	 g3702hwK+4ksq/WomzJ8YZKlq30WCCBK8/KaBFMuDMQGViKZ3FGMw3QTZl+uMlUg1l
-	 koWEIOU4rqNynbMtgREduZwHnLl99GXTLWj88X4zFd+CptwZ3ypvYBeu6x3HaeDAY0
-	 il/CdcranpBjQ==
+	s=k20201202; t=1612116076;
+	bh=UPfEBsh3l/arPX81UXhscTfEGUvOJMt8yL9y5QTTTts=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=OjG2iweK7h7vkQXFkHisZe6A8ZJPZrRTQAFc2oQKA+gAx1b34L5VFbTN06avcAFIS
+	 p1ZBJ3k1Gwk4AhwIXemB5b+FjIxbCyz+BOwsixnfQku4vEYAC7c0bKZMHwx0kSi8HP
+	 DOp0XzHhdtmpateQZyMQgfE7AqlXw7iOCAXhn212NNMmGF/Ja4l9iZrya0VwdUu/Ki
+	 Ehq6fJ82aPBFITh/0eIPhaksB+3CJ9UbVSOqR/2wjPSQUjVUZB8dyUWdpBuTclQ0M/
+	 3iI10XCkKUzdRcJeBVoYR4CbpFvZ7fyHNmXrNwxxnFRUdzQvf0CcL+Vdt2iYMZ0rCQ
+	 Uz4Qa5QC9pXbw==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -30,11 +30,14 @@ To: Olof Johansson <olof@lixom.net>,
 	arm@kernel.org,
 	soc@kernel.org
 Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL 1/2] memory: drivers for v5.12
-Date: Sun, 31 Jan 2021 19:01:08 +0100
-Message-Id: <20210131180109.11510-1-krzk@kernel.org>
+	linux-kernel@vger.kernel.org,
+	Thierry Reding <treding@nvidia.com>
+Subject: [GIT PULL 2/2] memory: tegra drivers for v5.12
+Date: Sun, 31 Jan 2021 19:01:09 +0100
+Message-Id: <20210131180109.11510-2-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210131180109.11510-1-krzk@kernel.org>
+References: <20210131180109.11510-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
@@ -44,41 +47,41 @@ The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.12
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-tegra-5.12
 
-for you to fetch changes up to 50fc8d9232cdc64b9e9d1b9488452f153de52b69:
+for you to fetch changes up to 25d987706abce0a425332a41ec984390fd03350a:
 
-  memory: mtk-smi: Allow building as module (2021-01-26 20:47:51 +0100)
+  memory: tegra: Remove calls to dev_pm_opp_set_clkname() (2021-01-29 07:59:01 +0100)
 
 ----------------------------------------------------------------
-Memory controller drivers for v5.12
+Memory controller drivers for v5.12 - Tegra SoC
 
-1. Mediatek SMI: fix PM usage counter and make the driver modular.
-2. Renesas RPC-IF: add support for RZ/G2 series.
+1. Make the tegra124-emc driver modular.
+2. Add interconnect support to Tegra124 memory controller drivers.
 3. Minor fixes.
 
 ----------------------------------------------------------------
-Adam Ford (2):
-      dt-bindings: memory: renesas,rpc-if: Add support for RZ/G2 Series
-      memory: renesas-rpc-if: Add RZ/G2 to Kconfig description
+Dmitry Osipenko (4):
+      memory: tegra124-emc: Make driver modular
+      memory: tegra124-emc: Continue probing if timings are missing in device-tree
+      memory: tegra124: Support interconnect framework
+      memory: tegra: Check whether reset is already asserted
 
-Pan Bian (1):
-      memory: ti-aemif: Drop child node when jumping out loop
+Viresh Kumar (1):
+      memory: tegra: Remove calls to dev_pm_opp_set_clkname()
 
-Yong Wu (2):
-      memory: mtk-smi: Use platform_register_drivers
-      memory: mtk-smi: Allow building as module
-
-Zhang Qilong (1):
-      memory: mtk-smi: Fix PM usage counter unbalance in mtk_smi ops
-
-Zheng Yongjun (1):
-      memory: emif: Use DEFINE_SPINLOCK() for spinlock
-
- .../memory-controllers/renesas,rpc-if.yaml         |  6 +++-
- drivers/memory/Kconfig                             |  8 ++---
- drivers/memory/emif.c                              |  3 +-
- drivers/memory/mtk-smi.c                           | 36 ++++++++++------------
- drivers/memory/ti-aemif.c                          |  8 +++--
- include/soc/mediatek/smi.h                         |  2 +-
- 6 files changed, 33 insertions(+), 30 deletions(-)
+ drivers/clk/tegra/Kconfig            |   3 +
+ drivers/clk/tegra/Makefile           |   2 +-
+ drivers/clk/tegra/clk-tegra124-emc.c |  41 +++-
+ drivers/clk/tegra/clk-tegra124.c     |  26 ++-
+ drivers/clk/tegra/clk.h              |  18 +-
+ drivers/memory/tegra/Kconfig         |   4 +-
+ drivers/memory/tegra/mc.c            |   7 +
+ drivers/memory/tegra/tegra124-emc.c  | 368 +++++++++++++++++++++++++++++++----
+ drivers/memory/tegra/tegra124.c      |  82 +++++++-
+ drivers/memory/tegra/tegra20-emc.c   |  13 +-
+ drivers/memory/tegra/tegra30-emc.c   |  13 +-
+ include/linux/clk/tegra.h            |   8 +
+ include/soc/tegra/emc.h              |  16 --
+ 13 files changed, 508 insertions(+), 93 deletions(-)
+ delete mode 100644 include/soc/tegra/emc.h
