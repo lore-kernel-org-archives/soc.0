@@ -8,14 +8,14 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AD10C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 22:19:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23926C43381
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 22:19:43 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CDD3164E2A
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 22:19:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CDD3164E2A
+	by mail.kernel.org (Postfix) with ESMTPS id DF9AC64E29
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 22:19:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DF9AC64E29
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -24,66 +24,66 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=kwA4G8ZeATr3VO+rAjI8cYPhDGBuKlkjogdV7a/2kOE=; b=pIUagFPQVWXNQ6KWoWB3ynyGs
-	tcn9WKFg6Ld/VhpOhJkX66NCUh0OD3y4FoAXsWywtuw92kw+O1n3eGy5K9GTdJF3HQk3PNaegVqQP
-	BaqKlrNQJQb61b1Qtx5DahA+yvH8NAIhVL2B7du9atsO2fpQBZ8VvWK2qcEWcO9xCfUmaId50lfQO
-	L4EITxcqrTHSY4VRULuHoHMZo5dwDtA+sDU52/qQc0rB6PwyjoNLQ2Fi/I7D+omaVKeR2ovuDHRnG
-	Btch0+i1aZZxGnIzN01fxRkIBS6/SiWYV+KwOUtupD3ik2QeACtraV//KtjFNyVavYsQLcUO/gqmW
-	kAl4jon7Q==;
+	 bh=o9xrfRJ6WMdeMlSv5DdcDcFa+vXbrOEkO4P+xgEtB8M=; b=t7ke4cD+cgX55d1q9wJSIh2V9
+	JtEsOHC6D1GxO2ny24zB7sdqV3zke+pYDNM174LxXSFPtmShLiTZW22W1cj1Fdqgzdgl+P7QdpLKv
+	WviYTZAdPlwMvpdqEL1jrosfrscGoeVXTFQusgv+B2kvNOOPkVPs3aE99J+ewZTgBW1fOfq7FsC92
+	TpizfcVATETanG+JJIco1Ib+YK4kNUE8SY1eGYjt5AQ8EmOHRoHY1gtQ0phnaWEPfD1sI51x/Y0fx
+	hoEPJTthVGg/gkHej6/+eWSE4K5aZ5D0dHyAD018oTcn/XRVi0gp3zmZRhFsS6/PyCX/eOhMJx2+Y
+	J3h4Ggrpw==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l6L33-0000zk-Hm; Sun, 31 Jan 2021 22:18:25 +0000
-Received: from mail-pj1-x102c.google.com ([2607:f8b0:4864:20::102c])
+	id 1l6L2z-0000yn-49; Sun, 31 Jan 2021 22:18:21 +0000
+Received: from mail-pf1-x42d.google.com ([2607:f8b0:4864:20::42d])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l6L2p-0000wq-9f
- for linux-arm-kernel@lists.infradead.org; Sun, 31 Jan 2021 22:18:12 +0000
-Received: by mail-pj1-x102c.google.com with SMTP id g15so9809594pjd.2
+ id 1l6L2m-0000vr-8n
+ for linux-arm-kernel@lists.infradead.org; Sun, 31 Jan 2021 22:18:09 +0000
+Received: by mail-pf1-x42d.google.com with SMTP id e19so10300823pfh.6
  for <linux-arm-kernel@lists.infradead.org>;
- Sun, 31 Jan 2021 14:18:10 -0800 (PST)
+ Sun, 31 Jan 2021 14:18:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=azUrymzYkMpG3QdawuXg9B9eTIWCZ4nx4P4ZI0Sx6Pc=;
- b=Fi5Garo7fYRiZD2Gf5igCyIHildypmTMl3mHuRio4GC9o0hd8qRBrOVzTONiX17INl
- 7GZVO/hHLpL8DgnGknCuEIetw2l9KPXgjFnoUuNU3VvwXRgMineCpnpAkXe/WrJ9h6dk
- 1xUDVrdHJ00eBuTW5vk7Tcp1UMhNJf24JEkD5G3CSB0aftg3B4aX0Ul87Jiq4PxcUfPs
- IWoQCdjPJetYGiPvijEAi0KI8jtBpjiGRc52ciRUXg0HBCNTdBN3u0+OBwHYG4ElxT/9
- jnejqg893XLVixfLqEXgbkzSDAf6ZVe6XfKzuI9W0lcNNKwvV7HCkdix4K4UE4dgl7In
- +bjw==
+ bh=/T4k3lHLOO0wbkrdlTk7LJ/Zq3cU4QuNjq3JxsvSkzI=;
+ b=vKhTi+vt9kmaVJxEWqdDljyxw1IDyGAWPjig29O4Mtmq5ZW8PoXkvv9XY4dnQvgdg1
+ WuAc6h+2PPxjCY1JleSHB22sUVO516wS8ALsjlnwaG5bgmDGO3ji1VVIU7ZW+Zy1rL+k
+ mHIU8WosjPPfvY5ya8E8/bmGEuHAHsJ+lB95cMKO8PdH/CDahfX9AxVGccYjpUqTKqFu
+ 0gfP80iecVHZSTSR/W8ARwB8KG/DQoCw0pZDrU2pSSk+u8CtTXe5kPw4cV5+W6qeb1Mb
+ 4q3amRIVmjK3Q1cToVaq/lKzn9EnbvMG9gC/NCJoT2EQ8aiojwoy/kog65uNiE+f12qm
+ qn1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=azUrymzYkMpG3QdawuXg9B9eTIWCZ4nx4P4ZI0Sx6Pc=;
- b=myAkDcCRarYThNvXra3AsgazhFu8A2QnI90wZAwesAUyXAQxGld1ANkmIEuabrPXj+
- 1v3N4/qrLzzZERAJvGlRnQtxAFElblWWNDHhYnU0ZePV2hlc6FKb1TWm5ypLzWoIvgvQ
- eyqmR3u8/k9OPoT5DPQdTZzoDiIHEDZA98p92B58XeOt5ienPtJua6c16PEY1/X6RfjV
- ZnLjat2VkadGbolIF8tSlo7htimRWLJAflw7ANZoWzcLB00Z7JPnLPSYqzC04hk7G3qf
- 59J1VX02cbh5WIir8FCwbTyvQ8UFGwZVEkb7edwepU2eiwKd/tuOOfWZnnrSrMxgMom0
- GJLQ==
-X-Gm-Message-State: AOAM532BX8ULLpj38BR1PMnMiA8ihIdN/6RInIK877ZD9D4zmu/SfSS/
- 66ZCtXVmbz7X3AJ5DAR0XsA=
-X-Google-Smtp-Source: ABdhPJznS1Ur/1MiAJ+AKUoYzomujL9QNccE+rJLDi+mSPNdYXJpJCCxvwbgUdsr5E+dDCKsSvXrDA==
-X-Received: by 2002:a17:902:6b02:b029:da:c6c0:d650 with SMTP id
- o2-20020a1709026b02b02900dac6c0d650mr15206734plk.74.1612131489147; 
- Sun, 31 Jan 2021 14:18:09 -0800 (PST)
+ bh=/T4k3lHLOO0wbkrdlTk7LJ/Zq3cU4QuNjq3JxsvSkzI=;
+ b=roWHejwZ5qp2b4sL+KU6dcVG6UYx9JLPjTkhqK0c8gpWC8ZHlAPR7e652EZXh6WrH6
+ 2TPoiCo78g2w11jQRnbfgRWUNZfj7xf0CM3/iJgZZ3ZWxRi+1HwkFvfWaQb7Ghpkq7YY
+ w6jl0MPARd6+aA4o1ym+jBY7QeV+X88lcLQTe3vAaT/34MFdCnofTJMUJ08zS1PaaUCQ
+ p0qBRCeAZVdksg667XM0ge1onMhZaW4kgRHCKACNIOU8LIi+WSlJYNChNtkOrQgykIRt
+ o342iEDHBLs6iZyFjX8EDPZYQnFX+QuZp8dE7Du+If8pbaYvTlooq8xw8d/cKbhBTnBa
+ 9eBQ==
+X-Gm-Message-State: AOAM533ScThLFT+DT1r49GFP/lopiIXU9iUi3vctnx11TzeeApmFzZ1t
+ 9HEtjbUI5stlCcQazzUOnWg=
+X-Google-Smtp-Source: ABdhPJw7X+KfMsWTD+sT71vXZQHMKegPfX4Vw1H8la5IOlD7h3laKVPBBYkNHxx83qcSRxD/HyYJgA==
+X-Received: by 2002:aa7:8b0f:0:b029:1c0:e782:ba29 with SMTP id
+ f15-20020aa78b0f0000b02901c0e782ba29mr13246799pfd.37.1612131486122; 
+ Sun, 31 Jan 2021 14:18:06 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
- by smtp.gmail.com with ESMTPSA id a4sm15512177pfg.41.2021.01.31.14.18.07
+ by smtp.gmail.com with ESMTPSA id a4sm15512177pfg.41.2021.01.31.14.18.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 31 Jan 2021 14:18:08 -0800 (PST)
+ Sun, 31 Jan 2021 14:18:05 -0800 (PST)
 From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Subject: [GIT PULL 5/6] Broadcom drivers changes for 5.12
-Date: Sun, 31 Jan 2021 14:17:19 -0800
-Message-ID: <20210131221721.685974-5-f.fainelli@gmail.com>
+Subject: [GIT PULL 3/6] Broadcom devicetree changes for 5.12
+Date: Sun, 31 Jan 2021 14:17:17 -0800
+Message-ID: <20210131221721.685974-3-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210131221721.685974-1-f.fainelli@gmail.com>
 References: <20210131221721.685974-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210131_171811_451130_7E330A66 
-X-CRM114-Status: GOOD (  13.81  )
+X-CRM114-CacheID: sfid-20210131_171808_336514_DADFA14E 
+X-CRM114-Status: GOOD (  10.15  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,56 +95,70 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Rob Herring <robh@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Florian Fainelli <f.fainelli@gmail.com>, arnd@arndb.de, khilman@kernel.org,
- olof@lixom.net, bcm-kernel-feedback-list@broadcom.com,
- =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: linux-arm-kernel@lists.infradead.org,
+ Florian Fainelli <f.fainelli@gmail.com>, arnd@arndb.de,
+ Tim Gover <tim.gover@raspberrypi.com>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>, khilman@kernel.org,
+ Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+ bcm-kernel-feedback-list@broadcom.com, Maxime Ripard <maxime@cerno.tech>,
+ olof@lixom.net, Stanislav Jakubek <stano.jakubek@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210131221719.YBUvsJoAEAjFuOTRwWZYLc1cWepvYjY-7PLyXp4Wwek@z>
+Message-ID: <20210131221717.H0rwxhLlwqMLAcegDzSALgH3IkTh1sO51R3zvDetBLE@z>
 
-VGhlIGZvbGxvd2luZyBjaGFuZ2VzIHNpbmNlIGNvbW1pdCA1YzhmZTU4M2NjZTU0MmFhMGI4NGFk
-YzkzOWNlODUyOTNkZTM2ZTVlOgoKICBMaW51eCA1LjExLXJjMSAoMjAyMC0xMi0yNyAxNTozMDoy
-MiAtMDgwMCkKCmFyZSBhdmFpbGFibGUgaW4gdGhlIEdpdCByZXBvc2l0b3J5IGF0OgoKICBodHRw
-czovL2dpdGh1Yi5jb20vQnJvYWRjb20vc3RibGludXguZ2l0IHRhZ3MvYXJtLXNvYy9mb3ItNS4x
-Mi9kcml2ZXJzCgpmb3IgeW91IHRvIGZldGNoIGNoYW5nZXMgdXAgdG8gOGI4ZjA5NWI5MDc2Y2E2
-MTEwN2MwOTEwYzkyNzNhZmQxZGZhMWYwNDoKCiAgc29jOiBiY206IGJyY21zdGI6IFJlbW92ZSBz
-b2NfaXNfYnJjbXN0YigpICgyMDIxLTAxLTI3IDA5OjM2OjQxIC0wODAwKQoKLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpUaGlz
-IHB1bGwgcmVxdWVzdCBjb250YWlucyBCcm9hZGNvbSBTb0NzIGRyaXZlcnMgY2hhbmdlcyBmb3Ig
-NS4xMiwKcGxlYXNlIHB1bGwgdGhlIGZvbGxvd2luZzoKCi0gUmFmYWwgYWRkcyBzdXBwb3J0IGZv
-ciB0aGUgUG93ZXIgTWFuYWdlbWVudCBCdXMgKFBNQikgd2hpY2ggaXMgdXNlZCBpbgogIGEgdmFy
-aWV0eSBvZiBEU0wvQ2FibGUgbW9kZW0vU1RCIFNvQ3Mgd2l0aCBhIHByaW1hcnkgdGFyZ2V0IGJl
-aW5nIHRoZQogIDQ5MDggV2ktRmkgU29DIGZyb20gdGhlIERTTCBvcmdhbml6YXRpb24uIEhlIGFs
-c28gYWRkcyBlbXB0eSBzdHVicyB0bwogIGdldCB0aGUgY2hpcCBpZGVudGlmaWNhdGlvbiAoZmFt
-aWx5IGFuZCByZXZpc2lvbikgdG8gcGVybWl0IHRoZQogIEJyb2FkY29tIFNUQiBVU0IgUEhZIGRy
-aXZlciBmcm9tIGJlaW5nIGRlY291cGxlZCBmcm9tIEFSQ0hfQlJDTVNUQgoKLSBGbG9yaWFuIHJl
-bW92ZXMgYW4gdW51c2VkIGZ1bmN0aW9uIGFuZCBpdHMgaGVhZGVyCgotLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCkZsb3JpYW4g
-RmFpbmVsbGkgKDEpOgogICAgICBzb2M6IGJjbTogYnJjbXN0YjogUmVtb3ZlIHNvY19pc19icmNt
-c3RiKCkKClJhZmHFgiBNacWCZWNraSAoMyk6CiAgICAgIGR0LWJpbmRpbmdzOiBwb3dlcjogZG9j
-dW1lbnQgQnJvYWRjb20ncyBQTUIgYmluZGluZwogICAgICBzb2M6IGJjbTogYWRkIFBNIGRyaXZl
-ciBmb3IgQnJvYWRjb20ncyBQTUIKICAgICAgc29jOiBiY206IGJyY21zdGI6IGFkZCBzdHVicyBm
-b3IgZ2V0dGluZyBwbGF0Zm9ybSBJRHMKCiAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy9wb3dlci9i
-cmNtLGJjbS1wbWIueWFtbCAgICB8ICA1MCArKysrCiBNQUlOVEFJTkVSUyAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxMCArCiBkcml2ZXJzL3NvYy9iY20vTWFrZWZp
-bGUgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMiArLQogZHJpdmVycy9zb2MvYmNtL2Jj
-bTYzeHgvS2NvbmZpZyAgICAgICAgICAgICAgICAgICAgfCAgIDkgKwogZHJpdmVycy9zb2MvYmNt
-L2JjbTYzeHgvTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgfCAgIDEgKwogZHJpdmVycy9zb2Mv
-YmNtL2JjbTYzeHgvYmNtLXBtYi5jICAgICAgICAgICAgICAgICAgfCAzMzMgKysrKysrKysrKysr
-KysrKysrKysrCiBkcml2ZXJzL3NvYy9iY20vYnJjbXN0Yi9jb21tb24uYyAgICAgICAgICAgICAg
-ICAgICB8ICAxNyAtLQogaW5jbHVkZS9kdC1iaW5kaW5ncy9zb2MvYmNtLXBtYi5oICAgICAgICAg
-ICAgICAgICAgfCAgMTEgKwogaW5jbHVkZS9saW51eC9zb2MvYnJjbXN0Yi9icmNtc3RiLmggICAg
-ICAgICAgICAgICAgfCAgMTYgKwogaW5jbHVkZS9zb2MvYnJjbXN0Yi9jb21tb24uaCAgICAgICAg
-ICAgICAgICAgICAgICAgfCAgMTIgLQogMTAgZmlsZXMgY2hhbmdlZCwgNDMxIGluc2VydGlvbnMo
-KyksIDMwIGRlbGV0aW9ucygtKQogY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2
-aWNldHJlZS9iaW5kaW5ncy9wb3dlci9icmNtLGJjbS1wbWIueWFtbAogY3JlYXRlIG1vZGUgMTAw
-NjQ0IGRyaXZlcnMvc29jL2JjbS9iY202M3h4L2JjbS1wbWIuYwogY3JlYXRlIG1vZGUgMTAwNjQ0
-IGluY2x1ZGUvZHQtYmluZGluZ3Mvc29jL2JjbS1wbWIuaAogZGVsZXRlIG1vZGUgMTAwNjQ0IGlu
-Y2x1ZGUvc29jL2JyY21zdGIvY29tbW9uLmgKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmxpbnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0CmxpbnV4LWFy
-bS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZwpodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFybS1rZXJuZWwK
+The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+
+  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+
+are available in the Git repository at:
+
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.12/devicetree
+
+for you to fetch changes up to a0610b409fc9f90b4861c021ebe853bfcc310bb3:
+
+  Merge tag 'tags/bcm2835-dt-next-2021-01-28' into devicetree/next (2021-01-28 20:11:44 -0800)
+
+----------------------------------------------------------------
+This pull request contains Broadcom ARM-based SoCs Device Tree changes
+for 5.12, please pull the following:
+
+- Dave adds a proper compatile string for the DSI1 panel on 2711
+  (Raspberry Pi 4) to permit adequate driver differentiation
+
+- Nicolas declares reserved memory regions filed by the Rasbperry Pi
+  bootloader to indicate the running system configuration
+
+- Maxime declares the BSC (HDMI I2C controller) and CEC interrupt
+  controllers
+
+- Stanislav fixes a tab vs. space issue in the BCM21664 DTS
+
+----------------------------------------------------------------
+Dave Stevenson (1):
+      ARM: dts: bcm2711: Use compatible string for BCM2711 DSI1
+
+Florian Fainelli (2):
+      Merge tag 'tags/bcm2835-dt-next-2021-01-25' into devicetree/next
+      Merge tag 'tags/bcm2835-dt-next-2021-01-28' into devicetree/next
+
+Maxime Ripard (2):
+      ARM: dts: bcm2711: Add the BSC interrupt controller
+      ARM: dts: bcm2711: Add the CEC interrupt controller
+
+Nicolas Saenz Julienne (1):
+      ARM: dts: bcm2711: Add reserved memory template to hold firmware configuration
+
+Stanislav Jakubek (1):
+      ARM: dts: bcm21664: Replace spaces with a tab
+
+ arch/arm/boot/dts/bcm21664.dtsi       |  2 +-
+ arch/arm/boot/dts/bcm2711-rpi-4-b.dts | 17 +++++++++++++++++
+ arch/arm/boot/dts/bcm2711.dtsi        | 31 +++++++++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+), 1 deletion(-)
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
