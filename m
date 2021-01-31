@@ -1,38 +1,84 @@
-Return-Path: <mripard@kernel.org>
+Return-Path: <SRS0=Fj/g=HC=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E907C433DB
-	for <soc@archiver.kernel.org>; Sun, 31 Jan 2021 17:59:00 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 1340E64E4C; Sun, 31 Jan 2021 17:59:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10A4FC433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 18:00:12 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id AE4F061492
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 18:00:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AE4F061492
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:Cc:
+	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
+	MIME-Version:Message-ID:Subject:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+	References:List-Owner; bh=vh9etdvA2E/h+aPc8i01Ptu8bpCiTcWJw4kd4P3lhMI=; b=JQR
+	LgaYtsuY6smvrVJm+K9WM2yxodY9QEwRM39kzU1QvY3lGMFT5V+jv5hTWmGuohDkqL2SJXyNc3//v
+	xlqLTU6NWq4zsO+Q0R0lqcChVl3VBXA6ev4ObSIa8GAvSkspEMUxaz756IVIjIBEhwcrQfbcjP60t
+	3xXywL3WL9GaD8UGOhFYxlor0SdtFiYI9S3XW64N+5HxRaEBQrbaP4Sbs4oFw0XF7am81jEXPPF2/
+	kOtnZiDFxOqn59+aj1CliHO6V709H9JYsFgXKL2ua2VKL/DTHbAi5o3xJtolp+qRSyggxkU7GbgIg
+	yu/0Ch5RBw100P4w3wd20daBJw/G+lw==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l6H03-0004TU-9S; Sun, 31 Jan 2021 17:59:03 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l6H01-0004Sr-1P
+ for linux-arm-kernel@lists.infradead.org; Sun, 31 Jan 2021 17:59:01 +0000
 Received: by mail.kernel.org (Postfix) with ESMTPSA id 7CA0764E43;
-	Sun, 31 Jan 2021 17:58:59 +0000 (UTC)
+ Sun, 31 Jan 2021 17:58:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612115939;
-	bh=tOIxTGcXlIsZPlM/axqMMBVDJKMuW295OToS+3m6rfY=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=GFxyAcgublKxyHZhC0EOlY39FQusllGDrEoXZNOq8ei+guxJHkbe2t8Zpm3GhLUI7
-	 Xq2lKcwFhKjo+eVR+lKI0dXYtmP+kT9SaQU7ZNbOxPfb9FELOGlw+dhuyLWB0wIfAC
-	 q8cYkhMv7EyecReFy2tZliifFlRUy1CMZm/2k2WrLIm0z63+3h/+1c/Pp3ZTDqwSJB
-	 mLP3N5B0b89SI3HBIjiqm3q5LHzFE6vyaUGZtQUb4pb77Nmcu8SPRHmbJaE6BWg3pP
-	 n2eLjLgA5X6g2gkEizuXTV4IPCGYgAdgFb2CJLbUPMgTinsLIXbgUqjZf9LsF6cU38
-	 POGmI4UQimAiA==
+ s=k20201202; t=1612115939;
+ bh=tOIxTGcXlIsZPlM/axqMMBVDJKMuW295OToS+3m6rfY=;
+ h=Date:From:List-Id:To:Cc:Subject:From;
+ b=GFxyAcgublKxyHZhC0EOlY39FQusllGDrEoXZNOq8ei+guxJHkbe2t8Zpm3GhLUI7
+ Xq2lKcwFhKjo+eVR+lKI0dXYtmP+kT9SaQU7ZNbOxPfb9FELOGlw+dhuyLWB0wIfAC
+ q8cYkhMv7EyecReFy2tZliifFlRUy1CMZm/2k2WrLIm0z63+3h/+1c/Pp3ZTDqwSJB
+ mLP3N5B0b89SI3HBIjiqm3q5LHzFE6vyaUGZtQUb4pb77Nmcu8SPRHmbJaE6BWg3pP
+ n2eLjLgA5X6g2gkEizuXTV4IPCGYgAdgFb2CJLbUPMgTinsLIXbgUqjZf9LsF6cU38
+ POGmI4UQimAiA==
 Date: Sun, 31 Jan 2021 18:58:57 +0100
 From: Maxime Ripard <mripard@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org, soc@kernel.org
-Cc: Maxime Ripard <mripard@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@siol.net>
 Subject: [GIT PULL] Allwinner Drivers Changes for 5.12
 Message-ID: <91f2980f-266f-41f2-ba10-5a395625498c.lettre@localhost>
 MIME-Version: 1.0
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210131_125901_254724_D357FCED 
+X-CRM114-Status: UNSURE (   9.68  )
+X-CRM114-Notice: Please train this message.
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: Jernej Skrabec <jernej.skrabec@siol.net>, Chen-Yu Tsai <wens@csie.org>,
+ linux-arm-kernel@lists.infradead.org, Maxime Ripard <mripard@kernel.org>
+Content-Type: multipart/mixed; boundary="===============0832117332219180988=="
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210131175857.LMv6DQWguiJH4tmHSadfVG49ZueWLX153mfsWdAcdtI@z>
+
+
+--===============0832117332219180988==
 Content-Type: multipart/signed; micalg=pgp-sha256;
 	protocol="application/pgp-signature"; boundary="XsQoSWH+UP9D9v3l"
 Content-Disposition: inline
@@ -124,3 +170,18 @@ OGD96cunddq+Tnna66oICSXa0U/CEgc=
 -----END PGP SIGNATURE-----
 
 --XsQoSWH+UP9D9v3l--
+
+
+--===============0832117332219180988==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+--===============0832117332219180988==--
+
