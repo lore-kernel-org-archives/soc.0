@@ -8,14 +8,14 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC347C433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E16C1C433E0
 	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 22:19:44 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A69FD64E29
+	by mail.kernel.org (Postfix) with ESMTPS id A9B5064E2A
 	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 22:19:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A69FD64E29
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A9B5064E2A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -24,65 +24,64 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=c1QecyIUsGUXV+scM4522myRr4T0X/Z92iGIrIFJMyQ=; b=jBQ3RVrAg4jHwiY+KMtdtFUCM
-	91oWxHHEVgprclNB8Wum60heUnKVFzWEwIBxTN28VF7nqok5Y0z4CKAtk2KukH21Md6+9DeKivJbX
-	94BWZDnJ7e0CCbCx3z+ATFASNjtJ6k26VmqYRO2HtPE/zVsvKYW/JewxSGJe587sJ0FGH+vwEW5Iv
-	WhCGD+AkOmY2QzcZECbpQWnVM04NL4K6PL5RQ43JSEwxgSVAf8bpprRgk2Ueze28Fgex1HBAu08Zx
-	d+mmnsq1KKo6hzaSGjhzebqrvh30PEpRET11GyFQW6bXJtzDj5v4/JJ6grIvDZ1rgjjISr4ejonEd
-	VI/OEw6AQ==;
+	 bh=c1QecyIUsGUXV+scM4522myRr4T0X/Z92iGIrIFJMyQ=; b=ihwDlQ2Z5aVQdDFarBMM/Bd1o
+	vQUIBn4E24NifPgp33Vd8aeQjfOw4A5MkY9F4E36HeTkHJGdhyqRjfoTkypsWxDdj1Uxgq4255qIt
+	eJVMnn3UXI2anG2OAxMZd5gTvu/ncRd0tgMvoEN6wMVgUk738NLAjS4OamJMEwA+mqQW8ILV437UJ
+	HkNxtsGc+odqNxqKVvTn8AlmHRUPMKedKJUffRRWy+F3Ccwd9rMdQVoaV+vW7MW05gl7cEj1CGgB0
+	eLbXLRlPh2LXsC4YymxIYz1/GeKFVeEzgq4kBQkklwgUnecpQngnyN7BxfkWg9Od10U+Mesf2GcV4
+	H1GKgDNnw==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l6L3I-00011Z-21; Sun, 31 Jan 2021 22:18:40 +0000
-Received: from mail-pl1-x636.google.com ([2607:f8b0:4864:20::636])
+	id 1l6L35-00010H-VD; Sun, 31 Jan 2021 22:18:27 +0000
+Received: from mail-pg1-x52f.google.com ([2607:f8b0:4864:20::52f])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l6L2s-0000xn-B7
- for linux-arm-kernel@lists.infradead.org; Sun, 31 Jan 2021 22:18:16 +0000
-Received: by mail-pl1-x636.google.com with SMTP id h15so8892717pli.8
+ id 1l6L2q-0000xI-Qa
+ for linux-arm-kernel@lists.infradead.org; Sun, 31 Jan 2021 22:18:15 +0000
+Received: by mail-pg1-x52f.google.com with SMTP id j2so9064915pgl.0
  for <linux-arm-kernel@lists.infradead.org>;
- Sun, 31 Jan 2021 14:18:13 -0800 (PST)
+ Sun, 31 Jan 2021 14:18:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
  bh=Cy7H6RjOSWJaQHgQqPSzs728mDlUm0icPLVytrCrESM=;
- b=ndmxwi/zgkeF4HS+QACbI92MwWTq6HQTwYp6B+ZrzxdIzkS7+ujD/IoYVh3mYFbWxP
- HikBY0QoIKdDs6I3d4zUg/Rc7gT6HgRkiOm26foVgF+zU7fdxaP8bLXfnobSlGjYSdZL
- Al6ZYfbc1OEzmf91mv1+knf8sNwVCGnLEJx2wyNEA/QJXdNPc2QSSlkA5y7PMLdUpSje
- dV8sUQokvTtRaVcyNjcudghsV4bmtU4PU50lK4+2F/ERuGZgnffoM6YToHpeUE9N/+xe
- KwFpOClOyOauW5+G+gLLIRssSBNjH+cgORMl0ch9I1Ry05EPEYxJFTzjCFzz9J4rrubz
- AQ6A==
+ b=ZecceKtP4mnRvzX+G9BULnGuizMGXcN+sPvL6VobA/HTraKoQeGASgzqfqXStWtBAH
+ cYX91nYf0cdFpbBvq1m7Lgk9i4jeAI4hX+RVCcPuYaHfmj8FPF5Vk9nkTbh0z5kKqg2e
+ kU/ZggUmfqtZi/Z1yoxIZVnrVloMteKYu/yv4mvQOsM2O8if6YSTbI2DlY+KM6TF7qTN
+ hqbpXTV9aMg3AefS2CVcm3DNhC81VYhjbjJ0aFPHE0lhaYmCeXWDcK3P1fhswQJpYQkT
+ /MUmliunPpw7EM6MozIRlp3L9DmAX92V4CE3YR/p+lhu4kuiqbzp0Am34nJr3ixyYPwd
+ zbgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
  bh=Cy7H6RjOSWJaQHgQqPSzs728mDlUm0icPLVytrCrESM=;
- b=ieKbjclqKffitnnE741KvlYgAniu1safWVdpHyn4e9jnmxKOU/604B4AfsmGIrSaGa
- dygxmm7FMLOrGmtklTWGjgRcXOn9Qa2bJH+Zu7qagEEvF1YGo329DHF8nanL3/HenjzA
- HvWRUR1r6YpkevQdJxlgUMwJB3qMYRA0RX9iPv+ZB67ZXShKmU4tFGaj+obck6SLRd+7
- Shc1wfOD+IbNwUq/UyyKOMBVRtcbkn4jghbA0E0ZYaV7F/z96rcD9dBRwxXNEm46e4sJ
- NuQOFIzQg0X1kMGq81OVf9Jq0OT/AyRfq6YrG27VJ+qk4XkBLjepp+doMg+YlaUOSGTB
- uuyw==
-X-Gm-Message-State: AOAM531Z8nsPPWistvEcD8HCeE+4FVce7gijUF0HtKRhPwWiZiK/saGC
- ZCNdjYSH8X+p0y7I1J8fHzc=
-X-Google-Smtp-Source: ABdhPJy6upU/bZBOa4WobjbR1Z2RXkAusy3PH7J/EPW6l45rMgoymOR4RgCl7EjRSPZ6LGr3KV0eeg==
-X-Received: by 2002:a17:902:7445:b029:e1:5a7b:3f15 with SMTP id
- e5-20020a1709027445b02900e15a7b3f15mr2586609plt.29.1612131492227; 
- Sun, 31 Jan 2021 14:18:12 -0800 (PST)
+ b=YIlOSFdgE2Xc4NVFiRgyJgHStbOAddc/azTYfQcSAfuGqN/dBrcnIvFwu2ZYg+mHM5
+ cP0sQ4afWxIFIVuH5sm+Pq0By1WMEaznnvPutX18aILZE9HobA9TV5fhtyofxxcUkNph
+ Rcmfk+Pt5SB9k8pAy/zVhVxIJm7rvsPbzT8La7ujn4j+Y8Myh22yJU20vmhXuO4v6x58
+ BqLCcFO3m/1+OjOaF0+btDtDSvdsrThCoHwyN0ZROu4faHFJZRCIAu4FkODUroE+W+qN
+ 9aNuJhHVLBT87j19iuy58V5NRsEsmDtBuDeUvH4tmIeG9qVw0JMyIijmgF6OUdKnheqL
+ ELSg==
+X-Gm-Message-State: AOAM531v507qmt5L7Xz7ZNFOlIXjRfJEyeC7AWfpNcMYme3+v5K4u19I
+ QkakGGKh9HyXamHagDfd+as=
+X-Google-Smtp-Source: ABdhPJzRSNtio/NBrFfep7fHfrzy4BXDBG8KVKXoVIVfQ/lAa8qEDQGCuU3mEcOm7n+chBPdtrDTiA==
+X-Received: by 2002:a65:6246:: with SMTP id q6mr1020521pgv.6.1612131490747;
+ Sun, 31 Jan 2021 14:18:10 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
- by smtp.gmail.com with ESMTPSA id a4sm15512177pfg.41.2021.01.31.14.18.10
+ by smtp.gmail.com with ESMTPSA id a4sm15512177pfg.41.2021.01.31.14.18.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 31 Jan 2021 14:18:11 -0800 (PST)
+ Sun, 31 Jan 2021 14:18:09 -0800 (PST)
 From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Subject: [GIT PULL 7/7] Broadcom soc changes for 5.12
-Date: Sun, 31 Jan 2021 14:17:21 -0800
-Message-ID: <20210131221721.685974-7-f.fainelli@gmail.com>
+Subject: [GIT PULL 6/6] Broadcom soc changes for 5.12
+Date: Sun, 31 Jan 2021 14:17:20 -0800
+Message-ID: <20210131221721.685974-6-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210131221721.685974-1-f.fainelli@gmail.com>
 References: <20210131221721.685974-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210131_171814_495990_BDFD7F71 
+X-CRM114-CacheID: sfid-20210131_171812_957661_375694D3 
 X-CRM114-Status: GOOD (  10.41  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
@@ -104,7 +103,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210131221721.xa_O4FuuxC0Vb0kWc_QgCFN2GKQ1BwMUNWw8t8lNuQ4@z>
+Message-ID: <20210131221720.ywvvsSJ3GX6cHROQbO88Iq9JzhPKQIWqgYy_G3b7R2k@z>
 
 The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
