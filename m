@@ -1,177 +1,112 @@
-Return-Path: <SRS0=N7fp=HB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=275N=HC=gmail.com=matthias.bgg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52A42C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 30 Jan 2021 13:15:57 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E96BC433DB
+	for <soc@archiver.kernel.org>; Sun, 31 Jan 2021 15:07:59 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7498664E04; Sun, 31 Jan 2021 15:07:59 +0000 (UTC)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EE46A64D9F
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 30 Jan 2021 13:15:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EE46A64D9F
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:Cc:
-	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
-	MIME-Version:Message-ID:Subject:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-	References:List-Owner; bh=BdUvQW5CQZReTjSLR2DcCmen3jIdPhgBtLpqkbDiTqY=; b=ToQ
-	NOLeN0JK2Fep6bDWacygvahBHniAasDr5LrhY6B/Y1mbNxQGAHdCDU+hIVjC7PbQYYid4kmubDBNn
-	bvieCk3fOXLS1Iu8cGJW7KUHIURAVy6HnMm68ms5JSyi12tY+rdDHYTTOwXD93YE+Sz67fZmIxXaj
-	YCMl45LXxWn0RjKQEem5o1lvW/laN/ldPobcRTA+htPQkSmxDlwQ3J9Fi9iv0ATj0aMd2Tls+ZcpX
-	B47EqWQnUWi8DZhNHOEAz8heaTdp87n4WxnnLJWuiAbadtyr88cKZXlek9Qr2gNIy9F9Jyz9tDqw/
-	Cflxhe1FftvvXKst1DjE3ZRMmi0YIew==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l5q53-0007cD-QP; Sat, 30 Jan 2021 13:14:25 +0000
-Received: from fllv0016.ext.ti.com ([198.47.19.142])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l5q4y-0007bq-Lc
- for linux-arm-kernel@lists.infradead.org; Sat, 30 Jan 2021 13:14:24 +0000
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
- by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 10UDECvx011905;
- Sat, 30 Jan 2021 07:14:12 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
- s=ti-com-17Q1; t=1612012452;
- bh=XFymvdCm4O53NxcLqDM99zA8H+6HJ83huZq37r3iRCk=;
- h=Date:From:To:CC:Subject;
- b=u/WjIbL9/5cK3i+lfz3CS2fB0bmK1+VQ7tj23FMJu22LWTE4e1rlHKHE8tAZ6DGvP
- oGPdQfv7lJgENzW4oL15yhpI86pmzPenBg8MTh/LvhOMK8Ov3vGv0IHTtGwsu+CmFh
- VUK+CehysLzKu9OVf+RxLZKkqSwXl5Y7XgfRNGfU=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
- by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 10UDEC1k105703
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Sat, 30 Jan 2021 07:14:12 -0600
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Sat, 30
- Jan 2021 07:14:11 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Sat, 30 Jan 2021 07:14:11 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
- by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 10UDEB3Q020590;
- Sat, 30 Jan 2021 07:14:11 -0600
-Date: Sat, 30 Jan 2021 07:14:11 -0600
-From: Nishanth Menon <nm@ti.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 099E364E1F;
+	Sun, 31 Jan 2021 15:07:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 099E364E1F
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=matthias.bgg@gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id y187so11036159wmd.3;
+        Sun, 31 Jan 2021 07:07:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Vpo/YLEC9aCyTz6KjobMCzq+82sKuMKIXEWEt+YC14E=;
+        b=OlJOa4jS477uJ7EGNMHHHo06AzD3gWf9Ggn7Yl+4kMCxOZ7sarG+gnPbqG65bMLpAy
+         zrIecsk0tUiZrEkUOX33tjVsDNJFOE2RPNNe0lYaScEgAfTYu/X3H1eva4HZEVd2373c
+         3crbm9ObgLuScp0cS2kd3jwhW5fWuqLtXITjCGrcTPHIIniDwiQcf8dRcsBtQbufrZsH
+         EDjobqXEZ7SR44KDq4C0UdS7IPqWzqQm9e1zyy2Hh+nEmthY139EssNDTr3eP1+J4lMu
+         kD+bg/qn7U2xEUARVLR61rT/P4S7tGL1hrRGDW1g27y96lfPfkzLWBszO7tt8pXN9GNr
+         TN4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Vpo/YLEC9aCyTz6KjobMCzq+82sKuMKIXEWEt+YC14E=;
+        b=SqEffqYxwrl8iB4sTcUJGptzSeKT403xAMiDMqns/dNlva6H3ZClgvrtHji154AYrO
+         1594vwvIv0Z0a9MHCzXBYuael+l5B6bR9ox0SUsAfMez1Sk54w/WNpOExm5jLZ8DQkFy
+         uqpk1xxrUPEyhvEVfnkR9gSBWEXJQ+JLXLQ2immIq5ANS8/Wi6W5dqvrQsSZz3FenO/2
+         5I7bs3Q6AdCmyzfXdXU8MQW+8EDzihWAJd+5ux3GYKtEsOjvNx8LJD2vU6BSPB7wgDp6
+         H0tVIhEqz1uDyNQjsp7wWYOtRectNTGrRJZp9SAEkayFoQdkDNzUKa9Ru3LSP6MoXRNE
+         HQJA==
+X-Gm-Message-State: AOAM531hv5ZtB4IydEk49yCnue6bVemYepEekuC25Py4NrOD311YsKlH
+	+/GIyN1mAO4cXjKW1jRvnrp3gf1BrOFJqkj6
+X-Google-Smtp-Source: ABdhPJyUzLGZ44ueTOjnLv5xrehDKINnxZ+xuSyonqd1VMxtcLkaGvmwKgpdsE5Q8iAy+4LLAe9/jw==
+X-Received: by 2002:a05:600c:4f50:: with SMTP id m16mr11148122wmq.175.1612102048930;
+        Sun, 31 Jan 2021 06:07:28 -0800 (PST)
+Received: from ziggy.stardust ([213.195.126.134])
+        by smtp.gmail.com with ESMTPSA id r16sm23529682wrx.36.2021.01.31.06.07.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Jan 2021 06:07:28 -0800 (PST)
+Subject: Re: [PATCH v1 2/2] arm64: configs: Support DEVAPC on MediaTek
+ platforms
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- <arm@kernel.org>, <soc@kernel.org>
-Subject: [GIT PULL 1/2] MAINTAINERS: Update to TI maintainer for v5.12
-Message-ID: <20210130131411.afna4wj72r7xscqn@skinny>
+To: Neal Liu <neal.liu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ SoC Team <soc@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, lkml <linux-kernel@vger.kernel.org>,
+ Hanks Chen <Hanks.Chen@mediatek.com>,
+ Jackson-kt Chang <Jackson-kt.Chang@mediatek.com>, wsd_upstream@mediatek.com
+References: <1608713092-26952-1-git-send-email-neal.liu@mediatek.com>
+ <1608713092-26952-3-git-send-email-neal.liu@mediatek.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+Message-ID: <68442164-d649-aee0-cfe8-c9ebb868612d@gmail.com>
+Date: Sun, 31 Jan 2021 15:07:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210130_081420_832479_5C2813DB 
-X-CRM114-Status: GOOD (  11.18  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: linux-arm-kernel@lists.infradead.org, Tero Kristo <kristo@kernel.org>,
- linux-kernel@vger.kernel.org
-Content-Type: multipart/mixed; boundary="===============7268091315775590414=="
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210130131411.k7N7LOlUEc9EEllM7uQ9FQ3EA-p-LB_6NbZoPvMMFvI@z>
-
---===============7268091315775590414==
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gicpp6a64sa3muot"
-Content-Disposition: inline
-
---gicpp6a64sa3muot
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-Please pull the following MAINTAINERS file update for v5.12 cycle. Made
-sense to send via ARM path since the main PR path was for TI platforms.
-
-The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-
-  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/nmenon/linux.git tags/ti-k3=
--maintainer-for-v5.12
-
-for you to fetch changes up to 2672b94d730c4b69a17ce297dc3fa60b980e72dc:
-
-  MAINTAINERS: Update my email address and maintainer level status (2021-01=
--12 07:47:13 -0600)
-
-----------------------------------------------------------------
-Maintainer changes for TI for v5.12 merge window:
-
-- Tero switches to kernel.org address
-
-----------------------------------------------------------------
-Tero Kristo (1):
-      MAINTAINERS: Update my email address and maintainer level status
-
- MAINTAINERS | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
-
---gicpp6a64sa3muot
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmAVW5wACgkQ3bWEnRc2
-JJ3W5Q/+LP/xOm51phhdMlrCBpXa4epd3z2NZRUt//bp/ObWcF6VtSliPxLOHfUI
-7ro89eDzNj0ZtBIXEbipnOjlCvBSMsABs/d6jb3IxjiSdxrllj+IOfM+s4m7+50Y
-7qgYBNIRLCOctY42QWaffkCuYAS/IFaFKgZv4HmZSoACdwoRVPSPkeDu9+vPAMtb
-RRzvcQo19WwtkYEgvHUMSg4WU8YLd4XQES9tXxHuc9CG5P+THkXk/JDkpMIC9Ky8
-sSo0k54JFgcJ+T9Cg1/bePMLP5cs9E/vkdf3bcsYAufjjTQh/MThQk6pBeH5h/ic
-xrvlrRPteUjSyuzzhUIfUflnungio5+Q4oWIbUrxOpCaKt/6aaBOEmbvG3x3lzd5
-rZUWP2LIkOjO4NYdMWGsLkIo0x9OmaiJRIDws8NqXN+XXLZQrw4eUQa9XBA8Mx1f
-S7w6FXoGurGFRibMmMJ0N6HqmFyWoEus8YytSfx+1LGDZ4/CricNvXmzpVAGtZ7S
-SHAWzK82SyFB00Fv6G87bBqFhSwaJHN5CnlzPLic13lrp2EWcCfgLuUvpQJv92Xk
-+rgF6itAHf7uKUFmJ8JRG/uXpN7yTA0NIIkvwx7yagBBh6ITdlYjA0LtKtL3Qzyr
-TZGoCaIdEe8Qg9fjgxfdnJ40tlLXTSYTOwMAwzmTsizg0j2Q/hk=
-=bgUI
------END PGP SIGNATURE-----
-
---gicpp6a64sa3muot--
-
-
---===============7268091315775590414==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+In-Reply-To: <1608713092-26952-3-git-send-email-neal.liu@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
---===============7268091315775590414==--
 
+On 23/12/2020 09:44, Neal Liu wrote:
+> Support DEVAPC on MediaTek platforms by enabling CONFIG_MTK_DEVAPC.
+> 
+> Signed-off-by: Neal Liu <neal.liu@mediatek.com>
+> ---
+>  arch/arm64/configs/defconfig |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 17a2df6..a373776 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -257,6 +257,7 @@ CONFIG_MTD_NAND_MARVELL=y
+>  CONFIG_MTD_NAND_FSL_IFC=y
+>  CONFIG_MTD_NAND_QCOM=y
+>  CONFIG_MTD_SPI_NOR=y
+> +CONFIG_MTK_DEVAPC=m
+>  CONFIG_SPI_CADENCE_QUADSPI=y
+>  CONFIG_BLK_DEV_LOOP=y
+>  CONFIG_BLK_DEV_NBD=m
+> 
+
+From my understanding, defconfig is for a minimal config that allows to boot a
+machine. As MTK_DEVAPC is a rather exotic driver to detect bus access
+violations, I think it's not a good candidate for inclusion in defconfig.
+
+In any case, I added the SoC maintainer, so that they can correct me, if I'm
+wrong :)
+
+Regards,
+Matthias
