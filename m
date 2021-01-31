@@ -1,98 +1,74 @@
-Return-Path: <SRS0=Fj/g=HC=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=OvMt=HC=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B6AEC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 18:52:20 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3667AC433E0
+	for <soc@archiver.kernel.org>; Sun, 31 Jan 2021 22:18:04 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 07A9A64E2B; Sun, 31 Jan 2021 22:18:04 +0000 (UTC)
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B9F2D64E4F
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 18:52:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B9F2D64E4F
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:Cc:
-	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
-	MIME-Version:Message-ID:Subject:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-	References:List-Owner; bh=CMzjFwih40t1koZYDAi1OZIKPi1q9dryvtHbOkbiTP8=; b=Cji
-	68tqOKF1kKjI0FF5WV59jdqHPXyG16FneoPWSYlrDx8YdXBy97ncO3CPrgbAHlS/0uUGrCFJGwukk
-	a2zsmhdSIVI9SDwne+X8tkmWNCJN4Gmw7cA4PWvBgsTqFw2lD3LFuLq73wpi0MtRRzHDau1oct1yt
-	EmwLZlVqtidC8MzO5tKdQdx51D5SFzf6rtr1+wkPvhCFXzJHzZ9ZFX5tm4ydmVKeXQ7pwD0n25G/U
-	nAuxCBuCs6sQteMlWiLFLeR47JBAgT4+k/1icy5p6KCTyFV37nAxYJMGs7KLU7u7dEQjOU4USmwWH
-	7sYe/qnHx2xD7MlNYgvs9j8yJdDyOzw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l6Ho6-0007xb-Hw; Sun, 31 Jan 2021 18:50:46 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l6Ho3-0007xB-97
- for linux-arm-kernel@lists.infradead.org; Sun, 31 Jan 2021 18:50:44 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8FC8664E4B;
- Sun, 31 Jan 2021 18:50:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612119042;
- bh=CJ9EnBtr9oB0JIupcCdgyRtUBE1/GU+c/LlfH/9rU58=;
- h=Date:From:List-Id:To:Cc:Subject:From;
- b=ilPzho9WxrvampHiscmc6jD2O3SiT2R3jeY/2HtwKxEGa0XmlADeEUB77bvhvQs3h
- /40GcXLMTh+oxYQKqUgX/i8aasjzRt8txtutxaDR+XmlIg0I91AImKFqzKi13oV9WU
- E9blCXQSPeAej40vU1bV86lsqW4SHE20lc421Q/LvUd4kuBltFVdLDNkREQivamOKy
- pstMDDZoHZvF4P6Z5+2f9FEPTssgpkrjYPStj1Y0Dj9KpxJGaivlyzYmj0GLXl31sY
- DCMDk9lYTcPBsqsC8/pbyNWfKD6SbYnWdJuJR5wtl7oOOg7HsjvifYjFn1ZFoYnTQu
- iAH+d9Ds+js4w==
-Date: Sun, 31 Jan 2021 19:50:39 +0100
-From: Maxime Ripard <mripard@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id D193164E29;
+	Sun, 31 Jan 2021 22:18:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D193164E29
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=f.fainelli@gmail.com
+Received: by mail-pg1-f179.google.com with SMTP id t25so10733749pga.2;
+        Sun, 31 Jan 2021 14:18:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fQGpI2fGIe+9Ixx9I1K4oeU/85aYZYkAc9VcUwZmTLg=;
+        b=EWoBsooeLkdolIjfjlbXqlEzi2ltwS3dWuvw7XIZG7VmzQ2VWcnUufT7FWuKMHxt/2
+         ALjs5Aez683LQhbO4EnnrMWWa/mUYHlntGP7xkSo5qbqf7IUnAnMeuAwzu1YYZsgadlV
+         Dw+5M7O3wBRzDj8sb/m44FEsWyeAX1XZwt1CtAQOI3K6XOCr7vWokA1FP/d/ORIbKi9t
+         0Gr1f6hPIdClTHdfjQHhbbyMgEFYXNoXuNnuw3tZoUoHxGm7OSHcL4JunPXeqCMV5983
+         37N3Wr0sO20C8q4X3DPfsOFMpCl8+4Bir5ioEj/u/jei1dEGCbLB+ieRSnwpe98oDwB8
+         xooQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fQGpI2fGIe+9Ixx9I1K4oeU/85aYZYkAc9VcUwZmTLg=;
+        b=DpzbiJOitoH/qS+CiQ8gjBuj0aBjWsVJmd0haoxSqb/HxUGMqANLTdJnqh6K9m7Elc
+         E8axSa3908x75bZDcKszlflRQ77y6ZhWwAuAqqXPpwtgYoghcIYDCZFcgOE31w4/R6DW
+         0f594zIl19X1wnuniCBzX0T91QpHRuMz1yEJMq1vD50AT0fzo/td/iuu4zalaoSnKaBx
+         srXvhe4k/TbU5eRpNI5tsrg5e4CpYrmizP87ngYpE1k+IDa82YJayevh5VrosXwYPMqW
+         YmCCvnI/dRpFDW1p2cREJv27kbqSXvdHuk2tnYwthbNxkejYh5Tc598BGH1gldi5BK/g
+         7rPw==
+X-Gm-Message-State: AOAM531WlY2ySHTs4qHuJQQ1YbPdpTBSy26M+RDYYfjAIHdyctBBEdpD
+	Pw8eZRgwcWMx0DBl0EcUKJFgFItpoQA=
+X-Google-Smtp-Source: ABdhPJzoeY1liWXItaCx8TheKxc7VnWGONysx3YFbj9epgMLJpjwYeAZNrtfMmqXXETAGQoqu0AG+A==
+X-Received: by 2002:a63:2306:: with SMTP id j6mr11107451pgj.187.1612131483014;
+        Sun, 31 Jan 2021 14:18:03 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id a4sm15512177pfg.41.2021.01.31.14.18.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jan 2021 14:18:02 -0800 (PST)
+From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Subject: [GIT PULL] Allwinner Device Tree Changes for 5.12
-Message-ID: <48511540-fdd6-4fbe-8037-ec9fa8436147.lettre@localhost>
+To: soc@kernel.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>,
+	Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	khilman@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [GIT PULL 1/6] Broadcom defconfig changes for 5.12
+Date: Sun, 31 Jan 2021 14:17:15 -0800
+Message-Id: <20210131221721.685974-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210131_135043_488817_4A648982 
-X-CRM114-Status: GOOD (  14.62  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Jernej Skrabec <jernej.skrabec@siol.net>, Chen-Yu Tsai <wens@csie.org>,
- linux-arm-kernel@lists.infradead.org, Maxime Ripard <mripard@kernel.org>
-Content-Type: multipart/mixed; boundary="===============4641889968235641546=="
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210131185039.uOQCXosL3n9-gmF5T2BDpdV8cfWZSOBmQfT3qDG2gm4@z>
-
-
---===============4641889968235641546==
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="9amGYk9869ThD9tj"
-Content-Disposition: inline
-
-
---9amGYk9869ThD9tj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi Arnd, Olof,
-
-Please pull the following changes for the next release.
-
-Thanks!
-Maxime
+Content-Transfer-Encoding: 8bit
 
 The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
@@ -100,234 +76,25 @@ The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git refs/tags/sunxi-dt-for-5.12
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.12/defconfig
 
-for you to fetch changes up to 2977fcb7a974e64bdfe43d1114869afaec59d431:
+for you to fetch changes up to d88b6b834872d51d76a951f89c761e7b12717962:
 
-  ARM: dts: sunxi: Rename nmi_intc to r_intc (2021-01-31 19:49:20 +0100)
-
-----------------------------------------------------------------
-Our usual bunch of patches to support the Allwinner SoCs, this time
-adding:
-  - DT fixes spotted through the schemas
-  - Mali Support for the A10s/A13/GR8/R8
-  - MMC improvements for the A64 and H6
-  - New board: SL631 Action Camera, PineTab Early Adopter
+  Merge tag 'tags/bcm2835-defconfig-next-2021-01-25' into defconfig/next (2021-01-25 13:13:44 -0800)
 
 ----------------------------------------------------------------
-Andre Przywara (8):
-      arm64: dts: allwinner: A64: properly connect USB PHY to port 0
-      arm64: dts: allwinner: H6: properly connect USB PHY to port 0
-      arm64: dts: allwinner: Pine64-LTS: Add status LED
-      arm64: dts: allwinner: Drop non-removable from SoPine/LTS SD card
-      arm64: dts: allwinner: H6: Allow up to 150 MHz MMC bus frequency
-      arm64: dts: allwinner: A64: Limit MMC2 bus frequency to 150 MHz
-      arm64: dts: allwinner: Pine64-LTS/SoPine: Enable HS200 eMMC mode
-      arm64: dts: allwinner: Pine H64: Enable HS200 eMMC mode
+This pull request contains Broadcom ARM-based SoCs defconfig updates for
+5.12, please pull the following:
 
-Dylan Van Assche (1):
-      arm64: allwinner: dts: pinephone: add 'pine64, pinephone' to the compatible list
+- Nicolas enables the NVMEM reserved memory driver to permit reading the
+  Raspberry Pi's bootloader configuration from user-space
 
-Icenowy Zheng (3):
-      dt-bindings: arm: sunxi: add PineTab Early Adopter edition
-      arm64: allwinner: dts: a64: add DT for Early Adopter's PineTab
-      dt-bindings: arm: sunxi: document orig PineTab DT as sample
+----------------------------------------------------------------
+Florian Fainelli (1):
+      Merge tag 'tags/bcm2835-defconfig-next-2021-01-25' into defconfig/next
 
-Jernej Skrabec (6):
-      dt-bindings: media: Add Allwinner R40 deinterlace compatible
-      ARM: dts: sun8i: r40: Add deinterlace node
-      arm64: dts: allwinner: h5: Add deinterlace node
-      arm64: dts: allwinner: h6: PineH64 model B: Add bluetooth
-      ARM: dts: sunxi: bananapi-m2-plus: Increase BT UART speed
-      ARM: dts: sun8i: h2-plus: bananapi-m2-zero: Increase BT UART speed
+Nicolas Saenz Julienne (1):
+      ARM: multi_v7_defconfig: Enable nvmem's rmem driver
 
-Maxime Ripard (16):
-      dt-bindings: sunxi: Fix the pinecube compatible
-      dt-bindings: iio: adc: Add AXP803 compatible
-      dt-bindings: rtc: sun6i-a31-rtc: Loosen the requirements on the clocks
-      ARM: dts: sunxi: Fix the LED node names
-      ARM: dts: sunxi: Add missing backlight supply
-      ARM: dts: sunxi: Fix CPU thermal zone node name
-      ARM: dts: sun6i: primo81: Remove useless io-channel-cells
-      ARM: dts: sun8i: nanopi-r1: Fix GPIO regulator state array
-      ARM: dts: sun8i-s3: impetus: Fix the USB PHY ID detect GPIO properties
-      ARM: dts: sun8i-s3: pinecube: Fix CSI DTC warnings
-      ARM: dts: sun8i-a83t: Remove empty CSI port
-      ARM: dts: sun8i-a33: sina33: Add missing panel power supply
-      arm64: dts: allwinner: h6: Use - instead of @ for DT OPP entries
-      arm64: dts: allwinner: pinephone: Remove useless light sensor supplies
-      arm64: dts: allwinner: pinetab: Fix the panel compatible
-      arm64: dts: allwinner: pine-h64: Fix typos in BT GPIOs
-
-Michael Klein (3):
-      ARM: dts: sun8i-h2-plus-bananapi-m2-zero: add regulator nodes vcc-dram and vcc1v2
-      ARM: dts: sun6i-a31s-sinovoip-bpi-m2: add gpio-line-names
-      ARM: dts: sun8i-h2-plus-bananapi-m2-zero: add poweroff node
-
-Paul Kocialkowski (6):
-      dt-bindings: irq: sun7i-nmi: Add binding documentation for the V3s NMI
-      ARM: dts: sun8i-v3s: Add the V3s NMI IRQ controller
-      ARM: dts: sun8i: Cleanup the Pinecube AXP209 node
-      dt-bindings: arm: sunxi: Add SL631 with IMX179 bindings
-      ARM: dts: sun8i-v3: Add support for the SL631 Action Camera with IMX179
-      ARM: dts: sun8i-v3s: Add CSI0 MCLK pin definition
-
-Samuel Holland (3):
-      arm64: dts: allwinner: pinephone: Support volume key wakeup
-      arm64: dts: allwinner: h6: Add RSB controller node
-      ARM: dts: sunxi: Rename nmi_intc to r_intc
-
-Sergio Sota (1):
-      ARM: dts: sun5i: add A10s/A13 mali gpu support fallback
-
-
- Documentation/devicetree/bindings/arm/sunxi.yaml                                       |  19 +++++++++--
- Documentation/devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml                     |  12 ++++---
- Documentation/devicetree/bindings/interrupt-controller/allwinner,sun7i-a20-sc-nmi.yaml |   3 ++-
- Documentation/devicetree/bindings/media/allwinner,sun8i-h3-deinterlace.yaml            |   3 ++-
- Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml                     |   1 +-
- arch/arm/boot/dts/Makefile                                                             |   1 +-
- arch/arm/boot/dts/sun4i-a10-a1000.dts                                                  |   4 +-
- arch/arm/boot/dts/sun4i-a10-cubieboard.dts                                             |   4 +-
- arch/arm/boot/dts/sun4i-a10-dserve-dsrv9703c.dts                                       |   1 +-
- arch/arm/boot/dts/sun4i-a10-inet1.dts                                                  |   1 +-
- arch/arm/boot/dts/sun4i-a10-jesurun-q5.dts                                             |   2 +-
- arch/arm/boot/dts/sun4i-a10-marsboard.dts                                              |   8 ++---
- arch/arm/boot/dts/sun4i-a10-olinuxino-lime.dts                                         |   2 +-
- arch/arm/boot/dts/sun4i-a10-pcduino.dts                                                |   4 +-
- arch/arm/boot/dts/sun4i-a10-pov-protab2-ips9.dts                                       |   1 +-
- arch/arm/boot/dts/sun5i-a10s-auxtek-t003.dts                                           |   2 +-
- arch/arm/boot/dts/sun5i-a10s-auxtek-t004.dts                                           |   2 +-
- arch/arm/boot/dts/sun5i-a10s-mk802.dts                                                 |   2 +-
- arch/arm/boot/dts/sun5i-a10s-olinuxino-micro.dts                                       |   2 +-
- arch/arm/boot/dts/sun5i-a10s-r7-tv-dongle.dts                                          |   2 +-
- arch/arm/boot/dts/sun5i-a10s-wobo-i5.dts                                               |   2 +-
- arch/arm/boot/dts/sun5i-a13-empire-electronix-d709.dts                                 |   1 +-
- arch/arm/boot/dts/sun5i-a13-licheepi-one.dts                                           |   6 +--
- arch/arm/boot/dts/sun5i-a13-olinuxino-micro.dts                                        |   2 +-
- arch/arm/boot/dts/sun5i-a13-olinuxino.dts                                              |   2 +-
- arch/arm/boot/dts/sun5i-a13-pocketbook-touch-lux-3.dts                                 |   3 +-
- arch/arm/boot/dts/sun5i-a13.dtsi                                                       |   2 +-
- arch/arm/boot/dts/sun5i-gr8-evb.dts                                                    |   2 +-
- arch/arm/boot/dts/sun5i-reference-design-tablet.dtsi                                   |   1 +-
- arch/arm/boot/dts/sun5i.dtsi                                                           |  12 +++++++-
- arch/arm/boot/dts/sun6i-a31-hummingbird.dts                                            |   2 +-
- arch/arm/boot/dts/sun6i-a31-i7.dts                                                     |   2 +-
- arch/arm/boot/dts/sun6i-a31-m9.dts                                                     |   4 +-
- arch/arm/boot/dts/sun6i-a31-mele-a1000g-quad.dts                                       |   4 +-
- arch/arm/boot/dts/sun6i-a31.dtsi                                                       |   4 +-
- arch/arm/boot/dts/sun6i-a31s-primo81.dts                                               |   3 +--
- arch/arm/boot/dts/sun6i-a31s-sina31s-core.dtsi                                         |   2 +-
- arch/arm/boot/dts/sun6i-a31s-sinovoip-bpi-m2.dts                                       |  79 +++++++++++++++++++++++++++++++++++++++++++---
- arch/arm/boot/dts/sun6i-a31s-yones-toptech-bs1078-v2.dts                               |   2 +-
- arch/arm/boot/dts/sun6i-reference-design-tablet.dtsi                                   |   2 +-
- arch/arm/boot/dts/sun7i-a20-bananapi-m1-plus.dts                                       |   4 +-
- arch/arm/boot/dts/sun7i-a20-bananapi.dts                                               |   2 +-
- arch/arm/boot/dts/sun7i-a20-bananapro.dts                                              |   4 +-
- arch/arm/boot/dts/sun7i-a20-cubieboard2.dts                                            |   4 +-
- arch/arm/boot/dts/sun7i-a20-cubietruck.dts                                             |   8 ++---
- arch/arm/boot/dts/sun7i-a20-i12-tvbox.dts                                              |   4 +-
- arch/arm/boot/dts/sun7i-a20-itead-ibox.dts                                             |   4 +-
- arch/arm/boot/dts/sun7i-a20-lamobo-r1.dts                                              |   2 +-
- arch/arm/boot/dts/sun7i-a20-m3.dts                                                     |   2 +-
- arch/arm/boot/dts/sun7i-a20-olimex-som-evb.dts                                         |   2 +-
- arch/arm/boot/dts/sun7i-a20-olimex-som204-evb.dts                                      |   6 +--
- arch/arm/boot/dts/sun7i-a20-olinuxino-lime.dts                                         |   2 +-
- arch/arm/boot/dts/sun7i-a20-olinuxino-lime2.dts                                        |   2 +-
- arch/arm/boot/dts/sun7i-a20-olinuxino-micro.dts                                        |   2 +-
- arch/arm/boot/dts/sun7i-a20-orangepi-mini.dts                                          |   4 +-
- arch/arm/boot/dts/sun7i-a20-orangepi.dts                                               |   2 +-
- arch/arm/boot/dts/sun7i-a20-pcduino3-nano.dts                                          |   6 +--
- arch/arm/boot/dts/sun7i-a20-pcduino3.dts                                               |   4 +-
- arch/arm/boot/dts/sun7i-a20-wexler-tab7200.dts                                         |   1 +-
- arch/arm/boot/dts/sun7i-a20.dtsi                                                       |   2 +-
- arch/arm/boot/dts/sun8i-a23-a33.dtsi                                                   |   2 +-
- arch/arm/boot/dts/sun8i-a33-inet-d978-rev2.dts                                         |   2 +-
- arch/arm/boot/dts/sun8i-a33-olinuxino.dts                                              |   4 +-
- arch/arm/boot/dts/sun8i-a33-sinlinx-sina33.dts                                         |   3 +-
- arch/arm/boot/dts/sun8i-a33.dtsi                                                       |   2 +-
- arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts                                           |   4 +-
- arch/arm/boot/dts/sun8i-a83t-cubietruck-plus.dts                                       |   8 ++---
- arch/arm/boot/dts/sun8i-a83t-tbs-a711.dts                                              |   2 +-
- arch/arm/boot/dts/sun8i-a83t.dtsi                                                      |   3 +--
- arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts                                   |  30 +++++++++++++++++-
- arch/arm/boot/dts/sun8i-h3-beelink-x2.dts                                              |   4 +-
- arch/arm/boot/dts/sun8i-h3-nanopi-duo2.dts                                             |   4 +-
- arch/arm/boot/dts/sun8i-h3-nanopi-neo-air.dts                                          |   4 +-
- arch/arm/boot/dts/sun8i-h3-nanopi-r1.dts                                               |   4 +-
- arch/arm/boot/dts/sun8i-h3-nanopi.dtsi                                                 |   4 +-
- arch/arm/boot/dts/sun8i-h3-orangepi-zero-plus2.dts                                     |   4 +-
- arch/arm/boot/dts/sun8i-r16-bananapi-m2m.dts                                           |   8 ++---
- arch/arm/boot/dts/sun8i-r16-parrot.dts                                                 |  10 +++---
- arch/arm/boot/dts/sun8i-r40.dtsi                                                       |  19 +++++++++++-
- arch/arm/boot/dts/sun8i-reference-design-tablet.dtsi                                   |   3 +-
- arch/arm/boot/dts/sun8i-s3-elimo-impetus.dtsi                                          |   2 +-
- arch/arm/boot/dts/sun8i-s3-pinecube.dts                                                |  11 +-----
- arch/arm/boot/dts/sun8i-v3-sl631-imx179.dts                                            |  12 +++++++-
- arch/arm/boot/dts/sun8i-v3-sl631.dtsi                                                  | 138 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
- arch/arm/boot/dts/sun8i-v3s.dtsi                                                       |  17 +++++++++-
- arch/arm/boot/dts/sun9i-a80-cubieboard4.dts                                            |   4 +-
- arch/arm/boot/dts/sunxi-bananapi-m2-plus.dtsi                                          |   1 +-
- arch/arm64/boot/dts/allwinner/Makefile                                                 |   1 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64-bananapi-m64.dts                              |   6 +--
- arch/arm64/boot/dts/allwinner/sun50i-a64-nanopi-a64.dts                                |   2 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts                                |  11 ++++++-
- arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts                                  |   5 +---
- arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dts                             |   2 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dts                             |   2 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dts                             |   2 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi                                |  18 +++++++---
- arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab-early-adopter.dts                     |  26 +++++++++++++++-
- arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dts                                   |   2 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64-sopine-baseboard.dts                          |   1 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64-sopine.dtsi                                   |   1 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64-teres-i.dts                                   |   4 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi                                          |   6 ++-
- arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-neo-plus2.dts                           |   4 +-
- arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-neo2.dts                                |   4 +-
- arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-pc2.dts                               |   4 +-
- arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-prime.dts                             |   4 +-
- arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus.dts                         |   4 +-
- arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts                        |   4 +-
- arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi                                           |  13 ++++++++-
- arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts                                |   2 +-
- arch/arm64/boot/dts/allwinner/sun50i-h6-cpu-opp.dtsi                                   |  20 ++++++------
- arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts                                 |   4 +-
- arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi                                  |   4 +-
- arch/arm64/boot/dts/allwinner/sun50i-h6-pine-h64-model-b.dts                           |  15 +++++++++-
- arch/arm64/boot/dts/allwinner/sun50i-h6-pine-h64.dts                                   |   7 ++--
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi                                           |  26 +++++++++++++++-
- 116 files changed, 607 insertions(+), 186 deletions(-)
- create mode 100644 arch/arm/boot/dts/sun8i-v3-sl631-imx179.dts
- create mode 100644 arch/arm/boot/dts/sun8i-v3-sl631.dtsi
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab-early-adopter.dts
-
-
-
---9amGYk9869ThD9tj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYBb7/wAKCRDj7w1vZxhR
-xdGSAQD4lDzKpbXxZUz4nCF61Bv79zOSvqZkNSwhLVOsQV9a0wD/dVFipg58T3GZ
-AqzQ80pLovw/SXQBctzSzmt1IynmrAk=
-=sOAH
------END PGP SIGNATURE-----
-
---9amGYk9869ThD9tj--
-
-
---===============4641889968235641546==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
---===============4641889968235641546==--
-
+ arch/arm/configs/multi_v7_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
