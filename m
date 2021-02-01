@@ -1,114 +1,97 @@
-Return-Path: <SRS0=ZBoG=HD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=vtH0=HD=gmail.com=matthias.bgg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE984C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Feb 2021 09:55:13 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4A91C433E0
+	for <soc@archiver.kernel.org>; Mon,  1 Feb 2021 10:12:30 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 5F6BB64DB2; Mon,  1 Feb 2021 10:12:30 +0000 (UTC)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 864A064EAC
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Feb 2021 09:55:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 864A064EAC
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Subject:From:To:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=pfLuX1w75L9pQDjIXxl97pvGjgCVRc9+2oZJqDLIGto=; b=gJNWRxXX3qQbC1FHPyjP3yBlkf
-	XgYJBdFR5eVngyuygZytNqG9nhQ1mqa6tlBuwOvEundO/3uvGu7cvaRp6VUqKs7c4rrx/+VBdTVqf
-	6LVeO4X3PAEvqK1AuVMlrM51X6fx/XxJJEC8oHWy8tv0IyYttFClKNpEIN7sJxgEFxaXKw2Ivy3xU
-	IPWsPjGheBa3uoRdwHAuVItFyGxBcs6vmgSJ8TjchDEpY+S/mIWV0WS5QtGbD5ZV4wKw8Oc4JrmED
-	ffFx0Pn24NGZMWoJdAp66cV+fZbD9RXiUrZxSOs8LtVva/WB+ZA4/WZHdTbNWjfaAlQrAwU7v4z9d
-	InR4zI5g==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l6VuH-0001ya-0K; Mon, 01 Feb 2021 09:54:05 +0000
-Received: from mail-wr1-x42d.google.com ([2a00:1450:4864:20::42d])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l6VuE-0001xx-Bh; Mon, 01 Feb 2021 09:54:03 +0000
-Received: by mail-wr1-x42d.google.com with SMTP id l12so15860597wry.2;
- Mon, 01 Feb 2021 01:54:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=to:cc:from:subject:message-id:date:user-agent:mime-version
- :content-language:content-transfer-encoding;
- bh=d30/WqC5Sr8iUYYqfq19zQKJNZP17PGn+43sKEWUOrs=;
- b=pAJu87KNgZ/rko5hpxYAYXP6pIDxuv7dayJ4dxt8Cy0jqob30WTeRO39Oq2nt9cQpZ
- 5VGDieD5mSuCkUclZu79RiBTVYfr/7WqqlnLmQEJvFFpG2EAF376UGosWKyFX1vqg9BF
- FlcZDYMnlw2KDhl8huT17Bj0rIllIlkSynRkPdOAPC1yhocCVGLiwCBtA4XyFXlfPIi+
- +IRHk/kDGXJagQFTcwGT1i7/2Ll+Tog9qT769Gwxyvlx5LV4YZhp+2umDfVaNLzY/pQG
- /5/ywA1kyxG0aiN517UmvN4prhDNrHxpuZ9qZz8pLdL8bkNe1ORtZnRWdhba1TFmyUIw
- 7byA==
+	by mail.kernel.org (Postfix) with ESMTPS id CD9C264DF5;
+	Mon,  1 Feb 2021 10:12:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CD9C264DF5
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=matthias.bgg@gmail.com
+Received: by mail-wr1-f53.google.com with SMTP id q7so15877447wre.13;
+        Mon, 01 Feb 2021 02:12:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=QpxNtNbna4Scltna+Nb6lMeZ0gHBJTYgia9t/bkI6Zs=;
+        b=opI0B60cn7stle5LAAHoczgTI/0TODtirP6jlFWz/0ABOCvPdBzMoU7UoIyvLywx3d
+         gD5Nb9aSUwazeEhA93xs8zyQqne1acq5GGryY8VwCrqXdbfhrHJQTAv4W8fl2tid5u99
+         wK4MzMbGgxD6RYThZ9iY3mYmZafJVKSNfXKhaxl4OqyW28Ghhd9wLATMWj3TRh7DaMou
+         DzGgWnWInHAJ8bOm8BrZX3Eehas//UBKrcbAOHavgebciYPtasraZdzYMQ3XSlgToXcF
+         upPPlTPiJRCcjyItGf9/yIWt9epbRaIXl5EmATvqJYoVe5Oe2ihYw5Eg49FgHQucoNmq
+         TCyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
- :mime-version:content-language:content-transfer-encoding;
- bh=d30/WqC5Sr8iUYYqfq19zQKJNZP17PGn+43sKEWUOrs=;
- b=hspYALuVOeGaGtSjF8J1t2jwqxv4UxSQnWXVQtikLAwIjt1HCknIVyyih0KN79zlkC
- iI06s2H1r3sFALzNDEzL3SGXd7PY1VgsSssC9sBOu7vlOjmGxcfN4zErxZCIxvVy6fxB
- NHJNHtLSqy4UlhBQV0LKl856+1XJ5B/EpimlqDGhVdB7RnPKtKzAWLqSFkFD0XhJq2yW
- JOI2AGshOfjaRwDmMInU5inypHiLWncyA7a/efbfFlq881XG0ACmHimGEvImgnr4p2tR
- PkbibXfDaF822o79joT1aOhkzlNGbCzmtR00VIjBMBZBLUKWISLsz9KX58CpACcXybqN
- Gdfw==
-X-Gm-Message-State: AOAM532t/qUnBSYQqN0Rg9L/xGl+5bDmbIlSS8XXuOVHkl/tEL1iWCyZ
- FWsDeKd2cvdW0ySTBtpfhBg=
-X-Google-Smtp-Source: ABdhPJzx6z8Sox35xoBAgnXigMReq9/U391Zebk6MofU2hDdrRQ1+NkEbHV3m69ux9L1udtsw1L50w==
-X-Received: by 2002:a5d:4574:: with SMTP id a20mr16892144wrc.201.1612173241221; 
- Mon, 01 Feb 2021 01:54:01 -0800 (PST)
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=QpxNtNbna4Scltna+Nb6lMeZ0gHBJTYgia9t/bkI6Zs=;
+        b=oiVy79Uky8ecR3QiUhVg6CYNeACuUeL8LHNMdqkPDh1kunw9kCx2eOs3yhnvTzMHV9
+         9rHkV56E2oP4xk6ZGt7EWvhEK5Ca3WUXNgzqW+QylscJfp2PNsODTRpAR7JpbGTdH/Oc
+         TlMYsldEhitlfbMq0okpq7VFMi0LdQMlKQCM4aEnKNsZHI1kWipVSY5LT7JSv6OLHu8p
+         dQm/ERQEDqQ+9kzZXYWE3LcZRsyAWCSnBsHaiH3Nqi6xV2gsKx0U569+FGuNVNYigEdk
+         XLJ7qs9DXaTUJIOO/yrHyjiRcj4sfTqMgzopv2FPYx5+vzop0A51ArwDsgWfiOr9WUIX
+         HSQQ==
+X-Gm-Message-State: AOAM530iVVq5ECxbnDJDC1B73S904rdk4GOS2JYubjeSZZ9+ajVXvtpI
+	3boNRH6G4nH69z/3sllHBeE=
+X-Google-Smtp-Source: ABdhPJxZz4ds0zipa2CrBlxfV5OmoWiYePP7VyYh3ZBX28tShz97Q6Ozhp5ECqTMej7yM6ZpUN4VbA==
+X-Received: by 2002:a5d:4988:: with SMTP id r8mr17433084wrq.26.1612174348382;
+        Mon, 01 Feb 2021 02:12:28 -0800 (PST)
 Received: from ziggy.stardust ([213.195.126.134])
- by smtp.gmail.com with ESMTPSA id t17sm9190627wmi.46.2021.02.01.01.54.00
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 01 Feb 2021 01:54:00 -0800 (PST)
+        by smtp.gmail.com with ESMTPSA id j7sm2286301wrp.72.2021.02.01.02.12.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Feb 2021 02:12:27 -0800 (PST)
 List-Id: <soc.lore.kernel.org>
 To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: "moderated list:ARM/Mediatek SoC support"
+ <linux-mediatek@lists.infradead.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>, Argus Lin <argus.lin@mediatek.com>,
+ Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+ Fabien Parent <fparent@baylibre.com>,
+ Frank Wunderlich <frank-w@public-files.de>,
+ Hsin-Yi Wang <hsinyi@chromium.org>, James Liao <jamesjj.liao@mediatek.com>,
+ Neal Liu <neal.liu@mediatek.com>, Yongqiang Niu
+ <yongqiang.niu@mediatek.com>, Bayi Cheng <bayi.cheng@mediatek.com>
 From: Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [GIT PULL] soc: mediatek: updates for v5.12
-Message-ID: <5faa52c2-0ddb-b809-7444-ce6f6ff6d8ad@gmail.com>
-Date: Mon, 1 Feb 2021 10:53:59 +0100
+Subject: [GIT PULL] arm64: dts: mediatek: updates for v5.12
+Message-ID: <565be0cc-460a-7d0b-47da-09bf0401e8fe@gmail.com>
+Date: Mon, 1 Feb 2021 11:12:26 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210201_045402_478458_EB33B577 
-X-CRM114-Status: GOOD (  15.47  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>,
- Fabien Parent <fparent@baylibre.com>,
- "moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
- Hsin-Yi Wang <hsinyi@chromium.org>,
- Enric Balletbo i Serra <enric.balletbo@collabora.com>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210201095359.fmBxPEVNA3u9kjuu8n62G-_7M7eZTLZBwABmM1haGNU@z>
+Content-Transfer-Encoding: 8bit
 
-Hi Arnd and Olof,
+Hi Olof and Arnd,
 
-Please find below the updates for the mediatek SoC drivers. The most outstanding
-thing is, that we now support also the MT8167 power domains.
+Please find below the updates for the MediaTek dts64.
+Lots of work is done in the MT8183 SoC which can be found in some newer
+Chromebooks, especially around grafics support. Not so much is happening on the
+shiny new MT8192, as we still lack some core drivers, which provide a lots of
+dependencies.
+
+Apart from that we support two new devices for the MT6779 from the mobile chip
+line. One is a SoC specific device called DEVAPC. It provides a kind of bus
+firewall which will pass information on potentially malicious bus accesses from
+TF-A to the SoC. It had been a long journey for the driver and I'm happy that it
+is now supported by the device.
+
+On the IoT side of the chips we now have support for the APDMA controller for
+the MT8516 UARTs.
 
 Regards,
 Matthias
@@ -121,51 +104,84 @@ The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 are available in the Git repository at:
 
   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/
-tags/v5.11-next-soc
+tags/v5.11-next-dts64
 
-for you to fetch changes up to dd65030295e20338bbb8238454c2e9546b6e5e17:
+for you to fetch changes up to 18d6e3f6744d6105ab61de790170cb60534eeebc:
 
-  soc: mediatek: pm-domains: Don't print an error if child domain is deferred
-(2021-01-31 15:59:16 +0100)
-
-----------------------------------------------------------------
-pm-domains:
-- add support for MT8167
-- add support for regulator needed by a PM domain
-- make error message in deferred probe case better
-
-cmdq-helper:
-- remove arch specific flush function, use mailbox rx_callback instead
+  arm64: dts: mt8183: Fix GCE include path (2021-02-01 09:48:19 +0100)
 
 ----------------------------------------------------------------
-Chun-Kuang Hu (1):
-      soc: mediatek: cmdq: Remove cmdq_pkt_flush()
+mt6779:
+- add DEVAPC node to detect mallicious bus accesses
+- add PMIC wrapper node
+
+mt7622:
+- add reset to mmc node
+
+mt8183:
+- fix typo in drma-fifo-size property
+- refine compatible for the disp-gamma
+- add phandel of PM domain to the PWM node
+- add second PWM node
+- add regulator to MFG power domain
+- enable DSI node in kukui
+- add krane sku0, which uses different panel
+- fix mailbox dt-bindings include path
+
+mt8192:
+- add NOR flash node
+- add PSCI based CPU idle states
+
+mt8516:
+- add node for the UART's APDMA controller
+
+----------------------------------------------------------------
+Argus Lin (1):
+      arm64: dts: mt6779: Support pwrap on Mediatek MT6779 platform
 
 Enric Balletbo i Serra (1):
-      soc: mediatek: pm-domains: Don't print an error if child domain is deferred
+      arm64: dts: mt8183: Add missing power-domain for pwm0 node
 
-Fabien Parent (2):
-      dt-bindings: power: Add MT8167 power domains
-      soc: mediatek: pm-domains: Add support for mt8167
+Fabien Parent (3):
+      arm64: dts: mediatek: mt8183: add pwm node
+      arm64: dts: mediatek: mt8183-evb: add PWM support
+      arm64: dts: mediatek: mt8516: add support for APDMA
 
-Hsin-Yi Wang (2):
-      dt-bindings: power: Add domain regulator supply
-      soc: mediatek: pm-domains: Add domain regulator supply
+Frank Wunderlich (1):
+      dts64: mt7622: fix slow sd card access
 
- .../bindings/power/mediatek,power-controller.yaml  | 11 +++
- drivers/soc/mediatek/mt8167-pm-domains.h           | 86 ++++++++++++++++++++++
- drivers/soc/mediatek/mt8183-pm-domains.h           |  1 +
- drivers/soc/mediatek/mtk-cmdq-helper.c             | 32 --------
- drivers/soc/mediatek/mtk-pm-domains.c              | 51 ++++++++++++-
- drivers/soc/mediatek/mtk-pm-domains.h              |  2 +
- include/dt-bindings/power/mt8167-power.h           | 17 +++++
- include/linux/soc/mediatek/infracfg.h              |  8 ++
- include/linux/soc/mediatek/mtk-cmdq.h              | 12 ---
- 9 files changed, 173 insertions(+), 47 deletions(-)
- create mode 100644 drivers/soc/mediatek/mt8167-pm-domains.h
- create mode 100644 include/dt-bindings/power/mt8167-power.h
+Hsin-Yi Wang (4):
+      arm64: dts: mediatek: mt8183: Add domain supply for mfg
+      arm64: dts: mt8183: config dsi node
+      arm64: dts: mt8183: Add krane-sku0 board.
+      dt-bindings: arm64: dts: mediatek: Add krane sku0
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+James Liao (1):
+      arm64: dts: mt8192: Add cpu-idle-states
+
+Matthias Brugger (1):
+      arm64: dts: mt8183: Fix GCE include path
+
+Neal Liu (1):
+      arm64: dts: mt6779: Support devapc
+
+Yongqiang Niu (2):
+      arm64: dts: mt8183: rename rdma fifo size
+      arm64: dts: mt8183: refine gamma compatible name
+
+bayi cheng (1):
+      arm64: dts: mt8192: add nor_flash device node
+
+ .../devicetree/bindings/arm/mediatek.yaml          |  4 +-
+ arch/arm64/boot/dts/mediatek/Makefile              |  1 +
+ arch/arm64/boot/dts/mediatek/mt6779.dtsi           | 17 +++++++
+ arch/arm64/boot/dts/mediatek/mt7622.dtsi           |  2 +
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts        | 12 +++++
+ .../boot/dts/mediatek/mt8183-kukui-krane-sku0.dts  | 23 +++++++++
+ .../dts/mediatek/mt8183-kukui-krane-sku176.dts     |  5 ++
+ arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi     | 46 +++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi           | 26 +++++++---
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi           | 57 ++++++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8516.dtsi           | 30 ++++++++++++
+ 11 files changed, 216 insertions(+), 7 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dts
