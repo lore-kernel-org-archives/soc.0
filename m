@@ -1,69 +1,105 @@
-Return-Path: <SRS0=4Q+8=HD=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=ZBoG=HD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D2D7C433DB
-	for <soc@archiver.kernel.org>; Mon,  1 Feb 2021 09:13:17 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 15E0A64E4F; Mon,  1 Feb 2021 09:13:17 +0000 (UTC)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EECEC433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Feb 2021 09:14:32 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 93DB764E40
-	for <soc@kernel.org>; Mon,  1 Feb 2021 09:13:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 93DB764E40
+	by mail.kernel.org (Postfix) with ESMTPS id C557764E57
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Feb 2021 09:14:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C557764E57
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linus.walleij@linaro.org
-Received: by mail-lj1-f177.google.com with SMTP id t8so18621894ljk.10
-        for <soc@kernel.org>; Mon, 01 Feb 2021 01:13:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2oE25ixhS6qPVWF6lU9GDjpU9To1kS1GSFrjRASaVgo=;
-        b=aEwO63wpfQ94jTrJai0DJL3FDE407Bn/WJpc8Crv172v+SPNNPLqLWLvI6frrlkd7y
-         PjBnvfzbtwu4DnmmUovSswtjxOe2ZbEShgOpPfydnzLSUinrBwJ8boJrFm6TU9G1CCVG
-         dCTf8H105j6gtI1Vlfuh2aAbpcAcO/TbOeuN+TurgTJdVbqj2f1TgIHjgGqQEBAeLOCF
-         537uEBuPq5AmtJiu8sq4/xewugYAA5YsZeKL1NiG7iExYB5MeUeGd9yUNZjGhwhALBCg
-         435XIY45hTcHX+E95lj8HD4NWH3qz3UR1LY/2sEieZRqt9Bb7zDMMlBwZleJHH77uwTh
-         dkRA==
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=OMAv4sz6JsnWRM+i/5SZwUJJh4ljUYp5Q7B6F3lAnw4=; b=QVwvGaZZ4wRysi7tpzDglvNlvK
+	DTUsTOuDvS5RVSixHmS4cVAc4rcGFMsLUgFTas3IIDyp/ZpnAnHtm9NlaYKzXsba6APA3/75QvasK
+	q6YzWJPu+5pASAWqCykE2Mnt1Hjx7NKLjBH7xwC/kIrenHsoTzwFWsznEEIbBIP1XXwENmIsApMXH
+	Jw++W+FTrOLD/J2ijwfJ6oGAcjR0To4K5DC9Z34wje6iw/90xUMSFoJvEMwUWu0DPJVrYzCOMNmCU
+	RTIvMq94o/nE2GXutYFgxYKyHrmW3r63jHmQp/wyq59AYFQ9xXxmtMiemwVwRwfGqw+YLKBJ6ChA8
+	N4Acaikg==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l6VGs-0005e9-Kt; Mon, 01 Feb 2021 09:13:22 +0000
+Received: from mail-lj1-x231.google.com ([2a00:1450:4864:20::231])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l6VGo-0005dj-RN
+ for linux-arm-kernel@lists.infradead.org; Mon, 01 Feb 2021 09:13:20 +0000
+Received: by mail-lj1-x231.google.com with SMTP id a25so18666163ljn.0
+ for <linux-arm-kernel@lists.infradead.org>;
+ Mon, 01 Feb 2021 01:13:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=2oE25ixhS6qPVWF6lU9GDjpU9To1kS1GSFrjRASaVgo=;
+ b=aEwO63wpfQ94jTrJai0DJL3FDE407Bn/WJpc8Crv172v+SPNNPLqLWLvI6frrlkd7y
+ PjBnvfzbtwu4DnmmUovSswtjxOe2ZbEShgOpPfydnzLSUinrBwJ8boJrFm6TU9G1CCVG
+ dCTf8H105j6gtI1Vlfuh2aAbpcAcO/TbOeuN+TurgTJdVbqj2f1TgIHjgGqQEBAeLOCF
+ 537uEBuPq5AmtJiu8sq4/xewugYAA5YsZeKL1NiG7iExYB5MeUeGd9yUNZjGhwhALBCg
+ 435XIY45hTcHX+E95lj8HD4NWH3qz3UR1LY/2sEieZRqt9Bb7zDMMlBwZleJHH77uwTh
+ dkRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2oE25ixhS6qPVWF6lU9GDjpU9To1kS1GSFrjRASaVgo=;
-        b=nvT1XSk0AB03hgapo/aSZmM/xWwaSpBvbt0uQ/2Q0e13kRQThF+XFdstT9E4wb9E8x
-         9DhI+XFJOLlfY7hC8F++iacD7BNOCyYhBMg7Ybxzyb7hviC4VlqYCXXNvzG8IcZxIHrE
-         QhrPZx2TGIBLugOCLyZTbKfu7zRIFIlRBT5tbLq0lPfKly3Y14ngyKe8Q+dau9K3kyUX
-         Ss32P5C4D56OoQrYVmXL/Q28brW6CqnGe5impE0wd+SUetM+A0tK4pmJ5bAqS7yvSYFV
-         VRaH+JcfVi+Fxdvzt9mkgy5H/8reqT0Vg9Tvx2rrVXaybJ/vcuxZU6X2exa8+EqF3Xkl
-         f0KA==
-X-Gm-Message-State: AOAM530Pc+dXWRo6rqWEyN0mqWPECxcRbUQbX/kEtY7Ry8immqyhMn3i
-	4TYqOMx8IxWh/v3MUzBw60YA2KePFD7r5L46
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=2oE25ixhS6qPVWF6lU9GDjpU9To1kS1GSFrjRASaVgo=;
+ b=mFXaicV1tYnHr/QSB6DOBv+h0yarxwz3BQKM6ol8Pf87pbuNv3MvyQoaSXdinzjnhn
+ RdlS0RII9uZ+FSsx8Hu0PcP7RqoeowpQ8EkAxvWsTU6QVbs9N4j8KdjiMVXN6eKbPo1H
+ n3ozQr8gkCRnfUggeAiRytxm+wi71F8icpPIfPN2FLmiHu9N7eurKLlLNgSZE8e1tTCn
+ lGnUNezRnuW/uUKg1yQO0PabgvVUd/mFYvhCNPINUfFe68SvDRn8otadZQ3HiTvWqnXY
+ s9UIXCCxV+JldicEBd++NRAJvg0lKJmRNuf7XssMta91Yqo7GrOBKAboq4/HuV0Tb44N
+ UTjw==
+X-Gm-Message-State: AOAM5306G7PonaG9P7iJzUp4AXE3tsoxTSzKolyDBXf7+E0W26iseOVg
+ c/TPsPFHcWquzYvHyxhwS+EhYQ==
 X-Google-Smtp-Source: ABdhPJzStSOsZDhBZVeH7n4/PZVWrjzjxwDD/msE3r/i9drcj6hVhUteBKatmvqVOlD6K1JxNXhj2w==
-X-Received: by 2002:a2e:9b8f:: with SMTP id z15mr10239725lji.295.1612170794765;
-        Mon, 01 Feb 2021 01:13:14 -0800 (PST)
-Received: from localhost.localdomain (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
-        by smtp.gmail.com with ESMTPSA id u4sm2939929lfc.277.2021.02.01.01.13.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Feb 2021 01:13:14 -0800 (PST)
+X-Received: by 2002:a2e:9b8f:: with SMTP id z15mr10239725lji.295.1612170794765; 
+ Mon, 01 Feb 2021 01:13:14 -0800 (PST)
+Received: from localhost.localdomain
+ (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
+ by smtp.gmail.com with ESMTPSA id u4sm2939929lfc.277.2021.02.01.01.13.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 01 Feb 2021 01:13:14 -0800 (PST)
 From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Linus Walleij <linus.walleij@linaro.org>
 Subject: [PATCH] ARM: dts: ux500: Add Flash LEDs to Samsung phones
 Date: Mon,  1 Feb 2021 10:13:08 +0100
-Message-Id: <20210201091308.284465-1-linus.walleij@linaro.org>
+Message-ID: <20210201091308.284465-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210201_041319_011606_0FAA90E4 
+X-CRM114-Status: GOOD (  16.07  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+ linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210201091308.MHKYamwe27CzP7edsgid8OtogADN9_2w1nokseGzDVk@z>
 
 This adds the Richtek RT8515 Flash LED to the Golden,
 Skomer and Janice device trees.
@@ -264,3 +300,8 @@ index 36420492fd72..d28a00757d0b 100644
 -- 
 2.29.2
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
