@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57CE8C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Feb 2021 16:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F33BAC433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Feb 2021 16:27:53 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E83B164D9D
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Feb 2021 16:27:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E83B164D9D
+	by mail.kernel.org (Postfix) with ESMTPS id 8AFD564D9D
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Feb 2021 16:27:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8AFD564D9D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,35 +23,35 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To:From:
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=24vaAX2f1G4K0Vctnr5/06dindEDwhLSSOgyd9eFB90=; b=A/QWQ/KDl9AafcfKEfGHWGoaM/
-	T4PLthmWrwLZcTx9f8g/8DBfd6Ybjs5eMZNN8UBkOwOiTyWXndNcRLiS8X2DniyxEfQWTsVHeKWv8
-	xKVlnMIE+X6V8Atxm9AkZkbjFRlHevs8p3wB7/e/E2bIaPmkhy2w1Rj0qyWMpue5YDhmoeRmuhF1/
-	+ofWJG5d9Ee0MTkXFTtu9M5V81pjBIL+HlePyrWNDLPmnyir+HnObXpwrV4OL0Y46rXlqDflYVkFt
-	7TJ+fY/7x+pFVmMy64UKffTtmJyzz1zb5rMaajYWQpxqQnj+g86tO5nZ9sjNr/TAESMta1LRWBXDF
-	oAZ7usKg==;
+	bh=q6WZbaVuheqZjYIWWE0n7NzrOgH/+DNAy7fZbW5tOFY=; b=HZ4D1IekTFHMMOYvvexKnctrIP
+	c46G+eZwv4dED/kCbb6QnXuySuBBmsr/d2pGBsyvA5ykig72nZoJuk2XhiIozu+V2qUle0jthMp0O
+	dWCADZthcQFohK1ArMX71wA7MAt0cISM6BurDadc7sNC2NEaYMQmnWGiHnqXc8g6omnKgEltP2fxa
+	dO1zuc3kz4jHHq1pxlSQW644mO3mD6npX2kaQNp9hnwF6/TKZPgj3sUVf5ytD2aZQn7SGs0H/ZSl+
+	AsyHHLe1mNmfLBjJ1CBoVIpDZ8Yd+2/IZlPwww/oJy6nTIORILG1QFN7JH3X2I1yDkAJHaYK7BVr2
+	6X2o0Wsw==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l6c1q-0000tL-Nd; Mon, 01 Feb 2021 16:26:18 +0000
-Received: from relay12.mail.gandi.net ([217.70.178.232])
+	id 1l6c2O-0000zq-Kd; Mon, 01 Feb 2021 16:26:52 +0000
+Received: from relay7-d.mail.gandi.net ([217.70.183.200])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l6c1n-0000sm-R2
- for linux-arm-kernel@lists.infradead.org; Mon, 01 Feb 2021 16:26:16 +0000
+ id 1l6c2M-0000yy-2T
+ for linux-arm-kernel@lists.infradead.org; Mon, 01 Feb 2021 16:26:50 +0000
+X-Originating-IP: 90.65.91.141
 Received: from localhost (lfbn-lyo-1-1912-141.w90-65.abo.wanadoo.fr
  [90.65.91.141]) (Authenticated sender: gregory.clement@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id B579A200006;
- Mon,  1 Feb 2021 16:26:11 +0000 (UTC)
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 12FD320007;
+ Mon,  1 Feb 2021 16:26:43 +0000 (UTC)
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  <arm@kernel.org>, soc@kernel.org
-Subject: [GIT PULL] ARM: mvebu: dt for v5.12 (#1)
-Date: Mon, 01 Feb 2021 17:26:11 +0100
-Message-ID: <87sg6fn49o.fsf@BL-laptop>
+Subject: [GIT PULL] ARM: mvebu: dt64 for v5.12 (#1)
+Date: Mon, 01 Feb 2021 17:26:43 +0100
+Message-ID: <87pn1jn48s.fsf@BL-laptop>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210201_112615_987391_CFCD7AC0 
-X-CRM114-Status: UNSURE (   9.93  )
-X-CRM114-Notice: Please train this message.
+X-CRM114-CacheID: sfid-20210201_112650_266548_131E512B 
+X-CRM114-Status: GOOD (  11.94  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,47 +65,45 @@ List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>,
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 Cc: Andrew Lunn <andrew@lunn.ch>, linux-arm-kernel@lists.infradead.org,
  Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210201162611._TBIUbHq5YwM9pjnySbKAhcttY468VOkxuKdpplEpxo@z>
+Message-ID: <20210201162643.J68fqLPJKgpttJ24YZbnwHVc4ldLRh2to7nYaKRbCtM@z>
 
-Hi,
-
-Here is the first pull request for dt for mvebu for v5.12.
-
-Gregory
-
-The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-
-  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt-5.12-1
-
-for you to fetch changes up to 46ecdfc1830eaa40a11d7f832089c82b0e67ea96:
-
-  ARM: dts: armada388-helios4: assign pinctrl to each fan (2021-01-29 16:25:31 +0100)
-
-----------------------------------------------------------------
-mvebu dt for 5.12 (part 1)
-
-Improve LED and fan support on Helios4 boad (Armada 388 based)
-Add ECC configuration for Linksys board (Aramda 385 based)
-
-----------------------------------------------------------------
-Rosen Penev (3):
-      ARM: dts: armada-385-linksys: fix usage with newer devices
-      ARM: dts: armada388-helios4: assign pinctrl to LEDs
-      ARM: dts: armada388-helios4: assign pinctrl to each fan
-
- arch/arm/boot/dts/armada-385-linksys.dtsi |  2 ++
- arch/arm/boot/dts/armada-388-helios4.dts  | 28 ++++++++++++++++++++++------
- 2 files changed, 24 insertions(+), 6 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+SGksCgpIZXJlIGlzIHRoZSBmaXJzdCBwdWxsIHJlcXVlc3QgZm9yIGR0NjQgZm9yIG12ZWJ1IGZv
+ciB2NS4xMi4KCkdyZWdvcnkKClRoZSBmb2xsb3dpbmcgY2hhbmdlcyBzaW5jZSBjb21taXQgNWM4
+ZmU1ODNjY2U1NDJhYTBiODRhZGM5MzljZTg1MjkzZGUzNmU1ZToKCiAgTGludXggNS4xMS1yYzEg
+KDIwMjAtMTItMjcgMTU6MzA6MjIgLTA4MDApCgphcmUgYXZhaWxhYmxlIGluIHRoZSBHaXQgcmVw
+b3NpdG9yeSBhdDoKCiAgZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwv
+Z2l0L2djbGVtZW50L212ZWJ1LmdpdCB0YWdzL212ZWJ1LWR0NjQtNS4xMi0xCgpmb3IgeW91IHRv
+IGZldGNoIGNoYW5nZXMgdXAgdG8gMzVkYjVlMzJlYmMxNjMzMGFlNjI3NWMyNDc4M2VmYTQwOTFh
+ZjFiYzoKCiAgYXJtNjQ6IGR0czogYXJtYWRhOiBhZGQgcHdtIG9mZnNldHMgZm9yIGFwL2NwIGdw
+aW9zICgyMDIxLTAxLTI5IDE2OjU0OjQ4ICswMTAwKQoKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQptdmVidSBkdDY0IGZvciA1
+LjEyIChwYXJ0IDEpCgogLSByZW5hbWUgdS1ib290IG10ZCBwYXJ0aXRpb24gdG8gYTUzLWZpcm13
+YXJlIG9uIFR1cnJpcyBNb3ggKEFybWFkYSAzNzIwIGJhc2VkKQogLSBpbXByb3ZlIFNESENJIHN1
+cHBvcnQgb24gQVA4MDcgYmFzZWQgYm9hcmQKIC0gbW92ZSBTQVRBIGNvbXBoeSBpbnRvIG1haW4g
+YXJtYWRhLTM3eHguZHRzaQogLSBhZGQgQXJtYWRhIDhLLzdLIFBXTSBzdXBwb3J0CgotLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+CkJhcnVjaCBTaWFjaCAoMSk6CiAgICAgIGFybTY0OiBkdHM6IGFybWFkYTogYWRkIHB3bSBvZmZz
+ZXRzIGZvciBhcC9jcCBncGlvcwoKS29uc3RhbnRpbiBQb3JvdGNoa2luICgxKToKICAgICAgYXJt
+NjQ6IGR0czogY2hhbmdlIEFQODA3IFNESENJIGNvbXBhdGliaWxpdHkgc3RyaW5nCgpNYXJjaW4g
+V29qdGFzICgxKToKICAgICAgYXJtNjQ6IGR0czogY245MTN4LWRiOiBlbmFibGUgTU1DIEhTNDAw
+CgpNYXJlayBCZWjDum4gKDEpOgogICAgICBhcm02NDogZHRzOiBhcm1hZGEtMzcyMC10dXJyaXMt
+bW94OiByZW5hbWUgdS1ib290IG10ZCBwYXJ0aXRpb24gdG8gYTUzLWZpcm13YXJlCgpQYWxpIFJv
+aMOhciAoMSk6CiAgICAgIGFybTY0OiBkdHM6IG1hcnZlbGw6IGFybWFkYS0zN3h4OiBBZGQgU0FU
+QSBjb21waHkgaW50byBtYWluIGFybWFkYS0zN3h4LmR0c2kgZmlsZQoKIGFyY2gvYXJtNjQvYm9v
+dC9kdHMvbWFydmVsbC9hcm1hZGEtMzcyMC1lc3ByZXNzb2Jpbi5kdHNpIHwgIDIgLS0KIGFyY2gv
+YXJtNjQvYm9vdC9kdHMvbWFydmVsbC9hcm1hZGEtMzcyMC10dXJyaXMtbW94LmR0cyAgIHwgIDIg
+Ky0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9hcm1hZGEtMzd4eC5kdHNpICAgICAgICAg
+ICAgIHwgIDIgKysKIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9hcm1hZGEtYXA4MDcuZHRz
+aSAgICAgICAgICAgIHwgIDUgKysrKysKIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9hcm1h
+ZGEtYXA4MHguZHRzaSAgICAgICAgICAgIHwgIDMgKysrCiBhcmNoL2FybTY0L2Jvb3QvZHRzL21h
+cnZlbGwvYXJtYWRhLWNwMTF4LmR0c2kgICAgICAgICAgICB8IDEwICsrKysrKysrKysKIGFyY2gv
+YXJtNjQvYm9vdC9kdHMvbWFydmVsbC9jbjkxMzAtZGIuZHRzICAgICAgICAgICAgICAgIHwgIDIg
+KysKIDcgZmlsZXMgY2hhbmdlZCwgMjMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmxpbnV4LWFybS1r
+ZXJuZWwgbWFpbGluZyBsaXN0CmxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZwpo
+dHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFybS1rZXJu
+ZWwK
