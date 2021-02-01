@@ -1,141 +1,116 @@
-Return-Path: <SRS0=Fj/g=HC=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=Kms+=HD=oracle.com=santosh.shilimkar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87A8CC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 22:24:47 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B68D3C433DB
+	for <soc@archiver.kernel.org>; Mon,  1 Feb 2021 05:21:17 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 8C45A64E2A; Mon,  1 Feb 2021 05:21:17 +0000 (UTC)
+Received: from aserp2130.oracle.com (aserp2130.oracle.com [141.146.126.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3BC0264DFA
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 31 Jan 2021 22:24:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3BC0264DFA
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=J7UZ9F8p8bM1JOc5XKMnZFRhaLgYFpIxuh1vheB4wY8=; b=tBU6mGmX3exzb00K8eAUY8vC9
-	IfAMscbFNd29beEgEevAHv7/XJZ4DcRDuyElEeARgGH7+xr8V+rh47nHsNp17dSPjFjWIg4+Pmina
-	uruSLcxk3A7wKaa91FQMNG27nly/VsbjcDVgyShnPD9NhPCsQ+hSVZx0aoj8a+WSJypDNJv+i1LW7
-	A7sGs4vg/1iNAeJdnpnd34S+iTwtC6rjwO6FTDM4SU2mId3lhqkj81tSDhprA2DmzmIWh1X8eHFrv
-	GsTc5QDTJwO4CPdALgf20NoIQcrnFOMtjHLwRqHS3R4bjU/cARLdpSOdCRx8Mwcx/BxR0j6Im9dQx
-	twXl8uw3A==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l6L87-0002FP-8J; Sun, 31 Jan 2021 22:23:39 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l6L84-0002ED-BZ; Sun, 31 Jan 2021 22:23:37 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DE09564E2A;
- Sun, 31 Jan 2021 22:23:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612131814;
- bh=1zFi1O/OfYRPJDpm+YetAkissf3owl4zMydwrZGKhtA=;
- h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
- b=c/SetFTgjDQen2386CJ8OpClyi1IQL+o1fM0exttg7g76Edj/2OnTgpANm4CGLIoU
- 9AUmk+fosA9M5z2V5SWEmOYhl/ALjJ8FJhdulR7cbUe2vxnbWWT1DPcjMRlxbYQ3k2
- AxqjNQhSD0IJMXro4+G+3EVrC4QNsSqtHfZzH3fBZV7EwxBTnxbKq5kifeBagRy8IP
- EHml06Cl256UCTYXiDCsQ0i8ILsdV8Z4qaGVWgy2HSKpbNi3cZcHLUd37F1qWEaZFO
- f7hlxApr48faFQaEUCwS6htTA2BKKO2G1dSqNLJnjJwfH1mewrWC3mLMlXpbQPEKVn
- zQQz4Ieb7Utaw==
-Received: by mail-oo1-f54.google.com with SMTP id g46so3774424ooi.9;
- Sun, 31 Jan 2021 14:23:33 -0800 (PST)
-X-Gm-Message-State: AOAM533WEuuG2w5UN3T5iMsO1J4JhGvKExhVJ+wlGvu9Lan7QA60ASai
- 3IOrQScYSGrL/RM43fmGsJMZ5juofu/2PbrxTXs=
-X-Google-Smtp-Source: ABdhPJzJdLOj/vjVeCo4tCU0t8VtADnGPEnXFXXeUhxRbWkkiD6RvXIuBjxJ2kZqzBEd/nUmDyfOMYGYA4dCL0LKoBk=
-X-Received: by 2002:a4a:870c:: with SMTP id z12mr3228398ooh.15.1612131813154; 
- Sun, 31 Jan 2021 14:23:33 -0800 (PST)
-MIME-Version: 1.0
-References: <1608713092-26952-1-git-send-email-neal.liu@mediatek.com>
- <1608713092-26952-3-git-send-email-neal.liu@mediatek.com>
- <68442164-d649-aee0-cfe8-c9ebb868612d@gmail.com>
-In-Reply-To: <68442164-d649-aee0-cfe8-c9ebb868612d@gmail.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Sun, 31 Jan 2021 23:23:17 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1DLX6y5GM3O7+T0gMH_JLRp6nUkHFZc4Shjn_bTKWWSw@mail.gmail.com>
-Message-ID: <CAK8P3a1DLX6y5GM3O7+T0gMH_JLRp6nUkHFZc4Shjn_bTKWWSw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] arm64: configs: Support DEVAPC on MediaTek
- platforms
-To: Matthias Brugger <matthias.bgg@gmail.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210131_172336_501785_543F0578 
-X-CRM114-Status: GOOD (  18.23  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by mail.kernel.org (Postfix) with ESMTPS id 4C2EA60234;
+	Mon,  1 Feb 2021 05:21:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4C2EA60234
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=oracle.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=santosh.shilimkar@oracle.com
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+	by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1115DZ0W179837;
+	Mon, 1 Feb 2021 05:21:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=NGNMP8cFJbPPBvx3gcdqk3xsHqfUkWSZAztQLufqfb0=;
+ b=F3OdNfR4u0UdmokB+ZUNPeVf8xyoTdVp+HhEQmo9ZnF/kuU2mx7W/LLcPQZA2wNexjKX
+ PqrsijZtEJE3qOQ8QdyZ0UW9La7cxWGalgxZiHocLIxkOSqibjLvsCSGr8g8ld7X4FpU
+ 551cdWLtcgidRXsCaMNyIHjvDhlPYwu/zJBiJP3xW/mpMYhojbuFFztBgvZ7sBSXaKsI
+ CPOGqUe9exVrVymX+ajfsiwW1vwogZjfBKWojwtl5KyQEblUV0VR4rVzxPNcprwB5pQt
+ fKfyF1rVxPbt+fOVeQxamyzWUBpYJ5zicjoA8xA/uC4EUQjPtn6uzIUTeCCe0wVec4B+ HA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+	by aserp2130.oracle.com with ESMTP id 36cvyakmf5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 01 Feb 2021 05:21:12 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+	by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1115G4R8179597;
+	Mon, 1 Feb 2021 05:21:10 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+	by userp3020.oracle.com with ESMTP id 36dh7p6x4k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 01 Feb 2021 05:21:10 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+	by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 1115KxLL015567;
+	Mon, 1 Feb 2021 05:20:59 GMT
+Received: from localhost.localdomain (/10.159.236.203)
+	by default (Oracle Beehive Gateway v4.0)
+	with ESMTP ; Sun, 31 Jan 2021 21:20:59 -0800
+From: Santosh Shilimkar <santosh.shilimkar@oracle.com>
 List-Id: <soc.lore.kernel.org>
-Cc: DTML <devicetree@vger.kernel.org>, wsd_upstream <wsd_upstream@mediatek.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Hanks Chen <Hanks.Chen@mediatek.com>, lkml <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Neal Liu <neal.liu@mediatek.com>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- "moderated list:ARM/Mediatek SoC..." <linux-mediatek@lists.infradead.org>,
- Will Deacon <will@kernel.org>,
- Jackson-kt Chang <Jackson-kt.Chang@mediatek.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210131222317.atJy4aTb2PFWIQSOWTt9R4wWvBt4skbKWLJnWNtEikg@z>
+To: arnd@arndb.de, olof@lixom.net, soc@kernel.org
+Cc: arm@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, santosh.shilimkar@oracle.com
+Subject: [GIT PULL 1/2] drivers: soc: Keystone update for v5.12
+Date: Sun, 31 Jan 2021 21:20:54 -0800
+Message-Id: <1612156854-10929-1-git-send-email-santosh.shilimkar@oracle.com>
+X-Mailer: git-send-email 1.9.1
+X-Proofpoint-IMR: 1
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9881 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
+ suspectscore=0 spamscore=0 mlxlogscore=999 phishscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102010025
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9881 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 impostorscore=0
+ mlxscore=0 spamscore=0 bulkscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 malwarescore=0 phishscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102010025
 
-On Sun, Jan 31, 2021 at 3:07 PM Matthias Brugger <matthias.bgg@gmail.com> wrote:
-> On 23/12/2020 09:44, Neal Liu wrote:
-> > Support DEVAPC on MediaTek platforms by enabling CONFIG_MTK_DEVAPC.
-> >
-> > Signed-off-by: Neal Liu <neal.liu@mediatek.com>
-> > ---
-> >  arch/arm64/configs/defconfig |    1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> > index 17a2df6..a373776 100644
-> > --- a/arch/arm64/configs/defconfig
-> > +++ b/arch/arm64/configs/defconfig
-> > @@ -257,6 +257,7 @@ CONFIG_MTD_NAND_MARVELL=y
-> >  CONFIG_MTD_NAND_FSL_IFC=y
-> >  CONFIG_MTD_NAND_QCOM=y
-> >  CONFIG_MTD_SPI_NOR=y
-> > +CONFIG_MTK_DEVAPC=m
-> >  CONFIG_SPI_CADENCE_QUADSPI=y
-> >  CONFIG_BLK_DEV_LOOP=y
-> >  CONFIG_BLK_DEV_NBD=m
-> >
->
-> From my understanding, defconfig is for a minimal config that allows to boot a
-> machine. As MTK_DEVAPC is a rather exotic driver to detect bus access
-> violations, I think it's not a good candidate for inclusion in defconfig.
->
-> In any case, I added the SoC maintainer, so that they can correct me, if I'm
-> wrong :)
+The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
-I generally don't mind adding platform specific drivers as loadable modules
-even if they are somewhat obscure. For built-in drivers, this is
-different though,
-as those have a noticeable impact on other platforms.
+  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 
-I haven't kept track of what this particular driver does, but from the Kconfig
-description, I'd say it should get enabled in defconfig.
+are available in the git repository at:
 
-        Arnd
+  git://git.kernel.org/pub/scm/linux/kernel/git/ssantosh/linux-keystone.git tags/drivers_soc_for_5.12
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+for you to fetch changes up to a8fc8e5b8e42c4401d009143a5fd822ef3d0c9df:
+
+  soc: ti: k3-ringacc: Use of_device_get_match_data() (2021-01-31 20:58:49 -0800)
+
+----------------------------------------------------------------
+drivers: soc: Keystone update for v5.12
+
+Updates include:
+	- Navigator refcount correction
+	- probe fix in pm driver
+	- fix clock init for PRUSS
+	- PRUSS binding doc update
+	- of_device_get_match_data() use in ringacc
+
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      soc: ti: pm33xx: Fix some resource leak in the error handling paths of the probe function
+
+Grzegorz Jaszczyk (1):
+      dt-bindings: soc: ti: Update TI PRUSS bindings about schemas to include
+
+Suman Anna (3):
+      soc: ti: pruss: Correct the pruss_clk_init error trace text
+      soc: ti: pruss: Refactor the CFG sub-module init
+      soc: ti: k3-ringacc: Use of_device_get_match_data()
+
+Vasyl Gomonovych (1):
+      soc: ti: knav_qmss: Put refcount for dev node in failure case
+
+ .../devicetree/bindings/soc/ti/ti,pruss.yaml       | 76 ++++++++++++++++++
+ drivers/soc/ti/k3-ringacc.c                        |  7 +-
+ drivers/soc/ti/knav_dma.c                          |  1 +
+ drivers/soc/ti/knav_qmss_queue.c                   |  3 +
+ drivers/soc/ti/pm33xx.c                            |  5 +-
+ drivers/soc/ti/pruss.c                             | 91 ++++++++++++----------
+ 6 files changed, 137 insertions(+), 46 deletions(-)
