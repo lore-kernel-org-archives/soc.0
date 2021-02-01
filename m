@@ -7,37 +7,39 @@ X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B4F6C433DB
-	for <soc@archiver.kernel.org>; Mon,  1 Feb 2021 16:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB9ECC433E0
+	for <soc@archiver.kernel.org>; Mon,  1 Feb 2021 16:26:50 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 2319164E9E; Mon,  1 Feb 2021 16:26:17 +0000 (UTC)
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+	id 6D02D64D9D; Mon,  1 Feb 2021 16:26:50 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B4AB264DAF;
-	Mon,  1 Feb 2021 16:26:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B4AB264DAF
+	by mail.kernel.org (Postfix) with ESMTPS id 9DCA864DAF;
+	Mon,  1 Feb 2021 16:26:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9DCA864DAF
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gregory.clement@bootlin.com
+X-Originating-IP: 90.65.91.141
 Received: from localhost (lfbn-lyo-1-1912-141.w90-65.abo.wanadoo.fr [90.65.91.141])
 	(Authenticated sender: gregory.clement@bootlin.com)
-	by relay12.mail.gandi.net (Postfix) with ESMTPSA id B579A200006;
-	Mon,  1 Feb 2021 16:26:11 +0000 (UTC)
+	by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 12FD320007;
+	Mon,  1 Feb 2021 16:26:43 +0000 (UTC)
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  <arm@kernel.org>, soc@kernel.org
 Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
  <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt for v5.12 (#1)
-Date: Mon, 01 Feb 2021 17:26:11 +0100
-Message-ID: <87sg6fn49o.fsf@BL-laptop>
+Subject: [GIT PULL] ARM: mvebu: dt64 for v5.12 (#1)
+Date: Mon, 01 Feb 2021 17:26:43 +0100
+Message-ID: <87pn1jn48s.fsf@BL-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Here is the first pull request for dt for mvebu for v5.12.
+Here is the first pull request for dt64 for mvebu for v5.12.
 
 Gregory
 
@@ -47,24 +49,46 @@ The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt-5.12-1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
+bu-dt64-5.12-1
 
-for you to fetch changes up to 46ecdfc1830eaa40a11d7f832089c82b0e67ea96:
+for you to fetch changes up to 35db5e32ebc16330ae6275c24783efa4091af1bc:
 
-  ARM: dts: armada388-helios4: assign pinctrl to each fan (2021-01-29 16:25:31 +0100)
-
-----------------------------------------------------------------
-mvebu dt for 5.12 (part 1)
-
-Improve LED and fan support on Helios4 boad (Armada 388 based)
-Add ECC configuration for Linksys board (Aramda 385 based)
+  arm64: dts: armada: add pwm offsets for ap/cp gpios (2021-01-29 16:54:48 =
++0100)
 
 ----------------------------------------------------------------
-Rosen Penev (3):
-      ARM: dts: armada-385-linksys: fix usage with newer devices
-      ARM: dts: armada388-helios4: assign pinctrl to LEDs
-      ARM: dts: armada388-helios4: assign pinctrl to each fan
+mvebu dt64 for 5.12 (part 1)
 
- arch/arm/boot/dts/armada-385-linksys.dtsi |  2 ++
- arch/arm/boot/dts/armada-388-helios4.dts  | 28 ++++++++++++++++++++++------
- 2 files changed, 24 insertions(+), 6 deletions(-)
+ - rename u-boot mtd partition to a53-firmware on Turris Mox (Armada 3720 b=
+ased)
+ - improve SDHCI support on AP807 based board
+ - move SATA comphy into main armada-37xx.dtsi
+ - add Armada 8K/7K PWM support
+
+----------------------------------------------------------------
+Baruch Siach (1):
+      arm64: dts: armada: add pwm offsets for ap/cp gpios
+
+Konstantin Porotchkin (1):
+      arm64: dts: change AP807 SDHCI compatibility string
+
+Marcin Wojtas (1):
+      arm64: dts: cn913x-db: enable MMC HS400
+
+Marek Beh=C3=BAn (1):
+      arm64: dts: armada-3720-turris-mox: rename u-boot mtd partition to a5=
+3-firmware
+
+Pali Roh=C3=A1r (1):
+      arm64: dts: marvell: armada-37xx: Add SATA comphy into main armada-37=
+xx.dtsi file
+
+ arch/arm64/boot/dts/marvell/armada-3720-espressobin.dtsi |  2 --
+ arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts   |  2 +-
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi             |  2 ++
+ arch/arm64/boot/dts/marvell/armada-ap807.dtsi            |  5 +++++
+ arch/arm64/boot/dts/marvell/armada-ap80x.dtsi            |  3 +++
+ arch/arm64/boot/dts/marvell/armada-cp11x.dtsi            | 10 ++++++++++
+ arch/arm64/boot/dts/marvell/cn9130-db.dts                |  2 ++
+ 7 files changed, 23 insertions(+), 3 deletions(-)
