@@ -1,96 +1,118 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=ZBoG=HD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FC15C433E0
-	for <linux-devicetree@archiver.kernel.org>; Mon,  1 Feb 2021 08:51:30 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB53264E36
-	for <linux-devicetree@archiver.kernel.org>; Mon,  1 Feb 2021 08:51:29 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbhBAIv1 (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Mon, 1 Feb 2021 03:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbhBAIv0 (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Mon, 1 Feb 2021 03:51:26 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB15C061574;
-        Mon,  1 Feb 2021 00:50:46 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id o10so11010097wmc.1;
-        Mon, 01 Feb 2021 00:50:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rIiV2l/8Qf1juG7z36n1KVoCTNYEzigbbx8ySlcRFIU=;
-        b=qpwS4+w0No/kjqi9pPJi0b1UkW42lwpu9GiFvxw5B5qU8wh1TT4PzZOFNDpV9x0aMB
-         559Kf9cmqogMtj/58X+kijNdaqWOrLanYVn7vOKPJR+6NMGAp+UDs5yjnIOxA8ZbHom8
-         K+S4th4Ji8cxYidORiMybefEIwPFmaW1sWNSBBOeOkbRQOJGBdbAMYnIr1fHpb8SojfV
-         oDCBSmWrgxZ3USTPdliDl16vLjnQCKaBnLZDW4aQMkTfabhI8rTbZgk5pHszFLVnFoEx
-         b2RivGZucjjOGAl3nYOd6XdNBnRpZoyt8Z2+neh1jBYCDvbcACDgJwUrOh1J4GoQkfM8
-         eKIw==
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0536CC433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Feb 2021 08:51:53 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 8CDA464E31
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Feb 2021 08:51:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8CDA464E31
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
+	References:To:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=EVft5tmJl8eV/Sx9Ddt7NPlIi/WAVTSMEkL3Al4Ta38=; b=bNc5KPSsoe7PQ7h4cKkWAJVuK
+	DdKiA3PkcXSXtvedeRHMPhYVk5CAj0tnPx2BHfPQZiWb7r0TNBOMVM+Prr1/p+EA54OoU2tFESJmY
+	rUw/n44Il+q5rtQp1Lxv2JYZR2UnrPNxZOAtsxYVxMTcG1dbI8BK5bcoufNn8YnKIRbzhgWuaevx9
+	hv7L1IKxvfCEfLTovYFTsG0yFNzSTjGmc4w5B/Kukbq941V6bb4pNf8BwGXh/Qhv2uV/Z1esNNF+X
+	0HCZ+j64nHdH6JreTRxBs328Q3k/w2HnTAEYVzHpucewi8rVLztQ8czmR49+jnwAnAlVGjuMnPoMz
+	ncAfQAwcA==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l6Uv3-0002mk-4a; Mon, 01 Feb 2021 08:50:49 +0000
+Received: from mail-wm1-x329.google.com ([2a00:1450:4864:20::329])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l6Uv0-0002m2-AV; Mon, 01 Feb 2021 08:50:47 +0000
+Received: by mail-wm1-x329.google.com with SMTP id o5so2216887wmq.2;
+ Mon, 01 Feb 2021 00:50:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=subject:to:cc:references:from:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=rIiV2l/8Qf1juG7z36n1KVoCTNYEzigbbx8ySlcRFIU=;
+ b=qpwS4+w0No/kjqi9pPJi0b1UkW42lwpu9GiFvxw5B5qU8wh1TT4PzZOFNDpV9x0aMB
+ 559Kf9cmqogMtj/58X+kijNdaqWOrLanYVn7vOKPJR+6NMGAp+UDs5yjnIOxA8ZbHom8
+ K+S4th4Ji8cxYidORiMybefEIwPFmaW1sWNSBBOeOkbRQOJGBdbAMYnIr1fHpb8SojfV
+ oDCBSmWrgxZ3USTPdliDl16vLjnQCKaBnLZDW4aQMkTfabhI8rTbZgk5pHszFLVnFoEx
+ b2RivGZucjjOGAl3nYOd6XdNBnRpZoyt8Z2+neh1jBYCDvbcACDgJwUrOh1J4GoQkfM8
+ eKIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rIiV2l/8Qf1juG7z36n1KVoCTNYEzigbbx8ySlcRFIU=;
-        b=UKBnB/9HXMf1T16MN1mBiSku3zURAYjieKgKi08RGsmCxA+FHZQPB25ROcFdnr0rTp
-         Wz4iiKo9ydTlGoKRxLwVPsbom2If/FfTn1vjKO11Op/X1i4pKQT+BydV2aA6q5nsPlUN
-         5Sja0h/MaSS+KKkoRFcqv+K7ZBxL2o86s+IYs7/+Rh+gX0EwV+03WJkWTlFLp+2GbXKA
-         2bZzTieictof2EKy+S/QApyRu/0CoaN1SJSdw33YJ34RZBJxkAClwv6xhhZ5UkQN3B89
-         BxX1o+cl8m4/IOrd9A4EOObaShe1BovVx9ETFk6vGsroiZnAtYfqVenGL8lG++7hgw2O
-         7vQQ==
-X-Gm-Message-State: AOAM533UIatAyaeR38NT57m0HOPB5llG5RKm8yLbvDMaDC9QGanP89Uf
-        kn6jU3MSIqve3TO6L1mJ9qA=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=rIiV2l/8Qf1juG7z36n1KVoCTNYEzigbbx8ySlcRFIU=;
+ b=KRCO0TeNdfVr/L4/UeT4edEFWi2poGe+P/N7S6SRaxjGhXqL5kZh1VGVeiW92BI650
+ 4evBF6b2iVcmsZLeR8LzKb7u09JtDaB0qG1sNoFe7SM9YnPTAvqaYjg7k7BE3F6iQTKH
+ o1tV08ql/TmKqJN08j0opFwCohxmVpt6+VQUFXcsw3sIQ/f/j1xE2eE9piJ/NTh3okfs
+ uvSiIqAH0ZjwQmJM3tQ+o3YaSUiUSFEnZ1w9x2bn6wrbWfpaJhYHQLbZA7Ytr+dGSQXB
+ J2MNtcDR8wuWhfy8Qh/Ozmjb4NIGztucTS9shTetAImBICQhp6CLUI0Se/h0kaBp1XsH
+ ez1A==
+X-Gm-Message-State: AOAM5324VgJOMfCaq4yzkmMBq2S8SoNqzbhiTsK85NX6KDgJABZZNtPk
+ gGUM6k0IaJG2rfR99wUXYvmVLhL9NedlhEQ7
 X-Google-Smtp-Source: ABdhPJwMG9i1Sej5MLrrFago+IjOeLAh/IFRWk11NBhciLuq+1qoY42wMuzwOISDhylXSmgSrk7Few==
-X-Received: by 2002:a1c:408a:: with SMTP id n132mr5037245wma.86.1612169445107;
-        Mon, 01 Feb 2021 00:50:45 -0800 (PST)
+X-Received: by 2002:a1c:408a:: with SMTP id n132mr5037245wma.86.1612169445107; 
+ Mon, 01 Feb 2021 00:50:45 -0800 (PST)
 Received: from ziggy.stardust ([213.195.126.134])
-        by smtp.gmail.com with ESMTPSA id i7sm15842882wmq.2.2021.02.01.00.50.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Feb 2021 00:50:44 -0800 (PST)
+ by smtp.gmail.com with ESMTPSA id i7sm15842882wmq.2.2021.02.01.00.50.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 01 Feb 2021 00:50:44 -0800 (PST)
 Subject: Re: [PATCH v1 2/2] arm64: configs: Support DEVAPC on MediaTek
  platforms
-To:     Arnd Bergmann <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc:     Neal Liu <neal.liu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, SoC Team <soc@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        wsd_upstream <wsd_upstream@mediatek.com>,
-        Hanks Chen <Hanks.Chen@mediatek.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Jackson-kt Chang <Jackson-kt.Chang@mediatek.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+To: Arnd Bergmann <arnd@kernel.org>
 References: <1608713092-26952-1-git-send-email-neal.liu@mediatek.com>
  <1608713092-26952-3-git-send-email-neal.liu@mediatek.com>
  <68442164-d649-aee0-cfe8-c9ebb868612d@gmail.com>
  <CAK8P3a1DLX6y5GM3O7+T0gMH_JLRp6nUkHFZc4Shjn_bTKWWSw@mail.gmail.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
 Message-ID: <7001eef4-42bd-0c17-50a3-4d619d0fc80a@gmail.com>
-Date:   Mon, 1 Feb 2021 09:50:43 +0100
+Date: Mon, 1 Feb 2021 09:50:43 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.1
 MIME-Version: 1.0
 In-Reply-To: <CAK8P3a1DLX6y5GM3O7+T0gMH_JLRp6nUkHFZc4Shjn_bTKWWSw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210201_035046_400369_BA9CC7E4 
+X-CRM114-Status: GOOD (  20.22  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: DTML <devicetree@vger.kernel.org>, wsd_upstream <wsd_upstream@mediatek.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Hanks Chen <Hanks.Chen@mediatek.com>, lkml <linux-kernel@vger.kernel.org>,
+ SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Neal Liu <neal.liu@mediatek.com>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ "moderated list:ARM/Mediatek SoC..." <linux-mediatek@lists.infradead.org>,
+ Will Deacon <will@kernel.org>,
+ Jackson-kt Chang <Jackson-kt.Chang@mediatek.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20210201085043.kzRjs2zJ3RYZYvaKJsU8r5BSEW6HSMS0aQ_yVc6Viks@z>
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210201085043._lLIRcBFrtjZZcegtd0CM8AnfaMC-U9X5NaQcPxr5zs@z>
 
 
 
@@ -136,3 +158,8 @@ On 31/01/2021 23:23, Arnd Bergmann wrote:
 
 Thanks for the feedback Arnd.
 Applied now to v5.11-next/defconfig
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
