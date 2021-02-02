@@ -7,58 +7,54 @@ X-Spam-Status: No, score=-18.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF517C433DB
-	for <soc@archiver.kernel.org>; Tue,  2 Feb 2021 21:36:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51514C433DB
+	for <soc@archiver.kernel.org>; Tue,  2 Feb 2021 21:36:57 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 7624D64F68; Tue,  2 Feb 2021 21:36:55 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D19464F61;
-	Tue,  2 Feb 2021 21:36:53 +0000 (UTC)
+	id 2789364F69; Tue,  2 Feb 2021 21:36:57 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C2CBE64F64;
+	Tue,  2 Feb 2021 21:36:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612301815;
-	bh=l2zLiFQYnlqIzy1qNedzusDW5xujvBFhDqicPTJu+K4=;
+	s=k20201202; t=1612301817;
+	bh=BbnJSr6Ege++aFAAeZmKTDK8JpUtr5OP94Bw0+A/zX8=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=i7xRh+5e1Icq8XUlZO6RPmgx78gebZqS2ntA/0MKpOiIMHLutKd3a0Ezp8vPx2aoy
-	 QnMnhD/ux5KG8spsvjJ9+YU2qPHmjlTKTfstzXX5/iUgjgBxL1UcVdj2iRaQfer6qD
-	 bUdwt0GoNLUJtaiRHwDvKFQ7i/qxBb6mWr1cvOPP9nicjIFWYSNrKvn5RAD9W1b21y
-	 vttN/OJXVr6+S8Qq3dPoV0GhmD1ml1psdrWV/H49Pfbgh/gM7M/FIfWR7JOMGRLCOO
-	 BulN+nhmB9rdVvkecUxq/zzZs7ck7Z/YKOJU+VvJ26DGYbSWYZnA+Z4Zk8UzHIQD9u
-	 NnYGhDQzuZplA==
+	b=tnW9lbtBK/1Plx6K15vOxWIzlWfcj6T2ASg7s2OZ6hfwoUEeBCojIWrP7gWI0/KDA
+	 8CFJGZNw4pxLnYD3n6t9qnWj+yMeSdWEPpLY66c/Ptj51JvkDPa3Ls9aiRM9VOUyjz
+	 MmMpA1/5KAD6VJwyosZ9aO7ZToZ6EUGWLXsxiB9LbKr/SwLpp1U6eleWzSOh6vRR86
+	 heQmfo6JEmAuEKYVkL4ZB+85CYB/5UAcm1Pw7i2sHinNy/A6NALLh7SOYmj7Zq3YSA
+	 vZ72yUn90gz2lSIX/hEYs9J09kFN7akivGQmi5q7HjvmAM5QZniRlJK+gFIeRB/Ftz
+	 SmXJsSwybulfg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Florian Fainelli <f.fainelli@gmail.com>
+To: arm@kernel.org,
+	soc@kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Olof Johansson <olof@lixom.net>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com,
-	olof@lixom.net,
-	linux-arm-kernel@lists.infradead.org,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: Re: [GIT PULL 5/6] Broadcom drivers changes for 5.12
-Date: Tue,  2 Feb 2021 22:36:47 +0100
-Message-Id: <161230178545.1902917.1837726983239956032.b4-ty@arndb.de>
+	linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL 1/2] memory: drivers for v5.12
+Date: Tue,  2 Feb 2021 22:36:48 +0100
+Message-Id: <161230178526.1902917.16304011124716230610.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210131221721.685974-5-f.fainelli@gmail.com>
-References: <20210131221721.685974-1-f.fainelli@gmail.com> <20210131221721.685974-5-f.fainelli@gmail.com>
+In-Reply-To: <20210131180109.11510-1-krzk@kernel.org>
+References: <20210131180109.11510-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sun, 31 Jan 2021 14:17:19 -0800, Florian Fainelli wrote:
+On Sun, 31 Jan 2021 19:01:08 +0100, Krzysztof Kozlowski wrote:
 > The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 > 
 >   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 > 
 > are available in the Git repository at:
 > 
->   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.12/drivers
+>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.12
 > 
 > [...]
 
 Merged into arm/drivers, thanks!
 
-merge commit: 60a64da9f0d0b7e766ba9bb0c11e28ca780fc2fd
+merge commit: 993fd7d6fef65330b1a4abd0005ba09e0d8de3de
 
        Arnd
