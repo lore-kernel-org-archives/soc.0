@@ -6,22 +6,22 @@ X-Spam-Status: No, score=-8.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF5BC433DB
-	for <soc@archiver.kernel.org>; Tue,  2 Feb 2021 17:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A72E8C433DB
+	for <soc@archiver.kernel.org>; Tue,  2 Feb 2021 17:10:30 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 6349364F88; Tue,  2 Feb 2021 17:10:28 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 940C364F8A;
-	Tue,  2 Feb 2021 17:10:26 +0000 (UTC)
+	id 73C0B64F8D; Tue,  2 Feb 2021 17:10:30 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B181764F8C;
+	Tue,  2 Feb 2021 17:10:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612285828;
-	bh=n1En1YLsvhIFHDL/bHDovjiiN1YH8YRRfAM3SkCGU3o=;
+	s=k20201202; t=1612285830;
+	bh=RDAJBs7hZAG5GvM978VxZJpSkxhRuZNwaO6Yq94kChw=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=T8GVO+Lv7frIDNOIlNzFe650j7WZRajEmJItiOhuFwjgqx+TGhdOfFiJv537mGrfm
-	 m80YznJMeajrl+cctwYJGpq0ft9j+KCAE26D1INA/vka+WNI1hXAv9/Xo4r8kCHDch
-	 x5d6EGwMtks1wdI0nRqYX3pa0Z3n/WdI+imamBVqwhu99/m8XcEjeyKccTRbzG9RJf
-	 M7J5kjalT0s/3+biRPzZDg9uz6Uw2QTcz3UwTxDeoWMyR6xNmN/E0Sd7CQ5HyxHyBO
-	 d1NB8BWDSEzmxfe53VWuUVnI1usN7OeQdsItA0He9Kg4wSfvLZuTqfG5a0dqSaZ5gw
-	 H5fxw+nWtrCIg==
+	b=vDaHzrjDb3AGR4e5b34K6gS00qljX3gLNowscx9++KNcpdMLf56srrZmgm+5rKt53
+	 c7kOaA0sG+5Kx7nwgqEYCH3YHspzic1cJpibp/ayf3x5A8csdX80uBnzJ4W+0KBIDY
+	 dPQwc2MDDXk6vq6S7BHQFT251BCNh+XaMTiBsp1guVnoO/8Qx8fZp3zwoEJvQSwCJm
+	 XgESIclHh07vizO1OVvcJUQ/1sgD42svxsx5vGwXJyvi+FnXHADvLfJn13uygtG84K
+	 GTO0mPmZo2GMT1WWwxGEyJsLOR35Lj/ZaOFLra5Xoi/1Tyr3BVjMC8CJET74CNEjSX
+	 xuLCv29AbrFTA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -32,19 +32,19 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Andrew Lunn <andrew@lunn.ch>,
 	linux-arm-kernel@lists.infradead.org,
 	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Subject: Re: [GIT PULL] ARM: mvebu: dt64 for v5.12 (#1)
-Date: Tue,  2 Feb 2021 18:10:09 +0100
-Message-Id: <161228552323.1852435.8043125783469757212.b4-ty@arndb.de>
+Subject: Re: [GIT PULL] ARM: mvebu: dt for v5.12 (#1)
+Date: Tue,  2 Feb 2021 18:10:10 +0100
+Message-Id: <161228552314.1852435.14453137896753476944.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <87pn1jn48s.fsf@BL-laptop>
-References: <87pn1jn48s.fsf@BL-laptop>
+In-Reply-To: <87sg6fn49o.fsf@BL-laptop>
+References: <87sg6fn49o.fsf@BL-laptop>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 01 Feb 2021 17:26:43 +0100, Gregory CLEMENT wrote:
-> Here is the first pull request for dt64 for mvebu for v5.12.
+On Mon, 01 Feb 2021 17:26:11 +0100, Gregory CLEMENT wrote:
+> Here is the first pull request for dt for mvebu for v5.12.
 > 
 > Gregory
 > 
@@ -56,6 +56,6 @@ On Mon, 01 Feb 2021 17:26:43 +0100, Gregory CLEMENT wrote:
 
 Merged into arm/dt, thanks!
 
-merge commit: 481d73c663e138a256988beca54152545ad265f5
+merge commit: 7e500c897ddf99f9f794a1ff80175a3a18547095
 
        Arnd
