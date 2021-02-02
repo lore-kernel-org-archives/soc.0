@@ -2,66 +2,63 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CACCC433E0
-	for <soc@archiver.kernel.org>; Tue,  2 Feb 2021 16:48:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32990C433E0
+	for <soc@archiver.kernel.org>; Tue,  2 Feb 2021 16:48:03 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id B0CDE64F94; Tue,  2 Feb 2021 16:48:00 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A0AB64F7F;
-	Tue,  2 Feb 2021 16:47:58 +0000 (UTC)
+	id 0F02164F7E; Tue,  2 Feb 2021 16:48:03 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A3AE64F7B;
+	Tue,  2 Feb 2021 16:48:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612284480;
-	bh=R2JKYXC6NAoRuSanZPQd/DMB+L1eNAcjJrgEMgYwM0w=;
+	s=k20201202; t=1612284483;
+	bh=v1NnVSi+Hlclnm9HV7X6h64hYRp8PCCjPAjlT4F8aOc=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lcqTC7dADIoHogusTvXfCbjywtV0jiKHfqHhsLn19jWf2CU6ekfHN7GlJhVlVI7l8
-	 /GLLHdNphhynu1rV7DX5D4kyMNjyA5RPSBIh8YNkF2p3TdZCwOa8ZyzJlS27a5iRQA
-	 BANfKNlQ78sOJKrPpy3TfR2KWbB0PVrOTMLL1oUpk2n7HvWgQgTytVmln/g+Fcw0K+
-	 IDjem5TiURKjF98KL5MpHcnYXOWTo3wyba0jm+OC/WDPLERZhNq8N87ZV7erA/nMsB
-	 GcbG1i65f5z+urPVoEgBhBBda1/18sdaZEDJMR1wle+KPxe7LPsFhyGA1P+bbwmooC
-	 uXrXXRTegbdHw==
+	b=AUJdeI0JLDhQlnHpGSgRJuu0LdQacUZB5sD9HykPjOZJSAtqZcEsHZHiesFdwbFJY
+	 7uGwQpbdptHRR8rJh4Lun8cBawAuGek/nja5coiq0cwQN/6Lv2lniNFM66Bx8PE6k0
+	 8OBsAZH1Tymhi7K5V8CXpTzdrNQT/OoKPynfnTcNQSbkk9ELWOe8CwA7UKkY4Sn53A
+	 I3ZXIe1W64XGVbmb3Ju5e7tFqW4l9OB7TFH37QGoWztqPVYD4u0mf9tG22icYsQhT2
+	 ggsLOj2m+HawqGfBFUyO4F3GdSb6Ax8hRNWET1NoUTzoy6+KelMwb9ROl7bYfAa80z
+	 L+5O1qof6i/yg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Nishanth Menon <nm@ti.com>,
-	arm@kernel.org,
-	soc@kernel.org,
-	Olof Johansson <olof@lixom.net>
+To: arm@kernel.org,
+	Shawn Guo <shawnguo@kernel.org>,
+	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org,
-	Tero Kristo <kristo@kernel.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 1/2] MAINTAINERS: Update to TI maintainer for v5.12
-Date: Tue,  2 Feb 2021 17:47:51 +0100
-Message-Id: <161228438414.1848830.8600684869682893491.b4-ty@arndb.de>
+	Stefan Agner <stefan@agner.ch>,
+	Fabio Estevam <festevam@gmail.com>,
+	linux-imx@nxp.com,
+	Li Yang <leoyang.li@nxp.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de
+Subject: Re: [GIT PULL] i.MX fixes for 5.11, round 3
+Date: Tue,  2 Feb 2021 17:47:52 +0100
+Message-Id: <161228438432.1848830.13359081644541092544.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210130131411.afna4wj72r7xscqn@skinny>
-References: <20210130131411.afna4wj72r7xscqn@skinny>
+In-Reply-To: <20210202071441.GP907@dragon>
+References: <20210202071441.GP907@dragon>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sat, 30 Jan 2021 07:14:11 -0600, Nishanth Menon wrote:
-> Please pull the following MAINTAINERS file update for v5.12 cycle. Made
-> sense to send via ARM path since the main PR path was for TI platforms.
-
-This seems more appropriate to have in v5.11, I tend to fast-track
-maintainer address changes as bug-fixes so future emails reach the
-correct address.
-
-> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+On Tue, 2 Feb 2021 15:14:42 +0800, Shawn Guo wrote:
+> The following changes since commit 82c082784e03a9a9c043345f9bc04bc8254cf6da:
 > 
->   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+>   firmware: imx: select SOC_BUS to fix firmware build (2021-01-18 15:49:07 +0800)
 > 
 > are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.11-3
 > 
 > [...]
 
 Merged into arm/fixes, thanks!
 
-merge commit: 6102f9e700bb3fee2f37756514885e7b14a70ef6
+merge commit: 422d7e3727d8f7b269a7dd2eafc279fd5dddb13e
 
        Arnd
