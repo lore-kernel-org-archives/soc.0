@@ -6,14 +6,14 @@ X-Spam-Status: No, score=-7.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03005C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  2 Feb 2021 17:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAD26C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  2 Feb 2021 17:11:51 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B676964F4B
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  2 Feb 2021 17:11:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B676964F4B
+	by mail.kernel.org (Postfix) with ESMTPS id 48FDE64F50
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  2 Feb 2021 17:11:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 48FDE64F50
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,46 +22,44 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=dqEupUCR9ZaWlm19/xE/bWqFcEDtHf0avfpX3U6nCsg=; b=aI+I1hpdMRkjVoBUFvCuz3H5Q
-	LipeH5uzQV7apEOsfXE9oaQ4v7TIPUSFcU4GJ5VngPebeihu7YaYsTcUbKG56BGJcuXx1wuwzIS/f
-	wFWWAAqH7RG9oI5F0zu9m4oWKOowPVGrJXrKVGJT4JCqBiYA4NPPkDGHCZrRTRntT5+ylxxQZUA5R
-	gzbXRBJrbMgdRPyNIqf2mPjIBOP25Ko8fLO1Ia+3lvzqWga5zM3HNje/4Cit1SYd2NFSj0b8Vj6Xf
-	zcCP0TQF3B96RAOQN1jGYYCcUoAKZy+lXcdsAow8bcZdyf5YY8TSX8EKfUed8f26O9IaOedRVOVIA
-	iFa9kL6MQ==;
+	 bh=MSiIQC1bASiCM24UXPoGeaIjbIdeI/q6V8E21WoMj9k=; b=Frky+EBB36Nwxn99JRNfDSkJK
+	6a3Q2QAj9FfKCZxguzBT/BbC5jlHhcSZLps0RVj99M8Ea1qRaLbruAPumPjoYPvWfgZhgKWJ4hLVp
+	E39E8225CwIa2GMFoYaaf2AIZHZ7JPzsOob98X5/JHxEWGieIQiRF2N19y0/gdnp+c1npK7WTxgoN
+	JyR5TIjSgEUhLhBNRA24H8MGVrkCrxshp8LFX2OBRjTisAjMEsPY+Nm0f3d1P/HrS4TNY/0fmTina
+	+yycHql/lc7w3FDUOSAuI5J5Mz7YPVFtaXb4JruScNjY8oGvkXX+GY2y+L95BH7bx5CT4CEPC7Y8c
+	vU86Jncjw==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l6zCF-00037s-Q1; Tue, 02 Feb 2021 17:10:35 +0000
+	id 1l6zCN-0003C8-Vl; Tue, 02 Feb 2021 17:10:44 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l6zCB-00036B-0c
- for linux-arm-kernel@lists.infradead.org; Tue, 02 Feb 2021 17:10:32 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B181764F8C;
- Tue,  2 Feb 2021 17:10:28 +0000 (UTC)
+ id 1l6zCG-00038c-2K; Tue, 02 Feb 2021 17:10:37 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 61F1864F90;
+ Tue,  2 Feb 2021 17:10:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612285830;
- bh=RDAJBs7hZAG5GvM978VxZJpSkxhRuZNwaO6Yq94kChw=;
+ s=k20201202; t=1612285835;
+ bh=lB/MY/hwqaGFkU+ADnUf+L9HD2CW5JsTy/vaikCTH7E=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=vDaHzrjDb3AGR4e5b34K6gS00qljX3gLNowscx9++KNcpdMLf56srrZmgm+5rKt53
- c7kOaA0sG+5Kx7nwgqEYCH3YHspzic1cJpibp/ayf3x5A8csdX80uBnzJ4W+0KBIDY
- dPQwc2MDDXk6vq6S7BHQFT251BCNh+XaMTiBsp1guVnoO/8Qx8fZp3zwoEJvQSwCJm
- XgESIclHh07vizO1OVvcJUQ/1sgD42svxsx5vGwXJyvi+FnXHADvLfJn13uygtG84K
- GTO0mPmZo2GMT1WWwxGEyJsLOR35Lj/ZaOFLra5Xoi/1Tyr3BVjMC8CJET74CNEjSX
- xuLCv29AbrFTA==
+ b=kSdJZOokFLSjHNkGgMVfmTdaziDOY7jQIqaQkDOM+cqthvhjZOXyUgltj+o8Rivtn
+ HXT3rvU+1Ca3lWlj/KrdWzXtgfmj2akLpeHMmTtTm6wehsQjJTyHmtRXlavdK3OBIB
+ XY55fTf4ezJzrjHwCcTdiv3tiytKEDYm/l4HnfuP5EJ5F1S8AfBxL3y8e9W/cyUux4
+ SbiTIt2nf3kgMk73d4XgipN3KJE5JEr//atYVw7Y0M6XrBfUyAVldQ16hCs7vy8nn0
+ LBR5Ak9EH9f+z+gZKYZxBDgl3VsjTWpu82fev7xFslCiDcv/wBmBmREAhepELatLz0
+ Lz7NriaQWctSg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, soc@kernel.org,
- Gregory CLEMENT <gregory.clement@bootlin.com>, arm@kernel.org
-Subject: Re: [GIT PULL] ARM: mvebu: dt for v5.12 (#1)
-Date: Tue,  2 Feb 2021 18:10:10 +0100
-Message-ID: <161228552314.1852435.14453137896753476944.b4-ty@arndb.de>
+To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [GIT PULL] arm64: dts: mediatek: updates for v5.12
+Date: Tue,  2 Feb 2021 18:10:12 +0100
+Message-ID: <161228552305.1852435.3470546880273148615.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <87sg6fn49o.fsf@BL-laptop>
-References: <87sg6fn49o.fsf@BL-laptop>
+In-Reply-To: <565be0cc-460a-7d0b-47da-09bf0401e8fe@gmail.com>
+References: <565be0cc-460a-7d0b-47da-09bf0401e8fe@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210202_121031_172083_7837A6D8 
-X-CRM114-Status: UNSURE (   9.68  )
-X-CRM114-Notice: Please train this message.
+X-CRM114-CacheID: sfid-20210202_121036_231487_1EBA94D8 
+X-CRM114-Status: GOOD (  13.75  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,31 +71,40 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Andrew Lunn <andrew@lunn.ch>, linux-arm-kernel@lists.infradead.org,
- Arnd Bergmann <arnd@arndb.de>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+Cc: James Liao <jamesjj.liao@mediatek.com>, Argus Lin <argus.lin@mediatek.com>,
+ Arnd Bergmann <arnd@arndb.de>, Frank Wunderlich <frank-w@public-files.de>,
+ Bayi Cheng <bayi.cheng@mediatek.com>, Fabien Parent <fparent@baylibre.com>,
+ Neal Liu <neal.liu@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
+ Hsin-Yi Wang <hsinyi@chromium.org>,
+ Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+ "moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210202171010.tTo5RoZzYap0cwJ5BzShXOrky5rSDia38X-mmFvW0v0@z>
+Message-ID: <20210202171012.ol4Tpzp61N72FKHcdiKJanYtmM7K8hTOaiCjkedMWDo@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 01 Feb 2021 17:26:11 +0100, Gregory CLEMENT wrote:
-> Here is the first pull request for dt for mvebu for v5.12.
+On Mon, 1 Feb 2021 11:12:26 +0100, Matthias Brugger wrote:
+> Please find below the updates for the MediaTek dts64.
+> Lots of work is done in the MT8183 SoC which can be found in some newer
+> Chromebooks, especially around grafics support. Not so much is happening on the
+> shiny new MT8192, as we still lack some core drivers, which provide a lots of
+> dependencies.
 > 
-> Gregory
-> 
-> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-> 
->   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+> Apart from that we support two new devices for the MT6779 from the mobile chip
+> line. One is a SoC specific device called DEVAPC. It provides a kind of bus
+> firewall which will pass information on potentially malicious bus accesses from
+> TF-A to the SoC. It had been a long journey for the driver and I'm happy that it
+> is now supported by the device.
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 7e500c897ddf99f9f794a1ff80175a3a18547095
+merge commit: 542b9f11e5643d165d43e45675993e040cf32e5f
 
        Arnd
 
