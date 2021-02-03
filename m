@@ -1,56 +1,74 @@
-Return-Path: <SRS0=hsWj=HF=gmail.com=jacquiot.aurelien@kernel.org>
+Return-Path: <SRS0=Uajl=HF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08C9BC433DB
-	for <soc@archiver.kernel.org>; Wed,  3 Feb 2021 07:55:44 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id D34A664E3E; Wed,  3 Feb 2021 07:55:43 +0000 (UTC)
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 627EBC433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  3 Feb 2021 07:57:09 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5B1DD64E43;
-	Wed,  3 Feb 2021 07:55:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5B1DD64E43
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=jacquiot.aurelien@gmail.com
-Received: by mail-ot1-f52.google.com with SMTP id h14so22543417otr.4;
-        Tue, 02 Feb 2021 23:55:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=63MoKAFcFhjQc91uaq35mHDldaAP2W+c4ko5J7FNUMk=;
-        b=BB+zRepswIButdv+kp00R4ILxvpn56H/3612HfUL8G4Ol7qfAbOYQzsXYh4ae5gQWh
-         JZkSwj11ZdTx0PLtoqM8VGENI1pWdbxHzsAZ4inoP5J01F2Gjm7CmJeA3QMorCrMAAkm
-         z8Ehj1jHeZVkaH1surL1eoCDBxJXweJ4+AibOPcv5mGC+81coBkog3T40nvQEfcUHd+c
-         tTlEk9caYM4mTFqDWi4FSjIsrtbZjIaaik1Rbjzp80KPjEsveuE8Zuu6XE1s36NIQBEK
-         1XqwZxnRk8iujzKeZGdHuveJ1w2c4/9fnk35s4J4Mnz/iZjealTHNl1W9ptFLWj5ntN1
-         jqUw==
+	by mail.kernel.org (Postfix) with ESMTPS id BCB8464DD5
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  3 Feb 2021 07:57:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BCB8464DD5
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
+	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=/DkfsPpsGsHyAwBw1v0O1g1Wua7OXBudZNmzLt99iZs=; b=C/picFIX3tsWUWrDMTRNN2E3D
+	S/Q6y/5TdiPOk3cK1gzMISSA/IRxCRM+cyHJ3HkajnhO3N1m0PaNbohWHNMMftIh+XUh66zFvUJ9H
+	CWriY/Tjz4LLElkDjWlGR8gf9I5iuzN3A1G2LzU7iQb62xzHuQQ1/gkc3jaP6bps50IVgXWz1GGmH
+	Xl7dNP66NN887Sia8ur5Mc1SjoLnh02+oMDBHvBajIxtJqlYGzBt9wJQouzhq4G/m1XJuScl/DQoP
+	ofWeg+mCz3XNaZJQBkNgSjBwiJNy61XNSdxVckGLgO8NCDUSBa2wzZ03wwd80RgaJxkPBkV48pqA7
+	reyJseIAA==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l7D0u-0001aL-RM; Wed, 03 Feb 2021 07:55:48 +0000
+Received: from mail-ot1-x32e.google.com ([2607:f8b0:4864:20::32e])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l7D0q-0001Ya-LF
+ for linux-arm-kernel@lists.infradead.org; Wed, 03 Feb 2021 07:55:46 +0000
+Received: by mail-ot1-x32e.google.com with SMTP id t25so12425290otc.5
+ for <linux-arm-kernel@lists.infradead.org>;
+ Tue, 02 Feb 2021 23:55:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=63MoKAFcFhjQc91uaq35mHDldaAP2W+c4ko5J7FNUMk=;
+ b=BB+zRepswIButdv+kp00R4ILxvpn56H/3612HfUL8G4Ol7qfAbOYQzsXYh4ae5gQWh
+ JZkSwj11ZdTx0PLtoqM8VGENI1pWdbxHzsAZ4inoP5J01F2Gjm7CmJeA3QMorCrMAAkm
+ z8Ehj1jHeZVkaH1surL1eoCDBxJXweJ4+AibOPcv5mGC+81coBkog3T40nvQEfcUHd+c
+ tTlEk9caYM4mTFqDWi4FSjIsrtbZjIaaik1Rbjzp80KPjEsveuE8Zuu6XE1s36NIQBEK
+ 1XqwZxnRk8iujzKeZGdHuveJ1w2c4/9fnk35s4J4Mnz/iZjealTHNl1W9ptFLWj5ntN1
+ jqUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=63MoKAFcFhjQc91uaq35mHDldaAP2W+c4ko5J7FNUMk=;
-        b=hIfiBBPrtmcITdCjLyP5gQf1Qg7tU84rkJqmgHdTpGHrzpBAaQhO+N/3Jmt9rcbsFS
-         noSZXOT7wRq0uiveQffB+lg0FyZobZOCLvI9ijaz918RGrTW41bvd6mPxMW2IQ0ZFGnt
-         NvRpvrreN8qvM+AdeoQ6i7g09KrHk5eHnjTp9jE0o22dStg/gytJEUmZYXqbfgdp+5lY
-         2vINjBqfQuKjPjWZx34EIRD5qsIMrwWahh4T5YFi7hg09xRklERGHi63rVBk6jrqmzCU
-         0E93BHhdKkWy6WlXGV9gDkt2hrfNoK4f/KVCLV0aY4bX5E+6dXy6HzGeuZ2ZtMqsuDIO
-         U2CQ==
-X-Gm-Message-State: AOAM532sh4Zy5SzWSlkV0Uh5LS5Nx4olIW1qCGmMeo6OPWySvYic25/q
-	/SgVSJzw25b8fsZ/HJPbsdezQArwsXjzQo5uBp0=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=63MoKAFcFhjQc91uaq35mHDldaAP2W+c4ko5J7FNUMk=;
+ b=Wk8uyTGEbWd+7P2zg9Ee2dnz0nj9Mhgk750qCaNSrl4HMd2fXr08TbU/tQBVBsZTGp
+ 8QlYQUDhTGx2JyxxzSLaP7xSMUX2ZPYwc9+YcwfP7QNphl9FhtbxenDimbB7bd/bDnuO
+ vdUjE/hLG0ZdomzHZI7Qumd3dJs3hVPVVh6DgyHtKHmYWvJkkd94rEP+KbQ4VJHnTFRd
+ cOW38/cjnNYe6RzHmtQ0n3FgRYJcc9nLb7K3t9/W0pAR/rRHfMylDwfZ/0vQBEP8qbaf
+ e8o77Y4glM2Djhvq3Pxyf23fZnG4+6/pLVglxdpfRXLrExQ8LQn6K9BTvJlHmpu+r2pS
+ PxNg==
+X-Gm-Message-State: AOAM531GrbU7+qdfTXP+lf5T3Z5zShMoUlc96l/XjI9uhyor+f9MX5B+
+ wHoazbSB6nA+mjYbpy8W9/JUA9r+E9y4OLXn11Y=
 X-Google-Smtp-Source: ABdhPJwKUnifR+UjYgjUBSspIt6bKWkb49apVdzvCfY9mowk6UGQ6O3vUNYzMiQDJV4Y0a4mPHKipit8ArFBgvNPD+o=
-X-Received: by 2002:a9d:7ccd:: with SMTP id r13mr1212997otn.253.1612338942439;
+X-Received: by 2002:a9d:7ccd:: with SMTP id r13mr1212997otn.253.1612338942439; 
  Tue, 02 Feb 2021 23:55:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20210120124812.2800027-1-arnd@kernel.org> <20210120124812.2800027-2-arnd@kernel.org>
+References: <20210120124812.2800027-1-arnd@kernel.org>
+ <20210120124812.2800027-2-arnd@kernel.org>
  <20dff5cfdc4ca3aad9fb55e43a716630ba50a939.camel@redhat.com>
 In-Reply-To: <20dff5cfdc4ca3aad9fb55e43a716630ba50a939.camel@redhat.com>
 From: Aurelien Jacquiot <jacquiot.aurelien@gmail.com>
@@ -58,816 +76,669 @@ Date: Wed, 3 Feb 2021 08:55:33 +0100
 Message-ID: <CAC_vE7xqqtjHTxUmumjqrcV+3Kf03H8-n1ouJxKAKD+P_zZUZQ@mail.gmail.com>
 Subject: Re: [PATCH 1/5] c6x: remove architecture
 To: Mark Salter <msalter@redhat.com>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210203_025544_767306_E954EC5B 
+X-CRM114-Status: GOOD (  23.89  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, 
-	linux-c6x-dev@linux-c6x.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Arnd Bergmann <arnd@kernel.org>, linux-c6x-dev@linux-c6x.org,
+ Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210203075533.h7OPRYHMS3C7xUshRsIEI5ncDeRm6S1WrEIX5HTmDhY@z>
 
-Thanks Mark and Arnd!
-
-Aur=C3=A9lien
-
-On Thu, Jan 21, 2021 at 4:44 PM Mark Salter <msalter@redhat.com> wrote:
->
-> On Wed, 2021-01-20 at 13:48 +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > The c6x architecture was added to the kernel in 2011 at a time when
-> > running Linux on DSPs was widely seen as the logical evolution.
-> > It appears the trend has gone back to running Linux on Arm based SoCs
-> > with DSP, using a better supported software ecosystem, and having bette=
-r
-> > real-time behavior for the DSP code. An example of this is TI's own
-> > Keystone2 platform.
-> >
-> > The upstream kernel port appears to no longer have any users. Mark
-> > Salter remained avaialable to review patches, but mentioned that
-> > he no longer has access to working hardware himself. Without any
-> > users, it's best to just remove the code completely to reduce the
-> > work for cross-architecture code changes.
-> >
-> > Many thanks to Mark for maintaining the code for the past ten years.
-> >
-> > Link: https://lore.kernel.org/lkml/41dc7795afda9f776d8cd0d3075f776cf586=
-e97c.camel@redhat.com/
-> > Cc: Mark Salter <msalter@redhat.com>
-> > Cc: Aurelien Jacquiot <jacquiot.aurelien@gmail.com>
-> > Cc: linux-c6x-dev@linux-c6x.org
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  .../devicetree/bindings/c6x/clocks.txt        |  40 -
-> >  .../devicetree/bindings/c6x/dscr.txt          | 127 ---
-> >  .../devicetree/bindings/c6x/emifa.txt         |  62 --
-> >  Documentation/devicetree/bindings/c6x/soc.txt |  28 -
-> >  .../ti,c64x+megamod-pic.txt                   | 103 ---
-> >  .../bindings/timer/ti,c64x+timer64.txt        |  25 -
-> >  MAINTAINERS                                   |   8 -
-> >  arch/c6x/Kconfig                              | 113 ---
-> >  arch/c6x/Kconfig.debug                        |  10 -
-> >  arch/c6x/Makefile                             |  60 --
-> >  arch/c6x/boot/Makefile                        |  11 -
-> >  arch/c6x/boot/dts/Makefile                    |  16 -
-> >  arch/c6x/boot/dts/dsk6455.dts                 |  57 --
-> >  arch/c6x/boot/dts/evmc6457.dts                |  43 -
-> >  arch/c6x/boot/dts/evmc6472.dts                |  68 --
-> >  arch/c6x/boot/dts/evmc6474.dts                |  53 --
-> >  arch/c6x/boot/dts/evmc6678.dts                |  78 --
-> >  arch/c6x/boot/dts/tms320c6455.dtsi            |  97 ---
-> >  arch/c6x/boot/dts/tms320c6457.dtsi            |  69 --
-> >  arch/c6x/boot/dts/tms320c6472.dtsi            | 135 ----
-> >  arch/c6x/boot/dts/tms320c6474.dtsi            |  90 ---
-> >  arch/c6x/boot/dts/tms320c6678.dtsi            | 147 ----
-> >  arch/c6x/configs/dsk6455_defconfig            |  42 -
-> >  arch/c6x/configs/evmc6457_defconfig           |  39 -
-> >  arch/c6x/configs/evmc6472_defconfig           |  40 -
-> >  arch/c6x/configs/evmc6474_defconfig           |  40 -
-> >  arch/c6x/configs/evmc6678_defconfig           |  40 -
-> >  arch/c6x/include/asm/Kbuild                   |   5 -
-> >  arch/c6x/include/asm/asm-offsets.h            |   1 -
-> >  arch/c6x/include/asm/bitops.h                 |  95 ---
-> >  arch/c6x/include/asm/bug.h                    |  20 -
-> >  arch/c6x/include/asm/cache.h                  |  94 ---
-> >  arch/c6x/include/asm/cacheflush.h             |  45 --
-> >  arch/c6x/include/asm/checksum.h               |  34 -
-> >  arch/c6x/include/asm/clock.h                  | 145 ----
-> >  arch/c6x/include/asm/cmpxchg.h                |  63 --
-> >  arch/c6x/include/asm/delay.h                  |  64 --
-> >  arch/c6x/include/asm/dscr.h                   |  30 -
-> >  arch/c6x/include/asm/elf.h                    | 117 ---
-> >  arch/c6x/include/asm/flat.h                   |  19 -
-> >  arch/c6x/include/asm/ftrace.h                 |   6 -
-> >  arch/c6x/include/asm/hardirq.h                |  17 -
-> >  arch/c6x/include/asm/irq.h                    |  50 --
-> >  arch/c6x/include/asm/irqflags.h               |  68 --
-> >  arch/c6x/include/asm/linkage.h                |  31 -
-> >  arch/c6x/include/asm/megamod-pic.h            |  10 -
-> >  arch/c6x/include/asm/mmu_context.h            |   6 -
-> >  arch/c6x/include/asm/module.h                 |  20 -
-> >  arch/c6x/include/asm/page.h                   |   9 -
-> >  arch/c6x/include/asm/pgtable.h                |  66 --
-> >  arch/c6x/include/asm/processor.h              | 114 ---
-> >  arch/c6x/include/asm/procinfo.h               |  24 -
-> >  arch/c6x/include/asm/ptrace.h                 |  32 -
-> >  arch/c6x/include/asm/sections.h               |  12 -
-> >  arch/c6x/include/asm/setup.h                  |  31 -
-> >  arch/c6x/include/asm/soc.h                    |  35 -
-> >  arch/c6x/include/asm/special_insns.h          |  60 --
-> >  arch/c6x/include/asm/string.h                 |  18 -
-> >  arch/c6x/include/asm/switch_to.h              |  30 -
-> >  arch/c6x/include/asm/syscall.h                |  75 --
-> >  arch/c6x/include/asm/syscalls.h               |  46 --
-> >  arch/c6x/include/asm/thread_info.h            |  94 ---
-> >  arch/c6x/include/asm/timer64.h                |   7 -
-> >  arch/c6x/include/asm/timex.h                  |  30 -
-> >  arch/c6x/include/asm/tlb.h                    |   7 -
-> >  arch/c6x/include/asm/traps.h                  |  33 -
-> >  arch/c6x/include/asm/uaccess.h                |  97 ---
-> >  arch/c6x/include/asm/unaligned.h              | 104 ---
-> >  arch/c6x/include/asm/vmalloc.h                |   4 -
-> >  arch/c6x/include/uapi/asm/Kbuild              |   2 -
-> >  arch/c6x/include/uapi/asm/byteorder.h         |  13 -
-> >  arch/c6x/include/uapi/asm/ptrace.h            | 164 ----
-> >  arch/c6x/include/uapi/asm/setup.h             |   7 -
-> >  arch/c6x/include/uapi/asm/sigcontext.h        |  81 --
-> >  arch/c6x/include/uapi/asm/swab.h              |  55 --
-> >  arch/c6x/include/uapi/asm/unistd.h            |  29 -
-> >  arch/c6x/kernel/Makefile                      |  13 -
-> >  arch/c6x/kernel/asm-offsets.c                 | 123 ---
-> >  arch/c6x/kernel/c6x_ksyms.c                   |  62 --
-> >  arch/c6x/kernel/devicetree.c                  |  14 -
-> >  arch/c6x/kernel/entry.S                       | 736 ------------------
-> >  arch/c6x/kernel/head.S                        |  81 --
-> >  arch/c6x/kernel/irq.c                         | 127 ---
-> >  arch/c6x/kernel/module.c                      | 119 ---
-> >  arch/c6x/kernel/process.c                     | 151 ----
-> >  arch/c6x/kernel/ptrace.c                      | 139 ----
-> >  arch/c6x/kernel/setup.c                       | 476 -----------
-> >  arch/c6x/kernel/signal.c                      | 322 --------
-> >  arch/c6x/kernel/soc.c                         |  87 ---
-> >  arch/c6x/kernel/switch_to.S                   |  71 --
-> >  arch/c6x/kernel/sys_c6x.c                     |  71 --
-> >  arch/c6x/kernel/time.c                        |  63 --
-> >  arch/c6x/kernel/traps.c                       | 409 ----------
-> >  arch/c6x/kernel/vectors.S                     |  78 --
-> >  arch/c6x/kernel/vmlinux.lds.S                 | 151 ----
-> >  arch/c6x/lib/Makefile                         |   8 -
-> >  arch/c6x/lib/checksum.c                       |  11 -
-> >  arch/c6x/lib/csum_64plus.S                    | 414 ----------
-> >  arch/c6x/lib/divi.S                           |  41 -
-> >  arch/c6x/lib/divremi.S                        |  34 -
-> >  arch/c6x/lib/divremu.S                        |  75 --
-> >  arch/c6x/lib/divu.S                           |  86 --
-> >  arch/c6x/lib/llshl.S                          |  25 -
-> >  arch/c6x/lib/llshr.S                          |  26 -
-> >  arch/c6x/lib/llshru.S                         |  26 -
-> >  arch/c6x/lib/memcpy_64plus.S                  |  43 -
-> >  arch/c6x/lib/mpyll.S                          |  37 -
-> >  arch/c6x/lib/negll.S                          |  19 -
-> >  arch/c6x/lib/pop_rts.S                        |  20 -
-> >  arch/c6x/lib/push_rts.S                       |  19 -
-> >  arch/c6x/lib/remi.S                           |  52 --
-> >  arch/c6x/lib/remu.S                           |  70 --
-> >  arch/c6x/lib/strasgi.S                        |  77 --
-> >  arch/c6x/lib/strasgi_64plus.S                 |  27 -
-> >  arch/c6x/mm/Makefile                          |   6 -
-> >  arch/c6x/mm/dma-coherent.c                    | 173 ----
-> >  arch/c6x/mm/init.c                            |  65 --
-> >  arch/c6x/platforms/Kconfig                    |  21 -
-> >  arch/c6x/platforms/Makefile                   |  13 -
-> >  arch/c6x/platforms/cache.c                    | 444 -----------
-> >  arch/c6x/platforms/dscr.c                     | 595 --------------
-> >  arch/c6x/platforms/emif.c                     |  84 --
-> >  arch/c6x/platforms/megamod-pic.c              | 344 --------
-> >  arch/c6x/platforms/pll.c                      | 440 -----------
-> >  arch/c6x/platforms/plldata.c                  | 467 -----------
-> >  arch/c6x/platforms/timer64.c                  | 241 ------
-> >  drivers/bus/Kconfig                           |   2 +-
-> >  fs/Kconfig.binfmt                             |   2 +-
-> >  include/asm-generic/page.h                    |   4 -
-> >  129 files changed, 2 insertions(+), 11162 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/c6x/clocks.txt
-> >  delete mode 100644 Documentation/devicetree/bindings/c6x/dscr.txt
-> >  delete mode 100644 Documentation/devicetree/bindings/c6x/emifa.txt
-> >  delete mode 100644 Documentation/devicetree/bindings/c6x/soc.txt
-> >  delete mode 100644 Documentation/devicetree/bindings/interrupt-control=
-ler/ti,c64x+megamod-pic.txt
-> >  delete mode 100644 Documentation/devicetree/bindings/timer/ti,c64x+tim=
-er64.txt
-> >  delete mode 100644 arch/c6x/Kconfig
-> >  delete mode 100644 arch/c6x/Kconfig.debug
-> >  delete mode 100644 arch/c6x/Makefile
-> >  delete mode 100644 arch/c6x/boot/Makefile
-> >  delete mode 100644 arch/c6x/boot/dts/Makefile
-> >  delete mode 100644 arch/c6x/boot/dts/dsk6455.dts
-> >  delete mode 100644 arch/c6x/boot/dts/evmc6457.dts
-> >  delete mode 100644 arch/c6x/boot/dts/evmc6472.dts
-> >  delete mode 100644 arch/c6x/boot/dts/evmc6474.dts
-> >  delete mode 100644 arch/c6x/boot/dts/evmc6678.dts
-> >  delete mode 100644 arch/c6x/boot/dts/tms320c6455.dtsi
-> >  delete mode 100644 arch/c6x/boot/dts/tms320c6457.dtsi
-> >  delete mode 100644 arch/c6x/boot/dts/tms320c6472.dtsi
-> >  delete mode 100644 arch/c6x/boot/dts/tms320c6474.dtsi
-> >  delete mode 100644 arch/c6x/boot/dts/tms320c6678.dtsi
-> >  delete mode 100644 arch/c6x/configs/dsk6455_defconfig
-> >  delete mode 100644 arch/c6x/configs/evmc6457_defconfig
-> >  delete mode 100644 arch/c6x/configs/evmc6472_defconfig
-> >  delete mode 100644 arch/c6x/configs/evmc6474_defconfig
-> >  delete mode 100644 arch/c6x/configs/evmc6678_defconfig
-> >  delete mode 100644 arch/c6x/include/asm/Kbuild
-> >  delete mode 100644 arch/c6x/include/asm/asm-offsets.h
-> >  delete mode 100644 arch/c6x/include/asm/bitops.h
-> >  delete mode 100644 arch/c6x/include/asm/bug.h
-> >  delete mode 100644 arch/c6x/include/asm/cache.h
-> >  delete mode 100644 arch/c6x/include/asm/cacheflush.h
-> >  delete mode 100644 arch/c6x/include/asm/checksum.h
-> >  delete mode 100644 arch/c6x/include/asm/clock.h
-> >  delete mode 100644 arch/c6x/include/asm/cmpxchg.h
-> >  delete mode 100644 arch/c6x/include/asm/delay.h
-> >  delete mode 100644 arch/c6x/include/asm/dscr.h
-> >  delete mode 100644 arch/c6x/include/asm/elf.h
-> >  delete mode 100644 arch/c6x/include/asm/flat.h
-> >  delete mode 100644 arch/c6x/include/asm/ftrace.h
-> >  delete mode 100644 arch/c6x/include/asm/hardirq.h
-> >  delete mode 100644 arch/c6x/include/asm/irq.h
-> >  delete mode 100644 arch/c6x/include/asm/irqflags.h
-> >  delete mode 100644 arch/c6x/include/asm/linkage.h
-> >  delete mode 100644 arch/c6x/include/asm/megamod-pic.h
-> >  delete mode 100644 arch/c6x/include/asm/mmu_context.h
-> >  delete mode 100644 arch/c6x/include/asm/module.h
-> >  delete mode 100644 arch/c6x/include/asm/page.h
-> >  delete mode 100644 arch/c6x/include/asm/pgtable.h
-> >  delete mode 100644 arch/c6x/include/asm/processor.h
-> >  delete mode 100644 arch/c6x/include/asm/procinfo.h
-> >  delete mode 100644 arch/c6x/include/asm/ptrace.h
-> >  delete mode 100644 arch/c6x/include/asm/sections.h
-> >  delete mode 100644 arch/c6x/include/asm/setup.h
-> >  delete mode 100644 arch/c6x/include/asm/soc.h
-> >  delete mode 100644 arch/c6x/include/asm/special_insns.h
-> >  delete mode 100644 arch/c6x/include/asm/string.h
-> >  delete mode 100644 arch/c6x/include/asm/switch_to.h
-> >  delete mode 100644 arch/c6x/include/asm/syscall.h
-> >  delete mode 100644 arch/c6x/include/asm/syscalls.h
-> >  delete mode 100644 arch/c6x/include/asm/thread_info.h
-> >  delete mode 100644 arch/c6x/include/asm/timer64.h
-> >  delete mode 100644 arch/c6x/include/asm/timex.h
-> >  delete mode 100644 arch/c6x/include/asm/tlb.h
-> >  delete mode 100644 arch/c6x/include/asm/traps.h
-> >  delete mode 100644 arch/c6x/include/asm/uaccess.h
-> >  delete mode 100644 arch/c6x/include/asm/unaligned.h
-> >  delete mode 100644 arch/c6x/include/asm/vmalloc.h
-> >  delete mode 100644 arch/c6x/include/uapi/asm/Kbuild
-> >  delete mode 100644 arch/c6x/include/uapi/asm/byteorder.h
-> >  delete mode 100644 arch/c6x/include/uapi/asm/ptrace.h
-> >  delete mode 100644 arch/c6x/include/uapi/asm/setup.h
-> >  delete mode 100644 arch/c6x/include/uapi/asm/sigcontext.h
-> >  delete mode 100644 arch/c6x/include/uapi/asm/swab.h
-> >  delete mode 100644 arch/c6x/include/uapi/asm/unistd.h
-> >  delete mode 100644 arch/c6x/kernel/Makefile
-> >  delete mode 100644 arch/c6x/kernel/asm-offsets.c
-> >  delete mode 100644 arch/c6x/kernel/c6x_ksyms.c
-> >  delete mode 100644 arch/c6x/kernel/devicetree.c
-> >  delete mode 100644 arch/c6x/kernel/entry.S
-> >  delete mode 100644 arch/c6x/kernel/head.S
-> >  delete mode 100644 arch/c6x/kernel/irq.c
-> >  delete mode 100644 arch/c6x/kernel/module.c
-> >  delete mode 100644 arch/c6x/kernel/process.c
-> >  delete mode 100644 arch/c6x/kernel/ptrace.c
-> >  delete mode 100644 arch/c6x/kernel/setup.c
-> >  delete mode 100644 arch/c6x/kernel/signal.c
-> >  delete mode 100644 arch/c6x/kernel/soc.c
-> >  delete mode 100644 arch/c6x/kernel/switch_to.S
-> >  delete mode 100644 arch/c6x/kernel/sys_c6x.c
-> >  delete mode 100644 arch/c6x/kernel/time.c
-> >  delete mode 100644 arch/c6x/kernel/traps.c
-> >  delete mode 100644 arch/c6x/kernel/vectors.S
-> >  delete mode 100644 arch/c6x/kernel/vmlinux.lds.S
-> >  delete mode 100644 arch/c6x/lib/Makefile
-> >  delete mode 100644 arch/c6x/lib/checksum.c
-> >  delete mode 100644 arch/c6x/lib/csum_64plus.S
-> >  delete mode 100644 arch/c6x/lib/divi.S
-> >  delete mode 100644 arch/c6x/lib/divremi.S
-> >  delete mode 100644 arch/c6x/lib/divremu.S
-> >  delete mode 100644 arch/c6x/lib/divu.S
-> >  delete mode 100644 arch/c6x/lib/llshl.S
-> >  delete mode 100644 arch/c6x/lib/llshr.S
-> >  delete mode 100644 arch/c6x/lib/llshru.S
-> >  delete mode 100644 arch/c6x/lib/memcpy_64plus.S
-> >  delete mode 100644 arch/c6x/lib/mpyll.S
-> >  delete mode 100644 arch/c6x/lib/negll.S
-> >  delete mode 100644 arch/c6x/lib/pop_rts.S
-> >  delete mode 100644 arch/c6x/lib/push_rts.S
-> >  delete mode 100644 arch/c6x/lib/remi.S
-> >  delete mode 100644 arch/c6x/lib/remu.S
-> >  delete mode 100644 arch/c6x/lib/strasgi.S
-> >  delete mode 100644 arch/c6x/lib/strasgi_64plus.S
-> >  delete mode 100644 arch/c6x/mm/Makefile
-> >  delete mode 100644 arch/c6x/mm/dma-coherent.c
-> >  delete mode 100644 arch/c6x/mm/init.c
-> >  delete mode 100644 arch/c6x/platforms/Kconfig
-> >  delete mode 100644 arch/c6x/platforms/Makefile
-> >  delete mode 100644 arch/c6x/platforms/cache.c
-> >  delete mode 100644 arch/c6x/platforms/dscr.c
-> >  delete mode 100644 arch/c6x/platforms/emif.c
-> >  delete mode 100644 arch/c6x/platforms/megamod-pic.c
-> >  delete mode 100644 arch/c6x/platforms/pll.c
-> >  delete mode 100644 arch/c6x/platforms/plldata.c
-> >  delete mode 100644 arch/c6x/platforms/timer64.c
-> >
-> > diff --git a/Documentation/devicetree/bindings/c6x/clocks.txt b/Documen=
-tation/devicetree/bindings/c6x/clocks.txt
-> > deleted file mode 100644
-> > index a04f5fd30122..000000000000
-> > diff --git a/Documentation/devicetree/bindings/c6x/dscr.txt b/Documenta=
-tion/devicetree/bindings/c6x/dscr.txt
-> > deleted file mode 100644
-> > index 92672235de57..000000000000
-> > diff --git a/Documentation/devicetree/bindings/c6x/emifa.txt b/Document=
-ation/devicetree/bindings/c6x/emifa.txt
-> > deleted file mode 100644
-> > index 0ff6e9b9a13f..000000000000
-> > diff --git a/Documentation/devicetree/bindings/c6x/soc.txt b/Documentat=
-ion/devicetree/bindings/c6x/soc.txt
-> > deleted file mode 100644
-> > index b1e4973b5769..000000000000
-> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/ti,=
-c64x+megamod-pic.txt b/Documentation/devicetree/bindings/interrupt-
-> > controller/ti,c64x+megamod-pic.txt
-> > deleted file mode 100644
-> > index ee3f9c351501..000000000000
-> > diff --git a/Documentation/devicetree/bindings/timer/ti,c64x+timer64.tx=
-t b/Documentation/devicetree/bindings/timer/ti,c64x+timer64.txt
-> > deleted file mode 100644
-> > index d96c1e283e73..000000000000
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index fb971f5f6f0c..7c3eadb185f9 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -3837,14 +3837,6 @@ F:       drivers/irqchip/irq-csky-*
-> >  N:     csky
-> >  K:     csky
-> >
-> > -C6X ARCHITECTURE
-> > -M:     Mark Salter <msalter@redhat.com>
-> > -M:     Aurelien Jacquiot <jacquiot.aurelien@gmail.com>
-> > -L:     linux-c6x-dev@linux-c6x.org
-> > -S:     Maintained
-> > -W:     http://www.linux-c6x.org/wiki/index.php/Main_Page
-> > -F:     arch/c6x/
-> > -
-> >  CA8210 IEEE-802.15.4 RADIO DRIVER
-> >  M:     Harry Morris <h.morris@cascoda.com>
-> >  L:     linux-wpan@vger.kernel.org
-> > diff --git a/arch/c6x/Kconfig b/arch/c6x/Kconfig
-> > deleted file mode 100644
-> > index bdeeac28b1be..000000000000
-> > diff --git a/arch/c6x/Kconfig.debug b/arch/c6x/Kconfig.debug
-> > deleted file mode 100644
-> > index c299e0d8eca3..000000000000
-> > diff --git a/arch/c6x/Makefile b/arch/c6x/Makefile
-> > deleted file mode 100644
-> > index b7aa854f7008..000000000000
-> > diff --git a/arch/c6x/boot/Makefile b/arch/c6x/boot/Makefile
-> > deleted file mode 100644
-> > index 842b7b0bfe80..000000000000
-> > diff --git a/arch/c6x/boot/dts/Makefile b/arch/c6x/boot/dts/Makefile
-> > deleted file mode 100644
-> > index f438285c3640..000000000000
-> > diff --git a/arch/c6x/boot/dts/dsk6455.dts b/arch/c6x/boot/dts/dsk6455.=
-dts
-> > deleted file mode 100644
-> > index fa904f2916b5..000000000000
-> > diff --git a/arch/c6x/boot/dts/evmc6457.dts b/arch/c6x/boot/dts/evmc645=
-7.dts
-> > deleted file mode 100644
-> > index 73e1d43b51ce..000000000000
-> > diff --git a/arch/c6x/boot/dts/evmc6472.dts b/arch/c6x/boot/dts/evmc647=
-2.dts
-> > deleted file mode 100644
-> > index 4878b78919fa..000000000000
-> > diff --git a/arch/c6x/boot/dts/evmc6474.dts b/arch/c6x/boot/dts/evmc647=
-4.dts
-> > deleted file mode 100644
-> > index d10746453217..000000000000
-> > diff --git a/arch/c6x/boot/dts/evmc6678.dts b/arch/c6x/boot/dts/evmc667=
-8.dts
-> > deleted file mode 100644
-> > index 5e6c0961e7b2..000000000000
-> > diff --git a/arch/c6x/boot/dts/tms320c6455.dtsi b/arch/c6x/boot/dts/tms=
-320c6455.dtsi
-> > deleted file mode 100644
-> > index 0b21cb30343b..000000000000
-> > diff --git a/arch/c6x/boot/dts/tms320c6457.dtsi b/arch/c6x/boot/dts/tms=
-320c6457.dtsi
-> > deleted file mode 100644
-> > index e49f7ae19124..000000000000
-> > diff --git a/arch/c6x/boot/dts/tms320c6472.dtsi b/arch/c6x/boot/dts/tms=
-320c6472.dtsi
-> > deleted file mode 100644
-> > index 9dd4b04e78ef..000000000000
-> > diff --git a/arch/c6x/boot/dts/tms320c6474.dtsi b/arch/c6x/boot/dts/tms=
-320c6474.dtsi
-> > deleted file mode 100644
-> > index 0ef5333629a6..000000000000
-> > diff --git a/arch/c6x/boot/dts/tms320c6678.dtsi b/arch/c6x/boot/dts/tms=
-320c6678.dtsi
-> > deleted file mode 100644
-> > index da1e3f2bf062..000000000000
-> > diff --git a/arch/c6x/configs/dsk6455_defconfig b/arch/c6x/configs/dsk6=
-455_defconfig
-> > deleted file mode 100644
-> > index d764ea4cce7f..000000000000
-> > diff --git a/arch/c6x/configs/evmc6457_defconfig b/arch/c6x/configs/evm=
-c6457_defconfig
-> > deleted file mode 100644
-> > index 05d0b4a25ab1..000000000000
-> > diff --git a/arch/c6x/configs/evmc6472_defconfig b/arch/c6x/configs/evm=
-c6472_defconfig
-> > deleted file mode 100644
-> > index 8d81fcf86b0e..000000000000
-> > diff --git a/arch/c6x/configs/evmc6474_defconfig b/arch/c6x/configs/evm=
-c6474_defconfig
-> > deleted file mode 100644
-> > index 8156a98f3958..000000000000
-> > diff --git a/arch/c6x/configs/evmc6678_defconfig b/arch/c6x/configs/evm=
-c6678_defconfig
-> > deleted file mode 100644
-> > index c4f433c25b69..000000000000
-> > diff --git a/arch/c6x/include/asm/Kbuild b/arch/c6x/include/asm/Kbuild
-> > deleted file mode 100644
-> > index a4ef93a1f7ae..000000000000
-> > diff --git a/arch/c6x/include/asm/asm-offsets.h b/arch/c6x/include/asm/=
-asm-offsets.h
-> > deleted file mode 100644
-> > index d370ee36a182..000000000000
-> > diff --git a/arch/c6x/include/asm/bitops.h b/arch/c6x/include/asm/bitop=
-s.h
-> > deleted file mode 100644
-> > index 50e618f38a11..000000000000
-> > diff --git a/arch/c6x/include/asm/bug.h b/arch/c6x/include/asm/bug.h
-> > deleted file mode 100644
-> > index 1a68676256ee..000000000000
-> > diff --git a/arch/c6x/include/asm/cache.h b/arch/c6x/include/asm/cache.=
-h
-> > deleted file mode 100644
-> > index 0fa8bf77c954..000000000000
-> > diff --git a/arch/c6x/include/asm/cacheflush.h b/arch/c6x/include/asm/c=
-acheflush.h
-> > deleted file mode 100644
-> > index 10922d528de6..000000000000
-> > diff --git a/arch/c6x/include/asm/checksum.h b/arch/c6x/include/asm/che=
-cksum.h
-> > deleted file mode 100644
-> > index 934918def632..000000000000
-> > diff --git a/arch/c6x/include/asm/clock.h b/arch/c6x/include/asm/clock.=
-h
-> > deleted file mode 100644
-> > index 7b6c42a52ec9..000000000000
-> > diff --git a/arch/c6x/include/asm/cmpxchg.h b/arch/c6x/include/asm/cmpx=
-chg.h
-> > deleted file mode 100644
-> > index 6eed628a9e7f..000000000000
-> > diff --git a/arch/c6x/include/asm/delay.h b/arch/c6x/include/asm/delay.=
-h
-> > deleted file mode 100644
-> > index 455fc713ae54..000000000000
-> > diff --git a/arch/c6x/include/asm/dscr.h b/arch/c6x/include/asm/dscr.h
-> > deleted file mode 100644
-> > index f6b095c3d3f5..000000000000
-> > diff --git a/arch/c6x/include/asm/elf.h b/arch/c6x/include/asm/elf.h
-> > deleted file mode 100644
-> > index ca88acbf560b..000000000000
-> > diff --git a/arch/c6x/include/asm/flat.h b/arch/c6x/include/asm/flat.h
-> > deleted file mode 100644
-> > index 9e6544b51386..000000000000
-> > diff --git a/arch/c6x/include/asm/ftrace.h b/arch/c6x/include/asm/ftrac=
-e.h
-> > deleted file mode 100644
-> > index 3701958d3d1c..000000000000
-> > diff --git a/arch/c6x/include/asm/hardirq.h b/arch/c6x/include/asm/hard=
-irq.h
-> > deleted file mode 100644
-> > index f37d07d31040..000000000000
-> > diff --git a/arch/c6x/include/asm/irq.h b/arch/c6x/include/asm/irq.h
-> > deleted file mode 100644
-> > index 9da4d1afd0d7..000000000000
-> > diff --git a/arch/c6x/include/asm/irqflags.h b/arch/c6x/include/asm/irq=
-flags.h
-> > deleted file mode 100644
-> > index d6cd71c02629..000000000000
-> > diff --git a/arch/c6x/include/asm/linkage.h b/arch/c6x/include/asm/link=
-age.h
-> > deleted file mode 100644
-> > index 1ad615da6479..000000000000
-> > diff --git a/arch/c6x/include/asm/megamod-pic.h b/arch/c6x/include/asm/=
-megamod-pic.h
-> > deleted file mode 100644
-> > index a0a6d596bf9b..000000000000
-> > diff --git a/arch/c6x/include/asm/mmu_context.h b/arch/c6x/include/asm/=
-mmu_context.h
-> > deleted file mode 100644
-> > index d2659d0a3297..000000000000
-> > diff --git a/arch/c6x/include/asm/module.h b/arch/c6x/include/asm/modul=
-e.h
-> > deleted file mode 100644
-> > index 9fc9f4a8ecc2..000000000000
-> > diff --git a/arch/c6x/include/asm/page.h b/arch/c6x/include/asm/page.h
-> > deleted file mode 100644
-> > index 40079899084d..000000000000
-> > diff --git a/arch/c6x/include/asm/pgtable.h b/arch/c6x/include/asm/pgta=
-ble.h
-> > deleted file mode 100644
-> > index 8a91ceda39fa..000000000000
-> > diff --git a/arch/c6x/include/asm/processor.h b/arch/c6x/include/asm/pr=
-ocessor.h
-> > deleted file mode 100644
-> > index 1456f5e11de3..000000000000
-> > diff --git a/arch/c6x/include/asm/procinfo.h b/arch/c6x/include/asm/pro=
-cinfo.h
-> > deleted file mode 100644
-> > index aaa3cb902c43..000000000000
-> > diff --git a/arch/c6x/include/asm/ptrace.h b/arch/c6x/include/asm/ptrac=
-e.h
-> > deleted file mode 100644
-> > index 7cbae382cf37..000000000000
-> > diff --git a/arch/c6x/include/asm/sections.h b/arch/c6x/include/asm/sec=
-tions.h
-> > deleted file mode 100644
-> > index dc2f15eb3bde..000000000000
-> > diff --git a/arch/c6x/include/asm/setup.h b/arch/c6x/include/asm/setup.=
-h
-> > deleted file mode 100644
-> > index 5496bccecaa0..000000000000
-> > diff --git a/arch/c6x/include/asm/soc.h b/arch/c6x/include/asm/soc.h
-> > deleted file mode 100644
-> > index 43f50159e59b..000000000000
-> > diff --git a/arch/c6x/include/asm/special_insns.h b/arch/c6x/include/as=
-m/special_insns.h
-> > deleted file mode 100644
-> > index d233160aefd4..000000000000
-> > diff --git a/arch/c6x/include/asm/string.h b/arch/c6x/include/asm/strin=
-g.h
-> > deleted file mode 100644
-> > index b290ead40f68..000000000000
-> > diff --git a/arch/c6x/include/asm/switch_to.h b/arch/c6x/include/asm/sw=
-itch_to.h
-> > deleted file mode 100644
-> > index 36c5332fadae..000000000000
-> > diff --git a/arch/c6x/include/asm/syscall.h b/arch/c6x/include/asm/sysc=
-all.h
-> > deleted file mode 100644
-> > index 38f3e2284ecd..000000000000
-> > diff --git a/arch/c6x/include/asm/syscalls.h b/arch/c6x/include/asm/sys=
-calls.h
-> > deleted file mode 100644
-> > index df3d05feb153..000000000000
-> > diff --git a/arch/c6x/include/asm/thread_info.h b/arch/c6x/include/asm/=
-thread_info.h
-> > deleted file mode 100644
-> > index dd8913d57189..000000000000
-> > diff --git a/arch/c6x/include/asm/timer64.h b/arch/c6x/include/asm/time=
-r64.h
-> > deleted file mode 100644
-> > index b850dfef1f79..000000000000
-> > diff --git a/arch/c6x/include/asm/timex.h b/arch/c6x/include/asm/timex.=
-h
-> > deleted file mode 100644
-> > index f946ce297e13..000000000000
-> > diff --git a/arch/c6x/include/asm/tlb.h b/arch/c6x/include/asm/tlb.h
-> > deleted file mode 100644
-> > index 240ba0febb57..000000000000
-> > diff --git a/arch/c6x/include/asm/traps.h b/arch/c6x/include/asm/traps.=
-h
-> > deleted file mode 100644
-> > index 7e1d31c47680..000000000000
-> > diff --git a/arch/c6x/include/asm/uaccess.h b/arch/c6x/include/asm/uacc=
-ess.h
-> > deleted file mode 100644
-> > index 585adf9201b7..000000000000
-> > diff --git a/arch/c6x/include/asm/unaligned.h b/arch/c6x/include/asm/un=
-aligned.h
-> > deleted file mode 100644
-> > index d628cc170564..000000000000
-> > diff --git a/arch/c6x/include/asm/vmalloc.h b/arch/c6x/include/asm/vmal=
-loc.h
-> > deleted file mode 100644
-> > index 26c6c6696bbd..000000000000
-> > diff --git a/arch/c6x/include/uapi/asm/Kbuild b/arch/c6x/include/uapi/a=
-sm/Kbuild
-> > deleted file mode 100644
-> > index e78470141932..000000000000
-> > diff --git a/arch/c6x/include/uapi/asm/byteorder.h b/arch/c6x/include/u=
-api/asm/byteorder.h
-> > deleted file mode 100644
-> > index ab61f867391c..000000000000
-> > diff --git a/arch/c6x/include/uapi/asm/ptrace.h b/arch/c6x/include/uapi=
-/asm/ptrace.h
-> > deleted file mode 100644
-> > index 9b51110a0842..000000000000
-> > diff --git a/arch/c6x/include/uapi/asm/setup.h b/arch/c6x/include/uapi/=
-asm/setup.h
-> > deleted file mode 100644
-> > index e90548cebec3..000000000000
-> > diff --git a/arch/c6x/include/uapi/asm/sigcontext.h b/arch/c6x/include/=
-uapi/asm/sigcontext.h
-> > deleted file mode 100644
-> > index 4e5a9a260861..000000000000
-> > diff --git a/arch/c6x/include/uapi/asm/swab.h b/arch/c6x/include/uapi/a=
-sm/swab.h
-> > deleted file mode 100644
-> > index c407c0497718..000000000000
-> > diff --git a/arch/c6x/include/uapi/asm/unistd.h b/arch/c6x/include/uapi=
-/asm/unistd.h
-> > deleted file mode 100644
-> > index 79b724c39d9b..000000000000
-> > diff --git a/arch/c6x/kernel/Makefile b/arch/c6x/kernel/Makefile
-> > deleted file mode 100644
-> > index fbe74174de87..000000000000
-> > diff --git a/arch/c6x/kernel/asm-offsets.c b/arch/c6x/kernel/asm-offset=
-s.c
-> > deleted file mode 100644
-> > index 4a264ef87dcb..000000000000
-> > diff --git a/arch/c6x/kernel/c6x_ksyms.c b/arch/c6x/kernel/c6x_ksyms.c
-> > deleted file mode 100644
-> > index 5a39f52f9db4..000000000000
-> > diff --git a/arch/c6x/kernel/devicetree.c b/arch/c6x/kernel/devicetree.=
-c
-> > deleted file mode 100644
-> > index a0c73f0545b2..000000000000
-> > diff --git a/arch/c6x/kernel/entry.S b/arch/c6x/kernel/entry.S
-> > deleted file mode 100644
-> > index fb154d19625b..000000000000
-> > diff --git a/arch/c6x/kernel/head.S b/arch/c6x/kernel/head.S
-> > deleted file mode 100644
-> > index fecbeef827bc..000000000000
-> > diff --git a/arch/c6x/kernel/irq.c b/arch/c6x/kernel/irq.c
-> > deleted file mode 100644
-> > index e4c53d185b62..000000000000
-> > diff --git a/arch/c6x/kernel/module.c b/arch/c6x/kernel/module.c
-> > deleted file mode 100644
-> > index 09b4c6bfe877..000000000000
-> > diff --git a/arch/c6x/kernel/process.c b/arch/c6x/kernel/process.c
-> > deleted file mode 100644
-> > index 9f4fd6a40a10..000000000000
-> > diff --git a/arch/c6x/kernel/ptrace.c b/arch/c6x/kernel/ptrace.c
-> > deleted file mode 100644
-> > index 3cdaa8cf0ed6..000000000000
-> > diff --git a/arch/c6x/kernel/setup.c b/arch/c6x/kernel/setup.c
-> > deleted file mode 100644
-> > index 9254c3b794a5..000000000000
-> > diff --git a/arch/c6x/kernel/signal.c b/arch/c6x/kernel/signal.c
-> > deleted file mode 100644
-> > index 862460c3b183..000000000000
-> > diff --git a/arch/c6x/kernel/soc.c b/arch/c6x/kernel/soc.c
-> > deleted file mode 100644
-> > index 8362f9390e03..000000000000
-> > diff --git a/arch/c6x/kernel/switch_to.S b/arch/c6x/kernel/switch_to.S
-> > deleted file mode 100644
-> > index b7f9f607042e..000000000000
-> > diff --git a/arch/c6x/kernel/sys_c6x.c b/arch/c6x/kernel/sys_c6x.c
-> > deleted file mode 100644
-> > index 600277f057cf..000000000000
-> > diff --git a/arch/c6x/kernel/time.c b/arch/c6x/kernel/time.c
-> > deleted file mode 100644
-> > index f3ec91a87f4f..000000000000
-> > diff --git a/arch/c6x/kernel/traps.c b/arch/c6x/kernel/traps.c
-> > deleted file mode 100644
-> > index 2b9121c755be..000000000000
-> > diff --git a/arch/c6x/kernel/vectors.S b/arch/c6x/kernel/vectors.S
-> > deleted file mode 100644
-> > index ad3dc006a6d3..000000000000
-> > diff --git a/arch/c6x/kernel/vmlinux.lds.S b/arch/c6x/kernel/vmlinux.ld=
-s.S
-> > deleted file mode 100644
-> > index ac99ba0864bf..000000000000
-> > diff --git a/arch/c6x/lib/Makefile b/arch/c6x/lib/Makefile
-> > deleted file mode 100644
-> > index e182004f82fe..000000000000
-> > diff --git a/arch/c6x/lib/checksum.c b/arch/c6x/lib/checksum.c
-> > deleted file mode 100644
-> > index dff2e2ec6e64..000000000000
-> > diff --git a/arch/c6x/lib/csum_64plus.S b/arch/c6x/lib/csum_64plus.S
-> > deleted file mode 100644
-> > index 57148866d8d3..000000000000
-> > diff --git a/arch/c6x/lib/divi.S b/arch/c6x/lib/divi.S
-> > deleted file mode 100644
-> > index d1764ae0b519..000000000000
-> > diff --git a/arch/c6x/lib/divremi.S b/arch/c6x/lib/divremi.S
-> > deleted file mode 100644
-> > index 575fc57a8a76..000000000000
-> > diff --git a/arch/c6x/lib/divremu.S b/arch/c6x/lib/divremu.S
-> > deleted file mode 100644
-> > index 5f6a6a2997ae..000000000000
-> > diff --git a/arch/c6x/lib/divu.S b/arch/c6x/lib/divu.S
-> > deleted file mode 100644
-> > index f0f6082944c2..000000000000
-> > diff --git a/arch/c6x/lib/llshl.S b/arch/c6x/lib/llshl.S
-> > deleted file mode 100644
-> > index 3272499618e0..000000000000
-> > diff --git a/arch/c6x/lib/llshr.S b/arch/c6x/lib/llshr.S
-> > deleted file mode 100644
-> > index 6bfaacd15e73..000000000000
-> > diff --git a/arch/c6x/lib/llshru.S b/arch/c6x/lib/llshru.S
-> > deleted file mode 100644
-> > index 103128f50770..000000000000
-> > diff --git a/arch/c6x/lib/memcpy_64plus.S b/arch/c6x/lib/memcpy_64plus.=
-S
-> > deleted file mode 100644
-> > index 157a30486bfd..000000000000
-> > diff --git a/arch/c6x/lib/mpyll.S b/arch/c6x/lib/mpyll.S
-> > deleted file mode 100644
-> > index d07c13ec4fd4..000000000000
-> > diff --git a/arch/c6x/lib/negll.S b/arch/c6x/lib/negll.S
-> > deleted file mode 100644
-> > index 9ba434db5366..000000000000
-> > diff --git a/arch/c6x/lib/pop_rts.S b/arch/c6x/lib/pop_rts.S
-> > deleted file mode 100644
-> > index f129e32943c5..000000000000
-> > diff --git a/arch/c6x/lib/push_rts.S b/arch/c6x/lib/push_rts.S
-> > deleted file mode 100644
-> > index 40b0a4fe937c..000000000000
-> > diff --git a/arch/c6x/lib/remi.S b/arch/c6x/lib/remi.S
-> > deleted file mode 100644
-> > index 96a1335eac20..000000000000
-> > diff --git a/arch/c6x/lib/remu.S b/arch/c6x/lib/remu.S
-> > deleted file mode 100644
-> > index 428feb9c06c0..000000000000
-> > diff --git a/arch/c6x/lib/strasgi.S b/arch/c6x/lib/strasgi.S
-> > deleted file mode 100644
-> > index 715aeb200792..000000000000
-> > diff --git a/arch/c6x/lib/strasgi_64plus.S b/arch/c6x/lib/strasgi_64plu=
-s.S
-> > deleted file mode 100644
-> > index d10aa2dc3249..000000000000
-> > diff --git a/arch/c6x/mm/Makefile b/arch/c6x/mm/Makefile
-> > deleted file mode 100644
-> > index 19d05e972dd1..000000000000
-> > diff --git a/arch/c6x/mm/dma-coherent.c b/arch/c6x/mm/dma-coherent.c
-> > deleted file mode 100644
-> > index 03df07a831fc..000000000000
-> > diff --git a/arch/c6x/mm/init.c b/arch/c6x/mm/init.c
-> > deleted file mode 100644
-> > index a97e51a3e26d..000000000000
-> > diff --git a/arch/c6x/platforms/Kconfig b/arch/c6x/platforms/Kconfig
-> > deleted file mode 100644
-> > index f3a9ae6e0e82..000000000000
-> > diff --git a/arch/c6x/platforms/Makefile b/arch/c6x/platforms/Makefile
-> > deleted file mode 100644
-> > index b320f1c68884..000000000000
-> > diff --git a/arch/c6x/platforms/cache.c b/arch/c6x/platforms/cache.c
-> > deleted file mode 100644
-> > index fff027b72513..000000000000
-> > diff --git a/arch/c6x/platforms/dscr.c b/arch/c6x/platforms/dscr.c
-> > deleted file mode 100644
-> > index 4571615b589f..000000000000
-> > diff --git a/arch/c6x/platforms/emif.c b/arch/c6x/platforms/emif.c
-> > deleted file mode 100644
-> > index 6142ecc2cd88..000000000000
-> > diff --git a/arch/c6x/platforms/megamod-pic.c b/arch/c6x/platforms/mega=
-mod-pic.c
-> > deleted file mode 100644
-> > index 56189e50728c..000000000000
-> > diff --git a/arch/c6x/platforms/pll.c b/arch/c6x/platforms/pll.c
-> > deleted file mode 100644
-> > index 6fdf20d64dc7..000000000000
-> > diff --git a/arch/c6x/platforms/plldata.c b/arch/c6x/platforms/plldata.=
-c
-> > deleted file mode 100644
-> > index a799e04edefe..000000000000
-> > diff --git a/arch/c6x/platforms/timer64.c b/arch/c6x/platforms/timer64.=
-c
-> > deleted file mode 100644
-> > index 661f4c7c6ef6..000000000000
-> > diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
-> > index 0c262c2aeaf2..e7f7eee6ee9a 100644
-> > --- a/drivers/bus/Kconfig
-> > +++ b/drivers/bus/Kconfig
-> > @@ -80,7 +80,7 @@ config MOXTET
-> >
-> >  config HISILICON_LPC
-> >         bool "Support for ISA I/O space on HiSilicon Hip06/7"
-> > -       depends on (ARM64 && ARCH_HISI) || (COMPILE_TEST && !ALPHA && !=
-HEXAGON && !PARISC && !C6X)
-> > +       depends on (ARM64 && ARCH_HISI) || (COMPILE_TEST && !ALPHA && !=
-HEXAGON && !PARISC)
-> >         depends on HAS_IOMEM
-> >         select INDIRECT_PIO if ARM64
-> >         help
-> > diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
-> > index 885da6d983b4..647439c2c05a 100644
-> > --- a/fs/Kconfig.binfmt
-> > +++ b/fs/Kconfig.binfmt
-> > @@ -45,7 +45,7 @@ config ARCH_USE_GNU_PROPERTY
-> >  config BINFMT_ELF_FDPIC
-> >         bool "Kernel support for FDPIC ELF binaries"
-> >         default y if !BINFMT_ELF
-> > -       depends on (ARM || (SUPERH && !MMU) || C6X)
-> > +       depends on (ARM || (SUPERH && !MMU))
-> >         select ELFCORE
-> >         help
-> >           ELF FDPIC binaries are based on ELF, but allow the individual=
- load
-> > diff --git a/include/asm-generic/page.h b/include/asm-generic/page.h
-> > index fe801f01625e..6fc47561814c 100644
-> > --- a/include/asm-generic/page.h
-> > +++ b/include/asm-generic/page.h
-> > @@ -63,11 +63,7 @@ extern unsigned long memory_end;
-> >
-> >  #endif /* !__ASSEMBLY__ */
-> >
-> > -#ifdef CONFIG_KERNEL_RAM_BASE_ADDRESS
-> > -#define PAGE_OFFSET            (CONFIG_KERNEL_RAM_BASE_ADDRESS)
-> > -#else
-> >  #define PAGE_OFFSET            (0)
-> > -#endif
-> >
-> >  #ifndef ARCH_PFN_OFFSET
-> >  #define ARCH_PFN_OFFSET                (PAGE_OFFSET >> PAGE_SHIFT)
->
-> Thanks Arnd.
->
-> Acked-by: Mark Salter <msalter@redhat.com>
->
->
->
+VGhhbmtzIE1hcmsgYW5kIEFybmQhCgpBdXLDqWxpZW4KCk9uIFRodSwgSmFuIDIxLCAyMDIxIGF0
+IDQ6NDQgUE0gTWFyayBTYWx0ZXIgPG1zYWx0ZXJAcmVkaGF0LmNvbT4gd3JvdGU6Cj4KPiBPbiBX
+ZWQsIDIwMjEtMDEtMjAgYXQgMTM6NDggKzAxMDAsIEFybmQgQmVyZ21hbm4gd3JvdGU6Cj4gPiBG
+cm9tOiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPgo+ID4KPiA+IFRoZSBjNnggYXJjaGl0
+ZWN0dXJlIHdhcyBhZGRlZCB0byB0aGUga2VybmVsIGluIDIwMTEgYXQgYSB0aW1lIHdoZW4KPiA+
+IHJ1bm5pbmcgTGludXggb24gRFNQcyB3YXMgd2lkZWx5IHNlZW4gYXMgdGhlIGxvZ2ljYWwgZXZv
+bHV0aW9uLgo+ID4gSXQgYXBwZWFycyB0aGUgdHJlbmQgaGFzIGdvbmUgYmFjayB0byBydW5uaW5n
+IExpbnV4IG9uIEFybSBiYXNlZCBTb0NzCj4gPiB3aXRoIERTUCwgdXNpbmcgYSBiZXR0ZXIgc3Vw
+cG9ydGVkIHNvZnR3YXJlIGVjb3N5c3RlbSwgYW5kIGhhdmluZyBiZXR0ZXIKPiA+IHJlYWwtdGlt
+ZSBiZWhhdmlvciBmb3IgdGhlIERTUCBjb2RlLiBBbiBleGFtcGxlIG9mIHRoaXMgaXMgVEkncyBv
+d24KPiA+IEtleXN0b25lMiBwbGF0Zm9ybS4KPiA+Cj4gPiBUaGUgdXBzdHJlYW0ga2VybmVsIHBv
+cnQgYXBwZWFycyB0byBubyBsb25nZXIgaGF2ZSBhbnkgdXNlcnMuIE1hcmsKPiA+IFNhbHRlciBy
+ZW1haW5lZCBhdmFpYWxhYmxlIHRvIHJldmlldyBwYXRjaGVzLCBidXQgbWVudGlvbmVkIHRoYXQK
+PiA+IGhlIG5vIGxvbmdlciBoYXMgYWNjZXNzIHRvIHdvcmtpbmcgaGFyZHdhcmUgaGltc2VsZi4g
+V2l0aG91dCBhbnkKPiA+IHVzZXJzLCBpdCdzIGJlc3QgdG8ganVzdCByZW1vdmUgdGhlIGNvZGUg
+Y29tcGxldGVseSB0byByZWR1Y2UgdGhlCj4gPiB3b3JrIGZvciBjcm9zcy1hcmNoaXRlY3R1cmUg
+Y29kZSBjaGFuZ2VzLgo+ID4KPiA+IE1hbnkgdGhhbmtzIHRvIE1hcmsgZm9yIG1haW50YWluaW5n
+IHRoZSBjb2RlIGZvciB0aGUgcGFzdCB0ZW4geWVhcnMuCj4gPgo+ID4gTGluazogaHR0cHM6Ly9s
+b3JlLmtlcm5lbC5vcmcvbGttbC80MWRjNzc5NWFmZGE5Zjc3NmQ4Y2QwZDMwNzVmNzc2Y2Y1ODZl
+OTdjLmNhbWVsQHJlZGhhdC5jb20vCj4gPiBDYzogTWFyayBTYWx0ZXIgPG1zYWx0ZXJAcmVkaGF0
+LmNvbT4KPiA+IENjOiBBdXJlbGllbiBKYWNxdWlvdCA8amFjcXVpb3QuYXVyZWxpZW5AZ21haWwu
+Y29tPgo+ID4gQ2M6IGxpbnV4LWM2eC1kZXZAbGludXgtYzZ4Lm9yZwo+ID4gU2lnbmVkLW9mZi1i
+eTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4KPiA+IC0tLQo+ID4gIC4uLi9kZXZpY2V0
+cmVlL2JpbmRpbmdzL2M2eC9jbG9ja3MudHh0ICAgICAgICB8ICA0MCAtCj4gPiAgLi4uL2Rldmlj
+ZXRyZWUvYmluZGluZ3MvYzZ4L2RzY3IudHh0ICAgICAgICAgIHwgMTI3IC0tLQo+ID4gIC4uLi9k
+ZXZpY2V0cmVlL2JpbmRpbmdzL2M2eC9lbWlmYS50eHQgICAgICAgICB8ICA2MiAtLQo+ID4gIERv
+Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jNngvc29jLnR4dCB8ICAyOCAtCj4gPiAg
+Li4uL3RpLGM2NHgrbWVnYW1vZC1waWMudHh0ICAgICAgICAgICAgICAgICAgIHwgMTAzIC0tLQo+
+ID4gIC4uLi9iaW5kaW5ncy90aW1lci90aSxjNjR4K3RpbWVyNjQudHh0ICAgICAgICB8ICAyNSAt
+Cj4gPiAgTUFJTlRBSU5FUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICA4
+IC0KPiA+ICBhcmNoL2M2eC9LY29uZmlnICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAx
+MTMgLS0tCj4gPiAgYXJjaC9jNngvS2NvbmZpZy5kZWJ1ZyAgICAgICAgICAgICAgICAgICAgICAg
+IHwgIDEwIC0KPiA+ICBhcmNoL2M2eC9NYWtlZmlsZSAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgfCAgNjAgLS0KPiA+ICBhcmNoL2M2eC9ib290L01ha2VmaWxlICAgICAgICAgICAgICAgICAg
+ICAgICAgfCAgMTEgLQo+ID4gIGFyY2gvYzZ4L2Jvb3QvZHRzL01ha2VmaWxlICAgICAgICAgICAg
+ICAgICAgICB8ICAxNiAtCj4gPiAgYXJjaC9jNngvYm9vdC9kdHMvZHNrNjQ1NS5kdHMgICAgICAg
+ICAgICAgICAgIHwgIDU3IC0tCj4gPiAgYXJjaC9jNngvYm9vdC9kdHMvZXZtYzY0NTcuZHRzICAg
+ICAgICAgICAgICAgIHwgIDQzIC0KPiA+ICBhcmNoL2M2eC9ib290L2R0cy9ldm1jNjQ3Mi5kdHMg
+ICAgICAgICAgICAgICAgfCAgNjggLS0KPiA+ICBhcmNoL2M2eC9ib290L2R0cy9ldm1jNjQ3NC5k
+dHMgICAgICAgICAgICAgICAgfCAgNTMgLS0KPiA+ICBhcmNoL2M2eC9ib290L2R0cy9ldm1jNjY3
+OC5kdHMgICAgICAgICAgICAgICAgfCAgNzggLS0KPiA+ICBhcmNoL2M2eC9ib290L2R0cy90bXMz
+MjBjNjQ1NS5kdHNpICAgICAgICAgICAgfCAgOTcgLS0tCj4gPiAgYXJjaC9jNngvYm9vdC9kdHMv
+dG1zMzIwYzY0NTcuZHRzaSAgICAgICAgICAgIHwgIDY5IC0tCj4gPiAgYXJjaC9jNngvYm9vdC9k
+dHMvdG1zMzIwYzY0NzIuZHRzaSAgICAgICAgICAgIHwgMTM1IC0tLS0KPiA+ICBhcmNoL2M2eC9i
+b290L2R0cy90bXMzMjBjNjQ3NC5kdHNpICAgICAgICAgICAgfCAgOTAgLS0tCj4gPiAgYXJjaC9j
+NngvYm9vdC9kdHMvdG1zMzIwYzY2NzguZHRzaSAgICAgICAgICAgIHwgMTQ3IC0tLS0KPiA+ICBh
+cmNoL2M2eC9jb25maWdzL2RzazY0NTVfZGVmY29uZmlnICAgICAgICAgICAgfCAgNDIgLQo+ID4g
+IGFyY2gvYzZ4L2NvbmZpZ3MvZXZtYzY0NTdfZGVmY29uZmlnICAgICAgICAgICB8ICAzOSAtCj4g
+PiAgYXJjaC9jNngvY29uZmlncy9ldm1jNjQ3Ml9kZWZjb25maWcgICAgICAgICAgIHwgIDQwIC0K
+PiA+ICBhcmNoL2M2eC9jb25maWdzL2V2bWM2NDc0X2RlZmNvbmZpZyAgICAgICAgICAgfCAgNDAg
+LQo+ID4gIGFyY2gvYzZ4L2NvbmZpZ3MvZXZtYzY2NzhfZGVmY29uZmlnICAgICAgICAgICB8ICA0
+MCAtCj4gPiAgYXJjaC9jNngvaW5jbHVkZS9hc20vS2J1aWxkICAgICAgICAgICAgICAgICAgIHwg
+ICA1IC0KPiA+ICBhcmNoL2M2eC9pbmNsdWRlL2FzbS9hc20tb2Zmc2V0cy5oICAgICAgICAgICAg
+fCAgIDEgLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvYXNtL2JpdG9wcy5oICAgICAgICAgICAgICAg
+ICB8ICA5NSAtLS0KPiA+ICBhcmNoL2M2eC9pbmNsdWRlL2FzbS9idWcuaCAgICAgICAgICAgICAg
+ICAgICAgfCAgMjAgLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvYXNtL2NhY2hlLmggICAgICAgICAg
+ICAgICAgICB8ICA5NCAtLS0KPiA+ICBhcmNoL2M2eC9pbmNsdWRlL2FzbS9jYWNoZWZsdXNoLmgg
+ICAgICAgICAgICAgfCAgNDUgLS0KPiA+ICBhcmNoL2M2eC9pbmNsdWRlL2FzbS9jaGVja3N1bS5o
+ICAgICAgICAgICAgICAgfCAgMzQgLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvYXNtL2Nsb2NrLmgg
+ICAgICAgICAgICAgICAgICB8IDE0NSAtLS0tCj4gPiAgYXJjaC9jNngvaW5jbHVkZS9hc20vY21w
+eGNoZy5oICAgICAgICAgICAgICAgIHwgIDYzIC0tCj4gPiAgYXJjaC9jNngvaW5jbHVkZS9hc20v
+ZGVsYXkuaCAgICAgICAgICAgICAgICAgIHwgIDY0IC0tCj4gPiAgYXJjaC9jNngvaW5jbHVkZS9h
+c20vZHNjci5oICAgICAgICAgICAgICAgICAgIHwgIDMwIC0KPiA+ICBhcmNoL2M2eC9pbmNsdWRl
+L2FzbS9lbGYuaCAgICAgICAgICAgICAgICAgICAgfCAxMTcgLS0tCj4gPiAgYXJjaC9jNngvaW5j
+bHVkZS9hc20vZmxhdC5oICAgICAgICAgICAgICAgICAgIHwgIDE5IC0KPiA+ICBhcmNoL2M2eC9p
+bmNsdWRlL2FzbS9mdHJhY2UuaCAgICAgICAgICAgICAgICAgfCAgIDYgLQo+ID4gIGFyY2gvYzZ4
+L2luY2x1ZGUvYXNtL2hhcmRpcnEuaCAgICAgICAgICAgICAgICB8ICAxNyAtCj4gPiAgYXJjaC9j
+NngvaW5jbHVkZS9hc20vaXJxLmggICAgICAgICAgICAgICAgICAgIHwgIDUwIC0tCj4gPiAgYXJj
+aC9jNngvaW5jbHVkZS9hc20vaXJxZmxhZ3MuaCAgICAgICAgICAgICAgIHwgIDY4IC0tCj4gPiAg
+YXJjaC9jNngvaW5jbHVkZS9hc20vbGlua2FnZS5oICAgICAgICAgICAgICAgIHwgIDMxIC0KPiA+
+ICBhcmNoL2M2eC9pbmNsdWRlL2FzbS9tZWdhbW9kLXBpYy5oICAgICAgICAgICAgfCAgMTAgLQo+
+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvYXNtL21tdV9jb250ZXh0LmggICAgICAgICAgICB8ICAgNiAt
+Cj4gPiAgYXJjaC9jNngvaW5jbHVkZS9hc20vbW9kdWxlLmggICAgICAgICAgICAgICAgIHwgIDIw
+IC0KPiA+ICBhcmNoL2M2eC9pbmNsdWRlL2FzbS9wYWdlLmggICAgICAgICAgICAgICAgICAgfCAg
+IDkgLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3BndGFibGUuaCAgICAgICAgICAgICAgICB8
+ICA2NiAtLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3Byb2Nlc3Nvci5oICAgICAgICAgICAg
+ICB8IDExNCAtLS0KPiA+ICBhcmNoL2M2eC9pbmNsdWRlL2FzbS9wcm9jaW5mby5oICAgICAgICAg
+ICAgICAgfCAgMjQgLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3B0cmFjZS5oICAgICAgICAg
+ICAgICAgICB8ICAzMiAtCj4gPiAgYXJjaC9jNngvaW5jbHVkZS9hc20vc2VjdGlvbnMuaCAgICAg
+ICAgICAgICAgIHwgIDEyIC0KPiA+ICBhcmNoL2M2eC9pbmNsdWRlL2FzbS9zZXR1cC5oICAgICAg
+ICAgICAgICAgICAgfCAgMzEgLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3NvYy5oICAgICAg
+ICAgICAgICAgICAgICB8ICAzNSAtCj4gPiAgYXJjaC9jNngvaW5jbHVkZS9hc20vc3BlY2lhbF9p
+bnNucy5oICAgICAgICAgIHwgIDYwIC0tCj4gPiAgYXJjaC9jNngvaW5jbHVkZS9hc20vc3RyaW5n
+LmggICAgICAgICAgICAgICAgIHwgIDE4IC0KPiA+ICBhcmNoL2M2eC9pbmNsdWRlL2FzbS9zd2l0
+Y2hfdG8uaCAgICAgICAgICAgICAgfCAgMzAgLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3N5
+c2NhbGwuaCAgICAgICAgICAgICAgICB8ICA3NSAtLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvYXNt
+L3N5c2NhbGxzLmggICAgICAgICAgICAgICB8ICA0NiAtLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUv
+YXNtL3RocmVhZF9pbmZvLmggICAgICAgICAgICB8ICA5NCAtLS0KPiA+ICBhcmNoL2M2eC9pbmNs
+dWRlL2FzbS90aW1lcjY0LmggICAgICAgICAgICAgICAgfCAgIDcgLQo+ID4gIGFyY2gvYzZ4L2lu
+Y2x1ZGUvYXNtL3RpbWV4LmggICAgICAgICAgICAgICAgICB8ICAzMCAtCj4gPiAgYXJjaC9jNngv
+aW5jbHVkZS9hc20vdGxiLmggICAgICAgICAgICAgICAgICAgIHwgICA3IC0KPiA+ICBhcmNoL2M2
+eC9pbmNsdWRlL2FzbS90cmFwcy5oICAgICAgICAgICAgICAgICAgfCAgMzMgLQo+ID4gIGFyY2gv
+YzZ4L2luY2x1ZGUvYXNtL3VhY2Nlc3MuaCAgICAgICAgICAgICAgICB8ICA5NyAtLS0KPiA+ICBh
+cmNoL2M2eC9pbmNsdWRlL2FzbS91bmFsaWduZWQuaCAgICAgICAgICAgICAgfCAxMDQgLS0tCj4g
+PiAgYXJjaC9jNngvaW5jbHVkZS9hc20vdm1hbGxvYy5oICAgICAgICAgICAgICAgIHwgICA0IC0K
+PiA+ICBhcmNoL2M2eC9pbmNsdWRlL3VhcGkvYXNtL0tidWlsZCAgICAgICAgICAgICAgfCAgIDIg
+LQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvdWFwaS9hc20vYnl0ZW9yZGVyLmggICAgICAgICB8ICAx
+MyAtCj4gPiAgYXJjaC9jNngvaW5jbHVkZS91YXBpL2FzbS9wdHJhY2UuaCAgICAgICAgICAgIHwg
+MTY0IC0tLS0KPiA+ICBhcmNoL2M2eC9pbmNsdWRlL3VhcGkvYXNtL3NldHVwLmggICAgICAgICAg
+ICAgfCAgIDcgLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvdWFwaS9hc20vc2lnY29udGV4dC5oICAg
+ICAgICB8ICA4MSAtLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvdWFwaS9hc20vc3dhYi5oICAgICAg
+ICAgICAgICB8ICA1NSAtLQo+ID4gIGFyY2gvYzZ4L2luY2x1ZGUvdWFwaS9hc20vdW5pc3RkLmgg
+ICAgICAgICAgICB8ICAyOSAtCj4gPiAgYXJjaC9jNngva2VybmVsL01ha2VmaWxlICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDEzIC0KPiA+ICBhcmNoL2M2eC9rZXJuZWwvYXNtLW9mZnNldHMuYyAg
+ICAgICAgICAgICAgICAgfCAxMjMgLS0tCj4gPiAgYXJjaC9jNngva2VybmVsL2M2eF9rc3ltcy5j
+ICAgICAgICAgICAgICAgICAgIHwgIDYyIC0tCj4gPiAgYXJjaC9jNngva2VybmVsL2RldmljZXRy
+ZWUuYyAgICAgICAgICAgICAgICAgIHwgIDE0IC0KPiA+ICBhcmNoL2M2eC9rZXJuZWwvZW50cnku
+UyAgICAgICAgICAgICAgICAgICAgICAgfCA3MzYgLS0tLS0tLS0tLS0tLS0tLS0tCj4gPiAgYXJj
+aC9jNngva2VybmVsL2hlYWQuUyAgICAgICAgICAgICAgICAgICAgICAgIHwgIDgxIC0tCj4gPiAg
+YXJjaC9jNngva2VybmVsL2lycS5jICAgICAgICAgICAgICAgICAgICAgICAgIHwgMTI3IC0tLQo+
+ID4gIGFyY2gvYzZ4L2tlcm5lbC9tb2R1bGUuYyAgICAgICAgICAgICAgICAgICAgICB8IDExOSAt
+LS0KPiA+ICBhcmNoL2M2eC9rZXJuZWwvcHJvY2Vzcy5jICAgICAgICAgICAgICAgICAgICAgfCAx
+NTEgLS0tLQo+ID4gIGFyY2gvYzZ4L2tlcm5lbC9wdHJhY2UuYyAgICAgICAgICAgICAgICAgICAg
+ICB8IDEzOSAtLS0tCj4gPiAgYXJjaC9jNngva2VybmVsL3NldHVwLmMgICAgICAgICAgICAgICAg
+ICAgICAgIHwgNDc2IC0tLS0tLS0tLS0tCj4gPiAgYXJjaC9jNngva2VybmVsL3NpZ25hbC5jICAg
+ICAgICAgICAgICAgICAgICAgIHwgMzIyIC0tLS0tLS0tCj4gPiAgYXJjaC9jNngva2VybmVsL3Nv
+Yy5jICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDg3IC0tLQo+ID4gIGFyY2gvYzZ4L2tlcm5l
+bC9zd2l0Y2hfdG8uUyAgICAgICAgICAgICAgICAgICB8ICA3MSAtLQo+ID4gIGFyY2gvYzZ4L2tl
+cm5lbC9zeXNfYzZ4LmMgICAgICAgICAgICAgICAgICAgICB8ICA3MSAtLQo+ID4gIGFyY2gvYzZ4
+L2tlcm5lbC90aW1lLmMgICAgICAgICAgICAgICAgICAgICAgICB8ICA2MyAtLQo+ID4gIGFyY2gv
+YzZ4L2tlcm5lbC90cmFwcy5jICAgICAgICAgICAgICAgICAgICAgICB8IDQwOSAtLS0tLS0tLS0t
+Cj4gPiAgYXJjaC9jNngva2VybmVsL3ZlY3RvcnMuUyAgICAgICAgICAgICAgICAgICAgIHwgIDc4
+IC0tCj4gPiAgYXJjaC9jNngva2VybmVsL3ZtbGludXgubGRzLlMgICAgICAgICAgICAgICAgIHwg
+MTUxIC0tLS0KPiA+ICBhcmNoL2M2eC9saWIvTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgICAg
+ICAgfCAgIDggLQo+ID4gIGFyY2gvYzZ4L2xpYi9jaGVja3N1bS5jICAgICAgICAgICAgICAgICAg
+ICAgICB8ICAxMSAtCj4gPiAgYXJjaC9jNngvbGliL2NzdW1fNjRwbHVzLlMgICAgICAgICAgICAg
+ICAgICAgIHwgNDE0IC0tLS0tLS0tLS0KPiA+ICBhcmNoL2M2eC9saWIvZGl2aS5TICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgfCAgNDEgLQo+ID4gIGFyY2gvYzZ4L2xpYi9kaXZyZW1pLlMgICAg
+ICAgICAgICAgICAgICAgICAgICB8ICAzNCAtCj4gPiAgYXJjaC9jNngvbGliL2RpdnJlbXUuUyAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgIDc1IC0tCj4gPiAgYXJjaC9jNngvbGliL2RpdnUuUyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDg2IC0tCj4gPiAgYXJjaC9jNngvbGliL2xsc2hs
+LlMgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDI1IC0KPiA+ICBhcmNoL2M2eC9saWIvbGxz
+aHIuUyAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMjYgLQo+ID4gIGFyY2gvYzZ4L2xpYi9s
+bHNocnUuUyAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyNiAtCj4gPiAgYXJjaC9jNngvbGli
+L21lbWNweV82NHBsdXMuUyAgICAgICAgICAgICAgICAgIHwgIDQzIC0KPiA+ICBhcmNoL2M2eC9s
+aWIvbXB5bGwuUyAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMzcgLQo+ID4gIGFyY2gvYzZ4
+L2xpYi9uZWdsbC5TICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxOSAtCj4gPiAgYXJjaC9j
+NngvbGliL3BvcF9ydHMuUyAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIwIC0KPiA+ICBhcmNo
+L2M2eC9saWIvcHVzaF9ydHMuUyAgICAgICAgICAgICAgICAgICAgICAgfCAgMTkgLQo+ID4gIGFy
+Y2gvYzZ4L2xpYi9yZW1pLlMgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA1MiAtLQo+ID4g
+IGFyY2gvYzZ4L2xpYi9yZW11LlMgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA3MCAtLQo+
+ID4gIGFyY2gvYzZ4L2xpYi9zdHJhc2dpLlMgICAgICAgICAgICAgICAgICAgICAgICB8ICA3NyAt
+LQo+ID4gIGFyY2gvYzZ4L2xpYi9zdHJhc2dpXzY0cGx1cy5TICAgICAgICAgICAgICAgICB8ICAy
+NyAtCj4gPiAgYXJjaC9jNngvbW0vTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+ICA2IC0KPiA+ICBhcmNoL2M2eC9tbS9kbWEtY29oZXJlbnQuYyAgICAgICAgICAgICAgICAgICAg
+fCAxNzMgLS0tLQo+ID4gIGFyY2gvYzZ4L21tL2luaXQuYyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICB8ICA2NSAtLQo+ID4gIGFyY2gvYzZ4L3BsYXRmb3Jtcy9LY29uZmlnICAgICAgICAgICAg
+ICAgICAgICB8ICAyMSAtCj4gPiAgYXJjaC9jNngvcGxhdGZvcm1zL01ha2VmaWxlICAgICAgICAg
+ICAgICAgICAgIHwgIDEzIC0KPiA+ICBhcmNoL2M2eC9wbGF0Zm9ybXMvY2FjaGUuYyAgICAgICAg
+ICAgICAgICAgICAgfCA0NDQgLS0tLS0tLS0tLS0KPiA+ICBhcmNoL2M2eC9wbGF0Zm9ybXMvZHNj
+ci5jICAgICAgICAgICAgICAgICAgICAgfCA1OTUgLS0tLS0tLS0tLS0tLS0KPiA+ICBhcmNoL2M2
+eC9wbGF0Zm9ybXMvZW1pZi5jICAgICAgICAgICAgICAgICAgICAgfCAgODQgLS0KPiA+ICBhcmNo
+L2M2eC9wbGF0Zm9ybXMvbWVnYW1vZC1waWMuYyAgICAgICAgICAgICAgfCAzNDQgLS0tLS0tLS0K
+PiA+ICBhcmNoL2M2eC9wbGF0Zm9ybXMvcGxsLmMgICAgICAgICAgICAgICAgICAgICAgfCA0NDAg
+LS0tLS0tLS0tLS0KPiA+ICBhcmNoL2M2eC9wbGF0Zm9ybXMvcGxsZGF0YS5jICAgICAgICAgICAg
+ICAgICAgfCA0NjcgLS0tLS0tLS0tLS0KPiA+ICBhcmNoL2M2eC9wbGF0Zm9ybXMvdGltZXI2NC5j
+ICAgICAgICAgICAgICAgICAgfCAyNDEgLS0tLS0tCj4gPiAgZHJpdmVycy9idXMvS2NvbmZpZyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAyICstCj4gPiAgZnMvS2NvbmZpZy5iaW5mbXQg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAyICstCj4gPiAgaW5jbHVkZS9hc20tZ2Vu
+ZXJpYy9wYWdlLmggICAgICAgICAgICAgICAgICAgIHwgICA0IC0KPiA+ICAxMjkgZmlsZXMgY2hh
+bmdlZCwgMiBpbnNlcnRpb25zKCspLCAxMTE2MiBkZWxldGlvbnMoLSkKPiA+ICBkZWxldGUgbW9k
+ZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2M2eC9jbG9ja3MudHh0
+Cj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
+cy9jNngvZHNjci50eHQKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZp
+Y2V0cmVlL2JpbmRpbmdzL2M2eC9lbWlmYS50eHQKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgRG9j
+dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2M2eC9zb2MudHh0Cj4gPiAgZGVsZXRlIG1v
+ZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pbnRlcnJ1cHQtY29u
+dHJvbGxlci90aSxjNjR4K21lZ2Ftb2QtcGljLnR4dAo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBE
+b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdGltZXIvdGksYzY0eCt0aW1lcjY0LnR4
+dAo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9LY29uZmlnCj4gPiAgZGVsZXRlIG1v
+ZGUgMTAwNjQ0IGFyY2gvYzZ4L0tjb25maWcuZGVidWcKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQg
+YXJjaC9jNngvTWFrZWZpbGUKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvYm9vdC9N
+YWtlZmlsZQo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9ib290L2R0cy9NYWtlZmls
+ZQo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9ib290L2R0cy9kc2s2NDU1LmR0cwo+
+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9ib290L2R0cy9ldm1jNjQ1Ny5kdHMKPiA+
+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvYm9vdC9kdHMvZXZtYzY0NzIuZHRzCj4gPiAg
+ZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2Jvb3QvZHRzL2V2bWM2NDc0LmR0cwo+ID4gIGRl
+bGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9ib290L2R0cy9ldm1jNjY3OC5kdHMKPiA+ICBkZWxl
+dGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvYm9vdC9kdHMvdG1zMzIwYzY0NTUuZHRzaQo+ID4gIGRl
+bGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9ib290L2R0cy90bXMzMjBjNjQ1Ny5kdHNpCj4gPiAg
+ZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2Jvb3QvZHRzL3RtczMyMGM2NDcyLmR0c2kKPiA+
+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvYm9vdC9kdHMvdG1zMzIwYzY0NzQuZHRzaQo+
+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9ib290L2R0cy90bXMzMjBjNjY3OC5kdHNp
+Cj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2NvbmZpZ3MvZHNrNjQ1NV9kZWZjb25m
+aWcKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvY29uZmlncy9ldm1jNjQ1N19kZWZj
+b25maWcKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvY29uZmlncy9ldm1jNjQ3Ml9k
+ZWZjb25maWcKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvY29uZmlncy9ldm1jNjQ3
+NF9kZWZjb25maWcKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvY29uZmlncy9ldm1j
+NjY3OF9kZWZjb25maWcKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvaW5jbHVkZS9h
+c20vS2J1aWxkCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvYXNtL2Fz
+bS1vZmZzZXRzLmgKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvaW5jbHVkZS9hc20v
+Yml0b3BzLmgKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvaW5jbHVkZS9hc20vYnVn
+LmgKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvaW5jbHVkZS9hc20vY2FjaGUuaAo+
+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9pbmNsdWRlL2FzbS9jYWNoZWZsdXNoLmgK
+PiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvaW5jbHVkZS9hc20vY2hlY2tzdW0uaAo+
+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9pbmNsdWRlL2FzbS9jbG9jay5oCj4gPiAg
+ZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvYXNtL2NtcHhjaGcuaAo+ID4gIGRl
+bGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9pbmNsdWRlL2FzbS9kZWxheS5oCj4gPiAgZGVsZXRl
+IG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvYXNtL2RzY3IuaAo+ID4gIGRlbGV0ZSBtb2Rl
+IDEwMDY0NCBhcmNoL2M2eC9pbmNsdWRlL2FzbS9lbGYuaAo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0
+NCBhcmNoL2M2eC9pbmNsdWRlL2FzbS9mbGF0LmgKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJj
+aC9jNngvaW5jbHVkZS9hc20vZnRyYWNlLmgKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9j
+NngvaW5jbHVkZS9hc20vaGFyZGlycS5oCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4
+L2luY2x1ZGUvYXNtL2lycS5oCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1
+ZGUvYXNtL2lycWZsYWdzLmgKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvaW5jbHVk
+ZS9hc20vbGlua2FnZS5oCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUv
+YXNtL21lZ2Ftb2QtcGljLmgKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvaW5jbHVk
+ZS9hc20vbW11X2NvbnRleHQuaAo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9pbmNs
+dWRlL2FzbS9tb2R1bGUuaAo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9pbmNsdWRl
+L2FzbS9wYWdlLmgKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvaW5jbHVkZS9hc20v
+cGd0YWJsZS5oCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3By
+b2Nlc3Nvci5oCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3By
+b2NpbmZvLmgKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvaW5jbHVkZS9hc20vcHRy
+YWNlLmgKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvaW5jbHVkZS9hc20vc2VjdGlv
+bnMuaAo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9pbmNsdWRlL2FzbS9zZXR1cC5o
+Cj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3NvYy5oCj4gPiAg
+ZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3NwZWNpYWxfaW5zbnMuaAo+
+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9pbmNsdWRlL2FzbS9zdHJpbmcuaAo+ID4g
+IGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9pbmNsdWRlL2FzbS9zd2l0Y2hfdG8uaAo+ID4g
+IGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9pbmNsdWRlL2FzbS9zeXNjYWxsLmgKPiA+ICBk
+ZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvaW5jbHVkZS9hc20vc3lzY2FsbHMuaAo+ID4gIGRl
+bGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9pbmNsdWRlL2FzbS90aHJlYWRfaW5mby5oCj4gPiAg
+ZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3RpbWVyNjQuaAo+ID4gIGRl
+bGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9pbmNsdWRlL2FzbS90aW1leC5oCj4gPiAgZGVsZXRl
+IG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3RsYi5oCj4gPiAgZGVsZXRlIG1vZGUg
+MTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3RyYXBzLmgKPiA+ICBkZWxldGUgbW9kZSAxMDA2
+NDQgYXJjaC9jNngvaW5jbHVkZS9hc20vdWFjY2Vzcy5oCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0
+IGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3VuYWxpZ25lZC5oCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0
+IGFyY2gvYzZ4L2luY2x1ZGUvYXNtL3ZtYWxsb2MuaAo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBh
+cmNoL2M2eC9pbmNsdWRlL3VhcGkvYXNtL0tidWlsZAo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBh
+cmNoL2M2eC9pbmNsdWRlL3VhcGkvYXNtL2J5dGVvcmRlci5oCj4gPiAgZGVsZXRlIG1vZGUgMTAw
+NjQ0IGFyY2gvYzZ4L2luY2x1ZGUvdWFwaS9hc20vcHRyYWNlLmgKPiA+ICBkZWxldGUgbW9kZSAx
+MDA2NDQgYXJjaC9jNngvaW5jbHVkZS91YXBpL2FzbS9zZXR1cC5oCj4gPiAgZGVsZXRlIG1vZGUg
+MTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvdWFwaS9hc20vc2lnY29udGV4dC5oCj4gPiAgZGVsZXRl
+IG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvdWFwaS9hc20vc3dhYi5oCj4gPiAgZGVsZXRl
+IG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2luY2x1ZGUvdWFwaS9hc20vdW5pc3RkLmgKPiA+ICBkZWxl
+dGUgbW9kZSAxMDA2NDQgYXJjaC9jNngva2VybmVsL01ha2VmaWxlCj4gPiAgZGVsZXRlIG1vZGUg
+MTAwNjQ0IGFyY2gvYzZ4L2tlcm5lbC9hc20tb2Zmc2V0cy5jCj4gPiAgZGVsZXRlIG1vZGUgMTAw
+NjQ0IGFyY2gvYzZ4L2tlcm5lbC9jNnhfa3N5bXMuYwo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBh
+cmNoL2M2eC9rZXJuZWwvZGV2aWNldHJlZS5jCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gv
+YzZ4L2tlcm5lbC9lbnRyeS5TCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2tlcm5l
+bC9oZWFkLlMKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngva2VybmVsL2lycS5jCj4g
+PiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2tlcm5lbC9tb2R1bGUuYwo+ID4gIGRlbGV0
+ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9rZXJuZWwvcHJvY2Vzcy5jCj4gPiAgZGVsZXRlIG1vZGUg
+MTAwNjQ0IGFyY2gvYzZ4L2tlcm5lbC9wdHJhY2UuYwo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBh
+cmNoL2M2eC9rZXJuZWwvc2V0dXAuYwo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9r
+ZXJuZWwvc2lnbmFsLmMKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngva2VybmVsL3Nv
+Yy5jCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2tlcm5lbC9zd2l0Y2hfdG8uUwo+
+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9rZXJuZWwvc3lzX2M2eC5jCj4gPiAgZGVs
+ZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2tlcm5lbC90aW1lLmMKPiA+ICBkZWxldGUgbW9kZSAx
+MDA2NDQgYXJjaC9jNngva2VybmVsL3RyYXBzLmMKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJj
+aC9jNngva2VybmVsL3ZlY3RvcnMuUwo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9r
+ZXJuZWwvdm1saW51eC5sZHMuUwo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9saWIv
+TWFrZWZpbGUKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvbGliL2NoZWNrc3VtLmMK
+PiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvbGliL2NzdW1fNjRwbHVzLlMKPiA+ICBk
+ZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvbGliL2RpdmkuUwo+ID4gIGRlbGV0ZSBtb2RlIDEw
+MDY0NCBhcmNoL2M2eC9saWIvZGl2cmVtaS5TCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gv
+YzZ4L2xpYi9kaXZyZW11LlMKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvbGliL2Rp
+dnUuUwo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9saWIvbGxzaGwuUwo+ID4gIGRl
+bGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9saWIvbGxzaHIuUwo+ID4gIGRlbGV0ZSBtb2RlIDEw
+MDY0NCBhcmNoL2M2eC9saWIvbGxzaHJ1LlMKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9j
+NngvbGliL21lbWNweV82NHBsdXMuUwo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9s
+aWIvbXB5bGwuUwo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9saWIvbmVnbGwuUwo+
+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9saWIvcG9wX3J0cy5TCj4gPiAgZGVsZXRl
+IG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2xpYi9wdXNoX3J0cy5TCj4gPiAgZGVsZXRlIG1vZGUgMTAw
+NjQ0IGFyY2gvYzZ4L2xpYi9yZW1pLlMKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngv
+bGliL3JlbXUuUwo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9saWIvc3RyYXNnaS5T
+Cj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L2xpYi9zdHJhc2dpXzY0cGx1cy5TCj4g
+PiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L21tL01ha2VmaWxlCj4gPiAgZGVsZXRlIG1v
+ZGUgMTAwNjQ0IGFyY2gvYzZ4L21tL2RtYS1jb2hlcmVudC5jCj4gPiAgZGVsZXRlIG1vZGUgMTAw
+NjQ0IGFyY2gvYzZ4L21tL2luaXQuYwo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9w
+bGF0Zm9ybXMvS2NvbmZpZwo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9wbGF0Zm9y
+bXMvTWFrZWZpbGUKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvcGxhdGZvcm1zL2Nh
+Y2hlLmMKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9jNngvcGxhdGZvcm1zL2RzY3IuYwo+
+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBhcmNoL2M2eC9wbGF0Zm9ybXMvZW1pZi5jCj4gPiAgZGVs
+ZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L3BsYXRmb3Jtcy9tZWdhbW9kLXBpYy5jCj4gPiAgZGVs
+ZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYzZ4L3BsYXRmb3Jtcy9wbGwuYwo+ID4gIGRlbGV0ZSBtb2Rl
+IDEwMDY0NCBhcmNoL2M2eC9wbGF0Zm9ybXMvcGxsZGF0YS5jCj4gPiAgZGVsZXRlIG1vZGUgMTAw
+NjQ0IGFyY2gvYzZ4L3BsYXRmb3Jtcy90aW1lcjY0LmMKPiA+Cj4gPiBkaWZmIC0tZ2l0IGEvRG9j
+dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2M2eC9jbG9ja3MudHh0IGIvRG9jdW1lbnRh
+dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2M2eC9jbG9ja3MudHh0Cj4gPiBkZWxldGVkIGZpbGUg
+bW9kZSAxMDA2NDQKPiA+IGluZGV4IGEwNGY1ZmQzMDEyMi4uMDAwMDAwMDAwMDAwCj4gPiBkaWZm
+IC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2M2eC9kc2NyLnR4dCBi
+L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jNngvZHNjci50eHQKPiA+IGRlbGV0
+ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggOTI2NzIyMzVkZTU3Li4wMDAwMDAwMDAwMDAK
+PiA+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYzZ4L2Vt
+aWZhLnR4dCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jNngvZW1pZmEudHh0
+Cj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDBmZjZlOWI5YTEzZi4uMDAw
+MDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
+bmdzL2M2eC9zb2MudHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2M2eC9z
+b2MudHh0Cj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGIxZTQ5NzNiNTc2
+OS4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
+L2JpbmRpbmdzL2ludGVycnVwdC1jb250cm9sbGVyL3RpLGM2NHgrbWVnYW1vZC1waWMudHh0IGIv
+RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2ludGVycnVwdC0KPiA+IGNvbnRyb2xs
+ZXIvdGksYzY0eCttZWdhbW9kLXBpYy50eHQKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+
+ID4gaW5kZXggZWUzZjljMzUxNTAxLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9Eb2N1
+bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdGltZXIvdGksYzY0eCt0aW1lcjY0LnR4dCBi
+L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aW1lci90aSxjNjR4K3RpbWVyNjQu
+dHh0Cj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGQ5NmMxZTI4M2U3My4u
+MDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvTUFJTlRBSU5FUlMgYi9NQUlOVEFJTkVSUwo+
+ID4gaW5kZXggZmI5NzFmNWY2ZjBjLi43YzNlYWRiMTg1ZjkgMTAwNjQ0Cj4gPiAtLS0gYS9NQUlO
+VEFJTkVSUwo+ID4gKysrIGIvTUFJTlRBSU5FUlMKPiA+IEBAIC0zODM3LDE0ICszODM3LDYgQEAg
+RjogICAgICAgZHJpdmVycy9pcnFjaGlwL2lycS1jc2t5LSoKPiA+ICBOOiAgICAgY3NreQo+ID4g
+IEs6ICAgICBjc2t5Cj4gPgo+ID4gLUM2WCBBUkNISVRFQ1RVUkUKPiA+IC1NOiAgICAgTWFyayBT
+YWx0ZXIgPG1zYWx0ZXJAcmVkaGF0LmNvbT4KPiA+IC1NOiAgICAgQXVyZWxpZW4gSmFjcXVpb3Qg
+PGphY3F1aW90LmF1cmVsaWVuQGdtYWlsLmNvbT4KPiA+IC1MOiAgICAgbGludXgtYzZ4LWRldkBs
+aW51eC1jNngub3JnCj4gPiAtUzogICAgIE1haW50YWluZWQKPiA+IC1XOiAgICAgaHR0cDovL3d3
+dy5saW51eC1jNngub3JnL3dpa2kvaW5kZXgucGhwL01haW5fUGFnZQo+ID4gLUY6ICAgICBhcmNo
+L2M2eC8KPiA+IC0KPiA+ICBDQTgyMTAgSUVFRS04MDIuMTUuNCBSQURJTyBEUklWRVIKPiA+ICBN
+OiAgICAgSGFycnkgTW9ycmlzIDxoLm1vcnJpc0BjYXNjb2RhLmNvbT4KPiA+ICBMOiAgICAgbGlu
+dXgtd3BhbkB2Z2VyLmtlcm5lbC5vcmcKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9LY29uZmln
+IGIvYXJjaC9jNngvS2NvbmZpZwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRl
+eCBiZGVlYWMyOGIxYmUuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L0tj
+b25maWcuZGVidWcgYi9hcmNoL2M2eC9LY29uZmlnLmRlYnVnCj4gPiBkZWxldGVkIGZpbGUgbW9k
+ZSAxMDA2NDQKPiA+IGluZGV4IGMyOTllMGQ4ZWNhMy4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0t
+Z2l0IGEvYXJjaC9jNngvTWFrZWZpbGUgYi9hcmNoL2M2eC9NYWtlZmlsZQo+ID4gZGVsZXRlZCBm
+aWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBiN2FhODU0ZjcwMDguLjAwMDAwMDAwMDAwMAo+ID4g
+ZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2Jvb3QvTWFrZWZpbGUgYi9hcmNoL2M2eC9ib290L01ha2Vm
+aWxlCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDg0MmI3YjBiZmU4MC4u
+MDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvYm9vdC9kdHMvTWFrZWZpbGUg
+Yi9hcmNoL2M2eC9ib290L2R0cy9NYWtlZmlsZQo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0
+Cj4gPiBpbmRleCBmNDM4Mjg1YzM2NDAuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2Fy
+Y2gvYzZ4L2Jvb3QvZHRzL2RzazY0NTUuZHRzIGIvYXJjaC9jNngvYm9vdC9kdHMvZHNrNjQ1NS5k
+dHMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggZmE5MDRmMjkxNmI1Li4w
+MDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9ib290L2R0cy9ldm1jNjQ1Ny5k
+dHMgYi9hcmNoL2M2eC9ib290L2R0cy9ldm1jNjQ1Ny5kdHMKPiA+IGRlbGV0ZWQgZmlsZSBtb2Rl
+IDEwMDY0NAo+ID4gaW5kZXggNzNlMWQ0M2I1MWNlLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1n
+aXQgYS9hcmNoL2M2eC9ib290L2R0cy9ldm1jNjQ3Mi5kdHMgYi9hcmNoL2M2eC9ib290L2R0cy9l
+dm1jNjQ3Mi5kdHMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggNDg3OGI3
+ODkxOWZhLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9ib290L2R0cy9l
+dm1jNjQ3NC5kdHMgYi9hcmNoL2M2eC9ib290L2R0cy9ldm1jNjQ3NC5kdHMKPiA+IGRlbGV0ZWQg
+ZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggZDEwNzQ2NDUzMjE3Li4wMDAwMDAwMDAwMDAKPiA+
+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9ib290L2R0cy9ldm1jNjY3OC5kdHMgYi9hcmNoL2M2eC9i
+b290L2R0cy9ldm1jNjY3OC5kdHMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5k
+ZXggNWU2YzA5NjFlN2IyLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9i
+b290L2R0cy90bXMzMjBjNjQ1NS5kdHNpIGIvYXJjaC9jNngvYm9vdC9kdHMvdG1zMzIwYzY0NTUu
+ZHRzaQo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCAwYjIxY2IzMDM0M2Iu
+LjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2Jvb3QvZHRzL3RtczMyMGM2
+NDU3LmR0c2kgYi9hcmNoL2M2eC9ib290L2R0cy90bXMzMjBjNjQ1Ny5kdHNpCj4gPiBkZWxldGVk
+IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGU0OWY3YWUxOTEyNC4uMDAwMDAwMDAwMDAwCj4g
+PiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvYm9vdC9kdHMvdG1zMzIwYzY0NzIuZHRzaSBiL2FyY2gv
+YzZ4L2Jvb3QvZHRzL3RtczMyMGM2NDcyLmR0c2kKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0
+NAo+ID4gaW5kZXggOWRkNGIwNGU3OGVmLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9h
+cmNoL2M2eC9ib290L2R0cy90bXMzMjBjNjQ3NC5kdHNpIGIvYXJjaC9jNngvYm9vdC9kdHMvdG1z
+MzIwYzY0NzQuZHRzaQo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCAwZWY1
+MzMzNjI5YTYuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2Jvb3QvZHRz
+L3RtczMyMGM2Njc4LmR0c2kgYi9hcmNoL2M2eC9ib290L2R0cy90bXMzMjBjNjY3OC5kdHNpCj4g
+PiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGRhMWUzZjJiZjA2Mi4uMDAwMDAw
+MDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvY29uZmlncy9kc2s2NDU1X2RlZmNvbmZp
+ZyBiL2FyY2gvYzZ4L2NvbmZpZ3MvZHNrNjQ1NV9kZWZjb25maWcKPiA+IGRlbGV0ZWQgZmlsZSBt
+b2RlIDEwMDY0NAo+ID4gaW5kZXggZDc2NGVhNGNjZTdmLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYg
+LS1naXQgYS9hcmNoL2M2eC9jb25maWdzL2V2bWM2NDU3X2RlZmNvbmZpZyBiL2FyY2gvYzZ4L2Nv
+bmZpZ3MvZXZtYzY0NTdfZGVmY29uZmlnCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+
+IGluZGV4IDA1ZDBiNGEyNWFiMS4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9j
+NngvY29uZmlncy9ldm1jNjQ3Ml9kZWZjb25maWcgYi9hcmNoL2M2eC9jb25maWdzL2V2bWM2NDcy
+X2RlZmNvbmZpZwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCA4ZDgxZmNm
+ODZiMGUuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2NvbmZpZ3MvZXZt
+YzY0NzRfZGVmY29uZmlnIGIvYXJjaC9jNngvY29uZmlncy9ldm1jNjQ3NF9kZWZjb25maWcKPiA+
+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggODE1NmE5OGYzOTU4Li4wMDAwMDAw
+MDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9jb25maWdzL2V2bWM2Njc4X2RlZmNvbmZp
+ZyBiL2FyY2gvYzZ4L2NvbmZpZ3MvZXZtYzY2NzhfZGVmY29uZmlnCj4gPiBkZWxldGVkIGZpbGUg
+bW9kZSAxMDA2NDQKPiA+IGluZGV4IGM0ZjQzM2MyNWI2OS4uMDAwMDAwMDAwMDAwCj4gPiBkaWZm
+IC0tZ2l0IGEvYXJjaC9jNngvaW5jbHVkZS9hc20vS2J1aWxkIGIvYXJjaC9jNngvaW5jbHVkZS9h
+c20vS2J1aWxkCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGE0ZWY5M2Ex
+ZjdhZS4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvaW5jbHVkZS9hc20v
+YXNtLW9mZnNldHMuaCBiL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL2FzbS1vZmZzZXRzLmgKPiA+IGRl
+bGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggZDM3MGVlMzZhMTgyLi4wMDAwMDAwMDAw
+MDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9pbmNsdWRlL2FzbS9iaXRvcHMuaCBiL2FyY2gv
+YzZ4L2luY2x1ZGUvYXNtL2JpdG9wcy5oCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+
+IGluZGV4IDUwZTYxOGYzOGExMS4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9j
+NngvaW5jbHVkZS9hc20vYnVnLmggYi9hcmNoL2M2eC9pbmNsdWRlL2FzbS9idWcuaAo+ID4gZGVs
+ZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCAxYTY4Njc2MjU2ZWUuLjAwMDAwMDAwMDAw
+MAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL2NhY2hlLmggYi9hcmNoL2M2
+eC9pbmNsdWRlL2FzbS9jYWNoZS5oCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGlu
+ZGV4IDBmYThiZjc3Yzk1NC4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngv
+aW5jbHVkZS9hc20vY2FjaGVmbHVzaC5oIGIvYXJjaC9jNngvaW5jbHVkZS9hc20vY2FjaGVmbHVz
+aC5oCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDEwOTIyZDUyOGRlNi4u
+MDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvaW5jbHVkZS9hc20vY2hlY2tz
+dW0uaCBiL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL2NoZWNrc3VtLmgKPiA+IGRlbGV0ZWQgZmlsZSBt
+b2RlIDEwMDY0NAo+ID4gaW5kZXggOTM0OTE4ZGVmNjMyLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYg
+LS1naXQgYS9hcmNoL2M2eC9pbmNsdWRlL2FzbS9jbG9jay5oIGIvYXJjaC9jNngvaW5jbHVkZS9h
+c20vY2xvY2suaAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCA3YjZjNDJh
+NTJlYzkuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNt
+L2NtcHhjaGcuaCBiL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL2NtcHhjaGcuaAo+ID4gZGVsZXRlZCBm
+aWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCA2ZWVkNjI4YTllN2YuLjAwMDAwMDAwMDAwMAo+ID4g
+ZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL2RlbGF5LmggYi9hcmNoL2M2eC9pbmNs
+dWRlL2FzbS9kZWxheS5oCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDQ1
+NWZjNzEzYWU1NC4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvaW5jbHVk
+ZS9hc20vZHNjci5oIGIvYXJjaC9jNngvaW5jbHVkZS9hc20vZHNjci5oCj4gPiBkZWxldGVkIGZp
+bGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGY2YjA5NWMzZDNmNS4uMDAwMDAwMDAwMDAwCj4gPiBk
+aWZmIC0tZ2l0IGEvYXJjaC9jNngvaW5jbHVkZS9hc20vZWxmLmggYi9hcmNoL2M2eC9pbmNsdWRl
+L2FzbS9lbGYuaAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBjYTg4YWNi
+ZjU2MGIuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNt
+L2ZsYXQuaCBiL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL2ZsYXQuaAo+ID4gZGVsZXRlZCBmaWxlIG1v
+ZGUgMTAwNjQ0Cj4gPiBpbmRleCA5ZTY1NDRiNTEzODYuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAt
+LWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL2Z0cmFjZS5oIGIvYXJjaC9jNngvaW5jbHVkZS9h
+c20vZnRyYWNlLmgKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMzcwMTk1
+OGQzZDFjLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9pbmNsdWRlL2Fz
+bS9oYXJkaXJxLmggYi9hcmNoL2M2eC9pbmNsdWRlL2FzbS9oYXJkaXJxLmgKPiA+IGRlbGV0ZWQg
+ZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggZjM3ZDA3ZDMxMDQwLi4wMDAwMDAwMDAwMDAKPiA+
+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9pbmNsdWRlL2FzbS9pcnEuaCBiL2FyY2gvYzZ4L2luY2x1
+ZGUvYXNtL2lycS5oCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDlkYTRk
+MWFmZDBkNy4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvaW5jbHVkZS9h
+c20vaXJxZmxhZ3MuaCBiL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL2lycWZsYWdzLmgKPiA+IGRlbGV0
+ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggZDZjZDcxYzAyNjI5Li4wMDAwMDAwMDAwMDAK
+PiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9pbmNsdWRlL2FzbS9saW5rYWdlLmggYi9hcmNoL2M2
+eC9pbmNsdWRlL2FzbS9saW5rYWdlLmgKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4g
+aW5kZXggMWFkNjE1ZGE2NDc5Li4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2
+eC9pbmNsdWRlL2FzbS9tZWdhbW9kLXBpYy5oIGIvYXJjaC9jNngvaW5jbHVkZS9hc20vbWVnYW1v
+ZC1waWMuaAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBhMGE2ZDU5NmJm
+OWIuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL21t
+dV9jb250ZXh0LmggYi9hcmNoL2M2eC9pbmNsdWRlL2FzbS9tbXVfY29udGV4dC5oCj4gPiBkZWxl
+dGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGQyNjU5ZDBhMzI5Ny4uMDAwMDAwMDAwMDAw
+Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvaW5jbHVkZS9hc20vbW9kdWxlLmggYi9hcmNoL2M2
+eC9pbmNsdWRlL2FzbS9tb2R1bGUuaAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBp
+bmRleCA5ZmM5ZjRhOGVjYzIuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4
+L2luY2x1ZGUvYXNtL3BhZ2UuaCBiL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL3BhZ2UuaAo+ID4gZGVs
+ZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCA0MDA3OTg5OTA4NGQuLjAwMDAwMDAwMDAw
+MAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL3BndGFibGUuaCBiL2FyY2gv
+YzZ4L2luY2x1ZGUvYXNtL3BndGFibGUuaAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4g
+PiBpbmRleCA4YTkxY2VkYTM5ZmEuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gv
+YzZ4L2luY2x1ZGUvYXNtL3Byb2Nlc3Nvci5oIGIvYXJjaC9jNngvaW5jbHVkZS9hc20vcHJvY2Vz
+c29yLmgKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMTQ1NmY1ZTExZGUz
+Li4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9pbmNsdWRlL2FzbS9wcm9j
+aW5mby5oIGIvYXJjaC9jNngvaW5jbHVkZS9hc20vcHJvY2luZm8uaAo+ID4gZGVsZXRlZCBmaWxl
+IG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBhYWEzY2I5MDJjNDMuLjAwMDAwMDAwMDAwMAo+ID4gZGlm
+ZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL3B0cmFjZS5oIGIvYXJjaC9jNngvaW5jbHVk
+ZS9hc20vcHRyYWNlLmgKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggN2Ni
+YWUzODJjZjM3Li4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9pbmNsdWRl
+L2FzbS9zZWN0aW9ucy5oIGIvYXJjaC9jNngvaW5jbHVkZS9hc20vc2VjdGlvbnMuaAo+ID4gZGVs
+ZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBkYzJmMTVlYjNiZGUuLjAwMDAwMDAwMDAw
+MAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL3NldHVwLmggYi9hcmNoL2M2
+eC9pbmNsdWRlL2FzbS9zZXR1cC5oCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGlu
+ZGV4IDU0OTZiY2NlY2FhMC4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngv
+aW5jbHVkZS9hc20vc29jLmggYi9hcmNoL2M2eC9pbmNsdWRlL2FzbS9zb2MuaAo+ID4gZGVsZXRl
+ZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCA0M2Y1MDE1OWU1OWIuLjAwMDAwMDAwMDAwMAo+
+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL3NwZWNpYWxfaW5zbnMuaCBiL2Fy
+Y2gvYzZ4L2luY2x1ZGUvYXNtL3NwZWNpYWxfaW5zbnMuaAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUg
+MTAwNjQ0Cj4gPiBpbmRleCBkMjMzMTYwYWVmZDQuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdp
+dCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL3N0cmluZy5oIGIvYXJjaC9jNngvaW5jbHVkZS9hc20v
+c3RyaW5nLmgKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggYjI5MGVhZDQw
+ZjY4Li4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9pbmNsdWRlL2FzbS9z
+d2l0Y2hfdG8uaCBiL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL3N3aXRjaF90by5oCj4gPiBkZWxldGVk
+IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDM2YzUzMzJmYWRhZS4uMDAwMDAwMDAwMDAwCj4g
+PiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvaW5jbHVkZS9hc20vc3lzY2FsbC5oIGIvYXJjaC9jNngv
+aW5jbHVkZS9hc20vc3lzY2FsbC5oCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGlu
+ZGV4IDM4ZjNlMjI4NGVjZC4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngv
+aW5jbHVkZS9hc20vc3lzY2FsbHMuaCBiL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL3N5c2NhbGxzLmgK
+PiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggZGYzZDA1ZmViMTUzLi4wMDAw
+MDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9pbmNsdWRlL2FzbS90aHJlYWRfaW5m
+by5oIGIvYXJjaC9jNngvaW5jbHVkZS9hc20vdGhyZWFkX2luZm8uaAo+ID4gZGVsZXRlZCBmaWxl
+IG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBkZDg5MTNkNTcxODkuLjAwMDAwMDAwMDAwMAo+ID4gZGlm
+ZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL3RpbWVyNjQuaCBiL2FyY2gvYzZ4L2luY2x1
+ZGUvYXNtL3RpbWVyNjQuaAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBi
+ODUwZGZlZjFmNzkuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1
+ZGUvYXNtL3RpbWV4LmggYi9hcmNoL2M2eC9pbmNsdWRlL2FzbS90aW1leC5oCj4gPiBkZWxldGVk
+IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGY5NDZjZTI5N2UxMy4uMDAwMDAwMDAwMDAwCj4g
+PiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvaW5jbHVkZS9hc20vdGxiLmggYi9hcmNoL2M2eC9pbmNs
+dWRlL2FzbS90bGIuaAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCAyNDBi
+YTBmZWJiNTcuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUv
+YXNtL3RyYXBzLmggYi9hcmNoL2M2eC9pbmNsdWRlL2FzbS90cmFwcy5oCj4gPiBkZWxldGVkIGZp
+bGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDdlMWQzMWM0NzY4MC4uMDAwMDAwMDAwMDAwCj4gPiBk
+aWZmIC0tZ2l0IGEvYXJjaC9jNngvaW5jbHVkZS9hc20vdWFjY2Vzcy5oIGIvYXJjaC9jNngvaW5j
+bHVkZS9hc20vdWFjY2Vzcy5oCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4
+IDU4NWFkZjkyMDFiNy4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvaW5j
+bHVkZS9hc20vdW5hbGlnbmVkLmggYi9hcmNoL2M2eC9pbmNsdWRlL2FzbS91bmFsaWduZWQuaAo+
+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBkNjI4Y2MxNzA1NjQuLjAwMDAw
+MDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvYXNtL3ZtYWxsb2MuaCBi
+L2FyY2gvYzZ4L2luY2x1ZGUvYXNtL3ZtYWxsb2MuaAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAw
+NjQ0Cj4gPiBpbmRleCAyNmM2YzY2OTZiYmQuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBh
+L2FyY2gvYzZ4L2luY2x1ZGUvdWFwaS9hc20vS2J1aWxkIGIvYXJjaC9jNngvaW5jbHVkZS91YXBp
+L2FzbS9LYnVpbGQKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggZTc4NDcw
+MTQxOTMyLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9pbmNsdWRlL3Vh
+cGkvYXNtL2J5dGVvcmRlci5oIGIvYXJjaC9jNngvaW5jbHVkZS91YXBpL2FzbS9ieXRlb3JkZXIu
+aAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBhYjYxZjg2NzM5MWMuLjAw
+MDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1ZGUvdWFwaS9hc20vcHRy
+YWNlLmggYi9hcmNoL2M2eC9pbmNsdWRlL3VhcGkvYXNtL3B0cmFjZS5oCj4gPiBkZWxldGVkIGZp
+bGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDliNTExMTBhMDg0Mi4uMDAwMDAwMDAwMDAwCj4gPiBk
+aWZmIC0tZ2l0IGEvYXJjaC9jNngvaW5jbHVkZS91YXBpL2FzbS9zZXR1cC5oIGIvYXJjaC9jNngv
+aW5jbHVkZS91YXBpL2FzbS9zZXR1cC5oCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+
+IGluZGV4IGU5MDU0OGNlYmVjMy4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9j
+NngvaW5jbHVkZS91YXBpL2FzbS9zaWdjb250ZXh0LmggYi9hcmNoL2M2eC9pbmNsdWRlL3VhcGkv
+YXNtL3NpZ2NvbnRleHQuaAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCA0
+ZTVhOWEyNjA4NjEuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2luY2x1
+ZGUvdWFwaS9hc20vc3dhYi5oIGIvYXJjaC9jNngvaW5jbHVkZS91YXBpL2FzbS9zd2FiLmgKPiA+
+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggYzQwN2MwNDk3NzE4Li4wMDAwMDAw
+MDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9pbmNsdWRlL3VhcGkvYXNtL3VuaXN0ZC5o
+IGIvYXJjaC9jNngvaW5jbHVkZS91YXBpL2FzbS91bmlzdGQuaAo+ID4gZGVsZXRlZCBmaWxlIG1v
+ZGUgMTAwNjQ0Cj4gPiBpbmRleCA3OWI3MjRjMzlkOWIuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAt
+LWdpdCBhL2FyY2gvYzZ4L2tlcm5lbC9NYWtlZmlsZSBiL2FyY2gvYzZ4L2tlcm5lbC9NYWtlZmls
+ZQo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBmYmU3NDE3NGRlODcuLjAw
+MDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2tlcm5lbC9hc20tb2Zmc2V0cy5j
+IGIvYXJjaC9jNngva2VybmVsL2FzbS1vZmZzZXRzLmMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEw
+MDY0NAo+ID4gaW5kZXggNGEyNjRlZjg3ZGNiLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQg
+YS9hcmNoL2M2eC9rZXJuZWwvYzZ4X2tzeW1zLmMgYi9hcmNoL2M2eC9rZXJuZWwvYzZ4X2tzeW1z
+LmMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggNWEzOWY1MmY5ZGI0Li4w
+MDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9rZXJuZWwvZGV2aWNldHJlZS5j
+IGIvYXJjaC9jNngva2VybmVsL2RldmljZXRyZWUuYwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAw
+NjQ0Cj4gPiBpbmRleCBhMGM3M2YwNTQ1YjIuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBh
+L2FyY2gvYzZ4L2tlcm5lbC9lbnRyeS5TIGIvYXJjaC9jNngva2VybmVsL2VudHJ5LlMKPiA+IGRl
+bGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggZmIxNTRkMTk2MjViLi4wMDAwMDAwMDAw
+MDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9rZXJuZWwvaGVhZC5TIGIvYXJjaC9jNngva2Vy
+bmVsL2hlYWQuUwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBmZWNiZWVm
+ODI3YmMuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2tlcm5lbC9pcnEu
+YyBiL2FyY2gvYzZ4L2tlcm5lbC9pcnEuYwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4g
+PiBpbmRleCBlNGM1M2QxODViNjIuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gv
+YzZ4L2tlcm5lbC9tb2R1bGUuYyBiL2FyY2gvYzZ4L2tlcm5lbC9tb2R1bGUuYwo+ID4gZGVsZXRl
+ZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCAwOWI0YzZiZmU4NzcuLjAwMDAwMDAwMDAwMAo+
+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2tlcm5lbC9wcm9jZXNzLmMgYi9hcmNoL2M2eC9rZXJu
+ZWwvcHJvY2Vzcy5jCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDlmNGZk
+NmE0MGExMC4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngva2VybmVsL3B0
+cmFjZS5jIGIvYXJjaC9jNngva2VybmVsL3B0cmFjZS5jCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAx
+MDA2NDQKPiA+IGluZGV4IDNjZGFhOGNmMGVkNi4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0
+IGEvYXJjaC9jNngva2VybmVsL3NldHVwLmMgYi9hcmNoL2M2eC9rZXJuZWwvc2V0dXAuYwo+ID4g
+ZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCA5MjU0YzNiNzk0YTUuLjAwMDAwMDAw
+MDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2tlcm5lbC9zaWduYWwuYyBiL2FyY2gvYzZ4
+L2tlcm5lbC9zaWduYWwuYwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCA4
+NjI0NjBjM2IxODMuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2tlcm5l
+bC9zb2MuYyBiL2FyY2gvYzZ4L2tlcm5lbC9zb2MuYwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAw
+NjQ0Cj4gPiBpbmRleCA4MzYyZjkzOTBlMDMuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBh
+L2FyY2gvYzZ4L2tlcm5lbC9zd2l0Y2hfdG8uUyBiL2FyY2gvYzZ4L2tlcm5lbC9zd2l0Y2hfdG8u
+Uwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBiN2Y5ZjYwNzA0MmUuLjAw
+MDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2tlcm5lbC9zeXNfYzZ4LmMgYi9h
+cmNoL2M2eC9rZXJuZWwvc3lzX2M2eC5jCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+
+IGluZGV4IDYwMDI3N2YwNTdjZi4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9j
+Nngva2VybmVsL3RpbWUuYyBiL2FyY2gvYzZ4L2tlcm5lbC90aW1lLmMKPiA+IGRlbGV0ZWQgZmls
+ZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggZjNlYzkxYTg3ZjRmLi4wMDAwMDAwMDAwMDAKPiA+IGRp
+ZmYgLS1naXQgYS9hcmNoL2M2eC9rZXJuZWwvdHJhcHMuYyBiL2FyY2gvYzZ4L2tlcm5lbC90cmFw
+cy5jCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDJiOTEyMWM3NTViZS4u
+MDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngva2VybmVsL3ZlY3RvcnMuUyBi
+L2FyY2gvYzZ4L2tlcm5lbC92ZWN0b3JzLlMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+
+ID4gaW5kZXggYWQzZGMwMDZhNmQzLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNo
+L2M2eC9rZXJuZWwvdm1saW51eC5sZHMuUyBiL2FyY2gvYzZ4L2tlcm5lbC92bWxpbnV4Lmxkcy5T
+Cj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGFjOTliYTA4NjRiZi4uMDAw
+MDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvbGliL01ha2VmaWxlIGIvYXJjaC9j
+NngvbGliL01ha2VmaWxlCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGUx
+ODIwMDRmODJmZS4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvbGliL2No
+ZWNrc3VtLmMgYi9hcmNoL2M2eC9saWIvY2hlY2tzdW0uYwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUg
+MTAwNjQ0Cj4gPiBpbmRleCBkZmYyZTJlYzZlNjQuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdp
+dCBhL2FyY2gvYzZ4L2xpYi9jc3VtXzY0cGx1cy5TIGIvYXJjaC9jNngvbGliL2NzdW1fNjRwbHVz
+LlMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggNTcxNDg4NjZkOGQzLi4w
+MDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9saWIvZGl2aS5TIGIvYXJjaC9j
+NngvbGliL2RpdmkuUwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBkMTc2
+NGFlMGI1MTkuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2xpYi9kaXZy
+ZW1pLlMgYi9hcmNoL2M2eC9saWIvZGl2cmVtaS5TCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2
+NDQKPiA+IGluZGV4IDU3NWZjNTdhOGE3Ni4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEv
+YXJjaC9jNngvbGliL2RpdnJlbXUuUyBiL2FyY2gvYzZ4L2xpYi9kaXZyZW11LlMKPiA+IGRlbGV0
+ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggNWY2YTZhMjk5N2FlLi4wMDAwMDAwMDAwMDAK
+PiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9saWIvZGl2dS5TIGIvYXJjaC9jNngvbGliL2RpdnUu
+Uwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBmMGY2MDgyOTQ0YzIuLjAw
+MDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2xpYi9sbHNobC5TIGIvYXJjaC9j
+NngvbGliL2xsc2hsLlMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMzI3
+MjQ5OTYxOGUwLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9saWIvbGxz
+aHIuUyBiL2FyY2gvYzZ4L2xpYi9sbHNoci5TCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQK
+PiA+IGluZGV4IDZiZmFhY2QxNWU3My4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJj
+aC9jNngvbGliL2xsc2hydS5TIGIvYXJjaC9jNngvbGliL2xsc2hydS5TCj4gPiBkZWxldGVkIGZp
+bGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDEwMzEyOGY1MDc3MC4uMDAwMDAwMDAwMDAwCj4gPiBk
+aWZmIC0tZ2l0IGEvYXJjaC9jNngvbGliL21lbWNweV82NHBsdXMuUyBiL2FyY2gvYzZ4L2xpYi9t
+ZW1jcHlfNjRwbHVzLlMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMTU3
+YTMwNDg2YmZkLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9saWIvbXB5
+bGwuUyBiL2FyY2gvYzZ4L2xpYi9tcHlsbC5TCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQK
+PiA+IGluZGV4IGQwN2MxM2VjNGZkNC4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJj
+aC9jNngvbGliL25lZ2xsLlMgYi9hcmNoL2M2eC9saWIvbmVnbGwuUwo+ID4gZGVsZXRlZCBmaWxl
+IG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCA5YmE0MzRkYjUzNjYuLjAwMDAwMDAwMDAwMAo+ID4gZGlm
+ZiAtLWdpdCBhL2FyY2gvYzZ4L2xpYi9wb3BfcnRzLlMgYi9hcmNoL2M2eC9saWIvcG9wX3J0cy5T
+Cj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGYxMjllMzI5NDNjNS4uMDAw
+MDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvbGliL3B1c2hfcnRzLlMgYi9hcmNo
+L2M2eC9saWIvcHVzaF9ydHMuUwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRl
+eCA0MGIwYTRmZTkzN2MuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2xp
+Yi9yZW1pLlMgYi9hcmNoL2M2eC9saWIvcmVtaS5TCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2
+NDQKPiA+IGluZGV4IDk2YTEzMzVlYWMyMC4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0IGEv
+YXJjaC9jNngvbGliL3JlbXUuUyBiL2FyY2gvYzZ4L2xpYi9yZW11LlMKPiA+IGRlbGV0ZWQgZmls
+ZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggNDI4ZmViOWMwNmMwLi4wMDAwMDAwMDAwMDAKPiA+IGRp
+ZmYgLS1naXQgYS9hcmNoL2M2eC9saWIvc3RyYXNnaS5TIGIvYXJjaC9jNngvbGliL3N0cmFzZ2ku
+Uwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCA3MTVhZWIyMDA3OTIuLjAw
+MDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L2xpYi9zdHJhc2dpXzY0cGx1cy5T
+IGIvYXJjaC9jNngvbGliL3N0cmFzZ2lfNjRwbHVzLlMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEw
+MDY0NAo+ID4gaW5kZXggZDEwYWEyZGMzMjQ5Li4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQg
+YS9hcmNoL2M2eC9tbS9NYWtlZmlsZSBiL2FyY2gvYzZ4L21tL01ha2VmaWxlCj4gPiBkZWxldGVk
+IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDE5ZDA1ZTk3MmRkMS4uMDAwMDAwMDAwMDAwCj4g
+PiBkaWZmIC0tZ2l0IGEvYXJjaC9jNngvbW0vZG1hLWNvaGVyZW50LmMgYi9hcmNoL2M2eC9tbS9k
+bWEtY29oZXJlbnQuYwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCAwM2Rm
+MDdhODMxZmMuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L21tL2luaXQu
+YyBiL2FyY2gvYzZ4L21tL2luaXQuYwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBp
+bmRleCBhOTdlNTFhM2UyNmQuLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4
+L3BsYXRmb3Jtcy9LY29uZmlnIGIvYXJjaC9jNngvcGxhdGZvcm1zL0tjb25maWcKPiA+IGRlbGV0
+ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggZjNhOWFlNmUwZTgyLi4wMDAwMDAwMDAwMDAK
+PiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9wbGF0Zm9ybXMvTWFrZWZpbGUgYi9hcmNoL2M2eC9w
+bGF0Zm9ybXMvTWFrZWZpbGUKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXgg
+YjMyMGYxYzY4ODg0Li4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9wbGF0
+Zm9ybXMvY2FjaGUuYyBiL2FyY2gvYzZ4L3BsYXRmb3Jtcy9jYWNoZS5jCj4gPiBkZWxldGVkIGZp
+bGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IGZmZjAyN2I3MjUxMy4uMDAwMDAwMDAwMDAwCj4gPiBk
+aWZmIC0tZ2l0IGEvYXJjaC9jNngvcGxhdGZvcm1zL2RzY3IuYyBiL2FyY2gvYzZ4L3BsYXRmb3Jt
+cy9kc2NyLmMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggNDU3MTYxNWI1
+ODlmLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9wbGF0Zm9ybXMvZW1p
+Zi5jIGIvYXJjaC9jNngvcGxhdGZvcm1zL2VtaWYuYwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAw
+NjQ0Cj4gPiBpbmRleCA2MTQyZWNjMmNkODguLjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBh
+L2FyY2gvYzZ4L3BsYXRmb3Jtcy9tZWdhbW9kLXBpYy5jIGIvYXJjaC9jNngvcGxhdGZvcm1zL21l
+Z2Ftb2QtcGljLmMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggNTYxODll
+NTA3MjhjLi4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2M2eC9wbGF0Zm9ybXMv
+cGxsLmMgYi9hcmNoL2M2eC9wbGF0Zm9ybXMvcGxsLmMKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEw
+MDY0NAo+ID4gaW5kZXggNmZkZjIwZDY0ZGM3Li4wMDAwMDAwMDAwMDAKPiA+IGRpZmYgLS1naXQg
+YS9hcmNoL2M2eC9wbGF0Zm9ybXMvcGxsZGF0YS5jIGIvYXJjaC9jNngvcGxhdGZvcm1zL3BsbGRh
+dGEuYwo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCBhNzk5ZTA0ZWRlZmUu
+LjAwMDAwMDAwMDAwMAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYzZ4L3BsYXRmb3Jtcy90aW1lcjY0
+LmMgYi9hcmNoL2M2eC9wbGF0Zm9ybXMvdGltZXI2NC5jCj4gPiBkZWxldGVkIGZpbGUgbW9kZSAx
+MDA2NDQKPiA+IGluZGV4IDY2MWY0YzdjNmVmNi4uMDAwMDAwMDAwMDAwCj4gPiBkaWZmIC0tZ2l0
+IGEvZHJpdmVycy9idXMvS2NvbmZpZyBiL2RyaXZlcnMvYnVzL0tjb25maWcKPiA+IGluZGV4IDBj
+MjYyYzJhZWFmMi4uZTdmN2VlZTZlZTlhIDEwMDY0NAo+ID4gLS0tIGEvZHJpdmVycy9idXMvS2Nv
+bmZpZwo+ID4gKysrIGIvZHJpdmVycy9idXMvS2NvbmZpZwo+ID4gQEAgLTgwLDcgKzgwLDcgQEAg
+Y29uZmlnIE1PWFRFVAo+ID4KPiA+ICBjb25maWcgSElTSUxJQ09OX0xQQwo+ID4gICAgICAgICBi
+b29sICJTdXBwb3J0IGZvciBJU0EgSS9PIHNwYWNlIG9uIEhpU2lsaWNvbiBIaXAwNi83Igo+ID4g
+LSAgICAgICBkZXBlbmRzIG9uIChBUk02NCAmJiBBUkNIX0hJU0kpIHx8IChDT01QSUxFX1RFU1Qg
+JiYgIUFMUEhBICYmICFIRVhBR09OICYmICFQQVJJU0MgJiYgIUM2WCkKPiA+ICsgICAgICAgZGVw
+ZW5kcyBvbiAoQVJNNjQgJiYgQVJDSF9ISVNJKSB8fCAoQ09NUElMRV9URVNUICYmICFBTFBIQSAm
+JiAhSEVYQUdPTiAmJiAhUEFSSVNDKQo+ID4gICAgICAgICBkZXBlbmRzIG9uIEhBU19JT01FTQo+
+ID4gICAgICAgICBzZWxlY3QgSU5ESVJFQ1RfUElPIGlmIEFSTTY0Cj4gPiAgICAgICAgIGhlbHAK
+PiA+IGRpZmYgLS1naXQgYS9mcy9LY29uZmlnLmJpbmZtdCBiL2ZzL0tjb25maWcuYmluZm10Cj4g
+PiBpbmRleCA4ODVkYTZkOTgzYjQuLjY0NzQzOWMyYzA1YSAxMDA2NDQKPiA+IC0tLSBhL2ZzL0tj
+b25maWcuYmluZm10Cj4gPiArKysgYi9mcy9LY29uZmlnLmJpbmZtdAo+ID4gQEAgLTQ1LDcgKzQ1
+LDcgQEAgY29uZmlnIEFSQ0hfVVNFX0dOVV9QUk9QRVJUWQo+ID4gIGNvbmZpZyBCSU5GTVRfRUxG
+X0ZEUElDCj4gPiAgICAgICAgIGJvb2wgIktlcm5lbCBzdXBwb3J0IGZvciBGRFBJQyBFTEYgYmlu
+YXJpZXMiCj4gPiAgICAgICAgIGRlZmF1bHQgeSBpZiAhQklORk1UX0VMRgo+ID4gLSAgICAgICBk
+ZXBlbmRzIG9uIChBUk0gfHwgKFNVUEVSSCAmJiAhTU1VKSB8fCBDNlgpCj4gPiArICAgICAgIGRl
+cGVuZHMgb24gKEFSTSB8fCAoU1VQRVJIICYmICFNTVUpKQo+ID4gICAgICAgICBzZWxlY3QgRUxG
+Q09SRQo+ID4gICAgICAgICBoZWxwCj4gPiAgICAgICAgICAgRUxGIEZEUElDIGJpbmFyaWVzIGFy
+ZSBiYXNlZCBvbiBFTEYsIGJ1dCBhbGxvdyB0aGUgaW5kaXZpZHVhbCBsb2FkCj4gPiBkaWZmIC0t
+Z2l0IGEvaW5jbHVkZS9hc20tZ2VuZXJpYy9wYWdlLmggYi9pbmNsdWRlL2FzbS1nZW5lcmljL3Bh
+Z2UuaAo+ID4gaW5kZXggZmU4MDFmMDE2MjVlLi42ZmM0NzU2MTgxNGMgMTAwNjQ0Cj4gPiAtLS0g
+YS9pbmNsdWRlL2FzbS1nZW5lcmljL3BhZ2UuaAo+ID4gKysrIGIvaW5jbHVkZS9hc20tZ2VuZXJp
+Yy9wYWdlLmgKPiA+IEBAIC02MywxMSArNjMsNyBAQCBleHRlcm4gdW5zaWduZWQgbG9uZyBtZW1v
+cnlfZW5kOwo+ID4KPiA+ICAjZW5kaWYgLyogIV9fQVNTRU1CTFlfXyAqLwo+ID4KPiA+IC0jaWZk
+ZWYgQ09ORklHX0tFUk5FTF9SQU1fQkFTRV9BRERSRVNTCj4gPiAtI2RlZmluZSBQQUdFX09GRlNF
+VCAgICAgICAgICAgIChDT05GSUdfS0VSTkVMX1JBTV9CQVNFX0FERFJFU1MpCj4gPiAtI2Vsc2UK
+PiA+ICAjZGVmaW5lIFBBR0VfT0ZGU0VUICAgICAgICAgICAgKDApCj4gPiAtI2VuZGlmCj4gPgo+
+ID4gICNpZm5kZWYgQVJDSF9QRk5fT0ZGU0VUCj4gPiAgI2RlZmluZSBBUkNIX1BGTl9PRkZTRVQg
+ICAgICAgICAgICAgICAgKFBBR0VfT0ZGU0VUID4+IFBBR0VfU0hJRlQpCj4KPiBUaGFua3MgQXJu
+ZC4KPgo+IEFja2VkLWJ5OiBNYXJrIFNhbHRlciA8bXNhbHRlckByZWRoYXQuY29tPgo+Cj4KPgoK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbGludXgtYXJt
+LWtlcm5lbCBtYWlsaW5nIGxpc3QKbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3Jn
+Cmh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtYXJtLWtl
+cm5lbAo=
