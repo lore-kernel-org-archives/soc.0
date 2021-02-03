@@ -1,286 +1,188 @@
-Return-Path: <SRS0=Uajl=HF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=bhtp=HF=xilinx.com=michals@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E7F7C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  3 Feb 2021 12:42:44 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19908C433E0
+	for <soc@archiver.kernel.org>; Wed,  3 Feb 2021 13:31:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id C50E464FA1; Wed,  3 Feb 2021 13:31:12 +0000 (UTC)
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2042.outbound.protection.outlook.com [40.107.243.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4CEFC64F99
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  3 Feb 2021 12:42:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4CEFC64F99
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:MIME-Version:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=seHs5KnZrJOLY916e1ZIKwjAPDeeQVblaDP0ql5U1so=; b=FEpZlgP3J3j+4HB9x7oxF0vJ93
-	qEJWO3RJ5uJa1tXRfMSmPRH6MrvHPEojGpVqh1QPG9ssfQQgXx+hAvwT4ykdKO7Liz9/97JwhcxPu
-	UA0gfBAMHHYvoATZ9XjIg+O74HM+jNK+ceCjJrkMygpjf/og0msKc4jP96coly5lsXVUMH8YQCv11
-	C56ydQW7Cre6wYIqHVjwtGwBptIskpCsM80n4zcnJ+/I2olREWE9zXpKCq3mrfPnj/c7HZirKHAG7
-	vZg0rnttYfvrQqxIRLNDzGwcTMDZI2CjPPxTuRO7equ9Mez6uh3vgIxBIqbnJrW2Mdui5f1npwjow
-	N+XURVDg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l7HTc-0003EE-Jg; Wed, 03 Feb 2021 12:41:44 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l7HTa-0003DS-4o
- for linux-arm-kernel@lists.infradead.org; Wed, 03 Feb 2021 12:41:43 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4BE0464E4A
- for <linux-arm-kernel@lists.infradead.org>;
- Wed,  3 Feb 2021 12:41:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612356101;
- bh=xAfRqBE+pAbxUC34HhBy+qHGodXdkQJi03i/yKzhH1o=;
- h=From:Date:Subject:To:List-Id:Cc:From;
- b=a6IA724npiEh0d/XEpy5Yc/YitSsfE5rqy6UxcAjO1hsS+Wb3R9MXjkhPNJGFlhgj
- PFF0ggzfcMCORTOr3xL/ZmM8S0MNu9RY/qJ6P39m84U9czdYI2S5NNIdwkyytGMxQm
- mhONBTuw/HCfR+HOAkglUkFpOfUPHp8emseXt5Wd9HKFgf95zYPnyH49GDUzsiv13A
- WNVrtY+N07DeUTZOO8DxXxU8ENgeAOhtGbxpSJub1rDFrrjn2KhE5KrDpFMUNcuGC4
- OJXdgBHSxoPVUS49i1WTSc2eGLj64D2D2RhUtXXeyr43w2IPTmnQBPlvHev3CAnVvr
- PqdiwqzvS2OZA==
-Received: by mail-ot1-f41.google.com with SMTP id 36so23171779otp.2
- for <linux-arm-kernel@lists.infradead.org>;
- Wed, 03 Feb 2021 04:41:41 -0800 (PST)
-X-Gm-Message-State: AOAM532lf2m65O6VLyuLzAQ37mgEJGb+ZVYACSsu4/8gKu7bxTa7jUJv
- 5UpmMkC8IOQAtT5LJbu7kx+CKvaguZZqtapdLZU=
-X-Google-Smtp-Source: ABdhPJyLp00x2R2SaV/rOpM9Uk0hpmPrjHB1aq7/yV2vW2twmX/LWRv8pEjJBo8c5/60UUkiFG4hxmi39E/c3aRDvxw=
-X-Received: by 2002:a05:6830:139a:: with SMTP id
- d26mr1888240otq.305.1612356100569; 
- Wed, 03 Feb 2021 04:41:40 -0800 (PST)
-MIME-Version: 1.0
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Wed, 3 Feb 2021 13:41:24 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1Ud0DtX+GGnap1r+Yu+KONeqq64q+2y2D3mVPGN4vwuQ@mail.gmail.com>
-Message-ID: <CAK8P3a1Ud0DtX+GGnap1r+Yu+KONeqq64q+2y2D3mVPGN4vwuQ@mail.gmail.com>
-Subject: [GIT PULL] ARM: SoC fixes for v5.11, part 3
-To: Linus Torvalds <torvalds@linux-foundation.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210203_074142_325378_8D87D89E 
-X-CRM114-Status: GOOD (  15.18  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by mail.kernel.org (Postfix) with ESMTPS id 5D38364F55;
+	Wed,  3 Feb 2021 13:31:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5D38364F55
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=xilinx.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=michals@xilinx.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NBaqmvoW1FZ46g3MXSek8M3EKVNotFqBWeH6p/236DTF9ccUXuum+RysEbKbVyxIXE4HLDNlECwBqjNbGemLPcMpvh0o9jhiVULFw4A2ar9mpVolvR1bvSFsH+k4eRjjhMVu/EhcK9cKWbXNluua0+pksiteuSLbWT1Jv6sWYurtsP/hQSwd44cV6G2fc726AwsVkpu3pj4z/OPvPWxMZkNYEv6q/kIs5nkantpNpqABpKNrlzr0TZnVb1xoobXlTMVyNmswBiIYbI0V8+fF9cgi20Wdmlef3YnaqkYfg0Uv0GJ4faPfW4l6ui3uaQC9yhm3mU6m22jRSlmfM+HM5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rwGNBD55jmQNwt5Q8pCrZMHLJE/W+aNeGAO+E4Jpwjk=;
+ b=b6xHtEGWytqxv4nHvwZIrS63oLJR5kgBGGceZrlGAqP1L7yV3DqNJ95nYqrIXMMGzfK5AwfQT5GTTGoYz4EM87DQS4sWlG/dTvlmXaLbHjzLb52IRJckHmIPbQPYXVgHUu024Dpc2vLdSwk5cXTt+ip0/W0h/CPQwdz7esfFrhqwJG6OYjLCnQopivA87LkgB+liXOs39FJZ4b/eyRGCLl23eDikh6WJPnfdJryNyxS6t+TWu3Vxb5A2kHGwZnXsqSRxs1UTfOb+fzPC2Zk+8TVmQgKUKqozg7fpeVrAklj9wRTQ13SLVrf71Igc0kE23ry1ufLx5rZ6G1kEasA7qg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=lists.infradead.org
+ smtp.mailfrom=xilinx.com; dmarc=bestguesspass action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rwGNBD55jmQNwt5Q8pCrZMHLJE/W+aNeGAO+E4Jpwjk=;
+ b=JCwQtKf0ug8FRaDK2afNwy15I2XTxm7Ek7Pt44UXSyxEHq7MkXCbOEABQ3d4OUYJLnw6ds/UozVmf9L1+fpW1AxYTRrnTyVRGqoFJOQ/NkygJUHJhidbZ3BHaA6Yo8S6arE8bd5XUcoczpfK3Cb5XcRcqOZ4rMys9++3mGzSLW4=
+Received: from BL1PR13CA0153.namprd13.prod.outlook.com (2603:10b6:208:2bd::8)
+ by BYAPR02MB5973.namprd02.prod.outlook.com (2603:10b6:a03:11d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.17; Wed, 3 Feb
+ 2021 13:31:10 +0000
+Received: from BL2NAM02FT011.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:208:2bd:cafe::6) by BL1PR13CA0153.outlook.office365.com
+ (2603:10b6:208:2bd::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.17 via Frontend
+ Transport; Wed, 3 Feb 2021 13:31:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; lists.infradead.org; dkim=none (message not signed)
+ header.d=none;lists.infradead.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BL2NAM02FT011.mail.protection.outlook.com (10.152.77.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3784.12 via Frontend Transport; Wed, 3 Feb 2021 13:31:10 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Wed, 3 Feb 2021 05:31:06 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Wed, 3 Feb 2021 05:31:06 -0800
+Envelope-to: linux-arm-kernel@lists.infradead.org,
+ arm@kernel.org,
+ soc@kernel.org
+Received: from [172.30.17.109] (port=60516)
+	by smtp.xilinx.com with esmtp (Exim 4.90)
+	(envelope-from <michal.simek@xilinx.com>)
+	id 1l7IFN-0006f0-Qb; Wed, 03 Feb 2021 05:31:06 -0800
 List-Id: <soc.lore.kernel.org>
-Cc: Heiko Stuebner <mmind@kernel.org>, Marek Vasut <marex@denx.de>,
- Tony Lindgren <tony@atomide.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Maxime Ripard <mripard@kernel.org>,
- Bjorn Andersson <bjorn.andersson@linaro.org>,
- Alexandre TORGUE <alexandre.torgue@foss.st.com>, SoC Team <soc@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
+To: SoC Team <soc@kernel.org>
+CC: arm-soc <arm@kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>
+From: Michal Simek <michal.simek@xilinx.com>
+Subject: [GIT PULL] arm64: dts: ZynqMP DT changes for v5.12
+Message-ID: <b1a6f89e-f6b4-757b-daf0-d2f1844b833d@xilinx.com>
+Date: Wed, 3 Feb 2021 14:31:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210203124124.b9_D_xAh6wMQF-XuEP4GxExVgJa199h3VhOXE-VwtPU@z>
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: afa923e8-ddd3-4b72-67c7-08d8c847f82c
+X-MS-TrafficTypeDiagnostic: BYAPR02MB5973:
+X-Microsoft-Antispam-PRVS:
+	<BYAPR02MB59738E7656EDC780A16F436AC6B49@BYAPR02MB5973.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	GO++Lhhx8j4xLdlsSdlYloFG26jQXa7aP5yX0Azs/IqrsPRP+AnZeaVAjEBrS1VRiJBYaqD6a5qIE/LKNYJgYWieUH7Idu9/jZnafOqfkwjcPcVqGw41NruGylYwwPCyTQwXTGQ1QevvVfI0DZh0Li89dO3MeHTFn2bdg4Q69iRD0VMoKSuHhUL1m+z9Mb2q9DHw3Psz7bdUy94GQdBYJgc6K997oZITtPU4qF5HtVlvBDV18J4G6j3VDMskd1tRItBdHik1qnYoHt9dNX4/33yXBONwCEqJYqJPulNNnlHfRUqXkz6GKJlptf/yRd4DJK3ozyLRgE3A0806BgA0NvvzpipEoDo1m2BY9hdWoufn7dSw4k76usfXCOOBvKIfroCPLTbptGjCS/95QgiDSdMi4yZE0nC68Yhvs+gFPt/Pq+kVJeeDnJYFu13Q32tJBU5olEK1E8Z5TNri/CUEhJMXpHIQZWX8UZsmhF/7mAfT58j+klMJ63U/MmNyV8MGKv1f5UaSvuWwsWWi1ts16hGFxfAow58O9oT9KiINA1aG0CdElQjsJZEMF4Ukkx1qywTZjkpVpYY73DEa6NCvevtGOlQaA/t3JWEfcD3zVm+n1mkKllyQB2mSDmXFNwAWQhk48jMoCfS6xusSJ3zjzuW3oQzfOuEdl7NaPlAUXFIqH+0tORmQ9z4fiJWhAEJiK/CBTivl+CP3nu8oSgwA/lJ21WFsdTcuSjNnMSYaHEMeHl9soX04VQVQGoEgga+dD+LkqfvVSl9aWnpXgGE7K07AGN7+NEKTm0eQM004EmQ=
+X-Forefront-Antispam-Report:
+	CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(376002)(136003)(346002)(39860400002)(36840700001)(46966006)(9786002)(54906003)(8676002)(966005)(4001150100001)(2616005)(44832011)(31686004)(478600001)(36906005)(316002)(7636003)(5660300002)(356005)(82740400003)(426003)(31696002)(6916009)(70586007)(2906002)(186003)(26005)(336012)(83380400001)(47076005)(4326008)(8936002)(70206006)(82310400003)(36756003)(36860700001)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2021 13:31:10.3388
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: afa923e8-ddd3-4b72-67c7-08d8c847f82c
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL2NAM02FT011.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5973
 
-The following changes since commit e49c24c8cd00ea9d7471520fff562fb4e7e9f61a:
+Hi,
 
-  Merge tag 'imx-fixes-5.11-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
-arm/fixes (2021-01-22 23:52:42 +0100)
+please pull the following changes to your tree.
+
+Thanks,
+Michal
+
+The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+
+  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-tags/arm-soc-fixes-v5.11-3
+  https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-dt-for-v5.12
 
-for you to fetch changes up to 459630a3ebb4110c571f103fbc2d8120be001e39:
+for you to fetch changes up to 55563399bb16906b3e179dbeb66c0bf44c21b12a:
 
-  Merge tag 'sunxi-fixes-for-5.11-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into
-arm/fixes (2021-02-03 11:24:01 +0100)
+  arm64: dts: zynqmp: Wire up the DisplayPort subsystem (2021-02-01
+10:40:37 +0100)
 
 ----------------------------------------------------------------
-The code fixes in this round are all for the Texas Instruments OMAP
-platform, addressing several regressions related to the ti-sysc
-interconnect changes that were merged in linux-5.11 and one recently
-introduced RCU usage warning.
+arm64: dts: ZynqMP DT changes for v5.12
 
-Tero Kristo updates his maintainer file entries as he is changing
-to a new employer.
+- Wire clock chips present on boards
+- Enable reset, qspi, nand, watchdog and DP IPs
+- Enable phy driver for sata and DP
+- Add iommu description
+- Add support for zcu104 revC+ boards
 
-The other changes are for devicetree files across eight different
-platforms:
-
-TI OMAP:
- - multiple gpio related one-line fixes
-
-Allwinner/sunxi:
- - ARM: dts: sun7i: a20: bananapro: Fix ethernet phy-mode
- - soc: sunxi: mbus: Remove DE2 display engine compatibles
-
-NXP lpc32xx:
- - ARM: dts: lpc32xx: Revert set default clock rate of HCLK PLL
-
-STMicroelectronics stm32
- - multiple minor fixes for DHCOM/DHCOR boards
-
-NXP Layerscape:
- - Fix DCFG address range on LS1046A SoC
-
-Amlogic meson:
- - fix reboot issue on odroid C4
- - revert an ethernet change that caused a regression
- - meson-g12: Set FL-adj property value
-
-Rockchip:
- - multiple minor fixes on 64-bit rockchip machines
-
-Qualcomm:
- - Regression fixes for Lenovo Yoga touchpad and for
-   interconnect configuration
- - Boot fixes for 'LPASS' clock configuration on two machines
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+- Various small changes
+  - Add missing labels
+  - Fix typos in documentation
+  - Add missing boards
 
 ----------------------------------------------------------------
-Alexandre Belloni (1):
-      ARM: dts: lpc32xx: Revert set default clock rate of HCLK PLL
+Laurent Pinchart (2):
+      arm64: dts: zynqmp: Add DPDMA node
+      arm64: dts: zynqmp: Wire up the DisplayPort subsystem
 
-Arnd Bergmann (11):
-      Merge tag 'stm32-dt-for-v5.11-fixes-1' of
-git://git.kernel.org/.../atorgue/stm32 into arm/fixes
-      Merge tag 'amlogic-fixes' of
-git://git.kernel.org/.../khilman/linux-amlogic into arm/fixes
-      Merge tag 'qcom-arm64-fixes-for-5.11' of
-git://git.kernel.org/.../qcom/linux into arm/fixes
-      Merge tag 'qcom-arm64-defconfig-fixes-for-5.11' of
-git://git.kernel.org/.../qcom/linux into arm/fixes
-      Merge tag 'omap-for-v5.11/fixes-rc5' of
-git://git.kernel.org/.../tmlind/linux-omap into arm/fixes
-      Merge tag 'v5.11-rockchip-dtsfixes1' of
-git://git.kernel.org/.../mmind/linux-rockchip into arm/fixes
-      Merge tag 'amlogic-fixes-2' of
-git://git.kernel.org/.../khilman/linux-amlogic into arm/fixes
-      Merge tag 'amlogic-fixes-3' of
-git://git.kernel.org/.../khilman/linux-amlogic into arm/fixes
-      Merge tag 'ti-k3-maintainer-for-v5.12' of
-git://git.kernel.org/.../nmenon/linux into arm/fixes
-      Merge tag 'imx-fixes-5.11-3' of
-git://git.kernel.org/.../shawnguo/linux into arm/fixes
-      Merge tag 'sunxi-fixes-for-5.11-2' of
-git://git.kernel.org/.../sunxi/linux into arm/fixes
+Michal Simek (15):
+      arm64: dts: zynqmp: Add address-cells property to interrupt
+controllers
+      arm64: dts: zynqmp: Fix u48 si5382 chip on zcu111
+      arm64: dts: zynqmp: Add DT description for si5328 for zcu102/zcu106
+      arm64: dts: zynqmp: Enable si5341 driver for zcu102/106/111
+      arm64: dts: zynqmp: Enable reset controller driver
+      arm64: dts: zynqmp: Enable phy driver for Sata on zcu102/zcu104/zcu106
+      arm64: dts: zynqmp: Add label for zynqmp_ipi
+      arm64: dts: zynqmp: Add missing mio-bank properties to sdhcis
+      arm64: dts: zynqmp: Wire arasan nand controller
+      arm64: dts: zynqmp: Wire zynqmp qspi controller
+      arm64: dts: zynqmp: Add missing lpd watchdog node
+      arm64: dts: zynqmp: Add missing iommu IDs
+      arm64: dts: zynqmp: Add description for zcu104 revC
+      dt-bindings: arm: Fix typo in zcu111 board
+      arm64: dts: zynqmp: Add DisplayPort subsystem
 
-Bjorn Andersson (2):
-      arm64: defconfig: Make INTERCONNECT_QCOM_SDM845 builtin
-      arm64: dts: qcom: sdm845: Reserve LPASS clocks in gcc
-
-H. Nikolaus Schaller (2):
-      DTS: ARM: gta04: remove legacy spi-cs-high to make display work again
-      ARM: dts; gta04: SPI panel chip select is active low
-
-Hermann Lauer (1):
-      ARM: dts: sun7i: a20: bananapro: Fix ethernet phy-mode
-
-Johan Jonker (1):
-      arm64: dts: rockchip: remove interrupt-names property from
-rk3399 vdec node
-
-Linus Walleij (1):
-      ARM: OMAP1: OSK: fix ohci-omap breakage
-
-Marc Zyngier (1):
-      arm64: dts: rockchip: Fix PCIe DT properties on rk3399
-
-Marek Szyprowski (1):
-      arm64: dts: meson: switch TFLASH_VDD_EN pin to open drain on Odroid-C4
-
-Marek Vasut (7):
-      ARM: dts: stm32: Fix polarity of the DH DRC02 uSD card detect
-      ARM: dts: stm32: Connect card-detect signal on DHCOM
-      ARM: dts: stm32: Disable WP on DHCOM uSD slot
-      ARM: dts: stm32: Disable optional TSC2004 on DRC02 board
-      ARM: dts: stm32: Fix GPIO hog names on DHCOM
-      ARM: dts: stm32: Fix GPIO hog flags on DHCOM PicoITX
-      ARM: dts: stm32: Fix GPIO hog flags on DHCOM DRC02
-
-Neil Armstrong (1):
-      Revert "arm64: dts: amlogic: add missing ethernet reset ID"
-
-Paul Kocialkowski (1):
-      soc: sunxi: mbus: Remove DE2 display engine compatibles
-
-Robin Murphy (1):
-      arm64: dts: rockchip: Disable display for NanoPi R2S
-
-Sandy Huang (1):
-      arm64: dts: rockchip: fix vopl iommu irq on px30
-
-Serge Semin (1):
-      arm64: dts: amlogic: meson-g12: Set FL-adj property value
-
-Shawn Guo (1):
-      arm64: dts: qcom: c630: keep both touchpad devices enabled
-
-Simon South (1):
-      arm64: dts: rockchip: Use only supported PCIe link speed on Pinebook Pro
-
-Tero Kristo (1):
-      MAINTAINERS: Update my email address and maintainer level status
-
-Tony Lindgren (7):
-      Merge branch 'fixes-omap3' into fixes
-      soc: ti: omap-prm: Fix boot time errors for rst_map_012 bits 0 and 1
-      ARM: OMAP2+: Fix suspcious RCU usage splats for omap_enter_idle_coupled
-      Merge branch 'cpuidle-fix' into fixes
-      ARM: OMAP2+: Fix booting for am335x after moving to simple-pm-bus
-      drivers: bus: simple-pm-bus: Fix compatibility with simple-bus for auxdata
-      ARM: dts: omap4-droid4: Fix lost keypad slide interrupts for droid4
-
-Zyta Szpak (1):
-      arm64: dts: ls1046a: fix dcfg address range
-
- MAINTAINERS                                        | 12 +++++-----
- arch/arm/boot/dts/lpc32xx.dtsi                     |  3 ---
- arch/arm/boot/dts/omap3-gta04.dtsi                 |  3 +--
- arch/arm/boot/dts/omap4-droid4-xt894.dts           |  5 ++++
- arch/arm/boot/dts/stm32mp15xx-dhcom-drc02.dtsi     | 16 +++++++++----
- arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi   |  4 ++--
- arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi       |  3 ++-
- arch/arm/boot/dts/sun7i-a20-bananapro.dts          |  2 +-
- arch/arm/mach-omap1/board-osk.c                    |  2 ++
- arch/arm/mach-omap2/Kconfig                        | 28 +++++++++++-----------
- arch/arm/mach-omap2/cpuidle44xx.c                  | 16 ++++++-------
- arch/arm/mach-omap2/pdata-quirks.c                 |  1 +
- arch/arm64/boot/dts/amlogic/meson-axg.dtsi         |  2 --
- arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |  4 +---
- arch/arm64/boot/dts/amlogic/meson-gx.dtsi          |  3 ---
- .../arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts |  2 +-
- arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi     |  2 +-
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts         |  4 +++-
- .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      | 14 ++++-------
- arch/arm64/boot/dts/rockchip/px30.dtsi             |  2 +-
- arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts |  4 ++++
- .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |  1 -
- arch/arm64/boot/dts/rockchip/rk3399.dtsi           |  3 +--
- arch/arm64/configs/defconfig                       |  2 +-
- drivers/bus/simple-pm-bus.c                        |  3 ++-
- drivers/soc/sunxi/sunxi_mbus.c                     |  5 ----
- drivers/soc/ti/omap_prm.c                          | 11 +++++++++
- 27 files changed, 84 insertions(+), 73 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ Documentation/devicetree/bindings/arm/xilinx.yaml |   3 +-
+ arch/arm64/boot/dts/xilinx/Makefile               |   1 +
+ arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi    |  22 ++++++++++++
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts |  33 ++++++++++++++++++
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts |  94
+++++++++++++++++++++++++++++++++++++++++++++++++-
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts |  40
++++++++++++++++++++++
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts | 293
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts |  89
++++++++++++++++++++++++++++++++++++++++++++++++
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts |  70
++++++++++++++++++++++++++++++++++++--
+ arch/arm64/boot/dts/xilinx/zynqmp.dtsi            | 128
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 10 files changed, 768 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
