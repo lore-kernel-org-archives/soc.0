@@ -6,56 +6,55 @@ X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 355D6C433E0
-	for <soc@archiver.kernel.org>; Wed,  3 Feb 2021 12:31:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 489D8C433E6
+	for <soc@archiver.kernel.org>; Wed,  3 Feb 2021 12:31:46 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 0AA9D64F4B; Wed,  3 Feb 2021 12:31:40 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B21B64F87;
-	Wed,  3 Feb 2021 12:31:38 +0000 (UTC)
+	id 2004964FA4; Wed,  3 Feb 2021 12:31:46 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8086964F9F;
+	Wed,  3 Feb 2021 12:31:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612355499;
-	bh=oS3ZsFsgy7Rk/fmspwaRx/BuhNweOte4igOFT7mQkIQ=;
+	s=k20201202; t=1612355506;
+	bh=6ADiZNTlHAF2RHz64S8FjGDXiXXKIWA5HGc+MA1Ir0U=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ViontBEoNtYKgCypK6CzFw0MzVmVDV87NT4nneSXE81Owud7dSdhc7hVOup4Elq9l
-	 3JNqi2lY5O47PYIAgVE4ZSl2sRbImtjWNaBr5PZSo/LT8c5m70llFa70cBqGUboZRv
-	 fO4bCuqm8tUQZdqduwR/ubYKPVc58v3JZFsbRdWxtJKMonrhTx56uFfmJ3GUPVFNMk
-	 etfy6DFF3BDZ+K6batDdlhfYsRi6HEl5ab8YErgvns7Y4B3Vb7l0FHiAmRGZduIm9W
-	 2XfE2VNGdvM6qfxA5E8Jz485mVhXjhWfNdkJTexzP/Yu+ofqfJoRFYNjk3zbfTdeKT
-	 +dfjgAR+gnnNQ==
+	b=f5hy/zH2mwbHm8MZiKBc8KjNyfBJ1BXkfogsEImnRyVjJbiJl3RXe2wPAHglpDzJJ
+	 gHuUy4dJTrJWwMbZenSHEei0Eb5PzXpzWjgcGxd8E6uE1rDTyz1I0VYLuYNWGuEAfL
+	 M3d16YB/sYCr3vaPsBfBUZ4n5Ds8QieWy7BgFoXC87/7O0KRq2kv/G+ED2gx0E16Lc
+	 L/Q6G0cZDiXXtkus0Vi9wWcwi0FCITpxk+tDTXHo/BVkF91iIe1j2X49Q3Kq6LnUm4
+	 yBAsoSxXDAT1DQXyt0f3dN5fo484ZJ0uSlGdipBjKY1mITTp6kRJ5qp6KrVr+xbZPT
+	 gvUFHF7g0IwNA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
+	arm@kernel.org,
+	Maxime Ripard <mripard@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	linux-kernel@vger.kernel.org,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH RESEND v2] ARM: dts: lpc32xx: Revert set default clock rate of HCLK PLL
-Date: Wed,  3 Feb 2021 13:31:34 +0100
-Message-Id: <161235548531.2002750.2897549125435385468.b4-ty@arndb.de>
+	Jernej Skrabec <jernej.skrabec@siol.net>,
+	linux-arm-kernel@lists.infradead.org,
+	Chen-Yu Tsai <wens@csie.org>
+Subject: Re: [GIT PULL] Allwinner Fixes for 5.11, Take 2
+Date: Wed,  3 Feb 2021 13:31:35 +0100
+Message-Id: <161235548539.2002750.2693038279702469216.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210203090320.GA3760268@piout.net>
-References: <20210203090320.GA3760268@piout.net>
+In-Reply-To: <f8298059-f9ca-43b4-9e29-35bc0e0c9b15.lettre@localhost>
+References: <f8298059-f9ca-43b4-9e29-35bc0e0c9b15.lettre@localhost>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 3 Feb 2021 10:03:20 +0100, Alexandre Belloni wrote:
-> This reverts commit c17e9377aa81664d94b4f2102559fcf2a01ec8e7.
+On Wed, 3 Feb 2021 11:12:11 +0100, Maxime Ripard wrote:
+> Please pull the following changes for the current release. It supersedes
+> the one you reverted that was missing my Sob.
 > 
-> The lpc32xx clock driver is not able to actually change the PLL rate as
-> this would require reparenting ARM_CLK, DDRAM_CLK, PERIPH_CLK to SYSCLK,
-> then stop the PLL, update the register, restart the PLL and wait for the
-> PLL to lock and finally reparent ARM_CLK, DDRAM_CLK, PERIPH_CLK to HCLK
-> PLL.
+> Thanks!
+> Maxime
+> 
+> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 > 
 > [...]
 
-Applied to arm/fixes, thanks!
+Merged into arm/fixes, thanks!
 
-[1/1] ARM: dts: lpc32xx: Revert set default clock rate of HCLK PLL
-      commit: 5638159f6d93b99ec9743ac7f65563fca3cf413d
+merge commit: 459630a3ebb4110c571f103fbc2d8120be001e39
 
        Arnd
