@@ -1,26 +1,31 @@
-Return-Path: <SRS0=wwgT=HG=linaro.org=bjorn.andersson@kernel.org>
+Return-Path: <linux-arm-msm-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1866C433E0
-	for <soc@archiver.kernel.org>; Thu,  4 Feb 2021 05:20:46 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 785EC64F53; Thu,  4 Feb 2021 05:20:46 +0000 (UTC)
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 36DA964F58
-	for <soc@kernel.org>; Thu,  4 Feb 2021 05:20:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 36DA964F58
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=bjorn.andersson@linaro.org
-Received: by mail-ot1-f48.google.com with SMTP id i20so2264661otl.7
-        for <soc@kernel.org>; Wed, 03 Feb 2021 21:20:46 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF6A3C433E0
+	for <linux-arm-msm@archiver.kernel.org>; Thu,  4 Feb 2021 05:21:38 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id A88C064DFA
+	for <linux-arm-msm@archiver.kernel.org>; Thu,  4 Feb 2021 05:21:38 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S230172AbhBDFV1 (ORCPT
+        <rfc822;linux-arm-msm@archiver.kernel.org>);
+        Thu, 4 Feb 2021 00:21:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229508AbhBDFV0 (ORCPT
+        <rfc822;linux-arm-msm@vger.kernel.org>);
+        Thu, 4 Feb 2021 00:21:26 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08469C061573
+        for <linux-arm-msm@vger.kernel.org>; Wed,  3 Feb 2021 21:20:46 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id f6so2253323ots.9
+        for <linux-arm-msm@vger.kernel.org>; Wed, 03 Feb 2021 21:20:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
@@ -37,14 +42,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=E/8uJA5jNje7Thb0EiPxe74F6CPnpjaarskIjDAF+zA=;
-        b=GH0bto3yHUljU8t/xxVmskVT+Y3hscxh1o77gB5dB8BaqQjCe+1ky3AZTLWx0zue0b
-         g77hDFVYouShw3MKQMltGkSMSiNDMV0fSL3LKNvGyda9Et/XIA9f1DYouilsKyai+D1Z
-         f4tFUHmlZE+rQu9DR7ZZb2T68ww2ZvqqLaHHjGqTKSiGlvoqyfOZ6rVH6WEnYDtH55QO
-         tLoWPADwAdyNtu/GAGVB/6PIS/lfwLr3/J4lpByrtEQsbvzTTrHqH7yIrQHFLpeMt4ew
-         uC2oCkrpOa82dYGx9Kfalah+wYtQrhkmxNRI8Fl8ymMGj+UmK6Irs47pM45g7H6qhJ5r
-         hR9A==
-X-Gm-Message-State: AOAM533hi1fq8RyJh+rQC4Qxn5Jq1rxSoJCCBB5mfcGvEEU2/hngPQl0
-	NGPF2+oCgrpXoFZHXcZGaM3uhg==
+        b=TwmrLk2VXXQOHy90I6ZZIw8mbbt6uN7BtfOHzrPw1/At1iD74E47akEO2fDexLBelf
+         sKemxcGC37CxkNtua7eX2RqCrU+neRkmeAMkvQQKcrRb1K/fbbKG7PP0my+Zs5Wy7jGp
+         CgeR6roXfqnrDVgZTYzSlpMOnVlYoMExvxkOgesfW5w5psotA0KEh6qUsh1vQQ5wSNg8
+         VhV9ed1e6LppIOt3a6venbTa5IjpXefouxH9luNmXEfXG/wMRDxWR6eT3vzsrPfd9B2l
+         QFOaT48QN+3iiXfVpniPLEDfsMjvi0V+3DWYFhQOzkChC8rIWmyrKNmIhMR6y8I2JnL+
+         wjiQ==
+X-Gm-Message-State: AOAM533jWsLwOnYQfIFvDjeogZfoNOU5JSeYiN+hbSBEYyiK2mCsh7sW
+        PpBzch+lIYfyLWFb/1G0/I1hoA==
 X-Google-Smtp-Source: ABdhPJwVI+XpW2363KZ3Fo659qv8EuiOcn3k8u+25f2cWQSrDm+unFsE2zTDhuX25M/dbbets/Q9Kw==
 X-Received: by 2002:a9d:4e8d:: with SMTP id v13mr4755102otk.12.1612416045280;
         Wed, 03 Feb 2021 21:20:45 -0800 (PST)
@@ -52,43 +57,46 @@ Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104
         by smtp.gmail.com with ESMTPSA id a13sm932447otr.49.2021.02.03.21.20.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 03 Feb 2021 21:20:44 -0800 (PST)
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Gustave Monce <gustave.monce@outlook.com>,
-	Danny Lin <danny@kdrag0n.dev>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-	Vincent Knecht <vincent.knecht@mailoo.org>,
-	Douglas Anderson <dianders@chromium.org>,
-	Jonathan Albrieux <jonathan.albrieux@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Akhil P Oommen <akhilpo@codeaurora.org>,
-	Caleb Connolly <caleb@connolly.tech>,
-	Eric Biggers <ebiggers@google.com>,
-	"J . R . Divya Antony" <d.antony.jr@gmail.com>,
-	Matthias Kaehlcke <mka@chromium.org>,
-	Robert Foss <robert.foss@linaro.org>,
-	Steev Klimaszewski <steev@kali.org>,
-	Stephen Boyd <swboyd@chromium.org>
+To:     arm@kernel.org, soc@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Gustave Monce <gustave.monce@outlook.com>,
+        Danny Lin <danny@kdrag0n.dev>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Jonathan Albrieux <jonathan.albrieux@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Akhil P Oommen <akhilpo@codeaurora.org>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Eric Biggers <ebiggers@google.com>,
+        "J . R . Divya Antony" <d.antony.jr@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Stephen Boyd <swboyd@chromium.org>
 Subject: [GIT PULL] Qualcomm ARM64 DT updates for 5.12
-Date: Wed,  3 Feb 2021 23:20:43 -0600
-Message-Id: <20210204052043.388621-1-bjorn.andersson@linaro.org>
+Date:   Wed,  3 Feb 2021 23:20:43 -0600
+Message-ID: <20210204052043.388621-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Precedence: bulk
+List-ID: <linux-arm-msm.vger.kernel.org>
+X-Mailing-List: linux-arm-msm@vger.kernel.org
+Message-ID: <20210204052043.oIhDcJWJXp-MY3h4OrSDN2VxXWKK7xBWApFR5duACDA@z>
 
 The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
