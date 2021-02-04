@@ -2,19 +2,19 @@ Return-Path: <SRS0=IECD=HG=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-22.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC805C433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A50FAC433DB
 	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 20:42:18 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 44A8964F48
+	by mail.kernel.org (Postfix) with ESMTPS id 4153664DDD
 	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 20:42:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 44A8964F48
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4153664DDD
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=marcan.st
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,41 +23,41 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=gm5b97B7apQfO5dytWRw6UblJTexn5VtTKHlu7qDHEk=; b=VkKaIcYJ0nSREN4RVSa0mNsJU
-	EzRNAatVNhlGhsjFA2OjXn5Kb8OPtpnoNelR8sQqV2fyjiwmdoyxXW+Z09Ib0kWjuzM8gpwvP6saz
-	6cSEgOQydaqpwCLsB0CklJCNKimb7QLpQHwM7kJg+elzWoRLfcW9oW5EyyTSu62ZLZg9fIUJKDuWN
-	xTpAI8BJelfAS7OKd/PL9LXKbNQqt2pAiMwgMeAin10/E+1rDpG6XNE/oNwF09ZI6fQT0NIs9Fu6C
-	NM5Bmk9fN/GK6Pa3BzhW+V4Rz8sk9L/uEIzya5t8pN9oa+bdX3SP6NvW3lmVdsa3hmuaiMMV8bLC0
-	4CQVyvrUg==;
+	 bh=4m8dk9rSHjXuYScabqlRURTIfzk6yaSzlHkIqdZX/wY=; b=bJwC9Jg7BPwd4o3KJYY2RJTOc
+	adRiafWJJF9DSx4Sgs/S9q+S8Gkis+qtNKpb4l7vyFr8ohp2h5uIoLrOZUcNrx6GuKpI7V3ehGQru
+	A70dC2t8FAT3/qM+bjpoU9+0U2W7jjQs8+g49AyrL1hi6Vxn16Jc7tYG4DtGhY/r4D0gqkWMy6Jhk
+	Q/9KcwBngm4eeTQ77TBcAlb3rhcOU3q8J/FzKZi4m4yD/miUTLtHHYuOaxUZdXUOduZalxxRLSS7v
+	kjIy5HawT4FkqJ5nFDNPDCEXdlJ81B02FRG55CHBEm+rn3PZ66ldgn8ldHTNp7+EF21beUlWPiZUQ
+	f5uLwkicw==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l7lQM-0007rI-WA; Thu, 04 Feb 2021 20:40:23 +0000
-Received: from marcansoft.com ([2a01:298:fe:f::2] helo=mail.marcansoft.com)
+	id 1l7lQR-0007s7-RE; Thu, 04 Feb 2021 20:40:27 +0000
+Received: from marcansoft.com ([212.63.210.85] helo=mail.marcansoft.com)
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l7lQG-0007pe-SI
- for linux-arm-kernel@lists.infradead.org; Thu, 04 Feb 2021 20:40:17 +0000
+ id 1l7lQL-0007qi-1L
+ for linux-arm-kernel@lists.infradead.org; Thu, 04 Feb 2021 20:40:22 +0000
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
  (Authenticated sender: hector@marcansoft.com)
- by mail.marcansoft.com (Postfix) with ESMTPSA id C471142772;
- Thu,  4 Feb 2021 20:40:10 +0000 (UTC)
+ by mail.marcansoft.com (Postfix) with ESMTPSA id DFF2F427D5;
+ Thu,  4 Feb 2021 20:40:16 +0000 (UTC)
 From: Hector Martin <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
 To: Hector Martin <marcan@marcan.st>,
 	soc@kernel.org
-Subject: [PATCH 01/18] dt-bindings: vendor-prefixes: add AAPL prefix
-Date: Fri,  5 Feb 2021 05:39:34 +0900
-Message-ID: <20210204203951.52105-2-marcan@marcan.st>
+Subject: [PATCH 03/18] dt-bindings: arm: AAPL: Add bindings for Apple ARM
+ platforms
+Date: Fri,  5 Feb 2021 05:39:36 +0900
+Message-Id: <20210204203951.52105-4-marcan@marcan.st>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210204203951.52105-1-marcan@marcan.st>
 References: <20210204203951.52105-1-marcan@marcan.st>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210204_154017_074929_48DD903E 
-X-CRM114-Status: UNSURE (   9.32  )
-X-CRM114-Notice: Please train this message.
+X-CRM114-CacheID: sfid-20210204_154021_291223_28CCDC4C 
+X-CRM114-Status: GOOD (  12.61  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,29 +77,83 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210204203934.mq8CZcMh_Ognw-a9YQiKdT7jfGl4381TswDBlFAMI4c@z>
 
-Amusingly, this wasn't yet documented, even though this vendor prefix
-has been used since time immemorial on PPC.
+This introduces bindings for all three 2020 Apple M1 devices:
+
+* AAPL,j274 - Mac mini (M1, 2020)
+* AAPL,j293 - MacBook Pro (13-inch, M1, 2020)
+* AAPL,j313 - MacBook Air (M1, 2020)
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../devicetree/bindings/arm/AAPL.yaml         | 36 +++++++++++++++++++
+ MAINTAINERS                                   | 10 ++++++
+ 2 files changed, 46 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/AAPL.yaml
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 041ae90b0d8f..d7950c723472 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -25,6 +25,8 @@ patternProperties:
-   # Keep list in alphabetical order.
-   "^70mai,.*":
-     description: 70mai Co., Ltd.
-+  "^AAPL,.*":
-+    description: Apple Inc.
-   "^abb,.*":
-     description: ABB
-   "^abilis,.*":
+diff --git a/Documentation/devicetree/bindings/arm/AAPL.yaml b/Documentation/devicetree/bindings/arm/AAPL.yaml
+new file mode 100644
+index 000000000000..145b184e4a24
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/AAPL.yaml
+@@ -0,0 +1,36 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/AAPL.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Apple ARM Machine Device Tree Bindings
++
++maintainers:
++  - Hector Martin <marcan@marcan.st>
++
++description: |
++  Apple ARM ("Apple Silicon") platforms should contain compatible strings
++  in the following format:
++
++  - AAPL,j274 (board/device ID)
++  - AAPL,m1 (SoC name)
++  - AAPL,arm-platform (used for all Apple ARM devices)
++
++properties:
++  $nodename:
++    const: "/"
++  compatible:
++    oneOf:
++      - description: Apple M1 SoC based platforms
++        items:
++          - enum:
++              - AAPL,j274 # Mac mini (M1, 2020)
++              - AAPL,j293 # MacBook Pro (13-inch, M1, 2020)
++              - AAPL,j313 # MacBook Air (M1, 2020)
++          - const: AAPL,m1
++          - const: AAPL,arm-platform
++
++additionalProperties: true
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d3e847f7f3dc..91a7b33834ac 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1625,6 +1625,16 @@ F:	arch/arm/mach-alpine/
+ F:	arch/arm64/boot/dts/amazon/
+ F:	drivers/*/*alpine*
+ 
++ARM/APPLE MACHINE SUPPORT
++M:	Hector Martin <marcan@marcan.st>
++L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
++S:	Maintained
++W:	https://asahilinux.org
++B:	https://github.com/AsahiLinux/linux/issues
++C:	irc://chat.freenode.net/asahi-dev
++T:	git https://github.com/AsahiLinux/linux.git
++F:	Documentation/devicetree/bindings/arm/AAPL.yaml
++
+ ARM/ARTPEC MACHINE SUPPORT
+ M:	Jesper Nilsson <jesper.nilsson@axis.com>
+ M:	Lars Persson <lars.persson@axis.com>
 -- 
 2.30.0
 
