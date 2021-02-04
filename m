@@ -1,127 +1,133 @@
-Return-Path: <SRS0=IECD=HG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+X-Spam-Status: No, score=-18.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49274C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 16:02:53 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 018E564F4D
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 16:02:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 018E564F4D
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=5BoXLBPK50suouEJb/MkRMSzL7PQOfAdS/o1EY0eVDs=; b=sTTJJTBVuJYRDCSZcYFTWHUybS
-	yAo1GDh0AUV4afExyo7UPskOAx39iWdvNWrCazWhiVJAdX8aNJKNGV1Vu4W7i1yJVUbu+O58yBafD
-	heBR4tCDavp64lQuxNdz51pYtDI+/JP3S1ioycuiPl0McFV879FaK1Lqd+6+4W8gHhWtGNkn4Qyb4
-	03N0S3rtIFV9/3LubFKlPK5uEkFq6KjXY/iyCkfnyhffUPpqcGArwB0L3aP3e2hJ7hSMN24LmpXcy
-	+N2d0/VB+z0k41MI8bqijArRp7s5246d5gXr+jM3CeXjGSfgUFSo08gU5aqeQ9RjOiTWHXpxgEBa1
-	XEu60T3g==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l7h4d-0008Uy-JO; Thu, 04 Feb 2021 16:01:39 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l7h4Z-0008To-5H
- for linux-arm-kernel@lists.infradead.org; Thu, 04 Feb 2021 16:01:35 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3F40E64DD6;
- Thu,  4 Feb 2021 16:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB7D2C433E0
+	for <soc@archiver.kernel.org>; Thu,  4 Feb 2021 16:24:21 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A796564F46; Thu,  4 Feb 2021 16:24:21 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E86A64E3F;
+	Thu,  4 Feb 2021 16:24:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612454494;
- bh=8G+7VE0gcf4JFZkpiuUu1ybU70U+isYPoSIRMW+O3Io=;
- h=From:To:List-Id:Cc:Subject:Date:From;
- b=AxxDK+Qh/TvtH6+p7RY3eKl2Q6vIunpGyqYxp1thSCCTb1/u1TqihAr1e1T5oseA6
- 0eBeBZ6dRyjww7TuQhpCNYhvnzKPj5tiWehSOFgAd+N1tyIoZawQwTeOcT2+pCXKAU
- ztKmVjPK9cqvt1fPelPTuED2WrquMuW3Wi7SPWhkud0rfQxN+tomGqZCH+RmlhWRwA
- XGQ9S5qxb9e6qPd2PUHcpEDGw4CaTYx8ir+H+lBifZyuFW2GJu5bc4NifehlFE113J
- 1fs/7q+WiVRv6ZdU/z83PwOJvqrfhMteUI3jby6Il3oTQdfV/ioHkP/9lsxasA/mRy
- wlmknOda2Co9g==
+	s=k20201202; t=1612455861;
+	bh=wuLYYCwHZMgbt5nb9mtubFyVtmrl2W2eCyuwFcHaNbs=;
+	h=From:To:List-Id:Cc:Subject:Date:From;
+	b=m9wBdgig1UeBzClRQ7pMKJ64pQq2qG9bImmw4EEr2f503Xfvk33cfAY0SybbEJFp6
+	 JXA/qP3TemjfV4XKESPe63nWMAstO+MY90daY5qd+uOf3WY7oIUQDrD/hxE4OxllUi
+	 xDIaS65nnywORZZOAkNA2+I3bLnamqWrayxSbO+TySz+Y08Olnsrt4Mw52kae2uKLR
+	 6B36AsZCVIMWXy03cXLz0bOmIDV4x1HJWW7WImaHg4+oHcFMOlOO+w9B6Y6wbN+JNS
+	 wUEuiI50JJ5/JM5sEJgSM+hs2SLcpkqTYJ2/OqaNJTkUyfc+uOdtzE+R4zihuuVXlO
+	 dgUMjVu5f/xIQ==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Russell King <linux@armlinux.org.uk>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH] ARM: at91: use proper asm syntax in pm_suspend
-Date: Thu,  4 Feb 2021 17:01:20 +0100
-Message-ID: <20210204160129.2249394-1-arnd@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Ben Dooks <ben-linux@fluff.org>,
+	soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Stefan Agner <stefan@agner.ch>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	clang-built-linux@googlegroups.com
+Subject: [PATCH] ARM: s3c: fix fiq for clang IAS
+Date: Thu,  4 Feb 2021 17:23:42 +0100
+Message-Id: <20210204162416.3030114-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210204_110135_307624_46FD082F 
-X-CRM114-Status: GOOD (  12.83  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>,
- linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
- soc@kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210204160120.v7aIWoeOjxP-mLmWTbIUud-2um_b8WipJalDgt-hLfc@z>
+Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Compiling with the clang integrated assembler warns about
-a recently added instruction:
+Building with the clang integrated assembler produces a couple of
+errors for the s3c24xx fiq support:
 
-<instantiation>:14:13: error: unknown token in expression
- ldr tmp1, =#0x00020010UL
-arch/arm/mach-at91/pm_suspend.S:542:2: note: while in macro instantiation
- at91_plla_enable
+arch/arm/mach-s3c/irq-s3c24xx-fiq.S:52:2: error: instruction 'subne' can not set flags, but 's' suffix specified
+ subnes pc, lr, #4 @@ return, still have work to do
+ ^
+arch/arm/mach-s3c/irq-s3c24xx-fiq.S:64:1: error: invalid symbol redefinition
+s3c24xx_spi_fiq_txrx:
+^
+arch/arm/mach-s3c/irq-s3c24xx-fiq.S:79:2: error: instruction 'subne' can not set flags, but 's' suffix specified
+ subnes pc, lr, #4 @@ return, still have work to do
+ ^
+arch/arm/mach-s3c/irq-s3c24xx-fiq.S:104:2: error: instruction 'subne' can not set flags, but 's' suffix specified
+ subnes pc, lr, #4 @@ return, still have work to do
 
-Remove the extra '#' character that is not used for the 'ldr'
-instruction when doing an indirect load of a constant.
+There are apparently two problems: one with extraneous or duplicate
+labels, and one with old-style opcode mnemonics. Stefan Agner has
+previously fixed other problems like this, but missed this particular
+file.
 
-Fixes: 4fd36e458392 ("ARM: at91: pm: add plla disable/enable support for sam9x60")
+Fixes: bec0806cfec6 ("spi_s3c24xx: add FIQ pseudo-DMA support")
+Cc: Stefan Agner <stefan@agner.ch>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-at91/pm_suspend.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/mach-s3c/irq-s3c24xx-fiq.S | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/mach-at91/pm_suspend.S b/arch/arm/mach-at91/pm_suspend.S
-index 909856c8a8c6..0d467cc40129 100644
---- a/arch/arm/mach-at91/pm_suspend.S
-+++ b/arch/arm/mach-at91/pm_suspend.S
-@@ -446,7 +446,7 @@ ENDPROC(at91_backup_mode)
- 	str	tmp1, [pmc, #AT91_PMC_PLL_UPDT]
+diff --git a/arch/arm/mach-s3c/irq-s3c24xx-fiq.S b/arch/arm/mach-s3c/irq-s3c24xx-fiq.S
+index b54cbd012241..5d238d9a798e 100644
+--- a/arch/arm/mach-s3c/irq-s3c24xx-fiq.S
++++ b/arch/arm/mach-s3c/irq-s3c24xx-fiq.S
+@@ -35,7 +35,6 @@
+ 	@ and an offset to the irq acknowledgment word
  
- 	/* step 2. */
--	ldr	tmp1, =#AT91_PMC_PLL_ACR_DEFAULT_PLLA
-+	ldr	tmp1, =AT91_PMC_PLL_ACR_DEFAULT_PLLA
- 	str	tmp1, [pmc, #AT91_PMC_PLL_ACR]
+ ENTRY(s3c24xx_spi_fiq_rx)
+-s3c24xx_spi_fix_rx:
+ 	.word	fiq_rx_end - fiq_rx_start
+ 	.word	fiq_rx_irq_ack - fiq_rx_start
+ fiq_rx_start:
+@@ -49,7 +48,7 @@ fiq_rx_start:
+ 	strb	fiq_rtmp, [ fiq_rspi, # S3C2410_SPTDAT ]
  
- 	/* step 3. */
+ 	subs	fiq_rcount, fiq_rcount, #1
+-	subnes	pc, lr, #4		@@ return, still have work to do
++	subsne	pc, lr, #4		@@ return, still have work to do
+ 
+ 	@@ set IRQ controller so that next op will trigger IRQ
+ 	mov	fiq_rtmp, #0
+@@ -61,7 +60,6 @@ fiq_rx_irq_ack:
+ fiq_rx_end:
+ 
+ ENTRY(s3c24xx_spi_fiq_txrx)
+-s3c24xx_spi_fiq_txrx:
+ 	.word	fiq_txrx_end - fiq_txrx_start
+ 	.word	fiq_txrx_irq_ack - fiq_txrx_start
+ fiq_txrx_start:
+@@ -76,7 +74,7 @@ fiq_txrx_start:
+ 	strb	fiq_rtmp, [ fiq_rspi, # S3C2410_SPTDAT ]
+ 
+ 	subs	fiq_rcount, fiq_rcount, #1
+-	subnes	pc, lr, #4		@@ return, still have work to do
++	subsne	pc, lr, #4		@@ return, still have work to do
+ 
+ 	mov	fiq_rtmp, #0
+ 	str	fiq_rtmp, [ fiq_rirq, # S3C2410_INTMOD  - S3C24XX_VA_IRQ ]
+@@ -88,7 +86,6 @@ fiq_txrx_irq_ack:
+ fiq_txrx_end:
+ 
+ ENTRY(s3c24xx_spi_fiq_tx)
+-s3c24xx_spi_fix_tx:
+ 	.word	fiq_tx_end - fiq_tx_start
+ 	.word	fiq_tx_irq_ack - fiq_tx_start
+ fiq_tx_start:
+@@ -101,7 +98,7 @@ fiq_tx_start:
+ 	strb	fiq_rtmp, [ fiq_rspi, # S3C2410_SPTDAT ]
+ 
+ 	subs	fiq_rcount, fiq_rcount, #1
+-	subnes	pc, lr, #4		@@ return, still have work to do
++	subsne	pc, lr, #4		@@ return, still have work to do
+ 
+ 	mov	fiq_rtmp, #0
+ 	str	fiq_rtmp, [ fiq_rirq, # S3C2410_INTMOD  - S3C24XX_VA_IRQ ]
 -- 
 2.29.2
 
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
