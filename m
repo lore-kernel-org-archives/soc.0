@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F1C5C433E0
-	for <linux-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 20:46:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 842FAC433E6
+	for <linux-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 20:47:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C17164E22
-	for <linux-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 20:46:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B70264F44
+	for <linux-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 20:47:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbhBDUmG (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Thu, 4 Feb 2021 15:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
+        id S230055AbhBDUrH (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 4 Feb 2021 15:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbhBDUlG (ORCPT
+        with ESMTP id S229623AbhBDUlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Feb 2021 15:41:06 -0500
+        Thu, 4 Feb 2021 15:41:50 -0500
 Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE27AC061788
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Feb 2021 12:40:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00066C06178A
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Feb 2021 12:41:07 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id DFF2F427D5;
-        Thu,  4 Feb 2021 20:40:16 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 2266A42856;
+        Thu,  4 Feb 2021 20:40:38 +0000 (UTC)
 From:   Hector Martin <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
 To:     Hector Martin <marcan@marcan.st>, soc@kernel.org
@@ -37,9 +37,9 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         Marc Zyngier <maz@kernel.org>, robh+dt@kernel.org,
         Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, Olof Johansson <olof@lixom.net>
-Subject: [PATCH 03/18] dt-bindings: arm: AAPL: Add bindings for Apple ARM platforms
-Date:   Fri,  5 Feb 2021 05:39:36 +0900
-Message-ID: <20210204203951.52105-4-marcan@marcan.st>
+Subject: [PATCH 10/18] arm64: Introduce FIQ support
+Date:   Fri,  5 Feb 2021 05:39:43 +0900
+Message-ID: <20210204203951.52105-11-marcan@marcan.st>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210204203951.52105-1-marcan@marcan.st>
 References: <20210204203951.52105-1-marcan@marcan.st>
@@ -48,84 +48,173 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20210204203936.VOGrTRL7YsSUCp9ku9V7_Vdv-x4ydb1v9Jrh90km5Nc@z>
+Message-ID: <20210204203943.zunWnJKsfcUAqKYLyDp2LSJ-fPGRWPUhHd8jPiU8jz4@z>
 
-This introduces bindings for all three 2020 Apple M1 devices:
+Apple SoCs (A11 and newer) have some interrupt sources hardwired to the
+FIQ line. Implement support for this by simply treating IRQs and FIQs
+the same way in the interrupt vectors. This is conditional on the
+ARM64_NEEDS_FIQ CPU feature flag, and thus will not affect other
+systems.
 
-* AAPL,j274 - Mac mini (M1, 2020)
-* AAPL,j293 - MacBook Pro (13-inch, M1, 2020)
-* AAPL,j313 - MacBook Air (M1, 2020)
+Root irqchip drivers can discriminate between IRQs and FIQs by checking
+the ISR_EL1 system register.
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- .../devicetree/bindings/arm/AAPL.yaml         | 36 +++++++++++++++++++
- MAINTAINERS                                   | 10 ++++++
- 2 files changed, 46 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/AAPL.yaml
+ arch/arm64/include/asm/assembler.h |  4 ++++
+ arch/arm64/include/asm/daifflags.h |  7 +++++++
+ arch/arm64/include/asm/irqflags.h  | 17 +++++++++++++----
+ arch/arm64/kernel/entry.S          | 27 +++++++++++++++++++++++----
+ 4 files changed, 47 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/AAPL.yaml b/Documentation/devicetree/bindings/arm/AAPL.yaml
-new file mode 100644
-index 000000000000..145b184e4a24
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/AAPL.yaml
-@@ -0,0 +1,36 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/AAPL.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Apple ARM Machine Device Tree Bindings
-+
-+maintainers:
-+  - Hector Martin <marcan@marcan.st>
-+
-+description: |
-+  Apple ARM ("Apple Silicon") platforms should contain compatible strings
-+  in the following format:
-+
-+  - AAPL,j274 (board/device ID)
-+  - AAPL,m1 (SoC name)
-+  - AAPL,arm-platform (used for all Apple ARM devices)
-+
-+properties:
-+  $nodename:
-+    const: "/"
-+  compatible:
-+    oneOf:
-+      - description: Apple M1 SoC based platforms
-+        items:
-+          - enum:
-+              - AAPL,j274 # Mac mini (M1, 2020)
-+              - AAPL,j293 # MacBook Pro (13-inch, M1, 2020)
-+              - AAPL,j313 # MacBook Air (M1, 2020)
-+          - const: AAPL,m1
-+          - const: AAPL,arm-platform
-+
-+additionalProperties: true
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d3e847f7f3dc..91a7b33834ac 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1625,6 +1625,16 @@ F:	arch/arm/mach-alpine/
- F:	arch/arm64/boot/dts/amazon/
- F:	drivers/*/*alpine*
+diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+index bf125c591116..6acfc372dc76 100644
+--- a/arch/arm64/include/asm/assembler.h
++++ b/arch/arm64/include/asm/assembler.h
+@@ -42,7 +42,11 @@
  
-+ARM/APPLE MACHINE SUPPORT
-+M:	Hector Martin <marcan@marcan.st>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Maintained
-+W:	https://asahilinux.org
-+B:	https://github.com/AsahiLinux/linux/issues
-+C:	irc://chat.freenode.net/asahi-dev
-+T:	git https://github.com/AsahiLinux/linux.git
-+F:	Documentation/devicetree/bindings/arm/AAPL.yaml
-+
- ARM/ARTPEC MACHINE SUPPORT
- M:	Jesper Nilsson <jesper.nilsson@axis.com>
- M:	Lars Persson <lars.persson@axis.com>
+ 	/* IRQ is the lowest priority flag, unconditionally unmask the rest. */
+ 	.macro enable_da_f
++alternative_if ARM64_NEEDS_FIQ
++	msr	daifclr, #(8 | 4)
++alternative_else
+ 	msr	daifclr, #(8 | 4 | 1)
++alternative_endif
+ 	.endm
+ 
+ /*
+diff --git a/arch/arm64/include/asm/daifflags.h b/arch/arm64/include/asm/daifflags.h
+index 1c26d7baa67f..228a6039c701 100644
+--- a/arch/arm64/include/asm/daifflags.h
++++ b/arch/arm64/include/asm/daifflags.h
+@@ -112,6 +112,13 @@ static inline void local_daif_restore(unsigned long flags)
+ 		 * So we don't need additional synchronization here.
+ 		 */
+ 		gic_write_pmr(pmr);
++	} else if (system_uses_fiqs()) {
++		/*
++		 * On systems that use FIQs, disable FIQs if IRQs are disabled.
++		 * This can happen if the DAIF_* flags at the top of this file
++		 * are used to set DAIF directly.
++		 */
++		flags |= PSR_F_BIT;
+ 	}
+ 
+ 	write_sysreg(flags, daif);
+diff --git a/arch/arm64/include/asm/irqflags.h b/arch/arm64/include/asm/irqflags.h
+index ff328e5bbb75..689c573c4b47 100644
+--- a/arch/arm64/include/asm/irqflags.h
++++ b/arch/arm64/include/asm/irqflags.h
+@@ -19,8 +19,9 @@
+  * side effects for other flags. Keeping to this order makes it easier for
+  * entry.S to know which exceptions should be unmasked.
+  *
+- * FIQ is never expected, but we mask it when we disable debug exceptions, and
+- * unmask it at all other times.
++ * FIQ is never expected on most platforms, but we mask it when we disable
++ * debug exceptions, and unmask it at all other times. On platforms that
++ * require FIQs, it tracks IRQ masking.
+  */
+ 
+ /*
+@@ -34,8 +35,14 @@ static inline void arch_local_irq_enable(void)
+ 		WARN_ON_ONCE(pmr != GIC_PRIO_IRQON && pmr != GIC_PRIO_IRQOFF);
+ 	}
+ 
+-	asm volatile(ALTERNATIVE(
++	/*
++	 * Yes, ALTERNATIVE() nests properly... only one of these should be
++	 * active on any given platform.
++	 */
++	asm volatile(ALTERNATIVE(ALTERNATIVE(
+ 		"msr	daifclr, #2		// arch_local_irq_enable",
++		"msr	daifclr, #3		// arch_local_irq_enable",
++		ARM64_NEEDS_FIQ),
+ 		__msr_s(SYS_ICC_PMR_EL1, "%0"),
+ 		ARM64_HAS_IRQ_PRIO_MASKING)
+ 		:
+@@ -53,8 +60,10 @@ static inline void arch_local_irq_disable(void)
+ 		WARN_ON_ONCE(pmr != GIC_PRIO_IRQON && pmr != GIC_PRIO_IRQOFF);
+ 	}
+ 
+-	asm volatile(ALTERNATIVE(
++	asm volatile(ALTERNATIVE(ALTERNATIVE(
+ 		"msr	daifset, #2		// arch_local_irq_disable",
++		"msr	daifset, #3		// arch_local_irq_disable",
++		ARM64_NEEDS_FIQ),
+ 		__msr_s(SYS_ICC_PMR_EL1, "%0"),
+ 		ARM64_HAS_IRQ_PRIO_MASKING)
+ 		:
+diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+index c9bae73f2621..81ca04ebe37b 100644
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -60,7 +60,7 @@
+ #define BAD_FIQ		2
+ #define BAD_ERROR	3
+ 
+-	.macro kernel_ventry, el, label, regsize = 64
++	.macro kernel_ventry, el, label, regsize = 64, altlabel = 0, alt = 0
+ 	.align 7
+ #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
+ 	.if	\el == 0
+@@ -87,7 +87,15 @@ alternative_else_nop_endif
+ 	tbnz	x0, #THREAD_SHIFT, 0f
+ 	sub	x0, sp, x0			// x0'' = sp' - x0' = (sp + x0) - sp = x0
+ 	sub	sp, sp, x0			// sp'' = sp' - x0 = (sp + x0) - x0 = sp
++	.if	\altlabel != 0
++	alternative_if \alt
++	b	el\()\el\()_\altlabel
++	alternative_else
+ 	b	el\()\el\()_\label
++	alternative_endif
++	.else
++	b	el\()\el\()_\label
++	.endif
+ 
+ 0:
+ 	/*
+@@ -119,7 +127,15 @@ alternative_else_nop_endif
+ 	sub	sp, sp, x0
+ 	mrs	x0, tpidrro_el0
+ #endif
++	.if	\altlabel != 0
++	alternative_if \alt
++	b	el\()\el\()_\altlabel
++	alternative_else
+ 	b	el\()\el\()_\label
++	alternative_endif
++	.else
++	b	el\()\el\()_\label
++	.endif
+ 	.endm
+ 
+ 	.macro tramp_alias, dst, sym
+@@ -547,18 +563,21 @@ SYM_CODE_START(vectors)
+ 
+ 	kernel_ventry	1, sync				// Synchronous EL1h
+ 	kernel_ventry	1, irq				// IRQ EL1h
+-	kernel_ventry	1, fiq_invalid			// FIQ EL1h
++							// FIQ EL1h
++	kernel_ventry	1, fiq_invalid, 64, irq, ARM64_NEEDS_FIQ
+ 	kernel_ventry	1, error			// Error EL1h
+ 
+ 	kernel_ventry	0, sync				// Synchronous 64-bit EL0
+ 	kernel_ventry	0, irq				// IRQ 64-bit EL0
+-	kernel_ventry	0, fiq_invalid			// FIQ 64-bit EL0
++							// FIQ 64-bit EL0
++	kernel_ventry	0, fiq_invalid, 64, irq, ARM64_NEEDS_FIQ
+ 	kernel_ventry	0, error			// Error 64-bit EL0
+ 
+ #ifdef CONFIG_COMPAT
+ 	kernel_ventry	0, sync_compat, 32		// Synchronous 32-bit EL0
+ 	kernel_ventry	0, irq_compat, 32		// IRQ 32-bit EL0
+-	kernel_ventry	0, fiq_invalid_compat, 32	// FIQ 32-bit EL0
++							// FIQ 32-bit EL0
++	kernel_ventry	0, fiq_invalid_compat, 32, irq_compat, ARM64_NEEDS_FIQ
+ 	kernel_ventry	0, error_compat, 32		// Error 32-bit EL0
+ #else
+ 	kernel_ventry	0, sync_invalid, 32		// Synchronous 32-bit EL0
 -- 
 2.30.0
 
