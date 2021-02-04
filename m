@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-23.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66443C433E0
-	for <soc@archiver.kernel.org>; Thu,  4 Feb 2021 12:02:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F713C433E0
+	for <soc@archiver.kernel.org>; Thu,  4 Feb 2021 12:02:08 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 074D864F65; Thu,  4 Feb 2021 12:02:06 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1D6BC64F5C;
-	Thu,  4 Feb 2021 12:02:03 +0000 (UTC)
+	id 6958D64F6A; Thu,  4 Feb 2021 12:02:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6248764F67;
+	Thu,  4 Feb 2021 12:02:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612440125;
-	bh=TM1KQsbvxtFKjTK7qmaypFlrAbjUrVOdA33g8M9LEz0=;
+	s=k20201202; t=1612440128;
+	bh=0jUdnoVi6n9pnGbYm/hiXbQP487D72ZRXXtR2IXpc38=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lyFGgCACIXJMprsypM04r7qz1nwlLm3G+WsOOMI+ykR4dqqH1hGDKyklD984aprew
-	 qB5dMw9ex+KgeEb3+l1xcl9E/b9K1Pu5OLZFcCreP3calrSlVEcRcwW5UH+tSlRgTY
-	 /kt1innZTuKyhNPKzBw1PW1b+uA5k1+/GyJASQibq01tBzrqjX8Uraxbg7YXmH5WHy
-	 CfztB1+tJMN8np0BcfaeMSp7vUWpYdboVNZX5zGdJSncWNz3QsugFz6vIMd7nb9q2b
-	 2LhLQvghEpqHgJ5aQidad0qyXl0MYKpsIIYjoy19w1ssK/W1+/OcH74NLzNw5TCHGu
-	 BFymJXi7abc1w==
+	b=Q0zweP/HBO5eHKBfR3BLnCG93QkRc5hEuZ+VeWqneTVu3kudZ71VnjeH0GnI4mf8m
+	 LaN0iHtsm2ViJu+hKW8xyHWwQV1ExI0ljYF9tSwNcPnO3fLrMYZCIHXfnfMYMmTp39
+	 B905iW5+YAdhu+XuR8THnOV3mgz7ZEMM58ePTaibxGmIb4Fmpp4bDiGIBJqBWRTHFZ
+	 H2ZjjrlqQ35KuiQyoLd4ltdWvxBMo1QylRBkiDyodhFkhxBrfmj9mUGN05kAygb3XY
+	 4ubJDugizqbZykkSums7lB+HCvz0c2bWnTVWAkMIMXmr6jdRd6h+8D2Fpcigtxs0w7
+	 pE28EUxUH93HA==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -34,9 +34,9 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/6] i.MX SoC update for 5.12
-Date: Thu,  4 Feb 2021 20:01:46 +0800
-Message-Id: <20210204120150.26186-2-shawnguo@kernel.org>
+Subject: [GIT PULL 3/6] i.MX DT bindings update for 5.12
+Date: Thu,  4 Feb 2021 20:01:47 +0800
+Message-Id: <20210204120150.26186-3-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210204120150.26186-1-shawnguo@kernel.org>
 References: <20210204120150.26186-1-shawnguo@kernel.org>
@@ -47,31 +47,58 @@ The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-5.12
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-5.12
 
-for you to fetch changes up to 579c6f925e5ae3a70ec32e936908066707dbfef5:
+for you to fetch changes up to 1447e43c0b735ffc0d48a6aec4f74d6877caffc2:
 
-  ARM: imx: Remove unused IMX_GPIO_NR() macro (2021-01-29 16:47:25 +0800)
-
-----------------------------------------------------------------
-i.MX SoC update for 5.12:
-
-- Drop unused IMX_GPIO_NR() macro.
-- Remove KSZ8081 PHY fixup from i.MX6UL machine code, because it only
-  applies for KSZ8081RNA with 50MHz clock source, but breaks other
-  KSZ8081 PHY configurations.
-- Add a print of CPU type and SOC revision for i.MX6UL during boot.
+  dt-bindings: arm: imx: add imx8mm nitrogen support (2021-01-30 22:25:55 +0800)
 
 ----------------------------------------------------------------
-Fabio Estevam (1):
-      ARM: imx: Remove unused IMX_GPIO_NR() macro
+i.MX DT bindings update for 5.12:
 
-Oleksij Rempel (1):
-      ARM: imx: mach-imx6ul: remove 14x14 EVK specific PHY fixup
+- Various board compatible additions to fsl.yaml.
+- Add vendor prefix for Plymovent and Kverneland Group.
+- Update simple panel bindings to include compatible for EDT and Kyocera
+  panels.
 
-Stefan Riedmueller (1):
-      ARM: mach-imx: imx6ul: Print SOC revision on boot
+----------------------------------------------------------------
+Adam Ford (1):
+      dt-bindings: arm: fsl: Add beacon,imx8mn-beacon-kit
 
- arch/arm/mach-imx/hardware.h    |  4 ----
- arch/arm/mach-imx/mach-imx6ul.c | 25 ++++---------------------
- 2 files changed, 4 insertions(+), 25 deletions(-)
+Adrien Grassein (1):
+      dt-bindings: arm: imx: add imx8mm nitrogen support
+
+Alice Guo (1):
+      dt-bindings: soc: imx8m: add DT Binding doc for soc unique ID
+
+Martin Kepplinger (1):
+      dt-bindings: arm: fsl: Add the librem 5 Evergreen revision
+
+Michael Walle (1):
+      dt-bindings: arm: fsl: add Kontron sl28 variant 1
+
+Oleksij Rempel (11):
+      dt-bindings: display: simple: fix alphabetical order for EDT compatibles
+      dt-bindings: display: simple: add EDT compatibles already supported by the driver
+      dt-bindings: display: simple: Add Kyocera tcg070wvlq panel
+      dt-bindings: vendor-prefixes: Add an entry for Plymovent
+      dt-bindings: arm: fsl: add Plymovent M2M board
+      dt-bindings: arm: fsl: add Plymovent BAS board
+      dt-bindings: arm: fsl: add Protonic MVT board
+      dt-bindings: arm: fsl: add Protonic PRTI6G board
+      dt-bindings: vendor-prefixes: Add an entry for Kverneland Group
+      dt-bindings: arm: fsl: add Kverneland UT1, UT1Q and UI1P boards
+      dt-bindings: arm: fsl: add Kverneland TGO board
+
+Teresa Remmet (1):
+      bindings: arm: fsl: Add PHYTEC i.MX8MP devicetree bindings
+
+Tim Harvey (1):
+      dt-bindings: arm: fsl: Add binding for Gateworks boards with IMX8MM
+
+ Documentation/devicetree/bindings/arm/fsl.yaml     | 23 ++++++
+ .../bindings/display/panel/panel-simple.yaml       | 19 +++--
+ .../devicetree/bindings/soc/imx/imx8m-soc.yaml     | 86 ++++++++++++++++++++++
+ .../devicetree/bindings/vendor-prefixes.yaml       |  4 +
+ 4 files changed, 124 insertions(+), 8 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/imx/imx8m-soc.yaml
