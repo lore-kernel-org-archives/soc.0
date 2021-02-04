@@ -1,26 +1,32 @@
-Return-Path: <SRS0=rUgV=HG=google.com=ndesaulniers@kernel.org>
+Return-Path: <linux-samsung-soc-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52391C433E0
-	for <soc@archiver.kernel.org>; Thu,  4 Feb 2021 18:11:35 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 289E064F45; Thu,  4 Feb 2021 18:11:35 +0000 (UTC)
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DDEAC64EE2
-	for <soc@kernel.org>; Thu,  4 Feb 2021 18:11:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DDEAC64EE2
-Authentication-Results: mail.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=ndesaulniers@google.com
-Received: by mail-pl1-f173.google.com with SMTP id u11so2165813plg.13
-        for <soc@kernel.org>; Thu, 04 Feb 2021 10:11:34 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 661EDC433DB
+	for <linux-samsung-soc@archiver.kernel.org>; Thu,  4 Feb 2021 18:12:38 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 3E14564F65
+	for <linux-samsung-soc@archiver.kernel.org>; Thu,  4 Feb 2021 18:12:38 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S238378AbhBDSMX (ORCPT
+        <rfc822;linux-samsung-soc@archiver.kernel.org>);
+        Thu, 4 Feb 2021 13:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238928AbhBDSMP (ORCPT
+        <rfc822;linux-samsung-soc@vger.kernel.org>);
+        Thu, 4 Feb 2021 13:12:15 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A8CC0613D6
+        for <linux-samsung-soc@vger.kernel.org>; Thu,  4 Feb 2021 10:11:34 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id x9so2193655plb.5
+        for <linux-samsung-soc@vger.kernel.org>; Thu, 04 Feb 2021 10:11:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -37,32 +43,40 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=RtK9mH1gkT4tly0aUjleqbTCqo0H1GWRGkm+wgQLcKQ=;
-        b=dbmT93UmKbGqBnLXmUBGwAo+LsMjw/MMbx/umn0Oxr/ykzVUBdgh8qfnSCtaf2CBEs
-         iQdsQ/oxxApRq1Oxn5X8gfpTLLuJ8TRjAZemWNTWGm8Huy3QzKZNXo1QzD6oTAX/geYw
-         huvNcYzrUGF3GrnEPnpqUOQcIRetGjZi6MtB4VZoJ9LL7ZeP+LkVh7ecSQQL96pEdDKP
-         j7TOcyOs0MDYfjsmPuP+AYwTMzKoaZoEOBMbINikNi3lXnsKiecMCSvT1a08mVu8Thun
-         qQLf6mxZw8noLzh7nX81TB5n85nIkjebu7puFO0N/Jk5iX9T7mzYenlWDv06OUCvetNw
-         4JKQ==
-X-Gm-Message-State: AOAM531+El1u9VewZof0Zdu04gZfbKkQAuv0MYpqqzDkadcMIdjdWFAy
-	obmLt8AZxACBm+0M62pnzLQUTjJdsimMHhGkKEmz9g==
+        b=kXRuvBm1k9IkzUEHUhgHkLNq6F1aYsTPbUPKtNWGd/aTUDeXymrPyOKPPvQPhvPKEr
+         5xvg/Qve5uaNlrHZUKoXS6RuoW94gBucupezGX7vk4lbqXwZMnyAAMji3fAvMQz4J8qJ
+         9uJ1HdoCKbkR97E2j6ImfUjx9Gd5zzoFqUGaHqZKCxMoOk4i+n7vLloLmN5+/MMQJsp/
+         71cUsoaYL9ew+3tWEXj61wS6Jyo4rgG9hQCW4GzSmcPmoKmx77Dx3l5b/Ojif+RMlGdL
+         MnOiJWUejnn/9X/eDguoHtzA6u1eIBzVGCIWEw2keXmDwyPVtOGTcSp35fO7GHTya5E+
+         UD/g==
+X-Gm-Message-State: AOAM531l4P4o7ds39FXtE8aZqUy+UVwNxMnWmvPNldUN+2GxN6E2c5sp
+        MKhzc6kYJMALBvmcSwkrRST7F9hHO/OUphIAlNnhvg==
 X-Google-Smtp-Source: ABdhPJwM9n11EzR6QjrdGwIT7tXe7o6IvZV4XBcsjcTX9FIJNuwD9dfLJji0WYIC63nh1Z206CveXNSVwbNVcyALRBI=
 X-Received: by 2002:a17:90a:8b82:: with SMTP id z2mr190576pjn.25.1612462294295;
  Thu, 04 Feb 2021 10:11:34 -0800 (PST)
 MIME-Version: 1.0
 References: <20210204162416.3030114-1-arnd@kernel.org>
 In-Reply-To: <20210204162416.3030114-1-arnd@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 4 Feb 2021 10:11:23 -0800
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 4 Feb 2021 10:11:23 -0800
 Message-ID: <CAKwvOd=1Cs75KdVU5Fa9W+wYmjo=5fFNBb6m6PnHUp=eoM-H5g@mail.gmail.com>
 Subject: Re: [PATCH] ARM: s3c: fix fiq for clang IAS
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Ben Dooks <ben-linux@fluff.org>, 
-	soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, Stefan Agner <stefan@agner.ch>, 
-	Russell King <linux@armlinux.org.uk>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	linux-samsung-soc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <clang-built-linux@googlegroups.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Ben Dooks <ben-linux@fluff.org>, soc@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Stefan Agner <stefan@agner.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-samsung-soc.vger.kernel.org>
+X-Mailing-List: linux-samsung-soc@vger.kernel.org
+Message-ID: <20210204181123.buDULN0CcK-4hJxkmsmzK7Nr3Zwehc_wv6zg2QbEYIY@z>
 
 On Thu, Feb 4, 2021 at 8:24 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
