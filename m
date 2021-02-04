@@ -2,19 +2,19 @@ Return-Path: <SRS0=IECD=HG=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-22.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D420AC433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 20:43:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 455C1C433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 20:43:23 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7B07064F45
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 20:43:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7B07064F45
+	by mail.kernel.org (Postfix) with ESMTPS id D41E264F44
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 20:43:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D41E264F44
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=marcan.st
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,41 +23,41 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=wvf8cfVCiahhrKjCKiFnZsnlJNfAnN2FeaCZ5fvVboI=; b=NE2Q/knJWZYP9NutRpa6Bclm2
-	OHN/X3xZxtHNvMAI577WeWaCbpFRKBuMm6pR5T/0Hie6YMQ9aJ50AL0csbs/vlb/ezfOJkolTnbsH
-	CLEroG0MMzxu587TKRdnSpiEflrW5jf2CnzQibRPBI1+3MTQpNNsugPfLYrlda1bOujtT6ceG8lQy
-	hEyc4fjChrQ9CV8Lsxq3X4mxMolNPTccQJm1Ne13g3n31HxR1eE2ThFhukY4LuW6WUGV+e/fHw3rl
-	rHbjD0x56ISoKFOknYzaXvWu5hvVTJ93IURlVKg3Jv3h01Bl+bq8yHkMJgZ5nFYDFH4hX02m11hF8
-	cDQxAFR/w==;
+	 bh=c0glWh1hs/ZWJPuEdl5hAwI7NDk4GVi4bMNvDn41ZmE=; b=V637Y1V0qVYTxsJwIPowfuHHe
+	zZYA8ctX202bteZF9x4NW1uD6NAkLdxr4XyOc7cQHSogVXcTfrJcqSRpvCNpcKvUbh3xZszX0HPxp
+	7QPkxgg32ec0yYNf5pDEJikyTZ0P8KOasFfIo+1mSKMaoRqZR/NzHIw65aEXa9G1n63nwyUOVOUh+
+	iBSa4g2ZdA3aNpyIO67esQ7a4TD62XPpHSz0NR05UZh4SmRieoLGOl22M0IMNvXjMZ4Vq0EvfMEMW
+	TBDVWfPTfr+9vbX7oBNfHT47Y8WUbvM34JcZqy35TPOEAS2pJvjosAnYrgjXo+DgtdgSh3AeAsm4v
+	uRQiGGVcQ==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l7lRS-0008Gr-VE; Thu, 04 Feb 2021 20:41:32 +0000
+	id 1l7lRc-0008Lr-Kz; Thu, 04 Feb 2021 20:41:42 +0000
 Received: from marcansoft.com ([212.63.210.85] helo=mail.marcansoft.com)
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l7lQq-0007zm-Rv
- for linux-arm-kernel@lists.infradead.org; Thu, 04 Feb 2021 20:40:54 +0000
+ id 1l7lQu-00081L-6b
+ for linux-arm-kernel@lists.infradead.org; Thu, 04 Feb 2021 20:40:57 +0000
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
  (Authenticated sender: hector@marcansoft.com)
- by mail.marcansoft.com (Postfix) with ESMTPSA id E83B34285D;
- Thu,  4 Feb 2021 20:40:48 +0000 (UTC)
+ by mail.marcansoft.com (Postfix) with ESMTPSA id 48E7442860;
+ Thu,  4 Feb 2021 20:40:52 +0000 (UTC)
 From: Hector Martin <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
 To: Hector Martin <marcan@marcan.st>,
 	soc@kernel.org
-Subject: [PATCH 13/18] arm64: ioremap: use nGnRnE mappings on platforms that
- require it
-Date: Fri,  5 Feb 2021 05:39:46 +0900
-Message-Id: <20210204203951.52105-14-marcan@marcan.st>
+Subject: [PATCH 14/18] dt-bindings: interrupt-controller: Add DT bindings for
+ apple-aic
+Date: Fri,  5 Feb 2021 05:39:47 +0900
+Message-Id: <20210204203951.52105-15-marcan@marcan.st>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210204203951.52105-1-marcan@marcan.st>
 References: <20210204203951.52105-1-marcan@marcan.st>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210204_154053_081157_06F428FA 
-X-CRM114-Status: GOOD (  19.42  )
+X-CRM114-CacheID: sfid-20210204_154056_532589_2903A5CB 
+X-CRM114-Status: GOOD (  15.70  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,110 +78,145 @@ Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 
-This follows from the fixmap patch, but relates to the general case.
-This is a hack, and incomplete. Read on for discussion.
-
-The problem: on Apple ARM platforms, SoC MMIO needs to use nGnRnE
-mappings: writes using nGnRE are blackholed. This seems to be by design,
-and there doesn't seem to be any fabric configuration or other bit we
-can flip to make the problem go away.
-
-As an additional confounding factor, reportedly PCIe MMIO BAR mappings
-conversely *do* need to use nGnRE to work properly. So we can't even get
-away with a single ioremap setting, but need to discriminate based on
-what bus the device is in. Since these devices have Thunderbolt, all PCI
-devices in the tree are potentially in scope. Ugh.
-
-Ideas:
-
-(1) Set up some devicetree property to default to nGnRnE at the platform
-    level, and then make PCI drivers use nGnRE.
-
-    This will require changing the PCI code to make pci_ioremap_bar do
-    something other than a plain ioremap().
-
-    Unfortunately, of the ~630 PCI drivers in the tree, only ~90 use
-    pci_ioremap_bar(). This would require a tree-wide cleanup to
-    introduce something akin to pci_ioremap(), and make all PCI
-    drivers use it instead of naked ioremap().
-
-    Currently there are three ioremap variants:
-
-    ioremap()
-    ioremap_wc()
-    ioremap_uc() (not normally used on arm64)
-
-    None of these really capture the nGnRE vs nGnRnE distinction. If
-    a new variant is introduced in common code, we'd have to provide
-    a default implementation that falls back to regular ioremap() on
-    other arches. Something like ioremap() vs. ioremap_np() (nonposted)?
-
-(2) The converse of (1): keep the nGnRE default, but introduce special
-    casing to the OF binding code to use nGnRnE when instructed to do so
-    on these platforms. This means of_iomap() needs changing.
-
-    The advantage of this approach is that the set of possible non-PCI
-    drivers that are useful on these SoCs is bounded, so not all drivers
-    that don't go through that path need to be fixed.
-
-    Additionally, this could take advantage of the OF address
-    translation stuff to be smarter about deciding to use nGnRnE, e.g.
-    doing it based on a property of the parent bus node.
-
-    Of note, some devices (like samsung_tty) go through the platform
-    device framework, which eventually goes into devm code. So
-    of_address_to_resource would need to set some flag on the struct
-    resource, that can then be used by both of_iomap() and
-    devm_ioremap_resource() and friends to eventually call the right
-    ioremap variant.
-
-    The ioremap considerations from (1) apply here too.
-
-(3) Do it at a lower level, in ioremap() itself. This requires that
-    ioremap() somehow discriminates based on address range to pick what
-    kind of mapping to make.
-
-    Declaring these address ranges would be an issue. Options:
-
-    a) An out of band list in a DT node, a la /reserved-memory
-
-    b) Something based on the existing DT hierarchy, where we can scan
-       bus ranges and locate buses with a property that says "nGnRnE" or
-       "nGnRE" and dynamically build the list based on that.
-
-    The advantage of this option is that it doesn't touch non-arch code.
-    The disadvantage is that it adds a complete new bespoke mechanism to
-    the DT, and that it does not let device drivers actually select the
-    IO mode, which might be desirable in the future anyway for some
-    devices.
-
-All discussion and additional ideas welcome.
+AIC is the Apple Interrupt Controller found on Apple ARM SoCs, such as
+the M1.
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- arch/arm64/include/asm/io.h | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ .../interrupt-controller/AAPL,aic.yaml        | 88 +++++++++++++++++++
+ MAINTAINERS                                   |  2 +
+ .../interrupt-controller/apple-aic.h          | 14 +++
+ 3 files changed, 104 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/AAPL,aic.yaml
+ create mode 100644 include/dt-bindings/interrupt-controller/apple-aic.h
 
-diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-index 5ea8656a2030..f2609a4f5019 100644
---- a/arch/arm64/include/asm/io.h
-+++ b/arch/arm64/include/asm/io.h
-@@ -167,7 +167,14 @@ extern void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot
- extern void iounmap(volatile void __iomem *addr);
- extern void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size);
- 
--#define ioremap(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRE))
-+/*
-+ * Some platforms require nGnRnE for MMIO.
-+ */
-+extern bool arm64_use_ne_io;
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/AAPL,aic.yaml b/Documentation/devicetree/bindings/interrupt-controller/AAPL,aic.yaml
+new file mode 100644
+index 000000000000..7e119614275a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/AAPL,aic.yaml
+@@ -0,0 +1,88 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/AAPL,aic.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#define ioremap(addr, size)		__ioremap((addr), (size), \
-+						  arm64_use_ne_io ? __pgprot(PROT_DEVICE_nGnRnE) \
-+								  : __pgprot(PROT_DEVICE_nGnRE))
- #define ioremap_wc(addr, size)		__ioremap((addr), (size), __pgprot(PROT_NORMAL_NC))
++title: Apple Interrupt Controller
++
++maintainers:
++  - Hector Martin <marcan@marcan.st>
++
++description: |
++  The Apple Interrupt Controller is a simple interrupt controller present on
++  Apple ARM SoC platforms, including various iPhone and iPad devices and the
++  "Apple Silicon" M1 Macs.
++
++  It provides the following features:
++
++  - Level-triggered hardware IRQs wired to SoC blocks
++    - Single mask bit per IRQ
++    - Per-IRQ affinity setting
++    - Automatic masking on event delivery (auto-ack)
++    - Software triggering (ORed with hw line)
++  - 2 per-CPU IPIs (meant as "self" and "other", but they are interchangeable
++    if not symmetric)
++  - Automatic prioritization (single event/ack register per CPU, lower IRQs =
++    higher priority)
++  - Automatic masking on ack
++  - Default "this CPU" register view and explicit per-CPU views
++
++allOf:
++  - $ref: /schemas/interrupt-controller.yaml#
++
++properties:
++  compatible:
++    contains:
++      enum:
++        - AAPL,aic
++        - AAPL,m1-aic
++
++  interrupt-controller: true
++
++  '#interrupt-cells':
++    const: 3
++    description: |
++      The 1st cell contains the interrupt type:
++        - 0: Hardware IRQ
++        - 1: FIQ
++        - 2: IPI
++
++      The 2nd cell contains the interrupt number.
++        - HW IRQs: interrupt number
++        - FIQs:
++          - 0: physical timer
++          - 1: virtual timer
++        - IPIs:
++          - 0: normal/"other" IPI (used interanlly for virtual IPIs)
++          - 1: self IPI (normally unused)
++
++      The 3rd cell contains the interrupt flags. This is normally
++      IRQ_TYPE_LEVEL_HIGH (4).
++
++  reg:
++    description: |
++      Specifies base physical address and size of the AIC registers.
++    maxItems: 1
++
++required:
++  - compatible
++  - '#interrupt-cells'
++  - interrupt-controller
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        aic: interrupt-controller@23b100000 {
++            compatible = "AAPL,m1-aic", "AAPL,aic";
++            #interrupt-cells = <3>;
++            interrupt-controller;
++            reg = <0x2 0x3b100000 0x0 0x8000>;
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 91a7b33834ac..f3d4661731c8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1634,6 +1634,8 @@ B:	https://github.com/AsahiLinux/linux/issues
+ C:	irc://chat.freenode.net/asahi-dev
+ T:	git https://github.com/AsahiLinux/linux.git
+ F:	Documentation/devicetree/bindings/arm/AAPL.yaml
++F:	Documentation/devicetree/bindings/interrupt-controller/AAPL,aic.yaml
++F:	include/dt-bindings/interrupt-controller/apple-aic.h
  
- /*
+ ARM/ARTPEC MACHINE SUPPORT
+ M:	Jesper Nilsson <jesper.nilsson@axis.com>
+diff --git a/include/dt-bindings/interrupt-controller/apple-aic.h b/include/dt-bindings/interrupt-controller/apple-aic.h
+new file mode 100644
+index 000000000000..f54dc0cd6e9a
+--- /dev/null
++++ b/include/dt-bindings/interrupt-controller/apple-aic.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
++#ifndef _DT_BINDINGS_INTERRUPT_CONTROLLER_APPLE_AIC_H
++#define _DT_BINDINGS_INTERRUPT_CONTROLLER_APPLE_AIC_H
++
++#include <dt-bindings/interrupt-controller/irq.h>
++
++#define AIC_IRQ 0
++#define AIC_FIQ 1
++#define AIC_IPI 2
++
++#define AIC_TMR_PHYS 0
++#define AIC_TMR_VIRT 1
++
++#endif
 -- 
 2.30.0
 
