@@ -1,48 +1,63 @@
-Return-Path: <SRS0=0Yz+=HG=intel.com=lkp@kernel.org>
+Return-Path: <SRS0=IECD=HG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66569C433E0
-	for <soc@archiver.kernel.org>; Thu,  4 Feb 2021 23:56:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 256EF64FB3; Thu,  4 Feb 2021 23:56:05 +0000 (UTC)
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C5AFC433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 23:57:29 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 85B9B64FB0;
-	Thu,  4 Feb 2021 23:56:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 85B9B64FB0
+	by mail.kernel.org (Postfix) with ESMTPS id E639164FA4
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 23:57:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E639164FA4
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=intel.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=lkp@intel.com
-IronPort-SDR: a5RjgyjQlz1ekHqdVg3FqQ6VtATLnHyyd2tAvaK/x+DuPI7yiTed9MC2abZE91jcuatp+85WRz
- lfFVTkq6jJKQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="160509007"
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Cc:List-Subscribe:
+	List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:In-Reply-To:
+	Content-Type:MIME-Version:References:Message-ID:Subject:To:From:Date:Reply-To
+	:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=w4rvh3qsDRpXfAyYhsbIT8iOF9Fp8o/DYSn7UJneyxs=; b=DwziFt3YA0/wz0ue+znMnn+is
+	pud/r1bAh3bn4+YVfxal8pcoJnmaYZKCZ/YBJvgJeRy00aS0mHTs34sg+Bjjj2L4ByFvlOsrvIMsR
+	UY7Gfu9fKfkq3+IsEkM/14OEdHmCTHaTYKcl9LOGC4bJHp4H5S3nmRr2zQgNRg4TvcINGBcgGyAa2
+	jUCMlfj6uvstipTrFffkYvGbSBHK9g8FVUnPRtbtIxEQzUK6H3NuKeyY/ahFpLO3hG6rMfrEwoRe+
+	xJPfVJF2o39Us37fD28aeLIzGuJ+XQajbf8UKeCtCpK3BM4g+7+VTlLR2gEet2AKjBRhoHAi/VULx
+	+Ium8zu8w==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l7oTr-0006aI-Lw; Thu, 04 Feb 2021 23:56:11 +0000
+Received: from mga01.intel.com ([192.55.52.88])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l7oTo-0006Zp-0M
+ for linux-arm-kernel@lists.infradead.org; Thu, 04 Feb 2021 23:56:09 +0000
+IronPort-SDR: rb6gU8d4x4YrwlAprgdlnlu1OM3xFQql/hjHpz7biSri6B6NL/qGWxIU2gzkBtHM54No+MifW4
+ so2Myn0NQALw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="200346648"
 X-IronPort-AV: E=Sophos;i="5.81,153,1610438400"; 
-   d="gz'50?scan'50,208,50";a="160509007"
+ d="gz'50?scan'50,208,50";a="200346648"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 15:56:03 -0800
+ by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 04 Feb 2021 15:56:03 -0800
 IronPort-SDR: 1TcZJqTb5Ja8uFesOD+V01rgS0iVNJP/qD302bIIFpGCUDQlz3zUAleZj5rUrDcqW0nLfyaQX0
  hjpHAkmwq8zQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,153,1610438400"; 
-   d="gz'50?scan'50,208,50";a="357378127"
+ d="gz'50?scan'50,208,50";a="357378127"
 Received: from lkp-server02.sh.intel.com (HELO 8b832f01bb9c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 04 Feb 2021 15:55:59 -0800
+ by orsmga003.jf.intel.com with ESMTP; 04 Feb 2021 15:55:59 -0800
 Received: from kbuild by 8b832f01bb9c with local (Exim 4.92)
-	(envelope-from <lkp@intel.com>)
-	id 1l7oTf-0001Iz-BY; Thu, 04 Feb 2021 23:55:59 +0000
+ (envelope-from <lkp@intel.com>)
+ id 1l7oTf-0001Iz-BY; Thu, 04 Feb 2021 23:55:59 +0000
 Date: Fri, 5 Feb 2021 07:55:17 +0800
 From: kernel test robot <lkp@intel.com>
 List-Id: <soc.lore.kernel.org>
 To: Hector Martin <marcan@marcan.st>, soc@kernel.org
-Cc: kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
-	Marc Zyngier <maz@kernel.org>, robh+dt@kernel.org,
-	Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, Olof Johansson <olof@lixom.net>
 Subject: Re: [PATCH 05/18] tty: serial: samsung_tty: add support for Apple
  UARTs
 Message-ID: <202102050712.kj9NwIa3-lkp@intel.com>
@@ -52,6 +67,27 @@ Content-Type: multipart/mixed; boundary="u3/rZRmxL6MmkK24"
 Content-Disposition: inline
 In-Reply-To: <20210204203951.52105-6-marcan@marcan.st>
 User-Agent: Mutt/1.10.1 (2018-07-13)
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210204_185608_425235_701AE1F5 
+X-CRM114-Status: GOOD (  21.06  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: Arnd Bergmann <arnd@kernel.org>, kbuild-all@lists.01.org,
+ devicetree@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+ linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+ Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210204235517.FAZhqac40azRBVqRA8R70tJGsRz3ZlUbm9vxGM2caK0@z>
 
 
 --u3/rZRmxL6MmkK24
@@ -1129,4 +1165,16 @@ gX18ObDJYew5oztT8H3KS8t6ctC3gI12oNsohiYfLca2uWKB9jThAAqO/XzvbsXa1nGZgsg6
 MJE6luvAePhHsGY7quAMbMgKvSXTfGDHwF0ZAFM4eDaUtRpDdttKhhFUkAJUfzMRFqOUVR8M
 XgxeBAP9Gvr/AbDSN5HdqAMA
 
+--u3/rZRmxL6MmkK24
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
 --u3/rZRmxL6MmkK24--
+
