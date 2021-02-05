@@ -1,105 +1,69 @@
-Return-Path: <SRS0=IECD=HG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=aZLS=HH=intel.com=lkp@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C5AFC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 23:57:29 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5BC6C433DB
+	for <soc@archiver.kernel.org>; Fri,  5 Feb 2021 02:20:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 955C764FB9; Fri,  5 Feb 2021 02:20:16 +0000 (UTC)
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E639164FA4
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Feb 2021 23:57:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E639164FA4
+	by mail.kernel.org (Postfix) with ESMTPS id F192564FB4;
+	Fri,  5 Feb 2021 02:20:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F192564FB4
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=intel.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Cc:List-Subscribe:
-	List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:In-Reply-To:
-	Content-Type:MIME-Version:References:Message-ID:Subject:To:From:Date:Reply-To
-	:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=w4rvh3qsDRpXfAyYhsbIT8iOF9Fp8o/DYSn7UJneyxs=; b=DwziFt3YA0/wz0ue+znMnn+is
-	pud/r1bAh3bn4+YVfxal8pcoJnmaYZKCZ/YBJvgJeRy00aS0mHTs34sg+Bjjj2L4ByFvlOsrvIMsR
-	UY7Gfu9fKfkq3+IsEkM/14OEdHmCTHaTYKcl9LOGC4bJHp4H5S3nmRr2zQgNRg4TvcINGBcgGyAa2
-	jUCMlfj6uvstipTrFffkYvGbSBHK9g8FVUnPRtbtIxEQzUK6H3NuKeyY/ahFpLO3hG6rMfrEwoRe+
-	xJPfVJF2o39Us37fD28aeLIzGuJ+XQajbf8UKeCtCpK3BM4g+7+VTlLR2gEet2AKjBRhoHAi/VULx
-	+Ium8zu8w==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l7oTr-0006aI-Lw; Thu, 04 Feb 2021 23:56:11 +0000
-Received: from mga01.intel.com ([192.55.52.88])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l7oTo-0006Zp-0M
- for linux-arm-kernel@lists.infradead.org; Thu, 04 Feb 2021 23:56:09 +0000
-IronPort-SDR: rb6gU8d4x4YrwlAprgdlnlu1OM3xFQql/hjHpz7biSri6B6NL/qGWxIU2gzkBtHM54No+MifW4
- so2Myn0NQALw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="200346648"
-X-IronPort-AV: E=Sophos;i="5.81,153,1610438400"; 
- d="gz'50?scan'50,208,50";a="200346648"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
- by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 04 Feb 2021 15:56:03 -0800
-IronPort-SDR: 1TcZJqTb5Ja8uFesOD+V01rgS0iVNJP/qD302bIIFpGCUDQlz3zUAleZj5rUrDcqW0nLfyaQX0
- hjpHAkmwq8zQ==
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=lkp@intel.com
+IronPort-SDR: HkcK79Rvwij4QZU3wSFi+yTGZVzqe+3AqqN/zkov4EDi/EIoJggE2qNGCUq7JL31U3fpsgImKs
+ e5DS9Yr9fvmA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="266195467"
+X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
+   d="gz'50?scan'50,208,50";a="266195467"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 18:20:15 -0800
+IronPort-SDR: b1wIeq3GMU9g+Lc3WGFWQthXyEez8c4EL9BMGuGmYdFp/JHrEUw/ZD4hamh4kxhtNq+He5oWQO
+ OSPYE+V8x4sg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,153,1610438400"; 
- d="gz'50?scan'50,208,50";a="357378127"
+X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
+   d="gz'50?scan'50,208,50";a="397292457"
 Received: from lkp-server02.sh.intel.com (HELO 8b832f01bb9c) ([10.239.97.151])
- by orsmga003.jf.intel.com with ESMTP; 04 Feb 2021 15:55:59 -0800
+  by orsmga007.jf.intel.com with ESMTP; 04 Feb 2021 18:20:11 -0800
 Received: from kbuild by 8b832f01bb9c with local (Exim 4.92)
- (envelope-from <lkp@intel.com>)
- id 1l7oTf-0001Iz-BY; Thu, 04 Feb 2021 23:55:59 +0000
-Date: Fri, 5 Feb 2021 07:55:17 +0800
+	(envelope-from <lkp@intel.com>)
+	id 1l7qjC-0001Ot-UT; Fri, 05 Feb 2021 02:20:10 +0000
+Date: Fri, 5 Feb 2021 10:19:58 +0800
 From: kernel test robot <lkp@intel.com>
 List-Id: <soc.lore.kernel.org>
 To: Hector Martin <marcan@marcan.st>, soc@kernel.org
+Cc: kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
+	Marc Zyngier <maz@kernel.org>, robh+dt@kernel.org,
+	Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, Olof Johansson <olof@lixom.net>
 Subject: Re: [PATCH 05/18] tty: serial: samsung_tty: add support for Apple
  UARTs
-Message-ID: <202102050712.kj9NwIa3-lkp@intel.com>
+Message-ID: <202102051010.anaAYEHm-lkp@intel.com>
 References: <20210204203951.52105-6-marcan@marcan.st>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="u3/rZRmxL6MmkK24"
+Content-Type: multipart/mixed; boundary="J/dobhs11T7y2rNN"
 Content-Disposition: inline
 In-Reply-To: <20210204203951.52105-6-marcan@marcan.st>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210204_185608_425235_701AE1F5 
-X-CRM114-Status: GOOD (  21.06  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Arnd Bergmann <arnd@kernel.org>, kbuild-all@lists.01.org,
- devicetree@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
- linux-kernel@vger.kernel.org, robh+dt@kernel.org,
- Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210204235517.FAZhqac40azRBVqRA8R70tJGsRz3ZlUbm9vxGM2caK0@z>
 
 
---u3/rZRmxL6MmkK24
+--J/dobhs11T7y2rNN
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hi Hector,
 
-I love your patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on robh/for-next linus/master v5.11-rc6 next-20210125]
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on robh/for-next linus/master v5.11-rc6 next-20210125]
 [cannot apply to tip/irq/core]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
@@ -122,9 +86,9 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/tty/serial/samsung_tty.c:60: warning: "NO_IRQ" redefined
+   drivers/tty/serial/samsung_tty.c:60: warning: "NO_IRQ" redefined
       60 | #define NO_IRQ -1
          | 
    In file included from arch/arm/include/asm/hardirq.h:5,
@@ -136,7 +100,7 @@ All warnings (new ones prefixed by >>):
       22 | #define NO_IRQ ((unsigned int)(-1))
          | 
    drivers/tty/serial/samsung_tty.c: In function 's3c24xx_serial_resume_noirq':
-   drivers/tty/serial/samsung_tty.c:2309:4: error: a label can only be part of a statement and a declaration is not a statement
+>> drivers/tty/serial/samsung_tty.c:2309:4: error: a label can only be part of a statement and a declaration is not a statement
     2309 |    unsigned int ucon;
          |    ^~~~~~~~
    drivers/tty/serial/samsung_tty.c:2334:4: error: a label can only be part of a statement and a declaration is not a statement
@@ -144,23 +108,74 @@ All warnings (new ones prefixed by >>):
          |    ^~~~~~~~
 
 
-vim +/NO_IRQ +60 drivers/tty/serial/samsung_tty.c
+vim +2309 drivers/tty/serial/samsung_tty.c
 
-    58	
-    59	/* IRQ number used when the handler is called in non-IRQ context */
-  > 60	#define NO_IRQ -1
-    61	
+  2299	
+  2300	static int s3c24xx_serial_resume_noirq(struct device *dev)
+  2301	{
+  2302		struct uart_port *port = s3c24xx_dev_to_port(dev);
+  2303		struct s3c24xx_uart_port *ourport = to_ourport(port);
+  2304	
+  2305		if (port) {
+  2306			/* restore IRQ mask */
+  2307			switch (s3c24xx_irq_type(port)) {
+  2308			case IRQ_APPLE:
+> 2309				unsigned int ucon;
+  2310	
+  2311				clk_prepare_enable(ourport->clk);
+  2312				if (!IS_ERR(ourport->baudclk))
+  2313					clk_prepare_enable(ourport->baudclk);
+  2314	
+  2315				ucon = rd_regl(port, S3C2410_UCON);
+  2316	
+  2317				ucon &= ~(APPLE_UCON_TXTHRESH_ENA_MSK |
+  2318					APPLE_UCON_RXTHRESH_ENA_MSK |
+  2319					APPLE_UCON_RXTO_ENA_MSK);
+  2320	
+  2321				if (ourport->tx_enabled)
+  2322					ucon |= APPLE_UCON_TXTHRESH_ENA_MSK;
+  2323				if (ourport->rx_enabled)
+  2324					ucon |= APPLE_UCON_RXTHRESH_ENA_MSK |
+  2325						APPLE_UCON_RXTO_ENA_MSK;
+  2326	
+  2327				wr_regl(port, S3C2410_UCON, ucon);
+  2328	
+  2329				if (!IS_ERR(ourport->baudclk))
+  2330					clk_disable_unprepare(ourport->baudclk);
+  2331				clk_disable_unprepare(ourport->clk);
+  2332				break;
+  2333			case IRQ_S3C6400:
+  2334				unsigned int uintm = 0xf;
+  2335	
+  2336				if (ourport->tx_enabled)
+  2337					uintm &= ~S3C64XX_UINTM_TXD_MSK;
+  2338				if (ourport->rx_enabled)
+  2339					uintm &= ~S3C64XX_UINTM_RXD_MSK;
+  2340				clk_prepare_enable(ourport->clk);
+  2341				if (!IS_ERR(ourport->baudclk))
+  2342					clk_prepare_enable(ourport->baudclk);
+  2343				wr_regl(port, S3C64XX_UINTM, uintm);
+  2344				if (!IS_ERR(ourport->baudclk))
+  2345					clk_disable_unprepare(ourport->baudclk);
+  2346				clk_disable_unprepare(ourport->clk);
+  2347				break;
+  2348			}
+  2349		}
+  2350	
+  2351		return 0;
+  2352	}
+  2353	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---u3/rZRmxL6MmkK24
+--J/dobhs11T7y2rNN
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICIGDHGAAAy5jb25maWcAlFxbc+M2sn7Pr2AlL8lDYom62XXKDxAJSlgRJAcAJdkvKMWj
+H4sICJOZHGAAAy5jb25maWcAlFxbc+M2sn7Pr2AlL8lDYom62XXKDxAJSlgRJAcAJdkvKMWj
 mVWtL3NkOTvz708DvAEgaM/Z2qqMuhu3RqPxdaPp3375LUBvl5enw+X0cHh8/BF8PT4fz4fL
 8XPw5fR4/J8gzoMsFwGOifgLhNPT89v3q8P5KZj9NR7/Nfrz/DANNsfz8/ExiF6ev5y+vkHr
 08vzL7/9EuVZQlYyiuQWM07yTAq8F7e/Qus/H1U/f359fjse/j79+fXhIfh9FUV/BDd/Tf4a
@@ -1165,16 +1180,4 @@ gX18ObDJYew5oztT8H3KS8t6ctC3gI12oNsohiYfLca2uWKB9jThAAqO/XzvbsXa1nGZgsg6
 MJE6luvAePhHsGY7quAMbMgKvSXTfGDHwF0ZAFM4eDaUtRpDdttKhhFUkAJUfzMRFqOUVR8M
 XgxeBAP9Gvr/AbDSN5HdqAMA
 
---u3/rZRmxL6MmkK24
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
---u3/rZRmxL6MmkK24--
-
+--J/dobhs11T7y2rNN--
