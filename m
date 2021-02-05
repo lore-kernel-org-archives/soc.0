@@ -1,101 +1,75 @@
-Return-Path: <SRS0=eMXW=HH=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EBD8C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  5 Feb 2021 11:36:43 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2940164DB2
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  5 Feb 2021 11:36:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2940164DB2
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=marcan.st
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:
-	Content-Transfer-Encoding:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:Subject:
-	From:References:To:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=s1V3UoWEtAoS1IEsawDdrG0iRurR8FcNT/1IEhRqEwA=; b=XlIwnYieR3QEsjULOHWJzlyyw
-	xo8HtQgU5XAptwGhImf+TNaAvicnOY6priGjNZ+fB4MqZw8HGg25/iBZdTZvy9J5z/BRuCPWiB2SW
-	ScA3yvlzGNmXRhyuRepfYk6ebsVpykv5eY0smMhetThrF1tYezFD4nLMwoFsMmxugZJ21rPkyk/zE
-	NtFm0/JMzgmmqmzawTZVFC353ZjgX08EgxmGWPemmEZ9sXt8zL4R2R7D6vRIK7rzYmuJeZd4HOXyi
-	EqG2uJU1XChEMybGwF7Qcc8cr6TKjBuIWVl81UU9eSH96Q0fwHxFpGIRY8ae+YDGMtvaRyGQG4P3s
-	HiliB68Yg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l7zOU-0007DB-2X; Fri, 05 Feb 2021 11:35:22 +0000
-Received: from marcansoft.com ([212.63.210.85] helo=mail.marcansoft.com)
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l7zOO-0007Bm-Vn
- for linux-arm-kernel@lists.infradead.org; Fri, 05 Feb 2021 11:35:20 +0000
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- (Authenticated sender: marcan@marcan.st)
- by mail.marcansoft.com (Postfix) with ESMTPSA id 3107A41F5F;
- Fri,  5 Feb 2021 11:35:05 +0000 (UTC)
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-References: <20210204203951.52105-1-marcan@marcan.st>
-From: Hector Martin 'marcan' <marcan@marcan.st>
-Subject: Re: [PATCH 00/18] Apple M1 SoC platform bring-up
-Message-ID: <d7802d11-ce90-5645-1636-7f75a7a0694f@marcan.st>
-Date: Fri, 5 Feb 2021 20:35:03 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1E1BC433E0
+	for <soc@archiver.kernel.org>; Fri,  5 Feb 2021 12:44:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id B6DD065029; Fri,  5 Feb 2021 12:44:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8AD4C64FD0;
+	Fri,  5 Feb 2021 12:44:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1612529047;
+	bh=h2qOOv3e7kAsV2hlLAnsoINg6+vs4lcX0hUtCmYe3lw=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=pPK9LB7MQvm8YsPJirQhLp4nOi9yXnD2kjUvboMKSOBNrvezB85SG4keDBQMIfRPn
+	 iZAFqADDAngV6hTb9pScXPzuO+05v2t3B6TgmuGNf7trZFWKtRJ7dkwbgI2vrIs2oc
+	 NmHv3yY5Gl0kzS/Ijf2rkv9Hm7Moh6IJg9RNU3XNonMjZACsGma8jDiQkGBTD8SGOy
+	 jhwlwOZPUuQ/FG6n6WikRGfzHiKQTwxk5//uO/JE8XitclsK0dnZWhFRmLhlbw73JB
+	 lVXXkh+FAxmqfg7JOAjKoXTeL7+XloliChbhLOGQgSi9q0xKBihuBVYpr1bbXEzQyx
+	 0LQ1Uhg1ZJ3Qg==
+Received: by mail-oo1-f47.google.com with SMTP id x10so42361oor.3;
+        Fri, 05 Feb 2021 04:44:07 -0800 (PST)
+X-Gm-Message-State: AOAM531pw5q98o+AdCf8Dw3JPTHnt7IexfEo4ObIV/EYqZaFvM9JSWNv
+	gnz41cfIyBX/XunWGbCknoVmk6216GEqPmzq/AM=
+X-Google-Smtp-Source: ABdhPJyFNASGtUL6SFR3W/WWHAyCpbx4HXopFMsnG12PVdwpgJVxJ75/vU9c39mapas+s6DugL4fX6Zxp0n9A6GVJ+g=
+X-Received: by 2002:a4a:bb01:: with SMTP id f1mr3330752oop.66.1612529046721;
+ Fri, 05 Feb 2021 04:44:06 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210204203951.52105-1-marcan@marcan.st>
-Content-Language: es-ES
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210205_063517_152037_8E6540AF 
-X-CRM114-Status: GOOD (  10.24  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org,
- Arnd Bergmann <arnd@kernel.org>, Marc Zyngier <maz@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>, linux-kernel@vger.kernel.org,
- Alexander Graf <graf@amazon.com>, Olof Johansson <olof@lixom.net>,
- Mohamed Mediouni <mohamed.mediouni@caramail.com>,
- Will Deacon <will@kernel.org>, robh@kernel.org,
- linux-arm-kernel@lists.infradead.org, Stan Skowronek <stan@corellium.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210205113503.YMv-Jgw_6BLzV5_XgpfKsyhLVeaw4YZgs3d2IWYElBg@z>
+References: <20210204203951.52105-1-marcan@marcan.st> <20210204203951.52105-19-marcan@marcan.st>
+ <CAK8P3a3v6emxavbyjFhY+WdvH1t4EPMZSjEsSx0M+cRqjRCO1g@mail.gmail.com>
+ <de236d0c-579d-c0d9-8d60-77f30889f50c@marcan.st> <CAK8P3a2DawQA-PD5aqbkVPB7UxuohN0oe9mJPe8488pUryotJQ@mail.gmail.com>
+ <3f2001f0-4a90-645e-d016-03907228dc7a@marcan.st>
+In-Reply-To: <3f2001f0-4a90-645e-d016-03907228dc7a@marcan.st>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Fri, 5 Feb 2021 13:43:49 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3DhP3AGWmmM_7O0H4KsaYEwEysdaGUdhJA-RX8A=Q__Q@mail.gmail.com>
+Message-ID: <CAK8P3a3DhP3AGWmmM_7O0H4KsaYEwEysdaGUdhJA-RX8A=Q__Q@mail.gmail.com>
+Subject: Re: [PATCH 18/18] arm64: apple: Add initial Mac Mini 2020 (M1) devicetree
+To: "Hector Martin 'marcan'" <marcan@marcan.st>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, DTML <devicetree@vger.kernel.org>, 
+	Olof Johansson <olof@lixom.net>, Ard Biesheuvel <ardb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 05/02/2021 05.39, Hector Martin wrote:
-> This series brings up initial support for the Apple M1 SoC, used in the
-> 2020 Mac Mini, MacBook Pro, and MacBook Air models.
+On Fri, Feb 5, 2021 at 8:11 AM Hector Martin 'marcan' <marcan@marcan.st> wrote:
+>
+> One thing I wanted to ask: is there some kind of "experimental" policy
+> for DT bindings? At early platform bring-up stages it seems like it
+> could be valuable to allow for breaking DT changes while we flesh out
+> the details (this is especially true of a reverse engineered platform
+> like this, where we don't have knowledge of all the hardware details a
+> priori). The dozen or so users we might have at this stage obviously
+> won't complain too much :)
 
-Forgot to CC: a few folks involved in the previous related thread, 
-sorry! Adding them here, hope everyone got the series via the MLs.
+We don't have a hard policy here, other than the obvious "never break
+setups that users rely on". As you expected, this usually means that
+I wouldn't complain if you change something in the initial versions
+and there is a good reason for that change, it shouldn't be a problem.
 
-v2 will be CCed to everyone else too.
+An extreme example here is the omap platform that keeps making
+incompatible dt changes as there is still ongoing work for removing
+the remaining platform specific code in arch/arm/ and replacing it
+with DT descriptions.
 
--- 
-Hector Martin "marcan" (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Once your port is fairly complete and there are users that rely on stability
+of the bindings, I would expect all further changes to be compatible in
+both ways, allowing old kernels with new dtbs and the other way round.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+       Arnd
