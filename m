@@ -1,38 +1,49 @@
-Return-Path: <SRS0=V1Ej=HH=marcan.st=marcan@kernel.org>
+Return-Path: <SRS0=eMXW=HH=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.6 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F4D2C433DB
-	for <soc@archiver.kernel.org>; Fri,  5 Feb 2021 07:12:03 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 54CFE64FC0; Fri,  5 Feb 2021 07:12:03 +0000 (UTC)
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA27C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  5 Feb 2021 07:13:13 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5222561481;
-	Fri,  5 Feb 2021 07:12:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5222561481
+	by mail.kernel.org (Postfix) with ESMTPS id D483C64FB9
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  5 Feb 2021 07:13:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D483C64FB9
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=marcan.st
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=marcan@marcan.st
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:
+	Content-Transfer-Encoding:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:Subject:
+	From:References:To:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=Rtlqm4Tk5CoAMCBuq/tJfCsvJeiiplFE8u/ChO4lJvo=; b=HJUnejigBsM63N5nNRtKIc++D
+	mTjdFJHfU1XJYQNYYfCykjDhjiFudAX8SxNt2W6HNe1yvuNhIZFrdtTqQnOVvfvEJ/P2JqEMxVVQX
+	g6gy39B22g4tYOXaulO7oIePbOYebpivuf8ntGGNEUfhz0LbxJgaxZNiNWbCu2ECtyV3yDlkwrwcT
+	XU1kMElyM/WZoqwc3h0HF51ciXN9aYljlSuqWF7kal9XkQ0v+5/XRSTaCBbxUVlgJuhEIDVV5PuLn
+	CjSd0F1kD5i3pmbv5bM/VAdk6lpFDYsVlXvxbaKrnXrfv64pjIyZIEIZkCriXv7tRPbe5NIceleYO
+	QqS4LXjtA==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l7vHf-00060G-Lc; Fri, 05 Feb 2021 07:12:03 +0000
+Received: from marcansoft.com ([212.63.210.85] helo=mail.marcansoft.com)
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l7vHc-0005zH-Rb
+ for linux-arm-kernel@lists.infradead.org; Fri, 05 Feb 2021 07:12:02 +0000
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: marcan@marcan.st)
-	by mail.marcansoft.com (Postfix) with ESMTPSA id 857B5423AD;
-	Fri,  5 Feb 2021 07:11:55 +0000 (UTC)
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ (Authenticated sender: marcan@marcan.st)
+ by mail.marcansoft.com (Postfix) with ESMTPSA id 857B5423AD;
+ Fri,  5 Feb 2021 07:11:55 +0000 (UTC)
 To: Arnd Bergmann <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- DTML <devicetree@vger.kernel.org>, Olof Johansson <olof@lixom.net>,
- Ard Biesheuvel <ardb@kernel.org>
 References: <20210204203951.52105-1-marcan@marcan.st>
  <20210204203951.52105-19-marcan@marcan.st>
  <CAK8P3a3v6emxavbyjFhY+WdvH1t4EPMZSjEsSx0M+cRqjRCO1g@mail.gmail.com>
@@ -47,9 +58,32 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.0
 MIME-Version: 1.0
 In-Reply-To: <CAK8P3a2DawQA-PD5aqbkVPB7UxuohN0oe9mJPe8488pUryotJQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210205_021201_016931_7BA4AB96 
+X-CRM114-Status: GOOD (  20.01  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: DTML <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Olof Johansson <olof@lixom.net>, Ard Biesheuvel <ardb@kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210205071153.H3QBfA_OF3uRZgRxtk97GhX-tTjuOvPbzGRPi5lM4gk@z>
 
 On 05/02/2021 08.08, Arnd Bergmann wrote:
 > On Thu, Feb 4, 2021 at 10:44 PM Hector Martin 'marcan' <marcan@marcan.st> wrote:
@@ -95,3 +129,8 @@ won't complain too much :)
 -- 
 Hector Martin "marcan" (marcan@marcan.st)
 Public Key: https://mrcn.st/pub
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
