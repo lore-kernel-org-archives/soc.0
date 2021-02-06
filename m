@@ -1,356 +1,79 @@
-Return-Path: <SRS0=0nBm=HI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <maz@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A113AC433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  6 Feb 2021 15:39:50 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 408CCC433E0
+	for <soc@archiver.kernel.org>; Sat,  6 Feb 2021 15:46:10 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 0994E64E9D; Sat,  6 Feb 2021 15:46:10 +0000 (UTC)
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4F4C664E9D
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  6 Feb 2021 15:39:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4F4C664E9D
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Subject:To:From:
-	Message-ID:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=cVjUlEASXxJDmWjMg7G0v6EM0DS07+QiLda2JA4UCXA=; b=2E2PEHqi481PnuKFsbw1HdDbg
-	gKutJ65nFuw5UIpI437NDpp1P+0QZgcPxFXmDBs0k3KR0QreYBOlglL8c+XdUGbjMeSC0dHI/yLLc
-	1+VtzO92mgsadHUJLCvMU+puotIOLNoecTJ3CECUFlqqcB7hOIqIcurcL7OpW9duZdfulkw1j8hi3
-	k6vEVy3MUNWyv5GsGt+a1NlCGFrou5pxHRvuidncNkicHD8FMVEl+/8FhQq/HCKmYkqfarJQxpSGK
-	9pm6sKGFmm51eLLzBo4buJqGjzIz3MG6Bi3JNgBzORTT/gqoAKyb61BgCvf7ixBgXpow8LE3VONnI
-	uL+w5dwBg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l8Peq-0003hl-TE; Sat, 06 Feb 2021 15:38:00 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l8Pen-0003gw-Os
- for linux-arm-kernel@lists.infradead.org; Sat, 06 Feb 2021 15:37:58 +0000
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org
- [51.254.78.96])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.kernel.org (Postfix) with ESMTPSA id B3A5064E91;
- Sat,  6 Feb 2021 15:37:55 +0000 (UTC)
-Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78]
- helo=wait-a-minute.misterjones.org)
- by disco-boy.misterjones.org with esmtpsa (TLS1.3) tls
- TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94)
- (envelope-from <maz@kernel.org>)
- id 1l8Pej-00CVRO-HK; Sat, 06 Feb 2021 15:37:53 +0000
-Date: Sat, 06 Feb 2021 15:37:52 +0000
-Message-ID: <87h7mpky0f.wl-maz@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPSA id D233464E9F;
+	Sat,  6 Feb 2021 15:46:09 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94)
+	(envelope-from <maz@kernel.org>)
+	id 1l8Pmh-00CVY2-Mb; Sat, 06 Feb 2021 15:46:07 +0000
+Date: Sat, 06 Feb 2021 15:46:06 +0000
+Message-ID: <87ft29kxmp.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 10/18] arm64: Introduce FIQ support
-In-Reply-To: <20210204203951.52105-11-marcan@marcan.st>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	robh+dt@kernel.org,
+	Arnd Bergmann <arnd@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH 11/18] arm64: Kconfig: Require FIQ support for ARCH_APPLE
+In-Reply-To: <20210204203951.52105-12-marcan@marcan.st>
 References: <20210204203951.52105-1-marcan@marcan.st>
- <20210204203951.52105-11-marcan@marcan.st>
+	<20210204203951.52105-12-marcan@marcan.st>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 62.31.163.78
-X-SA-Exim-Rcpt-To: marcan@marcan.st, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, arnd@kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, olof@lixom.net
+X-SA-Exim-Rcpt-To: marcan@marcan.st, soc@kernel.org, linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, arnd@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, olof@lixom.net
 X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org);
- SAEximRunCond expanded to false
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210206_103757_972314_232DCBED 
-X-CRM114-Status: GOOD (  33.08  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, soc@kernel.org, robh+dt@kernel.org,
- Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210206153752.0629Wn9MkaxnTOvsOK9GuwSta9ez3ZoHnx_FUM7udWw@z>
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Thu, 04 Feb 2021 20:39:43 +0000,
+On Thu, 04 Feb 2021 20:39:44 +0000,
 Hector Martin <marcan@marcan.st> wrote:
 > 
-> Apple SoCs (A11 and newer) have some interrupt sources hardwired to the
-> FIQ line. Implement support for this by simply treating IRQs and FIQs
-> the same way in the interrupt vectors. This is conditional on the
-> ARM64_NEEDS_FIQ CPU feature flag, and thus will not affect other
-> systems.
-> 
-> Root irqchip drivers can discriminate between IRQs and FIQs by checking
-> the ISR_EL1 system register.
+> All currently supported Apple ARM SoCs (and possibly all future ones
+> too) require FIQs.
 > 
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->  arch/arm64/include/asm/assembler.h |  4 ++++
->  arch/arm64/include/asm/daifflags.h |  7 +++++++
->  arch/arm64/include/asm/irqflags.h  | 17 +++++++++++++----
->  arch/arm64/kernel/entry.S          | 27 +++++++++++++++++++++++----
->  4 files changed, 47 insertions(+), 8 deletions(-)
+>  arch/arm64/Kconfig.platforms | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
-> index bf125c591116..6acfc372dc76 100644
-> --- a/arch/arm64/include/asm/assembler.h
-> +++ b/arch/arm64/include/asm/assembler.h
-> @@ -42,7 +42,11 @@
->  
->  	/* IRQ is the lowest priority flag, unconditionally unmask the rest. */
->  	.macro enable_da_f
-> +alternative_if ARM64_NEEDS_FIQ
-> +	msr	daifclr, #(8 | 4)
-> +alternative_else
->  	msr	daifclr, #(8 | 4 | 1)
-> +alternative_endif
+> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> index e3e3bd2c4374..8182d78e8e23 100644
+> --- a/arch/arm64/Kconfig.platforms
+> +++ b/arch/arm64/Kconfig.platforms
+> @@ -32,6 +32,7 @@ config ARCH_ALPINE
+>  config ARCH_APPLE
+>  	bool "Apple Silicon SoC family"
+>  	select GENERIC_IRQ_CHIP
+> +	select ARM64_FIQ_SUPPORT
 
-See my digression in patch 8. I really wonder what the benefit is to
-treat FIQ independently of IRQ, and we might as well generalise
-this. We could always panic on getting a FIQ on platforms that don't
-expect one.
-
-It'd be good to rope in the other interested parties (Mark for the
-early entry code, James for RAS and SError handling).
-
->  	.endm
->  
->  /*
-> diff --git a/arch/arm64/include/asm/daifflags.h b/arch/arm64/include/asm/daifflags.h
-> index 1c26d7baa67f..228a6039c701 100644
-> --- a/arch/arm64/include/asm/daifflags.h
-> +++ b/arch/arm64/include/asm/daifflags.h
-> @@ -112,6 +112,13 @@ static inline void local_daif_restore(unsigned long flags)
->  		 * So we don't need additional synchronization here.
->  		 */
->  		gic_write_pmr(pmr);
-> +	} else if (system_uses_fiqs()) {
-> +		/*
-> +		 * On systems that use FIQs, disable FIQs if IRQs are disabled.
-> +		 * This can happen if the DAIF_* flags at the top of this file
-> +		 * are used to set DAIF directly.
-> +		 */
-> +		flags |= PSR_F_BIT;
->  	}
->  
->  	write_sysreg(flags, daif);
-> diff --git a/arch/arm64/include/asm/irqflags.h b/arch/arm64/include/asm/irqflags.h
-> index ff328e5bbb75..689c573c4b47 100644
-> --- a/arch/arm64/include/asm/irqflags.h
-> +++ b/arch/arm64/include/asm/irqflags.h
-> @@ -19,8 +19,9 @@
->   * side effects for other flags. Keeping to this order makes it easier for
->   * entry.S to know which exceptions should be unmasked.
->   *
-> - * FIQ is never expected, but we mask it when we disable debug exceptions, and
-> - * unmask it at all other times.
-> + * FIQ is never expected on most platforms, but we mask it when we disable
-> + * debug exceptions, and unmask it at all other times. On platforms that
-> + * require FIQs, it tracks IRQ masking.
->   */
->  
->  /*
-> @@ -34,8 +35,14 @@ static inline void arch_local_irq_enable(void)
->  		WARN_ON_ONCE(pmr != GIC_PRIO_IRQON && pmr != GIC_PRIO_IRQOFF);
->  	}
->  
-> -	asm volatile(ALTERNATIVE(
-> +	/*
-> +	 * Yes, ALTERNATIVE() nests properly... only one of these should be
-> +	 * active on any given platform.
-> +	 */
-> +	asm volatile(ALTERNATIVE(ALTERNATIVE(
->  		"msr	daifclr, #2		// arch_local_irq_enable",
-> +		"msr	daifclr, #3		// arch_local_irq_enable",
-> +		ARM64_NEEDS_FIQ),
-
-Err... no. Please. It may be a cool hack, but that's an unmaintainable
-one in the long run. If you *really* have to have a special case here,
-consider using a callback instead, and generate the right instruction
-directly.
-
->  		__msr_s(SYS_ICC_PMR_EL1, "%0"),
->  		ARM64_HAS_IRQ_PRIO_MASKING)
->  		:
-> @@ -53,8 +60,10 @@ static inline void arch_local_irq_disable(void)
->  		WARN_ON_ONCE(pmr != GIC_PRIO_IRQON && pmr != GIC_PRIO_IRQOFF);
->  	}
->  
-> -	asm volatile(ALTERNATIVE(
-> +	asm volatile(ALTERNATIVE(ALTERNATIVE(
->  		"msr	daifset, #2		// arch_local_irq_disable",
-> +		"msr	daifset, #3		// arch_local_irq_disable",
-> +		ARM64_NEEDS_FIQ),
->  		__msr_s(SYS_ICC_PMR_EL1, "%0"),
->  		ARM64_HAS_IRQ_PRIO_MASKING)
->  		:
-> diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-> index c9bae73f2621..81ca04ebe37b 100644
-> --- a/arch/arm64/kernel/entry.S
-> +++ b/arch/arm64/kernel/entry.S
-> @@ -60,7 +60,7 @@
->  #define BAD_FIQ		2
->  #define BAD_ERROR	3
->  
-> -	.macro kernel_ventry, el, label, regsize = 64
-> +	.macro kernel_ventry, el, label, regsize = 64, altlabel = 0, alt = 0
->  	.align 7
->  #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
->  	.if	\el == 0
-> @@ -87,7 +87,15 @@ alternative_else_nop_endif
->  	tbnz	x0, #THREAD_SHIFT, 0f
->  	sub	x0, sp, x0			// x0'' = sp' - x0' = (sp + x0) - sp = x0
->  	sub	sp, sp, x0			// sp'' = sp' - x0 = (sp + x0) - x0 = sp
-> +	.if	\altlabel != 0
-> +	alternative_if \alt
-> +	b	el\()\el\()_\altlabel
-> +	alternative_else
->  	b	el\()\el\()_\label
-> +	alternative_endif
-> +	.else
-> +	b	el\()\el\()_\label
-> +	.endif
->  
->  0:
->  	/*
-> @@ -119,7 +127,15 @@ alternative_else_nop_endif
->  	sub	sp, sp, x0
->  	mrs	x0, tpidrro_el0
->  #endif
-> +	.if	\altlabel != 0
-> +	alternative_if \alt
-> +	b	el\()\el\()_\altlabel
-> +	alternative_else
->  	b	el\()\el\()_\label
-> +	alternative_endif
-> +	.else
-> +	b	el\()\el\()_\label
-> +	.endif
->  	.endm
->  
->  	.macro tramp_alias, dst, sym
-> @@ -547,18 +563,21 @@ SYM_CODE_START(vectors)
->  
->  	kernel_ventry	1, sync				// Synchronous EL1h
->  	kernel_ventry	1, irq				// IRQ EL1h
-> -	kernel_ventry	1, fiq_invalid			// FIQ EL1h
-> +							// FIQ EL1h
-> +	kernel_ventry	1, fiq_invalid, 64, irq, ARM64_NEEDS_FIQ
-
-It could be better to create a set of first class FIQ handlers rather
-than this alternative target macro. I quickly hacked this instead,
-which I find more readable.
+Ah, this is what I was expecting in the previous patch. I guess the
+initial ARCH_APPLE patch could be moved down the line and add all the
+dependencies in one go.
 
 Thanks,
 
 	M.
 
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index a8c3e7aaca74..dc65b56626ab 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -547,18 +547,18 @@ SYM_CODE_START(vectors)
- 
- 	kernel_ventry	1, sync				// Synchronous EL1h
- 	kernel_ventry	1, irq				// IRQ EL1h
--	kernel_ventry	1, fiq_invalid			// FIQ EL1h
-+	kernel_ventry	1, fiq				// FIQ EL1h
- 	kernel_ventry	1, error			// Error EL1h
- 
- 	kernel_ventry	0, sync				// Synchronous 64-bit EL0
- 	kernel_ventry	0, irq				// IRQ 64-bit EL0
--	kernel_ventry	0, fiq_invalid			// FIQ 64-bit EL0
-+	kernel_ventry	0, fiq				// FIQ 64-bit EL0
- 	kernel_ventry	0, error			// Error 64-bit EL0
- 
- #ifdef CONFIG_COMPAT
- 	kernel_ventry	0, sync_compat, 32		// Synchronous 32-bit EL0
- 	kernel_ventry	0, irq_compat, 32		// IRQ 32-bit EL0
--	kernel_ventry	0, fiq_invalid_compat, 32	// FIQ 32-bit EL0
-+	kernel_ventry	0, fiq, 32			// FIQ 32-bit EL0
- 	kernel_ventry	0, error_compat, 32		// Error 32-bit EL0
- #else
- 	kernel_ventry	0, sync_invalid, 32		// Synchronous 32-bit EL0
-@@ -658,6 +658,10 @@ SYM_CODE_START_LOCAL_NOALIGN(el1_sync)
- SYM_CODE_END(el1_sync)
- 
- 	.align	6
-+SYM_CODE_START_LOCAL_NOALIGN(el1_fiq)
-+alternative_if_not ARM64_NEEDS_FIQ
-+	b	el1_fiq_invalid
-+alternative_else_nop_endif
- SYM_CODE_START_LOCAL_NOALIGN(el1_irq)
- 	kernel_entry 1
- 	gic_prio_irq_setup pmr=x20, tmp=x1
-@@ -688,6 +692,7 @@ alternative_else_nop_endif
- 
- 	kernel_exit 1
- SYM_CODE_END(el1_irq)
-+SYM_CODE_END(el1_fiq)
- 
- /*
-  * EL0 mode handlers.
-@@ -710,10 +715,15 @@ SYM_CODE_START_LOCAL_NOALIGN(el0_sync_compat)
- SYM_CODE_END(el0_sync_compat)
- 
- 	.align	6
-+SYM_CODE_START_LOCAL_NOALIGN(el0_fiq_compat)
-+alternative_if_not ARM64_NEEDS_FIQ
-+	b	el0_fiq_invalid
-+alternative_else_nop_endif
- SYM_CODE_START_LOCAL_NOALIGN(el0_irq_compat)
- 	kernel_entry 0, 32
- 	b	el0_irq_naked
- SYM_CODE_END(el0_irq_compat)
-+SYM_CODE_END(el0_fiq_compat)
- 
- SYM_CODE_START_LOCAL_NOALIGN(el0_error_compat)
- 	kernel_entry 0, 32
-@@ -722,6 +732,10 @@ SYM_CODE_END(el0_error_compat)
- #endif
- 
- 	.align	6
-+SYM_CODE_START_LOCAL_NOALIGN(el0_fiq)
-+alternative_if_not ARM64_NEEDS_FIQ
-+	b	el0_fiq_invalid
-+alternative_else_nop_endif
- SYM_CODE_START_LOCAL_NOALIGN(el0_irq)
- 	kernel_entry 0
- el0_irq_naked:
-@@ -736,6 +750,7 @@ el0_irq_naked:
- 
- 	b	ret_to_user
- SYM_CODE_END(el0_irq)
-+SYM_CODE_END(el0_fiq)
- 
- SYM_CODE_START_LOCAL(el1_error)
- 	kernel_entry 1
-
-
 -- 
 Without deviation from the norm, progress is not possible.
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
