@@ -1,50 +1,95 @@
-Return-Path: <maz@kernel.org>
+Return-Path: <SRS0=0nBm=HI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C8D2C433DB
-	for <soc@archiver.kernel.org>; Sat,  6 Feb 2021 15:37:56 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id E052164E4A; Sat,  6 Feb 2021 15:37:55 +0000 (UTC)
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A113AC433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Sat,  6 Feb 2021 15:39:50 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPSA id B3A5064E91;
-	Sat,  6 Feb 2021 15:37:55 +0000 (UTC)
-Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=wait-a-minute.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94)
-	(envelope-from <maz@kernel.org>)
-	id 1l8Pej-00CVRO-HK; Sat, 06 Feb 2021 15:37:53 +0000
+	by mail.kernel.org (Postfix) with ESMTPS id 4F4C664E9D
+	for <linux-arm-kernel@archiver.kernel.org>; Sat,  6 Feb 2021 15:39:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4F4C664E9D
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Subject:To:From:
+	Message-ID:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=cVjUlEASXxJDmWjMg7G0v6EM0DS07+QiLda2JA4UCXA=; b=2E2PEHqi481PnuKFsbw1HdDbg
+	gKutJ65nFuw5UIpI437NDpp1P+0QZgcPxFXmDBs0k3KR0QreYBOlglL8c+XdUGbjMeSC0dHI/yLLc
+	1+VtzO92mgsadHUJLCvMU+puotIOLNoecTJ3CECUFlqqcB7hOIqIcurcL7OpW9duZdfulkw1j8hi3
+	k6vEVy3MUNWyv5GsGt+a1NlCGFrou5pxHRvuidncNkicHD8FMVEl+/8FhQq/HCKmYkqfarJQxpSGK
+	9pm6sKGFmm51eLLzBo4buJqGjzIz3MG6Bi3JNgBzORTT/gqoAKyb61BgCvf7ixBgXpow8LE3VONnI
+	uL+w5dwBg==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l8Peq-0003hl-TE; Sat, 06 Feb 2021 15:38:00 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l8Pen-0003gw-Os
+ for linux-arm-kernel@lists.infradead.org; Sat, 06 Feb 2021 15:37:58 +0000
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org
+ [51.254.78.96])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.kernel.org (Postfix) with ESMTPSA id B3A5064E91;
+ Sat,  6 Feb 2021 15:37:55 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78]
+ helo=wait-a-minute.misterjones.org)
+ by disco-boy.misterjones.org with esmtpsa (TLS1.3) tls
+ TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94)
+ (envelope-from <maz@kernel.org>)
+ id 1l8Pej-00CVRO-HK; Sat, 06 Feb 2021 15:37:53 +0000
 Date: Sat, 06 Feb 2021 15:37:52 +0000
 Message-ID: <87h7mpky0f.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Hector Martin <marcan@marcan.st>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	robh+dt@kernel.org,
-	Arnd Bergmann <arnd@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Olof Johansson <olof@lixom.net>
 Subject: Re: [PATCH 10/18] arm64: Introduce FIQ support
 In-Reply-To: <20210204203951.52105-11-marcan@marcan.st>
 References: <20210204203951.52105-1-marcan@marcan.st>
-	<20210204203951.52105-11-marcan@marcan.st>
+ <20210204203951.52105-11-marcan@marcan.st>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 62.31.163.78
-X-SA-Exim-Rcpt-To: marcan@marcan.st, soc@kernel.org, linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, arnd@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, olof@lixom.net
+X-SA-Exim-Rcpt-To: marcan@marcan.st, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, arnd@kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, olof@lixom.net
 X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org);
+ SAEximRunCond expanded to false
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210206_103757_972314_232DCBED 
+X-CRM114-Status: GOOD (  33.08  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, soc@kernel.org, robh+dt@kernel.org,
+ Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210206153752.0629Wn9MkaxnTOvsOK9GuwSta9ez3ZoHnx_FUM7udWw@z>
 
 On Thu, 04 Feb 2021 20:39:43 +0000,
 Hector Martin <marcan@marcan.st> wrote:
@@ -304,3 +349,8 @@ index a8c3e7aaca74..dc65b56626ab 100644
 
 -- 
 Without deviation from the norm, progress is not possible.
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
