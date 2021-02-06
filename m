@@ -1,159 +1,212 @@
-Return-Path: <SRS0=0nBm=HI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <maz@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB7B7C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  6 Feb 2021 13:47:27 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93523C433E0
+	for <soc@archiver.kernel.org>; Sat,  6 Feb 2021 13:58:45 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 3E3CD64EAD; Sat,  6 Feb 2021 13:58:45 +0000 (UTC)
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7EAB364EAD
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  6 Feb 2021 13:47:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7EAB364EAD
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=CPtmqUaLr6swjxoXnNwUvhmHh8mW6SiqsvZH1gCfpAE=; b=h96t8gw78cwBcOGzf9KqJL4SJ
-	WO5ZKN6AS3lpOOB4T5H2pNkdttak/OHvoTLQJ7E3x9uaeH7qDZawlMtZGE92CJjlkY1O7Kh/YXUb7
-	EX279sIV8Jrb0gFivvUrPZYz8GRzfwM4GsfTetqMshv/Fy7BiVn6KqvvUwKjag9GB3y+QFKeyWul/
-	502mWxGdyl++367uj+zBKiTX5J5NCii3MttvrC8laDwfSw3GqdUrNKDl3G0RPD72XDfCqSk3nc5mr
-	ksKrSrbbtZtjIt3EwsiXfLqOWbXdKEj9rbj5chfCTOeT+X7b3NTZSU9EdYQEvQ4IjtTKmxLg0/8ZY
-	6i50I/BWQ==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l8Nu7-0004Lw-3m; Sat, 06 Feb 2021 13:45:39 +0000
-Received: from mail-wr1-f46.google.com ([209.85.221.46])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l8Nu3-0004LV-1D
- for linux-arm-kernel@lists.infradead.org; Sat, 06 Feb 2021 13:45:36 +0000
-Received: by mail-wr1-f46.google.com with SMTP id v15so11063511wrx.4
- for <linux-arm-kernel@lists.infradead.org>;
- Sat, 06 Feb 2021 05:45:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=7ghVbTm1KHFPZQbBwYfJEJHbvho+CoG+hwSpE/oCZOc=;
- b=blQtfpml9C1sBiT6hwucdfe9DkOrDcizfxUNX1u0TsSrduTTc+sweqDd70rWZY4Rk2
- cWEHCradD1KPEhaKAouhj28jSv7qGpYsV1q7nvu/dos1WePj/Ifx4c7Jt8VpMio5Rp3n
- 3hR0sLpBD1qIUXHFemQj1ICv7s6qnKvWuWgYlOgnjHHgXELJIINJuX02hwyHORLrY4sb
- 6nOZVi4btobYyEEcAAF1NERd+kXaGMCcuJQbfqjhzh1KcNgOuW+XeIb7H4tTqGaZjQ/4
- HPnR6TeVeL1VsOsXvoce0aEzDpEdmhjiGE2AXD3wn2kH0YBVPY/dprLdk0HWBNT/4K8T
- raMA==
-X-Gm-Message-State: AOAM532F0h7yFeiIEfuW1gDSI9pJyZKlm1l1aKi4DjhoqL/gyZ1b2FYx
- qSSvyH1GallQjvHc7vEXFQjvGdhvoZY=
-X-Google-Smtp-Source: ABdhPJxfZL4HL+Mq28hXXROX5oDPXTtbYpNw5IDUR7G1wwpEwQJWkmQ95FfU7I+FNgdfeWWCNapjdQ==
-X-Received: by 2002:adf:e807:: with SMTP id o7mr10750502wrm.308.1612619133829; 
- Sat, 06 Feb 2021 05:45:33 -0800 (PST)
-Received: from kozik-lap (194-95-143-94.dyn.cable.fcom.ch. [94.143.95.194])
- by smtp.googlemail.com with ESMTPSA id w14sm16387610wro.86.2021.02.06.05.45.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 06 Feb 2021 05:45:32 -0800 (PST)
-Date: Sat, 6 Feb 2021 14:45:31 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPSA id 12F8864EBC;
+	Sat,  6 Feb 2021 13:58:45 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94)
+	(envelope-from <maz@kernel.org>)
+	id 1l8O6k-00CUk7-U6; Sat, 06 Feb 2021 13:58:43 +0000
+Date: Sat, 06 Feb 2021 13:58:42 +0000
+Message-ID: <87im75l2lp.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Hector Martin <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- arm@kernel.org, soc@kernel.org
-Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
-Message-ID: <20210206134531.l5vpzlmev4v3f3uo@kozik-lap>
-References: <20210125191240.11278-1-krzk@kernel.org>
- <20210125191240.11278-3-krzk@kernel.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210125191240.11278-3-krzk@kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210206_084535_108477_F996529E 
-X-CRM114-Status: GOOD (  17.07  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Sylwester Nawrocki <snawrocki@kernel.org>,
- linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- Marek Szyprowski <m.szyprowski@samsung.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210206134531.KKK38UzUwc3bgxVe6rtVl8eNM7HxE5MGao_cmqkXQ7s@z>
+Cc: soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	robh+dt@kernel.org,
+	Arnd Bergmann <arnd@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH 08/18] arm64: cpufeature: Add a feature for FIQ support
+In-Reply-To: <20210204203951.52105-9-marcan@marcan.st>
+References: <20210204203951.52105-1-marcan@marcan.st>
+	<20210204203951.52105-9-marcan@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: marcan@marcan.st, soc@kernel.org, linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, arnd@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, olof@lixom.net
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Mon, Jan 25, 2021 at 08:12:39PM +0100, Krzysztof Kozlowski wrote:
-> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-> 
->   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-5.12
-> 
-> for you to fetch changes up to 3803f461bd28c1c817281348509399778633e82f:
-> 
->   ARM: dts: exynos: Add top-off charging regulator node for I9100 (2021-01-03 17:33:29 +0100)
-> 
-> ----------------------------------------------------------------
-> Samsung DTS ARM changes for v5.12
-> 
-> 1. Use new compatile to properly configure Exynos5420 USB2 PHY, fixing
->    it suspend/resume cycle.
-> 2. Correct Samsung PMIC interrupt trigger levels on multiple boards.
-> 3. Correct the voltages of Samsung GT-I9100 charger and add top-off
->    charger.
-> 
+Hi Hector,
 
-Hi everyone,
-
-Any progress or new comments about this pull request?
-
-Best regards,
-Krzysztof
-
-
-
-> ----------------------------------------------------------------
-> Krzysztof Kozlowski (6):
->       ARM: dts: exynos: correct PMIC interrupt trigger level on Artik 5
->       ARM: dts: exynos: correct PMIC interrupt trigger level on Monk
->       ARM: dts: exynos: correct PMIC interrupt trigger level on Rinato
->       ARM: dts: exynos: correct PMIC interrupt trigger level on Spring
->       ARM: dts: exynos: correct PMIC interrupt trigger level on Arndale Octa
->       ARM: dts: exynos: correct PMIC interrupt trigger level on Odroid XU3 family
+On Thu, 04 Feb 2021 20:39:41 +0000,
+Hector Martin <marcan@marcan.st> wrote:
 > 
-> Marek Szyprowski (1):
->       ARM: dts: exynos: use Exynos5420 dedicated USB2 PHY compatible
+> Apple ARM SoCs (A11 and newer) have some interrupt sources hard-wired to
+> the FIQ line. Introduce a cpufeature that can be used to enable FIQ
+> unmasking and handling via alternatives.
 > 
-> Timon Baetz (2):
->       ARM: dts: exynos: Fix charging regulator voltage and current for I9100
->       ARM: dts: exynos: Add top-off charging regulator node for I9100
+> This is currently enabled for all Apple CPUs. If/when support is
+> implemented for older (pre-A11) iPhone/iPad SoCs which do not need FIQs,
+> or if newer SoCs are released without the FIQ requirement, we can
+> revisit the condition.
 > 
->  arch/arm/boot/dts/exynos3250-artik5.dtsi      |  2 +-
->  arch/arm/boot/dts/exynos3250-monk.dts         |  2 +-
->  arch/arm/boot/dts/exynos3250-rinato.dts       |  2 +-
->  arch/arm/boot/dts/exynos4210-i9100.dts        | 30 ++++++++++++++++-----------
->  arch/arm/boot/dts/exynos5250-spring.dts       |  2 +-
->  arch/arm/boot/dts/exynos5420-arndale-octa.dts |  2 +-
->  arch/arm/boot/dts/exynos5422-odroid-core.dtsi |  2 +-
->  arch/arm/boot/dts/exynos54xx.dtsi             |  6 +++---
->  8 files changed, 27 insertions(+), 21 deletions(-)
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  arch/arm64/Kconfig                  | 10 +++++++++
+>  arch/arm64/include/asm/cpucaps.h    |  3 ++-
+>  arch/arm64/include/asm/cpufeature.h |  6 ++++++
+>  arch/arm64/include/asm/cputype.h    |  1 +
+>  arch/arm64/kernel/cpufeature.c      | 32 +++++++++++++++++++++++++++++
+>  5 files changed, 51 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index f39568b28ec1..11cfdc07404f 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -1756,6 +1756,16 @@ config ARM64_DEBUG_PRIORITY_MASKING
+>  	  If unsure, say N
+>  endif
+>  
+> +config ARM64_FIQ_SUPPORT
+> +	bool "Support for FIQ interrupts"
+> +	help
+> +	  Adds support for handling FIQ interrupts as normal IRQs.
+> +	  This is required on Apple platforms where some IRQ sources are
+> +	  hardwired to the FIQ interrupt line.
+> +
+> +	  FIQs are only enabled at runtime on platforms that require them
+> +	  via the CPU feature framework.
+> +
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+This definitely should be selected by CONFIG_ARCH_APPLE. Otherwise,
+you can easily end-up with a non-working system.
+
+>  config RELOCATABLE
+>  	bool "Build a relocatable kernel image" if EXPERT
+>  	select ARCH_HAS_RELR
+> diff --git a/arch/arm64/include/asm/cpucaps.h b/arch/arm64/include/asm/cpucaps.h
+> index b77d997b173b..c36d926ad801 100644
+> --- a/arch/arm64/include/asm/cpucaps.h
+> +++ b/arch/arm64/include/asm/cpucaps.h
+> @@ -66,7 +66,8 @@
+>  #define ARM64_WORKAROUND_1508412		58
+>  #define ARM64_HAS_LDAPR				59
+>  #define ARM64_KVM_PROTECTED_MODE		60
+> +#define ARM64_NEEDS_FIQ				61
+>  
+> -#define ARM64_NCAPS				61
+> +#define ARM64_NCAPS				62
+>  
+>  #endif /* __ASM_CPUCAPS_H */
+> diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+> index 9a555809b89c..3a00cfb347c9 100644
+> --- a/arch/arm64/include/asm/cpufeature.h
+> +++ b/arch/arm64/include/asm/cpufeature.h
+> @@ -716,6 +716,12 @@ static __always_inline bool system_uses_irq_prio_masking(void)
+>  	       cpus_have_const_cap(ARM64_HAS_IRQ_PRIO_MASKING);
+>  }
+>  
+> +static __always_inline bool system_uses_fiqs(void)
+
+nit: fiq, not fiqs.
+
+> +{
+> +	return IS_ENABLED(CONFIG_ARM64_FIQ_SUPPORT) &&
+> +	       cpus_have_const_cap(ARM64_NEEDS_FIQ);
+> +}
+> +
+>  static inline bool system_supports_mte(void)
+>  {
+>  	return IS_ENABLED(CONFIG_ARM64_MTE) &&
+> diff --git a/arch/arm64/include/asm/cputype.h b/arch/arm64/include/asm/cputype.h
+> index ef5b040dee44..2084a0340d16 100644
+> --- a/arch/arm64/include/asm/cputype.h
+> +++ b/arch/arm64/include/asm/cputype.h
+> @@ -59,6 +59,7 @@
+>  #define ARM_CPU_IMP_NVIDIA		0x4E
+>  #define ARM_CPU_IMP_FUJITSU		0x46
+>  #define ARM_CPU_IMP_HISI		0x48
+> +#define ARM_CPU_IMP_APPLE		0x61
+>  
+>  #define ARM_CPU_PART_AEM_V8		0xD0F
+>  #define ARM_CPU_PART_FOUNDATION		0xD00
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index e99eddec0a46..0863cf7cf807 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -1237,6 +1237,29 @@ static bool has_cache_idc(const struct arm64_cpu_capabilities *entry,
+>  	return ctr & BIT(CTR_IDC_SHIFT);
+>  }
+>  
+> +static void cpu_sync_irq_to_fiq(struct arm64_cpu_capabilities const *cap)
+> +{
+> +	u64 daif = read_sysreg(daif);
+> +
+> +	/*
+> +	 * By this point in the boot process IRQs are likely masked and FIOs
+> +	 * aren't, so we need to sync things to avoid spurious early FIQs.
+> +	 */
+> +
+> +	if (daif & PSR_I_BIT)
+> +		daif |= PSR_F_BIT;
+> +	else
+> +		daif &= ~PSR_F_BIT;
+> +
+> +	write_sysreg(daif, daif);
+
+Could this happen too late? If, as explained above, we can get a FIQ
+until we mask it here, what prevents something (a timer?) from kicking
+and creating havoc just before the sync?
+
+If the answer is "nothing", then it probably means that the default
+behaviour should be to treat PSTATE.I and PSTATE.F as containing the
+same value at all times, and not just as an afterthought when we
+detect that we're on a CPU type or another.
+
+This could expand into enabling Group-0 interrupts with GICv3 on
+systems that have a single security state (such as virtual machines),
+though I don't really see a good use case for it.
+
+> +}
+> +
+> +static bool needs_fiq(const struct arm64_cpu_capabilities *entry, int __unused)
+> +{
+> +	/* All supported Apple cores need this */
+> +	return read_cpuid_implementor() == ARM_CPU_IMP_APPLE;
+> +}
+> +
+>  static void cpu_emulate_effective_ctr(const struct arm64_cpu_capabilities *__unused)
+>  {
+>  	/*
+> @@ -2154,6 +2177,15 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+>  		.matches = has_cpuid_feature,
+>  		.min_field_value = 1,
+>  	},
+> +#ifdef CONFIG_ARM64_FIQ_SUPPORT
+> +	{
+> +		.desc = "FIQs",
+> +		.capability = ARM64_NEEDS_FIQ,
+> +		.type = ARM64_CPUCAP_BOOT_CPU_FEATURE,
+> +		.matches = needs_fiq,
+> +		.cpu_enable = cpu_sync_irq_to_fiq,
+> +	},
+> +#endif
+>  	{},
+>  };
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
