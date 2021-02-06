@@ -1,37 +1,38 @@
-Return-Path: <SRS0=NRVF=HI=gmail.com=k.kozlowski.k@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=BAYES_00,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99FD5C433E0
-	for <soc@archiver.kernel.org>; Sat,  6 Feb 2021 15:07:02 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 6E0E464EBF; Sat,  6 Feb 2021 15:07:02 +0000 (UTC)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 04E8E64E39;
-	Sat,  6 Feb 2021 15:07:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 04E8E64E39
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=k.kozlowski.k@gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id d16so11174420wro.11;
-        Sat, 06 Feb 2021 07:07:01 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3222C433E0
+	for <linux-devicetree@archiver.kernel.org>; Sat,  6 Feb 2021 15:07:44 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 9CAA864E22
+	for <linux-devicetree@archiver.kernel.org>; Sat,  6 Feb 2021 15:07:44 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S229793AbhBFPHm (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Sat, 6 Feb 2021 10:07:42 -0500
+Received: from mail-wr1-f46.google.com ([209.85.221.46]:38216 "EHLO
+        mail-wr1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229711AbhBFPHl (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Sat, 6 Feb 2021 10:07:41 -0500
+Received: by mail-wr1-f46.google.com with SMTP id b3so11231585wrj.5;
+        Sat, 06 Feb 2021 07:07:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
         bh=fzMdGIncwXZccKuwFCYwYE/wDOhe7aap4KiSx77Zgp0=;
-        b=Mckz/PZzOCn+P9oKBg3TXvzDF30lKolWBKixxwWyEIamWUyLq/p4VUGVCbHt07jqos
-         nHt1824lXonob85E1rrFpLB98c0bZtaZhNDwiRdJKmIN02wGYS2xPiCmCXKHjD3oqKGB
-         ygn9qeEyC1tmHJxXs5Vfakm6BCzjWujqA1Qwo4So/L3ceMzK96RnCVyUK4ChyW4EI+tk
-         lmsQpD3fiWZm5U+p3zFcxPjk7FwZeZUa4OIFw3vDO/RgL0NhMPvPIOTJjb4VoQkoo8Kr
-         dVDHcdKLkLi67VRul/Os4PZgIsYGSA7YWgtlusJh8Xo7Ye7F6/qpGYErYLpqyiBSWbnF
-         itxg==
-X-Gm-Message-State: AOAM532DuWRqlw66+wIe7Mh7AEFy91MvIcVM4oNxWDAWfqlRxG4jXan2
-	kFjGjyfr0IE6IOoza+a8rtLPUapIRPU=
+        b=pdIcz/W1PBqtbpw0wgkx/6ZcXy3IDO/kagpnwpimr7pWfgeC9YThEosPh2SuyAhFrw
+         h0yUc63uM9JUgsN1/0az2lfL81Ih+f0P8rW+g6RPJjLvAWjyXQDBpfMe20hDaPnAZ6wP
+         +aJkR4RggzRjY1rq1DrrmfeF7eLMZvfRvvqPAsVMmyNPqHY5Ua8Wc1rROKvIXHB4b1AZ
+         fpvp3d6nZDdpHGcv3bsXH/kjdjfpYNn41gOAjdQw7yRIw8uktCCyVBcSo5jCVIpEJSHx
+         benLwJL97qXd/rSbJkOrz+RVIKhRXqRATh6iKPDA3FbahhRPRMfkuBmBgT8nPrJ8+/Vf
+         Yz7A==
+X-Gm-Message-State: AOAM53081ObSexktDeuuqp3QLYG/uNW8Ed4HHLRTegYgAivcSJzzKFv2
+        hTfseM2Kuva8v8lrW5m/OWk=
 X-Google-Smtp-Source: ABdhPJwbJn9PaV7uVVeptZSLdmOkDPGrrad13AK38DSA0rKn7zNGSVqVrGkydECDJ0UubdHLvPkEqQ==
 X-Received: by 2002:adf:cc8e:: with SMTP id p14mr10271797wrj.270.1612624019973;
         Sat, 06 Feb 2021 07:06:59 -0800 (PST)
@@ -39,30 +40,32 @@ Received: from kozik-lap (194-95-143-94.dyn.cable.fcom.ch. [94.143.95.194])
         by smtp.googlemail.com with ESMTPSA id n9sm16781833wrq.41.2021.02.06.07.06.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 06 Feb 2021 07:06:58 -0800 (PST)
-Date: Sat, 6 Feb 2021 16:06:55 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
+Date:   Sat, 6 Feb 2021 16:06:55 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-	arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Sylwester Nawrocki <snawrocki@kernel.org>,
-	DTML <devicetree@vger.kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Alexandre Torgue <alexandre.torgue@st.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Maxime Ripard <mripard@kernel.org>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Maxime Ripard <mripard@kernel.org>
 Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
 Message-ID: <20210206150655.nq2m4usyzg4rgvtt@kozik-lap>
 References: <20210125191240.11278-1-krzk@kernel.org>
@@ -73,6 +76,10 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <CAK8P3a0Kgn9PTHjsU7MbJPC8vatvb9KYJJKWxrx7zQzTNgK10g@mail.gmail.com>
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210206150655.81CpA5x85V6y0v-JqsPRjZfiXXd6kPNQXITOJ06gBYc@z>
 
 On Sat, Feb 06, 2021 at 03:35:54PM +0100, Arnd Bergmann wrote:
 > On Sat, Feb 6, 2021 at 2:45 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
