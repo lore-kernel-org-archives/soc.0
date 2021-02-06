@@ -1,173 +1,96 @@
-Return-Path: <SRS0=0nBm=HI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=NRVF=HI=gmail.com=k.kozlowski.k@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 145F5C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  6 Feb 2021 10:19:37 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C5DFC433DB
+	for <soc@archiver.kernel.org>; Sat,  6 Feb 2021 13:13:05 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 008AE64EAC; Sat,  6 Feb 2021 13:13:05 +0000 (UTC)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 85BC564E36
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  6 Feb 2021 10:19:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 85BC564E36
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=sntech.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=j9eGjgtSiwG55Qa4TmGnrWAFo5Pikv7KHB1lH8sip0k=; b=VYGOoBvltCpd5ZKciSEK/YFLQW
-	ydcqhfKtow1oi4Du/1wecqNO3uaMZlbgupIi12//QJC/Swl5n5A/2o3GCYW9UoiyTFQHKczw184r2
-	a9/ijUt4QVDKqJpIIaKOw0uAa9ANc6ukqV0wkwYegAGW+QaEv9l1oVQklIAsTfrX83EqhnD1f7BSx
-	c/WVcKoCGlxBIsaxbZAFuRJGNIfW64PhnYXWOEE01HfWTsJ6qEjHEI0PwozRs15iGAsMeXh0Xwj8g
-	DCzW9WJmP/lzzrpJESst3QTKTb5ROg3EcnfHwD41J9Th+4xFoN3O6xwV4SDxYTYkGuh0SR70PwyzO
-	DTTdbaHg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l8Kfa-0000Ns-1M; Sat, 06 Feb 2021 10:18:26 +0000
-Received: from gloria.sntech.de ([185.11.138.130])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l8KfW-0000Mp-9z; Sat, 06 Feb 2021 10:18:23 +0000
-Received: from p508fcd06.dip0.t-ipconnect.de ([80.143.205.6]
- helo=phil.localnet)
- by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
- (Exim 4.92) (envelope-from <heiko@sntech.de>)
- id 1l8KfT-00074K-PN; Sat, 06 Feb 2021 11:18:19 +0100
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Subject: [GIT PULL RESEND] Rockchip dts64 changes for 5.12
-Date: Sat, 06 Feb 2021 11:18:18 +0100
-Message-ID: <12699743.uLZWGnKmhe@phil>
-MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210206_051822_375170_A7D352D2 
-X-CRM114-Status: GOOD (  14.50  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by mail.kernel.org (Postfix) with ESMTPS id 8A01864E42;
+	Sat,  6 Feb 2021 13:13:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8A01864E42
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=k.kozlowski.k@gmail.com
+Received: by mail-wm1-f45.google.com with SMTP id i5so216957wmq.2;
+        Sat, 06 Feb 2021 05:13:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TcWqlo7340ClwaNrU2G13HH3PdkJ5tma+WdPpB6m4uk=;
+        b=D4BFdrKN+GHtJVllqc0riGsHOdrZjfWf0Y4at4WNVQ+H9ZJLB9MGJnIoxmeFcptkiL
+         wA3jvieQVZzYDOo2ClwSMLZ/9Y9Ov3qS1fbx2o4P3RUnbwZeigRzt9vIooXU6jKbJAnj
+         FNCMFB6GcfC8qB+M8jbOVtg+ZsN7Mqjkg/nFll+2TAPD5mWLGBWPhWrjLN57N+rSRI1l
+         9M2V+J8ZHILWSAW7xag6vQYwZ3PfOyrx72vFj1sdtlfTPMdaL74wU8EApUTeEIlp354q
+         ksyGVu3YL5Gk1uAk5fcYK39RZkarFlCYFJ1oYGfK7cVqrIMRxS0Igtnro0tePW1CZvGw
+         ZBxg==
+X-Gm-Message-State: AOAM532ByMOzzVa/Lm+4LWHTZ5jGIPvEGU9AQmafeD+PBUmbdi4Aktmd
+	lCA1OtgkhTNMn2MfDJPS8jb8wHu44ig=
+X-Google-Smtp-Source: ABdhPJxmmMbmWj5ntspZOudiviLyA/AkKCV1/oa2n4cSkwvyp024Ie1So4/dPvxLTHW2DQ2K5hFNrQ==
+X-Received: by 2002:a1c:a707:: with SMTP id q7mr7476875wme.15.1612617182491;
+        Sat, 06 Feb 2021 05:13:02 -0800 (PST)
+Received: from kozik-lap (194-95-143-94.dyn.cable.fcom.ch. [94.143.95.194])
+        by smtp.googlemail.com with ESMTPSA id 67sm11724509wmz.46.2021.02.06.05.13.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Feb 2021 05:13:01 -0800 (PST)
+Date: Sat, 6 Feb 2021 14:12:58 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-rockchip@lists.infradead.org, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210206101818.1vZfeN73aXvdOWJ3YWKWmSSynUNfKfxlBDGz8gtMbFM@z>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Ben Dooks <ben-linux@fluff.org>, soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, Stefan Agner <stefan@agner.ch>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	clang-built-linux@googlegroups.com
+Subject: Re: [PATCH] ARM: s3c: fix fiq for clang IAS
+Message-ID: <20210206131258.du6tmx7lda35rg5l@kozik-lap>
+References: <20210204162416.3030114-1-arnd@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210204162416.3030114-1-arnd@kernel.org>
 
-Hi Arnd, Kevin, Olof,
+On Thu, Feb 04, 2021 at 05:23:42PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Building with the clang integrated assembler produces a couple of
+> errors for the s3c24xx fiq support:
+> 
+> arch/arm/mach-s3c/irq-s3c24xx-fiq.S:52:2: error: instruction 'subne' can not set flags, but 's' suffix specified
+>  subnes pc, lr, #4 @@ return, still have work to do
+>  ^
+> arch/arm/mach-s3c/irq-s3c24xx-fiq.S:64:1: error: invalid symbol redefinition
+> s3c24xx_spi_fiq_txrx:
+> ^
+> arch/arm/mach-s3c/irq-s3c24xx-fiq.S:79:2: error: instruction 'subne' can not set flags, but 's' suffix specified
+>  subnes pc, lr, #4 @@ return, still have work to do
+>  ^
+> arch/arm/mach-s3c/irq-s3c24xx-fiq.S:104:2: error: instruction 'subne' can not set flags, but 's' suffix specified
+>  subnes pc, lr, #4 @@ return, still have work to do
+> 
+> There are apparently two problems: one with extraneous or duplicate
+> labels, and one with old-style opcode mnemonics. Stefan Agner has
+> previously fixed other problems like this, but missed this particular
+> file.
+> 
+> Fixes: bec0806cfec6 ("spi_s3c24xx: add FIQ pseudo-DMA support")
+> Cc: Stefan Agner <stefan@agner.ch>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/mach-s3c/irq-s3c24xx-fiq.S | 9 +++------
 
-sorry I mixed up the versioning in the pull's subject.
-The changes are of course meant for 5.12.
+Thanks, applied.
 
-Thanks
-Heiko
+Best regards,
+Krzysztof
 
-
-The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-
-  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git ta=
-gs/v5.12-rockchip-dts64-1
-
-for you to fetch changes up to 7582ad63c9bd09a8f0988c46074481ddd4f92e04:
-
-  arm64: dts: rockchip: more user friendly name of sound nodes (2021-02-01 =
-19:00:31 +0100)
-
-----------------------------------------------------------------
-New boards: Radxa Rock Pi E, NanoPi M4B
-More fixed indices for mmc nodes; removal of obsolete amba bus nodes;
-nand-flash-controller nodes for px30 and rk3308; rk3399 pcie ranges fix;
-board-level fixes for Helios64, NanoPi and Rock960; more sound support
-for rock64 and rockpro64 and cleanups to make dt-bindings happier.
-
-----------------------------------------------------------------
-Chen-Yu Tsai (5):
-      arm64: dts: rockchip: rk3328: Add clock_in_out property to gmac2phy n=
-ode
-      dt-bindings: arm: rockchip: Add Radxa ROCK Pi E
-      arm64: dts: rockchip: rk3328: Add Radxa ROCK Pi E
-      arm64: dts: rockchip: Move ep-gpios property to nanopc-t4 from nanopi4
-      arm64: dts: rockchip: Add NanoPi M4B board
-
-Johan Jonker (11):
-      arm64: dts: rockchip: assign a fixed index to mmc devices on rk3328 b=
-oards
-      arm64: dts: rockchip: add QoS register compatibles for rk3399
-      arm64: dts: rockchip: add QoS register compatibles for px30
-      arm64: dts: rockchip: rename thermal subnodes for rk3368
-      arm64: dts: rockchip: rename thermal subnodes for rk3399
-      arm64: dts: rockchip: fix ranges property format for rk3399 pcie node
-      arm64: dts: rockchip: cleanup cpu_thermal node of rk3399-rock960.dts
-      arm64: dts: rockchip: assign a fixed index to mmc devices on px30 boa=
-rds
-      arm64: dts: rockchip: assign a fixed index to mmc devices on rk3308 b=
-oards
-      arm64: dts: rockchip: assign a fixed index to mmc devices on rk3368 b=
-oards
-      arm64: dts: rockchip: rename pinctrl nodename to gmac2io for nanopi-r=
-2s board
-
-Katsuhiro Suzuki (3):
-      arm64: dts: rockchip: enable HDMI sound nodes for rk3328-rock64
-      arm64: dts: rockchip: add SPDIF node for rk3399-rockpro64
-      arm64: dts: rockchip: more user friendly name of sound nodes
-
-Robin Murphy (2):
-      arm64: dts: rockchip: Light "sys" LED on NanoPi R2S
-      arm64: dts: rockchip: Remove bogus "amba" bus nodes
-
-Uwe Kleine-K=F6nig (1):
-      arm64: dts: rockchip: Rely on SoC external pull up on pmic-int-l on H=
-elios64
-
-Yifeng Zhao (2):
-      arm64: dts: rockchip: Add NFC node for RK3308 SoC
-      arm64: dts: rockchip: Add NFC node for PX30 SoC
-
- .../devicetree/bindings/arm/rockchip.yaml          |   5 +
- arch/arm64/boot/dts/rockchip/Makefile              |   2 +
- arch/arm64/boot/dts/rockchip/px30.dtsi             |  83 +++--
- arch/arm64/boot/dts/rockchip/rk3308.dtsi           |  63 ++--
- arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts |   3 +-
- arch/arm64/boot/dts/rockchip/rk3328-rock-pi-e.dts  | 382 +++++++++++++++++=
-++++
- arch/arm64/boot/dts/rockchip/rk3328-rock64.dts     |  56 ++-
- arch/arm64/boot/dts/rockchip/rk3328.dtsi           |  33 +-
- arch/arm64/boot/dts/rockchip/rk3368.dtsi           |  62 ++--
- .../boot/dts/rockchip/rk3399-kobol-helios64.dts    |   2 +-
- arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts  |   1 +
- arch/arm64/boot/dts/rockchip/rk3399-nanopi-m4b.dts |  52 +++
- arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi   |   1 -
- arch/arm64/boot/dts/rockchip/rk3399-rock960.dts    |  53 +--
- arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi |  29 +-
- arch/arm64/boot/dts/rockchip/rk3399.dtsi           | 109 +++---
- 16 files changed, 690 insertions(+), 246 deletions(-)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3328-rock-pi-e.dts
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-nanopi-m4b.dts
-
-
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
