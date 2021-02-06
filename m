@@ -1,38 +1,39 @@
-Return-Path: <SRS0=R130=HI=gmail.com=geert.uytterhoeven@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34034C433E0
-	for <soc@archiver.kernel.org>; Sat,  6 Feb 2021 19:48:02 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id A7CB764E5A; Sat,  6 Feb 2021 19:48:01 +0000 (UTC)
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2DD7264E25;
-	Sat,  6 Feb 2021 19:48:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2DD7264E25
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=geert.uytterhoeven@gmail.com
-Received: by mail-ot1-f41.google.com with SMTP id d7so8140853otq.6;
-        Sat, 06 Feb 2021 11:48:01 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25F79C43381
+	for <linux-devicetree@archiver.kernel.org>; Sat,  6 Feb 2021 19:48:54 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id E55E764E28
+	for <linux-devicetree@archiver.kernel.org>; Sat,  6 Feb 2021 19:48:53 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S229706AbhBFTst (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Sat, 6 Feb 2021 14:48:49 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:42955 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229508AbhBFTsl (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Sat, 6 Feb 2021 14:48:41 -0500
+Received: by mail-ot1-f52.google.com with SMTP id q4so751111otm.9;
+        Sat, 06 Feb 2021 11:48:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=8mVMNF4fRsyTZazYCsaAIH58/5IMUtcIzDAOPD4XiLo=;
-        b=P5JJ6p3PoWatNzGmJ73OWWd02/wmpR+7uwC11IDCtyvHpSF7sTx0g3MugUeDUiQ8L9
-         bBv4Xu+giMVHtP8zZ70TuGuKkPO769mjlU6WkORInBBQx9nEuQIVMtWufFYr2K9BYCD8
-         BuVqDVM6f4HPijVVsUviW/gkPz7glbdrWqxKFC1Dqn6wRNgQd+jlrGi8r/o9lX2XaYG4
-         Ic7eZxl+hvsEMZbbvXE5GQqBu3Ovx7rq3n3XwIhOcUhISG1eovYs0DbY4tMUojmYd0Oo
-         8w58ljOQTF73+PRmHncyanKCgF3H2XHMtCc2QB8aA3EO7Nc61FY+4qNk0++WljwsW6XY
-         eZ4A==
-X-Gm-Message-State: AOAM530LlD0WqE17AJIJgclB2ifZudhn11DDxoHob/3aWSVWkePQf6xB
-	twT8Q1F4XXWPwB8T8vXYOuYFRDtx+iK50a6aGMjGWvm9
+        b=R7AgR3EvwypHb0F2brBXz0ZAB82ZRwLdUFWS8Ipry1qAJ3JDp+1z5qC0iTb8eTUgeP
+         tQT6gKaCf7if3/qIjn+qOjGVx8MVBYivczGkt6RwHa2tZT4WGHyMCvv/4hXdBkSdAxe9
+         0jCjCibZwp4/WbveJqMoDKCHoOLuKD6TGGBjAegOKhshEwJF2HS3A8Nmj/RgZkqz4zTv
+         RUL2eBrqqjSDmScEA5iFWB6JRlBJ6PLZ3QnfYnSLMoXi5/BqPcKSMgzEikYRkOU2y2BY
+         s7NGkmnpPcQ/MFTHrLdAUSMaSzjKx0MnHPTRu7aK63Zajzill0Uy/lV8vr5Q1Ss0swXQ
+         rYQg==
+X-Gm-Message-State: AOAM531knbpEapYKzaHq0xJHR8ACxKkJY7uWgYhMDXigg66G7uFA9tha
+        T+cKnjPwdHLJNtm01TCX2JuH7pY4AzAHzDCRkDQ=
 X-Google-Smtp-Source: ABdhPJw745S8LM8O3h8fPOXwjE6gI72k4oPqS5/xYZ9eVQi+tWwpGN5S3rTWZsDTboMo0cSPFheifgB+2yBBK2ArvyU=
 X-Received: by 2002:a05:6830:15cc:: with SMTP id j12mr7710395otr.145.1612640880368;
  Sat, 06 Feb 2021 11:48:00 -0800 (PST)
@@ -40,26 +41,40 @@ MIME-Version: 1.0
 References: <20210125191240.11278-1-krzk@kernel.org> <20210125191240.11278-3-krzk@kernel.org>
  <20210206134531.l5vpzlmev4v3f3uo@kozik-lap> <CAK8P3a0Kgn9PTHjsU7MbJPC8vatvb9KYJJKWxrx7zQzTNgK10g@mail.gmail.com>
 In-Reply-To: <CAK8P3a0Kgn9PTHjsU7MbJPC8vatvb9KYJJKWxrx7zQzTNgK10g@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Sat, 6 Feb 2021 20:47:49 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sat, 6 Feb 2021 20:47:49 +0100
 Message-ID: <CAMuHMdWZ8QmiQCmiW9AvCpviNZeuaxThSo_4Xb2DGEs9hMTKMQ@mail.gmail.com>
 Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, 
-	arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Sylwester Nawrocki <snawrocki@kernel.org>, DTML <devicetree@vger.kernel.org>, 
-	Tony Lindgren <tony@atomide.com>, Frank Rowand <frowand.list@gmail.com>, 
-	Rob Herring <robh+dt@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Gregory Clement <gregory.clement@bootlin.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <bjorn.andersson@linaro.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Alexandre Torgue <alexandre.torgue@st.com>, Kevin Hilman <khilman@baylibre.com>, 
-	Maxime Ripard <mripard@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Maxime Ripard <mripard@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210206194749.y9bq22hxsdzkX173G09_LzwsJnBRnLJHhJolg3eD8aM@z>
 
 Hi Arnd,
 
