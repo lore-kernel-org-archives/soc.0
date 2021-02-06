@@ -1,37 +1,37 @@
-Return-Path: <SRS0=YjQ7=HI=lists.infradead.org=linux-rockchip-bounces+linux-rockchip=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=0nBm=HI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25BF4C433DB
-	for <linux-rockchip@archiver.kernel.org>; Sat,  6 Feb 2021 10:18:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 145F5C433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Sat,  6 Feb 2021 10:19:37 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 80CA664D73
-	for <linux-rockchip@archiver.kernel.org>; Sat,  6 Feb 2021 10:18:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 80CA664D73
+	by mail.kernel.org (Postfix) with ESMTPS id 85BC564E36
+	for <linux-arm-kernel@archiver.kernel.org>; Sat,  6 Feb 2021 10:19:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 85BC564E36
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=sntech.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-rockchip-bounces+linux-rockchip=archiver.kernel.org@lists.infradead.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
 	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
 	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To:From:
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=tnwmzHTq3WDH1HANbdAeH69T6nF9nXLODT1l2uSfkWY=; b=egE9DVwfsod+8C+7wPH5z/pCee
-	CHoI6ytZ5OgGv9SjSPhnqfUmanIs1MVWHViIdz77HkoyPDbr2pUuhGdq1IBy3sffYdG4ZWqWPBXNv
-	cdul0PAV+feFcSE+rKLQURGylUcdsIft1jRJI/KwDt0N7UTfriu5PaqTVibPtVfyygCb28CHP9/4b
-	eynmdX06FyxKwCXP1QgDbBMPkv6z94u1wTo+J3zhWWRSJ/E28t83EtWqxX6pncQBOYBagxc2Q+/yH
-	Sbn2bk2RQ9MKPYUGczth+y6xgcWeEtGJ0845sK411wLM4Pls5WdfISbWRDfnZRjREba2+NmPO8yJ4
-	W/dcCcjQ==;
+	bh=j9eGjgtSiwG55Qa4TmGnrWAFo5Pikv7KHB1lH8sip0k=; b=VYGOoBvltCpd5ZKciSEK/YFLQW
+	ydcqhfKtow1oi4Du/1wecqNO3uaMZlbgupIi12//QJC/Swl5n5A/2o3GCYW9UoiyTFQHKczw184r2
+	a9/ijUt4QVDKqJpIIaKOw0uAa9ANc6ukqV0wkwYegAGW+QaEv9l1oVQklIAsTfrX83EqhnD1f7BSx
+	c/WVcKoCGlxBIsaxbZAFuRJGNIfW64PhnYXWOEE01HfWTsJ6qEjHEI0PwozRs15iGAsMeXh0Xwj8g
+	DCzW9WJmP/lzzrpJESst3QTKTb5ROg3EcnfHwD41J9Th+4xFoN3O6xwV4SDxYTYkGuh0SR70PwyzO
+	DTTdbaHg==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l8KfY-0000Nh-UA; Sat, 06 Feb 2021 10:18:24 +0000
+	id 1l8Kfa-0000Ns-1M; Sat, 06 Feb 2021 10:18:26 +0000
 Received: from gloria.sntech.de ([185.11.138.130])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
  id 1l8KfW-0000Mp-9z; Sat, 06 Feb 2021 10:18:23 +0000
@@ -49,26 +49,25 @@ MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
 X-CRM114-CacheID: sfid-20210206_051822_375170_A7D352D2 
 X-CRM114-Status: GOOD (  14.50  )
-X-BeenThere: linux-rockchip@lists.infradead.org
+X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
-List-Id: Upstream kernel work for Rockchip platforms
- <linux-rockchip.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-rockchip>, 
- <mailto:linux-rockchip-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-rockchip/>
-List-Post: <mailto:linux-rockchip@lists.infradead.org>
-List-Help: <mailto:linux-rockchip-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-rockchip>, 
- <mailto:linux-rockchip-request@lists.infradead.org?subject=subscribe>
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
 Cc: linux-rockchip@lists.infradead.org, soc@kernel.org,
  linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-Sender: "Linux-rockchip" <linux-rockchip-bounces@lists.infradead.org>
-Errors-To: linux-rockchip-bounces+linux-rockchip=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210206101818.cJyWY_qngKuq_3OefIzRHc1XWn8bkMeipnN8hHsT6PU@z>
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210206101818.1vZfeN73aXvdOWJ3YWKWmSSynUNfKfxlBDGz8gtMbFM@z>
 
 Hi Arnd, Kevin, Olof,
 
@@ -169,6 +168,6 @@ Yifeng Zhao (2):
 
 
 _______________________________________________
-Linux-rockchip mailing list
-Linux-rockchip@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-rockchip
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
