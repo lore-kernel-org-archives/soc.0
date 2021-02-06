@@ -1,143 +1,117 @@
-Return-Path: <SRS0=0nBm=HI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=R130=HI=gmail.com=geert.uytterhoeven@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7E8CC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  6 Feb 2021 16:24:03 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34034C433E0
+	for <soc@archiver.kernel.org>; Sat,  6 Feb 2021 19:48:02 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A7CB764E5A; Sat,  6 Feb 2021 19:48:01 +0000 (UTC)
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 85B4664DE7
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  6 Feb 2021 16:24:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 85B4664DE7
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=40QFYI6GxJtr0UVQqjM/iW3wKmhpFv2E7+nx+daRcWY=; b=bXn9NbEbqTfCMX0tdBWBXFUZe
-	PhvYjRsFEw25MOCurWZKcdPHRG6r+Hli+DxBUtlfi7OICgh2zwNomePI8TmXmOaZc+AO815SQRWFp
-	hTsIQgdqnKiH3sCExpcdda8pg2vOh75poLugvqDjY2q60BQC0mgOTahmtAr0QXax8lEek0J7eelaf
-	GIQtkj20J84qx6NTtk20HZlbJndPVOeRlxlkn7kJnMA4049jCmuD+Mek2dh4yI6OzCze3xHB8a3LL
-	SLQZbxIV4+fBItOUcLUii+N7GhNbxFgiITX1OsSUW1plkTTN1g8ZOYrO1ZvR6QgxX66U4b3CtzZJz
-	BzEGuqhGw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l8QMB-0005lH-6W; Sat, 06 Feb 2021 16:22:47 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l8QM8-0005kv-FG
- for linux-arm-kernel@lists.infradead.org; Sat, 06 Feb 2021 16:22:45 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3687164EAC
- for <linux-arm-kernel@lists.infradead.org>;
- Sat,  6 Feb 2021 16:22:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612628563;
- bh=bB7lIDv6NLqdI1sNli6zYhmNZmrOsw1KJg5Z86kLR2U=;
- h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
- b=UGfz/5Qla8V5bHkHPqcrav35IHSlUrDQlDYapiTo1UryHkdlq44Kqovml+zHtMMmO
- lZ9NKdtJHJjJ6tcHrkh52pFT5EhrycQwUrv+MAXD9CmwppL/2TCo7/t+88g84w/2Z8
- zYg3R3R3613Nt1vQ1itu0WeWV/KPIIZGPl/3CQjSu0AM9c02BDc6UxU9wzadWHP+3w
- H6PnwNd3IiMA7svoUr85E33+J59+3VhY4n27uZskjdzKoe1S+Z2DhfQ/TB7cwPD7/A
- eyO+sMF2lIpEqz+DODHp9uQmkJ81Edw4G+NpQM0o+Oejf23QoLdm69HgQl8RGsFUCF
- d4ZeovTLyM5bQ==
-Received: by mail-ot1-f50.google.com with SMTP id 100so3372176otg.3
- for <linux-arm-kernel@lists.infradead.org>;
- Sat, 06 Feb 2021 08:22:43 -0800 (PST)
-X-Gm-Message-State: AOAM531qfp/X4c1txAI1RYeT1R1mBhOiBSz0UvSAOMgI8m8OTelLdqia
- CcE3SmYL//qp5xzEUywv+iJOGTZVJyA2OPy63Jg=
-X-Google-Smtp-Source: ABdhPJyYfibIxYnxW4TQFfaGgWwDmUbkgmJFwxSr5HqEvczYz27a8FLtWimMXB2/AG4NNqjlCTV35ARHAZLMjXTdl2w=
-X-Received: by 2002:a9d:6c11:: with SMTP id f17mr4068079otq.210.1612628562566; 
- Sat, 06 Feb 2021 08:22:42 -0800 (PST)
+	by mail.kernel.org (Postfix) with ESMTPS id 2DD7264E25;
+	Sat,  6 Feb 2021 19:48:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2DD7264E25
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=geert.uytterhoeven@gmail.com
+Received: by mail-ot1-f41.google.com with SMTP id d7so8140853otq.6;
+        Sat, 06 Feb 2021 11:48:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8mVMNF4fRsyTZazYCsaAIH58/5IMUtcIzDAOPD4XiLo=;
+        b=P5JJ6p3PoWatNzGmJ73OWWd02/wmpR+7uwC11IDCtyvHpSF7sTx0g3MugUeDUiQ8L9
+         bBv4Xu+giMVHtP8zZ70TuGuKkPO769mjlU6WkORInBBQx9nEuQIVMtWufFYr2K9BYCD8
+         BuVqDVM6f4HPijVVsUviW/gkPz7glbdrWqxKFC1Dqn6wRNgQd+jlrGi8r/o9lX2XaYG4
+         Ic7eZxl+hvsEMZbbvXE5GQqBu3Ovx7rq3n3XwIhOcUhISG1eovYs0DbY4tMUojmYd0Oo
+         8w58ljOQTF73+PRmHncyanKCgF3H2XHMtCc2QB8aA3EO7Nc61FY+4qNk0++WljwsW6XY
+         eZ4A==
+X-Gm-Message-State: AOAM530LlD0WqE17AJIJgclB2ifZudhn11DDxoHob/3aWSVWkePQf6xB
+	twT8Q1F4XXWPwB8T8vXYOuYFRDtx+iK50a6aGMjGWvm9
+X-Google-Smtp-Source: ABdhPJw745S8LM8O3h8fPOXwjE6gI72k4oPqS5/xYZ9eVQi+tWwpGN5S3rTWZsDTboMo0cSPFheifgB+2yBBK2ArvyU=
+X-Received: by 2002:a05:6830:15cc:: with SMTP id j12mr7710395otr.145.1612640880368;
+ Sat, 06 Feb 2021 11:48:00 -0800 (PST)
 MIME-Version: 1.0
-References: <20210204203951.52105-1-marcan@marcan.st>
- <20210204203951.52105-11-marcan@marcan.st>
- <87h7mpky0f.wl-maz@kernel.org>
-In-Reply-To: <87h7mpky0f.wl-maz@kernel.org>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Sat, 6 Feb 2021 17:22:26 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0-Qk1WAUaCWeX8Zypphpadan3YAOES9t7LFYBOJkXKog@mail.gmail.com>
-Message-ID: <CAK8P3a0-Qk1WAUaCWeX8Zypphpadan3YAOES9t7LFYBOJkXKog@mail.gmail.com>
-Subject: Re: [PATCH 10/18] arm64: Introduce FIQ support
-To: Marc Zyngier <maz@kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210206_112244_597068_8D1463B5 
-X-CRM114-Status: GOOD (  16.47  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+References: <20210125191240.11278-1-krzk@kernel.org> <20210125191240.11278-3-krzk@kernel.org>
+ <20210206134531.l5vpzlmev4v3f3uo@kozik-lap> <CAK8P3a0Kgn9PTHjsU7MbJPC8vatvb9KYJJKWxrx7zQzTNgK10g@mail.gmail.com>
+In-Reply-To: <CAK8P3a0Kgn9PTHjsU7MbJPC8vatvb9KYJJKWxrx7zQzTNgK10g@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Sat, 6 Feb 2021 20:47:49 +0100
+Message-ID: <CAMuHMdWZ8QmiQCmiW9AvCpviNZeuaxThSo_4Xb2DGEs9hMTKMQ@mail.gmail.com>
+Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: DTML <devicetree@vger.kernel.org>, Hector Martin <marcan@marcan.st>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Olof Johansson <olof@lixom.net>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210206162226.wQinUkqNyNX944GzHRW6su05AR8mb1VMAv--AXQuET4@z>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, 
+	arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	Sylwester Nawrocki <snawrocki@kernel.org>, DTML <devicetree@vger.kernel.org>, 
+	Tony Lindgren <tony@atomide.com>, Frank Rowand <frowand.list@gmail.com>, 
+	Rob Herring <robh+dt@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Gregory Clement <gregory.clement@bootlin.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <bjorn.andersson@linaro.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Alexandre Torgue <alexandre.torgue@st.com>, Kevin Hilman <khilman@baylibre.com>, 
+	Maxime Ripard <mripard@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Feb 6, 2021 at 4:37 PM Marc Zyngier <maz@kernel.org> wrote:
-> On Thu, 04 Feb 2021 20:39:43 +0000, Hector Martin <marcan@marcan.st> wrote:
+Hi Arnd,
 
-> > diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
-> > index bf125c591116..6acfc372dc76 100644
-> > --- a/arch/arm64/include/asm/assembler.h
-> > +++ b/arch/arm64/include/asm/assembler.h
-> > @@ -42,7 +42,11 @@
-> >
-> >       /* IRQ is the lowest priority flag, unconditionally unmask the rest. */
-> >       .macro enable_da_f
-> > +alternative_if ARM64_NEEDS_FIQ
-> > +     msr     daifclr, #(8 | 4)
-> > +alternative_else
-> >       msr     daifclr, #(8 | 4 | 1)
-> > +alternative_endif
+On Sat, Feb 6, 2021 at 3:36 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> That said, I'm still not happy about the patch we discussed in the
+> other email thread[1] and I'd like to handle it a little more strictly in
+> the future, but I agree this wasn't obvious and we have been rather
+> inconsistent about it in the past, with some platform maintainers
+> handling it way more strictly than others.
 >
-> See my digression in patch 8. I really wonder what the benefit is to
-> treat FIQ independently of IRQ, and we might as well generalise
-> this. We could always panic on getting a FIQ on platforms that don't
-> expect one.
+> I've added the devicetree maintainers and a few other platform
+> maintainers to Cc here, maybe they can provide some further
+> opinions on the topic so we can come to an approach that
+> works for everyone.
 >
-> It'd be good to rope in the other interested parties (Mark for the
-> early entry code, James for RAS and SError handling).
+> My summary of the thread in [1] is there was a driver bug that
+> required a DT binding change. Krzysztof and the other involved
+> parties made sure the driver handles it in a backward-compatible
+> way (an old dtb file will still run into the bug but keep working
+> with new kernels), but decided that they did not need to worry
+> about the opposite case (running an old kernel with an updated
+> dtb). I noticed the compatibility break and said that I would
+> prefer this to be done in a way that is compatible both ways,
+> or at the minimum be alerted about the binding break in the
+> pull request, with an explanation about why this had to be done,
+> even when we don't think anyone is going to be affected.
+>
+> What do others think about this? Should we generally assume
+> that breaking old kernels with new dtbs is acceptable, or should
+> we try to avoid it if possible, the same way we try to avoid
+> breaking new kernels with old dtbs? Should this be a platform
+> specific policy or should we try to handle all platforms the same
+> way?
 
-There might be another slightly hacky but less intrusive option
-that could be done (almost) purely within the aic code:
+For Renesas SoCs, we typically only consider compatibility of new
+kernels with old DTBs, not the other way around.
+However, most DTB updates are due to new hardware support, so using the
+new DTB with an old kernel usually just means no newly documented
+hardware, or new feature, is being used by the old kernel.
 
-* In the fiq handler code, check if normal interrupts were enabled
-  when the fiq hit. Normally they are enabled, so just proceed to
-  handle the timer and ipi directly
+In case there was a real issue fixed, and using the new DTB with the old
+kernel would cause a regression, and we're aware of it, we do make sure
+the DTS update is postponed until the corresponding driver update has
+hit upstream.
 
-* if irq was disabled, defer the handling by doing a self-ipi
-  through the aic's ipi method, and handle it from there
-  when dealing with the next interrupt once interrupts get
-  enabled.
+Gr{oetje,eeting}s,
 
-This would be similar to the soft-disable feature on powerpc, which
-never actually turns off interrupts from regular kernel code but
-just checks a flag in local_irq_enable that gets set when a
-hardirq happened.
+                        Geert
 
-          Arnd
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
