@@ -1,38 +1,68 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=h8h3=HJ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14D12C433E0
-	for <soc@archiver.kernel.org>; Sun,  7 Feb 2021 18:50:10 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id DD9D364E34; Sun,  7 Feb 2021 18:50:09 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B99BC64E30;
-	Sun,  7 Feb 2021 18:50:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3814EC433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Sun,  7 Feb 2021 18:51:30 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id D52BD64DF2
+	for <linux-arm-kernel@archiver.kernel.org>; Sun,  7 Feb 2021 18:51:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D52BD64DF2
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
+	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=2QSXjzsasPtVBK+iCmQnRJ4Ve/8ozNwLLBKjfqvpEMc=; b=cW/Zvy3RDpeA4GWEGbt1yiNO8
+	z2DAH2MJbp/WQQWPJRnSDbyc9hYrY8qi4YLAf9sCPM8R3EIYUGZQ+MdS7M/e2KMys7dEqnwJ7LDci
+	CDB0QXzrROUaOQ4+USGtyuhBYs5R0TaK0E/OP/Cc25oM+M+X1BT0K/TwY50CEBxTPCnGXM1Ev1E4t
+	TGyEPF0HaIKIc0Rayti1S8d7biTA87GZZGi4/YKeoE/RWIdRI/thj438GSmZ5mi1PIDQDLl+Z4t99
+	oLVNZxuuGt8UK+a7a/XLxxFD5P9L2sj3oECVtvTtepOtvznm3gRbM67fjX28t9kIzt1mjf7GoVXT4
+	R4s2zddog==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l8p8P-0002xg-O7; Sun, 07 Feb 2021 18:50:13 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l8p8N-0002wn-Ao
+ for linux-arm-kernel@lists.infradead.org; Sun, 07 Feb 2021 18:50:12 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B281C64DF0
+ for <linux-arm-kernel@lists.infradead.org>;
+ Sun,  7 Feb 2021 18:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612723809;
-	bh=zLrZH7u8b340JUKe9u6QJb984ZFsjNLKfNoSrHfAx+o=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=MwoR5mPeh9MdovahURDMIbLVVgXSEXSaRaE6YH1NojJ2PTjBrKG6zB8SghMuhXdVV
-	 0mSTNSlMPe6SoYjY/Qp0EfG9XJR5f23J9aA6pbiuSfXA65+nKZUpKR4YoNrE3MYfrz
-	 479sjvyZYnBRKskTtTRyegPY+/dlWCHMxbGbxeZBH60BAInAV7mKtdD2YQNf7Nrg+z
-	 H4X7nwBxE9xcAfFaDymre9iWromuxpWZcE1i1L5jvPKF4YUIwt4P46qcgBX4J8rwHT
-	 5KDUIUb0Wt8Lej0wIffL344i9inBOgjxCFUWl5mW04+476FBUtFKk49XizjWeiUFLb
-	 mJeQ6aoUZtuLQ==
-Received: by mail-oi1-f175.google.com with SMTP id v193so8014084oie.8;
-        Sun, 07 Feb 2021 10:50:09 -0800 (PST)
-X-Gm-Message-State: AOAM533xchNF+WuKI5BTlfy3sNSmdDCPdG3A1dJk39i32Jcyyb1vic76
-	+ruX0kM0HibV5FQiKSIHaXVWRKJR1dyfR/Hb1UQ=
+ s=k20201202; t=1612723809;
+ bh=zLrZH7u8b340JUKe9u6QJb984ZFsjNLKfNoSrHfAx+o=;
+ h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+ b=MwoR5mPeh9MdovahURDMIbLVVgXSEXSaRaE6YH1NojJ2PTjBrKG6zB8SghMuhXdVV
+ 0mSTNSlMPe6SoYjY/Qp0EfG9XJR5f23J9aA6pbiuSfXA65+nKZUpKR4YoNrE3MYfrz
+ 479sjvyZYnBRKskTtTRyegPY+/dlWCHMxbGbxeZBH60BAInAV7mKtdD2YQNf7Nrg+z
+ H4X7nwBxE9xcAfFaDymre9iWromuxpWZcE1i1L5jvPKF4YUIwt4P46qcgBX4J8rwHT
+ 5KDUIUb0Wt8Lej0wIffL344i9inBOgjxCFUWl5mW04+476FBUtFKk49XizjWeiUFLb
+ mJeQ6aoUZtuLQ==
+Received: by mail-oi1-f178.google.com with SMTP id l3so3498722oii.2
+ for <linux-arm-kernel@lists.infradead.org>;
+ Sun, 07 Feb 2021 10:50:09 -0800 (PST)
+X-Gm-Message-State: AOAM531ydkM2Zx21xdZenUKT/6YJOB0bOerCCFSnPxp4AN0E+aziFjPY
+ tdU6kAMx9y51Cdy8jPHGbdPTqM0TgAoofHlAZcU=
 X-Google-Smtp-Source: ABdhPJyDRjLOh/MKsgqtGED0S0mi24CWBQUO9WGLOYmU4ZVYj6zUfXxnEIp9WinnK4URvR05/Fc874Z+oPrQQ/N7PRE=
 X-Received: by 2002:aca:e103:: with SMTP id y3mr8916747oig.11.1612723808999;
  Sun, 07 Feb 2021 10:50:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20210204203951.52105-1-marcan@marcan.st> <20210204203951.52105-11-marcan@marcan.st>
- <87h7mpky0f.wl-maz@kernel.org> <CAK8P3a0-Qk1WAUaCWeX8Zypphpadan3YAOES9t7LFYBOJkXKog@mail.gmail.com>
- <cb721f28-d5e9-3381-2d04-746c0aa2a0d3@marcan.st> <CAK8P3a1R51_nqfMWG7SxScJNJEQ3qvp-cynABKEDaQ4O9REM=Q@mail.gmail.com>
+References: <20210204203951.52105-1-marcan@marcan.st>
+ <20210204203951.52105-11-marcan@marcan.st>
+ <87h7mpky0f.wl-maz@kernel.org>
+ <CAK8P3a0-Qk1WAUaCWeX8Zypphpadan3YAOES9t7LFYBOJkXKog@mail.gmail.com>
+ <cb721f28-d5e9-3381-2d04-746c0aa2a0d3@marcan.st>
+ <CAK8P3a1R51_nqfMWG7SxScJNJEQ3qvp-cynABKEDaQ4O9REM=Q@mail.gmail.com>
  <df54df32-088a-c707-9ffd-e099878548bc@marcan.st>
 In-Reply-To: <df54df32-088a-c707-9ffd-e099878548bc@marcan.st>
 From: Arnd Bergmann <arnd@kernel.org>
@@ -41,12 +71,31 @@ X-Gmail-Original-Message-ID: <CAK8P3a1vmUJ0EpzU2+u2gy8WHCVV5ur9u-oTzU2BP=ddbXQeL
 Message-ID: <CAK8P3a1vmUJ0EpzU2+u2gy8WHCVV5ur9u-oTzU2BP=ddbXQeLQ@mail.gmail.com>
 Subject: Re: [PATCH 10/18] arm64: Introduce FIQ support
 To: "Hector Martin 'marcan'" <marcan@marcan.st>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210207_135011_498804_33E65BA5 
+X-CRM114-Status: GOOD (  44.82  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, SoC Team <soc@kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, DTML <devicetree@vger.kernel.org>, 
-	Olof Johansson <olof@lixom.net>
-Content-Type: text/plain; charset="UTF-8"
+Cc: DTML <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Olof Johansson <olof@lixom.net>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210207184953._Cz_CQec8g3qi65i7RnBfQT7f8J32GpUkkF8kS0urSM@z>
 
 On Sun, Feb 7, 2021 at 4:40 PM Hector Martin 'marcan' <marcan@marcan.st> wrote:
 > On 07/02/2021 21.25, Arnd Bergmann wrote:
@@ -171,3 +220,8 @@ Anyway, it's probably not worth pursuing this further if the timer
 interrupt is level-triggered, as you explained above.
 
        Arnd
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
