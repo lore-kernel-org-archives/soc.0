@@ -1,122 +1,95 @@
-Return-Path: <SRS0=h8h3=HJ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACDC1C433E6
-	for <linux-arm-kernel@archiver.kernel.org>; Sun,  7 Feb 2021 09:28:05 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 597F564E2F
-	for <linux-arm-kernel@archiver.kernel.org>; Sun,  7 Feb 2021 09:28:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 597F564E2F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=marcan.st
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:
-	Content-Transfer-Encoding:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:References:
-	To:From:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=B7gJR9GhcugpR8Yph/v7UhohYwcI8ntR2/sDtAtn+Yk=; b=BAs634frPfmv3E2PD7UUP4ZTN
-	pGJb4NGIJyr9quKbiR+V/ZOkvWtEwLdpdFnNkFGWec9GD+WtC6n2jgIIyQcjuM848Yw3lasCzkwai
-	Y5wimVeJWIzB9Ak8E0OAo+suFbiaqfD2xGUwsr4D3G7c3A8b4nwG0CF7CY18oUIIONE7IZQzjOD22
-	QJxBKkpQI0dClDX9svb8U/I0YJ0CXsKHlIcW4wdRixVAGhQTvhvv7ue/uktuMqhyAghcYJpI0Wpp4
-	Fm6LGUJ68suBIP+PWrG9ed4hViQgY5XD3frKOWrBeYJqlxpnsXVXjStLNgLUyBtlYB1V4GYLOdnUy
-	uwcPjoadA==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l8gLD-0004on-Vc; Sun, 07 Feb 2021 09:26:52 +0000
-Received: from marcansoft.com ([212.63.210.85] helo=mail.marcansoft.com)
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l8gLB-0004oH-J0
- for linux-arm-kernel@lists.infradead.org; Sun, 07 Feb 2021 09:26:50 +0000
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits))
- (No client certificate requested)
- (Authenticated sender: marcan@marcan.st)
- by mail.marcansoft.com (Postfix) with ESMTPSA id C083042852;
- Sun,  7 Feb 2021 09:26:45 +0000 (UTC)
-Subject: Re: [PATCH 05/18] tty: serial: samsung_tty: add support for Apple
- UARTs
-From: Hector Martin 'marcan' <marcan@marcan.st>
-To: Marc Zyngier <maz@kernel.org>
-References: <20210204203951.52105-1-marcan@marcan.st>
- <20210204203951.52105-6-marcan@marcan.st> <87lfc1l4lo.wl-maz@kernel.org>
- <e842f37d-d788-2d34-05e4-86ef94aed8f5@marcan.st>
-Message-ID: <e2bd8f99-58db-4cae-30b3-6fa608bc76dd@marcan.st>
-Date: Sun, 7 Feb 2021 18:26:43 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 693B1C433E0
+	for <soc@archiver.kernel.org>; Sun,  7 Feb 2021 12:25:20 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 25BEB64E54; Sun,  7 Feb 2021 12:25:20 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F39A864DF6;
+	Sun,  7 Feb 2021 12:25:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1612700720;
+	bh=XyIV0mQRY76asF3SEYLbYdKnyQG/xcH5nGqR8aL09QE=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=dWr0vbjS2hz95yn1KghsniexxA5hrho2hgnMPc5FQlxBEkGL75RnqxHV3S6Qlni80
+	 IuynGNgjTGBf4Mhoi69NyMTZsKvBFknA/5W5NFrrit+p6w4y3JW+SvgdiRr/nK48+D
+	 5ivndodJzJSHkgXu567enpc5xFuqbgRIRpjJgl/cmqCk7T7t3a2FFUhfdDsWxnE1Vh
+	 Zue6JD0G8TKA2ShDkwrTp0xvKwoBucoU0YgStvmPqSmgN7ep0TxciZHEJQkXYHBXOd
+	 NkCNDgNUANxR7JmajgFAv0TfXEfUUNEbWgN946G/qbltkflSbZlLAp5opLg2so02ER
+	 +f1TsK2eKONJg==
+Received: by mail-oi1-f179.google.com with SMTP id v193so7352920oie.8;
+        Sun, 07 Feb 2021 04:25:19 -0800 (PST)
+X-Gm-Message-State: AOAM530l7AQ/SMAeKsJauyVOLJBndtLSyr3tkuJbLZmW7n9UFvjkNrxU
+	uAZmVroO4YTZ9XTebf11W0PgJ069SfCKR9l6ifU=
+X-Google-Smtp-Source: ABdhPJxLK4Eh3P4gg7G+hL1MAzjTYsIn7CY2vh0qkD4hrNVz8zoUU5hpLDo+VeYS+1HxaswTc9+BVAPuAiIEqUo/imM=
+X-Received: by 2002:aca:e103:: with SMTP id y3mr8152498oig.11.1612700719300;
+ Sun, 07 Feb 2021 04:25:19 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <e842f37d-d788-2d34-05e4-86ef94aed8f5@marcan.st>
-Content-Language: es-ES
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210207_042649_794828_611AB28C 
-X-CRM114-Status: GOOD (  16.79  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+References: <20210204203951.52105-1-marcan@marcan.st> <20210204203951.52105-11-marcan@marcan.st>
+ <87h7mpky0f.wl-maz@kernel.org> <CAK8P3a0-Qk1WAUaCWeX8Zypphpadan3YAOES9t7LFYBOJkXKog@mail.gmail.com>
+ <cb721f28-d5e9-3381-2d04-746c0aa2a0d3@marcan.st>
+In-Reply-To: <cb721f28-d5e9-3381-2d04-746c0aa2a0d3@marcan.st>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Sun, 7 Feb 2021 13:25:03 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1R51_nqfMWG7SxScJNJEQ3qvp-cynABKEDaQ4O9REM=Q@mail.gmail.com>
+Message-ID: <CAK8P3a1R51_nqfMWG7SxScJNJEQ3qvp-cynABKEDaQ4O9REM=Q@mail.gmail.com>
+Subject: Re: [PATCH 10/18] arm64: Introduce FIQ support
+To: "Hector Martin 'marcan'" <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
- soc@kernel.org, robh+dt@kernel.org, Olof Johansson <olof@lixom.net>,
- linux-arm-kernel@lists.infradead.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210207092643.R7fRPIqtIvGqZWDQdjVOPweVQWYMAFFma3VuYFl9JDk@z>
+Cc: Marc Zyngier <maz@kernel.org>, SoC Team <soc@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, DTML <devicetree@vger.kernel.org>, 
+	Olof Johansson <olof@lixom.net>
+Content-Type: text/plain; charset="UTF-8"
 
-On 07/02/2021 18.12, Hector Martin 'marcan' wrote:
-> On 06/02/2021 22.15, Marc Zyngier wrote:
->> The default should be IRQ_NONE, otherwise the kernel cannot detect a
->> screaming spurious interrupt.
-> 
-> Good point, and this needs fixing in s3c64xx_serial_handle_irq too then
-> (which is what I based mine off of).
-> 
->>> +	ret = request_irq(port->irq, apple_serial_handle_irq, IRQF_SHARED,
->>> +			  s3c24xx_serial_portname(port), ourport);
->>
->> Why IRQF_SHARED? Do you expect any other device sharing the same line
->> with this UART?
-> 
-> This also came from s3c64xx_serial_startup and... now I wonder why that
-> one needs it. Maybe on some SoCs it does get shared? Certainly not for
-> discrete rx/tx irq chips (and indeed those don't set the flag)...
-> 
-> CCing Thomas, who added the S3C64xx support (and should probably review
-> this patch); is there a reason for IRQF_SHARED there? NB: v1 breaks the
-> build on arm or with CONFIG_PM_SLEEP, those will be fixed for v2.
+On Sun, Feb 7, 2021 at 9:36 AM Hector Martin 'marcan' <marcan@marcan.st> wrote:
+> On 07/02/2021 01.22, Arnd Bergmann wrote:
+> > * In the fiq handler code, check if normal interrupts were enabled
+> >    when the fiq hit. Normally they are enabled, so just proceed to
+> >    handle the timer and ipi directly
+> >
+> > * if irq was disabled, defer the handling by doing a self-ipi
+> >    through the aic's ipi method, and handle it from there
+> >    when dealing with the next interrupt once interrupts get
+> >    enabled.
+> >
+> > This would be similar to the soft-disable feature on powerpc, which
+> > never actually turns off interrupts from regular kernel code but
+> > just checks a flag in local_irq_enable that gets set when a
+> > hardirq happened.
+>
+> Case #2 seems messy. In AIC, we'd have to either:
+>
+> * Disable FIQs, and hope that doesn't confuse any save/restore code
+> going on, then set a flag and check it in *both* the IRQ and FIQ path
+> since either might trigger depending on what happens next, or
+> * Mask the relevant timer, which we'd then need to make sure does not
+> confuse the timer code (Unmask it again when we fire the interrupt? But
+> what if the timer code intended to mask it in the interim?)
 
-Seems Thomas does not work for Linaro any more :)
+I'm not quite following here. The IRQ should be disabled the entire time
+while handling that self-IPI and the timer top half code, so if we get
+another FIQ while handling the timer from the IRQ path, it will lead
+either yet another self-IPI or it will be ignored in case the previous timer
+event has not been Acked yet. I would expect that both cases are
+race-free here, the only time that the FIQ needs to be disabled is
+while actually handling the FIQ. Did I miss something?
 
-CCing Krzysztof instead, who is the Samsung arch maintainer.
+> Plus I don't know if the vector entry code and other scaffolding between
+> the vector and the AIC driver would be happy with, effectively,
+> recursive interrupts. This could work with a carefully controlled path
+> to make sure it doesn't break things, but I'm not so sure about the
+> current "just point FIQ and IRQ to the same place" approach here.
 
-> 
-> Either way, certainly not for Apple SoCs; I'll get rid of IRQF_SHARED
-> for v2.
+If we do what I described above, the FIQ and IRQ entry would have
+to be separate and only arrive in the same code path when calling
+into drivers/clocksource/arm_arch_timer.c. It's not recursive there
+because that part is only called when IRQ is disabled, and no IRQ
+is being executed while the FIQ hits.
 
--- 
-Hector Martin "marcan" (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+       Arnd
