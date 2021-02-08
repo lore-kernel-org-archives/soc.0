@@ -1,106 +1,519 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <maz@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 289F0C433E0
-	for <linux-devicetree@archiver.kernel.org>; Mon,  8 Feb 2021 08:45:46 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E4F5564E8B
-	for <linux-devicetree@archiver.kernel.org>; Mon,  8 Feb 2021 08:45:45 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbhBHIpL (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Mon, 8 Feb 2021 03:45:11 -0500
-Received: from muru.com ([72.249.23.125]:58752 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230398AbhBHImE (ORCPT <rfc822;devicetree@vger.kernel.org>);
-        Mon, 8 Feb 2021 03:42:04 -0500
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id E962A80A3;
-        Mon,  8 Feb 2021 08:40:45 +0000 (UTC)
-Date:   Mon, 8 Feb 2021 10:40:26 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C41C0C433E9
+	for <soc@archiver.kernel.org>; Mon,  8 Feb 2021 09:25:56 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7BEF264E8F; Mon,  8 Feb 2021 09:25:56 +0000 (UTC)
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPSA id 2500464E88;
+	Mon,  8 Feb 2021 09:25:56 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94)
+	(envelope-from <maz@kernel.org>)
+	id 1l92np-00Cjfe-Jv; Mon, 08 Feb 2021 09:25:53 +0000
+Date: Mon, 08 Feb 2021 09:25:52 +0000
+Message-ID: <87eehqlxlr.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Hector Martin <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Maxime Ripard <mripard@kernel.org>
-Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
-Message-ID: <YCD4+pb4MfuA1b9e@atomide.com>
-References: <20210125191240.11278-1-krzk@kernel.org>
- <20210125191240.11278-3-krzk@kernel.org>
- <20210206134531.l5vpzlmev4v3f3uo@kozik-lap>
- <CAK8P3a0Kgn9PTHjsU7MbJPC8vatvb9KYJJKWxrx7zQzTNgK10g@mail.gmail.com>
- <CAMuHMdWZ8QmiQCmiW9AvCpviNZeuaxThSo_4Xb2DGEs9hMTKMQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWZ8QmiQCmiW9AvCpviNZeuaxThSo_4Xb2DGEs9hMTKMQ@mail.gmail.com>
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20210208084026.fb7dtun42YncI_lZfz_YlaoDeoLNWKc9ukEwbCssChk@z>
+Cc: soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	robh+dt@kernel.org,
+	Arnd Bergmann <arnd@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH 15/18] irqchip/apple-aic: Add support for the Apple Interrupt Controller
+In-Reply-To: <20210204203951.52105-16-marcan@marcan.st>
+References: <20210204203951.52105-1-marcan@marcan.st>
+	<20210204203951.52105-16-marcan@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: marcan@marcan.st, soc@kernel.org, linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, arnd@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, olof@lixom.net
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-* Geert Uytterhoeven <geert@linux-m68k.org> [210206 19:48]:
-> On Sat, Feb 6, 2021 at 3:36 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> > What do others think about this? Should we generally assume
-> > that breaking old kernels with new dtbs is acceptable, or should
-> > we try to avoid it if possible, the same way we try to avoid
-> > breaking new kernels with old dtbs? Should this be a platform
-> > specific policy or should we try to handle all platforms the same
-> > way?
+On Thu, 04 Feb 2021 20:39:48 +0000,
+Hector Martin <marcan@marcan.st> wrote:
 > 
-> For Renesas SoCs, we typically only consider compatibility of new
-> kernels with old DTBs, not the other way around.
-> However, most DTB updates are due to new hardware support, so using the
-> new DTB with an old kernel usually just means no newly documented
-> hardware, or new feature, is being used by the old kernel.
+> This is the root interrupt controller used on Apple ARM SoCs such as the
+> M1. This irqchip driver performs multiple functions:
 > 
-> In case there was a real issue fixed, and using the new DTB with the old
-> kernel would cause a regression, and we're aware of it, we do make sure
-> the DTS update is postponed until the corresponding driver update has
-> hit upstream.
+> * Discriminates between IRQs and FIQs
+> 
+> * Drives the AIC peripheral itself (which handles IRQs)
+> 
+> * Dispatches FIQs to downstream hard-wired clients (currently the ARM
+>   timer).
+> 
+> This patch introduces basic UP irqchip support, without SMP/IPI support.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  MAINTAINERS                     |   1 +
+>  drivers/irqchip/Kconfig         |  10 +
+>  drivers/irqchip/Makefile        |   1 +
+>  drivers/irqchip/irq-apple-aic.c | 316 ++++++++++++++++++++++++++++++++
+>  4 files changed, 328 insertions(+)
+>  create mode 100644 drivers/irqchip/irq-apple-aic.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f3d4661731c8..3a54ee5747d3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1635,6 +1635,7 @@ C:	irc://chat.freenode.net/asahi-dev
+>  T:	git https://github.com/AsahiLinux/linux.git
+>  F:	Documentation/devicetree/bindings/arm/AAPL.yaml
+>  F:	Documentation/devicetree/bindings/interrupt-controller/AAPL,aic.yaml
+> +F:	drivers/irqchip/irq-apple-aic.c
+>  F:	include/dt-bindings/interrupt-controller/apple-aic.h
+>  
+>  ARM/ARTPEC MACHINE SUPPORT
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index b147f22a78f4..288c01a9abd4 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -590,4 +590,14 @@ config MST_IRQ
+>  	help
+>  	  Support MStar Interrupt Controller.
+>  
+> +config APPLE_AIC
+> +	bool "Apple Interrupt Controller (AIC)"
+> +	depends on ARCH_APPLE || COMPILE_TEST
+> +	default ARCH_APPLE
+> +	select IRQ_DOMAIN
+> +	select IRQ_DOMAIN_HIERARCHY
+> +	help
+> +	  Support for the Apple Interrupt Controller found on Apple Silicon SoCs,
+> +	  such as the M1.
+> +
+>  endmenu
+> diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+> index 0ac93bfaec61..0e2ba7c2dce7 100644
+> --- a/drivers/irqchip/Makefile
+> +++ b/drivers/irqchip/Makefile
+> @@ -113,3 +113,4 @@ obj-$(CONFIG_LOONGSON_PCH_PIC)		+= irq-loongson-pch-pic.o
+>  obj-$(CONFIG_LOONGSON_PCH_MSI)		+= irq-loongson-pch-msi.o
+>  obj-$(CONFIG_MST_IRQ)			+= irq-mst-intc.o
+>  obj-$(CONFIG_SL28CPLD_INTC)		+= irq-sl28cpld.o
+> +obj-$(CONFIG_APPLE_AIC)			+= irq-apple-aic.o
+> diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+> new file mode 100644
+> index 000000000000..533e3ce9f432
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-apple-aic.c
+> @@ -0,0 +1,316 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright 2021 Hector Martin <marcan@marcan.st>
+> + *
+> + * Based on irq-lpc32xx:
+> + *   Copyright 2015-2016 Vladimir Zapolskiy <vz@mleia.com>
+> + * Based on irq-bcm2836:
+> + *   Copyright 2015 Broadcom
+> + */
+> +
+> +/*
+> + * AIC is a fairly simple interrupt controller with the following features:
+> + *
+> + * - 896 level-triggered hardware IRQs
+> + *   - Single mask bit per IRQ
+> + *   - Per-IRQ affinity setting
+> + *   - Automatic masking on event delivery (auto-ack)
+> + *   - Software triggering (ORed with hw line)
+> + * - 2 per-CPU IPIs (meant as "self" and "other", but they are interchangeable if not symmetric)
+> + * - Automatic prioritization (single event/ack register per CPU, lower IRQs = higher priority)
+> + * - Automatic masking on ack
+> + * - Default "this CPU" register view and explicit per-CPU views
+> + *
+> + * In addition, this driver also handles FIQs, as these are routed to the same IRQ vector. These
+> + * are used for Fast IPIs (TODO) and the ARMv8 timer IRQs.
+> + *
+> + * Implementation notes:
+> + *
+> + * - This driver creates one IRQ domain for HW IRQs and the timer FIQs
+> + * - FIQ hwirq numbers are assigned after true hwirqs, and are per-cpu
+> + * - DT bindings use 3-cell form (like GIC):
+> + *   - <0 nr flags> - hwirq #nr
+> + *   - <1 nr flags> - FIQ #nr
+> + *     - nr=0  physical timer
+> + *     - nr=1  virtual timer
+> + *   - <2 nr flags> - IPI #nr
+> + *     - nr=0  other IPI
+> + *     - nr=1  self IPI
 
-Yeah agreed. Adding new devicetree properties should not be a problem
-for device drivers.
+I really do not want to expose IPIs in the DT. The OS defines what
+IPIs are used for, not the firmware/HW. No other platform requires
+this either, so is there any reason to do so?
 
-For renamed devicetree properties, the driver won't be aware of them
-if a newer dtb is used. The only thing the driver can possibly do at
-this point is maybe warn about some missing old property and bail out.
+> + *
+> + */
+> +
+> +#define pr_fmt(fmt) "%s: " fmt, __func__
+> +
+> +#include <linux/io.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqchip/chained_irq.h>
 
-Making sure the driver changes are in place first helps a bit..
-But naturally fixing the driver in advance won't help booting kernels
-before the driver changes with a newer dtb :)
+There isn't any chained interrupt controller here, AFAICT.
 
-What helps though is to make sure git bisect works for building and
-booting already at -rc1 kernel to make debugging the issue easy. As
--rc1 is used typically as the merge base the problem causing branches
-can be tested separately that way.
+> +#include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/slab.h>
+> +#include <asm/exception.h>
+> +
+> +#include <dt-bindings/interrupt-controller/apple-aic.h>
+> +
+> +#define AIC_INFO		0x0004
+> +#define AIC_INFO_NR_HW(i)	((i) & 0x0000ffff)
+> +
+> +#define AIC_CONFIG		0x0010
+> +
+> +#define AIC_WHOAMI		0x2000
+> +#define AIC_EVENT		0x2004
+> +
+> +#define AIC_EVENT_TYPE_HW	1
+> +#define AIC_EVENT_TYPE_IPI	4
+> +#define AIC_EVENT_IPI_OTHER	1
+> +#define AIC_EVENT_IPI_SELF	2
+> +
+> +#define AIC_IPI_SEND		0x2008
+> +#define AIC_IPI_ACK		0x200c
+> +#define AIC_IPI_MASK_SET	0x2024
+> +#define AIC_IPI_MASK_CLR	0x2028
+> +
+> +#define AIC_IPI_SEND_CPU(cpu)	BIT(cpu)
+> +
+> +#define AIC_IPI_OTHER		BIT(0)
+> +#define AIC_IPI_SELF		BIT(31)
+> +
+> +#define AIC_TARGET_CPU		0x3000
+> +#define AIC_SW_SET		0x4000
+> +#define AIC_SW_CLR		0x4080
+> +#define AIC_MASK_SET		0x4100
+> +#define AIC_MASK_CLR		0x4180
+> +
+> +#define AIC_CPU_IPI_SET(cpu)	(0x5008 + (cpu << 7))
+> +#define AIC_CPU_IPI_CLR(cpu)	(0x500c + (cpu << 7))
+> +#define AIC_CPU_IPI_MASK_SET(cpu) (0x5024 + (cpu << 7))
+> +#define AIC_CPU_IPI_MASK_CLR(cpu) (0x5028 + (cpu << 7))
+> +
+> +#define MASK_REG(x)		(4 * ((x) >> 5))
+> +#define MASK_BIT(x)		BIT((x) & 0x1f)
+> +
+> +#define AIC_NR_FIQ		2
+> +#define AIC_NR_IPI		2
+> +
+> +/*
+> + * Max 31 bits in IPI SEND register (top bit is self).
+> + * >=32-core chips will need code changes anyway.
+> + */
+> +#define AIC_MAX_CPUS 31
+> +
+> +struct aic_irq_chip {
+> +	void __iomem *base;
+> +	struct irq_domain *hw_domain;
+> +	int nr_hw;
+> +};
+> +
+> +static struct aic_irq_chip *aic_irqc;
+> +
+> +static inline u32 aic_ic_read(struct aic_irq_chip *ic, u32 reg)
 
-Regards,
+Please drop the inline, the compiler should manage this on its own
+(and in most case will totally ignore that keyword one way or
+another).
 
-Tony
+> +{
+> +	return readl(ic->base + reg);
+
+Please consider using the _relaxed accessors, as I don't think any of
+these interacts with memory (apart from IPIs, of course).
+
+> +}
+> +
+> +static inline void aic_ic_write(struct aic_irq_chip *ic, u32 reg, u32 val)
+> +{
+> +	writel(val, ic->base + reg);
+> +}
+> +
+> +/* These functions do nothing for FIQs, because they have no masks */
+> +static void aic_irq_mask(struct irq_data *d)
+> +{
+> +	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
+> +
+> +	if (d->hwirq < ic->nr_hw)
+> +		aic_ic_write(ic, AIC_MASK_SET + MASK_REG(d->hwirq),
+> +			     MASK_BIT(d->hwirq));
+> +}
+
+If these functions have no impact on the per-CPU interrupts, then
+maybe these interrupts should be given a different irqchip.
+
+> +
+> +static void aic_irq_unmask(struct irq_data *d)
+> +{
+> +	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
+> +
+> +	if (d->hwirq < ic->nr_hw)
+> +		aic_ic_write(ic, AIC_MASK_CLR + MASK_REG(d->hwirq),
+> +			     MASK_BIT(d->hwirq));
+> +}
+> +
+> +static void aic_irq_eoi(struct irq_data *d)
+> +{
+> +	/*
+> +	 * Reading the interrupt reason automatically acknowledges and masks
+> +	 * the IRQ, so we just unmask it here if needed.
+> +	 */
+> +	if (!irqd_irq_disabled(d) && !irqd_irq_masked(d))
+> +		aic_irq_unmask(d);
+
+This doesn't apply to per-CPU interrupts, right? Or does it?
+
+> +}
+> +
+> +static void aic_handle_irq(struct pt_regs *regs)
+> +{
+> +	struct aic_irq_chip *ic = aic_irqc;
+> +	u32 event = aic_ic_read(ic, AIC_EVENT);
+> +
+> +	while (event) {
+> +		u32 type = event >> 16, irq = event & 0xffff;
+
+Nit: please consider introducing masks and using the bitfield macros
+to extract the various fields.
+
+> +
+> +		/* AIC_EVENT is read-sensitive, ensure it happens before we proceed */
+> +		isb();
+
+You seem to have a data dependency after this, so I can't see how the
+ISB influences the read from AIC_EVENT. However you need to order it
+with the read from the timer registers, and I believe it'd be better
+to move the barrier there.
+
+> +
+> +		if (type == AIC_EVENT_TYPE_HW) {
+> +			handle_domain_irq(aic_irqc->hw_domain, irq, regs);
+> +		} else if (type == AIC_EVENT_TYPE_IPI) {
+> +			handle_domain_irq(aic_irqc->hw_domain,
+> +					  ic->nr_hw + AIC_NR_FIQ + irq - 1, regs);
+
+nit: it would be slightly less cumbersome to compute the hwirq in a
+switch, and have a single call to handle_domain_irq().
+
+I also wonder whether using two top-level domains would be better. Not
+a big deal though.
+
+> +		} else {
+> +			pr_err("spurious IRQ event %d, %d\n", type, irq);
+
+Spurious interrupts aren't an error, in general. If you really want to
+keep this, at the very least make it rate-limited.
+
+> +		}
+> +
+> +		event = aic_ic_read(ic, AIC_EVENT);
+
+Consider turning the whole thing into a do{}while() so that there is
+only a single read of AIC_EVENT in the function.
+
+> +	}
+> +}
+> +
+> +#define TIMER_FIRING(x)                                                        \
+> +	(((x) & (ARCH_TIMER_CTRL_ENABLE | ARCH_TIMER_CTRL_IT_MASK |            \
+> +		 ARCH_TIMER_CTRL_IT_STAT)) ==                                  \
+> +	 (ARCH_TIMER_CTRL_ENABLE | ARCH_TIMER_CTRL_IT_STAT))
+> +
+> +static void aic_handle_fiq(struct pt_regs *regs)
+> +{
+> +	/*
+> +	 * It would be really nice to find a system register that lets us get the FIQ source
+> +	 * state without having to peek down into clients...
+> +	 */
+
+nit: please try to keep comments within the 80 cols limit. I don't
+mind code being wider, but comments benefit from being more rigorously
+structured.
+
+And yes, having to poll each end-point IP is really a drag. How does
+the PMU work on this system? Is there any other per-CPU source?
+
+> +	if (TIMER_FIRING(read_sysreg(cntp_ctl_el0))) {
+> +		handle_domain_irq(aic_irqc->hw_domain,
+> +				  aic_irqc->nr_hw + AIC_TMR_PHYS, regs);
+> +	}
+> +
+> +	if (TIMER_FIRING(read_sysreg(cntv_ctl_el0))) {
+> +		handle_domain_irq(aic_irqc->hw_domain,
+> +				  aic_irqc->nr_hw + AIC_TMR_VIRT, regs);
+> +	}
+
+This system runs VHE, so there is also CNT{P,V}_CTL_EL02 to consider.
+But I really wonder how the whole thing works once these two timers
+are assigned to a guest. Somehow, something must control the masking,
+otherwise you wouldn't be able to enter a guest with a timer firing.
+
+It also means that there is no way to have threaded per-CPU
+interrupts, which means no Preempt-RT. You could wire the mask/unmask
+callbacks to mess with the IMASK bit in individual timers, but that
+doesn't solve the problem for guests.
+
+> +}
+> +
+> +static void __exception_irq_entry aic_handle_irq_or_fiq(struct pt_regs *regs)
+> +{
+> +	u64 isr = read_sysreg(isr_el1);
+> +
+> +	if (isr & PSR_F_BIT)
+> +		aic_handle_fiq(regs);
+> +
+> +	if (isr & PSR_I_BIT)
+> +		aic_handle_irq(regs);
+> +}
+> +
+> +static struct irq_chip aic_chip = {
+> +	.name = "AIC",
+> +	.irq_mask = aic_irq_mask,
+> +	.irq_unmask = aic_irq_unmask,
+> +	.irq_eoi = aic_irq_eoi,
+> +};
+> +
+> +static int aic_irq_domain_map(struct irq_domain *id, unsigned int irq,
+> +			      irq_hw_number_t hw)
+> +{
+> +	struct aic_irq_chip *ic = id->host_data;
+> +
+> +	irq_set_chip_data(irq, ic);
+> +	if (hw < ic->nr_hw) {
+> +		irq_set_chip_and_handler(irq, &aic_chip, handle_fasteoi_irq);
+> +	} else {
+> +		irq_set_percpu_devid(irq);
+> +		irq_set_chip_and_handler(irq, &aic_chip,
+> +					 handle_percpu_devid_irq);
+> +	}
+> +	irq_set_status_flags(irq, IRQ_LEVEL);
+
+Are all interrupts level? How are MSIs implemented?
+
+> +	irq_set_noprobe(irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static void aic_irq_domain_unmap(struct irq_domain *id, unsigned int irq)
+> +{
+> +	irq_set_chip_and_handler(irq, NULL, NULL);
+> +}
+> +
+> +static int aic_irq_domain_xlate(struct irq_domain *id,
+> +				struct device_node *ctrlr, const u32 *intspec,
+> +				unsigned int intsize,
+> +				irq_hw_number_t *out_hwirq,
+> +				unsigned int *out_type)
+> +{
+> +	struct aic_irq_chip *ic = id->host_data;
+> +
+> +	if (intsize != 3)
+> +		return -EINVAL;
+> +
+> +	if (intspec[0] == AIC_IRQ && intspec[1] < ic->nr_hw)
+> +		*out_hwirq = intspec[1];
+> +	else if (intspec[0] == AIC_FIQ && intspec[1] < AIC_NR_FIQ)
+> +		*out_hwirq = ic->nr_hw + intspec[1];
+> +	else if (intspec[0] == AIC_IPI && intspec[1] < AIC_NR_IPI)
+> +		*out_hwirq = ic->nr_hw + AIC_NR_FIQ + intspec[1];
+> +	else
+> +		return -EINVAL;
+> +
+> +	*out_type = intspec[2] & IRQ_TYPE_SENSE_MASK;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops aic_irq_domain_ops = {
+> +	.map = aic_irq_domain_map,
+> +	.unmap = aic_irq_domain_unmap,
+> +	.xlate = aic_irq_domain_xlate,
+> +};
+> +
+> +static int __init aic_of_ic_init(struct device_node *node,
+> +				 struct device_node *parent)
+> +{
+> +	int i;
+> +	void __iomem *regs;
+> +	u32 info;
+> +	struct aic_irq_chip *irqc;
+> +
+> +	regs = of_iomap(node, 0);
+> +	if (WARN_ON(!regs))
+> +		return -EIO;
+> +
+> +	irqc = kzalloc(sizeof(*irqc), GFP_KERNEL);
+> +	if (!irqc)
+> +		return -ENOMEM;
+> +
+> +	aic_irqc = irqc;
+> +	irqc->base = regs;
+> +
+> +	info = aic_ic_read(irqc, AIC_INFO);
+> +	irqc->nr_hw = AIC_INFO_NR_HW(info);
+> +
+> +	irqc->hw_domain =
+> +		irq_domain_add_linear(node,
+> +				      irqc->nr_hw + AIC_NR_FIQ + AIC_NR_IPI,
+> +				      &aic_irq_domain_ops, irqc);
+
+Please keep assignments on a single line.
+
+> +	if (WARN_ON(!irqc->hw_domain)) {
+> +		iounmap(irqc->base);
+> +		kfree(irqc);
+> +		return -ENODEV;
+> +	}
+> +
+> +	irq_domain_update_bus_token(irqc->hw_domain, DOMAIN_BUS_WIRED);
+> +
+> +	set_handle_irq(aic_handle_irq_or_fiq);
+> +
+> +	for (i = 0; i < BITS_TO_LONGS(irqc->nr_hw); i++)
+
+long is 64bit on arm64, so this loop is unlikely to do what you
+want. Consider using BITS_TO_U32.
+
+> +		aic_ic_write(irqc, AIC_MASK_SET + i * 4, ~0);
+> +	for (i = 0; i < BITS_TO_LONGS(irqc->nr_hw); i++)
+> +		aic_ic_write(irqc, AIC_SW_CLR + i * 4, ~0);
+> +	for (i = 0; i < irqc->nr_hw; i++)
+> +		aic_ic_write(irqc, AIC_TARGET_CPU + i * 4, 1);
+> +
+> +	pr_info("AIC: initialized with %d IRQs, %d FIQs, %d IPIs\n",
+> +		irqc->nr_hw, AIC_NR_FIQ, AIC_NR_IPI);
+> +
+> +	return 0;
+> +}
+> +
+> +IRQCHIP_DECLARE(apple_m1_aic, "AAPL,aic", aic_of_ic_init);
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
