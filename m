@@ -1,213 +1,114 @@
-Return-Path: <SRS0=U7wc=HK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=KGEu=HK=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75B35C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 11:58:24 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C898AC433E0
+	for <soc@archiver.kernel.org>; Mon,  8 Feb 2021 12:02:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 79E1364E76; Mon,  8 Feb 2021 12:02:06 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C2FCB64E79
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 11:58:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C2FCB64E79
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=marcan.st
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:
-	Content-Transfer-Encoding:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:Subject:
-	From:References:To:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=ScYHz38ZqvdYPVSlZ02r0vV/iIfgp7JtHSd0DR5iT8U=; b=mZ+fenBtoJp68ra5TqCexcuIU
-	LDZUo6JQtXvwp/WHNlIw7pbsucZWX6fnBtUQvkSTmVfz+3tOMlLU4wKOmEjVgn+vcxcCSbtJhjECa
-	c5lH+JKxtVTQ/lBih+W1D3FbEHnhgIoIQyOzGYoh7wYHWU/iCMD3sqPX54WVGmEnIdctJbLzpfWWo
-	ORuoPjiTpUjcCgQbB/b7LL+GNh3c1H4M1rvDYRv9Ytez56ltWPFoW1uxRgUY4jT4Wdx+ZuhPUE844
-	763+p2Bi2pShiKAxJrT4axZDopXDCbu5djFUWrhV2WmbubkDwcXTFzosybI/X4r7LFYHmHY4QxJP8
-	75CAL3fmw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l95A8-0004Q3-65; Mon, 08 Feb 2021 11:57:04 +0000
-Received: from marcansoft.com ([2a01:298:fe:f::2] helo=mail.marcansoft.com)
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l95A4-0004Pc-Gq
- for linux-arm-kernel@lists.infradead.org; Mon, 08 Feb 2021 11:57:02 +0000
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits))
- (No client certificate requested)
- (Authenticated sender: marcan@marcan.st)
- by mail.marcansoft.com (Postfix) with ESMTPSA id B7ED441E96;
- Mon,  8 Feb 2021 11:56:55 +0000 (UTC)
-To: Krzysztof Kozlowski <krzk@kernel.org>
-References: <20210204203951.52105-1-marcan@marcan.st>
- <20210204203951.52105-19-marcan@marcan.st>
- <20210208110441.25qc6yken4effd6c@kozik-lap>
-From: Hector Martin 'marcan' <marcan@marcan.st>
-Subject: Re: [PATCH 18/18] arm64: apple: Add initial Mac Mini 2020 (M1)
- devicetree
-Message-ID: <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
-Date: Mon, 8 Feb 2021 20:56:53 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20210208110441.25qc6yken4effd6c@kozik-lap>
-Content-Language: es-ES
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210208_065700_820604_CE570A0A 
-X-CRM114-Status: GOOD (  35.77  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by mail.kernel.org (Postfix) with ESMTPS id F201164E60;
+	Mon,  8 Feb 2021 12:02:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F201164E60
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=Nicolas.Ferre@microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1612785725; x=1644321725;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ktQ5H8JYp5ZgySkZR4VfvzwHO9Mgrs/mBdNMLYeZkxM=;
+  b=k5ultU1Mkelhw5potm3NLXiceSodGr/tVpL6Z5xIidy0icK44QPvXxwz
+   LXwgOEtZceelgmJmR32C7JjcOB//Bwx+heTzPpS+MfRel49e6UITEiS4B
+   H0TW9YUeBqlNEV90/fygiemIjCrl11X1xO1kuRh9juLO3P7D2qTjf9ofW
+   gkxcQZGnwPfpioDqZKmM8+C0zhET+3B8ehiDTmNIOhraxSgXLucjym86z
+   M2kI3bijHcAVhkzbW2bRFp8ZdVzwoJLYgyzZSWsXkg+qtXjDhhuN6WixP
+   Ahphnb9pLTtu/fHBcYC6kPJP/dKZBwmMcRP8jXPJ5k1Hs+jSHQE/m3BOl
+   Q==;
+IronPort-SDR: rb5GGXYKJ5kzLbBo/stIFUeaIMnmsV3zR5j4y77pvHVeAUZvBwQkajr3G6WGASlqK5CiWTM4Qw
+ aSx/gxlnBcnwD5emNbzpDgy9iDfxgOTelfv+qU8J/p/QJcXKCm7ncyPSpD7JialLK7EwAHzkvu
+ IQ4HNNTlwV9fL/nmNvaliYycyGSTZG03dQ6+G7bD1lfay2YFQV9chkW0Az/RDXtl3Hj0l7fEAY
+ RRZ6sLAjBl5Rzhf88TOb1E3qFPklbzFGZJePc02r22Pxhna/FjDbm7ZqVdnpoWAg5nA6qjx0Ku
+ C18=
+X-IronPort-AV: E=Sophos;i="5.81,161,1610434800"; 
+   d="scan'208";a="105816294"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Feb 2021 05:02:04 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Mon, 8 Feb 2021 05:02:04 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.1979.3 via Frontend Transport; Mon, 8 Feb 2021 05:02:00 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, devicetree@vger.kernel.org,
- Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org, soc@kernel.org,
- robh+dt@kernel.org, Olof Johansson <olof@lixom.net>,
- linux-arm-kernel@lists.infradead.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210208115653.LRtUuWJ1BOQosgqVT6HO0TMAXil2PcoOInFoULb-Ud4@z>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Ludovic Desroches
+	<ludovic.desroches@microchip.com>
+Subject: [GIT PULL] ARM: at91: defconfig for 5.12 #2
+Date: Mon, 8 Feb 2021 12:57:53 +0100
+Message-ID: <20210208115753.54730-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.30.0
+MIME-Version: 1.0
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 08/02/2021 20.04, Krzysztof Kozlowski wrote:
-> apple
-> 
-> Don't make things different for this one platform (comparing to all
-> other platforms). Apple is not that special. :)
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-AAPL is the old vendor prefix used in the PowerPC era. I'm happy to use 
-`apple`, as long as we're OK with having two different prefixes for the 
-same vendor, one for PPC and one for ARM64. I've seen opinions go both 
-ways on this one :)
+Arnd, Olof,
 
->> + * Copyright 2021 Hector Martin <marcan@marcan.st>
-> 
-> A lot here might be difficult to reverse-egineer or figure out by
-> ourself, so usually people rely on vendor sources (the open source
-> compliance package). Didn't you receive such for the iOS (or whatever
-> was on your Mac)?
+Here is the second batch of defconfig changes for 5.12.
 
-Apple source drops are sparse (they don't even include things like the 
-irqchip driver, only the very core OS code) and APSL licensed, which is 
-a license incompatible with the GPL. Worse, they've moved to a 
-partial-blob model with the M1; M1-compatible XNU source code drops now 
-include a .a blob with startup and CPU-specific code, for which no 
-source code is provided. (to be clear: Apple does not ship Linux for 
-these machines)
+Thanks, best regards,
+  Nicolas
 
-Honestly, beyond what's in this patchset and a few more details about 
-CPU registers like performance monitoring stuff that exist in public XNU 
-drops but I haven't looked into yet, Apple's source code drops are going 
-to be practically useless to us from here on out. It's all binaries 
-after this.
+The following changes since commit 00a1aa475f507454fab82f02c6230c8fb2312a12:
 
-Apple device trees are not open source at all; those are provided by 
-iBoot and ship with device firmware, which is not openly licensed. Those 
-device trees are OF-inspired, but otherwise in a different format and 
-structure to Linux device trees.
+  ARM: configs: multi_{v5,v7}: remove ATMEL_TCLIB (2021-01-02 14:06:48 +0100)
 
-Since there is zero Apple-published code or data with a license 
-compatible with the Linux kernel to be used here, there can be zero 
-copyright lines claiming any submissions are copyright Apple from us, 
-because that would imply a license violation has occurred. I am treating 
-this as I would any other no-source reverse engineering project, that 
-is, ensuring that I only look at Apple code (binaries, source, 
-devicetrees, whatever) to understand how the hardware functions, build 
-documentation for it (at least in my head, but I am also trying to 
-document things on our wiki as I go), and then write original code to 
-drive it from Linux, unrelated to whatever Apple was doing.
+are available in the Git repository at:
 
-We're also trying to avoid looking at any Apple stuff in general as much 
-as possible, preferring black-box approaches where feasible, to minimize 
-exposure. For example, I only looked at an (outdated, arm32 era) AIC 
-register name list in XNU to write the AIC driver; there is no actual 
-AIC driver code in the source, and instead of decompiling Apple's binary 
-blob AIC driver module, I figured out how the hardware actually worked 
-via probing and experimentation. The entire userspace GPU stack is being 
-reverse engineered via a black-box approach, without any decompilation. 
-I'm going to see what I can do about the kernel driver in the future, 
-and prefer some kind of mmio tracing solution if I can get it all to 
-work on macOS.
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-defconfig-5.11-2
 
-As for this file specifically: while I am obviously looking at Apple's 
-DTs to figure out things like register offsets and what hardware exists, 
-those are facts, and facts are not copyrightable, and thus Apple does 
-not hold any copyright interest over this code as I submitted it. Short 
-of verbatim copying and pasting of entire nodes with bespoke property 
-names (which would never fly here anyway because Apple does things very 
-differently from Linux DTs when you get down into the details), it would 
-be extremely hard to argue that translating hardware information from 
-decompiled Apple DTs to Linux DTs would constitute a copyright 
-violation, since the entire purpose of DTs is to describe hardware facts.
+for you to fetch changes up to b33f4da7b3efcb7521399d5e18cdd15e60ab34df:
 
-You can read more about our reverse engineering and copyright policy at 
-https://alx.sh/re - if you have any suggestions or spot anything 
-problematic, please let me know.
+  ARM: configs: sama5_defconfig: add QSPI driver (2021-02-08 09:55:00 +0100)
 
-(I'm actually probably going to change that copyright line to "The Asahi 
-Linux Contributors" for v2, if that's okay with the kernel folks, to be 
-in line with our other projects; I defaulted to my name since so far I'm 
-the only contributor to these files, but I expect other people to throw 
-PRs at me in the future and the history to end up with more names here)
+----------------------------------------------------------------
+AT91 defconfig for 5.12, part 2:
 
-> I guess Rob will comment on the dt-bindings more... but for me a generic
-> "arm-platform" is too generic. What's the point of it? I didn't see any
-> of such generic compatibles in other platforms.
+- only at91_dt_defconfig and sama5_defconfig modified
+- update to match current options, unneeded options removed
+- missing drivers added, some are on-SoC peripherals, some are helpers
+- modify legacy ATAGS or DT options to match common usage
 
-This is a hack for patches #11/#12 to use, and I expect it will go away 
-once we figure out how to properly handle that problem (which needs 
-further discussion). Sorry for the noise, this should not be there in 
-the final version.
+----------------------------------------------------------------
+Claudiu Beznea (1):
+      ARM: configs: at91: enable drivers for sam9x60
 
->> +		bootargs = "earlycon";
-> 
-> This should not be hard-coded in DTS. Pass it from bootloader.
+Nicolas Ferre (5):
+      ARM: configs: sama5_defconfig: update and remove unneeded options
+      ARM: configs: at91: DT/ATAG defconfig modifications
+      ARM: configs: at91_dt_defconfig: add useful helper options
+      ARM: configs: at91_dt_defconfig: add ov7740 module
+      ARM: configs: sama5_defconfig: add QSPI driver
 
-My apologies, this was garbage left over from before I had bootargs 
-support in the bootloader. Will be gone for v2.
-
->> +	clk24: clk24 {
-> 
-> Just "clock". Node names should be generic.
-
-Really? Almost every other device device tree uses unique clock node names.
-
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +		clock-frequency = <24000000>;
->> +		clock-output-names = "clk24";
-> 
-> What clock is it? Part of board or SoC? Isn't it a work-around for
-> missing clock drivers?
-
-The clock topology isn't entirely known yet; I'm submitting this as an 
-initial bring-up patchset and indeed there should be a clockchip driver 
-in the future. The UART driver wants a clock to be able to calculate 
-baud rates. I figured we can get away with a fixed-clock for now while 
-that part of the SoC gets figured out.
-
-Ack on all the other comments, will fix for v2.
-
-Thanks for the review!
+ arch/arm/configs/at91_dt_defconfig | 17 ++++++++++++-----
+ arch/arm/configs/sama5_defconfig   | 14 ++------------
+ 2 files changed, 14 insertions(+), 17 deletions(-)
 
 -- 
-Hector Martin "marcan" (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Nicolas Ferre
