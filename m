@@ -1,139 +1,212 @@
-Return-Path: <SRS0=U7wc=HK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=Nkqh=HK=gmail.com=k.kozlowski.k@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=BAYES_00,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4C32C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 12:07:03 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A25E2C433E0
+	for <soc@archiver.kernel.org>; Mon,  8 Feb 2021 12:13:30 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 5CFDF64E27; Mon,  8 Feb 2021 12:13:30 +0000 (UTC)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 788EE64E7C
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 12:07:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 788EE64E7C
+	by mail.kernel.org (Postfix) with ESMTPS id C266E64DCC;
+	Mon,  8 Feb 2021 12:13:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C266E64DCC
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:
-	Content-Transfer-Encoding:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Message-ID:References:In-Reply-To:Subject:To:From:
-	Date:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=j404UJI/eBjQ9b6f9neZ5yb0uDWT9c4iTZBeRqBsfH4=; b=cPWOrUqr+sT6KwbnLKXbBiWPL
-	39LmtUaBHO+vzKkLT36xtqk9QwGvTo7Fi0VqWRL1+eBTaYfdlzUVb9yqh4O9jqnASHqY4Gv4K7zjT
-	W1tCyax3aN1BdBxbLzKf85q7Op40+82S/8PLzNwXEu+gh+LE+p9oKrJGZ+pRpBRoxjp7TGZs0eksn
-	M7d/5Ah9N8uRxZbsnkkmyCfYERB/wp/sg4HxIDuXgiVeskd2BGhqUCvSQQNrvuKWy2zESl6Nu3xyo
-	A7vwgEIExCfj2yX/CBdspiSUjpeKCmU3Ss9+e0lpUMb+RuecFj51y4QS3a9WMrwnMJ7/n2CGaKhvk
-	Qx7dHZNxA==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l95Io-0005QM-G0; Mon, 08 Feb 2021 12:06:02 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l95Im-0005Pu-5O
- for linux-arm-kernel@lists.infradead.org; Mon, 08 Feb 2021 12:06:01 +0000
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org
- [51.254.78.96])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.kernel.org (Postfix) with ESMTPSA id 0E98D64E60;
- Mon,  8 Feb 2021 12:05:59 +0000 (UTC)
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
- by disco-boy.misterjones.org with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94)
- (envelope-from <maz@kernel.org>)
- id 1l95Ii-00Clw4-T8; Mon, 08 Feb 2021 12:05:57 +0000
-MIME-Version: 1.0
-Date: Mon, 08 Feb 2021 12:05:56 +0000
-From: Marc Zyngier <maz@kernel.org>
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=k.kozlowski.k@gmail.com
+Received: by mail-ed1-f52.google.com with SMTP id df22so17815806edb.1;
+        Mon, 08 Feb 2021 04:13:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FpLR5cZzlQKftepQVrprWEOfxdWH5lN8lHi/n2VPC5I=;
+        b=gh5PfiDJQImo9dHlFewOtBnzrHAu6gQlmSzeKjnDFcXkZCa1KkUS6S8Dq30f8IiIUT
+         zmB6KCOLiYpdP7zijmr1KHCI0E1g2VV/ajj1lwbKS/5vi1GwYKFTNk0d+7VQt7jhRPqD
+         J00EzCTCk5Xkr08FV4jnFLhyZrcG8EZSJLb/hCQhcni2KolL+LCJZNAqPHi0kJGtP+t4
+         vsms1iERKA8dDcSOyr4F1l1g+oaddmjvAqWF7Qfxm1y5QfC1E7Tn9NRP5VqiyUgBKmxr
+         tUExE0fczoaogdFDlC5rgCtGVJagyIa6JoVOuCPqowdfA/Jqwuabc08f+EV2w/GOevIV
+         xdNQ==
+X-Gm-Message-State: AOAM5320EygGKKPWLnCOJslVrN1Ukggsvij1efXYQ3HoPLyoEP5spY/B
+	OVIRFyhs7VbXjsQtg7jn7u4=
+X-Google-Smtp-Source: ABdhPJzKOvT2pcfH6hm8UXtb6quo0MW5QUh99YT16bBy/QZjt+x9tofllOvobrLzWCCU+gDST0jy1g==
+X-Received: by 2002:a05:6402:1711:: with SMTP id y17mr16628083edu.72.1612786408134;
+        Mon, 08 Feb 2021 04:13:28 -0800 (PST)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id hr31sm8330971ejc.125.2021.02.08.04.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Feb 2021 04:13:26 -0800 (PST)
+Date: Mon, 8 Feb 2021 13:13:25 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Hector Martin 'marcan' <marcan@marcan.st>
-Subject: Re: [PATCH 11/18] arm64: Kconfig: Require FIQ support for ARCH_APPLE
-In-Reply-To: <860b7dac-ccad-b6c9-c7be-537d6b1c5ede@marcan.st>
-References: <20210204203951.52105-1-marcan@marcan.st>
- <20210204203951.52105-12-marcan@marcan.st> <87ft29kxmp.wl-maz@kernel.org>
- <860b7dac-ccad-b6c9-c7be-537d6b1c5ede@marcan.st>
-User-Agent: Roundcube Webmail/1.4.10
-Message-ID: <2a93bf0df74df8cb022e61d69d1de88e@kernel.org>
-X-Sender: maz@kernel.org
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: marcan@marcan.st, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, arnd@kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, olof@lixom.net
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org);
- SAEximRunCond expanded to false
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210208_070600_308335_C19BD723 
-X-CRM114-Status: GOOD (  21.25  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, soc@kernel.org, robh+dt@kernel.org,
- Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210208120556.dlnItqkqwvxsreYHI1W8T-BgOmlWKQ6O_Adma8vKu68@z>
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+	Marc Zyngier <maz@kernel.org>, robh+dt@kernel.org,
+	Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH 18/18] arm64: apple: Add initial Mac Mini 2020 (M1)
+ devicetree
+Message-ID: <20210208121325.owjjd7nfbdanszny@kozik-lap>
+References: <20210204203951.52105-1-marcan@marcan.st>
+ <20210204203951.52105-19-marcan@marcan.st>
+ <20210208110441.25qc6yken4effd6c@kozik-lap>
+ <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
 
-On 2021-02-07 09:23, Hector Martin 'marcan' wrote:
-> On 07/02/2021 00.46, Marc Zyngier wrote:
->>>   config ARCH_APPLE
->>>   	bool "Apple Silicon SoC family"
->>>   	select GENERIC_IRQ_CHIP
->>> +	select ARM64_FIQ_SUPPORT
->> 
->> Ah, this is what I was expecting in the previous patch. I guess the
->> initial ARCH_APPLE patch could be moved down the line and add all the
->> dependencies in one go.
+On Mon, Feb 08, 2021 at 08:56:53PM +0900, Hector Martin 'marcan' wrote:
+> On 08/02/2021 20.04, Krzysztof Kozlowski wrote:
+> > apple
+> > 
+> > Don't make things different for this one platform (comparing to all
+> > other platforms). Apple is not that special. :)
 > 
-> I was trying to introduce the Kconfig before the code that depends on
-> it; is it kosher to have it in the other order, looking for CONFIG_
-> defines that don't exist yet?
+> AAPL is the old vendor prefix used in the PowerPC era. I'm happy to use
+> `apple`, as long as we're OK with having two different prefixes for the same
+> vendor, one for PPC and one for ARM64. I've seen opinions go both ways on
+> this one :)
 
-Absolutely. The only requirement is to make sure that nothing breaks in
-the middle of a series.
+Thanks for explanation. I propose to choose just "apple". Sticking to
+old vendor name is not a requirement - we have few vendor prefixes which
+were marked as deprecated because we switched to a better one.
 
-> Though in this case the only user earlier in the series is the Samsung
-> stuff, which doesn't care about FIQs, so I can just sort things as
-> FIQ->ARCH_APPLE->samsung->AIC...
+> 
+> > > + * Copyright 2021 Hector Martin <marcan@marcan.st>
+> > 
+> > A lot here might be difficult to reverse-egineer or figure out by
+> > ourself, so usually people rely on vendor sources (the open source
+> > compliance package). Didn't you receive such for the iOS (or whatever
+> > was on your Mac)?
+> 
+> Apple source drops are sparse (they don't even include things like the
+> irqchip driver, only the very core OS code) and APSL licensed, which is a
+> license incompatible with the GPL. Worse, they've moved to a partial-blob
+> model with the M1; M1-compatible XNU source code drops now include a .a blob
+> with startup and CPU-specific code, for which no source code is provided.
+> (to be clear: Apple does not ship Linux for these machines)
+> 
+> Honestly, beyond what's in this patchset and a few more details about CPU
+> registers like performance monitoring stuff that exist in public XNU drops
+> but I haven't looked into yet, Apple's source code drops are going to be
+> practically useless to us from here on out. It's all binaries after this.
+> 
+> Apple device trees are not open source at all; those are provided by iBoot
+> and ship with device firmware, which is not openly licensed. Those device
+> trees are OF-inspired, but otherwise in a different format and structure to
+> Linux device trees.
+> 
+> Since there is zero Apple-published code or data with a license compatible
+> with the Linux kernel to be used here, there can be zero copyright lines
+> claiming any submissions are copyright Apple from us, because that would
+> imply a license violation has occurred. I am treating this as I would any
+> other no-source reverse engineering project, that is, ensuring that I only
+> look at Apple code (binaries, source, devicetrees, whatever) to understand
+> how the hardware functions, build documentation for it (at least in my head,
+> but I am also trying to document things on our wiki as I go), and then write
+> original code to drive it from Linux, unrelated to whatever Apple was doing.
 
-Seems fine to me. Sorting out the infrastructure first (FIQ, memory
-attributes) first is a requirement anyway, so the ordering of the
-series could reflect that priority.
+Makes sense. In such case it's indeed your work. Since you introduce it,
+the DTSes are usually licensed with (GPL-2.0+ OR MIT).
 
-> I'm not sure about AIC vs. ARCH_APPLE though. Right now the pattern is
-> that AIC depends on ARCH_APPLE and also defaults to that. But then you
-> can build with ARCH_APPLE and AIC disabled if you so choose, which
-> does result in a broken system on these machines. AIC should build
-> without ARCH_APPLE (as long as we're on ARM64), so we could reverse
-> that.
+> 
+> We're also trying to avoid looking at any Apple stuff in general as much as
+> possible, preferring black-box approaches where feasible, to minimize
+> exposure. For example, I only looked at an (outdated, arm32 era) AIC
+> register name list in XNU to write the AIC driver; there is no actual AIC
+> driver code in the source, and instead of decompiling Apple's binary blob
+> AIC driver module, I figured out how the hardware actually worked via
+> probing and experimentation. The entire userspace GPU stack is being reverse
+> engineered via a black-box approach, without any decompilation. I'm going to
+> see what I can do about the kernel driver in the future, and prefer some
+> kind of mmio tracing solution if I can get it all to work on macOS.
+> 
+> As for this file specifically: while I am obviously looking at Apple's DTs
+> to figure out things like register offsets and what hardware exists, those
+> are facts, and facts are not copyrightable, and thus Apple does not hold any
+> copyright interest over this code as I submitted it. Short of verbatim
+> copying and pasting of entire nodes with bespoke property names (which would
+> never fly here anyway because Apple does things very differently from Linux
+> DTs when you get down into the details), it would be extremely hard to argue
+> that translating hardware information from decompiled Apple DTs to Linux DTs
+> would constitute a copyright violation, since the entire purpose of DTs is
+> to describe hardware facts.
+> 
+> You can read more about our reverse engineering and copyright policy at
+> https://alx.sh/re - if you have any suggestions or spot anything
+> problematic, please let me know.
+> 
+> (I'm actually probably going to change that copyright line to "The Asahi
+> Linux Contributors" for v2, if that's okay with the kernel folks, to be in
+> line with our other projects; I defaulted to my name since so far I'm the
+> only contributor to these files, but I expect other people to throw PRs at
+> me in the future and the history to end up with more names here)
 
-As long as ARCH_APPLE selects AIC, you can make AIC selectable on
-its own. What I'm trying to avoid is people ending up with an unbootable
-system, and not having interrupts is one thing that makes it really hard
-to debug...
+The copyrights matter more in case the need to relicense the work or
+some copyright-infringement cases. If you use generic alias - The Asahi
+contributors - how it would be possible to find people with actual
+copyrights? For example to ask them about relicense permission?  Unless
+it's an official body (e.g. foundation or company).  Therefore I propose
+to stick to real names and include other contributors once they
+contribute.
 
-Thanks,
+However this are just my thoughts, not a really professional opinion
+about copyright aspects.
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+> 
+> > I guess Rob will comment on the dt-bindings more... but for me a generic
+> > "arm-platform" is too generic. What's the point of it? I didn't see any
+> > of such generic compatibles in other platforms.
+> 
+> This is a hack for patches #11/#12 to use, and I expect it will go away once
+> we figure out how to properly handle that problem (which needs further
+> discussion). Sorry for the noise, this should not be there in the final
+> version.
+> 
+> > > +		bootargs = "earlycon";
+> > 
+> > This should not be hard-coded in DTS. Pass it from bootloader.
+> 
+> My apologies, this was garbage left over from before I had bootargs support
+> in the bootloader. Will be gone for v2.
+> 
+> > > +	clk24: clk24 {
+> > 
+> > Just "clock". Node names should be generic.
+> 
+> Really? Almost every other device device tree uses unique clock node names.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Yes, really, devicetree/ePAPR spec:
+"The name of a node should be somewhat generic, reflecting the function
+of the device and not its precise programming model. If appropriate, the
+name should be one of the following choices:"
+
+Multiple other boards and people (including myself...) made the same
+mistake of adding specific names. Even some platform maintainers still
+don't get it or never cared to look at DT spec. :)
+
+> 
+> > > +		compatible = "fixed-clock";
+> > > +		#clock-cells = <0>;
+> > > +		clock-frequency = <24000000>;
+> > > +		clock-output-names = "clk24";
+> > 
+> > What clock is it? Part of board or SoC? Isn't it a work-around for
+> > missing clock drivers?
+> 
+> The clock topology isn't entirely known yet; I'm submitting this as an
+> initial bring-up patchset and indeed there should be a clockchip driver in
+> the future. The UART driver wants a clock to be able to calculate baud
+> rates. I figured we can get away with a fixed-clock for now while that part
+> of the SoC gets figured out.
+
+Such workaround is ok, but maybe add a comment that it's a workaround so
+far.
+
+Best regards,
+Krzysztof
+
