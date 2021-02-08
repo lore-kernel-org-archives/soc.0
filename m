@@ -1,153 +1,161 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=Nkqh=HK=gmail.com=k.kozlowski.k@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=BAYES_00,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFD5EC433DB
-	for <linux-devicetree@archiver.kernel.org>; Mon,  8 Feb 2021 18:24:12 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 72ADA64E6D
-	for <linux-devicetree@archiver.kernel.org>; Mon,  8 Feb 2021 18:24:12 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbhBHSX6 (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Mon, 8 Feb 2021 13:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235624AbhBHSWZ (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Mon, 8 Feb 2021 13:22:25 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77F5C0617A7
-        for <devicetree@vger.kernel.org>; Mon,  8 Feb 2021 10:21:25 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id y199so14586040oia.4
-        for <devicetree@vger.kernel.org>; Mon, 08 Feb 2021 10:21:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/6qzm5KZjVpY/QzjBwjI8Vq6UfMUyCiZgQDTe4g04Js=;
-        b=bxtDkLUWrKlJbPvM+jLfS8mCKCZwiI+jYVHmSbVHEdnMKKDWCwbDMx1u4JoCotMd86
-         jpuHSVKLSdvYumtDRShyyRZWBOz6z1cwykOVpK90620JyQF79VJvkofMNFqpManNxZgK
-         Ahm5BbXg9l8iodZB4CVJrKOEOct471xOuycq1+AMk7eywGux9yzCV47I2NLgn/HZKsA5
-         Sy7fyEHXNhuJ/CE8ZxFso48MhgXsCdXqseuYphZGyOxMJ2ZSYXdt/j/v914THaZ7hNZY
-         ywfaUDikqO1A3vCqtSn1xr0qTN1DunOOYGtqk90yICZeJ3xg/Bq2w6K+racW4OerdImi
-         APlg==
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9550AC433DB
+	for <soc@archiver.kernel.org>; Mon,  8 Feb 2021 18:37:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 5CAE264E5A; Mon,  8 Feb 2021 18:37:26 +0000 (UTC)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id C9B7A60C3F;
+	Mon,  8 Feb 2021 18:37:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C9B7A60C3F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=k.kozlowski.k@gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id w4so75262wmi.4;
+        Mon, 08 Feb 2021 10:37:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=/6qzm5KZjVpY/QzjBwjI8Vq6UfMUyCiZgQDTe4g04Js=;
-        b=uNUxlz2ZP3UHS/NAWUD7EwnuC15gckXSKi0G0NML5Q8B3Ogysj7qyzhAZ7jUwRMQzM
-         bGNQn6Z7Go90kNn8XJe9N5fCPl2hppuGTF6KZktO+EBiGRnuOjq7OZO2As5KcQ+9UAZz
-         cZlWyvQ/3+c4Wm34tyg65B6cog2Hv+QpFkANn7hMTPEU3Wfn6t8D9ld+4XdUV1Uqw8ai
-         f6fBKr27rrIc5HOnEc+Azh3Wd4zCrHjMy2TenxUupi/ogRVMj5T3GmbcvmndYdUIYsu6
-         U9OZkIFGYmesQLc7j/3Clx1oDI58BH+LW/ShX6xX1zaV3n/Ky12QhR7uFOtZnexQ+Pn/
-         1lRA==
-X-Gm-Message-State: AOAM530NkkGiYf9n72kSO5Gn6Sg2cWJMd5Qr4Nh8WIjVCnI8NrTjkg98
-        w6bmbUuSVqyFWIGcGWkp1NkxCPay/5eCtQ==
-X-Google-Smtp-Source: ABdhPJzFxujF8FdJ9rDgJh66bsfw8Jea1OwoyzKak4GDomOyVWtD7WQiDcq3QdmAsvzxsDQBvxe4Qg==
-X-Received: by 2002:aca:7541:: with SMTP id q62mr15579oic.143.1612808485225;
-        Mon, 08 Feb 2021 10:21:25 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id t2sm3937004otj.47.2021.02.08.10.21.23
+        bh=LCazIuYzBZltynFuvPO11MbeG9djR0YG9Vn4Gd94Mj8=;
+        b=hyZo3J9AQI3DPrKYeE3karMxCvhvF0QDtcpx33A3qPqx1zTV8gb19TMXzkCEi4gw0A
+         2kKxBlgdJf4wbgR08wFMQiqqbZXx0mdKyxLbPaeYVkVCObt7x9XGVlNx1HkXFO2fcWgv
+         hEc/yPH7I05pODDIgN2cRFIvWXSRKqs+IzT8Dk89XeQvaEu9D3agXfTLbkm8D7mdf03J
+         +ea/l76k6I2smqgN5lhivFTd+SyasXAPF1/1f+9gFkrQFKjotraNobrCueCqr296KsBx
+         1Ft6KmgS/vgt0yGkPnInSVylj2zqZ+WqqoE45kPtRmZNDzCjg2jMR4LIFjCkmMIb+LFt
+         lhaw==
+X-Gm-Message-State: AOAM531o0XGzR7Duc/LJQ4qc80ITU02D8iuMTCvnajktQfBzxu/1fx9B
+	I0Bz2cqbcFUwAddQCuQw+Fc=
+X-Google-Smtp-Source: ABdhPJx5+93U+Vf00VOHmUASuEOURE6VEeP94SC6giYw0Z/wDYFCVRw7Hu+lyDXt+hRbtNuLKTqKbA==
+X-Received: by 2002:a1c:39d5:: with SMTP id g204mr92727wma.127.1612809444236;
+        Mon, 08 Feb 2021 10:37:24 -0800 (PST)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id x15sm13363628wro.66.2021.02.08.10.37.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Feb 2021 10:21:24 -0800 (PST)
-Date:   Mon, 8 Feb 2021 12:21:22 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
+        Mon, 08 Feb 2021 10:37:23 -0800 (PST)
+Date: Mon, 8 Feb 2021 19:37:21 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Hector Martin <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Maxime Ripard <mripard@kernel.org>
-Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
-Message-ID: <YCGBIvRfoP0BeyrP@builder.lan>
-References: <20210125191240.11278-1-krzk@kernel.org>
- <20210125191240.11278-3-krzk@kernel.org>
- <20210206134531.l5vpzlmev4v3f3uo@kozik-lap>
- <CAK8P3a0Kgn9PTHjsU7MbJPC8vatvb9KYJJKWxrx7zQzTNgK10g@mail.gmail.com>
- <CAMuHMdWZ8QmiQCmiW9AvCpviNZeuaxThSo_4Xb2DGEs9hMTKMQ@mail.gmail.com>
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+	Marc Zyngier <maz@kernel.org>, robh+dt@kernel.org,
+	Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH 05/18] tty: serial: samsung_tty: add support for Apple
+ UARTs
+Message-ID: <20210208183721.4gc7vyfgtpk7nch3@kozik-lap>
+References: <20210204203951.52105-1-marcan@marcan.st>
+ <20210204203951.52105-6-marcan@marcan.st>
+ <20210208105451.yumjjunjeyrglfnw@kozik-lap>
+ <11d36c47-45c6-03ee-2d08-6692b5d0e241@marcan.st>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdWZ8QmiQCmiW9AvCpviNZeuaxThSo_4Xb2DGEs9hMTKMQ@mail.gmail.com>
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20210208182122.L5BP5QRFjCCcm3eGTq4kSUibc8Qc78VgJ_AsumdTN1M@z>
+In-Reply-To: <11d36c47-45c6-03ee-2d08-6692b5d0e241@marcan.st>
 
-On Sat 06 Feb 13:47 CST 2021, Geert Uytterhoeven wrote:
-
-> Hi Arnd,
+On Tue, Feb 09, 2021 at 01:10:02AM +0900, Hector Martin wrote:
+> On 08/02/2021 19.54, Krzysztof Kozlowski wrote:
+> > > +enum s3c24xx_irq_type {
+> > > +	IRQ_DISCRETE = 0,
+> > > +	IRQ_S3C6400 = 1,
+> > > +	IRQ_APPLE = 2,
+> > 
+> > It seems you add the third structure to differentiate type of UART.
+> > There is already port type and s3c24xx_serial_drv_data, no need for
+> > third structure (kind of similar to tries of Tamseel Shams in recent
+> > patches). It's too much. Instead, differentiate by port type or prepare
+> > own set of uart_ops if it's really different (like you did with startup
+> > op).
 > 
-> On Sat, Feb 6, 2021 at 3:36 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> > That said, I'm still not happy about the patch we discussed in the
-> > other email thread[1] and I'd like to handle it a little more strictly in
-> > the future, but I agree this wasn't obvious and we have been rather
-> > inconsistent about it in the past, with some platform maintainers
-> > handling it way more strictly than others.
-> >
-> > I've added the devicetree maintainers and a few other platform
-> > maintainers to Cc here, maybe they can provide some further
-> > opinions on the topic so we can come to an approach that
-> > works for everyone.
-> >
-> > My summary of the thread in [1] is there was a driver bug that
-> > required a DT binding change. Krzysztof and the other involved
-> > parties made sure the driver handles it in a backward-compatible
-> > way (an old dtb file will still run into the bug but keep working
-> > with new kernels), but decided that they did not need to worry
-> > about the opposite case (running an old kernel with an updated
-> > dtb). I noticed the compatibility break and said that I would
-> > prefer this to be done in a way that is compatible both ways,
-> > or at the minimum be alerted about the binding break in the
-> > pull request, with an explanation about why this had to be done,
-> > even when we don't think anyone is going to be affected.
-> >
-> > What do others think about this? Should we generally assume
-> > that breaking old kernels with new dtbs is acceptable, or should
-> > we try to avoid it if possible, the same way we try to avoid
-> > breaking new kernels with old dtbs? Should this be a platform
-> > specific policy or should we try to handle all platforms the same
-> > way?
+> This ties into little changes in a bunch of places, so separate uart_ops
+> callbacks for every one of those would end up duplicating a lot of code :(
 > 
-> For Renesas SoCs, we typically only consider compatibility of new
-> kernels with old DTBs, not the other way around.
-> However, most DTB updates are due to new hardware support, so using the
-> new DTB with an old kernel usually just means no newly documented
-> hardware, or new feature, is being used by the old kernel.
+> That list is just used to map the port type to something that only
+> represents the type of IRQs, but its only real purpose for the indirection
+> is so I can do "== IRQ_DISCRETE" in some codepaths to mean "not apple or
+> S3C6400".
 > 
+> e.g.
+> 
+>     if (s3c24xx_irq_type(port) == IRQ_DISCRETE)
+>         free_irq(ourport->rx_irq, ourport);
+> 
+> Would have to become
+> 
+>     if (port->type != IRQ_S3C6400 && port->type != IRQ_APPLE)
+>         free_irq(ourport->rx_irq, ourport);
+> 
+> or
+> 
+>     switch (port->type) {
+>     case IRQ_S3C6400:
+>     case IRQ_APPLE:
+>         break;
+>     default:
+>         free_irq(ourport->rx_irq, ourport);
+>     }
+> 
+> Which one do you prefer?
 
-This is the case for the Qualcomm tree as well, it's expected that a new
-kernel should work with older DT. But, while we don't actively try to
-break it, there are plenty of examples where we don't/can't give the
-promise in the other direction.
+The latter, especially that switches will appear quite a lot in such
+case.
 
-These examples ranges from advancements in power management
-(implementation and binding) to DT validation forcing deprecation and
-adoption of new bindings.
+However this pattern (== IRQ_DISCRETE) appears only in three places so
+it should not be the main case considered here.
 
-Regards,
-Bjorn
+However I saw later you actually replaced the
+s3c24xx_serial_has_interrupt_mask(), so it's not that bad.
+
+In most of your code, there will be actually a switch with all three
+cases.
+
+> 
+> Aside: Marc didn't like introducing new port types into uapi, but if we
+> don't do that then we need a "real" port type in drv_data that isn't the
+> uapi-exposed port or something along those lines, with a separate enum
+> containing all the true port type values for that.
+
+Looking at Greg's comment, we can get rid of the PORT_ stuff entirely.
+First of all, PORT_S3C2410 == PORT_S3C2412, so this define is not
+accurate.
+
+This leaves us with three types (s3c2400, s3c2440, s3c6410 and Apple).
+The s3c2440 could be removed with adding a new "ucon_mask" field to
+s3c24xx_serial_drv_data.
+
+This would end with s3c24xx, s3c6410 and Apple - quite nice choice.
+
+> 
+> > >   	/* Startup sequence is different for s3c64xx and higher SoC's */
+> > > -	if (s3c24xx_serial_has_interrupt_mask(port))
+> > > +	case IRQ_S3C6400:
+> > >   		s3c24xx_serial_ops.startup = s3c64xx_serial_startup;
+> > 
+> > Don't overwrite specific ops. It's difficult to see then which ops are
+> > being used. Instead create a new set of uart_ops matching the needs.
+> 
+> s3c24xx_serial_ops was already doing that here, but I can move that to a a
+> separate uart_ops too.
+
+You're right. This one would have to be improved before your change.
+Instead of replacing specific op calls in startup, I think it's better
+to have entirely separate ops instance for each variant:
+
+static const struct uart_ops s3c24xx_serial_ops;
+static const struct uart_ops s3c64xx_serial_ops;
+static const struct uart_ops s5l_serial_ops;
+
+This allows to add a "const", since uart_port takes such const pointer.
+
+Still during s3c24xx_serial_probe() correct ops would have to be
+assigned, but at least all ops are easily visible.
+
+Best regards,
+Krzysztof
+
