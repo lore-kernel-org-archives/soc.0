@@ -1,53 +1,57 @@
-Return-Path: <SRS0=AEqt=HK=bootlin.com=alexandre.belloni@kernel.org>
+Return-Path: <linux-samsung-soc-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4A9EC433DB
-	for <soc@archiver.kernel.org>; Mon,  8 Feb 2021 23:10:48 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 426A564EAC; Mon,  8 Feb 2021 23:10:48 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 34ED964E42;
-	Mon,  8 Feb 2021 23:10:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 34ED964E42
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=alexandre.belloni@bootlin.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BD6FC433E0
+	for <linux-samsung-soc@archiver.kernel.org>; Mon,  8 Feb 2021 23:11:33 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 5898C64E82
+	for <linux-samsung-soc@archiver.kernel.org>; Mon,  8 Feb 2021 23:11:33 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S229715AbhBHXLb (ORCPT
+        <rfc822;linux-samsung-soc@archiver.kernel.org>);
+        Mon, 8 Feb 2021 18:11:31 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:39909 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229621AbhBHXLb (ORCPT
+        <rfc822;linux-samsung-soc@vger.kernel.org>);
+        Mon, 8 Feb 2021 18:11:31 -0500
 X-Originating-IP: 86.202.109.140
 Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
-	(Authenticated sender: alexandre.belloni@bootlin.com)
-	by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 5895FE0005;
-	Mon,  8 Feb 2021 23:10:40 +0000 (UTC)
-Date: Tue, 9 Feb 2021 00:10:40 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Arnd Bergmann <arnd@kernel.org>
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 5895FE0005;
+        Mon,  8 Feb 2021 23:10:40 +0000 (UTC)
+Date:   Tue, 9 Feb 2021 00:10:40 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-	arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Sylwester Nawrocki <snawrocki@kernel.org>,
-	DTML <devicetree@vger.kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Alexandre Torgue <alexandre.torgue@st.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Maxime Ripard <mripard@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Maxime Ripard <mripard@kernel.org>
 Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
 Message-ID: <20210208231040.GF351084@piout.net>
 References: <20210125191240.11278-1-krzk@kernel.org>
@@ -64,6 +68,10 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <CAK8P3a0QRcQM4rH9HgVMOHa_eATXsjRbGDXuMO7FgnA8OgPk0Q@mail.gmail.com>
+Precedence: bulk
+List-ID: <linux-samsung-soc.vger.kernel.org>
+X-Mailing-List: linux-samsung-soc@vger.kernel.org
+Message-ID: <20210208231040.VlS_SdnXZ4JpR7mXYxM_XKdLn1ROIxljlrcsI0cD6I4@z>
 
 On 08/02/2021 23:14:02+0100, Arnd Bergmann wrote:
 > On Mon, Feb 8, 2021 at 10:35 PM Alexandre Belloni
