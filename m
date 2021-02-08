@@ -1,116 +1,146 @@
-Return-Path: <SRS0=U7wc=HK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=AEqt=HK=bootlin.com=alexandre.belloni@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AE47C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 20:38:12 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BC4FC433E6
+	for <soc@archiver.kernel.org>; Mon,  8 Feb 2021 21:35:45 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 6EBA164EAC; Mon,  8 Feb 2021 21:35:45 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 251B764DAE
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 20:38:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 251B764DAE
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=VxYm85CGDiYj0s7q1+6p7qd97oUn7kB2tYSXf/dXND4=; b=vv7o5M9XWdt1qBpXvWlyZsvX9x
-	MPp5DtpX73cOw7uJv8paD/obIwG9ABc949AqPRgpKtzeojY3yXDwKpIVjQOd1D4dCN7vH3Ru5LNul
-	P+vKoKYuX2NCGStKxoGZ3f+/npp8tEwLLBlN2X9hbx7Y/WBF0anCHk3xsFme6b1C0WkBLrwfkLMcc
-	kLBUbELAZafBVN4nppqA+BcPYV7QPSoq5NMiFkO0t5OsUmn4kzLheDE8em6kkQUDc3qQjXu+I0TcT
-	iqoR3gmbRJxd4lRqEofueooqdmKEXAN+gelB6roL1ZWAe1mT93RMPVWFnmEtU3eewUTt/JD3vj0Qr
-	7W9UpOvA==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l9DHT-0004zM-GK; Mon, 08 Feb 2021 20:37:11 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l9DHQ-0004yY-L2
- for linux-arm-kernel@lists.infradead.org; Mon, 08 Feb 2021 20:37:09 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5AA8164E54;
- Mon,  8 Feb 2021 20:37:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612816626;
- bh=TyeD4K1P5vUntgNfyF2TCOemZLb/fT9iSjguOChf9ZI=;
- h=From:List-Id:To:Cc:Subject:Date:From;
- b=ctXqYScIlRy9apfRcxXFkUl+R6uLEWLQt8k2A4pm0gk14xHDkpKFHeZBiZ08hMQlD
- SjZNtVLD+JHAxoWL87ZvN0NFNF+nauyt2VU91HGdYQf7dHzjnVUqUHKJ9NUwm33qR6
- MXKWDiVDJjmjaDf9Hjd7decFs/0X31J3wRQWhjNKayugMWHCHCNgZEyiQgdFKGv04h
- JNoM1bi+K+jLpVpJU7DFCiVcUilgum/LZrTwEX5LHJDVU950555+ENLm9ml4l6GnaH
- r3kkZt7Aof77GtfrEBmwaQlQCLxfQQN/870y5wJ3eCyVgSwUigz4LkgFbTYP4ARKOq
- yd4VOU2ZJTXQg==
-From: Dinh Nguyen <dinguyen@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id 2338E64E82;
+	Mon,  8 Feb 2021 21:35:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2338E64E82
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=alexandre.belloni@bootlin.com
+X-Originating-IP: 86.202.109.140
+Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
+	(Authenticated sender: alexandre.belloni@bootlin.com)
+	by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id B154B4000A;
+	Mon,  8 Feb 2021 21:35:37 +0000 (UTC)
+Date: Mon, 8 Feb 2021 22:35:37 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Subject: [GIT PULL] SoCFPGA DTS fix for v5.12
-Date: Mon,  8 Feb 2021 14:37:03 -0600
-Message-ID: <20210208203703.36109-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.30.0
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+	arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Sylwester Nawrocki <snawrocki@kernel.org>,
+	DTML <devicetree@vger.kernel.org>, Tony Lindgren <tony@atomide.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Alexandre Torgue <alexandre.torgue@st.com>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Maxime Ripard <mripard@kernel.org>
+Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
+Message-ID: <20210208213537.GA351084@piout.net>
+References: <20210125191240.11278-1-krzk@kernel.org>
+ <20210125191240.11278-3-krzk@kernel.org>
+ <20210206134531.l5vpzlmev4v3f3uo@kozik-lap>
+ <CAK8P3a0Kgn9PTHjsU7MbJPC8vatvb9KYJJKWxrx7zQzTNgK10g@mail.gmail.com>
+ <CAMuHMdWZ8QmiQCmiW9AvCpviNZeuaxThSo_4Xb2DGEs9hMTKMQ@mail.gmail.com>
+ <YCGBIvRfoP0BeyrP@builder.lan>
+ <20210208184230.onhlioflyylkx6xo@kozik-lap>
+ <CAK8P3a3bsw8p2Geyo-vh1AJUfMQCCf3kpa_YB+tKmcvWHqRcEw@mail.gmail.com>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210208_153708_786480_C069FC3B 
-X-CRM114-Status: UNSURE (   8.73  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: dinguyen@kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210208203703.zEdV_Rgv31ds66lbB9Zd01pYPvKvLS_PXs_A7qWD86E@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a3bsw8p2Geyo-vh1AJUfMQCCf3kpa_YB+tKmcvWHqRcEw@mail.gmail.com>
 
-Hi Arnd, Kevin, and Olof:
+Hello,
 
-Please pull in this SoCFPGA DTS fix for v5.12.
+On 08/02/2021 20:52:37+0100, Arnd Bergmann wrote:
+> On Mon, Feb 8, 2021 at 7:42 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > Let me steer the discussion to original topic - it's about old kernel
+> > and new DTB, assuming that mainline kernel bisectability is not
+> > affected.
+> >
+> > Flow looks like this:
+> >
+> > 0. You have existing bidings and drivers.
+> > 1. Patch changing bindings (with new compatible) and drivers gets
+> >    accepted by maintainer.
+> > 2. Patch above (bindings+drivers) goes during merge window to v5.11-rc1.
+> > 3. Patch changing in-tree DTS to new compatible gets accepted by
+> >    maintainer and it is sent as v5.12-rc1 material to SoC maintainers.
+> >
+> > So again: old kernel, using old bindings, new DTB.
+> >
 
-Thanks,
-Dinh
+I don't think forward compatibility was ever considered. I've seen it
+being mentioned a few times on #armlinux but honestly this simply can't
+be achieved. This would mean being able to write complete DT bindings
+for a particular SoC at day 0 which will realistically never happen. You
+may noteven have a complete datasheet and even if you have a datasheet,
+it may not be complete or it may be missing hw errata that are
+discovered later on and need a new binding to handle.
 
+> > Another case is where out-of-tree user of bindings, e.g. FreeBSD, takes
+> > new DTS (at point of #3 above or later) but did not take the bindings.
+> > Such system would be broken but it's their fault - they took DTS without
+> > taking the bindings (which were there already for one release!).
+> 
+> The particular boot flow that I am worried about here is when the dtb and
+> kernel are not updated in sync. Traditionally this happens when the dtb
+> is contained in the firmware image or generated by the firmware, as would
+> be the case on any server class system, but also on embedded systems
+> that can run an upstream kernel but without having the dts contributed
+> into the kernel sources.
+> 
+> When you have this case, you can install a working system, and install
+> an upgraded kernel without problems. You might then want to update the
+> firmware as well, in order to take advantage of the features implemented
+> in the kernel kernel that require a DT description. Again, no problem.
+> 
+> However, once the firmware is updated, it may no longer be possible to
+> go back to the old kernel in case the new one is busted.
+> 
 
-The following changes since commit 1048ba83fb1c00cd24172e23e8263972f6b5d9ac:
+Any serious update strategy will update both the kernel and device tree
+at the same time, exactly like you already have to update the initramfs
+with the kernel as soon as it is including kernel modules.
+I would expect any embedded platform to actually use a container format,
+like a FIT image that will ship the kernel, DT and intiramfs in a single
+image and will allow to sign all parts.
 
-  Linux 5.11-rc6 (2021-01-31 13:50:09 -0800)
+> A similar problem can happen with the EBBR boot flow that relies on
+> a uefi-enabled firmware such as a u-boot, while using grub2 as the
+> actual boot loader. This is commonly supported across distros. While
+> grub2 can load a matching set of kernel+initrd+dtb from disk and run
+> that, this often fails in practice because u-boot needs to fill a
+> board specific set of DT properties (bootargs, detected memory,
+> mac address, ...). The usual way this gets handled is that u-boot loads
+> grub2 and the dtb from disk and then passes the modified dtb to grub,
+> which picks only kernel+initrd from disk and boots this with the dtb.
+> 
+> The result is similar to case with dtb built into the firmware: after
+> upgrading the dtb that gets loaded by u-boot, grub can still pick
+> old kernels but they may not work as they did in the past. There are
+> obviously ways to work around it, but it does lead to user frustration.
+> 
 
-are available in the Git repository at:
+Are there really any platforms with the dtb built into the firmware? I
+feel like this is a mythical creature used to scare people into keeping
+the DTB ABI stable. Aren't all the distribution already able to cope
+with keeping DTB and kernel in sync?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_fix_for_v5.12
-
-for you to fetch changes up to b7ff3a447d100c999d9848353ef8a4046831d893:
-
-  arm64: dts: agilex: fix phy interface bit shift for gmac1 and gmac2 (2021-02-04 22:29:00 -0600)
-
-----------------------------------------------------------------
-SoCFPGA Agilex fix for v5.12
-- Fix PHY interface register offset for GMACs
-
-----------------------------------------------------------------
-Dinh Nguyen (1):
-      arm64: dts: agilex: fix phy interface bit shift for gmac1 and gmac2
-
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
