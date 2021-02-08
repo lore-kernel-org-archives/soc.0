@@ -1,136 +1,122 @@
-Return-Path: <SRS0=U7wc=HK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=6A6O=HK=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23203C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 17:33:31 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EA88C433E6
+	for <soc@archiver.kernel.org>; Mon,  8 Feb 2021 17:58:51 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id CDD7A64EDA; Mon,  8 Feb 2021 17:58:50 +0000 (UTC)
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B98D964DB2
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 17:33:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B98D964DB2
+	by mail.kernel.org (Postfix) with ESMTPS id 6479464ECB;
+	Mon,  8 Feb 2021 17:58:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6479464ECB
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=mHyvCmym9epG/Wr5LUs7VcJeJGgxbeIkDT5PrqiVmwM=; b=T4j50jPKzlgcYOGygTFrW46ia
-	Dv2pju4iD13WLFJpAtLbIac/qfiJTj8IX8koU8kYmZZbB8u6TEVjTWH/Q82bLqXudHlSu+E2QuUJR
-	EyMEn7Og4r+uQpcgRsFmVMeeIIskWtvmpm1XZBY4BEZv4W1Ci3w8OO5Z/DQmLqmb0Lq/idY9t5Owo
-	RtKdC9X3MqOYWLRKjvxwMxKKY2VtKiT8Jy7u2+zP18agq6VPrGNicjoEgrjl8EhHUDT/uBoU8s4ZJ
-	7lD01RMqZiMCeMt6dV2wIfiR2VMbdZ+BZrySGQLIwOHri5ji47ycPGQP38VGa+2ofe8XQ15sS8BF9
-	5BaouM2+w==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l9AOb-0002K7-Bq; Mon, 08 Feb 2021 17:32:21 +0000
-Received: from mail-ot1-f45.google.com ([209.85.210.45])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l9AOX-0002J9-VR
- for linux-arm-kernel@lists.infradead.org; Mon, 08 Feb 2021 17:32:19 +0000
-Received: by mail-ot1-f45.google.com with SMTP id k25so12818472otb.4
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 08 Feb 2021 09:32:17 -0800 (PST)
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=robherring2@gmail.com
+Received: by mail-ot1-f41.google.com with SMTP id k10so12644751otl.2;
+        Mon, 08 Feb 2021 09:58:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=CJGZSCJAur/5Hm+o5HKIZJ3m/1BQyOjxp7i5ki4kvKg=;
- b=bDAYrmBHaYJUJfWGztfELO60uLkQ/FgLoFEGezD8Jj5Ry/P1FkByAbduYR7w+ouVpm
- F1NJp2VNzCOUvehWM6IJml3nQ7TV9De9J6FcBmw+H/KRgOk1Kkjg10UKc/HCfHnfgiGf
- IVCJ5hIuWJSm/V8YDHa3iSmbsrT6K4UTZA9nqvUR+6cCMXExW1R02RVopkaFJAGtKZXg
- V9dOiZ2EBVqNmMUz8jiyAj9q701u5y17VwE4Q3UEkr4/9PtmcVdKuI6yHUyYFHJX9pg1
- L3tc6ykXBVIJ/DLd4TqXMsI2cifr69+AYBNRFdSzOPwS74DyJ2uV/Oxa8t05iOd9z/R7
- 4BoA==
-X-Gm-Message-State: AOAM5327KxLA/vR/Y4sqqjlX5n5+9Adxt3dRvdOt1TSp+pYqFJiZjRF/
- Mf63YWzlRUT7JiwkUHXqIA==
-X-Google-Smtp-Source: ABdhPJw4/R4KH0mvoPgQxyLxAdM16oo9jlsjZpjjo7ro5BZRGiRShXk92zZZg3RgRWmLqj4kALEs9w==
-X-Received: by 2002:a9d:640b:: with SMTP id h11mr13124079otl.224.1612805537064; 
- Mon, 08 Feb 2021 09:32:17 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net.
- [24.155.109.49])
- by smtp.gmail.com with ESMTPSA id y65sm1324246oie.50.2021.02.08.09.32.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Feb 2021 09:32:16 -0800 (PST)
-Received: (nullmailer pid 1578321 invoked by uid 1000);
- Mon, 08 Feb 2021 17:32:15 -0000
-Date: Mon, 8 Feb 2021 11:32:15 -0600
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lScv50d1ZyqagwO0c9BMwWMnexfOHV/tP4Lgw63kKHw=;
+        b=HNuJb0SlB5o4YTyGgKsOGwIqfJL+NKi05q1Xn8H/hqua8ROy1E1dCryYCO4OMCFuLa
+         MsRrPJQy4hpT4KFlCw4o3mIh0R0lGciCqHgsvcn//nds7tvILsuaSYQUGcJ/LbBA8cAu
+         HM/QPyNJ0RnFlknQXvd99Cronu0kXIGPWyzS2LELreG4OOSiUrh5ZZ0QzeC/lx5xH9Ww
+         IyHWSgCCq3L2oK7BmsTKa7pjRNn1s5I/rGuJuukCopJJgtEr5ZLXbGzkinZdf7mdGUHs
+         /vzUz/5AXT/M7L0Y1OOlOFli63k6CoSPF1Kot5OiIxgJN7gW3TRORYQ5VFDG7lsfLoH3
+         yVSg==
+X-Gm-Message-State: AOAM530qWKJ+e8dXvJDF1+X/Xe7Jg9NchbdCQ2SxPI3tWQUBHqrThn2L
+	E7H2aqZaz/T4UncOG6XDxw==
+X-Google-Smtp-Source: ABdhPJzqRSrYc4T8fAFx8cdWWHXtMy9OBexjy9vulNRDba6D0v0R4U+Q3TIwsWMEc78NEdWT8dc9FA==
+X-Received: by 2002:a05:6830:22d7:: with SMTP id q23mr5443543otc.71.1612807129548;
+        Mon, 08 Feb 2021 09:58:49 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id u73sm3668919oie.30.2021.02.08.09.58.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Feb 2021 09:58:48 -0800 (PST)
+Received: (nullmailer pid 1618899 invoked by uid 1000);
+	Mon, 08 Feb 2021 17:58:47 -0000
+Date: Mon, 8 Feb 2021 11:58:47 -0600
 From: Rob Herring <robh@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 01/18] dt-bindings: vendor-prefixes: add AAPL prefix
-Message-ID: <20210208173215.GA1567700@robh.at.kernel.org>
-References: <20210204203951.52105-1-marcan@marcan.st>
- <20210204203951.52105-2-marcan@marcan.st>
- <20210208102730.p4nhsl35oowsklv2@kozik-lap>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210208102730.p4nhsl35oowsklv2@kozik-lap>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210208_123218_089988_A37F5CCE 
-X-CRM114-Status: GOOD (  19.17  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+To: Hector Martin <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, devicetree@vger.kernel.org,
- Marc Zyngier <maz@kernel.org>, Hector Martin <marcan@marcan.st>,
- linux-kernel@vger.kernel.org, soc@kernel.org, Olof Johansson <olof@lixom.net>,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210208173215.eob9vdtsVaw5JNofNX6yPfEO8qymKyF7KRG_0rjp9aM@z>
+Cc: Arnd Bergmann <arnd@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, DTML <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>, Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 18/18] arm64: apple: Add initial Mac Mini 2020 (M1)
+ devicetree
+Message-ID: <20210208175847.GB1567700@robh.at.kernel.org>
+References: <20210204203951.52105-1-marcan@marcan.st>
+ <20210204203951.52105-19-marcan@marcan.st>
+ <20210208110441.25qc6yken4effd6c@kozik-lap>
+ <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
+ <20210208121325.owjjd7nfbdanszny@kozik-lap>
+ <CAK8P3a0yBC3dui6vcz+NByWD-3LqRj-2MF89jpjb_k8r5xmNRA@mail.gmail.com>
+ <f98dc238-6742-455e-3f76-e86ae4c0c838@marcan.st>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f98dc238-6742-455e-3f76-e86ae4c0c838@marcan.st>
 
-On Mon, Feb 08, 2021 at 11:27:30AM +0100, Krzysztof Kozlowski wrote:
-> On Fri, Feb 05, 2021 at 05:39:34AM +0900, Hector Martin wrote:
-> > Amusingly, this wasn't yet documented, even though this vendor prefix
-> > has been used since time immemorial on PPC.
+On Mon, Feb 08, 2021 at 11:12:52PM +0900, Hector Martin wrote:
+> On 08/02/2021 21.40, Arnd Bergmann wrote:
+> > On Mon, Feb 8, 2021 at 1:13 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > > 
+> > > On Mon, Feb 08, 2021 at 08:56:53PM +0900, Hector Martin 'marcan' wrote:
+> > > > On 08/02/2021 20.04, Krzysztof Kozlowski wrote:
+> > > > > apple
+> > > > > 
+> > > > > Don't make things different for this one platform (comparing to all
+> > > > > other platforms). Apple is not that special. :)
+> > > > 
+> > > > AAPL is the old vendor prefix used in the PowerPC era. I'm happy to use
+> > > > `apple`, as long as we're OK with having two different prefixes for the same
+> > > > vendor, one for PPC and one for ARM64. I've seen opinions go both ways on
+> > > > this one :)
+> > > 
+> > > Thanks for explanation. I propose to choose just "apple". Sticking to
+> > > old vendor name is not a requirement - we have few vendor prefixes which
+> > > were marked as deprecated because we switched to a better one.
 > > 
-> > Signed-off-by: Hector Martin <marcan@marcan.st>
-> > ---
-> >  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > index 041ae90b0d8f..d7950c723472 100644
-> > --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > @@ -25,6 +25,8 @@ patternProperties:
-> >    # Keep list in alphabetical order.
-> >    "^70mai,.*":
-> >      description: 70mai Co., Ltd.
-> > +  "^AAPL,.*":
+> > We've gone back and forth on this a few times already. My current
+> > preference would also be to go with "apple", not because it's somehow
+> > nicer or clearer but because it avoids the namespace conflict with
+> > what the Apple firmware uses:
+
+It's only AAPL,phandle and AAPL,unit-string (equivalent to unit-address) 
+AFAICT which are really internal format details. So it's really 'apple' 
+that could conflct, but I can't see that mattering.
+
+> Ack, I'll use 'apple' for v2.
+
+3 votes for 'apple'. You all get to pick the color of this shed.
+
+> Amusingly, Apple actually use 'apple,firestorm' and 'apple,icestorm' for the
+> CPUs in their devicetrees for these machines, so those will end up identical
+> :) (they don't use apple-related prefixes for any other compatible strings
+> at all, it's a mess). But we don't care about what their ADTs (Apple DTs) do
+> in Linux anyway, the bootloader abstracts all that out and we'll be dealing
+> with mantaining proper DTs ourselves.
 > 
-> All prefixes are lower case... see ABB below (not mentioning that the
-> company name is not APPLE), so just "apple".
+> > > Makes sense. In such case it's indeed your work. Since you introduce it,
+> > > the DTSes are usually licensed with (GPL-2.0+ OR MIT).
+> > 
+> > Indeed, we do want other OSs to use our dts files, so the general
+> > preference is to have a permissive license, unless you have a strong
+> > reason yourself to require GPL-only.
+> 
+> Thanks for pointing this out; this was actually unintentional. I based it
+> off of an old dts I'd written ages ago and forgot to revisit the license. I
+> even have it marked GPL-2.0+ in the copy in our bootloader repo, which is
+> otherwise supposed to be MIT for original code...
 
-Grep the kernel tree for 'AAPL,'. It comes from the the ticker symbol 
-which early on was the preferred form, but we've tended to move away 
-from that. The DT Apple ships (which is *very* different) uses both 
-forms.
-
-So keep what exists already or have old AAPL and new apple?
+I'll also highlight there's a DT only tree[1] available to import DT 
+related parts to other projects. It's generated from the kernel tree. 
+Probably an overkill to copying at this point though.
 
 Rob
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/devicetree/devicetree-rebasing.git/
