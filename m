@@ -1,159 +1,192 @@
-Return-Path: <linux-samsung-soc-owner@kernel.org>
+Return-Path: <SRS0=6A6O=HK=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=BAYES_00,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4C1BC43381
-	for <linux-samsung-soc@archiver.kernel.org>; Mon,  8 Feb 2021 18:44:08 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 89DEC64E74
-	for <linux-samsung-soc@archiver.kernel.org>; Mon,  8 Feb 2021 18:44:08 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234129AbhBHSnb (ORCPT
-        <rfc822;linux-samsung-soc@archiver.kernel.org>);
-        Mon, 8 Feb 2021 13:43:31 -0500
-Received: from mail-ed1-f51.google.com ([209.85.208.51]:38824 "EHLO
-        mail-ed1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235879AbhBHSnP (ORCPT
-        <rfc822;linux-samsung-soc@vger.kernel.org>);
-        Mon, 8 Feb 2021 13:43:15 -0500
-Received: by mail-ed1-f51.google.com with SMTP id s11so19860158edd.5;
-        Mon, 08 Feb 2021 10:42:58 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56181C433DB
+	for <soc@archiver.kernel.org>; Mon,  8 Feb 2021 19:14:51 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 1A92464E9C; Mon,  8 Feb 2021 19:14:51 +0000 (UTC)
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id AC81964E74;
+	Mon,  8 Feb 2021 19:14:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AC81964E74
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=robherring2@gmail.com
+Received: by mail-ot1-f47.google.com with SMTP id i20so15228868otl.7;
+        Mon, 08 Feb 2021 11:14:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=o0MO6kYhDlukwe2FztGhJY4JOmsuVtg2OPvSn78DT4o=;
-        b=dAdHxwPFGIMoqa/lBmCRcIfp5CNpz6JNqivt5dX9nKDVtEltyRYdJ8/Ov7E9u6c4Hw
-         dCfcX1jGYFGTS0D0TiloDu/ZeP5eXC93kjCz+5NxUmqgsuj9aV9sF46/LqBHnIs1J6HX
-         deORHajAKcVXymltgZbh815MonPcoln1rfQDF/Fa9eJZfUySZ8bc8a0+99kstly0xJGr
-         GSnObmyz4oPQg/0btEs26NgC0elnTp8zgufFHiZZ8sLgSQpQtBhVLBgpQuaXmJHdviPY
-         wIwLux93IBgKNyiXOgKxYowullCVPK3bDtPUAR2VmcJaRAO+sTXUw6GTWSDItFNWhDr4
-         iyOg==
-X-Gm-Message-State: AOAM532EkZFUsNgr0alikqmD6chf/3rvkGYXUXN2zZOAgyIwkTEY2y5B
-        uNNZ+wtD6wzQ6s71fw6r3V8=
-X-Google-Smtp-Source: ABdhPJxPQoDmwOFtcSLnMjYpNRs+iVkrhj4hV31wgmf6XJ1MLpWB5omO8uuafc7Bk011dYwog3NnRA==
-X-Received: by 2002:a05:6402:22ce:: with SMTP id dm14mr13185754edb.256.1612809753077;
-        Mon, 08 Feb 2021 10:42:33 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id hy24sm8682518ejc.40.2021.02.08.10.42.31
+        bh=9MpW4g/Oa/7358qxsu5N9b3A3zLC/8dOk9zLIzf9+VY=;
+        b=pYKHh3+emmwyOl2LSrPFkxndNJy5QcpQAiqNCl0ppock36xeg68lr+MwE+RHnN9bmn
+         8d82cypo6SwdeSFij0eAbDSvjTtAWA+MUCdK17ljTsjfyrMoMi0wrheOus6AKKBVtY6P
+         ZV5TuAewOMTRVdJb8yXH2pLm+vMFZ6xS0+HZSqIVnnzY997bJR9guYQ5MGQFrRG5lZc+
+         0d3XxYBqSR8HHvvmOWln4p9ra0TJIuAy+7rDWWoUhl9OSpV0d+EMplilbQhhvAamgcSS
+         daS/Wv2VgpYkT36FNgS+yYrAqJ9RwWKatSbUvQn6UqhjZpHX+7gK772o3MCGT+1GeYkH
+         GINQ==
+X-Gm-Message-State: AOAM533TSGrMKzHMZ260qqZuR1ClQaGblAKsHhia5bm4329bC470kFNb
+	VG1ZQoUbwYmbGtEkjOeVag==
+X-Google-Smtp-Source: ABdhPJy2Zdk/7lhRLfQ4vS7stnE58LqLxeABIlpPpWwn9WDzA3vpkWV8wHQrC0uGs0rwMLBvpmZeqQ==
+X-Received: by 2002:a9d:6e0b:: with SMTP id e11mr8799402otr.343.1612811688715;
+        Mon, 08 Feb 2021 11:14:48 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id g11sm3859816oif.9.2021.02.08.11.14.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Feb 2021 10:42:31 -0800 (PST)
-Date:   Mon, 8 Feb 2021 19:42:30 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+        Mon, 08 Feb 2021 11:14:48 -0800 (PST)
+Received: (nullmailer pid 1735846 invoked by uid 1000);
+	Mon, 08 Feb 2021 19:14:47 -0000
+Date: Mon, 8 Feb 2021 13:14:47 -0600
+From: Rob Herring <robh@kernel.org>
+To: Hector Martin 'marcan' <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Maxime Ripard <mripard@kernel.org>
-Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
-Message-ID: <20210208184230.onhlioflyylkx6xo@kozik-lap>
-References: <20210125191240.11278-1-krzk@kernel.org>
- <20210125191240.11278-3-krzk@kernel.org>
- <20210206134531.l5vpzlmev4v3f3uo@kozik-lap>
- <CAK8P3a0Kgn9PTHjsU7MbJPC8vatvb9KYJJKWxrx7zQzTNgK10g@mail.gmail.com>
- <CAMuHMdWZ8QmiQCmiW9AvCpviNZeuaxThSo_4Xb2DGEs9hMTKMQ@mail.gmail.com>
- <YCGBIvRfoP0BeyrP@builder.lan>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Arnd Bergmann <arnd@kernel.org>, devicetree@vger.kernel.org, Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org, soc@kernel.org, Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 18/18] arm64: apple: Add initial Mac Mini 2020 (M1)
+ devicetree
+Message-ID: <20210208191447.GA1677483@robh.at.kernel.org>
+References: <20210204203951.52105-1-marcan@marcan.st>
+ <20210204203951.52105-19-marcan@marcan.st>
+ <20210208110441.25qc6yken4effd6c@kozik-lap>
+ <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YCGBIvRfoP0BeyrP@builder.lan>
-Precedence: bulk
-List-ID: <linux-samsung-soc.vger.kernel.org>
-X-Mailing-List: linux-samsung-soc@vger.kernel.org
-Message-ID: <20210208184230.zXj3KTJ0xAJpyC8e6Z1ws-RbMnuUAG-ClGT5prYX_1c@z>
+In-Reply-To: <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
 
-On Mon, Feb 08, 2021 at 12:21:22PM -0600, Bjorn Andersson wrote:
-> On Sat 06 Feb 13:47 CST 2021, Geert Uytterhoeven wrote:
+On Mon, Feb 08, 2021 at 08:56:53PM +0900, Hector Martin 'marcan' wrote:
+> On 08/02/2021 20.04, Krzysztof Kozlowski wrote:
+> > apple
+> > 
+> > Don't make things different for this one platform (comparing to all
+> > other platforms). Apple is not that special. :)
 > 
-> > Hi Arnd,
-> > 
-> > On Sat, Feb 6, 2021 at 3:36 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> > > That said, I'm still not happy about the patch we discussed in the
-> > > other email thread[1] and I'd like to handle it a little more strictly in
-> > > the future, but I agree this wasn't obvious and we have been rather
-> > > inconsistent about it in the past, with some platform maintainers
-> > > handling it way more strictly than others.
-> > >
-> > > I've added the devicetree maintainers and a few other platform
-> > > maintainers to Cc here, maybe they can provide some further
-> > > opinions on the topic so we can come to an approach that
-> > > works for everyone.
-> > >
-> > > My summary of the thread in [1] is there was a driver bug that
-> > > required a DT binding change. Krzysztof and the other involved
-> > > parties made sure the driver handles it in a backward-compatible
-> > > way (an old dtb file will still run into the bug but keep working
-> > > with new kernels), but decided that they did not need to worry
-> > > about the opposite case (running an old kernel with an updated
-> > > dtb). I noticed the compatibility break and said that I would
-> > > prefer this to be done in a way that is compatible both ways,
-> > > or at the minimum be alerted about the binding break in the
-> > > pull request, with an explanation about why this had to be done,
-> > > even when we don't think anyone is going to be affected.
-> > >
-> > > What do others think about this? Should we generally assume
-> > > that breaking old kernels with new dtbs is acceptable, or should
-> > > we try to avoid it if possible, the same way we try to avoid
-> > > breaking new kernels with old dtbs? Should this be a platform
-> > > specific policy or should we try to handle all platforms the same
-> > > way?
-> > 
-> > For Renesas SoCs, we typically only consider compatibility of new
-> > kernels with old DTBs, not the other way around.
-> > However, most DTB updates are due to new hardware support, so using the
-> > new DTB with an old kernel usually just means no newly documented
-> > hardware, or new feature, is being used by the old kernel.
-> > 
+> AAPL is the old vendor prefix used in the PowerPC era. I'm happy to use
+> `apple`, as long as we're OK with having two different prefixes for the same
+> vendor, one for PPC and one for ARM64. I've seen opinions go both ways on
+> this one :)
 > 
-> This is the case for the Qualcomm tree as well, it's expected that a new
-> kernel should work with older DT. But, while we don't actively try to
-> break it, there are plenty of examples where we don't/can't give the
-> promise in the other direction.
+> > > + * Copyright 2021 Hector Martin <marcan@marcan.st>
+> > 
+> > A lot here might be difficult to reverse-egineer or figure out by
+> > ourself, so usually people rely on vendor sources (the open source
+> > compliance package). Didn't you receive such for the iOS (or whatever
+> > was on your Mac)?
+> 
+> Apple source drops are sparse (they don't even include things like the
+> irqchip driver, only the very core OS code) and APSL licensed, which is a
+> license incompatible with the GPL. Worse, they've moved to a partial-blob
+> model with the M1; M1-compatible XNU source code drops now include a .a blob
+> with startup and CPU-specific code, for which no source code is provided.
+> (to be clear: Apple does not ship Linux for these machines)
+> 
+> Honestly, beyond what's in this patchset and a few more details about CPU
+> registers like performance monitoring stuff that exist in public XNU drops
+> but I haven't looked into yet, Apple's source code drops are going to be
+> practically useless to us from here on out. It's all binaries after this.
+> 
+> Apple device trees are not open source at all; those are provided by iBoot
+> and ship with device firmware, which is not openly licensed. Those device
+> trees are OF-inspired, but otherwise in a different format and structure to
+> Linux device trees.
+> 
+> Since there is zero Apple-published code or data with a license compatible
+> with the Linux kernel to be used here, there can be zero copyright lines
+> claiming any submissions are copyright Apple from us, because that would
+> imply a license violation has occurred. I am treating this as I would any
+> other no-source reverse engineering project, that is, ensuring that I only
+> look at Apple code (binaries, source, devicetrees, whatever) to understand
+> how the hardware functions, build documentation for it (at least in my head,
+> but I am also trying to document things on our wiki as I go), and then write
+> original code to drive it from Linux, unrelated to whatever Apple was doing.
+> 
+> We're also trying to avoid looking at any Apple stuff in general as much as
+> possible, preferring black-box approaches where feasible, to minimize
+> exposure. For example, I only looked at an (outdated, arm32 era) AIC
+> register name list in XNU to write the AIC driver; there is no actual AIC
+> driver code in the source, and instead of decompiling Apple's binary blob
+> AIC driver module, I figured out how the hardware actually worked via
+> probing and experimentation. The entire userspace GPU stack is being reverse
+> engineered via a black-box approach, without any decompilation. I'm going to
+> see what I can do about the kernel driver in the future, and prefer some
+> kind of mmio tracing solution if I can get it all to work on macOS.
+> 
+> As for this file specifically: while I am obviously looking at Apple's DTs
+> to figure out things like register offsets and what hardware exists, those
+> are facts, and facts are not copyrightable, and thus Apple does not hold any
+> copyright interest over this code as I submitted it. Short of verbatim
+> copying and pasting of entire nodes with bespoke property names (which would
+> never fly here anyway because Apple does things very differently from Linux
+> DTs when you get down into the details), it would be extremely hard to argue
+> that translating hardware information from decompiled Apple DTs to Linux DTs
+> would constitute a copyright violation, since the entire purpose of DTs is
+> to describe hardware facts.
+> 
+> You can read more about our reverse engineering and copyright policy at
+> https://alx.sh/re - if you have any suggestions or spot anything
+> problematic, please let me know.
+> 
+> (I'm actually probably going to change that copyright line to "The Asahi
+> Linux Contributors" for v2, if that's okay with the kernel folks, to be in
+> line with our other projects; I defaulted to my name since so far I'm the
+> only contributor to these files, but I expect other people to throw PRs at
+> me in the future and the history to end up with more names here)
 
-Thanks everyone for comments.
+Does there need to be a legal entity behind 'The Asahi Linux 
+Contributors' to be valid?
 
-Let me steer the discussion to original topic - it's about old kernel
-and new DTB, assuming that mainline kernel bisectability is not
-affected.
+From a more practical standpoint, if we want to relicense something in 
+say 5 years from now, who do we ask for an okay?
 
-Flow looks like this:
+> > I guess Rob will comment on the dt-bindings more... but for me a generic
+> > "arm-platform" is too generic. What's the point of it? I didn't see any
+> > of such generic compatibles in other platforms.
+> 
+> This is a hack for patches #11/#12 to use, and I expect it will go away once
+> we figure out how to properly handle that problem (which needs further
+> discussion). Sorry for the noise, this should not be there in the final
+> version.
 
-0. You have existing bidings and drivers.
-1. Patch changing bindings (with new compatible) and drivers gets
-   accepted by maintainer.
-2. Patch above (bindings+drivers) goes during merge window to v5.11-rc1.
-3. Patch changing in-tree DTS to new compatible gets accepted by
-   maintainer and it is sent as v5.12-rc1 material to SoC maintainers.
+I was going to ask on this. If you have a user of it, I'm okay with it. 
+Generally though, 3 or 4 levels of compatible don't really have users.
 
-So again: old kernel, using old bindings, new DTB.
+> > > +		bootargs = "earlycon";
+> > 
+> > This should not be hard-coded in DTS. Pass it from bootloader.
+> 
+> My apologies, this was garbage left over from before I had bootargs support
+> in the bootloader. Will be gone for v2.
+> 
+> > > +	clk24: clk24 {
+> > 
+> > Just "clock". Node names should be generic.
+> 
+> Really? Almost every other device device tree uses unique clock node names.
 
-Another case is where out-of-tree user of bindings, e.g. FreeBSD, takes
-new DTS (at point of #3 above or later) but did not take the bindings.
-Such system would be broken but it's their fault - they took DTS without
-taking the bindings (which were there already for one release!).
+It's a WIP to be more consistent around node names. For actual
+clock controllers we have 'clock-controller(@.*)?'. There's not really 
+something established for 'fixed-clock'. We probably should define 
+something, but that goes in the schema first.
 
-Best regards,
-Krzysztof
+> > > +		compatible = "fixed-clock";
+> > > +		#clock-cells = <0>;
+> > > +		clock-frequency = <24000000>;
+> > > +		clock-output-names = "clk24";
+> > 
+> > What clock is it? Part of board or SoC? Isn't it a work-around for
+> > missing clock drivers?
+> 
+> The clock topology isn't entirely known yet; I'm submitting this as an
+> initial bring-up patchset and indeed there should be a clockchip driver in
+> the future. The UART driver wants a clock to be able to calculate baud
+> rates. I figured we can get away with a fixed-clock for now while that part
+> of the SoC gets figured out.
+
+That is normal. It does break compatibility between an old kernel 
+and new DT. There's not really a good way to avoid that.
+
+Rob
