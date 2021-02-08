@@ -1,57 +1,49 @@
-Return-Path: <linux-samsung-soc-owner@kernel.org>
+Return-Path: <SRS0=U7wc=HK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BD6FC433E0
-	for <linux-samsung-soc@archiver.kernel.org>; Mon,  8 Feb 2021 23:11:33 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5898C64E82
-	for <linux-samsung-soc@archiver.kernel.org>; Mon,  8 Feb 2021 23:11:33 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbhBHXLb (ORCPT
-        <rfc822;linux-samsung-soc@archiver.kernel.org>);
-        Mon, 8 Feb 2021 18:11:31 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:39909 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbhBHXLb (ORCPT
-        <rfc822;linux-samsung-soc@vger.kernel.org>);
-        Mon, 8 Feb 2021 18:11:31 -0500
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B110C433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 23:12:01 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id EB47D64E6E
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 23:12:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EB47D64E6E
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
+	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=WMmd67twoowAQuiC3DrWAUus/fjkaURjL3O1NLMsny4=; b=hTqAXNURgOE56AB+DS5xL0qQD
+	bGfiF2AeV+uqWWOWuqgmlCJvEFfxcrddVTmrbYI4tY18O0C/dAgA4Ym79H2Umbje05IiNcELOkR5/
+	tuPkQlJHrwz0Zwlxt1qm/MCvfM8qdtpd/f+8yemN/eWG1ZO/avIvN1zqx9jB1KLt/jH9JqtwYO0VH
+	gjqoJlaZoukXoMeHjtYiBw7uO6y2VM8t+AMrONB7gIDvzPl1PU2MzlWflEK5aolFubC/2a72Xq3MD
+	//Txbkq1PJbOh6MhfOxDKzGKFydzH9X5sTXYjW+v8UT1L8rGKmLbEavxAyHr1Bnt8/DokyBOXH1Kt
+	bykbKzjMA==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l9Fg8-0001Cv-Gc; Mon, 08 Feb 2021 23:10:48 +0000
+Received: from relay4-d.mail.gandi.net ([217.70.183.196])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l9Fg5-0001CP-JR
+ for linux-arm-kernel@lists.infradead.org; Mon, 08 Feb 2021 23:10:46 +0000
 X-Originating-IP: 86.202.109.140
-Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 5895FE0005;
-        Mon,  8 Feb 2021 23:10:40 +0000 (UTC)
-Date:   Tue, 9 Feb 2021 00:10:40 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Maxime Ripard <mripard@kernel.org>
+Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr
+ [86.202.109.140])
+ (Authenticated sender: alexandre.belloni@bootlin.com)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 5895FE0005;
+ Mon,  8 Feb 2021 23:10:40 +0000 (UTC)
+Date: Tue, 9 Feb 2021 00:10:40 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Arnd Bergmann <arnd@kernel.org>
 Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
 Message-ID: <20210208231040.GF351084@piout.net>
 References: <20210125191240.11278-1-krzk@kernel.org>
@@ -65,13 +57,44 @@ References: <20210125191240.11278-1-krzk@kernel.org>
  <20210208213537.GA351084@piout.net>
  <CAK8P3a0QRcQM4rH9HgVMOHa_eATXsjRbGDXuMO7FgnA8OgPk0Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <CAK8P3a0QRcQM4rH9HgVMOHa_eATXsjRbGDXuMO7FgnA8OgPk0Q@mail.gmail.com>
-Precedence: bulk
-List-ID: <linux-samsung-soc.vger.kernel.org>
-X-Mailing-List: linux-samsung-soc@vger.kernel.org
-Message-ID: <20210208231040.VlS_SdnXZ4JpR7mXYxM_XKdLn1ROIxljlrcsI0cD6I4@z>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210208_181045_853475_51FA266E 
+X-CRM114-Status: GOOD (  48.66  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
+ Tony Lindgren <tony@atomide.com>, Linus Walleij <linus.walleij@linaro.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Frank Rowand <frowand.list@gmail.com>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES"
+ <linux-samsung-soc@vger.kernel.org>, Sylwester Nawrocki <snawrocki@kernel.org>,
+ Kevin Hilman <khilman@baylibre.com>,
+ Gregory Clement <gregory.clement@bootlin.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>, arm-soc <arm@kernel.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>, DTML <devicetree@vger.kernel.org>,
+ Alexandre Torgue <alexandre.torgue@st.com>, Arnd Bergmann <arnd@arndb.de>,
+ Maxime Ripard <mripard@kernel.org>, SoC Team <soc@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>, Bjorn Andersson <bjorn.andersson@linaro.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Olof Johansson <olof@lixom.net>, Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210208231040.Qk6ZeWbFyUtanLvVBaCDR-BILSBTSB1M309GdQ6iiOY@z>
 
 On 08/02/2021 23:14:02+0100, Arnd Bergmann wrote:
 > On Mon, Feb 8, 2021 at 10:35 PM Alexandre Belloni
@@ -200,3 +223,8 @@ question the sanity of doing that ;)
 Alexandre Belloni, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
