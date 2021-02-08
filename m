@@ -1,185 +1,96 @@
-Return-Path: <SRS0=U7wc=HK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <maz@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=BAYES_00,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C657BC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 11:30:18 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB139C433E0
+	for <soc@archiver.kernel.org>; Mon,  8 Feb 2021 11:30:54 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7443964E99; Mon,  8 Feb 2021 11:30:54 +0000 (UTC)
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 69BA864E92
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 11:30:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 69BA864E92
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Subject:To:From:
-	Message-ID:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=Uz72Pe9n8abfX29S2pXXhsu1JdbiCwU0KHYCJBgjC4o=; b=Npw9S2y795XZKB/TTQw2Bz3rM
-	3mqmLnvGitC3IMB7rZcbNlsGoeCe60dV0EYG/RPACpKr1IHxe6GyUIXitQmEylq/CTB1FTpPrb02B
-	vii8I3A/1TFJHDQ2RX3eA+Flap9zand3mJVtY04XKhc1AQSprPmvlECSyt9tu46x6meWlxatNUCYr
-	yAN1c5iZ6cXvN5vCUJOPKhaCFpWUUdDz/FhP9862Dc/0Z/xGjJQkayGnQZK5hg+I+TXvUURDpxczy
-	0QI0yfEC1RFVy+Lts/dBA71v3prHslwOM81XPJmtoBf9oz/pn7o9I/xpGpCOlU1rhBLdqHonEXYE5
-	swFs4jp5g==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l94jC-0008Nv-2c; Mon, 08 Feb 2021 11:29:14 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l94j9-0008NF-MY
- for linux-arm-kernel@lists.infradead.org; Mon, 08 Feb 2021 11:29:12 +0000
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org
- [51.254.78.96])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.kernel.org (Postfix) with ESMTPSA id 8E6C164E8B;
- Mon,  8 Feb 2021 11:29:10 +0000 (UTC)
-Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78]
- helo=wait-a-minute.misterjones.org)
- by disco-boy.misterjones.org with esmtpsa (TLS1.3) tls
- TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94)
- (envelope-from <maz@kernel.org>)
- id 1l94j6-00ClRC-49; Mon, 08 Feb 2021 11:29:08 +0000
-Date: Mon, 08 Feb 2021 11:29:07 +0000
-Message-ID: <87czxalrwc.wl-maz@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPSA id 467E164EA1;
+	Mon,  8 Feb 2021 11:30:54 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94)
+	(envelope-from <maz@kernel.org>)
+	id 1l94km-00ClSf-1Q; Mon, 08 Feb 2021 11:30:52 +0000
+Date: Mon, 08 Feb 2021 11:30:50 +0000
+Message-ID: <87blculrth.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Hector Martin 'marcan' <marcan@marcan.st>
-Subject: Re: [PATCH 08/18] arm64: cpufeature: Add a feature for FIQ support
-In-Reply-To: <d110504f-2461-8b41-72cc-72681d775a97@marcan.st>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	robh+dt@kernel.org,
+	Arnd Bergmann <arnd@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Olof Johansson <olof@lixom.net>,
+	Mark Rutland <mark.rutland@arm.com>,
+	James Morse <james.morse@arm.com>
+Subject: Re: [PATCH 10/18] arm64: Introduce FIQ support
+In-Reply-To: <2bfebb31-afb5-88a7-d092-87f88aa7367a@marcan.st>
 References: <20210204203951.52105-1-marcan@marcan.st>
- <20210204203951.52105-9-marcan@marcan.st>
- <87im75l2lp.wl-maz@kernel.org>
- <d110504f-2461-8b41-72cc-72681d775a97@marcan.st>
+	<20210204203951.52105-11-marcan@marcan.st>
+	<87h7mpky0f.wl-maz@kernel.org>
+	<2bfebb31-afb5-88a7-d092-87f88aa7367a@marcan.st>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 62.31.163.78
-X-SA-Exim-Rcpt-To: marcan@marcan.st, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, arnd@kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, olof@lixom.net
+X-SA-Exim-Rcpt-To: marcan@marcan.st, soc@kernel.org, linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, arnd@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, olof@lixom.net, mark.rutland@arm.com, james.morse@arm.com
 X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org);
- SAEximRunCond expanded to false
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210208_062911_920330_B98C2AD4 
-X-CRM114-Status: GOOD (  40.00  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, soc@kernel.org, robh+dt@kernel.org,
- Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210208112907.OBMO2jJb4H2qF1iQs-lVitl4Vkb6uRxKIzNsGByiQz0@z>
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Sun, 07 Feb 2021 08:28:35 +0000,
+On Sun, 07 Feb 2021 08:47:23 +0000,
 Hector Martin 'marcan' <marcan@marcan.st> wrote:
 > 
-> On 06/02/2021 22.58, Marc Zyngier wrote:
-> > Hector Martin <marcan@marcan.st> wrote:
-> >> +static void cpu_sync_irq_to_fiq(struct arm64_cpu_capabilities const *cap)
-> >> +{
-> >> +	u64 daif = read_sysreg(daif);
-> >> +
-> >> +	/*
-> >> +	 * By this point in the boot process IRQs are likely masked and FIOs
-> >> +	 * aren't, so we need to sync things to avoid spurious early FIQs.
-> >> +	 */
-> >> +
-> >> +	if (daif & PSR_I_BIT)
-> >> +		daif |= PSR_F_BIT;
-> >> +	else
-> >> +		daif &= ~PSR_F_BIT;
-> >> +
-> >> +	write_sysreg(daif, daif);
+> On 07/02/2021 00.37, Marc Zyngier wrote:
+> > See my digression in patch 8. I really wonder what the benefit is to
+> > treat FIQ independently of IRQ, and we might as well generalise
+> > this. We could always panic on getting a FIQ on platforms that don't
+> > expect one.
 > > 
-> > Could this happen too late? If, as explained above, we can get a FIQ
-> > until we mask it here, what prevents something (a timer?) from kicking
-> > and creating havoc just before the sync?
+> > It'd be good to rope in the other interested parties (Mark for the
+> > early entry code, James for RAS and SError handling).
 > 
-> Nothing, other than timers not being enabled this early (hopefully the
-> bootloader doesn't leave a rogue timer running for us...)
+> CCing Mark and James: TL;DR what do you think about unconditionally
+> keeping DAIF.I == DAIF.F, would this break other platforms with
+> spurious FIQs or conversely mask FIQs when we don't want to in some
+> cases? The FIQ vector would remain a panic except on platforms that
+> require using it, via an alternatives patch.
+> 
+> >>   	kernel_ventry	1, sync				// Synchronous EL1h
+> >>   	kernel_ventry	1, irq				// IRQ EL1h
+> >> -	kernel_ventry	1, fiq_invalid			// FIQ EL1h
+> >> +							// FIQ EL1h
+> >> +	kernel_ventry	1, fiq_invalid, 64, irq, ARM64_NEEDS_FIQ
+> > 
+> > It could be better to create a set of first class FIQ handlers rather
+> > than this alternative target macro. I quickly hacked this instead,
+> > which I find more readable.
+> 
+> I think I ended up with the macro change to keep it 1:1 with IRQ, vs a
+> separate branch... but I didn't think of the fallthrough-with-nop
+> trick, neat. It is definitely is more readable. Are you OK with me
+> pulling this patch in for v2, with your name on it?
 
-I'm not sure we want to trust the FW on that particular front (no
-offence intended...;-).
+Up to you, I don't mind either way. This is just code! :D
 
 > 
-> > If the answer is "nothing", then it probably means that the default
-> > behaviour should be to treat PSTATE.I and PSTATE.F as containing the
-> > same value at all times, and not just as an afterthought when we
-> > detect that we're on a CPU type or another.
+> > -	kernel_ventry	0, fiq_invalid_compat, 32	// FIQ 32-bit EL0
+> > +	kernel_ventry	0, fiq, 32			// FIQ 32-bit EL0
 > 
-> I thought of this too. Originally I thought PSTATE.F was always set on
-> other systems, and thus unmasking FIQs could cause problems if there
-> is a pending rogue FIQ for some reason. However, while writing this
-> patch I realized that as part of normal process state changes we
-> already unmask FIQs anyway (see DAIF_PROCCTX).
-> 
-> Thus, in fact, this patch actually changes things (when the cpufeature
-> is set) to mask FIQs in some cases where they currently aren't, and
-> conversely to unmask them in some cases where they currently are. But
-> the fact that FIQ masking is somewhat inconsistent to begin with
-> suggests that we should be able to mess with it without causing
-> breakage for other systems.
-> 
-> So I guess in this case it would be legitimate to just make I==F on
-> every system, and if something breaks it should be fixed by making
-> whatever is causing a rogue FIQ not do that, right?
+> fiq_compat here, right?
 
-That is my current take on this patch. Nothing in the arm64 kernel
-expects a FIQ today, so *when* a FIQ fires is pretty much irrelevant,
-as long as we handle it properly (panic). Keeping the two bits in sync
-is trivial, and shouldn't carry material overhead.
-
-> That would leave the vector switcheroo as the only thing the
-> cpufeature does, which would certainly simplify a lot of the patch.
-> 
-> > This could expand into enabling Group-0 interrupts with GICv3 on
-> > systems that have a single security state (such as virtual machines),
-> > though I don't really see a good use case for it.
-> 
-> I could see having a separate vector path opening up the door for
-> performance hacks for very specific use cases that want really low
-> latency for *one* thing (e.g. the mess the Raspberry Pi folks do to
-> work around that braindead USB controller's performance issues),
-> though I imagine there would have to be very compelling reasons to
-> develop a framework to do this sanely upstream.
-
-In general, this only works for single security state systems (systems
-without EL3 and VMs), as FIQs are usually routed to the secure side
-otherwise. If tied to a GIC, Group-0 interrupts aren't configurable
-from NS either.
-
-> Incidentally, I have a personal interest in real-time performance
-> (especially audio); once the dust settles and we have a workable
-> kernel for normal use I do hope to spend some time taking a deep dive
-> into latencies and finding RT-unfriendly code, but that's pretty far
-> off right now. Maybe PREEMPT_RT will even be merged by then :-) (I
-> hope that without SMM to screw things up on these machines they might
-> make very nice RT-capable boxes...)
-
-Aside from the lack of programmable priority, the lack of convenient
-masking for per-CPU interrupts is a bit of an issue...
+Of course.
 
 Thanks,
 
@@ -187,8 +98,3 @@ Thanks,
 
 -- 
 Without deviation from the norm, progress is not possible.
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
