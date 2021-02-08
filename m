@@ -1,62 +1,99 @@
-Return-Path: <SRS0=Nkqh=HK=gmail.com=k.kozlowski.k@kernel.org>
+Return-Path: <SRS0=U7wc=HK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3998AC433E0
-	for <soc@archiver.kernel.org>; Mon,  8 Feb 2021 11:04:46 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id DB90264E27; Mon,  8 Feb 2021 11:04:45 +0000 (UTC)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C596C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 11:05:59 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 50C8964E54;
-	Mon,  8 Feb 2021 11:04:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 50C8964E54
+	by mail.kernel.org (Postfix) with ESMTPS id E474A64E27
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 11:05:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E474A64E27
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=k.kozlowski.k@gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id df22so17587219edb.1;
-        Mon, 08 Feb 2021 03:04:45 -0800 (PST)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
+	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=ct6w/owxWIcLdht4W9bZkuqxoNhs8dATEj73UQVZ3Rg=; b=EAN+dFatfOGHmnHGqlE08NRGu
+	c8kotFbrY0ZYPuxm6YzsDuKoDSzst0VJXPYelKX7Sd0MChpxsRMqHFEEKvRpnALB5Rmx5OFIKH4j0
+	gxCe3rh7BrWlJnWnL3DrcPfYQMUCtn/8ENMBcd+xbFrzy6ZBKVDNnPIRnehUB1kEn9xfT7lOzgs0i
+	ssUhPtUEq6tlS2OVNMGRJEfEOhcO7qFDzVc1MkhmRO9u5LCoBjCr9cXMOehEfINfKOJsWDvOcclhN
+	MJpwFc4vVud0+mpC/dXqmlpH4hvvQEi67FZhZsD9mUr9KQhq5k0VS03nWV/y7beSMY8FLKsX1j5nZ
+	zItp2geeg==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l94LZ-0003lj-9K; Mon, 08 Feb 2021 11:04:49 +0000
+Received: from mail-ed1-f50.google.com ([209.85.208.50])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l94LV-0003k9-1G
+ for linux-arm-kernel@lists.infradead.org; Mon, 08 Feb 2021 11:04:47 +0000
+Received: by mail-ed1-f50.google.com with SMTP id q2so14406562eds.11
+ for <linux-arm-kernel@lists.infradead.org>;
+ Mon, 08 Feb 2021 03:04:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZnXtuKDtjfCK+Wau43axfzEHC52NhOuAsUoAI9Jo0T4=;
-        b=NWvin+TfzIqFzgth4AjxicEfF0GmvF9WGmrrf5Mj50kYyMhRLMWJX6mhCkcuDd9k+3
-         m7WphHrasqP33wgOuS0lO8M7naiC0RjTWSZT8g+vGufxZdEZv/T5CHEyME9D/WwuMzt4
-         ZmF7+EmkcBJsoMa8/ZIkrdo90fEdYLI/cqcZ856BDvFU31xniAcVycalpjIAgb3d2obv
-         GoitQ9+jfOCXd70cdyc98pGEVp4iJn+NyToFO9+qNKr0sZ7geVhE3ORAFJVTraKHdGJF
-         o/Y6XprFaQ1kmKGq10obYPKmNW7F6AHblmLdLQZq5OV+TEeUwEToDpB2Iz0CC8GUVQaO
-         UMVA==
-X-Gm-Message-State: AOAM531nNpBhi1qulgj+DrYrSP+DR61j5IBpF3Ipcgt71JCv3gPWJlGD
-	ly2B6xVIAH+EfeIrALbcb38=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+ :mime-version:content-disposition:in-reply-to;
+ bh=ZnXtuKDtjfCK+Wau43axfzEHC52NhOuAsUoAI9Jo0T4=;
+ b=koOhUUBIL1zqQjD70FOtwveIoXnzNtIvfvJQ9KVgcLhGuW0BWN63m9dPBgsXQ4LVTK
+ Fi9PqCEKsrFEaCbYZiKrjC3PZTJdeFShvOLXgqE+9RQcZFBekERw+hMlATa5teU+6DC+
+ pPexZijZxBGB/kalUjXAcZRFN6zATUqfqTNd7582jmSwirisdaMNqnge5542jUWjJBOu
+ 0eTSSmqSDVQKCd63Kfk/7Ga+VARCrCIN69M17xqW+/kVpfo9srzBHvKeG2HvJ7Kzizay
+ BIUJ6mMN6F8takdnv8SK3G1re1mm6D2fz4fc4KlcjuF1A+UWf5E6z4XGLPMxIztJn77H
+ pKZw==
+X-Gm-Message-State: AOAM533S1oPANgxDfAv1LgIgcVGJaUJzEj8M/0UwAsqBfvXcOsLrU+tw
+ QV3AUD3zzIRkc77n8s4JROU=
 X-Google-Smtp-Source: ABdhPJyTpLeaD+lc+pF/9E0BTCIWBbMdXbaxi0/0fqwRf5MYHywFNGGihVKmvcrpNDgjFNZ32RWqjw==
-X-Received: by 2002:a50:bf42:: with SMTP id g2mr16650172edk.101.1612782283762;
-        Mon, 08 Feb 2021 03:04:43 -0800 (PST)
+X-Received: by 2002:a50:bf42:: with SMTP id g2mr16650172edk.101.1612782283762; 
+ Mon, 08 Feb 2021 03:04:43 -0800 (PST)
 Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id lc11sm3180759ejc.95.2021.02.08.03.04.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Feb 2021 03:04:42 -0800 (PST)
+ by smtp.googlemail.com with ESMTPSA id lc11sm3180759ejc.95.2021.02.08.03.04.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 08 Feb 2021 03:04:42 -0800 (PST)
 Date: Mon, 8 Feb 2021 12:04:41 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Hector Martin <marcan@marcan.st>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-	Marc Zyngier <maz@kernel.org>, robh+dt@kernel.org,
-	Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, Olof Johansson <olof@lixom.net>
 Subject: Re: [PATCH 18/18] arm64: apple: Add initial Mac Mini 2020 (M1)
  devicetree
 Message-ID: <20210208110441.25qc6yken4effd6c@kozik-lap>
 References: <20210204203951.52105-1-marcan@marcan.st>
  <20210204203951.52105-19-marcan@marcan.st>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <20210204203951.52105-19-marcan@marcan.st>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210208_060445_155124_C2BAF0F2 
+X-CRM114-Status: GOOD (  25.29  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, devicetree@vger.kernel.org,
+ Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org, soc@kernel.org,
+ robh+dt@kernel.org, Olof Johansson <olof@lixom.net>,
+ linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210208110441.14lyarfo9N2dFjUdfKM6qlp2ywweMDruZ_qUMLsb9wU@z>
 
 On Fri, Feb 05, 2021 at 05:39:51AM +0900, Hector Martin wrote:
 > This currently supports:
@@ -297,3 +334,8 @@ No blank lines at end of blocks.
 
 Best regards,
 Krzysztof
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
