@@ -1,52 +1,68 @@
-Return-Path: <SRS0=Nkqh=HK=gmail.com=k.kozlowski.k@kernel.org>
+Return-Path: <SRS0=U7wc=HK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=BAYES_00,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A25E2C433E0
-	for <soc@archiver.kernel.org>; Mon,  8 Feb 2021 12:13:30 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 5CFDF64E27; Mon,  8 Feb 2021 12:13:30 +0000 (UTC)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C40B0C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 12:14:48 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C266E64DCC;
-	Mon,  8 Feb 2021 12:13:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C266E64DCC
+	by mail.kernel.org (Postfix) with ESMTPS id 4CAE264DCC
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 12:14:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4CAE264DCC
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=k.kozlowski.k@gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id df22so17815806edb.1;
-        Mon, 08 Feb 2021 04:13:29 -0800 (PST)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
+	Subject:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=l+/5VxRW0/dlYWMmDfXx4RqYTEj8BOZk4OBYOTl8qms=; b=hECxCVDC56lm3HrHkr3HrXeiH
+	NnFSwozP0aOg80EzHGidw7OlzTCG3o0Ei876gsAy5lRaRLoe9zSHTyCgoTQL90ojYXtypaB/psPHV
+	iSXEgUGpMyVbW28E03WWWPxz95l8e2vh3ZlK+ox713VaxuuSoI5Qn9b8OA/083ZOelTDAvOzeljat
+	vVZHC1jepmqssGqBjjrPfHiMbmFOIuO7EnQ/oqyrUUqNJ3LxOdu+K1XhZtFqaczq/bjLEyESJ11vA
+	65ItNuM9c1teVltengtqINTQFcBMd3pYHwx6/+r8bKeRnVmD9aaEmlhxz9x//pt5KZhk2AHO+iH6m
+	tPEpEcpNQ==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1l95Q5-0006FG-MO; Mon, 08 Feb 2021 12:13:33 +0000
+Received: from mail-ed1-f47.google.com ([209.85.208.47])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1l95Q1-0006Ee-J1
+ for linux-arm-kernel@lists.infradead.org; Mon, 08 Feb 2021 12:13:31 +0000
+Received: by mail-ed1-f47.google.com with SMTP id y18so17725076edw.13
+ for <linux-arm-kernel@lists.infradead.org>;
+ Mon, 08 Feb 2021 04:13:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FpLR5cZzlQKftepQVrprWEOfxdWH5lN8lHi/n2VPC5I=;
-        b=gh5PfiDJQImo9dHlFewOtBnzrHAu6gQlmSzeKjnDFcXkZCa1KkUS6S8Dq30f8IiIUT
-         zmB6KCOLiYpdP7zijmr1KHCI0E1g2VV/ajj1lwbKS/5vi1GwYKFTNk0d+7VQt7jhRPqD
-         J00EzCTCk5Xkr08FV4jnFLhyZrcG8EZSJLb/hCQhcni2KolL+LCJZNAqPHi0kJGtP+t4
-         vsms1iERKA8dDcSOyr4F1l1g+oaddmjvAqWF7Qfxm1y5QfC1E7Tn9NRP5VqiyUgBKmxr
-         tUExE0fczoaogdFDlC5rgCtGVJagyIa6JoVOuCPqowdfA/Jqwuabc08f+EV2w/GOevIV
-         xdNQ==
-X-Gm-Message-State: AOAM5320EygGKKPWLnCOJslVrN1Ukggsvij1efXYQ3HoPLyoEP5spY/B
-	OVIRFyhs7VbXjsQtg7jn7u4=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+ :mime-version:content-disposition:in-reply-to;
+ bh=FpLR5cZzlQKftepQVrprWEOfxdWH5lN8lHi/n2VPC5I=;
+ b=JobTnzjtuOCiBlxU+RFjz7yoU0W7c50pQ8v1iQnQ+1v8RJ3oaxPcjx7uhIsUdcYjPN
+ Idje112Dm5rhqYhdQCBZCcj8omxaViajeKuxeewZwDmtSklA0jq61/4k57Fo+poIVq1U
+ W9DEidN+b3wWfImhT8pi0zDl/JS0ZcNnEsFih7GQG5u/Ln9bi3LJtJU25Ps4Yeg2Pt8B
+ BPqZrhhuzGh3hAP6v3jZgJxVuxsnVReIoiUV2+rdECc3zRGKOSeDy9J8rIFqb1ZpdJWT
+ /c31JZCF2EgF5WxXL7w/LPU23mBahDlbtWDf81UrEtVI0IkbNwMn3HiFQphYBSFVJUca
+ TOWw==
+X-Gm-Message-State: AOAM531gyvmjLaeYORokT3Qj9dyxCqENMVLB5NVBpSplTdxiwGkpZ8N5
+ g7NTfpQTRKmGwiwn+O8fuUNOXssicIg=
 X-Google-Smtp-Source: ABdhPJzKOvT2pcfH6hm8UXtb6quo0MW5QUh99YT16bBy/QZjt+x9tofllOvobrLzWCCU+gDST0jy1g==
-X-Received: by 2002:a05:6402:1711:: with SMTP id y17mr16628083edu.72.1612786408134;
-        Mon, 08 Feb 2021 04:13:28 -0800 (PST)
+X-Received: by 2002:a05:6402:1711:: with SMTP id
+ y17mr16628083edu.72.1612786408134; 
+ Mon, 08 Feb 2021 04:13:28 -0800 (PST)
 Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id hr31sm8330971ejc.125.2021.02.08.04.13.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Feb 2021 04:13:26 -0800 (PST)
+ by smtp.googlemail.com with ESMTPSA id
+ hr31sm8330971ejc.125.2021.02.08.04.13.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 08 Feb 2021 04:13:26 -0800 (PST)
 Date: Mon, 8 Feb 2021 13:13:25 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Hector Martin 'marcan' <marcan@marcan.st>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-	Marc Zyngier <maz@kernel.org>, robh+dt@kernel.org,
-	Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, Olof Johansson <olof@lixom.net>
 Subject: Re: [PATCH 18/18] arm64: apple: Add initial Mac Mini 2020 (M1)
  devicetree
 Message-ID: <20210208121325.owjjd7nfbdanszny@kozik-lap>
@@ -55,9 +71,32 @@ References: <20210204203951.52105-1-marcan@marcan.st>
  <20210208110441.25qc6yken4effd6c@kozik-lap>
  <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210208_071329_716247_76DC8177 
+X-CRM114-Status: GOOD (  53.97  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, devicetree@vger.kernel.org,
+ Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org, soc@kernel.org,
+ robh+dt@kernel.org, Olof Johansson <olof@lixom.net>,
+ linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210208121325.MHe7c7iNEMGLNI614ntjhbSsbl6FSzlaMRP1euIiQRA@z>
 
 On Mon, Feb 08, 2021 at 08:56:53PM +0900, Hector Martin 'marcan' wrote:
 > On 08/02/2021 20.04, Krzysztof Kozlowski wrote:
@@ -210,3 +249,8 @@ far.
 Best regards,
 Krzysztof
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
