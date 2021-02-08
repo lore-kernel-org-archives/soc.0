@@ -1,118 +1,122 @@
-Return-Path: <SRS0=U7wc=HK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <maz@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50ABBC433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 10:30:52 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A525CC433E0
+	for <soc@archiver.kernel.org>; Mon,  8 Feb 2021 10:34:10 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 80DD964E88; Mon,  8 Feb 2021 10:34:10 +0000 (UTC)
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DACC064EE3
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Feb 2021 10:30:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DACC064EE3
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=v22St+UUGhymZLPiz5NsecjHtyyVJUSVIvedTPZFVbU=; b=qIs0EZ1E1a8bggf55QJPdaX+w
-	78nGAdTFN5r5ocLE5Lr2JKeqkMa7EWzTbxq3GvE5FObPS7kEobZ5C7nEIMFAAGWDRPpjtgWYnBNIm
-	Gf9THqFm7qBTRhQR072unTmqQyPctwYapsjkoAD4wZdJyTkwlEeQ/xrZgvPyXKSL07M/f4LsbfAB/
-	bdAq8HyVWboG5bCxJBuSwVBPpVjCb6WdavBp9YRRDa7pI5ZJmTi4d8BJ0LxXiHwlGG+gBuDOTL/tW
-	CJJ9aGlMeZrEgkpCNnjr4/nTbvJ5L0UuIGb8nZvc7D8N132EBJe8+r6+lhdsQBAlBuUvt/3afqE1v
-	+S6HG5fNw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l93nd-0007AA-42; Mon, 08 Feb 2021 10:29:45 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l93nb-00079g-6F
- for linux-arm-kernel@lists.infradead.org; Mon, 08 Feb 2021 10:29:43 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E86764EEA
- for <linux-arm-kernel@lists.infradead.org>;
- Mon,  8 Feb 2021 10:29:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612780180;
- bh=p2hx13acRNeRuP4/3KLPZN6rkRc1Qu9PVutMfTL9s+0=;
- h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
- b=CxGdeT7tkU3I3bRTBd2DLR0XNj0sfLX/0zK4WO9Lbsj0L7h9pubYB6BFevAmG6ENl
- 95bY3/ATjPn2YGTI//PB6joJlk6yJVuhZmlJ8HK2A++V5ZC/f5DOT6sgwNYOg4+0mR
- ibMJfqDfOL5xJ8C0NBo41IYJap3DzzmrPkACBllMeQZ79v8PmKa+Q1uELxj67KQ2Pz
- SueBMS+AqNzPh9+vLcnB4Lso8KGQZHYt4njJBaYs9YKPD0OIrWU+yceAy7IMXEXo5s
- /g8b+IRr6c/r8Z+MXUdUN+4yoY5ZNc+By7dx3wqhU+jAHMDM2gisNlYZurwWCYkbI3
- IjQrcsCtLG2vw==
-Received: by mail-ot1-f54.google.com with SMTP id q4so4038843otm.9
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 08 Feb 2021 02:29:40 -0800 (PST)
-X-Gm-Message-State: AOAM533i1NDXSxAM+Ba3PWeCwI46bpimU0CAB1dePIXuUtV9zt5DDGaj
- ers28wUZQ9zBe2Df3Cqtq4hIsklyIec4OyylaEY=
-X-Google-Smtp-Source: ABdhPJyRKuKxcCWk5w7thD9Nr/Fjq8zYWawG9+OC4Z/IF51G+RuRSi0qovib3pD6A0+8UTKCFZwnVeglv9K1F/1wuwY=
-X-Received: by 2002:a05:6830:18e6:: with SMTP id
- d6mr7375696otf.251.1612780179583; 
- Mon, 08 Feb 2021 02:29:39 -0800 (PST)
+	by mail.kernel.org (Postfix) with ESMTPSA id 5159D64E56;
+	Mon,  8 Feb 2021 10:34:10 +0000 (UTC)
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.94)
+	(envelope-from <maz@kernel.org>)
+	id 1l93rr-00Ckco-KX; Mon, 08 Feb 2021 10:34:08 +0000
 MIME-Version: 1.0
-References: <20210204203951.52105-1-marcan@marcan.st>
- <20210204203951.52105-16-marcan@marcan.st>
- <87eehqlxlr.wl-maz@kernel.org>
-In-Reply-To: <87eehqlxlr.wl-maz@kernel.org>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Mon, 8 Feb 2021 11:29:23 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a25eFFrMG-9QknFZ6Ckc3-gkiLK=jQdnyTMgn-z4X0RHQ@mail.gmail.com>
-Message-ID: <CAK8P3a25eFFrMG-9QknFZ6Ckc3-gkiLK=jQdnyTMgn-z4X0RHQ@mail.gmail.com>
-Subject: Re: [PATCH 15/18] irqchip/apple-aic: Add support for the Apple
- Interrupt Controller
-To: Marc Zyngier <maz@kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210208_052943_329115_0A56AC98 
-X-CRM114-Status: GOOD (  13.86  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-List-Id: <soc.lore.kernel.org>
-Cc: DTML <devicetree@vger.kernel.org>, Hector Martin <marcan@marcan.st>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Olof Johansson <olof@lixom.net>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210208102923.pxRVb9BbJMXb1BwgzSdUTDyVEfVg9kDqg58A3ZJhWA4@z>
+Date: Mon, 08 Feb 2021 10:34:07 +0000
+From: Marc Zyngier <maz@kernel.org>
+To: Hector Martin 'marcan' <marcan@marcan.st>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+ robh+dt@kernel.org, Arnd Bergmann <arnd@kernel.org>,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, Olof Johansson
+ <olof@lixom.net>
+Subject: Re: [PATCH 05/18] tty: serial: samsung_tty: add support for Apple
+ UARTs
+In-Reply-To: <e842f37d-d788-2d34-05e4-86ef94aed8f5@marcan.st>
+References: <20210204203951.52105-1-marcan@marcan.st>
+ <20210204203951.52105-6-marcan@marcan.st> <87lfc1l4lo.wl-maz@kernel.org>
+ <e842f37d-d788-2d34-05e4-86ef94aed8f5@marcan.st>
+User-Agent: Roundcube Webmail/1.4.10
+Message-ID: <73116feaa00de9173d1f2c35ce16e08f@kernel.org>
+X-Sender: maz@kernel.org
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: marcan@marcan.st, soc@kernel.org, linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, arnd@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, olof@lixom.net
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Mon, Feb 8, 2021 at 10:25 AM Marc Zyngier <maz@kernel.org> wrote:
-> On Thu, 04 Feb 2021 20:39:48 +0000, Hector Martin <marcan@marcan.st> wrote:
+On 2021-02-07 09:12, Hector Martin 'marcan' wrote:
+> On 06/02/2021 22.15, Marc Zyngier wrote:
 
-> > +{
-> > +     return readl(ic->base + reg);
->
-> Please consider using the _relaxed accessors, as I don't think any of
-> these interacts with memory (apart from IPIs, of course).
+[...]
 
-MSI interrupts require serializing with DMA, so at the minimum I think there
-needs to be something that ensures that DMA from device into memory
-has completed before delivering the completion interrupt to a driver. This
-may already be implied when the AIC is entered, but this is hard to know
-without actual hardware specs.
+>>> -	spin_lock_irqsave(&port->lock, flags);
+>>> +	/* Only lock if called from IRQ context */
+>>> +	if (irq != NO_IRQ)
+>>> +		spin_lock_irqsave(&port->lock, flags);
+>> 
+>> Isn't that actually dangerous? What prevents the interrupt from firing
+>> right in the middle of this sequence and create havoc when called from
+>> enable_tx_pio()? I fail to see what you gain with sidestepping the
+>> locking.
+> 
+> The callpath here is:
+> 
+> uart_start -> __uart_start -> (uart_ops.start_tx)
+> s3c24xx_serial_start_tx -> s3c24xx_serial_start_tx_pio ->
+> enable_tx_pio -> s3c24xx_serial_tx_chars
+> 
+> And uart_start takes the uart_port lock. None of the serial functions
+> take the lock because the serial core already does, but obviously the
+> IRQ handler needs to, *if* it's called as an IRQ handler only.
 
-       Arnd
+Right, that's the part I missed, thanks for pointing this out.
+It'd probably be cleaner to move the whole s3c24xx_serial_tx_chars()
+into a helper and keep the locking in the interrupt handler proper.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+[...]
+
+>>> diff --git a/include/uapi/linux/serial_core.h 
+>>> b/include/uapi/linux/serial_core.h
+>>> index 62c22045fe65..59d102b674db 100644
+>>> --- a/include/uapi/linux/serial_core.h
+>>> +++ b/include/uapi/linux/serial_core.h
+>>> @@ -277,4 +277,7 @@
+>>>   /* Freescale LINFlexD UART */
+>>>   #define PORT_LINFLEXUART	122
+>>>   +/* Apple Silicon (M1/T8103) UART (Samsung variant) */
+>>> +#define PORT_APPLE	123
+>>> +
+>> 
+>> Do you actually need a new port type here? Looking at the driver
+>> itself, it is mainly used to work out the IRQ model. Maybe introducing
+>> a new irq_type field in the port structure would be better than
+>> exposing this to userspace (which should see something that is exactly
+>> the same as a S3C UART).
+> 
+> Well... every S3C variant already has its own port type here.
+> 
+> #define PORT_S3C2410    55
+> #define PORT_S3C2440    61
+> #define PORT_S3C2400    67
+> #define PORT_S3C2412    73
+> #define PORT_S3C6400    84
+> 
+> If we don't introduce a new one, which one should we pretend to be? :)
+
+Pick one! :D
+
+> I agree that it might make sense to merge all of these into one,
+> though; I don't know what the original reason for splitting them out
+> is. But now that they're part of the userspace API, this might not be
+> a good idea. Though, unsurprisingly, some googling suggests there are
+> zero users of these defines in userspace.
+
+I don't think we can do that, but I don't think we should keep adding
+to this unless there is a very good reason. Greg would know, I expect.
+
+Thanks,
+
+          M.
+-- 
+Jazz is not dead. It just smells funny...
