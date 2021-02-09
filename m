@@ -2,19 +2,18 @@ Return-Path: <SRS0=xDNJ=HL=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B84D5C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 15:15:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95480C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 15:15:40 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 54E4364EB1
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 15:15:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 54E4364EB1
+	by mail.kernel.org (Postfix) with ESMTPS id 4108664EB8
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 15:15:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4108664EB8
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,45 +22,45 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=2PsEvcnvG0ojba2cxgTb1LwYAr6vBkN2s2mBpZTcj5E=; b=PUeLvvHWGT4qEVuN6dih26w4e
-	YgTO2VfXZCnw/KTNIeJLU1NBC6OfiDn/O2orV/F5wDybPOTbyI/rSg2jDrWMMDspKZNxxTsP+SbTF
-	E4g6A/m8kJqK3ema1Fk96TTgI3NYMzU2KUS98n23UL2+0Jsp+rdEYEE58K2rSSbKuH7QBfVpcdXd4
-	klEFU9/B1PejWY6H9kgqvIJzC4yHYCa/TdXtOopU2u5Vf/afOAvJuinEAHRzOeoFzACzR1NasqsQE
-	HlWLuhSOFA/s/YHSNv16qpegTYv8bT1T1rJOZa+bpF0pcnT52cF9EdrG+PXGQ5ahR5d6uEYVrEqwO
-	BgfniQkXQ==;
+	 bh=vGZZO7hFGFWrbaJGEVhTurWEigsPk3CydbgxdUZ7W98=; b=LtFQ9r8dxB0aE6drWFvY6peW6
+	w/JTClENNdegy3uYFU95i9j67xLGTl0PdV9H9KzZhC2fLfYTmkzVqDKW+fdCElGO5bHFsxakmRx/J
+	7qZdG92vNIQXJdsI4Rsa2nJ7/lTYgSPIuiwMvByfMsUr2FnXybtdBXwiXrZHaqxc1IS7wfncfKz7i
+	/i3da9ydFqMq7fiWyYuAWn4Zrqze0144+JOKqwyxMk7+4tk79tTXjmo+/zG2NRMSYUfwaGN/7OrzS
+	zbs9+9WrdmGPVEjIVNcDQ/jTW+PDUItXT5iBJiMOc3/TtxSE60IcO36kIqrtKnBElL0YQsSp84uTu
+	PoP64ObFQ==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l9Uig-0005HX-F8; Tue, 09 Feb 2021 15:14:26 +0000
+	id 1l9Uil-0005Iz-Ce; Tue, 09 Feb 2021 15:14:32 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l9UiQ-0005DK-1B; Tue, 09 Feb 2021 15:14:11 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CC81064E88;
- Tue,  9 Feb 2021 15:14:07 +0000 (UTC)
+ id 1l9UiS-0005E3-9C
+ for linux-arm-kernel@lists.infradead.org; Tue, 09 Feb 2021 15:14:13 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9B00A64EC6;
+ Tue,  9 Feb 2021 15:14:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612883649;
- bh=sISzvmFfKdR/yd4UNKJ8qSPNAWkQd3BSlSYsCkUMJhM=;
+ s=k20201202; t=1612883651;
+ bh=vF369+zbhpiQ45k/ZshjP1Py4rriN3NsCdst7RvcaHA=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=XD2A6Li4r/dXO0whxcZnDmuu/P73XO2fL2ehEGTMwh4JNkJa2T5awiPlQNM/GqFyB
- HdkqyU+JZwljLIKEZyBCC6Orm2p9wji+7AZpvar74qpOyYVWrnbJ6kJXTpHhsKpwHC
- AZaaOawU8S/PMEcaqGW+EBY5fzDmWOeI3FOCR+tqrhEO4HTkG2lyR0SmLQcy9Q2Kbl
- q9Paeu97wj3U8n4m44SJaEhZ8KhingrFKdOoZv8b5lR+YxxMtcHgGxWsdZ3dbrF3kS
- PYkQ29m3KBPA0D8pk3/EJq0qXEUvjHaJarsrmz/nMMbJ7ityXqrWIzNGLcAaa0w/sa
- aYPJ9+ngYI9mw==
+ b=hy4q4lhxfTgCnAI52aGiwt/3XRkusFSkxzFTMw3oE6CdQ/MzTha8yPvT49BvKBl0H
+ NCm6RQhOHhlplmzq0nUSQg9d67/EAs0Be34kSF7cR5CyC7Pn6XKg/po0/h2Qql6910
+ rfr7xw6RpUAX+xBv2okBOSv6Cbb9mp0Qi9xwWsB0kqu8+R616uEwfrvaPA9gyGHu5P
+ Zt8od+g9mYDaoki6JnM92w1QLrhvfa2kdWvkew1V44FeJblyXhCy77dT3PconIxFf+
+ 9uh6EexOUsQHlrp3c6WZilLD6zF4XBXNYNu8P7sv0D8EEtnKkzUawPARAvDXi/KdXJ
+ aH7FMKp2fqEQQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org,
-	Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [GIT PULL] ARM: multi_v7_defconfig: amlogic updtes for v5.12
-Date: Tue,  9 Feb 2021 16:13:54 +0100
-Message-ID: <161288360473.2910447.10678299620796355576.b4-ty@arndb.de>
+To: "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+ arm@kernel.org, soc@kernel.org, Olof Johansson <olof@lixom.net>
+Subject: Re: [GIT PULL] ARM: at91: defconfig for 5.12 #2
+Date: Tue,  9 Feb 2021 16:13:55 +0100
+Message-ID: <161288360578.2910447.16931908601286064983.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <7hsg6d2bxg.fsf@baylibre.com>
-References: <7hsg6d2bxg.fsf@baylibre.com>
+In-Reply-To: <20210208115753.54730-1-nicolas.ferre@microchip.com>
+References: <20210208115753.54730-1-nicolas.ferre@microchip.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210209_101410_305952_25B0DF7E 
-X-CRM114-Status: UNSURE (   8.20  )
+X-CRM114-CacheID: sfid-20210209_101412_517636_5B5F5E45 
+X-CRM114-Status: UNSURE (   9.41  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
@@ -74,30 +73,34 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Linux Kernel list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210209151354.KcadJbMOx1okRqzHyaubfWPYkMBpqUdPzvLHviu02W8@z>
+Message-ID: <20210209151355._3hYTfJWHYX1slqEI5_yiw8rGRmry2ernqCDhGWvg6I@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 03 Feb 2021 11:23:07 -0800, Kevin Hilman wrote:
-> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+On Mon, 8 Feb 2021 12:57:53 +0100, nicolas.ferre@microchip.com wrote:
+> Arnd, Olof,
 > 
->   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+> Here is the second batch of defconfig changes for 5.12.
 > 
-> are available in the Git repository at:
+> Thanks, best regards,
+>   Nicolas
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic.git tags/amlogic-soc
+> The following changes since commit 00a1aa475f507454fab82f02c6230c8fb2312a12:
 > 
 > [...]
 
 Merged into arm/defconfig, thanks!
 
-merge commit: f7d62396798cac36dc1ea530afc3e560f52ce327
+merge commit: cfc9e56311075d25ebb3031dc1c0fd27bcdee47f
 
        Arnd
 
