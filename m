@@ -1,109 +1,134 @@
-Return-Path: <SRS0=xDNJ=HL=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=hahe=HL=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91721C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 23:20:44 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5287EC433DB
+	for <soc@archiver.kernel.org>; Tue,  9 Feb 2021 23:26:27 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 1E9AE64E4B; Tue,  9 Feb 2021 23:26:27 +0000 (UTC)
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4AC4964E30
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 23:20:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4AC4964E30
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=RvpBTkmtO+aMC1fvcF2AcWkIVjy4afh5BdipsyHZ9Iw=; b=fvnXYEJKaTL11E9mMpPvBjAz0
-	qsf/LqYRToM2JGhewD3l+gUDmG+TeZeL2m429abMvoZ5a7t4g+yg/BROikG8UI/BzV+K+uwmR32sY
-	rlkXyskNg8bfOfpEQ4LX8LfMocAngWCBHEAE6AwoYMbf1/hYsJphoGZVVmX3F5siMXUa/ZqEKl0RU
-	E+59Fgt8Z9HUUwCGAJCq5ST8X+6WDJPFUtRlbdLZPUeoy8AzQai+FyTyG5/UOUuPFBl63tsVjSjty
-	dpl5/VMGFBRSq2JmKEBGvBLjfv23QecIslLdU+5OmHZSaV+YLNJNDIBmUvbU7wWJSyAf7jS4PfWik
-	BKWqERgqg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l9cIL-0002qy-6i; Tue, 09 Feb 2021 23:19:45 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l9cII-0002qE-Of
- for linux-arm-kernel@lists.infradead.org; Tue, 09 Feb 2021 23:19:43 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2FE4C64E30;
- Tue,  9 Feb 2021 23:19:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612912782;
- bh=EsCYx4e6aSbp9Bwrp1F5WRMx2a9KgKO5uK+Y66H2i5M=;
- h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=pTy6uzqVoHFIPTwej+ov1lLD1lZty8/RSR+zwK4RY5w7j6KjtDYJkbXl6uxzSYBWr
- u9Tyf0AOZB3J1LAWBebKEf2JlSubQPRetba5krpyYVSl9GExIVKKtkCcl6Rl/GiwwS
- NsO5N0sID4t/7PaNSQbo/BBFwNRPqgZqf3gF3OAjKtYtmHBThsbd1Yv9p5rVF+dDvW
- KvOP+3t/i/R90dgi8++1Qfap6AfLa5FPztor5PzkA9jvabtOkuI/dkfVcL9SeCHAC3
- x+Ec0Z956OrqvrYj3avYt62GRjuSy623gBXTwr92jYKbh238hZgk7KCS/PpH8bSj0B
- DU/fmW0eUnA5A==
-From: Arnd Bergmann <arnd@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id E43B464E50
+	for <soc@kernel.org>; Tue,  9 Feb 2021 23:26:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E43B464E50
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=bjorn.andersson@linaro.org
+Received: by mail-ot1-f51.google.com with SMTP id k10so150943otl.2
+        for <soc@kernel.org>; Tue, 09 Feb 2021 15:26:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IwjXZ3dkAIZUownYRrDsDZnRxOFipZhcPjf1znpQlRU=;
+        b=q91+zAClRM7pyaCnLFx3MyKyH7OSxHVCSJpb77hP1+0SiR/fqGac79HrjLCaptgY6+
+         Lf27lzi31zn+AJXdqJYupbclg/9XBIdSU0quV1yfIw1kKidFcATuGNt50YwFLkCR9Sxe
+         BTaX1H7MWwVwg71ebPrwXplIv0VvsW1NztckZJign/UjFLsLvxZ0ylNHYQKApzED5RkY
+         bCCm+LpNvgdzyq3tECg/zZJzC9K6y8se77udepdOroQ5Efyhi2WTrLtJaocE2nQtKnsv
+         zQITzIU3rPEiEOva3hZ4M8wNFLh/qxx2K8hEDQqKsmZBK91un4Xxpr/0TzXFIswzAfAl
+         lK6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IwjXZ3dkAIZUownYRrDsDZnRxOFipZhcPjf1znpQlRU=;
+        b=nYHpk6RdBgqeww+ZeUmydyVPaRbYdTQ57yyyL+EjtJhrrrEnkA4UA4BOYA8Aj1pL5n
+         9boPWgh0VUq6g6YA5KiaqETHRIZeiF9U1NYgU0zvsDZxWMgZ7OLfeyjj04W3dr0MrzXc
+         qettNhxqlpkoAtAj4J8kanL6l0nTFnHKAUCUhUZx7hhSlEYFzoroJb/kPp4OlInKj30w
+         2tjFfsQz2sRBIyA33Q5OKTtua+rGux4AxDy2yK5X+YMgKYyi+t5DK+ejVP4OwStJXMfv
+         xuZDEXEwIrRPMb2LGPSqZUTvRaVQPygBB5sBbMUpnjHVSGrqYT6NdCWauQ+VpOBmPOU3
+         qEyw==
+X-Gm-Message-State: AOAM533dZKrjxWdWuyl+Gn1k/HbODyeb/8o/mXsfvmmRmLQmX2cPL/Y8
+	Atsh8L7Q9HhHtS+22bSZakuBOw==
+X-Google-Smtp-Source: ABdhPJwUBm3MgKUTm/uqt3L5ze0JESuAsqG9gWJMpqLjxyJ5YKUQ/ezM6jHaJ8b0gtPMlK1L69wtlA==
+X-Received: by 2002:a05:6830:2106:: with SMTP id i6mr62990otc.260.1612913186087;
+        Tue, 09 Feb 2021 15:26:26 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id y65sm50603oie.50.2021.02.09.15.26.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Feb 2021 15:26:25 -0800 (PST)
+Date: Tue, 9 Feb 2021 17:26:23 -0600
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Shawn Guo <shawnguo@kernel.org>,
-	arm@kernel.org
-Subject: Re: [GIT PULL 1/6] i.MX drivers change for 5.12
-Date: Wed, 10 Feb 2021 00:19:10 +0100
-Message-ID: <161291272322.978640.8692820949134074215.b4-ty@arndb.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210204120150.26186-1-shawnguo@kernel.org>
-References: <20210204120150.26186-1-shawnguo@kernel.org>
+Cc: arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Andy Gross <agross@kernel.org>,
+	Robert Foss <robert.foss@linaro.org>,
+	Olof Johansson <olof@lixom.net>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+	Gustave Monce <gustave.monce@outlook.com>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Vincent Knecht <vincent.knecht@mailoo.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Akhil P Oommen <akhilpo@codeaurora.org>,
+	linux-arm-kernel@lists.infradead.org, Danny Lin <danny@kdrag0n.dev>,
+	"J . R . Divya Antony" <d.antony.jr@gmail.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Jonathan Albrieux <jonathan.albrieux@gmail.com>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	Steev Klimaszewski <steev@kali.org>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	Vinod Koul <vkoul@kernel.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	Eric Biggers <ebiggers@google.com>, linux-arm-msm@vger.kernel.org,
+	Stephen Boyd <swboyd@chromium.org>,
+	Caleb Connolly <caleb@connolly.tech>
+Subject: Re: [GIT PULL] Qualcomm ARM64 DT updates for 5.12
+Message-ID: <YCMaH1pYhU2VH8wp@builder.lan>
+References: <20210204052043.388621-1-bjorn.andersson@linaro.org>
+ <161291108058.974605.13581246808545504549.b4-ty@arndb.de>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210209_181942_918624_8A09B451 
-X-CRM114-Status: UNSURE (   8.45  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Arnd Bergmann <arnd@arndb.de>, Stefan Agner <stefan@agner.ch>,
- Li Yang <leoyang.li@nxp.com>, linux-imx@nxp.com, kernel@pengutronix.de,
- Fabio Estevam <festevam@gmail.com>, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210209231910.4qTBnPuOidsp8ErfmBd7NoetZtfvsDPkswSDNI5rWE0@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <161291108058.974605.13581246808545504549.b4-ty@arndb.de>
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue 09 Feb 17:06 CST 2021, Arnd Bergmann wrote:
 
-On Thu, 4 Feb 2021 20:01:45 +0800, Shawn Guo wrote:
-> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
->   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+> On Wed, 3 Feb 2021 23:20:43 -0600, Bjorn Andersson wrote:
+> > The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+> > 
+> >   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+> > 
+> > are available in the Git repository at:
+> > 
+> >   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.12
+> > 
+> > [...]
 > 
-> are available in the Git repository at:
+> Merged into arm/dt, thanks!
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-5.12
+> I noticed that this came fairly late in the cycle and has a fairly
+> large amount of changes in it. It would be nice if you could try
+> to send some of the DT contents a little earlier in the future to
+> avoid risking them to miss out.
 > 
-> [...]
 
-Merged into arm/drivers, thanks!
+Yeah, sorry about it showing up late.
 
-merge commit: 168b322e36c5f8903f31d89f34355004920b5e00
+I'm trying to balance it because I do feel frustration from the
+contributors that the Qualcomm branches are "locked down" for 4-5 weeks
+per cycle.
 
-       Arnd
+> It could also help to split up the largest branches to make them a
+> little smaller, e.g. by having one branch just for new SoC and/or
+> new board support, and another branch for changes to existing machines.
+> 
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+It's fairly common that things such as PMICs are reused between new and
+old platforms, so I fear that such a split will cause unnecessary
+conflicts between my trees.
+
+Perhaps I should just send multiple pull requests throughout the cycle?
+
+Regards,
+Bjorn
