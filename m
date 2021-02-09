@@ -2,27 +2,26 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FA6AC433E0
-	for <soc@archiver.kernel.org>; Tue,  9 Feb 2021 23:06:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DABFDC433E0
+	for <soc@archiver.kernel.org>; Tue,  9 Feb 2021 23:06:45 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 6A3E164E4B; Tue,  9 Feb 2021 23:06:43 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6A47764E50;
-	Tue,  9 Feb 2021 23:06:41 +0000 (UTC)
+	id BAF1D64E53; Tue,  9 Feb 2021 23:06:45 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BDEB764E5B;
+	Tue,  9 Feb 2021 23:06:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612912003;
-	bh=N+wrpsvcANkoNLYnDnDHfEuPrrF952t2G46nComfzVE=;
+	s=k20201202; t=1612912005;
+	bh=Lm9mD4TDfrKP1FuvKDuBqUCGzT+XEF3aP3SSUIiU0KY=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V+v4BUV6Z7H420/g4LSh0oejzN1nhraurspA12nZRO3J78bXQFKaf0hdjIduSKD9H
-	 yAYLmpChVsk8IEsiSSHN50KWj139UCVAAtWGEBppg1s6BmnrqeKVGL66LHLZLn1pqa
-	 W76FVdwDQfM8vEyWRd3bqzCvQV76Yrer5/kJWzvz2gxM7M/qO1J1BjM/17OBm7+yxu
-	 IPXfJA0AV322amPoXAGeLV33weC7Xu7XhLMY2Y5VljewkvYoqmBiH4O/xMjcV3uCPw
-	 99Q82bMtGMCcixrzJU3k7PvTatabHyBPzsuDmNJJo9Q49FvnJC7J9+t6bJJD87z48v
-	 cU234w3LSVLuw==
+	b=VDKRJ2sY8nWqMnz2TQkom7CPgr6y2frh/3ZScMz2zjEvDUPtfM99P+O/wF3CdKHzs
+	 rITHFTxCLbnBo8utWwyj8fP0DQfOXWZLR8HptxMllYjp3AB9VKneoIxxNHm4u9HnQ7
+	 4oubjlff2/NbGfae3JggSBT6xDnKAWaUvF/7FTC7t1nF6chCsHxKLDSqAcQrddSAU4
+	 1sZuuYBJj/O01fXEN8rzDsMq3FIfzp6rXm+5rkZLpJkCRyPx15dO+bXhBou+m1lz8A
+	 ceo7vK69do19cHlltuBA9LEcyOWitZyP5qUv2wWB2lJeXkpeQn7+jdp/WxI/XtYnic
+	 hKPxfyK80N8PQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -35,30 +34,30 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Fabio Estevam <festevam@gmail.com>,
 	kernel@pengutronix.de,
 	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 3/6] i.MX DT bindings update for 5.12
-Date: Wed, 10 Feb 2021 00:06:12 +0100
-Message-Id: <161291108076.974605.15340898669997318905.b4-ty@arndb.de>
+Subject: Re: [GIT PULL 4/6] i.MX device tree change for 5.12
+Date: Wed, 10 Feb 2021 00:06:13 +0100
+Message-Id: <161291108085.974605.6481239956002704956.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210204120150.26186-3-shawnguo@kernel.org>
-References: <20210204120150.26186-1-shawnguo@kernel.org> <20210204120150.26186-3-shawnguo@kernel.org>
+In-Reply-To: <20210204120150.26186-4-shawnguo@kernel.org>
+References: <20210204120150.26186-1-shawnguo@kernel.org> <20210204120150.26186-4-shawnguo@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Thu, 4 Feb 2021 20:01:47 +0800, Shawn Guo wrote:
-> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+On Thu, 4 Feb 2021 20:01:48 +0800, Shawn Guo wrote:
+> Tag imx-fixes-5.11-2 is merged into the branch to resolve some
+> dependency around imx6-sr-som board support.
 > 
->   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+> Shawn
 > 
-> are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-5.12
+> The following changes since commit 82c082784e03a9a9c043345f9bc04bc8254cf6da:
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 6f771ce6c3bb2c4dc9d348b578871c7adb8b285b
+merge commit: 48a60549d207c0e5691b88cd91305a7c0521cef5
 
        Arnd
