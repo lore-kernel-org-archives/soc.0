@@ -2,19 +2,19 @@ Return-Path: <SRS0=xDNJ=HL=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29400C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E32D8C433E6
 	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 23:08:45 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9961F64E56
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 23:08:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9961F64E56
+	by mail.kernel.org (Postfix) with ESMTPS id 8A58964E53
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 23:08:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8A58964E53
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,45 +23,43 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=sjjERdYPXBGGA3R2RUiJy3LL1m4/3W83pTNZWnMCVC8=; b=SKTnneweF6oYkzGb8MXsnGZKN
-	qxm/a0Bi2QyBde0/A2rUGUFZVKeNDjMOnZFv6BH2R3cTqX7B88TGSCixzpHF4JEQvOdH+Va/rLTZu
-	WOokTONemkApWXPnvs+QrhFWHt+M6em8t8iczEMKtKi7Aw6aWS1wbgd/5yp67E91N8MyxdC+PRc2+
-	JxffcGlszntjBHWwxiBnjDbck3lfkelf/ieN8EWb1ZE5EImOSJ40sv2aBTt6mDAanDHYHPWDCouDn
-	m4WNTO4X9N2PBAWae8lZBWUYqX0KPVpCwrBNGMBWApktVivAqit+wu8b/jP4nI0kzROLGulUNUsYG
-	LMfVyiwgQ==;
+	 bh=fwUEW5CK9o+A6IIm0LPqk3glo6iHomeTU2vA0Vb+Lq8=; b=SJxNhmY7HWV82fXWwB65fLu9E
+	tq+E+dBM4nW9LkqjB8VLLOL837e0oAHEteloce2D7DvskIIV8lMxUDxMxSKLi4o1Es2yefVAZLm7n
+	ThNmfvdcmpztTsoqPyb5B5Z9Kcd6gJQL3S1ZZ6PuaRhLQD+MO9yTjFN/4XlhekKOM/tuT7v19cw0o
+	fI2eCUR74ngLMdTSmOHB2eM4/iAkmnxzfP2rBxGQ75RoLy7EZgkiDHFIor8lVmFXcA4381LnSCjpu
+	uUb54jSyAvcN31hCZlM6jA00izpuyANKzeIAz6SUwGro/gWkMVzJI0eCCs9W5mkbmNBfhfMzf8RfO
+	BXYEK7QdA==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l9c6H-0007TB-3u; Tue, 09 Feb 2021 23:07:17 +0000
+	id 1l9c63-0007O6-Dw; Tue, 09 Feb 2021 23:07:03 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l9c5c-0007Fg-41; Tue, 09 Feb 2021 23:06:37 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2265364E57;
- Tue,  9 Feb 2021 23:06:33 +0000 (UTC)
+ id 1l9c5a-0007F5-CX; Tue, 09 Feb 2021 23:06:35 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6CA5B64E56;
+ Tue,  9 Feb 2021 23:06:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612911995;
- bh=9YckVoh99k0PrrQq2KqKYIvjQiEOYXO6rHCjaSjFj6I=;
- h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=EVKLJe1yPw1/n6LwmzInl36ikv4ezSItsNi6ALzvt0E8jNGpoAtzcbgM2hHtFlGYG
- 0Bc1/nJWUDonqun1OCN9YTnF5Ey0qdA+5vmL/sOrHKlOxfSlagwSsulbMkqwuvHAxr
- Gffo8InVG/TAGrYm363sPQD33bflMGT3F+uaFvonuFMuJZFwtfA0gPYgjr1V7z5Ckb
- zvtUR/K9YW9FBCZOKH109bxdK1+aVMzdsgYueZTvK1scEam0ZQ3+7cxuCrIAO5Yxbr
- nsWAVk4GQElEeW0IIPVuLT7wTqJGBAwHuj1U10/q7FQDf3Ee+KXffnXn2eWiw02jUo
- DtOcvIZh0feDA==
+ s=k20201202; t=1612911993;
+ bh=oZZ/3UxFQ8eAo5gQbDUvtCgPkYXeyOoBm/fjUqRiJFw=;
+ h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
+ b=Ikqn5Yms2cuCO2WSEdg+vBC7j3DY4+1SnZcz0BQ/faU4fclY7Yros8Vw94G1/JzFe
+ oN/kHlxMvoZg08xIeTvJTRmqUo+a+DKpo44WOODyIzw/oa+LwN04uHQCimhPftxna5
+ EE+bP8NR/lBVTMLmz4gfKI0l21Zquge4jUkl1cBCbpNrVBS92XLWiQ4pyKHkenjivE
+ oBay96xDQoY4HwL6uGfULNHWn14wAEAmHduULAVuS42IwTR9w+od9z4oDny7f/ZkMn
+ 57zz/WXnUXfbnD5FZOajp3JBGRl0P+L3fCFyw9m3gE8I3kIlcGc2rHB+acNQco6gGp
+ wcdXsYoZdVfAQ==
 From: Arnd Bergmann <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: Kevin Hilman <khilman@baylibre.com>,
-	arm@kernel.org,
-	soc@kernel.org
-Subject: Re: [GIT PULL] ARM: dts: amlogic updates for v5.12
-Date: Wed, 10 Feb 2021 00:06:08 +0100
-Message-ID: <161291108049.974605.5648830104662503715.b4-ty@arndb.de>
+To: Heiko Stuebner <heiko@sntech.de>,
+	arm@kernel.org
+Subject: Re: [GIT PULL] Rockchip dts32 changes for 5.12
+Date: Wed, 10 Feb 2021 00:06:07 +0100
+Message-ID: <161291108112.974605.6402867046741602030.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <7ho8h12bto.fsf@baylibre.com>
-References: <7ho8h12bto.fsf@baylibre.com>
+In-Reply-To: <2184150.ElGaqSPkdT@phil>
+References: <2184150.ElGaqSPkdT@phil>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210209_180636_284047_DFCD0B70 
-X-CRM114-Status: UNSURE (   8.60  )
+X-CRM114-CacheID: sfid-20210209_180634_623886_42120138 
+X-CRM114-Status: UNSURE (   8.64  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
@@ -74,30 +72,31 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- Arnd Bergmann <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+Cc: linux-rockchip@lists.infradead.org, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210209230608.oBcalzSp_PrMgdb0o4v6QfVnRhsmSHU1E2JoQ0ywDTc@z>
+Message-ID: <20210209230607.tNFls9y1Uw7XtJobWHNEHXV796ZKaGw4aAaxqRbllKQ@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 03 Feb 2021 11:25:23 -0800, Kevin Hilman wrote:
+On Sat, 06 Feb 2021 01:02:39 +0100, Heiko Stuebner wrote:
 > The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 > 
 >   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic.git tags/amlogic-dt
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v5.12-rockchip-dts32-1
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 02bb4cb4c463bcf656d1d2c20ee8a41ff5a09da8
+merge commit: 243d3de3bd40379bbc63523f3e5638a1ad850345
 
        Arnd
 
