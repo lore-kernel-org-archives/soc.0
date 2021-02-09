@@ -6,52 +6,54 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9990C433E0
-	for <soc@archiver.kernel.org>; Tue,  9 Feb 2021 23:06:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 446D4C433E0
+	for <soc@archiver.kernel.org>; Tue,  9 Feb 2021 23:06:41 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 8DBF964E4B; Tue,  9 Feb 2021 23:06:39 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DABDB64E57;
-	Tue,  9 Feb 2021 23:06:37 +0000 (UTC)
+	id 1D2DD64E54; Tue,  9 Feb 2021 23:06:41 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DA93664E53;
+	Tue,  9 Feb 2021 23:06:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612911999;
-	bh=7ZAyY0kFvIcHeTyX7Q8yoQjLemPKaNWDBWcsAaTeyoM=;
+	s=k20201202; t=1612912001;
+	bh=/wq8JSDUov9vAvA1GfExy59e4zrtM8zH4pEEYcvWz2w=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pebOjsXaWvoz1Nn7p3gJn5j36/VuF+sPXaO3dL0LRUrKEeDHZ5qtrlv9fT9EamjyQ
-	 NF+RbkQoyLCxoq9orwaVO8isWUusX0uV5R+4kU6shJr9F/TiP2qUaYBFfzj7GTDCzB
-	 schwSObGKoahBNGW75ALTLeiKMqZEldsxx2FRj0ceDACrKV6+o1AIp5VFdtURRR1n5
-	 fAzJ/35+ESLQhJSVBVbnh54YBavrc3fwtSKakGUbS6BNoAwcQ/QvoKeFqMASjJz2vQ
-	 QgVZXOLqJLy/2gxMEGtQgBl1r52HeTj+tiMrInh+GFeC4WwRKzcABOrXvTBlBziry2
-	 ANazWkzVt4/mw==
+	b=lSeGliwYwFXpgqSQr3BHrhdCSGRvqH9eQMvgMgn2wiePp+EfFony9jzIl/EOXU2Du
+	 ppy1bcmTIrvh4AFmyon5NiDmdJlgRUoHrmHmEZJ4xjHWGdVR14wGl/LkLhTIV1vdvN
+	 5JzeoMANgmKDHWNSZ+Sn4NdsxoOe0JtAd8/bl7B0aTqV/vKA47Re4XAAm6DpQh9hUH
+	 NnQ0yN66V9/szsDcZlOvbcCc87kC+aeSOB/EfQ28o9KU6frQmMWvtuoCwbsHBIOs9V
+	 UfhtYXXryzq1gotIkHjFvjjBf6lWYlCJJgGfM0ig5jVZPxTV0ZlJfXCNNt2n1OO+JL
+	 EL4Kg4wVKeS7Q==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	soc@kernel.org
+To: SoC Team <soc@kernel.org>,
+	Michal Simek <michal.simek@xilinx.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	afaerber@suse.de,
-	olof@lixom.net,
-	thomas.liau@actions-semi.com,
-	cristian.ciocaltea@gmail.com,
-	linux-actions@lists.infradead.org
-Subject: Re: [GIT,PULL] Actions Semi ARM DT updates for 5.12
-Date: Wed, 10 Feb 2021 00:06:10 +0100
-Message-Id: <161291108103.974605.14089940447493072537.b4-ty@arndb.de>
+	arm-soc <arm@kernel.org>,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [GIT PULL] arm64: dts: ZynqMP DT changes for v5.12
+Date: Wed, 10 Feb 2021 00:06:11 +0100
+Message-Id: <161291108040.974605.3573776808485788092.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210205050346.GA7619@thinkpad>
-References: <20210205050346.GA7619@thinkpad>
+In-Reply-To: <b1a6f89e-f6b4-757b-daf0-d2f1844b833d@xilinx.com>
+References: <b1a6f89e-f6b4-757b-daf0-d2f1844b833d@xilinx.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 5 Feb 2021 10:33:46 +0530, Manivannan Sadhasivam wrote:
-> This PR aims at improving the support for Actions Semi S500 SoC and Roseapplepi
-> board. The details are in the signed tag as usual.
+On Wed, 3 Feb 2021 14:31:04 +0100, Michal Simek wrote:
+> please pull the following changes to your tree.
 > 
 > Thanks,
-> Mani
+> Michal
+> 
+> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+> 
+>   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+> 
+> [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 74d60e2e93fe0f552532165a807c02c1e298ff54
+merge commit: 638f79778d4fe79adc7d3ee72ae367982db51759
 
        Arnd
