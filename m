@@ -7,54 +7,56 @@ X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBC9BC433E0
-	for <soc@archiver.kernel.org>; Tue,  9 Feb 2021 23:06:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFA60C433DB
+	for <soc@archiver.kernel.org>; Tue,  9 Feb 2021 23:06:37 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 8935A64E54; Tue,  9 Feb 2021 23:06:35 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2265364E57;
-	Tue,  9 Feb 2021 23:06:33 +0000 (UTC)
+	id 8ED9F64E40; Tue,  9 Feb 2021 23:06:37 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DB7A664E5A;
+	Tue,  9 Feb 2021 23:06:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612911995;
-	bh=9YckVoh99k0PrrQq2KqKYIvjQiEOYXO6rHCjaSjFj6I=;
+	s=k20201202; t=1612911997;
+	bh=BuVGOgcKBY6v/5FQJuBvz93sC+cXkuKqd0cBByl/3tk=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EVKLJe1yPw1/n6LwmzInl36ikv4ezSItsNi6ALzvt0E8jNGpoAtzcbgM2hHtFlGYG
-	 0Bc1/nJWUDonqun1OCN9YTnF5Ey0qdA+5vmL/sOrHKlOxfSlagwSsulbMkqwuvHAxr
-	 Gffo8InVG/TAGrYm363sPQD33bflMGT3F+uaFvonuFMuJZFwtfA0gPYgjr1V7z5Ckb
-	 zvtUR/K9YW9FBCZOKH109bxdK1+aVMzdsgYueZTvK1scEam0ZQ3+7cxuCrIAO5Yxbr
-	 nsWAVk4GQElEeW0IIPVuLT7wTqJGBAwHuj1U10/q7FQDf3Ee+KXffnXn2eWiw02jUo
-	 DtOcvIZh0feDA==
+	b=bOnZiT0zQdcbqnndwCxAai1B1pIfzx+4ZxoW7PrIh8A0z662KyrInNnfLxTc6ed8W
+	 CEgPqF94U9edY4E8/vVx9Ywh2RgmREOFIVrmE9YHTcFibc6xeeT15gyacgauVl7dwQ
+	 ueD42Vkr78SbAckkajqqMPDjsS0lUa9mJNL4GaxS0TbB7yM5vFWxrwMKDmwNCDk5KO
+	 uICn8wh9b7o+brGVSGiJNhkdDB1pVZO/Je16Zy+ksceBCmazY6sUfvyo9ivhjY9Vg6
+	 CU8bsLIiy8byGl3sDx31lUwOV5LpSswH7/bhA3dpGL9TMaqRefKrOYpmQhUMDJaOex
+	 87hcmpgcEx4ug==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Kevin Hilman <khilman@baylibre.com>,
+To: Krzysztof Kozlowski <krzk@kernel.org>,
 	arm@kernel.org,
+	Olof Johansson <olof@lixom.net>,
 	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-amlogic@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] ARM: dts: amlogic updates for v5.12
-Date: Wed, 10 Feb 2021 00:06:08 +0100
-Message-Id: <161291108049.974605.5648830104662503715.b4-ty@arndb.de>
+Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
+Date: Wed, 10 Feb 2021 00:06:09 +0100
+Message-Id: <161291141019.975053.14323750026373147341.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <7ho8h12bto.fsf@baylibre.com>
-References: <7ho8h12bto.fsf@baylibre.com>
+In-Reply-To: <20210125191240.11278-3-krzk@kernel.org>
+References: <20210125191240.11278-1-krzk@kernel.org> <20210125191240.11278-3-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 03 Feb 2021 11:25:23 -0800, Kevin Hilman wrote:
+On Mon, 25 Jan 2021 20:12:39 +0100, Krzysztof Kozlowski wrote:
 > The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 > 
 >   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic.git tags/amlogic-dt
+>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-5.12
 > 
 > [...]
 
-Merged into arm/dt, thanks!
+Merged into arm/dt at least, sorry for the long delay.
 
-merge commit: 02bb4cb4c463bcf656d1d2c20ee8a41ff5a09da8
+merge commit: f3d8876acac00e7430e46679fb1da26e50c006d5
 
        Arnd
