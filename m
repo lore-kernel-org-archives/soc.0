@@ -1,142 +1,178 @@
-Return-Path: <SRS0=xDNJ=HL=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <robh+dt@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0F9FC433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 11:23:30 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 77E2764E40
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 11:23:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 77E2764E40
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=marcan.st
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:
-	Content-Transfer-Encoding:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:Subject:
-	From:References:To:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=4egPwFBR7oDbpRrkkLQ8doo3r97S252WjFXLMCP9otc=; b=dggiO1QKVke7cDwR+KC5OTRjb
-	23B0eDknzgKbnlUaDWdDpYolIVN1jgwfXQJPBEFVOZnSnjahfCtdQe+Ozjoy7nBR53y8tbTEcdO4P
-	0cPc8S/zMYbBNlHxfwfysAogAX3c0fIewCMMD1oL0d2t3VPqWRot7F5MvGdli72kmOHKhMxlvK06n
-	j6JMrW2miy1IBnAJi97/ALJBooVY6P75OkXY6dm7fuzKDqN0hgyG/uE0ANaQKcRzRUdc8LWsEr/eO
-	S+dVx7ovdxZcGz3fs372EhAQk66YdBPEpZngvyJG+gsvhwJlvaie95HKV6oQpAyhzMTns4fFKagro
-	3ka3S8AXA==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l9R62-0000b9-6U; Tue, 09 Feb 2021 11:22:18 +0000
-Received: from marcansoft.com ([212.63.210.85] helo=mail.marcansoft.com)
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l9R5y-0000aZ-F9
- for linux-arm-kernel@lists.infradead.org; Tue, 09 Feb 2021 11:22:16 +0000
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- (Authenticated sender: marcan@marcan.st)
- by mail.marcansoft.com (Postfix) with ESMTPSA id C172941EE3;
- Tue,  9 Feb 2021 11:22:08 +0000 (UTC)
-To: Arnd Bergmann <arnd@kernel.org>
-References: <20210204203951.52105-1-marcan@marcan.st>
- <20210204203951.52105-14-marcan@marcan.st>
- <CAK8P3a2Ad+xmmMWgznOHPpxgCXKWFYfpHBqt_49_UuxrwFSq+A@mail.gmail.com>
- <c1bc2a087747c4d9@bloch.sibelius.xs4all.nl>
- <635f1a81-58c8-f3b6-ab3f-1cf6a084aed0@marcan.st>
- <CAK8P3a043eO4p2o6tizR2x7a1TZHMqO7TdX53JC4bTZnbQd9iQ@mail.gmail.com>
-From: Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 13/18] arm64: ioremap: use nGnRnE mappings on platforms
- that require it
-Message-ID: <11cdf93c-0b25-e1c1-5d18-80ccb4a3f2d9@marcan.st>
-Date: Tue, 9 Feb 2021 20:22:06 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FD8BC433DB
+	for <soc@archiver.kernel.org>; Tue,  9 Feb 2021 14:27:48 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A438F64EE7; Tue,  9 Feb 2021 14:27:47 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4CA0164ECD;
+	Tue,  9 Feb 2021 14:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1612880867;
+	bh=IUb6DV3nU1zdGhhWAb17Qi2tqhYOdDTW8nBtL3IEZJk=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=pyq/U5LjUu8OBj1pwTvyj4dLtPR5jAyfyIz+TslDj9ucJxLjxPo0vz4Tt3oLEQVcA
+	 5U9WAPfLVw0qF8TSK3D9wOHXFd15HwCGSB1EWNlxQCLjUaz1GUbzgO/vklhySSNjcq
+	 quk5+skE7AuMotOKEoHBzlQP8CLnUkXQIjdZL1FhECY1SAo/UbLzL+EPzgYL4lHdca
+	 Vjc70Bfbtn1flMzp3GUY2xgnBqyzQIHeFjddvN/yaml4VSCatzgx5u2JFxl4jOcDVV
+	 7OhsRNtLB34z+hFWTnDBfvzBz2v26SN6HMgMt0bUEesVq620ckgNMTMh1tJgj9BNc4
+	 F89+ZRjISXTRQ==
+Received: by mail-ej1-f47.google.com with SMTP id y9so31782121ejp.10;
+        Tue, 09 Feb 2021 06:27:47 -0800 (PST)
+X-Gm-Message-State: AOAM532RerjmzJJbcLnQyEyjeQ6kedE1my0bYKj8tjjcS4uN+mXaIdBI
+	OVWuDfO5KPFgPtP/QE0BOcXpzsUlR5PTAaOgRw==
+X-Google-Smtp-Source: ABdhPJyf3fDdh3vgBVlRXkwPQY2+f4xwXx5hBCpKQMUMFm8rdoadj2gemHW29NQWQecKohtHD7YsfotKbI+11sDJrEc=
+X-Received: by 2002:a17:907:262b:: with SMTP id aq11mr16445765ejc.360.1612880865579;
+ Tue, 09 Feb 2021 06:27:45 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a043eO4p2o6tizR2x7a1TZHMqO7TdX53JC4bTZnbQd9iQ@mail.gmail.com>
-Content-Language: es-ES
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210209_062214_614392_803E4B6F 
-X-CRM114-Status: GOOD (  19.40  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+References: <20210125191240.11278-1-krzk@kernel.org> <20210125191240.11278-3-krzk@kernel.org>
+ <20210206134531.l5vpzlmev4v3f3uo@kozik-lap> <CAK8P3a0Kgn9PTHjsU7MbJPC8vatvb9KYJJKWxrx7zQzTNgK10g@mail.gmail.com>
+ <CAMuHMdWZ8QmiQCmiW9AvCpviNZeuaxThSo_4Xb2DGEs9hMTKMQ@mail.gmail.com>
+ <YCGBIvRfoP0BeyrP@builder.lan> <20210208184230.onhlioflyylkx6xo@kozik-lap>
+ <CAK8P3a3bsw8p2Geyo-vh1AJUfMQCCf3kpa_YB+tKmcvWHqRcEw@mail.gmail.com>
+ <20210208213537.GA351084@piout.net> <CAK8P3a0QRcQM4rH9HgVMOHa_eATXsjRbGDXuMO7FgnA8OgPk0Q@mail.gmail.com>
+ <20210208231040.GF351084@piout.net>
+In-Reply-To: <20210208231040.GF351084@piout.net>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Tue, 9 Feb 2021 08:27:26 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJicBkH_a2kvM=+p3wde1T5Cx7C+qNR3r0WjksZfBnCKA@mail.gmail.com>
+Message-ID: <CAL_JsqJicBkH_a2kvM=+p3wde1T5Cx7C+qNR3r0WjksZfBnCKA@mail.gmail.com>
+Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
 List-Id: <soc.lore.kernel.org>
-Cc: DTML <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Olof Johansson <olof@lixom.net>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Mark Kettenis <mark.kettenis@xs4all.nl>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210209112206.h22yNXTiLSK8haL4i4b8a3jVjcAUf2lIRfRf7IUh_-4@z>
+Cc: Arnd Bergmann <arnd@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Bjorn Andersson <bjorn.andersson@linaro.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, arm-soc <arm@kernel.org>, 
+	SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	Sylwester Nawrocki <snawrocki@kernel.org>, DTML <devicetree@vger.kernel.org>, 
+	Tony Lindgren <tony@atomide.com>, Frank Rowand <frowand.list@gmail.com>, 
+	Gregory Clement <gregory.clement@bootlin.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Alexandre Torgue <alexandre.torgue@st.com>, 
+	Kevin Hilman <khilman@baylibre.com>, Maxime Ripard <mripard@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 09/02/2021 18.15, Arnd Bergmann wrote:
-> Right, these are the same ranges that I found in the adt and that Mark
-> listed in his code snippet, so it seems we all see the same partitioning
-> of the address space. I also see them reflected in the
-> /defaults/pmap-io-ranges property in ADT, which seems to have an entry
-> for every register range that has some mmio registers, along with what
-> appears to be a bitmask of some attributes, and it clearly shows
-> the above ranges as having a distinct set of bits from the others
-> (in little-endian):
-> 
->   00000000 04000000 00000080 00000000 27000080 65494350
->   00000080 04000000 00000080 00000000 27000080 65494350
->   00000080 05000000 00000080 00000000 27000080 65494350
->   00000000 06000000 00000080 00000000 27000080 65494350
->   000000a0 06000000 00000020 00000000 27000080 65494350
->   000000c0 06000000 00000040 00000000 27000080 65494350
->     ^64-bit address       ^64-bit length            ^ 64-bit flags?
+On Mon, Feb 8, 2021 at 5:10 PM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> On 08/02/2021 23:14:02+0100, Arnd Bergmann wrote:
+> > On Mon, Feb 8, 2021 at 10:35 PM Alexandre Belloni
+> > <alexandre.belloni@bootlin.com> wrote:
+> > > On 08/02/2021 20:52:37+0100, Arnd Bergmann wrote:
+> > > > On Mon, Feb 8, 2021 at 7:42 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > > > > Let me steer the discussion to original topic - it's about old kernel
+> > > > > and new DTB, assuming that mainline kernel bisectability is not
+> > > > > affected.
+> > > > >
+> > > > > Flow looks like this:
+> > > > >
+> > > > > 0. You have existing bidings and drivers.
+> > > > > 1. Patch changing bindings (with new compatible) and drivers gets
+> > > > >    accepted by maintainer.
+> > > > > 2. Patch above (bindings+drivers) goes during merge window to v5.11-rc1.
+> > > > > 3. Patch changing in-tree DTS to new compatible gets accepted by
+> > > > >    maintainer and it is sent as v5.12-rc1 material to SoC maintainers.
+> > > > >
+> > > > > So again: old kernel, using old bindings, new DTB.
+> > > > >
+> > >
+> > > I don't think forward compatibility was ever considered. I've seen it
+> > > being mentioned a few times on #armlinux but honestly this simply can't
+> > > be achieved. This would mean being able to write complete DT bindings
+> > > for a particular SoC at day 0 which will realistically never happen. You
+> > > may noteven have a complete datasheet and even if you have a datasheet,
+> > > it may not be complete or it may be missing hw errata that are
+> > > discovered later on and need a new binding to handle.
+> >
+> > You do not have to write the correct DT for this, the only requirement
+> > is that any changes to a node are backward-compatible, which is
+> > typically the case if you add properties or compatible strings without
+> > removing the old one. A bugfix in this case is also backward-compatible.
+> >
+> > The part that can not happen instead is to write a DT that can expose
+> > features that any future kernel will use.
+> >
+>
+> But I think we are speaking about the other way around were you would be
+> e.g. removing properties or splitting a node is multiple different
+> nodes following a different understanding of the hardware.
+> And in this case, any rework of the bindings will be forbidden, like
+> 32b7cfbd4bb2 ("ARM: dts: at91: remove deprecated ADC properties") will
+> break older kernels trying to use the new dtb.
+> 761f6ed85417 ("ARM: dts: at91: sama5d4: use correct rtc compatible") is
+> an other case.
+> I'm not sure want to keep the older properties or the older compatible
+> string as a fallback for this use case.
+>
+> > > > However, once the firmware is updated, it may no longer be possible to
+> > > > go back to the old kernel in case the new one is busted.
+> > > >
+> > >
+> > > Any serious update strategy will update both the kernel and device tree
+> > > at the same time, exactly like you already have to update the initramfs
+> > > with the kernel as soon as it is including kernel modules.
+> > > I would expect any embedded platform to actually use a container format,
+> > > like a FIT image that will ship the kernel, DT and intiramfs in a single
+> > > image and will allow to sign all parts.
+> >
+> > Embedded systems that do this have no requirement for backward
+> > or forward compatibility at all, the only requirement for these is bisectability
+> > of git commits.
+> >
+>
+> Yes and I can't see any drawbacks in this approach.
+>
+> > > > A similar problem can happen with the EBBR boot flow that relies on
+> > > > a uefi-enabled firmware such as a u-boot, while using grub2 as the
+> > > > actual boot loader. This is commonly supported across distros. While
+> > > > grub2 can load a matching set of kernel+initrd+dtb from disk and run
+> > > > that, this often fails in practice because u-boot needs to fill a
+> > > > board specific set of DT properties (bootargs, detected memory,
+> > > > mac address, ...). The usual way this gets handled is that u-boot loads
+> > > > grub2 and the dtb from disk and then passes the modified dtb to grub,
+> > > > which picks only kernel+initrd from disk and boots this with the dtb.
+> > > >
+> > > > The result is similar to case with dtb built into the firmware: after
+> > > > upgrading the dtb that gets loaded by u-boot, grub can still pick
+> > > > old kernels but they may not work as they did in the past. There are
+> > > > obviously ways to work around it, but it does lead to user frustration.
+> > > >
+> > >
+> > > Are there really any platforms with the dtb built into the firmware?
+> > > I feel like this is a mythical creature used to scare people into keeping
+> > > the DTB ABI stable. Aren't all the distribution already able to cope
+> > > with keeping DTB and kernel in sync?
+> >
+> > I think most traditional PowerPC systems fall into this category, most
+>
+> My understanding was that the traditional PPC systems had a small device
+> tree and usually are not affected by driver changes but I may be wrong.
+>
+> > systems that boot using UEFI+grub (as I explained), and anyone who
+> > uses a distro kernel on custom hardware with their own dtb.
+> >
+>
+> Aren't the ones using a distro kernel with a custom dtb more concerned
+> by backward compatibility (i.e. new kernel with old dtb) rather than old
+> kernel on new dtb? If they have an old dtb, an old kernel, and update to
+> a new kernel, backward compatibility will ensure this continues to work.
+> If then they work on updating their dtb, they still have the old one and
+> can make the distribution match dtb and kernel. This is already handled
+> properly by debian and I guess the other distributions as it is anyway
+> already matching kernel and initramfs.
 
-That's ASCII :-)
+SUSE is doing the opposite AIUI. This is a bit harder because adding
+any new provider breaks compatibility as the old kernel will wait for
+a non-existent driver for the new provider. That was the motivation
+for deferred probe timeouts. Of course, I wouldn't really call a
+platform stable if you are still adding clock, pinctrl, power-domain,
+etc. providers.
 
-'PCIe'
-
-> 
-> As opposed to e.g.
-> 
->   0000f002 05000000 00400000 00000000 07400000 54524144
-
-'DART'
-
->   00800021 05000000 00400000 00000000 07400000 44495344
-
-'DSID'
-
-> Ok, so if we want this to get encoded in a 'struct resource' flag, the PCI
-> resources should work just fine as these resources come from the
-> PCI layer rather than of_address_to_resource(). I think it would be
-> reasonable here to add something to of_address_to_resource() to
-> set such a flag if we can find an unused one, and then require the
-> drivers for this platform to go through devm_ioremap_resource()
-> or similar.
-
-This sounds reasonable. For setting such a flag, I guess looking for a 
-property (inherited from parents) would make sense. `mmio-map-mode = 
-"nonposted"` or something like that?
-
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Rob
