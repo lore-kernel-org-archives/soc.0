@@ -1,151 +1,118 @@
-Return-Path: <SRS0=xDNJ=HL=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42265C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 08:27:19 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DB90964EBD
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Feb 2021 08:27:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DB90964EBD
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=R2cqJO8ANojwOhhGZooK2V8j8pLDWfdHit6ULv8obvY=; b=xUTVLUB2vhwgUxRtIynWADdFO
-	bqMafme9lkjDu7ppXgr1WSorfgT8daU8QYw07eHCfdNV+h/oqNfhZW7z+lVk9k2ooZ6vsp26KSnmW
-	bHbah02t6iIIlLWVhsPr1VK10guEhlOI3fFeQgpkjBT63bQc6SBsctHx6t6/9r0EvpAX4+VqP6VO9
-	9D4BI21eaHX19UbN5pGUKYe5TF2BXM9huQOTvUS3AMae+FSaG6yQtwXEt4/P/eq9HHXsSbAMriAGD
-	tRodu9sgXU2wyuwrA35RyhVIenxAFpEAq3zxBOX5M9uFxTDgcHCd7/8fgFYgSvuDL5Wbhq5rhXmst
-	cqj9M7s/A==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l9OLD-0001c7-CB; Tue, 09 Feb 2021 08:25:47 +0000
-Received: from mail-ot1-f51.google.com ([209.85.210.51])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l9OLA-0001bL-J7
- for linux-arm-kernel@lists.infradead.org; Tue, 09 Feb 2021 08:25:45 +0000
-Received: by mail-ot1-f51.google.com with SMTP id 63so16788691oty.0
- for <linux-arm-kernel@lists.infradead.org>;
- Tue, 09 Feb 2021 00:25:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=lNbh7LjdqrFqGa+5oSbQ+cwJwgupwerGD92n/ai+/tU=;
- b=DOCiiLy91qUZ/klf80yjtB795BnWkMNXQwjnWCL3Sz887RydEYvkPvB4uEE7V8aLy3
- eglZZUt7JzZajGJihR2FhJkMaTEAVfrTHBG0+2R4nivM2wUPUKNT6yjVGVp7KrFvX/XJ
- OIiOYT1CckUMeF8WQNBcIz3SVtqbQ6SA9T9+R+rCVmVZvbOBcHClDiOLB95ZZqm+UfgJ
- Iw43iDP5MhZkU/Lza2q61Rtc2/u0l0GooLwWsuVbVuPqK2kXwd1o++AHHSP1Klp1O50K
- 1DgeFMofSMAVy+oH0bHthZOwdM/YIzbjMOeyFjLd1BORfqzaWY17TZG1U/Ki5N7SGWPu
- OhBw==
-X-Gm-Message-State: AOAM533gFpjNLiymRfvVlW43tGrxcCRPVMabrJOM4uMAAytx+MbqwWQ+
- 0ODKmfuaxjtBhggWcp4LxNRBRummHTaoGLU02RQ=
-X-Google-Smtp-Source: ABdhPJyHYllDbGGarpfEfSMLq+6yFSlPIZ/1ViJwMsZFWXHFp6l5RgUa1BlE4L4SlzEI1vlM0qByA8Z7RtWYZngawdw=
-X-Received: by 2002:a9d:77d6:: with SMTP id w22mr4174886otl.145.1612859142032; 
- Tue, 09 Feb 2021 00:25:42 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AECBEC433E0
+	for <soc@archiver.kernel.org>; Tue,  9 Feb 2021 09:15:49 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7436E64EC4; Tue,  9 Feb 2021 09:15:49 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4923464EC2;
+	Tue,  9 Feb 2021 09:15:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1612862149;
+	bh=f7I8VFYO1/xZGCKojh0al/Q6VigrmQP1NtWLooJ1JG8=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=FLBIl3ZlBrko2Qy0lK3pnG9gfHgUIrEzmXsjFoF8HdnY68nDQXO0o6tCcj0t6HbrU
+	 j5i3mcW+MBEE51BOJl3NQ54rNwFBzkY+lPkTuhqwyg87rmzyFVBADbc06nL0SpVl8b
+	 +0S7BGLfUSb52PZv7ds0qk+e1sbtihr5RJBSUsQCTiox3KD4iHC3Zdv/RXa6txysWe
+	 I75s8MKo2qsqxEsOkvO/e0ChE+SZRxmW8eZSpX6yxHiIsYLEfgO+fXiJ+178K2sCMs
+	 1/mJv7jmD3Q7eMCSWtLmOoC5czqB19PbGBanvUo1LIXBnWAQ1zbo18GLZAJ7bgd+zD
+	 w2lu3T6IC24sA==
+Received: by mail-ot1-f52.google.com with SMTP id t25so16882773otc.5;
+        Tue, 09 Feb 2021 01:15:49 -0800 (PST)
+X-Gm-Message-State: AOAM5301kJjqBkM06O8IVCiUmkbHh0QNhR1e4rrtDNLJtvF4flOazsfq
+	Y2wgZbojC7E0c+1vAVq6iFtBRTBEYHaJoAmZ5Xc=
+X-Google-Smtp-Source: ABdhPJzCKdL5uwLNsgiJEByxXI2C7OJRcIA5qgQWvO8WZpPO+Twp0vvTJkeQ1SMTBdFB7TKlXxKK6mcA0B2przB/fAQ=
+X-Received: by 2002:a9d:3403:: with SMTP id v3mr6555894otb.305.1612862148433;
+ Tue, 09 Feb 2021 01:15:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20210125191240.11278-1-krzk@kernel.org>
- <20210125191240.11278-3-krzk@kernel.org>
- <20210206134531.l5vpzlmev4v3f3uo@kozik-lap>
- <CAK8P3a0Kgn9PTHjsU7MbJPC8vatvb9KYJJKWxrx7zQzTNgK10g@mail.gmail.com>
- <CAMuHMdWZ8QmiQCmiW9AvCpviNZeuaxThSo_4Xb2DGEs9hMTKMQ@mail.gmail.com>
- <YCGBIvRfoP0BeyrP@builder.lan> <20210208184230.onhlioflyylkx6xo@kozik-lap>
- <CAK8P3a3bsw8p2Geyo-vh1AJUfMQCCf3kpa_YB+tKmcvWHqRcEw@mail.gmail.com>
- <20210208213537.GA351084@piout.net>
- <CAK8P3a0QRcQM4rH9HgVMOHa_eATXsjRbGDXuMO7FgnA8OgPk0Q@mail.gmail.com>
- <20210208231040.GF351084@piout.net>
-In-Reply-To: <20210208231040.GF351084@piout.net>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 9 Feb 2021 09:25:31 +0100
-Message-ID: <CAMuHMdUSRZ+Fho4OG3xZayzOrFnJXxomT3q16vu_Jai6Lb7hxg@mail.gmail.com>
-Subject: Re: [GIT PULL 2/3] ARM: dts: samsung: DTS for v5.12
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210209_032544_694362_BE89768B 
-X-CRM114-Status: GOOD (  18.95  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+References: <20210204203951.52105-1-marcan@marcan.st> <20210204203951.52105-14-marcan@marcan.st>
+ <CAK8P3a2Ad+xmmMWgznOHPpxgCXKWFYfpHBqt_49_UuxrwFSq+A@mail.gmail.com>
+ <c1bc2a087747c4d9@bloch.sibelius.xs4all.nl> <635f1a81-58c8-f3b6-ab3f-1cf6a084aed0@marcan.st>
+In-Reply-To: <635f1a81-58c8-f3b6-ab3f-1cf6a084aed0@marcan.st>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Tue, 9 Feb 2021 10:15:31 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a043eO4p2o6tizR2x7a1TZHMqO7TdX53JC4bTZnbQd9iQ@mail.gmail.com>
+Message-ID: <CAK8P3a043eO4p2o6tizR2x7a1TZHMqO7TdX53JC4bTZnbQd9iQ@mail.gmail.com>
+Subject: Re: [PATCH 13/18] arm64: ioremap: use nGnRnE mappings on platforms
+ that require it
+To: Hector Martin <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
- Tony Lindgren <tony@atomide.com>, Linus Walleij <linus.walleij@linaro.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Frank Rowand <frowand.list@gmail.com>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES"
- <linux-samsung-soc@vger.kernel.org>, Sylwester Nawrocki <snawrocki@kernel.org>,
- Kevin Hilman <khilman@baylibre.com>,
- Gregory Clement <gregory.clement@bootlin.com>,
- Krzysztof Kozlowski <krzk@kernel.org>, arm-soc <arm@kernel.org>,
- DTML <devicetree@vger.kernel.org>, Alexandre Torgue <alexandre.torgue@st.com>,
- Arnd Bergmann <arnd@arndb.de>, Maxime Ripard <mripard@kernel.org>,
- SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Bjorn Andersson <bjorn.andersson@linaro.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Arnd Bergmann <arnd@kernel.org>, Olof Johansson <olof@lixom.net>,
- Shawn Guo <shawnguo@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210209082531.qtmOs4Tgp6kSre4k09gErQRgmkjz26UfmiOLQEGb1H0@z>
+Cc: Mark Kettenis <mark.kettenis@xs4all.nl>, DTML <devicetree@vger.kernel.org>, 
+	Marc Zyngier <maz@kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, Olof Johansson <olof@lixom.net>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Alexandre,
-
-On Tue, Feb 9, 2021 at 12:10 AM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
-> On 08/02/2021 23:14:02+0100, Arnd Bergmann wrote:
-> > On Mon, Feb 8, 2021 at 10:35 PM Alexandre Belloni
-> > <alexandre.belloni@bootlin.com> wrote:
-> > > Are there really any platforms with the dtb built into the firmware?
-> > > I feel like this is a mythical creature used to scare people into keeping
-> > > the DTB ABI stable. Aren't all the distribution already able to cope
-> > > with keeping DTB and kernel in sync?
-> >
-> > I think most traditional PowerPC systems fall into this category, most
+On Tue, Feb 9, 2021 at 1:25 AM Hector Martin <marcan@marcan.st> wrote:
+> On 09/02/2021 08.20, Mark Kettenis wrote:
+> I probed writing to i<<28 for i = [0..255], using nGnRE. This reveals
+> that nGnRE writes are allowed (i.e. either succeed or error out
+> differently) in the following ranges:
 >
-> My understanding was that the traditional PPC systems had a small device
-> tree and usually are not affected by driver changes but I may be wrong.
+> 0x400000000 - 0x4ffffffff (apciec0)
+> 0x580000000 - 0x67fffffff (apciec1)
+> 0x6a0000000 - 0x6ffffffff (apcie)
+>
+> Which matches the `ranges` properties of the respective apcie devices in
+> the ADT.
 
-They were much simpler than a modern SoC, with most functionality
-implemented by modularity (e.g. PCI devices, I still like 'compatible
-= "pci1186,100"'[1] ;-)
-And the bindings were simple and stable (i.e. they did exist before the
-platform was shipped).
+Right, these are the same ranges that I found in the adt and that Mark
+listed in his code snippet, so it seems we all see the same partitioning
+of the address space. I also see them reflected in the
+/defaults/pmap-io-ranges property in ADT, which seems to have an entry
+for every register range that has some mmio registers, along with what
+appears to be a bitmask of some attributes, and it clearly shows
+the above ranges as having a distinct set of bits from the others
+(in little-endian):
 
-[1] http://users.telenet.be/geertu/Linux/PPC/pci/ethernetAT4/
+ 00000000 04000000 00000080 00000000 27000080 65494350
+ 00000080 04000000 00000080 00000000 27000080 65494350
+ 00000080 05000000 00000080 00000000 27000080 65494350
+ 00000000 06000000 00000080 00000000 27000080 65494350
+ 000000a0 06000000 00000020 00000000 27000080 65494350
+ 000000c0 06000000 00000040 00000000 27000080 65494350
+   ^64-bit address       ^64-bit length            ^ 64-bit flags?
 
-Gr{oetje,eeting}s,
+As opposed to e.g.
 
-                        Geert
+ 0000f002 05000000 00400000 00000000 07400000 54524144
+ 0000f802 05000000 00400000 00000000 07400000 54524144
+ 00800021 05000000 00400000 00000000 07400000 44495344
+ 0000a801 05000000 00400000 00000000 07400000 54524144
+00000367 02000000 00400000 00000000 07400000 54524144
+...
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+There is one more entry for the 0x700000000-0x7ffffffff range, which
+has yet another distinct bitmask, but does not seem to correspond
+to any registers listed in other nodes.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> The first two are obviously the TB3 ports, and have more
+> features (three ranges instead of two, presumably IO port ranges are
+> supported on those, there's some extra DMA stuff, etc).
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+The PCI ranges property identifies these as 64-bit prefetchable (0x43),
+32-bit non-prefetchable (0x02), and 32-bit pre prefetchable (0x42)
+respectively. The third bus only lacks the 32-bit prefetchable range,
+that is normally ok. Is this the NVMe host or something else?
+
+None of them have an I/O space ranges though, only memory space.
+
+> So the hardware behavior is to block nGnRE everywhere except in those
+> ranges (i.e. the nGnRnE fault takes precedence over other errors, like
+> the address not existing at all).
+
+Ok, so if we want this to get encoded in a 'struct resource' flag, the PCI
+resources should work just fine as these resources come from the
+PCI layer rather than of_address_to_resource(). I think it would be
+reasonable here to add something to of_address_to_resource() to
+set such a flag if we can find an unused one, and then require the
+drivers for this platform to go through devm_ioremap_resource()
+or similar.
+
+       Arnd
