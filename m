@@ -2,59 +2,62 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FE16C433E0
-	for <soc@archiver.kernel.org>; Tue,  9 Feb 2021 15:14:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C973CC433E0
+	for <soc@archiver.kernel.org>; Tue,  9 Feb 2021 15:14:11 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 4712464EC2; Tue,  9 Feb 2021 15:14:09 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CC81064E88;
-	Tue,  9 Feb 2021 15:14:07 +0000 (UTC)
+	id 9718664EB8; Tue,  9 Feb 2021 15:14:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9B00A64EC6;
+	Tue,  9 Feb 2021 15:14:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612883649;
-	bh=sISzvmFfKdR/yd4UNKJ8qSPNAWkQd3BSlSYsCkUMJhM=;
+	s=k20201202; t=1612883651;
+	bh=vF369+zbhpiQ45k/ZshjP1Py4rriN3NsCdst7RvcaHA=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XD2A6Li4r/dXO0whxcZnDmuu/P73XO2fL2ehEGTMwh4JNkJa2T5awiPlQNM/GqFyB
-	 HdkqyU+JZwljLIKEZyBCC6Orm2p9wji+7AZpvar74qpOyYVWrnbJ6kJXTpHhsKpwHC
-	 AZaaOawU8S/PMEcaqGW+EBY5fzDmWOeI3FOCR+tqrhEO4HTkG2lyR0SmLQcy9Q2Kbl
-	 q9Paeu97wj3U8n4m44SJaEhZ8KhingrFKdOoZv8b5lR+YxxMtcHgGxWsdZ3dbrF3kS
-	 PYkQ29m3KBPA0D8pk3/EJq0qXEUvjHaJarsrmz/nMMbJ7ityXqrWIzNGLcAaa0w/sa
-	 aYPJ9+ngYI9mw==
+	b=hy4q4lhxfTgCnAI52aGiwt/3XRkusFSkxzFTMw3oE6CdQ/MzTha8yPvT49BvKBl0H
+	 NCm6RQhOHhlplmzq0nUSQg9d67/EAs0Be34kSF7cR5CyC7Pn6XKg/po0/h2Qql6910
+	 rfr7xw6RpUAX+xBv2okBOSv6Cbb9mp0Qi9xwWsB0kqu8+R616uEwfrvaPA9gyGHu5P
+	 Zt8od+g9mYDaoki6JnM92w1QLrhvfa2kdWvkew1V44FeJblyXhCy77dT3PconIxFf+
+	 9uh6EexOUsQHlrp3c6WZilLD6zF4XBXNYNu8P7sv0D8EEtnKkzUawPARAvDXi/KdXJ
+	 aH7FMKp2fqEQQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
+To: "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+	arm@kernel.org,
 	soc@kernel.org,
-	Kevin Hilman <khilman@baylibre.com>
+	Olof Johansson <olof@lixom.net>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-amlogic@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] ARM: multi_v7_defconfig: amlogic updtes for v5.12
-Date: Tue,  9 Feb 2021 16:13:54 +0100
-Message-Id: <161288360473.2910447.10678299620796355576.b4-ty@arndb.de>
+	Ludovic Desroches <ludovic.desroches@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	Linux Kernel list <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] ARM: at91: defconfig for 5.12 #2
+Date: Tue,  9 Feb 2021 16:13:55 +0100
+Message-Id: <161288360578.2910447.16931908601286064983.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <7hsg6d2bxg.fsf@baylibre.com>
-References: <7hsg6d2bxg.fsf@baylibre.com>
+In-Reply-To: <20210208115753.54730-1-nicolas.ferre@microchip.com>
+References: <20210208115753.54730-1-nicolas.ferre@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 03 Feb 2021 11:23:07 -0800, Kevin Hilman wrote:
-> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+On Mon, 8 Feb 2021 12:57:53 +0100, nicolas.ferre@microchip.com wrote:
+> Arnd, Olof,
 > 
->   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+> Here is the second batch of defconfig changes for 5.12.
 > 
-> are available in the Git repository at:
+> Thanks, best regards,
+>   Nicolas
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic.git tags/amlogic-soc
+> The following changes since commit 00a1aa475f507454fab82f02c6230c8fb2312a12:
 > 
 > [...]
 
 Merged into arm/defconfig, thanks!
 
-merge commit: f7d62396798cac36dc1ea530afc3e560f52ce327
+merge commit: cfc9e56311075d25ebb3031dc1c0fd27bcdee47f
 
        Arnd
