@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EB2CC433DB
-	for <soc@archiver.kernel.org>; Wed, 10 Feb 2021 17:19:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF394C433E0
+	for <soc@archiver.kernel.org>; Wed, 10 Feb 2021 17:19:12 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id DFA1964EC8; Wed, 10 Feb 2021 17:19:07 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 36E4164EC6;
-	Wed, 10 Feb 2021 17:19:05 +0000 (UTC)
+	id 979CE64ECC; Wed, 10 Feb 2021 17:19:12 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3823364EC7;
+	Wed, 10 Feb 2021 17:19:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612977547;
-	bh=c/Ax+KU4DL5JozYwTOkjNe1K5hw5XVOa51fa//wHaxA=;
+	s=k20201202; t=1612977552;
+	bh=UQZmJPyUrCZnK9e0DT6jGZRT4VtnkmY1IlgeadpSMF8=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=J7twu9oruKBFHatLyOM8x1cg1lnIeAvQMkeWMxdW8Gi0yfefNN+W23FnELWHQr/Bf
-	 g+gKio7xoxnGayi6PvCzaLK5Ye47K22iBS19pc0cS85eW8xwL9jMNWVAM90ycSdPS4
-	 37/6A7MXJDyZQ79e+kW114NVT/eDjGFNLsj3JfuO1TqBtisAHbywEnFhi0ByomBzq0
-	 kDJ09W45kn6CALhspPGWbGJ5vpxDdgz0CiM2WZjwHvGaDGQ/mfTKEtkY12+CDnUY7Q
-	 piPSxgvbFeoHUy7E9Df7dkGbAsluPdKlM4dYb0ixz+lRyxGG0gKL09FoV7ta8raPh3
-	 y0dsd+DIAsFlA==
+	b=B395kkAGg9fEAGQVXKxSPdBfTzxIGYmbWR4+45Y3eKQP1CivpCglNQ7rOB+i7x08m
+	 yb+fDZTJ/G8yISBXhCGvy3JxKFY+3htJmmTM1SrVrrssyIM+UrWQpySfVPD7awOTIl
+	 d4AC+w0uPzktTOp7wPol3dQhtR04GZN7BKyH6jOpDDC5zQQQW/9UKmdzKzCJC3Zp3C
+	 M/HK42lh2zjOl8eIZy9mePqVdc2VapeVk+klrIUHq4A5m3sxqsHxRhWGxegeSJJxAf
+	 SEBqkazyj3DestiGTT79Z0xw9uPBNVjnhMBUxeeAyZ1FnFBy5EOBjwAdle0voPag/Y
+	 Khlf6imRHgsuA==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: "Paul J. Murphy" <paul.j.murphy@intel.com>,
@@ -38,63 +38,34 @@ To: "Paul J. Murphy" <paul.j.murphy@intel.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RFT 05/11] arm64: dts: intel: socfpga_agilex: move timer out of soc node
-Date: Wed, 10 Feb 2021 18:18:17 +0100
-Message-Id: <20210210171823.333802-5-krzk@kernel.org>
+Subject: [PATCH 06/11] arm64: dts: intel: socfpga_agilex: remove default status=okay
+Date: Wed, 10 Feb 2021 18:18:18 +0100
+Message-Id: <20210210171823.333802-6-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210210171823.333802-1-krzk@kernel.org>
 References: <20210210171823.333802-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The ARM architected timer is part of ARM CPU design therefore by
-convention it should not be inside the soc node.  This also fixes dtc
-warning like:
-
-    arch/arm64/boot/dts/intel/socfpga_agilex.dtsi:410.9-416.5:
-        Warning (simple_bus_reg): /soc/timer: missing or empty reg/ranges property
+New nodes are okay by default.
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-index 12b6d208e236..30dcf9978067 100644
+index 30dcf9978067..750237b9c5c1 100644
 --- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
 +++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-@@ -115,6 +115,15 @@ qspi_clk: qspi-clk {
- 		};
- 	};
- 
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupt-parent = <&intc>;
-+		interrupts = <1 13 0xf08>,
-+			     <1 14 0xf08>,
-+			     <1 11 0xf08>,
-+			     <1 10 0xf08>;
-+	};
-+
- 	soc {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
-@@ -406,15 +415,6 @@ sysmgr: sysmgr@ffd12000 {
- 			reg = <0xffd12000 0x500>;
+@@ -472,7 +472,6 @@ uart1: serial1@ffc02100 {
+ 		usbphy0: usbphy@0 {
+ 			#phy-cells = <0>;
+ 			compatible = "usb-nop-xceiv";
+-			status = "okay";
  		};
  
--		/* Local timer */
--		timer {
--			compatible = "arm,armv8-timer";
--			interrupts = <1 13 0xf08>,
--				     <1 14 0xf08>,
--				     <1 11 0xf08>,
--				     <1 10 0xf08>;
--		};
--
- 		timer0: timer0@ffc03000 {
- 			compatible = "snps,dw-apb-timer";
- 			interrupts = <0 113 4>;
+ 		usb0: usb@ffb00000 {
 -- 
 2.25.1
 
