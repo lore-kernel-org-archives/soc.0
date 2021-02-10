@@ -2,64 +2,84 @@ Return-Path: <SRS0=mpRk=HM=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45B13C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 12:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43793C433E6
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 12:25:39 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D4F0064E2A
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 12:25:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D4F0064E2A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=marcan.st
+	by mail.kernel.org (Postfix) with ESMTPS id BD57864E25
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 12:25:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BD57864E25
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:
-	Content-Transfer-Encoding:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:Subject:
-	From:References:To:Reply-To:Content-ID:Content-Description:Resent-Date:
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
+	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=43J3cVk1ZyVyo7qMwkJJACWBq8UHCEDWt3/VDj3Cnnc=; b=2jnE8HLzDDhzYZMF0YaHTXDGR
-	xKvo6TYWZm/gqYLfElDIT+bMMN1GgmxVqL7V5mHTGPqahapnRbuROPB9rjMgISh19kayR00YX1fRz
-	zhOu6NIN2IDldlnLJgBdia5ECEHuEyORm4mPcTJRC1ih0imJ+9tbsqKXkcUQiF9lBp1qxKu21oCG4
-	YjCHepnLhE1YD9rDzWnq6bGJJGpfJN4JigEz8Ih+3pgLNslpTcZD4T1199bhnFOpHgVSyZN3/zppc
-	C/+p5AjvXZ/xaCiEDm5k8qS7AYB2W570V+9WpPRXqE3ctfYCUd3rz+0SNrq16lURayMbNrTmeJcCI
-	YA3o9ts1Q==;
+	 bh=N2xhsDIjVncN9nl6X/unEnYj9McyJoqH4tL/gjVaAhM=; b=n5W5b3WYuw9lFki8R81lfnteA
+	1dn+1jqOokiyCfBDoyMVJDw3BXD0XT3KV8nzuvWR9m+nrIf5Ry2ueEjuMLWH3TkHNUJnV12nnmG4A
+	0mLuw0Br/qLf54U6CIXThUOJzAZGZ9bQ8vfdKqJATy+HP+/eqgkJqjAbWFTR1wiovtY4HfO2cUk/N
+	7bFrEHxX3aYkXRt6gDGuVWkWKc3BSthwTVmWzutAzNh6k601NXdgEzDe2WF9cVH1zZVxQ+Zp899Ln
+	DgoI6O6kRBLhZtyBlFbWRhf6LN2ZaDrwMx3qEC79+lXxR9qcXER28ojupq4jxtgIk1vjEigoJqwRl
+	hmRr+nl9g==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l9oXk-0006fV-VY; Wed, 10 Feb 2021 12:24:29 +0000
-Received: from marcansoft.com ([212.63.210.85] helo=mail.marcansoft.com)
+	id 1l9oXb-0006dR-UC; Wed, 10 Feb 2021 12:24:20 +0000
+Received: from mail-qt1-x830.google.com ([2607:f8b0:4864:20::830])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l9oXh-0006dw-IN
- for linux-arm-kernel@lists.infradead.org; Wed, 10 Feb 2021 12:24:27 +0000
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- (Authenticated sender: marcan@marcan.st)
- by mail.marcansoft.com (Postfix) with ESMTPSA id 8CBC341FA3;
- Wed, 10 Feb 2021 12:24:18 +0000 (UTC)
-To: Will Deacon <will@kernel.org>
-References: <20210204203951.52105-1-marcan@marcan.st>
- <20210204203951.52105-14-marcan@marcan.st>
- <CAK8P3a2Ad+xmmMWgznOHPpxgCXKWFYfpHBqt_49_UuxrwFSq+A@mail.gmail.com>
-From: Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 13/18] arm64: ioremap: use nGnRnE mappings on platforms
- that require it
-Message-ID: <475f7586-cabf-1169-8800-cdd2c012a5a6@marcan.st>
-Date: Wed, 10 Feb 2021 21:24:15 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ id 1l9oXZ-0006bR-CR
+ for linux-arm-kernel@lists.infradead.org; Wed, 10 Feb 2021 12:24:18 +0000
+Received: by mail-qt1-x830.google.com with SMTP id d3so1288617qtr.10
+ for <linux-arm-kernel@lists.infradead.org>;
+ Wed, 10 Feb 2021 04:24:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=LISi+Oc9GTZ5oHTm+YUr6VLWACgROuri9cGJPLpozgI=;
+ b=EW9Gs12uxdYBPULSVoXhyzBNha9rowbDBkjznSNaTFNaiTV56gKyrVP5MVjdlsaoBp
+ SynP8rRSvYLNNcbAltAfGysTSBI9lsE9Nl+/l90licN9Ut8RU5i2wAdZMLR/dr6Z+vjQ
+ ghbeYAQ2zgUg+JxD3Pys4HZTNJDGYOu1VEbns=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=LISi+Oc9GTZ5oHTm+YUr6VLWACgROuri9cGJPLpozgI=;
+ b=etwRfrZ1FCuN8eq4xGBY+e2rmdpkoXc2jn9bdiyKi5PAVEaYHcM7m875hJ/RiN7q6Q
+ Pow6V8+QVngbnH+lk4jaCECIzpNtu5zbQRhuknVPsrWcznJZBxoUu8Rv8vQlWQXD/vF5
+ E4DbC5arog6wD/72oDGxUbbuCTeMcOFqbBW6nfEzAWuRBxuoozb6mWy03qctyfeVcVgL
+ At8mvPZbOCS7wYPU3GC8Bo5r52Wgn6Bg/jCXXuDxEwX9GUK0ntu2Q3Ysnm7F0hfKBa+U
+ rATSSRB/xoJKv1JYisZAfdFcw6tZR9PjPEFSKb+uWOQ9y6GyVnB83/5axVkBsbsSU5XX
+ kZpQ==
+X-Gm-Message-State: AOAM530qrqg/BTiaCCdqS3nWFl1nOsMyRotlBfMNH7zhO9wenjmFTMxb
+ QKD+P82apo905kGK8uKH0eGR0edlfbTqSogPf9URJA==
+X-Google-Smtp-Source: ABdhPJxEfZ/WBSPKx1Tl0qBwSbg2IbGZqKcplsfGLH1uLBGHXIALkT/jB/LIe+Ss4Wptzn5AfhQO5Hz846E+WIqzIZk=
+X-Received: by 2002:a05:622a:4ce:: with SMTP id
+ q14mr2498595qtx.132.1612959853524; 
+ Wed, 10 Feb 2021 04:24:13 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a2Ad+xmmMWgznOHPpxgCXKWFYfpHBqt_49_UuxrwFSq+A@mail.gmail.com>
-Content-Language: en-US
+References: <20210204203951.52105-1-marcan@marcan.st>
+ <20210204203951.52105-19-marcan@marcan.st>
+ <20210208110441.25qc6yken4effd6c@kozik-lap>
+ <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
+ <YCOzLSqdsr83xf0b@atomide.com>
+ <4481998a-27f6-951e-bb4f-a9d2b95f211f@marcan.st>
+ <YCPE2lPpBlhCi7TH@atomide.com>
+ <4dd911d8-ce84-bf4d-3aae-95ef321b4a97@marcan.st>
+In-Reply-To: <4dd911d8-ce84-bf4d-3aae-95ef321b4a97@marcan.st>
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Wed, 10 Feb 2021 21:24:02 +0900
+Message-ID: <CAFr9PXkLRKHguszidJX2Qit0QUJ0QxFi3H=Wp2HDqpfJQYZEVw@mail.gmail.com>
+Subject: Re: [PATCH 18/18] arm64: apple: Add initial Mac Mini 2020 (M1)
+ devicetree
+To: Hector Martin <marcan@marcan.st>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210210_072425_747810_DAADC72E 
-X-CRM114-Status: GOOD (  18.87  )
+X-CRM114-CacheID: sfid-20210210_072417_636329_5D985807 
+X-CRM114-Status: GOOD (  18.72  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,87 +92,51 @@ List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: DTML <devicetree@vger.kernel.org>, Arnd Bergmann <arnd@kernel.org>,
- Marc Zyngier <maz@kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Olof Johansson <olof@lixom.net>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Mark Kettenis <mark.kettenis@xs4all.nl>
+Cc: Arnd Bergmann <arnd@kernel.org>, DTML <devicetree@vger.kernel.org>,
+ Tony Lindgren <tony@atomide.com>, Marc Zyngier <maz@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>, SoC Team <soc@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>, Olof Johansson <olof@lixom.net>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210210122415.zmUxJFCphIBHjExp8PaZVr_TaQqMTeNSJILucngPlrk@z>
+Message-ID: <20210210122402.IMPVXuL27FWgWAEW9gIHBUxZvzf-cb3TNWOg470dNBM@z>
 
-Hi Will, I'm pulling you in at Marc's suggestion. Do you have an opinion 
-on what the better solution to this problem is?
+Hi Hector,
 
-The executive summary is that Apple SoCs require nGnRnE memory mappings 
-for MMIO, except for PCI space which uses nGnRE. ARM64 currently uses 
-nGnRE everywhere. Solutions discussed in this thread and elsewhere include:
+On Wed, 10 Feb 2021 at 20:49, Hector Martin <marcan@marcan.st> wrote:
 
-1. Something similar to the current hacky patch (which isn't really 
-intended as a real solution...); change ioremap to default to nGnRnE 
-using some kind of platform-level flag in the DT, then figure out how to 
-get the PCI drivers to bypass that. This requires changing almost every 
-PCI driver, since most of them use plain ioremap().
+> > Yeah, just don't use an imaginary dummy index for the reg. Use a real
+> > register offset from a clock controller instance base, and a register
+> > bit offset too if needed.
+>
+> I mean for fixed input clocks without any particular numbering, or for
+> temporary fake clocks while we figure out the clock controller. Once a
+> real clock controller is involved, if there are hardware indexes
+> involved that are consistent then of course I'll use those in some way
+> that makes sense.
 
-2. A per-device DT property that tells of_address_to_resource to set a 
-flag in the struct resource, which is then used by 
-devm_ioremap_resource/of_iomap to pick a new ioremap_ variant for nGnRnE 
-(introduce ioremap_np() for nonposted?) (PCI would work with this 
-inasmuch as it would not support it, and thus fall back to the current 
-nGnRE default, which is correct for PCI...). This requires changing 
-DT-binding drivers that we depend on to not use plain ioremap() (if any 
-do so), but that is a finite subset (unlike PCI which involves 
-potentially every driver, because thunderbolt).
+This exact problem exists for MStar/SigmaStar too.
+As it stands there is no documentation to show what the actual clock
+tree looks like so everything is guess and I need to come up with numbers.
+I'm interested to see what the solution to this is as it will come up again
+when mainlining chips without documentation.
 
-3. Encode the mapping type in the address of child devices, either 
-abusing the high bits of the reg or introducing an extra DT cell there, 
-introduce a new OF bus type that strips those away via a ranges mapping 
-and sets flags in the struct resource, similar to what the PCI bus does 
-with its 3-cell ranges, then do as (2) above and make 
-devm_ioremap_resource/of_iomap use it:
 
-On 09/02/2021 07.57, Arnd Bergmann wrote:
-> #define MAP_NONPOSTED 0x80000000
-> 
-> arm-io { /* name for adt, should be changed */
->       compatible = "apple,m1-internal-bus";
->       #address-cells = <2>; /* or maybe <3> if we want */
->       #size-cells = <2>;
->       ranges =
->                 /* on-chip MMIO */
->                 <(MAP_NONPOSTED | 0x2) 0x0   0x2 0x0 0x1 0x0>,
-> 
->                /* first PCI: 2GB control, 4GB memory space */
->               <(MAP_NONPOSTED | 0x3) 0x80000000  0x3 0x80000000  0x0 0x80000000>,
->                <0x4 0x0   0x4 0x0  0x1 0x0>,
-[...]
+> The purpose of the clock in this particular case is just to make the
+> uart driver work, since it wants to know its reference clock; there is
+> work to be done here to figure out the real clock tree
 
-> The MAP_NONPOSTED flag then gets interpreted by the .translate() and
-> .get_flags() callbacks of "struct of_bus" in the kernel, where it is put into
-> a "struct resource" flag, and interpreted when the resource gets mapped.
-> 
-> The PCI host controller nests inside of the node above, and (in theory)
-> uses the same trick to distinguish between prefetchable and non-prefetchable
-> memory, except in practice this is handled in device drivers that already
-> know whether to call ioremap() or ioremap_wc().
+FWIW arm/boot/dts/mstar-v7.dtsi has the same issue: Needs uart,
+has no uart clock. In that instance the uart clock setup by u-boot
+is passed to the uart driver as a property instead of creating a fake
+clock.
 
-4. Introduce a new top-level DT element in the style of reserved-memory, 
-that describes address ranges and the mapping type to use. This could be 
-implemented entirely in arch code, having arm64's ioremap look up the 
-address in a structure populated from this.
+Cheers,
 
-As an additional wrinkle, earlycon is almost certainly going to need a 
-special path to handle this very early, before OF stuff is available; it 
-also uses fixmap instead of ioremap, which has its own idea about what 
-type of mapping to use.
-
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Daniel
 
 _______________________________________________
 linux-arm-kernel mailing list
