@@ -1,114 +1,214 @@
-Return-Path: <SRS0=mpRk=HM=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=VrW/=HM=linaro.org=anders.roxell@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4245BC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 17:33:45 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD658C433E0
+	for <soc@archiver.kernel.org>; Wed, 10 Feb 2021 19:05:12 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A8B7564E32; Wed, 10 Feb 2021 19:05:12 +0000 (UTC)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F287B64EC9
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 17:33:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F287B64EC9
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=toshiba.co.jp
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Subject:To:From:Date:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=+ar28EJ+j6uWyfke5ZhvJ3lXIadzVb9izYi6vhWYhbk=; b=cQHCRqUmtDtgfdyW2c05KpnsVn
-	8aVmve8ZiUt5FZHervLpnP+JPFcMWqXYY2cyDzpB2klXo70r1hWxTNW4RgjOuGcrr6brYf25DZR/B
-	WP0sPPoJic59Q2+mw+Gbzy5jJvEpBzdWXbAj+mVdqm9attxQNNhPP9w04ZsDX7jcO2YVHxDEH0QEM
-	bfUtfh+hT6xzS/D4IfAAF0YC+ntxM0nK0LMrvDsNh8jn4Kyz7e/Dy/DFVmSQ3gYVeL0ubQqFBfZQp
-	Hu36mvzB7EMXRKAaztv1O5zj6xv8JecNTpB8m650Vp2sZKXnI81DR0vkwjL/x5HvDapTDMUxl1Pr3
-	RLLIvm8w==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l9tLt-0004a7-Sb; Wed, 10 Feb 2021 17:32:33 +0000
-Received: from mo-csw1515.securemx.jp ([210.130.202.154]
- helo=mo-csw.securemx.jp)
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l9tLq-0004YU-Gg
- for linux-arm-kernel@lists.infradead.org; Wed, 10 Feb 2021 17:32:32 +0000
-Received: by mo-csw.securemx.jp (mx-mo-csw1515) id 11AHWEvi014609;
- Thu, 11 Feb 2021 02:32:14 +0900
-X-Iguazu-Qid: 34tMScsDAnZFFYdiXA
-X-Iguazu-QSIG: v=2; s=0; t=1612978334; q=34tMScsDAnZFFYdiXA;
- m=Km+Q8gkiHMM9wvJSGLkYsgiwpRYJ1OYFW1VtlyXYnn8=
-Received: from imx2.toshiba.co.jp (imx2.toshiba.co.jp [106.186.93.51])
- by relay.securemx.jp (mx-mr1513) id 11AHWBNW008311;
- Thu, 11 Feb 2021 02:32:12 +0900
-Received: from enc01.toshiba.co.jp ([106.186.93.100])
- by imx2.toshiba.co.jp  with ESMTP id 11AHWBGr010235;
- Thu, 11 Feb 2021 02:32:11 +0900 (JST)
-Received: from hop001.toshiba.co.jp ([133.199.164.63])
- by enc01.toshiba.co.jp  with ESMTP id 11AHWBex002763;
- Thu, 11 Feb 2021 02:32:11 +0900
-Date: Thu, 11 Feb 2021 02:32:10 +0900
-From: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+	by mail.kernel.org (Postfix) with ESMTPS id 2E71064E38
+	for <soc@kernel.org>; Wed, 10 Feb 2021 19:05:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2E71064E38
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=anders.roxell@linaro.org
+Received: by mail-lf1-f41.google.com with SMTP id p21so4426340lfu.11
+        for <soc@kernel.org>; Wed, 10 Feb 2021 11:05:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AUZZJPcdsZ4nXWPrdOtnVl3JVvpEylf0g26f/cJWrEs=;
+        b=tdvdvopNJa/CNXblKmh3zsQ94QYlwXgnTc3W2rw3GKaWji6T1d806HNk5jlGGQsE0d
+         Z3BzOj8nXe/DC40o+NAgzKZEhnAAmT+MybnSvLG2UiVRby+UfPnUmHXxsNbU7/THaivB
+         IJok8KZuYBmdglvY9AXbeqg2N79bWTTZAvbuVrJ/jApGhi9wm0hMJLi3kDsrycTWwkH+
+         KeQqcA/kzuUA1N4LUQGmsMhnfPeZKVkijrSX1wnSYD7t5hFI06+M7TAv4qerUeyHPFAm
+         84uVebInrFDi44XE03vgB3Mbxtn8cTyAwnIJLm2UKF/hTrvWBymtDXcbDo+kC+Za5e0s
+         IaxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AUZZJPcdsZ4nXWPrdOtnVl3JVvpEylf0g26f/cJWrEs=;
+        b=NQVdDq7VpICYkjK1jvHNxl8snEtlETr856Y+e46ogj1s7ktQHdtJEcVNvnXLl16h99
+         10tcJEhokaVhlfEBBtHU5Rf70G8BUYV0clIrgqZD81dlKHlM7zHLLPskstgA3qQQApcY
+         bJ4+eH84sBv27ApPhnxDmQ/E2OAl652TPXnFUmoDXDfGizhczSYKD+eIqUsKar/y75OG
+         h+CCd28G+PktlTd60v2+WZ3c+vtAlJbXdBb8WCRQUOVkN36BacdU3XMLya09From/IPD
+         QZPhMHxJTKpqiW7/UJPqNml8YSM/Nwe1W+8YfrvdGGMUQJNH1jcjO9DLXTnTOL1dkQp0
+         0BSQ==
+X-Gm-Message-State: AOAM533M2YepV0X7jOY7bA+ORHmcHRSm7H8d1QjFO3DbtZtP2FmCRUap
+	R+TxP2dXCht1ZzU1Rn4xCYmj12CCaIckrc6k
+X-Google-Smtp-Source: ABdhPJx+dGCB5Wuq+4IRhfx1FPsG7SMl/CyZGsYTUvPGsDbtVXH2raDj8I9KusXJvxhAT7I/ejZXMg==
+X-Received: by 2002:a19:4843:: with SMTP id v64mr2309414lfa.178.1612983910472;
+        Wed, 10 Feb 2021 11:05:10 -0800 (PST)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id s16sm390025ljc.121.2021.02.10.11.05.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Feb 2021 11:05:09 -0800 (PST)
+From: Anders Roxell <anders.roxell@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, olof@lixom.net, arnd@arndb.de
-Subject: [GIT PULL] ARM: Visconti: device tree changes for 5.12
-X-TSB-HOP: ON
-Message-ID: <20210210173210.nnytfyrkkj6ylrtb@toshiba.co.jp>
+To: soc@kernel.org
+Cc: catalin.marinas@arm.com,
+	will@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux@armlinux.org.uk,
+	tsbogend@alpha.franken.de,
+	mpe@ellerman.id.au,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	chris@zankel.net,
+	jcmvbkbc@gmail.com,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-xtensa@linux-xtensa.org,
+	mst@redhat.com,
+	jasowang@redhat.com,
+	virtualization@lists.linux-foundation.org,
+	arnd@arndb.de,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH] arm64: defconfig: enable modern virtio pci device
+Date: Wed, 10 Feb 2021 20:05:06 +0100
+Message-Id: <20210210190506.1923684-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Disposition: inline
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210210_123230_949090_AAFB4EB6 
-X-CRM114-Status: UNSURE (   8.42  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: bgolaszewski@baylibre.com, linus.walleij@linaro.org,
- yuji2.ishikawa@toshiba.co.jp, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210210173210.l_rGLzoFDsm8DGZFP3D6KuaWoY2iRlT825Euf18xHHM@z>
+Content-Transfer-Encoding: 8bit
 
-Hi SoC team,
+Since patch ("virtio-pci: introduce modern device module") got added it
+is not possible to boot a defconfig kernel in qemu with a virtio pci
+device.  Add CONFIG_VIRTIO_PCI_MODERN=y fragment makes the kernel able
+to boot.
 
-This request includes the GPIO DT patch for the Visconti SoC.
-Please pull for v5.12 kernel cycle.
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ arch/arm/configs/multi_v7_defconfig         | 1 +
+ arch/arm64/configs/defconfig                | 1 +
+ arch/mips/configs/loongson3_defconfig       | 1 +
+ arch/mips/configs/malta_kvm_guest_defconfig | 1 +
+ arch/powerpc/configs/guest.config           | 1 +
+ arch/riscv/configs/defconfig                | 1 +
+ arch/riscv/configs/rv32_defconfig           | 1 +
+ arch/xtensa/configs/virt_defconfig          | 1 +
+ kernel/configs/kvm_guest.config             | 1 +
+ 9 files changed, 9 insertions(+)
 
-The following changes since commit 4fd18fc38757217c746aa063ba9e4729814dc737:
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index 3823da605430..02297ed49b20 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -972,6 +972,7 @@ CONFIG_DW_DMAC=y
+ CONFIG_RCAR_DMAC=y
+ CONFIG_RENESAS_USB_DMAC=m
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_PCI_MODERN=y
+ CONFIG_VIRTIO_MMIO=y
+ CONFIG_STAGING=y
+ CONFIG_MFD_NVEC=y
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 83c28da85834..8334e9cb4608 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -910,6 +910,7 @@ CONFIG_TI_K3_UDMA_GLUE_LAYER=y
+ CONFIG_VFIO=y
+ CONFIG_VFIO_PCI=y
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_PCI_MODERN=y
+ CONFIG_VIRTIO_BALLOON=y
+ CONFIG_VIRTIO_MMIO=y
+ CONFIG_XEN_GNTDEV=y
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index 0e79f81217bc..ac5f2dcbffb1 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -324,6 +324,7 @@ CONFIG_RTC_DRV_CMOS=y
+ CONFIG_RTC_DRV_GOLDFISH=y
+ CONFIG_DMADEVICES=y
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_PCI_MODERN=y
+ CONFIG_VIRTIO_BALLOON=m
+ CONFIG_VIRTIO_INPUT=y
+ CONFIG_VIRTIO_MMIO=y
+diff --git a/arch/mips/configs/malta_kvm_guest_defconfig b/arch/mips/configs/malta_kvm_guest_defconfig
+index 9185e0a0aa45..043633cdb406 100644
+--- a/arch/mips/configs/malta_kvm_guest_defconfig
++++ b/arch/mips/configs/malta_kvm_guest_defconfig
+@@ -332,6 +332,7 @@ CONFIG_RTC_DRV_CMOS=y
+ CONFIG_UIO=m
+ CONFIG_UIO_CIF=m
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_PCI_MODERN=y
+ CONFIG_VIRTIO_BALLOON=y
+ CONFIG_VIRTIO_MMIO=y
+ CONFIG_EXT2_FS=y
+diff --git a/arch/powerpc/configs/guest.config b/arch/powerpc/configs/guest.config
+index 209f58515d88..fbff632c8633 100644
+--- a/arch/powerpc/configs/guest.config
++++ b/arch/powerpc/configs/guest.config
+@@ -5,6 +5,7 @@ CONFIG_NET_FAILOVER=y
+ CONFIG_VIRTIO_CONSOLE=y
+ CONFIG_VIRTIO=y
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_PCI_MODERN=y
+ CONFIG_KVM_GUEST=y
+ CONFIG_EPAPR_PARAVIRT=y
+ CONFIG_VIRTIO_BALLOON=y
+diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+index 8c3d1e451703..b7fa7a1a0c6d 100644
+--- a/arch/riscv/configs/defconfig
++++ b/arch/riscv/configs/defconfig
+@@ -85,6 +85,7 @@ CONFIG_MMC=y
+ CONFIG_MMC_SPI=y
+ CONFIG_RTC_CLASS=y
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_PCI_MODERN=y
+ CONFIG_VIRTIO_BALLOON=y
+ CONFIG_VIRTIO_INPUT=y
+ CONFIG_VIRTIO_MMIO=y
+diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
+index 2c2cda6cc1c5..68296101fa06 100644
+--- a/arch/riscv/configs/rv32_defconfig
++++ b/arch/riscv/configs/rv32_defconfig
+@@ -84,6 +84,7 @@ CONFIG_MMC=y
+ CONFIG_MMC_SPI=y
+ CONFIG_RTC_CLASS=y
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_PCI_MODERN=y
+ CONFIG_VIRTIO_BALLOON=y
+ CONFIG_VIRTIO_INPUT=y
+ CONFIG_VIRTIO_MMIO=y
+diff --git a/arch/xtensa/configs/virt_defconfig b/arch/xtensa/configs/virt_defconfig
+index 6d1387dfa96f..7fad1c2454fd 100644
+--- a/arch/xtensa/configs/virt_defconfig
++++ b/arch/xtensa/configs/virt_defconfig
+@@ -74,6 +74,7 @@ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_LOGO=y
+ # CONFIG_USB_SUPPORT is not set
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_PCI_MODERN=y
+ CONFIG_VIRTIO_INPUT=y
+ # CONFIG_IOMMU_SUPPORT is not set
+ CONFIG_EXT3_FS=y
+diff --git a/kernel/configs/kvm_guest.config b/kernel/configs/kvm_guest.config
+index 208481d91090..8dea6df20006 100644
+--- a/kernel/configs/kvm_guest.config
++++ b/kernel/configs/kvm_guest.config
+@@ -22,6 +22,7 @@ CONFIG_S390_GUEST=y
+ CONFIG_VIRTIO=y
+ CONFIG_VIRTIO_MENU=y
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_PCI_MODERN=y
+ CONFIG_VIRTIO_BLK=y
+ CONFIG_VIRTIO_CONSOLE=y
+ CONFIG_VIRTIO_NET=y
+-- 
+2.30.0
 
-  arm64: dts: visconti: Add watchdog support for TMPV7708 SoC (2021-01-25 09:20:47 +0900)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/iwamatsu/linux-visconti.git dt-for-v5.12
-
-for you to fetch changes up to 0109a17564fc753d8769a1b8d76db3dba17b959b:
-
-  arm: dts: visconti: Add DT support for Toshiba Visconti5 GPIO driver (2021-02-11 02:01:16 +0900)
-
-----------------------------------------------------------------
-Nobuhiro Iwamatsu (1):
-      arm: dts: visconti: Add DT support for Toshiba Visconti5 GPIO driver
-
- arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts |  4 ++++
- arch/arm64/boot/dts/toshiba/tmpv7708.dtsi        | 11 +++++++++++
- 2 files changed, 15 insertions(+)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
