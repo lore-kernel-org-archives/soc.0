@@ -1,109 +1,124 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=8H8H=HM=gmail.com=joel.stan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1952AC433E0
-	for <linux-devicetree@archiver.kernel.org>; Wed, 10 Feb 2021 12:27:07 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C77E764E3B
-	for <linux-devicetree@archiver.kernel.org>; Wed, 10 Feb 2021 12:27:06 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbhBJM0y (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Wed, 10 Feb 2021 07:26:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbhBJMYy (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Wed, 10 Feb 2021 07:24:54 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49646C061756
-        for <devicetree@vger.kernel.org>; Wed, 10 Feb 2021 04:24:14 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id c5so1332461qth.2
-        for <devicetree@vger.kernel.org>; Wed, 10 Feb 2021 04:24:14 -0800 (PST)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C759C433DB
+	for <soc@archiver.kernel.org>; Wed, 10 Feb 2021 12:28:38 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 5933064E40; Wed, 10 Feb 2021 12:28:38 +0000 (UTC)
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id E7DD364E3B;
+	Wed, 10 Feb 2021 12:28:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E7DD364E3B
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=joel.stan@gmail.com
+Received: by mail-qk1-f182.google.com with SMTP id s77so1383313qke.4;
+        Wed, 10 Feb 2021 04:28:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LISi+Oc9GTZ5oHTm+YUr6VLWACgROuri9cGJPLpozgI=;
-        b=EW9Gs12uxdYBPULSVoXhyzBNha9rowbDBkjznSNaTFNaiTV56gKyrVP5MVjdlsaoBp
-         SynP8rRSvYLNNcbAltAfGysTSBI9lsE9Nl+/l90licN9Ut8RU5i2wAdZMLR/dr6Z+vjQ
-         ghbeYAQ2zgUg+JxD3Pys4HZTNJDGYOu1VEbns=
+        d=jms.id.au; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=vI8LTqZNRbWKdjOBJGdCR1A9O42gwiRAlVy4aB+gjt0=;
+        b=UWUHSPK2UgUR1Opbv/hP+s9OXD8+lmPO3KTBgt2KyxMCb5rUpC+M5kQXYKKTI6FpCu
+         duv1gcgxmy042asbgJC4Adw4BNM86J4Qrqe0iF0rSPMrgZ8Y8u4uwz7WPl/ihBw5Wuiq
+         VGaeK6v/PHrOZqy9raO2rEcAKY7kPqrPcaMFA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LISi+Oc9GTZ5oHTm+YUr6VLWACgROuri9cGJPLpozgI=;
-        b=VCp2reuG6OjlWL4xZmF+G6U/03gc3VEhNPKmbXsJRRyqhyE2nTYl+6scT2AXo+QIWN
-         rJp6BkYc1LJ/JIV2AWiR0gl1Hl5nOe0Uj2NHq6ZetPXa4thv3BwN+JJQx+nduAeYDS2b
-         9xynFVSurki/2DdpsGTjDqJonayTHFYMHa1XwzlVnnhYwQvV5PUV8EKpjVjLf+6Swh++
-         fgdGmnSJkXDv6Z2bV1i+3PBHirbI9w2LrguNKAPoiJpdKv07TL6Q6LVhDhg00ezVx7ap
-         XcWHt4N9/lTGXO3Su+5FUNQAOJXXFaExO2FnQ3LixuoR9gpFFy2nxuJvnMo93Hlx+nJ4
-         SW2A==
-X-Gm-Message-State: AOAM531At0c6TayggAArYSfdi/xO3zhrAnfU+pJOY0q5ae12ApuxqtUR
-        V9vTpOeyqhIKPOAxgBCTpQfwE7bS2vBN7MUYZch6fg==
-X-Google-Smtp-Source: ABdhPJxEfZ/WBSPKx1Tl0qBwSbg2IbGZqKcplsfGLH1uLBGHXIALkT/jB/LIe+Ss4Wptzn5AfhQO5Hz846E+WIqzIZk=
-X-Received: by 2002:a05:622a:4ce:: with SMTP id q14mr2498595qtx.132.1612959853524;
- Wed, 10 Feb 2021 04:24:13 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=vI8LTqZNRbWKdjOBJGdCR1A9O42gwiRAlVy4aB+gjt0=;
+        b=aMAEbUpyeTpmWUG8PIjAYntDGjMgKdpS6UVR6l748qzCpBia2Dc5r0NPUQvTcAFvfi
+         WXRycr+SRR4w9ik//UAMO0qFzSyOfFXk265x0+yINH13CuwmYu/Z2PrwvE+Gw9m9SwU1
+         DOoXDE8zy+wPUgwNVXcM3E/W4Fc8+USJ5suSjLSiqvsrUXhB6XgdekiqrQ1zZhHIXjc7
+         U7M8xxep9ehIyu1Y9mAikG/nTk9ay6AGkUu9veOCcKCa/eznvRsQ+kPPyAh3Lnz4Cxl0
+         4/in+YvGy9FHToVVvxZF9o081VHFU7/iYBIJnm4GV81lQf2R9KrAl666BRI1ScU3mGpd
+         PHuw==
+X-Gm-Message-State: AOAM530vb6+WNgscH8oXFQkx0NaQeAQjtLW9spKMi4WCKQG6Ok2Hptzr
+	2Z2R7wyYs6dzSdNq4e5effZkkyPyTfgeykocp2FprT0heYGmaQ==
+X-Google-Smtp-Source: ABdhPJxjIvSwIe2LcPNfvc5jPUF+6QlqW8H70/X76vGSIgNLwakHY/aQ7AyZjlqjYEgZjUXBB1iDcH472vf7tDszxzw=
+X-Received: by 2002:a37:ac10:: with SMTP id e16mr2984793qkm.465.1612960115018;
+ Wed, 10 Feb 2021 04:28:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20210204203951.52105-1-marcan@marcan.st> <20210204203951.52105-19-marcan@marcan.st>
- <20210208110441.25qc6yken4effd6c@kozik-lap> <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
- <YCOzLSqdsr83xf0b@atomide.com> <4481998a-27f6-951e-bb4f-a9d2b95f211f@marcan.st>
- <YCPE2lPpBlhCi7TH@atomide.com> <4dd911d8-ce84-bf4d-3aae-95ef321b4a97@marcan.st>
-In-Reply-To: <4dd911d8-ce84-bf4d-3aae-95ef321b4a97@marcan.st>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Wed, 10 Feb 2021 21:24:02 +0900
-Message-ID: <CAFr9PXkLRKHguszidJX2Qit0QUJ0QxFi3H=Wp2HDqpfJQYZEVw@mail.gmail.com>
-Subject: Re: [PATCH 18/18] arm64: apple: Add initial Mac Mini 2020 (M1) devicetree
-To:     Hector Martin <marcan@marcan.st>
+From: Joel Stanley <joel@jms.id.au>
+Date: Wed, 10 Feb 2021 12:28:23 +0000
+Message-ID: <CACPK8XfQgGch5bK3YD0La+CE2L5DxVa1MNw6m1fc40j0w7e9Tw@mail.gmail.com>
+Subject: [GIT PULL] ARM: aspeed: devicetree changes for 5.12
 List-Id: <soc.lore.kernel.org>
-Cc:     Tony Lindgren <tony@atomide.com>, Arnd Bergmann <arnd@kernel.org>,
-        DTML <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+To: SoC Team <soc@kernel.org>, arm <arm@kernel.org>
+Cc: Andrew Jeffery <andrew@aj.id.au>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	linux-aspeed <linux-aspeed@lists.ozlabs.org>
 Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20210210122402.8ib-x0DobomjSjE9qrFQffRZcYTKaogz9jMNvpal6PI@z>
 
-Hi Hector,
+Hello Soc maintainers,
 
-On Wed, 10 Feb 2021 at 20:49, Hector Martin <marcan@marcan.st> wrote:
+Here's my late pull request. I've deferred some LPC device tree
+bindings rework that need a closer review, so the contents of this
+pull request should be straightforward.
 
-> > Yeah, just don't use an imaginary dummy index for the reg. Use a real
-> > register offset from a clock controller instance base, and a register
-> > bit offset too if needed.
->
-> I mean for fixed input clocks without any particular numbering, or for
-> temporary fake clocks while we figure out the clock controller. Once a
-> real clock controller is involved, if there are hardware indexes
-> involved that are consistent then of course I'll use those in some way
-> that makes sense.
+The following changes since commit a74c6525f12f35a5af529ff057e63cfdc461704c:
 
-This exact problem exists for MStar/SigmaStar too.
-As it stands there is no documentation to show what the actual clock
-tree looks like so everything is guess and I need to come up with numbers.
-I'm interested to see what the solution to this is as it will come up again
-when mainlining chips without documentation.
+  ARM: dts: aspeed: ast2600evb: Add enable ehci and uhci (2021-02-10
+21:21:36 +1030)
 
+are available in the Git repository at:
 
-> The purpose of the clock in this particular case is just to make the
-> uart driver work, since it wants to know its reference clock; there is
-> work to be done here to figure out the real clock tree
+  git://git.kernel.org/pub/scm/linux/kernel/git/joel/aspeed.git
+tags/aspeed-5.12-devicetree
 
-FWIW arm/boot/dts/mstar-v7.dtsi has the same issue: Needs uart,
-has no uart clock. In that instance the uart clock setup by u-boot
-is passed to the uart driver as a property instead of creating a fake
-clock.
+for you to fetch changes up to a74c6525f12f35a5af529ff057e63cfdc461704c:
 
-Cheers,
+  ARM: dts: aspeed: ast2600evb: Add enable ehci and uhci (2021-02-10
+21:21:36 +1030)
 
-Daniel
+----------------------------------------------------------------
+ASPEED device tree updates for 5.12
+
+ - New machines
+
+  * Ampere Mt. Jade, an AST2500 BMC for an x86 server
+  * IBM Everest, an AST2600 BMC for a Power10 server
+  * Supermicro x11spi, an AST2500 BMC for an ARM server
+
+ - AST2600 eMMC clock phase configuration
+
+ - Proper clock support for LPC snoop
+
+ - Misc updates to ethanolx, mowgli, ast2600evb, g220a, and rainier
+
+----------------------------------------------------------------
+Andrew Jeffery (1):
+      ARM: dts: aspeed: rainier: Add eMMC clock phase compensation
+
+Ben Pai (1):
+      ARM: dts: aspeed: mowgli: Add i2c rtc device
+
+Eddie James (1):
+      ARM: dts: aspeed: Add Everest BMC machine
+
+George Liu (2):
+      ARM: dts: aspeed: inspur-fp5280g2: Add GPIO line names
+      ARM: dts: aspeed: inspur-fp5280g2: Add ipsps1 driver
+
+John Wang (2):
+      ARM: dts: aspeed: Add LCLK to lpc-snoop
+      ARM: dts: aspeed: g220a: Fix some gpio
+
+Konstantin Aladyshev (1):
+      ARM: dts: aspeed: amd-ethanolx: Enable secondary LPC snooping address
+
+Lotus Xu (1):
+      ARM: dts: aspeed: g220a: Enable ipmb
+
+Quan Nguyen (1):
+      ARM: dts: aspeed: Add device tree for Ampere's Mt. Jade BMC
+
+Ryan Chen (1):
+      ARM: dts: aspeed: ast2600evb: Add enable ehci and uhci
+
+Ryan Sie (1):
+      ARM: dts: aspeed: Add Supermicro x11spi BMC machine
