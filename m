@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08E06C433DB
-	for <soc@archiver.kernel.org>; Wed, 10 Feb 2021 17:19:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AAF6C433DB
+	for <soc@archiver.kernel.org>; Wed, 10 Feb 2021 17:19:28 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id CDC3264EDE; Wed, 10 Feb 2021 17:19:24 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3797164EE0;
-	Wed, 10 Feb 2021 17:19:22 +0000 (UTC)
+	id C5C7064EE3; Wed, 10 Feb 2021 17:19:27 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 251E964EE6;
+	Wed, 10 Feb 2021 17:19:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612977564;
-	bh=9KKk5ehnWrA7UtNnP6QtrHqBtIqhTlf0+HSb9xqWDLA=;
+	s=k20201202; t=1612977567;
+	bh=lUobpB2+foAOvaqKEW2gF9nAkNBxrYowZDqmODWTi1g=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lq3WLnscCy7gzzE/yXhENBoPzIqqeBP3kJAzS3XJKDGW0P/Jru+BYkyBhNWvwGoO4
-	 c6vbweRlhLJ/NHhCvlhl6nqvgsjGzxlYdoA71XG8m/N+ncah+wR+gQF6hZ1RFGiBUo
-	 teZZERvviZWMFT5q5hZD+Kx32h2Ot4e9bSzFsWqcjlrSL9vvnVVxpWL3Bk6vkuc+2V
-	 gqCgOoAsfh7+wd3Bg+9eETbh9zYe4DWumJ3XfdfFMO9oJZHv5wYSTG2NW9xGM4vgAj
-	 sw0xjDmJbsOopcsAeCAXtxudaCDvFWfv+Mm3dSpFDiOGY3VA9q84InEMqooNBfW8kj
-	 KmZ+xQ4n0eVEA==
+	b=bNyp/aE9Uq1MI4ITfsbc9wdBqJSOfZzgEe7G65BqZx7Q5Oih5fP+ykKuIA5zgHZco
+	 jIdDk40VeP4cuzZQzI+s/Jd8U+8loAlMpt0/fRDgjQNhhcmxuCa+Nl1VDb8Obf9S1g
+	 qA+hPt7RTVUZ/vStbLfAxr+y1hWcbmNQGxjZTS6OL8Epbautogd4DrnBD9gKZaZDBf
+	 FuR1u+0qLyAg15FcAJEHldHtWx8E6P2okRqTU5ag+vVHV6xGnqqUlErDaKDvsB64x6
+	 mUB6Rao+ssxBXIbZhL1WOG4PsQuTJs04hU70DKzFThPfISSqHViiF+dztRmriIEPK5
+	 +s3ktZ4n0cQ9w==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: "Paul J. Murphy" <paul.j.murphy@intel.com>,
@@ -38,9 +38,9 @@ To: "Paul J. Murphy" <paul.j.murphy@intel.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RFT 10/11] arm64: dts: intel: socfpga_agilex_socdk: align LED node names with dtschema
-Date: Wed, 10 Feb 2021 18:18:22 +0100
-Message-Id: <20210210171823.333802-10-krzk@kernel.org>
+Subject: [RFT 11/11] arm64: dts: intel: socfpga_agilex_socdk_nand: align LED node names with dtschema
+Date: Wed, 10 Feb 2021 18:18:23 +0100
+Message-Id: <20210210171823.333802-11-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210210171823.333802-1-krzk@kernel.org>
 References: <20210210171823.333802-1-krzk@kernel.org>
@@ -54,13 +54,13 @@ like:
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts | 6 +++---
+ arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-index f14a89ca8784..13718ab5ed91 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
+index 58a827a5e83f..cc2dcabf34e3 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
 @@ -20,17 +20,17 @@ chosen {
  
  	leds {
