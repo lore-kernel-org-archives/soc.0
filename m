@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3BC9C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 17:21:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EA02C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 17:21:15 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7041E64E9C
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 17:21:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7041E64E9C
+	by mail.kernel.org (Postfix) with ESMTPS id 2C1D564E9C
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 17:21:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2C1D564E9C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,31 +23,31 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=7xoJ/VBhMqMBdjyRrhEGkyjIYoYJUHgPaY8WGoBdsxo=; b=R78JfRVnLyFyc3MXnJVcxhSMJ
-	EwT2NKE5cVjFot/IXKcnbd+JcdeR7LM3lt5i0rEOsXpRRiR3LtOlSxwKVh+7LO7a5PrEIR3sFXx1Q
-	nn9dabYL5m0lCGkhgYqa2c24CNTDT3X2mInIl9Z6DG/Ct2BEIRPXQlN+FmhJZCcR41i+4aUKElE+q
-	HZ00Wij9h2PeleJfY+6mJS0fvWp3R64jNc7TgwKzU7rDWDh12hUJsSTJb4TAeRwPBcfid05Aom9tu
-	7RHgf4Y2spizzifA7AKyd2iwgIvy8zerSaSGdRMGEmu/I8F+hCuAHdChBMEsWn29LPjR14LPLJAsM
-	GEl45x0GQ==;
+	 bh=4k5V3RMKJ2kXzKWZJHU0UA+Qf+MbcsakNJtpUiKVOA4=; b=LmxUl/rsjF2iSOaXCZ9M4tEN3
+	PiogyTwo7hUIkNKF/oo/uMC2KLPS0GiVdAT4NFDquDT/Iw5cGJPpRYnlq5/xYZLhIfUPaNx22LBVn
+	l9WEeKXvqOQxEoz4biGBOK+Dz61gBg+D7Ga9zTZ7JpvDiQcxOXuXCocwzpHTvRFXzvNx6Oz2P7VZj
+	2v+WURJeGEVERY3GVX8Ervsj2WU1I2qfOBbmhLDf3MW8be8s7NDwc5Zojn+n20gRq4Tf37NZAgFqx
+	xfFGURDXQOkCoWlq5Ryn8ipYmTv66S8L1/v/8W0+u43iIvaFowy41eTyNDZvAYXzkinIwLk3qBbq/
+	XTu3S4NIQ==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l9t9X-0008JN-FE; Wed, 10 Feb 2021 17:19:47 +0000
+	id 1l9t9d-0008Lo-2x; Wed, 10 Feb 2021 17:19:53 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l9t98-000895-Hj
- for linux-arm-kernel@lists.infradead.org; Wed, 10 Feb 2021 17:19:23 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 39F5A64ECE;
- Wed, 10 Feb 2021 17:19:19 +0000 (UTC)
+ id 1l9t9B-0008AI-E7
+ for linux-arm-kernel@lists.infradead.org; Wed, 10 Feb 2021 17:19:26 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3797164EE0;
+ Wed, 10 Feb 2021 17:19:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612977561;
- bh=OkUEgbvb3q7v/xr6+fYyiQ2LjIwiJVB/Qs6LTMIkR08=;
+ s=k20201202; t=1612977564;
+ bh=9KKk5ehnWrA7UtNnP6QtrHqBtIqhTlf0+HSb9xqWDLA=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=sJn+VaIdQM+nODR4PWAIuaL2t/24mKKmhrbQDpUEM5GWaKycNlUUNdBdXauPeuiBN
- 1jiUSrTyeYGIMenYDxcVvGp3mhd2YF8gCT2LzgMx0X3pW6sj8YTL1yi3givOgHTEG0
- 0aVuGmdILauIGS4kF1yR8of3oGLIzT82WaT9jPo649qFFGeCVgByPrgixFMN43jrFg
- oyy13QOaTUgwUoze0tsInVWvEYE+fdcqPPqINxY2UBUYbmhpxQ8TmjUiakdv/Jz9/G
- L31bRcLaRhdodUuJzb3SyUle1iV7wfpUupXHE8MZ14njHiEW2e2CsNLeGH3+Phg4U0
- ReJb/NfNvRXrA==
+ b=lq3WLnscCy7gzzE/yXhENBoPzIqqeBP3kJAzS3XJKDGW0P/Jru+BYkyBhNWvwGoO4
+ c6vbweRlhLJ/NHhCvlhl6nqvgsjGzxlYdoA71XG8m/N+ncah+wR+gQF6hZ1RFGiBUo
+ teZZERvviZWMFT5q5hZD+Kx32h2Ot4e9bSzFsWqcjlrSL9vvnVVxpWL3Bk6vkuc+2V
+ gqCgOoAsfh7+wd3Bg+9eETbh9zYe4DWumJ3XfdfFMO9oJZHv5wYSTG2NW9xGM4vgAj
+ sw0xjDmJbsOopcsAeCAXtxudaCDvFWfv+Mm3dSpFDiOGY3VA9q84InEMqooNBfW8kj
+ KmZ+xQ4n0eVEA==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: "Paul J. Murphy" <paul.j.murphy@intel.com>,
@@ -57,17 +57,17 @@ To: "Paul J. Murphy" <paul.j.murphy@intel.com>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, arm@kernel.org, soc@kernel.org,
  Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Subject: [RFT 09/11] arm64: dts: intel: socfpga_agilex: align node names with
- dtschema
-Date: Wed, 10 Feb 2021 18:18:21 +0100
-Message-ID: <20210210171823.333802-9-krzk@kernel.org>
+Subject: [RFT 10/11] arm64: dts: intel: socfpga_agilex_socdk: align LED node
+ names with dtschema
+Date: Wed, 10 Feb 2021 18:18:22 +0100
+Message-ID: <20210210171823.333802-10-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210210171823.333802-1-krzk@kernel.org>
 References: <20210210171823.333802-1-krzk@kernel.org>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210210_121922_694404_A5715D67 
-X-CRM114-Status: GOOD (  10.89  )
+X-CRM114-CacheID: sfid-20210210_121925_647095_4D0C22D1 
+X-CRM114-Status: GOOD (  10.99  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,61 +84,43 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210210171821.edqVTTfG4EBbqfw0BTqAooR7NUL37BmnVfXaKhHIVUQ@z>
+Message-ID: <20210210171822.nI7_nMUwMLa5fnKUt3iMVG7rmZaYupceqfrMCNbvPzc@z>
 
-Align the NAND, GIC and UART node names with dtschema to silence
-dtbs_check warnings like:
+Align the LED node names with dtschema to silence dtbs_check warnings
+like:
 
-    arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dt.yaml:
-        intc@fffc1000: $nodename:0: 'intc@fffc1000' does not match '^interrupt-controller(@[0-9a-f,]+)*$'
-    arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dt.yaml:
-        serial0@ffc02000: $nodename:0: 'serial0@ffc02000' does not match '^serial(@[0-9a-f,]+)*$'
+    leds: 'hps0', 'hps1', 'hps2' do not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-index 8e6ba1c06938..860a80c4258f 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-@@ -78,7 +78,7 @@ psci {
- 		method = "smc";
- 	};
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+index f14a89ca8784..13718ab5ed91 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+@@ -20,17 +20,17 @@ chosen {
  
--	intc: intc@fffc1000 {
-+	intc: interrupt-controller@fffc1000 {
- 		compatible = "arm,gic-400", "arm,cortex-a15-gic";
- 		#interrupt-cells = <3>;
- 		interrupt-controller;
-@@ -316,7 +316,7 @@ mmc: dwmmc0@ff808000 {
- 			status = "disabled";
+ 	leds {
+ 		compatible = "gpio-leds";
+-		hps0 {
++		led0 {
+ 			label = "hps_led0";
+ 			gpios = <&portb 20 GPIO_ACTIVE_HIGH>;
  		};
  
--		nand: nand@ffb90000 {
-+		nand: nand-controller@ffb90000 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			compatible = "altr,socfpga-denali-nand";
-@@ -479,7 +479,7 @@ timer3: timer3@ffd00100 {
- 			clock-names = "timer";
+-		hps1 {
++		led1 {
+ 			label = "hps_led1";
+ 			gpios = <&portb 19 GPIO_ACTIVE_HIGH>;
  		};
  
--		uart0: serial0@ffc02000 {
-+		uart0: serial@ffc02000 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0xffc02000 0x100>;
- 			interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>;
-@@ -490,7 +490,7 @@ uart0: serial0@ffc02000 {
- 			clocks = <&clkmgr AGILEX_L4_SP_CLK>;
+-		hps2 {
++		led2 {
+ 			label = "hps_led2";
+ 			gpios = <&portb 21 GPIO_ACTIVE_HIGH>;
  		};
- 
--		uart1: serial1@ffc02100 {
-+		uart1: serial@ffc02100 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0xffc02100 0x100>;
- 			interrupts = <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.25.1
 
