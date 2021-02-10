@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E833C433E0
-	for <soc@archiver.kernel.org>; Wed, 10 Feb 2021 17:19:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08E06C433DB
+	for <soc@archiver.kernel.org>; Wed, 10 Feb 2021 17:19:25 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id DB1B164ED9; Wed, 10 Feb 2021 17:19:21 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 39F5A64ECE;
-	Wed, 10 Feb 2021 17:19:19 +0000 (UTC)
+	id CDC3264EDE; Wed, 10 Feb 2021 17:19:24 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3797164EE0;
+	Wed, 10 Feb 2021 17:19:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1612977561;
-	bh=OkUEgbvb3q7v/xr6+fYyiQ2LjIwiJVB/Qs6LTMIkR08=;
+	s=k20201202; t=1612977564;
+	bh=9KKk5ehnWrA7UtNnP6QtrHqBtIqhTlf0+HSb9xqWDLA=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sJn+VaIdQM+nODR4PWAIuaL2t/24mKKmhrbQDpUEM5GWaKycNlUUNdBdXauPeuiBN
-	 1jiUSrTyeYGIMenYDxcVvGp3mhd2YF8gCT2LzgMx0X3pW6sj8YTL1yi3givOgHTEG0
-	 0aVuGmdILauIGS4kF1yR8of3oGLIzT82WaT9jPo649qFFGeCVgByPrgixFMN43jrFg
-	 oyy13QOaTUgwUoze0tsInVWvEYE+fdcqPPqINxY2UBUYbmhpxQ8TmjUiakdv/Jz9/G
-	 L31bRcLaRhdodUuJzb3SyUle1iV7wfpUupXHE8MZ14njHiEW2e2CsNLeGH3+Phg4U0
-	 ReJb/NfNvRXrA==
+	b=lq3WLnscCy7gzzE/yXhENBoPzIqqeBP3kJAzS3XJKDGW0P/Jru+BYkyBhNWvwGoO4
+	 c6vbweRlhLJ/NHhCvlhl6nqvgsjGzxlYdoA71XG8m/N+ncah+wR+gQF6hZ1RFGiBUo
+	 teZZERvviZWMFT5q5hZD+Kx32h2Ot4e9bSzFsWqcjlrSL9vvnVVxpWL3Bk6vkuc+2V
+	 gqCgOoAsfh7+wd3Bg+9eETbh9zYe4DWumJ3XfdfFMO9oJZHv5wYSTG2NW9xGM4vgAj
+	 sw0xjDmJbsOopcsAeCAXtxudaCDvFWfv+Mm3dSpFDiOGY3VA9q84InEMqooNBfW8kj
+	 KmZ+xQ4n0eVEA==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: "Paul J. Murphy" <paul.j.murphy@intel.com>,
@@ -38,68 +38,50 @@ To: "Paul J. Murphy" <paul.j.murphy@intel.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RFT 09/11] arm64: dts: intel: socfpga_agilex: align node names with dtschema
-Date: Wed, 10 Feb 2021 18:18:21 +0100
-Message-Id: <20210210171823.333802-9-krzk@kernel.org>
+Subject: [RFT 10/11] arm64: dts: intel: socfpga_agilex_socdk: align LED node names with dtschema
+Date: Wed, 10 Feb 2021 18:18:22 +0100
+Message-Id: <20210210171823.333802-10-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210210171823.333802-1-krzk@kernel.org>
 References: <20210210171823.333802-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Align the NAND, GIC and UART node names with dtschema to silence
-dtbs_check warnings like:
+Align the LED node names with dtschema to silence dtbs_check warnings
+like:
 
-    arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dt.yaml:
-        intc@fffc1000: $nodename:0: 'intc@fffc1000' does not match '^interrupt-controller(@[0-9a-f,]+)*$'
-    arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dt.yaml:
-        serial0@ffc02000: $nodename:0: 'serial0@ffc02000' does not match '^serial(@[0-9a-f,]+)*$'
+    leds: 'hps0', 'hps1', 'hps2' do not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-index 8e6ba1c06938..860a80c4258f 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-@@ -78,7 +78,7 @@ psci {
- 		method = "smc";
- 	};
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+index f14a89ca8784..13718ab5ed91 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+@@ -20,17 +20,17 @@ chosen {
  
--	intc: intc@fffc1000 {
-+	intc: interrupt-controller@fffc1000 {
- 		compatible = "arm,gic-400", "arm,cortex-a15-gic";
- 		#interrupt-cells = <3>;
- 		interrupt-controller;
-@@ -316,7 +316,7 @@ mmc: dwmmc0@ff808000 {
- 			status = "disabled";
+ 	leds {
+ 		compatible = "gpio-leds";
+-		hps0 {
++		led0 {
+ 			label = "hps_led0";
+ 			gpios = <&portb 20 GPIO_ACTIVE_HIGH>;
  		};
  
--		nand: nand@ffb90000 {
-+		nand: nand-controller@ffb90000 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			compatible = "altr,socfpga-denali-nand";
-@@ -479,7 +479,7 @@ timer3: timer3@ffd00100 {
- 			clock-names = "timer";
+-		hps1 {
++		led1 {
+ 			label = "hps_led1";
+ 			gpios = <&portb 19 GPIO_ACTIVE_HIGH>;
  		};
  
--		uart0: serial0@ffc02000 {
-+		uart0: serial@ffc02000 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0xffc02000 0x100>;
- 			interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>;
-@@ -490,7 +490,7 @@ uart0: serial0@ffc02000 {
- 			clocks = <&clkmgr AGILEX_L4_SP_CLK>;
+-		hps2 {
++		led2 {
+ 			label = "hps_led2";
+ 			gpios = <&portb 21 GPIO_ACTIVE_HIGH>;
  		};
- 
--		uart1: serial1@ffc02100 {
-+		uart1: serial@ffc02100 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0xffc02100 0x100>;
- 			interrupts = <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.25.1
 
