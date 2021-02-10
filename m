@@ -1,4 +1,4 @@
-Return-Path: <SRS0=bbt8=HM=lists.infradead.org=linux-riscv-bounces+linux-riscv=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=mpRk=HM=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -7,37 +7,38 @@ X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E285FC433DB
-	for <linux-riscv@archiver.kernel.org>; Wed, 10 Feb 2021 19:05:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AC64C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 19:06:33 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7BEC464E32
-	for <linux-riscv@archiver.kernel.org>; Wed, 10 Feb 2021 19:05:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7BEC464E32
+	by mail.kernel.org (Postfix) with ESMTPS id 0A8F764E42
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 19:06:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0A8F764E42
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-riscv-bounces+linux-riscv=archiver.kernel.org@lists.infradead.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
 	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
 	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=Z0WxYMYRYsljvatrW44SZchcdm03J9I8v3x+zz0g+Mw=; b=Jg+pAwGt/70tIcnRXYGNImlntg
-	LQhtuGcrWk7JJhsnoY+dWNfNbTs4KMy1qfABG9u8iEjaZzwjUIWW0wbAdG8BP/rh3pg6MJSrx+Hsb
-	Cjq6yckVf78FGRLYD9KtPCM4cXeTfcemufnMn6OKEIEyr42qZgsZNqRq9naaf27HinQzERCqal/R6
-	Hn6nmJ3NPvebINudkHVtnZPOBYEFbHXThn8qqh1z7hIuB2U8+RahEMUzyqRFEegDO042ZJDAZ7tUw
-	HHCs8cEzTb/eHALKToz+3KSqSVXnkFcDuYy92bqjScX70tuYF4dIvA6f+NB6SD00GBWuHNv19wKOz
-	sVP7q0Aw==;
+	bh=4GNfFka1KgReM0us8I0m586WjlLu5Sw9/amEwqGa/+Y=; b=3QclJMVCgPyN76uKdVjUrG7lz1
+	tG+Xvai59o4zna/5w/AOsa5anOkEgVdeIEOjALj2dggzYn4oAmzPcQ+mOSUKyeF7CVyaJRa5X4w9e
+	TUMtyTKRYDRG2i/Kv5UFekewwZ5i9agSRKXko5XtF6vOkEpiMVBj7YCbW+Oyp+/5dg9V3FyU1JF4N
+	ks3RP6uRvSqqjGlSYxFaPELXMsGdZkHnuP8yNXRW0pPVkQMJ0vQUU3CYyHHfWvnhWjcLb7kce4cVM
+	SwIE3lZcLjwjKFD29SXsN/BKtviHYsyLePXxiC7/Zy56iUXucwUY8aJFoDkpJfGpk5GhjmQbwt7eT
+	OqeRJU/w==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l9une-0003nm-OW; Wed, 10 Feb 2021 19:05:18 +0000
-Received: from mail-lf1-x129.google.com ([2a00:1450:4864:20::129])
+	id 1l9und-0003nU-N2; Wed, 10 Feb 2021 19:05:17 +0000
+Received: from mail-lf1-x134.google.com ([2a00:1450:4864:20::134])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l9una-0003mc-1U
- for linux-riscv@lists.infradead.org; Wed, 10 Feb 2021 19:05:15 +0000
-Received: by mail-lf1-x129.google.com with SMTP id d24so4460975lfs.8
- for <linux-riscv@lists.infradead.org>; Wed, 10 Feb 2021 11:05:11 -0800 (PST)
+ id 1l9una-0003mb-0Y
+ for linux-arm-kernel@lists.infradead.org; Wed, 10 Feb 2021 19:05:15 +0000
+Received: by mail-lf1-x134.google.com with SMTP id h26so4503257lfm.1
+ for <linux-arm-kernel@lists.infradead.org>;
+ Wed, 10 Feb 2021 11:05:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
@@ -53,14 +54,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
  bh=AUZZJPcdsZ4nXWPrdOtnVl3JVvpEylf0g26f/cJWrEs=;
- b=dn/8w68Oj0o/mBPkdqfQvjNWQV6sQNNIUDtbQgEh160UlXmw/5SAr+3tTqRgDFK1x/
- WlRWBk+LDjrDQCJUXs/T6yQ3szGDx+DX8VKaqG3V5m2Vi8D2Aq1Vsya7ikGLNW/79fJ1
- UIcWJXi7AsD47u7O1Qd9x+UuDPSdZco2eiFQ0a15KSgxOPxhXzl/i7WBvaanjDImOgGf
- 4nd8uJ7j0sABLdB8iulTpUKYLwF9seIW8T5ivIm4YEvVIv2KX72IkG0eJ/W5iKcNoAmQ
- M/uzF6mffwiNqfhqQ/aRqWNKtqbegOZynwkozs/qGIDIsSmBkINn1cjB+hEre5a96g9g
- kKxA==
-X-Gm-Message-State: AOAM5323sB7CzC0HlvfB20phLQrch7bYaM3cxZCSWFzJpbHZRzEN9VPg
- ErpEVaZdw9sGOws0GRFrlDkddw==
+ b=jeby6SumuuR0Lags3btgWymbZYAIHKMZoTEhxX/cNfbgq7e4zR0Mo0vV9RjluZHdPd
+ 3/Ocnr4Z3jdZw/ubwgbGiMD3uSrxP/q/u5MF5MJtYUj5OLiTqMbinVwv19LM+4Sr2nj1
+ IipIcBPN9xmhUjRMAMUpCKvlxd7V4lu39jofpD+VcC2rsyZsAlmm77Ov5f+IhsU0BcnM
+ U45pU1Rrm6REVgEbw2wavZ7ll6HG+gIjuFKL9o/K/Ysy4ZUI45i/kFj5uBMgkBnkZGK4
+ bL3o8nkWgj4YLXtOhA95bUklEey+I3fek6sXqzW8h3qpLQqxwE4Yy1oCnEMNDcAOhCg6
+ eExA==
+X-Gm-Message-State: AOAM532tLWXjp6E5SFnBIlk6k5bhTQbZLYqHHCQXA8ng6rk6nASGuPEi
+ mrychSyqTsyomlnFsFqGgxPIww==
 X-Google-Smtp-Source: ABdhPJx+dGCB5Wuq+4IRhfx1FPsG7SMl/CyZGsYTUvPGsDbtVXH2raDj8I9KusXJvxhAT7I/ejZXMg==
 X-Received: by 2002:a19:4843:: with SMTP id v64mr2309414lfa.178.1612983910472; 
  Wed, 10 Feb 2021 11:05:10 -0800 (PST)
@@ -78,19 +79,19 @@ Message-ID: <20210210190506.1923684-1-anders.roxell@linaro.org>
 X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210210_140514_103750_C1B9BE66 
-X-CRM114-Status: GOOD (  11.22  )
-X-BeenThere: linux-riscv@lists.infradead.org
+X-CRM114-CacheID: sfid-20210210_140514_096750_80023E35 
+X-CRM114-Status: GOOD (  12.83  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
-List-Id: <linux-riscv.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-riscv>,
- <mailto:linux-riscv-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-riscv/>
-List-Post: <mailto:linux-riscv@lists.infradead.org>
-List-Help: <mailto:linux-riscv-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-riscv>,
- <mailto:linux-riscv-request@lists.infradead.org?subject=subscribe>
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 Cc: chris@zankel.net, tsbogend@alpha.franken.de,
  Anders Roxell <anders.roxell@linaro.org>, mst@redhat.com, arnd@arndb.de,
  linuxppc-dev@lists.ozlabs.org, catalin.marinas@arm.com,
@@ -102,9 +103,9 @@ Cc: chris@zankel.net, tsbogend@alpha.franken.de,
  linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Sender: "linux-riscv" <linux-riscv-bounces@lists.infradead.org>
-Errors-To: linux-riscv-bounces+linux-riscv=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210210190506.vrea_lFAjDQbkEPdXBa2tOKzT-jcpXRfHoeaYqkYCMU@z>
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210210190506.zLxMohCU8XttcqI-8bjSg4PlsJAOtUhETLox9qDZUkQ@z>
 
 Since patch ("virtio-pci: introduce modern device module") got added it
 is not possible to boot a defconfig kernel in qemu with a virtio pci
@@ -237,6 +238,6 @@ index 208481d91090..8dea6df20006 100644
 
 
 _______________________________________________
-linux-riscv mailing list
-linux-riscv@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-riscv
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
