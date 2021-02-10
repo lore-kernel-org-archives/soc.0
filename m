@@ -1,171 +1,98 @@
-Return-Path: <SRS0=mpRk=HM=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=G/+E=HM=marcan.st=marcan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D89DAC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 10:39:27 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5009C433E0
+	for <soc@archiver.kernel.org>; Wed, 10 Feb 2021 11:08:00 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A939F64E25; Wed, 10 Feb 2021 11:08:00 +0000 (UTC)
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7B9B664E0B
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Feb 2021 10:39:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7B9B664E0B
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=TxEQcElbk8XmOEeNGh0iWwVjr0+hUo+TOUMAqn9Q+Zg=; b=RubVVY7q7HGC6lkemAxmuNnVn
-	g9cvEqD8UoPxM6uKX3N7QVON1b3pi8Azok+QVp5SGsfKbIxALdwQV1rdvT4muDXhJInL3F7pkVoS9
-	xIFvC2k85V8/FC2lGH+qFnuoYniElmfIbEoHqH5a5w/xA+AS2n1YHERgn8TMYNtwDmBaoAouPgvut
-	dzoh2kkUfazWdvPPrqWEzbAPbC244RlUBYsiLerGLnXENsVm/9pzZ1bLFBPR31+5VfvA2kJr0/YfI
-	AibVRzYDiicHGr2uxuNYhOdCS1pJyYvmw+w2YGgKdaM4NjRj550hvnOsEgsSzTF1tfUSFkRHOBD7Y
-	IOOYn16yw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1l9mst-0006Ei-FW; Wed, 10 Feb 2021 10:38:11 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1l9msr-0006EH-3F
- for linux-arm-kernel@lists.infradead.org; Wed, 10 Feb 2021 10:38:10 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0B4E164E65
- for <linux-arm-kernel@lists.infradead.org>;
- Wed, 10 Feb 2021 10:38:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1612953488;
- bh=kJ5NEd1wPuralnoeS7NUAvqrMwfVJAwMjNF2FJererc=;
- h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
- b=pBTyWSHupyiUZFMQo2CZyfAOBxgyUkgDxDPBqQt4s25RdJO4rpKQgoN3MmaK9ymoZ
- Yjt/xmgHbQ1d4E1XWD5/NTA59MjfdUNsxqBF4VftfIkPwxMQ5ljlmEDlw42lwrtCYx
- ZBfRcO3I2cm2NyLdI4G+p4oWQlbYYiTrretVgY94e+U1jgg11I5kvUEm4K3KrfUm49
- zG+Iq6XubDL4CiGyWUtiQRYao+2NSXjeyd1AikGYm4HW6TbgonMcR+jWqjJLbS8Rit
- Df0dvDq3p1a+N6C9mwykgrmpyf4n6Z/u97GFuNTRvSt8XlbtkPl58xly1B4ETrzNan
- CRS09Io4cJj5w==
-Received: by mail-oi1-f174.google.com with SMTP id l3so1503654oii.2
- for <linux-arm-kernel@lists.infradead.org>;
- Wed, 10 Feb 2021 02:38:08 -0800 (PST)
-X-Gm-Message-State: AOAM533taS6MUPSzkEByt60wS6FuswlKYRi95ACf8GZwAAHpheO2HDnU
- za+ceuG4zd6cggehwArJDwBMEUWe2/vwqv+4Cgg=
-X-Google-Smtp-Source: ABdhPJxA9Kx3g91FSnt4s2DCj614mT+UHkeOW6LsxqLHSNEt+cQ0dS6n6u9RegDJMez08G5VyLFr54//U3mofZv7wt0=
-X-Received: by 2002:aca:d908:: with SMTP id q8mr1523595oig.67.1612953486990;
- Wed, 10 Feb 2021 02:38:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20210204052043.388621-1-bjorn.andersson@linaro.org>
- <161291108058.974605.13581246808545504549.b4-ty@arndb.de>
- <YCMaH1pYhU2VH8wp@builder.lan>
-In-Reply-To: <YCMaH1pYhU2VH8wp@builder.lan>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Wed, 10 Feb 2021 11:37:50 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1q2pXXWJqxtHKbFQvYmp8cmrHz-dnUo8b+8C6jP6uffw@mail.gmail.com>
-Message-ID: <CAK8P3a1q2pXXWJqxtHKbFQvYmp8cmrHz-dnUo8b+8C6jP6uffw@mail.gmail.com>
-Subject: Re: [GIT PULL] Qualcomm ARM64 DT updates for 5.12
-To: Bjorn Andersson <bjorn.andersson@linaro.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210210_053809_295609_60F3E9CC 
-X-CRM114-Status: GOOD (  24.70  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by mail.kernel.org (Postfix) with ESMTPS id 32E6264E2F;
+	Wed, 10 Feb 2021 11:07:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 32E6264E2F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=marcan.st
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=marcan@marcan.st
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: marcan@marcan.st)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id 3B9FC41FA3;
+	Wed, 10 Feb 2021 11:07:52 +0000 (UTC)
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Eric Biggers <ebiggers@google.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
- Konrad Dybcio <konrad.dybcio@somainline.org>,
- Akhil P Oommen <akhilpo@codeaurora.org>, Steev Klimaszewski <steev@kali.org>,
- Caleb Connolly <caleb@connolly.tech>,
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Matthias Kaehlcke <mka@chromium.org>,
- Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
- Danny Lin <danny@kdrag0n.dev>, arm-soc <arm@kernel.org>,
- Kevin Hilman <khilman@baylibre.com>, Andy Gross <agross@kernel.org>,
- Gustave Monce <gustave.monce@outlook.com>, Arnd Bergmann <arnd@arndb.de>,
- linux-arm-msm <linux-arm-msm@vger.kernel.org>,
- "J . R . Divya Antony" <d.antony.jr@gmail.com>,
- Stephen Boyd <swboyd@chromium.org>, Olof Johansson <olof@lixom.net>,
- SoC Team <soc@kernel.org>, Jonathan Albrieux <jonathan.albrieux@gmail.com>,
- Vincent Knecht <vincent.knecht@mailoo.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Stephan Gerhold <stephan@gerhold.net>,
- Douglas Anderson <dianders@chromium.org>, Robert Foss <robert.foss@linaro.org>,
- Vinod Koul <vkoul@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210210103750.ZnZkSOtoTZfI9EvEdUW1eeexlUk891ElcmhbfltL2Jc@z>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+ devicetree@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+ linux-kernel@vger.kernel.org, soc@kernel.org, robh+dt@kernel.org,
+ Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
+References: <20210204203951.52105-1-marcan@marcan.st>
+ <20210204203951.52105-19-marcan@marcan.st>
+ <20210208110441.25qc6yken4effd6c@kozik-lap>
+ <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
+ <YCOzLSqdsr83xf0b@atomide.com>
+From: Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 18/18] arm64: apple: Add initial Mac Mini 2020 (M1)
+ devicetree
+Message-ID: <4481998a-27f6-951e-bb4f-a9d2b95f211f@marcan.st>
+Date: Wed, 10 Feb 2021 20:07:49 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <YCOzLSqdsr83xf0b@atomide.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 10, 2021 at 12:26 AM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
-> On Tue 09 Feb 17:06 CST 2021, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > On Wed, 3 Feb 2021 23:20:43 -0600, Bjorn Andersson wrote:
-> > > The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-> > >
-> > >   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-> > >
-> > > are available in the Git repository at:
-> > >
-> > >   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.12
-> > >
-> > > [...]
-> >
-> > Merged into arm/dt, thanks!
-> >
-> > I noticed that this came fairly late in the cycle and has a fairly
-> > large amount of changes in it. It would be nice if you could try
-> > to send some of the DT contents a little earlier in the future to
-> > avoid risking them to miss out.
-> >
->
-> Yeah, sorry about it showing up late.
->
-> I'm trying to balance it because I do feel frustration from the
-> contributors that the Qualcomm branches are "locked down" for 4-5 weeks
-> per cycle.
->
-> > It could also help to split up the largest branches to make them a
-> > little smaller, e.g. by having one branch just for new SoC and/or
-> > new board support, and another branch for changes to existing machines.
-> >
->
-> It's fairly common that things such as PMICs are reused between new and
-> old platforms, so I fear that such a split will cause unnecessary
-> conflicts between my trees.
->
-> Perhaps I should just send multiple pull requests throughout the cycle?
+On 10/02/2021 19.19, Tony Lindgren wrote:
+> * Hector Martin 'marcan' <marcan@marcan.st> [210208 12:05]:
+>> On 08/02/2021 20.04, Krzysztof Kozlowski wrote:
+> ...
+> 
+>>>> +	clk24: clk24 {
+>>>
+>>> Just "clock". Node names should be generic.
+>>
+>> Really? Almost every other device device tree uses unique clock node names.
+> 
+> Yeah please just use generic node name "clock". FYI, we're still hurting
+> because of this for the TI clock node names years after because the drivers
+> got a chance to rely on the clock node name..
+> 
+> Using "clock" means your clock driver code won't get a chance to wrongly
+> use the node name and you avoid similar issues.
 
-That's what most others do that have a lot of contents, that definitely
-works for me. Just use whichever way works best for your workflow.
+That means it'll end up like this (so that we can have more than one 
+fixed-clock):
 
-If you have the usual ~200 changesets for a merge window, it would be
-great to have the majority of those some time between rc3 and rc5,
-with anything that you are not comfortable with committing early
-in one of the later pull requests.
+clocks {
+     #address-cells = <1>;
+     #size-cells = <0>;
 
-I don't mind getting a last-minute fixup or revert of an earlier change
-when you have sent something earlier that looked good but it turned
-out to be incorrect during testing.
+     clk123: clock@0 {
+         ...
+         reg = <0>
+     }
 
-        Arnd
+     clk456: clock@1 {
+         ...
+         reg = <1>
+     }
+}
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Correct?
+
+Incidentally, there is just one example in the kernel tree of doing this 
+right (in arch/arm/boot/dts/imx6qdl-tx6.dtsi). All the others that use 
+non-mmio clocks called `clock`, including the various tegra devicetrees, 
+violate the DT spec by not including a dummy reg property matching the 
+unit-address.
+
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
