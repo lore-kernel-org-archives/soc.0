@@ -1,56 +1,40 @@
-Return-Path: <SRS0=/n+n=HM=gmail.com=k.kozlowski.k@kernel.org>
+Return-Path: <SRS0=G/+E=HM=marcan.st=marcan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=BAYES_00,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C05E2C433E0
-	for <soc@archiver.kernel.org>; Wed, 10 Feb 2021 12:55:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E962C433E0
+	for <soc@archiver.kernel.org>; Wed, 10 Feb 2021 12:56:17 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 88F6464E45; Wed, 10 Feb 2021 12:55:52 +0000 (UTC)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 5820F64E65; Wed, 10 Feb 2021 12:56:17 +0000 (UTC)
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0F89664DF2;
-	Wed, 10 Feb 2021 12:55:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0F89664DF2
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=k.kozlowski.k@gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id t142so1752180wmt.1;
-        Wed, 10 Feb 2021 04:55:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=klyvuCb2s80xxmYVdUoIwTBI4ZLcJg7EZBGPH+l10fY=;
-        b=nK3X6vpcBwdFmMfg+/6NQVTFatvmW8Ngixt5elst8dY+tiqzZ3xwoDVRIJsCjoSQ9d
-         gl/DxfJMfOIMY0o++upMyA9Dmm5fMusY4GPQsO5wCmKPw9K+HEmrcQo2HJTnTKe9U5Yn
-         cOkw5nryGCMzINFpCx6O90WelKKCPEqHUf1IYSy9kFGRp0jDKQoPKWvKgMktaM2mJG4t
-         kQr1nZZM7FNRBHkDT+GIEQ2/4j4H/RXVBrj7GxS7JCSLf3zynKOotR50HcNR41VM0ZHg
-         tCRmKY2lmBgLmAhKiqZjkMe+HrGB1nJDy0iErOgz+5+EAlb+W8zEqHay0YILhbhjTMql
-         fznw==
-X-Gm-Message-State: AOAM5311ZX3Ft/Rbu+3EW7oxnTjnaVIXNBNxSyUQn421tJSeR5z2IysO
-	BhiewvejTJiyZLfOavoiWlc=
-X-Google-Smtp-Source: ABdhPJxEJMv2xTHkhA5hRM6aKJJZhYfdlEBUHOKcxJzOPO3sXDi3h9DHp9MZv//bMkX9mQOgPEc9bA==
-X-Received: by 2002:a1c:3b8a:: with SMTP id i132mr2869183wma.26.1612961750425;
-        Wed, 10 Feb 2021 04:55:50 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id 64sm3601054wrc.50.2021.02.10.04.55.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Feb 2021 04:55:49 -0800 (PST)
-Date: Wed, 10 Feb 2021 13:55:48 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Tony Lindgren <tony@atomide.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Hector Martin <marcan@marcan.st>, Arnd Bergmann <arnd@kernel.org>,
-	devicetree@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-	linux-kernel@vger.kernel.org, soc@kernel.org, robh+dt@kernel.org,
-	Olof Johansson <olof@lixom.net>,
-	linux-arm-kernel@lists.infradead.org
+	by mail.kernel.org (Postfix) with ESMTPS id A372C64E32;
+	Wed, 10 Feb 2021 12:56:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A372C64E32
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=marcan.st
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=marcan@marcan.st
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: marcan@marcan.st)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id B7B3541FA3;
+	Wed, 10 Feb 2021 12:56:10 +0000 (UTC)
 Subject: Re: [PATCH 18/18] arm64: apple: Add initial Mac Mini 2020 (M1)
  devicetree
-Message-ID: <20210210125548.sdeadc4ncoxu3ikj@kozik-lap>
+To: Daniel Palmer <daniel@0x0f.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Tony Lindgren <tony@atomide.com>, Arnd Bergmann <arnd@kernel.org>,
+ DTML <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>, SoC Team <soc@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>, Olof Johansson <olof@lixom.net>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
 References: <20210204203951.52105-1-marcan@marcan.st>
  <20210204203951.52105-19-marcan@marcan.st>
  <20210208110441.25qc6yken4effd6c@kozik-lap>
@@ -58,75 +42,43 @@ References: <20210204203951.52105-1-marcan@marcan.st>
  <YCOzLSqdsr83xf0b@atomide.com>
  <4481998a-27f6-951e-bb4f-a9d2b95f211f@marcan.st>
  <YCPE2lPpBlhCi7TH@atomide.com>
+ <4dd911d8-ce84-bf4d-3aae-95ef321b4a97@marcan.st>
+ <CAFr9PXkLRKHguszidJX2Qit0QUJ0QxFi3H=Wp2HDqpfJQYZEVw@mail.gmail.com>
+From: Hector Martin <marcan@marcan.st>
+Message-ID: <3d61ca6d-98a1-b78a-07da-cd20834de5a1@marcan.st>
+Date: Wed, 10 Feb 2021 21:56:08 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YCPE2lPpBlhCi7TH@atomide.com>
+In-Reply-To: <CAFr9PXkLRKHguszidJX2Qit0QUJ0QxFi3H=Wp2HDqpfJQYZEVw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 10, 2021 at 01:34:50PM +0200, Tony Lindgren wrote:
-> * Hector Martin <marcan@marcan.st> [210210 11:14]:
-> > On 10/02/2021 19.19, Tony Lindgren wrote:
-> > > * Hector Martin 'marcan' <marcan@marcan.st> [210208 12:05]:
-> > > > On 08/02/2021 20.04, Krzysztof Kozlowski wrote:
-> > > ...
-> > > 
-> > > > > > +	clk24: clk24 {
-> > > > > 
-> > > > > Just "clock". Node names should be generic.
-> > > > 
-> > > > Really? Almost every other device device tree uses unique clock node names.
-> > > 
-> > > Yeah please just use generic node name "clock". FYI, we're still hurting
-> > > because of this for the TI clock node names years after because the drivers
-> > > got a chance to rely on the clock node name..
-> > > 
-> > > Using "clock" means your clock driver code won't get a chance to wrongly
-> > > use the node name and you avoid similar issues.
-> > 
-> > That means it'll end up like this (so that we can have more than one
-> > fixed-clock):
-> > 
-> > clocks {
-> >     #address-cells = <1>;
-> >     #size-cells = <0>;
-> > 
-> >     clk123: clock@0 {
-> >         ...
-> >         reg = <0>
-> >     }
-> > 
-> >     clk456: clock@1 {
-> >         ...
-> >         reg = <1>
-> >     }
-> > }
-> > 
-> > Correct?
+On 10/02/2021 21.24, Daniel Palmer wrote:
+> This exact problem exists for MStar/SigmaStar too.
+> As it stands there is no documentation to show what the actual clock
+> tree looks like so everything is guess and I need to come up with numbers.
+> I'm interested to see what the solution to this is as it will come up again
+> when mainlining chips without documentation.
+
+So far the answer seems to be to take the best guess available, and then 
+we get to fix it until we have real users and breaking DT compatibility 
+is no longer an option... :-)
+
+>> The purpose of the clock in this particular case is just to make the
+>> uart driver work, since it wants to know its reference clock; there is
+>> work to be done here to figure out the real clock tree
 > 
-> Yeah, just don't use an imaginary dummy index for the reg. Use a real
-> register offset from a clock controller instance base, and a register
-> bit offset too if needed.
+> FWIW arm/boot/dts/mstar-v7.dtsi has the same issue: Needs uart,
+> has no uart clock. In that instance the uart clock setup by u-boot
+> is passed to the uart driver as a property instead of creating a fake
+> clock.
 
-No, there is no need for fake "clocks" node with fake addresses. If you
-have multiple clocks, the rules are the same as for other similar cases,
-e.g. leds:
+In our case it's an existing driver (with patches) that is already 
+integrated with the clock infrastructure, so it makes sense to use a 
+fixed-clock instead of just an ad-hoc property.
 
-{
-    clock-0 {
-       ...
-    };
-
-    clock-1 {
-        ..
-    };
-
-    soc@0 {
-    };
-}
-
-This should not generate any dtc W=1 warnings and work with dtschema
-(you need to check for both).
-
-Best regards,
-Krzysztof
-
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
