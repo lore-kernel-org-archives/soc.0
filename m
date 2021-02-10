@@ -1,145 +1,63 @@
-Return-Path: <linux-arm-msm-owner@kernel.org>
+Return-Path: <SRS0=wqEb=HM=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEB32C433DB
-	for <linux-arm-msm@archiver.kernel.org>; Tue,  9 Feb 2021 23:35:19 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 940D864E0D
-	for <linux-arm-msm@archiver.kernel.org>; Tue,  9 Feb 2021 23:35:19 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234476AbhBIXdw (ORCPT
-        <rfc822;linux-arm-msm@archiver.kernel.org>);
-        Tue, 9 Feb 2021 18:33:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234386AbhBIX2W (ORCPT
-        <rfc822;linux-arm-msm@vger.kernel.org>);
-        Tue, 9 Feb 2021 18:28:22 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6E6C06121D
-        for <linux-arm-msm@vger.kernel.org>; Tue,  9 Feb 2021 15:26:26 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id s107so119760otb.8
-        for <linux-arm-msm@vger.kernel.org>; Tue, 09 Feb 2021 15:26:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IwjXZ3dkAIZUownYRrDsDZnRxOFipZhcPjf1znpQlRU=;
-        b=q91+zAClRM7pyaCnLFx3MyKyH7OSxHVCSJpb77hP1+0SiR/fqGac79HrjLCaptgY6+
-         Lf27lzi31zn+AJXdqJYupbclg/9XBIdSU0quV1yfIw1kKidFcATuGNt50YwFLkCR9Sxe
-         BTaX1H7MWwVwg71ebPrwXplIv0VvsW1NztckZJign/UjFLsLvxZ0ylNHYQKApzED5RkY
-         bCCm+LpNvgdzyq3tECg/zZJzC9K6y8se77udepdOroQ5Efyhi2WTrLtJaocE2nQtKnsv
-         zQITzIU3rPEiEOva3hZ4M8wNFLh/qxx2K8hEDQqKsmZBK91un4Xxpr/0TzXFIswzAfAl
-         lK6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IwjXZ3dkAIZUownYRrDsDZnRxOFipZhcPjf1znpQlRU=;
-        b=bfvQj8DIqTl9e/aSSrmxw/mpTVCJ3VxRPn5taSHUqAk3LVw0dYECiJRN88cyL1SQPv
-         LuKfW848AkaUhJa1FZCu3uV0AASjdIAmTrZluhtZ9q3cYW9H5L2hPGh+Isxzk2g4f8hV
-         hFbPymQueEwMq3fPSRdrI5KZlJnfoReqHOSBY7UmUjKtE8ltL9VuqvORNgY/s583jA8f
-         uuNXyWynbfwJlipLPCXoDu9N/yOM9uhModTDQnIJtR9BiPI6Qg97DHTraeVO5vOcKpBI
-         n6HKBA6EcNowOH+2+QA7Xgp4IZSs24yrYuxzEfBBcl2M3eRmaIw+0J070XXcWsoFQfnM
-         Dq5g==
-X-Gm-Message-State: AOAM532/4va8IzdVbqIBfZqoHD5A7cem1SnSz7DQqriCsMNDqoQlcolB
-        OvS0l88gZOBFEmT2JtqCalTD3Q==
-X-Google-Smtp-Source: ABdhPJwUBm3MgKUTm/uqt3L5ze0JESuAsqG9gWJMpqLjxyJ5YKUQ/ezM6jHaJ8b0gtPMlK1L69wtlA==
-X-Received: by 2002:a05:6830:2106:: with SMTP id i6mr62990otc.260.1612913186087;
-        Tue, 09 Feb 2021 15:26:26 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id y65sm50603oie.50.2021.02.09.15.26.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Feb 2021 15:26:25 -0800 (PST)
-Date:   Tue, 9 Feb 2021 17:26:23 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Arnd Bergmann <arnd@kernel.org>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3BE8C433E0
+	for <soc@archiver.kernel.org>; Wed, 10 Feb 2021 10:19:30 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id BF71E64E37; Wed, 10 Feb 2021 10:19:30 +0000 (UTC)
+Received: from muru.com (muru.com [72.249.23.125])
+	by mail.kernel.org (Postfix) with ESMTP id F2CF964E28;
+	Wed, 10 Feb 2021 10:19:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F2CF964E28
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=tony@atomide.com
+Received: from atomide.com (localhost [127.0.0.1])
+	by muru.com (Postfix) with ESMTPS id 302D380EB;
+	Wed, 10 Feb 2021 10:19:46 +0000 (UTC)
+Date: Wed, 10 Feb 2021 12:19:25 +0200
+From: Tony Lindgren <tony@atomide.com>
+To: Hector Martin 'marcan' <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
-Cc:     arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Andy Gross <agross@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Gustave Monce <gustave.monce@outlook.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Akhil P Oommen <akhilpo@codeaurora.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Danny Lin <danny@kdrag0n.dev>,
-        "J . R . Divya Antony" <d.antony.jr@gmail.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Jonathan Albrieux <jonathan.albrieux@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Vinod Koul <vkoul@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Caleb Connolly <caleb@connolly.tech>
-Subject: Re: [GIT PULL] Qualcomm ARM64 DT updates for 5.12
-Message-ID: <YCMaH1pYhU2VH8wp@builder.lan>
-References: <20210204052043.388621-1-bjorn.andersson@linaro.org>
- <161291108058.974605.13581246808545504549.b4-ty@arndb.de>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+	devicetree@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+	linux-kernel@vger.kernel.org, soc@kernel.org, robh+dt@kernel.org,
+	Olof Johansson <olof@lixom.net>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 18/18] arm64: apple: Add initial Mac Mini 2020 (M1)
+ devicetree
+Message-ID: <YCOzLSqdsr83xf0b@atomide.com>
+References: <20210204203951.52105-1-marcan@marcan.st>
+ <20210204203951.52105-19-marcan@marcan.st>
+ <20210208110441.25qc6yken4effd6c@kozik-lap>
+ <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <161291108058.974605.13581246808545504549.b4-ty@arndb.de>
-Precedence: bulk
-List-ID: <linux-arm-msm.vger.kernel.org>
-X-Mailing-List: linux-arm-msm@vger.kernel.org
-Message-ID: <20210209232623.VGKuvSC5WETgnTFHMthWBcdCFx-tnpEFKifZAvKhLgY@z>
+In-Reply-To: <cd67b2ce-9676-31b4-85f7-de1ec9b2bf72@marcan.st>
 
-On Tue 09 Feb 17:06 CST 2021, Arnd Bergmann wrote:
+* Hector Martin 'marcan' <marcan@marcan.st> [210208 12:05]:
+> On 08/02/2021 20.04, Krzysztof Kozlowski wrote:
+...
 
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> On Wed, 3 Feb 2021 23:20:43 -0600, Bjorn Andersson wrote:
-> > The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+> > > +	clk24: clk24 {
 > > 
-> >   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.12
-> > 
-> > [...]
+> > Just "clock". Node names should be generic.
 > 
-> Merged into arm/dt, thanks!
-> 
-> I noticed that this came fairly late in the cycle and has a fairly
-> large amount of changes in it. It would be nice if you could try
-> to send some of the DT contents a little earlier in the future to
-> avoid risking them to miss out.
-> 
+> Really? Almost every other device device tree uses unique clock node names.
 
-Yeah, sorry about it showing up late.
+Yeah please just use generic node name "clock". FYI, we're still hurting
+because of this for the TI clock node names years after because the drivers
+got a chance to rely on the clock node name..
 
-I'm trying to balance it because I do feel frustration from the
-contributors that the Qualcomm branches are "locked down" for 4-5 weeks
-per cycle.
-
-> It could also help to split up the largest branches to make them a
-> little smaller, e.g. by having one branch just for new SoC and/or
-> new board support, and another branch for changes to existing machines.
-> 
-
-It's fairly common that things such as PMICs are reused between new and
-old platforms, so I fear that such a split will cause unnecessary
-conflicts between my trees.
-
-Perhaps I should just send multiple pull requests throughout the cycle?
+Using "clock" means your clock driver code won't get a chance to wrongly
+use the node name and you avoid similar issues.
 
 Regards,
-Bjorn
+
+Tony
+
