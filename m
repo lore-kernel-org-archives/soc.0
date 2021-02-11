@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D91A1C43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F9DDC433DB
 	for <soc@archiver.kernel.org>; Thu, 11 Feb 2021 15:20:08 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 7B1E164F52; Thu, 11 Feb 2021 15:20:08 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 61F1464EF7;
+	id 704A364F51; Thu, 11 Feb 2021 15:20:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 564C764E87;
 	Thu, 11 Feb 2021 15:20:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1613056808;
-	bh=uV72avYEC9rQ3F0SWnWpLYAaW2aqJBFKNzokxk4+5c8=;
+	bh=JW2zPGDom59ywmagrMxRjp8+JjVMsEG6YvF6aL1WDgg=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=O6gElMfGbQf3uqGkMKRWuTj1tFa6hEnlXEH1MeRTOOot5s7lm5JawIgpINgfJVJG8
-	 LWB33I2ZxeDKQpb9Uc0VhTgZghLJvqSwhFAWtL/LX5ZD17DHTNnbheR/69KctpEh77
-	 fnCCXDUKXTZ2xpJ04zyl60YfWqkQnUJp3CRNBmOKqbx6pBrQmkqaHnlsExrf2Zj26+
-	 be6os7znSmZwkh93MAy7PN9732UGU/mMauQynSBsqqpUnkE1/2psxL+WqjYbR1x3Tl
-	 5m/WymDV0EiGgRgtqNq7M2obz9Wx1Z0sSCiSxX1OQj6cSUObD1Ro7SfEVA/0/aeGy8
-	 zInAoThVobKxQ==
+	b=eeJ485DtB11kDBW/Ft/4kpeO7fVV0qWuWEfT00lp16cpoRXjea4Ume4M7PnRF753e
+	 NZjKWF18e7t0Uyd7pxS5EYRUOzRgy4MuIf4qHrTJC1gdqeJd6rrZ879gcSc/EtH1MR
+	 p9Ux1Q8P3aw6Nw8zWJ3PeTl8Ju5GOXD8D86iq4ODSu53UpNHpQqCWVL4ze2JEQTxE7
+	 Dd4MbrEcPC5sWVnGZYXwbVc2tdxcGolXSRaVu9V/i04Gx5cws+BevLaEyiYRCHxhy+
+	 JVgKOBnMtMHJpL55/gPmJ/kgkiE5fRilqfevhaJEbGTKDMuGztfvSen2Bn0sck3q1q
+	 +eqnOYlsjbBew==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 5B64660A2B;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 468E260A29;
 	Thu, 11 Feb 2021 15:20:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: Visconti: device tree changes for 5.12
+Subject: Re: [GIT PULL] ARM: aspeed: devicetree changes for 5.12
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <161305680837.9082.11776328608756866532.git-patchwork-notify@kernel.org>
+ <161305680828.9082.5881568314308527931.git-patchwork-notify@kernel.org>
 Date: Thu, 11 Feb 2021 15:20:08 +0000
-References: <20210210173210.nnytfyrkkj6ylrtb@toshiba.co.jp>
-In-Reply-To: <20210210173210.nnytfyrkkj6ylrtb@toshiba.co.jp>
-To: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+References: <CACPK8XfQgGch5bK3YD0La+CE2L5DxVa1MNw6m1fc40j0w7e9Tw@mail.gmail.com>
+In-Reply-To: <CACPK8XfQgGch5bK3YD0La+CE2L5DxVa1MNw6m1fc40j0w7e9Tw@mail.gmail.com>
+To: Joel Stanley <joel@jms.id.au>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -43,19 +43,20 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Thu, 11 Feb 2021 02:32:10 +0900 you wrote:
-> Hi SoC team,
+On Wed, 10 Feb 2021 12:28:23 +0000 you wrote:
+> Hello Soc maintainers,
 > 
-> This request includes the GPIO DT patch for the Visconti SoC.
-> Please pull for v5.12 kernel cycle.
+> Here's my late pull request. I've deferred some LPC device tree
+> bindings rework that need a closer review, so the contents of this
+> pull request should be straightforward.
 > 
-> The following changes since commit 4fd18fc38757217c746aa063ba9e4729814dc737:
+> The following changes since commit a74c6525f12f35a5af529ff057e63cfdc461704c:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: Visconti: device tree changes for 5.12
-    https://git.kernel.org/soc/soc/c/a36c9ff6a2df
+  - [GIT,PULL] ARM: aspeed: devicetree changes for 5.12
+    https://git.kernel.org/soc/soc/c/52ded9eaa25a
 
 You are awesome, thank you!
 --
