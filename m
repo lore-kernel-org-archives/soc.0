@@ -6,14 +6,14 @@ X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30896C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Feb 2021 15:02:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66764C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Feb 2021 15:02:29 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DAC8864DD8
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Feb 2021 15:02:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DAC8864DD8
+	by mail.kernel.org (Postfix) with ESMTPS id 225D761490
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Feb 2021 15:02:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 225D761490
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,45 +22,47 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=VLAHtl/HGJPQFsCndymwjwBTvSkNEOTb8fEJO2vVykI=; b=bI5j0mcrCasM+To5a8bmBWett
-	pr7Htc3mvI+b7QrqXDoAg6kYDzROcxujJNW7l8kCvQ16mcMgSALUamUoflXSXxvKdTGz8uPzRX8s5
-	zmSWpYl8w+2Pt2fsFbP7EKnJe1md9hUtIyViykqKaSA0oKnDHisKs36UrezHbXpOyvPMy95THkOU9
-	c7eenhYju1j48CIvE1klxb58QJWtzTLVc9s0jyJYs5GBGTmLFOAXcPW2wB+rWz0nXi27HdwXFYupm
-	GrfUXpO7TAUP4HsclWArl+9DWTIVgw0I7DB2wKXZuOtWUPC24LxoGYz8Ztfkc1rKhIQ5Ws2wNBFUh
-	RfL1vWu6A==;
+	 bh=ZjHeTzABebu+PGc/nV83hHin2lC9/r1Z9nJ5ES0NFhU=; b=slnv1Ii8HwzWKgUx+Fr29mfRR
+	k3ZCPs65qr7EUXtxR/+AwEyFnC90J95Obiz8NLcUvqH+ov58QjXBA4WlSMQqe5gCsCMXL8hLNiTsU
+	KoNBK4Bl5uLXwGK2WH2n6N1yIbdVf+/CvlU+B/MDZA/CrFGRsZQpINLGYEgMs6cOsZGXLngAzV2Mz
+	qXJlktc4uPt8pPm/p/693dlgWP3sayODNI3T3LrZ9ym9BxVheF7dAHNCFiTbLMYEcWsXISpD/G2ZK
+	i8RXwtTKlQD5coCEdwJi3+OklTr0pDksaGnmZgbgxazxyh6ec1maAfG4j+fJ0zXUzkCV5YqeIED1Y
+	ARhZwDrOA==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1lADSu-0005I3-2F; Thu, 11 Feb 2021 15:01:08 +0000
+	id 1lADSx-0005Ie-C4; Thu, 11 Feb 2021 15:01:11 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1lADSs-0005He-KH
- for linux-arm-kernel@lists.infradead.org; Thu, 11 Feb 2021 15:01:07 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3989D64E7E;
- Thu, 11 Feb 2021 15:01:04 +0000 (UTC)
+ id 1lADSu-0005IA-UZ
+ for linux-arm-kernel@lists.infradead.org; Thu, 11 Feb 2021 15:01:09 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C24D664E8B;
+ Thu, 11 Feb 2021 15:01:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1613055665;
- bh=X9UqADU4J8H3kIOyPuFf7eWbCck6q4pQRHXpDS4jmlA=;
+ s=k20201202; t=1613055668;
+ bh=rqDDjK79OBgoldPyoYveemxer73pj+/BzsHfHnq+B+k=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=Oyn4pPI2M1y4Ah2UElZjGLQtDOuiLHAPYfv9JypgZG0JRxFxN8jCR5hik0JFGITc8
- CdcOkG/bui6Hc5ovBaVXs/v4Q49RedFmEgOEKHio0G+ySix8AyveCbOG5ynN7eZmA2
- nsWBTCnyJ2xAMcF8fkn3/+xMDkPuxLS9yTpkcACTJ3B86BV9apRCeHVzH/QlU2cTjD
- HZcaZ4c75Jv7cU1cD9CB0Je5Gbwi9AMXZb+qOcxiKXNJR8wVb4heROqbM5lnBhJfzz
- cQm9SjjUJQijtXvCXblwihONFBYYOzHpI6275WKi98e3o2+yXn3R1qPBzjU3clqlKu
- OfT40EBy5DF4w==
+ b=pQ/+BRdpKgxwexLP3BGQbeHw9yLGaWQAi7fYG5MgCwPBMf13lfglgCNTuI6VZ+Dm0
+ CHTBexu91SMibX4R0bJeGKCHNJuJqqh0ojHE/buz1jMySAdzw7YQ0DuW99JjTWF621
+ /QvwyBbg3BUpgmJs7rdQ/AwyQFy2/9lnpJNXuUJZudXwIm5sAgy3JUhkiYP3dLILcr
+ w3LRyzooHRQxgSh6whG3SWjnVfzBQwIsVcJs8Y2tNvbVXKQQWe8F3VP5/hdpOpDHZi
+ 9ApPH7+V2hl59HeDeNUIIV4o218iNTqSYlhG7fY3XRHlFtwodEiBIgiNrwGWjt5Fkb
+ WrHOkq9Csps8g==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Krzysztof Kozlowski <krzk@kernel.org>,
- arm@kernel.org, soc@kernel.org
-Subject: Re: [GIT PULL] ARM: mach/soc: samsung: late pull for v5.12
-Date: Thu, 11 Feb 2021 16:01:00 +0100
-Message-ID: <161305564880.259023.8415922783471505237.b4-ty@arndb.de>
+To: linux-samsung-soc@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+ arm@kernel.org, soc@kernel.org, Olof Johansson <olof@lixom.net>,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] MAINTAINERS: arm: samsung: include S3C headers in
+ platform entry
+Date: Thu, 11 Feb 2021 16:01:01 +0100
+Message-ID: <161305564871.259023.6054347017604811927.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210211082254.7934-1-krzk@kernel.org>
-References: <20210211082254.7934-1-krzk@kernel.org>
+In-Reply-To: <20210210172303.335268-1-krzk@kernel.org>
+References: <20210210172303.335268-1-krzk@kernel.org>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210211_100106_731604_0CA4C4C9 
-X-CRM114-Status: UNSURE (   9.94  )
+X-CRM114-CacheID: sfid-20210211_100109_105657_DBE674E5 
+X-CRM114-Status: UNSURE (   7.21  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
@@ -73,30 +75,25 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210211150100.Ojgwag1jkfoe1DvyavT2EnAIwaK15JZZ7LkLV6RHArc@z>
+Message-ID: <20210211150101.oN3TPfSOmWxjzZGW_famYaO3v7p1tumzWjaZET-Az8A@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Thu, 11 Feb 2021 09:22:54 +0100, Krzysztof Kozlowski wrote:
-> Late pull with minor mach/soc fixes for v5.12.
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
-> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-> 
-> [...]
+On Wed, 10 Feb 2021 18:23:03 +0100, Krzysztof Kozlowski wrote:
+> Several S3C24xx/S3C64xx headers in include/linux are not caught by
+> Samsung S3C/S5P/Exynos maintainer entry and might look like abandoned.
+> Include them in "ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES"
+> entry.
 
-Merged into arm/soc, thanks!
+Applied to arm/soc, thanks!
 
-merge commit: c2bd78de41fc3bdeb183bc24bbb2c4c0f3cfdb9a
+[1/1] MAINTAINERS: arm: samsung: include S3C headers in platform entry
+      commit: 36de760a5a90450bc1bd92b6938ce46f502da54d
 
        Arnd
 
