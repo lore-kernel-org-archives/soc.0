@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-23.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DAD5C433E6
-	for <soc@archiver.kernel.org>; Thu, 11 Feb 2021 08:18:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCF76C433DB
+	for <soc@archiver.kernel.org>; Thu, 11 Feb 2021 08:22:59 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 313B364E9C; Thu, 11 Feb 2021 08:18:37 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E8A0164DFF;
-	Thu, 11 Feb 2021 08:18:35 +0000 (UTC)
+	id 6DEB864EC5; Thu, 11 Feb 2021 08:22:59 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D9FD064E16;
+	Thu, 11 Feb 2021 08:22:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1613031517;
-	bh=x2tofSDiu1JNQFJDEzL+ZgZZ3odjG4WGo5Sqkcgl4c8=;
+	s=k20201202; t=1613031779;
+	bh=BYNKdB641tbIHjMtGzjmd4sQCNJ/fauTzb5OJP1vN48=;
 	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=hyufnu3xIA48smBP7PP1bKwDuxuam9UKCc7HX9+bjes2jZKjyvYTobgYy6QhXpLxr
-	 G0lzKirBjtWM87FKaQ49/SdeOQ6wL5TlpQHHHktEvt7ZePc193cxs2QfBKHXEIztsE
-	 w2pOvLq8svU5TFiASyou2+AX57qot4sTvlSiTl9K3n1XkZgRERhejHImrSghycNCzD
-	 JvPWHP0v+3DnTeC3qUQNHMwCzRUXWfgY+B+IqFi6XwCZRaDibf//L3Ufq2xZ5+fAKo
-	 dXuClyEPrqg63trrik1hVaN+e9wuFBrPFM6XiYs7BKyUbJUkjJ9ubfKutzEGleJaYQ
-	 3MCCrF+xFlmXA==
+	b=SEVKxx5Me68iMP7bz5EQVmUvQONUfFqPtgAtUyeBNpAZpaJPc+8ekeg24KdkcFhLI
+	 D/uPP+xH5vb4BS7jdzRvfKWodpL7HRV7p7YUINIGL4FP+u6nWe1QOXvylU7LnvO+DD
+	 5++CHj1rdncMGyqmGcYHMewPl2bm0pIzHHJaBPDcXAr27NvKgpVxJPwXqcPv0CHeXl
+	 WEJrecE2dbiKzipPz7PL8IbRuie/nLATEW6CYWmx67ZYiMaCEAOnNVN0RtG1ilhmC9
+	 S8cJ2ZQCzatKMf6FHkvYHYml6bwijKYZrTKUf1yDuFD6k0/sQ7/YkOYfBoQLvK0Jhj
+	 H3gR810nmoFZg==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -30,48 +30,50 @@ To: Olof Johansson <olof@lixom.net>,
 	arm@kernel.org,
 	soc@kernel.org
 Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] memory: drivers for v5.12, part two
-Date: Thu, 11 Feb 2021 09:18:29 +0100
-Message-Id: <20210211081829.7317-1-krzk@kernel.org>
+Subject: [GIT PULL] ARM: mach/soc: samsung: late pull for v5.12
+Date: Thu, 11 Feb 2021 09:22:54 +0100
+Message-Id: <20210211082254.7934-1-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Hi,
 
-Second (and late) pull request, on top of previous one.
+Late pull with minor mach/soc fixes for v5.12.
 
 Best regards,
 Krzysztof
 
 
-The following changes since commit 50fc8d9232cdc64b9e9d1b9488452f153de52b69:
+The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
-  memory: mtk-smi: Allow building as module (2021-01-26 20:47:51 +0100)
+  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.12-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-soc-5.12
 
-for you to fetch changes up to 321b36c79c431957c8c599a9f9640096c305cd03:
+for you to fetch changes up to f503878564f5e68c1aeb1ea01e437060bf905c50:
 
-  memory: tegra186-emc: Replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE (2021-02-08 18:15:45 +0100)
-
-----------------------------------------------------------------
-Memory controller drivers for v5.12, part two
-
-Two minor cleanups and one fix for compile testing (when !CONFIG_OF).
+  ARM: s3c: irq-s3c24xx: staticize local functions (2021-02-08 18:10:21 +0100)
 
 ----------------------------------------------------------------
-Jiapeng Chong (1):
-      memory: tegra186-emc: Replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE
+Samsung mach/soc changes for v5.12
+
+Three fixes for S3C24xx: one for building with clang and two for
+warnings.
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      ARM: s3c: fix fiq for clang IAS
 
 Krzysztof Kozlowski (2):
-      memory: ti-emif-pm: Drop of_match_ptr from of_device_id table
-      memory: samsung: exynos5422-dmc: Correct function names in kerneldoc
+      ARM: s3c: irq-s3c24xx: include headers for missing declarations
+      ARM: s3c: irq-s3c24xx: staticize local functions
 
- drivers/memory/samsung/exynos5422-dmc.c |  4 ++--
- drivers/memory/tegra/tegra186-emc.c     | 12 ++++++------
- drivers/memory/ti-emif-pm.c             |  2 +-
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ arch/arm/mach-s3c/irq-s3c24xx-fiq.S | 9 +++------
+ arch/arm/mach-s3c/irq-s3c24xx.c     | 8 +++++---
+ 2 files changed, 8 insertions(+), 9 deletions(-)
