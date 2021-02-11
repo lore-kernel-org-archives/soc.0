@@ -1,4 +1,4 @@
-Return-Path: <SRS0=PCma=HN=lists.infradead.org=linux-riscv-bounces+linux-riscv=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=xpWt=HN=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ED6EC433E0
-	for <linux-riscv@archiver.kernel.org>; Thu, 11 Feb 2021 11:52:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7700C433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Feb 2021 11:53:47 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 32FAE64DA5
-	for <linux-riscv@archiver.kernel.org>; Thu, 11 Feb 2021 11:52:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 32FAE64DA5
+	by mail.kernel.org (Postfix) with ESMTPS id 67E3564E6F
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Feb 2021 11:53:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 67E3564E6F
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-riscv-bounces+linux-riscv=archiver.kernel.org@lists.infradead.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
 	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
 	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
 	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=f6LzdoyscMWjoJW7nlRFrvdxkn0ItoHLotxnc0QYwu0=; b=CsTc0e+m+4XEZlOdMetYvSogg
-	NSHM6TMpHgn6CQn+sGGltZW4WRqLrSIsmwcmhdradt2d3mA5d8dL0kJ0N8MREXnVcdMiP1EpYICuV
-	XIY92oQeWImFsBZxJveTJNXXzi6mCbdtBQ/dMCLAzgHOrBV6UOmPG3/YRMQUDyhMxbXt74X+2PISV
-	Z4COGG/zNm+fX/su2rjSNbwXrntCe6N5RDoFm94uT7Ei4by5fK4dwG4lBRv+SdK9Dfdz4tN8ARxGr
-	dgkandkCbUG6iA6lAvA/I+YLhygDBs/t0EenpZVlr9m0IY/hxy0G/sjD9HZ+N1d8z3mGakHWGo2Wm
-	EpeutQm7Q==;
+	 bh=goR5wQvetrD0n7ohd+5XuBW3TAop5Fgzdg3Cy2g6MNI=; b=XKtshq/1CbPrQFLlNDGYeLLrB
+	/4vpjdp2whIDiRUbLpiZrxrfS4ho0aYCjlvkIFnVt9kWKEzWmeYjFZvkJB1XBhBDa0WqEcC7s4Q6j
+	UwMI8qzwzr2Q4/GUA1yhVZYYzpsuApeW2B0PHhPH/Nl1NZCCYcIOhWFF5eyZl4C8wbWjEqXfh00Za
+	eGyKKj+TMKuPkAuPmjC9WVJFtthoctereW0o8vO5FF90yxVYDI5gH7fhQwNfO0CM+zn01M/rzCEIp
+	Qx0IBn0dxoWlYG+UuV1hwDh/kOjTX1rQtgIxUPNCUEntkjdoMQf5eVgm9bM9nMU3dnO+EVZS8w6A5
+	fhdbkkPSw==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1lAAWZ-0002Ql-IG; Thu, 11 Feb 2021 11:52:43 +0000
+	id 1lAAWV-0002Pi-Bm; Thu, 11 Feb 2021 11:52:39 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
  id 1lAAWT-0002Oe-Av; Thu, 11 Feb 2021 11:52:38 +0000
@@ -66,17 +66,17 @@ To: Anders Roxell <anders.roxell@linaro.org>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
 X-CRM114-CacheID: sfid-20210211_065237_473504_5F916949 
 X-CRM114-Status: GOOD (  14.61  )
-X-BeenThere: linux-riscv@lists.infradead.org
+X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
-List-Id: <linux-riscv.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-riscv>,
- <mailto:linux-riscv-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-riscv/>
-List-Post: <mailto:linux-riscv@lists.infradead.org>
-List-Help: <mailto:linux-riscv-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-riscv>,
- <mailto:linux-riscv-request@lists.infradead.org?subject=subscribe>
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
 Cc: Chris Zankel <chris@zankel.net>,
  Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -96,9 +96,9 @@ Cc: Chris Zankel <chris@zankel.net>,
  Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Sender: "linux-riscv" <linux-riscv-bounces@lists.infradead.org>
-Errors-To: linux-riscv-bounces+linux-riscv=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210211115219.Pglpi0EwUh3gmqOp8118qy2k-opdyjvVf5tFFlBs4N0@z>
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210211115219.pAvepMIxsMBlb_a2krtxXjh0LJGuHCZyliq1ebKRmc4@z>
 
 On Wed, Feb 10, 2021 at 8:05 PM Anders Roxell <anders.roxell@linaro.org> wrote:
 >
@@ -119,6 +119,6 @@ Michael, can you pick this up in the vhost tree that introduces the regression?
          Arnd
 
 _______________________________________________
-linux-riscv mailing list
-linux-riscv@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-riscv
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
