@@ -1,207 +1,72 @@
-Return-Path: <SRS0=xpWt=HN=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FD87C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Feb 2021 11:34:31 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 28EA5601FF
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Feb 2021 11:34:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 28EA5601FF
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=xilinx.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Subject:From:To:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=krii4McV3KSAQI8e4hl36ZuQv4sG2RtdLeB9dpCpsqc=; b=gEjiygKM7CThphC5AzkTlvBsrc
-	uugU3QPOOCrkWvUzeUseLFLWGdIPeL/Qo1HdZryrCaZzmSBy+D2Jg/FYBC1ffr8HyJxfWXtlZy+Nh
-	5tS6oFxaiwr8UYkYM+9vmz70J0o4XhdPH2+K3UM183PQSRB8x+2fjDWkRcycE5x+x89FMvSslHtIs
-	Y7TU9wpHtyRpyIJf9Esg8JkOYwt51ACV43d2xhEe2A018neubz1KpvYg0ddCYTslME6G9Se414keH
-	hOBSiNw/bWkTg7LM4E3oU9Ws5Wad5uVI6GkxN6nAagGyPreceLthqivUYD2iO68OmJsn5q59Wrb0L
-	0xyG+Oxg==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1lAADi-00081h-2L; Thu, 11 Feb 2021 11:33:14 +0000
-Received: from mail-co1nam04on0621.outbound.protection.outlook.com
- ([2a01:111:f400:fe4d::621]
- helo=NAM04-CO1-obe.outbound.protection.outlook.com)
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1lAADf-00080j-RC
- for linux-arm-kernel@lists.infradead.org; Thu, 11 Feb 2021 11:33:12 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GpD/9v1sovvXp13Wk0smr5g3OzqeCURQl5Yaem3P6G1t1XDFXwJgwATmYImvze9jbIX2I9Jfbf8W0k8bf+kClDbkSCqGRdUfpsaxPNIfgnjbrKddbEtjveL/ajnFgoHgPMFf1Y7DF5JmBwDVAQs7upcZx+FVpgKgzrEQUSetXgRPgLYoT0bGa5tYfPuojnn6b3XNRx+B4K/A0pzwGAk1gQ3TC3nO1gzGY3dqStKD6gkjiVO26jkhscCrS3Kw1dqCtSbgrlajQmyvdVJlGmz4SxrwtuJoWRT5s4hMPX+I+PlNeFPEL0mJM4hDL6wepM9pWMy9jXqv6cY+iFZL9DMqdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uo9i2+ETKViOv+8lri8o7zm8xKN3n0U9Rp3MzgMiAPg=;
- b=BsX6C5k0ifxTtsEamYJXVH31jpLBYFGBvnbcjPT6/KRUjY635w/AFfVwsFvv7RivzBWrJQy0mgQ/K+SBHTirFh8eS+biaJ50y6ZlbIOFJiL7gMiEAHRTcXm7e2ZTnJQzv3RAuMjT6e+1X6gYJ/UFgx9s/hByIfu1TWYajd68b55a5fEKVkC+BFidMgDro6iSg5cGltXkELw6m/wyPG0mT3SQh4OCWfU9Rj8Aakr2qjoNpCql/FOoSwnL6d9OFHRb+GefLNn//s5sYSLjJBl2zQFmw/PUlo+gBxdUna6EplG88OKBtnvs9h/F9j6f/3Nq8Z5p1NVXntyEAY0Lc8bb/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=lists.infradead.org
- smtp.mailfrom=xilinx.com; dmarc=bestguesspass action=none
- header.from=xilinx.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uo9i2+ETKViOv+8lri8o7zm8xKN3n0U9Rp3MzgMiAPg=;
- b=X/AESsthTvFKoBvV+iD4F64NU3Ktyv6H8rqSaSqwgn7pwWkXGhQAhgYfaFsarHD9I58dTDPK1YEE6fdnNReU27sbpR0ixf+5yNY05tHWgcBsg7G0CNvU8zwrialwtG5Jsk2YAbEGZmJShETCpWgn67wrDmy1qKijqzTWWtQ4ho8=
-Received: from DM5PR15CA0048.namprd15.prod.outlook.com (2603:10b6:4:4b::34) by
- SJ0PR02MB7359.namprd02.prod.outlook.com (2603:10b6:a03:298::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.30; Thu, 11 Feb
- 2021 11:33:04 +0000
-Received: from CY1NAM02FT024.eop-nam02.prod.protection.outlook.com
- (2603:10b6:4:4b:cafe::62) by DM5PR15CA0048.outlook.office365.com
- (2603:10b6:4:4b::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.25 via Frontend
- Transport; Thu, 11 Feb 2021 11:33:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; lists.infradead.org; dkim=none (message not signed)
- header.d=none;lists.infradead.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- CY1NAM02FT024.mail.protection.outlook.com (10.152.74.210) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3846.25 via Frontend Transport; Thu, 11 Feb 2021 11:33:04 +0000
-Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Thu, 11 Feb 2021 03:33:03 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
- 15.1.1913.5 via Frontend Transport; Thu, 11 Feb 2021 03:33:03 -0800
-Received: from [172.30.17.109] (port=42588)
- by smtp.xilinx.com with esmtp (Exim 4.90)
- (envelope-from <michal.simek@xilinx.com>)
- id 1lAADX-0007rb-LX; Thu, 11 Feb 2021 03:33:03 -0800
-List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-From: Michal Simek <michal.simek@xilinx.com>
-Subject: [GIT PULL v2] ARM: dts zynq: Xilinx DT changes for v5.12
-Message-ID: <19e0e0c9-1bed-bba5-6c80-6903937b3d96@xilinx.com>
-Date: Thu, 11 Feb 2021 12:33:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3698C433E0
+	for <soc@archiver.kernel.org>; Thu, 11 Feb 2021 11:52:36 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7CE2464ED0; Thu, 11 Feb 2021 11:52:36 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4AFFF64E6F;
+	Thu, 11 Feb 2021 11:52:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1613044356;
+	bh=PBeGwLjGEVNJ7GvWXwV/HotbITgDYxhkIawMCH+Lrbs=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=UWUJO+bsvWVj78WCD0fvipRTLnOXddNZEaQduxHnMCUXe77oubK0cIAs9RDYceIvG
+	 cooHtk01MuGnQsKy5R9I0hwrTPTpmTc3bOU2jsOakaZzwz9PZ14g9XY92xu9EroeDz
+	 86Pae8VNn9oqBg72oBPh8UzbLdSaaxXvC8WA9721EJmHmJZiXOdTQ6tHGSRgN5jKYt
+	 m/56TcdYnvel4dhiyjVJPnxd8M4BKBTKfKZgm6O6+UHTj7f5GJ/Hcu5DiT2+oSNbmS
+	 6LITPe3qmLaQFJQD13hmuw8tozlRoV0LRNo56kNCkMlu25moBI2ycn0Waxp8Mk4RsU
+	 BMoejHV7l3gCA==
+Received: by mail-oi1-f180.google.com with SMTP id f3so2002701oiw.13;
+        Thu, 11 Feb 2021 03:52:36 -0800 (PST)
+X-Gm-Message-State: AOAM5326pNmboRhihZAYGm9iggXA8xfcH38uGfliCyr7Y+HRngYyoefh
+	KlpXahGKJsSl14dcWqZ+W9TOgxvPsJjo07D6E98=
+X-Google-Smtp-Source: ABdhPJzGRc5cUize8GW1KygKY5QB0/6HYJu2d/5NJ6GASLOCiQXtKEwJmHvgaTx+l4EO/iyAwaQnn0uo6oHda0i+L3M=
+X-Received: by 2002:aca:e103:: with SMTP id y3mr2307802oig.11.1613044355483;
+ Thu, 11 Feb 2021 03:52:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Language: en-US
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b87d6d28-801d-4947-4483-08d8ce80cbe4
-X-MS-TrafficTypeDiagnostic: SJ0PR02MB7359:
-X-Microsoft-Antispam-PRVS: <SJ0PR02MB7359EF12DDFCBA397976FC6BC68C9@SJ0PR02MB7359.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EHpgsGBVEpYVSXVmUBhJCkVtREK9Hf6vEDbCYm6sefeGwFR2d7Mf9hvM5RLl1LKqJonz6CUEU3Kr2i77feaKs7oQXzFVHuBZiowNJxs2FxjkIgH86BNR0y83Aomq/YmSobAICs7K/2MffwVGkaCaopCl2M4VG1NmY1SRuGiXMpwd20BMhPFSS7jSMt48Fz9gMeTX3hojfqj2PclHE1dN1Qh+dSbTr4oPKK4wdMmh6+6NbJzxEZkmWTe9Kd92UONztJQQC0U5aTePGRT3Lnai69TdF3oiOvxGbl6DiNqRjyC7DbwP9cnqUps/IutUrwlalJWIsuHa8BhrzO1ExpPqtgR1fVUcIN/cAWDGik+UAiItOI25cns1s/Birg3h5E7omg1MjWJGwndX1/C2GJvwtqdIbMk9k4N6HW57FekmBNaKY4F/Dv7aBNaqeIL6ARksBOKx4FFkeh5frfWy777heL4gPWRuOqShqMdAAAXtIh0xVQFOquyvw8de6Fii2Q2bJV3MAKSBZ45Mp2uLqJFlUL/CNUvUVZsZUblq17JYB9fBHfZCrNPyuwRvTz7/hTyF88WhBWcTAiDxuH7ZeheJ9ztPf7Ctmp6PI6c+i2abA9EP5hKnMN487/g4FOWXw0rPb9OXO8QGBrgT6/osuYmnG90qXzxTrg322nkIxEZl57MZzDu3oOCvuIUGsW7QnzATgOgcsnE2Rz/NiXK9HTA0gYWlsBV3jTo0vEtSYxlvUU0IEVN+HVLqzubrnLjma3Nng6IcOs9ZRHh3buHFmxen3DvDkLEzelP2CcgDcE8ttyk=
-X-Forefront-Antispam-Report: CIP:149.199.62.198; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:xsj-pvapexch01.xlnx.xilinx.com;
- PTR:unknown-62-198.xilinx.com; CAT:NONE;
- SFS:(4636009)(396003)(346002)(39860400002)(376002)(136003)(36840700001)(46966006)(478600001)(7636003)(26005)(5660300002)(336012)(2616005)(36860700001)(4001150100001)(966005)(186003)(426003)(36756003)(31696002)(8936002)(316002)(6916009)(36906005)(70586007)(82310400003)(31686004)(4326008)(8676002)(47076005)(2906002)(82740400003)(9786002)(44832011)(70206006)(356005)(54906003)(83380400001)(50156003)(43740500002);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2021 11:33:04.4175 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b87d6d28-801d-4947-4483-08d8ce80cbe4
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c; Ip=[149.199.62.198];
- Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT024.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7359
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210211_063311_979684_457D41EA 
-X-CRM114-Status: GOOD (  15.37  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: arm-soc <arm@kernel.org>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210211113301.15RmrwRV8umutXU6ttTCZYYxlgMCs1W1lpzWR4InJQ8@z>
+References: <20210210190506.1923684-1-anders.roxell@linaro.org>
+In-Reply-To: <20210210190506.1923684-1-anders.roxell@linaro.org>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Thu, 11 Feb 2021 12:52:19 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2ysNApoG2FDsLdNoWA7nPXvzLMzkjXWdCig9jaSWwuKw@mail.gmail.com>
+Message-ID: <CAK8P3a2ysNApoG2FDsLdNoWA7nPXvzLMzkjXWdCig9jaSWwuKw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: defconfig: enable modern virtio pci device
+To: Anders Roxell <anders.roxell@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	Russell King - ARM Linux <linux@armlinux.org.uk>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	"open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, 
+	linux-riscv <linux-riscv@lists.infradead.org>, linux-xtensa@linux-xtensa.org, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	virtualization@lists.linux-foundation.org, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+On Wed, Feb 10, 2021 at 8:05 PM Anders Roxell <anders.roxell@linaro.org> wrote:
+>
+> Since patch ("virtio-pci: introduce modern device module") got added it
+> is not possible to boot a defconfig kernel in qemu with a virtio pci
+> device.  Add CONFIG_VIRTIO_PCI_MODERN=y fragment makes the kernel able
+> to boot.
+>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> ---
+>  arch/arm/configs/multi_v7_defconfig         | 1 +
+>  arch/arm64/configs/defconfig                | 1 +
 
-please pull the following DT changes to your tree. The major part is
-adding one new board and qspi dt binding conversion.
-I have dropped one patch based on communication with Arnd.
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-Thanks,
-Michal
+Michael, can you pick this up in the vhost tree that introduces the regression?
 
-The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-
-  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-
-are available in the Git repository at:
-
-  https://github.com/Xilinx/linux-xlnx.git tags/zynq-dt-for-v5.12-v2
-
-for you to fetch changes up to 19e1f484a6bb452d28d79cf41f280cdfde3176a9:
-
-  dt-bindings: spi: zynq: Convert Zynq QSPI binding to yaml (2021-02-11
-12:30:37 +0100)
-
-----------------------------------------------------------------
-ARM: dts: Zynq DT changes for v5.12-v2
-
-- Add Ebang board support
-- Add missing zturn boards in dt binding
-- And convert Zynq QSPI binding
-
-----------------------------------------------------------------
-Michael Walle (4):
-      dt-bindings: add ebang vendor prefix
-      dt-bindings: arm: add Ebang EBAZ4205 board
-      ARM: dts: add Ebang EBAZ4205 device tree
-      ARM: dts: ebaz4205: add pinctrl entries for switches
-
-Michal Simek (2):
-      dt-bindings: arm: xilinx: Add missing Zturn boards
-      dt-bindings: spi: zynq: Convert Zynq QSPI binding to yaml
-
- Documentation/devicetree/bindings/arm/xilinx.yaml         |   3 +++
- Documentation/devicetree/bindings/spi/spi-zynq-qspi.txt   |  25
--------------------------
- Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml |  59
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Documentation/devicetree/bindings/vendor-prefixes.yaml    |   2 ++
- MAINTAINERS                                               |   1 +
- arch/arm/boot/dts/Makefile                                |   1 +
- arch/arm/boot/dts/zynq-ebaz4205.dts                       | 132
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 7 files changed, 198 insertions(+), 25 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-zynq-qspi.txt
- create mode 100644
-Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml
- create mode 100644 arch/arm/boot/dts/zynq-ebaz4205.dts
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+         Arnd
