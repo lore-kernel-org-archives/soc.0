@@ -6,56 +6,54 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2626FC433E0
-	for <soc@archiver.kernel.org>; Thu, 11 Feb 2021 15:04:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A284C433DB
+	for <soc@archiver.kernel.org>; Thu, 11 Feb 2021 15:04:28 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E6CF364EE6; Thu, 11 Feb 2021 15:04:25 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 673FD64EEB;
-	Thu, 11 Feb 2021 15:04:24 +0000 (UTC)
+	id 162CA64EF0; Thu, 11 Feb 2021 15:04:28 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D841B64EEE;
+	Thu, 11 Feb 2021 15:04:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1613055865;
-	bh=+jRoaD3iDwRW6TssAdozKbV2lWhdbP0kdSOL+xK/aNc=;
+	s=k20201202; t=1613055868;
+	bh=1d42BxUE/1dsT5m/gRPrkorZT4HaEgiBeyVaFobzOsA=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oFrz9l/D80OFyMamSVIO6KHbjBK+rSIk4//bXhMB1KEGOYbX1wu+fw2GB2ISOxxHD
-	 ilJ4mgWKra18d6S237jEOOv8LvjN2piFN5f36W3ZNVysdgXqPpcM5Wk8F6W7TO2e8H
-	 xykg7hbvS0/p9v4gGv61YOB9SOfBpqxcXS27vy55A0a8zCq56nGPfYXdbVqXcNDPJm
-	 HtKTXkufcz/u6mWV//pKws1jI+qmU1Igm3AVM/HqkSOoEXFli+WPurMgqAehemdp/i
-	 TzI8SuoUAFf55eaQoJBUW8Q9A9mrsPbgHXTZBGvCuXhOxUEUr6RbOO1izoJJcrJIJ+
-	 CigTtHobl4XRw==
+	b=VxGM0fV48RHhFOhTkFUOGLeqpCmEV7wINIoEY+BFlvgjWqtGRDU0/RodkCAzi2Bm4
+	 iFH6FFcN4UtWqBunHqcg6C4ndQ9lYLMsaYgJqCEyUE6UT2skOw6VeTeFug9zwsF5Js
+	 YIRqj1hNbSAa/hVu8hiQlZivuvu+0Jb+1u0ThMPTro7rZ/qPIjrXfx0XatomIy/LlU
+	 tLEEd+SUIkkb7hsnLlW8v3EjolZW8M7C2eRib/JyKqzJkms3owcD4EDg8BlXINHwQt
+	 qY4QZZBz++A3KM2i4fJAKTDD4EHsQK8ywf5nEv2x/Y2dGYHYkCXlfnaqdoO0996S0H
+	 SrgKgxJzmkS2g==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: SoC Team <soc@kernel.org>,
-	arm <arm@kernel.org>,
-	Joel Stanley <joel@jms.id.au>
+	Michal Simek <michal.simek@xilinx.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	Andrew Jeffery <andrew@aj.id.au>,
-	linux-aspeed <linux-aspeed@lists.ozlabs.org>
-Subject: Re: [GIT PULL] ARM: aspeed: devicetree changes for 5.12
-Date: Thu, 11 Feb 2021 16:04:20 +0100
-Message-Id: <161305573907.259289.4679154731626442010.b4-ty@arndb.de>
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	arm-soc <arm@kernel.org>
+Subject: Re: [GIT PULL v2] ARM: dts zynq: Xilinx DT changes for v5.12
+Date: Thu, 11 Feb 2021 16:04:21 +0100
+Message-Id: <161305573925.259289.17212813544897085950.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <CACPK8XfQgGch5bK3YD0La+CE2L5DxVa1MNw6m1fc40j0w7e9Tw@mail.gmail.com>
-References: <CACPK8XfQgGch5bK3YD0La+CE2L5DxVa1MNw6m1fc40j0w7e9Tw@mail.gmail.com>
+In-Reply-To: <19e0e0c9-1bed-bba5-6c80-6903937b3d96@xilinx.com>
+References: <19e0e0c9-1bed-bba5-6c80-6903937b3d96@xilinx.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 10 Feb 2021 12:28:23 +0000, Joel Stanley wrote:
-> Here's my late pull request. I've deferred some LPC device tree
-> bindings rework that need a closer review, so the contents of this
-> pull request should be straightforward.
+On Thu, 11 Feb 2021 12:33:01 +0100, Michal Simek wrote:
+> please pull the following DT changes to your tree. The major part is
+> adding one new board and qspi dt binding conversion.
+> I have dropped one patch based on communication with Arnd.
 > 
-> The following changes since commit a74c6525f12f35a5af529ff057e63cfdc461704c:
+> Thanks,
+> Michal
 > 
->   ARM: dts: aspeed: ast2600evb: Add enable ehci and uhci (2021-02-10
-> 21:21:36 +1030)
+> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 52ded9eaa25a203e59142db252d0bc2aae80a2c2
+merge commit: 78155527283ddb04bb4a5b78320c861e1035d357
 
        Arnd
