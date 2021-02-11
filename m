@@ -1,232 +1,77 @@
-Return-Path: <SRS0=uerg=HM=lists.ozlabs.org=linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@kernel.org>
+Return-Path: <krzk@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45C6FC433E0
-	for <linuxppc-dev@archiver.kernel.org>; Wed, 10 Feb 2021 19:07:49 +0000 (UTC)
-Received: from lists.ozlabs.org (lists.ozlabs.org [203.11.71.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9904C64E42
-	for <linuxppc-dev@archiver.kernel.org>; Wed, 10 Feb 2021 19:07:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9904C64E42
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org
-Received: from bilbo.ozlabs.org (lists.ozlabs.org [IPv6:2401:3900:2:1::3])
-	by lists.ozlabs.org (Postfix) with ESMTP id 4DbTmK6mtxzDspf
-	for <linuxppc-dev@archiver.kernel.org>; Thu, 11 Feb 2021 06:07:45 +1100 (AEDT)
-Authentication-Results: lists.ozlabs.org; spf=pass (sender SPF authorized)
- smtp.mailfrom=linaro.org (client-ip=2a00:1450:4864:20::12c;
- helo=mail-lf1-x12c.google.com; envelope-from=anders.roxell@linaro.org;
- receiver=<UNKNOWN>)
-Authentication-Results: lists.ozlabs.org; dkim=pass (2048-bit key;
- unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256
- header.s=google header.b=tdvdvopN; dkim-atps=neutral
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
- [IPv6:2a00:1450:4864:20::12c])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by lists.ozlabs.org (Postfix) with ESMTPS id 4DbTjW3qjQzDwj5
- for <linuxppc-dev@lists.ozlabs.org>; Thu, 11 Feb 2021 06:05:15 +1100 (AEDT)
-Received: by mail-lf1-x12c.google.com with SMTP id v24so4464589lfr.7
- for <linuxppc-dev@lists.ozlabs.org>; Wed, 10 Feb 2021 11:05:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=AUZZJPcdsZ4nXWPrdOtnVl3JVvpEylf0g26f/cJWrEs=;
- b=tdvdvopNJa/CNXblKmh3zsQ94QYlwXgnTc3W2rw3GKaWji6T1d806HNk5jlGGQsE0d
- Z3BzOj8nXe/DC40o+NAgzKZEhnAAmT+MybnSvLG2UiVRby+UfPnUmHXxsNbU7/THaivB
- IJok8KZuYBmdglvY9AXbeqg2N79bWTTZAvbuVrJ/jApGhi9wm0hMJLi3kDsrycTWwkH+
- KeQqcA/kzuUA1N4LUQGmsMhnfPeZKVkijrSX1wnSYD7t5hFI06+M7TAv4qerUeyHPFAm
- 84uVebInrFDi44XE03vgB3Mbxtn8cTyAwnIJLm2UKF/hTrvWBymtDXcbDo+kC+Za5e0s
- IaxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=AUZZJPcdsZ4nXWPrdOtnVl3JVvpEylf0g26f/cJWrEs=;
- b=TvR/inVAk+6acJ8cud9Z1GTvLgL6Ihzhg9vUqVYP8j00IOMRK5UcueWObuE5Hw9ggc
- E//czF0yAC+tfE/Na0nByVRCMrbYTuWLpOvGULIh0GDGFuNGYGlhtU9Dyng8RlWc7S5h
- PzTuBtOVoA7+ZPBzxUKbug7IsQ6JRl9P7OXJojSriu/IHJeZr1R5hp7M/Bct0IP19oDU
- MqTUf0CXZaz9AAVc/UZU0EqnnLDiVlUyN5Juu/NoY+nzYi57wb/d3R/2JVpDLMhEUrth
- Yi9c68cNl+u/DKyaJISbxgYEo4hRAMsdUxLloOiw4rBZTZVzhz1MdpapsJav/N7+WAQ5
- ctCw==
-X-Gm-Message-State: AOAM532eKL1jEnikGa6+EZtY4/p/KhzhRrzj430itbsy6nezjUIlyHcn
- K418JuFwdP337ztQ4mhyA1PJ9Q==
-X-Google-Smtp-Source: ABdhPJx+dGCB5Wuq+4IRhfx1FPsG7SMl/CyZGsYTUvPGsDbtVXH2raDj8I9KusXJvxhAT7I/ejZXMg==
-X-Received: by 2002:a19:4843:: with SMTP id v64mr2309414lfa.178.1612983910472; 
- Wed, 10 Feb 2021 11:05:10 -0800 (PST)
-Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se.
- [85.229.40.155])
- by smtp.gmail.com with ESMTPSA id s16sm390025ljc.121.2021.02.10.11.05.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Feb 2021 11:05:09 -0800 (PST)
-From: Anders Roxell <anders.roxell@linaro.org>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DAD5C433E6
+	for <soc@archiver.kernel.org>; Thu, 11 Feb 2021 08:18:37 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 313B364E9C; Thu, 11 Feb 2021 08:18:37 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E8A0164DFF;
+	Thu, 11 Feb 2021 08:18:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1613031517;
+	bh=x2tofSDiu1JNQFJDEzL+ZgZZ3odjG4WGo5Sqkcgl4c8=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=hyufnu3xIA48smBP7PP1bKwDuxuam9UKCc7HX9+bjes2jZKjyvYTobgYy6QhXpLxr
+	 G0lzKirBjtWM87FKaQ49/SdeOQ6wL5TlpQHHHktEvt7ZePc193cxs2QfBKHXEIztsE
+	 w2pOvLq8svU5TFiASyou2+AX57qot4sTvlSiTl9K3n1XkZgRERhejHImrSghycNCzD
+	 JvPWHP0v+3DnTeC3qUQNHMwCzRUXWfgY+B+IqFi6XwCZRaDibf//L3Ufq2xZ5+fAKo
+	 dXuClyEPrqg63trrik1hVaN+e9wuFBrPFM6XiYs7BKyUbJUkjJ9ubfKutzEGleJaYQ
+	 3MCCrF+xFlmXA==
+From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: [PATCH] arm64: defconfig: enable modern virtio pci device
-Date: Wed, 10 Feb 2021 20:05:06 +0100
-Message-ID: <20210210190506.1923684-1-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.30.0
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] memory: drivers for v5.12, part two
+Date: Thu, 11 Feb 2021 09:18:29 +0100
+Message-Id: <20210211081829.7317-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-BeenThere: linuxppc-dev@lists.ozlabs.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
-List-Unsubscribe: <https://lists.ozlabs.org/options/linuxppc-dev>,
- <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=unsubscribe>
-List-Archive: <http://lists.ozlabs.org/pipermail/linuxppc-dev/>
-List-Post: <mailto:linuxppc-dev@lists.ozlabs.org>
-List-Help: <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=help>
-List-Subscribe: <https://lists.ozlabs.org/listinfo/linuxppc-dev>,
- <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=subscribe>
-Cc: chris@zankel.net, tsbogend@alpha.franken.de,
- Anders Roxell <anders.roxell@linaro.org>, mst@redhat.com, arnd@arndb.de,
- linuxppc-dev@lists.ozlabs.org, catalin.marinas@arm.com,
- linux-xtensa@linux-xtensa.org, paul.walmsley@sifive.com,
- virtualization@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
- linux@armlinux.org.uk, jcmvbkbc@gmail.com, aou@eecs.berkeley.edu,
- palmer@dabbelt.com, linux-riscv@lists.infradead.org,
- linux-mips@vger.kernel.org, will@kernel.org, jasowang@redhat.com,
- linux-arm-kernel@lists.infradead.org
-Errors-To: linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org
-Sender: "Linuxppc-dev"
- <linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org>
-Message-ID: <20210210190506.eSMsFL-GiGSluL7u6jaefHbWqX9IEEnhOOeWE-T860U@z>
 
-Since patch ("virtio-pci: introduce modern device module") got added it
-is not possible to boot a defconfig kernel in qemu with a virtio pci
-device.  Add CONFIG_VIRTIO_PCI_MODERN=y fragment makes the kernel able
-to boot.
+Hi,
 
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- arch/arm/configs/multi_v7_defconfig         | 1 +
- arch/arm64/configs/defconfig                | 1 +
- arch/mips/configs/loongson3_defconfig       | 1 +
- arch/mips/configs/malta_kvm_guest_defconfig | 1 +
- arch/powerpc/configs/guest.config           | 1 +
- arch/riscv/configs/defconfig                | 1 +
- arch/riscv/configs/rv32_defconfig           | 1 +
- arch/xtensa/configs/virt_defconfig          | 1 +
- kernel/configs/kvm_guest.config             | 1 +
- 9 files changed, 9 insertions(+)
+Second (and late) pull request, on top of previous one.
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 3823da605430..02297ed49b20 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -972,6 +972,7 @@ CONFIG_DW_DMAC=y
- CONFIG_RCAR_DMAC=y
- CONFIG_RENESAS_USB_DMAC=m
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_PCI_MODERN=y
- CONFIG_VIRTIO_MMIO=y
- CONFIG_STAGING=y
- CONFIG_MFD_NVEC=y
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 83c28da85834..8334e9cb4608 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -910,6 +910,7 @@ CONFIG_TI_K3_UDMA_GLUE_LAYER=y
- CONFIG_VFIO=y
- CONFIG_VFIO_PCI=y
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_PCI_MODERN=y
- CONFIG_VIRTIO_BALLOON=y
- CONFIG_VIRTIO_MMIO=y
- CONFIG_XEN_GNTDEV=y
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index 0e79f81217bc..ac5f2dcbffb1 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -324,6 +324,7 @@ CONFIG_RTC_DRV_CMOS=y
- CONFIG_RTC_DRV_GOLDFISH=y
- CONFIG_DMADEVICES=y
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_PCI_MODERN=y
- CONFIG_VIRTIO_BALLOON=m
- CONFIG_VIRTIO_INPUT=y
- CONFIG_VIRTIO_MMIO=y
-diff --git a/arch/mips/configs/malta_kvm_guest_defconfig b/arch/mips/configs/malta_kvm_guest_defconfig
-index 9185e0a0aa45..043633cdb406 100644
---- a/arch/mips/configs/malta_kvm_guest_defconfig
-+++ b/arch/mips/configs/malta_kvm_guest_defconfig
-@@ -332,6 +332,7 @@ CONFIG_RTC_DRV_CMOS=y
- CONFIG_UIO=m
- CONFIG_UIO_CIF=m
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_PCI_MODERN=y
- CONFIG_VIRTIO_BALLOON=y
- CONFIG_VIRTIO_MMIO=y
- CONFIG_EXT2_FS=y
-diff --git a/arch/powerpc/configs/guest.config b/arch/powerpc/configs/guest.config
-index 209f58515d88..fbff632c8633 100644
---- a/arch/powerpc/configs/guest.config
-+++ b/arch/powerpc/configs/guest.config
-@@ -5,6 +5,7 @@ CONFIG_NET_FAILOVER=y
- CONFIG_VIRTIO_CONSOLE=y
- CONFIG_VIRTIO=y
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_PCI_MODERN=y
- CONFIG_KVM_GUEST=y
- CONFIG_EPAPR_PARAVIRT=y
- CONFIG_VIRTIO_BALLOON=y
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index 8c3d1e451703..b7fa7a1a0c6d 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -85,6 +85,7 @@ CONFIG_MMC=y
- CONFIG_MMC_SPI=y
- CONFIG_RTC_CLASS=y
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_PCI_MODERN=y
- CONFIG_VIRTIO_BALLOON=y
- CONFIG_VIRTIO_INPUT=y
- CONFIG_VIRTIO_MMIO=y
-diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
-index 2c2cda6cc1c5..68296101fa06 100644
---- a/arch/riscv/configs/rv32_defconfig
-+++ b/arch/riscv/configs/rv32_defconfig
-@@ -84,6 +84,7 @@ CONFIG_MMC=y
- CONFIG_MMC_SPI=y
- CONFIG_RTC_CLASS=y
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_PCI_MODERN=y
- CONFIG_VIRTIO_BALLOON=y
- CONFIG_VIRTIO_INPUT=y
- CONFIG_VIRTIO_MMIO=y
-diff --git a/arch/xtensa/configs/virt_defconfig b/arch/xtensa/configs/virt_defconfig
-index 6d1387dfa96f..7fad1c2454fd 100644
---- a/arch/xtensa/configs/virt_defconfig
-+++ b/arch/xtensa/configs/virt_defconfig
-@@ -74,6 +74,7 @@ CONFIG_FRAMEBUFFER_CONSOLE=y
- CONFIG_LOGO=y
- # CONFIG_USB_SUPPORT is not set
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_PCI_MODERN=y
- CONFIG_VIRTIO_INPUT=y
- # CONFIG_IOMMU_SUPPORT is not set
- CONFIG_EXT3_FS=y
-diff --git a/kernel/configs/kvm_guest.config b/kernel/configs/kvm_guest.config
-index 208481d91090..8dea6df20006 100644
---- a/kernel/configs/kvm_guest.config
-+++ b/kernel/configs/kvm_guest.config
-@@ -22,6 +22,7 @@ CONFIG_S390_GUEST=y
- CONFIG_VIRTIO=y
- CONFIG_VIRTIO_MENU=y
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_PCI_MODERN=y
- CONFIG_VIRTIO_BLK=y
- CONFIG_VIRTIO_CONSOLE=y
- CONFIG_VIRTIO_NET=y
--- 
-2.30.0
+Best regards,
+Krzysztof
 
+
+The following changes since commit 50fc8d9232cdc64b9e9d1b9488452f153de52b69:
+
+  memory: mtk-smi: Allow building as module (2021-01-26 20:47:51 +0100)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.12-2
+
+for you to fetch changes up to 321b36c79c431957c8c599a9f9640096c305cd03:
+
+  memory: tegra186-emc: Replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE (2021-02-08 18:15:45 +0100)
+
+----------------------------------------------------------------
+Memory controller drivers for v5.12, part two
+
+Two minor cleanups and one fix for compile testing (when !CONFIG_OF).
+
+----------------------------------------------------------------
+Jiapeng Chong (1):
+      memory: tegra186-emc: Replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE
+
+Krzysztof Kozlowski (2):
+      memory: ti-emif-pm: Drop of_match_ptr from of_device_id table
+      memory: samsung: exynos5422-dmc: Correct function names in kerneldoc
+
+ drivers/memory/samsung/exynos5422-dmc.c |  4 ++--
+ drivers/memory/tegra/tegra186-emc.c     | 12 ++++++------
+ drivers/memory/ti-emif-pm.c             |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
