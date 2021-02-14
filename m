@@ -1,217 +1,208 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=BbVa=HQ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-25.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-24.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFDA1C433DB
-	for <soc@archiver.kernel.org>; Sun, 14 Feb 2021 22:44:33 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 8576564E52; Sun, 14 Feb 2021 22:44:33 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B71964E27
-	for <soc@kernel.org>; Sun, 14 Feb 2021 22:44:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6AB2C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 14 Feb 2021 22:44:51 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 8A49E64DF4
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 14 Feb 2021 22:44:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8A49E64DF4
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe
+	:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:References:MIME-Version:
+	Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	bh=9LMvVENXI4XksCACtOp1mm51ZBDyM0pvYP1utt5RopY=; b=gM2f2kPKfjJJBvBCuZn0S08X/Z
+	Z2N4KJkB73UePpOIB0pNtPXbWh0ge+Q3ADyRyU1vok102O63VdM8Q8p7JpsfnXxJpQiF0F9RUqJ2S
+	/Qr9gpMgX8BPwOxNvJd67/qdkrB772gXmc7qQM5GT6aQHG+U0NGr4WcDx63SWpiG0IUhfIvdeHwIo
+	mSyvXuMgbt0AscK1psVHa39RN9z3wGrfMXENr4fdIluhYk5DX1lt3LQ/dP/ozIfjBDOHarlilXQYr
+	SXhXNIXI36dlXt3CkEVo3nLxsJjnOcizzBrn0AOgM8dZO01EKTvlfaLNCP2UEZGS9cLBI3BLp0uya
+	TqG5c78Q==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1lBQ7J-0007tQ-JY; Sun, 14 Feb 2021 22:43:50 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1lBQ7F-0007sn-KT
+ for linux-arm-kernel@lists.infradead.org; Sun, 14 Feb 2021 22:43:46 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A9D2464E29
+ for <linux-arm-kernel@lists.infradead.org>;
+ Sun, 14 Feb 2021 22:43:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1613342673;
-	bh=Ni46dVPQ7gmxTo49gEBjDmdwPqNKQzEgV41e6qBUgJE=;
-	h=References:In-Reply-To:From:Date:Subject:List-Id:To:From;
-	b=rFmw66SOCrGjYwRYH7d2uTkp7yk4Zs/HC78qwFr52D8e6HICS0KGiFXv73gpx8msi
-	 Zm3FLR4qMva4W+6dkGLSXdqodIuhpOywi3WFafwWi54Lq79+5vEtWM2X2gC8qMD40p
-	 mfwlZFZ5OZzfwPnxaDDQfB6GoG1Uqe2Zt3PGryfaJGN4vGu116Ldsg+psj3z7fMysC
-	 HTpSzIDwaDTFHZXcCPpLeIsR0EQItgUTv/66N5O4zWx09ftUnVnS+0Q7HD3twv1DNi
-	 H+O1DfwXUz5UOyLixyB3MBlqPsmMkc1RNPdWo9fZFcrP1ekczRGWApNxuYxJxvdpec
-	 ve+Q6/jECnwxA==
-Received: by mail-oi1-f174.google.com with SMTP id g84so6062785oib.0
-        for <soc@kernel.org>; Sun, 14 Feb 2021 14:44:33 -0800 (PST)
-X-Gm-Message-State: AOAM530NfXyTGx4b/VwXlH4dAJd49AHg5Ec+lr8XRe+FzfTo+DZMDuOA
-	WAqK0ozh0K0IDMAxpxQSaGB20t8G/k8fhB0SYLg=
-X-Google-Smtp-Source: ABdhPJyORQMZp2HtToThmOc2hWMs9Aa359nm3m1JiJAG/4cz0CbHd/epBLYes8nqxssF8Crf68UZB8sNAbvRILc76Ls=
-X-Received: by 2002:aca:d908:: with SMTP id q8mr6407683oig.67.1613342672757;
- Sun, 14 Feb 2021 14:44:32 -0800 (PST)
+ s=k20201202; t=1613342624;
+ bh=YK3rfycgtWeTFmUgEeeN3XJ0hvkNJ5DOH41Kd0XLFo0=;
+ h=References:In-Reply-To:From:Date:Subject:List-Id:To:From;
+ b=DuQ9CMuTreaF92aIqNZZgalWceDSpV0F9xBQGiebYNHBiF35LIhoH198rmrqV1O6h
+ Phv3tsMdhv7xXK3nczJI72mwaJdKQYQ6CXTRMFe8jxf4UP69c0gEYV6QCkcC+kYuks
+ z/LND/pzkALfnOYuIq2KOXNqkplR3IGNqG7iNGS1/rXWhBGHvCIewvV6oZP4BGkfx1
+ 2zVO5MK9XfzW7H8fkw+F/a6OZO9hMURLQCvC+NtM41Y0DxCBk2XZianZQyWH7Nwf8S
+ vAWdKyNkqJHg78LyQnMCAR5w78fAAxsM/y9vkM7kvtLQ5Rdjc0vPyRfKcS1F6tBIQq
+ xep+pQVW1vDeQ==
+Received: by mail-ot1-f42.google.com with SMTP id i20so4527413otl.7
+ for <linux-arm-kernel@lists.infradead.org>;
+ Sun, 14 Feb 2021 14:43:44 -0800 (PST)
+X-Gm-Message-State: AOAM5310PSsNexVEBHEWBHqKnP6JYz8wbyTAy+1xRIABDq53kM92ydHr
+ WXrO43+tudKpWDnOIeXqLI7zJfqbk468eMGhkI4=
+X-Google-Smtp-Source: ABdhPJyAoMZkYA9sX7ithmaSGz5UdwO78xEEfOvKL5kXR+Kg/yKfWXxVb5Bsski9Wf7IfT8hKvcZ+FHtttj3FOb/hic=
+X-Received: by 2002:a9d:6c11:: with SMTP id f17mr9504339otq.210.1613342624036; 
+ Sun, 14 Feb 2021 14:43:44 -0800 (PST)
 MIME-Version: 1.0
 References: <CAK8P3a0w-vPNBF=4ieg3YUyNHzy+qiZ5iK-9M1cRxA+TakScYw@mail.gmail.com>
 In-Reply-To: <CAK8P3a0w-vPNBF=4ieg3YUyNHzy+qiZ5iK-9M1cRxA+TakScYw@mail.gmail.com>
 From: Arnd Bergmann <arnd@kernel.org>
-Date: Sun, 14 Feb 2021 23:44:16 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0rK+By11RG+A5NxJ5kWQCWzB3Qs7BFiJfL8sqRtMt2ww@mail.gmail.com>
-Message-ID: <CAK8P3a0rK+By11RG+A5NxJ5kWQCWzB3Qs7BFiJfL8sqRtMt2ww@mail.gmail.com>
-Subject: [GIT PULL 4/6] ARM SoC defconfigs for v5.12
+Date: Sun, 14 Feb 2021 23:43:28 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0kOOOR4RP_A9v9R4_PeGsa9z3=TqcvH-Cs9oRq4mNDhQ@mail.gmail.com>
+Message-ID: <CAK8P3a0kOOOR4RP_A9v9R4_PeGsa9z3=TqcvH-Cs9oRq4mNDhQ@mail.gmail.com>
+Subject: [GIT PULL 3/6] ARM SoC changes for v5.12
 List-Id: <soc.lore.kernel.org>
 To: Linus Torvalds <torvalds@linux-foundation.org>, SoC Team <soc@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210214_174345_891341_FC9E25B4 
+X-CRM114-Status: GOOD (  13.66  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210214224328.xQL0Mhzk3_-xfcwCdlHTsiVH7mbnH0V0DQ7HdJlDdUc@z>
 
-The following changes since commit 7c53f6b671f4aba70ff15e1b05148b10d58c2837=
-:
+The following changes since commit 7c53f6b671f4aba70ff15e1b05148b10d58c2837:
 
   Linux 5.11-rc3 (2021-01-10 14:34:50 -0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-tags/arm-defconfig-v5.12
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-soc-v5.12
 
-for you to fetch changes up to 21e4675d9305f6ccd20b95d943882d607c8ae288:
+for you to fetch changes up to c2bd78de41fc3bdeb183bc24bbb2c4c0f3cfdb9a:
 
-  Merge tag 'zynqmp-soc-for-v5.12' of
-https://github.com/Xilinx/linux-xlnx into arm/defconfig (2021-02-10
-00:08:06 +0100)
+  Merge tag 'samsung-soc-5.12' of
+git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into arm/soc
+(2021-02-11 12:48:40 +0100)
 
 ----------------------------------------------------------------
-ARM: SoC defconfigs for v5.12
+ARM: SoC changes for v5.12
 
-As usual, a number of additional device drivers that were added
-to the kernel are now enabled in the respective configuration
-files. A few of the files get updated to match the current
-Kconfig files for removed or renamed options.
+This is mostly 32-bit code for SoC platforms, and looks smaller
+than any such branch I remember from previous kernels, as most
+of this is now handled in other subsystems for modern platforms:
+
+- Minor bugfixes and Kconfig updates for Tegra, Broadcom, i.MX,
+  Renesas, and Samsung
+
+- Updates to the MAINTAINERS listing for Actions, OMAP, and Samsung
+
+- Samsung SoC driver updates to make them loadable modules
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
 ----------------------------------------------------------------
-Adam Ford (1):
-      arm64: defconfig: Enable WM8962
+Arnd Bergmann (8):
+      Merge tag 'samsung-drivers-5.12' of
+git://git.kernel.org/.../krzk/linux into arm/soc
+      Merge tag 'renesas-drivers-for-v5.12-tag1' of
+git://git.kernel.org/.../geert/renesas-devel into arm/soc
+      Merge tag 'omap-for-v5.12/soc-signed' of
+git://git.kernel.org/.../tmlind/linux-omap into arm/soc
+      Merge tag 'tegra-for-5.12-arm-core' of
+git://git.kernel.org/.../tegra/linux into arm/soc
+      Merge tag 'arm-soc/for-5.12/soc' of
+https://github.com/Broadcom/stblinux into arm/soc
+      ARM: s3c: fix fiq for clang IAS
+      Merge tag 'imx-soc-5.12' of
+git://git.kernel.org/.../shawnguo/linux into arm/soc
+      Merge tag 'samsung-soc-5.12' of
+git://git.kernel.org/.../krzk/linux into arm/soc
 
-Adrien Grassein (1):
-      arm64: defconfig: Enable PF8x00 as builtin
+Cristian Ciocaltea (1):
+      MAINTAINERS: Add linux-actions ML for Actions Semi Arch
 
-Alexandre Belloni (2):
-      ARM: configs: at91: remove ATMEL_TCLIB
-      ARM: configs: multi_{v5,v7}: remove ATMEL_TCLIB
+Dmitry Osipenko (1):
+      ARM: tegra: Don't enable unused PLLs on resume from suspend
 
-Andreas Kemnade (1):
-      ARM: imx_v6_v7_defconfig: enable power driver of RN5T618 PMIC family
-
-Argus Lin (1):
-      arm64: configs: Support pwrap on Mediatek MT6779 platform
-
-Arnd Bergmann (14):
-      Merge tag 'at91-defconfig-5.12' of
-git://git.kernel.org/.../at91/linux into arm/defconfig
-      Merge tag 'tegra-for-5.12-arm-defconfig' of
-git://git.kernel.org/.../tegra/linux into arm/defconfig
-      Merge tag 'tegra-for-5.12-arm64-defconfig' of
-git://git.kernel.org/.../tegra/linux into arm/defconfig
-      Merge tag 'arm-soc/for-5.12/defconfig' of
-https://github.com/Broadcom/stblinux into arm/defconfig
-      Merge tag 'arm-soc/for-5.12/defconfig-arm64' of
-https://github.com/Broadcom/stblinux into arm/defconfig
-      Merge tag 'v5.11-next-defconfig' of
-git://git.kernel.org/.../matthias.bgg/linux into arm/defconfig
-      Merge tag 'amlogic-soc' of
-git://git.kernel.org/.../khilman/linux-amlogic into arm/defconfig
-      Merge tag 'qcom-arm64-defconfig-for-5.12' of
-git://git.kernel.org/.../qcom/linux into arm/defconfig
-      Merge tag 'qcom-defconfig-for-5.12' of
-git://git.kernel.org/.../qcom/linux into arm/defconfig
-      Merge tag 'imx-defconfig-5.12' of
-git://git.kernel.org/.../shawnguo/linux into arm/defconfig
-      Merge tag 'at91-defconfig-5.11-2' of
-git://git.kernel.org/.../at91/linux into arm/defconfig
-      Merge tag 'v5.12-rockchip-defconfig64-1' of
-git://git.kernel.org/.../mmind/linux-rockchip into arm/defconfig
-      Merge tag 'omap-for-v5.12/defconfig-signed' of
-git://git.kernel.org/.../tmlind/linux-omap into arm/defconfig
-      Merge tag 'zynqmp-soc-for-v5.12' of
-https://github.com/Xilinx/linux-xlnx into arm/defconfig
-
-Bjorn Andersson (2):
-      arm64: defconfig: Enable HID multitouch
-      arm64: defconfig: Enable TMPFS Posix ACL
-
-Claudiu Beznea (1):
-      ARM: configs: at91: enable drivers for sam9x60
-
-Dmitry Baryshkov (3):
-      arm64: defconfig: enable display clock controller on sm8250
-      arm64: defconfig: enable Lontium LT9611UXC bridge driver
-      arm64: defconfig: Enable Qualcomm SM8250 audio config
+Fabio Estevam (1):
+      ARM: imx: Remove unused IMX_GPIO_NR() macro
 
 Florian Fainelli (2):
-      Merge tag 'tags/bcm2835-defconfig-next-2021-01-25' into defconfig/nex=
-t
-      Merge tag 'tags/bcm2835-defconfig-arm64-next-2021-01-25' into
-defconfig-arm64/next
+      ARM: brcmstb: Add debug UART entry for 72116
+      Merge tag 'tags/bcm2835-soc-next-2021-01-25' into soc/next
 
-Guido G=C3=BCnther (2):
-      arm64: defconfig: Enable Librem 5 devkit components
-      arm64: defconfig: Enable vibra-pwm
+Geert Uytterhoeven (2):
+      soc: renesas: rcar-sysc: Use readl_poll_timeout_atomic()
+      soc: renesas: rcar-sysc: Mark device node OF_POPULATED after init
 
-Jagan Teki (1):
-      arm64: defconfig: Enable REGULATOR_MP8859
+Krzysztof Kozlowski (6):
+      soc: samsung: exynos-asv: handle reading revision register error
+      soc: samsung: exynos-chipid: convert to driver and merge exynos-asv
+      soc: samsung: exynos-chipid: correct helpers __init annotation
+      ARM: s3c: irq-s3c24xx: include headers for missing declarations
+      ARM: s3c: irq-s3c24xx: staticize local functions
+      MAINTAINERS: arm: samsung: include S3C headers in platform entry
 
-Jon Hunter (2):
-      ARM: config: Enable Tegra SoC Thermal driver
-      arm64: defconfig: Enable Tegra SoC Thermal driver
+Marek Szyprowski (2):
+      soc: samsung: exynos-asv: don't defer early on not-supported SoCs
+      soc: samsung: pm_domains: Convert to regular platform driver
 
-Manivannan Sadhasivam (14):
-      ARM: multi_v7_defconfig: Enable Actions Semi platform and drivers
-      ARM: qcom_defconfig: Enable RPMh drivers
-      ARM: qcom_defconfig: Enable SDX55 pinctrl driver
-      ARM: qcom_defconfig: Enable SDX55 GCC driver
-      ARM: qcom_defconfig: Enable SMEM partition parser
-      ARM: qcom_defconfig: Enable MTD UBI driver
-      ARM: qcom_defconfig: Enable UBI file system
-      ARM: qcom_defconfig: Enable DWC3 controller and PHYs
-      ARM: qcom_defconfig: Enable ARM SMMU
-      ARM: qcom_defconfig: Enable RPMh regulator
-      ARM: qcom_defconfig: Enable watchdog driver
-      ARM: qcom_defconfig: Enable ARM PSCI support
-      ARM: qcom_defconfig: Enable RPMh power domain driver
-      ARM: qcom_defconfig: Enable Command DB driver
+Maxime Ripard (1):
+      ARM: bcm: Select BRCMSTB_L2_IRQ for bcm2835
 
-Martin Blumenstingl (1):
-      ARM: multi_v7_defconfig: Enable support for the ADC thermal sensor
+Oleksij Rempel (1):
+      ARM: imx: mach-imx6ul: remove 14x14 EVK specific PHY fixup
 
-Martin Kepplinger (1):
-      arm64: defconfig: Enable interconnect for imx8mq
+Roger Quadros (1):
+      MAINTAINERS: Update address for OMAP GPMC driver
 
-Michael Walle (1):
-      arm64: defconfig: Enable Broadcom BCM54140 PHY
+Stefan Riedmueller (1):
+      ARM: mach-imx: imx6ul: Print SOC revision on boot
 
-Neal Liu (1):
-      arm64: configs: Support DEVAPC on MediaTek platforms
+Wang Qing (1):
+      ARM: OMAP2+: fix spellint typo
 
-Nicolas Ferre (5):
-      ARM: configs: sama5_defconfig: update and remove unneeded options
-      ARM: configs: at91: DT/ATAG defconfig modifications
-      ARM: configs: at91_dt_defconfig: add useful helper options
-      ARM: configs: at91_dt_defconfig: add ov7740 module
-      ARM: configs: sama5_defconfig: add QSPI driver
+ MAINTAINERS                         |  5 +-
+ arch/arm/include/debug/brcmstb.S    | 30 ++++++------
+ arch/arm/mach-bcm/Kconfig           |  1 +
+ arch/arm/mach-exynos/Kconfig        |  1 -
+ arch/arm/mach-imx/hardware.h        |  4 --
+ arch/arm/mach-imx/mach-imx6ul.c     | 25 ++--------
+ arch/arm/mach-omap2/clockdomain.c   |  4 +-
+ arch/arm/mach-s3c/irq-s3c24xx-fiq.S |  9 ++--
+ arch/arm/mach-s3c/irq-s3c24xx.c     |  8 +--
+ arch/arm/mach-tegra/sleep-tegra20.S | 38 +++++++++++++--
+ arch/arm/mach-tegra/sleep-tegra30.S | 94 +++++++++++++++++++++++++++--------
+ arch/arm64/Kconfig.platforms        |  1 +
+ drivers/soc/renesas/rcar-sysc.c     | 37 +++++++-------
+ drivers/soc/samsung/Kconfig         | 12 ++---
+ drivers/soc/samsung/Makefile        |  3 +-
+ drivers/soc/samsung/exynos-asv.c    | 57 ++++++++--------------
+ drivers/soc/samsung/exynos-asv.h    |  2 +
+ drivers/soc/samsung/exynos-chipid.c | 71 ++++++++++++++++++---------
+ drivers/soc/samsung/pm_domains.c    | 97 ++++++++++++++++++-------------------
+ 19 files changed, 286 insertions(+), 213 deletions(-)
 
-Nicolas Saenz Julienne (2):
-      arm64: defconfig: Enable nvmem's rmem driver
-      ARM: multi_v7_defconfig: Enable nvmem's rmem driver
-
-Quanyang Wang (1):
-      arm64: defconfig: enable clock driver for ZynqMP platforms
-
-Sameer Pujar (2):
-      arm64: defconfig: Enable Tegra audio graph card driver
-      arm64: defconfig: Enable RT5659
-
-Teresa Remmet (2):
-      arm64: defconfig: Enable rv3028 i2c rtc driver
-      arm64: defconfig: Enable PCA9532 support
-
-Tony Lindgren (2):
-      ARM: omap2plus_defconfig: Update for moved options
-      ARM: omap2plus_defconfig: Update for dropped options
-
-Yannick Fertre (1):
-      ARM: multi_v7_defconfig: add STM32 CEC support
-
- arch/arm/configs/at91_dt_defconfig   | 18 ++++++++++++------
- arch/arm/configs/imx_v6_v7_defconfig |  1 +
- arch/arm/configs/multi_v5_defconfig  |  1 -
- arch/arm/configs/multi_v7_defconfig  | 15 ++++++++++++++-
- arch/arm/configs/omap2plus_defconfig | 22 +++++-----------------
- arch/arm/configs/qcom_defconfig      | 18 ++++++++++++++++++
- arch/arm/configs/sama5_defconfig     | 15 ++-------------
- arch/arm/configs/tegra_defconfig     |  1 +
- arch/arm64/configs/defconfig         | 35 ++++++++++++++++++++++++++++++++=
-+++
- 9 files changed, 88 insertions(+), 38 deletions(-)
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
