@@ -1,430 +1,125 @@
-Return-Path: <SRS0=BbVa=HQ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5A5DC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 14 Feb 2021 13:16:56 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 688C164E60
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 14 Feb 2021 13:16:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 688C164E60
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:References:In-Reply-To:Message-Id:Date:Subject:To:
-	From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=+UMyJGMS6EpyB046sRfj/kIk2XrVbo/m/Ci/f1vmEiY=; b=2Btq/WWPr0ikW3MXfJG6MhGe1E
-	RIFGl9kpyJ9QGmtTgqwAFcUDApZjDa7xQEU/hodbogTi0P3rjIYs3nWwTV9YuTKW8hoJBxY8WZ+yl
-	x85T7IRzgNRB1i7C7di7jsJX8UNEdW+/MzgRjSkJfSCIYVqsIVk5XpejLPIY6YVjhw7G6jKawJpdh
-	5nJxSCsUjbME0Xv6FT8Xnl7eCslSri/eR/JX0Zz5ieabl/d7FpD6ip7VWPJPuUQIkZWSewRIEodAT
-	E5SS5GyQuDz6Fj5D3JtJcZF5AhR4+7GChkqS2IDteQ0QzFnUSerOPxedIjQ8Kq+9wJ64j5Ihc2DOU
-	LMWagVwA==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1lBHFc-0001zp-P4; Sun, 14 Feb 2021 13:15:48 +0000
-Received: from mail-ej1-x632.google.com ([2a00:1450:4864:20::632])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1lBHFZ-0001yX-KY
- for linux-arm-kernel@lists.infradead.org; Sun, 14 Feb 2021 13:15:46 +0000
-Received: by mail-ej1-x632.google.com with SMTP id b14so965174eju.7
- for <linux-arm-kernel@lists.infradead.org>;
- Sun, 14 Feb 2021 05:15:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:in-reply-to:references;
- bh=It/tnchFTL5BU0mnlVkVrdQSaCCBWgmelB0GwnqJJyA=;
- b=YcrRQ10fhOvk3EguiqPeZ/qwyoXHA0krmoC2Pf+giRf/uonRTpiL4d9YBJvxOVXWu6
- 7AUu04CH+RnwCTNpulx2zv9jpOX3pJmoYQwuNu5p5c35w7NClR7xHYeOluoubXgxOCOJ
- zvjoTXdpA04DVXvaEnPZooeTfgP1fV/ITWUYaa++cuYTXXMLp1UkceGPclw32NNoVOu2
- fZFRJ/uRWcfTOe6Oe/dqHkKCY939d8PXtr5ASpWbvhgzvCL0ynwspRsIojFJzzfe5CZ/
- JT1XND6bad16E1ZJjOKUAfWBlX1N/GWGYzSy9+TtFFLLovSHACusRf9IHnariIMfft7c
- X4YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references;
- bh=It/tnchFTL5BU0mnlVkVrdQSaCCBWgmelB0GwnqJJyA=;
- b=C4Mdp0Bym047HKu8Y4LNJ2HYb6HEg3AhIJnsC8IJeJvSikjH1NxFcXVdeqpzKp8nlm
- s6Mm6zJIOajhxIv2NQf8Cs702DCU/pjIDbVyHMqh2gKpzg1MVtXgwFs17zs4FE6sqg95
- CorNN146VDz6XNt0ciGzJACdW2OraYrA//k/yVbDxQlKpyMZ+UNMGR8IBQz0Vv0f1sFH
- faNJ89FLEXO98SepNTAAIKpIRrf2RA/HUev73EJ61MWtA5IR9h6sJZIuaG1soeR62jjc
- Hjx0uJYmoi63Br2Ti2Yn+0AiFQezf0f7KoSB7Ogxs4R4oR0EdTSOo+TKip/sdDzTykJA
- /L/A==
-X-Gm-Message-State: AOAM530Ox28NimSakkjliXn5nPfX0Q9V6LBKLLmgdGVhw0qszsksz5+p
- jjZVZ+0Y50qSW3cwVC+vBGs=
-X-Google-Smtp-Source: ABdhPJw4mp8gtML/z1TDmBxI+p/j5CP5kukJELG5m1IYi1pY2Kwb9qeocJQUGmUzC0hnh0ac/FMboQ==
-X-Received: by 2002:a17:906:755:: with SMTP id
- z21mr11680010ejb.514.1613308543969; 
- Sun, 14 Feb 2021 05:15:43 -0800 (PST)
-Received: from localhost
- (ipv6-31ee9f1acdb5aef4.ost.clients.hamburg.freifunk.net.
- [2a03:2267:4:0:31ee:9f1a:cdb5:aef4])
- by smtp.gmail.com with ESMTPSA id kb25sm8993004ejc.19.2021.02.14.05.15.43
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Sun, 14 Feb 2021 05:15:43 -0800 (PST)
-From: Oliver Graute <oliver.graute@gmail.com>
-To: shawnguo@kernel.org
-Subject: [PATCH v9 2/3] ARM: dts: Add support for i.MX6 UltraLite DART
- Variscite Customboard
-Date: Sun, 14 Feb 2021 14:13:49 +0100
-Message-ID: <1613308450-27958-3-git-send-email-oliver.graute@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1613308450-27958-1-git-send-email-oliver.graute@gmail.com>
-References: <1613308450-27958-1-git-send-email-oliver.graute@gmail.com>
-X-Patchwork-Bot: notify
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210214_081545_748962_E5FB6BAC 
-X-CRM114-Status: GOOD (  20.61  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, Parthiban Nallathambi <parthitce@gmail.com>,
- Arnd Bergmann <arnd@arndb.de>, narmstrong@baylibre.com,
- Sascha Hauer <s.hauer@pengutronix.de>, m.felsch@pengutronix.de,
- linux-kernel@vger.kernel.org, Oliver Graute <oliver.graute@gmail.com>,
- soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- NXP Linux Team <linux-imx@nxp.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Olof Johansson <olof@lixom.net>, festevam@gmail.com,
- linux-arm-kernel@lists.infradead.org
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31E78C433E0
+	for <soc@archiver.kernel.org>; Sun, 14 Feb 2021 22:38:21 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id BBFDE64E4E; Sun, 14 Feb 2021 22:38:20 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 91F2F64E27
+	for <soc@kernel.org>; Sun, 14 Feb 2021 22:38:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1613342300;
+	bh=2wALrn8VAAbK/1x1XX+Lop9OH26WAwPXH9B1Wn+KeHc=;
+	h=From:Date:Subject:List-Id:To:From;
+	b=gjAXr4NHD4s2/2xlbf5/XJpLIh5JZ/zfO/oRNkXaq2QoARTQbyTTOkATaj4c8N4q6
+	 rW+q+nuZ/gpAGSyr5kFF1mAPpLjdWMPqH2bmebYzJiBPL5zhAdTFD9zwJoeu8TKfav
+	 AaaTWPfCvlQ1vXijke2fGGVYQC/vwbNqnZ/xE1IWt6Zc5T4upWXAkaK9vVBg22byPC
+	 Dm/mHr3yxQzn6iUkuZcVU311cOayxY4+fqfEE5kDcc5keA3kvDZcMFv6zLDVL8K8PF
+	 Ll22XK4tPK32NfZ57+/2NNod4YtfHEdqyN/mFdgXwuy1zfgq90j4Z5ZZH0l9h+bZZA
+	 s/Yf0dIwNqcSw==
+Received: by mail-ot1-f48.google.com with SMTP id l23so4495270otn.10
+        for <soc@kernel.org>; Sun, 14 Feb 2021 14:38:20 -0800 (PST)
+X-Gm-Message-State: AOAM530n3JNZmvJLr6BOzsJ83blaUk0AWHPkuUupIkXiwh2mHX1LsrIZ
+	zYRvPJ7qWNavKye0NzHOgxxs//qKIABxnEtIs8Y=
+X-Google-Smtp-Source: ABdhPJxhKcABtd+TMhOp7xAMleHJyMln/77KiRekZ5trzivBzHsFc5dt8UPOdtw5SFO5oDoTd8snKP9tsF/7pnqUR+M=
+X-Received: by 2002:a05:6830:18e6:: with SMTP id d6mr9895956otf.251.1613342299853;
+ Sun, 14 Feb 2021 14:38:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210214131349.4Os-rcqypEWuiOCMxogRAhWnT2t75EjryHlhbA3Tu6E@z>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Sun, 14 Feb 2021 23:38:03 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0w-vPNBF=4ieg3YUyNHzy+qiZ5iK-9M1cRxA+TakScYw@mail.gmail.com>
+Message-ID: <CAK8P3a0w-vPNBF=4ieg3YUyNHzy+qiZ5iK-9M1cRxA+TakScYw@mail.gmail.com>
+Subject: [GIT PULL 0/6] ARM SoC changes for v5.12
+List-Id: <soc.lore.kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>, SoC Team <soc@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This patch adds DeviceTree Source for the i.MX6 UltraLite DART NAND/WIFI
+5.12 seems to be a fairly quiet release for the SoC tree. The main
+highlights are:
 
-Signed-off-by: Oliver Graute <oliver.graute@gmail.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Neil Armstrong <narmstrong@baylibre.com>
-Cc: Marco Felsch <m.felsch@pengutronix.de>
-Cc: Parthiban Nallathambi <parthitce@gmail.com>
----
-Changelog:
+ - Removing six of the older platforms that have no known users, as well
+   as the arch/c6x architecture. Despite all that removed code, there is st=
+ill
+   a small overall growth:
+   907 files changed, 33888 insertions(+), 26918 deletions(-)
+   I sent patches to remove an additional 50875 lines of driver code for th=
+ese
+   platforms, but those patches are merged through other subsystem trees.
 
-v9:
- - removed display-timing node
- - added 5V power supply for display
- - added assigned clocks for display
+- Support for three additional SoCs: Broadcom BCM4908 is used in wireless
+  routers, Qualcomm Snapdragon 888 is the latest high-end phone chip and
+  Qualcomm X55 is the a 5G modem chip that can also run as a standalone SoC
 
-v8:
- - backlight droped the status line
- - port the display panel
- - added pinctrl for touch
+- Support for the Apple M1 is coming up nicely, but didn't make the cut thi=
+s
+  time as there are still some fundamental decisions to be made, expect thi=
+s
+  to be added for v5.13.
 
-v7:
- - fixed wakeup-source
+- Among the newly supported boards, there are once more a number of older
+  mobile phones and tables, as well as modern development platforms and
+  industrial machines
 
-v6:
- - added some muxing
- - added codec in sound node
- - added adc1 node
+- A total of 752 non-merge changesets were written by 187 individual
+  developers. The six branches contain 78 pull requests from 29 downstream
+  maintainers, as well as a small number of patches that I applied directly=
+.
 
- arch/arm/boot/dts/Makefile                      |   1 +
- arch/arm/boot/dts/imx6ul-var-6ulcustomboard.dts | 255 ++++++++++++++++++++++++
- 2 files changed, 256 insertions(+)
- create mode 100644 arch/arm/boot/dts/imx6ul-var-6ulcustomboard.dts
+=3D=3D=3D Top 20 contributors by number of patches =3D=3D=3D
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index ce66ffd..9f72446 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -626,6 +626,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
- 	imx6ul-tx6ul-0010.dtb \
- 	imx6ul-tx6ul-0011.dtb \
- 	imx6ul-tx6ul-mainboard.dtb \
-+	imx6ul-var-6ulcustomboard.dtb \
- 	imx6ull-14x14-evk.dtb \
- 	imx6ull-colibri-eval-v3.dtb \
- 	imx6ull-colibri-wifi-eval-v3.dtb \
-diff --git a/arch/arm/boot/dts/imx6ul-var-6ulcustomboard.dts b/arch/arm/boot/dts/imx6ul-var-6ulcustomboard.dts
-new file mode 100644
-index 00000000..bf18888
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ul-var-6ulcustomboard.dts
-@@ -0,0 +1,255 @@
-+// SPDX-License-Identifier: (GPL-2.0)
-+/*
-+ * Support for Variscite DART-6UL Module
-+ *
-+ * Copyright (C) 2015 Freescale Semiconductor, Inc.
-+ * Copyright (C) 2015-2016 Variscite Ltd. - http://www.variscite.com
-+ * Copyright (C) 2018-2021 Oliver Graute <oliver.graute@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/input/input.h>
-+#include "imx6ul-imx6ull-var-dart-common.dtsi"
-+
-+/ {
-+	model = "Variscite i.MX6 UltraLite Carrier-board";
-+	compatible = "variscite,6ulcustomboard", "fsl,imx6ul";
-+
-+	backlight_lcd: backlight {
-+		compatible = "pwm-backlight";
-+		pwms = <&pwm1 0 20000>;
-+		brightness-levels = <0 4 8 16 32 64 128 255>;
-+		default-brightness-level = <6>;
-+		status = "okay";
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_keys>;
-+
-+		user {
-+			gpios = <&gpio1 0 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_BACK>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	gpio-leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_leds>;
-+
-+		d16-led {
-+			gpios = <&gpio4 20 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+
-+	panel1: panel-lcd {
-+		compatible = "sgd,gktw70sdad1sd";
-+
-+		backlight = <&backlight_lcd>;
-+		label = "gktw70sdad1sd";
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&lcdif_out>;
-+			};
-+		};
-+	};
-+
-+	sound {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,name = "wm8731audio";
-+		simple-audio-card,widgets =
-+			"Headphone", "Headphone Jack",
-+			"Line", "Line Jack",
-+			"Microphone", "Mic Jack";
-+		simple-audio-card,routing =
-+			"Headphone Jack", "RHPOUT",
-+			"Headphone Jack", "LHPOUT",
-+			"LLINEIN", "Line Jack",
-+			"RLINEIN", "Line Jack",
-+			"MICIN", "Mic Bias",
-+			"Mic Bias", "Mic Jack";
-+		simple-audio-card,format = "i2s";
-+		simple-audio-card,bitclock-master = <&codec_dai>;
-+		simple-audio-card,frame-master = <&codec_dai>;
-+
-+		codec_dai: simple-audio-card,codec {
-+			sound-dai = <&wm8731>;
-+			system-clock-frequency = <12288000>;
-+		};
-+	};
-+};
-+
-+&adc1 {
-+	status = "okay";
-+};
-+
-+&can1 {
-+	status = "okay";
-+};
-+
-+&can2 {
-+	status = "okay";
-+};
-+
-+&fec1 {
-+	status = "okay";
-+};
-+
-+&fec2 {
-+	status = "okay";
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+};
-+
-+&i2c2 {
-+	clock_frequency = <100000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c2>;
-+	status = "okay";
-+
-+	wm8731: audio-codec@1a {
-+		compatible = "wlf,wm8731";
-+		reg = <0x1a>;
-+		#sound-dai-cells = <0>;
-+		clocks = <&clks IMX6UL_CLK_SAI2>;
-+		clock-names = "mclk";
-+	};
-+
-+	touchscreen@38 {
-+		compatible = "edt,edt-ft5x06";
-+		reg = <0x38>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_touch>;
-+		interrupt-parent = <&gpio3>;
-+		interrupts = <4 IRQ_TYPE_NONE>;
-+		touchscreen-size-x = <800>;
-+		touchscreen-size-y = <480>;
-+		touchscreen-inverted-x;
-+		touchscreen-inverted-y;
-+		wakeup-source;
-+	};
-+
-+	rtc@68 {
-+		compatible = "dallas,ds1337";
-+		reg = <0x68>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_rtc>;
-+		interrupt-parent = <&gpio5>;
-+		interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
-+	};
-+};
-+
-+&lcdif {
-+	assigned-clocks = <&clks IMX6UL_CLK_LCDIF_PRE_SEL>;
-+	assigned-clock-parents = <&clks IMX6UL_CLK_PLL5_VIDEO_DIV>;
-+	pinctrl-names = "default";
-+	power-supply = <&reg_5v0>;
-+	pinctrl-0 = <&pinctrl_lcdif>;
-+	status = "okay";
-+
-+	port {
-+		lcdif_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
-+
-+&pwm1 {
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart1>;
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&uart3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart3>;
-+	uart-has-rtscts;
-+	status = "okay";
-+};
-+
-+&usbotg1 {
-+	disable-over-current;
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
-+&usbotg2 {
-+	disable-over-current;
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
-+&iomuxc {
-+	pinctrl_gpio_keys: gpio_keysgrp {
-+		fsl,pins = <
-+			MX6UL_PAD_GPIO1_IO00__GPIO1_IO00	0x17059
-+		>;
-+	};
-+
-+	pinctrl_gpio_leds: gpioledsgrp {
-+		fsl,pins = <
-+			MX6UL_PAD_CSI_HSYNC__GPIO4_IO20		0x1b0b0
-+		>;
-+	};
-+
-+	pinctrl_i2c2: i2c2grp {
-+		fsl,pins = <
-+			MX6UL_PAD_UART5_TX_DATA__I2C2_SCL	0x4001b8b0
-+			MX6UL_PAD_UART5_RX_DATA__I2C2_SDA	0x4001b8b0
-+		>;
-+	};
-+
-+	pinctrl_lcdif: lcdif {
-+		fsl,pins = <
-+			MX6UL_PAD_LCD_DATA02__LCDIF_DATA02	0x79
-+			MX6UL_PAD_LCD_DATA03__LCDIF_DATA03	0x79
-+			MX6UL_PAD_LCD_DATA04__LCDIF_DATA04	0x79
-+			MX6UL_PAD_LCD_DATA05__LCDIF_DATA05	0x79
-+			MX6UL_PAD_LCD_DATA06__LCDIF_DATA06	0x79
-+			MX6UL_PAD_LCD_DATA07__LCDIF_DATA07	0x79
-+			MX6UL_PAD_LCD_DATA10__LCDIF_DATA10	0x79
-+			MX6UL_PAD_LCD_DATA11__LCDIF_DATA11	0x79
-+			MX6UL_PAD_LCD_DATA12__LCDIF_DATA12	0x79
-+			MX6UL_PAD_LCD_DATA13__LCDIF_DATA13	0x79
-+			MX6UL_PAD_LCD_DATA14__LCDIF_DATA14	0x79
-+			MX6UL_PAD_LCD_DATA15__LCDIF_DATA15	0x79
-+			MX6UL_PAD_LCD_DATA18__LCDIF_DATA18	0x79
-+			MX6UL_PAD_LCD_DATA19__LCDIF_DATA19	0x79
-+			MX6UL_PAD_LCD_DATA20__LCDIF_DATA20	0x79
-+			MX6UL_PAD_LCD_DATA21__LCDIF_DATA21	0x79
-+			MX6UL_PAD_LCD_DATA22__LCDIF_DATA22	0x79
-+			MX6UL_PAD_LCD_DATA23__LCDIF_DATA23	0x79
-+			MX6UL_PAD_LCD_CLK__LCDIF_CLK		0x79
-+			MX6UL_PAD_LCD_ENABLE__LCDIF_ENABLE	0x79
-+		>;
-+	};
-+
-+	pinctrl_rtc: rtcgrp {
-+		fsl,pins = <
-+			MX6UL_PAD_SNVS_TAMPER7__GPIO5_IO07	0x1b0b0
-+		>;
-+	};
-+
-+	pinctrl_touch: touchgrp {
-+		fsl,pins = <
-+			MX6UL_PAD_LCD_RESET__GPIO3_IO04		0x80000000
-+		>;
-+	};
-+
-+};
--- 
-2.7.4
+     34 Manivannan Sadhasivam
+     30 Adam Ford
+     26 Konrad Dybcio
+     25 Dmitry Baryshkov
+     19 Maxime Ripard
+     18 Oleksij Rempel
+     17 Michal Simek
+     17 Krzysztof Kozlowski
+     16 Michael Walle
+     16 Johan Jonker
+     15 Vinod Koul
+     14 Gustave Monce
+     12 Lubomir Rintel
+     11 Rafa=C5=82 Mi=C5=82ecki
+     11 Martin Kepplinger
+     11 Cristian Ciocaltea
+     11 Andre Przywara
+     10 Linus Walleij
+     10 Guido G=C3=BCnther
+      9 Zhen Lei
 
+=3D=3D=3D Dirstat =3D=3D=3D
+   2.8% Documentation/devicetree/bindings/
+  28.3% arch/arm/boot/dts/
+   1.4% arch/arm/mach-prima2/
+   1.1% arch/arm/mach-u300/
+   3.0% arch/arm/
+   1.6% arch/arm64/boot/dts/amlogic/
+   8.5% arch/arm64/boot/dts/freescale/
+   1.0% arch/arm64/boot/dts/hisilicon/
+   4.3% arch/arm64/boot/dts/nvidia/
+  11.6% arch/arm64/boot/dts/qcom/
+   4.0% arch/arm64/boot/dts/renesas/
+   1.5% arch/arm64/boot/dts/rockchip/
+   1.1% arch/arm64/boot/dts/xilinx/
+   1.4% arch/arm64/boot/dts/zte/
+   2.5% arch/arm64/boot/dts/
+   1.1% arch/c6x/boot/dts/
+   3.3% arch/c6x/include/asm/
+   5.5% arch/c6x/kernel/
+   1.7% arch/c6x/lib/
+   4.4% arch/c6x/platforms/
+   1.7% arch/c6x/
+   1.0% drivers/memory/
+   3.9% drivers/soc/
+   1.0% drivers/tee/optee/
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+         Arnd
