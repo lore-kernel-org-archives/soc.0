@@ -8,93 +8,93 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D684C433DB
-	for <soc@archiver.kernel.org>; Wed, 17 Feb 2021 01:17:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49BC2C433E6
+	for <soc@archiver.kernel.org>; Wed, 17 Feb 2021 01:17:04 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id BA6706186A; Wed, 17 Feb 2021 01:17:02 +0000 (UTC)
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	id 118ED64E79; Wed, 17 Feb 2021 01:17:04 +0000 (UTC)
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 860A664E2F;
-	Wed, 17 Feb 2021 01:17:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 860A664E2F
+	by mail.kernel.org (Postfix) with ESMTPS id C746264E2F;
+	Wed, 17 Feb 2021 01:17:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C746264E2F
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=f.fainelli@gmail.com
-Received: by mail-pg1-f170.google.com with SMTP id a4so5861431pgc.11;
-        Tue, 16 Feb 2021 17:17:02 -0800 (PST)
+Received: by mail-pj1-f45.google.com with SMTP id d2so552751pjs.4;
+        Tue, 16 Feb 2021 17:17:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qzbulnVJvkxHQqgd6L0cuy16ntsVshSWo2ZahMwyOFI=;
-        b=WZ45NcvUVJENtrhS1GQ+G9m9qBfjydOd5ga9u6FyXstZJ2KkVEhYgqwQELicsKK6M6
-         fayoIHiI9Dq2be/l0nsv+aWGGJxEh9ma5SJ9dNtHEl2CFvbyfxZYBR2qW66Jm4uNflby
-         5oP1t7OlUtIknl4+x/Jrmi2qY/U4A+sj3dnK2LJfbclWWzE5IJ4cHHekIENdHNKy2wTX
-         bRyqBse84MACBcH6nYkH0EaYLLNQtx6YyYN+SP5J8t0UvhznfULGnd/KAI/GhjE4Y6q2
-         1FQfeO8JDd1gREUE5NCNRo16SKzwkwEk3dQXW3Cx6rX/1KdVcE4h0mL/cO8T12DmcVLE
-         Iq+w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=VC8mFVpBkd3XjnulZt1KtNe/EgtH5Xa5A7VuRQLB5bk=;
+        b=VGkE7zQjSi/MXJDiQ06A+q4+kWCf+fgHycd9I6KT76EGN6M8OKnhcdpaRphXNI9jxm
+         KUopUh23uILJ1cOOnsOgNTlXa50CXq/zJqWDj1OUfpbuY1ks6yBYOrLOTP4/3hGKl8Ua
+         n6Tfk22NIn/uQMMnZLS1nLTXotmQTUs3N9JbSbD437UJl32zKqEHcwr7nCgRch84mVRw
+         Llg8pQQRtDQ4SPwixCqDn0RlDMBgXq8FfkEVCA+aK9xJ6KLqS9LBYPO4z23y1w96DI0h
+         eYav9XmVjO7Dlgdk1ZRRvrfEj/flKKXqzMZdzycEPOTiino2JS58Kj9L/lnKX/ry4LQb
+         9f0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qzbulnVJvkxHQqgd6L0cuy16ntsVshSWo2ZahMwyOFI=;
-        b=m30q84zpBIzIkva4xsIzwjYVxKCDkQIWDGZx6nvllRy1cGBgc7hSKWHECGcrTqDKkL
-         f8Jsk7Ehlm7vALatSp4vBQAuLrvz4I35ine5YA3kygMA+fSo3Fs3NxNNC7QjCmuWrZjH
-         k0svw6N2GluQeKPBgk1X2HILaH6uCxLvCuSw97ljZ6FPW8/lT9CQwjwowcApw/V69sjv
-         GculgVNvW/r4yQ0ANyxEQSUamWQKtpVcMQRqeJU9Ry8dPw0wF8L8nMQt5tRaDwlSg6IP
-         fO2qoifyTYQSn/Ko2J0zJYgNAPcucG4MCjEYGtNTaEnQKCE4Fw23/KQtBdMjh0dSDbVM
-         OBjw==
-X-Gm-Message-State: AOAM531FcSqSoLwbSyspVRB4TbYP1PR7IEyFPpx14WNcybbqvuWb46jM
-	TfWFJ2lWCQ/Sa70BUggoGKBKx5C3GPw=
-X-Google-Smtp-Source: ABdhPJzK31tTvES4U9HvYNcCjb38B0r2zZrB2k40n8zceRiitb7+ReZfS9GAaOsFHwb5f/PbH/Q1eA==
-X-Received: by 2002:a63:c44d:: with SMTP id m13mr21706170pgg.64.1613524621621;
-        Tue, 16 Feb 2021 17:17:01 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=VC8mFVpBkd3XjnulZt1KtNe/EgtH5Xa5A7VuRQLB5bk=;
+        b=Br4WClNDc09EZWUPVd0PzpaHWLDOcRlLEBSXwABHrPhYtZ+6ipchSB2mCdkhBT3yrP
+         0pbVHzcZ2qvAYyKdEhHKDsjKV6vDVgLPwGBEe7I8N2AloP2NYl9qW9mOUfikM101XUje
+         SHiI5dt01eGFtNbxhTnsEXsNSRxL+aR0qeLrCgiZMwllrZVm44SJxlkBIoPBHqWy0qWh
+         9KksSvDXNqRb5GR0OmHw+SYrLqL98mxwXZbOEuW8kZ1TW2C3LZMjeQgsQlLdTdJCBdYp
+         R2Ih5cqGgK0FY4biBlFY1TysYWnkkECa8UAvQS3pX3cWj/eM4V/q4jje7xvNVimUD4mx
+         rt9Q==
+X-Gm-Message-State: AOAM533+K+EuTSY0zxVIaChupupNoac/oHJ+f9RdpEeMmcLh+NWFXWk+
+	T4lxaE6hcpTIHc2VFDsm3tZ58rh0+Qo=
+X-Google-Smtp-Source: ABdhPJxXJ+TkKMgQHnCMQgVHisBWUajjHREpMShokoYCGIVpT6BbqN6UWem/X854K06f6nJFbU5Urw==
+X-Received: by 2002:a17:90b:410d:: with SMTP id io13mr3260666pjb.68.1613524623044;
+        Tue, 16 Feb 2021 17:17:03 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id f3sm316046pgh.75.2021.02.16.17.17.00
+        by smtp.gmail.com with ESMTPSA id f3sm316046pgh.75.2021.02.16.17.17.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Feb 2021 17:17:01 -0800 (PST)
+        Tue, 16 Feb 2021 17:17:02 -0800 (PST)
 From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+	Florian Fainelli <f.fainelli@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 1/2] Broadcom late devicetree changes for 5.12
-Date: Tue, 16 Feb 2021 17:16:53 -0800
-Message-Id: <20210217011654.2561426-1-f.fainelli@gmail.com>
+Subject: [GIT PULL 2/2] Broadcom late drivers changes for 5.12
+Date: Tue, 16 Feb 2021 17:16:54 -0800
+Message-Id: <20210217011654.2561426-2-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210217011654.2561426-1-f.fainelli@gmail.com>
+References: <20210217011654.2561426-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit a0610b409fc9f90b4861c021ebe853bfcc310bb3:
+The following changes since commit 8b8f095b9076ca61107c0910c9273afd1dfa1f04:
 
-  Merge tag 'tags/bcm2835-dt-next-2021-01-28' into devicetree/next (2021-01-28 20:11:44 -0800)
+  soc: bcm: brcmstb: Remove soc_is_brcmstb() (2021-01-27 09:36:41 -0800)
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.12/devicetree-part2
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.12/drivers-part2
 
-for you to fetch changes up to 443f0bb8e29fa031ec4d5beb3c3143350438dc97:
+for you to fetch changes up to b22ac48b0a4d74415beef10e49e434e8f228a2bf:
 
-  Revert "ARM: dts: bcm2711: Add the BSC interrupt controller" (2021-02-16 17:11:40 -0800)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM-based SoC changes for 5.12,
-please pull the following:
-
-- Florian reverts the adding of the second level interrupt controller
-  for HDMI BSC interrupts since they collide with the main I2C
-  controller (i2c-bcm2835).
+  MAINTAINERS: rectify BROADCOM PMB (POWER MANAGEMENT BUS) DRIVER (2021-02-08 13:19:23 -0800)
 
 ----------------------------------------------------------------
-Florian Fainelli (1):
-      Revert "ARM: dts: bcm2711: Add the BSC interrupt controller"
+This pull request contains Broadcom ARM/ARM64 SoC drivers changes for
+5.12:
 
- arch/arm/boot/dts/bcm2711.dtsi | 12 ------------
- 1 file changed, 12 deletions(-)
+- Lukas fixes an incorrect entry of the Broadcom PMB driver which still
+  referenced the location of the files from a previous submission
+
+----------------------------------------------------------------
+Lukas Bulwahn (1):
+      MAINTAINERS: rectify BROADCOM PMB (POWER MANAGEMENT BUS) DRIVER
+
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
