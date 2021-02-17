@@ -1,99 +1,100 @@
-Return-Path: <SRS0=pZ4E=HS=pascalroeleven.nl=dev@kernel.org>
+Return-Path: <SRS0=pHIv=HT=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89532C433E0
-	for <soc@archiver.kernel.org>; Tue, 16 Feb 2021 17:09:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D684C433DB
+	for <soc@archiver.kernel.org>; Wed, 17 Feb 2021 01:17:03 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 22C3E64E2B; Tue, 16 Feb 2021 17:09:29 +0000 (UTC)
-X-Greylist: delayed 535 seconds by postgrey-1.34 at mail.kernel.org; Tue, 16 Feb 2021 17:09:28 UTC
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AC46664E08
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=pascalroeleven.nl
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=dev@pascalroeleven.nl
-Received: from pmg02-out2.zxcs.nl (pmg02-out2.zxcs.nl [185.104.28.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id BA6706186A; Wed, 17 Feb 2021 01:17:02 +0000 (UTC)
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AC46664E08;
-	Tue, 16 Feb 2021 17:09:28 +0000 (UTC)
-Received: from pmg02.zxcs.nl (localhost.localdomain [127.0.0.1])
-	by pmg02.zxcs.nl (ZXCS) with ESMTP id E010F82663;
-	Tue, 16 Feb 2021 18:00:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=pascalroeleven.nl; s=x; h=Content-Transfer-Encoding:MIME-Version:Message-Id
-	:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=CQp8a9bvhUdwKVBZ0N74gvncL9qmC+u/ZFHCgpEsS+o=; b=J50Nm06a0Q51h3t6vBefpAdhwE
-	qUU6PnVO0ETMQZWrfbYifiMV+K3vdb93a/bgcoI8JZ3JS1n0EaFeqJHVZgqq1g44DdRGCSMiE3rEo
-	EmY0rsoxnQslBiDKQlR25nZJCQPy++iz/NAbm0cHi3xHkDsnBDnUhGvQaEz4IHMw8YiAHnUk9ePCq
-	aJDftDN39WtTpjUSLRFiivUGO/yTCe2xEM2sYqExeJzRAC0bDnpKMNajz9oMh6mwhwsOcw5szbp/4
-	eUV4D77lwpxnlZuFEkxEtocsJrCNP6lKdnMQnTC1gu8qTY9gz1H3yTErRFzsgElA/tROBumk3Ovlm
-	lPXF4nAQ==;
-From: Pascal Roeleven <dev@pascalroeleven.nl>
+	by mail.kernel.org (Postfix) with ESMTPS id 860A664E2F;
+	Wed, 17 Feb 2021 01:17:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 860A664E2F
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=f.fainelli@gmail.com
+Received: by mail-pg1-f170.google.com with SMTP id a4so5861431pgc.11;
+        Tue, 16 Feb 2021 17:17:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qzbulnVJvkxHQqgd6L0cuy16ntsVshSWo2ZahMwyOFI=;
+        b=WZ45NcvUVJENtrhS1GQ+G9m9qBfjydOd5ga9u6FyXstZJ2KkVEhYgqwQELicsKK6M6
+         fayoIHiI9Dq2be/l0nsv+aWGGJxEh9ma5SJ9dNtHEl2CFvbyfxZYBR2qW66Jm4uNflby
+         5oP1t7OlUtIknl4+x/Jrmi2qY/U4A+sj3dnK2LJfbclWWzE5IJ4cHHekIENdHNKy2wTX
+         bRyqBse84MACBcH6nYkH0EaYLLNQtx6YyYN+SP5J8t0UvhznfULGnd/KAI/GhjE4Y6q2
+         1FQfeO8JDd1gREUE5NCNRo16SKzwkwEk3dQXW3Cx6rX/1KdVcE4h0mL/cO8T12DmcVLE
+         Iq+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qzbulnVJvkxHQqgd6L0cuy16ntsVshSWo2ZahMwyOFI=;
+        b=m30q84zpBIzIkva4xsIzwjYVxKCDkQIWDGZx6nvllRy1cGBgc7hSKWHECGcrTqDKkL
+         f8Jsk7Ehlm7vALatSp4vBQAuLrvz4I35ine5YA3kygMA+fSo3Fs3NxNNC7QjCmuWrZjH
+         k0svw6N2GluQeKPBgk1X2HILaH6uCxLvCuSw97ljZ6FPW8/lT9CQwjwowcApw/V69sjv
+         GculgVNvW/r4yQ0ANyxEQSUamWQKtpVcMQRqeJU9Ry8dPw0wF8L8nMQt5tRaDwlSg6IP
+         fO2qoifyTYQSn/Ko2J0zJYgNAPcucG4MCjEYGtNTaEnQKCE4Fw23/KQtBdMjh0dSDbVM
+         OBjw==
+X-Gm-Message-State: AOAM531FcSqSoLwbSyspVRB4TbYP1PR7IEyFPpx14WNcybbqvuWb46jM
+	TfWFJ2lWCQ/Sa70BUggoGKBKx5C3GPw=
+X-Google-Smtp-Source: ABdhPJzK31tTvES4U9HvYNcCjb38B0r2zZrB2k40n8zceRiitb7+ReZfS9GAaOsFHwb5f/PbH/Q1eA==
+X-Received: by 2002:a63:c44d:: with SMTP id m13mr21706170pgg.64.1613524621621;
+        Tue, 16 Feb 2021 17:17:01 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id f3sm316046pgh.75.2021.02.16.17.17.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Feb 2021 17:17:01 -0800 (PST)
+From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: Rob Herring <robh+dt@kernel.org>,
+To: soc@kernel.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	Maxime Ripard <mripard@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@siol.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	=?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
-	Corentin Labbe <clabbe@baylibre.com>,
-	Martin Cerveny <m.cerveny@computer.org>,
-	devicetree@vger.kernel.org,
+	Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: linux-sunxi@googlegroups.com,
-	Pascal Roeleven <dev@pascalroeleven.nl>
-Subject: [PATCH RESEND v3 0/2] Add support for Topwise A721 tablet
-Date: Tue, 16 Feb 2021 17:59:52 +0100
-Message-ID: <20210216165954.43135-1-dev@pascalroeleven.nl>
-X-Mailer: git-send-email 2.27.0
+	arnd@arndb.de,
+	olof@lixom.net,
+	khilman@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [GIT PULL 1/2] Broadcom late devicetree changes for 5.12
+Date: Tue, 16 Feb 2021 17:16:53 -0800
+Message-Id: <20210217011654.2561426-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-AuthUser: dev@pascalroeleven.nl
-Message-ID: <20210216165952.rzXEA_YHE1A30ZiRLXG1Hrnhgyy0kL5hFvXioTNhhd8@z>
 
-On request I'm resending the last two patches from the Topwise A721 tablet
-series from a year ago as they weren't picked up. The other patches are
-already merged, so I didn't resend them. They still apply as-is, so no changes
-are made.
+The following changes since commit a0610b409fc9f90b4861c021ebe853bfcc310bb3:
 
-Changes from v2:
-* Collected acked-by.
+  Merge tag 'tags/bcm2835-dt-next-2021-01-28' into devicetree/next (2021-01-28 20:11:44 -0800)
 
-Original cover letter:
+are available in the Git repository at:
 
-This series add support for the Topwise A721 tablet and it's display.
-It is an old tablet (around 2012) but it might be useful as reference
-as the devicetree is pretty complete.
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.12/devicetree-part2
 
-Changes from v1:
-* Split into multiple patches
-* dt-binding: use yaml instead of txt
-* dt-binding: add Topwise A721 to sunxi.yaml
-* dt-binding: add Topwise to vendor-prefixes
-* drm: Add bus_format, bus_flags and connector_type
-* dts: Use SPDX license identifier instead of boilerplate license text
-* dts: Remove pinctrl leftovers
+for you to fetch changes up to 443f0bb8e29fa031ec4d5beb3c3143350438dc97:
 
-Pascal Roeleven (2):
-  dt-bindings: arm: Add Topwise A721
-  ARM: dts: sun4i: Add support for Topwise A721 tablet
+  Revert "ARM: dts: bcm2711: Add the BSC interrupt controller" (2021-02-16 17:11:40 -0800)
 
- .../devicetree/bindings/arm/sunxi.yaml        |   5 +
- arch/arm/boot/dts/Makefile                    |   3 +-
- arch/arm/boot/dts/sun4i-a10-topwise-a721.dts  | 242 ++++++++++++++++++
- 3 files changed, 249 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/boot/dts/sun4i-a10-topwise-a721.dts
+----------------------------------------------------------------
+This pull request contains Broadcom ARM-based SoC changes for 5.12,
+please pull the following:
 
--- 
-2.27.0
+- Florian reverts the adding of the second level interrupt controller
+  for HDMI BSC interrupts since they collide with the main I2C
+  controller (i2c-bcm2835).
 
+----------------------------------------------------------------
+Florian Fainelli (1):
+      Revert "ARM: dts: bcm2711: Add the BSC interrupt controller"
 
+ arch/arm/boot/dts/bcm2711.dtsi | 12 ------------
+ 1 file changed, 12 deletions(-)
