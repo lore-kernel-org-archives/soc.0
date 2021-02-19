@@ -1,90 +1,127 @@
-Return-Path: <SRS0=1QLz=HV=cerno.tech=maxime@kernel.org>
+Return-Path: <SRS0=I5U8=HV=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D134C433DB
-	for <soc@archiver.kernel.org>; Fri, 19 Feb 2021 11:51:32 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id CF34264EB3; Fri, 19 Feb 2021 11:51:31 +0000 (UTC)
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D2C0C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 19 Feb 2021 11:53:47 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AB7E460C3D;
-	Fri, 19 Feb 2021 11:51:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AB7E460C3D
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=cerno.tech
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=maxime@cerno.tech
+	by mail.kernel.org (Postfix) with ESMTPS id 31A1664EB3
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 19 Feb 2021 11:53:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 31A1664EB3
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=cerno.tech
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Type:Cc:
+	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
+	In-Reply-To:MIME-Version:References:Message-ID:Subject:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=a92LAhJtd2aSWl/fPIQl6E6yR2Pgoh6pDUQPkaRrEEw=; b=M9BYaOEhAsh+wwwogYMOSLk7E
+	s4wv8GVi8NX7ZSiakjJEeyWYixcFfVUO7wR/HmmXplycao1NpG+Gak6E+nlnzvceaqCRCUuYbBBhQ
+	6sI6xOpQT8p1FtCsTKN4ZuMc5Gg8lBeerhESB/oMkMjsKRAH8Epbzp18Gj6Kd6yUMKwc1bnTCLxlk
+	mj1hpWMi2AoZ7ZFwjvZFOSRifGaDln3n6dI7Wb77JymQsZmcAfIzKlf/48FqPN1GBgh7YofJ1+Pxe
+	4YD3b0a5eTAiX4o8rrHRDSc2G1agLYczoexE5nCQVkfRyL7+E4rloegLSiLw+KPTq5E27pwtkBXAT
+	YDqUELQ/w==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1lD4Jv-0007OF-8c; Fri, 19 Feb 2021 11:51:39 +0000
+Received: from new2-smtp.messagingengine.com ([66.111.4.224])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1lD4Js-0007Nc-SV
+ for linux-arm-kernel@lists.infradead.org; Fri, 19 Feb 2021 11:51:38 +0000
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-	by mailnew.nyi.internal (Postfix) with ESMTP id BF72858017B;
-	Fri, 19 Feb 2021 06:51:29 -0500 (EST)
+ by mailnew.nyi.internal (Postfix) with ESMTP id BF72858017B;
+ Fri, 19 Feb 2021 06:51:29 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 19 Feb 2021 06:51:29 -0500
+ by compute6.internal (MEProxy); Fri, 19 Feb 2021 06:51:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=fm2; bh=aZern2yKBkAYfT9tSyK4y/aYiC2
-	GCcYVc0aQT81xeHw=; b=UK68A0rIVZrH6G9Y+0w0XT5pM0OV8NE+quAmg0XT6qA
-	3Olbig5PU39gxOg/MdZZHlBbIeHLKlrFn3sX6WbhE0OpPVuF24phUoXcyHYag6s0
-	cDP3WWaEYlddDtmGdJCEV96i+WM9kFHMR8I65cRgRxBlX3cHhvnp7GZdu+MtPmma
-	6rdMqw9T4sAKwvz2HmFLGV9U/twe0pb4aurl5zhfL9AVRICzbKEkmLxurTXRM9L+
-	3LlEEoPVtD3muv9TDV8X2TwI+D6+ApdGM6YD3tFoNb6MejRWlnLD98KPPrKudE8h
-	Bj6IFe8ExUvPgUKjTadcWd7zOb/RED4lz+WOdoqE0Uw==
+ date:from:to:cc:subject:message-id:references:mime-version
+ :content-type:in-reply-to; s=fm2; bh=aZern2yKBkAYfT9tSyK4y/aYiC2
+ GCcYVc0aQT81xeHw=; b=UK68A0rIVZrH6G9Y+0w0XT5pM0OV8NE+quAmg0XT6qA
+ 3Olbig5PU39gxOg/MdZZHlBbIeHLKlrFn3sX6WbhE0OpPVuF24phUoXcyHYag6s0
+ cDP3WWaEYlddDtmGdJCEV96i+WM9kFHMR8I65cRgRxBlX3cHhvnp7GZdu+MtPmma
+ 6rdMqw9T4sAKwvz2HmFLGV9U/twe0pb4aurl5zhfL9AVRICzbKEkmLxurTXRM9L+
+ 3LlEEoPVtD3muv9TDV8X2TwI+D6+ApdGM6YD3tFoNb6MejRWlnLD98KPPrKudE8h
+ Bj6IFe8ExUvPgUKjTadcWd7zOb/RED4lz+WOdoqE0Uw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=aZern2
-	yKBkAYfT9tSyK4y/aYiC2GCcYVc0aQT81xeHw=; b=kzkNuBxBlDx3vpbYeGVS4T
-	BD3XNKpE7df0iyskfEECt2uxZl9C4z8HMJaGJ1fyBQsOh5eQZHUaCfQVCg2EllV4
-	cBKSbpCnkD9Csl4zGzd2YAFQoygUdoYF5OmY+4pNjUkhqo4TIyEx9Vp192HAcnNt
-	oSZqJJcdy13eZXtQwCKOFwZfUOtSiYIGRuR2P7uLu3oJqofZ2zb/0Mh/Um6mhFM5
-	xUOyD8vnMtsgvt6azDuxvAGbuJP6xlQbjp6jTh61g/pK6/8yRYhFjiSlwLZ466z7
-	eCMobWqp6krep6rK19IH/pS42uMadQXFP5npr9opRPIh6drBylbDvHcIziEslPIw
-	==
+ messagingengine.com; h=cc:content-type:date:from:in-reply-to
+ :message-id:mime-version:references:subject:to:x-me-proxy
+ :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=aZern2
+ yKBkAYfT9tSyK4y/aYiC2GCcYVc0aQT81xeHw=; b=kzkNuBxBlDx3vpbYeGVS4T
+ BD3XNKpE7df0iyskfEECt2uxZl9C4z8HMJaGJ1fyBQsOh5eQZHUaCfQVCg2EllV4
+ cBKSbpCnkD9Csl4zGzd2YAFQoygUdoYF5OmY+4pNjUkhqo4TIyEx9Vp192HAcnNt
+ oSZqJJcdy13eZXtQwCKOFwZfUOtSiYIGRuR2P7uLu3oJqofZ2zb/0Mh/Um6mhFM5
+ xUOyD8vnMtsgvt6azDuxvAGbuJP6xlQbjp6jTh61g/pK6/8yRYhFjiSlwLZ466z7
+ eCMobWqp6krep6rK19IH/pS42uMadQXFP5npr9opRPIh6drBylbDvHcIziEslPIw
+ ==
 X-ME-Sender: <xms:P6YvYId7T8bQfzfqvs6n-7yaEM0dBaHmLLzoFIy0aMfmxSjbROEJ1Q>
-    <xme:P6YvYKP-PBO_RAqwATVDJcpoHlDZgmFTF2Czggr4S5LTe6WwYNvlK0psXT5q_Y9hG
-    bi1OTmrZPEQAgz43WQ>
+ <xme:P6YvYKP-PBO_RAqwATVDJcpoHlDZgmFTF2Czggr4S5LTe6WwYNvlK0psXT5q_Y9hG
+ bi1OTmrZPEQAgz43WQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrjeeigdefvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
-    udenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+ curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+ uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+ fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+ ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+ gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+ udenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
+ grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
 X-ME-Proxy: <xmx:P6YvYJg1Yw3wyzosPbX-VRDn2CSO8pePHe3a9qH-bQ_UGgt_6kOoXQ>
-    <xmx:P6YvYN_NZ1KpyII-3Pd_jHFNOOMVfYDXekemSbYHmJ7OEz3Zeh2UiQ>
-    <xmx:P6YvYEvGAMFlHhWwe-ulbLpsGOaxHLO-lCasCIUQnV7UYyC2SsaTgA>
-    <xmx:QaYvYEERBNKaC-HgmSNQvfVkK-GzGBldl2y1gJ_WneIfaEjrQgH6mA>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-	by mail.messagingengine.com (Postfix) with ESMTPA id 6A68E240065;
-	Fri, 19 Feb 2021 06:51:27 -0500 (EST)
+ <xmx:P6YvYN_NZ1KpyII-3Pd_jHFNOOMVfYDXekemSbYHmJ7OEz3Zeh2UiQ>
+ <xmx:P6YvYEvGAMFlHhWwe-ulbLpsGOaxHLO-lCasCIUQnV7UYyC2SsaTgA>
+ <xmx:QaYvYEERBNKaC-HgmSNQvfVkK-GzGBldl2y1gJ_WneIfaEjrQgH6mA>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr
+ [90.89.68.76])
+ by mail.messagingengine.com (Postfix) with ESMTPA id 6A68E240065;
+ Fri, 19 Feb 2021 06:51:27 -0500 (EST)
 Date: Fri, 19 Feb 2021 12:51:24 +0100
 From: Maxime Ripard <maxime@cerno.tech>
 To: Pascal Roeleven <dev@pascalroeleven.nl>
-List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@siol.net>,
-	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	=?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
-	Corentin Labbe <clabbe@baylibre.com>,
-	Martin Cerveny <m.cerveny@computer.org>, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-sunxi@googlegroups.com
 Subject: Re: [PATCH RESEND v3 2/2] ARM: dts: sun4i: Add support for Topwise
  A721 tablet
 Message-ID: <20210219115124.lneiioiksjflbsuo@gilmour>
 References: <20210216165954.43135-1-dev@pascalroeleven.nl>
  <20210216165954.43135-3-dev@pascalroeleven.nl>
 MIME-Version: 1.0
+In-Reply-To: <20210216165954.43135-3-dev@pascalroeleven.nl>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210219_065137_191392_BF7654DC 
+X-CRM114-Status: GOOD (  20.01  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: devicetree@vger.kernel.org, Jernej Skrabec <jernej.skrabec@siol.net>,
+ Arnd Bergmann <arnd@arndb.de>, linux-sunxi@googlegroups.com,
+ Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>,
+ =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+ Corentin Labbe <clabbe@baylibre.com>, Martin Cerveny <m.cerveny@computer.org>,
+ Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
+Content-Type: multipart/mixed; boundary="===============0821156453382544955=="
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210219115124.bppA5dJIr1TI0tURzctlGTakc4zuCx-9yy02GFmo9Gg@z>
+
+
+--===============0821156453382544955==
 Content-Type: multipart/signed; micalg=pgp-sha256;
 	protocol="application/pgp-signature"; boundary="mtxopajle64dkerr"
 Content-Disposition: inline
-In-Reply-To: <20210216165954.43135-3-dev@pascalroeleven.nl>
 
 
 --mtxopajle64dkerr
@@ -293,3 +330,18 @@ UWbbNcjkHUaCL1O/dw/JXnUCvEkL5gQ=
 -----END PGP SIGNATURE-----
 
 --mtxopajle64dkerr--
+
+
+--===============0821156453382544955==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+--===============0821156453382544955==--
+
