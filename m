@@ -6,14 +6,14 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67F04C433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D329C433E0
 	for <linux-arm-kernel@archiver.kernel.org>; Sun, 21 Feb 2021 02:59:18 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1889D6512C
+	by mail.kernel.org (Postfix) with ESMTPS id 5231D65130
 	for <linux-arm-kernel@archiver.kernel.org>; Sun, 21 Feb 2021 02:59:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1889D6512C
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5231D65130
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,50 +22,49 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:To:Date:Message-Id:References:In-Reply-To:From:
 	Subject:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=HbTmqEY6G3nvOr/Oncie18TwBT1FxsD99Ayh6AuHof4=; b=qVTXq2I1TtG/fnxcCewRiGsT8G
-	xXkxuWHyauq6e75kywzeXNs+eBqCs9no7u5QEwq4eBsDqAhJ731+uIK5DzdUri/UTdxhZ6XXZbePd
-	Y360SxNnA9y2gPpptOvvgQQd5pWqE02llrYlD8O6vFNsErlyyhOSI57wPU7Ge6WA+O+1E6x6RnrME
-	kop12/4133KIw6jvN6Nq9FKHuIBfp4LQdV7u6L53pat0Z7xMs9VPDlcEvQsTKBJ+/vs6y7JUZkx+1
-	Fk1UlAaa6hCwGh+yQEY6iVeFHqF9BckmbNN0lvEEBNa+6+jRZazs1UJdJgwZuRGvfgNSHDUKPoEdN
-	UimXhqTg==;
+	bh=OD0GwM7AMgHOuiZXlzf5XreWI03RIS5JeA5B9iWv6xc=; b=EC9q7/kTY0sX4crUGQz7NGPm++
+	CJgjHq6UnGFCz6YsAQRbqcw6FAB5tU3G0h9S+jKfy8KMNEB2yx7GJ1aNGUdxQE45MzFbAefr4tV2P
+	lklZfkPbywDy9Zbn120ygOxxhYVMv6BQlK8RVchDGVVXQn5YbQRa+6eZ0l1aMg9DVXWrmPeUA1EmX
+	7TfAjlh1Xo+ptTWSb+xpHBsvGSiXg95M4ZOWOHa/e8xNrKvg0rYxMB4d/0tObEQdPRaltliSjV/Px
+	ODWoFXA/T6IAqG7/4IUPXfHZMM9aqCk+pN+L5luJyK0sHtm7UOeGbA8pOpEYcrFjyyprvmHuBtOIA
+	tvz98XeQ==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1lDewV-0004Oq-Vy; Sun, 21 Feb 2021 02:57:56 +0000
+	id 1lDewD-0004Mp-9j; Sun, 21 Feb 2021 02:57:37 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1lDew9-0004LE-Oz
- for linux-arm-kernel@lists.infradead.org; Sun, 21 Feb 2021 02:57:36 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPS id 627A264EF9;
+ id 1lDew9-0004LF-Lk
+ for linux-arm-kernel@lists.infradead.org; Sun, 21 Feb 2021 02:57:35 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPS id 4F5A464EF7;
  Sun, 21 Feb 2021 02:57:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
  s=k20201202; t=1613876251;
- bh=LCK0VHBAKoWSQjOxwjyyLU88OlNKxcypa4CM+z3N2dM=;
+ bh=V7/dZ099Tb6lH58YI/2FfDyYBPeoPepzyijvFSKFXtI=;
  h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
- b=EfuCmyFZniP3N63Q+t8i9te0/sddFbwAM9ufv273mXaSRWlAymxTI+IjgOZbubSKI
- 1ShovOwBUGHsU8sxWfHx/9e2HCVqFStPbt7tWqva+jE/opLHr+PuUcgXxUD/cLoFXP
- Z4Xd3Xh6cQjI+NP8C6+EqiEg/OifsIwMFQIC36ev9Hb62JFqHxXEVFZQbzi2zoRfIe
- kHX9zEHh4Zc3ITyhB8fuqr+JH1ojS3I/LijJdb+ribgMcADn+AnzhyMkFJfIwDFmi2
- 3URe2TaAAUi9EhjWVJ/nFtME1unqvbduwxUfIW+cdnyNjKrYA0IYJYq2hXrEUhqfIp
- hRwSvDDl0nDhg==
-Subject: Re: [GIT PULL 4/6] ARM SoC defconfigs for v5.12
+ b=MrBmFllGAfj8gzeDEGs/KSHpB4pvEUKqPlH/79xIzmsE8NWrOkdiORHyQ5yMUU8yT
+ KkxFCr6oeFumFixSq99EUxP5OxZUH913IcroMyw2bfMV4gUTgyDveZUztxpdPfQLMK
+ s05tC2Qxsl9rokVJhyBVg6XBDixk0U+BMS3djxC/fgJ9YBope8NVV4fjDcSzaDUvTq
+ eKDoHIome1ZPPUj4w8teDqJH/IOAaJQ3AbV4PLiP3Rzqib+U5ZR7F+J01m6SeBVvxA
+ C90P7da85e/P5PcLAGJfVL0N7C/HeQba/HWqkAx8KwCdljt7B18r1xJlqcU9ehzicG
+ KDwrkkSutruDw==
+Subject: Re: [GIT PULL 3/6] ARM SoC changes for v5.12
 From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAK8P3a0rK+By11RG+A5NxJ5kWQCWzB3Qs7BFiJfL8sqRtMt2ww@mail.gmail.com>
+In-Reply-To: <CAK8P3a0kOOOR4RP_A9v9R4_PeGsa9z3=TqcvH-Cs9oRq4mNDhQ@mail.gmail.com>
 References: <CAK8P3a0w-vPNBF=4ieg3YUyNHzy+qiZ5iK-9M1cRxA+TakScYw@mail.gmail.com>
- <CAK8P3a0rK+By11RG+A5NxJ5kWQCWzB3Qs7BFiJfL8sqRtMt2ww@mail.gmail.com>
+ <CAK8P3a0kOOOR4RP_A9v9R4_PeGsa9z3=TqcvH-Cs9oRq4mNDhQ@mail.gmail.com>
 X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <CAK8P3a0rK+By11RG+A5NxJ5kWQCWzB3Qs7BFiJfL8sqRtMt2ww@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
- tags/arm-defconfig-v5.12
-X-PR-Tracked-Commit-Id: 21e4675d9305f6ccd20b95d943882d607c8ae288
+X-PR-Tracked-Message-Id: <CAK8P3a0kOOOR4RP_A9v9R4_PeGsa9z3=TqcvH-Cs9oRq4mNDhQ@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-soc-v5.12
+X-PR-Tracked-Commit-Id: c2bd78de41fc3bdeb183bc24bbb2c4c0f3cfdb9a
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 56bf6fc266ca14d2b9276c8a62e4ff6783bfe68b
-Message-ID: <161387625124.20427.12672981125117094900.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 5011bb9fbb194834dd04ae6c986d439032ecc717
+Message-ID: <161387625113.20427.15408784927818520135.pr-tracker-bot@kernel.org>
 Date: Sun, 21 Feb 2021 02:57:31 +0000
 To: Arnd Bergmann <arnd@kernel.org>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210220_215734_351245_05D3ECEA 
-X-CRM114-Status: UNSURE (   5.30  )
+X-CRM114-CacheID: sfid-20210220_215734_306967_7D43D749 
+X-CRM114-Status: UNSURE (   5.24  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
@@ -87,14 +86,14 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210221025731.3LY4dIAiOoDQ9AP-aoy4VwCXXwy0qMcVJgXlC9BDI6s@z>
+Message-ID: <20210221025731.3uSI-wW1phr_QAfHpcKkJXI0XuT8TQRGSYcwRDjdzzE@z>
 
-The pull request you sent on Sun, 14 Feb 2021 23:44:16 +0100:
+The pull request you sent on Sun, 14 Feb 2021 23:43:28 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-defconfig-v5.12
+> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-soc-v5.12
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/56bf6fc266ca14d2b9276c8a62e4ff6783bfe68b
+https://git.kernel.org/torvalds/c/5011bb9fbb194834dd04ae6c986d439032ecc717
 
 Thank you!
 
