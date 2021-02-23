@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93544C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Feb 2021 06:21:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F9BAC433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Feb 2021 06:21:13 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3FF6C64DB1
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Feb 2021 06:21:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3FF6C64DB1
+	by mail.kernel.org (Postfix) with ESMTPS id 1423864ED6
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Feb 2021 06:21:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1423864ED6
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,65 +23,65 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=yXiQHtSTMsytDoSDQWSwGY3ypuhVfZRfpWwq4fClRdg=; b=ay5Wwl3QcZy5QFcciBcZIRiMf
-	uvEHmcFx9j5bBoPr9QAloBDXQikIVBSF5y+mEsi6q/KNHdwO8fBGn+0yj/321aYj3IJpZAGEKTY1I
-	VzAZ/ti0kOwJPt8RPr9sUmfVxbC38E8Wp3lgk7e56r2oN76O/hxGqmnY2lsRXd5dRfJzFLGFHUqKJ
-	eADs9yEid4XbHsy3623rKug+VFrHeDjLtqdQOVXPJaXYFJxEb3mxaV10uumqV4+3xunBq9OUPhv/Z
-	MeGYbdTf2fWK1M8VJetrDPArwD+oVFdUWu9FS/jDjNf+zYTXdhHzFbmr2Ul4lDF+F7HrOgiGvM8Yp
-	LhrbzKnUA==;
+	 bh=74/oNQZ0WbuoQgmB97K3BtpVjYl1XJx9NmmM2IG491c=; b=tFPOwKz0a2svaX4Ryso44qWrT
+	NKSPsJU8yIbHZlDpRl+MpvXCJyT4rK9rBLOps/izmwoUgTwy1HG6/kz8P+cdlMrIGkm5MkLW1UhS5
+	8jxiAFigvM9Q3uC0fq++vk8U1o/1vFMUeeGsv3FSzloZQ5tqBTsgGYhMLEuNU0LYTPeAYYgHhVY41
+	XNIqaAh/0RS5+KQz1jzL1l9bPPQpaLh3sTkUpcChM+BXRB/p/V7XsXivfHTIhslmibGjZf2ZSd7Ou
+	hZRT6GbhV0010RTDEUeE3ulhnCEtyw+/0TKJTDi9wutlvVlp/XeTchHps+FIK11fVnoV4OrcKLzBw
+	sHAnwrdRQ==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1lER3E-0006yN-7a; Tue, 23 Feb 2021 06:20:04 +0000
-Received: from mail-pj1-x1034.google.com ([2607:f8b0:4864:20::1034])
+	id 1lER3J-00071a-J0; Tue, 23 Feb 2021 06:20:09 +0000
+Received: from mail-pj1-x1030.google.com ([2607:f8b0:4864:20::1030])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1lER2h-0006oZ-Hf
- for linux-arm-kernel@lists.infradead.org; Tue, 23 Feb 2021 06:19:34 +0000
-Received: by mail-pj1-x1034.google.com with SMTP id o6so1176221pjf.5
+ id 1lER2k-0006p1-19
+ for linux-arm-kernel@lists.infradead.org; Tue, 23 Feb 2021 06:19:36 +0000
+Received: by mail-pj1-x1030.google.com with SMTP id s23so1193553pji.1
  for <linux-arm-kernel@lists.infradead.org>;
- Mon, 22 Feb 2021 22:19:31 -0800 (PST)
+ Mon, 22 Feb 2021 22:19:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=G4thmjduZ43HX5eyCNJENeVZMcyA8AVKFXPpIRfsEmo=;
- b=amHWH1xFUTFu36kpCUT4l9b90U0fBp3Q9fyx8iXV9r/xiRDq9pDWnJnL5GPlqLxbSj
- HR0yuPTyY+r+HwX+t5dEfOPeVRXaEaI3mggCZWThxuvElg0+eLqgqpVKAuTGcld4bc6X
- MHx5hnu+uT3f4oMN6r166FajTuyU6Mtf+FsqQ=
+ bh=aI5IVkQJA7PDNbBU/+1PZqGp3m7b3MnBtGAvzpqE9DI=;
+ b=krfujBl0J3RTa+9MxhJ1pPz8nrwfBTvIuo2aMFitjGAWxGPWV7xeKZzzG+bMU+3iUy
+ Mc5Us7xmjCKRjKJsudStwDXQ5GMoRh7bmyzyoFgQlsU0Or3Ww9ad+a7WksQ9IzdZLbay
+ MULJZM57YvPqTgUTD2YUj/28tKRa7nzcg8ztI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=G4thmjduZ43HX5eyCNJENeVZMcyA8AVKFXPpIRfsEmo=;
- b=M7NN0nBDTHviw8Uisdiw2YpziumcJQ4z85y0St5uv0wLb4Gq/fZ0agmO4IhPDsbHQ7
- PWEwMmzdPu9rh2lUsjgseebsVp9WmpsnAwK6/dsCexgvB0WeVjWiy9fy3hsArZX24U7d
- IW/NbgmvVft+kPJQ7Edes1VrsR1Fx8cFE5YH7tpw1gMRjm4wUjFYJS/Fwva/+vqFJkoQ
- Xdqx2k4woEsO1pekbVGnxKLXhYKuclktJVcN4TxcKQ6P825aLVtNbPMRv65oQAGYrdlT
- bxv6Qe5wTtXDPwjXTYhqdWRSRtYXJnqAuTLLe4QcOE/tArghtHpxdy9/IN17CGp9sEYd
- CVZQ==
-X-Gm-Message-State: AOAM53271HBXVH821qHYI5ntKbLpxsAEbrxu0jviGWkMSqq8ffRn9wyb
- 3qYNY79zok+VGix85/MW3mad2w==
-X-Google-Smtp-Source: ABdhPJzKdWD/HPnom8Qx8jH6AAUN43gD8lpStgM44BbHKJBQkB14izYGXPrhe4CCETIu2OGeezBwGg==
-X-Received: by 2002:a17:90a:7e94:: with SMTP id
- j20mr28131038pjl.218.1614061169617; 
- Mon, 22 Feb 2021 22:19:29 -0800 (PST)
+ bh=aI5IVkQJA7PDNbBU/+1PZqGp3m7b3MnBtGAvzpqE9DI=;
+ b=IwQChVTHeUcREP7atpZLR6hop1TwjtLlI/jykB1qOTqxAHDx5ltMNyR+gPS7S/uf/A
+ HKTnfx8VEZloYlBafrMoN+VH2N0NoBpvvdgtuwkf7bkhGrrUSNCdnU0ffvD3eT50JIhl
+ INx3org11mA35gNBkBsFNNRrLjM8oNQn4SIotifAvzUBL+6mopqqbMA2t9khFk8OaQ2j
+ Gg69gx4FHWsGjKnaq0/58r9WvWmkxlE+s/O2m9WH+6ZDLcBRrEYraPgPDOcLh8LIgl6+
+ U1lemKcyzPE7NDtV2yDYIyyLTLGRyQ0neD8KhG42I8Oc7xTxlENmaS+WHTFRCLM23o+Q
+ 8Cag==
+X-Gm-Message-State: AOAM533mkKN5Wr3z5PaxWjGuj74c5MlMPfaIo5YWcx0FaQndKIcSCt7J
+ 2u3LHDbmYA2Hw8kfmXM4mPM1zg==
+X-Google-Smtp-Source: ABdhPJxKcQ0XdzH66RpqYbTQ6lbBZie3kabhudXrxsFNyvw+rqjI5s3m5LdmnSloa1eUTFccWA5bRQ==
+X-Received: by 2002:a17:90a:7e0a:: with SMTP id
+ i10mr26715766pjl.152.1614061171969; 
+ Mon, 22 Feb 2021 22:19:31 -0800 (PST)
 Received: from shiro.work (p345188-ipngn200408sizuokaden.shizuoka.ocn.ne.jp.
  [124.98.97.188])
- by smtp.googlemail.com with ESMTPSA id n10sm20135169pgk.91.2021.02.22.22.19.27
+ by smtp.googlemail.com with ESMTPSA id n10sm20135169pgk.91.2021.02.22.22.19.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 22 Feb 2021 22:19:29 -0800 (PST)
+ Mon, 22 Feb 2021 22:19:31 -0800 (PST)
 From: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
 To: devicetree@vger.kernel.org, linux-clk@vger.kernel.org, soc@kernel.org,
  sboyd@kernel.org
-Subject: [PATCH 7/8] ARM: mstar: Add OPP table for infinity3
-Date: Tue, 23 Feb 2021 15:18:29 +0900
-Message-ID: <20210223061830.1913700-8-daniel@0x0f.com>
+Subject: [PATCH 8/8] ARM: mstar: Add OPP table for mercury5
+Date: Tue, 23 Feb 2021 15:18:30 +0900
+Message-ID: <20210223061830.1913700-9-daniel@0x0f.com>
 X-Mailer: git-send-email 2.30.0.rc2
 In-Reply-To: <20210223061830.1913700-1-daniel@0x0f.com>
 References: <20210223061830.1913700-1-daniel@0x0f.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210223_011932_937984_D12B9AC4 
-X-CRM114-Status: GOOD (  11.98  )
+X-CRM114-CacheID: sfid-20210223_011934_254354_00D6330F 
+X-CRM114-Status: GOOD (  11.45  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,80 +99,57 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210223061829.kF6ZDxa8GMV4ZBOI5ohDjFjS2Iutw0PLuBfbG5yJgLw@z>
+Message-ID: <20210223061830.ygo3b-C2s5XcKY66d-q3fuQlR_IwQ0-Xeu4T47xPC0w@z>
 
-The infinity3 has a slightly higher max frequency
-compared to the infinity so extend the OPP table.
+Add an OPP table for mercury5 so that cpu frequency scaling can
+happen.
 
-Co-authored-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Daniel Palmer <daniel@0x0f.com>
 ---
- arch/arm/boot/dts/mstar-infinity3.dtsi | 58 ++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ arch/arm/boot/dts/mstar-mercury5.dtsi | 36 +++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/arch/arm/boot/dts/mstar-infinity3.dtsi b/arch/arm/boot/dts/mstar-infinity3.dtsi
-index 9857e2a9934d..a56cf29e5d82 100644
---- a/arch/arm/boot/dts/mstar-infinity3.dtsi
-+++ b/arch/arm/boot/dts/mstar-infinity3.dtsi
-@@ -6,6 +6,64 @@
+diff --git a/arch/arm/boot/dts/mstar-mercury5.dtsi b/arch/arm/boot/dts/mstar-mercury5.dtsi
+index a7d0dd9d6132..80a19bd23c9c 100644
+--- a/arch/arm/boot/dts/mstar-mercury5.dtsi
++++ b/arch/arm/boot/dts/mstar-mercury5.dtsi
+@@ -6,6 +6,42 @@
  
- #include "mstar-infinity.dtsi"
+ #include "mstar-v7.dtsi"
  
-+&cpu0_opp_table {
-+	opp-1008000000 {
-+		opp-hz = /bits/ 64 <1008000000>;
-+		opp-microvolt = <1000000>;
-+		clock-latency-ns = <300000>;
-+	};
++/ {
++	cpu0_opp_table: opp_table0 {
++		compatible = "operating-points-v2";
++		opp-shared;
 +
-+	// overclock frequencies below, shown to work fine up to 1.3 GHz
-+	opp-108000000 {
-+		opp-hz = /bits/ 64 <1080000000>;
-+		opp-microvolt = <1000000>;
-+		clock-latency-ns = <300000>;
-+		turbo-mode;
-+	};
++		opp-100000000 {
++			opp-hz = /bits/ 64 <100000000>;
++			opp-microvolt = <800000 800000 850000>;
++			clock-latency-ns = <300000>;
++		};
 +
-+	opp-1188000000 {
-+		opp-hz = /bits/ 64 <1188000000>;
-+		opp-microvolt = <1000000>;
-+		clock-latency-ns = <300000>;
-+		turbo-mode;
-+	};
++		opp-200000000 {
++			opp-hz = /bits/ 64 <200000000>;
++			opp-microvolt = <850000 850000 880000>;
++			clock-latency-ns = <300000>;
++		};
 +
-+	opp-1296000000 {
-+		opp-hz = /bits/ 64 <1296000000>;
-+		opp-microvolt = <1000000>;
-+		clock-latency-ns = <300000>;
-+		turbo-mode;
-+	};
++		opp-400000000 {
++			opp-hz = /bits/ 64 <400000000>;
++			opp-microvolt = <880000 880000 890000>;
++			clock-latency-ns = <300000>;
++		};
++		opp-600000000 {
++			opp-hz = /bits/ 64 <600000000>;
++			opp-microvolt = <900000 900000 1000000>;
++			clock-latency-ns = <300000>;
++		};
 +
-+	opp-1350000000 {
-+		opp-hz = /bits/ 64 <1350000000>;
-+		opp-microvolt = <1000000>;
-+		clock-latency-ns = <300000>;
-+		turbo-mode;
-+	};
-+
-+	opp-1404000000 {
-+		opp-hz = /bits/ 64 <1404000000>;
-+		opp-microvolt = <1000000>;
-+		clock-latency-ns = <300000>;
-+		turbo-mode;
-+	};
-+
-+	opp-1458000000 {
-+		opp-hz = /bits/ 64 <1458000000>;
-+		opp-microvolt = <1000000>;
-+		clock-latency-ns = <300000>;
-+		turbo-mode;
-+	};
-+
-+	opp-1512000000 {
-+		opp-hz = /bits/ 64 <1512000000>;
-+		opp-microvolt = <1000000>;
-+		clock-latency-ns = <300000>;
-+		turbo-mode;
++		opp-800000000 {
++			opp-hz = /bits/ 64 <800000000>;
++			opp-microvolt = <900000 900000 1000000>;
++			clock-latency-ns = <300000>;
++		};
 +	};
 +};
 +
