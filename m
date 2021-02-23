@@ -1,135 +1,102 @@
-Return-Path: <SRS0=eyM4=HY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=dVkn=HZ=0x0f.com=daniel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 488E4C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 22 Feb 2021 10:10:32 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0558DC433DB
+	for <soc@archiver.kernel.org>; Tue, 23 Feb 2021 06:19:15 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id C111E64E62; Tue, 23 Feb 2021 06:19:14 +0000 (UTC)
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 02978614A5
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 22 Feb 2021 10:10:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 02978614A5
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=pascalroeleven.nl
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=09OFq3QxO7zunpUtgEBVvNNPjJYP2fuaP/dAPoyO9Xk=; b=XI4g8CQyRWR4LUt6wxWvMs0G7Y
-	F3kWK1xQEgpn1sRGISecHsfRPIQGuTbdsqoZaDQ7f2hqlwOfUBo+0AQrK37DCC85wHn3Rmtxf63+n
-	7oGaNui4Wrff/NoAmGOpY+Gnzl2ZB+tdkz2g7x6zMw7qGV4Csdd1fRYdGiuvrtSGG59TkOmlnsv0r
-	RectOk/3m+rbDd0IvgEw8KE9sVAijxfQU/HkXg5D3AcESbFxx+GIMT5YqdSV2bHrgF8sW5hnc3nKo
-	DwSa0nv5vVUbqxAcstWbX8iGRBj1vz8sZofMNJoITvgq7BSnRfdKSgR2MC6I3vuvCg9P5CgSu3GtX
-	w6vElezQ==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1lE89I-0004xH-CF; Mon, 22 Feb 2021 10:09:04 +0000
-Received: from pmg01-out2.zxcs.nl ([2a06:2ec0:1:a::ffeb])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1lE89A-0004uk-Dk
- for linux-arm-kernel@lists.infradead.org; Mon, 22 Feb 2021 10:08:58 +0000
-Received: from pmg01.zxcs.nl (localhost.localdomain [127.0.0.1])
- by pmg01.zxcs.nl (ZXCS) with ESMTP id 1507F10588A;
- Mon, 22 Feb 2021 11:08:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=pascalroeleven.nl; s=x; h=Content-Transfer-Encoding:MIME-Version:Message-Id
- :Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
- List-Subscribe:List-Post:List-Owner:List-Archive;
- bh=KsZvchTpxBaJoKjRefDrbL7JsiCBHcFRF62tHbfbg+M=; b=rW8nQmOyGEf23sfmBuBdWMBEqT
- kAf96AdA1k4CPrRSCaKtgM0MgKoYx9hqOLUvo/eOpo/YzGZWxBeBBwKZm2NDBjo0BJ6yOYGLn+XcR
- e9+z4UTFD+CWXodva1LfYJeQce/PGHkAsd+W9Xk7zPhf8DTDiWhcFXA43fbo8izXmjohltSFpjBxl
- JWaF1IZ7+otoAzKTJzIpJgrJS3U6wZPCu4cXNQ8Lq95WXLUXL/5dHbQa+Un8zwGeuFyudHlTIGewp
- /FaNtPgUFbqQugkOBzoqZpT67HN442/v5XblvEIqHxgUD8XZ0d2EsMRxaXrHzL9PeG48ZfRBbyaHp
- jjxp1VCw==;
-From: Pascal Roeleven <dev@pascalroeleven.nl>
+	by mail.kernel.org (Postfix) with ESMTPS id 29FA764E60
+	for <soc@kernel.org>; Tue, 23 Feb 2021 06:19:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 29FA764E60
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=daniel@0x0f.com
+Received: by mail-pg1-f174.google.com with SMTP id l2so1687794pgb.1
+        for <soc@kernel.org>; Mon, 22 Feb 2021 22:19:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5FL/F1gCFmBMP8+RfZ2tPc29BuH7DoO9TPApvWMpXrY=;
+        b=sz3vP7AGKlQXyS2RDXmywvZUnQ5EhPaeq8Lu5rtj26+LhGxR0RMTZIe3o5BF05dO7F
+         nKjGu3Dcm1sk1k1v9AxCeajyOq1w4y3qbGdQBJDI4VVqV4AHe1DiYMEB8Qmd4XU5kKr8
+         V2pK2mJwNswP51/9JYngQraTpenSNLTD32PE0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5FL/F1gCFmBMP8+RfZ2tPc29BuH7DoO9TPApvWMpXrY=;
+        b=kPZoHU5WwwAwzVVP+nNzjQhG8PJF7/cbGhNcgy60Aodwtlk+5dAKNL1b/1oQeKxbgd
+         tO+ORdN9S8A69VCYdFRJITzn17x18NbZiIQYwF+TNJJrMZUcyQ7IOroK0UaNd2ImVtb3
+         gpu8T1DVCwab4MF2+ILTc9BiidIUza3QXJWyDoxlroo2bEOlFrLWF+s+4YcPD6hOUV7m
+         U2by3xnkGy1bXcnb434YpXEFIylwZa3Bwiy9Tk5zQe3hpMj6EjM9Mm7tM6ofEe5UMfs6
+         vHjZEcvcxCgE/iO9/weOdVwavtaOwK3iyOUxqRC3d33bifRLU6YoFXZ6/wpDdxGKTUgH
+         Pphw==
+X-Gm-Message-State: AOAM532S3SdhWsldpdvUHvvbk7fTino264+hvesphtkQXW697dRV2jsU
+	67+COkPJH4ozm2XhWlpwTLVHfw==
+X-Google-Smtp-Source: ABdhPJwJaNbUqhV3I7tQ+drfo40Dil/MozZwGwWntn9HWDo9ZR71eAj9kODrgi7GuJUdcXT2cj5HBw==
+X-Received: by 2002:a62:7bc5:0:b029:1ed:62d5:31f7 with SMTP id w188-20020a627bc50000b02901ed62d531f7mr968575pfc.24.1614061153493;
+        Mon, 22 Feb 2021 22:19:13 -0800 (PST)
+Received: from shiro.work (p345188-ipngn200408sizuokaden.shizuoka.ocn.ne.jp. [124.98.97.188])
+        by smtp.googlemail.com with ESMTPSA id n10sm20135169pgk.91.2021.02.22.22.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Feb 2021 22:19:13 -0800 (PST)
+From: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
-To: Rob Herring <robh+dt@kernel.org>, Maxime Ripard <mripard@kernel.org>,
- Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@siol.net>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org,
- =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
- Icenowy Zheng <icenowy@aosc.io>, Corentin Labbe <clabbe@baylibre.com>,
- Martin Cerveny <m.cerveny@computer.org>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/2] Add support for Topwise A721 tablet
-Date: Mon, 22 Feb 2021 11:08:24 +0100
-Message-ID: <20210222100826.12478-1-dev@pascalroeleven.nl>
-X-Mailer: git-send-email 2.27.0
+To: devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	soc@kernel.org,
+	sboyd@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	w@1wt.eu,
+	Daniel Palmer <daniel@0x0f.com>
+Subject: [PATCH 0/8] ARM: mstar: cpupll
+Date: Tue, 23 Feb 2021 15:18:22 +0900
+Message-Id: <20210223061830.1913700-1-daniel@0x0f.com>
+X-Mailer: git-send-email 2.30.0.rc2
 MIME-Version: 1.0
-X-AuthUser: dev@pascalroeleven.nl
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210222_050856_755925_9A58B281 
-X-CRM114-Status: GOOD (  14.94  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: linux-sunxi@googlegroups.com, Pascal Roeleven <dev@pascalroeleven.nl>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210222100824.gDlMrEmqFC0VFe8oFKmxjPgq-ltfIEexuqVLdKXVucE@z>
+Content-Transfer-Encoding: 8bit
 
-On request I'm resending the last two patches from the Topwise A721 tablet
-series from a year ago as they weren't picked up. The other patches are
-already merged, so I didn't resend them.
+This series adds a scrappy driver for the PLL that generates
+the cpu clock on MStar/SigmaStar ARMv7 SoCs.
 
-Changes from v3:
-* Fix DT validation warnings
-* Remove leftover labels
+Unfortunately there isn't much documentation for this thing
+so there are few magic values and guesses.
 
-Changes from v2:
-* Collected acked-by.
+This needs to come after the MPLL DT changes.
 
-Original cover letter:
+Daniel Palmer (8):
+  dt-bindings: clk: mstar msc313 cpupll binding description
+  clk: mstar: msc313 cpupll clk driver
+  ARM: mstar: Add cpupll to base dtsi
+  ARM: mstar: Link cpupll to cpu
+  ARM: mstar: Link cpupll to second core
+  ARM: mstar: Add OPP table for infinity
+  ARM: mstar: Add OPP table for infinity3
+  ARM: mstar: Add OPP table for mercury5
 
-This series add support for the Topwise A721 tablet and it's display.
-It is an old tablet (around 2012) but it might be useful as reference
-as the devicetree is pretty complete.
-
-Changes from v1:
-* Split into multiple patches
-* dt-binding: use yaml instead of txt
-* dt-binding: add Topwise A721 to sunxi.yaml
-* dt-binding: add Topwise to vendor-prefixes
-* drm: Add bus_format, bus_flags and connector_type
-* dts: Use SPDX license identifier instead of boilerplate license text
-* dts: Remove pinctrl leftovers
-
-Pascal Roeleven (2):
-  dt-bindings: arm: Add Topwise A721
-  ARM: dts: sun4i: Add support for Topwise A721 tablet
-
- .../devicetree/bindings/arm/sunxi.yaml        |   5 +
- arch/arm/boot/dts/Makefile                    |   3 +-
- arch/arm/boot/dts/sun4i-a10-topwise-a721.dts  | 242 ++++++++++++++++++
- 3 files changed, 249 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/boot/dts/sun4i-a10-topwise-a721.dts
+ .../bindings/clock/mstar,msc313-cpupll.yaml   |  45 ++++
+ arch/arm/boot/dts/mstar-infinity.dtsi         |  34 +++
+ arch/arm/boot/dts/mstar-infinity2m.dtsi       |   2 +
+ arch/arm/boot/dts/mstar-infinity3.dtsi        |  58 +++++
+ arch/arm/boot/dts/mstar-mercury5.dtsi         |  36 +++
+ arch/arm/boot/dts/mstar-v7.dtsi               |   9 +
+ drivers/clk/mstar/Kconfig                     |   7 +
+ drivers/clk/mstar/Makefile                    |   1 +
+ drivers/clk/mstar/clk-msc313-cpupll.c         | 228 ++++++++++++++++++
+ 9 files changed, 420 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/mstar,msc313-cpupll.yaml
+ create mode 100644 drivers/clk/mstar/clk-msc313-cpupll.c
 
 -- 
-2.27.0
+2.30.0.rc2
 
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
