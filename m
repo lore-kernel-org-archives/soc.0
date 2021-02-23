@@ -2,86 +2,84 @@ Return-Path: <SRS0=smCM=HZ=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41A45C433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37E66C433DB
 	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Feb 2021 06:20:51 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CB8EB64E62
+	by mail.kernel.org (Postfix) with ESMTPS id BEB5C64E2E
 	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Feb 2021 06:20:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CB8EB64E62
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BEB5C64E2E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
 	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=unxO0W5TK57qMapzBwl/jOzXJ1QFq4t8N3fulXZfav0=; b=wB5pY2FUVlju8t0J/v+Up+fv+
-	4r3qL9oV7tjEM2rLlmzh4RBfpDR2mjdZMuQYWZ4XVR2S41C8QLbsAXiXvi9P2ayK2U+yp7b/EXoaA
-	fMilcMcnLVcAUzeyZR6yyLRY7BadDuNxgSCHy3DG+GHBQfFuAqSnR3Sp8N0GamYFQltZQGvyQET72
-	LWZrZabWhFvavmaZ034KM4m0GNJuUvx1I4uvHuwTjMMzIpy7IYVmxY3zwqXxQEUMdsuSrzAByt6rp
-	lJNFI9eZ8zN8B8tAM7MCNMhremF1s82ogZ1TStWW8KcO866EpbeKQIZgjvjOPQTC63iIoJp4LNfpI
-	OjysWl9Rw==;
+	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=GKXpycLHJHuJL4Ii8ab+i8v3DYT174UZko5Rz8zamO4=; b=nmCm1hHMZyPpSZZZ/H37EwfEbh
+	JBZjigb8Av023MF9q1DKAMuiPNaN1go4CNYrfpA5yb7EYHAWcy/3GbwFnWWprrGsoPF5KtBlM+/gL
+	OvS/y5IZF5HZv2DhUOdE60YTYDhrvxeW1QFQFKyBxHsR5kQ5CIQXxpZg7L85j5s4ZogJOisj7c2je
+	sbcWt3mFJexIqj1llJieq6loBBUmXoBZMpE7Pk7J3+3Y5dSJt1WmgYnCs/OyqRmAukt2vbIEyGm+M
+	zGRId3gyzpMK1/zUzWj0QpcghZwbvcDAwr/42uk9fpcfLTjN8UneewkkPk/GCpGyj+ksgdhklLnQ2
+	6B1pFqwQ==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1lER2h-0006od-2d; Tue, 23 Feb 2021 06:19:31 +0000
-Received: from mail-pl1-x634.google.com ([2607:f8b0:4864:20::634])
+	id 1lER2V-0006ks-Fv; Tue, 23 Feb 2021 06:19:19 +0000
+Received: from mail-pg1-x52d.google.com ([2607:f8b0:4864:20::52d])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1lER2Y-0006lW-CG
- for linux-arm-kernel@lists.infradead.org; Tue, 23 Feb 2021 06:19:23 +0000
-Received: by mail-pl1-x634.google.com with SMTP id u11so9188866plg.13
+ id 1lER2R-0006jr-S5
+ for linux-arm-kernel@lists.infradead.org; Tue, 23 Feb 2021 06:19:17 +0000
+Received: by mail-pg1-x52d.google.com with SMTP id o63so11744823pgo.6
  for <linux-arm-kernel@lists.infradead.org>;
- Mon, 22 Feb 2021 22:19:21 -0800 (PST)
+ Mon, 22 Feb 2021 22:19:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=WvzkCjZyptzDnW1uepsiXb6ybrsE6A8U5lzjXZF4NH4=;
- b=DeXXljYGddSCbpsw5yQZDdWWq/dbOTy0CmpXadmiPDNqrp0kPHRgRzwK11zwiGd6AO
- BY+r+BrMSNGMhKk+KRhiTLh2ke5g/iRd1c0XY2bJIWXOC/JSLO4AUt9qWVD5qNlZIcOE
- vlc8lAkWXzdwQkm1q3G4APE7sDzXfl4MycAic=
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=5FL/F1gCFmBMP8+RfZ2tPc29BuH7DoO9TPApvWMpXrY=;
+ b=sz3vP7AGKlQXyS2RDXmywvZUnQ5EhPaeq8Lu5rtj26+LhGxR0RMTZIe3o5BF05dO7F
+ nKjGu3Dcm1sk1k1v9AxCeajyOq1w4y3qbGdQBJDI4VVqV4AHe1DiYMEB8Qmd4XU5kKr8
+ V2pK2mJwNswP51/9JYngQraTpenSNLTD32PE0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=WvzkCjZyptzDnW1uepsiXb6ybrsE6A8U5lzjXZF4NH4=;
- b=mJs1BfzSqCmAhTHYVbE41DIhXdriGWU6b6GW1mrkh7mSobWlJH8+xzubJkbkjMgJC+
- t/kfJDsEgSqYAA6zs/19mFZRSpfwFu9VENxXDq6wRJ/dI54+gKwC1sjvkS0wbBzLDrwy
- Z6bbRoyqfXOQ4FyqrU9d/fJza/wyZsU4TYLz37ARhjlR4jXz1r8OLO4hxFSpHa3RRKJM
- SplULxZuK5T8OwrwyV5Eo36FAc89EBta8Ec1QtZKVyPB6aI4qwgIaA3dJHfgRPNF1nWr
- Tiajbj9I2QUVqGi2o7zvyzbtH6Dh90cHwSyK2u5pJ3ewQfDhhzTAGR5+fmMBvF3kwqjC
- Ju2Q==
-X-Gm-Message-State: AOAM531MzK9z2FIY5nuIAlIc5/DbxeDgqzwU+nZ8khOn39lRMRgEMngf
- gp18Xl/aL24/tMczHyXoVcPV2w==
-X-Google-Smtp-Source: ABdhPJzUFcIDoQ53XoBGFCZHB+j9nJd4ObgYI5HbP5VqqkuvxkGhU56VmEE/a/ZFZLF7fjsQVyhI2Q==
-X-Received: by 2002:a17:90a:ea88:: with SMTP id
- h8mr27156943pjz.154.1614061160369; 
- Mon, 22 Feb 2021 22:19:20 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=5FL/F1gCFmBMP8+RfZ2tPc29BuH7DoO9TPApvWMpXrY=;
+ b=ZKmXqP9V1uh1zBFqHvdpV84zACNU3VuiTxdQYzTqIn5DVbcbI3iCJxZ1NicMODzylu
+ +Ty+kmg0c85ksslyLCslRJCo/cy0mevlsUj3wGRwOw9sj2NK8+3/DEup9WWoZfPURbqH
+ D+ODhMP76bjXUc4DMb2O2y0le3Qzj260GIx9ciFCdNq3EWs4ycULni96FeDNNzMLDm21
+ yXvTmtyIWilj+xFfgYLhHxowA1uio5EmMWGtvgGsraKTX6aOKZbiecFkTUC6+gzDbdnk
+ bqB7apMeihPsw8Hvln5b3n42ssy+YiDf+107fUwGbV1codR6QsR4q/9cb5JlIZDmJ7Xx
+ TaCQ==
+X-Gm-Message-State: AOAM530N+05oOF6Q4qwTISCy3JeJKtOS7g0vH/hdFPxuI4933dixZ617
+ IPyXuoqh21OOQiMbGyGDFi+wdg==
+X-Google-Smtp-Source: ABdhPJwJaNbUqhV3I7tQ+drfo40Dil/MozZwGwWntn9HWDo9ZR71eAj9kODrgi7GuJUdcXT2cj5HBw==
+X-Received: by 2002:a62:7bc5:0:b029:1ed:62d5:31f7 with SMTP id
+ w188-20020a627bc50000b02901ed62d531f7mr968575pfc.24.1614061153493; 
+ Mon, 22 Feb 2021 22:19:13 -0800 (PST)
 Received: from shiro.work (p345188-ipngn200408sizuokaden.shizuoka.ocn.ne.jp.
  [124.98.97.188])
- by smtp.googlemail.com with ESMTPSA id n10sm20135169pgk.91.2021.02.22.22.19.18
+ by smtp.googlemail.com with ESMTPSA id n10sm20135169pgk.91.2021.02.22.22.19.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 22 Feb 2021 22:19:20 -0800 (PST)
+ Mon, 22 Feb 2021 22:19:13 -0800 (PST)
 From: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
 To: devicetree@vger.kernel.org, linux-clk@vger.kernel.org, soc@kernel.org,
  sboyd@kernel.org
-Subject: [PATCH 3/8] ARM: mstar: Add cpupll to base dtsi
-Date: Tue, 23 Feb 2021 15:18:25 +0900
-Message-ID: <20210223061830.1913700-4-daniel@0x0f.com>
+Subject: [PATCH 0/8] ARM: mstar: cpupll
+Date: Tue, 23 Feb 2021 15:18:22 +0900
+Message-ID: <20210223061830.1913700-1-daniel@0x0f.com>
 X-Mailer: git-send-email 2.30.0.rc2
-In-Reply-To: <20210223061830.1913700-1-daniel@0x0f.com>
-References: <20210223061830.1913700-1-daniel@0x0f.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210223_011922_868183_A23B8537 
-X-CRM114-Status: GOOD (  11.66  )
+X-CRM114-CacheID: sfid-20210223_011916_152633_E53A2CE2 
+X-CRM114-Status: GOOD (  13.29  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,34 +97,39 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210223061825.yme6GLgnkQVDb8clg724pdeUtdaHTUW2UxTOt2RjgpI@z>
+Message-ID: <20210223061822.LlcvSaljKBXQx7mY9aI9tiHIl0BF9mCA1rrwtTyhOCU@z>
 
-All MStar/SigmaStar ARMv7 SoCs have the CPU PLL at the same
-place so add it to the base dtsi.
+This series adds a scrappy driver for the PLL that generates
+the cpu clock on MStar/SigmaStar ARMv7 SoCs.
 
-Signed-off-by: Daniel Palmer <daniel@0x0f.com>
----
- arch/arm/boot/dts/mstar-v7.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+Unfortunately there isn't much documentation for this thing
+so there are few magic values and guesses.
 
-diff --git a/arch/arm/boot/dts/mstar-v7.dtsi b/arch/arm/boot/dts/mstar-v7.dtsi
-index 075d583d6f40..d323c1a3f3c2 100644
---- a/arch/arm/boot/dts/mstar-v7.dtsi
-+++ b/arch/arm/boot/dts/mstar-v7.dtsi
-@@ -132,6 +132,13 @@ mpll: mpll@206000 {
- 				clocks = <&xtal>;
- 			};
- 
-+			cpupll: cpupll@206400 {
-+				compatible = "mstar,msc313-cpupll";
-+				reg = <0x206400 0x200>;
-+				#clock-cells = <0>;
-+				clocks = <&mpll MSTAR_MSC313_MPLL_DIV2>;
-+			};
-+
- 			gpio: gpio@207800 {
- 				#gpio-cells = <2>;
- 				reg = <0x207800 0x200>;
+This needs to come after the MPLL DT changes.
+
+Daniel Palmer (8):
+  dt-bindings: clk: mstar msc313 cpupll binding description
+  clk: mstar: msc313 cpupll clk driver
+  ARM: mstar: Add cpupll to base dtsi
+  ARM: mstar: Link cpupll to cpu
+  ARM: mstar: Link cpupll to second core
+  ARM: mstar: Add OPP table for infinity
+  ARM: mstar: Add OPP table for infinity3
+  ARM: mstar: Add OPP table for mercury5
+
+ .../bindings/clock/mstar,msc313-cpupll.yaml   |  45 ++++
+ arch/arm/boot/dts/mstar-infinity.dtsi         |  34 +++
+ arch/arm/boot/dts/mstar-infinity2m.dtsi       |   2 +
+ arch/arm/boot/dts/mstar-infinity3.dtsi        |  58 +++++
+ arch/arm/boot/dts/mstar-mercury5.dtsi         |  36 +++
+ arch/arm/boot/dts/mstar-v7.dtsi               |   9 +
+ drivers/clk/mstar/Kconfig                     |   7 +
+ drivers/clk/mstar/Makefile                    |   1 +
+ drivers/clk/mstar/clk-msc313-cpupll.c         | 228 ++++++++++++++++++
+ 9 files changed, 420 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/mstar,msc313-cpupll.yaml
+ create mode 100644 drivers/clk/mstar/clk-msc313-cpupll.c
+
 -- 
 2.30.0.rc2
 
