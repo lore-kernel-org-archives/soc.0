@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3991FC4332D
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Feb 2021 06:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A632C433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Feb 2021 06:21:10 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E160464E2E
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Feb 2021 06:21:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E160464E2E
+	by mail.kernel.org (Postfix) with ESMTPS id E8F8664DA3
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Feb 2021 06:21:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E8F8664DA3
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,65 +23,65 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=8ez0DEYvkv3E9K4UHf4txWxZ8agA4+iHoB4xkZ/CrsI=; b=IgNrQV64vLhzSSM9Hlep9yNM+
-	ggX1cSiS11HQnVJMLOR+bacyC+6nKduOmFCiL/4Ikz+b6Lw03qgRaSmEomKNNrwd8ikG5dWymvbhc
-	toVOMtG75e2l42DcBfiRQXlQ6shbQrvfINqBm8KbTSCmaWiBGDaPgBj3CKlxa+l3rLHPJ+W1m2dPs
-	Z/Zdl1Yw6cROItnRCYPzTcKUPd0G1Mga8W41831MeSG0q2IesJ/QlBJAC3DLCqPwKzV4YNx1Hy+GN
-	TrTrOqGtjcqkVuk0Vz5hB6cTr4ZNkLz+OrkZeHaPfXDspWQakqw2uD3/O7/o33jlK6x2yjUUs7Ofm
-	2+WhRWrlw==;
+	 bh=JoXfXiEWRhHS2jdNgwNc2kuAqkiesOiPG36OxtT3MPQ=; b=IYEB7o+Z7VnLfPNNaArHwSQFD
+	pUntyRm5VnlusvZsKHUdyvHuVAVOve3JZHJON59JQ68TFtJ/2kuyi6vfiQLQkaIa/SWHzlwt1YDpR
+	VILRgQXjZmNv0A0LWEFRKbCd2NSAciZZfkRV0zSzcdkMeuPSr05XeYxUmH363m8LSS7NXv7xajyDt
+	yS1mBOh16lCZbzigc9HK5uzo+EroSMN+tY63bkNcf94ysNccjO5xp6cNTgv8Xoy81l5/wU2eV8m3R
+	1A3oWeoZJWGcqGKE7FuefcH4OgvGCH6qL8D3CERh3LT7hVRtW6FMvVJ6F/NwhDU1o57kbKnd8FksS
+	8z4vlrvAQ==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1lER2u-0006t1-O8; Tue, 23 Feb 2021 06:19:44 +0000
-Received: from mail-pf1-x429.google.com ([2607:f8b0:4864:20::429])
+	id 1lER36-0006wR-GS; Tue, 23 Feb 2021 06:19:56 +0000
+Received: from mail-pj1-x1031.google.com ([2607:f8b0:4864:20::1031])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1lER2a-0006lx-OK
- for linux-arm-kernel@lists.infradead.org; Tue, 23 Feb 2021 06:19:25 +0000
-Received: by mail-pf1-x429.google.com with SMTP id j12so8134011pfj.12
+ id 1lER2f-0006nc-2L
+ for linux-arm-kernel@lists.infradead.org; Tue, 23 Feb 2021 06:19:32 +0000
+Received: by mail-pj1-x1031.google.com with SMTP id o6so1176167pjf.5
  for <linux-arm-kernel@lists.infradead.org>;
- Mon, 22 Feb 2021 22:19:24 -0800 (PST)
+ Mon, 22 Feb 2021 22:19:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=F8U0f9JNY8hRMi39WPkD4ASf4aAhKNDuZAqXYiDMPnc=;
- b=OdafbEs6apuScIxtpkC5hbqj2hdH2BgCZ/p6xtr5NI/8lYsH/8jqbSc51l3+G+oxdm
- /HTWGZWDK2BndoVcYAnXd0cjugjc+PqdTeqTCSYl4njHNY1e7RWaWUsyGsoI42armolR
- q0pkImbhFou/3iRgFAQDzcMf3nJvz1jrtqflU=
+ bh=SE8LvB13EoijNekrwFmw4zAb9BZgnUUKtus/CbxCO44=;
+ b=Vzqnw822lH2lfVZnHFzXqgEjRR+CAv1klD1WlOha88yUivgU/HRzplnKxIRyISmh0c
+ JbvmMk3JdaI2X1TDHww+2/w7j/gkEVZkZOQZS69erTcEV6JBiWyzuSXvc9JMPyGMs9Kw
+ +Dn0H3PI6Wgd7h/fts19GzE8gCfBUHadG09JQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=F8U0f9JNY8hRMi39WPkD4ASf4aAhKNDuZAqXYiDMPnc=;
- b=bje0Rqu06QERARgKs24/JbNk21ByVpP8ZgpayDktXZi7bMb0s2jcQd7X9lqfzrDHsi
- ButOl9mfr2a+xYKvDOFlSL1Z29VZnjUpIkyXU/tSxNQ8XzTr4pdJZwp+cbBmSO143g3s
- CBC3Ol6oGEBZQpaoa1gbnU34rtmOl/BjaMTdlBdFopLdqeVf+ncU+8fwe1GvxwWc7u+y
- p8dveIxX/cXheUvg3NuIdj/ivreh+COXyb3Xhg7+96gZt8ilthNI+GWnX4esv/z7LE5x
- tzm6O9cmreCQuVJxIjAS6kI1Ybr7Om2/fIPilyZimH7K+6GvqQXOPb5QsIT8EkWGJPFG
- j54w==
-X-Gm-Message-State: AOAM533d3OHRmBxQ+EsrzF6zCel5oAfLFipiNDUHGRI/IcacLd+KpmA+
- Ip83X5nFX0XNF7zPFRFae3vtXQ==
-X-Google-Smtp-Source: ABdhPJxc6Ul/6qH9CfSEt6s256nfdmu2EHwQomQ8gqEAsR960hE9xL7M7oKKwskSClxqWd9Szf2f+A==
-X-Received: by 2002:a62:dd01:0:b029:1ed:6b67:1377 with SMTP id
- w1-20020a62dd010000b02901ed6b671377mr938433pff.48.1614061162681; 
- Mon, 22 Feb 2021 22:19:22 -0800 (PST)
+ bh=SE8LvB13EoijNekrwFmw4zAb9BZgnUUKtus/CbxCO44=;
+ b=Byttl3f1I1DzbKGEigQ/Bt05ziqzMHIW9toCdSlx8+ZEAzemgXGU3mAJkH4szfaDo6
+ gYFfz8nUQH9iu55AbzT2d1kT4lvag5eQAAinscAu6GtVblR2IE+kNxFlCqW8g8OXP4kT
+ nnGvtQUCeMvU+UKQZz5vod/xSSJfaOrkdcTwYNf5maugXdfy3qsnzswZFITRyGUjNpeQ
+ QKIxM6ig7G0LoGv2nw+cJ9WkCGIkYM6kGr10hqMeVcCAGE72DAioLAcnh23fm7ag9527
+ Oow/psxgzkufFxufqoglDg+6DmWVnu1tfR1RQEbBIQrSykH9eVtj4i5BekOigzvjw4Hr
+ oyXw==
+X-Gm-Message-State: AOAM531aX24FX5GNNxrwpdRzjAAaafV1NEfIBrxGoM9g3ZaImEkrIFsv
+ YVFHXPUmVsct1Wzy/Xbn2aBshw==
+X-Google-Smtp-Source: ABdhPJzoIJDh0x+aPCJvQ3KGczLpHsrN+drRAIc5AD4BKUwfO1ZvK1x/0gzZUZpOaaY3vYvOJ8Z3MA==
+X-Received: by 2002:a17:90a:1d0a:: with SMTP id
+ c10mr28899732pjd.142.1614061167210; 
+ Mon, 22 Feb 2021 22:19:27 -0800 (PST)
 Received: from shiro.work (p345188-ipngn200408sizuokaden.shizuoka.ocn.ne.jp.
  [124.98.97.188])
- by smtp.googlemail.com with ESMTPSA id n10sm20135169pgk.91.2021.02.22.22.19.20
+ by smtp.googlemail.com with ESMTPSA id n10sm20135169pgk.91.2021.02.22.22.19.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 22 Feb 2021 22:19:22 -0800 (PST)
+ Mon, 22 Feb 2021 22:19:26 -0800 (PST)
 From: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
 To: devicetree@vger.kernel.org, linux-clk@vger.kernel.org, soc@kernel.org,
  sboyd@kernel.org
-Subject: [PATCH 4/8] ARM: mstar: Link cpupll to cpu
-Date: Tue, 23 Feb 2021 15:18:26 +0900
-Message-ID: <20210223061830.1913700-5-daniel@0x0f.com>
+Subject: [PATCH 6/8] ARM: mstar: Add OPP table for infinity
+Date: Tue, 23 Feb 2021 15:18:28 +0900
+Message-ID: <20210223061830.1913700-7-daniel@0x0f.com>
 X-Mailer: git-send-email 2.30.0.rc2
 In-Reply-To: <20210223061830.1913700-1-daniel@0x0f.com>
 References: <20210223061830.1913700-1-daniel@0x0f.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210223_011924_857938_9FF2C80C 
-X-CRM114-Status: GOOD (  12.15  )
+X-CRM114-CacheID: sfid-20210223_011929_242417_2A45A0F2 
+X-CRM114-Status: GOOD (  11.54  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,29 +99,62 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210223061826.paHbueFUghdhsqGbIpK0A5tHnIi87y6XkT5oP-R1N_E@z>
+Message-ID: <20210223061828.ZTOVUJRRFcQYOJRXvHQN-TqhrH3diJXs9fAm1JKWuoo@z>
 
-The CPU clock is sourced from the CPU PLL.
-Link cpupll to the cpu so that frequency scaling can happen.
+Add an OPP table for the inifinity chips so
+that cpu frequency scaling can happen.
 
+Co-authored-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Daniel Palmer <daniel@0x0f.com>
 ---
- arch/arm/boot/dts/mstar-v7.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/boot/dts/mstar-infinity.dtsi | 34 +++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/arch/arm/boot/dts/mstar-v7.dtsi b/arch/arm/boot/dts/mstar-v7.dtsi
-index d323c1a3f3c2..4d9991294f7c 100644
---- a/arch/arm/boot/dts/mstar-v7.dtsi
-+++ b/arch/arm/boot/dts/mstar-v7.dtsi
-@@ -21,6 +21,8 @@ cpu0: cpu@0 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a7";
- 			reg = <0x0>;
-+			clocks = <&cpupll>;
-+			clock-names = "cpuclk";
- 		};
- 	};
+diff --git a/arch/arm/boot/dts/mstar-infinity.dtsi b/arch/arm/boot/dts/mstar-infinity.dtsi
+index 0bee517797f4..441a917b88ba 100644
+--- a/arch/arm/boot/dts/mstar-infinity.dtsi
++++ b/arch/arm/boot/dts/mstar-infinity.dtsi
+@@ -8,6 +8,40 @@
  
+ #include <dt-bindings/gpio/msc313-gpio.h>
+ 
++/ {
++	cpu0_opp_table: opp_table0 {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-240000000 {
++			opp-hz = /bits/ 64 <240000000>;
++			opp-microvolt = <1000000>;
++			clock-latency-ns = <300000>;
++		};
++
++		opp-400000000 {
++			opp-hz = /bits/ 64 <400000000>;
++			opp-microvolt = <1000000>;
++			clock-latency-ns = <300000>;
++		};
++		opp-600000000 {
++			opp-hz = /bits/ 64 <600000000>;
++			opp-microvolt = <1000000>;
++			clock-latency-ns = <300000>;
++		};
++
++		opp-800000000 {
++			opp-hz = /bits/ 64 <800000000>;
++			opp-microvolt = <1000000>;
++			clock-latency-ns = <300000>;
++		};
++	};
++};
++
++&cpu0 {
++	operating-points-v2 = <&cpu0_opp_table>;
++};
++
+ &imi {
+ 	reg = <0xa0000000 0x16000>;
+ };
 -- 
 2.30.0.rc2
 
