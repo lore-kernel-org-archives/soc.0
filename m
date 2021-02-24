@@ -2,37 +2,38 @@ Return-Path: <SRS0=3I03=H2=pascalroeleven.nl=dev@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 009F8C433E6
-	for <soc@archiver.kernel.org>; Wed, 24 Feb 2021 10:53:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AAABC433DB
+	for <soc@archiver.kernel.org>; Wed, 24 Feb 2021 10:53:20 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 6869264F00; Wed, 24 Feb 2021 10:53:18 +0000 (UTC)
-Received: from pmg02-out2.zxcs.nl (pmg02-out2.zxcs.nl [185.104.28.196])
+	id 58B8064EC9; Wed, 24 Feb 2021 10:53:20 +0000 (UTC)
+Received: from pmg01-out3.zxcs.nl (pmg01-out3.zxcs.nl [185.220.172.250])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0D8D064EC9;
-	Wed, 24 Feb 2021 10:53:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0D8D064EC9
+	by mail.kernel.org (Postfix) with ESMTPS id D2E6964ECB;
+	Wed, 24 Feb 2021 10:53:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D2E6964ECB
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=pascalroeleven.nl
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=dev@pascalroeleven.nl
-Received: from pmg02.zxcs.nl (localhost.localdomain [127.0.0.1])
-	by pmg02.zxcs.nl (ZXCS) with ESMTP id 11E50836CF;
-	Wed, 24 Feb 2021 11:53:14 +0100 (CET)
+Received: from pmg01.zxcs.nl (localhost.localdomain [127.0.0.1])
+	by pmg01.zxcs.nl (ZXCS) with ESMTP id 26076106752;
+	Wed, 24 Feb 2021 11:53:17 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=pascalroeleven.nl; s=x; h=Content-Transfer-Encoding:MIME-Version:Message-Id
-	:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	d=pascalroeleven.nl; s=x; h=Content-Transfer-Encoding:MIME-Version:References
+	:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=LieaRHuE7NqSgW/06u6/oNTdLnEXxyMsmUNcQJgFjTQ=; b=NJL7ObititnNGhi/HImSRY3BEF
-	0+wXpSj/DqIjUVb9gyw7aMtIcWggNPb3JMvv7m2+1wKYzi29Y3dCivsTAO8Aw723ZfldChvZCAmaq
-	tLxsgTFP4AGsCuxOTWbDc0BXh8DvGsMf2j1e4OaKe63/MiRpRuRvyhWDyjQnmHCK2qrlTxDaPRI8G
-	MkZ8wuBSKCosnn7Q4gBj8kYo6Np8JcpsAgnL1TIM0skvZueYqD93npCDD6nZ9pqevu+akZp9p1aeM
-	9f2+zGwrragMWMkLlOy7zzcMKLKMUKeaZ80R1k9o2xjzbCsczOTIaAX6JRrx4hSVeRsgHGbwvt72K
-	VoRtydIQ==;
+	bh=0ezqB/1a+OwcYabQdqNCgm+GNs+ai2gxOlbTrgpqe6Y=; b=OO0pN2wc9ZoYsoujfIJXXQ5B5O
+	vi0dyZLfo26hLB51fxZ9pkwGZWKC8vln1uKqeFnBywI2v7b829sPnBZ19Nw/wPwmpVY2+KFvyQM5x
+	g0oJ71DsgqPSbutdJJHGC0BsedPSmkUFOIUF0VbwfmPAotShU7fUre0pkuXdUQoxnIQCtAUZsZkGe
+	Oc6rV84QDCP/whRyqtA7p5DKhyR9gGkaJkW1rdayXnbZXIkr4VwrvlcTwlvfI9ln/zXHGJaJrdfnK
+	M0AXGxrHDacFcyQdp1rim1dSkvZUlRcEGHu9FwV4KIl476rrJzfU2O2c31YVUH8oeLBbOnyHmCVIA
+	mtxfZwZQ==;
 From: Pascal Roeleven <dev@pascalroeleven.nl>
 List-Id: <soc.lore.kernel.org>
 To: Rob Herring <robh+dt@kernel.org>,
@@ -51,53 +52,289 @@ To: Rob Herring <robh+dt@kernel.org>,
 	linux-kernel@vger.kernel.org
 Cc: linux-sunxi@googlegroups.com,
 	Pascal Roeleven <dev@pascalroeleven.nl>
-Subject: [PATCH v5 0/2] Add support for Topwise A721 tablet
-Date: Wed, 24 Feb 2021 11:52:38 +0100
-Message-Id: <20210224105240.47754-1-dev@pascalroeleven.nl>
+Subject: [PATCH v5 2/2] ARM: dts: sun4i: Add support for Topwise A721 tablet
+Date: Wed, 24 Feb 2021 11:52:40 +0100
+Message-Id: <20210224105240.47754-3-dev@pascalroeleven.nl>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210224105240.47754-1-dev@pascalroeleven.nl>
+References: <20210224105240.47754-1-dev@pascalroeleven.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-AuthUser: dev@pascalroeleven.nl
 
-On request I'm resending the last two patches from the Topwise A721 tablet
-series from a year ago as they weren't picked up. The other patches are
-already merged, so I didn't resend them.
+The Topwise A721/LY-F1 tablet is a tablet sold around 2012 under
+different brands. The mainboard mentions A721 clearly, so this tablet
+is best known under this name.
 
-Changes from v4:
-* Reorder nodes alphabetically
-
-Changes from v3:
-* Fix DT validation warnings
-* Remove leftover labels
-
-Changes from v2:
-* Collected acked-by.
-
-Original cover letter:
-
-This series add support for the Topwise A721 tablet and it's display.
-It is an old tablet (around 2012) but it might be useful as reference
-as the devicetree is pretty complete.
-
-Changes from v1:
-* Split into multiple patches
-* dt-binding: use yaml instead of txt
-* dt-binding: add Topwise A721 to sunxi.yaml
-* dt-binding: add Topwise to vendor-prefixes
-* drm: Add bus_format, bus_flags and connector_type
-* dts: Use SPDX license identifier instead of boilerplate license text
-* dts: Remove pinctrl leftovers
-
-Pascal Roeleven (2):
-  dt-bindings: arm: Add Topwise A721
-  ARM: dts: sun4i: Add support for Topwise A721 tablet
-
- .../devicetree/bindings/arm/sunxi.yaml        |   5 +
- arch/arm/boot/dts/Makefile                    |   3 +-
- arch/arm/boot/dts/sun4i-a10-topwise-a721.dts  | 242 ++++++++++++++++++
- 3 files changed, 249 insertions(+), 1 deletion(-)
+Signed-off-by: Pascal Roeleven <dev@pascalroeleven.nl>
+---
+ arch/arm/boot/dts/Makefile                   |   3 +-
+ arch/arm/boot/dts/sun4i-a10-topwise-a721.dts | 242 +++++++++++++++++++
+ 2 files changed, 244 insertions(+), 1 deletion(-)
  create mode 100644 arch/arm/boot/dts/sun4i-a10-topwise-a721.dts
 
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 8e5d4ab4e7..53b6e06bf1 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1105,7 +1105,8 @@ dtb-$(CONFIG_MACH_SUN4I) += \
+ 	sun4i-a10-olinuxino-lime.dtb \
+ 	sun4i-a10-pcduino.dtb \
+ 	sun4i-a10-pcduino2.dtb \
+-	sun4i-a10-pov-protab2-ips9.dtb
++	sun4i-a10-pov-protab2-ips9.dtb \
++	sun4i-a10-topwise-a721.dtb
+ dtb-$(CONFIG_MACH_SUN5I) += \
+ 	sun5i-a10s-auxtek-t003.dtb \
+ 	sun5i-a10s-auxtek-t004.dtb \
+diff --git a/arch/arm/boot/dts/sun4i-a10-topwise-a721.dts b/arch/arm/boot/dts/sun4i-a10-topwise-a721.dts
+new file mode 100644
+index 0000000000..3628f12d25
+--- /dev/null
++++ b/arch/arm/boot/dts/sun4i-a10-topwise-a721.dts
+@@ -0,0 +1,242 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright 2020 Pascal Roeleven <dev@pascalroeleven.nl>
++ */
++
++/dts-v1/;
++#include "sun4i-a10.dtsi"
++#include "sunxi-common-regulators.dtsi"
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/pwm/pwm.h>
++
++/ {
++	model = "Topwise A721";
++	compatible = "topwise,a721", "allwinner,sun4i-a10";
++
++	aliases {
++		serial0 = &uart0;
++	};
++
++	backlight: backlight {
++		compatible = "pwm-backlight";
++		pwms = <&pwm 0 100000 PWM_POLARITY_INVERTED>;
++		power-supply = <&reg_vbat>;
++		enable-gpios = <&pio 7 7 GPIO_ACTIVE_HIGH>; /* PH7 */
++		brightness-levels = <0 30 40 50 60 70 80 90 100>;
++		default-brightness-level = <8>;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	panel {
++		compatible = "starry,kr070pe2t";
++		backlight = <&backlight>;
++		power-supply = <&reg_lcd_power>;
++
++		port {
++			panel_input: endpoint {
++				remote-endpoint = <&tcon0_out_panel>;
++			};
++		};
++	};
++
++	reg_lcd_power: reg-lcd-power {
++		compatible = "regulator-fixed";
++		regulator-name = "reg-lcd-power";
++		gpio = <&pio 7 8 GPIO_ACTIVE_HIGH>; /* PH8 */
++		enable-active-high;
++	};
++
++	reg_vbat: reg-vbat {
++		compatible = "regulator-fixed";
++		regulator-name = "vbat";
++		regulator-min-microvolt = <3700000>;
++		regulator-max-microvolt = <3700000>;
++	};
++
++};
++
++&codec {
++	status = "okay";
++};
++
++&cpu0 {
++	cpu-supply = <&reg_dcdc2>;
++};
++
++&de {
++	status = "okay";
++};
++
++&ehci0 {
++	status = "okay";
++};
++
++&ehci1 {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++
++	axp209: pmic@34 {
++		reg = <0x34>;
++		interrupts = <0>;
++	};
++};
++
++#include "axp209.dtsi"
++
++&ac_power_supply {
++	status = "okay";
++};
++
++&battery_power_supply {
++	status = "okay";
++};
++
++&i2c1 {
++	status = "okay";
++
++	accelerometer@4c {
++		compatible = "fsl,mma7660";
++		reg = <0x4c>;
++	};
++};
++
++&i2c2 {
++	status = "okay";
++
++	touchscreen@38 {
++		compatible = "edt,edt-ft5406";
++		reg = <0x38>;
++		interrupt-parent = <&pio>;
++		interrupts = <7 21 IRQ_TYPE_EDGE_FALLING>;
++		touchscreen-size-x = <800>;
++		touchscreen-size-y = <480>;
++		vcc-supply = <&reg_vcc3v3>;
++	};
++};
++
++&lradc {
++	vref-supply = <&reg_ldo2>;
++	status = "okay";
++
++	button-571 {
++		label = "Volume Up";
++		linux,code = <KEY_VOLUMEUP>;
++		channel = <0>;
++		voltage = <571428>;
++	};
++
++	button-761 {
++		label = "Volume Down";
++		linux,code = <KEY_VOLUMEDOWN>;
++		channel = <0>;
++		voltage = <761904>;
++	};
++};
++
++&mmc0 {
++	vmmc-supply = <&reg_vcc3v3>;
++	bus-width = <4>;
++	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH01 */
++	status = "okay";
++};
++
++&ohci0 {
++	status = "okay";
++};
++
++&ohci1 {
++	status = "okay";
++};
++
++&otg_sram {
++	status = "okay";
++};
++
++&pio {
++	vcc-pb-supply = <&reg_vcc3v3>;
++	vcc-pf-supply = <&reg_vcc3v3>;
++	vcc-ph-supply = <&reg_vcc3v3>;
++};
++
++&pwm {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pwm0_pin>;
++	status = "okay";
++};
++
++&reg_dcdc2 {
++	regulator-always-on;
++	regulator-min-microvolt = <1000000>;
++	regulator-max-microvolt = <1400000>;
++	regulator-name = "vdd-cpu";
++};
++
++&reg_dcdc3 {
++	regulator-always-on;
++	regulator-min-microvolt = <1250000>;
++	regulator-max-microvolt = <1250000>;
++	regulator-name = "vdd-int-dll";
++};
++
++&reg_ldo1 {
++	regulator-name = "vdd-rtc";
++};
++
++&reg_ldo2 {
++	regulator-always-on;
++	regulator-min-microvolt = <3000000>;
++	regulator-max-microvolt = <3000000>;
++	regulator-name = "avcc";
++};
++
++&reg_usb0_vbus {
++	status = "okay";
++};
++
++&reg_usb1_vbus {
++	status = "okay";
++};
++
++&reg_usb2_vbus {
++	status = "okay";
++};
++
++&tcon0_out {
++	tcon0_out_panel: endpoint@0 {
++		reg = <0>;
++		remote-endpoint = <&panel_input>;
++	};
++};
++
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_pb_pins>;
++	status = "okay";
++};
++
++&usb_otg {
++	dr_mode = "otg";
++	status = "okay";
++};
++
++&usb_power_supply {
++	status = "okay";
++};
++
++&usbphy {
++	usb0_id_det-gpios = <&pio 7 4 GPIO_ACTIVE_HIGH>; /* PH4 */
++	usb0_vbus_det-gpios = <&pio 7 5 GPIO_ACTIVE_HIGH>; /* PH5 */
++	usb0_vbus-supply = <&reg_usb0_vbus>;
++	usb1_vbus-supply = <&reg_usb1_vbus>;
++	usb2_vbus-supply = <&reg_usb2_vbus>;
++	status = "okay";
++};
 -- 
 2.27.0
 
