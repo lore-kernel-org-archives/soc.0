@@ -1,116 +1,119 @@
-Return-Path: <SRS0=yS1I=H4=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=pQk7=H4=gmail.com=alexander.sverdlin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81455C433E6
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 26 Feb 2021 18:02:55 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C84FC433DB
+	for <soc@archiver.kernel.org>; Fri, 26 Feb 2021 19:23:28 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id CD90D64F27; Fri, 26 Feb 2021 19:23:27 +0000 (UTC)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1AC3764F1B
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 26 Feb 2021 18:02:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1AC3764F1B
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=spsIEiyvkt1ThybX3a8gRoUYOi5a8/QAw23vdGqAyl0=; b=ajx4TEBMua0+vObGqDm1s9nuL
-	VYyKfqyYneRn+BXn4of9HFpqTa+Zxwr1Sj6gEYUMExGMuXWkM3B5la3gQ8O/xMFQrE5nbkXxQP3yC
-	qYuXLREGtkgAj9kauupV7xFR88yBqMsOW7AXyqJPxaamDf97YeKaK4xVbbQMhP+prn8M5VlPLujnD
-	xvx98d9OpNG0eJD6oMea2iklfDeNVu6hBhzIxzoa4LuEV1DQaHePhaKYx7FtDpAnwlq6Uri9fiIp9
-	7mZ5/lnt4+UeNbebSImqPLvg8pFnKQGSoFN4Uf7K5vgLN/Fj/eZBQ/ollvfYzEeW9Gu3SWKLEu8c1
-	nyuqHh9YQ==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1lFhQT-0001bj-UD; Fri, 26 Feb 2021 18:01:17 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1lFhQR-0001bP-3G
- for linux-arm-kernel@lists.infradead.org; Fri, 26 Feb 2021 18:01:15 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 15A6664F03
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 26 Feb 2021 18:01:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1614362474;
- bh=K7ckSsBdRk9rkAeryus+c3Q4PuQkK1Uq+V7iFTKfGwE=;
- h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
- b=DO3RSA62JjU1Rhi6oOfMEnru7cpXgSdRZ1pFYq/VXa/Dw1Op9KXTeTU3TZbDgGw2p
- mydKgZeeJ+LHX6MyBdDcFtV+eZOb8131rzknEi2AFbPlrWk5K37TU6VSomvV73dxgU
- AB9HY8elug/cpRQ1rlju37hq70BDJDRsnrT2g0GqPGQ6nXwEhVLO5lid91WCfuNXZ7
- BnS+mdMZGv4dD2OBD3r/C3YV+7bbGNFSx9EjLc/V1A9s/SUeW5E5zMyy/HtJ+GFrQj
- nUQksCQpKcPD9y5C1VH8W37KXDRQI/mfDkw9ZXtw8hcFdHj8U/INvDrZT4SyWMaeYZ
- w+Kssb1JEpTIw==
-Received: by mail-oi1-f178.google.com with SMTP id l133so10591134oib.4
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 26 Feb 2021 10:01:14 -0800 (PST)
-X-Gm-Message-State: AOAM530lTXFNMm5434CNZ0d3cNP3Et/fgsV9qFBom1MjhtG2TYQrRXQw
- Ee9sQG5oypdllEW3Z7lk/jZaSuJlCoBxt+UnxO8=
-X-Google-Smtp-Source: ABdhPJzAqTkX5+PkGxMg1asdXRKWTDALsdIgq1ACEq8X71dP5w1l3DcYrd6GMc0V94kFGbIQ7FtZiXLmCBrwteJV7LM=
-X-Received: by 2002:aca:4a47:: with SMTP id x68mr2769592oia.67.1614362473428; 
- Fri, 26 Feb 2021 10:01:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20210226164345.3889993-1-arnd@kernel.org>
-In-Reply-To: <20210226164345.3889993-1-arnd@kernel.org>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 26 Feb 2021 19:00:56 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2E0pv6PKzcCoRZH0G_gGrhWeiDwN7h090iQpd6c=XG1Q@mail.gmail.com>
-Message-ID: <CAK8P3a2E0pv6PKzcCoRZH0G_gGrhWeiDwN7h090iQpd6c=XG1Q@mail.gmail.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 4B28A64F14;
+	Fri, 26 Feb 2021 19:23:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4B28A64F14
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=alexander.sverdlin@gmail.com
+Received: by mail-wr1-f50.google.com with SMTP id f12so5824273wrx.8;
+        Fri, 26 Feb 2021 11:23:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=OsztXS2pxF0mqVb9NZgLRR6d9O9wIrx2e3naQfnixyw=;
+        b=mvJeaORv08NO8JFv6YX3OR8eF2mGEPxZfE4KvPhccDkBqlM+vFrbJ8EUbyPW+S4KFL
+         IKg5IoaxhhzeHbhRwG7qmM1yla9/TV2WIFUHoLqAiLUPw9Eo1/xpVgYtQ5kMGqSMYMPo
+         nCdzHOFFywol73/GqgJw3G1tqgQY2i6vmjlASg+WIWtL2gWbVucVYF9DYeHH2oUDF5mt
+         YGhIgGCDR9xuuQYwjVngxJH5HrHTgat5f/CcwODnA3wAd/9GrQjArsY/xpDU9soy0/Np
+         TlQyg2IS+HctwnnB+Pt5gfP5E+BMoXR2TwsYCLKkp5bWoXCoTi11PrEkafAmHa7dV1Zc
+         x/Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=OsztXS2pxF0mqVb9NZgLRR6d9O9wIrx2e3naQfnixyw=;
+        b=meSF0AGbMIGR3gO6+fnm32z8YfZHb9CXpMElkiy2FS0cNqH9qEshnV9SFDpnMQ/GDS
+         ZieFXok636AEGW6ZyKx7gbh5Xw7Jw7v8gU4BBAiubNJBLR6WQeUexR8msz/DJEZxnJC2
+         L/yJVkSbqr0NqrVQ5glvxnD/kmyQzRAI1zdozVep73kHghgMlNifNblCzW6xow8KtV2q
+         1uyvGK3JjI6K2i+g0WdgtSUGwYgaIJEyHWM7npUUbvADREOAVVgPw7jOUVtnAJ/7311E
+         97kJv4KNNtFUblByp9qwxONKyQkMXr1OA3Y72WeVo5gf4KdZBGrPxkfw/ILksVRMme41
+         YPCw==
+X-Gm-Message-State: AOAM531oex617q1xPQNJRIWDdrSDy6Pz+Es8oxXWwg9j8bKEFp/WjIiQ
+	J4Y3tj7OQDEXnxJbmoQaGaeyl4Tlwdk=
+X-Google-Smtp-Source: ABdhPJwSLG2nJ/s2aJyqjLoRzlpNT/jkEbmhfYg2OHWfEm5RLYiq3iP9n9FdRbVdUHCVfr8UUSz6LQ==
+X-Received: by 2002:adf:d20c:: with SMTP id j12mr4729579wrh.76.1614367405841;
+        Fri, 26 Feb 2021 11:23:25 -0800 (PST)
+Received: from [192.168.1.21] ([195.245.17.255])
+        by smtp.gmail.com with ESMTPSA id t23sm13630703wmn.13.2021.02.26.11.23.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Feb 2021 11:23:25 -0800 (PST)
+Message-ID: <141f3098744ea8d1cc39abcdce89c0e513bfbc70.camel@gmail.com>
 Subject: Re: [PATCH] ARM: ep93xx: don't use clang IAS for crunch
-To: Hartley Sweeten <hsweeten@visionengravers.com>, 
- Alexander Sverdlin <alexander.sverdlin@gmail.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210226_130115_250787_ABF98916 
-X-CRM114-Status: UNSURE (   8.59  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To: Arnd Bergmann <arnd@kernel.org>, Hartley Sweeten
+	 <hsweeten@visionengravers.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <ndesaulniers@google.com>,
- Russell King <linux@armlinux.org.uk>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- clang-built-linux <clang-built-linux@googlegroups.com>,
- SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210226180056.Lo_Q1xPwk5sGzYUtSaDMth2mhQZoyzODBHeT1pFexSw@z>
+Cc: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, Russell King
+ <linux@armlinux.org.uk>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ clang-built-linux@googlegroups.com
+Date: Fri, 26 Feb 2021 20:23:24 +0100
+In-Reply-To: <20210226164345.3889993-1-arnd@kernel.org>
+References: <20210226164345.3889993-1-arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 26, 2021 at 5:44 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
->  obj-$(CONFIG_CRUNCH)           += crunch.o crunch-bits.o
-> -AFLAGS_crunch-bits.o           := -Wa,-mcpu=ep9312
-> +AFLAGS_crunch-bits.o           := -Wa,-mcpu=ep9312 $(cc-option, -fno-integrated-as)
+Hi!
 
-I reworked that patch just before sending it out, and ended up with two typos
-in there, it should be
+On Fri, 2021-02-26 at 17:43 +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Randconfig builds with ep93xx fail with the clang integrated
+> assembler that does not understand the maverick crunch extensions:
+> 
+> arch/arm/mach-ep93xx/crunch-bits.S:94:2: error: invalid instruction
+>  cfstr64 mvdx0, [r1, #0] @ save 64b registers
+> 
+> It is unclear if anyone is still using support for crunch: gcc-4.8 dropped
+> it in 2012 when it was already too broken to be used reliabled. glibc
+> support existed as an external patch but was never merged upstream.
+> We could consider removing the last bits of the kernel support as well.
 
-+AFLAGS_crunch-bits.o           := -Wa,-mcpu=ep9312 $(call cc-option,
--no-integrated-as)
+This was my impression already in 2006, that Cirrus is not going to work
+on Crunch support. From my PoV it's OK to remove the support in the
+kernel completely.
 
-I'll wait for others to comment before I send the fixed version.
+> Turn off the integrated assembler for this file for now.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/mach-ep93xx/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/mach-ep93xx/Makefile b/arch/arm/mach-ep93xx/Makefile
+> index 86768495f61d..f686577ba059 100644
+> --- a/arch/arm/mach-ep93xx/Makefile
+> +++ b/arch/arm/mach-ep93xx/Makefile
+> @@ -7,7 +7,7 @@ obj-y                   := core.o clock.o timer-ep93xx.o
+>  obj-$(CONFIG_EP93XX_DMA)       += dma.o
+>  
+>  obj-$(CONFIG_CRUNCH)           += crunch.o crunch-bits.o
+> -AFLAGS_crunch-bits.o           := -Wa,-mcpu=ep9312
+> +AFLAGS_crunch-bits.o           := -Wa,-mcpu=ep9312 $(cc-option, -fno-integrated-as)
+>  
+>  obj-$(CONFIG_MACH_ADSSPHERE)   += adssphere.o
+>  obj-$(CONFIG_MACH_EDB93XX)     += edb93xx.o
 
-      Arnd
+-- 
+Alexander Sverdlin.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
