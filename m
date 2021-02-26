@@ -1,27 +1,44 @@
-Return-Path: <linux-kernel-owner@kernel.org>
+Return-Path: <SRS0=yS1I=H4=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DB51C433DB
-	for <linux-kernel@archiver.kernel.org>; Fri, 26 Feb 2021 19:34:02 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBC2464F14
-	for <linux-kernel@archiver.kernel.org>; Fri, 26 Feb 2021 19:34:01 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbhBZTdk (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Fri, 26 Feb 2021 14:33:40 -0500
-Received: from mail-dm6nam11on2132.outbound.protection.outlook.com ([40.107.223.132]:50208
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229545AbhBZTdg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 Feb 2021 14:33:36 -0500
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DFBBC433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 26 Feb 2021 19:34:08 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id D48A764F1B
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 26 Feb 2021 19:34:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D48A764F1B
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=visionengravers.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:In-Reply-To:References:Message-ID:Date:
+	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=nIGkHJf1h0Vfsr5KKsaOuaS73TpmwEVRPXnqVe2oiOc=; b=E6dGL0XvK/m3I5BK4UrMJaVqs
+	2Ht3pSztL2a+MMoEmWZK3gnBZMOC4waEwk89mJv2q+E9+5x/CdIRWhX1kbnDLfex8cbyQX77hAFuA
+	RLZnobj+lvD3UYKhbyRbxCmfTLGroN1zpQVu0978x/AfDRGhSXteHeeHLNJjnuFftsSP35UcWkram
+	hoecu8iiUGJDD1tnqrBDwIENFqhXmGdg4uL0V+Ds5f3DxolnTxpJQMVgHeoICTNZxe+AB9csbpeSb
+	4yYRz2YiWMUGXl96BZOFmWyb2mciC9/7KaeHfDrfHROfDZeOf3HNgG1nQAXccsbBB+ptaCmOitnvv
+	tyept55Ng==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1lFir3-0001Mz-C3; Fri, 26 Feb 2021 19:32:49 +0000
+Received: from mail-dm6nam11on2130.outbound.protection.outlook.com
+ ([40.107.223.130] helo=NAM11-DM6-obe.outbound.protection.outlook.com)
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1lFiqz-0001Ls-VP
+ for linux-arm-kernel@lists.infradead.org; Fri, 26 Feb 2021 19:32:46 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=bU2ROT9Aso8+lHchjvd4j8+cwj51O9I1SclKMwcUl1NEAktmP9nBDs14fWlc3NoOHvlnmR0ow9RTFuHBPYEskqWxuWdOP9wPHwY2V7pAeP7hBi3j6oE555z3SPa/4pU+PXjVB5HePlwze825ceOzHNM1m7seqIcQkOkBJLJ7ZMhr3tqKqproy7HSxD4hJYRLqdKKkJz+Dw04g7KXEE2VOe5aLVPGt+MFzgZwM0hLc4+xVCgrlv+fah+be5L50BdHP7V29A9daZ7V9PfzLXmFT92clZLXMHqUuAQxXyg+K0AU55vRGIqzTaEVc+OKLN4j5lB+Ijo8gqNhyEAYBphmOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
  bh=HLTRQFueVRhAB0K40qdJE/0p9R/1Wtk230ZcsqWFPQk=;
@@ -31,30 +48,21 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  header.from=visionengravers.com; dkim=pass header.d=visionengravers.com;
  arc=none
 Received: from BYAPR01MB5621.prod.exchangelabs.com (2603:10b6:a03:118::32) by
- BY5PR01MB5779.prod.exchangelabs.com (2603:10b6:a03:1ce::20) with Microsoft
+ BY5PR01MB5779.prod.exchangelabs.com (2603:10b6:a03:1ce::20) with
+ Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.20.3890.19; Fri, 26 Feb 2021 19:32:42 +0000
 Received: from BYAPR01MB5621.prod.exchangelabs.com
  ([fe80::c4cc:6fb9:44da:e2dc]) by BYAPR01MB5621.prod.exchangelabs.com
  ([fe80::c4cc:6fb9:44da:e2dc%6]) with mapi id 15.20.3846.041; Fri, 26 Feb 2021
  19:32:42 +0000
-From:   Hartley Sweeten <HartleyS@visionengravers.com>
-To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-CC:     "soc@kernel.org" <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "clang-built-linux@googlegroups.com" 
-        <clang-built-linux@googlegroups.com>
+From: Hartley Sweeten <HartleyS@visionengravers.com>
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, Arnd Bergmann
+ <arnd@kernel.org>
 Subject: RE: [PATCH] ARM: ep93xx: don't use clang IAS for crunch
 Thread-Topic: [PATCH] ARM: ep93xx: don't use clang IAS for crunch
 Thread-Index: AQHXDF6daAHoIbKUtEazeMb2p7+FnKpq0PYAgAABKaA=
-Date:   Fri, 26 Feb 2021 19:32:42 +0000
+Date: Fri, 26 Feb 2021 19:32:42 +0000
 Message-ID: <BYAPR01MB5621DC2003DA49EA64AD46A0D09D9@BYAPR01MB5621.prod.exchangelabs.com>
 References: <20210226164345.3889993-1-arnd@kernel.org>
  <141f3098744ea8d1cc39abcdce89c0e513bfbc70.camel@gmail.com>
@@ -75,7 +83,10 @@ x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
 x-microsoft-antispam-message-info: BTCSu9be5eLB8ZVIFygNk4Juzma/ElYzCmn2x0tpFg/g5QQjarX9Q1Jd1ShkZ0ghyf8F47SsQTYghTTwRWNQ2LsVZnKCRBbMYmJUg9/uhj7nYQ+IxjsS+Ka7c2WZOre5YXrOy+S8rgm2tB1ZBXx/OGKTAh6qZkZxjEMMWBU6VVQFEX6SsAydR7WWU6p7UBzuRF+arql4PCCunb7smm6c5k5T+dQUo5nFSzPUqD+RDHuAOFcA7IFjetrnLRz44QpkVlnBliDLw2/DWoLosA4Yyp+SaQByd0BNAlPboChe6nv+h6hvlQW0t5PBY/JSB8HmIraUBLiTyu2ezaUQ0KRkTQBGNepoJHqLheQz3QdwpiCnsa9sWJb8c67wzvg+8iTy/nZzwEh5NdGncFFlv9JMgp+3l/fTvE+mt1UVfjbwuCoiT01w2m3FhXinlulqcRh5rmWgtcVlqR14YZSk1zIDraocNXrn2mLrl+qoWPvn6YlBCSBH10I7NCSw9TgA0yIXsjHbdgKFBWeZWGtdiI8esQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR01MB5621.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(346002)(396003)(366004)(376002)(39840400004)(136003)(4326008)(110136005)(7696005)(7416002)(186003)(8676002)(66476007)(66946007)(5660300002)(8936002)(64756008)(33656002)(55016002)(76116006)(2906002)(54906003)(66556008)(66446008)(52536014)(316002)(478600001)(6506007)(53546011)(86362001)(71200400001)(26005)(9686003);DIR:OUT;SFP:1102;
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BYAPR01MB5621.prod.exchangelabs.com; PTR:; CAT:NONE;
+ SFS:(346002)(396003)(366004)(376002)(39840400004)(136003)(4326008)(110136005)(7696005)(7416002)(186003)(8676002)(66476007)(66946007)(5660300002)(8936002)(64756008)(33656002)(55016002)(76116006)(2906002)(54906003)(66556008)(66446008)(52536014)(316002)(478600001)(6506007)(53546011)(86362001)(71200400001)(26005)(9686003);
+ DIR:OUT; SFP:1102; 
 x-ms-exchange-antispam-messagedata: =?utf-8?B?eGVGZFF3TmZCR0NrdkJjU0tkOEU0dEdsbE1TcnRVdlliRVcrdzdEb2xrVVdB?=
  =?utf-8?B?UzVtN0JwbkZmdjFuWlVnTkMrYktpc2t3Y3Q3b1FPZ3kxRFlKYVluL2MzYloy?=
  =?utf-8?B?WVA4QlVWTDZNc3dLelQyYTY5K3hiWHFENk52Rk5GbGE5M2FWRXVDL09YbXFk?=
@@ -107,24 +118,44 @@ x-ms-exchange-antispam-messagedata: =?utf-8?B?eGVGZFF3TmZCR0NrdkJjU0tkOEU0dEdsbE
  =?utf-8?B?ZkRnRjlJMElKbThJb2dOelJKTmJvY3pKUXVIMHMyVmNiMFZRNllZK0M4c2Nu?=
  =?utf-8?Q?1x70yMGxha/HVbGKMt+b6OM8/88bYZq+cRrLoQk?=
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-OriginatorOrg: visionengravers.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR01MB5621.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-Network-Message-Id: 5adf1bbd-676a-416a-4dce-08d8da8d4915
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Feb 2021 19:32:42.3382
- (UTC)
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Feb 2021 19:32:42.3382 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: d698601f-af92-4269-8099-fd6f11636477
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: Wxbxpkg3ioBuT9PFI+BlR4MV3qWdJlLBDObtI2qVws4uE4WUew+kwpLeCmGydQ1gEuTO722H/2Ae3qlhbiDdKfbcSA3KEm/H84dJPvN5FDA=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR01MB5779
-Precedence: bulk
-List-ID: <linux-kernel.vger.kernel.org>
-X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20210226193242.phB4UlsfMyjpWg6Bq4je7fQdPaFwXxQ5OifqbXXusOA@z>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210226_143246_075371_EDF2D7A4 
+X-CRM114-Status: GOOD (  16.31  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <ndesaulniers@google.com>,
+ Russell King <linux@armlinux.org.uk>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ "clang-built-linux@googlegroups.com" <clang-built-linux@googlegroups.com>,
+ "soc@kernel.org" <soc@kernel.org>,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210226193242.OEhAZTl44_zAFjPYycOQlnnqi4bUT4U4YB2xu7btyOw@z>
 
 T24gRnJpZGF5LCBGZWJydWFyeSAyNiwgMjAyMSAxMjoyMyBQTSwgQWxleGFuZGVyIFN2ZXJkbGlu
 IHdyb3RlOg0KPiBPbiBGcmksIDIwMjEtMDItMjYgYXQgMTc6NDMgKzAxMDAsIEFybmQgQmVyZ21h
@@ -147,4 +178,7 @@ dWxseSB1c2UgaXQgZm9yIGFueXRoaW5nLiBJdCAia2luZCIgb2Ygd29ya3MgYnV0IGRlcGVuZGlu
 ZyBvbiB0aGUgRVA5M3h4IHNpbGljb24gcmV2aXNpb24gdGhlcmUgYXJlIHN0aWxsIGEgbnVtYmVy
 IG9mIGhhcmR3YXJlIGJ1Z3MgdGhhdCBlaXRoZXIgZ2l2ZSBpbXByZWNpc2Ugb3IgZ2FyYmFnZSBy
 ZXN1bHRzLg0KDQpJIGhhdmUgbm8gcHJvYmxlbSB3aXRoIHJlbW92aW5nIHRoZSBrZXJuZWwgc3Vw
-cG9ydCBmb3IgdGhlIG1hdmVyaWNrIGNydW5jaC4NCg0KSGFydGxleQ0K
+cG9ydCBmb3IgdGhlIG1hdmVyaWNrIGNydW5jaC4NCg0KSGFydGxleQ0KX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbGludXgtYXJtLWtlcm5lbCBtYWlsaW5n
+IGxpc3QKbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnCmh0dHA6Ly9saXN0cy5p
+bmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtYXJtLWtlcm5lbAo=
