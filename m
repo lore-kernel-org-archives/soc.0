@@ -1,23 +1,24 @@
-Return-Path: <SRS0=UpU6=H4=visionengravers.com=HartleyS@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21556C433E0
-	for <soc@archiver.kernel.org>; Fri, 26 Feb 2021 19:32:45 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 9EE1E64F1F; Fri, 26 Feb 2021 19:32:44 +0000 (UTC)
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2130.outbound.protection.outlook.com [40.107.220.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1A9C464E28;
-	Fri, 26 Feb 2021 19:32:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1A9C464E28
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=visionengravers.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=HartleyS@visionengravers.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DB51C433DB
+	for <linux-kernel@archiver.kernel.org>; Fri, 26 Feb 2021 19:34:02 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id EBC2464F14
+	for <linux-kernel@archiver.kernel.org>; Fri, 26 Feb 2021 19:34:01 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S230231AbhBZTdk (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Fri, 26 Feb 2021 14:33:40 -0500
+Received: from mail-dm6nam11on2132.outbound.protection.outlook.com ([40.107.223.132]:50208
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229545AbhBZTdg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 26 Feb 2021 14:33:36 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=bU2ROT9Aso8+lHchjvd4j8+cwj51O9I1SclKMwcUl1NEAktmP9nBDs14fWlc3NoOHvlnmR0ow9RTFuHBPYEskqWxuWdOP9wPHwY2V7pAeP7hBi3j6oE555z3SPa/4pU+PXjVB5HePlwze825ceOzHNM1m7seqIcQkOkBJLJ7ZMhr3tqKqproy7HSxD4hJYRLqdKKkJz+Dw04g7KXEE2VOe5aLVPGt+MFzgZwM0hLc4+xVCgrlv+fah+be5L50BdHP7V29A9daZ7V9PfzLXmFT92clZLXMHqUuAQxXyg+K0AU55vRGIqzTaEVc+OKLN4j5lB+Ijo8gqNhyEAYBphmOA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
@@ -37,29 +38,31 @@ Received: from BYAPR01MB5621.prod.exchangelabs.com
  ([fe80::c4cc:6fb9:44da:e2dc]) by BYAPR01MB5621.prod.exchangelabs.com
  ([fe80::c4cc:6fb9:44da:e2dc%6]) with mapi id 15.20.3846.041; Fri, 26 Feb 2021
  19:32:42 +0000
-From: Hartley Sweeten <HartleyS@visionengravers.com>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, Arnd Bergmann
-	<arnd@kernel.org>
+From:   Hartley Sweeten <HartleyS@visionengravers.com>
+To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-CC: "soc@kernel.org" <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Russell
- King <linux@armlinux.org.uk>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "clang-built-linux@googlegroups.com"
-	<clang-built-linux@googlegroups.com>
+CC:     "soc@kernel.org" <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>
 Subject: RE: [PATCH] ARM: ep93xx: don't use clang IAS for crunch
 Thread-Topic: [PATCH] ARM: ep93xx: don't use clang IAS for crunch
 Thread-Index: AQHXDF6daAHoIbKUtEazeMb2p7+FnKpq0PYAgAABKaA=
-Date: Fri, 26 Feb 2021 19:32:42 +0000
-Message-ID:
- <BYAPR01MB5621DC2003DA49EA64AD46A0D09D9@BYAPR01MB5621.prod.exchangelabs.com>
+Date:   Fri, 26 Feb 2021 19:32:42 +0000
+Message-ID: <BYAPR01MB5621DC2003DA49EA64AD46A0D09D9@BYAPR01MB5621.prod.exchangelabs.com>
 References: <20210226164345.3889993-1-arnd@kernel.org>
  <141f3098744ea8d1cc39abcdce89c0e513bfbc70.camel@gmail.com>
 In-Reply-To: <141f3098744ea8d1cc39abcdce89c0e513bfbc70.camel@gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
 authentication-results: gmail.com; dkim=none (message not signed)
  header.d=none;gmail.com; dmarc=none action=none
  header.from=visionengravers.com;
@@ -67,17 +70,13 @@ x-originating-ip: [63.230.248.205]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-correlation-id: 5adf1bbd-676a-416a-4dce-08d8da8d4915
 x-ms-traffictypediagnostic: BY5PR01MB5779:
-x-microsoft-antispam-prvs:
- <BY5PR01MB5779019AF9CF17B1E1AFECBED09D9@BY5PR01MB5779.prod.exchangelabs.com>
+x-microsoft-antispam-prvs: <BY5PR01MB5779019AF9CF17B1E1AFECBED09D9@BY5PR01MB5779.prod.exchangelabs.com>
 x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- BTCSu9be5eLB8ZVIFygNk4Juzma/ElYzCmn2x0tpFg/g5QQjarX9Q1Jd1ShkZ0ghyf8F47SsQTYghTTwRWNQ2LsVZnKCRBbMYmJUg9/uhj7nYQ+IxjsS+Ka7c2WZOre5YXrOy+S8rgm2tB1ZBXx/OGKTAh6qZkZxjEMMWBU6VVQFEX6SsAydR7WWU6p7UBzuRF+arql4PCCunb7smm6c5k5T+dQUo5nFSzPUqD+RDHuAOFcA7IFjetrnLRz44QpkVlnBliDLw2/DWoLosA4Yyp+SaQByd0BNAlPboChe6nv+h6hvlQW0t5PBY/JSB8HmIraUBLiTyu2ezaUQ0KRkTQBGNepoJHqLheQz3QdwpiCnsa9sWJb8c67wzvg+8iTy/nZzwEh5NdGncFFlv9JMgp+3l/fTvE+mt1UVfjbwuCoiT01w2m3FhXinlulqcRh5rmWgtcVlqR14YZSk1zIDraocNXrn2mLrl+qoWPvn6YlBCSBH10I7NCSw9TgA0yIXsjHbdgKFBWeZWGtdiI8esQ==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR01MB5621.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(346002)(396003)(366004)(376002)(39840400004)(136003)(4326008)(110136005)(7696005)(7416002)(186003)(8676002)(66476007)(66946007)(5660300002)(8936002)(64756008)(33656002)(55016002)(76116006)(2906002)(54906003)(66556008)(66446008)(52536014)(316002)(478600001)(6506007)(53546011)(86362001)(71200400001)(26005)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata:
- =?utf-8?B?eGVGZFF3TmZCR0NrdkJjU0tkOEU0dEdsbE1TcnRVdlliRVcrdzdEb2xrVVdB?=
+x-microsoft-antispam-message-info: BTCSu9be5eLB8ZVIFygNk4Juzma/ElYzCmn2x0tpFg/g5QQjarX9Q1Jd1ShkZ0ghyf8F47SsQTYghTTwRWNQ2LsVZnKCRBbMYmJUg9/uhj7nYQ+IxjsS+Ka7c2WZOre5YXrOy+S8rgm2tB1ZBXx/OGKTAh6qZkZxjEMMWBU6VVQFEX6SsAydR7WWU6p7UBzuRF+arql4PCCunb7smm6c5k5T+dQUo5nFSzPUqD+RDHuAOFcA7IFjetrnLRz44QpkVlnBliDLw2/DWoLosA4Yyp+SaQByd0BNAlPboChe6nv+h6hvlQW0t5PBY/JSB8HmIraUBLiTyu2ezaUQ0KRkTQBGNepoJHqLheQz3QdwpiCnsa9sWJb8c67wzvg+8iTy/nZzwEh5NdGncFFlv9JMgp+3l/fTvE+mt1UVfjbwuCoiT01w2m3FhXinlulqcRh5rmWgtcVlqR14YZSk1zIDraocNXrn2mLrl+qoWPvn6YlBCSBH10I7NCSw9TgA0yIXsjHbdgKFBWeZWGtdiI8esQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR01MB5621.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(346002)(396003)(366004)(376002)(39840400004)(136003)(4326008)(110136005)(7696005)(7416002)(186003)(8676002)(66476007)(66946007)(5660300002)(8936002)(64756008)(33656002)(55016002)(76116006)(2906002)(54906003)(66556008)(66446008)(52536014)(316002)(478600001)(6506007)(53546011)(86362001)(71200400001)(26005)(9686003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?eGVGZFF3TmZCR0NrdkJjU0tkOEU0dEdsbE1TcnRVdlliRVcrdzdEb2xrVVdB?=
  =?utf-8?B?UzVtN0JwbkZmdjFuWlVnTkMrYktpc2t3Y3Q3b1FPZ3kxRFlKYVluL2MzYloy?=
  =?utf-8?B?WVA4QlVWTDZNc3dLelQyYTY5K3hiWHFENk52Rk5GbGE5M2FWRXVDL09YbXFk?=
  =?utf-8?B?K0dqQVlIQitwUzh6akRTRGxzRVlndEZCU3J3eDE0YkxRdTJTTDlkb2ZOMXRs?=
@@ -122,6 +121,10 @@ X-MS-Exchange-CrossTenant-id: d698601f-af92-4269-8099-fd6f11636477
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: Wxbxpkg3ioBuT9PFI+BlR4MV3qWdJlLBDObtI2qVws4uE4WUew+kwpLeCmGydQ1gEuTO722H/2Ae3qlhbiDdKfbcSA3KEm/H84dJPvN5FDA=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR01MB5779
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210226193242.phB4UlsfMyjpWg6Bq4je7fQdPaFwXxQ5OifqbXXusOA@z>
 
 T24gRnJpZGF5LCBGZWJydWFyeSAyNiwgMjAyMSAxMjoyMyBQTSwgQWxleGFuZGVyIFN2ZXJkbGlu
 IHdyb3RlOg0KPiBPbiBGcmksIDIwMjEtMDItMjYgYXQgMTc6NDMgKzAxMDAsIEFybmQgQmVyZ21h
