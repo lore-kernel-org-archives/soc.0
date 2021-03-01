@@ -1,70 +1,105 @@
-Return-Path: <SRS0=C383=H7=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=cQz6=H7=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6727AC433E0
-	for <soc@archiver.kernel.org>; Mon,  1 Mar 2021 23:20:59 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 02C4760232; Mon,  1 Mar 2021 23:20:59 +0000 (UTC)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C9BEC433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Mar 2021 23:22:09 +0000 (UTC)
+Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8E73360235
-	for <soc@kernel.org>; Mon,  1 Mar 2021 23:20:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8E73360235
+	by mail.kernel.org (Postfix) with ESMTPS id 32D7960200
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Mar 2021 23:22:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 32D7960200
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linus.walleij@linaro.org
-Received: by mail-lj1-f175.google.com with SMTP id p15so12666852ljc.13
-        for <soc@kernel.org>; Mon, 01 Mar 2021 15:20:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LVmImkXhdF8b7IyEbAftanQY9XJqBkgbJmzCGT5ATkA=;
-        b=R0IvFNn1ba2I96r7yvogckNXutet/yzP5SCj/BorUQKQQGx4IOS8iO6IUuq19bI3cV
-         18dcxBqRc9Mq7ZqJgk2o+6BVbBntrwoE9m333dOS8Lv/ZYaF77m3M8VqRzTfLei/CmiA
-         FTVbG4c/ei4vd5L1+t3R4y0SicAOQUMLTsfIkNHdu4XP6NWp/k/BpEpSNNbq0XIfREos
-         6FnyJ00QaZ5+WL1iT6fHHE7z+CWMbTRtpdMuSg2rQoQzMArSQlXIyW9VBtFnoanf/x6r
-         1XUMBGBpyyZRHidiFv3/7LLpEL0N99DWaDyk7R94ENqyG5ZhjplvyQ6Ku7JLS2nFcf8D
-         CnSA==
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=gufcY2high/umnbbewQPZpY5gijgmAf5bXgwrthz2Z8=; b=hf3KHbfJXio8YCL4udIR1FNoG1
+	2P026NBtXMEHVrDANrfkm2nK6rYevX7g1i1b1+ELDl8xhnXSmqNNiVOG66AJEeRFnsB/BnS/+VQk1
+	vl4qaIkTfrmFc69wrq0Ayd4t0q2Hb+9ze6dP4QZfjye5NiCldVTu99A3lYdkwaUjPJNN1GLCAcEm/
+	hT0VbfYoIQ6IhewDGWgaLdD5a34LpbtF8tblA0Xb9fL0MoJ7YAXX2D3tsYJX/8fURJNf+wUbuFjP6
+	+fO3/caCYPzD+jMHs2ZspL7BGxBdwFFItVkPfMBaQs6qDK2aVbyP4eEfQ98B2qsu6ED0xdzwAg4x9
+	Xzkq65wg==;
+Received: from localhost ([::1] helo=merlin.infradead.org)
+	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
+	id 1lGrqX-0003sw-To; Mon, 01 Mar 2021 23:21:01 +0000
+Received: from mail-lj1-x232.google.com ([2a00:1450:4864:20::232])
+ by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
+ id 1lGrqU-0003sU-Oi
+ for linux-arm-kernel@lists.infradead.org; Mon, 01 Mar 2021 23:21:00 +0000
+Received: by mail-lj1-x232.google.com with SMTP id q23so21585341lji.8
+ for <linux-arm-kernel@lists.infradead.org>;
+ Mon, 01 Mar 2021 15:20:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=LVmImkXhdF8b7IyEbAftanQY9XJqBkgbJmzCGT5ATkA=;
+ b=R0IvFNn1ba2I96r7yvogckNXutet/yzP5SCj/BorUQKQQGx4IOS8iO6IUuq19bI3cV
+ 18dcxBqRc9Mq7ZqJgk2o+6BVbBntrwoE9m333dOS8Lv/ZYaF77m3M8VqRzTfLei/CmiA
+ FTVbG4c/ei4vd5L1+t3R4y0SicAOQUMLTsfIkNHdu4XP6NWp/k/BpEpSNNbq0XIfREos
+ 6FnyJ00QaZ5+WL1iT6fHHE7z+CWMbTRtpdMuSg2rQoQzMArSQlXIyW9VBtFnoanf/x6r
+ 1XUMBGBpyyZRHidiFv3/7LLpEL0N99DWaDyk7R94ENqyG5ZhjplvyQ6Ku7JLS2nFcf8D
+ CnSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LVmImkXhdF8b7IyEbAftanQY9XJqBkgbJmzCGT5ATkA=;
-        b=M8Moyr3iJojkESs1/sulbEtQNOAinlyxyP4LdcplKOaproSLpJurIO/Dfa+TG8eeK7
-         wDRUOosF7WxZDVwMhIsBWgNcTUkVOZPqqNYhjAY0/YeI+QJ/lhalR2zJHI8sbJnht9nw
-         riUa2qAOYelBAaEh7UCM5OY6OZ1ury+HaWAHlMPIKi5QeDwy/gec5aRiy1n5PCnUd2B+
-         UQQ4BuRKh2jLE45OhxeWlzK178SI1f770P++aMYKesCaE4/LDoeZO0l801HFZK5c2M6u
-         xKSA4xx46tIdVM23kVwJGRv2E1yk4s3TQyr/fXNuIczU21pwaouif5OuVymfLD53f2NF
-         t1Ww==
-X-Gm-Message-State: AOAM531J3G7y79DRuaKvPPCfuE1p50uFsZmvwBGG3HrU87VhIcvaGTD4
-	55ir/tqTxBOHEW04jqRu3ggNlQ==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=LVmImkXhdF8b7IyEbAftanQY9XJqBkgbJmzCGT5ATkA=;
+ b=OXNq+lMCgfJTEDqyepAgFRccYeMmRRG4ylj3Wneq1BsYqtkfFI5dnZJ9zJwHBxOKuJ
+ T/ImlTrMaImWAcWaji4x3Xdtl7JGdF+3A0p+tV4as+4PQp3e8gz63MHm/5ajWIz9Me56
+ 7Qp7oENL4J8TSbufhCm6sgd4iv/ZfMoWAoe2tf3MOtc0rFnLZFJVSPKCj1yKTbrutj6l
+ geIJWkhWS09hWuJ4eVM4UmC39koDL6aC6rSC3HOeVKGxilGHrHdsRH0856l9ACBNHbCE
+ fd++r47nIQtsiag/rNR3NA4WpKx9aOsiXAVZ3Xqs4TNyKgdkJQgG0UcKOH5PjabkCBqS
+ YL0A==
+X-Gm-Message-State: AOAM532jeMUOU0hUjPXX9wp7JGDoY3j/QKn4BnHjmPMn7kp9a4RPlDj/
+ CiCfa/G/5P2joYPnh/o/gzQGUQ==
 X-Google-Smtp-Source: ABdhPJyZsR28gjuiz9aG/my6WBT/wp5t7x99EoudK3t21CaepBplhF49+VVGs7QpL57zG1bJxq1cSQ==
-X-Received: by 2002:a2e:b4b7:: with SMTP id q23mr7139818ljm.88.1614640856911;
-        Mon, 01 Mar 2021 15:20:56 -0800 (PST)
-Received: from localhost.localdomain (c-d7cb225c.014-348-6c756e10.bbcust.telenor.se. [92.34.203.215])
-        by smtp.gmail.com with ESMTPSA id s5sm283660lfd.284.2021.03.01.15.20.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 15:20:56 -0800 (PST)
+X-Received: by 2002:a2e:b4b7:: with SMTP id q23mr7139818ljm.88.1614640856911; 
+ Mon, 01 Mar 2021 15:20:56 -0800 (PST)
+Received: from localhost.localdomain
+ (c-d7cb225c.014-348-6c756e10.bbcust.telenor.se. [92.34.203.215])
+ by smtp.gmail.com with ESMTPSA id s5sm283660lfd.284.2021.03.01.15.20.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 01 Mar 2021 15:20:56 -0800 (PST)
 From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Stephan Gerhold <stephan@gerhold.net>
 Subject: [PATCH] ARM: configs: ux500: Update for new drivers
 Date: Tue,  2 Mar 2021 00:20:50 +0100
-Message-Id: <20210301232050.1457397-1-linus.walleij@linaro.org>
+Message-ID: <20210301232050.1457397-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210301_182059_127375_73F6E81C 
+X-CRM114-Status: GOOD (  12.46  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+ Stephan Gerhold <stephan@gerhold.net>, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210301232050.RT7srX1D_QuAaDOSxOvXxoJw-NLP_DjPsRV15_qU1vc@z>
 
 Some new driver support for the Ux500 devices landed in
 v5.12-rc1 so update the defconfig to use them:
@@ -166,3 +201,8 @@ index bcedfe1422aa..dbb1ef601762 100644
 -- 
 2.29.2
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
