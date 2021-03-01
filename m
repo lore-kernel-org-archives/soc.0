@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BB82C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B62EC433DB
 	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Mar 2021 12:37:55 +0000 (UTC)
 Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9491364E5C
+	by mail.kernel.org (Postfix) with ESMTPS id E171564E31
 	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Mar 2021 12:37:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9491364E5C
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E171564E31
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,63 +23,64 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=AytUgY6TUni4kS37KtaqGFGIdSo6LrmVxSQxPiXnv88=; b=lEMPkMpOFr1FBRDkQ9pY9cdbM
-	2OdGdUpfRdCYAKSz8hQKVXvWiBzlJ1N4VCyp8O4vuB8gueMx8p56TcdMhIf5Uqn1NKaIcNgC/qlI3
-	saU0ss4FJMSzK2fW429mdQ6eICaAvLdM1r9R31AsZ1b7lzVkRQbgApG2QBbGvZmtYipgE2hCVShvo
-	AQW1Pc784qOjLJfNTGNBSgzow7flwJKxxUPMiafprXjQqiNv7vWD3eCYtcci6hFSuIDy065+qoFSS
-	1UVECOBkACG9unA0KDW5cr/Q8+11EDrhxl6YB5Gd5qevWxb7K9rZaPWQq4of4fZRr24e7V4B8Nau8
-	2xjCjZ32Q==;
+	 bh=mESQHHDrUgwg8HM5ptlKfxSsip7S2u+fXbS9Q2RF7VE=; b=BOj2Mof1Q/pcMJOeLfvifgJv8
+	lIVTr/hpwvWGwM5saiP7PBj2MiPie+ff7euDvu9ZQn+op30782x6eAs5QtPJC7bEOUUD1f52FJ3cu
+	bMJNvVw9XIeldlmk0JxKeY3wiHdLywZNGiucWkZYR5G+jSYXv1XiJW0dxGPhquRRjPno8qvoT4dWj
+	Vg7DNxPJyhR57Fe9p0t/kf2lW+mAL0QuUX83J/OpC2XJb/A3252eD51wfUgCaGFW2RAemprdJzJ7r
+	MPO+sV9fY8p3KQ4vzad6UQ6ye7GFOuuGsNWl38b6J+AuX0Ry/sYRKPr2aYZl20hLlug32k6VNGO+B
+	K0EyW5Eew==;
 Received: from localhost ([::1] helo=merlin.infradead.org)
 	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1lGhmk-0004Lg-LM; Mon, 01 Mar 2021 12:36:26 +0000
-Received: from mail-pf1-x42e.google.com ([2607:f8b0:4864:20::42e])
+	id 1lGhmj-0004LR-7k; Mon, 01 Mar 2021 12:36:25 +0000
+Received: from mail-pg1-x531.google.com ([2607:f8b0:4864:20::531])
  by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1lGhmg-0004K4-NV
- for linux-arm-kernel@lists.infradead.org; Mon, 01 Mar 2021 12:36:23 +0000
-Received: by mail-pf1-x42e.google.com with SMTP id 192so4407467pfv.0
+ id 1lGhmf-0004K1-T5
+ for linux-arm-kernel@lists.infradead.org; Mon, 01 Mar 2021 12:36:22 +0000
+Received: by mail-pg1-x531.google.com with SMTP id p21so11443314pgl.12
  for <linux-arm-kernel@lists.infradead.org>;
- Mon, 01 Mar 2021 04:36:22 -0800 (PST)
+ Mon, 01 Mar 2021 04:36:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=+k4h3DmLpBdKDskL9GZ/5TFWOILyp4Yu88KprHaLQKE=;
- b=LXsgkHRudMusscZhb8tcXfF/UOSbdaiDWcQYPsD1X4Wq3fGQFyFSTcgYFNAa8NLPNq
- tTbnNz9qHrGUsGM9wVQ39viWKoq/ILyVTBh1LVGv/DhNUk/eOQCioNlhOHSm5JbM0DYN
- eANJzwaDFbvAKU1QILsouWS76VWxkq1hclLwI=
+ bh=C88FmiAqxDnJbB9m5EGVR/CJ40sQ0nT98Az9DhqgecU=;
+ b=k25ODqx0AJ9FiPd1SEWkoupl4VkvfyH//7e4sw3S9SizNEvqDBmeG8PMTbrw8Wud2p
+ jPT/5r8AUEOc+6GCoMClwE2m9U12dn/IyaSPGBhnWNegGzlei+RJ5Q0GhZ1do2ME2bob
+ 0valpUCI4R32euZNZJguYY2Uh3+rSnvly1/gY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=+k4h3DmLpBdKDskL9GZ/5TFWOILyp4Yu88KprHaLQKE=;
- b=MIVZNnE5/QiP6/Khdxp42ts9SM5twuxj7kesWnizVf2R5omnnHaEy9q5C9A/GlW/ta
- bROJuZHMzldy88tkKcVib08w5IVQmb+R4k+4eXeU+xubDBJmVHF8rmJ9yX2AIrbQxKPE
- ZighTEdCD8K4qUqubdrvPPZA6xjvZOaQOLB8L6fLB0WaXJPQJMUcQpSad0pk9dViisNP
- 4hOydsPsqFx0kVSZ6vwBy7ilVHPuKm/Lb5CHGGnBIWPgX4VmhAjrByHH+h86Fxc+43W/
- ixYsYGY+y6Sl0bcqeKL12ieRONxdS+vzNAyBPAq8cLZlcr6//sXlfFJ++bl4fs1AgUC5
- 1b9g==
-X-Gm-Message-State: AOAM531+5eUPomxhwtLEPxFTH4Mlwz0fkvEMcj7tCdf9ltvCxPfTn1p6
- T8Yqbzxci1f9shUe53GZieagBQ==
-X-Google-Smtp-Source: ABdhPJwTEPhmbXdM73IRV4qErcw1tHV6jN+BJBRpELMoKnNa4BLKg/pydkhpYosYCFC+tEFU67mx0g==
-X-Received: by 2002:a63:c1d:: with SMTP id b29mr13749890pgl.9.1614602180117;
- Mon, 01 Mar 2021 04:36:20 -0800 (PST)
+ bh=C88FmiAqxDnJbB9m5EGVR/CJ40sQ0nT98Az9DhqgecU=;
+ b=iP1yho7IgM2SfEGbgxGWfeSHTQTkf9HqL9QladNHP85GPTLKT/hnAdOBHybZw6Fb96
+ /otewsrM/eM/jYKkAkDtc8NsQuHZ/SkH6XdSZ+ty/wxiffHErO7xe8RdZWR5BrC3zS5P
+ 3aPMv3cIaYPNSGnDxzKQKEUcRwrMz6EBCl7/WKcmRSnqU8WESAHI7il7SUJDAa3Vl3+q
+ HOqeR+nJyngn/cLkKG5OEfvKRmDFk0CfsdHv2AHC5ynHalBzny4q7FTi0Rfhayqmd5FE
+ fWm8JUOhWIlVpU/5EDdKjtVtjUel7bqtZYQtQHh3fpmHRpjh/Qr7IWPI2ywpfyuPwSI0
+ pLiQ==
+X-Gm-Message-State: AOAM532bsSm2Yg3YDZpPL9xKU/4JxTXSnSai5FYHI/IuoVx28xWWVHW6
+ uAUS70bq/8O1cLtW8fpifbVQUQ==
+X-Google-Smtp-Source: ABdhPJy4edf/KQypinIj/0pMZbp3pGG1yVFbUE7VPL2CwLLI5GWeL1N/ukAkzUJwOZk8lI2iMzCeTQ==
+X-Received: by 2002:a62:ed0b:0:b029:1ee:7568:5ab9 with SMTP id
+ u11-20020a62ed0b0000b02901ee75685ab9mr7010492pfh.79.1614602178032; 
+ Mon, 01 Mar 2021 04:36:18 -0800 (PST)
 Received: from shiro.work (p345188-ipngn200408sizuokaden.shizuoka.ocn.ne.jp.
  [124.98.97.188])
- by smtp.googlemail.com with ESMTPSA id 8sm18130928pfp.171.2021.03.01.04.36.18
+ by smtp.googlemail.com with ESMTPSA id 8sm18130928pfp.171.2021.03.01.04.36.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Mar 2021 04:36:19 -0800 (PST)
+ Mon, 01 Mar 2021 04:36:17 -0800 (PST)
 From: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Subject: [PATCH 2/3] ARM: mstar: Add the external clocks to the base dsti
-Date: Mon,  1 Mar 2021 21:35:41 +0900
-Message-ID: <20210301123542.2800643-3-daniel@0x0f.com>
+Subject: [PATCH 1/3] ARM: mstar: Select MSTAR_MSC313_MPLL
+Date: Mon,  1 Mar 2021 21:35:40 +0900
+Message-ID: <20210301123542.2800643-2-daniel@0x0f.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210301123542.2800643-1-daniel@0x0f.com>
 References: <20210301123542.2800643-1-daniel@0x0f.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210301_073622_807724_108A4E10 
-X-CRM114-Status: GOOD (  14.44  )
+X-CRM114-CacheID: sfid-20210301_073621_981998_D0806CBF 
+X-CRM114-Status: GOOD (  12.34  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,54 +99,28 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210301123541.bD15ViqRttxXQllkJn_FowiQStvQjciZgA0bmRAbY9g@z>
+Message-ID: <20210301123540.mD6AbzrJIGdV0IZcB0J4k5bo78Rx9H9jinxqNrQoAws@z>
 
-All of the currently known MStar/SigmaStar ARMv7 SoCs have an "xtal"
-clock input that is usually 24MHz and an "RTC xtal" that is usually 32KHz.
-
-The xtal input has to be connected to something so it's enabled by default.
-
-The MSC313 and MSC313E do not bring the RTC clock input out to the pins
-so it's impossible to connect it. The SSC8336 does bring the input
-out to the pins but it's not always actually connected to something.
-
-The RTC node needs to always be present because in the future the nodes
-for the clock muxes will refer to it even if it's not usable.
-
-The RTC node is disabled by default and should be enabled at the board
-level if the RTC input is wired up.
+All of the ARCH_MSTARV7 chips have an MPLL as the source for
+peripheral clocks so select MSTAR_MSC313_MPLL.
 
 Signed-off-by: Daniel Palmer <daniel@0x0f.com>
 ---
- arch/arm/boot/dts/mstar-v7.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ arch/arm/mach-mstar/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/mstar-v7.dtsi b/arch/arm/boot/dts/mstar-v7.dtsi
-index b0a21b0b731f..889c3804c251 100644
---- a/arch/arm/boot/dts/mstar-v7.dtsi
-+++ b/arch/arm/boot/dts/mstar-v7.dtsi
-@@ -46,6 +46,21 @@ pmu: pmu {
- 		interrupt-affinity = <&cpu0>;
- 	};
- 
-+	clocks: clocks {
-+		xtal: xtal {
-+			#clock-cells = <0>;
-+			compatible = "fixed-clock";
-+			clock-frequency = <24000000>;
-+		};
-+
-+		rtc_xtal: rtc_xtal {
-+			#clock-cells = <0>;
-+			compatible = "fixed-clock";
-+			clock-frequency = <32768>;
-+			status = "disabled";
-+		};
-+	};
-+
- 	soc: soc {
- 		compatible = "simple-bus";
- 		#address-cells = <1>;
+diff --git a/arch/arm/mach-mstar/Kconfig b/arch/arm/mach-mstar/Kconfig
+index 576d1ab293c8..cd300eeedc20 100644
+--- a/arch/arm/mach-mstar/Kconfig
++++ b/arch/arm/mach-mstar/Kconfig
+@@ -4,6 +4,7 @@ menuconfig ARCH_MSTARV7
+ 	select ARM_GIC
+ 	select ARM_HEAVY_MB
+ 	select MST_IRQ
++	select MSTAR_MSC313_MPLL
+ 	help
+ 	  Support for newer MStar/Sigmastar SoC families that are
+ 	  based on Armv7 cores like the Cortex A7 and share the same
 -- 
 2.30.1
 
