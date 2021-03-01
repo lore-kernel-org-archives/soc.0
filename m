@@ -1,124 +1,168 @@
-Return-Path: <SRS0=cQz6=H7=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=C383=H7=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD628C433E9
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Mar 2021 12:37:57 +0000 (UTC)
-Received: from merlin.infradead.org (merlin.infradead.org [205.233.59.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6727AC433E0
+	for <soc@archiver.kernel.org>; Mon,  1 Mar 2021 23:20:59 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 02C4760232; Mon,  1 Mar 2021 23:20:59 +0000 (UTC)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6303664E31
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  1 Mar 2021 12:37:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6303664E31
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=merlin.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=ew3GaIHhjTkLDSWyHZe25MejfvHK+9O0u+Z2dq49BeU=; b=M8UGTXM/iAmGJfdKZVC1Vjkmes
-	aFLVvfENcZd/fL85hVT1h1BLKdZ3U/3aXrKA2V8NlgluYe/p4rb670obUFjI0/QQU62870TKKON4R
-	kjcU5kZV8YQEfccz572B+tsngIN93fLYAl37iEmaOGJTGflnskSfxAcFBzdnPzPssvBjUoDDoTLU9
-	y7iE0g+VTuJ5dkJML32YgeCS2/R20ECVsA+WiqJemVkHQMeY0fa9jCHWVEdEIJW1dT84jynLR+0cD
-	UvaADceOH887NJB9UdfaIyYqRIh7SPF6X+pnw7Ensb8dNiOsiPKIxH7FfZG9A4Tc3kgum6U/Un0nl
-	8EEwIElw==;
-Received: from localhost ([::1] helo=merlin.infradead.org)
-	by merlin.infradead.org with esmtp (Exim 4.92.3 #3 (Red Hat Linux))
-	id 1lGhmh-0004Kx-Q8; Mon, 01 Mar 2021 12:36:23 +0000
-Received: from mail-pj1-x102c.google.com ([2607:f8b0:4864:20::102c])
- by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
- id 1lGhme-0004Ju-Ps
- for linux-arm-kernel@lists.infradead.org; Mon, 01 Mar 2021 12:36:21 +0000
-Received: by mail-pj1-x102c.google.com with SMTP id e9so11739403pjj.0
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 01 Mar 2021 04:36:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=aHKl2ifjfFue0mX7AlhZwlZkgYLL6KuO5Evur3d7teY=;
- b=rtiZd5gC6kPJr3YwWqhGX23hoyV/0rnI1ney+wD2Qfu/xruPUrh6WhKRWaGTO/EvDQ
- 5BRqCCUgOxplOvmZA3aERlUOS5SYSL/fiTG/Oav2IUtdohRqUMg91wQruJkyRdu4Sge0
- pZ8vDbJjDZfLJ8rRP46CyoGEH5Zhdn+cy6arY=
+	by mail.kernel.org (Postfix) with ESMTPS id 8E73360235
+	for <soc@kernel.org>; Mon,  1 Mar 2021 23:20:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8E73360235
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linus.walleij@linaro.org
+Received: by mail-lj1-f175.google.com with SMTP id p15so12666852ljc.13
+        for <soc@kernel.org>; Mon, 01 Mar 2021 15:20:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LVmImkXhdF8b7IyEbAftanQY9XJqBkgbJmzCGT5ATkA=;
+        b=R0IvFNn1ba2I96r7yvogckNXutet/yzP5SCj/BorUQKQQGx4IOS8iO6IUuq19bI3cV
+         18dcxBqRc9Mq7ZqJgk2o+6BVbBntrwoE9m333dOS8Lv/ZYaF77m3M8VqRzTfLei/CmiA
+         FTVbG4c/ei4vd5L1+t3R4y0SicAOQUMLTsfIkNHdu4XP6NWp/k/BpEpSNNbq0XIfREos
+         6FnyJ00QaZ5+WL1iT6fHHE7z+CWMbTRtpdMuSg2rQoQzMArSQlXIyW9VBtFnoanf/x6r
+         1XUMBGBpyyZRHidiFv3/7LLpEL0N99DWaDyk7R94ENqyG5ZhjplvyQ6Ku7JLS2nFcf8D
+         CnSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=aHKl2ifjfFue0mX7AlhZwlZkgYLL6KuO5Evur3d7teY=;
- b=fKkL0hq44SqszZ2OxPeINK8KZ0t3MJ3vFa8dBc8gqqmc4f6W0eArgPtq3IttV1Yzf2
- uCKqufZPiPPpZAO9o/uTmnbkR8T8dpzJmJZ5KRwmsOPg22tm7yOImZsh9F8z3DpHt8Te
- /DwzFnwzrJfEsEA7sw12d00s9k25k5DNYX0W/5esL5sWsG2CR/ZsjiFE41QZU3EYWAWu
- 0AtKjPF8s13RfULYh+iDdg/YvMPRmo6VkaJXcXe08YgD5i7XRAFaleOXAFCv3yJF8aIg
- HygefudSx7HsodmYsn9qzF2/4NE0BkCQMQm+T+UYt15DlDl0yG1xoN/1yvJRdEayzr++
- H43Q==
-X-Gm-Message-State: AOAM532MJwjAWX9g8JWd9AShdrnlAbv38MRRbncIw15hhRTauohYmzUx
- syy1sCi3DwwLeC6AAyj3p4KxXg==
-X-Google-Smtp-Source: ABdhPJxOr/a6RlVgTyLEJ1PiMM+lPrd84tutb8D9p3gWD2fgAKluwDJh3vEg5M+cXvXJHFimSWH0wQ==
-X-Received: by 2002:a17:90a:13:: with SMTP id
- 19mr17624768pja.116.1614602175901; 
- Mon, 01 Mar 2021 04:36:15 -0800 (PST)
-Received: from shiro.work (p345188-ipngn200408sizuokaden.shizuoka.ocn.ne.jp.
- [124.98.97.188])
- by smtp.googlemail.com with ESMTPSA id 8sm18130928pfp.171.2021.03.01.04.36.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Mar 2021 04:36:15 -0800 (PST)
-From: Daniel Palmer <daniel@0x0f.com>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LVmImkXhdF8b7IyEbAftanQY9XJqBkgbJmzCGT5ATkA=;
+        b=M8Moyr3iJojkESs1/sulbEtQNOAinlyxyP4LdcplKOaproSLpJurIO/Dfa+TG8eeK7
+         wDRUOosF7WxZDVwMhIsBWgNcTUkVOZPqqNYhjAY0/YeI+QJ/lhalR2zJHI8sbJnht9nw
+         riUa2qAOYelBAaEh7UCM5OY6OZ1ury+HaWAHlMPIKi5QeDwy/gec5aRiy1n5PCnUd2B+
+         UQQ4BuRKh2jLE45OhxeWlzK178SI1f770P++aMYKesCaE4/LDoeZO0l801HFZK5c2M6u
+         xKSA4xx46tIdVM23kVwJGRv2E1yk4s3TQyr/fXNuIczU21pwaouif5OuVymfLD53f2NF
+         t1Ww==
+X-Gm-Message-State: AOAM531J3G7y79DRuaKvPPCfuE1p50uFsZmvwBGG3HrU87VhIcvaGTD4
+	55ir/tqTxBOHEW04jqRu3ggNlQ==
+X-Google-Smtp-Source: ABdhPJyZsR28gjuiz9aG/my6WBT/wp5t7x99EoudK3t21CaepBplhF49+VVGs7QpL57zG1bJxq1cSQ==
+X-Received: by 2002:a2e:b4b7:: with SMTP id q23mr7139818ljm.88.1614640856911;
+        Mon, 01 Mar 2021 15:20:56 -0800 (PST)
+Received: from localhost.localdomain (c-d7cb225c.014-348-6c756e10.bbcust.telenor.se. [92.34.203.215])
+        by smtp.gmail.com with ESMTPSA id s5sm283660lfd.284.2021.03.01.15.20.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Mar 2021 15:20:56 -0800 (PST)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: [PATCH 0/3] ARM: mstar: MPLL mop up
-Date: Mon,  1 Mar 2021 21:35:39 +0900
-Message-ID: <20210301123542.2800643-1-daniel@0x0f.com>
-X-Mailer: git-send-email 2.30.1
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH] ARM: configs: ux500: Update for new drivers
+Date: Tue,  2 Mar 2021 00:20:50 +0100
+Message-Id: <20210301232050.1457397-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210301_073621_007225_C1341B9C 
-X-CRM114-Status: UNSURE (   9.44  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: arnd@kernel.org, Daniel Palmer <daniel@0x0f.com>,
- linux-kernel@vger.kernel.org, olof@lixom.net, w@1wt.eu,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210301123539.MMceowEVIVw5L_D9GvrAvLLBuBA-0QNyaJeFZGyq9_4@z>
+Content-Transfer-Encoding: 8bit
 
-This series is just 3 small patches that got left behind
-when the MPLL driver was merged.
+Some new driver support for the Ux500 devices landed in
+v5.12-rc1 so update the defconfig to use them:
 
-Link: https://lore.kernel.org/linux-arm-kernel/20210211052206.2955988-1-daniel@0x0f.com/
+- TM2 touchkey, used on the Golden and Janice.
+- SPI GPIO, used for the Janice display control.
+- NTC thermistor, used for the HREF temperature
+  sensors.
+- V4L2 flash control that gives support for LED
+  torch to userspaces such as Phosh.
+- The LEDs Flash class and RT8515 Flash/torch LED
+  driver used in all the Samsung mobiles.
+- FSA9480 extcon, used by Janice.
+- BMC150 accelerometer, used by Janice.
+- IIO rescaler, used for thermistors and ALS
+  on Janice.
+- MPU3050 gyroscope driver used by Janice.
+- Yamaha YAS530 magnetometer driver used by Janice.
 
-Daniel Palmer (3):
-  ARM: mstar: Select MSTAR_MSC313_MPLL
-  ARM: mstar: Add the external clocks to the base dsti
-  ARM: mstar: Add mpll to base dtsi
+Cc: Stephan Gerhold <stephan@gerhold.net>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+SoC folks: please apply this directly for the -rcs.
+---
+ arch/arm/configs/u8500_defconfig | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
- arch/arm/boot/dts/mstar-v7.dtsi | 23 +++++++++++++++++++++++
- arch/arm/mach-mstar/Kconfig     |  1 +
- 2 files changed, 24 insertions(+)
-
+diff --git a/arch/arm/configs/u8500_defconfig b/arch/arm/configs/u8500_defconfig
+index bcedfe1422aa..dbb1ef601762 100644
+--- a/arch/arm/configs/u8500_defconfig
++++ b/arch/arm/configs/u8500_defconfig
+@@ -55,6 +55,7 @@ CONFIG_KEYBOARD_GPIO=y
+ CONFIG_KEYBOARD_NOMADIK=y
+ CONFIG_KEYBOARD_STMPE=y
+ CONFIG_KEYBOARD_TC3589X=y
++CONFIG_KEYBOARD_TM2_TOUCHKEY=y
+ # CONFIG_INPUT_MOUSE is not set
+ CONFIG_INPUT_TOUCHSCREEN=y
+ CONFIG_TOUCHSCREEN_ATMEL_MXT=y
+@@ -74,10 +75,12 @@ CONFIG_SERIAL_DEV_BUS=y
+ CONFIG_HW_RANDOM=y
+ CONFIG_I2C_GPIO=y
+ CONFIG_SPI=y
++CONFIG_SPI_GPIO=y
+ CONFIG_SPI_PL022=y
+ CONFIG_GPIO_STMPE=y
+ CONFIG_GPIO_TC3589X=y
+ CONFIG_SENSORS_IIO_HWMON=y
++CONFIG_SENSORS_NTC_THERMISTOR=y
+ CONFIG_THERMAL=y
+ CONFIG_CPU_THERMAL=y
+ CONFIG_WATCHDOG=y
+@@ -85,6 +88,10 @@ CONFIG_MFD_STMPE=y
+ CONFIG_MFD_TC3589X=y
+ CONFIG_REGULATOR_AB8500=y
+ CONFIG_REGULATOR_GPIO=y
++CONFIG_MEDIA_SUPPORT=y
++CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_VIDEO_V4L2_SUBDEV_API=y
++CONFIG_V4L2_FLASH_LED_CLASS=y
+ CONFIG_DRM=y
+ CONFIG_DRM_PANEL_NOVATEK_NT35510=y
+ CONFIG_DRM_PANEL_SAMSUNG_S6D16D0=y
+@@ -112,10 +119,12 @@ CONFIG_MMC=y
+ CONFIG_MMC_ARMMMCI=y
+ CONFIG_NEW_LEDS=y
+ CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_CLASS_FLASH=y
+ CONFIG_LEDS_LM3530=y
+ CONFIG_LEDS_GPIO=y
+ CONFIG_LEDS_LP55XX_COMMON=y
+ CONFIG_LEDS_LP5521=y
++CONFIG_LEDS_RT8515=y
+ CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+ CONFIG_RTC_CLASS=y
+ CONFIG_RTC_DRV_AB8500=y
+@@ -124,16 +133,21 @@ CONFIG_DMADEVICES=y
+ CONFIG_STE_DMA40=y
+ CONFIG_HWSPINLOCK=y
+ CONFIG_HSEM_U8500=y
++CONFIG_EXTCON_FSA9480=y
+ CONFIG_IIO=y
+ CONFIG_IIO_SW_TRIGGER=y
+ CONFIG_BMA180=y
++CONFIG_BMC150_ACCEL=y
+ CONFIG_IIO_ST_ACCEL_3AXIS=y
++CONFIG_IIO_RESCALE=y
++CONFIG_MPU3050_I2C=y
+ CONFIG_IIO_ST_GYRO_3AXIS=y
+ CONFIG_INV_MPU6050_I2C=y
+ CONFIG_BH1780=y
+ CONFIG_GP2AP002=y
+ CONFIG_AK8974=y
+ CONFIG_IIO_ST_MAGN_3AXIS=y
++CONFIG_YAMAHA_YAS530=y
+ CONFIG_IIO_HRTIMER_TRIGGER=y
+ CONFIG_IIO_ST_PRESS=y
+ CONFIG_EXT2_FS=y
 -- 
-2.30.1
+2.29.2
 
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
