@@ -2,20 +2,19 @@ Return-Path: <SRS0=J3As=IB=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2775C43381
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  3 Mar 2021 18:41:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E59FC433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  3 Mar 2021 19:20:12 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DE79A64ECF
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  3 Mar 2021 18:41:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DE79A64ECF
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+	by mail.kernel.org (Postfix) with ESMTPS id 7F1D264EF4
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  3 Mar 2021 19:20:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7F1D264EF4
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
@@ -23,74 +22,80 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
 	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=hwKtwtVxMppC9yKUtR+cxT6UM74l66GNP9Z8JLdxzck=; b=OHvcWtIQS788B1U4Wgobt5RWm
-	18nF9Ppg5i0IJ5NoPsfEXxD2QgrT6Hp0i0aM30ebq3YPR+n9lMbcqKyULKIxHHBwIs8tDzZ4f2HvS
-	MBoNkRVR+WpZo9VU5JHzOnEIqOJawGBr4oZDr8emG2t6pSAjENHEXjMMCR3vYlKnANje8iXHUSDJN
-	lf5GwyEiUlj7pKSbuio8pWHs0yCQL/4nCE3cyy864PlV7AMBgYjtaybfoJXr9GYDi1tw8TYkxgbv8
-	e9hvnP5o+7zDtAYUyooclMz6e6W0OQroI0/uMxz2eu2nM+4M2klXRCqdWC+jXtWWJeMl41gQ9d0U9
-	qFeHuMJVQ==;
+	 bh=Hb+Ap0FuPQGM1s/F3TTwysOGa4ocTORJ+tecMDCJbjE=; b=Mp++R1ubCVwRs3weAv2HLLo73
+	li5xyqRU8DfoNMw4zRBvCN4yklArvCgcaNgt1gPrywRRobPh9yQti1bUtqGmNcB5/IrYvrbBSPhzM
+	o6Cz05BM6SMc7V5fTw59e4W9CEVLZEyxU4dW056yHOpzvYUZGpzHmKp836yI+HWnLZf0+0ctLawdm
+	+lVQsjWBYe5CNcu0NPFQHPXIpEQh8gLVRtsYmpA5mW9DIU8rA7wn1Xej0C0lxsli+xoE8jjVjLeiF
+	Dmzyi68QdsE/DfGrWtUlrcIQGzzZ4FNm129rVTEHR5HM2TvI1Z6E1Y1cR/5L6766+RO86BYHFRHvH
+	9HhHUmjeg==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lHWP4-0063OM-FT; Wed, 03 Mar 2021 18:39:24 +0000
+	id 1lHWzz-006Awn-11; Wed, 03 Mar 2021 19:17:32 +0000
 Received: from casper.infradead.org ([2001:8b0:10b:1236::1])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lHT18-005HF6-EL
- for linux-arm-kernel@desiato.infradead.org; Wed, 03 Mar 2021 15:02:26 +0000
+ id 1lHT2r-005Hrn-3n
+ for linux-arm-kernel@desiato.infradead.org; Wed, 03 Mar 2021 15:04:13 +0000
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=infradead.org; s=casper.20170209; h=Content-Type:Cc:To:Subject:Message-ID:
- Date:From:In-Reply-To:References:MIME-Version:Sender:Reply-To:
+ d=infradead.org; s=casper.20170209; h=Content-Type:Cc:List-Id:To:Subject:
+ Message-ID:Date:From:In-Reply-To:References:MIME-Version:Sender:Reply-To:
  Content-Transfer-Encoding:Content-ID:Content-Description;
- bh=by3K048DQ1t9InFYfR9YClx1/v8wISgr9N0yhXdY8Fc=; b=gaHErDL2fSxLBjWIBxnwL8QXSU
- jQuChIvYbuDNVk5sXsJYuJ8nr3v3pg62Am83lviwNKHrOLxdoTVHdi5Wzbv3mvfhzW5qCGdGIWdu0
- kDKzSWZVsFbT0LWF78xiXICvgzLF5XM60/SCsPEnU1tNpVIXfekcocbH9dVlLw66v8lUZUjf/tK1T
- DpqGKSGUly6SAGw+MycL2/f9BvBYLUYDoLw8v7WhkvGgdCoU0PzmJGXVIBSdL0tp/wKzAATSlKEnL
- lmzoc0oJL1+wkSE6+iCPTrZacP6PvlDIh/k6oGraKruCVe1dl3boXryHzS6hs4qjEdQxYCOuameYd
- CEWJfAWA==;
-Received: from mout.kundenserver.de ([217.72.192.73])
+ bh=1FsybmuyP5cOjkfNe0e0f6tZbBSYUS5F5BusqJHA1Oo=; b=ndXlO0hohnCOkmCSDty3xuj7+I
+ vsZ+i38pmiFNK2iMMi+k1Ah6PT9KqXFEZEvAKVfrpF4lYRc4ok3AhgX33BtKEbakn9WEevZTkyHGw
+ U8Gwzj7Esgqd643qjLU9rzhpiq8YHekDgbIaA/bduuks0d6o4IXKGCAoOMxxj6+djrJlTdIz65kuI
+ syTXDKMsyKCA+/JJ01DsGCqo7nYmzZjNcFZNX3V9HPv+aSp1GnNfOTFtu9mwONbCbqiRkviuMiAcr
+ Oh91Eb/pecEbQwytrHWL+uEDFQE1TYEeAFY9+9iUYdZc+MnDltGlvwp72wBzBQkklihFhzomgT3QE
+ YtSTtDcA==;
+Received: from mail.kernel.org ([198.145.29.99])
  by casper.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lHPcP-002Lnv-0Y
- for linux-arm-kernel@lists.infradead.org; Wed, 03 Mar 2021 11:24:44 +0000
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MDQmW-1l6w1E2fN0-00AWwb for <linux-arm-kernel@lists.infradead.org>; Wed,
- 03 Mar 2021 12:24:34 +0100
-Received: by mail-wr1-f54.google.com with SMTP id b18so16771258wrn.6
+ id 1lH30w-00GzrA-Pu
+ for linux-arm-kernel@lists.infradead.org; Tue, 02 Mar 2021 11:16:32 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A12AE64F07
  for <linux-arm-kernel@lists.infradead.org>;
- Wed, 03 Mar 2021 03:24:31 -0800 (PST)
-X-Gm-Message-State: AOAM531MgHV+9syj7eNEoc1bWK2Pqp6TF0piq++xybtFmgJn3cz5vhHk
- rZUwNdwHJMlCCqc8Ty3vSkHR6GQdhHJwbdQxKFk=
-X-Google-Smtp-Source: ABdhPJxpwiQEBoXRFpev1BecFuEWDtaCog1buNDzGK8+Jk7b6oIRnv3iwO0+Defv6yy4HboaxEeWf/uRuMjHZmPwZAs=
-X-Received: by 2002:adf:de11:: with SMTP id b17mr27292715wrm.196.1614770671214; 
- Wed, 03 Mar 2021 03:24:31 -0800 (PST)
+ Tue,  2 Mar 2021 11:07:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+ s=k20201202; t=1614683235;
+ bh=JXsntDomzvvp35KqPtyck4SYOcKp8C4CKAHwX45dSbk=;
+ h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+ b=KtChTbLobWxE790ocN6tY6pzK8us82tmSNZzHL0pjxAF1zvqb2b4lE/TH2q3Rtz5p
+ tWRAk/mT0xENLL2LzwfWbH6pSyi+Aiw2pqAeDc8v4ecyikzgY/aCl8c6PGP27BsG3J
+ wqpfga9299ZfCFQgLl/VZFxLjUjG+SFJqDQth1SYd0M+oEjoJMFTMsQ2N0gzbiMfOn
+ 0IkDiQKvyWKNAetPBYrwb1qwLbMrfJAloknLJkKF6KLkNoLjoQmxF4J3NOz3JN5BjV
+ EnaETFLFMCbYyBzRH10h8dlIkYlUPcSX0ENWHEnOiPw2H1RoxQcSJE3fdQkNSAVq06
+ POo9NPkAg6g7g==
+Received: by mail-ot1-f51.google.com with SMTP id f33so19553438otf.11
+ for <linux-arm-kernel@lists.infradead.org>;
+ Tue, 02 Mar 2021 03:07:15 -0800 (PST)
+X-Gm-Message-State: AOAM5329vzbJAMWDzxfghKv7l59CSQAYR5qQKLFtidOcydexUX1KW9NX
+ bz/i4xFzPF07MMlEwBB8vT5J4kBnwyqmIiIFPbQ=
+X-Google-Smtp-Source: ABdhPJxhU9eCujXvv4W27bbuQrN4TqJbps/AVuDpVM+qdE75c882pb9q50Qcmq/ml0VnXFoQJVtbrz+VtQpfjeZra24=
+X-Received: by 2002:a9d:7f11:: with SMTP id j17mr18038402otq.251.1614683234751; 
+ Tue, 02 Mar 2021 03:07:14 -0800 (PST)
 MIME-Version: 1.0
-References: <1614764303-34903-1-git-send-email-tan.shaopeng@jp.fujitsu.com>
- <1614764303-34903-2-git-send-email-tan.shaopeng@jp.fujitsu.com>
-In-Reply-To: <1614764303-34903-2-git-send-email-tan.shaopeng@jp.fujitsu.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 3 Mar 2021 12:24:14 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0VUoixMKg5UmF8agAZUXoMT8_SbCiWBdStbZ+_yAYNjA@mail.gmail.com>
-Message-ID: <CAK8P3a0VUoixMKg5UmF8agAZUXoMT8_SbCiWBdStbZ+_yAYNjA@mail.gmail.com>
-Subject: Re: [PATCH RFC] soc: fujitsu: Add cache driver code
-To: "tan.shaopeng" <tan.shaopeng@jp.fujitsu.com>
+References: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
+ <20210108125410.GA84941@C02TD0UTHF1T.local>
+ <CAK8P3a34aPUwjAXoh20E-PT6vG6gbW_itAXVQAYrhsHZbzqRsQ@mail.gmail.com>
+ <OSBPR01MB4582283E56A13D03A778150FE5AA0@OSBPR01MB4582.jpnprd01.prod.outlook.com>
+ <CAK8P3a2BbCtZG=+fi1mtrhMtBKHcaZa=gvfiKJVdnsq6N3yG4A@mail.gmail.com>
+ <OSBPR01MB45821D2CFA8285A3FFDE6B1CE5A70@OSBPR01MB4582.jpnprd01.prod.outlook.com>
+ <CAK8P3a0Oxvm=VTnPAwxSQ-od4Q0rqMq45633pMyTcV8Adet-Lw@mail.gmail.com>
+ <OSBPR01MB4582A4399A25EBC65F8B0626E5859@OSBPR01MB4582.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSBPR01MB4582A4399A25EBC65F8B0626E5859@OSBPR01MB4582.jpnprd01.prod.outlook.com>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Tue, 2 Mar 2021 12:06:57 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3dBnSMmOgXHeycwpXJo3O2oq1e3Ue0XzgP=q68ZxMzvg@mail.gmail.com>
+Message-ID: <CAK8P3a3dBnSMmOgXHeycwpXJo3O2oq1e3Ue0XzgP=q68ZxMzvg@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/10] Add Fujitsu A64FX soc entry/hardware barrier
+ driver
+To: "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>,
- Will Deacon <will@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
- Olof Johansson <olof@lixom.net>,
- Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
-X-Provags-ID: V03:K1:fyfNOU4OyYPPcA19ArSA2aYm7+ifWGrcLLm39wWkYKR338id0is
- X7/sU70At+byGstaZwyv+d5eAFltV7dXRyhx9M66kdTqqNGQ3IHrczTGQ6Tu9nmuzkUIdL0
- KPHm8Ja7JzotbafiM/SeIRTjEI/9RG2lWX2UIHqSzalpDysuP8qDKWzyBoOR2zWJgvu9cJ6
- HYC05bpKAmwBH4LkpV5NQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CftOm2SznQM=:sStmQVwic7sR/2l8e5nHTH
- SuXSJWq34oWgegAH9wo8zG5E/kRVneQlISTDcYfdEoFHT/+z/ZDX0fng42Wu3WFsQWccZ98h/
- 0ny0lhqvkkF296X0rtVQ5SWQqERO80GHIrtYQ5Zw/izlTEYtjDAKR/uXnztjJ/GXe0Sl3ddwU
- 7qkF5BBG/03v4cA3A+qjiXLDapHuDbM6Kr1ycyHo72Yh/WW1TPC+2zGJIFQHiIk7nsbbtax05
- na35+X8e6U/ZWc6krOh7GQJ5d5A0DmDrI7oAe0tr15cNHtw4i7oLBgKWtFtwobv12LWE77v5a
- IThk69iWXVZ39MjwsXTkSRHHSnPbj/oqiUg9ugb26EKxzA2/IlIxJuaHnSnmTuDP2BcyCHth2
- BIrY0efsIQ8auYgLFUn5HRMQ9jpkY25iNL4WRUQyufY5iQlz6cQUDBcHS53SV
+Cc: Mark Rutland <mark.rutland@arm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, 
+ SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>,
+ Will Deacon <will@kernel.org>, 
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210303_112444_011235_1996CED1 
-X-CRM114-Status: GOOD (  26.31  )
+X-CRM114-CacheID: sfid-20210302_111632_453843_804E0CD7 
+X-CRM114-Status: GOOD (  35.30  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -106,83 +111,82 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210303112414.Uh932k3F28WKr7whuAufl0pXhmy1xZl3hMjeVQCxxjk@z>
+Message-ID: <20210302110657.hOv2WrBnVib_H4CInhyZXGKV8H5fMULa7UMPrFFzGkw@z>
 
-On Wed, Mar 3, 2021 at 10:38 AM tan.shaopeng
-<tan.shaopeng@jp.fujitsu.com> wrote:
-> +
-> +config FUJITSU_CACHE
-> +        tristate "FUJITSU Cache Driver"
-> +        depends on ARM64_VHE || COMPILE_TEST
-> +        help
-> +          FUJITSU Cache Driver
-> +
-> +          This driver offers cache functions for A64FX system.
-> +         Loading this cache driver, control registers will be set to enable
-> +         these functions, and advanced settings registers will be set by default
-> +         values. After loading this driver, you can use the default values of the
-> +         advanced settings registers or set the advanced settings registers
-> +         from EL0. Unloading this driver, control registers will be clear to
-> +         disable these functions.
-> +          When built as a module, this will be called as "fujitsu_cache".
+On Thu, Feb 18, 2021 at 10:49 AM misono.tomohiro@fujitsu.com
+<misono.tomohiro@fujitsu.com> wrote:
+>
+> > > > > Also, It is common usage that each running thread is bound to one PE in
+> > > > > multi-threaded HPC applications.
+> > > >
+> > > > I think the expectation that all threads are bound to a physical CPU
+> > > > makes sense for using this feature, but I think it would be necessary
+> > > > to enforce that, e.g. by allowing only threads to enable it after they
+> > > > are isolated to a non-shared CPU, and automatically disabling it
+> > > > if the CPU isolation is changed.
+> > > >
+> > > > For the user space interface, something based on process IDs
+> > > > seems to make more sense to me than something based on CPU
+> > > > numbers. All of the above does require some level of integration
+> > > > with the core kernel of course.
+> > > >
+> > > > I think the next step would be to try to come up with a high-level
+> > > > user interface design that has a chance to get merged, rather than
+> > > > addressing the review comments for the current implementation.
+>
+> Hello,
+>
+> Sorry for late response but while thinking new approaches, I come up with
+> some different idea and want to hear your opinions. How about offload
+> all control to user space while the driver just offers read/write access
+> to the needed registers? Let me explain in detail.
+>
+> Although I searched similar functions in other products, I could not find
+> it. Also, this hardware barrier performs intra-numa synchronization and
+> it is hard to be used for general inter-process barrier. So I think
+> generalizing this feature in kernel does not go well.
 
-My feeling is that this code should be in arch/arm64/, as the cache
-is generally considered part of the CPU, rather than part of the wider
-SoC design, or something that can be controlled separately from the
-core kernel and memory management code.
+Ok, thank you for taking a look.
 
-> +module_param(tagaddr_ctrl_reg, ulong, 0444);
-> +MODULE_PARM_DESC(tagaddr_ctrl_reg, "HPC tag address override control register");
-> +module_param(hwpf_ctrl_reg, ulong, 0444);
-> +MODULE_PARM_DESC(hwpf_ctrl_reg, "hardware prefetch assist control register");
-> +module_param(sec_ctrl_reg, ulong, 0444);
-> +MODULE_PARM_DESC(sec_ctrl_reg, "sector cache control register");
-> +module_param(sec_assign_reg, ulong, 0444);
-> +MODULE_PARM_DESC(sec_assign_reg, "sector cache assign register");
-> +module_param(sec_set0_l2_reg, ulong, 0444);
-> +MODULE_PARM_DESC(sec_set0_l2_reg, "sector cache L2 way register(sector=0,1)");
-> +module_param(sec_set1_l2_reg, ulong, 0444);
-> +MODULE_PARM_DESC(sec_set1_l2_reg, "sector cache L2 way register(sector=2,3)");
+> As I said this is mainly for HPC application. In the usual situations, the
+> user has full control of the PC nodes when running HPC application and
+> thus the user has full responsibility of running processes on the machine.
+> Offloading all controls to these registers to the user is acceptable in that
+> case (i.e. the driver just offers access to the registers and does not control it).
+> This is the safe for the kernel operation as manipulating barrier related
+> registers just affects user application.
+>
+> In this approach we could remove ioctls or control logic in the driver but
+> we need some way to access the needed registers. I firstly think if I can
+> use x86's MSR driver like approach but I know the idea is rejected
+> recently for security concerns:
+>  https://lore.kernel.org/linux-arm-kernel/20201130174833.41315-1-rongwei.wang@linux.alibaba.com/
+>
+> Based on these observations, I have two ideas currently:
+>  1) make the driver to only expose sysfs interface for reading/writing
+>    A64FX's barrier registers
+> or
+>  2) generalizing (1) in some way; To make some mechanism to expose
+>    CPU defined registers which can be safely accessed from user space
+>
+> Are these idea acceptable ways to explore to get merged in upstream?
+> I'd appreciate any criticism/comments.
 
-My feeling is that the actual settings need to be on a higher level, not tied
-to the specific register-level implementation of this chip. Normally,  the L2
-cache is set up by the firmware according to local policy, and the settings
-can either be read by the kernel from registers or passed down through the
-device tree. It sounds like you want to control the policy at runtime in the
-operating system rather than at boot time, so for each setting you wish to
-override, there should be description of what the setting does and what
-the purpose of overriding the firmware setting is.
+I'm also running out of ideas here. I don't think a sysfs interface would
+be any different to your earlier ioctl interface or the the /dev/msr approach,
+they all share the same problem that they expose low-level access to
+platform specific registers in a way that is neither portable nor safe to
+use for general-purpose applications outside the very narrow scope
+of running highly optimized HPC applications.
 
-Looking at the first one in the list, I see the specification mentions
-multiple distinct features that can be enabled or disabled, so these
-should probably get controlled individually. I also see that it is possible
-to control this for TTBR1 and TTBR0 separately, and we probably
-cannot allow user space (through module parameters or any other
-interface) to control TTBR1, which is where the kernel resides.
+You can of course continue using the module you have as an external
+module that gets built outside of the kernel itself, and shipped along
+with the application or library using it, rather than with the kernel.
+Obviously this is not something I would generally recommend either,
+but this may be the last resort to fall back to when everything else
+fails.
 
-The TTBR0 settings in turn would seem to interact with
-CONFIG_ARM64_MTE, and should not be controlled independently
-but through the same interfaces as that if we find that it does need
-to be controlled at all.
-
-I have not looked at any further details, but that should help get an
-idea of what I think would happen with the other registers.
-
-> +static int __init fujitsu_drv_init(void)
-> +{
-> +       int ret;
-> +
-> +       if (read_cpuid_implementor() != ARM_CPU_IMP_FUJITSU)
-> +               return -ENODEV;
-> +       if (read_cpuid_part_number() != FUJITSU_CPU_PART_A64FX)
-> +               return -ENODEV;
-
-The module_init function should not return an error when it is running on
-incompatible hardware, please just change this to silently return success
-to avoid warning about the failed initcall if the driver is built into a generic
-kernel.
-
-       Arnd
+      Arnd
 
 _______________________________________________
 linux-arm-kernel mailing list
