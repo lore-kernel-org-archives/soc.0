@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0601C433E0
-	for <soc@archiver.kernel.org>; Wed,  3 Mar 2021 18:28:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C898C433E6
+	for <soc@archiver.kernel.org>; Wed,  3 Mar 2021 18:28:26 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id AAAAE64F0A; Wed,  3 Mar 2021 18:28:23 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C78464EF3;
-	Wed,  3 Mar 2021 18:28:21 +0000 (UTC)
+	id 4A9F764F0B; Wed,  3 Mar 2021 18:28:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0213064EF8;
+	Wed,  3 Mar 2021 18:28:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1614796103;
-	bh=prsVG/qhvgCCdE9CrULapjEh2VPg8F1aWyfx/efhJus=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=VllzeKMcZeCqhq9Fg2LtGKb/RvNaNjrZQ6kljK3ZN6Mf9SCct062HwmDvzWlqdp1C
-	 qoM0khq1eqvLBiKm9SCwY2AaIr2Yv6uvrZ/29Lmjno7/DjMVftIfqmgUk/V7PvxDJ+
-	 DeIRBticvqLyIiqMEauwD5s4fbeduthY+C3kcaA+AyM4IdaqMb3rd5w4wE9BhbOnee
-	 u+TuArdUD4vUTtTkL4M6UaULjbC4US29PZGmhmKyvpw6vyZDQDeY57RPS839t0Y6/n
-	 TMd71tM9Ss829dOvrp4ZE1aTnrpRxeoFRznuqHU0C9Z+MQn3rdqe9uPsDN1TwIuZw+
-	 FcjBm/TArtuHg==
+	s=k20201202; t=1614796106;
+	bh=5N8vp/LmJHYeWFsIHJ+ReAQNV4KmGtjrpFWQPdN4USs=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ZMzl7J+BSt4YD+V/ZPUuohztcmrcxq+4T2+plihq1DNIjtTxThK5ZRBI8CkssAVa1
+	 f24YHL3LqT5BRFufzLyKqRhFDZvjP+kmwpmEktTYFdF1JwdcDI9hfACSZbFtfcRpwn
+	 rg8w4YoKZviECZ+71+xLdb9MnQ2M0VwGoS2cMDjfIz25UNYppd0HOKbSwBveDuwRBe
+	 4e/TmchssuOOfFluDJptU4rq7Ewyht5kX5hbP0Okc8mCdw9OQQXwiQVV76ydgpDKvY
+	 R4w392cF8gCbNCfnZGPRsoP/HpQge7DGNNeQJMvhiAEZZDGKOR0vnG/oaCJrInZ8jV
+	 L/I5Ip3Y8PPew==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Andy Gross <agross@kernel.org>,
@@ -37,10 +37,12 @@ To: Andy Gross <agross@kernel.org>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND 1/2] ARM: dts: qcom: msm8974-lge-nexus5: correct fuel gauge interrupt trigger level
-Date: Wed,  3 Mar 2021 19:28:15 +0100
-Message-Id: <20210303182816.137255-1-krzk@kernel.org>
+Subject: [RESEND 2/2] ARM: dts: qcom: msm8974-samsung-klte: correct fuel gauge interrupt trigger level
+Date: Wed,  3 Mar 2021 19:28:16 +0100
+Message-Id: <20210303182816.137255-2-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210303182816.137255-1-krzk@kernel.org>
+References: <20210303182816.137255-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
@@ -48,23 +50,24 @@ The Maxim fuel gauge datasheets describe the interrupt line as active
 low with a requirement of acknowledge from the CPU.  The falling edge
 interrupt will mostly work but it's not correct.
 
-Fixes: 45dfa741df86 ("ARM: dts: qcom: msm8974-lge-nexus5: Add fuel gauge")
+Fixes: da8d46992e67 ("ARM: dts: qcom: msm8974-klte: Add fuel gauge")
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Acked-by: Iskren Chernev <iskren.chernev@gmail.com>
+Acked-By: Iskren Chernev <iskren.chernev@gmail.com>
+Tested-By: Iskren Chernev <iskren.chernev@gmail.com>
 ---
- arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts | 2 +-
+ arch/arm/boot/dts/qcom-msm8974-samsung-klte.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-index 0cda654371ae..56ee02ceba7d 100644
---- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-@@ -575,7 +575,7 @@ fuelgauge: max17048@36 {
- 			maxim,rcomp = /bits/ 8 <0x4d>;
+diff --git a/arch/arm/boot/dts/qcom-msm8974-samsung-klte.dts b/arch/arm/boot/dts/qcom-msm8974-samsung-klte.dts
+index a0f7f461f48c..2dadb836c5fe 100644
+--- a/arch/arm/boot/dts/qcom-msm8974-samsung-klte.dts
++++ b/arch/arm/boot/dts/qcom-msm8974-samsung-klte.dts
+@@ -717,7 +717,7 @@ fuelgauge@36 {
+ 			maxim,rcomp = /bits/ 8 <0x56>;
  
- 			interrupt-parent = <&msmgpio>;
--			interrupts = <9 IRQ_TYPE_EDGE_FALLING>;
-+			interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
+ 			interrupt-parent = <&pma8084_gpios>;
+-			interrupts = <21 IRQ_TYPE_EDGE_FALLING>;
++			interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
  
  			pinctrl-names = "default";
  			pinctrl-0 = <&fuelgauge_pin>;
