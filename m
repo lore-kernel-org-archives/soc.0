@@ -1,125 +1,121 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=RWG8=IB=jp.fujitsu.com=tan.shaopeng@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 425C2C433E0
-	for <soc@archiver.kernel.org>; Tue,  2 Mar 2021 11:07:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 867D9C433E0
+	for <soc@archiver.kernel.org>; Wed,  3 Mar 2021 09:39:58 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id D380564F15; Tue,  2 Mar 2021 11:07:15 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A4AED64F0B;
-	Tue,  2 Mar 2021 11:07:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1614683235;
-	bh=JXsntDomzvvp35KqPtyck4SYOcKp8C4CKAHwX45dSbk=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=KtChTbLobWxE790ocN6tY6pzK8us82tmSNZzHL0pjxAF1zvqb2b4lE/TH2q3Rtz5p
-	 tWRAk/mT0xENLL2LzwfWbH6pSyi+Aiw2pqAeDc8v4ecyikzgY/aCl8c6PGP27BsG3J
-	 wqpfga9299ZfCFQgLl/VZFxLjUjG+SFJqDQth1SYd0M+oEjoJMFTMsQ2N0gzbiMfOn
-	 0IkDiQKvyWKNAetPBYrwb1qwLbMrfJAloknLJkKF6KLkNoLjoQmxF4J3NOz3JN5BjV
-	 EnaETFLFMCbYyBzRH10h8dlIkYlUPcSX0ENWHEnOiPw2H1RoxQcSJE3fdQkNSAVq06
-	 POo9NPkAg6g7g==
-Received: by mail-ot1-f53.google.com with SMTP id h22so19578848otr.6;
-        Tue, 02 Mar 2021 03:07:15 -0800 (PST)
-X-Gm-Message-State: AOAM532OZkmrxik3nxBTme5Up7X798XhLi8DgGcDJyBQBpiLXIgQf5GA
-	xSW1+8648S6ZW8LhZqM0o7g23GfkswPg98fxKfI=
-X-Google-Smtp-Source: ABdhPJxhU9eCujXvv4W27bbuQrN4TqJbps/AVuDpVM+qdE75c882pb9q50Qcmq/ml0VnXFoQJVtbrz+VtQpfjeZra24=
-X-Received: by 2002:a9d:7f11:: with SMTP id j17mr18038402otq.251.1614683234751;
- Tue, 02 Mar 2021 03:07:14 -0800 (PST)
-MIME-Version: 1.0
-References: <20210108105241.1757799-1-misono.tomohiro@jp.fujitsu.com>
- <20210108125410.GA84941@C02TD0UTHF1T.local> <CAK8P3a34aPUwjAXoh20E-PT6vG6gbW_itAXVQAYrhsHZbzqRsQ@mail.gmail.com>
- <OSBPR01MB4582283E56A13D03A778150FE5AA0@OSBPR01MB4582.jpnprd01.prod.outlook.com>
- <CAK8P3a2BbCtZG=+fi1mtrhMtBKHcaZa=gvfiKJVdnsq6N3yG4A@mail.gmail.com>
- <OSBPR01MB45821D2CFA8285A3FFDE6B1CE5A70@OSBPR01MB4582.jpnprd01.prod.outlook.com>
- <CAK8P3a0Oxvm=VTnPAwxSQ-od4Q0rqMq45633pMyTcV8Adet-Lw@mail.gmail.com> <OSBPR01MB4582A4399A25EBC65F8B0626E5859@OSBPR01MB4582.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSBPR01MB4582A4399A25EBC65F8B0626E5859@OSBPR01MB4582.jpnprd01.prod.outlook.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Tue, 2 Mar 2021 12:06:57 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3dBnSMmOgXHeycwpXJo3O2oq1e3Ue0XzgP=q68ZxMzvg@mail.gmail.com>
-Message-ID: <CAK8P3a3dBnSMmOgXHeycwpXJo3O2oq1e3Ue0XzgP=q68ZxMzvg@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/10] Add Fujitsu A64FX soc entry/hardware barrier driver
-To: "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
+	id 3246064EE8; Wed,  3 Mar 2021 09:39:58 +0000 (UTC)
+X-Greylist: delayed 64 seconds by postgrey-1.34 at mail.kernel.org; Wed, 03 Mar 2021 09:39:57 UTC
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0995764EBD
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jp.fujitsu.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=tan.shaopeng@jp.fujitsu.com
+Received: from esa3.hc1455-7.c3s2.iphmx.com (esa3.hc1455-7.c3s2.iphmx.com [207.54.90.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 0995764EBD;
+	Wed,  3 Mar 2021 09:39:56 +0000 (UTC)
+IronPort-SDR: 0rz8UhzEBq0be3RT+UBSlHncD7vh52pxzGr43oTd19jCgOFt5VrJFyRpsiM2X/RnTArmY5//I7
+ LKE/0x1ppJ3wUetafZzwsMrY3nglZT6vAm0UYQZ1+dna9CdCkPROOwHU4zCZOdcnX430YswWft
+ ifCfBFs74nO30btnHEvinbwbiSiXARPxJgROqyzFSOk03OK+haPMP0MzJssaafKHyrun0TPv6N
+ BT0wzUlaqj4fmQxH27V5QYOSJsWJx1LFMM1+6DT2KuOF4MsRh7bwzHw2M11yI8kvIWB3rsC8Ub
+ 5UE=
+X-IronPort-AV: E=McAfee;i="6000,8403,9911"; a="21486526"
+X-IronPort-AV: E=Sophos;i="5.81,219,1610377200"; 
+   d="scan'208";a="21486526"
+Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
+  by esa3.hc1455-7.c3s2.iphmx.com with ESMTP; 03 Mar 2021 18:38:50 +0900
+Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
+	by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 08D5BE60A7;
+	Wed,  3 Mar 2021 18:38:50 +0900 (JST)
+Received: from yto-om4.fujitsu.com (yto-om4.o.css.fujitsu.com [10.128.89.165])
+	by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 475AD2170CE;
+	Wed,  3 Mar 2021 18:38:49 +0900 (JST)
+Received: from cn-r05-09.localdomain (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+	by yto-om4.fujitsu.com (Postfix) with ESMTP id 0C3DB4006817C;
+	Wed,  3 Mar 2021 18:38:49 +0900 (JST)
+From: "tan.shaopeng" <tan.shaopeng@jp.fujitsu.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>, Will Deacon <will@kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+To: linux-arm-kernel@lists.infradead.org,
+	soc@kernel.org
+Cc: will@kernel.org,
+	catalin.marinas@arm.com,
+	arnd@arndb.de,
+	olof@lixom.net,
+	misono.tomohiro@jp.fujitsu.com,
+	tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH RFC] Upstream A64FX cache driver
+Date: Wed,  3 Mar 2021 18:38:22 +0900
+Message-Id: <1614764303-34903-1-git-send-email-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
 
-On Thu, Feb 18, 2021 at 10:49 AM misono.tomohiro@fujitsu.com
-<misono.tomohiro@fujitsu.com> wrote:
->
-> > > > > Also, It is common usage that each running thread is bound to one PE in
-> > > > > multi-threaded HPC applications.
-> > > >
-> > > > I think the expectation that all threads are bound to a physical CPU
-> > > > makes sense for using this feature, but I think it would be necessary
-> > > > to enforce that, e.g. by allowing only threads to enable it after they
-> > > > are isolated to a non-shared CPU, and automatically disabling it
-> > > > if the CPU isolation is changed.
-> > > >
-> > > > For the user space interface, something based on process IDs
-> > > > seems to make more sense to me than something based on CPU
-> > > > numbers. All of the above does require some level of integration
-> > > > with the core kernel of course.
-> > > >
-> > > > I think the next step would be to try to come up with a high-level
-> > > > user interface design that has a chance to get merged, rather than
-> > > > addressing the review comments for the current implementation.
->
-> Hello,
->
-> Sorry for late response but while thinking new approaches, I come up with
-> some different idea and want to hear your opinions. How about offload
-> all control to user space while the driver just offers read/write access
-> to the needed registers? Let me explain in detail.
->
-> Although I searched similar functions in other products, I could not find
-> it. Also, this hardware barrier performs intra-numa synchronization and
-> it is hard to be used for general inter-process barrier. So I think
-> generalizing this feature in kernel does not go well.
+From: "tan.shaopeng" <tan.shaopeng@jp.fujitsu.com>
 
-Ok, thank you for taking a look.
+Hello, 
 
-> As I said this is mainly for HPC application. In the usual situations, the
-> user has full control of the PC nodes when running HPC application and
-> thus the user has full responsibility of running processes on the machine.
-> Offloading all controls to these registers to the user is acceptable in that
-> case (i.e. the driver just offers access to the registers and does not control it).
-> This is the safe for the kernel operation as manipulating barrier related
-> registers just affects user application.
->
-> In this approach we could remove ioctls or control logic in the driver but
-> we need some way to access the needed registers. I firstly think if I can
-> use x86's MSR driver like approach but I know the idea is rejected
-> recently for security concerns:
->  https://lore.kernel.org/linux-arm-kernel/20201130174833.41315-1-rongwei.wang@linux.alibaba.com/
->
-> Based on these observations, I have two ideas currently:
->  1) make the driver to only expose sysfs interface for reading/writing
->    A64FX's barrier registers
-> or
->  2) generalizing (1) in some way; To make some mechanism to expose
->    CPU defined registers which can be safely accessed from user space
->
-> Are these idea acceptable ways to explore to get merged in upstream?
-> I'd appreciate any criticism/comments.
+This driver enables Fujitsu A64FX's cache function. 
 
-I'm also running out of ideas here. I don't think a sysfs interface would
-be any different to your earlier ioctl interface or the the /dev/msr approach,
-they all share the same problem that they expose low-level access to
-platform specific registers in a way that is neither portable nor safe to
-use for general-purpose applications outside the very narrow scope
-of running highly optimized HPC applications.
+[Driver Description] 
+A64FX CPU has several functions for HPC workload and this driver is  
+for cache functions. 
 
-You can of course continue using the module you have as an external
-module that gets built outside of the kernel itself, and shipped along
-with the application or library using it, rather than with the kernel.
-Obviously this is not something I would generally recommend either,
-but this may be the last resort to fall back to when everything else
-fails.
+Loading this cache driver, control registers will be set to enable  
+these functions, and advanced settings registers will be set by default 
+values. After loading this driver, you can use the default values of the 
+advanced settings registers or set custom values to the advanced 
+settings registers from EL0. Unloading this driver, control registers 
+will be clear to disable these functions. 
 
-      Arnd
+These functions include sector cache function and hardware prefetch  
+assistance function. 
+- Sector cache function:  
+ Cache partitioning function which can control virtual cache capacity for 
+ each characteristics of data such as temporal locality. 
+- Hardware prefetch assistance function:  
+ Software can provide the hint for hardware prefetch mechanism to reduce  
+ the penalty of the memory access. By providing the access pattern  
+ through that function in advance, hardware prefetch mechanism can access 
+ the complex pattern. 
+
+These functions can be executed according to the default values of the 
+registers which are set by the driver. Or they can be executed  
+according to a tag which is the upper 8 bits of the load/store address 
+of application to customize hardware prefetch and sector cache. 
+
+For more details of these functions,  
+see A64FX HPC extension specification in 
+https://github.com/fujitsu/A64FX  
+
+The driver is based on v5.11-rc2 and tested on FX1000 environment. 
+
+[RFC]  
+This function only performs register initialization for A64FX. At first, 
+I wanted to insert it to kernel initialization code, but there is no  
+initialization code except errata, so I made this driver. 
+I'd like to know if this approach is OK? Would you give me some advice? 
+
+Best regards, 
+Tan Shaopeng 
+
+tan.shaopeng (1):
+  soc: fujitsu: Add cache driver code
+
+ MAINTAINERS                         |   6 ++
+ arch/arm64/Kconfig.platforms        |   5 +
+ drivers/soc/Kconfig                 |   1 +
+ drivers/soc/Makefile                |   1 +
+ drivers/soc/fujitsu/Kconfig         |  26 +++++
+ drivers/soc/fujitsu/fujitsu_cache.c | 183 ++++++++++++++++++++++++++++++++++++
+ 6 files changed, 222 insertions(+)
+ create mode 100644 drivers/soc/fujitsu/Kconfig
+ create mode 100644 drivers/soc/fujitsu/fujitsu_cache.c
+
+-- 
+1.8.3.1
+
