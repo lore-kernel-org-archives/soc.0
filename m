@@ -1,37 +1,58 @@
-Return-Path: <SRS0=peI6=IC=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=to4Y=IC=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2E6AC433DB
-	for <soc@archiver.kernel.org>; Thu,  4 Mar 2021 10:55:00 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 74B4964F32; Thu,  4 Mar 2021 10:55:00 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63A78C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Mar 2021 10:57:29 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 95D9964E12;
-	Thu,  4 Mar 2021 10:54:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 95D9964E12
+	by mail.kernel.org (Postfix) with ESMTPS id DD65764E67
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Mar 2021 10:57:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DD65764E67
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arnd@arndb.de
-Received: from mail-oi1-f176.google.com ([209.85.167.176]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MzhWp-1ldxJo2hHN-00vhuj; Thu, 04 Mar 2021 11:54:57 +0100
-Received: by mail-oi1-f176.google.com with SMTP id x20so29574794oie.11;
-        Thu, 04 Mar 2021 02:54:57 -0800 (PST)
-X-Gm-Message-State: AOAM531uHRyKKWZhM2mEedj0nI6+dDZai1LJvX73r2yAZYCfUiAHbdQH
-	ntmiQWErARaDZitDOfjmB7Gcr8JuRQ70ck79iMY=
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
+	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=0GKTf8VDCUmC1uH5KeV2vU4nVYloMCs2u7yoSZYc+MI=; b=WUZWN7aHz8iphrwLcUu/Zk4Xa
+	voty/ZalGY1Iq+AaPzHrNI8kb0kpj3g8cs4SUmYoMNdr8mOtMUkklKY7WiGxAL+erTJYlMqGmCbJi
+	iGX93qiG6GBRdZvwjFoHL3YCfbrYJmTjlx9ldSe8CYPNlmAerm6xrPR/lktLjrzjn4mooyDCYbaN3
+	RJzzv8s2BCyCcPg/zyycdXJyW5cd2KMr8RkX/GpK58CJoSEsBeXnC6hQZD0iWnDmB6decAaMC3V0E
+	Rqcn/X6tK4Clccq7FaoUCKz1uaXHC9LhcLQQhBrW2iAyAxcj31WdMLAtRAFwgyXErUX6fEWNWx5Dm
+	fwzDf39rw==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lHldU-008P5p-Fa; Thu, 04 Mar 2021 10:55:16 +0000
+Received: from mout.kundenserver.de ([212.227.126.133])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lHldK-008P4f-EJ
+ for linux-arm-kernel@lists.infradead.org; Thu, 04 Mar 2021 10:55:11 +0000
+Received: from mail-oi1-f170.google.com ([209.85.167.170]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MhFpq-1lvlHk2aw6-00eKkm for <linux-arm-kernel@lists.infradead.org>; Thu, 04
+ Mar 2021 11:54:58 +0100
+Received: by mail-oi1-f170.google.com with SMTP id f3so29581250oiw.13
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 04 Mar 2021 02:54:57 -0800 (PST)
+X-Gm-Message-State: AOAM532WF3ug2paY9lYlPMPrc5kZ9U3mDo5j6Q8qoQKhst4jx7Or+cu+
+ uNb7MD8tdkJnbcFr86Sg9r93hJP7x9cEjQ3GrbE=
 X-Google-Smtp-Source: ABdhPJytX8nn9WHwGZ7rb0wgm/6H84zd3AC843FxpQZ5cioWDF+zMks/HkXPuRTfr7wcNPv4syg2U/RoyxzEgDNs6dQ=
-X-Received: by 2002:aca:5e85:: with SMTP id s127mr2376937oib.67.1614855296283;
+X-Received: by 2002:aca:5e85:: with SMTP id s127mr2376937oib.67.1614855296283; 
  Thu, 04 Mar 2021 02:54:56 -0800 (PST)
 MIME-Version: 1.0
 References: <1614764303-34903-1-git-send-email-tan.shaopeng@jp.fujitsu.com>
  <1614764303-34903-2-git-send-email-tan.shaopeng@jp.fujitsu.com>
- <CAK8P3a0VUoixMKg5UmF8agAZUXoMT8_SbCiWBdStbZ+_yAYNjA@mail.gmail.com> <OSAPR01MB2146DC8A26F6EBD1CF11D9748B979@OSAPR01MB2146.jpnprd01.prod.outlook.com>
+ <CAK8P3a0VUoixMKg5UmF8agAZUXoMT8_SbCiWBdStbZ+_yAYNjA@mail.gmail.com>
+ <OSAPR01MB2146DC8A26F6EBD1CF11D9748B979@OSAPR01MB2146.jpnprd01.prod.outlook.com>
 In-Reply-To: <OSAPR01MB2146DC8A26F6EBD1CF11D9748B979@OSAPR01MB2146.jpnprd01.prod.outlook.com>
 From: Arnd Bergmann <arnd@arndb.de>
 Date: Thu, 4 Mar 2021 11:54:39 +0100
@@ -40,22 +61,38 @@ Message-ID: <CAK8P3a17oRP=mU09ypPSxY3ms=fCROxk8SXo0S+CQpdtvsoHXA@mail.gmail.com>
 Subject: Re: [PATCH RFC] soc: fujitsu: Add cache driver code
 To: "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>, 
-	Will Deacon <will@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Olof Johansson <olof@lixom.net>, 
-	"misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:fCKjy6UJPuYu08747POVyvz0CPzPyZ82ng+nCE5MDfDlx9H/dIC
- JPAWoe/SCS3cKLS/j3lhvbaqTWgVBUF2ab+IpgM1h9sdXOBFtftHtf7eEKIF1KmgEc/mC/i
- Kf1v+jJvyGtTFbwisPuwwampfQerBMqeZktHJQ/mjpnF7VLK148wgVpkFQBwCox+vbDLgdn
- 4eZ/5GtGwTJ8dmfqFW3wg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7rmfmGNKsus=:lx9GT9knZmJaFFEZc5BkPz
- SSaukHOJLWpQ7+CddYhdQn3/UpsVvuaKYMEhi0Kht7mF/5iIkLOBJmTJdNwvLTL974cxOKsjV
- IsSZayKhqX9TblVq7UbW8b5+rrWuGG1htNtiNQtM/0MGtcruu08rTqEpavkodnCHwKb252E3H
- E2bPAJPQs3ZKyFbyPLiU5cFytAeWA2rvIdriZJpSdS+bUOKP3LVmAOsc5reyNrOPN6sbCmDwk
- 7P84MhERNW2t4ehTd0TSp0OvBkywYHSN0LDgkXgNjuFysZ8xUSgxuZXAJjpspv1gHy+rs1yn7
- j1ZyZSIAHd7HXC1fFa3pL723++rQ7ZW+bk5qXkmWLGHuL3i7GxOoKct6gloDMh2wxr+dQNaMF
- 89UxCz9oJEul8jJ6rhD62TOnNTgI6ylg4MqCsZlDYSJC8XFO/HgcGKDbqgzoV
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>,
+ Will Deacon <will@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+ Olof Johansson <olof@lixom.net>, 
+ "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
+X-Provags-ID: V03:K1:5BxEriacSr90wflLWVxFRPnvHIBks//sMw/09AOZVsgY0bC2cA5
+ DhiWFEX9ItGQoWffSxKQbXxJNvQsvgy7+6GkLE3NJTzHlPvX0T5PMHbjUlAJQSs/5KGaePO
+ ZszF1iOTaPzJBjDXbx1oCwmo7pNGBPdVeVm3g8kSrZ5O8sdVwRi16G2uuXJeG0oNlG6YRoc
+ Fl4LrP8uWBwZ8o6SN0vOA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TOpfcCo0oa8=:jksamEnm9tsGU1NX+QhgI0
+ Lhc4Z0zadGiZVk+AvwXr95PlD75Of4O1R16bar1ysR9acYcHEaDTogoOj1oL03rew/WAmas/4
+ rXRLbt7lkzPoZRiTFvB6iNj233KiOVYpS8inRTk+fwxT7fndYchKADQVEGRI7+uVHa/fZ+fHL
+ zKyKaFrJjiStsBlzJgIO2oOHcUixUPRRKx4flAmmlFQrik13uY7lgdPUdteSB5O1TK0u6rFKF
+ ynb9nx+rhWwO4hJZENb/SJx3RgHixDaIzHltWjlm47UMCWSRmEUmQ0byyJG1FXqSY2VQpZOor
+ GQ+xA+RX6sDpz/RyHVo6JmEiJ8lMaItKLhw/c7duSbm/wLLnim1pSPiKo/brVdaMtfxFAPv4B
+ 2Ku32B/VAoIQWchwdobKaXdd0G2EmlJ+9GlV2PWcjMQWBnJd7avwzyeKClZjHMbLtaU93elS5
+ 7MBoffDXTMYS+1NSAL8bhyJiP7SNEDaBNK3oxwNEnRKr1jOskQkQ
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210304105439.4NajGJzIq0yDQD_GjZC4wAmO8yOPqADLR5BJaB4jVLI@z>
 
 On Thu, Mar 4, 2021 at 11:34 AM tan.shaopeng@fujitsu.com
 <tan.shaopeng@fujitsu.com> wrote:
@@ -129,3 +166,8 @@ pointer, and any code that interacts with user addresses would need
 to know about this.
 
        Arnd
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
