@@ -1,51 +1,94 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=CegL=IF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52AEAC433E0
-	for <soc@archiver.kernel.org>; Sun,  7 Mar 2021 13:02:36 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 19C68650FD; Sun,  7 Mar 2021 13:02:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C5B3C433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Sun,  7 Mar 2021 13:04:13 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 052DA65100
+	for <linux-arm-kernel@archiver.kernel.org>; Sun,  7 Mar 2021 13:04:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 052DA65100
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=3ftPiv/FLGnNk2+TmPT83tjmcL5TW24h8Om22d0cicU=; b=ceW0Bcl6owpLOHs0G8p/I/L1y
+	kWA37DssFpxXRiiEylmskfG8zd0z/phnoSg/2O7a5BFcvGBDUEYQpdGOF73jJJeVFP8pbQ0HfMH/M
+	lItqObTp3E2NalbOYbkcke/eePya6/3gnOGVQbzSWnXbn1JSCU0eOF5Ujcfy0s5TT2pEyVYsXddxo
+	ZBvHnou3nZiRo8gRed6Ep0wgEeXBYZwCm9D78t0alt7CEAx/qOr2mlFnvbWg3KN3bxNATOEvZm6dl
+	flgxdoHHugcei879zHVn97YSjinDM3A5yLjR3J+cIEefqXx+k5EW4WtIGdVVvfAt/bhqORFKTei/4
+	jA0/S15Bg==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lIt3T-00A6jp-4Y; Sun, 07 Mar 2021 13:02:43 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lIt3N-00A6iX-FY
+ for linux-arm-kernel@lists.infradead.org; Sun, 07 Mar 2021 13:02:40 +0000
 Received: by mail.kernel.org (Postfix) with ESMTPSA id 3325A65100;
-	Sun,  7 Mar 2021 13:02:33 +0000 (UTC)
+ Sun,  7 Mar 2021 13:02:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1615122156;
-	bh=Z7tHrzSv3UdenUINfxuYyWAGZJtKAXwCzMkFcmp+HWw=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=pK4Df0ZYG0pE/03AI5EITASGk+Cuq0p3LssNZgKnRGHXJ9zoxDC147JZp5QSTAxlQ
-	 Xqe6IFNKxsSqX/A+iFP+k2SedffKxxM9IGC5G6BAxDJUApY310qqHCsK8ytWWIM91T
-	 BOOOOOIAfBSejFkCB8IO2VIu4LXXaKjFEzH6n+C1qknArlVUBaSj1b8sm7McW/wV/X
-	 p4Ye34bZrQESzGB+kzVPq6SZCELIeTKDbmUWmIthWiuaTM0BJDxmJcYkVpoV/c+UXP
-	 nK8HcV2hQSPucHrjDaNypoJQJ2PHlE0K+wyKNPAEbhoxmOE3pr3IE5LDDsTrHK+3T+
-	 /KIZalUyve37Q==
+ s=k20201202; t=1615122156;
+ bh=Z7tHrzSv3UdenUINfxuYyWAGZJtKAXwCzMkFcmp+HWw=;
+ h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+ b=pK4Df0ZYG0pE/03AI5EITASGk+Cuq0p3LssNZgKnRGHXJ9zoxDC147JZp5QSTAxlQ
+ Xqe6IFNKxsSqX/A+iFP+k2SedffKxxM9IGC5G6BAxDJUApY310qqHCsK8ytWWIM91T
+ BOOOOOIAfBSejFkCB8IO2VIu4LXXaKjFEzH6n+C1qknArlVUBaSj1b8sm7McW/wV/X
+ p4Ye34bZrQESzGB+kzVPq6SZCELIeTKDbmUWmIthWiuaTM0BJDxmJcYkVpoV/c+UXP
+ nK8HcV2hQSPucHrjDaNypoJQJ2PHlE0K+wyKNPAEbhoxmOE3pr3IE5LDDsTrHK+3T+
+ /KIZalUyve37Q==
 Date: Sun, 7 Mar 2021 21:02:28 +0800
 From: Shawn Guo <shawnguo@kernel.org>
 To: Oliver Graute <oliver.graute@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: m.felsch@pengutronix.de, festevam@gmail.com, narmstrong@baylibre.com,
-	Parthiban Nallathambi <parthitce@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+ Parthiban Nallathambi <parthitce@gmail.com>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ NXP Linux Team <linux-imx@nxp.com>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v9 2/3] ARM: dts: Add support for i.MX6 UltraLite DART
  Variscite Customboard
 Message-ID: <20210307130227.GB543@dragon>
 References: <1613308450-27958-1-git-send-email-oliver.graute@gmail.com>
  <1613308450-27958-3-git-send-email-oliver.graute@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <1613308450-27958-3-git-send-email-oliver.graute@gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210307_130238_038109_EF0A0F5F 
+X-CRM114-Status: GOOD (  21.66  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210307130228.oS_Fb5M4QiRhLtl1su6_-xzdaeoBlTcraGsWGOvb_Z0@z>
 
 On Sun, Feb 14, 2021 at 02:13:49PM +0100, Oliver Graute wrote:
 > This patch adds DeviceTree Source for the i.MX6 UltraLite DART NAND/WIFI
@@ -375,3 +418,8 @@ Shawn
 > -- 
 > 2.7.4
 > 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
