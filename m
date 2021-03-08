@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA66EC433E0
-	for <soc@archiver.kernel.org>; Mon,  8 Mar 2021 16:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 194FBC433E0
+	for <soc@archiver.kernel.org>; Mon,  8 Mar 2021 16:22:44 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id BCA216522E; Mon,  8 Mar 2021 16:22:41 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D849365226;
-	Mon,  8 Mar 2021 16:22:39 +0000 (UTC)
+	id EA07265229; Mon,  8 Mar 2021 16:22:43 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 12A7D60241;
+	Mon,  8 Mar 2021 16:22:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1615220561;
-	bh=ttjPRouIOPlSkyqjYj/ltvyLuVoeWCC/qc6EwvnywPw=;
+	s=k20201202; t=1615220563;
+	bh=PIWOuvauAMrcIkgKVxiqpGLJKvoBrIANiGRJ2kFz8GM=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DiajB48UxAbLJpD+KQsgalkZq/PsHAA/Kt1GC2tSjfncWbMkrJWhLfK8nzumSFKTb
-	 HgCjIz/9Q3CxmX2T3JcJPgO2s7RAB0IddZY8SVu28UutzzRofWakcZTHU7QylnmzRc
-	 CVYBkuuXnAqiJZY+JH2UE+iRFUrpVA7Gb7K6VMg85TY4JA2/EMOEDCdQ8UY3LcRCBa
-	 NyC/B6QuoCnxyN44iqnhYPZQwr+cKkX0mLmz3rIonHH24WeMUB0RSpkgUjYcjtbxtC
-	 Xf1rX6INGaksgtzKzVWjRwwAOO8jCxxwzuWZLvrg+MkWs+awPhMAqHEnQ5E1wwmjeM
-	 Altlss4GdPmjA==
+	b=aIlP9HjMotwDkezVXsAhzkuh7SyPrt0quVOpOiS/7HDjGFvmEEGXVHxIuWeE2yAyV
+	 GRbbe1t+DbJGTTAcU+OCylDXFVD42OMemTc5z7DzgShLCYrqcvFpixuOyuq6kQnmZs
+	 kNN0qBI2WAmeXh1ch3M7VWy63rlHnZxK2V9dNtbJ6W1SrUcbKyUXDXJ1UPszRBj44T
+	 6SBEOpAZS/GR7tOIu51ajg5JZWvzi9J7Nq8JUZrXT+js1CgEZZLdUCLZPjt4Am6LRH
+	 s1j7iNcsFlDU4VM90mrIsGIHwv2qy3HeHjZDpkJ9lOGtEW40kSaVofc1JLfbq7V+ft
+	 Z7ChZpRScg7nA==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: devicetree@vger.kernel.org,
@@ -35,120 +35,100 @@ Cc: "Paul J. Murphy" <paul.j.murphy@intel.com>,
 	Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND PATCH 02/10] arm64: dts: intel: socfpga: override clocks by label
-Date: Mon,  8 Mar 2021 17:22:20 +0100
-Message-Id: <20210308162228.62614-3-krzk@kernel.org>
+Subject: [RESEND PATCH 03/10] arm64: dts: intel: socfpga_agilex: move clocks out of soc node
+Date: Mon,  8 Mar 2021 17:22:21 +0100
+Message-Id: <20210308162228.62614-4-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210308162228.62614-1-krzk@kernel.org>
 References: <20210308162228.62614-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Using full paths to extend or override a device tree node is error
-prone.  If there was a typo error, a new node will be created instead of
-extending the existing node.  This will lead to run-time errors that
-could be hard to detect.
+The clocks are usually not part of the SoC but provided on the board
+(external oscillators).  Moving them out of soc node fixes dtc warning:
 
-A mistyped label on the other hand, will cause a dtc compile error
-(during build time).
+    arch/arm64/boot/dts/intel/socfpga_agilex.dtsi:111.10-137.5:
+        Warning (simple_bus_reg): /soc/clocks: missing or empty reg/ranges property
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts   | 12 ++++--------
- .../boot/dts/intel/socfpga_agilex_socdk_nand.dts     | 12 ++++--------
- arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts      | 12 ++++--------
- 3 files changed, 12 insertions(+), 24 deletions(-)
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 56 +++++++++----------
+ 1 file changed, 28 insertions(+), 28 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-index a7a83f29f00b..f14a89ca8784 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-@@ -41,14 +41,6 @@ memory {
- 		/* We expect the bootloader to fill in the reg */
- 		reg = <0 0 0 0>;
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+index 07c099b4ed5b..8f0736e4f3b5 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+@@ -87,6 +87,34 @@ intc: intc@fffc1000 {
+ 		      <0x0 0xfffc6000 0x0 0x2000>;
  	};
--
--	soc {
+ 
++	clocks {
++		cb_intosc_hs_div2_clk: cb-intosc-hs-div2-clk {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++		};
++
++		cb_intosc_ls_clk: cb-intosc-ls-clk {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++		};
++
++		f2s_free_clk: f2s-free-clk {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++		};
++
++		osc1: osc1 {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++		};
++
++		qspi_clk: qspi-clk {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <200000000>;
++		};
++	};
++
+ 	soc {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+@@ -108,34 +136,6 @@ clkmgr: clock-controller@ffd10000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
 -		clocks {
--			osc1 {
--				clock-frequency = <25000000>;
+-			cb_intosc_hs_div2_clk: cb-intosc-hs-div2-clk {
+-				#clock-cells = <0>;
+-				compatible = "fixed-clock";
+-			};
+-
+-			cb_intosc_ls_clk: cb-intosc-ls-clk {
+-				#clock-cells = <0>;
+-				compatible = "fixed-clock";
+-			};
+-
+-			f2s_free_clk: f2s-free-clk {
+-				#clock-cells = <0>;
+-				compatible = "fixed-clock";
+-			};
+-
+-			osc1: osc1 {
+-				#clock-cells = <0>;
+-				compatible = "fixed-clock";
+-			};
+-
+-			qspi_clk: qspi-clk {
+-				#clock-cells = <0>;
+-				compatible = "fixed-clock";
+-				clock-frequency = <200000000>;
 -			};
 -		};
--	};
- };
- 
- &gpio1 {
-@@ -92,6 +84,10 @@ &mmc {
- 	bus-width = <4>;
- };
- 
-+&osc1 {
-+	clock-frequency = <25000000>;
-+};
-+
- &uart0 {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
-index 979aa59a6bd0..58a827a5e83f 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
-@@ -41,14 +41,6 @@ memory {
- 		/* We expect the bootloader to fill in the reg */
- 		reg = <0 0 0 0>;
- 	};
 -
--	soc {
--		clocks {
--			osc1 {
--				clock-frequency = <25000000>;
--			};
--		};
--	};
- };
- 
- &gpio1 {
-@@ -121,6 +113,10 @@ partition@4280000 {
- 	};
- };
- 
-+&osc1 {
-+	clock-frequency = <25000000>;
-+};
-+
- &uart0 {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
-index 5f56e2697fee..01f1307ce4ac 100644
---- a/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
-+++ b/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
-@@ -23,14 +23,6 @@ memory {
- 		/* We expect the bootloader to fill in the reg */
- 		reg = <0 0 0 0>;
- 	};
--
--	soc {
--		clocks {
--			osc1 {
--				clock-frequency = <25000000>;
--			};
--		};
--	};
- };
- 
- &clkmgr {
-@@ -44,6 +36,10 @@ &mmc {
- 	bus-width = <4>;
- };
- 
-+&osc1 {
-+	clock-frequency = <25000000>;
-+};
-+
- &uart0 {
- 	status = "okay";
- };
+ 		gmac0: ethernet@ff800000 {
+ 			compatible = "altr,socfpga-stmmac-a10-s10", "snps,dwmac-3.74a", "snps,dwmac";
+ 			reg = <0xff800000 0x2000>;
 -- 
 2.25.1
 
