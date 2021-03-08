@@ -2,26 +2,27 @@ Return-Path: <krzk@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7819BC433E0
-	for <soc@archiver.kernel.org>; Mon,  8 Mar 2021 16:22:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C68B0C433E0
+	for <soc@archiver.kernel.org>; Mon,  8 Mar 2021 16:22:39 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 4BBE16522B; Mon,  8 Mar 2021 16:22:37 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 481EC60241;
-	Mon,  8 Mar 2021 16:22:35 +0000 (UTC)
+	id 8A4C06521F; Mon,  8 Mar 2021 16:22:39 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9817765230;
+	Mon,  8 Mar 2021 16:22:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1615220557;
-	bh=4pM6PW9BV8u6dvJehZSa10vcwxY3GS8bKwOAVpECg/c=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=N0+Xx1qA5uJxoiiFMHmVv+3LC6JwAMcPOH3J8tO1V6zxIAC4/dieiF6oZBs/eptiz
-	 CrgDpNWnfwBChFGY4cVVxZi4IxTi05nf7valx57GsHOySaQFK5Hlj5B48HPNpImZNF
-	 X4ot0InmZcwnjQ/xTeaQIW+ky8EzmiTOM4tJ45o5dfMQ20BS/6CnWfrwIn40wkrnQb
-	 ZrgAou5Zr6luXRHpLjmyACpPfH5jFX1WfnDj2x9fQjUk0pG1PGLB2BoZTl+uYsHOB5
-	 euS6ODypFwZik0muBOYmuu7/VO1nmwYh+yuoqw/RQE35x9sI2rs1VpbeWn0rVukbwQ
-	 ULEBO9W0fVHDw==
+	s=k20201202; t=1615220559;
+	bh=DaxqMrSjGTPKPAeSFo0wHloyqcDmzR3MPAXDd4mr7CY=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=DHAWb8216sL4pJA7s6bxkRegIiuTZ+aNXbN/0/reDIaybUnjnWAXOeP9S2XhKJjgQ
+	 2B8+Ei/5D65nzYHbvu2/9Nlrq+GHit0wJdQ0ntogpnMrLz7N9sEooe+S/FpZFpP5A/
+	 0p8oruIf4Gk9DGUZu+gDni6Sytx2SLXKIhpEYdfmd/+MYmWH4VttaFMZR6okJO4YMk
+	 qXD1u/HpF4HN6C/ktSUkGCBjyFNgmmx++Ochpd80/lQaZwjQnoAAOcuw22kkZnqyfn
+	 m/Q+Mv/36SP1K3pZzLZKVz/g06WGmiw2I2jaAw13jNKdCyMWNCrrE8urpa5fnBGbw1
+	 vu67DAwLSHqxg==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: devicetree@vger.kernel.org,
@@ -34,43 +35,38 @@ Cc: "Paul J. Murphy" <paul.j.murphy@intel.com>,
 	Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND PATCH 00/10] arm64: dts: intel: socfpga: minor cleanups
-Date: Mon,  8 Mar 2021 17:22:18 +0100
-Message-Id: <20210308162228.62614-1-krzk@kernel.org>
+Subject: [RESEND PATCH 01/10] dt-bindings: arm: intel,keembay: limit the dtschema to root node
+Date: Mon,  8 Mar 2021 17:22:19 +0100
+Message-Id: <20210308162228.62614-2-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210308162228.62614-1-krzk@kernel.org>
+References: <20210308162228.62614-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Arnd and Olof,
+The check for the board compatible should be limited only to the root
+node.  Any other nodes with such compatible are not part of this schema
+and should not match.
 
-This is just a resend of previous patch. Since I did not get replies
-from Intel maintainers, I assume this could go via soc tree directly.
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+---
+ Documentation/devicetree/bindings/arm/intel,keembay.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Best regards,
-Krzysztof
-
-
-Krzysztof Kozlowski (10):
-  dt-bindings: arm: intel,keembay: limit the dtschema to root node
-  arm64: dts: intel: socfpga: override clocks by label
-  arm64: dts: intel: socfpga_agilex: move clocks out of soc node
-  arm64: dts: intel: socfpga_agilex: move timer out of soc node
-  arm64: dts: intel: socfpga_agilex: remove default status=okay
-  arm64: dts: intel: socfpga_agilex: move usbphy out of soc node
-  arm64: dts: intel: socfpga_agilex: use defined for GIC interrupts
-  arm64: dts: intel: socfpga_agilex: align node names with dtschema
-  arm64: dts: intel: socfpga_agilex_socdk: align LED node names with
-    dtschema
-  arm64: dts: intel: socfpga_agilex_socdk_nand: align LED node names
-    with dtschema
-
- .../bindings/arm/intel,keembay.yaml           |   2 +
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 222 ++++++++++--------
- .../boot/dts/intel/socfpga_agilex_socdk.dts   |  18 +-
- .../dts/intel/socfpga_agilex_socdk_nand.dts   |  18 +-
- .../boot/dts/intel/socfpga_n5x_socdk.dts      |  12 +-
- 5 files changed, 144 insertions(+), 128 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/arm/intel,keembay.yaml b/Documentation/devicetree/bindings/arm/intel,keembay.yaml
+index 69cd30872928..107e686ab207 100644
+--- a/Documentation/devicetree/bindings/arm/intel,keembay.yaml
++++ b/Documentation/devicetree/bindings/arm/intel,keembay.yaml
+@@ -11,6 +11,8 @@ maintainers:
+   - Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+ 
+ properties:
++  $nodename:
++    const: '/'
+   compatible:
+     items:
+       - enum:
 -- 
 2.25.1
 
