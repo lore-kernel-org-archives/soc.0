@@ -1,80 +1,67 @@
-Return-Path: <SRS0=gQRC=IG=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <krzk@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF91CC433DB
-	for <soc@archiver.kernel.org>; Mon,  8 Mar 2021 17:04:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C01BCC433E0
+	for <soc@archiver.kernel.org>; Mon,  8 Mar 2021 17:08:55 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 97A6D6522F; Mon,  8 Mar 2021 17:04:59 +0000 (UTC)
-Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 27B1864FB8
-	for <soc@kernel.org>; Mon,  8 Mar 2021 17:04:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 27B1864FB8
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
-Received: from mail-wr1-f71.google.com ([209.85.221.71])
-	by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	(Exim 4.86_2)
-	(envelope-from <krzysztof.kozlowski@canonical.com>)
-	id 1lJJJR-0002p9-Ch
-	for soc@kernel.org; Mon, 08 Mar 2021 17:04:57 +0000
-Received: by mail-wr1-f71.google.com with SMTP id m9so5098490wrx.6
-        for <soc@kernel.org>; Mon, 08 Mar 2021 09:04:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BXtq859FRQFtajUaYN/vsNNVk2NCapuaGNff+HIq1fU=;
-        b=BDXNIctjPUluFfnG34+tZ2Qq6hPyBKAfKOORNmyB4xYu5ALBms6XasHHeZaywgJifK
-         vWqCYGG0OKxfrZMVPGPUqNOZcn08AHqHK1uq2Vux0fJln+pmN6aOuyC+TdjR4SqZTKrI
-         ePc5KzGx8rpCGT2lZ0gTxdi6vfwgUbpF09W+T+EBD8BYi79NCLpohT2oA2n/KhUpa0MQ
-         GK0dV326sLumFfhLZLWP28UiP2OT14V5lj6lDfYm0+6uJBdNgam/1WAkGfjert8CiEDx
-         anX03HSMIt4z7peUmbGbcuwbHhuSrV281eS/YBkBO34lrdEqonKTFeTBV7C2/Wospfxf
-         XNww==
-X-Gm-Message-State: AOAM533i9rmTe7mXHYPg8hk1K7PNDfczNmDHvCebjl5eCvmdXHpt5pCu
-	m4OqMFBXxsywd6U+u0a5oqthgv+dP644n3CP8WAQaBDEiGEZ/4So6Lk3acUaSUV2TfRjdUNNetQ
-	I4uocPqs2s0yxviJ0GMxHE8U=
-X-Received: by 2002:a05:600c:2282:: with SMTP id 2mr23166409wmf.93.1615223097155;
-        Mon, 08 Mar 2021 09:04:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxLrFBqic+DPXYmImXzmYhbuZCgb6qkVJhkld52yZQWkqYiOpDyptEHqsQ82up1jI+m7+KO/w==
-X-Received: by 2002:a05:600c:2282:: with SMTP id 2mr23166377wmf.93.1615223096907;
-        Mon, 08 Mar 2021 09:04:56 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id v2sm13166218wru.85.2021.03.08.09.04.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 09:04:56 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-X-Google-Original-From: Krzysztof Kozlowski <krzk@kernel.org>
-Date: Mon, 8 Mar 2021 18:04:54 +0100
-List-Id: <soc.lore.kernel.org>
-To: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>
-Cc: "Paul J. Murphy" <paul.j.murphy@intel.com>,
-	Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
-	Rob Herring <robh+dt@kernel.org>
-Subject: Re: [RESEND PATCH 00/10] arm64: dts: intel: socfpga: minor cleanups
-Message-ID: <20210308170454.sbeylw5istqeglfl@kozik-lap>
-References: <20210308162228.62614-1-krzk@kernel.org>
+	id 7F53765238; Mon,  8 Mar 2021 17:08:55 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2DBDD6522F;
+	Mon,  8 Mar 2021 17:08:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1615223335;
+	bh=O4V57frTM1Q2V6DD1XJCpPKOS3e9+Td27CgPy0zbZXc=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=Ccl1jjnR5OBYLPco9TZXfbkb5E/MkT7dwoA3+x92n80Zz/GviYmHzL1Z8EMWGSjjo
+	 7GtDwNdDyuIQJaJtryWchMqUyaQXln5g5TlG+DLpysIj+tKVGsLmhQlUq+bLHK4XO5
+	 BqgnG4yVvT00cLNW9Q4BEyAbTBeslZzlvH77xSmjXIQ6J3IuG14dUfi2hF1mA5/T+y
+	 AHJkkwhWyQqXD6WqHrvlkflDtxoT+DpwAP9W9dduIWL+aRjAIb/LYYCQDvwyzd9iRv
+	 jziCWhImOQfJMAVTQcr/0aHSynA+V1GQtYV/nyVLdUvEyqabT3x+jc8BVnJ7+9JnRT
+	 xvHPE3WPhvQqw==
+Received: by mail-ej1-f45.google.com with SMTP id dx17so21853352ejb.2;
+        Mon, 08 Mar 2021 09:08:55 -0800 (PST)
+X-Gm-Message-State: AOAM531L2ohRQ/NfAN0beYhrxAmBRScW3P8DFn3E+hOVAqkEvni0/yD0
+	EyrMGPPj1NO81S6raLlLzmxBJUuj9xY2vOcYEBw=
+X-Google-Smtp-Source: ABdhPJwnGIYxWOzf7t/IJvdZRxITyPAZJLW9lGcKCUi4upCN/s7lfkbi7lWlaOrpGbQJmJUjA11fjj5bAX3PhHEKinM=
+X-Received: by 2002:a17:906:a896:: with SMTP id ha22mr15846918ejb.503.1615223333767;
+ Mon, 08 Mar 2021 09:08:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210308162228.62614-1-krzk@kernel.org>
+References: <20210308162228.62614-1-krzk@kernel.org> <1fe9e98c7b3cc380e43a3aa0048a733a18c8816b.camel@intel.com>
+In-Reply-To: <1fe9e98c7b3cc380e43a3aa0048a733a18c8816b.camel@intel.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Date: Mon, 8 Mar 2021 18:08:40 +0100
+X-Gmail-Original-Message-ID: <CAJKOXPdOzgmjxxLgZJwfa_dykfD97hTCo3ewUAyr_JPoErFg9Q@mail.gmail.com>
+Message-ID: <CAJKOXPdOzgmjxxLgZJwfa_dykfD97hTCo3ewUAyr_JPoErFg9Q@mail.gmail.com>
+Subject: Re: [RESEND PATCH 00/10] arm64: dts: intel: socfpga: minor cleanups
+To: "Alessandrelli, Daniele" <daniele.alessandrelli@intel.com>
+List-Id: <soc.lore.kernel.org>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, "olof@lixom.net" <olof@lixom.net>, 
+	"arnd@arndb.de" <arnd@arndb.de>, "soc@kernel.org" <soc@kernel.org>, 
+	"dinguyen@kernel.org" <dinguyen@kernel.org>, "arm@kernel.org" <arm@kernel.org>, 
+	"Murphy, Paul J" <paul.j.murphy@intel.com>, "robh+dt@kernel.org" <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 08, 2021 at 05:22:18PM +0100, Krzysztof Kozlowski wrote:
-> Hi Arnd and Olof,
-> 
-> This is just a resend of previous patch. Since I did not get replies
-> from Intel maintainers, I assume this could go via soc tree directly.
+On Mon, 8 Mar 2021 at 17:40, Alessandrelli, Daniele
+<daniele.alessandrelli@intel.com> wrote:
+>
+> On Mon, 2021-03-08 at 17:22 +0100, Krzysztof Kozlowski wrote:
+> > Hi Arnd and Olof,
+> >
+> > This is just a resend of previous patch. Since I did not get replies
+> > from Intel maintainers, I assume this could go via soc tree directly.
+>
+> I think the to/cc list is missing Dinh, the socfpga maintainer:
+> Dinh Nguyen <dinguyen@kernel.org>
+>
+> I already acked the only patch I could review, i.e.:
+> dt-bindings: arm: intel,keembay: limit the dtschema to root node
 
-Actually it is my bad because I think I skipped Dinh Nguyen. Let me
-resend it one more time, hopefully to proper address.
+Yes, I also spotted it now, my bad. Thanks Daniele for pointing this out.
 
 Best regards,
 Krzysztof
