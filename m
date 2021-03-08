@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82387C433DB
-	for <soc@archiver.kernel.org>; Mon,  8 Mar 2021 17:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5745C433E0
+	for <soc@archiver.kernel.org>; Mon,  8 Mar 2021 17:10:01 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 4FEED6523B; Mon,  8 Mar 2021 17:10:00 +0000 (UTC)
+	id 6E31A6524A; Mon,  8 Mar 2021 17:10:01 +0000 (UTC)
 Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1CA246522F
-	for <soc@kernel.org>; Mon,  8 Mar 2021 17:10:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1CA246522F
+	by mail.kernel.org (Postfix) with ESMTPS id 111D165243
+	for <soc@kernel.org>; Mon,  8 Mar 2021 17:10:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 111D165243
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
-Received: from mail-wm1-f70.google.com ([209.85.128.70])
+Received: from mail-wm1-f69.google.com ([209.85.128.69])
 	by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
 	(Exim 4.86_2)
 	(envelope-from <krzysztof.kozlowski@canonical.com>)
-	id 1lJJOI-0003JY-HM
-	for soc@kernel.org; Mon, 08 Mar 2021 17:09:58 +0000
-Received: by mail-wm1-f70.google.com with SMTP id o9so2284576wmq.9
-        for <soc@kernel.org>; Mon, 08 Mar 2021 09:09:58 -0800 (PST)
+	id 1lJJOJ-0003KC-Ip
+	for soc@kernel.org; Mon, 08 Mar 2021 17:09:59 +0000
+Received: by mail-wm1-f69.google.com with SMTP id n25so5224853wmk.1
+        for <soc@kernel.org>; Mon, 08 Mar 2021 09:09:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6bdm0sjGtk8ALuy1N/+43SmVtmn6LvoyCFMfDfYjuck=;
-        b=DrIZyk2VTz/xog0VTbI19YMtD5dh6Dka7svSjk/4SFDOrjLPhpr4cKT/I8WqxFaapE
-         6htjlvNyKJ7NNzDH59QxEIyTIljLMHqDaOkQmWodCrk7khHldRc4F8xe+Zyfbt5bKEZl
-         yC62zn7cnitCwXIlSa50t8inKL1RMpsbTKYSRkJiXDj/1iIUGIYCgga9vWI4B15KXRWX
-         a+WiTCg2XyEeuXKGuRTvhrwf/XGlZbfhEZ8JmKE5kCZPh0Muc1nHrgfwlslV8gzw2SeN
-         BVIkqPw0gXzzYx9aPhlxIbkS8S24dJ9IjdwJYvdvunGecCelZr2bZyvPu/KGebZKFdDg
-         cHAA==
-X-Gm-Message-State: AOAM533pbKNmv3qIQmn6bpB18OQHvtiZ0srd46B9eEmWoXgKXTmN6mIJ
-	rmwDDTWtETbI1t1/Yr/B6uA75kkrkBRb0ESWBAdlve1wO7D3qU/y5yVAeQFlZn0qmPPZvs47M2J
-	EamBdsAfvllfv8gPO5/t5dO4=
-X-Received: by 2002:a7b:c316:: with SMTP id k22mr12209063wmj.176.1615223398177;
-        Mon, 08 Mar 2021 09:09:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy/vaioWrZfMyz0ifoB5yEGjPUKvGhG+eDmZX8KoWdrhuVHiFg7sKbEpL2kmn7OTH+70AH7xA==
-X-Received: by 2002:a7b:c316:: with SMTP id k22mr12209049wmj.176.1615223398072;
-        Mon, 08 Mar 2021 09:09:58 -0800 (PST)
+        bh=J8s41kTqsk18jArtcexwjcTxcMbClVKzru2/iOied3M=;
+        b=sCtA8uo1p1uVHuFPy73ElZuU6af65bwPUMtmAob0tno+KBZ3lrDhc10iEvnr5VoXus
+         1Mm5h+Oitaaxo/fKpmXiHxU5Qwn++iI14y4HrkMDbV8Bgu0RYUNzdGFBzSneZ6LlFne3
+         38qSaerQs1qhzImA4xC986iWd6Gu/FcRMPQy8L0KxaeVKYY+/hdx4cCVACKdQQzsakkr
+         2gZQhTKdLcsAp4lJ1aaR/IkUZdcx/3RiPWQu1yMUimDxleDph/nhQ2QT6xC69KyqwDDd
+         WTFTLMjhJCV7aZwnYljnv3m8aRJHhtLwimxKwar7T9rJc8P6g3BlIctDNjW1NKNIUEg/
+         xQ6g==
+X-Gm-Message-State: AOAM531wyeOMRX1aF7KJs6xoXR7xDl9lw6GVavHd2W7gy2Ea0Dd6h8LM
+	ZyppiMzhMQBKoLY+ecIQulWhYAD4fCb4jNKP6VJrf2S5TbcqAxAPjS4VYBeFwqQY8wJSAG0bgZn
+	+s0VBWK2L1FbNc/xziTpWBOQ=
+X-Received: by 2002:adf:e481:: with SMTP id i1mr8535890wrm.63.1615223399319;
+        Mon, 08 Mar 2021 09:09:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzKn+XdN+3exyMy6wDRVvSJH0t5bhxIQlMvXRSWRbJA1ckNgQs8bb12LMytPb2HH9k3ivKNkA==
+X-Received: by 2002:adf:e481:: with SMTP id i1mr8535868wrm.63.1615223399142;
+        Mon, 08 Mar 2021 09:09:59 -0800 (PST)
 Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.gmail.com with ESMTPSA id c11sm19568762wrs.28.2021.03.08.09.09.56
+        by smtp.gmail.com with ESMTPSA id c11sm19568762wrs.28.2021.03.08.09.09.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 09:09:57 -0800 (PST)
+        Mon, 08 Mar 2021 09:09:58 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
 To: "Paul J. Murphy" <paul.j.murphy@intel.com>,
@@ -63,9 +63,9 @@ To: "Paul J. Murphy" <paul.j.murphy@intel.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND 2nd PATCH 03/10] arm64: dts: intel: socfpga_agilex: move clocks out of soc node
-Date: Mon,  8 Mar 2021 18:09:38 +0100
-Message-Id: <20210308170945.161468-4-krzysztof.kozlowski@canonical.com>
+Subject: [RESEND 2nd PATCH 04/10] arm64: dts: intel: socfpga_agilex: move timer out of soc node
+Date: Mon,  8 Mar 2021 18:09:39 +0100
+Message-Id: <20210308170945.161468-5-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210308170945.161468-1-krzysztof.kozlowski@canonical.com>
 References: <20210308170945.161468-1-krzysztof.kozlowski@canonical.com>
@@ -74,91 +74,54 @@ Content-Transfer-Encoding: 8bit
 
 From: Krzysztof Kozlowski <krzk@kernel.org>
 
-The clocks are usually not part of the SoC but provided on the board
-(external oscillators).  Moving them out of soc node fixes dtc warning:
+The ARM architected timer is part of ARM CPU design therefore by
+convention it should not be inside the soc node.  This also fixes dtc
+warning like:
 
-    arch/arm64/boot/dts/intel/socfpga_agilex.dtsi:111.10-137.5:
-        Warning (simple_bus_reg): /soc/clocks: missing or empty reg/ranges property
+    arch/arm64/boot/dts/intel/socfpga_agilex.dtsi:410.9-416.5:
+        Warning (simple_bus_reg): /soc/timer: missing or empty reg/ranges property
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 56 +++++++++----------
- 1 file changed, 28 insertions(+), 28 deletions(-)
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-index 07c099b4ed5b..8f0736e4f3b5 100644
+index 8f0736e4f3b5..25882faccbdb 100644
 --- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
 +++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-@@ -87,6 +87,34 @@ intc: intc@fffc1000 {
- 		      <0x0 0xfffc6000 0x0 0x2000>;
+@@ -115,6 +115,15 @@ qspi_clk: qspi-clk {
+ 		};
  	};
  
-+	clocks {
-+		cb_intosc_hs_div2_clk: cb-intosc-hs-div2-clk {
-+			#clock-cells = <0>;
-+			compatible = "fixed-clock";
-+		};
-+
-+		cb_intosc_ls_clk: cb-intosc-ls-clk {
-+			#clock-cells = <0>;
-+			compatible = "fixed-clock";
-+		};
-+
-+		f2s_free_clk: f2s-free-clk {
-+			#clock-cells = <0>;
-+			compatible = "fixed-clock";
-+		};
-+
-+		osc1: osc1 {
-+			#clock-cells = <0>;
-+			compatible = "fixed-clock";
-+		};
-+
-+		qspi_clk: qspi-clk {
-+			#clock-cells = <0>;
-+			compatible = "fixed-clock";
-+			clock-frequency = <200000000>;
-+		};
++	timer {
++		compatible = "arm,armv8-timer";
++		interrupt-parent = <&intc>;
++		interrupts = <1 13 0xf08>,
++			     <1 14 0xf08>,
++			     <1 11 0xf08>,
++			     <1 10 0xf08>;
 +	};
 +
  	soc {
  		#address-cells = <1>;
  		#size-cells = <1>;
-@@ -108,34 +136,6 @@ clkmgr: clock-controller@ffd10000 {
- 			#clock-cells = <1>;
+@@ -406,15 +415,6 @@ sysmgr: sysmgr@ffd12000 {
+ 			reg = <0xffd12000 0x500>;
  		};
  
--		clocks {
--			cb_intosc_hs_div2_clk: cb-intosc-hs-div2-clk {
--				#clock-cells = <0>;
--				compatible = "fixed-clock";
--			};
--
--			cb_intosc_ls_clk: cb-intosc-ls-clk {
--				#clock-cells = <0>;
--				compatible = "fixed-clock";
--			};
--
--			f2s_free_clk: f2s-free-clk {
--				#clock-cells = <0>;
--				compatible = "fixed-clock";
--			};
--
--			osc1: osc1 {
--				#clock-cells = <0>;
--				compatible = "fixed-clock";
--			};
--
--			qspi_clk: qspi-clk {
--				#clock-cells = <0>;
--				compatible = "fixed-clock";
--				clock-frequency = <200000000>;
--			};
+-		/* Local timer */
+-		timer {
+-			compatible = "arm,armv8-timer";
+-			interrupts = <1 13 0xf08>,
+-				     <1 14 0xf08>,
+-				     <1 11 0xf08>,
+-				     <1 10 0xf08>;
 -		};
 -
- 		gmac0: ethernet@ff800000 {
- 			compatible = "altr,socfpga-stmmac-a10-s10", "snps,dwmac-3.74a", "snps,dwmac";
- 			reg = <0xff800000 0x2000>;
+ 		timer0: timer0@ffc03000 {
+ 			compatible = "snps,dw-apb-timer";
+ 			interrupts = <0 113 4>;
 -- 
 2.25.1
 
