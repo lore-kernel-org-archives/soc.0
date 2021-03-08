@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82DF5C433E0
-	for <soc@archiver.kernel.org>; Mon,  8 Mar 2021 16:22:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9A7CC433E0
+	for <soc@archiver.kernel.org>; Mon,  8 Mar 2021 16:22:50 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 573956521F; Mon,  8 Mar 2021 16:22:48 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6CA8A6522E;
-	Mon,  8 Mar 2021 16:22:46 +0000 (UTC)
+	id 818F06522F; Mon,  8 Mar 2021 16:22:50 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A0B9160241;
+	Mon,  8 Mar 2021 16:22:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1615220568;
-	bh=1pQf5As865nFveD7kdwkB2hGE6Xwl7BJYejgNXCQxyQ=;
+	s=k20201202; t=1615220570;
+	bh=WjQucMJgoQboQ4KTxNtenpqSOnYqYfMkrfDLFuaJnOM=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IPq65gTc2+pSvnQ4wwqzh7JxvAvAEpAVZJl7nQqgAWaKGEl/+Yv6vzWe3xrWZyDG7
-	 Lpq+5Pnri3EV04a8vK6kf4f/24Qp4vWn8U42q3kaFViQ47tsWkmmY04qYC0uQUmqf3
-	 DYnEdquXgmL19SI7NP6fd/V+kkw4zPR9mPUd3y/vRMaEjxxN/EyqtnBLR10EbKsGuM
-	 xol4ML9GwDu/8be7v7vJDcK97VCS1lhM4K53tqjtC+3J9wJblx1LymUgk+mOZjzYoj
-	 CUhDV199kGxEmuGJLE2bkUBxHELTF27n6EytBBrQr1JK4TFtttd4Ysr7BdBfqV2Hfd
-	 upblp+HXpfgAQ==
+	b=ViUStSZg6Pzi0fmtfT9braAo33N/AcfLgpA6uX7E7LvbM1erbRJhFTPolG8iAPGbA
+	 FK7E1ACIcZ0jaeYYioVOf5lm8K0mLQXNvzLw137KGndlytmFCqiPeSfJ/bHIfE2aB9
+	 hif7L1qmPfCG347TKywHODtSXXTCdhk2AOmiZzRe9CZptjf04Z9EaPQ2O3E13dP8fO
+	 P0zLW/EFKzo7YCmi5bos7Bc8ULjX9WpVDDW0qse6QQZnIRr9wtc/l37ZwGuTkCLyzz
+	 Vuhj0fCrGCMSeolkGFLkqQ8UGQ8E8eZdTn1HfCP7RFipJ7uFF5bexJ1Z84tdTkeThE
+	 Y7fr+o46zUHOQ==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: devicetree@vger.kernel.org,
@@ -35,34 +35,54 @@ Cc: "Paul J. Murphy" <paul.j.murphy@intel.com>,
 	Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND PATCH 05/10] arm64: dts: intel: socfpga_agilex: remove default status=okay
-Date: Mon,  8 Mar 2021 17:22:23 +0100
-Message-Id: <20210308162228.62614-6-krzk@kernel.org>
+Subject: [RESEND PATCH 06/10] arm64: dts: intel: socfpga_agilex: move usbphy out of soc node
+Date: Mon,  8 Mar 2021 17:22:24 +0100
+Message-Id: <20210308162228.62614-7-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210308162228.62614-1-krzk@kernel.org>
 References: <20210308162228.62614-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-New nodes are okay by default.
+The usual usb-nop-xceiv USB phy node should be under root node, to fix
+dtc warning:
+
+    arch/arm64/boot/dts/intel/socfpga_agilex.dtsi:472.21-476.5:
+        Warning (simple_bus_reg): /soc/usbphy@0: missing or empty reg/ranges property
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-index 25882faccbdb..f46d678ba775 100644
+index f46d678ba775..103de0a91e60 100644
 --- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
 +++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-@@ -472,7 +472,6 @@ uart1: serial1@ffc02100 {
- 		usbphy0: usbphy@0 {
- 			#phy-cells = <0>;
- 			compatible = "usb-nop-xceiv";
--			status = "okay";
+@@ -124,6 +124,11 @@ timer {
+ 			     <1 10 0xf08>;
+ 	};
+ 
++	usbphy0: usbphy {
++		#phy-cells = <0>;
++		compatible = "usb-nop-xceiv";
++	};
++
+ 	soc {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+@@ -469,11 +474,6 @@ uart1: serial1@ffc02100 {
+ 			status = "disabled";
  		};
  
+-		usbphy0: usbphy@0 {
+-			#phy-cells = <0>;
+-			compatible = "usb-nop-xceiv";
+-		};
+-
  		usb0: usb@ffb00000 {
+ 			compatible = "snps,dwc2";
+ 			reg = <0xffb00000 0x40000>;
 -- 
 2.25.1
 
