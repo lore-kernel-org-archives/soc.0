@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38033C433DB
-	for <soc@archiver.kernel.org>; Mon,  8 Mar 2021 16:22:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 590B6C433E0
+	for <soc@archiver.kernel.org>; Mon,  8 Mar 2021 16:22:59 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 0E93965229; Mon,  8 Mar 2021 16:22:57 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E09E65226;
-	Mon,  8 Mar 2021 16:22:55 +0000 (UTC)
+	id 391E165227; Mon,  8 Mar 2021 16:22:59 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5849E6521F;
+	Mon,  8 Mar 2021 16:22:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1615220577;
-	bh=9KKk5ehnWrA7UtNnP6QtrHqBtIqhTlf0+HSb9xqWDLA=;
+	s=k20201202; t=1615220579;
+	bh=lUobpB2+foAOvaqKEW2gF9nAkNBxrYowZDqmODWTi1g=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nVaOXJRzdqlB1xBtYSmcxlPTIbfG059YSC4JblxmuIymQ4aUNkRtRQdPgcvVI/PQA
-	 C5HZeHa/uRgldMoTk5aohP0ZdOpR9To0qP0xc5NIGhNEkBww1CXCqmaMrfrxq8iAFu
-	 Yppar04KoRZe4pUz1etkjEEIbkba42mu+8gxbc9hw+Bp/T8vwjRu4vf4bn+pZ2b3M8
-	 ja4RNtCa6YTWwoR+t6mNOylnSCnPAH69K9ubj/fte8BQEu2+DZffPmmJyuh2f3/SUg
-	 z3pETJkquQdAXKKYnPoCCTisKndb47VjoNC1MkaSVTwzT6szOWmYFGiNOpWUsXpUnp
-	 gDMN/V/6H2KIw==
+	b=mpC/a122aVQ92lRNCATZs4/PbQsBJomB3g1D3D5tzoMFuY2Lw1MR3Or99y0poOw/s
+	 NNTPVgTmAj/Ycfs75URlndCax4FfjTvcW9IpmLcXQIo26pNW1tXr+2kkEa1ebLkWzp
+	 fcLhIMybTGDsDurZqNSpUbpvPzlWf6AER7EdyshECd8tkxHznoYPZpj8LZ+LOfmqCB
+	 w0a416/OHYqNbGI4CbUt1AJq1rwcuS/YYzm16E2kefjfCDJLHwKQPyin+VF3oWlyi2
+	 0pPNpi1/Q4BluA9N5o5wPryel71usmyopBA3NkdK0d65OCDm6v6roS1RtKER56/7Fe
+	 /BfT9P59F/1NA==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: devicetree@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc: "Paul J. Murphy" <paul.j.murphy@intel.com>,
 	Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND PATCH 09/10] arm64: dts: intel: socfpga_agilex_socdk: align LED node names with dtschema
-Date: Mon,  8 Mar 2021 17:22:27 +0100
-Message-Id: <20210308162228.62614-10-krzk@kernel.org>
+Subject: [RESEND PATCH 10/10] arm64: dts: intel: socfpga_agilex_socdk_nand: align LED node names with dtschema
+Date: Mon,  8 Mar 2021 17:22:28 +0100
+Message-Id: <20210308162228.62614-11-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210308162228.62614-1-krzk@kernel.org>
 References: <20210308162228.62614-1-krzk@kernel.org>
@@ -51,13 +51,13 @@ like:
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts | 6 +++---
+ arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-index f14a89ca8784..13718ab5ed91 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
+index 58a827a5e83f..cc2dcabf34e3 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
 @@ -20,17 +20,17 @@ chosen {
  
  	leds {
