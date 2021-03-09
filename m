@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFED8C433E0
-	for <soc@archiver.kernel.org>; Tue,  9 Mar 2021 13:26:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5580C433E0
+	for <soc@archiver.kernel.org>; Tue,  9 Mar 2021 13:30:58 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 9864D65173; Tue,  9 Mar 2021 13:26:36 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C317650E6;
-	Tue,  9 Mar 2021 13:26:35 +0000 (UTC)
+	id 741F764F62; Tue,  9 Mar 2021 13:30:58 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 197F864F35;
+	Tue,  9 Mar 2021 13:30:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1615296396;
-	bh=WdtJLOZRt8UAfoNxy/JF9a72rBNh6A9ZqMX0DOyZtig=;
+	s=k20201202; t=1615296658;
+	bh=iGtdU+6GSxlqPB9V2HpM8TOGhILqr2eIHzs21JyFqAc=;
 	h=Subject:List-Id:To:Cc:References:From:Date:In-Reply-To:From;
-	b=StLZ/wMFX00il7iZXQKGjaw/6ED/qIQiuf69fBOFxsmjep77lM/gsv7SGvwutJQXH
-	 69K2uS1QFpfAL2drAjXvQOdI0tPqKNpyCpKUSh4yNJkvcNHglyZM0sQ+6l66mRg7Fz
-	 oHA+dtqYFs6W7AaLaLQiFuniftajCw8UhOlaZXRHOzyOn0ALtpJxh4MKLE5+35Zwc2
-	 hZwZTby2QN3/ogkuSy8Xy4qPzupyINpwRXCiLiA0lr98Y+4Wkr5hbQoHCw/29FIMJw
-	 Ia1tRISAswhWTvUVcmDsf21U5uyo8nF+k+EX8vEXYeI9h9uy2CAwVLywT7XKk/0K8A
-	 QjFlkrnajbkFw==
-Subject: Re: [PATCH v2] arm64: defconfig: enable Intel's eASIC N5X SoCFPGA and
- Keem Bay SoC
+	b=KjbmQcph/FialNjZLvDWMKRCnbHJ2Wv7vsTNrKQok1R5NnnnYyJ3JfsO2ZkXNgjAh
+	 Pv8wkEAoryo4vPynzXCZKqphJ2qZQsocqq0dv0vm4+iTy6gFH2SWPYiD5NQUkGq1o5
+	 vvnc3KnqGxCGqVe3xkS2wtfxAIgi5sLcsnFevmHTzrp7jpK7F8nitCQuHengucN9NA
+	 SW6UddM6JGDefysyhL9VaQ9mi3i7HTGamw+Fyu4iV8e05yOoX7rb7emDYK+wx3GVOD
+	 Rm6hL05BimijXcWW4cpP4d5x/Q7CWItwkT6ZR+S5G12iZKinoGI9YzvbvfXfGlPdwg
+	 LF8MMt4SIQXSQ==
+Subject: Re: [RESEND 2nd PATCH 00/10] arm64: dts: intel: socfpga: minor
+ cleanups
 List-Id: <soc.lore.kernel.org>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
  "Paul J. Murphy" <paul.j.murphy@intel.com>,
@@ -33,76 +33,55 @@ To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
  linux-kernel@vger.kernel.org, arm@kernel.org, soc@kernel.org,
  Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>
-References: <20210308174824.278372-1-krzysztof.kozlowski@canonical.com>
- <776e0c26-4f05-2a3c-1536-f730b9109b1b@kernel.org>
- <7462eeec-5c4e-b4d5-cf94-9945042fc1d1@canonical.com>
+References: <20210308170945.161468-1-krzysztof.kozlowski@canonical.com>
 From: Dinh Nguyen <dinguyen@kernel.org>
-Message-ID: <73dafebf-5c47-5d90-e29e-e1811f370a54@kernel.org>
-Date: Tue, 9 Mar 2021 07:26:33 -0600
+Message-ID: <b1b65ce5-ac1b-3a4b-5233-8c5fa50f9b2f@kernel.org>
+Date: Tue, 9 Mar 2021 07:30:55 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <7462eeec-5c4e-b4d5-cf94-9945042fc1d1@canonical.com>
+In-Reply-To: <20210308170945.161468-1-krzysztof.kozlowski@canonical.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
 
 
-On 3/9/21 3:29 AM, Krzysztof Kozlowski wrote:
-> On 08/03/2021 20:07, Dinh Nguyen wrote:
->> Hi Krzysztof,
->>
->> On 3/8/21 11:48 AM, Krzysztof Kozlowski wrote:
->>> From: Krzysztof Kozlowski <krzk@kernel.org>
->>>
->>> Enable in defconfig two Intel ARM64 architectures: the eASIC N5X SoCFPGA
->>> and Keem Bay SoC.  This allows compile coverage when building default
->>> config.
->>>
->>> For the N5X (and Agilex) enable also DesignWare SPI controller in MMIO.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
->>>
->>> ---
->>>
->>> Hi Arnd,
->>>
->>> You asked me to check if all drivers are enabled for these platforms.
->>> In general the answer is yes. In particular:
->>> 1. Keem Bay is does not have much in upstream, but everything described
->>>      in DTS is there,
->>> 2. N5X shares a lot with Agilex SoCFPGA which already (mostly) is
->>>      supported.
->>>
->>> Changes since v1:
->>> 1. Enable also SPI_DW_MMIO
->>> ---
->>>    arch/arm64/configs/defconfig | 5 +++++
->>>    1 file changed, 5 insertions(+)
->>>
->>> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
->>> index d612f633b771..9f9adcb8b0e9 100644
->>> --- a/arch/arm64/configs/defconfig
->>> +++ b/arch/arm64/configs/defconfig
->>> @@ -29,6 +29,7 @@ CONFIG_KALLSYMS_ALL=y
->>>    CONFIG_PROFILING=y
->>>    CONFIG_ARCH_ACTIONS=y
->>>    CONFIG_ARCH_AGILEX=y
->>> +CONFIG_ARCH_N5X=y
->>
->> I just submitted a patch for this as well. From the looks of the
->> defconfig file, it looks like the platforms are in alphabetical order,
->> but then I see that ARCH_SUNXI is not in it's correct spot if there is a
->> rule for keeping things in alphabetical order.
->>
+On 3/8/21 11:09 AM, Krzysztof Kozlowski wrote:
+> From: Krzysztof Kozlowski <krzk@kernel.org>
 > 
-> The rule is that order comes from savedefconfig, not alphabetical. This
-> way you avoid reshuffling of symbols on any future savedefconfig.
+> Hi Dinh, Arnd and Olof,
+> 
+> This is just a resend of previous patch.
+> 
+> Best regards,
+> Krzysztof
+> 
+> Krzysztof Kozlowski (10):
+>    dt-bindings: arm: intel,keembay: limit the dtschema to root node
+>    arm64: dts: intel: socfpga: override clocks by label
+>    arm64: dts: intel: socfpga_agilex: move clocks out of soc node
+>    arm64: dts: intel: socfpga_agilex: move timer out of soc node
+>    arm64: dts: intel: socfpga_agilex: remove default status=okay
+>    arm64: dts: intel: socfpga_agilex: move usbphy out of soc node
+>    arm64: dts: intel: socfpga_agilex: use defined for GIC interrupts
+>    arm64: dts: intel: socfpga_agilex: align node names with dtschema
+>    arm64: dts: intel: socfpga_agilex_socdk: align LED node names with
+>      dtschema
+>    arm64: dts: intel: socfpga_agilex_socdk_nand: align LED node names
+>      with dtschema
+> 
+>   .../bindings/arm/intel,keembay.yaml           |   2 +
+>   arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 222 ++++++++++--------
+>   .../boot/dts/intel/socfpga_agilex_socdk.dts   |  18 +-
+>   .../dts/intel/socfpga_agilex_socdk_nand.dts   |  18 +-
+>   .../boot/dts/intel/socfpga_n5x_socdk.dts      |  12 +-
+>   5 files changed, 144 insertions(+), 128 deletions(-)
 > 
 
-Got it. But I've done savedefconfig in the past and Arnd adviced against 
-that because what if multiple patches come in with savedefconfig, 
-wouldn't that cause a messy merge?
+For the whole series that involves socfpga, feel free to add:
 
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+
+Thanks,
 Dinh
