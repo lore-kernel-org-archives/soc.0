@@ -1,190 +1,306 @@
-Return-Path: <SRS0=6xFU=II=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=xqHC=II=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEF5AC433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Mar 2021 08:37:48 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79CFBC433DB
+	for <soc@archiver.kernel.org>; Wed, 10 Mar 2021 08:38:53 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 3F5C364FC0; Wed, 10 Mar 2021 08:38:53 +0000 (UTC)
+Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8985D64FDE
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Mar 2021 08:37:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8985D64FDE
+	by mail.kernel.org (Postfix) with ESMTPS id EA3E764FF2
+	for <soc@kernel.org>; Wed, 10 Mar 2021 08:38:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EA3E764FF2
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=hvUy5Jd0ulNmzmhIDiivZ0abTeQLXuPqQDB+aae3G9Y=; b=mGVIJpf3feYqRFHMPzq0mQ/Ru
-	veHvqXucdxa2MyCO4koOzamjdcIZ+6JBOZFnWQSMru7yLRsUnUb01fvgffrUvGIXTyJKG1POzMezU
-	TK0B/JFLCr3Ku4iPzdQfp+VQi33eOZuDLDBQ765KW1rmHdGvSpX8suQNWsXzTkCpGBuWPIkQGYtun
-	lcnqDN6nNRlRrlKf1SircB4yhH/JVEQievclmF6kRxgv2Ip+ubhcNLKDMO1mFcl8QnikCRr/DeFAX
-	/ZnvQmcfCCVngicZgtc2w9AnE7NjUigflDEXqCvMIViwSe1PdMFrqjmPPEP1Nex1ZxpEQ1WG/Za1o
-	INuAseDIw==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lJuKG-006JEA-3S; Wed, 10 Mar 2021 08:36:16 +0000
-Received: from youngberry.canonical.com ([91.189.89.112])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lJuK8-006JCz-PZ
- for linux-arm-kernel@lists.infradead.org; Wed, 10 Mar 2021 08:36:11 +0000
-Received: from mail-wr1-f69.google.com ([209.85.221.69])
- by youngberry.canonical.com with esmtps
- (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128) (Exim 4.86_2)
- (envelope-from <krzysztof.kozlowski@canonical.com>)
- id 1lJuK8-0003QM-4B
- for linux-arm-kernel@lists.infradead.org; Wed, 10 Mar 2021 08:36:08 +0000
-Received: by mail-wr1-f69.google.com with SMTP id e29so7653779wra.12
- for <linux-arm-kernel@lists.infradead.org>;
- Wed, 10 Mar 2021 00:36:08 -0800 (PST)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
+Received: from mail-wm1-f70.google.com ([209.85.128.70])
+	by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	(Exim 4.86_2)
+	(envelope-from <krzysztof.kozlowski@canonical.com>)
+	id 1lJuMl-0003hu-3g
+	for soc@kernel.org; Wed, 10 Mar 2021 08:38:51 +0000
+Received: by mail-wm1-f70.google.com with SMTP id a3so863281wmm.0
+        for <soc@kernel.org>; Wed, 10 Mar 2021 00:38:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=7UxAFifTu8sU7gViKdQC961bKcjK3MvZFPTtwzp8Z94=;
- b=H8ZsEDdk/p5TOUs5FiRvWwd1ZMMfM94x3swcmw+y3PjJj/SFDrKF+8NItqAiRS6afv
- qO72VGGRuJH62KIgEpkNGQqg6fihsQxp03rwF0zJtnSB5pUIuXB9WZjymfjfyEst5QLz
- IzuuHD+HpoUV72jQgaAak/npB0ep3NGdZXmzhVNlREc3Toaf2qbjp9CUZsvW9R6gb49m
- ZUp5j0ykVzfiofhANkclWgaerQ23czQv6dQEl8HmxGeqFlZa39JyoIeAKrVEN2RWftrz
- IpnzlTqsjT4MYg5F+2+UgBg0zuTuLIB0ftbBjpNXX/hArjVZYYqgX7/gjRlyaKPqQwCm
- aVaA==
-X-Gm-Message-State: AOAM531+EaslPJlvtLlBE4IAIC37UA9xLz3zNrhYeBdVjiVN1UBxZjZk
- h/O1MHN334AMTXVlmfbPuMPYRUBbl9ASVZRknhUMBFXhbBzjFnpDeedPJkV1/8uQHIwU4S+j2z3
- SUdGbwljwBPPkInYMKPbGkddMeFghatVBN4L3OiXG33eZq5/26M1H
-X-Received: by 2002:a1c:7901:: with SMTP id l1mr2229030wme.114.1615365367740; 
- Wed, 10 Mar 2021 00:36:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzre2rLibVvflzX2MrQlXqX4OZ1UrJ20LDyRBd9TPGnPB0yloUbIcy/A0jwyJm4iqYiEGZYgQ==
-X-Received: by 2002:a1c:7901:: with SMTP id l1mr2229010wme.114.1615365367542; 
- Wed, 10 Mar 2021 00:36:07 -0800 (PST)
-Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch.
- [84.226.167.205])
- by smtp.gmail.com with ESMTPSA id m17sm28675495wrx.92.2021.03.10.00.36.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Mar 2021 00:36:07 -0800 (PST)
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sJ+sWBPv8WTfBNPzw5KlNRJFjLSGVwyyKfH3WBvU8l8=;
+        b=o8ECrJU7bFh/+Vp+MwCVaooHp1gKO5W8vVBfrm9GuSSx9/U90uTyXP9EGeP8o86Ply
+         Vjug6Ww8hJ4Z3Ip1piMHKFFu1fFl4IXPza5hRs7imam2CCZRXfE5woKI0+Bmqpi+f7pH
+         Uw/0oocn0kjzyVtfGUuJterDtGtC7jWI0qWSibRr69awVBSXY99rbTYngW05R+oc3D+7
+         cuFnur9fBsBMFMAhYF8gu+/PMPOA+dJSp7LJ3m/nKKvnQq7B7xmgCy0Efkh8pnMr+79I
+         fyKGNM+e4D8o0Z8MzyUTiP3uMDI4SyI4d8f9CMle0cVvXNMSZH4+zANmh0+rmvT+Ql93
+         YoKA==
+X-Gm-Message-State: AOAM5339MN63DHRDHrdTQKYS7m+9YRkH1QAnFT3sJPrvPFM09DiV6mSs
+	Q9iRwc7SfXMuFe139IgmRTS75Le5OiQgXstvntuBMaCMy8PEsQ3RwsFdEVZAnRLWLyy4wR0ZXFX
+	teAsbvZ0enr/i9WHheJQWF+Y=
+X-Received: by 2002:a05:600c:35cd:: with SMTP id r13mr2199383wmq.186.1615365530697;
+        Wed, 10 Mar 2021 00:38:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxffKMarXt3WZ+2PQHxVk57BSqlnROHSdAmLc0YNptS3mf1yMHQoutG4Gedc/GO/nV/7BS6Sw==
+X-Received: by 2002:a05:600c:35cd:: with SMTP id r13mr2199348wmq.186.1615365530484;
+        Wed, 10 Mar 2021 00:38:50 -0800 (PST)
+Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id u20sm32781061wru.6.2021.03.10.00.38.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Mar 2021 00:38:50 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Dinh Nguyen <dinguyen@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Moritz Fischer <mdf@kernel.org>,
- Tom Rix <trix@redhat.com>, Lee Jones <lee.jones@linaro.org>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-edac@vger.kernel.org, linux-fpga@vger.kernel.org,
- netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	Lee Jones <lee.jones@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-fpga@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	arm@kernel.org,
+	soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [RFC v2 1/5] clk: socfpga: allow building N5X clocks with ARCH_N5X
-Date: Wed, 10 Mar 2021 09:33:23 +0100
-Message-ID: <20210310083327.480837-2-krzysztof.kozlowski@canonical.com>
+Subject: [RFC v2 3/5] arm64: socfpga: rename ARCH_STRATIX10 to ARCH_SOCFPGA64
+Date: Wed, 10 Mar 2021 09:38:37 +0100
+Message-Id: <20210310083840.481615-1-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210310083327.480837-1-krzysztof.kozlowski@canonical.com>
 References: <20210310083327.480837-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210310_083608_966466_2A5EB502 
-X-CRM114-Status: GOOD (  20.94  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210310083323.FUq5dGcNrznlPdqlgw-iTDo26zlbktM-1gy6BLsmOy0@z>
+Content-Transfer-Encoding: 8bit
 
-The Intel's eASIC N5X (ARCH_N5X) architecture shares a lot with Agilex
-(ARCH_AGILEX) so it uses the same socfpga_agilex.dtsi, with minor
-changes.  Also the clock drivers are the same.
+Prepare for merging Stratix 10, Agilex and N5X into one arm64
+architecture by first renaming the ARCH_STRATIX10 into ARCH_SOCFPGA64.
 
-However the clock drivers won't be build without ARCH_AGILEX.  One could
-assume that ARCH_N5X simply depends on ARCH_AGILEX but this was not
-modeled in Kconfig.  In current stage the ARCH_N5X is simply
-unbootable.
-
-Add a separate Kconfig entry for clocks used by both ARCH_N5X and
-ARCH_AGILEX so the necessary objects will be built if either of them is
-selected.
+The existing ARCH_SOCFPGA (in ARMv7) Kconfig symbol cannot be used
+because altera_edac driver builds differently between them (with
+ifdefs).
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- drivers/clk/Kconfig          | 1 +
- drivers/clk/Makefile         | 1 +
- drivers/clk/socfpga/Kconfig  | 6 ++++++
- drivers/clk/socfpga/Makefile | 4 ++--
- 4 files changed, 10 insertions(+), 2 deletions(-)
- create mode 100644 drivers/clk/socfpga/Kconfig
+ arch/arm64/Kconfig.platforms                |  7 ++++---
+ arch/arm64/boot/dts/altera/Makefile         |  2 +-
+ arch/arm64/configs/defconfig                |  2 +-
+ drivers/clk/Makefile                        |  2 +-
+ drivers/clk/socfpga/Kconfig                 |  4 ++--
+ drivers/edac/Kconfig                        |  2 +-
+ drivers/edac/altera_edac.c                  | 10 +++++-----
+ drivers/firmware/Kconfig                    |  2 +-
+ drivers/fpga/Kconfig                        |  2 +-
+ drivers/mfd/Kconfig                         |  2 +-
+ drivers/net/ethernet/stmicro/stmmac/Kconfig |  4 ++--
+ drivers/reset/Kconfig                       |  2 +-
+ 12 files changed, 21 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index a588d56502d4..1d1891b9cad2 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -394,6 +394,7 @@ source "drivers/clk/renesas/Kconfig"
- source "drivers/clk/rockchip/Kconfig"
- source "drivers/clk/samsung/Kconfig"
- source "drivers/clk/sifive/Kconfig"
-+source "drivers/clk/socfpga/Kconfig"
- source "drivers/clk/sprd/Kconfig"
- source "drivers/clk/sunxi/Kconfig"
- source "drivers/clk/sunxi-ng/Kconfig"
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index cdfd5fed457f..78bba3633eab 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -254,10 +254,11 @@ config ARCH_SEATTLE
+ 	help
+ 	  This enables support for AMD Seattle SOC Family
+ 
+-config ARCH_STRATIX10
+-	bool "Altera's Stratix 10 SoCFPGA Family"
++config ARCH_SOCFPGA64
++	bool "Intel's SoCFPGA ARMv8 Families"
+ 	help
+-	  This enables support for Altera's Stratix 10 SoCFPGA Family.
++	  This enables support for Intel's SoCFPGA ARMv8 families:
++	  Stratix 10 (ex. Altera), Agilex and eASIC N5X.
+ 
+ config ARCH_SYNQUACER
+ 	bool "Socionext SynQuacer SoC Family"
+diff --git a/arch/arm64/boot/dts/altera/Makefile b/arch/arm64/boot/dts/altera/Makefile
+index 10119c7ab437..b45b92f8b4ec 100644
+--- a/arch/arm64/boot/dts/altera/Makefile
++++ b/arch/arm64/boot/dts/altera/Makefile
+@@ -1,3 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-dtb-$(CONFIG_ARCH_STRATIX10) += socfpga_stratix10_socdk.dtb \
++dtb-$(CONFIG_ARCH_SOCFPGA64) += socfpga_stratix10_socdk.dtb \
+ 				socfpga_stratix10_socdk_nand.dtb
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index d612f633b771..ee742900a150 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -50,7 +50,7 @@ CONFIG_ARCH_RENESAS=y
+ CONFIG_ARCH_ROCKCHIP=y
+ CONFIG_ARCH_S32=y
+ CONFIG_ARCH_SEATTLE=y
+-CONFIG_ARCH_STRATIX10=y
++CONFIG_ARCH_SOCFPGA64=y
+ CONFIG_ARCH_SYNQUACER=y
+ CONFIG_ARCH_TEGRA=y
+ CONFIG_ARCH_SPRD=y
 diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index b22ae4f81e0b..12e46b12e587 100644
+index 12e46b12e587..e34457539edf 100644
 --- a/drivers/clk/Makefile
 +++ b/drivers/clk/Makefile
-@@ -106,6 +106,7 @@ obj-$(CONFIG_COMMON_CLK_SAMSUNG)	+= samsung/
- obj-$(CONFIG_CLK_SIFIVE)		+= sifive/
+@@ -107,7 +107,7 @@ obj-$(CONFIG_CLK_SIFIVE)		+= sifive/
  obj-$(CONFIG_ARCH_SOCFPGA)		+= socfpga/
  obj-$(CONFIG_ARCH_AGILEX)		+= socfpga/
-+obj-$(CONFIG_ARCH_N5X)			+= socfpga/
- obj-$(CONFIG_ARCH_STRATIX10)		+= socfpga/
+ obj-$(CONFIG_ARCH_N5X)			+= socfpga/
+-obj-$(CONFIG_ARCH_STRATIX10)		+= socfpga/
++obj-$(CONFIG_ARCH_SOCFPGA64)		+= socfpga/
  obj-$(CONFIG_PLAT_SPEAR)		+= spear/
  obj-y					+= sprd/
+ obj-$(CONFIG_ARCH_STI)			+= st/
 diff --git a/drivers/clk/socfpga/Kconfig b/drivers/clk/socfpga/Kconfig
-new file mode 100644
-index 000000000000..cae6fd9fac64
---- /dev/null
+index 7d4772faf93d..8cf3dfdba255 100644
+--- a/drivers/clk/socfpga/Kconfig
 +++ b/drivers/clk/socfpga/Kconfig
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+config COMMON_CLK_AGILEX
-+	bool
-+	# Intel Agilex / N5X clock controller support
-+	default y if ARCH_AGILEX || ARCH_N5X
-+	depends on ARCH_AGILEX || ARCH_N5X
-diff --git a/drivers/clk/socfpga/Makefile b/drivers/clk/socfpga/Makefile
-index bf736f8d201a..e3614f758184 100644
---- a/drivers/clk/socfpga/Makefile
-+++ b/drivers/clk/socfpga/Makefile
-@@ -3,5 +3,5 @@ obj-$(CONFIG_ARCH_SOCFPGA) += clk.o clk-gate.o clk-pll.o clk-periph.o
- obj-$(CONFIG_ARCH_SOCFPGA) += clk-pll-a10.o clk-periph-a10.o clk-gate-a10.o
- obj-$(CONFIG_ARCH_STRATIX10) += clk-s10.o
- obj-$(CONFIG_ARCH_STRATIX10) += clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o
--obj-$(CONFIG_ARCH_AGILEX) += clk-agilex.o
--obj-$(CONFIG_ARCH_AGILEX) += clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o
-+obj-$(CONFIG_COMMON_CLK_AGILEX) += clk-agilex.o
-+obj-$(CONFIG_COMMON_CLK_AGILEX) += clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o
+@@ -2,5 +2,5 @@
+ config COMMON_CLK_SOCFPGA64
+ 	bool
+ 	# Intel Stratix / Agilex / N5X clock controller support
+-	default y if ARCH_AGILEX || ARCH_N5X || ARCH_STRATIX10
+-	depends on ARCH_AGILEX || ARCH_N5X || ARCH_STRATIX10
++	default y if ARCH_AGILEX || ARCH_N5X || ARCH_SOCFPGA64
++	depends on ARCH_AGILEX || ARCH_N5X || ARCH_SOCFPGA64
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index 27d0c4cdc58d..97fa2056bd47 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+@@ -396,7 +396,7 @@ config EDAC_THUNDERX
+ 
+ config EDAC_ALTERA
+ 	bool "Altera SOCFPGA ECC"
+-	depends on EDAC=y && (ARCH_SOCFPGA || ARCH_STRATIX10)
++	depends on EDAC=y && (ARCH_SOCFPGA || ARCH_SOCFPGA64)
+ 	help
+ 	  Support for error detection and correction on the
+ 	  Altera SOCs. This is the global enable for the
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index e91cf1147a4e..ba11219664ca 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -1502,7 +1502,7 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
+ 	dci->dev_name = ecc_name;
+ 
+ 	/* Update the PortB IRQs - A10 has 4, S10 has 2, Index accordingly */
+-#ifdef CONFIG_ARCH_STRATIX10
++#ifdef CONFIG_ARCH_SOCFPGA64
+ 	altdev->sb_irq = irq_of_parse_and_map(np, 1);
+ #else
+ 	altdev->sb_irq = irq_of_parse_and_map(np, 2);
+@@ -1521,7 +1521,7 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
+ 		goto err_release_group_1;
+ 	}
+ 
+-#ifdef CONFIG_ARCH_STRATIX10
++#ifdef CONFIG_ARCH_SOCFPGA64
+ 	/* Use IRQ to determine SError origin instead of assigning IRQ */
+ 	rc = of_property_read_u32_index(np, "interrupts", 1, &altdev->db_irq);
+ 	if (rc) {
+@@ -1931,7 +1931,7 @@ static int altr_edac_a10_device_add(struct altr_arria10_edac *edac,
+ 		goto err_release_group1;
+ 	}
+ 
+-#ifdef CONFIG_ARCH_STRATIX10
++#ifdef CONFIG_ARCH_SOCFPGA64
+ 	/* Use IRQ to determine SError origin instead of assigning IRQ */
+ 	rc = of_property_read_u32_index(np, "interrupts", 0, &altdev->db_irq);
+ 	if (rc) {
+@@ -2016,7 +2016,7 @@ static const struct irq_domain_ops a10_eccmgr_ic_ops = {
+ /************** Stratix 10 EDAC Double Bit Error Handler ************/
+ #define to_a10edac(p, m) container_of(p, struct altr_arria10_edac, m)
+ 
+-#ifdef CONFIG_ARCH_STRATIX10
++#ifdef CONFIG_ARCH_SOCFPGA64
+ /* panic routine issues reboot on non-zero panic_timeout */
+ extern int panic_timeout;
+ 
+@@ -2109,7 +2109,7 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
+ 					 altr_edac_a10_irq_handler,
+ 					 edac);
+ 
+-#ifdef CONFIG_ARCH_STRATIX10
++#ifdef CONFIG_ARCH_SOCFPGA64
+ 	{
+ 		int dberror, err_addr;
+ 
+diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+index 3f14dffb9669..59660798f05f 100644
+--- a/drivers/firmware/Kconfig
++++ b/drivers/firmware/Kconfig
+@@ -206,7 +206,7 @@ config FW_CFG_SYSFS_CMDLINE
+ 
+ config INTEL_STRATIX10_SERVICE
+ 	tristate "Intel Stratix10 Service Layer"
+-	depends on (ARCH_STRATIX10 || ARCH_AGILEX) && HAVE_ARM_SMCCC
++	depends on (ARCH_SOCFPGA64 || ARCH_AGILEX) && HAVE_ARM_SMCCC
+ 	default n
+ 	help
+ 	  Intel Stratix10 service layer runs at privileged exception level,
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 5ff9438b7b46..7f7504d1c961 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -60,7 +60,7 @@ config FPGA_MGR_ZYNQ_FPGA
+ 
+ config FPGA_MGR_STRATIX10_SOC
+ 	tristate "Intel Stratix10 SoC FPGA Manager"
+-	depends on (ARCH_STRATIX10 && INTEL_STRATIX10_SERVICE)
++	depends on (ARCH_SOCFPGA64 && INTEL_STRATIX10_SERVICE)
+ 	help
+ 	  FPGA manager driver support for the Intel Stratix10 SoC.
+ 
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index a03de3f7a8ed..8fbd10cc6944 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -32,7 +32,7 @@ config MFD_ALTERA_A10SR
+ 
+ config MFD_ALTERA_SYSMGR
+ 	bool "Altera SOCFPGA System Manager"
+-	depends on (ARCH_SOCFPGA || ARCH_STRATIX10) && OF
++	depends on (ARCH_SOCFPGA || ARCH_SOCFPGA64) && OF
+ 	select MFD_SYSCON
+ 	help
+ 	  Select this to get System Manager support for all Altera branded
+diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+index e675ba12fde2..ab6eb792fbdb 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
++++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+@@ -140,8 +140,8 @@ config DWMAC_ROCKCHIP
+ 
+ config DWMAC_SOCFPGA
+ 	tristate "SOCFPGA dwmac support"
+-	default (ARCH_SOCFPGA || ARCH_STRATIX10)
+-	depends on OF && (ARCH_SOCFPGA || ARCH_STRATIX10 || COMPILE_TEST)
++	default (ARCH_SOCFPGA || ARCH_SOCFPGA64)
++	depends on OF && (ARCH_SOCFPGA || ARCH_SOCFPGA64 || COMPILE_TEST)
+ 	select MFD_SYSCON
+ 	help
+ 	  Support for ethernet controller on Altera SOCFPGA
+diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+index 4171c6f76385..fa7f1394697b 100644
+--- a/drivers/reset/Kconfig
++++ b/drivers/reset/Kconfig
+@@ -183,7 +183,7 @@ config RESET_SCMI
+ 
+ config RESET_SIMPLE
+ 	bool "Simple Reset Controller Driver" if COMPILE_TEST
+-	default ARCH_AGILEX || ARCH_ASPEED || ARCH_BCM4908 || ARCH_BITMAIN || ARCH_REALTEK || ARCH_STM32 || ARCH_STRATIX10 || ARCH_SUNXI || ARC
++	default ARCH_AGILEX || ARCH_ASPEED || ARCH_BCM4908 || ARCH_BITMAIN || ARCH_REALTEK || ARCH_STM32 || ARCH_SOCFPGA64 || ARCH_SUNXI || ARC
+ 	help
+ 	  This enables a simple reset controller driver for reset lines that
+ 	  that can be asserted and deasserted by toggling bits in a contiguous,
 -- 
 2.25.1
 
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
