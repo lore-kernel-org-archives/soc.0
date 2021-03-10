@@ -1,175 +1,117 @@
-Return-Path: <SRS0=6xFU=II=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=XJCD=II=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 767CEC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Mar 2021 15:55:44 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7D19C433E6
+	for <soc@archiver.kernel.org>; Wed, 10 Mar 2021 16:10:58 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7B28F64FBC; Wed, 10 Mar 2021 16:10:58 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0C1A464EE2
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Mar 2021 15:55:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0C1A464EE2
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:References:
-	Cc:To:From:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=7MD21RmQPmVGRtUsY5VMHEFoIpsqwGw6Onk+aVW0pjk=; b=OhgebIWgSBtwfuJOePS4VriC5
-	Fx2GyhW2f8X8NrezyEff9B3gr+pqGWx3NczlAcsjY3XW6Epv4fH9L4j26rVz+WfeUa0+bhwVnQSk9
-	jT8AV6zCHjBnx+e4Rn/rmBW2Saicxie56OPjX9+SvioAL8dGS0+TKHTXQBih37rGF9UQEX8b8EuN8
-	4K+yhuosKMnoKb5dqUwZ8d53jlkA8fIYKQOJK02IEeI9+eqzEAdNx1vWb/8pRMSz8hCsVNC078Np1
-	1F9h0GHFSLDgnArB4ujSlodyBpVWlq4uPi/kDcOb5lQtPgh8JTJCFPrJ1RGOdFJVWN+JQlQKlFPAQ
-	v3ckgnpMg==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lK1AI-0079bP-JI; Wed, 10 Mar 2021 15:54:26 +0000
-Received: from youngberry.canonical.com ([91.189.89.112])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lK1AE-0079b5-9x
- for linux-arm-kernel@lists.infradead.org; Wed, 10 Mar 2021 15:54:24 +0000
-Received: from mail-wm1-f72.google.com ([209.85.128.72])
- by youngberry.canonical.com with esmtps
- (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128) (Exim 4.86_2)
- (envelope-from <krzysztof.kozlowski@canonical.com>)
- id 1lK1AD-0004nO-Cs
- for linux-arm-kernel@lists.infradead.org; Wed, 10 Mar 2021 15:54:21 +0000
-Received: by mail-wm1-f72.google.com with SMTP id m17so1216624wml.3
- for <linux-arm-kernel@lists.infradead.org>;
- Wed, 10 Mar 2021 07:54:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:from:to:cc:references:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=14FPz1l6aS2SCug92QhFgOtMYZ2KTboq6wLTNYV4gRU=;
- b=BQ0V1rYnWX/e/LTMeVPJS3p83qC3wgzlQkwL/BsESMALwgfz+IHt3H8UrIj6RfLQFO
- 2ys1hc0xpY6fhhco+WL6AChyb+jmPhmHkaa06g3y7BfvEKykg4f4ngILHpXq5tp3OAWd
- ASjqbVY4MhrcMOpLV4S7GpSR+r7fQhnAp8ukFgc8PTIc5cfvd0p2+FmlIGJjNJIe8XpR
- ii6zISB+Anj2mEIHT3VQ4I15EYcd+XzGj9KkyL7WbbFNmu5p1WZn6NxY/vOf9OikR3AN
- iBn1sKxh723OidCHJvcXG++QW70vWxxRmSvR5C9/cQj002CBFIj9WqfuzIAyLep6DtaY
- +sag==
-X-Gm-Message-State: AOAM530+GL7v9LFIsRRM3RT5kdN9T39GrZJR/HTsrO/YPjMiNj8qAthd
- 4LOhZOymJ+Ea44QY6V0qdH1z9VxaATIkMRDWanycRMAv1wSq46GAlsWwHHn5m3o+UA8pGu63FjQ
- WoAleP8OuDEJJuIQCi5qNDlDjz9NjfLND4La8xDYM1Ydstdv0TmAq
-X-Received: by 2002:a7b:c04c:: with SMTP id u12mr4060597wmc.9.1615391660978;
- Wed, 10 Mar 2021 07:54:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzYVlIoIwJAU38MnjUazA5nQqK16xaytYspMDuXR9nuYZruHOq/jCZGaK71U4tP9AymiD6NlQ==
-X-Received: by 2002:a7b:c04c:: with SMTP id u12mr4060585wmc.9.1615391660799;
- Wed, 10 Mar 2021 07:54:20 -0800 (PST)
-Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch.
- [84.226.167.205])
- by smtp.gmail.com with ESMTPSA id n4sm9584462wmq.40.2021.03.10.07.54.20
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 10 Mar 2021 07:54:20 -0800 (PST)
-Subject: Re: [RFC v2 3/5] arm64: socfpga: rename ARCH_STRATIX10 to
- ARCH_SOCFPGA64
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To: Arnd Bergmann <arnd@arndb.de>
+	by mail.kernel.org (Postfix) with ESMTPS id 1730464F9B;
+	Wed, 10 Mar 2021 16:10:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1730464F9B
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=Nicolas.Ferre@microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1615392658; x=1646928658;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=O5jeKypV2ExKtHu5QJ2ITrvif4oyKitUExTdelTu/Qo=;
+  b=xrQ0Wh6uAkhw+z98UkwBmAookwl7jtPmNxWJcwZCz/5EFitTMfXPO9P6
+   lyARoJ3fcPnadxeopucVrKgYxplEZ5rR/COXxSWptdudGhTzsRohPab7L
+   1D8UPmLanmpwokrBdoG9YUNVXSx6HEvvrd9J1gc5UhUpXkP5Q8wyPv/Nc
+   s5GRbsJ+FYUh1NBAyq2UZdPe/jxjj9nFhQtE9mPnaWauW8E+VP/DGBJEe
+   JalbqMWgbkRiu4o5qaAzPdAOqpduer5x1RphUZk/Ta3dCJq+FX/LFXyZQ
+   Hx/+8f3k8bCjHAjpCvtjw30OpKTr1D1zsEJCF99PiYG9ggHVRVyVv4jB8
+   Q==;
+IronPort-SDR: nEaPGjPgYT3WDxBsCTOOdsRUMVINyPtJBcEgKTRUNDp9FEeYRZcDojqs1/h6MdrlEmC0BmQCOz
+ gp3dxzKAy+omQxtr+rD/OgcSJ4MbdKHAPQnUzAuGSaP2JxRNi2EJ2djotDRutXic9la4Lf3bEY
+ ULgI0r2JqdEjEpkWvHN/auHfDKLmO6KgBnp4cYoAAJTjIFHqcm5F8MOIlSPBPhYaQEyrPBrQ5e
+ HTh4Ft5XMYDgQ5SyVjSz65qaCYeXsJDSK0Np+WG5etgvAyD58cB1MiBD+RK+0n+DKqVt97Ho3u
+ e2w=
+X-IronPort-AV: E=Sophos;i="5.81,237,1610434800"; 
+   d="scan'208";a="46983116"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2021 09:10:56 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 10 Mar 2021 09:10:56 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Wed, 10 Mar 2021 09:10:53 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Tom Rix <trix@redhat.com>, Lee Jones <lee.jones@linaro.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Dinh Nguyen <dinguyen@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Moritz Fischer <mdf@kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- DTML <devicetree@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>,
- linux-edac@vger.kernel.org, linux-fpga@vger.kernel.org,
- Networking <netdev@vger.kernel.org>,
- linux-stm32@st-md-mailman.stormreply.com, arm-soc <arm@kernel.org>,
- SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>
-References: <20210310083327.480837-1-krzysztof.kozlowski@canonical.com>
- <20210310083840.481615-1-krzysztof.kozlowski@canonical.com>
- <20210310094527.GA701493@dell>
- <35c39c81-08e4-24c8-f683-2fa7a7ea71de@redhat.com>
- <1c06cb74-f0b0-66e5-a594-ed1ee9bc876e@canonical.com>
- <CAK8P3a1CCQwbeH4KiUgif+-HdubVjjZBkMXimEjYkgeh4eJ7cg@mail.gmail.com>
- <52d0489f-0f77-76a2-3269-e3004c6b6c07@canonical.com>
-Message-ID: <ba2536a6-7c74-0cca-023f-cc6179950d37@canonical.com>
-Date: Wed, 10 Mar 2021 16:54:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Ludovic Desroches
+	<ludovic.desroches@microchip.com>
+Subject: [GIT PULL] ARM: at91: fixes for 5.12
+Date: Wed, 10 Mar 2021 17:05:47 +0100
+Message-ID: <20210310160547.55382-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <52d0489f-0f77-76a2-3269-e3004c6b6c07@canonical.com>
-Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210310_155422_500287_81051FE3 
-X-CRM114-Status: GOOD (  27.43  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210310155419.pfKhhO3OKm_ATYzWQh2m3Lenci7i2OK9NzjCLC32ZXE@z>
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 10/03/2021 16:47, Krzysztof Kozlowski wrote:
-> On 10/03/2021 16:39, Arnd Bergmann wrote:
->> On Wed, Mar 10, 2021 at 4:06 PM Krzysztof Kozlowski
->> <krzysztof.kozlowski@canonical.com> wrote:
->>> On 10/03/2021 15:45, Tom Rix wrote:
->>>> On 3/10/21 1:45 AM, Lee Jones wrote:
->>>
->>> Many other architectures do not have vendor prefix (TEGRA, EXYNOS,
->>> ZYNQMP etc). I would call it the same as in ARMv7 - ARCH_SOCFPGA - but
->>> the Altera EDAC driver depends on these symbols to be different.
->>> Anyway, I don't mind using something else for the name.
->>
->> I agree the name SOCFPGA is confusing, since it is really a class of
->> device that is made by multiple manufacturers rather than a brand name,
->> but renaming that now would be equally confusing. If the Intel folks
->> could suggest a better name that describes all products in the platform
->> and is less ambiguous, we could rename it to that. I think ARCH_ALTERA
->> would make sense, but I don't know if that is a name that is getting
->> phased out. (We once renamed the Marvell Orion platform to ARCH_MVEBU,
->> but shortly afterwards, Marvell renamed their embedded business unit (EBU)
->> and the name has no longer made sense since).
-> 
-> I wait then for some ideas from Dinh (or anyone else).
-> 
->>
->> Regardless of what name we end up with, I do think we should have the
->> same name for 32-bit and 64-bit and instead fix the edac driver to do
->> runtime detection based on the compatible string.
-> 
-> I can rename ARCH_SOCFPGA on 32-bit ARM as well, however converting edac
-> driver from #ifdef ARCH_SOCFPGA64 to proper compatible string will be
-> too much for me: I am not able to test it.
-> 
-> This edac Altera driver is very weird... it uses the same compatible
-> differently depending whether this is 32-bit or 64-bit (e.g. Stratix
-> 10)! On ARMv7 the compatible means for example one IRQ... On ARMv8, we
-> have two. It's quite a new code (2019 from Intel), not some ancient
-> legacy, so it should never have been accepted...
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Oh, it's not that horrible as it sounds. They actually have different
-compatibles for edac driver with these differences (e.g. in interrupts).
-They just do not use them and instead check for the basic (common?)
-compatible and architecture... Anyway without testing I am not the
-person to fix the edac driver.
+Arnd, Olof,
 
-Best regards,
-Krzysztof
+Here are some fixes for 5.12. It's not regression vs. previous revision, this
+is why I send them early in the cycle.
+I based my branch on top of 5.12-rc2 because I noticed that your "master"
+branch was pointing to it (and of course the "-dontuse" suffix from Linus).
+Tell me if you prefer that I use a more usual "-rc1".
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Thanks, best regards,
+  Nicolas
+
+The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+
+  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-5.12
+
+for you to fetch changes up to 2c69c8a1736eace8de491d480e6e577a27c2087c:
+
+  ARM: dts: at91: sam9x60: fix mux-mask to match product's datasheet (2021-03-10 16:38:15 +0100)
+
+----------------------------------------------------------------
+AT91 fixes for 5.12:
+
+- only DT changes
+-- wrong phy address that blocks Ethernet use on boards with sama5d27 SoM1
+-- restrictive PIN possibilities for sam9x60
+
+----------------------------------------------------------------
+Claudiu Beznea (1):
+      ARM: dts: at91-sama5d27_som1: fix phy address to 7
+
+Federico Pellegrin (1):
+      ARM: dts: at91: sam9x60: fix mux-mask for PA7 so it can be set to A, B and C
+
+Nicolas Ferre (1):
+      ARM: dts: at91: sam9x60: fix mux-mask to match product's datasheet
+
+ arch/arm/boot/dts/at91-sam9x60ek.dts      | 8 --------
+ arch/arm/boot/dts/at91-sama5d27_som1.dtsi | 4 ++--
+ arch/arm/boot/dts/sam9x60.dtsi            | 9 +++++++++
+ 3 files changed, 11 insertions(+), 10 deletions(-)
+
+-- 
+Nicolas Ferre
