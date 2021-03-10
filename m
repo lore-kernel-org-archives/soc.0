@@ -1,105 +1,134 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=xqHC=II=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBFFAC433E0
-	for <linux-devicetree@archiver.kernel.org>; Tue,  9 Mar 2021 15:21:02 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BAFE365279
-	for <linux-devicetree@archiver.kernel.org>; Tue,  9 Mar 2021 15:21:02 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbhCIPUa (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Tue, 9 Mar 2021 10:20:30 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:53711 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbhCIPUA (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Tue, 9 Mar 2021 10:20:00 -0500
-Received: from mail-oi1-f177.google.com ([209.85.167.177]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MjjGV-1m2vKe0G5r-00lDYJ; Tue, 09 Mar 2021 16:19:59 +0100
-Received: by mail-oi1-f177.google.com with SMTP id y131so12422022oia.8;
-        Tue, 09 Mar 2021 07:19:58 -0800 (PST)
-X-Gm-Message-State: AOAM5339a4r5qZ9D2qwrSyyYr1vzMdRsvGqQE1zUvvpmnJ7rDdDDXoVg
-        d6q+vICPyAYuHMkJ6kdB7Tq+pev6MBeRNXXOsKo=
-X-Google-Smtp-Source: ABdhPJzLaYkFBQxeenML1CtvrMiCXYHwEhB7UewHLGYWzvuz3PZ33xGUA54iow9OSLWqVDbvpKTVkJjaZNVQIbBYtnE=
-X-Received: by 2002:a05:6808:3d9:: with SMTP id o25mr3319660oie.4.1615303197754;
- Tue, 09 Mar 2021 07:19:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20210308174824.278372-1-krzysztof.kozlowski@canonical.com>
- <776e0c26-4f05-2a3c-1536-f730b9109b1b@kernel.org> <7462eeec-5c4e-b4d5-cf94-9945042fc1d1@canonical.com>
- <73dafebf-5c47-5d90-e29e-e1811f370a54@kernel.org>
-In-Reply-To: <73dafebf-5c47-5d90-e29e-e1811f370a54@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 9 Mar 2021 16:19:38 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a36-6yjVLSdJiUWPEz0_i_DWbPasQ8RZWHyxth-4D62+w@mail.gmail.com>
-Message-ID: <CAK8P3a36-6yjVLSdJiUWPEz0_i_DWbPasQ8RZWHyxth-4D62+w@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: defconfig: enable Intel's eASIC N5X SoCFPGA and
- Keem Bay SoC
-To:     Dinh Nguyen <dinguyen@kernel.org>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23F83C433E9
+	for <soc@archiver.kernel.org>; Wed, 10 Mar 2021 08:33:34 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id DF57F65004; Wed, 10 Mar 2021 08:33:33 +0000 (UTC)
+Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 6B3E064FF4
+	for <soc@kernel.org>; Wed, 10 Mar 2021 08:33:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6B3E064FF4
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
+Received: from mail-wr1-f72.google.com ([209.85.221.72])
+	by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	(Exim 4.86_2)
+	(envelope-from <krzysztof.kozlowski@canonical.com>)
+	id 1lJuHb-0003GD-98
+	for soc@kernel.org; Wed, 10 Mar 2021 08:33:31 +0000
+Received: by mail-wr1-f72.google.com with SMTP id s10so7655118wre.0
+        for <soc@kernel.org>; Wed, 10 Mar 2021 00:33:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RZxvgYZhRwx3vtBKrExOY7yB1Rao/D3y6ddDmt53T8k=;
+        b=GFpkjn0MCGNHuJColZM9SMzf3x/HfRp4eBkOJdNwZrKVa5y76w3ZzW9xzHOO9B+3Fm
+         01hhAGeHua2DH/Tnh7WOWi+WdsKqlIVHul6AfhB8NjVhy/ufrRI5zp0tIuKDTEfY7Frh
+         VLuj8gM4wNPcbUEtge2Rb7eqXAJvp8UzHdSUaz/EjVXMk7G9Q6tFtt7ahXoWs+UKv0LD
+         /0J8XS3GjNfurNOLZ+gGKAxTfmkbcGXfn4QIxU8ym2xaGLVIedKpXBEY3Zl+Gf8I6NKM
+         9G8wclRnrupxTtN53dLE7xIWjWqeA3NvRvKJFNa55+C9UpXpFWi5cRS799IbqxDSKD40
+         PeQw==
+X-Gm-Message-State: AOAM533odrlHuroojY2oPHsX0XqgsWojYWc2PpEQJMywdzGH71FVc6Le
+	H28QKmp3iTWnVeBj2qROqAvyXCOW6GBaoShy+/84WBaisImJYXDtlfnuF48vpAiJK5KQ38cNYHT
+	PQaaHXzTyLlFbul0nUxKwLe8=
+X-Received: by 2002:a1c:f406:: with SMTP id z6mr2225379wma.24.1615365211049;
+        Wed, 10 Mar 2021 00:33:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx+uPRMBgFfoVCHx5kur24yVECBMZDDtyDQfyluEn8gAohH3gku3X1wAI4MIWrYIO0FNDk1jQ==
+X-Received: by 2002:a1c:f406:: with SMTP id z6mr2225348wma.24.1615365210807;
+        Wed, 10 Mar 2021 00:33:30 -0800 (PST)
+Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id m17sm28675495wrx.92.2021.03.10.00.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Mar 2021 00:33:30 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "Paul J. Murphy" <paul.j.murphy@intel.com>,
-        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:0VNQWv4CJMORYfYt384S4Cwbt/RyMCjriXy/gnf+9pzZTRQjku1
- sczWe+TvzeqhfJIKWv/mRywefscDgEutjIEKcxSMq52vWYDDFg0OELBcYu0HIuCQdrUju23
- NX/nRAiiatSNB/Cmn6kmwxx4C7aaQDlZrs0V3/hYdmcez5rgi/9vPYTicKkEyB++00avYkQ
- sb32KMH3TfEjFdU15Lq1g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:x44rUkFs4VI=:YhiqcnipD+ehvEIQeO2MU8
- AkumpthI3Lcz4Jk0tKamLpgHHjAmyKlU87gSD8UoH/7Ag4oedLtbUbF1M7uhxXcgL+rd3wi5W
- qLrbq5/0/Zqtr7/sVPxbBX8PixyEQnWNBX/Xzv+UOpb6pSOBTI09PzAQa5tuz2kyogEZMtk8m
- kuHKafjx4/fkaKR08aOHZ2gpKYzMwQoUTWGbGrTFtjH58IViEzXkLPyGgd2UzxNwlZQxK5SxJ
- Wu2LkUOpOi1xY5Ly1t8Sbk3enqxFf6Jegnz2gPwZi0ucPeTnzlpIuFhSI+RNw5NTqCuWSeY7R
- sGJ8B4PJVkKReQo2Nx+cMXc7mHv54MNY/meua/t6w//fgsuul1JfyVdSskQQ5ZYNXEEBD8Yiw
- s5OXbPUx8OGMhnm27uu1yc53B/7PlPedEZ5fGg/dB6SYvzz/r+vTkZpKkRX40tpIf1vRKfA6d
- K4N84QVt9lS4Fqq/upzHh2VZ573EhvzZdJii8wItKxrDzi4emj9TJD5jlraLLsg5aIFR2lTdC
- RHA4GknC6XLynf17Di6tDY8Wj4WFFGbPhDWMKFJdS8QoBLlsa0YIa9DOssA6mx4GA==
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20210309151938.hj1cUw8Tf5nIXpvPwMabOfSVm8dDArpNQMSY0P6OO30@z>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	Lee Jones <lee.jones@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-fpga@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	arm@kernel.org,
+	soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [RFC v2 0/5] arm64 / clk: socfpga: simplifying, cleanups and compile testing
+Date: Wed, 10 Mar 2021 09:33:22 +0100
+Message-Id: <20210310083327.480837-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 9, 2021 at 2:26 PM Dinh Nguyen <dinguyen@kernel.org> wrote:
-> On 3/9/21 3:29 AM, Krzysztof Kozlowski wrote:
-> > On 08/03/2021 20:07, Dinh Nguyen wrote:
-> >>> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> >>> index d612f633b771..9f9adcb8b0e9 100644
-> >>> --- a/arch/arm64/configs/defconfig
-> >>> +++ b/arch/arm64/configs/defconfig
-> >>> @@ -29,6 +29,7 @@ CONFIG_KALLSYMS_ALL=y
-> >>>    CONFIG_PROFILING=y
-> >>>    CONFIG_ARCH_ACTIONS=y
-> >>>    CONFIG_ARCH_AGILEX=y
-> >>> +CONFIG_ARCH_N5X=y
-> >>
-> >> I just submitted a patch for this as well. From the looks of the
-> >> defconfig file, it looks like the platforms are in alphabetical order,
-> >> but then I see that ARCH_SUNXI is not in it's correct spot if there is a
-> >> rule for keeping things in alphabetical order.
-> >>
-> >
-> > The rule is that order comes from savedefconfig, not alphabetical. This
-> > way you avoid reshuffling of symbols on any future savedefconfig.
-> >
->
-> Got it. But I've done savedefconfig in the past and Arnd adviced against
-> that because what if multiple patches come in with savedefconfig,
-> wouldn't that cause a messy merge?
+Hi,
 
-To clarify: you should not send the result of 'make savedefconfig'
-if it changes the contents of the file in another way, but Krzysztof's
-recommendation of adding new lines where savedefconfig would
-put them is best.
+All three Intel arm64 SoCFPGA architectures (Agilex, N5X and Stratix 10)
+are basically flavors/platforms of the same architecture.  At least from
+the Linux point of view.  Up to a point that N5X and Agilex share DTSI.
+Having three top-level architectures for the same one barely makes
+sense and complicates driver selection.
 
-        Arnd
+Try to unify them.
+
+Changes since v1:
+=================
+1. New patch 3/5: arm64: socfpga: rename ARCH_STRATIX10 to ARCH_SOCFPGA64
+2. New patch 4/5: arm64: intel: merge Agilex and N5X into ARCH_SOCFPGA64
+3. Fix build issue reported by kernel test robot (with ARCH_STRATIX10
+   and COMPILE_TEST but without selecting some of the clocks).
+
+I tested compile builds on few configurations, so I hope kbuild 0-day
+will check more options (please give it few days on the lists).
+
+Best regards,
+Krzysztof
+
+
+Krzysztof Kozlowski (5):
+  clk: socfpga: allow building N5X clocks with ARCH_N5X
+  clk: socfpga: build together Stratix 10, Agilex and N5X clock drivers
+  arm64: socfpga: rename ARCH_STRATIX10 to ARCH_SOCFPGA64
+  arm64: intel: merge Agilex and N5X into ARCH_SOCFPGA64
+  clk: socfpga: allow compile testing of Stratix 10 / Agilex clocks
+
+ arch/arm64/Kconfig.platforms                | 17 ++++-------------
+ arch/arm64/boot/dts/altera/Makefile         |  2 +-
+ arch/arm64/boot/dts/intel/Makefile          |  6 +++---
+ arch/arm64/configs/defconfig                |  3 +--
+ drivers/clk/Kconfig                         |  1 +
+ drivers/clk/Makefile                        |  4 +---
+ drivers/clk/socfpga/Kconfig                 | 17 +++++++++++++++++
+ drivers/clk/socfpga/Makefile                |  7 +++----
+ drivers/edac/Kconfig                        |  2 +-
+ drivers/edac/altera_edac.c                  | 10 +++++-----
+ drivers/firmware/Kconfig                    |  2 +-
+ drivers/fpga/Kconfig                        |  2 +-
+ drivers/mfd/Kconfig                         |  2 +-
+ drivers/net/ethernet/stmicro/stmmac/Kconfig |  4 ++--
+ drivers/reset/Kconfig                       |  2 +-
+ 15 files changed, 43 insertions(+), 38 deletions(-)
+ create mode 100644 drivers/clk/socfpga/Kconfig
+
+-- 
+2.25.1
+
