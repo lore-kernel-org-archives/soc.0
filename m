@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68975C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:31:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90CE7C433E6
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:35:05 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9297660233
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:31:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9297660233
+	by mail.kernel.org (Postfix) with ESMTPS id 8FD0764F46
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:35:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8FD0764F46
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,54 +23,54 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=+tw9qUjGQRQxzDz4qnd4ZTgvz7EJMmc8SZJS1C1h0oo=; b=BNco6VbjBbyJPpa17wMLJjnEL
-	IZCiDNr4fdmAZ3ADEdy7kMBmfT5Kq7zmMo7OJKLBM0ssrw/NW1F0k3Cp8yJbrfciBetrsxMTLdH2d
-	iU2nUtDoETK6yFfSwhtAbJDdEh7jEx2eu23bZi8FYfKhOFSRG9ZDE7HGQ+PIFkitq5IihItPusoJZ
-	qi4MMwzKbAlOh+EHulz5vU7SEv/zNxrOL9jowAgtJUi72cR2HlK1QQY+6/ssdvbMudVsOcNbjLRrj
-	UaEz1AwZnLJut/uWlX7jA5Wpr9tSdtmJRcJoQuJRuotPBdOo+rIKhBuW56HCtCKCyerqRDX5ziHBo
-	xSmV2cbFA==;
+	 bh=ZtcFk38mIxUGU6/CSmXBPfleYCzdnyEEPiMWLQPVjMs=; b=FT2pKvbwsUAhToqaoI4xjlzo3
+	dPfPZAbMrQbD7ycjmwmPdcM2A9QGltSRAIpxMFqm8zv/SzCYfY0AOzEh8CKuLbWLalg8FJiAatiLh
+	DlHmodSyC6YA3U2fBevyO2rbG/FaCBIHXSbiYK9EmaHVYKP4pNW4M0e7yfnmqiX416lASt+xUZhzw
+	ffjFsKeSq39YftZ8NEhdzAk9+5KFLGrNov9VghcGb68ou01jnHlUF0/069p7nAFyYtDelsjbnZyj+
+	RZJT3kmFO9r7ez3ipWa81EehwLWtI5bs9eWL6d2lOCuQ0w8kkctTDLVoUD0j2xpSEZV5562e5GMDX
+	PNsoKMQnQ==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lKNG2-009Rjj-D9; Thu, 11 Mar 2021 15:29:51 +0000
+	id 1lKNJX-009Smh-0M; Thu, 11 Mar 2021 15:33:27 +0000
 Received: from youngberry.canonical.com ([91.189.89.112])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lKNE7-009Qsb-IM
- for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 15:27:54 +0000
-Received: from mail-lj1-f199.google.com ([209.85.208.199])
+ id 1lKNJR-009SlM-0z
+ for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 15:33:22 +0000
+Received: from mail-lf1-f70.google.com ([209.85.167.70])
  by youngberry.canonical.com with esmtps
  (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128) (Exim 4.86_2)
  (envelope-from <krzysztof.kozlowski@canonical.com>)
- id 1lKNE7-0005mT-07
- for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 15:27:51 +0000
-Received: by mail-lj1-f199.google.com with SMTP id i26so8668701ljn.13
+ id 1lKNJQ-0006F1-HB
+ for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 15:33:20 +0000
+Received: by mail-lf1-f70.google.com with SMTP id p5so6856156lfo.9
  for <linux-arm-kernel@lists.infradead.org>;
- Thu, 11 Mar 2021 07:27:50 -0800 (PST)
+ Thu, 11 Mar 2021 07:33:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=lXB/iL6vA5+sCIUzf2o2vRh/ni0zGUa9h57FfrwufeA=;
- b=AU9ab5xPnj1M3wZaleUm/cW2HecctRLZYhnUfqriMKeDma7AMiR/hiqZJm9D+UpHbE
- DObD8IzluoGUNZB4ql8qR1JyCgCSghdjk3LLr4KrzeOZjGJMAsP92BKgGCUIhjHlsh8/
- WaAkDfIwF8xf+m9nhPLANZ0Xs5E6AKuWWe1Xiwn1plxWXLM9U/f6upPpHKH/dxYku+Pk
- Rp65lBobH5siWfec+z7cbpPz0EK9yY/1hjU+6F2IloHYsRUyYOhlnVKOdupY6WFnCbd+
- e81l0KQkpQsT4itQkZDHlsTD+8NWtHwB6EMVvti2ZHx7BA+6knj6KQhblawPAjhzhwzc
- zmWQ==
-X-Gm-Message-State: AOAM532usolns8bUICrRg2cMvNo/9vQAXKocphaFkz/p53aj+BnYpYiW
- xgByoLzx5uWF13Irdgu9nhimavspl83wk00s8y9bX9c8qEPYJk8cYzHT8HXbm+sKP08nU68CRh6
- zvR7UuLlLg96dfEG9HLUZ14WRlYfHDM8qoT9f+BpPIgRaNraq6dvG
-X-Received: by 2002:a17:906:753:: with SMTP id
- z19mr3596702ejb.447.1615476460420; 
- Thu, 11 Mar 2021 07:27:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwn2V3fXBoj0gUy8DLvmPZgdZVpI4oNbBPuRpgJS86sHTABegOHS6FeUR0VFJ6Dqnh8S7uUpw==
-X-Received: by 2002:a17:906:753:: with SMTP id
- z19mr3596661ejb.447.1615476460220; 
- Thu, 11 Mar 2021 07:27:40 -0800 (PST)
+ bh=UjkBHzEIXy3Qt0KfyB8W+UTqTimKf+/Z4F2P3MBYO1k=;
+ b=tzhLuR5KCA0qSCeEdhwpUoRpJJCBBVM+mAZQedhotxGuhZuGX78vZ8U6ZNraupkupR
+ LaNBY7/bmUNyH85OTtetFOiVH2R/LTtEj34IZ28WEAv55PBM0khPorkOB6u6PUwkHPU0
+ WfhM1n0ZGqjJbVwQ2xByoxhROPXOsCvScdIolVh/j0f9forWoPD3sBWIZb/J7mUqIX0u
+ fCTuacRT1qBgiA2D/BCVJHHk6pbesl99exjOfq/lPNtpCAi3g2VG24E23rgRXGRzZZQ2
+ 6gi/n3CxtOLFLZhQ05MrfGFXeEsEKaovgWE2+LHq9Y1uW8a+R3XrbWtC1WwF/AnZq/Ih
+ p9eg==
+X-Gm-Message-State: AOAM53148i66znWhY+vFE4S85hVH12qRDk6i21qhhmZRuSWewD0OD1tu
+ H/q7SwX6yvN+IjMqE2Fj7KLYSf42eI7mkQF1POMOteTjtkWO6D1N9FLHpe5kpfn9oAIleMtreJ4
+ RTsywnVM1FUeDYDdwKva9MFTB/Ni2YVqp46E27OdxZ+AiNpkqG0X2
+X-Received: by 2002:a05:6402:149:: with SMTP id
+ s9mr9105099edu.247.1615476453452; 
+ Thu, 11 Mar 2021 07:27:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy9JEFJOCs9xlVCDjG2l3JIb1sIqxzKP3KekIDHOJltUt18JZjWfClKITi/qC3i9sP0ViNxqQ==
+X-Received: by 2002:a05:6402:149:: with SMTP id
+ s9mr9105059edu.247.1615476453282; 
+ Thu, 11 Mar 2021 07:27:33 -0800 (PST)
 Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch.
  [84.226.167.205])
- by smtp.gmail.com with ESMTPSA id g1sm1497413edh.31.2021.03.11.07.27.39
+ by smtp.gmail.com with ESMTPSA id t15sm1552389edw.84.2021.03.11.07.27.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Mar 2021 07:27:39 -0800 (PST)
+ Thu, 11 Mar 2021 07:27:32 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
 To: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
@@ -93,17 +93,17 @@ To: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
  linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
  netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH v3 13/15] i2c: altera: use ARCH_INTEL_SOCFPGA also for 32-bit
- ARM SoCs
-Date: Thu, 11 Mar 2021 16:27:38 +0100
-Message-ID: <20210311152738.1318541-1-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v3 11/15] dmaengine: socfpga: use ARCH_INTEL_SOCFPGA also for
+ 32-bit ARM SoCs
+Date: Thu, 11 Mar 2021 16:27:31 +0100
+Message-ID: <20210311152731.1318428-1-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
 References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210311_152751_874990_1A769E78 
-X-CRM114-Status: GOOD (  17.60  )
+X-CRM114-CacheID: sfid-20210311_153321_109906_3F2EFA37 
+X-CRM114-Status: GOOD (  16.04  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -119,32 +119,29 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210311152738.uosAeMUFN_OLA01FZJqVPlvj4oM9SYkg-2ptJVU0YXw@z>
+Message-ID: <20210311152731.aDzlF2_EnwTUfG-YNTuaqM0ErovzdOmMMOIxvYr_H6M@z>
 
 ARCH_SOCFPGA is being renamed to ARCH_INTEL_SOCFPGA so adjust the
 32-bit ARM drivers to rely on new symbol.
 
-The side effect is that the I2C_ALTERA will now be available for both
-32-bit and 64-bit Intel SoCFPGA, even though it is used only for 32-bit.
-
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- drivers/i2c/busses/Kconfig | 2 +-
+ drivers/dma/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 05ebf7546e3f..3eec59f1fed3 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -369,7 +369,7 @@ comment "I2C system bus drivers (mostly embedded / system-on-chip)"
+diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
+index 0c2827fd8c19..a0836ffc22e0 100644
+--- a/drivers/dma/Kconfig
++++ b/drivers/dma/Kconfig
+@@ -100,7 +100,7 @@ config AT_XDMAC
  
- config I2C_ALTERA
- 	tristate "Altera Soft IP I2C"
--	depends on ARCH_SOCFPGA || NIOS2 || COMPILE_TEST
-+	depends on ARCH_INTEL_SOCFPGA || NIOS2 || COMPILE_TEST
- 	depends on OF
- 	help
- 	  If you say yes to this option, support will be included for the
+ config AXI_DMAC
+ 	tristate "Analog Devices AXI-DMAC DMA support"
+-	depends on MICROBLAZE || NIOS2 || ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_SOCFPGA || COMPILE_TEST
++	depends on MICROBLAZE || NIOS2 || ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA || COMPILE_TEST
+ 	select DMA_ENGINE
+ 	select DMA_VIRTUAL_CHANNELS
+ 	select REGMAP_MMIO
 -- 
 2.25.1
 
