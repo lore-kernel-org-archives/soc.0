@@ -1,30 +1,30 @@
-Return-Path: <SRS0=JLLq=IJ=arndb.de=arnd@kernel.org>
+Return-Path: <linux-edac-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E591CC433DB
-	for <soc@archiver.kernel.org>; Thu, 11 Mar 2021 09:15:12 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 97E1B64FB8; Thu, 11 Mar 2021 09:15:12 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9966A64E69;
-	Thu, 11 Mar 2021 09:15:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9966A64E69
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arnd@arndb.de
-Received: from mail-ot1-f43.google.com ([209.85.210.43]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MrQN5-1m7vJ60vSB-00oVJ9; Thu, 11 Mar 2021 10:15:07 +0100
-Received: by mail-ot1-f43.google.com with SMTP id t16so860419ott.3;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88371C433DB
+	for <linux-edac@archiver.kernel.org>; Thu, 11 Mar 2021 09:15:57 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 470D464FB0
+	for <linux-edac@archiver.kernel.org>; Thu, 11 Mar 2021 09:15:57 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S231804AbhCKJP0 (ORCPT <rfc822;linux-edac@archiver.kernel.org>);
+        Thu, 11 Mar 2021 04:15:26 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:36025 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231995AbhCKJPM (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 11 Mar 2021 04:15:12 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MFbFW-1lWvnJ0PaY-00H7e9; Thu, 11 Mar 2021 10:15:07 +0100
+Received: by mail-ot1-f53.google.com with SMTP id 75so854357otn.4;
         Thu, 11 Mar 2021 01:15:06 -0800 (PST)
-X-Gm-Message-State: AOAM533I95g3qKnJGpU2/swNr0GTQHyFDxiytcfzUNPZSP3OEhwVL+jz
-	e4tgxIFIkiaAIEJcQ6YuoB0efMjC+MzcQR1cDdw=
+X-Gm-Message-State: AOAM530eVF7rVrpAp1XLvQIrseRQla+swzeBKntkJBil4am9F6BNaHgT
+        /7lc/bi2WdFhGObsvTlTFukx3xklGp4XhWG4Fm0=
 X-Google-Smtp-Source: ABdhPJyn+biUFqeUpWbgYz+onSoY1lB5lZXnaVdOJ59ivfe6fWw6B/LYP9dm97k0WNF1I7ZVkGTZlALTwC9lFjwxZew=
 X-Received: by 2002:a05:6830:14c1:: with SMTP id t1mr6129948otq.305.1615454105254;
  Thu, 11 Mar 2021 01:15:05 -0800 (PST)
@@ -36,37 +36,47 @@ References: <20210310083327.480837-1-krzysztof.kozlowski@canonical.com>
  <52d0489f-0f77-76a2-3269-e3004c6b6c07@canonical.com> <ba2536a6-7c74-0cca-023f-cc6179950d37@canonical.com>
  <CAK8P3a1k7c5X5x=-_-=f=ACwY+uQQ8YEcAGXYfdTdSnqpo96sA@mail.gmail.com> <fb0d8ca3-ac46-f547-02b0-7f47ff8fff6b@canonical.com>
 In-Reply-To: <fb0d8ca3-ac46-f547-02b0-7f47ff8fff6b@canonical.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Thu, 11 Mar 2021 10:14:49 +0100
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 11 Mar 2021 10:14:49 +0100
 X-Gmail-Original-Message-ID: <CAK8P3a05VkttECKTgonxKCSjJR0W4V1TRrUYMydgUGywbCSCWQ@mail.gmail.com>
 Message-ID: <CAK8P3a05VkttECKTgonxKCSjJR0W4V1TRrUYMydgUGywbCSCWQ@mail.gmail.com>
 Subject: Re: [RFC v2 3/5] arm64: socfpga: rename ARCH_STRATIX10 to ARCH_SOCFPGA64
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Tom Rix <trix@redhat.com>, Lee Jones <lee.jones@linaro.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Moritz Fischer <mdf@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, DTML <devicetree@vger.kernel.org>, 
-	linux-clk <linux-clk@vger.kernel.org>, linux-edac@vger.kernel.org, 
-	linux-fpga@vger.kernel.org, Networking <netdev@vger.kernel.org>, 
-	linux-stm32@st-md-mailman.stormreply.com, arm-soc <arm@kernel.org>, 
-	SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>
+Cc:     Tom Rix <trix@redhat.com>, Lee Jones <lee.jones@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-edac@vger.kernel.org, linux-fpga@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com, arm-soc <arm@kernel.org>,
+        SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:QJkSDiV1wbCmdeUEnO+jqRlmB3Yhbfg9R08Abx3GOrE3sc4Bi/e
- +hBiHQhr18xcfmxVrHwsk+HgtGDc5qS3QCqyl5bfgoIxkcyoT3RHPQKCNT7zXTA4+Hv3GS2
- MqE6tnYVkUBQoSDsiDZhCBv8YVwzyMf+apBzx3cJ47igL6JPNCscgBHjbCkLjbSLzAots+s
- gUv423ZfVV2o3ecSfVQBg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:J4FEMRqtu/A=:GT/969kV8lASh5iPiCI1I6
- QCSRcAcyALiu9vGrk3P8QXTKfaDJXVrG7NMsWVuiCwlmbbXy33OP9LI/BthKD4kZiuTqZbqZO
- EmggUQwwOhAsbK02EJ52+CFQPPMX4gS7JBhcioODUka4qxXYn6Z4rO8U1GhbsOvImNL//gwmC
- /PsKkJK9g5CqRH5bwld+ejrBps2d8SyFa54fLz2UzP+sOFVxdyWvkFNkoFV39kpz35ok4K1AI
- 19Z1a3lEsZKAN0Pmg0dEWsdEGn9oDN9g/fqTQ++hFFn52zc6Le7rPG1UbCGF0jw+bka6r6vj2
- /Km8kyW6RXOLoI/+yArqutBcbl9cgX1JXqoS4NysXVpkC5UUJqZXVpOE7gifmfOUpl10Rrmu9
- pRdVRyBj+38jI6Y/6HaCLnVI785nFClc7y2nMihEMF53/w9dBsKYKTg8ErcqiS1T5WfcubVe4
- T9d6TjOvLqagXalplPlHkIYQj7elSGtEKWD224Ly1xIbkB1S1+fx1hdqyXUv8eRjsO5KRflIL
- TMLBtmV8iIbCReMC9E5pUWP30+GVtyOiI93MLShaEP0zx0VYRIcoCQXPsJT02ujKw==
+X-Provags-ID: V03:K1:8zSo19FEMGDxyiVQDBPRPGNk7oUpBJKvj23wAA3LeoGeGTVaVDe
+ tYcAtEWJuc6QF3xHchWKOFHw7SzdIyvsUGzwG5ZCAIbpfSiEs2I44sZv8Ig0uLr7MILLENl
+ cggEdUK03qWlQ/08UCGbvsKoo6DI2tigOl0tTfxiLh2W3CnAAeAKnlFxyt1SxNWb91t9oNT
+ f3uj0KvErM5ZZx+1XApng==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DHa3uyTr8Bg=:mYAf3HuyZSpvNDQzaYFPIa
+ LQ8jH4G5xwF5IsG18LSCUNEXu4cXgmL7HkSnx6t4Odmq50eV26cIJzOSX95EuRoTU568WFmVF
+ 6D6D2deAwUPjNAd5o/5141PGlP5tMgZPA3BihdFgV9Vw8oifzBng1y8RuPF4IX6cUvqY5NNbz
+ en5TQeAfMSBlKae749fUXQxsregl6IgMbfo+qesr2t5g5x2bCVIUzGqMysf6XNbekDVasEP3g
+ 6EXFmth3Dl/KzQzYt3UXUELR8LXIo7HFiARyafcLr85kuYQpClWDo5ZRL1uOd+ggzsJb/7YIE
+ CGe/BYpm/a3+KFbtnRLNP15PnpWixRxwkjNUvGXUaeCU9viIXWzITSL9ZLlZatpM1k3BK4VZp
+ gadboAk6GmkTmKrcXZfqvdunIX95jT0D0bli/LjuuMhmXSPV40LWZHonSaELFmzWfjcBHMIJ5
+ z3Fq8/5O8dgcvuQ3hGKZOMoL+YW/IWvOOEsxT4sU+CK9ihrHpjVf/eIrZ8h4RNFNvXWG6gPgJ
+ M+CdNro9r1nbTqwf74QTm4hvH8nIJCY5WcW0ZvCL+Ii/J7pF2RXZfOlA/V0c0xtqA==
+Precedence: bulk
+List-ID: <linux-edac.vger.kernel.org>
+X-Mailing-List: linux-edac@vger.kernel.org
+Message-ID: <20210311091449._HLhHmQQfU14PJAg71sbt69w-YIZxmuogvgx7QXJDBk@z>
 
 On Thu, Mar 11, 2021 at 8:08 AM Krzysztof Kozlowski
 <krzysztof.kozlowski@canonical.com> wrote:
