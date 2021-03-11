@@ -1,158 +1,219 @@
-Return-Path: <SRS0=Mioa=IJ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=0NYo=IJ=redhat.com=trix@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F65DC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:37:26 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FDCCC433DB
+	for <soc@archiver.kernel.org>; Thu, 11 Mar 2021 18:26:41 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id C0DF764FEF; Thu, 11 Mar 2021 18:26:40 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [63.128.21.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B6B6564F46
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:37:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B6B6564F46
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Type:
-	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
-	In-Reply-To:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date
-	:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=6CUYuLR0mV/4kjv144SIpbRnVS5sg53IDxiE7b11AIc=; b=djR/Ke+2VD0mCyQzvXdvQ1X6o
-	kUfYApJvkhJBn75G2v+yHF49B8HcjVabrlPxLHoBnXHt+KADQX95qYfR9+mAQ0sugycXZmykTdydN
-	VoT2N+ufQhdSTog6G4JOOiFshVTjTQxpFto03TSgwXcnIGVpCTWKMLdgaNb58oazP9HbO3sueKvA7
-	SHJkNvCz5xlEVnaGI+MZyARLwwLBCCc1dZ1ku/Hx3/1kxlNQSiVHUSK1y3vig9DVhUh5lkEq6GL/d
-	UXAmNSMuffZMX3LasPzM4JghvZryMQi597gzizI+kjWS6Aph+9PUkwDFiqQls/AFiqza64jah/WkD
-	caxV03KyQ==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lKNLk-009TL1-4c; Thu, 11 Mar 2021 15:35:44 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lKNLZ-009TIo-I7
- for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 15:35:39 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F214964F46;
- Thu, 11 Mar 2021 15:35:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1615476929;
- bh=zAgboUjHHYtSTApDhEwGuBzEumVnZm12d8hI44Sy55c=;
- h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
- b=Ke6tN8VnwcrLmL2Q2jUfC9ZA9s7EyGy3T54ZcGRmWIGRpDgIwLttVr6Ehce8IONoe
- xFb1SF7rEYR+atDV344GT0OHFUTDY35SXRhp7RczqKREG5yS2OzC+ZGFvjUJSbtHFv
- kOS2EJ7aJJdtCnT4cPC4/RTEEtOSoBUFxdepUD2Kv5SUmKZ6rPY3P412xnr7Btgc2Z
- vjE993D2QXRIBGCygPLXYpqXi7d8ABSoIyRyIlK+J9TZMHeJmqbOjk9V5VU8JvBRbt
- BTpzQJl8s4MyyjVjchocujVQYU/niPELw49UEURznPD8vVbFDtDG4M/7e4MWqurAHm
- EPHL/5qFywnWg==
-Date: Thu, 11 Mar 2021 16:35:25 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 6571E64FCE
+	for <soc@kernel.org>; Thu, 11 Mar 2021 18:26:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6571E64FCE
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=redhat.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=trix@redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1615487199;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7/wSGYLh9BUQ/m4VK2E3Iu8L1K7AWw+HwFDDXH/P7x4=;
+	b=Dt56iO4QJuJA+k3BrHjVi7X4akcMO+fRI3Op/0Vlc4YS1d0fSliXBiTt5M6YPh81npUeAo
+	DONzHVH3vUzM3i7Q/rhj6Wb86BvX9R713O30qm86eYnTVWaw712H2o2v2ckbvL/zzFODWg
+	NXs61CYptcr97lCFNI+HveKAq/RCz64=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-206-WqvYo4ywOgmYUwTEDUG41Q-1; Thu, 11 Mar 2021 13:26:37 -0500
+X-MC-Unique: WqvYo4ywOgmYUwTEDUG41Q-1
+Received: by mail-qk1-f199.google.com with SMTP id b78so16252028qkg.13
+        for <soc@kernel.org>; Thu, 11 Mar 2021 10:26:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=7/wSGYLh9BUQ/m4VK2E3Iu8L1K7AWw+HwFDDXH/P7x4=;
+        b=IbB82k3gspjFTFCTiv2b/O+Vz4IaJ9tQ9yPIM8dMCqdSReXce79+mAas9e1V1c0Yca
+         FxwxXR8LvpYGqRrIvbGCPnX7y1JUEzlIQuxdPKrsbfpPiYCbKBpE/OqVEtB+qoMZO3q1
+         OKQjC4p3FUn811TaH9yKda76s0t9sRBczUUoaXZT1QOyQIKHz9ItjSzXNUL9Apm47ctE
+         cvbWOdOgi3ErUFT/zCduk2usKfKw2dirdCwbzIK7sfZk4m0wLbZX8gNQXD0RurK5d1nj
+         QuDfelXNZHCApPelZg3N5AfgIBpcSme+u0bo9FJwopxTVFmMBJq8f0WU7qxNZCZ9Oswe
+         7Ykw==
+X-Gm-Message-State: AOAM530YL+u1izc61IMOocG5xRdiwpJqf5I2vegKRnG+0nzuexNcBfY3
+	Nx8HdP30K7tGSx4nlzcbXi0aOobpobKLd1hBY+z75qPe4car8GCnnXVF3UqbCXM3d/mUssU9HFE
+	nYhKn6Q==
+X-Received: by 2002:ac8:68d:: with SMTP id f13mr8512360qth.300.1615487197329;
+        Thu, 11 Mar 2021 10:26:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJykrRpLf1VdnWeXfJOmyNvXTcgKB/EbD8MxyP146EU0lCHJTfc5M6K1GGvBKnS5gI4cz7i4ig==
+X-Received: by 2002:ac8:68d:: with SMTP id f13mr8512326qth.300.1615487197076;
+        Thu, 11 Mar 2021 10:26:37 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id 77sm2571571qko.48.2021.03.11.10.26.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Mar 2021 10:26:36 -0800 (PST)
+Subject: Re: [PATCH v3 00/15] arm64 / clk: socfpga: simplifying, cleanups and
+ compile testing
 List-Id: <soc.lore.kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+ Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
  Olof Johansson <olof@lixom.net>, soc@kernel.org,
  Rob Herring <robh+dt@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
  Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
  James Morse <james.morse@arm.com>, Robert Richter <rric@kernel.org>,
- Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
- Lee Jones <lee.jones@linaro.org>,
+ Moritz Fischer <mdf@kernel.org>, Lee Jones <lee.jones@linaro.org>,
  Giuseppe Cavallaro <peppe.cavallaro@st.com>,
- Alexandre Torgue <alexandre.torgue@st.com>,
- Jose Abreu <joabreu@synopsys.com>, "David S. Miller" <davem@davemloft.net>,
+ Alexandre Torgue <alexandre.torgue@st.com>, Jose Abreu
+ <joabreu@synopsys.com>, "David S. Miller" <davem@davemloft.net>,
  Jakub Kicinski <kuba@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  dmaengine@vger.kernel.org, linux-edac@vger.kernel.org,
  linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
  netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v3 13/15] i2c: altera: use ARCH_INTEL_SOCFPGA also for
- 32-bit ARM SoCs
-Message-ID: <20210311153525.GI3566@ninjato>
 References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
- <20210311152738.1318541-1-krzysztof.kozlowski@canonical.com>
+From: Tom Rix <trix@redhat.com>
+Message-ID: <f0b90916-9047-d5da-5cde-75d4330cf041@redhat.com>
+Date: Thu, 11 Mar 2021 10:26:32 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-In-Reply-To: <20210311152738.1318541-1-krzysztof.kozlowski@canonical.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210311_153534_199962_B4146A00 
-X-CRM114-Status: GOOD (  13.14  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5328318395134103696=="
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210311153525.dpL5UU49N9xq_NqqiU6kNliCaKGXwM8yNAPSWsadYWQ@z>
+In-Reply-To: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 
 
---===============5328318395134103696==
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5uO961YFyoDlzFnP"
-Content-Disposition: inline
+On 3/11/21 7:25 AM, Krzysztof Kozlowski wrote:
+> Hi,
+>
+> All three Intel arm64 SoCFPGA architectures (Agilex, N5X and Stratix 10)
+> are basically flavors/platforms of the same architecture.  At least from
+> the Linux point of view.  Up to a point that N5X and Agilex share DTSI.
+> Having three top-level architectures for the same one barely makes
+> sense and complicates driver selection.
+>
+> Additionally it was pointed out that ARCH_SOCFPGA name is too generic.
+> There are other vendors making SoC+FPGA designs, so the name should be
+> changed to have real vendor (currently: Intel).
+>
+>
+> Dependencies / merging
+> ======================
+> 1. Patch 1 is used as base, so other changes depend on its hunks.
+>    I put it at beginning as it is something close to a fix, so candidate
+>    for stable (even though I did not mark it like that).
+> 2. Patch 2: everything depends on it.
+>
+> 3. 64-bit path:
+> 3a. Patches 3-7: depend on patch 2, from 64-bit point of view.
+> 3b. Patch 8: depends on 2-7 as it finally removes 64-bit ARCH_XXX
+>     symbols.
+>
+> 4. 32-bit path:
+> 4a. Patches 9-14: depend on 2, from 32-bit point of view.
+> 4b. Patch 15: depends on 9-14 as it finally removes 32-bit ARCH_SOCFPGA
+>     symbol.
+>
+> If the patches look good, proposed merging is via SoC tree (after
+> getting acks from everyone). Sharing immutable branches is also a way.
+>
+>
+> Changes since v2
+> ================
+> 1. Several new patches and changes.
+> 2. Rename ARCH_SOCFPGA to ARCH_INTEL_SOCFPGA on 32-bit and 64-bit.
+> 3. Enable compile testing of 32-bit socfpga clock drivers.
+> 4. Split changes per subsystems for easier review.
+> 5. I already received an ack from Lee Jones, but I did not add it as
+>    there was big refactoring.  Please kindly ack one more time if it
+>    looks good.
+>
+> Changes since v1
+> ================
+> 1. New patch 3: arm64: socfpga: rename ARCH_STRATIX10 to ARCH_SOCFPGA64.
+> 2. New patch 4: arm64: intel: merge Agilex and N5X into ARCH_SOCFPGA64.
+> 3. Fix build is.sue reported by kernel test robot (with ARCH_STRATIX10
+>    and COMPILE_TEST but without selecting some of the clocks).
+>
+>
+> RFT
+> ===
+> I tested compile builds on few configurations, so I hope kbuild 0-day
+> will check more options (please give it few days on the lists).
+> I compare the generated autoconf.h and found no issues.  Testing on real
+> hardware would be appreciated.
+>
+> Best regards,
+> Krzysztof
+>
+> Krzysztof Kozlowski (15):
+>   clk: socfpga: allow building N5X clocks with ARCH_N5X
+>   ARM: socfpga: introduce common ARCH_INTEL_SOCFPGA
+>   mfd: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
+>   net: stmmac: merge ARCH_SOCFPGA and ARCH_STRATIX10
+>   clk: socfpga: build together Stratix 10, Agilex and N5X clock drivers
+>   clk: socfpga: merge ARCH_SOCFPGA and ARCH_STRATIX10
+>   EDAC: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
+>   arm64: socfpga: merge Agilex and N5X into ARCH_INTEL_SOCFPGA
+>   clk: socfpga: allow compile testing of Stratix 10 / Agilex clocks
+>   clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and
+>     compile test)
+>   dmaengine: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+>   fpga: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+>   i2c: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+>   reset: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+>   ARM: socfpga: drop ARCH_SOCFPGA
+>
+>  arch/arm/Kconfig                            |  2 +-
+>  arch/arm/Kconfig.debug                      |  6 +++---
+>  arch/arm/Makefile                           |  2 +-
+>  arch/arm/boot/dts/Makefile                  |  2 +-
+>  arch/arm/configs/multi_v7_defconfig         |  2 +-
+>  arch/arm/configs/socfpga_defconfig          |  2 +-
+>  arch/arm/mach-socfpga/Kconfig               |  4 ++--
+>  arch/arm64/Kconfig.platforms                | 17 ++++-------------
+>  arch/arm64/boot/dts/altera/Makefile         |  2 +-
+>  arch/arm64/boot/dts/intel/Makefile          |  6 +++---
+>  arch/arm64/configs/defconfig                |  3 +--
+>  drivers/clk/Kconfig                         |  1 +
+>  drivers/clk/Makefile                        |  4 +---
+>  drivers/clk/socfpga/Kconfig                 | 19 +++++++++++++++++++
+>  drivers/clk/socfpga/Makefile                | 11 +++++------
+>  drivers/dma/Kconfig                         |  2 +-
+>  drivers/edac/Kconfig                        |  2 +-
+>  drivers/edac/altera_edac.c                  | 17 +++++++++++------
+>  drivers/firmware/Kconfig                    |  2 +-
+>  drivers/fpga/Kconfig                        |  8 ++++----
+>  drivers/i2c/busses/Kconfig                  |  2 +-
+>  drivers/mfd/Kconfig                         |  4 ++--
+>  drivers/net/ethernet/stmicro/stmmac/Kconfig |  4 ++--
+>  drivers/reset/Kconfig                       |  6 +++---
+>  24 files changed, 71 insertions(+), 59 deletions(-)
+>  create mode 100644 drivers/clk/socfpga/Kconfig
+>
+Thanks for changing the config name.
 
+Please review checkpatch --strict on this set, the typical complaint is
 
---5uO961YFyoDlzFnP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and compile test)    
+WARNING: please write a paragraph that describes the config symbol fully
+#35: FILE: drivers/clk/socfpg/Kconfig:11:                       
++config CLK_INTEL_SOCFPGA32
 
-On Thu, Mar 11, 2021 at 04:27:38PM +0100, Krzysztof Kozlowski wrote:
-> ARCH_SOCFPGA is being renamed to ARCH_INTEL_SOCFPGA so adjust the
-> 32-bit ARM drivers to rely on new symbol.
->=20
-> The side effect is that the I2C_ALTERA will now be available for both
-> 32-bit and 64-bit Intel SoCFPGA, even though it is used only for 32-bit.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-Acked-by: Wolfram Sang <wsa@kernel.org>
-
-
---5uO961YFyoDlzFnP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBKOLkACgkQFA3kzBSg
-KbbZ/w/9GRR5AjuL/bna/Vk8wI5mY1iTWUuqDmvXapF1EgH2dIRC1PQbIpNEndNW
-xqCH2kRbwlPINKD0E+N99R+T/wsk2qMu5hSkl+IQHHRzuF9ZeThFUnJCDzUF0UMS
-WoMTLrYyl1/ei2jJHzvbC5mmsOg3ckJA3c/wI9oATNu8yHQ5ptkYGBYPzh8IcPQS
-Z3WMvWz6Ir4NBpy68lJ0EPW5/mgLdBGI+6/JRNh+8CABa9IU/eZsHxWVj4fOE92W
-Eao/3P9oVGI+fcNxIp0oMrWFkw0emhGlcS+XyiKtvHhBlvmlkeenrOYU3ARDllNj
-Lv+Lrp0fT7H6kTUcJEAzLAza8h6v94J9KOdRR0Ll1sBALSv7OA5HHNgmfutZpWSs
-grYmZqs34BbSr8NGOdU90f02peBMLDYt4kiV7OtbjhSnV71xI1F6dyQCLaFEXAz7
-J/AAKzgBbFTtO1wtE3jwSeBGSSc7QeuKyPAERwFWjN2f2J37/bC/R6c/AxAmCNXi
-+jcMDrOwQWlbaYFYQLo75tdowmM1LrEmptykTH0dWpDx2RXdmsSz6VGamqHdfTM3
-FJ/VRIuqVu20LB55FSNLCxmwxnTVvv/OcnDwMAYDlQIYMsFigLTBWFNtRVmvGNPK
-WHUoXN5NBygSwkUPKGDji5EAKyZBa/QMW3C9Nn1aU4MXlAFKZFk=
-=53ZM
------END PGP SIGNATURE-----
-
---5uO961YFyoDlzFnP--
-
-
---===============5328318395134103696==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
---===============5328318395134103696==--
+Tom
 
