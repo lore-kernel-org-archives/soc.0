@@ -5,16 +5,16 @@ X-Spam-Level:
 X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D62CC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:29:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6223C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:29:47 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2E5DF60233
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:29:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2E5DF60233
+	by mail.kernel.org (Postfix) with ESMTPS id 0C44B64DF5
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:29:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0C44B64DF5
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,54 +23,54 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=0HdhRJdVZqisFYnccSkviQoMUBwYFhpy3AUfPULtRtI=; b=dH+M6W+WkvusMqyOOwixfdfGj
-	nf9YclJ66NFY04YhxK110TpAy/f+n+VnZq3SAL0bbd5t4ETCmD7m/Aq45A0jbW46CQxil3NRgnrup
-	nEs7l8nBU/91xSToeGaq+6ruR25AMkvpJR7tTxuqOPkXXH/XCnshH5FsaiWRcOOCK8d4h/8yxgOwb
-	VjsZRMQHLglPeYHEXICXaue9XWrRHOQLc+PjLWBEC8rci5UJHXOcvRfZw3QCHDDGIC86zp9xLNytx
-	/DSaNFj/Ius05gIB5F8nGVY1fjhm2btQ3641De5vTjxshlFpId8TAnvWpb/ozUmLu0KcMF4nsOkZq
-	BmzOCbbxg==;
+	 bh=qvbQRspZ6tlxguI0CEPOYyKxjIA828Yscc34ARpHQEk=; b=c6gi0EM3u2xIYv3QIrbGHGgp+
+	VWOHG7bLiOeE3yBRFxCQ7QximMiItvuegkUJVP68u8WIGWxLpE6aFES13BwwbWEqraghhB5H65mwT
+	Ubg+hNu5jLz9odFz54BGhpWr0yjvEMfCVtI6Ophkl3eqS42b9rg6H+qi5oQQP8jkyrVbfbjo1CC8h
+	+AAjR9KFsUzVmG/7enbM+Ivo9GdXdCdHt8lWoCnu/1IcZBxuAg/eiz5VMJlJMPw3rJTqO3egomJ3j
+	WjFvaEXASCXpFtQBkJ5LqqqMU/jSH88VpGHcio5SZk103aHT/5Yg6L2o+4Sxio7S2mhDhHDjbQLD+
+	tJRxDyTMQ==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lKNDv-009Qmn-4l; Thu, 11 Mar 2021 15:27:39 +0000
+	id 1lKNEA-009Qt1-57; Thu, 11 Mar 2021 15:27:54 +0000
 Received: from youngberry.canonical.com ([91.189.89.112])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lKNDW-009Qa9-Cl
+ id 1lKNDX-009QaA-7E
  for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 15:27:18 +0000
-Received: from mail-ej1-f70.google.com ([209.85.218.70])
+Received: from mail-ed1-f71.google.com ([209.85.208.71])
  by youngberry.canonical.com with esmtps
  (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128) (Exim 4.86_2)
  (envelope-from <krzysztof.kozlowski@canonical.com>)
- id 1lKNDV-0005Qc-VI
- for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 15:27:14 +0000
-Received: by mail-ej1-f70.google.com with SMTP id gn30so8762425ejc.3
+ id 1lKNCJ-0004tK-Kc
+ for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 15:25:59 +0000
+Received: by mail-ed1-f71.google.com with SMTP id u2so10021817edj.20
  for <linux-arm-kernel@lists.infradead.org>;
- Thu, 11 Mar 2021 07:27:13 -0800 (PST)
+ Thu, 11 Mar 2021 07:25:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=cIj5BtBwg8JC7nZHxIeVIntDKYdsgLPXWA5tG6HI5Ss=;
- b=Fk7vTxL1wVwwnb2xFFhgpia0IjgS/sAJphrHCee0KQ7wYGeacHJz7g27DCT8/DOJY9
- sQKP+tlsaewcCieSp3nkkE8X9xZ2g7Y31SwZFng3eu+iq2PYAWpwkZ8UezBhZqIh3x0y
- sG/oo9e+cfjDGsviSisBz3IUwTFf7mJMIxJ9aSu6RrA12NNVC5J+j47qgUx24cp2KZIm
- AgYd3xDomnedanakrqW6b+1FTqXMIzPNiw4welMFBTbKIvud1ZY9OHkTRSIRpf8RWiZj
- SQt8Fl/YpC35Lj5LjyHKFIfE6Z8cxqcbo6sb/uOiLx99jN0VzmU19cBz2XdrsM26Mq5o
- tidg==
-X-Gm-Message-State: AOAM532GhInwlmM/KqoonIqatvnEUOWIRw3lONyJuqcNgY++z0hMBy4V
- FojABa8UPZLtmcUKjJe9kP+Miw3dl1ieiXBFoJXl4qpjEjuf14YN3HBmZO2q43y0WRFMbwLfkGG
- pKSpY4FW2vNCH7vsVp/3ZSOEPDDn8xqDxfeNa1cHt8i2Ej99Y3/na
-X-Received: by 2002:a17:906:4150:: with SMTP id
- l16mr3692154ejk.90.1615476432202; 
- Thu, 11 Mar 2021 07:27:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzJ7WD9YIospDnRGiimdfWoLZHOrOz423wxHgF5hcMLCaCtoxrFxNCxImfeln4ju9bNe30G5A==
-X-Received: by 2002:a17:906:4150:: with SMTP id
- l16mr3692120ejk.90.1615476431970; 
- Thu, 11 Mar 2021 07:27:11 -0800 (PST)
+ bh=kUT7ytcjB6VCPdAxIBqG0E5rhLsqE5uC2TbGUeGX+rU=;
+ b=qXA/0KReMz+IDXT50NE3xlclPZuwUU2MwBhcg79UIxa9C9sW/vZMz5QIodJBaz3jkq
+ +FSiKNAIGopNal1GKWdK0KbR6RLib5Xr+dzsEPVJ+yhLWD2EZFL1xh0AuiRGpNzmhjt8
+ 78CRJjTrk2G/AlXyUG+zuwo7tbH6FAuK8rZrCosA3yTaTN9xPJGUslQZbIHvQn/B2h1Y
+ HI6I6TpI9wswRm+vR5Hxenzzyf6ozCZ58l51qndexwSRIRD0mpVOwf6CrVXXbUb10ETV
+ fuokMof3P7gBygWnSHNzcHJJEVnuhRDoPv29TtMFfe4gHNLrnT8RtuV9iyLusW9yZCBg
+ a9ow==
+X-Gm-Message-State: AOAM532N9UMKyhC6+EhQuPBw0uQGPQUS++AJHutjVtrnnUcFFcxwBSI5
+ K+UmFzFFyLODZjZWhScURynJBOW8AqaAS+v7zSjdQNMbKjg1AqTCB9URtn/jX5VXZUppQRdgey3
+ bV9V1DQl1TZpLrsAmLIFGmjnXvzgD8L3ICEOFu4+P/SNUu4ul7Pmo
+X-Received: by 2002:a17:906:894:: with SMTP id
+ n20mr3550518eje.57.1615476359044; 
+ Thu, 11 Mar 2021 07:25:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzewwKul+qByKNtSAFVbtVEtU+PJVW0lvuxaGwwO1QNpVsWLj92RBZH/7UiX/uUZip32n7cVA==
+X-Received: by 2002:a17:906:894:: with SMTP id
+ n20mr3550472eje.57.1615476358839; 
+ Thu, 11 Mar 2021 07:25:58 -0800 (PST)
 Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch.
  [84.226.167.205])
- by smtp.gmail.com with ESMTPSA id y12sm1473148ejb.104.2021.03.11.07.27.11
+ by smtp.gmail.com with ESMTPSA id v25sm1517826edr.18.2021.03.11.07.25.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Mar 2021 07:27:11 -0800 (PST)
+ Thu, 11 Mar 2021 07:25:58 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
 To: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
@@ -93,17 +93,16 @@ To: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
  linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
  netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH v3 09/15] clk: socfpga: allow compile testing of Stratix 10 /
- Agilex clocks
-Date: Thu, 11 Mar 2021 16:27:07 +0100
-Message-ID: <20210311152707.1317791-1-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v3 07/15] EDAC: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
+Date: Thu, 11 Mar 2021 16:25:37 +0100
+Message-ID: <20210311152545.1317581-8-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
 References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210311_152716_031202_1C3D3E00 
-X-CRM114-Status: GOOD (  16.38  )
+X-CRM114-CacheID: sfid-20210311_152716_035529_D9F1A885 
+X-CRM114-Status: GOOD (  19.07  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -119,54 +118,88 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210311152707.cO-eBOBPC5eyZbMT_VA5ZELqw6FwTc4udFu2XoVDjEs@z>
+Message-ID: <20210311152537.F_qfPRYf4AOwxYR55egbNm2kLViBYp_pWmd9Blg6aXs@z>
 
-The Stratix 10 / Agilex / N5X clocks do not use anything other than OF
-or COMMON_CLK so they should be compile testable on most of the
-platforms.
+Simplify 32-bit and 64-bit Intel SoCFPGA Kconfig options by having only
+one for both of them.  This the common practice for other platforms.
+Additionally, the ARCH_SOCFPGA is too generic as SoCFPGA designs come
+from multiple vendors.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- drivers/clk/Makefile        |  2 +-
- drivers/clk/socfpga/Kconfig | 15 ++++++++++++---
- 2 files changed, 13 insertions(+), 4 deletions(-)
+ drivers/edac/Kconfig       |  2 +-
+ drivers/edac/altera_edac.c | 17 +++++++++++------
+ 2 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index 96802294d35a..9b582b3fca34 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -104,7 +104,7 @@ obj-y					+= renesas/
- obj-$(CONFIG_ARCH_ROCKCHIP)		+= rockchip/
- obj-$(CONFIG_COMMON_CLK_SAMSUNG)	+= samsung/
- obj-$(CONFIG_CLK_SIFIVE)		+= sifive/
--obj-$(CONFIG_ARCH_INTEL_SOCFPGA)	+= socfpga/
-+obj-y					+= socfpga/
- obj-$(CONFIG_PLAT_SPEAR)		+= spear/
- obj-y					+= sprd/
- obj-$(CONFIG_ARCH_STI)			+= st/
-diff --git a/drivers/clk/socfpga/Kconfig b/drivers/clk/socfpga/Kconfig
-index b6c5b9737174..b62ede8cad01 100644
---- a/drivers/clk/socfpga/Kconfig
-+++ b/drivers/clk/socfpga/Kconfig
-@@ -1,6 +1,15 @@
- # SPDX-License-Identifier: GPL-2.0
-+config CLK_INTEL_SOCFPGA
-+	bool "Intel SoCFPGA family clock support" if COMPILE_TEST && !ARCH_INTEL_SOCFPGA
-+	default ARCH_INTEL_SOCFPGA
-+	help
-+	  Support for the clock controllers present on Intel SoCFPGA and eASIC
-+	  devices like Stratix 10, Agilex and N5X eASIC.
-+
-+if CLK_INTEL_SOCFPGA
-+
- config CLK_INTEL_SOCFPGA64
--	bool
--	# Intel Stratix / Agilex / N5X clock controller support
-+	bool "Intel Stratix / Agilex / N5X clock controller support" if COMPILE_TEST && (!ARM64 || !ARCH_INTEL_SOCFPGA)
- 	default ARM64 && ARCH_INTEL_SOCFPGA
--	depends on ARM64 && ARCH_INTEL_SOCFPGA
-+
-+endif # CLK_INTEL_SOCFPGA
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index 27d0c4cdc58d..1e836e320edd 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+@@ -396,7 +396,7 @@ config EDAC_THUNDERX
+ 
+ config EDAC_ALTERA
+ 	bool "Altera SOCFPGA ECC"
+-	depends on EDAC=y && (ARCH_SOCFPGA || ARCH_STRATIX10)
++	depends on EDAC=y && ARCH_INTEL_SOCFPGA
+ 	help
+ 	  Support for error detection and correction on the
+ 	  Altera SOCs. This is the global enable for the
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index e91cf1147a4e..5f7fd79ec82f 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -1501,8 +1501,13 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
+ 	dci->mod_name = ecc_name;
+ 	dci->dev_name = ecc_name;
+ 
+-	/* Update the PortB IRQs - A10 has 4, S10 has 2, Index accordingly */
+-#ifdef CONFIG_ARCH_STRATIX10
++	/*
++	 * Update the PortB IRQs - A10 has 4, S10 has 2, Index accordingly
++	 *
++	 * FIXME: Instead of ifdefs with different architectures the driver
++	 *        should properly use compatibles.
++	 */
++#ifdef CONFIG_64BIT
+ 	altdev->sb_irq = irq_of_parse_and_map(np, 1);
+ #else
+ 	altdev->sb_irq = irq_of_parse_and_map(np, 2);
+@@ -1521,7 +1526,7 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
+ 		goto err_release_group_1;
+ 	}
+ 
+-#ifdef CONFIG_ARCH_STRATIX10
++#ifdef CONFIG_64BIT
+ 	/* Use IRQ to determine SError origin instead of assigning IRQ */
+ 	rc = of_property_read_u32_index(np, "interrupts", 1, &altdev->db_irq);
+ 	if (rc) {
+@@ -1931,7 +1936,7 @@ static int altr_edac_a10_device_add(struct altr_arria10_edac *edac,
+ 		goto err_release_group1;
+ 	}
+ 
+-#ifdef CONFIG_ARCH_STRATIX10
++#ifdef CONFIG_64BIT
+ 	/* Use IRQ to determine SError origin instead of assigning IRQ */
+ 	rc = of_property_read_u32_index(np, "interrupts", 0, &altdev->db_irq);
+ 	if (rc) {
+@@ -2016,7 +2021,7 @@ static const struct irq_domain_ops a10_eccmgr_ic_ops = {
+ /************** Stratix 10 EDAC Double Bit Error Handler ************/
+ #define to_a10edac(p, m) container_of(p, struct altr_arria10_edac, m)
+ 
+-#ifdef CONFIG_ARCH_STRATIX10
++#ifdef CONFIG_64BIT
+ /* panic routine issues reboot on non-zero panic_timeout */
+ extern int panic_timeout;
+ 
+@@ -2109,7 +2114,7 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
+ 					 altr_edac_a10_irq_handler,
+ 					 edac);
+ 
+-#ifdef CONFIG_ARCH_STRATIX10
++#ifdef CONFIG_64BIT
+ 	{
+ 		int dberror, err_addr;
+ 
 -- 
 2.25.1
 
