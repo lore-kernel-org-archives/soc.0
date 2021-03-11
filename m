@@ -1,91 +1,205 @@
-Return-Path: <SRS0=XWxL=IJ=foss.st.com=patrice.chotard@kernel.org>
+Return-Path: <SRS0=tCWR=IJ=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A316C433E0
-	for <soc@archiver.kernel.org>; Thu, 11 Mar 2021 15:24:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9D11C433E0
+	for <soc@archiver.kernel.org>; Thu, 11 Mar 2021 15:25:54 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id EEF9664FAB; Thu, 11 Mar 2021 15:24:44 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 9D67964FF5; Thu, 11 Mar 2021 15:25:54 +0000 (UTC)
+Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 497C164FA6
-	for <soc@kernel.org>; Thu, 11 Mar 2021 15:24:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 497C164FA6
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=patrice.chotard@foss.st.com
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12BF74Zo011771;
-	Thu, 11 Mar 2021 16:24:41 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=v+c1CwgHEdj0dQK0n2xQKNTW00bhBAc+aNy3B1sUE1s=;
- b=BTfNMr9l0h2mjKOtsPNeZvKzT9gD4Tbjdy1JwpBUA+fpqsNPkFqQ4o6xqz+R91HSKM5T
- D3AS4A6EDBLG7Zcsw8sBAgyAthYFWMFEFmc6N41VfPOclbZavZ5IOfj8GugLHoOFYb9r
- 10q7Bo4AGBAsJWr32ff9BwooKnUDANoeh2X27zK/stZXzfrXxVPMWi0E40q5twQj5EXz
- GcG4FhAMvmPHE8JnWyVnU9QYWDLK/csq+ScpQ8xNYJdsIGncf3lQaC8FNJMpKIeLJlwv
- Tvx50fUL9KScYPd8l9WeHyeNkndcLPgLMQlOSFTWlobfbXuJJiWOixur/GkVw/W5/bko Qg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com with ESMTP id 3740377k8q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Mar 2021 16:24:41 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E0E9410002A;
-	Thu, 11 Mar 2021 16:24:40 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D7D4B24CFD6;
-	Thu, 11 Mar 2021 16:24:40 +0100 (CET)
-Received: from lmecxl0573.lme.st.com (10.75.127.51) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 11 Mar
- 2021 16:24:40 +0100
-Subject: Re: [RESEND PATCH 0/3] MAINTAINERS: update STMicroelectronics email
+	by mail.kernel.org (Postfix) with ESMTPS id 0279764FAB
+	for <soc@kernel.org>; Thu, 11 Mar 2021 15:25:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0279764FAB
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
+Received: from mail-ed1-f69.google.com ([209.85.208.69])
+	by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	(Exim 4.86_2)
+	(envelope-from <krzysztof.kozlowski@canonical.com>)
+	id 1lKNCB-0004jY-Ik
+	for soc@kernel.org; Thu, 11 Mar 2021 15:25:51 +0000
+Received: by mail-ed1-f69.google.com with SMTP id n20so10108183edr.8
+        for <soc@kernel.org>; Thu, 11 Mar 2021 07:25:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HH1upFGS1oxbv+vQ09D6VKarsXku0IAuIjEmvH7R4Kk=;
+        b=kyY5T0kLzhpmiKEUfwKSfuiTkO4Hm26XV4Se9eV8zkqp3bxouB1wELIIK2OwwWvXN6
+         NCTcr9sUi1nu8PlxZU/MJeNlSYHaVha/ZZWOLvGBYPHmNdQJKKrEEUlI0n22jwY+0SrQ
+         WwQHDxNV/nE5K7i1I6TwxBAeHtFqkLCRvEEfCcjFUdpYNq4ffYZCRXMoSQ2xdpgL9CZR
+         DQNRzGeOYtpwSfDRHh9UHqWKLkyyVUGw+IMEL/LTOG84Qsv/JS28eGXM/fPebOD47QZA
+         YLxQbKt6iad8MbZj9XJDMq/fy136BDdaW98shgPgAiFrMbReQmHg9iiqEiJznL1baK+2
+         eITQ==
+X-Gm-Message-State: AOAM530+cMivWyWYiYBBiibxRoJBAE2N1IGQuifuvjb7WO/CgNS+nEYt
+	UcJaLl23REdWEkpDM1nOKiia5DCjQg0G/pnu1cQH1frP82/ZVU+R0KJzk683QsyO+Cpwz9X1DsO
+	y405nF4LivzFrqPPOZ4PBTeI=
+X-Received: by 2002:a17:906:4f8a:: with SMTP id o10mr3653358eju.484.1615476351099;
+        Thu, 11 Mar 2021 07:25:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwl4COb3xR5+Ql8luerMFoHdUQmjQDr8WhPDVtBN8ZjQzZ5RdBWXObNPvxwoLN6Q/QH+U5+ow==
+X-Received: by 2002:a17:906:4f8a:: with SMTP id o10mr3653311eju.484.1615476350782;
+        Thu, 11 Mar 2021 07:25:50 -0800 (PST)
+Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id v25sm1517826edr.18.2021.03.11.07.25.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Mar 2021 07:25:50 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: <linux-kernel@vger.kernel.org>, <soc@kernel.org>
-CC: <linux-stm32@st-md-mailman.stormreply.com>
-References: <20210216074929.29033-1-patrice.chotard@foss.st.com>
-From: Patrice CHOTARD <patrice.chotard@foss.st.com>
-Message-ID: <1cd91834-6df8-a655-a3b1-0e16f5fe470d@foss.st.com>
-Date: Thu, 11 Mar 2021 16:24:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To: Russell King <linux@armlinux.org.uk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Robert Richter <rric@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	Lee Jones <lee.jones@linaro.org>,
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+	Alexandre Torgue <alexandre.torgue@st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-fpga@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v3 00/15] arm64 / clk: socfpga: simplifying, cleanups and compile testing
+Date: Thu, 11 Mar 2021 16:25:30 +0100
+Message-Id: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210216074929.29033-1-patrice.chotard@foss.st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-11_05:2021-03-10,2021-03-11 signatures=0
+Content-Transfer-Encoding: 8bit
 
-Hi 
+Hi,
 
-It's just a gentle reminder to not forgot this series.
+All three Intel arm64 SoCFPGA architectures (Agilex, N5X and Stratix 10)
+are basically flavors/platforms of the same architecture.  At least from
+the Linux point of view.  Up to a point that N5X and Agilex share DTSI.
+Having three top-level architectures for the same one barely makes
+sense and complicates driver selection.
 
-Thanks
+Additionally it was pointed out that ARCH_SOCFPGA name is too generic.
+There are other vendors making SoC+FPGA designs, so the name should be
+changed to have real vendor (currently: Intel).
 
-Patrice
 
-On 2/16/21 8:49 AM, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
-> 
-> This series:
->   _ Update st.com to foss.st.com email for some maintainers.
->   _ Remove Vincent Abriou as STI/STM DRM driver
->   _ Add Alain Volmat as STM32 I2C/SMBUS driver maintainer
-> 
-> Patrice Chotard (3):
->   MAINTAINERS: Update some st.com email addresses to foss.st.com
->   MAINTAINERS: Remove Vincent Abriou for STM/STI DRM drivers.
->   MAINTAINERS: Add Alain Volmat as STM32 I2C/SMBUS maintainer
-> 
->  MAINTAINERS | 31 +++++++++++++++----------------
->  1 file changed, 15 insertions(+), 16 deletions(-)
-> 
+Dependencies / merging
+======================
+1. Patch 1 is used as base, so other changes depend on its hunks.
+   I put it at beginning as it is something close to a fix, so candidate
+   for stable (even though I did not mark it like that).
+2. Patch 2: everything depends on it.
+
+3. 64-bit path:
+3a. Patches 3-7: depend on patch 2, from 64-bit point of view.
+3b. Patch 8: depends on 2-7 as it finally removes 64-bit ARCH_XXX
+    symbols.
+
+4. 32-bit path:
+4a. Patches 9-14: depend on 2, from 32-bit point of view.
+4b. Patch 15: depends on 9-14 as it finally removes 32-bit ARCH_SOCFPGA
+    symbol.
+
+If the patches look good, proposed merging is via SoC tree (after
+getting acks from everyone). Sharing immutable branches is also a way.
+
+
+Changes since v2
+================
+1. Several new patches and changes.
+2. Rename ARCH_SOCFPGA to ARCH_INTEL_SOCFPGA on 32-bit and 64-bit.
+3. Enable compile testing of 32-bit socfpga clock drivers.
+4. Split changes per subsystems for easier review.
+5. I already received an ack from Lee Jones, but I did not add it as
+   there was big refactoring.  Please kindly ack one more time if it
+   looks good.
+
+Changes since v1
+================
+1. New patch 3: arm64: socfpga: rename ARCH_STRATIX10 to ARCH_SOCFPGA64.
+2. New patch 4: arm64: intel: merge Agilex and N5X into ARCH_SOCFPGA64.
+3. Fix build is.sue reported by kernel test robot (with ARCH_STRATIX10
+   and COMPILE_TEST but without selecting some of the clocks).
+
+
+RFT
+===
+I tested compile builds on few configurations, so I hope kbuild 0-day
+will check more options (please give it few days on the lists).
+I compare the generated autoconf.h and found no issues.  Testing on real
+hardware would be appreciated.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (15):
+  clk: socfpga: allow building N5X clocks with ARCH_N5X
+  ARM: socfpga: introduce common ARCH_INTEL_SOCFPGA
+  mfd: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
+  net: stmmac: merge ARCH_SOCFPGA and ARCH_STRATIX10
+  clk: socfpga: build together Stratix 10, Agilex and N5X clock drivers
+  clk: socfpga: merge ARCH_SOCFPGA and ARCH_STRATIX10
+  EDAC: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
+  arm64: socfpga: merge Agilex and N5X into ARCH_INTEL_SOCFPGA
+  clk: socfpga: allow compile testing of Stratix 10 / Agilex clocks
+  clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and
+    compile test)
+  dmaengine: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+  fpga: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+  i2c: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+  reset: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+  ARM: socfpga: drop ARCH_SOCFPGA
+
+ arch/arm/Kconfig                            |  2 +-
+ arch/arm/Kconfig.debug                      |  6 +++---
+ arch/arm/Makefile                           |  2 +-
+ arch/arm/boot/dts/Makefile                  |  2 +-
+ arch/arm/configs/multi_v7_defconfig         |  2 +-
+ arch/arm/configs/socfpga_defconfig          |  2 +-
+ arch/arm/mach-socfpga/Kconfig               |  4 ++--
+ arch/arm64/Kconfig.platforms                | 17 ++++-------------
+ arch/arm64/boot/dts/altera/Makefile         |  2 +-
+ arch/arm64/boot/dts/intel/Makefile          |  6 +++---
+ arch/arm64/configs/defconfig                |  3 +--
+ drivers/clk/Kconfig                         |  1 +
+ drivers/clk/Makefile                        |  4 +---
+ drivers/clk/socfpga/Kconfig                 | 19 +++++++++++++++++++
+ drivers/clk/socfpga/Makefile                | 11 +++++------
+ drivers/dma/Kconfig                         |  2 +-
+ drivers/edac/Kconfig                        |  2 +-
+ drivers/edac/altera_edac.c                  | 17 +++++++++++------
+ drivers/firmware/Kconfig                    |  2 +-
+ drivers/fpga/Kconfig                        |  8 ++++----
+ drivers/i2c/busses/Kconfig                  |  2 +-
+ drivers/mfd/Kconfig                         |  4 ++--
+ drivers/net/ethernet/stmicro/stmmac/Kconfig |  4 ++--
+ drivers/reset/Kconfig                       |  6 +++---
+ 24 files changed, 71 insertions(+), 59 deletions(-)
+ create mode 100644 drivers/clk/socfpga/Kconfig
+
+-- 
+2.25.1
+
