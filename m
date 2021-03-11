@@ -1,129 +1,118 @@
-Return-Path: <SRS0=6xFU=II=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=tCWR=IJ=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46C0FC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Mar 2021 16:50:43 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A4F1C433DB
+	for <soc@archiver.kernel.org>; Thu, 11 Mar 2021 07:08:53 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id D0B9E64FF2; Thu, 11 Mar 2021 07:08:52 +0000 (UTC)
+Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DC31264FC3
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Mar 2021 16:50:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DC31264FC3
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=aGYMMhb1EzJIMLrMJ0nRBiPF7MHHtXdC7IUbiEMr5DI=; b=rIYWTJklFveq0Ht05lkLtw7j/
-	i6UY2qK5Pz3Uv0ob1X/8XgISTccavdzxSnIMYUZnp7Uhm95Kohu1xpDPxx3ZgyRWSnq5d/Gq1WvQ1
-	vjxjC6poSCJ51Lxms4s8U8oND+fGt+yxBORvxoDNW1nkvw0u6jwY/i8oeFHNf1AeBDwolkA+yV0FK
-	s8TjJ3eTUoOTSSnB4r+hytDg7R2itLL9wXDVcoXnCQy0E6g4QKfDDqLFBpimnKD7gXAWD/ca0cX7x
-	8yPQOPH/4j9rCC7bCu8lQMBfO/XIMgl263D8HLYnGV1lYepgR8d9wm0uvdYQfVrTfSKYUN8F/Ug4z
-	r6LEGwoxw==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lK21U-007GqL-62; Wed, 10 Mar 2021 16:49:24 +0000
-Received: from mout.kundenserver.de ([212.227.126.135])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lK21P-007Gpm-CC
- for linux-arm-kernel@lists.infradead.org; Wed, 10 Mar 2021 16:49:21 +0000
-Received: from mail-ot1-f44.google.com ([209.85.210.44]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MWRZr-1lE8EI081T-00XvTh for <linux-arm-kernel@lists.infradead.org>; Wed, 10
- Mar 2021 17:49:17 +0100
-Received: by mail-ot1-f44.google.com with SMTP id b8so16993871oti.7
- for <linux-arm-kernel@lists.infradead.org>;
- Wed, 10 Mar 2021 08:49:15 -0800 (PST)
-X-Gm-Message-State: AOAM531RyiuEfF+A+AhMBZAWbCsVxh1f7UpewV2Zud/vez7lajz/PsAy
- YC8L1DHZskqgrMMqKz3LSfQBvM64HFQOrZrbP4Y=
-X-Google-Smtp-Source: ABdhPJw1kIhr8ttdGXD5g+DpuAzvAToYG1aFxOSVPDl56eSY4x70c4eQdWZH4tiH2ZUpEN9KrRB/9/YZCrDgnKY8YZU=
-X-Received: by 2002:a05:6830:14c1:: with SMTP id
- t1mr3227502otq.305.1615394954588; 
- Wed, 10 Mar 2021 08:49:14 -0800 (PST)
-MIME-Version: 1.0
+	by mail.kernel.org (Postfix) with ESMTPS id 5BA6D64FEC
+	for <soc@kernel.org>; Thu, 11 Mar 2021 07:08:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5BA6D64FEC
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
+Received: from mail-wr1-f71.google.com ([209.85.221.71])
+	by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	(Exim 4.86_2)
+	(envelope-from <krzysztof.kozlowski@canonical.com>)
+	id 1lKFRC-0001hY-1I
+	for soc@kernel.org; Thu, 11 Mar 2021 07:08:50 +0000
+Received: by mail-wr1-f71.google.com with SMTP id m23so4089799wrh.7
+        for <soc@kernel.org>; Wed, 10 Mar 2021 23:08:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zgH3nywQ4QyohOt2SMlSyPyC9OdZbO8xrqdRqBr6msM=;
+        b=A0AZDPkjSQtqwXcEhUj3x8sqstoIaiW8v78wf9JfhqAPxMBNXQ/bQK9EIJFZD3zPO1
+         I2t+yZ9xOD5OCiWhKreM2jDiBZ3Enm0xHCKaN3FlLfOQPdersp1eZkzwR9QgPBgoy6JR
+         Ao4oo1nV+0I8BGuQIP/Dxxbp6L4NcgO9UHkMGNSu4EwEbiw47OekNwu4sTmXHhHWSni3
+         pVanqthS8HXHIbIGEuCDp/qGe8yQ5jDrIa6B2/DfX4JLWipnQoElNVpzxdg0U0JLvA52
+         HMX+NcsOg/M2PzfGp/S1VCv98wtwGgojSTXFWZWnefsC/AnK5QBbEfWfoq+SdvSzkFao
+         MuAQ==
+X-Gm-Message-State: AOAM5300P62Zm7/QmIoPlAgjSLEFfQ6kpYu8QnNFF0imMDuA1Gj91wAK
+	+g8X6mtjHPJCpakoNhLJ4DrVB3pwgsT+J0VKVOeZXt4U9E36odxYLL6Qo6YVa9tOjrdVIakAPSY
+	vES9u+sbgkcigUW7V52Tkieg=
+X-Received: by 2002:a7b:ce16:: with SMTP id m22mr6850405wmc.65.1615446529752;
+        Wed, 10 Mar 2021 23:08:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxFSUTjS1JFmjO0hMPLkEAzm/KPuXrtY7IKz/mXB9yfWR7YE3pRWw0tap7L6t6boQLro+3hFQ==
+X-Received: by 2002:a7b:ce16:: with SMTP id m22mr6850370wmc.65.1615446529545;
+        Wed, 10 Mar 2021 23:08:49 -0800 (PST)
+Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id a6sm2515137wmm.0.2021.03.10.23.08.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Mar 2021 23:08:49 -0800 (PST)
+Subject: Re: [RFC v2 3/5] arm64: socfpga: rename ARCH_STRATIX10 to
+ ARCH_SOCFPGA64
+To: Arnd Bergmann <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+Cc: Tom Rix <trix@redhat.com>, Lee Jones <lee.jones@linaro.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Dinh Nguyen <dinguyen@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Moritz Fischer <mdf@kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ DTML <devicetree@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>,
+ linux-edac@vger.kernel.org, linux-fpga@vger.kernel.org,
+ Networking <netdev@vger.kernel.org>,
+ linux-stm32@st-md-mailman.stormreply.com, arm-soc <arm@kernel.org>,
+ SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>
 References: <20210310083327.480837-1-krzysztof.kozlowski@canonical.com>
  <20210310083840.481615-1-krzysztof.kozlowski@canonical.com>
- <20210310083840.481615-3-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20210310083840.481615-3-krzysztof.kozlowski@canonical.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 10 Mar 2021 17:48:58 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a27hAExCKtsO7k1HQwLKk-5Q8uxYYt_G2v-Osq8RZv2tg@mail.gmail.com>
-Message-ID: <CAK8P3a27hAExCKtsO7k1HQwLKk-5Q8uxYYt_G2v-Osq8RZv2tg@mail.gmail.com>
-Subject: Re: [RFC v2 5/5] clk: socfpga: allow compile testing of Stratix 10 /
- Agilex clocks
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Dinh Nguyen <dinguyen@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
- Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
- Lee Jones <lee.jones@linaro.org>, 
- Linux ARM <linux-arm-kernel@lists.infradead.org>, 
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- DTML <devicetree@vger.kernel.org>, 
- linux-clk <linux-clk@vger.kernel.org>, linux-edac@vger.kernel.org, 
- linux-fpga@vger.kernel.org, Networking <netdev@vger.kernel.org>, 
- linux-stm32@st-md-mailman.stormreply.com, arm-soc <arm@kernel.org>, 
- SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>
-X-Provags-ID: V03:K1:h0sLajhLrOVWs72cB/wONAWl6+YjN2YRNNfHL9rpX0RUtvpYlvO
- 7vYlyW9how/AwxMBN1JCZkM0HkWkHi2wBlXkvvGm6M7ABKTVTydL6v1kc8vz/DRK0HNxFRN
- 5zEXEPOQDZ88GcdKvdfgW33atMiQdSFmbjmAwVy0+yEjNGF+5zVa+shMYNR62RfsZd+xs3K
- GcWPsriklSix13I8W08Ag==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VGrdtcE9KPs=:HzRlRduGUO0vCaBBH7FC/8
- bxgRZKoswd9aBeFNUDAJ2XUmFQcHW1EuQcWdaD1xWPVJ9Aeze2fxwstjbIAxxTVXRuvxF/+MS
- dx+CzCkKqL26CHCDRj140f3OZeL7wketaQtoyKmsEzWZszVXPTfgxeg3eOZnfDr9oF/NN4FCa
- E9gHySgTf2x/UZr7d9mpzYoh4IKdb17LPyr7U2UP9pmr9RSWxj60rdWsUalYvE4rEobzYs4le
- BDmanYwpsGOfYIEXVP719fch5Fv4bb7Ys3rA8yM6Lv49f8bMrv021lktRwJIbGTfRx7SUCrsw
- KoVhrLnlaNkYaKnvVQTVqy/AP/cRIpmyPA5RVRk9tKTDK2xWkl8EO7k14CUOfdtkpt122lrmC
- RIoXE2wzbkhNaZCPclfmOQw5yY0f7EkkJ5NAWZdZ33aXR+D15mjXsXdur6pldFU1ohfku0K4I
- gJz5XvNUT8LqtF1hIhph9aRwQOkIEMy4HOnSIKxNPs1vjaPbtvj6ucPEsf1k1ysIkLBz9cWuo
- pt22svjFcBLK9/HURDxB2RpflgTf2SKQyZ2VeCOFh0Mllc5gX+zaq01BHkOfGy8Dw==
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210310_164919_510695_71761EDA 
-X-CRM114-Status: GOOD (  12.43  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+ <20210310094527.GA701493@dell>
+ <35c39c81-08e4-24c8-f683-2fa7a7ea71de@redhat.com>
+ <1c06cb74-f0b0-66e5-a594-ed1ee9bc876e@canonical.com>
+ <CAK8P3a1CCQwbeH4KiUgif+-HdubVjjZBkMXimEjYkgeh4eJ7cg@mail.gmail.com>
+ <52d0489f-0f77-76a2-3269-e3004c6b6c07@canonical.com>
+ <ba2536a6-7c74-0cca-023f-cc6179950d37@canonical.com>
+ <CAK8P3a1k7c5X5x=-_-=f=ACwY+uQQ8YEcAGXYfdTdSnqpo96sA@mail.gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <fb0d8ca3-ac46-f547-02b0-7f47ff8fff6b@canonical.com>
+Date: Thu, 11 Mar 2021 08:08:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
+MIME-Version: 1.0
+In-Reply-To: <CAK8P3a1k7c5X5x=-_-=f=ACwY+uQQ8YEcAGXYfdTdSnqpo96sA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210310164858.xPBIAFUQYYuk8tYkjGb2I9kliTTEQIO8CP_BfL6qN_4@z>
 
-On Wed, Mar 10, 2021 at 9:38 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
-> --- a/drivers/clk/socfpga/Kconfig
-> +++ b/drivers/clk/socfpga/Kconfig
-> @@ -1,6 +1,17 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +config COMMON_CLK_SOCFPGA
-> +       bool "Intel SoCFPGA family clock support" if COMPILE_TEST && !ARCH_SOCFPGA && !ARCH_SOCFPGA64
-> +       depends on ARCH_SOCFPGA || ARCH_SOCFPGA64 || COMPILE_TEST
-> +       default y if ARCH_SOCFPGA || ARCH_SOCFPGA64
+On 10/03/2021 17:42, Arnd Bergmann wrote:
+> On Wed, Mar 10, 2021 at 4:54 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>> On 10/03/2021 16:47, Krzysztof Kozlowski wrote:
+>>> This edac Altera driver is very weird... it uses the same compatible
+>>> differently depending whether this is 32-bit or 64-bit (e.g. Stratix
+>>> 10)! On ARMv7 the compatible means for example one IRQ... On ARMv8, we
+>>> have two. It's quite a new code (2019 from Intel), not some ancient
+>>> legacy, so it should never have been accepted...
+>>
+>> Oh, it's not that horrible as it sounds. They actually have different
+>> compatibles for edac driver with these differences (e.g. in interrupts).
+>> They just do not use them and instead check for the basic (common?)
+>> compatible and architecture... Anyway without testing I am not the
+>> person to fix the edac driver.
+> 
+> Ok, This should be fixed properly as you describe, but as a quick hack
+> it wouldn't be hard to just change the #ifdef to check for CONFIG_64BIT
+> instead of CONFIG_ARCH_STRATIX10 during the rename of the config
+> symbol.
 
-I think the 'depends on' line here is redundant if you also have the
-'if' line and the default.
+This would work. The trouble with renaming ARCH_SOCFPGA into
+ARCH_INTEL_SOCFPGA is that still SOCFPGA will appear in many other
+Kconfig symbols or even directory paths.
 
-        Arnd
+Let me use ARCH_INTEL_SOCFPGA for 64bit here and renaming of 32bit a
+little bit later.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Best regards,
+Krzysztof
