@@ -1,55 +1,75 @@
-Return-Path: <SRS0=tCWR=IJ=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=Mioa=IJ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B078BC433E0
-	for <soc@archiver.kernel.org>; Thu, 11 Mar 2021 14:50:39 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 5D6D664FEB; Thu, 11 Mar 2021 14:50:39 +0000 (UTC)
-Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A66A4C433E6
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 14:52:03 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EE8CC64FEE
-	for <soc@kernel.org>; Thu, 11 Mar 2021 14:50:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EE8CC64FEE
+	by mail.kernel.org (Postfix) with ESMTPS id 1B0CD64F3F
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 14:52:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1B0CD64F3F
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
+	References:Cc:To:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=grWBM1hIF2mEdsmqyvAjtHoBKiujGMf8n9qGXzxX+xA=; b=MNWaUsmrTa9qDpQP4Rvzl5UGZ
+	cjhfTVRxMDBABhmDxOVlkWnZ2HHCaYgfIWjSOU2Vao1mNOpeyw06CgfmwvVsqBhquf0uBsAEloBXg
+	StDN5xUrKTFAHhmLrQhcQS4AaEF7iaNE7U/dvQdbtZpgltPTEqqNoQmqZ57PAbod0HLYA9cY4NBuS
+	VHd9xQHfmxqBYookG1JtRbEkdjshR2oFGhwgqSABvOfIQRhqOCJ/Qd3V0iU26A7wio26j9ETLdyM4
+	PVD/ADTsrYH6DWAQk8TIH9n2deSKC78jJYpCn/Gs71+D0/bhJSMXswzpQj1S1ux9rGZf8PGRjDGJZ
+	fjFv6GjkQ==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lKMeD-009N04-PE; Thu, 11 Mar 2021 14:50:45 +0000
+Received: from youngberry.canonical.com ([91.189.89.112])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lKMe6-009MyL-14
+ for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 14:50:42 +0000
 Received: from mail-wm1-f71.google.com ([209.85.128.71])
-	by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	(Exim 4.86_2)
-	(envelope-from <krzysztof.kozlowski@canonical.com>)
-	id 1lKMe5-0001X2-40
-	for soc@kernel.org; Thu, 11 Mar 2021 14:50:37 +0000
-Received: by mail-wm1-f71.google.com with SMTP id i14so4133247wmq.7
-        for <soc@kernel.org>; Thu, 11 Mar 2021 06:50:37 -0800 (PST)
+ by youngberry.canonical.com with esmtps
+ (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128) (Exim 4.86_2)
+ (envelope-from <krzysztof.kozlowski@canonical.com>)
+ id 1lKMe5-0001Wr-0P
+ for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 14:50:37 +0000
+Received: by mail-wm1-f71.google.com with SMTP id n22so1609739wmo.7
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 11 Mar 2021 06:50:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uKAiLuqa2i9OZl7ygZkPLgKIbolSbL3Tro2Nub/Uk4Y=;
-        b=T0l9AmBmVeprYGgBfYcJMEdNKcc8Qd8IaDvjav1u7GYY07/JmXtYOAUbxP07Ho2t0f
-         Q6ZMUaL67UE6WqKs5ygL3F8jayAXk3cFRbD0hKiONLwj2oapVfmY6xm+1ScvoI6wfJ8T
-         /OBRaCJkbQ+0qthywKE5cp6OpbAtptn0Bgjd457AZc+F3F7K9KGn6HC4jaOza+i6CX9v
-         dTE8lbbVe1pa29HDaWh3qqPLGqrJbtMx5g6Wi1GwBUTz634tl/JWMjPhjrCM9IH5vSdn
-         4thTZaFyfC+nr5wchkfwZR/3R91EnyEsEAH/7MSsb8HkcYC1HAs0ZaRl0dPDM0B2PBuC
-         zfjw==
-X-Gm-Message-State: AOAM533fP5oRdRQ7y4g21wXKvxJyeuRPcF3xNJmwQqkh9M0d46ygQIV1
-	RIwtJYNHW/EU+KmBJCxR0m8eY0Z6+b2HZx6EWkhstUr2yQoUIYHerbFP5HEQaiNWUdwaAn4OR4t
-	lXr4KhbqXTKldqTg+2iaYXL4=
-X-Received: by 2002:adf:f852:: with SMTP id d18mr9342160wrq.210.1615474236737;
-        Thu, 11 Mar 2021 06:50:36 -0800 (PST)
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=uKAiLuqa2i9OZl7ygZkPLgKIbolSbL3Tro2Nub/Uk4Y=;
+ b=pY+MRFzp9OT9lJNIN0RsHacq4olW5ru4nC4VwtsNRmPp+XvrSs5von5shU//VVzbJt
+ 5NGirpfgXklThtKMrFnpwok5FK9ZmKTKazQQbOgEulqB+01uVUDvi8Dh1EYD347LAjpt
+ neo5I2/pJxd3IIM8lzHEdEneDzQOD5cjNC6823h3zAhvMxSxAx3C52lGOzgJ8RZasv8m
+ br1H9GSQ539yZsw2PlFNpmSLTIojFqwE/ejpwkbECphSaWeeDzQusqZXtRZhEASJewRp
+ /l24tx90idCWuDfUO0VeGuN+PFSE+fGyS4+UzfevgRUoQCFEjfdUi3WgVsSI0C1FPdNY
+ gCeQ==
+X-Gm-Message-State: AOAM533WzcfSqZNPTdtz/cetZqACWrbJoU6iI7trtScNb89vEGmUwzJL
+ s+DMyy50XFV0BXZGLIoIYyO6DOpyFrgPXukOs1nvBa0vc07fwjLOxMav5hc3KV+1pAO4wGXBjct
+ hBeS8WB9hSaY+kAAAbujrLAqldbES8gEKfZSh9jJYnk91EWGgaqSF
+X-Received: by 2002:adf:f852:: with SMTP id d18mr9342163wrq.210.1615474236737; 
+ Thu, 11 Mar 2021 06:50:36 -0800 (PST)
 X-Google-Smtp-Source: ABdhPJyesJMeh5P/4D8iW/copAeKCALuE0/kYNU8cA4lvJq7myQHewdqjAfZPd2tqbyUu+ezagHw4g==
-X-Received: by 2002:adf:f852:: with SMTP id d18mr9342138wrq.210.1615474236553;
-        Thu, 11 Mar 2021 06:50:36 -0800 (PST)
-Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.gmail.com with ESMTPSA id 4sm4433053wma.0.2021.03.11.06.50.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Mar 2021 06:50:36 -0800 (PST)
+X-Received: by 2002:adf:f852:: with SMTP id d18mr9342138wrq.210.1615474236553; 
+ Thu, 11 Mar 2021 06:50:36 -0800 (PST)
+Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch.
+ [84.226.167.205])
+ by smtp.gmail.com with ESMTPSA id 4sm4433053wma.0.2021.03.11.06.50.35
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 11 Mar 2021 06:50:36 -0800 (PST)
 Subject: Re: [RFC v2 3/5] arm64: socfpga: rename ARCH_STRATIX10 to
  ARCH_SOCFPGA64
 To: Arnd Bergmann <arnd@arndb.de>
@@ -84,9 +104,26 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
 In-Reply-To: <CAK8P3a05VkttECKTgonxKCSjJR0W4V1TRrUYMydgUGywbCSCWQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210311_145038_177085_D6BAAAA8 
+X-CRM114-Status: GOOD (  21.47  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210311145035.u6aL5LAhYcwe2SKF064eEkbi6T63udhVqeG7_zbI6fw@z>
 
 On 11/03/2021 10:14, Arnd Bergmann wrote:
 > On Thu, Mar 11, 2021 at 8:08 AM Krzysztof Kozlowski
@@ -130,3 +167,8 @@ Sure, let me try that. I have a v3 almost ready.
 
 Best regards,
 Krzysztof
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
