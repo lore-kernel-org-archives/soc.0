@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6223C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:29:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05567C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:30:12 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0C44B64DF5
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:29:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0C44B64DF5
+	by mail.kernel.org (Postfix) with ESMTPS id 706FE64E3F
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 11 Mar 2021 15:30:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 706FE64E3F
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,54 +23,54 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=qvbQRspZ6tlxguI0CEPOYyKxjIA828Yscc34ARpHQEk=; b=c6gi0EM3u2xIYv3QIrbGHGgp+
-	VWOHG7bLiOeE3yBRFxCQ7QximMiItvuegkUJVP68u8WIGWxLpE6aFES13BwwbWEqraghhB5H65mwT
-	Ubg+hNu5jLz9odFz54BGhpWr0yjvEMfCVtI6Ophkl3eqS42b9rg6H+qi5oQQP8jkyrVbfbjo1CC8h
-	+AAjR9KFsUzVmG/7enbM+Ivo9GdXdCdHt8lWoCnu/1IcZBxuAg/eiz5VMJlJMPw3rJTqO3egomJ3j
-	WjFvaEXASCXpFtQBkJ5LqqqMU/jSH88VpGHcio5SZk103aHT/5Yg6L2o+4Sxio7S2mhDhHDjbQLD+
-	tJRxDyTMQ==;
+	 bh=/1SzDhlP4n0s8O78JIDfCA2wO1VinPYS4uHBygXwO54=; b=SogRFQDrHSw/8dxkVcruYt9oQ
+	VZVUEpqjE5RLT42y3XmnpECxt2Ew8UEqSH39zwOUXJ9oH6cBFlaQ3U31ntUoEZxmWil910yVe9ts7
+	sTpIvcMrix/ssLFbGXUxqgnCN6S/A/RnnWTULw3Py2C47/AMXh6hKlsJ+5s31wVg/aoJjwkTNspdx
+	QbY1n/C+Ruk3zV1KGRdqJ5Cek8dwvH/7cl5mehdcWocgi3rMNnzhziD8UAC5Ber1NiGvISaoKmxnC
+	IcXIjqe5/CLGbV3wYO1TuhuZTIkqIuY2ph4tiRjdoViQFxTOd54oNG/psof2JIRJ/pJCPUGDpehbL
+	DpfnccvZg==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lKNEA-009Qt1-57; Thu, 11 Mar 2021 15:27:54 +0000
+	id 1lKNEX-009R43-FT; Thu, 11 Mar 2021 15:28:17 +0000
 Received: from youngberry.canonical.com ([91.189.89.112])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lKNDX-009QaA-7E
- for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 15:27:18 +0000
-Received: from mail-ed1-f71.google.com ([209.85.208.71])
+ id 1lKNDc-009Qed-LS
+ for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 15:27:24 +0000
+Received: from mail-ed1-f72.google.com ([209.85.208.72])
  by youngberry.canonical.com with esmtps
  (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128) (Exim 4.86_2)
  (envelope-from <krzysztof.kozlowski@canonical.com>)
- id 1lKNCJ-0004tK-Kc
- for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 15:25:59 +0000
-Received: by mail-ed1-f71.google.com with SMTP id u2so10021817edj.20
+ id 1lKNDb-0005TX-Pu
+ for linux-arm-kernel@lists.infradead.org; Thu, 11 Mar 2021 15:27:19 +0000
+Received: by mail-ed1-f72.google.com with SMTP id w18so7257573edu.5
  for <linux-arm-kernel@lists.infradead.org>;
- Thu, 11 Mar 2021 07:25:59 -0800 (PST)
+ Thu, 11 Mar 2021 07:27:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=kUT7ytcjB6VCPdAxIBqG0E5rhLsqE5uC2TbGUeGX+rU=;
- b=qXA/0KReMz+IDXT50NE3xlclPZuwUU2MwBhcg79UIxa9C9sW/vZMz5QIodJBaz3jkq
- +FSiKNAIGopNal1GKWdK0KbR6RLib5Xr+dzsEPVJ+yhLWD2EZFL1xh0AuiRGpNzmhjt8
- 78CRJjTrk2G/AlXyUG+zuwo7tbH6FAuK8rZrCosA3yTaTN9xPJGUslQZbIHvQn/B2h1Y
- HI6I6TpI9wswRm+vR5Hxenzzyf6ozCZ58l51qndexwSRIRD0mpVOwf6CrVXXbUb10ETV
- fuokMof3P7gBygWnSHNzcHJJEVnuhRDoPv29TtMFfe4gHNLrnT8RtuV9iyLusW9yZCBg
- a9ow==
-X-Gm-Message-State: AOAM532N9UMKyhC6+EhQuPBw0uQGPQUS++AJHutjVtrnnUcFFcxwBSI5
- K+UmFzFFyLODZjZWhScURynJBOW8AqaAS+v7zSjdQNMbKjg1AqTCB9URtn/jX5VXZUppQRdgey3
- bV9V1DQl1TZpLrsAmLIFGmjnXvzgD8L3ICEOFu4+P/SNUu4ul7Pmo
-X-Received: by 2002:a17:906:894:: with SMTP id
- n20mr3550518eje.57.1615476359044; 
- Thu, 11 Mar 2021 07:25:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzewwKul+qByKNtSAFVbtVEtU+PJVW0lvuxaGwwO1QNpVsWLj92RBZH/7UiX/uUZip32n7cVA==
-X-Received: by 2002:a17:906:894:: with SMTP id
- n20mr3550472eje.57.1615476358839; 
- Thu, 11 Mar 2021 07:25:58 -0800 (PST)
+ bh=/3UhGLxhWacdcsSpVsIOhi7iq++tfBdPJwQmfZFh1zw=;
+ b=rgrRtnb/i+oVOrztItwvinFf0OF/S2wsAX03Qw0/tegndcFTIqVQHc2oq4i59f/mCG
+ Ymb4LZiLOXni4UfgKR7RibxpfrT3xt+bwEJg0Rce3V//dem2Ffh2O0rzbBNh2ZnPYdGa
+ +nkb+I+ERlvI78JeHNEMKds41OeybLlWGdenIyqeyKeJVjiFh8E8PkNJrVtUfRUTWoeh
+ 4G+MOY+OMyAOj2T68kAkI2A4Py7PWRBEVVoIN8emkMyyk1d1o7mE5JMpoDvbib2yv/Qc
+ B4eNFLOEE1JhQ7h97wewPffv1fSZOb5cwCmC+JKn/6zYYTr60HzgIBLJzbtWvVLQYKrP
+ LwfA==
+X-Gm-Message-State: AOAM532GMrDX6u7uIujC5u9vWpd2oaB6fTg2k1c8HQDRO9e0IOaWErOv
+ hhM3CCzILgcRXw4Q1yRIhNn7/ptvsdg/vtW/MuYCUJB9dz50aQ5JEh/EvcoCk/soogo/mEMvCal
+ Y6yLP0wPgbwsEP8JUFk6iVo2rpVsRW/r6qVOqzQdPNlEAjtWHnpOh
+X-Received: by 2002:a05:6402:1103:: with SMTP id
+ u3mr8916740edv.205.1615476439291; 
+ Thu, 11 Mar 2021 07:27:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJykFYMegR7g3sofzBC+1YkJVaDapoNS+bRGUtFV8/I7aVJB5VDHjlbA8PWaxRhm9KLVG244sg==
+X-Received: by 2002:a05:6402:1103:: with SMTP id
+ u3mr8916710edv.205.1615476439104; 
+ Thu, 11 Mar 2021 07:27:19 -0800 (PST)
 Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch.
  [84.226.167.205])
- by smtp.gmail.com with ESMTPSA id v25sm1517826edr.18.2021.03.11.07.25.57
+ by smtp.gmail.com with ESMTPSA id yk8sm1445697ejb.123.2021.03.11.07.27.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Mar 2021 07:25:58 -0800 (PST)
+ Thu, 11 Mar 2021 07:27:18 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
 To: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
@@ -93,16 +93,17 @@ To: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
  linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
  netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH v3 07/15] EDAC: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
-Date: Thu, 11 Mar 2021 16:25:37 +0100
-Message-ID: <20210311152545.1317581-8-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v3 10/15] clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit
+ ARM SoCs (and compile test)
+Date: Thu, 11 Mar 2021 16:27:15 +0100
+Message-ID: <20210311152715.1317848-1-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
 References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210311_152716_035529_D9F1A885 
-X-CRM114-Status: GOOD (  19.07  )
+X-CRM114-CacheID: sfid-20210311_152722_839912_A34D7B4B 
+X-CRM114-Status: GOOD (  17.66  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -118,88 +119,56 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210311152537.F_qfPRYf4AOwxYR55egbNm2kLViBYp_pWmd9Blg6aXs@z>
+Message-ID: <20210311152715.hfglRCzJL_plaR72KfbbBS-1j08ZAL6g57xMRNzEjbg@z>
 
-Simplify 32-bit and 64-bit Intel SoCFPGA Kconfig options by having only
-one for both of them.  This the common practice for other platforms.
-Additionally, the ARCH_SOCFPGA is too generic as SoCFPGA designs come
-from multiple vendors.
+ARCH_SOCFPGA is being renamed to ARCH_INTEL_SOCFPGA so adjust the
+32-bit ARM drivers to rely on new symbol.
+
+There is little point to share clock controller drivers between 32-bit
+and 64-bit platforms because there will not be a generic image for both
+of them.  Therefore add a new Kconfig entry for building 32-bit clock
+driverss, similar to one for 64-bit.  This allows enabling compile
+testing.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- drivers/edac/Kconfig       |  2 +-
- drivers/edac/altera_edac.c | 17 +++++++++++------
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ drivers/clk/socfpga/Kconfig  | 6 +++++-
+ drivers/clk/socfpga/Makefile | 4 ++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 27d0c4cdc58d..1e836e320edd 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -396,7 +396,7 @@ config EDAC_THUNDERX
- 
- config EDAC_ALTERA
- 	bool "Altera SOCFPGA ECC"
--	depends on EDAC=y && (ARCH_SOCFPGA || ARCH_STRATIX10)
-+	depends on EDAC=y && ARCH_INTEL_SOCFPGA
+diff --git a/drivers/clk/socfpga/Kconfig b/drivers/clk/socfpga/Kconfig
+index b62ede8cad01..0cf16b894efb 100644
+--- a/drivers/clk/socfpga/Kconfig
++++ b/drivers/clk/socfpga/Kconfig
+@@ -4,10 +4,14 @@ config CLK_INTEL_SOCFPGA
+ 	default ARCH_INTEL_SOCFPGA
  	help
- 	  Support for error detection and correction on the
- 	  Altera SOCs. This is the global enable for the
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index e91cf1147a4e..5f7fd79ec82f 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -1501,8 +1501,13 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
- 	dci->mod_name = ecc_name;
- 	dci->dev_name = ecc_name;
+ 	  Support for the clock controllers present on Intel SoCFPGA and eASIC
+-	  devices like Stratix 10, Agilex and N5X eASIC.
++	  devices like Aria, Cyclone, Stratix 10, Agilex and N5X eASIC.
  
--	/* Update the PortB IRQs - A10 has 4, S10 has 2, Index accordingly */
--#ifdef CONFIG_ARCH_STRATIX10
-+	/*
-+	 * Update the PortB IRQs - A10 has 4, S10 has 2, Index accordingly
-+	 *
-+	 * FIXME: Instead of ifdefs with different architectures the driver
-+	 *        should properly use compatibles.
-+	 */
-+#ifdef CONFIG_64BIT
- 	altdev->sb_irq = irq_of_parse_and_map(np, 1);
- #else
- 	altdev->sb_irq = irq_of_parse_and_map(np, 2);
-@@ -1521,7 +1526,7 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
- 		goto err_release_group_1;
- 	}
+ if CLK_INTEL_SOCFPGA
  
--#ifdef CONFIG_ARCH_STRATIX10
-+#ifdef CONFIG_64BIT
- 	/* Use IRQ to determine SError origin instead of assigning IRQ */
- 	rc = of_property_read_u32_index(np, "interrupts", 1, &altdev->db_irq);
- 	if (rc) {
-@@ -1931,7 +1936,7 @@ static int altr_edac_a10_device_add(struct altr_arria10_edac *edac,
- 		goto err_release_group1;
- 	}
- 
--#ifdef CONFIG_ARCH_STRATIX10
-+#ifdef CONFIG_64BIT
- 	/* Use IRQ to determine SError origin instead of assigning IRQ */
- 	rc = of_property_read_u32_index(np, "interrupts", 0, &altdev->db_irq);
- 	if (rc) {
-@@ -2016,7 +2021,7 @@ static const struct irq_domain_ops a10_eccmgr_ic_ops = {
- /************** Stratix 10 EDAC Double Bit Error Handler ************/
- #define to_a10edac(p, m) container_of(p, struct altr_arria10_edac, m)
- 
--#ifdef CONFIG_ARCH_STRATIX10
-+#ifdef CONFIG_64BIT
- /* panic routine issues reboot on non-zero panic_timeout */
- extern int panic_timeout;
- 
-@@ -2109,7 +2114,7 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- 					 altr_edac_a10_irq_handler,
- 					 edac);
- 
--#ifdef CONFIG_ARCH_STRATIX10
-+#ifdef CONFIG_64BIT
- 	{
- 		int dberror, err_addr;
- 
++config CLK_INTEL_SOCFPGA32
++	bool "Intel Aria / Cyclone clock controller support" if COMPILE_TEST && (!ARM || !ARCH_INTEL_SOCFPGA)
++	default ARM && ARCH_INTEL_SOCFPGA
++
+ config CLK_INTEL_SOCFPGA64
+ 	bool "Intel Stratix / Agilex / N5X clock controller support" if COMPILE_TEST && (!ARM64 || !ARCH_INTEL_SOCFPGA)
+ 	default ARM64 && ARCH_INTEL_SOCFPGA
+diff --git a/drivers/clk/socfpga/Makefile b/drivers/clk/socfpga/Makefile
+index ebd3538d12de..e8dfce339c91 100644
+--- a/drivers/clk/socfpga/Makefile
++++ b/drivers/clk/socfpga/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+-obj-$(CONFIG_ARCH_SOCFPGA) += clk.o clk-gate.o clk-pll.o clk-periph.o
+-obj-$(CONFIG_ARCH_SOCFPGA) += clk-pll-a10.o clk-periph-a10.o clk-gate-a10.o
++obj-$(CONFIG_CLK_INTEL_SOCFPGA32) += clk.o clk-gate.o clk-pll.o clk-periph.o \
++				     clk-pll-a10.o clk-periph-a10.o clk-gate-a10.o
+ obj-$(CONFIG_CLK_INTEL_SOCFPGA64) += clk-s10.o \
+ 				     clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o \
+ 				     clk-agilex.o
 -- 
 2.25.1
 
