@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2701BC433E6
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 12 Mar 2021 12:53:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0D9FC433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 12 Mar 2021 13:51:17 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8590764F09
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 12 Mar 2021 12:53:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8590764F09
+	by mail.kernel.org (Postfix) with ESMTPS id 6926A64F9E
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 12 Mar 2021 13:51:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6926A64F9E
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,32 +23,33 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
 	References:To:Subject:Reply-To:Cc:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=I7T6vdOWxjuSxp3LHZKzea+hvZzxlBWmBFGG8qXu6VU=; b=gfkCoo5KHVrWddY5pVF41P9Kb
-	l865uhpBp40z8c5JtdCgUTe3C9HvmkX3iO/1B7Wv7dxVXprCSYx1723jX7EImBTgPbgaRbLJzSVMq
-	ueDsuhgju/ouneqwv2fVhQUw/8/d5przEI7QCZCsPgzUcCkifa+lbNlxMGa+BFMc2tm8R25qmkX3P
-	x6U+mE1qpN3V86Jnh0LOviNprtRI9AyshJHENPI3+Lmm5zf2fsyUQVfsbt0mmWarVoAxXiUO6IbA3
-	d4VrxOlnBZ8c7RRGgwDd4BHrUFTfUkxgDHu2RYzQRS1vVSRI8EEgsT1zKY43Matd991BIYsqxd5jB
-	YcHupvwnQ==;
+	 bh=DLDgMmGI8CvG/STMnDMtKc/1E9z27hdOC5Cle5fFvaM=; b=b0UsxS9UKQETK1AFaRqPEuP8i
+	qEbN7fWvX4nQMs7nbRC0clBjJYlYtoE05BeaO8jdsQ+31qA0q/EZH+DIbwcMBrT8Q0VCkyY/TCZ6I
+	e/7sxOi47GHfR4NwP2GhS+nghr5+jWIZq1Zhoo86M34TtDiOI5fx+1IfrtR7ZhwDBMMg6Sb2DtMIu
+	5vpW9ETZBYmYpPDk+xzUF54iNwUY1VLbdOv2dFrwkT+MZg0f8OnoVVK4169Ml8ztv9JaBtXBtv8vw
+	xJKFMCdb0TqURJQEZGt+Ad60PzFhBDm5nfDOEVDFjLRK62HjYshjquH8nlGXZCmVvHYH191JQTnV4
+	zAcN4RbQQ==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lKhGM-00BSj1-F9; Fri, 12 Mar 2021 12:51:30 +0000
+	id 1lKiBA-00BYlq-J3; Fri, 12 Mar 2021 13:50:12 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lKhE9-00BSQA-Oc
- for linux-arm-kernel@lists.infradead.org; Fri, 12 Mar 2021 12:51:17 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 55C2F64F89;
- Fri, 12 Mar 2021 12:48:52 +0000 (UTC)
+ id 1lKhC8-00BSCm-S2
+ for linux-arm-kernel@lists.infradead.org; Fri, 12 Mar 2021 12:49:12 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 43AFC64FA8;
+ Fri, 12 Mar 2021 12:47:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1615553334;
- bh=uB3vMcXdC8aACPYGUHyfZ2GzV3nzneo8Q3EOByeTzW0=;
+ s=k20201202; t=1615553225;
+ bh=tKxo7sljt+pkSDWh1mUmM5NEnGtDl1u9sBRuSQ9gqRc=;
  h=Subject:List-Id:To:References:From:Date:In-Reply-To:From;
- b=ZmH3jzv//iRYRZfcceEQqb/LV0Ub7ujH+WFIPqjxApAXsK4UwH/Gap7lNJRDUsLaD
- 5YzL4kBSXoh6sxORYrp6ohH9Gb/BddpzjQWU3LSDU/aJl0r4htusbgXIvv4E45LYjG
- 1X2LcxvB/Sr8HANXumXGzHWSZvZKZYe5gdCZWo5WMc8eoTYPawcIe8KLDLxL/YLfwY
- aJSnm4Hy+K7xydXXlmU+YuIpLRWDknYAH9cF3hhXWlX/+7cXHXF8sUoSM4+EqE9ODw
- oT7j99a0pn8E14Td5LQOgGh86cvb/8cCj5vYh4kRgmDNPZCt6+gHmiAZQZ3X7uIBFZ
- b+iVASrAr6wFg==
-Subject: Re: [PATCH v3 15/15] ARM: socfpga: drop ARCH_SOCFPGA
+ b=B3Wff/4KDmmI4bxbuLnCVv/MwYiNVGTqwGqUPpD8YXC6MroBQPb8N+EnosWeJCJ2y
+ Rkp7GdjehEX1HMV3fPxNO7aKArRqwH6TrHVpzL4ryxEl70Lzbax1YbTihd7p+v3wLi
+ F/vgUsvYwllSpTtiN3jZhkOFVNUz2QLObR9b7zLUrx98RXMWrgmD7MB7rebtqDmvOM
+ FVXb6gGhhc78VVIZZlmPvJJqjIh1an/WBxQHhzuE0Q1unaoDjymZt7zaDFiFzoYUbq
+ yaZP/LSuHch01stzO64G9IeE+HgpEIjCVxMIZDa/Xm3msx8lukkNSFJOIykNnOw3TT
+ kYlzkQX5Dj6Nw==
+Subject: Re: [PATCH v3 01/15] clk: socfpga: allow building N5X clocks with
+ ARCH_N5X
 List-Id: <soc.lore.kernel.org>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
  Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
@@ -69,18 +70,18 @@ To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
  linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
  netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
 References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
- <20210311152744.1318653-1-krzysztof.kozlowski@canonical.com>
+ <20210311152545.1317581-2-krzysztof.kozlowski@canonical.com>
 From: Dinh Nguyen <dinguyen@kernel.org>
-Message-ID: <e15b2fe2-3ce8-6196-1bac-f4d40776eb24@kernel.org>
-Date: Fri, 12 Mar 2021 06:48:51 -0600
+Message-ID: <658d380b-c043-06be-a7b9-f96e73aa03f9@kernel.org>
+Date: Fri, 12 Mar 2021 06:47:01 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <20210311152744.1318653-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210311152545.1317581-2-krzysztof.kozlowski@canonical.com>
 Content-Language: en-US
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210312_125116_240947_F91CE8D1 
-X-CRM114-Status: GOOD (  18.71  )
+X-CRM114-CacheID: sfid-20210312_124909_696958_4A000415 
+X-CRM114-Status: GOOD (  23.69  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -96,75 +97,81 @@ Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210312124851.cf4O_KRM34hbkrF28bGTnCn_D0flyHFkD1cTuAPUNXM@z>
+Message-ID: <20210312124701.PhIu-9cbAh2jtxGA3Ja5Ke9p_6ZrZZU37w6iIRvT814@z>
 
 
 
-On 3/11/21 9:27 AM, Krzysztof Kozlowski wrote:
-> Simplify 32-bit and 64-bit Intel SoCFPGA Kconfig options by having only
-> one for both of them.  After conversion of all
-> drivers to use the new ARCH_INTEL_SOCFPGA, the remaining ARM option can
-> be removed.
+On 3/11/21 9:25 AM, Krzysztof Kozlowski wrote:
+> The Intel's eASIC N5X (ARCH_N5X) architecture shares a lot with Agilex
+> (ARCH_AGILEX) so it uses the same socfpga_agilex.dtsi, with minor
+> changes.  Also the clock drivers are the same.
+> 
+> However the clock drivers won't be build without ARCH_AGILEX.  One could
+> assume that ARCH_N5X simply depends on ARCH_AGILEX but this was not
+> modeled in Kconfig.  In current stage the ARCH_N5X is simply
+> unbootable.
+> 
+> Add a separate Kconfig entry for clocks used by both ARCH_N5X and
+> ARCH_AGILEX so the necessary objects will be built if either of them is
+> selected.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->   arch/arm/configs/multi_v7_defconfig | 2 +-
->   arch/arm/configs/socfpga_defconfig  | 2 +-
->   arch/arm/mach-socfpga/Kconfig       | 8 ++------
->   3 files changed, 4 insertions(+), 8 deletions(-)
+>   drivers/clk/Kconfig          | 1 +
+>   drivers/clk/Makefile         | 1 +
+>   drivers/clk/socfpga/Kconfig  | 6 ++++++
+>   drivers/clk/socfpga/Makefile | 4 ++--
+>   4 files changed, 10 insertions(+), 2 deletions(-)
+>   create mode 100644 drivers/clk/socfpga/Kconfig
 > 
-> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-> index 3823da605430..591b15164e3d 100644
-> --- a/arch/arm/configs/multi_v7_defconfig
-> +++ b/arch/arm/configs/multi_v7_defconfig
-> @@ -79,7 +79,7 @@ CONFIG_ARCH_MSM8960=y
->   CONFIG_ARCH_MSM8974=y
->   CONFIG_ARCH_ROCKCHIP=y
->   CONFIG_ARCH_RENESAS=y
-> -CONFIG_ARCH_SOCFPGA=y
-> +CONFIG_ARCH_INTEL_SOCFPGA=y
->   CONFIG_PLAT_SPEAR=y
->   CONFIG_ARCH_SPEAR13XX=y
->   CONFIG_MACH_SPEAR1310=y
-> diff --git a/arch/arm/configs/socfpga_defconfig b/arch/arm/configs/socfpga_defconfig
-> index 0c60eb382c80..2d9404ea52c6 100644
-> --- a/arch/arm/configs/socfpga_defconfig
-> +++ b/arch/arm/configs/socfpga_defconfig
-> @@ -9,7 +9,7 @@ CONFIG_NAMESPACES=y
->   CONFIG_BLK_DEV_INITRD=y
->   CONFIG_EMBEDDED=y
->   CONFIG_PROFILING=y
-> -CONFIG_ARCH_SOCFPGA=y
-> +CONFIG_ARCH_INTEL_SOCFPGA=y
->   CONFIG_ARM_THUMBEE=y
->   CONFIG_SMP=y
->   CONFIG_NR_CPUS=2
-> diff --git a/arch/arm/mach-socfpga/Kconfig b/arch/arm/mach-socfpga/Kconfig
-> index e43ed0ca6860..43ddec677c0b 100644
-> --- a/arch/arm/mach-socfpga/Kconfig
-> +++ b/arch/arm/mach-socfpga/Kconfig
-> @@ -1,8 +1,7 @@
->   # SPDX-License-Identifier: GPL-2.0-only
-> -menuconfig ARCH_SOCFPGA
-> +menuconfig ARCH_INTEL_SOCFPGA
->   	bool "Altera SOCFPGA family"
->   	depends on ARCH_MULTI_V7
-> -	select ARCH_INTEL_SOCFPGA
->   	select ARCH_SUPPORTS_BIG_ENDIAN
->   	select ARM_AMBA
->   	select ARM_GIC
-> @@ -20,10 +19,7 @@ menuconfig ARCH_SOCFPGA
->   	select PL310_ERRATA_753970 if PL310
->   	select PL310_ERRATA_769419
->   
-> -if ARCH_SOCFPGA
-> -config ARCH_INTEL_SOCFPGA
-> -	bool
-> -
-> +if ARCH_INTEL_SOCFPGA
->   config SOCFPGA_SUSPEND
->   	bool "Suspend to RAM on SOCFPGA"
->   	help
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index a588d56502d4..1d1891b9cad2 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -394,6 +394,7 @@ source "drivers/clk/renesas/Kconfig"
+>   source "drivers/clk/rockchip/Kconfig"
+>   source "drivers/clk/samsung/Kconfig"
+>   source "drivers/clk/sifive/Kconfig"
+> +source "drivers/clk/socfpga/Kconfig"
+>   source "drivers/clk/sprd/Kconfig"
+>   source "drivers/clk/sunxi/Kconfig"
+>   source "drivers/clk/sunxi-ng/Kconfig"
+> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+> index b22ae4f81e0b..12e46b12e587 100644
+> --- a/drivers/clk/Makefile
+> +++ b/drivers/clk/Makefile
+> @@ -106,6 +106,7 @@ obj-$(CONFIG_COMMON_CLK_SAMSUNG)	+= samsung/
+>   obj-$(CONFIG_CLK_SIFIVE)		+= sifive/
+>   obj-$(CONFIG_ARCH_SOCFPGA)		+= socfpga/
+>   obj-$(CONFIG_ARCH_AGILEX)		+= socfpga/
+> +obj-$(CONFIG_ARCH_N5X)			+= socfpga/
+>   obj-$(CONFIG_ARCH_STRATIX10)		+= socfpga/
+>   obj-$(CONFIG_PLAT_SPEAR)		+= spear/
+>   obj-y					+= sprd/
+> diff --git a/drivers/clk/socfpga/Kconfig b/drivers/clk/socfpga/Kconfig
+> new file mode 100644
+> index 000000000000..3c30617169bf
+> --- /dev/null
+> +++ b/drivers/clk/socfpga/Kconfig
+> @@ -0,0 +1,6 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +config CLK_INTEL_SOCFPGA64
+> +	bool
+> +	# Intel Agilex / N5X clock controller support
+> +	default (ARCH_AGILEX || ARCH_N5X)
+> +	depends on ARCH_AGILEX || ARCH_N5X
+> diff --git a/drivers/clk/socfpga/Makefile b/drivers/clk/socfpga/Makefile
+> index bf736f8d201a..c6db8dd4ab35 100644
+> --- a/drivers/clk/socfpga/Makefile
+> +++ b/drivers/clk/socfpga/Makefile
+> @@ -3,5 +3,5 @@ obj-$(CONFIG_ARCH_SOCFPGA) += clk.o clk-gate.o clk-pll.o clk-periph.o
+>   obj-$(CONFIG_ARCH_SOCFPGA) += clk-pll-a10.o clk-periph-a10.o clk-gate-a10.o
+>   obj-$(CONFIG_ARCH_STRATIX10) += clk-s10.o
+>   obj-$(CONFIG_ARCH_STRATIX10) += clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o
+> -obj-$(CONFIG_ARCH_AGILEX) += clk-agilex.o
+> -obj-$(CONFIG_ARCH_AGILEX) += clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o
+> +obj-$(CONFIG_CLK_INTEL_SOCFPGA64) += clk-agilex.o
+> +obj-$(CONFIG_CLK_INTEL_SOCFPGA64) += clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o
 > 
 
 Acked-by: Dinh Nguyen <dinguyen@kernel.org>
