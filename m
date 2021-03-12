@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0CEFC433E0
-	for <soc@archiver.kernel.org>; Fri, 12 Mar 2021 12:47:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16209C433DB
+	for <soc@archiver.kernel.org>; Fri, 12 Mar 2021 12:47:37 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 741DD64FFE; Fri, 12 Mar 2021 12:47:21 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C544464FE2;
-	Fri, 12 Mar 2021 12:47:18 +0000 (UTC)
+	id D4E5E64FF5; Fri, 12 Mar 2021 12:47:36 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E8A7864FE0;
+	Fri, 12 Mar 2021 12:47:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1615553241;
-	bh=1fZ0FKRtf2Xjxe7KBivClSQ500entp+/bdQG6G0FdCI=;
+	s=k20201202; t=1615553256;
+	bh=tC9vXuNeMt2BcsSWomDvOlVNAT15v0VJGkzD4Spk0nk=;
 	h=Subject:List-Id:To:References:From:Date:In-Reply-To:From;
-	b=ihWeTdUGbazqxWDdbNzqRN7VL/zLQEf7cNKat01w2F2x2XD85hhgdm8/SQ07m9nCO
-	 54JekYLAVN8f8Uwug4hCtVIJZFZZ/T/CxISGzWJkJnAMfV2HT8g2tuiys+YtrP9o8/
-	 MPDSg073KZJi/aFuXNAejWtsMUiqza1isRH9tJDF5UDs5AV72OmA8VqtgvtNli6eQg
-	 vJle/NeJ4FpP8alK+L2U5peWUVnMJYef+VKfSa2rorh1OEdoolOr0IFTPybwQEKBDo
-	 /4FO84rP7nXsYderehBJXvG5Uo30RcKOU8+sjE2dPZ/oQcQNl7c+3J5XdUd7N7l8TA
-	 oZHizWhfVkToQ==
-Subject: Re: [PATCH v3 02/15] ARM: socfpga: introduce common
- ARCH_INTEL_SOCFPGA
+	b=SBXMNvUWf1XVnDxY8VlIAVrxvfKd50uGoa3aJz0VWBFfyDk+qHSm85xZM/9jbmrt2
+	 GPFZ1bPWPXGlPlEXPslBLW1OCbV0GnsJui1JTq+UmleN7b49Wf0AqoJiTPnvdS41/E
+	 Yu0Libd3eiVPXFm3dNSuZAZC19beLgkXEDaPrqgtdC4CxHjLwPwFa8QYvTpa83nXFo
+	 0LeqqdQ3WESLGfE0z2xrUhduHLXfAvxoIdsF/CsclCyLWmL/fxb69A7vpr8jhbBzM+
+	 L+4Ed9UBxDCULa+USnF4te+wbOUgTTbjOug9B3xkUwAZcmyA8I5wVjECfuZhnM9QtC
+	 JTnAl9rdPo93Q==
+Subject: Re: [PATCH v3 05/15] clk: socfpga: build together Stratix 10, Agilex
+ and N5X clock drivers
 List-Id: <soc.lore.kernel.org>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
  Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
@@ -45,14 +45,14 @@ To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
  linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
  netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
 References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
- <20210311152545.1317581-3-krzysztof.kozlowski@canonical.com>
+ <20210311152545.1317581-6-krzysztof.kozlowski@canonical.com>
 From: Dinh Nguyen <dinguyen@kernel.org>
-Message-ID: <3d5bac4c-ea41-02d5-071b-17e23421d14b@kernel.org>
-Date: Fri, 12 Mar 2021 06:47:17 -0600
+Message-ID: <5dc72298-a44a-1f99-c7d6-b69001f7c7fe@kernel.org>
+Date: Fri, 12 Mar 2021 06:47:33 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <20210311152545.1317581-3-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210311152545.1317581-6-krzysztof.kozlowski@canonical.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -60,141 +60,49 @@ Content-Transfer-Encoding: 7bit
 
 
 On 3/11/21 9:25 AM, Krzysztof Kozlowski wrote:
-> Simplify 32-bit and 64-bit Intel SoCFPGA Kconfig options by having only
-> one for both of them.  This the common practice for other platforms.
-> Additionally, the ARCH_SOCFPGA is too generic as SoCFPGA designs come
-> from multiple vendors.
+> On a multiplatform kernel there is little benefit in splitting each
+> clock driver per platform because space savings are minimal.  Such split
+> also complicates the code, especially after adding compile testing.
+> 
+> Build all arm64 Intel SoCFPGA clocks together with one entry in
+> Makefile.  This also removed duplicated line in the Makefile (selecting
+> common part of clocks per platform).
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->   arch/arm/Kconfig                    | 2 +-
->   arch/arm/Kconfig.debug              | 6 +++---
->   arch/arm/Makefile                   | 2 +-
->   arch/arm/boot/dts/Makefile          | 2 +-
->   arch/arm/mach-socfpga/Kconfig       | 4 ++++
->   arch/arm64/Kconfig.platforms        | 4 ++++
->   arch/arm64/boot/dts/altera/Makefile | 2 +-
->   7 files changed, 15 insertions(+), 7 deletions(-)
+>   drivers/clk/socfpga/Kconfig  | 6 +++---
+>   drivers/clk/socfpga/Makefile | 7 +++----
+>   2 files changed, 6 insertions(+), 7 deletions(-)
 > 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index 853aab5ab327..37f94cf0cfdb 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -1320,7 +1320,7 @@ config ARM_PSCI
->   # selected platforms.
->   config ARCH_NR_GPIO
->   	int
-> -	default 2048 if ARCH_SOCFPGA
-> +	default 2048 if ARCH_INTEL_SOCFPGA
->   	default 1024 if ARCH_BRCMSTB || ARCH_RENESAS || ARCH_TEGRA || \
->   		ARCH_ZYNQ || ARCH_ASPEED
->   	default 512 if ARCH_EXYNOS || ARCH_KEYSTONE || SOC_OMAP5 || \
-> diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-> index 9e0b5e7f12af..36016497b1b3 100644
-> --- a/arch/arm/Kconfig.debug
-> +++ b/arch/arm/Kconfig.debug
-> @@ -1087,7 +1087,7 @@ choice
->   		  on SD5203 UART.
->   
->   	config DEBUG_SOCFPGA_UART0
-> -		depends on ARCH_SOCFPGA
-> +		depends on ARCH_INTEL_SOCFPGA
->   		bool "Use SOCFPGA UART0 for low-level debug"
->   		select DEBUG_UART_8250
->   		help
-> @@ -1095,7 +1095,7 @@ choice
->   		  on SOCFPGA(Cyclone 5 and Arria 5) based platforms.
->   
->   	config DEBUG_SOCFPGA_ARRIA10_UART1
-> -		depends on ARCH_SOCFPGA
-> +		depends on ARCH_INTEL_SOCFPGA
->   		bool "Use SOCFPGA Arria10 UART1 for low-level debug"
->   		select DEBUG_UART_8250
->   		help
-> @@ -1103,7 +1103,7 @@ choice
->   		  on SOCFPGA(Arria 10) based platforms.
->   
->   	config DEBUG_SOCFPGA_CYCLONE5_UART1
-> -		depends on ARCH_SOCFPGA
-> +		depends on ARCH_INTEL_SOCFPGA
->   		bool "Use SOCFPGA Cyclone 5 UART1 for low-level debug"
->   		select DEBUG_UART_8250
->   		help
-> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-> index dad5502ecc28..415c3514573a 100644
-> --- a/arch/arm/Makefile
-> +++ b/arch/arm/Makefile
-> @@ -209,7 +209,7 @@ machine-$(CONFIG_PLAT_SAMSUNG)		+= s3c
->   machine-$(CONFIG_ARCH_S5PV210)		+= s5pv210
->   machine-$(CONFIG_ARCH_SA1100)		+= sa1100
->   machine-$(CONFIG_ARCH_RENESAS)	 	+= shmobile
-> -machine-$(CONFIG_ARCH_SOCFPGA)		+= socfpga
-> +machine-$(CONFIG_ARCH_INTEL_SOCFPGA)	+= socfpga
->   machine-$(CONFIG_ARCH_STI)		+= sti
->   machine-$(CONFIG_ARCH_STM32)		+= stm32
->   machine-$(CONFIG_ARCH_SUNXI)		+= sunxi
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 53b6e06bf19a..fe8f7c349f1d 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1033,7 +1033,7 @@ dtb-$(CONFIG_ARCH_S5PV210) += \
->   	s5pv210-smdkc110.dtb \
->   	s5pv210-smdkv210.dtb \
->   	s5pv210-torbreck.dtb
-> -dtb-$(CONFIG_ARCH_SOCFPGA) += \
-> +dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) += \
->   	socfpga_arria5_socdk.dtb \
->   	socfpga_arria10_socdk_nand.dtb \
->   	socfpga_arria10_socdk_qspi.dtb \
-> diff --git a/arch/arm/mach-socfpga/Kconfig b/arch/arm/mach-socfpga/Kconfig
-> index c3bb68d57cea..e43ed0ca6860 100644
-> --- a/arch/arm/mach-socfpga/Kconfig
-> +++ b/arch/arm/mach-socfpga/Kconfig
-> @@ -2,6 +2,7 @@
->   menuconfig ARCH_SOCFPGA
->   	bool "Altera SOCFPGA family"
->   	depends on ARCH_MULTI_V7
-> +	select ARCH_INTEL_SOCFPGA
->   	select ARCH_SUPPORTS_BIG_ENDIAN
->   	select ARM_AMBA
->   	select ARM_GIC
-> @@ -20,6 +21,9 @@ menuconfig ARCH_SOCFPGA
->   	select PL310_ERRATA_769419
->   
->   if ARCH_SOCFPGA
-> +config ARCH_INTEL_SOCFPGA
-> +	bool
-> +
->   config SOCFPGA_SUSPEND
->   	bool "Suspend to RAM on SOCFPGA"
->   	help
-> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-> index cdfd5fed457f..ecab67a1afb8 100644
-> --- a/arch/arm64/Kconfig.platforms
-> +++ b/arch/arm64/Kconfig.platforms
-> @@ -256,9 +256,13 @@ config ARCH_SEATTLE
->   
->   config ARCH_STRATIX10
->   	bool "Altera's Stratix 10 SoCFPGA Family"
-> +	select ARCH_INTEL_SOCFPGA
->   	help
->   	  This enables support for Altera's Stratix 10 SoCFPGA Family.
->   
-> +config ARCH_INTEL_SOCFPGA
-> +	bool
-> +
->   config ARCH_SYNQUACER
->   	bool "Socionext SynQuacer SoC Family"
->   
-> diff --git a/arch/arm64/boot/dts/altera/Makefile b/arch/arm64/boot/dts/altera/Makefile
-> index 10119c7ab437..4db83fbeb115 100644
-> --- a/arch/arm64/boot/dts/altera/Makefile
-> +++ b/arch/arm64/boot/dts/altera/Makefile
-> @@ -1,3 +1,3 @@
->   # SPDX-License-Identifier: GPL-2.0-only
-> -dtb-$(CONFIG_ARCH_STRATIX10) += socfpga_stratix10_socdk.dtb \
-> +dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) += socfpga_stratix10_socdk.dtb \
->   				socfpga_stratix10_socdk_nand.dtb
+> diff --git a/drivers/clk/socfpga/Kconfig b/drivers/clk/socfpga/Kconfig
+> index 3c30617169bf..bc102e0f0be0 100644
+> --- a/drivers/clk/socfpga/Kconfig
+> +++ b/drivers/clk/socfpga/Kconfig
+> @@ -1,6 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   config CLK_INTEL_SOCFPGA64
+>   	bool
+> -	# Intel Agilex / N5X clock controller support
+> -	default (ARCH_AGILEX || ARCH_N5X)
+> -	depends on ARCH_AGILEX || ARCH_N5X
+> +	# Intel Stratix / Agilex / N5X clock controller support
+> +	default (ARCH_AGILEX || ARCH_N5X || ARCH_STRATIX10)
+> +	depends on ARCH_AGILEX || ARCH_N5X || ARCH_STRATIX10
+> diff --git a/drivers/clk/socfpga/Makefile b/drivers/clk/socfpga/Makefile
+> index c6db8dd4ab35..ebd3538d12de 100644
+> --- a/drivers/clk/socfpga/Makefile
+> +++ b/drivers/clk/socfpga/Makefile
+> @@ -1,7 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   obj-$(CONFIG_ARCH_SOCFPGA) += clk.o clk-gate.o clk-pll.o clk-periph.o
+>   obj-$(CONFIG_ARCH_SOCFPGA) += clk-pll-a10.o clk-periph-a10.o clk-gate-a10.o
+> -obj-$(CONFIG_ARCH_STRATIX10) += clk-s10.o
+> -obj-$(CONFIG_ARCH_STRATIX10) += clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o
+> -obj-$(CONFIG_CLK_INTEL_SOCFPGA64) += clk-agilex.o
+> -obj-$(CONFIG_CLK_INTEL_SOCFPGA64) += clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o
+> +obj-$(CONFIG_CLK_INTEL_SOCFPGA64) += clk-s10.o \
+> +				     clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o \
+> +				     clk-agilex.o
 > 
 
 Acked-by: Dinh Nguyen <dinguyen@kernel.org>
