@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2341C433DB
-	for <soc@archiver.kernel.org>; Fri, 12 Mar 2021 12:48:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3D70C433DB
+	for <soc@archiver.kernel.org>; Fri, 12 Mar 2021 12:48:36 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id A3F3364FFE; Fri, 12 Mar 2021 12:48:13 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0097964FEA;
-	Fri, 12 Mar 2021 12:48:10 +0000 (UTC)
+	id 8897465004; Fri, 12 Mar 2021 12:48:36 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C27F764FF5;
+	Fri, 12 Mar 2021 12:48:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1615553293;
-	bh=zqQ+TLOED1Y90DQzgPBBXvQKHXerBwQtp3QdYQkiG3o=;
+	s=k20201202; t=1615553316;
+	bh=0M3AWAnfNcs/YwhscgnVDNjOxG7wujCB0Tnhsuxfu4M=;
 	h=Subject:List-Id:To:References:From:Date:In-Reply-To:From;
-	b=KV8zoYaMonNQ2Ukt9r6YBu5pNJuO+KRTKV0eB+qBSeDuj7mpk25jEhvp2VVPbhENZ
-	 HlPB94sz8D+yMyOppP2cfSFwwwWohi5xWFLgB7vk+lYg+Ubs4aVWzFTs1ECskzRwUF
-	 bM/iaFhy0jJ0DjP50M0AeOYXAT4fq8KeiVTg0XtgMM5PXY64gszADeqZBokHGf1HDN
-	 MmLV7Rb3nFgeJ39jC4PANu9lArPKhdggNDwBF8Fs9ka9bDmje4i9PC0JJmfuWfD26w
-	 6DFQ3KFXYrIb1Q2e0w8NODcDYBda1OkrpS7M9VoIm79ZkvZiGje1FJEPrvEzHb+jbO
-	 Xh4dtOt9oTxhg==
-Subject: Re: [PATCH v3 09/15] clk: socfpga: allow compile testing of Stratix
- 10 / Agilex clocks
+	b=tYS7wMpvc8ozOG2Vz0TZhyKmTxGN8o8bUAYQJ1RM6gYkDL2+jHfYwQhjJMgJkjxy/
+	 AGFUkZOXTkaUHsrtUSx3AmyjE60KOQJuhLQROl/w7Tm84mvcTe0nQoI8EIgjVo1p56
+	 7/ODZrr9JDAjEj25OPYw9IhND9/hfNqfd1NgOeDNG2ThZ2oQ8kCxB4z/uVPARd37Ac
+	 CjFiPVkgFqEHLYNvIKNOy2XDM0coEexoTl5wLnA47VPh+6Z2noTtHzgzIR6Qgk3nSy
+	 /Bm0Sj1ifjvKczJv/OX9bWOjSxzHzro/Yu+B1I53wZvSpmkZWivNrCPwFsCios7Xr6
+	 5y1sBZT+or9hQ==
+Subject: Re: [PATCH v3 10/15] clk: socfpga: use ARCH_INTEL_SOCFPGA also for
+ 32-bit ARM SoCs (and compile test)
 List-Id: <soc.lore.kernel.org>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
  Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
@@ -45,14 +45,14 @@ To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
  linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
  netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
 References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
- <20210311152707.1317791-1-krzysztof.kozlowski@canonical.com>
+ <20210311152715.1317848-1-krzysztof.kozlowski@canonical.com>
 From: Dinh Nguyen <dinguyen@kernel.org>
-Message-ID: <2a358f79-c6c4-e1b7-980e-b14d6a15d45d@kernel.org>
-Date: Fri, 12 Mar 2021 06:48:10 -0600
+Message-ID: <3470598f-b301-952b-3b13-43b36ff8a8fa@kernel.org>
+Date: Fri, 12 Mar 2021 06:48:32 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <20210311152707.1317791-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210311152715.1317848-1-krzysztof.kozlowski@canonical.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -60,52 +60,54 @@ Content-Transfer-Encoding: 7bit
 
 
 On 3/11/21 9:27 AM, Krzysztof Kozlowski wrote:
-> The Stratix 10 / Agilex / N5X clocks do not use anything other than OF
-> or COMMON_CLK so they should be compile testable on most of the
-> platforms.
+> ARCH_SOCFPGA is being renamed to ARCH_INTEL_SOCFPGA so adjust the
+> 32-bit ARM drivers to rely on new symbol.
+> 
+> There is little point to share clock controller drivers between 32-bit
+> and 64-bit platforms because there will not be a generic image for both
+> of them.  Therefore add a new Kconfig entry for building 32-bit clock
+> driverss, similar to one for 64-bit.  This allows enabling compile
+> testing.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->   drivers/clk/Makefile        |  2 +-
->   drivers/clk/socfpga/Kconfig | 15 ++++++++++++---
->   2 files changed, 13 insertions(+), 4 deletions(-)
+>   drivers/clk/socfpga/Kconfig  | 6 +++++-
+>   drivers/clk/socfpga/Makefile | 4 ++--
+>   2 files changed, 7 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-> index 96802294d35a..9b582b3fca34 100644
-> --- a/drivers/clk/Makefile
-> +++ b/drivers/clk/Makefile
-> @@ -104,7 +104,7 @@ obj-y					+= renesas/
->   obj-$(CONFIG_ARCH_ROCKCHIP)		+= rockchip/
->   obj-$(CONFIG_COMMON_CLK_SAMSUNG)	+= samsung/
->   obj-$(CONFIG_CLK_SIFIVE)		+= sifive/
-> -obj-$(CONFIG_ARCH_INTEL_SOCFPGA)	+= socfpga/
-> +obj-y					+= socfpga/
->   obj-$(CONFIG_PLAT_SPEAR)		+= spear/
->   obj-y					+= sprd/
->   obj-$(CONFIG_ARCH_STI)			+= st/
 > diff --git a/drivers/clk/socfpga/Kconfig b/drivers/clk/socfpga/Kconfig
-> index b6c5b9737174..b62ede8cad01 100644
+> index b62ede8cad01..0cf16b894efb 100644
 > --- a/drivers/clk/socfpga/Kconfig
 > +++ b/drivers/clk/socfpga/Kconfig
-> @@ -1,6 +1,15 @@
->   # SPDX-License-Identifier: GPL-2.0
-> +config CLK_INTEL_SOCFPGA
-> +	bool "Intel SoCFPGA family clock support" if COMPILE_TEST && !ARCH_INTEL_SOCFPGA
-> +	default ARCH_INTEL_SOCFPGA
-> +	help
-> +	  Support for the clock controllers present on Intel SoCFPGA and eASIC
-> +	  devices like Stratix 10, Agilex and N5X eASIC.
-> +
-> +if CLK_INTEL_SOCFPGA
+> @@ -4,10 +4,14 @@ config CLK_INTEL_SOCFPGA
+>   	default ARCH_INTEL_SOCFPGA
+>   	help
+>   	  Support for the clock controllers present on Intel SoCFPGA and eASIC
+> -	  devices like Stratix 10, Agilex and N5X eASIC.
+> +	  devices like Aria, Cyclone, Stratix 10, Agilex and N5X eASIC.
+>   
+>   if CLK_INTEL_SOCFPGA
+>   
+> +config CLK_INTEL_SOCFPGA32
+> +	bool "Intel Aria / Cyclone clock controller support" if COMPILE_TEST && (!ARM || !ARCH_INTEL_SOCFPGA)
+> +	default ARM && ARCH_INTEL_SOCFPGA
 > +
 >   config CLK_INTEL_SOCFPGA64
-> -	bool
-> -	# Intel Stratix / Agilex / N5X clock controller support
-> +	bool "Intel Stratix / Agilex / N5X clock controller support" if COMPILE_TEST && (!ARM64 || !ARCH_INTEL_SOCFPGA)
+>   	bool "Intel Stratix / Agilex / N5X clock controller support" if COMPILE_TEST && (!ARM64 || !ARCH_INTEL_SOCFPGA)
 >   	default ARM64 && ARCH_INTEL_SOCFPGA
-> -	depends on ARM64 && ARCH_INTEL_SOCFPGA
-> +
-> +endif # CLK_INTEL_SOCFPGA
+> diff --git a/drivers/clk/socfpga/Makefile b/drivers/clk/socfpga/Makefile
+> index ebd3538d12de..e8dfce339c91 100644
+> --- a/drivers/clk/socfpga/Makefile
+> +++ b/drivers/clk/socfpga/Makefile
+> @@ -1,6 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+> -obj-$(CONFIG_ARCH_SOCFPGA) += clk.o clk-gate.o clk-pll.o clk-periph.o
+> -obj-$(CONFIG_ARCH_SOCFPGA) += clk-pll-a10.o clk-periph-a10.o clk-gate-a10.o
+> +obj-$(CONFIG_CLK_INTEL_SOCFPGA32) += clk.o clk-gate.o clk-pll.o clk-periph.o \
+> +				     clk-pll-a10.o clk-periph-a10.o clk-gate-a10.o
+>   obj-$(CONFIG_CLK_INTEL_SOCFPGA64) += clk-s10.o \
+>   				     clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o \
+>   				     clk-agilex.o
 > 
 
 Acked-by: Dinh Nguyen <dinguyen@kernel.org>
