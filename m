@@ -1,97 +1,74 @@
-Return-Path: <SRS0=d50f=IN=linaro.org=jens.wiklander@kernel.org>
+Return-Path: <SRS0=8Yc9=IO=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B688DC433DB
-	for <soc@archiver.kernel.org>; Mon, 15 Mar 2021 11:37:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D00CCC433E0
+	for <soc@archiver.kernel.org>; Tue, 16 Mar 2021 22:00:14 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 7571E64DE7; Mon, 15 Mar 2021 11:37:38 +0000 (UTC)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	id A4F8064F91; Tue, 16 Mar 2021 22:00:14 +0000 (UTC)
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F105E64E61
-	for <soc@kernel.org>; Mon, 15 Mar 2021 11:37:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F105E64E61
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=jens.wiklander@linaro.org
-Received: by mail-lj1-f171.google.com with SMTP id z25so15782876lja.3
-        for <soc@kernel.org>; Mon, 15 Mar 2021 04:37:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=iXyQ5uLBIQL0Ohz4oY8OpYihmmqLiQTm4jdm3uoravc=;
-        b=dRPtWgBvIWeoaCmPztmKyFm5CjYlz6alSoMcVYp41t+L5GdZOmdjXxA9WiJrkhdvsG
-         telcqa3jVXiHhvDOT2x5126NMG/uJVWYaJK6yRNp7dQWVmVaboGPh8OehP1eYzAfrlQk
-         tfdj9HRh4WjIz6k3z1hCvISs7oJ1VybKH7N3HmAT+qjpO/tO/xKww4MNIRhRXSPN8K8S
-         pTyr4w0PVhLaJssNLzzYozRfp6fsuLu3uHR9lfGttTlIWx5vbTBTVfXG7/ulgiknpjVi
-         Eui8uYSyxZV7d7Rz9hZ6nBmAs8HXPuDWnTel66UiPXq1AVpatg3qcfWY2yTqU2bxE9P/
-         jXiQ==
+	by mail.kernel.org (Postfix) with ESMTPS id 6EDBD64DFB;
+	Tue, 16 Mar 2021 22:00:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6EDBD64DFB
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=robherring2@gmail.com
+Received: by mail-io1-f47.google.com with SMTP id k2so38937099ioh.5;
+        Tue, 16 Mar 2021 15:00:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=iXyQ5uLBIQL0Ohz4oY8OpYihmmqLiQTm4jdm3uoravc=;
-        b=Ciyc+uPWHH62uS2zvM3y0d8IVB1PqUSNnU9OI+r1hlwT/AuDRPsYxeM9D02cwltKlR
-         bVwqce3WxVKlP4l3wEdx/Qk9FyHNoJGMQvCbw28CqYcVyVw7Ob9lNbwS6sXuh79RsIyc
-         IVE5VQF8BXh3JhGTXlFqIdWD+8InbCUiZ9ENp8rglp9GtkPPLW4Xu+PHIKT4eynZJ242
-         VSAU9nvQ4LVEzfapKk8ACcWQCK03YZ7wbiybA6J8ZtXlxmedu/ke0WSYWSIN3hdHyLqD
-         OwX6HTNQyOX2O0nRRtzQXxBVGh+zwIzydb9C03gXhQLT7g+DK394bhIxwtYTIAcTG62h
-         Nppg==
-X-Gm-Message-State: AOAM532m1zvnaVNh/SFzDAW9DaC8mri39PKgKyLvnEJEAqy9B0HwVBvy
-	idxcKGPu7XMxi4lbnr200iIzAg==
-X-Google-Smtp-Source: ABdhPJycEH5h6oRqVsK08fMcRac8KL6vv0ODLk5w4mHbkb8jFh4XkKRq8OumBeqEPfsD9rSjoxRJMw==
-X-Received: by 2002:a2e:a60a:: with SMTP id v10mr10686235ljp.267.1615808256341;
-        Mon, 15 Mar 2021 04:37:36 -0700 (PDT)
-Received: from jade (h-249-223.A175.priv.bahnhof.se. [98.128.249.223])
-        by smtp.gmail.com with ESMTPSA id w5sm2639274lfu.179.2021.03.15.04.37.35
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hWQnLy+wlCYyKsfibvRnMmDe6TnPBpLcmFf0o5i5sXo=;
+        b=rq4YOdr3ndUShNlhXmCEHM9wtMZxqmwETSKTnXQrRGr/hTVlgRSQT6D99TwQmSu0zO
+         OsBRjE7ta+FTi6TmLt8tPAt7qA/rWU2chIl1l+S3ZpjktBJ7qGEWoVO7UkWsjxKvr0WE
+         2U5jDGmubu6i6bvHyr7TB94XRrmwutNwUUnfMEMp7dGBEwOH/ImAWFleRNT3Am4KzFzw
+         W7daPGZxZ5mTjUGzNkNowgUGe2DW88K5IXOVRYlLxLVkE7bLMWFhNbqk26eCL0xcOrjM
+         KC+ZMzMrKqNx27HQ7G6Dm+j+kqwtZ95PAlu340RpCzlhqL1yrUNRhHfigN1FCUuRYV9/
+         245Q==
+X-Gm-Message-State: AOAM533FWov6GvUgwLAoAtQvrboAc8WiRFPj1MUPNW0dhOsbDEVAYFOQ
+	tcbKX9NCHUtQ+Yi32/2diA==
+X-Google-Smtp-Source: ABdhPJwCXPLXH5ryR9zjM8plYiRvPqgWPNS67eAHKVo6mFw4S0V6YZBXB8qtNjD3qRbtCquQg9ctNg==
+X-Received: by 2002:a05:6602:179c:: with SMTP id y28mr4758814iox.151.1615932013916;
+        Tue, 16 Mar 2021 15:00:13 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id n16sm8806315ilq.71.2021.03.16.15.00.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 04:37:35 -0700 (PDT)
-Date: Mon, 15 Mar 2021 12:37:33 +0100
-From: Jens Wiklander <jens.wiklander@linaro.org>
+        Tue, 16 Mar 2021 15:00:12 -0700 (PDT)
+Received: (nullmailer pid 3753212 invoked by uid 1000);
+	Tue, 16 Mar 2021 22:00:09 -0000
+Date: Tue, 16 Mar 2021 16:00:09 -0600
+From: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: op-tee@lists.trustedfirmware.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Jisheng Zhang <Jisheng.Zhang@synaptics.com>
-Subject: [GIT PULL] OP-TEE tracepoints for v5.13
-Message-ID: <20210315113733.GA1944243@jade>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>, Olof Johansson <olof@lixom.net>, "Paul J. Murphy" <paul.j.murphy@intel.com>, arm@kernel.org, Arnd Bergmann <arnd@arndb.de>, Daniele Alessandrelli <daniele.alessandrelli@intel.com>, soc@kernel.org
+Subject: Re: [RESEND 2nd PATCH 01/10] dt-bindings: arm: intel,keembay: limit
+ the dtschema to root node
+Message-ID: <20210316220009.GA3753176@robh.at.kernel.org>
+References: <20210308170945.161468-1-krzysztof.kozlowski@canonical.com>
+ <20210308170945.161468-2-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20210308170945.161468-2-krzysztof.kozlowski@canonical.com>
 
-Hello arm-soc maintainers,
+On Mon, 08 Mar 2021 18:09:36 +0100, Krzysztof Kozlowski wrote:
+> From: Krzysztof Kozlowski <krzk@kernel.org>
+> 
+> The check for the board compatible should be limited only to the root
+> node.  Any other nodes with such compatible are not part of this schema
+> and should not match.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+> ---
+>  Documentation/devicetree/bindings/arm/intel,keembay.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-Please pull this patch adding tracepoints around calls to OP-TEE in
-secure world.
-
-Thanks,
-Jens
-
-The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
-
-  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
-
-are available in the Git repository at:
-
-  git://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-tracepoints-for-v5.13
-
-for you to fetch changes up to 0101947dbcc3204f08fb5b69a21dbd4b1535cad6:
-
-  tee: optee: add invoke_fn tracepoints (2021-03-15 12:04:01 +0100)
-
-----------------------------------------------------------------
-Add tracepoints around calls to secure world
-
-----------------------------------------------------------------
-Jisheng Zhang (1):
-      tee: optee: add invoke_fn tracepoints
-
- drivers/tee/optee/call.c        |  4 +++
- drivers/tee/optee/optee_trace.h | 67 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 71 insertions(+)
- create mode 100644 drivers/tee/optee/optee_trace.h
+Acked-by: Rob Herring <robh@kernel.org>
