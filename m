@@ -1,74 +1,100 @@
-Return-Path: <SRS0=8Yc9=IO=gmail.com=robherring2@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D00CCC433E0
-	for <soc@archiver.kernel.org>; Tue, 16 Mar 2021 22:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 540C4C433E0
+	for <soc@archiver.kernel.org>; Thu, 18 Mar 2021 09:01:51 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id A4F8064F91; Tue, 16 Mar 2021 22:00:14 +0000 (UTC)
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6EDBD64DFB;
-	Tue, 16 Mar 2021 22:00:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6EDBD64DFB
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=robherring2@gmail.com
-Received: by mail-io1-f47.google.com with SMTP id k2so38937099ioh.5;
-        Tue, 16 Mar 2021 15:00:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hWQnLy+wlCYyKsfibvRnMmDe6TnPBpLcmFf0o5i5sXo=;
-        b=rq4YOdr3ndUShNlhXmCEHM9wtMZxqmwETSKTnXQrRGr/hTVlgRSQT6D99TwQmSu0zO
-         OsBRjE7ta+FTi6TmLt8tPAt7qA/rWU2chIl1l+S3ZpjktBJ7qGEWoVO7UkWsjxKvr0WE
-         2U5jDGmubu6i6bvHyr7TB94XRrmwutNwUUnfMEMp7dGBEwOH/ImAWFleRNT3Am4KzFzw
-         W7daPGZxZ5mTjUGzNkNowgUGe2DW88K5IXOVRYlLxLVkE7bLMWFhNbqk26eCL0xcOrjM
-         KC+ZMzMrKqNx27HQ7G6Dm+j+kqwtZ95PAlu340RpCzlhqL1yrUNRhHfigN1FCUuRYV9/
-         245Q==
-X-Gm-Message-State: AOAM533FWov6GvUgwLAoAtQvrboAc8WiRFPj1MUPNW0dhOsbDEVAYFOQ
-	tcbKX9NCHUtQ+Yi32/2diA==
-X-Google-Smtp-Source: ABdhPJwCXPLXH5ryR9zjM8plYiRvPqgWPNS67eAHKVo6mFw4S0V6YZBXB8qtNjD3qRbtCquQg9ctNg==
-X-Received: by 2002:a05:6602:179c:: with SMTP id y28mr4758814iox.151.1615932013916;
-        Tue, 16 Mar 2021 15:00:13 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id n16sm8806315ilq.71.2021.03.16.15.00.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 15:00:12 -0700 (PDT)
-Received: (nullmailer pid 3753212 invoked by uid 1000);
-	Tue, 16 Mar 2021 22:00:09 -0000
-Date: Tue, 16 Mar 2021 16:00:09 -0600
-From: Rob Herring <robh@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+	id 1050464F18; Thu, 18 Mar 2021 09:01:51 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 68D606148E;
+	Thu, 18 Mar 2021 09:01:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1616058111;
+	bh=1CaeqjzTDN5MXdLj74768GDiTbrkvP1IB1LRx7ToJ74=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=cFxsACFFPTH4rfQU2VL9hLMGpKBfsphrLZiMMecjlx/84a7cLP1to2DvbVe2gaCnQ
+	 InQ+x4BkewCF0r2ufY6i1Lbn4T3o43vLulMyvVTYqkJZBDB1RonA+sj2/t81bGJpJP
+	 AAkG7Xxb1crMMLufg1itplrki1hetYhfpNkUEzxnyqw+PlK3SOF3p2Ga2lW4JnnpO5
+	 9uQ41OSe5BK9LWpYJx9MQnqP8K/IoKiIsv8Ze7PgSJ/kmBjfXYLAbPYTGid9sJVKdc
+	 YCMAIxm/dJBialCcW1ibJFGFae9HFtLLUvB/+z/fx/ra4Mc7cVRE91lvkZw/+DRWyn
+	 bQVzmLNbcdWDw==
+Date: Thu, 18 Mar 2021 17:01:46 +0800
+From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>, Olof Johansson <olof@lixom.net>, "Paul J. Murphy" <paul.j.murphy@intel.com>, arm@kernel.org, Arnd Bergmann <arnd@arndb.de>, Daniele Alessandrelli <daniele.alessandrelli@intel.com>, soc@kernel.org
-Subject: Re: [RESEND 2nd PATCH 01/10] dt-bindings: arm: intel,keembay: limit
- the dtschema to root node
-Message-ID: <20210316220009.GA3753176@robh.at.kernel.org>
-References: <20210308170945.161468-1-krzysztof.kozlowski@canonical.com>
- <20210308170945.161468-2-krzysztof.kozlowski@canonical.com>
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
+	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] i.MX fixes for 5.12
+Message-ID: <20210318090145.GA22955@dragon>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210308170945.161468-2-krzysztof.kozlowski@canonical.com>
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
 
-On Mon, 08 Mar 2021 18:09:36 +0100, Krzysztof Kozlowski wrote:
-> From: Krzysztof Kozlowski <krzk@kernel.org>
-> 
-> The check for the board compatible should be limited only to the root
-> node.  Any other nodes with such compatible are not part of this schema
-> and should not match.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
-> ---
->  Documentation/devicetree/bindings/arm/intel,keembay.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
-Acked-by: Rob Herring <robh@kernel.org>
+  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.12
+
+for you to fetch changes up to e4817a1b6b77db538bc0141c3b138f2df803ce87:
+
+  ARM: dts: imx6ull: fix ubi filesystem mount failed (2021-03-18 12:06:28 +0800)
+
+----------------------------------------------------------------
+i.MX fixes for 5.12:
+
+- Fix an Ethernet issue on imx6ul-14x14-evk board that is caused by
+  independent PHY reset.
+- Add missing `dma-coherent` property for LayerScape device trees to fix a
+  kernel BUG report.
+- Use IRQCHIP_DECLARE for AVIC driver to fix a boot issue on i.MX25 with
+  fw_devlink=on.
+- Add missing I2C pinctrl entry for imx8mp-phyboard-pollux-rdk board to
+  fix the broken I2C GPIO recovery support.
+- Add `fsl,use-minimum-ecc` property for imx6ull-myir-mys-6ulx-eval
+  device tree to fix UBI filesystem mount failure.
+
+----------------------------------------------------------------
+Fabio Estevam (1):
+      ARM: imx6ul-14x14-evk: Do not reset the Ethernet PHYs independently
+
+Horia Geantă (3):
+      arm64: dts: ls1046a: mark crypto engine dma coherent
+      arm64: dts: ls1043a: mark crypto engine dma coherent
+      arm64: dts: ls1012a: mark crypto engine dma coherent
+
+Saravana Kannan (1):
+      ARM: imx: avic: Convert to using IRQCHIP_DECLARE
+
+Teresa Remmet (1):
+      arm64: dts: imx8mp-phyboard-pollux-rdk: Add missing pinctrl entry
+
+dillon min (1):
+      ARM: dts: imx6ull: fix ubi filesystem mount failed
+
+ arch/arm/boot/dts/imx6ul-14x14-evk.dtsi            | 22 ++++++++++++++------
+ arch/arm/boot/dts/imx6ull-myir-mys-6ulx-eval.dts   |  1 +
+ arch/arm/mach-imx/avic.c                           | 16 ++++++++++++++-
+ arch/arm/mach-imx/common.h                         |  1 -
+ arch/arm/mach-imx/mach-imx1.c                      | 11 ----------
+ arch/arm/mach-imx/mach-imx25.c                     | 12 -----------
+ arch/arm/mach-imx/mach-imx27.c                     | 12 -----------
+ arch/arm/mach-imx/mach-imx31.c                     |  1 -
+ arch/arm/mach-imx/mach-imx35.c                     |  1 -
+ arch/arm/mach-imx/mm-imx3.c                        | 24 ----------------------
+ arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi     |  1 +
+ arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi     |  1 +
+ arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi     |  1 +
+ .../dts/freescale/imx8mp-phyboard-pollux-rdk.dts   |  2 +-
+ .../boot/dts/freescale/imx8mp-phycore-som.dtsi     |  2 +-
+ 15 files changed, 37 insertions(+), 71 deletions(-)
