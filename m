@@ -2,68 +2,65 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83A49C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFCAAC433DB
 	for <soc@archiver.kernel.org>; Thu, 18 Mar 2021 23:10:12 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 5976864F24; Thu, 18 Mar 2021 23:10:12 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 427BE64EF6
-	for <soc@kernel.org>; Thu, 18 Mar 2021 23:10:12 +0000 (UTC)
+	id 71B7064F53; Thu, 18 Mar 2021 23:10:12 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 5AA9864F33;
+	Thu, 18 Mar 2021 23:10:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1616109012;
-	bh=sxjCG6cFPvoDypJulAiefvWzSSrt74Zl+PEcrnInaLM=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=Ex69TMUI8ACxKNjGyYpe0/Me/YxycJwXFBV3bBucD1ZGMHTuc7iMyJMMCVBBR89Fe
-	 /3HDBgz6CQ4sEfTn3p74tvK97/Lxx2M3xA2jPXqAjU7/8ZHSxxhtRKVMqZcFev3bWa
-	 1NX29WTB+W1P6964jOsSbAfUhwLB3Js0b++gTEPTijQQK7wAj4kispcU10ea/CUQft
-	 liZmygAW2XV5jO9FoV/8OE2HvjrMsyXg85aAIwFCcUPUiuK9sPGl5i6sCD/GWCgZ+s
-	 NtRTNSdwX+oYLCA+vA7rMK8sDFfa380rCU2NXfWdafmU/2HnQ6yJrZBE/yqsM6V3Ps
-	 R2kMVntP0NM4g==
+	bh=sYmBu/zptOhghQvASLe4f3vIrlNOwWeijdFst9ZIQxk=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=NuiZcuN5IqxOyi8VJQNisurHkDJL5rZwhMPMiv40LfxzocmNbiRsOWNwIsonMBkxM
+	 n2/GzIK6JPjnT9Q44ctDNN1NwxiFZjN7NwR6xnZK4L0f/xPp+awcyfi3KRkMvW6t4O
+	 3LrYnoP4wW/23GXFvExrjFM4tmLfhfoCZlfCFwQEQglnxvVxVYCSkmfCzZnhm1jHiw
+	 USh5acERrIWsw19qUm4eclPq/wy7XNw5AlQRjqIODdJYhdVtNM19DdUWO8N2wcXmm2
+	 FcvbAM2+T8RPL6P7KoBUl9N3EIaft+0fY8Go4aQHwNovhcFIXvAxglpXYFVwZXE7K6
+	 iI5Om8siocx4w==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3C5EB600E8;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4E3396097B;
 	Thu, 18 Mar 2021 23:10:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] ARM: at91: fixes for 5.12
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <161610901221.20140.8633935211374619076.git-patchwork-summary@kernel.org>
+ <161610901231.20140.279113367869329140.git-patchwork-notify@kernel.org>
 Date: Thu, 18 Mar 2021 23:10:12 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20210310160547.55382-1-nicolas.ferre@microchip.com>
+In-Reply-To: <20210310160547.55382-1-nicolas.ferre@microchip.com>
+To: Nicolas Ferre <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (refs/heads/arm/fixes):
+This pull request was applied to soc/soc.git (refs/heads/arm/fixes):
 
-Series: [GIT,PULL,1/2] Broadcom late devicetree changes for 5.12
-  Submitter: Florian Fainelli <f.fainelli@gmail.com>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=434323
-  Lore link: https://lore.kernel.org/r/20210217011654.2561426-1-f.fainelli@gmail.com
-    Patches: [GIT,PULL,1/2] Broadcom late devicetree changes for 5.12
-             [GIT,PULL,2/2] Broadcom late drivers changes for 5.12
-Patch: [GIT,PULL] ARM: at91: fixes for 5.12
-  Submitter: Nicolas Ferre <nicolas.ferre@microchip.com>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=445517
-  Lore link: https://lore.kernel.org/r/20210310160547.55382-1-nicolas.ferre@microchip.com
-Patch: [GIT,PULL] i.MX fixes for 5.12
-  Submitter: Shawn Guo <shawnguo@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=450545
-  Lore link: https://lore.kernel.org/r/20210318090145.GA22955@dragon
-Patch: [GIT,PULL] Fixes for omaps for v5.12-rc cycle
-  Submitter: Tony Lindgren <tony@atomide.com>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=442069
-  Lore link: https://lore.kernel.org/r/pull-1614868603-800959@atomide.com
+On Wed, 10 Mar 2021 17:05:47 +0100 you wrote:
+> From: Nicolas Ferre <nicolas.ferre@microchip.com>
+> 
+> Arnd, Olof,
+> 
+> Here are some fixes for 5.12. It's not regression vs. previous revision, this
+> is why I send them early in the cycle.
+> I based my branch on top of 5.12-rc2 because I noticed that your "master"
+> branch was pointing to it (and of course the "-dontuse" suffix from Linus).
+> Tell me if you prefer that I use a more usual "-rc1".
+> 
+> [...]
 
-Total patches: 5
+Here is the summary with links:
+  - [GIT,PULL] ARM: at91: fixes for 5.12
+    https://git.kernel.org/soc/soc/c/3848421f9d1f
 
+You are awesome, thank you!
 --
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
