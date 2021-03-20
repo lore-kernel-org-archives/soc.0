@@ -1,31 +1,49 @@
-Return-Path: <SRS0=0R2B=IS=gmx.net=j.neuschaefer@kernel.org>
+Return-Path: <SRS0=gZYX=IS=lists.ozlabs.org=openbmc-bounces+openbmc=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69C30C433DB
-	for <soc@archiver.kernel.org>; Sat, 20 Mar 2021 18:44:56 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 33D8B6193D; Sat, 20 Mar 2021 18:44:56 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE786C433C1
+	for <openbmc@archiver.kernel.org>; Sat, 20 Mar 2021 18:45:31 +0000 (UTC)
+Received: from lists.ozlabs.org (lists.ozlabs.org [112.213.38.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6D2A46192E;
-	Sat, 20 Mar 2021 18:44:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6D2A46192E
+	by mail.kernel.org (Postfix) with ESMTPS id 6F5016192E
+	for <openbmc@archiver.kernel.org>; Sat, 20 Mar 2021 18:45:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6F5016192E
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=j.neuschaefer@gmx.net
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
+Received: from boromir.ozlabs.org (localhost [IPv6:::1])
+	by lists.ozlabs.org (Postfix) with ESMTP id 4F2qT530bLz2ysh
+	for <openbmc@archiver.kernel.org>; Sun, 21 Mar 2021 05:45:29 +1100 (AEDT)
+Authentication-Results: lists.ozlabs.org;
+	dkim=fail reason="signature verification failed" (1024-bit key; secure) header.d=gmx.net header.i=@gmx.net header.a=rsa-sha256 header.s=badeba3b8450 header.b=gNCTz1TE;
+	dkim-atps=neutral
+Authentication-Results: lists.ozlabs.org;
+ spf=pass (sender SPF authorized) smtp.mailfrom=gmx.net
+ (client-ip=212.227.17.21; helo=mout.gmx.net;
+ envelope-from=j.neuschaefer@gmx.net; receiver=<UNKNOWN>)
+Authentication-Results: lists.ozlabs.org; dkim=pass (1024-bit key;
+ secure) header.d=gmx.net header.i=@gmx.net header.a=rsa-sha256
+ header.s=badeba3b8450 header.b=gNCTz1TE; 
+ dkim-atps=neutral
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest
+ SHA256) (No client certificate requested)
+ by lists.ozlabs.org (Postfix) with ESMTPS id 4F2qSd2VQNz2xYb
+ for <openbmc@lists.ozlabs.org>; Sun, 21 Mar 2021 05:45:01 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=badeba3b8450; t=1616265888;
-	bh=d1vLtDraAtkMqHk6HROk38CMMUZVffe5COQYlFCGvjg=;
-	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gNCTz1TEHRD3nAWVERGBvz4eZtmiAjN1QtMt2n43X0jxFLlx4dSyyFpRWQbcD7SsG
-	 sqrCM1lJJwfsbL8EjJBEkZE+mXVWXFRgmBZt+DK62V5ObZHYr734SKMdSgrODFrMCv
-	 08bhd2ueFbhd2Y4GAwbVyobiuRz+UtgWVNnoLfW0=
+ s=badeba3b8450; t=1616265888;
+ bh=d1vLtDraAtkMqHk6HROk38CMMUZVffe5COQYlFCGvjg=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+ b=gNCTz1TEHRD3nAWVERGBvz4eZtmiAjN1QtMt2n43X0jxFLlx4dSyyFpRWQbcD7SsG
+ sqrCM1lJJwfsbL8EjJBEkZE+mXVWXFRgmBZt+DK62V5ObZHYr734SKMdSgrODFrMCv
+ 08bhd2ueFbhd2Y4GAwbVyobiuRz+UtgWVNnoLfW0=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from longitude ([37.201.215.134]) by mail.gmx.net (mrgmx104
  [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLzFx-1l6IKX1U3N-00HveN; Sat, 20
@@ -33,15 +51,6 @@ Received: from longitude ([37.201.215.134]) by mail.gmx.net (mrgmx104
 Date: Sat, 20 Mar 2021 19:44:47 +0100
 From: Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
 To: Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-List-Id: <soc.lore.kernel.org>
-Cc: openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
-	Tomer Maimon <tmaimon77@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Patrick Venture <venture@google.com>, linux-kernel@vger.kernel.org,
-	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Olof Johansson <olof@lixom.net>, Tali Perry <tali.perry1@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Benjamin Fair <benjaminfair@google.com>
 Subject: Re: [PATCH 13/14] ARM: dts: Add devicetree for Supermicro X9SCi-LN4F
  based on WPCM450
 Message-ID: <YFZCnwmKT89wTGml@latitude>
@@ -49,7 +58,7 @@ References: <20210320181610.680870-1-j.neuschaefer@gmx.net>
  <20210320181610.680870-14-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Z1VQwSmFz+hiTBWT"
+ protocol="application/pgp-signature"; boundary="Z1VQwSmFz+hiTBWT"
 Content-Disposition: inline
 In-Reply-To: <20210320181610.680870-14-j.neuschaefer@gmx.net>
 X-Provags-ID: V03:K1:vkJZm344XxWzxVLFJbgPxKxyIbETOxSDelWoxR9zduf2ke/h6S1
@@ -70,6 +79,29 @@ X-UI-Out-Filterresults: notjunk:1;V03:K0:+XV7oEPMWik=:6W/DHQC9ZT3vehD8OtkMIu
  fT3OM63NVixoiFAyboAPnlISGJFatBZG36IKP7skabR3uQhIrmPoCH8ALs3uWR24X9UbFLhlO
  DANHgr3HLhaGDnY0IlKFdezhjxgA3tgd9RswMlwxnNSOOAemOB13kDzXAmL/Iw+l7NtPjIkUw
  ycJX27yhIUASt+Ij4DoA==
+X-BeenThere: openbmc@lists.ozlabs.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: Development list for OpenBMC <openbmc.lists.ozlabs.org>
+List-Unsubscribe: <https://lists.ozlabs.org/options/openbmc>,
+ <mailto:openbmc-request@lists.ozlabs.org?subject=unsubscribe>
+List-Archive: <http://lists.ozlabs.org/pipermail/openbmc/>
+List-Post: <mailto:openbmc@lists.ozlabs.org>
+List-Help: <mailto:openbmc-request@lists.ozlabs.org?subject=help>
+List-Subscribe: <https://lists.ozlabs.org/listinfo/openbmc>,
+ <mailto:openbmc-request@lists.ozlabs.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: devicetree@vger.kernel.org, Tomer Maimon <tmaimon77@gmail.com>,
+ Arnd Bergmann <arnd@arndb.de>, Avi Fishman <avifishman70@gmail.com>,
+ Patrick Venture <venture@google.com>, openbmc@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, Tali Perry <tali.perry1@gmail.com>,
+ soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org,
+ Benjamin Fair <benjaminfair@google.com>
+Errors-To: openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
+Sender: "openbmc"
+ <openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org>
+Message-ID: <20210320184447.SGTnDI-b98Xuab2nrZRo4O-qWXbsbOKMAFUy3qiwBA0@z>
 
 
 --Z1VQwSmFz+hiTBWT
