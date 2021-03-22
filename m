@@ -1,113 +1,114 @@
-Return-Path: <SRS0=55Mi=IU=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=I0QX=IU=linaro.org=lee.jones@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 808B4C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 22 Mar 2021 12:19:46 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0DA2C433C1
+	for <soc@archiver.kernel.org>; Mon, 22 Mar 2021 15:11:00 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7871F6198D; Mon, 22 Mar 2021 15:11:00 +0000 (UTC)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1B8BC6198E
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 22 Mar 2021 12:19:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1B8BC6198E
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=OXPlJbuTyiRmlF/YLuhnPzN5l0toQAeTfYjzA8EuVTc=; b=Y39QjlsATj8WajP4WcRWZJfMD
-	dtBsqZTHnumwnGMTjCb4KxToe6Nq6rT7+DsPCP3lbtZBWxgaq2JZB8GYMFj7rSC5UYRpx72NBgCLy
-	tl1c/arW7/Wgkoj/PD5+kj1nP+LJ9pw6RrM0klH60cOpxeKW/lsE33a/G8g+I3v3PhfHB1Mh9ei/p
-	MRoTrx6xDeb5BGXKuqFjtgf69rIPeC+zZMKkf4dXA0fPNE6eV1NPdekiFdI4imuHQJMOZcOeC2U6y
-	Lol6Pk8W41fQxVnzIy9r9KEaeCRcWhGxnqfaSGtRfD+/TMrDmTbIqu4GSAtd4ps0OrIH/0pCdkY7J
-	jR4X55zXw==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lOJVH-00BYRp-D0; Mon, 22 Mar 2021 12:17:51 +0000
-Received: from mail-vs1-f49.google.com ([209.85.217.49])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lOJVC-00BYQy-8k
- for linux-arm-kernel@lists.infradead.org; Mon, 22 Mar 2021 12:17:48 +0000
-Received: by mail-vs1-f49.google.com with SMTP id h25so7317221vso.2
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 22 Mar 2021 05:17:44 -0700 (PDT)
+	by mail.kernel.org (Postfix) with ESMTPS id 16D2361931
+	for <soc@kernel.org>; Mon, 22 Mar 2021 15:10:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 16D2361931
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=lee.jones@linaro.org
+Received: by mail-ed1-f42.google.com with SMTP id bf3so19806110edb.6
+        for <soc@kernel.org>; Mon, 22 Mar 2021 08:10:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=BblDdmrktMK5tFFD4LOpFP77ijBklviaU26xu4C63tQ=;
+        b=IT2iGJQyBA7Y1+dCJvTIJziErQmWcbn0+kMr4Y273pDNqodHvB6Ww7nGeAozLlDj16
+         AaZFlWmlmAzS7zUACjHtiaCrXpOhiRROiQFyU4auZ+13hpjjdqVYNePQ5Cyp/9DkkrQC
+         b91OFvMWYHKs9MAA7wM3CC0WQRuzxtVRw66hiamNYNrYJOlJE43oIsVGuMZ9kLPAqUbQ
+         nynbvcEhIJeX2PlbMuKhnlTT65dd9GDFO83TYP0QzGcN6dLgdO2DDjR1KDBGvGzAifvT
+         3iM6ErE3HQUX/Nd9uR6OnpKDyBISmiXqsi9ileg7sykq6tbAiP06wPIgKKPW7GTaZvHL
+         iZmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=QPgEpzU1+EhZmQwMgoUtTQpTOrmK2g2nAYsCnP+ZK2w=;
- b=XF49Om+G3npz+EKJ5RcT5onkOc3MXM8n0La1hZ66F5rdhpOZGnBRyBgZk6iIrRHmeC
- gl97fRzIh/YDjAKWvCGTsyojKNPFnGh+hA35NyDJv5S7wwIMkf5XR3pb9YiGDBEQ2+uX
- Deg2blMqxk4VhQ2E5zTNHNOqRXgq23mJBXs1FsK06y8x12H5f+fnWsGhJdR5JhUZ2WEk
- twGTYEYs/VFdxSpH+XcMFc/jrgq0txgMzVuVt242akqU00WmCm/PmQYsEQ/+jBjHPNG6
- gttWQo9kaGM8QtQIgQvYyIf2i/NyV8wiCMG2CsDIU1H6mVBqTa9rvrxiHgc/E8yuyk2S
- SJxA==
-X-Gm-Message-State: AOAM533JKtrhPJpZL4ZvF8jDaPJmySfbKC2Tz+fE6hj1oZ3x8WWXaxda
- rbD6jI1Ps+tNISDFcat2wICls1j63m0K+RD69LY=
-X-Google-Smtp-Source: ABdhPJwVpWGzwO18L28qFPoAsIXhxBH6cwNId9V4e47Iag3AKYxFvIfKgJVUUZMsFRnCrLQwRjfrVXfpCs5zgCYtcVg=
-X-Received: by 2002:a67:8883:: with SMTP id k125mr8816445vsd.18.1616415463497; 
- Mon, 22 Mar 2021 05:17:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210319085146.2709844-1-geert+renesas@glider.be>
-In-Reply-To: <20210319085146.2709844-1-geert+renesas@glider.be>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 22 Mar 2021 13:17:31 +0100
-Message-ID: <CAMuHMdXEhw2ZWBk0mw+dENs0TAurHnvt35s6bMX19oQJMhHdXg@mail.gmail.com>
-Subject: Re: [GIT PULL 0/3] Renesas ARM SoC updates for v5.13
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=BblDdmrktMK5tFFD4LOpFP77ijBklviaU26xu4C63tQ=;
+        b=WO4DhkeILLbjZNOnuLBOEV53+Jd9aVncObx1sANs7u2uZ4iXVt5BEtJmWWv1WjXSla
+         8ywpteVEXjnwIsJ4EC4gzpmy58X6SCNheINWwmVqi7uuemdkWxLBFibi7XmcK7rLCxHz
+         CPx4i/83/y2xVtCBavqsOCyOMpiB98i6dMlj3rvtNQ1zfA6lMfahKTF6xFw3+5V8f+pf
+         NtIveH/unEghQ3xKEY1zQ1J3BSQjrU+jmA8rCZIYqRY+FNeFKKHVLsYwh7SyIuEmVGGz
+         V5m1OEWMsqCeseV47Vy2HJsJn8ojrjaV94fYUCiUqymvJ3bRcp2bG3Accmp/Kce+Bshy
+         Znxg==
+X-Gm-Message-State: AOAM533G7kvgl2rkclW3ez/Fpjvifsmt06+1YpvckHCl6dBTfqKHwIAF
+	FfM+juk19HTarIY+h2O+XQ+aiA==
+X-Google-Smtp-Source: ABdhPJwxMVa4A4qij3tXD3Epc4EsEgsbfdMWBHLOdKIarJBUoxpk8xvIYdSjs+oVvVNjC/1HEN64aQ==
+X-Received: by 2002:a05:6402:22b5:: with SMTP id cx21mr26421224edb.27.1616425856228;
+        Mon, 22 Mar 2021 08:10:56 -0700 (PDT)
+Received: from dell ([91.110.221.180])
+        by smtp.gmail.com with ESMTPSA id e4sm9768413ejz.4.2021.03.22.08.10.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Mar 2021 08:10:55 -0700 (PDT)
+Date: Mon, 22 Mar 2021 15:10:53 +0000
+From: Lee Jones <lee.jones@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, arm-soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>, 
- Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210322_121746_674384_C8962EFF 
-X-CRM114-Status: GOOD (  17.29  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210322121731.6kVgJShaf0AuVw3KRKBpgtn4ESTpeFvRzRa1ebrBi5E@z>
+Cc: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>, soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>, Robert Richter <rric@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+	Alexandre Torgue <alexandre.torgue@st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v3 03/15] mfd: altera: merge ARCH_SOCFPGA and
+ ARCH_STRATIX10
+Message-ID: <20210322151053.GB2916463@dell>
+References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
+ <20210311152545.1317581-4-krzysztof.kozlowski@canonical.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210311152545.1317581-4-krzysztof.kozlowski@canonical.com>
 
-On Fri, Mar 19, 2021 at 9:51 AM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
-> This is my first pull request for the inclusion of Renesas SoC updates
-> for v5.13.
->
-> It consists of 2 parts:
+On Thu, 11 Mar 2021, Krzysztof Kozlowski wrote:
 
-Oops, 3 parts.  Sorry for that.
+> Simplify 32-bit and 64-bit Intel SoCFPGA Kconfig options by having only
+> one for both of them.  This the common practice for other platforms.
+> Additionally, the ARCH_SOCFPGA is too generic as SoCFPGA designs come
+> from multiple vendors.
+> 
+> The side effect is that the MFD_ALTERA_A10SR will now be available for
+> both 32-bit and 64-bit Intel SoCFPGA, even though it is used only for
+> 32-bit.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  drivers/mfd/Kconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Gr{oetje,eeting}s,
-
-                        Geert
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
