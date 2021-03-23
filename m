@@ -7,85 +7,70 @@ X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7A76C433E2
-	for <soc@archiver.kernel.org>; Tue, 23 Mar 2021 13:18:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49A76C433DB
+	for <soc@archiver.kernel.org>; Tue, 23 Mar 2021 13:19:57 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 7CFD5619BA; Tue, 23 Mar 2021 13:18:19 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E26CF619BD;
-	Tue, 23 Mar 2021 13:18:16 +0000 (UTC)
+	id 180C0619BF; Tue, 23 Mar 2021 13:19:57 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9652761878;
+	Tue, 23 Mar 2021 13:19:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1616505499;
-	bh=zy3eaWM34meh9vujn/0cgSKa8LyiHHrxZT/dC6isFBM=;
+	s=k20201202; t=1616505597;
+	bh=dW3xy43Msw7WMhtRkTRD2i1zHDV7+FX88dULyq9VjiU=;
 	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=o38ISwQi98tv0l8IqjPmKf4oQ6BexixE8XCwsQUYxsIMQLYon8hs+kbtz6YCwtVeo
-	 PIQCuwk2i55hdzSNiRtNz9Yf//2sCizxpelNSFKua3drsM3mtB1hKq2q/XJtLVORU+
-	 l8M4df1LF3q/wkb4zbYhj4vCAHDS9V6YliWKN+2JjBVgA9fEw8tY+DYczi9fYPYtuI
-	 H5sYhlqqzMeGeXpab646/elVcqy1bXKNFBrFeb8byLP75oAPsygl8kxd1ym0HgH+lF
-	 5LHPli2sJBV9HJym6fM9gDrmTazynbQCLtHUj6Ao6ZzofxG7KGJOgB4tA9Q3kKgPdo
-	 HqsyUwxMVBxdA==
+	b=iueD3kIyPkarOf7CXfVyU9P6WoyxWicNYqiXN0i2XleAe1mn5s6xfl06Rss7AJPLJ
+	 PvsH16NmOTgDR6mKnWBPjk/kqkAFlnmtjnMtDQHK4xOv5+MFZ3T201Wzt71DZ2P8MW
+	 VI8GmjbP2d5r2P7nygI6eUAhuBr2WdQVxArDFtJ+Kz+yA01QYijbK9ODaDCZ9QIXQ8
+	 IGoGbnrKFWgux5lXIi0GVgFc4VTyafBH/ZhfON/fM6OyH+wSUAjsujT9GE849mrZLE
+	 0zaXEtq7vg2RNbi27tGo1J9qQdWKFVnaJTMApefLLaWGrmUsg8mw6fJU33YR/EEpSV
+	 2ivDvWvgK4+9g==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Santosh Shilimkar <ssantosh@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>
+To: Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org,
 	Arnd Bergmann <arnd@arndb.de>,
-	Russell King <linux@armlinux.org.uk>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Jim Quinlan <james.quinlan@broadcom.com>,
-	Maxime Ripard <maxime@cerno.tech>,
-	linux-arm-kernel@lists.infradead.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	linux-kernel@vger.kernel.org,
 	clang-built-linux@googlegroups.com
-Subject: [PATCH] ARM: keystone: fix integer overflow warning
-Date: Tue, 23 Mar 2021 14:18:05 +0100
-Message-Id: <20210323131814.2751750-1-arnd@kernel.org>
+Subject: [PATCH] ARM: mvebu: avoid clang -Wtautological-constant warning
+Date: Tue, 23 Mar 2021 14:19:42 +0100
+Message-Id: <20210323131952.2835509-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang warns about an impossible condition when building with 32-bit
-phys_addr_t:
+Clang warns about the comparison when using a 32-bit phys_addr_t:
 
-arch/arm/mach-keystone/keystone.c:79:16: error: result of comparison of constant 51539607551 with expression of type 'phys_addr_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-            mem_end   > KEYSTONE_HIGH_PHYS_END) {
-            ~~~~~~~   ^ ~~~~~~~~~~~~~~~~~~~~~~
-arch/arm/mach-keystone/keystone.c:78:16: error: result of comparison of constant 34359738368 with expression of type 'phys_addr_t' (aka 'unsigned int') is always true [-Werror,-Wtautological-constant-out-of-range-compare]
-        if (mem_start < KEYSTONE_HIGH_PHYS_START ||
-            ~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/bus/mvebu-mbus.c:621:17: error: result of comparison of constant 4294967296 with expression of type 'phys_addr_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+                if (reg_start >= 0x100000000ULL)
 
-Change the temporary variable to a fixed-size u64 to avoid the warning.
+Add a cast to shut up the warning.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-keystone/keystone.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/bus/mvebu-mbus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-keystone/keystone.c b/arch/arm/mach-keystone/keystone.c
-index cd711bfc591f..2c647bdf8d25 100644
---- a/arch/arm/mach-keystone/keystone.c
-+++ b/arch/arm/mach-keystone/keystone.c
-@@ -65,7 +65,7 @@ static void __init keystone_init(void)
- static long long __init keystone_pv_fixup(void)
- {
- 	long long offset;
--	phys_addr_t mem_start, mem_end;
-+	u64 mem_start, mem_end;
+diff --git a/drivers/bus/mvebu-mbus.c b/drivers/bus/mvebu-mbus.c
+index dd9e7343a5e3..ea0424922de7 100644
+--- a/drivers/bus/mvebu-mbus.c
++++ b/drivers/bus/mvebu-mbus.c
+@@ -618,7 +618,7 @@ mvebu_mbus_find_bridge_hole(uint64_t *start, uint64_t *end)
+ 		 * This part of the memory is above 4 GB, so we don't
+ 		 * care for the MBus bridge hole.
+ 		 */
+-		if (reg_start >= 0x100000000ULL)
++		if ((u64)reg_start >= 0x100000000ULL)
+ 			continue;
  
- 	mem_start = memblock_start_of_DRAM();
- 	mem_end = memblock_end_of_DRAM();
-@@ -78,7 +78,7 @@ static long long __init keystone_pv_fixup(void)
- 	if (mem_start < KEYSTONE_HIGH_PHYS_START ||
- 	    mem_end   > KEYSTONE_HIGH_PHYS_END) {
- 		pr_crit("Invalid address space for memory (%08llx-%08llx)\n",
--		        (u64)mem_start, (u64)mem_end);
-+		        mem_start, mem_end);
- 		return 0;
- 	}
- 
+ 		/*
 -- 
 2.29.2
 
