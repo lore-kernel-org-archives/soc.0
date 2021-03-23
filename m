@@ -2,19 +2,19 @@ Return-Path: <SRS0=aJU7=IV=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 641F3C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Mar 2021 17:35:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CE72C433C1
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Mar 2021 17:35:48 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EF16B600EF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Mar 2021 17:35:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EF16B600EF
+	by mail.kernel.org (Postfix) with ESMTPS id 1C89D619C1
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 23 Mar 2021 17:35:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1C89D619C1
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,48 +23,48 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=eJXhrW0PBTHc5br/I4FW3NKX+7aM1lbI8fJRaEUiHcU=; b=CaPCuENP5Z/FSbe5TAVJQa3q0
-	PbTCCTavHHumfx/WFKTWXurLmDMxwrEOszvinrEtsp7YSC6M8dquUXbuHveMHbuwdrSlqqN7FdOlj
-	KjdSof9IXWG3/E2ByHerOOJ6gmgUXPOl9eDb97dMAluJJc3WIANOmJulhlYGtPvXgCYglKX2T3yyF
-	CvsxyOKoXH/Gx6/FMdF2PgLnvOOEN2N3cKplBKoYbKW31mSeWUIbvDsIA4hOXnO3XxImmaehFHVgV
-	0DUuHMhIRUe8XxNXEHSL/NMWNvv8WUIXgpUt7/gKHtb6iqzR16TF6YY3NrSf7b8WJsuzKUPD9yioB
-	0MkMCK0/Q==;
+	 bh=SefZTdrjBqD3GDWLTT1DxrYVN0R6Nh7KGDkFSbg/A58=; b=dfpaHoI4ocBZAAVCR1r2GOhJm
+	RnU4xcHqzQoupWw+6QhcWl5YVWdAA8X1X4cQfE7cVFdgK6ycbmOq+KxbA+hOvx0VWLvmFuCfhz4rV
+	lN/VO4Sd/IKqewZzkI+IWzx7KuFI11cSiLdq2+4D0GuDL52zVHad7N3WfwOJO462uMGT+gf2Y1Goc
+	WcVnE4P8ZZ7/6f8qH63WEQKCdExUThLCSGBFRBPCDHrC8pN3r3CU78ymkJGpHJFXn7/TayPcK3NuI
+	tHVA0BrCrPjBojr8htdi4ieTya7LbnApVZ5FqcZJvdv/fNzpEIkIxhHtT2hMzNVJ20jTUC4bSC1tl
+	qtbGdgygQ==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lOkuU-00FPXI-2P; Tue, 23 Mar 2021 17:33:42 +0000
+	id 1lOkuz-00FPgt-OT; Tue, 23 Mar 2021 17:34:13 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lOkuO-00FPVz-03
- for linux-arm-kernel@lists.infradead.org; Tue, 23 Mar 2021 17:33:37 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2BA7D619C1;
- Tue, 23 Mar 2021 17:33:33 +0000 (UTC)
+ id 1lOkus-00FPeV-L8
+ for linux-arm-kernel@lists.infradead.org; Tue, 23 Mar 2021 17:34:08 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D9819600EF;
+ Tue, 23 Mar 2021 17:34:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1616520814;
- bh=D1SW3s3mSner/+64SWK4kWmpA5riGvih25dnjKUDQ0w=;
+ s=k20201202; t=1616520845;
+ bh=1P2fQ8kHbnS7O3gDUlqincn6nGWEB+xXUEVX945aEIU=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=NOF2A4J9sS5kZXJML5JTXwwttuGylo3oMMX8sSp8Xl+Gjz3k9wAZfog+HG6gTj8bW
- svDR407SRG0vD8VfXXTfx8AD5nT55/z5xcYiwu/at5PjVRvTtX5YboKIuFZhpnKGMl
- VGbjekOmDm+n1Be2LVnF2Tn/ClXj8JBOhGGMMedBD3QWnoL5dVwg6CoeHTYsN4vZvn
- On6SJwzUR2rzsmrMfUljKJUAr0QqrSePBrf2IJfU3GGFMzqQAjq4c4QiiPbFaxBvPW
- gTbZqWEgtHkWWh4tS1KWZbOWBRKl3rSkFZvX8+9hw800zgzGSpo071w+0d/q9FPdlS
- KaT8b189IV5mw==
+ b=jAimD95ph7ls+ighEMoEQS9Jm0jmch3nixsi14V1vhpdP5nKjdddwUfMvA10A24q1
+ pD9ZS5Bw2dCFS/gcIFBZfLg153UqAKzpi74GXsq4S6PR7J9JVVv6DqqN5gZU4oPhqa
+ pFOX216LaXVAOVB1hAytQ38FSoWd94fR8vywYfFvALxES9haqa4D3TIb3r2MTum63G
+ EDAdSw8dSRYUqFkY23/Pmn62BBnxOiT5xRLWHE/uaAAwEvQAh/3+zeqouCG4Wk/pqb
+ x+ebdK7aGKzyWZEw2ozQ0J5se+GqwYLLv/xEHy2mUHT+Qdw8jW5uTP/tcr7Q4hQ5Tc
+ qLlg9gu9UXAKA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, arm-soc <soc@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-renesas-soc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, Magnus Damm <magnus.damm@gmail.com>
-Subject: Re: [GIT PULL 1/3] Renesas ARM defconfig updates for v5.13
-Date: Tue, 23 Mar 2021 18:33:30 +0100
-Message-ID: <161652079858.2900879.12964454491151691553.b4-ty@arndb.de>
+To: arm-soc <soc@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>,
+ arm-soc <arm@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
+ Magnus Damm <magnus.damm@gmail.com>, linux-renesas-soc@vger.kernel.org
+Subject: Re: [GIT PULL 2/3] Renesas ARM DT updates for v5.13
+Date: Tue, 23 Mar 2021 18:34:00 +0100
+Message-ID: <161652082999.2901149.1420849682427390367.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210319085146.2709844-2-geert+renesas@glider.be>
+In-Reply-To: <20210319085146.2709844-3-geert+renesas@glider.be>
 References: <20210319085146.2709844-1-geert+renesas@glider.be>
- <20210319085146.2709844-2-geert+renesas@glider.be>
+ <20210319085146.2709844-3-geert+renesas@glider.be>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210323_173336_433648_4230F44A 
-X-CRM114-Status: UNSURE (   6.81  )
+X-CRM114-CacheID: sfid-20210323_173406_882436_2F6FE5EE 
+X-CRM114-Status: UNSURE (   6.48  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -81,24 +81,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210323173330._iCIMBEu7cb2u5-K-kycW5-pLWFyxDZ3GoPW5HCqGFQ@z>
+Message-ID: <20210323173400.hHAHrIFJtcEtV37gZdCyK7stAkZU2nWfNCWpxKMMO1o@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 19 Mar 2021 09:51:44 +0100, Geert Uytterhoeven wrote:
+On Fri, 19 Mar 2021 09:51:45 +0100, Geert Uytterhoeven wrote:
 > The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 > 
 >   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-defconfig-for-v5.13-tag1
+>   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.13-tag1
 > 
 > [...]
 
-Merged into arm/defconfig, thanks!
+Merged into arm/dt, thanks!
 
-merge commit: b61ecafafe9cbe8e99206bb7ef638d8e8340515d
+merge commit: f38dc82b56a83be8a18e395ff5568e46621db749
 
        Arnd
 
