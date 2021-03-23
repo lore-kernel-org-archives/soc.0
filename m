@@ -1,26 +1,28 @@
-Return-Path: <SRS0=6Ou/=IV=oracle.com=santosh.shilimkar@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0F2AC433EC
-	for <soc@archiver.kernel.org>; Tue, 23 Mar 2021 17:56:41 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 4C307619DC; Tue, 23 Mar 2021 17:56:41 +0000 (UTC)
-Received: from userp2130.oracle.com (userp2130.oracle.com [156.151.31.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D882E619D7;
-	Tue, 23 Mar 2021 17:56:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D882E619D7
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=oracle.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=santosh.shilimkar@oracle.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6837C433C1
+	for <linux-kernel@archiver.kernel.org>; Tue, 23 Mar 2021 17:57:43 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 946D3619AE
+	for <linux-kernel@archiver.kernel.org>; Tue, 23 Mar 2021 17:57:43 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S231470AbhCWR5M (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Tue, 23 Mar 2021 13:57:12 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:54820 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231721AbhCWR4z (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 23 Mar 2021 13:56:55 -0400
 Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-	by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 12NHsgBw017899;
-	Tue, 23 Mar 2021 17:56:16 GMT
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 12NHsgBw017899;
+        Tue, 23 Mar 2021 17:56:16 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : references : in-reply-to : content-type :
  content-id : content-transfer-encoding : mime-version; s=corp-2020-01-29;
@@ -31,16 +33,16 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to 
  WNb0ORBKvRgl0qBsLpAdJeNr+NNQV9Z/YitXqgDJrB16b50JSS7gkeY5uC/QNqxOl+kS
  nieXQAUI1yTRY5yM+gDO3UcZ0EFU51Op6/3PVH9Dt1GPCUHjYj698D+cE2SG4PvxL+8m NQ== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-	by userp2130.oracle.com with ESMTP id 37d8fr8312-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 23 Mar 2021 17:56:16 +0000
+        by userp2130.oracle.com with ESMTP id 37d8fr8312-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Mar 2021 17:56:16 +0000
 Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-	by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 12NHoANU099095;
-	Tue, 23 Mar 2021 17:56:15 GMT
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 12NHoANU099095;
+        Tue, 23 Mar 2021 17:56:15 GMT
 Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2043.outbound.protection.outlook.com [104.47.56.43])
-	by userp3020.oracle.com with ESMTP id 37dtts976m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 23 Mar 2021 17:56:15 +0000
+        by userp3020.oracle.com with ESMTP id 37dtts976m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Mar 2021 17:56:15 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=efNB0SFAktaDb9W1Xy528/upRrQ55dC+q26yvxiHHAyBTOTilvQnJlR6qYLja+FCX4kOrp9gGhqnjgsvKWKVFX8r0zmt4NUlOOKIk6eSlbZQhcoYVWb8cW8Yb1BlPpv4Um4ywqIh8IruW25aWsQ2OCfYRNrZG4NQP/SHLGjFqDGE3VszWsQGIew5HVG3fVtqUlBxRETdm4ntUGaMK4xKxTNqLMfjlSF/LwShXY8gHaVcLLXhnmYmVwcsWNt49AhMxE4jajLLHJDkD46czvdJRQRT5MSDB5MOCS/nkml1gpC8+lD01Ez2sHYYsEf9BeNUpXCC40B+j3SDRcjjgwJdfQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
@@ -65,32 +67,27 @@ Received: from BYAPR10MB3270.namprd10.prod.outlook.com
  ([fe80::9ceb:27f9:6598:8782]) by BYAPR10MB3270.namprd10.prod.outlook.com
  ([fe80::9ceb:27f9:6598:8782%5]) with mapi id 15.20.3955.027; Tue, 23 Mar 2021
  17:56:13 +0000
-From: Santosh Shilimkar <santosh.shilimkar@oracle.com>
-To: Arnd Bergmann <arnd@kernel.org>
+From:   Santosh Shilimkar <santosh.shilimkar@oracle.com>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-CC: Santosh Shilimkar <ssantosh@kernel.org>,
-        Nathan Chancellor
-	<nathan@kernel.org>,
+CC:     Santosh Shilimkar <ssantosh@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         "soc@kernel.org" <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Russell
- King <linux@armlinux.org.uk>,
+        Russell King <linux@armlinux.org.uk>,
         Robin Murphy <robin.murphy@arm.com>,
-        Mathieu
- Poirier <mathieu.poirier@linaro.org>,
-        Jim Quinlan
-	<james.quinlan@broadcom.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
         Maxime Ripard <maxime@cerno.tech>,
-        "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "clang-built-linux@googlegroups.com"
-	<clang-built-linux@googlegroups.com>
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>
 Subject: Re: [PATCH] ARM: keystone: fix integer overflow warning
 Thread-Topic: [PATCH] ARM: keystone: fix integer overflow warning
 Thread-Index: AQHXIA3QtV60SgMwyESQrTqBJcDToA==
-Date: Tue, 23 Mar 2021 17:56:13 +0000
+Date:   Tue, 23 Mar 2021 17:56:13 +0000
 Message-ID: <B995B0A0-165D-47CA-A766-3110D6C0DD60@oracle.com>
 References: <20210323131814.2751750-1-arnd@kernel.org>
 In-Reply-To: <20210323131814.2751750-1-arnd@kernel.org>
@@ -105,17 +102,13 @@ x-originating-ip: [69.181.241.203]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-correlation-id: 0f421ad9-bd25-413a-a386-08d8ee24f303
 x-ms-traffictypediagnostic: SJ0PR10MB4575:
-x-microsoft-antispam-prvs: 
- <SJ0PR10MB45753DB5365FBE15D93ABE7793649@SJ0PR10MB4575.namprd10.prod.outlook.com>
+x-microsoft-antispam-prvs: <SJ0PR10MB45753DB5365FBE15D93ABE7793649@SJ0PR10MB4575.namprd10.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:849;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- EVq1bzyqs2kt2H5PCXcLjSPQN3WusuRim2FAdxQiBDvqY2RGkanaL935l2vhO44L1Xa2xUygisj+ttVY0EOnqNKbaiixaS62dlB5S/J4LnMYW/1xfjJw7YuNjvwckWg6bq/+5UgzgAnAYkh9NU6bny8l/pQNEzoLDIiooxLwcsHV6OsX9dDSfqVmDZukrPJ9UUfWjR7eByM84X2YuQCYApWmQu56UiIHDZcxH+7X4k5PQIdaOnug/Qt/MGyNfxw4E9GmjSlb8nFrcTtOFGJBgQI99vy0DJHJG1KqF7CbfUC4Ian8unZe9cql4KRYhF0E3QEGdvToe390TU+O8knF09hohiRs862aydezXmapMHw8vyKjefbKSEbdLzjl/igTy6tLU0XvpEWd+4GmWT10rBbC3ZuE3ZAV8N2TnB67X8nUNa1wvzK1iNvlqkjs0qT11ASkDwsX/dZL/yCmm6hzQASak2dKSv1QnAIuryiEIEf5l4fTJmj2pZsF2kDqq+8WMD58ovsvHO9BfLmNb9tY55SsE0TcYotXcyYztf+PbjpojnNVa8qrNiL0Da7sxR0/dqp1SB18y9DxQdZAq9Nenkmwik0ipbppOzP5fjMHN9qnlI76yQ10z50Dnn/wVbCpIG2ZvnhHZ/cxx5mP/z9Gvy9Fakt1q+zkvmfmHgqsJcc3Wbu4mtw4LFFiaqBj5Vu0
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3270.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(366004)(376002)(136003)(346002)(39860400002)(2906002)(66476007)(66446008)(53546011)(316002)(5660300002)(76116006)(38100700001)(6486002)(478600001)(66556008)(6512007)(44832011)(64756008)(86362001)(66946007)(4744005)(6506007)(7416002)(54906003)(4326008)(8936002)(186003)(26005)(36756003)(71200400001)(2616005)(33656002)(8676002)(6916009)(83380400001)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 
- =?utf-8?B?UVBTSnpBVm1QMUVDNktSdnB0RHN2ak1YQkRLTlVFL0ljSUFCQXRPUnRjdG41?=
+x-microsoft-antispam-message-info: EVq1bzyqs2kt2H5PCXcLjSPQN3WusuRim2FAdxQiBDvqY2RGkanaL935l2vhO44L1Xa2xUygisj+ttVY0EOnqNKbaiixaS62dlB5S/J4LnMYW/1xfjJw7YuNjvwckWg6bq/+5UgzgAnAYkh9NU6bny8l/pQNEzoLDIiooxLwcsHV6OsX9dDSfqVmDZukrPJ9UUfWjR7eByM84X2YuQCYApWmQu56UiIHDZcxH+7X4k5PQIdaOnug/Qt/MGyNfxw4E9GmjSlb8nFrcTtOFGJBgQI99vy0DJHJG1KqF7CbfUC4Ian8unZe9cql4KRYhF0E3QEGdvToe390TU+O8knF09hohiRs862aydezXmapMHw8vyKjefbKSEbdLzjl/igTy6tLU0XvpEWd+4GmWT10rBbC3ZuE3ZAV8N2TnB67X8nUNa1wvzK1iNvlqkjs0qT11ASkDwsX/dZL/yCmm6hzQASak2dKSv1QnAIuryiEIEf5l4fTJmj2pZsF2kDqq+8WMD58ovsvHO9BfLmNb9tY55SsE0TcYotXcyYztf+PbjpojnNVa8qrNiL0Da7sxR0/dqp1SB18y9DxQdZAq9Nenkmwik0ipbppOzP5fjMHN9qnlI76yQ10z50Dnn/wVbCpIG2ZvnhHZ/cxx5mP/z9Gvy9Fakt1q+zkvmfmHgqsJcc3Wbu4mtw4LFFiaqBj5Vu0
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3270.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(366004)(376002)(136003)(346002)(39860400002)(2906002)(66476007)(66446008)(53546011)(316002)(5660300002)(76116006)(38100700001)(6486002)(478600001)(66556008)(6512007)(44832011)(64756008)(86362001)(66946007)(4744005)(6506007)(7416002)(54906003)(4326008)(8936002)(186003)(26005)(36756003)(71200400001)(2616005)(33656002)(8676002)(6916009)(83380400001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?UVBTSnpBVm1QMUVDNktSdnB0RHN2ak1YQkRLTlVFL0ljSUFCQXRPUnRjdG41?=
  =?utf-8?B?V1lEV05ONG12U3JmUU9Ed0FJR0xVWkJzb2tGVTBvSnJTSXRTcGFZZTlGTXFu?=
  =?utf-8?B?a3d2cGlKYW1TeHVuMGdyR29CdVVPRmJBcStIYkI0bkNXL3VkcE1UcG5jRFh6?=
  =?utf-8?B?ZnFmaGduQXJhSDd0KzcwUmlWQkIrQVJsdFhabXFvZ21qeG55L3laWlNIZUV4?=
@@ -173,6 +166,10 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=
  phishscore=0 bulkscore=0 adultscore=0 malwarescore=0 clxscore=1011
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2103230131
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210323175613.1OBKx0UMpHSvRFU-QiRpvbzHsqrk-XNoviZSM4ZjVfo@z>
 
 DQoNCj4gT24gTWFyIDIzLCAyMDIxLCBhdCA2OjE4IEFNLCBBcm5kIEJlcmdtYW5uIDxhcm5kQGtl
 cm5lbC5vcmc+IHdyb3RlOg0KPiANCj4gRnJvbTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5k
