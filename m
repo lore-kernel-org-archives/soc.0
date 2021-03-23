@@ -1,49 +1,82 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=XXYE=IV=lists.ozlabs.org=linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EAACC433DB
-	for <soc@archiver.kernel.org>; Tue, 23 Mar 2021 13:15:35 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 1EE6B61994; Tue, 23 Mar 2021 13:15:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEAE5C433DB
+	for <linuxppc-dev@archiver.kernel.org>; Tue, 23 Mar 2021 13:16:05 +0000 (UTC)
+Received: from lists.ozlabs.org (lists.ozlabs.org [112.213.38.117])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id CE78961990
+	for <linuxppc-dev@archiver.kernel.org>; Tue, 23 Mar 2021 13:16:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CE78961990
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org
+Received: from boromir.ozlabs.org (localhost [IPv6:::1])
+	by lists.ozlabs.org (Postfix) with ESMTP id 4F4X1Z6cktz3bn9
+	for <linuxppc-dev@archiver.kernel.org>; Wed, 24 Mar 2021 00:16:02 +1100 (AEDT)
+Authentication-Results: lists.ozlabs.org;
+	dkim=fail reason="signature verification failed" (2048-bit key; unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20201202 header.b=JsUC3pbw;
+	dkim-atps=neutral
+Authentication-Results: lists.ozlabs.org; spf=pass (sender SPF authorized)
+ smtp.mailfrom=kernel.org (client-ip=198.145.29.99; helo=mail.kernel.org;
+ envelope-from=arnd@kernel.org; receiver=<UNKNOWN>)
+Authentication-Results: lists.ozlabs.org; dkim=pass (2048-bit key;
+ unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
+ header.s=k20201202 header.b=JsUC3pbw; 
+ dkim-atps=neutral
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by lists.ozlabs.org (Postfix) with ESMTPS id 4F4X165Brbz30Dd
+ for <linuxppc-dev@lists.ozlabs.org>; Wed, 24 Mar 2021 00:15:38 +1100 (AEDT)
 Received: by mail.kernel.org (Postfix) with ESMTPSA id 7001261984;
-	Tue, 23 Mar 2021 13:15:32 +0000 (UTC)
+ Tue, 23 Mar 2021 13:15:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1616505335;
-	bh=mrlm0oDlOwv23D8hsr1CVyK/ZOFyC0hrwBy3dJk/ysA=;
-	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=JsUC3pbweaqN5nmQ9B8OzW219fmNpEX0iNg6qfe1CabmUAdrJob4ukggXwkvYiW1N
-	 fGfMHsfeZ/giyVMlBN8/liYFvKOf1Q+vKgaweRaga3+NoIjykw3tw3750oJ4ZTcNp5
-	 AzeYcSur8nRKEthFdA+Yugipke0zf8Gni6MpJZ+z19s5YcM/x8w14+rnehqDwXfgjB
-	 QJXHBfUArmrY+snO8U6vyP/W4Fbf2rvLBEeJ5Ae/dahy2w28qGjligsR3wsYKUIcri
-	 39X6XOjM8t0yFK9WWZ9/Ma2wkitkRdXcdbVfPEpiFYyCYTeUBH7AlMlI7BHPtpXDoh
-	 rTpMIAQEb087A==
+ s=k20201202; t=1616505335;
+ bh=mrlm0oDlOwv23D8hsr1CVyK/ZOFyC0hrwBy3dJk/ysA=;
+ h=From:To:List-Id:Cc:Subject:Date:From;
+ b=JsUC3pbweaqN5nmQ9B8OzW219fmNpEX0iNg6qfe1CabmUAdrJob4ukggXwkvYiW1N
+ fGfMHsfeZ/giyVMlBN8/liYFvKOf1Q+vKgaweRaga3+NoIjykw3tw3750oJ4ZTcNp5
+ AzeYcSur8nRKEthFdA+Yugipke0zf8Gni6MpJZ+z19s5YcM/x8w14+rnehqDwXfgjB
+ QJXHBfUArmrY+snO8U6vyP/W4Fbf2rvLBEeJ5Ae/dahy2w28qGjligsR3wsYKUIcri
+ 39X6XOjM8t0yFK9WWZ9/Ma2wkitkRdXcdbVfPEpiFYyCYTeUBH7AlMlI7BHPtpXDoh
+ rTpMIAQEb087A==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Li Yang <leoyang.li@nxp.com>,
-	Roy Pledge <roy.pledge@nxp.com>,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Scott Wood <oss@buserror.net>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Lee Jones <lee.jones@linaro.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	YueHaibing <yuehaibing@huawei.com>,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
+To: Li Yang <leoyang.li@nxp.com>, Roy Pledge <roy.pledge@nxp.com>,
+ Claudiu Manoil <claudiu.manoil@nxp.com>, Scott Wood <oss@buserror.net>
 Subject: [PATCH] soc/fsl: qbman: fix conflicting alignment attributes
 Date: Tue, 23 Mar 2021 14:15:23 +0100
-Message-Id: <20210323131530.2619900-1-arnd@kernel.org>
+Message-ID: <20210323131530.2619900-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-BeenThere: linuxppc-dev@lists.ozlabs.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
+List-Unsubscribe: <https://lists.ozlabs.org/options/linuxppc-dev>,
+ <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=unsubscribe>
+List-Archive: <http://lists.ozlabs.org/pipermail/linuxppc-dev/>
+List-Post: <mailto:linuxppc-dev@lists.ozlabs.org>
+List-Help: <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=help>
+List-Subscribe: <https://lists.ozlabs.org/listinfo/linuxppc-dev>,
+ <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ YueHaibing <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org,
+ soc@kernel.org, Jakub Kicinski <kuba@kernel.org>,
+ Lee Jones <lee.jones@linaro.org>, linux-arm-kernel@lists.infradead.org
+Errors-To: linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org
+Sender: "Linuxppc-dev"
+ <linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org>
+Message-ID: <20210323131523.w9SMBnqcz48htGdz-75SUBNpxXXuUFSY8CnSlfIFaBo@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
