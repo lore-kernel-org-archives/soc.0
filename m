@@ -1,79 +1,105 @@
-Return-Path: <nathan@kernel.org>
+Return-Path: <SRS0=RUVj=IW=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA3A0C433E0
-	for <soc@archiver.kernel.org>; Tue, 23 Mar 2021 18:40:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29034C433DB
+	for <soc@archiver.kernel.org>; Wed, 24 Mar 2021 11:20:44 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 78B06619C1; Tue, 23 Mar 2021 18:40:02 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 310AC60200;
-	Tue, 23 Mar 2021 18:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1616524802;
-	bh=fTYGqJ5MIYPajmgIiHC3Gu5EqdEZZ8uNfGHz6mas7B0=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=nnnxFiILmY6r49KBX1zVSPURiGtSjsu1ZKpVuR6GAcqjk5nGfOr74vavOuJF29FMW
-	 C3fqx2OOwM1jsbFVmvF9mVRyAfMKo51xHSLn3ZMWbbN7iAXf58T61ydXZTEHUR4L7j
-	 P4EfimmEp4+ipx4Kz1odauH6luPDdF0eM/jHnWovKLSFa0iEtY/UZqGIf6TBlfHu8M
-	 N8K9FqO/xIi7BMlmsvhdVGfKMcJ7MMvHTQM01b0mNnV1bj9SrjZb2XV7LK16a99NwH
-	 o4HlYIGw7yP2LBuPQAZ3w3Mmu7xeTmgKCaayPYDHh2oOpBVUpfo/vZBnwPBxpQCB10
-	 tk8hMgD1YIp/Q==
-Date: Tue, 23 Mar 2021 11:39:57 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
+	id EEF6061A06; Wed, 24 Mar 2021 11:20:43 +0000 (UTC)
+Received: from muru.com (muru.com [72.249.23.125])
+	by mail.kernel.org (Postfix) with ESMTP id 9511E6191F;
+	Wed, 24 Mar 2021 11:20:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9511E6191F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=tony@atomide.com
+Received: from hillo.muru.com (localhost [127.0.0.1])
+	by muru.com (Postfix) with ESMTP id 82F9B8057;
+	Wed, 24 Mar 2021 11:21:39 +0000 (UTC)
+From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>, soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH] ARM: mvebu: avoid clang -Wtautological-constant warning
-Message-ID: <20210323183957.cgku3mhmcn53aut4@archlinux-ax161>
-References: <20210323131952.2835509-1-arnd@kernel.org>
+To: soc@kernel.org
+Cc: arm@kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"Tony Lindgren" <tony@atomide.com>
+Subject: [GIT PULL] More fixes for omaps for v5.12-rc cycle
+Date: Wed, 24 Mar 2021 13:20:39 +0200
+Message-Id: <pull-1616584662-702939@atomide.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210323131952.2835509-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 23, 2021 at 02:19:42PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Clang warns about the comparison when using a 32-bit phys_addr_t:
-> 
-> drivers/bus/mvebu-mbus.c:621:17: error: result of comparison of constant 4294967296 with expression of type 'phys_addr_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
->                 if (reg_start >= 0x100000000ULL)
-> 
-> Add a cast to shut up the warning.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+From: "Tony Lindgren" <tony@atomide.com>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
-> ---
->  drivers/bus/mvebu-mbus.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/bus/mvebu-mbus.c b/drivers/bus/mvebu-mbus.c
-> index dd9e7343a5e3..ea0424922de7 100644
-> --- a/drivers/bus/mvebu-mbus.c
-> +++ b/drivers/bus/mvebu-mbus.c
-> @@ -618,7 +618,7 @@ mvebu_mbus_find_bridge_hole(uint64_t *start, uint64_t *end)
->  		 * This part of the memory is above 4 GB, so we don't
->  		 * care for the MBus bridge hole.
->  		 */
-> -		if (reg_start >= 0x100000000ULL)
-> +		if ((u64)reg_start >= 0x100000000ULL)
->  			continue;
->  
->  		/*
-> -- 
-> 2.29.2
-> 
+  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.12/fixes-rc4-signed
+
+for you to fetch changes up to b3d09a06d89f474cb52664e016849315a97e09d9:
+
+  ARM: OMAP4: PM: update ROM return address for OSWR and OFF (2021-03-17 15:15:52 +0200)
+
+----------------------------------------------------------------
+More fixes for omaps for v5.12-rc cycle
+
+Two fixes for hangs, mmc slot order fix, and a voltage typo fix:
+
+- Remove unused duplicate sha2md5_fck clock node that can race with the
+  OMAP4_SHA2MD5_CLKCTRL clock node for disable for unused clocks
+
+- Add aliases for omap4/5 mmc to put the slots back into the right
+  order again
+
+- Fix typo for bionic voltage controllers that accidentally use mpu
+  for all instances instead of mpu, core and iva
+
+- Fix random hangs for droid4 caused by missing fix from TI Android
+  kernel tree to do a dummy smc call on cpuidle wakeup path
+
+----------------------------------------------------------------
+
+Note that the stats below also include my earlier pull request as the pull
+request is generated against v5.12-rc2.
+
+Carlos Leija (1):
+      ARM: OMAP4: PM: update ROM return address for OSWR and OFF
+
+Grygorii Strashko (1):
+      bus: omap_l3_noc: mark l3 irqs as IRQF_NO_THREAD
+
+Mans Rullgard (1):
+      ARM: dts: am33xx: add aliases for mmc interfaces
+
+Tony Lindgren (9):
+      soc: ti: omap-prm: Fix reboot issue with invalid pcie reset map for dra7
+      ARM: OMAP2+: Fix smartreflex init regression after dropping legacy data
+      Merge branch 'fixes-v5.11' into fixes
+      bus: ti-sysc: Fix warning on unbind if reset is not deasserted
+      soc: ti: omap-prm: Fix occasional abort on reset deassert for dra7 iva
+      ARM: dts: Drop duplicate sha2md5_fck to fix clk_disable race
+      ARM: dts: Fix moving mmc devices with aliases for omap4 & 5
+      Merge branch 'fixes-rc2' into fixes
+      ARM: OMAP4: Fix PMIC voltage domains for bionic
+
+ arch/arm/boot/dts/am33xx.dtsi          |  3 ++
+ arch/arm/boot/dts/omap4.dtsi           |  5 +++
+ arch/arm/boot/dts/omap44xx-clocks.dtsi |  8 ----
+ arch/arm/boot/dts/omap5.dtsi           |  5 +++
+ arch/arm/mach-omap2/omap-secure.c      | 39 ++++++++++++++++++
+ arch/arm/mach-omap2/omap-secure.h      |  1 +
+ arch/arm/mach-omap2/pmic-cpcap.c       |  4 +-
+ arch/arm/mach-omap2/sr_device.c        | 75 ++++++++++++++++++++++++++--------
+ drivers/bus/omap_l3_noc.c              |  4 +-
+ drivers/bus/ti-sysc.c                  |  4 +-
+ drivers/soc/ti/omap_prm.c              |  8 +++-
+ 11 files changed, 124 insertions(+), 32 deletions(-)
