@@ -1,196 +1,159 @@
-Return-Path: <SRS0=GF4P=IY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=dgHK=IY=linaro.org=manivannan.sadhasivam@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-24.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC8E1C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 26 Mar 2021 16:05:19 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEA02C433E0
+	for <soc@archiver.kernel.org>; Fri, 26 Mar 2021 18:22:48 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 8F88F61A38; Fri, 26 Mar 2021 18:22:48 +0000 (UTC)
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6697F61A2B
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 26 Mar 2021 16:05:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6697F61A2B
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:MIME-Version:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=5OJAS0o43oi0F10VADeFw2NJHUxILm89nPxAO13SrDI=; b=VSdwQU3+EK11bSj3XINhVEObmJ
-	I2vz6RE49ndGHzkPbr5sbCx71IssrWcb9dk5POpD8mTt5czZdl4mkL7L2wfMxSZ2NSc37N1lguY00
-	XVXLNlKuxuKnI2p+4+iXiuJT1gfLD/gQTRGDp6710p85cv7axMQUHVz8ZfEZNVSUU+c6902QixqBA
-	i9Z47UAZ4QD4pN0/FtdmimFmPRjPMP7ENVqBaf/yoyYSVSW7P2h21fug0Cujib3wW/RSqsMFWxsFl
-	9hEjtOCCLXbkaPP4dcW7jU7xwmYqgs0m2t9gt7aA0A++sviSp7LYo/UGk9NYRcS7i9zuVFHfOrleG
-	UEo7uZfA==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lPovk-003wW6-OU; Fri, 26 Mar 2021 16:03:24 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lPova-003wUs-TP
- for linux-arm-kernel@lists.infradead.org; Fri, 26 Mar 2021 16:03:18 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 41B5D61A2A
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 26 Mar 2021 16:03:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1616774593;
- bh=gDRpe+xf82CeSuSzG9G6Q9nKEkx1xSc/XTzQDmGAVrg=;
- h=From:Date:Subject:To:List-Id:Cc:From;
- b=BzcTB4lvPy1SJ/WcvBkq7Kw2+8ozgNlBbpOKXVaddFimP2pJH71iXiY6GhJPpIjnw
- dejbUlX/8A2vFy72lnPff4vJ1wG++94DmzuQgObAwJielBKifeW/2uY4zBv1IGSdRp
- navxuh2zEtbgL5wuv5CMltpxQCadRc7jG812CcVDqexQIELF+d8p9Nj0Y5eQgaZ+6p
- phZ4UujC4d4UxK47hZ6AUMK9QvK9PukLLoo32wvax+94KqOzwksRvoox9+8X62bdvz
- SJS2E5sfDhrc4W5rYAGjj0rktICzJkQKn6TQIJsKH2RgaUxiF4/RVoynoWSoWWQThR
- X30wdg30xGTNQ==
-Received: by mail-ot1-f47.google.com with SMTP id
- 91-20020a9d08640000b0290237d9c40382so5625020oty.12
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 26 Mar 2021 09:03:13 -0700 (PDT)
-X-Gm-Message-State: AOAM530quIqFJAUybB9P5a0Wy59VurTu2uysC/xWfVhv9QdR3uP2RLeA
- PRxn1keLr6T2Sp1LDVqQQv4/aKU6bNFFWWjx99w=
-X-Google-Smtp-Source: ABdhPJxKQUsQUL9Ou63VS2IXalng02yPSjWBMUCEeJRBxLRUNlYbPuwHdH+PrWqkYrwj6qHltZ3v6AynmHRMx4D3OEo=
-X-Received: by 2002:a05:6830:148c:: with SMTP id
- s12mr12624294otq.251.1616774592506; 
- Fri, 26 Mar 2021 09:03:12 -0700 (PDT)
-MIME-Version: 1.0
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 26 Mar 2021 17:02:57 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2BTOzDfmH3dHmwm6LYPefFAnGCMPdQOpUbXOukiT0rVw@mail.gmail.com>
-Message-ID: <CAK8P3a2BTOzDfmH3dHmwm6LYPefFAnGCMPdQOpUbXOukiT0rVw@mail.gmail.com>
-Subject: [GIT PULL] ARM: SoC fixes for v5.12
-To: Linus Torvalds <torvalds@linux-foundation.org>
+	by mail.kernel.org (Postfix) with ESMTPS id 5CAD861A32
+	for <soc@kernel.org>; Fri, 26 Mar 2021 18:22:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5CAD861A32
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=manivannan.sadhasivam@linaro.org
+Received: by mail-pg1-f171.google.com with SMTP id i22so5180550pgl.4
+        for <soc@kernel.org>; Fri, 26 Mar 2021 11:22:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jTn/uUJ+LFQPTBhHrUYL0kAqEpchxiI/QloMXShvaSg=;
+        b=nn1MjHPYaWoHftAWKn+3FFCIcCa1eRT0uZOUpIjI6j9ZE93LqX2Eak3CIXk5YdtBQL
+         GGDir9kdxKg6NiSr0WbgqwjXmOypBn/eXFhQPhmyypBVAheL+hv3GXh/XPngDcVsvDO4
+         LN7dFGVyS5TBS8fVHd+fO0kw6lD+LXfyb8OoVNkor57JZ9e4XjZRNrGJ36+S7eyQ/lMc
+         V0dMhEbO4lBRJZ+KADbhAO0gemOU3lhHZ90YgBOY9ERfHSqH5lsKvge/lQxkKXFP8hza
+         NhQh5NTxoSSNhkyG02fiUEfZErr8lR4DV0kJ8i6ttc35oQBcolKceTZWsS+SWAiGFAIX
+         HCBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jTn/uUJ+LFQPTBhHrUYL0kAqEpchxiI/QloMXShvaSg=;
+        b=cW/8jViueQCZ3olriYnsMx9tL6yoDvr/v7M/PJWxLlayVwW7NZk1i8ijqsjM3U28g7
+         IEFOSksiOtDx7w3/J1f0shxH50ojSVcePb0dXqGT1Ads7fh8F9diVJAspxMbjHWs1ErB
+         p68eGM4MzDjCmjiTZke1HwiQejBz7vjz2DyWw/5+7W0/mnjSMqfgo0zpYhJLF+89LGf5
+         VKxhTGpQU8Kwmme7kH0c22bmjWW1J67mcg7Mqz3fm2c7qPWckiMCVIje4HiH/ZNPaHtR
+         mzMNC1eVLQL7vl/tBDTh5S1FtWybsXde3tVp15aVw7BfCzGrLsCf0m/jR5eBwk432Gzn
+         mQww==
+X-Gm-Message-State: AOAM531B8tBTimTLcAjTpw9o8aEB/tCkW9wodZevses9OW3BAJWmaE8F
+	jL48w7JsL66q+PI5fA4joYbdlPGw17jD
+X-Google-Smtp-Source: ABdhPJyrPVoMQlwEHjwBivlbDbaEwnf1pl7RuLCDnlGwsVTz+RGbEjpi5UGFQQlmPZpjo1Bp0pjYtA==
+X-Received: by 2002:a63:fd50:: with SMTP id m16mr13460841pgj.256.1616782967428;
+        Fri, 26 Mar 2021 11:22:47 -0700 (PDT)
+Received: from localhost.localdomain ([103.77.37.139])
+        by smtp.gmail.com with ESMTPSA id p1sm9573592pfn.22.2021.03.26.11.22.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Mar 2021 11:22:47 -0700 (PDT)
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210326_160316_782938_26860B80 
-X-CRM114-Status: GOOD (  18.80  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210326160257.ned5wWr0DRXvvpLUj-JukTLJMpTxCfR64W5iU5EQBg4@z>
+To: soc@kernel.org
+Cc: linux@armlinux.org.uk,
+	will@kernel.org,
+	arnd@arndb.de,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	bjorn.andersson@linaro.org,
+	linux-arm-msm@vger.kernel.org,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3] ARM: kernel: Fix interrupted SMC calls
+Date: Fri, 26 Mar 2021 23:52:37 +0530
+Message-Id: <20210326182237.47048-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-VGhlIGZvbGxvd2luZyBjaGFuZ2VzIHNpbmNlIGNvbW1pdCBhMzhmZDg3NDg0NjQ4MzE1ODRhMTk0
-MzhjYmIzMDgyYjVhMmRhYjE1OgoKICBMaW51eCA1LjEyLXJjMiAoMjAyMS0wMy0wNSAxNzozMzo0
-MSAtMDgwMCkKCmFyZSBhdmFpbGFibGUgaW4gdGhlIEdpdCByZXBvc2l0b3J5IGF0OgoKICBnaXQ6
-Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc29jL3NvYy5naXQgdGFn
-cy9zb2MtZml4ZXMtNS4xMgoKZm9yIHlvdSB0byBmZXRjaCBjaGFuZ2VzIHVwIHRvIDY3MzM1Yjhk
-MjhjZDJlZTI3OWQ2YWIzYzcyODU2Yjc2NDExYmE0OGE6CgogIE1lcmdlIHRhZyAnaW14LWZpeGVz
-LTUuMTInIG9mCmdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9z
-aGF3bmd1by9saW51eCBpbnRvCmFybS9maXhlcyAoMjAyMS0wMy0xOCAyMzo1Mzo0NyArMDEwMCkK
-Ci0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0KQVJNOiBTb0MgZml4ZXMgZm9yIHY1LjEyCgpUb28gbWFueSBmaXhlcyBoYXZlIGFj
-Y3VtdWxhdGVkIGluIHRoZSBzb2MgdHJlZSwgc28gdGhpcyBpcyBhIGZhaXJseQpsYXJnZSBzZXQu
-IEFzIHVzdWFsLCBtb3N0IG9mIHRoZSBmaXhlcyBhcmUgZm9yIGRldmljZXRyZWUgZmlsZXMsIGJ1
-dAp0aGVyZSBhcmUgYWxzbyBub3RhYmxlIGNvZGUgY2hhbmdlcyBmb3IgaW14IGFuZCBvbWFwIHJl
-Z3Jlc3Npb25zIGFzCndlbGwgYXMgc29tZSBtYWludGFpbmVyIGZpbGUgdXBkYXRlcy4KCmlteDoK
-IC0gRml4IGFuIEV0aGVybmV0IGlzc3VlIG9uIGlteDZ1bC0xNHgxNC1ldmsgYm9hcmQgdGhhdCBp
-cyBjYXVzZWQgYnkKICAgaW5kZXBlbmRlbnQgUEhZIHJlc2V0LgoKIC0gQWRkIG1pc3NpbmcgYGRt
-YS1jb2hlcmVudGAgcHJvcGVydHkgZm9yIExheWVyU2NhcGUgZGV2aWNlIHRyZWVzIHRvIGZpeCBh
-CiAgIGtlcm5lbCBCVUcgcmVwb3J0LgoKIC0gVXNlIElSUUNISVBfREVDTEFSRSBmb3IgQVZJQyBk
-cml2ZXIgdG8gZml4IGEgYm9vdCBpc3N1ZSBvbiBpLk1YMjUgd2l0aAogICBmd19kZXZsaW5rPW9u
-LgoKIC0gQWRkIG1pc3NpbmcgSTJDIHBpbmN0cmwgZW50cnkgZm9yIGlteDhtcC1waHlib2FyZC1w
-b2xsdXgtcmRrIGJvYXJkIHRvCiAgIGZpeCB0aGUgYnJva2VuIEkyQyBHUElPIHJlY292ZXJ5IHN1
-cHBvcnQuCgogLSBBZGQgYGZzbCx1c2UtbWluaW11bS1lY2NgIHByb3BlcnR5IGZvciBpbXg2dWxs
-LW15aXItbXlzLTZ1bHgtZXZhbAogICBkZXZpY2UgdHJlZSB0byBmaXggVUJJIGZpbGVzeXN0ZW0g
-bW91bnQgZmFpbHVyZS4KCmF0OTE6CiAtIHdyb25nIHBoeSBhZGRyZXNzIHRoYXQgYmxvY2tzIEV0
-aGVybmV0IHVzZSBvbiBib2FyZHMgd2l0aCBzYW1hNWQyNyBTb00xCgogLSByZXN0cmljdGl2ZSBw
-aW4gcG9zc2liaWxpdGllcyBmb3Igc2FtOXg2MAoKb21hcDoKIC0gRml4IG9jcCBpbnRlcmNvbm5l
-Y3QgYnVzIGFjY2VzcyBlcnJvciByZXBvcnRpbmcgZm9yIG9tYXBfbDNfbm9jIGJ5CiAgIHNldHRp
-bmcgSVJRRl9OT19USFJFQUQKCiAtIEZpeCBjaGFuZ2VkIG1tYyBzbG90IG9yZGVyIHJlZ3Jlc3Np
-b24gYnkgYWRkaW5nIG1tYyBhbGlhc2VzIGZvciBhbTMzNXgKCiAtIEZpeCBkcmE3IHJlYm9vdCBy
-ZWdyZXNzaW9uIGNhdXNlZCBieSBpbnZhbGlkIHBjaWUgcmVzZXQgbWFwCgogLSBGaXggc21hcnRy
-ZWZsZXggaW5pdCByZWdyZXNzaW9uIGNhdXNlZCBieSBkcm9wcGVkIGxlZ2FjeSBkYXRhCgogLSBG
-aXggdGktc3lzYyBkcml2ZXIgd2FybmluZyBvbiB1bmJpbmQgaWYgcmVzZXQgaXMgbm90IGRlYXNz
-ZXJ0ZWQKCiAtIEZpeCBmbGFrZXkgcmVzZXQgZGVhc3NlcnQgZm9yIGRyYTcgaXZhCgpzdG0zMjoK
-IC0gTUFJTlRBSU5FUiBmaWxlIHVwZGF0ZXMKCmJyb2FkY29tOgogLSBicmNtc3RiIFNvQyBJRCBi
-dWlsZCBmaXgKCiAtIE1BSU5UQUlORVIgZmlsZSB1cGRhdGVzCgpTaWduZWQtb2ZmLWJ5OiBBcm5k
-IEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPgoKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpBcm5kIEJlcmdtYW5uICg0KToKICAg
-ICAgTWVyZ2UgdGFnICdhcm0tc29jL2Zvci01LjEyL2RyaXZlcnMtcGFydDInIG9mCmh0dHBzOi8v
-Z2l0aHViLmNvbS9Ccm9hZGNvbS9zdGJsaW51eCBpbnRvIGFybS9maXhlcwogICAgICBNZXJnZSB0
-YWcgJ29tYXAtZm9yLXY1LjEyL2ZpeGVzLXJjMS1zaWduZWQnIG9mCmdpdDovL2dpdC5rZXJuZWwu
-b3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90bWxpbmQvbGludXgtb21hcCBpbnRvCmFybS9m
-aXhlcwogICAgICBNZXJnZSB0YWcgJ2F0OTEtZml4ZXMtNS4xMicgb2YKZ2l0Oi8vZ2l0Lmtlcm5l
-bC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2F0OTEvbGludXggaW50bwphcm0vZml4ZXMK
-ICAgICAgTWVyZ2UgdGFnICdpbXgtZml4ZXMtNS4xMicgb2YKZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcv
-cHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3NoYXduZ3VvL2xpbnV4IGludG8KYXJtL2ZpeGVzCgpD
-bGF1ZGl1IEJlem5lYSAoMSk6CiAgICAgIEFSTTogZHRzOiBhdDkxLXNhbWE1ZDI3X3NvbTE6IGZp
-eCBwaHkgYWRkcmVzcyB0byA3CgpGYWJpbyBFc3RldmFtICgxKToKICAgICAgQVJNOiBpbXg2dWwt
-MTR4MTQtZXZrOiBEbyBub3QgcmVzZXQgdGhlIEV0aGVybmV0IFBIWXMgaW5kZXBlbmRlbnRseQoK
-RmVkZXJpY28gUGVsbGVncmluICgxKToKICAgICAgQVJNOiBkdHM6IGF0OTE6IHNhbTl4NjA6IGZp
-eCBtdXgtbWFzayBmb3IgUEE3IHNvIGl0IGNhbiBiZSBzZXQKdG8gQSwgQiBhbmQgQwoKR3J5Z29y
-aWkgU3RyYXNoa28gKDEpOgogICAgICBidXM6IG9tYXBfbDNfbm9jOiBtYXJrIGwzIGlycXMgYXMg
-SVJRRl9OT19USFJFQUQKCkhvcmlhIEdlYW50xIMgKDMpOgogICAgICBhcm02NDogZHRzOiBsczEw
-NDZhOiBtYXJrIGNyeXB0byBlbmdpbmUgZG1hIGNvaGVyZW50CiAgICAgIGFybTY0OiBkdHM6IGxz
-MTA0M2E6IG1hcmsgY3J5cHRvIGVuZ2luZSBkbWEgY29oZXJlbnQKICAgICAgYXJtNjQ6IGR0czog
-bHMxMDEyYTogbWFyayBjcnlwdG8gZW5naW5lIGRtYSBjb2hlcmVudAoKTHVrYXMgQnVsd2FobiAo
-MSk6CiAgICAgIE1BSU5UQUlORVJTOiByZWN0aWZ5IEJST0FEQ09NIFBNQiAoUE9XRVIgTUFOQUdF
-TUVOVCBCVVMpIERSSVZFUgoKTWFucyBSdWxsZ2FyZCAoMSk6CiAgICAgIEFSTTogZHRzOiBhbTMz
-eHg6IGFkZCBhbGlhc2VzIGZvciBtbWMgaW50ZXJmYWNlcwoKTmljb2xhcyBGZXJyZSAoMSk6CiAg
-ICAgIEFSTTogZHRzOiBhdDkxOiBzYW05eDYwOiBmaXggbXV4LW1hc2sgdG8gbWF0Y2ggcHJvZHVj
-dCdzIGRhdGFzaGVldAoKUGF0cmljZSBDaG90YXJkICgzKToKICAgICAgTUFJTlRBSU5FUlM6IFVw
-ZGF0ZSBzb21lIHN0LmNvbSBlbWFpbCBhZGRyZXNzZXMgdG8gZm9zcy5zdC5jb20KICAgICAgTUFJ
-TlRBSU5FUlM6IFJlbW92ZSBWaW5jZW50IEFicmlvdSBmb3IgU1RNL1NUSSBEUk0gZHJpdmVycy4K
-ICAgICAgTUFJTlRBSU5FUlM6IEFkZCBBbGFpbiBWb2xtYXQgYXMgU1RNMzIgSTJDL1NNQlVTIG1h
-aW50YWluZXIKClNhcmF2YW5hIEthbm5hbiAoMSk6CiAgICAgIEFSTTogaW14OiBhdmljOiBDb252
-ZXJ0IHRvIHVzaW5nIElSUUNISVBfREVDTEFSRQoKVGVyZXNhIFJlbW1ldCAoMSk6CiAgICAgIGFy
-bTY0OiBkdHM6IGlteDhtcC1waHlib2FyZC1wb2xsdXgtcmRrOiBBZGQgbWlzc2luZyBwaW5jdHJs
-IGVudHJ5CgpUb255IExpbmRncmVuICg1KToKICAgICAgc29jOiB0aTogb21hcC1wcm06IEZpeCBy
-ZWJvb3QgaXNzdWUgd2l0aCBpbnZhbGlkIHBjaWUgcmVzZXQgbWFwIGZvciBkcmE3CiAgICAgIEFS
-TTogT01BUDIrOiBGaXggc21hcnRyZWZsZXggaW5pdCByZWdyZXNzaW9uIGFmdGVyIGRyb3BwaW5n
-IGxlZ2FjeSBkYXRhCiAgICAgIE1lcmdlIGJyYW5jaCAnZml4ZXMtdjUuMTEnIGludG8gZml4ZXMK
-ICAgICAgYnVzOiB0aS1zeXNjOiBGaXggd2FybmluZyBvbiB1bmJpbmQgaWYgcmVzZXQgaXMgbm90
-IGRlYXNzZXJ0ZWQKICAgICAgc29jOiB0aTogb21hcC1wcm06IEZpeCBvY2Nhc2lvbmFsIGFib3J0
-IG9uIHJlc2V0IGRlYXNzZXJ0IGZvciBkcmE3IGl2YQoKZGlsbG9uIG1pbiAoMSk6CiAgICAgIEFS
-TTogZHRzOiBpbXg2dWxsOiBmaXggdWJpIGZpbGVzeXN0ZW0gbW91bnQgZmFpbGVkCgogTUFJTlRB
-SU5FUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAzMyArKysrKy0t
-LS0tCiBhcmNoL2FybS9ib290L2R0cy9hbTMzeHguZHRzaSAgICAgICAgICAgICAgICAgICAgICB8
-ICAzICsKIGFyY2gvYXJtL2Jvb3QvZHRzL2F0OTEtc2FtOXg2MGVrLmR0cyAgICAgICAgICAgICAg
-IHwgIDggLS0tCiBhcmNoL2FybS9ib290L2R0cy9hdDkxLXNhbWE1ZDI3X3NvbTEuZHRzaSAgICAg
-ICAgICB8ICA0ICstCiBhcmNoL2FybS9ib290L2R0cy9pbXg2dWwtMTR4MTQtZXZrLmR0c2kgICAg
-ICAgICAgICB8IDIyICsrKysrLS0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZ1bGwtbXlpci1teXMt
-NnVseC1ldmFsLmR0cyAgIHwgIDEgKwogYXJjaC9hcm0vYm9vdC9kdHMvc2FtOXg2MC5kdHNpICAg
-ICAgICAgICAgICAgICAgICAgfCAgOSArKysKIGFyY2gvYXJtL21hY2gtaW14L2F2aWMuYyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIHwgMTYgKysrKy0KIGFyY2gvYXJtL21hY2gtaW14L2NvbW1v
-bi5oICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgLQogYXJjaC9hcm0vbWFjaC1pbXgvbWFj
-aC1pbXgxLmMgICAgICAgICAgICAgICAgICAgICAgfCAxMSAtLS0tCiBhcmNoL2FybS9tYWNoLWlt
-eC9tYWNoLWlteDI1LmMgICAgICAgICAgICAgICAgICAgICB8IDEyIC0tLS0KIGFyY2gvYXJtL21h
-Y2gtaW14L21hY2gtaW14MjcuYyAgICAgICAgICAgICAgICAgICAgIHwgMTIgLS0tLQogYXJjaC9h
-cm0vbWFjaC1pbXgvbWFjaC1pbXgzMS5jICAgICAgICAgICAgICAgICAgICAgfCAgMSAtCiBhcmNo
-L2FybS9tYWNoLWlteC9tYWNoLWlteDM1LmMgICAgICAgICAgICAgICAgICAgICB8ICAxIC0KIGFy
-Y2gvYXJtL21hY2gtaW14L21tLWlteDMuYyAgICAgICAgICAgICAgICAgICAgICAgIHwgMjQgLS0t
-LS0tLQogYXJjaC9hcm0vbWFjaC1vbWFwMi9zcl9kZXZpY2UuYyAgICAgICAgICAgICAgICAgICAg
-fCA3NSArKysrKysrKysrKysrKysrKy0tLS0tCiBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2Fs
-ZS9mc2wtbHMxMDEyYS5kdHNpICAgICB8ICAxICsKIGFyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNj
-YWxlL2ZzbC1sczEwNDNhLmR0c2kgICAgIHwgIDEgKwogYXJjaC9hcm02NC9ib290L2R0cy9mcmVl
-c2NhbGUvZnNsLWxzMTA0NmEuZHRzaSAgICAgfCAgMSArCiAuLi4vZHRzL2ZyZWVzY2FsZS9pbXg4
-bXAtcGh5Ym9hcmQtcG9sbHV4LXJkay5kdHMgICB8ICAyICstCiAuLi4vYm9vdC9kdHMvZnJlZXNj
-YWxlL2lteDhtcC1waHljb3JlLXNvbS5kdHNpICAgICB8ICAyICstCiBkcml2ZXJzL2J1cy9vbWFw
-X2wzX25vYy5jICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA0ICstCiBkcml2ZXJzL2J1cy90
-aS1zeXNjLmMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA0ICstCiBkcml2ZXJzL3Nv
-Yy90aS9vbWFwX3BybS5jICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA4ICsrLQogMjQgZmls
-ZXMgY2hhbmdlZCwgMTM2IGluc2VydGlvbnMoKyksIDEyMCBkZWxldGlvbnMoLSkKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmxpbnV4LWFybS1rZXJuZWwg
-bWFpbGluZyBsaXN0CmxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZwpodHRwOi8v
-bGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFybS1rZXJuZWwK
+On Qualcomm ARM32 platforms, the SMC call can return before it has
+completed. If this occurs, the call can be restarted, but it requires
+using the returned session ID value from the interrupted SMC call.
+
+The ARM32 SMCC code already has the provision to add platform specific
+quirks for things like this. So let's make use of it and add the
+Qualcomm specific quirk (ARM_SMCCC_QUIRK_QCOM_A6) used by the QCOM_SCM
+driver.
+
+This change is similar to the below one added for ARM64 a while ago:
+commit 82bcd087029f ("firmware: qcom: scm: Fix interrupted SCM calls")
+
+Without this change, the Qualcomm ARM32 platforms like SDX55 will return
+-EINVAL for SMC calls used for modem firmware loading and validation.
+
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+
+Changes in v3:
+
+* Rebased on top of v5.12-rc2
+* Sent to SoC list since there was no review so far apart from initial one
+  by Russel
+
+Changes in v2:
+
+* Preserved callee saved registers and used the registers r4, r5 which
+  are getting pushed onto the stack.
+
+ arch/arm/kernel/asm-offsets.c |  3 +++
+ arch/arm/kernel/smccc-call.S  | 11 ++++++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/kernel/asm-offsets.c b/arch/arm/kernel/asm-offsets.c
+index be8050b0c3df..70993af22d80 100644
+--- a/arch/arm/kernel/asm-offsets.c
++++ b/arch/arm/kernel/asm-offsets.c
+@@ -24,6 +24,7 @@
+ #include <asm/vdso_datapage.h>
+ #include <asm/hardware/cache-l2x0.h>
+ #include <linux/kbuild.h>
++#include <linux/arm-smccc.h>
+ #include "signal.h"
+ 
+ /*
+@@ -148,6 +149,8 @@ int main(void)
+   DEFINE(SLEEP_SAVE_SP_PHYS,	offsetof(struct sleep_save_sp, save_ptr_stash_phys));
+   DEFINE(SLEEP_SAVE_SP_VIRT,	offsetof(struct sleep_save_sp, save_ptr_stash));
+ #endif
++  DEFINE(ARM_SMCCC_QUIRK_ID_OFFS,	offsetof(struct arm_smccc_quirk, id));
++  DEFINE(ARM_SMCCC_QUIRK_STATE_OFFS,	offsetof(struct arm_smccc_quirk, state));
+   BLANK();
+   DEFINE(DMA_BIDIRECTIONAL,	DMA_BIDIRECTIONAL);
+   DEFINE(DMA_TO_DEVICE,		DMA_TO_DEVICE);
+diff --git a/arch/arm/kernel/smccc-call.S b/arch/arm/kernel/smccc-call.S
+index 00664c78faca..931df62a7831 100644
+--- a/arch/arm/kernel/smccc-call.S
++++ b/arch/arm/kernel/smccc-call.S
+@@ -3,7 +3,9 @@
+  * Copyright (c) 2015, Linaro Limited
+  */
+ #include <linux/linkage.h>
++#include <linux/arm-smccc.h>
+ 
++#include <asm/asm-offsets.h>
+ #include <asm/opcodes-sec.h>
+ #include <asm/opcodes-virt.h>
+ #include <asm/unwind.h>
+@@ -27,7 +29,14 @@ UNWIND(	.fnstart)
+ UNWIND(	.save	{r4-r7})
+ 	ldm	r12, {r4-r7}
+ 	\instr
+-	pop	{r4-r7}
++	ldr	r4, [sp, #36]
++	cmp	r4, #0
++	beq	1f			// No quirk structure
++	ldr     r5, [r4, #ARM_SMCCC_QUIRK_ID_OFFS]
++	cmp     r5, #ARM_SMCCC_QUIRK_QCOM_A6
++	bne	1f			// No quirk present
++	str	r6, [r4, #ARM_SMCCC_QUIRK_STATE_OFFS]
++1:	pop	{r4-r7}
+ 	ldr	r12, [sp, #(4 * 4)]
+ 	stm	r12, {r0-r3}
+ 	bx	lr
+-- 
+2.25.1
+
