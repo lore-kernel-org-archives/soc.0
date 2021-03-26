@@ -1,153 +1,205 @@
-Return-Path: <SRS0=GF4P=IY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-25.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C4DCC433C1
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 26 Mar 2021 08:54:02 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C3631619AE
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 26 Mar 2021 08:54:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C3631619AE
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=p4OF2j0oHboPG9AyIYphqcqevhLXwyKyiyiYqc58fA4=; b=lkBayzunW7QnpMWQduKjUw6AO
-	PF/SNb4/LOjCW98pr9K1mdYNTrlU2PTMMzcRtUxmdF6mtQWagWVPdAVc4KD2P/Ehm5W7KPsLhvXYK
-	1KFLnjLBzj3vWZlsFCdhxVszGaRzYAKeTBVe0DcGgVP6hlRL2Qa4Ln02Yw9OAM8USHhXMQa751Iy1
-	hDFAYWRB6h79pBhnmkasmlaKmWI53Gq4p3lYtxi19gaZSWQS0dxlEMt9t1u0ijRYdwaWuHjW3faku
-	J+wdG7mbU4RSw9lwlRjRoTjUvMJ4NmOzjxAIyGhm8astXHED8zsLIponlSZ1c6FKVABydANKJbK9c
-	L3aOAvJMg==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lPiCQ-0033CI-IL; Fri, 26 Mar 2021 08:52:10 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lPiCL-0033Bb-UF
- for linux-arm-kernel@lists.infradead.org; Fri, 26 Mar 2021 08:52:08 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1FEE861A43
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 26 Mar 2021 08:52:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 915DBC433C1
+	for <soc@archiver.kernel.org>; Fri, 26 Mar 2021 16:03:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 6668361A32; Fri, 26 Mar 2021 16:03:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3EC9A61A28
+	for <soc@kernel.org>; Fri, 26 Mar 2021 16:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1616748723;
- bh=XLC9yTktkkTCTcqmTymKbTkS7ocrX/l3RayX7yKfUVI=;
- h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
- b=lBrtXw4IguGaQxldR1tMbzgyY/459t+AJnsxWjtacrvonEyaiKgvg0a36MZmS2hRI
- pPf5E60q6ihnrDDdqCxaavQOxRcMs9G9AXp6kx/L7N9hchCEwzHzuEd4n2iccH13Yl
- o03yicOVpDb9sfGGim3AGr1J/9KkOaFlZkkDUihxhKqE9C+Yz2JGoeap1i2WziQtCh
- scfzUykjP7KNWmoudf3E5tpPOUhOORVuKzzVZ0CvWv3Thrp+yV5SLmYh8XYF01Y0wK
- Vqgrcir0b4fJskQNdi6J4j8du2SqYB8uUjt8vlaPWcCQVstBUo8J9PU1/psJzAbKZo
- bVJD99+44gCLg==
-Received: by mail-oo1-f44.google.com with SMTP id
- j10-20020a4ad18a0000b02901b677a0ba98so1144959oor.1
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 26 Mar 2021 01:52:03 -0700 (PDT)
-X-Gm-Message-State: AOAM532UlYPUzjiotTiV3Vw4McjGs4cH/K0qT22a/5kB5zempU2TDCu+
- /5pXMkA3lYVZC9VicufVlxfk0MmQVbE01y+4teI=
-X-Google-Smtp-Source: ABdhPJxFmzDYtA3vz0j++H5JPrGDulcgfDeMX+fhEtN0QMlJKXJwWIk94mYoTguFCR3xO2L/Mr+haF9Bq5h9AnTcBrs=
-X-Received: by 2002:a4a:e9a2:: with SMTP id t2mr10392411ood.15.1616748722322; 
- Fri, 26 Mar 2021 01:52:02 -0700 (PDT)
+	s=k20201202; t=1616774593;
+	bh=gDRpe+xf82CeSuSzG9G6Q9nKEkx1xSc/XTzQDmGAVrg=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=BzcTB4lvPy1SJ/WcvBkq7Kw2+8ozgNlBbpOKXVaddFimP2pJH71iXiY6GhJPpIjnw
+	 dejbUlX/8A2vFy72lnPff4vJ1wG++94DmzuQgObAwJielBKifeW/2uY4zBv1IGSdRp
+	 navxuh2zEtbgL5wuv5CMltpxQCadRc7jG812CcVDqexQIELF+d8p9Nj0Y5eQgaZ+6p
+	 phZ4UujC4d4UxK47hZ6AUMK9QvK9PukLLoo32wvax+94KqOzwksRvoox9+8X62bdvz
+	 SJS2E5sfDhrc4W5rYAGjj0rktICzJkQKn6TQIJsKH2RgaUxiF4/RVoynoWSoWWQThR
+	 X30wdg30xGTNQ==
+Received: by mail-ot1-f49.google.com with SMTP id v24-20020a9d69d80000b02901b9aec33371so5668987oto.2
+        for <soc@kernel.org>; Fri, 26 Mar 2021 09:03:13 -0700 (PDT)
+X-Gm-Message-State: AOAM532Os6mVJQ7Ww9pFFARmGGjUyrgPoited5h9OeQA/+DjlaQ+j0w3
+	wcm5bETSiLsRVBjIam9pKnA4wssey7iyWYep+8s=
+X-Google-Smtp-Source: ABdhPJxKQUsQUL9Ou63VS2IXalng02yPSjWBMUCEeJRBxLRUNlYbPuwHdH+PrWqkYrwj6qHltZ3v6AynmHRMx4D3OEo=
+X-Received: by 2002:a05:6830:148c:: with SMTP id s12mr12624294otq.251.1616774592506;
+ Fri, 26 Mar 2021 09:03:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210323131530.2619900-1-arnd@kernel.org>
- <CADRPPNQJfJ=KmRGkX5Uo6VfWDsihrMUKV7OkQ7jtb3+Byb0RLQ@mail.gmail.com>
-In-Reply-To: <CADRPPNQJfJ=KmRGkX5Uo6VfWDsihrMUKV7OkQ7jtb3+Byb0RLQ@mail.gmail.com>
 From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 26 Mar 2021 09:51:47 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2y4cmmRtpPvSvxaevDftsCUQDEJxjin0j77yOJqxv_YA@mail.gmail.com>
-Message-ID: <CAK8P3a2y4cmmRtpPvSvxaevDftsCUQDEJxjin0j77yOJqxv_YA@mail.gmail.com>
-Subject: Re: [PATCH] soc/fsl: qbman: fix conflicting alignment attributes
-To: Li Yang <leoyang.li@nxp.com>
+Date: Fri, 26 Mar 2021 17:02:57 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2BTOzDfmH3dHmwm6LYPefFAnGCMPdQOpUbXOukiT0rVw@mail.gmail.com>
+Message-ID: <CAK8P3a2BTOzDfmH3dHmwm6LYPefFAnGCMPdQOpUbXOukiT0rVw@mail.gmail.com>
+Subject: [GIT PULL] ARM: SoC fixes for v5.12
+To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Roy Pledge <roy.pledge@nxp.com>, Claudiu Manoil <claudiu.manoil@nxp.com>, 
- Scott Wood <oss@buserror.net>, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- YueHaibing <yuehaibing@huawei.com>, 
- lkml <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Lee Jones <lee.jones@linaro.org>, 
- "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE"
- <linux-arm-kernel@lists.infradead.org>, 
- Madalin-cristian Bucur <madalin.bucur@nxp.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210326_085206_390923_DA875AC5 
-X-CRM114-Status: GOOD (  23.47  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210326085147.SPfPxRpg0ADLT2p7VqQvQtKrVumvDEgFC2KkGYMmIPc@z>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 26, 2021 at 3:17 AM Li Yang <leoyang.li@nxp.com> wrote:
-> On Tue, Mar 23, 2021 at 8:17 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > When building with W=1, gcc points out that the __packed attribute
-> > on struct qm_eqcr_entry conflicts with the 8-byte alignment
-> > attribute on struct qm_fd inside it:
-> >
-> > drivers/soc/fsl/qbman/qman.c:189:1: error: alignment 1 of 'struct qm_eqcr_entry' is less than 8 [-Werror=packed-not-aligned]
-> >
-> > I assume that the alignment attribute is the correct one, and
-> > that qm_eqcr_entry cannot actually be unaligned in memory,
-> > so add the same alignment on the outer struct.
-> >
-> > Fixes: c535e923bb97 ("soc/fsl: Introduce DPAA 1.x QMan device driver")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  drivers/soc/fsl/qbman/qman.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/soc/fsl/qbman/qman.c b/drivers/soc/fsl/qbman/qman.c
-> > index a1b9be1d105a..fde4edd83c14 100644
-> > --- a/drivers/soc/fsl/qbman/qman.c
-> > +++ b/drivers/soc/fsl/qbman/qman.c
-> > @@ -186,7 +186,7 @@ struct qm_eqcr_entry {
-> >         __be32 tag;
-> >         struct qm_fd fd;
-> >         u8 __reserved3[32];
-> > -} __packed;
-> > +} __packed __aligned(8);
->
-> The EQCR structure is actually aligned on 64-byte from the manual.
-> But probably 8 is enough to let the compiler not complain.
+The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15=
+:
 
-The important bit is that all members inside are at most 8-byte long
-and naturally aligned, so the compiler can now optimize the accesses
-because it can assume that each member can be updated atomically.
+  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
 
-Marking a structure as unaligned with the __packed attribute can lead
-to rather unoptimized code, which is particularly important when the
-structure is mapped as uncached -- accessing it one byte at a time
-means you have eight times the latency for a simple read. I think on
-arm64, the compiler doesn't actually have to do that, but at least if you
-run a 32-bit kernel, the packing would prevent the use of ldrd or ldm
-instructions that need an aligned word.
+are available in the Git repository at:
 
-       Arnd
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-=
+5.12
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+for you to fetch changes up to 67335b8d28cd2ee279d6ab3c72856b76411ba48a:
+
+  Merge tag 'imx-fixes-5.12' of
+git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
+arm/fixes (2021-03-18 23:53:47 +0100)
+
+----------------------------------------------------------------
+ARM: SoC fixes for v5.12
+
+Too many fixes have accumulated in the soc tree, so this is a fairly
+large set. As usual, most of the fixes are for devicetree files, but
+there are also notable code changes for imx and omap regressions as
+well as some maintainer file updates.
+
+imx:
+ - Fix an Ethernet issue on imx6ul-14x14-evk board that is caused by
+   independent PHY reset.
+
+ - Add missing `dma-coherent` property for LayerScape device trees to fix a
+   kernel BUG report.
+
+ - Use IRQCHIP_DECLARE for AVIC driver to fix a boot issue on i.MX25 with
+   fw_devlink=3Don.
+
+ - Add missing I2C pinctrl entry for imx8mp-phyboard-pollux-rdk board to
+   fix the broken I2C GPIO recovery support.
+
+ - Add `fsl,use-minimum-ecc` property for imx6ull-myir-mys-6ulx-eval
+   device tree to fix UBI filesystem mount failure.
+
+at91:
+ - wrong phy address that blocks Ethernet use on boards with sama5d27 SoM1
+
+ - restrictive pin possibilities for sam9x60
+
+omap:
+ - Fix ocp interconnect bus access error reporting for omap_l3_noc by
+   setting IRQF_NO_THREAD
+
+ - Fix changed mmc slot order regression by adding mmc aliases for am335x
+
+ - Fix dra7 reboot regression caused by invalid pcie reset map
+
+ - Fix smartreflex init regression caused by dropped legacy data
+
+ - Fix ti-sysc driver warning on unbind if reset is not deasserted
+
+ - Fix flakey reset deassert for dra7 iva
+
+stm32:
+ - MAINTAINER file updates
+
+broadcom:
+ - brcmstb SoC ID build fix
+
+ - MAINTAINER file updates
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+----------------------------------------------------------------
+Arnd Bergmann (4):
+      Merge tag 'arm-soc/for-5.12/drivers-part2' of
+https://github.com/Broadcom/stblinux into arm/fixes
+      Merge tag 'omap-for-v5.12/fixes-rc1-signed' of
+git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into
+arm/fixes
+      Merge tag 'at91-fixes-5.12' of
+git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into
+arm/fixes
+      Merge tag 'imx-fixes-5.12' of
+git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
+arm/fixes
+
+Claudiu Beznea (1):
+      ARM: dts: at91-sama5d27_som1: fix phy address to 7
+
+Fabio Estevam (1):
+      ARM: imx6ul-14x14-evk: Do not reset the Ethernet PHYs independently
+
+Federico Pellegrin (1):
+      ARM: dts: at91: sam9x60: fix mux-mask for PA7 so it can be set
+to A, B and C
+
+Grygorii Strashko (1):
+      bus: omap_l3_noc: mark l3 irqs as IRQF_NO_THREAD
+
+Horia Geant=C4=83 (3):
+      arm64: dts: ls1046a: mark crypto engine dma coherent
+      arm64: dts: ls1043a: mark crypto engine dma coherent
+      arm64: dts: ls1012a: mark crypto engine dma coherent
+
+Lukas Bulwahn (1):
+      MAINTAINERS: rectify BROADCOM PMB (POWER MANAGEMENT BUS) DRIVER
+
+Mans Rullgard (1):
+      ARM: dts: am33xx: add aliases for mmc interfaces
+
+Nicolas Ferre (1):
+      ARM: dts: at91: sam9x60: fix mux-mask to match product's datasheet
+
+Patrice Chotard (3):
+      MAINTAINERS: Update some st.com email addresses to foss.st.com
+      MAINTAINERS: Remove Vincent Abriou for STM/STI DRM drivers.
+      MAINTAINERS: Add Alain Volmat as STM32 I2C/SMBUS maintainer
+
+Saravana Kannan (1):
+      ARM: imx: avic: Convert to using IRQCHIP_DECLARE
+
+Teresa Remmet (1):
+      arm64: dts: imx8mp-phyboard-pollux-rdk: Add missing pinctrl entry
+
+Tony Lindgren (5):
+      soc: ti: omap-prm: Fix reboot issue with invalid pcie reset map for d=
+ra7
+      ARM: OMAP2+: Fix smartreflex init regression after dropping legacy da=
+ta
+      Merge branch 'fixes-v5.11' into fixes
+      bus: ti-sysc: Fix warning on unbind if reset is not deasserted
+      soc: ti: omap-prm: Fix occasional abort on reset deassert for dra7 iv=
+a
+
+dillon min (1):
+      ARM: dts: imx6ull: fix ubi filesystem mount failed
+
+ MAINTAINERS                                        | 33 +++++-----
+ arch/arm/boot/dts/am33xx.dtsi                      |  3 +
+ arch/arm/boot/dts/at91-sam9x60ek.dts               |  8 ---
+ arch/arm/boot/dts/at91-sama5d27_som1.dtsi          |  4 +-
+ arch/arm/boot/dts/imx6ul-14x14-evk.dtsi            | 22 +++++--
+ arch/arm/boot/dts/imx6ull-myir-mys-6ulx-eval.dts   |  1 +
+ arch/arm/boot/dts/sam9x60.dtsi                     |  9 +++
+ arch/arm/mach-imx/avic.c                           | 16 ++++-
+ arch/arm/mach-imx/common.h                         |  1 -
+ arch/arm/mach-imx/mach-imx1.c                      | 11 ----
+ arch/arm/mach-imx/mach-imx25.c                     | 12 ----
+ arch/arm/mach-imx/mach-imx27.c                     | 12 ----
+ arch/arm/mach-imx/mach-imx31.c                     |  1 -
+ arch/arm/mach-imx/mach-imx35.c                     |  1 -
+ arch/arm/mach-imx/mm-imx3.c                        | 24 -------
+ arch/arm/mach-omap2/sr_device.c                    | 75 +++++++++++++++++-=
+----
+ arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi     |  1 +
+ arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi     |  1 +
+ arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi     |  1 +
+ .../dts/freescale/imx8mp-phyboard-pollux-rdk.dts   |  2 +-
+ .../boot/dts/freescale/imx8mp-phycore-som.dtsi     |  2 +-
+ drivers/bus/omap_l3_noc.c                          |  4 +-
+ drivers/bus/ti-sysc.c                              |  4 +-
+ drivers/soc/ti/omap_prm.c                          |  8 ++-
+ 24 files changed, 136 insertions(+), 120 deletions(-)
