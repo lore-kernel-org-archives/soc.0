@@ -1,234 +1,121 @@
-Return-Path: <SRS0=GF4P=IY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=FXz0=I3=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9666C433C1
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 26 Mar 2021 19:02:10 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E7C766193F
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 26 Mar 2021 19:02:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E7C766193F
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
-	References:Cc:To:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=jK229uGDl/1D0euSWq0/YrzTQm6tbnlvMKLXZxaqGG0=; b=eEXitvsnRjRGOb63BiEl82jBj
-	Q3b5OSugybTEkX1bG3RiB9QTQHkQlWBGkbUfUd8bI5svQ15qD16xa7UJigdtbLF7D95+vmyzGPZUu
-	BghZZJHMcb/73vfYKaWctXmSGttmsGMKKmWbkyN9ihgE7ud3mZ1u1NxiFhwEPPJN5K4EvcR8flQ6H
-	K3nHh/5tup/Dn/tX/NWnPiPmCr03AfGxU6tpLnjMwEKnXm/ARlIZ076E2d6pjP2wVBA4txkFfFMcf
-	6eRtXX6acFSVB6ux11Dw54m8nrZqMEHSodvv4CmnLEyRUYZHbsPI2XZzpT81sz0Fa8zYIu1pqgUon
-	IwwEwukSg==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lPrhG-004B20-KH; Fri, 26 Mar 2021 19:00:38 +0000
-Received: from mail-pl1-x631.google.com ([2607:f8b0:4864:20::631])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lPrh9-004B14-IB
- for linux-arm-kernel@lists.infradead.org; Fri, 26 Mar 2021 19:00:35 +0000
-Received: by mail-pl1-x631.google.com with SMTP id y2so1364221plg.5
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 26 Mar 2021 12:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=subject:to:cc:references:from:message-id:date:user-agent
- :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=HNyKIaASUrW7kKOwX98wYKim1aH2PfFTA7jxzM7JquQ=;
- b=siEHzuw2cZyO18WczX6KJ3DFuM1uNXPe0tVU4MHJgsqbkvVj/l3IJ88COYwuAr9Zet
- ndLttyz+ER/8qMr918cMoNUUxj6W4I8r2nv62gX96lLw+D47Vu9ixj92vYvlA24SsDG6
- 28p1OwOVSVXtdiw44Vtd3Ag7e5nKWJxJsxQrDvBF1JcdYfeEf6oopJhDClgpE45Bk/nX
- RhTVlX3d/LDEjwkex9/sh1+iJ7atb8kBvn/7G+07FgD+ukJNPKyRDwI5qd7WQmb+oDA5
- W7/6Fb05GZce0F3c/SU3oo9hkAQet07rZ02vr16cext18RhmYKXIDKrXTYho3socVVbm
- 2jZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:cc:references:from:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=HNyKIaASUrW7kKOwX98wYKim1aH2PfFTA7jxzM7JquQ=;
- b=gxwardLzdR/IjoYnnKnNKCbbCioU8f8joPKpmrLgit+cJbcW+A/g6kBESd9rwfdeSQ
- LMTgsYc2wDSf+vYF+pixkwCeRSuhOqM56Rj1Q9r1eq1CQQxuZ+bNdl0vrzy1Qq4YXG5Q
- P+U5kilzGGIZtq0CBnA3ya4xNbCyxXbQAY68/HEVc4wjirliF05HzWRCvMBazjtvkOTG
- we8VvR+3qCmLp/Lfb/zCD656CYIO1qNKWf0r30XvqboySwUsPc/Tsand79s1EA4sc1mN
- JTueNdzPDe7NMhYwYpBnfGAw423x/9RjEqEihjgkR5v3aZF3YGs3OgDdpY4gTIqjj7Jj
- q87g==
-X-Gm-Message-State: AOAM530S6SthC308Yrrmh2OcrRJS0ccYqskEHsu7ziiQHb+o5N6BYgxe
- tAmQLZRvdtWDPajjUZySZQI=
-X-Google-Smtp-Source: ABdhPJx5bAx8gFRXoRKKiFI/wbWsJuqjXD+R5otdeI7H1W+rKLSfbX7ajxQ0DA87Q2TEYN43P9GAOg==
-X-Received: by 2002:a17:90b:344c:: with SMTP id
- lj12mr15399183pjb.208.1616785229100; 
- Fri, 26 Mar 2021 12:00:29 -0700 (PDT)
-Received: from [10.230.29.202] ([192.19.223.252])
- by smtp.gmail.com with ESMTPSA id 22sm9327217pjl.31.2021.03.26.12.00.27
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 26 Mar 2021 12:00:28 -0700 (PDT)
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.12
-To: Arnd Bergmann <arnd@kernel.org>,
- Linus Torvalds <torvalds@linux-foundation.org>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04BBAC433C1
+	for <soc@archiver.kernel.org>; Mon, 29 Mar 2021 07:55:34 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id B4A8261959; Mon, 29 Mar 2021 07:55:33 +0000 (UTC)
+Received: from muru.com (muru.com [72.249.23.125])
+	by mail.kernel.org (Postfix) with ESMTP id C667A6193A;
+	Mon, 29 Mar 2021 07:55:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C667A6193A
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=tony@atomide.com
+Received: from hillo.muru.com (localhost [127.0.0.1])
+	by muru.com (Postfix) with ESMTP id ABACE80AF;
+	Mon, 29 Mar 2021 07:56:32 +0000 (UTC)
+From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>
-References: <CAK8P3a2BTOzDfmH3dHmwm6LYPefFAnGCMPdQOpUbXOukiT0rVw@mail.gmail.com>
-From: Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <597f7c5d-c788-5bc7-bf53-1707fff77e65@gmail.com>
-Date: Fri, 26 Mar 2021 12:00:26 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.9.0
+To: soc@kernel.org
+Cc: arm@kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"Tony Lindgren" <tony@atomide.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Santosh Shilimkar <ssantosh@kernel.org>
+Subject: [GIT PULL 1/3] Driver changes for omaps for genpd support
+Date: Mon, 29 Mar 2021 10:55:20 +0300
+Message-Id: <pull-1617004205-537424@atomide.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a2BTOzDfmH3dHmwm6LYPefFAnGCMPdQOpUbXOukiT0rVw@mail.gmail.com>
-Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210326_190033_051358_895DCEE6 
-X-CRM114-Status: GOOD (  31.26  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210326190026.ej6fdON4Pvrz9bJAe7r6iqL6X25eDgAtNmD17rbA6wM@z>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-CgpPbiAzLzI2LzIwMjEgOTowMiBBTSwgQXJuZCBCZXJnbWFubiB3cm90ZToKPiBUaGUgZm9sbG93
-aW5nIGNoYW5nZXMgc2luY2UgY29tbWl0IGEzOGZkODc0ODQ2NDgzMTU4NGExOTQzOGNiYjMwODJi
-NWEyZGFiMTU6Cj4gCj4gICBMaW51eCA1LjEyLXJjMiAoMjAyMS0wMy0wNSAxNzozMzo0MSAtMDgw
-MCkKPiAKPiBhcmUgYXZhaWxhYmxlIGluIHRoZSBHaXQgcmVwb3NpdG9yeSBhdDoKPiAKPiAgIGdp
-dDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9zb2Mvc29jLmdpdCB0
-YWdzL3NvYy1maXhlcy01LjEyCj4gCj4gZm9yIHlvdSB0byBmZXRjaCBjaGFuZ2VzIHVwIHRvIDY3
-MzM1YjhkMjhjZDJlZTI3OWQ2YWIzYzcyODU2Yjc2NDExYmE0OGE6Cj4gCj4gICBNZXJnZSB0YWcg
-J2lteC1maXhlcy01LjEyJyBvZgo+IGdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgv
-a2VybmVsL2dpdC9zaGF3bmd1by9saW51eCBpbnRvCj4gYXJtL2ZpeGVzICgyMDIxLTAzLTE4IDIz
-OjUzOjQ3ICswMTAwKQo+IAo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiBBUk06IFNvQyBmaXhlcyBmb3IgdjUuMTIKPiAK
-PiBUb28gbWFueSBmaXhlcyBoYXZlIGFjY3VtdWxhdGVkIGluIHRoZSBzb2MgdHJlZSwgc28gdGhp
-cyBpcyBhIGZhaXJseQo+IGxhcmdlIHNldC4gQXMgdXN1YWwsIG1vc3Qgb2YgdGhlIGZpeGVzIGFy
-ZSBmb3IgZGV2aWNldHJlZSBmaWxlcywgYnV0Cj4gdGhlcmUgYXJlIGFsc28gbm90YWJsZSBjb2Rl
-IGNoYW5nZXMgZm9yIGlteCBhbmQgb21hcCByZWdyZXNzaW9ucyBhcwo+IHdlbGwgYXMgc29tZSBt
-YWludGFpbmVyIGZpbGUgdXBkYXRlcy4KCkFybmQsIEkgZG9uJ3Qgc2VlOgoKaHR0cHM6Ly9sb3Jl
-Lmtlcm5lbC5vcmcvbGludXgtYXJtLWtlcm5lbC8yMDIxMDIxNzAxMTY1NC4yNTYxNDI2LTEtZi5m
-YWluZWxsaUBnbWFpbC5jb20vCgpkZXNwaXRlIHJlY2VpdmluZyBhIG1lc3NhZ2UgaW5kaWNhdGlu
-ZyB0aGF0IGl0IHdhcyBwdWxsZWQ6CgpIZXJlIGlzIHRoZSBzdW1tYXJ5IHdpdGggbGlua3M6CiAg
-LSBbR0lULFBVTEwsMS8yXSBCcm9hZGNvbSBsYXRlIGRldmljZXRyZWUgY2hhbmdlcyBmb3IgNS4x
-MgogICAgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9zb2Mvc29jL2MvYWY2ZTA1ZjE3MTE0CiAgLSBb
-R0lULFBVTEwsMi8yXSBCcm9hZGNvbSBsYXRlIGRyaXZlcnMgY2hhbmdlcyBmb3IgNS4xMgogICAg
-aHR0cHM6Ly9naXQua2VybmVsLm9yZy9zb2Mvc29jL2MvMDE0NDMzNzU2MzgxCgp0aGUgZmlyc3Qg
-bGluayBkb2VzIG5vdCBxdWl0ZSBsb29rIHJpZ2h0IHRvIG1lIGFzIGl0IGRvZXMgbm90IGNvbnRh
-aW4KdGhlIHJldmVydC4KCj4gCj4gaW14Ogo+ICAtIEZpeCBhbiBFdGhlcm5ldCBpc3N1ZSBvbiBp
-bXg2dWwtMTR4MTQtZXZrIGJvYXJkIHRoYXQgaXMgY2F1c2VkIGJ5Cj4gICAgaW5kZXBlbmRlbnQg
-UEhZIHJlc2V0Lgo+IAo+ICAtIEFkZCBtaXNzaW5nIGBkbWEtY29oZXJlbnRgIHByb3BlcnR5IGZv
-ciBMYXllclNjYXBlIGRldmljZSB0cmVlcyB0byBmaXggYQo+ICAgIGtlcm5lbCBCVUcgcmVwb3J0
-Lgo+IAo+ICAtIFVzZSBJUlFDSElQX0RFQ0xBUkUgZm9yIEFWSUMgZHJpdmVyIHRvIGZpeCBhIGJv
-b3QgaXNzdWUgb24gaS5NWDI1IHdpdGgKPiAgICBmd19kZXZsaW5rPW9uLgo+IAo+ICAtIEFkZCBt
-aXNzaW5nIEkyQyBwaW5jdHJsIGVudHJ5IGZvciBpbXg4bXAtcGh5Ym9hcmQtcG9sbHV4LXJkayBi
-b2FyZCB0bwo+ICAgIGZpeCB0aGUgYnJva2VuIEkyQyBHUElPIHJlY292ZXJ5IHN1cHBvcnQuCj4g
-Cj4gIC0gQWRkIGBmc2wsdXNlLW1pbmltdW0tZWNjYCBwcm9wZXJ0eSBmb3IgaW14NnVsbC1teWly
-LW15cy02dWx4LWV2YWwKPiAgICBkZXZpY2UgdHJlZSB0byBmaXggVUJJIGZpbGVzeXN0ZW0gbW91
-bnQgZmFpbHVyZS4KPiAKPiBhdDkxOgo+ICAtIHdyb25nIHBoeSBhZGRyZXNzIHRoYXQgYmxvY2tz
-IEV0aGVybmV0IHVzZSBvbiBib2FyZHMgd2l0aCBzYW1hNWQyNyBTb00xCj4gCj4gIC0gcmVzdHJp
-Y3RpdmUgcGluIHBvc3NpYmlsaXRpZXMgZm9yIHNhbTl4NjAKPiAKPiBvbWFwOgo+ICAtIEZpeCBv
-Y3AgaW50ZXJjb25uZWN0IGJ1cyBhY2Nlc3MgZXJyb3IgcmVwb3J0aW5nIGZvciBvbWFwX2wzX25v
-YyBieQo+ICAgIHNldHRpbmcgSVJRRl9OT19USFJFQUQKPiAKPiAgLSBGaXggY2hhbmdlZCBtbWMg
-c2xvdCBvcmRlciByZWdyZXNzaW9uIGJ5IGFkZGluZyBtbWMgYWxpYXNlcyBmb3IgYW0zMzV4Cj4g
-Cj4gIC0gRml4IGRyYTcgcmVib290IHJlZ3Jlc3Npb24gY2F1c2VkIGJ5IGludmFsaWQgcGNpZSBy
-ZXNldCBtYXAKPiAKPiAgLSBGaXggc21hcnRyZWZsZXggaW5pdCByZWdyZXNzaW9uIGNhdXNlZCBi
-eSBkcm9wcGVkIGxlZ2FjeSBkYXRhCj4gCj4gIC0gRml4IHRpLXN5c2MgZHJpdmVyIHdhcm5pbmcg
-b24gdW5iaW5kIGlmIHJlc2V0IGlzIG5vdCBkZWFzc2VydGVkCj4gCj4gIC0gRml4IGZsYWtleSBy
-ZXNldCBkZWFzc2VydCBmb3IgZHJhNyBpdmEKPiAKPiBzdG0zMjoKPiAgLSBNQUlOVEFJTkVSIGZp
-bGUgdXBkYXRlcwo+IAo+IGJyb2FkY29tOgo+ICAtIGJyY21zdGIgU29DIElEIGJ1aWxkIGZpeAo+
-IAo+ICAtIE1BSU5UQUlORVIgZmlsZSB1cGRhdGVzCj4gCj4gU2lnbmVkLW9mZi1ieTogQXJuZCBC
-ZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4KPiAKPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gQXJuZCBCZXJnbWFubiAoNCk6
-Cj4gICAgICAgTWVyZ2UgdGFnICdhcm0tc29jL2Zvci01LjEyL2RyaXZlcnMtcGFydDInIG9mCj4g
-aHR0cHM6Ly9naXRodWIuY29tL0Jyb2FkY29tL3N0YmxpbnV4IGludG8gYXJtL2ZpeGVzCj4gICAg
-ICAgTWVyZ2UgdGFnICdvbWFwLWZvci12NS4xMi9maXhlcy1yYzEtc2lnbmVkJyBvZgo+IGdpdDov
-L2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90bWxpbmQvbGludXgtb21h
-cCBpbnRvCj4gYXJtL2ZpeGVzCj4gICAgICAgTWVyZ2UgdGFnICdhdDkxLWZpeGVzLTUuMTInIG9m
-Cj4gZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2F0OTEvbGlu
-dXggaW50bwo+IGFybS9maXhlcwo+ICAgICAgIE1lcmdlIHRhZyAnaW14LWZpeGVzLTUuMTInIG9m
-Cj4gZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3NoYXduZ3Vv
-L2xpbnV4IGludG8KPiBhcm0vZml4ZXMKPiAKPiBDbGF1ZGl1IEJlem5lYSAoMSk6Cj4gICAgICAg
-QVJNOiBkdHM6IGF0OTEtc2FtYTVkMjdfc29tMTogZml4IHBoeSBhZGRyZXNzIHRvIDcKPiAKPiBG
-YWJpbyBFc3RldmFtICgxKToKPiAgICAgICBBUk06IGlteDZ1bC0xNHgxNC1ldms6IERvIG5vdCBy
-ZXNldCB0aGUgRXRoZXJuZXQgUEhZcyBpbmRlcGVuZGVudGx5Cj4gCj4gRmVkZXJpY28gUGVsbGVn
-cmluICgxKToKPiAgICAgICBBUk06IGR0czogYXQ5MTogc2FtOXg2MDogZml4IG11eC1tYXNrIGZv
-ciBQQTcgc28gaXQgY2FuIGJlIHNldAo+IHRvIEEsIEIgYW5kIEMKPiAKPiBHcnlnb3JpaSBTdHJh
-c2hrbyAoMSk6Cj4gICAgICAgYnVzOiBvbWFwX2wzX25vYzogbWFyayBsMyBpcnFzIGFzIElSUUZf
-Tk9fVEhSRUFECj4gCj4gSG9yaWEgR2VhbnTEgyAoMyk6Cj4gICAgICAgYXJtNjQ6IGR0czogbHMx
-MDQ2YTogbWFyayBjcnlwdG8gZW5naW5lIGRtYSBjb2hlcmVudAo+ICAgICAgIGFybTY0OiBkdHM6
-IGxzMTA0M2E6IG1hcmsgY3J5cHRvIGVuZ2luZSBkbWEgY29oZXJlbnQKPiAgICAgICBhcm02NDog
-ZHRzOiBsczEwMTJhOiBtYXJrIGNyeXB0byBlbmdpbmUgZG1hIGNvaGVyZW50Cj4gCj4gTHVrYXMg
-QnVsd2FobiAoMSk6Cj4gICAgICAgTUFJTlRBSU5FUlM6IHJlY3RpZnkgQlJPQURDT00gUE1CIChQ
-T1dFUiBNQU5BR0VNRU5UIEJVUykgRFJJVkVSCj4gCj4gTWFucyBSdWxsZ2FyZCAoMSk6Cj4gICAg
-ICAgQVJNOiBkdHM6IGFtMzN4eDogYWRkIGFsaWFzZXMgZm9yIG1tYyBpbnRlcmZhY2VzCj4gCj4g
-Tmljb2xhcyBGZXJyZSAoMSk6Cj4gICAgICAgQVJNOiBkdHM6IGF0OTE6IHNhbTl4NjA6IGZpeCBt
-dXgtbWFzayB0byBtYXRjaCBwcm9kdWN0J3MgZGF0YXNoZWV0Cj4gCj4gUGF0cmljZSBDaG90YXJk
-ICgzKToKPiAgICAgICBNQUlOVEFJTkVSUzogVXBkYXRlIHNvbWUgc3QuY29tIGVtYWlsIGFkZHJl
-c3NlcyB0byBmb3NzLnN0LmNvbQo+ICAgICAgIE1BSU5UQUlORVJTOiBSZW1vdmUgVmluY2VudCBB
-YnJpb3UgZm9yIFNUTS9TVEkgRFJNIGRyaXZlcnMuCj4gICAgICAgTUFJTlRBSU5FUlM6IEFkZCBB
-bGFpbiBWb2xtYXQgYXMgU1RNMzIgSTJDL1NNQlVTIG1haW50YWluZXIKPiAKPiBTYXJhdmFuYSBL
-YW5uYW4gKDEpOgo+ICAgICAgIEFSTTogaW14OiBhdmljOiBDb252ZXJ0IHRvIHVzaW5nIElSUUNI
-SVBfREVDTEFSRQo+IAo+IFRlcmVzYSBSZW1tZXQgKDEpOgo+ICAgICAgIGFybTY0OiBkdHM6IGlt
-eDhtcC1waHlib2FyZC1wb2xsdXgtcmRrOiBBZGQgbWlzc2luZyBwaW5jdHJsIGVudHJ5Cj4gCj4g
-VG9ueSBMaW5kZ3JlbiAoNSk6Cj4gICAgICAgc29jOiB0aTogb21hcC1wcm06IEZpeCByZWJvb3Qg
-aXNzdWUgd2l0aCBpbnZhbGlkIHBjaWUgcmVzZXQgbWFwIGZvciBkcmE3Cj4gICAgICAgQVJNOiBP
-TUFQMis6IEZpeCBzbWFydHJlZmxleCBpbml0IHJlZ3Jlc3Npb24gYWZ0ZXIgZHJvcHBpbmcgbGVn
-YWN5IGRhdGEKPiAgICAgICBNZXJnZSBicmFuY2ggJ2ZpeGVzLXY1LjExJyBpbnRvIGZpeGVzCj4g
-ICAgICAgYnVzOiB0aS1zeXNjOiBGaXggd2FybmluZyBvbiB1bmJpbmQgaWYgcmVzZXQgaXMgbm90
-IGRlYXNzZXJ0ZWQKPiAgICAgICBzb2M6IHRpOiBvbWFwLXBybTogRml4IG9jY2FzaW9uYWwgYWJv
-cnQgb24gcmVzZXQgZGVhc3NlcnQgZm9yIGRyYTcgaXZhCj4gCj4gZGlsbG9uIG1pbiAoMSk6Cj4g
-ICAgICAgQVJNOiBkdHM6IGlteDZ1bGw6IGZpeCB1YmkgZmlsZXN5c3RlbSBtb3VudCBmYWlsZWQK
-PiAKPiAgTUFJTlRBSU5FUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-fCAzMyArKysrKy0tLS0tCj4gIGFyY2gvYXJtL2Jvb3QvZHRzL2FtMzN4eC5kdHNpICAgICAgICAg
-ICAgICAgICAgICAgIHwgIDMgKwo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxLXNhbTl4NjBlay5k
-dHMgICAgICAgICAgICAgICB8ICA4IC0tLQo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxLXNhbWE1
-ZDI3X3NvbTEuZHRzaSAgICAgICAgICB8ICA0ICstCj4gIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZ1
-bC0xNHgxNC1ldmsuZHRzaSAgICAgICAgICAgIHwgMjIgKysrKystLQo+ICBhcmNoL2FybS9ib290
-L2R0cy9pbXg2dWxsLW15aXItbXlzLTZ1bHgtZXZhbC5kdHMgICB8ICAxICsKPiAgYXJjaC9hcm0v
-Ym9vdC9kdHMvc2FtOXg2MC5kdHNpICAgICAgICAgICAgICAgICAgICAgfCAgOSArKysKPiAgYXJj
-aC9hcm0vbWFjaC1pbXgvYXZpYy5jICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAxNiArKysr
-LQo+ICBhcmNoL2FybS9tYWNoLWlteC9jb21tb24uaCAgICAgICAgICAgICAgICAgICAgICAgICB8
-ICAxIC0KPiAgYXJjaC9hcm0vbWFjaC1pbXgvbWFjaC1pbXgxLmMgICAgICAgICAgICAgICAgICAg
-ICAgfCAxMSAtLS0tCj4gIGFyY2gvYXJtL21hY2gtaW14L21hY2gtaW14MjUuYyAgICAgICAgICAg
-ICAgICAgICAgIHwgMTIgLS0tLQo+ICBhcmNoL2FybS9tYWNoLWlteC9tYWNoLWlteDI3LmMgICAg
-ICAgICAgICAgICAgICAgICB8IDEyIC0tLS0KPiAgYXJjaC9hcm0vbWFjaC1pbXgvbWFjaC1pbXgz
-MS5jICAgICAgICAgICAgICAgICAgICAgfCAgMSAtCj4gIGFyY2gvYXJtL21hY2gtaW14L21hY2gt
-aW14MzUuYyAgICAgICAgICAgICAgICAgICAgIHwgIDEgLQo+ICBhcmNoL2FybS9tYWNoLWlteC9t
-bS1pbXgzLmMgICAgICAgICAgICAgICAgICAgICAgICB8IDI0IC0tLS0tLS0KPiAgYXJjaC9hcm0v
-bWFjaC1vbWFwMi9zcl9kZXZpY2UuYyAgICAgICAgICAgICAgICAgICAgfCA3NSArKysrKysrKysr
-KysrKysrKy0tLS0tCj4gIGFyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL2ZzbC1sczEwMTJh
-LmR0c2kgICAgIHwgIDEgKwo+ICBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9mc2wtbHMx
-MDQzYS5kdHNpICAgICB8ICAxICsKPiAgYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUvZnNs
-LWxzMTA0NmEuZHRzaSAgICAgfCAgMSArCj4gIC4uLi9kdHMvZnJlZXNjYWxlL2lteDhtcC1waHli
-b2FyZC1wb2xsdXgtcmRrLmR0cyAgIHwgIDIgKy0KPiAgLi4uL2Jvb3QvZHRzL2ZyZWVzY2FsZS9p
-bXg4bXAtcGh5Y29yZS1zb20uZHRzaSAgICAgfCAgMiArLQo+ICBkcml2ZXJzL2J1cy9vbWFwX2wz
-X25vYy5jICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA0ICstCj4gIGRyaXZlcnMvYnVzL3Rp
-LXN5c2MuYyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDQgKy0KPiAgZHJpdmVycy9z
-b2MvdGkvb21hcF9wcm0uYyAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgOCArKy0KPiAgMjQg
-ZmlsZXMgY2hhbmdlZCwgMTM2IGluc2VydGlvbnMoKyksIDEyMCBkZWxldGlvbnMoLSkKPiAKPiBf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGxpbnV4LWFy
-bS1rZXJuZWwgbWFpbGluZyBsaXN0Cj4gbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQu
-b3JnCj4gaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51eC1h
-cm0ta2VybmVsCj4gCgotLSAKRmxvcmlhbgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KbGludXgtYXJtLWtlcm5lbCBtYWlsaW5nIGxpc3QKbGludXgtYXJt
-LWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnCmh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21h
-aWxtYW4vbGlzdGluZm8vbGludXgtYXJtLWtlcm5lbAo=
+From: "Tony Lindgren" <tony@atomide.com>
+
+The following changes since commit 4c9f4865f4604744d4f1a43db22ac6ec9dc8e587:
+
+  Merge branch 'fixes-rc2' into fixes (2021-03-08 11:34:12 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.13/ti-sysc-signed
+
+for you to fetch changes up to d995d3d025bbd2d89abf12418f20d19bc0cb0130:
+
+  bus: ti-sysc: Use kzalloc for allocating only one thing (2021-03-24 13:44:04 +0200)
+
+----------------------------------------------------------------
+Driver changes for omaps for genpd support for v5.13
+
+In order to move omap4/5 and dra7 to probe with devicetree data and genpd,
+we need to patch the related drivers to prepare.
+
+These are mostly ti-sysc interconnect target module driver changes and soc
+init changes. However, there are minor changes to other drivers too. There
+are changes for pci-dra7xx probe, omap-prm idle configuration, and a omap5
+clock change:
+
+- ti-sysc needs iorange check improved when the interconnect target module
+  has no control registers listed
+
+- ti-sysc needs to probe l4_wkup and l4_cfg interconnects first to avoid
+  issues with missing resources and unnecessary deferred probe
+
+- ti-sysc debug option can now detect more devices
+
+- ti-sysc now warns if an old incomplete devicetree data is found as we
+  now rely on it being complete for am3 and 4
+
+- soc init code needs to check for prcm and prm nodes for omap4/5 and
+  dra7
+
+- omap-prm driver needs to enable autoidle retention support for omap4
+
+- omap5 clocks are missing gpmc and ocmc clock registers
+
+- pci-dra7xx now needs to use builtin_platform_driver instead of using
+  builtin_platform_driver_probe for deferred probe to work
+
+There are also few minor non-urgent fixes:
+
+- soc init code pdata_quirks_init_clocks should be static
+
+- ti-sysc has few unneeded semiconon typos
+
+- ti-sysc can use kzalloc instead of kcalloc for a single element
+
+----------------------------------------------------------------
+Tony Lindgren (8):
+      bus: ti-sysc: Fix initializing module_pa for modules without sysc register
+      bus: ti-sysc: Probe for l4_wkup and l4_cfg interconnect devices first
+      bus: ti-sysc: Detect more modules for debugging
+      bus: ti-sysc: Check for old incomplete dtb
+      ARM: OMAP2+: Init both prm and prcm nodes early for clocks
+      soc: ti: omap-prm: Allow hardware supported retention when idle
+      clk: ti: omap5: Add missing gpmc and ocmc clkctrl
+      PCI: pci-dra7xx: Prepare for deferred probe with module_platform_driver
+
+Wei Yongjun (1):
+      ARM: OMAP2+: Make symbol 'pdata_quirks_init_clocks' static
+
+Yang Li (1):
+      bus: ti-sysc: remove unneeded semicolon
+
+Zheng Yongjun (1):
+      bus: ti-sysc: Use kzalloc for allocating only one thing
+
+ arch/arm/mach-omap2/pdata-quirks.c      | 29 ++++++++----
+ drivers/bus/ti-sysc.c                   | 84 ++++++++++++++++++++++++++++++---
+ drivers/clk/ti/clk-54xx.c               |  2 +
+ drivers/pci/controller/dwc/pci-dra7xx.c | 13 ++---
+ drivers/soc/ti/omap_prm.c               | 16 +++++--
+ include/dt-bindings/clock/omap5.h       |  2 +
+ 6 files changed, 122 insertions(+), 24 deletions(-)
