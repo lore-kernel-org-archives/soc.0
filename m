@@ -7,37 +7,39 @@ X-Spam-Status: No, score=-23.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05A3DC433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D51FC433C1
 	for <soc@archiver.kernel.org>; Tue, 30 Mar 2021 11:04:32 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id D2AE761989; Tue, 30 Mar 2021 11:04:31 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5AD4161985;
+	id 7346F6199A; Tue, 30 Mar 2021 11:04:32 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 074DF61987;
 	Tue, 30 Mar 2021 11:04:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617102271;
-	bh=WItIEkcv1jIXljsuLzmbBpBnmQuP4kRby5C1UMEJTqA=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=jwH+XFK7XtJhxQ15bJh+1rGSLpHyYAZYdFXIKTBBg07jyofCWjsDePImI0WfDmke8
-	 fu0mYuyWKCNfbRFp1p7KLt8PPohfYrx6SOZy6oZbBchOhznAaTxCMlB3vyeRzUEi9K
-	 4QcinPoVuijCXQgNmfWv+zJLzWu0oHwYoYKSMW2hLKyzsQRMMsyhBcwP0iLYi9gMDw
-	 4VhQhKKZ4Pf7D/YY4gC2KRzQiaM39VZUrpEpO5sDc/Y3+AjrZxMeCaJUlsQuIL5n39
-	 /BPZoZZwjMQwgvDttX3egJk2uStMQhFqPap7wCa91x41NwECqZ73ra29Oc7mQj36US
-	 hH26nTL2Ffr5g==
+	s=k20201202; t=1617102272;
+	bh=8dJYjaBl8bSTA5qG93Sb9jICcT3ZEH/X9GL61yw23+Q=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=XBl+Gi+GSGoO9gfZpmH4+sLMUrDGfIUWcJWFbrDH+3j0hm64/p2+8XyMTsfXbpRph
+	 GB/1XBOi/fV7b7vuIuXfbtZLMprtNkuBZbQwBgwNJv1dBN9rr5AIOPlbzJLM10Th2c
+	 Df8O4ABGSSLQIkuK6zEar31qlkiE62PVUlKP8cnjdZkWOrmwvFElSAPu02OSFg836V
+	 PFGQtSPsPWYH747LCQhbrc0Jx1kNeavnWiH99/3UnZWmBg84UknU+kg2NYK9tTJuC7
+	 LWsRHFmNRBPDmIKsP9di+932lnnphCs9SnBWOj4pqaAktb2QXbdsH+hHgb9L8vbvrq
+	 3DlKPh2VYpbXA==
 From: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
 Cc: dinguyen@kernel.org
-Subject: [GIT PULL 1/3] SoCFPGA updates for v5.13
-Date: Tue, 30 Mar 2021 06:04:28 -0500
-Message-Id: <20210330110430.558182-1-dinguyen@kernel.org>
+Subject: [GIT PULL 2/3] SoCFPGA DTS updates for v5.13
+Date: Tue, 30 Mar 2021 06:04:29 -0500
+Message-Id: <20210330110430.558182-2-dinguyen@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210330110430.558182-1-dinguyen@kernel.org>
+References: <20210330110430.558182-1-dinguyen@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Hi Arnd, Kevin, and Olof:
 
-Please pull in these SoCFPGA updates for v5.13.
+Please pull in these SoCFPGA DTS updates for v5.13.
 
 Thanks,
 Dinh
@@ -48,62 +50,34 @@ The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_update_for_v5.13
+  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_update_for_v5.13
 
-for you to fetch changes up to 4483397b03536506535d611b0cb28a81a69e8edf:
+for you to fetch changes up to 0501418e4439d4ba2644b9d9a52287002fbc7553:
 
-  ARM: socfpga: drop ARCH_SOCFPGA (2021-03-23 11:03:36 -0500)
-
-----------------------------------------------------------------
-SoCFPGA updates for v5.13
-- Patches from Krzysztof Kozlowski the cleans up and consolidate support for
-  SoCFPGA platforms
-	- Rename ARCH_SOCFPGA into ARCH_INTEL_SOCFPGA
-	- Consolidate ARCH_STRATIX10 into ARCH_INTEL_SOCFPGA
-	- Consolidate ARCH_AGILEX into ARCH_INTEL_SOCFPGA
-	- Consolidate ARCH_N5X into ARCH_INTEL_SOCFPGA
+  arm64: dts: intel: adjust qpsi read-delay property (2021-03-30 05:51:30 -0500)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (15):
-      clk: socfpga: allow building N5X clocks with ARCH_N5X
-      ARM: socfpga: introduce common ARCH_INTEL_SOCFPGA
-      mfd: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
-      net: stmmac: merge ARCH_SOCFPGA and ARCH_STRATIX10
-      clk: socfpga: build together Stratix 10, Agilex and N5X clock drivers
-      clk: socfpga: merge ARCH_SOCFPGA and ARCH_STRATIX10
-      EDAC: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
-      arm64: socfpga: merge Agilex and N5X into ARCH_INTEL_SOCFPGA
-      clk: socfpga: allow compile testing of Stratix 10 / Agilex clocks
-      clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and compile test)
-      dmaengine: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
-      fpga: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
-      i2c: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
-      reset: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
-      ARM: socfpga: drop ARCH_SOCFPGA
+SoCFPGA DTS updates for v5.13
+- Patches from Krzysztof Kozlowski that fixes dtc warnings
+  and dtbs_check warnings
+- Adjust the "cnds,read-delay" value for the Agilex devkit to 2
 
- arch/arm/Kconfig                            |  2 +-
- arch/arm/Kconfig.debug                      |  6 +++---
- arch/arm/Makefile                           |  2 +-
- arch/arm/boot/dts/Makefile                  |  2 +-
- arch/arm/configs/multi_v7_defconfig         |  2 +-
- arch/arm/configs/socfpga_defconfig          |  2 +-
- arch/arm/mach-socfpga/Kconfig               |  4 ++--
- arch/arm64/Kconfig.platforms                | 17 ++++-------------
- arch/arm64/boot/dts/altera/Makefile         |  2 +-
- arch/arm64/boot/dts/intel/Makefile          |  6 +++---
- arch/arm64/configs/defconfig                |  2 +-
- drivers/clk/Kconfig                         |  1 +
- drivers/clk/Makefile                        |  4 +---
- drivers/clk/socfpga/Kconfig                 | 19 +++++++++++++++++++
- drivers/clk/socfpga/Makefile                | 11 +++++------
- drivers/dma/Kconfig                         |  2 +-
- drivers/edac/Kconfig                        |  2 +-
- drivers/edac/altera_edac.c                  | 17 +++++++++++------
- drivers/firmware/Kconfig                    |  2 +-
- drivers/fpga/Kconfig                        |  8 ++++----
- drivers/i2c/busses/Kconfig                  |  2 +-
- drivers/mfd/Kconfig                         |  4 ++--
- drivers/net/ethernet/stmicro/stmmac/Kconfig |  4 ++--
- drivers/reset/Kconfig                       |  6 +++---
- 24 files changed, 71 insertions(+), 58 deletions(-)
- create mode 100644 drivers/clk/socfpga/Kconfig
+----------------------------------------------------------------
+Dinh Nguyen (1):
+      arm64: dts: intel: adjust qpsi read-delay property
+
+Krzysztof Kozlowski (8):
+      arm64: dts: intel: socfpga: override clocks by label
+      arm64: dts: intel: socfpga_agilex: move clocks out of soc node
+      arm64: dts: intel: socfpga_agilex: move timer out of soc node
+      arm64: dts: intel: socfpga_agilex: remove default status=okay
+      arm64: dts: intel: socfpga_agilex: move usbphy out of soc node
+      arm64: dts: intel: socfpga_agilex: use defined for GIC interrupts
+      arm64: dts: intel: socfpga_agilex: align node names with dtschema
+      arm64: dts: intel: socfpga_agilex_socdk_nand: align LED node names with dtschema
+
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      | 222 ++++++++++++---------
+ arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts |  14 +-
+ .../boot/dts/intel/socfpga_agilex_socdk_nand.dts   |  18 +-
+ arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts    |  12 +-
+ 4 files changed, 140 insertions(+), 126 deletions(-)
