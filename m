@@ -1,187 +1,98 @@
-Return-Path: <SRS0=I5Nz=I3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=skuN=I4=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02DABC433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 29 Mar 2021 16:55:46 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37C06C433E2
+	for <soc@archiver.kernel.org>; Tue, 30 Mar 2021 08:22:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 1789F6196C; Tue, 30 Mar 2021 08:22:13 +0000 (UTC)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 910946191F
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 29 Mar 2021 16:55:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 910946191F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=x1tLWRB92WT+U+XQGueJcHmPdMvgJ/z0yPuHNljNPj8=; b=DtyOJbAj/4TSQS2Sfy72b2vqg
-	oIirWTFxPwnQ3xJ4b8aTTnX+qzIOG8fN9NYvykbhdfpEL0xCG/ENFfw5FrH7wkYccrB2vHJxLmPVx
-	v8wnNpAv+SQknt1X6U8c6n9eRSBZEnW6bleU0T0FtX3cwxtxkx7t33j2nTarS3wqnPdCVlsoV8Rfn
-	CwHA5ZRMh1Fh6gIy5BsoEpO2U8qk/nxLvdNvLgPGUK+rKaxioGqa5lZt9cid6nSk/jbd95US6Q7Uc
-	q1Avr18OtWB4EvsRnwQkhoQgJ+wSw2ysMv88iz0Vh7JcvhArOdzic8NqJxnojSKgJWBsEXLkmlLDf
-	yALcHJFVA==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lQv8O-000nUA-V7; Mon, 29 Mar 2021 16:53:01 +0000
-Received: from casper.infradead.org ([2001:8b0:10b:1236::1])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lQoeN-000YmR-47
- for linux-arm-kernel@desiato.infradead.org; Mon, 29 Mar 2021 09:57:35 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
- MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
- :Reply-To:Content-ID:Content-Description;
- bh=Gn2RpkEKbIp1cAMfQ0B1aVUkBWGqAegjCNf++aLyvtI=; b=Y5TZU+iVeIb9qezavejWKqva59
- cBUX2brKZbrQeqlG3pofCIxW8nHv2/WBT8hK9xsKdnwONLs2SJ9aEUzqWckFBD2HMevSTzEsvjB8M
- jU1HpSzXRSli2JkIlL8wbz4exJWbkWKNW/zm2MlAEwaVLrb+mc9PCENitdx9uqRk9BIkX83kJNQ90
- v2Eh8L7zvi1jqJEe2AWAHB3zwKBu8E/5UP9PnjnnOjWta5flNXfuAQojSQPs4U+gyO3ITXRcz1/T7
- G9DlDhb2LHLpZ+ZgedzNGZkRL+s8XhpXdDWNyOEqEorxXWRC6M2rW7MCqDaWEQBNtf4jkjlBdlem2
- AdMT7EbA==;
-Received: from muru.com ([72.249.23.125])
- by casper.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
- id 1lQmkP-001CnT-7g
- for linux-arm-kernel@lists.infradead.org; Mon, 29 Mar 2021 07:55:53 +0000
-Received: from hillo.muru.com (localhost [127.0.0.1])
- by muru.com (Postfix) with ESMTP id 304CA811B;
- Mon, 29 Mar 2021 07:56:41 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 8DF916157F
+	for <soc@kernel.org>; Tue, 30 Mar 2021 08:22:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8DF916157F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=jens.wiklander@linaro.org
+Received: by mail-lf1-f49.google.com with SMTP id n138so22523438lfa.3
+        for <soc@kernel.org>; Tue, 30 Mar 2021 01:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=0qSy1MVbTFfSGRDPmoKRiOph5YqV5xL5GvGDM8LZE/k=;
+        b=XYNxb8bjIXQEiworr1609zQd16eadlj0gAF1chjtfPOiFBme8JeFUlRcIXjDxyrfND
+         gv5FZneuoNsUBwWM9uYiDWqOIqEvxX93EkVbTxGI79oRHhCcmPp2R7DzuiGS7RRw2V5q
+         kbf31yl3dzceedNPgrLajMyF8AJG8gpI/N6FkabpZ+zNXCk68/cpEy5/0+X9yBYGXG4F
+         eAKjXQqt7lK0JY0neJPFfoemD6jwy8m3nvEc75gqlh/OYQQD0Wte4WddyzgPZAnhmWPO
+         1fk9lg6SaU/CmX42M9RP2IdDu+Fta7reSJwsxFu1oPSF3d81WaRx9FFWwtSWFxyfaJtM
+         HcEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=0qSy1MVbTFfSGRDPmoKRiOph5YqV5xL5GvGDM8LZE/k=;
+        b=Pfu/zI9yGmEoCVhUOCKfUVqb8gesCTpYCfjKp4pRTctVylGo2KYKS3oFkylLGMuSaW
+         NuZzSZ6N+V1UoIY0JSaLygDYqAvyUrj/M0ltA7rDSYpl+yAp20h31BBUv3XWVMw3/UJN
+         iJG32ntaKW3Uf6VNhTD2nyR0nbjPEI0zvj2971IUFKSXxU+u4riVJKvglHzPaG/IKsJ6
+         O6IeOI5dy9eJr3lsnbBVfnpNXmVolnO8SfX6ijFujnZpgnenUorhNW3LD/MUZUwCO3Ag
+         fpdu65cb/jMZtA/8rD4sfzEVlpaqlfxojNbefbT/prQ5TdRVLEHkwG5U3e2feBABozeP
+         yHIg==
+X-Gm-Message-State: AOAM532iEk8azlmo1XjSBPVLKQC36xnNbgMj4ybAYAcC5zKoqD69PJ2K
+	7ts6n2mZIkGOo8+MCor0tPeWPw==
+X-Google-Smtp-Source: ABdhPJzIl4hLL8Krt5oiEyybF+iTwH8dmHrf/cbfUkYsI71XvGAAZYvLMPiz20B6oFT9GtQNOmFUTg==
+X-Received: by 2002:a05:6512:304c:: with SMTP id b12mr1038631lfb.3.1617092530844;
+        Tue, 30 Mar 2021 01:22:10 -0700 (PDT)
+Received: from jade (h-249-223.A175.priv.bahnhof.se. [98.128.249.223])
+        by smtp.gmail.com with ESMTPSA id 192sm2701813ljj.95.2021.03.30.01.22.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Mar 2021 01:22:10 -0700 (PDT)
+Date: Tue, 30 Mar 2021 10:22:08 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org, linux-omap@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, "Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL 3/3] Drop legacy data for dra7 and omap4/5 and clean-up
-Date: Mon, 29 Mar 2021 10:55:22 +0300
-Message-ID: <pull-1617004205-537424@atomide.com-3>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <pull-1617004205-537424@atomide.com>
-References: <pull-1617004205-537424@atomide.com>
+To: arm@kernel.org, soc@kernel.org
+Cc: op-tee@lists.trustedfirmware.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+Subject: [GIT PULL] OP-TEE tracepoints fix for v5.13
+Message-ID: <20210330082208.GA965793@jade>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210329_085542_146270_235AD34C 
-X-CRM114-Status: GOOD (  12.07  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210329075522.JdvVbnSjaFqe8MLbjcI24DY-lV0MnGtVh7QCELkloiQ@z>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-From: "Tony Lindgren" <tony@atomide.com>
+Hello arm-soc maintainers,
 
-The following changes since commit 083516ad540a1104a0ae5ae7e83f2a2d8e39d2bc:
+The previous pull request for OP-TEE tracepoints introduced a build
+error when building whithout O=..., apparently many regression builds
+uses that option.
 
-  Merge tags 'genpd-dts-dra7', 'genpd-dts-omap4' and 'genpd-dts-omap5' into omap-for-v5.13/dts-genpd (2021-03-10 14:16:34 +0200)
+Please pull this small fix for the build error.
+
+Thanks,
+Jens
+
+The following changes since commit 0101947dbcc3204f08fb5b69a21dbd4b1535cad6:
+
+  tee: optee: add invoke_fn tracepoints (2021-03-15 12:04:01 +0100)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.13/genpd-cleanup-signed
+  git://git.linaro.org/people/jens.wiklander/linux-tee.git/ tags/optee-tracepoints-fix-for-v5.13
 
-for you to fetch changes up to 4adcf4c28f6dc191187359bfceee5ab5fe91a50e:
+for you to fetch changes up to 7ccdcaace80810175bd20b2ece856b42edd43991:
 
-  bus: ti-sysc: Warn about old dtb for dra7 and omap4/5 (2021-03-12 10:23:48 +0200)
-
-----------------------------------------------------------------
-Drop legacy data for dra7 and omap4/5 for genpd support for v5.13
-
-Similar to what we have already done for am3 and 4, we can now boot dra7,
-omap4, and omap5 with devicetree data and genpd without legacy SoC specific
-built-in data.
-
-Let's drop the legacy data for these SoCs, and the related "ti,hwmods"
-custom devicetree property. As with these changes we now expect to have
-complete devicetree data, let's also warn in the case if an old devicetree
-data is noticed. And with the warning provided, there should not be any
-need to delay dropping the legacy data as it just unnecessarily complicates
-things.
-
-The main reasons for dropping the legacy data is to avoid the burden of
-maintaining a mixed boot process where both legacy built-in data and
-devicetree data are needed. And we can now use standard reset driver,
-genpd, and simple-pm-bus features.
-
-These patches are based on the related devicetree changes to add the
-missing interconnect target module configuration for these SoCs.
+  tee: optee: fix build error caused by recent optee tracepoints feature (2021-03-30 09:33:33 +0200)
 
 ----------------------------------------------------------------
-Tony Lindgren (35):
-      ARM: OMAP2+: Drop legacy platform data for dra7 pcie
-      ARM: OMAP2+: Drop legacy platform data for dra7 qspi
-      ARM: OMAP2+: Drop legacy platform data for dra7 sata
-      ARM: OMAP2+: Drop legacy platform data for dra7 mpu
-      ARM: OMAP2+: Drop legacy platform data for dra7 dmm
-      ARM: OMAP2+: Drop legacy platform data for dra7 l4_wkup
-      ARM: OMAP2+: Drop legacy platform data for dra7 l4_per1
-      ARM: OMAP2+: Drop legacy platform data for dra7 l4_per2
-      ARM: OMAP2+: Drop legacy platform data for dra7 l4_per3
-      ARM: OMAP2+: Drop legacy platform data for dra7 l4_cfg
-      ARM: OMAP2+: Drop legacy platform data for dra7 l3
-      ARM: OMAP2+: Drop legacy platform data for dra7 hwmod
-      ARM: OMAP2+: Drop legacy platform data for omap4 iss
-      ARM: OMAP2+: Drop legacy platform data for omap4 control modules
-      ARM: OMAP2+: Drop legacy platform data for omap4 dmm
-      ARM: OMAP2+: Drop legacy platform data for omap4 emif
-      ARM: OMAP2+: Drop legacy platform data for omap4 debugss
-      ARM: OMAP2+: Drop legacy platform data for omap4 mpu
-      ARM: OMAP2+: Drop legacy platform data for omap4 l4_wkup
-      ARM: OMAP2+: Drop legacy platform data for omap4 l4_per
-      ARM: OMAP2+: Drop legacy platform data for omap4 l4_cfg
-      ARM: OMAP2+: Drop legacy platform data for omap4 l3
-      ARM: OMAP2+: Drop legacy platform data for omap4 hwmod
-      ARM: OMAP2+: Drop legacy platform data for omap5 dmm
-      ARM: OMAP2+: Drop legacy platform data for omap5 emif
-      ARM: OMAP2+: Drop legacy platform data for omap5 mpu
-      ARM: OMAP2+: Drop legacy platform data for omap5 sata
-      ARM: OMAP2+: Drop legacy platform data for omap5 l4_wkup
-      ARM: OMAP2+: Drop legacy platform data for omap5 l4_per
-      ARM: OMAP2+: Drop legacy platform data for omap5 l4_cfg
-      ARM: OMAP2+: Drop legacy platform data for omap5 l3
-      ARM: OMAP2+: Drop legacy platform data for omap5 hwmod
-      Merge branches 'omap-for-v5.13/genpd-dra7', 'omap-for-v5.13/genpd-omap4' and 'omap-for-v5.13/genpd-omap5' into omap-for-v5.13/genpd-drop-legacy
-      ARM: OMAP2+: Stop building legacy code for dra7 and omap4/5
-      bus: ti-sysc: Warn about old dtb for dra7 and omap4/5
+Fixes build error for recently added OP-TEE tracepoints
 
- arch/arm/boot/dts/dra7-l4.dtsi             |   1 -
- arch/arm/boot/dts/dra7.dtsi                |   5 -
- arch/arm/boot/dts/omap4-l4.dtsi            |   4 -
- arch/arm/boot/dts/omap4.dtsi               |   8 +-
- arch/arm/boot/dts/omap5.dtsi               |   4 -
- arch/arm/mach-omap2/Kconfig                |   3 -
- arch/arm/mach-omap2/Makefile               |  11 +-
- arch/arm/mach-omap2/common.h               |   9 -
- arch/arm/mach-omap2/io.c                   |  12 +-
- arch/arm/mach-omap2/omap_hwmod.c           |   8 -
- arch/arm/mach-omap2/omap_hwmod.h           |  14 +-
- arch/arm/mach-omap2/omap_hwmod_44xx_data.c | 877 -----------------------------
- arch/arm/mach-omap2/omap_hwmod_54xx_data.c | 467 ---------------
- arch/arm/mach-omap2/omap_hwmod_7xx_data.c  | 719 -----------------------
- arch/arm/mach-omap2/pdata-quirks.c         |   2 +-
- arch/arm/mach-omap2/sr_device.c            |   7 +
- drivers/bus/ti-sysc.c                      |   3 +
- 17 files changed, 35 insertions(+), 2119 deletions(-)
- delete mode 100644 arch/arm/mach-omap2/omap_hwmod_44xx_data.c
- delete mode 100644 arch/arm/mach-omap2/omap_hwmod_54xx_data.c
- delete mode 100644 arch/arm/mach-omap2/omap_hwmod_7xx_data.c
+----------------------------------------------------------------
+Jisheng Zhang (1):
+      tee: optee: fix build error caused by recent optee tracepoints feature
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ drivers/tee/optee/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
