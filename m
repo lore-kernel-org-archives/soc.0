@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-23.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D51FC433C1
-	for <soc@archiver.kernel.org>; Tue, 30 Mar 2021 11:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C973C433E1
+	for <soc@archiver.kernel.org>; Tue, 30 Mar 2021 11:04:33 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 7346F6199A; Tue, 30 Mar 2021 11:04:32 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 074DF61987;
-	Tue, 30 Mar 2021 11:04:31 +0000 (UTC)
+	id 19B4361985; Tue, 30 Mar 2021 11:04:33 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 99B0E61987;
+	Tue, 30 Mar 2021 11:04:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617102272;
-	bh=8dJYjaBl8bSTA5qG93Sb9jICcT3ZEH/X9GL61yw23+Q=;
+	s=k20201202; t=1617102273;
+	bh=DFcQ2RFcw6wv+dmxb0wZbs4myIc1RRn6c/EoDE7s2SU=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XBl+Gi+GSGoO9gfZpmH4+sLMUrDGfIUWcJWFbrDH+3j0hm64/p2+8XyMTsfXbpRph
-	 GB/1XBOi/fV7b7vuIuXfbtZLMprtNkuBZbQwBgwNJv1dBN9rr5AIOPlbzJLM10Th2c
-	 Df8O4ABGSSLQIkuK6zEar31qlkiE62PVUlKP8cnjdZkWOrmwvFElSAPu02OSFg836V
-	 PFGQtSPsPWYH747LCQhbrc0Jx1kNeavnWiH99/3UnZWmBg84UknU+kg2NYK9tTJuC7
-	 LWsRHFmNRBPDmIKsP9di+932lnnphCs9SnBWOj4pqaAktb2QXbdsH+hHgb9L8vbvrq
-	 3DlKPh2VYpbXA==
+	b=eYL7z809csbZfrjbIZs+Xr07zTKeWaLVvoF0ZxeW8NfIxGyLAzZ7JdxjNGrJ7D6y8
+	 w7G/DslF3M02borV6YS6lVneIH3y/p6+zRU4W+1OfKXTfHSNp0hb4furAaCZQQG2e+
+	 tM+a7iwX7mKKqO06Mst11cHV0j+9riWHzEttqsaCDik6nnvP1q+wvHMThy4yk7znMX
+	 F2mOThLxxQMm1Gym5ziSLp2eZkJ0Td2EScL192uifkf4s4Qa/5niFW4o8RuKKHJQ3W
+	 mQCL1Iep5iQcCO/SWuNQMRjL/ABtM5GtOBejrfIOiAIDNmZLZgrE3/IU2HNsp3yNnO
+	 3wwNcoaLcQ9YQ==
 From: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
 Cc: dinguyen@kernel.org
-Subject: [GIT PULL 2/3] SoCFPGA DTS updates for v5.13
-Date: Tue, 30 Mar 2021 06:04:29 -0500
-Message-Id: <20210330110430.558182-2-dinguyen@kernel.org>
+Subject: [GIT PULL 3/3] ARM64 defconfig update for v5.13
+Date: Tue, 30 Mar 2021 06:04:30 -0500
+Message-Id: <20210330110430.558182-3-dinguyen@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210330110430.558182-1-dinguyen@kernel.org>
 References: <20210330110430.558182-1-dinguyen@kernel.org>
@@ -39,7 +39,7 @@ Content-Transfer-Encoding: 8bit
 
 Hi Arnd, Kevin, and Olof:
 
-Please pull in these SoCFPGA DTS updates for v5.13.
+Please pull in this ARM64 defconfig update for v5.13.
 
 Thanks,
 Dinh
@@ -50,34 +50,21 @@ The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_update_for_v5.13
+  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/arm64_defconfig_for_v5.13
 
-for you to fetch changes up to 0501418e4439d4ba2644b9d9a52287002fbc7553:
+for you to fetch changes up to 40f90f4763e26cc4eb04b37766b7fd3f5952b516:
 
-  arm64: dts: intel: adjust qpsi read-delay property (2021-03-30 05:51:30 -0500)
-
-----------------------------------------------------------------
-SoCFPGA DTS updates for v5.13
-- Patches from Krzysztof Kozlowski that fixes dtc warnings
-  and dtbs_check warnings
-- Adjust the "cnds,read-delay" value for the Agilex devkit to 2
+  arm64: defconfig: enable Intel's eASIC N5X SoCFPGA and Keem Bay SoC (2021-03-23 12:58:46 -0500)
 
 ----------------------------------------------------------------
-Dinh Nguyen (1):
-      arm64: dts: intel: adjust qpsi read-delay property
+ARM64 defconfig for v5.13
+- Add support for Intel N5X SoCFPGA
+- Add support for Intel Keem SoC
+- Add support for Designware SPI driver
 
-Krzysztof Kozlowski (8):
-      arm64: dts: intel: socfpga: override clocks by label
-      arm64: dts: intel: socfpga_agilex: move clocks out of soc node
-      arm64: dts: intel: socfpga_agilex: move timer out of soc node
-      arm64: dts: intel: socfpga_agilex: remove default status=okay
-      arm64: dts: intel: socfpga_agilex: move usbphy out of soc node
-      arm64: dts: intel: socfpga_agilex: use defined for GIC interrupts
-      arm64: dts: intel: socfpga_agilex: align node names with dtschema
-      arm64: dts: intel: socfpga_agilex_socdk_nand: align LED node names with dtschema
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      arm64: defconfig: enable Intel's eASIC N5X SoCFPGA and Keem Bay SoC
 
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      | 222 ++++++++++++---------
- arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts |  14 +-
- .../boot/dts/intel/socfpga_agilex_socdk_nand.dts   |  18 +-
- arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts    |  12 +-
- 4 files changed, 140 insertions(+), 126 deletions(-)
+ arch/arm64/configs/defconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
