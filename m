@@ -8,65 +8,68 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A986C433DB
-	for <soc@archiver.kernel.org>; Tue, 30 Mar 2021 18:40:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F2C5C433C1
+	for <soc@archiver.kernel.org>; Tue, 30 Mar 2021 18:40:15 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id DDBB5619DD; Tue, 30 Mar 2021 18:40:13 +0000 (UTC)
+	id 4B16F619E5; Tue, 30 Mar 2021 18:40:15 +0000 (UTC)
 Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A6BDB61968;
-	Tue, 30 Mar 2021 18:40:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A6BDB61968
+	by mail.kernel.org (Postfix) with ESMTPS id EF82961968;
+	Tue, 30 Mar 2021 18:40:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EF82961968
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=f.fainelli@gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id g10so6620120plt.8;
-        Tue, 30 Mar 2021 11:40:13 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id w11so6624497ply.6;
+        Tue, 30 Mar 2021 11:40:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EnS1PRqnIWad9K6sQUdO8+C2d50HB1TEH3EOrTdyoTM=;
-        b=ERY1OWIe3n9q9Rc58iAruumFsdKYdILEgW50K+So/xh/m76E6nDLLqm9XL3Tmy0z/3
-         /JSOXzt2i4MGf1RNnN5DeNeDWMPBx5aj3Cj2SIqA4ieWVN/Q80CSerx8rAe9X1ku/BSV
-         jGYjHJICnZCyzhiwNm32ia3Auwk/dCrnlQPuBtyoar5wPyOt53qoutFhGhv4fqWOkVOh
-         ImADgyU2p+D9oda6EJ5WJqnoyZo7/+sYPrKDdE5J04p9mqOFRjnw+d1BhD4lGld0MBHj
-         BPyXTpx1/Wa2KvKPGMWCaV764H8EEAPxKGx9JM38X14KGXO+axvRE/cs1LYdLFeoPae0
-         mRnQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=H3Xg6pVdKFcLHkDnuynv+KrzACQdL7Z+QfspHhlmM7o=;
+        b=t0IZ1UcOUonTShG95R7idEdFtvN6FmBLIOe6k8Jlsg3HkuHiY6smRWgd5uiou1rlOq
+         kypxQMKkcTuS7w4fRID25BEDKryOLfYEmUFjGo2oJVvhENCCPdCzEIxhbDQGnRvj2yq5
+         t75uwNsacilOe/AKuXMIgX1KrkUzx9XMWN7dW49lFE9GJhPhfU/VRTgDtgtioOkbWtW5
+         I0H7a3JMPyTKXRXG46u5Cpgb3c3YjiWqlQLqPUxdIE9gZjdKh7RZEGeTPR7GY4Z7PhoW
+         cNsm2H/8KEkQZajPst5re/lk6ViRe8RTC+/8YT8tjAiBFZMdZ7W2UyUzjSLMTzejHw2o
+         JwFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EnS1PRqnIWad9K6sQUdO8+C2d50HB1TEH3EOrTdyoTM=;
-        b=NPRG/fzHSdLSh/ejusdeMKm22SfoBl8Pte+Pj9MdJ2yQDx/riIooSqga2JFB6clqtj
-         a0LeiYjw93gkEs5dXEj9o88YvfBjxCgfdTSL423hRMuNulXt3u5/MVqsW9vLAx+VDHZC
-         VMPFdgA6ibA8euylLEtGYBg0K0Q7U6tHo4cIyLss6YG82IDY0fHAKhmA0FcDs9K1TnxB
-         VEwkl/vYPsuakPv7Vym3jAEYAtZ588gUT+5fxQshkAZbNgGIk1M70qoDZvxdnFxzzIEf
-         IfW++tEkpuQu5SSKQiJCadCO/lBl+4OEJ+uqPWqdMvSuYTDjYs2aWYwxnB8uLezGutHK
-         cR1w==
-X-Gm-Message-State: AOAM530fer0iJqhVeOqd4DkxNivaQRrnVkvmcjHdmxoHYbiwHhirFheX
-	DWwkQQBRjdXl+btzsQPgEBAaTc7ALws=
-X-Google-Smtp-Source: ABdhPJzNKkPTb9XzQwrmn7jfOqOC4rRVXH9aYteyuwvnJ3E8xbNGnkxj8luDNnC9hlIvm3F6ggwXmA==
-X-Received: by 2002:a17:902:d64a:b029:e6:30a6:64e3 with SMTP id y10-20020a170902d64ab02900e630a664e3mr35369843plh.28.1617129612595;
-        Tue, 30 Mar 2021 11:40:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=H3Xg6pVdKFcLHkDnuynv+KrzACQdL7Z+QfspHhlmM7o=;
+        b=oahbV2kq658kwDzDrlbEKkBXykHuW20JdnN5z4FANSsmOOZLyuHBVQCsdEWzImDuRF
+         XCvFjkmpmVEOD2iCQIumUDHq98tUkhb4m/IKZX/poKShF9Lx/qj+ssXqgjUbZgSGfbck
+         Q0AlEYaTQM6GiP+l9fGvQ8YId1u+C1vkMgKIo6pdDTw92q6RwfWzwKGTp3/q6lsFGynu
+         sMtORyERHEH+vqmqa6B+K/p8Pzx8bEdNlxchBS9EgjE7mG8TvuojpyeJJBijvLpxbe0Z
+         F1JewxX8TKV0EIGvrYD5puDFIhW+pbaBeKEOkmuY3QqrVAWVfNPKublh9MAbEENhXtBG
+         Hx9Q==
+X-Gm-Message-State: AOAM532ViSzcBuY/dNMsyVs89sndXnJ8GEWMdQOa575yna5poa1D9HLs
+	Kj+c04l7DZLAtU/CMn65KsB5F2ydI8Q=
+X-Google-Smtp-Source: ABdhPJyokzrIZazmQ0BY78LLblAdzpZhyC/+dZc80/RYigA2kXH+fmyaB+L9azwZo22SIz3pEZF4hA==
+X-Received: by 2002:a17:90a:8b97:: with SMTP id z23mr662960pjn.1.1617129613930;
+        Tue, 30 Mar 2021 11:40:13 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id gm9sm3307696pjb.13.2021.03.30.11.40.11
+        by smtp.gmail.com with ESMTPSA id gm9sm3307696pjb.13.2021.03.30.11.40.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Mar 2021 11:40:11 -0700 (PDT)
+        Tue, 30 Mar 2021 11:40:13 -0700 (PDT)
 From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
 	Florian Fainelli <f.fainelli@gmail.com>,
+	Rob Herring <robh@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 1/3] Broadcom devicetree changes for 5.13
-Date: Tue, 30 Mar 2021 11:40:04 -0700
-Message-Id: <20210330184006.1451315-1-f.fainelli@gmail.com>
+Subject: [GIT PULL 2/3] Broadcom devicetree-arm64 changes for 5.13
+Date: Tue, 30 Mar 2021 11:40:05 -0700
+Message-Id: <20210330184006.1451315-2-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210330184006.1451315-1-f.fainelli@gmail.com>
+References: <20210330184006.1451315-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -77,52 +80,41 @@ The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.13/devicetree
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.13/devicetre-arm64
 
-for you to fetch changes up to dcb56d61d5a8acca0a357cc603397bc0272ce4cb:
+for you to fetch changes up to 9f01f5cdb548352418b34ce77db02a560fe2913b:
 
-  ARM: dts: BCM5301X: Set Linksys EA9500 power LED (2021-03-29 11:43:45 -0700)
+  arm64: dts: broadcom: bcm4908: add Ethernet MAC addr (2021-03-29 11:44:31 -0700)
 
 ----------------------------------------------------------------
-This pull request contains Broadcom ARM-based SoCs Device Tree changes
+This pull request contains Broadcom ARM64-based SoCs Device Tree changes
 for 5.13, please pull the following:
 
-- Rafal fixes YAML warnings for the memory nodes of BCM5301X nodes and
-  adds support for the NVMEM NVRAM node on Linksys and Luxul WLAN
-  routers. He also fixes up the partitions for the Linksys EA9400 to
-  use the newly introduced parser compatible and sets the power LED to
-  its default state.
+- Rafal continues to add support for the 4908 SoCs and describes the USB
+  PHY, firmware flash partitions and Ethernet switch and Ethernet
+  controller. He also adds support for the TP-Link Archer C2300 V1
+  router and upates the Netgear R8000P and Asus GT-AC5300 routers network
+  ports description.
 
 ----------------------------------------------------------------
-Rafał Miłecki (4):
-      ARM: dts: BCM5301X: fix "reg" formatting in /memory node
-      ARM: dts: BCM5301X: Describe NVMEM NVRAM on Linksys & Luxul routers
-      ARM: dts: BCM5301X: Fix Linksys EA9500 partitions
-      ARM: dts: BCM5301X: Set Linksys EA9500 power LED
+Rafał Miłecki (11):
+      arm64: dts: broadcom: bcm4908: describe USB PHY
+      arm64: dts: broadcom: bcm4908: describe Ethernet controller
+      arm64: dts: broadcom: bcm4908: describe Netgear R8000P switch
+      arm64: dts: broadcom: bcm4908: add remaining Netgear R8000P LEDs
+      arm64: dts: broadcom: bcm4908: describe firmware partitions
+      arm64: dts: broadcom: bcm4908: fix switch parent node name
+      dt-bindings: arm: bcm: document TP-Link Archer C2300 binding
+      arm64: dts: broadcom: bcm4908: add TP-Link Archer C2300 V1
+      arm64: dts: broadcom: bcm4908: set Asus GT-AC5300 port 7 PHY mode
+      arm64: dts: broadcom: bcm4908: add Ethernet TX irq
+      arm64: dts: broadcom: bcm4908: add Ethernet MAC addr
 
- arch/arm/boot/dts/bcm4708-asus-rt-ac56u.dts        |  4 ++--
- arch/arm/boot/dts/bcm4708-asus-rt-ac68u.dts        |  4 ++--
- arch/arm/boot/dts/bcm4708-buffalo-wzr-1750dhp.dts  |  4 ++--
- arch/arm/boot/dts/bcm4708-linksys-ea6300-v1.dts    |  5 +++++
- arch/arm/boot/dts/bcm4708-netgear-r6250.dts        |  4 ++--
- arch/arm/boot/dts/bcm4708-netgear-r6300-v2.dts     |  4 ++--
- arch/arm/boot/dts/bcm4708-smartrg-sr400ac.dts      |  4 ++--
- arch/arm/boot/dts/bcm47081-asus-rt-n18u.dts        |  4 ++--
- arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dts |  4 ++--
- arch/arm/boot/dts/bcm47081-buffalo-wzr-900dhp.dts  |  4 ++--
- arch/arm/boot/dts/bcm47081-luxul-xwr-1200.dts      |  5 +++++
- arch/arm/boot/dts/bcm4709-asus-rt-ac87u.dts        |  4 ++--
- arch/arm/boot/dts/bcm4709-buffalo-wxr-1900dhp.dts  |  4 ++--
- arch/arm/boot/dts/bcm4709-linksys-ea9200.dts       |  9 ++++++--
- arch/arm/boot/dts/bcm4709-netgear-r7000.dts        |  4 ++--
- arch/arm/boot/dts/bcm4709-netgear-r8000.dts        |  4 ++--
- arch/arm/boot/dts/bcm47094-dlink-dir-885l.dts      |  4 ++--
- arch/arm/boot/dts/bcm47094-linksys-panamera.dts    | 26 +++++++++++++---------
- arch/arm/boot/dts/bcm47094-luxul-abr-4500.dts      |  9 ++++++--
- arch/arm/boot/dts/bcm47094-luxul-xbr-4500.dts      |  9 ++++++--
- arch/arm/boot/dts/bcm47094-luxul-xwc-2000.dts      |  4 ++--
- arch/arm/boot/dts/bcm47094-luxul-xwr-3100.dts      |  9 ++++++--
- arch/arm/boot/dts/bcm47094-luxul-xwr-3150-v1.dts   |  9 ++++++--
- arch/arm/boot/dts/bcm47094-netgear-r8500.dts       |  4 ++--
- arch/arm/boot/dts/bcm47094-phicomm-k3.dts          |  4 ++--
- 25 files changed, 94 insertions(+), 55 deletions(-)
+ .../devicetree/bindings/arm/bcm/brcm,bcm4908.yaml  |   1 +
+ arch/arm64/boot/dts/broadcom/bcm4908/Makefile      |   1 +
+ .../broadcom/bcm4908/bcm4906-netgear-r8000p.dts    | 107 +++++++++++-
+ .../bcm4908/bcm4906-tplink-archer-c2300-v1.dts     | 182 +++++++++++++++++++++
+ .../broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts    |  44 ++++-
+ arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi  |  47 +++++-
+ 6 files changed, 375 insertions(+), 7 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts
