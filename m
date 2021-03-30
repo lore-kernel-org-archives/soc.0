@@ -1,97 +1,109 @@
-Return-Path: <SRS0=skuN=I4=linaro.org=jens.wiklander@kernel.org>
+Return-Path: <dinguyen@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C3B8C433C1
-	for <soc@archiver.kernel.org>; Tue, 30 Mar 2021 11:00:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05A3DC433DB
+	for <soc@archiver.kernel.org>; Tue, 30 Mar 2021 11:04:32 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 2A1436196C; Tue, 30 Mar 2021 11:00:45 +0000 (UTC)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A917061928
-	for <soc@kernel.org>; Tue, 30 Mar 2021 11:00:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A917061928
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=jens.wiklander@linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id w28so2162343lfn.2
-        for <soc@kernel.org>; Tue, 30 Mar 2021 04:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=0APZS7qW26TQ2G+AjsqWhc2vH9zR/hdxgKlxQBPo6jY=;
-        b=i2knyJ1sOyCrZOtRxP2K/kzwfl6hxexD9Rgft0GYDLtQQutWd5WSAfzSWkjSA6ynsb
-         wxxEQ+lZtRH70LuUs8tWdz+WJRK4dZdQaey9OlXNMY1Eli0Ybq0tyfuXo4SpxDv0OQHB
-         hQoEwmisCyJeEvffAZPnX2REsyje4r4D55QmZSpSX8w08Cf9qdGmsjMWWTj3YapnU6VJ
-         0jryFctoc2KLsDvoClWWgRa+4jGf4vDsTVZzpQ19PgEObPyd3/d4//osE+L47O/fs5xt
-         3qg6GZ4jxGNsZrPE7zW01VJAFlw8jbiaKsdVjwXuVC1LpKM6e8IHG17GH1Ak8QkRVBIC
-         xVjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=0APZS7qW26TQ2G+AjsqWhc2vH9zR/hdxgKlxQBPo6jY=;
-        b=k5SOC0dbhsgQuPW//B8gThWEnIp0WMw2aMazEJjPplUUk+nYVi3erBfrbKyfnHdB30
-         PyppU2FcqOB2WWWHkzG4sGDGPu3B6h78mlAAttpLH0hYhi7s1MaP5XUgiHoTajRtfOcP
-         JIJJrSkNBEi6S0fV589sOEBPDEydc++9L3jJdk4KdnxnUq/RZxlK2P+HvcLW7S9t2o5C
-         9EndAv7W5mRyOy73kzF7wSI+HtToluGPtLST2dGcLycrbeTebWzSZpDgcEwVKJ7SnhqB
-         SxUFy8FnDfYI9unhM/6uZm8jF3F/ai/Ah2EBBuYvyp7oUUBoNIAnH2yLf14xgqCEXrTm
-         QiHA==
-X-Gm-Message-State: AOAM530/i7BSQXlxBJ0YQT3ROkIg53Xq3JyfowoO+VaKPEjP7hoaduQg
-	ptrlTIyn+K1gFsoU3yaRSsxPOoG0fulBDgOd
-X-Google-Smtp-Source: ABdhPJzgc2H73wOp9fwexyN8u+OrDRs+gsXXnZr5n49qEctr+PRLJjclKcSQoNWMtMy0TGrk3YOglg==
-X-Received: by 2002:ac2:4ac4:: with SMTP id m4mr18924716lfp.404.1617102042945;
-        Tue, 30 Mar 2021 04:00:42 -0700 (PDT)
-Received: from jade (h-249-223.A175.priv.bahnhof.se. [98.128.249.223])
-        by smtp.gmail.com with ESMTPSA id h4sm1324240lfv.22.2021.03.30.04.00.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Mar 2021 04:00:39 -0700 (PDT)
-Date: Tue, 30 Mar 2021 13:00:37 +0200
-From: Jens Wiklander <jens.wiklander@linaro.org>
+	id D2AE761989; Tue, 30 Mar 2021 11:04:31 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5AD4161985;
+	Tue, 30 Mar 2021 11:04:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1617102271;
+	bh=WItIEkcv1jIXljsuLzmbBpBnmQuP4kRby5C1UMEJTqA=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=jwH+XFK7XtJhxQ15bJh+1rGSLpHyYAZYdFXIKTBBg07jyofCWjsDePImI0WfDmke8
+	 fu0mYuyWKCNfbRFp1p7KLt8PPohfYrx6SOZy6oZbBchOhznAaTxCMlB3vyeRzUEi9K
+	 4QcinPoVuijCXQgNmfWv+zJLzWu0oHwYoYKSMW2hLKyzsQRMMsyhBcwP0iLYi9gMDw
+	 4VhQhKKZ4Pf7D/YY4gC2KRzQiaM39VZUrpEpO5sDc/Y3+AjrZxMeCaJUlsQuIL5n39
+	 /BPZoZZwjMQwgvDttX3egJk2uStMQhFqPap7wCa91x41NwECqZ73ra29Oc7mQj36US
+	 hH26nTL2Ffr5g==
+From: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: op-tee@lists.trustedfirmware.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Jerome Forissier <jerome@forissier.org>
-Subject: [GIT PULL] OP-TEE memref size check for v5.13
-Message-ID: <20210330110037.GA1166563@jade>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: dinguyen@kernel.org
+Subject: [GIT PULL 1/3] SoCFPGA updates for v5.13
+Date: Tue, 30 Mar 2021 06:04:28 -0500
+Message-Id: <20210330110430.558182-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hello arm-soc maintainers,
+Hi Arnd, Kevin, and Olof:
 
-Please pull this small patch for the OP-TEE driver to remove the invalid
-size check of outgoing memref parameters. This code path is only
-activated for a certain configuration of OP-TEE in secure world
-(CFG_CORE_DYN_SHM=n) so this problem isn't always visible.
+Please pull in these SoCFPGA updates for v5.13.
 
 Thanks,
-Jens
+Dinh
 
-The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
 
-  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+  Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
 
 are available in the Git repository at:
 
-  git://git.linaro.org/people/jens.wiklander/linux-tee.git/ tags/optee-memref-size-for-v5.13
+  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_update_for_v5.13
 
-for you to fetch changes up to c650b8dc7a7910eb25af0aac1720f778b29e679d:
+for you to fetch changes up to 4483397b03536506535d611b0cb28a81a69e8edf:
 
-  tee: optee: do not check memref size on return from Secure World (2021-03-30 10:44:50 +0200)
-
-----------------------------------------------------------------
-OP-TEE skip check of returned memref size
+  ARM: socfpga: drop ARCH_SOCFPGA (2021-03-23 11:03:36 -0500)
 
 ----------------------------------------------------------------
-Jerome Forissier (1):
-      tee: optee: do not check memref size on return from Secure World
+SoCFPGA updates for v5.13
+- Patches from Krzysztof Kozlowski the cleans up and consolidate support for
+  SoCFPGA platforms
+	- Rename ARCH_SOCFPGA into ARCH_INTEL_SOCFPGA
+	- Consolidate ARCH_STRATIX10 into ARCH_INTEL_SOCFPGA
+	- Consolidate ARCH_AGILEX into ARCH_INTEL_SOCFPGA
+	- Consolidate ARCH_N5X into ARCH_INTEL_SOCFPGA
 
- drivers/tee/optee/core.c | 10 ----------
- 1 file changed, 10 deletions(-)
+----------------------------------------------------------------
+Krzysztof Kozlowski (15):
+      clk: socfpga: allow building N5X clocks with ARCH_N5X
+      ARM: socfpga: introduce common ARCH_INTEL_SOCFPGA
+      mfd: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
+      net: stmmac: merge ARCH_SOCFPGA and ARCH_STRATIX10
+      clk: socfpga: build together Stratix 10, Agilex and N5X clock drivers
+      clk: socfpga: merge ARCH_SOCFPGA and ARCH_STRATIX10
+      EDAC: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
+      arm64: socfpga: merge Agilex and N5X into ARCH_INTEL_SOCFPGA
+      clk: socfpga: allow compile testing of Stratix 10 / Agilex clocks
+      clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and compile test)
+      dmaengine: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+      fpga: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+      i2c: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+      reset: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+      ARM: socfpga: drop ARCH_SOCFPGA
+
+ arch/arm/Kconfig                            |  2 +-
+ arch/arm/Kconfig.debug                      |  6 +++---
+ arch/arm/Makefile                           |  2 +-
+ arch/arm/boot/dts/Makefile                  |  2 +-
+ arch/arm/configs/multi_v7_defconfig         |  2 +-
+ arch/arm/configs/socfpga_defconfig          |  2 +-
+ arch/arm/mach-socfpga/Kconfig               |  4 ++--
+ arch/arm64/Kconfig.platforms                | 17 ++++-------------
+ arch/arm64/boot/dts/altera/Makefile         |  2 +-
+ arch/arm64/boot/dts/intel/Makefile          |  6 +++---
+ arch/arm64/configs/defconfig                |  2 +-
+ drivers/clk/Kconfig                         |  1 +
+ drivers/clk/Makefile                        |  4 +---
+ drivers/clk/socfpga/Kconfig                 | 19 +++++++++++++++++++
+ drivers/clk/socfpga/Makefile                | 11 +++++------
+ drivers/dma/Kconfig                         |  2 +-
+ drivers/edac/Kconfig                        |  2 +-
+ drivers/edac/altera_edac.c                  | 17 +++++++++++------
+ drivers/firmware/Kconfig                    |  2 +-
+ drivers/fpga/Kconfig                        |  8 ++++----
+ drivers/i2c/busses/Kconfig                  |  2 +-
+ drivers/mfd/Kconfig                         |  4 ++--
+ drivers/net/ethernet/stmicro/stmmac/Kconfig |  4 ++--
+ drivers/reset/Kconfig                       |  6 +++---
+ 24 files changed, 71 insertions(+), 58 deletions(-)
+ create mode 100644 drivers/clk/socfpga/Kconfig
