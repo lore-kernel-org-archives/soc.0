@@ -1,121 +1,97 @@
-Return-Path: <SRS0=+/G9=I4=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=skuN=I4=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A8DDC433C1
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 30 Mar 2021 09:04:18 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C3B8C433C1
+	for <soc@archiver.kernel.org>; Tue, 30 Mar 2021 11:00:45 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 2A1436196C; Tue, 30 Mar 2021 11:00:45 +0000 (UTC)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9431861929
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 30 Mar 2021 09:04:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9431861929
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=spxHYYsxUGfcA7dq8gASUyuZ37oGsgh+k3m00gQcZNs=; b=fMfkan1nfhHiyRXmWXsXElVr7w
-	KKE3lT5FwcuRXFdz3P3LiNXsFykzthBYeZbRb27bnkE7h/yNV6csDp7Q/9fVSvzkjVjtBGNEKH3oH
-	LjLixV78hKGsd3Rxda/0uySMG2cKibB2BeI87e5UdjTdMcupmuMCvv0Cqy+tnA2zbhQUkvpfgUy1U
-	wTXwFf4QiAciKCggWbN7evdv2AXUEJ1Ne9JNknOQtw4f5B7ggLv0zstMYiMho0sPlLwc0OyW7zbyj
-	gF/s9+GuVb/gKSkBHpx9cb0Qn4uSkvYcJz+PIKF+WQV/QzB8jZQNgww32k8RS1qDCcnnWvBxLubCW
-	VbQIBzrw==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lRAGw-0038GD-Uu; Tue, 30 Mar 2021 09:02:51 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lRAGq-0038Em-0k
- for linux-arm-kernel@lists.infradead.org; Tue, 30 Mar 2021 09:02:46 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F105061959;
- Tue, 30 Mar 2021 09:02:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1617094962;
- bh=hFfoYeoBQFX/shr1P1K4yAz0eDeOmXZxekXBwhAUJAQ=;
- h=Date:From:List-Id:To:Cc:Subject:From;
- b=FQYzKZ4xnQagchQoOtkKUM1617vJK8SUXVaaM/nVeCnCe03QRW0R3TMgdMQ53n0Kb
- hKooO04IczNIR/mOgWB/fcvYuyC0/fduGn7g2JFUa3XV/N18CRpn5RUbki3CFwszpe
- gP0MOyHTlg4kCKn0j9CdNnjoN+fMqv2xZkgS0P2gXqp+EdHKoy4fRwFJSL+9ODlPvF
- M1OSSyt4mCW1n7DnzXi+mhrWiwMvhq2slHXNwHfxLscTnHlKB8zdXTwznQR2UIbu6m
- MI5XWwJWIInScpWt5s0u86KKDYQ/amPR5ytX7gk5sTG6N7YN5uvBW71a35XRGJaPw7
- VFyn00BEfUWwg==
-Date: Tue, 30 Mar 2021 17:02:37 +0800
-From: Shawn Guo <shawnguo@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id A917061928
+	for <soc@kernel.org>; Tue, 30 Mar 2021 11:00:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A917061928
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=jens.wiklander@linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id w28so2162343lfn.2
+        for <soc@kernel.org>; Tue, 30 Mar 2021 04:00:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=0APZS7qW26TQ2G+AjsqWhc2vH9zR/hdxgKlxQBPo6jY=;
+        b=i2knyJ1sOyCrZOtRxP2K/kzwfl6hxexD9Rgft0GYDLtQQutWd5WSAfzSWkjSA6ynsb
+         wxxEQ+lZtRH70LuUs8tWdz+WJRK4dZdQaey9OlXNMY1Eli0Ybq0tyfuXo4SpxDv0OQHB
+         hQoEwmisCyJeEvffAZPnX2REsyje4r4D55QmZSpSX8w08Cf9qdGmsjMWWTj3YapnU6VJ
+         0jryFctoc2KLsDvoClWWgRa+4jGf4vDsTVZzpQ19PgEObPyd3/d4//osE+L47O/fs5xt
+         3qg6GZ4jxGNsZrPE7zW01VJAFlw8jbiaKsdVjwXuVC1LpKM6e8IHG17GH1Ak8QkRVBIC
+         xVjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=0APZS7qW26TQ2G+AjsqWhc2vH9zR/hdxgKlxQBPo6jY=;
+        b=k5SOC0dbhsgQuPW//B8gThWEnIp0WMw2aMazEJjPplUUk+nYVi3erBfrbKyfnHdB30
+         PyppU2FcqOB2WWWHkzG4sGDGPu3B6h78mlAAttpLH0hYhi7s1MaP5XUgiHoTajRtfOcP
+         JIJJrSkNBEi6S0fV589sOEBPDEydc++9L3jJdk4KdnxnUq/RZxlK2P+HvcLW7S9t2o5C
+         9EndAv7W5mRyOy73kzF7wSI+HtToluGPtLST2dGcLycrbeTebWzSZpDgcEwVKJ7SnhqB
+         SxUFy8FnDfYI9unhM/6uZm8jF3F/ai/Ah2EBBuYvyp7oUUBoNIAnH2yLf14xgqCEXrTm
+         QiHA==
+X-Gm-Message-State: AOAM530/i7BSQXlxBJ0YQT3ROkIg53Xq3JyfowoO+VaKPEjP7hoaduQg
+	ptrlTIyn+K1gFsoU3yaRSsxPOoG0fulBDgOd
+X-Google-Smtp-Source: ABdhPJzgc2H73wOp9fwexyN8u+OrDRs+gsXXnZr5n49qEctr+PRLJjclKcSQoNWMtMy0TGrk3YOglg==
+X-Received: by 2002:ac2:4ac4:: with SMTP id m4mr18924716lfp.404.1617102042945;
+        Tue, 30 Mar 2021 04:00:42 -0700 (PDT)
+Received: from jade (h-249-223.A175.priv.bahnhof.se. [98.128.249.223])
+        by smtp.gmail.com with ESMTPSA id h4sm1324240lfv.22.2021.03.30.04.00.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Mar 2021 04:00:39 -0700 (PDT)
+Date: Tue, 30 Mar 2021 13:00:37 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
- Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
- linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 5.12, round 2
-Message-ID: <20210330090236.GQ22955@dragon>
+To: arm@kernel.org, soc@kernel.org
+Cc: op-tee@lists.trustedfirmware.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Jerome Forissier <jerome@forissier.org>
+Subject: [GIT PULL] OP-TEE memref size check for v5.13
+Message-ID: <20210330110037.GA1166563@jade>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210330_100244_347875_39E6B41D 
-X-CRM114-Status: UNSURE (   7.36  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210330090237.rcfX2AbJITT9i-im8GRt_eFpJHNcpc6ldzoKauCdJTI@z>
 
-The following changes since commit e4817a1b6b77db538bc0141c3b138f2df803ce87:
+Hello arm-soc maintainers,
 
-  ARM: dts: imx6ull: fix ubi filesystem mount failed (2021-03-18 12:06:28 +=
-0800)
+Please pull this small patch for the OP-TEE driver to remove the invalid
+size check of outgoing memref parameters. This code path is only
+activated for a certain configuration of OP-TEE in secure world
+(CFG_CORE_DYN_SHM=n) so this problem isn't always visible.
+
+Thanks,
+Jens
+
+The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+
+  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx=
--fixes-5.12-2
+  git://git.linaro.org/people/jens.wiklander/linux-tee.git/ tags/optee-memref-size-for-v5.13
 
-for you to fetch changes up to f57011e72f5fe0421ec7a812beb1b57bdf4bb47f:
+for you to fetch changes up to c650b8dc7a7910eb25af0aac1720f778b29e679d:
 
-  ARM: dts: imx6: pbab01: Set vmmc supply for both SD interfaces (2021-03-3=
-0 16:35:28 +0800)
+  tee: optee: do not check memref size on return from Secure World (2021-03-30 10:44:50 +0200)
 
 ----------------------------------------------------------------
-i.MX fixes for 5.12, round 2:
-
-- Fix a system failure on imx6qdl-phytec-pfla02 board when booting from
-  SD, by adding missing vmmc supply for SD interfaces.
-- Fix address typo in i.MX8MM/Q IOMUXC_SD1_DATA0_GPIO2_IO2 definition.
+OP-TEE skip check of returned memref size
 
 ----------------------------------------------------------------
-Oliver St=E4bler (1):
-      arm64: dts: imx8mm/q: Fix pad control of SD1_DATA0
+Jerome Forissier (1):
+      tee: optee: do not check memref size on return from Secure World
 
-Stefan Riedmueller (1):
-      ARM: dts: imx6: pbab01: Set vmmc supply for both SD interfaces
-
- arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi   | 2 ++
- arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h | 2 +-
- arch/arm64/boot/dts/freescale/imx8mq-pinfunc.h | 2 +-
- 3 files changed, 4 insertions(+), 2 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ drivers/tee/optee/core.c | 10 ----------
+ 1 file changed, 10 deletions(-)
