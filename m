@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-22.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3CE2C433E0
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 04:12:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09DA3C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 04:12:55 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 61CA0619DE
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 04:12:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 61CA0619DE
+	by mail.kernel.org (Postfix) with ESMTPS id 86AC5619DE
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 04:12:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 86AC5619DE
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:MIME-Version:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:References:In-Reply-To:Message-Id:Date:Subject:Cc:To
-	:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=xi0LLmxHMHqYhWxDJZttK49eGFQfNPtSJV8xTL0TY7s=; b=a/KXzeKs8LbBlbk5/iYoJ3P8ft
-	Tr+qr7+TbVtDBYX1ijWKoa31Seh/gkXnh645C0BlKcyv8rmPhBTUDP4tD8cHHPjZD+IPGAMQQV4CP
-	acikTUDSzoazYK3m5xyBKc7yGYxAx09Izb4ZcVO9VA7xqeOzDZVFDZhFOZc7ZIo+iOjWbbuavUZTM
-	Rk2S1LB/JmOrmbyuPXrDD3NZXFbd0B9zM8zilLUfwkF4lQpUDxCiltlI1m9szWrpOZ4RqNd74OQIG
-	TNkfpo09SgI9+jfzvGZGolnguLh7lPAQpC8s9uWkvY5rmolpX7doUElGNm7aH9NCXqlOiGlz0y0ri
-	Isq45Qdw==;
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
+	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=OsnYhetx78b385G0Vk4QrRe4a2YEoA5EA1Boa2531mk=; b=GPIePGnwdtq3cUBp6eeIAyhJM
+	lh6tCtecDIplabAR2+9Cgts/Q4vcwKcjtseyShEHkSihslOqdoQa39yCMUIGpew7rIOz7U0+NYUpq
+	RWmmUHKoHktZC4rdN6vR/st3hnpQM05yU5M6LEyjMl9f91HciGb46b+A+gJi60+q3ap3H2yGM6Svx
+	fdGsTBclW/9TZTtyebRnOirWyB/x2KYM9lSOBNIe8sPm1/+KwTPSYbU8cvKVONhkzbypx5LhIqZg2
+	QN6ibk8eOS7Sj28YfxgonreOgUqoHPpiD8jiLIiqgNGJouMgzuT80GKD0/wojk9toxTRY+gfs0voF
+	cDObvBygg==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lRSCF-005R2q-7g; Wed, 31 Mar 2021 04:11:11 +0000
+	id 1lRSCO-005R3i-1L; Wed, 31 Mar 2021 04:11:20 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lRSBo-005R0j-60
- for linux-arm-kernel@lists.infradead.org; Wed, 31 Mar 2021 04:10:46 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5770B619E1;
- Wed, 31 Mar 2021 04:10:41 +0000 (UTC)
+ id 1lRSBq-005R16-DM
+ for linux-arm-kernel@lists.infradead.org; Wed, 31 Mar 2021 04:10:48 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6E498619E8;
+ Wed, 31 Mar 2021 04:10:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1617163843;
- bh=CRIgsnvwwULTMw1iyO8MWQDFQ2WdQ73eLpPPYM2yeAo=;
+ s=k20201202; t=1617163845;
+ bh=Sr65hYmDkG/dqoKauy259KiYePrdUVJQ/dgmQ8j7nYk=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=BOejjoZUOxbjksZ15DFPwvvo6Qr2HvYyFB6Y0bpbsn4+DJ3LIL0JQYoU5UERU6o5X
- hU4A3gMHY65rqIHkh6o7H3PTjMrguhzvDi6+mudROrSsn4kTrxnMb+2iWlg0Oi9Toy
- GTdSuVhn9ywbkGnN4YQ9MNgFyqv8Bj2HIVu2vze78fc+dprUqGf+DXP2VQI2ti7VnB
- aAvcm/GxeByLrHNI+NLcQni2Dg6i7nJolk2T8XZEsDNNTc4fONX9e45F5g4PtyjV5q
- ACRBl0gno4wVxl8HrcAxd4pz5eRxtj5OzV4fKQVCtFrLFegEAxHCP+0p9inJSdnpvz
- sYv+FDWBeozhw==
+ b=XFcXQCM0aCnnXQfQlknfAI9XkI+dcyqSOKWY8P4Qt7JJyoro0LYIyeoOmu84bJCti
+ /z1b6HI4HrNypRPAkfyoo6BMfAZko8g8eLP4EaT7hDxuNtYqtqkXpERZM7+SfrnHbU
+ eO/7wI0MNHpcdV3TqrePkNMVtrJ4B2ktDuCVO5eAl/n/lylhVWJBFO8Ists8z9wNc2
+ BovoaEzaiMKTYPpbVH7c3U8KOcFJKUPWUjZ82NCfZ+s1hW1eZwZUTIB3PBZ4L1Dz/s
+ +dPifgeTG8ilDCOW9o6zDjMbpzfcxSl2Q+f/BV0F4V2MffxxTp8hh3Y0PFXw9XP7ju
+ TAso8kSGOAhLA==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -56,16 +56,16 @@ Cc: Shawn Guo <shawnguo@kernel.org>, Fabio Estevam <festevam@gmail.com>,
  Stefan Agner <stefan@agner.ch>, Li Yang <leoyang.li@nxp.com>,
  kernel@pengutronix.de, linux-imx@nxp.com,
  linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 3/6] i.MX DT bindings update for 5.13
-Date: Wed, 31 Mar 2021 12:10:16 +0800
-Message-ID: <20210331041019.31345-3-shawnguo@kernel.org>
+Subject: [GIT PULL 4/6] i.MX device tree change for 5.13
+Date: Wed, 31 Mar 2021 12:10:17 +0800
+Message-ID: <20210331041019.31345-4-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210331041019.31345-1-shawnguo@kernel.org>
 References: <20210331041019.31345-1-shawnguo@kernel.org>
+MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210331_051044_656915_E6DD4258 
-X-CRM114-Status: UNSURE (   6.81  )
-X-CRM114-Notice: Please train this message.
+X-CRM114-CacheID: sfid-20210331_051046_946281_C0AA78A9 
+X-CRM114-Status: GOOD (  11.08  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -77,60 +77,92 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210331041016.45P3h_d1hrBHb1VgsA7gzun59-bmwMzLZsfZWyBGlsw@z>
+Message-ID: <20210331041017.kJApwic8VSsX7AvmUF0NwgwMeTxDvy2V9jmQsM4K7Mk@z>
 
-The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
-
-  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindgins-5.13
-
-for you to fetch changes up to 6634b2d252accd3fcdc94a5e0a1319009363892e:
-
-  dt-bindings: arm: fsl: Add the reMarkable 2 e-Ink tablet (2021-03-29 09:42:11 +0800)
-
-----------------------------------------------------------------
-i.MX bindings update for 5.13:
-
-- Add vendor prefix for reMarkable.
-- Add compatible for reMarkable 2 e-Ink tablet, Kontron pITX-imx8m
-  board, Engicam i.Core MX8M Mini devices.
-- Add compatbile 'fsl,imx8qm-mu' for i.MX mailbox bindings.
-- One correction on example clock-names in imx8qxp-lpcg bindings.
-
-----------------------------------------------------------------
-Alistair Francis (2):
-      dt-bindings: Add vendor prefix for reMarkable
-      dt-bindings: arm: fsl: Add the reMarkable 2 e-Ink tablet
-
-Dong Aisheng (2):
-      dt-bindings: arm: fsl: add imx8qm boards compatible string
-      dt-bindings: mailbox: mu: add imx8qm support
-
-Heiko Thiery (1):
-      dt-bindings: arm: fsl: add Kontron pITX-imx8m board
-
-Jagan Teki (2):
-      dt-bindings: arm: fsl: Add Engicam i.Core MX8M Mini C.TOUCH 2.0
-      dt-bindings: arm: fsl: Add Engicam i.Core MX8M Mini EDIMM2.2 Starter Kit
-
-Peng Fan (1):
-      dt-bindings: clock: imx8qxp-lpcg: correct the example clock-names
-
- Documentation/devicetree/bindings/arm/fsl.yaml           | 16 ++++++++++++++++
- .../devicetree/bindings/clock/imx8qxp-lpcg.yaml          |  6 +++---
- Documentation/devicetree/bindings/mailbox/fsl,mu.yaml    |  5 ++++-
- Documentation/devicetree/bindings/vendor-prefixes.yaml   |  2 ++
- 4 files changed, 25 insertions(+), 4 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+VGhlIGZvbGxvd2luZyBjaGFuZ2VzIHNpbmNlIGNvbW1pdCBhMzhmZDg3NDg0NjQ4MzE1ODRhMTk0
+MzhjYmIzMDgyYjVhMmRhYjE1OgoKICBMaW51eCA1LjEyLXJjMiAoMjAyMS0wMy0wNSAxNzozMzo0
+MSAtMDgwMCkKCmFyZSBhdmFpbGFibGUgaW4gdGhlIEdpdCByZXBvc2l0b3J5IGF0OgoKICBnaXQ6
+Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc2hhd25ndW8vbGludXgu
+Z2l0IHRhZ3MvaW14LWR0LTUuMTMKCmZvciB5b3UgdG8gZmV0Y2ggY2hhbmdlcyB1cCB0byA0NWI3
+OGRkMzlmMDRmNjE5OGY4ZTJlOWZlOWQxNTVhNWU4MzI2YWFiOgoKICBBUk06IGR0czogaW14Njog
+cGJhYjAxOiBTZXQgVVNCIE9URyBwb3J0IHRvIHBlcmlwaGVyYWwgKDIwMjEtMDMtMzAgMTY6MzM6
+MTYgKzA4MDApCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tCmkuTVggZGV2aWNlIHRyZWUgY2hhbmdlIGZvciA1LjEzOgoKLSBO
+ZXcgYm9hcmQgc3VwcG9ydDogaS5NWDdEIGJhc2VkIHJlTWFya2FibGUyLgotIENsZWFuIHVwIGlt
+eDZxbC1wZmxhMDIgaG9nIGdyb3VwIGJ5IG1vdmluZyBwaW5zIGludG8gY29ycmVzcG9uZGVkCiAg
+Y2xpZW50IGdyb3Vwcy4KLSBBZGQgTmV0cm9uaXggZW1iZWRkZWQgY29udHJvbGxlciBmb3IgaW14
+NTAta29iby1hdXJhLgotIEEgc2VyaWVzIGZyb20gU2ViYXN0aWFuIFJlaWNoZWwgdG8gaW1wcm92
+ZSBHRSBCeDUwdjMgZGV2aWNlIHRyZWVzLgotIFN1cHBvcnQgSTJDIGJ1cyByZWNvdmVyeSBmb3Ig
+aW14NnFkbC13YW5kYm9hcmQgYnkgYWRkaW5nIFNDTC9TREEKICBHUElPcy4KLSBSZW1vdmUgdW5u
+ZWNlc3NhcnkgI2FkZHJlc3MtY2VsbHMvI3NpemUtY2VsbHMgZnJvbSBpbXg2cWRsLWd3IGJvYXJk
+cy4KLSBWYXJpb3VzIHNtYWxsIGFuZCByYW5kb20gZGV2aWNlIHRyZWUgdXBkYXRlLgoKLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LQpBbGV4YW5kZXIgU2hpeWFuICgzKToKICAgICAgQVJNOiBkdHM6IGlteDZxZGwtdHM3OTcwOiBE
+cm9wIHJlZHVuZGFudCAiZnNsLG1vZGUiIG9wdGlvbgogICAgICBBUk06IGR0czogaW14NnFkbC1w
+aHl0ZWMtcGJhYjAxOiBTZWxlY3Qgc3luY2hyb25vdXMgbW9kZSBmb3IgQVVETVVYCiAgICAgIEFS
+TTogZHRzOiBpbXg2cWwtcGZsYTAyOiBNb3ZlICJob2ciIHBpbnMgaW50byBjb3JyZXNwb25kZWQg
+cGluIGdyb3VwcwoKQWxpc3RhaXIgRnJhbmNpcyAoMSk6CiAgICAgIEFSTTogaW14N2QtcmVtYXJr
+YWJsZTI6IEluaXRpYWwgZGV2aWNlIHRyZWUgZm9yIHJlTWFya2FibGUyCgpBbmRyZWFzIEtlbW5h
+ZGUgKDEpOgogICAgICBBUk06IGR0czogaW14NnNsLXRvbGluby1zaGluZTJoZDogQWRkIE5ldHJv
+bml4IGVtYmVkZGVkIGNvbnRyb2xsZXIKCkRpbWEgQXphcmtpbiAoMSk6CiAgICAgIEFSTTogZHRz
+OiBpbXg2cWRsLXdhbmRib2FyZDogYWRkIHNjbC9zZGEgZ3Bpb3MgZGVmaW5pdGlvbnMgZm9yIGky
+YyBidXMgcmVjb3ZlcnkKCkZhYmlvIEVzdGV2YW0gKDMpOgogICAgICBBUk06IGR0czogaW14NTMt
+cXNiOiBEZXNjcmliZSB0aGUgZXNkaGMxIGNhcmQgZGV0ZWN0IHBpbgogICAgICBBUk06IGR0czog
+aW14NmRsLXBseWJhczogRml4IGdwaW8ta2V5cyBXPTEgd2FybmluZ3MKICAgICAgQVJNOiBkdHM6
+IGlteDdkLW1iYTc6IFJlbW92ZSB1bnN1cHBvcnRlZCBQQ0kgcHJvcGVydGllcwoKSG9yaWEgR2Vh
+bnTEgyAoMSk6CiAgICAgIEFSTTogZHRzOiBsczEwMjFhOiBtYXJrIGNyeXB0byBlbmdpbmUgZG1h
+IGNvaGVyZW50CgpJYW4gUmF5ICgxKToKICAgICAgQVJNOiBkdHM6IGlteDogYng1MHYzOiBEZWZp
+bmUgR1BJTyBsaW5lIG5hbWVzCgpKb25hdGhhbiBOZXVzY2jDpGZlciAoMSk6CiAgICAgIEFSTTog
+ZHRzOiBpbXg1MC1rb2JvLWF1cmE6IEFkZCBOZXRyb25peCBlbWJlZGRlZCBjb250cm9sbGVyCgpQ
+aGlsaXBwZSBTY2hlbmtlciAoMSk6CiAgICAgIEFSTTogZHRzOiBjb2xpYnJpLWlteDZ1bGw6IENo
+YW5nZSBkcml2ZSBzdHJlbmd0aCBmb3IgdXNkaGMyCgpTZWJhc3RpYW4gUmVpY2hlbCAoNCk6CiAg
+ICAgIEFSTTogZHRzOiBpbXg6IE1hcmsgSUlNIGFzIHN5c2NvbiBvbiBpLk1YNTEvaS5NWDUzCiAg
+ICAgIEFSTTogZHRzOiBpbXg2cS1iYTE2OiBhZGQgVVNCIE9URyBWQlVTIGVuYWJsZSBHUElPCiAg
+ICAgIEFSTTogZHRzOiBpbXg2cS1iYTE2OiBpbXByb3ZlIFBIWSBpbmZvcm1hdGlvbgogICAgICBB
+Uk06IGR0czogaW14OiBieDUwdjM6IGkyYyBHUElPcyBhcmUgb3BlbiBkcmFpbgoKU2VyZ2UgU2Vt
+aW4gKDEpOgogICAgICBBUk06IGR0czogbHMxMDIxYTogSGFybW9uaXplIERXQyBVU0IzIERUIG5v
+ZGVzIG5hbWUKClN0ZWZhbiBSaWVkbXVlbGxlciAoMik6CiAgICAgIEFSTTogZHRzOiBpbXg2OiBw
+ZmxhMDI6IEZpeCBVU0IgdmJ1cyBlbmFibGUgcGlubXV4aW5nCiAgICAgIEFSTTogZHRzOiBpbXg2
+OiBwYmFiMDE6IFNldCBVU0IgT1RHIHBvcnQgdG8gcGVyaXBoZXJhbAoKVGltIEhhcnZleSAoMSk6
+CiAgICAgIEFSTTogZHRzOiBpbXg2cWRsLWd3KjogUmVtb3ZlIHVubmVjZXNzYXJ5ICNhZGRyZXNz
+LWNlbGxzLyNzaXplLWNlbGxzCgogYXJjaC9hcm0vYm9vdC9kdHMvTWFrZWZpbGUgICAgICAgICAg
+ICAgICAgICAgfCAgIDEgKwogYXJjaC9hcm0vYm9vdC9kdHMvaW14NTAta29iby1hdXJhLmR0cyAg
+ICAgICAgfCAgMTYgKystCiBhcmNoL2FybS9ib290L2R0cy9pbXg1MS5kdHNpICAgICAgICAgICAg
+ICAgICB8ICAgMiArLQogYXJjaC9hcm0vYm9vdC9kdHMvaW14NTMtcXNiLWNvbW1vbi5kdHNpICAg
+ICAgfCAgIDIgKwogYXJjaC9hcm0vYm9vdC9kdHMvaW14NTMuZHRzaSAgICAgICAgICAgICAgICAg
+fCAgIDIgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZkbC1wbHliYXMuZHRzICAgICAgICAgIHwg
+ICA2ICstCiBhcmNoL2FybS9ib290L2R0cy9pbXg2cS1iNDUwdjMuZHRzICAgICAgICAgICB8ICAg
+NSArCiBhcmNoL2FybS9ib290L2R0cy9pbXg2cS1iNjUwdjMuZHRzICAgICAgICAgICB8ICAgNSAr
+CiBhcmNoL2FybS9ib290L2R0cy9pbXg2cS1iODUwdjMuZHRzICAgICAgICAgICB8ICAgNSArCiBh
+cmNoL2FybS9ib290L2R0cy9pbXg2cS1iYTE2LmR0c2kgICAgICAgICAgICB8ICAyMSArKysrCiBh
+cmNoL2FybS9ib290L2R0cy9pbXg2cS1ieDUwdjMuZHRzaSAgICAgICAgICB8ICAxMiArLS0KIGFy
+Y2gvYXJtL2Jvb3QvZHRzL2lteDZxZGwtZ3c1Mnh4LmR0c2kgICAgICAgIHwgICAyIC0KIGFyY2gv
+YXJtL2Jvb3QvZHRzL2lteDZxZGwtZ3c1M3h4LmR0c2kgICAgICAgIHwgICAyIC0KIGFyY2gvYXJt
+L2Jvb3QvZHRzL2lteDZxZGwtZ3c1NHh4LmR0c2kgICAgICAgIHwgICAyIC0KIGFyY2gvYXJtL2Jv
+b3QvZHRzL2lteDZxZGwtZ3c1NTF4LmR0c2kgICAgICAgIHwgICAyIC0KIGFyY2gvYXJtL2Jvb3Qv
+ZHRzL2lteDZxZGwtZ3c1NTJ4LmR0c2kgICAgICAgIHwgICAyIC0KIGFyY2gvYXJtL2Jvb3QvZHRz
+L2lteDZxZGwtZ3c1NjB4LmR0c2kgICAgICAgIHwgICAyIC0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lt
+eDZxZGwtZ3c1OTAzLmR0c2kgICAgICAgIHwgICAyIC0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZx
+ZGwtZ3c1OTA0LmR0c2kgICAgICAgIHwgICAyIC0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZxZGwt
+Z3c1OTA3LmR0c2kgICAgICAgIHwgICAyIC0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZxZGwtZ3c1
+OTEwLmR0c2kgICAgICAgIHwgICAyIC0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZxZGwtZ3c1OTEy
+LmR0c2kgICAgICAgIHwgICAyIC0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZxZGwtZ3c1OTEzLmR0
+c2kgICAgICAgIHwgICAyIC0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZxZGwtcGh5dGVjLXBiYWIw
+MS5kdHNpIHwgICA2ICstCiBhcmNoL2FybS9ib290L2R0cy9pbXg2cWRsLXBoeXRlYy1wZmxhMDIu
+ZHRzaSB8ICAzOCArKystLS0tCiBhcmNoL2FybS9ib290L2R0cy9pbXg2cWRsLXRzNzk3MC5kdHNp
+ICAgICAgICB8ICAgMSAtCiBhcmNoL2FybS9ib290L2R0cy9pbXg2cWRsLXdhbmRib2FyZC5kdHNp
+ICAgICB8ICAyNCArKysrLQogYXJjaC9hcm0vYm9vdC9kdHMvaW14NnNsLXRvbGluby1zaGluZTJo
+ZC5kdHMgfCAgIDcgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZ1bGwtY29saWJyaS5kdHNpICAg
+ICAgIHwgIDEyICstLQogYXJjaC9hcm0vYm9vdC9kdHMvaW14N2QtbWJhNy5kdHMgICAgICAgICAg
+ICAgfCAgIDIgLQogYXJjaC9hcm0vYm9vdC9kdHMvaW14N2QtcmVtYXJrYWJsZTIuZHRzICAgICAg
+fCAxNDYgKysrKysrKysrKysrKysrKysrKysrKysrKysrCiBhcmNoL2FybS9ib290L2R0cy9sczEw
+MjFhLmR0c2kgICAgICAgICAgICAgICB8ICAgMyArLQogMzIgZmlsZXMgY2hhbmdlZCwgMjcwIGlu
+c2VydGlvbnMoKyksIDcwIGRlbGV0aW9ucygtKQogY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJt
+L2Jvb3QvZHRzL2lteDdkLXJlbWFya2FibGUyLmR0cwoKX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KbGludXgtYXJtLWtlcm5lbCBtYWlsaW5nIGxpc3QKbGlu
+dXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnCmh0dHA6Ly9saXN0cy5pbmZyYWRlYWQu
+b3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtYXJtLWtlcm5lbAo=
