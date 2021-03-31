@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-22.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67389C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 04:12:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3CE2C433E0
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 04:12:38 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 07C54619DE
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 04:12:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 07C54619DE
+	by mail.kernel.org (Postfix) with ESMTPS id 61CA0619DE
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 04:12:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 61CA0619DE
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,31 +23,31 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:References:In-Reply-To:Message-Id:Date:Subject:Cc:To
 	:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=LHH0Y7n3t965u6Xa0tjCjGsdDOJvSGxryD7CsgOlMJA=; b=OJ2vGr6sOsxnIMMHmIBH1t2U+S
-	uBdH0zgVW7z+Di6bf4n/D9ghmGc98TyP5zo6pbpYtGWz3MeyhBXCram6lOdNjcKpTlScum56Gmzc1
-	87PRlkjYxqDkZJ+SdgAOR0XrxSp0mhFzAL7p8mImFdfTz3+uJyejAeWsYVwp+IlTnQ2DoAEBmBjsD
-	8y6mz5sd3ehBlFK8nqM6lr8Q7B7hLhnNNnUD/oTe+Wzt8dukVEqnE8Oc/RO1DVAmnR7P7RThomM4Z
-	6jme+1LsesFi5gMPAjQGRlNjbP6bxcTAu6emFw91DzyRt26e0mKHMKmUL3B57CS6oIacPN3eoKSdY
-	ziELOSdA==;
+	bh=xi0LLmxHMHqYhWxDJZttK49eGFQfNPtSJV8xTL0TY7s=; b=a/KXzeKs8LbBlbk5/iYoJ3P8ft
+	Tr+qr7+TbVtDBYX1ijWKoa31Seh/gkXnh645C0BlKcyv8rmPhBTUDP4tD8cHHPjZD+IPGAMQQV4CP
+	acikTUDSzoazYK3m5xyBKc7yGYxAx09Izb4ZcVO9VA7xqeOzDZVFDZhFOZc7ZIo+iOjWbbuavUZTM
+	Rk2S1LB/JmOrmbyuPXrDD3NZXFbd0B9zM8zilLUfwkF4lQpUDxCiltlI1m9szWrpOZ4RqNd74OQIG
+	TNkfpo09SgI9+jfzvGZGolnguLh7lPAQpC8s9uWkvY5rmolpX7doUElGNm7aH9NCXqlOiGlz0y0ri
+	Isq45Qdw==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lRSC3-005R2N-A8; Wed, 31 Mar 2021 04:10:59 +0000
+	id 1lRSCF-005R2q-7g; Wed, 31 Mar 2021 04:11:11 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lRSBm-005R0L-8X
- for linux-arm-kernel@lists.infradead.org; Wed, 31 Mar 2021 04:10:44 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 36DB8619DE;
- Wed, 31 Mar 2021 04:10:39 +0000 (UTC)
+ id 1lRSBo-005R0j-60
+ for linux-arm-kernel@lists.infradead.org; Wed, 31 Mar 2021 04:10:46 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5770B619E1;
+ Wed, 31 Mar 2021 04:10:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1617163840;
- bh=cfDWLfWZyaUvinkgMTUFtNENs54GRQ6bKrqYv61Q6ug=;
+ s=k20201202; t=1617163843;
+ bh=CRIgsnvwwULTMw1iyO8MWQDFQ2WdQ73eLpPPYM2yeAo=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=chqu+d6qkRUHvYuNn+73GQ6RNVEf1xCDjkC/fbAfVrU0GNx1Zf1d/z5W3KVrbWeea
- GpSsnbsE8SfA/gELmFTq8ri9wNTLFrD7GivkKQP/8I48pPdNc/+IsU09oMVc8UjcXX
- StWciQn6LDed2uYB/p9kXhs+yAYELDzLz3wZeTg9vTSi19cb1MrSUEkpkcKGK7bTGF
- zlWZDRwP6plcVcbklv+vxwrKE/ap/Ki9m4m6utJYXLLAarhfDxzsp4EscGOjkwQVpk
- 8RNJINVCY9LGQWTKqQ6MdbR5SjNAPvlSzLqP5Di99mo5yZDWvo6ZNUBXnB+J0kNucy
- T1HhiWr9+7eOQ==
+ b=BOejjoZUOxbjksZ15DFPwvvo6Qr2HvYyFB6Y0bpbsn4+DJ3LIL0JQYoU5UERU6o5X
+ hU4A3gMHY65rqIHkh6o7H3PTjMrguhzvDi6+mudROrSsn4kTrxnMb+2iWlg0Oi9Toy
+ GTdSuVhn9ywbkGnN4YQ9MNgFyqv8Bj2HIVu2vze78fc+dprUqGf+DXP2VQI2ti7VnB
+ aAvcm/GxeByLrHNI+NLcQni2Dg6i7nJolk2T8XZEsDNNTc4fONX9e45F5g4PtyjV5q
+ ACRBl0gno4wVxl8HrcAxd4pz5eRxtj5OzV4fKQVCtFrLFegEAxHCP+0p9inJSdnpvz
+ sYv+FDWBeozhw==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -56,15 +56,15 @@ Cc: Shawn Guo <shawnguo@kernel.org>, Fabio Estevam <festevam@gmail.com>,
  Stefan Agner <stefan@agner.ch>, Li Yang <leoyang.li@nxp.com>,
  kernel@pengutronix.de, linux-imx@nxp.com,
  linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/6] i.MX SoC update for 5.13
-Date: Wed, 31 Mar 2021 12:10:15 +0800
-Message-ID: <20210331041019.31345-2-shawnguo@kernel.org>
+Subject: [GIT PULL 3/6] i.MX DT bindings update for 5.13
+Date: Wed, 31 Mar 2021 12:10:16 +0800
+Message-ID: <20210331041019.31345-3-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210331041019.31345-1-shawnguo@kernel.org>
 References: <20210331041019.31345-1-shawnguo@kernel.org>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210331_051042_835693_AB34BCF3 
-X-CRM114-Status: UNSURE (   6.71  )
+X-CRM114-CacheID: sfid-20210331_051044_656915_E6DD4258 
+X-CRM114-Status: UNSURE (   6.81  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -82,7 +82,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210331041015.Kk-TfMk1W1YvxgoXlh4v8AjpKArGQRDB7fg8M1-mxsE@z>
+Message-ID: <20210331041016.45P3h_d1hrBHb1VgsA7gzun59-bmwMzLZsfZWyBGlsw@z>
 
 The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
@@ -90,27 +90,45 @@ The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-5.13
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindgins-5.13
 
-for you to fetch changes up to f21a468832f43fdc896e29d1ed8488ba45eeb630:
+for you to fetch changes up to 6634b2d252accd3fcdc94a5e0a1319009363892e:
 
-  ARM: imx: Kconfig: Fix typo in help (2021-03-15 12:21:59 +0800)
-
-----------------------------------------------------------------
-i.MX SoC update for 5.13:
-
-- A couple of typo fixes on help text and comment.
+  dt-bindings: arm: fsl: Add the reMarkable 2 e-Ink tablet (2021-03-29 09:42:11 +0800)
 
 ----------------------------------------------------------------
-Bhaskar Chowdhury (1):
-      ARM: mach-imx: Fix a spelling in the file pm-imx5.c
+i.MX bindings update for 5.13:
 
-Nobuhiro Iwamatsu (1):
-      ARM: imx: Kconfig: Fix typo in help
+- Add vendor prefix for reMarkable.
+- Add compatible for reMarkable 2 e-Ink tablet, Kontron pITX-imx8m
+  board, Engicam i.Core MX8M Mini devices.
+- Add compatbile 'fsl,imx8qm-mu' for i.MX mailbox bindings.
+- One correction on example clock-names in imx8qxp-lpcg bindings.
 
- arch/arm/mach-imx/Kconfig   | 2 +-
- arch/arm/mach-imx/pm-imx5.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+----------------------------------------------------------------
+Alistair Francis (2):
+      dt-bindings: Add vendor prefix for reMarkable
+      dt-bindings: arm: fsl: Add the reMarkable 2 e-Ink tablet
+
+Dong Aisheng (2):
+      dt-bindings: arm: fsl: add imx8qm boards compatible string
+      dt-bindings: mailbox: mu: add imx8qm support
+
+Heiko Thiery (1):
+      dt-bindings: arm: fsl: add Kontron pITX-imx8m board
+
+Jagan Teki (2):
+      dt-bindings: arm: fsl: Add Engicam i.Core MX8M Mini C.TOUCH 2.0
+      dt-bindings: arm: fsl: Add Engicam i.Core MX8M Mini EDIMM2.2 Starter Kit
+
+Peng Fan (1):
+      dt-bindings: clock: imx8qxp-lpcg: correct the example clock-names
+
+ Documentation/devicetree/bindings/arm/fsl.yaml           | 16 ++++++++++++++++
+ .../devicetree/bindings/clock/imx8qxp-lpcg.yaml          |  6 +++---
+ Documentation/devicetree/bindings/mailbox/fsl,mu.yaml    |  5 ++++-
+ Documentation/devicetree/bindings/vendor-prefixes.yaml   |  2 ++
+ 4 files changed, 25 insertions(+), 4 deletions(-)
 
 _______________________________________________
 linux-arm-kernel mailing list
