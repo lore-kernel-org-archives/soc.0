@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-23.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A494C433C1
-	for <soc@archiver.kernel.org>; Wed, 31 Mar 2021 04:10:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EB40C433C1
+	for <soc@archiver.kernel.org>; Wed, 31 Mar 2021 04:10:41 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id D5516619DA; Wed, 31 Mar 2021 04:10:38 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 15FF0619DB;
-	Wed, 31 Mar 2021 04:10:36 +0000 (UTC)
+	id 04BCB619E3; Wed, 31 Mar 2021 04:10:41 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 36DB8619DE;
+	Wed, 31 Mar 2021 04:10:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617163838;
-	bh=xVGwmuuaspcOA67NhO43yvUoxEK7fy/AwoBkld2KwUI=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=HZRf5KA5CO3T+jfxWwjCAbeqVMDnQsUytVDbeivzMCaXpSE99PQsHW9AFLdlHeLge
-	 RJUh5Vmz4XJ4+hQjG7X0oMeQVRo05EmNLJk42ci1vwv1yBK2D7qG9uJA0graST7TZs
-	 jYXWVLbYz2qJctW0uMTeT361YQ3kGNwwvmnUpxv82LMOmJKfvhcPt25Et5wY91VzCP
-	 xaUkOj8FPPaOYBmfzI7XhYlFx6N8sqp2zT2LX0p1lFFtqAxKFieR2dYOCvOaJlKzyH
-	 9+71KDMwPeUM776rBhgVGYXrP1LrtyNnDqszs4uiX81ps5Cz1IhrDUrZsHWBKXwAjv
-	 9yfAP+SQcJ2FA==
+	s=k20201202; t=1617163840;
+	bh=cfDWLfWZyaUvinkgMTUFtNENs54GRQ6bKrqYv61Q6ug=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=chqu+d6qkRUHvYuNn+73GQ6RNVEf1xCDjkC/fbAfVrU0GNx1Zf1d/z5W3KVrbWeea
+	 GpSsnbsE8SfA/gELmFTq8ri9wNTLFrD7GivkKQP/8I48pPdNc/+IsU09oMVc8UjcXX
+	 StWciQn6LDed2uYB/p9kXhs+yAYELDzLz3wZeTg9vTSi19cb1MrSUEkpkcKGK7bTGF
+	 zlWZDRwP6plcVcbklv+vxwrKE/ap/Ki9m4m6utJYXLLAarhfDxzsp4EscGOjkwQVpk
+	 8RNJINVCY9LGQWTKqQ6MdbR5SjNAPvlSzLqP5Di99mo5yZDWvo6ZNUBXnB+J0kNucy
+	 T1HhiWr9+7eOQ==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -34,10 +34,12 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/6] i.MX drivers change for 5.13
-Date: Wed, 31 Mar 2021 12:10:14 +0800
-Message-Id: <20210331041019.31345-1-shawnguo@kernel.org>
+Subject: [GIT PULL 2/6] i.MX SoC update for 5.13
+Date: Wed, 31 Mar 2021 12:10:15 +0800
+Message-Id: <20210331041019.31345-2-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210331041019.31345-1-shawnguo@kernel.org>
+References: <20210331041019.31345-1-shawnguo@kernel.org>
 
 The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
@@ -45,34 +47,24 @@ The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-5.13
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-5.13
 
-for you to fetch changes up to f63af5f3b8e2cba1b0b19b5cc4aa00d152f84599:
+for you to fetch changes up to f21a468832f43fdc896e29d1ed8488ba45eeb630:
 
-  firmware: imx: scu-pd: add missed ADC1 pd (2021-03-29 09:34:37 +0800)
-
-----------------------------------------------------------------
-i.MX drivers change for 5.13:
-
-- Update SCU power domain driver to keep console domain power on.
-- Add missing ADC1 power domain to SCU power domain driver.
-- Update comments for single global power domain in SCU power domain
-  driver.
-- Add i.MX51/i.MX53 unique id support to i.MX SoC driver.
+  ARM: imx: Kconfig: Fix typo in help (2021-03-15 12:21:59 +0800)
 
 ----------------------------------------------------------------
-Dong Aisheng (1):
-      firmware: imx: scu-pd: do not power off console domain
+i.MX SoC update for 5.13:
 
-Frank Li (1):
-      firmware: imx: scu-pd: add missed ADC1 pd
+- A couple of typo fixes on help text and comment.
 
-Sebastian Reichel (1):
-      soc: imx: add i.MX51/i.MX53 unique id support
+----------------------------------------------------------------
+Bhaskar Chowdhury (1):
+      ARM: mach-imx: Fix a spelling in the file pm-imx5.c
 
-Ulf Hansson (1):
-      firmware: imx: scu-pd: Update comments for single global power domain
+Nobuhiro Iwamatsu (1):
+      ARM: imx: Kconfig: Fix typo in help
 
- drivers/firmware/imx/scu-pd.c | 41 +++++++++++++++++++++++++++++++++++++----
- drivers/soc/imx/soc-imx.c     | 12 ++++++++++++
- 2 files changed, 49 insertions(+), 4 deletions(-)
+ arch/arm/mach-imx/Kconfig   | 2 +-
+ arch/arm/mach-imx/pm-imx5.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
