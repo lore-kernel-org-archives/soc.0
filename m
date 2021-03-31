@@ -1,62 +1,69 @@
-Return-Path: <SRS0=kYrm=I5=arndb.de=arnd@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42660C433C1
-	for <soc@archiver.kernel.org>; Wed, 31 Mar 2021 07:04:34 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 097B96024A; Wed, 31 Mar 2021 07:04:34 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2A5B361874;
-	Wed, 31 Mar 2021 07:04:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2A5B361874
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arnd@arndb.de
-Received: from mail-oi1-f174.google.com ([209.85.167.174]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mof1D-1lyuta0mfB-00p44U; Wed, 31 Mar 2021 09:04:31 +0200
-Received: by mail-oi1-f174.google.com with SMTP id w70so19156221oie.0;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8E2FC433DB
+	for <linux-devicetree@archiver.kernel.org>; Wed, 31 Mar 2021 07:05:15 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 7CD18619D6
+	for <linux-devicetree@archiver.kernel.org>; Wed, 31 Mar 2021 07:05:15 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S233823AbhCaHEm (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Wed, 31 Mar 2021 03:04:42 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:58179 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233822AbhCaHEc (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Wed, 31 Mar 2021 03:04:32 -0400
+Received: from mail-oi1-f178.google.com ([209.85.167.178]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MS4WT-1l4DVk00h1-00TW8J; Wed, 31 Mar 2021 09:04:31 +0200
+Received: by mail-oi1-f178.google.com with SMTP id v25so2473850oic.5;
         Wed, 31 Mar 2021 00:04:30 -0700 (PDT)
-X-Gm-Message-State: AOAM533rozYyMIlPvfnMeP279WSUnVw5IE9/AnwNfpbAWPCnwS/rT4fS
-	XcCUgOFKJxV9jchlVFeCrDtqbKwde6bCFgfYc6E=
+X-Gm-Message-State: AOAM532kXENdqjbCfHN0LlGNp5Khsr7EaA/a/rkUdBcRPGAII6lFD+O2
+        HP5+9WNskHDGsjTUtDaqQ/h5AQE5kjG9xgwzp9k=
 X-Google-Smtp-Source: ABdhPJyIeGbUukD8qVI5qDo309eo5AeCgLJups4xAzlxGTq91SBqwp+eFLRjPFEBheBw/OjFF0/PbS6AJI3aY8vgrtc=
 X-Received: by 2002:aca:5945:: with SMTP id n66mr1326284oib.11.1617174269552;
  Wed, 31 Mar 2021 00:04:29 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210331014603.2496983-1-danielwa@cisco.com>
 In-Reply-To: <20210331014603.2496983-1-danielwa@cisco.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 31 Mar 2021 09:04:15 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 31 Mar 2021 09:04:15 +0200
 X-Gmail-Original-Message-ID: <CAK8P3a1rbGPxjRiUTy3AKh4S9jqxk=SHoa9s0Z-3nhgQb3xJUw@mail.gmail.com>
 Message-ID: <CAK8P3a1rbGPxjRiUTy3AKh4S9jqxk=SHoa9s0Z-3nhgQb3xJUw@mail.gmail.com>
 Subject: Re: [PATCH] arm64: Add support for cisco craw64 ARMv8 SoCs
-To: Daniel Walker <danielwa@cisco.com>
+To:     Daniel Walker <danielwa@cisco.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Ofer Licht <olicht@cisco.com>, xe-linux-external@cisco.com, 
-	DTML <devicetree@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
+        SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Ofer Licht <olicht@cisco.com>, xe-linux-external@cisco.com,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:bz+Znq371hwhp71LPJWtwCd3D7TBKpZp6722Ywc4DTlaDPBPI7J
- th6no5H/2RV82I99+YgVzQ7/VT1L9bd95HHIPTrIHcGy6z31FA/kfYb0X98f8osfig3y6gu
- hPaQ1kjE9v+8sUWGn8/R/97cu64cigjnhTEbtZ++/L1iAWZkBftYrgRW7jJhVZTztb03dsJ
- KCJpC+QZkISrOxXp/sErw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:71Bw5tx1xqA=:4QUkidEscSfCNwLtiBiZ16
- HZgVVeLbCmUjqPTYIlMCZu0mRhjrDYyQntZ86en7tSKKLr5PFSja9mL43sGPHxGvrysQzEN7E
- CLWq2GDHs67S+Xgb/PYA//PGjACJaOwa9P/ERUjfy1+GEvoCpxHSTSBBHhQJks/u6f/Ki2IjH
- QUNNK05QdBsN56+FdCvud8KZuYJOYTpUIhcaIrsf3rl0SrTF0bmeM/FOYGr2pXyMs7ssz1dZc
- 2WPrS5SFU5FegmUR/KX6t1SQvRyrlOZxDC5WBLUrEbiA5Mo91qMtc7Lmub07jSitnVLLj6zSW
- +8VbP8WjZszPhTRXx0nyrQnKR3wkDH7G9XR2qhClpFpbuSN/w7+noEuSy8wUAA2E/eFylmKSa
- a4fA1pAP60nIBHCq2MrWVeCI+EmvjMcp0Fom4uUJ9n7Y6gJSC/FFdBrRYw0kp9iqqqylLcpj1
- /Bdw0lBNGiCas4V8YEsO2xlUHvWSL2k=
+X-Provags-ID: V03:K1:o/EEY1/Vtm32SERdad9YLFVAppq5PIL92vHYcN7ewwd5tfDpA3j
+ 6z55UMwmaLYrsKGYCc57TrMabjdm2lnRS4Uw9g9tc+6iHCgqz0QslEykOUosci7Z7uwDZNV
+ uJ2V/VYopYIiXCC4gkjKY6FLQU5aTo8eNDh9snrC+ehpQkafGP/M/SpaTPSe3c/+xejNfpL
+ azIVPpnv90Mjyz5FD52pw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hX9reeoEI60=:rN2p/4oAMgTL9I0T9Hliqo
+ 23U5a6h/NfRhZUDlD6nwYRouOHP7M8IWSWc9yNrtt5ex7uLIC9KikKsambXqpmamR+SSxL5Zz
+ HmT1hSGY0kLwX7lvjMM2iTKipMyhCWnUeNm9dNfzKNj9P7Ug45dNWFhJvPELvrdB7nnMcU8bP
+ zrnbbKHen6iBlkW3gLcQOEOjNmPFXNVSsJtfrIrOWmBeQ0L5lbSg2I2kh8xH74teqQYDPwydg
+ pGXLrmjahJLrkhtlsmzyFXheHTjaQpyA7F160sKG3iOfe7Oo5j5utV5Op7/hBps/OJu4ADYoV
+ Soz4dAlg3q314l/5Gy6fplFbTwO4CwHLajmJu1yxBOECaT6HPOvYKgPANvWnq2y1mMKLdoNRQ
+ m7rj2gQ7s/9pCXoG/vGs5+c1L58wecYpdvUEbQ9OP9iyO85+SZts+8AKihREk0iKvj1iPJGFB
+ vqWUakkaenuuKOpzeXMNIX31VkZdEWQ=
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210331070415.1FOanSyJsvtM3nTzlsjyqunVvcXieFnegazUzdWH0UQ@z>
 
 On Wed, Mar 31, 2021 at 3:46 AM Daniel Walker <danielwa@cisco.com> wrote:
 > From: Ofer Licht <olicht@cisco.com>
