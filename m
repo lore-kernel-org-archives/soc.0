@@ -1,33 +1,61 @@
-Return-Path: <robh+dt@kernel.org>
+Return-Path: <SRS0=X/nU=I5=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5182C43460
-	for <soc@archiver.kernel.org>; Wed, 31 Mar 2021 15:06:30 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id B41E36101D; Wed, 31 Mar 2021 15:06:30 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3BF246100C;
-	Wed, 31 Mar 2021 15:06:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 215B1C433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 15:08:20 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 8B59B60725
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 15:08:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8B59B60725
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
+	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=kfjS3X7H37Clh/AFv1kYW/XntWLUYWozkL/e6fVF+yg=; b=mpOMMr6nPXDh8cILrc9FpxNkP
+	JpPdoNMVE6dFawPPp5cvVrz+iBNStiiaellrc0+DP4DgCOI4k2t0iJv0SxfMS5gbZBlzPqbbah2hV
+	kZjzlzb3rV2lEvC94gFJTGoUFqIwB0rosRlL+pqxKRV8IXveuwTtMUnecvBq5A6u8S27v7lXzEVG8
+	AhW72XVDxRxCt1mmOgLyy8Ktdqhu42PMn+KP6GmwHBU2CteSouhPth59KsPQ3JkZo3jmRGl078ekr
+	I2oneKDSqooUXy05/BjxPAVjWo6j/qeuoqFCmOCbVA+FfKGSh5q8AjTNfHlmb3Qqfbc4F54BY5N1+
+	ckDxIMcZg==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lRcQY-006rg2-KL; Wed, 31 Mar 2021 15:06:38 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lRcQS-006rfA-1c
+ for linux-arm-kernel@lists.infradead.org; Wed, 31 Mar 2021 15:06:34 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2814A61008
+ for <linux-arm-kernel@lists.infradead.org>;
+ Wed, 31 Mar 2021 15:06:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617203190;
-	bh=dKpWjwcpYFhBw0dAY3i32wSpMmPAxB8UmPTzWNX8Xoc=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=m4QiMVMwIq+LeYJoCD7VO5eF9FdtmSc0ebh3ay+ETkJ6ykDMRK7sq8kfoBdHOhcBp
-	 125IeW4ZFo8a7+tSyCUS1leKa9Vg/eVD/lNXB+QSU3FRgFgX6u00O5SgmhAqm7DET3
-	 6C7iKFTUTb9dQMrrV2013dDL7xSlFJ6LGKs+OHutSxPzPOmuSTQ41KQ90kwT0hVnCy
-	 kiDsI0WfSawYWhZg0hpiZaUG2OOjTkXHRZ0tSe6+9LJQawMUT4LkmERLHz4POsioSP
-	 MCYXMQVPkYNjuFM4TkpUbhf7Ib+ItmMU4t/mtocAGWIjAVrXdd5IWvwM+r/3iwWhti
-	 cMuzOWO8ib8Lw==
-Received: by mail-ej1-f50.google.com with SMTP id u21so30523882ejo.13;
-        Wed, 31 Mar 2021 08:06:30 -0700 (PDT)
-X-Gm-Message-State: AOAM533AMq+TBFMnl5MJsutKinJ0pHygFlvRzZ6FR510pz0w6QNNSm45
-	pR+YtAvIYKBOmZlTVTpDsl0MeT0DiCwkPZQjyg==
+ s=k20201202; t=1617203190;
+ bh=dKpWjwcpYFhBw0dAY3i32wSpMmPAxB8UmPTzWNX8Xoc=;
+ h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+ b=m4QiMVMwIq+LeYJoCD7VO5eF9FdtmSc0ebh3ay+ETkJ6ykDMRK7sq8kfoBdHOhcBp
+ 125IeW4ZFo8a7+tSyCUS1leKa9Vg/eVD/lNXB+QSU3FRgFgX6u00O5SgmhAqm7DET3
+ 6C7iKFTUTb9dQMrrV2013dDL7xSlFJ6LGKs+OHutSxPzPOmuSTQ41KQ90kwT0hVnCy
+ kiDsI0WfSawYWhZg0hpiZaUG2OOjTkXHRZ0tSe6+9LJQawMUT4LkmERLHz4POsioSP
+ MCYXMQVPkYNjuFM4TkpUbhf7Ib+ItmMU4t/mtocAGWIjAVrXdd5IWvwM+r/3iwWhti
+ cMuzOWO8ib8Lw==
+Received: by mail-ej1-f54.google.com with SMTP id w3so30608655ejc.4
+ for <linux-arm-kernel@lists.infradead.org>;
+ Wed, 31 Mar 2021 08:06:30 -0700 (PDT)
+X-Gm-Message-State: AOAM532ioLaRyhGAWL5U62rFNnnb4Q1PQvXFQ+Ng/YgRegozoCJFneJW
+ 0bsrpDm4zvRYrlsfIT6kTOwARtuUF2zeukijMA==
 X-Google-Smtp-Source: ABdhPJzDJV3a948WfO2R2rJf+FY8BDlMUyLvgQwANhqqxHGpfWbEhaEOEl1UpOJ0TYRzYWvBbyRHtsIGs7lceEN+TmY=
-X-Received: by 2002:a17:906:d153:: with SMTP id br19mr3940394ejb.360.1617203188591;
+X-Received: by 2002:a17:906:d153:: with SMTP id
+ br19mr3940394ejb.360.1617203188591; 
  Wed, 31 Mar 2021 08:06:28 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210331014603.2496983-1-danielwa@cisco.com>
@@ -40,11 +68,31 @@ Subject: Re: [PATCH] arm64: Add support for cisco craw64 ARMv8 SoCs
 To: Daniel Walker <danielwa@cisco.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
-	Ofer Licht <olicht@cisco.com>, xe-linux-external@cisco.com, devicetree@vger.kernel.org, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ SoC Team <soc@kernel.org>, 
+ Ofer Licht <olicht@cisco.com>, xe-linux-external@cisco.com,
+ devicetree@vger.kernel.org, 
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210331_160632_453990_125870EC 
+X-CRM114-Status: GOOD (  20.90  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210331150615.pIUyb_qO6afcw-HVaDnwr9LqalFDNwtXQaA0wSJZ4hs@z>
 
 On Tue, Mar 30, 2021 at 8:46 PM Daniel Walker <danielwa@cisco.com> wrote:
 >
@@ -827,3 +875,8 @@ DWC controller needs a 'dbi' region.
 > --
 > 2.25.1
 >
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
