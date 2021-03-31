@@ -1,56 +1,101 @@
-Return-Path: <SRS0=1Wsg=I5=gmail.com=robherring2@kernel.org>
+Return-Path: <SRS0=X/nU=I5=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58E00C433B4
-	for <soc@archiver.kernel.org>; Wed, 31 Mar 2021 13:41:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 3940E6198F; Wed, 31 Mar 2021 13:41:05 +0000 (UTC)
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68AAEC433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 13:43:30 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F276561989;
-	Wed, 31 Mar 2021 13:41:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F276561989
+	by mail.kernel.org (Postfix) with ESMTPS id 06FED61A38
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 13:43:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 06FED61A38
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=robherring2@gmail.com
-Received: by mail-ot1-f42.google.com with SMTP id g8-20020a9d6c480000b02901b65ca2432cso18957592otq.3;
-        Wed, 31 Mar 2021 06:41:04 -0700 (PDT)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:MIME-Version:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:Message-Id:Date:Subject:References:In-Reply-To:Cc:To
+	:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	bh=DthOM0pk/2AMqCljIroHII+KrM79yUwoVN2kTWGhHio=; b=bVUmcsMlxt4dF3Fbm8A2T9f4HJ
+	rsks17RKQ/Ne8FXxxJwf1N+hiFwapBGmMKdzQMEnyfNEw8horUBF14ole5WG11ZJvHarI4N28NaLg
+	luwIer0iQgm/B5evri5wvrtMgUEkj3YdaO+TP9LZ1lWCyJ84yuQ0ePlLatPY3NVK9y67k8l/CUDMN
+	mDvwzyMeJ5uQNbJTWwV0Fjjucyd3+JwaqDgg3utXUubF4aHo9vp8e4LFufANrR0TKZXPEGVPYiY79
+	8dmjelpwy+pnplFmQxvLAm/e2VG24wIgQy220MVlXR8F3Ec5DsP7rVwgXc6gtYXBKCNkOqhHbJV5k
+	L11U8bEg==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lRb5r-006h9k-8m; Wed, 31 Mar 2021 13:41:11 +0000
+Received: from mail-ot1-f54.google.com ([209.85.210.54])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lRb5l-006h3M-H2
+ for linux-arm-kernel@lists.infradead.org; Wed, 31 Mar 2021 13:41:07 +0000
+Received: by mail-ot1-f54.google.com with SMTP id
+ w21-20020a9d63950000b02901ce7b8c45b4so18951636otk.5
+ for <linux-arm-kernel@lists.infradead.org>;
+ Wed, 31 Mar 2021 06:41:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=aTBIHPsVXRONiKFVCQ4rm5968LVQVqkaiMrcfjuQapw=;
-        b=DKnG9Fmo6iAht3XNSgQMJdQque1xYxQKsqTKKno8RRklYLrmiE99yHSbt4/IQ4EUAr
-         ZKrsv1HeyZrMFguTfsIUUUKY9t8c1BYHXLPBsS3fdTrvPfvJazRmIbYPCLqFAdtc+Iac
-         0aI33MDfH+D8E8P5mF+9k4mSyZnstLfY7oynMTpoppom+chbztPcGcv2iJU4pAif6TOB
-         YzMluu9RcFfJr+jBMJa23oni9BMIgh8vsaqYBR1h1yTKfFpA5Bww1YSX2irpmEpS/Tll
-         QFrCgvQIyX8ZFdQ/qDDVoGMUfHqyV9t2lGVgn0349lcStUkpm/MHhOlj7DW9m2kNFw7k
-         UfMQ==
-X-Gm-Message-State: AOAM530WpNpzEG8Mqv94H+EDKc1/Ho4bzlbUgK4F3XGAbytDpaUXU9cA
-	7Hgi6Ldf/oajBqo6HTZn3w==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+ :message-id;
+ bh=aTBIHPsVXRONiKFVCQ4rm5968LVQVqkaiMrcfjuQapw=;
+ b=oGEZyYMtYqbSTx2sb6w2qt12uKUGddmLg55NDQ37Z//4GqXCsvTsQS0/d4XaY0YiZ+
+ 5am3NhOf5wqnzIHFDFIzQ4VoNVTurrKO06TdTK8zseVA+PKDzGHGCu5MjTI15wNoZwx7
+ biUshP8FFljcMhdonMi1gP+6Ua/S0/CKAX2qec956jqHjiYP90F6l3eBHFisH51znwqq
+ 9+HoMB74hZnpf4IeWXCF2udo4yzSS5SVu1GPmSE88xrcGPtnlTqCInOawNPupk/XCf/x
+ cwYKvBob9S2fKGRgq1VTuFZ0oN/9V8VPD520HAN9p/x8oLsxlWn3UYGUu6OHez0JFTcZ
+ FyQw==
+X-Gm-Message-State: AOAM530lprkX8ZQA2+pROGDfj546cWf56wD10vtWSZ19qPOFDuYy4lht
+ /r6uhXlr+eD/XgV4QH7UfUIOP9/KjQ==
 X-Google-Smtp-Source: ABdhPJzy3SsAO2JNoicePD84R9N8XZFDjn1ywgiPiF4SS2F2kCj3aGWUxkXkHIoNeDi+ORtuPIFuGw==
-X-Received: by 2002:a05:6830:1658:: with SMTP id h24mr2573272otr.263.1617198064313;
-        Wed, 31 Mar 2021 06:41:04 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id l26sm474234otd.21.2021.03.31.06.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Mar 2021 06:41:03 -0700 (PDT)
+X-Received: by 2002:a05:6830:1658:: with SMTP id
+ h24mr2573272otr.263.1617198064313; 
+ Wed, 31 Mar 2021 06:41:04 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net.
+ [24.155.109.49])
+ by smtp.gmail.com with ESMTPSA id l26sm474234otd.21.2021.03.31.06.41.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 31 Mar 2021 06:41:03 -0700 (PDT)
 Received: (nullmailer pid 2074859 invoked by uid 1000);
-	Wed, 31 Mar 2021 13:40:59 -0000
+ Wed, 31 Mar 2021 13:40:59 -0000
 From: Rob Herring <robh@kernel.org>
 To: Daniel Walker <danielwa@cisco.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Ofer Licht <olicht@cisco.com>, Rob Herring <robh+dt@kernel.org>, xe-linux-external@cisco.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, soc@kernel.org, Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org, Olof Johansson <olof@lixom.net>, Catalin Marinas <catalin.marinas@arm.com>, Arnd Bergmann <arnd@arndb.de>
+Cc: Ofer Licht <olicht@cisco.com>, Rob Herring <robh+dt@kernel.org>,
+ xe-linux-external@cisco.com, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, soc@kernel.org, Will Deacon <will@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, Olof Johansson <olof@lixom.net>,
+ Catalin Marinas <catalin.marinas@arm.com>, Arnd Bergmann <arnd@arndb.de>
 In-Reply-To: <20210331014603.2496983-1-danielwa@cisco.com>
 References: <20210331014603.2496983-1-danielwa@cisco.com>
 Subject: Re: [PATCH] arm64: Add support for cisco craw64 ARMv8 SoCs
 Date: Wed, 31 Mar 2021 08:40:59 -0500
-Message-Id: <1617198059.598213.2074858.nullmailer@robh.at.kernel.org>
+Message-ID: <1617198059.598213.2074858.nullmailer@robh.at.kernel.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210331_144105_595619_974DFEBB 
+X-CRM114-Status: GOOD (  15.89  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210331134059.M5cSM09JNprBUz7GL6i_T8LJBpzi42HibTPyjESSeAY@z>
 
 On Tue, 30 Mar 2021 18:46:02 -0700, Daniel Walker wrote:
 > From: Ofer Licht <olicht@cisco.com>
@@ -197,3 +242,8 @@ pip3 install dtschema --upgrade
 
 Please check and re-submit.
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
