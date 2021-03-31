@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-22.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB598C433DB
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 04:12:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67389C433DB
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 04:12:37 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 69B0A619E2
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 04:12:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 69B0A619E2
+	by mail.kernel.org (Postfix) with ESMTPS id 07C54619DE
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 31 Mar 2021 04:12:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 07C54619DE
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
 	:Content-Type:MIME-Version:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Message-Id:Date:Subject:Cc:To:From:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=hfiQen949fMiSE0BnJfFhM0AkZ+X8ER28eFbCg+BV+o=; b=L8lVyocAozb5EgizF7VO5fV2I0
-	t+zOOguue12duybNVhPnl9nY7JyXGDu5Sm7B60gGPjCQTlj3wur0RX0aNbS9mJP0uklXRLIthecs3
-	glTFcGseFwhNhT+by4Y7Ra0P//BGvNfnsexzHFgZ5hSVi72AcIWLGRiCjVd4ibzaXa0tp8TXYxoC6
-	uTTfgTZkuZ0T9H4a5D8tn7JRE1P/k5+1bWU9YV05fphT4Ctc9Om/XFqqi7FoCTASUcR+lRptqNHtT
-	SNZaUDe7p90t88aoI3G1TyCm2SnF6NLZl63Mb7RhyRSo8jLLJMgKcXB7RvqgNAwEM1eRwkVJ2d3Nt
-	uk3nilWw==;
+	List-Unsubscribe:List-Id:References:In-Reply-To:Message-Id:Date:Subject:Cc:To
+	:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	bh=LHH0Y7n3t965u6Xa0tjCjGsdDOJvSGxryD7CsgOlMJA=; b=OJ2vGr6sOsxnIMMHmIBH1t2U+S
+	uBdH0zgVW7z+Di6bf4n/D9ghmGc98TyP5zo6pbpYtGWz3MeyhBXCram6lOdNjcKpTlScum56Gmzc1
+	87PRlkjYxqDkZJ+SdgAOR0XrxSp0mhFzAL7p8mImFdfTz3+uJyejAeWsYVwp+IlTnQ2DoAEBmBjsD
+	8y6mz5sd3ehBlFK8nqM6lr8Q7B7hLhnNNnUD/oTe+Wzt8dukVEqnE8Oc/RO1DVAmnR7P7RThomM4Z
+	6jme+1LsesFi5gMPAjQGRlNjbP6bxcTAu6emFw91DzyRt26e0mKHMKmUL3B57CS6oIacPN3eoKSdY
+	ziELOSdA==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lRSBr-005R18-F3; Wed, 31 Mar 2021 04:10:47 +0000
+	id 1lRSC3-005R2N-A8; Wed, 31 Mar 2021 04:10:59 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lRSBm-005R0J-8X
+ id 1lRSBm-005R0L-8X
  for linux-arm-kernel@lists.infradead.org; Wed, 31 Mar 2021 04:10:44 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 15FF0619DB;
- Wed, 31 Mar 2021 04:10:36 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 36DB8619DE;
+ Wed, 31 Mar 2021 04:10:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1617163838;
- bh=xVGwmuuaspcOA67NhO43yvUoxEK7fy/AwoBkld2KwUI=;
- h=From:List-Id:To:Cc:Subject:Date:From;
- b=HZRf5KA5CO3T+jfxWwjCAbeqVMDnQsUytVDbeivzMCaXpSE99PQsHW9AFLdlHeLge
- RJUh5Vmz4XJ4+hQjG7X0oMeQVRo05EmNLJk42ci1vwv1yBK2D7qG9uJA0graST7TZs
- jYXWVLbYz2qJctW0uMTeT361YQ3kGNwwvmnUpxv82LMOmJKfvhcPt25Et5wY91VzCP
- xaUkOj8FPPaOYBmfzI7XhYlFx6N8sqp2zT2LX0p1lFFtqAxKFieR2dYOCvOaJlKzyH
- 9+71KDMwPeUM776rBhgVGYXrP1LrtyNnDqszs4uiX81ps5Cz1IhrDUrZsHWBKXwAjv
- 9yfAP+SQcJ2FA==
+ s=k20201202; t=1617163840;
+ bh=cfDWLfWZyaUvinkgMTUFtNENs54GRQ6bKrqYv61Q6ug=;
+ h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=chqu+d6qkRUHvYuNn+73GQ6RNVEf1xCDjkC/fbAfVrU0GNx1Zf1d/z5W3KVrbWeea
+ GpSsnbsE8SfA/gELmFTq8ri9wNTLFrD7GivkKQP/8I48pPdNc/+IsU09oMVc8UjcXX
+ StWciQn6LDed2uYB/p9kXhs+yAYELDzLz3wZeTg9vTSi19cb1MrSUEkpkcKGK7bTGF
+ zlWZDRwP6plcVcbklv+vxwrKE/ap/Ki9m4m6utJYXLLAarhfDxzsp4EscGOjkwQVpk
+ 8RNJINVCY9LGQWTKqQ6MdbR5SjNAPvlSzLqP5Di99mo5yZDWvo6ZNUBXnB+J0kNucy
+ T1HhiWr9+7eOQ==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -56,13 +56,15 @@ Cc: Shawn Guo <shawnguo@kernel.org>, Fabio Estevam <festevam@gmail.com>,
  Stefan Agner <stefan@agner.ch>, Li Yang <leoyang.li@nxp.com>,
  kernel@pengutronix.de, linux-imx@nxp.com,
  linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/6] i.MX drivers change for 5.13
-Date: Wed, 31 Mar 2021 12:10:14 +0800
-Message-ID: <20210331041019.31345-1-shawnguo@kernel.org>
+Subject: [GIT PULL 2/6] i.MX SoC update for 5.13
+Date: Wed, 31 Mar 2021 12:10:15 +0800
+Message-ID: <20210331041019.31345-2-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210331041019.31345-1-shawnguo@kernel.org>
+References: <20210331041019.31345-1-shawnguo@kernel.org>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210331_051042_610277_91F1B604 
-X-CRM114-Status: UNSURE (   5.15  )
+X-CRM114-CacheID: sfid-20210331_051042_835693_AB34BCF3 
+X-CRM114-Status: UNSURE (   6.71  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -80,7 +82,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210331041014.e01ze0Vu2A3mJkuwrFmk-kZj3jctHdAB_l8759HJdAs@z>
+Message-ID: <20210331041015.Kk-TfMk1W1YvxgoXlh4v8AjpKArGQRDB7fg8M1-mxsE@z>
 
 The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
@@ -88,37 +90,27 @@ The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-5.13
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-5.13
 
-for you to fetch changes up to f63af5f3b8e2cba1b0b19b5cc4aa00d152f84599:
+for you to fetch changes up to f21a468832f43fdc896e29d1ed8488ba45eeb630:
 
-  firmware: imx: scu-pd: add missed ADC1 pd (2021-03-29 09:34:37 +0800)
-
-----------------------------------------------------------------
-i.MX drivers change for 5.13:
-
-- Update SCU power domain driver to keep console domain power on.
-- Add missing ADC1 power domain to SCU power domain driver.
-- Update comments for single global power domain in SCU power domain
-  driver.
-- Add i.MX51/i.MX53 unique id support to i.MX SoC driver.
+  ARM: imx: Kconfig: Fix typo in help (2021-03-15 12:21:59 +0800)
 
 ----------------------------------------------------------------
-Dong Aisheng (1):
-      firmware: imx: scu-pd: do not power off console domain
+i.MX SoC update for 5.13:
 
-Frank Li (1):
-      firmware: imx: scu-pd: add missed ADC1 pd
+- A couple of typo fixes on help text and comment.
 
-Sebastian Reichel (1):
-      soc: imx: add i.MX51/i.MX53 unique id support
+----------------------------------------------------------------
+Bhaskar Chowdhury (1):
+      ARM: mach-imx: Fix a spelling in the file pm-imx5.c
 
-Ulf Hansson (1):
-      firmware: imx: scu-pd: Update comments for single global power domain
+Nobuhiro Iwamatsu (1):
+      ARM: imx: Kconfig: Fix typo in help
 
- drivers/firmware/imx/scu-pd.c | 41 +++++++++++++++++++++++++++++++++++++----
- drivers/soc/imx/soc-imx.c     | 12 ++++++++++++
- 2 files changed, 49 insertions(+), 4 deletions(-)
+ arch/arm/mach-imx/Kconfig   | 2 +-
+ arch/arm/mach-imx/pm-imx5.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 _______________________________________________
 linux-arm-kernel mailing list
