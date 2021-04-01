@@ -1,82 +1,60 @@
-Return-Path: <SRS0=CMgu=I5=milecki.pl=rafal@kernel.org>
+Return-Path: <sboyd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7377C433ED
-	for <soc@archiver.kernel.org>; Wed, 31 Mar 2021 22:52:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC3ABC433B4
+	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 01:32:30 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 7838F61056; Wed, 31 Mar 2021 22:52:29 +0000 (UTC)
-X-Greylist: delayed 2398 seconds by postgrey-1.34 at mail.kernel.org; Wed, 31 Mar 2021 22:52:28 UTC
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6EC0D61007
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=milecki.pl
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=rafal@milecki.pl
-Received: from 2.mo4.mail-out.ovh.net (2.mo4.mail-out.ovh.net [46.105.72.36])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6EC0D61007
-	for <soc@kernel.org>; Wed, 31 Mar 2021 22:52:28 +0000 (UTC)
-Received: from player750.ha.ovh.net (unknown [10.110.103.2])
-	by mo4.mail-out.ovh.net (Postfix) with ESMTP id B483B27074F
-	for <soc@kernel.org>; Wed, 31 Mar 2021 23:36:38 +0200 (CEST)
-Received: from RCM-web7.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-	(Authenticated sender: rafal@milecki.pl)
-	by player750.ha.ovh.net (Postfix) with ESMTPSA id E05C21C91F28D;
-	Wed, 31 Mar 2021 21:36:30 +0000 (UTC)
+	id 465086108B; Thu,  1 Apr 2021 01:32:30 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 07DFB61002;
+	Thu,  1 Apr 2021 01:32:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1617240750;
+	bh=1pKzTV1rSUrVvS8ear40uiy8cJ8WKDAJLPyT943wPt8=;
+	h=In-Reply-To:References:Subject:From:Cc:List-Id:To:Date:From;
+	b=hvo7booBTicx2YIuvBa7JRSRk0xF8QRfxoGJ3xNaNqQ8zq8B+UmUzLVFKDrWXTMIQ
+	 5mNS68qGD9DQ3jx/uyCrPb4LVl1df+SxgejeKfjUHfxmdjA18EQ05wNcbvIZK4R704
+	 Wcxfx7rJ261yGmN/zMOtkk4qnoGgvundVPRSle/8o7dGVBxcvDz1Y4O42a4T3miNSl
+	 XDLFdd40T+chnxyKFRFxRpH37H1DzCE7Fcd+BejN3wuotFFNSfnuNsMAdFNc+wnB7k
+	 GAsd6EXeWHsR8l2Clm7zPhAYjRwUfVYGM+CObn7h3VsUnDMHahts5uvIoefxjMzNIO
+	 Fp3We/0p0LExQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Date: Wed, 31 Mar 2021 23:36:30 +0200
-From: =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To: Florian Fainelli <f.fainelli@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210311152545.1317581-2-krzysztof.kozlowski@canonical.com>
+References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com> <20210311152545.1317581-2-krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH v3 01/15] clk: socfpga: allow building N5X clocks with ARCH_N5X
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org, arnd@arndb.de,
- olof@lixom.net, khilman@kernel.org, bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [GIT PULL 1/3] Broadcom devicetree changes for 5.13
-In-Reply-To: <20210330184006.1451315-1-f.fainelli@gmail.com>
-References: <20210330184006.1451315-1-f.fainelli@gmail.com>
-User-Agent: Roundcube Webmail/1.4.10
-Message-ID: <498a63cbc96cd52210260e6d0229ad74@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 16962245047560146671
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrudeivddgudeijecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeggfffhvffujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeeutdfhveehfeduudfftdeigfejuddtvedvledvjefhjeejhfekueelvedvkeelgeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejhedtrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorhhg
-Message-ID: <20210331213630.teHq9gSaKk95y59FfzplXRng8IkQP8-Tpn4ee9FADoA@z>
+To: Alexandre Torgue <alexandre.torgue@st.com>, Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>, David S. Miller <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, Giuseppe Cavallaro <peppe.cavallaro@st.com>, Jakub Kicinski <kuba@kernel.org>, James Morse <james.morse@arm.com>, Jose Abreu <joabreu@synopsys.com>, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, Lee Jones <lee.jones@linaro.org>, Michael Turquette <mturquette@baylibre.com>, Moritz Fischer <mdf@kernel.org>, Olof Johansson <olof@lixom.net>, Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh+dt@kernel.org>, Robert Richter <rric@kernel.org>, Russell King <linux@armlinux.org.uk>, Tom Rix <trix@redhat.com>, Tony Luck <tony.luck@intel.com>, Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>, devicetree@vger.kernel.org, dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, linux-edac@vger.kernel.org, lin
+ ux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org, soc@kernel.org
+Date: Wed, 31 Mar 2021 18:32:28 -0700
+Message-ID: <161724074854.2260335.2479133227977254546@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 
-On 2021-03-30 20:40, Florian Fainelli wrote:
-> The following changes since commit 
-> fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
-> 
->   Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://github.com/Broadcom/stblinux.git 
-> tags/arm-soc/for-5.13/devicetree
-> 
-> for you to fetch changes up to 
-> dcb56d61d5a8acca0a357cc603397bc0272ce4cb:
-> 
->   ARM: dts: BCM5301X: Set Linksys EA9500 power LED (2021-03-29 11:43:45 
-> -0700)
+Quoting Krzysztof Kozlowski (2021-03-11 07:25:31)
+> The Intel's eASIC N5X (ARCH_N5X) architecture shares a lot with Agilex
+> (ARCH_AGILEX) so it uses the same socfpga_agilex.dtsi, with minor
+> changes.  Also the clock drivers are the same.
+>=20
+> However the clock drivers won't be build without ARCH_AGILEX.  One could
+> assume that ARCH_N5X simply depends on ARCH_AGILEX but this was not
+> modeled in Kconfig.  In current stage the ARCH_N5X is simply
+> unbootable.
+>=20
+> Add a separate Kconfig entry for clocks used by both ARCH_N5X and
+> ARCH_AGILEX so the necessary objects will be built if either of them is
+> selected.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
 
-This one seems a bit confusing.
+Acked-by: Stephen Boyd <sboyd@kernel.org>
 
-Command:
-git log arm-soc/for-5.13/devicetree
-shows me only 2 of mentioned commits
-
-Web UI:
-https://github.com/Broadcom/stblinux/releases/tag/arm-soc%2Ffor-5.13%2Fdevicetree
-references dcb56d6 but opening it shows page with a warning:
-"This commit does not belong to any branch on this repository, and may 
-belong to a fork outside of the repository."
-
-My guess if you didn't push your local devicetree/next branch.
+FYI, Dinh sent some patches to change socfpga code to use clk_hw so it
+may conflict.
