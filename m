@@ -1,111 +1,81 @@
-Return-Path: <SRS0=UN2r=I6=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=cELQ=I6=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+X-Spam-Status: No, score=-22.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 851C9C433ED
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:28:18 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D933DC433B4
+	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 17:49:55 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A7859610A0; Thu,  1 Apr 2021 17:49:55 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 288F8613B1
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:28:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 288F8613B1
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=jrhzEh/WFLc9GwS34+zRUDe8+MUwK/J7h4sBrovFZnA=; b=e7cwigPwWq7aznUuNouL/5+2H
-	/M3wEk4MGHO8l11rKbZKH1ZUQiJ894JLF0S8vJvMhLOB1z7NWPgoRjnFKtvXiD+HoEws9t3XR4Ntu
-	zspXzjTKppg3xq3gB2aXnMKbzA4ZOhPYo8ndTaGeldIW6Ic0BrBWBoi8H0sM1JDEJSU5A0iFnazcu
-	1JwrxiGEtwiJiunM06Hcef8RQhgL90G1/fq3p++kxzb2eiP2CaA3QRHbi69lbfNrsKM4Fnx2/SSN2
-	+Ib5asSAnUC8o/fLaRzkhvdYNDuJOhLn44n4+Nkspi/6mKvYbTrEntJRCYU+3nt1zoMiCPGN/K/Zk
-	g8dRtjJTg==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lS15w-00AWBa-HM; Thu, 01 Apr 2021 17:27:00 +0000
-Received: from mail-ed1-x534.google.com ([2a00:1450:4864:20::534])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lS155-00AVx8-K1
- for linux-arm-kernel@lists.infradead.org; Thu, 01 Apr 2021 17:26:11 +0000
-Received: by mail-ed1-x534.google.com with SMTP id bf3so2815454edb.6
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 01 Apr 2021 10:26:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=KFyIg8syNYPFzhmphZGsN0/P5BjL76RGwMywZZQhQ6c=;
- b=nvTC5y589Fz/gj87Pv5YA9OmIoYiI3vwoAOpWITntQYOll/KEaz8X20wO9hoVRcw4E
- chE8IvLnNqOcIC+3TaSeWXe3FXsM7JOmQTtn+/q74qyh73IlvDC2rItOxKi76eRm0R5J
- uczD62U9ZYoncx4VbDAWzo7Bk4XfQn8RSFWfY9wgqXWLytg3h69vztqRHUsgs/UamSEW
- fFeNsREl325yllSCy9MMzuv4eYJXvsikbgegvtSeAnicVNDrSgkyVTBVWTNv3WYmvCQc
- w3ZbV0OzLDnv/enXIqlfLqmfMVvmK+ut14Vq1RL/jnVz2SYCiIvRrrUdBIqpBC74CZYG
- krtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=KFyIg8syNYPFzhmphZGsN0/P5BjL76RGwMywZZQhQ6c=;
- b=dczVg5GLKFPhTONONZ4sicjUvkoHPgBzZfUOQSU8GurF7gdXvT1IvhzriMAxkhPsjk
- iY0G7W/vS9Zsa69BiIILUuaaEJsElhM7cyvyvNQKrCsKq+h5bE39jb6KChdEiju3MC2k
- cNazOEEhwwWsI/PSjKqQZzJizr+pczvhzp+CyARdGho44SaIWoVgAPps2luSyNFlQOsk
- uEiOWcw9T+HAaiO4CcII4ddi1wqs7AoKPx95xneSb2sHKP/IaSdRkL9FAJWtmfOhuRce
- X3ZIgZ3GgbG9do31kHEWhPA1xbZ+gg5MRfaR63QjEZ1vQgluh7Ug+xFC4nTsOd9OWYS9
- t1RA==
-X-Gm-Message-State: AOAM532y49oHLTuwIpNDKVYictW4mkCHI9g4Hdig2X+WQXdZsaDRy1ly
- /Rw53qBceieq34tScb+MkZU=
-X-Google-Smtp-Source: ABdhPJzHLEVoJiG2OIvfg61ZJ+n48ibWJdHJA6V35LhUTvqh/mUPrd8q/IsIyh5iDD/AyxbRLrbR3A==
-X-Received: by 2002:aa7:c1d5:: with SMTP id d21mr10816258edp.167.1617297967004; 
- Thu, 01 Apr 2021 10:26:07 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
- by smtp.gmail.com with ESMTPSA id hb19sm3045144ejb.11.2021.04.01.10.26.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 01 Apr 2021 10:26:05 -0700 (PDT)
-From: Thierry Reding <thierry.reding@gmail.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 5223460234;
+	Thu,  1 Apr 2021 17:49:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5223460234
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=Nicolas.Ferre@microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1617299395; x=1648835395;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=t+Damo6lBLTec0MqdYsAZG21XEfwTrUjDwnQIVPgrfg=;
+  b=C1JlNayVuothxW5Q1zNAHSzT0JD30HKCQPhNeuKTGYc50akr8tkSDhw/
+   DBlb/E7liLuR7h+QsxCVIgr6q/sN4sbxqa95P09nsNDm7Hn0v1Hm18vtg
+   8trrijmPoY2ZUR4LDI3WlATK2R+9SHIcdKJ0Qsv341i6gkbC/CQp6wm2d
+   8vwB5AFsjJohHMvxOSN7OpnYK9I3ELl492RtBibORU4yj0JEArNP9Oah3
+   vC3SjYP0y8LpHbcLvAWCzVAa9MHrV4dvL65tJIjRWW5LnepfnDy8KbDWq
+   Z6R9JI1R8HsPR+ci1E1ZHSQSsjdRbsIjcGU3NHqn/nWwh7wV8crAmyfRC
+   A==;
+IronPort-SDR: 5Ng5NM1EzbpwR/HTQNvjcYL+q3V6cpSEYUklwZ7HK057B398VMKy7ww3FQCX3PxiL+u3xAMd55
+ MXUshv32BekJnKyET4D489sAzSpIGtg6eqmR/LYgGcT6AHFfvCai4HxPcgvH9jkVRiHUF/VIkt
+ dapG1mATxs46C4ElHH7FoXFGb2vgTzPrbx4ZDVrZFsWtf9Rl2B7ZyXbTLXgeDXK/GIiVarPOXS
+ 7aLrbtkGK+ZQOXfye16SXvY8kG+hwYf9n6Pv9gbrVw9Db3edYDVLcvqt7Z6pcSNs0fjKoo+ZT+
+ eQ4=
+X-IronPort-AV: E=Sophos;i="5.81,296,1610434800"; 
+   d="scan'208";a="112171420"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2021 10:49:54 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 1 Apr 2021 10:49:54 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 10:49:52 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
- Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 5/5] arm64: tegra: Device tree fixes for v5.12-rc6
-Date: Thu,  1 Apr 2021 19:26:22 +0200
-Message-ID: <20210401172622.3352990-5-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210401172622.3352990-1-thierry.reding@gmail.com>
-References: <20210401172622.3352990-1-thierry.reding@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Ludovic Desroches
+	<ludovic.desroches@microchip.com>
+Subject: [GIT PULL] ARM: at91: soc for 5.13
+Date: Thu, 1 Apr 2021 19:45:44 +0200
+Message-ID: <20210401174544.32193-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210401_182608_994335_2366F73E 
-X-CRM114-Status: GOOD (  12.38  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210401172622.wmTiMy42k0seHZDytUn1eG6LM3gAJRuS7tZSlz4mpyk@z>
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi ARM SoC maintainers,
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+
+Arnd, Olof,
+
+One single patch for now on our SoC branch. Stakeholders agreed to make it
+travel with at91 -> arm-soc.
+
+Thanks, best regards,
+  Nicolas
 
 The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
@@ -113,44 +83,26 @@ The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.13-arm64-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-soc-5.13
 
-for you to fetch changes up to 405fa9e9d8664e830982c5fbcb70f9ba8656bafc:
+for you to fetch changes up to 41dbf4a146a06443d1cbf39e238f02fa1ca9d626:
 
-  arm64: tegra: Move clocks from RT5658 endpoint to device node (2021-03-25 14:04:49 +0100)
-
-Thanks,
-Thierry
+  ARM: at91: pm: Move prototypes to mutually included header (2021-03-26 18:20:49 +0100)
 
 ----------------------------------------------------------------
-arm64: tegra: Device tree fixes for v5.12-rc6
+AT91 soc for 5.13:
 
-This contains a couple of device tree fixes for the v5.12 release cycle.
-These are needed for proper audio support on Jetson AGX Xavier, to boot
-the Jetson Xavier NX from an SD card and to be able to suspend/resume
-the Jetson TX2.
+- Fixing a W=1 warning
 
 ----------------------------------------------------------------
-Jon Hunter (2):
-      arm64: tegra: Set fw_devlink=on for Jetson TX2
-      arm64: tegra: Fix mmc0 alias for Jetson Xavier NX
+Lee Jones (1):
+      ARM: at91: pm: Move prototypes to mutually included header
 
-Sameer Pujar (1):
-      arm64: tegra: Move clocks from RT5658 endpoint to device node
+ arch/arm/mach-at91/pm.c        | 19 ++++++++-----------
+ drivers/pinctrl/pinctrl-at91.c |  2 ++
+ include/soc/at91/pm.h          | 16 ++++++++++++++++
+ 3 files changed, 26 insertions(+), 11 deletions(-)
+ create mode 100644 include/soc/at91/pm.h
 
-Thierry Reding (1):
-      arm64: tegra: Add unit-address for ACONNECT on Tegra186
-
- arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts  | 2 +-
- arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi      | 2 +-
- arch/arm64/boot/dts/nvidia/tegra186.dtsi            | 2 +-
- arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts  | 3 ++-
- arch/arm64/boot/dts/nvidia/tegra194-p3668-0000.dtsi | 4 ++++
- arch/arm64/boot/dts/nvidia/tegra194-p3668-0001.dtsi | 4 ++++
- arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi      | 1 -
- 7 files changed, 13 insertions(+), 5 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+-- 
+Nicolas Ferre
