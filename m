@@ -1,49 +1,65 @@
-Return-Path: <SRS0=sZmu=I6=gmail.com=joel.stan@kernel.org>
+Return-Path: <SRS0=EFpz=I6=lists.ozlabs.org=openbmc-bounces+openbmc=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 303A3C433B4
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 03:51:56 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id EA1C561007; Thu,  1 Apr 2021 03:51:55 +0000 (UTC)
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85F63C433ED
+	for <openbmc@archiver.kernel.org>; Thu,  1 Apr 2021 03:52:26 +0000 (UTC)
+Received: from lists.ozlabs.org (lists.ozlabs.org [112.213.38.117])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8416661055;
-	Thu,  1 Apr 2021 03:51:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8416661055
+	by mail.kernel.org (Postfix) with ESMTPS id 1F65061007
+	for <openbmc@archiver.kernel.org>; Thu,  1 Apr 2021 03:52:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1F65061007
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=joel.stan@gmail.com
-Received: by mail-qk1-f175.google.com with SMTP id c3so1008104qkc.5;
-        Wed, 31 Mar 2021 20:51:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=G2UzKuCdp1j8anPgqYZtRd7WtA1gZSM9upkU0HaBZxs=;
-        b=Ys55/Yc56xPgdVRXN/HBS4oQkCdVyEAfTsBTgt22jNI/ReUyHJC7Fivo6VgQTVCqXK
-         F/LOIRBjNGoAUB9lQGIVJCYOX2D5CXOkD4yYxL64eWhS9nssupqqC5R9BKyRrUB4zo8W
-         4xnpbdVNsRDDpFUYLRiqpsceODnK/2dQM8wIQ=
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
+Received: from boromir.ozlabs.org (localhost [IPv6:::1])
+	by lists.ozlabs.org (Postfix) with ESMTP id 4F9q544GHWz303s
+	for <openbmc@archiver.kernel.org>; Thu,  1 Apr 2021 14:52:24 +1100 (AEDT)
+Authentication-Results: lists.ozlabs.org;
+	dkim=fail reason="signature verification failed" (1024-bit key; secure) header.d=jms.id.au header.i=@jms.id.au header.a=rsa-sha256 header.s=google header.b=Ys55/Yc5;
+	dkim-atps=neutral
+Authentication-Results: lists.ozlabs.org; spf=pass (sender SPF authorized)
+ smtp.mailfrom=gmail.com (client-ip=2607:f8b0:4864:20::730;
+ helo=mail-qk1-x730.google.com; envelope-from=joel.stan@gmail.com;
+ receiver=<UNKNOWN>)
+Authentication-Results: lists.ozlabs.org; dkim=pass (1024-bit key;
+ secure) header.d=jms.id.au header.i=@jms.id.au header.a=rsa-sha256
+ header.s=google header.b=Ys55/Yc5; dkim-atps=neutral
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com
+ [IPv6:2607:f8b0:4864:20::730])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by lists.ozlabs.org (Postfix) with ESMTPS id 4F9q4Z6nVXz2yYn;
+ Thu,  1 Apr 2021 14:51:58 +1100 (AEDT)
+Received: by mail-qk1-x730.google.com with SMTP id z10so953747qkz.13;
+ Wed, 31 Mar 2021 20:51:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=G2UzKuCdp1j8anPgqYZtRd7WtA1gZSM9upkU0HaBZxs=;
+ b=Ys55/Yc56xPgdVRXN/HBS4oQkCdVyEAfTsBTgt22jNI/ReUyHJC7Fivo6VgQTVCqXK
+ F/LOIRBjNGoAUB9lQGIVJCYOX2D5CXOkD4yYxL64eWhS9nssupqqC5R9BKyRrUB4zo8W
+ 4xnpbdVNsRDDpFUYLRiqpsceODnK/2dQM8wIQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G2UzKuCdp1j8anPgqYZtRd7WtA1gZSM9upkU0HaBZxs=;
-        b=KkBfSYTYDgYoS9JIsU9C+4dNSymcXvhR2G9jHGFYD99bBD7zhdy6/WyneOM86kWuPN
-         IJW1zVqdXRZTSkdWdu7yr3ARAhJsLv46iUXh1GiaIBc7CyaeiqZiEFDvUQfGPT6asczq
-         v8FcKVyVGMMB3ibQgVkJB60wve8cRjb7C2c3LXdNJsFmNheDS1g0TTt+B+rpkQMpI0qF
-         PNaF7Ve86NutoWkfnsW5RBYodyjvAw0cPngu8s/evJ6TdyOTjFK0vEIAxDRHG9mIqIT6
-         RYfkZQ8UhS1wY5R2VRZfmT095KWghalydTQfj2yAeryBkme4b8BtBO3iZwPP4MiO7FlJ
-         SNiQ==
-X-Gm-Message-State: AOAM532XI2gfSv91TUmFnMJ0aUu5ptj5N8jqvBEbVYSPDbdR/sfZcwZu
-	QhnXAf++4xz5E/mCTif+1dXtdTfU4wGCiWJzx+4=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=G2UzKuCdp1j8anPgqYZtRd7WtA1gZSM9upkU0HaBZxs=;
+ b=dVMZGXaiy+Zm64mWwA0HC7EOD+LFj8APOHONTLQeZPb8qg9AvVWfye0SotyYQt8c7A
+ jNBOdCZVuuULy3UqON4QkTm2MZWq/2DCAwWl+iqruG7BfDhkEfyhIAl1O7/cP5FSsgA5
+ ECZ79dLZfyvey0p99O6ba9Uv1OBNtMU6XeK6SGHqqwqjhliOqa25DsMEux7nJiNZa1b9
+ XjncWxGs3XWRV1nyORMXF76hmiEqwUpQ651MxoZJ4OcNYqArFCVb31nNvo+RcWLNp14G
+ oygwMiPB2wHQkEs1VjtGvdu2rAn+jtE8HruvgaEXWnl4xocpwkU5TPdTDe7ZLNhhPZz7
+ WIQw==
+X-Gm-Message-State: AOAM532tAibXcPZw+X62Ri4M3J882Et/JOVu5zsVVreNmCw4AIoOmzN5
+ hE/lsV4NrLMFepUIfK5jTZWL4KGhSA/X8rhswbWZLLE10xOKItKT
 X-Google-Smtp-Source: ABdhPJyPyUqt1LE98UHlWdEY70Fzzk2zIuvPWojOLPrtTopLJFCQ2ygWnNdRtshS4txlG2QtOIodDE5mmLwZT1wWiPA=
-X-Received: by 2002:a37:a147:: with SMTP id k68mr6564933qke.66.1617249114564;
+X-Received: by 2002:a37:a147:: with SMTP id k68mr6564933qke.66.1617249114564; 
  Wed, 31 Mar 2021 20:51:54 -0700 (PDT)
 MIME-Version: 1.0
 References: <CACPK8XfBsq6H5qsSNgwqdRhHXTUYnNQKekSNMnxXoVaAzMc=MQ@mail.gmail.com>
@@ -54,14 +70,30 @@ Date: Thu, 1 Apr 2021 03:51:42 +0000
 Message-ID: <CACPK8Xcr+OauMH2NFSOKF7TZ2HDDnpqPvbnqg17YbKmhroqBMw@mail.gmail.com>
 Subject: Re: [PATCH] ARM: dts: aspeed: add ASRock E3C246D4I BMC
 To: Zev Weiss <zev@bewilderbeest.net>
-List-Id: <soc.lore.kernel.org>
-Cc: OpenBMC Maillist <openbmc@lists.ozlabs.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	linux-aspeed <linux-aspeed@lists.ozlabs.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Andrew Jeffery <andrew@aj.id.au>, 
-	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, devicetree <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+X-BeenThere: openbmc@lists.ozlabs.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: Development list for OpenBMC <openbmc.lists.ozlabs.org>
+List-Unsubscribe: <https://lists.ozlabs.org/options/openbmc>,
+ <mailto:openbmc-request@lists.ozlabs.org?subject=unsubscribe>
+List-Archive: <http://lists.ozlabs.org/pipermail/openbmc/>
+List-Post: <mailto:openbmc@lists.ozlabs.org>
+List-Help: <mailto:openbmc-request@lists.ozlabs.org?subject=help>
+List-Subscribe: <https://lists.ozlabs.org/listinfo/openbmc>,
+ <mailto:openbmc-request@lists.ozlabs.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: devicetree <devicetree@vger.kernel.org>,
+ linux-aspeed <linux-aspeed@lists.ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
+ Andrew Jeffery <andrew@aj.id.au>, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Olof Johansson <olof@lixom.net>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Errors-To: openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
+Sender: "openbmc"
+ <openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org>
+Message-ID: <20210401035142.2qrOvqfuxjsTQVu2DW7ktPCLKz8Xhso8ALNSlCMtItA@z>
 
 Hi Zev,
 
