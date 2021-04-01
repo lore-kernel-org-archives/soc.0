@@ -1,75 +1,108 @@
-Return-Path: <SRS0=6LjJ=I6=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=UN2r=I6=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0BB6C433ED
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 17:26:09 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 7BD87613B9; Thu,  1 Apr 2021 17:26:09 +0000 (UTC)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F6F1C433ED
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:27:42 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 108C061393;
-	Thu,  1 Apr 2021 17:26:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 108C061393
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=thierry.reding@gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id b16so2810527eds.7;
-        Thu, 01 Apr 2021 10:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KFyIg8syNYPFzhmphZGsN0/P5BjL76RGwMywZZQhQ6c=;
-        b=nvTC5y589Fz/gj87Pv5YA9OmIoYiI3vwoAOpWITntQYOll/KEaz8X20wO9hoVRcw4E
-         chE8IvLnNqOcIC+3TaSeWXe3FXsM7JOmQTtn+/q74qyh73IlvDC2rItOxKi76eRm0R5J
-         uczD62U9ZYoncx4VbDAWzo7Bk4XfQn8RSFWfY9wgqXWLytg3h69vztqRHUsgs/UamSEW
-         fFeNsREl325yllSCy9MMzuv4eYJXvsikbgegvtSeAnicVNDrSgkyVTBVWTNv3WYmvCQc
-         w3ZbV0OzLDnv/enXIqlfLqmfMVvmK+ut14Vq1RL/jnVz2SYCiIvRrrUdBIqpBC74CZYG
-         krtg==
+	by mail.kernel.org (Postfix) with ESMTPS id C637661393
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:27:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C637661393
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=ruUJUgWVKe/jXH6mXnON3RWoh+UMxgZC5svIYiLrBHk=; b=evc0o6tMCq2zHLBSoSqN2CHGqc
+	NIw6m/x2KBfr5+jbULHjk9lUaK790zhZ1R/emSEOPTnFahHz1zNHHsukRNimYuYxbS8S+Xob1VuBA
+	EhIKGFw3oqp7lKNwL8bDjSNFuHkDMOBoQmIIFyF+3eSU96pnRVoQqTHSpVeoGk6DazMYErkUaxml3
+	HzgcaoabHnmrhfE+A0ZIkmTdYiWS3lMvhyyjXYZ4XWlavRwO7qEYIjCq/8Wp3Ee6kIJ0+EM5HKiCi
+	ifFovX3EX/KiwGlbGdnsISneAg2LG9lllCKbi+GjWDD79gSKk/YfK8GFznEtRUOwqv7OE2wUiPG17
+	nBkFBlMQ==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lS154-00AVwU-OV; Thu, 01 Apr 2021 17:26:08 +0000
+Received: from mail-ed1-x536.google.com ([2a00:1450:4864:20::536])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lS14y-00AVuZ-Bh
+ for linux-arm-kernel@lists.infradead.org; Thu, 01 Apr 2021 17:26:02 +0000
+Received: by mail-ed1-x536.google.com with SMTP id y6so2832639eds.1
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 01 Apr 2021 10:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=GMblnBVnulvH6aIz/MT4g7SaDY1kdi5Yx0m1X2b/Wlo=;
+ b=fuyL0AYiFQMbYBbNkrX575nXxWE6ZHj11DzMJQBH1+mP9DtWhaygZLhBkV9LoFQYtm
+ v/LidO0rpF6xO4zfEPbImcjWuftBSNbQ00SH3IG1FYq6YEmW+zvQ4DNId6zsJUBcouBa
+ 6Ejrtq33xQpGdjGYwDjuNm7P2btNs552vHU+rnUzGEQIuQ+WM3VJkxEDKvQ2p5E+b+he
+ bT2S37DOn8zPIE5hFB7FapdhrXM+QeEeXnBMs9UcREGhbp/kFQFaQhYnEyOi7suZ9Tfg
+ oloCyMXRhsY+u2PmZQLD9JEzf6Q0a5JBR3J+Ulb9aqsmQgblZ16/1K3+ULsbW8ruaepW
+ 3J5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KFyIg8syNYPFzhmphZGsN0/P5BjL76RGwMywZZQhQ6c=;
-        b=Kgh9YDX0HyNhURr4uP3QwetQgru9IegE8+D86kd6rit+vcs1IRsMZN8FcjV8pIN9QG
-         pUrvDbFjOueezch/N4CsnaEaX6Ll2eQ2T+iEu72S56xVeN8FGeccrciuAqn21N1Qr7rA
-         CBQBWNgYCQ6fM8PU51ubKiLNkT8r3QA1JpvM/l//uZTpPI75hptgVqYDCNaAsKkao7nK
-         GW7V4KIkr3jTJQ6g7a7ipMsd0S8dw/CUqbQZL0Y5LePUdKYt5XAPv79r1YQHyA1DUuZ3
-         7zHvMMryGoBMPIbvR4lZs1kJvmT2iohdcMts15FLGAvDEJau3iwYYYr3I7T3H4JTRerL
-         bqFw==
-X-Gm-Message-State: AOAM532I9UIh/BkWpBFXLtx27sjHQH7xf77T7qogIYs3naI0xo8rD+cp
-	4k+noXSHceZF5WYKbc4OfOjGZJ5yWOU=
-X-Google-Smtp-Source: ABdhPJzHLEVoJiG2OIvfg61ZJ+n48ibWJdHJA6V35LhUTvqh/mUPrd8q/IsIyh5iDD/AyxbRLrbR3A==
-X-Received: by 2002:aa7:c1d5:: with SMTP id d21mr10816258edp.167.1617297967004;
-        Thu, 01 Apr 2021 10:26:07 -0700 (PDT)
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=GMblnBVnulvH6aIz/MT4g7SaDY1kdi5Yx0m1X2b/Wlo=;
+ b=uj4CbHgKpCeMcOA8T72GTT0QMsUc/+LkuBaySZazdm+H5Jmv+dfuOZ5r6BC1IIUu4d
+ U6sjkL8vBGWxY+wQ7rhDfsXK7RHoiVf8Taf6Hn5SLIKePFBucSMj9+xV5X/75BYpu42W
+ Wyzfr1uoLFsNwXi6ggUbxwy9uSWNilErsaopE50QBaQNmM92vdH4kV+j8w2KgcOeLFMX
+ kqYZ+qeU3lXF9Q7M8aiAgEh+GN8BxOBm6uGwy10t/bG5V09l6E/bXIcPuLTfr37zpF8k
+ b70YGV+NIVTJyy2zYy2NPbP4nduicQORzPznND/aed/E8PB6xwjV846PvftDLiG+Y+DI
+ PCGQ==
+X-Gm-Message-State: AOAM533J+g2f6MP5U2EKv2bsEGExIQPURW41wizDBQmj8dWgf9/fCDGq
+ JVeRs+9270dDKBNkP1Z373A=
+X-Google-Smtp-Source: ABdhPJxl28lLSjZdqRGFy24R1fPXWHpNZxrCKIsIji0q5YfE/004Mvv3PNwnpZSrACN6y3NUIxYsuQ==
+X-Received: by 2002:aa7:de11:: with SMTP id h17mr10860271edv.83.1617297958938; 
+ Thu, 01 Apr 2021 10:25:58 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id hb19sm3045144ejb.11.2021.04.01.10.26.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Apr 2021 10:26:05 -0700 (PDT)
+ by smtp.gmail.com with ESMTPSA id g20sm3745557edb.7.2021.04.01.10.25.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 01 Apr 2021 10:25:57 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
 Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 5/5] arm64: tegra: Device tree fixes for v5.12-rc6
-Date: Thu,  1 Apr 2021 19:26:22 +0200
-Message-Id: <20210401172622.3352990-5-thierry.reding@gmail.com>
+ Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/5] dt-bindings: Changes for v5.13-rc1
+Date: Thu,  1 Apr 2021 19:26:18 +0200
+Message-ID: <20210401172622.3352990-1-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210401172622.3352990-1-thierry.reding@gmail.com>
-References: <20210401172622.3352990-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210401_182600_569797_8375CA5D 
+X-CRM114-Status: UNSURE (   8.03  )
+X-CRM114-Notice: Please train this message.
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210401172618.mbg3nraPx9fXbdbqa4XaucZpDoUiEUYKxTDlQbQE67I@z>
 
 Hi ARM SoC maintainers,
 
@@ -79,39 +112,30 @@ The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.13-arm64-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.13-dt-bindings
 
-for you to fetch changes up to 405fa9e9d8664e830982c5fbcb70f9ba8656bafc:
+for you to fetch changes up to d1e24c46250731204dbf61b5191e4dcf2c2d9391:
 
-  arm64: tegra: Move clocks from RT5658 endpoint to device node (2021-03-25 14:04:49 +0100)
+  dt-bindings: phy: tegra-xusb: Add nvidia,pmc prop (2021-03-24 14:04:40 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-arm64: tegra: Device tree fixes for v5.12-rc6
+dt-bindings: Changes for v5.13-rc1
 
-This contains a couple of device tree fixes for the v5.12 release cycle.
-These are needed for proper audio support on Jetson AGX Xavier, to boot
-the Jetson Xavier NX from an SD card and to be able to suspend/resume
-the Jetson TX2.
+One single changes that adds the nvidia,pmc property to the XUSB pad
+controller binding, which will subsequently be used to implement USB
+sleepwalk functionality.
 
 ----------------------------------------------------------------
-Jon Hunter (2):
-      arm64: tegra: Set fw_devlink=on for Jetson TX2
-      arm64: tegra: Fix mmc0 alias for Jetson Xavier NX
+JC Kuo (1):
+      dt-bindings: phy: tegra-xusb: Add nvidia,pmc prop
 
-Sameer Pujar (1):
-      arm64: tegra: Move clocks from RT5658 endpoint to device node
+ Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thierry Reding (1):
-      arm64: tegra: Add unit-address for ACONNECT on Tegra186
-
- arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts  | 2 +-
- arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi      | 2 +-
- arch/arm64/boot/dts/nvidia/tegra186.dtsi            | 2 +-
- arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts  | 3 ++-
- arch/arm64/boot/dts/nvidia/tegra194-p3668-0000.dtsi | 4 ++++
- arch/arm64/boot/dts/nvidia/tegra194-p3668-0001.dtsi | 4 ++++
- arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi      | 1 -
- 7 files changed, 13 insertions(+), 5 deletions(-)
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
