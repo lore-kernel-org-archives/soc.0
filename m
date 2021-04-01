@@ -2,59 +2,64 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1FC4C433ED
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 20:15:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2366C433B4
+	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 20:15:52 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 885D0610E7; Thu,  1 Apr 2021 20:15:50 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DA1C6610D1;
-	Thu,  1 Apr 2021 20:15:48 +0000 (UTC)
+	id D3381610E9; Thu,  1 Apr 2021 20:15:52 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D577D610F7;
+	Thu,  1 Apr 2021 20:15:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617308150;
-	bh=N+8g3oi/DtOR4IYfKa4K/TuQ5ID2Jy9j60SR79CV9e0=;
+	s=k20201202; t=1617308152;
+	bh=kwWyuDUAJuOzjmy8QsMSGDC1bsN5AwFFHpq5F3sfG0E=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pSpEirbcyT/HIrg21DMCZeyzEyLgqxZAUE8xefTuDXvuKGxgCp514CCIPaeEpgWO8
-	 q4Oj6C+3fjzDGFpxG5M+/O1I7Qi2jReXtJzMMeqmo4aZHZLelONALYl62ViH3K0NUs
-	 WgGj9oznz3aQXVVPIomeaghLKPEbrgKjSkcpXHgkf5r7hg7N4iWhgr82POo0gnyVzL
-	 4sZmQqvTRvIguYVfjpWu/jEB8C/pLNf9Z9p5e1ETRNIj5gzyWO17SeGooFMdUBlaJG
-	 LXbUPAW7vLGwhLsBBlwFq7BwHU5gz08uc3s1H+uYAO0LZJZ+SUXhXdv+jfvCwuWhYz
-	 7X1zYVsFGl9Gg==
+	b=fnXZ9+oy+xCSyh0FAWf+V/VbBvNh3ParmimUP3KAwjcvZlGq1EA+HBzrBGTG+X1Ab
+	 yluUOwddRuhDV6p6qZyj/wrzWPEdlWjhDrB7F+7qzrf1hlPXPY//YZbwNVAZxm1nQc
+	 Ar46RZokVBb1TFVkRnXfB71oFKItM2t7d7dH5n1rrTr8yBSGtkQuprvncG8zR92JTe
+	 2s2mGoxFAwA0X/8js5mEzwYpl33XFjvGZ2fAuNmy8AmqNsKyB1zScU+u2k+Gg4VJh9
+	 uq3vUp+uCYlEsJ2SSP3RFgSlj1o+28IIbY8y76lMtZOWr2Rfo1OKzVeqIKfqvtWL0F
+	 XlAFuYMrX6gMw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	arm-soc <arm@kernel.org>
+To: arm@kernel.org,
+	Shawn Guo <shawnguo@kernel.org>,
+	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
-	Boris Lysov <arzamas-16@mail.ee>,
-	Chunfeng Yun <chunfeng.yun@mediatek.com>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [GIT PULL] ARM: dts: mediatek: updates for v5.13
-Date: Thu,  1 Apr 2021 22:15:22 +0200
-Message-Id: <161730808698.655497.18205720456447891568.b4-ty@arndb.de>
+	linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de,
+	Fabio Estevam <festevam@gmail.com>,
+	Li Yang <leoyang.li@nxp.com>,
+	linux-imx@nxp.com,
+	Stefan Agner <stefan@agner.ch>
+Subject: Re: [GIT PULL 3/6] i.MX DT bindings update for 5.13
+Date: Thu,  1 Apr 2021 22:15:23 +0200
+Message-Id: <161730808624.655497.9470372573569537914.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <be262120-6cd9-87a7-ccc3-f5c403cff66b@gmail.com>
-References: <be262120-6cd9-87a7-ccc3-f5c403cff66b@gmail.com>
+In-Reply-To: <20210331041019.31345-3-shawnguo@kernel.org>
+References: <20210331041019.31345-1-shawnguo@kernel.org> <20210331041019.31345-3-shawnguo@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Thu, 1 Apr 2021 16:01:34 +0200, Matthias Brugger wrote:
-> Please take the below patches into account. These are mostly cleanups to make
-> the DTB checker happy. Apart from that we now have SMP support for MT6589, it's
-> nice to see that someone keeps working on this old platform with which I started
-> upstreaming :)
+On Wed, 31 Mar 2021 12:10:16 +0800, Shawn Guo wrote:
+> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 > 
-> Regards,
-> Matthias
+>   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindgins-5.13
+> 
+> [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 8028548ba16284166987d8969e0c5bec36a0228d
+merge commit: 2771bc0dbaad48238b0fc3ae73d1c5215b5e018b
 
        Arnd
