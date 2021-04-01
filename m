@@ -1,43 +1,41 @@
-Return-Path: <SRS0=EFpz=I6=lists.ozlabs.org=openbmc-bounces+openbmc=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=UN2r=I6=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 543A2C43461
-	for <openbmc@archiver.kernel.org>; Thu,  1 Apr 2021 04:09:55 +0000 (UTC)
-Received: from lists.ozlabs.org (lists.ozlabs.org [112.213.38.117])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD2D3C433ED
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 04:29:49 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 979CB6101A
-	for <openbmc@archiver.kernel.org>; Thu,  1 Apr 2021 04:09:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 979CB6101A
+	by mail.kernel.org (Postfix) with ESMTPS id 4FDA360FE9
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 04:29:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4FDA360FE9
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=bewilderbeest.net
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
-Received: from boromir.ozlabs.org (localhost [IPv6:::1])
-	by lists.ozlabs.org (Postfix) with ESMTP id 4F9qTD6XcWz30BG
-	for <openbmc@archiver.kernel.org>; Thu,  1 Apr 2021 15:09:52 +1100 (AEDT)
-Authentication-Results: lists.ozlabs.org;
-	dkim=fail reason="signature verification failed" (1024-bit key; unprotected) header.d=bewilderbeest.net header.i=@bewilderbeest.net header.a=rsa-sha256 header.s=thorn header.b=kdlFaZDp;
-	dkim-atps=neutral
-Authentication-Results: lists.ozlabs.org; spf=pass (sender SPF authorized)
- smtp.mailfrom=bewilderbeest.net (client-ip=71.19.156.171;
- helo=thorn.bewilderbeest.net; envelope-from=zev@bewilderbeest.net;
- receiver=<UNKNOWN>)
-Authentication-Results: lists.ozlabs.org; dkim=pass (1024-bit key;
- unprotected) header.d=bewilderbeest.net header.i=@bewilderbeest.net
- header.a=rsa-sha256 header.s=thorn header.b=kdlFaZDp; 
- dkim-atps=neutral
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net
- [71.19.156.171])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by lists.ozlabs.org (Postfix) with ESMTPS id 4F9qSl0z0fz2yxq;
- Thu,  1 Apr 2021 15:09:25 +1100 (AEDT)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Type:
+	Content-Transfer-Encoding:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=2zP084dr4lHHj1SaoNoJjIBzyKNWWH2dHt7gO1FU2yY=; b=eSZpiZ0eQ3GkqMS6M8nEZ86Ry
+	epO3apC4ReOk7hcyFxUgk63tKnaX5uLxFNnA9bdWDAHDEIYiMiqw9S9cKnXh4MGHm5RUMDUnDELpH
+	81cDRxVrDDm/aSXy9lSTqqGOCaTdEdt4zsne3CbmX71kfslkN3T7HI0Pk3hlXYnbzmlyqSE82u9Fu
+	BlgP6JQvARUt7wHNPOU2vzDOEEzGkjEQuhbYrPj2gR+0Rplr+B88osE3lyTjEA8ZaLRoR+0UU6PRY
+	33CfHpbakHKlksi6EayF/B7nO5diJgPVCkMFKQ2ZD234/cagihgJiry7hq7T/QC/vaim2cQAQqA0o
+	Y6hDfCaaA==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lRowH-008TD2-87; Thu, 01 Apr 2021 04:28:13 +0000
+Received: from thorn.bewilderbeest.net ([71.19.156.171])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lRoe5-008OOv-LZ
+ for linux-arm-kernel@lists.infradead.org; Thu, 01 Apr 2021 04:09:27 +0000
 Received: from hatter.bewilderbeest.net (unknown [IPv6:2600:6c44:7f:ba20::7c6])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
@@ -54,38 +52,41 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
 Date: Wed, 31 Mar 2021 23:09:20 -0500
 From: Zev Weiss <zev@bewilderbeest.net>
 To: Joel Stanley <joel@jms.id.au>
+List-Id: <soc.lore.kernel.org>
+Cc: OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Andrew Jeffery <andrew@aj.id.au>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>, devicetree <devicetree@vger.kernel.org>
 Subject: Re: [PATCH] ARM: dts: aspeed: add ASRock E3C246D4I BMC
 Message-ID: <YGVHcGnwvN638d6z@hatter.bewilderbeest.net>
 References: <CACPK8XfBsq6H5qsSNgwqdRhHXTUYnNQKekSNMnxXoVaAzMc=MQ@mail.gmail.com>
  <20210401025104.2278-1-zev@bewilderbeest.net>
  <CACPK8Xcr+OauMH2NFSOKF7TZ2HDDnpqPvbnqg17YbKmhroqBMw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
 In-Reply-To: <CACPK8Xcr+OauMH2NFSOKF7TZ2HDDnpqPvbnqg17YbKmhroqBMw@mail.gmail.com>
-X-BeenThere: openbmc@lists.ozlabs.org
-X-Mailman-Version: 2.1.29
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210401_050926_095584_5F13FD24 
+X-CRM114-Status: GOOD (  26.34  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
 Precedence: list
-List-Id: Development list for OpenBMC <openbmc.lists.ozlabs.org>
-List-Unsubscribe: <https://lists.ozlabs.org/options/openbmc>,
- <mailto:openbmc-request@lists.ozlabs.org?subject=unsubscribe>
-List-Archive: <http://lists.ozlabs.org/pipermail/openbmc/>
-List-Post: <mailto:openbmc@lists.ozlabs.org>
-List-Help: <mailto:openbmc-request@lists.ozlabs.org?subject=help>
-List-Subscribe: <https://lists.ozlabs.org/listinfo/openbmc>,
- <mailto:openbmc-request@lists.ozlabs.org?subject=subscribe>
-List-Id: <soc.lore.kernel.org>
-Cc: devicetree <devicetree@vger.kernel.org>,
- linux-aspeed <linux-aspeed@lists.ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
- Andrew Jeffery <andrew@aj.id.au>, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Olof Johansson <olof@lixom.net>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Errors-To: openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
-Sender: "openbmc"
- <openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org>
-Message-ID: <20210401040920.jSsRcHpeVFk95NPGjtaAj2oFk5kzp-uZGJ9168eEsNY@z>
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210401040920.Kz4Zxz7y0bplk2FGMYJWkoeGdRuaeprsIBzZHJamZNg@z>
 
 On Wed, Mar 31, 2021 at 10:51:42PM CDT, Joel Stanley wrote:
 >Hi Zev,
@@ -372,3 +373,8 @@ Zev
 >> --
 >> 2.31.1
 >>
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
