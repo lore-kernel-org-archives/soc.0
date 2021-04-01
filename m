@@ -2,18 +2,19 @@ Return-Path: <SRS0=UN2r=I6=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14E22C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 10:26:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEECBC433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 10:26:14 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 83150610CB
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 10:25:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 83150610CB
+	by mail.kernel.org (Postfix) with ESMTPS id 67C59606A5
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 10:26:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 67C59606A5
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,51 +23,49 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=aJDGr8+WdbXyuDw8yyn+0RTZn+TMmhH3/BD5w6+DbkY=; b=dPuw0YChEEjeMAAtRvgqw50AR
-	rjack+z6oT7NhwqvVxyVXQxFL0EzJv+r939TvVH0VWQElXebPCBra6VIlV+aPW5frCyXOFkkEWdxR
-	EOk+3NaejKK2aLumytasrCZoG1y6M0LeFMkhFhCOl00BjR5zAyVwWgsqOYOOw07cooDr0171kqj3v
-	6bAS4dJ5Hc6ZtDAxLKf8nfDGVNyLXBPK+pV4NjqUqaswKsdsUxOtE9zqKAAe8396B2NckYKfApz1G
-	EzSNK3sm1OiuvjRLNVDu9sk7IZuy1BqEXZ5JKNrrGHthJMOrtc+QBZYbhlgCPHRejPKoWlG5iV+VU
-	7nVgzNBIQ==;
+	 bh=4Zo6TuXNyesDu8qEdwoFjzQS96Om2iAbd9X1p0rFrso=; b=PcH2U7JcgXPWxjkle2P1/G5yb
+	xvul/nafVgs5CG+I22GdjRLdxzuXoUKI8Ciy/Ubq715OGiFnihRKSIe9XVHsoa3UM/gVErpS1YZlf
+	Ep6q8L6snEwI6ZZYxizR/OFGFqnjCV89FaLoeLdh535SkiJ5j9B1ZDZkLroLiAXmuUM3hCzG5yZ87
+	oRZv2dkkXvGa5Q9DgAw6EoslVbHy72H2Cwuz9Joqxl72lnCBUk0lOcH8+tJta4Q0JumMMX8RJpaOV
+	25XdSzvZKj777+Yi0Kgmk1LUe8J/cxBheJGu/1/HJAdDN2lgrDJPnEKjizKsusb2d2IqHcZY+8Z1+
+	v5LfxhrUQ==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lRuUv-009Cq6-Sk; Thu, 01 Apr 2021 10:24:22 +0000
+	id 1lRuV5-009CtA-5A; Thu, 01 Apr 2021 10:24:31 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lRuUS-009Ci6-Hh
- for linux-arm-kernel@lists.infradead.org; Thu, 01 Apr 2021 10:23:57 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C1318610CC;
- Thu,  1 Apr 2021 10:23:47 +0000 (UTC)
+ id 1lRuUW-009Cjp-La
+ for linux-arm-kernel@lists.infradead.org; Thu, 01 Apr 2021 10:24:00 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 58482610CA;
+ Thu,  1 Apr 2021 10:23:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1617272630;
- bh=MZ3Ne7ildQK4xFvvzsF6ZSktnlVMdKCIZSj1JEw6htk=;
- h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
- b=RJ8tvMOaVhlGiMjt6SNGdffrUCik9IPv+22Lj9ln8X1D5YKAJpPlRHI7PwxmPDXjk
- k+tMiKCk1lzd4L7/Ijz9gq9wCP+Cg/H3kQH6noZnlfERXRR+L/Js8deCIqF6+Dx5yE
- fLhuKtuBRc6d6GlCMN4MRQkNsG5nS1+Qf3HmRVJUbXZBLtONpUJJVd7vOFagWdCVOx
- M5BQUh483IJcedke6tsujvWW62ZLTwC+1CcbBUKaDb1Y3YrDp+dwSSonww96LHz06i
- nE7hrZqrxvgxeSg3clSt+LoRqErWs1rVwFX0QNaQcCqTzaPYVA4zaUMuPd5miPs7Qh
- m/OMrKD7enkBQ==
+ s=k20201202; t=1617272635;
+ bh=echKhk/+du5revw56d9N1TtPnxzuzBPGHd3iaQ496Xk=;
+ h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=UxuCUS8Ewavw1VGOPNOhxECVjCSTnSE2hTmRdj80WAgBHauG0SU1ub8DXfDKZu5KF
+ 7VvXgHEEDctKtAwWqd57pztmBDHjvQdM1uF68y1PIaxWg9ieLAx/KOWpAXR3g/FU1L
+ iFEDzr3lUl2kuLF5J5pLsKB4WHP56yvDJpfLSjBPqJvQrBPrLUSBO/wlADdJm2G5mn
+ hPJ7v/mNTTdTXAQHLMiAo3jEzCJEAWEsJwdjGaU9+WJ7JRGX+Muf1iKEArUp8iwmyj
+ 56+Tcwz7mKTTkVaTCdpULUEBTo+eT9HjIBvPB3LTGopF73Bq7V/h7IQYIukxDWkMLE
+ UCNVhQOH7ZvrQ==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Roy Pledge <roy.pledge@nxp.com>, Claudiu Manoil <claudiu.manoil@nxp.com>,
- Scott Wood <oss@buserror.net>, Arnd Bergmann <arnd@kernel.org>,
- Li Yang <leoyang.li@nxp.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, Lee Jones <lee.jones@linaro.org>,
- soc@kernel.org, Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Jakub Kicinski <kuba@kernel.org>, YueHaibing <yuehaibing@huawei.com>,
- linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] soc/fsl: qbman: fix conflicting alignment attributes
-Date: Thu,  1 Apr 2021 12:23:30 +0200
-Message-ID: <161727243810.583633.4915294266076534019.b4-ty@arndb.de>
+To: Shawn Guo <shawnguo@kernel.org>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
+ linux-imx@nxp.com, kernel@pengutronix.de, Stefan Agner <stefan@agner.ch>,
+ Fabio Estevam <festevam@gmail.com>, Li Yang <leoyang.li@nxp.com>
+Subject: Re: [GIT PULL] i.MX fixes for 5.12, round 2
+Date: Thu,  1 Apr 2021 12:23:32 +0200
+Message-ID: <161727243755.583633.10590032736575762334.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210323131530.2619900-1-arnd@kernel.org>
-References: <20210323131530.2619900-1-arnd@kernel.org>
+In-Reply-To: <20210330090236.GQ22955@dragon>
+References: <20210330090236.GQ22955@dragon>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210401_112354_496173_BDC7368F 
-X-CRM114-Status: UNSURE (   9.08  )
+X-CRM114-CacheID: sfid-20210401_112358_950724_654841A3 
+X-CRM114-Status: UNSURE (   6.26  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -83,25 +82,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210401102330.AZj_JIdsq7U24aPX5X7Utc7i0GW7ZwyF47FrbapFiq0@z>
+Message-ID: <20210401102332.clgYJ05GtANVdRr-QDQ8k-wtdQJJUNKl-pQsTxFUqe8@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 23 Mar 2021 14:15:23 +0100, Arnd Bergmann wrote:
-> When building with W=1, gcc points out that the __packed attribute
-> on struct qm_eqcr_entry conflicts with the 8-byte alignment
-> attribute on struct qm_fd inside it:
+On Tue, 30 Mar 2021 17:02:37 +0800, Shawn Guo wrote:
+> The following changes since commit e4817a1b6b77db538bc0141c3b138f2df803ce87:
 > 
-> drivers/soc/fsl/qbman/qman.c:189:1: error: alignment 1 of 'struct qm_eqcr_entry' is less than 8 [-Werror=packed-not-aligned]
+>   ARM: dts: imx6ull: fix ubi filesystem mount failed (2021-03-18 12:06:28 +0800)
 > 
-> I assume that the alignment attribute is the correct one, and
-> that qm_eqcr_entry cannot actually be unaligned in memory,
-> so add the same alignment on the outer struct.
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.12-2
+> 
+> [...]
 
-Applied to arm/fixes
+Merged into arm/fixes, thanks!
 
-[1/1] soc/fsl: qbman: fix conflicting alignment attributes
-      commit: b9ab2619047edc1c6c07dc68963d84a5979f0abe
+merge commit: 89e21e1ad92373b7306b9b8494d45781598ce72f
 
        Arnd
 
