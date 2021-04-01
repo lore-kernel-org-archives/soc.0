@@ -2,60 +2,66 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C74DBC433B4
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 19:24:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77359C433ED
+	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 19:24:33 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 92EDD61001; Thu,  1 Apr 2021 19:24:28 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 140A1601FD;
-	Thu,  1 Apr 2021 19:24:26 +0000 (UTC)
+	id 58505610D0; Thu,  1 Apr 2021 19:24:33 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 11D6C610C7;
+	Thu,  1 Apr 2021 19:24:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617305068;
-	bh=qD36HT3wr/JCFkj8VC2XOv41n8kMcWvt48FkkODJHlw=;
+	s=k20201202; t=1617305073;
+	bh=D7jJwnU+o4TFZE/ODZG4YwaqAYa78t9bwwiTUI35u18=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oLy6JIf9ca6Pc67LR3LVv2Ry2O5jsTLYKxMYSP7RwmKR8b2GB4CAtpoDmMXizsZ6k
-	 vKRbux3IXzF96uGP9UtyXXvN2Wiey6YQ6vhUPI1N4zRemmJSkq+VNqrwgqn05AgRbl
-	 0v6RrzZ6GmPXVB5W27v76W2go9vtUxTPGGAhElHJ/qwv/n+UPLn7zgkfBTIqU5fQjR
-	 iRFMnuiKLxKmH1M3HbbPMhNT/dEOfsmXutbpmUxqnhByAL35J/nY56/fMOWOvi38WN
-	 hiI6hldMUs73IEwNnmDHG5g2wm0+fNa5zKt4LFQq2VcVNjsGmRNqkoDeYmIkfkK8z0
-	 JdxQ/8LozEBtg==
+	b=ZIHdbmYtKJ2K5Gb+IqDF5ghFYdXZGeeYOn6xU62eZm2jW0FB74wxPqtj/UnMDM+od
+	 mpiYHvPoSNgufD2iFABfOpEFb/bQHL4qJfA0KRUpjgiX26EJg8PeK4d6HSh78O76ft
+	 onHziqy7iuDr6f5qJp1MtxYLOZ0KHwel+dfjgvzl23I/xM1Uj1dUadvdZKenqH23Dg
+	 EcBSNie2F8z1sSGDwkhrlfvN7y7+Vtc31+ZybYLK+l/t0sgI9MF6hEk3dYrXmsDfge
+	 x4voyWl+aC8B0CUFFjxH7kth8GgupVjzJWorp6PloD43K9AXow+MHlB3fLzwNHLMgX
+	 V1GDLDt8BIRgg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
-	Jens Wiklander <jens.wiklander@linaro.org>,
-	arm@kernel.org
+	Nicolas Saenz Julienne <nsaenz@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	op-tee@lists.trustedfirmware.org,
-	Jerome Forissier <jerome@forissier.org>
-Subject: Re: [GIT PULL] OP-TEE memref size check for v5.13
-Date: Thu,  1 Apr 2021 21:24:13 +0200
-Message-Id: <161730504488.632809.12872911046632269445.b4-ty@arndb.de>
+	gregkh@linuxfoundation.org,
+	linux-arm-kernel@lists.infradead.org,
+	sboyd@kernel.org,
+	dmitry.torokhov@gmail.com,
+	robh@kernel.org,
+	u.kleine-koenig@pengutronix.de,
+	bgolaszewski@baylibre.com,
+	thierry.reding@gmail.com,
+	f.fainelli@gmail.com
+Subject: Re: [GIT PULL] Raspberry Pi driver updates for v5.13
+Date: Thu,  1 Apr 2021 21:24:14 +0200
+Message-Id: <161730504479.632809.2179392548261995613.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210330110037.GA1166563@jade>
-References: <20210330110037.GA1166563@jade>
+In-Reply-To: <20210322174232.29549-1-nsaenz@kernel.org>
+References: <20210322174232.29549-1-nsaenz@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 30 Mar 2021 13:00:37 +0200, Jens Wiklander wrote:
-> Please pull this small patch for the OP-TEE driver to remove the invalid
-> size check of outgoing memref parameters. This code path is only
-> activated for a certain configuration of OP-TEE in secure world
-> (CFG_CORE_DYN_SHM=n) so this problem isn't always visible.
+On Mon, 22 Mar 2021 18:42:32 +0100, Nicolas Saenz Julienne wrote:
+> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 > 
-> Thanks,
-> Jens
+>   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git tags/rpi-poe-v5.13
 > 
 > [...]
 
 Merged into arm/drivers, thanks!
 
-merge commit: d6358a687891dacbe7d88541a83f61bdccb4f7b8
+merge commit: 7da68c64bc9037da7e470bfd219a2b5b7e7c5af1
 
        Arnd
