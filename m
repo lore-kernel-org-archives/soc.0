@@ -2,60 +2,58 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 405ACC433B4
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 21:07:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29BB2C433B4
+	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 21:08:41 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 1EECD61106; Thu,  1 Apr 2021 21:07:17 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BC5DA6112F;
-	Thu,  1 Apr 2021 21:07:15 +0000 (UTC)
+	id E2533610FB; Thu,  1 Apr 2021 21:08:40 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CA6CC60FE9;
+	Thu,  1 Apr 2021 21:08:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617311237;
-	bh=3oStrjzAvVbQa0S1FwZRjUrmDCAHpXIE1z/QYbHDtOw=;
+	s=k20201202; t=1617311320;
+	bh=y5UPwiqkgfVx96KWYdQ37ezgwlno0VIQUmTVpSz4sJQ=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=q/81vyuzAp1HBF45rRIeQlHbO9Zz94x5zr9IvXtD1uCffpIiFbALWvmQ30MQxZg7G
-	 nANGZ20jcv6h3XmC1JSWHHwzybVyIOgRL5dixRckSz5cpZRggIrsMr0V/bPkoCR9Lm
-	 GKcY6UY4UVoxk2ffnCqmsld3s/I6x2xxz2hjLqrCvN0NoLI+E/bOxVIuSe4m73Tr6v
-	 1lw6vyxlWYVef406Jq14IFFFqiuDXIQ4X6zjOXgD9UN9qbsK6Qtb5gdtsaJOx5oYul
-	 7yOEitcCangyJvVHEEGi0+rZqfscxZ6MK980NlLGCFYAxPFo+nGGJWYmjF2AmF7T5e
-	 A+ovDIRfwXiNQ==
+	b=miCgnTNDChBZ5lsxXSdr0GbztB3aXt9HiOE3DomqO3GMZbVj9TWM4ugzAH35gqyCe
+	 eQ9chKvksllpKF1n/ZBCLQBHjZpffFSbE7hr9CqkEYP2iMppE9RnVNDvq8ZaGVZIYf
+	 p1sPswwb3CacheSgk0VHrCwf+l3tiFxAMF2Br8ifTbxywpzcjTbqSlPAxs+0nYmNrP
+	 pnsfZCGQDyNC9/SHlTvwg70k6FCQoLXmOpFUy9PfT4/cwaJQQ5ILxgLkgCtJpaqqpd
+	 87z0nUei50UTB1Yx2lO06Uw3oQQer81xHQC2ME8ejhl1jTDTTNHeDEj2+oKBiTvIlO
+	 FCnmaZ5iyRiWQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Tony Lindgren <tony@atomide.com>,
-	soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-kernel@lists.infradead.org,
+To: soc@kernel.org,
 	arm@kernel.org,
-	linux-omap@vger.kernel.org
-Subject: Re: [GIT PULL 3/3] Drop legacy data for dra7 and omap4/5 and clean-up
-Date: Thu,  1 Apr 2021 23:07:06 +0200
-Message-Id: <161731121857.663132.4089815992350147845.b4-ty@arndb.de>
+	Dinh Nguyen <dinguyen@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [GIT PULL 1/3] SoCFPGA updates for v5.13
+Date: Thu,  1 Apr 2021 23:08:35 +0200
+Message-Id: <161731130329.663335.3847371649852120175.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <pull-1617004205-537424@atomide.com-3>
-References: <pull-1617004205-537424@atomide.com> <pull-1617004205-537424@atomide.com-3>
+In-Reply-To: <20210330110430.558182-1-dinguyen@kernel.org>
+References: <20210330110430.558182-1-dinguyen@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 29 Mar 2021 10:55:22 +0300, Tony Lindgren wrote:
-> The following changes since commit 083516ad540a1104a0ae5ae7e83f2a2d8e39d2bc:
+On Tue, 30 Mar 2021 06:04:28 -0500, Dinh Nguyen wrote:
+> Please pull in these SoCFPGA updates for v5.13.
 > 
->   Merge tags 'genpd-dts-dra7', 'genpd-dts-omap4' and 'genpd-dts-omap5' into omap-for-v5.13/dts-genpd (2021-03-10 14:16:34 +0200)
+> Thanks,
+> Dinh
 > 
-> are available in the Git repository at:
+> The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.13/genpd-cleanup-signed
+>   Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
 > 
 > [...]
 
-Merged into arm/soc, thanks!
+Merged into arm/drivers, thanks!
 
-merge commit: 3e26eccd40f9d4ff43fbd05edaccb96abfab04e8
+merge commit: ba87f2009edb69fa81d344c55bcee518b0707c98
 
        Arnd
