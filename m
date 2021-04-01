@@ -2,62 +2,64 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 451FCC43461
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43FB3C43460
 	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 09:41:01 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 15237610C7; Thu,  1 Apr 2021 09:41:01 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id F3D686108B
-	for <soc@kernel.org>; Thu,  1 Apr 2021 09:41:00 +0000 (UTC)
+	id 0D9A66108F; Thu,  1 Apr 2021 09:41:01 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id E9A0660FE8;
+	Thu,  1 Apr 2021 09:41:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1617270061;
-	bh=1eTD25TNHfEvphc02Lytwl4nIA5M/7Jbb+eGRPMV3Ac=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=ReCmxWLvFRSHdKVzOdfwg75I/mZuuMXatMqKfFjDxhp2g+om94um6AiHNZFjOA99U
-	 U9xPLJFYqQGjckKoKvjiQwMH/8xHw/Vo5Q4XceZ3mmiYqWNDSeF2cRDOPt1lCuYjbO
-	 pjHsaLpe1FkdoCg1dqCRQ/eedzYYDGz9HNuORF5s2CjWZ4AAM+H2362o+W162eX6Db
-	 C+6QtoYrlP0M/5nYEWLzOG42f9rbQh42sn3spGaT7+lOv+FxLrZ4RfX8ZROGyzbPA7
-	 hn01G9OHD5rHSpY7aDFCFrCuLABjBcHZcNYH6prXDX7B+peMVb58+DeJFVolj1U6PO
-	 IkxkoURD9ubPQ==
+	bh=EiY0EjzzpRQq/3hOUN+hLww5vgdtlc0aTM+7uQLurnI=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=lCe7QK2zbSSXMV8irt/1r85wwEeklFqR/VPr9p6hv5/0rtKRPcak1h8GyCweXT21C
+	 CpSzswitf2m6kib1tuHgEi55y7QCzl4iaBCAQd4BfkkMGcmBAYfM4paABSJPYcWV4O
+	 ScTxslAsoYA4HVav8mnKWsoTzHm2FEDMl3Nr0HXX8lm+/dk/ZVW7op188sIf/MG6Bs
+	 AC5325EKqqdWNX2ke3wlCSmbaG/0uNcAdKNDZ/gqA6zYZEeEvf6zhWo2ZFlD2OVN8e
+	 UeUfDrZwwWIDajuQcY3WfplYbWvdENAcC0ENU1hZZ+xIJjirR0nUPkH/1GM7aVXPt1
+	 DKzEWhUNzr4yg==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D7F3060727;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E0F4F609CF;
 	Thu,  1 Apr 2021 09:41:00 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] More fixes for omaps for v5.12-rc cycle
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <161727006083.25375.18066690501544276798.git-patchwork-summary@kernel.org>
+ <161727006091.25375.6717547268485823430.git-patchwork-notify@kernel.org>
 Date: Thu, 01 Apr 2021 09:41:00 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <pull-1616584662-702939@atomide.com>
+In-Reply-To: <pull-1616584662-702939@atomide.com>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (refs/heads/arm/fixes):
+This pull request was applied to soc/soc.git (refs/heads/arm/fixes):
 
-Patch: [GIT,PULL] More fixes for omaps for v5.12-rc cycle
-  Submitter: Tony Lindgren <tony@atomide.com>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=454539
-  Lore link: https://lore.kernel.org/r/pull-1616584662-702939@atomide.com
-Patch: [GIT,PULL] i.MX fixes for 5.12, round 2
-  Submitter: Shawn Guo <shawnguo@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=457937
-  Lore link: https://lore.kernel.org/r/20210330090236.GQ22955@dragon
-Patch: [GIT,PULL] ARM: SoC fixes for v5.12
-  Submitter: Arnd Bergmann <arnd@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=456323
-  Lore link: https://lore.kernel.org/r/CAK8P3a2BTOzDfmH3dHmwm6LYPefFAnGCMPdQOpUbXOukiT0rVw@mail.gmail.com
+On Wed, 24 Mar 2021 13:20:39 +0200 you wrote:
+> From: "Tony Lindgren" <tony@atomide.com>
+> 
+> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+> 
+>   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+> 
+> are available in the Git repository at:
+> 
+> [...]
 
-Total patches: 3
+Here is the summary with links:
+  - [GIT,PULL] More fixes for omaps for v5.12-rc cycle
+    https://git.kernel.org/soc/soc/c/111a5a421fb7
 
+You are awesome, thank you!
 --
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
