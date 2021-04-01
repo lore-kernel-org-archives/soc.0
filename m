@@ -7,56 +7,55 @@ X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 629E1C433ED
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 20:16:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B714C433ED
+	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 20:16:07 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 45489610E5; Thu,  1 Apr 2021 20:16:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A0315610D0;
-	Thu,  1 Apr 2021 20:16:03 +0000 (UTC)
+	id EBF44610F7; Thu,  1 Apr 2021 20:16:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9107A610E9;
+	Thu,  1 Apr 2021 20:16:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617308165;
-	bh=jPNGUCNbVcKITJwrKf1PZUGFtBFu7AyQnlQFiQYd9RA=;
+	s=k20201202; t=1617308166;
+	bh=a8wXmiIZJuzMRoiHoMZd0u967sFUL0d5AugV/GBVCmQ=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OxcexJ4Epc6tStF3C743sU3DdK0PW8I2qXOTWjjz++zd2V1xCzI53JNPGQmcF5AjI
-	 +kqX5Oz8ihsXWe0LBJVdeSVntbtaa2RMUIpoQCE9uAmIQFqzbvpIKFpOQJaktDzrVS
-	 pw6kqylx4oORyObFGPrjjML0Et3VfCp5bZagdk/iw6f+WjzXnkXEAtQY1n/vAPW+G9
-	 PEWCUHkQg9mwsQndlPX05coMMP6m+BLwIZy/mfJDpmLEM6Ex++lcAMCe8LcdghOetY
-	 XKuS/G5Ymwr67QHy1s5QD6+o+XOR2R4qMmGF2c4KGLIl7XhxiASOTP0+aKhy4EjZmD
-	 C/6SXBucKjtCA==
+	b=NkC7djKdqiHs9fxzRfCOjkqWtzZY3b7dRjPmy8bwFfU4E1SW+QTfoayL2eeO181q5
+	 qpMZbvkVnBirYYvD1aDCTAyDB4Y2iQgUq3wFRqT2Tqt9p4mCJ9RwYmjrY2/J8tXlkE
+	 MS+J3V9xGrek97GOFzkNQD7lCgjtmDDrEuZ4S0F8U+y9SSX6UrlZ7wHONEQBbffKqv
+	 ceisQnrskf7v+6vIfdsfus7lMTZLxk4KOyTe+gJOZ1rYTxCFzBSzNdZ2A0akBTfFlM
+	 CSVWuWiBtWeGIEsIbFgs9N8Z1cDW9adLDOEqqNWtX/eULdBhBqVMLTwujfdM989vep
+	 fRNMjZBh+iuUw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	Thierry Reding <thierry.reding@gmail.com>,
+To: Tony Lindgren <tony@atomide.com>,
 	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Jon Hunter <jonathanh@nvidia.com>,
+	linux-omap@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-tegra@vger.kernel.org
-Subject: Re: [GIT PULL 5/5] arm64: tegra: Device tree fixes for v5.12-rc6
-Date: Thu,  1 Apr 2021 22:15:29 +0200
-Message-Id: <161730808690.655497.9362657785877242094.b4-ty@arndb.de>
+	arm@kernel.org
+Subject: Re: [GIT PULL 2/3] Devicetree changes for omaps for genpd support
+Date: Thu,  1 Apr 2021 22:15:30 +0200
+Message-Id: <161730808591.655497.12428729315912496095.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210401172622.3352990-5-thierry.reding@gmail.com>
-References: <20210401172622.3352990-1-thierry.reding@gmail.com> <20210401172622.3352990-5-thierry.reding@gmail.com>
+In-Reply-To: <pull-1617004205-537424@atomide.com-2>
+References: <pull-1617004205-537424@atomide.com> <pull-1617004205-537424@atomide.com-2>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Thu, 1 Apr 2021 19:26:22 +0200, Thierry Reding wrote:
-> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+On Mon, 29 Mar 2021 10:55:21 +0300, Tony Lindgren wrote:
+> The following changes since commit e259c2926c016dd815e5547412356d378fc1f589:
 > 
->   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+>   PCI: pci-dra7xx: Prepare for deferred probe with module_platform_driver (2021-03-10 14:01:00 +0200)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.13-arm64-dt
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.13/dts-genpd-signed
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 520f30feb864e9baaf7bed677892b478ffd10232
+merge commit: e49936d2154724213b5ec8a8aae89b2c2ebc3af1
 
        Arnd
