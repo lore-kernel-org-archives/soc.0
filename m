@@ -1,61 +1,105 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=qM2e=I6=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B714C433ED
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 20:16:07 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id EBF44610F7; Thu,  1 Apr 2021 20:16:06 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9107A610E9;
-	Thu,  1 Apr 2021 20:16:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 502CCC433B4
+	for <linux-mediatek@archiver.kernel.org>; Thu,  1 Apr 2021 20:18:10 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id BFE6E60C3D
+	for <linux-mediatek@archiver.kernel.org>; Thu,  1 Apr 2021 20:18:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BFE6E60C3D
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
+	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=/QvNWDjs+Drvz/XP9nV3ygfwOv+EvQ3BhRQY9OZ62/Q=; b=qvZjMPmi91NHyhNZf3aDElwiT
+	qaH3I4m89tcJgJqbXPPVaWl9CeGsCDnHDlmq5SW/oWY2Hudd2KZzVHOnWoNO/aGeTOGfa5YjZJt2B
+	g13NGK/BbZJ+ETJpQjtg9YzBQpLmYFAeFynewcJvH4CV6qTLWUG8Z4bCUspjlo/CwfgGSUjOoNnvA
+	exTr52+JT87sdzkRU2xfGN4R1HwClViCHGI1OFuzvzXtPMNuQZMro2A5EAsOJaMVXrXWXib2PwrIJ
+	IPYpxpmrRMpDqX21IAP2Xj0FmI8P+ZQb5/DRRCQiiEz7rpVl1mPP7PMJVSl39ruRCl/dcHCdKCgUp
+	BTRKzJbMA==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lS3lO-00AuMR-QQ; Thu, 01 Apr 2021 20:17:59 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lS3jL-00At2O-OW; Thu, 01 Apr 2021 20:15:57 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DA1C6610D1;
+ Thu,  1 Apr 2021 20:15:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617308166;
-	bh=a8wXmiIZJuzMRoiHoMZd0u967sFUL0d5AugV/GBVCmQ=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NkC7djKdqiHs9fxzRfCOjkqWtzZY3b7dRjPmy8bwFfU4E1SW+QTfoayL2eeO181q5
-	 qpMZbvkVnBirYYvD1aDCTAyDB4Y2iQgUq3wFRqT2Tqt9p4mCJ9RwYmjrY2/J8tXlkE
-	 MS+J3V9xGrek97GOFzkNQD7lCgjtmDDrEuZ4S0F8U+y9SSX6UrlZ7wHONEQBbffKqv
-	 ceisQnrskf7v+6vIfdsfus7lMTZLxk4KOyTe+gJOZ1rYTxCFzBSzNdZ2A0akBTfFlM
-	 CSVWuWiBtWeGIEsIbFgs9N8Z1cDW9adLDOEqqNWtX/eULdBhBqVMLTwujfdM989vep
-	 fRNMjZBh+iuUw==
+ s=k20201202; t=1617308150;
+ bh=N+8g3oi/DtOR4IYfKa4K/TuQ5ID2Jy9j60SR79CV9e0=;
+ h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=pSpEirbcyT/HIrg21DMCZeyzEyLgqxZAUE8xefTuDXvuKGxgCp514CCIPaeEpgWO8
+ q4Oj6C+3fjzDGFpxG5M+/O1I7Qi2jReXtJzMMeqmo4aZHZLelONALYl62ViH3K0NUs
+ WgGj9oznz3aQXVVPIomeaghLKPEbrgKjSkcpXHgkf5r7hg7N4iWhgr82POo0gnyVzL
+ 4sZmQqvTRvIguYVfjpWu/jEB8C/pLNf9Z9p5e1ETRNIj5gzyWO17SeGooFMdUBlaJG
+ LXbUPAW7vLGwhLsBBlwFq7BwHU5gz08uc3s1H+uYAO0LZJZ+SUXhXdv+jfvCwuWhYz
+ 7X1zYVsFGl9Gg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Tony Lindgren <tony@atomide.com>,
-	soc@kernel.org
+To: SoC Team <soc@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ arm-soc <arm@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	arm@kernel.org
-Subject: Re: [GIT PULL 2/3] Devicetree changes for omaps for genpd support
-Date: Thu,  1 Apr 2021 22:15:30 +0200
-Message-Id: <161730808591.655497.12428729315912496095.b4-ty@arndb.de>
+ "moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
+ Boris Lysov <arzamas-16@mail.ee>, Chunfeng Yun <chunfeng.yun@mediatek.com>,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [GIT PULL] ARM: dts: mediatek: updates for v5.13
+Date: Thu,  1 Apr 2021 22:15:22 +0200
+Message-ID: <161730808698.655497.18205720456447891568.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <pull-1617004205-537424@atomide.com-2>
-References: <pull-1617004205-537424@atomide.com> <pull-1617004205-537424@atomide.com-2>
+In-Reply-To: <be262120-6cd9-87a7-ccc3-f5c403cff66b@gmail.com>
+References: <be262120-6cd9-87a7-ccc3-f5c403cff66b@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210401_211555_816496_916F7FF5 
+X-CRM114-Status: UNSURE (   8.99  )
+X-CRM114-Notice: Please train this message.
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210401201522.ATxQvcX1DX7riKUGReAIboAUrBtaACVNPgeSSBj95Os@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 29 Mar 2021 10:55:21 +0300, Tony Lindgren wrote:
-> The following changes since commit e259c2926c016dd815e5547412356d378fc1f589:
+On Thu, 1 Apr 2021 16:01:34 +0200, Matthias Brugger wrote:
+> Please take the below patches into account. These are mostly cleanups to make
+> the DTB checker happy. Apart from that we now have SMP support for MT6589, it's
+> nice to see that someone keeps working on this old platform with which I started
+> upstreaming :)
 > 
->   PCI: pci-dra7xx: Prepare for deferred probe with module_platform_driver (2021-03-10 14:01:00 +0200)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.13/dts-genpd-signed
-> 
-> [...]
+> Regards,
+> Matthias
 
 Merged into arm/dt, thanks!
 
-merge commit: e49936d2154724213b5ec8a8aae89b2c2ebc3af1
+merge commit: 8028548ba16284166987d8969e0c5bec36a0228d
 
        Arnd
+
+_______________________________________________
+Linux-mediatek mailing list
+Linux-mediatek@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-mediatek
