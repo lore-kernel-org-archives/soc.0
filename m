@@ -1,104 +1,64 @@
-Return-Path: <linux-kernel-owner@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7B04C43619
-	for <linux-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:57 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9486361165
-	for <linux-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:57 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236701AbhDARtd (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Thu, 1 Apr 2021 13:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234741AbhDARjh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Apr 2021 13:39:37 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB7FC0610D0
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Apr 2021 05:33:06 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id x207so1626709oif.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Apr 2021 05:33:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bYBBXqXjqIEWJW+a8G61y+9V36oyZ8bqWDrWT4tmnlc=;
-        b=Kg+n6DGxQjSdU4ERhysXZ45Lu56R/0K+pTJJpe7815cK0Mtt660ipOl4qwNPU4lcta
-         D4Txr9k1sgImDF7ualRrC8EbqCfmkPSUJ77tRSvAVuybaC8ZFEyy/R1YoD9KeMWsD5Pf
-         Va4I7+ZprD3HxQ38wydSNIyjUhtkGpZ5tMGHOAbBD7QkXTT1ml+30AJ7lVEouAAqkuFO
-         cUZ/MWeqUnCB3VRNPawpvLBIaN7SP5j/o/91ArNzAYd9WNfyw8mb+LXdkN10bEkAsJH0
-         Ypu6ls2y57tvLHQLdxKEXAQlfFU+8Q7KGg2Faf68A348V3OfZOfapnu9I3ShOmnGCslj
-         RloQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bYBBXqXjqIEWJW+a8G61y+9V36oyZ8bqWDrWT4tmnlc=;
-        b=OPBRhTqbLGvFfk/wAUf/ubmTi5fgy7mhYvrvyVQXdquzxyyuBzfRr09LtRtDOC5yAS
-         UHctUChiHMeDQDRXIx1Oo0mmPww2tbnWWNxiPHDB8MBEELlNzcpb1F7q3zN+Ma/fxQ2W
-         ciH6cz6INnDeDZtWgOrBNQ0xEDD/5zti+aLAihMu9wU1BtL1ASXR24iPsRBB76WQHCdW
-         D9VxDN4YYOhwoQfiLvHSYIqBPGGOR/LHWE3Bzm6fuomi67koiiT1Bkc5ZFzRxC14aJd/
-         vZ7CBb8aBlKXONba4/l2GgS5/iJXpqZLuR7/r9t6z4Zg27na7W91ljWg3eHSRzxKF1c6
-         kuWw==
-X-Gm-Message-State: AOAM531UpSFNoZHgoJt0PpEtTl2nR6R6Ajuh0kiMSOpDgN/kIZJZTRvx
-        4GrcHZJJtLySyO98/vIx8aexqP8BnUZe9iRSpjo/zg==
-X-Google-Smtp-Source: ABdhPJywnxWEEjMlE4aBIUeotkDIUC9+UKYA0hL+/WDzMmkmPSd5/pgY/hKusGxY9ewHKyLtBan5czoqJBH63756PxY=
-X-Received: by 2002:aca:7c4:: with SMTP id 187mr5765643oih.47.1617280385522;
- Thu, 01 Apr 2021 05:33:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210330082208.GA965793@jade> <161727243793.583633.7984995735453542553.b4-ty@arndb.de>
-In-Reply-To: <161727243793.583633.7984995735453542553.b4-ty@arndb.de>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Thu, 1 Apr 2021 14:32:54 +0200
-Message-ID: <CAHUa44Fdvhj2ca4O+CxD94YZ6BtzNut9HMn3FxDshh_vgHVwDA@mail.gmail.com>
-Subject: Re: [GIT PULL] OP-TEE tracepoints fix for v5.13
-To:     Arnd Bergmann <arnd@kernel.org>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4D31C433B4
+	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 19:24:23 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id B141E610CA; Thu,  1 Apr 2021 19:24:23 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DB654610A5;
+	Thu,  1 Apr 2021 19:24:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1617305063;
+	bh=y4dKcnGnV+jd4LSVkwIniCXTDonRLqPpBczlpm8sm34=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=MvpgvIL9NMvz4ioZ7qRXhUuFt8fsJcVvAhMuf4TLuUcH0KxsveuYc+Yrf6zhgW5rU
+	 ws7CmN70uVe39REsVYjKrw3L3gZAUnIVUMrfsBNPMxq5EkJ8gNIF64z795EYVuNg+8
+	 YsGJa9DzLe/Ns0RE45GQln1lgU3gnC5yS5yIRY70y/FulfMB5ADhcRkKtSS0pV9geB
+	 mjU+C1sS3Ww3eBhezez+vs69SmGVhF212GhdKjNZgF7qOVnhhhsK2ju/MhhwXgHDLV
+	 uqB+wZQoVpmuy4FR7zBBkLtLayrjwD+spcewMO94AubV534hWN5/ieeJloBjIQfjuW
+	 ziwiYlwOjbVOw==
+From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc:     SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>
-Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <linux-kernel.vger.kernel.org>
-X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20210401123254.Mz1Wk0GGwNw5mFsOOkiTPch0-nFOnKEKrMmvE-IAkHE@z>
+To: soc@kernel.org,
+	Florian Fainelli <f.fainelli@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	khilman@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	olof@lixom.net,
+	bcm-kernel-feedback-list@broadcom.com,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+	Rob Herring <robh@kernel.org>
+Subject: Re: [GIT PULL 3/3] Broadcom drivers changes for 5.13
+Date: Thu,  1 Apr 2021 21:24:12 +0200
+Message-Id: <161730504496.632809.4121560040129719627.b4-ty@arndb.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210330184006.1451315-3-f.fainelli@gmail.com>
+References: <20210330184006.1451315-1-f.fainelli@gmail.com> <20210330184006.1451315-3-f.fainelli@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 1, 2021 at 12:23 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> On Tue, 30 Mar 2021 10:22:08 +0200, Jens Wiklander wrote:
-> > The previous pull request for OP-TEE tracepoints introduced a build
-> > error when building whithout O=..., apparently many regression builds
-> > uses that option.
-> >
-> > Please pull this small fix for the build error.
-> >
-> > Thanks,
-> > Jens
-> >
-> > [...]
->
-> You asked for this to be merged for 5.13, but as the change is clearly correct
-> and required as a build fix, I added it as a fix for 5.12 instead, hope that's
-> ok.
->
-> Merged into arm/fixes, thanks!
->
-> merge commit: 3e530f89d72dd1ab31e20d6f8567e357b928705c
+From: Arnd Bergmann <arnd@arndb.de>
 
-OK. Please note that this pulls in 0101947dbcc3 ("tee: optee: add
-invoke_fn tracepoints") (the commit just before actually) which I
-believe was queued for v5.13.
+On Tue, 30 Mar 2021 11:40:06 -0700, Florian Fainelli wrote:
+> The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
+> 
+>   Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.13/drivers
+> 
+> [...]
 
-Cheers,
-Jens
+Merged into arm/drivers, thanks!
+
+merge commit: e9396d6b3864d235c57733ccb4902834eb8313a8
+
+       Arnd
