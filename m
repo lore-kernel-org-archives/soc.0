@@ -1,61 +1,102 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=m4lh=I6=lists.ozlabs.org=linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7661AC433ED
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 10:23:57 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 494DD610E6; Thu,  1 Apr 2021 10:23:57 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CF56B610CD;
-	Thu,  1 Apr 2021 10:23:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34D75C433B4
+	for <linuxppc-dev@archiver.kernel.org>; Thu,  1 Apr 2021 10:24:20 +0000 (UTC)
+Received: from lists.ozlabs.org (lists.ozlabs.org [112.213.38.117])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 95913606A5
+	for <linuxppc-dev@archiver.kernel.org>; Thu,  1 Apr 2021 10:24:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 95913606A5
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org
+Received: from boromir.ozlabs.org (localhost [IPv6:::1])
+	by lists.ozlabs.org (Postfix) with ESMTP id 4F9znG1bM3z3bwq
+	for <linuxppc-dev@archiver.kernel.org>; Thu,  1 Apr 2021 21:24:18 +1100 (AEDT)
+Authentication-Results: lists.ozlabs.org;
+	dkim=fail reason="signature verification failed" (2048-bit key; unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20201202 header.b=RJ8tvMOa;
+	dkim-atps=neutral
+Authentication-Results: lists.ozlabs.org; spf=pass (sender SPF authorized)
+ smtp.mailfrom=kernel.org (client-ip=198.145.29.99; helo=mail.kernel.org;
+ envelope-from=arnd@kernel.org; receiver=<UNKNOWN>)
+Authentication-Results: lists.ozlabs.org; dkim=pass (2048-bit key;
+ unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
+ header.s=k20201202 header.b=RJ8tvMOa; 
+ dkim-atps=neutral
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by lists.ozlabs.org (Postfix) with ESMTPS id 4F9zmp1nzvz2yy7
+ for <linuxppc-dev@lists.ozlabs.org>; Thu,  1 Apr 2021 21:23:54 +1100 (AEDT)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C1318610CC;
+ Thu,  1 Apr 2021 10:23:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617272637;
-	bh=NlzFEJnGo31nu4+3b3ZxFIOj1CRAeQgNnmnScf+84ts=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nHXYk+oUUyqi5lRKIAPZLnBOfjRmV3qSm1355uldps0T+ItrxLVNyRJs09IYST3Y8
-	 c+a1qx2u4t6q94r9FeCS2l5qhUqIFWhFymOQWULG26PIk+wipNmVfh4yN3Bxa9DZ3f
-	 IJwmQk+ekDDr9gQ/ide2+3E7ylWwqPodjcGcLlLjx3fowtNi/2MAWEZKSJaWrWzSVU
-	 qVn9HXc/Abca875kfIEw9rKjD8u3LLgK07yLvawPDAFcOke1JEus7Nvm55JP9sT8ir
-	 fVU1k+nuUaesj5+C9KF/pDwGxeFB7ZCICtlbByk3zxE243oqVDAyhisB8h4vUWEznc
-	 VQhgQG9SZ4rng==
+ s=k20201202; t=1617272630;
+ bh=MZ3Ne7ildQK4xFvvzsF6ZSktnlVMdKCIZSj1JEw6htk=;
+ h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
+ b=RJ8tvMOaVhlGiMjt6SNGdffrUCik9IPv+22Lj9ln8X1D5YKAJpPlRHI7PwxmPDXjk
+ k+tMiKCk1lzd4L7/Ijz9gq9wCP+Cg/H3kQH6noZnlfERXRR+L/Js8deCIqF6+Dx5yE
+ fLhuKtuBRc6d6GlCMN4MRQkNsG5nS1+Qf3HmRVJUbXZBLtONpUJJVd7vOFagWdCVOx
+ M5BQUh483IJcedke6tsujvWW62ZLTwC+1CcbBUKaDb1Y3YrDp+dwSSonww96LHz06i
+ nE7hrZqrxvgxeSg3clSt+LoRqErWs1rVwFX0QNaQcCqTzaPYVA4zaUMuPd5miPs7Qh
+ m/OMrKD7enkBQ==
 From: Arnd Bergmann <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: Tony Lindgren <tony@atomide.com>,
-	soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org,
-	arm@kernel.org
-Subject: Re: [GIT PULL] More fixes for omaps for v5.12-rc cycle
-Date: Thu,  1 Apr 2021 12:23:33 +0200
-Message-Id: <161727243717.583633.17499890750529623246.b4-ty@arndb.de>
+To: Roy Pledge <roy.pledge@nxp.com>, Claudiu Manoil <claudiu.manoil@nxp.com>,
+ Scott Wood <oss@buserror.net>, Arnd Bergmann <arnd@kernel.org>,
+ Li Yang <leoyang.li@nxp.com>
+Subject: Re: [PATCH] soc/fsl: qbman: fix conflicting alignment attributes
+Date: Thu,  1 Apr 2021 12:23:30 +0200
+Message-ID: <161727243810.583633.4915294266076534019.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <pull-1616584662-702939@atomide.com>
-References: <pull-1616584662-702939@atomide.com>
+In-Reply-To: <20210323131530.2619900-1-arnd@kernel.org>
+References: <20210323131530.2619900-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-BeenThere: linuxppc-dev@lists.ozlabs.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
+List-Unsubscribe: <https://lists.ozlabs.org/options/linuxppc-dev>,
+ <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=unsubscribe>
+List-Archive: <http://lists.ozlabs.org/pipermail/linuxppc-dev/>
+List-Post: <mailto:linuxppc-dev@lists.ozlabs.org>
+List-Help: <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=help>
+List-Subscribe: <https://lists.ozlabs.org/listinfo/linuxppc-dev>,
+ <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ YueHaibing <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org,
+ soc@kernel.org, Jakub Kicinski <kuba@kernel.org>,
+ Lee Jones <lee.jones@linaro.org>, linux-arm-kernel@lists.infradead.org
+Errors-To: linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org
+Sender: "Linuxppc-dev"
+ <linuxppc-dev-bounces+linuxppc-dev=archiver.kernel.org@lists.ozlabs.org>
+Message-ID: <20210401102330.rQw-YL4cqdECf_s_Z9rkQCTZSh-q2PnO4YK2TNQhJts@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 24 Mar 2021 13:20:39 +0200, Tony Lindgren wrote:
-> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+On Tue, 23 Mar 2021 14:15:23 +0100, Arnd Bergmann wrote:
+> When building with W=1, gcc points out that the __packed attribute
+> on struct qm_eqcr_entry conflicts with the 8-byte alignment
+> attribute on struct qm_fd inside it:
 > 
->   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+> drivers/soc/fsl/qbman/qman.c:189:1: error: alignment 1 of 'struct qm_eqcr_entry' is less than 8 [-Werror=packed-not-aligned]
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.12/fixes-rc4-signed
-> 
-> [...]
+> I assume that the alignment attribute is the correct one, and
+> that qm_eqcr_entry cannot actually be unaligned in memory,
+> so add the same alignment on the outer struct.
 
-Merged into arm/fixes, thanks!
+Applied to arm/fixes
 
-merge commit: 111a5a421fb770d0fc2e09f7d57eb2cbe51e3ade
+[1/1] soc/fsl: qbman: fix conflicting alignment attributes
+      commit: b9ab2619047edc1c6c07dc68963d84a5979f0abe
 
        Arnd
