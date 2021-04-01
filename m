@@ -1,4 +1,4 @@
-Return-Path: <SRS0=qM2e=I6=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=UN2r=I6=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -9,31 +9,31 @@ X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B714EC43460
-	for <linux-mediatek@archiver.kernel.org>; Thu,  1 Apr 2021 13:59:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2C54C433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 14:00:17 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5EB49611ED
-	for <linux-mediatek@archiver.kernel.org>; Thu,  1 Apr 2021 13:59:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5EB49611ED
+	by mail.kernel.org (Postfix) with ESMTPS id 294A0610CF
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 14:00:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 294A0610CF
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
 	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
 	List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Subject:From:Cc:To:
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=2BaDVBmAkwGdfUZJd3AJr69cSimcDhf6oo3mRuDsf88=; b=O3szJ3L9O4KmaB7QGSRPLSp1Rt
-	oAVSYvyUc3WP5DmPZrID8lAtcg93iQDpEpY78hi0a0aZIK9KNIMmIMfFoWrv54yGAvki13QoIb92U
-	ydbM6Tg+PMJj1jevSv6uVxXs12R+Dd+KhdW6/6nybaR6K18EQ+ThVZRq4SKL1A9FaAHb7Y68PzXpW
-	o7TMHytxjzWVXq8DFB+l/ofcFsBt5lYySrb4nEJOH2e97mwTJzvkr7KSuAgbxn6Us7eHRoJN6FTpS
-	SlQdUWrq0Rk7VKoUfmuvlu9i2d/YFmGicjRhVCWbs8pZ5h6aCwe1zzJUuWjxgdgaGVf/hTY5Qx5FC
-	af+os0YQ==;
+	bh=D6NjKKC4jJjw6RpNSL78iQr+oE8okLVdjYC5ZElJqYU=; b=DnSaDuAmP8vBBxuTkvAsbib7xt
+	vxBGfNPJBHuepgMgFgIkG4z5MeQ0WBPUrbqmNaL4Ui3PJ4i/1UjJUiFMmJR9zCDesrXnCbbrHnBSj
+	fY5p1KaDfOL7sHS4ELDJz78l8xX7YBCCizugeTRE5edHUHxP4Jw15CrAwsAANJj7rggZVbHNpdws3
+	FMfP6RTuGCHQY7cAkvcmid4Mth/OtSenMpeYQDa/OeFYgajrCaxB8GF9vERDW215zrSJ/XjSoN6hr
+	gTNDFRCV0pCMApvw/IBEJuNXAKjGyF5VXjGIx8j+qTsGkAkurAeBsBjLkY2YIT4RKuhy/vQsdPYxC
+	qP0fcCuQ==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lRxqk-009leP-Us; Thu, 01 Apr 2021 13:59:07 +0000
+	id 1lRxqW-009lYO-HK; Thu, 01 Apr 2021 13:58:52 +0000
 Received: from mail-ej1-x62e.google.com ([2a00:1450:4864:20::62e])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
  id 1lRxqO-009lVD-G3; Thu, 01 Apr 2021 13:58:47 +0000
@@ -89,22 +89,22 @@ X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3
 X-CRM114-CacheID: sfid-20210401_145844_799997_97D41E1B 
 X-CRM114-Status: UNSURE (   9.89  )
 X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-mediatek@lists.infradead.org
+X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
-List-Id: <linux-mediatek.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>, 
- <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
-List-Post: <mailto:linux-mediatek@lists.infradead.org>
-List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>, 
- <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
-Errors-To: linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210401135841.T7w2wx5B0qBpQxXR3w8JaIiQ_wQ8-rLefFog-2kYbEw@z>
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210401135841.Q8TC2Eu1ID1jERtCJszBJUrYoiNL1GIDHjZgtNZ1Y9U@z>
 
 Hi Arnd and Olof,
 
@@ -141,6 +141,6 @@ Chromebooks
  1 file changed, 15 insertions(+)
 
 _______________________________________________
-Linux-mediatek mailing list
-Linux-mediatek@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-mediatek
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
