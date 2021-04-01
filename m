@@ -6,54 +6,62 @@ X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29BB2C433B4
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 21:08:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FC71C433ED
+	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 21:08:45 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E2533610FB; Thu,  1 Apr 2021 21:08:40 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CA6CC60FE9;
-	Thu,  1 Apr 2021 21:08:39 +0000 (UTC)
+	id 0EB01610F8; Thu,  1 Apr 2021 21:08:45 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C827610C7;
+	Thu,  1 Apr 2021 21:08:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617311320;
-	bh=y5UPwiqkgfVx96KWYdQ37ezgwlno0VIQUmTVpSz4sJQ=;
+	s=k20201202; t=1617311325;
+	bh=5eoCbOT03yYdZ3SzNI2XZ+AWzU6pejyoMe7AYWXziec=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=miCgnTNDChBZ5lsxXSdr0GbztB3aXt9HiOE3DomqO3GMZbVj9TWM4ugzAH35gqyCe
-	 eQ9chKvksllpKF1n/ZBCLQBHjZpffFSbE7hr9CqkEYP2iMppE9RnVNDvq8ZaGVZIYf
-	 p1sPswwb3CacheSgk0VHrCwf+l3tiFxAMF2Br8ifTbxywpzcjTbqSlPAxs+0nYmNrP
-	 pnsfZCGQDyNC9/SHlTvwg70k6FCQoLXmOpFUy9PfT4/cwaJQQ5ILxgLkgCtJpaqqpd
-	 87z0nUei50UTB1Yx2lO06Uw3oQQer81xHQC2ME8ejhl1jTDTTNHeDEj2+oKBiTvIlO
-	 FCnmaZ5iyRiWQ==
+	b=NfRarbvQZ1F9pm8NP8ZGJob4XCbo2SbHOe3eR0wf+PSKSeXaTV2uucvCbAPvhgdwB
+	 dvcJXoiv6p+/9MQHRAz5aOQeUAfNl2NA7y7lOXrt5sEW+dzA3N42fq1MQDb140IQOX
+	 1r/Pyqzshl0hnwOXMbuF6twr0687hLCTv3pAa8nAwvu22l5r4ik+aYEoLETuvDjObq
+	 Y5pYRuNoNZirIyZP9EgXcfpR2EzaFu57FBsfDPh+5B7GVnSD4jyelEdC3EJsCSuFSB
+	 zB0CmM3MI9B+N592HMYWy7wohyL5y50XBA1MYma0hWGFxgbOiZOY9/FJ/On2v5BtYI
+	 a/5ayeXjMbFIA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	arm@kernel.org,
-	Dinh Nguyen <dinguyen@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [GIT PULL 1/3] SoCFPGA updates for v5.13
-Date: Thu,  1 Apr 2021 23:08:35 +0200
-Message-Id: <161731130329.663335.3847371649852120175.b4-ty@arndb.de>
+To: SoC Team <soc@kernel.org>,
+	arm-soc <arm@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	CK HU <ck.hu@mediatek.com>,
+	Wei Yongjun <weiyongjun1@huawei.com>,
+	Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
+	Hsin-Yi Wang <hsinyi@chromium.org>,
+	Yongqiang Niu <yongqiang.niu@mediatek.com>
+Subject: Re: [GIT PULL] soc: mediatek: changes for v5.13
+Date: Thu,  1 Apr 2021 23:08:36 +0200
+Message-Id: <161731130321.663335.9439061446866872029.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210330110430.558182-1-dinguyen@kernel.org>
-References: <20210330110430.558182-1-dinguyen@kernel.org>
+In-Reply-To: <c47d4bdd-9e05-c0de-bacb-3a262fed936d@gmail.com>
+References: <c47d4bdd-9e05-c0de-bacb-3a262fed936d@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 30 Mar 2021 06:04:28 -0500, Dinh Nguyen wrote:
-> Please pull in these SoCFPGA updates for v5.13.
+On Thu, 1 Apr 2021 16:19:45 +0200, Matthias Brugger wrote:
+> Below you can find the changes for the SoC drivers. After we fixed in the last
+> round the power management domain driver. This time it is the MMSYS driver. Up
+> to now it held one big table with routing information for all SoCs. But that's
+> not practical over time, so that was splitten up to add only per SoC structures.
+> That should make it easier in the future to add support for new SoCs. At least
+> one series didn't hit mainline this time, but should be ready for the next round.
 > 
-> Thanks,
-> Dinh
-> 
-> The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
-> 
->   Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
+> Please take the patches into account for your pull request.
 > 
 > [...]
 
 Merged into arm/drivers, thanks!
 
-merge commit: ba87f2009edb69fa81d344c55bcee518b0707c98
+merge commit: 3e7f2f2980e82eb20ce73691d65d696c6994ad4c
 
        Arnd
