@@ -2,19 +2,18 @@ Return-Path: <SRS0=UN2r=I6=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73B48C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 21:14:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 407FDC433ED
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 21:14:40 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D7D91610A0
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 21:13:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D7D91610A0
+	by mail.kernel.org (Postfix) with ESMTPS id AE28B610A0
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 21:14:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AE28B610A0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,51 +22,46 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=iTgP+oGR2OreBVH+Sf7YCOTLRzwX+AIFTy1AXHWSxZM=; b=ovnd7ZuBP7yKsNx9DQUulhgT+
-	aJw0DrfAm97bFzGCIUZsb+PYvUe09y1cXVylKwBTB/pUXCX8XYxx9vSPI2q7n0XT2ro7j8dKMrcjF
-	rrpPm3k/cYA/Mg5+jaaGf7eTwp+bQZ3tgkYIoZaSvmyXxp9JDZqeTaOA9oow1Kawb/wsnU/SUqAoV
-	6/psg1LvRYiAI7Ze7agtNGbwEo3dGfvseZa7CRgxSmBuKCU+sY9HdFfDHb86xUaJc0os4O+6yqXXa
-	I9FELdEl42NSqqIB5HO/PRdUJPoBQ+1V5Dx8b1zjddYVRlL13U1RR88Zea3A/waE4uZGQVGlhGVJ5
-	Tp/pZwg2A==;
+	 bh=EkK2C0DJrGLKjYB7DAxtKUlLoYupiZDDC+dChk6Ot1E=; b=GSdE/DQ6HbKLDOUV9Y8alCCHt
+	B2TpxtVs+Jb2gSVTHGen5zNq+xK/gjXZfpndnn/ZFrZbJA3hOZmqUHYk+uVIh6WFdDZLE1sW1WoXf
+	f8gA2bPkcLmLyXEDaGUMlDDK3QkGRNlC57Y4u3WC5C+6IMsp4DLKMLZxYgC/lXwtQlGwM2aqj6v6h
+	bF9siAGBcPFjcdHipa5C233ASkiGsFdJVFIO6tJx6TgcEG+xFib+vrB52li61idYtcHiOOWgfx/lI
+	ceNSHmmMBDk1kbzlbeW7PAcgiKHt6yy6Fk03vBXT4df8k1Yc7j60TUQ5HM6j/zSeSaJNnbrkOIDBu
+	bH/VKHkkA==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lS4Yb-00B13e-TU; Thu, 01 Apr 2021 21:08:52 +0000
+	id 1lS4a7-00B1Bu-Fs; Thu, 01 Apr 2021 21:10:24 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lS4WE-00B0wY-IB
- for linux-arm-kernel@lists.infradead.org; Thu, 01 Apr 2021 21:06:44 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B2F761103;
- Thu,  1 Apr 2021 21:06:19 +0000 (UTC)
+ id 1lS4W8-00B0wR-5M
+ for linux-arm-kernel@lists.infradead.org; Thu, 01 Apr 2021 21:06:45 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B0111610FA;
+ Thu,  1 Apr 2021 21:06:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1617311181;
- bh=yEeBq9au/1/8SGwwI5LjOH2w9D5Ry/sCr4gyR7wQbhM=;
+ s=k20201202; t=1617311175;
+ bh=6JRjyfScpf/efWp6V9b8MycI7e5TmvBSvuXzH73BLGk=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=jm16m2GRLCKZGoR7f+o+lo2k68SPS/Fm5Y1CSN2LapApz9x6lNE4biVR0JYvV44x9
- BHZ68/2ev1yUTDLx/FOofYeovZowyzIGtAImOCAv2NpBx49gTbO3+atA4R9ODuxIBt
- 349MLygwvJdnsDyxQatJPlhQL0q/O3N9ojIyUYp5INhVrFECpk3giL78y0FiBeuQHf
- PwDwhTN/NoDHoXx84RT97shhhKwhybNEj1DGMjAWEM2lbAQ/J4u8Ri+1UgdOVxdznu
- qnjioFncHRTIgWd89lRtxKxd27wdUn4BWAj8RgSpwI1fmiVQ4Re1eeo2Ns1x9/vFHY
- 4MeIim9YUncOg==
+ b=MRAcNBewsxVKExQTydH1wcfZ/UPLCrYozgb5q8R64P8UuVCmfvHZMB3piXIL48mZz
+ V9ATTySy9X/l2dB02UE+etYnSTH8S59Yq9GoJC6MOgHeVOhaY8Bnnl/BblBNJy4yxk
+ 7jqizE/iIwiOVvK/imjmWdNOk/dTzS+013iOQgNp++yU9rfojrggmXpdWTEspy4R/U
+ LFlGnNeuRjgeMQxRy0PLsYAJzpCwJ55DxYUdAhZ7HRGNpd0JWuLGBNSpW05BnVHuzM
+ oIvTzA5O/eR2QFqGf7i2jKC4VdNzGJrhZGpiMtNv63cQX8f3xXddrF5uA/Vl97KN82
+ +17EwXlu5KvMg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Shawn Guo <shawnguo@kernel.org>,
-	arm@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Li Yang <leoyang.li@nxp.com>,
- Stefan Agner <stefan@agner.ch>, linux-imx@nxp.com, kernel@pengutronix.de,
- Fabio Estevam <festevam@gmail.com>, linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 6/6] i.MX defconfig change for 5.13
-Date: Thu,  1 Apr 2021 23:06:07 +0200
-Message-ID: <161731114623.662954.11029736079612919707.b4-ty@arndb.de>
+To: soc@kernel.org, Linus Walleij <linus.walleij@linaro.org>, arm@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
+ Stephan Gerhold <stephan@gerhold.net>
+Subject: Re: [PATCH] ARM: configs: ux500: Update for new drivers
+Date: Thu,  1 Apr 2021 23:06:04 +0200
+Message-ID: <161731114635.662954.4375604729144576675.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210331041019.31345-6-shawnguo@kernel.org>
-References: <20210331041019.31345-1-shawnguo@kernel.org>
- <20210331041019.31345-6-shawnguo@kernel.org>
+In-Reply-To: <20210301232050.1457397-1-linus.walleij@linaro.org>
+References: <20210301232050.1457397-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210401_220642_763271_E3538F6D 
-X-CRM114-Status: UNSURE (   6.19  )
-X-CRM114-Notice: Please train this message.
+X-CRM114-CacheID: sfid-20210401_220642_759114_2364EADE 
+X-CRM114-Status: GOOD (  11.85  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -83,24 +77,33 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210401210607.r-gZyT5Hx6w-JEpE5Kvg67JQbrXarsD8i2Oq78DH-TA@z>
+Message-ID: <20210401210604.qkcQN4KTCCI322CBn_oYFeJZCKMZ2pA8Ft0Kw6lDBug@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 31 Mar 2021 12:10:19 +0800, Shawn Guo wrote:
-> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+On Tue, 2 Mar 2021 00:20:50 +0100, Linus Walleij wrote:
+> Some new driver support for the Ux500 devices landed in
+> v5.12-rc1 so update the defconfig to use them:
 > 
->   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-defconfig-5.13
-> 
-> [...]
+> - TM2 touchkey, used on the Golden and Janice.
+> - SPI GPIO, used for the Janice display control.
+> - NTC thermistor, used for the HREF temperature
+>   sensors.
+> - V4L2 flash control that gives support for LED
+>   torch to userspaces such as Phosh.
+> - The LEDs Flash class and RT8515 Flash/torch LED
+>   driver used in all the Samsung mobiles.
+> - FSA9480 extcon, used by Janice.
+> - BMC150 accelerometer, used by Janice.
+> - IIO rescaler, used for thermistors and ALS
+>   on Janice.
+> - MPU3050 gyroscope driver used by Janice.
+> - Yamaha YAS530 magnetometer driver used by Janice.
 
-Merged into arm/defconfig, thanks!
+Applied to arm/defconfig, thanks!
 
-merge commit: bbbd7b0120849d0d8022a5a211d3f1171ecf43cb
+[1/1] ARM: configs: ux500: Update for new drivers
+      commit: 907d6d3e41f960a083dc927350b3b531c43c1ce1
 
        Arnd
 
