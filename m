@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37BADC433B4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0BB6C433ED
 	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 17:26:09 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 15D50613BA; Thu,  1 Apr 2021 17:26:09 +0000 (UTC)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	id 7BD87613B9; Thu,  1 Apr 2021 17:26:09 +0000 (UTC)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9A02C61373;
-	Thu,  1 Apr 2021 17:26:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9A02C61373
+	by mail.kernel.org (Postfix) with ESMTPS id 108C061393;
+	Thu,  1 Apr 2021 17:26:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 108C061393
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=thierry.reding@gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id h10so2786270edt.13;
+Received: by mail-ed1-f52.google.com with SMTP id b16so2810527eds.7;
         Thu, 01 Apr 2021 10:26:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=g5sLzzLW3ME8Xe8VqYfMyA7U25GpLo2zuKXzOdcoRKY=;
-        b=fMyLwNAl16sg3Najvg/gxxAfWYQYJWo6FFTC5aQ4NfcfFj+7bs47jmjSuh9LRIkX3R
-         83Wk/V5NLiYy/SSpUY228BUxI+Cuet5RWYo2CS4HbVnRpNcROxCdqHLnbhO7KmsZ7vMK
-         C2vNpBJEy4XDGdLXfF0ytJ4uh1iLXWQ5/MoZGg0Ytl4smHYTjx8rrz5hmj0/4TIBGGh2
-         GdexAPTyyywyoZJ6qho1j/h/PBLcOzjZ4NyGAxpPmu6bi2MMDnFntnrnTpgqrV7XSoby
-         w+jE4pouiq8y2g82hqYSDpaDjSU1QJ1qc6dmJFJ4+i/tq6aTnMRPCzTw7TK9GXYNaEj+
-         LoxQ==
+        bh=KFyIg8syNYPFzhmphZGsN0/P5BjL76RGwMywZZQhQ6c=;
+        b=nvTC5y589Fz/gj87Pv5YA9OmIoYiI3vwoAOpWITntQYOll/KEaz8X20wO9hoVRcw4E
+         chE8IvLnNqOcIC+3TaSeWXe3FXsM7JOmQTtn+/q74qyh73IlvDC2rItOxKi76eRm0R5J
+         uczD62U9ZYoncx4VbDAWzo7Bk4XfQn8RSFWfY9wgqXWLytg3h69vztqRHUsgs/UamSEW
+         fFeNsREl325yllSCy9MMzuv4eYJXvsikbgegvtSeAnicVNDrSgkyVTBVWTNv3WYmvCQc
+         w3ZbV0OzLDnv/enXIqlfLqmfMVvmK+ut14Vq1RL/jnVz2SYCiIvRrrUdBIqpBC74CZYG
+         krtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=g5sLzzLW3ME8Xe8VqYfMyA7U25GpLo2zuKXzOdcoRKY=;
-        b=rJUeBN0EuLjyCOruI0QSxM9f5ZLfXp7kiB4IpA9mwNOWoJYD9/83ROzniDWxgfKcrh
-         oLPFPWekb3PpJH4oqZ/Djq3frZfar6tgrmfjs5WR8MNqxfXD5jw840+Y1y2d6lJs/BG6
-         dMXajhqAeRAAW9XaLF25/O484cpfzKibYLWaVIQK1aq6HUnMaDRSlLlQFnbwBAQ9h4ti
-         Q/06pKFlSm/urfgdg3LeWKRyvY8PG4P8NUV6aDvtoYZKERCOOHTjBQjB84AntNR4Qgkz
-         fjgyrq6KJZXB3DmZV2fCWNz8buOF4WwdRSB2chSQ+zwghrl5ToubYH/+MmDlKvJ96Kbd
-         eX1g==
-X-Gm-Message-State: AOAM5327TNUTvdRyZwbePg5OVlO/iIYolj7lsSbyeBMNkgg53bKRfp96
-	Rb7argtakCtOrELaRUsBVtjH+Yn9Yn0=
-X-Google-Smtp-Source: ABdhPJzIO9me1GxZXSNCR7NdpxHXdxcnYyP3uc3QZBz6aEJV0912UIwloUJFSuLMCdCoSAL1UuMEiA==
-X-Received: by 2002:aa7:cf17:: with SMTP id a23mr11495614edy.30.1617297964690;
-        Thu, 01 Apr 2021 10:26:04 -0700 (PDT)
+        bh=KFyIg8syNYPFzhmphZGsN0/P5BjL76RGwMywZZQhQ6c=;
+        b=Kgh9YDX0HyNhURr4uP3QwetQgru9IegE8+D86kd6rit+vcs1IRsMZN8FcjV8pIN9QG
+         pUrvDbFjOueezch/N4CsnaEaX6Ll2eQ2T+iEu72S56xVeN8FGeccrciuAqn21N1Qr7rA
+         CBQBWNgYCQ6fM8PU51ubKiLNkT8r3QA1JpvM/l//uZTpPI75hptgVqYDCNaAsKkao7nK
+         GW7V4KIkr3jTJQ6g7a7ipMsd0S8dw/CUqbQZL0Y5LePUdKYt5XAPv79r1YQHyA1DUuZ3
+         7zHvMMryGoBMPIbvR4lZs1kJvmT2iohdcMts15FLGAvDEJau3iwYYYr3I7T3H4JTRerL
+         bqFw==
+X-Gm-Message-State: AOAM532I9UIh/BkWpBFXLtx27sjHQH7xf77T7qogIYs3naI0xo8rD+cp
+	4k+noXSHceZF5WYKbc4OfOjGZJ5yWOU=
+X-Google-Smtp-Source: ABdhPJzHLEVoJiG2OIvfg61ZJ+n48ibWJdHJA6V35LhUTvqh/mUPrd8q/IsIyh5iDD/AyxbRLrbR3A==
+X-Received: by 2002:aa7:c1d5:: with SMTP id d21mr10816258edp.167.1617297967004;
+        Thu, 01 Apr 2021 10:26:07 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id c17sm4377374edw.32.2021.04.01.10.26.03
+        by smtp.gmail.com with ESMTPSA id hb19sm3045144ejb.11.2021.04.01.10.26.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Apr 2021 10:26:03 -0700 (PDT)
+        Thu, 01 Apr 2021 10:26:05 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -61,9 +61,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 4/5] ARM: tegra: Device tree changes for v5.13-rc1
-Date: Thu,  1 Apr 2021 19:26:21 +0200
-Message-Id: <20210401172622.3352990-4-thierry.reding@gmail.com>
+Subject: [GIT PULL 5/5] arm64: tegra: Device tree fixes for v5.12-rc6
+Date: Thu,  1 Apr 2021 19:26:22 +0200
+Message-Id: <20210401172622.3352990-5-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210401172622.3352990-1-thierry.reding@gmail.com>
 References: <20210401172622.3352990-1-thierry.reding@gmail.com>
@@ -79,53 +79,39 @@ The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.13-arm-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.13-arm64-dt
 
-for you to fetch changes up to 3a6c267dd7b8822eb722835b503c5a438cbd3700:
+for you to fetch changes up to 405fa9e9d8664e830982c5fbcb70f9ba8656bafc:
 
-  ARM: tegra: acer-a500: Add atmel,wakeup-method property (2021-03-26 14:21:28 +0100)
+  arm64: tegra: Move clocks from RT5658 endpoint to device node (2021-03-25 14:04:49 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-ARM: tegra: Device tree changes for v5.13-rc1
+arm64: tegra: Device tree fixes for v5.12-rc6
 
-This contains a couple of improvements and fixes for various 32-bit
-Tegra-based boards.
+This contains a couple of device tree fixes for the v5.12 release cycle.
+These are needed for proper audio support on Jetson AGX Xavier, to boot
+the Jetson Xavier NX from an SD card and to be able to suspend/resume
+the Jetson TX2.
 
 ----------------------------------------------------------------
-Dmitry Osipenko (15):
-      ARM: tegra: ventana: Support CPU and Core voltage scaling
-      ARM: tegra: ventana: Support CPU thermal throttling
-      ARM: tegra: cardhu: Support CPU frequency and voltage scaling on all board variants
-      ARM: tegra: cardhu: Support CPU thermal throttling
-      ARM: tegra: paz00: Enable full voltage scaling ranges for CPU and Core domains
-      ARM: tegra: acer-a500: Enable core voltage scaling
-      ARM: tegra: acer-a500: Reduce thermal throttling hysteresis to 0.2C
-      ARM: tegra: acer-a500: Specify all CPU cores as cooling devices
-      ARM: tegra: acer-a500: Rename avdd to vdda of touchscreen node
-      ARM: tegra: nexus7: Specify all CPU cores as cooling devices
-      ARM: tegra: ouya: Specify all CPU cores as cooling devices
-      ARM: tegra: Specify CPU suspend OPP in device-tree
-      ARM: tegra: Specify memory suspend OPP in device-tree
-      ARM: tegra: Specify tps65911 as wakeup source
-      ARM: tegra: acer-a500: Add atmel,wakeup-method property
+Jon Hunter (2):
+      arm64: tegra: Set fw_devlink=on for Jetson TX2
+      arm64: tegra: Fix mmc0 alias for Jetson Xavier NX
 
- arch/arm/boot/dts/tegra124-peripherals-opp.dtsi    |  5 ++
- arch/arm/boot/dts/tegra20-acer-a500-picasso.dts    | 16 +++--
- arch/arm/boot/dts/tegra20-cpu-opp.dtsi             |  2 +
- arch/arm/boot/dts/tegra20-paz00.dts                | 14 ++--
- arch/arm/boot/dts/tegra20-peripherals-opp.dtsi     |  1 +
- arch/arm/boot/dts/tegra20-ventana.dts              | 78 +++++++++++++++++---
- arch/arm/boot/dts/tegra30-apalis.dtsi              |  1 +
- .../dts/tegra30-asus-nexus7-grouper-common.dtsi    | 14 ++--
- .../dts/tegra30-asus-nexus7-grouper-ti-pmic.dtsi   |  1 +
- arch/arm/boot/dts/tegra30-beaver.dts               |  1 +
- arch/arm/boot/dts/tegra30-cardhu-a04.dts           | 48 -------------
- arch/arm/boot/dts/tegra30-cardhu.dtsi              | 84 ++++++++++++++++++++--
- arch/arm/boot/dts/tegra30-colibri.dtsi             |  1 +
- arch/arm/boot/dts/tegra30-cpu-opp.dtsi             |  3 +
- arch/arm/boot/dts/tegra30-ouya.dts                 | 16 +++--
- arch/arm/boot/dts/tegra30-peripherals-opp.dtsi     |  3 +
- 16 files changed, 204 insertions(+), 84 deletions(-)
+Sameer Pujar (1):
+      arm64: tegra: Move clocks from RT5658 endpoint to device node
+
+Thierry Reding (1):
+      arm64: tegra: Add unit-address for ACONNECT on Tegra186
+
+ arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts  | 2 +-
+ arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi      | 2 +-
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi            | 2 +-
+ arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts  | 3 ++-
+ arch/arm64/boot/dts/nvidia/tegra194-p3668-0000.dtsi | 4 ++++
+ arch/arm64/boot/dts/nvidia/tegra194-p3668-0001.dtsi | 4 ++++
+ arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi      | 1 -
+ 7 files changed, 13 insertions(+), 5 deletions(-)
