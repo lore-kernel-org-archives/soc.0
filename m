@@ -7,59 +7,55 @@ X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 960A4C433ED
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 21:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 405ACC433B4
+	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 21:07:17 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 714BD6112D; Thu,  1 Apr 2021 21:07:15 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7644E61108;
-	Thu,  1 Apr 2021 21:07:13 +0000 (UTC)
+	id 1EECD61106; Thu,  1 Apr 2021 21:07:17 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BC5DA6112F;
+	Thu,  1 Apr 2021 21:07:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617311235;
-	bh=6453ln+PWqcrJ98JQvBIu9jIGZoVpnsbf/f/L7AgyMM=;
+	s=k20201202; t=1617311237;
+	bh=3oStrjzAvVbQa0S1FwZRjUrmDCAHpXIE1z/QYbHDtOw=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KG1htfkrBDEI4My2o/ecc0MN65re5loVpfzcXgfqozMgUe1SdyLwI01PkdVaYr96J
-	 bNskXkJ+GNkVHbRsCNqZ7BBXQzYVhiEcLh35W3spLwx4WLz9ukHBzWR5mTSt5SBF1m
-	 Ah/QE+JHdRvrcwhTNXdpJGSyGfhH+ZLVgtaa9l/csRimc/kLL67/pycDC0nbJyb1Kd
-	 VlHhyr7mE52SHWAWANnGtFYRATldjhLqUxT5Nnpvq+3IEhqMg0z4rfDDKDM6djseu3
-	 q2jdwnIN+0fat0Y9zi4YjtoJtUUIv/l3llDyuFQ0XoXiB0D2AuIw0V0bxMee/VPn+Y
-	 Ohq1mr/GHDwQg==
+	b=q/81vyuzAp1HBF45rRIeQlHbO9Zz94x5zr9IvXtD1uCffpIiFbALWvmQ30MQxZg7G
+	 nANGZ20jcv6h3XmC1JSWHHwzybVyIOgRL5dixRckSz5cpZRggIrsMr0V/bPkoCR9Lm
+	 GKcY6UY4UVoxk2ffnCqmsld3s/I6x2xxz2hjLqrCvN0NoLI+E/bOxVIuSe4m73Tr6v
+	 1lw6vyxlWYVef406Jq14IFFFqiuDXIQ4X6zjOXgD9UN9qbsK6Qtb5gdtsaJOx5oYul
+	 7yOEitcCangyJvVHEEGi0+rZqfscxZ6MK980NlLGCFYAxPFo+nGGJWYmjF2AmF7T5e
+	 A+ovDIRfwXiNQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Shawn Guo <shawnguo@kernel.org>,
-	soc@kernel.org,
-	arm@kernel.org
+To: Tony Lindgren <tony@atomide.com>,
+	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-imx@nxp.com,
-	Stefan Agner <stefan@agner.ch>,
-	kernel@pengutronix.de,
-	Li Yang <leoyang.li@nxp.com>,
-	Fabio Estevam <festevam@gmail.com>
-Subject: Re: [GIT PULL 2/6] i.MX SoC update for 5.13
-Date: Thu,  1 Apr 2021 23:07:05 +0200
-Message-Id: <161731121864.663132.16506818644518053696.b4-ty@arndb.de>
+	arm@kernel.org,
+	linux-omap@vger.kernel.org
+Subject: Re: [GIT PULL 3/3] Drop legacy data for dra7 and omap4/5 and clean-up
+Date: Thu,  1 Apr 2021 23:07:06 +0200
+Message-Id: <161731121857.663132.4089815992350147845.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210331041019.31345-2-shawnguo@kernel.org>
-References: <20210331041019.31345-1-shawnguo@kernel.org> <20210331041019.31345-2-shawnguo@kernel.org>
+In-Reply-To: <pull-1617004205-537424@atomide.com-3>
+References: <pull-1617004205-537424@atomide.com> <pull-1617004205-537424@atomide.com-3>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 31 Mar 2021 12:10:15 +0800, Shawn Guo wrote:
-> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+On Mon, 29 Mar 2021 10:55:22 +0300, Tony Lindgren wrote:
+> The following changes since commit 083516ad540a1104a0ae5ae7e83f2a2d8e39d2bc:
 > 
->   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+>   Merge tags 'genpd-dts-dra7', 'genpd-dts-omap4' and 'genpd-dts-omap5' into omap-for-v5.13/dts-genpd (2021-03-10 14:16:34 +0200)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-5.13
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.13/genpd-cleanup-signed
 > 
 > [...]
 
 Merged into arm/soc, thanks!
 
-merge commit: 4f9c62d1f79c42674e8ba0c4592a438c21fcbf23
+merge commit: 3e26eccd40f9d4ff43fbd05edaccb96abfab04e8
 
        Arnd
