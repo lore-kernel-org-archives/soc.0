@@ -1,58 +1,75 @@
-Return-Path: <SRS0=+Tl1=I6=gmail.com=matthias.bgg@kernel.org>
+Return-Path: <SRS0=qM2e=I6=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA001C433B4
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 14:19:49 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 931F361359; Thu,  1 Apr 2021 14:19:49 +0000 (UTC)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05953C433ED
+	for <linux-mediatek@archiver.kernel.org>; Thu,  1 Apr 2021 14:20:12 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 20D4961356;
-	Thu,  1 Apr 2021 14:19:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 20D4961356
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=matthias.bgg@gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id u21so3108232ejo.13;
-        Thu, 01 Apr 2021 07:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=mn+zAEfgfvZOPxyZ5lSaKbrrkB5QqVeA9D0gp624xhM=;
-        b=oKPwlmnXhSKou2CFeMozxerGBzoLUUiHzspIx48KKx01gSQzGdnABjqfq2auaIWnV9
-         b3h0Um/jk92NuC7yPu0lWT+GdmQVT5oxXy8xuLKAg1eWdHYt4R+56DWwijfMwvA0TEli
-         ObEdx4Ig4A3SzjE7Wu3gEy4IQuaitPQr077A01JiGz5a0xuh/nXXIA0bUX90S9aKFd17
-         qBtdCbJlQD2bkECQe2whOM/QitsNTBDffeUDAeIHHTiTFsZT+4oVMp2G48h7Itqqsljz
-         rAqpLUr8DBW364D7KKzlO5Hv42zThrPa5phGytJ2NsmcZ+Pmbri8YCp4iHdgiEapjztL
-         lj0Q==
+	by mail.kernel.org (Postfix) with ESMTPS id 81B9961356
+	for <linux-mediatek@archiver.kernel.org>; Thu,  1 Apr 2021 14:20:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 81B9961356
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Subject:From:Cc:To:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=SvjDux3546ntr+AwRJh16/vivAclTAlHIozP3N8fU8s=; b=O29pGpT2dei4jw3oErNrEwxXnE
+	VYcVv2HpPjwfsGt1VMeAx/tjiameIhH1Ukni+fjP8r8E55M1vIF25vw5+TGFBFfb2hwHjNjYt69yQ
+	Nk9JMa5dpe+Sld3qnZvUSe/6rPdFvsH8OOovhYDODXF8PBmhoRK4KA2KuErB7lqv/i2dfmqh8YIxf
+	H16nMO92637wX2mBC15C66lGsrJ7WprQP4iX1eh/K4fhC8O87u2FWbJ9gcJXjZTyL3YSwVmJ0Skoy
+	4V5RhT86nCMeAIBMksyMZ5IOse/2HjNyAh9QsnaSgvabg5SQAY4S9fXWPERrZzcAbz/bjBsCBtmm9
+	j/A7qJlw==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lRyAx-009ooH-QL; Thu, 01 Apr 2021 14:19:59 +0000
+Received: from mail-ej1-x62b.google.com ([2a00:1450:4864:20::62b])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lRyAm-009olj-DO; Thu, 01 Apr 2021 14:19:50 +0000
+Received: by mail-ej1-x62b.google.com with SMTP id u5so3136202ejn.8;
+ Thu, 01 Apr 2021 07:19:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=to:cc:from:subject:message-id:date:user-agent:mime-version
+ :content-language:content-transfer-encoding;
+ bh=mn+zAEfgfvZOPxyZ5lSaKbrrkB5QqVeA9D0gp624xhM=;
+ b=oKPwlmnXhSKou2CFeMozxerGBzoLUUiHzspIx48KKx01gSQzGdnABjqfq2auaIWnV9
+ b3h0Um/jk92NuC7yPu0lWT+GdmQVT5oxXy8xuLKAg1eWdHYt4R+56DWwijfMwvA0TEli
+ ObEdx4Ig4A3SzjE7Wu3gEy4IQuaitPQr077A01JiGz5a0xuh/nXXIA0bUX90S9aKFd17
+ qBtdCbJlQD2bkECQe2whOM/QitsNTBDffeUDAeIHHTiTFsZT+4oVMp2G48h7Itqqsljz
+ rAqpLUr8DBW364D7KKzlO5Hv42zThrPa5phGytJ2NsmcZ+Pmbri8YCp4iHdgiEapjztL
+ lj0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=mn+zAEfgfvZOPxyZ5lSaKbrrkB5QqVeA9D0gp624xhM=;
-        b=KspQL5YjpJuCypU8Fjxs+slxlQR6NWh8ZK2mJ7hKCuxIN0AyXxVl/hvl41uNyhzmDR
-         u0ufrBQBUAMh2xxnJdT1yj7g2hJlJhfpowLRxq7RtAsSSFh7a+nvtaHIMuK5F6VfM8Bc
-         hgBHZ+ANgE8WqaBAYfITwnD11YL6ySpQmKwHmC5ETMGK6rD2FYJb/NCamoRhZVjg5Dew
-         /2vaxVTX2274uPwR9GuVP5RrfE1fi/vcfCUunAdSUjIhpapmKt+fulGwXlP6xOeSN0bs
-         kLx1RbRUCjc9wYa6ZqNQRpKAQlSLAQ1NFRwMFYKYe2amF1mXjUtxMtMd6oxRu21YoC5t
-         hNEg==
-X-Gm-Message-State: AOAM530WGgHFETUS4qDGK7gSteQWG8BfYhOZ6Nv2G5aWBTXXFTQEM/Zw
-	vPCHTjzig5LqBNPuRy2kg4A=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+ :mime-version:content-language:content-transfer-encoding;
+ bh=mn+zAEfgfvZOPxyZ5lSaKbrrkB5QqVeA9D0gp624xhM=;
+ b=PaOZKAb24V7E4AF5LlgpfXmQzkcnXaUjeX24imfT7mh4X7NwOoB6n/Qz8KVC7YJfYq
+ cOuwB8c2xEuGZaP/MVgE8Hmhl0xxie+8Zmr7z2Mmt4gkYMtnEWZ/v8PkQdyL6RZT2WzY
+ BWwbLJqzkxwto+kdkZSyydu92PDkImUJ99hqszusdw5YcTQb5NQquxdGAMbw92vyUkYc
+ pBaNRhLWJ9u/NFge562cNyTBnMEU4ROHY4g3cLp68Z/Hd698JcD/0mABTY5c3OoSqkS8
+ 54ui401HHts8kj5H4nPzWE8oFxKfyvJMgUdtyJdoddW5QABMazOVUCoevTKGFpqUg235
+ AJQQ==
+X-Gm-Message-State: AOAM533sIqSCF1Sym+peQOBdYpFgnrLkrikZ0v+W9q9PKY1dxMPiDv7A
+ JlYcIMSD6bPCDVuj57plX+8=
 X-Google-Smtp-Source: ABdhPJzq7fC7fowvOWX05Xwy8o65MMSUt9l/0HJoJywwksfcE1zr8cu5t1bWELd63DqCqS5y+MXolw==
-X-Received: by 2002:a17:907:94cc:: with SMTP id dn12mr9422447ejc.177.1617286787716;
-        Thu, 01 Apr 2021 07:19:47 -0700 (PDT)
+X-Received: by 2002:a17:907:94cc:: with SMTP id
+ dn12mr9422447ejc.177.1617286787716; 
+ Thu, 01 Apr 2021 07:19:47 -0700 (PDT)
 Received: from ziggy.stardust ([213.195.126.134])
-        by smtp.gmail.com with ESMTPSA id i10sm2826660ejv.106.2021.04.01.07.19.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Apr 2021 07:19:47 -0700 (PDT)
+ by smtp.gmail.com with ESMTPSA id i10sm2826660ejv.106.2021.04.01.07.19.46
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 01 Apr 2021 07:19:47 -0700 (PDT)
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
 Cc: "moderated list:ARM/Mediatek SoC support"
@@ -70,9 +87,26 @@ Date: Thu, 1 Apr 2021 16:19:45 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210401_151948_708953_9D6D386D 
+X-CRM114-Status: GOOD (  18.99  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210401141945.6joFMwQbPXb-2MJewDwcWAspy3gcgDT3bZLP-QBxI14@z>
 
 Hi Arnd and Olof,
 
@@ -161,3 +195,8 @@ Yongqiang Niu (1):
  12 files changed, 511 insertions(+), 277 deletions(-)
  create mode 100644 drivers/soc/mediatek/mt8183-mmsys.h
  create mode 100644 drivers/soc/mediatek/mtk-mmsys.h
+
+_______________________________________________
+Linux-mediatek mailing list
+Linux-mediatek@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-mediatek
