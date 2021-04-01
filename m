@@ -6,64 +6,61 @@ X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BB0EC433ED
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 10:23:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B3AEC433ED
+	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 10:23:53 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 0B769610CF; Thu,  1 Apr 2021 10:23:51 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C1318610CC;
-	Thu,  1 Apr 2021 10:23:47 +0000 (UTC)
+	id 03A48610E6; Thu,  1 Apr 2021 10:23:53 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B64F610E5;
+	Thu,  1 Apr 2021 10:23:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617272630;
-	bh=MZ3Ne7ildQK4xFvvzsF6ZSktnlVMdKCIZSj1JEw6htk=;
-	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RJ8tvMOaVhlGiMjt6SNGdffrUCik9IPv+22Lj9ln8X1D5YKAJpPlRHI7PwxmPDXjk
-	 k+tMiKCk1lzd4L7/Ijz9gq9wCP+Cg/H3kQH6noZnlfERXRR+L/Js8deCIqF6+Dx5yE
-	 fLhuKtuBRc6d6GlCMN4MRQkNsG5nS1+Qf3HmRVJUbXZBLtONpUJJVd7vOFagWdCVOx
-	 M5BQUh483IJcedke6tsujvWW62ZLTwC+1CcbBUKaDb1Y3YrDp+dwSSonww96LHz06i
-	 nE7hrZqrxvgxeSg3clSt+LoRqErWs1rVwFX0QNaQcCqTzaPYVA4zaUMuPd5miPs7Qh
-	 m/OMrKD7enkBQ==
+	s=k20201202; t=1617272632;
+	bh=e4TJMuRsiwzOjyKke3jnjHTOGkPTztzbu56nOrJk5lE=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Sy8F4lxJQLxSrbye1a8Uy6Mk34J9t0pzx+bAqHOMuh/cV0h2i/3eiUvLEogsGYIme
+	 WPcik+taCuLX1bIXMyOBbbmJ4SbrJpdOfP55N0fDc2bSjRorq+ZnT0kXSQSlbnswY/
+	 hlFdCoqP4S8sm//dEqEOEu0quvAEt4woJZE8cZBVWnMJ2yHLR8GfqY21EVFyi1fxHT
+	 agFs5C+FoVI6HoByiMcUKefR5mOlLXL8parrbw0akuJzMQs9wJoZ1Rs0e2FnizaBNv
+	 Evx6I4Kcs/RVIcF82DHjSt85sr/jTB5fH889nuRh9+u2WLiOZshoaoYhq0TW9M/R5W
+	 fkTIQiU9XI3BQ==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Roy Pledge <roy.pledge@nxp.com>,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Scott Wood <oss@buserror.net>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Li Yang <leoyang.li@nxp.com>
 List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org,
+	Jens Wiklander <jens.wiklander@linaro.org>,
+	arm@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Lee Jones <lee.jones@linaro.org>,
-	soc@kernel.org,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Jakub Kicinski <kuba@kernel.org>,
-	YueHaibing <yuehaibing@huawei.com>,
-	linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] soc/fsl: qbman: fix conflicting alignment attributes
-Date: Thu,  1 Apr 2021 12:23:30 +0200
-Message-Id: <161727243810.583633.4915294266076534019.b4-ty@arndb.de>
+	op-tee@lists.trustedfirmware.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+Subject: Re: [GIT PULL] OP-TEE tracepoints fix for v5.13
+Date: Thu,  1 Apr 2021 12:23:31 +0200
+Message-Id: <161727243793.583633.7984995735453542553.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210323131530.2619900-1-arnd@kernel.org>
-References: <20210323131530.2619900-1-arnd@kernel.org>
+In-Reply-To: <20210330082208.GA965793@jade>
+References: <20210330082208.GA965793@jade>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 23 Mar 2021 14:15:23 +0100, Arnd Bergmann wrote:
-> When building with W=1, gcc points out that the __packed attribute
-> on struct qm_eqcr_entry conflicts with the 8-byte alignment
-> attribute on struct qm_fd inside it:
+On Tue, 30 Mar 2021 10:22:08 +0200, Jens Wiklander wrote:
+> The previous pull request for OP-TEE tracepoints introduced a build
+> error when building whithout O=..., apparently many regression builds
+> uses that option.
 > 
-> drivers/soc/fsl/qbman/qman.c:189:1: error: alignment 1 of 'struct qm_eqcr_entry' is less than 8 [-Werror=packed-not-aligned]
+> Please pull this small fix for the build error.
 > 
-> I assume that the alignment attribute is the correct one, and
-> that qm_eqcr_entry cannot actually be unaligned in memory,
-> so add the same alignment on the outer struct.
+> Thanks,
+> Jens
+> 
+> [...]
 
-Applied to arm/fixes
+You asked for this to be merged for 5.13, but as the change is clearly correct
+and required as a build fix, I added it as a fix for 5.12 instead, hope that's
+ok.
 
-[1/1] soc/fsl: qbman: fix conflicting alignment attributes
-      commit: b9ab2619047edc1c6c07dc68963d84a5979f0abe
+Merged into arm/fixes, thanks!
+
+merge commit: 3e530f89d72dd1ab31e20d6f8567e357b928705c
 
        Arnd
