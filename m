@@ -1,53 +1,323 @@
-Return-Path: <sboyd@kernel.org>
+Return-Path: <SRS0=EFpz=I6=lists.ozlabs.org=openbmc-bounces+openbmc=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D90CC433ED
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 01:34:45 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id D7CB161077; Thu,  1 Apr 2021 01:34:44 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A977660FEE;
-	Thu,  1 Apr 2021 01:34:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617240884;
-	bh=y68C6IcS4m9PdNpuDWn6Qfoy8NqdkF9RgAyAEM3FH7I=;
-	h=In-Reply-To:References:Subject:From:Cc:List-Id:To:Date:From;
-	b=Ix2FykBgr2c3lT6X7vOJbbeRHaCnO4Al8p1iBMXYa38InTFl1x+QJY3Gi3ECAKnDx
-	 Ae6xhoOLYyS//Gu6nvCp5MmNGPOFoah/fmL6cCeltP1zvoza0p1ybnjIwEJhdO3Raw
-	 Q+5+5WFCVKBq3pkHVoZKeAgAs/qeGS875YMewOFupQxSYHZgX3T9XIzAsflYtHXGeK
-	 ElsmH/q+KavxtTwjU8hKR4RMpcfrNguCyt2lQRiOosXb7hRlhpQ0QMb8YWZasDmRF2
-	 9AMmtrY62i9V2ww2aNiTNu4G+E60bfwRxsHBiDw+LKTAxtmak432N4oyMhbTgOkXrU
-	 Mfy5oBtmYYfeA==
-Content-Type: text/plain; charset="utf-8"
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DED1EC433B4
+	for <openbmc@archiver.kernel.org>; Thu,  1 Apr 2021 02:52:01 +0000 (UTC)
+Received: from lists.ozlabs.org (lists.ozlabs.org [112.213.38.117])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 3CA0961057
+	for <openbmc@archiver.kernel.org>; Thu,  1 Apr 2021 02:52:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3CA0961057
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=bewilderbeest.net
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
+Received: from boromir.ozlabs.org (localhost [IPv6:::1])
+	by lists.ozlabs.org (Postfix) with ESMTP id 4F9nlM3NPNz30Cy
+	for <openbmc@archiver.kernel.org>; Thu,  1 Apr 2021 13:51:59 +1100 (AEDT)
+Authentication-Results: lists.ozlabs.org;
+	dkim=fail reason="signature verification failed" (1024-bit key; unprotected) header.d=bewilderbeest.net header.i=@bewilderbeest.net header.a=rsa-sha256 header.s=thorn header.b=ODPjRldX;
+	dkim-atps=neutral
+Authentication-Results: lists.ozlabs.org; spf=pass (sender SPF authorized)
+ smtp.mailfrom=bewilderbeest.net (client-ip=71.19.156.171;
+ helo=thorn.bewilderbeest.net; envelope-from=zev@bewilderbeest.net;
+ receiver=<UNKNOWN>)
+Authentication-Results: lists.ozlabs.org; dkim=pass (1024-bit key;
+ unprotected) header.d=bewilderbeest.net header.i=@bewilderbeest.net
+ header.a=rsa-sha256 header.s=thorn header.b=ODPjRldX; 
+ dkim-atps=neutral
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net
+ [71.19.156.171])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by lists.ozlabs.org (Postfix) with ESMTPS id 4F9nks575sz2yxw;
+ Thu,  1 Apr 2021 13:51:32 +1100 (AEDT)
+Received: from hatter.bewilderbeest.net (unknown [IPv6:2600:6c44:7f:ba20::7c6])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested) (Authenticated sender: zev)
+ by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 5132A6F;
+ Wed, 31 Mar 2021 19:51:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+ s=thorn; t=1617245490;
+ bh=ACBP00g3dIGlkj6j3+YvdG5qoy4fOyiGS7DhceuyHdI=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=ODPjRldXoiewGaZVrbRmf0SDhWF2BicJmSqW6itb30q6LQ3Ld8Z+2pZZFMTdNdVYg
+ jNfvzRHu2O//a7ojX2him+GzTp7d6jwn9XxMM1cvcbmp7SOZgXFaoxvDjYYtLF97li
+ 9M3aF9+w5dAVj5l9dwDqTC7nlGCPne1BBlRSjr3M=
+From: Zev Weiss <zev@bewilderbeest.net>
+To: Joel Stanley <joel@jms.id.au>
+Subject: [PATCH] ARM: dts: aspeed: add ASRock E3C246D4I BMC
+Date: Wed, 31 Mar 2021 21:51:03 -0500
+Message-Id: <20210401025104.2278-1-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <CACPK8XfBsq6H5qsSNgwqdRhHXTUYnNQKekSNMnxXoVaAzMc=MQ@mail.gmail.com>
+References: <CACPK8XfBsq6H5qsSNgwqdRhHXTUYnNQKekSNMnxXoVaAzMc=MQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210311152715.1317848-1-krzysztof.kozlowski@canonical.com>
-References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com> <20210311152715.1317848-1-krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH v3 10/15] clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and compile test)
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Content-Transfer-Encoding: 8bit
+X-BeenThere: openbmc@lists.ozlabs.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: Development list for OpenBMC <openbmc.lists.ozlabs.org>
+List-Unsubscribe: <https://lists.ozlabs.org/options/openbmc>,
+ <mailto:openbmc-request@lists.ozlabs.org?subject=unsubscribe>
+List-Archive: <http://lists.ozlabs.org/pipermail/openbmc/>
+List-Post: <mailto:openbmc@lists.ozlabs.org>
+List-Help: <mailto:openbmc-request@lists.ozlabs.org?subject=help>
+List-Subscribe: <https://lists.ozlabs.org/listinfo/openbmc>,
+ <mailto:openbmc-request@lists.ozlabs.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-To: Alexandre Torgue <alexandre.torgue@st.com>, Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>, David S. Miller <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, Giuseppe Cavallaro <peppe.cavallaro@st.com>, Jakub Kicinski <kuba@kernel.org>, James Morse <james.morse@arm.com>, Jose Abreu <joabreu@synopsys.com>, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, Lee Jones <lee.jones@linaro.org>, Michael Turquette <mturquette@baylibre.com>, Moritz Fischer <mdf@kernel.org>, Olof Johansson <olof@lixom.net>, Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh+dt@kernel.org>, Robert Richter <rric@kernel.org>, Russell King <linux@armlinux.org.uk>, Tom Rix <trix@redhat.com>, Tony Luck <tony.luck@intel.com>, Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>, devicetree@vger.kernel.org, dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, linux-edac@vger.kernel.org, lin
- ux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org, soc@kernel.org
-Date: Wed, 31 Mar 2021 18:34:43 -0700
-Message-ID: <161724088358.2260335.5735095120413931039@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Cc: devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+ Zev Weiss <zev@bewilderbeest.net>, Andrew Jeffery <andrew@aj.id.au>,
+ openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org
+Errors-To: openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org
+Sender: "openbmc"
+ <openbmc-bounces+openbmc=archiver.kernel.org@lists.ozlabs.org>
 
-Quoting Krzysztof Kozlowski (2021-03-11 07:27:15)
-> ARCH_SOCFPGA is being renamed to ARCH_INTEL_SOCFPGA so adjust the
-> 32-bit ARM drivers to rely on new symbol.
->=20
-> There is little point to share clock controller drivers between 32-bit
-> and 64-bit platforms because there will not be a generic image for both
-> of them.  Therefore add a new Kconfig entry for building 32-bit clock
-> driverss, similar to one for 64-bit.  This allows enabling compile
-> testing.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
+This is a relatively low-cost AST2500-based Xeon E-2100/E-2200 series
+mini-ITX board that we hope can provide a decent platform for OpenBMC
+development.
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+This initial device-tree provides the necessary configuration for
+basic BMC functionality such as host power control, serial console and
+KVM support, and POST code snooping.
+
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/aspeed-bmc-asrock-e3c246d4i.dts  | 202 ++++++++++++++++++
+ 2 files changed, 203 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 8e5d4ab4e75e..b12911262ca1 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1406,6 +1406,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+ 	aspeed-bmc-ampere-mtjade.dtb \
+ 	aspeed-bmc-arm-centriq2400-rep.dtb \
+ 	aspeed-bmc-arm-stardragon4800-rep2.dtb \
++	aspeed-bmc-asrock-e3c246d4i.dts \
+ 	aspeed-bmc-bytedance-g220a.dtb \
+ 	aspeed-bmc-facebook-cmm.dtb \
+ 	aspeed-bmc-facebook-galaxy100.dtb \
+diff --git a/arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts b/arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts
+new file mode 100644
+index 000000000000..dcab6e78dfa4
+--- /dev/null
++++ b/arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts
+@@ -0,0 +1,202 @@
++// SPDX-License-Identifier: GPL-2.0+
++/dts-v1/;
++
++#include "aspeed-g5.dtsi"
++#include <dt-bindings/gpio/aspeed-gpio.h>
++#include <dt-bindings/i2c/i2c.h>
++
++/{
++	model = "ASRock E3C246D4I BMC";
++	compatible = "asrock,e3c246d4i-bmc", "aspeed,ast2500";
++
++	aliases {
++		serial4 = &uart5;
++	};
++
++	chosen {
++		stdout-path = &uart5;
++		bootargs = "console=tty0 console=ttyS4,115200 earlyprintk";
++	};
++
++	memory@80000000 {
++		reg = <0x80000000 0x20000000>;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		heartbeat {
++			/* BMC_HB_LED_N */
++			gpios = <&gpio ASPEED_GPIO(H, 6) GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "timer";
++		};
++
++		system-fault {
++			/* SYSTEM_FAULT_LED_N */
++			gpios = <&gpio ASPEED_GPIO(Z, 2) GPIO_ACTIVE_LOW>;
++			panic-indicator;
++		};
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		uid-button {
++			label = "uid-button";
++			gpios = <&gpio ASPEED_GPIO(F, 1) GPIO_ACTIVE_LOW>;
++			linux,code = <ASPEED_GPIO(F, 1)>;
++		};
++	};
++
++	iio-hwmon {
++		compatible = "iio-hwmon";
++		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
++			<&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>,
++			<&adc 10>, <&adc 11>, <&adc 12>;
++	};
++};
++
++&fmc {
++	status = "okay";
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "bmc";
++		spi-max-frequency = <100000000>; /* 100 MHz */
++#include "openbmc-flash-layout.dtsi"
++	};
++};
++
++&uart5 {
++	status = "okay";
++};
++
++&vuart {
++	status = "okay";
++	aspeed,sirq-active-high;
++};
++
++&mac0 {
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rgmii1_default &pinctrl_mdio1_default>;
++};
++
++&i2c1 {
++	status = "okay";
++
++	/* thermal sensor, one diode run to a disconnected header */
++	w83773g@4c {
++		compatible = "nuvoton,w83773g";
++		reg = <0x4c>;
++	};
++};
++
++&i2c3 {
++	status = "okay";
++
++	/* FRU EEPROM */
++	eeprom@57 {
++		compatible = "st,24c128", "atmel,24c128";
++		reg = <0x57>;
++		pagesize = <16>;
++	};
++};
++
++&video {
++	status = "okay";
++};
++
++&vhub {
++	status = "okay";
++};
++
++&lpc_ctrl {
++	status = "okay";
++};
++
++&lpc_snoop {
++	status = "okay";
++	snoop-ports = <0x80>;
++};
++
++&gpio {
++	status = "okay";
++	gpio-line-names =
++		/*  A */ "BMC_MAC1_INTB", "BMC_MAC2_INTB", "NMI_BTN_N", "BMC_NMI",
++			"", "", "", "",
++		/*  B */ "", "", "", "", "", "IRQ_BMC_PCH_SMI_LPC_N", "", "",
++		/*  C */ "", "", "", "", "", "", "", "",
++		/*  D */ "BMC_PSIN", "BMC_PSOUT", "BMC_RESETCON", "RESETCON",
++			"", "", "", "",
++		/*  E */ "", "", "", "", "", "", "", "",
++		/*  F */ "LOCATORLED_STATUS_N", "LOCATORBTN", "", "",
++			"", "", "BMC_PCH_SCI_LPC", "BMC_NCSI_MUX_CTL",
++		/*  G */ "HWM_BAT_EN", "CHASSIS_ID0", "CHASSIS_ID1", "CHASSIS_ID2",
++			"BMC_ALERT1_N_R", "BMC_ALERT2_N_R", "BMC_ALERT3_N", "SML0ALERT",
++		/*  H */ "FM_ME_RCVR_N", "O_PWROK", "SKL_CNL_R", "D4_DIMM_EVENT_3V_N",
++			"MFG_MODE_N", "BMC_RTCRST", "BMC_HB_LED_N", "BMC_CASEOPEN",
++		/*  I */ "", "", "", "", "", "", "", "",
++		/*  J */ "BMC_READY", "BMC_PCH_BIOS_CS_N", "BMC_SMI", "",
++			"", "", "", "",
++		/*  K */ "", "", "", "", "", "", "", "",
++		/*  L */ "BMC_CTS1", "BMC_DCD1", "BMC_DSR1", "BMC_RI1",
++			"BMC_DTR1", "BMC_RTS1", "BMC_TXD1", "BMC_RXD1",
++		/*  M */ "BMC_LAN0_DIS_N", "BMC_LAN1_DIS_N", "", "",
++			"", "", "", "",
++		/*  N */ "", "", "", "", "", "", "", "",
++		/*  O */ "", "", "", "", "", "", "", "",
++		/*  P */ "", "", "", "", "", "", "", "",
++		/*  Q */ "", "", "", "",
++			"BMC_SBM_PRESENT_1_N", "BMC_SBM_PRESENT_2_N",
++			"BMC_SBM_PRESENT_3_N", "BMC_PCIE_WAKE_N",
++		/*  R */ "", "", "", "", "", "", "", "",
++		/*  S */ "PCHHOT_BMC_N", "", "RSMRST",
++			"", "", "", "", "",
++		/*  T */ "", "", "", "", "", "", "", "",
++		/*  U */ "", "", "", "", "", "", "", "",
++		/*  V */ "", "", "", "", "", "", "", "",
++		/*  W */ "PS_PWROK", /* dummy always-high signal */
++			"", "", "", "", "", "", "",
++		/*  X */ "", "", "", "", "", "", "", "",
++		/*  Y */ "SLP_S3", "SLP_S5", "", "", "", "", "", "",
++		/*  Z */ "CPU_CATERR_BMC_PCH_N", "", "SYSTEM_FAULT_LED_N", "BMC_THROTTLE_N",
++			"", "", "", "",
++		/* AA */ "CPU1_THERMTRIP_LATCH_N", "", "CPU1_PROCHOT_N", "",
++			"", "", "IRQ_SMI_ACTIVE_N", "FM_BIOS_POST_CMPLT_N",
++		/* AB */ "", "", "ME_OVERRIDE", "BMC_DMI_MODIFY",
++			"", "", "", "",
++		/* AC */ "LAD0", "LAD1", "LAD2", "LAD3",
++			"CK_33M_BMC", "LFRAME", "SERIRQ", "S_PLTRST";
++
++	/* Assert BMC_READY so BIOS doesn't sit around waiting for it */
++	bmc-ready {
++		gpio-hog;
++		gpios = <ASPEED_GPIO(J, 0) GPIO_ACTIVE_LOW>;
++		output-high;
++	};
++};
++
++&adc {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_adc0_default
++			&pinctrl_adc1_default
++			&pinctrl_adc2_default
++			&pinctrl_adc3_default
++			&pinctrl_adc4_default
++			&pinctrl_adc5_default
++			&pinctrl_adc6_default
++			&pinctrl_adc7_default
++			&pinctrl_adc8_default
++			&pinctrl_adc9_default
++			&pinctrl_adc10_default
++			&pinctrl_adc11_default
++			&pinctrl_adc12_default>;
++};
++
++&kcs3 {
++	status = "okay";
++	aspeed,lpc-io-reg = <0xca2>;
++};
+-- 
+2.31.1
+
