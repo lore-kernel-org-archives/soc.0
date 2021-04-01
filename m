@@ -1,67 +1,102 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=UN2r=I6=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FC71C433ED
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 21:08:45 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 0EB01610F8; Thu,  1 Apr 2021 21:08:45 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C827610C7;
-	Thu,  1 Apr 2021 21:08:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38C13C433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 21:12:58 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 9D922610C7
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 21:12:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9D922610C7
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
+	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=A2zADuW/gAMgM8bHQztdSzW2n7xkNg+hgB7YG0YQ3C8=; b=hjGyUU+JKfgbLy8nKwmHulXbN
+	dJptyY6csz2HLUw/CWd52SkC2fHXyKwrkdRzVrdY9CW9jPGNAAi4u45q4wi1rLAxBT4IZI7v4MFeP
+	PxsDtG71nhtAndzTShr/j6+cBgdloBkaKsgY+L+GjPafvB/GJ/poC0p5efguiEy41MyzydWy2c02H
+	mVf640Zyw2SjGrNlGEnhJ4ImN0kte9eyj53Ax99mkl9ebarIQliLvya8QlRuS+rMTvdFuA9L/bDTO
+	83F+WLFfvBtDpVmlA9JRjLb9IAdHN8ZKpZuVpUYARCZXymShywZHao1L7lXZns81alD9A/ZXpuI5T
+	03WUFwKmw==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lS4XE-00B11L-Ca; Thu, 01 Apr 2021 21:07:25 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lS4W8-00B0wO-0M
+ for linux-arm-kernel@lists.infradead.org; Thu, 01 Apr 2021 21:06:45 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 86420610F7;
+ Thu,  1 Apr 2021 21:06:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617311325;
-	bh=5eoCbOT03yYdZ3SzNI2XZ+AWzU6pejyoMe7AYWXziec=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NfRarbvQZ1F9pm8NP8ZGJob4XCbo2SbHOe3eR0wf+PSKSeXaTV2uucvCbAPvhgdwB
-	 dvcJXoiv6p+/9MQHRAz5aOQeUAfNl2NA7y7lOXrt5sEW+dzA3N42fq1MQDb140IQOX
-	 1r/Pyqzshl0hnwOXMbuF6twr0687hLCTv3pAa8nAwvu22l5r4ik+aYEoLETuvDjObq
-	 Y5pYRuNoNZirIyZP9EgXcfpR2EzaFu57FBsfDPh+5B7GVnSD4jyelEdC3EJsCSuFSB
-	 zB0CmM3MI9B+N592HMYWy7wohyL5y50XBA1MYma0hWGFxgbOiZOY9/FJ/On2v5BtYI
-	 a/5ayeXjMbFIA==
+ s=k20201202; t=1617311172;
+ bh=H9C7fZndGJzPonnBNukM9PU9HffsDsUwZe9xsFCNTjY=;
+ h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
+ b=Zde4Tq/KLW9oTtQpqqLvTJIW7Ovz6uQA7GJlK93z7irpHWSVhqdhlF4lZZMpuArux
+ qLm3SA8D/VErmgtN+yJsfY9+w5UZExas1Jcjue5G1Y8rCqPHjZ3kPwWAT49W74CU6t
+ WN6LzzKzy/HsOJXEeGd5HpRcIa0M+SwQ/63LHKl8AF99owKe00Hl6wXZ1iuo5354Ts
+ NLiZ6OmYaeyma6bvkZukgAfpJyYCA3VcWRHuA8yuND9xlUNoodur1TJiTgH6uRwILY
+ DVBpvNBtxfTpdyVtMUtC2lnuKRW2QdJHs38sAaI/MpbEyzWVPED+OEoU6KlcaEY1NP
+ 54Ad0fReIHUng==
 From: Arnd Bergmann <arnd@kernel.org>
+To: Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Robert Jarzmik <robert.jarzmik@free.fr>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>,
-	arm-soc <arm@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	CK HU <ck.hu@mediatek.com>,
-	Wei Yongjun <weiyongjun1@huawei.com>,
-	Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
-	Hsin-Yi Wang <hsinyi@chromium.org>,
-	Yongqiang Niu <yongqiang.niu@mediatek.com>
-Subject: Re: [GIT PULL] soc: mediatek: changes for v5.13
-Date: Thu,  1 Apr 2021 23:08:36 +0200
-Message-Id: <161731130321.663335.9439061446866872029.b4-ty@arndb.de>
+Cc: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] ARM: configs: Remove REGULATOR_USERSPACE_CONSUMER
+Date: Thu,  1 Apr 2021 23:06:02 +0200
+Message-ID: <161731114633.662954.15683308110570757088.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <c47d4bdd-9e05-c0de-bacb-3a262fed936d@gmail.com>
-References: <c47d4bdd-9e05-c0de-bacb-3a262fed936d@gmail.com>
+In-Reply-To: <20210401102858.4095-1-broonie@kernel.org>
+References: <20210401102858.4095-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210401_220642_770641_1FEF2F36 
+X-CRM114-Status: GOOD (  10.09  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210401210602.5uZCw2cvc6fHwtzZitbdekYhewXt0SoCNXT8NNMNP18@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Thu, 1 Apr 2021 16:19:45 +0200, Matthias Brugger wrote:
-> Below you can find the changes for the SoC drivers. After we fixed in the last
-> round the power management domain driver. This time it is the MMSYS driver. Up
-> to now it held one big table with routing information for all SoCs. But that's
-> not practical over time, so that was splitten up to add only per SoC structures.
-> That should make it easier in the future to add support for new SoCs. At least
-> one series didn't hit mainline this time, but should be ready for the next round.
-> 
-> Please take the patches into account for your pull request.
-> 
-> [...]
+On Thu, 1 Apr 2021 11:28:58 +0100, Mark Brown wrote:
+> The userspace consumer is a development tool, not intended for producton
+> systems and so should not be present in defconfigs especially not those
+> for specific machines so is not a good fit for defconfig, remove it from
+> those defconfigs where it is enabled. No system in mainline actually
+> instantiates one.
 
-Merged into arm/drivers, thanks!
+Applied to arm/defconfig, thanks!
 
-merge commit: 3e7f2f2980e82eb20ce73691d65d696c6994ad4c
+[1/1] ARM: configs: Remove REGULATOR_USERSPACE_CONSUMER
+      commit: 797e1491b8df16eb666ec12f7a49515f12515c37
 
        Arnd
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
