@@ -7,59 +7,55 @@ X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4AF2C433ED
-	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 10:23:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7661AC433ED
+	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 10:23:57 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 806E2610D2; Thu,  1 Apr 2021 10:23:55 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 58482610CA;
-	Thu,  1 Apr 2021 10:23:53 +0000 (UTC)
+	id 494DD610E6; Thu,  1 Apr 2021 10:23:57 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CF56B610CD;
+	Thu,  1 Apr 2021 10:23:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617272635;
-	bh=echKhk/+du5revw56d9N1TtPnxzuzBPGHd3iaQ496Xk=;
+	s=k20201202; t=1617272637;
+	bh=NlzFEJnGo31nu4+3b3ZxFIOj1CRAeQgNnmnScf+84ts=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UxuCUS8Ewavw1VGOPNOhxECVjCSTnSE2hTmRdj80WAgBHauG0SU1ub8DXfDKZu5KF
-	 7VvXgHEEDctKtAwWqd57pztmBDHjvQdM1uF68y1PIaxWg9ieLAx/KOWpAXR3g/FU1L
-	 iFEDzr3lUl2kuLF5J5pLsKB4WHP56yvDJpfLSjBPqJvQrBPrLUSBO/wlADdJm2G5mn
-	 hPJ7v/mNTTdTXAQHLMiAo3jEzCJEAWEsJwdjGaU9+WJ7JRGX+Muf1iKEArUp8iwmyj
-	 56+Tcwz7mKTTkVaTCdpULUEBTo+eT9HjIBvPB3LTGopF73Bq7V/h7IQYIukxDWkMLE
-	 UCNVhQOH7ZvrQ==
+	b=nHXYk+oUUyqi5lRKIAPZLnBOfjRmV3qSm1355uldps0T+ItrxLVNyRJs09IYST3Y8
+	 c+a1qx2u4t6q94r9FeCS2l5qhUqIFWhFymOQWULG26PIk+wipNmVfh4yN3Bxa9DZ3f
+	 IJwmQk+ekDDr9gQ/ide2+3E7ylWwqPodjcGcLlLjx3fowtNi/2MAWEZKSJaWrWzSVU
+	 qVn9HXc/Abca875kfIEw9rKjD8u3LLgK07yLvawPDAFcOke1JEus7Nvm55JP9sT8ir
+	 fVU1k+nuUaesj5+C9KF/pDwGxeFB7ZCICtlbByk3zxE243oqVDAyhisB8h4vUWEznc
+	 VQhgQG9SZ4rng==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Shawn Guo <shawnguo@kernel.org>,
-	arm@kernel.org,
+To: Tony Lindgren <tony@atomide.com>,
 	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-imx@nxp.com,
-	kernel@pengutronix.de,
-	Stefan Agner <stefan@agner.ch>,
-	Fabio Estevam <festevam@gmail.com>,
-	Li Yang <leoyang.li@nxp.com>
-Subject: Re: [GIT PULL] i.MX fixes for 5.12, round 2
-Date: Thu,  1 Apr 2021 12:23:32 +0200
-Message-Id: <161727243755.583633.10590032736575762334.b4-ty@arndb.de>
+	linux-omap@vger.kernel.org,
+	arm@kernel.org
+Subject: Re: [GIT PULL] More fixes for omaps for v5.12-rc cycle
+Date: Thu,  1 Apr 2021 12:23:33 +0200
+Message-Id: <161727243717.583633.17499890750529623246.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210330090236.GQ22955@dragon>
-References: <20210330090236.GQ22955@dragon>
+In-Reply-To: <pull-1616584662-702939@atomide.com>
+References: <pull-1616584662-702939@atomide.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 30 Mar 2021 17:02:37 +0800, Shawn Guo wrote:
-> The following changes since commit e4817a1b6b77db538bc0141c3b138f2df803ce87:
+On Wed, 24 Mar 2021 13:20:39 +0200, Tony Lindgren wrote:
+> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 > 
->   ARM: dts: imx6ull: fix ubi filesystem mount failed (2021-03-18 12:06:28 +0800)
+>   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.12-2
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.12/fixes-rc4-signed
 > 
 > [...]
 
 Merged into arm/fixes, thanks!
 
-merge commit: 89e21e1ad92373b7306b9b8494d45781598ce72f
+merge commit: 111a5a421fb770d0fc2e09f7d57eb2cbe51e3ade
 
        Arnd
