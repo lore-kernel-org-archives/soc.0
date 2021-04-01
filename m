@@ -1,120 +1,90 @@
-Return-Path: <SRS0=UN2r=I6=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=+Tl1=I6=gmail.com=matthias.bgg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BCEEC433ED
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 14:03:15 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69F7DC433ED
+	for <soc@archiver.kernel.org>; Thu,  1 Apr 2021 14:14:24 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 1A8AD61358; Thu,  1 Apr 2021 14:14:24 +0000 (UTC)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E44AA6127C
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 14:03:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E44AA6127C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Subject:From:Cc:To:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=DdVYk2VNs2T0KKsV8PCPcD08lawrg+cnDNC8USgUIpQ=; b=li5btUpYAbaEGzfT6pNUR9P8xY
-	UMGEK0NwMyBTD3gTTWn3eia0lb4Lz9DsjaxsGj0pKr66y0udaFwbbeibczHHmICH7as4t+7TIN+fD
-	4f0+invyTR78qa9rRXkczIFD21j/lDM5TJhLrY/H4jmJTdPZUjG51o3VeetVMih8eKiLlYLCGYFYq
-	EnfHOGMcyOOb36Sxdx2o4C94H+kr6Wmt50U1Md4uVaMS48OP8stY730QhR7WlKVMaOmYO7nSfZNy7
-	ZNctherADDs3+dBb/45sgvD5uDn6J6HCpASgGxNF1o/BnBbPhJaRlUHY8ic27SYmtxCKVBnkEHsaJ
-	ZDJ7rvYw==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lRxtK-009mNI-C4; Thu, 01 Apr 2021 14:01:46 +0000
-Received: from mail-ed1-x532.google.com ([2a00:1450:4864:20::532])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lRxtD-009mM7-Rd; Thu, 01 Apr 2021 14:01:42 +0000
-Received: by mail-ed1-x532.google.com with SMTP id b16so2084223eds.7;
- Thu, 01 Apr 2021 07:01:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=to:cc:from:subject:message-id:date:user-agent:mime-version
- :content-language:content-transfer-encoding;
- bh=Kpqxj1R5RpTVz1wBSRjGUo0ShbRDPWFOGRiU4h0lHJs=;
- b=KF+livsuleM1CtrGNFRxImYJSlRq24NlTbJfISnKTFNHN0k227mnczQBcjgurTdtYQ
- k4ieptHLFhVoH3h9LbDyNEoU/P/1mEoUGVNSTig3i3xgjB5VZ2FxtQ0Mu9ioE5yO8gAj
- AokZVHGiwwIFVMogDK2/vSlAK/iXp9f6gRsUWm84idp/WE7bvolY+0/mUs43db+R9k8l
- aDY4bGk3rvqgZoVQRd0Ndh00uyIwnhIwGAmJ3Zgv2PWTGWmfoxMDEWXOUAtd8+d9GyhX
- wWi1v3HuqppBj4psniCgJ1KVhwAWCyhZ1IUkYVWt8vSXV1eCos2QS+jbcmzmTV/ZtsA4
- Orgw==
+	by mail.kernel.org (Postfix) with ESMTPS id A363261356;
+	Thu,  1 Apr 2021 14:14:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A363261356
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=matthias.bgg@gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id o19so2141290edc.3;
+        Thu, 01 Apr 2021 07:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=2iPiER7+Mw9G4stxjC5v9//X5TggjLttwCChYXF8TQU=;
+        b=jSM2vOBJ5p0I5wFDQI/bRmeDf0iK3BaX458RHLIENtVgxKnla4c1YHGcHkeMKo4xMs
+         tYNaSRRAIuqAPLfl6c8DXpNZw3AcJ6tGhCHy3GdyqZvlFDfH0ZeEoS4OxFOHxAZrqq/V
+         eNxiu/oo7ppLEtGJaDZlHsY+/Wt3p0XhitTxprnPuEM+5RGLQ9oX5iT+bFq1nyklgffK
+         2VDoKV+hkVHgj2MckFJ7LXWA2SN65Pv/EbmAIZlRKIpzO+7Xn/hCsS/VC/As1+uH5lYG
+         w3e3sVdTbtSbxuQKcub6i+QnplSFrXuXSOxZptO6rM4F8vin5ddjZO1fjqI3VVKY8SjS
+         URTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
- :mime-version:content-language:content-transfer-encoding;
- bh=Kpqxj1R5RpTVz1wBSRjGUo0ShbRDPWFOGRiU4h0lHJs=;
- b=k76HgUHNjTBD+RAkI/JMyQajm+J/+lItcRnMGbWmiYG/30809bbm4JsgSGmtKE1ehC
- WohyvDvUBhcSFrkhwbstFRffWiVh4cnu11loY9vF9gEOcufoLzkuVVbnczmu9OWEANZ/
- GVTMmRNECwIL2kGmqCaWzlTdBq0ER4KTeJaXvJPZ3H4f+4c7xu0BO21HqxN8gCrK2oxl
- jnsoFBwwS7WnzKdO9iIdBUNTfFtKN8YRtWrIqDeEVoNjPycj51eeun+OCSslTobA3K5k
- mqdvAgJAJV+npAabtk7XZLlMMGqn/w+NE+4W7btTJzfTT3VSL4rRXPmHdf2gSkcJwouA
- 7HFA==
-X-Gm-Message-State: AOAM533PyfVbQ1KTf4XfSYxBjfY2mPf7HSzZjyfV6J/+fOeBrBWKNA4f
- Kvw1SjzzjdbqVEy8kyZ/WZY=
-X-Google-Smtp-Source: ABdhPJy+F6nVJbW11NEWKQKmNn/+8SdFFd8vKpxN0TylkP1ecGu2agI49lAIvGeMA80rjZLRsH5Ohw==
-X-Received: by 2002:a05:6402:1713:: with SMTP id
- y19mr9948692edu.52.1617285699193; 
- Thu, 01 Apr 2021 07:01:39 -0700 (PDT)
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=2iPiER7+Mw9G4stxjC5v9//X5TggjLttwCChYXF8TQU=;
+        b=m4K0O7pS2tW6xVk8wnGZL96P1KITbtAovVRTAkFj8Z0RV8B/NWLwQAkoYNrcvijrnh
+         AaIETaedWiBzLzmwrmlizYLkvY2NJQ0rwuuuTfz/TqlUpQhGZ7qmX2wFyYxac7MzptD5
+         xdUm4KJHo9fgKM5HL+hDgfMxQPku/3dRdFH/TzzxSefeOfkC7c0PoKTJm7qCyL8ylmOJ
+         EnaZneLjQxp5Uh9NTkLi99Syt5T2ySwMYkW6ZOGK1jYdQNbQVKC4zebiej3Dc9vmbnyP
+         5aIIb7aYU0fX2bgwV7CUU1OadvRrl0Ch1Fd0T0EroufB70K6DzKADEuDINDVF1xHBL9Z
+         kJ0Q==
+X-Gm-Message-State: AOAM532B0IgULjt5mZj354Rxe9SgUkXaLM+xoDTtD7D9zrzBrC/ppl3M
+	O++z5nHvHMUqc9I+zm0tjHo=
+X-Google-Smtp-Source: ABdhPJyudkq44tnD6PFdxEt8sWOEruY+6c9i6HalMBGJleKVpLrfgUXQ8RA395TNZkdfJ40Z4Ctdlg==
+X-Received: by 2002:aa7:da46:: with SMTP id w6mr10348146eds.40.1617286462366;
+        Thu, 01 Apr 2021 07:14:22 -0700 (PDT)
 Received: from ziggy.stardust ([213.195.126.134])
- by smtp.gmail.com with ESMTPSA id v15sm3566132edw.28.2021.04.01.07.01.34
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 01 Apr 2021 07:01:38 -0700 (PDT)
+        by smtp.gmail.com with ESMTPSA id x9sm3629842edv.22.2021.04.01.07.14.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Apr 2021 07:14:21 -0700 (PDT)
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
 Cc: "moderated list:ARM/Mediatek SoC support"
  <linux-mediatek@lists.infradead.org>,
  "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, Boris Lysov <arzamas-16@mail.ee>,
- Chunfeng Yun <chunfeng.yun@mediatek.com>
+ <linux-arm-kernel@lists.infradead.org>,
+ Chunfeng Yun <chunfeng.yun@mediatek.com>,
+ Fabien Parent <fparent@baylibre.com>, Hsin-Yi Wang <hsinyi@chromium.org>,
+ Matthias Kaehlcke <mka@chromium.org>, Nicolas Boichat
+ <drinkcat@chromium.org>, Ryan Wu <Yz.Wu@mediatek.com>,
+ Ryder Lee <ryder.lee@mediatek.com>, Seiya Wang <seiya.wang@mediatek.com>,
+ Michael Kao <michael.kao@mediatek.com>
 From: Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [GIT PULL] ARM: dts: mediatek: updates for v5.13
-Message-ID: <be262120-6cd9-87a7-ccc3-f5c403cff66b@gmail.com>
-Date: Thu, 1 Apr 2021 16:01:34 +0200
+Subject: [GIT PULL] arm64: dts: mediatek: changes for v5.13
+Message-ID: <d1121630-5778-0955-fac7-f921174defe7@gmail.com>
+Date: Thu, 1 Apr 2021 16:14:20 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210401_150140_113513_0974D880 
-X-CRM114-Status: GOOD (  12.21  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210401140134.rKZjORk_EQWkFgtWp3EOkluJyNYvZf42RaSLAttDqF0@z>
+Content-Transfer-Encoding: 8bit
 
 Hi Olof and Arnd,
 
-Please take the below patches into account. These are mostly cleanups to make
-the DTB checker happy. Apart from that we now have SMP support for MT6589, it's
-nice to see that someone keeps working on this old platform with which I started
-upstreaming :)
+Please have a look at the updates below. As you can see we have quite some
+activity on the MT8183 based devices, with a whole bunch of new Chromebook
+bindings added this round. Apart from that the a bit older MT8173 still gets
+improvement, which is nice to see.
 
 Regards,
 Matthias
-
 ---
 
 The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
@@ -124,33 +94,122 @@ The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 are available in the Git repository at:
 
   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/
-tags/v5.12-next-dts32
+tags/v5.12-next-dts64
 
-for you to fetch changes up to 562f818deaf0601f224999cc39b6c97fbb2adc57:
+for you to fetch changes up to a7dceafed43a4a610d340da3703653cca2c50c1d:
 
-  arm: mediatek: dts: activate SMP for mt6589 (2021-03-30 12:12:25 +0200)
+  arm64: dts: mediatek: fix reset GPIO level on pumpkin (2021-04-01 11:39:10 +0200)
 
 ----------------------------------------------------------------
+- add trivial bindings for MT8195
 - fix dtbs_check warnings
-- enable SMP for mt6589
+- add pinmux for build-in Wifi on MT7622 evaluation borad
+
+MT8183:
+- fix USB wakeup register
+- add regulator for EVB board
+- add registers to mailbox consumers
+- add thermal zone and trip points for CPU cooling
+- Add new boards:
+  * ASUS Chromebook Flip CM3
+  * ASUS Chromebook Detachable CM3
+  * Acer Chromebook Spin 311
+  * Lenovo 10e Chromebook Tablet
+
+MT8173:
+- fix PHY property in DSI
+- fix power-domain for PMIC wrapper
+
+Pumkin:
+- add MT8516 based board
+- add MT8183 based board
+- fix reset pin for MT8167 and MT8516 based boards
 
 ----------------------------------------------------------------
-Boris Lysov (1):
-      arm: mediatek: dts: activate SMP for mt6589
+Chunfeng Yun (8):
+      arm64: dts: mt8183: update wakeup register offset
+      arm64: dts: mt8173: fix property typo of 'phys' in dsi node
+      arm64: dts: mediatek: mt8173: fix dtbs_check warning
+      arm64: dts: mediatek: mt2712: harmonize node names
+      arm64: dts: mediatek: mt8516: harmonize node names and compatibles
+      arm64: dts: mediatek: mt7622: harmonize node names and compatibles
+      arm64: dts: mediatek: mt8183: fix dtbs_check warning
+      arm64: dts: mt8173: fix wrong power-domain phandle of pmic
 
-Chunfeng Yun (3):
-      arm: dts: mt7629: harmonize node names and compatibles
-      arm: dts: mt7623: harmonize node names and compatibles
-      arm: dts: mt2701: harmonize node names and compatibles
+Fabien Parent (4):
+      dt-bindings: arm64: dts: mediatek: Add mt8516-pumpkin board
+      dt-bindings: arm64: dts: mediatek: Add mt8183-pumpkin board
+      arm64: dts: mt8183: add mt8183 pumpkin board
+      arm64: dts: mediatek: fix reset GPIO level on pumpkin
 
- arch/arm/boot/dts/mt2701.dtsi  | 19 +++++++++++--------
- arch/arm/boot/dts/mt6589.dtsi  |  1 +
- arch/arm/boot/dts/mt7623.dtsi  | 26 ++++++++++++++------------
- arch/arm/boot/dts/mt7623n.dtsi |  4 ++--
- arch/arm/boot/dts/mt7629.dtsi  | 12 +++++++-----
- 5 files changed, 35 insertions(+), 27 deletions(-)
+Hsin-Yi Wang (9):
+      arm64: dts: mediatek: mt8183: evb: Add domain supply for mfg
+      dt-bindings: arm64: dts: mediatek: Add mt8183-kukui-jacuzzi-damu
+      dt-bindings: arm64: dts: mediatek: Add mt8183-kukui-jacuzzi-juniper
+      arm64: dts: mt8183: Add kukui-jacuzzi-damu board
+      arm64: dts: mt8183: Add kukui-jacuzzi-juniper board
+      arm64: dts: mt8183: Add gce client reg for display subcomponents
+      dt-bindings: arm64: dts: mediatek: Add mt8183-kukui-kakadu
+      dt-bindings: arm64: dts: mediatek: Add mt8183-kukui-kodama
+      arm64: dts: mt8183: Add kukui kodama board
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Matthias Kaehlcke (1):
+      arm64: dts: mt8183: Configure CPU cooling
+
+Nicolas Boichat (1):
+      arm64: dts: mt8183: Add kukui kakadu board
+
+Ryan Wu (1):
+      dt-bindings: nvmem: mediatek: add support for MediaTek mt8192 SoC
+
+Ryder Lee (1):
+      arm64: dts: mt7622: add ePA/eLNA pinmux for built-in WiFi
+
+Seiya Wang (3):
+      dt-bindings: timer: Add compatible for Mediatek MT8195
+      dt-bindings: serial: Add compatible for Mediatek MT8195
+      dt-bindings: arm: Add compatible for Mediatek MT8195
+
+michael.kao (1):
+      arm64: dts: mt8183: add thermal zone node
+
+ .../devicetree/bindings/arm/mediatek.yaml          |  36 ++
+ .../devicetree/bindings/nvmem/mtk-efuse.txt        |   1 +
+ .../devicetree/bindings/serial/mtk-uart.txt        |   1 +
+ .../bindings/timer/mediatek,mtk-timer.txt          |   1 +
+ arch/arm64/boot/dts/mediatek/Makefile              |   8 +
+ arch/arm64/boot/dts/mediatek/mt2712e.dtsi          |   8 +-
+ arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts       |  12 +
+ arch/arm64/boot/dts/mediatek/mt7622.dtsi           |   9 +-
+ arch/arm64/boot/dts/mediatek/mt8173-evb.dts        |   6 +-
+ arch/arm64/boot/dts/mediatek/mt8173.dtsi           |  15 +-
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts        |   4 +
+ .../dts/mediatek/mt8183-kukui-jacuzzi-damu.dts     |  31 ++
+ .../mt8183-kukui-jacuzzi-juniper-sku16.dts         |  13 +
+ .../dts/mediatek/mt8183-kukui-jacuzzi-juniper.dtsi |  27 ++
+ .../boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi    | 474 +++++++++++++++++++++
+ .../boot/dts/mediatek/mt8183-kukui-kakadu.dts      |  13 +
+ .../boot/dts/mediatek/mt8183-kukui-kakadu.dtsi     | 378 ++++++++++++++++
+ .../dts/mediatek/mt8183-kukui-kodama-sku16.dts     |  21 +
+ .../dts/mediatek/mt8183-kukui-kodama-sku272.dts    |  21 +
+ .../dts/mediatek/mt8183-kukui-kodama-sku288.dts    |  21 +
+ .../dts/mediatek/mt8183-kukui-kodama-sku32.dts     |  21 +
+ .../boot/dts/mediatek/mt8183-kukui-kodama.dtsi     | 343 +++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts    | 378 ++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi           | 158 ++++++-
+ arch/arm64/boot/dts/mediatek/mt8516.dtsi           |   9 +-
+ arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi   |   3 +-
+ 26 files changed, 1982 insertions(+), 30 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dts
+ create mode 100644
+arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper.dtsi
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
