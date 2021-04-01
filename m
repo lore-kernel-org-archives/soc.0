@@ -9,14 +9,14 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 170DDC433ED
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:27:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DEFBC433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:27:58 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 69E5F613B9
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:27:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 69E5F613B9
+	by mail.kernel.org (Postfix) with ESMTPS id C2BD3613B5
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:27:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C2BD3613B5
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -25,53 +25,53 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=aGy8oqlG6kLYqLjJ22QFw0sgnNLNMP3tHdBoyosNLz0=; b=S9e4fUGj5LfLboSNFsKDhkhaU
-	wwu2+42I62yY9Ul++fCt+tNbEv2uacqOjm/gPNl+Y8Ssy/npf3fvzxmDQbYI5Ah5UJwCg1EyG8OIV
-	ZpiSbBUIkgIMXDbq7bglSj0br0NNvb0NpBYLNGTFjYuh7bxGUjuCzSv03Ih0o2ZP05GHi0qZbluvD
-	7lfzfomQDi3JrjVF4r0JWOBXQBWRX7QJKE3h4GgWQOphgzfJPcvQmTh0OP8GSyMuw9sOMw3QJqhCR
-	DXKSaxpl0XjSaF2b4X+gbMakk4fMwSNOE+ysdZzuVi+9sYnP4RETHjFE0+hXBLUTS6ByT5kcrmDpx
-	3mDg+Khew==;
+	 bh=qyeqRLkArjuw3F06De5JJLB1TMHSpQWPtfny/NmRf94=; b=HoTs1zGpR5bQ03+2quJdgHDgL
+	cvsbCnEtIRWGhCKmLA3MfFAYtADI1nvw/Brp1mfFELMtS9v/4qC/a39piX9eI1eaIDTuX7odiR/sq
+	20fPr6TXFbIAfh8R8urO4IfKD5tT33Ij0BE47vsA2WRlyv5r3aUtkcm+StTPdFn1+At0nWw1hSV9a
+	16bxUhLEFj6ii8AgBNERb9qoxt9bQvNKkn2S1vWLzwjcl6uVPe8nC7kl5GkRc6Jn73JOg+x3tBvcT
+	grS3OUXlXPeq9JT9Ge15BAg17EQ7z54LIWhKsMUBnWBFRBMF8jY8tb437e9h0Ij5b9Q+BtVW8Nv7t
+	rpyB1jYRQ==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lS15F-00AVz0-GR; Thu, 01 Apr 2021 17:26:17 +0000
-Received: from mail-ej1-x629.google.com ([2a00:1450:4864:20::629])
+	id 1lS15S-00AW2B-Jq; Thu, 01 Apr 2021 17:26:30 +0000
+Received: from mail-ej1-x62d.google.com ([2a00:1450:4864:20::62d])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lS14z-00AVv6-S7
- for linux-arm-kernel@lists.infradead.org; Thu, 01 Apr 2021 17:26:03 +0000
-Received: by mail-ej1-x629.google.com with SMTP id u21so3977240ejo.13
+ id 1lS151-00AVvo-Jn
+ for linux-arm-kernel@lists.infradead.org; Thu, 01 Apr 2021 17:26:05 +0000
+Received: by mail-ej1-x62d.google.com with SMTP id u5so4008782ejn.8
  for <linux-arm-kernel@lists.infradead.org>;
- Thu, 01 Apr 2021 10:26:01 -0700 (PDT)
+ Thu, 01 Apr 2021 10:26:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=REwstNQho+0HF6CmmQ9jvF2oPascfGsNa3A+M63+ZoA=;
- b=sxlOIJzZWh+CM7b7PEGZxLFNmCHPX6k8wsPuZ6h2RIHxQ0LKn/Lxg1y+Y3CEr8pR1L
- vyBGPjPtURl7QlifNLXLDJondO6It08jh0ZWcQVaKiQFiZ/U688PazfVCeubkHrMduUi
- 9Kp7t9jF33JvgaMh8/eoiN2GNvhCfsXLfW7OWr/xpSQo8ThPPPqqyk9+Z9YME8uh9ssT
- vN+W3bpuoF/G0RPRTWrN199/fhPtfcyc8RIOWVgXdd0CFycQU2BjKZKDDdWZ3KOIjLsp
- GbRm/AyKxmCKL1oOee0YjrY0UOI0N+SEThm6AJHL3Ccr7fBEyLnfb8LqBLBh7xG5GGYp
- DYcg==
+ bh=2Omm+oEQ1soNxmNoKODfBvftl8Wbkbkn+2eacAPkZvY=;
+ b=tsob7xXrkZ7jnS1kyYuhptSfIT3jomtbs2ZL11Wx/MdFuYfvO+yhUBC3PtK5wKv/G1
+ bUHi7XHiZGnuymA9UO6GywV42BrngqwFiLl4mCvIJfYZOiPHZBYYqsPJoYX16rtougkB
+ Mm7zOyWeN7hnRnseW5t0Ez69gyIlMlLGKNHNppjYlfUAyNz5otEm49so0E1HnKmUUJA7
+ ONEzdvUFel2XYMRMsx0PzwEjiG1pVtZExoJNiM0Cu1uirSFQC2OJ735+nTybckScTrf5
+ Pd1sGJwnhKTaUSo1+I3MWEkJCQ1j+pqbxCXGY8MFk+lGUNVyTJVNnJsBwgior98O2OMy
+ mXAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=REwstNQho+0HF6CmmQ9jvF2oPascfGsNa3A+M63+ZoA=;
- b=OBPomGe4RoG+xuIGY5Q6xKg8C4W3dmhhgIS90GoI3qsWiebSRM9exqIRtoUUasMKJm
- 6YvJMqc11WP9n7+yF/mC+2+EA4YaUzogJh1oI3PkHlSHHbENcXfduTHnQET7b9DTxLlV
- 165pVLbPyABqjLGkiDMQANjUseeJ6f9n34b6AzJt36B2sV04wxRN+YZrTb2N69tkm928
- X80wx6klNGmBZpSfLbonm9mOMp63IpU7qNS2taPVSkIrBCD0RRqHhO2FhOYikqmTiS6x
- wZ9Sz+fBhWJfydFB5+u1c5fKaJZAXtQeJlkk37mfxLp+4dtOxW7rTUWPC2C49RibA2/S
- gwXQ==
-X-Gm-Message-State: AOAM532O0tAJWKaPiz+uBVMtfYfjdxb+RAYHSE6i5tF9hahBwHmR2rvZ
- GlC4jCZkYzF4F6yD/NsMDXY=
-X-Google-Smtp-Source: ABdhPJxE13Lorh6skVD7dPNFfE3hH5Aow2jkICl6k92P5R+PgadH2/fn/9VFL8Fy9EYLRoXz6Hzn1g==
-X-Received: by 2002:a17:907:629c:: with SMTP id
- nd28mr10385959ejc.267.1617297960950; 
- Thu, 01 Apr 2021 10:26:00 -0700 (PDT)
+ bh=2Omm+oEQ1soNxmNoKODfBvftl8Wbkbkn+2eacAPkZvY=;
+ b=HbvX+CRs+9I8PgOPCBpmJ5oXOeNGsin+ThbzZ+bJ0UZwOxUtcXiz3Jc2SZt7eJU8iN
+ jAxsoUBjy3KmYWSDS4qnUoFLgAwQgUZO3a6KNaC9rkBrY4rbdRJ75PEYRG2wEaEvMIqz
+ yBdMQmR67kqwa6vZApUuiomkph4ww1T7/sQg9jNt6hYl4tAC+ZpPn+xqhn5zfkb+wxH7
+ lFQrtUJUez81cN2wldLPoNjHEimYP0Zmwv7fIswTGsJUxEaB4bvtQHInmhTkNREjIbDF
+ VIvATem4oOWPExWHO8BjN4HVL0oVMHu8SzoiYMIqpXfQqWZ8WN1v8P/Xq26hNP/ER3xm
+ 9CcA==
+X-Gm-Message-State: AOAM531vbKj4H7miN+8CWM6mOmgltzS1SrDrg5a0IHirQsyc4CZsjyB6
+ 2nHExIkkUBt3mknTKlmbJrY=
+X-Google-Smtp-Source: ABdhPJzqPLheYK+WbmzO01k9KyCjZMQ0LGPYHUZmVfXeAf+8NxLcNxqFDd5AXEIvO+FGNC7oqsS9+g==
+X-Received: by 2002:a17:906:3f87:: with SMTP id
+ b7mr10253092ejj.139.1617297962946; 
+ Thu, 01 Apr 2021 10:26:02 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
- by smtp.gmail.com with ESMTPSA id hd8sm2995528ejc.92.2021.04.01.10.25.59
+ by smtp.gmail.com with ESMTPSA id c12sm4199808edx.54.2021.04.01.10.26.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 01 Apr 2021 10:25:59 -0700 (PDT)
+ Thu, 01 Apr 2021 10:26:02 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -79,17 +79,16 @@ To: arm@kernel.org,
 Cc: Thierry Reding <thierry.reding@gmail.com>,
  Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/5] clk: tegra: Changes for v5.13-rc1
-Date: Thu,  1 Apr 2021 19:26:19 +0200
-Message-ID: <20210401172622.3352990-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/5] soc/tegra: Changes for v5.13-rc1
+Date: Thu,  1 Apr 2021 19:26:20 +0200
+Message-ID: <20210401172622.3352990-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210401172622.3352990-1-thierry.reding@gmail.com>
 References: <20210401172622.3352990-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210401_182602_260630_AB070200 
-X-CRM114-Status: UNSURE (   8.98  )
-X-CRM114-Notice: Please train this message.
+X-CRM114-CacheID: sfid-20210401_182603_859595_B4744A43 
+X-CRM114-Status: GOOD (  10.42  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -105,7 +104,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210401172619.novQyzkUFu6GKX9gKnQtrTx6anp0hkvf8uLjUm7I7Bc@z>
+Message-ID: <20210401172620.SedL5ciWY0S2EQebXoOjH_JuTdpe3WRQbswqT1favGA@z>
 
 Hi ARM SoC maintainers,
 
@@ -115,30 +114,35 @@ The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.13-clk
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.13-soc
 
-for you to fetch changes up to 0c7ea2b1c850756140fef03bed0fbaf0957f120a:
+for you to fetch changes up to 366d7c643a8a9db652341e314b33d3fc80595e6c:
 
-  clk: tegra: Don't enable PLLE HW sequencer at init (2021-03-24 14:02:14 +0100)
+  soc/tegra: pmc: Print out domain name when reset fails to acquire (2021-03-26 13:10:25 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-clk: tegra: Changes for v5.13-rc1
+soc/tegra: Changes for v5.13-rc1
 
-This adds PLLE HW sequencer support which is necessary for USB sleepwalk
-functionality.
+Contains a couple of fixes to the PMC power domain implementation and
+exports a regmap from PMC needed to implement USB sleepwalk support.
 
 ----------------------------------------------------------------
-JC Kuo (2):
-      clk: tegra: Add PLLE HW power sequencer control
-      clk: tegra: Don't enable PLLE HW sequencer at init
+Dmitry Osipenko (5):
+      soc/tegra: regulators: Fix locking up when voltage-spread is out of range
+      soc/tegra: pmc: Fix imbalanced clock disabling in error code path
+      soc/tegra: pmc: Fix completion of power-gate toggling
+      soc/tegra: pmc: Ensure that clock rates aren't too high
+      soc/tegra: pmc: Print out domain name when reset fails to acquire
 
- drivers/clk/tegra/clk-pll.c      | 12 ---------
- drivers/clk/tegra/clk-tegra210.c | 53 +++++++++++++++++++++++++++++++++++++++-
- include/linux/clk/tegra.h        |  4 ++-
- 3 files changed, 55 insertions(+), 14 deletions(-)
+JC Kuo (1):
+      soc/tegra: pmc: Provide USB sleepwalk register map
+
+ drivers/soc/tegra/pmc.c                | 259 ++++++++++++++++++++++++++++++++-
+ drivers/soc/tegra/regulators-tegra30.c |   2 +-
+ 2 files changed, 252 insertions(+), 9 deletions(-)
 
 _______________________________________________
 linux-arm-kernel mailing list
