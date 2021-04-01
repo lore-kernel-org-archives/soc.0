@@ -1,147 +1,104 @@
-Return-Path: <SRS0=UN2r=I6=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA211C433ED
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:29 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7EDFD6101A
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7EDFD6101A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:Cc:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=cc2FK4QgR2coYlmydEDwFKi9NSDPIZ3AnHCKP4qHCi4=; b=Bxn2d7BZ532vuGOlIXGG39ed6H
-	/O9pCkFSRG0gavn8NISRt/nkS5V5upctvNJdDmQl1h6ttgPWNQuV07awYNZ7uHQdop5Jph8eD79AG
-	dVgyBJwumLNpv7U8CRGw8JialcUhUyQZTc3bln21p3hwq/zP5aTY+KCwbBRNNYUgG0q5InFiLmxMj
-	DCSW9lqN4iMbARMgl+2gYKesvcV4RWcxyeUKsKmYYM7pcKvVdxlyoW/M7SHOMtQvBkzuAvfSelYec
-	8Ainh7AXENu9oTDrfaG1r5ZOsn8hVZiVJQql5OO39m9vyoiZRMUZaSW235u6H/jcGRD0Rw3TI2eR0
-	5LhR+RiQ==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lS1SE-00Aadv-5a; Thu, 01 Apr 2021 17:50:02 +0000
-Received: from esa.microchip.iphmx.com ([68.232.154.123])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lS1S9-00Aacb-G4
- for linux-arm-kernel@lists.infradead.org; Thu, 01 Apr 2021 17:50:00 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1617299397; x=1648835397;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=t+Damo6lBLTec0MqdYsAZG21XEfwTrUjDwnQIVPgrfg=;
- b=S5Wy0PDPDw2+HBLj90xzeZx/Ihhtz2H14Bym8PISzCaUrj7Ge1lyV0kr
- hhwVkdXCANn9gmQAakQPTgFCT2n5AL3U1/KXqFdJkqSGDWD/Qpi/tAZTG
- lzOTNqzm/AoiwysXlU66WUWZEk9Drc3X2PrSI7KlaSmRhtT8OkyxYFcmJ
- yV+ueEBZNZfKPDeU8/PTFFcMWtMF0mW1BVsW4pI+xj9ouyFsjrpy2Gflg
- 7hzg99HBpO2I4IP62NhnuPWcuEaz4feYwAUkq0dx/+aZxg5xV2ExEwMN5
- UhefKExr61izo5ojhbLZBx3eSBYXIXThn73BO4Sg75+AqRKo+LMirse6I A==;
-IronPort-SDR: 5Ng5NM1EzbpwR/HTQNvjcYL+q3V6cpSEYUklwZ7HK057B398VMKy7ww3FQCX3PxiL+u3xAMd55
- MXUshv32BekJnKyET4D489sAzSpIGtg6eqmR/LYgGcT6AHFfvCai4HxPcgvH9jkVRiHUF/VIkt
- dapG1mATxs46C4ElHH7FoXFGb2vgTzPrbx4ZDVrZFsWtf9Rl2B7ZyXbTLXgeDXK/GIiVarPOXS
- 7aLrbtkGK+ZQOXfye16SXvY8kG+hwYf9n6Pv9gbrVw9Db3edYDVLcvqt7Z6pcSNs0fjKoo+ZT+
- eQ4=
-X-IronPort-AV: E=Sophos;i="5.81,296,1610434800"; d="scan'208";a="112171420"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 01 Apr 2021 10:49:54 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 1 Apr 2021 10:49:54 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Thu, 1 Apr 2021 10:49:52 -0700
-From: <nicolas.ferre@microchip.com>
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, <soc@kernel.org>
-Subject: [GIT PULL] ARM: at91: soc for 5.13
-Date: Thu, 1 Apr 2021 19:45:44 +0200
-Message-ID: <20210401174544.32193-1-nicolas.ferre@microchip.com>
-X-Mailer: git-send-email 2.31.1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7B04C43619
+	for <linux-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:57 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 9486361165
+	for <linux-kernel@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:57 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S236701AbhDARtd (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 1 Apr 2021 13:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234741AbhDARjh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 1 Apr 2021 13:39:37 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB7FC0610D0
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Apr 2021 05:33:06 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id x207so1626709oif.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Apr 2021 05:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bYBBXqXjqIEWJW+a8G61y+9V36oyZ8bqWDrWT4tmnlc=;
+        b=Kg+n6DGxQjSdU4ERhysXZ45Lu56R/0K+pTJJpe7815cK0Mtt660ipOl4qwNPU4lcta
+         D4Txr9k1sgImDF7ualRrC8EbqCfmkPSUJ77tRSvAVuybaC8ZFEyy/R1YoD9KeMWsD5Pf
+         Va4I7+ZprD3HxQ38wydSNIyjUhtkGpZ5tMGHOAbBD7QkXTT1ml+30AJ7lVEouAAqkuFO
+         cUZ/MWeqUnCB3VRNPawpvLBIaN7SP5j/o/91ArNzAYd9WNfyw8mb+LXdkN10bEkAsJH0
+         Ypu6ls2y57tvLHQLdxKEXAQlfFU+8Q7KGg2Faf68A348V3OfZOfapnu9I3ShOmnGCslj
+         RloQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bYBBXqXjqIEWJW+a8G61y+9V36oyZ8bqWDrWT4tmnlc=;
+        b=OPBRhTqbLGvFfk/wAUf/ubmTi5fgy7mhYvrvyVQXdquzxyyuBzfRr09LtRtDOC5yAS
+         UHctUChiHMeDQDRXIx1Oo0mmPww2tbnWWNxiPHDB8MBEELlNzcpb1F7q3zN+Ma/fxQ2W
+         ciH6cz6INnDeDZtWgOrBNQ0xEDD/5zti+aLAihMu9wU1BtL1ASXR24iPsRBB76WQHCdW
+         D9VxDN4YYOhwoQfiLvHSYIqBPGGOR/LHWE3Bzm6fuomi67koiiT1Bkc5ZFzRxC14aJd/
+         vZ7CBb8aBlKXONba4/l2GgS5/iJXpqZLuR7/r9t6z4Zg27na7W91ljWg3eHSRzxKF1c6
+         kuWw==
+X-Gm-Message-State: AOAM531UpSFNoZHgoJt0PpEtTl2nR6R6Ajuh0kiMSOpDgN/kIZJZTRvx
+        4GrcHZJJtLySyO98/vIx8aexqP8BnUZe9iRSpjo/zg==
+X-Google-Smtp-Source: ABdhPJywnxWEEjMlE4aBIUeotkDIUC9+UKYA0hL+/WDzMmkmPSd5/pgY/hKusGxY9ewHKyLtBan5czoqJBH63756PxY=
+X-Received: by 2002:aca:7c4:: with SMTP id 187mr5765643oih.47.1617280385522;
+ Thu, 01 Apr 2021 05:33:05 -0700 (PDT)
 MIME-Version: 1.0
-Organization: microchip
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210401_184958_002095_8CD76F96 
-X-CRM114-Status: UNSURE (   7.86  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- Linux Kernel list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210401174544.e521jfPJCH2vWmjjSuHEE32MA6QQx7cq1478QI0Lyfk@z>
+References: <20210330082208.GA965793@jade> <161727243793.583633.7984995735453542553.b4-ty@arndb.de>
+In-Reply-To: <161727243793.583633.7984995735453542553.b4-ty@arndb.de>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 1 Apr 2021 14:32:54 +0200
+Message-ID: <CAHUa44Fdvhj2ca4O+CxD94YZ6BtzNut9HMn3FxDshh_vgHVwDA@mail.gmail.com>
+Subject: Re: [GIT PULL] OP-TEE tracepoints fix for v5.13
+To:     Arnd Bergmann <arnd@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc:     SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210401123254.Mz1Wk0GGwNw5mFsOOkiTPch0-nFOnKEKrMmvE-IAkHE@z>
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
+On Thu, Apr 1, 2021 at 12:23 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> On Tue, 30 Mar 2021 10:22:08 +0200, Jens Wiklander wrote:
+> > The previous pull request for OP-TEE tracepoints introduced a build
+> > error when building whithout O=..., apparently many regression builds
+> > uses that option.
+> >
+> > Please pull this small fix for the build error.
+> >
+> > Thanks,
+> > Jens
+> >
+> > [...]
+>
+> You asked for this to be merged for 5.13, but as the change is clearly correct
+> and required as a build fix, I added it as a fix for 5.12 instead, hope that's
+> ok.
+>
+> Merged into arm/fixes, thanks!
+>
+> merge commit: 3e530f89d72dd1ab31e20d6f8567e357b928705c
 
-Arnd, Olof,
+OK. Please note that this pulls in 0101947dbcc3 ("tee: optee: add
+invoke_fn tracepoints") (the commit just before actually) which I
+believe was queued for v5.13.
 
-One single patch for now on our SoC branch. Stakeholders agreed to make it
-travel with at91 -> arm-soc.
-
-Thanks, best regards,
-  Nicolas
-
-The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
-
-  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-soc-5.13
-
-for you to fetch changes up to 41dbf4a146a06443d1cbf39e238f02fa1ca9d626:
-
-  ARM: at91: pm: Move prototypes to mutually included header (2021-03-26 18:20:49 +0100)
-
-----------------------------------------------------------------
-AT91 soc for 5.13:
-
-- Fixing a W=1 warning
-
-----------------------------------------------------------------
-Lee Jones (1):
-      ARM: at91: pm: Move prototypes to mutually included header
-
- arch/arm/mach-at91/pm.c        | 19 ++++++++-----------
- drivers/pinctrl/pinctrl-at91.c |  2 ++
- include/soc/at91/pm.h          | 16 ++++++++++++++++
- 3 files changed, 26 insertions(+), 11 deletions(-)
- create mode 100644 include/soc/at91/pm.h
-
--- 
-Nicolas Ferre
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Cheers,
+Jens
