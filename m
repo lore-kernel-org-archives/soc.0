@@ -6,48 +6,49 @@ X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7CDFC433B4
-	for <soc@archiver.kernel.org>; Sat,  3 Apr 2021 20:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76C55C433ED
+	for <soc@archiver.kernel.org>; Sat,  3 Apr 2021 20:57:10 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 50FA961357; Sat,  3 Apr 2021 20:57:07 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A442A61247;
-	Sat,  3 Apr 2021 20:57:05 +0000 (UTC)
+	id 360A66135A; Sat,  3 Apr 2021 20:57:10 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8925661353;
+	Sat,  3 Apr 2021 20:57:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617483427;
-	bh=KBMgWGGAd1vr2YjSeLapUko7SpOAJTIZz3qSsywmxlQ=;
+	s=k20201202; t=1617483430;
+	bh=hO9/OTmLG0RXUwfVmsv9gdrqok/H5a0w/xDzWkp2i7A=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ff9+09Y+4sJIkwphg3y66hyRm+b6COLbERnz/UhHibhnvVg8IaYWB1175D24BqYKW
-	 A3seAHZ3vU0CAbzOXQa2CRSbyjzSHOUc9/WRh53G4Rcof2BrlHZW8f3Tu06lBKkILD
-	 XvmkqokhJ/bV9HvmGspQUjpCC32YAKrUi4aQWqmdTFilC0EqK5Cv1cs2st+fVP29ob
-	 Fvx6DzAix+P5AWeL/tvr+FfasaRUFqMvTXamVZHUNmw/TRmv5lSmGriJnvrsmnGVNP
-	 Az/CXoYk19URCH38y9G7WVsv3bdFyZHVOH88chENSdjuBXLJMRzKo1Gi5tsDeXssDL
-	 ISiCXp0UnGRrQ==
+	b=ZajaCon/njBo9pGm+jWQASujV40hBo+PtYAEOKd73nE+EXJCwG82gkrE+D2S1WGR5
+	 acuXKICJI5a+v59tqWP3Q29a0tSrfupXJqY0PbfRQBAmmqjXFZ/GA2CHQATGHU8xx/
+	 fqlpFzCqRrMiyuOz9grBOZMrhDy3IICbVx61fUNzmwKZ+EaenudgaeLhn11tmS8ze/
+	 btfuWY+tHwY/mcQSvXyiWivny9jtsHhJ3Oug2SbmH3SU6QpOeJI+PfhSNjahSxQ0xV
+	 l4I+qlsOYdAEhQ0A9S7NW2NoW6MuReml8h8dGKoWqKlM1XNc+hN2B2Fp/Bh9LGuzJK
+	 q6ytpEhMQCnOw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
-	Olof Johansson <olof@lixom.net>,
 	arm@kernel.org,
-	Gregory CLEMENT <gregory.clement@bootlin.com>
+	Maxime Ripard <mripard@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
-	Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [GIT PULL] ARM: mvebu: fixes for v5.12 (#1)
-Date: Sat,  3 Apr 2021 22:56:56 +0200
-Message-Id: <161748341017.896324.9953024889088248771.b4-ty@arndb.de>
+	linux-sunxi@lists.linux.dev,
+	Jernej Skrabec <jernej.skrabec@siol.net>,
+	Chen-Yu Tsai <wens@csie.org>
+Subject: Re: [GIT PULL] Allwinner Fixes for 5.12
+Date: Sat,  3 Apr 2021 22:56:57 +0200
+Message-Id: <161748340980.896324.15422033544003499472.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <87a6qgctit.fsf@BL-laptop>
-References: <87a6qgctit.fsf@BL-laptop>
+In-Reply-To: <9df637a0-945e-4469-8e6d-0903cc9d3196.lettre@localhost>
+References: <9df637a0-945e-4469-8e6d-0903cc9d3196.lettre@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 02 Apr 2021 22:37:30 +0200, Gregory CLEMENT wrote:
-> Here is the first pull request for fixes for mvebu for v5.12.
+On Fri, 2 Apr 2021 15:36:33 +0200, Maxime Ripard wrote:
+> Please pull the following changes for the current release.
 > 
-> Gregory
+> Thanks!
+> Maxime
 > 
 > The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 > 
@@ -57,6 +58,6 @@ On Fri, 02 Apr 2021 22:37:30 +0200, Gregory CLEMENT wrote:
 
 Merged into arm/fixes, thanks!
 
-merge commit: 6bf18bbe1999c4ad4875bb7205df70e1037d17cd
+merge commit: d06d82146c3b4b1159b052c6c2e143293ee9f687
 
        Arnd
