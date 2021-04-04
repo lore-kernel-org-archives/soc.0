@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-22.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BC87C433B4
-	for <soc@archiver.kernel.org>; Sun,  4 Apr 2021 16:48:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45B18C433ED
+	for <soc@archiver.kernel.org>; Sun,  4 Apr 2021 16:49:17 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 1F46D61365; Sun,  4 Apr 2021 16:48:44 +0000 (UTC)
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+	id 0781561365; Sun,  4 Apr 2021 16:49:17 +0000 (UTC)
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D9CC261364
-	for <soc@kernel.org>; Sun,  4 Apr 2021 16:48:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D9CC261364
+	by mail.kernel.org (Postfix) with ESMTPS id C402161364
+	for <soc@kernel.org>; Sun,  4 Apr 2021 16:49:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C402161364
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
 Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=bjorn.andersson@linaro.org
-Received: by mail-oi1-f180.google.com with SMTP id n140so9673037oig.9
-        for <soc@kernel.org>; Sun, 04 Apr 2021 09:48:43 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id l12-20020a9d6a8c0000b0290238e0f9f0d8so9389343otq.8
+        for <soc@kernel.org>; Sun, 04 Apr 2021 09:49:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tbpeT+Mek+XfamFPZmReFCDXJFtqrtaG9wtcXHbtspw=;
-        b=m+Dn/sje6Lm6a8Ehtytn3lZkENyRULhfOhPDdgsZ5z5oYte0AnICLQSi4Bn5AdL58J
-         +CoBQ9rs7KPatBG7fG7ZPx2mjLoSPG9Wu69hmQ4aHlNu/3WDiuA8GHZ9YlnnXqi03msD
-         NJeibO4qVVZ9kILn5yHlBilZaKEr+nCuhC6VrRC2BBVgJNVLrto/F9ubLo71miMNh91a
-         ZAnFBP6xLNBGfnC8iShC4eNZ7IM2XcAKsPTbhvjCkK52gO8PtlXhfmUTkXhZLdcyk1xW
-         hNjOsUmFSN7nP1FTsI6Z5kJeHZ6pDR0PeF23x1Dhy77+eeZDK04njiNWvlu5F/r6bKXf
-         Picg==
+        bh=WvpKVxkr11cSrwrSA2TIlZoNH745gMhmN8B21UocYa4=;
+        b=jPJIqTkkr9QaWXm93eYRjbvMVUxApwVsGrFVqqemJXUUx3wmL1ts3BOl1yWn4h7aNJ
+         AOwxdoCWv0W0fOVm9NiIlQDrVDq3r0aNeWIChJIRVECU6Mv6JXO6rTzETKcBT51eWTzM
+         5MGCAXFz/+v6xVDPtyyJr9MS8i29YYalOwMfBHpJ5zy8cIEtzpnaJ/dyflxYD1UO4Yta
+         +oK+GvbUXyjYf0yWrMqeDrQGDQu6hjA/FPwol8Z7D+i9wxepRVJkEjkuSedUFVeQqJAG
+         R52sTdYDNKpWGKo00zm3Rck6SvbLNffz7NR4NUco3fj+zMGss15OHYAzkhZAkeya7zSt
+         U7kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tbpeT+Mek+XfamFPZmReFCDXJFtqrtaG9wtcXHbtspw=;
-        b=JOhcx9kk143Pr74r+JaBi3VGqcqRwkKPpajXgU6bre/6tbRU295waLGbg5K+VRnv+f
-         11gHYTstsKRrQpKoSEBir5O+sofXQdLHnA5ymqy4SXCzmTFp4GMGAtu1vjZCb2WFC147
-         aOqEKX4dJy5rtfn4TPhrnVrNuvyxaHgjlCUp/7AsTu9efsQiO2sGUOP4VY2c8RxohLlb
-         Oliz5OEZxiUCnrHb6uALFKped+1Jjdgw2Jd51avP8pJ2cTKlx4Ys9GQkF0B4p7SDK1ku
-         /U+hVdbBQdea4wRrxmlk34xyjNT+UXIg2A+21StPWVYjJHJBVitQcVmGwd5lgerZWs/y
-         9ZOw==
-X-Gm-Message-State: AOAM533dIRGKK3gyQa+dQOS6eWL+4w5vAl8mxnMnbCCftfZhbibl5BGX
-	P46n6cIL4UP0c4ir9xfvSYooJA==
-X-Google-Smtp-Source: ABdhPJy3Mi64WupJ/Hgn5dxMjnN3uch64bKtgIU0ITOjLlU9jvRjq65mBzceXINQyD0eKQZUQgC1Pw==
-X-Received: by 2002:aca:e0d4:: with SMTP id x203mr15938867oig.76.1617554923162;
-        Sun, 04 Apr 2021 09:48:43 -0700 (PDT)
+        bh=WvpKVxkr11cSrwrSA2TIlZoNH745gMhmN8B21UocYa4=;
+        b=YZF2riBJWgHXR4viWNNYn6p6G4JWlRXgkWnzVA8l1Mu6y6um5HyPOwYeTXRikTWzSg
+         VdeaEtaeHAG3oYPTvCFibaiOV0eEvrZqqwZzixebik96vSyV4TWPf8N1eucaitbwoayy
+         hxA1+1TeaL7mk9CuVCHvgwZLg1B/m8pZkkSXy1IfS4+Xhe1zFJ2ixsPBHvhGOAhtRjfo
+         uomAk4XE1yIvFyndQH4/682oClLw5P1LlfjZQEdEKIkoHHIuD7Y3QTflM3FfHuDrq3NI
+         TVl1okvAJ+xwoD9+0ieCJyZxWebP2Y/KBHXdeLaVAHAXyMpQKPwDFXCwYRsUyaZ1GQm7
+         51QA==
+X-Gm-Message-State: AOAM5327MsDyWowYEGWq5NLfalteH8XnNIWvQXNnljQCbqbFPvArlgfY
+	AXjcuiyOktLWwCbv7yNtRM0FCw==
+X-Google-Smtp-Source: ABdhPJyKgIplmYX5sgdWQ/W2XwLbJAMu6BQjt+/7iiBSvFoDOKuMWmR08p4hPSkikgj5GySeXWxPFg==
+X-Received: by 2002:a05:6830:118f:: with SMTP id u15mr18791631otq.43.1617554956020;
+        Sun, 04 Apr 2021 09:49:16 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id j72sm2672556oih.46.2021.04.04.09.48.42
+        by smtp.gmail.com with ESMTPSA id d13sm3374946otk.74.2021.04.04.09.49.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Apr 2021 09:48:42 -0700 (PDT)
+        Sun, 04 Apr 2021 09:49:15 -0700 (PDT)
 From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -61,10 +61,27 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Andy Gross <agross@kernel.org>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>
-Subject: [GIT PULL] Qualcomm ARM64 defconfig udpate for 5.13
-Date: Sun,  4 Apr 2021 11:48:41 -0500
-Message-Id: <20210404164841.712845-1-bjorn.andersson@linaro.org>
+	Kevin Hilman <khilman@baylibre.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Rajendra Nayak <rnayak@codeaurora.org>,
+	Shawn Guo <shawn.guo@linaro.org>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Maulik Shah <mkshah@codeaurora.org>,
+	Robert Foss <robert.foss@linaro.org>,
+	Jack Pham <jackp@codeaurora.org>,
+	Abhishek Kumar <kuabhs@chromium.org>,
+	Alexandru M Stan <amstan@chromium.org>,
+	Sandeep Maheswaram <sanm@codeaurora.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>,
+	satya priya <skakit@codeaurora.org>
+Subject: [GIT PULL] Qualcomm ARM64 DT updates for 5.13
+Date: Sun,  4 Apr 2021 11:49:14 -0500
+Message-Id: <20210404164914.712946-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,21 +92,212 @@ The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-5.13
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.13
 
-for you to fetch changes up to 1a0252abb6ff8312f28d4d8bc2b115ffa9c5d6c6:
+for you to fetch changes up to e9269650db2f5b4aeeafced1a42b2e51d10bcdf5:
 
-  arm64: defconfig: Enable Qualcomm SM8350 TLMM and GCC (2021-03-08 10:45:28 -0600)
-
-----------------------------------------------------------------
-Qualcomm ARM64 defconfig udpate for 5.13
-
-This enables the SM8350 TLMM and GCC drivers, needed to boot the
-platform.
+  arm64: dts: qcom: qrb5165-rb5: switch into using GPIO for SPI0 CS (2021-03-18 09:35:42 -0500)
 
 ----------------------------------------------------------------
-Bjorn Andersson (1):
-      arm64: defconfig: Enable Qualcomm SM8350 TLMM and GCC
+Qualcomm ARM64 DT updates for 5.13
 
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+This extends the initial SM8350 description merged in v5.12 with
+CPUfreq, SMMU, UFS, RPMHPD, SPMI, USB and remoteproc support. It adds
+initial PMIC definitions for the 6 PMICs found on the MTP and it
+introduces the new SM8350 Hardware Development Kit (HDK).
+
+SC7180 is further polished, the DisplayPort portion of the QMP phy is
+defined and several new SKUs of the Trogdor devices are introduced.
+
+The new SC7280 platform is introduced, with RPMH, RPMHPD, RPMCC, SPMI,
+CPU idle, SMMU and watchdog defined.
+
+SDM845 gains the camera related nodes and some cleanups.
+
+For SM8250 it brings some cleanups and migrates SPI0 to use GPIO for
+chip select.
+
+----------------------------------------------------------------
+Abhishek Kumar (1):
+      arm64: dts: qcom: sc7180: add GO_LAZOR variant property for lazor
+
+Alexandru M Stan (1):
+      arm64: dts: qcom: sc7180-trogdor: Remove fp control pins in prep for coachz
+
+Bjorn Andersson (3):
+      arm64: dts: qcom: Introduce SM8350 HDK
+      dt-bindings: arm: qcom: Add SM8350 HDK
+      arm64: dts: qcom: pm8150: Enable RTC
+
+Dmitry Baryshkov (4):
+      arm64: dts: qcom: sm8250: split spi pinctrl config
+      arm64: dts: qcom: sm8250: further split of spi pinctrl config
+      arm64: dts: qcom: sm8250: add pinctrl for SPI using GPIO as a CS
+      arm64: dts: qcom: qrb5165-rb5: switch into using GPIO for SPI0 CS
+
+Douglas Anderson (7):
+      arm64: dts: qcom: Move sc7180 MI2S config to board files and make pulldown
+      arm64: dts: qcom: Prep sc7180-trogdor trackpad IRQ for new boards
+      arm64: dts: qcom: Unify the sc7180-trogdor panel nodes
+      arm64: dts: qcom: Add sc7180-lazor-limozeen skus
+      arm64: dts: qcom: Add sc7180-trogdor-pompom skus
+      arm64: dts: qcom: Add sc7180-trogdor-coachz skus
+      arm64: dts: qcom: sc7180: Avoid glitching SPI CS at bootup on trogdor
+
+Jack Pham (2):
+      arm64: dts: qcom: sm8350: add USB and PHY device nodes
+      arm64: dts: qcom: sm8350-mtp: enable USB nodes
+
+Matthias Kaehlcke (5):
+      arm64: dts: qcom: sc7180: trogdor: Add label to charger thermal zone
+      arm64: dts: qcom: sc7180: Disable charger thermal zone for lazor
+      arm64: dts: qcom: sc7180: trogdor: Fix trip point config of charger thermal zone
+      arm64: dts: qcom: sc7180: trogdor: Use ADC TM channel 0 instead of 1 for charger temperature
+      arm64: dts: qcom: sc7180: Set up lazor r3+ as sc7180-lite SKUs
+
+Maulik Shah (3):
+      arm64: dts: qcom: sc7280: Add RSC and PDC devices
+      arm64: dts: qcom: sc7280: Add reserved memory for fw
+      arm64: dts: qcom: sc7280: Add cpuidle states
+
+Rajendra Nayak (4):
+      dt-bindings: arm: qcom: Document sc7280 SoC and board
+      arm64: dts: qcom: sc7280: Add basic dts/dtsi files for sc7280 soc
+      arm64: dts: qcom: SC7280: Add rpmhcc clock controller node
+      arm64: dts: qcom: sc7280: Add rpmh power-domain node
+
+Robert Foss (3):
+      arm64: dts: qcom: sdm845: Add CAMSS ISP node
+      arm64: dts: qcom: sdm845-db845c: Configure regulators for camss node
+      arm64: dts: qcom: sdm845-db845c: Enable ov8856 sensor and connect to ISP
+
+Sai Prakash Ranjan (9):
+      arm64: dts: qcom: sc7180: Rename the qmp node to power-controller
+      arm64: dts: qcom: sdm845: Rename the qmp node to power-controller
+      arm64: dts: qcom: sm8250: Rename the qmp node to power-controller
+      arm64: dts: qcom: sm8350: Rename the qmp node to power-controller
+      arm64: dts: qcom: sm8250: Fix level triggered PMU interrupt polarity
+      arm64: dts: qcom: sm8350: Fix level triggered PMU interrupt polarity
+      arm64: dts: qcom: sm8250: Fix timer interrupt to specify EL2 physical timer
+      arm64: dts: qcom: sc7280: Add device node for APPS SMMU
+      arm64: dts: qcom: sc7280: Add APSS watchdog node
+
+Sandeep Maheswaram (1):
+      arm64: dts: qcom: sc7180: Use pdc interrupts for USB instead of GIC interrupts
+
+Shawn Guo (4):
+      arm64: dts: qcom: sdm845: fix number of pins in 'gpio-ranges'
+      arm64: dts: qcom: sm8150: fix number of pins in 'gpio-ranges'
+      arm64: dts: qcom: sm8250: fix number of pins in 'gpio-ranges'
+      arm64: dts: qcom: sm8350: fix number of pins in 'gpio-ranges'
+
+Srinivas Kandagatla (1):
+      arm64: dts: qcom: db845c: fix correct powerdown pin for WSA881x
+
+Stephen Boyd (4):
+      arm64: dts: qcom: sc7180: Update dts for DP phy inside QMP phy
+      arm64: dts: qcom: trogdor: Only wakeup from pen eject
+      arm64: dts: qcom: Disable camera clk on sc7180-trogdor devices by default
+      arm64: dts: qcom: sc7180: Drop duplicate dp_hot_plug_det node in trogdor
+
+Venkata Lakshmi Narayana Gubba (1):
+      arm64: dts: qcom: sc7180: Remove clock for bluetooth on Trogdor
+
+Vinod Koul (25):
+      arm64: dts: qcom: sm8350: Add apss_smmu node
+      arm64: dts: qcom: sm8350: Add UFS nodes
+      arm64: dts: qcom: sm8350-mtp: enable UFS nodes
+      arm64: dts: qcom: sm8350-mtp: add regulator names
+      arm64: dts: qcom: sm8350: fix typo
+      arm64: dts: qcom: sm8350: Add rpmhpd node
+      arm64: dts: qcom: sm8350: Add rmtfs node
+      arm64: dts: qcom: sm8350: Add SMP2P nodes
+      arm64: dts: qcom: sm8350: Add remoteprocs
+      arm64: dts: qcom: sm8350-mtp: Enable remoteprocs
+      arm64: dts: qcom: sm8350: Use enums for GCC
+      arm64: dts: qcom: sm8350: Add cpufreq node
+      arm64: dts: qcom: apq8016-sbc: drop qcom,sbc
+      arm64: dts: qcom: msm8916: don't use empty memory node
+      dt-bindings: arm: qcom: Document ipq6018-cp01 board
+      arm64: dts: qcom: msm8994: don't use empty memory node
+      dt-bindings: arm: qcom: Document sony boards for apq8094
+      arm64: dts: qcom: sm8350: Add spmi node
+      arm64: dts: qcom: pmk8350: Add base dts file
+      arm64: dts: qcom: pm8350: Add base dts file
+      arm64: dts: qcom: pm8350b: Add base dts file
+      arm64: dts: qcom: pm8350c: Add base dts file
+      arm64: dts: qcom: pmr735a: Add base dts file
+      arm64: dts: qcom: pmr735B: Add base dts file
+      arm64: dts: qcom: sm8350-mtp: Add PMICs
+
+satya priya (1):
+      arm64: dts: qcom: sc7280: Add SPMI PMIC arbiter device for SC7280
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |  18 +
+ arch/arm64/boot/dts/qcom/Makefile                  |  13 +
+ arch/arm64/boot/dts/qcom/apq8016-sbc.dts           |   2 +-
+ arch/arm64/boot/dts/qcom/msm8916.dtsi              |   4 +-
+ arch/arm64/boot/dts/qcom/msm8994.dtsi              |   4 +-
+ arch/arm64/boot/dts/qcom/pm8150.dtsi               |   4 +-
+ arch/arm64/boot/dts/qcom/pm8350.dtsi               |  25 +
+ arch/arm64/boot/dts/qcom/pm8350b.dtsi              |  25 +
+ arch/arm64/boot/dts/qcom/pm8350c.dtsi              |  25 +
+ arch/arm64/boot/dts/qcom/pmk8350.dtsi              |  25 +
+ arch/arm64/boot/dts/qcom/pmr735a.dtsi              |  25 +
+ arch/arm64/boot/dts/qcom/pmr735b.dtsi              |  25 +
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts           |  18 +-
+ .../boot/dts/qcom/sc7180-trogdor-coachz-r1-lte.dts |  18 +
+ .../boot/dts/qcom/sc7180-trogdor-coachz-r1.dts     | 154 +++++
+ .../boot/dts/qcom/sc7180-trogdor-coachz-r2-lte.dts |  18 +
+ .../boot/dts/qcom/sc7180-trogdor-coachz-r2.dts     |  15 +
+ .../arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi | 240 +++++++
+ .../qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dts |  34 +
+ .../qcom/sc7180-trogdor-lazor-limozeen-nots.dts    |  26 +
+ .../dts/qcom/sc7180-trogdor-lazor-limozeen.dts     |  42 ++
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts      |   9 +
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts      |   9 +
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dts   |   5 +-
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts  |   4 +-
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r3.dts      |  10 +
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi |  39 +-
+ .../boot/dts/qcom/sc7180-trogdor-pompom-r1-lte.dts |  14 +
+ .../boot/dts/qcom/sc7180-trogdor-pompom-r1.dts     |  26 +
+ .../boot/dts/qcom/sc7180-trogdor-pompom-r2-lte.dts |  14 +
+ .../boot/dts/qcom/sc7180-trogdor-pompom-r2.dts     |  44 ++
+ .../arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi | 288 ++++++++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts     |  35 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       | 162 ++---
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |  51 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts            |  47 ++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               | 608 +++++++++++++++++
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts         |  27 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               | 139 +++-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi               |   2 +-
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts            |   4 -
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               | 548 ++++++++--------
+ arch/arm64/boot/dts/qcom/sm8350-hdk.dts            | 319 +++++++++
+ arch/arm64/boot/dts/qcom/sm8350-mtp.dts            | 116 ++++
+ arch/arm64/boot/dts/qcom/sm8350.dtsi               | 726 ++++++++++++++++++++-
+ 45 files changed, 3553 insertions(+), 453 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8350.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8350b.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8350c.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pmk8350.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pmr735a.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pmr735b.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1-lte.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r2-lte.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r2.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1-lte.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2-lte.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-idp.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8350-hdk.dts
