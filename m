@@ -1,179 +1,93 @@
-Return-Path: <SRS0=86YY=JB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=Vezv=JC=mail.ru=shc_work@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3110BC433ED
-	for <linux-arm-kernel@archiver.kernel.org>; Sun,  4 Apr 2021 16:51:58 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 924DDC433ED
+	for <soc@archiver.kernel.org>; Mon,  5 Apr 2021 05:29:53 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 381AB613AB; Mon,  5 Apr 2021 05:29:53 +0000 (UTC)
+X-Greylist: delayed 764 seconds by postgrey-1.34 at mail.kernel.org; Mon, 05 Apr 2021 05:29:52 UTC
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5A857613A9
+Authentication-Results: mail.kernel.org; dmarc=pass (p=reject dis=none) header.from=mail.ru
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=shc_work@mail.ru
+Received: from fallback25.mail.ru (fallback25.m.smailru.net [94.100.189.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B45DB611EE
-	for <linux-arm-kernel@archiver.kernel.org>; Sun,  4 Apr 2021 16:51:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B45DB611EE
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=iZLICubq5rWxV7Cf7rHrIGiYZ0c0z+i9E92j03yofME=; b=D4By5Mlnn7BpZqGL0OF0xMeyRw
-	51Qqh7ZanwyGxPcfKbG2JsOEdTkqj2rDA+9M3/okP9rVAq2g1dlRZDX2DVT6G13zFa1UpInPiuQAC
-	W7E3wJgap+XCCaSDismU5IDBLW4v8PRwV2RfueKx1gDmWFwklWcIp8wRMriG4zXz6GMgOTSyzck9C
-	PQVKOWdbP9iR/97D3z7zs9XO6iNbMNXHzxD6f/NplSesUcLmcVVblNYSivIQCZAIz4t5v1BV1J5ox
-	sdInHymo7gxUVWg0t1vm92/aWKCwH9tL8rxJL6bQK334zr+o0B4tPLMiQkcN2VL8J6efU7n/M2H6F
-	tyG3TURQ==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lT5wq-00FziL-Qi; Sun, 04 Apr 2021 16:50:04 +0000
-Received: from mail-ot1-x330.google.com ([2607:f8b0:4864:20::330])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lT5wg-00FzgR-Cj
- for linux-arm-kernel@lists.infradead.org; Sun, 04 Apr 2021 16:50:00 +0000
-Received: by mail-ot1-x330.google.com with SMTP id
- w21-20020a9d63950000b02901ce7b8c45b4so9407477otk.5
- for <linux-arm-kernel@lists.infradead.org>;
- Sun, 04 Apr 2021 09:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=7xTMgW45Pf8wC7ZRL/3TK62BwJGeS6Chx/bVTjL7mA8=;
- b=nk2BEyZT3RueLrxOExLKWBZJ4EKVhn3pOd321Mci6cTy9UF10XDahELujCxuwySvUG
- B2Ncy1Ibr8C/BV431PRL+pG/rtYU7DgQRQ/QBZtv9lQzB+gV/6gw9EnpQZHFNoileHEl
- aJk+FKh0d9iL+K+GwmkuQvvLH2lekIAZFXFnwENU2TMsCLeFpDg97YQdSuBkqAVD7ukn
- S1akeMTq+egbXQjJH87qf2r9+Dwyk6HU588mMZtrkqo4ZjxaMwmYjI6cemLhElQbPnLE
- c27XVgHV2hb9IK1ukCiis03sxeNkl2iF+HA5GDj6FKOPX+CIGd9StpJT+8vwzRZZ4DH5
- Fuvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=7xTMgW45Pf8wC7ZRL/3TK62BwJGeS6Chx/bVTjL7mA8=;
- b=Bn2PL5vXIg90vrjlbFQ8UwtSPtlqc+r/hKGCWKzS5zpaB7IKIteYu9t1rQPq83OEPs
- amtIKT93BHwY9/xK5rX2jZDgwi8Xy8wDtlpMatUxTktR2OnhOhqhOlOiy3ReRuQQIVxl
- j+ymAD5Wznv62l5DfzmUpgASWSTk6PRbO/1UfGo+G/itUF/+h7x2GeaTzFdFG6BkMH1e
- 1ogJavUvMLG+RMGEk6xl3wH93n3egfr86tZ8SNacuZDSrmkB/zypufJQ6XsUPoQgU5zs
- fRPvM5Jqu04UJSYAhdvoQ/4Thap9WTbUaWg2m5Y4Wim4rX7ZjzcP+MjlcReVWTZ1EJl8
- RWeg==
-X-Gm-Message-State: AOAM533uxbriOM1/9NcofH6E4FgNX1EnE0C7mly89PO09Hry7uE+d7Pi
- TdWN+7z6IOY5OFFPFo1TzKAuOA==
-X-Google-Smtp-Source: ABdhPJzsBh85jkPN+kupmkbaUDVIvy3owM/rhUReliF+WgCmBH3OAadg8PUmUrCoHGwPT+2ljycS0g==
-X-Received: by 2002:a05:6830:164e:: with SMTP id
- h14mr19956152otr.200.1617554992963; 
- Sun, 04 Apr 2021 09:49:52 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net.
- [104.57.184.186])
- by smtp.gmail.com with ESMTPSA id e34sm3379081ote.70.2021.04.04.09.49.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 04 Apr 2021 09:49:52 -0700 (PDT)
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+	by mail.kernel.org (Postfix) with ESMTPS id 5A857613A9
+	for <soc@kernel.org>; Mon,  5 Apr 2021 05:29:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail3;
+	h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From; bh=7rTE6l+EV0CSu6WCqXqhPhIrNDAXh/zRwZwsidUiKXg=;
+	b=uPwN3Hs8eRTD1KRtEE0VMM4Xq1yAQWN30fGyImA/et5O/qo8IAs/1wD3psOy0aWnnGf1/C8+6lHMSjXirHahxVfvmLvCGCTO10CLuAOXWiqgo3VS8THdubMC20I0oDEQLY9t0r49QT5wjGhB8IG0OddXAo4zKWHFZLZB72fBN8g=;
+Received: from [10.161.64.48] (port=43694 helo=smtp40.i.mail.ru)
+	by fallback25.m.smailru.net with esmtp (envelope-from <shc_work@mail.ru>)
+	id 1lTHbl-0007o7-TY
+	for soc@kernel.org; Mon, 05 Apr 2021 08:17:06 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail3;
+	h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=7rTE6l+EV0CSu6WCqXqhPhIrNDAXh/zRwZwsidUiKXg=;
+	b=s1qLthK1zXB3WcdKG2OMytx9gEgi4uW+nYtorncGB74J028xUs50gZhNiqXgUkUII0mxKFs44hGIJBSfuM/WaSqERXBe0sKCNt5H6ecfBSxodZardlmEDHwrif5RwiNf6jYQ+Sa0tBP/2zQOcVAd4sIn73/vvTRzv9lOmjz86WQ=;
+Received: by smtp40.i.mail.ru with esmtpa (envelope-from <shc_work@mail.ru>)
+	id 1lTHbk-0004b7-3z; Mon, 05 Apr 2021 08:17:04 +0300
+From: Alexander Shiyan <shc_work@mail.ru>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@baylibre.com>,
- Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
- Rajendra Nayak <rnayak@codeaurora.org>, Stephen Boyd <swboyd@chromium.org>,
- Vinod Koul <vkoul@kernel.org>, Bhaskar Chowdhury <unixbhaskar@gmail.com>,
- Pan Bian <bianpan2016@163.com>, Sibi Sankar <sibis@codeaurora.org>
-Subject: [GIT PULL] Qualcomm driver updates for 5.13
-Date: Sun,  4 Apr 2021 11:49:51 -0500
-Message-ID: <20210404164951.713045-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.31.0
+To: soc@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Alexander Shiyan <shc_work@mail.ru>
+Subject: [PATCH RESEND 2/5] ARM: dts: clps711x: Add keypad node
+Date: Mon,  5 Apr 2021 08:16:55 +0300
+Message-Id: <20210405051658.26779-2-shc_work@mail.ru>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210405051658.26779-1-shc_work@mail.ru>
+References: <20210405051658.26779-1-shc_work@mail.ru>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210404_174958_424803_BD265FBF 
-X-CRM114-Status: UNSURE (   9.73  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210404164951.-8fk139e4qn-xmNrjcsGrGlvMH6E2B1CdgInb7h-Zos@z>
+Content-Transfer-Encoding: 8bit
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD9ED7173E37F4E32947A0146560F8BA70927CAA5B950F38D9F182A05F53808504010E979BF23E11CD7F1129FD167558B9D2AC17D9C16D5343AB9E1A1B78D2DB891
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE70043D879A87EF1BCEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637A85D247F7B1E5F958638F802B75D45FF914D58D5BE9E6BC131B5C99E7648C95C16EE06F5A270FE6AEEEE6A93333AC62243751B18FC56AB1BA471835C12D1D9774AD6D5ED66289B5259CC434672EE6371117882F4460429724CE54428C33FAD30A8DF7F3B2552694AC26CFBAC0749D213D2E47CDBA5A9658378DA827A17800CE71AE4D56B06699BBC9FA2833FD35BB23DF004C90652538430302FCEF25BFAB3454AD6D5ED66289B5278DA827A17800CE785EA5298403C1DB1D32BA5DBAC0009BE395957E7521B51C20BC6067A898B09E4090A508E0FED6299176DF2183F8FC7C09100238FE36DC7A2B3661434B16C20AC78D18283394535A9E827F84554CEF5019E625A9149C048EE9ECD01F8117BC8BEE2021AF6380DFAD18AA50765F790063735872C767BF85DA227C277FBC8AE2E8B779389CF6F126FEC75ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
+X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C414F749A5E30D975C16EE06F5A270FE6AEEEE6A93333AC62243751B18FC56AB1B9C2B6934AE262D3EE7EAB7254005DCED7532B743992DF240BDC6A1CF3F042BAD6DF99611D93F60EF2B7ABF3321926E07699F904B3F4130E343918A1A30D5E7FCCB5012B2E24CD356
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D342B94C1DAF75C4D22D202AF5675E11607127F9DDF43A05C32610632F6F99DC026E53186FD4F270C661D7E09C32AA3244CD225171B85B5624569DE9FE1DF55E9838580396430872480FACE5A9C96DEB163
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojt47dm/981n6XGF2N/WqHig==
+X-Mailru-Sender: 8261CADE3D3FA0B4C2F1292954F703E980C2E32AE04C5E28B7280D22F3FBB267D5D2FE30A98E1B0C6B3B2BD4812BFD4DC77752E0C033A69E93554C27080790AB3B25A7FBAAF806F0AE208404248635DF
+X-Mras: Ok
+X-7564579A: 646B95376F6C166E
+X-77F55803: 6242723A09DB00B4DF7173A40FF1347DA6106AACE9855D4976ED1A9D65780DFF049FFFDB7839CE9EEAEE7218277C81E55B7BAEBECC090445BCFAF56A3C63DCD20CF26742A290A619
+X-7FA49CB5: 0D63561A33F958A5ABB6EEEB9317722809FABE33B0A9BB6605B933AE536512588941B15DA834481FA18204E546F3947CC824672CB62AFFF2F6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F79006378E5B25976F539216389733CBF5DBD5E9B5C8C57E37DE458BD9DD9810294C998ED8FC6C240DEA76428AA50765F7900637E63F877465845756D81D268191BDAD3DBD4B6F7A4D31EC0BEA7A3FFF5B025636AAAE862A0553A39223F8577A6DFFEA7CC415C329B279CF9D43847C11F186F3C59DAA53EE0834AAEE
+X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C414F749A5E30D975C16EE06F5A270FE6A498B8313E58EC713278C1E955F5722369C2B6934AE262D3EE7EAB7254005DCED8DA55E71E02F9FC08E8E86DC7131B365E7726E8460B7C23C
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojt47dm/981n4lks3RAnkpLA==
+X-Mailru-MI: 800
+X-Mailru-Sender: A5480F10D64C900511DAD0B11101DE4FC24335D991DDEB0A09B7C42B508FB625E28E2421BF3B429A3786569BE0651809D50E20E2BC48EF5AFF3C6AF3E48A3A73EAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
 
-The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+This adds missing keypad node to basic clps711x DT.
 
-  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+Signed-off-by: Alexander Shiyan <shc_work@mail.ru>
+---
+ arch/arm/boot/dts/ep7209.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-are available in the Git repository at:
+diff --git a/arch/arm/boot/dts/ep7209.dtsi b/arch/arm/boot/dts/ep7209.dtsi
+index dacbe0d8e67a..02606547bdc5 100644
+--- a/arch/arm/boot/dts/ep7209.dtsi
++++ b/arch/arm/boot/dts/ep7209.dtsi
+@@ -182,6 +182,13 @@ syscon3: syscon@80002200 {
+ 		};
+ 	};
+ 
++	keypad: keypad {
++		compatible = "cirrus,ep7209-keypad";
++		interrupts = <16>;
++		syscon = <&syscon1>;
++		status = "disabled";
++	};
++
+ 	mctrl: mctrl {
+ 		compatible = "cirrus,ep7209-mctrl-gpio";
+ 		gpio,syscon-dev = <&syscon1 0 0>;
+-- 
+2.26.2
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-5.13
-
-for you to fetch changes up to ac6ad7c2a862d682bb584a4bc904d89fa7721af8:
-
-  bus: qcom: Put child node before return (2021-03-29 22:01:27 -0500)
-
-----------------------------------------------------------------
-Qualcomm driver updates for 5.13
-
-This introduces SC7280 and SM8350 support in the RPMH power-domain
-driver, SC7280 support to the LLCC driver, SC7280 support tot he AOSS
-QMP driver, cleanups to the RPMH driver and a few smaller fixes to the
-SMEM, QMI and EBI2 drivers.
-
-----------------------------------------------------------------
-Bhaskar Chowdhury (1):
-      soc: qcom: Fix typos in the file qmi_encdec.c
-
-Pan Bian (1):
-      bus: qcom: Put child node before return
-
-Rajendra Nayak (3):
-      dt-bindings: power: rpmpd: Add sc7280 to rpmpd binding
-      soc: qcom: rpmhpd: Add sc7280 powerdomains
-      dt-bindings: firmware: scm: Add sc7280 support
-
-Sai Prakash Ranjan (4):
-      dt-bindings: arm: msm: Add LLCC for SC7280
-      soc: qcom: llcc: Add configuration data for SC7280
-      dt-bindings: soc: qcom: aoss: Add SC7280 compatible
-      soc: qcom: aoss: Add AOSS QMP support for SC7280
-
-Sibi Sankar (1):
-      soc: qcom: smem: Update max processor count
-
-Stephen Boyd (3):
-      soc: qcom: rpmh-rsc: Remove tcs_is_free() API
-      soc: qcom: rpmh-rsc: Loop over fewer bits in irq handler
-      soc: qcom: rpmh-rsc: Fold WARN_ON() into if condition
-
-Vinod Koul (2):
-      dt-bindings: power: Add rpm power domain bindings for SM8350
-      soc: qcom: rpmhpd: Add SM8350 power domains
-
- .../devicetree/bindings/arm/msm/qcom,llcc.yaml     |  1 +
- .../devicetree/bindings/firmware/qcom,scm.txt      |  1 +
- .../devicetree/bindings/power/qcom,rpmpd.yaml      |  2 +
- .../devicetree/bindings/soc/qcom/qcom,aoss-qmp.txt |  1 +
- drivers/bus/qcom-ebi2.c                            |  4 +-
- drivers/soc/qcom/llcc-qcom.c                       | 19 +++++++
- drivers/soc/qcom/qcom_aoss.c                       |  1 +
- drivers/soc/qcom/qmi_encdec.c                      |  8 +--
- drivers/soc/qcom/rpmh-rsc.c                        | 65 ++++++++--------------
- drivers/soc/qcom/rpmhpd.c                          | 56 +++++++++++++++++++
- drivers/soc/qcom/smem.c                            |  2 +-
- include/dt-bindings/power/qcom-rpmpd.h             | 26 +++++++++
- 12 files changed, 137 insertions(+), 49 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
