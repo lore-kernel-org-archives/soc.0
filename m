@@ -1,112 +1,159 @@
-Return-Path: <SRS0=1rdH=JD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=0+Op=JD=gmx.net=j.neuschaefer@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,SUBJ_ALL_CAPS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CC8AC433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  6 Apr 2021 10:12:54 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00372C433ED
+	for <soc@archiver.kernel.org>; Tue,  6 Apr 2021 12:12:03 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id D432261042; Tue,  6 Apr 2021 12:12:03 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3A4DD613C4
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  6 Apr 2021 10:12:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3A4DD613C4
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=8rsmI5DbGdLYUGkaPE7f7NeXVPPWt+R7on/MaEbvvD0=; b=JQnQuGht+ATmEeZVe+x727opn
-	7eQYB003JaqzOQS3ZKdLUGE0B9NjWpCgp1nNrwZARFp/thyZtwr/WGUN8Vo8B5vD5MEcgetCnQtUA
-	PMc/T74o25YAbRAOyPTeu9t9jjk6+mwJqbjo9lv26NkY3nmF9yDcgn6MXkTf/aNAcR9y+NF24K8Wu
-	/pJQRyvA8v3DSyn6EJTToFq7BZ0BoEbVQO80o9pg9EW1BexVYmhvNHXHAS7PLYNAEKEtvNLEgqiGF
-	pPl491NAZbA04xAN3rrEJAZ/P5sJWJRPTaBPBocMb/ro1ttcOo/uI5WmwoVHXnX9HJu3yhNJ/99y6
-	xdfxpAMiA==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lTig2-0027r2-At; Tue, 06 Apr 2021 10:11:18 +0000
-Received: from muru.com ([72.249.23.125])
- by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
- id 1lTifr-0027pl-Ps
- for linux-arm-kernel@lists.infradead.org; Tue, 06 Apr 2021 10:11:09 +0000
-Received: from hillo.muru.com (localhost [127.0.0.1])
- by muru.com (Postfix) with ESMTP id D503F8119;
- Tue,  6 Apr 2021 10:12:15 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 411FB613BD;
+	Tue,  6 Apr 2021 12:12:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 411FB613BD
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=j.neuschaefer@gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+	s=badeba3b8450; t=1617711116;
+	bh=0mYa4APzjX4y4tzJVfb5VIFApuD/1wa2g96PG4y8oYk=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Ub3zaSIRybTv919sY7OiG5Wz49aqrHPqTGFBNMp+u0egrwuWJK+SekF7gT85aGHYW
+	 2Q5hQjko/65nyjS3PEWlC8QDc46mGV1YaLFK3hU/lfwe7SQHZy1pYK+vpmxXeFyEfq
+	 htF53lxcFVfWCbe2iOWoOyOd0q4WpMJRn+aLWzA8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([37.201.215.134]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MV63q-1l2m3m0BoU-00S4S5; Tue, 06
+ Apr 2021 14:11:56 +0200
+From: =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To: openbmc@lists.ozlabs.org
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org, linux-omap@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, "Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL 2/3] 
-Date: Tue,  6 Apr 2021 13:10:59 +0300
-Message-ID: <pull-1617703816-65652@atomide.com-2>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <pull-1617703816-65652@atomide.com>
-References: <pull-1617703816-65652@atomide.com>
+Cc: Tomer Maimon <tmaimon77@gmail.com>,
+	Joel Stanley <joel@jms.id.au>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v2 09/10] ARM: dts: Add devicetree for Supermicro X9SCi-LN4F based on WPCM450
+Date: Tue,  6 Apr 2021 14:09:20 +0200
+Message-Id: <20210406120921.2484986-10-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210406120921.2484986-1-j.neuschaefer@gmx.net>
+References: <20210406120921.2484986-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210406_111108_269268_B33084EB 
-X-CRM114-Status: UNSURE (   8.42  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210406101059.Off6cTuPf5kHXQXNb1qdbI9UyuQ5iTJU3rnVakAPQeo@z>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:9DiOCvXHwoFh1kDKM09Us9g9xP2gE4HWlzUOVkEO1hQrdf2PPFo
+ b68DFZ7wrJu7ib8Me6MhvTQnQLQcF0UI7BqlK6LFSAGmFMQLSQptrojzQPZjh6LgbGlrgYf
+ pyaFmci5BiXhsiarsvY+P3VNo9+vLiyhUwa+p5x5dh7EoHxvb9EbjMe/C2B4Rv1AtEV1XhE
+ DoMpBBm1KlprrR5TL4U8Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/Qe8xLnpBvA=:HmbDV7ZX29oTuwy/S9tbR/
+ HpCQ0/HxeyZVGyH1zGNCPAVNjoDju7G7U9W7qHitOlDMzk8VlLPx6rCFvPLPWEFlxk5h3z8/X
+ oNWgjgTcPhxnCHMRqoZHSJN3DSVhCaQlWfC9UnyB5BcHyOYNHL88/EZ/muGs5su03qbhbnedB
+ +cJS+HSPAkULfZpTapOks4pPy1kSh2IbgC5eBSIrac+2XnKKNFNCouRvs/RIN7Ss5NGLBFlwt
+ Py10Z5Yv3FvUyaAjDu1uc+eWim5W6ySMvoTEF4iXj7Hprbb3a1Wjhu+nYsJlUnvIvQSumUfxy
+ cV5niq9BkL0fClTKMTZGzeugYgAFXFoe7129eLh6/lX7swTPI6vbzcmGq6oZf88wSNmj37kN4
+ TvzUwkOe2j2B+mC7n1rbkh1sBsHr9Oir8/QEtslIvTf3RARsoNYLfaNuFbKkgJxvAx2O7Zx9L
+ CcHBYAxUpskhndkybuq3jLbXV+lp9IhVLIZnKsIFfU7m1RjHNgvZ9cgo4+0rJuR83GbadfBD3
+ 8H0jIh6L8+bheMy+sYizHTXUfGAMYEJWiBnSXSHSbz1jt+/dnMvr6XbJ61isR0cU6TF/tO2uI
+ 9QKmWhv+ALzLjKQQeuQ/vhe34jkpgyif5yx9NN1tM4TGJLxHvGhoq+ViRlkVk5TBRWw+e6iG3
+ MiR8S548pkRxpucHdXuuzKMhVlXpZLeR6ja4wIxF4ZYSmjhajNl5BwxsDRZm9B2FVhDAAgT/h
+ 4I8/tsaevKiZ/qUs5ZgZ6dDqPqa1TuRR1Et8KcgLkwUT9ust1o2FAqOmNTKM8dYoH1dkM2fC4
+ VVyno+URu5lmP5/5W6t0dDSQF5aXEZH32P5Wq8zN8tdwXlYTWGIkPmo24mFPJiQ3eYDz6396Q
+ up7QltPkM5EBKkMvn4DYtbVGyCSOzVOvBZ62mcwnX89Fj2Ksk/1+XsB+RFanWm7Ba9GkVFYVX
+ kaEynW8ztuPXY8cKz7uljhKDc5k2C/oTWB4EnuyC8HZ/teEtjs3a7bb5SXRuVwEo98SKmM1bt
+ nP1wftmwTWmiJIsXZlOQ89Hpy8jxucakW/1H7OTZ8jp20Lo3O2XREaes4ycYElktld8zXWSh2
+ 7JWMj+L5s3Og/6ctMZ7kur82utwvhZEjuUm1xnu2JtJ5Fuu8KzCQQbhFs5u8xyTkp4YTTbqWK
+ wRhoBh+mFxZmHxWyYsMEJ8Hb0vHAZkDWPAl67yv594rTH82iaBZU/BkzBLYIDHcmQQfyW8SrU
+ unSsXH/CqpzPl5QYz
 
-RnJvbTogIlRvbnkgTGluZGdyZW4iIDx0b255QGF0b21pZGUuY29tPgoKVGhlIGZvbGxvd2luZyBj
-aGFuZ2VzIHNpbmNlIGNvbW1pdCBhMzhmZDg3NDg0NjQ4MzE1ODRhMTk0MzhjYmIzMDgyYjVhMmRh
-YjE1OgoKICBMaW51eCA1LjEyLXJjMiAoMjAyMS0wMy0wNSAxNzozMzo0MSAtMDgwMCkKCmFyZSBh
-dmFpbGFibGUgaW4gdGhlIEdpdCByZXBvc2l0b3J5IGF0OgoKICBnaXQ6Ly9naXQua2VybmVsLm9y
-Zy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG1saW5kL2xpbnV4LW9tYXAgdGFncy9vbWFwLWZv
-ci12NS4xMy9kdC12Mi1zaWduZWQKCmZvciB5b3UgdG8gZmV0Y2ggY2hhbmdlcyB1cCB0byBlZTM2
-OGExMGQwZGZiMjdiYmZmMzYzNjFlYTIxNjZmODY0MDI4YThiOgoKICBBUk06IGR0czogYW0zMzV4
-LWJvbmVibGFjay5kdHM6IHVuaXF1ZSBncGlvLWxpbmUtbmFtZXMgKDIwMjEtMDMtMzEgMDg6NTQ6
-NDUgKzAzMDApCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tCkRldmljZXRyZWUgY2hhbmdlcyBmb3Igb21hcHMgZm9yIHY1LjEz
-CgpNb3N0bHkgY29uZmlndXJlcyBhZGR0aW9uYWwgZGV2aWNlcyBmb3IgdmFyaW91cyBib2FyZHMs
-IGFuZAp1cGRhdGVzIHRoZSBncGlvIGxpbmUgbmFtZXMgZm9yIGJlYWdsZSBib2FyZHMgc28gdXNl
-cnNwYWNlIGNhbgpvcHRpb25hbGx5IGZpbmQgdGhlIHJpZ2h0IGxpbmVzOgoKLSBVc2UgdW5pcXVl
-IGdwaW8gbGluZSBuYW1lcyBmb3IgYW0zMzV4LXBvY2tldGJlYWdsZQoKLSBVcGRhdGUgb21hcDMt
-ZWNobyBsZWQgY29uZmlndXJhdGlvbiBhbmQgYWRkIGF0aDZrbCBub2RlCgotIEZpeCBpbmRlbnRh
-dGlvbiBmb3IgYW0zIHRzY2FkYyBub2RlCgotIFByZXBhcmUgbW90b3JvbGEtY3BjYXAtbWFwcGhv
-bmUgZm9yIHBvd2VyIHN1cHBseSBkdGJzX2NoZWNrX3BhcnNpbmcKCi0gVXNlIHVuaXF1ZSBncGlv
-IGxpbmUgbmFtZXMgZm9yIGFtMzM1eC1ib25lYmxhY2suZHRzCgotLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCkFuZHLDqSBIZW50
-c2NoZWwgKDIpOgogICAgICBBUk06IGR0czogb21hcDMtZWNobzogVXBkYXRlIExFRCBjb25maWd1
-cmF0aW9uCiAgICAgIEFSTTogZHRzOiBvbWFwMy1lY2hvOiBBZGQgYXRoNmtsIG5vZGUKCkRhcmlv
-IEJpbmFjY2hpICgxKToKICAgICAgQVJNOiBkdHM6IGFtMzN4eC1sNDogZml4IHRzY2FkY0AwIG5v
-ZGUgaW5kZW50YXRpb24KCkRyZXcgRnVzdGluaSAoMik6CiAgICAgIEFSTTogZHRzOiBhbTMzNXgt
-cG9ja2V0YmVhZ2xlOiB1bmlxdWUgZ3Bpby1saW5lLW5hbWVzCiAgICAgIEFSTTogZHRzOiBhbTMz
-NXgtYm9uZWJsYWNrLmR0czogdW5pcXVlIGdwaW8tbGluZS1uYW1lcwoKU2ViYXN0aWFuIFJlaWNo
-ZWwgKDEpOgogICAgICBBUk06IGR0czogbW90b3JvbGEtY3BjYXAtbWFwcGhvbmU6IFByZXBhcmUg
-Zm9yIGR0YnNfY2hlY2sgcGFyc2luZwoKIGFyY2gvYXJtL2Jvb3QvZHRzL2FtMzM1eC1ib25lYmxh
-Y2suZHRzICAgICAgICAgfCAxMzIgKysrLS0tLQogYXJjaC9hcm0vYm9vdC9kdHMvYW0zMzV4LXBv
-Y2tldGJlYWdsZS5kdHMgICAgICB8IDE0MCArKysrLS0tLQogYXJjaC9hcm0vYm9vdC9kdHMvYW0z
-M3h4LWw0LmR0c2kgICAgICAgICAgICAgICB8ICAyOCArLQogYXJjaC9hcm0vYm9vdC9kdHMvbW90
-b3JvbGEtY3BjYXAtbWFwcGhvbmUuZHRzaSB8ICA1OSArKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL29t
-YXAzLWVjaG8uZHRzICAgICAgICAgICAgICAgfCA0NzYgKysrKysrKysrKysrKysrKystLS0tLS0t
-LQogNSBmaWxlcyBjaGFuZ2VkLCA1MTQgaW5zZXJ0aW9ucygrKSwgMzIxIGRlbGV0aW9ucygtKQoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbGludXgtYXJt
-LWtlcm5lbCBtYWlsaW5nIGxpc3QKbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3Jn
-Cmh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtYXJtLWtl
-cm5lbAo=
+The Supermicro X9SCi-LN4F is a server mainboard featuring the WPCM450
+BMC. This patch adds a minimal devicetree for Linux running on the BMC.
+
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+
+
+=2D--
+
+v2:
+- Group wpcm450 devicetree with npcm7xx devicetrees in the Makefile
+=2D--
+ arch/arm/boot/dts/Makefile                    |  2 +
+ .../nuvoton-wpcm450-supermicro-x9sci-ln4f.dts | 40 +++++++++++++++++++
+ 2 files changed, 42 insertions(+)
+ create mode 100644 arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4=
+f.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 8e5d4ab4e75e6..5a9d99d5443e4 100644
+=2D-- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -333,6 +333,8 @@ dtb-$(CONFIG_ARCH_LPC18XX) +=3D \
+ dtb-$(CONFIG_ARCH_LPC32XX) +=3D \
+ 	lpc3250-ea3250.dtb \
+ 	lpc3250-phy3250.dtb
++dtb-$(CONFIG_ARCH_WPCM450) +=3D \
++	nuvoton-wpcm450-supermicro-x9sci-ln4f.dtb
+ dtb-$(CONFIG_ARCH_NPCM7XX) +=3D \
+ 	nuvoton-npcm730-gsj.dtb \
+ 	nuvoton-npcm730-kudo.dtb \
+diff --git a/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts b=
+/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts
+new file mode 100644
+index 0000000000000..83f27fbf4e939
+=2D-- /dev/null
++++ b/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++// Copyright 2021 Jonathan Neusch=C3=A4fer
++
++/dts-v1/;
++
++/* The last 16 MiB are dedicated to the GPU */
++/memreserve/ 0x07000000 0x01000000;
++
++#include "nuvoton-wpcm450.dtsi"
++
++/ {
++	model =3D "Supermicro X9SCi-LN4F BMC";
++	compatible =3D "supermicro,x9sci-ln4f-bmc", "nuvoton,wpcm450";
++
++	chosen {
++		stdout-path =3D "serial0:115200n8";
++	};
++
++	memory@0 {
++		device_type =3D "memory";
++		reg =3D <0 0x08000000>; /* 128 MiB */
++	};
++};
++
++&serial0 {
++	/*
++	 * Debug serial port. TX is exposed on the right pad of unpopulated
++	 * resistor R1247, RX on the right pad of R1162.
++	 */
++	status =3D "okay";
++};
++
++&serial1 {
++	/* "Serial over LAN" port. Connected to ttyS2 of the host system. */
++	status =3D "okay";
++};
++
++&watchdog0 {
++	status =3D "okay";
++};
+=2D-
+2.30.2
+
