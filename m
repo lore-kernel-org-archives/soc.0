@@ -1,28 +1,53 @@
-Return-Path: <dinguyen@kernel.org>
+Return-Path: <SRS0=1rdH=JD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,NICE_REPLY_A,
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,NICE_REPLY_A,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2ED5C433B4
-	for <soc@archiver.kernel.org>; Tue,  6 Apr 2021 18:17:18 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 50E2C613D2; Tue,  6 Apr 2021 18:17:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41F08C433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  6 Apr 2021 18:19:00 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id C95DA61205
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  6 Apr 2021 18:18:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C95DA61205
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Type:
+	Content-Transfer-Encoding:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
+	References:To:Subject:Reply-To:Cc:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=K4ZxV65oimoxGf6UDJY6DvujdTbIf7j7HquYL8UZZ2w=; b=pfBw6rnJ5copsX2wFvvFYAX/n
+	/pGBXtSHFHFP/7VgAx3Nu9DiD9Va8rJMarkLVkMvmWvubOZUNG890wquAQHGR2lqRypb4ZKqIrzaH
+	fJmJyUgUl7GaOI6IzB1cILnLvNLvo63CiPkupEBezknWUMocxgfNZEOZrOfeMNfxjWH2eqNu3y09p
+	phaRkV0h71O5B56Qbth5QZ5QM4CrV/G89z5EaaRJAhOgBCCNnJDtXy4Pxt3PrhMc9mRYRhWP/skdE
+	0knOZyRVJcMEYh5GOFFz2tsNLAVi7WS5fZeOLyNBv6Blhi6HYutaT10X+pq9B7zghu8+uPjdjUCxj
+	hv8jLaWSA==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lTqGR-003Djg-Qv; Tue, 06 Apr 2021 18:17:24 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lTqGN-003DhB-J7
+ for linux-arm-kernel@lists.infradead.org; Tue, 06 Apr 2021 18:17:22 +0000
 Received: by mail.kernel.org (Postfix) with ESMTPSA id E3280613B3;
-	Tue,  6 Apr 2021 18:17:14 +0000 (UTC)
+ Tue,  6 Apr 2021 18:17:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617733038;
-	bh=X67a8xpcXCjUsAjr8KVYSZbvffOYc8116pHyl/kzd3I=;
-	h=Subject:List-Id:To:References:From:Date:In-Reply-To:From;
-	b=tWksv+jOi7RVLiGI5AobiRwmqX3uc9vSCQ9xIHWR8NbnIv47jYgv7VrKFj69ftRez
-	 ZAUEcxE7XUkmjfs257DQLGsdlS+ONHj7MSfCJKDooj0nOA/DSS++gM1u5Q4QilNXio
-	 KpT+8JXGuD4srZhP8UazvKsJg4iKGsDExe5N2tsfIwBBvGP2ddDhnNGPR60H3b5hMi
-	 qd452TTf8+CG+EPaRE2hzpiU3/rJsVWfB+w5BWAYHddyQIXb37mfiZi6mV0G9QvcdC
-	 qLgrZnCb/HvoFpd4prMT2+KgaL1Kw02xIaxpm/yUnAGoQxQaUMnmBXNV2EjPy+Q0gb
-	 IhUqBZuNy7TUg==
+ s=k20201202; t=1617733038;
+ bh=X67a8xpcXCjUsAjr8KVYSZbvffOYc8116pHyl/kzd3I=;
+ h=Subject:List-Id:To:References:From:Date:In-Reply-To:From;
+ b=tWksv+jOi7RVLiGI5AobiRwmqX3uc9vSCQ9xIHWR8NbnIv47jYgv7VrKFj69ftRez
+ ZAUEcxE7XUkmjfs257DQLGsdlS+ONHj7MSfCJKDooj0nOA/DSS++gM1u5Q4QilNXio
+ KpT+8JXGuD4srZhP8UazvKsJg4iKGsDExe5N2tsfIwBBvGP2ddDhnNGPR60H3b5hMi
+ qd452TTf8+CG+EPaRE2hzpiU3/rJsVWfB+w5BWAYHddyQIXb37mfiZi6mV0G9QvcdC
+ qLgrZnCb/HvoFpd4prMT2+KgaL1Kw02xIaxpm/yUnAGoQxQaUMnmBXNV2EjPy+Q0gb
+ IhUqBZuNy7TUg==
 Subject: Re: [PATCH v3 01/15] clk: socfpga: allow building N5X clocks with
  ARCH_N5X
 List-Id: <soc.lore.kernel.org>
@@ -56,9 +81,26 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
 In-Reply-To: <161724074854.2260335.2479133227977254546@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210406_191719_904931_AACD1F59 
+X-CRM114-Status: GOOD (  14.88  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210406181713.SHrHk_DPXqmLMcyAddS-6KmZsLGxmlK4vFoOud9M9hM@z>
 
 
 
@@ -90,3 +132,8 @@ I just checked, no conflicts.
 
 Thanks
 Dinh
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
