@@ -7,19 +7,19 @@ X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23B37C43461
-	for <soc@archiver.kernel.org>; Tue,  6 Apr 2021 10:11:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98DC8C43462
+	for <soc@archiver.kernel.org>; Tue,  6 Apr 2021 10:11:09 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id ED4D0613CA; Tue,  6 Apr 2021 10:11:07 +0000 (UTC)
+	id 3BF2C613E0; Tue,  6 Apr 2021 10:11:09 +0000 (UTC)
 Received: from muru.com (muru.com [72.249.23.125])
-	by mail.kernel.org (Postfix) with ESMTP id 8E6FD613CF;
-	Tue,  6 Apr 2021 10:11:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8E6FD613CF
+	by mail.kernel.org (Postfix) with ESMTP id 074FC613D0;
+	Tue,  6 Apr 2021 10:11:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 074FC613D0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=tony@atomide.com
 Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id D503F8119;
-	Tue,  6 Apr 2021 10:12:15 +0000 (UTC)
+	by muru.com (Postfix) with ESMTP id 2EBC88128;
+	Tue,  6 Apr 2021 10:12:17 +0000 (UTC)
 From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -27,9 +27,9 @@ Cc: arm@kernel.org,
 	linux-omap@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL 2/3] 
-Date: Tue,  6 Apr 2021 13:10:59 +0300
-Message-Id: <pull-1617703816-65652@atomide.com-2>
+Subject: [GIT PULL 3/3] 
+Date: Tue,  6 Apr 2021 13:11:00 +0300
+Message-Id: <pull-1617703816-65652@atomide.com-3>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <pull-1617703816-65652@atomide.com>
 References: <pull-1617703816-65652@atomide.com>
@@ -45,47 +45,27 @@ The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.13/dt-v2-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.13/defconfig-signed
 
-for you to fetch changes up to ee368a10d0dfb27bbff36361ea2166f864028a8b:
+for you to fetch changes up to f6a7ea04ad2044e8f05b55f3bdd3133f468f60d1:
 
-  ARM: dts: am335x-boneblack.dts: unique gpio-line-names (2021-03-31 08:54:45 +0300)
-
-----------------------------------------------------------------
-Devicetree changes for omaps for v5.13
-
-Mostly configures addtional devices for various boards, and
-updates the gpio line names for beagle boards so userspace can
-optionally find the right lines:
-
-- Use unique gpio line names for am335x-pocketbeagle
-
-- Update omap3-echo led configuration and add ath6kl node
-
-- Fix indentation for am3 tscadc node
-
-- Prepare motorola-cpcap-mapphone for power supply dtbs_check_parsing
-
-- Use unique gpio line names for am335x-boneblack.dts
+  ARM: omap2plus_defconfig: Add AT25 EEPROM module (2021-03-24 13:46:55 +0200)
 
 ----------------------------------------------------------------
-André Hentschel (2):
-      ARM: dts: omap3-echo: Update LED configuration
-      ARM: dts: omap3-echo: Add ath6kl node
+Defconfig changes for omaps for v5.13
 
-Dario Binacchi (1):
-      ARM: dts: am33xx-l4: fix tscadc@0 node indentation
+Update defconfig to have nefilter available as loadable modules
+to make the defconfig more usable for networked devices. And we now
+select SIMPLE_PM_BUS so it can be dropped. And some devices use
+EEPROM_AT25 so let's add it as a loadable module.
 
-Drew Fustini (2):
-      ARM: dts: am335x-pocketbeagle: unique gpio-line-names
-      ARM: dts: am335x-boneblack.dts: unique gpio-line-names
+----------------------------------------------------------------
+Adam Ford (1):
+      ARM: omap2plus_defconfig: Add AT25 EEPROM module
 
-Sebastian Reichel (1):
-      ARM: dts: motorola-cpcap-mapphone: Prepare for dtbs_check parsing
+Ivan Jelincic (2):
+      ARM: omap2plus_defconfig: Update for dropped simple-pm-bus
+      ARM: omap2plus_defconfig: Enable Netfilter components as modules
 
- arch/arm/boot/dts/am335x-boneblack.dts         | 132 +++----
- arch/arm/boot/dts/am335x-pocketbeagle.dts      | 140 ++++----
- arch/arm/boot/dts/am33xx-l4.dtsi               |  28 +-
- arch/arm/boot/dts/motorola-cpcap-mapphone.dtsi |  59 ++-
- arch/arm/boot/dts/omap3-echo.dts               | 476 +++++++++++++++++--------
- 5 files changed, 514 insertions(+), 321 deletions(-)
+ arch/arm/configs/omap2plus_defconfig | 151 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 150 insertions(+), 1 deletion(-)
