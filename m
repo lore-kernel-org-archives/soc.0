@@ -1,151 +1,271 @@
-Return-Path: <SRS0=1rdH=JD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=WvRP=JD=gmail.com=groeck7@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5DA0C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  6 Apr 2021 12:15:07 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C261C433B4
+	for <soc@archiver.kernel.org>; Tue,  6 Apr 2021 16:10:02 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 162E9613C4; Tue,  6 Apr 2021 16:10:02 +0000 (UTC)
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1F4CB613BD
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  6 Apr 2021 12:15:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1F4CB613BD
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=Cqeux0vtJtlK6WtUW35pFBtdcHabhl38abL6v/hbmjA=; b=Uozqlg7po+sOtb49Hk+vGP/IT
-	36MdDfBDmsq6ghaBliQxoHMjsfN/ZTVFr4Gn3DPtr/SKuw5vhUUKqNAZux61ueioyLM+LEtglLcz0
-	HL5W2eRHgMXjiPzdJ6ykVNz6lTo6c91ZjwD9RKktaepFmTbkdW0Xyps2u3uNIwfScg34/xqQo8OEC
-	hDDZ81jQY3i+PgrkouKScS3WHYuKLXOoV90IoN2wPPAp46NRIN36S4utUu7JJ+KmGYJxcgFPrPUg1
-	4Oy1nrD/eMYWktYq+L4Fmn8OvtdzQksZFUfdjBzGW57/RG8LS9KMdxE03PSORxovuxT4GSSwM/Iax
-	IghZYEGtg==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lTkZ8-002Wfi-1R; Tue, 06 Apr 2021 12:12:19 +0000
-Received: from mout.gmx.net ([212.227.17.22])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lTkYo-002WXS-LN
- for linux-arm-kernel@lists.infradead.org; Tue, 06 Apr 2021 12:12:01 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1617711116;
- bh=0mYa4APzjX4y4tzJVfb5VIFApuD/1wa2g96PG4y8oYk=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=Ub3zaSIRybTv919sY7OiG5Wz49aqrHPqTGFBNMp+u0egrwuWJK+SekF7gT85aGHYW
- 2Q5hQjko/65nyjS3PEWlC8QDc46mGV1YaLFK3hU/lfwe7SQHZy1pYK+vpmxXeFyEfq
- htF53lxcFVfWCbe2iOWoOyOd0q4WpMJRn+aLWzA8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([37.201.215.134]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MV63q-1l2m3m0BoU-00S4S5; Tue, 06
- Apr 2021 14:11:56 +0200
-From: =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To: openbmc@lists.ozlabs.org
+	by mail.kernel.org (Postfix) with ESMTPS id AFCDA613BD;
+	Tue,  6 Apr 2021 16:10:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AFCDA613BD
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=groeck7@gmail.com
+Received: by mail-oi1-f175.google.com with SMTP id a8so15629788oic.11;
+        Tue, 06 Apr 2021 09:10:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=70/WXuRSOVM+Cc9ViyI6lDUSxH+eDXC41IovFsWbeYs=;
+        b=mZHPqUim93e/5u+URkvc/Ye1e5GK97PBlzfwKox4sOBT0lN+SkMyIKlSxqOOXncrAK
+         6vC4G+ZyvQX97b1+02ESEbKpWxy6wpdVgcvS3TML68NHexPqdOTJYcS2owuFsU4G/IQw
+         2m6PgS4O+foYkxYMBeufP2rbxsFCpYuGbB+YZgt6f42vITYALda/lf2H3CFixXYuqAVN
+         Qot5vsNWbluJqtZuxX7JwGE2pWMkl7cmc3V4dMSdVzMMp07mI8uZbBp0dyzbOk4mRjfO
+         NMLENOqxmZvhSEPNuzYgXh1CIdskUDOAzniyiTPpp+6SJZhlzYwHIn0rsE4GObpAQKPP
+         CJsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=70/WXuRSOVM+Cc9ViyI6lDUSxH+eDXC41IovFsWbeYs=;
+        b=mdUTOC7X0Y2LFMfiB3mNudx363rZ3kfuU19CO+y+wyUQPeBX4zkFwlfc6/ygv9gpLC
+         Cq/UKg6pknVUVnzy8OHI5QjXkZSYPBZtVF78Ftz7STPW2m+xfrfUOZDbp7RSKwjhOsXk
+         Gd/2FzztYP8t/L7FgU5iaxgSSXw53qgyjjF/s+WljFj2isbMiWtR6rXf0x6xPNlWbEUP
+         bNJBdQkFOMejq6kEV+b6zgyulviu3RcqK7j2ukaq+g/MWWvuA1QT7V7OCTEkWqqbFoOZ
+         UYjgUxKyQGjTbUbsbqBv1TG0o8nF9UdB94k7Eo+A31TLIlLAOkhs06C6vkj3NOxwQi6C
+         CAPg==
+X-Gm-Message-State: AOAM531fCISM4OmHMlLD7Hv1s/Vww00Ru+PvuZs/Nko+2b/NXBDO7I9D
+	/veNS7CmQKy7Xj01fdA2YUM=
+X-Google-Smtp-Source: ABdhPJw+oRcabyeXlR7veCmXYel+3+bxwvoQzsVviymeaR2MbFVB6NWM8xsX1yZHtzLpbix2jLBDXA==
+X-Received: by 2002:aca:4187:: with SMTP id o129mr3872937oia.10.1617725401042;
+        Tue, 06 Apr 2021 09:10:01 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r22sm4644989otg.4.2021.04.06.09.10.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 06 Apr 2021 09:10:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 6 Apr 2021 09:09:59 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Tomer Maimon <tmaimon77@gmail.com>, Joel Stanley <joel@jms.id.au>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v2 09/10] ARM: dts: Add devicetree for Supermicro X9SCi-LN4F
- based on WPCM450
-Date: Tue,  6 Apr 2021 14:09:20 +0200
-Message-ID: <20210406120921.2484986-10-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210406120921.2484986-1-j.neuschaefer@gmx.net>
-References: <20210406120921.2484986-1-j.neuschaefer@gmx.net>
+Cc: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>, soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>, Robert Richter <rric@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
+	Lee Jones <lee.jones@linaro.org>,
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+	Alexandre Torgue <alexandre.torgue@st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v3 08/15] arm64: socfpga: merge Agilex and N5X into
+ ARCH_INTEL_SOCFPGA
+Message-ID: <20210406160959.GA208060@roeck-us.net>
+References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
+ <20210311152545.1317581-9-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:9DiOCvXHwoFh1kDKM09Us9g9xP2gE4HWlzUOVkEO1hQrdf2PPFo
- b68DFZ7wrJu7ib8Me6MhvTQnQLQcF0UI7BqlK6LFSAGmFMQLSQptrojzQPZjh6LgbGlrgYf
- pyaFmci5BiXhsiarsvY+P3VNo9+vLiyhUwa+p5x5dh7EoHxvb9EbjMe/C2B4Rv1AtEV1XhE
- DoMpBBm1KlprrR5TL4U8Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/Qe8xLnpBvA=:HmbDV7ZX29oTuwy/S9tbR/
- HpCQ0/HxeyZVGyH1zGNCPAVNjoDju7G7U9W7qHitOlDMzk8VlLPx6rCFvPLPWEFlxk5h3z8/X
- oNWgjgTcPhxnCHMRqoZHSJN3DSVhCaQlWfC9UnyB5BcHyOYNHL88/EZ/muGs5su03qbhbnedB
- +cJS+HSPAkULfZpTapOks4pPy1kSh2IbgC5eBSIrac+2XnKKNFNCouRvs/RIN7Ss5NGLBFlwt
- Py10Z5Yv3FvUyaAjDu1uc+eWim5W6ySMvoTEF4iXj7Hprbb3a1Wjhu+nYsJlUnvIvQSumUfxy
- cV5niq9BkL0fClTKMTZGzeugYgAFXFoe7129eLh6/lX7swTPI6vbzcmGq6oZf88wSNmj37kN4
- TvzUwkOe2j2B+mC7n1rbkh1sBsHr9Oir8/QEtslIvTf3RARsoNYLfaNuFbKkgJxvAx2O7Zx9L
- CcHBYAxUpskhndkybuq3jLbXV+lp9IhVLIZnKsIFfU7m1RjHNgvZ9cgo4+0rJuR83GbadfBD3
- 8H0jIh6L8+bheMy+sYizHTXUfGAMYEJWiBnSXSHSbz1jt+/dnMvr6XbJ61isR0cU6TF/tO2uI
- 9QKmWhv+ALzLjKQQeuQ/vhe34jkpgyif5yx9NN1tM4TGJLxHvGhoq+ViRlkVk5TBRWw+e6iG3
- MiR8S548pkRxpucHdXuuzKMhVlXpZLeR6ja4wIxF4ZYSmjhajNl5BwxsDRZm9B2FVhDAAgT/h
- 4I8/tsaevKiZ/qUs5ZgZ6dDqPqa1TuRR1Et8KcgLkwUT9ust1o2FAqOmNTKM8dYoH1dkM2fC4
- VVyno+URu5lmP5/5W6t0dDSQF5aXEZH32P5Wq8zN8tdwXlYTWGIkPmo24mFPJiQ3eYDz6396Q
- up7QltPkM5EBKkMvn4DYtbVGyCSOzVOvBZ62mcwnX89Fj2Ksk/1+XsB+RFanWm7Ba9GkVFYVX
- kaEynW8ztuPXY8cKz7uljhKDc5k2C/oTWB4EnuyC8HZ/teEtjs3a7bb5SXRuVwEo98SKmM1bt
- nP1wftmwTWmiJIsXZlOQ89Hpy8jxucakW/1H7OTZ8jp20Lo3O2XREaes4ycYElktld8zXWSh2
- 7JWMj+L5s3Og/6ctMZ7kur82utwvhZEjuUm1xnu2JtJ5Fuu8KzCQQbhFs5u8xyTkp4YTTbqWK
- wRhoBh+mFxZmHxWyYsMEJ8Hb0vHAZkDWPAl67yv594rTH82iaBZU/BkzBLYIDHcmQQfyW8SrU
- unSsXH/CqpzPl5QYz
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210406_131158_913782_A5825AC4 
-X-CRM114-Status: GOOD (  15.70  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210406120920.VrXelEH8rb4br-deSajLrI4i_nXbGkjb0pXwKRxd-9s@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210311152545.1317581-9-krzysztof.kozlowski@canonical.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 
-VGhlIFN1cGVybWljcm8gWDlTQ2ktTE40RiBpcyBhIHNlcnZlciBtYWluYm9hcmQgZmVhdHVyaW5n
-IHRoZSBXUENNNDUwCkJNQy4gVGhpcyBwYXRjaCBhZGRzIGEgbWluaW1hbCBkZXZpY2V0cmVlIGZv
-ciBMaW51eCBydW5uaW5nIG9uIHRoZSBCTUMuCgpTaWduZWQtb2ZmLWJ5OiBKb25hdGhhbiBOZXVz
-Y2jDpGZlciA8ai5uZXVzY2hhZWZlckBnbXgubmV0PgoKCi0tLQoKdjI6Ci0gR3JvdXAgd3BjbTQ1
-MCBkZXZpY2V0cmVlIHdpdGggbnBjbTd4eCBkZXZpY2V0cmVlcyBpbiB0aGUgTWFrZWZpbGUKLS0t
-CiBhcmNoL2FybS9ib290L2R0cy9NYWtlZmlsZSAgICAgICAgICAgICAgICAgICAgfCAgMiArCiAu
-Li4vbnV2b3Rvbi13cGNtNDUwLXN1cGVybWljcm8teDlzY2ktbG40Zi5kdHMgfCA0MCArKysrKysr
-KysrKysrKysrKysrCiAyIGZpbGVzIGNoYW5nZWQsIDQyIGluc2VydGlvbnMoKykKIGNyZWF0ZSBt
-b2RlIDEwMDY0NCBhcmNoL2FybS9ib290L2R0cy9udXZvdG9uLXdwY200NTAtc3VwZXJtaWNyby14
-OXNjaS1sbjRmLmR0cwoKZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL01ha2VmaWxlIGIv
-YXJjaC9hcm0vYm9vdC9kdHMvTWFrZWZpbGUKaW5kZXggOGU1ZDRhYjRlNzVlNi4uNWE5ZDk5ZDU0
-NDNlNCAxMDA2NDQKLS0tIGEvYXJjaC9hcm0vYm9vdC9kdHMvTWFrZWZpbGUKKysrIGIvYXJjaC9h
-cm0vYm9vdC9kdHMvTWFrZWZpbGUKQEAgLTMzMyw2ICszMzMsOCBAQCBkdGItJChDT05GSUdfQVJD
-SF9MUEMxOFhYKSArPSBcCiBkdGItJChDT05GSUdfQVJDSF9MUEMzMlhYKSArPSBcCiAJbHBjMzI1
-MC1lYTMyNTAuZHRiIFwKIAlscGMzMjUwLXBoeTMyNTAuZHRiCitkdGItJChDT05GSUdfQVJDSF9X
-UENNNDUwKSArPSBcCisJbnV2b3Rvbi13cGNtNDUwLXN1cGVybWljcm8teDlzY2ktbG40Zi5kdGIK
-IGR0Yi0kKENPTkZJR19BUkNIX05QQ003WFgpICs9IFwKIAludXZvdG9uLW5wY203MzAtZ3NqLmR0
-YiBcCiAJbnV2b3Rvbi1ucGNtNzMwLWt1ZG8uZHRiIFwKZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jv
-b3QvZHRzL251dm90b24td3BjbTQ1MC1zdXBlcm1pY3JvLXg5c2NpLWxuNGYuZHRzIGIvYXJjaC9h
-cm0vYm9vdC9kdHMvbnV2b3Rvbi13cGNtNDUwLXN1cGVybWljcm8teDlzY2ktbG40Zi5kdHMKbmV3
-IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMDAwMC4uODNmMjdmYmY0ZTkzOQotLS0g
-L2Rldi9udWxsCisrKyBiL2FyY2gvYXJtL2Jvb3QvZHRzL251dm90b24td3BjbTQ1MC1zdXBlcm1p
-Y3JvLXg5c2NpLWxuNGYuZHRzCkBAIC0wLDAgKzEsNDAgQEAKKy8vIFNQRFgtTGljZW5zZS1JZGVu
-dGlmaWVyOiBHUEwtMi4wLW9ubHkgT1IgQlNELTItQ2xhdXNlCisvLyBDb3B5cmlnaHQgMjAyMSBK
-b25hdGhhbiBOZXVzY2jDpGZlcgorCisvZHRzLXYxLzsKKworLyogVGhlIGxhc3QgMTYgTWlCIGFy
-ZSBkZWRpY2F0ZWQgdG8gdGhlIEdQVSAqLworL21lbXJlc2VydmUvIDB4MDcwMDAwMDAgMHgwMTAw
-MDAwMDsKKworI2luY2x1ZGUgIm51dm90b24td3BjbTQ1MC5kdHNpIgorCisvIHsKKwltb2RlbCA9
-ICJTdXBlcm1pY3JvIFg5U0NpLUxONEYgQk1DIjsKKwljb21wYXRpYmxlID0gInN1cGVybWljcm8s
-eDlzY2ktbG40Zi1ibWMiLCAibnV2b3Rvbix3cGNtNDUwIjsKKworCWNob3NlbiB7CisJCXN0ZG91
-dC1wYXRoID0gInNlcmlhbDA6MTE1MjAwbjgiOworCX07CisKKwltZW1vcnlAMCB7CisJCWRldmlj
-ZV90eXBlID0gIm1lbW9yeSI7CisJCXJlZyA9IDwwIDB4MDgwMDAwMDA+OyAvKiAxMjggTWlCICov
-CisJfTsKK307CisKKyZzZXJpYWwwIHsKKwkvKgorCSAqIERlYnVnIHNlcmlhbCBwb3J0LiBUWCBp
-cyBleHBvc2VkIG9uIHRoZSByaWdodCBwYWQgb2YgdW5wb3B1bGF0ZWQKKwkgKiByZXNpc3RvciBS
-MTI0NywgUlggb24gdGhlIHJpZ2h0IHBhZCBvZiBSMTE2Mi4KKwkgKi8KKwlzdGF0dXMgPSAib2th
-eSI7Cit9OworCismc2VyaWFsMSB7CisJLyogIlNlcmlhbCBvdmVyIExBTiIgcG9ydC4gQ29ubmVj
-dGVkIHRvIHR0eVMyIG9mIHRoZSBob3N0IHN5c3RlbS4gKi8KKwlzdGF0dXMgPSAib2theSI7Cit9
-OworCismd2F0Y2hkb2cwIHsKKwlzdGF0dXMgPSAib2theSI7Cit9OwotLQoyLjMwLjIKCgpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsaW51eC1hcm0ta2Vy
-bmVsIG1haWxpbmcgbGlzdApsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcKaHR0
-cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51eC1hcm0ta2VybmVs
-Cg==
+On Thu, Mar 11, 2021 at 04:25:38PM +0100, Krzysztof Kozlowski wrote:
+> Agilex, N5X and Stratix 10 share all quite similar arm64 hard cores and
+> SoC-part.  Up to a point that N5X uses the same DTSI as Agilex.  From
+> the Linux kernel point of view these are flavors of the same
+> architecture so there is no need for three top-level arm64
+> architectures.  Simplify this by merging all three architectures into
+> ARCH_INTEL_SOCFPGA and dropping the other ARCH* arm64 Kconfig entries.
+> 
+> The side effect is that the INTEL_STRATIX10_SERVICE will now be
+> available for both 32-bit and 64-bit Intel SoCFPGA, even though it is
+> used only for 64-bit.
+
+Did you try to compile, say, arm:allmodconfig with this patch applied ?
+Because for me that results in:
+
+In file included from <command-line>:
+drivers/firmware/stratix10-rsu.c: In function 'rsu_status_callback':
+include/linux/compiler_types.h:320:38: error:
+	call to '__compiletime_assert_177' declared with attribute error:
+	FIELD_GET: type of reg too small for mask
+
+and lots of similar errors.
+
+Guenter
+
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  arch/arm64/Kconfig.platforms       | 21 ++++-----------------
+>  arch/arm64/boot/dts/intel/Makefile |  6 +++---
+>  arch/arm64/configs/defconfig       |  3 +--
+>  drivers/clk/Makefile               |  2 --
+>  drivers/clk/socfpga/Kconfig        |  4 ++--
+>  drivers/firmware/Kconfig           |  2 +-
+>  drivers/fpga/Kconfig               |  2 +-
+>  drivers/reset/Kconfig              |  2 +-
+>  8 files changed, 13 insertions(+), 29 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> index ecab67a1afb8..ce50dd129eec 100644
+> --- a/arch/arm64/Kconfig.platforms
+> +++ b/arch/arm64/Kconfig.platforms
+> @@ -8,16 +8,6 @@ config ARCH_ACTIONS
+>  	help
+>  	  This enables support for the Actions Semiconductor S900 SoC family.
+>  
+> -config ARCH_AGILEX
+> -	bool "Intel's Agilex SoCFPGA Family"
+> -	help
+> -	  This enables support for Intel's Agilex SoCFPGA Family.
+> -
+> -config ARCH_N5X
+> -	bool "Intel's eASIC N5X SoCFPGA Family"
+> -	help
+> -	  This enables support for Intel's eASIC N5X SoCFPGA Family.
+> -
+>  config ARCH_SUNXI
+>  	bool "Allwinner sunxi 64-bit SoC Family"
+>  	select ARCH_HAS_RESET_CONTROLLER
+> @@ -254,14 +244,11 @@ config ARCH_SEATTLE
+>  	help
+>  	  This enables support for AMD Seattle SOC Family
+>  
+> -config ARCH_STRATIX10
+> -	bool "Altera's Stratix 10 SoCFPGA Family"
+> -	select ARCH_INTEL_SOCFPGA
+> -	help
+> -	  This enables support for Altera's Stratix 10 SoCFPGA Family.
+> -
+>  config ARCH_INTEL_SOCFPGA
+> -	bool
+> +	bool "Intel's SoCFPGA ARMv8 Families"
+> +	help
+> +	  This enables support for Intel's SoCFPGA ARMv8 families:
+> +	  Stratix 10 (ex. Altera), Agilex and eASIC N5X.
+>  
+>  config ARCH_SYNQUACER
+>  	bool "Socionext SynQuacer SoC Family"
+> diff --git a/arch/arm64/boot/dts/intel/Makefile b/arch/arm64/boot/dts/intel/Makefile
+> index 3a052540605b..0b5477442263 100644
+> --- a/arch/arm64/boot/dts/intel/Makefile
+> +++ b/arch/arm64/boot/dts/intel/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> -dtb-$(CONFIG_ARCH_AGILEX) += socfpga_agilex_socdk.dtb \
+> -			     socfpga_agilex_socdk_nand.dtb
+> +dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) += socfpga_agilex_socdk.dtb \
+> +				socfpga_agilex_socdk_nand.dtb \
+> +				socfpga_n5x_socdk.dtb
+>  dtb-$(CONFIG_ARCH_KEEMBAY) += keembay-evm.dtb
+> -dtb-$(CONFIG_ARCH_N5X) += socfpga_n5x_socdk.dtb
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index d612f633b771..cf8a3009b858 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -28,7 +28,6 @@ CONFIG_KALLSYMS_ALL=y
+>  # CONFIG_COMPAT_BRK is not set
+>  CONFIG_PROFILING=y
+>  CONFIG_ARCH_ACTIONS=y
+> -CONFIG_ARCH_AGILEX=y
+>  CONFIG_ARCH_SUNXI=y
+>  CONFIG_ARCH_ALPINE=y
+>  CONFIG_ARCH_BCM2835=y
+> @@ -50,7 +49,7 @@ CONFIG_ARCH_RENESAS=y
+>  CONFIG_ARCH_ROCKCHIP=y
+>  CONFIG_ARCH_S32=y
+>  CONFIG_ARCH_SEATTLE=y
+> -CONFIG_ARCH_STRATIX10=y
+> +CONFIG_ARCH_INTEL_SOCFPGA=y
+>  CONFIG_ARCH_SYNQUACER=y
+>  CONFIG_ARCH_TEGRA=y
+>  CONFIG_ARCH_SPRD=y
+> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+> index 1e29e5ad107a..96802294d35a 100644
+> --- a/drivers/clk/Makefile
+> +++ b/drivers/clk/Makefile
+> @@ -105,8 +105,6 @@ obj-$(CONFIG_ARCH_ROCKCHIP)		+= rockchip/
+>  obj-$(CONFIG_COMMON_CLK_SAMSUNG)	+= samsung/
+>  obj-$(CONFIG_CLK_SIFIVE)		+= sifive/
+>  obj-$(CONFIG_ARCH_INTEL_SOCFPGA)	+= socfpga/
+> -obj-$(CONFIG_ARCH_AGILEX)		+= socfpga/
+> -obj-$(CONFIG_ARCH_N5X)			+= socfpga/
+>  obj-$(CONFIG_PLAT_SPEAR)		+= spear/
+>  obj-y					+= sprd/
+>  obj-$(CONFIG_ARCH_STI)			+= st/
+> diff --git a/drivers/clk/socfpga/Kconfig b/drivers/clk/socfpga/Kconfig
+> index bc102e0f0be0..b6c5b9737174 100644
+> --- a/drivers/clk/socfpga/Kconfig
+> +++ b/drivers/clk/socfpga/Kconfig
+> @@ -2,5 +2,5 @@
+>  config CLK_INTEL_SOCFPGA64
+>  	bool
+>  	# Intel Stratix / Agilex / N5X clock controller support
+> -	default (ARCH_AGILEX || ARCH_N5X || ARCH_STRATIX10)
+> -	depends on ARCH_AGILEX || ARCH_N5X || ARCH_STRATIX10
+> +	default ARM64 && ARCH_INTEL_SOCFPGA
+> +	depends on ARM64 && ARCH_INTEL_SOCFPGA
+> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+> index 3f14dffb9669..6a4e882e448d 100644
+> --- a/drivers/firmware/Kconfig
+> +++ b/drivers/firmware/Kconfig
+> @@ -206,7 +206,7 @@ config FW_CFG_SYSFS_CMDLINE
+>  
+>  config INTEL_STRATIX10_SERVICE
+>  	tristate "Intel Stratix10 Service Layer"
+> -	depends on (ARCH_STRATIX10 || ARCH_AGILEX) && HAVE_ARM_SMCCC
+> +	depends on ARCH_INTEL_SOCFPGA && HAVE_ARM_SMCCC
+>  	default n
+>  	help
+>  	  Intel Stratix10 service layer runs at privileged exception level,
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 5ff9438b7b46..fd325e9c5ce6 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -60,7 +60,7 @@ config FPGA_MGR_ZYNQ_FPGA
+>  
+>  config FPGA_MGR_STRATIX10_SOC
+>  	tristate "Intel Stratix10 SoC FPGA Manager"
+> -	depends on (ARCH_STRATIX10 && INTEL_STRATIX10_SERVICE)
+> +	depends on (ARCH_INTEL_SOCFPGA && INTEL_STRATIX10_SERVICE)
+>  	help
+>  	  FPGA manager driver support for the Intel Stratix10 SoC.
+>  
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index 4171c6f76385..b1e8efa16166 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -183,7 +183,7 @@ config RESET_SCMI
+>  
+>  config RESET_SIMPLE
+>  	bool "Simple Reset Controller Driver" if COMPILE_TEST
+> -	default ARCH_AGILEX || ARCH_ASPEED || ARCH_BCM4908 || ARCH_BITMAIN || ARCH_REALTEK || ARCH_STM32 || ARCH_STRATIX10 || ARCH_SUNXI || ARC
+> +	default ARCH_ASPEED || ARCH_BCM4908 || ARCH_BITMAIN || ARCH_REALTEK || ARCH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC
+>  	help
+>  	  This enables a simple reset controller driver for reset lines that
+>  	  that can be asserted and deasserted by toggling bits in a contiguous,
+> -- 
+> 2.25.1
+> 
