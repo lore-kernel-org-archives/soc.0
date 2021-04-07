@@ -1,108 +1,101 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=Yh/P=JE=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3EB4C433ED
-	for <linux-devicetree@archiver.kernel.org>; Wed,  7 Apr 2021 16:09:43 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96B04610E8
-	for <linux-devicetree@archiver.kernel.org>; Wed,  7 Apr 2021 16:09:43 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234231AbhDGQJw (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Wed, 7 Apr 2021 12:09:52 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:40189 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354275AbhDGQHN (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Wed, 7 Apr 2021 12:07:13 -0400
-Received: from mail-ot1-f49.google.com ([209.85.210.49]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N6srH-1le9hy3tsd-018LjN for <devicetree@vger.kernel.org>; Wed, 07 Apr 2021
- 18:07:02 +0200
-Received: by mail-ot1-f49.google.com with SMTP id y19-20020a0568301d93b02901b9f88a238eso18546649oti.11
-        for <devicetree@vger.kernel.org>; Wed, 07 Apr 2021 09:07:01 -0700 (PDT)
-X-Gm-Message-State: AOAM532SyL3ONlsG1j/nYiCslj25YgEOx8yOIFXGxZzyuO8MQQjfD1/2
-        Ft67syj3SAh3qYc50nl2QSo2YEZ6WwOVHDsbzQs=
-X-Google-Smtp-Source: ABdhPJymSQJTahzo74k3DCXqZLabZ7pj1oDnsEr/iW3XDliuXTMvQkoUagOIuZhBUsyHUIVKVPi0LMKTb9enlCKqF4I=
-X-Received: by 2002:a9d:316:: with SMTP id 22mr3544860otv.210.1617811620677;
- Wed, 07 Apr 2021 09:07:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <22814673-e9fe-f65b-cc0f-b02be4f90d1a@gmail.com>
-In-Reply-To: <22814673-e9fe-f65b-cc0f-b02be4f90d1a@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 7 Apr 2021 18:06:44 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0bp3CUzOQHSX5KYt44j-Njk_u2P=0q-ZQ0HcTBiVVVSA@mail.gmail.com>
-Message-ID: <CAK8P3a0bp3CUzOQHSX5KYt44j-Njk_u2P=0q-ZQ0HcTBiVVVSA@mail.gmail.com>
-Subject: Re: [GIT PULL] arm64: dts: mediatek: changes for v5.13 (second round)
-To:     Matthias Brugger <matthias.bgg@gmail.com>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47D3FC433ED
+	for <soc@archiver.kernel.org>; Wed,  7 Apr 2021 16:13:39 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 1701161353; Wed,  7 Apr 2021 16:13:39 +0000 (UTC)
+Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 8646761260
+	for <soc@kernel.org>; Wed,  7 Apr 2021 16:13:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8646761260
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
+Received: from mail-wm1-f72.google.com ([209.85.128.72])
+	by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	(Exim 4.86_2)
+	(envelope-from <krzysztof.kozlowski@canonical.com>)
+	id 1lUAoC-0001qh-Ug
+	for soc@kernel.org; Wed, 07 Apr 2021 16:13:37 +0000
+Received: by mail-wm1-f72.google.com with SMTP id y15so577625wmq.9
+        for <soc@kernel.org>; Wed, 07 Apr 2021 09:13:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GCaQ4X0i1Zh2bf+++rMGXv8cMwAxvbSBKfO/usQt79g=;
+        b=RXTPt1Z6YeTVVG70oWsiS93Ogcvbx5e4W1KAJhcFhX0AetfHJvbnjxOTBPRN0RQNRL
+         OONqWTRC7Gbc0voQoWaiekowVnWveWtjYBfAu4WI8Njs2lHXsZEoZ8vSfGHM0lKyMV/I
+         W0HBnxmjSmq5k4VXYSHX67I7P+M2qX5HlLTX2oxGXhm5DVkjW8BqZdXYWywn22OJFg2L
+         LbZ6AC8bNFpz5L2DrpTQMwNNJZdHBa1cQ7PxWPQUYT5ZGo7Ud5mZlwTwaseMp7gql4iu
+         vxhNWUvFl3iygPFCoXuPbgCfHKES+T3dxyxQGxDn/riiL2Znc89Af04DecvCP5kk9nGj
+         z/AA==
+X-Gm-Message-State: AOAM533I/nJoKIVQpWxFZHsmR9cV52TeUzuN87pL/tFx/oHaGI1hqcnK
+	IkDp7SvHbva1qgz7Mt0+U5yAPgH7ndCD4bCEzjdxhJW6bl4tA2/MBrBca9nkQhf9CbbF5THMUOl
+	Jy0uoZeRrMtJgbI8Pw1abC5s=
+X-Received: by 2002:adf:ef0a:: with SMTP id e10mr5160003wro.129.1617812016726;
+        Wed, 07 Apr 2021 09:13:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzStNBdG4/Um9qP4P2r3AXJim8xMhu/B9k05GyAyYX9QtekqyznyOJpI4nqeSYbJB3JRwfhsA==
+X-Received: by 2002:adf:ef0a:: with SMTP id e10mr5159987wro.129.1617812016501;
+        Wed, 07 Apr 2021 09:13:36 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-192-147.adslplus.ch. [188.155.192.147])
+        by smtp.gmail.com with ESMTPSA id k16sm20856105wrl.47.2021.04.07.09.13.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Apr 2021 09:13:36 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc:     SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:NrmKc5AzZD500iEjEF7KYYDMzpBWDWfKqcEMDKzppHORsuDLpNM
- 8Siu2krapKZnFrBU+pFD1HwrVGtHGxjwNH3FvcksQtXmZCqbSZh4zoJ6mbvWibg2P23v7qx
- +T1THqNWsdHuYeY+VMP5CETMgj7VcEmSscSh0nTZ+epSmmr/FiIVC1xojtHJeEjRfGa6PF2
- fJAoov5QqKXkoQKwdNSgA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VoIV5e1C2nA=:4bqhfp1Km91LlDSe6Sef8J
- zCtrtc0sOvcdbKnGmkZd1i7OZ5XWSI4/ya7QDqGhgj7vscqeuM2z+gTpLsVFI2u/Ba9lLzVUY
- Jz0B3L36+Ud5bnHMqLFGkSNe/v/TIrojBG1pVLNVJOds84Bfp2S9iFDhmwY6Lc3iTXaMcTEVx
- 7BjavWh4X3mzJxICVH1uAjnZkGRyvYB6Q0pRREUrvUVEYVG/aEyYx9cxGtR9hkTqafoE/ri6E
- mzm68XeMI5vaGFS6M5QfWTAECyvdPu8+r5KbbwB5qPqumiLoORkWfB4Tty13DEVWalHE1IXui
- NBbJJvOh+Tr28F6acxUFwVyjqBirGoLfe6zh4zhp4e8SxrZrRhbInr1kLD2yM8oNVnvOV270r
- 3Mt8Pd4uhTJeAOHmQkpJC2+wwRXmTANPqMIUZ1aPkofPsMcQVFP0xeldQDkWrfcAQAoTJWbAl
- OaQXut+Tqu0vY3TvhGfDhzz2ZJzRwBA=
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20210407160644.0bv_ULoULWYS6Qw4do3kFk5NBluMx3QkdtYiSI4E9FE@z>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/2] memory: drivers for v5.13
+Date: Wed,  7 Apr 2021 18:13:32 +0200
+Message-Id: <20210407161333.73013-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 7, 2021 at 1:00 PM Matthias Brugger <matthias.bgg@gmail.com> wrote:
->
-> Hi Olof and Arnd,
->
-> Here comes the second round of arm64 DT patches. Hope I'm not too late.
-> Basically we add several node to MT8167.
-> ----------------------------------------------------------------
-> Fabien Parent (6):
+The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
->       arm64: dts: mediatek: mt8167: add some DRM nodes
+  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
 
-I stumbled over this patch adding a lot of aliases:
+are available in the Git repository at:
 
-+       aliases {
-+               aal0 = &aal;
-+               ccorr0 = &ccorr;
-+               color0 = &color;
-+               dither0 = &dither;
-+               dsi0 = &dsi;
-+               ovl0 = &ovl0;
-+               pwm0 = &disp_pwm;
-+               rdma0 = &rdma0;
-+               rdma1 = &rdma1;
-+               wdma0 = &wdma;
-+       };
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.13
 
+for you to fetch changes up to 25dcca7fedcd4e31cb368ad846bfd738c0c6307c:
 
-Something doesn't quite feel right about this, and I checked with Rob,
-who also thinks this looks wrong. I suppose we need to have a set of
-well documented alias types rather than just having drivers make up
-new ones on the spot.
+  memory: pl353: fix mask of ECC page_size config register (2021-04-05 16:15:58 +0200)
 
-I also noticed that some of the referenced nodes are missing a DT
-binding file, so those need to be added and reviewed as well.
+----------------------------------------------------------------
+Memory controller drivers for v5.13
 
-At this point, I'd prefer to drop the entire branch for v5.13 and have
-you work it out for the next release.
+1. OMAP: fix unlikely but possible out of bounds read.
+2. PL353: fix mask used in setting ECC page_size in config register.
+3. Minor cleanup: Freescale Corenet.
 
-       Arnd
+----------------------------------------------------------------
+Colin Ian King (1):
+      memory: gpmc: fix out of bounds read and dereference on gpmc_cs[]
+
+Qiheng Lin (1):
+      memory: fsl-corenet-cf: Remove redundant dev_err call in ccf_probe()
+
+gexueyuan (1):
+      memory: pl353: fix mask of ECC page_size config register
+
+ drivers/memory/fsl-corenet-cf.c | 4 +---
+ drivers/memory/omap-gpmc.c      | 7 +++++--
+ drivers/memory/pl353-smc.c      | 2 +-
+ 3 files changed, 7 insertions(+), 6 deletions(-)
