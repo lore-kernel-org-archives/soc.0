@@ -1,128 +1,98 @@
-Return-Path: <SRS0=LeP6=JE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=Ip9B=JE=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FA1DC43461
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  7 Apr 2021 14:34:13 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8E18C43462
+	for <soc@archiver.kernel.org>; Wed,  7 Apr 2021 16:07:04 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A6ECA61382; Wed,  7 Apr 2021 16:07:04 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EF53F610F8
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  7 Apr 2021 14:34:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EF53F610F8
+	by mail.kernel.org (Postfix) with ESMTPS id 0247361154;
+	Wed,  7 Apr 2021 16:07:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0247361154
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=D7s0PmHkmGN/5wsrlj/UG9UEbWabFhB+YFA8Go+aKZI=; b=FX7ngsDH+W0da5awfMn1f+hej
-	06E1NsX3ynGsg/FewH+Gx98zr5RUOQ7YnjLMrg852VpFTgwEx21DHL9NbxMkwCN4BZQQE5VEckciI
-	tNSZfxfMKge2y1g2qfGMfDu1LGFkSeKzCNjhp1cm+2qUlONFAy+JCjsjY0jiJV4joiWW9QmbYhZ1q
-	9bdo+W5iqTYkCRsl1UX60r5WW6OvWpM7BZ2gTAdxtxRh7fNUUH3ZPHMRwpL0E1K6p+deKWvQLlPCY
-	eetD+2Wp7pRdwHIBzrL5OvLJXgdG6jHMqSo8ky0uG2HICl7Zh4cNyPjMqxRzdsUbRa4Nt6Ka8W3BA
-	DY7Lf6JmQ==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lU9EC-0059mL-1a; Wed, 07 Apr 2021 14:32:21 +0000
-Received: from mout.kundenserver.de ([212.227.17.10])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lU9E5-0059kK-Ri
- for linux-arm-kernel@lists.infradead.org; Wed, 07 Apr 2021 14:32:15 +0000
-Received: from mail-oi1-f178.google.com ([209.85.167.178]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MeTsQ-1m27423vym-00aRxY for <linux-arm-kernel@lists.infradead.org>; Wed,
- 07 Apr 2021 16:32:03 +0200
-Received: by mail-oi1-f178.google.com with SMTP id v25so18948447oic.5
- for <linux-arm-kernel@lists.infradead.org>;
- Wed, 07 Apr 2021 07:32:02 -0700 (PDT)
-X-Gm-Message-State: AOAM531QPHgOgC/6QTBAqm9V4PgCvSyineXy/PnGk4zx0KpD2uK9aE+3
- v+Bs6xUWg8oMtAd8VGvziuXFK1e9IQ/kzd+o9hs=
-X-Google-Smtp-Source: ABdhPJz3rOug/myucPiyn2F6CpgsSegz+/pHmK8XszIjmYisNeCOrVVePZdEIr67xXu2+oU6AX0eXAqf1anrPWj7D+o=
-X-Received: by 2002:aca:5945:: with SMTP id n66mr2419512oib.11.1617805921378; 
- Wed, 07 Apr 2021 07:32:01 -0700 (PDT)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arnd@arndb.de
+Received: from mail-ot1-f49.google.com ([209.85.210.49]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MwxRN-1lo1530xrP-00yOxh; Wed, 07 Apr 2021 18:07:02 +0200
+Received: by mail-ot1-f49.google.com with SMTP id s11-20020a056830124bb029021bb3524ebeso18627970otp.0;
+        Wed, 07 Apr 2021 09:07:01 -0700 (PDT)
+X-Gm-Message-State: AOAM531kPXg4hcWV97WdppdyJyBQIOsU7hFrRhH76NT2A8iyydvC+QhG
+	83T07LEcjWRdgrIWIGRpAc0JSZ19kcRBWfMWVqQ=
+X-Google-Smtp-Source: ABdhPJymSQJTahzo74k3DCXqZLabZ7pj1oDnsEr/iW3XDliuXTMvQkoUagOIuZhBUsyHUIVKVPi0LMKTb9enlCKqF4I=
+X-Received: by 2002:a9d:316:: with SMTP id 22mr3544860otv.210.1617811620677;
+ Wed, 07 Apr 2021 09:07:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <744291cd-a66f-dedb-fe7a-752a9032d6cd@hisilicon.com>
-In-Reply-To: <744291cd-a66f-dedb-fe7a-752a9032d6cd@hisilicon.com>
+References: <22814673-e9fe-f65b-cc0f-b02be4f90d1a@gmail.com>
+In-Reply-To: <22814673-e9fe-f65b-cc0f-b02be4f90d1a@gmail.com>
 From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 7 Apr 2021 16:31:44 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a31XFD7smyK0R41uX9fw+P6zPDLEgJoXz99imYS8urENQ@mail.gmail.com>
-Message-ID: <CAK8P3a31XFD7smyK0R41uX9fw+P6zPDLEgJoXz99imYS8urENQ@mail.gmail.com>
-Subject: Re: [GIT,PULL] arm64: dts: hisilicon dts updates for v5.13
-To: Wei Xu <xuwei5@hisilicon.com>
+Date: Wed, 7 Apr 2021 18:06:44 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0bp3CUzOQHSX5KYt44j-Njk_u2P=0q-ZQ0HcTBiVVVSA@mail.gmail.com>
+Message-ID: <CAK8P3a0bp3CUzOQHSX5KYt44j-Njk_u2P=0q-ZQ0HcTBiVVVSA@mail.gmail.com>
+Subject: Re: [GIT PULL] arm64: dts: mediatek: changes for v5.13 (second round)
+To: Matthias Brugger <matthias.bgg@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Olof Johansson <olof@lixom.net>, 
- "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
- Zhangyi ac <zhangyi.ac@huawei.com>, 
- "Liguozhu (Kenneth)" <liguozhu@hisilicon.com>,
- Tangkunshan <tangkunshan@huawei.com>, 
- Daode Huang <huangdaode@hisilicon.com>,
- Jonathan Cameron <jonathan.cameron@huawei.com>, 
- John Garry <john.garry@huawei.com>, 
- Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
- Salil Mehta <salil.mehta@huawei.com>, Shiju Jose <shiju.jose@huawei.com>,
- Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-X-Provags-ID: V03:K1:GGgN0/gIixQXyZk8a+TIZGmhr/JD+cGZq8/zq//7gp8aZUgJ/TI
- 9S6tJORzxVKMQ/SrzMe4K8vsvyIG2rWHKcVxvmFwpgFOnOFQYKwdQTr70HK31EuQ87aW4jD
- beBP4FComjWG0/+D7dTWik+3eZViowVEUDeZGJi4vFsPFjNSnVZIwN+DhmjJuW3OFK7NFIC
- AI0WV+JdvrOEGsNfhpxXg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kRYNhxsNgqs=:pVx441QW2Z2Kxgoj0FOehX
- T1SVyzkg+pVlbLISU7bcLuS/jdIG7FzBGho69UT0FjxAUZhIr+Zp45A7C39wMIOvObwaKvT/p
- GMezjDhFlb76iBgplr83XCH4fMTgSKFmt4YbMCXLQJ/Ix9cH4WL8VovUji/ycY8KsHv0Nzszt
- gnL8dgBHIyzc5QSTqERUPqr7xNscmns7aTfwu+rrj2ddV3cWYVL9OI27XIotP/mvkz+2PPYAT
- iO935p2drMBxsMuAfUSadc2UvoPtm9IkOPKKDOWEgNkefb2Dz3V4RuNgJHyHIOqeaLgIbk7Mg
- 92bFhbBpBuNNMuaiRx0dSdFQOCm/j5uFlFmA+ge4KLdWIOR8R5WSy9Gk6Idt5TuIGXUZJLMfT
- DMI8JSDIgtUNi5iIONRhy+ZvTNQaE7VBTqEIZCIAa01NOyOwgBrrLPKS+TQ0aD/2CUNLLNuFe
- 4YAVZfJWx+Y+d2chFSaXuwUc+MdVz7g=
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210407_153214_025597_67A9809F 
-X-CRM114-Status: GOOD (  12.81  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210407143144.FRkNxr6YLTebFC1oEFbzHK7jzs2x6iQp8_C-q7BhAhY@z>
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>, Fabien Parent <fparent@baylibre.com>, 
+	Irui Wang <irui.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>, 
+	DTML <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:bjKm2gmMAadtOOhW4FZA3s/aXGZFiyuNkb7CBScp65MeTvHZXTI
+ GtmoTFMwqLaSY9M4BX4pmfsdpwbNQHF+JBt8yh0pSOglWQ54zqRg21goNYHT8arTTqpQDB2
+ pB05YyO1P5jck0vtVH/5zZmBljA9AHBsfE9D8MSaQnPFNn3Gzx9OlPy44w2UCMcPYhq5E4Y
+ /jZb0IAYWS5g4vsBsRXgw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TxdWfbg4Mho=:JcuvFp0ftlqR6oqPmHHqku
+ p2cCsn47mFVVA88W00dm8dJVQf6oJqiwz7p69uU18ndNidzSrSyoIvKyZ0/8meHnzI3B1MjRK
+ HVi+NfKaYT7RKhJQ3Dv9Ras22kIXmXZ8BBT5wNmNorFuUrdDKIBMmgDS6j8LY1Xj1lgOBJs17
+ ujVjvNdvQTbYVjrOnhOvWpoAY6GF1TKaRCA7eOJ+vLwf9gElthbViM+NfN64ZVQLydY05bsKQ
+ ywzPBuDE5aF8MnKUPVLW7Ayn54qq6zLDvB2qDATUnJhyc4h2XBO2oZzp/TyvnFdNcmzv+hMK1
+ 3kO46zwk2/ar3hMHxX6Tf+8XHp8WmH24vlwlvavC0GNXxcX15lu76ilFNWvXgpi+awGAuyGLu
+ cCeDxJWZJOrcyNOJF8hcvGu3DrYV2ZE5cCuCxv7fZhBAP+EsdgqCIJp1RdpYaB7eyHYy3PsYM
+ WeBB1sPpTpzu6U0OLYI3ha+Nw3D0jHU=
 
-On Sat, Apr 3, 2021 at 5:06 PM Wei Xu <xuwei5@hisilicon.com> wrote:
+On Wed, Apr 7, 2021 at 1:00 PM Matthias Brugger <matthias.bgg@gmail.com> wrote:
 >
-> Hi ARM-SoC team,
+> Hi Olof and Arnd,
 >
-> Please consider to pull the following changes.
-> Thanks!
+> Here comes the second round of arm64 DT patches. Hope I'm not too late.
+> Basically we add several node to MT8167.
+> ----------------------------------------------------------------
+> Fabien Parent (6):
 
-I'd prefer to not break compatibility of old kernels with new dts files
-here, as this would prevent installing an old distro with an ebbr
-compliant boot loader, for purely cosmetic reasons.  These are used
-in the popular 'hikey' boards, which are used in many scenarios,
-which makes it fairly likely that someone might want to install
-something other than the very latest kernel.
+>       arm64: dts: mediatek: mt8167: add some DRM nodes
 
-Could you instead keep both the old and the new property in there
-for at least a few years?
+I stumbled over this patch adding a lot of aliases:
 
-        Arnd
++       aliases {
++               aal0 = &aal;
++               ccorr0 = &ccorr;
++               color0 = &color;
++               dither0 = &dither;
++               dsi0 = &dsi;
++               ovl0 = &ovl0;
++               pwm0 = &disp_pwm;
++               rdma0 = &rdma0;
++               rdma1 = &rdma1;
++               wdma0 = &wdma;
++       };
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+Something doesn't quite feel right about this, and I checked with Rob,
+who also thinks this looks wrong. I suppose we need to have a set of
+well documented alias types rather than just having drivers make up
+new ones on the spot.
+
+I also noticed that some of the referenced nodes are missing a DT
+binding file, so those need to be added and reviewed as well.
+
+At this point, I'd prefer to drop the entire branch for v5.13 and have
+you work it out for the next release.
+
+       Arnd
