@@ -1,122 +1,147 @@
-Return-Path: <SRS0=Yh/P=JE=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=MYJy=JE=gmail.com=matthias.bgg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E6F1C433B4
-	for <soc@archiver.kernel.org>; Wed,  7 Apr 2021 16:13:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9AD6C433ED
+	for <soc@archiver.kernel.org>; Wed,  7 Apr 2021 16:34:15 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id DD3C861130; Wed,  7 Apr 2021 16:13:39 +0000 (UTC)
-Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
+	id B419361359; Wed,  7 Apr 2021 16:34:15 +0000 (UTC)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7EA9061260
-	for <soc@kernel.org>; Wed,  7 Apr 2021 16:13:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7EA9061260
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
-Received: from mail-wr1-f69.google.com ([209.85.221.69])
-	by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	(Exim 4.86_2)
-	(envelope-from <krzysztof.kozlowski@canonical.com>)
-	id 1lUAoE-0001r9-3K
-	for soc@kernel.org; Wed, 07 Apr 2021 16:13:38 +0000
-Received: by mail-wr1-f69.google.com with SMTP id y14so1964069wro.23
-        for <soc@kernel.org>; Wed, 07 Apr 2021 09:13:38 -0700 (PDT)
+	by mail.kernel.org (Postfix) with ESMTPS id 4F20B6128D;
+	Wed,  7 Apr 2021 16:34:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4F20B6128D
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=matthias.bgg@gmail.com
+Received: by mail-wr1-f51.google.com with SMTP id x15so9444746wrq.3;
+        Wed, 07 Apr 2021 09:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3sa3LQLOBxeCLo4GFb1u0PqEDuUq0YAJuYAYRfsoD8I=;
+        b=XGEZEG8EbHfLGhPcqXiItLDJT4EC8MGWqNa55/FxcpuSmGhINWzIW/e9BYzlRfVPpt
+         8Chjb6hQDkHVeujT+buj5xf6zermWti0Qa0SXvzuBWMDIif08WUITkDKlht8HjwadRn6
+         qg30lmofu72ZRaQjvCbq43VbmbMeVoqpo0Do2QnI7/2YzIZGhJEcH88tECsxLya7eoIy
+         Prnh4iCAhphDOTjeJMeBwM1iiaFE3AqZHhZY9w3vseYc7Ue3zzjghADTowGaQ4AXcQvD
+         V+FmEBg0xRYYkzZwaRsGjp2wFgVWoSfk0BoGbmG8V8QtodBHue0zrTidePCmDOFr0Z30
+         toMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Srw9aPFAfT6trVNtgydDAxzyZ1eybVMpNyRiKQWc/rY=;
-        b=jEeK0qtEqbFJGyDLRBRYmOPJ9Fz7OlUbV280h7atjT6CW4V6sP8SpfXN6VXsYzqTRn
-         s+X22yRnEqnoWcDkRVsC7kTdNqJn4YXC1Kxcs06GLH531tMuqoK1bhCcvZqpC8ENLZyt
-         I3Sbjjuwi+eD41TxDniM1cvadvA6Yd5WxPZYIdCMvdaG1YDP7ZPittx1GOTnLKnulKjf
-         pWK3uZFejQsCom6GnEL0V1l3oHuE25RU5IedfUoFFqQyuoycI/XCjB2XHVJ5mYNkm5k3
-         qI0wRgB/DfUO+XEI4uBdE16dZMSNM63myM2xYiaslhwV7y1+QDgSKeRYTlhUFVJr6S2p
-         2wNg==
-X-Gm-Message-State: AOAM532BQkl5MkJFVMCrwLCgVNWbVH37vnz0OSkDEc+vLJbZBkeM3y7Y
-	uYySjwkHhll7cIeYKIa6aTphaSTlnPy+74euZxvq4ftUnYkgJR/OB3DfvhViH5RLk7oZPB8g3J+
-	UhJVsbfDzoBer7hy7WxFnl38=
-X-Received: by 2002:a7b:c04d:: with SMTP id u13mr3768764wmc.83.1617812017842;
-        Wed, 07 Apr 2021 09:13:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyTXNUbV0m3g0bqClRZwiW2bxwFUmfJ0xhpYtI9EgCRAx0pK9haRiCu12aENJwkmhwA2CmZ6w==
-X-Received: by 2002:a7b:c04d:: with SMTP id u13mr3768737wmc.83.1617812017569;
-        Wed, 07 Apr 2021 09:13:37 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-192-147.adslplus.ch. [188.155.192.147])
-        by smtp.gmail.com with ESMTPSA id k16sm20856105wrl.47.2021.04.07.09.13.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Apr 2021 09:13:36 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3sa3LQLOBxeCLo4GFb1u0PqEDuUq0YAJuYAYRfsoD8I=;
+        b=a+O2pxNKkTsfcSuuQ75KfQSSg1fNqBZhjjmqp0KZ3crr8/ro9gyHoZ9F1noJzeTsOW
+         m1ERZarkpdD91/OC34CbySJJlVjNQU/Se6yassKJDvK8ATOKWTps8c5RfbsbpR1lEBXq
+         UIMDj0IbDyXuOIoEIcNAffVsdg8eNBmAjRyE1WaRdNEPLb5ibCbsbzd1o4L1WAcyNzMc
+         W0IOR5m7E5zvlitEOFvkwqRnGd04Mu1x3qPU8hnktwqzARox1Ln6TKtOi/RYWmNiVNa4
+         4JrGzNlkkuE+xbVzHv1Mz0wgfb8mxXICOcXVJ/gS19VRPSpmJuJf4uFDGIgypV0mKNPp
+         uxAA==
+X-Gm-Message-State: AOAM530qxAb7CSzX/B3yIvF8EQkUWWLtRNhwEMQ1E3A+V+DMnN1Hsa6Q
+	D3W+gPvzGxOVr85DOKemM9scv3FjzsvUMA==
+X-Google-Smtp-Source: ABdhPJyZI3anJAkuMlf1PNEYlN4Np6KEOgs1BC7KiD0QDsTVwjdGUHm83p1824PzzaAQM0wcXwG32w==
+X-Received: by 2002:a5d:58f2:: with SMTP id f18mr5362228wrd.7.1617813253949;
+        Wed, 07 Apr 2021 09:34:13 -0700 (PDT)
+Received: from ziggy.stardust ([37.223.140.37])
+        by smtp.gmail.com with ESMTPSA id e13sm45662866wrg.72.2021.04.07.09.34.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Apr 2021 09:34:13 -0700 (PDT)
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Dmitry Osipenko <digetx@gmail.com>,
-	Thierry Reding <treding@nvidia.com>
-Subject: [GIT PULL 2/2] memory: tegra for v5.13
-Date: Wed,  7 Apr 2021 18:13:33 +0200
-Message-Id: <20210407161333.73013-2-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210407161333.73013-1-krzysztof.kozlowski@canonical.com>
-References: <20210407161333.73013-1-krzysztof.kozlowski@canonical.com>
+Cc: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "moderated list:ARM/Mediatek SoC support"
+ <linux-mediatek@lists.infradead.org>, Fabien Parent <fparent@baylibre.com>,
+ Irui Wang <irui.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+ DTML <devicetree@vger.kernel.org>, Chun-Kuang Hu <chunkuang.hu@kernel.org>
+References: <22814673-e9fe-f65b-cc0f-b02be4f90d1a@gmail.com>
+ <CAK8P3a0bp3CUzOQHSX5KYt44j-Njk_u2P=0q-ZQ0HcTBiVVVSA@mail.gmail.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [GIT PULL] arm64: dts: mediatek: changes for v5.13 (second round)
+Message-ID: <01c82108-64a8-33ee-3984-5bd7056a0002@gmail.com>
+Date: Wed, 7 Apr 2021 18:34:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <CAK8P3a0bp3CUzOQHSX5KYt44j-Njk_u2P=0q-ZQ0HcTBiVVVSA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+Hi Arnd,
 
-  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+On 07/04/2021 18:06, Arnd Bergmann wrote:
+> On Wed, Apr 7, 2021 at 1:00 PM Matthias Brugger <matthias.bgg@gmail.com> wrote:
+>>
+>> Hi Olof and Arnd,
+>>
+>> Here comes the second round of arm64 DT patches. Hope I'm not too late.
+>> Basically we add several node to MT8167.
+>> ----------------------------------------------------------------
+>> Fabien Parent (6):
+> 
+>>       arm64: dts: mediatek: mt8167: add some DRM nodes
+> 
+> I stumbled over this patch adding a lot of aliases:
+> 
+> +       aliases {
+> +               aal0 = &aal;
+> +               ccorr0 = &ccorr;
+> +               color0 = &color;
+> +               dither0 = &dither;
+> +               dsi0 = &dsi;
+> +               ovl0 = &ovl0;
+> +               pwm0 = &disp_pwm;
+> +               rdma0 = &rdma0;
+> +               rdma1 = &rdma1;
+> +               wdma0 = &wdma;
+> +       };
+> 
+> 
+> Something doesn't quite feel right about this, and I checked with Rob,
+> who also thinks this looks wrong. I suppose we need to have a set of
+> well documented alias types rather than just having drivers make up
+> new ones on the spot.
 
-are available in the Git repository at:
+These are needed in the DRM driver, see drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-tegra-5.13
+I added Chun-Kuang who is the maintainer of the driver. I think it's a good idea
+to have this alias described in the binding. Maybe a good excuse to move to yaml
+as well :)
 
-for you to fetch changes up to d8d5cbc619e86b8f2167ae40d029a9d07e97b303:
+> 
+> I also noticed that some of the referenced nodes are missing a DT
+> binding file, so those need to be added and reviewed as well.
 
-  dt-bindings: memory: tegra20: mc: Convert to schema (2021-04-01 19:58:22 +0200)
+I suppose you are talking about "mediatek,mt8173-vcodec-enc-vp8". The binding
+patches are in the media tree [1]. Maybe I supposed wrongly that they will land
+in v5.13? Or perhaps I should have mentioned that in the pull request.
 
-----------------------------------------------------------------
-Memory controller drivers for v5.13 - Tegra SoC
+If it wasn't about this compatible and you can still remember, please let me
+know so that we can fix that :)
 
-1. Few cleanups.
-2. Add debug statistics to Tegra20 memory controller.
-3. Update bindings and convert to dtschema.  This update is not
-   backwards compatible (ABI break) however the broken part was added
-   recently (v5.11) and there are no users of it yet.
+I double checked and didn't find any missing binding. Some of them only have the
+fallback binding described, maybe that's what you are referring to.
 
-----------------------------------------------------------------
-Dmitry Osipenko (8):
-      memory: tegra20: Add debug statistics
-      memory: tegra20: Correct comment to MC_STAT registers writes
-      memory: tegra20: Protect debug code with a lock
-      memory: tegra: Print out info-level once per driver probe
-      dt-bindings: memory: tegra20: emc: Replace core regulator with power domain
-      dt-bindings: memory: tegra30: emc: Replace core regulator with power domain
-      dt-bindings: memory: tegra124: emc: Replace core regulator with power domain
-      dt-bindings: memory: tegra20: mc: Convert to schema
+> 
+> At this point, I'd prefer to drop the entire branch for v5.13 and have
+> you work it out for the next release.
+> 
 
-Yang Li (1):
-      memory: tegra: replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE
+Fair enough, pull request was quite late. I'll queue them for the next round then.
 
- .../memory-controllers/nvidia,tegra124-emc.yaml    |   7 +-
- .../memory-controllers/nvidia,tegra20-emc.txt      |   4 +-
- .../memory-controllers/nvidia,tegra20-mc.txt       |  40 ---
- .../memory-controllers/nvidia,tegra20-mc.yaml      |  79 +++++
- .../memory-controllers/nvidia,tegra30-emc.yaml     |   7 +-
- drivers/memory/tegra/mc.c                          |   9 +
- drivers/memory/tegra/mc.h                          |   4 +-
- drivers/memory/tegra/tegra124-emc.c                |  16 +-
- drivers/memory/tegra/tegra20-emc.c                 |  20 +-
- drivers/memory/tegra/tegra20.c                     | 332 +++++++++++++++++++++
- drivers/memory/tegra/tegra30-emc.c                 |  18 +-
- include/soc/tegra/mc.h                             |   7 +
- 12 files changed, 466 insertions(+), 77 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.yaml
+Thanks for having a look,
+Matthias
+
+[1]
+https://git.linuxtv.org/media_tree.git/commit/?id=dd0008beef0dda915a255691e8b3b0527efaf1d8
+
