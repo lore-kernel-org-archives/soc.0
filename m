@@ -1,139 +1,128 @@
-Return-Path: <SRS0=1rdH=JD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <linux-samsung-soc-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41F08C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  6 Apr 2021 18:19:00 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C95DA61205
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  6 Apr 2021 18:18:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C95DA61205
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Type:
-	Content-Transfer-Encoding:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
-	References:To:Subject:Reply-To:Cc:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=K4ZxV65oimoxGf6UDJY6DvujdTbIf7j7HquYL8UZZ2w=; b=pfBw6rnJ5copsX2wFvvFYAX/n
-	/pGBXtSHFHFP/7VgAx3Nu9DiD9Va8rJMarkLVkMvmWvubOZUNG890wquAQHGR2lqRypb4ZKqIrzaH
-	fJmJyUgUl7GaOI6IzB1cILnLvNLvo63CiPkupEBezknWUMocxgfNZEOZrOfeMNfxjWH2eqNu3y09p
-	phaRkV0h71O5B56Qbth5QZ5QM4CrV/G89z5EaaRJAhOgBCCNnJDtXy4Pxt3PrhMc9mRYRhWP/skdE
-	0knOZyRVJcMEYh5GOFFz2tsNLAVi7WS5fZeOLyNBv6Blhi6HYutaT10X+pq9B7zghu8+uPjdjUCxj
-	hv8jLaWSA==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lTqGR-003Djg-Qv; Tue, 06 Apr 2021 18:17:24 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lTqGN-003DhB-J7
- for linux-arm-kernel@lists.infradead.org; Tue, 06 Apr 2021 18:17:22 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E3280613B3;
- Tue,  6 Apr 2021 18:17:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1617733038;
- bh=X67a8xpcXCjUsAjr8KVYSZbvffOYc8116pHyl/kzd3I=;
- h=Subject:List-Id:To:References:From:Date:In-Reply-To:From;
- b=tWksv+jOi7RVLiGI5AobiRwmqX3uc9vSCQ9xIHWR8NbnIv47jYgv7VrKFj69ftRez
- ZAUEcxE7XUkmjfs257DQLGsdlS+ONHj7MSfCJKDooj0nOA/DSS++gM1u5Q4QilNXio
- KpT+8JXGuD4srZhP8UazvKsJg4iKGsDExe5N2tsfIwBBvGP2ddDhnNGPR60H3b5hMi
- qd452TTf8+CG+EPaRE2hzpiU3/rJsVWfB+w5BWAYHddyQIXb37mfiZi6mV0G9QvcdC
- qLgrZnCb/HvoFpd4prMT2+KgaL1Kw02xIaxpm/yUnAGoQxQaUMnmBXNV2EjPy+Q0gb
- IhUqBZuNy7TUg==
-Subject: Re: [PATCH v3 01/15] clk: socfpga: allow building N5X clocks with
- ARCH_N5X
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E1BBC43460
+	for <linux-samsung-soc@archiver.kernel.org>; Wed,  7 Apr 2021 06:58:41 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 04C36613B3
+	for <linux-samsung-soc@archiver.kernel.org>; Wed,  7 Apr 2021 06:58:40 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1345991AbhDGG6t (ORCPT
+        <rfc822;linux-samsung-soc@archiver.kernel.org>);
+        Wed, 7 Apr 2021 02:58:49 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:59000 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345990AbhDGG6t (ORCPT
+        <rfc822;linux-samsung-soc@vger.kernel.org>);
+        Wed, 7 Apr 2021 02:58:49 -0400
+Received: from mail-wr1-f69.google.com ([209.85.221.69])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lU298-0000e9-Tc
+        for linux-samsung-soc@vger.kernel.org; Wed, 07 Apr 2021 06:58:39 +0000
+Received: by mail-wr1-f69.google.com with SMTP id r11so6502042wrp.8
+        for <linux-samsung-soc@vger.kernel.org>; Tue, 06 Apr 2021 23:58:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Zf/0xmgkd8JXssWxjuLFbhP71v2tVuYVuW0VdB/t3GU=;
+        b=N3kvaAcVdsrmo4gkk2CV4gMKTOqtJZTHh7oyoYVA7VIAU2sFxemx7BM/EfOWD4tfwU
+         u3a7G48as6SVuBT2PvxQEU4Gb9inaH5+ygmocXgBsh6GvlbPqeyT/XtRSnIqWJnoPIFS
+         i99InnjkLPx5St9Ty8yvH8YO1JsvpEXrkeOaWVroREoSyhX2a6HUfmr3vg7UbrB9dlUn
+         qUm1bj3aOwVhn1UvStwTd8KUmjykmfITkysMRoFKhg8JoaijLKb4m3G7XZqD7PCeNGB/
+         HEXJ9dGZzWN8fQq3qV1uS+F+ezg7IwSgx24FWdUNOh+Yj/xmkt3pcs4jcgAjeHR/Vlwb
+         Vy2Q==
+X-Gm-Message-State: AOAM531t3OHDFrM5rsGKXg91Hy9n30eSzXewADmqhOeGl0eyD3M3MB6q
+        fO9rmfpNFaYVTQ8YRUEJSKekAm+w/VcQpqVHYUiJSu3WKXXE6gGDB3e+bDK4E+h9aEEiBGaiDJO
+        vBqTvBpfSHsTPVJLV/CrHEYlyfO+VSbDHXyLaMJJ6LD8/e7LG
+X-Received: by 2002:adf:ee0f:: with SMTP id y15mr2377220wrn.43.1617778718585;
+        Tue, 06 Apr 2021 23:58:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy9IcdaSKcj+GrigVRg0Helk2YtTBPvlNhfhdALWQNwbMWOwjMQ3kKaSPfk/Wup3uyGbo1/Gg==
+X-Received: by 2002:adf:ee0f:: with SMTP id y15mr2377204wrn.43.1617778718408;
+        Tue, 06 Apr 2021 23:58:38 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-192-147.adslplus.ch. [188.155.192.147])
+        by smtp.gmail.com with ESMTPSA id c16sm2410506wrx.46.2021.04.06.23.58.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Apr 2021 23:58:37 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: Stephen Boyd <sboyd@kernel.org>,
- Alexandre Torgue <alexandre.torgue@st.com>, Arnd Bergmann <arnd@arndb.de>,
- Borislav Petkov <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>,
- "David S. Miller" <davem@davemloft.net>,
- Giuseppe Cavallaro <peppe.cavallaro@st.com>, Jakub Kicinski
- <kuba@kernel.org>, James Morse <james.morse@arm.com>,
- Jose Abreu <joabreu@synopsys.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
- Lee Jones <lee.jones@linaro.org>, Michael Turquette
- <mturquette@baylibre.com>, Moritz Fischer <mdf@kernel.org>,
- Olof Johansson <olof@lixom.net>, Philipp Zabel <p.zabel@pengutronix.de>,
- Rob Herring <robh+dt@kernel.org>, Robert Richter <rric@kernel.org>,
- Russell King <linux@armlinux.org.uk>, Tom Rix <trix@redhat.com>,
- Tony Luck <tony.luck@intel.com>, Vinod Koul <vkoul@kernel.org>,
- Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-edac@vger.kernel.org,
- "lin ux-fpga"@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- netdev@vger.kernel.org, soc@kernel.org
-References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
- <20210311152545.1317581-2-krzysztof.kozlowski@canonical.com>
- <161724074854.2260335.2479133227977254546@swboyd.mtv.corp.google.com>
-From: Dinh Nguyen <dinguyen@kernel.org>
-Message-ID: <c4998896-0339-d03d-0902-ea4725f7688c@kernel.org>
-Date: Tue, 6 Apr 2021 13:17:13 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL 1/3] ARM: dts: samsung: Pull for v5.13
+Date:   Wed,  7 Apr 2021 08:58:26 +0200
+Message-Id: <20210407065828.7213-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <161724074854.2260335.2479133227977254546@swboyd.mtv.corp.google.com>
-Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210406_191719_904931_AACD1F59 
-X-CRM114-Status: GOOD (  14.88  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210406181713.SHrHk_DPXqmLMcyAddS-6KmZsLGxmlK4vFoOud9M9hM@z>
+Content-Transfer-Encoding: 8bit
+Precedence: bulk
+List-ID: <linux-samsung-soc.vger.kernel.org>
+X-Mailing-List: linux-samsung-soc@vger.kernel.org
 
+From: Krzysztof Kozlowski <krzk@kernel.org>
 
+The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
-On 3/31/21 8:32 PM, Stephen Boyd wrote:
-> Quoting Krzysztof Kozlowski (2021-03-11 07:25:31)
->> The Intel's eASIC N5X (ARCH_N5X) architecture shares a lot with Agilex
->> (ARCH_AGILEX) so it uses the same socfpga_agilex.dtsi, with minor
->> changes.  Also the clock drivers are the same.
->>
->> However the clock drivers won't be build without ARCH_AGILEX.  One could
->> assume that ARCH_N5X simply depends on ARCH_AGILEX but this was not
->> modeled in Kconfig.  In current stage the ARCH_N5X is simply
->> unbootable.
->>
->> Add a separate Kconfig entry for clocks used by both ARCH_N5X and
->> ARCH_AGILEX so the necessary objects will be built if either of them is
->> selected.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> ---
-> 
-> Acked-by: Stephen Boyd <sboyd@kernel.org>
-> 
-> FYI, Dinh sent some patches to change socfpga code to use clk_hw so it
-> may conflict.
-> 
+  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
 
-I just checked, no conflicts.
+are available in the Git repository at:
 
-Thanks
-Dinh
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-5.13
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+for you to fetch changes up to 7f4ebf3e4ce10a1ed8ff2aee5d75568dc3522b2f:
+
+  ARM: dts: exynos: Add front camera support to I9100 (2021-03-28 20:10:09 +0200)
+
+----------------------------------------------------------------
+Samsung DTS ARM changes for v5.13
+
+1. Configure battery charger and front camera on GT-I9100 phone.
+2. Fix in several boards the Maxim PMIC/MUIC/fuel gauge interrupt flags
+   to match real type of interrupt coming from the device.
+3. Correct DTS with dtschema.  This brings back the commit adding input
+   clock to CMU in Exynos4412 Odroid which was reverted some time ago
+   due to unsupported deferred probes (now supported and tested).
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (13):
+      ARM: dts: exynos: correct fuel gauge interrupt trigger level on GT-I9100
+      ARM: dts: exynos: correct fuel gauge interrupt trigger level on P4 Note family
+      ARM: dts: exynos: correct fuel gauge interrupt trigger level on Midas family
+      ARM: dts: exynos: correct MUIC interrupt trigger level on Midas family
+      ARM: dts: exynos: correct PMIC interrupt trigger level on Midas family
+      ARM: dts: exynos: correct PMIC interrupt trigger level on Odroid X/U3 family
+      ARM: dts: exynos: correct PMIC interrupt trigger level on P4 Note family
+      ARM: dts: exynos: correct PMIC interrupt trigger level on SMDK5250
+      ARM: dts: exynos: correct PMIC interrupt trigger level on Snow
+      ARM: dts: s5pv210: correct fuel gauge interrupt trigger level on Fascinate family
+      ARM: dts: exynos: add input clock to CMU in Exynos4412 Odroid
+      ARM: dts: exynos: replace deprecated NTC/Murata compatibles
+      ARM: dts: exynos: white-space cleanups
+
+Timon Baetz (2):
+      ARM: dts: exynos: add charger supply for I9100
+      ARM: dts: exynos: Add front camera support to I9100
+
+ arch/arm/boot/dts/exynos3250-monk.dts           |  4 +-
+ arch/arm/boot/dts/exynos3250-rinato.dts         |  4 +-
+ arch/arm/boot/dts/exynos4210-i9100.dts          | 56 ++++++++++++++++++++++++-
+ arch/arm/boot/dts/exynos4412-midas.dtsi         |  6 +--
+ arch/arm/boot/dts/exynos4412-odroid-common.dtsi |  5 ++-
+ arch/arm/boot/dts/exynos4412-odroidx.dts        |  3 +-
+ arch/arm/boot/dts/exynos4412-p4note.dtsi        |  4 +-
+ arch/arm/boot/dts/exynos4412-ppmu-common.dtsi   | 48 ++++++++++-----------
+ arch/arm/boot/dts/exynos5250-smdk5250.dts       |  2 +-
+ arch/arm/boot/dts/exynos5250-snow-common.dtsi   |  2 +-
+ arch/arm/boot/dts/exynos5410-pinctrl.dtsi       | 28 ++++++-------
+ arch/arm/boot/dts/s5pv210-fascinate4g.dts       |  2 +-
+ 12 files changed, 110 insertions(+), 54 deletions(-)
