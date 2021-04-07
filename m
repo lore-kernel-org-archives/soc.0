@@ -1,98 +1,71 @@
-Return-Path: <SRS0=LeP6=JE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C408C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  7 Apr 2021 16:08:44 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DE159610E8
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  7 Apr 2021 16:08:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DE159610E8
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=96TYiEdxT56VxRb2rG5cqR1h1LwV9b4L2z8wEj1hwJc=; b=pyVKkjmkZiCVoH4+uiLgodLWx
-	zf2e8Q1VprAxg750HA3WMd1pcUGAigVyqBo0PYaAPUlGvYUO7N+JFK1uA9FZ2UIOmktenUlnDzNtB
-	V787q1tCUXSCZ+L02n3DtKKzZw6JJXlj3Wnfo0SfdolvhBt0EASwD6sQIRH1J+hnplGpgvApkm1Di
-	vyloUHAQG2+W9T5DjxGOTA2od52OZPBnyLnoDO/jydc7zQLQEdZdLUOQKdBAxuZXag7T1rJYu0TGd
-	VmJ7b6CMnRwa0YEPEqmT1cCq8eFv7x7ZnNkIukMZ9io+CXAMy+42Xa7LALqPlO0G6hnDneBjSRFQ6
-	jtZ7Am31w==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lUAi2-005PLm-Sx; Wed, 07 Apr 2021 16:07:15 +0000
-Received: from mout.kundenserver.de ([217.72.192.75])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUAhu-005PIR-0U; Wed, 07 Apr 2021 16:07:08 +0000
-Received: from mail-ot1-f43.google.com ([209.85.210.43]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MCayD-1lLgVo2ld5-009e9h; Wed, 07 Apr 2021 18:07:03 +0200
-Received: by mail-ot1-f43.google.com with SMTP id
- c24-20020a9d6c980000b02902662e210895so18067638otr.9; 
- Wed, 07 Apr 2021 09:07:01 -0700 (PDT)
-X-Gm-Message-State: AOAM531+3ui50AUpDjqry90/xdzchUByKvyUzyKDFUdttk7wDZvlsIdv
- O0UuJRAjWNd+LLNyBRvUXpABDvS/kjl1EvfNCKM=
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3EB4C433ED
+	for <linux-devicetree@archiver.kernel.org>; Wed,  7 Apr 2021 16:09:43 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 96B04610E8
+	for <linux-devicetree@archiver.kernel.org>; Wed,  7 Apr 2021 16:09:43 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S234231AbhDGQJw (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Wed, 7 Apr 2021 12:09:52 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:40189 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354275AbhDGQHN (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Wed, 7 Apr 2021 12:07:13 -0400
+Received: from mail-ot1-f49.google.com ([209.85.210.49]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N6srH-1le9hy3tsd-018LjN for <devicetree@vger.kernel.org>; Wed, 07 Apr 2021
+ 18:07:02 +0200
+Received: by mail-ot1-f49.google.com with SMTP id y19-20020a0568301d93b02901b9f88a238eso18546649oti.11
+        for <devicetree@vger.kernel.org>; Wed, 07 Apr 2021 09:07:01 -0700 (PDT)
+X-Gm-Message-State: AOAM532SyL3ONlsG1j/nYiCslj25YgEOx8yOIFXGxZzyuO8MQQjfD1/2
+        Ft67syj3SAh3qYc50nl2QSo2YEZ6WwOVHDsbzQs=
 X-Google-Smtp-Source: ABdhPJymSQJTahzo74k3DCXqZLabZ7pj1oDnsEr/iW3XDliuXTMvQkoUagOIuZhBUsyHUIVKVPi0LMKTb9enlCKqF4I=
 X-Received: by 2002:a9d:316:: with SMTP id 22mr3544860otv.210.1617811620677;
  Wed, 07 Apr 2021 09:07:00 -0700 (PDT)
 MIME-Version: 1.0
 References: <22814673-e9fe-f65b-cc0f-b02be4f90d1a@gmail.com>
 In-Reply-To: <22814673-e9fe-f65b-cc0f-b02be4f90d1a@gmail.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 7 Apr 2021 18:06:44 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 7 Apr 2021 18:06:44 +0200
 X-Gmail-Original-Message-ID: <CAK8P3a0bp3CUzOQHSX5KYt44j-Njk_u2P=0q-ZQ0HcTBiVVVSA@mail.gmail.com>
 Message-ID: <CAK8P3a0bp3CUzOQHSX5KYt44j-Njk_u2P=0q-ZQ0HcTBiVVVSA@mail.gmail.com>
 Subject: Re: [GIT PULL] arm64: dts: mediatek: changes for v5.13 (second round)
-To: Matthias Brugger <matthias.bgg@gmail.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
- "moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
- Fabien Parent <fparent@baylibre.com>, 
- Irui Wang <irui.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>, 
- DTML <devicetree@vger.kernel.org>
-X-Provags-ID: V03:K1:SqazPwvr0nPaIdsyrgk7OHK3V6kOlzxKgJbIO363DKvRLkBm24B
- giZ++hkitYAfI75LlHQw2n0RpiOIrr9ZMZOvyUL1gtnvXg/KOkqEyAlhCUZXdL4C3YvHJ2R
- yxQGXM/9/qXroYh/eOPPLc02Nm7ROgYKN9ZsdoN34gkDK6buFBU7RMWCCYyNVJ5LcEurvjU
- MbS78ttvnjOmqgsclKNBQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:w1fiFBLEuzc=:o1yGzpkglatoBhKCgBiwix
- QLW/PIe4wGkzcKL5A+dFTg1cjdnnaAmhDHVT8Wwpy7FTAqc7f9jVn8MoZQ1tbJp382H6/A5yG
- Pc1ri7J290HzOdDnYa2K8vnMbHmWPAolTqyx7uu1+6C371Y6SzJj3alkXE4vgkXqvBnUV1Wur
- Is2st962heiljfM+VviqRnNOePTpeS9UanH+fwQORjeiSv7pQj1VJdydY8B11+lFoZDqHXBKt
- GsvovLG/YBmAoPNNWjjEmr0HKCkhLrsq04PjCbg2Y3kQdq51sGO9ViStCcVpSR9cuiV+R/bIj
- jhfNlhQVku3IwiOQ0gmYWb1s/WFwY+TV7wmNc6/AqdtAhz8KNa4dEPK0PLNkxH3Z2Ty4en9rQ
- M5N+yTGxIiv0jAhtn2Wf+qSaFbIfpfqqQ17szL3HIeCzJyDfgoSWviqKp2o8jfAYst3r3EHA7
- hP952i5TZitvBqqIJLmfHEm3g5E7+0E=
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210407_170706_224649_5E5235A2 
-X-CRM114-Status: GOOD (  15.09  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210407160644.ml-vLNDaVesy39zsRRC6YD5Jf_6kJMKJMCFS9HIXCVU@z>
+Cc:     SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Fabien Parent <fparent@baylibre.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:NrmKc5AzZD500iEjEF7KYYDMzpBWDWfKqcEMDKzppHORsuDLpNM
+ 8Siu2krapKZnFrBU+pFD1HwrVGtHGxjwNH3FvcksQtXmZCqbSZh4zoJ6mbvWibg2P23v7qx
+ +T1THqNWsdHuYeY+VMP5CETMgj7VcEmSscSh0nTZ+epSmmr/FiIVC1xojtHJeEjRfGa6PF2
+ fJAoov5QqKXkoQKwdNSgA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:VoIV5e1C2nA=:4bqhfp1Km91LlDSe6Sef8J
+ zCtrtc0sOvcdbKnGmkZd1i7OZ5XWSI4/ya7QDqGhgj7vscqeuM2z+gTpLsVFI2u/Ba9lLzVUY
+ Jz0B3L36+Ud5bnHMqLFGkSNe/v/TIrojBG1pVLNVJOds84Bfp2S9iFDhmwY6Lc3iTXaMcTEVx
+ 7BjavWh4X3mzJxICVH1uAjnZkGRyvYB6Q0pRREUrvUVEYVG/aEyYx9cxGtR9hkTqafoE/ri6E
+ mzm68XeMI5vaGFS6M5QfWTAECyvdPu8+r5KbbwB5qPqumiLoORkWfB4Tty13DEVWalHE1IXui
+ NBbJJvOh+Tr28F6acxUFwVyjqBirGoLfe6zh4zhp4e8SxrZrRhbInr1kLD2yM8oNVnvOV270r
+ 3Mt8Pd4uhTJeAOHmQkpJC2+wwRXmTANPqMIUZ1aPkofPsMcQVFP0xeldQDkWrfcAQAoTJWbAl
+ OaQXut+Tqu0vY3TvhGfDhzz2ZJzRwBA=
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210407160644.0bv_ULoULWYS6Qw4do3kFk5NBluMx3QkdtYiSI4E9FE@z>
 
 On Wed, Apr 7, 2021 at 1:00 PM Matthias Brugger <matthias.bgg@gmail.com> wrote:
 >
@@ -133,8 +106,3 @@ At this point, I'd prefer to drop the entire branch for v5.13 and have
 you work it out for the next release.
 
        Arnd
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
