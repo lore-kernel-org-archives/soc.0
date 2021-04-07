@@ -1,25 +1,30 @@
-Return-Path: <SRS0=1uUJ=JE=baylibre.com=fparent@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6444AC433B4
-	for <soc@archiver.kernel.org>; Wed,  7 Apr 2021 22:15:03 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 3239361246; Wed,  7 Apr 2021 22:15:03 +0000 (UTC)
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CBC146124C
-	for <soc@kernel.org>; Wed,  7 Apr 2021 22:15:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CBC146124C
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=fparent@baylibre.com
-Received: by mail-il1-f178.google.com with SMTP id b17so71526ilh.6
-        for <soc@kernel.org>; Wed, 07 Apr 2021 15:15:01 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0E25C43461
+	for <linux-devicetree@archiver.kernel.org>; Wed,  7 Apr 2021 22:15:04 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id B04A461363
+	for <linux-devicetree@archiver.kernel.org>; Wed,  7 Apr 2021 22:15:04 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S229780AbhDGWPN (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Wed, 7 Apr 2021 18:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229469AbhDGWPM (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Wed, 7 Apr 2021 18:15:12 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93AD4C061760
+        for <devicetree@vger.kernel.org>; Wed,  7 Apr 2021 15:15:01 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id c3so86651ils.2
+        for <devicetree@vger.kernel.org>; Wed, 07 Apr 2021 15:15:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -36,14 +41,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=QzKyYf1bHGK6AtnOk88opCZuU9Drjf8q36capzyYvC8=;
-        b=JuMPG7TZg1uwvwiHiQeOISH7a2zkXl7qDR69dLTElMz9AwXfXK9EujjvGjGxfxYgO7
-         9RYMhNTSPIXiA6mR70cT6R3OT9OKEUyCFIROmxWafcrbZYRLNUaOo4CwbE7AKBkBTnhC
-         dkqVEE4QPDsXFKEmI6yOpyckTn4+GH2m2XtyPWeoN9kjJKGucevvjjBPsEAOZVI5PWc4
-         IvkWtoGHk7uoCoiHbMT4JCTOukQoPgHLmS4N2yldqhickYL0Qo1VNzFeIce0x6BtNHVp
-         CmyPo6jsVtZDwvzGwo1LtrvxBCeplcVFf/1CrQvD2qw08HIV6lb8tev2vti6N5BIlXCt
-         N1JQ==
-X-Gm-Message-State: AOAM533SkGr+bnBw/djRwijICbt5pxQmcRYUsEVQoTBOXRM5ZQF+srWv
-	VRoYuNWjxKhzlDZopviPPZ7G9VBmcf2rmC3G+DhnCg==
+        b=JE3LzDA8SWGoFgliCl49VjU4MdqsUz5EomUVNXbFpcWf7VVl0GMMDhulaWAovU8CqB
+         O6aV7xnnLimuA/dekEoJKFJrp6ltAMI6dzCBjl3JdAlKfDDFf8OWr5agBtNtGcHd3nNG
+         2yyJGahKI9RKWGfBtZ171ahmrlyJQgMnP4pJV3OnusUZmJ/fPuQLJip+gPgiO61R2GVa
+         IDtXzEAHs51UlxCiUmwP1hlSlMPHaYL0CWOACYR9w64IBGo6wYuR6BB3IGoxa5cMkt92
+         GDHgWk2csa+7bZAzr/tfkEula2zcNMdQlow/vAjGyI+DOKGTcOjvLEBVqd1D42TqRL2b
+         JxMw==
+X-Gm-Message-State: AOAM531fEsCEh9Dj9XBBgjvfVp1vToKXAEXcbCXD9c7zKlvj7O2tei0v
+        2/JqZunb2y6XiENwNEolDIT0rSFFv3iwRhnPBODuhA==
 X-Google-Smtp-Source: ABdhPJySz1xoT7xQVligVV9v3QSICXWrplknepoG0630xLscPoS6xyyapHtTzMksUc++H4qNT7FARgnA+moEIJCZI1Y=
 X-Received: by 2002:a92:6810:: with SMTP id d16mr4757496ilc.88.1617833701020;
  Wed, 07 Apr 2021 15:15:01 -0700 (PDT)
@@ -52,18 +57,27 @@ References: <22814673-e9fe-f65b-cc0f-b02be4f90d1a@gmail.com>
  <CAK8P3a0bp3CUzOQHSX5KYt44j-Njk_u2P=0q-ZQ0HcTBiVVVSA@mail.gmail.com>
  <01c82108-64a8-33ee-3984-5bd7056a0002@gmail.com> <CAK8P3a37BUdHneO+9+t0Pan3UWZHub-ishcKLNxCbqO0kk0CNw@mail.gmail.com>
 In-Reply-To: <CAK8P3a37BUdHneO+9+t0Pan3UWZHub-ishcKLNxCbqO0kk0CNw@mail.gmail.com>
-From: Fabien Parent <fparent@baylibre.com>
-Date: Thu, 8 Apr 2021 00:14:50 +0200
+From:   Fabien Parent <fparent@baylibre.com>
+Date:   Thu, 8 Apr 2021 00:14:50 +0200
 Message-ID: <CAOwMV_yQLWwMEQ_f_wHOAipgD1qZgNz2SA2RJDZpNozCKv4vWQ@mail.gmail.com>
 Subject: Re: [GIT PULL] arm64: dts: mediatek: changes for v5.13 (second round)
-To: Arnd Bergmann <arnd@arndb.de>
+To:     Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>, SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>, Irui Wang <irui.wang@mediatek.com>, 
-	Rob Herring <robh+dt@kernel.org>, DTML <devicetree@vger.kernel.org>, 
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210407221450.R-NEGYhRdTeYau0pHP4VigX0EJHIyqkvXEanx-DtbBU@z>
 
 Hi Arnd,
 
