@@ -1,55 +1,75 @@
-Return-Path: <SRS0=zDaR=JF=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=Q2eW=JF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99AB9C433ED
-	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 19:25:32 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 6EBE861104; Thu,  8 Apr 2021 19:25:32 +0000 (UTC)
-Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31A22C433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 19:28:32 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 150EF610FB
-	for <soc@kernel.org>; Thu,  8 Apr 2021 19:25:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 150EF610FB
+	by mail.kernel.org (Postfix) with ESMTPS id B8DC3608FC
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 19:28:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B8DC3608FC
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
-Received: from mail-wr1-f71.google.com ([209.85.221.71])
-	by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	(Exim 4.86_2)
-	(envelope-from <krzysztof.kozlowski@canonical.com>)
-	id 1lUaHS-0002d6-Db
-	for soc@kernel.org; Thu, 08 Apr 2021 19:25:30 +0000
-Received: by mail-wr1-f71.google.com with SMTP id z7so1384595wrs.17
-        for <soc@kernel.org>; Thu, 08 Apr 2021 12:25:30 -0700 (PDT)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
+	References:Cc:To:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=6x6XVjjy6zxZGcJEBJcKXhPcdKkRgy1rcRX5nhFn0oQ=; b=JPNP6EPoxvhvLNztMlCNc12Ud
+	sCSK0+rr0SaqQlSTVIkxo2hmIQRS2RTZ4kY9TMWrQHJffrlBvygrj3FXE6KiwmmpIk2rwn6Y8sHr5
+	c7rP/djEKPQcujKJjyS4Exf0UV7W8vmugEqfFHYQ3Pe8lOKbEY0YKlKt3fplstsU4rR2lEylvM+mq
+	AkA7+zdFPSXWYNI2qMML5D/KmMUrEjpoqgntX6BUuS4KzXQq3Eay4YUThxBF3qIItQcQqa9tAH1XJ
+	NIMSzvAi72QQQfm+9t1mRclNNbwUbQiG84Rs4BgWEVSaxKF0gek4emvZ0Eqo+QzOwRs7UkspxO3FY
+	ge6e+oCjw==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lUaHX-0095p4-Py; Thu, 08 Apr 2021 19:25:36 +0000
+Received: from youngberry.canonical.com ([91.189.89.112])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lUaHT-0095oA-AZ
+ for linux-arm-kernel@lists.infradead.org; Thu, 08 Apr 2021 19:25:33 +0000
+Received: from mail-wr1-f69.google.com ([209.85.221.69])
+ by youngberry.canonical.com with esmtps
+ (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128) (Exim 4.86_2)
+ (envelope-from <krzysztof.kozlowski@canonical.com>)
+ id 1lUaHS-0002d9-7G
+ for linux-arm-kernel@lists.infradead.org; Thu, 08 Apr 2021 19:25:30 +0000
+Received: by mail-wr1-f69.google.com with SMTP id o11so1399021wrc.4
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 08 Apr 2021 12:25:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=EW7d+9G4/kjjtpomgAZZU/CRnYFDop2X3n6Zj7v339I=;
-        b=a0RKoYAGG48DocnUH/gTtRhJKnIizh8WImDISt+S9p48V1PqEJj+UseMBHFWWAK3wX
-         xypnaiYo/8JsW5jQMhLtUFmu+q9C0RALvFK6xgVfyrE1BeHkSzl57ZoAzXkznfzxaUSY
-         9OWpgnrhbLftzLqZrx35Rhscn6bJCVkj4K/DDWkyCL17ffP/B6UUgmHPjrLZbrOsr0Mn
-         BmMPLeJYYF/OvOPyDX4W5/Hj/vm+63wBxRMVRl3eTZ9fVlcMI7O6WewV1o3X26JxXWCR
-         lfXGQ9zd/qGfIMAO5rBND7aEAjQGVIV/PYR0FMYBYhrRNbytRankOfGmUV4r1VjbX7j4
-         KUWg==
-X-Gm-Message-State: AOAM532I9gavPRLqlwJCZFBWmj9ycG7v7QGwML/ETkl4JLeue4+xPs+J
-	x0TNHlsOcxPdxvwjIzTmCCuUpyrvDtjeZK0CSg7MUxxWoYT9btuMtalylv/PShmQVP6GtXnD6dv
-	gqiiqSnluZhak+LnUl6KTQEU=
-X-Received: by 2002:a5d:4f0e:: with SMTP id c14mr14193195wru.0.1617909929799;
-        Thu, 08 Apr 2021 12:25:29 -0700 (PDT)
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=EW7d+9G4/kjjtpomgAZZU/CRnYFDop2X3n6Zj7v339I=;
+ b=IVe9diW5oGdLwaEFiP8EuUtn8TEdeCNAiiDByGoDzF1W+mug6dt+IFhkc0liodUQ5L
+ xcJzp6V1a6/b7zbAwungjl3akgGCgacKG8M14eg6cTcZEEoKphocvjcoVtU7R9FUxKlZ
+ 6/92YQEFBkFJktv6+R02trulIt0TtsSKVySbyCjWcvrohI44tdTASYm2bu/Xn+6sA8oP
+ 0QwWyk0RHAr3axRbSTdefIKz96uLTyspw7rRTa+Bv080nS7v3KcFNXzbTsKF1lgGmujm
+ OyXWcvDOqepLq20cYrVF0hieNFYeHdmOIvUVBUWR5o2Yu7mJqMlONvenXr0v/Qah3ac2
+ U1ew==
+X-Gm-Message-State: AOAM533OnOXUetAToGEpzIOQIDFPfPGUG3vZeAE9aczrrHZx3CxcQ8P/
+ qOVVVKROzCAJgbXxoXuP4rx+5SHYrEKyIHYsErWnsEiXU4aCKCqy7LI3nwbxoVQ1QUIWU3miSzp
+ 4NZKc54MgCpuXwWZAY/x0tGUcTn+wW2KpARlL66ghTqZBzH+1kmQL
+X-Received: by 2002:a5d:4f0e:: with SMTP id c14mr14193191wru.0.1617909929799; 
+ Thu, 08 Apr 2021 12:25:29 -0700 (PDT)
 X-Google-Smtp-Source: ABdhPJw3uC3t9Rn/hZil2QBwcuqL7F591JGwIex59HP2iZb5W4DsmO5gVtcusB8GA9Rzz/D/7bvgcg==
-X-Received: by 2002:a5d:4f0e:: with SMTP id c14mr14193176wru.0.1617909929665;
-        Thu, 08 Apr 2021 12:25:29 -0700 (PDT)
-Received: from [192.168.1.115] (xdsl-188-155-192-147.adslplus.ch. [188.155.192.147])
-        by smtp.gmail.com with ESMTPSA id u17sm261604wmq.3.2021.04.08.12.25.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Apr 2021 12:25:29 -0700 (PDT)
+X-Received: by 2002:a5d:4f0e:: with SMTP id c14mr14193176wru.0.1617909929665; 
+ Thu, 08 Apr 2021 12:25:29 -0700 (PDT)
+Received: from [192.168.1.115] (xdsl-188-155-192-147.adslplus.ch.
+ [188.155.192.147])
+ by smtp.gmail.com with ESMTPSA id u17sm261604wmq.3.2021.04.08.12.25.28
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 08 Apr 2021 12:25:29 -0700 (PDT)
 Subject: Re: New 'make dtbs_check W=1' warnings
 To: Arnd Bergmann <arnd@kernel.org>, DTML <devicetree@vger.kernel.org>,
  Rob Herring <robh+dt@kernel.org>
@@ -75,9 +95,26 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
 In-Reply-To: <CAK8P3a1L8rWpR5b66v6Su8-m7-scA0wZQr_g_4KnV4dnrky6ZA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210408_202531_470238_68EA556D 
+X-CRM114-Status: GOOD (  25.66  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210408192528.FAboMv0FRnkw7xCc0Tlv1mKL7ASoymK_UZikoNvpeqA@z>
 
 On 08/04/2021 17:08, Arnd Bergmann wrote:
 > Greetings to all Arm platform maintainers,
@@ -116,3 +153,8 @@ kbuild robot.
 
 Best regards,
 Krzysztof
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
