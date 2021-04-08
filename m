@@ -6,14 +6,14 @@ X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DAC4C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 15:51:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5FDEC433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 15:52:00 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0C14761132
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 15:51:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0C14761132
+	by mail.kernel.org (Postfix) with ESMTPS id 006E261107
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 15:51:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 006E261107
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,48 +22,48 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=rDANDVX/Q0qaEFyapHySS8Vr4zQ163cJ18pl5d94p3M=; b=NNKMsDebRGmkMqQrfG4WoXFRl
-	AnC+zFmEyKrPhjensh8lB/3YLb7Gp0KDCzZIVAHiMH8sgc2n7iIEXNt1gOHakSHLfsFUyGe70Iy6S
-	eqsG0fUaGg4gzpg8XXIlRYZMiYnTCWJfVPdqTv6D8KSfXBAEgQJt85IfaKJCQ4K1Xj/jdALHvuH68
-	Rhnm1Rh/mxE41dqny/8L49UmmceBp+XcGJ9eWB7UXa4pPwNz/NGDVl0dzyxOPfWInmwfgr7MUTADr
-	MMk+9I/F2fz9QsGZViGOgIUtAQNtJ+GOpcJzGY/KUUB/i4zmZcF/vX/N6VgR9Cmx5c2B01u+qGOWJ
-	msP8WhHUw==;
+	 bh=wSkSg7oHrzrbRrDOFW4ectM/KQqQSAmnPvx3Mj97934=; b=O3TEbwFKccsbBtu05iKbOnJGO
+	J/shswWlh59CgHEw0yr0lYV3nYD0cj9L/GqdPAB+dhunIKGntlA7sJMFgyLvao0GLuBjY4uIB9eMr
+	kAg28iNx5++kXJ/lHfgZHeCZHIBv/TlSajGXLqLgKaS+xtPDomBS4CnOgROC0tcZZW5JQQ6LYXvhD
+	gMeD4NLPfwEeqmzIE0AR5fA3nPYDigeH7S3VXFTy++hgKtqBdGPT0Tke7+6j3LGf9r6yln9Co+Wxc
+	dETwLU3RTV0QlRFaADCVobrtwt3B58aroKqFXmnQSY9sIvHzLyOpAv37dxddWxFg3S0fteKBHIYRC
+	MMJ+4pRBA==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lUWuv-008VAj-Dq; Thu, 08 Apr 2021 15:50:01 +0000
+	id 1lUWvJ-008VJC-Fm; Thu, 08 Apr 2021 15:50:25 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUWue-008V2n-UC
- for linux-arm-kernel@lists.infradead.org; Thu, 08 Apr 2021 15:49:48 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D8EA61155;
- Thu,  8 Apr 2021 15:49:42 +0000 (UTC)
+ id 1lUWup-008V7f-NE
+ for linux-arm-kernel@lists.infradead.org; Thu, 08 Apr 2021 15:49:58 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 21CC061158;
+ Thu,  8 Apr 2021 15:49:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1617896983;
- bh=wsrGaq7lMt1D1s+OTUqLNmpDcaeia7PVJYghnE8512s=;
+ s=k20201202; t=1617896994;
+ bh=SK63wqZYU3DsXQuWRf8x+2cEIgroaltGmCMLkEJA334=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=CRuMnUokn+6/ij/dzppQWiotI1E9ZMJrUDbc8lG7C3+E61/C1p6UIDH5FZs8Z6ufq
- Z+1CTxviLxwLeGtygFr8Qqxp6CNg60B09f530H9iO/X2kLD0t3AaW4349XUfVaEiMD
- 0ytNB3qr9ZTm6H+G83J/YUcj8smcWmtt2EzbHu8lhLUaoW0cYoMMrlGQo6Q+WaplEc
- ARPmHquG0511z/MI5/u6X0DTNC5/4mKp6/7KRoaTFSX712h2AgL8I63gr1UlrwziH5
- ThfQ1ymWHS/3+dz/3vJPDVGr7vbcTLU9CQE/zczaf3r221jbYLBByDqLrl+C6KWpCJ
- WpvOe5E6AYMSA==
+ b=UbVX0LONVMuHtM0a1Dr4WSfvzdNh7FRvwHQoHHSGIPFUGKQb5n4GXFtCMErzF3t8o
+ zVgTG472yQQSduCqCIMU2NDDsx8x3gJo5DByGZh67tW/8wAQ/PWxvSO5kWMplPPcQE
+ Y2sypgqjlJZSJrz+0G+riaoO9jaQ0K2NHGnfSzU34EOnK58/Z8jYjo0yKohcmc0mdN
+ dwsNGQljNBL6PgGPpZhKK52lYpcNHflQTMce2SCCD5glP2MAhl94zORS9wOJ721Zkv
+ TR6f3iB6b/wVcGSyTTCkx3Wsp9X5hsQEpMgEb1qvfPLyqiJ3IeoqZHNPsaG41E1k0u
+ bgla666f/isPQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org,
-	Dinh Nguyen <dinguyen@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] SoCFPGA firmware update for v5.13
-Date: Thu,  8 Apr 2021 17:49:28 +0200
-Message-ID: <161789693296.1636044.15606458085850254179.b4-ty@arndb.de>
+To: SoC Team <soc@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
+ ARM SoC Team <arm@kernel.org>, ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ Kevin Hilman <khilman@kernel.org>,
+ Cristian Marussi <cristian.marussi@arm.com>
+Subject: Re: [GIT PULL] firmware: arm_scmi: updates for v5.13
+Date: Thu,  8 Apr 2021 17:49:32 +0200
+Message-ID: <161789693280.1636044.5523561185670345817.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210405155026.86309-1-dinguyen@kernel.org>
-References: <20210405155026.86309-1-dinguyen@kernel.org>
+In-Reply-To: <20210331100657.ilu63i4swnr3zp4e@bogus>
+References: <20210331100657.ilu63i4swnr3zp4e@bogus>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210408_164946_312130_B5FD48A0 
-X-CRM114-Status: UNSURE (   7.44  )
+X-CRM114-CacheID: sfid-20210408_164956_483171_D464354F 
+X-CRM114-Status: UNSURE (   6.94  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -80,25 +80,25 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210408154928.Utg23Vsdi_KrJ04QyXPh-RUxH6Jz7n1TQtWKxnYlxaw@z>
+Message-ID: <20210408154932.9LGtDrmLpnMYkGDrAx2sD1PUtnNQ-15WsRH91CS2XBc@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 5 Apr 2021 10:50:26 -0500, Dinh Nguyen wrote:
-> Please pull in this patch for v5.13.
+On Wed, 31 Mar 2021 11:06:57 +0100, Sudeep Holla wrote:
+> Please pull !
 > 
-> Thanks,
-> Dinh
+> All the drivers files have been acked by respective maintainers.
+> There is a conflict with IIO tree in linux-next with right fix there,
+> we might get same conflict depending on what gets merged first upstream.
 > 
-> The following changes since commit 4483397b03536506535d611b0cb28a81a69e8edf:
-> 
->   ARM: socfpga: drop ARCH_SOCFPGA (2021-03-23 11:03:36 -0500)
+> Regards,
+> Sudeep
 > 
 > [...]
 
 Merged into arm/drivers, thanks!
 
-merge commit: 0ffc253e2e0ea7b0a1a6b73f019ba38dfe7a3e44
+merge commit: 4be3f47e1bd5c9be4c4b95de5f3531f062a28a66
 
        Arnd
 
