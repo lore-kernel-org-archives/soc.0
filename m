@@ -2,70 +2,59 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B6CDC433B4
-	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 15:49:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11EFBC433B4
+	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 15:49:44 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id C8BC96113A; Thu,  8 Apr 2021 15:49:41 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BE89F61132;
-	Thu,  8 Apr 2021 15:49:37 +0000 (UTC)
+	id D325361157; Thu,  8 Apr 2021 15:49:43 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D8EA61155;
+	Thu,  8 Apr 2021 15:49:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617896981;
-	bh=olb/BeUnUWrIc42bUkFXurxIFBPFBMmAbAPvSCR7p9M=;
+	s=k20201202; t=1617896983;
+	bh=wsrGaq7lMt1D1s+OTUqLNmpDcaeia7PVJYghnE8512s=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YVwKJ/rVn3vHbPuD358X4rRHMRsNqz18wGOZDnhZ9jmS888M01VGfoRUcACaBugAW
-	 x3fPtYsPY17AtEdiz7u5iWTOOoKelioOPR0OR3fvzIyFAA5eCtXk15aORUDN7tA9d4
-	 7bPaVzaaWrk+1V0Hhcz+Bna4VOfpGmODpD7WJgsY6i4jKKDCfqhbdFZERtDd4G76qr
-	 TV6eBX/leLjdNeg4kIUjr2W3pptGym2NkYpW/dxPk7Szn/2PpnuiCha7Su1pV/9r9K
-	 cdcnc27jp4a96RYpvB8l3w3Q2srtLO1O2NbgJymojwak6i1ypUEYLZmLoZUAck0csd
-	 NepUzUyfIQhsw==
+	b=CRuMnUokn+6/ij/dzppQWiotI1E9ZMJrUDbc8lG7C3+E61/C1p6UIDH5FZs8Z6ufq
+	 Z+1CTxviLxwLeGtygFr8Qqxp6CNg60B09f530H9iO/X2kLD0t3AaW4349XUfVaEiMD
+	 0ytNB3qr9ZTm6H+G83J/YUcj8smcWmtt2EzbHu8lhLUaoW0cYoMMrlGQo6Q+WaplEc
+	 ARPmHquG0511z/MI5/u6X0DTNC5/4mKp6/7KRoaTFSX712h2AgL8I63gr1UlrwziH5
+	 ThfQ1ymWHS/3+dz/3vJPDVGr7vbcTLU9CQE/zczaf3r221jbYLBByDqLrl+C6KWpCJ
+	 WpvOe5E6AYMSA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>,
-	arm@kernel.org,
-	soc@kernel.org
+To: arm@kernel.org,
+	soc@kernel.org,
+	Dinh Nguyen <dinguyen@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-msm@vger.kernel.org,
-	Sibi Sankar <sibis@codeaurora.org>,
-	Pan Bian <bianpan2016@163.com>,
-	Stephen Boyd <swboyd@chromium.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Olof Johansson <olof@lixom.net>,
-	Rajendra Nayak <rnayak@codeaurora.org>,
-	Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Andy Gross <agross@kernel.org>
-Subject: Re: [GIT PULL] Qualcomm driver updates for 5.13
-Date: Thu,  8 Apr 2021 17:49:27 +0200
-Message-Id: <161789693288.1636044.1145984086185945508.b4-ty@arndb.de>
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] SoCFPGA firmware update for v5.13
+Date: Thu,  8 Apr 2021 17:49:28 +0200
+Message-Id: <161789693296.1636044.15606458085850254179.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210404164951.713045-1-bjorn.andersson@linaro.org>
-References: <20210404164951.713045-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20210405155026.86309-1-dinguyen@kernel.org>
+References: <20210405155026.86309-1-dinguyen@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sun, 4 Apr 2021 11:49:51 -0500, Bjorn Andersson wrote:
-> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+On Mon, 5 Apr 2021 10:50:26 -0500, Dinh Nguyen wrote:
+> Please pull in this patch for v5.13.
 > 
->   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+> Thanks,
+> Dinh
 > 
-> are available in the Git repository at:
+> The following changes since commit 4483397b03536506535d611b0cb28a81a69e8edf:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-5.13
+>   ARM: socfpga: drop ARCH_SOCFPGA (2021-03-23 11:03:36 -0500)
 > 
 > [...]
 
 Merged into arm/drivers, thanks!
 
-merge commit: 207481077b07d53cb378bc5dc71ae5379c91e8a8
+merge commit: 0ffc253e2e0ea7b0a1a6b73f019ba38dfe7a3e44
 
        Arnd
