@@ -1,167 +1,126 @@
-Return-Path: <SRS0=Q2eW=JF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=1Od/=JF=linaro.org=dmitry.baryshkov@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB6C1C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 23:07:41 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3CA9C433ED
+	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 23:41:50 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7BE1961168; Thu,  8 Apr 2021 23:41:50 +0000 (UTC)
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6053E61008
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 23:07:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6053E61008
+	by mail.kernel.org (Postfix) with ESMTPS id 4057161132
+	for <soc@kernel.org>; Thu,  8 Apr 2021 23:41:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4057161132
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=PD31e2S9X3Oy2Ex05e/ZKsczij2zov9P7lXeSzoF2yg=; b=Vf9Acnqq1xBXKrD+ridAKUnRf
-	aMxWDO4xZrc6AInWj/VYxHAsWDkNmEJ5VMtl41kaKbIdCVU9uTuyDYdXZ5tLwMVefBq2TdlI9baKV
-	O1JKYU34ETPrO3KlHrpPxiE1PbO16Gz9FmxrPToYRKXvSh0bymwZNTuj5npaJcJeXMpoXElxTmua2
-	iV8O7MHWeYi4O4NWCzpwRb+E8h3ru1h33Zi/xGgjRDSYDBEl00ryq+MBiVQPBVYhNiDukujFkrUVc
-	2YJVvAgReQWJMpurp1LVFFaDddjy3zyVeC2V6p/NyWaMfM6AM2qjW78mr4IGxOsqduglLtd4l3iLb
-	tSR9jomnw==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lUdiT-009QXK-Nt; Thu, 08 Apr 2021 23:05:37 +0000
-Received: from mail-oo1-xc35.google.com ([2607:f8b0:4864:20::c35])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUdiM-009QWW-49
- for linux-arm-kernel@lists.infradead.org; Thu, 08 Apr 2021 23:05:32 +0000
-Received: by mail-oo1-xc35.google.com with SMTP id
- n12-20020a4ad12c0000b02901b63e7bc1b4so901636oor.5
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 08 Apr 2021 16:05:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=date:from:to:cc:subject:message-id:references:mime-version
- :content-disposition:in-reply-to;
- bh=fIJgPmsymRSbpAq065huLv5F9qsBv+0+1g6TYUpN05I=;
- b=jVGst8yP+aXkUmXUvTfLCylBlxO5+0c1cLYJz8HXDAMObgH+8PeUFm6p/kkIO2pZI8
- FGGcsAgojuRqkVmpgTUh8kxaSTvcorn9xjwQQogdWJgiIE9mJu9M7uEjYNTFxgSbNtOJ
- yAo8zuZmAQ4n6Gm34vqYTZRRyoDjN40TLF1YD0SZ40uGqb1APBGDGqXexISpEwyQrhNo
- hsorUmXOixtOdON0WoNKPYLIX0zG2bXpLsI/OKT3KqZUCLU7ZCcS8SvW18/0YpUZCRsc
- Oxw4fuWJSrabcK1yINRXoBNiqQ00zTmBKzvl/LPpvxbWZ1lHmwjM2lj5XWUtbiXnNmIc
- V4/g==
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=dmitry.baryshkov@linaro.org
+Received: by mail-qk1-f179.google.com with SMTP id c3so4169717qkc.5
+        for <soc@kernel.org>; Thu, 08 Apr 2021 16:41:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8KRUudqQ7fiqiTO1h1nhjXIsFEoc1XK+L2rdZ1uxSAg=;
+        b=yHH1TguXIOLaBlQty2FkN1++Ql1LbpqyhCP/Bi9XQjCI+iCfX3544SZzo5Y7gLXcrB
+         c3vqh34BZjV/GX060haL1oSrlETmiX2GKL4Hc2D+QH2W7CTmlQuW06kq8qaVXqa3O+Ba
+         pYybh9dAQ//7dOoGPTLu//LBK0EntAPRBYR4TLyK2RFNRHKJUVYs3r8MG5f4IwzI31vS
+         WPlUBkat9NZq6QOv4mvJDKzSdfg7PV8sG1HwkXKR6Pa6TeNMlsplEoZLwPqcZWNYDYKP
+         lmZdS6usMKm8ISMpRX0aWzPtDxGcV+oWwI54ScYD6OcXFo8KBfrQ09Mvey00ZhcR93nV
+         myGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=fIJgPmsymRSbpAq065huLv5F9qsBv+0+1g6TYUpN05I=;
- b=hCaBz9GvlJPtgM/h0OPNo58lKtIAfweQO0W7NindMv+LbHMd56rAKDhWaMHdd60kQ7
- Hp7JU11V9qTNOW6PcwQ4GERiDM1PYsyuCY95RMY9LiDFNYOq/83dtBFaVY0zD6+NF4Bc
- w0UgkGoNtm27bWwSh7K43cSiPi71MYsnz1Sg+DULA+n3rIUKkNXtcGMQnRKknLICRaSw
- /fnaOmiDyI65NW5EErxGRFfch0YeTd3BY0XTUQdO6QqCZIw7+6H1GDNPXjnelbACwt04
- 2wQlzWTKQxHWm9hcWodqpWfLmhAelUJF1iVJs2qQAyfrL86fGWDeSSLdL+SEAVcvS0Yz
- 7FGQ==
-X-Gm-Message-State: AOAM5300JjDSLVx9JT2XikQ0QTyGl7kJCUbjXGQXt8F1j6eK+ghGqDmt
- EyS4KuOTRkv+TtNGWzuiPaNqaw==
-X-Google-Smtp-Source: ABdhPJxRzyAgaAYEq32zzNis2OIL568aSsy9PaGGntU7HxN3A33+OInIy5jLCmOjuHtchT30o8XzHQ==
-X-Received: by 2002:a4a:8247:: with SMTP id t7mr9504066oog.53.1617923128816;
- Thu, 08 Apr 2021 16:05:28 -0700 (PDT)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net.
- [104.57.184.186])
- by smtp.gmail.com with ESMTPSA id x3sm195405oif.22.2021.04.08.16.05.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Apr 2021 16:05:28 -0700 (PDT)
-Date: Thu, 8 Apr 2021 18:05:22 -0500
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, arm-soc <arm@kernel.org>,
- SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
- Jack Pham <jackp@codeaurora.org>,
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Douglas Anderson <dianders@chromium.org>,
- Kevin Hilman <khilman@baylibre.com>,
- Rajendra Nayak <rnayak@codeaurora.org>,
- Sandeep Maheswaram <sanm@codeaurora.org>,
- Robert Foss <robert.foss@linaro.org>, Vinod Koul <vkoul@kernel.org>,
- Stephen Boyd <swboyd@chromium.org>,
- Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>,
- Andy Gross <agross@kernel.org>,
- linux-arm-msm <linux-arm-msm@vger.kernel.org>,
- satya priya <skakit@codeaurora.org>, Abhishek Kumar <kuabhs@chromium.org>,
- Matthias Kaehlcke <mka@chromium.org>, Shawn Guo <shawn.guo@linaro.org>,
- Alexandru M Stan <amstan@chromium.org>, Maulik Shah <mkshah@codeaurora.org>
-Subject: Re: [GIT PULL] Qualcomm ARM64 DT updates for 5.13
-Message-ID: <20210408230522.GS904837@yoga>
-References: <20210404164914.712946-1-bjorn.andersson@linaro.org>
- <161789462034.1629934.2631576576205147984.b4-ty@arndb.de>
- <YG8qIfFdY+As5tye@builder.lan>
- <CAK8P3a2v6yUVi395ixJRer2wyNVNXB-uypCqw5ts327ST=fHPg@mail.gmail.com>
- <CAA8EJpq4r0-XTouJTxnNdO8tgydenb+LjDykWORSNeLb3vSqMg@mail.gmail.com>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8KRUudqQ7fiqiTO1h1nhjXIsFEoc1XK+L2rdZ1uxSAg=;
+        b=J4Ajo21JW/R8+syko6d28U9X3ZB6D0yZTQ4XjjLAzIRwBCmghpTgLRFDfADaePcFCs
+         F72cP4B0ZC/OqHoTb6K7V4wAv2lJMhI0rIZyWYLLPL/emMSGReL88x4Iw/FlF6ShZX5R
+         1Gd7f3cc4V8fVIQMenejcwftj1mu1xxhawZylhB9gBg9FB+XtfczCpASIy+Nkl5dfSJ5
+         P7JyqzaJ/WWSTyjtMvhreRwBeqTi6ZCbjpAF+Cb7EeK0I3CU9yDYS2LVd7/o85kAbLBR
+         8onjFWX7vP269sAZgRYewOkaGZE7IRHd65ZnFR0EU4Dfh5iFx42dqJbT8kufGjeLLiXH
+         TYSg==
+X-Gm-Message-State: AOAM5314rUMlqqW+Lmjua0DrvlA7/ky1qy+l6iFzW7HSh/EIjtocpWdC
+	kSoW0209E7GA9gFiSblr+voQRzmmC8g1fuQtULY/LHjhu7XbOw==
+X-Google-Smtp-Source: ABdhPJyHPuE4navRPOijhLZmY/RoeCxFazCLQbKT5I8ozqsoCzXvOiMSY+ipZbh1hlP3lOdy4M8E0I0XN9PPmb1zcMM=
+X-Received: by 2002:ae9:f312:: with SMTP id p18mr11406022qkg.162.1617925309436;
+ Thu, 08 Apr 2021 16:41:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpq4r0-XTouJTxnNdO8tgydenb+LjDykWORSNeLb3vSqMg@mail.gmail.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210409_000530_397121_7A85389B 
-X-CRM114-Status: GOOD (  23.58  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210408230522.LkjbgCzE7_TTVu9-Mijzf_LWgb6tEaROAGKL5UKgqf0@z>
+References: <20210404164914.712946-1-bjorn.andersson@linaro.org>
+ <161789462034.1629934.2631576576205147984.b4-ty@arndb.de> <YG8qIfFdY+As5tye@builder.lan>
+ <CAK8P3a2v6yUVi395ixJRer2wyNVNXB-uypCqw5ts327ST=fHPg@mail.gmail.com>
+ <CAA8EJpq4r0-XTouJTxnNdO8tgydenb+LjDykWORSNeLb3vSqMg@mail.gmail.com> <20210408230522.GS904837@yoga>
+In-Reply-To: <20210408230522.GS904837@yoga>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Fri, 9 Apr 2021 02:41:38 +0300
+Message-ID: <CAA8EJprO7jwqaKXXk70hzDJnTU6iX6i2Vk1OxkrwDKFFQQSyEw@mail.gmail.com>
+Subject: Re: [GIT PULL] Qualcomm ARM64 DT updates for 5.13
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, 
+	Olof Johansson <olof@lixom.net>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>, Jack Pham <jackp@codeaurora.org>, 
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Douglas Anderson <dianders@chromium.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Rajendra Nayak <rnayak@codeaurora.org>, 
+	Sandeep Maheswaram <sanm@codeaurora.org>, Robert Foss <robert.foss@linaro.org>, 
+	Vinod Koul <vkoul@kernel.org>, Stephen Boyd <swboyd@chromium.org>, 
+	Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>, Andy Gross <agross@kernel.org>, 
+	linux-arm-msm <linux-arm-msm@vger.kernel.org>, satya priya <skakit@codeaurora.org>, 
+	Abhishek Kumar <kuabhs@chromium.org>, Matthias Kaehlcke <mka@chromium.org>, Shawn Guo <shawn.guo@linaro.org>, 
+	Alexandru M Stan <amstan@chromium.org>, Maulik Shah <mkshah@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu 08 Apr 16:53 CDT 2021, Dmitry Baryshkov wrote:
-
-> On Thu, 8 Apr 2021 at 23:05, Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > On Thu, Apr 8, 2021 at 6:06 PM Bjorn Andersson
-> > <bjorn.andersson@linaro.org> wrote:
-> > > On Thu 08 Apr 10:24 CDT 2021, Arnd Bergmann wrote:
-> > > > Maybe see if you can address these in a follow-up, to avoid regressions.
-> > > >
+On Fri, 9 Apr 2021 at 02:05, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
+>
+> On Thu 08 Apr 16:53 CDT 2021, Dmitry Baryshkov wrote:
+>
+> > On Thu, 8 Apr 2021 at 23:05, Arnd Bergmann <arnd@kernel.org> wrote:
 > > >
-> > > I'm about to send you a another set of pull requests with some more
-> > > goodies that was lingering on the list. I will take a look to see if I
-> > > can follow up on that with some fixes for above warnings - and take
-> > > another look at incorporating dtbs_check in my workflow.
+> > > On Thu, Apr 8, 2021 at 6:06 PM Bjorn Andersson
+> > > <bjorn.andersson@linaro.org> wrote:
+> > > > On Thu 08 Apr 10:24 CDT 2021, Arnd Bergmann wrote:
+> > > > > Maybe see if you can address these in a follow-up, to avoid regressions.
+> > > > >
+> > > >
+> > > > I'm about to send you a another set of pull requests with some more
+> > > > goodies that was lingering on the list. I will take a look to see if I
+> > > > can follow up on that with some fixes for above warnings - and take
+> > > > another look at incorporating dtbs_check in my workflow.
+> > >
+> > > Ok, sounds good. As I mentioned, I'm also just learning how to use
+> > > dtbs_check properly. Unfortunately, it takes ages to run on a
+> > > non-parallel build,
+> > > and using 'make -j32' as I normally do means the output gets reordered
+> > > with every run.
+> > >
+> > > It's probably ok if you figure out how to only run it for the files you
+> > > actually change in the Qualcomm tree.
 > >
-> > Ok, sounds good. As I mentioned, I'm also just learning how to use
-> > dtbs_check properly. Unfortunately, it takes ages to run on a
-> > non-parallel build,
-> > and using 'make -j32' as I normally do means the output gets reordered
-> > with every run.
+> > Disabling all non-Qualcomm arches makes `make dtbs_check` a little bit
+> > less painful.
 > >
-> > It's probably ok if you figure out how to only run it for the files you
-> > actually change in the Qualcomm tree.
-> 
-> Disabling all non-Qualcomm arches makes `make dtbs_check` a little bit
-> less painful.
-> 
+>
+> Yes, this is a trick I'm applying as well.
+>
+> It would however be nice if one didn't have to disable CONFIG_ARCH_* to
+> achieve this, or even better if one could run dtbs_check on a single
+> .dtb. In particular since many of the warnings are resolved by fixing
+> the bindings, which causes dtbs_check to recheck all files.
 
-Yes, this is a trick I'm applying as well.
+As a quick hack: add the following rule to the top-level Makefile:
 
-It would however be nice if one didn't have to disable CONFIG_ARCH_* to
-achieve this, or even better if one could run dtbs_check on a single
-.dtb. In particular since many of the warnings are resolved by fixing
-the bindings, which causes dtbs_check to recheck all files.
+%.dt.yaml: include/config/kernel.release scripts_dtc
+        $(Q)$(MAKE) $(build)=Documentation/devicetree/bindings
+Documentation/devicetree/bindings/processed-schema.json
+        $(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@ CHECK_DTBS=y
 
-Regards,
-Bjorn
+Now you can run checks for a single device tree by running 'make
+ARCH=arm64 ...... sdm845-db845.dy.yaml'
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+I don't know if it's worth including this into the upstream source tree.
+
+-- 
+With best wishes
+Dmitry
