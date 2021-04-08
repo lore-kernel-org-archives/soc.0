@@ -1,71 +1,93 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=Q2eW=JF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-25.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-25.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0CAFC433B4
-	for <linux-devicetree@archiver.kernel.org>; Thu,  8 Apr 2021 15:55:41 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 75D2761158
-	for <linux-devicetree@archiver.kernel.org>; Thu,  8 Apr 2021 15:55:41 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbhDHPzv (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Thu, 8 Apr 2021 11:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbhDHPzv (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Thu, 8 Apr 2021 11:55:51 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76ECDC061760;
-        Thu,  8 Apr 2021 08:55:39 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 417BDC433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 15:57:34 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id CCC536113A
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 15:57:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CCC536113A
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=marcan.st
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Type:
+	Content-Transfer-Encoding:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Subject:From:Cc:To:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=0yhJyWv0dCSiNTXF2pQY78e/S5I25szlm3KDG+IQlPg=; b=GIzI6Oaj7KuMgZlywYBssDBmVL
+	HDEjxtasXTyVSVzyqTY+0IKUgs7u4lWQMLYlnVbHy6lYSGvu23z6umEYvJoZ135tJ2CF4BsH3G5qz
+	F0x+lEsmeMWRdXLgr7rzzXJ4umv/Zq5fGq4Q42/17FHGw6Wgba01c94gSsCt/ZuVnZpVrxF/LrrYL
+	t3xaZ37Sfossb2I4+5AVKGpyccSfcYITUQfDd4CINUfg7/42CEMQHPwnHShH/1NnDE6lQcs/I5DX0
+	NquXhAy4Uc1hHzjQVwCIKHSL1eiTA3jwAgHQ/6hhBeVJ7XaRzlhHp3w5b+95YTyF8F4oJ3bg4tvO6
+	9ZiILHJw==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lUX0S-008XLa-EE; Thu, 08 Apr 2021 15:55:44 +0000
+Received: from marcansoft.com ([2a01:298:fe:f::2] helo=mail.marcansoft.com)
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lUX0M-008XJv-L8
+ for linux-arm-kernel@lists.infradead.org; Thu, 08 Apr 2021 15:55:42 +0000
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 1C00841E64;
-        Thu,  8 Apr 2021 15:55:30 +0000 (UTC)
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ (Authenticated sender: marcan@marcan.st)
+ by mail.marcansoft.com (Postfix) with ESMTPSA id 1C00841E64;
+ Thu,  8 Apr 2021 15:55:30 +0000 (UTC)
 List-Id: <soc.lore.kernel.org>
-To:     soc@kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-From:   Hector Martin <marcan@marcan.st>
+To: soc@kernel.org
+Cc: Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
+ Arnd Bergmann <arnd@kernel.org>, Olof Johansson <olof@lixom.net>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Mark Kettenis <mark.kettenis@xs4all.nl>, Tony Lindgren <tony@atomide.com>,
+ Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+ Stan Skowronek <stan@corellium.com>, Alexander Graf <graf@amazon.com>,
+ Will Deacon <will@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Andy Shevchenko <andy.shevchenko@gmail.com>, Jonathan Corbet
+ <corbet@lwn.net>, Catalin Marinas <catalin.marinas@arm.com>,
+ Christoph Hellwig <hch@infradead.org>, "David S. Miller"
+ <davem@davemloft.net>, Konrad Dybcio <konrad.dybcio@somainline.org>,
+ devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+From: Hector Martin <marcan@marcan.st>
 Subject: [GIT PULL] Apple M1 SoC platform bring-up for 5.13
 Message-ID: <bdb18e9f-fcd7-1e31-2224-19c0e5090706@marcan.st>
-Date:   Fri, 9 Apr 2021 00:55:28 +0900
+Date: Fri, 9 Apr 2021 00:55:28 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210408_165539_884697_CBFDEFD1 
+X-CRM114-Status: GOOD (  26.02  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210408155528.WKxlr37LRMPN9h8RV6SbjmX2U3h8HkXa4ajSuTZdp1I@z>
 
 Hi Arnd and all,
 
@@ -263,3 +285,8 @@ Hector Martin (17):
   create mode 100644 arch/arm64/boot/dts/apple/t8103.dtsi
   create mode 100644 drivers/irqchip/irq-apple-aic.c
   create mode 100644 include/dt-bindings/interrupt-controller/apple-aic.h
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
