@@ -2,63 +2,60 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EB3FC433ED
-	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 20:20:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5409FC433ED
+	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 20:20:35 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id D6ACF6115C; Thu,  8 Apr 2021 20:20:30 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F2C0610CF;
-	Thu,  8 Apr 2021 20:20:28 +0000 (UTC)
+	id 2678E6115C; Thu,  8 Apr 2021 20:20:35 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 51C3161159;
+	Thu,  8 Apr 2021 20:20:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617913230;
-	bh=P6PT1hQasfOdzBnYgOkWcVty9BPwNuJx/4jTmTi+f5E=;
+	s=k20201202; t=1617913235;
+	bh=Ol4v7YNDLR8aNW/yj8HuDlxq+pgknT1KPgaXlcHNMB8=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BOD8Kh4OVcifqdyk8l1bHPzPwPl2xmWoUaG0UASx1NIcOnTMDrNPj7K2Ky796reu/
-	 Hj6YT2cTdn0rmIIkeUlfu0Zg4ByMEIhmce8kTV+PXaCfNhowllzXjWmU+4q302yJ/i
-	 Dyw3QtwVcx61tNYn9Wk6B8toX70SyHjitzVpweNdwqdvpbjkYBxuKYA39fvv1voAQO
-	 LCzS7z+Yd7gqOSr6+TPe87UX+GxfHWZ+EyGfP9FNdn6CKaUpEUoetpuqe2OQavecUS
-	 1g269O/adp0Lb4bxoqsCLdihdQC8CH+bKK0irBn8a8TWRuhifJiJ1CZ/F5KYcf4gYf
-	 2R1Ku96+W92Kg==
+	b=hRGX3OIV2qmFI3/Y8vn0ePHMzdUSa448Gjc8yQFeY1kKqk6eCYaJcCo3JWQyWyrOj
+	 wqviZRY6KVOjnbm3k2knNg/iuDRWgdGMwbk8pdmc4C9GdBxsFIb1lCpLH6n8P3ZNft
+	 UUxDZMnxA3ezGLueNOkr8RbXhp5T38z69IFr/CEOdt80QKHXRcHmDO7X7Yi757qF06
+	 4Vxo/S0FzArPgbrlPirsM8IrjyghpjFLmAgcfUHZp34YmbD7Oh6cfUmLIrzl5KIOCC
+	 mKo9CGAkVRZ7SBL6mj/mAGuLQTScLQ2LF45JtXx6M7zlg2P/flRxRk8aYJKJXkSFyN
+	 W8HB23nuJw6YA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>,
-	soc@kernel.org,
-	arm@kernel.org
+To: soc@kernel.org,
+	Tony Lindgren <tony@atomide.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-msm@vger.kernel.org,
-	Kevin Hilman <khilman@baylibre.com>,
-	Andy Gross <agross@kernel.org>,
-	Olof Johansson <olof@lixom.net>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] Qualcomm ARM64 defconfig udpate for 5.13
-Date: Thu,  8 Apr 2021 22:20:04 +0200
-Message-Id: <161791320105.1663026.16468860660574153145.b4-ty@arndb.de>
+	linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	arm@kernel.org
+Subject: Re: [GIT PULL 3/3]
+Date: Thu,  8 Apr 2021 22:20:05 +0200
+Message-Id: <161791320105.1663026.3535744727493035044.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210404164841.712845-1-bjorn.andersson@linaro.org>
-References: <20210404164841.712845-1-bjorn.andersson@linaro.org>
+In-Reply-To: <pull-1617703816-65652@atomide.com-3>
+References: <pull-1617703816-65652@atomide.com> <pull-1617703816-65652@atomide.com-3>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sun, 4 Apr 2021 11:48:41 -0500, Bjorn Andersson wrote:
+On Tue, 6 Apr 2021 13:11:00 +0300, Tony Lindgren wrote:
 > The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 > 
 >   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-5.13
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.13/defconfig-signed
 > 
 > [...]
 
 Merged into arm/defconfig, thanks!
 
-merge commit: d515102f56a02b68c5cc840880b45730736df73d
+merge commit: 2de5bb995656312ac1464ee29294140e9aacd642
 
        Arnd
