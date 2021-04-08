@@ -1,253 +1,109 @@
-Return-Path: <SRS0=QRcX=JF=linaro.org=manivannan.sadhasivam@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C5E3C433ED
-	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 06:22:50 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id ED67961181; Thu,  8 Apr 2021 06:22:49 +0000 (UTC)
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C7CC961178
-	for <soc@kernel.org>; Thu,  8 Apr 2021 06:22:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C7CC961178
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=manivannan.sadhasivam@linaro.org
-Received: by mail-pg1-f172.google.com with SMTP id b17so664182pgh.7
-        for <soc@kernel.org>; Wed, 07 Apr 2021 23:22:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5j55AIKXs4c80ut0LuiEEzUyH///apdN9jqfe/vdEMU=;
-        b=rm3KWCO7ayjSg0Stq9ui8jiHZsvG/6gludBzsSl+xQm5x01LlTXmBEhT2QTzKMOIfW
-         ZUIzfdPQGWB8wx+63kWa5rfA1QOfQDlgP1Zmd3UIqZrZozvaS7ufe6Wa4IpcMFAgM2ft
-         FyRBcoNy/5b6R4PszNNzNVoE+18QVDnrhyElOAdd6SR1JWB6wXfYXcuQl/XwUCQmB4mV
-         B8FZX6y05nJkPgDgMs+jYN9u+MtRhMorbkwVeLSS0lOto+IlAKi0TKAMpynf549TABXl
-         9dBYD7zwgUs74+Pwrn4ZpuuXf478himLPgdTRfPO1s0dNM55gXoF4/l38rQbz6t53vNm
-         nj0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5j55AIKXs4c80ut0LuiEEzUyH///apdN9jqfe/vdEMU=;
-        b=I/mGSx5Iz8sxw/syLWJFYJkI1zhIUzXKHe5586yv4O2fNrvKTHgs2Yid9oxAOW0I14
-         aYiPwMbt0Cdo9n/P2CsEZqcFcj/RLunDblImwFOUfUPethqnUqJ0sBnM8u1/RbB9kfp+
-         VhnehBceux8cWCk0ct17126MuCegGFi035vPSI37LS1JP7CX/tekfW66p+hkeWMjChip
-         2aDbYJn+ipEZSyboqvpG45dabSlg7xulU83iNWiFM0miPHevNQui32FXlwmHUlg+0EdE
-         55eUIr0fKe4+hBvvn6sS5A41UuY/+hqY6EzfvwVpnwVekwzwrQ07bcMdke2+Cb37PClb
-         CxqA==
-X-Gm-Message-State: AOAM533IUm2qb8II3B8eZHihn3OR3O4CFUa67YtuP5O2rQDlTL5uFwv1
-	xoz5tvLh/tSCNWyOBqp91PyBLq47BZHjA2E=
-X-Google-Smtp-Source: ABdhPJxq0w9c5T2eoHxeJMVactroxGubXVkTvDu49v8pIsYtueP8TINDvvZ5JmegD5U0RTN6oE2fVA==
-X-Received: by 2002:a63:dc49:: with SMTP id f9mr6595263pgj.361.1617862969101;
-        Wed, 07 Apr 2021 23:22:49 -0700 (PDT)
-Received: from localhost.localdomain ([2409:4072:6e85:565f:2e19:9e93:4526:a814])
-        by smtp.gmail.com with ESMTPSA id w7sm18926652pff.208.2021.04.07.23.22.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Apr 2021 23:22:48 -0700 (PDT)
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-X-Google-Original-From: Manivannan Sadhasivam <mani@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: olof@lixom.net,
-	arnd@arndb.de,
-	afaerber@suse.de,
-	linux-actions@lists.infradead.org,
-	thomas.liau@actions-semi.com,
-	cristian.ciocaltea@gmail.com,
-	Manivannan Sadhasivam <mani@kernel.org>
-Subject: [PATCH] ARM: dts: owl-s500-roseapplepi: Add ATC2603C PMIC
-Date: Thu,  8 Apr 2021 11:52:32 +0530
-Message-Id: <20210408062232.3575-1-mani@kernel.org>
-X-Mailer: git-send-email 2.25.1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53025C433B4
+	for <linux-devicetree@archiver.kernel.org>; Thu,  8 Apr 2021 07:26:50 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 23EB961057
+	for <linux-devicetree@archiver.kernel.org>; Thu,  8 Apr 2021 07:26:50 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S229566AbhDHH1A (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Thu, 8 Apr 2021 03:27:00 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:49757 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229623AbhDHH07 (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Thu, 8 Apr 2021 03:26:59 -0400
+Received: from mail-oo1-f51.google.com ([209.85.161.51]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MqsL3-1lzHxG2c8v-00mrKD for <devicetree@vger.kernel.org>; Thu, 08 Apr 2021
+ 09:26:47 +0200
+Received: by mail-oo1-f51.google.com with SMTP id p2-20020a4aa8420000b02901bc7a7148c4so277980oom.11
+        for <devicetree@vger.kernel.org>; Thu, 08 Apr 2021 00:26:47 -0700 (PDT)
+X-Gm-Message-State: AOAM530/pJOoK0WdWE9OnO6D1HOQQ8cenUs5VKALd1eNsoPk/yleEuKr
+        2LFE+ItBKYD5uZnFWTetEb5dUtuwn3062S4+/No=
+X-Google-Smtp-Source: ABdhPJzKJmULiKJZbqIfF2zDxr9Dn4RUKtO26qlLbMKJT/5DsJBNPIXmgMgdVr4n60mmoqzCYdBdCT5pE1al5gbKDF0=
+X-Received: by 2002:a4a:244d:: with SMTP id v13mr6446430oov.66.1617866806386;
+ Thu, 08 Apr 2021 00:26:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <22814673-e9fe-f65b-cc0f-b02be4f90d1a@gmail.com>
+ <CAK8P3a0bp3CUzOQHSX5KYt44j-Njk_u2P=0q-ZQ0HcTBiVVVSA@mail.gmail.com>
+ <01c82108-64a8-33ee-3984-5bd7056a0002@gmail.com> <CAK8P3a37BUdHneO+9+t0Pan3UWZHub-ishcKLNxCbqO0kk0CNw@mail.gmail.com>
+ <CAOwMV_yQLWwMEQ_f_wHOAipgD1qZgNz2SA2RJDZpNozCKv4vWQ@mail.gmail.com>
+In-Reply-To: <CAOwMV_yQLWwMEQ_f_wHOAipgD1qZgNz2SA2RJDZpNozCKv4vWQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 8 Apr 2021 09:26:30 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2Qg-uz0kMXFMrvRjUv3NRvZXjTwS1P5MDvFk3feYaBzg@mail.gmail.com>
+Message-ID: <CAK8P3a2Qg-uz0kMXFMrvRjUv3NRvZXjTwS1P5MDvFk3feYaBzg@mail.gmail.com>
+Subject: Re: [GIT PULL] arm64: dts: mediatek: changes for v5.13 (second round)
+To:     Fabien Parent <fparent@baylibre.com>
+List-Id: <soc.lore.kernel.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:j1AY6EJODYVytiIWB+Wooc0C26ZDQp1gjNo+f7t5FKwICN5kbn1
+ k5mUBpepRh13Le4Xl/BVBIPCoYMk0aqtzO8ZsKJVXifZ5TP4y65PufxRHlWwOHnG6Vl5V7A
+ gGydAy8Hgme1iOhBLlRcxxfVXoaKCqYbvU/m6SxODzsYtN+G1oMTO8lJuF8gwJ20SWd6K2h
+ VK1GtOUR/liUdNqGfzfSw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hPjVjcVz+go=:PFID7DMQHfXRZqqH4JwxX1
+ xgEkc8vfh1sFi+o0tzLf3KGqR+MiBxukPKdqMH0lw/3YrgR21BLEocqBK8YRxZDAezCKwzM/C
+ ImGH8P2D3zMGWqHVGUaqmMNbvV5vav0njBCCLU7BxQgkLywHD9vok/duFMpA2PsGx6t3tQeoB
+ Z54Q4lerXqawEdjDf/PDr39Y2/bqanCnCCgPehGvlhWDNzb78Uti2yBXXVBTg8BxG7FSBX8mZ
+ eEZeBeuypfvNzwMxG16QnjWTIMAjLTLF4wnXDZ6vrp7lhMYUsKXs37twbvyWvHfG39MXqKTWA
+ z2T+JnKOamxHu928mutOEzCfr4Lwu29mOUPvFFSRbNEoTq0jjUTDZcplgzVgPW+zR7FGQMDX5
+ phyWepSMTPWdNmoO1k0q4OgaqZfJBmMNNc6hmZ3QqZnSkEnDGxBXFLIs6+jwLXpahmgMMoJqj
+ Ncckw0N4dcGKLhknmU54iCtRtD75XTA=
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
 
-From: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+On Thu, Apr 8, 2021 at 12:14 AM Fabien Parent <fparent@baylibre.com> wrote:
+> On Wed, Apr 7, 2021 at 7:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Wed, Apr 7, 2021 at 6:34 PM Matthias Brugger <matthias.bgg@gmail.com> wrote:
+> > > On 07/04/2021 18:06, Arnd Bergmann wrote:
+> >
+> > So five of the strings are documented, the others are missing. I did not check
+> > the other patches in your branch.
+>
+> The binding documentation for these drivers are here [0]. The display
+> bindings are documented as:
+> - compatible: "mediatek,<chip>-disp-<function>", one of
+>
+> The <chip> placeholder is never expanded for all the supported chips.
+> The 5 existings matches from your grep command comes from the example.
+> I guess these will be fixed whenever someone converts [0] to yaml.
 
-Add device tree node for ATC2603C PMIC and remove the 'fixed-3.1V'
-dummy regulator used for the uSD supply.
+Ok. I suppose the wildcards just didn't get caught in the initial review of the
+binding. The way the binding is defined is not all that helpful since the entire
+point of having chip specific strings is to allow having different bindings for
+future chips that have different requirements.
 
-Additionally, add 'SYSPWR' fixed regulator and provide cpu0 supply.
+There is still an open question on what to do to replace the aliases. At least
+since they are not part of the documented binding, it is fairly easy to argue
+that the drivers should not rely on them, and we can still change them.
+I also see that as late as last november, there were still incompatible
+code changes to the ad-hoc binding in
+drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c, so I'm not too worried
+about breaking existing dts files that relied on it.
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-Link: https://lore.kernel.org/r/2e0a2931ae3757f016948e7c78e8e54afa325ae0.1615538629.git.cristian.ciocaltea@gmail.com
-Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
----
+I don't claim to understand how the various blocks all fit together here,
+but I would expect that this can all be replaced with just having
+references to phandles for the other nodes in one place.
 
-Just a single patch for v5.13, so sending it directly. The corresponding
-driver and binding patches are merged into mfd tree.
+Are the aliases in this case actually board specific, or do they just
+document how the SoC is wired up?
 
- arch/arm/boot/dts/owl-s500-roseapplepi.dts | 132 ++++++++++++++++++++-
- 1 file changed, 126 insertions(+), 6 deletions(-)
-
-diff --git a/arch/arm/boot/dts/owl-s500-roseapplepi.dts b/arch/arm/boot/dts/owl-s500-roseapplepi.dts
-index ff91561ca99c..b8c5db2344aa 100644
---- a/arch/arm/boot/dts/owl-s500-roseapplepi.dts
-+++ b/arch/arm/boot/dts/owl-s500-roseapplepi.dts
-@@ -2,7 +2,7 @@
- /*
-  * Roseapple Pi
-  *
-- * Copyright (C) 2020 Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-+ * Copyright (C) 2020-2021 Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-  */
- 
- /dts-v1/;
-@@ -27,20 +27,140 @@ memory@0 {
- 		reg = <0x0 0x80000000>; /* 2GB */
- 	};
- 
--	/* Fixed regulator used in the absence of PMIC */
--	sd_vcc: sd-vcc {
-+	syspwr: regulator-5v0 {
- 		compatible = "regulator-fixed";
--		regulator-name = "fixed-3.1V";
--		regulator-min-microvolt = <3100000>;
--		regulator-max-microvolt = <3100000>;
-+		regulator-name = "SYSPWR";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
- 		regulator-always-on;
- 	};
- };
- 
-+&cpu0 {
-+	cpu0-supply = <&vdd_cpu>;
-+};
-+
- &i2c0 {
- 	status = "okay";
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&i2c0_pins>;
-+
-+	atc260x: pmic@65 {
-+		compatible = "actions,atc2603c";
-+		reg = <0x65>;
-+		interrupt-parent = <&sirq>;
-+		interrupts = <2 IRQ_TYPE_LEVEL_HIGH>;
-+
-+		reset-time-sec = <6>;
-+
-+		regulators {
-+			compatible = "actions,atc2603c-regulator";
-+
-+			dcdc1-supply = <&syspwr>;
-+			dcdc2-supply = <&syspwr>;
-+			dcdc3-supply = <&syspwr>;
-+			ldo1-supply = <&syspwr>;
-+			ldo2-supply = <&syspwr>;
-+			ldo3-supply = <&syspwr>;
-+			ldo5-supply = <&syspwr>;
-+			ldo6-supply = <&syspwr>;
-+			ldo7-supply = <&syspwr>;
-+			ldo8-supply = <&syspwr>;
-+			ldo11-supply = <&syspwr>;
-+			ldo12-supply = <&syspwr>;
-+			switchldo1-supply = <&vcc>;
-+
-+			vdd_cpu: dcdc1 {
-+				regulator-name = "VDD_CPU";
-+				regulator-min-microvolt = <700000>;
-+				regulator-max-microvolt = <1400000>;
-+				regulator-always-on;
-+			};
-+
-+			vddq: dcdc2 {
-+				regulator-name = "VDDQ";
-+				regulator-min-microvolt = <1300000>;
-+				regulator-max-microvolt = <2150000>;
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+
-+			vcc: dcdc3 {
-+				regulator-name = "VCC";
-+				regulator-min-microvolt = <2600000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+			};
-+
-+			vcc_3v3: ldo1 {
-+				regulator-name = "VCC_3V3";
-+				regulator-min-microvolt = <2600000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+			};
-+
-+			avcc: ldo2 {
-+				regulator-name = "AVCC";
-+				regulator-min-microvolt = <2600000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+			};
-+
-+			vdd_1v8: ldo3 {
-+				regulator-name = "VDD_1V8";
-+				regulator-min-microvolt = <1500000>;
-+				regulator-max-microvolt = <2000000>;
-+				regulator-always-on;
-+			};
-+
-+			vcc_3v1: ldo5 {
-+				regulator-name = "VCC_3V1";
-+				regulator-min-microvolt = <2600000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+
-+			avdd: ldo6 {
-+				regulator-name = "AVDD";
-+				regulator-min-microvolt = <700000>;
-+				regulator-max-microvolt = <1400000>;
-+				regulator-always-on;
-+			};
-+
-+			sens_1v8: ldo7 {
-+				regulator-name = "SENS_1V8";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+			};
-+
-+			ldo8: ldo8 {
-+				regulator-name = "LDO8";
-+				regulator-min-microvolt = <2300000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+
-+			svcc: ldo11 {
-+				regulator-name = "SVCC";
-+				regulator-min-microvolt = <2600000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+			};
-+
-+			rtc_vdd: ldo12 {
-+				regulator-name = "RTC_VDD";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-always-on;
-+			};
-+
-+			sd_vcc: switchldo1 {
-+				regulator-name = "SD_VCC";
-+				regulator-min-microvolt = <3000000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+		};
-+	};
- };
- 
- &i2c1 {
--- 
-2.25.1
-
+       Arnd
