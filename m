@@ -1,108 +1,157 @@
-Return-Path: <SRS0=Q2eW=JF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=EZsW=JF=ti.com=nm@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9778FC433ED
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 20:23:10 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31B00C433ED
+	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 20:33:50 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id EEE1461151; Thu,  8 Apr 2021 20:33:49 +0000 (UTC)
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2B9DE61151
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 20:23:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2B9DE61151
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=0BkEtSv6SfGfQxO1C5R/v6JE0gBYK663NZkrmaKiRg4=; b=mUi2p5Walytz6ItFx22VWj7/G
-	rUPnuuZ9waMVGXe4M+3Yu6WNd0kfRyvaW2q5/F4jNryGiZssfYSxrAVddPzcUH6SK9ZbMgjOIOax7
-	sQcPlnnYdsNsdEzssesOM9AyiEHzKA59OBS7v/pJRxx1M90erPtT+rSvphTQHZt4Zy1KYt6pmcjW+
-	5OL9+26GiyUvPanH1eJ3gNlPmUb5XBC4XBQIGhQRFvKAr9U6ctlehiSWcZd8SwF/JEt4MbrFtZFhR
-	THe7yAiPRlcCLnjVdkbLEfYkwIFCCJZ5U8ex+mcAwQhiyEI1NLWuXSrkIUyxpimUjraLwv1N3g8ti
-	+x1CmAjJg==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lUb9u-009CC9-Ib; Thu, 08 Apr 2021 20:21:47 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUb9q-009CB5-Sn
- for linux-arm-kernel@lists.infradead.org; Thu, 08 Apr 2021 20:21:44 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 611E5610FC;
- Thu,  8 Apr 2021 20:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1617913301;
- bh=XG7ZBeR3dlHMBKcF/vu3FeV5kedebxxNaln7NWAPM7c=;
- h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=UmVZFYgHg2Qu//Lb1WwP3aMhSyPySThqRBS21XDepOffkW2RDa38E6hL//LpbOLAY
- wDcQZc/ecE0zc10u5TNjofg8dKLzU2AJYzGG3/eFLGqBMRTKBufH/nlSaoa32Gax6M
- StiK0FMqBXEcshw9JzE3uE565Gbtm7oTWHtm9bIJvNMHr8PeYE1eD8Xgw9kE89pwVP
- wqcSD2Ko0G0ywJA1mvTBg41roSqc1zzUH9fTyUUD8AwPeTh6521w3ly4UJYp/NjdAH
- V5MXYOFir8Y6oNd6SDm6dAkAHy72jrK6u03r+9USRnYshVMPcNjOWZW9cMS53DD+jZ
- UW/+7xti+M7HA==
-From: Arnd Bergmann <arnd@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id 7B65B6113C;
+	Thu,  8 Apr 2021 20:33:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7B65B6113C
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=nm@ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 138KXmI1093663;
+	Thu, 8 Apr 2021 15:33:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1617914028;
+	bh=10BMFLUqlV8GVdS5cFsilLWusC/DF5YsA+ZG6gaonRk=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=unwymwSQjkmZxU5zvQEyiFxbncadqfeGajKtPAmGnmSTwezZ8S1xiAK5d8ZiGSvNy
+	 KWToQY31GYGg6JGMnxE9Z0XTiTG4Bo5KqsyuviiIz4BlXioVdns4MeBrfJLJr2Z4Tk
+	 U82vaWhpZgTMWx1Io/E3a8zTlqgEYBSvFW371si8=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 138KXmtA102347
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 8 Apr 2021 15:33:48 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 8 Apr
+ 2021 15:33:48 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Thu, 8 Apr 2021 15:33:48 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+	by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 138KXm9G006412;
+	Thu, 8 Apr 2021 15:33:48 -0500
+Date: Thu, 8 Apr 2021 15:33:48 -0500
+From: Nishanth Menon <nm@ti.com>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
- Olof Johansson <olof@lixom.net>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
- Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [GIT PULL] ARM: mvebu: dt for v5.13 (#1)
-Date: Thu,  8 Apr 2021 22:20:55 +0200
-Message-ID: <161791324990.1663215.15241029409271472842.b4-ty@arndb.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <87v98xbzir.fsf@BL-laptop>
-References: <87v98xbzir.fsf@BL-laptop>
+CC: SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>,
+        arm-soc
+	<arm@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Tero
+ Kristo <kristo@kernel.org>,
+        Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] arm64: dts: TI K3 updates for v5.13
+Message-ID: <20210408203348.vafestu55hpw3zeq@bluff>
+References: <20210405155336.smohb7uzkperqwuz@reflex>
+ <161789493785.1630479.2066806618809349698.b4-ty@arndb.de>
+ <20210408163439.x7pz7bitwmu7aenl@freckled>
+ <CAK8P3a0r3knGP5XxSz_K4zj4=iMNg_UysJLS8jdgqAZunLfLLw@mail.gmail.com>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210408_212143_149946_A03B1EC3 
-X-CRM114-Status: GOOD (  10.26  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210408202055.D57iKocsDyC6oEXpKRM22gyroO9j-J5DRF8g9e3j1-0@z>
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a0r3knGP5XxSz_K4zj4=iMNg_UysJLS8jdgqAZunLfLLw@mail.gmail.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-From: Arnd Bergmann <arnd@arndb.de>
-
-On Wed, 07 Apr 2021 22:39:08 +0200, Gregory CLEMENT wrote:
-> Here is the first pull request for dt for mvebu for v5.13.
+On 22:13-20210408, Arnd Bergmann wrote:
+> On Thu, Apr 8, 2021 at 6:34 PM Nishanth Menon <nm@ti.com> wrote:
+> > On 17:24-20210408, Arnd Bergmann wrote:
+> > >
+> > > ti/k3-am64-main.dtsi:376.40-385.4: Warning (simple_bus_reg): /bus@f4000/interrupt-controller0: missing or empty reg/ranges property
+> > > ti/k3-am64-main.dtsi:45.13-135.4: Warning (simple_bus_reg): /bus@f4000/dmss: missing or empty reg/ranges property
+> > > ti/k3-am64-mcu.dtsi:77.39-86.4: Warning (simple_bus_reg): /bus@f4000/bus@4000000/interrupt-controller1: missing or empty reg/ranges property
+> > >
+> > > ti/k3-am642-evm.dt.yaml: bus@4000000: interrupt-controller1: {'type': 'object'} is not allowed for {'compatible': ['ti,sci-intr'], 'ti,intr-trigger-type': [[1]], 'interrupt-controller': True, 'interrupt-parent': [[1]], '#interrupt-cells': [[1]], 'ti,sci': [[4]], 'ti,sci-dev-id': [[5]], 'ti,interrupt-ranges': [[0, 104, 4]], 'phandle': [[5]]}
+> > > ti/k3-am642-evm.dt.yaml: bus@f4000: dmss: {'type': 'object'} is not allowed for {'compatible': ['simple-mfd'], '#address-cells': [[2]], '#size-cells': [[2]], 'dma-ranges': True, 'ranges':  'phandle': [[7]]}}
+> > > ti/k3-am642-evm.dt.yaml: bus@f4000: interrupt-controller0: {'type': 'object'} is not allowed for {'compatible': ['ti,sci-intr'], 'ti,intr-trigger-type': [[1]], 'interrupt-controller': True, 'interrupt-parent': [[1]], '#interrupt-cells': [[1]], 'ti,sci': [[4]], 'ti,sci-dev-id': [[3]], 'ti,interrupt-ranges': [[0, 32, 16]], 'phandle': [[15]]}
+> > > ti/k3-am642-evm.dt.yaml: flash@0: 'cdns,read-delay', 'cdns,tchsh-ns', 'cdns,tsd2d-ns', 'cdns,tshsl-ns', 'cdns,tslch-ns' do not match any of the regexes: '^partition@', 'pinctrl-[0-9]+'
+> > > ti/k3-am642-sk.dt.yaml: bus@4000000: interrupt-controller1: {'type': 'object'} is not allowed for {'compatible': ['ti,sci-intr'], 'ti,intr-trigger-type': [[1]], ...
+> > > ti/k3-am642-sk.dt.yaml: bus@f4000: dmss: {'type': 'object'} is not allowed for {'compatible': ['simple-mfd'], ...
+> > > ti/k3-am642-sk.dt.yaml: bus@f4000: interrupt-controller0: {'type': 'object'} is not allowed for {'compatible': ['ti,sci-intr'], 'ti,intr-trigger-type': [[1]], 'interrupt-controller': True, 'interrupt-parent': [[1]], '#interrupt-cells': [[1]], 'ti,sci': [[4]], 'ti,sci-dev-id': [[3]], 'ti,interrupt-ranges': [[0, 32, 16]], 'phandle': [[11]]}
+> > > ti/k3-am642-sk.dt.yaml: flash@0: 'cdns,read-delay', 'cdns,tchsh-ns', 'cdns,tsd2d-ns', 'cdns,tshsl-ns', 'cdns,tslch-ns' do not match any of the regexes: '^partition@', 'pinctrl-[0-9]+'
+> > > ti/k3-j7200-common-proc-board.dt.yaml: flash@0: 'cdns,read-delay', 'cdns,tchsh-ns', 'cdns,tsd2d-ns', 'cdns,tshsl-ns', 'cdns,tslch-ns' do not match any of the regexes: '^partition@', 'pinctrl-[0-9]+'
+> > >
+> > >
+> > > merge commit: 4b8cf90637f295ff1cb1f4bdfde134dab1196296
+> >
+> >
+> > We have a bunch of problems with interrupt controller definitions -
+> > attempts in [1] [2] did'nt seem to come to any form of conclusion yet.
+> >
+> > Cdns is a convert from txt to yaml and is queued on Marks' tree[3]
 > 
-> This one is latter that the other ones, because I've just found a
-> patch pending since December. I hope it is not too late.
+> Ok, thanks for taking a look
 > 
-> Gregory
+
+Apologies on not flagging in my PR itself.
+
+> > These issues pre-existed in existing definitions and/or convertion
+> > from txt and we are already working to make sure we try and reach a
+> > conclusion soon[4]. I am guessing from your note that it is high time we
+> > put our foot down on txt bindings and clean yamls, I will ensure we
+> > follow up on that.
 > 
-> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+> I'm still trying to figure out how to best script it, my intention was to
+> only list issues that got introduced in the latest patches rather than
+> the existing problems.
+
+I had done a bit of scripting around this already in my checker:
+https://github.com/nmenon/kernel_patch_verify/blob/master/kernel_patch_verify#L212
+Though it never works quite right all the time.. So, i do run explicit
+checks afterwards to try and catch these.. and containerizing them
+helped deployment aspects(developers having different schema package
+versions) in control as well.
+
+but yeah, a clean way of doing things still eludes me.
+
 > 
-> [...]
+> On the other hand, it would indeed help to address any issues that
+> are going to come up in every newly added board first, and then
+> eventually get to all the remaining warnings for issues with the
+> yaml bindings.
 
-Merged into arm/dt, thanks!
+yep, some of the troubles I had has relation to schema checks getting
+stricter after I had queued things up, and then having to make a
+choice :(. But internally, I am tracking those in our tracking system
+and team has been given a headsup that we cleanup yamls before we add
+any further nodes.
 
-merge commit: e3e1276295a4c5eddc31dd297e8f6af275ca9c4f
+> 
 
-       Arnd
+The following also need to be converted to yaml (internal
+JIRA tracking already done).
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Documentation/devicetree/bindings/arm/keystone/ti,sci.txt
+Documentation/devicetree/bindings/gpio/gpio-davinci.txt
+Documentation/devicetree/bindings/i2c/i2c-omap.txt
+Documentation/devicetree/bindings/input/touchscreen/ti-tsc-adc.txt
+Documentation/devicetree/bindings/mailbox/omap-mailbox.txt
+Documentation/devicetree/bindings/mailbox/ti,secure-proxy.txt
+Documentation/devicetree/bindings/mtd/ti,am654-hbmc.txt
+Documentation/devicetree/bindings/pci/pci-keystone.txt
+Documentation/devicetree/bindings/phy/ti,phy-am654-serdes.txt
+Documentation/devicetree/bindings/pwm/pwm-tiecap.txt
+Documentation/devicetree/bindings/pwm/pwm-tiehrpwm.txt
+Documentation/devicetree/bindings/serial/omap_serial.txt
+Documentation/devicetree/bindings/spi/omap-spi.txt
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
