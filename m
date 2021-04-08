@@ -1,32 +1,30 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=hr/K=JF=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53025C433B4
-	for <linux-devicetree@archiver.kernel.org>; Thu,  8 Apr 2021 07:26:50 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 23EB961057
-	for <linux-devicetree@archiver.kernel.org>; Thu,  8 Apr 2021 07:26:50 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbhDHH1A (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Thu, 8 Apr 2021 03:27:00 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:49757 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbhDHH07 (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Thu, 8 Apr 2021 03:26:59 -0400
-Received: from mail-oo1-f51.google.com ([209.85.161.51]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MqsL3-1lzHxG2c8v-00mrKD for <devicetree@vger.kernel.org>; Thu, 08 Apr 2021
- 09:26:47 +0200
-Received: by mail-oo1-f51.google.com with SMTP id p2-20020a4aa8420000b02901bc7a7148c4so277980oom.11
-        for <devicetree@vger.kernel.org>; Thu, 08 Apr 2021 00:26:47 -0700 (PDT)
-X-Gm-Message-State: AOAM530/pJOoK0WdWE9OnO6D1HOQQ8cenUs5VKALd1eNsoPk/yleEuKr
-        2LFE+ItBKYD5uZnFWTetEb5dUtuwn3062S4+/No=
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D277DC433ED
+	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 07:26:50 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A977961178; Thu,  8 Apr 2021 07:26:50 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id C454161164;
+	Thu,  8 Apr 2021 07:26:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C454161164
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arnd@arndb.de
+Received: from mail-oo1-f48.google.com ([209.85.161.48]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M7sM0-1lYEoM0GO2-004yop; Thu, 08 Apr 2021 09:26:48 +0200
+Received: by mail-oo1-f48.google.com with SMTP id w1-20020a4adec10000b02901bc77feac3eso287247oou.3;
+        Thu, 08 Apr 2021 00:26:47 -0700 (PDT)
+X-Gm-Message-State: AOAM531wPKkLiZlSkTJEqYvUZAMWB8LRInWYihe739P7UdWP3BHRl8AV
+	btf1qkepXQfGgegHl+jWoDlxQcKJuBqzTfrXUVQ=
 X-Google-Smtp-Source: ABdhPJzKJmULiKJZbqIfF2zDxr9Dn4RUKtO26qlLbMKJT/5DsJBNPIXmgMgdVr4n60mmoqzCYdBdCT5pE1al5gbKDF0=
 X-Received: by 2002:a4a:244d:: with SMTP id v13mr6446430oov.66.1617866806386;
  Thu, 08 Apr 2021 00:26:46 -0700 (PDT)
@@ -36,39 +34,34 @@ References: <22814673-e9fe-f65b-cc0f-b02be4f90d1a@gmail.com>
  <01c82108-64a8-33ee-3984-5bd7056a0002@gmail.com> <CAK8P3a37BUdHneO+9+t0Pan3UWZHub-ishcKLNxCbqO0kk0CNw@mail.gmail.com>
  <CAOwMV_yQLWwMEQ_f_wHOAipgD1qZgNz2SA2RJDZpNozCKv4vWQ@mail.gmail.com>
 In-Reply-To: <CAOwMV_yQLWwMEQ_f_wHOAipgD1qZgNz2SA2RJDZpNozCKv4vWQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 8 Apr 2021 09:26:30 +0200
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 8 Apr 2021 09:26:30 +0200
 X-Gmail-Original-Message-ID: <CAK8P3a2Qg-uz0kMXFMrvRjUv3NRvZXjTwS1P5MDvFk3feYaBzg@mail.gmail.com>
 Message-ID: <CAK8P3a2Qg-uz0kMXFMrvRjUv3NRvZXjTwS1P5MDvFk3feYaBzg@mail.gmail.com>
 Subject: Re: [GIT PULL] arm64: dts: mediatek: changes for v5.13 (second round)
-To:     Fabien Parent <fparent@baylibre.com>
+To: Fabien Parent <fparent@baylibre.com>
 List-Id: <soc.lore.kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>, SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>, Irui Wang <irui.wang@mediatek.com>, 
+	Rob Herring <robh+dt@kernel.org>, DTML <devicetree@vger.kernel.org>, 
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:j1AY6EJODYVytiIWB+Wooc0C26ZDQp1gjNo+f7t5FKwICN5kbn1
- k5mUBpepRh13Le4Xl/BVBIPCoYMk0aqtzO8ZsKJVXifZ5TP4y65PufxRHlWwOHnG6Vl5V7A
- gGydAy8Hgme1iOhBLlRcxxfVXoaKCqYbvU/m6SxODzsYtN+G1oMTO8lJuF8gwJ20SWd6K2h
- VK1GtOUR/liUdNqGfzfSw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hPjVjcVz+go=:PFID7DMQHfXRZqqH4JwxX1
- xgEkc8vfh1sFi+o0tzLf3KGqR+MiBxukPKdqMH0lw/3YrgR21BLEocqBK8YRxZDAezCKwzM/C
- ImGH8P2D3zMGWqHVGUaqmMNbvV5vav0njBCCLU7BxQgkLywHD9vok/duFMpA2PsGx6t3tQeoB
- Z54Q4lerXqawEdjDf/PDr39Y2/bqanCnCCgPehGvlhWDNzb78Uti2yBXXVBTg8BxG7FSBX8mZ
- eEZeBeuypfvNzwMxG16QnjWTIMAjLTLF4wnXDZ6vrp7lhMYUsKXs37twbvyWvHfG39MXqKTWA
- z2T+JnKOamxHu928mutOEzCfr4Lwu29mOUPvFFSRbNEoTq0jjUTDZcplgzVgPW+zR7FGQMDX5
- phyWepSMTPWdNmoO1k0q4OgaqZfJBmMNNc6hmZ3QqZnSkEnDGxBXFLIs6+jwLXpahmgMMoJqj
- Ncckw0N4dcGKLhknmU54iCtRtD75XTA=
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
+X-Provags-ID: V03:K1:SEPheqocUgEBKaWEQzXhXMbcg64RXaKgsnxO4C71HvaRNaW1YLr
+ vnojImipnju27pRpwtSzDVce8MmETlejigyKEtu/RyDQzDFWjd3YjqzhtS3SZ43UszkSHnB
+ Z01Rxg6OCmVVv8X1pxhSlxrbJj/0+ZBnqvwZvgTsBXW/1176HPs6Sl/1Q8K9N8eeFK2IbXt
+ xW4e9tXB9k63Dy6XlW92Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:GJyYWLv1wFQ=:SvbNhPj6b94Q5FRHqiBHMx
+ TOKQP9MGXLYBwF3UQwB8dlQEYBafblRfLbC+eo+GTJ+vpjjjSpRfKRccRVrqI8l1+0Ntor/cP
+ kNXo6y+1OpJZnWamrVfS1DjjYG6fxsKS2QvIykYTW6pjI1TvAmDndSMMZdrGgMOWQ1SpQqijg
+ cc+FFaXsT1oPLcO+ft7vszBpDkX6cZ+0ssoK6CfNclabAQpUV5WTae0ZXe8ERw9+1Mrx8j9Fr
+ 4+8AdLxU+TQAck4Ji0PqUNmeGWR5hD8PMbE0x1/lJHxdyga6BKQZDk2wUkTc1aLFxgiV7n6gC
+ NuyUJ7ekTEnaV81KUQxGq8pplN9f018RfxgaoCDFR8WBuWwECND+Xf/MMjVXz0U0o5BtOX1ij
+ 0T2UznrML4bcqW1MuwOy8x/jcCGwtT3RluqusUmvp/vy8gBiPTh1s4MjDFX+/82k3+OPd4Ew0
+ RUCbv5LeicOhNZcK4tfcDik9QMwpP2Iln1cGJgWZDP6/GggIKayk7CAqzabe6X4KeA4V6ht36
+ s5incrJgCKzNj/vWsTrayeGdwBVBQ+xs3IcJF+qnKT9Bsijkg6xZ08n148rUrtESXr5CZt4pY
+ mN+43OK8CmG/jdoU4x5P56F/rpzLP/VG9T
+Message-ID: <20210408072630.9Bm4bQTeMN3hyypfBcR6N1NCaoKJ7-2GbPJ5hXXqN24@z>
 
 On Thu, Apr 8, 2021 at 12:14 AM Fabien Parent <fparent@baylibre.com> wrote:
 > On Wed, Apr 7, 2021 at 7:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
