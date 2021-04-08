@@ -1,37 +1,56 @@
-Return-Path: <SRS0=hr/K=JF=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=hXrw=JF=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D277DC433ED
-	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 07:26:50 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id A977961178; Thu,  8 Apr 2021 07:26:50 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 889EAC433B4
+	for <linux-mediatek@archiver.kernel.org>; Thu,  8 Apr 2021 07:27:26 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C454161164;
-	Thu,  8 Apr 2021 07:26:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C454161164
+	by mail.kernel.org (Postfix) with ESMTPS id 0382B61178
+	for <linux-mediatek@archiver.kernel.org>; Thu,  8 Apr 2021 07:27:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0382B61178
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arnd@arndb.de
-Received: from mail-oo1-f48.google.com ([209.85.161.48]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M7sM0-1lYEoM0GO2-004yop; Thu, 08 Apr 2021 09:26:48 +0200
-Received: by mail-oo1-f48.google.com with SMTP id w1-20020a4adec10000b02901bc77feac3eso287247oou.3;
-        Thu, 08 Apr 2021 00:26:47 -0700 (PDT)
-X-Gm-Message-State: AOAM531wPKkLiZlSkTJEqYvUZAMWB8LRInWYihe739P7UdWP3BHRl8AV
-	btf1qkepXQfGgegHl+jWoDlxQcKJuBqzTfrXUVQ=
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
+	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=O0u/YN9V07qwv7XCLXdxNI755XIVmNDD0mURgaca4Ww=; b=jkQYIccbPJkdh3uJAb4plJINx
+	B3+3WkNA8yUBcAJtjwWr4OD2C1byTU8DSTb5r0PVDEa/PRyDytu+ED+4grzCbffajyXbmSYLM2PND
+	GCTAlMyzEy61la3N/1FpvY/aN5Qmi+Acw5jCy6e5jPjGTI/zmhOlNoZa8LBLtBW6b67cBxfkD7QCC
+	Zs4T7dRZ85ZhDh5a+0sV940hpquwqssqQ0YYMY0RSwwR23cujJLhxeXWCUw2jArBcI3qxf/zcLTjS
+	rTcMnoWSgnWG0YKFRo9BV63FDKKKFqIIaYy5MRl6tXfgaUpXhB7Ge3b9W50F3DUIc58QQlSMw7hH0
+	vPxEmRz5g==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lUP4L-007DXz-Ut; Thu, 08 Apr 2021 07:27:17 +0000
+Received: from mout.kundenserver.de ([212.227.126.130])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lUP3x-007DPE-Cw; Thu, 08 Apr 2021 07:26:51 +0000
+Received: from mail-oo1-f47.google.com ([209.85.161.47]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MXotA-1l58Qm0C5M-00YDZh; Thu, 08 Apr 2021 09:26:48 +0200
+Received: by mail-oo1-f47.google.com with SMTP id
+ n12-20020a4ad12c0000b02901b63e7bc1b4so283328oor.5; 
+ Thu, 08 Apr 2021 00:26:47 -0700 (PDT)
+X-Gm-Message-State: AOAM531MSgt0amp/mLmUdh7TaP5SaEagIlfL5ae+faxs2wTu9Q0Jdhii
+ E+NgeBakUSVwsMeLkyXVEZMMI96nUHEgRYh2O0Q=
 X-Google-Smtp-Source: ABdhPJzKJmULiKJZbqIfF2zDxr9Dn4RUKtO26qlLbMKJT/5DsJBNPIXmgMgdVr4n60mmoqzCYdBdCT5pE1al5gbKDF0=
-X-Received: by 2002:a4a:244d:: with SMTP id v13mr6446430oov.66.1617866806386;
+X-Received: by 2002:a4a:244d:: with SMTP id v13mr6446430oov.66.1617866806386; 
  Thu, 08 Apr 2021 00:26:46 -0700 (PDT)
 MIME-Version: 1.0
 References: <22814673-e9fe-f65b-cc0f-b02be4f90d1a@gmail.com>
  <CAK8P3a0bp3CUzOQHSX5KYt44j-Njk_u2P=0q-ZQ0HcTBiVVVSA@mail.gmail.com>
- <01c82108-64a8-33ee-3984-5bd7056a0002@gmail.com> <CAK8P3a37BUdHneO+9+t0Pan3UWZHub-ishcKLNxCbqO0kk0CNw@mail.gmail.com>
+ <01c82108-64a8-33ee-3984-5bd7056a0002@gmail.com>
+ <CAK8P3a37BUdHneO+9+t0Pan3UWZHub-ishcKLNxCbqO0kk0CNw@mail.gmail.com>
  <CAOwMV_yQLWwMEQ_f_wHOAipgD1qZgNz2SA2RJDZpNozCKv4vWQ@mail.gmail.com>
 In-Reply-To: <CAOwMV_yQLWwMEQ_f_wHOAipgD1qZgNz2SA2RJDZpNozCKv4vWQ@mail.gmail.com>
 From: Arnd Bergmann <arnd@arndb.de>
@@ -41,27 +60,44 @@ Message-ID: <CAK8P3a2Qg-uz0kMXFMrvRjUv3NRvZXjTwS1P5MDvFk3feYaBzg@mail.gmail.com>
 Subject: Re: [GIT PULL] arm64: dts: mediatek: changes for v5.13 (second round)
 To: Fabien Parent <fparent@baylibre.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>, SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>, Irui Wang <irui.wang@mediatek.com>, 
-	Rob Herring <robh+dt@kernel.org>, DTML <devicetree@vger.kernel.org>, 
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:SEPheqocUgEBKaWEQzXhXMbcg64RXaKgsnxO4C71HvaRNaW1YLr
- vnojImipnju27pRpwtSzDVce8MmETlejigyKEtu/RyDQzDFWjd3YjqzhtS3SZ43UszkSHnB
- Z01Rxg6OCmVVv8X1pxhSlxrbJj/0+ZBnqvwZvgTsBXW/1176HPs6Sl/1Q8K9N8eeFK2IbXt
- xW4e9tXB9k63Dy6XlW92Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GJyYWLv1wFQ=:SvbNhPj6b94Q5FRHqiBHMx
- TOKQP9MGXLYBwF3UQwB8dlQEYBafblRfLbC+eo+GTJ+vpjjjSpRfKRccRVrqI8l1+0Ntor/cP
- kNXo6y+1OpJZnWamrVfS1DjjYG6fxsKS2QvIykYTW6pjI1TvAmDndSMMZdrGgMOWQ1SpQqijg
- cc+FFaXsT1oPLcO+ft7vszBpDkX6cZ+0ssoK6CfNclabAQpUV5WTae0ZXe8ERw9+1Mrx8j9Fr
- 4+8AdLxU+TQAck4Ji0PqUNmeGWR5hD8PMbE0x1/lJHxdyga6BKQZDk2wUkTc1aLFxgiV7n6gC
- NuyUJ7ekTEnaV81KUQxGq8pplN9f018RfxgaoCDFR8WBuWwECND+Xf/MMjVXz0U0o5BtOX1ij
- 0T2UznrML4bcqW1MuwOy8x/jcCGwtT3RluqusUmvp/vy8gBiPTh1s4MjDFX+/82k3+OPd4Ew0
- RUCbv5LeicOhNZcK4tfcDik9QMwpP2Iln1cGJgWZDP6/GggIKayk7CAqzabe6X4KeA4V6ht36
- s5incrJgCKzNj/vWsTrayeGdwBVBQ+xs3IcJF+qnKT9Bsijkg6xZ08n148rUrtESXr5CZt4pY
- mN+43OK8CmG/jdoU4x5P56F/rpzLP/VG9T
-Message-ID: <20210408072630.9Bm4bQTeMN3hyypfBcR6N1NCaoKJ7-2GbPJ5hXXqN24@z>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>, SoC Team <soc@kernel.org>,
+ arm-soc <arm@kernel.org>, 
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+ "moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
+ Irui Wang <irui.wang@mediatek.com>, 
+ Rob Herring <robh+dt@kernel.org>, DTML <devicetree@vger.kernel.org>, 
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>
+X-Provags-ID: V03:K1:3iJ3FwKfbPdKycmovsr0K6C4Gkm66iqPcSy1F0MH+JIfgtd9avP
+ LRv4ArBQ4ueRRleO8vtmT4rEBShBdVdHvE/P3puzDhocO8ssb0TTZ4fQk8TSP+rog826w87
+ WdsYiVgATAkCNRjcaBj71Fkvy6sjWlSimuNOwuated02Fyn1udh58kBfv40qafz7rHqIj33
+ bXncLb3MaOEIXrN6MzGkg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:gjunnoIs9bs=:15FKe2y5vIh6o3CwAYJr5h
+ 8ibi2v3g5okh4US5CipbjIoV1w9woIMNno5HSMZDH42TXeZyXZsq00F09tDA8lHTfX5B0kz8c
+ F/RftUI8QLCJiehAIYx1maDUcybJU5aMmY101bX8J32XNZOlOzMifWD6oOpYUKN/T9JYRQGpc
+ /ZLtsvWFXer9uuWjQ4kNlmrjqW0jv8ktaL4BAVYwiWPHLCrR1C1bvRQT+c6mj257cWwR9K9eZ
+ ZqoDK7cVQnEMHvD/+Qhv8SV3+gsq12p0YEO8Coouy+gcx9Rm4sIFHKrTyhlpdaav+lKwI9o2Z
+ 4qbg+5vzsoKonnbc/4UU7fk0nuKKBRbZ1l8o5EJhuoQx/c2Kz3Zxsm/QDW2EBhiup7J9HvcGs
+ 3vwLHmkP2OCYfqfmrfZ8s55wGftLAesZK3BPVjeU7RiWkqDh9STiXCdyu1v6mvbTK/MuNrcNZ
+ Li1CibN+I2rDKa5q41lj0swIe8QztNo=
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210408_082649_783867_923B9724 
+X-CRM114-Status: GOOD (  23.09  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210408072630.U3fkdmUV9F-QprWjDS8Ys1JnvqPsrxGicA6XTqbdzBc@z>
 
 On Thu, Apr 8, 2021 at 12:14 AM Fabien Parent <fparent@baylibre.com> wrote:
 > On Wed, Apr 7, 2021 at 7:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
@@ -100,3 +136,8 @@ Are the aliases in this case actually board specific, or do they just
 document how the SoC is wired up?
 
        Arnd
+
+_______________________________________________
+Linux-mediatek mailing list
+Linux-mediatek@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-mediatek
