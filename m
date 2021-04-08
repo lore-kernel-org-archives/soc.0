@@ -6,58 +6,54 @@ X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C095CC433ED
-	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 20:21:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A799C433ED
+	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 20:21:50 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 9F01561159; Thu,  8 Apr 2021 20:21:41 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 611E5610FC;
-	Thu,  8 Apr 2021 20:21:39 +0000 (UTC)
+	id 94872610CF; Thu,  8 Apr 2021 20:21:47 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 22B47610FC;
+	Thu,  8 Apr 2021 20:21:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617913301;
-	bh=XG7ZBeR3dlHMBKcF/vu3FeV5kedebxxNaln7NWAPM7c=;
+	s=k20201202; t=1617913307;
+	bh=RIGHTTrrlRxVS5C+wMeteqopPhyIKQCIHurDzF43Ss8=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UmVZFYgHg2Qu//Lb1WwP3aMhSyPySThqRBS21XDepOffkW2RDa38E6hL//LpbOLAY
-	 wDcQZc/ecE0zc10u5TNjofg8dKLzU2AJYzGG3/eFLGqBMRTKBufH/nlSaoa32Gax6M
-	 StiK0FMqBXEcshw9JzE3uE565Gbtm7oTWHtm9bIJvNMHr8PeYE1eD8Xgw9kE89pwVP
-	 wqcSD2Ko0G0ywJA1mvTBg41roSqc1zzUH9fTyUUD8AwPeTh6521w3ly4UJYp/NjdAH
-	 V5MXYOFir8Y6oNd6SDm6dAkAHy72jrK6u03r+9USRnYshVMPcNjOWZW9cMS53DD+jZ
-	 UW/+7xti+M7HA==
+	b=S+q7N+UOUfy95EaGzuz5bvcZp6YlRFh1s3k34bnQ7APtcNJk6NW8mROXtUone7rVU
+	 Bs0l7vp6IA01K8PjN3QblEyHuRlGyYnnHLWGdYSkmXR/2vnEVzYv5waib4x9k5s94I
+	 vT+LdIA/rvgj+H7BM3vYWwT97nAsRecVwVryaNN4lQdMzerTxAHOwUTrSEpSP216PM
+	 HGCkvh+iSPKIcoEByI8sltEiPdJztm2sMTFwb9RScoL4Zstn1uQZDAtrlSdiyd9J+W
+	 WVTVATdu4trL961Y8Xi9unIJrk1YpbD5hEGLVfah5d97Oq/6l2TK3eCUCoDKfA7nHy
+	 ZvoejPFzK5Qfg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Olof Johansson <olof@lixom.net>
+To: soc@kernel.org,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-kernel@lists.infradead.org,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [GIT PULL] ARM: mvebu: dt for v5.13 (#1)
-Date: Thu,  8 Apr 2021 22:20:55 +0200
-Message-Id: <161791324990.1663215.15241029409271472842.b4-ty@arndb.de>
+	thomas.liau@actions-semi.com,
+	linux-actions@lists.infradead.org,
+	olof@lixom.net,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	cristian.ciocaltea@gmail.com,
+	afaerber@suse.de
+Subject: Re: [PATCH] ARM: dts: owl-s500-roseapplepi: Add ATC2603C PMIC
+Date: Thu,  8 Apr 2021 22:20:56 +0200
+Message-Id: <161791325045.1663215.17065971485977562987.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <87v98xbzir.fsf@BL-laptop>
-References: <87v98xbzir.fsf@BL-laptop>
+In-Reply-To: <20210408062232.3575-1-mani@kernel.org>
+References: <20210408062232.3575-1-mani@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 07 Apr 2021 22:39:08 +0200, Gregory CLEMENT wrote:
-> Here is the first pull request for dt for mvebu for v5.13.
+On Thu, 8 Apr 2021 11:52:32 +0530, Manivannan Sadhasivam wrote:
+> Add device tree node for ATC2603C PMIC and remove the 'fixed-3.1V'
+> dummy regulator used for the uSD supply.
 > 
-> This one is latter that the other ones, because I've just found a
-> patch pending since December. I hope it is not too late.
-> 
-> Gregory
-> 
-> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
-> 
-> [...]
+> Additionally, add 'SYSPWR' fixed regulator and provide cpu0 supply.
 
-Merged into arm/dt, thanks!
+Applied to arm/dt, thanks!
 
-merge commit: e3e1276295a4c5eddc31dd297e8f6af275ca9c4f
+[1/1] ARM: dts: owl-s500-roseapplepi: Add ATC2603C PMIC
+      commit: d8fcfbf38fe168d55a1e73095f831a60e3e95b91
 
        Arnd
