@@ -1,162 +1,118 @@
-Return-Path: <SRS0=Q2eW=JF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=zDaR=JF=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E176C433ED
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 16:36:35 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99AB9C433ED
+	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 19:25:32 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 6EBE861104; Thu,  8 Apr 2021 19:25:32 +0000 (UTC)
+Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B0648610D1
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 16:36:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B0648610D1
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:CC:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=TcviURYvXhsZFXFUREOediW6ZEimxh138PmK+Dmdpjs=; b=Rkn8H4+ZT0scf5fsZxb+1mbNv
-	GA+k05FSU8r0h7yMdg4jt1e4vS4qXjK+LZh/yyV0mZc4OonpNBabvf74vkGVQFJZVb5COQVmp5e+q
-	5r1rIfhEc1iEP3+ylBipPmdtWJ0txxkM2bCh7vVqpH7m4tAFDR7cjTbgjBgz5SGbMI1tpRZAgSkTu
-	FaG4vtEAlVRBfvXyt0f5DKYSXO9shlo+Pu+nTzoAlin3+g8QrtSiBoTWvgw3C8sVPe0SkDIKVXsuH
-	CXnYv4gFKhdBfQRz0zRD1/i5rpS2OG0dNNR8/pHKJfGPJU9FgtzkIZX5Aj7yJjhcB978bhCt/gBca
-	imI4nljJw==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lUXcP-008e1c-9o; Thu, 08 Apr 2021 16:34:58 +0000
-Received: from fllv0016.ext.ti.com ([198.47.19.142])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUXcE-008dxa-Hq
- for linux-arm-kernel@lists.infradead.org; Thu, 08 Apr 2021 16:34:49 +0000
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
- by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 138GYeGl051984;
- Thu, 8 Apr 2021 11:34:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
- s=ti-com-17Q1; t=1617899680;
- bh=nLUTBiorp5Os08gZKDmsVcD9Hpijn0XmkEbQWDxvW+M=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=Hs5/eaDNRPilF1Uj3nv3RLiwnVL9mbgqmHwLZYzH7WHE7Lwrl8Bsg4DCBvRK8ddaq
- ljmY2Y358UdoxWGfOPPxmbOv9TK52xGRYwntTNtjwsYF33jKA1HqUqf2OS8VrVcXlt
- 5KOH5InHcNtrVmWDn9V4Ec4q5oYDp1SHf4+ze8qg=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
- by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 138GYeOn090958
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Thu, 8 Apr 2021 11:34:40 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 8 Apr
- 2021 11:34:40 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Thu, 8 Apr 2021 11:34:40 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
- by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 138GYdUV057016;
- Thu, 8 Apr 2021 11:34:39 -0500
-Date: Thu, 8 Apr 2021 11:34:39 -0500
-From: Nishanth Menon <nm@ti.com>
-To: Arnd Bergmann <arnd@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id 150EF610FB
+	for <soc@kernel.org>; Thu,  8 Apr 2021 19:25:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 150EF610FB
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
+Received: from mail-wr1-f71.google.com ([209.85.221.71])
+	by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	(Exim 4.86_2)
+	(envelope-from <krzysztof.kozlowski@canonical.com>)
+	id 1lUaHS-0002d6-Db
+	for soc@kernel.org; Thu, 08 Apr 2021 19:25:30 +0000
+Received: by mail-wr1-f71.google.com with SMTP id z7so1384595wrs.17
+        for <soc@kernel.org>; Thu, 08 Apr 2021 12:25:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EW7d+9G4/kjjtpomgAZZU/CRnYFDop2X3n6Zj7v339I=;
+        b=a0RKoYAGG48DocnUH/gTtRhJKnIizh8WImDISt+S9p48V1PqEJj+UseMBHFWWAK3wX
+         xypnaiYo/8JsW5jQMhLtUFmu+q9C0RALvFK6xgVfyrE1BeHkSzl57ZoAzXkznfzxaUSY
+         9OWpgnrhbLftzLqZrx35Rhscn6bJCVkj4K/DDWkyCL17ffP/B6UUgmHPjrLZbrOsr0Mn
+         BmMPLeJYYF/OvOPyDX4W5/Hj/vm+63wBxRMVRl3eTZ9fVlcMI7O6WewV1o3X26JxXWCR
+         lfXGQ9zd/qGfIMAO5rBND7aEAjQGVIV/PYR0FMYBYhrRNbytRankOfGmUV4r1VjbX7j4
+         KUWg==
+X-Gm-Message-State: AOAM532I9gavPRLqlwJCZFBWmj9ycG7v7QGwML/ETkl4JLeue4+xPs+J
+	x0TNHlsOcxPdxvwjIzTmCCuUpyrvDtjeZK0CSg7MUxxWoYT9btuMtalylv/PShmQVP6GtXnD6dv
+	gqiiqSnluZhak+LnUl6KTQEU=
+X-Received: by 2002:a5d:4f0e:: with SMTP id c14mr14193195wru.0.1617909929799;
+        Thu, 08 Apr 2021 12:25:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw3uC3t9Rn/hZil2QBwcuqL7F591JGwIex59HP2iZb5W4DsmO5gVtcusB8GA9Rzz/D/7bvgcg==
+X-Received: by 2002:a5d:4f0e:: with SMTP id c14mr14193176wru.0.1617909929665;
+        Thu, 08 Apr 2021 12:25:29 -0700 (PDT)
+Received: from [192.168.1.115] (xdsl-188-155-192-147.adslplus.ch. [188.155.192.147])
+        by smtp.gmail.com with ESMTPSA id u17sm261604wmq.3.2021.04.08.12.25.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Apr 2021 12:25:29 -0700 (PDT)
+Subject: Re: New 'make dtbs_check W=1' warnings
+To: Arnd Bergmann <arnd@kernel.org>, DTML <devicetree@vger.kernel.org>,
+ Rob Herring <robh+dt@kernel.org>
 List-Id: <soc.lore.kernel.org>
-CC: <soc@kernel.org>, Olof Johansson <olof@lixom.net>, <arm@kernel.org>, Arnd
- Bergmann <arnd@arndb.de>, <linux-arm-kernel@lists.infradead.org>,
- Tero Kristo <kristo@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] arm64: dts: TI K3 updates for v5.13
-Message-ID: <20210408163439.x7pz7bitwmu7aenl@freckled>
-References: <20210405155336.smohb7uzkperqwuz@reflex>
- <161789493785.1630479.2066806618809349698.b4-ty@arndb.de>
+Cc: Linus Walleij <linusw@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Alexandre Torgue <alexandre.torgue@st.com>,
+ Kevin Hilman <khilman@baylibre.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Tony Lindgren <tony@atomide.com>, Shawn Guo <shawnguo@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Bjorn Andersson <bjorn.andersson@linaro.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>, Nishanth Menon <nm@ti.com>,
+ Tero Kristo <kristo@kernel.org>, SoC Team <soc@kernel.org>,
+ Gregory Clement <gregory.clement@bootlin.com>,
+ Florian Fainelli <f.fainelli@gmail.com>
+References: <CAK8P3a1L8rWpR5b66v6Su8-m7-scA0wZQr_g_4KnV4dnrky6ZA@mail.gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <70873555-ab01-feb0-536b-d4b60ac89768@canonical.com>
+Date: Thu, 8 Apr 2021 21:25:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <161789493785.1630479.2066806618809349698.b4-ty@arndb.de>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210408_173446_886385_9985CC7C 
-X-CRM114-Status: GOOD (  14.94  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <CAK8P3a1L8rWpR5b66v6Su8-m7-scA0wZQr_g_4KnV4dnrky6ZA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210408163439.Mp6urFrRwSndYmEnnCwcyXtXCkvB-7zKfahu4_6m-D0@z>
 
-On 17:24-20210408, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 08/04/2021 17:08, Arnd Bergmann wrote:
+> Greetings to all Arm platform maintainers,
 > 
-> On Mon, 5 Apr 2021 10:53:36 -0500, Nishanth Menon wrote:
-> > Please pull the following device tree changes for v5.13 cycle.
-> > 
-> > The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
-> > 
-> >   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
-> > 
-> > are available in the Git repository at:
-> > 
-> > [...]
+> I've just gone through the DT merges I've received so far and, with a
+> little help from Rob,
+> managed to run 'make dtbs_check W=1' before and after, to see what
+> warnings we get.
+> The good news is that the number of warnings is going down, but
+> unfortunately there
+> is still an unmanageable amount of remaining warnings, and some new
+> ones crept in.
 > 
-> Merged into arm/dt, thanks!
-
-Thanks.
+> I'm still working on my tooling for this, to catch these better, but
+> ideally I think we should
+> try to not introduce new warnings. I think some platforms are already
+> clean, and I did
+> not see any new warnings for mvebu, samsung and broadcom. There were a lot of
+> warnings from .dtsi files, and I probably did an incomplete job at
+> deduplicating those.
 > 
-> There are a couple added warnings from 'make W=1 dtbs_check' though:
+> See below for the other platforms, and the new warnings that I found.
+> If these are
+> valid, please send a fixup before the merge window, and let me know if
+> you have ideas
+> for how we should handle these in the future.
 > 
-> ti/k3-am64-main.dtsi:376.40-385.4: Warning (simple_bus_reg): /bus@f4000/interrupt-controller0: missing or empty reg/ranges property
-> ti/k3-am64-main.dtsi:45.13-135.4: Warning (simple_bus_reg): /bus@f4000/dmss: missing or empty reg/ranges property
-> ti/k3-am64-mcu.dtsi:77.39-86.4: Warning (simple_bus_reg): /bus@f4000/bus@4000000/interrupt-controller1: missing or empty reg/ranges property
-> 
-> ti/k3-am642-evm.dt.yaml: bus@4000000: interrupt-controller1: {'type': 'object'} is not allowed for {'compatible': ['ti,sci-intr'], 'ti,intr-trigger-type': [[1]], 'interrupt-controller': True, 'interrupt-parent': [[1]], '#interrupt-cells': [[1]], 'ti,sci': [[4]], 'ti,sci-dev-id': [[5]], 'ti,interrupt-ranges': [[0, 104, 4]], 'phandle': [[5]]}
-> ti/k3-am642-evm.dt.yaml: bus@f4000: dmss: {'type': 'object'} is not allowed for {'compatible': ['simple-mfd'], '#address-cells': [[2]], '#size-cells': [[2]], 'dma-ranges': True, 'ranges':  'phandle': [[7]]}}
-> ti/k3-am642-evm.dt.yaml: bus@f4000: interrupt-controller0: {'type': 'object'} is not allowed for {'compatible': ['ti,sci-intr'], 'ti,intr-trigger-type': [[1]], 'interrupt-controller': True, 'interrupt-parent': [[1]], '#interrupt-cells': [[1]], 'ti,sci': [[4]], 'ti,sci-dev-id': [[3]], 'ti,interrupt-ranges': [[0, 32, 16]], 'phandle': [[15]]}
-> ti/k3-am642-evm.dt.yaml: flash@0: 'cdns,read-delay', 'cdns,tchsh-ns', 'cdns,tsd2d-ns', 'cdns,tshsl-ns', 'cdns,tslch-ns' do not match any of the regexes: '^partition@', 'pinctrl-[0-9]+'
-> ti/k3-am642-sk.dt.yaml: bus@4000000: interrupt-controller1: {'type': 'object'} is not allowed for {'compatible': ['ti,sci-intr'], 'ti,intr-trigger-type': [[1]], ...
-> ti/k3-am642-sk.dt.yaml: bus@f4000: dmss: {'type': 'object'} is not allowed for {'compatible': ['simple-mfd'], ...
-> ti/k3-am642-sk.dt.yaml: bus@f4000: interrupt-controller0: {'type': 'object'} is not allowed for {'compatible': ['ti,sci-intr'], 'ti,intr-trigger-type': [[1]], 'interrupt-controller': True, 'interrupt-parent': [[1]], '#interrupt-cells': [[1]], 'ti,sci': [[4]], 'ti,sci-dev-id': [[3]], 'ti,interrupt-ranges': [[0, 32, 16]], 'phandle': [[11]]}
-> ti/k3-am642-sk.dt.yaml: flash@0: 'cdns,read-delay', 'cdns,tchsh-ns', 'cdns,tsd2d-ns', 'cdns,tshsl-ns', 'cdns,tslch-ns' do not match any of the regexes: '^partition@', 'pinctrl-[0-9]+'
-> ti/k3-j7200-common-proc-board.dt.yaml: flash@0: 'cdns,read-delay', 'cdns,tchsh-ns', 'cdns,tsd2d-ns', 'cdns,tshsl-ns', 'cdns,tslch-ns' do not match any of the regexes: '^partition@', 'pinctrl-[0-9]+'
-> 
-> 
-> merge commit: 4b8cf90637f295ff1cb1f4bdfde134dab1196296
+> For this merge window, I don't think any of them are show-stoppers (Rob, let me
+> know if you disagree), but in the long run we may want to gradually enforce
+> a rule about not merging changes that introduce any new warnings, in order to
+> have a chance of cleaning up the existing ones.
 
++1 for such rule, although the best would be to get a report about new
+warnings on posted patches or shortly after applying, e.g. via 0-day
+kbuild robot.
 
-We have a bunch of problems with interrupt controller definitions -
-attempts in [1] [2] did'nt seem to come to any form of conclusion yet.
-
-Cdns is a convert from txt to yaml and is queued on Marks' tree[3]
-
-These issues pre-existed in existing definitions and/or convertion
-from txt and we are already working to make sure we try and reach a
-conclusion soon[4]. I am guessing from your note that it is high time we
-put our foot down on txt bindings and clean yamls, I will ensure we
-follow up on that.
-
-
-[1] https://lore.kernel.org/linux-devicetree/CAL_Jsq++DyiKG9smQGx9FAPDJnVrezcXNb0Y5uh-5_2GBzTQpQ@mail.gmail.com/#t
-[2] https://lore.kernel.org/linux-arm-kernel/20210311215914.pgpz2yymmfqlainl@episode/ 
-[3] https://lore.kernel.org/linux-arm-kernel/161726952255.2486.16196604421904035265.b4-ty@kernel.org/
-[4] https://lore.kernel.org/linux-arm-kernel/20210311134908.jsh2lywtwzvlyvbc@finally/
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Best regards,
+Krzysztof
