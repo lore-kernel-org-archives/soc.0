@@ -1,135 +1,118 @@
-Return-Path: <SRS0=Q2eW=JF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11CE3C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 20:06:45 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B07EA610FC
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 20:06:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B07EA610FC
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=9ob1O8kV6i+npUypxuTDQQui5Wf/jGyzrauaEy0yif4=; b=kxWBSjQk9zPXJwxNRbWZwqY+Z
-	IVAURCc4dH0b1apSK9reK9hnm59NYnelox7LnfzsdjWQM7Sc379ZVYaVw8sm318WCKhKkeT2PO0e8
-	glSeEiphn38wIWYtsY4N2HxhFhda8FQb5/G1ur6o/sgH3Nl8d7StlysFpOZQl3UBCFmSaEn3W9eTg
-	C9c0Fg2QowQUkryRhtxI033V8+jeR01KTAMyszqEwkQzRJWkdUy69BrxMhn6S4ADUXvWwZlt2DD35
-	8s35vb1/1ibWbwk9GzRx777LtCLOYfQB/HkKzBZgcsZAHQgTwVX411cM0yqO+wdlAYKCr5MW46/76
-	/FPmwvGjA==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lUato-0099kQ-R0; Thu, 08 Apr 2021 20:05:09 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUatj-0099ir-66
- for linux-arm-kernel@lists.infradead.org; Thu, 08 Apr 2021 20:05:05 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C83F361107
- for <linux-arm-kernel@lists.infradead.org>;
- Thu,  8 Apr 2021 20:05:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B2BC433ED
+	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 20:13:58 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 186D661006; Thu,  8 Apr 2021 20:13:58 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5CEB61157;
+	Thu,  8 Apr 2021 20:13:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1617912300;
- bh=3kIIacXoQFBQy8yEj8Z2NRLgJ8azW9bsrjCf1Joem7A=;
- h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
- b=JOa/NTqdU7G83fbavNfhl5BUoD+9rhqhNOMRnHnKj0KlmyV1Y2HpBXmiMjYd40uVj
- X8zd/0OyuXlYaEtlXOiKz6TZQm8L4Gdt6bnvKu15JkXmliSUUeUGJSKXFblRZe7Dhu
- Wh2DTZlA3F8OU7HXO44GzEsi2skgB1hZjnyLW4/4UxyWU1xciPv0T/jvvUVRX9odII
- 06XHr9oQ074CrEH3XBSgnCMJg32EWtL0CX+tcicUDXGGrFuHJY4bWyM6ppUqlRa4WS
- ybUVuEDBM4K7wFe/quh/7lZHkZUaUSudKTA3VCzQVajk8rdZWOl7fLs3NbJgn2Zh5V
- PUb67pqABtR8w==
-Received: by mail-ot1-f53.google.com with SMTP id
- w31-20020a9d36220000b02901f2cbfc9743so3526165otb.7
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 08 Apr 2021 13:05:00 -0700 (PDT)
-X-Gm-Message-State: AOAM532QP6Hurp1kRhEHVCl70cwkupF0/TeRuDjLX95Ygs7HuQulVXjv
- DyfQU5YS1wSyE0K+vM/ojl1gWXQga241E8ddpgs=
-X-Google-Smtp-Source: ABdhPJyR9VAcVN1TEnQNSo+1kiW312GG1ZiLtvnYHlLiZhYuNzKfn7gEwt3o3axBkrbdG6jvGdU8YR5gyM8Y3YAg1b0=
-X-Received: by 2002:a05:6830:148c:: with SMTP id
- s12mr9533160otq.251.1617912300146; 
- Thu, 08 Apr 2021 13:05:00 -0700 (PDT)
+	s=k20201202; t=1617912838;
+	bh=+rZGlvjpUumH6DiemEM946UKZ4XQvYHiu+csXYOh8xg=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=A44IuqukhS7qthk+Z3Zx4B6EkWPi3JLRUejZcOh1PQUvXqBYLhQPKuXAgKtBoCuK3
+	 ee8rtQDvC04790d/hIBcYk6LDqi3Cb6HNmDyHcRkRB2OoB9JXJBefuyvTksd4F4DlN
+	 82ULJpTuD254BJQxotFJNMu2KczGkRkKCa+CXgKtH/hE3lXQLt1JamaKu0djhVFshU
+	 2+iZvYoGte99qPntbSQD2sRSXrCa9nucGcYo8mVJ764vz+9NBDeYn5a7zRtXLHWfE1
+	 Gy5dnu7Uhr7BFwO0kka8SC00RXgCVV2TbiuRIzt6RrpgATzRL7PtGaZ4Ydqg7PZudH
+	 GNeA7/ToaHwQQ==
+Received: by mail-ot1-f47.google.com with SMTP id s11-20020a056830124bb029021bb3524ebeso3616420otp.0;
+        Thu, 08 Apr 2021 13:13:57 -0700 (PDT)
+X-Gm-Message-State: AOAM5309qEvqRpqp98EFnjClC7b4yLJ4Lq+DtPFDU/QKWf66BgFy26HB
+	kRJJypSJ/lkhXeZVMRQoii3bbjG//14fLq03LG4=
+X-Google-Smtp-Source: ABdhPJwNoEofBl0oeBw6msPAsg+S+5Hqxl+brsoR7yB23DLN7tI/hJgmNw5hUao7IJIkIsLlGEk5pX3EeLR5tRDyeXc=
+X-Received: by 2002:a9d:758b:: with SMTP id s11mr9253563otk.305.1617912837245;
+ Thu, 08 Apr 2021 13:13:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210404164914.712946-1-bjorn.andersson@linaro.org>
- <161789462034.1629934.2631576576205147984.b4-ty@arndb.de>
- <YG8qIfFdY+As5tye@builder.lan>
-In-Reply-To: <YG8qIfFdY+As5tye@builder.lan>
+References: <20210405155336.smohb7uzkperqwuz@reflex> <161789493785.1630479.2066806618809349698.b4-ty@arndb.de>
+ <20210408163439.x7pz7bitwmu7aenl@freckled>
+In-Reply-To: <20210408163439.x7pz7bitwmu7aenl@freckled>
 From: Arnd Bergmann <arnd@kernel.org>
-Date: Thu, 8 Apr 2021 22:04:44 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2v6yUVi395ixJRer2wyNVNXB-uypCqw5ts327ST=fHPg@mail.gmail.com>
-Message-ID: <CAK8P3a2v6yUVi395ixJRer2wyNVNXB-uypCqw5ts327ST=fHPg@mail.gmail.com>
-Subject: Re: [GIT PULL] Qualcomm ARM64 DT updates for 5.13
-To: Bjorn Andersson <bjorn.andersson@linaro.org>
+Date: Thu, 8 Apr 2021 22:13:41 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0r3knGP5XxSz_K4zj4=iMNg_UysJLS8jdgqAZunLfLLw@mail.gmail.com>
+Message-ID: <CAK8P3a0r3knGP5XxSz_K4zj4=iMNg_UysJLS8jdgqAZunLfLLw@mail.gmail.com>
+Subject: Re: [GIT PULL] arm64: dts: TI K3 updates for v5.13
+To: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
- Olof Johansson <olof@lixom.net>, 
- Linux ARM <linux-arm-kernel@lists.infradead.org>, 
- Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
- Jack Pham <jackp@codeaurora.org>, 
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Douglas Anderson <dianders@chromium.org>, 
- Kevin Hilman <khilman@baylibre.com>, Rajendra Nayak <rnayak@codeaurora.org>, 
- Sandeep Maheswaram <sanm@codeaurora.org>, Robert Foss <robert.foss@linaro.org>,
- Vinod Koul <vkoul@kernel.org>, Stephen Boyd <swboyd@chromium.org>, 
- Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>,
- Andy Gross <agross@kernel.org>, 
- linux-arm-msm <linux-arm-msm@vger.kernel.org>,
- satya priya <skakit@codeaurora.org>, Abhishek Kumar <kuabhs@chromium.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- Matthias Kaehlcke <mka@chromium.org>, Shawn Guo <shawn.guo@linaro.org>, 
- Alexandru M Stan <amstan@chromium.org>, Maulik Shah <mkshah@codeaurora.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210408_210503_722333_FF637BAD 
-X-CRM114-Status: GOOD (  14.97  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210408200444._P6gu-q--dvLsrSxEooysvAHDVlyKTdLMFGOB5noGP4@z>
+Cc: SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>, arm-soc <arm@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Tero Kristo <kristo@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 8, 2021 at 6:06 PM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
-> On Thu 08 Apr 10:24 CDT 2021, Arnd Bergmann wrote:
-> > Maybe see if you can address these in a follow-up, to avoid regressions.
+On Thu, Apr 8, 2021 at 6:34 PM Nishanth Menon <nm@ti.com> wrote:
+> On 17:24-20210408, Arnd Bergmann wrote:
 > >
+> > ti/k3-am64-main.dtsi:376.40-385.4: Warning (simple_bus_reg): /bus@f4000=
+/interrupt-controller0: missing or empty reg/ranges property
+> > ti/k3-am64-main.dtsi:45.13-135.4: Warning (simple_bus_reg): /bus@f4000/=
+dmss: missing or empty reg/ranges property
+> > ti/k3-am64-mcu.dtsi:77.39-86.4: Warning (simple_bus_reg): /bus@f4000/bu=
+s@4000000/interrupt-controller1: missing or empty reg/ranges property
+> >
+> > ti/k3-am642-evm.dt.yaml: bus@4000000: interrupt-controller1: {'type': '=
+object'} is not allowed for {'compatible': ['ti,sci-intr'], 'ti,intr-trigge=
+r-type': [[1]], 'interrupt-controller': True, 'interrupt-parent': [[1]], '#=
+interrupt-cells': [[1]], 'ti,sci': [[4]], 'ti,sci-dev-id': [[5]], 'ti,inter=
+rupt-ranges': [[0, 104, 4]], 'phandle': [[5]]}
+> > ti/k3-am642-evm.dt.yaml: bus@f4000: dmss: {'type': 'object'} is not all=
+owed for {'compatible': ['simple-mfd'], '#address-cells': [[2]], '#size-cel=
+ls': [[2]], 'dma-ranges': True, 'ranges':  'phandle': [[7]]}}
+> > ti/k3-am642-evm.dt.yaml: bus@f4000: interrupt-controller0: {'type': 'ob=
+ject'} is not allowed for {'compatible': ['ti,sci-intr'], 'ti,intr-trigger-=
+type': [[1]], 'interrupt-controller': True, 'interrupt-parent': [[1]], '#in=
+terrupt-cells': [[1]], 'ti,sci': [[4]], 'ti,sci-dev-id': [[3]], 'ti,interru=
+pt-ranges': [[0, 32, 16]], 'phandle': [[15]]}
+> > ti/k3-am642-evm.dt.yaml: flash@0: 'cdns,read-delay', 'cdns,tchsh-ns', '=
+cdns,tsd2d-ns', 'cdns,tshsl-ns', 'cdns,tslch-ns' do not match any of the re=
+gexes: '^partition@', 'pinctrl-[0-9]+'
+> > ti/k3-am642-sk.dt.yaml: bus@4000000: interrupt-controller1: {'type': 'o=
+bject'} is not allowed for {'compatible': ['ti,sci-intr'], 'ti,intr-trigger=
+-type': [[1]], ...
+> > ti/k3-am642-sk.dt.yaml: bus@f4000: dmss: {'type': 'object'} is not allo=
+wed for {'compatible': ['simple-mfd'], ...
+> > ti/k3-am642-sk.dt.yaml: bus@f4000: interrupt-controller0: {'type': 'obj=
+ect'} is not allowed for {'compatible': ['ti,sci-intr'], 'ti,intr-trigger-t=
+ype': [[1]], 'interrupt-controller': True, 'interrupt-parent': [[1]], '#int=
+errupt-cells': [[1]], 'ti,sci': [[4]], 'ti,sci-dev-id': [[3]], 'ti,interrup=
+t-ranges': [[0, 32, 16]], 'phandle': [[11]]}
+> > ti/k3-am642-sk.dt.yaml: flash@0: 'cdns,read-delay', 'cdns,tchsh-ns', 'c=
+dns,tsd2d-ns', 'cdns,tshsl-ns', 'cdns,tslch-ns' do not match any of the reg=
+exes: '^partition@', 'pinctrl-[0-9]+'
+> > ti/k3-j7200-common-proc-board.dt.yaml: flash@0: 'cdns,read-delay', 'cdn=
+s,tchsh-ns', 'cdns,tsd2d-ns', 'cdns,tshsl-ns', 'cdns,tslch-ns' do not match=
+ any of the regexes: '^partition@', 'pinctrl-[0-9]+'
+> >
+> >
+> > merge commit: 4b8cf90637f295ff1cb1f4bdfde134dab1196296
 >
-> I'm about to send you a another set of pull requests with some more
-> goodies that was lingering on the list. I will take a look to see if I
-> can follow up on that with some fixes for above warnings - and take
-> another look at incorporating dtbs_check in my workflow.
+>
+> We have a bunch of problems with interrupt controller definitions -
+> attempts in [1] [2] did'nt seem to come to any form of conclusion yet.
+>
+> Cdns is a convert from txt to yaml and is queued on Marks' tree[3]
 
-Ok, sounds good. As I mentioned, I'm also just learning how to use
-dtbs_check properly. Unfortunately, it takes ages to run on a
-non-parallel build,
-and using 'make -j32' as I normally do means the output gets reordered
-with every run.
+Ok, thanks for taking a look
 
-It's probably ok if you figure out how to only run it for the files you
-actually change in the Qualcomm tree.
+> These issues pre-existed in existing definitions and/or convertion
+> from txt and we are already working to make sure we try and reach a
+> conclusion soon[4]. I am guessing from your note that it is high time we
+> put our foot down on txt bindings and clean yamls, I will ensure we
+> follow up on that.
+
+I'm still trying to figure out how to best script it, my intention was to
+only list issues that got introduced in the latest patches rather than
+the existing problems.
+
+On the other hand, it would indeed help to address any issues that
+are going to come up in every newly added board first, and then
+eventually get to all the remaining warnings for issues with the
+yaml bindings.
 
        Arnd
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
