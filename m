@@ -1,121 +1,85 @@
-Return-Path: <SRS0=Q2eW=JF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=hr/K=JF=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30AEFC433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 09:55:24 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E406C433ED
+	for <soc@archiver.kernel.org>; Thu,  8 Apr 2021 10:15:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 46BD461178; Thu,  8 Apr 2021 10:15:26 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 817C4610FA
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  8 Apr 2021 09:55:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 817C4610FA
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=huawei.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
-	References:CC:To:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=73+lbA/X8uAervh2V5Rbede9jE5QjRqRsbkMd/3cX28=; b=LzQ6pZRS0YFmIZ7hv4DQToKGY
-	xzi7pMbnBjNN99oAv909cGXIAd4GXcE44l7ZdxXZqj+A7HNzcWO69SsnPOBYN5xf++eBayPyeuwzU
-	PW9Br1sJDMITLuwdSf9N5itccBMSQ2bW4Y5CMgXwrKMujasQLQbcineQDkCmj9DKGGge1KCxtLe1q
-	GassLkJqPObNT1V48e2DWpMreA+bdYIYT39Ym3jfYVt/Eg6dj3UQnXAu5Ls/PJVljZpJ8vpy1/YpO
-	LbYG5gFeyn91AzRqEUvO7KdYo3nu4KM1zHd8vdqVu3ryIrujtfSxHtpM7rd5tyoYFlnR3noQvxnc/
-	36H4O3LfA==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lURML-007Yk4-2k; Thu, 08 Apr 2021 09:53:57 +0000
-Received: from szxga05-in.huawei.com ([45.249.212.191])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lURMG-007YhU-FX
- for linux-arm-kernel@lists.infradead.org; Thu, 08 Apr 2021 09:53:54 +0000
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
- by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FGGjc74bhzPp6v;
- Thu,  8 Apr 2021 17:51:00 +0800 (CST)
-Received: from [127.0.0.1] (10.174.179.202) by DGGEMS410-HUB.china.huawei.com
- (10.3.19.210) with Microsoft SMTP Server id 14.3.498.0;
- Thu, 8 Apr 2021 17:53:38 +0800
-Subject: Re: [GIT,PULL] arm64: dts: hisilicon dts updates for v5.13
-To: Arnd Bergmann <arnd@arndb.de>, Wei Xu <xuwei5@hisilicon.com>
-List-Id: <soc.lore.kernel.org>
-CC: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, Linux ARM
- <linux-arm-kernel@lists.infradead.org>, Olof Johansson <olof@lixom.net>,
- Zhangyi ac <zhangyi.ac@huawei.com>, "Liguozhu (Kenneth)"
- <liguozhu@hisilicon.com>, Tangkunshan <tangkunshan@huawei.com>, Daode Huang
- <huangdaode@hisilicon.com>, Jonathan Cameron <jonathan.cameron@huawei.com>,
- John Garry <john.garry@huawei.com>, Shameerali Kolothum Thodi
- <shameerali.kolothum.thodi@huawei.com>, Salil Mehta <salil.mehta@huawei.com>, 
- Shiju Jose <shiju.jose@huawei.com>, Mauro Carvalho Chehab
- <mchehab+huawei@kernel.org>
-References: <744291cd-a66f-dedb-fe7a-752a9032d6cd@hisilicon.com>
- <CAK8P3a31XFD7smyK0R41uX9fw+P6zPDLEgJoXz99imYS8urENQ@mail.gmail.com>
-From: "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <028b2fd0-854f-a683-22be-36f3af5b5784@huawei.com>
-Date: Thu, 8 Apr 2021 17:53:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+	by mail.kernel.org (Postfix) with ESMTPS id 3743B61168;
+	Thu,  8 Apr 2021 10:15:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3743B61168
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arnd@arndb.de
+Received: from mail-oo1-f42.google.com ([209.85.161.42]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MEFnR-1lKqly0zg5-00ABQ5; Thu, 08 Apr 2021 12:15:23 +0200
+Received: by mail-oo1-f42.google.com with SMTP id s1-20020a4ac1010000b02901cfd9170ce2so373357oop.12;
+        Thu, 08 Apr 2021 03:15:22 -0700 (PDT)
+X-Gm-Message-State: AOAM530JjyAx0yGq+98sBWSl2GNKsOhnv0aeYDvFVS5y9KKGldvbhg+s
+	R0FDgYnGvLsxf/rQTpRHQRyJ+DwMeJF8LruBulw=
+X-Google-Smtp-Source: ABdhPJz0Swhk/adEKhNiECd444g8lzHIqwV0wMOHQrhyl2H25uFzPA40WDIH+eYVvjun//PBhBzUdDK5JjhhHAIvCy0=
+X-Received: by 2002:a4a:304a:: with SMTP id z10mr6937279ooz.26.1617876921751;
+ Thu, 08 Apr 2021 03:15:21 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a31XFD7smyK0R41uX9fw+P6zPDLEgJoXz99imYS8urENQ@mail.gmail.com>
-Content-Language: en-US
-X-Originating-IP: [10.174.179.202]
-X-CFilter-Loop: Reflected
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210408_105352_798398_FD7F0C27 
-X-CRM114-Status: GOOD (  12.27  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210408095336.dHY3Wcy0gPALkA-wqUQqsutA8IBEqaM4gH9vW3Ddzjw@z>
+References: <744291cd-a66f-dedb-fe7a-752a9032d6cd@hisilicon.com>
+ <CAK8P3a31XFD7smyK0R41uX9fw+P6zPDLEgJoXz99imYS8urENQ@mail.gmail.com> <028b2fd0-854f-a683-22be-36f3af5b5784@huawei.com>
+In-Reply-To: <028b2fd0-854f-a683-22be-36f3af5b5784@huawei.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 8 Apr 2021 12:15:05 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0So6USwL0FYtzbFotJeBZw87p2kX86hHDyF+WFPvrD1Q@mail.gmail.com>
+Message-ID: <CAK8P3a0So6USwL0FYtzbFotJeBZw87p2kX86hHDyF+WFPvrD1Q@mail.gmail.com>
+Subject: Re: [GIT,PULL] arm64: dts: hisilicon dts updates for v5.13
+To: "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Wei Xu <xuwei5@hisilicon.com>, SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Olof Johansson <olof@lixom.net>, 
+	Zhangyi ac <zhangyi.ac@huawei.com>, "Liguozhu (Kenneth)" <liguozhu@hisilicon.com>, 
+	Tangkunshan <tangkunshan@huawei.com>, Daode Huang <huangdaode@hisilicon.com>, 
+	Jonathan Cameron <jonathan.cameron@huawei.com>, John Garry <john.garry@huawei.com>, 
+	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>, Salil Mehta <salil.mehta@huawei.com>, 
+	Shiju Jose <shiju.jose@huawei.com>, Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Nv81eFK9heR5kD9Wcz9UPMXJ7v/MR04ip4vTx1F25Cm97Tv+Rxe
+ gBDRFGzipvj2/ENDfjDYCMRvjZZWYi/kz9QD0naq1sb6Ucx0ev5K2flDrf30FDkdLEHLt2C
+ vq8sGLS5LS92V8X5XG9nh38V8j2dkt/rV5BBO9sqDcNdEFbLVeUTiMCVE9AKYJxFmrgKnv+
+ 2u6rI9lg11E25Zw+48f1Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ooRgWNbHHQU=:hqDD3Pe7R1RxFUZszzjP18
+ JAjrC+cXD/W2h7eeYNDnIX++XrCjP5P2CMUjX6DvlFdQF1rlwppKDNyUIpuAV1/TSWObPfmmX
+ hfoOld00gRm+oGpgiaydpzqEffvl+KCPUYYCDAxa2QDgkiEjKFU7UQPYQG//qXn1DHFbbhNPD
+ kIBYmy+sAzgWuF2irCQJLwKErRYAJ6ZESJi6B3IZXIIZFL1xHawNPLFsOTmfMIJmdT8weatPH
+ Lzwg50cdkaoVwIeGvLqSi7OQTwoquGopXcGNjnfAoW4EeItkxkEtC3JBHFUPV6K50t3gwqz2X
+ Y722mG1el8dswXS9yKFJWIMX16aWa7y5988RnYHLKBbcLlQYkpK5qqt3cNnvqD6NVZsfFlJwo
+ pQgkOqwXy/fAYKOjqOXwcSKGjBTWZK+N5IZ4gmGewGgK7Jt5X63No5TT9LEAwU6LJYWIvIR0z
+ Z+zdyVOv2tYjfHWDyWBlkRkvjQ2c00s=
 
+On Thu, Apr 8, 2021 at 11:53 AM Leizhen (ThunderTown)
+<thunder.leizhen@huawei.com> wrote:
+> On 2021/4/7 22:31, Arnd Bergmann wrote:
+> > On Sat, Apr 3, 2021 at 5:06 PM Wei Xu <xuwei5@hisilicon.com> wrote:
+> >>
+> >> Hi ARM-SoC team,
+> >>
+> >> Please consider to pull the following changes.
+> >> Thanks!
+> >
+> > I'd prefer to not break compatibility of old kernels with new dts files
+> > here, as this would prevent installing an old distro with an ebbr
+> > compliant boot loader, for purely cosmetic reasons.  These are used
+>
+> However, it seems unlikely that users only upgrade dts without upgrading the driver.
 
+The typical scenario is that you upgrade the OS by installing a new
+kernel first, and then updating the DT. However, you might want to
+still boot into an older kernel, e.g. for testing purposes when something
+breaks, or to have multiple operating systems installed in parallel,
+picking the rootfs through grub2.
 
-On 2021/4/7 22:31, Arnd Bergmann wrote:
-> On Sat, Apr 3, 2021 at 5:06 PM Wei Xu <xuwei5@hisilicon.com> wrote:
->>
->> Hi ARM-SoC team,
->>
->> Please consider to pull the following changes.
->> Thanks!
-> 
-> I'd prefer to not break compatibility of old kernels with new dts files
-> here, as this would prevent installing an old distro with an ebbr
-> compliant boot loader, for purely cosmetic reasons.  These are used
-
-However, it seems unlikely that users only upgrade dts without upgrading the driver.
-
-> in the popular 'hikey' boards, which are used in many scenarios,
-> which makes it fairly likely that someone might want to install
-> something other than the very latest kernel.
-> 
-> Could you instead keep both the old and the new property in there
-> for at least a few years?
-> 
->         Arnd
-> 
-> .
-> 
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+           Arnd
