@@ -2,19 +2,18 @@ Return-Path: <SRS0=+Itf=JG=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDD0CC433ED
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 20:02:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56330C433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 20:03:37 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 82CBC6105A
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 20:02:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 82CBC6105A
+	by mail.kernel.org (Postfix) with ESMTPS id E2BBE6105A
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 20:03:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E2BBE6105A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,73 +22,60 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=Vnh1GBmDDYNzyoEBw3pXIJkLS+exK39OjP6E6IxeEeU=; b=X3IvSCvebcbqicK5KvyaZjCyk
-	xWgMy5khhgWXyPQM/Vm52JHLkh1b+KAqZ0ZZTwMPs/w/1gA68CMR2W0b6EOa0sZbwgiqhf+TdHbLN
-	/8IbQ7p/O4vRLkaDTbydRLCoHkW9LtM5ixPzHAKyqWoT3Q8PDLz4N/JGLCFduca6wIbnZoVILQBpv
-	1zQ/XHBlm/CF9BC52JU3K1N57IUlPfJWzg9j9Wqh9vJl7/zL+BQJZj0axGz2DPf8QCp0lZLAEn8RN
-	jr6cwUQdj3Rxb56N2aY0AwLycnJys9IpKT/u7jW+guyDsRe065ucCrT0mDR4e39rHeuzBW/Mj3qWz
-	zFjH8Algg==;
+	 bh=IVF9mpDOwh7EpNNXrlAOMAxNYZXwe59r4Tab2nzy55Y=; b=E+V4+UhH15sSnovLGOC6Xtrfk
+	VS/4mYpYV7YSsep2d8fx0UM7mrTqUlUNf7MgjWwv9yMgfaJKn4teMBohVtjvy8eJBuYcvkiZdmpw1
+	HMvgYjOs9wFm4lBFaOonhkCoxEAH3/HSwedMdU25u8ZoWcQVjqIw1MRFTfWwfNK8X7FEnpImOmJ9C
+	fQYcGbMose0q1DS+5t+MMFPhozocWHehnycvZar2wFtsIBA0b/BdlCFKmwLcrUp9fl4GKwxoUQWbm
+	VC1FehlyTXFsPe9X/M14XCCI90kZTZWFd3EyJbeJLWW6JpK2Gm7sFG1qUAYrw1jfknkKpxV8HEQo8
+	id6IafeIQ==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lUxHz-001SCh-22; Fri, 09 Apr 2021 19:59:47 +0000
+	id 1lUxJv-001SQD-6S; Fri, 09 Apr 2021 20:01:35 +0000
 Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUxDb-001Rx7-Ma
- for linux-arm-kernel@desiato.infradead.org; Fri, 09 Apr 2021 19:55:14 +0000
+ id 1lUxDf-001Rxg-DG; Fri, 09 Apr 2021 19:55:14 +0000
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
  d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
  Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
  To:List-Id:From:Sender:Reply-To:Content-ID:Content-Description;
- bh=49hVlg4hsE98lW2lNhjnPxAs6x6hwsGbD6UBsXcAegc=; b=VyWMs3uw2igGrLA+mPG6UKqJ0i
- kzn3DvcYlqidiITCTDYl1YATPlpBnM/pU1vUYb3XFqGrs8wlJFEzizuHBDOOOtApDh4aTpZniW45i
- 8K7yPWiZ2AwlAZoLQ9uGIZIHxW52fl5lEv1ggRCN4Bj6LoUbRhRyAKs35ujBQ7JVHgk0r3zN9xlCN
- B9fF8EOFkvByrYriWvyTBavwFqBQVUquOGmYGbMcpYoLf/dSqmr0bTVPFwHW+X9q9eecS7GY6xuFV
- jFwvNmvzpbUPEe2R+UzlNNwrbUkArmZwfs068hiIFPytySVlNBiYdEeKgs6wLvAj79ZbZngMAFdrq
- fWrBVukQ==;
+ bh=6Sh7BT7H/1kqw0LjPMNVqKo2HmkFz0rqHz/HzAQKxyk=; b=JcMphgFK3oRU2BodDLxhehsQXO
+ LC4gTz12SIGzIdJk9BevdeF2FAqNK9Gz3kOkFO6mqT/0MGlq3TPMt+uK28M8Y63J1tMkQGmQlDeeJ
+ E52/LyHFwZx2BF49lpLmejisxc61H66JGnr6qRM9Pc0RRFt2VU3pCvda77pCDp47ipMd7V0Icp4s6
+ 7dS303qKdpI2cFu00JYsRnxYaG5B2DlzS15HaGFGtPu/AX0O5ZOh8DrmcwjsdS74Rck7uZaImmIRE
+ zXlgCioB69GOTphRPKndnG6Et8qPsjBjyDy71XPsQwKzBm0mvKf9fMhDzpuJLQU7wvYtKVkXNAZrl
+ GII1/Vkg==;
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUxDZ-004m09-4j
- for linux-arm-kernel@lists.infradead.org; Fri, 09 Apr 2021 19:55:02 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 86789610F9;
- Fri,  9 Apr 2021 19:54:56 +0000 (UTC)
+ id 1lUxDd-004m0b-48; Fri, 09 Apr 2021 19:55:06 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 86DE161186;
+ Fri,  9 Apr 2021 19:55:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1617998100;
- bh=AP8+aNUTnD+CO0BIHhYhziWO+97Lau3/XEnosXE8xuI=;
+ s=k20201202; t=1617998104;
+ bh=pDnrJcgtP6+wy/hGLUiAByKSmbuPue4kVYXSXIcpLHE=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=u8bpe3brRgIT/CSUUmz24bHvRs0skQ7oGM1Ky5kT2vqK6UyHh7KNKI+p7QjcdkzuC
- yPvBIwpa1b9RurPI7wsP6h0zktCiYJSHmIUCldtUNcruL4AerJAdJuHb7uBGXUT8ww
- aSqiWaxVKRaTMXdBai3LmEwlprJCWo9XXKfl2zshvpy4tzgf8e3cT7/+Fjrs0lQTtH
- FCdBZYhMBP8QL8s5XUcyM6+PH4NQHv/O62sSNN4NLtjQWrtzjxSs7vex08ILR9txbS
- U9bRccwM8uzqJqmebu+lPI+uNmb3fJtf5tL09jWTXunbrq4Q+m40fNkkoMAM+f0nZI
- RhgUmFJ9lo5JQ==
+ b=V350quqbWUUsbsrh5Yv6DnUxUOsPsaBjPn6nD/QcIO2LhP7hZ8sDw1hp3cACCDTdp
+ XDtvFFYnwtp6gfgt5gT+7CtAP1lND29oNRTfrP8VJJBBfkLWlGmPMhq/HroZQH54+X
+ DQjg0vARZ2vRF8m8cSPIgf/DUVoTI1q+yfkhBcNSM2GkgZ8SVhMU3r3g3/O1rmQCqs
+ tikY3hnrJb6zLbKkeIzvWqb61yMXjpaPTCeFiWSAFpG/M6LtAOc9NJOyUGQ6luZYfm
+ Hvlcy6LxBueud14cVPuwDSZtjkiEJ+kStIoGuSyF+X3BlgBRfk2b0+/460wHhFzUY5
+ wZEzbym6tmtaw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>, soc@kernel.org,
- arm@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org,
- Ajit Pandey <ajitp@codeaurora.org>,
- Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
- Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
- Jonathan Marek <jonathan@marek.ca>, Caleb Connolly <caleb@connolly.tech>,
- Jami Kettunen <jamipkettunen@gmail.com>, Andy Gross <agross@kernel.org>,
- Robert Foss <robert.foss@linaro.org>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Stephan Gerhold <stephan@gerhold.net>,
- Sujit Kautkar <sujitka@chromium.org>, Vinod Koul <vkoul@kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- satya priya <skakit@codeaurora.org>, Olof Johansson <olof@lixom.net>,
+To: soc@kernel.org,
+	arm@kernel.org,
+	Kevin Hilman <khilman@baylibre.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-amlogic@lists.infradead.org,
  linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] More Qualcomm ARM64 DT updates for 5.13
-Date: Fri,  9 Apr 2021 21:54:52 +0200
-Message-ID: <161799808694.1862218.16413759565351084850.b4-ty@arndb.de>
+Subject: Re: [GIT PULL] arm64: dts: amlogic: updates for v5.13 (round 2)
+Date: Fri,  9 Apr 2021 21:54:54 +0200
+Message-ID: <161799808702.1862218.12904940080958587014.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210409163949.776530-1-bjorn.andersson@linaro.org>
-References: <20210409163949.776530-1-bjorn.andersson@linaro.org>
+In-Reply-To: <7htuofgwaz.fsf@baylibre.com>
+References: <7htuofgwaz.fsf@baylibre.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210409_125501_228021_012DA4B1 
-X-CRM114-Status: UNSURE (   6.46  )
+X-CRM114-CacheID: sfid-20210409_125505_206604_A6872731 
+X-CRM114-Status: UNSURE (   6.90  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -106,24 +92,25 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210409195452.VK7ND5SuyP4zJdIckuTEa6qNRjmXgE5_vtrKQgZZpt0@z>
+Message-ID: <20210409195454.uOsuzqleIbEqD6_FpvjwI-JtLDkTdoDkPEELHStdHJc@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 9 Apr 2021 11:39:49 -0500, Bjorn Andersson wrote:
-> The following changes since commit e9269650db2f5b4aeeafced1a42b2e51d10bcdf5:
+On Fri, 09 Apr 2021 11:14:12 -0700, Kevin Hilman wrote:
+> Arnd, Olof,
 > 
->   arm64: dts: qcom: qrb5165-rb5: switch into using GPIO for SPI0 CS (2021-03-18 09:35:42 -0500)
+> A 2nd round of DT changes for Amlogic SoC families.
 > 
-> are available in the Git repository at:
+> I'm now aware of the new DT warnings added in the first round and will
+> work to get those cleaned up next.
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.13-2
+> Kevin
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: a8f6ba28257ab6fcf08138496afdcb2d6de3955c
+merge commit: db7a033f2b1f54c46244efe54687fe8f4b9b7c21
 
        Arnd
 
