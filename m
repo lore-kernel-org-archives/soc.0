@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61924C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 20:02:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDD0CC433ED
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 20:02:59 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EB61A61104
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 20:02:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EB61A61104
+	by mail.kernel.org (Postfix) with ESMTPS id 82CBC6105A
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 20:02:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 82CBC6105A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,64 +23,73 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=zWlzpQnVS5qlXaBLkZByCNpbphDoS9ocoSIMuq5OMnc=; b=lnvtc8RzNI49CsxiSUIH296gq
-	4c6zXvMBD2imyrG8QZ1BRRwTFXpHLy8o05VSX7tcRq1uaCdjKc2RIiOyIBR88cknJHOMKIJ2Wj1j3
-	SW3rS8TbqjidAZzWwMedkUc0D3aaZuC/vPty+8sE6lylC2y9Y4e/oVrXMZptEymQSELnOtciLMKM6
-	jNwDICLE68dzSuvqAgnUNtVNjvW84SRpUJKuAhnRc/jkBV7alLF0my47GN8AmiN/1Js4FqmjuOyyr
-	iY8CMMZ93NjTYtt4inwcwfI5q3KCWpaA+3G+TGrwD9OJy5o3M93FqtwvtyAaHKH3GkvKaGCjVzMey
-	OBvstcqIA==;
+	 bh=Vnh1GBmDDYNzyoEBw3pXIJkLS+exK39OjP6E6IxeEeU=; b=X3IvSCvebcbqicK5KvyaZjCyk
+	xWgMy5khhgWXyPQM/Vm52JHLkh1b+KAqZ0ZZTwMPs/w/1gA68CMR2W0b6EOa0sZbwgiqhf+TdHbLN
+	/8IbQ7p/O4vRLkaDTbydRLCoHkW9LtM5ixPzHAKyqWoT3Q8PDLz4N/JGLCFduca6wIbnZoVILQBpv
+	1zQ/XHBlm/CF9BC52JU3K1N57IUlPfJWzg9j9Wqh9vJl7/zL+BQJZj0axGz2DPf8QCp0lZLAEn8RN
+	jr6cwUQdj3Rxb56N2aY0AwLycnJys9IpKT/u7jW+guyDsRe065ucCrT0mDR4e39rHeuzBW/Mj3qWz
+	zFjH8Algg==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lUxE0-001S0E-O3; Fri, 09 Apr 2021 19:55:29 +0000
+	id 1lUxHz-001SCh-22; Fri, 09 Apr 2021 19:59:47 +0000
 Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUxDd-001Rxe-ST
- for linux-arm-kernel@desiato.infradead.org; Fri, 09 Apr 2021 19:55:12 +0000
+ id 1lUxDb-001Rx7-Ma
+ for linux-arm-kernel@desiato.infradead.org; Fri, 09 Apr 2021 19:55:14 +0000
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
  d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
  Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
  To:List-Id:From:Sender:Reply-To:Content-ID:Content-Description;
- bh=eDHI6RzT2FXawSvFvnPdPdpf/zSJKVY4/2BRWI7+sUw=; b=zTfQxNEwGhw+kwbEEnKN+f8xYX
- G7yxppx1ukn+sD1i0RcNHQrYDeXd3Zkx8/9nWkSO6SQ0+dImiAHTlCo5xcim3x5bq9Qh/iq2YM0Zq
- 3BVkuQYGm52gRuHsbjOerGAlUgUywYVso18iH//VrC6wT/56GcfRRjsKhsZ5k4afJ4fmZQyha6mVL
- 7rbAbMqGZ2Rsi/YuwUpwl3PGcMPGkGUmqbJjFiY7lejqpAC7UhDFk3RHXAC4zy3fV1lSDzcIcFE9j
- 8GO5xtr3mP1c+3YsayANtRlioqWUZp+EcCVf3NxFHfPLHw6SDRuhbBZnMoP45TEYh5FGGonvsz7y/
- ImOjR/gg==;
+ bh=49hVlg4hsE98lW2lNhjnPxAs6x6hwsGbD6UBsXcAegc=; b=VyWMs3uw2igGrLA+mPG6UKqJ0i
+ kzn3DvcYlqidiITCTDYl1YATPlpBnM/pU1vUYb3XFqGrs8wlJFEzizuHBDOOOtApDh4aTpZniW45i
+ 8K7yPWiZ2AwlAZoLQ9uGIZIHxW52fl5lEv1ggRCN4Bj6LoUbRhRyAKs35ujBQ7JVHgk0r3zN9xlCN
+ B9fF8EOFkvByrYriWvyTBavwFqBQVUquOGmYGbMcpYoLf/dSqmr0bTVPFwHW+X9q9eecS7GY6xuFV
+ jFwvNmvzpbUPEe2R+UzlNNwrbUkArmZwfs068hiIFPytySVlNBiYdEeKgs6wLvAj79ZbZngMAFdrq
+ fWrBVukQ==;
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUxDb-004m0N-Dh
- for linux-arm-kernel@lists.infradead.org; Fri, 09 Apr 2021 19:55:04 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E0ECF610CA;
- Fri,  9 Apr 2021 19:55:00 +0000 (UTC)
+ id 1lUxDZ-004m09-4j
+ for linux-arm-kernel@lists.infradead.org; Fri, 09 Apr 2021 19:55:02 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 86789610F9;
+ Fri,  9 Apr 2021 19:54:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1617998103;
- bh=nCtEdRhW89YXTx2iWEJ+OoLpmlFebL7FXdfZQQWfs6s=;
+ s=k20201202; t=1617998100;
+ bh=AP8+aNUTnD+CO0BIHhYhziWO+97Lau3/XEnosXE8xuI=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=qlbEnXBxpoHdbKIMnTSwROw09edcaCeQJM5AZX6iXxMSG0lo9OX7+rzuBCy+9iUT8
- M+d4IfxH8pMYFl9z8znD0yNtFVVqaRLLjjnMo4xCcM9rajyOWpTDBRXteOg9WGKzXO
- gYbJm3Jdc4yIwye1VOaDe3W/c+545azjNJXrP0WGHB8TnJZlp4YU9JZz6zjEPoHLVY
- XarnaBAAQ+80YNSDXl3ozsr6OLYhm1GVBjp1MyiUZZAnO3G6stJEiiMiDE2/siYt1X
- LlHxpDSzqOI+/VBWfiFXIsMIiyJTpGx1HxeQArecpl3uFmmclSZQyg8N8sgy38Iy18
- IV0D9u8rM5dRA==
+ b=u8bpe3brRgIT/CSUUmz24bHvRs0skQ7oGM1Ky5kT2vqK6UyHh7KNKI+p7QjcdkzuC
+ yPvBIwpa1b9RurPI7wsP6h0zktCiYJSHmIUCldtUNcruL4AerJAdJuHb7uBGXUT8ww
+ aSqiWaxVKRaTMXdBai3LmEwlprJCWo9XXKfl2zshvpy4tzgf8e3cT7/+Fjrs0lQTtH
+ FCdBZYhMBP8QL8s5XUcyM6+PH4NQHv/O62sSNN4NLtjQWrtzjxSs7vex08ILR9txbS
+ U9bRccwM8uzqJqmebu+lPI+uNmb3fJtf5tL09jWTXunbrq4Q+m40fNkkoMAM+f0nZI
+ RhgUmFJ9lo5JQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Bjorn Andersson <bjorn.andersson@linaro.org>, soc@kernel.org,
  arm@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Luca Weiss <luca@z3ntu.xyz>,
- linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>, Olof Johansson <olof@lixom.net>,
- Alexey Minnekhanov <alexeymin@postmarketos.org>,
- Kevin Hilman <khilman@baylibre.com>, linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] Qualcomm dts updates for v5.13
-Date: Fri,  9 Apr 2021 21:54:53 +0200
-Message-ID: <161799808686.1862218.8412636987649764617.b4-ty@arndb.de>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org,
+ Ajit Pandey <ajitp@codeaurora.org>,
+ Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+ Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
+ Jonathan Marek <jonathan@marek.ca>, Caleb Connolly <caleb@connolly.tech>,
+ Jami Kettunen <jamipkettunen@gmail.com>, Andy Gross <agross@kernel.org>,
+ Robert Foss <robert.foss@linaro.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ Kevin Hilman <khilman@baylibre.com>, Stephan Gerhold <stephan@gerhold.net>,
+ Sujit Kautkar <sujitka@chromium.org>, Vinod Koul <vkoul@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ satya priya <skakit@codeaurora.org>, Olof Johansson <olof@lixom.net>,
+ linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] More Qualcomm ARM64 DT updates for 5.13
+Date: Fri,  9 Apr 2021 21:54:52 +0200
+Message-ID: <161799808694.1862218.16413759565351084850.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210409162359.776076-1-bjorn.andersson@linaro.org>
-References: <20210409162359.776076-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20210409163949.776530-1-bjorn.andersson@linaro.org>
+References: <20210409163949.776530-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210409_125503_502303_779D3F1F 
-X-CRM114-Status: UNSURE (   6.65  )
+X-CRM114-CacheID: sfid-20210409_125501_228021_012DA4B1 
+X-CRM114-Status: UNSURE (   6.46  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -97,24 +106,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210409195453.124FX6_SFzPD3OVVCi8pnwCo-CgUQjGp8R9EZ-LWI68@z>
+Message-ID: <20210409195452.VK7ND5SuyP4zJdIckuTEa6qNRjmXgE5_vtrKQgZZpt0@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 9 Apr 2021 11:23:59 -0500, Bjorn Andersson wrote:
-> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+On Fri, 9 Apr 2021 11:39:49 -0500, Bjorn Andersson wrote:
+> The following changes since commit e9269650db2f5b4aeeafced1a42b2e51d10bcdf5:
 > 
->   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+>   arm64: dts: qcom: qrb5165-rb5: switch into using GPIO for SPI0 CS (2021-03-18 09:35:42 -0500)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-for-5.13
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.13-2
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: e8adf27e9766525ebedb8e6607c023997f93c353
+merge commit: a8f6ba28257ab6fcf08138496afdcb2d6de3955c
 
        Arnd
 
