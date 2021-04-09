@@ -6,55 +6,61 @@ X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8A2FC433ED
-	for <soc@archiver.kernel.org>; Fri,  9 Apr 2021 07:17:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2249C433B4
+	for <soc@archiver.kernel.org>; Fri,  9 Apr 2021 07:18:26 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 7F65861177; Fri,  9 Apr 2021 07:17:40 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9D83661178;
-	Fri,  9 Apr 2021 07:17:38 +0000 (UTC)
+	id BD9C561106; Fri,  9 Apr 2021 07:18:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3F88661107;
+	Fri,  9 Apr 2021 07:18:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617952660;
-	bh=uygj9zBfptFX92rchP4Ynh/JGD0wJp90BR8NgN0XWbU=;
+	s=k20201202; t=1617952706;
+	bh=2mWb3+F3h0vGmR85tMfMYETiFUZhbud9i7NI+IMO9pE=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=o2f38BEsEIKhiqiWk/PsQpFwVE2m4pitqyKjdNGWESG2Zf4lxm8hj4ZO+Fq7Wm956
-	 cMlZD+r7hciqVFG3Ug6Xw1WpzrKy9VbcEFKlYJwBSuI+8XLMCyoLeJDJCoU3BgvnqH
-	 +4LoJyWCJK/A4iD8pHN7DkPDkp8yV7TXJSbixo6f8YV4koda0w/I4oikDfm82oh7Ut
-	 +4n2M06bZyshzLt5dI7La7Di3hWHgwKS/uk1NDeev0Ox58a/5geWBbJVvEjXcXI74F
-	 Av7PPV734QUEYnJkWoZMw/bJ+6FKyovVnFjNI0QzseRrcxw7KBwQQWZR8byrwklcTf
-	 lPessPAZ4Zgqw==
+	b=AbKSnn28w5EJo1scRp166/oa/7BV2oqBWO66yVtmAx/tWC28KtWWFKzvlkOjn2AU0
+	 9jzbxKN8nj7sfyEvjhunUmzGj/Fb9l7QX72FfvNi//DcWuwKr41+ikR8oqviPBwoVb
+	 h37E59y8nb/ZlJpQiFTo6nIvKs2H3t6QjPhmt/jlwmWtxepSSXJSIRK6nO/F/2op2N
+	 xAIo7owvReEF57qJaGteeJSBkd1REnQF3UaQw0D3epNm2IHLF1L0ru7saqMT5O0OOM
+	 HrG5ozgjsw06TP522ZwKDS4psU1K8j9eeDu2dwhYqXgn9J99VhaLOdL/e04+GGstkN
+	 ycvivTGQZmw8Q==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: SoC Team <soc@kernel.org>,
 	Joel Stanley <joel@jms.id.au>
 Cc: Arnd Bergmann <arnd@arndb.de>,
+	"Chia-Wei, Wang" <chiawei_wang@aspeedtech.com>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
 	Andrew Jeffery <andrew@aj.id.au>,
-	linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [GIT PULL] ARM: bmc: devicetree changes for 5.13
-Date: Fri,  9 Apr 2021 09:17:35 +0200
-Message-Id: <161795265048.1749935.15830124997910239772.b4-ty@arndb.de>
+	Corey Minyard <cminyard@mvista.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-aspeed <linux-aspeed@lists.ozlabs.org>
+Subject: Re: [GIT PULL] ARM: aspeed: lpc changes for 5.13
+Date: Fri,  9 Apr 2021 09:18:20 +0200
+Message-Id: <161795267844.1750068.14862109207368145425.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <CACPK8Xe-KV5BeQwOH6NKC1++FCVqwwNCGBh7hEbBORfrmxfTtQ@mail.gmail.com>
-References: <CACPK8Xe-KV5BeQwOH6NKC1++FCVqwwNCGBh7hEbBORfrmxfTtQ@mail.gmail.com>
+In-Reply-To: <CACPK8Xcb12LsVr7CUaXXjQskKbVjb7x+jgueG1Hik-kBPWtDSg@mail.gmail.com>
+References: <CACPK8Xcb12LsVr7CUaXXjQskKbVjb7x+jgueG1Hik-kBPWtDSg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 9 Apr 2021 06:14:27 +0000, Joel Stanley wrote:
-> Here's a pull request from me for the ASPEED and Nuvoton changes
-> targeting the v5.13 merge window. As you can see I've chosen to
-> arrange the pull request as one single "BMC-related" set of changes.
-> If we choose to continue with this, in the future I will cover the
-> ASPEED, NPCM and soon to be merged WPCM (legacy Nuvoton) systems.
+On Fri, 9 Apr 2021 06:29:52 +0000, Joel Stanley wrote:
+> This is a pull request containing a slightly messy device tree and
+> associated driver changes for the ASPEED systems. It corrects some
+> design decisions made when first mainlining support for the BMC
+> devices on the LPC bus that have stopped us from being able to write
+> drivers for eg. KCS.
 > 
-> The following changes since commit ee33e2fb3d70267de00f7c0b09e7e3b309a686df:
+> Andrew has worked with Chai-Wei from ASPEED on this process. These set
+> of changes have acks from the maintainers, and allow Andrew to go
+> ahead with fixing the KCS drivers in the future. The branch should
+> apply with no conflicts no matter which order it is merged.
 > 
 > [...]
 
-Merged into arm/dt, thanks!
+Merged into arm/drivers, thanks!
 
-merge commit: e3bbc53ac8827babb5001037883e4edd2068168d
+merge commit: d60f314b93b637e9721c406f5a61cf2157e59b48
 
        Arnd
