@@ -1,109 +1,142 @@
-Return-Path: <SRS0=zFty=JG=gmail.com=joel.stan@kernel.org>
+Return-Path: <SRS0=+Itf=JG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F1B9C433ED
-	for <soc@archiver.kernel.org>; Fri,  9 Apr 2021 06:46:42 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 0CC26600D1; Fri,  9 Apr 2021 06:46:42 +0000 (UTC)
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CF46C433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 06:51:48 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 35D79610C8
-	for <soc@kernel.org>; Fri,  9 Apr 2021 06:46:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 35D79610C8
+	by mail.kernel.org (Postfix) with ESMTPS id DC40B610C8
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 06:51:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DC40B610C8
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=joel.stan@gmail.com
-Received: by mail-qt1-f180.google.com with SMTP id y12so3459156qtx.11
-        for <soc@kernel.org>; Thu, 08 Apr 2021 23:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=Fk+SLvQByxpVgF9nXnK+sGfyXWmk8mqqM5Z9mDGSXkM=;
-        b=nQOrPXAP/rlXJIGMD67uNpaC5fSCWPVHu39ALGm7WV4Dnt2JXgbUa87Gj5jf+BptHR
-         JlBiR9daoFIXRJoqnqwHoeGl8k5ddLFoYeFpisFVWS5PkThNBdGiqHDSv4yj/JkvJDlY
-         F4MWHsFZ7pJznA1OX5VI8A3USTLnvksfeu7b4=
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:MIME-Version:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=7SnWCsr5UPZr9aZS9HbZrQUkac4gzUSV0c5sBxrbphg=; b=DT7xowM3KPFau26FNDmwIYl0Pg
+	wkRtsGs/lTQ+eL0qh7mDjG7eEDRokJbq/nki7vzRl/lBZxIKp5XtuFb1+Qzol6PrVuuXmeyR2/AIC
+	tU+1wvbF4B0thRccKz4kez7pOzK01qIwPAF1LJmmCy8BD7et4zyFrzg9lPcchNGsIAkQWOdLEunOQ
+	d0A9foQbgO/LzydRxvFjQB9Y5xWQrSQnkwWeVrLl5vVsxKqBuLHFRi0kl5GPFX0hndoF2ppB7lqCm
+	BfsTldTN3RQeULfus+SCoMU6cMr1oXR++/kL2m7LY9ldh87oHkFb0g23sxaxlxwaXkzyF8svnPhnH
+	gpVAiALw==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lUkxb-00AK82-EQ; Fri, 09 Apr 2021 06:49:49 +0000
+Received: from mail-qk1-x730.google.com ([2607:f8b0:4864:20::730])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lUkeb-00AJ2j-KJ
+ for linux-arm-kernel@lists.infradead.org; Fri, 09 Apr 2021 06:30:23 +0000
+Received: by mail-qk1-x730.google.com with SMTP id 7so4843108qka.7
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 08 Apr 2021 23:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
+ h=mime-version:from:date:message-id:subject:to:cc;
+ bh=t6sfaiKhpJzm6PSIf/ddHU0ldz4ZXvQKkmw7oDKOIyg=;
+ b=PXJMuB/sRtry0TFRSRVSvL9b1Obex34q0EYuMI0KevjzaahGxSYOdPJj3p7uQMktf/
+ SmDk9QgSUPq+OoXavw9h2kYvWLge9VXenmNjZbO+kUFE75AhlFQGG35rCT128ILSFQJa
+ hfO1qs7pyU+lY9CFAMh9YRXev0ZMrHy0InAZQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=Fk+SLvQByxpVgF9nXnK+sGfyXWmk8mqqM5Z9mDGSXkM=;
-        b=WdFW+cNCbwvri68iIL/oseiz7LgVcfmk3fYAqnHsXzd7cLdn33nSxSHMAmIJ1OV0oa
-         7YLbg7RgQes0SJ7YSjN+TGFx5PEP2Q4U1hTmpQ4G9I0THsOdi53WP1F1j8Y8FJ/PLzqo
-         Xo9c6/FFKAORsDBYpA2ZlF+OZQ90lhPjRsohMV8ftcZq5xY5I5ym1GKUPXb/LzoLM1OT
-         p3qaBs8JURbCGH0SBQbyyyiTyy6gsEO7Bt6NW3xGQ2APbjg/kaQ6dHfVme+iOBPa1fBU
-         oIWVN85/e7aCF0OwODzuhMf9gKXpQGINZJEa2YtDE3ZuFFo7/n8yLzuQX8JgSgVZl2Fl
-         DM3g==
-X-Gm-Message-State: AOAM532RJurMBRDuyC1Q/3bjL6oYoT22FDF4KU/X5zYuRAzqbWu4C2E/
-	9MKzVtIh8HPHUSWpF23BF3qEUmzVRBZH9p9NmwcIxB2CY/ivYQ==
-X-Google-Smtp-Source: ABdhPJyOK1IoEN8R85hTcPiUd7XO74Y6XVEax2g5xYbXraGJzUecQnp5eFR8XWNCzxuAlQ3ltLYwd23fyAcCPakT7Xk=
-X-Received: by 2002:ac8:4d1b:: with SMTP id w27mr6020430qtv.363.1617950799643;
- Thu, 08 Apr 2021 23:46:39 -0700 (PDT)
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+ bh=t6sfaiKhpJzm6PSIf/ddHU0ldz4ZXvQKkmw7oDKOIyg=;
+ b=t2nAYKCHxNqIZLBbr3zWPeVp8CiJ9bqXbX0Svmc7fo87sXKS3a/cQl7wKwzTaGN4It
+ lqarDU2n4y5KJ/3FjnK6ywXPt6m7kWCkQ7z2Nx5eVh3i+fuO1kmJLE2eYjbVCFOQQfx/
+ BdAWt55E+MwhTrPdWLM3tTwi1Ytf5ZFRA5arqMJdz9E4+y32zr/yGbeQnmo3zduVHUA9
+ R7v8QhZvyBsZEDhPs8iN/4VFHTRk4pz2aEuiY2dE3DfK6Hc6RSWNH9bed275kjokp0GQ
+ 5C/Ax/7dDkTc0aIYlUbWT9chZY3SVrz3HM2THf2w/MuHq5ljvLANYtELDtX0ER/huSf8
+ HN0g==
+X-Gm-Message-State: AOAM533j86ET3GZE2s8duTLud1VWJyrXOOOn+5D/zENB8n6ha5XvRvO/
+ lLs5OP7ShdW/zihpu7oFDHGupTVBoJ7GmeldxH8=
+X-Google-Smtp-Source: ABdhPJxgu3cBHKkUKgRIxfjzhkmIIhaArUkzZ7ELQ+REDApTFFkya83HBLiA9F2iqAllfdJfMfC0rTiuwzYTrj86UsY=
+X-Received: by 2002:a05:620a:c11:: with SMTP id
+ l17mr12472020qki.487.1617949804254; 
+ Thu, 08 Apr 2021 23:30:04 -0700 (PDT)
 MIME-Version: 1.0
 From: Joel Stanley <joel@jms.id.au>
-Date: Fri, 9 Apr 2021 06:46:27 +0000
-Message-ID: <CACPK8Xdj20TcJckH8fx757ACa4hT4j3bZEctT0Przjv8XJd7KA@mail.gmail.com>
-Subject: [GIT PULL] ARM: nuvoton: Add WPCM450 support
+Date: Fri, 9 Apr 2021 06:29:52 +0000
+Message-ID: <CACPK8Xcb12LsVr7CUaXXjQskKbVjb7x+jgueG1Hik-kBPWtDSg@mail.gmail.com>
+Subject: [GIT PULL] ARM: aspeed: lpc changes for 5.13
 List-Id: <soc.lore.kernel.org>
 To: SoC Team <soc@kernel.org>
-Cc: =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Corey Minyard <cminyard@mvista.com>,
+ Linus Walleij <linus.walleij@linaro.org>, 
+ "Chia-Wei, Wang" <chiawei_wang@aspeedtech.com>,
+ Andrew Jeffery <andrew@aj.id.au>, 
+ Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+ linux-aspeed <linux-aspeed@lists.ozlabs.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210409_073022_045076_F8F71285 
+X-CRM114-Status: GOOD (  10.06  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210409062952.9Xkzkfa2s_qoEpjryVpxj0EJ_-j-txzvln_CrGT1jVg@z>
 
 Hello Soc maintainers,
 
-Here's a support for a Nuvoton soc contributed by Jonathan. There are
-changes for the irq controller, timer and serial port that have been
-merged by other maintainers. I've picked up the arch and device tree
-changes on his behalf to go through the soc tree.
+This is a pull request containing a slightly messy device tree and
+associated driver changes for the ASPEED systems. It corrects some
+design decisions made when first mainlining support for the BMC
+devices on the LPC bus that have stopped us from being able to write
+drivers for eg. KCS.
 
-The following changes since commit 09e6d2b71ae673dccf9f59f0fc1e17109113b6f4=
-:
+Andrew has worked with Chai-Wei from ASPEED on this process. These set
+of changes have acks from the maintainers, and allow Andrew to go
+ahead with fixing the KCS drivers in the future. The branch should
+apply with no conflicts no matter which order it is merged.
 
-  ARM: config: Add WPCM to multi v5 (2021-04-09 15:18:40 +0930)
+If you would like to handle this another way then let me know.
+
+The following changes since commit 489774ff5db943642751f4f0fdac9033239208c6:
+
+  soc: aspeed: Adapt to new LPC device tree layout (2021-04-09 13:39:22 +0930)
 
 are available in the Git repository at:
 
   git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
-tags/bmc-5.13-wpcm450
+tags/aspeed-5.13-lpc
 
-for you to fetch changes up to 09e6d2b71ae673dccf9f59f0fc1e17109113b6f4:
+for you to fetch changes up to 489774ff5db943642751f4f0fdac9033239208c6:
 
-  ARM: config: Add WPCM to multi v5 (2021-04-09 15:18:40 +0930)
-
-----------------------------------------------------------------
-Nuvoton WPCM450 BMC SoC
-
-This adds basic support for the Nuvoton WPCM450 BMC SoC. It's an older
-SoC but still commonly found on eBay, mostly in Supermicro X9 server
-boards.
-
-Third-party documentation is available at:
-https://github.com/neuschaefer/wpcm450/wiki
-
-The code has been contributed by Jonathan Neusch=C3=A4fer who has also
-stepped forward to maintain the soc.
+  soc: aspeed: Adapt to new LPC device tree layout (2021-04-09 13:39:22 +0930)
 
 ----------------------------------------------------------------
-Joel Stanley (1):
-      ARM: config: Add WPCM to multi v5
+ASPEED LPC updates for 5.13
 
-Jonathan Neusch=C3=A4fer (10):
-      dt-bindings: arm: Convert nuvoton,npcm750 binding to YAML
-      ARM: dts: Add board-specific compatible string to npcm750-evb devicet=
-ree
-      dt-bindings: vendor-prefixes: Add Supermicro
-      dt-bindings: arm: npcm: Add nuvoton,wpcm450 compatible string
-      dt-bindings: watchdog: npcm: Add nuvoton,wpcm450-wdt
-      ARM: npcm: Introduce Nuvoton WPCM450 SoC
-      watchdog: npcm: Add support for WPCM450
-      ARM: dts: Add devicetree for Nuvoton WPCM450 BMC chip
-      ARM: dts: Add devicetree for Supermicro X9SCi-LN4F based on WPCM450
-      MAINTAINERS: Add entry for Nuvoton WPCM450
+These patches fix the ASPEED LPC bindings and LPC-related device drivers
+so in the future the KCS driver can properly use the hardware.
+
+----------------------------------------------------------------
+Chia-Wei, Wang (5):
+      dt-bindings: aspeed-lpc: Remove LPC partitioning
+      ARM: dts: Remove LPC BMC and Host partitions
+      ipmi: kcs: aspeed: Adapt to new LPC DTS layout
+      pinctrl: aspeed-g5: Adapt to new LPC device tree layout
+      soc: aspeed: Adapt to new LPC device tree layout
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
