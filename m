@@ -1,152 +1,127 @@
-Return-Path: <SRS0=+Itf=JG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=2hmS=JG=baylibre.com=khilman@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8FE7C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 17:52:01 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0879C433B4
+	for <soc@archiver.kernel.org>; Fri,  9 Apr 2021 18:10:32 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 8A3576115C; Fri,  9 Apr 2021 18:10:32 +0000 (UTC)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6957A60FE8
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 17:52:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6957A60FE8
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=dG7QdD7ZDkiStF1znJpQKokry0VG1tlh/6oLnHeQtls=; b=THrZdLvgZqSxn5Fgxy4lj5jKXS
-	2p+CVieixEzQRTlKsyO4JjVVCwJx1KwD4thRS4RT+Uzv8w3LqBEVaBEx8LCCoQ2eomDgGNK3mQGW5
-	aNtJRMRUx221V5aBS/loN/jYU56I54BJwtvXqx751qTxAyHGXmLEizOCovbhT8Wkie1y4KEiCK0aP
-	69AeA8oP+0HR2aUKIEaJ95f1veTv5m7kc3n7dvDFZk5iuzlMOANcowCDlD/NROpuioMq+IVnvh2Bb
-	6xU6ehFfGRjvy+qdJo6m4My/EF0mSc/qrUxwoyRSUkD6Hdo9yRX4iC+WBwWiknoDZgpX4y6lLAs9K
-	SP8wqyJQ==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lUvH2-001E5V-VJ; Fri, 09 Apr 2021 17:50:29 +0000
-Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUvGz-001E5I-Rn
- for linux-arm-kernel@desiato.infradead.org; Fri, 09 Apr 2021 17:50:25 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
- MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
- Content-ID:Content-Description:In-Reply-To:References;
- bh=yF4adJ/N2MJB/B2dgo3LBF/vMMqYbS0nkm1kg+A3XuM=; b=0zG8czrJjxm0V0jj7KjFY6G9MV
- KtqPEE7ABIlS4fTfK7rise/IMTk5V9vcva4MqVXmk6z1rYqEfoJpqll8y/r4Bt4KLwCGKQDbFxN6n
- EKVviTb985EyCyozzR0XZsRecparv5kuCJ0nuak3g9EffbjOoyxa6vKrKXf9OGnWL22tMXDbuO5bU
- av4r7ZoBjl8YURzlXyCHMInOse93zBrYNLsauAAQrpTSjRiz/RX/5cPZoCDiTJNubSjC0WcBSFWfq
- /VdELJSMLiiGJMFWSMuEY6mDZH9KAbTpuUnwN/X07f6Io7s1BGP9bIDhiCc94INIVmBG78CO8YgF7
- lF+0kiXQ==;
-Received: from mail-pf1-x42c.google.com ([2607:f8b0:4864:20::42c])
- by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUvGx-004hbk-7B
- for linux-arm-kernel@lists.infradead.org; Fri, 09 Apr 2021 17:50:24 +0000
-Received: by mail-pf1-x42c.google.com with SMTP id n38so4738152pfv.2
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 09 Apr 2021 10:50:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=yF4adJ/N2MJB/B2dgo3LBF/vMMqYbS0nkm1kg+A3XuM=;
- b=D6kKemq6EnpKrfWIvgpsEpTT028RfRz8+6DpFobJX56oYxynu6JztyCv21GKK9cZwp
- zWR7dKvJ+HkzBlB7FPw12mbiwdbPyRv/mYwrU0oymndu4ideXQBIlgQg5BcFAO1khr0z
- SCk/SsOggGhGTsXlAjF46q5n8J7EKG4NU6Ujs0APlhJwQ3Hjr+BfYKNtm5U1iy1V39Tq
- 7bIzkkeN3T4RgINNe7h767S/MmCeMvDCU22jFdReisRbQdunslojnlCwuT7qtCz1q32J
- Wx1aw0XDSmb9U/PhiwYUcc92L8DRP5qOpq6gXbYjfMYYOAwzYuHv9IIrnr0blo0y6vMv
- FyEg==
+	by mail.kernel.org (Postfix) with ESMTPS id E13916115B
+	for <soc@kernel.org>; Fri,  9 Apr 2021 18:10:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E13916115B
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=khilman@baylibre.com
+Received: by mail-wm1-f44.google.com with SMTP id y204so1973858wmg.2
+        for <soc@kernel.org>; Fri, 09 Apr 2021 11:10:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=NCZ0mYxm01Y6BQQ4DD36UoK5wirRF8QQOJoKGAXkKTk=;
+        b=ar1Zx3c1rW8q67/2QqTbpdVGKfniQ6hAquhWNWYX0UDyP9xjygQePIsPRL+SSoZXyA
+         7/3YhAuLzi1JaA6ZfDnFMs1gtaSDAWFTLdW5n/QInLt1zVCcO/GHZLoYUEIVaa4ykIdA
+         ucJEr/xvByEmqRbS1vsmrQeXUCcxu3i672jzgIZnSTBZnp55F6XhQDkOR1dDZns+ZhdU
+         sfCrfaN1OuD4E1yepOBZlGnTQXobxN5W6c8/yrLMyQxwlLT7LMU29/xmEMcw6W0FDPQa
+         29eA0o8iRGdInjpqivK03pvHN2rH73XDVHt+hpRZsu7IH/mxwIiJTyvCQcpGwfy8KQkI
+         RyuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=yF4adJ/N2MJB/B2dgo3LBF/vMMqYbS0nkm1kg+A3XuM=;
- b=al/P/NdyA/cdAyrdBNhksyFAX+4+JzQqO6fLg1pyGC4eMehsfuVHIBuKu/CiJ67AB+
- KlIsSePEnbGDtvee3IlrvGG9ny1fkPgK6yoBUloAvhDmxFrZ1ojgsVnneGvW1ozdFL3s
- tyV4Z8lUvqs7+au9fIzBq93kIx5PnCzV2EnvPHfd10A4yu/eOYXzcw1jqZ/HJIIDMUib
- DYjPl4MehbAz9Q4fmrJN+3vO8fNW6z1+V2dwQF+ix4a6SGjBO0qcRsIBbkclyhl4fscN
- GsHAXS1Mvyy/A1XfcbdwWBVOMOcDMVs8z7xbUGb1g1ARqI2yCA5Sm2P6r5HyiA46YbDd
- BKCg==
-X-Gm-Message-State: AOAM531mEroqvyZYBOtjh3IRkJfxwrJqbka20Di0BNi0dIMmgc0/WzaE
- WFui/Dx4q6xMo9r9Hm16FNZXe7wtADk=
-X-Google-Smtp-Source: ABdhPJxHp+9xc6/QzyQflTULgUDZZGa7gN4SxfnVzrVYepgzPZ9jzUjK7LdxsCV2el2gWwpUEvezVg==
-X-Received: by 2002:a63:eb49:: with SMTP id b9mr14099271pgk.318.1617990621940; 
- Fri, 09 Apr 2021 10:50:21 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
- by smtp.gmail.com with ESMTPSA id v126sm2878493pfv.138.2021.04.09.10.50.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 09 Apr 2021 10:50:21 -0700 (PDT)
-From: Florian Fainelli <f.fainelli@gmail.com>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=NCZ0mYxm01Y6BQQ4DD36UoK5wirRF8QQOJoKGAXkKTk=;
+        b=V7z5z564OynN/58bE3P6OhIBAeWP9epPKTXl7XqNpe7EkJcplU8/d6REgwXVoEDSOZ
+         vYRp+PpnqLVE3aTqHyf+YAwzMGpRhoQJdhEaVhRKNGzeCCX7CULebkgb2T7iCI8/sdc2
+         mti3vX9r+mlEIS0QmawBe73/fAP0HGDpfJhC8kK16HA/7X8WV9v+JikFNR5c0+R5rKI5
+         4kAPw4qSQSpwVK4S+jyYx1SZO/F75g+NjAiEbJGG141c+aTnuEOidVe8X1tzvuVEPHLP
+         rD2Pw/XywocbG8Z253JXw+/o9dh1PnZnrV09nMxnZVST4tgBXK1JlaSO0SQKM7mnbHRx
+         omCg==
+X-Gm-Message-State: AOAM530DWDsq/GriGClhCwGcsiounnTLcf6+yKAwzSMS+9ibIWCEoz9V
+	h3Zaj+z3i3/seTIrBur2fdwSx6ey7XPwWeE9
+X-Google-Smtp-Source: ABdhPJwOHbbgqVNyb5kiH2aXj+nlYbV4MK6sHLNhY6ffGKTo4wfH+1xpR2QDE36PvmUypSyEmf3DSQ==
+X-Received: by 2002:a7b:c20c:: with SMTP id x12mr715878wmi.51.1617991829376;
+        Fri, 09 Apr 2021 11:10:29 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id w22sm4999135wmc.13.2021.04.09.11.10.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Apr 2021 11:10:28 -0700 (PDT)
+From: Kevin Hilman <khilman@baylibre.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>,
- Florian Fainelli <f.fainelli@gmail.com>,
- linux-arm-kernel@lists.infradead.org, arnd@arndb.de, olof@lixom.net,
- khilman@kernel.org, bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL] Broadcom maintainers changes for 5.13
-Date: Fri,  9 Apr 2021 10:50:18 -0700
-Message-ID: <20210409175018.3051283-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+To: Arnd Bergmann <arnd@kernel.org>, soc@kernel.org, arm@kernel.org,
+ Christian Hewitt <chewitt@libreelec.tv>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
+ linux-amlogic@lists.infradead.org
+Subject: Re: [GIT PULL] arm64: dts: amlogic updates for v5.13
+In-Reply-To: <161789493793.1630479.15784072871445378505.b4-ty@arndb.de>
+References: <7h5z10mjpp.fsf@baylibre.com>
+ <161789493793.1630479.15784072871445378505.b4-ty@arndb.de>
+Date: Fri, 09 Apr 2021 11:10:26 -0700
+Message-ID: <7h1rbjib1p.fsf@baylibre.com>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210409_105023_276465_167EF94C 
-X-CRM114-Status: UNSURE (   8.14  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210409175018.9IYAUXmXXG0UTB80KRLgTTcYhvksnmS1g-ug9wMlyoA@z>
+Content-Type: text/plain
 
-The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
+[ + Christian ]
 
-  Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
+Arnd Bergmann <arnd@kernel.org> writes:
 
-are available in the Git repository at:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> On Mon, 05 Apr 2021 15:48:18 -0700, Kevin Hilman wrote:
+>> The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
+>> 
+>>   Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
+>> 
+>> are available in the Git repository at:
+>> 
+>>   https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic.git tags/amlogic-dt64
+>> 
+>> [...]
+>
+> Merged into arm/dt, thanks!
+>
+> Can you have a look at these added warnings from 'make dtbs_check W=1'?
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.13/maintainers
+Yes, we'll have a look and send a follow-up set of fixes.
 
-for you to fetch changes up to 0072f6c37f02071821eb2135b80daa404d783704:
+Kevin
 
-  mailmap: Update email address for Nicolas Saenz (2021-04-09 10:47:17 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom SoC MAINTAINERS file entries and
-.mailmap updates for 5.13, please pull the following:
-
-- Nicolas updates his maintainer email to a kernel.org address for
-  continuity
-
-----------------------------------------------------------------
-Nicolas Saenz Julienne (2):
-      MAINTAINERS: Update BCM2711/BCM2335 maintainer's mail
-      mailmap: Update email address for Nicolas Saenz
-
- .mailmap    | 2 ++
- MAINTAINERS | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dts:31.19-42.4: Warning (avoid_unnecessary_addr_size): /gpio-keys-polled: unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dts:37.12-41.5: Warning (unit_address_vs_reg): /gpio-keys-polled/button@0: node has a unit name, but no reg or ranges property
+> amlogic/meson-gxm-mecool-kiii-pro.dts:36.19-47.4: Warning (avoid_unnecessary_addr_size): /gpio-keys-polled: unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
+> amlogic/meson-gxm-mecool-kiii-pro.dts:42.12-46.5: Warning (unit_address_vs_reg): /gpio-keys-polled/button@0: node has a unit name, but no reg or ranges property
+> amlogic/meson-gxm-minix-neo-u9h.dts:42.19-53.4: Warning (avoid_unnecessary_addr_size): /gpio-keys-polled: unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
+> amlogic/meson-gxm-minix-neo-u9h.dts:48.12-52.5: Warning (unit_address_vs_reg): /gpio-keys-polled/button@0: node has a unit name, but no reg or ranges property
+> amlogic/meson-gxl-s805x-p241.dt.yaml: serial@84c0: 'uart-has-rtscts' does not match any of the regexes: 'pinctrl-[0-9]+' amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: audio-controller@5400:
+> 'sound-name-prefix' does not match any of the regexes: 'pinctrl-[0-9]+' amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml:
+> audio-controller@c8832000: 'AVDD-supply', 'sound-name-prefix' do not match any f the regexes: 'pinctrl-[0-9]+'
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: bluetooth: clock-names: ['lpo'] is too short
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: bluetooth: clock-names:0: 'txco' was expected
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: bluetooth: clocks: [[23]] is too short
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: bus@c8834000: eth-phy-mux: {'type': 'object'} is not allowed for {'compatible': ['mdio-mux-mmioreg', 'mdio-mux'], '#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[0, 1372, 0, 4]], 'mux-mask': [[4294967295]], 'mdio-parent-bus': [[35]], 'mdio@e40908ff': {'reg': [[3825797375]], '#address-cells': [[1]], '#size-cells': [[0]], 'ethernet-phy@8': {'compatible': ['ethernet-phy-id0181.4400'], 'interrupts': [[0, 9, 4]], 'reg': [[8]], 'max-speed': [[100]], 'phandle': [[36]]}}, 'mdio@2009087f': {'reg': [[537462911]], '#address-cells': [[1]], '#size-cells': [[0]]}}
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: bus@c8834000: rng: {'type': 'object'} is not allowed for {'compatible': ['amlogic,meson-rng'], 'reg': [[0, 0, 0, 4]], 'clocks': [[3, 25]], 'clock-names': ['core']}
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: hdmi-tx@c883a000: 'sound-name-prefix' does not match any of the regexes: pinctrl-[0-9]+'
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: ir@580: linux,rc-map-name:0: 'rc-mecool-kii-pro' is not one of ['rc-adstech-dvb-t-ci', 'rc-alink-dtu-m', 'rc-anysee', 'rc-apac-viewcomp',..., 'rc-zx-irdec']
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: leds: 'blue' does not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: serial@84c0: 'bluetooth', 'uart-has-rtscts' do not match any of the regexes:
+> 'pinctrl-0-9]+'
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: sound: 'assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' do not atch any of the regexes: '^dai-link-[0-9]+$', 'pinctrl-[0-9]+'
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: sound: 'clocks' is a dependency of 'assigned-clocks'
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: sound: audio-routing: ['AU2 INL', 'ACODEC LOLP', 'AU2 INR', 'ACODEC LORP', AU2 INL', 'ACODEC LOLN', 'AU2 INR', 'ACODEC LORN', 'Lineout', 'AU2 OUTL', 'Lineout', 'AU2 OUTR'] is too long
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: sound: dai-link-0:sound-dai:0: [63, 0, 0] is too long
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: sound: dai-link-0:sound-dai:0:1: missing phandle tag in 0
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: sound: dai-link-0:sound-dai:0:2: missing phandle tag in 0
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: sound: dai-link-1:sound-dai:0: [63, 0, 1] is too long
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: sound: dai-link-1:sound-dai:0:1: missing phandle tag in 0
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: sound: dai-link-1:sound-dai:0:2: missing phandle tag in 1
+> amlogic/meson-gxl-s905d-mecool-kii-pro.dt.yaml: vpu@d0100000: 'amlogic,canvas' does not match any of the regexes: 'pinctrl-[0-9]+'
+>
+> merge commit: aa1e345ade42ba90ab868750acab27a360998af1
+>
+>        Arnd
