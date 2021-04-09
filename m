@@ -7,61 +7,72 @@ X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFCDBC433B4
-	for <soc@archiver.kernel.org>; Fri,  9 Apr 2021 19:54:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF6B9C433B4
+	for <soc@archiver.kernel.org>; Fri,  9 Apr 2021 19:55:00 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 6673361178; Fri,  9 Apr 2021 19:54:13 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 15FB1610CA;
-	Fri,  9 Apr 2021 19:54:10 +0000 (UTC)
+	id 96B2F61178; Fri,  9 Apr 2021 19:55:00 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 86789610F9;
+	Fri,  9 Apr 2021 19:54:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1617998053;
-	bh=cOzyZqca5gwW2gABD9EnRTP6HqnEfJigmShKZpH8ayo=;
+	s=k20201202; t=1617998100;
+	bh=AP8+aNUTnD+CO0BIHhYhziWO+97Lau3/XEnosXE8xuI=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=g8/9j7hCL0IuLIZ9M6dn2nlwTIszeftBcLdd7o7os7uUI8JXwldEKZrd+7nOh5TiK
-	 9K/lzrnw3nnsZIN4hDh1jm7gYmgkabMWPmLsrGQkrONyf7zwaO7u3d8mUFZJNbOz3z
-	 HMs5/VUmRz8xWx/GxWDZfXRMZgSMWpUuhRxPBWyrFhGbl8PfOOPmzLpZxD24GrRLSA
-	 k1rRD2GYZQH5ChFv1ehy63+3K/Fgg3ZKprFp1B9DvW2HRWtyukndbwVm7BXTr7Q9/h
-	 KDm7+epwEs94Op/dt1KCfLFGcqWAJ0LguDunAIP9mxhhvhj4ksbfaV6eAFzRCIItmf
-	 V+ARDfRfHk/Fw==
+	b=u8bpe3brRgIT/CSUUmz24bHvRs0skQ7oGM1Ky5kT2vqK6UyHh7KNKI+p7QjcdkzuC
+	 yPvBIwpa1b9RurPI7wsP6h0zktCiYJSHmIUCldtUNcruL4AerJAdJuHb7uBGXUT8ww
+	 aSqiWaxVKRaTMXdBai3LmEwlprJCWo9XXKfl2zshvpy4tzgf8e3cT7/+Fjrs0lQTtH
+	 FCdBZYhMBP8QL8s5XUcyM6+PH4NQHv/O62sSNN4NLtjQWrtzjxSs7vex08ILR9txbS
+	 U9bRccwM8uzqJqmebu+lPI+uNmb3fJtf5tL09jWTXunbrq4Q+m40fNkkoMAM+f0nZI
+	 RhgUmFJ9lo5JQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
+To: Bjorn Andersson <bjorn.andersson@linaro.org>,
+	soc@kernel.org,
 	arm@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Andy Gross <agross@kernel.org>,
-	Olof Johansson <olof@lixom.net>,
-	Qinglang Miao <miaoqinglang@huawei.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
 	linux-arm-msm@vger.kernel.org,
+	Ajit Pandey <ajitp@codeaurora.org>,
+	Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+	Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
+	Jonathan Marek <jonathan@marek.ca>,
+	Caleb Connolly <caleb@connolly.tech>,
+	Jami Kettunen <jamipkettunen@gmail.com>,
+	Andy Gross <agross@kernel.org>,
+	Robert Foss <robert.foss@linaro.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
 	Kevin Hilman <khilman@baylibre.com>,
-	Stephen Boyd <swboyd@chromium.org>
-Subject: Re: [GIT PULL] More Qualcomm driver updates for 5.13
-Date: Fri,  9 Apr 2021 21:54:08 +0200
-Message-Id: <161799803678.1862045.4284365394007319918.b4-ty@arndb.de>
+	Stephan Gerhold <stephan@gerhold.net>,
+	Sujit Kautkar <sujitka@chromium.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	satya priya <skakit@codeaurora.org>,
+	Olof Johansson <olof@lixom.net>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] More Qualcomm ARM64 DT updates for 5.13
+Date: Fri,  9 Apr 2021 21:54:52 +0200
+Message-Id: <161799808694.1862218.16413759565351084850.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210409162001.775851-1-bjorn.andersson@linaro.org>
-References: <20210409162001.775851-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20210409163949.776530-1-bjorn.andersson@linaro.org>
+References: <20210409163949.776530-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 9 Apr 2021 11:20:01 -0500, Bjorn Andersson wrote:
-> The following changes since commit ac6ad7c2a862d682bb584a4bc904d89fa7721af8:
+On Fri, 9 Apr 2021 11:39:49 -0500, Bjorn Andersson wrote:
+> The following changes since commit e9269650db2f5b4aeeafced1a42b2e51d10bcdf5:
 > 
->   bus: qcom: Put child node before return (2021-03-29 22:01:27 -0500)
+>   arm64: dts: qcom: qrb5165-rb5: switch into using GPIO for SPI0 CS (2021-03-18 09:35:42 -0500)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-5.13-2
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.13-2
 > 
 > [...]
 
-Merged into arm/drivers, thanks!
+Merged into arm/dt, thanks!
 
-merge commit: 30be8446db39be8dc52fc8cd2cb601d3d6319e9d
+merge commit: a8f6ba28257ab6fcf08138496afdcb2d6de3955c
 
        Arnd
