@@ -1,71 +1,101 @@
-Return-Path: <SRS0=3PsG=JG=marcan.st=marcan@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61241C433B4
-	for <soc@archiver.kernel.org>; Fri,  9 Apr 2021 05:20:52 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 3B16E61165; Fri,  9 Apr 2021 05:20:52 +0000 (UTC)
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3A947610A2;
-	Fri,  9 Apr 2021 05:20:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3A947610A2
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=marcan.st
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=marcan@marcan.st
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: hector@marcansoft.com)
-	by mail.marcansoft.com (Postfix) with ESMTPSA id 5947A41E57;
-	Fri,  9 Apr 2021 05:20:45 +0000 (UTC)
-From: Hector Martin <marcan@marcan.st>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Arnd Bergmann <arnd@kernel.org>,
-	Hector Martin <marcan@marcan.st>
-Subject: [PATCH] asm-generic/io.h: Unbork ioremap_np() declaration
-Date: Fri,  9 Apr 2021 14:20:38 +0900
-Message-Id: <20210409052038.58925-1-marcan@marcan.st>
-X-Mailer: git-send-email 2.30.0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E40DC433ED
+	for <linux-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 05:28:03 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 650CC61029
+	for <linux-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 05:28:03 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S231147AbhDIF2O (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Fri, 9 Apr 2021 01:28:14 -0400
+Received: from 6.mo1.mail-out.ovh.net ([46.105.43.205]:44290 "EHLO
+        6.mo1.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229846AbhDIF2N (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 9 Apr 2021 01:28:13 -0400
+Received: from player692.ha.ovh.net (unknown [10.109.146.168])
+        by mo1.mail-out.ovh.net (Postfix) with ESMTP id A5DA41FC359
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Apr 2021 07:27:57 +0200 (CEST)
+Received: from RCM-web3.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
+        (Authenticated sender: rafal@milecki.pl)
+        by player692.ha.ovh.net (Postfix) with ESMTPSA id 10B651CC96314;
+        Fri,  9 Apr 2021 05:27:37 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date:   Fri, 09 Apr 2021 07:27:36 +0200
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, DTML <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linusw@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        SoC Team <soc@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Gregory Clement <gregory.clement@bootlin.com>
+Subject: Re: New 'make dtbs_check W=1' warnings
+In-Reply-To: <632cbdec-e477-212c-f5a8-81151915fdeb@gmail.com>
+References: <CAK8P3a1L8rWpR5b66v6Su8-m7-scA0wZQr_g_4KnV4dnrky6ZA@mail.gmail.com>
+ <632cbdec-e477-212c-f5a8-81151915fdeb@gmail.com>
+User-Agent: Roundcube Webmail/1.4.10
+Message-ID: <903fdcef324310c97627ada4bbc77ebb@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Ovh-Tracer-Id: 16563395004640431855
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrudektddgleegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvufgjfhgfkfigihgtgfesthejjhdttdervdenucfhrhhomheptfgrfhgrlhgpofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepveefvdetjeffueefkeeuuedvgefhgeegjefgvedvgeeiteduueeivdeltedthfetnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrheiledvrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
 
-It accidentally slipped into the #ifdef for ioremap_uc().
+On 2021-04-09 05:37, Florian Fainelli wrote:
+> On 4/8/2021 8:08 AM, Arnd Bergmann wrote:
+>> Greetings to all Arm platform maintainers,
+>> 
+>> I've just gone through the DT merges I've received so far and, with a
+>> little help from Rob,
+>> managed to run 'make dtbs_check W=1' before and after, to see what
+>> warnings we get.
+>> The good news is that the number of warnings is going down, but
+>> unfortunately there
+>> is still an unmanageable amount of remaining warnings, and some new
+>> ones crept in.
+>> 
+>> I'm still working on my tooling for this, to catch these better, but
+>> ideally I think we should
+>> try to not introduce new warnings. I think some platforms are already
+>> clean, and I did
+>> not see any new warnings for mvebu, samsung and broadcom. There were a 
+>> lot of
+>> warnings from .dtsi files, and I probably did an incomplete job at
+>> deduplicating those.
+> 
+> There are definitively a ton of warnings for Broacom DTS files, a 
+> number
+> of those warnings exist because the bindings were not converted to 
+> YAML.
+> Rafal, do you think you could help me with taking care of the
+> BCM5301X/4908 warnings?
 
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- include/asm-generic/io.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 082e0c96db6e..76d456c516a1 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -995,6 +995,7 @@ static inline void __iomem *ioremap_uc(phys_addr_t offset, size_t size)
- {
- 	return NULL;
- }
-+#endif
- 
- /*
-  * ioremap_np needs an explicit architecture implementation, as it
-@@ -1013,8 +1014,6 @@ static inline void __iomem *ioremap_np(phys_addr_t offset, size_t size)
- }
- #endif
- 
--#endif
--
- #ifdef CONFIG_HAS_IOPORT_MAP
- #ifndef CONFIG_GENERIC_IOMAP
- #ifndef ioport_map
--- 
-2.30.0
-
+Sure, I got rid of one or two warnings already, I'll keep working on 
+that.
