@@ -1,246 +1,99 @@
-Return-Path: <SRS0=+Itf=JG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=kpNk=JG=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB8D1C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 16:41:32 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1094AC433B4
+	for <soc@archiver.kernel.org>; Fri,  9 Apr 2021 17:50:23 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id D8E076115C; Fri,  9 Apr 2021 17:50:22 +0000 (UTC)
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 66EB7610A7
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 16:41:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 66EB7610A7
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=ZEHP+a3hLZt8EF8o0PHwviB1NbQK3oBeGKN7MFzv5aU=; b=KgkK0Q3xt6BGNh7nTVf5qbr2L/
-	Fb9tQ04GZ2X2goJ4b0JVx7DqBQwWnMNaPrz+0SlSh7FUNkqp9VA+Puc7ai8ljQ6tlemwusog5ilEU
-	sj2m5Ssy1Zx+xQd/J7yTRIkuN2KSXA1gvj0Kmqizkzol2pKWQd4MbneIljArGWgSvY2jsKcJZY7Zj
-	yCjceMF7a7W40bO2SDjnYnKV52bWIAtKkSoDZOgWRqWIvIXAav4/k19xYerBz//mCjHe4QoH0H6Hq
-	k3dLrIa/dzJV7kEFPuJGB8IPtKngm0wsL6gFlw9W4nPIBTRHL9ii9VgmzB3/Zsmk6I42PYpNPj2BU
-	4x54lpZQ==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lUuAo-0018Em-Iy; Fri, 09 Apr 2021 16:39:58 +0000
-Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUuAm-0018Ee-CV
- for linux-arm-kernel@desiato.infradead.org; Fri, 09 Apr 2021 16:39:56 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
- MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
- Content-ID:Content-Description:In-Reply-To:References;
- bh=c2I7vz5xvNaGcHWWThHF1IEDKnVReToEcusVQ2zMISA=; b=DuwR45INR6DSag/mi8DC/nnfHX
- hEHgq9jxkT6FU7/0ORNSgH0+EKUkGcowrEnQUqTYx6S+mMeMdRSTxxTXAfuPtD2gjdWl05FzSsUFi
- 8mqq7U7qcopEGrbiC/3z0mtm5+wR6wvn0QBSTgHJUnelb1HwWo2rCcFI29GiaUz13lCL8gA09REoo
- w5lwgwN9OKP+jag18rcxxXiivl7L1kjgA+O6X1GwT2l1YV6HnLRJ9B2FeqjaoAH0KESK6OIhYeKWZ
- qWaDbRk7+mBBPlVIbueyi+Ubisi/myFrM+wCc6vlOfwy48zliVOb8mGZgH28AG7NTtLHxnr72xg2N
- gby50DeQ==;
-Received: from mail-oo1-xc32.google.com ([2607:f8b0:4864:20::c32])
- by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lUuAi-004f6Y-Bv
- for linux-arm-kernel@lists.infradead.org; Fri, 09 Apr 2021 16:39:54 +0000
-Received: by mail-oo1-xc32.google.com with SMTP id
- 125-20020a4a1a830000b02901b6a144a417so1462855oof.13
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 09 Apr 2021 09:39:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=c2I7vz5xvNaGcHWWThHF1IEDKnVReToEcusVQ2zMISA=;
- b=xETKEtGItsm/JmQqTLBVMoGDGLl19hQrTN/Dfm0DMLD3wMYWkv3tRExvjFFLjPCQP1
- 1XLul0HkC1L1NrUEYsvavEqYaANvmUw4JAtg5kjfNp8cNprhb5P6cXmpzRXTkCUd+MUf
- AHpCv8qCpMJrJ7C2wfRQcEshG4pQp1KyP0IUAtaenJ7z8bmtFZgkt5oREVYQvcNJQ0bA
- giT7+BMNgK6LF2429vGSoAZWRm59fx9/yRmPC0Xpvlnn/lYHJmVlQwzemfaXSNnrAzw9
- EObzKZMpRUjwZfZJV47BOPQkNbKGuP/m4fn8jOfpxKaobaiNAfQwehIFAJksXYx7Yju+
- c0FA==
+	by mail.kernel.org (Postfix) with ESMTPS id AC20F610A6;
+	Fri,  9 Apr 2021 17:50:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AC20F610A6
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=f.fainelli@gmail.com
+Received: by mail-pf1-f176.google.com with SMTP id m11so4711685pfc.11;
+        Fri, 09 Apr 2021 10:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yF4adJ/N2MJB/B2dgo3LBF/vMMqYbS0nkm1kg+A3XuM=;
+        b=D6kKemq6EnpKrfWIvgpsEpTT028RfRz8+6DpFobJX56oYxynu6JztyCv21GKK9cZwp
+         zWR7dKvJ+HkzBlB7FPw12mbiwdbPyRv/mYwrU0oymndu4ideXQBIlgQg5BcFAO1khr0z
+         SCk/SsOggGhGTsXlAjF46q5n8J7EKG4NU6Ujs0APlhJwQ3Hjr+BfYKNtm5U1iy1V39Tq
+         7bIzkkeN3T4RgINNe7h767S/MmCeMvDCU22jFdReisRbQdunslojnlCwuT7qtCz1q32J
+         Wx1aw0XDSmb9U/PhiwYUcc92L8DRP5qOpq6gXbYjfMYYOAwzYuHv9IIrnr0blo0y6vMv
+         FyEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=c2I7vz5xvNaGcHWWThHF1IEDKnVReToEcusVQ2zMISA=;
- b=lTHxberBz4Ygofk8rZGVrZuzfnIctpgkA1r0LyPEACIdwOq3KdUGdAcqsqM5K4FkX2
- ardxSq6tIlmu4SQI5wuUTBUmLeTpU+RicllBiwaaJrsgch8ZMt3bPs1TCtRFC2HUWopt
- F6nWGCdpywuX3azraEe7F55XjkKwpB0UNpC8lv5qjTFoyAOBOQd842H2w6K3MhbTEEJ5
- aTcdxkSOhAczleKiav6UnVhDPT0IvIrP+/xmt+eIlxr0wEg2FYNTBI5IyCAQaxG1yeZi
- 1ujeXAdR1lrbQePZPk3t3Xvh6s4QQyhf0Dq/SdT4glPlXsKZYhD4O5EL507qPMg97XIr
- PDig==
-X-Gm-Message-State: AOAM5306fJn6ZdL9AwjRvSBBmZQEJr/Y4Hdeu9K/MNAYQn0DIz5ZoB/W
- VNTk58xfZdXsa12GNM38x4WYOg==
-X-Google-Smtp-Source: ABdhPJwH2uVxpLp9og2voqCtDqUvyt9JU3NklXdAiwRoO2+CRgGLOQC7Oz/xUUXxDRmLGh4js5eNXQ==
-X-Received: by 2002:a4a:b787:: with SMTP id a7mr12582747oop.18.1617986391161; 
- Fri, 09 Apr 2021 09:39:51 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net.
- [104.57.184.186])
- by smtp.gmail.com with ESMTPSA id n104sm43979ota.27.2021.04.09.09.39.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 09 Apr 2021 09:39:50 -0700 (PDT)
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yF4adJ/N2MJB/B2dgo3LBF/vMMqYbS0nkm1kg+A3XuM=;
+        b=Gmpq9RJc1S8vfwj6FiCjvfZGBsTBti4DNG+CPzFiL4U0SJwLCdEz2RtmIAv1qZ9MKl
+         SdYYGiVnyqr4FfX1tZYkBuHA0vg6mP4qHiHzvCxwtmco0VB/HJYHfZRM3Ou1VN+O7RjQ
+         sIpBPKawkzVZmtLShbknwJrfU7U2S4gr0+x6yP+iqNb3G3eDvykR9t1n3f0112aVyawO
+         h/cIVefYXXKWus7XVJWRsl25X2C/LQ80/DMEWpt3KHrQV0xlTZWsPbR7aF3l+QNYsrX3
+         qBKC8vhmXh4fDKClTWdSNkCCFj9QDJjuKmws0Bi4j/apVi1inuuM4vXNCGcWNBRSZm3J
+         M1YQ==
+X-Gm-Message-State: AOAM5306MKKtpqNGc1eI0UUU0XNqydwwyUeY/lI8TaWcRG3Rv2hT7Ks8
+	W2QZt49laIdz45O6CPgeE/kH9myd8Tg=
+X-Google-Smtp-Source: ABdhPJxHp+9xc6/QzyQflTULgUDZZGa7gN4SxfnVzrVYepgzPZ9jzUjK7LdxsCV2el2gWwpUEvezVg==
+X-Received: by 2002:a63:eb49:: with SMTP id b9mr14099271pgk.318.1617990621940;
+        Fri, 09 Apr 2021 10:50:21 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id v126sm2878493pfv.138.2021.04.09.10.50.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Apr 2021 10:50:21 -0700 (PDT)
+From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@baylibre.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
- Caleb Connolly <caleb@connolly.tech>,
- Jami Kettunen <jamipkettunen@gmail.com>,
- Jonathan Marek <jonathan@marek.ca>, Robert Foss <robert.foss@linaro.org>,
- Ajit Pandey <ajitp@codeaurora.org>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
- Stephan Gerhold <stephan@gerhold.net>,
- Sujit Kautkar <sujitka@chromium.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, Vinod Koul <vkoul@kernel.org>,
- satya priya <skakit@codeaurora.org>
-Subject: [GIT PULL] More Qualcomm ARM64 DT updates for 5.13
-Date: Fri,  9 Apr 2021 11:39:49 -0500
-Message-ID: <20210409163949.776530-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.31.0
+To: soc@kernel.org
+Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	khilman@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [GIT PULL] Broadcom maintainers changes for 5.13
+Date: Fri,  9 Apr 2021 10:50:18 -0700
+Message-Id: <20210409175018.3051283-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210409_093952_497191_9F749A4D 
-X-CRM114-Status: GOOD (  15.57  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210409163949.Z0GJDn6rJRlGMPcTWT4A5hGo6RKtyxxbbriieQ5P0pg@z>
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit e9269650db2f5b4aeeafced1a42b2e51d10bcdf5:
+The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
 
-  arm64: dts: qcom: qrb5165-rb5: switch into using GPIO for SPI0 CS (2021-03-18 09:35:42 -0500)
+  Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.13-2
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.13/maintainers
 
-for you to fetch changes up to 7178d4cc0702bfe6a7e0f21e37d6e3dfe8e40f11:
+for you to fetch changes up to 0072f6c37f02071821eb2135b80daa404d783704:
 
-  arm64: dts: qcom: update usb qmp phy clock-cells property (2021-04-08 10:23:25 -0500)
-
-----------------------------------------------------------------
-More Qualcomm ARM64 DT updates for 5.13
-
-This adds RPMh regulators, coresight, AOSS qmp, ipcc, llcc for the
-SC7280. It adds interconnect, PRNG and thermal pieces to SM8350. It
-specifies the now required clocks for the SDM845 gcc, corrects the
-firmware-name for adsp and cdsp on the db845c and defines DSI and panel
-bits for Xiaomi Pocophone F1.
-
-SM8150 gains iommu settings and the remaining I2C controllers and SM8250
-gains Venus and the QMP PHY is updated to include the DP portion.
-
-It adds the MSM8998 based OnePlus 5/5T device and enables sound support
-on the Trogdor device family.
-
-Lastly it adds the GIC hypervisor registers & interrupt for when Linux
-is booted in EL2 on MSM8916.
+  mailmap: Update email address for Nicolas Saenz (2021-04-09 10:47:17 -0700)
 
 ----------------------------------------------------------------
-Ajit Pandey (1):
-      arm64: dts: qcom: sc7180-trogdor: Add lpass dai link for I2S driver
+This pull request contains Broadcom SoC MAINTAINERS file entries and
+.mailmap updates for 5.13, please pull the following:
 
-Bryan O'Donoghue (1):
-      arm64: dts: qcom: sm8250: Add venus DT node
+- Nicolas updates his maintainer email to a kernel.org address for
+  continuity
 
-Caleb Connolly (2):
-      arm64: dts: qcom: sm8150: add other QUP nodes and iommus
-      arm64: dts: qcom: sm8150: add i2c nodes
+----------------------------------------------------------------
+Nicolas Saenz Julienne (2):
+      MAINTAINERS: Update BCM2711/BCM2335 maintainer's mail
+      mailmap: Update email address for Nicolas Saenz
 
-Dmitry Baryshkov (4):
-      arm64: dts: qcom: sdm845: add required clocks on the gcc
-      arm64: dts: qcom: sm8250: switch usb1 qmp phy to USB3+DP mode
-      arm64: dts: qcom: use dp_phy to provide clocks to dispcc
-      arm64: dts: sdm845-db845c: make firmware filenames follow linux-firmware
-
-Jami Kettunen (2):
-      arm64: dts: qcom: msm8998: Disable MSS remoteproc by default
-      arm64: dts: qcom: Add support for OnePlus 5/5T
-
-Jonathan Marek (2):
-      arm64: dts: qcom: sm8250: fix display nodes
-      arm64: dts: qcom: update usb qmp phy clock-cells property
-
-Robert Foss (2):
-      arm64: dts: qcom: sm8350: Add thermal zones and throttling support
-      arm64: dts: qcom: sm8350: Add support for PRNG EE
-
-Sai Prakash Ranjan (4):
-      arm64: dts: qcom: sc7280: Add device tree node for LLCC
-      arm64: dts: qcom: sc7280: Add IPCC for SC7280 SoC
-      arm64: dts: qcom: sc7280: Add AOSS QMP node
-      arm64: dts: qcom: sc7280: Add Coresight support
-
-Srinivasa Rao Mandadapu (1):
-      arm64: dts: qcom: Add sound node for sc7180-trogdor-coachz
-
-Stephan Gerhold (1):
-      arm64: dts: qcom: msm8916: Add GICv2 hypervisor registers/interrupt
-
-Sujit Kautkar (1):
-      arm64: dts: qcom: Move rmtfs memory region
-
-Sumit Semwal (1):
-      arm64: dts: qcom: sdm845-xiaomi-beryllium: Add DSI and panel bits
-
-Vinod Koul (1):
-      arm64: dts: qcom: sm8350: Add interconnects
-
-jonathan@marek.ca (1):
-      arm64: dts: qcom: sm8250: Add videocc DT node
-
-satya priya (1):
-      arm64: dts: qcom: sc7280: Add RPMh regulators for sc7280-idp
-
- arch/arm64/boot/dts/qcom/Makefile                  |   2 +
- arch/arm64/boot/dts/qcom/msm8916.dtsi              |   4 +-
- arch/arm64/boot/dts/qcom/msm8998-clamshell.dtsi    |   4 +
- arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi          |   4 +
- .../boot/dts/qcom/msm8998-oneplus-cheeseburger.dts |  42 +
- .../boot/dts/qcom/msm8998-oneplus-common.dtsi      | 514 ++++++++++++
- .../boot/dts/qcom/msm8998-oneplus-dumpling.dts     |  25 +
- arch/arm64/boot/dts/qcom/msm8998.dtsi              |   2 +
- .../arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi |  10 +
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       |  60 +-
- arch/arm64/boot/dts/qcom/sc7180.dtsi               |   4 +-
- arch/arm64/boot/dts/qcom/sc7280-idp.dts            | 212 +++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi               | 520 ++++++++++++
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts         |   4 +-
- .../boot/dts/qcom/sdm845-xiaomi-beryllium.dts      |  71 ++
- arch/arm64/boot/dts/qcom/sdm845.dtsi               |  16 +-
- arch/arm64/boot/dts/qcom/sm8150.dtsi               | 553 ++++++++++++-
- arch/arm64/boot/dts/qcom/sm8250.dtsi               | 128 ++-
- arch/arm64/boot/dts/qcom/sm8350.dtsi               | 911 +++++++++++++++++++++
- 19 files changed, 3048 insertions(+), 38 deletions(-)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dts
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ .mailmap    | 2 ++
+ MAINTAINERS | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
