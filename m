@@ -1,87 +1,134 @@
-Return-Path: <SRS0=SKgf=JG=linaro.org=bjorn.andersson@kernel.org>
+Return-Path: <SRS0=+Itf=JG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B9E4C433B4
-	for <soc@archiver.kernel.org>; Fri,  9 Apr 2021 16:39:52 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 1CAB1610CA; Fri,  9 Apr 2021 16:39:52 +0000 (UTC)
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB8D1C433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 16:41:32 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E1779610C8
-	for <soc@kernel.org>; Fri,  9 Apr 2021 16:39:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E1779610C8
+	by mail.kernel.org (Postfix) with ESMTPS id 66EB7610A7
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 16:41:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 66EB7610A7
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=bjorn.andersson@linaro.org
-Received: by mail-oo1-f49.google.com with SMTP id n12-20020a4ad12c0000b02901b63e7bc1b4so1470779oor.5
-        for <soc@kernel.org>; Fri, 09 Apr 2021 09:39:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=c2I7vz5xvNaGcHWWThHF1IEDKnVReToEcusVQ2zMISA=;
-        b=xETKEtGItsm/JmQqTLBVMoGDGLl19hQrTN/Dfm0DMLD3wMYWkv3tRExvjFFLjPCQP1
-         1XLul0HkC1L1NrUEYsvavEqYaANvmUw4JAtg5kjfNp8cNprhb5P6cXmpzRXTkCUd+MUf
-         AHpCv8qCpMJrJ7C2wfRQcEshG4pQp1KyP0IUAtaenJ7z8bmtFZgkt5oREVYQvcNJQ0bA
-         giT7+BMNgK6LF2429vGSoAZWRm59fx9/yRmPC0Xpvlnn/lYHJmVlQwzemfaXSNnrAzw9
-         EObzKZMpRUjwZfZJV47BOPQkNbKGuP/m4fn8jOfpxKaobaiNAfQwehIFAJksXYx7Yju+
-         c0FA==
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=ZEHP+a3hLZt8EF8o0PHwviB1NbQK3oBeGKN7MFzv5aU=; b=KgkK0Q3xt6BGNh7nTVf5qbr2L/
+	Fb9tQ04GZ2X2goJ4b0JVx7DqBQwWnMNaPrz+0SlSh7FUNkqp9VA+Puc7ai8ljQ6tlemwusog5ilEU
+	sj2m5Ssy1Zx+xQd/J7yTRIkuN2KSXA1gvj0Kmqizkzol2pKWQd4MbneIljArGWgSvY2jsKcJZY7Zj
+	yCjceMF7a7W40bO2SDjnYnKV52bWIAtKkSoDZOgWRqWIvIXAav4/k19xYerBz//mCjHe4QoH0H6Hq
+	k3dLrIa/dzJV7kEFPuJGB8IPtKngm0wsL6gFlw9W4nPIBTRHL9ii9VgmzB3/Zsmk6I42PYpNPj2BU
+	4x54lpZQ==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lUuAo-0018Em-Iy; Fri, 09 Apr 2021 16:39:58 +0000
+Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lUuAm-0018Ee-CV
+ for linux-arm-kernel@desiato.infradead.org; Fri, 09 Apr 2021 16:39:56 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+ MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+ Content-ID:Content-Description:In-Reply-To:References;
+ bh=c2I7vz5xvNaGcHWWThHF1IEDKnVReToEcusVQ2zMISA=; b=DuwR45INR6DSag/mi8DC/nnfHX
+ hEHgq9jxkT6FU7/0ORNSgH0+EKUkGcowrEnQUqTYx6S+mMeMdRSTxxTXAfuPtD2gjdWl05FzSsUFi
+ 8mqq7U7qcopEGrbiC/3z0mtm5+wR6wvn0QBSTgHJUnelb1HwWo2rCcFI29GiaUz13lCL8gA09REoo
+ w5lwgwN9OKP+jag18rcxxXiivl7L1kjgA+O6X1GwT2l1YV6HnLRJ9B2FeqjaoAH0KESK6OIhYeKWZ
+ qWaDbRk7+mBBPlVIbueyi+Ubisi/myFrM+wCc6vlOfwy48zliVOb8mGZgH28AG7NTtLHxnr72xg2N
+ gby50DeQ==;
+Received: from mail-oo1-xc32.google.com ([2607:f8b0:4864:20::c32])
+ by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lUuAi-004f6Y-Bv
+ for linux-arm-kernel@lists.infradead.org; Fri, 09 Apr 2021 16:39:54 +0000
+Received: by mail-oo1-xc32.google.com with SMTP id
+ 125-20020a4a1a830000b02901b6a144a417so1462855oof.13
+ for <linux-arm-kernel@lists.infradead.org>;
+ Fri, 09 Apr 2021 09:39:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=c2I7vz5xvNaGcHWWThHF1IEDKnVReToEcusVQ2zMISA=;
+ b=xETKEtGItsm/JmQqTLBVMoGDGLl19hQrTN/Dfm0DMLD3wMYWkv3tRExvjFFLjPCQP1
+ 1XLul0HkC1L1NrUEYsvavEqYaANvmUw4JAtg5kjfNp8cNprhb5P6cXmpzRXTkCUd+MUf
+ AHpCv8qCpMJrJ7C2wfRQcEshG4pQp1KyP0IUAtaenJ7z8bmtFZgkt5oREVYQvcNJQ0bA
+ giT7+BMNgK6LF2429vGSoAZWRm59fx9/yRmPC0Xpvlnn/lYHJmVlQwzemfaXSNnrAzw9
+ EObzKZMpRUjwZfZJV47BOPQkNbKGuP/m4fn8jOfpxKaobaiNAfQwehIFAJksXYx7Yju+
+ c0FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=c2I7vz5xvNaGcHWWThHF1IEDKnVReToEcusVQ2zMISA=;
-        b=JTnkycv1nKdPYUWTUm18uuy1220/vPIi8cri2pmEqfi4P0vC4SzeYpIDI9oJzHOSE3
-         hp3ZLPZUOYxjUPkHYtGQJggHNg0hHue6hv1dWejEFojBtrOmCEfD/QN2ShhhG2NKHpEc
-         KRwCbuQH877L+yB8XulOSZjSvbiQv8YfBhK6h3N9/sMCQeeJddzvYRDCllbttmmAurEq
-         tudgLb7/m8uRHZsVjKq5H3RLkGjKAL2+abI9MixPHVJyoB2ucc65sW817BHrxxCM22rk
-         04WsSSLlD0ppivz2dhyBoj6l2nIFIo9iW5ubjuzEmmWqfuhLXISC7JyYLEq6+dcZddIZ
-         V41w==
-X-Gm-Message-State: AOAM5309vdG295+9GpkBzDrUd0guDdjTgw/Lbaa4Lu2d4CTj9Bu/oQES
-	ZLBbCjWuQfCM5S/x+25Y9FywPbPP2nxsuQ==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=c2I7vz5xvNaGcHWWThHF1IEDKnVReToEcusVQ2zMISA=;
+ b=lTHxberBz4Ygofk8rZGVrZuzfnIctpgkA1r0LyPEACIdwOq3KdUGdAcqsqM5K4FkX2
+ ardxSq6tIlmu4SQI5wuUTBUmLeTpU+RicllBiwaaJrsgch8ZMt3bPs1TCtRFC2HUWopt
+ F6nWGCdpywuX3azraEe7F55XjkKwpB0UNpC8lv5qjTFoyAOBOQd842H2w6K3MhbTEEJ5
+ aTcdxkSOhAczleKiav6UnVhDPT0IvIrP+/xmt+eIlxr0wEg2FYNTBI5IyCAQaxG1yeZi
+ 1ujeXAdR1lrbQePZPk3t3Xvh6s4QQyhf0Dq/SdT4glPlXsKZYhD4O5EL507qPMg97XIr
+ PDig==
+X-Gm-Message-State: AOAM5306fJn6ZdL9AwjRvSBBmZQEJr/Y4Hdeu9K/MNAYQn0DIz5ZoB/W
+ VNTk58xfZdXsa12GNM38x4WYOg==
 X-Google-Smtp-Source: ABdhPJwH2uVxpLp9og2voqCtDqUvyt9JU3NklXdAiwRoO2+CRgGLOQC7Oz/xUUXxDRmLGh4js5eNXQ==
-X-Received: by 2002:a4a:b787:: with SMTP id a7mr12582747oop.18.1617986391161;
-        Fri, 09 Apr 2021 09:39:51 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id n104sm43979ota.27.2021.04.09.09.39.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Apr 2021 09:39:50 -0700 (PDT)
+X-Received: by 2002:a4a:b787:: with SMTP id a7mr12582747oop.18.1617986391161; 
+ Fri, 09 Apr 2021 09:39:51 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net.
+ [104.57.184.186])
+ by smtp.gmail.com with ESMTPSA id n104sm43979ota.27.2021.04.09.09.39.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 09 Apr 2021 09:39:50 -0700 (PDT)
 From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-	Caleb Connolly <caleb@connolly.tech>,
-	Jami Kettunen <jamipkettunen@gmail.com>,
-	Jonathan Marek <jonathan@marek.ca>,
-	Robert Foss <robert.foss@linaro.org>,
-	Ajit Pandey <ajitp@codeaurora.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Sujit Kautkar <sujitka@chromium.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	satya priya <skakit@codeaurora.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@baylibre.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+ Caleb Connolly <caleb@connolly.tech>,
+ Jami Kettunen <jamipkettunen@gmail.com>,
+ Jonathan Marek <jonathan@marek.ca>, Robert Foss <robert.foss@linaro.org>,
+ Ajit Pandey <ajitp@codeaurora.org>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
+ Stephan Gerhold <stephan@gerhold.net>,
+ Sujit Kautkar <sujitka@chromium.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Vinod Koul <vkoul@kernel.org>,
+ satya priya <skakit@codeaurora.org>
 Subject: [GIT PULL] More Qualcomm ARM64 DT updates for 5.13
 Date: Fri,  9 Apr 2021 11:39:49 -0500
-Message-Id: <20210409163949.776530-1-bjorn.andersson@linaro.org>
+Message-ID: <20210409163949.776530-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210409_093952_497191_9F749A4D 
+X-CRM114-Status: GOOD (  15.57  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210409163949.Z0GJDn6rJRlGMPcTWT4A5hGo6RKtyxxbbriieQ5P0pg@z>
 
 The following changes since commit e9269650db2f5b4aeeafced1a42b2e51d10bcdf5:
 
@@ -192,3 +239,8 @@ satya priya (1):
  create mode 100644 arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dts
  create mode 100644 arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi
  create mode 100644 arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dts
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
