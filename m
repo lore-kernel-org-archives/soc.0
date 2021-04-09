@@ -1,59 +1,106 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=+Itf=JG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85DF7C433ED
-	for <linux-devicetree@archiver.kernel.org>; Fri,  9 Apr 2021 12:20:51 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4465461178
-	for <linux-devicetree@archiver.kernel.org>; Fri,  9 Apr 2021 12:20:51 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbhDIMVD (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Fri, 9 Apr 2021 08:21:03 -0400
-Received: from mail-out.m-online.net ([212.18.0.9]:49334 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbhDIMVC (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Fri, 9 Apr 2021 08:21:02 -0400
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16CA1C433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 12:22:46 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 8F6A161165
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  9 Apr 2021 12:22:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8F6A161165
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=denx.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=Euq8/tSMssvYY0/2CUM0B2b6Sd5jml1NW7gwvC8vtiw=; b=AEPzi6Us9pFfcyPtIqJbRuPHE1
+	E2jAyTinsNe6GQvEae04htxcLjIK30wuWrj52Efhs3xSZj8JoWu2UPlaOVNVmUdgTziw/CGVuEYwR
+	f8hm3od2FGYkFNMAl3wXl+F+Bahz9nD+216eOBVqEmYEESrjOODxcpUMttz7+njcW06QgA6DiKHFV
+	v0KhQwHW0UdFYFGMKqgZEgOvhsOmEgnKUugLGnkQTrSWKlp+1aFNeXaPQEnEv8lZSm37wqcmt7Uw1
+	fY7ObHXQl++Kgve/wFEaMaAbohFkqtdaadBdTHJmdUJ4Q0gYaddjqv3jllHaDbT60WATdGyxImYTX
+	hB7rGLMg==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lUq8B-000iOu-Ls; Fri, 09 Apr 2021 12:21:00 +0000
+Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lUq8A-000iOM-0O
+ for linux-arm-kernel@desiato.infradead.org; Fri, 09 Apr 2021 12:20:58 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+ MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+ Content-ID:Content-Description:In-Reply-To:References;
+ bh=i9LbioyM6BhiEXV4uI4ZecM4i47+OWK6b3YI0jDXJj8=; b=BTN/L4tJMUNSSGmacarpGl2FVK
+ DApfUNXhfE92K8IUZnnr+O430QMdRYaTzSL5TfOd3qFkG0xZIcWF5Sj1/XfXYS1G4dCiA5IvH4nww
+ TY4Eo8g7pVFI5GgszCFUCQhwtD6NTxOqgoGET+UrRZGLWC2x2aw2NUmqVQULOSj50gBh4ELi5TipW
+ wo4+/Pu6EMfomHC7Bv/MCOfrUOXB8HReXvGA6lGISjmWV5r3kaCtcGQAWBCqIfusdsxSjJuT1+sck
+ IASWjkSk1U5XnzYqKkbrHUvL6XJ20nIvmKGMOOl7cXjPpYs+lCFjfp0tHqImyWIc9CKqVHj5Wp/Bu
+ l7CIQvbw==;
+Received: from mail-out.m-online.net ([212.18.0.9])
+ by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lUq86-004VKW-Gg
+ for linux-arm-kernel@lists.infradead.org; Fri, 09 Apr 2021 12:20:56 +0000
 Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4FGy001dChz1qtQF;
-        Fri,  9 Apr 2021 14:20:48 +0200 (CEST)
+ by mail-out.m-online.net (Postfix) with ESMTP id 4FGy001dChz1qtQF;
+ Fri,  9 Apr 2021 14:20:48 +0200 (CEST)
 Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4FGy000Rvxz1qqwp;
-        Fri,  9 Apr 2021 14:20:48 +0200 (CEST)
+ by mail.m-online.net (Postfix) with ESMTP id 4FGy000Rvxz1qqwp;
+ Fri,  9 Apr 2021 14:20:48 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at mnet-online.de
 Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id 3xAlLEhjTm45; Fri,  9 Apr 2021 14:20:46 +0200 (CEST)
+ by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new,
+ port 10024)
+ with ESMTP id 3xAlLEhjTm45; Fri,  9 Apr 2021 14:20:46 +0200 (CEST)
 X-Auth-Info: oxxYY0cPQTVwwLJEyDhi89sOk4LP78poTozY3fuYeBs=
-Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Fri,  9 Apr 2021 14:20:46 +0200 (CEST)
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Fabio Estevam <festevam@gmail.com>
+Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl
+ [85.222.111.42])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.mnet-online.de (Postfix) with ESMTPSA;
+ Fri,  9 Apr 2021 14:20:46 +0200 (CEST)
+From: Lukasz Majewski <lukma@denx.de>
+To: Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Fabio Estevam <festevam@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc:     devicetree@vger.kernel.org, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Lukasz Majewski <lukma@denx.de>
-Subject: [PATCH 2/2] ARM: dts: imx28: Add DTS description of imx28 based XEA board
-Date:   Fri,  9 Apr 2021 14:20:36 +0200
-Message-Id: <20210409122036.31628-1-lukma@denx.de>
+Cc: devicetree@vger.kernel.org, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Lukasz Majewski <lukma@denx.de>
+Subject: [PATCH 2/2] ARM: dts: imx28: Add DTS description of imx28 based XEA
+ board
+Date: Fri,  9 Apr 2021 14:20:36 +0200
+Message-ID: <20210409122036.31628-1-lukma@denx.de>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210409_052054_874395_CE9DAEB6 
+X-CRM114-Status: GOOD (  17.36  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210409122036.zfQZqMH4WKGtkxg4bTBkKB8ODRd0iEcHgtmpqBt236U@z>
 
 This patch adds DTS definition of the imx278 based XEA board.
 
@@ -374,3 +421,8 @@ index 000000000000..a400c108f66a
 -- 
 2.20.1
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
