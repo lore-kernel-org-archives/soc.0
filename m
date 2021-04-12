@@ -1,136 +1,69 @@
-Return-Path: <SRS0=Ikse=JJ=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=TdV8=JJ=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A174C433ED
-	for <soc@archiver.kernel.org>; Mon, 12 Apr 2021 13:47:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDDB4C433B4
+	for <soc@archiver.kernel.org>; Mon, 12 Apr 2021 13:48:33 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 08E386128B; Mon, 12 Apr 2021 13:47:11 +0000 (UTC)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id A1E5D6109F; Mon, 12 Apr 2021 13:48:33 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8F042610CB
-	for <soc@kernel.org>; Mon, 12 Apr 2021 13:47:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8F042610CB
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linus.walleij@linaro.org
-Received: by mail-lf1-f52.google.com with SMTP id z13so4430554lfd.9
-        for <soc@kernel.org>; Mon, 12 Apr 2021 06:47:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0HhOgkxi6adNvPMTz1qTbyoEcmMMeYlubTaxaYt4Nn4=;
-        b=raMszZJ8T7hmemwqKuhKAF6ZtVOm6r/BoUcHXk31NqmCjMhNwGksjJWkRUJXmwFDXZ
-         X24ZHF8Db6QzZ3RNRFsdMobECXS1pIKolOjH28ObDpkAQ+tYSP/asLGMzZr2mlRYPjzF
-         T3OwW8T9YAEdE1qQi8M+IzSUyFG5pw8+1ANIizo+yIBrWBkEU+Lm0U8Em4fTHuTSXK60
-         Ewc2Q+9/mcMSmJB9HGJiiTwNkNyH45K6JjJzDXgiNevF0wEF4sBQXzzAu6Ejeg0i4pv0
-         Zi6R/sFzUsdo7Dx8q8m7ScYG+nTnOMTrGc6hA9yjkmJkN3v2ty72Ufq4TZ1ZIVFOE8Tz
-         b3zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0HhOgkxi6adNvPMTz1qTbyoEcmMMeYlubTaxaYt4Nn4=;
-        b=BsCHdmXcEcRJKhvGUyMA+qLSgiUcE6sQTbOHap/M7chIemYVDfMGpWg/gZPKq95N8b
-         GaUvdyo0m6VfbbVx9TVeCL68jyQHExBO5IQFejRJ9Hxk3DwMKY0srDjVigPbsOGtUt26
-         v3dvYBF9ojXBiu2nxq/m91ZBm59Guo8gmOSS82WUTT21rnrgLLB7hfhIyLxBcZh1m30e
-         f/7tYE1doi1QKorb/a34aSIUz6YblaxqaXokNy++7ojL6JD00+gz2kZHGJbYY9LUXJzA
-         U8Jsw472bU52J7xoPGnNH3n68DqCZvvAxENTF0NCmc/FfRTU0cAQJaJ0NR2eY4k2n5wF
-         Up0Q==
-X-Gm-Message-State: AOAM531SI39Nyy/oaFD1v7xzhT4cqvkRbAq4VrDV+tRA4HDs/NLSnOVm
-	iWNJNdyMFXJ3AqMsQGGP7Uj8Dg==
-X-Google-Smtp-Source: ABdhPJzWZRbQIk98M35U0N56Q8aGHZD2Y9tXG3Xz6Rb7MUonQ+rnEETPgNjyFI0Ps1ERMwFq9jbb2w==
-X-Received: by 2002:a19:c509:: with SMTP id w9mr4985351lfe.484.1618235229003;
-        Mon, 12 Apr 2021 06:47:09 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id f20sm2433719lfk.207.2021.04.12.06.47.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Apr 2021 06:47:08 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] ARM: defconfig: gemini: Update defconfig
-Date: Mon, 12 Apr 2021 15:47:00 +0200
-Message-Id: <20210412134700.1977619-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.29.2
+	by mail.kernel.org (Postfix) with ESMTPS id 96CD5611AD
+	for <soc@kernel.org>; Mon, 12 Apr 2021 13:48:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 96CD5611AD
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arnd@arndb.de
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MybX9-1lkaxv48Fx-00z1i0 for <soc@kernel.org>; Mon, 12 Apr 2021 15:48:31
+ +0200
+Received: by mail-wr1-f54.google.com with SMTP id s7so12904804wru.6
+        for <soc@kernel.org>; Mon, 12 Apr 2021 06:48:30 -0700 (PDT)
+X-Gm-Message-State: AOAM5324EwUqaDHq+xbtu/tR5Bto0Ag/9x0ddSjX4yhy5LypTw1ieJQh
+	Amo+zD4mM+MxzjF+R3cD8AzhiQ9hYOBYnJxk1Wc=
+X-Google-Smtp-Source: ABdhPJzRKsuHD0/zPPicEoAxxZxBRdHEuIhju2Sjyhs6U3CtpsN5iiGtWexs/UH9JtENKAiPv0Fc8B0whXOW4BsN5Zc=
+X-Received: by 2002:a5d:6a11:: with SMTP id m17mr32604882wru.361.1618235310703;
+ Mon, 12 Apr 2021 06:48:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210216074929.29033-1-patrice.chotard@foss.st.com>
+ <1cd91834-6df8-a655-a3b1-0e16f5fe470d@foss.st.com> <52c32145-7f29-8944-58dc-dc2fb406ffb0@foss.st.com>
+In-Reply-To: <52c32145-7f29-8944-58dc-dc2fb406ffb0@foss.st.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 12 Apr 2021 15:48:14 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1upDuztHd0pH_dM+OpMp8WtiMPAZN8p=9xxtCSVJGZMw@mail.gmail.com>
+Message-ID: <CAK8P3a1upDuztHd0pH_dM+OpMp8WtiMPAZN8p=9xxtCSVJGZMw@mail.gmail.com>
+Subject: Re: [Linux-stm32] [RESEND PATCH 0/3] MAINTAINERS: update
+ STMicroelectronics email
+To: Patrice CHOTARD <patrice.chotard@foss.st.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
+	linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:AqcUWQrlXwL3Tj5XVmiKAUWizBdLQYBA3Zk8+jv6nlAabFxHrAr
+ JrkaKhv7hInz9d65QEQLAEIXjtNTbZ0NFEYp2PeOVyxkIbcD6qN/01c3XT2J4JJkL/xCblX
+ bPrCjRxlYp5MqZxplMee8f3Xq9hzZhz9Uv1CovOcCZH3dXnN7Da3EsxsJXFFPlw6Q4Ue1Yo
+ ocZ9f2JI+gq7XMY/zR5WQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YDSAl845Zew=:tABZ8+DAg4muN4fRdoPq5D
+ TsZ3r5e7K3JkhG0aKCe51jZiDzfk1fP+WYmIdC9inK7654/NpAmh5qEl+LURO5GgEvv2JfFDi
+ mRtX6gQNE2lLFKu7Ycvgyb74owDFo5hk681npCjdq1bpGTLHJ9Ogv690T3blP7rjJ0SwBefaY
+ hRc7cAuq/caUgp53puqAVSmD7xH0Q/CWNQUmbJS91whSOb4nNJwly+i2p0IELxoEeYecMwfg6
+ b0/ZdgvW5ZPBCtcYI5O1O+1mXxzxQnJaStxhqp5BvrteEDs/HnSGQezZMJ24QsUk20mJdDJcb
+ +mLqX6jy4yxXei1bZjxug9Szsui7zJ23jfgwwri4usbQoFjYTfl77/GUPGKEUJVcvQfY3Qcah
+ 0XF+g3kUob4vt2+Vq9ys6VCH8eNOEzhq+c3vFtK0aZVQlXbV1BJ7dJJ79UNM1fxrLI5HzlgZe
+ 3BQ/UHD6+trNMqMHOM5e4bzg46QW46g=
 
-Update the Gemini defconfig: some moved options, added som
-WLAN drivers existing on the supported platforms and enabled
-the drivetemp sensor which is used on the NAS devices.
+On Mon, Apr 12, 2021 at 12:19 PM Patrice CHOTARD
+<patrice.chotard@foss.st.com> wrote:
+>
+> Hi
+>
+> I think this series has been forgotten, any chance to see it merged into v5.13 ?
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ARM SoC folks: apply this wherever defconfigs go.
----
- arch/arm/configs/gemini_defconfig | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+It's in -rc7, but it appears that my email reply went missing when I merged it.
 
-diff --git a/arch/arm/configs/gemini_defconfig b/arch/arm/configs/gemini_defconfig
-index d2d5f1cf815f..4d5409689e68 100644
---- a/arch/arm/configs/gemini_defconfig
-+++ b/arch/arm/configs/gemini_defconfig
-@@ -16,6 +16,7 @@ CONFIG_CMDLINE="console=ttyS0,115200n8"
- CONFIG_KEXEC=y
- CONFIG_PM=y
- CONFIG_PARTITION_ADVANCED=y
-+CONFIG_IOSCHED_BFQ=y
- CONFIG_BINFMT_MISC=y
- CONFIG_CMA=y
- CONFIG_NET=y
-@@ -51,9 +52,27 @@ CONFIG_NETDEVICES=y
- CONFIG_TUN=y
- CONFIG_NET_DSA_REALTEK_SMI=y
- CONFIG_GEMINI_ETHERNET=y
-+CONFIG_MARVELL_PHY=y
- CONFIG_MDIO_BITBANG=y
- CONFIG_MDIO_GPIO=y
--CONFIG_MARVELL_PHY=y
-+# CONFIG_USB_NET_DRIVERS is not set
-+# CONFIG_WLAN_VENDOR_ADMTEK is not set
-+# CONFIG_WLAN_VENDOR_ATH is not set
-+# CONFIG_WLAN_VENDOR_ATMEL is not set
-+# CONFIG_WLAN_VENDOR_BROADCOM is not set
-+# CONFIG_WLAN_VENDOR_CISCO is not set
-+# CONFIG_WLAN_VENDOR_INTEL is not set
-+# CONFIG_WLAN_VENDOR_INTERSIL is not set
-+# CONFIG_WLAN_VENDOR_MARVELL is not set
-+# CONFIG_WLAN_VENDOR_MEDIATEK is not set
-+CONFIG_RT2X00=y
-+CONFIG_RT61PCI=y
-+CONFIG_RT2800PCI=y
-+# CONFIG_WLAN_VENDOR_REALTEK is not set
-+# CONFIG_WLAN_VENDOR_RSI is not set
-+# CONFIG_WLAN_VENDOR_ST is not set
-+# CONFIG_WLAN_VENDOR_TI is not set
-+# CONFIG_WLAN_VENDOR_ZYDAS is not set
- CONFIG_INPUT_EVDEV=y
- CONFIG_KEYBOARD_GPIO=y
- # CONFIG_INPUT_MOUSE is not set
-@@ -67,6 +86,7 @@ CONFIG_SERIAL_OF_PLATFORM=y
- CONFIG_I2C_GPIO=y
- CONFIG_SPI=y
- CONFIG_SPI_GPIO=y
-+CONFIG_SENSORS_DRIVETEMP=y
- CONFIG_SENSORS_GPIO_FAN=y
- CONFIG_SENSORS_LM75=y
- CONFIG_THERMAL=y
-@@ -98,5 +118,4 @@ CONFIG_TMPFS_POSIX_ACL=y
- CONFIG_ROMFS_FS=y
- CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ISO8859_1=y
--# CONFIG_ENABLE_MUST_CHECK is not set
- CONFIG_DEBUG_FS=y
--- 
-2.29.2
-
+      Arnd
