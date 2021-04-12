@@ -1,91 +1,85 @@
-Return-Path: <SRS0=CIG8=JJ=foss.st.com=patrice.chotard@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3909C433B4
-	for <soc@archiver.kernel.org>; Mon, 12 Apr 2021 16:27:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE45BC433ED
+	for <soc@archiver.kernel.org>; Mon, 12 Apr 2021 18:52:55 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 873E4613E8; Mon, 12 Apr 2021 16:27:29 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B3275613EC
-	for <soc@kernel.org>; Mon, 12 Apr 2021 16:27:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B3275613EC
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=patrice.chotard@foss.st.com
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13CGQIJT029160;
-	Mon, 12 Apr 2021 18:27:25 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=5KDL4+wCL/RdEldQijS3CgPsT7I4YVF6zQxSMq/morU=;
- b=ugOAcuft2aUQCAUioP4D+MJ41O+4Ho7dnag/F0nzVxrCpIZavKbbkAQ7nm23WBRhnNBB
- Wf7oXeV3qx6dr+IPnEdVpSflHpLK/YAwdKQeV8jCkIFgHtkKClLPiu2vc4CmILhI51Rv
- 295hQK/v4ps8EAlHOtEfriwo2hBkEFrmPShztjb84AjL5sDxrYnwfXyPJaD3PnIxkmLZ
- ARfcPKBq0V9AFXkEmx1/mC1lmJLQ/tC33+bC/gszIpRfhGvvmahpb86z6brb4Ojhda3E
- dIxK2dS/kDm3GIDE9rXYWDLEu7DeV4SUW3QTSPDNjTF5qFXNmht7b3OA6iCtmfdBAGMs kg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com with ESMTP id 37vrp58dsx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Apr 2021 18:27:25 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 777AD10002A;
-	Mon, 12 Apr 2021 18:27:25 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 66253232C79;
-	Mon, 12 Apr 2021 18:27:25 +0200 (CEST)
-Received: from lmecxl0573.lme.st.com (10.75.127.49) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 12 Apr
- 2021 18:27:25 +0200
-Subject: Re: [Linux-stm32] [RESEND PATCH 0/3] MAINTAINERS: update
- STMicroelectronics email
-To: Arnd Bergmann <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-CC: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        SoC Team
-	<soc@kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>
-References: <20210216074929.29033-1-patrice.chotard@foss.st.com>
- <1cd91834-6df8-a655-a3b1-0e16f5fe470d@foss.st.com>
- <52c32145-7f29-8944-58dc-dc2fb406ffb0@foss.st.com>
- <CAK8P3a1upDuztHd0pH_dM+OpMp8WtiMPAZN8p=9xxtCSVJGZMw@mail.gmail.com>
-From: Patrice CHOTARD <patrice.chotard@foss.st.com>
-Message-ID: <2a3edcb1-df18-fed9-c91c-1e014033004c@foss.st.com>
-Date: Mon, 12 Apr 2021 18:27:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+	id 820B861362; Mon, 12 Apr 2021 18:52:55 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 32E8961352;
+	Mon, 12 Apr 2021 18:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1618253575;
+	bh=vmh72/XeZ2EcVu0BkeFIMrOShLBZVwPfATYyjCSkxXY=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=s6JZEqyuTxWJBYVkq1VRelW1EcwH3H4riAEFagpmQNkJ+t7Q7p7U9runvhYk2/ihH
+	 /W2RNm7PNMesKQTlmmQ8vpJpTYqvxXn5p7BLjDEZAV8WpeYH8J/0X9RqAOLVZ58Oxw
+	 OzOJDccSo59Z0mxfJb+TiRTZveM3xo16zma6dSZ/ki80/jGF6tR7QCoQ113bddi3bA
+	 gMUDBSUk1PWjjstE0Lsc6dTFFmJJPdFzk5vtf+IBkxS6BrbPcX+r3q9TKbaChYEPjv
+	 heOzncogUfVyli1Xb4tZ8yz9gkWBs9CdMKotu9WEP8T04nCbCta5h8ST6wgARtRdVs
+	 Hqx9nlPiGmIyQ==
+Received: by mail-wm1-f45.google.com with SMTP id z24-20020a1cf4180000b029012463a9027fso7472120wma.5;
+        Mon, 12 Apr 2021 11:52:55 -0700 (PDT)
+X-Gm-Message-State: AOAM532A4Hh89crxx74/m5fTeeUycU867oJo8TUgGggT6qxRsHBOVHDk
+	zS1p5h9maltzxsbLDY55KVeJgsTgBu8h0fIOFLU=
+X-Google-Smtp-Source: ABdhPJz83AM6Og1E/29eeE0tygPLaSuAZ4OdBuwM+e8QXLur9sHx4AIBZ4LhOaHNDEcvMz6VMMzQ3r0zqQT/YVry8o0=
+X-Received: by 2002:a05:600c:19cf:: with SMTP id u15mr468118wmq.43.1618253573862;
+ Mon, 12 Apr 2021 11:52:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a1upDuztHd0pH_dM+OpMp8WtiMPAZN8p=9xxtCSVJGZMw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-12_11:2021-04-12,2021-04-12 signatures=0
+References: <CAK8P3a1L8rWpR5b66v6Su8-m7-scA0wZQr_g_4KnV4dnrky6ZA@mail.gmail.com>
+ <CAMuHMdWY0aGoAw6QfF5PQRFNFwAzNP9cmFCjbKnsSbHsMz45fQ@mail.gmail.com>
+ <CAK8P3a3EaaTGvAYvffbf7AF-iaC05yMShdnTc2QMcKQGZv7N8Q@mail.gmail.com> <20210412160116.GA904837@yoga>
+In-Reply-To: <20210412160116.GA904837@yoga>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Mon, 12 Apr 2021 20:52:37 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1_YB944niA-ebk-nJx-JDBh1q7z6s-9mLGFjF2Nv9r9w@mail.gmail.com>
+Message-ID: <CAK8P3a1_YB944niA-ebk-nJx-JDBh1q7z6s-9mLGFjF2Nv9r9w@mail.gmail.com>
+Subject: Re: New 'make dtbs_check W=1' warnings
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>, DTML <devicetree@vger.kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, Linus Walleij <linusw@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Alexandre Torgue <alexandre.torgue@st.com>, 
+	Kevin Hilman <khilman@baylibre.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Tony Lindgren <tony@atomide.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, Nishanth Menon <nm@ti.com>, 
+	Tero Kristo <kristo@kernel.org>, SoC Team <soc@kernel.org>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Gregory Clement <gregory.clement@bootlin.com>, 
+	Florian Fainelli <f.fainelli@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
+On Mon, Apr 12, 2021 at 6:01 PM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+> On Mon 12 Apr 08:14 CDT 2021, Arnd Bergmann wrote:
+> > On Mon, Apr 12, 2021 at 1:32 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > On Thu, Apr 8, 2021 at 5:08 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> So the same binding patch is picked up both in the driver and soc tree?
+> I was expecting that to cause (harmless) conflicts when things arrive in
+> Linus' merge queue?
+>
+> Or are you saying people go the length to create immutable branches for
+> each binding?
 
+I think it's usually one immutable branch for all the bindings of a given
+merge window. This avoids the merge conflicts, and you can add further
+bindings on the same branch before sending it off to the soc tree.
 
-On 4/12/21 3:48 PM, Arnd Bergmann wrote:
-> On Mon, Apr 12, 2021 at 12:19 PM Patrice CHOTARD
-> <patrice.chotard@foss.st.com> wrote:
->>
->> Hi
->>
->> I think this series has been forgotten, any chance to see it merged into v5.13 ?
-> 
-> It's in -rc7, but it appears that my email reply went missing when I merged it.
-> 
->       Arnd
-> 
+> I'm curious because it's fairly often that we introduce clocks,
+> interconnects etc where the macros from the dt bindings includes aren't
+> available for another release (so we use numerical constants and then go
+> back and fix them up later).
 
-Perfect, thanks for confirmation ;-) 
+Ah right, it is particularly bad for platforms that don't have a regular
+layout in these blocks and need to define a new constant every time
+another clock/reset/pin/... is discovered in the downstream sources.
 
-Patrice
+I was mainly referring to the simpler problem of defining a binding
+document for a device once, and then merging the nodes.
+
+       Arnd
