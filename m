@@ -1,73 +1,114 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=5jFp=JJ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CFD2C433ED
-	for <linux-devicetree@archiver.kernel.org>; Mon, 12 Apr 2021 11:33:12 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C9A561206
-	for <linux-devicetree@archiver.kernel.org>; Mon, 12 Apr 2021 11:33:12 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239318AbhDLLd2 (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Mon, 12 Apr 2021 07:33:28 -0400
-Received: from mail-ua1-f49.google.com ([209.85.222.49]:34709 "EHLO
-        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237792AbhDLLd2 (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Mon, 12 Apr 2021 07:33:28 -0400
-Received: by mail-ua1-f49.google.com with SMTP id s2so4109413uap.1;
-        Mon, 12 Apr 2021 04:33:10 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EECB3C433ED
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 12 Apr 2021 11:34:55 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 9135161244
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 12 Apr 2021 11:34:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9135161244
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
+	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=nn+1TiMPU4nHsvVHOzrTmTwHKMYJOQSrteA7hF0y3xU=; b=P5Ds6MsjQZB+4huFjGreFSTVE
+	7O78kWZ0KvMOiRVVrCHhVC/ywDukWoOeLf/9oXPyF23WZrr0GQxy2R0qqpkxQeLwp5XtUAJUvK/tL
+	IAYNAF4vggWll/VBr7+0qM2otLvVcHb6a1i0WI5Yzl3G+hHjot2JPWdLqTThhc10cxYCRU9PEx3Go
+	tCzmRzYfGyEg6DXUXLZDUiDRg6Q58e67cxitgbOPAP/cnJjkx1nleafhlCwZP4uD4Sp+6JJUlhzP3
+	aTtfSttKHYOYqigfDGL9vm4NPn33S8JiL7uj0D3weD4wJsBTdlDXPnQPBsO268Q+OxYkDixieKSnf
+	3Bs+ShS1w==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lVuoe-006ZWe-LJ; Mon, 12 Apr 2021 11:33:16 +0000
+Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lVuob-006ZW1-NQ
+ for linux-arm-kernel@desiato.infradead.org; Mon, 12 Apr 2021 11:33:13 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=infradead.org; s=bombadil.20210309; h=Content-Type:Cc:To:Subject:Message-ID
+ :Date:From:In-Reply-To:References:MIME-Version:Sender:Reply-To:
+ Content-Transfer-Encoding:Content-ID:Content-Description;
+ bh=/BtLuken7/ATnnaUkY5iHVkSwH8IiGzx/qlI7A0N+vg=; b=wlY/Y+wGnmBSWc9cT98x2YhyA/
+ rknXI7zlb3MXVJzw4BFpBMn/nQPmCi6vSc7+PL/hWtoGQraXzr/dhBIf03DnAB/SNBlsFmh+W/i+z
+ 9thpiO4cE0IqcOe26dYGIzNSKOGDLcczFVfkDqabZPZyMrEHyKI9um2X7Y0RGqJvX6ZOs5fMwYfLo
+ f8iHkNhh8BeiJGGSafPHVoEMvj2+zjptOI/jTTRAMTWWVaf4Jqv0OR3Sb7ktSD4szx22KgXi9Jfbp
+ Ag1fhk+OIVMz4wH0eH2pBLf6CD74hSIDSKX8phWmbMTRXAhY7lbZd3JGs3Miuo4sI+VTxjYAFoHDv
+ 2o6Rn4Iw==;
+Received: from mail-ua1-f51.google.com ([209.85.222.51])
+ by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lVuoZ-006BKa-16
+ for linux-arm-kernel@lists.infradead.org; Mon, 12 Apr 2021 11:33:12 +0000
+Received: by mail-ua1-f51.google.com with SMTP id h34so4110568uah.5
+ for <linux-arm-kernel@lists.infradead.org>;
+ Mon, 12 Apr 2021 04:33:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/BtLuken7/ATnnaUkY5iHVkSwH8IiGzx/qlI7A0N+vg=;
-        b=WUw34Xz6aZWhQ8YYTeVTVjkvo+O8RkO+g5ebYgeOhc4nnQW5PRl3yoXIPo1+oKs3yC
-         VrHhNUAf5fZTjusEksj85l62fpKpYrvd0Zdf3b4Wbc1p31fl5166ECJ4OoJYof1yFfPE
-         zU1isrPjRDBpxhrdAO8AFXvJgpVas8G8/6BhYySloEGAv89BvlStp1X2Rzc49fB7qkNT
-         8c59zrAZPVRtdIyIgszNBxgGuy0EjUKtPR45wiFu3+H96CSN+bp8R/K3uPmrdnljxe8F
-         nefFB2iDZW2ViDs5XMA3wylyNAm30/L7THmLUAztbYXUBwaIknozqtdTXhsv337C/nh0
-         h1rw==
-X-Gm-Message-State: AOAM531jHIJNtnaTHUwX57iHIPVJxy4M6nGR49G/FxZjLP4krqagzhkd
-        w9e875PTonNGGmq2Nn0ePnQPg5jqi1tO/S/qFDk=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=/BtLuken7/ATnnaUkY5iHVkSwH8IiGzx/qlI7A0N+vg=;
+ b=WJqEBBFdsrmkroiVz+NMPCY2G49qiqNEZno1FXh/uj+AIQgHItxz/vCB/bhcRFEcs7
+ 9WnFy6W2OtsC9hUGm9u0oT74D7xD0vJnwcyRPXshV4Hy8EwqIkHapDxOtq37obmLMoVI
+ dxSNyQ4N//iAPhrpR7GaqtDff6ePciHwri3c/BZhrgLeKuGuabSJrU8/DiHDH0LD6vDR
+ JzZYYOLTrZoT9eC9bEO/Piebw8c84aM+NtsReGavI3NtrxEumd8AScVpzbuOpsMu5GVf
+ Cjj7ChnJjJ6gk+KJNERpI63HBwLZChiw/9FLgvCyX8RNbt2utzRiYmyeG30LCBAodVAz
+ 6Ukg==
+X-Gm-Message-State: AOAM5308wg16VpjJp8MzDuMhw8HCix9/NKwZ6o5nAZYwWzxbO4X52DNU
+ +kQdMKydRuoUoxxMDJqgBN/FqdFq5YWZ4FXU8Aw=
 X-Google-Smtp-Source: ABdhPJwc7H2iNse606hnm01z3wmnOaEjTehppMFD2rGS5SzORSJzulLQ3INeDmOJwFpkG1K0oL1+YL7jRWDlysWfhK4=
-X-Received: by 2002:ab0:3157:: with SMTP id e23mr17802147uam.106.1618227189854;
+X-Received: by 2002:ab0:3157:: with SMTP id e23mr17802147uam.106.1618227189854; 
  Mon, 12 Apr 2021 04:33:09 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAK8P3a1L8rWpR5b66v6Su8-m7-scA0wZQr_g_4KnV4dnrky6ZA@mail.gmail.com>
 In-Reply-To: <CAK8P3a1L8rWpR5b66v6Su8-m7-scA0wZQr_g_4KnV4dnrky6ZA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 12 Apr 2021 13:32:58 +0200
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 12 Apr 2021 13:32:58 +0200
 Message-ID: <CAMuHMdWY0aGoAw6QfF5PQRFNFwAzNP9cmFCjbKnsSbHsMz45fQ@mail.gmail.com>
 Subject: Re: New 'make dtbs_check W=1' warnings
-To:     Arnd Bergmann <arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc:     DTML <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        SoC Team <soc@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20210412113258.zswcy-e-0hg0M3R11GQArQYXL48JDVb5G4vroBDi-aA@z>
+Cc: DTML <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Linus Walleij <linusw@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Alexandre Torgue <alexandre.torgue@st.com>, Kevin Hilman <khilman@baylibre.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Tony Lindgren <tony@atomide.com>, 
+ Shawn Guo <shawnguo@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+ Bjorn Andersson <bjorn.andersson@linaro.org>, Nishanth Menon <nm@ti.com>,
+ Tero Kristo <kristo@kernel.org>, 
+ SoC Team <soc@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
+ Gregory Clement <gregory.clement@bootlin.com>,
+ Florian Fainelli <f.fainelli@gmail.com>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210412_043311_096323_8F883F53 
+X-CRM114-Status: GOOD (  35.85  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210412113258.4jK5Gd_Pyj2iy4OHcBh8iHglTcLqdm71Z84IeMNa3DY@z>
 
 Hi Arnd,
 
@@ -135,3 +176,8 @@ Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 In personal conversations with technical people, I call myself a hacker. But
 when I'm talking to journalists I just say "programmer" or something like that.
                                 -- Linus Torvalds
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
