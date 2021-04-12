@@ -1,60 +1,73 @@
-Return-Path: <SRS0=l2vm=JJ=gmail.com=geert.uytterhoeven@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CBE6C433B4
-	for <soc@archiver.kernel.org>; Mon, 12 Apr 2021 11:33:11 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 3907A61245; Mon, 12 Apr 2021 11:33:11 +0000 (UTC)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E7B5D60249;
-	Mon, 12 Apr 2021 11:33:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E7B5D60249
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=geert.uytterhoeven@gmail.com
-Received: by mail-ua1-f52.google.com with SMTP id h5so4116515uaw.0;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CFD2C433ED
+	for <linux-devicetree@archiver.kernel.org>; Mon, 12 Apr 2021 11:33:12 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 2C9A561206
+	for <linux-devicetree@archiver.kernel.org>; Mon, 12 Apr 2021 11:33:12 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S239318AbhDLLd2 (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Mon, 12 Apr 2021 07:33:28 -0400
+Received: from mail-ua1-f49.google.com ([209.85.222.49]:34709 "EHLO
+        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237792AbhDLLd2 (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Mon, 12 Apr 2021 07:33:28 -0400
+Received: by mail-ua1-f49.google.com with SMTP id s2so4109413uap.1;
         Mon, 12 Apr 2021 04:33:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=/BtLuken7/ATnnaUkY5iHVkSwH8IiGzx/qlI7A0N+vg=;
-        b=fx6XbTnWlsXTM2qr+wzUfyAe4d1HJjvBXvKF3Bsr1HauFZ9/Mxl+0AzGqJ5e6NSQBd
-         KVDS4CK8eZZrdE5RzP6vomed7zTVlTwI89vEJ9gceRIlZTh4MEl6cAw54to9K93RWV8f
-         izJxK8rAvgNPyuc0uimQ/QSfNZyxAYyNoP7Sxu8voijgdPUJHbECZXsofqFKmKCS83d6
-         pZ47nJ/0T1EisubaRRAkZkkpCrOFGfJWr8Df67O6fT75iAnSvKhxPJJ2EPEyqb3Nq18y
-         SNBj0IC0v/yKqwNNDiyPUgixxOp6u0k3eZ2xfjExAfO033rMbVuydnYuZ3+Vb7lUDTmG
-         t3EQ==
-X-Gm-Message-State: AOAM530/JHVU6rN2UwhQoalx9QC4MGjBs0pfZI3edNOsGtvmXPlL6M23
-	SJn9V2lIrjm1nJPPHJkTMgvR0h5B6fGNtmLBt8tTH7EOcVY=
+        b=WUw34Xz6aZWhQ8YYTeVTVjkvo+O8RkO+g5ebYgeOhc4nnQW5PRl3yoXIPo1+oKs3yC
+         VrHhNUAf5fZTjusEksj85l62fpKpYrvd0Zdf3b4Wbc1p31fl5166ECJ4OoJYof1yFfPE
+         zU1isrPjRDBpxhrdAO8AFXvJgpVas8G8/6BhYySloEGAv89BvlStp1X2Rzc49fB7qkNT
+         8c59zrAZPVRtdIyIgszNBxgGuy0EjUKtPR45wiFu3+H96CSN+bp8R/K3uPmrdnljxe8F
+         nefFB2iDZW2ViDs5XMA3wylyNAm30/L7THmLUAztbYXUBwaIknozqtdTXhsv337C/nh0
+         h1rw==
+X-Gm-Message-State: AOAM531jHIJNtnaTHUwX57iHIPVJxy4M6nGR49G/FxZjLP4krqagzhkd
+        w9e875PTonNGGmq2Nn0ePnQPg5jqi1tO/S/qFDk=
 X-Google-Smtp-Source: ABdhPJwc7H2iNse606hnm01z3wmnOaEjTehppMFD2rGS5SzORSJzulLQ3INeDmOJwFpkG1K0oL1+YL7jRWDlysWfhK4=
 X-Received: by 2002:ab0:3157:: with SMTP id e23mr17802147uam.106.1618227189854;
  Mon, 12 Apr 2021 04:33:09 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAK8P3a1L8rWpR5b66v6Su8-m7-scA0wZQr_g_4KnV4dnrky6ZA@mail.gmail.com>
 In-Reply-To: <CAK8P3a1L8rWpR5b66v6Su8-m7-scA0wZQr_g_4KnV4dnrky6ZA@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 12 Apr 2021 13:32:58 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 12 Apr 2021 13:32:58 +0200
 Message-ID: <CAMuHMdWY0aGoAw6QfF5PQRFNFwAzNP9cmFCjbKnsSbHsMz45fQ@mail.gmail.com>
 Subject: Re: New 'make dtbs_check W=1' warnings
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: DTML <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Linus Walleij <linusw@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Alexandre Torgue <alexandre.torgue@st.com>, Kevin Hilman <khilman@baylibre.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, Tony Lindgren <tony@atomide.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Bjorn Andersson <bjorn.andersson@linaro.org>, Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>, 
-	SoC Team <soc@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Gregory Clement <gregory.clement@bootlin.com>, Florian Fainelli <f.fainelli@gmail.com>
+Cc:     DTML <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linusw@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        SoC Team <soc@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210412113258.zswcy-e-0hg0M3R11GQArQYXL48JDVb5G4vroBDi-aA@z>
 
 Hi Arnd,
 
