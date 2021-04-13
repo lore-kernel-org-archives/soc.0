@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A4D9C43460
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 772D9C43461
 	for <soc@archiver.kernel.org>; Tue, 13 Apr 2021 09:30:12 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 0CF2E613BA; Tue, 13 Apr 2021 09:30:11 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id E9349613B6;
+	id 17E93613C1; Tue, 13 Apr 2021 09:30:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 00A0D61222;
 	Tue, 13 Apr 2021 09:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1618306211;
-	bh=uplRy7uwXpOFMWodgW9/T2Q7/sx3eBj2JIoSD4gKh9Q=;
+	bh=52+gBUZWae3HE3MCJSNF0+J8oZNAmjwkIOmxV0mDJbk=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=IS5QmuSAoyYPsyF7uigEqgGAsnwFRkcP31Rio9kFpUwofSSzNztU3pNbCURMvoQ/x
-	 cRhNp4+ptNFCByYKrowh8MPEkzv+SV7jW3GV6aLPQwARKg/dtfs4yO0LZaKfWWLn/V
-	 3tMlV/CHYTrAuHg5RtRayTvF0WKKKJGFi6eKIO67UbYxTj+PTe0VJ/FUkvGdpo5TcA
-	 rINJ9Fr+eqT1bA1CAq+m+DEpx5Rf4kHL3PPSfzJZCwdjsdG0ZmU52e5kE4SpZnTMtG
-	 ink7aO1W61CiFgCJotMYLYnaQet/VRzkQlpnBDBFv7b2aQC5JwRdYPyxGplkJEdafL
-	 32uaDE1mD63rA==
+	b=BtweGZZqIZizIlUSAIqLJM6bhT3NKDhQj1msjzOLX+c9lTydfuVibfTzbeYmOqzg1
+	 LeYbSQBdeSKYJQdPxyQdl5PIb6lchGYM/1u4MQpD6eNSTKlkasDIIpFNIjP54lhOGQ
+	 pdtB7zK69Drg36KnWJJEApR6iFDSPj0IO5WMxgZhd9hK1wS/e5JN6ee/cPpsw0xOpl
+	 TpCsi2nS1GaoHj7CQb+I2mbq3dUWnCA6AXVKSWnCpJLQjbJsPFithiT053fYWClsTZ
+	 wrtSlgNpBzUn1ufqwT4WqujdvkAKvAu8YFv2sQoNvpCM4eKRat2yyz4TXriZNUznl0
+	 V+3RC1qYWzceQ==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D53BA609B9;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E766B60CD1;
 	Tue, 13 Apr 2021 09:30:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts32 changes for 5.13
+Subject: Re: [GIT PULL] soc/fsl drivers changes for next(v5.13)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <161830621086.20348.4287708763848447706.git-patchwork-notify@kernel.org>
+ <161830621094.20348.18398372295713466336.git-patchwork-notify@kernel.org>
 Date: Tue, 13 Apr 2021 09:30:10 +0000
-References: <4638723.31r3eYUQgx@phil>
-In-Reply-To: <4638723.31r3eYUQgx@phil>
-To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
+References: <20210409205719.27927-1-leoyang.li@nxp.com>
+In-Reply-To: <20210409205719.27927-1-leoyang.li@nxp.com>
+To: Leo Li <leoyang.li@nxp.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -43,19 +43,19 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Sun, 11 Apr 2021 11:43:57 +0200 you wrote:
-> Hi Arnd, Kevin, Olof,
+On Fri,  9 Apr 2021 15:57:19 -0500 you wrote:
+> Hi soc maintainers,
 > 
-> please find below (and in the next mail) dts changes for
-> Rockchip platforms for 5.13.
+> Please merge the following new changes for soc/fsl drivers.
 > 
-> Please pull
+> Regards,
+> Leo
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Rockchip dts32 changes for 5.13
-    https://git.kernel.org/soc/soc/c/91f059a0fc23
+  - [GIT,PULL] soc/fsl drivers changes for next(v5.13)
+    https://git.kernel.org/soc/soc/c/41c39cfc841d
 
 You are awesome, thank you!
 --
