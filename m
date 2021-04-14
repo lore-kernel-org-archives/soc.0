@@ -1,173 +1,164 @@
-Return-Path: <SRS0=OvlU=JK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=aW75=JL=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C2D9C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 13 Apr 2021 09:57:42 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4327CC433ED
+	for <soc@archiver.kernel.org>; Wed, 14 Apr 2021 02:47:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 08E666113D; Wed, 14 Apr 2021 02:47:16 +0000 (UTC)
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1B88261370
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 13 Apr 2021 09:57:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1B88261370
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Type:
-	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
-	In-Reply-To:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date
-	:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=0SRa1zdFLUyZq5GpFZmLlsRD8+AFMBGcUhAU7GnlinE=; b=SocdQ7FXVLDKDrpQcAxETZhNS
-	vDHaMzKKYZjI47TkfOLJ8DJytZgdSTm8BVkAbt1V8qhRzNZDtVuwGttBw7dBbkLOdzH5e7oANnPkU
-	vG38mUhnLFgEY48dzaweQz7ofLyLeo+/NsKm5GYEiRLQdnGdIVzgyOrEZMNl0y4atKwjR+G3gTV5I
-	7AyooU8h8ccGkrjuRwNaUu7KwGqLYwoNeEKw1N0mel/ksTcgaB8yBblWGbZgedVtrMNpbRvzBWgmv
-	EOZPSKwt2j51Im8Jw9i8bRtyuHhLeanXEaDVoo1+C3fW5XqnHT7KNrDgX/sxq6Y4ZlRWkQDvpJZFt
-	8flujVDOw==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lWFlu-008o6x-6m; Tue, 13 Apr 2021 09:55:50 +0000
-Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lWFlq-008o6I-9O
- for linux-arm-kernel@desiato.infradead.org; Tue, 13 Apr 2021 09:55:46 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
- :References:Message-ID:Subject:Cc:List-Id:To:From:Date:Sender:Reply-To:
- Content-Transfer-Encoding:Content-ID:Content-Description;
- bh=3yr28My6WXoo6CQW/YIHzqImC+8GIX9W8yNiJe7vnrE=; b=qcLlQUlVDHmtDYpEdhMuU6nhAj
- HgZCTexQfUGuIZIoXkHsmSjwUOVLw84qQL+Ck9IqY2A15dNRpr0BVXKahz5QYBm1DYk/aAfWCwfX3
- gQj8P5MBSem+YTNDN1+KyJbh4VAk85eOJaPDNlN6M3ampliaF58rSfh76h40F9hsGeR9ymPrMIR41
- lG9PQtV7mThLzc9PcPYhTHXbdc+Ro/R3ZXyVUQjUgDXaxA2pBKhmxZtRbg07W/AZ/nBsnetJOOeks
- E0d24GUHtOiwkHOlKwwhV2G51vUAMCYjW6W+R9uLhwm2SGS3rzG4lipowo+NZBQ1iDIYEIo47sk3X
- jXWLa5gA==;
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lWFln-006uFU-TL
- for linux-arm-kernel@lists.infradead.org; Tue, 13 Apr 2021 09:55:45 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E444661369;
- Tue, 13 Apr 2021 09:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1618307743;
- bh=3yr28My6WXoo6CQW/YIHzqImC+8GIX9W8yNiJe7vnrE=;
- h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
- b=HlHQfDs8VuzU1M9tViQ8vhwG4fJYOLYYMhQuLA4elC4cXfvVf8YNZ38//74DZHR9P
- FqdtpoYxPho3wWAFYdUewtEm7J9ksZTKNqzvc/ZwCLSoOhzUT0AV19jkz9jqklAc4B
- DmAq8AH9Sf9SXzVNsNqLrlrxqmGW7OWSOvBmfs19xX/FB5XMIKcGdtPjWuhx4cWegp
- iILFfmzA9D7gFFeQx+1Hv3rTljR6mA6cMkLXolBkFZWMVHW9YC1J/gJrFPYsmup7ch
- 7uKy/7VluM1DxHm7aFroALTah6Y1ImpuqIOx5uHqtezlV5hCGVDqq+lzhUPjdV3Kok
- td9ZQbyPPOdng==
-Date: Tue, 13 Apr 2021 10:55:22 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id DB02261176
+	for <soc@kernel.org>; Wed, 14 Apr 2021 02:47:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DB02261176
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=bjorn.andersson@linaro.org
+Received: by mail-oi1-f181.google.com with SMTP id e66so3829736oif.11
+        for <soc@kernel.org>; Tue, 13 Apr 2021 19:47:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uODSff3t2JSJqxFmEXfapBv0QkFqQwxecfMeix/4Xhg=;
+        b=P631JNgnQJKoJT8k6iHyWS7SzFFegwexZ5mGAB0sXUE72L34HvEEPtiui3W8wiF66n
+         Jz2ToTYX9M7FP2i8S55NnkOKm1+dMPsDhmqiI1r5bpkqYDVPYs0owyzAsMue/jaSexiZ
+         oxTpGenbTauS11vt8itGtCITFUclDK19hQcE7vbfhNxP1xfEf+oMCqtHB5I/ap+UNSYj
+         6dbIHY3Vz7LCTi73Fvz3l7Nst75fUkFpglYJ6ic8qDYrdnemFLzVAMq3H3voe8ZQA5UX
+         qXlBw64+l7aF37B3D5J98D3ekBK64uBltk3nQke/OwQQ1t79rMCXW/nLwpfQK5wKmbat
+         tIog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uODSff3t2JSJqxFmEXfapBv0QkFqQwxecfMeix/4Xhg=;
+        b=SrQQrsTOqhk77ysyImViqgBdmDXVMY97BG4l4/sMCKACNerqchmwZyDDjpiokVC9tb
+         /fcDsF0Pr/sYmvjrbgAvjtURlMGlVy33xMxY75KbgAR4kNKF6LfIDpm+6NOaKG+B7cQL
+         5Y1LSXrZe3QTlzR7B4Dr5aTUz7XpCIOQTHR8q7Ek8GcixQweBAvmWGbarnpWiWvjP8kt
+         RHCxLaTsPLXGoLr86W/6aaWcxANxrE9cfqKd6j5pgsn692pIimGn8VatrtYNDf5Bk5fX
+         WDJOwvaJ+5RlSVSf3HOy3PDj63eNpH1pZ6JuajwuKnya4vEk1djN8g91zLOe18QPyV8f
+         tyMQ==
+X-Gm-Message-State: AOAM532s2tJuD+3tTyNEbu7cD1RUPW8QKJlkQDdfZaIruPS8HNriFu0m
+	ezjekaCwx2jTsq+z9OJtrMg4yg==
+X-Google-Smtp-Source: ABdhPJyeMBwF8/BA758z0/LHS5xbw4Go//yuABYqrtdJI4syuogqUsBuF6MJaujiZAkbPIidsVRktQ==
+X-Received: by 2002:aca:1312:: with SMTP id e18mr649250oii.153.1618368435099;
+        Tue, 13 Apr 2021 19:47:15 -0700 (PDT)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id b12sm3845680oti.17.2021.04.13.19.47.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Apr 2021 19:47:14 -0700 (PDT)
+Date: Tue, 13 Apr 2021 21:47:12 -0500
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- DTML <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Linus Walleij <linusw@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Alexandre Torgue <alexandre.torgue@st.com>,
- Kevin Hilman <khilman@baylibre.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Tony Lindgren <tony@atomide.com>, Shawn Guo <shawnguo@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
- SoC Team <soc@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>,
- Gregory Clement <gregory.clement@bootlin.com>,
- Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: New 'make dtbs_check W=1' warnings
-Message-ID: <20210413095522.GA5586@sirena.org.uk>
-References: <CAK8P3a1L8rWpR5b66v6Su8-m7-scA0wZQr_g_4KnV4dnrky6ZA@mail.gmail.com>
- <CAMuHMdWY0aGoAw6QfF5PQRFNFwAzNP9cmFCjbKnsSbHsMz45fQ@mail.gmail.com>
- <CAK8P3a3EaaTGvAYvffbf7AF-iaC05yMShdnTc2QMcKQGZv7N8Q@mail.gmail.com>
- <20210412160116.GA904837@yoga>
- <CAK8P3a1_YB944niA-ebk-nJx-JDBh1q7z6s-9mLGFjF2Nv9r9w@mail.gmail.com>
+Cc: soc@kernel.org, linux@armlinux.org.uk, will@kernel.org, arnd@arndb.de,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v3] ARM: kernel: Fix interrupted SMC calls
+Message-ID: <20210414024712.GX1538589@yoga>
+References: <20210326182237.47048-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a1_YB944niA-ebk-nJx-JDBh1q7z6s-9mLGFjF2Nv9r9w@mail.gmail.com>
-X-Cookie: Shake well before using.
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210413_025543_990513_6151EAF2 
-X-CRM114-Status: GOOD (  17.29  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2384915597988420807=="
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210413095522.zfBatjKKZI6XOJgMtAFniw7ncnnwjF_LDQmDqRnFHpM@z>
-
-
---===============2384915597988420807==
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7JfCtLOvnd9MIVvH"
-Content-Disposition: inline
-
-
---7JfCtLOvnd9MIVvH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20210326182237.47048-1-manivannan.sadhasivam@linaro.org>
 
-On Mon, Apr 12, 2021 at 08:52:37PM +0200, Arnd Bergmann wrote:
-> On Mon, Apr 12, 2021 at 6:01 PM Bjorn Andersson
-> > On Mon 12 Apr 08:14 CDT 2021, Arnd Bergmann wrote:
+On Fri 26 Mar 13:22 CDT 2021, Manivannan Sadhasivam wrote:
 
-> > So the same binding patch is picked up both in the driver and soc tree?
-> > I was expecting that to cause (harmless) conflicts when things arrive in
-> > Linus' merge queue?
+> On Qualcomm ARM32 platforms, the SMC call can return before it has
+> completed. If this occurs, the call can be restarted, but it requires
+> using the returned session ID value from the interrupted SMC call.
+> 
+> The ARM32 SMCC code already has the provision to add platform specific
+> quirks for things like this. So let's make use of it and add the
+> Qualcomm specific quirk (ARM_SMCCC_QUIRK_QCOM_A6) used by the QCOM_SCM
+> driver.
+> 
+> This change is similar to the below one added for ARM64 a while ago:
+> commit 82bcd087029f ("firmware: qcom: scm: Fix interrupted SCM calls")
+> 
+> Without this change, the Qualcomm ARM32 platforms like SDX55 will return
+> -EINVAL for SMC calls used for modem firmware loading and validation.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-> > Or are you saying people go the length to create immutable branches for
-> > each binding?
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-> I think it's usually one immutable branch for all the bindings of a given
-> merge window. This avoids the merge conflicts, and you can add further
-> bindings on the same branch before sending it off to the soc tree.
+Regards,
+Bjorn
 
-Even with a single branch for everything having to split serieses into
-multiple branches seems like a pain, it'll break my automation for
-example.
-
---7JfCtLOvnd9MIVvH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmB1aokACgkQJNaLcl1U
-h9BYoAf/d8xl+p11Ol3VZqWHP5xhJep7Q+NToFMOwICDFa+dQGCm8AKljcF3Vhr1
-gn9IA7MeOUIMv+mEVKnHr0p+UP3GG84Dn+uTn0E4DYZkipBpvb4pBz3pvl/kFr5Q
-/o76CegXEwkycuW8AosKMCGhnrgPMsInV/Mu3sGv7DTI0IaLjDNH7TS14Az9genT
-SSTsu/0L4TnLZIlRLRI1hZ/4KPLzjIR+rSfR/E7j71VOQNF5GnIAKj0xOQcGJv4H
-vtW2j2WTKCkedDbDBvHxMsd7taiVnAYYFzbKU5gd66caudzHqJdJGh45irJLoJDM
-EO3U4LepMpL/s/OTT263JrPdl9K1sw==
-=kGwu
------END PGP SIGNATURE-----
-
---7JfCtLOvnd9MIVvH--
-
-
---===============2384915597988420807==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
---===============2384915597988420807==--
-
+> ---
+> 
+> Changes in v3:
+> 
+> * Rebased on top of v5.12-rc2
+> * Sent to SoC list since there was no review so far apart from initial one
+>   by Russel
+> 
+> Changes in v2:
+> 
+> * Preserved callee saved registers and used the registers r4, r5 which
+>   are getting pushed onto the stack.
+> 
+>  arch/arm/kernel/asm-offsets.c |  3 +++
+>  arch/arm/kernel/smccc-call.S  | 11 ++++++++++-
+>  2 files changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/kernel/asm-offsets.c b/arch/arm/kernel/asm-offsets.c
+> index be8050b0c3df..70993af22d80 100644
+> --- a/arch/arm/kernel/asm-offsets.c
+> +++ b/arch/arm/kernel/asm-offsets.c
+> @@ -24,6 +24,7 @@
+>  #include <asm/vdso_datapage.h>
+>  #include <asm/hardware/cache-l2x0.h>
+>  #include <linux/kbuild.h>
+> +#include <linux/arm-smccc.h>
+>  #include "signal.h"
+>  
+>  /*
+> @@ -148,6 +149,8 @@ int main(void)
+>    DEFINE(SLEEP_SAVE_SP_PHYS,	offsetof(struct sleep_save_sp, save_ptr_stash_phys));
+>    DEFINE(SLEEP_SAVE_SP_VIRT,	offsetof(struct sleep_save_sp, save_ptr_stash));
+>  #endif
+> +  DEFINE(ARM_SMCCC_QUIRK_ID_OFFS,	offsetof(struct arm_smccc_quirk, id));
+> +  DEFINE(ARM_SMCCC_QUIRK_STATE_OFFS,	offsetof(struct arm_smccc_quirk, state));
+>    BLANK();
+>    DEFINE(DMA_BIDIRECTIONAL,	DMA_BIDIRECTIONAL);
+>    DEFINE(DMA_TO_DEVICE,		DMA_TO_DEVICE);
+> diff --git a/arch/arm/kernel/smccc-call.S b/arch/arm/kernel/smccc-call.S
+> index 00664c78faca..931df62a7831 100644
+> --- a/arch/arm/kernel/smccc-call.S
+> +++ b/arch/arm/kernel/smccc-call.S
+> @@ -3,7 +3,9 @@
+>   * Copyright (c) 2015, Linaro Limited
+>   */
+>  #include <linux/linkage.h>
+> +#include <linux/arm-smccc.h>
+>  
+> +#include <asm/asm-offsets.h>
+>  #include <asm/opcodes-sec.h>
+>  #include <asm/opcodes-virt.h>
+>  #include <asm/unwind.h>
+> @@ -27,7 +29,14 @@ UNWIND(	.fnstart)
+>  UNWIND(	.save	{r4-r7})
+>  	ldm	r12, {r4-r7}
+>  	\instr
+> -	pop	{r4-r7}
+> +	ldr	r4, [sp, #36]
+> +	cmp	r4, #0
+> +	beq	1f			// No quirk structure
+> +	ldr     r5, [r4, #ARM_SMCCC_QUIRK_ID_OFFS]
+> +	cmp     r5, #ARM_SMCCC_QUIRK_QCOM_A6
+> +	bne	1f			// No quirk present
+> +	str	r6, [r4, #ARM_SMCCC_QUIRK_STATE_OFFS]
+> +1:	pop	{r4-r7}
+>  	ldr	r12, [sp, #(4 * 4)]
+>  	stm	r12, {r0-r3}
+>  	bx	lr
+> -- 
+> 2.25.1
+> 
