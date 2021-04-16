@@ -1,90 +1,126 @@
-Return-Path: <matthias.bgg@kernel.org>
+Return-Path: <SRS0=rcQv=JN=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6360C43460
-	for <soc@archiver.kernel.org>; Fri, 16 Apr 2021 14:39:38 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id C352E6115B; Fri, 16 Apr 2021 14:39:38 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9F938613B4;
-	Fri, 16 Apr 2021 14:39:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEB9DC433B4
+	for <linux-mediatek@archiver.kernel.org>; Fri, 16 Apr 2021 14:40:07 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id B3DBD61184
+	for <linux-mediatek@archiver.kernel.org>; Fri, 16 Apr 2021 14:40:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B3DBD61184
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=FZ2xuyhzTqEUK2H3y81c0tWNuAorv7+xpTAFcyZawt4=; b=TIQcA3fsWw/ta+7+Z4JKHdca1X
+	dqDw73l4mkWAfMgxFKmszLJQoSv3XNhVqootD6Hg98Ix7/rvk8VTh+jr56hEck9+S4xBY08mbh0HD
+	ZvDfbdaPgfzJ3VoUbC1BcTwQPqquURZGjHr56JtbTlWIwVY7TQuNbW1hPgtOpyjDeixFQUREdJg/L
+	X1chZgUvzqDvSdoE0dKRH5r4xJFA9nD0GxIuUtTcbjF2PzlSFUB0iiiTZuILkzhHooUpQjs0VKAsW
+	9bRLidb1HM6l5kdVdCMjWYBnZQbXwDRs7HxdHsJvsvInvGsRAMsaiTRALtSJ2k68icdThuUHtITKI
+	PvtrRl/Q==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lXPdQ-002REz-JZ; Fri, 16 Apr 2021 14:39:52 +0000
+Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lXPdA-002R9H-Qy; Fri, 16 Apr 2021 14:39:37 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+ MIME-Version:Message-Id:Date:Subject:Cc:To:List-Id:From:Sender:Reply-To:
+ Content-Type:Content-ID:Content-Description:In-Reply-To:References;
+ bh=ZCdZrlyVwQxuiKkvxt5vv5UGjQXSjY78bJlAi4Q2CXQ=; b=JNfQtRVRkOtMmVoGw0ofSAQFwI
+ clUitFhmAWAF370sj3/PFghSLyIV2ezt6RpzykqBPt8G/7o0F5mtWaQN+Nfj/fNnCZOlTjnCAE8lr
+ t+CbEr6ncbLP7BHto5QQqt05fvyLOAzUH+PNrpEK16HLn9qCytnhvCbrrtd20hf0+UDyDJnOP83A4
+ 1QvfiiPwRutybvEqUZhoor8wmdX6+sFeFMWXsSwtJZ5SP/iX+1WVfh/2mWH2plaBYOwnYJ1HUj+aC
+ FB4m6Q0OcDSaamo9rmtxhAPq0i3RaO8Yun9GONM1UtC7KOoQwdu8O9qMImtk7r15t4RcG+beKaPaL
+ F8wSppNg==;
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lXPd8-009SbE-EN; Fri, 16 Apr 2021 14:39:35 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BF653611C2;
+ Fri, 16 Apr 2021 14:39:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1618583978;
-	bh=iR54IzMf1S6kuxyIla+yy1tc43W+FXsmvIuG/2BQeqI=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cwQBpC5q+qTkUAqpGv3l8e+mkhSp4zH53rc/2YUp+yJEVYyKZ0Hrba2IxG3MYG5Kn
-	 +apVvMR/cv/jJgSZz8zbOhlRLk+s/ZffuyPjYB+PK1TmN15x1YurjgSIdDlWggWS9+
-	 hf+mMipckFclqk9qukrS76JV9JSQAblGLcSON/27Tu3nAr6haJHr4jT+HeKUhi0CVO
-	 bbf/FGEiwCFXe8wUfkXFOilG0aaozsMj+Z9l/uf//vD5exQlGKkK7j3767cyjfYWi/
-	 dDGxr8rB59rHPww3r1Gat0VpAVCl/h7BjI/+VxiCDZjKZGgJUWHY1UFY/sWvznImlG
-	 cigyZCJGLojmw==
+ s=k20201202; t=1618583973;
+ bh=OvwYzUWAq+F6jUu3zv85BIbsufle24EDLBJL80W5lv8=;
+ h=From:List-Id:To:Cc:Subject:Date:From;
+ b=rDuhQhn1WfFYm3ASpVlGtSjJhme8acFo2yTImNM6LHGiDPwj2Jsgeg0En2xFloRIs
+ nAsNePIbMFbF++dtP5ZbtA/NCcDdYXHk4oA406PpUXs4rCJ8DzHVROaz3rOu6mkbyR
+ yir5Vm207OuErJOpebB8k8/d96GjsRN/Eb+nPyDARDFjNOoeQQ5AhiB8gWY5pJKZRT
+ P1kbzSk8vN9Zrq9mYtC9KPasgm5yDieNDnrNjGIK7vJh7XG+5wqh0ej5IIDBPvCESu
+ 0uILVxuhlVXT/eJP6ClpHtolhnOkwzK4JSrk/rpbWDc2XexJl7lVkR25JJc2bqb//1
+ xSWwvj2pn/EvA==
 From: matthias.bgg@kernel.org
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
 	arm@kernel.org
-Cc: linux-mediatek@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] arm64: dts: mt8183: fix dtbs_check warning
-Date: Fri, 16 Apr 2021 16:39:23 +0200
-Message-Id: <20210416143923.23406-3-matthias.bgg@kernel.org>
+Cc: linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] dts: mediatek: fixes for v5.13
+Date: Fri, 16 Apr 2021 16:39:21 +0200
+Message-ID: <20210416143923.23406-1-matthias.bgg@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210416143923.23406-1-matthias.bgg@kernel.org>
-References: <20210416143923.23406-1-matthias.bgg@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210416_073934_523028_A2DECF12 
+X-CRM114-Status: UNSURE (   8.37  )
+X-CRM114-Notice: Please train this message.
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210416143921.g6m7iBHriSym55NqU3ofykFXyCY4W9HqnwHT2ywwjPA@z>
 
 From: Matthias Brugger <matthias.bgg@gmail.com>
 
-Fix unit names to make dtbs_check happy.
+Hi Olof and Arnd,
 
-Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Link: https://lore.kernel.org/r/20210414144643.17435-2-matthias.bgg@kernel.org
-Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+Here come two smaller fixes for dtbs_check. I realized that we have tons
+of warnings, so I'll try to get rid of them over time, but it will be a
+longer run :)
 
----
+Please have a look.
+Regards,
+Matthias
 
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 0ff7b67a6806..c5e822b6b77a 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -681,13 +681,13 @@ cpu_thermal: cpu_thermal {
- 				sustainable-power = <5000>;
- 
- 				trips {
--					threshold: trip-point@0 {
-+					threshold: trip-point0 {
- 						temperature = <68000>;
- 						hysteresis = <2000>;
- 						type = "passive";
- 					};
- 
--					target: trip-point@1 {
-+					target: trip-point1 {
- 						temperature = <80000>;
- 						hysteresis = <2000>;
- 						type = "passive";
-@@ -1103,7 +1103,7 @@ u2port0: usb-phy@0 {
- 				status = "okay";
- 			};
- 
--			u3port0: usb-phy@0700 {
-+			u3port0: usb-phy@700 {
- 				reg = <0x0700 0x900>;
- 				clocks = <&clk26m>;
- 				clock-names = "ref";
+
+Matthias Brugger (2):
+  arm64: dts: mt8183-pumpkin: fix dtbs_check warning
+  arm64: dts: mt8183: fix dtbs_check warning
+
+ arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts | 4 ++--
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi        | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
 -- 
 2.30.2
 
+
+_______________________________________________
+Linux-mediatek mailing list
+Linux-mediatek@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-mediatek
