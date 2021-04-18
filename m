@@ -1,25 +1,29 @@
-Return-Path: <torvalds@linuxfoundation.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2F19C433ED
-	for <soc@archiver.kernel.org>; Sun, 18 Apr 2021 20:36:31 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 5E8EF60E0B; Sun, 18 Apr 2021 20:36:31 +0000 (UTC)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 254A0610A1
-	for <soc@kernel.org>; Sun, 18 Apr 2021 20:36:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 254A0610A1
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=torvalds@linuxfoundation.org
-Received: by mail-lf1-f47.google.com with SMTP id i10so16879719lfe.11
-        for <soc@kernel.org>; Sun, 18 Apr 2021 13:36:31 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 643DFC433B4
+	for <linux-kernel@archiver.kernel.org>; Sun, 18 Apr 2021 20:36:34 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 41C9A610A1
+	for <linux-kernel@archiver.kernel.org>; Sun, 18 Apr 2021 20:36:34 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S232255AbhDRUhB (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Sun, 18 Apr 2021 16:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229488AbhDRUhA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 18 Apr 2021 16:37:00 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA58C06174A
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Apr 2021 13:36:31 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id z13so35735727lfd.9
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Apr 2021 13:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -33,40 +37,46 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=+njT44QYZ3Qq5BMIpyAraB9HjcJytfPjL+0P2G7goO4=;
-        b=gGGT3yLMIt3fyM8BeXq75mw0AjuX07x9bu6T5G7NC8dJWa8I2uV7vRFFpdGGAXK7hx
-         BspvZnV6sw5ePt779mzDTj/UockE5djgheg7jqiuIZ8GG98rRlqCoZOj6wo+9WoXiUFo
-         ztL3PZiWb/NtsMHjIxkH6Q3A5sfoDmx1Fu9ve87/1HNAZBrnIlxpz8h4EaY1Eus883Nr
-         vdaGetoR8mg8f874mZp+/HXpEb3SkIUeA8UwmGVZM692pKVXT8hl1AHJPPDn3hHAlgXx
-         D/aY2TDk0eQPBHuppbiw2WwqjaCxhr+9l8g+vwKKztbZ81yVPw7re9Z3WaGbzGz4rEDm
-         fvnw==
-X-Gm-Message-State: AOAM5334McGWkNnMQdenK/qSOamOsOLiYtm765HtVGNOMJ7rfXrIcAvD
-	Hooo/EkD9Cv2KpZo9R/YohvMHl8kQnmmjv+T
-X-Google-Smtp-Source: ABdhPJz4nmOClfg+nC4ME/Njw/R3Yrl/1sTfiuN4ZguOJVwkA22oXhV2ajdYq6srcWE+RKnAwQtiOQ==
-X-Received: by 2002:a05:6512:3b25:: with SMTP id f37mr829741lfv.127.1618778189453;
+        b=IG5fbuLCTCIPfmFrUuG60GTl49fB/VhcYozER6vK1Xfn+RwFIvUB9kihxG1xBnwpdb
+         ggyR4LUo681q7HwI1LU9WQwMX97euUfERZg06QNUmS5DgeZo/xdpQ7hOVLOOKcQ2IxkL
+         beodWIGJPGoYUw7Ng9OxJJFKe4CjmKW/bsbPE6mlzH0mYtF8N23qDdPfGpVvvJBNG58o
+         pJkgIQFBy/BSw/J7PgGT3BrEZTPil3M4uO+AYDVBu8hsyFwfBM3EJoqvxwlkxDs5KLeT
+         2lGCl2Ezk1LkB3a+SlB++21L+TR8ZBpPMJNZBM29s+7azsaJ366q9IWq0hR2kLDDY5Pi
+         i3/Q==
+X-Gm-Message-State: AOAM530uyvFohbZaSpRofht70LTIoAl9gX/IZeVBq/ic37RAPPLBUIfX
+        Jj4fG2OsUAuv7fwQhwZVu009sybTh+z6tKto
+X-Google-Smtp-Source: ABdhPJzpFdLmJTTeNPMWhC3jeAscyN+drlTQrQkIV2s9qcsSWV8RIt+XY/3e/zhbu/cejSfF15UK/Q==
+X-Received: by 2002:a19:6906:: with SMTP id e6mr3454233lfc.514.1618778189550;
         Sun, 18 Apr 2021 13:36:29 -0700 (PDT)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
-        by smtp.gmail.com with ESMTPSA id x26sm1626341lfn.269.2021.04.18.13.36.28
-        for <soc@kernel.org>
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
+        by smtp.gmail.com with ESMTPSA id z2sm935775ljz.116.2021.04.18.13.36.28
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Sun, 18 Apr 2021 13:36:29 -0700 (PDT)
-Received: by mail-lf1-f50.google.com with SMTP id x19so22364510lfa.2
-        for <soc@kernel.org>; Sun, 18 Apr 2021 13:36:28 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id 12so52593399lfq.13
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Apr 2021 13:36:28 -0700 (PDT)
 X-Received: by 2002:a19:ca0d:: with SMTP id a13mr1019571lfg.253.1618778188783;
  Sun, 18 Apr 2021 13:36:28 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAK8P3a3h0QDvv-0yTVOMjx-8vUUcAFTQ6di71b2DwCELHNpPLw@mail.gmail.com>
  <CAK8P3a3oQm7P=Mj2xU=8v=g82mN-OXk7yrPmFMcK0XpMpwRctg@mail.gmail.com>
 In-Reply-To: <CAK8P3a3oQm7P=Mj2xU=8v=g82mN-OXk7yrPmFMcK0XpMpwRctg@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 18 Apr 2021 13:36:13 -0700
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 18 Apr 2021 13:36:13 -0700
 X-Gmail-Original-Message-ID: <CAHk-=wgNrFFVxF-9g1bjRZaG2OL4Big1_aKTMFyGagrhVNx2Kw@mail.gmail.com>
 Message-ID: <CAHk-=wgNrFFVxF-9g1bjRZaG2OL4Big1_aKTMFyGagrhVNx2Kw@mail.gmail.com>
 Subject: Re: [GIT PULL] Re: ARM SoC fixes for v5.12, part 2
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Tony Lindgren <tony@atomide.com>
+Cc:     SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210418203613.4XwOHPpVFkmevaq-TrhacApdK-eH64TvWGb3fcR9QtI@z>
 
 On Sun, Apr 18, 2021 at 12:24 PM Arnd Bergmann <arnd@kernel.org> wrote:
 >
