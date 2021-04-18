@@ -1,181 +1,129 @@
-Return-Path: <SRS0=AN+G=JO=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-25.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1208CC433ED
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 17 Apr 2021 01:14:12 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 842AB60233
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 17 Apr 2021 01:14:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 842AB60233
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
-	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=bRrOYcaGWOEiCp8LVewXFhkaRLnf+dGXPazSeIhZ10w=; b=Q8HWCNObdovleBRgSFNAbwA/s
-	m6gvmNcAn5EmK5G3Io7eNoGK/YF3Djdp+F1m4iSHEDM5OBPE8k3wyPZIbUg9tvPhsy617nlwqu6Me
-	+LiPg+l2dLp1gJxYFlWkJqnagnXxmpCFSvkMTykAf+fwOIckJ4rl5HZATXj/CnnRfBAIJZ+I0+4tV
-	l26ylnnlfxjY5NrPO213v8EiSPCWV5dt7gQWSmkbNkqPQ0Rwem8kzgsUbsm8LbNZW5lZYvFxsbXRI
-	Sv8E7ujJhHR8eW6WUfjqkSEgpPkOzcEslqqFiq8iiTDGfcg9Kg5qK+7Iv1vsZOhdP6TUW1hKEU493
-	NAPqlhyow==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lXZVX-003w7o-1u; Sat, 17 Apr 2021 01:12:23 +0000
-Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lXZUs-003vyJ-Fm
- for linux-arm-kernel@desiato.infradead.org; Sat, 17 Apr 2021 01:11:43 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
- MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
- :Reply-To:Content-Type:Content-ID:Content-Description;
- bh=DjE5M9M5jRthI7V37X8gqi/YzZYKLarjADVCR4EpqlU=; b=ctv5j5cgovb40McaslpPsMeh2Q
- fNZ0hLy3HsyJ1onD4BhbWV9NV05NG7naDLPGXo3Y1Zhc5mwcNzxXpjcUEWJ/6rCj4SwAPDTDhNXVO
- g/1SRqSYial52+tFJ7I4XJAPg95UKOrg51kE9IJKOlADznrYbVfFBNhnQPOroXibnnOByJPzYbC1u
- T6lpORMSnyQHpKntnsiKLZIZYLnYHNmr/yf68TOv6+mgsjYu8vyCnOMGXPTJ6waMC21lKA+i2Bfzm
- tNZ5vDufINcOChnt834ctHUiRLhEEI0cAquT2uLzF4+bjXGfQt5vPLYp2l6ewD4VRwFegWtYxwEib
- BVO9sgbQ==;
-Received: from mail-pf1-x42f.google.com ([2607:f8b0:4864:20::42f])
- by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lXZUo-009p2L-0d
- for linux-arm-kernel@lists.infradead.org; Sat, 17 Apr 2021 01:11:41 +0000
-Received: by mail-pf1-x42f.google.com with SMTP id o123so19439816pfb.4
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 16 Apr 2021 18:11:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=DjE5M9M5jRthI7V37X8gqi/YzZYKLarjADVCR4EpqlU=;
- b=rIkha+FoUYvB7CL0e1okwuoTh16BMF5NzOjcugAU5HxEkojxwQX0EYuq+NnFI9uSD5
- Fk2ta2jZp/LDO1mbohtJ6mKrSBb+P8cTDHXl5Nht2hEvgRR7/dHzZXJkVb23lpJC9ww+
- TLGMUPy1+ngmU+rJdKkX5SeP6E/7PNSHPdAeU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=DjE5M9M5jRthI7V37X8gqi/YzZYKLarjADVCR4EpqlU=;
- b=L8yH7NHtGIh9M9eWLg6YwjLYZTlhpqYms8lHnN/iZv+rYA6yJHMrNrJBR2EfL7u2jS
- WHcmi65YrZ8uh+Bu+W4g3//iX1VLZi4djwxeSKy2tzuyOfRUSG0X9XxBPGHBJbrtYtqZ
- F5gnmx1uOVqXWFdcGZCURwFlCZAyeK//k2HMWrqU360G9RpXObZrwdZ3yTbocjcjlIok
- IcLTMRY+/tVvfPxhhmxTKfAgt+T8G7hIBSPSqnhtoVUMRI+h1JOwb7QzawsXd2MAEeBg
- YTotegAkwAf7zkFLdWeU43kVIbNBEH2AQpxL66oZo3AKuKjS5IwUQRoBGmD81LM/24Tm
- 3axA==
-X-Gm-Message-State: AOAM5332Ox4NXKP680GrPVmq61IBmkBKE8p+tH81eSzBlxzFprKO4LHA
- DQ7YaTjMnwQrGmwWqaPq/blbQA==
-X-Google-Smtp-Source: ABdhPJxYL4jwj2wr5/CUQx0LynwDfVQMtuuKB+roDjT7Tn79/nRKrbabWXhRKM4RNtQReyLD/qFe3A==
-X-Received: by 2002:a62:cf83:0:b029:24a:935:e2f1 with SMTP id
- b125-20020a62cf830000b029024a0935e2f1mr10149297pfg.8.1618621897269; 
- Fri, 16 Apr 2021 18:11:37 -0700 (PDT)
-Received: from shiro.work (p345188-ipngn200408sizuokaden.shizuoka.ocn.ne.jp.
- [124.98.97.188])
- by smtp.googlemail.com with ESMTPSA id x17sm2181515pjr.0.2021.04.16.18.11.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Apr 2021 18:11:37 -0700 (PDT)
-From: Daniel Palmer <daniel@0x0f.com>
-List-Id: <soc.lore.kernel.org>
-To: devicetree@vger.kernel.org, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- robh+dt@kernel.org, olof@lixom.net, arnd@kernel.org
-Cc: w@1wt.eu,
-	Daniel Palmer <daniel@0x0f.com>
-Subject: [PATCH 3/3] ARM: dts: mstar: Add a dts for M5Stack UnitV2
-Date: Sat, 17 Apr 2021 10:10:15 +0900
-Message-ID: <20210417011015.2105280-4-daniel@0x0f.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20210417011015.2105280-1-daniel@0x0f.com>
-References: <20210417011015.2105280-1-daniel@0x0f.com>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A23F7C433ED
+	for <soc@archiver.kernel.org>; Sun, 18 Apr 2021 19:23:28 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 48D16610E7; Sun, 18 Apr 2021 19:23:28 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D33E60698
+	for <soc@kernel.org>; Sun, 18 Apr 2021 19:23:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1618773808;
+	bh=iB9FjRppP4uPT4mx09Rjt69lVT8mFvl7Tz7PFiF60P8=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=uFpyLfh3FkDQDFV0qW4xd/qVVi3sSe0FvtRvhW6tBQVrIsumFnW44LpoNv/H/aU0W
+	 krv5i6gbWP6mhFrQp7cL2Ana+8m5hTEBxb2q18xFGwFDpKO7VPwkSlLm7BG1JU/NFs
+	 vmuaWMVx7oVtmEVpHqEIkJuTPfzmc18jqUid7SOYkTe3aJmmBZgh6LkQxvAPH2SWzB
+	 KdGVjQq+L5ulU7aqNp/AIKikBB6DIb47lb3dPmj+yCk0NHdqp7gl2K7o1mjtOG1NK9
+	 bkcxjlRiCAdTYbb1GC4eJ5nCqLC3aVjvsJnFFzPE3UcDFq+JzTVm9+dtf2aqtc6fVl
+	 0nKpbkypFCYCQ==
+Received: by mail-wm1-f49.google.com with SMTP id f195-20020a1c1fcc0000b029012eb88126d7so6937541wmf.3
+        for <soc@kernel.org>; Sun, 18 Apr 2021 12:23:28 -0700 (PDT)
+X-Gm-Message-State: AOAM530yge0IBaV8KvV8Tlb+6Af7fCpvWVDP2HMqbLaPBFTj1wzg9o8I
+	1cep11F9uwFMQoeI//ozyhb8oPQ6co5Vha+4LHo=
+X-Google-Smtp-Source: ABdhPJyep2PToWXfhdBPzkd1wKVu3Qxp/XkPWTmabl4hRd99S2xazTQ77LZjLurtd7N8uEdQMwNXXOFH2hVTyD6hkE0=
+X-Received: by 2002:a05:600c:2282:: with SMTP id 2mr18324883wmf.84.1618773806698;
+ Sun, 18 Apr 2021 12:23:26 -0700 (PDT)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210416_181138_071395_D4622DB0 
-X-CRM114-Status: GOOD (  15.97  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210417011015.MjUBt7MYP5WnO8O3fl5jhaigLA6ruETjP9T31VSut4Y@z>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Sun, 18 Apr 2021 21:23:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3h0QDvv-0yTVOMjx-8vUUcAFTQ6di71b2DwCELHNpPLw@mail.gmail.com>
+Message-ID: <CAK8P3a3h0QDvv-0yTVOMjx-8vUUcAFTQ6di71b2DwCELHNpPLw@mail.gmail.com>
+Subject: ARM SoC fixes for v5.12, part 2
+To: Linus Torvalds <torvalds@linux-foundation.org>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Tony Lindgren <tony@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
 
-M5Stack are releasing a new widget based on the
-SigmaStar SSD202D. We have some support for the
-SSD202D so lets add a dts for it.
+The following changes since commit e49d033bddf5b565044e2abe4241353959bc9120:
 
-Link: https://m5stack-store.myshopify.com/products/unitv2-ai-camera-gc2145
-Signed-off-by: Daniel Palmer <daniel@0x0f.com>
----
- arch/arm/boot/dts/Makefile                    |  1 +
- .../dts/mstar-infinity2m-ssd202d-unitv2.dts   | 25 +++++++++++++++++++
- 2 files changed, 26 insertions(+)
- create mode 100644 arch/arm/boot/dts/mstar-infinity2m-ssd202d-unitv2.dts
+  Linux 5.12-rc6 (2021-04-04 14:15:36 -0700)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 8e5d4ab4e75e..66ddc7d0bd03 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1397,6 +1397,7 @@ dtb-$(CONFIG_ARCH_MILBEAUT) += milbeaut-m10v-evb.dtb
- dtb-$(CONFIG_ARCH_MSTARV7) += \
- 	mstar-infinity-msc313-breadbee_crust.dtb \
- 	mstar-infinity2m-ssd202d-ssd201htv2.dtb \
-+	mstar-infinity2m-ssd202d-unitv2.dtb \
- 	mstar-infinity3-msc313e-breadbee.dtb \
- 	mstar-mercury5-ssc8336n-midrived08.dtb
- dtb-$(CONFIG_ARCH_ASPEED) += \
-diff --git a/arch/arm/boot/dts/mstar-infinity2m-ssd202d-unitv2.dts b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-unitv2.dts
-new file mode 100644
-index 000000000000..a81684002e45
---- /dev/null
-+++ b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-unitv2.dts
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (c) 2021 thingy.jp.
-+ * Author: Daniel Palmer <daniel@thingy.jp>
-+ */
-+
-+/dts-v1/;
-+#include "mstar-infinity2m-ssd202d.dtsi"
-+
-+/ {
-+	model = "UnitV2";
-+	compatible = "m5stack,unitv2", "mstar,infinity2m";
-+
-+	aliases {
-+		serial0 = &pm_uart;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-+
-+&pm_uart {
-+	status = "okay";
-+};
--- 
-2.31.0
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+tags/arm-fixes-5.12-3
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+for you to fetch changes up to b9a9786a13ea158ee3b23614217f2e3158178421:
+
+  Merge tag 'omap-for-v5.12/fixes-rc6-signed' of
+git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into
+arm/fixes (2021-04-08 17:56:09 +0200)
+
+----------------------------------------------------------------
+ARM SoC fixes for v5.12, part 2
+
+Another smaller set of fixes for three of the Arm platforms:
+
+TI OMAP:
+
+    Fix swapped mmc device order also for omap3 that got changed with the
+    recent PROBE_PREFER_ASYNCHRONOUS changes. While eventually the aliases
+    should be board specific, all the mmc device instances are all there in
+    the SoC, and we do probe them by default so that PM runtime can idle the
+    devices if left enabled from the bootloader.
+
+Qualcomm Snapdragon:
+
+    This bypasses the, recently introduced, interconnect handling in the
+    GENI (serial engine) driver when running off ACPI, as this causes the
+    GENI probe to fail and the Lenovo Yoga C630 to boot without keyboard
+    and touchpad.
+
+Allwinner:
+
+    One 32kHz clock fix for the beelink gs1, a CD polarity fix for the SoPine,
+    some MAINTAINERS maintainance, and a clk / reset switch to our headers.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+----------------------------------------------------------------
+Andre Przywara (1):
+      arm64: dts: allwinner: Fix SD card CD GPIO for SOPine systems
+
+Arnd Bergmann (3):
+      Merge tag 'sunxi-fixes-for-5.12-1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into
+arm/fixes
+      Merge tag 'qcom-drivers-fixes-for-5.12' of
+git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into
+arm/fixes
+      Merge tag 'omap-for-v5.12/fixes-rc6-signed' of
+git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into
+arm/fixes
+
+Chen-Yu Tsai (1):
+      arm64: dts: allwinner: h6: Switch to macros for RSB clock/reset indices
+
+Jernej Skrabec (1):
+      arm64: dts: allwinner: h6: beelink-gs1: Remove ext. 32 kHz osc reference
+
+Maxime Ripard (2):
+      MAINTAINERS: Add our new mailing-list
+      MAINTAINERS: Match on allwinner keyword
+
+Shawn Guo (1):
+      soc: qcom: geni: shield geni_icc_get() for ACPI boot
+
+Tony Lindgren (3):
+      ARM: OMAP2+: Fix warning for omap_init_time_of()
+      ARM: dts: Fix swapped mmc order for omap3
+      ARM: OMAP2+: Fix uninitialized sr_inst
+
+ MAINTAINERS                                             | 2 ++
+ arch/arm/boot/dts/omap3.dtsi                            | 3 +++
+ arch/arm/mach-omap2/board-generic.c                     | 2 +-
+ arch/arm/mach-omap2/sr_device.c                         | 2 +-
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts | 4 ++++
+ arch/arm64/boot/dts/allwinner/sun50i-a64-sopine.dtsi    | 2 +-
+ arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts | 4 ----
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi            | 4 ++--
+ drivers/soc/qcom/qcom-geni-se.c                         | 3 +++
+ 9 files changed, 17 insertions(+), 9 deletions(-)
