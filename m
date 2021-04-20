@@ -1,70 +1,120 @@
-Return-Path: <SRS0=f6C9=JR=baylibre.com=khilman@kernel.org>
+Return-Path: <SRS0=nS3V=JR=lists.infradead.org=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46B9CC433B4
-	for <soc@archiver.kernel.org>; Tue, 20 Apr 2021 23:04:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id EF01161410; Tue, 20 Apr 2021 23:04:04 +0000 (UTC)
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1620FC433ED
+	for <linux-amlogic@archiver.kernel.org>; Tue, 20 Apr 2021 23:04:24 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DD4A561411
-	for <soc@kernel.org>; Tue, 20 Apr 2021 23:04:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DD4A561411
+	by mail.kernel.org (Postfix) with ESMTPS id F2B5B61410
+	for <linux-amlogic@archiver.kernel.org>; Tue, 20 Apr 2021 23:04:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F2B5B61410
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=khilman@baylibre.com
-Received: by mail-pl1-f179.google.com with SMTP id u15so11975295plf.10
-        for <soc@kernel.org>; Tue, 20 Apr 2021 16:04:03 -0700 (PDT)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc:To:From:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
+	bh=ftMLaJl4eCJSGeYSHIUTbd4zolwn0JmCgQjYWSBF1fU=; b=oa2EFXXVBCX6p3I0MVW4sJjFKQ
+	JgN0xTygSbdORm2R5PheeQKgJaq3R6aQjvf8fSeypQkjOSnsjqt0Rs150b3VVvDpbKW1jOgw6wgFw
+	9JJ5C4IHcRzBAlAb/2DhjN9UPfSQNXKPUefZVpV3XCWYmU+oAvj9GdoXlrNP/sirv2q75qgt7x823
+	9/XgkpXXXRlUt4/rogHHCS7QTsiqCBCEa3qlhKBt8b0CgCSgFSDPgLCqJw+QKgDzjE3Yakd16gqIW
+	FiWtGbMGzCIX3znpc/jhj2KbsEp4rmcoZm0G8q2cLDEsesPFFC+7LjS8ca1GHxlw4A2MgUN6raZBC
+	xeeA3m+g==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lYzPg-00DEtZ-8f; Tue, 20 Apr 2021 23:04:13 +0000
+Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lYzPd-00DEtN-0u
+ for linux-amlogic@desiato.infradead.org; Tue, 20 Apr 2021 23:04:09 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+ MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+ Content-ID:Content-Description:In-Reply-To:References;
+ bh=hot/XD38hSJlw3yqwRZmpSJt456nIc70hCLVFo4byo8=; b=igbBjChuT9wS55yjLjpljLgHJx
+ YvHmPFUJhueaGb9lDLHBUBtv6HAcWMs+a0m5eiAY+rUWWLVrqLIaTH4FTOvftPRZYDm0SdWhu4A+1
+ jh9a2E1sAMKYu1zo564shG/qnaTEkLDkcrQo+fkYx4u/ANd/52QVKmoEzvINPSmqbQ3laVY/wS7u0
+ w3QWt7ziDAot+HY1euZLB38F2Af00zk1Q5B5nrkbhzt8bz6D4noJvrFp7zfbI7B9LFHhaDN+g6jyc
+ AyBdmVXEYXw4KFF/SQ7sCC3y/J0G8g7XOQyZCKy1skx1tgQ6acCgeSBq9MgxDRaDepmA/e5FKjNIJ
+ YcNO7CNg==;
+Received: from mail-pl1-x62e.google.com ([2607:f8b0:4864:20::62e])
+ by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lYzPY-00CTJu-Nu
+ for linux-amlogic@lists.infradead.org; Tue, 20 Apr 2021 23:04:07 +0000
+Received: by mail-pl1-x62e.google.com with SMTP id n10so9378942plc.0
+ for <linux-amlogic@lists.infradead.org>; Tue, 20 Apr 2021 16:04:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hot/XD38hSJlw3yqwRZmpSJt456nIc70hCLVFo4byo8=;
-        b=Xz8NVSkcPXFO1td97DWfz1ah5C4XlY10Ij3tzxheolzhCwhywPplg55PbHRAb9Kol9
-         LS9LXv5y236jvzZkMtT5nq2QyzL3OPfsKWaE91k6cFmBDXkdw4EiPfytYJxuma5qt+mT
-         +Rx8qtW2F6Aw2aMItW4e6mlhFc549OoYKpTq8C20uvKDLfI17n61OTeyAuiLqIAN2Bpt
-         MWcrRV8c345vM52ejzaIaCl66gwfdhTkQdQ4vXjl24l2LSV9gGNOCc2219bo4DMKa6JB
-         YvsIYFCQz6xb+byiJf8byKFH/u6ipPX6BsFs1uu7wwZqZP6A0t6BQIB1O22ELsjJ+LFK
-         2cFg==
+ d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=hot/XD38hSJlw3yqwRZmpSJt456nIc70hCLVFo4byo8=;
+ b=Xz8NVSkcPXFO1td97DWfz1ah5C4XlY10Ij3tzxheolzhCwhywPplg55PbHRAb9Kol9
+ LS9LXv5y236jvzZkMtT5nq2QyzL3OPfsKWaE91k6cFmBDXkdw4EiPfytYJxuma5qt+mT
+ +Rx8qtW2F6Aw2aMItW4e6mlhFc549OoYKpTq8C20uvKDLfI17n61OTeyAuiLqIAN2Bpt
+ MWcrRV8c345vM52ejzaIaCl66gwfdhTkQdQ4vXjl24l2LSV9gGNOCc2219bo4DMKa6JB
+ YvsIYFCQz6xb+byiJf8byKFH/u6ipPX6BsFs1uu7wwZqZP6A0t6BQIB1O22ELsjJ+LFK
+ 2cFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hot/XD38hSJlw3yqwRZmpSJt456nIc70hCLVFo4byo8=;
-        b=g9W3gdIzahUXEbO7R/7Q2y7tX4WbSBbC3f0C43OuxMjMsRS5x5zz+RJq8YH+dKVLnY
-         AXkn04qFVyX6l+vHyFpH6rg2XROswIgIWUvkjvJ2TnXi1vG9/i8COfEb5K30sQCd3eGf
-         6x/bXFvn0aRfmIv2TXVed5WaFDC2cSTB/u//2se6tEY1aOcOC7/4FgIzeku+gA200V2t
-         MITPrnaUYxa450n7kVkxZi3l/C3AD1bOqyie6fSKCtf8lQfDQMqUe9FzG16vZISaCaO1
-         5UkHh+kU2JOyM4AKjt31AhON50cQBT5QUVTlKWuXBPgBnEtqnEVGvrIU7jah339X0+lB
-         9Suw==
-X-Gm-Message-State: AOAM530EZmDWUNFTkiFi7HnXqrCBGoax3xKEXI2AfWzCG3T8o+n7UDZE
-	qN69jlKSCitri7Ahvh8IPbirmw==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=hot/XD38hSJlw3yqwRZmpSJt456nIc70hCLVFo4byo8=;
+ b=AIFEzQ7QX+jr+dYidCw9mvuHgMeZOcT61l3b28jKv1GE5QupCDkIVXZ72oJAJC/6PK
+ x/KhP60RnMv7v2a2Eu4NyiJrjLWZM6woOVwoyivYzTqeIG/gWEivOJ5kCh4iK0O+ivN+
+ rmXdVYIwSSxtbAQZ3cP/mr0B4KIA6KJvSfM5TKYvDtrKSnADtsB9kEYYN2Qzwv3SJgkB
+ U49ebSpBw8HKIVg+P1k4CGYXHF8iw6StcqW1NE0jbWvKwR0l09raecS0lSjooPOYEWDR
+ LKk+YLmS4gnsVK3AjtVTg2alppyIvS9ah5y3DlT11fbe2PKlnNwoHWRU/MGDPVZl7XiT
+ 5v8g==
+X-Gm-Message-State: AOAM531mKARUH7VWhavChSTClDnbHGo3+FbZonN84piHCdLaXwz4GQ13
+ MUemiHEePUVEfzQhPM9OWtP+UA==
 X-Google-Smtp-Source: ABdhPJwvqz79PjHQemZUYMkP617oxKVf0o9rqM+dMwjhmO+k1dxrcManmIUzdTxCpwJO0ML4//PLGw==
-X-Received: by 2002:a17:902:9002:b029:e6:c95f:2a1d with SMTP id a2-20020a1709029002b02900e6c95f2a1dmr31376484plp.79.1618959843160;
-        Tue, 20 Apr 2021 16:04:03 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id a190sm87079pfd.118.2021.04.20.16.04.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Apr 2021 16:04:02 -0700 (PDT)
+X-Received: by 2002:a17:902:9002:b029:e6:c95f:2a1d with SMTP id
+ a2-20020a1709029002b02900e6c95f2a1dmr31376484plp.79.1618959843160; 
+ Tue, 20 Apr 2021 16:04:03 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net.
+ [71.197.186.152])
+ by smtp.gmail.com with ESMTPSA id a190sm87079pfd.118.2021.04.20.16.04.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 20 Apr 2021 16:04:02 -0700 (PDT)
 From: Kevin Hilman <khilman@baylibre.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>
 Cc: devicetree@vger.kernel.org,
 	linux-amlogic@lists.infradead.org
 Subject: [PATCH] arm64: dts: amlogic: misc DT schema fixups
 Date: Tue, 20 Apr 2021 16:04:02 -0700
-Message-Id: <20210420230402.8807-1-khilman@baylibre.com>
+Message-ID: <20210420230402.8807-1-khilman@baylibre.com>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210420_160404_882666_89E876B6 
+X-CRM114-Status: GOOD (  15.48  )
+X-BeenThere: linux-amlogic@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-amlogic.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-amlogic>, 
+ <mailto:linux-amlogic-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-amlogic/>
+List-Post: <mailto:linux-amlogic@lists.infradead.org>
+List-Help: <mailto:linux-amlogic-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-amlogic>,
+ <mailto:linux-amlogic-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-amlogic" <linux-amlogic-bounces@lists.infradead.org>
+Errors-To: linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210420230402.nMQ8SozRvY69KW5P7mu1JaAtKDDMsGJFVUifANNIPaA@z>
 
 Take a pass at cleaning up a bunch of warnings
 from 'make dtbs_check' that have crept in.
@@ -431,3 +481,8 @@ index b2a4e823c1d8..8c327c03d845 100644
 -- 
 2.29.2
 
+
+_______________________________________________
+linux-amlogic mailing list
+linux-amlogic@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-amlogic
