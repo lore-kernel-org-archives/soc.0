@@ -1,83 +1,127 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=AlHn=JS=lists.infradead.org=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47066C433ED
-	for <linux-devicetree@archiver.kernel.org>; Wed, 21 Apr 2021 07:51:44 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 19AC861435
-	for <linux-devicetree@archiver.kernel.org>; Wed, 21 Apr 2021 07:51:44 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237454AbhDUHwP (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Wed, 21 Apr 2021 03:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237471AbhDUHwP (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Wed, 21 Apr 2021 03:52:15 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F728C06174A
-        for <devicetree@vger.kernel.org>; Wed, 21 Apr 2021 00:51:42 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id o21-20020a1c4d150000b029012e52898006so705496wmh.0
-        for <devicetree@vger.kernel.org>; Wed, 21 Apr 2021 00:51:42 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A128C433B4
+	for <linux-amlogic@archiver.kernel.org>; Wed, 21 Apr 2021 07:52:05 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 3624F61182
+	for <linux-amlogic@archiver.kernel.org>; Wed, 21 Apr 2021 07:52:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3624F61182
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
+	References:Cc:To:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=Q9xWRcI14VzslZEZvSqkIwqOPT7xyYsiLZCYgmwCH28=; b=Aj3fEObHcADzzZ+s7seKVCJXg
+	6Che/NlUw35+7JXXC6UgqYU7QeCPpt72oTk23BMxE0HbvOsglgvGwJ5PEY6VshUq1YrQblbyIixnj
+	KsjMKahDkljbidGA5+OdNLGXutI55OPnUVbKoHJMa+erTPn2gLjaThhQO3ub8Gaqkr0U3H0Skdv90
+	/zz9jJDIYBP0lcNldaRv3z6KqPgmJExgpItyR4ADdZk2infhC0036wtHopTzXEIE6CRy4bqduRMPm
+	i62BKvPJ9Q9YJ8Zpo++/lioHQO+tjvxA5Htf2tzpNpVj7nhjtxXwaeykRWlHI726kEDSJDGfO82YZ
+	lJBPYJohg==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lZ7eI-00DvcL-SS; Wed, 21 Apr 2021 07:51:51 +0000
+Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lZ7eG-00Dvbx-KU
+ for linux-amlogic@desiato.infradead.org; Wed, 21 Apr 2021 07:51:49 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+ Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+ Subject:Sender:Reply-To:Content-ID:Content-Description;
+ bh=2P4oG7HNo+SuYtU66Lpge91f6btqFbYk+DdM40W1Mys=; b=YFq1+c20ro25scQ5B1V483iQP4
+ OGieB8uhBbelZmClFoje0dt22jv0i+h8bySpKisS6Kv0ydjkxdYHPfJlzLCHwzv3t2YB2W/WiFF9h
+ 7hb2ifUcEHKJtU4uwSxb2B6BzwA9kNsUBZWY9GH7gUYujOgByVQuuvvs26epl8D21ESXuAPEhg2De
+ Ns03J5Lh86Mi58CB2XtUvGLYdjvoOpi4FdbVqBUFy7Va4+oEMJGt+idJu/cTYAbOwt0yjdJ9zD+sL
+ GeE89JaZzeJf/HbHhXscz54I+fg1XggY85ZN2tsmBH9+hsbZlYqMVbyYF7XYn1ChuO3usyi9w8mHX
+ ekqJebEg==;
+Received: from mail-wm1-x32c.google.com ([2a00:1450:4864:20::32c])
+ by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lZ7eA-00Cgaq-VZ
+ for linux-amlogic@lists.infradead.org; Wed, 21 Apr 2021 07:51:47 +0000
+Received: by mail-wm1-x32c.google.com with SMTP id k128so21603122wmk.4
+ for <linux-amlogic@lists.infradead.org>; Wed, 21 Apr 2021 00:51:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2P4oG7HNo+SuYtU66Lpge91f6btqFbYk+DdM40W1Mys=;
-        b=z3/u6OZkBdphC2McY1DgqhO0PkFD9aCB11OnPgMNqnUFI9fFLvHqHdCLSkbDWb+B6Q
-         ftXq1w29JCnXnxlxqaMsjQt2nQwCzgTF/kNyaxxGDDgn1r4oFzilmDLU1W14pbD1FWwk
-         MlFyJvZ30zLWCgv5gf0rg3BGODpkBuIzBqa25zDix0mr+RapkLBufyD9UGU7bdxA1J6w
-         vyZkvwJJfzllprlKirReAKAN4FLmMHHU/Ui8TqyBrXBaMSkqyt/8sU9TtJ0MqbLFrjwh
-         KraiH4ER1pxa2bCgPYmgA7GLBmf5BsNHF137kkIgSkSwVgp2GlUxFHU75hZwqPAwjXSI
-         4Onw==
+ d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=2P4oG7HNo+SuYtU66Lpge91f6btqFbYk+DdM40W1Mys=;
+ b=z3/u6OZkBdphC2McY1DgqhO0PkFD9aCB11OnPgMNqnUFI9fFLvHqHdCLSkbDWb+B6Q
+ ftXq1w29JCnXnxlxqaMsjQt2nQwCzgTF/kNyaxxGDDgn1r4oFzilmDLU1W14pbD1FWwk
+ MlFyJvZ30zLWCgv5gf0rg3BGODpkBuIzBqa25zDix0mr+RapkLBufyD9UGU7bdxA1J6w
+ vyZkvwJJfzllprlKirReAKAN4FLmMHHU/Ui8TqyBrXBaMSkqyt/8sU9TtJ0MqbLFrjwh
+ KraiH4ER1pxa2bCgPYmgA7GLBmf5BsNHF137kkIgSkSwVgp2GlUxFHU75hZwqPAwjXSI
+ 4Onw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=2P4oG7HNo+SuYtU66Lpge91f6btqFbYk+DdM40W1Mys=;
-        b=g1mr6GQo9Lb+MRRfkcdBDl5xhSdDCF7vtdx3hZJ4aIeJQ2jZQxCwnkgLpOxoiJA1RT
-         hm5th6Ks1WVInAyM6hBDbmM7maWIeP56C0gUhvZr68IkDxDBA7TlmxpOP35Y1oJXHvo+
-         fPUBIQbJal8hv8GYmimISu39kIzWTetVuB9JB3VH0u4MSMyoBQUFUedgighXCC7lg+Wc
-         3BwCcl9BlPsmOFDgkPFSkJYMD4RIg25S2jCLWQEvoDiaLIManWplrZOOX1tc+qd59v76
-         bLUBbWx5P8Jja+qo79fFsDRJfcHOeZPriYd/H0FjMSTe3XgcRaQPBp5upmwcX+6zhZcX
-         Rnfw==
-X-Gm-Message-State: AOAM533Ol0CbOB7JRmK3MOHKRv50oasnmybjvBiBzYIimbcYt2ukKqYj
-        oQU5jjM6DdTsh2G3znsDddWxyA==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=2P4oG7HNo+SuYtU66Lpge91f6btqFbYk+DdM40W1Mys=;
+ b=PM8Kary8qh7H8vCHIus+BQg+jsMMFMBt2YuxjWfxwnuZq6/BGTpwtnluVixw52ZhCe
+ gUug4ejdMjB0N/+2kaXABF3i3qtP7geAFd8++pkqANUQ5ysFoB12YeTUumHA7Dl5cvcp
+ xfjhIh2g47h3Q0+aYHXm+vYMqdZXm8MQpxxaY6ed9PsBynYmkGwpbDYJ75zTcfR2mWfJ
+ 4HK6rQth/nXd0FyU+V7tGg4CxHPR3B5D6MPUk3GYOZSSZIB6YuTjc69CNRFpyu+3fuIx
+ kOtmK+zDTDfVCH6/DtLikhHXFHKoSncLAwkkBMJk7OWPIhDj2Rysr6QrM81XHHnF7qSO
+ W5qA==
+X-Gm-Message-State: AOAM532+me6q1z0QbZIw+PmE9b6LkpM/cknknTgEAJrFsyPtZ5sakjzp
+ bDcFl0vT+NafYtRYguY0Gyihj+GAxlPnsCy0
 X-Google-Smtp-Source: ABdhPJxGfIwVljwt0ch8b7JClfDnBt9G4Bnf4/bwNmrGSmCntIKRvd9mMKse0unWvkoTLCcXvbeiqg==
-X-Received: by 2002:a05:600c:4149:: with SMTP id h9mr8215720wmm.43.1618991501104;
-        Wed, 21 Apr 2021 00:51:41 -0700 (PDT)
-Received: from ?IPv6:2a01:e0a:90c:e290:f781:73d5:3127:752d? ([2a01:e0a:90c:e290:f781:73d5:3127:752d])
-        by smtp.gmail.com with ESMTPSA id m2sm1386979wmq.15.2021.04.21.00.51.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Apr 2021 00:51:40 -0700 (PDT)
+X-Received: by 2002:a05:600c:4149:: with SMTP id
+ h9mr8215720wmm.43.1618991501104; 
+ Wed, 21 Apr 2021 00:51:41 -0700 (PDT)
+Received: from ?IPv6:2a01:e0a:90c:e290:f781:73d5:3127:752d?
+ ([2a01:e0a:90c:e290:f781:73d5:3127:752d])
+ by smtp.gmail.com with ESMTPSA id m2sm1386979wmq.15.2021.04.21.00.51.39
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 21 Apr 2021 00:51:40 -0700 (PDT)
 Subject: Re: [PATCH] arm64: dts: amlogic: misc DT schema fixups
 List-Id: <soc.lore.kernel.org>
-To:     Kevin Hilman <khilman@baylibre.com>, Arnd Bergmann <arnd@arndb.de>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org
+To: Kevin Hilman <khilman@baylibre.com>, Arnd Bergmann <arnd@arndb.de>,
+ soc@kernel.org, Rob Herring <robh+dt@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org
 References: <20210420230402.8807-1-khilman@baylibre.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
+From: Neil Armstrong <narmstrong@baylibre.com>
 Organization: Baylibre
 Message-ID: <0a28f65f-716a-d67e-6fc4-2785c19b7ab3@baylibre.com>
-Date:   Wed, 21 Apr 2021 09:51:40 +0200
+Date: Wed, 21 Apr 2021 09:51:40 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
 In-Reply-To: <20210420230402.8807-1-khilman@baylibre.com>
-Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210421_005143_113465_17B4F9B5 
+X-CRM114-Status: GOOD (  24.91  )
+X-BeenThere: linux-amlogic@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-amlogic.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-amlogic>, 
+ <mailto:linux-amlogic-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-amlogic/>
+List-Post: <mailto:linux-amlogic@lists.infradead.org>
+List-Help: <mailto:linux-amlogic-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-amlogic>,
+ <mailto:linux-amlogic-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
+Sender: "linux-amlogic" <linux-amlogic-bounces@lists.infradead.org>
+Errors-To: linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210421075140.EQZEnKEg3DXYl3_DGxcczudxAo4xxCw-L2LwxMS215E@z>
 
 On 21/04/2021 01:04, Kevin Hilman wrote:
 > Take a pass at cleaning up a bunch of warnings
@@ -457,3 +501,8 @@ Apart that, the other changes are OK.
 
 
 Neil
+
+_______________________________________________
+linux-amlogic mailing list
+linux-amlogic@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-amlogic
