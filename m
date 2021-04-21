@@ -1,126 +1,459 @@
-Return-Path: <SRS0=AlHn=JS=lists.infradead.org=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2601BC433ED
-	for <linux-amlogic@archiver.kernel.org>; Wed, 21 Apr 2021 06:32:48 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BB88A613B0
-	for <linux-amlogic@archiver.kernel.org>; Wed, 21 Apr 2021 06:32:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BB88A613B0
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
-	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=Nn3IwNVwQYzKNuA/RnVhnt8zBqSRUU7SWRlH8taTm9s=; b=NCBpKZNM6nz18GF0MgGcmiiOw
-	CWZJkVpCQTeApMbDLjZfErn0Pvu9p4n0E6McU9bS6I1SLNwONQ9Uf5aQ/nAE2OH2v6mcxca0q6nvR
-	ty+dQj+i09tzWrx3dxMshGOCkMq5F8JisFQZ/grB8Ol+a49G4rcNE6Vfc8+TDcZFy97gjU0qAbZ9g
-	P3pLoQZ/c//AJj5nYxWpQe4VvVEtCxNAKXS41nxYYahFdwREOG02AzknVVp66yBia16QJ3wEe2mRa
-	SuG89jw+v5g2WgfzeAhrLtWsQ60Au6mQRoSwzjlKNlS+BUzKOCa7yD/X413yHxXEygnGjxCAfD3Cl
-	KYAdfr7oA==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lZ6Pd-00Do4m-VV; Wed, 21 Apr 2021 06:32:38 +0000
-Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lZ6Pa-00Do4W-4C
- for linux-amlogic@desiato.infradead.org; Wed, 21 Apr 2021 06:32:34 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=infradead.org; s=bombadil.20210309; h=Content-Type:Cc:To:Subject:Message-ID
- :Date:From:In-Reply-To:References:MIME-Version:Sender:Reply-To:
- Content-Transfer-Encoding:Content-ID:Content-Description;
- bh=myo3+/Q9DOAMfM5xrUu2iVreKWlbYPjuCyEepjLnQuE=; b=F+s5KiM9xYb/Q9c1+vk3StiiVn
- dhyiaLgb5YvyotrUms3XC5LqVicSnXkG/TlCJLtz30QrJZrtqHfwJrsGyw7FNDZlGq0fCIaNmx5K1
- 1uZho7FSNUqUoe3IaEn2rMPDUQAgx99KkDg5Kx7GNgMJi5mkKCASRJeZcwd8q905FYS0XJ7dmre25
- /6dgXQY+47mZwl5sxQYzpu/8fCC1LwM/m2bFYTdOCB7POiLFlyP6cT8YxAnqoJElF8aQDsQ0C9DtY
- HXxNLTNJcXgJwS4RqBn0yusbcN/1tT7IRc8Fgm4M4nMTX/KQj8VCkuf3nB8kU51Go57hY5vq39HMU
- QVL88ZvQ==;
-Received: from mout.kundenserver.de ([212.227.126.131])
- by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lZ6PW-00CdyK-J1
- for linux-amlogic@lists.infradead.org; Wed, 21 Apr 2021 06:32:32 +0000
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N9MlI-1lcF4x1cQO-015MlB for <linux-amlogic@lists.infradead.org>; Wed, 21 Apr
- 2021 08:32:27 +0200
-Received: by mail-wr1-f54.google.com with SMTP id w4so36336731wrt.5
- for <linux-amlogic@lists.infradead.org>; Tue, 20 Apr 2021 23:32:27 -0700 (PDT)
-X-Gm-Message-State: AOAM5301bmrhviZ9OPf7l5h+HfyMtGKXRP588ATGzHCTDSwAIjHPPWL8
- NT64pOrE4V0D1ug2UPku5/yw5Veg2+cm3bi7TK4=
-X-Google-Smtp-Source: ABdhPJz8KQSQMuG/h3FrLd/30pB27ABNbzxI+tJP3O1/oI7h1c5S/4lxz8O5iRBe9dLjnXhf6FKlZ1EzgS+Z6bRkkoQ=
-X-Received: by 2002:adf:e483:: with SMTP id i3mr25900890wrm.286.1618986747076; 
- Tue, 20 Apr 2021 23:32:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210420230402.8807-1-khilman@baylibre.com>
-In-Reply-To: <20210420230402.8807-1-khilman@baylibre.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 21 Apr 2021 08:32:09 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2bJL732XttLnjRH_1TA3EpuVaPyBDD0NbhbCO0WmqcNw@mail.gmail.com>
-Message-ID: <CAK8P3a2bJL732XttLnjRH_1TA3EpuVaPyBDD0NbhbCO0WmqcNw@mail.gmail.com>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47066C433ED
+	for <linux-devicetree@archiver.kernel.org>; Wed, 21 Apr 2021 07:51:44 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 19AC861435
+	for <linux-devicetree@archiver.kernel.org>; Wed, 21 Apr 2021 07:51:44 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S237454AbhDUHwP (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Wed, 21 Apr 2021 03:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237471AbhDUHwP (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Wed, 21 Apr 2021 03:52:15 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F728C06174A
+        for <devicetree@vger.kernel.org>; Wed, 21 Apr 2021 00:51:42 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id o21-20020a1c4d150000b029012e52898006so705496wmh.0
+        for <devicetree@vger.kernel.org>; Wed, 21 Apr 2021 00:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2P4oG7HNo+SuYtU66Lpge91f6btqFbYk+DdM40W1Mys=;
+        b=z3/u6OZkBdphC2McY1DgqhO0PkFD9aCB11OnPgMNqnUFI9fFLvHqHdCLSkbDWb+B6Q
+         ftXq1w29JCnXnxlxqaMsjQt2nQwCzgTF/kNyaxxGDDgn1r4oFzilmDLU1W14pbD1FWwk
+         MlFyJvZ30zLWCgv5gf0rg3BGODpkBuIzBqa25zDix0mr+RapkLBufyD9UGU7bdxA1J6w
+         vyZkvwJJfzllprlKirReAKAN4FLmMHHU/Ui8TqyBrXBaMSkqyt/8sU9TtJ0MqbLFrjwh
+         KraiH4ER1pxa2bCgPYmgA7GLBmf5BsNHF137kkIgSkSwVgp2GlUxFHU75hZwqPAwjXSI
+         4Onw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=2P4oG7HNo+SuYtU66Lpge91f6btqFbYk+DdM40W1Mys=;
+        b=g1mr6GQo9Lb+MRRfkcdBDl5xhSdDCF7vtdx3hZJ4aIeJQ2jZQxCwnkgLpOxoiJA1RT
+         hm5th6Ks1WVInAyM6hBDbmM7maWIeP56C0gUhvZr68IkDxDBA7TlmxpOP35Y1oJXHvo+
+         fPUBIQbJal8hv8GYmimISu39kIzWTetVuB9JB3VH0u4MSMyoBQUFUedgighXCC7lg+Wc
+         3BwCcl9BlPsmOFDgkPFSkJYMD4RIg25S2jCLWQEvoDiaLIManWplrZOOX1tc+qd59v76
+         bLUBbWx5P8Jja+qo79fFsDRJfcHOeZPriYd/H0FjMSTe3XgcRaQPBp5upmwcX+6zhZcX
+         Rnfw==
+X-Gm-Message-State: AOAM533Ol0CbOB7JRmK3MOHKRv50oasnmybjvBiBzYIimbcYt2ukKqYj
+        oQU5jjM6DdTsh2G3znsDddWxyA==
+X-Google-Smtp-Source: ABdhPJxGfIwVljwt0ch8b7JClfDnBt9G4Bnf4/bwNmrGSmCntIKRvd9mMKse0unWvkoTLCcXvbeiqg==
+X-Received: by 2002:a05:600c:4149:: with SMTP id h9mr8215720wmm.43.1618991501104;
+        Wed, 21 Apr 2021 00:51:41 -0700 (PDT)
+Received: from ?IPv6:2a01:e0a:90c:e290:f781:73d5:3127:752d? ([2a01:e0a:90c:e290:f781:73d5:3127:752d])
+        by smtp.gmail.com with ESMTPSA id m2sm1386979wmq.15.2021.04.21.00.51.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Apr 2021 00:51:40 -0700 (PDT)
 Subject: Re: [PATCH] arm64: dts: amlogic: misc DT schema fixups
-To: Kevin Hilman <khilman@baylibre.com>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- DTML <devicetree@vger.kernel.org>, 
- "open list:ARM/Amlogic Meson SoC support" <linux-amlogic@lists.infradead.org>
-X-Provags-ID: V03:K1:VayMfYcF7Aip0jl2vVx7EP8PfFl6P5fG5f2tBl/llQQ3L6m7URS
- tXBIh7i02uaKDSbeQIgmHw0MzRJgWxzB0qhr5stCN2M/myIelbD5pUBBdgRkl8oQIAea+EC
- HeuZ6Ema+rlYEvUZj4azBs8RFBz2nwhGOLgiQsZT+Bk8eUeQkARixAot7lEvyK3he83O3LI
- doCDmPTorf8DUUE5XR0sg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:N1pBbnxpOa0=:a1rryM0DGKC5mA2UlKPcNI
- ZWvP8abJPxxSP3OPwH4xuc4gaEcky3arT1NppmqmuS+eGhxzjPaI73IgznYALIRhy+ecRG6j7
- XPk2k331RhCzbRnoozdPXNDwXuleV1AyWP4WcytaEBwngx66CDwZJ/rXArKpQgwd+QNGMRbN7
- GRi94RLx559ZvjM/LbJfFC6s1nBq5rxitQkOb7U9BZeA4ALZr0cZWAWohYSacWagNs/V6mAmJ
- SSiUENhfn/SZwSfKon86dQ2faDNAl2JB9XjKnA65JyKXgGUyK0fZmNy9/BaH5wIEiU/O179Vi
- 9qCcpm3pr5TZr/FeA1vxfERnnHw5Mjzn6t1NNGvzMEAwLlU5K1Acnykv7QXMv/4whrMeBJ1yb
- OiUTJ8S94V82aGRqeXTziWrYSzNsPVSu+L7gdZNhW0QPW88iQf862cxTOblj4G0aMz6r6QxB7
- pGS0LW8QJ/MF2CcRNkyOIAoMbrOBZPpOsV+W10wvcbV4cDYY4Mu91b/xX3RfA9r1Lsn7ZI+f6
- 9KQ/rmGj6eNRbAqswplBZI=
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210420_233230_936830_739FB066 
-X-CRM114-Status: GOOD (  10.55  )
-X-BeenThere: linux-amlogic@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-amlogic.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-amlogic>, 
- <mailto:linux-amlogic-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-amlogic/>
-List-Post: <mailto:linux-amlogic@lists.infradead.org>
-List-Help: <mailto:linux-amlogic-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-amlogic>,
- <mailto:linux-amlogic-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+To:     Kevin Hilman <khilman@baylibre.com>, Arnd Bergmann <arnd@arndb.de>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org
+References: <20210420230402.8807-1-khilman@baylibre.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <0a28f65f-716a-d67e-6fc4-2785c19b7ab3@baylibre.com>
+Date:   Wed, 21 Apr 2021 09:51:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
+MIME-Version: 1.0
+In-Reply-To: <20210420230402.8807-1-khilman@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-amlogic" <linux-amlogic-bounces@lists.infradead.org>
-Errors-To: linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210421063209.8BmatfvG6ft09MPlpVg0sUYPMB3w2OtYX8DCCexPGXg@z>
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
 
-On Wed, Apr 21, 2021 at 1:04 AM Kevin Hilman <khilman@baylibre.com> wrote:
->
+On 21/04/2021 01:04, Kevin Hilman wrote:
 > Take a pass at cleaning up a bunch of warnings
 > from 'make dtbs_check' that have crept in.
->
+> 
 > Signed-off-by: Kevin Hilman <khilman@baylibre.com>
+> ---
+>  .../devicetree/bindings/gpu/arm,mali-bifrost.yaml  |  5 +++++
+>  .../bindings/media/amlogic,axg-ge2d.yaml           |  1 +
+>  Documentation/devicetree/bindings/media/rc.yaml    |  4 ++++
+>  .../devicetree/bindings/sound/amlogic,t9015.yaml   |  1 +
+>  arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |  4 ++--
+>  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  | 14 +++++++-------
+>  .../arm64/boot/dts/amlogic/meson-g12b-gsking-x.dts |  2 +-
+>  .../boot/dts/amlogic/meson-g12b-gtking-pro.dts     |  4 ++--
+>  arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts  |  2 +-
+>  .../boot/dts/amlogic/meson-g12b-odroid-n2.dtsi     |  4 ++--
+>  .../arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts |  2 +-
+>  .../dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dts |  2 +-
+>  .../boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dts |  8 ++++----
+>  .../boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dts |  2 +-
+>  .../boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts   |  2 +-
+>  .../boot/dts/amlogic/meson-gxm-wetek-core2.dts     |  2 +-
+>  arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi |  4 ++--
+>  .../arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts |  2 +-
+>  18 files changed, 38 insertions(+), 27 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+> index 184492162e7e..db2240bad012 100644
+> --- a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+> +++ b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+> @@ -69,6 +69,11 @@ properties:
+>  
+>        where voltage is in V, frequency is in MHz.
+>  
+> +  dma-coherent:
+> +    description: |
+> +      Present if page table walks made by the SMMU are cache coherent with the
+> +      CPU.
+> +
+>  required:
+>    - compatible
+>    - reg
 
-Thank you for addressing these. If Rob or someone else can review them
-and confirm that they all look good, I'll apply them on top of the branch
-I already have for 5.13.
+I think this one should go in a separate patch since it's not amlogic only.
 
-     Arnd
+> diff --git a/Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml b/Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml
+> index bee93bd84771..f3a337954eb3 100644
+> --- a/Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml
+> +++ b/Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml
+> @@ -33,6 +33,7 @@ required:
+>    - interrupts
+>    - clocks
+>    - resets
+> +  - reset-names
 
-_______________________________________________
-linux-amlogic mailing list
-linux-amlogic@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-amlogic
+Remove the reset-names from DT instead
+
+>  
+>  additionalProperties: false
+>  
+> diff --git a/Documentation/devicetree/bindings/media/rc.yaml b/Documentation/devicetree/bindings/media/rc.yaml
+> index 946441b4e1a5..c4a088669112 100644
+> --- a/Documentation/devicetree/bindings/media/rc.yaml
+> +++ b/Documentation/devicetree/bindings/media/rc.yaml
+> @@ -90,9 +90,12 @@ properties:
+>        - rc-leadtek-y04g0051
+>        - rc-lme2510
+>        - rc-manli
+> +      - rc-mecool-kii-pro
+> +      - rc-mecool-kiii-pro
+>        - rc-medion-x10
+>        - rc-medion-x10-digitainer
+>        - rc-medion-x10-or2x
+> +      - rc-minix-neo
+>        - rc-msi-digivox-ii
+>        - rc-msi-digivox-iii
+>        - rc-msi-tvanywhere
+> @@ -145,6 +148,7 @@ properties:
+>        - rc-videomate-s350
+>        - rc-videomate-tv-pvr
+>        - rc-videostrong-kii-pro
+> +      - rc-vega-s9x
+>        - rc-wetek-hub
+>        - rc-wetek-play2
+>        - rc-winfast
+> diff --git a/Documentation/devicetree/bindings/sound/amlogic,t9015.yaml b/Documentation/devicetree/bindings/sound/amlogic,t9015.yaml
+> index c7613ea728d4..7bcbed603824 100644
+> --- a/Documentation/devicetree/bindings/sound/amlogic,t9015.yaml
+> +++ b/Documentation/devicetree/bindings/sound/amlogic,t9015.yaml
+> @@ -41,6 +41,7 @@ required:
+>    - clocks
+>    - clock-names
+>    - resets
+> +  - reset-names
+
+Remove the reset-names from DT instead
+
+>  
+>  additionalProperties: false
+>  
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> index 755b4ad15184..b4000cf65a9a 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> @@ -88,13 +88,13 @@ reset: reset-controller@0 {
+>  				#reset-cells = <1>;
+>  			};
+>  
+> -			periphs_pinctrl: pinctrl@0400 {
+> +			periphs_pinctrl: pinctrl@400 {
+>  				compatible = "amlogic,meson-a1-periphs-pinctrl";
+>  				#address-cells = <2>;
+>  				#size-cells = <2>;
+>  				ranges;
+>  
+> -				gpio: bank@0400 {
+> +				gpio: bank@400 {
+>  					reg = <0x0 0x0400 0x0 0x003c>,
+>  					      <0x0 0x0480 0x0 0x0118>;
+>  					reg-names = "mux", "gpio";
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+> index 3dd2a5a8739b..793d48f72390 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+> @@ -128,9 +128,9 @@ soc {
+>  
+>  		pcie: pcie@fc000000 {
+>  			compatible = "amlogic,g12a-pcie", "snps,dw-pcie";
+> -			reg = <0x0 0xfc000000 0x0 0x400000
+> -			       0x0 0xff648000 0x0 0x2000
+> -			       0x0 0xfc400000 0x0 0x200000>;
+> +			reg = <0x0 0xfc000000 0x0 0x400000>,
+> +			      <0x0 0xff648000 0x0 0x2000>,
+> +			      <0x0 0xfc400000 0x0 0x200000>;
+>  			reg-names = "elbi", "cfg", "config";
+>  			interrupts = <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>;
+>  			#interrupt-cells = <1>;
+> @@ -140,8 +140,8 @@ pcie: pcie@fc000000 {
+>  			#address-cells = <3>;
+>  			#size-cells = <2>;
+>  			device_type = "pci";
+> -			ranges = <0x81000000 0 0 0x0 0xfc600000 0 0x00100000
+> -				  0x82000000 0 0xfc700000 0x0 0xfc700000 0 0x1900000>;
+> +			ranges = <0x81000000 0 0 0x0 0xfc600000 0 0x00100000>,
+> +				 <0x82000000 0 0xfc700000 0x0 0xfc700000 0 0x1900000>;
+>  
+>  			clocks = <&clkc CLKID_PCIE_PHY
+>  				  &clkc CLKID_PCIE_COMB
+> @@ -2009,7 +2009,7 @@ mux {
+>  				};
+>  			};
+>  
+> -			vrtc: rtc@0a8 {
+> +			vrtc: rtc@a8 {
+>  				compatible = "amlogic,meson-vrtc";
+>  				reg = <0x0 0x000a8 0x0 0x4>;
+>  			};
+> @@ -2187,7 +2187,7 @@ gpio_intc: interrupt-controller@f080 {
+>  				amlogic,channel-interrupts = <64 65 66 67 68 69 70 71>;
+>  			};
+>  
+> -			watchdog: wdt@f0d0 {
+> +			watchdog: watchdog@f0d0 {
+>  				compatible = "amlogic,meson-gxbb-wdt";
+>  				reg = <0x0 0xf0d0 0x0 0x10>;
+>  				clocks = <&xtal>;
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dts
+> index 211191f66344..6c7bfacbad78 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dts
+> @@ -12,7 +12,7 @@
+>  #include <dt-bindings/sound/meson-g12a-tohdmitx.h>
+>  
+>  / {
+> -	compatible = "azw,gsking-x", "amlogic,g12b";
+> +	compatible = "azw,gsking-x", "amlogic,s922x", "amlogic,g12b";
+>  	model = "Beelink GS-King X";
+>  
+>  	aliases {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dts
+> index 0e331aa5a2d7..707daf92787b 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dts
+> @@ -11,7 +11,7 @@
+>  #include <dt-bindings/sound/meson-g12a-tohdmitx.h>
+>  
+>  / {
+> -	compatible = "azw,gtking", "amlogic,g12b";
+> +	compatible = "azw,gtking", "amlogic,s922x", "amlogic,g12b";
+>  	model = "Beelink GT-King Pro";
+>  
+>  	aliases {
+> @@ -35,7 +35,7 @@ power-button {
+>  	leds {
+>  		compatible = "gpio-leds";
+>  
+> -		white {
+> +		led-white {
+>  			label = "power:white";
+>  			gpios = <&gpio_ao GPIOAO_11 GPIO_ACTIVE_HIGH>;
+>  			default-state = "on";
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts
+> index a7db84a500bb..5d96c1449050 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts
+> @@ -11,7 +11,7 @@
+>  #include <dt-bindings/sound/meson-g12a-tohdmitx.h>
+>  
+>  / {
+> -	compatible = "azw,gtking", "amlogic,g12b";
+> +	compatible = "azw,gtking", "amlogic,s922x", "amlogic,g12b";
+>  	model = "Beelink GT-King";
+>  
+>  	aliases {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+> index 473b81c652cf..344573e157a7 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+> @@ -42,7 +42,7 @@ emmc_pwrseq: emmc-pwrseq {
+>  	leds {
+>  		compatible = "gpio-leds";
+>  
+> -		blue {
+> +		led-blue {
+>  			label = "n2:blue";
+>  			gpios = <&gpio_ao GPIOAO_11 GPIO_ACTIVE_HIGH>;
+>  			linux,default-trigger = "heartbeat";
+> @@ -497,7 +497,7 @@ &gpio {
+>  	 * This signal should be handled by a USB specific power sequence
+>  	 * in order to reset the Hub when USB bus is powered down.
+>  	 */
+> -	usb-hub {
+> +	hog-0 {
+>  		gpio-hog;
+>  		gpios = <GPIOH_4 GPIO_ACTIVE_HIGH>;
+>  		output-high;
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts b/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts
+> index bfaf7f41a2d6..201596247fd9 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts
+> @@ -257,7 +257,7 @@ &gpio_ao {
+>  	 * This signal should be handled by a USB specific power sequence
+>  	 * in order to reset the Hub when USB bus is powered down.
+>  	 */
+> -	usb-hub {
+> +	hog-0 {
+>  		gpio-hog;
+>  		gpios = <GPIOAO_4 GPIO_ACTIVE_HIGH>;
+>  		output-high;
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dts
+> index 5ab5d3aa0646..c529b6c860a4 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dts
+> @@ -44,7 +44,7 @@ button@0 {
+>  	leds {
+>  		compatible = "gpio-leds";
+>  
+> -		blue {
+> +		led-blue {
+>  			color = <LED_COLOR_ID_BLUE>;
+>  			function = LED_FUNCTION_POWER;
+>  			gpios = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dts
+> index ad6d72254150..b331a013572f 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dts
+> @@ -16,28 +16,28 @@ / {
+>  	leds {
+>  		compatible = "gpio-leds";
+>  
+> -		yellow {
+> +		led-yellow {
+>  			color = <LED_COLOR_ID_YELLOW>;
+>  			function = LED_FUNCTION_STATUS;
+>  			gpios = <&gpio_ao GPIOAO_6 GPIO_ACTIVE_HIGH>;
+>  			default-state = "off";
+>  		};
+>  
+> -		blue {
+> +		led-blue {
+>  			color = <LED_COLOR_ID_BLUE>;
+>  			function = LED_FUNCTION_STATUS;
+>  			gpios = <&gpio GPIODV_28 GPIO_ACTIVE_HIGH>;
+>  			default-state = "off";
+>  		};
+>  
+> -		green {
+> +		led-green {
+>  			color = <LED_COLOR_ID_GREEN>;
+>  			function = LED_FUNCTION_STATUS;
+>  			gpios = <&gpio_ao GPIOAO_9 GPIO_ACTIVE_HIGH>;
+>  			default-state = "on";
+>  		};
+>  
+> -		red {
+> +		led-red {
+>  			color = <LED_COLOR_ID_RED>;
+>  			function = LED_FUNCTION_STATUS;
+>  			gpios = <&gpio GPIODV_27 GPIO_ACTIVE_HIGH>;
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dts b/arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dts
+> index 0651756d7fb5..ebebf344b715 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dts
+> @@ -49,7 +49,7 @@ button@0 {
+>  	leds {
+>  		compatible = "gpio-leds";
+>  
+> -		blue {
+> +		led-blue {
+>  			color = <LED_COLOR_ID_BLUE>;
+>  			function = LED_FUNCTION_POWER;
+>  			gpios = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts b/arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts
+> index a414cd39c2b1..ea9f234d1fc7 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts
+> @@ -17,7 +17,7 @@ / {
+>  	leds {
+>  		compatible = "gpio-leds";
+>  
+> -		white {
+> +		led-white {
+>  			color = <LED_COLOR_ID_WHITE>;
+>  			function = LED_FUNCTION_POWER;
+>  			gpios = <&gpio_ao GPIOAO_9 GPIO_ACTIVE_HIGH>;
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dts b/arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dts
+> index ec794c134c15..1e7f77f9b533 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dts
+> @@ -22,7 +22,7 @@ memory@0 {
+>  	leds {
+>  		compatible = "gpio-leds";
+>  
+> -		blue {
+> +		led-blue {
+>  			color = <LED_COLOR_ID_BLUE>;
+>  			function = LED_FUNCTION_STATUS;
+>  			gpios = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi b/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
+> index 877e3b989203..66d67524b031 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
+> @@ -43,14 +43,14 @@ button-function {
+>  	leds {
+>  		compatible = "gpio-leds";
+>  
+> -		white {
+> +		led-white {
+>  			color = <LED_COLOR_ID_WHITE>;
+>  			function = LED_FUNCTION_STATUS;
+>  			gpios = <&gpio_ao GPIOAO_4 GPIO_ACTIVE_HIGH>;
+>  			linux,default-trigger = "heartbeat";
+>  		};
+>  
+> -		red {
+> +		led-red {
+>  			color = <LED_COLOR_ID_RED>;
+>  			function = LED_FUNCTION_STATUS;
+>  			gpios = <&gpio_expander 5 GPIO_ACTIVE_HIGH>;
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts
+> index b2a4e823c1d8..8c327c03d845 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts
+> @@ -47,7 +47,7 @@ &gpio {
+>  	 * This signal should be handled by a USB specific power sequence
+>  	 * in order to reset the Hub when USB bus is powered down.
+>  	 */
+> -	usb-hub {
+> +	hog-0 {
+>  		gpio-hog;
+>  		gpios = <GPIOH_4 GPIO_ACTIVE_HIGH>;
+>  		output-high;
+> 
+
+Apart that, the other changes are OK.
+
+
+Neil
