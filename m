@@ -1,81 +1,128 @@
-Return-Path: <linux-tegra-owner@kernel.org>
+Return-Path: <SRS0=UfjI=JU=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAB0BC433B4
-	for <linux-tegra@archiver.kernel.org>; Fri, 23 Apr 2021 12:55:18 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA92E61422
-	for <linux-tegra@archiver.kernel.org>; Fri, 23 Apr 2021 12:55:18 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbhDWMzy (ORCPT <rfc822;linux-tegra@archiver.kernel.org>);
-        Fri, 23 Apr 2021 08:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbhDWMzx (ORCPT
-        <rfc822;linux-tegra@vger.kernel.org>);
-        Fri, 23 Apr 2021 08:55:53 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EC5C061574
-        for <linux-tegra@vger.kernel.org>; Fri, 23 Apr 2021 05:55:17 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id h8so17220972edb.2
-        for <linux-tegra@vger.kernel.org>; Fri, 23 Apr 2021 05:55:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=vrSCOv0VrXCxUxxR4cIzAHuXg+FaGnuPTqrTgUKwoDo=;
-        b=vI32s9qwDMCK2NLicnXa4U1S5MTepJieLW+ANoBdfKh+msuAULtlF+SgliTn7/5dCH
-         OI84mqpBiucXeJ2HmpmYk0s2GAQiFXLv37YpRDgwcKXu8hXTWkqpBRLA1H9Lj3zr+9hK
-         YZ1NZ38Gu5Hf2fYuyWDWDod3l24AUn1kQDKz6tOjSLvuP2Z0M7CvgTblq6AyxSg7vYBJ
-         4CBjEikDJwfOAoa2jz/M+IrLYwqGywHCqGs0qqaQhlKlsCIJ8tsR0TGgJvSgZlT+Xw9I
-         teQBsKwg+sGqOLwh5y18I+g6HbYf6YbluPJIdAfj0zTFzqlwieSBiWQQNYMLD5lvA5tm
-         onpw==
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C8A9C433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 23 Apr 2021 12:57:57 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id BA0836145A
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 23 Apr 2021 12:57:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BA0836145A
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Type:
+	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
+	In-Reply-To:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date
+	:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=hkKI5mrgjzXFPWQv6UE0qqECU20xrIyB3di5sFrXUXM=; b=ct8vlmSKbccsCVzJ4ROJcpkwV
+	uZKp9z0HVw9GqSSqY+rEGVIqMWJRlxSXUpLLXSgDMbF1ZEbveZD7JOTWIa4z7gOIawRdzeJgGVNTt
+	E9HOSSTl9GL/hUDmM8y8uiinOPXFDGChfwlhQXsB1tF45gRNbbIQLLuMOi+6gwE5BQpzBuSe98mP6
+	HNP7BfZC0S5DlXmP8Vw6OtAKmStRwV+wyLScOTQMQTY1gAWUXruQ0jZPn15JA2Xw0CJGXBmYY19Ut
+	szxqxBl7PfqG5c5P6xI4XkCLE7/cz9lgu9soZtNKSbXimYySi7UMfWGBOX9YyZum99Qjt38XjlcIO
+	72g7tdXgw==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lZvLC-001VJ8-Mr; Fri, 23 Apr 2021 12:55:26 +0000
+Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lZvL7-001VIx-5o
+ for linux-arm-kernel@desiato.infradead.org; Fri, 23 Apr 2021 12:55:21 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+ :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+ Content-Transfer-Encoding:Content-ID:Content-Description;
+ bh=vrSCOv0VrXCxUxxR4cIzAHuXg+FaGnuPTqrTgUKwoDo=; b=KTuTZ5EXP/v4ruPP9Te446C2/A
+ 2X4n3gXE/kMm4PMr4SL6yn2EL0PEMQ7Br7w0YDPEWlrVQHMAx3Rof0+bErvh+skXzpxNUz8ffeGZm
+ X1hbYjTWlqcA8J3+Cz5T6B48uBZnk2kazXI1zl5ssUUOTziTYG4t9ZP/6s6sSAoxvgkTtM+edWgSr
+ rpKrmQpf7BS/tNwIiF08i+w2DnFzz5LtT7h1Eut1Rhs1j2JLvVjkTLzbfyn6apyr0fRLUHDe1Baoc
+ JphY04goI7EYBt48l1CtmilK9ryncIcTqtx3inTEMQ+vXsejJUJpnXP0++nylTA9bxof3eZ4Qsl/x
+ iqIDtayA==;
+Received: from mail-ed1-x530.google.com ([2a00:1450:4864:20::530])
+ by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lZvL4-00EPK0-GB
+ for linux-arm-kernel@lists.infradead.org; Fri, 23 Apr 2021 12:55:19 +0000
+Received: by mail-ed1-x530.google.com with SMTP id i3so31668229edt.1
+ for <linux-arm-kernel@lists.infradead.org>;
+ Fri, 23 Apr 2021 05:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=date:from:to:cc:subject:message-id:references:mime-version
+ :content-disposition:in-reply-to:user-agent;
+ bh=vrSCOv0VrXCxUxxR4cIzAHuXg+FaGnuPTqrTgUKwoDo=;
+ b=vI32s9qwDMCK2NLicnXa4U1S5MTepJieLW+ANoBdfKh+msuAULtlF+SgliTn7/5dCH
+ OI84mqpBiucXeJ2HmpmYk0s2GAQiFXLv37YpRDgwcKXu8hXTWkqpBRLA1H9Lj3zr+9hK
+ YZ1NZ38Gu5Hf2fYuyWDWDod3l24AUn1kQDKz6tOjSLvuP2Z0M7CvgTblq6AyxSg7vYBJ
+ 4CBjEikDJwfOAoa2jz/M+IrLYwqGywHCqGs0qqaQhlKlsCIJ8tsR0TGgJvSgZlT+Xw9I
+ teQBsKwg+sGqOLwh5y18I+g6HbYf6YbluPJIdAfj0zTFzqlwieSBiWQQNYMLD5lvA5tm
+ onpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vrSCOv0VrXCxUxxR4cIzAHuXg+FaGnuPTqrTgUKwoDo=;
-        b=KpVXVgTsFr3NxN6Ybxb4p81n6m9DmClR88bQBmDqtA9wMiW1CUg7Xz+F1QxKDEBNkv
-         yom5k7Y4Hz6SjQk017/ALBW2EuolBpn+9pQvNnn1XPt6kOxEl67xgh53SXuTjHMxXtNy
-         6oHJH6Rt3xXPZV36W+ShCb6Zpdg//l8FwpaXRFjpPi+Oy4k4apDfHWHxV/2VLpFURKDF
-         AOAJRxo+5mNGYbZdY+u4T60XKso9TBE3cPXLEVo5MDZeG5KocvbNTHa6V83oyETrufYD
-         iuqbSuw3bg99wVR5GSpHPfgDGZa5Y/u2X2kKojiSzjabmd7OHFCU6Ix+PyomJ527lp25
-         4ALw==
-X-Gm-Message-State: AOAM532dfGb+6f4tRwUm+bUjnJDMvRDYEDFBOC+yl6CHK4luOvtlPHGN
-        /h7jTtPD+zd387wIVsuJHdE=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+ :mime-version:content-disposition:in-reply-to:user-agent;
+ bh=vrSCOv0VrXCxUxxR4cIzAHuXg+FaGnuPTqrTgUKwoDo=;
+ b=sStx8hyc7g/2wI5TgTl/H4b8dMPRfiQ445o2UutMesu1PGXMIY6l2ROSLmG6vVG+TY
+ Aiwxs6mvzOseGhF7zaO1rzZyUJB/4QnQx88rKcoftb7V5nJdRGXBxd/bNsEyimzawR7P
+ ty4TQ5vLzXrTLw7PdMaxC64zEhVs2YLvRVHDBuH+F5ZLx+TAZ47CzkenqpDtZUJXz/32
+ A45pi0jo8EIUN0kuVq8kMDz5OP5AtcBohST+x7Kqlwr0r9ES+ml3nuot7uDyqWed13vv
+ KUI+d6GNNpCRiR5WZqZbEWisc08FkBQ3TmkZzRXEKlpZkNvKBufyHnRLRvsuGB7i4QT2
+ 9L1Q==
+X-Gm-Message-State: AOAM533iX9mhu2QJxcILRGibWAO7HOUBLOYUK/NCkgtbIWHaoxD52tM2
+ 3Vi0ByyA+o4mzeziEIZrGkA=
 X-Google-Smtp-Source: ABdhPJz5BEEFOUq5CpBS8XyPBWYY9NVLe29Da3ThTI+NsPdsuAUbCIDGj4AMUIfOtg6qarhv1pLFAw==
-X-Received: by 2002:a05:6402:4386:: with SMTP id o6mr4327860edc.33.1619182516158;
-        Fri, 23 Apr 2021 05:55:16 -0700 (PDT)
+X-Received: by 2002:a05:6402:4386:: with SMTP id
+ o6mr4327860edc.33.1619182516158; 
+ Fri, 23 Apr 2021 05:55:16 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id t1sm3915307eju.88.2021.04.23.05.55.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Apr 2021 05:55:14 -0700 (PDT)
-Date:   Fri, 23 Apr 2021 14:56:03 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
+ by smtp.gmail.com with ESMTPSA id t1sm3915307eju.88.2021.04.23.05.55.14
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 23 Apr 2021 05:55:14 -0700 (PDT)
+Date: Fri, 23 Apr 2021 14:56:03 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org
-Cc:     Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
+To: Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org
+Cc: Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
 Subject: Re: [GIT PULL 5/5] arm64: tegra: Device tree fixes for v5.12-rc6
 Message-ID: <YILD4yyPXuiYbHW1@orome.fritz.box>
 References: <20210401172622.3352990-1-thierry.reding@gmail.com>
  <20210401172622.3352990-5-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="0+uDXqlHZoQ8VZ/1"
-Content-Disposition: inline
 In-Reply-To: <20210401172622.3352990-5-thierry.reding@gmail.com>
 User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
-Precedence: bulk
-List-ID: <linux-tegra.vger.kernel.org>
-X-Mailing-List: linux-tegra@vger.kernel.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210423_055518_564188_C8AD8386 
+X-CRM114-Status: GOOD (  20.29  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: multipart/mixed; boundary="===============7373397127697872932=="
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210423125603.ZrEKlg9XbmDT5xj2OTNmRNY1oA8SdbCOFipfFpkeWSc@z>
+
+
+--===============7373397127697872932==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="0+uDXqlHZoQ8VZ/1"
+Content-Disposition: inline
 
 
 --0+uDXqlHZoQ8VZ/1
@@ -166,3 +213,18 @@ POT3Zx7KSXI+k0cj6/O176OrOnRlaNLZRpy8StLfKNToP5Rv/bOrnj0MT3BjXKWA
 -----END PGP SIGNATURE-----
 
 --0+uDXqlHZoQ8VZ/1--
+
+
+--===============7373397127697872932==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+--===============7373397127697872932==--
+
