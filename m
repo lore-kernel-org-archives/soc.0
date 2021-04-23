@@ -1,25 +1,29 @@
-Return-Path: <SRS0=yEGJ=JU=0x0f.com=daniel@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F9CCC433ED
-	for <soc@archiver.kernel.org>; Fri, 23 Apr 2021 14:02:56 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 3FF3F61464; Fri, 23 Apr 2021 14:02:56 +0000 (UTC)
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 92E206145A
-	for <soc@kernel.org>; Fri, 23 Apr 2021 14:02:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 92E206145A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=daniel@0x0f.com
-Received: by mail-qt1-f170.google.com with SMTP id s4so8614362qtw.3
-        for <soc@kernel.org>; Fri, 23 Apr 2021 07:02:55 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A33BCC433ED
+	for <linux-kernel@archiver.kernel.org>; Fri, 23 Apr 2021 14:02:59 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 6A3FA61450
+	for <linux-kernel@archiver.kernel.org>; Fri, 23 Apr 2021 14:02:59 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S236835AbhDWODd (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Fri, 23 Apr 2021 10:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231305AbhDWODb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 23 Apr 2021 10:03:31 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DEFC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Apr 2021 07:02:55 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id o2so23003611qtr.4
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Apr 2021 07:02:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=0x0f.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -33,14 +37,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=yVfMqSBfK2/PqYx0vrefAbZn8CuJJPRDt4Z7FHHTIMk=;
-        b=PssTkc2xKTRPmIWFiWiLDdi0e19984skCn9XYZoeGqWgxKHYMFLEUDfHa24KeGyhPd
-         CRtuKZAI6dvXeph5w3zgaI006eTzxMznQ9qYsuCAVXftUb6vfCwBEIHbYpUlIotMs/F8
-         Us3YrdShRrilvSRZFrbjv3HW3N79kQ/bKZPe30fdlqxM54hRE0SU+NMEGzO1fCUOjFRu
-         I33ET2PaaWAtLQBvKu6AJfdoLX+acMJbm4Qf62RIQM5WIDWnO1gQ2+0HdpFQP+QLcC03
-         z+F693a446TxRHbRQR09zoiINQnrQCLoHP6C/kG3zRbDVu+S7gsjUAOfxp11gmpunSVe
-         5Tjw==
-X-Gm-Message-State: AOAM531KQsOkt7xkuIriTHt8cFJPLIKLQWfeNsgZjQqIA92ZECZSWs0A
-	cw0Tx6ENLqbzfGmAZLmP0bc3XkMx+P6omnebqX/+yA==
+        b=bAJ35mUlzXxWnk30F+8gn4hzkUw1yglGuBShBZ+LLDiU5GIlQc7HnPwCL50Vs1GAe6
+         lQDS8qd0Do+vWytQTRPGIU6uUgei5JdMMtpbdDkjrzMv26fd/sqQ2upaN+LgcSnMcGee
+         9tOg57LnnNn7QN4SfBHTslSg0VZ8C7/2/ME8beAf94WxrBrda65xe7KLcb5565hZHmWO
+         8+IdO2bevd410OZ/3edigDfAyBO8giBZSXacrPCMeD0Q5m9sVLU6W0Zo7e8alFShkiNn
+         5Ie0aUxKpVOhjCbVantBbg479d1OL3JAoYC30PySdAahOPhMich+rWeU7ssnETTKBXGK
+         5Ktg==
+X-Gm-Message-State: AOAM530jYj8hZFoB1xPbS+YiMS4YOQiManzXlm5Twa74Y4zRTKzauFuf
+        DAySS2uqLlXOQBTMlSv8ikCxmGf5NPxxyJv6yWlQXg==
 X-Google-Smtp-Source: ABdhPJypbM40Wzmt6esHRqkXVYyCEh+2x+nqmYNmzs0o++4f4iqaGJdE2IktnPmCKJxIGfzTPllPj8UPUv5oEwkJuPs=
 X-Received: by 2002:a05:622a:14b:: with SMTP id v11mr3909827qtw.33.1619186573440;
  Fri, 23 Apr 2021 07:02:53 -0700 (PDT)
@@ -48,16 +52,22 @@ MIME-Version: 1.0
 References: <20210422140945.4131092-1-daniel@0x0f.com> <20210422140945.4131092-2-daniel@0x0f.com>
  <CAK8P3a3fkjy2YYwhmsFQt-MSyOh=1zf1wqzQB7usjsHbUBWdtQ@mail.gmail.com>
 In-Reply-To: <CAK8P3a3fkjy2YYwhmsFQt-MSyOh=1zf1wqzQB7usjsHbUBWdtQ@mail.gmail.com>
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Fri, 23 Apr 2021 23:02:42 +0900
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Fri, 23 Apr 2021 23:02:42 +0900
 Message-ID: <CAFr9PX=QeON1C_25tyNK1rWGm3A_Kc2Ad5qLUCfunmdHQUsv_g@mail.gmail.com>
 Subject: Re: [RFC PATCH 1/2] ARM: mstar: Add header with macros for RIU
  register access
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Olof Johansson <olof@lixom.net>, Willy Tarreau <w@1wt.eu>
+Cc:     SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Olof Johansson <olof@lixom.net>, Willy Tarreau <w@1wt.eu>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210423140242.8bn9T0inpm9ke2JtsJeZoL1cJ3w2R0juv8Ig_jOYV7I@z>
 
 Hi Arnd,
 
