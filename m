@@ -1,1800 +1,625 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=6ihi=JX=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-25.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-24.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 808F4C433B4
-	for <soc@archiver.kernel.org>; Mon, 26 Apr 2021 15:57:40 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 3576A61154; Mon, 26 Apr 2021 15:57:40 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9890161107
-	for <soc@kernel.org>; Mon, 26 Apr 2021 15:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C989C43460
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 26 Apr 2021 15:59:11 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id B43FE6044F
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 26 Apr 2021 15:59:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B43FE6044F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
+	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=hGHwcmUc+mhcKEoCyMHTKV2QdGGN68EY/nzvfZkOux4=; b=MnzUerMzwoq7IxyqdU1Zo8XHn
+	giSYEAea/aLOjyDY9z4dWnP1V9DK+R4CQF/CLF2dlgTFvWlVmMfEZQDCU8GgLt209Le8c45rheHTu
+	2KJijoD+qqQ+s/nQUzWejomAjk/fZahKdmwya2RBJDedyDYnVOviZbWkjk7psh98FA5NqaRUliX/W
+	/OoxVdjqxjFx1tVbwYORCFYEeUb5XuQ0u9wFQi5sSV3b9NpO7/RpLUaIbW+G2ftKnUnuLWIskm4ip
+	6iog+ajIcfqbaGd4bmj9aAMt3M4kfwR5RfvuqsQr7I+bv8rzAH7Ixj7rRdXtg3fB3XH/RD6OYZ/Do
+	RjVPIrTxg==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lb3bl-0081Mn-A1; Mon, 26 Apr 2021 15:57:13 +0000
+Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lb3b0-00817X-Pv
+ for linux-arm-kernel@desiato.infradead.org; Mon, 26 Apr 2021 15:56:27 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+ Content-Type:Cc:List-Id:To:Subject:Message-ID:Date:From:In-Reply-To:
+ References:MIME-Version:Sender:Reply-To:Content-ID:Content-Description;
+ bh=Hyx6qNfHggVUnuf15YDBRGo4OgC5Hd9D7syNGDGej5E=; b=nrTZjI9cF60a6AfMLhtkpfFYXF
+ hFSRhJMVW89shIGql/O8ylOo3ffxiXzZ962YFxMCTBu9ZTonDuG3IT9YF50HulRDZnEJZPonJE9Zh
+ JPeA7g+pYQZMV/zBF7kTgOgt+/2k/n3Lm3TcAkTgWtcCVbOlZYYUTghgGWqkxsrkbxrk+QUxGdTwP
+ dAW1rRH5X9NVhHRpDpQ750MI50YyaJuu3NUrEybKWvEcLPwwO3julBarWZ7rRNnOS1onC+gpvgBWV
+ 35+gIUe7A9quk3edThUoPXdo2DHmRGfgcbkUa4e4PomjK9pMue+855gMa76XSASFGXn7UYbMMdH1k
+ /iXyf7Dg==;
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lb3av-00G41Z-Fz
+ for linux-arm-kernel@lists.infradead.org; Mon, 26 Apr 2021 15:56:24 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 59BFE610FA
+ for <linux-arm-kernel@lists.infradead.org>;
+ Mon, 26 Apr 2021 15:56:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1619452660;
-	bh=M5tN5MhjMXAbhM7TG7TUOz5jyPLCIewY0C7ittryU6w=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=AWd11/XeNUAq/2IoD2Pe1twMeywKd7nWkJag8G0Ex6YiUxrt64xYUOLddQBM18pag
-	 vUPtIDtLuZDlequS8m7wcYQ2vVf5U8CeEDa2Ht78U5DIi2BDJidsiKkcelYH9MoMf7
-	 yL9lIaYsSqQ2ZDbfuJoXFabGzmaMUe3hzMBju4glXFTMXXuZ2xcVK/IM2zj8JKmflt
-	 e2Wlb0f+WhuL5APD87iAXnkI5ZVRimb63VTqSgnbKFzXL6Isz7Zg8qiFwXuurqAgBX
-	 eVSTkBo+a5MmTqWWcLnMHN77nEqecNTzn1aNy1FVxpe4PffMUrrIg43E5IHCindnYQ
-	 ivFV438MsNSog==
-Received: by mail-wr1-f42.google.com with SMTP id e5so27780683wrg.7
-        for <soc@kernel.org>; Mon, 26 Apr 2021 08:57:39 -0700 (PDT)
-X-Gm-Message-State: AOAM5309i/Cm0PszBC1n5bEZZP75WX6dt48/En3CDEVjpz1UpdZ2wkPh
-	lclhUHSHrghLrJXcT5/ALfJHBK88r8yaSgY4faQ=
-X-Google-Smtp-Source: ABdhPJyohCzqEVUxKICztmAOrTYUwG+7jLhfd4kEfOkbBtKaXeWc7lv7Oyq5qrcNmow8BX/JTn+xgjL7N4NQIQhpx5g=
-X-Received: by 2002:adf:db4f:: with SMTP id f15mr23863269wrj.99.1619452657666;
- Mon, 26 Apr 2021 08:57:37 -0700 (PDT)
+ s=k20201202; t=1619452578;
+ bh=uXxkKoadgG9OPlxc+K0bJdTxlIqjFyVc0dZGyBwBKQQ=;
+ h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+ b=pGgWaeNEbXwi5cdp/vRViYhb+rVGXXqe0ukYDEuZwOBaAE4McMY0ondbwbyJ+a4Ce
+ FORrQhr8brO1slhj/Top1plpmkRQ6VjjWyaJNSIKZ6RlrsIhbhEmGyVVCfA+HVekZk
+ Rt715JM1MhYme+8kW7UfpMFIDoLAgaS0Gi70VbPx0S0o1M84YNU5rClI846IHkxxx4
+ Fu7ZpoK8q5OD6MtHezw44rFO1B/HqFBc09jl1d3o1y7IlI3Xz/DpNmXxuJyt4CQrus
+ uQcOTnrix2ICmAG8CYbJyrrKE/0llmOwN2k/Oa8YwznjOxJG0T9qjLkfc56/gDiNZs
+ hPxsAJa5iz1FA==
+Received: by mail-wr1-f47.google.com with SMTP id j5so55467944wrn.4
+ for <linux-arm-kernel@lists.infradead.org>;
+ Mon, 26 Apr 2021 08:56:18 -0700 (PDT)
+X-Gm-Message-State: AOAM5305+vCTLRNGI6sLFuQ957+CZeSTp+YlkyKKLyQbXYu3lV3iNSdb
+ 3UIQzEpq9o7ScrE7F0TCnLeKZJ86Josp8ToTulc=
+X-Google-Smtp-Source: ABdhPJy7N6PHzOEf7dtcyjW0eNqcWYNJk0XJyg4yagYgBclVZgw51WiXQxg6QH7heULLmMjPgtP/BxeuzOkSfFBwXPo=
+X-Received: by 2002:a5d:6dc4:: with SMTP id d4mr24777876wrz.105.1619452576658; 
+ Mon, 26 Apr 2021 08:56:16 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAK8P3a2RjRSjTcmwVf3VHy2CUB2HBj5AaJTx=1NSYuA_Qy4E-w@mail.gmail.com>
 In-Reply-To: <CAK8P3a2RjRSjTcmwVf3VHy2CUB2HBj5AaJTx=1NSYuA_Qy4E-w@mail.gmail.com>
 From: Arnd Bergmann <arnd@kernel.org>
-Date: Mon, 26 Apr 2021 17:57:08 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0=urEEHzcQt0u2fbb7SLDO6NGs8aeYvNpj=jP+YWd2Hw@mail.gmail.com>
-Message-ID: <CAK8P3a0=urEEHzcQt0u2fbb7SLDO6NGs8aeYvNpj=jP+YWd2Hw@mail.gmail.com>
-Subject: [GIT PULL 4/6] ARM: devicetree changes for 5.13
+Date: Mon, 26 Apr 2021 17:55:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3uSjSyrRAq2BjR2fo6S7kCfOo+3szQ2cvBt8-D2KybwQ@mail.gmail.com>
+Message-ID: <CAK8P3a3uSjSyrRAq2BjR2fo6S7kCfOo+3szQ2cvBt8-D2KybwQ@mail.gmail.com>
+Subject: [GIT PULL 3/6] ARM: SoC drivers for v5.13
 To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-The following changes since commit 405fa9e9d8664e830982c5fbcb70f9ba8656bafc=
-:
-
-  arm64: tegra: Move clocks from RT5658 endpoint to device node
-(2021-03-25 14:04:49 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-dt-5.1=
-3
-
-for you to fetch changes up to 3f9a3345a3a116af806064826d42cf5211dd611d:
-
-  dt-bindings: mali-bifrost: add dma-coherent (2021-04-22 23:19:47 +0200)
-
-----------------------------------------------------------------
-ARM: devicetree changes for 5.13
-
-There are six new SoCs added this time. Apple M1 and Nuvoton WPCM450
-have separate branches because they are new SoC families that require
-changes outside of device tree files. The other four are variations of
-already supported chips and get merged through this branch:
-
- - STMicroelectronics STM32H750 is one of many variants of STM32
-   microcontrollers based on the Cortex-M7 core. This is particularly
-   notable since we rarely add support for new MMU-less chips
-   these days. In this case, the board that gets added along with
-   the platform is not a SoC reference platform but the "Art Pi"
-   (https://art-pi.gitee.io/website/) machine that was originally design
-   for the RT-Thread RTOS.
-
- - NXP i.MX8QuadMax is a variant of the growing i.MX8 embedded/industrial
-   SoC family, using two Cortex-A72 and four Cortex-A53 cores. It
-   gets added along with its reference board, the "NXP i.MX8QuadMax
-   Multisensory Enablement Kit".
-
- - Qualcomm SC7280 is a Laptop SoC following the SC7180 (Snapdragon 7c)
-   that is used in some Chromebooks and Windows laptops. Only a reference
-   board is added for the moment.
-
- - TI AM64x Sita4ra is a new version of the K3 SoC family for industrial
-   control, motor control, remote IO, IoT gateway etc., similar to the
-   older AM65x family. Two reference machines are added alongside.
-
-Among the newly added machines, there is a very clear skew towards 64-bit
-machines now, with 12 32-bit machines compared to 23 64-bit machines. The
-full list sorted by SoC is:
-
- - ASpeed AST2500 BMC: ASRock E3C246D4I Xeon server board
- - Allwinner A10: Topwise A721 Tablet
- - Amlogic GXL: MeCool KII TV box
- - Amlogic GXM: Mecool KIII, Minix Neo U9-H TV boxes
- - Broadcom BCM4908: TP-Link Archer C2300 V1 router
- - MStar SSD202D: M5Stack UnitV2 camera
- - Marvell Armada 38x: ATL-x530 ethernet switch
- - Mediatek MT8183 Chromebooks: Lenovo 10e, Acer Spin 311,
-   Asus Flip CM3, Asus Detachable CM3
- - Mediatek MT8516/MT8183: OLogic Pumpkin Board
- - NXP i.MX7: reMarkable Tablet
- - NXP i.MX8M: Kontron pitx-imx8m, Engicam i.Core MX8M Mini
- - Nuvoton NPCM730: Quanta GBS BMC
- - Qualcomm X55: Telit FN980 TLB SoM, Thundercomm TurboX T55 SoM
- - Qualcomm MSM8998: OnePlus 5/5T phones
- - Qualcomm SM8350: Snapdragon 888 Mobile Hardware Development Kit
- - Rockchip RK3399: NanoPi R4S board
- - STM32MP1: Engicam MicroGEA STM32MP1 MicroDev 2.0 and SOM,
-   EDIMM2.2 Starter Kit, Carrier, SOM
- - TI AM65: Siemens SIMATIC IOT2050 gateway
-
-There is notable work going into extending already supported machines
-and SoCs:
-
- - ASpeed AST2500
- - Allwinner A23, A83t, A31, A64, H6
- - Amlogic G12B
- - Broadcom BCM4908
- - Marvell Armada 7K/8K/CN91xx
- - Mediatek MT6589, MT7622, MT8173, MT8183, MT8195
- - NXP i.MX8Q, i.MX8MM, i.MX8MP
- - Qualcomm MSM8916, SC7180, SDM845, SDX55, SM8350
- - Renesas R-Car M3, V3U
- - Rockchip RK3328, RK3399
- - STEricsson U8500
- - STMicroelectronics STM32MP141
- - Samsung Exynos 4412
- - TI K3-AM65, K3-J7200
- - TI OMAP3
-
-Among the treewide cleanups and bug fixes, two parts stand out:
-
- - There are a number of cleanups for issues pointed out by 'make
-   dtbs_check' this time, and I expect more to come in the future as we
-   increasingly check for regressions.
-
- - After a change to the MMC subsystem that can lead to unpredictable
-   device numbers, several platforms add 'aliases' properties for these
-   to give each MMC controller a fixed number.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-----------------------------------------------------------------
-Abhishek Kumar (1):
-      arm64: dts: qcom: sc7180: add GO_LAZOR variant property for lazor
-
-Adam Ford (1):
-      arm64: dts: imx8mn-beacon: Enable SDR104 on WiFi SDIO interface
-
-Adrien Grassein (9):
-      arm64: dts: imx8mm-nitrogen-r2: add wifi/bt chip
-      arm64: dts: imx8mm-nitrogen-r2: rework USDHC1
-      arm64: dts: imx8mm-nitrogen-r2: add USB support
-      arm64: dts: imx8mm-nitrogen-r2: add UARTs
-      arm64: dts: imx8mm-nitrogen-r2: rework UART 2
-      arm64: dts: imx8mm-nitrogen-r2: add PWMs
-      arm64: dts: imx8mm-nitrogen-r2: add FlexSPI
-      arm64: dts: imx8mm-nitrogen-r2: add audio
-      arm64: dts: imx8mm-nitrogen-r2: add ecspi2 support
-
-Ajit Pandey (1):
-      arm64: dts: qcom: sc7180-trogdor: Add lpass dai link for I2S driver
-
-Alain Volmat (1):
-      ARM: dts: stm32: enable the analog filter for all I2C nodes in stm32m=
-p151
-
-Alex Elder (1):
-      ARM: dts: qcom: sdx55: add IPA information
-
-Alexander Shiyan (8):
-      ARM: dts: imx6qdl-ts7970: Drop redundant "fsl,mode" option
-      ARM: dts: imx6qdl-phytec-pbab01: Select synchronous mode for AUDMUX
-      ARM: dts: imx6ql-pfla02: Move "hog" pins into corresponded pin groups
-      ARM: dts: clps711x: Add SYSCON nodes where it is used
-      ARM: dts: clps711x: Add keypad node
-      ARM: dts: clps711x: Fix serial port names
-      ARM: dts: clps711x: edb7211: Add unit-address to memory node
-      ARM: dts: clps711x: Add an empty chosen node to top level DTSI
-
-Alexander Stein (1):
-      arm64: dts: amlogic: Assign a fixed index to mmc devices
-
-Alexandre Torgue (2):
-      ARM: dts: stm32: add new instances for stm32h743 MCU
-      ARM: dts: stm32: fix i2c node typo in stm32h743
-
-Alexandru M Stan (1):
-      arm64: dts: qcom: sc7180-trogdor: Remove fp control pins in prep
-for coachz
-
-Alexey Minnekhanov (2):
-      ARM: dts: qcom: msm8974: add blsp2_uart8
-      ARM: dts: qcom: msm8974-klte: Add bluetooth support
-
-Alistair Francis (3):
-      dt-bindings: Add vendor prefix for reMarkable
-      dt-bindings: arm: fsl: Add the reMarkable 2 e-Ink tablet
-      ARM: imx7d-remarkable2: Initial device tree for reMarkable2
-
-Alpana Kumari (2):
-      ARM: dts: aspeed: rainier: Add presence GPIOs
-      ARM: dts: aspeed: everest: GPIOs support
-
-Andreas Kemnade (1):
-      ARM: dts: imx6sl-tolino-shine2hd: Add Netronix embedded controller
-
-Andr=C3=A9 Hentschel (2):
-      ARM: dts: omap3-echo: Update LED configuration
-      ARM: dts: omap3-echo: Add ath6kl node
-
-Angus Ainslie (1):
-      arm64: dts: librem5: protect some partitions of the nor-flash
-
-Arnd Bergmann (39):
-      Merge tag 'renesas-arm-dt-for-v5.13-tag1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into
-arm/dt
-      Merge tag 'omap-for-v5.13/dts-genpd-signed' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into
-arm/dt
-      Merge tag 'socfpga_dts_update_for_v5.13' of
-git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux into
-arm/dt
-      Merge tag 'arm-soc/for-5.13/devicetree' of
-https://github.com/Broadcom/stblinux into arm/dt
-      Merge tag 'arm-soc/for-5.13/devicetre-arm64' of
-https://github.com/Broadcom/stblinux into arm/dt
-      Merge tag 'imx-bindgins-5.13' of
-git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
-arm/dt
-      Merge tag 'imx-dt-5.13' of
-git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
-arm/dt
-      Merge tag 'imx-dt64-5.13' of
-git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
-arm/dt
-      Merge tag 'juno-updates-5.13' of
-git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into
-arm/dt
-      Merge tag 'ux500-dts-v5.13' of
-git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik
-into arm/dt
-      Merge tag 'stm32-dt-for-v5.13-1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32 into
-arm/dt
-      Merge tag 'tegra-for-5.13-dt-bindings' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into arm/dt
-      Merge tag 'tegra-for-5.13-arm-dt' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into arm/dt
-      Merge tag 'tegra-for-5.13-arm64-dt' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into arm/dt
-      Merge tag 'v5.12-next-dts32' of
-git://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux into
-arm/dt
-      Merge tag 'v5.12-next-dts64' of
-git://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux into
-arm/dt
-      Merge tag 'renesas-arm-dt-for-v5.13-tag2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into
-arm/dt
-      Merge tag 'sunxi-dt-for-5.13-1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into arm/dt
-      Merge tag 'mvebu-dt64-5.13-1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu into
-arm/dt
-      Merge tag 'qcom-arm64-for-5.13' of
-git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/dt
-      Merge tag 'ti-k3-dt-for-v5.13' of
-git://git.kernel.org/pub/scm/linux/kernel/git/nmenon/linux into arm/dt
-      Merge tag 'amlogic-dt64' of
-git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic
-into arm/dt
-      Merge tag 'omap-for-v5.13/dt-v2-signed' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into
-arm/dt
-      Merge tag 'samsung-dt-5.13' of
-git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into arm/dt
-      Merge tag 'samsung-dt64-5.13' of
-git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into arm/dt
-      Merge tag 'at91-dt-5.13' of
-git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/dt
-      Merge tag 'mvebu-dt-5.13-1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu into
-arm/dt
-      Merge tag 'bmc-5.13-devicetree' of
-git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc into arm/dt
-      ARM: dts: mvebu: fix SPI device node
-      ARM: dts: clps711x: fix missing interrupt parent
-      Merge tag 'qcom-dts-for-5.13' of
-git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/dt
-      Merge tag 'qcom-arm64-for-5.13-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/dt
-      Merge tag 'amlogic-dt64-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic
-into arm/dt
-      Merge tag 'v5.13-rockchip-dts32' of
-git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
-into arm/dt
-      Merge tag 'v5.13-rockchip-dts64' of
-git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
-into arm/dt
-      Merge tag 'zynqmp-dt-for-v5.13' of
-https://github.com/Xilinx/linux-xlnx into arm/dt
-      Merge tag 'qcom-dts-for-5.13-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/dt
-      Merge tag 'qcom-arm64-for-5.13-3' of
-git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/dt
-      Merge tag 'bmc-5.13-devicetree-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc into arm/dt
-
-Aryan Srivastava (1):
-      ARM: dts: mvebu: Add device tree for ATL-x530 Board
-
-Aswath Govindraju (7):
-      arm64: dts: ti: k3-j721e-main: Update the speed modes supported
-and their itap delay values for MMCSD subsystems
-      arm64: dts: ti: k3-am642-evm: Add support for SPI EEPROM
-      arm64: dts: ti: k3-am64-main: Add DT node for USB subsystem
-      arm64: dts: ti: k3-am642-evm: Add USB support
-      arm64: dts: ti: k3-am64: Add GPIO DT nodes
-      arm64: dts: ti: k3-am642: reserve gpio in mcu domain for firmware usa=
-ge
-      arm64: dts: ti: k3-j7200: Add support for higher speed modes and
-update delay select values for MMCSD subsystems
-
-Bhaskar Chowdhury (1):
-      ARM: dts: at91: Fix a typo
-
-Bjorn Andersson (3):
-      arm64: dts: qcom: Introduce SM8350 HDK
-      dt-bindings: arm: qcom: Add SM8350 HDK
-      arm64: dts: qcom: pm8150: Enable RTC
-
-Boris Lysov (1):
-      arm: mediatek: dts: activate SMP for mt6589
-
-Brandon Wyman (2):
-      ARM: dts: aspeed: rainier: Add gpio-keys-polled for fans
-      ARM: dts: aspeed: everest: Add power supply i2c devices
-
-Bryan O'Donoghue (1):
-      arm64: dts: qcom: sm8250: Add venus DT node
-
-Caleb Connolly (2):
-      arm64: dts: qcom: sm8150: add other QUP nodes and iommus
-      arm64: dts: qcom: sm8150: add i2c nodes
-
-Cameron Nemo (1):
-      arm64: dts: rockchip: add rk3328 dwc3 usb controller node
-
-Christian Hewitt (6):
-      dt-bindings: arm: amlogic: add support for the Minix NEO U9-H
-      arm64: dts: meson: add initial device-tree for Minix NEO U9-H
-      dt-bindings: arm: amlogic: add MeCool KII/KIII Pro bindings
-      arm64: dts: meson: add initial device-tree for MeCool KII Pro
-      arm64: dts: meson: add initial device-tree for MeCool KIII Pro
-      arm64: dts: meson: remove extra tab from ODROID N2/N2+ ext_mdio node
-
-Chunfeng Yun (11):
-      arm64: dts: mt8183: update wakeup register offset
-      arm64: dts: mt8173: fix property typo of 'phys' in dsi node
-      arm64: dts: mediatek: mt8173: fix dtbs_check warning
-      arm64: dts: mediatek: mt2712: harmonize node names
-      arm64: dts: mediatek: mt8516: harmonize node names and compatibles
-      arm64: dts: mediatek: mt7622: harmonize node names and compatibles
-      arm64: dts: mediatek: mt8183: fix dtbs_check warning
-      arm: dts: mt7629: harmonize node names and compatibles
-      arm: dts: mt7623: harmonize node names and compatibles
-      arm: dts: mt2701: harmonize node names and compatibles
-      arm64: dts: mt8173: fix wrong power-domain phandle of pmic
-
-Cristian Ciocaltea (1):
-      ARM: dts: owl-s500-roseapplepi: Add ATC2603C PMIC
-
-Daniel Palmer (6):
-      ARM: mstar: Select MSTAR_MSC313_MPLL
-      ARM: mstar: Add the external clocks to the base dsti
-      ARM: mstar: Add mpll to base dtsi
-      dt-bindings: vendor-prefixes: Add vendor prefix for M5Stack
-      dt-bindings: arm: mstar: Add compatible for M5Stack UnitV2
-      ARM: dts: mstar: Add a dts for M5Stack UnitV2
-
-Dario Binacchi (1):
-      ARM: dts: am33xx-l4: fix tscadc@0 node indentation
-
-Dave Gerlach (4):
-      dt-bindings: arm: ti: Add bindings for AM642 SoC
-      dt-bindings: pinctrl: k3: Introduce pinmux definitions for AM64
-      arm64: dts: ti: Add support for AM642 SoC
-      arm64: dts: ti: Add support for AM642 EVM
-
-Dien Pham (1):
-      arm64: dts: renesas: salvator-common: Add cpu-supply property to
-a57_0 node
-
-Dima Azarkin (1):
-      ARM: dts: imx6qdl-wandboard: add scl/sda gpios definitions for
-i2c bus recovery
-
-Dinh Nguyen (1):
-      arm64: dts: intel: adjust qpsi read-delay property
-
-Dmitry Baryshkov (8):
-      arm64: dts: qcom: sm8250: split spi pinctrl config
-      arm64: dts: qcom: sm8250: further split of spi pinctrl config
-      arm64: dts: qcom: sm8250: add pinctrl for SPI using GPIO as a CS
-      arm64: dts: qcom: qrb5165-rb5: switch into using GPIO for SPI0 CS
-      arm64: dts: qcom: sdm845: add required clocks on the gcc
-      arm64: dts: qcom: sm8250: switch usb1 qmp phy to USB3+DP mode
-      arm64: dts: qcom: use dp_phy to provide clocks to dispcc
-      arm64: dts: sdm845-db845c: make firmware filenames follow linux-firmw=
-are
-
-Dmitry Osipenko (15):
-      ARM: tegra: ventana: Support CPU and Core voltage scaling
-      ARM: tegra: ventana: Support CPU thermal throttling
-      ARM: tegra: cardhu: Support CPU frequency and voltage scaling on
-all board variants
-      ARM: tegra: cardhu: Support CPU thermal throttling
-      ARM: tegra: paz00: Enable full voltage scaling ranges for CPU
-and Core domains
-      ARM: tegra: acer-a500: Enable core voltage scaling
-      ARM: tegra: acer-a500: Reduce thermal throttling hysteresis to 0.2C
-      ARM: tegra: acer-a500: Specify all CPU cores as cooling devices
-      ARM: tegra: acer-a500: Rename avdd to vdda of touchscreen node
-      ARM: tegra: nexus7: Specify all CPU cores as cooling devices
-      ARM: tegra: ouya: Specify all CPU cores as cooling devices
-      ARM: tegra: Specify CPU suspend OPP in device-tree
-      ARM: tegra: Specify memory suspend OPP in device-tree
-      ARM: tegra: Specify tps65911 as wakeup source
-      ARM: tegra: acer-a500: Add atmel,wakeup-method property
-
-Dong Aisheng (16):
-      dt-bindings: arm: fsl: add imx8qm boards compatible string
-      dt-bindings: mailbox: mu: add imx8qm support
-      arm64: dts: imx8qxp: add fallback compatible string for scu pd
-      arm64: dts: imx8qxp: move scu pd node before scu clock node
-      arm64: dts: imx8qxp: orginize dts in subsystems
-      arm64: dts: imx8: add lsio lpcg clocks
-      arm64: dts: imx8: add conn lpcg clocks
-      arm64: dts: imx8: add adma lpcg clocks
-      arm64: dts: imx8: switch to two cell scu clock binding
-      arm64: dts: imx8: switch to new lpcg clock binding
-      arm64: dts: imx8qm: add lsio ss support
-      arm64: dts: imx8qm: add conn ss support
-      arm64: dts: imx8: split adma ss into dma and audio ss
-      arm64: dts: imx8qm: add dma ss support
-      arm64: dts: imx: add imx8qm common dts file
-      arm64: dts: imx: add imx8qm mek support
-
-Douglas Anderson (9):
-      arm64: dts: qcom: Move sc7180 MI2S config to board files and make pul=
-ldown
-      arm64: dts: qcom: Prep sc7180-trogdor trackpad IRQ for new boards
-      arm64: dts: qcom: Unify the sc7180-trogdor panel nodes
-      arm64: dts: qcom: Add sc7180-lazor-limozeen skus
-      arm64: dts: qcom: Add sc7180-trogdor-pompom skus
-      arm64: dts: qcom: Add sc7180-trogdor-coachz skus
-      arm64: dts: qcom: sc7180: Avoid glitching SPI CS at bootup on trogdor
-      arm64: dts: qcom: sc7180: coachz: Add "dmic_clk_en"
-      arm64: dts: qcom: sc7180: pompom: Add "dmic_clk_en" + sound model
-
-Drew Fustini (2):
-      ARM: dts: am335x-pocketbeagle: unique gpio-line-names
-      ARM: dts: am335x-boneblack.dts: unique gpio-line-names
-
-Eddie James (11):
-      ARM: dts: aspeed: rainier: Add additional processor CFAMs
-      ARM: dts: aspeed: rainier: Enable fan watchdog
-      ARM: dts: aspeed: rainier 4U: Fix fan configuration
-      ARM: dts: aspeed: everest: Add FSI CFAMs and re-number engines
-      ARM: dts: aspeed: everest: Add RTC
-      ARM: dts: aspeed: everest: Enable fan watchdog
-      ARM: dts: aspeed: Add Rainier 1S4U machine
-      ARM: dts: aspeed: Rainier: Fix PCA9552 on bus 8
-      ARM: dts: aspeed: Rainier: Fix humidity sensor bus address
-      ARM: dts: aspeed: Rainier 1S4U: Fix fan nodes
-      ARM: dts: aspeed: Rainier: Update to pass 2 hardware
-
-Fabien Parent (4):
-      dt-bindings: arm64: dts: mediatek: Add mt8516-pumpkin board
-      dt-bindings: arm64: dts: mediatek: Add mt8183-pumpkin board
-      arm64: dts: mt8183: add mt8183 pumpkin board
-      arm64: dts: mediatek: fix reset GPIO level on pumpkin
-
-Fabio Estevam (5):
-      arm64: dts: imx8mm-nitrogen-r2: Pass the i2c3 unit name
-      ARM: dts: imx53-qsb: Describe the esdhc1 card detect pin
-      ARM: dts: imx6dl-plybas: Fix gpio-keys W=3D1 warnings
-      ARM: dts: imx7d-mba7: Remove unsupported PCI properties
-      arm64: dts: imx8mp-evk: Improve the Ethernet PHY description
-
-Faiz Abbas (2):
-      arm64: dts: ti: k3-j7200: Add gpio nodes
-      arm64: dts: ti: k3-j7200-common-proc-board: Disable unused gpio modul=
-es
-
-Geert Uytterhoeven (15):
-      ARM: dts: renesas: Group tuples in APMU cpus properties
-      ARM: dts: renesas: Group tuples in playback and capture properties
-      ARM: dts: renesas: Group tuples in pin control properties
-      arm64: dts: renesas: Group tuples in playback and capture properties
-      arm64: dts: renesas: Group tuples in pin control properties
-      arm64: dts: renesas: Consolidate Salvator-X(S) HDMI0 handling
-      ARM: dts: rza2mevb: Upstream Linux requires SDRAM
-      arm64: dts: renesas: falcon: Add I2C EEPROM nodes
-      arm64: dts: renesas: falcon: Add CSI/DSI sub-board
-      arm64: dts: renesas: falcon: Add Ethernet sub-board
-      arm64: dts: renesas: falcon: Move console config to CPU board DTS
-      arm64: dts: renesas: falcon: Move watchdog config to CPU board DTS
-      arm64: dts: renesas: falcon: Move AVB0 to main DTS
-      ARM: dts: koelsch: Configure pull-up for SOFT_SW GPIO keys
-      arm64: dts: renesas: r8a77950: Drop operating points above 1.5 GHz
-
-George Hung (1):
-      ARM: dts: nuvoton: Add Quanta GBS BMC Device Tree
-
-Grygorii Strashko (1):
-      arm64: dts: ti: k3-am64-main: add main CPTS entry
-
-Guido G=C3=BCnther (8):
-      arm64: dts: imx8mq-librem5-devkit: Drop buck3 startup-ramp-delay
-      arm64: dts: librem5: Drop assigned-clocks from SAI2
-      arm64: dts: librem5-devkit: Use a less generic codec name
-      arm64: dts: librem5-devkit: Add speaker amplifier
-      arm64: dts: librem5-devkit: "Drop Line In Jack"
-      arm64: dts: librem5-devkit: Add mux for built-in vs headset mic
-      arm64: dts: librem5-devkit: Move headphone detection to sound card
-      arm64: dts: imx8mq-librem5: Hog the correct gpio
-
-Heiko Stuebner (11):
-      arm64: dts: rockchip: synchronize rk3399 opps with vendor kernel
-      arm64: dts: rockchip: used range'd gpu opps on rk3399
-      arm64: dts: rockchip: drop separate opp table on rk3399-puma
-      arm64: dts: rockchip: add phandle to timer0 on rk3368
-      ARM: dts: rockchip: move rk322x mmcx aliases to board dts files
-      ARM: dts: rockchip: move rv1108 mmcx aliases to board dts files
-      arm64: dts: rockchip: move mmc aliases to board dts on px30
-      arm64: dts: rockchip: move mmc aliases to board dts on rk3308
-      arm64: dts: rockchip: move mmc aliases to board dts on rk3328
-      arm64: dts: rockchip: move mmc aliases to board dts on rk3368
-      arm64: dts: rockchip: move mmc aliases to board dts on rk3399
-
-Heiko Thiery (2):
-      dt-bindings: arm: fsl: add Kontron pITX-imx8m board
-      arm64: dts: fsl: add support for Kontron pitx-imx8m board
-
-Horia Geant=C4=83 (1):
-      ARM: dts: ls1021a: mark crypto engine dma coherent
-
-Hsin-Yi Wang (9):
-      arm64: dts: mediatek: mt8183: evb: Add domain supply for mfg
-      dt-bindings: arm64: dts: mediatek: Add mt8183-kukui-jacuzzi-damu
-      dt-bindings: arm64: dts: mediatek: Add mt8183-kukui-jacuzzi-juniper
-      arm64: dts: mt8183: Add kukui-jacuzzi-damu board
-      arm64: dts: mt8183: Add kukui-jacuzzi-juniper board
-      arm64: dts: mt8183: Add gce client reg for display subcomponents
-      dt-bindings: arm64: dts: mediatek: Add mt8183-kukui-kakadu
-      dt-bindings: arm64: dts: mediatek: Add mt8183-kukui-kodama
-      arm64: dts: mt8183: Add kukui kodama board
-
-Hyeonki Hong (2):
-      arm64: dts: meson: add saradc node to ODROID N2/N2+
-      arm64: dts: meson: add GPIO line names to ODROID N2/N2+
-
-Ian Ray (1):
-      ARM: dts: imx: bx50v3: Define GPIO line names
-
-JC Kuo (1):
-      dt-bindings: phy: tegra-xusb: Add nvidia,pmc prop
-
-Jack Pham (2):
-      arm64: dts: qcom: sm8350: add USB and PHY device nodes
-      arm64: dts: qcom: sm8350-mtp: enable USB nodes
-
-Jagan Teki (15):
-      dt-bindings: arm: stm32: Add Engicam MicroGEA STM32MP1 MicroDev 2.0
-      ARM: dts: stm32: Add Engicam MicroGEA STM32MP1 SoM
-      ARM: dts: stm32: Add Engicam MicroGEA STM32MP1 MicroDev 2.0 board
-      dt-bindings: arm: stm32: Add Engicam MicroGEA STM32MP1 MicroDev 2.0 7=
-" OF
-      ARM: dts: stm32: Add Engicam MicroGEA STM32MP1 MicroDev 2.0 7" OF
-      dt-bindings: arm: stm32: Add Engicam i.Core STM32MP1 C.TOUCH 2.0
-      ARM: dts: stm32: Add Engicam i.Core STM32MP1 SoM
-      ARM: dts: stm32: Add Engicam i.Core STM32MP1 C.TOUCH 2.0
-      dt-bindings: arm: stm32: Add Engicam i.Core STM32MP1 EDIMM2.2 Starter=
- Kit
-      ARM: dts: stm32: Add Engicam i.Core STM32MP1 EDIMM2.2 Starter Kit
-      dt-bindings: arm: fsl: Add Engicam i.Core MX8M Mini C.TOUCH 2.0
-      dt-bindings: arm: fsl: Add Engicam i.Core MX8M Mini EDIMM2.2 Starter =
-Kit
-      arm64: dts: imx8mm: Add Engicam i.Core MX8M Mini SoM
-      arm64: dts: imx8mm: Add Engicam i.Core MX8M Mini C.TOUCH 2.0
-      arm64: dts: imx8mm: Add Engicam i.Core MX8M Mini EDIMM2.2 Starter Kit
-
-Jami Kettunen (2):
-      arm64: dts: qcom: msm8998: Disable MSS remoteproc by default
-      arm64: dts: qcom: Add support for OnePlus 5/5T
-
-Jan Kiszka (5):
-      arm64: dts: ti: k3-am65-main: Add device_type to pcie*_rc nodes
-      arm64: dts: ti: k3-am65-mcu: Add RTI watchdog entry
-      dt-bindings: Add Siemens vendor prefix
-      dt-bindings: arm: ti: Add bindings for Siemens IOT2050 boards
-      arm64: dts: ti: Add support for Siemens IOT2050 boards
-
-Jernej Skrabec (1):
-      ARM: dts: sun8i: h3: beelink-x2: Add power button
-
-Jim Wright (1):
-      ARM: dts: aspeed: everest: Add UCD90320 power sequencer
-
-Joel Stanley (2):
-      ARM: dts: aspeed: rainier: Add missing fan nodes
-      ARM: dts: aspeed: everest: Add size/address cells
-
-Johan Jonker (8):
-      arm64: dts: rockchip: enable dwc3 usb for A95X Z2
-      arm64: dts: rockchip: add new watchdog compatible to px30.dtsi
-      arm64: dts: rockchip: add new watchdog compatible to rk3308.dtsi
-      arm64: dts: rockchip: add new watchdog compatible to rk3328.dtsi
-      arm64: dts: rockchip: add new watchdog compatible to rk3399.dtsi
-      ARM: dts: rockchip: add new watchdog compatible to rv1108.dtsi
-      ARM: dts: rockchip: add new watchdog compatible to rk322x.dtsi
-      ARM: dts: rockchip: remove clock-names property from watchdog
-node in rv1108.dtsi
-
-Jonathan Marek (2):
-      arm64: dts: qcom: sm8250: fix display nodes
-      arm64: dts: qcom: update usb qmp phy clock-cells property
-
-Jonathan Neusch=C3=A4fer (1):
-      ARM: dts: imx50-kobo-aura: Add Netronix embedded controller
-
-Kevin Hilman (2):
-      arm64: dts: amlogic: misc DT schema fixups
-      dt-bindings: mali-bifrost: add dma-coherent
-
-Kieran Bingham (3):
-      arm64: dts: renesas: falcon-cpu: Add GP LEDs
-      arm64: dts: renesas: r8a779a0: Add FCPVD support
-      arm64: dts: renesas: r8a779a0: Add VSPD support
-
-Konstantin Aladyshev (1):
-      ARM: dts: aspeed: amd-ethanolx: Enable all used I2C busses
-
-Konstantin Porotchkin (2):
-      arm64: dts: marvell: add support for Marvell CP110 UTMI PHY
-      arm64: dts: marvell: enable CP110 UTMI PHY usage
-
-Krzysztof Kozlowski (25):
-      ARM: dts: exynos: correct fuel gauge interrupt trigger level on GT-I9=
-100
-      ARM: dts: exynos: correct fuel gauge interrupt trigger level on
-P4 Note family
-      ARM: dts: exynos: correct fuel gauge interrupt trigger level on
-Midas family
-      ARM: dts: exynos: correct MUIC interrupt trigger level on Midas famil=
-y
-      ARM: dts: exynos: correct PMIC interrupt trigger level on Midas famil=
-y
-      ARM: dts: exynos: correct PMIC interrupt trigger level on Odroid
-X/U3 family
-      ARM: dts: exynos: correct PMIC interrupt trigger level on P4 Note fam=
-ily
-      ARM: dts: exynos: correct PMIC interrupt trigger level on SMDK5250
-      ARM: dts: exynos: correct PMIC interrupt trigger level on Snow
-      ARM: dts: s5pv210: correct fuel gauge interrupt trigger level on
-Fascinate family
-      arm64: dts: exynos: re-order Slim SSS clocks to match dtschema
-      ARM: dts: exynos: add input clock to CMU in Exynos4412 Odroid
-      ARM: dts: exynos: replace deprecated NTC/Murata compatibles
-      ARM: dts: exynos: white-space cleanups
-      arm64: dts: exynos: white-space cleanups
-      arm64: dts: intel: socfpga: override clocks by label
-      arm64: dts: intel: socfpga_agilex: move clocks out of soc node
-      arm64: dts: intel: socfpga_agilex: move timer out of soc node
-      arm64: dts: intel: socfpga_agilex: remove default status=3Dokay
-      arm64: dts: intel: socfpga_agilex: move usbphy out of soc node
-      arm64: dts: intel: socfpga_agilex: use defined for GIC interrupts
-      arm64: dts: intel: socfpga_agilex: align node names with dtschema
-      arm64: dts: intel: socfpga_agilex_socdk_nand: align LED node
-names with dtschema
-      ARM: dts: qcom: msm8974-lge-nexus5: correct fuel gauge interrupt
-trigger level
-      ARM: dts: qcom: msm8974-samsung-klte: correct fuel gauge
-interrupt trigger level
-
-Kuldeep Singh (2):
-      arm64: dts: imx8mm: Reorder flexspi clock-names entry
-      arm64: dts: imx8mn: Reorder flexspi clock-names entry
-
-Kurt Kanzenbach (1):
-      ARM: dts: stm32: Add PTP clock to Ethernet controller
-
-Lad Prabhakar (2):
-      ARM: dts: r8a7742-iwg21d-q7-dbcm-ca: Separate out ov5640 nodes
-      ARM: dts: r8a7742-iwg21d-q7-dbcm-ca: Add support for 8-bit ov7725 sen=
-sors
-
-Laurent Pinchart (1):
-      arm64: dts: zynqmp: Add power domain for the DisplayPort DMA controll=
-er
-
-Linus Walleij (10):
-      ARM: dts: ux500: Fix BT+WLAN on Janice
-      ARM: dts: ux500: Fix touchscreen on TVK R2
-      ARM: dts: ux500: Move Synaptics to right include
-      ARM: dts: ux500: Push sensors to TVK R2 board
-      ARM: dts: ux500: Fix up TVK R3 sensors
-      ARM: dts: ux500: Push TC35893 defines to each UIB
-      ARM: dts: ux500: Totally separate TVK R2 and R3
-      ARM: dts: ux500: Clarify UIB version per board
-      ARM: dts: ux500: Bump AUX1 voltage
-      ARM: dts: ux500: Add Cypress CTTYSP touch to TVK UIB
-
-Lokesh Vutla (2):
-      dt-bindings: arm: ti: Add bindings for AM642 SK
-      arm64: dts: ti: Add support for AM642 SK
-
-Luca Weiss (1):
-      ARM: dts: qcom: msm8974-hammerhead: add mount matrix for IMU
-
-Ludovic Desroches (1):
-      ARM: dts: at91: change the key code of the gpio key
-
-Maciej Matuszczyk (1):
-      arm64: dts: rockchip: Add gpu opp nodes to px30 dtsi
-
-Manivannan Sadhasivam (14):
-      ARM: dts: qcom: sdx55: Add support for A7 PLL clock
-      ARM: dts: qcom: sdx55: Add support for APCS block
-      ARM: dts: qcom: sdx55: Add CPUFreq support
-      ARM: dts: qcom: sdx55: Add modem SMP2P node
-      ARM: dts: qcom: sdx55: Add IMEM and PIL info region
-      dt-bindings: firmware: scm: Add compatible for SDX55
-      ARM: dts: qcom: sdx55: Add SCM node
-      ARM: dts: qcom: sdx55: Add interconnect nodes
-      ARM: dts: qcom: Fix node name for NAND controller node
-      ARM: dts: qcom: sdx55: Add Modem remoteproc node
-      dt-bindings: arm: qcom: Add binding for Telit FN980 TLB board
-      ARM: dts: qcom: sdx55: Add basic devicetree support for Telit FN980 T=
-LB
-      dt-bindings: arm: qcom: Add binding for Thundercomm T55 kit
-      ARM: dts: qcom: sdx55: Add basic devicetree support for Thundercomm T=
-55
-
-Marek Beh=C3=BAn (1):
-      arm64: dts: marvell: armada-37xx: add syscon compatible to NB clk nod=
-e
-
-Marek Vasut (7):
-      arm64: dts: imx8mp: add eqos node and alias
-      arm64: dts: freescale: Add support EQOS MAC on phyBOARD-Pollux-i.MX8M=
-P
-      ARM: dts: stm32: Fill GPIO line names on DHCOM SoM
-      ARM: dts: stm32: Fill GPIO line names on AV96
-      ARM: dts: stm32: Update GPIO line names on DRC02
-      ARM: dts: stm32: Update GPIO line names on PicoITX
-      ARM: dts: stm32: Enable crc1 and cryp1 where applicable on DHSOM
-
-Martin Kepplinger (1):
-      arm64: dts: imx8mq-librem5-r2: set nearlevel to 120
-
-Matthew Barth (2):
-      ARM: dts: aspeed: everest: Add max31785 fan controller device
-      ARM: dts: aspeed: everest: Add pca9552 fan presence
-
-Matthias Brugger (2):
-      arm64: dts: mt8183-pumpkin: fix dtbs_check warning
-      arm64: dts: mt8183: fix dtbs_check warning
-
-Matthias Kaehlcke (6):
-      arm64: dts: qcom: sc7180: trogdor: Add label to charger thermal zone
-      arm64: dts: qcom: sc7180: Disable charger thermal zone for lazor
-      arm64: dts: qcom: sc7180: trogdor: Fix trip point config of
-charger thermal zone
-      arm64: dts: qcom: sc7180: trogdor: Use ADC TM channel 0 instead
-of 1 for charger temperature
-      arm64: dts: qcom: sc7180: Set up lazor r3+ as sc7180-lite SKUs
-      arm64: dts: mt8183: Configure CPU cooling
-
-Maulik Shah (3):
-      arm64: dts: qcom: sc7280: Add RSC and PDC devices
-      arm64: dts: qcom: sc7280: Add reserved memory for fw
-      arm64: dts: qcom: sc7280: Add cpuidle states
-
-Michael Walle (5):
-      arm64: dts: ls1028a: add interrupt to Root Complex Event Collector
-      arm64: dts: fsl-ls1028a-kontron-sl28: move MTD partitions
-      arm64: dts: fsl-ls1028a-kontron-sl28: combine unused partitions
-      arm64: dts: ls1028a: move rtc alias to individual boards
-      arm64: dts: fsl-ls1028a-kontron-sl28: add rtc0 alias
-
-Nichole Wang (1):
-      ARM: dts: aspeed: mihawk: Add GPIO line names
-
-Nicolas Boichat (1):
-      arm64: dts: mt8183: Add kukui kakadu board
-
-Nicolas Ferre (2):
-      ARM: dts: at91: sama5d2: add ETB and ETM unit name
-      ARM: dts: at91: sama5d2/trivial: fix letter case for etm hex address
-
-Niklas S=C3=B6derlund (2):
-      arm64: dts: renesas: r8a779a0: Add thermal support
-      arm64: dts: renesas: r8a77961: Add VIN and CSI-2 device nodes
-
-Pascal Roeleven (2):
-      dt-bindings: arm: Add Topwise A721
-      ARM: dts: sun4i: Add support for Topwise A721 tablet
-
-Paul Fertser (1):
-      ARM: dts: aspeed: tiogapass: add hotplug controller
-
-Peng Fan (3):
-      dt-bindings: clock: imx8qxp-lpcg: correct the example clock-names
-      arm64: dts: imx8qxp: correct usdhc clock-names sequence
-      arm64: dts: imx8mp: add wdog2/3 nodes
-
-Peter Ujfalusi (1):
-      arm64: dts: ti: k3-am64-main: Enable DMA support
-
-Philippe Schenker (1):
-      ARM: dts: colibri-imx6ull: Change drive strength for usdhc2
-
-Phong Hoang (2):
-      arm64: dts: renesas: r8a779a0: Add TMU support
-      arm64: dts: renesas: r8a779a0: Add CMT support
-
-Pieter Beers (1):
-      ARM: dts: sunxi: h2-plus-bananapi-m2-zero: Add HDMI out
-
-Pratyush Yadav (6):
-      arm64: dts: ti: k3-j721e-som-p0: Enable 8D-8D-8D mode on OSPI
-      arm64: dts: ti: am654-base-board: Enable 8D-8D-8D mode on OSPI
-      arm64: dts: ti: k3-j7200-som-p0: Add nodes for OSPI0
-      arm64: dts: ti: k3-j721e-mcu: Fix ospi compatible
-      arm64: dts: ti: k3-j7200-mcu: Fix ospi compatible
-      arm64: dts: ti: k3-am64-main: Fix ospi compatible
-
-Priyanga Ramasamy (1):
-      ARM: dts: aspeed: everest: Add I2C components
-
-Quanyang Wang (1):
-      arm64: dts: zynqmp: Remove si5328 device nodes
-
-Rafa=C5=82 Mi=C5=82ecki (15):
-      arm64: dts: broadcom: bcm4908: describe USB PHY
-      arm64: dts: broadcom: bcm4908: describe Ethernet controller
-      arm64: dts: broadcom: bcm4908: describe Netgear R8000P switch
-      arm64: dts: broadcom: bcm4908: add remaining Netgear R8000P LEDs
-      arm64: dts: broadcom: bcm4908: describe firmware partitions
-      arm64: dts: broadcom: bcm4908: fix switch parent node name
-      dt-bindings: arm: bcm: document TP-Link Archer C2300 binding
-      arm64: dts: broadcom: bcm4908: add TP-Link Archer C2300 V1
-      arm64: dts: broadcom: bcm4908: set Asus GT-AC5300 port 7 PHY mode
-      arm64: dts: broadcom: bcm4908: add Ethernet TX irq
-      ARM: dts: BCM5301X: fix "reg" formatting in /memory node
-      ARM: dts: BCM5301X: Describe NVMEM NVRAM on Linksys & Luxul routers
-      ARM: dts: BCM5301X: Fix Linksys EA9500 partitions
-      ARM: dts: BCM5301X: Set Linksys EA9500 power LED
-      arm64: dts: broadcom: bcm4908: add Ethernet MAC addr
-
-Rajendra Nayak (4):
-      dt-bindings: arm: qcom: Document sc7280 SoC and board
-      arm64: dts: qcom: sc7280: Add basic dts/dtsi files for sc7280 soc
-      arm64: dts: qcom: SC7280: Add rpmhcc clock controller node
-      arm64: dts: qcom: sc7280: Add rpmh power-domain node
-
-Robert Foss (5):
-      arm64: dts: qcom: sdm845: Add CAMSS ISP node
-      arm64: dts: qcom: sdm845-db845c: Configure regulators for camss node
-      arm64: dts: qcom: sdm845-db845c: Enable ov8856 sensor and connect to =
-ISP
-      arm64: dts: qcom: sm8350: Add thermal zones and throttling support
-      arm64: dts: qcom: sm8350: Add support for PRNG EE
-
-Robin Murphy (2):
-      arm64: dts: juno: Describe PCI dma-ranges
-      arm64: dts: juno: Enable more SMMUs
-
-Russell King (3):
-      arm64: dts: lx2160a-clearfog-itx: add SFP support
-      arm64: dts: marvell: clearfog-gt-8k: add pwm-fan
-      arm64: dts: marvell: clearfog-gt-8k: add cooling maps
-
-Ryan Wu (1):
-      dt-bindings: nvmem: mediatek: add support for MediaTek mt8192 SoC
-
-Ryder Lee (1):
-      arm64: dts: mt7622: add ePA/eLNA pinmux for built-in WiFi
-
-Sai Prakash Ranjan (13):
-      arm64: dts: qcom: sc7180: Rename the qmp node to power-controller
-      arm64: dts: qcom: sdm845: Rename the qmp node to power-controller
-      arm64: dts: qcom: sm8250: Rename the qmp node to power-controller
-      arm64: dts: qcom: sm8350: Rename the qmp node to power-controller
-      arm64: dts: qcom: sm8250: Fix level triggered PMU interrupt polarity
-      arm64: dts: qcom: sm8350: Fix level triggered PMU interrupt polarity
-      arm64: dts: qcom: sm8250: Fix timer interrupt to specify EL2
-physical timer
-      arm64: dts: qcom: sc7280: Add device node for APPS SMMU
-      arm64: dts: qcom: sc7280: Add APSS watchdog node
-      arm64: dts: qcom: sc7280: Add device tree node for LLCC
-      arm64: dts: qcom: sc7280: Add IPCC for SC7280 SoC
-      arm64: dts: qcom: sc7280: Add AOSS QMP node
-      arm64: dts: qcom: sc7280: Add Coresight support
-
-Samuel Holland (6):
-      ARM: dts: sunxi: Use the new r_intc binding
-      ARM: dts: sunxi: h3/h5: Add r_intc node
-      ARM: dts: sunxi: Move wakeup-capable IRQs to r_intc
-      arm64: dts: allwinner: Use the new r_intc binding
-      arm64: dts: allwinner: Move wakeup-capable IRQs to r_intc
-      arm64: dts: allwinner: h6: Use RSB for AXP805 PMIC connection
-
-Sandeep Maheswaram (1):
-      arm64: dts: qcom: sc7180: Use pdc interrupts for USB instead of
-GIC interrupts
-
-Sebastian Krzyszkowiak (1):
-      arm64: dts: imx8mq-librem5-r3: Mark buck3 as always on
-
-Sebastian Reichel (5):
-      ARM: dts: imx: Mark IIM as syscon on i.MX51/i.MX53
-      ARM: dts: imx6q-ba16: add USB OTG VBUS enable GPIO
-      ARM: dts: imx6q-ba16: improve PHY information
-      ARM: dts: imx: bx50v3: i2c GPIOs are open drain
-      ARM: dts: motorola-cpcap-mapphone: Prepare for dtbs_check parsing
-
-Seiya Wang (3):
-      dt-bindings: timer: Add compatible for Mediatek MT8195
-      dt-bindings: serial: Add compatible for Mediatek MT8195
-      dt-bindings: arm: Add compatible for Mediatek MT8195
-
-Serge Semin (1):
-      ARM: dts: ls1021a: Harmonize DWC USB3 DT nodes name
-
-Shawn Guo (4):
-      arm64: dts: qcom: sdm845: fix number of pins in 'gpio-ranges'
-      arm64: dts: qcom: sm8150: fix number of pins in 'gpio-ranges'
-      arm64: dts: qcom: sm8250: fix number of pins in 'gpio-ranges'
-      arm64: dts: qcom: sm8350: fix number of pins in 'gpio-ranges'
-
-Srinivas Kandagatla (1):
-      arm64: dts: qcom: db845c: fix correct powerdown pin for WSA881x
-
-Srinivasa Rao Mandadapu (1):
-      arm64: dts: qcom: Add sound node for sc7180-trogdor-coachz
-
-Stefan Riedmueller (2):
-      ARM: dts: imx6: pfla02: Fix USB vbus enable pinmuxing
-      ARM: dts: imx6: pbab01: Set USB OTG port to peripheral
-
-Stephan Gerhold (1):
-      arm64: dts: qcom: msm8916: Add GICv2 hypervisor registers/interrupt
-
-Stephen Boyd (4):
-      arm64: dts: qcom: sc7180: Update dts for DP phy inside QMP phy
-      arm64: dts: qcom: trogdor: Only wakeup from pen eject
-      arm64: dts: qcom: Disable camera clk on sc7180-trogdor devices by def=
-ault
-      arm64: dts: qcom: sc7180: Drop duplicate dp_hot_plug_det node in trog=
-dor
-
-Sujit Kautkar (1):
-      arm64: dts: qcom: Move rmtfs memory region
-
-Suman Anna (5):
-      arm64: dts: ti: k3-am65-main: Add ICSSG nodes
-      arm64: dts: ti: k3-j721e-main: Add ICSSG nodes
-      arm64: dts: ti: k3-am64-main: Add hwspinlock node
-      arm64: dts: ti: k3-am64-main: Add mailbox cluster nodes
-      arm64: dts: ti: k3-am642-evm/sk: Add IPC sub-mailbox nodes
-
-Sumit Semwal (1):
-      arm64: dts: qcom: sdm845-xiaomi-beryllium: Add DSI and panel bits
-
-Teresa Remmet (1):
-      arm64: dts: imx8mp-phyboard-pollux-rdk: Change debug UART
-
-Thomas Schneider (1):
-      arm64: dts: rockchip: add infrared receiver node to rockpro64
-
-Tianling Shen (2):
-      dt-bindings: Add doc for FriendlyARM NanoPi R4S
-      rockchip: rk3399: Add support for FriendlyARM NanoPi R4S
-
-Tim Harvey (1):
-      ARM: dts: imx6qdl-gw*: Remove unnecessary #address-cells/#size-cells
-
-Timon Baetz (2):
-      ARM: dts: exynos: add charger supply for I9100
-      ARM: dts: exynos: Add front camera support to I9100
-
-Tony Lindgren (46):
-      bus: ti-sysc: Fix initializing module_pa for modules without sysc reg=
-ister
-      bus: ti-sysc: Probe for l4_wkup and l4_cfg interconnect devices first
-      bus: ti-sysc: Detect more modules for debugging
-      bus: ti-sysc: Check for old incomplete dtb
-      ARM: OMAP2+: Init both prm and prcm nodes early for clocks
-      soc: ti: omap-prm: Allow hardware supported retention when idle
-      clk: ti: omap5: Add missing gpmc and ocmc clkctrl
-      PCI: pci-dra7xx: Prepare for deferred probe with module_platform_driv=
-er
-      ARM: dts: Update pcie ranges for dra7
-      ARM: dts: Configure interconnect target module for dra7 pcie
-      ARM: dts: Properly configure dra7 edma sysconfig registers
-      ARM: dts: Move dra7 l3 noc to a separate node
-      ARM: dts: Configure interconnect target module for dra7 qspi
-      ARM: dts: Configure interconnect target module for dra7 sata
-      ARM: dts: Configure interconnect target module for dra7 mpu
-      ARM: dts: Configure interconnect target module for dra7 dmm
-      ARM: dts: Configure simple-pm-bus for dra7 l4_wkup
-      ARM: dts: Configure simple-pm-bus for dra7 l4_per1
-      ARM: dts: Configure simple-pm-bus for dra7 l4_per2
-      ARM: dts: Configure simple-pm-bus for dra7 l4_per3
-      ARM: dts: Configure simple-pm-bus for dra7 l4_cfg
-      ARM: dts: Configure simple-pm-bus for dra7 l3
-      ARM: dts: Configure power-domain for omap4 gfx
-      ARM: dts: Configure power-domain for omap4 dts iss
-      ARM: dts: Configure interconnect target module for omap4 dmm
-      ARM: dts: Configure interconnect target module for omap4 emif
-      ARM: dts: Configure interconnect target module for omap4 debugss
-      ARM: dts: Configure interconnect target module for omap4 mpu
-      ARM: dts: Move omap4 mmio-sram out of l3 interconnect
-      ARM: dts: Move omap4 l3-noc to a separate node
-      ARM: dts: Configure simple-pm-bus for omap4 l4_wkup
-      ARM: dts: Configure simple-pm-bus for omap4 l4_per
-      ARM: dts: Configure simple-pm-bus for omap4 l4_cfg
-      ARM: dts: Prepare for simple-pm-bus for omap4 l3
-      ARM: dts: Configure interconnect target module for omap5 dmm
-      ARM: dts: Configure interconnect target module for omap5 emif
-      ARM: dts: Configure interconnect target module for omap5 mpu
-      ARM: dts: Configure interconnect target module for omap5 gpmc
-      ARM: dts: Configure interconnect target module for omap5 sata
-      ARM: dts: Move omap5 mmio-sram out of l3 interconnect
-      ARM: dts: Move omap5 l3-noc to a separate node
-      ARM: dts: Configure simple-pm-bus for omap5 l4_wkup
-      ARM: dts: Configure simple-pm-bus for omap5 l4_per
-      ARM: dts: Configure simple-pm-bus for omap5 l4_cfg
-      ARM: dts: Configure simple-pm-bus for omap5 l3
-      Merge tags 'genpd-dts-dra7', 'genpd-dts-omap4' and
-'genpd-dts-omap5' into omap-for-v5.13/dts-genpd
-
-V Sujith Kumar Reddy (1):
-      arm64: dts: qcom: sc7180: Update iommu property for simultaneous play=
-back
-
-Valentin CARON - foss (1):
-      ARM: dts: stm32: fix usart 2 & 3 pinconf to wake up with flow control
-
-Venkata Lakshmi Narayana Gubba (1):
-      arm64: dts: qcom: sc7180: Remove clock for bluetooth on Trogdor
-
-Vignesh Raghavendra (6):
-      arm64: dts: ti: k3-am64-main: Add CPSW DT node
-      arm64: dts: ti: k3-am642-evm: add CPSW3g DT nodes
-      arm64: dts: ti: k3-am642-sk: Add CPSW DT nodes
-      arm64: dts: ti: k3-am64-main: Add ADC nodes
-      arm64: dts: ti: k3-am64-main: Add OSPI node
-      arm64: dts: ti: k3-am64-evm/sk: Add OSPI flash DT node
-
-Vinod Koul (26):
-      arm64: dts: qcom: sm8350: Add apss_smmu node
-      arm64: dts: qcom: sm8350: Add UFS nodes
-      arm64: dts: qcom: sm8350-mtp: enable UFS nodes
-      arm64: dts: qcom: sm8350-mtp: add regulator names
-      arm64: dts: qcom: sm8350: fix typo
-      arm64: dts: qcom: sm8350: Add rpmhpd node
-      arm64: dts: qcom: sm8350: Add rmtfs node
-      arm64: dts: qcom: sm8350: Add SMP2P nodes
-      arm64: dts: qcom: sm8350: Add remoteprocs
-      arm64: dts: qcom: sm8350-mtp: Enable remoteprocs
-      arm64: dts: qcom: sm8350: Use enums for GCC
-      arm64: dts: qcom: sm8350: Add cpufreq node
-      arm64: dts: qcom: apq8016-sbc: drop qcom,sbc
-      arm64: dts: qcom: msm8916: don't use empty memory node
-      dt-bindings: arm: qcom: Document ipq6018-cp01 board
-      arm64: dts: qcom: msm8994: don't use empty memory node
-      dt-bindings: arm: qcom: Document sony boards for apq8094
-      arm64: dts: qcom: sm8350: Add spmi node
-      arm64: dts: qcom: pmk8350: Add base dts file
-      arm64: dts: qcom: pm8350: Add base dts file
-      arm64: dts: qcom: pm8350b: Add base dts file
-      arm64: dts: qcom: pm8350c: Add base dts file
-      arm64: dts: qcom: pmr735a: Add base dts file
-      arm64: dts: qcom: pmr735B: Add base dts file
-      arm64: dts: qcom: sm8350-mtp: Add PMICs
-      arm64: dts: qcom: sm8350: Add interconnects
-
-Vishwanatha Subbanna (1):
-      ARM: dts: aspeed: rainier: Add directly controlled LEDs
-
-Vladimir Barinov (1):
-      arm64: dts: renesas: r8a77980: Fix vin4-7 endpoint binding
-
-Vladimir Oltean (1):
-      arm64: dts: ls1028a: set up the real link speed for ENETC port 2
-
-Yoshihiro Shimoda (4):
-      ARM: dts: renesas: Add mmc aliases into R-Car Gen2 board dts files
-      arm64: dts: renesas: Add mmc aliases into board dts files
-      arm64: dts: renesas: r8a77961: Add CAN nodes
-      arm64: dts: renesas: r8a779a0: Fix PMU interrupt
-
-Yusuke Goda (1):
-      arm64: dts: renesas: ulcb: Add cpu-supply property to a57_0 node
-
-Yuya Hamamachi (1):
-      arm64: dts: renesas: r8a77961-ulcb: add HDMI Display support
-
-Zev Weiss (1):
-      ARM: dts: aspeed: Add ASRock E3C246D4I BMC
-
-dillon min (6):
-      Documentation: arm: stm32: Add stm32h750 value line doc
-      dt-bindings: arm: stm32: Add compatible strings for ART-PI board
-      ARM: dts: stm32: introduce stm32h7-pinctrl.dtsi to support stm32h750
-      ARM: dts: stm32: add support for art-pi board based on stm32h750xbh6
-      ARM: stm32: Add a new SoC - STM32H750
-      dt-bindings: serial: stm32: Use 'type: object' instead of false
-for 'additionalProperties'
-
-jonathan@marek.ca (1):
-      arm64: dts: qcom: sm8250: Add videocc DT node
-
-michael.kao (1):
-      arm64: dts: mt8183: add thermal zone node
-
-satya priya (2):
-      arm64: dts: qcom: sc7280: Add SPMI PMIC arbiter device for SC7280
-      arm64: dts: qcom: sc7280: Add RPMh regulators for sc7280-idp
-
- Documentation/arm/index.rst                        |    1 +
- Documentation/arm/stm32/stm32h750-overview.rst     |   34 +
- Documentation/devicetree/bindings/arm/amlogic.yaml |    3 +
- .../devicetree/bindings/arm/bcm/brcm,bcm4908.yaml  |    1 +
- Documentation/devicetree/bindings/arm/fsl.yaml     |   16 +
- .../devicetree/bindings/arm/mediatek.yaml          |   36 +
- .../devicetree/bindings/arm/mstar/mstar.yaml       |    1 +
- Documentation/devicetree/bindings/arm/qcom.yaml    |   20 +
- .../devicetree/bindings/arm/rockchip.yaml          |    1 +
- .../devicetree/bindings/arm/stm32/stm32.yaml       |   21 +
- Documentation/devicetree/bindings/arm/sunxi.yaml   |    5 +
- Documentation/devicetree/bindings/arm/ti/k3.yaml   |    9 +
- .../devicetree/bindings/clock/imx8qxp-lpcg.yaml    |    6 +-
- .../devicetree/bindings/firmware/qcom,scm.txt      |    1 +
- .../devicetree/bindings/gpu/arm,mali-bifrost.yaml  |    2 +
- .../devicetree/bindings/mailbox/fsl,mu.yaml        |    5 +-
- Documentation/devicetree/bindings/media/rc.yaml    |    4 +
- .../devicetree/bindings/nvmem/mtk-efuse.txt        |    1 +
- .../bindings/phy/nvidia,tegra124-xusb-padctl.txt   |    1 +
- .../devicetree/bindings/serial/mtk-uart.txt        |    1 +
- .../devicetree/bindings/serial/st,stm32-uart.yaml  |    3 +-
- .../bindings/timer/mediatek,mtk-timer.txt          |    1 +
- .../devicetree/bindings/vendor-prefixes.yaml       |    6 +
- arch/arm/boot/dts/Makefile                         |   18 +-
- arch/arm/boot/dts/am335x-boneblack.dts             |  132 +-
- arch/arm/boot/dts/am335x-pocketbeagle.dts          |  140 +-
- arch/arm/boot/dts/am33xx-l4.dtsi                   |   28 +-
- arch/arm/boot/dts/am33xx.dtsi                      |    3 +
- arch/arm/boot/dts/armada-385-atl-x530.dts          |  235 +++
- arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts      |   30 +
- arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts  |  202 +++
- .../arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts |    5 +
- arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts       | 1747 ++++++++++++++++=
-++--
- arch/arm/boot/dts/aspeed-bmc-ibm-rainier-1s4u.dts  |   14 +
- arch/arm/boot/dts/aspeed-bmc-ibm-rainier-4u.dts    |   14 +
- arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts       |  748 ++++++++-
- arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts        |   33 +
- arch/arm/boot/dts/at91-sam9x60ek.dts               |    3 +-
- arch/arm/boot/dts/at91-sama5d27_som1_ek.dts        |    3 +-
- arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts      |    3 +-
- arch/arm/boot/dts/at91-sama5d2_icp.dts             |    3 +-
- arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts          |    3 +-
- arch/arm/boot/dts/at91-sama5d2_xplained.dts        |    3 +-
- arch/arm/boot/dts/at91-sama5d3_xplained.dts        |    3 +-
- arch/arm/boot/dts/at91sam9260ek.dts                |    3 +-
- arch/arm/boot/dts/at91sam9g20ek_common.dtsi        |    3 +-
- arch/arm/boot/dts/bcm4708-asus-rt-ac56u.dts        |    4 +-
- arch/arm/boot/dts/bcm4708-asus-rt-ac68u.dts        |    4 +-
- arch/arm/boot/dts/bcm4708-buffalo-wzr-1750dhp.dts  |    4 +-
- arch/arm/boot/dts/bcm4708-linksys-ea6300-v1.dts    |    5 +
- arch/arm/boot/dts/bcm4708-netgear-r6250.dts        |    4 +-
- arch/arm/boot/dts/bcm4708-netgear-r6300-v2.dts     |    4 +-
- arch/arm/boot/dts/bcm4708-smartrg-sr400ac.dts      |    4 +-
- arch/arm/boot/dts/bcm47081-asus-rt-n18u.dts        |    4 +-
- arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dts |    4 +-
- arch/arm/boot/dts/bcm47081-buffalo-wzr-900dhp.dts  |    4 +-
- arch/arm/boot/dts/bcm47081-luxul-xwr-1200.dts      |    5 +
- arch/arm/boot/dts/bcm4709-asus-rt-ac87u.dts        |    4 +-
- arch/arm/boot/dts/bcm4709-buffalo-wxr-1900dhp.dts  |    4 +-
- arch/arm/boot/dts/bcm4709-linksys-ea9200.dts       |    9 +-
- arch/arm/boot/dts/bcm4709-netgear-r7000.dts        |    4 +-
- arch/arm/boot/dts/bcm4709-netgear-r8000.dts        |    4 +-
- arch/arm/boot/dts/bcm47094-dlink-dir-885l.dts      |    4 +-
- arch/arm/boot/dts/bcm47094-linksys-panamera.dts    |   26 +-
- arch/arm/boot/dts/bcm47094-luxul-abr-4500.dts      |    9 +-
- arch/arm/boot/dts/bcm47094-luxul-xbr-4500.dts      |    9 +-
- arch/arm/boot/dts/bcm47094-luxul-xwc-2000.dts      |    4 +-
- arch/arm/boot/dts/bcm47094-luxul-xwr-3100.dts      |    9 +-
- arch/arm/boot/dts/bcm47094-luxul-xwr-3150-v1.dts   |    9 +-
- arch/arm/boot/dts/bcm47094-netgear-r8500.dts       |    4 +-
- arch/arm/boot/dts/bcm47094-phicomm-k3.dts          |    4 +-
- arch/arm/boot/dts/dra7-l4.dtsi                     |   76 +-
- arch/arm/boot/dts/dra7.dtsi                        |  215 ++-
- arch/arm/boot/dts/ep7209.dtsi                      |   18 +-
- arch/arm/boot/dts/ep7211-edb7211.dts               |    2 +-
- arch/arm/boot/dts/exynos3250-monk.dts              |    4 +-
- arch/arm/boot/dts/exynos3250-rinato.dts            |    4 +-
- arch/arm/boot/dts/exynos4210-i9100.dts             |   56 +-
- arch/arm/boot/dts/exynos4412-midas.dtsi            |    6 +-
- arch/arm/boot/dts/exynos4412-odroid-common.dtsi    |    5 +-
- arch/arm/boot/dts/exynos4412-odroidx.dts           |    3 +-
- arch/arm/boot/dts/exynos4412-p4note.dtsi           |    4 +-
- arch/arm/boot/dts/exynos4412-ppmu-common.dtsi      |   48 +-
- arch/arm/boot/dts/exynos5250-smdk5250.dts          |    2 +-
- arch/arm/boot/dts/exynos5250-snow-common.dtsi      |    2 +-
- arch/arm/boot/dts/exynos5410-pinctrl.dtsi          |   28 +-
- arch/arm/boot/dts/imx50-kobo-aura.dts              |   16 +-
- arch/arm/boot/dts/imx51.dtsi                       |    2 +-
- arch/arm/boot/dts/imx53-qsb-common.dtsi            |    2 +
- arch/arm/boot/dts/imx53.dtsi                       |    2 +-
- arch/arm/boot/dts/imx6dl-plybas.dts                |    6 +-
- arch/arm/boot/dts/imx6q-b450v3.dts                 |    5 +
- arch/arm/boot/dts/imx6q-b650v3.dts                 |    5 +
- arch/arm/boot/dts/imx6q-b850v3.dts                 |    5 +
- arch/arm/boot/dts/imx6q-ba16.dtsi                  |   21 +
- arch/arm/boot/dts/imx6q-bx50v3.dtsi                |   12 +-
- arch/arm/boot/dts/imx6qdl-gw52xx.dtsi              |    2 -
- arch/arm/boot/dts/imx6qdl-gw53xx.dtsi              |    2 -
- arch/arm/boot/dts/imx6qdl-gw54xx.dtsi              |    2 -
- arch/arm/boot/dts/imx6qdl-gw551x.dtsi              |    2 -
- arch/arm/boot/dts/imx6qdl-gw552x.dtsi              |    2 -
- arch/arm/boot/dts/imx6qdl-gw560x.dtsi              |    2 -
- arch/arm/boot/dts/imx6qdl-gw5903.dtsi              |    2 -
- arch/arm/boot/dts/imx6qdl-gw5904.dtsi              |    2 -
- arch/arm/boot/dts/imx6qdl-gw5907.dtsi              |    2 -
- arch/arm/boot/dts/imx6qdl-gw5910.dtsi              |    2 -
- arch/arm/boot/dts/imx6qdl-gw5912.dtsi              |    2 -
- arch/arm/boot/dts/imx6qdl-gw5913.dtsi              |    2 -
- arch/arm/boot/dts/imx6qdl-phytec-pbab01.dtsi       |    6 +-
- arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi       |   38 +-
- arch/arm/boot/dts/imx6qdl-ts7970.dtsi              |    1 -
- arch/arm/boot/dts/imx6qdl-wandboard.dtsi           |   24 +-
- arch/arm/boot/dts/imx6sl-tolino-shine2hd.dts       |    7 +-
- arch/arm/boot/dts/imx6ull-colibri.dtsi             |   12 +-
- arch/arm/boot/dts/imx7d-mba7.dts                   |    2 -
- arch/arm/boot/dts/imx7d-remarkable2.dts            |  146 ++
- arch/arm/boot/dts/iwg20d-q7-common.dtsi            |    4 +-
- arch/arm/boot/dts/ls1021a.dtsi                     |    3 +-
- arch/arm/boot/dts/motorola-cpcap-mapphone.dtsi     |   59 +-
- .../boot/dts/mstar-infinity2m-ssd202d-unitv2.dts   |   25 +
- arch/arm/boot/dts/mstar-v7.dtsi                    |   23 +
- arch/arm/boot/dts/mt2701.dtsi                      |   19 +-
- arch/arm/boot/dts/mt6589.dtsi                      |    1 +
- arch/arm/boot/dts/mt7623.dtsi                      |   26 +-
- arch/arm/boot/dts/mt7623n.dtsi                     |    4 +-
- arch/arm/boot/dts/mt7629.dtsi                      |   12 +-
- arch/arm/boot/dts/nuvoton-npcm730-gbs.dts          | 1135 +++++++++++++
- arch/arm/boot/dts/omap3-echo.dts                   |  476 ++++--
- arch/arm/boot/dts/omap4-l4.dtsi                    |   39 +-
- arch/arm/boot/dts/omap4.dtsi                       |  170 +-
- arch/arm/boot/dts/omap4460.dtsi                    |   13 +-
- arch/arm/boot/dts/omap44xx-clocks.dtsi             |    8 -
- arch/arm/boot/dts/omap5-l4.dtsi                    |   67 +-
- arch/arm/boot/dts/omap5.dtsi                       |  209 ++-
- arch/arm/boot/dts/owl-s500-roseapplepi.dts         |  132 +-
- arch/arm/boot/dts/qcom-ipq4019.dtsi                |    2 +-
- .../dts/qcom-msm8974-lge-nexus5-hammerhead.dts     |    6 +-
- arch/arm/boot/dts/qcom-msm8974-samsung-klte.dts    |   52 +-
- arch/arm/boot/dts/qcom-msm8974.dtsi                |    9 +
- arch/arm/boot/dts/qcom-sdx55-t55.dts               |  281 ++++
- arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts   |  282 ++++
- arch/arm/boot/dts/qcom-sdx55.dtsi                  |  207 ++-
- arch/arm/boot/dts/r7s9210-rza2mevb.dts             |   55 +-
- arch/arm/boot/dts/r8a7742-iwg21d-q7-dbcm-ca.dts    |  159 +-
- .../dts/r8a7742-iwg21d-q7-dbcm-ov5640-single.dtsi  |   32 +
- .../dts/r8a7742-iwg21d-q7-dbcm-ov7725-single.dtsi  |   29 +
- arch/arm/boot/dts/r8a7742-iwg21d-q7.dts            |    4 +-
- arch/arm/boot/dts/r8a7742.dtsi                     |    4 +-
- arch/arm/boot/dts/r8a7743-sk-rzg1m.dts             |    2 +-
- arch/arm/boot/dts/r8a7743.dtsi                     |    2 +-
- arch/arm/boot/dts/r8a7744.dtsi                     |    2 +-
- arch/arm/boot/dts/r8a7745-iwg22d-sodimm.dts        |    4 +-
- arch/arm/boot/dts/r8a7745-sk-rzg1e.dts             |    2 +-
- arch/arm/boot/dts/r8a7745.dtsi                     |    2 +-
- arch/arm/boot/dts/r8a77470.dtsi                    |    2 +-
- arch/arm/boot/dts/r8a7790-lager.dts                |   11 +-
- arch/arm/boot/dts/r8a7790-stout.dts                |    4 +-
- arch/arm/boot/dts/r8a7790.dtsi                     |    4 +-
- arch/arm/boot/dts/r8a7791-koelsch.dts              |   19 +-
- arch/arm/boot/dts/r8a7791-porter.dts               |    6 +-
- arch/arm/boot/dts/r8a7791.dtsi                     |    2 +-
- arch/arm/boot/dts/r8a7792-blanche.dts              |    2 +-
- arch/arm/boot/dts/r8a7792-wheat.dts                |    2 +-
- arch/arm/boot/dts/r8a7792.dtsi                     |    2 +-
- arch/arm/boot/dts/r8a7793-gose.dts                 |   11 +-
- arch/arm/boot/dts/r8a7793.dtsi                     |    2 +-
- arch/arm/boot/dts/r8a7794-alt.dts                  |    5 +-
- arch/arm/boot/dts/r8a7794-silk.dts                 |    8 +-
- arch/arm/boot/dts/r8a7794.dtsi                     |    2 +-
- arch/arm/boot/dts/rk3228-evb.dts                   |    4 +
- arch/arm/boot/dts/rk3229-evb.dts                   |    4 +
- arch/arm/boot/dts/rk3229-xms6.dts                  |    6 +
- arch/arm/boot/dts/rk322x.dtsi                      |    5 +-
- arch/arm/boot/dts/rv1108-elgin-r1.dts              |    4 +
- arch/arm/boot/dts/rv1108-evb.dts                   |    4 +
- arch/arm/boot/dts/rv1108.dtsi                      |    6 +-
- arch/arm/boot/dts/s5pv210-fascinate4g.dts          |    2 +-
- arch/arm/boot/dts/sama5d2.dtsi                     |    6 +-
- arch/arm/boot/dts/sama5d3.dtsi                     |    2 +-
- arch/arm/boot/dts/ste-ab8500.dtsi                  |    4 +-
- arch/arm/boot/dts/ste-href-tvk1281618-r2.dtsi      |  214 ++-
- arch/arm/boot/dts/ste-href-tvk1281618-r3.dtsi      |  210 ++-
- arch/arm/boot/dts/ste-href-tvk1281618.dtsi         |  218 ---
- arch/arm/boot/dts/ste-href520-tvk.dts              |    4 +-
- arch/arm/boot/dts/ste-hrefprev60-tvk.dts           |    2 +-
- arch/arm/boot/dts/ste-hrefv60plus-tvk.dts          |    4 +-
- arch/arm/boot/dts/ste-ux500-samsung-janice.dts     |   48 +-
- arch/arm/boot/dts/stm32h7-pinctrl.dtsi             |  275 +++
- arch/arm/boot/dts/stm32h743-pinctrl.dtsi           |  306 ----
- arch/arm/boot/dts/stm32h743.dtsi                   |  177 +-
- arch/arm/boot/dts/stm32h743i-disco.dts             |    2 +-
- arch/arm/boot/dts/stm32h743i-eval.dts              |    2 +-
- arch/arm/boot/dts/stm32h750.dtsi                   |    6 +
- arch/arm/boot/dts/stm32h750i-art-pi.dts            |  229 +++
- arch/arm/boot/dts/stm32mp15-pinctrl.dtsi           |   21 +-
- arch/arm/boot/dts/stm32mp151.dtsi                  |    8 +
- arch/arm/boot/dts/stm32mp153c-dhcom-drc02.dts      |    4 +
- .../dts/stm32mp157a-icore-stm32mp1-ctouch2.dts     |   47 +
- .../dts/stm32mp157a-icore-stm32mp1-edimm2.2.dts    |   47 +
- arch/arm/boot/dts/stm32mp157a-icore-stm32mp1.dtsi  |  196 +++
- ...m32mp157a-microgea-stm32mp1-microdev2.0-of7.dts |  154 ++
- .../stm32mp157a-microgea-stm32mp1-microdev2.0.dts  |   55 +
- .../boot/dts/stm32mp157a-microgea-stm32mp1.dtsi    |  148 ++
- arch/arm/boot/dts/stm32mp157c-dhcom-pdk2.dts       |    4 +
- arch/arm/boot/dts/stm32mp157c-dhcom-picoitx.dts    |    4 +
- arch/arm/boot/dts/stm32mp15xx-dhcom-drc02.dtsi     |   12 +-
- arch/arm/boot/dts/stm32mp15xx-dhcom-picoitx.dtsi   |   12 +-
- arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi       |   64 +
- arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi |   35 +
- arch/arm/boot/dts/stm32mp15xx-dhcor-som.dtsi       |    4 +
- arch/arm/boot/dts/sun4i-a10-topwise-a721.dts       |  242 +++
- arch/arm/boot/dts/sun6i-a31-hummingbird.dts        |    2 +-
- arch/arm/boot/dts/sun6i-a31-m9.dts                 |    2 +-
- arch/arm/boot/dts/sun6i-a31-mele-a1000g-quad.dts   |    2 +-
- arch/arm/boot/dts/sun6i-a31.dtsi                   |    6 +-
- arch/arm/boot/dts/sun6i-a31s-primo81.dts           |    2 +-
- arch/arm/boot/dts/sun6i-a31s-sina31s-core.dtsi     |    2 +-
- arch/arm/boot/dts/sun6i-a31s-sinovoip-bpi-m2.dts   |    2 +-
- .../dts/sun6i-a31s-yones-toptech-bs1078-v2.dts     |    2 +-
- .../boot/dts/sun6i-reference-design-tablet.dtsi    |    2 +-
- arch/arm/boot/dts/sun8i-a23-a33.dtsi               |    6 +-
- arch/arm/boot/dts/sun8i-a33-olinuxino.dts          |    2 +-
- arch/arm/boot/dts/sun8i-a33-sinlinx-sina33.dts     |    2 +-
- .../boot/dts/sun8i-a83t-allwinner-h8homlet-v2.dts  |    4 +-
- arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts       |    4 +-
- arch/arm/boot/dts/sun8i-a83t-cubietruck-plus.dts   |    4 +-
- arch/arm/boot/dts/sun8i-a83t-tbs-a711.dts          |    4 +-
- arch/arm/boot/dts/sun8i-a83t.dtsi                  |    5 +-
- .../boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts    |   25 +
- arch/arm/boot/dts/sun8i-h3-beelink-x2.dts          |   11 +
- arch/arm/boot/dts/sun8i-r16-bananapi-m2m.dts       |    2 +-
- arch/arm/boot/dts/sun8i-r16-parrot.dts             |    2 +-
- .../boot/dts/sun8i-reference-design-tablet.dtsi    |    2 +-
- arch/arm/boot/dts/sunxi-h3-h5.dtsi                 |   12 +
- arch/arm/boot/dts/tegra124-peripherals-opp.dtsi    |    5 +
- arch/arm/boot/dts/tegra20-acer-a500-picasso.dts    |   16 +-
- arch/arm/boot/dts/tegra20-cpu-opp.dtsi             |    2 +
- arch/arm/boot/dts/tegra20-paz00.dts                |   14 +-
- arch/arm/boot/dts/tegra20-peripherals-opp.dtsi     |    1 +
- arch/arm/boot/dts/tegra20-ventana.dts              |   78 +-
- arch/arm/boot/dts/tegra30-apalis.dtsi              |    1 +
- .../dts/tegra30-asus-nexus7-grouper-common.dtsi    |   14 +-
- .../dts/tegra30-asus-nexus7-grouper-ti-pmic.dtsi   |    1 +
- arch/arm/boot/dts/tegra30-beaver.dts               |    1 +
- arch/arm/boot/dts/tegra30-cardhu-a04.dts           |   48 -
- arch/arm/boot/dts/tegra30-cardhu.dtsi              |   84 +-
- arch/arm/boot/dts/tegra30-colibri.dtsi             |    1 +
- arch/arm/boot/dts/tegra30-cpu-opp.dtsi             |    3 +
- arch/arm/boot/dts/tegra30-ouya.dts                 |   16 +-
- arch/arm/boot/dts/tegra30-peripherals-opp.dtsi     |    3 +
- arch/arm/mach-mstar/Kconfig                        |    1 +
- arch/arm/mach-omap2/pdata-quirks.c                 |   29 +-
- arch/arm/mach-omap2/sr_device.c                    |   75 +-
- arch/arm/mach-stm32/board-dt.c                     |    1 +
- .../dts/allwinner/sun50i-a64-amarula-relic.dts     |    2 +-
- .../boot/dts/allwinner/sun50i-a64-bananapi-m64.dts |    2 +-
- .../boot/dts/allwinner/sun50i-a64-nanopi-a64.dts   |    2 +-
- .../boot/dts/allwinner/sun50i-a64-olinuxino.dts    |    2 +-
- .../boot/dts/allwinner/sun50i-a64-orangepi-win.dts |    2 +-
- .../arm64/boot/dts/allwinner/sun50i-a64-pine64.dts |    2 +-
- .../boot/dts/allwinner/sun50i-a64-pinebook.dts     |    2 +-
- .../boot/dts/allwinner/sun50i-a64-pinephone.dtsi   |    2 +-
- .../boot/dts/allwinner/sun50i-a64-pinetab.dts      |    2 +-
- .../boot/dts/allwinner/sun50i-a64-sopine.dtsi      |    2 +-
- .../boot/dts/allwinner/sun50i-a64-teres-i.dts      |    2 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi      |    6 +-
- .../boot/dts/allwinner/sun50i-h6-beelink-gs1.dts   |   40 +-
- .../boot/dts/allwinner/sun50i-h6-orangepi-3.dts    |   16 +-
- .../boot/dts/allwinner/sun50i-h6-orangepi.dtsi     |   24 +-
- .../boot/dts/allwinner/sun50i-h6-pine-h64.dts      |    4 +-
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi       |    8 +-
- arch/arm64/boot/dts/amlogic/Makefile               |    3 +
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |    4 +-
- arch/arm64/boot/dts/amlogic/meson-axg.dtsi         |    1 -
- arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |   20 +-
- .../arm64/boot/dts/amlogic/meson-g12b-gsking-x.dts |    2 +-
- .../boot/dts/amlogic/meson-g12b-gtking-pro.dts     |    4 +-
- arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts  |    2 +-
- .../boot/dts/amlogic/meson-g12b-odroid-n2.dtsi     |   56 +-
- arch/arm64/boot/dts/amlogic/meson-gx.dtsi          |    6 +
- .../arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts |    2 +-
- .../dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dts |   86 +
- .../boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dts |    8 +-
- .../boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dts |  113 ++
- .../boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts   |  120 ++
- .../boot/dts/amlogic/meson-gxm-wetek-core2.dts     |    2 +-
- arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi |    4 +-
- .../arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts |    2 +-
- arch/arm64/boot/dts/arm/juno-base.dtsi             |    5 +-
- arch/arm64/boot/dts/arm/juno-r1.dts                |    4 +
- arch/arm64/boot/dts/arm/juno-r2.dts                |    4 +
- arch/arm64/boot/dts/broadcom/bcm4908/Makefile      |    1 +
- .../broadcom/bcm4908/bcm4906-netgear-r8000p.dts    |  107 +-
- .../bcm4908/bcm4906-tplink-archer-c2300-v1.dts     |  182 ++
- .../broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts    |   44 +-
- arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi  |   47 +-
- .../boot/dts/exynos/exynos5433-tm2-common.dtsi     |    2 +-
- arch/arm64/boot/dts/exynos/exynos5433.dtsi         |    6 +-
- arch/arm64/boot/dts/freescale/Makefile             |    4 +
- .../dts/freescale/fsl-ls1028a-kontron-sl28.dts     |   80 +-
- arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts  |    1 +
- arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts  |    1 +
- arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi     |   12 +-
- .../arm64/boot/dts/freescale/fsl-lx2160a-cex7.dtsi |   24 +
- .../dts/freescale/fsl-lx2160a-clearfog-itx.dtsi    |   64 +
- arch/arm64/boot/dts/freescale/imx8-ss-adma.dtsi    |    8 +
- arch/arm64/boot/dts/freescale/imx8-ss-audio.dtsi   |   68 +
- arch/arm64/boot/dts/freescale/imx8-ss-conn.dtsi    |  184 +++
- arch/arm64/boot/dts/freescale/imx8-ss-ddr.dtsi     |   18 +
- arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi     |  202 +++
- arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi    |  311 ++++
- .../dts/freescale/imx8mm-icore-mx8mm-ctouch2.dts   |   97 ++
- .../dts/freescale/imx8mm-icore-mx8mm-edimm2.2.dts  |   97 ++
- .../boot/dts/freescale/imx8mm-icore-mx8mm.dtsi     |  232 +++
- .../boot/dts/freescale/imx8mm-nitrogen-r2.dts      |  314 +++-
- arch/arm64/boot/dts/freescale/imx8mm.dtsi          |    2 +-
- .../boot/dts/freescale/imx8mn-beacon-som.dtsi      |    6 +-
- arch/arm64/boot/dts/freescale/imx8mn.dtsi          |    2 +-
- arch/arm64/boot/dts/freescale/imx8mp-evk.dts       |    2 +
- .../dts/freescale/imx8mp-phyboard-pollux-rdk.dts   |   56 +-
- arch/arm64/boot/dts/freescale/imx8mp.dtsi          |   39 +
- .../dts/freescale/imx8mq-kontron-pitx-imx8m.dts    |  613 +++++++
- .../boot/dts/freescale/imx8mq-librem5-devkit.dts   |   70 +-
- .../arm64/boot/dts/freescale/imx8mq-librem5-r2.dts |    2 +-
- .../arm64/boot/dts/freescale/imx8mq-librem5-r3.dts |    4 +
- arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi  |   24 +-
- arch/arm64/boot/dts/freescale/imx8qm-mek.dts       |  144 ++
- arch/arm64/boot/dts/freescale/imx8qm-ss-conn.dtsi  |   21 +
- arch/arm64/boot/dts/freescale/imx8qm-ss-dma.dtsi   |   51 +
- arch/arm64/boot/dts/freescale/imx8qm-ss-lsio.dtsi  |   61 +
- arch/arm64/boot/dts/freescale/imx8qm.dtsi          |  176 ++
- arch/arm64/boot/dts/freescale/imx8qxp-ai_ml.dts    |   20 +-
- .../dts/freescale/imx8qxp-colibri-eval-v3.dtsi     |    8 +-
- arch/arm64/boot/dts/freescale/imx8qxp-colibri.dtsi |   12 +-
- arch/arm64/boot/dts/freescale/imx8qxp-mek.dts      |   50 +-
- arch/arm64/boot/dts/freescale/imx8qxp-ss-adma.dtsi |   37 +
- arch/arm64/boot/dts/freescale/imx8qxp-ss-conn.dtsi |   25 +
- arch/arm64/boot/dts/freescale/imx8qxp-ss-lsio.dtsi |   61 +
- arch/arm64/boot/dts/freescale/imx8qxp.dtsi         |  423 +----
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      |  222 +--
- arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts |   14 +-
- .../boot/dts/intel/socfpga_agilex_socdk_nand.dts   |   18 +-
- arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts    |   12 +-
- arch/arm64/boot/dts/marvell/armada-37xx.dtsi       |    3 +-
- arch/arm64/boot/dts/marvell/armada-7040-db.dts     |   14 +-
- .../dts/marvell/armada-8040-clearfog-gt-8k.dts     |  127 ++
- arch/arm64/boot/dts/marvell/armada-8040-db.dts     |   21 +-
- arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi |   19 +-
- arch/arm64/boot/dts/marvell/armada-cp11x.dtsi      |   19 +
- arch/arm64/boot/dts/marvell/cn9130-db.dts          |   12 +-
- arch/arm64/boot/dts/marvell/cn9131-db.dts          |    9 +-
- arch/arm64/boot/dts/marvell/cn9132-db.dts          |   11 +-
- arch/arm64/boot/dts/mediatek/Makefile              |    8 +
- arch/arm64/boot/dts/mediatek/mt2712e.dtsi          |    8 +-
- arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts       |   12 +
- arch/arm64/boot/dts/mediatek/mt7622.dtsi           |    9 +-
- arch/arm64/boot/dts/mediatek/mt8173-evb.dts        |    6 +-
- arch/arm64/boot/dts/mediatek/mt8173.dtsi           |   15 +-
- arch/arm64/boot/dts/mediatek/mt8183-evb.dts        |    4 +
- .../dts/mediatek/mt8183-kukui-jacuzzi-damu.dts     |   31 +
- .../mt8183-kukui-jacuzzi-juniper-sku16.dts         |   13 +
- .../dts/mediatek/mt8183-kukui-jacuzzi-juniper.dtsi |   27 +
- .../boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi    |  474 ++++++
- .../boot/dts/mediatek/mt8183-kukui-kakadu.dts      |   13 +
- .../boot/dts/mediatek/mt8183-kukui-kakadu.dtsi     |  378 +++++
- .../dts/mediatek/mt8183-kukui-kodama-sku16.dts     |   21 +
- .../dts/mediatek/mt8183-kukui-kodama-sku272.dts    |   21 +
- .../dts/mediatek/mt8183-kukui-kodama-sku288.dts    |   21 +
- .../dts/mediatek/mt8183-kukui-kodama-sku32.dts     |   21 +
- .../boot/dts/mediatek/mt8183-kukui-kodama.dtsi     |  343 ++++
- arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts    |  378 +++++
- arch/arm64/boot/dts/mediatek/mt8183.dtsi           |  160 +-
- arch/arm64/boot/dts/mediatek/mt8516.dtsi           |    9 +-
- arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi   |    3 +-
- arch/arm64/boot/dts/qcom/Makefile                  |   15 +
- arch/arm64/boot/dts/qcom/apq8016-sbc.dts           |    2 +-
- arch/arm64/boot/dts/qcom/msm8916.dtsi              |    8 +-
- arch/arm64/boot/dts/qcom/msm8994.dtsi              |    4 +-
- arch/arm64/boot/dts/qcom/msm8998-clamshell.dtsi    |    4 +
- arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi          |    4 +
- .../boot/dts/qcom/msm8998-oneplus-cheeseburger.dts |   42 +
- .../boot/dts/qcom/msm8998-oneplus-common.dtsi      |  514 ++++++
- .../boot/dts/qcom/msm8998-oneplus-dumpling.dts     |   25 +
- arch/arm64/boot/dts/qcom/msm8998.dtsi              |    2 +
- arch/arm64/boot/dts/qcom/pm8150.dtsi               |    4 +-
- arch/arm64/boot/dts/qcom/pm8350.dtsi               |   25 +
- arch/arm64/boot/dts/qcom/pm8350b.dtsi              |   25 +
- arch/arm64/boot/dts/qcom/pm8350c.dtsi              |   25 +
- arch/arm64/boot/dts/qcom/pmk8350.dtsi              |   25 +
- arch/arm64/boot/dts/qcom/pmr735a.dtsi              |   25 +
- arch/arm64/boot/dts/qcom/pmr735b.dtsi              |   25 +
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts           |   18 +-
- .../boot/dts/qcom/sc7180-trogdor-coachz-r1-lte.dts |   18 +
- .../boot/dts/qcom/sc7180-trogdor-coachz-r1.dts     |  141 ++
- .../boot/dts/qcom/sc7180-trogdor-coachz-r2-lte.dts |   18 +
- .../boot/dts/qcom/sc7180-trogdor-coachz-r2.dts     |   15 +
- .../arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi |  266 +++
- .../qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dts |   34 +
- .../qcom/sc7180-trogdor-lazor-limozeen-nots.dts    |   26 +
- .../dts/qcom/sc7180-trogdor-lazor-limozeen.dts     |   42 +
- .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts      |    9 +
- .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts      |    9 +
- .../boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dts   |    5 +-
- .../boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts  |    4 +-
- .../boot/dts/qcom/sc7180-trogdor-lazor-r3.dts      |   10 +
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi |   39 +-
- .../boot/dts/qcom/sc7180-trogdor-pompom-r1-lte.dts |   14 +
- .../boot/dts/qcom/sc7180-trogdor-pompom-r1.dts     |   26 +
- .../boot/dts/qcom/sc7180-trogdor-pompom-r2-lte.dts |   14 +
- .../boot/dts/qcom/sc7180-trogdor-pompom-r2.dts     |   44 +
- .../arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi |  295 ++++
- arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts     |   35 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       |  222 ++-
- arch/arm64/boot/dts/qcom/sc7180.dtsi               |   58 +-
- arch/arm64/boot/dts/qcom/sc7280-idp.dts            |  259 +++
- arch/arm64/boot/dts/qcom/sc7280.dtsi               | 1128 +++++++++++++
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts         |   31 +-
- .../boot/dts/qcom/sdm845-xiaomi-beryllium.dts      |   71 +
- arch/arm64/boot/dts/qcom/sdm845.dtsi               |  155 +-
- arch/arm64/boot/dts/qcom/sm8150.dtsi               |  555 ++++++-
- arch/arm64/boot/dts/qcom/sm8250-mtp.dts            |    4 -
- arch/arm64/boot/dts/qcom/sm8250.dtsi               |  676 ++++----
- arch/arm64/boot/dts/qcom/sm8350-hdk.dts            |  319 ++++
- arch/arm64/boot/dts/qcom/sm8350-mtp.dts            |  116 ++
- arch/arm64/boot/dts/qcom/sm8350.dtsi               | 1637 ++++++++++++++++=
-+-
- .../boot/dts/renesas/beacon-renesom-baseboard.dtsi |    4 +-
- arch/arm64/boot/dts/renesas/hihope-common.dtsi     |    3 +
- arch/arm64/boot/dts/renesas/hihope-rev4.dtsi       |    2 +-
- .../boot/dts/renesas/r8a774a1-beacon-rzg2m-kit.dts |    3 +
- .../boot/dts/renesas/r8a774b1-beacon-rzg2n-kit.dts |    3 +
- arch/arm64/boot/dts/renesas/r8a774c0-cat874.dts    |    6 +-
- .../boot/dts/renesas/r8a774e1-beacon-rzg2h-kit.dts |    3 +
- .../arm64/boot/dts/renesas/r8a77950-salvator-x.dts |   37 +-
- arch/arm64/boot/dts/renesas/r8a77950.dtsi          |    5 +
- .../arm64/boot/dts/renesas/r8a77951-salvator-x.dts |   37 +-
- .../boot/dts/renesas/r8a77951-salvator-xs.dts      |   37 +-
- .../arm64/boot/dts/renesas/r8a77960-salvator-x.dts |   46 -
- .../boot/dts/renesas/r8a77960-salvator-xs.dts      |   46 -
- .../boot/dts/renesas/r8a77961-salvator-xs.dts      |   46 -
- arch/arm64/boot/dts/renesas/r8a77961-ulcb.dts      |   11 +
- arch/arm64/boot/dts/renesas/r8a77961.dtsi          |  340 +++-
- .../arm64/boot/dts/renesas/r8a77965-salvator-x.dts |   45 -
- .../boot/dts/renesas/r8a77965-salvator-xs.dts      |   45 -
- arch/arm64/boot/dts/renesas/r8a77980.dtsi          |   16 +-
- arch/arm64/boot/dts/renesas/r8a77990-ebisu.dts     |    9 +-
- .../boot/dts/renesas/r8a779a0-falcon-cpu.dtsi      |   79 +-
- .../boot/dts/renesas/r8a779a0-falcon-csi-dsi.dtsi  |   15 +
- .../boot/dts/renesas/r8a779a0-falcon-ethernet.dtsi |   15 +
- arch/arm64/boot/dts/renesas/r8a779a0-falcon.dts    |   50 +-
- arch/arm64/boot/dts/renesas/r8a779a0.dtsi          |  263 ++-
- arch/arm64/boot/dts/renesas/salvator-common.dtsi   |   52 +-
- arch/arm64/boot/dts/renesas/ulcb-kf.dtsi           |    1 +
- arch/arm64/boot/dts/renesas/ulcb.dtsi              |   12 +-
- arch/arm64/boot/dts/rockchip/Makefile              |    1 +
- .../boot/dts/rockchip/px30-engicam-common.dtsi     |    5 +
- .../boot/dts/rockchip/px30-engicam-px30-core.dtsi  |    4 +
- arch/arm64/boot/dts/rockchip/px30-evb.dts          |    6 +
- arch/arm64/boot/dts/rockchip/px30.dtsi             |   27 +-
- arch/arm64/boot/dts/rockchip/rk3308-roc-cc.dts     |    6 +
- arch/arm64/boot/dts/rockchip/rk3308.dtsi           |    5 +-
- arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts    |   11 +
- arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts |    4 +
- arch/arm64/boot/dts/rockchip/rk3328-a1.dts         |    5 +
- arch/arm64/boot/dts/rockchip/rk3328-evb.dts        |    6 +
- arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts |    4 +
- arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dts     |    5 +
- arch/arm64/boot/dts/rockchip/rk3328-rock-pi-e.dts  |    5 +
- arch/arm64/boot/dts/rockchip/rk3328-rock64.dts     |    5 +
- arch/arm64/boot/dts/rockchip/rk3328.dtsi           |   24 +-
- arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi       |    4 +
- arch/arm64/boot/dts/rockchip/rk3368-geekbox.dts    |    4 +
- .../arm64/boot/dts/rockchip/rk3368-lion-haikou.dts |    4 +
- arch/arm64/boot/dts/rockchip/rk3368-lion.dtsi      |    4 +
- .../boot/dts/rockchip/rk3368-orion-r68-meta.dts    |    5 +
- arch/arm64/boot/dts/rockchip/rk3368-px5-evb.dts    |    5 +
- arch/arm64/boot/dts/rockchip/rk3368-r88.dts        |    5 +
- arch/arm64/boot/dts/rockchip/rk3368.dtsi           |    5 +-
- arch/arm64/boot/dts/rockchip/rk3399-evb.dts        |    4 +
- arch/arm64/boot/dts/rockchip/rk3399-firefly.dts    |    6 +
- arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi       |    5 +
- arch/arm64/boot/dts/rockchip/rk3399-hugsun-x99.dts |    6 +
- .../boot/dts/rockchip/rk3399-khadas-edge.dtsi      |    6 +
- .../boot/dts/rockchip/rk3399-kobol-helios64.dts    |    5 +
- arch/arm64/boot/dts/rockchip/rk3399-leez-p710.dts  |    6 +
- arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts |  133 ++
- arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi   |    6 +
- arch/arm64/boot/dts/rockchip/rk3399-opp.dtsi       |   40 +-
- arch/arm64/boot/dts/rockchip/rk3399-orangepi.dts   |    6 +
- .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |    6 +
- .../arm64/boot/dts/rockchip/rk3399-puma-haikou.dts |    4 +
- arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi      |   55 +-
- .../boot/dts/rockchip/rk3399-roc-pc-mezzanine.dts  |    4 +
- arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi    |    5 +
- arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi |    5 +
- arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4b.dts |    4 +
- arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4c.dts |    4 +
- arch/arm64/boot/dts/rockchip/rk3399-rock960.dtsi   |    6 +
- arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi |   19 +
- .../dts/rockchip/rk3399-sapphire-excavator.dts     |    4 +
- arch/arm64/boot/dts/rockchip/rk3399-sapphire.dtsi  |    5 +
- arch/arm64/boot/dts/rockchip/rk3399.dtsi           |    5 +-
- .../boot/dts/rockchip/rk3399pro-vmarc-som.dtsi     |    5 +
- arch/arm64/boot/dts/ti/Makefile                    |    8 +-
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi           |  675 ++++++++
- arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi            |  103 ++
- arch/arm64/boot/dts/ti/k3-am64.dtsi                |  105 ++
- arch/arm64/boot/dts/ti/k3-am642-evm.dts            |  468 ++++++
- arch/arm64/boot/dts/ti/k3-am642-sk.dts             |  334 ++++
- arch/arm64/boot/dts/ti/k3-am642.dtsi               |   65 +
- arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi |  655 ++++++++
- arch/arm64/boot/dts/ti/k3-am65-main.dtsi           |  395 +++++
- arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi            |    9 +
- arch/arm64/boot/dts/ti/k3-am6528-iot2050-basic.dts |   61 +
- arch/arm64/boot/dts/ti/k3-am654-base-board.dts     |    4 +-
- .../boot/dts/ti/k3-am6548-iot2050-advanced.dts     |   60 +
- .../boot/dts/ti/k3-j7200-common-proc-board.dts     |   94 ++
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi          |   86 +-
- arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi    |   51 +
- arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi        |   36 +
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi          |  279 +++-
- arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi    |    4 +-
- arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi        |    4 +-
- arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts  |   20 +-
- arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts  |   20 +-
- arch/arm64/boot/dts/xilinx/zynqmp.dtsi             |    1 +
- drivers/bus/omap_l3_noc.c                          |    4 +-
- drivers/bus/ti-sysc.c                              |   82 +-
- drivers/clk/ti/clk-54xx.c                          |    2 +
- drivers/pci/controller/dwc/pci-dra7xx.c            |   13 +-
- drivers/soc/ti/omap_prm.c                          |   24 +-
- include/dt-bindings/clock/omap5.h                  |    2 +
- include/dt-bindings/pinctrl/k3.h                   |    5 +-
- 532 files changed, 27292 insertions(+), 3725 deletions(-)
- create mode 100644 Documentation/arm/stm32/stm32h750-overview.rst
- create mode 100644 arch/arm/boot/dts/armada-385-atl-x530.dts
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-ibm-rainier-1s4u.dts
- create mode 100644 arch/arm/boot/dts/imx7d-remarkable2.dts
- create mode 100644 arch/arm/boot/dts/mstar-infinity2m-ssd202d-unitv2.dts
- create mode 100644 arch/arm/boot/dts/nuvoton-npcm730-gbs.dts
- create mode 100644 arch/arm/boot/dts/qcom-sdx55-t55.dts
- create mode 100644 arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts
- create mode 100644 arch/arm/boot/dts/r8a7742-iwg21d-q7-dbcm-ov5640-single.=
-dtsi
- create mode 100644 arch/arm/boot/dts/r8a7742-iwg21d-q7-dbcm-ov7725-single.=
-dtsi
- delete mode 100644 arch/arm/boot/dts/ste-href-tvk1281618.dtsi
- create mode 100644 arch/arm/boot/dts/stm32h7-pinctrl.dtsi
- delete mode 100644 arch/arm/boot/dts/stm32h743-pinctrl.dtsi
- create mode 100644 arch/arm/boot/dts/stm32h750.dtsi
- create mode 100644 arch/arm/boot/dts/stm32h750i-art-pi.dts
- create mode 100644 arch/arm/boot/dts/stm32mp157a-icore-stm32mp1-ctouch2.dt=
-s
- create mode 100644 arch/arm/boot/dts/stm32mp157a-icore-stm32mp1-edimm2.2.d=
-ts
- create mode 100644 arch/arm/boot/dts/stm32mp157a-icore-stm32mp1.dtsi
- create mode 100644
-arch/arm/boot/dts/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts
- create mode 100644
-arch/arm/boot/dts/stm32mp157a-microgea-stm32mp1-microdev2.0.dts
- create mode 100644 arch/arm/boot/dts/stm32mp157a-microgea-stm32mp1.dtsi
- create mode 100644 arch/arm/boot/dts/sun4i-a10-topwise-a721.dts
- create mode 100644
-arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dts
- create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.d=
-ts
- create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts
- create mode 100644
-arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8-ss-adma.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8-ss-audio.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8-ss-conn.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8-ss-ddr.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-ctouch=
-2.dts
- create mode 100644
-arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-edimm2.2.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m=
-.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-mek.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-ss-conn.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-ss-dma.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-ss-lsio.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qm.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qxp-ss-adma.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qxp-ss-conn.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qxp-ss-lsio.dtsi
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.=
-dts
- create mode 100644
-arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dts
- create mode 100644
-arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper.dtsi
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.=
-dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272=
-.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288=
-.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.=
-dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.d=
-ts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dts
- create mode 100644 arch/arm64/boot/dts/qcom/pm8350.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/pm8350b.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/pm8350c.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/pmk8350.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/pmr735a.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/pmr735b.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1-lte.d=
-ts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r2-lte.d=
-ts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r2.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
- create mode 100644
-arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dts
- create mode 100644
-arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen.=
-dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1-lte.d=
-ts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2-lte.d=
-ts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-idp.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/sm8350-hdk.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779a0-falcon-csi-dsi.dts=
-i
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779a0-falcon-ethernet.dt=
-si
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts
- create mode 100644 arch/arm64/boot/dts/ti/k3-am64-main.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-am64.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-am642-evm.dts
- create mode 100644 arch/arm64/boot/dts/ti/k3-am642-sk.dts
- create mode 100644 arch/arm64/boot/dts/ti/k3-am642.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-am6528-iot2050-basic.dts
- create mode 100644 arch/arm64/boot/dts/ti/k3-am6548-iot2050-advanced.dts
+Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210426_085621_665958_AC1B4975 
+X-CRM114-Status: GOOD (  20.97  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210426155547.5hchBxmDq1EN9UPGlLLAhO-qp1s97fghbGf6pCV9Jew@z>
+
+VGhlIGZvbGxvd2luZyBjaGFuZ2VzIHNpbmNlIGNvbW1pdCA0YzlmNDg2NWY0NjA0NzQ0ZDRmMWE0
+M2RiMjJhYzZlYzlkYzhlNTg3OgoKICBNZXJnZSBicmFuY2ggJ2ZpeGVzLXJjMicgaW50byBmaXhl
+cyAoMjAyMS0wMy0wOCAxMTozNDoxMiArMDIwMCkKCmFyZSBhdmFpbGFibGUgaW4gdGhlIEdpdCBy
+ZXBvc2l0b3J5IGF0OgoKICBnaXQ6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5l
+bC9naXQvc29jL3NvYy5naXQKdGFncy9hcm0tZHJpdmVycy01LjEzCgpmb3IgeW91IHRvIGZldGNo
+IGNoYW5nZXMgdXAgdG8gNWZmYTgyODUzNDAzNjM0OGZhOTBmYjMwNzljY2MwOTcyZDIwMmM0YToK
+CiAgc29jOiBhc3BlZWQ6IGZpeCBhIHRlcm5hcnkgc2lnbiBleHBhbnNpb24gYnVnICgyMDIxLTA0
+LTIzIDExOjE2OjQ3ICswMjAwKQoKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpBUk06IFNvQyBkcml2ZXJzIGZvciB2NS4xMwoK
+VXBkYXRlcyBmb3IgU29DIHNwZWNpZmljIGRyaXZlcnMgaW5jbHVkZSBhIGZldyBzdWJzeXN0ZW1z
+IHRoYXQKaGF2ZSB0aGVpciBvd24gbWFpbnRhaW5lcnMgYnV0IHNlbmQgdGhlbSB0aHJvdWdoIHRo
+ZSBzb2MgdHJlZToKClRFRS9PUC1URUU6CiAtICBBZGQgdHJhY2Vwb2ludHMgYXJvdW5kIGNhbGxz
+IHRvIHNlY3VyZSB3b3JsZAoKTWVtb3J5IGNvbnRyb2xsZXIgZHJpdmVyczoKIC0gTWlub3IgZml4
+ZXMgZm9yIFJlbmVzYXMsIEV4eW5vcywgTWVkaWF0ZWsgYW5kIFRlZ3JhIHBsYXRmb3JtcwogLSBB
+ZGQgZGVidWcgc3RhdGlzdGljcyB0byBUZWdyYTIwIG1lbW9yeSBjb250cm9sbGVyCiAtIFVwZGF0
+ZSBUZWdyYSBiaW5kaW5ncyBhbmQgY29udmVydCB0byBkdHNjaGVtYQoKQVJNIFNDTUkgRmlybXdh
+cmU6CiAtIFN1cHBvcnQgZm9yIG1vZHVsYXIgU0NNSSBwcm90b2NvbHMgYW5kIHZlbmRvciBzcGVj
+aWZpYyBleHRlbnNpb25zCiAtIE5ldyBTQ01JIElJTyBkcml2ZXIKIC0gUGVyLWNwdSBEVkZTCgpU
+aGUgb3RoZXIgZHJpdmVyIGNoYW5nZXMgYXJlIGFsbCBmcm9tIHRoZSBwbGF0Zm9ybSBtYWludGFp
+bmVycwpkaXJlY3RseSBhbmQgcmVmbGVjdCB0aGUgZHJpdmVycyB0aGF0IGRvbid0IGZpdCBpbnRv
+IGFueSBvdGhlcgpzdWJzeXN0ZW0gYXMgd2VsbCBhcyB0cmVld2lkZSBjaGFuZ2VzIGZvciBhIHBh
+cnRpY3VsYXIgcGxhdGZvcm0uCgpTb0NGUEdBOgogLSBWYXJpb3VzIGNsZWFudXBzIGNvbnRyaWJ1
+dGVkIGJ5IEtyenlzenRvZiBLb3psb3dza2kKCk1lZGlhdGVrOgogLSBhZGQgTVQ4MTgzIHN1cHBv
+cnQgdG8gbXV0ZXggZHJpdmVyCiAtIE1NU1lTOiB1c2UgcGVyIFNvQyBhcnJheSB0byBkZXNjcmli
+ZSB0aGUgcG9zc2libGUgcm91dGluZwogLSBhZGQgTU1TWVMgc3VwcG9ydCBmb3IgTVQ4MTgzIGFu
+ZCBNVDgxNjcKIC0gYWRkIHN1cHBvcnQgZm9yIFBNSUMgd3JhcHBlciB3aXRoIGludGVncmF0ZWQg
+YXJiaXRlcgogLSBhZGQgc3VwcG9ydCBmb3IgTVQ4MTkyL01UNjg3MwoKVGVncmE6CiAtIEJ1ZyBm
+aXhlcyB0byBQTUMgYW5kIGNsb2NrIGRyaXZlcnMKCk5YUC9pLk1YOgogLSBVcGRhdGUgU0NVIHBv
+d2VyIGRvbWFpbiBkcml2ZXIgdG8ga2VlcCBjb25zb2xlIGRvbWFpbiBwb3dlciBvbi4KIC0gQWRk
+IG1pc3NpbmcgQURDMSBwb3dlciBkb21haW4gdG8gU0NVIHBvd2VyIGRvbWFpbiBkcml2ZXIuCiAt
+IFVwZGF0ZSBjb21tZW50cyBmb3Igc2luZ2xlIGdsb2JhbCBwb3dlciBkb21haW4gaW4gU0NVIHBv
+d2VyIGRvbWFpbgogICBkcml2ZXIuCiAtIEFkZCBpLk1YNTEvaS5NWDUzIHVuaXF1ZSBpZCBzdXBw
+b3J0IHRvIGkuTVggU29DIGRyaXZlci4KCk5YUC9GU0wgU29DIGRyaXZlciB1cGRhdGVzIGZvciB2
+NS4xMwogLSBBZGQgQUNQSSBzdXBwb3J0IGZvciBSQ1BNIGRyaXZlcgogLSBVc2UgZ2VuZXJpYyBp
+b3tyZWFkLHdyaXRlfSBmb3IgUUUgZHJpdmVycyBhZnRlciBwZXJmb3JtYW5jZSBvcHRpbWl6ZWQK
+ICAgZm9yIFBvd2VyUEMKIC0gRml4IFFCTUFOIHByb2JlIHRvIGNsZWFudXAgSFcgc3RhdGVzIGNv
+cnJlY3RseSBmb3Iga2V4ZWMKIC0gVmFyaW91cyBjbGVhbnVwIGFuZCBzdHlsZSBmaXggZm9yIFFC
+TUFOL1FFL0dVVFMgZHJpdmVycwoKT01BUDoKIC0gUHJlcGFyYXRpb24gdG8gdXNlIGRldmljZXRy
+ZWUgZm9yIGdlbnBkCiAtIHRpLXN5c2MgbmVlZHMgaW9yYW5nZSBjaGVjayBpbXByb3ZlZCB3aGVu
+IHRoZSBpbnRlcmNvbm5lY3QgdGFyZ2V0IG1vZHVsZQogICBoYXMgbm8gY29udHJvbCByZWdpc3Rl
+cnMgbGlzdGVkCiAtIHRpLXN5c2MgbmVlZHMgdG8gcHJvYmUgbDRfd2t1cCBhbmQgbDRfY2ZnIGlu
+dGVyY29ubmVjdHMgZmlyc3QgdG8gYXZvaWQKICAgaXNzdWVzIHdpdGggbWlzc2luZyByZXNvdXJj
+ZXMgYW5kIHVubmVjZXNzYXJ5IGRlZmVycmVkIHByb2JlCiAtIHRpLXN5c2MgZGVidWcgb3B0aW9u
+IGNhbiBub3cgZGV0ZWN0IG1vcmUgZGV2aWNlcwogLSB0aS1zeXNjIG5vdyB3YXJucyBpZiBhbiBv
+bGQgaW5jb21wbGV0ZSBkZXZpY2V0cmVlIGRhdGEgaXMgZm91bmQgYXMgd2UKICAgbm93IHJlbHkg
+b24gaXQgYmVpbmcgY29tcGxldGUgZm9yIGFtMyBhbmQgNAogLSBzb2MgaW5pdCBjb2RlIG5lZWRz
+IHRvIGNoZWNrIGZvciBwcmNtIGFuZCBwcm0gbm9kZXMgZm9yIG9tYXA0LzUgYW5kIGRyYTcKIC0g
+b21hcC1wcm0gZHJpdmVyIG5lZWRzIHRvIGVuYWJsZSBhdXRvaWRsZSByZXRlbnRpb24gc3VwcG9y
+dCBmb3Igb21hcDQKIC0gb21hcDUgY2xvY2tzIGFyZSBtaXNzaW5nIGdwbWMgYW5kIG9jbWMgY2xv
+Y2sgcmVnaXN0ZXJzCiAtIHBjaS1kcmE3eHggbm93IG5lZWRzIHRvIHVzZSBidWlsdGluX3BsYXRm
+b3JtX2RyaXZlciBpbnN0ZWFkIG9mIHVzaW5nCiAgIGJ1aWx0aW5fcGxhdGZvcm1fZHJpdmVyX3By
+b2JlIGZvciBkZWZlcnJlZCBwcm9iZSB0byB3b3JrCgpSYXNwYmVycnkgUGk6CiAtIEZpeC11cCBh
+bGwgUlBpIGZpcm13YXJlIGRyaXZlcnMgc28gYXMgZm9yIHVuYmluZCB0byBoYXBwZW4gaW4gYW4K
+ICAgb3JkZXJseSBmYXNoaW9uCiAtIFN1cHBvcnQgZm9yIFJQaSdzIFBvRSBoYXQgUFdNIGJ1cwoK
+UXVhbGNvbW0KIC0gSW1wcm92ZWQgZGV0ZWN0aW9uIGZvciBTQ00gY2FsbGluZyBjb252ZW50aW9u
+cwogLSBTdXBwb3J0IGZvciBPRU0gc3BlY2lmaWMgd2lmaSBmaXJtd2FyZSBwYXRoCiAtIEFkZGVk
+IGRyaXZlcnMgZm9yIFNDNzI4MC9TTTgzNTA6IFJQTUgsIExMQ0M8IEFPU1MgUU1QCgpTaWduZWQt
+b2ZmLWJ5OiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPgoKLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpBZGl0eWEgU3Jp
+dmFzdGF2YSAoMSk6CiAgICAgIHNvYzogZnNsOiBndXRzOiBmaXggY29tbWVudCBzeW50YXggaW4g
+ZmlsZQoKQXJuZCBCZXJnbWFubiAoMjMpOgogICAgICBNZXJnZSB0YWcgJ29wdGVlLXRyYWNlcG9p
+bnRzLWZvci12NS4xMycgb2YKZ2l0Oi8vZ2l0LmxpbmFyby5vcmcvcGVvcGxlL2plbnMud2lrbGFu
+ZGVyL2xpbnV4LXRlZSBpbnRvIGFybS9kcml2ZXJzCiAgICAgIE1lcmdlIHRhZyAncmVuZXNhcy1k
+cml2ZXJzLWZvci12NS4xMy10YWcxJyBvZgpnaXQ6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xp
+bnV4L2tlcm5lbC9naXQvZ2VlcnQvcmVuZXNhcy1kZXZlbCBpbnRvCmFybS9kcml2ZXJzCiAgICAg
+IE1lcmdlIHRhZyAnb3B0ZWUtdHJhY2Vwb2ludHMtZml4LWZvci12NS4xMycgb2YKZ2l0Oi8vZ2l0
+LmxpbmFyby5vcmcvcGVvcGxlL2plbnMud2lrbGFuZGVyL2xpbnV4LXRlZSBpbnRvIGFybS9maXhl
+cwogICAgICBNZXJnZSB0YWcgJ3JwaS1wb2UtdjUuMTMnIG9mCmdpdDovL2dpdC5rZXJuZWwub3Jn
+L3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9uc2FlbnovbGludXgtcnBpIGludG8KYXJtL2RyaXZl
+cnMKICAgICAgTWVyZ2UgdGFnICdvbWFwLWZvci12NS4xMy90aS1zeXNjLXNpZ25lZCcgb2YKZ2l0
+Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RtbGluZC9saW51eC1v
+bWFwIGludG8KYXJtL2RyaXZlcnMKICAgICAgTWVyZ2UgdGFnICdvcHRlZS1tZW1yZWYtc2l6ZS1m
+b3ItdjUuMTMnIG9mCmdpdDovL2dpdC5saW5hcm8ub3JnL3Blb3BsZS9qZW5zLndpa2xhbmRlci9s
+aW51eC10ZWUgaW50byBhcm0vZHJpdmVycwogICAgICBNZXJnZSB0YWcgJ2FybS1zb2MvZm9yLTUu
+MTMvZHJpdmVycycgb2YKaHR0cHM6Ly9naXRodWIuY29tL0Jyb2FkY29tL3N0YmxpbnV4IGludG8g
+YXJtL2RyaXZlcnMKICAgICAgTWVyZ2UgdGFnICdpbXgtZHJpdmVycy01LjEzJyBvZgpnaXQ6Ly9n
+aXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc2hhd25ndW8vbGludXggaW50
+bwphcm0vZHJpdmVycwogICAgICBNZXJnZSB0YWcgJ3RlZ3JhLWZvci01LjEzLWNsaycgb2YKZ2l0
+Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RlZ3JhL2xpbnV4IGlu
+dG8KYXJtL2RyaXZlcnMKICAgICAgTWVyZ2UgdGFnICd0ZWdyYS1mb3ItNS4xMy1zb2MnIG9mCmdp
+dDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90ZWdyYS9saW51eCBp
+bnRvCmFybS9kcml2ZXJzCiAgICAgIE1lcmdlIHRhZyAndjUuMTItbmV4dC1zb2MnIG9mCmdpdDov
+L2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9tYXR0aGlhcy5iZ2cvbGlu
+dXggaW50bwphcm0vZHJpdmVycwogICAgICBNZXJnZSB0YWcgJ3NvY2ZwZ2FfdXBkYXRlX2Zvcl92
+NS4xMycgb2YKZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2Rp
+bmd1eWVuL2xpbnV4IGludG8KYXJtL2RyaXZlcnMKICAgICAgTWVyZ2UgdGFnICdzY21pLXVwZGF0
+ZXMtNS4xMycgb2YKZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0
+L3N1ZGVlcC5ob2xsYS9saW51eCBpbnRvCmFybS9kcml2ZXJzCiAgICAgIE1lcmdlIHRhZyAncWNv
+bS1kcml2ZXJzLWZvci01LjEzJyBvZgpnaXQ6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4
+L2tlcm5lbC9naXQvcWNvbS9saW51eCBpbnRvCmFybS9kcml2ZXJzCiAgICAgIE1lcmdlIHRhZyAn
+c29jZnBnYV91cGRhdGVfZm9yX3Y1LjEzX3BhcnQyJyBvZgpnaXQ6Ly9naXQua2VybmVsLm9yZy9w
+dWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvZGluZ3V5ZW4vbGludXggaW50bwphcm0vZHJpdmVycwog
+ICAgICBNZXJnZSB0YWcgJ3Y1LjEyLW5leHQtc29jLjInIG9mCmdpdDovL2dpdC5rZXJuZWwub3Jn
+L3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9tYXR0aGlhcy5iZ2cvbGludXggaW50bwphcm0vZHJp
+dmVycwogICAgICBNZXJnZSB0YWcgJ21lbW9yeS1jb250cm9sbGVyLWRydi01LjEzJyBvZgpnaXQ6
+Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQva3J6ay9saW51eC1tZW0t
+Y3RybCBpbnRvCmFybS9kcml2ZXJzCiAgICAgIE1lcmdlIHRhZyAnbWVtb3J5LWNvbnRyb2xsZXIt
+ZHJ2LXRlZ3JhLTUuMTMnIG9mCmdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2Vy
+bmVsL2dpdC9rcnprL2xpbnV4LW1lbS1jdHJsIGludG8KYXJtL2RyaXZlcnMKICAgICAgTWVyZ2Ug
+dGFnICdhc3BlZWQtNS4xMy1scGMnIG9mCmdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGlu
+dXgva2VybmVsL2dpdC9qb2VsL2JtYyBpbnRvCmFybS9kcml2ZXJzCiAgICAgIE1lcmdlIHRhZyAn
+cWNvbS1kcml2ZXJzLWZvci01LjEzLTInIG9mCmdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20v
+bGludXgva2VybmVsL2dpdC9xY29tL2xpbnV4IGludG8KYXJtL2RyaXZlcnMKICAgICAgTWVyZ2Ug
+dGFnICd6eW5xbXAtc29jLWZvci12NS4xMycgb2YKaHR0cHM6Ly9naXRodWIuY29tL1hpbGlueC9s
+aW51eC14bG54IGludG8gYXJtL2RyaXZlcnMKICAgICAgTWVyZ2UgdGFnICdzb2MtZnNsLW5leHQt
+djUuMTMnIG9mCmdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9s
+ZW8vbGludXggaW50bwphcm0vZHJpdmVycwogICAgICBNZXJnZSB0YWcgJ21lbW9yeS1jb250cm9s
+bGVyLWRydi01LjEzLTInIG9mCmdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2Vy
+bmVsL2dpdC9rcnprL2xpbnV4LW1lbS1jdHJsIGludG8KYXJtL2RyaXZlcnMKCkJoYXNrYXIgQ2hv
+d2RodXJ5ICgxKToKICAgICAgc29jOiBxY29tOiBGaXggdHlwb3MgaW4gdGhlIGZpbGUgcW1pX2Vu
+Y2RlYy5jCgpCam9ybiBBbmRlcnNzb24gKDUpOgogICAgICBkdC1iaW5kaW5nczogc29jOiBxY29t
+OiB3Y25zczogQWRkIGZpcm13YXJlLW5hbWUgcHJvcGVydHkKICAgICAgc29jOiBxY29tOiB3Y25z
+c19jdHJsOiBJbnRyb2R1Y2UgbG9jYWwgdmFyaWFibGUgImRldiIKICAgICAgc29jOiBxY29tOiB3
+Y25zc19jdHJsOiBBbGxvdyByZWFkaW5nIGZpcm13YXJlLW5hbWUgZnJvbSBEVAogICAgICBzb2M6
+IHFjb206IG1kdF9sb2FkZXI6IFZhbGlkYXRlIHRoYXQgcF9maWxlc3ogPCBwX21lbXN6CiAgICAg
+IHNvYzogcWNvbTogbWR0X2xvYWRlcjogRGV0ZWN0IHRydW5jYXRlZCByZWFkIG9mIHNlZ21lbnRz
+CgpDSyBIdSAoMik6CiAgICAgIHNvYzogbWVkaWF0ZWs6IG1tc3lzOiBDcmVhdGUgc3RydWN0IG10
+a19tbXN5cyB0byBzdG9yZSBjb250ZXh0IGRhdGEKICAgICAgc29jOiBtZWRpYXRlazogbW1zeXM6
+IFVzZSBhbiBhcnJheSBmb3Igc2V0dGluZyB0aGUgcm91dGluZyByZWdpc3RlcnMKCkNoaWEtV2Vp
+LCBXYW5nICg1KToKICAgICAgZHQtYmluZGluZ3M6IGFzcGVlZC1scGM6IFJlbW92ZSBMUEMgcGFy
+dGl0aW9uaW5nCiAgICAgIEFSTTogZHRzOiBSZW1vdmUgTFBDIEJNQyBhbmQgSG9zdCBwYXJ0aXRp
+b25zCiAgICAgIGlwbWk6IGtjczogYXNwZWVkOiBBZGFwdCB0byBuZXcgTFBDIERUUyBsYXlvdXQK
+ICAgICAgcGluY3RybDogYXNwZWVkLWc1OiBBZGFwdCB0byBuZXcgTFBDIGRldmljZSB0cmVlIGxh
+eW91dAogICAgICBzb2M6IGFzcGVlZDogQWRhcHQgdG8gbmV3IExQQyBkZXZpY2UgdHJlZSBsYXlv
+dXQKCkNocmlzdG9waGUgTGVyb3kgKDMpOgogICAgICBzb2M6IGZzbDogcWU6IHJlcGxhY2UgcWVf
+aW97cmVhZCx3cml0ZX0qIHdyYXBwZXJzIGJ5IGdlbmVyaWMKaW97cmVhZCx3cml0ZX0qCiAgICAg
+IHR0eTogc2VyaWFsOiB1Y2NfdWFydDogcmVwbGFjZSBxZV9pb3tyZWFkLHdyaXRlfSogd3JhcHBl
+cnMgYnkKZ2VuZXJpYyBpb3tyZWFkLHdyaXRlfSoKICAgICAgUmV2ZXJ0ICJzb2M6IGZzbDogcWU6
+IGludHJvZHVjZSBxZV9pb3tyZWFkLHdyaXRlfSogd3JhcHBlcnMiCgpDb2xpbiBJYW4gS2luZyAo
+MSk6CiAgICAgIG1lbW9yeTogZ3BtYzogZml4IG91dCBvZiBib3VuZHMgcmVhZCBhbmQgZGVyZWZl
+cmVuY2Ugb24gZ3BtY19jc1tdCgpDcmlzdGlhbiBNYXJ1c3NpICgzOCk6CiAgICAgIGZpcm13YXJl
+OiBhcm1fc2NtaTogRXh0ZW5kIHByb3RvY29sIHJlZ2lzdHJhdGlvbiBpbnRlcmZhY2VzCiAgICAg
+IGZpcm13YXJlOiBhcm1fc2NtaTogSW50cm9kdWNlIHByb3RvY29sIGhhbmRsZSBkZWZpbml0aW9u
+cwogICAgICBmaXJtd2FyZTogYXJtX3NjbWk6IEludHJvZHVjZSBkZXZyZXMgZ2V0L3B1dCBwcm90
+b2NvbHMgb3BlcmF0aW9ucwogICAgICBmaXJtd2FyZTogYXJtX3NjbWk6IE1ha2Ugbm90aWZpY2F0
+aW9ucyBhd2FyZSBvZiBwcm90b2NvbHMgdXNlcnMKICAgICAgZmlybXdhcmU6IGFybV9zY21pOiBJ
+bnRyb2R1Y2UgbmV3IGRldnJlcyBub3RpZmljYXRpb24gb3BzCiAgICAgIGZpcm13YXJlOiBhcm1f
+c2NtaTogUmVmYWN0b3IgZXZlbnRzIHJlZ2lzdHJhdGlvbgogICAgICBmaXJtd2FyZTogYXJtX3Nj
+bWk6IENvbnZlcnQgZXZlbnRzIHJlZ2lzdHJhdGlvbiB0byBwcm90b2NvbCBoYW5kbGVzCiAgICAg
+IGZpcm13YXJlOiBhcm1fc2NtaTogQWRkIG5ldyBwcm90b2NvbCBoYW5kbGUgY29yZSB0cmFuc2Zl
+ciBvcHMKICAgICAgZmlybXdhcmU6IGFybV9zY21pOiBBZGQgaGVscGVyIHRvIGFjY2VzcyBwcm90
+b2NvbCByZXZpc2lvbi92ZXJzaW9uCiAgICAgIGZpcm13YXJlOiBhcm1fc2NtaTogUG9ydCBiYXNl
+IHByb3RvY29sIHRvIG5ldyBpbnRlcmZhY2UKICAgICAgZmlybXdhcmU6IGFybV9zY21pOiBQb3J0
+IHBlcmYgcHJvdG9jb2wgdG8gbmV3IHByb3RvY29scyBpbnRlcmZhY2UKICAgICAgY3B1ZnJlcTog
+c2NtaTogUG9ydCBkcml2ZXIgdG8gdGhlIG5ldyBzY21pX3BlcmZfcHJvdG9fb3BzIGludGVyZmFj
+ZQogICAgICBmaXJtd2FyZTogYXJtX3NjbWk6IFJlbW92ZSBsZWdhY3kgc2NtaV9wZXJmX29wcyBw
+cm90b2NvbCBpbnRlcmZhY2UKICAgICAgZmlybXdhcmU6IGFybV9zY21pOiBQb3J0IHBvd2VyIHBy
+b3RvY29sIHRvIG5ldyBwcm90b2NvbHMgaW50ZXJmYWNlCiAgICAgIGZpcm13YXJlOiBhcm1fc2Nt
+aTogUG9ydCBnZW5wZCBkcml2ZXIgdG8gdGhlIG5ldwpzY21pX3Bvd2VyX3Byb3RvX29wcyBpbnRl
+cmZhY2UKICAgICAgZmlybXdhcmU6IGFybV9zY21pOiBSZW1vdmUgbGVnYWN5IHNjbWlfcG93ZXJf
+b3BzIHByb3RvY29sIGludGVyZmFjZQogICAgICBmaXJtd2FyZTogYXJtX3NjbWk6IFBvcnQgY2xv
+Y2sgcHJvdG9jb2wgdG8gbmV3IHByb3RvY29scyBpbnRlcmZhY2UKICAgICAgY2xrOiBzY21pOiBQ
+b3J0IGRyaXZlciB0byB0aGUgbmV3IHNjbWlfY2xrX3Byb3RvX29wcyBpbnRlcmZhY2UKICAgICAg
+ZmlybXdhcmU6IGFybV9zY21pOiBSZW1vdmUgbGVnYWN5IHNjbWlfY2xrX29wcyBwcm90b2NvbCBp
+bnRlcmZhY2UKICAgICAgZmlybXdhcmU6IGFybV9zY21pOiBQb3J0IHJlc2V0IHByb3RvY29sIHRv
+IG5ldyBwcm90b2NvbHMgaW50ZXJmYWNlCiAgICAgIHJlc2V0OiByZXNldC1zY21pOiBQb3J0IGRy
+aXZlciB0byB0aGUgbmV3IHNjbWlfcmVzZXRfcHJvdG9fb3BzIGludGVyZmFjZQogICAgICBmaXJt
+d2FyZTogYXJtX3NjbWk6IFJlbW92ZSBsZWdhY3kgc2NtaV9yZXNldF9vcHMgcHJvdG9jb2wgaW50
+ZXJmYWNlCiAgICAgIGZpcm13YXJlOiBhcm1fc2NtaTogUG9ydCBzZW5zb3IgcHJvdG9jb2wgdG8g
+bmV3IHByb3RvY29scyBpbnRlcmZhY2UKICAgICAgaHdtb246IChzY21pKSBwb3J0IGRyaXZlciB0
+byB0aGUgbmV3IHNjbWlfc2Vuc29yX3Byb3RvX29wcyBpbnRlcmZhY2UKICAgICAgaWlvL3NjbWk6
+IFBvcnQgZHJpdmVyIHRvIHRoZSBuZXcgc2NtaV9zZW5zb3JfcHJvdG9fb3BzIGludGVyZmFjZQog
+ICAgICBmaXJtd2FyZTogYXJtX3NjbWk6IFJlbW92ZSBsZWdhY3kgc2NtaV9zZW5zb3Jfb3BzIHBy
+b3RvY29sIGludGVyZmFjZQogICAgICBmaXJtd2FyZTogYXJtX3NjbWk6IFBvcnQgc3lzdGVtcG93
+ZXIgcHJvdG9jb2wgdG8gbmV3IHByb3RvY29scyBpbnRlcmZhY2UKICAgICAgZmlybXdhcmU6IGFy
+bV9zY21pOiBQb3J0IHZvbHRhZ2UgcHJvdG9jb2wgdG8gbmV3IHByb3RvY29scyBpbnRlcmZhY2UK
+ICAgICAgcmVndWxhdG9yOiBzY21pOiBQb3J0IGRyaXZlciB0byB0aGUgbmV3IHNjbWlfdm9sdGFn
+ZV9wcm90b19vcHMgaW50ZXJmYWNlCiAgICAgIGZpcm13YXJlOiBhcm1fc2NtaTogUmVtb3ZlIGxl
+Z2FjeSBzY21pX3ZvbHRhZ2Vfb3BzIHByb3RvY29sIGludGVyZmFjZQogICAgICBmaXJtd2FyZTog
+YXJtX3NjbWk6IE1ha2UgcmVmZXJlbmNlcyB0byBoYW5kbGUgY29uc3QKICAgICAgZmlybXdhcmU6
+IGFybV9zY21pOiBDbGVhbnVwIGxlZ2FjeSBwcm90b2NvbCBpbml0IGNvZGUKICAgICAgZmlybXdh
+cmU6IGFybV9zY21pOiBDbGVhbnVwIHVudXNlZCBjb3JlIHRyYW5zZmVyIGhlbHBlciB3cmFwcGVy
+cwogICAgICBmaXJtd2FyZTogYXJtX3NjbWk6IENsZWFudXAgZXZlbnRzIHJlZ2lzdHJhdGlvbiB0
+cmFuc2llbnQgY29kZQogICAgICBmaXJtd2FyZTogYXJtX3NjbWk6IE1ha2Ugbm90aWZ5X3ByaXYg
+cmVhbGx5IHByaXZhdGUKICAgICAgZmlybXdhcmU6IGFybV9zY21pOiBSZW5hbWUgbm9uIGRldnJl
+cyBub3RpZnlfb3BzCiAgICAgIGZpcm13YXJlOiBhcm1fc2NtaTogQWRkIHByb3RvY29sIG1vZHVs
+YXJpemF0aW9uIHN1cHBvcnQKICAgICAgZmlybXdhcmU6IGFybV9zY21pOiBBZGQgZHluYW1pYyBz
+Y21pIGRldmljZXMgY3JlYXRpb24KCkRhbiBDYXJwZW50ZXIgKDEpOgogICAgICBzb2M6IGFzcGVl
+ZDogZml4IGEgdGVybmFyeSBzaWduIGV4cGFuc2lvbiBidWcKCkRtaXRyeSBPc2lwZW5rbyAoMTMp
+OgogICAgICBzb2MvdGVncmE6IHJlZ3VsYXRvcnM6IEZpeCBsb2NraW5nIHVwIHdoZW4gdm9sdGFn
+ZS1zcHJlYWQgaXMgb3V0IG9mIHJhbmdlCiAgICAgIHNvYy90ZWdyYTogcG1jOiBGaXggaW1iYWxh
+bmNlZCBjbG9jayBkaXNhYmxpbmcgaW4gZXJyb3IgY29kZSBwYXRoCiAgICAgIHNvYy90ZWdyYTog
+cG1jOiBGaXggY29tcGxldGlvbiBvZiBwb3dlci1nYXRlIHRvZ2dsaW5nCiAgICAgIHNvYy90ZWdy
+YTogcG1jOiBFbnN1cmUgdGhhdCBjbG9jayByYXRlcyBhcmVuJ3QgdG9vIGhpZ2gKICAgICAgc29j
+L3RlZ3JhOiBwbWM6IFByaW50IG91dCBkb21haW4gbmFtZSB3aGVuIHJlc2V0IGZhaWxzIHRvIGFj
+cXVpcmUKICAgICAgbWVtb3J5OiB0ZWdyYTIwOiBBZGQgZGVidWcgc3RhdGlzdGljcwogICAgICBt
+ZW1vcnk6IHRlZ3JhMjA6IENvcnJlY3QgY29tbWVudCB0byBNQ19TVEFUIHJlZ2lzdGVycyB3cml0
+ZXMKICAgICAgbWVtb3J5OiB0ZWdyYTIwOiBQcm90ZWN0IGRlYnVnIGNvZGUgd2l0aCBhIGxvY2sK
+ICAgICAgbWVtb3J5OiB0ZWdyYTogUHJpbnQgb3V0IGluZm8tbGV2ZWwgb25jZSBwZXIgZHJpdmVy
+IHByb2JlCiAgICAgIGR0LWJpbmRpbmdzOiBtZW1vcnk6IHRlZ3JhMjA6IGVtYzogUmVwbGFjZSBj
+b3JlIHJlZ3VsYXRvciB3aXRoCnBvd2VyIGRvbWFpbgogICAgICBkdC1iaW5kaW5nczogbWVtb3J5
+OiB0ZWdyYTMwOiBlbWM6IFJlcGxhY2UgY29yZSByZWd1bGF0b3Igd2l0aApwb3dlciBkb21haW4K
+ICAgICAgZHQtYmluZGluZ3M6IG1lbW9yeTogdGVncmExMjQ6IGVtYzogUmVwbGFjZSBjb3JlIHJl
+Z3VsYXRvciB3aXRoCnBvd2VyIGRvbWFpbgogICAgICBkdC1iaW5kaW5nczogbWVtb3J5OiB0ZWdy
+YTIwOiBtYzogQ29udmVydCB0byBzY2hlbWEKCkRvbmcgQWlzaGVuZyAoMSk6CiAgICAgIGZpcm13
+YXJlOiBpbXg6IHNjdS1wZDogZG8gbm90IHBvd2VyIG9mZiBjb25zb2xlIGRvbWFpbgoKRW5yaWMg
+QmFsbGV0Ym8gaSBTZXJyYSAoNSk6CiAgICAgIHNvYzogbWVkaWF0ZWs6IHBtLWRvbWFpbnM6IEZp
+eCBtaXNzaW5nIGVycm9yIGNvZGUgaW4Kc2Nwc3lzX2FkZF9zdWJkb21haW4oKQogICAgICBzb2M6
+IG1lZGlhdGVrOiBwbS1kb21haW5zOiBBZGQgYSBtZWFuaW5nZnVsIHBvd2VyIGRvbWFpbiBuYW1l
+CiAgICAgIHNvYzogbWVkaWF0ZWs6IHBtLWRvbWFpbnM6IEFkZCBhIHBvd2VyIGRvbWFpbiBuYW1l
+cyBmb3IgbXQ4MTgzCiAgICAgIHNvYzogbWVkaWF0ZWs6IHBtLWRvbWFpbnM6IEFkZCBhIHBvd2Vy
+IGRvbWFpbiBuYW1lcyBmb3IgbXQ4MTkyCiAgICAgIHNvYzogbWVkaWF0ZWs6IHBtLWRvbWFpbnM6
+IEFkZCBhIHBvd2VyIGRvbWFpbiBuYW1lcyBmb3IgbXQ4MTY3CgpGYWJpZW4gUGFyZW50ICgyKToK
+ICAgICAgZHQtYmluZGluZ3M6IG1lZGlhdGVrOiBtbXN5czogYWRkIG10ODE2NyBiaW5kaW5nCiAg
+ICAgIHNvYzogbWVkaWF0ZWs6IG1tc3lzOiBBZGQgc3VwcG9ydCBmb3IgTVQ4MTY3IFNvQwoKRnJh
+bmsgTGkgKDEpOgogICAgICBmaXJtd2FyZTogaW14OiBzY3UtcGQ6IGFkZCBtaXNzZWQgQURDMSBw
+ZAoKR2VlcnQgVXl0dGVyaG9ldmVuICgyKToKICAgICAgc29jOiByZW5lc2FzOiBybW9iaWxlLXN5
+c2M6IFJlbW92ZSB1bm5lZWRlZCBwbGF0Zm9ybSBpbmNsdWRlcwogICAgICBzb2M6IHJlbmVzYXM6
+IHJtb2JpbGUtc3lzYzogTWFyayBmd25vZGUgd2hlbiBQTSBkb21haW4gaXMgYWRkZWQKCkhzaW4t
+SHNpdW5nIFdhbmcgKDQpOgogICAgICBzb2M6IG1lZGlhdGVrOiBwd3JhcDogdXNlIEJJVCgpIG1h
+Y3JvCiAgICAgIHNvYzogbWVkaWF0ZWs6IHB3cmFwOiBhZGQgYXJiaXRlciBjYXBhYmlsaXR5CiAg
+ICAgIGR0LWJpbmRpbmdzOiBtZWRpYXRlazogYWRkIGNvbXBhdGlibGUgZm9yIE1UNjg3My84MTky
+IHB3cmFwCiAgICAgIHNvYzogbWVkaWF0ZWs6IHB3cmFwOiBhZGQgcHdyYXAgZHJpdmVyIGZvciBN
+VDY4NzMvODE5MiBTb0NzCgpIc2luLVlpIFdhbmcgKDEpOgogICAgICBzb2M6IG1lZGlhdGVrOiBt
+bXN5czogQWRkIG10ODE4MyBtbXN5cyByb3V0aW5nIHRhYmxlCgpKQyBLdW8gKDMpOgogICAgICBj
+bGs6IHRlZ3JhOiBBZGQgUExMRSBIVyBwb3dlciBzZXF1ZW5jZXIgY29udHJvbAogICAgICBjbGs6
+IHRlZ3JhOiBEb24ndCBlbmFibGUgUExMRSBIVyBzZXF1ZW5jZXIgYXQgaW5pdAogICAgICBzb2Mv
+dGVncmE6IHBtYzogUHJvdmlkZSBVU0Igc2xlZXB3YWxrIHJlZ2lzdGVyIG1hcAoKSmVyb21lIEZv
+cmlzc2llciAoMSk6CiAgICAgIHRlZTogb3B0ZWU6IGRvIG5vdCBjaGVjayBtZW1yZWYgc2l6ZSBv
+biByZXR1cm4gZnJvbSBTZWN1cmUgV29ybGQKCkppc2hlbmcgWmhhbmcgKDIpOgogICAgICB0ZWU6
+IG9wdGVlOiBhZGQgaW52b2tlX2ZuIHRyYWNlcG9pbnRzCiAgICAgIHRlZTogb3B0ZWU6IGZpeCBi
+dWlsZCBlcnJvciBjYXVzZWQgYnkgcmVjZW50IG9wdGVlIHRyYWNlcG9pbnRzIGZlYXR1cmUKCkp5
+b3RpIEJoYXlhbmEgKDEpOgogICAgICBpaW8vc2NtaTogQWRkaW5nIHN1cHBvcnQgZm9yIElJTyBT
+Q01JIEJhc2VkIFNlbnNvcnMKCktyenlzenRvZiBLb3psb3dza2kgKDE5KToKICAgICAgY2xrOiBz
+b2NmcGdhOiBhbGxvdyBidWlsZGluZyBONVggY2xvY2tzIHdpdGggQVJDSF9ONVgKICAgICAgQVJN
+OiBzb2NmcGdhOiBpbnRyb2R1Y2UgY29tbW9uIEFSQ0hfSU5URUxfU09DRlBHQQogICAgICBtZmQ6
+IGFsdGVyYTogbWVyZ2UgQVJDSF9TT0NGUEdBIGFuZCBBUkNIX1NUUkFUSVgxMAogICAgICBuZXQ6
+IHN0bW1hYzogbWVyZ2UgQVJDSF9TT0NGUEdBIGFuZCBBUkNIX1NUUkFUSVgxMAogICAgICBjbGs6
+IHNvY2ZwZ2E6IGJ1aWxkIHRvZ2V0aGVyIFN0cmF0aXggMTAsIEFnaWxleCBhbmQgTjVYIGNsb2Nr
+IGRyaXZlcnMKICAgICAgY2xrOiBzb2NmcGdhOiBtZXJnZSBBUkNIX1NPQ0ZQR0EgYW5kIEFSQ0hf
+U1RSQVRJWDEwCiAgICAgIEVEQUM6IGFsdGVyYTogbWVyZ2UgQVJDSF9TT0NGUEdBIGFuZCBBUkNI
+X1NUUkFUSVgxMAogICAgICBhcm02NDogc29jZnBnYTogbWVyZ2UgQWdpbGV4IGFuZCBONVggaW50
+byBBUkNIX0lOVEVMX1NPQ0ZQR0EKICAgICAgY2xrOiBzb2NmcGdhOiBhbGxvdyBjb21waWxlIHRl
+c3Rpbmcgb2YgU3RyYXRpeCAxMCAvIEFnaWxleCBjbG9ja3MKICAgICAgY2xrOiBzb2NmcGdhOiB1
+c2UgQVJDSF9JTlRFTF9TT0NGUEdBIGFsc28gZm9yIDMyLWJpdCBBUk0gU29DcwooYW5kIGNvbXBp
+bGUgdGVzdCkKICAgICAgZG1hZW5naW5lOiBzb2NmcGdhOiB1c2UgQVJDSF9JTlRFTF9TT0NGUEdB
+IGFsc28gZm9yIDMyLWJpdCBBUk0gU29DcwogICAgICBmcGdhOiBhbHRlcmE6IHVzZSBBUkNIX0lO
+VEVMX1NPQ0ZQR0EgYWxzbyBmb3IgMzItYml0IEFSTSBTb0NzCiAgICAgIGkyYzogYWx0ZXJhOiB1
+c2UgQVJDSF9JTlRFTF9TT0NGUEdBIGFsc28gZm9yIDMyLWJpdCBBUk0gU29DcwogICAgICByZXNl
+dDogc29jZnBnYTogdXNlIEFSQ0hfSU5URUxfU09DRlBHQSBhbHNvIGZvciAzMi1iaXQgQVJNIFNv
+Q3MKICAgICAgQVJNOiBzb2NmcGdhOiBkcm9wIEFSQ0hfU09DRlBHQQogICAgICBmaXJtd2FyZTog
+c3RyYXRpeDEwLXN2YzogYnVpbGQgb25seSBvbiA2NC1iaXQgQVJNCiAgICAgIGNsazogc29jZnBn
+YTogZml4IGlvbWVtIHBvaW50ZXIgY2FzdCBvbiA2NC1iaXQKICAgICAgbWVtb3J5OiByZW5lc2Fz
+LXJwYy1pZjogZml4IHBvc3NpYmxlIE5VTEwgcG9pbnRlciBkZXJlZmVyZW5jZSBvZiByZXNvdXJj
+ZQogICAgICBtZW1vcnk6IHNhbXN1bmc6IGV4eW5vczU0MjItZG1jOiBoYW5kbGUgY2xrX3NldF9w
+YXJlbnQoKSBmYWlsdXJlCgpMdWthcyBCdWx3YWhuICgyKToKICAgICAgTUFJTlRBSU5FUlM6IGFk
+ZCBhbm90aGVyIGVudHJ5IGZvciBBUk0vUVVBTENPTU0gU1VQUE9SVAogICAgICBzb2M6IHFjb206
+IGFkZHJlc3Mga2VybmVsLWRvYyB3YXJuaW5ncwoKTmljb2xhIE1henp1Y2F0byAoMik6CiAgICAg
+IHNjbWktY3B1ZnJlcTogUmVtb3ZlIGRlZmVycmVkIHByb2JlCiAgICAgIHNjbWktY3B1ZnJlcTog
+R2V0IG9wcF9zaGFyZWRfY3B1cyBmcm9tIG9wcC12MiBmb3IgRU0KCk5pY29sYXMgU2FlbnogSnVs
+aWVubmUgKDEwKToKICAgICAgZmlybXdhcmU6IHJhc3BiZXJyeXBpOiBLZWVwIGNvdW50IG9mIGFs
+bCBjb25zdW1lcnMKICAgICAgZmlybXdhcmU6IHJhc3BiZXJyeXBpOiBJbnRyb2R1Y2UgZGV2bV9y
+cGlfZmlybXdhcmVfZ2V0KCkKICAgICAgY2xrOiBiY206IHJwaTogUmVsZWFzZSBmaXJtd2FyZSBo
+YW5kbGUgb24gdW5iaW5kCiAgICAgIGdwaW86IHJhc3BiZXJyeXBpLWV4cDogUmVsZWFzZSBmaXJt
+d2FyZSBoYW5kbGUgb24gdW5iaW5kCiAgICAgIHJlc2V0OiByYXNwYmVycnlwaTogUmVsZWFzZSBm
+aXJtd2FyZSBoYW5kbGUgb24gdW5iaW5kCiAgICAgIHNvYzogYmNtOiByYXNwYmVycnlwaS1wb3dl
+cjogUmVsZWFzZSBmaXJtd2FyZSBoYW5kbGUgb24gdW5iaW5kCiAgICAgIHN0YWdpbmc6IHZjaGlx
+OiBSZWxlYXNlIGZpcm13YXJlIGhhbmRsZSBvbiB1bmJpbmQKICAgICAgaW5wdXQ6IHJhc3BiZXJy
+eXBpLXRzOiBSZWxlYXNlIGZpcm13YXJlIGhhbmRsZSB3aGVuIG5vdCBuZWVkZWQKICAgICAgZHQt
+YmluZGluZ3M6IHB3bTogQWRkIGJpbmRpbmcgZm9yIFJQaSBmaXJtd2FyZSBQV00gYnVzCiAgICAg
+IHB3bTogQWRkIFJhc3BiZXJyeSBQaSBGaXJtd2FyZSBiYXNlZCBQV00gYnVzCgpOb2J1aGlybyBJ
+d2FtYXRzdSAoMSk6CiAgICAgIGZpcm13YXJlOiB4aWxpbng6IFJlbW92ZSB6eW5xbXBfcG1fZ2V0
+X2VlbWlfb3BzKCkgaW4KSVNfUkVBQ0hBQkxFKENPTkZJR19aWU5RTVBfRklSTVdBUkUpCgpQYW4g
+QmlhbiAoMSk6CiAgICAgIGJ1czogcWNvbTogUHV0IGNoaWxkIG5vZGUgYmVmb3JlIHJldHVybgoK
+UGVuZyBNYSAoMSk6CiAgICAgIHNvYzogZnNsOiBlbmFibGUgYWNwaSBzdXBwb3J0IGluIFJDUE0g
+ZHJpdmVyCgpRaWhlbmcgTGluICgxKToKICAgICAgbWVtb3J5OiBmc2wtY29yZW5ldC1jZjogUmVt
+b3ZlIHJlZHVuZGFudCBkZXZfZXJyIGNhbGwgaW4gY2NmX3Byb2JlKCkKClFpbmdsYW5nIE1pYW8g
+KDEpOgogICAgICBzb2M6IHFjb206IHBkcjogRml4IGVycm9yIHJldHVybiBjb2RlIGluIHBkcl9y
+ZWdpc3Rlcl9saXN0ZW5lcgoKUmFmYcWCIE1pxYJlY2tpICgyKToKICAgICAgZHQtYmluZGluZ3M6
+IHBvd2VyOiBiY20tcG1iOiBhZGQgQkNNNjMxMzggYmluZGluZwogICAgICBzb2M6IGJjbTogYmNt
+LXBtYjogYWRkIEJDTTYzMTM4IFNBVEEgc3VwcG9ydAoKUmFqZW5kcmEgTmF5YWsgKDMpOgogICAg
+ICBkdC1iaW5kaW5nczogcG93ZXI6IHJwbXBkOiBBZGQgc2M3MjgwIHRvIHJwbXBkIGJpbmRpbmcK
+ICAgICAgc29jOiBxY29tOiBycG1ocGQ6IEFkZCBzYzcyODAgcG93ZXJkb21haW5zCiAgICAgIGR0
+LWJpbmRpbmdzOiBmaXJtd2FyZTogc2NtOiBBZGQgc2M3MjgwIHN1cHBvcnQKClJveSBQbGVkZ2Ug
+KDEpOgogICAgICBzb2M6IGZzbDogcWJtYW46IEVuc3VyZSBkZXZpY2UgY2xlYW51cCBpcyBydW4g
+Zm9yIGtleGVjCgpTYWkgUHJha2FzaCBSYW5qYW4gKDQpOgogICAgICBkdC1iaW5kaW5nczogYXJt
+OiBtc206IEFkZCBMTENDIGZvciBTQzcyODAKICAgICAgc29jOiBxY29tOiBsbGNjOiBBZGQgY29u
+ZmlndXJhdGlvbiBkYXRhIGZvciBTQzcyODAKICAgICAgZHQtYmluZGluZ3M6IHNvYzogcWNvbTog
+YW9zczogQWRkIFNDNzI4MCBjb21wYXRpYmxlCiAgICAgIHNvYzogcWNvbTogYW9zczogQWRkIEFP
+U1MgUU1QIHN1cHBvcnQgZm9yIFNDNzI4MAoKU2ViYXN0aWFuIFJlaWNoZWwgKDEpOgogICAgICBz
+b2M6IGlteDogYWRkIGkuTVg1MS9pLk1YNTMgdW5pcXVlIGlkIHN1cHBvcnQKClNpYmkgU2Fua2Fy
+ICgxKToKICAgICAgc29jOiBxY29tOiBzbWVtOiBVcGRhdGUgbWF4IHByb2Nlc3NvciBjb3VudAoK
+U3RlcGhlbiBCb3lkICg4KToKICAgICAgc29jOiBxY29tOiBycG1oLXJzYzogUmVtb3ZlIHRjc19p
+c19mcmVlKCkgQVBJCiAgICAgIHNvYzogcWNvbTogcnBtaC1yc2M6IExvb3Agb3ZlciBmZXdlciBi
+aXRzIGluIGlycSBoYW5kbGVyCiAgICAgIHNvYzogcWNvbTogcnBtaC1yc2M6IEZvbGQgV0FSTl9P
+TigpIGludG8gaWYgY29uZGl0aW9uCiAgICAgIGZpcm13YXJlOiBxY29tX3NjbTogTWFrZSBfX3Fj
+b21fc2NtX2lzX2NhbGxfYXZhaWxhYmxlKCkgcmV0dXJuIGJvb2wKICAgICAgZmlybXdhcmU6IHFj
+b21fc2NtOiBSZWR1Y2UgbG9ja2luZyBzZWN0aW9uIGZvciBfX2dldF9jb252ZW50aW9uKCkKICAg
+ICAgZmlybXdhcmU6IHFjb21fc2NtOiBXb3JrYXJvdW5kIGxhY2sgb2YgImlzIGF2YWlsYWJsZSIg
+Y2FsbCBvbiBTQzcxODAKICAgICAgZmlybXdhcmU6IHFjb21fc2NtOiBTdXBwcmVzcyBzeXNmcyBi
+aW5kIGF0dHJpYnV0ZXMKICAgICAgZmlybXdhcmU6IHFjb21fc2NtOiBGaXgga2VybmVsLWRvYyBm
+dW5jdGlvbiBuYW1lcyB0byBtYXRjaAoKU3VkZWVwIEhvbGxhICgxKToKICAgICAgTWVyZ2UgYnJh
+bmNoICdpYi1paW8tc2NtaS01LjEyLXJjMi10YWtlMycgb2YKZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcv
+cHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2ppYzIzL2lpbyBpbnRvCmZvci1uZXh0L3NjbWkKClRl
+amFzIFBhdGVsICgxKToKICAgICAgZmlybXdhcmU6IHhpbGlueDogRml4IGRlcmVmZXJlbmNpbmcg
+ZnJlZWQgbWVtb3J5CgpUb255IExpbmRncmVuICg4KToKICAgICAgYnVzOiB0aS1zeXNjOiBGaXgg
+aW5pdGlhbGl6aW5nIG1vZHVsZV9wYSBmb3IgbW9kdWxlcyB3aXRob3V0IHN5c2MgcmVnaXN0ZXIK
+ICAgICAgYnVzOiB0aS1zeXNjOiBQcm9iZSBmb3IgbDRfd2t1cCBhbmQgbDRfY2ZnIGludGVyY29u
+bmVjdCBkZXZpY2VzIGZpcnN0CiAgICAgIGJ1czogdGktc3lzYzogRGV0ZWN0IG1vcmUgbW9kdWxl
+cyBmb3IgZGVidWdnaW5nCiAgICAgIGJ1czogdGktc3lzYzogQ2hlY2sgZm9yIG9sZCBpbmNvbXBs
+ZXRlIGR0YgogICAgICBBUk06IE9NQVAyKzogSW5pdCBib3RoIHBybSBhbmQgcHJjbSBub2RlcyBl
+YXJseSBmb3IgY2xvY2tzCiAgICAgIHNvYzogdGk6IG9tYXAtcHJtOiBBbGxvdyBoYXJkd2FyZSBz
+dXBwb3J0ZWQgcmV0ZW50aW9uIHdoZW4gaWRsZQogICAgICBjbGs6IHRpOiBvbWFwNTogQWRkIG1p
+c3NpbmcgZ3BtYyBhbmQgb2NtYyBjbGtjdHJsCiAgICAgIFBDSTogcGNpLWRyYTd4eDogUHJlcGFy
+ZSBmb3IgZGVmZXJyZWQgcHJvYmUgd2l0aCBtb2R1bGVfcGxhdGZvcm1fZHJpdmVyCgpVbGYgSGFu
+c3NvbiAoMSk6CiAgICAgIGZpcm13YXJlOiBpbXg6IHNjdS1wZDogVXBkYXRlIGNvbW1lbnRzIGZv
+ciBzaW5nbGUgZ2xvYmFsIHBvd2VyIGRvbWFpbgoKVmlub2QgS291bCAoMik6CiAgICAgIGR0LWJp
+bmRpbmdzOiBwb3dlcjogQWRkIHJwbSBwb3dlciBkb21haW4gYmluZGluZ3MgZm9yIFNNODM1MAog
+ICAgICBzb2M6IHFjb206IHJwbWhwZDogQWRkIFNNODM1MCBwb3dlciBkb21haW5zCgpXZWkgWW9u
+Z2p1biAoMik6CiAgICAgIEFSTTogT01BUDIrOiBNYWtlIHN5bWJvbCAncGRhdGFfcXVpcmtzX2lu
+aXRfY2xvY2tzJyBzdGF0aWMKICAgICAgc29jOiBtZWRpYXRlazogTWFrZSBzeW1ib2wgJ210a19t
+dXRleF9kcml2ZXInIHN0YXRpYwoKWWFuZyBMaSAoMyk6CiAgICAgIGJ1czogdGktc3lzYzogcmVt
+b3ZlIHVubmVlZGVkIHNlbWljb2xvbgogICAgICBtZW1vcnk6IHRlZ3JhOiByZXBsYWNlIERFRklO
+RV9TSU1QTEVfQVRUUklCVVRFIHdpdGgKREVGSU5FX0RFQlVHRlNfQVRUUklCVVRFCiAgICAgIHNv
+YzogZnNsOiBndXRzOiByZW1vdmUgdW5uZWVkZWQgc2VtaWNvbG9uCgpZb25nIFd1ICgxKToKICAg
+ICAgbWVtb3J5OiBtdGstc21pOiBBZGQgZGV2aWNlLWxpbmsgYmV0d2VlbiBzbWktbGFyYiBhbmQg
+c21pLWNvbW1vbgoKWW9uZ3FpYW5nIE5pdSAoMSk6CiAgICAgIHNvYzogbWVkaWF0ZWs6IGFkZCBt
+dGsgbXV0ZXggc3VwcG9ydCBmb3IgTVQ4MTgzCgpaaGVuZyBZb25nanVuICgzKToKICAgICAgYnVz
+OiB0aS1zeXNjOiBVc2Uga3phbGxvYyBmb3IgYWxsb2NhdGluZyBvbmx5IG9uZSB0aGluZwogICAg
+ICBzb2M6IGZzbDogcWJtYW46IERlbGV0ZSB1c2VsZXNzIGtmcmVlIGNvZGUKICAgICAgc29jOiBm
+c2w6IHFlOiBVc2UgREVGSU5FX1NQSU5MT0NLKCkgZm9yIHNwaW5sb2NrCgpnZXh1ZXl1YW4gKDEp
+OgogICAgICBtZW1vcnk6IHBsMzUzOiBmaXggbWFzayBvZiBFQ0MgcGFnZV9zaXplIGNvbmZpZyBy
+ZWdpc3RlcgoKIC4uLi9hcm0vYmNtL3Jhc3BiZXJyeXBpLGJjbTI4MzUtZmlybXdhcmUueWFtbCAg
+ICAgIHwgIDIwICsKIC4uLi9iaW5kaW5ncy9hcm0vbWVkaWF0ZWsvbWVkaWF0ZWssbW1zeXMudHh0
+ICAgICAgIHwgICAxICsKIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9tc20vcWNvbSxsbGNj
+LnlhbWwgICAgIHwgICAxICsKIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL2Zpcm13YXJlL3Fjb20s
+c2NtLnR4dCAgICAgIHwgICAxICsKIC4uLi9tZW1vcnktY29udHJvbGxlcnMvbnZpZGlhLHRlZ3Jh
+MTI0LWVtYy55YW1sICAgIHwgICA3ICstCiAuLi4vbWVtb3J5LWNvbnRyb2xsZXJzL252aWRpYSx0
+ZWdyYTIwLWVtYy50eHQgICAgICB8ICAgNCArLQogLi4uL21lbW9yeS1jb250cm9sbGVycy9udmlk
+aWEsdGVncmEyMC1tYy50eHQgICAgICAgfCAgNDAgLS0KIC4uLi9tZW1vcnktY29udHJvbGxlcnMv
+bnZpZGlhLHRlZ3JhMjAtbWMueWFtbCAgICAgIHwgIDc5ICsrCiAuLi4vbWVtb3J5LWNvbnRyb2xs
+ZXJzL252aWRpYSx0ZWdyYTMwLWVtYy55YW1sICAgICB8ICAgNyArLQogLi4uL2RldmljZXRyZWUv
+YmluZGluZ3MvbWZkL2FzcGVlZC1scGMudHh0ICAgICAgICAgfCAxMDAgKy0tCiAuLi4vZGV2aWNl
+dHJlZS9iaW5kaW5ncy9wb3dlci9icmNtLGJjbS1wbWIueWFtbCAgICB8ICAgMSArCiAuLi4vZGV2
+aWNldHJlZS9iaW5kaW5ncy9wb3dlci9xY29tLHJwbXBkLnlhbWwgICAgICB8ICAgMiArCiAuLi4v
+ZGV2aWNldHJlZS9iaW5kaW5ncy9zb2MvbWVkaWF0ZWsvcHdyYXAudHh0ICAgICB8ICAgMSArCiAu
+Li4vZGV2aWNldHJlZS9iaW5kaW5ncy9zb2MvcWNvbS9xY29tLGFvc3MtcW1wLnR4dCB8ICAgMSAr
+CiAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy9zb2MvcWNvbS9xY29tLHdjbnNzLnR4dCAgICB8ICAg
+NyArCiBEb2N1bWVudGF0aW9uL2RyaXZlci1hcGkveGlsaW54L2VlbWkucnN0ICAgICAgICAgICB8
+ICAzMSArLQogTUFJTlRBSU5FUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgfCAgIDcgKwogYXJjaC9hcm0vS2NvbmZpZyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgfCAgIDIgKy0KIGFyY2gvYXJtL0tjb25maWcuZGVidWcgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgICA2ICstCiBhcmNoL2FybS9NYWtlZmlsZSAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAgMiArLQogYXJjaC9hcm0vYm9vdC9kdHMvTWFrZWZpbGUgICAgICAg
+ICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2FzcGVlZC1nNC5k
+dHNpICAgICAgICAgICAgICAgICAgIHwgIDc2ICstCiBhcmNoL2FybS9ib290L2R0cy9hc3BlZWQt
+ZzUuZHRzaSAgICAgICAgICAgICAgICAgICB8IDEzNyArKy0tCiBhcmNoL2FybS9ib290L2R0cy9h
+c3BlZWQtZzYuZHRzaSAgICAgICAgICAgICAgICAgICB8IDEzNyArKy0tCiBhcmNoL2FybS9jb25m
+aWdzL211bHRpX3Y3X2RlZmNvbmZpZyAgICAgICAgICAgICAgICB8ICAgMiArLQogYXJjaC9hcm0v
+Y29uZmlncy9zb2NmcGdhX2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgfCAgIDIgKy0KIGFyY2gv
+YXJtL21hY2gtb21hcDIvcGRhdGEtcXVpcmtzLmMgICAgICAgICAgICAgICAgIHwgIDI5ICstCiBh
+cmNoL2FybS9tYWNoLXNvY2ZwZ2EvS2NvbmZpZyAgICAgICAgICAgICAgICAgICAgICB8ICAgNCAr
+LQogYXJjaC9hcm02NC9LY29uZmlnLnBsYXRmb3JtcyAgICAgICAgICAgICAgICAgICAgICAgfCAg
+MTcgKy0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvYWx0ZXJhL01ha2VmaWxlICAgICAgICAgICAgICAg
+IHwgICAyICstCiBhcmNoL2FybTY0L2Jvb3QvZHRzL2ludGVsL01ha2VmaWxlICAgICAgICAgICAg
+ICAgICB8ICAgNiArLQogYXJjaC9hcm02NC9jb25maWdzL2RlZmNvbmZpZyAgICAgICAgICAgICAg
+ICAgICAgICAgfCAgIDIgKy0KIGRyaXZlcnMvYnVzL3Fjb20tZWJpMi5jICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHwgICA0ICstCiBkcml2ZXJzL2J1cy90aS1zeXNjLmMgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICB8ICA4NCArKy0KIGRyaXZlcnMvY2hhci9pcG1pL2tjc19ibWNfYXNw
+ZWVkLmMgICAgICAgICAgICAgICAgIHwgIDI3ICstCiBkcml2ZXJzL2Nsay9LY29uZmlnICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMSArCiBkcml2ZXJzL2Nsay9NYWtlZmlsZSAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgNCArLQogZHJpdmVycy9jbGsvYmNtL2Ns
+ay1yYXNwYmVycnlwaS5jICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KIGRyaXZlcnMvY2xrL2Ns
+ay1zY21pLmMgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDI4ICstCiBkcml2ZXJzL2Ns
+ay9zb2NmcGdhL0tjb25maWcgICAgICAgICAgICAgICAgICAgICAgICB8ICAxOSArCiBkcml2ZXJz
+L2Nsay9zb2NmcGdhL01ha2VmaWxlICAgICAgICAgICAgICAgICAgICAgICB8ICAxMSArLQogZHJp
+dmVycy9jbGsvc29jZnBnYS9jbGstZ2F0ZS5jICAgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0K
+IGRyaXZlcnMvY2xrL3RlZ3JhL2Nsay1wbGwuYyAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEy
+IC0KIGRyaXZlcnMvY2xrL3RlZ3JhL2Nsay10ZWdyYTIxMC5jICAgICAgICAgICAgICAgICAgIHwg
+IDUzICstCiBkcml2ZXJzL2Nsay90aS9jbGstNTR4eC5jICAgICAgICAgICAgICAgICAgICAgICAg
+ICB8ICAgMiArCiBkcml2ZXJzL2NwdWZyZXEvc2NtaS1jcHVmcmVxLmMgICAgICAgICAgICAgICAg
+ICAgICB8IDEwNyArKy0KIGRyaXZlcnMvZG1hL0tjb25maWcgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgICAyICstCiBkcml2ZXJzL2VkYWMvS2NvbmZpZyAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAgMiArLQogZHJpdmVycy9lZGFjL2FsdGVyYV9lZGFjLmMgICAgICAg
+ICAgICAgICAgICAgICAgICAgfCAgMTcgKy0KIGRyaXZlcnMvZmlybXdhcmUvS2NvbmZpZyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgICAyICstCiBkcml2ZXJzL2Zpcm13YXJlL2FybV9zY21p
+L2Jhc2UuYyAgICAgICAgICAgICAgICAgICB8IDE0MiArKy0tCiBkcml2ZXJzL2Zpcm13YXJlL2Fy
+bV9zY21pL2J1cy5jICAgICAgICAgICAgICAgICAgICB8IDEwMCArKy0KIGRyaXZlcnMvZmlybXdh
+cmUvYXJtX3NjbWkvY2xvY2suYyAgICAgICAgICAgICAgICAgIHwgMTI5ICsrLS0KIGRyaXZlcnMv
+ZmlybXdhcmUvYXJtX3NjbWkvY29tbW9uLmggICAgICAgICAgICAgICAgIHwgMTMzICsrKy0KIGRy
+aXZlcnMvZmlybXdhcmUvYXJtX3NjbWkvZHJpdmVyLmMgICAgICAgICAgICAgICAgIHwgNzk4ICsr
+KysrKysrKysrKysrKysrKystLQogZHJpdmVycy9maXJtd2FyZS9hcm1fc2NtaS9ub3RpZnkuYyAg
+ICAgICAgICAgICAgICAgfCAzMjggKysrKysrKy0tCiBkcml2ZXJzL2Zpcm13YXJlL2FybV9zY21p
+L25vdGlmeS5oICAgICAgICAgICAgICAgICB8ICA0MCArLQogZHJpdmVycy9maXJtd2FyZS9hcm1f
+c2NtaS9wZXJmLmMgICAgICAgICAgICAgICAgICAgfCAyNjIgKysrLS0tLQogZHJpdmVycy9maXJt
+d2FyZS9hcm1fc2NtaS9wb3dlci5jICAgICAgICAgICAgICAgICAgfCAxMzQgKystLQogZHJpdmVy
+cy9maXJtd2FyZS9hcm1fc2NtaS9yZXNldC5jICAgICAgICAgICAgICAgICAgfCAxNDYgKystLQog
+ZHJpdmVycy9maXJtd2FyZS9hcm1fc2NtaS9zY21pX3BtX2RvbWFpbi5jICAgICAgICAgfCAgMjYg
+Ky0KIGRyaXZlcnMvZmlybXdhcmUvYXJtX3NjbWkvc2Vuc29ycy5jICAgICAgICAgICAgICAgIHwg
+MjMyICsrKy0tLQogZHJpdmVycy9maXJtd2FyZS9hcm1fc2NtaS9zeXN0ZW0uYyAgICAgICAgICAg
+ICAgICAgfCAgNjMgKy0KIGRyaXZlcnMvZmlybXdhcmUvYXJtX3NjbWkvdm9sdGFnZS5jICAgICAg
+ICAgICAgICAgIHwgMTI2ICsrLS0KIGRyaXZlcnMvZmlybXdhcmUvaW14L3NjdS1wZC5jICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDQxICstCiBkcml2ZXJzL2Zpcm13YXJlL3Fjb21fc2NtLWxlZ2Fj
+eS5jICAgICAgICAgICAgICAgICB8ICAgNCArLQogZHJpdmVycy9maXJtd2FyZS9xY29tX3NjbS1z
+bWMuYyAgICAgICAgICAgICAgICAgICAgfCAgMTIgKy0KIGRyaXZlcnMvZmlybXdhcmUvcWNvbV9z
+Y20uYyAgICAgICAgICAgICAgICAgICAgICAgIHwgIDg5ICsrLQogZHJpdmVycy9maXJtd2FyZS9x
+Y29tX3NjbS5oICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDcgKy0KIGRyaXZlcnMvZmlybXdh
+cmUvcmFzcGJlcnJ5cGkuYyAgICAgICAgICAgICAgICAgICAgIHwgIDY5ICstCiBkcml2ZXJzL2Zp
+cm13YXJlL3hpbGlueC96eW5xbXAuYyAgICAgICAgICAgICAgICAgICB8ICAgNSArLQogZHJpdmVy
+cy9mcGdhL0tjb25maWcgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDggKy0KIGRy
+aXZlcnMvZ3Bpby9ncGlvLXJhc3BiZXJyeXBpLWV4cC5jICAgICAgICAgICAgICAgIHwgICAyICst
+CiBkcml2ZXJzL2h3bW9uL3NjbWktaHdtb24uYyAgICAgICAgICAgICAgICAgICAgICAgICB8ICAy
+NCArLQogZHJpdmVycy9pMmMvYnVzc2VzL0tjb25maWcgICAgICAgICAgICAgICAgICAgICAgICAg
+fCAgIDIgKy0KIGRyaXZlcnMvaWlvL2NvbW1vbi9LY29uZmlnICAgICAgICAgICAgICAgICAgICAg
+ICAgIHwgICAxICsKIGRyaXZlcnMvaWlvL2NvbW1vbi9NYWtlZmlsZSAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgICAxICsKIGRyaXZlcnMvaWlvL2NvbW1vbi9zY21pX3NlbnNvcnMvS2NvbmZpZyAg
+ICAgICAgICAgIHwgIDE4ICsKIGRyaXZlcnMvaWlvL2NvbW1vbi9zY21pX3NlbnNvcnMvTWFrZWZp
+bGUgICAgICAgICAgIHwgICA1ICsKIGRyaXZlcnMvaWlvL2NvbW1vbi9zY21pX3NlbnNvcnMvc2Nt
+aV9paW8uYyAgICAgICAgIHwgNjgzICsrKysrKysrKysrKysrKysrKwogZHJpdmVycy9pbnB1dC90
+b3VjaHNjcmVlbi9yYXNwYmVycnlwaS10cy5jICAgICAgICAgfCAgIDIgKy0KIGRyaXZlcnMvbWVt
+b3J5L2ZzbC1jb3JlbmV0LWNmLmMgICAgICAgICAgICAgICAgICAgIHwgICA0ICstCiBkcml2ZXJz
+L21lbW9yeS9tdGstc21pLmMgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxOSArLQogZHJp
+dmVycy9tZW1vcnkvb21hcC1ncG1jLmMgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDcgKy0K
+IGRyaXZlcnMvbWVtb3J5L3BsMzUzLXNtYy5jICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAy
+ICstCiBkcml2ZXJzL21lbW9yeS9yZW5lc2FzLXJwYy1pZi5jICAgICAgICAgICAgICAgICAgICB8
+ICAgMiArLQogZHJpdmVycy9tZW1vcnkvc2Ftc3VuZy9leHlub3M1NDIyLWRtYy5jICAgICAgICAg
+ICAgfCAgIDQgKy0KIGRyaXZlcnMvbWVtb3J5L3RlZ3JhL21jLmMgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgICA5ICsKIGRyaXZlcnMvbWVtb3J5L3RlZ3JhL21jLmggICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgICA0ICstCiBkcml2ZXJzL21lbW9yeS90ZWdyYS90ZWdyYTEyNC1lbWMuYyAg
+ICAgICAgICAgICAgICB8ICAxNiArLQogZHJpdmVycy9tZW1vcnkvdGVncmEvdGVncmEyMC1lbWMu
+YyAgICAgICAgICAgICAgICAgfCAgMjAgKy0KIGRyaXZlcnMvbWVtb3J5L3RlZ3JhL3RlZ3JhMjAu
+YyAgICAgICAgICAgICAgICAgICAgIHwgMzMyICsrKysrKysrKwogZHJpdmVycy9tZW1vcnkvdGVn
+cmEvdGVncmEzMC1lbWMuYyAgICAgICAgICAgICAgICAgfCAgMTggKy0KIGRyaXZlcnMvbWZkL0tj
+b25maWcgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICA0ICstCiBkcml2ZXJzL25l
+dC9ldGhlcm5ldC9zdG1pY3JvL3N0bW1hYy9LY29uZmlnICAgICAgICB8ICAgNCArLQogZHJpdmVy
+cy9wY2kvY29udHJvbGxlci9kd2MvcGNpLWRyYTd4eC5jICAgICAgICAgICAgfCAgMTMgKy0KIGRy
+aXZlcnMvcGluY3RybC9hc3BlZWQvcGluY3RybC1hc3BlZWQtZzUuYyAgICAgICAgIHwgIDE3ICst
+CiBkcml2ZXJzL3B3bS9LY29uZmlnICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAg
+OSArCiBkcml2ZXJzL3B3bS9NYWtlZmlsZSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8
+ICAgMSArCiBkcml2ZXJzL3B3bS9wd20tcmFzcGJlcnJ5cGktcG9lLmMgICAgICAgICAgICAgICAg
+ICB8IDIwNiArKysrKysKIGRyaXZlcnMvcmVndWxhdG9yL3NjbWktcmVndWxhdG9yLmMgICAgICAg
+ICAgICAgICAgIHwgIDQyICstCiBkcml2ZXJzL3Jlc2V0L0tjb25maWcgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAgNiArLQogZHJpdmVycy9yZXNldC9yZXNldC1yYXNwYmVycnlwaS5j
+ICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KIGRyaXZlcnMvcmVzZXQvcmVzZXQtc2NtaS5jICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgIDMzICstCiBkcml2ZXJzL3NvYy9hc3BlZWQvYXNwZWVk
+LWxwYy1jdHJsLmMgICAgICAgICAgICAgICB8ICAyMCArLQogZHJpdmVycy9zb2MvYXNwZWVkL2Fz
+cGVlZC1scGMtc25vb3AuYyAgICAgICAgICAgICAgfCAgMjcgKy0KIGRyaXZlcnMvc29jL2JjbS9i
+Y202M3h4L2JjbS1wbWIuYyAgICAgICAgICAgICAgICAgIHwgIDMwICsKIGRyaXZlcnMvc29jL2Jj
+bS9yYXNwYmVycnlwaS1wb3dlci5jICAgICAgICAgICAgICAgIHwgICAyICstCiBkcml2ZXJzL3Nv
+Yy9mc2wvZ3V0cy5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMiArLQogZHJpdmVy
+cy9zb2MvZnNsL3FibWFuL2JtYW4uYyAgICAgICAgICAgICAgICAgICAgICAgfCAgIDEgLQogZHJp
+dmVycy9zb2MvZnNsL3FibWFuL2JtYW5fcG9ydGFsLmMgICAgICAgICAgICAgICAgfCAgIDMgKy0K
+IGRyaXZlcnMvc29jL2ZzbC9xYm1hbi9xbWFuX3BvcnRhbC5jICAgICAgICAgICAgICAgIHwgICAz
+ICstCiBkcml2ZXJzL3NvYy9mc2wvcWUvZ3Bpby5jICAgICAgICAgICAgICAgICAgICAgICAgICB8
+ICAyMCArLQogZHJpdmVycy9zb2MvZnNsL3FlL3FlLmMgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgfCAgMjQgKy0KIGRyaXZlcnMvc29jL2ZzbC9xZS9xZV9jb21tb24uYyAgICAgICAgICAgICAg
+ICAgICAgIHwgICAzICstCiBkcml2ZXJzL3NvYy9mc2wvcWUvcWVfaWMuYyAgICAgICAgICAgICAg
+ICAgICAgICAgICB8ICAgNCArLQogZHJpdmVycy9zb2MvZnNsL3FlL3FlX2lvLmMgICAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgMzYgKy0KIGRyaXZlcnMvc29jL2ZzbC9xZS91Y2NfZmFzdC5jICAg
+ICAgICAgICAgICAgICAgICAgIHwgIDY4ICstCiBkcml2ZXJzL3NvYy9mc2wvcWUvdWNjX3Nsb3cu
+YyAgICAgICAgICAgICAgICAgICAgICB8ICA0MiArLQogZHJpdmVycy9zb2MvZnNsL3JjcG0uYyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMjQgKy0KIGRyaXZlcnMvc29jL2lteC9zb2Mt
+aW14LmMgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEyICsKIGRyaXZlcnMvc29jL21lZGlh
+dGVrL210ODE2Ny1tbXN5cy5oICAgICAgICAgICAgICAgIHwgIDM1ICsKIGRyaXZlcnMvc29jL21l
+ZGlhdGVrL210ODE2Ny1wbS1kb21haW5zLmggICAgICAgICAgIHwgICA3ICsKIGRyaXZlcnMvc29j
+L21lZGlhdGVrL210ODE3My1wbS1kb21haW5zLmggICAgICAgICAgIHwgIDEwICsKIGRyaXZlcnMv
+c29jL21lZGlhdGVrL210ODE4My1tbXN5cy5oICAgICAgICAgICAgICAgIHwgIDU0ICsrCiBkcml2
+ZXJzL3NvYy9tZWRpYXRlay9tdDgxODMtcG0tZG9tYWlucy5oICAgICAgICAgICB8ICAxNSArCiBk
+cml2ZXJzL3NvYy9tZWRpYXRlay9tdDgxOTItcG0tZG9tYWlucy5oICAgICAgICAgICB8ICAyMSAr
+CiBkcml2ZXJzL3NvYy9tZWRpYXRlay9tdGstbW1zeXMuYyAgICAgICAgICAgICAgICAgICB8IDMx
+NCArKy0tLS0tLQogZHJpdmVycy9zb2MvbWVkaWF0ZWsvbXRrLW1tc3lzLmggICAgICAgICAgICAg
+ICAgICAgfCAyMTUgKysrKysrCiBkcml2ZXJzL3NvYy9tZWRpYXRlay9tdGstbXV0ZXguYyAgICAg
+ICAgICAgICAgICAgICB8ICA1MiArLQogZHJpdmVycy9zb2MvbWVkaWF0ZWsvbXRrLXBtLWRvbWFp
+bnMuYyAgICAgICAgICAgICAgfCAgMTEgKy0KIGRyaXZlcnMvc29jL21lZGlhdGVrL210ay1wbS1k
+b21haW5zLmggICAgICAgICAgICAgIHwgICAyICsKIGRyaXZlcnMvc29jL21lZGlhdGVrL210ay1w
+bWljLXdyYXAuYyAgICAgICAgICAgICAgIHwgIDk3ICsrLQogZHJpdmVycy9zb2MvcWNvbS9sbGNj
+LXFjb20uYyAgICAgICAgICAgICAgICAgICAgICAgfCAgMTkgKwogZHJpdmVycy9zb2MvcWNvbS9t
+ZHRfbG9hZGVyLmMgICAgICAgICAgICAgICAgICAgICAgfCAgMTcgKwogZHJpdmVycy9zb2MvcWNv
+bS9wZHJfaW50ZXJmYWNlLmMgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KIGRyaXZlcnMvc29j
+L3Fjb20vcWNvbV9hb3NzLmMgICAgICAgICAgICAgICAgICAgICAgIHwgICAxICsKIGRyaXZlcnMv
+c29jL3Fjb20vcW1pX2VuY2RlYy5jICAgICAgICAgICAgICAgICAgICAgIHwgICA4ICstCiBkcml2
+ZXJzL3NvYy9xY29tL3JwbWgtcnNjLmMgICAgICAgICAgICAgICAgICAgICAgICB8ICA2NSArLQog
+ZHJpdmVycy9zb2MvcWNvbS9ycG1ocGQuYyAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgNTYg
+KysKIGRyaXZlcnMvc29jL3Fjb20vc21lbS5jICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+ICAyICstCiBkcml2ZXJzL3NvYy9xY29tL3djbnNzX2N0cmwuYyAgICAgICAgICAgICAgICAgICAg
+ICB8ICAxNSArLQogZHJpdmVycy9zb2MvcmVuZXNhcy9ybW9iaWxlLXN5c2MuYyAgICAgICAgICAg
+ICAgICAgfCAgIDQgKy0KIGRyaXZlcnMvc29jL3RlZ3JhL3BtYy5jICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgMjU5ICsrKysrKy0KIGRyaXZlcnMvc29jL3RlZ3JhL3JlZ3VsYXRvcnMtdGVn
+cmEzMC5jICAgICAgICAgICAgIHwgICAyICstCiBkcml2ZXJzL3NvYy90aS9vbWFwX3BybS5jICAg
+ICAgICAgICAgICAgICAgICAgICAgICB8ICAxNiArLQogLi4uL3ZjMDRfc2VydmljZXMvaW50ZXJm
+YWNlL3ZjaGlxX2FybS92Y2hpcV9hcm0uYyAgfCAgIDIgKy0KIGRyaXZlcnMvdGVlL29wdGVlL01h
+a2VmaWxlICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAzICsKIGRyaXZlcnMvdGVlL29wdGVl
+L2NhbGwuYyAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICA0ICsKIGRyaXZlcnMvdGVlL29w
+dGVlL2NvcmUuYyAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEwIC0KIGRyaXZlcnMvdGVl
+L29wdGVlL29wdGVlX3RyYWNlLmggICAgICAgICAgICAgICAgICAgIHwgIDY3ICsrCiBkcml2ZXJz
+L3R0eS9zZXJpYWwvdWNjX3VhcnQuYyAgICAgICAgICAgICAgICAgICAgICB8IDEyNCArKy0tCiBp
+bmNsdWRlL2R0LWJpbmRpbmdzL2Nsb2NrL29tYXA1LmggICAgICAgICAgICAgICAgICB8ICAgMiAr
+CiBpbmNsdWRlL2R0LWJpbmRpbmdzL3Bvd2VyL3Fjb20tcnBtcGQuaCAgICAgICAgICAgICB8ICAy
+NiArCiAuLi4vZHQtYmluZGluZ3MvcHdtL3Jhc3BiZXJyeXBpLGZpcm13YXJlLXBvZS1wd20uaCB8
+ICAxMyArCiBpbmNsdWRlL2R0LWJpbmRpbmdzL3NvYy9iY20tcG1iLmggICAgICAgICAgICAgICAg
+ICB8ICAgMSArCiBpbmNsdWRlL2xpbnV4L2Nsay90ZWdyYS5oICAgICAgICAgICAgICAgICAgICAg
+ICAgICB8ICAgNCArLQogaW5jbHVkZS9saW51eC9maXJtd2FyZS94bG54LXp5bnFtcC5oICAgICAg
+ICAgICAgICAgfCAgIDUgLQogaW5jbHVkZS9saW51eC9mc2wvZ3V0cy5oICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgfCAgIDQgKy0KIGluY2x1ZGUvbGludXgvc2NtaV9wcm90b2NvbC5oICAgICAg
+ICAgICAgICAgICAgICAgIHwgMjAwICsrKy0tLQogaW5jbHVkZS9saW51eC9zb2MvcWNvbS9hcHIu
+aCAgICAgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KIGluY2x1ZGUvbGludXgvc29jL3Fjb20v
+aXJxLmggICAgICAgICAgICAgICAgICAgICAgIHwgICAyICstCiBpbmNsdWRlL2xpbnV4L3NvYy9x
+Y29tL2xsY2MtcWNvbS5oICAgICAgICAgICAgICAgICB8ICAgNiArLQogaW5jbHVkZS9saW51eC9z
+b2MvcWNvbS9xbWkuaCAgICAgICAgICAgICAgICAgICAgICAgfCAgIDQgKy0KIGluY2x1ZGUvc29j
+L2JjbTI4MzUvcmFzcGJlcnJ5cGktZmlybXdhcmUuaCAgICAgICAgIHwgIDEwICsKIGluY2x1ZGUv
+c29jL2ZzbC9xZS9xZS5oICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDM0ICstCiBpbmNs
+dWRlL3NvYy90ZWdyYS9tYy5oICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgNyArCiAx
+NjcgZmlsZXMgY2hhbmdlZCwgNTU2MCBpbnNlcnRpb25zKCspLCAyMTExIGRlbGV0aW9ucygtKQog
+ZGVsZXRlIG1vZGUgMTAwNjQ0CkRvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZW1v
+cnktY29udHJvbGxlcnMvbnZpZGlhLHRlZ3JhMjAtbWMudHh0CiBjcmVhdGUgbW9kZSAxMDA2NDQK
+RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21lbW9yeS1jb250cm9sbGVycy9udmlk
+aWEsdGVncmEyMC1tYy55YW1sCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9jbGsvc29jZnBn
+YS9LY29uZmlnCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9paW8vY29tbW9uL3NjbWlfc2Vu
+c29ycy9LY29uZmlnCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9paW8vY29tbW9uL3NjbWlf
+c2Vuc29ycy9NYWtlZmlsZQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvaWlvL2NvbW1vbi9z
+Y21pX3NlbnNvcnMvc2NtaV9paW8uYwogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvcHdtL3B3
+bS1yYXNwYmVycnlwaS1wb2UuYwogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvc29jL21lZGlh
+dGVrL210ODE2Ny1tbXN5cy5oCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9zb2MvbWVkaWF0
+ZWsvbXQ4MTgzLW1tc3lzLmgKIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL3NvYy9tZWRpYXRl
+ay9tdGstbW1zeXMuaAogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvdGVlL29wdGVlL29wdGVl
+X3RyYWNlLmgKIGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL2R0LWJpbmRpbmdzL3B3bS9yYXNw
+YmVycnlwaSxmaXJtd2FyZS1wb2UtcHdtLmgKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmxpbnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0CmxpbnV4LWFy
+bS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZwpodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9t
+YWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFybS1rZXJuZWwK
