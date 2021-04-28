@@ -1,67 +1,72 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <gregkh@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5846DC43460
-	for <soc@archiver.kernel.org>; Tue, 27 Apr 2021 21:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7047C433ED
+	for <soc@archiver.kernel.org>; Wed, 28 Apr 2021 06:12:07 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E18DE613F5; Tue, 27 Apr 2021 21:22:42 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id CA46B60241;
-	Tue, 27 Apr 2021 21:22:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1619558562;
-	bh=JyXNJVwMpBowTe10Muw8wCqD7LGW1uEJ1KBqLIi2hNI=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=M83nKOfySasJn4FGjRwt1NjIWKS1uxH5kuwc+YmbmfxzlZZDBIpprAejY9LQ+0Hmj
-	 /ppH5zrgWvJTIrYlMorkPIWUC9Wgg8TQCv7Z+DbpOqUOb2qsHaM52u224IEpXUAiRu
-	 m4XJV/6GsXXtHmZlUTi4tTLeJWMrnbnRXX7sNKEKa3gOZsbyIT4SOZJbtAVqjjoJ/s
-	 6qxasyL/LP0egtFrowYBIvM5OJg9LSQ9jIQKDrGQwf7yIAEbx80YBzle4KXjllEgxD
-	 k8VgS50c0d5dMZq0i84+3ovdpkEt1d46sJ2QBe6AAOfV44ijI2i+NQs8XF5bUjKiAO
-	 /BDEwgmIpAdqw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C113860A3A;
-	Tue, 27 Apr 2021 21:22:42 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM SoC fixes for v5.12, part 4
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <161955856278.21098.16425214312269337459.git-patchwork-notify@kernel.org>
-Date: Tue, 27 Apr 2021 21:22:42 +0000
-References: <CAK8P3a20H54BCzzEtZEq2CXx57e1xeyzxf_uHq+OEMgKQvaC7g@mail.gmail.com>
-In-Reply-To: <CAK8P3a20H54BCzzEtZEq2CXx57e1xeyzxf_uHq+OEMgKQvaC7g@mail.gmail.com>
+	id 88E386141F; Wed, 28 Apr 2021 06:12:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8197B613B3;
+	Wed, 28 Apr 2021 06:12:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1619590327;
+	bh=dJJ0tvZ5MJ3qeFn4UO9q5Pg1l0TALUdby7ve1eM2grQ=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=FeMJIPqH4b6pi+6ue39y49E6677v535gJxnDBnSZ5VfWYi7BftKP4VUX5fFNlK8wN
+	 6AxDX48ar/lHxOnMsGAlL5Uv9+Tb/kIbeyCnaLnEGJd1oBb/ar09eo5bhxIQ+BsW0V
+	 a9CFOL67dDEAQZlsHU1Vkx9YtcE6PqW0+fGM6e4w=
+Date: Wed, 28 Apr 2021 08:12:03 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Ryan Wu <Yz.Wu@mediatek.com>, soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, Fabien Parent <fparent@baylibre.com>,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: nvmem: mediatek: remove duplicate mt8192
+ line
+Message-ID: <YIj8sySF3W0x8E+/@kroah.com>
+References: <20210427210121.1080364-1-arnd@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210427210121.1080364-1-arnd@kernel.org>
 
-Hello:
-
-This pull request was applied to soc/soc.git (refs/heads/arm/fixes):
-
-On Fri, 23 Apr 2021 21:55:22 +0200 you wrote:
-> The following changes since commit b9a9786a13ea158ee3b23614217f2e3158178421:
+On Tue, Apr 27, 2021 at 11:01:08PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
->   Merge tag 'omap-for-v5.12/fixes-rc6-signed' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into
-> arm/fixes (2021-04-08 17:56:09 +0200)
+> The same patch was accidentally merged twice, resulting in a
+> duplicate line for the mt8192 SoC.
 > 
-> are available in the Git repository at:
+> Fixes: f2674c0c7488 ("dt-bindings: nvmem: mediatek: add support for MediaTek mt8192 SoC")
+> Fixes: 2a1405a14c3a ("dt-bindings: nvmem: mediatek: add support for MediaTek mt8192 SoC")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  Documentation/devicetree/bindings/nvmem/mtk-efuse.txt | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> [...]
+> diff --git a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
+> index d479ad977e24..2f2895b1f06d 100644
+> --- a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
+> +++ b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
+> @@ -7,7 +7,6 @@ Required properties:
+>  	      "mediatek,mt7622-efuse", "mediatek,efuse": for MT7622
+>  	      "mediatek,mt7623-efuse", "mediatek,efuse": for MT7623
+>  	      "mediatek,mt8173-efuse" or "mediatek,efuse": for MT8173
+> -	      "mediatek,mt8192-efuse", "mediatek,efuse": for MT8192
+>  	      "mediatek,mt8516-efuse", "mediatek,efuse": for MT8516
+>  	      "mediatek,mt8192-efuse", "mediatek,efuse": for MT8192
 
-Here is the summary with links:
-  - [GIT,PULL] ARM SoC fixes for v5.12, part 4
-    https://git.kernel.org/soc/soc/c/6d1d45cb9834
+Shouldn't you drop the bottom one here to keep this in sorted order?
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+thanks,
 
-
+greg k-h
