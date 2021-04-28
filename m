@@ -1,131 +1,78 @@
-Return-Path: <SRS0=2Xr5=JZ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=WkcZ=JZ=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA9BAC433ED
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 28 Apr 2021 06:13:50 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 56D246141E
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 28 Apr 2021 06:13:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 56D246141E
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=HAjY3S7hLkwZrmehh5dVtyho/TfYP+ehjFNqkB/bRYI=; b=M4evbfl5OSYF1CiN/mIXrmBbI
-	ALBd590nRiOG9Z7Mwi/KtrGvB/Agel20Ds8vHMpiVLNEqIXnqZSbah041AliTyWfxU9EELGqB+QpW
-	VSyaoC+izcldS9jRSRg+DY2HVB4XVK8i4mm50FQM1ANPns5tAXJZXch2fPsGhmdFiaaw5RZ9DrTZX
-	aXMySNtd2MMhkgr4VOPEMRZiSrgCv8kybji1JSNiglxym49a4N2Bvya0kBjgSrJCRgyfulQKEwuiX
-	wi1hXJIwAy8es96ppDSG1RyZ8NhQDf36AzrQd348wKPCHaYIjc1Fc8q0PAe2knFMRa68UrcC2ypmw
-	ZSYLX1ftw==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lbdQk-002tye-Lq; Wed, 28 Apr 2021 06:12:14 +0000
-Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lbdQh-002tyP-Gi; Wed, 28 Apr 2021 06:12:11 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
- :References:Message-ID:Subject:Cc:List-Id:To:From:Date:Sender:Reply-To:
- Content-Transfer-Encoding:Content-ID:Content-Description;
- bh=exIWfyp5DP6MJ8raFiGS6RVBMJA413odfmn/lrQ5Ne0=; b=cnb+EQqPObeLpYCeXDX1omcWA6
- gtjLnVGj3aX+BSHti2Acw+Rh9jP/XjD9NTqSUwF5enaIuT0cX62klVmg+KVbSP/ua8hCl7wBw04KO
- 5Ozz8q1L7Gxp3WdSC5f4f9jgwc/ME3rXKXkNcmf/eSYkDmfG6rXRSIp7s4y/MIYe+F3FwC2weoabB
- urK5lNaclhu1g9Fjhqo0wLFtusD3DB6wHGFEYYN1Y3kcitAr5vPOPMp4E3cqMPQNkQdx7QKS4Al1n
- w1oDtn/VmKhqjp2QXiub5TLPOz85T92PaG/QFCYlgZLEhbif7CFm2huyTDKg+M7jww9xtoNveFAet
- cqGFFcEw==;
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lbdQe-00HCu9-QX; Wed, 28 Apr 2021 06:12:10 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8197B613B3;
- Wed, 28 Apr 2021 06:12:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
- s=korg; t=1619590327;
- bh=dJJ0tvZ5MJ3qeFn4UO9q5Pg1l0TALUdby7ve1eM2grQ=;
- h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
- b=FeMJIPqH4b6pi+6ue39y49E6677v535gJxnDBnSZ5VfWYi7BftKP4VUX5fFNlK8wN
- 6AxDX48ar/lHxOnMsGAlL5Uv9+Tb/kIbeyCnaLnEGJd1oBb/ar09eo5bhxIQ+BsW0V
- a9CFOL67dDEAQZlsHU1Vkx9YtcE6PqW0+fGM6e4w=
-Date: Wed, 28 Apr 2021 08:12:03 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Arnd Bergmann <arnd@kernel.org>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F4F0C433B4
+	for <soc@archiver.kernel.org>; Wed, 28 Apr 2021 09:31:59 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 5AB8361428; Wed, 28 Apr 2021 09:31:59 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by mail.kernel.org (Postfix) with ESMTP id F08E661429;
+	Wed, 28 Apr 2021 09:31:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F08E661429
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=sudeep.holla@arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B08DD6E;
+	Wed, 28 Apr 2021 02:31:58 -0700 (PDT)
+Received: from bogus (unknown [10.57.61.96])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 270543F70D;
+	Wed, 28 Apr 2021 02:31:57 -0700 (PDT)
+Date: Wed, 28 Apr 2021 10:31:48 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Rob Herring <robh+dt@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Ryan Wu <Yz.Wu@mediatek.com>, soc@kernel.org,
- Arnd Bergmann <arnd@arndb.de>, Fabien Parent <fparent@baylibre.com>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: nvmem: mediatek: remove duplicate mt8192 line
-Message-ID: <YIj8sySF3W0x8E+/@kroah.com>
-References: <20210427210121.1080364-1-arnd@kernel.org>
+To: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Kevin Hilman <khilman@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Olof Johansson <olof@lixom.net>
+Subject: [GIT PULL] firmware: arm_scmi: Fixes for v5.13
+Message-ID: <20210428093148.flrcowzr2dsj7byz@bogus>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210427210121.1080364-1-arnd@kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210427_231208_904883_9441606C 
-X-CRM114-Status: GOOD (  15.80  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210428061203.zDPkjyloGxzfHdA46Zk5_nF6kIUMZw5k1n3t1-36vCk@z>
+User-Agent: NeoMutt/20171215
 
-On Tue, Apr 27, 2021 at 11:01:08PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The same patch was accidentally merged twice, resulting in a
-> duplicate line for the mt8192 SoC.
-> 
-> Fixes: f2674c0c7488 ("dt-bindings: nvmem: mediatek: add support for MediaTek mt8192 SoC")
-> Fixes: 2a1405a14c3a ("dt-bindings: nvmem: mediatek: add support for MediaTek mt8192 SoC")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  Documentation/devicetree/bindings/nvmem/mtk-efuse.txt | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-> index d479ad977e24..2f2895b1f06d 100644
-> --- a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-> +++ b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-> @@ -7,7 +7,6 @@ Required properties:
->  	      "mediatek,mt7622-efuse", "mediatek,efuse": for MT7622
->  	      "mediatek,mt7623-efuse", "mediatek,efuse": for MT7623
->  	      "mediatek,mt8173-efuse" or "mediatek,efuse": for MT8173
-> -	      "mediatek,mt8192-efuse", "mediatek,efuse": for MT8192
->  	      "mediatek,mt8516-efuse", "mediatek,efuse": for MT8516
->  	      "mediatek,mt8192-efuse", "mediatek,efuse": for MT8192
+Hi ARM SoC Team,
 
-Shouldn't you drop the bottom one here to keep this in sorted order?
+Please pull !
 
-thanks,
+Regards,
+Sudeep
 
-greg k-h
+-->8
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+The following changes since commit d4f9dddd21f39395c62ea12d3d91239637d4805f:
+
+  firmware: arm_scmi: Add dynamic scmi devices creation (2021-03-30 16:35:16 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-fixes-5.13
+
+for you to fetch changes up to 03f840c49207e8c125b3df8c29c13137c6675d42:
+
+  firmware: arm_scmi: Remove duplicate declaration of struct scmi_protocol_handle (2021-04-27 11:57:26 +0100)
+
+----------------------------------------------------------------
+ARM SCMI fixes for v5.13
+
+A fix for very old possible ternary operation sign extention bug in the old
+ARM SCPI firmware driver and a cleanup to remove duplicate structure declartion
+in SCMI driver.
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      firmware: arm_scpi: Prevent the ternary sign expansion bug
+
+Wan Jiabing (1):
+      firmware: arm_scmi: Remove duplicate declaration of struct scmi_protocol_handle
+
+ drivers/firmware/arm_scmi/notify.h | 2 --
+ drivers/firmware/arm_scpi.c        | 4 +++-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
