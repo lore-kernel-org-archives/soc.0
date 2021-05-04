@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB387C433ED
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  4 May 2021 19:37:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88026C433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  4 May 2021 19:37:56 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8DCB461177
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  4 May 2021 19:37:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8DCB461177
+	by mail.kernel.org (Postfix) with ESMTPS id 4BE2E61177
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  4 May 2021 19:37:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4BE2E61177
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,84 +23,84 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:Message-Id:Date:
 	Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=hQRNvowUhIVWScTU12sETDetHDKLFiwxLbH8afrUjBI=; b=PPkRHkde5t9Jja11V4VdWBMNh
-	9iRmfl+2aJGs4L0s51+9GMUWSmkU6mbS2ZgtTAfylW29/LFpDOO0T/R7u2PfSu0kMMDPvLlqBtFHE
-	VkOR8T+dpdfj7+EA/jmOUPbRkwyvg8jlKam/M++8DrWAXNmSc/WNyw8K5C1C6gaIWntz68nqCdy/W
-	t49eYKy/X5AMIiVLGWXERKJBAUUy7J1e3YvlanRnFv6/OMgmgbMGMY54M6Viub3BBNrbrjFxfv9Aj
-	pYq85UYFuCg0EO/1JWR2hhwX10EYbkKk+/rGGmWwazCe+osasSZX3dchNPCcKkVWb2hpM2aki9Xv/
-	AA8u0CqgA==;
+	 bh=cS1iPDK9IwLg06g2W+7bpYk9Uhqjq53GKM6qEr7NEgk=; b=lyrk0SwGr0b1UYNY5iaqbO6gg
+	Ph3W50yRpJrtquUErV9J2cjIuvZvqAqkRay8g+9sb06hMIIzhoY1MOEhmvc/CI5fxZ4vBfX1WIUN2
+	1iJSUkN+wjvH198TufARa/1gCt+n1DHQmF9yZQtUvdSdIPHZKVvcfJZUwy7DuWhrC1qCZHBgPfCiZ
+	XQl6sDykS3Pg2hYDwQF503Ca0dnWy5clb8MGguVHCqrDzX31hoxiSkmCx5pi+BlYCz+a/wEIGgu35
+	yHnlgJguloAmcGM6Kfmto8pJVOvqIT42jh5YlBDA8uFD4FBt+Mw98keQjLPUq1vg76L6IFjP1ezIe
+	bwod0Z3xg==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1le0pL-00GuB3-W7; Tue, 04 May 2021 19:35:28 +0000
+	id 1le0pW-00GuCJ-5A; Tue, 04 May 2021 19:35:38 +0000
 Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1le0p6-00Gu9R-5P
+ id 1le0p7-00Gu9W-0U
  for linux-arm-kernel@desiato.infradead.org; Tue, 04 May 2021 19:35:13 +0000
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
  d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
  MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
  :Reply-To:Content-Type:Content-ID:Content-Description;
- bh=LfKwDo8azWN0Gbc7/pIjGO8T4exsCKBX4Y2Y1QqmWes=; b=g/K9W/m3h09XvuMKAu4OiGyy74
- zGwoDB3dyV8HqFxekfGO5L30SZa7AQKf8GX+ErXtqCzfn5l5T3ZoGOftOsd89FVnXKnndFIoguYKN
- tIMY+R0uyspzDnSU+REEEU+k9VHqYRyR6h6DIiL9S3RIX6kL9Ji+QWDEfGcnk8X/hjLLvTOti1tP5
- Fzje2OLvopuNN9m6gsAoIRrJx5mFZ77syZaWag1AX6+yJpHiPYfnkFhkGnORtxBvamLVZHzYeL6Ut
- FcPszwsIkvbvoK4Rg2pUmhG0TV5HfGT+pBxLwGRFNDUdxayHTl4dMkHYBZIDjXccf2cC5SePrxqsK
- PYx/pJ9A==;
-Received: from mail-wr1-x42c.google.com ([2a00:1450:4864:20::42c])
+ bh=vGH4gKVqMFGwtn6qnf+9iZ3a3vefAvfwW/d/3Z1krdI=; b=UPg6qCfGMWoZSorJIhiqlUSCwG
+ UlGfMGr9LUSj+tBJBFzK2nNiY2qcEPfAtQEIfoxZnZ81ddNkDJjrqOAVhICcEWVfKBZ42r3t6ivOo
+ O7V2XPCWotQ29aqziZveq/5C3RbQut6QfyTp8YxkLoRLYNFyzMaxUII5cFN4LNZiw4J6yT953ufiF
+ RRViSqkamdZaxgiKZGNbNRp6jwKWFJPf8bNF0ehVG9IfWxqSXIZ/Npbj2ftQyf/kMtabAio3KjNFB
+ YBG5hUojsbt1TDXf8sQAtW7Mf3YUwOSLf4ucdxqsAWmxubgquegSa3ngn/A3zjNsT73kUz7KZg5Dh
+ RJ4qQAxg==;
+Received: from mail-wr1-x42e.google.com ([2a00:1450:4864:20::42e])
  by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1le0p2-004DmH-R1
- for linux-arm-kernel@lists.infradead.org; Tue, 04 May 2021 19:35:10 +0000
-Received: by mail-wr1-x42c.google.com with SMTP id m9so10655948wrx.3
+ id 1le0p3-004DmI-9F
+ for linux-arm-kernel@lists.infradead.org; Tue, 04 May 2021 19:35:11 +0000
+Received: by mail-wr1-x42e.google.com with SMTP id l2so10628901wrm.9
  for <linux-arm-kernel@lists.infradead.org>;
- Tue, 04 May 2021 12:35:05 -0700 (PDT)
+ Tue, 04 May 2021 12:35:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=baylibre-com.20150623.gappssmtp.com; s=20150623;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=LfKwDo8azWN0Gbc7/pIjGO8T4exsCKBX4Y2Y1QqmWes=;
- b=05o7ReA7rAKHmkd0VqX0nWa4Encxngxhb46pr43kojkbSgBP0EaRdX+231RbnE7zwV
- s4y9y+xh22lXXGpOg43Ruv9YkwYPEsdd2QJWzd2BjIAk4Bz1rvU6vJG0Rzi5t4iHdgZl
- oP1ALyF3di75NUU8tOAsdX0b8BlG+etuwHXMISnRlIUis5NNI5YPGRp3YYHM+vq2tMoa
- q8mWAOCNZ737fuPJY73g+re2opNW22UsDdP341L8hgxvL3UQWhWIpjwQp6HzQcvjPOr6
- 0TBNYVrTFUr4iXI80KvYUV4zDsnoZ4ba5hOHpo+PABpIVXlej1HeH/SxnF8u7zxP1Qyh
- V8eA==
+ bh=vGH4gKVqMFGwtn6qnf+9iZ3a3vefAvfwW/d/3Z1krdI=;
+ b=zASfNWHRz1uXc+PDQtDVcFqPtvHY5VdiDHD/4G2VJOJAPRo4NbTO1z2H6LfZ4AzkSr
+ tphH6TDrILepJSikB4SgPkvbuFbZu7dFWjLRTLZ4HPfKs89CWxWKKSDFB1DO6wbLQ5ay
+ BICt9cqWGaNawYQVMPuxbo8RLfm1F7ph8A3Q1m/tP6w4icJDhN4inbGN93/Ofq//2CVu
+ j7QIOi+VHU3ssXB64KWr2dTVK5VjMvtli+jFOwXFt1DWDCFL+bktD+2NWsTCfcoYkOJT
+ QGgVVIYVl5kzZfyNxxnWsTyeRAelRQKpaSjFRJ+exqbjhav+RgiiOwJwQxRfR36JVrKT
+ pVxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=LfKwDo8azWN0Gbc7/pIjGO8T4exsCKBX4Y2Y1QqmWes=;
- b=fxdyRZOkGmEGt5XiXdTC1UKRKXPP7kfOf6x2fYOkt78ILbFxSqoUvdFndAnGztlger
- t7Aij3IEP8pbbjTSgKJt9Tb9NiJ0YXU3cGHn03/zxNSGVZYWiIIaHzYniYV79M0oWFH1
- QIzC4pi8qW5K24yl3Pr+uKsd3WJlNUmvpPOkYn1aRzknEIgyFiy/3Fb+dFa2nONDo348
- KscLGNcM8x5Sorw097w/ZNL9VMGjwD62+/4/hMfIYLg0wWYSXxeSTnZo4bllWhRQJIaY
- 1tLtpCQnbgT0C3B09h1hU4Zu1xhw1hMB4PGCyPxucn8mIM2OrEle0XPjJ8ayLGeCTCYF
- foxQ==
-X-Gm-Message-State: AOAM532MU+EH5+t9AfBO7rsarlzX95nIP0Sey6LHcLVhVBH8rQEh7yU+
- yum69UKn/iw6dhBAC0ieRz1jbKpMYcnrx1dD
-X-Google-Smtp-Source: ABdhPJxWg+HSorQvF2RrlLM+c8v0lSWRGO+IpTTDPUTnfP8IIx/z6CvDhSGW889Qo1o4XqTfgq0yNA==
-X-Received: by 2002:adf:ef90:: with SMTP id d16mr34040195wro.359.1620156904727; 
- Tue, 04 May 2021 12:35:04 -0700 (PDT)
+ bh=vGH4gKVqMFGwtn6qnf+9iZ3a3vefAvfwW/d/3Z1krdI=;
+ b=gZrCNX42vpiqMtYsVYEPpQdC+BOB6YP3qFgyHe9bFzqEldDsOEHYrGlsnhzxUYWgQB
+ tKdblJGOe2bONJ/RrggXmUiAgpJLVe2zUNrEYAGDfWOH20o0kuRliAkkXtVBzwtcu7dp
+ Awl6Ij9G4NZVOAA/RPQXIs3s0LVI7QdUz7PfZ+qbKs/Vpw0TXr2WdQ05X9m+jCa+6ax0
+ ttm99jeS7mrDnaU/bh/iJYHV6SAdRbpQQeTk6nnDCqWdgwNBtWmd0Ti0t4okt99V48Xg
+ GkGZpdg2Zwb9/pnuKoyhU2eVpjpz6AIX/FJuwDJjCejZO7qH72b6O7L5ys4kwM50iiMj
+ 39AQ==
+X-Gm-Message-State: AOAM5302R3effAROBsGYx46yS4QtBoLMyOD8K5zLN5Z+fLi+AttTZvSI
+ /yJuIdK/plXK8NwmB1TUFAOvQw==
+X-Google-Smtp-Source: ABdhPJyQHKfnAbPYhTTf6e5lMTFkW5CZeYWMhTWodx6MLel4EJC4lf+P/tfcTkGYStfLwQ/drNfktA==
+X-Received: by 2002:a5d:6da9:: with SMTP id u9mr33567229wrs.264.1620156905644; 
+ Tue, 04 May 2021 12:35:05 -0700 (PDT)
 Received: from localhost.localdomain
  (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
- by smtp.googlemail.com with ESMTPSA id x8sm17072136wru.70.2021.05.04.12.35.03
+ by smtp.googlemail.com with ESMTPSA id x8sm17072136wru.70.2021.05.04.12.35.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 04 May 2021 12:35:04 -0700 (PDT)
+ Tue, 04 May 2021 12:35:05 -0700 (PDT)
 From: Corentin Labbe <clabbe@baylibre.com>
 List-Id: <soc.lore.kernel.org>
 To: arnd@arndb.de, kaloz@openwrt.org, khalasa@piap.pl, linusw@kernel.org,
  linux@armlinux.org.uk, olof@lixom.net, robh+dt@kernel.org, soc@kernel.org
 Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH 1/5] ARM: ixp4xx_defconfig: add CONFIG_SERIAL_OF_PLATFORM
-Date: Tue,  4 May 2021 19:34:53 +0000
-Message-ID: <20210504193457.4008384-2-clabbe@baylibre.com>
+Subject: [PATCH 2/5] ARM: ixp4xx_defconfig: add MTD_PHYSMAP
+Date: Tue,  4 May 2021 19:34:54 +0000
+Message-ID: <20210504193457.4008384-3-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210504193457.4008384-1-clabbe@baylibre.com>
 References: <20210504193457.4008384-1-clabbe@baylibre.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210504_123508_891052_A7772682 
-X-CRM114-Status: GOOD (  11.05  )
+X-CRM114-CacheID: sfid-20210504_123509_345188_89838DB7 
+X-CRM114-Status: GOOD (  10.83  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -116,28 +116,29 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210504193453.9KRZtsgfDJjlYV5fCXnm3ynldYO9c0J947DVDnlUxJk@z>
+Message-ID: <20210504193454.ZVeo3D93_7mo3oKh37KCH753rN0uBxDRRWsDuR1rlaU@z>
 
-My ixp42x-welltech-epbx100 does not print anything on console without
-CONFIG_SERIAL_OF_PLATFORM.
+Without MTD_PHYSMAP/MTD_PHYSMAP_OF the flash partitions of my welltech,epbx100
+are not detected.
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- arch/arm/configs/ixp4xx_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/configs/ixp4xx_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/arch/arm/configs/ixp4xx_defconfig b/arch/arm/configs/ixp4xx_defconfig
-index 0d6edeb27659..e3bcf2bed25c 100644
+index e3bcf2bed25c..9a7667383df9 100644
 --- a/arch/arm/configs/ixp4xx_defconfig
 +++ b/arch/arm/configs/ixp4xx_defconfig
-@@ -152,6 +152,7 @@ CONFIG_INPUT_IXP4XX_BEEPER=y
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_SERIAL_8250_NR_UARTS=2
-+CONFIG_SERIAL_OF_PLATFORM=y
- CONFIG_I2C=y
- CONFIG_I2C_CHARDEV=y
- CONFIG_SENSORS_W83781D=y
+@@ -109,6 +109,8 @@ CONFIG_MTD_REDBOOT_PARTS=y
+ CONFIG_MTD_BLOCK=y
+ CONFIG_MTD_CFI=y
+ CONFIG_MTD_CFI_INTELEXT=y
++CONFIG_MTD_PHYSMAP=y
++CONFIG_MTD_PHYSMAP_OF=y
+ CONFIG_MTD_COMPLEX_MAPPINGS=y
+ CONFIG_MTD_IXP4XX=y
+ CONFIG_MTD_RAW_NAND=m
 -- 
 2.26.3
 
