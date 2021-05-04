@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 703B9C43460
-	for <soc@archiver.kernel.org>; Tue,  4 May 2021 19:35:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51E52C43461
+	for <soc@archiver.kernel.org>; Tue,  4 May 2021 19:35:08 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 3A815611AB; Tue,  4 May 2021 19:35:07 +0000 (UTC)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	id 21883613DC; Tue,  4 May 2021 19:35:08 +0000 (UTC)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C3D8613CD
+	by mail.kernel.org (Postfix) with ESMTPS id 470D3613C7
 	for <soc@kernel.org>; Tue,  4 May 2021 19:35:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2C3D8613CD
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 470D3613C7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=clabbe@baylibre.com
-Received: by mail-wr1-f47.google.com with SMTP id z6so10648373wrm.4
-        for <soc@kernel.org>; Tue, 04 May 2021 12:35:05 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id x5so10604593wrv.13
+        for <soc@kernel.org>; Tue, 04 May 2021 12:35:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LfKwDo8azWN0Gbc7/pIjGO8T4exsCKBX4Y2Y1QqmWes=;
-        b=05o7ReA7rAKHmkd0VqX0nWa4Encxngxhb46pr43kojkbSgBP0EaRdX+231RbnE7zwV
-         s4y9y+xh22lXXGpOg43Ruv9YkwYPEsdd2QJWzd2BjIAk4Bz1rvU6vJG0Rzi5t4iHdgZl
-         oP1ALyF3di75NUU8tOAsdX0b8BlG+etuwHXMISnRlIUis5NNI5YPGRp3YYHM+vq2tMoa
-         q8mWAOCNZ737fuPJY73g+re2opNW22UsDdP341L8hgxvL3UQWhWIpjwQp6HzQcvjPOr6
-         0TBNYVrTFUr4iXI80KvYUV4zDsnoZ4ba5hOHpo+PABpIVXlej1HeH/SxnF8u7zxP1Qyh
-         V8eA==
+        bh=vGH4gKVqMFGwtn6qnf+9iZ3a3vefAvfwW/d/3Z1krdI=;
+        b=zASfNWHRz1uXc+PDQtDVcFqPtvHY5VdiDHD/4G2VJOJAPRo4NbTO1z2H6LfZ4AzkSr
+         tphH6TDrILepJSikB4SgPkvbuFbZu7dFWjLRTLZ4HPfKs89CWxWKKSDFB1DO6wbLQ5ay
+         BICt9cqWGaNawYQVMPuxbo8RLfm1F7ph8A3Q1m/tP6w4icJDhN4inbGN93/Ofq//2CVu
+         j7QIOi+VHU3ssXB64KWr2dTVK5VjMvtli+jFOwXFt1DWDCFL+bktD+2NWsTCfcoYkOJT
+         QGgVVIYVl5kzZfyNxxnWsTyeRAelRQKpaSjFRJ+exqbjhav+RgiiOwJwQxRfR36JVrKT
+         pVxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LfKwDo8azWN0Gbc7/pIjGO8T4exsCKBX4Y2Y1QqmWes=;
-        b=B1+OcgWl9NvFpKju12dlBtBlZVKjMbF/y1SZLMeoaohMkkPnrXgF1bae8DqX96FV3h
-         j/8t/34PZ52mxVOJSCpI+7femOGqnVWnYHwslzxUB4e7YIi57+JMvTu4ExdFCpQh5Z4j
-         C3J4rqMyUGRbU+sWSwEI/06XjS+Q+RCIb7f6nnzjHE0gu2qKYn4ZbRjwArkGDqS/g80n
-         G17Xd8aeFqD8RG6Yy1tZ0zlJS8oIX3XqrtyRlVSoxzDnrkorrjmSqpBpXxB1siC49cST
-         U4I3m0c9vHJkmwhgZxlC1SBXs0D851S4cj3lphTPfXCl6l8M0wBa8ewcuU3NXczvmEu7
-         DibQ==
-X-Gm-Message-State: AOAM532urKF1PGg3crGG2Gb9QpQBDo9JkLjYXpzH1kLhJyX/UsiaiIF1
-	I6IKuKfcplC4xkuH4KKcvFLfmA==
-X-Google-Smtp-Source: ABdhPJxWg+HSorQvF2RrlLM+c8v0lSWRGO+IpTTDPUTnfP8IIx/z6CvDhSGW889Qo1o4XqTfgq0yNA==
-X-Received: by 2002:adf:ef90:: with SMTP id d16mr34040195wro.359.1620156904727;
-        Tue, 04 May 2021 12:35:04 -0700 (PDT)
+        bh=vGH4gKVqMFGwtn6qnf+9iZ3a3vefAvfwW/d/3Z1krdI=;
+        b=rGnoJ6P0BbS4pu6SyV0oS/Xg+iPyvjVJX+39Ze434pw8T0de6eH06Fbp409XvtbCBl
+         cs5Msq6jZMhhxOCXSwdiYoIkDpTBNYF6oFTfFp0BSQKx9nCfP2P1ZsiUKXPxU3jr4Ktk
+         oFGfuEWwhFWKblbjlhdj/cusFEPqUBc/4sswRTJJYr/rnv5wJplBIkdGFI8Rth/sEWuU
+         teAaNk3kahwcIKY0H4wrzJUmuIlH3RtgKgrBMfoZPyeb85zaEDBgaEknV3odk1vGa8bK
+         h4JR3ynHFv1/kXcHpS7Op0SRE0wNwKIitiwXS8vt4/T4TSMtc8evE2za2cZdAnDsLThj
+         WhHA==
+X-Gm-Message-State: AOAM532g/zNO8dnU1zBLzH3iv3Y3VZ9ve7RIaN+jvl0DF0qswHxBE6ky
+	EFqyg+bHPLZXLkEmZUzTCEbBvrdxKL9muVw5
+X-Google-Smtp-Source: ABdhPJyQHKfnAbPYhTTf6e5lMTFkW5CZeYWMhTWodx6MLel4EJC4lf+P/tfcTkGYStfLwQ/drNfktA==
+X-Received: by 2002:a5d:6da9:: with SMTP id u9mr33567229wrs.264.1620156905644;
+        Tue, 04 May 2021 12:35:05 -0700 (PDT)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id x8sm17072136wru.70.2021.05.04.12.35.03
+        by smtp.googlemail.com with ESMTPSA id x8sm17072136wru.70.2021.05.04.12.35.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 May 2021 12:35:04 -0700 (PDT)
+        Tue, 04 May 2021 12:35:05 -0700 (PDT)
 From: Corentin Labbe <clabbe@baylibre.com>
 List-Id: <soc.lore.kernel.org>
 To: arnd@arndb.de,
@@ -66,35 +66,36 @@ Cc: devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH 1/5] ARM: ixp4xx_defconfig: add CONFIG_SERIAL_OF_PLATFORM
-Date: Tue,  4 May 2021 19:34:53 +0000
-Message-Id: <20210504193457.4008384-2-clabbe@baylibre.com>
+Subject: [PATCH 2/5] ARM: ixp4xx_defconfig: add MTD_PHYSMAP
+Date: Tue,  4 May 2021 19:34:54 +0000
+Message-Id: <20210504193457.4008384-3-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210504193457.4008384-1-clabbe@baylibre.com>
 References: <20210504193457.4008384-1-clabbe@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-My ixp42x-welltech-epbx100 does not print anything on console without
-CONFIG_SERIAL_OF_PLATFORM.
+Without MTD_PHYSMAP/MTD_PHYSMAP_OF the flash partitions of my welltech,epbx100
+are not detected.
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- arch/arm/configs/ixp4xx_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/configs/ixp4xx_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/arch/arm/configs/ixp4xx_defconfig b/arch/arm/configs/ixp4xx_defconfig
-index 0d6edeb27659..e3bcf2bed25c 100644
+index e3bcf2bed25c..9a7667383df9 100644
 --- a/arch/arm/configs/ixp4xx_defconfig
 +++ b/arch/arm/configs/ixp4xx_defconfig
-@@ -152,6 +152,7 @@ CONFIG_INPUT_IXP4XX_BEEPER=y
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_SERIAL_8250_NR_UARTS=2
-+CONFIG_SERIAL_OF_PLATFORM=y
- CONFIG_I2C=y
- CONFIG_I2C_CHARDEV=y
- CONFIG_SENSORS_W83781D=y
+@@ -109,6 +109,8 @@ CONFIG_MTD_REDBOOT_PARTS=y
+ CONFIG_MTD_BLOCK=y
+ CONFIG_MTD_CFI=y
+ CONFIG_MTD_CFI_INTELEXT=y
++CONFIG_MTD_PHYSMAP=y
++CONFIG_MTD_PHYSMAP_OF=y
+ CONFIG_MTD_COMPLEX_MAPPINGS=y
+ CONFIG_MTD_IXP4XX=y
+ CONFIG_MTD_RAW_NAND=m
 -- 
 2.26.3
 
