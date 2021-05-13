@@ -1,47 +1,77 @@
-Return-Path: <SRS0=r+xE=KI=microchip.com=Tudor.Ambarus@kernel.org>
+Return-Path: <SRS0=VKAG=KI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39797C433B4
-	for <soc@archiver.kernel.org>; Thu, 13 May 2021 13:42:19 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 02DDF613C7; Thu, 13 May 2021 13:42:19 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08037C433B4
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 13 May 2021 13:45:01 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 91453613BD;
-	Thu, 13 May 2021 13:42:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 91453613BD
+	by mail.kernel.org (Postfix) with ESMTPS id 7E009613BD
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 13 May 2021 13:45:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7E009613BD
 Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=Tudor.Ambarus@microchip.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
+	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:MIME-Version:Content-ID:In-Reply-To:References:
+	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=CIqQ5KMpuarhOUceWLjV/vMGPX3e/WcGI/Lc3hl9GDc=; b=px0HLLuPuc7xV0tSQaNx+lJ/X
+	tBNHQq11CrHHN5dhMRI0tTLldA2dRmYioHCgmwh4Z2iFA9/T+JeeNvmjH5qUcM3QwKgSXtVZjJFdZ
+	9bp+mRF7/ij9ClvhL9ZfC2MKbbUhz00/4KPovgAoRKQUW7eMaH+oSQN+Us+j+RFrUpmcERypoVHIU
+	d64kbtuszPgXOYiSjVxgzl33utj7sc2btnMVOz56JhnWwMR4hcobV19GwPNuhvJ/IqBNJ9NG1N3B2
+	Zv1SC1RXFwUb/vgkb9p8J/Hpj7Dm1dvpzJkcwbd1MDPoqDON+JfD989s5BNKZ8gDcQYn+aNdz9BsE
+	+lOLVe8cw==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1lhBbg-005dml-Gu; Thu, 13 May 2021 13:42:28 +0000
+Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lhBbe-005dmc-Do
+ for linux-arm-kernel@desiato.infradead.org; Thu, 13 May 2021 13:42:26 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=infradead.org; s=bombadil.20210309; h=MIME-Version:
+ Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:
+ Message-ID:Date:Subject:CC:To:From:Sender:Reply-To:Content-Description;
+ bh=41ffHXe3fy4OSvKtQaF/Gg+iX0dxGFLSUCL+S9ONN2E=; b=l5JPBqcLZdcn98GkhCkoBWDHUp
+ uuykoyxa2Amn9gum3moxRn/vdcypPq1bLnWSkaRy4UBQUJfqji3Ge/iI6jn2DA77OoDmZkrx1Bvh/
+ uqcjNrN2ADY1CAArR5Vk/v+izNKKT7bG+PNy3Zep1FlD2NKKkv1VZJxmDXAMbB14h7JENElQe0EZL
+ atDG4yjsSHKe2FjNp+VDWOTnTF2YI3x3LV589tcL2jxcJGPp5WN4/n/3V/Amv9LNGT967fAZgPfgV
+ eA67Gz1a83X/fmIrZ6uD1uMwGnZ2PxJkmmL6wh0cBu6tqfczQde98dmJfNvQjvbgdS9VmVN7PaU1X
+ wrkEhnHQ==;
+Received: from esa.microchip.iphmx.com ([68.232.154.123])
+ by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1lhBbb-00BHe8-CG
+ for linux-arm-kernel@lists.infradead.org; Thu, 13 May 2021 13:42:25 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1620913338; x=1652449338;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=41ffHXe3fy4OSvKtQaF/Gg+iX0dxGFLSUCL+S9ONN2E=;
-  b=2gtgauHs1PeptYrtbnEq2CKacx9Yr5wKhOODiLVf9J+mK6+7Ssjm0o3I
-   Yq26EDgm3qROp9XUZz7NewWm3T2qd9CFFkHhCuOt5vfGeAzXaeoqdI5PD
-   PhfqIzuMfFRGt+/UPQkLAj2fVpWqX0Gv+w9cdoHe3Zp7r15a4/mc868kj
-   KFOgr4CJlHe+yY8oEQX9qbVGsmJeWAKDiijFAM3obcJ732dZg8qfp7u+U
-   /pEDvbBk9gFRuUD1o7DvKtDYSOH5mYWpR9rZvvldKytNiHNyPye5QeLss
-   Wv0+2OHPRpsS2LBvQvXUkCt6bT0bMm27CoRa3riwULDS4p+oko6vMoDuh
-   A==;
+ d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+ t=1620913343; x=1652449343;
+ h=from:to:cc:subject:date:message-id:references:
+ in-reply-to:content-id:content-transfer-encoding: mime-version;
+ bh=41ffHXe3fy4OSvKtQaF/Gg+iX0dxGFLSUCL+S9ONN2E=;
+ b=L7dG2nEFC5lAWIMsC3ZxRBQA6oA6FJPWq/vU52AC5XTtmAcmD/Qu2BqP
+ 8PScVxf8WX8YgvxlrbQlZYiT7X4qNnoKPJpvLnynr456b2TuT90n7+4Eu
+ hBO/gW8Qx9MjJ9xYbDMeHulDRjPBbGIaTmuLiUHdGdFfv32DUOfBkTS6M
+ gSa0uyNslJq2zcHmZxlci5Ul6Wgs2pogJsYezfQjvfoeO/Dpn07IZaR2P
+ Wpa7/rlsvdMZ45WyCsAf+L83n0VG/uGnEBbwQ0NEFYG8iQ0MZwe54vi6z
+ dHvMzO1nzffB0+rcRRnT7vMn/nVmQQYZMjpfs6/Ag6uLTQSevDVh4SBuD w==;
 IronPort-SDR: /MyyhhVwFgFeFaqqZ4l/nTUaghIRaoL8+bHr/hUrLC+6Bhv0sbzCZb60+lMhcgzktvDrI5poGj
  kgieQpddjpk75KDzYJsE3+RNY67HslWTPxKDlRwHgo6xD6L5ruBQWCQaV7x8Y83ooAepNl4QmX
  t6VxfsUeIWHLBVBwau1E+Ybc/BIRjvi7RwXrb2cXi26fWMiZWYUOBBQkUx7dfmDDCNZCh/psnN
  Mzr1ustcX4ogtKWcsNilwQkrCprwYkuVKWQ0fVp58ImXnlpxJpYjga/pVHO/g6e/U5YZKvmNWM
  qlw=
-X-IronPort-AV: E=Sophos;i="5.82,296,1613458800"; 
-   d="scan'208";a="55445327"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 May 2021 06:42:17 -0700
+X-IronPort-AV: E=Sophos;i="5.82,296,1613458800"; d="scan'208";a="55445327"
+Received: from smtpout.microchip.com (HELO email.microchip.com)
+ ([198.175.253.82])
+ by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
+ 13 May 2021 06:42:17 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -52,7 +82,7 @@ Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
  via Frontend Transport; Thu, 13 May 2021 06:42:16 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=UH3d+3NvlimGEZIVXdBF1mkMYvZJIsqWTauWIbafdQDcQrKR2Nw0msUKH/2osM/nRheScXvzSysk+vV31z6gwawBwr8o7o3lBsw1LTYsR8bcj1fYhOMCNG6KPNBve4izd502UslU2KK8QAEQr93cFnRiBCenICvkhfY4meP1C8NF35PqfKJYZ5SVBKTBYsCkBfHn9TUQoWoFa3GwkajhlrEU/i97GNguijuRkY4Hu0OAI+B9hn/R0AWv93qz9Hur1xdoJ5WwtSuOefal7ZDMVmG5vZM+Mc/ZJ8W1Ve6ZEgDvDZP1cpq0yFzvobynl1eXMo++c+n5ONZkFCwc79bFCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
  bh=41ffHXe3fy4OSvKtQaF/Gg+iX0dxGFLSUCL+S9ONN2E=;
@@ -77,12 +107,12 @@ Received: from CO1PR11MB4865.namprd11.prod.outlook.com
  13:42:13 +0000
 From: <Tudor.Ambarus@microchip.com>
 To: <Eugen.Hristev@microchip.com>, <robh+dt@kernel.org>,
-	<Nicolas.Ferre@microchip.com>
+ <Nicolas.Ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
 CC: <alexandre.belloni@bootlin.com>, <Ludovic.Desroches@microchip.com>,
-	<soc@kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<Claudiu.Beznea@microchip.com>, <Codrin.Ciubotariu@microchip.com>
+ <soc@kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+ <Claudiu.Beznea@microchip.com>, <Codrin.Ciubotariu@microchip.com>
 Subject: Re: [PATCH v3 2/4] ARM: dts: at91: add sama7g5 SoC DT and sama7g5-ek
 Thread-Topic: [PATCH v3 2/4] ARM: dts: at91: add sama7g5 SoC DT and sama7g5-ek
 Thread-Index: AQHXR/3HL6I3+ZZzaEmk5Vx1ejjgwQ==
@@ -93,8 +123,8 @@ References: <20210513061354.138158-1-eugen.hristev@microchip.com>
 In-Reply-To: <20210513061354.138158-2-eugen.hristev@microchip.com>
 Accept-Language: en-US
 Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
 user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 authentication-results: microchip.com; dkim=none (message not signed)
@@ -110,7 +140,10 @@ x-ms-oob-tlc-oobclassifiers: OLM:4125;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
 x-microsoft-antispam-message-info: TC0+sMQ0kxbDeGH3RDmKuhn8WyFDgqLBFS5r07wy0q/dtk51UCXUziQG9w9k3znYi1p/UD3+zqyJPZNXOPdKtkK8P3BFfpdcRSKSyK9uRqkmKiNlHgtN7HEVygNygYFJJHwZTsyjQ1Z6Ym3p7kJwJ/g+ol3FocoB7IGsDf1XVwQG7ZQWa0Mfvwr2EnPGWzx2gbwgRDGahUWiP7HOk7e011ayo0u8TFtrxXiHNb1M+vo1ltR+ka4zrVN7J/pyHos0oWhoQDF8jTY/Tqej8otEKFoXzyMNIyPBkka/WYpUY3PiS/zmLZQit8Z5ZwalWV59oct8rahfw3mWxkJAl8v+5IBVZBsSH6WtP27GB7zWFM2tTEB3WN2zS5jv80LgNNrNUrxHdsEZOwyWmukJEYJCQgYEBQ1RAXpTlabeEPvXiXjhxIabpC73XU0z2/umyH9Z/SPax3Oa0IOj2i3/Qz9d+zwShsn0do2J9avx462hrjc6UINXPhjngkVNUOiZ5vvoyG2tH5L1Y4C8JkP2UjcGVcwZikW1LfXx+jIqib8uhbLaMctfsfNYcgbLkEOBwjaRXRM+fibXuYHaHE3L5NJskDL8+MVw/egG5jei4urmdAl8FiAbpK/lOSENm23kKe/5ehyXq1IZSdQRUCwRvu7VCjJZmfcUbDBO0N3LWXAa6fuCbqd4yeC+prJTVECswui1+yzwnDcvboi2BoZR13bFKlTf+YNNKQggu5qugs/FqDjy0fO+GToEV9emAD9HPgCZaMTydLjSZ3PuyUrxiJAsPg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4865.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(136003)(396003)(366004)(346002)(376002)(5660300002)(316002)(8936002)(6512007)(110136005)(26005)(8676002)(107886003)(6486002)(76116006)(54906003)(186003)(4326008)(64756008)(36756003)(2616005)(66946007)(6506007)(122000001)(478600001)(6636002)(38100700002)(86362001)(71200400001)(66446008)(2906002)(66556008)(31686004)(4744005)(31696002)(66476007)(91956017)(966005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CO1PR11MB4865.namprd11.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(39860400002)(136003)(396003)(366004)(346002)(376002)(5660300002)(316002)(8936002)(6512007)(110136005)(26005)(8676002)(107886003)(6486002)(76116006)(54906003)(186003)(4326008)(64756008)(36756003)(2616005)(66946007)(6506007)(122000001)(478600001)(6636002)(38100700002)(86362001)(71200400001)(66446008)(2906002)(66556008)(31686004)(4744005)(31696002)(66476007)(91956017)(966005)(45980500001)(43740500002);
+ DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata: =?utf-8?B?WHkxZzQ3VG9rOUNVTjhBa0NiVzRDOEtRSFhxcE5MZ2E4dUdPcHE5amJNRy9Y?=
  =?utf-8?B?RVhwMGZrZWRYc2lCOS9DRFJwUWVnSmczU05xWjZ1MThlZEdGNnhjc2ZyRldE?=
  =?utf-8?B?a1phYitqcVVoVkEyTVVjYi9qaXBCT0ZoVGFxVG9RY3J6ZWJMeHIwL2QwTHlu?=
@@ -141,29 +174,62 @@ x-ms-exchange-antispam-messagedata: =?utf-8?B?WHkxZzQ3VG9rOUNVTjhBa0NiVzRDOEtRSF
  =?utf-8?B?RGVSSSthK2NaZjIxMDVYZ0JwYUVldTR5UDJMTjUvZjBVbnAxcFhHRURlUkt1?=
  =?utf-8?B?U3gyWDZRdGxibU55djMzVHgxcnRsaEJPSDdpVGZ3ZFBBM1hXZmtQOEVFWm1a?=
  =?utf-8?Q?fCXGRaxJPwCTwaTHcA=3D?=
-Content-Type: text/plain; charset="utf-8"
 Content-ID: <104ACE54BF0BD64A85B5F2A0724E44D4@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4865.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-Network-Message-Id: 33408e43-7db2-4043-5c33-08d91614ea6f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 May 2021 13:42:13.6147
- (UTC)
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 May 2021 13:42:13.6147 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: KUcnmzZx1a5jo4sAOLzNnbe3mutN/SyJtGNCnqhIetB2NtDl96KSUn3z7pdFL4/glDUWyDDH92CRlsLg8Dg9/lN66KUW//WV6xPWmRFEAnc=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1101MB2079
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210513_064223_512630_E4265F2E 
+X-CRM114-Status: GOOD (  12.46  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210513134213.4l0moMjqXKQa6y7J9U-_bOn9R0UOxAoH1yhA_c9sWvA@z>
 
-Y3V0DQoNCj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL2F0OTEtc2FtYTdnNWVrLmR0
-cyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2F0OTEtc2FtYTdnNWVrLmR0cw0KPiBuZXcgZmlsZSBtb2Rl
-IDEwMDY0NA0KPiBpbmRleCAwMDAwMDAwMDAwMDAuLmQ3MWMzMjI0YTBmOQ0KPiAtLS0gL2Rldi9u
-dWxsDQo+ICsrKyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2F0OTEtc2FtYTdnNWVrLmR0cw0KPiBAQCAt
-MCwwICsxLDcwNSBAQA0KDQpjdXQNCg0KPiArJmZseDExIHsNCj4gKyAgICAgICBhdG1lbCxmbGV4
-Y29tLW1vZGUgPSA8QVRNRUxfRkxFWENPTV9NT0RFX1NQST47DQo+ICsgICAgICAgc3RhdHVzID0g
-Im9rYXkiOw0KPiArDQo+ICsgICAgICAgc3BpMDogc3BpQDQwMCB7DQo+ICsgICAgICAgICAgICAg
-ICBjb21wYXRpYmxlID0gImF0bWVsLGF0OTFybTkyMDAtc3BpIjsNCg0KVGhlIHNwaSBmdW5jdGlv
-biBmb3IgZmx4MTEgc2hvdWxkIGJlIGRlc2NyaWJlZCBpbiB0aGUgU29DIGR0LiBZb3UgbWF5IGNo
-ZWNrDQp3aGF0IEkgZGlkIGF0Og0KaHR0cHM6Ly93d3cubWFpbC1hcmNoaXZlLmNvbS9saW51eC1r
-ZXJuZWxAdmdlci5rZXJuZWwub3JnL21zZzIxNTkwMzcuaHRtbA0KDQpDaGVlcnMsDQp0YQ0K
+cut
+
+> diff --git a/arch/arm/boot/dts/at91-sama7g5ek.dts b/arch/arm/boot/dts/at91-sama7g5ek.dts
+> new file mode 100644
+> index 000000000000..d71c3224a0f9
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/at91-sama7g5ek.dts
+> @@ -0,0 +1,705 @@
+
+cut
+
+> +&flx11 {
+> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
+> +       status = "okay";
+> +
+> +       spi0: spi@400 {
+> +               compatible = "atmel,at91rm9200-spi";
+
+The spi function for flx11 should be described in the SoC dt. You may check
+what I did at:
+https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2159037.html
+
+Cheers,
+ta
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
