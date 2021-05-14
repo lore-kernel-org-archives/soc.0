@@ -1,235 +1,113 @@
-Return-Path: <SRS0=VKAG=KI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=Fpm+=KJ=baylibre.com=narmstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08037C433B4
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 13 May 2021 13:45:01 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAC33C433B4
+	for <soc@archiver.kernel.org>; Fri, 14 May 2021 07:37:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 60283613DA; Fri, 14 May 2021 07:37:08 +0000 (UTC)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7E009613BD
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 13 May 2021 13:45:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7E009613BD
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Content-ID:In-Reply-To:References:
-	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=CIqQ5KMpuarhOUceWLjV/vMGPX3e/WcGI/Lc3hl9GDc=; b=px0HLLuPuc7xV0tSQaNx+lJ/X
-	tBNHQq11CrHHN5dhMRI0tTLldA2dRmYioHCgmwh4Z2iFA9/T+JeeNvmjH5qUcM3QwKgSXtVZjJFdZ
-	9bp+mRF7/ij9ClvhL9ZfC2MKbbUhz00/4KPovgAoRKQUW7eMaH+oSQN+Us+j+RFrUpmcERypoVHIU
-	d64kbtuszPgXOYiSjVxgzl33utj7sc2btnMVOz56JhnWwMR4hcobV19GwPNuhvJ/IqBNJ9NG1N3B2
-	Zv1SC1RXFwUb/vgkb9p8J/Hpj7Dm1dvpzJkcwbd1MDPoqDON+JfD989s5BNKZ8gDcQYn+aNdz9BsE
-	+lOLVe8cw==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1lhBbg-005dml-Gu; Thu, 13 May 2021 13:42:28 +0000
-Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
- by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lhBbe-005dmc-Do
- for linux-arm-kernel@desiato.infradead.org; Thu, 13 May 2021 13:42:26 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=infradead.org; s=bombadil.20210309; h=MIME-Version:
- Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:
- Message-ID:Date:Subject:CC:To:From:Sender:Reply-To:Content-Description;
- bh=41ffHXe3fy4OSvKtQaF/Gg+iX0dxGFLSUCL+S9ONN2E=; b=l5JPBqcLZdcn98GkhCkoBWDHUp
- uuykoyxa2Amn9gum3moxRn/vdcypPq1bLnWSkaRy4UBQUJfqji3Ge/iI6jn2DA77OoDmZkrx1Bvh/
- uqcjNrN2ADY1CAArR5Vk/v+izNKKT7bG+PNy3Zep1FlD2NKKkv1VZJxmDXAMbB14h7JENElQe0EZL
- atDG4yjsSHKe2FjNp+VDWOTnTF2YI3x3LV589tcL2jxcJGPp5WN4/n/3V/Amv9LNGT967fAZgPfgV
- eA67Gz1a83X/fmIrZ6uD1uMwGnZ2PxJkmmL6wh0cBu6tqfczQde98dmJfNvQjvbgdS9VmVN7PaU1X
- wrkEhnHQ==;
-Received: from esa.microchip.iphmx.com ([68.232.154.123])
- by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lhBbb-00BHe8-CG
- for linux-arm-kernel@lists.infradead.org; Thu, 13 May 2021 13:42:25 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1620913343; x=1652449343;
- h=from:to:cc:subject:date:message-id:references:
- in-reply-to:content-id:content-transfer-encoding: mime-version;
- bh=41ffHXe3fy4OSvKtQaF/Gg+iX0dxGFLSUCL+S9ONN2E=;
- b=L7dG2nEFC5lAWIMsC3ZxRBQA6oA6FJPWq/vU52AC5XTtmAcmD/Qu2BqP
- 8PScVxf8WX8YgvxlrbQlZYiT7X4qNnoKPJpvLnynr456b2TuT90n7+4Eu
- hBO/gW8Qx9MjJ9xYbDMeHulDRjPBbGIaTmuLiUHdGdFfv32DUOfBkTS6M
- gSa0uyNslJq2zcHmZxlci5Ul6Wgs2pogJsYezfQjvfoeO/Dpn07IZaR2P
- Wpa7/rlsvdMZ45WyCsAf+L83n0VG/uGnEBbwQ0NEFYG8iQ0MZwe54vi6z
- dHvMzO1nzffB0+rcRRnT7vMn/nVmQQYZMjpfs6/Ag6uLTQSevDVh4SBuD w==;
-IronPort-SDR: /MyyhhVwFgFeFaqqZ4l/nTUaghIRaoL8+bHr/hUrLC+6Bhv0sbzCZb60+lMhcgzktvDrI5poGj
- kgieQpddjpk75KDzYJsE3+RNY67HslWTPxKDlRwHgo6xD6L5ruBQWCQaV7x8Y83ooAepNl4QmX
- t6VxfsUeIWHLBVBwau1E+Ybc/BIRjvi7RwXrb2cXi26fWMiZWYUOBBQkUx7dfmDDCNZCh/psnN
- Mzr1ustcX4ogtKWcsNilwQkrCprwYkuVKWQ0fVp58ImXnlpxJpYjga/pVHO/g6e/U5YZKvmNWM
- qlw=
-X-IronPort-AV: E=Sophos;i="5.82,296,1613458800"; d="scan'208";a="55445327"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 13 May 2021 06:42:17 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 13 May 2021 06:42:17 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2
- via Frontend Transport; Thu, 13 May 2021 06:42:16 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UH3d+3NvlimGEZIVXdBF1mkMYvZJIsqWTauWIbafdQDcQrKR2Nw0msUKH/2osM/nRheScXvzSysk+vV31z6gwawBwr8o7o3lBsw1LTYsR8bcj1fYhOMCNG6KPNBve4izd502UslU2KK8QAEQr93cFnRiBCenICvkhfY4meP1C8NF35PqfKJYZ5SVBKTBYsCkBfHn9TUQoWoFa3GwkajhlrEU/i97GNguijuRkY4Hu0OAI+B9hn/R0AWv93qz9Hur1xdoJ5WwtSuOefal7ZDMVmG5vZM+Mc/ZJ8W1Ve6ZEgDvDZP1cpq0yFzvobynl1eXMo++c+n5ONZkFCwc79bFCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=41ffHXe3fy4OSvKtQaF/Gg+iX0dxGFLSUCL+S9ONN2E=;
- b=VmicrSnawBA9uLEJqLPVM+guAvbOa1082VjnUuqphDA6gbXxAcya7utq41dTXgLDaiEf4G4/gQUHX7PSYR3AhB1b5voDvW4FXr0GmG9zSOBVos6ZCavJBCdZ9bkAtFymPiIXiOZhWD505iFxk6ub0b53CwHKbXI7QMHFe1O0KkvDajgOtiBUszJnW+tBERcdKz0hJwsf4mSQ/9wf2QTXPpswRypivRvECFkGHchlef55ae1gh7dATIL1gYFeahLLWYv13EsnrhnzPFHgugx37b1sXDHhCkvBAC+w3hXRMfNMEW8VQ3fgpP+y6vdYHqSlB9U/GAbfhnmt3oiY0Hp+hg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+	by mail.kernel.org (Postfix) with ESMTPS id E7DD9611CE
+	for <soc@kernel.org>; Fri, 14 May 2021 07:37:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E7DD9611CE
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=narmstrong@baylibre.com
+Received: by mail-wm1-f44.google.com with SMTP id b11-20020a7bc24b0000b0290148da0694ffso949512wmj.2
+        for <soc@kernel.org>; Fri, 14 May 2021 00:37:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=41ffHXe3fy4OSvKtQaF/Gg+iX0dxGFLSUCL+S9ONN2E=;
- b=gr2e1WWhMzXNw9Qldp+TYxc8N5y1XZuGYR0BLCPe7A0j6U1xa1XaVkysRfFwlsViB1DN+Y6KBAJ/lsxnMHzUanunuauVnU9u/Uk48f/zcuRVCsZvk5hgCJ9Z7ocJkGaJTcd5kUP2cO/TWSbnEENm2X/tYUDROhMFUOg7Ajy9amk=
-Received: from CO1PR11MB4865.namprd11.prod.outlook.com (2603:10b6:303:9c::9)
- by MWHPR1101MB2079.namprd11.prod.outlook.com (2603:10b6:301:50::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4108.25; Thu, 13 May
- 2021 13:42:13 +0000
-Received: from CO1PR11MB4865.namprd11.prod.outlook.com
- ([fe80::1c4:1014:a541:e370]) by CO1PR11MB4865.namprd11.prod.outlook.com
- ([fe80::1c4:1014:a541:e370%4]) with mapi id 15.20.4108.031; Thu, 13 May 2021
- 13:42:13 +0000
-From: <Tudor.Ambarus@microchip.com>
-To: <Eugen.Hristev@microchip.com>, <robh+dt@kernel.org>,
- <Nicolas.Ferre@microchip.com>
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Xie40h+gZ1kzYUn1rROBwrR8QVBZ1vuhKr3GMAIK+Q8=;
+        b=TgVhJZN35mBTuD+cC15AfqK8ykz9udZlYfRFTLu9xXjgyLVHyoxCmmiA2XQ6mn7GQ6
+         8+k32KSLVWn4LMs3+3ZnbRxeSb1X9Nzo8HyoPuP1zJTCmBiS54FMI256xNZ4YaJP9Unb
+         2OdJkpT/f1RYZk3iDJlRqKDJMWgFUjS5D838OhtG72eqq0XV8ZXuv1dWpV4S/gl5hO9l
+         y0KU5idVxel5dpb6LLKxO6bckYUiVW0kewFbnWGdNZJ9ak9yXUZZbO+A82/eU08EzFHB
+         fXQ5B3Pwf2zcsm6kensIlmiSLxGwtAEBDtCtbKdpU7QfgslEXBqmiWDeTPwmrp5JNoiE
+         BaVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Xie40h+gZ1kzYUn1rROBwrR8QVBZ1vuhKr3GMAIK+Q8=;
+        b=CS0a+CrjFKDlQt7PEHLFJLR1eYd6HteRAiUJUFh/TlMtxmMG75XGfs4FRucCkv2hGU
+         aFSx4B4JremvJqWCQWKr8pLoSvC8ZSg8sCrpWhPMvMTAU+gVrbXqK041SoidgHAnArii
+         TjO5QGn3Sy1j2TzHANbM2Qaqy0LYGTXrmh8yqBAmMmkSoh42r10Vih0gBsh6xWB1/5WR
+         ZUMjAzfTwDyekYayThswLBCv+juv0iKQWYqmDa3bTmVqAMDjbc1CVh7jx5W2wVoptnm7
+         SMtC3MJYL9T6wOclmr4uycIUP/8IRKnQJNQGpq+/yC6xuGPXrBpA9q8y4pmQ8mcEhBoc
+         +3wg==
+X-Gm-Message-State: AOAM532YrPUrPKCHYLLzYzf5fb7M/ZKr7smNsg7pZAaLJHNDb3V99JYB
+	5xTsvnS4QVm8Qvu6cjToSrY9Yg==
+X-Google-Smtp-Source: ABdhPJwmhFrIvmqlONGCF4CpJDAkVPbQ35AP7JfhIb8MDmNU4+MHO5abZDYy/w/+WsNn4AWmn99G0A==
+X-Received: by 2002:a1c:20d2:: with SMTP id g201mr8102333wmg.48.1620977825427;
+        Fri, 14 May 2021 00:37:05 -0700 (PDT)
+Received: from [172.20.10.7] ([37.164.52.111])
+        by smtp.gmail.com with ESMTPSA id c14sm5664839wrt.77.2021.05.14.00.37.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 May 2021 00:37:04 -0700 (PDT)
+Subject: Re: [PATCH] MAINTAINERS: ARM/Amlogic SoCs: add Neil as primary
+ maintainer
 List-Id: <soc.lore.kernel.org>
-CC: <alexandre.belloni@bootlin.com>, <Ludovic.Desroches@microchip.com>,
- <soc@kernel.org>, <devicetree@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
- <Claudiu.Beznea@microchip.com>, <Codrin.Ciubotariu@microchip.com>
-Subject: Re: [PATCH v3 2/4] ARM: dts: at91: add sama7g5 SoC DT and sama7g5-ek
-Thread-Topic: [PATCH v3 2/4] ARM: dts: at91: add sama7g5 SoC DT and sama7g5-ek
-Thread-Index: AQHXR/3HL6I3+ZZzaEmk5Vx1ejjgwQ==
-Date: Thu, 13 May 2021 13:42:13 +0000
-Message-ID: <e68afc06-4ad9-9feb-8082-94f4ed7245da@microchip.com>
-References: <20210513061354.138158-1-eugen.hristev@microchip.com>
- <20210513061354.138158-2-eugen.hristev@microchip.com>
-In-Reply-To: <20210513061354.138158-2-eugen.hristev@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-authentication-results: microchip.com; dkim=none (message not signed)
- header.d=none;microchip.com; dmarc=none action=none
- header.from=microchip.com;
-x-originating-ip: [79.115.63.165]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 33408e43-7db2-4043-5c33-08d91614ea6f
-x-ms-traffictypediagnostic: MWHPR1101MB2079:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR1101MB2079648BFD74E9BD00610ECBF0519@MWHPR1101MB2079.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4125;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TC0+sMQ0kxbDeGH3RDmKuhn8WyFDgqLBFS5r07wy0q/dtk51UCXUziQG9w9k3znYi1p/UD3+zqyJPZNXOPdKtkK8P3BFfpdcRSKSyK9uRqkmKiNlHgtN7HEVygNygYFJJHwZTsyjQ1Z6Ym3p7kJwJ/g+ol3FocoB7IGsDf1XVwQG7ZQWa0Mfvwr2EnPGWzx2gbwgRDGahUWiP7HOk7e011ayo0u8TFtrxXiHNb1M+vo1ltR+ka4zrVN7J/pyHos0oWhoQDF8jTY/Tqej8otEKFoXzyMNIyPBkka/WYpUY3PiS/zmLZQit8Z5ZwalWV59oct8rahfw3mWxkJAl8v+5IBVZBsSH6WtP27GB7zWFM2tTEB3WN2zS5jv80LgNNrNUrxHdsEZOwyWmukJEYJCQgYEBQ1RAXpTlabeEPvXiXjhxIabpC73XU0z2/umyH9Z/SPax3Oa0IOj2i3/Qz9d+zwShsn0do2J9avx462hrjc6UINXPhjngkVNUOiZ5vvoyG2tH5L1Y4C8JkP2UjcGVcwZikW1LfXx+jIqib8uhbLaMctfsfNYcgbLkEOBwjaRXRM+fibXuYHaHE3L5NJskDL8+MVw/egG5jei4urmdAl8FiAbpK/lOSENm23kKe/5ehyXq1IZSdQRUCwRvu7VCjJZmfcUbDBO0N3LWXAa6fuCbqd4yeC+prJTVECswui1+yzwnDcvboi2BoZR13bFKlTf+YNNKQggu5qugs/FqDjy0fO+GToEV9emAD9HPgCZaMTydLjSZ3PuyUrxiJAsPg==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CO1PR11MB4865.namprd11.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(39860400002)(136003)(396003)(366004)(346002)(376002)(5660300002)(316002)(8936002)(6512007)(110136005)(26005)(8676002)(107886003)(6486002)(76116006)(54906003)(186003)(4326008)(64756008)(36756003)(2616005)(66946007)(6506007)(122000001)(478600001)(6636002)(38100700002)(86362001)(71200400001)(66446008)(2906002)(66556008)(31686004)(4744005)(31696002)(66476007)(91956017)(966005)(45980500001)(43740500002);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata: =?utf-8?B?WHkxZzQ3VG9rOUNVTjhBa0NiVzRDOEtRSFhxcE5MZ2E4dUdPcHE5amJNRy9Y?=
- =?utf-8?B?RVhwMGZrZWRYc2lCOS9DRFJwUWVnSmczU05xWjZ1MThlZEdGNnhjc2ZyRldE?=
- =?utf-8?B?a1phYitqcVVoVkEyTVVjYi9qaXBCT0ZoVGFxVG9RY3J6ZWJMeHIwL2QwTHlu?=
- =?utf-8?B?R3dBSWNaQ1RmK3ZVTlVnU3JyRzNudm9jQUVJdmRreVdlWVg5VlFnZnJoOFhy?=
- =?utf-8?B?T2hQRzVPT2FQN1RRUnJkN1ZFVVZab2ZWKzBZVXp1TmpUM0VUK3RQUjI1RjRj?=
- =?utf-8?B?SzRGWVNxdE9GTGZuN01qTkszd2NoRDZmZkFKVHYreUE5NVh5WkN0cXpTeGR4?=
- =?utf-8?B?OGZmUzQ1dkNxaWVXWXdaU3ZmM1dsMnpDR011L3dxTG1TOU1yak1uU0dHSTh3?=
- =?utf-8?B?N3RIUkxzRVFDbC9IaUZJVDdBZXJrQkpER3pnT1d1NGFyZkU3VHBaUlc0Y2tE?=
- =?utf-8?B?ajJodURoN0txSElUbG5tNlp2dnN2STRlVkJmeXRUSE05UktDaHJtSE1jQmhZ?=
- =?utf-8?B?WFdLYlc3OVdGQUxUdVJscVBpNWRtbkxjYmltOGpKS0JFVFFwREdJVlY1K0xi?=
- =?utf-8?B?bUtXc2svdVplNjB4cDhGYUVteTA2Q2ZUVWdOS3dqeHJ3UDRiK0lCUmlhZUpX?=
- =?utf-8?B?NXUxcmdLY3lyT3lyVUMzQkc3UEZXR3Z5QWc4eVBhUnphSDl4RFNTVmFSazE5?=
- =?utf-8?B?aCthWGdzNzhYMXB3NzUrWFBVUjhXK084cm1TcUE3ZzJhR1dhVk1kZ09zSldO?=
- =?utf-8?B?VHpZVWNId2FXYkdzenNEcE1oZHArSWpVaFYwcEVySzBURExqak9jL2Y3T1FD?=
- =?utf-8?B?bXlmWUorWVVFbTRrNHlQZDBaVnRnYU1HMCtIUUpNY2VnRzNITjFac2U2MGVa?=
- =?utf-8?B?S3pFV2NzVHBNRytBMUY1NmkrMmlGOTh4b2hNd3YxM1ViVzRVMjF0YldWUVUv?=
- =?utf-8?B?UHVkZ3JCMnl5dTM0UlNUYlB5L0I3Vm9POGFDYlltenZqR0RXSVV1ZkRvV0VO?=
- =?utf-8?B?Z3VLd1ZxR1VZRHk0clovUm5zblZKVkNIY3VBVFN2L1JodlNVNTZOTUZVTmxj?=
- =?utf-8?B?UU11MHZrZ2hEWjA0dVhyWXAySVUwRkxqV3dUd3gvUE9Tb0pzbDhaTDR4Sis2?=
- =?utf-8?B?UStZZ1B5cWROM1c2eWFHMGl3UCsvL2FUTzBzdFZQVEZDTkJ5TzdianRTcnU5?=
- =?utf-8?B?RXJzUFBjcGk3S3Z2OVVzSi9BSEhKNWxHM0NRREhHbmZHMmUrOE80QjhVTnF0?=
- =?utf-8?B?Q2o2b083V09Sajh2b0FsUE5LZjRIMnExbWlCajZRUnk2cHNZeGVKZ2IzV1Yr?=
- =?utf-8?B?Nk5sMHJuTWJDbkdnOWZYQ0FXMEhocDd3U2Y3NERsS3A3QzNJOFI5OTlOVm44?=
- =?utf-8?B?T3lOUEQvczdQN1RoQ0hEOE11N2FTY04xWlVzVkttRHZVT2RadklIdExMZ3M1?=
- =?utf-8?B?alpjRDV4OFJVVC9CRWhmV0h3NlhWQWh0NkJxbjVDdWtFZm5ob3ZNZ1lSam1F?=
- =?utf-8?B?VllwQWJFaTVzQmFIT1FjTGdoNzBuUUhtMDhMSklqQS9tQVpOamNmc2dLbGNY?=
- =?utf-8?B?WXJiVVpuNUlaNjZyK0pZU0ZxL3djeG01NGtoc0xRVXRlRDlXRmdsb0poUjVY?=
- =?utf-8?B?RGVSSSthK2NaZjIxMDVYZ0JwYUVldTR5UDJMTjUvZjBVbnAxcFhHRURlUkt1?=
- =?utf-8?B?U3gyWDZRdGxibU55djMzVHgxcnRsaEJPSDdpVGZ3ZFBBM1hXZmtQOEVFWm1a?=
- =?utf-8?Q?fCXGRaxJPwCTwaTHcA=3D?=
-Content-ID: <104ACE54BF0BD64A85B5F2A0724E44D4@namprd11.prod.outlook.com>
+To: Kevin Hilman <khilman@baylibre.com>, soc@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20210511190054.26300-1-khilman@baylibre.com>
+From: Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <45188686-7fc2-e48f-e249-0483431e9d46@baylibre.com>
+Date: Fri, 14 May 2021 09:37:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4865.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33408e43-7db2-4043-5c33-08d91614ea6f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 May 2021 13:42:13.6147 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KUcnmzZx1a5jo4sAOLzNnbe3mutN/SyJtGNCnqhIetB2NtDl96KSUn3z7pdFL4/glDUWyDDH92CRlsLg8Dg9/lN66KUW//WV6xPWmRFEAnc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1101MB2079
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210513_064223_512630_E4265F2E 
-X-CRM114-Status: GOOD (  12.46  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <20210511190054.26300-1-khilman@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210513134213.4l0moMjqXKQa6y7J9U-_bOn9R0UOxAoH1yhA_c9sWvA@z>
 
-cut
+Hi Kevin,
 
-> diff --git a/arch/arm/boot/dts/at91-sama7g5ek.dts b/arch/arm/boot/dts/at91-sama7g5ek.dts
-> new file mode 100644
-> index 000000000000..d71c3224a0f9
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/at91-sama7g5ek.dts
-> @@ -0,0 +1,705 @@
+On 11/05/2021 21:00, Kevin Hilman wrote:
+> Add Neil as primary maintainer for the Amlogic family of Arm SoCs.  I
+> will now act as co-maintainer.
+> 
+> Neil is already doing lots of the reviewing, testing and behind the
+> scenes support for users of the upstream kernel on these SoCs, so this
+> is just to formalize the current state of affairs.
+> 
+> Thanks Neil for all of your efforts, and keep up the great work!
+> 
+> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
+> ---
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index bd7aff0c120f..1f64aa7de84d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1618,8 +1618,8 @@ F:	Documentation/devicetree/bindings/sound/amlogic*
+>  F:	sound/soc/meson/
+>  
+>  ARM/Amlogic Meson SoC support
+> +M:	Neil Armstrong <narmstrong@baylibre.com>
+>  M:	Kevin Hilman <khilman@baylibre.com>
+> -R:	Neil Armstrong <narmstrong@baylibre.com>
+>  R:	Jerome Brunet <jbrunet@baylibre.com>
+>  R:	Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> 
 
-cut
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
 
-> +&flx11 {
-> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
-> +       status = "okay";
-> +
-> +       spi0: spi@400 {
-> +               compatible = "atmel,at91rm9200-spi";
+Thanks for your trust, I'll do my best to continue maintaining the Amlogic Linux SoC drivers & DT !
 
-The spi function for flx11 should be described in the SoC dt. You may check
-what I did at:
-https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2159037.html
-
-Cheers,
-ta
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Neil
