@@ -1,4 +1,4 @@
-Return-Path: <SRS0=q7sb=KL=lists.infradead.org=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=mshz=KL=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
 	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 080E1C433B4
-	for <linux-amlogic@archiver.kernel.org>; Sun, 16 May 2021 16:57:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E62CC433ED
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 16 May 2021 16:58:36 +0000 (UTC)
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AFA0560233
-	for <linux-amlogic@archiver.kernel.org>; Sun, 16 May 2021 16:57:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AFA0560233
+	by mail.kernel.org (Postfix) with ESMTPS id 0A60960233
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 16 May 2021 16:58:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0A60960233
 Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
 	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
 	List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:
 	References:MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	 bh=vo+AE7W2dsyjS7O7n9zqKEuoVGYZWbUFIHPKqGz7LEU=; b=PTiiO9RIyqS7aaTo7gMm0P2GC
-	NkFNBh/o84b4odKHzrYygGg099thbiGTVed4c2im24ebFbcT6RZoMVdXVVtd7Y4u+oxBiLkSkNbqq
-	IJAPeBhh7/09IedwjM7M5fnpOVRycRtndOCev8MfM5AqBCnSV/MMsyVC38wx+ZN0pVbuwoKg+HfAn
-	Dqj6KCMic4+bTTIVXUCfpe37Bop5vBvvRQC4FqoONMF+1rW5JOiTezdWCYP6R87XE7FHuFoBbWIsT
-	on92+F+P+r880dnvDSi9iLJvtNrjYAe6qQ1438RWinmLdDkOGooG13Rd8U9xRSib3tRTjlH285Tbk
-	rx54MOPKA==;
+	 bh=/Fnm5HiMrUNinksKrJ2pdlVP/dFr3I0S9FIeyQ5+wBw=; b=QqTsGpJeWCjpyppBYrXs3zWSf
+	S2N0monT9R1X0Jiwb5RZTXJSZPNZU50EnbKUII3kMcesPfqXCu0FhEeO69d4w4q7z7pew7JaoWEBi
+	IffaupMY0AnwyrjA/RBd0uPpXRwKD8pq6i4w6nCQem6GTB99LTsmVEwHdBGfqZN9A5IvOr2DHH8/J
+	9qn+Z4q8yJsNXuuogJJZhC61Ko/pwvi4X7yjgO61gI+8nZZJZmVZMgUon1yzt/tMQYMO+n67yF+v3
+	1fG8GGyGWyifmv6SwsiL0hUgLs7capkdKuCz6EJ3ARyte0HGzG0WEtiPAgcW4azWFPo/ID9Jjb5vI
+	62ZHUz0Eg==;
 Received: from localhost ([::1] helo=desiato.infradead.org)
 	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
-	id 1liK4X-00Cbm1-FY; Sun, 16 May 2021 16:56:57 +0000
+	id 1liK4a-00CbmG-8A; Sun, 16 May 2021 16:57:00 +0000
 Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
  by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
  id 1liK4U-00Cblj-Na; Sun, 16 May 2021 16:56:54 +0000
@@ -93,22 +93,22 @@ Cc: soc@kernel.org, Neil Armstrong <narmstrong@baylibre.com>,
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
 X-CRM114-CacheID: sfid-20210516_095652_014795_4B2C0F9A 
 X-CRM114-Status: GOOD (  10.63  )
-X-BeenThere: linux-amlogic@lists.infradead.org
+X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
-List-Id: <linux-amlogic.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-amlogic>, 
- <mailto:linux-amlogic-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-amlogic/>
-List-Post: <mailto:linux-amlogic@lists.infradead.org>
-List-Help: <mailto:linux-amlogic-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-amlogic>,
- <mailto:linux-amlogic-request@lists.infradead.org?subject=subscribe>
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Sender: "linux-amlogic" <linux-amlogic-bounces@lists.infradead.org>
-Errors-To: linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210516165638.2WqiE9Ie12-utgfxx81E7tdhXos3p_hdWc05vfxkT8o@z>
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210516165638.XMQbQPZ0xUEAmiW3HBZRg8dTuJmMY2Qs7AdTSZzArHg@z>
 
 On Tue, May 11, 2021 at 9:01 PM Kevin Hilman <khilman@baylibre.com> wrote:
 >
@@ -131,6 +131,6 @@ Best regards,
 Martin
 
 _______________________________________________
-linux-amlogic mailing list
-linux-amlogic@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-amlogic
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
