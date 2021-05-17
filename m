@@ -1,66 +1,112 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=iJAY=KM=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+X-Spam-Status: No, score=-15.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1F1FC433ED
-	for <linux-devicetree@archiver.kernel.org>; Mon, 17 May 2021 07:53:45 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9B27360232
-	for <linux-devicetree@archiver.kernel.org>; Mon, 17 May 2021 07:53:45 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbhEQHzA (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Mon, 17 May 2021 03:55:00 -0400
-Received: from phobos.denx.de ([85.214.62.61]:51604 "EHLO phobos.denx.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229736AbhEQHzA (ORCPT <rfc822;devicetree@vger.kernel.org>);
-        Mon, 17 May 2021 03:55:00 -0400
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EEEFC433ED
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 17 May 2021 08:13:35 +0000 (UTC)
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id B515B610A0
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 17 May 2021 08:13:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B515B610A0
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=denx.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Type:
+	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
+	MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:
+	Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date
+	:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	 bh=f8BZ1os40l+H4Z7+tHsX2JN3/Jx9re3emHfwuQnDzoA=; b=BraF9DJiEr9i8wtgKS2+BwXDh
+	WgHuDjs0VrqP9juOlmbE3JtspU6OmEc7WmRbt1/Uenh44o64mPpTAnIiW4WzZN7Wif0/+jBXSOQhH
+	YiTZW48V5+5/c050jxaxj/EsP91OmLAo7zACW6zYsk7ML2tHDAkYMopFUDcFZXXT7ZA/5vyD0MteD
+	GrJkRe94AgV0oQ7IphqG9yp0rdTJD3RlYzfjDWCMrRgEg3vrsUPOmUdnrKv4WhQ6NhX/0QivU1hEc
+	8JkISujiFsi8HMdsh/JNqgnNXnxQo/u2ut+Vtg2GoWB/g4uwKqAluwpKllxVmf1EoowXasAxDTRG1
+	jw52z2LZA==;
+Received: from localhost ([::1] helo=desiato.infradead.org)
+	by desiato.infradead.org with esmtp (Exim 4.94 #2 (Red Hat Linux))
+	id 1liYLS-00EB1a-LV; Mon, 17 May 2021 08:11:23 +0000
+Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
+ by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1liY4V-00E7AP-Oi
+ for linux-arm-kernel@desiato.infradead.org; Mon, 17 May 2021 07:53:58 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:References:
+ In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+ Content-Transfer-Encoding:Content-ID:Content-Description;
+ bh=+oFOD5axhaR2QxMG/99ig+HlPXW2khmyuitHw6lo6LM=; b=butebGacbocoyBTD9pDdsxD5WK
+ GQ2H5N60rarAoVixhm/HdPA2fdYtiU+X/khTgcbcGjVoJ3k/3qsrr5W08ZDE6EC4XgQDLQmPmTksH
+ bgDZrSJQ4fMu0MGDhJe75NSEXaMEt/JnPAJcDITE2uRggEHp6V9AMM9xDQ3SGeTuAWWJBGVLV0S6R
+ 5Uxug+K9csZdOqJN4hcq0uFPClDkY2QRpkUB9dv87vLLX+uztH73QoxmO5CdnDta4mL3jVj2b0nMU
+ hpKvg6gbYngq2dzvew1+kI7eCrve+GorPAE5xxPFULPEg/E6rmlxM0T6TrYqW05XTzzU2ZK6YfSES
+ ES42lZeQ==;
+Received: from phobos.denx.de ([85.214.62.61])
+ by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+ id 1liY4S-00DZ6t-0q
+ for linux-arm-kernel@lists.infradead.org; Mon, 17 May 2021 07:53:50 +0000
 Received: from ktm (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id AA3E88065C;
-        Mon, 17 May 2021 09:53:42 +0200 (CEST)
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ (Authenticated sender: lukma@denx.de)
+ by phobos.denx.de (Postfix) with ESMTPSA id AA3E88065C;
+ Mon, 17 May 2021 09:53:42 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1621238023;
-        bh=+oFOD5axhaR2QxMG/99ig+HlPXW2khmyuitHw6lo6LM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bq2sKYA76WIFNjvTHI33ZleQuK0cIxTIQmLd8iI3Jkzdy0WCtjf2oMMvKSDOacpw2
-         Jx966G31FJqNY7APQ1aW+NqDaIVO/Y5xPfkSe7tZmzEA4E7JHKg0LdkwXwKdASjcsF
-         BdTHU9jWo5hbwQzP4IiuKutkY3+lvYW/V19mqWlHHktesCu5praOHz98zFdPRaOf+Z
-         mXGdVXsZvtnFBQrllVJR/zJXk/co0/jLfnPTwQBahFvxpFAiY2OfWOrox5lDv89FLJ
-         xU4ln/pn2zbx1DTooxl7HbZrX9HFE8etLIBWD/4R8p8mL3JAkdjtxu4aHS0O1XHQzN
-         md0hy39jNiS3Q==
-Date:   Mon, 17 May 2021 09:53:33 +0200
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Shawn Guo <shawnguo@kernel.org>
+ s=phobos-20191101; t=1621238023;
+ bh=+oFOD5axhaR2QxMG/99ig+HlPXW2khmyuitHw6lo6LM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=bq2sKYA76WIFNjvTHI33ZleQuK0cIxTIQmLd8iI3Jkzdy0WCtjf2oMMvKSDOacpw2
+ Jx966G31FJqNY7APQ1aW+NqDaIVO/Y5xPfkSe7tZmzEA4E7JHKg0LdkwXwKdASjcsF
+ BdTHU9jWo5hbwQzP4IiuKutkY3+lvYW/V19mqWlHHktesCu5praOHz98zFdPRaOf+Z
+ mXGdVXsZvtnFBQrllVJR/zJXk/co0/jLfnPTwQBahFvxpFAiY2OfWOrox5lDv89FLJ
+ xU4ln/pn2zbx1DTooxl7HbZrX9HFE8etLIBWD/4R8p8mL3JAkdjtxu4aHS0O1XHQzN
+ md0hy39jNiS3Q==
+Date: Mon, 17 May 2021 09:53:33 +0200
+From: Lukasz Majewski <lukma@denx.de>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Fabio Estevam <festevam@gmail.com>, devicetree@vger.kernel.org,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Fabio
+ Estevam <festevam@gmail.com>, devicetree@vger.kernel.org, Olof Johansson
+ <olof@lixom.net>, soc@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 2/2] ARM: dts: imx28: Add DTS description of imx28 based
  XEA board
 Message-ID: <20210517095333.48d811be@ktm>
 In-Reply-To: <20210513033631.GL3425@dragon>
 References: <20210409122036.31628-1-lukma@denx.de>
-        <20210513033631.GL3425@dragon>
+ <20210513033631.GL3425@dragon>
 Organization: denx.de
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
- boundary="Sig_/pqViHQNJP4pms0nw.KJFIvk"; protocol="application/pgp-signature"
 X-Virus-Scanned: clamav-milter 0.102.4 at phobos.denx.de
 X-Virus-Status: Clean
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210517_005348_427512_D320899E 
+X-CRM114-Status: GOOD (  36.20  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: multipart/mixed; boundary="===============2846586586671395699=="
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210517075333.DpaDcAZSJlPUdg7xI7ozim1rTnHsUWgWOsxerFl99WQ@z>
+
+--===============2846586586671395699==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ boundary="Sig_/pqViHQNJP4pms0nw.KJFIvk"; protocol="application/pgp-signature"
 
 --Sig_/pqViHQNJP4pms0nw.KJFIvk
 Content-Type: text/plain; charset=US-ASCII
@@ -474,3 +520,18 @@ fk71ybArPvhHDzS7gbObrlTPD1Vn0Q==
 -----END PGP SIGNATURE-----
 
 --Sig_/pqViHQNJP4pms0nw.KJFIvk--
+
+
+--===============2846586586671395699==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+--===============2846586586671395699==--
+
