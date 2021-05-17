@@ -2,55 +2,56 @@ Return-Path: <SRS0=sRvu=KM=baylibre.com=clabbe@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 598E2C433ED
-	for <soc@archiver.kernel.org>; Mon, 17 May 2021 19:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42594C43461
+	for <soc@archiver.kernel.org>; Mon, 17 May 2021 19:32:21 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 32E1E61352; Mon, 17 May 2021 19:32:19 +0000 (UTC)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	id 1AB3A6128E; Mon, 17 May 2021 19:32:21 +0000 (UTC)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 47DFF6128E
-	for <soc@kernel.org>; Mon, 17 May 2021 19:32:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 47DFF6128E
+	by mail.kernel.org (Postfix) with ESMTPS id 1F9CD6134F
+	for <soc@kernel.org>; Mon, 17 May 2021 19:32:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1F9CD6134F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=clabbe@baylibre.com
-Received: by mail-wm1-f49.google.com with SMTP id b7so3579173wmh.5
-        for <soc@kernel.org>; Mon, 17 May 2021 12:32:18 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id z137-20020a1c7e8f0000b02901774f2a7dc4so489463wmc.0
+        for <soc@kernel.org>; Mon, 17 May 2021 12:32:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=o1MWPbCmhKRlzL0yQboMxEH1Vw5Cn+akoWVJYorN7PI=;
-        b=gMdukzhdloaqM5m8ubf2QsTgloFt0oz4um3ZEfJnC6cRrLb4WDhRkOO8MNcXJ94tzK
-         OsESwrpQ+vzWnStApEaLzk1FMuLyLEIdf/9Z90xd3FZNVj06J2RkE1n9bxgY6fe/8Ncq
-         oMgmF2/Lb4Ef9gxGuRWxbug+9XbrOFu3dztlMNhzuKM4goSO9cB79LOp8yCHrch6G5z1
-         HWJ0aecZ9uoZonwBT8M6tSqtz9Xl2UXBHAhYliIpdVymj8MLW0MqFmKaLA5Z/2EOyLDb
-         5P2DbcnKIVCSr2++Fcqi4xE4GWwqr7q4xAfJua5M+zhShrrYAB1xyMBmX/O5KdCAXWia
-         kKvA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=avksdsVdDMZgIQ3gqsIJUobMN9ruEWR0vv/Un1XX3xU=;
+        b=hTgaBFCmuFToWxc8asnrsyshPzpqHvZ3IqBoEB57RqwsPd/debGCK6X5Q4ySKDo/k/
+         8cOZpGUfYySaYQi1oinmuzNTaUcu5HSCVVLFnknxFgvSV2CR6itIKY5KvlhcugGcJtEM
+         wEwc2uY6AGNTufVQrlxgHA88xa61dMnwgDvf83/teANds9U5IkoUQ5n58Ac/ciCFNugf
+         d9fvnxrI9KkWkcMYDfacBOtEDSsosmy65IEAMEOOS2FlIa0BdQ8jksW8mQF8jBcBW1k4
+         /1fXfgtwXOBQNDBJ0G6HITTHnMy6AMRf2NPJES6wqGUU6MKJyLNsdBEozk5daSj/HV1I
+         SuQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=o1MWPbCmhKRlzL0yQboMxEH1Vw5Cn+akoWVJYorN7PI=;
-        b=QxXLfHSt/CazRQ32k1q/6E9hNq86VbpXZEGO8XILchsDc3x30hE6y4C+ML0j8reSl2
-         tWAWneGlVicLQ7ipAva44y9cZpZAR4gZGOJG+rvdoVCka4/BOatKKNLzP81P7VJM5FWv
-         P7OgkVCfSKck6js0WILScN0LMnRtyVsWad0KEjBackBVed9Uej20JlYDVdEekzh5qqdA
-         4aviWy0LMWbb/ZKJ8jrqSxPZ04pP/0pNfTnKm2hAMe9uTjLVlsbG75f89QFJ3ObP+QXv
-         z0JHLDvfyk/mXFuNhacD8Wmz0xHrYyVFALOCa2eJGo9i1WXvFQ7aHewk1IvsP1a0ycsY
-         t1Mg==
-X-Gm-Message-State: AOAM530F3NT6i1fdhUcFebYl+/WKR86Q+VPn4A90XEv/2ZonJca8WCvR
-	AOSykznXMbfajvQ2a7O+9va7lg==
-X-Google-Smtp-Source: ABdhPJwsv8iDnA2SN4nduILJwkjwb9WmpT/ZkNYhNGWcTPOkmyY9kui9eXiLhc780cUiLjBIdSA3DQ==
-X-Received: by 2002:a1c:1f84:: with SMTP id f126mr617294wmf.189.1621279936942;
-        Mon, 17 May 2021 12:32:16 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=avksdsVdDMZgIQ3gqsIJUobMN9ruEWR0vv/Un1XX3xU=;
+        b=oasyOs2RexpuAD7prQhu0tPC2BPGH0ZmbTO954xYwJH/IZFKBetKSQbUow7fovJ5aC
+         Qfbcn3tPuRd3ZJMnnzZi55LaBsqt+j4jv7g18YBnkN0u/iWPimh/RyoDSmVUha7ZtD/d
+         tiUlE3Dp7nR4H5zTJZv7idbm/sP3PSold3dRwpB70+7FZhkOal1XsMIAuAczOJKz8NHD
+         0VC/jGhr/pGU1M0szbVsRGxEENPkm0J3lV07/N4EqyVWhpxKaDVprhcgFX6nk7AXrhqW
+         Z+yIo2qSxtXmxVFKsDYApdsj08JcBJxzeHcmSmM88qeiBCoC3Qp9DizDnXDLYrRU0TfC
+         gj7w==
+X-Gm-Message-State: AOAM5306ZfNiVL9Xn9brVR+CNTaFbOePQZfjdPrMYwHdM8cy/d5shpzZ
+	TV3CMcGZZmEGqsKBwqIRk+7lt5D1hI5ILw==
+X-Google-Smtp-Source: ABdhPJw8RZbZSLGMEc2ndPTw06YXtCitfg1ZKJ/xrkVPyubmbaf6haCN+bTuDb9k6W+bPk20b0z48g==
+X-Received: by 2002:a7b:cd01:: with SMTP id f1mr609530wmj.177.1621279938739;
+        Mon, 17 May 2021 12:32:18 -0700 (PDT)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id e10sm18928907wrw.20.2021.05.17.12.32.15
+        by smtp.googlemail.com with ESMTPSA id e10sm18928907wrw.20.2021.05.17.12.32.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 May 2021 12:32:16 -0700 (PDT)
+        Mon, 17 May 2021 12:32:18 -0700 (PDT)
 From: Corentin Labbe <clabbe@baylibre.com>
 List-Id: <soc.lore.kernel.org>
 To: arnd@arndb.de,
@@ -63,31 +64,35 @@ Cc: devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH 0/5] ARM: gemini: add two more board
-Date: Mon, 17 May 2021 19:32:00 +0000
-Message-Id: <20210517193205.691147-1-clabbe@baylibre.com>
+Subject: [PATCH 2/5] dt-bindings: add vendor prefix for edimax
+Date: Mon, 17 May 2021 19:32:02 +0000
+Message-Id: <20210517193205.691147-3-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210517193205.691147-1-clabbe@baylibre.com>
+References: <20210517193205.691147-1-clabbe@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-I have two boards with a SL3516 SoC. Both are NAS box.
+Add vendor prefix for EDIMAX Technology Co., Ltd (https://www.edimax.com/)
 
-Corentin Labbe (5):
-  ARM: dts: gemini: add labels for USB, IDE, flash and ethernet
-  dt-bindings: add vendor prefix for edimax
-  dt-bindings: add vendor prefix for ssi
-  ARM: gemini: add device tree for edimax NS2502
-  ARM: gemini: add device tree for ssi1328
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
- .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
- arch/arm/boot/dts/Makefile                    |   2 +
- arch/arm/boot/dts/gemini-ns2502.dts           | 141 +++++++++++++++
- arch/arm/boot/dts/gemini-ssi1328.dts          | 162 ++++++++++++++++++
- arch/arm/boot/dts/gemini.dtsi                 |  12 +-
- 5 files changed, 315 insertions(+), 6 deletions(-)
- create mode 100644 arch/arm/boot/dts/gemini-ns2502.dts
- create mode 100644 arch/arm/boot/dts/gemini-ssi1328.dts
-
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index cf69dfd3d522..003f6354db04 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -329,6 +329,8 @@ patternProperties:
+     description: EBV Elektronik
+   "^eckelmann,.*":
+     description: Eckelmann AG
++  "^edimax,.*":
++    description: EDIMAX Technology Co., Ltd
+   "^edt,.*":
+     description: Emerging Display Technologies
+   "^eeti,.*":
 -- 
 2.26.3
 
