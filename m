@@ -6,57 +6,56 @@ X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A72EC43462
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D5C6C433B4
 	for <soc@archiver.kernel.org>; Mon, 17 May 2021 20:20:10 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E686A6135B; Mon, 17 May 2021 20:20:09 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id CF61661352;
+	id D4AE061354; Mon, 17 May 2021 20:20:09 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id BCEA160FEB;
 	Mon, 17 May 2021 20:20:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1621282809;
-	bh=X15NXBZS3JGbFVrPOKXKihBuXAGfg1xzMw9EbfYgwks=;
+	bh=0Amb4vKY3oTlPamdg6S1wZGqJ2ccnvYpsGMoNJxbv64=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=LWfnDf467qZGOtMTcfrooB9YSNzNxR9SGSFhpV/gJbXQ8q1W7EdCAf4L2su35FpFE
-	 OX6rmt8j6TSoeJM/Ccr0UuzivZzcLEpqabWtH/QQYQV75ZI5m8BKeBp0VssgPM26KE
-	 ELTq0m/UmAljQt9EuUGOGQxuwXSz/ZRSm3cbBst8z1oph2CSHK0rfSboXQ5+QNar6f
-	 SGQ5WDpqmoCtRATJeZLEwrliDkWY7NMEkwe86aCYYXvVVPwVdaZk0HIqgdmKeadCJ8
-	 4Vzw8Jc3X3X9ON8rHPl/C5jPwpFM7OysMelwVoRfBT2gxvLqXZFQ5TZAn3mY1yZUac
-	 cY0qS6jbHm6sA==
+	b=TAGUgRthSMwR+zAkDf9fym6Q2uooFa46L7GraeKf4bjyvO7O5gKDydyqueTerdynQ
+	 SEiAvl91T+TKKd33qCykcfReUFaGnj5Ric8XI8/dQD0XnpGWQD4zOUSRO67rAOrjve
+	 yettztkaA+oxrC0VFKuGb7jJoEn1q3vXcEmZ5qnuPMch9HhzkiBlsK/i9I2/MOHVRY
+	 9drzhUI/LfFsTfm8mkSSk4oCMP0B3XKvbeiSEg+mN43gdJwO67qERU+gpEc1R3cxqg
+	 RfO/FgQE3SKBZbZovRcfa2crM7u9KUxPT6BKPv+oq1X9sl+/sGbSD8uU5F614MrM5+
+	 F0KXb7Cz0G/jA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C3C3060BFB;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id B11B460972;
 	Mon, 17 May 2021 20:20:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] AMD-TEE fix for v5.13
+Subject: Re: [PATCH] MAINTAINERS: ARM/Amlogic SoCs: add Neil as primary maintainer
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162128280979.19328.13271242836160511417.git-patchwork-notify@kernel.org>
+ <162128280972.19328.14012577360413699130.git-patchwork-notify@kernel.org>
 Date: Mon, 17 May 2021 20:20:09 +0000
-References: <20210505110850.GA3434209@jade>
-In-Reply-To: <20210505110850.GA3434209@jade>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+References: <20210511190054.26300-1-khilman@baylibre.com>
+In-Reply-To: <20210511190054.26300-1-khilman@baylibre.com>
+To: Kevin Hilman <khilman@baylibre.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (refs/heads/arm/fixes):
+This patch was applied to soc/soc.git (refs/heads/arm/fixes):
 
-On Wed, 5 May 2021 13:08:50 +0200 you wrote:
-> Hello arm-soc maintainers,
+On Tue, 11 May 2021 12:00:54 -0700 you wrote:
+> Add Neil as primary maintainer for the Amlogic family of Arm SoCs.  I
+> will now act as co-maintainer.
 > 
-> Please pull this AMDTEE driver fix which adds reference counting to
-> loaded TAs which is needed for proper life cycle management of TAs.
-> 
-> Note that this isn't a usual Arm driver update. This targets AMD instead,
-> but is part of the TEE subsystem.
+> Neil is already doing lots of the reviewing, testing and behind the
+> scenes support for users of the upstream kernel on these SoCs, so this
+> is just to formalize the current state of affairs.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] AMD-TEE fix for v5.13
-    https://git.kernel.org/soc/soc/c/8ec51f894bf5
+  - MAINTAINERS: ARM/Amlogic SoCs: add Neil as primary maintainer
+    https://git.kernel.org/soc/soc/c/b433d090ac63
 
 You are awesome, thank you!
 --
