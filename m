@@ -1,25 +1,30 @@
-Return-Path: <SRS0=MfOv=KN=baylibre.com=clabbe@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B98BCC433ED
-	for <soc@archiver.kernel.org>; Tue, 18 May 2021 09:55:03 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 94A5461350; Tue, 18 May 2021 09:55:03 +0000 (UTC)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 86C74610A1
-	for <soc@kernel.org>; Tue, 18 May 2021 09:55:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 86C74610A1
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=clabbe@baylibre.com
-Received: by mail-wm1-f42.google.com with SMTP id y184-20020a1ce1c10000b02901769b409001so1117975wmg.3
-        for <soc@kernel.org>; Tue, 18 May 2021 02:55:02 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03855C43462
+	for <linux-devicetree@archiver.kernel.org>; Tue, 18 May 2021 09:55:07 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id D85A9610A1
+	for <linux-devicetree@archiver.kernel.org>; Tue, 18 May 2021 09:55:06 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S243215AbhERJ4W (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Tue, 18 May 2021 05:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348111AbhERJ4U (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Tue, 18 May 2021 05:56:20 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697D9C061573
+        for <devicetree@vger.kernel.org>; Tue, 18 May 2021 02:55:02 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id b7so4471749wmh.5
+        for <devicetree@vger.kernel.org>; Tue, 18 May 2021 02:55:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:references:mime-version
@@ -37,14 +42,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
         bh=fginyF3h0uO7FrUs8ObqH5iIkZOGxEkZEk2Vd5hl+Xk=;
-        b=r6hMXO6ESHIuHSgW04WT4qzBhvZksHGbS4KshWXBG7CIpb1sY/ca95f/7x8+v4m/PY
-         bRS/21duruGMauq4zd+smFAMB/q1LRSvfox3z453IjYNg77uhtLBcfmNt9WP+y0e9Veb
-         VXxWA5DuEjMvyyDA9KGJUePGRNVA6Ehl4Cdohn7xhXjw1j8yh0M8JV5zcjOeyeThWUNB
-         iwcIw4E1TXQ7yO5O1NaA63SwfbVkhfalQm4Tuhfsn/AEVc6ZvVjQ17rDMPoSI5qbVYFq
-         1FB2YHgStNNp+zX/FzP7LCOEQHdmxJpVqtq1EwfJZtDwBcxSql5OcWv/Y+9Smw8GKW+z
-         1COQ==
-X-Gm-Message-State: AOAM5336QJxVB4udrnnVLb3kabLp3mVO1XvT5fPaUAQHBKQLFMRIdn5Y
-	nU84ggEJTTX05c8GafWls7fDlw==
+        b=QckYSWfUC7x5RL3U3WK+zR7WII8lmXBlbP1D6zWPYyh8aU+33Ow9AhCTv8FebB71cX
+         ALOBQE09hEwRA5ip70UdIy6JIylHVudpP1DfCwjhKe8Md9cFEaxIKV12qM8oTMaI6Dde
+         Ggm5SWHNzRZsE8NRbpZPsTg1azLhDJ8suuL3vfZ+096ECz5S1S3lIjMyMADMvtEg7NB0
+         157Jix7N5LK40oHwkR/XMbC3OambzLha5lgjmM6lIgwJeq1CdUuLrLp480Z5F3D67Vmr
+         f34ccqYm0EzlWtMUvEef79cHUup19c2QmXZYbRR14Invdi0B/BHkansLABuiOrnHuA3f
+         S4Dg==
+X-Gm-Message-State: AOAM532VjSgSyMKK4EFlAWhrz7s1WcQQRmZkfqHPSOE4u36Zw2jllhXR
+        QqtG0wcq5xR2EIN9zbQimGeHzA==
 X-Google-Smtp-Source: ABdhPJwctiP6iNlOp+0KFqNHTYlHVOzwDJqpjoyzt4CfSSa1ZARgEvW7Zuwr3HxKdXV9J88hqOzC9A==
 X-Received: by 2002:a1c:28b:: with SMTP id 133mr4440939wmc.135.1621331701145;
         Tue, 18 May 2021 02:55:01 -0700 (PDT)
@@ -52,16 +57,17 @@ Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
         by smtp.googlemail.com with ESMTPSA id q3sm18355872wrr.43.2021.05.18.02.54.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 18 May 2021 02:55:00 -0700 (PDT)
-Date: Tue, 18 May 2021 11:54:57 +0200
-From: LABBE Corentin <clabbe@baylibre.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 18 May 2021 11:54:57 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	Rob Herring <robh+dt@kernel.org>, SoC Team <soc@kernel.org>,
-	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>, SoC Team <soc@kernel.org>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH 4/5] ARM: gemini: add device tree for edimax NS2502
 Message-ID: <YKOO8UxdmZBjYbt4@Red>
 References: <20210517193205.691147-1-clabbe@baylibre.com>
@@ -72,6 +78,10 @@ Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <CACRpkdY3c4uvo1zbEgNW0meF-4P8be_nmoOEQAHP5V+GXgoG=A@mail.gmail.com>
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210518095457.VpoZvhoC3gW6G6JkcqkIKie7-JHBRLn9SCPDFtYWa3w@z>
 
 Le Tue, May 18, 2021 at 01:46:20AM +0200, Linus Walleij a écrit :
 > Hi Corentin,
