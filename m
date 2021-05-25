@@ -1,114 +1,122 @@
-Return-Path: <SRS0=OWK0=KR=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=6pVm=KU=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27C36C2B9F2
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 22 May 2021 12:39:53 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B050C2B9F8
+	for <soc@archiver.kernel.org>; Tue, 25 May 2021 09:25:24 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 599B061431; Tue, 25 May 2021 09:25:24 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CE8F26128A
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 22 May 2021 12:39:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CE8F26128A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding
-	:Content-Type:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=J1M95C80CxsmPbAa8FlkTnW+PtdSLLkXIsRT2/fJxpw=; b=Ue2XIxyzxDmnisLBVgSD9ytETG
-	qYhawc/qVlbdG02A0Mrxd1p7+oMjBSkMY9fIM0H1Y9U4bqkI0YL7Svei6fbe2NC/E7/fKSU3wI7xE
-	S7f1S/SMc1TKsQulOhvqP/tfpba+lmNIc/Qc/h5LSKRZTxbvBuNy8RfPZauDwyQe4Ko2XsLl0LoCH
-	kMO8e5AHB3NRyUiKvogDv1p1UjAXK0/j6EN9liWxfJqkNBu7HZs9H9wRPn22N9gUvxqnHb0WGcK+D
-	SPlp3yqNVLZlXlR143cRtmhM1Onzfjf1y8F28H0kBA77a0ANvcUaPHSJ48r47wFKLb42BOAAOrkFl
-	/VVs9K7A==;
-Received: from localhost ([::1] helo=desiato.infradead.org)
-	by desiato.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lkQt4-002SFp-CO; Sat, 22 May 2021 12:37:50 +0000
-Received: from bombadil.infradead.org ([2607:7c80:54:e::133])
- by desiato.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lkQsz-002SF0-TY
- for linux-arm-kernel@desiato.infradead.org; Sat, 22 May 2021 12:37:46 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
- :References:Message-ID:Subject:Cc:List-Id:To:From:Date:Sender:Reply-To:
- Content-Transfer-Encoding:Content-ID:Content-Description;
- bh=hRx6XS+qCWuCqpislAzxKE0h2mT1asd8qqHX5J5MXX8=; b=H5J7oxgZAW7aBrTF3St8TdRWUf
- U9B0IiVDDRknrZ34QtFI9YB7mtQkGCJCbE6BIi4wShoBlPTd5Bs0b+57X6oyAqmFGhjB7uWODxFLt
- veV34LpC2lihj1+msgqxoY/rTrw7cRWKhNj6H3GKKe7/AmT8oG3b6jRNiN99PAa4/euw4EDFFHh1p
- KOrBYEMFLOPGpO10fkprJp6UcDHXKDW+61KO8diZbId3Zn4lBT2XkXsnZCkJ2UTrmntxg9ZVUgvWj
- MOhZYZIsAAEkfQbQlveI6dth3CVahYjTWHMHkVyrisBNsKPG/FaIm6ZditoCOR84aKRC+GK8Oopr3
- S/5JODIQ==;
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
- id 1lkQsx-0006dG-GH
- for linux-arm-kernel@lists.infradead.org; Sat, 22 May 2021 12:37:44 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 270EE611AD;
- Sat, 22 May 2021 12:37:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1621687063;
- bh=hPvJRi/4YD//sBf0sK2WpeQ/WH/A56zewUfTgUKlz2A=;
- h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
- b=IvFmp7nItbd2K2+6CnXqQV9F6k84vHhKy2yVJXo8PispX5scQ/sm9qa5S6zFaMjcn
- wFO/b6dVJGhEd4AI/UrP3kZQ1ztPepcsIW+zfcv8i5TI9adNT7a2GhLoZvPbUzCJxU
- IU5sJfwuMnqdNptnfJRz8g1106qxDext6UbiP8MoXGtvao/1Bch89fueP4P29+gHm1
- qv8bfMEVSJMKLyfKPPMaFlrHLC0KShmET8jiqD/3TtZXGgVMfSVDapys1giEQ1Pw2o
- PugVh97noHAb/PwnmgXTodZ4NYh0f23xJQQdOpwmzhFzph966LF+Q8HL+RxDFYuIVC
- ptwyfaYuuEAaQ==
-Date: Sat, 22 May 2021 20:37:35 +0800
-From: Shawn Guo <shawnguo@kernel.org>
-To: Lukasz Majewski <lukma@denx.de>
+	by mail.kernel.org (Postfix) with ESMTPS id 0FD2A61421;
+	Tue, 25 May 2021 09:25:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0FD2A61421
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=Nicolas.Ferre@microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1621934723; x=1653470723;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=id5jjjYGUYQ5y88qtb+UmsSE5j6OC46ZQvVJFXn8Wyc=;
+  b=hU+OEv2iwi4e3MSXWEqDDjruLVoQ88F2BoNeim6Csaq0VVzVMLa4tlED
+   LgMOUXNFoipDCk+wB0LQR3dCJCjxt5llf5Rlt4OAhd7ud+z38WYi7aLuc
+   v8qbVBK6Q2Km/tdPiZvlTjV1JXgz/kEqrjqM3BsV52yhDZ4lcbP4uZoiQ
+   ydspsjtiIkNBSTZ3ym5VTnrcFKxQdXOlSbN7TsnqZFH0G37WcI7O9F7WV
+   IZIvtNKrV4Np/LDrk7WGI3/cjKx49TnwYxZp1Qzhr/VVuV4ZebjGj5vKi
+   Fp1VcWmkdomhl7r29XZSsJ1nNFFA0Wf1DOFXa3arwTai2O1ltf0UkAxos
+   w==;
+IronPort-SDR: tg+RT8KQ02foJIOL7ihExOxMfJaaEfZF7OcWfCWqUf1mz6TzhnwVXpPCewgCbCH1dCfqqsWpvX
+ P4Y/N/kbxWu/njpWFzPnDg6UTJ9SB/FSgqVYATG83//+QM6ZRO63k0ktkmFwzJdy9ecjEyoohu
+ rZn+PQdDHnNRpggA3/kv95omzzMlEJkKhoUrmA+C7ZlYR20XoLnnFOIFCvc+cr6ubxxavSHvW2
+ ilGsri8AEojsPZYheCw3O2q87NWDfXHG0GKfPZrvcKGNKYUoqTuvpchGoU4QNBmFfoD8K/clPO
+ lII=
+X-IronPort-AV: E=Sophos;i="5.82,328,1613458800"; 
+   d="scan'208";a="129362356"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2021 02:25:23 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 25 May 2021 02:25:22 -0700
+Received: from [10.12.74.7] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Tue, 25 May 2021 02:25:21 -0700
+Subject: Re: [PATCH v2 2/4] ARM: dts: at91: add sama7g5 SoC DT and sama7g5-ek
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- Rob Herring <robh+dt@kernel.org>, soc@kernel.org,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] ARM: dts: imx28: Add DTS description of imx28 based
- XEA board
-Message-ID: <20210522123734.GB8194@dragon>
-References: <20210518142857.26170-1-lukma@denx.de>
+CC: <alexandre.belloni@bootlin.com>, <Eugen.Hristev@microchip.com>,
+	<Ludovic.Desroches@microchip.com>, <soc@kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <Claudiu.Beznea@microchip.com>,
+	<Codrin.Ciubotariu@microchip.com>
+References: <20210511071223.71379-1-eugen.hristev@microchip.com>
+ <20210511071223.71379-2-eugen.hristev@microchip.com>
+ <070939b0-ec77-a135-b351-4c4c8bc543f0@microchip.com>
+ <YJo0PY2E36v2Pqz/@piout.net>
+ <8c74596c-6d23-c822-fc2e-6cbb984fa4fd@microchip.com>
+ <20210511191653.GA2446068@robh.at.kernel.org>
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+Message-ID: <bbbb0934-666a-44be-f98c-cb0ad180c792@microchip.com>
+Date: Tue, 25 May 2021 11:25:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210518142857.26170-1-lukma@denx.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210522_053743_578098_D6D7613E 
-X-CRM114-Status: UNSURE (   7.90  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <20210511191653.GA2446068@robh.at.kernel.org>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210522123735.8lqW3fUjJC6G5xpfwwgwn8qGpJKgnu-jIXE26vgrXoQ@z>
 
-On Tue, May 18, 2021 at 04:28:57PM +0200, Lukasz Majewski wrote:
-> This patch adds DTS definition of the imx278 based XEA board.
+On 11/05/2021 at 21:16, Rob Herring wrote:
+> On Tue, May 11, 2021 at 09:03:37AM +0000, Eugen.Hristev@microchip.com wrote:
+>> On 5/11/21 10:37 AM, Alexandre Belloni wrote:
+>>> On 11/05/2021 07:18:31+0000, Eugen.Hristev@microchip.com wrote:
+>>>> On 5/11/21 10:12 AM, Eugen Hristev wrote:
+>>>>> Add Device Tree for sama7g5 SoC and associated board sama7g5-ek
+>>>>>
+>>>>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+>>>>> [claudiu.beznea@microchip.com: add clocks, ethernet, timers, power]
+>>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+>>>>> [codrin.ciubotariu@microchip.com: add audio]
+>>>>> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+>>>>> ---
+>>>>
+>>>> Changes in v2:
+>>>> - fixed license
+>>>> - fixed warnings for make dtbs (changed ahb/apb to just soc)
+>>>> - changed some node names as suggested
+>>>> - removed some okay status properties
+>>>> - addressed cpu node by label
+>>>> - removed stdout path
+>>>
+>>> Why would you remove stdout-path? The solution was to remove The console
+>>> parameter from bootargs, especially since you don't know what name the
+>>> console device will have depending on CONFIG_SERIAL_ATMEL_TTYAT.
+>>
+>> Ok, sure, I will add it back and remove console=...
+>>
+>> I will wait to see if Rob has anymore comments before preparing a v3.
 > 
-> Signed-off-by: Lukasz Majewski <lukma@denx.de>
+> No, nothing else.
 
-Applied, thanks.
+Hi Rob,
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+v4 was posted some time ago:
+https://lore.kernel.org/linux-arm-kernel/20210514082151.178571-2-eugen.hristev@microchip.com/
+
+I plan to include this series in at91 tree these couple of next days: do 
+I wait for your tag?
+
+Best regards,
+   Nicolas
+
+
+-- 
+Nicolas Ferre
