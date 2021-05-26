@@ -1,161 +1,358 @@
-Return-Path: <SRS0=Zt5s=KU=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=/9nS=KV=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	UPPERCASE_50_75,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36A09C2B9F8
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 25 May 2021 09:27:09 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5998C47082
+	for <soc@archiver.kernel.org>; Wed, 26 May 2021 10:12:12 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 89946613AB; Wed, 26 May 2021 10:12:12 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E5C6561408
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 25 May 2021 09:27:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E5C6561408
+	by mail.kernel.org (Postfix) with ESMTPS id 385B361360;
+	Wed, 26 May 2021 10:12:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 385B361360
 Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:
-	Content-Transfer-Encoding:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
-	References:CC:To:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=ZUfK54lYyaqVEoK9dJpb4DmYbHBoNaQNYcunDv3T3+4=; b=lwkVI8IefKRTrDCo+oteWtMuXY
-	UUZ1un+M11paD9a6usDVZycANfMBQVkAfomqr/fSvcu9VHyoFsn6xgwtPqlFj93B7Z8WRgLmjeMIS
-	+OzEbF5kWR9sYm55Xike6iaanajby+RaAqXZK5GT7hduPsy0ZpX3lbjQHtSXFFV8s3zjZODzHQkVx
-	399Ti3O12mn4FyWU96S2yJUh2tIyM/Z63j7WjPRAsXw3pAFlYM/+/woyRQcCS1rOa38zPxK+DbePB
-	rWT0p2Q3Ms3wgIDLI6caFbLnM18UukCKIxhhe8ASxo8gsXw5I8LkDHlFjx9JA6FkCuQN8bavR/IQh
-	Ndbnqdrw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1llTJa-004LyS-8Y; Tue, 25 May 2021 09:25:30 +0000
-Received: from esa.microchip.iphmx.com ([68.232.153.233])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1llTJU-004Lw4-Rh
- for linux-arm-kernel@lists.infradead.org; Tue, 25 May 2021 09:25:26 +0000
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=Nicolas.Ferre@microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1621934724; x=1653470724;
- h=subject:to:cc:references:from:message-id:date:
- mime-version:in-reply-to:content-transfer-encoding;
- bh=id5jjjYGUYQ5y88qtb+UmsSE5j6OC46ZQvVJFXn8Wyc=;
- b=IlMLmnNu1i0wFKdyiwmEAayIHwavKQUeRr5/Qd2oMD1oRy+zJC5ioabh
- DcuRgd8UK3teqhkeCkyz5gryHuPb27S8QyEmokLqzAUYCMe+WOi3lhnRF
- Ii70tcqlNsSgIlwu7+300r0bILR9ZSPPPSA6dqmjWGvqLg0SwW8FNZvS+
- XDt0Csika86CAlSj1kZ4TFgu9esdiGeTKPAaTbSy1QdJrNFvRgFAxcSOn
- XCQLFPgbyLJBTobITKYVDZ9M01YZontLKvJ96aB0++oNaWj1LRAZz8kQL
- mG9biqbpoyTNG8/EOZWdIaHQ5ZdJvGskwNJ8pbSTO3DpYHwFc2Afvmj1A w==;
-IronPort-SDR: tg+RT8KQ02foJIOL7ihExOxMfJaaEfZF7OcWfCWqUf1mz6TzhnwVXpPCewgCbCH1dCfqqsWpvX
- P4Y/N/kbxWu/njpWFzPnDg6UTJ9SB/FSgqVYATG83//+QM6ZRO63k0ktkmFwzJdy9ecjEyoohu
- rZn+PQdDHnNRpggA3/kv95omzzMlEJkKhoUrmA+C7ZlYR20XoLnnFOIFCvc+cr6ubxxavSHvW2
- ilGsri8AEojsPZYheCw3O2q87NWDfXHG0GKfPZrvcKGNKYUoqTuvpchGoU4QNBmFfoD8K/clPO
- lII=
-X-IronPort-AV: E=Sophos;i="5.82,328,1613458800"; d="scan'208";a="129362356"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 25 May 2021 02:25:23 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1622023933; x=1653559933;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=bW7n+e/OD7pmzw3aMWUasZ8+LI/KzJIeuHujrcb/OMg=;
+  b=1v5RrGL8+yQwaC1s7N8ZnxsjEmLCabkD2TQQkjeumbWN2fSB6kMqW0WI
+   eMI4AVdwWKfqouW/ErpOWbDlYgnj9jnwz4YpvGJ1HN5O8NaocLeleqpz/
+   U1qnFKcJGLSDRvJ1ASaOQPjSiET/xwB6/YVkmEqWVQvXeJgzhwMZeKe18
+   0jPsrrn/dULHD+tCGwAyTbzC0L1VFuC4gf06vmpayLL0mD9/I9f3IYiJX
+   XlgmqpZOxAQdWrNIMVQ2ex6nFBT3bDh0pswhj4bf5BaI+m/0ogDwo6HmG
+   dXFtyWCu1FWxQ8UvAKznx34M5zbardt/lDGfPBr+EtLawdoYqBybYlNoW
+   Q==;
+IronPort-SDR: MJyK+05kzakQRDQxGD4T97lBYXr2d6S6hgEFyacTyKWFTFGHE9+hJqD7coOtYPzrGXMQzuKoIB
+ QEy4YOxM41vKcLxROqg4fTPXlpEaJQOxLN1uPXgm2SxwiZw8kd5NhKnYOxX7UZkFTX8ZFrNHC1
+ ZkREipfOHdE/tUYQpOpClBKrrKtdUSDdzLaYL1Yxl5wvVSOi5K/SapXT8Yx1FB6tlt96TCa554
+ ZdbgxFGaxzpq6tDrlTZbeNOE1BF5kTEJkBUsrhd+rXU8JgHE6op0Cld7X79vaT8gzmMcVwvCjQ
+ j/4=
+X-IronPort-AV: E=Sophos;i="5.82,331,1613458800"; 
+   d="scan'208";a="122436595"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 May 2021 03:12:12 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 25 May 2021 02:25:22 -0700
-Received: from [10.12.74.7] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Tue, 25 May 2021 02:25:21 -0700
-Subject: Re: [PATCH v2 2/4] ARM: dts: at91: add sama7g5 SoC DT and sama7g5-ek
-To: Rob Herring <robh@kernel.org>
+ 15.1.2176.2; Wed, 26 May 2021 03:12:10 -0700
+Received: from [10.12.72.167] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Wed, 26 May 2021 03:12:08 -0700
+Subject: Re: [PATCH v4 3/4] ARM: configs: at91: add defconfig for sama7 family
+ of SoCs
+To: Eugen Hristev <eugen.hristev@microchip.com>, <robh+dt@kernel.org>
 List-Id: <soc.lore.kernel.org>
-CC: <alexandre.belloni@bootlin.com>, <Eugen.Hristev@microchip.com>,
- <Ludovic.Desroches@microchip.com>, <soc@kernel.org>,
- <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <Claudiu.Beznea@microchip.com>,
- <Codrin.Ciubotariu@microchip.com>
-References: <20210511071223.71379-1-eugen.hristev@microchip.com>
- <20210511071223.71379-2-eugen.hristev@microchip.com>
- <070939b0-ec77-a135-b351-4c4c8bc543f0@microchip.com>
- <YJo0PY2E36v2Pqz/@piout.net>
- <8c74596c-6d23-c822-fc2e-6cbb984fa4fd@microchip.com>
- <20210511191653.GA2446068@robh.at.kernel.org>
+CC: <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>,
+	<soc@kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<claudiu.beznea@microchip.com>, <codrin.ciubotariu@microchip.com>,
+	<tudor.ambarus@microchip.com>
+References: <20210514082151.178571-1-eugen.hristev@microchip.com>
+ <20210514082151.178571-3-eugen.hristev@microchip.com>
 From: Nicolas Ferre <nicolas.ferre@microchip.com>
 Organization: microchip
-Message-ID: <bbbb0934-666a-44be-f98c-cb0ad180c792@microchip.com>
-Date: Tue, 25 May 2021 11:25:20 +0200
+Message-ID: <f2e1c939-5569-c93c-3a0f-2ac80f021843@microchip.com>
+Date: Wed, 26 May 2021 12:12:07 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210511191653.GA2446068@robh.at.kernel.org>
+In-Reply-To: <20210514082151.178571-3-eugen.hristev@microchip.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
 Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210525_022524_978085_9E5499C7 
-X-CRM114-Status: GOOD (  13.61  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210525092520.aQbj9Le5Wgm_D4hfDnqeU_T3YUVjDzrIKiD0q-2oF9s@z>
 
-On 11/05/2021 at 21:16, Rob Herring wrote:
-> On Tue, May 11, 2021 at 09:03:37AM +0000, Eugen.Hristev@microchip.com wrote:
->> On 5/11/21 10:37 AM, Alexandre Belloni wrote:
->>> On 11/05/2021 07:18:31+0000, Eugen.Hristev@microchip.com wrote:
->>>> On 5/11/21 10:12 AM, Eugen Hristev wrote:
->>>>> Add Device Tree for sama7g5 SoC and associated board sama7g5-ek
->>>>>
->>>>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
->>>>> [claudiu.beznea@microchip.com: add clocks, ethernet, timers, power]
->>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
->>>>> [codrin.ciubotariu@microchip.com: add audio]
->>>>> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
->>>>> ---
->>>>
->>>> Changes in v2:
->>>> - fixed license
->>>> - fixed warnings for make dtbs (changed ahb/apb to just soc)
->>>> - changed some node names as suggested
->>>> - removed some okay status properties
->>>> - addressed cpu node by label
->>>> - removed stdout path
->>>
->>> Why would you remove stdout-path? The solution was to remove The console
->>> parameter from bootargs, especially since you don't know what name the
->>> console device will have depending on CONFIG_SERIAL_ATMEL_TTYAT.
->>
->> Ok, sure, I will add it back and remove console=...
->>
->> I will wait to see if Rob has anymore comments before preparing a v3.
+On 14/05/2021 at 10:21, Eugen Hristev wrote:
+> Add defconfig for sama7 SoC family.
 > 
-> No, nothing else.
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> [claudiu.beznea@microchip.com: add clocks, ethernet, timers, power]
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> [codrin.ciubotariu@microchip.com: add audio]
+> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-Hi Rob,
+We'll need to add:
 
-v4 was posted some time ago:
-https://lore.kernel.org/linux-arm-kernel/20210514082151.178571-2-eugen.hristev@microchip.com/
 
-I plan to include this series in at91 tree these couple of next days: do 
-I wait for your tag?
+@@ -24,6 +24,7 @@ CONFIG_ATMEL_CLOCKSOURCE_TCB=y 
+ 
 
-Best regards,
+  # CONFIG_CPU_SW_DOMAIN_PAN is not set
+  CONFIG_FORCE_MAX_ZONEORDER=15
+  CONFIG_UACCESS_WITH_MEMCPY=y
++# CONFIG_ATAGS is not set 
+ 
+
+  CONFIG_CMDLINE="console=ttyS0,115200 earlyprintk ignore_loglevel"
+  CONFIG_CPU_FREQ=y
+  CONFIG_CPU_FREQ_STAT=y
+@@ -87,6 +88,7 @@ CONFIG_DEVTMPFS_MOUNT=y 
+ 
+
+  # CONFIG_PREVENT_FIRMWARE_BUILD is not set
+  # CONFIG_ALLOW_DEV_COREDUMP is not set
+  CONFIG_MTD=y
++CONFIG_MTD_TESTS=m 
+ 
+
+  CONFIG_MTD_CMDLINE_PARTS=y
+  CONFIG_BLK_DEV_LOOP=y
+  CONFIG_BLK_DEV_RAM=y
+@@ -111,6 +113,7 @@ CONFIG_I2C_AT91=y 
+ 
+
+  CONFIG_SPI=y
+  CONFIG_SPI_MEM=y
+  CONFIG_SPI_ATMEL=y
++CONFIG_SPI_GPIO=y 
+ 
+
+  CONFIG_PINCTRL_AT91=y
+  CONFIG_PINCTRL_AT91PIO4=y
+  CONFIG_GPIO_SYSFS=y
+
+to match recent changes to other at91 defconfigs.
+
+
+Regards,
    Nicolas
+
+> ---
+>   arch/arm/configs/sama7_defconfig | 213 +++++++++++++++++++++++++++++++
+>   1 file changed, 213 insertions(+)
+>   create mode 100644 arch/arm/configs/sama7_defconfig
+> 
+> diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
+> new file mode 100644
+> index 000000000000..79f5b80e3555
+> --- /dev/null
+> +++ b/arch/arm/configs/sama7_defconfig
+> @@ -0,0 +1,213 @@
+> +# CONFIG_LOCALVERSION_AUTO is not set
+> +# CONFIG_SWAP is not set
+> +CONFIG_SYSVIPC=y
+> +CONFIG_NO_HZ_IDLE=y
+> +CONFIG_HIGH_RES_TIMERS=y
+> +CONFIG_LOG_BUF_SHIFT=16
+> +CONFIG_CGROUPS=y
+> +CONFIG_CGROUP_DEBUG=y
+> +CONFIG_NAMESPACES=y
+> +CONFIG_SYSFS_DEPRECATED=y
+> +CONFIG_SYSFS_DEPRECATED_V2=y
+> +CONFIG_BLK_DEV_INITRD=y
+> +# CONFIG_FHANDLE is not set
+> +# CONFIG_IO_URING is not set
+> +CONFIG_KALLSYMS_ALL=y
+> +CONFIG_EMBEDDED=y
+> +# CONFIG_VM_EVENT_COUNTERS is not set
+> +CONFIG_SLAB=y
+> +CONFIG_ARCH_AT91=y
+> +CONFIG_SOC_SAMA7G5=y
+> +CONFIG_ATMEL_CLOCKSOURCE_TCB=y
+> +# CONFIG_CACHE_L2X0 is not set
+> +# CONFIG_ARM_PATCH_IDIV is not set
+> +# CONFIG_CPU_SW_DOMAIN_PAN is not set
+> +CONFIG_FORCE_MAX_ZONEORDER=15
+> +CONFIG_UACCESS_WITH_MEMCPY=y
+> +CONFIG_CMDLINE="console=ttyS0,115200 earlyprintk ignore_loglevel"
+> +CONFIG_CPU_FREQ=y
+> +CONFIG_CPU_FREQ_STAT=y
+> +CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE=y
+> +CONFIG_CPU_FREQ_GOV_POWERSAVE=y
+> +CONFIG_CPU_FREQ_GOV_USERSPACE=y
+> +CONFIG_CPU_FREQ_GOV_ONDEMAND=y
+> +CONFIG_CPUFREQ_DT=y
+> +CONFIG_VFP=y
+> +CONFIG_NEON=y
+> +CONFIG_KERNEL_MODE_NEON=y
+> +CONFIG_MODULES=y
+> +CONFIG_MODULE_FORCE_LOAD=y
+> +CONFIG_MODULE_UNLOAD=y
+> +CONFIG_MODULE_FORCE_UNLOAD=y
+> +# CONFIG_BLK_DEV_BSG is not set
+> +CONFIG_PARTITION_ADVANCED=y
+> +# CONFIG_EFI_PARTITION is not set
+> +# CONFIG_COREDUMP is not set
+> +# CONFIG_COMPACTION is not set
+> +CONFIG_CMA=y
+> +CONFIG_NET=y
+> +CONFIG_PACKET=y
+> +CONFIG_UNIX=y
+> +CONFIG_INET=y
+> +CONFIG_IP_MULTICAST=y
+> +CONFIG_IP_PNP=y
+> +CONFIG_IP_PNP_DHCP=y
+> +# CONFIG_INET_DIAG is not set
+> +CONFIG_IPV6_SIT_6RD=y
+> +CONFIG_BRIDGE=m
+> +CONFIG_BRIDGE_VLAN_FILTERING=y
+> +CONFIG_NET_DSA=m
+> +CONFIG_VLAN_8021Q=m
+> +CONFIG_CAN=y
+> +CONFIG_CAN_M_CAN=y
+> +CONFIG_CAN_M_CAN_PLATFORM=y
+> +CONFIG_BT=y
+> +CONFIG_BT_RFCOMM=y
+> +CONFIG_BT_RFCOMM_TTY=y
+> +CONFIG_BT_BNEP=y
+> +CONFIG_BT_BNEP_MC_FILTER=y
+> +CONFIG_BT_BNEP_PROTO_FILTER=y
+> +CONFIG_BT_HIDP=y
+> +CONFIG_BT_HCIBTUSB=y
+> +CONFIG_BT_HCIUART=y
+> +CONFIG_BT_HCIUART_H4=y
+> +CONFIG_BT_HCIVHCI=y
+> +CONFIG_CFG80211=m
+> +# CONFIG_CFG80211_DEFAULT_PS is not set
+> +CONFIG_CFG80211_DEBUGFS=y
+> +CONFIG_CFG80211_WEXT=y
+> +CONFIG_MAC80211=m
+> +CONFIG_MAC80211_LEDS=y
+> +CONFIG_RFKILL=y
+> +CONFIG_RFKILL_INPUT=y
+> +CONFIG_PCCARD=y
+> +CONFIG_DEVTMPFS=y
+> +CONFIG_DEVTMPFS_MOUNT=y
+> +# CONFIG_STANDALONE is not set
+> +# CONFIG_PREVENT_FIRMWARE_BUILD is not set
+> +# CONFIG_ALLOW_DEV_COREDUMP is not set
+> +CONFIG_MTD=y
+> +CONFIG_MTD_CMDLINE_PARTS=y
+> +CONFIG_BLK_DEV_LOOP=y
+> +CONFIG_BLK_DEV_RAM=y
+> +CONFIG_BLK_DEV_RAM_COUNT=1
+> +CONFIG_BLK_DEV_RAM_SIZE=8192
+> +CONFIG_EEPROM_AT24=y
+> +CONFIG_SCSI=y
+> +CONFIG_BLK_DEV_SD=y
+> +CONFIG_NETDEVICES=y
+> +CONFIG_MACB=y
+> +CONFIG_MICREL_PHY=y
+> +CONFIG_INPUT_EVDEV=y
+> +CONFIG_KEYBOARD_GPIO=y
+> +# CONFIG_INPUT_MOUSE is not set
+> +CONFIG_LEGACY_PTY_COUNT=4
+> +CONFIG_SERIAL_ATMEL=y
+> +CONFIG_SERIAL_ATMEL_CONSOLE=y
+> +CONFIG_HW_RANDOM=y
+> +CONFIG_I2C=y
+> +CONFIG_I2C_CHARDEV=y
+> +CONFIG_I2C_AT91=y
+> +CONFIG_SPI=y
+> +CONFIG_SPI_MEM=y
+> +CONFIG_SPI_ATMEL=y
+> +CONFIG_PINCTRL_AT91=y
+> +CONFIG_PINCTRL_AT91PIO4=y
+> +CONFIG_GPIO_SYSFS=y
+> +CONFIG_POWER_RESET=y
+> +CONFIG_POWER_RESET_AT91_RESET=y
+> +CONFIG_POWER_RESET_AT91_SAMA5D2_SHDWC=y
+> +# CONFIG_HWMON is not set
+> +CONFIG_WATCHDOG=y
+> +CONFIG_SAMA5D4_WATCHDOG=y
+> +CONFIG_MFD_ATMEL_FLEXCOM=y
+> +CONFIG_REGULATOR=y
+> +CONFIG_REGULATOR_FIXED_VOLTAGE=y
+> +CONFIG_REGULATOR_MCP16502=y
+> +CONFIG_MEDIA_SUPPORT=y
+> +CONFIG_MEDIA_SUPPORT_FILTER=y
+> +# CONFIG_MEDIA_SUBDRV_AUTOSELECT is not set
+> +CONFIG_MEDIA_CAMERA_SUPPORT=y
+> +CONFIG_MEDIA_PLATFORM_SUPPORT=y
+> +CONFIG_V4L_PLATFORM_DRIVERS=y
+> +CONFIG_VIDEO_IMX219=m
+> +CONFIG_VIDEO_IMX274=m
+> +CONFIG_VIDEO_OV5647=m
+> +CONFIG_SOUND=y
+> +CONFIG_SND=y
+> +CONFIG_SND_SOC=y
+> +CONFIG_SND_ATMEL_SOC=y
+> +CONFIG_SND_SOC_MIKROE_PROTO=m
+> +CONFIG_SND_MCHP_SOC_I2S_MCC=y
+> +CONFIG_SND_MCHP_SOC_SPDIFTX=y
+> +CONFIG_SND_MCHP_SOC_SPDIFRX=y
+> +CONFIG_SND_SOC_PCM5102A=y
+> +CONFIG_SND_SOC_SPDIF=y
+> +CONFIG_SND_SIMPLE_CARD=y
+> +CONFIG_USB=y
+> +CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+> +CONFIG_USB_DYNAMIC_MINORS=y
+> +CONFIG_USB_EHCI_HCD=y
+> +CONFIG_USB_OHCI_HCD=y
+> +CONFIG_USB_STORAGE=y
+> +CONFIG_USB_UAS=y
+> +CONFIG_USB_GADGET=y
+> +CONFIG_U_SERIAL_CONSOLE=y
+> +CONFIG_USB_ATMEL_USBA=m
+> +CONFIG_USB_CONFIGFS=y
+> +CONFIG_USB_CONFIGFS_ACM=y
+> +CONFIG_USB_CONFIGFS_MASS_STORAGE=y
+> +CONFIG_USB_CONFIGFS_F_UVC=y
+> +CONFIG_USB_G_SERIAL=m
+> +CONFIG_MMC=y
+> +CONFIG_MMC_SDHCI=y
+> +CONFIG_MMC_SDHCI_PLTFM=y
+> +CONFIG_MMC_SDHCI_OF_AT91=y
+> +CONFIG_NEW_LEDS=y
+> +CONFIG_LEDS_CLASS=y
+> +CONFIG_LEDS_GPIO=y
+> +CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+> +CONFIG_RTC_CLASS=y
+> +# CONFIG_RTC_NVMEM is not set
+> +CONFIG_RTC_DRV_AT91RM9200=y
+> +CONFIG_RTC_DRV_AT91SAM9=y
+> +CONFIG_DMADEVICES=y
+> +CONFIG_AT_XDMAC=y
+> +CONFIG_DMATEST=y
+> +CONFIG_STAGING=y
+> +CONFIG_MICROCHIP_PIT64B=y
+> +# CONFIG_IOMMU_SUPPORT is not set
+> +# CONFIG_ATMEL_EBI is not set
+> +CONFIG_IIO=y
+> +CONFIG_IIO_SW_TRIGGER=y
+> +CONFIG_AT91_SAMA5D2_ADC=y
+> +CONFIG_PWM=y
+> +CONFIG_PWM_ATMEL=y
+> +CONFIG_EXT2_FS=y
+> +CONFIG_EXT3_FS=y
+> +CONFIG_FANOTIFY=y
+> +CONFIG_VFAT_FS=y
+> +CONFIG_TMPFS=y
+> +CONFIG_NFS_FS=y
+> +CONFIG_ROOT_NFS=y
+> +CONFIG_NLS_CODEPAGE_437=y
+> +CONFIG_NLS_CODEPAGE_850=y
+> +CONFIG_NLS_ISO8859_1=y
+> +CONFIG_NLS_UTF8=y
+> +CONFIG_LSM="N"
+> +CONFIG_CRYPTO_DEFLATE=y
+> +CONFIG_CRYPTO_LZO=y
+> +# CONFIG_CRYPTO_HW is not set
+> +CONFIG_CRC_CCITT=y
+> +CONFIG_CRC_ITU_T=y
+> +CONFIG_DMA_CMA=y
+> +CONFIG_CMA_SIZE_MBYTES=32
+> +CONFIG_CMA_ALIGNMENT=9
+> +# CONFIG_SECTION_MISMATCH_WARN_ONLY is not set
+> +CONFIG_DEBUG_FS=y
+> +# CONFIG_DEBUG_MISC is not set
+> +# CONFIG_SCHED_DEBUG is not set
+> +CONFIG_STACKTRACE=y
+> +# CONFIG_FTRACE is not set
+> +CONFIG_DEBUG_USER=y
+> +# CONFIG_RUNTIME_TESTING_MENU is not set
+> 
 
 
 -- 
 Nicolas Ferre
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
