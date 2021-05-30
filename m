@@ -1,292 +1,135 @@
-Return-Path: <linux-watchdog-owner@kernel.org>
+Return-Path: <SRS0=k3Qe=KZ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8559C47097
-	for <linux-watchdog@archiver.kernel.org>; Sun, 30 May 2021 09:26:53 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1CC761108
-	for <linux-watchdog@archiver.kernel.org>; Sun, 30 May 2021 09:26:53 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbhE3J2a (ORCPT
-        <rfc822;linux-watchdog@archiver.kernel.org>);
-        Sun, 30 May 2021 05:28:30 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:36415 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbhE3J2Z (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 30 May 2021 05:28:25 -0400
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56DC0C47091
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 30 May 2021 09:28:39 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 1487B610FA
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 30 May 2021 09:28:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1487B610FA
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:List-Subscribe:List-Help:
+	List-Post:List-Archive:List-Unsubscribe:List-Id:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=xDlQ0SN9sWiPpH+lD/gtVN8lIju/JL4Yu5/3YRfEl5Q=; b=iG+nCvR65TaYRf
+	z+V5xYL1Y8rEosXZBUMIuveOEEMhHYpP126q7fU+xXS9/MZiftIkzH9xj+wGfYs/DvTZxCObAJDqW
+	huWcV//6mOk1RCyB284f93wQRDMlVIrJAwTywX/5HtPKyG71Ceu3op7OBPpUQ/9qjNlc4Duuzbcn6
+	fV++1gUBmpEGa2duftmywlWa1yKSWn2NdJ5zT7ZDpqAHxjQS5nRhB1N5yGBAEKdG6OR7Ya062YlQF
+	Bq7csGL+0zLiM79261i9eNMg+gRJoNUS8Aq+YF1I60o7h5Ho1rHBbXL4sJSwm8u3Hg5Hk2DntSLBU
+	+1taVG4TkbBs2SaCOeMA==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1lnHiX-009NEQ-1c; Sun, 30 May 2021 09:26:45 +0000
+Received: from mout.kundenserver.de ([212.227.17.13])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1lnHiS-009NCH-Na; Sun, 30 May 2021 09:26:42 +0000
 Received: from localhost.localdomain ([37.4.249.151]) by
  mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MJW18-1m70QK1a7E-00JrUK; Sun, 30 May 2021 11:26:24 +0200
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
+ id 1N33ZD-1lQ0mo1C7J-013L7p; Sun, 30 May 2021 11:26:23 +0200
+From: Stefan Wahren <stefan.wahren@i2se.com>
+To: Rob Herring <robh+dt@kernel.org>,
+ Nicolas Saenz Julienne <nsaenz@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH 3/6] ARM: dts: Move BCM2711 RPi specific into separate dtsi
-Date:   Sun, 30 May 2021 11:26:12 +0200
-Message-Id: <1622366775-5309-4-git-send-email-stefan.wahren@i2se.com>
+Cc: Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>,
+ Scott Branden <sbranden@broadcom.com>,
+ bcm-kernel-feedback-list@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-watchdog@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH 1/6] ARM: dts: bcm283x: Fix up MMC node names
+Date: Sun, 30 May 2021 11:26:10 +0200
+Message-ID: <1622366775-5309-2-git-send-email-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1622366775-5309-1-git-send-email-stefan.wahren@i2se.com>
 References: <1622366775-5309-1-git-send-email-stefan.wahren@i2se.com>
-X-Provags-ID: V03:K1:M8P44XuD5Ei2tpIgR2aUmBNMRJXf3EtIhzOfSqlO1+r54TVGlJv
- uMtmJe2KUsQ+TXJhrR/6/uvGgPsJ5O7W1K7QC8Hu+WFFOTqcSCNqINi8CwHkTuazSShm+ob
- 1Xhba/kbK5nGBMLvkhI4vDhlQkigi9vnQgLe5JhENEHZRWEWLW5N7p7+m7FJUSSgxnKQyRL
- 5BbmelIYYV8UHW/brQjjw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UQGBprPtfMA=:7/EZxsNghN2DwbripBocLG
- QQlqrpQYui+S0FsZnmexJ8AN3ITvvVOcegFRb3WNSpBV7mDoUzSknXthPUY/aXjR5yj1Ye4fN
- KppoGoth9GQWfFVUY+P7vPuCg7lEW+gvf2aaj2zf7ajy2uXPnbQB8b7jMijhlOT7IzMBUhrCM
- XkTo2MlTle0dLcUsBK1swUea4kmJ0wa2RkzN4EpnIrfAICWerTFRYIGAt9j+tBkUhh1gjrBu2
- 4sjvmoZAvXwFOHog1fW7fAmXU1hJ91ZKFrAul1d4sFFy4+KOu0rPGviAonz5wEQQLgQ6iK/sJ
- VZs8a9k2jk1vHKlj9VI/8LmRDkru3zqihBUAaEey6k03JjiSz2SUt4wYp0HVCXklOcOJ7l+FH
- +5RmJ542u5yM3bEMaHWAko1C7qpnP9o6RYe0YvNDEpchUAXIUMpcMDnhCXWxrcbMlpuEVobPe
- sxzMYANfArGtuyEguCgS1LfiC1zw8xrKzzbEaFMNDnlV6v+0MkHoxi1egZi+eqy8GOtra6bTL
- 8vYTuUA2sJj7CiK8ZSUQ9Q=
-Precedence: bulk
-List-ID: <linux-watchdog.vger.kernel.org>
-X-Mailing-List: linux-watchdog@vger.kernel.org
+X-Provags-ID: V03:K1:zU43vaxG+aviVLNrCI/EJL4B8YCOUb5/nUyh6xHFOfoaHTiga8y
+ mn2JIOjJXEYn0AOzLQCVNHBfyAdXgIBfc+Y0J+1FlTdSQC5PrRSBFyNBUZZ5RQTAV+TwY2U
+ /Vzj0UGSnnRen0BSE7x9Yr5gXZZhuKPZ/WTXOphHSlql+AS1FLSouKmPXmzAic+dyNGxbdG
+ sKHcib4DUxU62/AhxGirA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BXOAIRfrMrA=:OzaYHAs0xVvwgJGlfZz9fb
+ COFvigPoPyhg/rx5AGNc8BDMlY/IzlbHspvjPOJA420EyPLoBacGcxcydhkGGkHiI+i78cja7
+ sngly6uGu9q73jzZLGBUYAkIcFIURnAtA2EN3f+mSGIUI1+BVqGaLwtRGSd/i0BtUWeJa7JcA
+ ehCaVvkHwrNBlenr7SeYe7IJ3OFM6f14LxHST4b/Lww9ccpD6ORVZ4U13GVm4k+RckTFP0nGq
+ u7Jw8guiF+Rqvk1BA9MoEuDex/2CPRYY/JkuXe9U2lHqrQ2MT8naWv0RPUFstHb8TbYw2poCB
+ fceb/jzRARunLREt+JSEWb1v+kbqcBacU1JZOppotTdrQXimED7LkDc4YWF3CZOWASSC+Bs/8
+ hCJwt0MT7LcX8WqxjAdV6FLfPXt8WjsF+fKulKk0xwazhoRNJu6fmx5ectoaWMdttYocIQZJf
+ +uFjagEknAOfdffOhAldjoKVsTGrUeY4zEUQPVb+S+eHLbEJyuTTjaQVggKKyR/i5YCYqOqy5
+ DhTm/CkcF1wmrayKTzj+vs=
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210530_022641_164171_63794FEE 
+X-CRM114-Status: GOOD (  12.01  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210530092610.2VMD7E_-DMnLnqEooXjyyQTgZt6LiUVWZ4nQwyPPJVk@z>
 
-There is a lot of Raspberry Pi specific stuff (neither SoC or board
-specific) for the BCM2711 which is currently in the RPi 4 B dts. In order
-to avoid copy & paste for every new BCM2711 based Raspberry Pi, move it
-into a separate dtsi.
+Fix the node names for the MMC/SD card controller to conform
+to the standard node name mmc@..
 
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 ---
- arch/arm/boot/dts/bcm2711-rpi-4-b.dts | 62 +----------------------------
- arch/arm/boot/dts/bcm2711-rpi.dtsi    | 75 +++++++++++++++++++++++++++++++++++
- 2 files changed, 76 insertions(+), 61 deletions(-)
- create mode 100644 arch/arm/boot/dts/bcm2711-rpi.dtsi
+ arch/arm/boot/dts/bcm2711.dtsi | 2 +-
+ arch/arm/boot/dts/bcm283x.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-index 3b4ab94..78142a0 100644
---- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-+++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-@@ -1,11 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0
- /dts-v1/;
- #include "bcm2711.dtsi"
--#include "bcm2835-rpi.dtsi"
-+#include "bcm2711-rpi.dtsi"
- #include "bcm283x-rpi-usb-peripheral.dtsi"
+diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
+index 720beec..d872064 100644
+--- a/arch/arm/boot/dts/bcm2711.dtsi
++++ b/arch/arm/boot/dts/bcm2711.dtsi
+@@ -413,7 +413,7 @@
+ 		ranges = <0x0 0x7e000000  0x0 0xfe000000  0x01800000>;
+ 		dma-ranges = <0x0 0xc0000000  0x0 0x00000000  0x40000000>;
  
--#include <dt-bindings/reset/raspberrypi,firmware-reset.h>
--
- / {
- 	compatible = "raspberrypi,4-model-b", "brcm,bcm2711";
- 	model = "Raspberry Pi 4 Model B";
-@@ -22,10 +20,7 @@
- 	};
+-		emmc2: emmc2@7e340000 {
++		emmc2: mmc@7e340000 {
+ 			compatible = "brcm,bcm2711-emmc2";
+ 			reg = <0x0 0x7e340000 0x100>;
+ 			interrupts = <GIC_SPI 126 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm/boot/dts/bcm283x.dtsi b/arch/arm/boot/dts/bcm283x.dtsi
+index b83a864..0f3be55 100644
+--- a/arch/arm/boot/dts/bcm283x.dtsi
++++ b/arch/arm/boot/dts/bcm283x.dtsi
+@@ -420,7 +420,7 @@
+ 			status = "disabled";
+ 		};
  
- 	aliases {
--		emmc2bus = &emmc2bus;
- 		ethernet0 = &genet;
--		pcie0 = &pcie0;
--		blconfig = &blconfig;
- 	};
- 
- 	leds {
-@@ -80,11 +75,6 @@
- };
- 
- &firmware {
--	firmware_clocks: clocks {
--		compatible = "raspberrypi,firmware-clocks";
--		#clock-cells = <1>;
--	};
--
- 	expgpio: gpio {
- 		compatible = "raspberrypi,firmware-gpio";
- 		gpio-controller;
-@@ -99,11 +89,6 @@
- 				  "";
- 		status = "okay";
- 	};
--
--	reset: reset {
--		compatible = "raspberrypi,firmware-reset";
--		#reset-cells = <1>;
--	};
- };
- 
- &gpio {
-@@ -180,23 +165,13 @@
- };
- 
- &hdmi0 {
--	clocks = <&firmware_clocks 13>, <&firmware_clocks 14>, <&dvp 0>, <&clk_27MHz>;
--	clock-names = "hdmi", "bvb", "audio", "cec";
--	wifi-2.4ghz-coexistence;
- 	status = "okay";
- };
- 
- &hdmi1 {
--	clocks = <&firmware_clocks 13>, <&firmware_clocks 14>, <&dvp 1>, <&clk_27MHz>;
--	clock-names = "hdmi", "bvb", "audio", "cec";
--	wifi-2.4ghz-coexistence;
- 	status = "okay";
- };
- 
--&hvs {
--	clocks = <&firmware_clocks 4>;
--};
--
- &pixelvalve0 {
- 	status = "okay";
- };
-@@ -219,22 +194,6 @@
- 	status = "okay";
- };
- 
--&rmem {
--	/*
--	 * RPi4's co-processor will copy the board's bootloader configuration
--	 * into memory for the OS to consume. It'll also update this node with
--	 * its placement information.
--	 */
--	blconfig: nvram@0 {
--		compatible = "raspberrypi,bootloader-config", "nvmem-rmem";
--		#address-cells = <1>;
--		#size-cells = <1>;
--		reg = <0x0 0x0 0x0>;
--		no-map;
--		status = "disabled";
--	};
--};
--
- /* SDHCI is used to control the SDIO for wireless */
- &sdhci {
- 	#address-cells = <1>;
-@@ -273,21 +232,6 @@
- 	};
- };
- 
--&pcie0 {
--	pci@1,0 {
--		#address-cells = <3>;
--		#size-cells = <2>;
--		ranges;
--
--		reg = <0 0 0 0 0>;
--
--		usb@1,0 {
--			reg = <0x10000 0 0 0 0>;
--			resets = <&reset RASPBERRYPI_FIRMWARE_RESET_ID_USB>;
--		};
--	};
--};
--
- /* uart0 communicates with the BT module */
- &uart0 {
- 	pinctrl-names = "default";
-@@ -309,10 +253,6 @@
- 	status = "okay";
- };
- 
--&vchiq {
--	interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
--};
--
- &vc4 {
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/bcm2711-rpi.dtsi b/arch/arm/boot/dts/bcm2711-rpi.dtsi
-new file mode 100644
-index 0000000..b4bc7f6
---- /dev/null
-+++ b/arch/arm/boot/dts/bcm2711-rpi.dtsi
-@@ -0,0 +1,75 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "bcm2835-rpi.dtsi"
-+
-+#include <dt-bindings/reset/raspberrypi,firmware-reset.h>
-+
-+/ {
-+	aliases {
-+		emmc2bus = &emmc2bus;
-+		pcie0 = &pcie0;
-+		blconfig = &blconfig;
-+	};
-+};
-+
-+&firmware {
-+	firmware_clocks: clocks {
-+		compatible = "raspberrypi,firmware-clocks";
-+		#clock-cells = <1>;
-+	};
-+
-+	reset: reset {
-+		compatible = "raspberrypi,firmware-reset";
-+		#reset-cells = <1>;
-+	};
-+};
-+
-+&hdmi0 {
-+	clocks = <&firmware_clocks 13>, <&firmware_clocks 14>, <&dvp 0>, <&clk_27MHz>;
-+	clock-names = "hdmi", "bvb", "audio", "cec";
-+	wifi-2.4ghz-coexistence;
-+};
-+
-+&hdmi1 {
-+	clocks = <&firmware_clocks 13>, <&firmware_clocks 14>, <&dvp 1>, <&clk_27MHz>;
-+	clock-names = "hdmi", "bvb", "audio", "cec";
-+	wifi-2.4ghz-coexistence;
-+};
-+
-+&hvs {
-+	clocks = <&firmware_clocks 4>;
-+};
-+
-+&pcie0 {
-+	pci@1,0 {
-+		#address-cells = <3>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		reg = <0 0 0 0 0>;
-+
-+		usb@1,0 {
-+			reg = <0x10000 0 0 0 0>;
-+			resets = <&reset RASPBERRYPI_FIRMWARE_RESET_ID_USB>;
-+		};
-+	};
-+};
-+
-+&rmem {
-+	/*
-+	 * RPi4's co-processor will copy the board's bootloader configuration
-+	 * into memory for the OS to consume. It'll also update this node with
-+	 * its placement information.
-+	 */
-+	blconfig: nvram@0 {
-+		compatible = "raspberrypi,bootloader-config", "nvmem-rmem";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		reg = <0x0 0x0 0x0>;
-+		no-map;
-+		status = "disabled";
-+	};
-+};
-+
-+&vchiq {
-+	interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
-+};
+-		sdhci: sdhci@7e300000 {
++		sdhci: mmc@7e300000 {
+ 			compatible = "brcm,bcm2835-sdhci";
+ 			reg = <0x7e300000 0x100>;
+ 			interrupts = <2 30>;
 -- 
 2.7.4
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
