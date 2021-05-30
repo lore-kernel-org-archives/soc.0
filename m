@@ -7,21 +7,21 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94E02C47089
-	for <soc@archiver.kernel.org>; Sun, 30 May 2021 09:26:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE528C47093
+	for <soc@archiver.kernel.org>; Sun, 30 May 2021 09:26:46 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 14FB0611AD; Sun, 30 May 2021 09:26:45 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+	id 99B0C611AC; Sun, 30 May 2021 09:26:46 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1C54C610FA;
-	Sun, 30 May 2021 09:26:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1C54C610FA
+	by mail.kernel.org (Postfix) with ESMTPS id D8EB7611AE;
+	Sun, 30 May 2021 09:26:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D8EB7611AE
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=stefan.wahren@i2se.com
 Received: from localhost.localdomain ([37.4.249.151]) by
  mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N33ZD-1lQ0mo1C7J-013L7p; Sun, 30 May 2021 11:26:23 +0200
+ id 1N6bwO-1lLJgV48Kc-017zow; Sun, 30 May 2021 11:26:26 +0200
 From: Stefan Wahren <stefan.wahren@i2se.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	Nicolas Saenz Julienne <nsaenz@kernel.org>
@@ -40,61 +40,56 @@ Cc: Florian Fainelli <f.fainelli@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-watchdog@vger.kernel.org,
 	Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH 1/6] ARM: dts: bcm283x: Fix up MMC node names
-Date: Sun, 30 May 2021 11:26:10 +0200
-Message-Id: <1622366775-5309-2-git-send-email-stefan.wahren@i2se.com>
+Subject: [PATCH 6/6] arm64: dts: broadcom: Add reference to RPi 400
+Date: Sun, 30 May 2021 11:26:15 +0200
+Message-Id: <1622366775-5309-7-git-send-email-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1622366775-5309-1-git-send-email-stefan.wahren@i2se.com>
 References: <1622366775-5309-1-git-send-email-stefan.wahren@i2se.com>
-X-Provags-ID: V03:K1:zU43vaxG+aviVLNrCI/EJL4B8YCOUb5/nUyh6xHFOfoaHTiga8y
- mn2JIOjJXEYn0AOzLQCVNHBfyAdXgIBfc+Y0J+1FlTdSQC5PrRSBFyNBUZZ5RQTAV+TwY2U
- /Vzj0UGSnnRen0BSE7x9Yr5gXZZhuKPZ/WTXOphHSlql+AS1FLSouKmPXmzAic+dyNGxbdG
- sKHcib4DUxU62/AhxGirA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BXOAIRfrMrA=:OzaYHAs0xVvwgJGlfZz9fb
- COFvigPoPyhg/rx5AGNc8BDMlY/IzlbHspvjPOJA420EyPLoBacGcxcydhkGGkHiI+i78cja7
- sngly6uGu9q73jzZLGBUYAkIcFIURnAtA2EN3f+mSGIUI1+BVqGaLwtRGSd/i0BtUWeJa7JcA
- ehCaVvkHwrNBlenr7SeYe7IJ3OFM6f14LxHST4b/Lww9ccpD6ORVZ4U13GVm4k+RckTFP0nGq
- u7Jw8guiF+Rqvk1BA9MoEuDex/2CPRYY/JkuXe9U2lHqrQ2MT8naWv0RPUFstHb8TbYw2poCB
- fceb/jzRARunLREt+JSEWb1v+kbqcBacU1JZOppotTdrQXimED7LkDc4YWF3CZOWASSC+Bs/8
- hCJwt0MT7LcX8WqxjAdV6FLfPXt8WjsF+fKulKk0xwazhoRNJu6fmx5ectoaWMdttYocIQZJf
- +uFjagEknAOfdffOhAldjoKVsTGrUeY4zEUQPVb+S+eHLbEJyuTTjaQVggKKyR/i5YCYqOqy5
- DhTm/CkcF1wmrayKTzj+vs=
+X-Provags-ID: V03:K1:q/IbM1RlSms3sEeZn3zRYhinPp/899xwqhVcoiG5y1OBVgwsH6O
+ e7PYL8xAInkdBGzu1pOE39H3F6P9naNEqYuwAc2mpB1xyVd5yvqvtTi658nyWWz/82oD93a
+ 3pkVyQzPykdSjEGnG44qgyV2CFFgG/9NvEtNjADpNfOqWDnJ5sUAZ4jUIhhg8Vrjwyaj2jX
+ qIWusPryam50OJwErfRZA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mju3w2jQjGc=:3jeTML6iMxctlGtCXzoSbA
+ zwlvr5OyBCNqFLSUOhJ/T9zgQMAH6EOsUeqY5HiuWTYdGgVnVt9hGuRNVie2LZPEh3BGfM3T6
+ OqE0716A90G4quNQ7SamvcvomRKgtNRMwamzKI/huIOUbOG4/l+b0gBTscn/w51XsG+vk0eNW
+ eTs/GaWkNk9uvmzGmoyn71cwVQK+yF0F0/4/XbaJKScptNnuoqkmEaoIafFwHD/c/5GEAjE3K
+ PTFM3oxkCN5cW/UNLVHl+305m1HrqMaeWnLRY3GTm207x/weU0iGoTMfRxnw2BbJaqqYGCNDC
+ iIsqV+8//ToAobliW5LFFMr1T15l3PSdWaolSVr5WcS1JxB8yBJKE5y1lNVknMUTfYXjsYLh/
+ oCvsi1B+sQKJD66agRWgCW1JHtTxVWiDI9aS/6ceoWvH3+i2KsZ8W3HweNKdE4Y7583atVle0
+ nS62CzSjpjRgMiGP0slRljV2RAa91HZ8aDpO+/cx+cq74PfrQf7syfLwxTX6979YRCZAj8Cmf
+ chqmXcWOYgNcmADcGiAkbA=
 
-Fix the node names for the MMC/SD card controller to conform
-to the standard node name mmc@..
+This adds a reference to the dts of the Raspberry Pi 400,
+so we don't need to maintain the content in arm64.
 
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 ---
- arch/arm/boot/dts/bcm2711.dtsi | 2 +-
- arch/arm/boot/dts/bcm283x.dtsi | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/broadcom/Makefile            | 3 ++-
+ arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts | 2 ++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts
 
-diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
-index 720beec..d872064 100644
---- a/arch/arm/boot/dts/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/bcm2711.dtsi
-@@ -413,7 +413,7 @@
- 		ranges = <0x0 0x7e000000  0x0 0xfe000000  0x01800000>;
- 		dma-ranges = <0x0 0xc0000000  0x0 0x00000000  0x40000000>;
- 
--		emmc2: emmc2@7e340000 {
-+		emmc2: mmc@7e340000 {
- 			compatible = "brcm,bcm2711-emmc2";
- 			reg = <0x0 0x7e340000 0x100>;
- 			interrupts = <GIC_SPI 126 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm/boot/dts/bcm283x.dtsi b/arch/arm/boot/dts/bcm283x.dtsi
-index b83a864..0f3be55 100644
---- a/arch/arm/boot/dts/bcm283x.dtsi
-+++ b/arch/arm/boot/dts/bcm283x.dtsi
-@@ -420,7 +420,7 @@
- 			status = "disabled";
- 		};
- 
--		sdhci: sdhci@7e300000 {
-+		sdhci: mmc@7e300000 {
- 			compatible = "brcm,bcm2835-sdhci";
- 			reg = <0x7e300000 0x100>;
- 			interrupts = <2 30>;
+diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
+index 998e240..11eae3e 100644
+--- a/arch/arm64/boot/dts/broadcom/Makefile
++++ b/arch/arm64/boot/dts/broadcom/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+-dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-4-b.dtb \
++dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
++			      bcm2711-rpi-4-b.dtb \
+ 			      bcm2837-rpi-3-a-plus.dtb \
+ 			      bcm2837-rpi-3-b.dtb \
+ 			      bcm2837-rpi-3-b-plus.dtb \
+diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts
+new file mode 100644
+index 0000000..b9000f5
+--- /dev/null
++++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts
+@@ -0,0 +1,2 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "arm/bcm2711-rpi-400.dts"
 -- 
 2.7.4
 
