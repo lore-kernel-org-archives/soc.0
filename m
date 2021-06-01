@@ -1,165 +1,211 @@
-Return-Path: <SRS0=hZ7m=K3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <nsaenz@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89223C47080
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Jun 2021 10:00:22 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 45CB761287
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Jun 2021 10:00:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 45CB761287
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Subject:Cc:To:
-	From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=6Onbb8Pw2jxW8eqFeeQa9UiXUwO++UJ3wEHOxmFyJR8=; b=SUFDT9jViDEuNB
-	nH1BLNkCJzVmm1tLIvJEMfMacbdfWtmIPx7Hb17IycPdzrMAHjwq8zWrbvXfYPqa+m+LPog/xCbtd
-	luAf8U0S3Wv7DVKjt/qwlBckpKoLImx/d0eKobQdPyWnegIN2nscn3Vs6Kw9YBsd5rpBhZOcDTLbQ
-	7+R6DCIqLhwat817/qoavllzbbgsMkGa+oh+KMHpqXqv/A4WFaCw30ECT33uG9IOo+aGwzQZ98OmL
-	MhmatIQhF8gfoD4yq7pYBwrpLMb60GM1W5MlHB+eKM0Yi5soyfZDsT6lhcBIn3SPgr0wmapkYkm8y
-	zl61G6sJbYuu217sqlLA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lo1Am-00FlFY-D7; Tue, 01 Jun 2021 09:58:56 +0000
-Received: from foss.arm.com ([217.140.110.172])
- by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lo1Ah-00FlDQ-8H
- for linux-arm-kernel@lists.infradead.org; Tue, 01 Jun 2021 09:58:54 +0000
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4FB6D11D4;
- Tue,  1 Jun 2021 02:58:46 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 47DE73F73D;
- Tue,  1 Jun 2021 02:58:45 -0700 (PDT)
-Date: Tue, 1 Jun 2021 10:58:38 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE2EDC4708F
+	for <soc@archiver.kernel.org>; Tue,  1 Jun 2021 10:03:12 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A08356139A; Tue,  1 Jun 2021 10:03:12 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 274BD6136E;
+	Tue,  1 Jun 2021 10:03:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1622541792;
+	bh=0jRus9vAu2IKxyB4L0YFCgNgnJE8tYA0twVfow3cZLY=;
+	h=Subject:From:To:List-Id:Cc:Date:In-Reply-To:References:From;
+	b=dYutvFXC05lIVPcV9fZpe5SSyzFnai6xlfSVoeuplbYGGIAqdpRdCHJliDUWLF6wB
+	 LW/f8mB2MaW5Frq7hqtYDVceXU6cuGiCnF+B0a+wIbbhcCeQnCiDbOpCkRFbUwCzBH
+	 OIilzuUt31V291ewa7jwBh0R02PRPlHhRr8oAUPvIlb73aD+k6udif9lAYl7HYJeay
+	 p9A83sKyHQWWP+tAByYhNbx7fm4jEXKQBOJa7j8OB91eB0oJQ3OeHRenCHvOYCgag/
+	 1tMYgQl5ZshPAZjP8covbxntLDjIDt7g8T90zp4fyRuV0bQ2OTJpxOR8laFyN/jpqy
+	 dhx5ehvo24zug==
+Message-ID: <86a7cded6e3e17b0ab347e55b38a44e10bc4e46a.camel@kernel.org>
+Subject: Re: [PATCH 3/6] ARM: dts: Move BCM2711 RPi specific into separate
+ dtsi
+From: nicolas saenz julienne <nsaenz@kernel.org>
+To: Stefan Wahren <stefan.wahren@i2se.com>, Rob Herring <robh+dt@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>,
- ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Kevin Hilman <khilman@kernel.org>,
- Sudeep Holla <sudeep.holla@arm.com>, Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_ffa: Initial support for v5.14
-Message-ID: <20210601095838.GA838783@bogus>
+Cc: Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>, 
+ Scott Branden <sbranden@broadcom.com>,
+ bcm-kernel-feedback-list@broadcom.com, Arnd Bergmann <arnd@arndb.de>,  Olof
+ Johansson <olof@lixom.net>, soc@kernel.org, Wim Van Sebroeck
+ <wim@linux-watchdog.org>,  Guenter Roeck <linux@roeck-us.net>,
+ devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org
+Date: Tue, 01 Jun 2021 12:03:07 +0200
+In-Reply-To: <1622366775-5309-4-git-send-email-stefan.wahren@i2se.com>
+References: <1622366775-5309-1-git-send-email-stefan.wahren@i2se.com>
+	 <1622366775-5309-4-git-send-email-stefan.wahren@i2se.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.0 (3.40.0-1.fc34) 
 MIME-Version: 1.0
-Content-Disposition: inline
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210601_025851_430453_2C38F579 
-X-CRM114-Status: GOOD (  15.08  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210601095838.ernErqojiMQcU3zdet2QsK76frRFA_6y5A964c236nQ@z>
+Content-Transfer-Encoding: 8bit
 
-Hi ARM SoC Team,
+Hi Stefan,
+Thanks for having a go at this.
 
-Please pull !
+On Sun, 2021-05-30 at 11:26 +0200, Stefan Wahren wrote:
+> There is a lot of Raspberry Pi specific stuff (neither SoC or board
+> specific) for the BCM2711 which is currently in the RPi 4 B dts. In order
+> to avoid copy & paste for every new BCM2711 based Raspberry Pi, move it
+> into a separate dtsi.
+> 
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> ---
+>  arch/arm/boot/dts/bcm2711-rpi-4-b.dts | 62 +----------------------------
+>  arch/arm/boot/dts/bcm2711-rpi.dtsi    | 75 +++++++++++++++++++++++++++++++++++
+>  2 files changed, 76 insertions(+), 61 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/bcm2711-rpi.dtsi
+> 
+> diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+> index 3b4ab94..78142a0 100644
+> --- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+> +++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+> @@ -1,11 +1,9 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /dts-v1/;
+>  #include "bcm2711.dtsi"
+> -#include "bcm2835-rpi.dtsi"
+> +#include "bcm2711-rpi.dtsi"
+>  #include "bcm283x-rpi-usb-peripheral.dtsi"
+>  
+> 
+> -#include <dt-bindings/reset/raspberrypi,firmware-reset.h>
+> -
+>  / {
+>  	compatible = "raspberrypi,4-model-b", "brcm,bcm2711";
+>  	model = "Raspberry Pi 4 Model B";
+> @@ -22,10 +20,7 @@
+>  	};
+>  
+> 
+>  	aliases {
+> -		emmc2bus = &emmc2bus;
+>  		ethernet0 = &genet;
 
-This is a new driver pull request. One of the arm64 patch is being
-pulled from a stable arm64 branch for-next/ffa as the other patches
-are dependent of the same.
+Why not picking this one? nor the relevant DT nodes? I belive it's available on
+all the bcm2711 based boards.
 
-Background
-----------
-This has been on the list for almost a year now with changing requirements.
-Initially Arm KVM wanted to use this via userspace interface in VMM to
-communicate with VMs. But it was later dropped in favour of arch-agnostic
-interface[1].
+> -		pcie0 = &pcie0;
+> -		blconfig = &blconfig;
+>  	};
+>  
+> 
+>  	leds {
+> @@ -80,11 +75,6 @@
+>  };
+>  
+> 
+>  &firmware {
+> -	firmware_clocks: clocks {
+> -		compatible = "raspberrypi,firmware-clocks";
+> -		#clock-cells = <1>;
+> -	};
+> -
+>  	expgpio: gpio {
 
-Also there was some discussion on the dt-bindings which was dropped
-completely. Though we need to workaround the lack of full discoveribility
-in v1.0 spec, it is now being fixed for the next version of the spec.
+Why not taking this one too and letting each dts file define its own
+'gpio-line-names'?
+
+>  		compatible = "raspberrypi,firmware-gpio";
+>  		gpio-controller;
+> @@ -99,11 +89,6 @@
+>  				  "";
+>  		status = "okay";
+>  	};
+> -
+> -	reset: reset {
+> -		compatible = "raspberrypi,firmware-reset";
+> -		#reset-cells = <1>;
+> -	};
+>  };
+>  
+> 
+>  &gpio {
+> @@ -180,23 +165,13 @@
+>  };
+>  
+> 
+>  &hdmi0 {
+> -	clocks = <&firmware_clocks 13>, <&firmware_clocks 14>, <&dvp 0>, <&clk_27MHz>;
+> -	clock-names = "hdmi", "bvb", "audio", "cec";
+> -	wifi-2.4ghz-coexistence;
+>  	status = "okay";
+>  };
+>  
+> 
+>  &hdmi1 {
+> -	clocks = <&firmware_clocks 13>, <&firmware_clocks 14>, <&dvp 1>, <&clk_27MHz>;
+> -	clock-names = "hdmi", "bvb", "audio", "cec";
+> -	wifi-2.4ghz-coexistence;
+>  	status = "okay";
+>  };
+>  
+> 
+> -&hvs {
+> -	clocks = <&firmware_clocks 4>;
+> -};
+> -
+>  &pixelvalve0 {
+>  	status = "okay";
+>  };
+> @@ -219,22 +194,6 @@
+>  	status = "okay";
+>  };
+>  
+> 
+> -&rmem {
+> -	/*
+> -	 * RPi4's co-processor will copy the board's bootloader configuration
+> -	 * into memory for the OS to consume. It'll also update this node with
+> -	 * its placement information.
+> -	 */
+> -	blconfig: nvram@0 {
+> -		compatible = "raspberrypi,bootloader-config", "nvmem-rmem";
+> -		#address-cells = <1>;
+> -		#size-cells = <1>;
+> -		reg = <0x0 0x0 0x0>;
+> -		no-map;
+> -		status = "disabled";
+> -	};
+> -};
+> -
+>  /* SDHCI is used to control the SDIO for wireless */
+>  &sdhci {
+>  	#address-cells = <1>;
+> @@ -273,21 +232,6 @@
+>  	};
+>  };
+>  
+> 
+> -&pcie0 {
+> -	pci@1,0 {
+> -		#address-cells = <3>;
+> -		#size-cells = <2>;
+> -		ranges;
+> -
+> -		reg = <0 0 0 0 0>;
+> -
+> -		usb@1,0 {
+> -			reg = <0x10000 0 0 0 0>;
+> -			resets = <&reset RASPBERRYPI_FIRMWARE_RESET_ID_USB>;
+> -		};
+> -	};
+> -};
+> -
+
+This is not relevant to CM4, maybe we should leave it in the .dts
+
+>  /* uart0 communicates with the BT module */
+>  &uart0 {
+
+What about 'uart1'? I belive the configuration is the same for all boards. pwm1
+also comes to mind.
 
 Regards,
-Sudeep
+Nicolas
 
-[1] https://mirrors.edge.kernel.org/pub/linux/kernel/people/will/slides/kvmforum-2020-edited.pdf
--->8
 
-The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
-
-  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/arm-ffa-5.14
-
-for you to fetch changes up to cc2195fe536c28e192df5d07e6dd277af36814b4:
-
-  firmware: arm_ffa: Add support for MEM_* interfaces (2021-05-26 22:38:43 +0100)
-
-----------------------------------------------------------------
-Arm Firmware Framework for ARMv8-A(FFA) interface driver
-
-The Arm FFA specification describes a software architecture to
-leverages the virtualization extension to isolate software images
-provided by an ecosystem of vendors from each other and describes
-interfaces that standardize communication between the various software
-images including communication between images in the Secure world and
-Normal world. Any Hypervisor could use the FFA interfaces to enable
-communication between VMs it manages.
-
-The Hypervisor a.k.a Partition managers in FFA terminology can assign
-system resources(Memory regions, Devices, CPU cycles) to the partitions
-and manage isolation amongst them.
-
-This is the initial and minimal support for the FFA interface to enable
-communication between secure partitions and the normal world OS.
-
-----------------------------------------------------------------
-Sudeep Holla (6):
-      arm64: smccc: Add support for SMCCCv1.2 extended input/output registers
-      firmware: arm_ffa: Add initial FFA bus support for device enumeration
-      firmware: arm_ffa: Add initial Arm FFA driver support
-      firmware: arm_ffa: Add support for SMCCC as transport to FFA driver
-      firmware: arm_ffa: Setup in-kernel users of FFA partitions
-      firmware: arm_ffa: Add support for MEM_* interfaces
-
- MAINTAINERS                       |   7 +
- arch/arm64/kernel/asm-offsets.c   |   9 +
- arch/arm64/kernel/smccc-call.S    |  57 +++
- drivers/firmware/Kconfig          |   1 +
- drivers/firmware/Makefile         |   1 +
- drivers/firmware/arm_ffa/Kconfig  |  21 ++
- drivers/firmware/arm_ffa/Makefile |   6 +
- drivers/firmware/arm_ffa/bus.c    | 210 +++++++++++
- drivers/firmware/arm_ffa/common.h |  31 ++
- drivers/firmware/arm_ffa/driver.c | 731 ++++++++++++++++++++++++++++++++++++++
- drivers/firmware/arm_ffa/smccc.c  |  39 ++
- include/linux/arm-smccc.h         |  55 +++
- include/linux/arm_ffa.h           | 267 ++++++++++++++
- 13 files changed, 1435 insertions(+)
- create mode 100644 drivers/firmware/arm_ffa/Kconfig
- create mode 100644 drivers/firmware/arm_ffa/Makefile
- create mode 100644 drivers/firmware/arm_ffa/bus.c
- create mode 100644 drivers/firmware/arm_ffa/common.h
- create mode 100644 drivers/firmware/arm_ffa/driver.c
- create mode 100644 drivers/firmware/arm_ffa/smccc.c
- create mode 100644 include/linux/arm_ffa.h
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
