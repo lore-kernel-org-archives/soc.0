@@ -1,47 +1,60 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=hZ7m=K3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E77A9C4708F
-	for <linux-devicetree@archiver.kernel.org>; Tue,  1 Jun 2021 18:51:52 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF49C610C8
-	for <linux-devicetree@archiver.kernel.org>; Tue,  1 Jun 2021 18:51:52 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234513AbhFASxd convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Tue, 1 Jun 2021 14:53:33 -0400
-Received: from mout.kundenserver.de ([217.72.192.74]:60287 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233397AbhFASxd (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Tue, 1 Jun 2021 14:53:33 -0400
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D4D1C47080
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Jun 2021 18:53:37 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 3C23D610C8
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Jun 2021 18:53:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3C23D610C8
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:
+	Message-ID:From:References:Cc:To:Subject:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Owner;
+	bh=5yqfEnzzpd6YdgK6PE91wZZiF2YUePq0rhITWPfn9VU=; b=MgSpVoFfKk6ECq7QdbvqbP95Zb
+	xk3pZnxH98PTm9v2a15fY7Vv8NNvNOGet3q7SRLGdZRuZDPy7FOQsEIa3CwN879Jj/JdQUMkTDYAS
+	wJFRoKLJ0Z5FLIXAcAGWtAtKiQ1vbZikbPw3uWAa2K336c/Ov56yi+07kUJyl1chHte/5jR2u6Xeh
+	A2XdHTGWmQ10GsxcPmuxjiwUt0Y+jHQGgCHPoDpIOYIe+x0lWWgqfd64keXvTxqDHxYZ8/DYugyyg
+	duRImZBJaiDHX1uV3GwQmc20gP6pUA9eREKM15PhF84pYunR3horVz4PQ8upSXBHf8FqdYLcNekVE
+	KF+O7omw==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1lo9US-000TX4-BQ; Tue, 01 Jun 2021 18:51:48 +0000
+Received: from mout.kundenserver.de ([217.72.192.74])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1lo9UO-000TNV-3i; Tue, 01 Jun 2021 18:51:46 +0000
 Received: from [192.168.1.107] ([37.4.249.151]) by mrelayeu.kundenserver.de
  (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
  1MVNEv-1lvgXT2dFv-00SKPS; Tue, 01 Jun 2021 20:51:24 +0200
-Subject: Re: [PATCH 3/6] ARM: dts: Move BCM2711 RPi specific into separate
- dtsi
-To:     nicolas saenz julienne <nsaenz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 3/6] ARM: dts: Move BCM2711 RPi specific into separate dtsi
+To: nicolas saenz julienne <nsaenz@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>,
+ Scott Branden <sbranden@broadcom.com>,
+ bcm-kernel-feedback-list@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, devicetree@vger.kernel.org,
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-watchdog@vger.kernel.org
 References: <1622366775-5309-1-git-send-email-stefan.wahren@i2se.com>
  <1622366775-5309-4-git-send-email-stefan.wahren@i2se.com>
  <86a7cded6e3e17b0ab347e55b38a44e10bc4e46a.camel@kernel.org>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
+From: Stefan Wahren <stefan.wahren@i2se.com>
 Autocrypt: addr=stefan.wahren@i2se.com; keydata=
  LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
  CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
@@ -173,13 +186,11 @@ Autocrypt: addr=stefan.wahren@i2se.com; keydata=
  bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
  LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
 Message-ID: <320c7299-3f89-861c-6a80-043b209e79e1@i2se.com>
-Date:   Tue, 1 Jun 2021 20:51:22 +0200
+Date: Tue, 1 Jun 2021 20:51:22 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
 In-Reply-To: <86a7cded6e3e17b0ab347e55b38a44e10bc4e46a.camel@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
 Content-Language: en-US
 X-Provags-ID: V03:K1:o7ttkHLk5fVzz0qVkbZYtChgTWMLIdtTDQqTt2iYyb3vtf+2cTX
  J365cIOK5dHUOxQ1UFhLw5avQZCRBhnVVMWP1zjYrnfrrmttHLJ07k+q8oL/zik5PTQInsf
@@ -194,190 +205,107 @@ X-UI-Out-Filterresults: notjunk:1;V03:K0:dXawFxPYhf0=:gkYO/bDcMJfx4VvPAOWWOj
  yjB+gGnTcWGMb8c7PKpB7umWUa6vzQcUvXXn6Bwl3CsKHHYz2znHvBoat7GjAyvHsQz2Vqwsp
  IRQ9F2c+Oxxz7ml7MEuzD7wyQ5UkOHeOpFW0C1HOcuVABwXmsqaw2GWLF3aCd0UyVGXdkoF9C
  whUCTCokHEMrRi9uuZZ0zg=
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210601_115144_482760_B0EE10C4 
+X-CRM114-Status: GOOD (  18.21  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210601185122.CSRxG5HZ_RYw-39PuosKSqUX-fWszKTa9uNw-s1wQrM@z>
 
-Hi Nicolas,
-
-Am 01.06.21 um 12:03 schrieb nicolas saenz julienne:
-> Hi Stefan,
-> Thanks for having a go at this.
->
-> On Sun, 2021-05-30 at 11:26 +0200, Stefan Wahren wrote:
->> There is a lot of Raspberry Pi specific stuff (neither SoC or board
->> specific) for the BCM2711 which is currently in the RPi 4 B dts. In order
->> to avoid copy & paste for every new BCM2711 based Raspberry Pi, move it
->> into a separate dtsi.
->>
->> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
->> ---
->>  arch/arm/boot/dts/bcm2711-rpi-4-b.dts | 62 +----------------------------
->>  arch/arm/boot/dts/bcm2711-rpi.dtsi    | 75 +++++++++++++++++++++++++++++++++++
->>  2 files changed, 76 insertions(+), 61 deletions(-)
->>  create mode 100644 arch/arm/boot/dts/bcm2711-rpi.dtsi
->>
->> diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
->> index 3b4ab94..78142a0 100644
->> --- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
->> +++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
->> @@ -1,11 +1,9 @@
->>  // SPDX-License-Identifier: GPL-2.0
->>  /dts-v1/;
->>  #include "bcm2711.dtsi"
->> -#include "bcm2835-rpi.dtsi"
->> +#include "bcm2711-rpi.dtsi"
->>  #include "bcm283x-rpi-usb-peripheral.dtsi"
->>  
->>
->> -#include <dt-bindings/reset/raspberrypi,firmware-reset.h>
->> -
->>  / {
->>  	compatible = "raspberrypi,4-model-b", "brcm,bcm2711";
->>  	model = "Raspberry Pi 4 Model B";
->> @@ -22,10 +20,7 @@
->>  	};
->>  
->>
->>  	aliases {
->> -		emmc2bus = &emmc2bus;
->>  		ethernet0 = &genet;
-> Why not picking this one? nor the relevant DT nodes? I belive it's available on
-> all the bcm2711 based boards.
-While i agree that most of the boards [1] support Ethernet, the PHY
-stuff is almost board specific.
->
->> -		pcie0 = &pcie0;
->> -		blconfig = &blconfig;
->>  	};
->>  
->>
->>  	leds {
->> @@ -80,11 +75,6 @@
->>  };
->>  
->>
->>  &firmware {
->> -	firmware_clocks: clocks {
->> -		compatible = "raspberrypi,firmware-clocks";
->> -		#clock-cells = <1>;
->> -	};
->> -
->>  	expgpio: gpio {
-> Why not taking this one too and letting each dts file define its own
-> 'gpio-line-names'?
-Agree
->
->>  		compatible = "raspberrypi,firmware-gpio";
->>  		gpio-controller;
->> @@ -99,11 +89,6 @@
->>  				  "";
->>  		status = "okay";
->>  	};
->> -
->> -	reset: reset {
->> -		compatible = "raspberrypi,firmware-reset";
->> -		#reset-cells = <1>;
->> -	};
->>  };
->>  
->>
->>  &gpio {
->> @@ -180,23 +165,13 @@
->>  };
->>  
->>
->>  &hdmi0 {
->> -	clocks = <&firmware_clocks 13>, <&firmware_clocks 14>, <&dvp 0>, <&clk_27MHz>;
->> -	clock-names = "hdmi", "bvb", "audio", "cec";
->> -	wifi-2.4ghz-coexistence;
->>  	status = "okay";
->>  };
->>  
->>
->>  &hdmi1 {
->> -	clocks = <&firmware_clocks 13>, <&firmware_clocks 14>, <&dvp 1>, <&clk_27MHz>;
->> -	clock-names = "hdmi", "bvb", "audio", "cec";
->> -	wifi-2.4ghz-coexistence;
->>  	status = "okay";
->>  };
->>  
->>
->> -&hvs {
->> -	clocks = <&firmware_clocks 4>;
->> -};
->> -
->>  &pixelvalve0 {
->>  	status = "okay";
->>  };
->> @@ -219,22 +194,6 @@
->>  	status = "okay";
->>  };
->>  
->>
->> -&rmem {
->> -	/*
->> -	 * RPi4's co-processor will copy the board's bootloader configuration
->> -	 * into memory for the OS to consume. It'll also update this node with
->> -	 * its placement information.
->> -	 */
->> -	blconfig: nvram@0 {
->> -		compatible = "raspberrypi,bootloader-config", "nvmem-rmem";
->> -		#address-cells = <1>;
->> -		#size-cells = <1>;
->> -		reg = <0x0 0x0 0x0>;
->> -		no-map;
->> -		status = "disabled";
->> -	};
->> -};
->> -
->>  /* SDHCI is used to control the SDIO for wireless */
->>  &sdhci {
->>  	#address-cells = <1>;
->> @@ -273,21 +232,6 @@
->>  	};
->>  };
->>  
->>
->> -&pcie0 {
->> -	pci@1,0 {
->> -		#address-cells = <3>;
->> -		#size-cells = <2>;
->> -		ranges;
->> -
->> -		reg = <0 0 0 0 0>;
->> -
->> -		usb@1,0 {
->> -			reg = <0x10000 0 0 0 0>;
->> -			resets = <&reset RASPBERRYPI_FIRMWARE_RESET_ID_USB>;
->> -		};
->> -	};
->> -};
->> -
-> This is not relevant to CM4, maybe we should leave it in the .dts
-Okay
->
->>  /* uart0 communicates with the BT module */
->>  &uart0 {
-> What about 'uart1'? I belive the configuration is the same for all boards. pwm1
-> also comes to mind.
-
-I wouldn't include pinmux dependent stuff here, because this is very
-specific to the board and use case [1].
-
-But there is a trick for the Pi 400, which is very similiar to the Pi 4
-B. We could include the pi4.dts in the pi400.dts. Additional i would
-keep this patch for CM4 and co.
-
-Regards
-Stefan
-
-[1] -
-https://afterhourscoding.wordpress.com/2021/02/21/a-list-of-raspberry-pi-compute-module-carrier-boards-and-devices/
-
->
-> Regards,
-> Nicolas
->
->
-
+SGkgTmljb2xhcywKCkFtIDAxLjA2LjIxIHVtIDEyOjAzIHNjaHJpZWIgbmljb2xhcyBzYWVueiBq
+dWxpZW5uZToKPiBIaSBTdGVmYW4sCj4gVGhhbmtzIGZvciBoYXZpbmcgYSBnbyBhdCB0aGlzLgo+
+Cj4gT24gU3VuLCAyMDIxLTA1LTMwIGF0IDExOjI2ICswMjAwLCBTdGVmYW4gV2FocmVuIHdyb3Rl
+Ogo+PiBUaGVyZSBpcyBhIGxvdCBvZiBSYXNwYmVycnkgUGkgc3BlY2lmaWMgc3R1ZmYgKG5laXRo
+ZXIgU29DIG9yIGJvYXJkCj4+IHNwZWNpZmljKSBmb3IgdGhlIEJDTTI3MTEgd2hpY2ggaXMgY3Vy
+cmVudGx5IGluIHRoZSBSUGkgNCBCIGR0cy4gSW4gb3JkZXIKPj4gdG8gYXZvaWQgY29weSAmIHBh
+c3RlIGZvciBldmVyeSBuZXcgQkNNMjcxMSBiYXNlZCBSYXNwYmVycnkgUGksIG1vdmUgaXQKPj4g
+aW50byBhIHNlcGFyYXRlIGR0c2kuCj4+Cj4+IFNpZ25lZC1vZmYtYnk6IFN0ZWZhbiBXYWhyZW4g
+PHN0ZWZhbi53YWhyZW5AaTJzZS5jb20+Cj4+IC0tLQo+PiDCoGFyY2gvYXJtL2Jvb3QvZHRzL2Jj
+bTI3MTEtcnBpLTQtYi5kdHMgfCA2MiArLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+PiDC
+oGFyY2gvYXJtL2Jvb3QvZHRzL2JjbTI3MTEtcnBpLmR0c2kgICAgfCA3NSArKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKwo+PiDCoDIgZmlsZXMgY2hhbmdlZCwgNzYgaW5zZXJ0aW9u
+cygrKSwgNjEgZGVsZXRpb25zKC0pCj4+IMKgY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtL2Jv
+b3QvZHRzL2JjbTI3MTEtcnBpLmR0c2kKPj4KPj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3Qv
+ZHRzL2JjbTI3MTEtcnBpLTQtYi5kdHMgYi9hcmNoL2FybS9ib290L2R0cy9iY20yNzExLXJwaS00
+LWIuZHRzCj4+IGluZGV4IDNiNGFiOTQuLjc4MTQyYTAgMTAwNjQ0Cj4+IC0tLSBhL2FyY2gvYXJt
+L2Jvb3QvZHRzL2JjbTI3MTEtcnBpLTQtYi5kdHMKPj4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMv
+YmNtMjcxMS1ycGktNC1iLmR0cwo+PiBAQCAtMSwxMSArMSw5IEBACj4+IMKgLy8gU1BEWC1MaWNl
+bnNlLUlkZW50aWZpZXI6IEdQTC0yLjAKPj4gwqAvZHRzLXYxLzsKPj4gwqAjaW5jbHVkZSAiYmNt
+MjcxMS5kdHNpIgo+PiAtI2luY2x1ZGUgImJjbTI4MzUtcnBpLmR0c2kiCj4+ICsjaW5jbHVkZSAi
+YmNtMjcxMS1ycGkuZHRzaSIKPj4gwqAjaW5jbHVkZSAiYmNtMjgzeC1ycGktdXNiLXBlcmlwaGVy
+YWwuZHRzaSIKPj4gwqAKPj4KPj4gLSNpbmNsdWRlIDxkdC1iaW5kaW5ncy9yZXNldC9yYXNwYmVy
+cnlwaSxmaXJtd2FyZS1yZXNldC5oPgo+PiAtCj4+IMKgLyB7Cj4+IMKgCWNvbXBhdGlibGUgPSAi
+cmFzcGJlcnJ5cGksNC1tb2RlbC1iIiwgImJyY20sYmNtMjcxMSI7Cj4+IMKgCW1vZGVsID0gIlJh
+c3BiZXJyeSBQaSA0IE1vZGVsIEIiOwo+PiBAQCAtMjIsMTAgKzIwLDcgQEAKPj4gwqAJfTsKPj4g
+wqAKPj4KPj4gwqAJYWxpYXNlcyB7Cj4+IC0JCWVtbWMyYnVzID0gJmVtbWMyYnVzOwo+PiDCoAkJ
+ZXRoZXJuZXQwID0gJmdlbmV0Owo+IFdoeSBub3QgcGlja2luZyB0aGlzIG9uZT8gbm9yIHRoZSBy
+ZWxldmFudCBEVCBub2Rlcz8gSSBiZWxpdmUgaXQncyBhdmFpbGFibGUgb24KPiBhbGwgdGhlIGJj
+bTI3MTEgYmFzZWQgYm9hcmRzLgpXaGlsZSBpIGFncmVlIHRoYXQgbW9zdCBvZiB0aGUgYm9hcmRz
+IFsxXSBzdXBwb3J0IEV0aGVybmV0LCB0aGUgUEhZCnN0dWZmIGlzIGFsbW9zdCBib2FyZCBzcGVj
+aWZpYy4KPgo+PiAtCQlwY2llMCA9ICZwY2llMDsKPj4gLQkJYmxjb25maWcgPSAmYmxjb25maWc7
+Cj4+IMKgCX07Cj4+IMKgCj4+Cj4+IMKgCWxlZHMgewo+PiBAQCAtODAsMTEgKzc1LDYgQEAKPj4g
+wqB9Owo+PiDCoAo+Pgo+PiDCoCZmaXJtd2FyZSB7Cj4+IC0JZmlybXdhcmVfY2xvY2tzOiBjbG9j
+a3Mgewo+PiAtCQljb21wYXRpYmxlID0gInJhc3BiZXJyeXBpLGZpcm13YXJlLWNsb2NrcyI7Cj4+
+IC0JCSNjbG9jay1jZWxscyA9IDwxPjsKPj4gLQl9Owo+PiAtCj4+IMKgCWV4cGdwaW86IGdwaW8g
+ewo+IFdoeSBub3QgdGFraW5nIHRoaXMgb25lIHRvbyBhbmQgbGV0dGluZyBlYWNoIGR0cyBmaWxl
+IGRlZmluZSBpdHMgb3duCj4gJ2dwaW8tbGluZS1uYW1lcyc/CkFncmVlCj4KPj4gwqAJCWNvbXBh
+dGlibGUgPSAicmFzcGJlcnJ5cGksZmlybXdhcmUtZ3BpbyI7Cj4+IMKgCQlncGlvLWNvbnRyb2xs
+ZXI7Cj4+IEBAIC05OSwxMSArODksNiBAQAo+PiDCoAkJCQkgICIiOwo+PiDCoAkJc3RhdHVzID0g
+Im9rYXkiOwo+PiDCoAl9Owo+PiAtCj4+IC0JcmVzZXQ6IHJlc2V0IHsKPj4gLQkJY29tcGF0aWJs
+ZSA9ICJyYXNwYmVycnlwaSxmaXJtd2FyZS1yZXNldCI7Cj4+IC0JCSNyZXNldC1jZWxscyA9IDwx
+PjsKPj4gLQl9Owo+PiDCoH07Cj4+IMKgCj4+Cj4+IMKgJmdwaW8gewo+PiBAQCAtMTgwLDIzICsx
+NjUsMTMgQEAKPj4gwqB9Owo+PiDCoAo+Pgo+PiDCoCZoZG1pMCB7Cj4+IC0JY2xvY2tzID0gPCZm
+aXJtd2FyZV9jbG9ja3MgMTM+LCA8JmZpcm13YXJlX2Nsb2NrcyAxND4sIDwmZHZwIDA+LCA8JmNs
+a18yN01Iej47Cj4+IC0JY2xvY2stbmFtZXMgPSAiaGRtaSIsICJidmIiLCAiYXVkaW8iLCAiY2Vj
+IjsKPj4gLQl3aWZpLTIuNGdoei1jb2V4aXN0ZW5jZTsKPj4gwqAJc3RhdHVzID0gIm9rYXkiOwo+
+PiDCoH07Cj4+IMKgCj4+Cj4+IMKgJmhkbWkxIHsKPj4gLQljbG9ja3MgPSA8JmZpcm13YXJlX2Ns
+b2NrcyAxMz4sIDwmZmlybXdhcmVfY2xvY2tzIDE0PiwgPCZkdnAgMT4sIDwmY2xrXzI3TUh6PjsK
+Pj4gLQljbG9jay1uYW1lcyA9ICJoZG1pIiwgImJ2YiIsICJhdWRpbyIsICJjZWMiOwo+PiAtCXdp
+ZmktMi40Z2h6LWNvZXhpc3RlbmNlOwo+PiDCoAlzdGF0dXMgPSAib2theSI7Cj4+IMKgfTsKPj4g
+wqAKPj4KPj4gLSZodnMgewo+PiAtCWNsb2NrcyA9IDwmZmlybXdhcmVfY2xvY2tzIDQ+Owo+PiAt
+fTsKPj4gLQo+PiDCoCZwaXhlbHZhbHZlMCB7Cj4+IMKgCXN0YXR1cyA9ICJva2F5IjsKPj4gwqB9
+Owo+PiBAQCAtMjE5LDIyICsxOTQsNiBAQAo+PiDCoAlzdGF0dXMgPSAib2theSI7Cj4+IMKgfTsK
+Pj4gwqAKPj4KPj4gLSZybWVtIHsKPj4gLQkvKgo+PiAtCSAqIFJQaTQncyBjby1wcm9jZXNzb3Ig
+d2lsbCBjb3B5IHRoZSBib2FyZCdzIGJvb3Rsb2FkZXIgY29uZmlndXJhdGlvbgo+PiAtCSAqIGlu
+dG8gbWVtb3J5IGZvciB0aGUgT1MgdG8gY29uc3VtZS4gSXQnbGwgYWxzbyB1cGRhdGUgdGhpcyBu
+b2RlIHdpdGgKPj4gLQkgKiBpdHMgcGxhY2VtZW50IGluZm9ybWF0aW9uLgo+PiAtCSAqLwo+PiAt
+CWJsY29uZmlnOiBudnJhbUAwIHsKPj4gLQkJY29tcGF0aWJsZSA9ICJyYXNwYmVycnlwaSxib290
+bG9hZGVyLWNvbmZpZyIsICJudm1lbS1ybWVtIjsKPj4gLQkJI2FkZHJlc3MtY2VsbHMgPSA8MT47
+Cj4+IC0JCSNzaXplLWNlbGxzID0gPDE+Owo+PiAtCQlyZWcgPSA8MHgwIDB4MCAweDA+Owo+PiAt
+CQluby1tYXA7Cj4+IC0JCXN0YXR1cyA9ICJkaXNhYmxlZCI7Cj4+IC0JfTsKPj4gLX07Cj4+IC0K
+Pj4gwqAvKiBTREhDSSBpcyB1c2VkIHRvIGNvbnRyb2wgdGhlIFNESU8gZm9yIHdpcmVsZXNzICov
+Cj4+IMKgJnNkaGNpIHsKPj4gwqAJI2FkZHJlc3MtY2VsbHMgPSA8MT47Cj4+IEBAIC0yNzMsMjEg
+KzIzMiw2IEBACj4+IMKgCX07Cj4+IMKgfTsKPj4gwqAKPj4KPj4gLSZwY2llMCB7Cj4+IC0JcGNp
+QDEsMCB7Cj4+IC0JCSNhZGRyZXNzLWNlbGxzID0gPDM+Owo+PiAtCQkjc2l6ZS1jZWxscyA9IDwy
+PjsKPj4gLQkJcmFuZ2VzOwo+PiAtCj4+IC0JCXJlZyA9IDwwIDAgMCAwIDA+Owo+PiAtCj4+IC0J
+CXVzYkAxLDAgewo+PiAtCQkJcmVnID0gPDB4MTAwMDAgMCAwIDAgMD47Cj4+IC0JCQlyZXNldHMg
+PSA8JnJlc2V0IFJBU1BCRVJSWVBJX0ZJUk1XQVJFX1JFU0VUX0lEX1VTQj47Cj4+IC0JCX07Cj4+
+IC0JfTsKPj4gLX07Cj4+IC0KPiBUaGlzIGlzIG5vdCByZWxldmFudCB0byBDTTQsIG1heWJlIHdl
+IHNob3VsZCBsZWF2ZSBpdCBpbiB0aGUgLmR0cwpPa2F5Cj4KPj4gwqAvKiB1YXJ0MCBjb21tdW5p
+Y2F0ZXMgd2l0aCB0aGUgQlQgbW9kdWxlICovCj4+IMKgJnVhcnQwIHsKPiBXaGF0IGFib3V0ICd1
+YXJ0MSc/IEkgYmVsaXZlIHRoZSBjb25maWd1cmF0aW9uIGlzIHRoZSBzYW1lIGZvciBhbGwgYm9h
+cmRzLiBwd20xCj4gYWxzbyBjb21lcyB0byBtaW5kLgoKSSB3b3VsZG4ndCBpbmNsdWRlIHBpbm11
+eCBkZXBlbmRlbnQgc3R1ZmYgaGVyZSwgYmVjYXVzZSB0aGlzIGlzIHZlcnkKc3BlY2lmaWMgdG8g
+dGhlIGJvYXJkIGFuZCB1c2UgY2FzZSBbMV0uCgpCdXQgdGhlcmUgaXMgYSB0cmljayBmb3IgdGhl
+IFBpIDQwMCwgd2hpY2ggaXMgdmVyeSBzaW1pbGlhciB0byB0aGUgUGkgNApCLiBXZSBjb3VsZCBp
+bmNsdWRlIHRoZSBwaTQuZHRzIGluIHRoZSBwaTQwMC5kdHMuIEFkZGl0aW9uYWwgaSB3b3VsZApr
+ZWVwIHRoaXMgcGF0Y2ggZm9yIENNNCBhbmQgY28uCgpSZWdhcmRzClN0ZWZhbgoKWzFdIC0KaHR0
+cHM6Ly9hZnRlcmhvdXJzY29kaW5nLndvcmRwcmVzcy5jb20vMjAyMS8wMi8yMS9hLWxpc3Qtb2Yt
+cmFzcGJlcnJ5LXBpLWNvbXB1dGUtbW9kdWxlLWNhcnJpZXItYm9hcmRzLWFuZC1kZXZpY2VzLwoK
+Pgo+IFJlZ2FyZHMsCj4gTmljb2xhcwo+Cj4KCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpsaW51eC1hcm0ta2VybmVsIG1haWxpbmcgbGlzdApsaW51eC1h
+cm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcKaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9saW51eC1hcm0ta2VybmVsCg==
