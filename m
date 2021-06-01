@@ -1,115 +1,119 @@
-Return-Path: <SRS0=hZ7m=K3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=OMTs=K3=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E027C47080
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Jun 2021 09:44:59 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93E58C4708F
+	for <soc@archiver.kernel.org>; Tue,  1 Jun 2021 09:45:09 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 6C9BE6136E; Tue,  1 Jun 2021 09:45:09 +0000 (UTC)
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 17EF3601FF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  1 Jun 2021 09:44:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 17EF3601FF
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Date:Cc:To:From:Subject:Message-ID:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=tmotl2fQ+ckE9EgDOSC18iZtYIwNzPqKWigMhD2naXM=; b=JsTxHvmg4uBq/T
-	E95jaV2AJIJf5eNBc/KaaPmM3hxazSqtarN1jXyrRt9ucKX1JLMA3F8aobNLmhoJLfVmPuRzCjL3P
-	xldMLDY5NnBd2EEC34UIBpVDxsOlS+D+ZEXe0yKJSqD5a8XwCqyfltX1g4ZUp3iB9IepfjVjAsFRh
-	cuLzt/eNWvodAdLs10dELUJ7DjwfNi6DxdrE6wOZwgdH0ivsPQRPEq6bcdtlm56WGNsNheeeTNBqd
-	gagPBkfP46y/ZjIhFKLHzPSRpAq2IIR1651zERNAHxBNaNR7oQQT5VlCH9xTr79yzKbw8hQSAJ6AV
-	Oh9Qy0S/QVh6hVUw04Dg==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lo0vw-00Fhph-SV; Tue, 01 Jun 2021 09:43:37 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lo0vt-00Fhoz-FP; Tue, 01 Jun 2021 09:43:34 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C7CCF601FF;
- Tue,  1 Jun 2021 09:43:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1622540613;
- bh=qlJI01KJ0TTGsYoAHunzAq6G5S1oyHceEVrUWUNT/Rc=;
- h=Subject:From:To:List-Id:Cc:Date:In-Reply-To:References:From;
- b=QMTmM+1Cv1EngwvVQDxzQeB4PTlN1b+zrjj0GcOuaOZ6plBGlDAJXCZOY4l92LAPf
- Q4hmySykGYZOUHeyiQVp5BUkLdeTLZeKh9hL+fUI9ZBTnsrPXYUCWLvD8n0Q0J18LZ
- Z/WR0AOfLwOVa+UWsmHV6k0hQ0g3AaaQEFtLwmyggNq5mAXAYQBravWKUlNj93MJry
- HgO0GHio//TaC1xi0n8t8NYSjjeatpMad0N1V5+6c1T+ZUg1LTEhf6+KuDEuogqXXk
- ilo9o5mhoVEy0vyeMZnfzBZboxiQRKFUhbqWftorW0cAd8IkEsLHH/lsgp6UlOOxPb
- CobY9rCXbAZag==
-Message-ID: <e61ba6f5b906fd26a61e9c79ef4dcf4792a364d7.camel@kernel.org>
-Subject: Re: [PATCH 2/6] watchdog: bcm2835_wdt: consider
- system-power-controller property
-From: nicolas saenz julienne <nsaenz@kernel.org>
-To: Stefan Wahren <stefan.wahren@i2se.com>, Rob Herring <robh+dt@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>, 
- Scott Branden <sbranden@broadcom.com>,
- bcm-kernel-feedback-list@broadcom.com, Arnd Bergmann <arnd@arndb.de>,  Olof
- Johansson <olof@lixom.net>, soc@kernel.org, Wim Van Sebroeck
- <wim@linux-watchdog.org>,  Guenter Roeck <linux@roeck-us.net>,
- devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org
-Date: Tue, 01 Jun 2021 11:43:27 +0200
-In-Reply-To: <1622366775-5309-3-git-send-email-stefan.wahren@i2se.com>
-References: <1622366775-5309-1-git-send-email-stefan.wahren@i2se.com>
- <1622366775-5309-3-git-send-email-stefan.wahren@i2se.com>
-User-Agent: Evolution 3.40.0 (3.40.0-1.fc34) 
+	by mail.kernel.org (Postfix) with ESMTPS id 46618611CA
+	for <soc@kernel.org>; Tue,  1 Jun 2021 09:45:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 46618611CA
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linus.walleij@linaro.org
+Received: by mail-lj1-f182.google.com with SMTP id a4so18354318ljd.5
+        for <soc@kernel.org>; Tue, 01 Jun 2021 02:45:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=aeflruk+sBPtid1nZ+1lhuvBercg4I32ZO4v88/nF8c=;
+        b=Tphttdqa9t8ioVNoOxOHTnwIbLZl2Lp6AjZE6/5XNd6o3KzSDvCR3jnSCIUy8qn++t
+         49lBZaJwej9Nlx2/q8JeWhxfAWDhyXIhRqSEensBJu4ZT2Pu+Ifxa6nTQaHq1MGg+4Z4
+         3cD7oU5zU1PnSDoMOB0fM+ioxejhYgs01uPbvudsb9RqXHNORb27uhri8vTJmIa0hdoB
+         bwbwvpmDOStQ97BRRc6dv9gxmPA873yrzhcsSqHWA2lIFG65s6Io5jNgeTQYIxFGNp0p
+         oMnFkw9/OrtQ9g4hgxy3b+IL6uPg9PTrKId3h5mqP6rcmf7jj4rVvrrSPzmd14HBKd/b
+         169Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=aeflruk+sBPtid1nZ+1lhuvBercg4I32ZO4v88/nF8c=;
+        b=Q2CMxFK0pD9gzhqdu/6q5s/jL9pD839yZAjL9JPlMuZWYLlBcf8d9VrWUp4drzOu+l
+         ncYxc8s97AVdboqwbdze2IFYQR5J3yAwrwYol3uxczhPV1ZI1i9fJhpmP/Gq4JdbDeDG
+         gNqgg2wqg36buzvXiW/F66NE9xGAVE02Z8yl9TmxRIjLgTjj2b+Esj/WW0/tJowdLyLL
+         wPqakfLxJR8lth7F28VdLI9W6pxQXNdF/uhMtxGqsX8/mzbNDymFtERVBom+liB5e0vd
+         oGxMDDYDfI0UDu3wsoQzpDHIkkiY5Wwd7hEMwPu17Hw+pVUX8UIKoPeUHTOIjmAVPjRX
+         biNw==
+X-Gm-Message-State: AOAM530NHGKKxewGQ+qQ4VQwkeZFrcy8t83b8sOXPrmNx1SZnUju6rzm
+	ixqnNK+Pa0AiJv8f2oFewRWtzGTmN0S2kj4ZPdcTbISkSIdOEw==
+X-Google-Smtp-Source: ABdhPJyBAXPovaFjjvNjV8Cqp8bblZqefwz5Z228geICib+pi7jwwdwLdYYtkfB7LWgysLJ5u4QE8fvYVttggP6SXyU=
+X-Received: by 2002:a05:651c:4c6:: with SMTP id e6mr20666608lji.326.1622540707519;
+ Tue, 01 Jun 2021 02:45:07 -0700 (PDT)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210601_024333_556688_758C4CE8 
-X-CRM114-Status: GOOD (  18.39  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210601094327.yW5uukjt1SSIboWlWgRKk0PrleAWzfGudPQZGElzZxI@z>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 1 Jun 2021 11:44:56 +0200
+Message-ID: <CACRpkdZWpLAcAStq8dEyGL_d9Bvp-WNPu-2EuJw1eTL4kyvgig@mail.gmail.com>
+Subject: [GIT PULL] Gemini DTS updates for v5.14
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Corentin Labbe <clabbe@baylibre.com>, Hans Ulli Kroll <ulli.kroll@googlemail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-T24gU3VuLCAyMDIxLTA1LTMwIGF0IDExOjI2ICswMjAwLCBTdGVmYW4gV2FocmVuIHdyb3RlOgo+
-IFVudGlsIG5vdyBhbGwgUmFzcGJlcnJ5IFBpIGJvYXJkcyB1c2VkIHRoZSBwb3dlciBvZmYgZnVu
-Y3Rpb24gb2YgdGhlIFNvQy4KPiBCdXQgdGhlIFJhc3BiZXJyeSBQaSA0MDAgdXNlcyBncGlvLXBv
-d2Vyb2ZmIGZvciB0aGUgd2hvbGUgYm9hcmQgd2hpY2gKPiBwb3NzaWJseSBjYW5ub3QgcmVnaXN0
-ZXIgdGhlIHBvd2Vyb2ZmIGhhbmRsZXIgYmVjYXVzZSB0aGUgaXQncwo+IGFscmVhZHkgcmVnaXN0
-ZXJlZCBieSB0aGlzIHdhdGNoZG9nIGRyaXZlci4gU28gY29uc2lkZXIgdGhlCj4gc3lzdGVtLXBv
-d2VyLWNvbnRyb2xsZXIgcHJvcGVydHkgZm9yIHJlZ2lzdGVyaW5nLCB3aGljaCBpcyBhbHJlYWR5
-Cj4gZGVmaW5lZCBpbiBzb2MvYmNtL2JyY20sYmNtMjgzNS1wbS50eHQgLgo+IAo+IFNpZ25lZC1v
-ZmYtYnk6IFN0ZWZhbiBXYWhyZW4gPHN0ZWZhbi53YWhyZW5AaTJzZS5jb20+Cj4gLS0tCj4gwqBk
-cml2ZXJzL3dhdGNoZG9nL2JjbTI4MzVfd2R0LmMgfCAxMCArKysrKysrLS0tCj4gwqAxIGZpbGUg
-Y2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQg
-YS9kcml2ZXJzL3dhdGNoZG9nL2JjbTI4MzVfd2R0LmMgYi9kcml2ZXJzL3dhdGNoZG9nL2JjbTI4
-MzVfd2R0LmMKPiBpbmRleCBkZWM2Y2EwLi45NDkwNzE3IDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMv
-d2F0Y2hkb2cvYmNtMjgzNV93ZHQuYwo+ICsrKyBiL2RyaXZlcnMvd2F0Y2hkb2cvYmNtMjgzNV93
-ZHQuYwo+IEBAIC0yMDUsOSArMjA1LDEzIEBAIHN0YXRpYyBpbnQgYmNtMjgzNV93ZHRfcHJvYmUo
-c3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPiDCoAlpZiAoZXJyKQo+IMKgCQlyZXR1cm4g
-ZXJyOwo+IMKgCj4gCj4gLQlpZiAocG1fcG93ZXJfb2ZmID09IE5VTEwpIHsKPiAtCQlwbV9wb3dl
-cl9vZmYgPSBiY20yODM1X3Bvd2VyX29mZjsKPiAtCQliY20yODM1X3Bvd2VyX29mZl93ZHQgPSB3
-ZHQ7Cj4gKwlpZiAob2ZfZGV2aWNlX2lzX3N5c3RlbV9wb3dlcl9jb250cm9sbGVyKHBkZXYtPmRl
-di5wYXJlbnQtPm9mX25vZGUpKSB7Cj4gKwkJaWYgKCFwbV9wb3dlcl9vZmYpIHsKPiArCQkJcG1f
-cG93ZXJfb2ZmID0gYmNtMjgzNV9wb3dlcl9vZmY7Cj4gKwkJCWJjbTI4MzVfcG93ZXJfb2ZmX3dk
-dCA9IHdkdDsKPiArCQl9IGVsc2Ugewo+ICsJCQlkZXZfaW5mbyhkZXYsICJQb3dlcm9mZiBoYW5k
-bGVyIGFscmVhZHkgcHJlc2VudCFcbiIpOwoKbml0OiBzaG91ZGxuJ3QgdGhpcyBiZSBhIHdhcm5p
-bmc/CgpPdGhlciB0aGFuIHRoYXQsCgpSZXZpZXdlZC1ieTogTmljb2xhcyBTYWVueiBKdWxpZW5u
-ZSA8bnNhZW56QGtlcm5lbC5vcmc+CgpSZWdhcmRzLApOaWNvbGFzCgoKCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmxpbnV4LWFybS1rZXJuZWwgbWFpbGlu
-ZyBsaXN0CmxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZwpodHRwOi8vbGlzdHMu
-aW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFybS1rZXJuZWwK
+Hi SoC maintainers,
+
+here are some collected DTS-patches for Gemini destined
+for the v5.14 kernel.
+
+Corentin is working on some more really interesting stuff:
+crypto acceleration and two new boards. If this gets finished
+in time for v5.14 I will simply send another pull request on
+top of this one.
+
+Please pull it in!
+
+Yours,
+Linus Walleij
+
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+
+  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+tags/gemini-dts-v5.14-1
+
+for you to fetch changes up to 78924664af92fabc203a946eac09c69592fa12c4:
+
+  ARM: dts: gemini: remove xxx-cells from display (2021-05-22 01:54:05 +0200)
+
+----------------------------------------------------------------
+Gemini device tree updates for the v5.14 kernel:
+- MAINTAINERS fix for the DTS files
+- Drop a duplicate ethernet node on the RUT1xx DTS
+- Add device_type to the PCI node
+- Fix up some DTS syntax so it agrees with the schemas merged
+  for the v5.14 merge window
+
+----------------------------------------------------------------
+Corentin Labbe (10):
+      MAINTAINERS: gemini: add missing dts pattern
+      ARM: dts: gemini: rename mdio to the right name
+      ARM: dts: gemini-rut1xx: remove duplicate ethernet node
+      ARM: dts: gemini: add device_type on pci
+      ARM: dts: gemini: use the right rtc compatible
+      ARM: dts: gemini: convert obsolete SPI properties
+      ARM: dts: gemini-dlink-dns-313: rename gpio-i2c to i2c
+      ARM: dts: gemini-dlink-dir-685: rename gpio-i2c to i2c
+      ARM: dts: gemini-dlink-dir-685: Remove address from display port
+      ARM: dts: gemini: remove xxx-cells from display
+
+ MAINTAINERS                                |  1 +
+ arch/arm/boot/dts/gemini-dlink-dir-685.dts | 11 +++++------
+ arch/arm/boot/dts/gemini-dlink-dns-313.dts |  4 ++--
+ arch/arm/boot/dts/gemini-nas4220b.dts      |  2 +-
+ arch/arm/boot/dts/gemini-rut1xx.dts        | 14 +-------------
+ arch/arm/boot/dts/gemini-sl93512r.dts      |  6 +++---
+ arch/arm/boot/dts/gemini-sq201.dts         |  6 +++---
+ arch/arm/boot/dts/gemini-wbd111.dts        |  2 +-
+ arch/arm/boot/dts/gemini-wbd222.dts        |  2 +-
+ arch/arm/boot/dts/gemini.dtsi              |  5 ++---
+ 10 files changed, 20 insertions(+), 33 deletions(-)
