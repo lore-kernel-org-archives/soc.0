@@ -7,60 +7,59 @@ X-Spam-Status: No, score=-19.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 321A8C47083
-	for <soc@archiver.kernel.org>; Wed,  2 Jun 2021 08:41:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23EC0C47083
+	for <soc@archiver.kernel.org>; Wed,  2 Jun 2021 08:47:06 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id EEBDF6139A; Wed,  2 Jun 2021 08:41:50 +0000 (UTC)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	id F2319613D7; Wed,  2 Jun 2021 08:47:05 +0000 (UTC)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B65C16121D
-	for <soc@kernel.org>; Wed,  2 Jun 2021 08:41:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B65C16121D
+	by mail.kernel.org (Postfix) with ESMTPS id D32A7613D3
+	for <soc@kernel.org>; Wed,  2 Jun 2021 08:47:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D32A7613D3
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=narmstrong@baylibre.com
-Received: by mail-wr1-f42.google.com with SMTP id j14so1420204wrq.5
-        for <soc@kernel.org>; Wed, 02 Jun 2021 01:41:49 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id h8so1413412wrz.8
+        for <soc@kernel.org>; Wed, 02 Jun 2021 01:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:subject:to:cc:organization:message-id:date:user-agent
          :mime-version:content-language:content-transfer-encoding;
-        bh=r3vRbfjQCGNJB8B/HupD/7FCKWHIrL1DKpr1YR4K1ME=;
-        b=g9O4RX/DJokdg0WffDlpvLr44YG00xVUL6p6t+GvaSqsSojwb67cJwbm+h8ftNuV+N
-         J3ZAMOsJBG3x9LKL2zjXEHsqtCfKpi8aET4hY909GdJvZ+7XK/oJ4aMwFpuYGmrPDvOa
-         o1y6KquCCZd/HURNtrFA4aackOuKVGv81osAWz8wMM2elUK1HmdaenaEFgL1VE18lw9V
-         mav0M9vjmBEh0EpdmmNw7HGBWrgnOTjuBr/C8xa6SMON8RCcf+FoLnj2oZf3PNrK7DDj
-         FemmLjkTaNltIOjxTZF4kNwf4UUdKvjzU4E/GlMNfFblwskAG92RmmohlG7a8vKw4CDb
-         yezw==
+        bh=ch8odCii0jbUEayBNz5PH1VkcSulmShj14mgcVkeUbI=;
+        b=fYAZRTperpNR8a/ILq4ijvaLZlihQDfXCbdbqeOh7VNtYzL++sYPL0jw4+W7uryFMF
+         2nTgsjFdFPb8zObAEF6Awj03dCNWBV2xLh8wFYbJNeEeCtq0gLTHUvEvpGTJobj1YJtK
+         MXkrkSqbDysOq67K/v0EHw/mDAYgAL5IrZkHTLl65v918f5v99gJatPfOTvY17ru2Yo1
+         OuVEVfqusrqLwC2j+9nBeA/V/iEPCmKgodhBNLg/roEH7vuv4a+C4mbDeY5Vdtc+8x1e
+         kuj/5BSCWl8Nmp9hYzIM4KQ49vbIfKI+DCgfUpxFPQcLz6lVYtoE15vCmLARIIqq6G3S
+         u7aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:subject:to:cc:organization:message-id:date
          :user-agent:mime-version:content-language:content-transfer-encoding;
-        bh=r3vRbfjQCGNJB8B/HupD/7FCKWHIrL1DKpr1YR4K1ME=;
-        b=U3i2n0C3JO9CPdXHHks4c4HHDMVWdTMl/ZI1BixcWlpgeiFwFb3ePihnmqbD3PQB//
-         D/0xnpSLTR8D1SXSmk2xFZD88F7dhVkAC0QjvtoTOkAN5S2IxdE1WYYrrY8ASL6fYx3b
-         zIz1EsxZZtABjXpdCMwFmo8m3dY58qwRKLBG00pSvPk/Q3Z3Ayt8+d6LngvMby3NMkyQ
-         ieuNk9OroJEzouLRAutfbl214yRtsTcfEUf2HgxHZeHHKQPKE1LD9BAIjoy/xci9Po82
-         XaR0VzZxWjuXoIhptbXsS1C5iAZyzsJdtUIWuHBRlIeomY4T/pLpv2/Uzjskb3+9Xql6
-         MP4Q==
-X-Gm-Message-State: AOAM530ZmWv/5dV61OUIwybI7j24Cu8Z1h7jYWndAPEdohJ9BVZBrMsg
-	T8WqQuPJtXgPxYY+BycPsn369Q==
-X-Google-Smtp-Source: ABdhPJx5MRXNhc5eSwZplehRDh0YJ1vXdtj0oT9GekLomseOUixW3fDg0HrfC7FXpdKeTILjRexV9A==
-X-Received: by 2002:adf:df8a:: with SMTP id z10mr4450786wrl.62.1622623308380;
-        Wed, 02 Jun 2021 01:41:48 -0700 (PDT)
+        bh=ch8odCii0jbUEayBNz5PH1VkcSulmShj14mgcVkeUbI=;
+        b=LCcl9YtihT/i3FekY7mdyYv8m1AXRhS4WW0mBJVZCgC0tt50SGlra3P0rqjFt+pRWE
+         vW+p0uuKzGfcdsUajlrA7Oc5O5yMm6a7/cMuAYt3vuYsQ4PyRnF5hMQbZFJ/QA/2Gd/f
+         /t0pYemnLk1UbJ4KXoomCsDTxr0zSseXeWUZBFESMRTG2/QAV0RXKSqmaFGF7I+ICRjJ
+         j0Ipb2oWDcTvr0UxONyiSJ0wPnZg3WIEVMrR4PDte9qtn5LCMpVSFG6JXsYjXl6xPiUu
+         4t5+y69kAvQrISLwQgk4jFYzhca1gdGl0MMiSIL5nys7mZtQnJyZbOcGQkyzIvi8MLic
+         3Gfw==
+X-Gm-Message-State: AOAM532o8dpJgt1S7KnutBg+iWTcbDoBFwO8UW0admUhsGxkfN1yx1hk
+	GKo+MU2T10fdz6pA6WfW4bNYR5fAACBVCGVy
+X-Google-Smtp-Source: ABdhPJxlo3D+p1t58u6+T9S+bruGgJ4TX6cNGRNmCmCd5BuIsfIVgUGCOd8KQpR9NW4IpxI1jHP7jQ==
+X-Received: by 2002:adf:ce90:: with SMTP id r16mr25919709wrn.146.1622623623254;
+        Wed, 02 Jun 2021 01:47:03 -0700 (PDT)
 Received: from ?IPv6:2a01:e0a:90c:e290:5bc3:680:d34c:955b? ([2a01:e0a:90c:e290:5bc3:680:d34c:955b])
-        by smtp.gmail.com with ESMTPSA id n12sm6193151wrs.19.2021.06.02.01.41.47
+        by smtp.gmail.com with ESMTPSA id 89sm6831225wrq.14.2021.06.02.01.47.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Jun 2021 01:41:47 -0700 (PDT)
+        Wed, 02 Jun 2021 01:47:02 -0700 (PDT)
 From: Neil Armstrong <narmstrong@baylibre.com>
-Subject: [GIT PULL] soc: amlogic: driver updates for v5.14
+Subject: [GIT PULL] arm64: dts: amlogic updates for v5.14
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, "arm@kernel.org" <arm@kernel.org>
-Cc: linux-amlogic@lists.infradead.org,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org
 Organization: Baylibre
-Message-ID: <58283600-2d9a-c259-4d80-6915e6e6c79e@baylibre.com>
-Date: Wed, 2 Jun 2021 10:41:46 +0200
+Message-ID: <bb207cf8-fc7a-3121-eea8-56618b5952aa@baylibre.com>
+Date: Wed, 2 Jun 2021 10:47:01 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
@@ -70,7 +69,10 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
-Here's a single cosmetic drivers change for v5.14.
+Here's the ARM64 DT changes for v5.14:
+- new Banana PI BPI-M5 board
+- handle of UART A bigger FIFO
+- various audio changes for internal DAC and loopback
 
 Neil
 
@@ -80,19 +82,37 @@ The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v5.14
+  https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v5.14
 
-for you to fetch changes up to e93e6bef7930cc23b878b6768f617c479f1a5c50:
+for you to fetch changes up to a270a2b24de5be0480136cbbd7805b9134762b97:
 
-  soc: amlogic: meson-ee-pwrc: Rename "get_power" to "is_powered_off" (2021-05-28 09:52:06 +0200)
-
-----------------------------------------------------------------
-Amlogic Drivers updates for v5.14:
-- soc: amlogic: meson-ee-pwrc: Rename "get_power" to "is_powered_off"
+  arm64: dts: meson: set 128bytes FIFO size on uart A (2021-06-01 10:27:02 +0200)
 
 ----------------------------------------------------------------
-Martin Blumenstingl (1):
-      soc: amlogic: meson-ee-pwrc: Rename "get_power" to "is_powered_off"
+Amlogic ARM64 DT changed for v5.14:
+- set 128bytes FIFO size on uart A
+- add Banana PI BPI-M5 board dts & bindings
+- meson-sm1: add toacodec node to use internal audio DAC
+- enable hdmi audio loopback on VIM3 board
 
- drivers/soc/amlogic/meson-ee-pwrc.c | 46 ++++++++++++++++++-------------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
+----------------------------------------------------------------
+Jerome Brunet (1):
+      arm64: dts: meson: vim3: enable hdmi audio loopback
+
+Neil Armstrong (4):
+      arm64: dts: meson-sm1: add toacodec node
+      dt-bindings: arm: amlogic: add Banana PI M5 bindings
+      arm64: dts: meson-sm1: add Banana PI BPI-M5 board dts
+      arm64: dts: meson: set 128bytes FIFO size on uart A
+
+ Documentation/devicetree/bindings/arm/amlogic.yaml |   1 +
+ arch/arm64/boot/dts/amlogic/Makefile               |   1 +
+ arch/arm64/boot/dts/amlogic/meson-axg.dtsi         |   1 +
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |   1 +
+ arch/arm64/boot/dts/amlogic/meson-gx.dtsi          |   1 +
+ arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi |  41 +-
+ .../boot/dts/amlogic/meson-sm1-bananapi-m5.dts     | 646 +++++++++++++++++++++
+ .../boot/dts/amlogic/meson-sm1-khadas-vim3l.dts    |  13 +
+ arch/arm64/boot/dts/amlogic/meson-sm1.dtsi         |  10 +
+ 9 files changed, 711 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
