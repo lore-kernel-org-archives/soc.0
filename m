@@ -1,26 +1,30 @@
-Return-Path: <SRS0=0PE6=K5=google.com=ndesaulniers@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD84DC47082
-	for <soc@archiver.kernel.org>; Thu,  3 Jun 2021 23:28:09 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id C505161411; Thu,  3 Jun 2021 23:28:09 +0000 (UTC)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A78C96140A
-	for <soc@kernel.org>; Thu,  3 Jun 2021 23:28:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A78C96140A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=reject dis=none) header.from=google.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=ndesaulniers@google.com
-Received: by mail-lj1-f175.google.com with SMTP id a4so9239656ljd.5
-        for <soc@kernel.org>; Thu, 03 Jun 2021 16:28:09 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43CBBC47082
+	for <linux-kernel@archiver.kernel.org>; Thu,  3 Jun 2021 23:28:28 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 292D86140F
+	for <linux-kernel@archiver.kernel.org>; Thu,  3 Jun 2021 23:28:28 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S229964AbhFCXaM (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 3 Jun 2021 19:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229576AbhFCXaL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Jun 2021 19:30:11 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B7DC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Jun 2021 16:28:10 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id w15so9182201ljo.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Jun 2021 16:28:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -37,33 +41,39 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=yp2xRS7FBwt+MIq6S/QXxDvwXDIU2o3m3x2Gm2/0e9o=;
-        b=rnFqPigr90IwktqDjzidQYOlFoq21+jcBgQmZL+c464SU864QN44Ywaaic9E6xEFcJ
-         /gLQN1Cotbv/z4r3KIzSd2ZP/wsPUPiN2Nvd2aOBjIJwlY3rpkr/5wVCOR6kfENRL+HL
-         A9hYddZceR1QWC+HpOCvL/uuFMjJBM/FCRpLd0HRIlDTTrLmilWG2Cu9utR+3NOAX1uw
-         QKh8uL1JV/kCqHYLCqELdO7UklGHxZsOtzemmNOWgPO5aPNFTIOy2KTEfp3Np+WHKoFX
-         hwd1Tghjs6kR77osWVx4nmqeJzkbD/ayZouS02gzDBdYYZdBwKslU3nHkBNzkUfGbLlq
-         NCfw==
-X-Gm-Message-State: AOAM5315PLj09LVYXYLnLzwkpyg2jNravaXPZKlpT2BNcP9lAbqVx0Dt
-	zLujA/RqWmsVqJT+sPdFJaLv0iWI9weZcpPNTAAETA==
+        b=brO/ezDTKlTIWQ+bkDE6JHpUaVkCs0hIfgWKDSw4kAScDFV6od8A8EDgA0FAd8oFDg
+         ybql3JfoGpMZMHV4d+eWGDGAm4/nn7tN8UJKM0dmkrI0YrnDfPrXlr4MPsXUhIQ4yBxr
+         0W8tPSjTQKe35rwbdJ1ktcvaJCGmWeWu17zlgIo/ra/EZTe5yxZbC8KXed87wtAixWSY
+         SaxJrrNOLcyQL46Qb9hYiOv1s09/ZlC0ymMNdWmrb9D+Rv08/bq513wCgFuEe6Vcp5CE
+         dbZZVKf3lyJhTbPMdPnSx+PbO8YQgQZJGUj/jYfwDvJo9nKO1M+OZLfmyxcwQ4hQ6rzP
+         Cg3Q==
+X-Gm-Message-State: AOAM530EMytZ5sGMw/btr/KZnkRAkz81PK2XFsfSXipcqQgNWpVz/69w
+        ywOM04siAyE2JJn7W9lXT3x0P59+QCW8V6pIykXSxA==
 X-Google-Smtp-Source: ABdhPJzXbiQOm/LTa/9I1aTG6l1jQZ5G6mYyNqgFW8DJe4zWHMlzneqPaWc1OYbyRPsdbcfjM4egzmVvxwPKp5INQg0=
 X-Received: by 2002:a05:651c:b1f:: with SMTP id b31mr1302202ljr.0.1622762887714;
  Thu, 03 Jun 2021 16:28:07 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210226164345.3889993-1-arnd@kernel.org> <CAK8P3a2E0pv6PKzcCoRZH0G_gGrhWeiDwN7h090iQpd6c=XG1Q@mail.gmail.com>
 In-Reply-To: <CAK8P3a2E0pv6PKzcCoRZH0G_gGrhWeiDwN7h090iQpd6c=XG1Q@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 3 Jun 2021 16:27:56 -0700
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 3 Jun 2021 16:27:56 -0700
 Message-ID: <CAKwvOdna9KPAsN6+qTDkWMdXYDg5AGUnp=ek5McxtDXLSQdVWg@mail.gmail.com>
 Subject: Re: [PATCH] ARM: ep93xx: don't use clang IAS for crunch
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Hartley Sweeten <hsweeten@visionengravers.com>, 
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>, SoC Team <soc@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Russell King <linux@armlinux.org.uk>, 
-	Nathan Chancellor <nathan@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <clang-built-linux@googlegroups.com>
+Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210603232756.NSQmyhb3KFPo6E6NvinJM3bINtqFQlCRF3kGiz2pgmo@z>
 
 On Fri, Feb 26, 2021 at 10:01 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
