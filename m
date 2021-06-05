@@ -7,35 +7,35 @@ X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A97C5C48BC2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97301C4743D
 	for <soc@archiver.kernel.org>; Sat,  5 Jun 2021 22:58:05 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 4154C61421; Sat,  5 Jun 2021 22:58:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 276B861415;
+	id 3625C6140F; Sat,  5 Jun 2021 22:58:05 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 1A65061408;
 	Sat,  5 Jun 2021 22:58:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1622933885;
-	bh=V5dLs97pmudnH9zAo7rTz5xhTq1+w+qc8T1TmlkS/PQ=;
+	bh=paC59S5Oxf3nysuBQH9aW8LLXBhrocaHK5LKUFPKa+A=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=NLPZ2YiSDyl5LX5Wa4ShqEN+NvqgXLDSLg0eiR+mmVkMxJz3dE8bwJMiXcBYDmkor
-	 x5uc+fCdf0kxt3vf36T42rKQGgdRZIicW/qnG4gZ7QDvzfdTdMvWk8eI3h5NcIVFGW
-	 BkhTBrimG3nojW8XQUNu8mv0inmDE1oiKlq1VxORycUzO/Zoaq9G3Ps88l6CorJon0
-	 wnLXBHfyIjcnUoynKcX+eQ5GjNAUOqYxmVinU5EXQmHOkVJThFMAeAoRCyzN8vO28s
-	 cBuD844dQFVp9O18yRN9xRsgRyvnTV1PNiSQA5ANobPFi/r3CVJI65Ge+l4UFxIWuA
-	 0YUCUy6wPykNA==
+	b=lHpt1pnad7y/4IHGICpIjCV6Eemyuy5P6aryoCWSeDgTnNqWSaaATKlBpo7UOJbOv
+	 /o1AhV1KrCXiodmvxiecESDBeZLcATlKROsZv3/z1dNdV9Hkex9zpcQ/p/cTfXe8ck
+	 FT4LM/xcGYh9gdmjF8VN/qRisJkh/4U3XUb+P3In4uLPBf3wjc1sjLq5FpoUG0Ajsw
+	 xRPxzs9DNJtUiZU0P2hnFz05NHVn9AsYAauS/tDdF72xV3Ez7JSLwEmvarN0hcNrxj
+	 gdbGUNQwlgQKDOJEG3bkCM9R5QfxhZcD4/LInBIOHnKcmsFQuBSiU7gTV+o5oEds/S
+	 iR8z/m2t3esyg==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 1A0FB60A6C;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 11347609EF;
 	Sat,  5 Jun 2021 22:58:05 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] SATA regresion fix for TI dra7 for v5.13
+Subject: Re: [GIT PULL] PM and build warning fixes for omaps
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162293388510.32315.4560117196603153425.git-patchwork-notify@kernel.org>
+ <162293388506.32315.3916354480762426592.git-patchwork-notify@kernel.org>
 Date: Sat, 05 Jun 2021 22:58:05 +0000
-References: <pull-1622613578-121536@atomide.com>
-In-Reply-To: <pull-1622613578-121536@atomide.com>
+References: <pull-1622614772-543196@atomide.com>
+In-Reply-To: <pull-1622614772-543196@atomide.com>
 To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
@@ -44,20 +44,20 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/arm/fixes):
 
-On Wed,  2 Jun 2021 09:00:05 +0300 you wrote:
+On Wed,  2 Jun 2021 09:20:17 +0300 you wrote:
 > From: "Tony Lindgren" <tony@atomide.com>
 > 
-> The following changes since commit d995d3d025bbd2d89abf12418f20d19bc0cb0130:
+> The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 > 
->   bus: ti-sysc: Use kzalloc for allocating only one thing (2021-03-24 13:44:04 +0200)
+>   Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
 > 
 > are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] SATA regresion fix for TI dra7 for v5.13
-    https://git.kernel.org/soc/soc/c/94277cb5b4db
+  - [GIT,PULL] PM and build warning fixes for omaps
+    https://git.kernel.org/soc/soc/c/2f3e4eb17973
 
 You are awesome, thank you!
 --
