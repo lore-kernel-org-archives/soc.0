@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6126CC48BC2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 372FCC4743F
 	for <soc@archiver.kernel.org>; Sat,  5 Jun 2021 23:00:26 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 21C5861408; Sat,  5 Jun 2021 23:00:26 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 09EE66141C;
-	Sat,  5 Jun 2021 23:00:26 +0000 (UTC)
+	id 130976136D; Sat,  5 Jun 2021 23:00:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id EEBEA6140F;
+	Sat,  5 Jun 2021 23:00:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1622934026;
-	bh=XMND57Wyn39eZZ4LgtVP3REJo1vYvNLzQmiKt3HbNho=;
+	bh=NstMeOKY1zThBuE3U7okHSAkKObUZ05rYDfkuSUamik=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ML55+AqU+TZ0IXJx4jb0lgpkhKJI322nqAXhJwgTuPS1A6aslQ1BGEDB1QlyjOr7M
-	 +x8fVwJMPRhDbhEn+g9xE6u+htu5AS2RUdlwGxoFairrxxS9dcVrdw3O+GOipuUydt
-	 Mq7TZ4fEXuOcOv/PvbkbEsU7rz8y0J6a+XcqEC2KGfjMGNadfRHuNQ7Y0YiLE/lRNQ
-	 hRym9bGAozEI+K2t7ykte8yWhEsrkZ2ynvnQOVGXG+qVcH1Re5m+apr2lkhHNcbNJR
-	 /+sf4faS9HDwORHgB1P7dY1vgtRCAP5WVrJJosFd3b6cqPaVZhJuAMTGbhxj2ac0bZ
-	 kTEg4NrV6XEfw==
+	b=n4t4JIg+7FOrCDF3PW/KfEbWR1fP6l+Lx7Y/rm7pC//dn2K+LJwWM0MBFZ+63W/ai
+	 b/cs0jUbiQpQaMHX+fHnMejhadl9nqDt/xZx3Um2REO2an7P0bvYtNKKp0UYvhrUpl
+	 hJeCztRPwGd1j6ZvgY/Lzmry++KWajHsRoDrI3aUUbU0CipAEC2tmNWSEnMteGfVXj
+	 UMmtajeRrLfEu+ynbnb1aNX/dQKhgBC5jdjk7MkdmcoxZCs8ypV+yF9IK4OapxO9J9
+	 o/2NkdxU5nYmx+DeegLknGaMLXDoaSLS24xklIHPVrOOgz+CsLvhG2XZHZEiU/oyBC
+	 pbA3lQIO7MRlA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0224A60A6C;
-	Sat,  5 Jun 2021 23:00:26 +0000 (UTC)
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E51A460A53;
+	Sat,  5 Jun 2021 23:00:25 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 5.13
+Subject: Re: [GIT PULL] PM and build warning fixes for omaps
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162293402600.32315.6718398151915673307.git-patchwork-notify@kernel.org>
-Date: Sat, 05 Jun 2021 23:00:26 +0000
-References: <20210527011758.GD8194@dragon>
-In-Reply-To: <20210527011758.GD8194@dragon>
-To: Shawn Guo <shawnguo@kernel.org>
+ <162293402593.32315.3708026233290825460.git-patchwork-notify@kernel.org>
+Date: Sat, 05 Jun 2021 23:00:25 +0000
+References: <pull-1622614772-543196@atomide.com>
+In-Reply-To: <pull-1622614772-543196@atomide.com>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -44,20 +44,20 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Thu, 27 May 2021 09:17:59 +0800 you wrote:
+On Wed,  2 Jun 2021 09:20:17 +0300 you wrote:
+> From: "Tony Lindgren" <tony@atomide.com>
+> 
 > The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 > 
 >   Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.13
-> 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 5.13
-    https://git.kernel.org/soc/soc/c/3a2d3ae06787
+  - [GIT,PULL] PM and build warning fixes for omaps
+    https://git.kernel.org/soc/soc/c/2f3e4eb17973
 
 You are awesome, thank you!
 --
