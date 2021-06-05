@@ -2,41 +2,40 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97301C4743D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2856C48BCD
 	for <soc@archiver.kernel.org>; Sat,  5 Jun 2021 22:58:05 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 3625C6140F; Sat,  5 Jun 2021 22:58:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 1A65061408;
+	id 4D2A361428; Sat,  5 Jun 2021 22:58:05 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 3582161420;
 	Sat,  5 Jun 2021 22:58:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1622933885;
-	bh=paC59S5Oxf3nysuBQH9aW8LLXBhrocaHK5LKUFPKa+A=;
+	bh=HosYfsGq0FCarLoLlpPoTE08CHHCZXWFqUs8NRn5AhU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=lHpt1pnad7y/4IHGICpIjCV6Eemyuy5P6aryoCWSeDgTnNqWSaaATKlBpo7UOJbOv
-	 /o1AhV1KrCXiodmvxiecESDBeZLcATlKROsZv3/z1dNdV9Hkex9zpcQ/p/cTfXe8ck
-	 FT4LM/xcGYh9gdmjF8VN/qRisJkh/4U3XUb+P3In4uLPBf3wjc1sjLq5FpoUG0Ajsw
-	 xRPxzs9DNJtUiZU0P2hnFz05NHVn9AsYAauS/tDdF72xV3Ez7JSLwEmvarN0hcNrxj
-	 gdbGUNQwlgQKDOJEG3bkCM9R5QfxhZcD4/LInBIOHnKcmsFQuBSiU7gTV+o5oEds/S
-	 iR8z/m2t3esyg==
+	b=M9Iwow0S3eW3EWoooQVoTJM937C76ioyTNstDYosdLvVsZXtVrEoGZUQLjsq1X9+r
+	 Cq+BncBTcEhWTGhvpBf+bAbeBjU83gleQZOO7LGCqva/dMgzNWQTDjRwYE+n3SijmU
+	 aP4ntOycQyMzfmYe8AycnT05/RiIgxJH3pqaH74WvYkB99gITg4hIfM93AwCELiekk
+	 yqdjrW1ZpxifX9WbfZNVOieJGZ39g60RrwNxyFl9iHSSpPWoAo7vP8qZd8Or0C0zKu
+	 95AknpSM6W01Fex1NhsYqvNq4TwyWUnwDhhjE+7ZUg/2AE4WX6mcfwCoVZlbhkdhQn
+	 E+I+tk2stv/NQ==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 11347609EF;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2B543609F7;
 	Sat,  5 Jun 2021 22:58:05 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] PM and build warning fixes for omaps
+Subject: Re: [GIT PULL] amlogic fixes for v5.13-rc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162293388506.32315.3916354480762426592.git-patchwork-notify@kernel.org>
+ <162293388517.32315.6669163315157175068.git-patchwork-notify@kernel.org>
 Date: Sat, 05 Jun 2021 22:58:05 +0000
-References: <pull-1622614772-543196@atomide.com>
-In-Reply-To: <pull-1622614772-543196@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
+References: <73e76706-f3f4-bebf-10dd-d2ec9106a234@baylibre.com>
+In-Reply-To: <73e76706-f3f4-bebf-10dd-d2ec9106a234@baylibre.com>
+To: Neil Armstrong <narmstrong@baylibre.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -44,20 +43,20 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/arm/fixes):
 
-On Wed,  2 Jun 2021 09:20:17 +0300 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
+On Mon, 31 May 2021 09:41:36 +0200 you wrote:
+> Hi,
+> 
+> Here's a couple of fixes for v5.13-rc1, one for the amlogic Kconfig and another for the meson-clk-measure soc driver.
+> 
+> Neil
 > 
 > The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
-> 
->   Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
-> 
-> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] PM and build warning fixes for omaps
-    https://git.kernel.org/soc/soc/c/2f3e4eb17973
+  - [GIT,PULL] amlogic fixes for v5.13-rc
+    https://git.kernel.org/soc/soc/c/3091a9e74240
 
 You are awesome, thank you!
 --
