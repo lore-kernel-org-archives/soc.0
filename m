@@ -1,67 +1,293 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=ICZO=LA=i2se.com=stefan.wahren@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACC54C48BD1
-	for <soc@archiver.kernel.org>; Sat,  5 Jun 2021 23:00:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97A12C47096
+	for <soc@archiver.kernel.org>; Sun,  6 Jun 2021 12:16:57 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 471536142C; Sat,  5 Jun 2021 23:00:26 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 3077961428;
-	Sat,  5 Jun 2021 23:00:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1622934026;
-	bh=l9jX7hHy77jlZwFiuc9frD0TVjePBNuA7SbaxUw0Jis=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=M9DL7srMVWmqs2Gl7Xe5jPZfYbXHAsKVjNsK5TAN4T+yrr7tSwF88h0ad4LGngbHb
-	 owH599m/DVQW7OlctcDTDJcn9HeIjsPVrEzkMOm0A43/CmAphj2n6jsQCtpLsDMdJJ
-	 dk8meNQXoxjBC1GYj8OwA3seSob1RtsqXNCeL2jMXrYhzX+mocpv9e9wbJylAiK9jh
-	 JRfr2QUip27CmXcg0wznhHOZ44T9WehGb9Py+DhR032W8afuKHqo87sre6A8gXSuCJ
-	 tPFZ0I4vzg5CTdfgGeCL5fixow5u8ubk0QT7J68o8UNuX6YUQ3ZzdjTLBu+FGHBaVd
-	 R9lzcBQGAA9Qw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2A9DD60A53;
-	Sat,  5 Jun 2021 23:00:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] OP-TEE fix for v5.13
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <162293402617.32315.8496115685197821881.git-patchwork-notify@kernel.org>
-Date: Sat, 05 Jun 2021 23:00:26 +0000
-References: <20210518100712.GA449561@jade>
-In-Reply-To: <20210518100712.GA449561@jade>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+	id 4C0C0611CA; Sun,  6 Jun 2021 12:16:57 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 49B1E608FE;
+	Sun,  6 Jun 2021 12:16:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 49B1E608FE
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=stefan.wahren@i2se.com
+Received: from localhost.localdomain ([37.4.249.157]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MyK5K-1lQT4I3yKi-00yi3s; Sun, 06 Jun 2021 14:16:35 +0200
+From: Stefan Wahren <stefan.wahren@i2se.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	Nicolas Saenz Julienne <nsaenz@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	bcm-kernel-feedback-list@broadcom.com,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	devicetree@vger.kernel.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-watchdog@vger.kernel.org,
+	Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH V2 3/7] ARM: dts: Move BCM2711 RPi specific into separate dtsi
+Date: Sun,  6 Jun 2021 14:16:13 +0200
+Message-Id: <1622981777-5023-4-git-send-email-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
+References: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
+X-Provags-ID: V03:K1:DZu3y0RVxc2QPn7QuojF///xA4qmq/Uar+yz0SlIg/PJ9TSuhqh
+ U2yCACckdei2EEQ2oDbK00NHEW/UHqNiAEA6NWlq/y/EzcCw/OU+sBSAvUWeu6vbPMHPWAS
+ Vd82NL1OLqMPB1XtrLpY9pa1bpUhcRX2mxhLJF/9aWIhi0SXtz2HFitR+0aVbgRc8WaKi+n
+ 8voq6mKRslwj2bN63oxyw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dzZ6vyu1YIo=:iGhhhPH5z4lQzjlz86ziNx
+ EEUooSV6oaVgT6o2F0Iw+WOqNordvtEJBmitOIjTOppLpl/GchurZ8nFmiwVKz3kPebGhlXb8
+ 44eYkc9vhSX3iWIp3sqL6kYpsoljM1jfCuo945UxkbPuW9yu4OukFjwGMLPScY1AAypiPwJh6
+ SqMr65Z8v5XaW+umtQooto0vl898EnSGtQKwvb77Y0x+FgXjNJFcENmjzWSxtLhzAnbetl7bw
+ YNtYUuwK6SEBPwgxQkx8urxZGFU/GGO6/B+NftoNROg0EP5+KbZ/CnYYOJ8rXfKVdlX2EfHVR
+ oqiczYFY0rGrGt3WQLJla9u24Z1egj3ZVi0YXK/uk47O/Pmky0Av5a1kJk0HVaiUPZn7ano8l
+ JKfEo2M20W0ux/TAwPOtaXWqhRfuzhJdcR25/ovLOkcEfq5jqCUAlDhMKiPb53s1WBep0gwqz
+ ENn6hbSDf6W67cCXVrpmRD3f/A3Cm6ZzEGV8VrwbtE0KFkE2NKz3rhfmFieWk7HvGsIcOkGGZ
+ PMbJj3ZN891DW45lKcLr5E=
 
-Hello:
+There is a lot of Raspberry Pi specific stuff (neither SoC or board
+specific) for the BCM2711 which is currently in the RPi 4 B dts. In order
+to avoid copy & paste for every new BCM2711 based Raspberry Pi, move it
+into a separate dtsi.
 
-This pull request was applied to soc/soc.git (refs/heads/for-next):
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ arch/arm/boot/dts/bcm2711-rpi-4-b.dts | 81 +++++------------------------------
+ arch/arm/boot/dts/bcm2711-rpi.dtsi    | 74 ++++++++++++++++++++++++++++++++
+ 2 files changed, 84 insertions(+), 71 deletions(-)
+ create mode 100644 arch/arm/boot/dts/bcm2711-rpi.dtsi
 
-On Tue, 18 May 2021 12:07:12 +0200 you wrote:
-> Hello arm-soc maintainers,
-> 
-> Please pull this small OP-TEE driver fix which uses export_uuid() to copy
-> the client UUID instead of making asumptions about the internal format of
-> uuid_t.
-> 
-> Thanks,
-> Jens
-> 
-> [...]
-
-Here is the summary with links:
-  - [GIT,PULL] OP-TEE fix for v5.13
-    https://git.kernel.org/soc/soc/c/7468bed8f850
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+index 3b4ab94..c54854a1 100644
+--- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
++++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+@@ -1,11 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /dts-v1/;
+ #include "bcm2711.dtsi"
+-#include "bcm2835-rpi.dtsi"
++#include "bcm2711-rpi.dtsi"
+ #include "bcm283x-rpi-usb-peripheral.dtsi"
+ 
+-#include <dt-bindings/reset/raspberrypi,firmware-reset.h>
+-
+ / {
+ 	compatible = "raspberrypi,4-model-b", "brcm,bcm2711";
+ 	model = "Raspberry Pi 4 Model B";
+@@ -15,19 +13,6 @@
+ 		stdout-path = "serial1:115200n8";
+ 	};
+ 
+-	/* Will be filled by the bootloader */
+-	memory@0 {
+-		device_type = "memory";
+-		reg = <0 0 0>;
+-	};
+-
+-	aliases {
+-		emmc2bus = &emmc2bus;
+-		ethernet0 = &genet;
+-		pcie0 = &pcie0;
+-		blconfig = &blconfig;
+-	};
+-
+ 	leds {
+ 		act {
+ 			gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
+@@ -79,31 +64,15 @@
+ 	status = "okay";
+ };
+ 
+-&firmware {
+-	firmware_clocks: clocks {
+-		compatible = "raspberrypi,firmware-clocks";
+-		#clock-cells = <1>;
+-	};
+-
+-	expgpio: gpio {
+-		compatible = "raspberrypi,firmware-gpio";
+-		gpio-controller;
+-		#gpio-cells = <2>;
+-		gpio-line-names = "BT_ON",
+-				  "WL_ON",
+-				  "PWR_LED_OFF",
+-				  "GLOBAL_RESET",
+-				  "VDD_SD_IO_SEL",
+-				  "CAM_GPIO",
+-				  "SD_PWR_ON",
+-				  "";
+-		status = "okay";
+-	};
+-
+-	reset: reset {
+-		compatible = "raspberrypi,firmware-reset";
+-		#reset-cells = <1>;
+-	};
++&expgpio {
++	gpio-line-names = "BT_ON",
++			  "WL_ON",
++			  "PWR_LED_OFF",
++			  "GLOBAL_RESET",
++			  "VDD_SD_IO_SEL",
++			  "CAM_GPIO",
++			  "SD_PWR_ON",
++			  "";
+ };
+ 
+ &gpio {
+@@ -180,23 +149,13 @@
+ };
+ 
+ &hdmi0 {
+-	clocks = <&firmware_clocks 13>, <&firmware_clocks 14>, <&dvp 0>, <&clk_27MHz>;
+-	clock-names = "hdmi", "bvb", "audio", "cec";
+-	wifi-2.4ghz-coexistence;
+ 	status = "okay";
+ };
+ 
+ &hdmi1 {
+-	clocks = <&firmware_clocks 13>, <&firmware_clocks 14>, <&dvp 1>, <&clk_27MHz>;
+-	clock-names = "hdmi", "bvb", "audio", "cec";
+-	wifi-2.4ghz-coexistence;
+ 	status = "okay";
+ };
+ 
+-&hvs {
+-	clocks = <&firmware_clocks 4>;
+-};
+-
+ &pixelvalve0 {
+ 	status = "okay";
+ };
+@@ -219,22 +178,6 @@
+ 	status = "okay";
+ };
+ 
+-&rmem {
+-	/*
+-	 * RPi4's co-processor will copy the board's bootloader configuration
+-	 * into memory for the OS to consume. It'll also update this node with
+-	 * its placement information.
+-	 */
+-	blconfig: nvram@0 {
+-		compatible = "raspberrypi,bootloader-config", "nvmem-rmem";
+-		#address-cells = <1>;
+-		#size-cells = <1>;
+-		reg = <0x0 0x0 0x0>;
+-		no-map;
+-		status = "disabled";
+-	};
+-};
+-
+ /* SDHCI is used to control the SDIO for wireless */
+ &sdhci {
+ 	#address-cells = <1>;
+@@ -309,10 +252,6 @@
+ 	status = "okay";
+ };
+ 
+-&vchiq {
+-	interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+-};
+-
+ &vc4 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/bcm2711-rpi.dtsi b/arch/arm/boot/dts/bcm2711-rpi.dtsi
+new file mode 100644
+index 0000000..ca266c5
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm2711-rpi.dtsi
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "bcm2835-rpi.dtsi"
++
++#include <dt-bindings/reset/raspberrypi,firmware-reset.h>
++
++/ {
++	/* Will be filled by the bootloader */
++	memory@0 {
++		device_type = "memory";
++		reg = <0 0 0>;
++	};
++
++	aliases {
++		emmc2bus = &emmc2bus;
++		ethernet0 = &genet;
++		pcie0 = &pcie0;
++		blconfig = &blconfig;
++	};
++};
++
++&firmware {
++	firmware_clocks: clocks {
++		compatible = "raspberrypi,firmware-clocks";
++		#clock-cells = <1>;
++	};
++
++	expgpio: gpio {
++		compatible = "raspberrypi,firmware-gpio";
++		gpio-controller;
++		#gpio-cells = <2>;
++		status = "okay";
++	};
++
++	reset: reset {
++		compatible = "raspberrypi,firmware-reset";
++		#reset-cells = <1>;
++	};
++};
++
++&hdmi0 {
++	clocks = <&firmware_clocks 13>, <&firmware_clocks 14>, <&dvp 0>, <&clk_27MHz>;
++	clock-names = "hdmi", "bvb", "audio", "cec";
++	wifi-2.4ghz-coexistence;
++};
++
++&hdmi1 {
++	clocks = <&firmware_clocks 13>, <&firmware_clocks 14>, <&dvp 1>, <&clk_27MHz>;
++	clock-names = "hdmi", "bvb", "audio", "cec";
++	wifi-2.4ghz-coexistence;
++};
++
++&hvs {
++	clocks = <&firmware_clocks 4>;
++};
++
++&rmem {
++	/*
++	 * RPi4's co-processor will copy the board's bootloader configuration
++	 * into memory for the OS to consume. It'll also update this node with
++	 * its placement information.
++	 */
++	blconfig: nvram@0 {
++		compatible = "raspberrypi,bootloader-config", "nvmem-rmem";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		reg = <0x0 0x0 0x0>;
++		no-map;
++		status = "disabled";
++	};
++};
++
++&vchiq {
++	interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
++};
+-- 
+2.7.4
 
