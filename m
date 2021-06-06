@@ -1,143 +1,103 @@
-Return-Path: <SRS0=ICZO=LA=i2se.com=stefan.wahren@kernel.org>
+Return-Path: <linux-watchdog-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34CD7C48BCD
-	for <soc@archiver.kernel.org>; Sun,  6 Jun 2021 12:17:00 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 0F2CB61420; Sun,  6 Jun 2021 12:17:00 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 413B2608FE;
-	Sun,  6 Jun 2021 12:16:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 413B2608FE
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=stefan.wahren@i2se.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD3F0C4743D
+	for <linux-watchdog@archiver.kernel.org>; Sun,  6 Jun 2021 12:17:01 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id B96D4608FE
+	for <linux-watchdog@archiver.kernel.org>; Sun,  6 Jun 2021 12:17:01 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S230108AbhFFMSu (ORCPT
+        <rfc822;linux-watchdog@archiver.kernel.org>);
+        Sun, 6 Jun 2021 08:18:50 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:49267 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229508AbhFFMSt (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Sun, 6 Jun 2021 08:18:49 -0400
 Received: from localhost.localdomain ([37.4.249.157]) by
  mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MrhHm-1l2AsK2p88-00ngV6; Sun, 06 Jun 2021 14:16:36 +0200
-From: Stefan Wahren <stefan.wahren@i2se.com>
-To: Rob Herring <robh+dt@kernel.org>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>
+ id 1MrhHm-1l2AsP35e8-00ngV6; Sun, 06 Jun 2021 14:16:33 +0200
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	bcm-kernel-feedback-list@broadcom.com,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	devicetree@vger.kernel.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-watchdog@vger.kernel.org,
-	Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH V2 6/7] ARM: dts: Add Raspberry Pi 400 support
-Date: Sun,  6 Jun 2021 14:16:16 +0200
-Message-Id: <1622981777-5023-7-git-send-email-stefan.wahren@i2se.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH V2 1/7] ARM: dts: bcm283x: Fix up MMC node names
+Date:   Sun,  6 Jun 2021 14:16:11 +0200
+Message-Id: <1622981777-5023-2-git-send-email-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
 References: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
-X-Provags-ID: V03:K1:qDXNiQNnXszhu7ZZn9qpiJjEOk/8SKuGCRk5P1O58HSgHSRlMLV
- 0xTH6Q+aPq28bWe7QSGDeV5lSsliVSiBA3k6TJs3CJKeIAEw7NFeK3ulpqriEj9rG7Kv09V
- f5yU99ZAK5+2om8JacoafiHBpbVGX9mLuw67b41uH2+buQZXHhd/vEsMYJuZdrkoAqxavb0
- XZzPZDPPXY9LZ3wix21Rw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TznBIvEQkDg=:GcLEDfRD80lGvCBDkMB65D
- n2NlGC6mkIjaUFrd5E9zZjH4kw+x9NA0hx9T0NWVp1ziEK3LHEL0hbgRb1eGvl867sbWe8Q/e
- F+/chJU1Mx0LnCpYtoSWFgn78hnQZJhGVxXq5//4mI3VEtfF9AR8GB+3HGCKfwrJIMGBo5Z5C
- Kbv39tIHz3XTISYrHVYqeoxMUNOZQ33vvSjziiWgEbr8MNV4my2sannMZeUBZQ1rfAUiOwJdE
- SafIVH+YbqGPYzy6kL1rz9v/wvq8qLcckHQlUI7bRNlhEUMt+smWFRhRRCDF6cnMKFbpNxf8N
- cBTBrYFLng5QRI23HFhu4XUe22u54bxcSeBToKQ7m/X1ARrVXdad++bxXayrAO+wwp6+KjdsO
- UGB4w5h4r4fw8SOAfV/4qpN4GcpWhnUdDQGkcIQFY4lXIGnOubFKi8EQK9Nu9O9Ky4v15aqXU
- wlW2w05R7Nw3UkdBbPiUzlEKUKxOxWAdrONwwMZxYNrKR2vf/cjHXKSLx2b3F9MzPOiS/NmA1
- J486J/wnFJuU58pVA9Dftc=
+X-Provags-ID: V03:K1:Z/8QOVZ2cHa4lrvfJQqghM920G55e/tsw2Kl4Gl3CPhqRzxY/3Q
+ pT8KAXiiYtiG2LFpO056LY5tzxOi+Gl7HNwVXnCr+Uls5Fn7P4AA8tzcENmameXpJB0f9It
+ 8CH8xbxBjWLR5DpsYYCYLmH1B5T/npNc7UitcUViH5+GE/J+7E9mdNSn0WFUl1ASkuRaqAE
+ ggvIa84w6NiZwRifXy9Sw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JGozPp/tc2Y=:4TCkNj3rNqgSZbnKTrYoqP
+ l1TepbDJDswV1l8Zp+ZeCLvGoYDTNt7cbcn/4aRectbcMXGtVbUa4BGolWhSQXyRXXF82jtfq
+ WV7YYFnDSSPbxeS2Nb72G0gCb4p8y7Jhrn3OEmf9u0ioh1eJf0Qmc/e8F6dKFSGp8piXCrUDs
+ V3ujKZDCWp3yRArZVwUJNGZYlmy6ASPsPdqFJVmSd0lFkl3rxbQULHxQLpJNwYu6h2Cs22aoQ
+ vn2iVIvozWRyxj6rjV8yOvTeYtljiYkCQo7OFxC3jGL4z2thwaTbJwBCfiFCiEZMSE4lrE/Ym
+ tknNkOdEI9gIh67xgYU2gX4FVuS1YmLzHlzM4S+ux++MtXvYaWsbMzMnTRNDEn0F46KP2rT8n
+ L6yQC6wlLaFjrYdbEfsc2PZjeNPEuzL+FPoD/TNtgjp4m3pTgsOD0q1HJzN7QBFwJRqEG4FPM
+ BaFNC8FdQobzUHTdhm421SGhsKQ1iN+JbUfHn7Og7L9xpZtZJ25GdM+HxxQ0bp+KsjDCoHC+J
+ ztsPy592xs8odkDq9tJffA=
+Precedence: bulk
+List-ID: <linux-watchdog.vger.kernel.org>
+X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The Raspberry Pi 400 is like a Pi 4 B designed into a keyboard. But there
-are some minor differences:
-
-- higher CPU clock rate (1.8 GHz)
-- different Wifi chip (BCM43456)
-- power off is now handled via GPIO
-- no ACT LED
+Fix the node names for the MMC/SD card controller to conform
+to the standard node name mmc@..
 
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
 ---
- arch/arm/boot/dts/Makefile            |  1 +
- arch/arm/boot/dts/bcm2711-rpi-400.dts | 45 +++++++++++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+)
- create mode 100644 arch/arm/boot/dts/bcm2711-rpi-400.dts
+ arch/arm/boot/dts/bcm2711.dtsi | 2 +-
+ arch/arm/boot/dts/bcm283x.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index f8f09c5..ec00dba 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -88,6 +88,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += \
- 	bcm2837-rpi-3-b.dtb \
- 	bcm2837-rpi-3-b-plus.dtb \
- 	bcm2837-rpi-cm3-io3.dtb \
-+	bcm2711-rpi-400.dtb \
- 	bcm2711-rpi-4-b.dtb \
- 	bcm2835-rpi-zero.dtb \
- 	bcm2835-rpi-zero-w.dtb
-diff --git a/arch/arm/boot/dts/bcm2711-rpi-400.dts b/arch/arm/boot/dts/bcm2711-rpi-400.dts
-new file mode 100644
-index 0000000..f4d2fc2
---- /dev/null
-+++ b/arch/arm/boot/dts/bcm2711-rpi-400.dts
-@@ -0,0 +1,45 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
-+#include "bcm2711-rpi-4-b.dts"
-+
-+/ {
-+	compatible = "raspberrypi,400", "brcm,bcm2711";
-+	model = "Raspberry Pi 400";
-+
-+	chosen {
-+		/* 8250 auxiliary UART instead of pl011 */
-+		stdout-path = "serial1:115200n8";
-+	};
-+
-+	leds {
-+		/delete-node/ led-act;
-+
-+		led-pwr {
-+			gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
-+		};
-+	};
-+
-+	gpio-poweroff {
-+		compatible = "gpio-poweroff";
-+		gpios = <&expgpio 5 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&expgpio {
-+	gpio-line-names = "BT_ON",
-+			  "WL_ON",
-+			  "",
-+			  "GLOBAL_RESET",
-+			  "VDD_SD_IO_SEL",
-+			  "CAM_GPIO",
-+			  "SD_PWR_ON",
-+			  "SD_OC_N";
-+};
-+
-+&genet_mdio {
-+	clock-frequency = <1950000>;
-+};
-+
-+&pm {
-+	/delete-property/ system-power-controller;
-+};
+diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
+index 720beec..d872064 100644
+--- a/arch/arm/boot/dts/bcm2711.dtsi
++++ b/arch/arm/boot/dts/bcm2711.dtsi
+@@ -413,7 +413,7 @@
+ 		ranges = <0x0 0x7e000000  0x0 0xfe000000  0x01800000>;
+ 		dma-ranges = <0x0 0xc0000000  0x0 0x00000000  0x40000000>;
+ 
+-		emmc2: emmc2@7e340000 {
++		emmc2: mmc@7e340000 {
+ 			compatible = "brcm,bcm2711-emmc2";
+ 			reg = <0x0 0x7e340000 0x100>;
+ 			interrupts = <GIC_SPI 126 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm/boot/dts/bcm283x.dtsi b/arch/arm/boot/dts/bcm283x.dtsi
+index b83a864..0f3be55 100644
+--- a/arch/arm/boot/dts/bcm283x.dtsi
++++ b/arch/arm/boot/dts/bcm283x.dtsi
+@@ -420,7 +420,7 @@
+ 			status = "disabled";
+ 		};
+ 
+-		sdhci: sdhci@7e300000 {
++		sdhci: mmc@7e300000 {
+ 			compatible = "brcm,bcm2835-sdhci";
+ 			reg = <0x7e300000 0x100>;
+ 			interrupts = <2 30>;
 -- 
 2.7.4
 
