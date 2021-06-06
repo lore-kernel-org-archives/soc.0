@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D4B4C47096
-	for <linux-arm-kernel@archiver.kernel.org>; Sun,  6 Jun 2021 12:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE852C47096
+	for <linux-arm-kernel@archiver.kernel.org>; Sun,  6 Jun 2021 12:20:17 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CCF1D608FE
-	for <linux-arm-kernel@archiver.kernel.org>; Sun,  6 Jun 2021 12:20:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CCF1D608FE
+	by mail.kernel.org (Postfix) with ESMTPS id 77203611CA
+	for <linux-arm-kernel@archiver.kernel.org>; Sun,  6 Jun 2021 12:20:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 77203611CA
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,21 +23,21 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Post:List-Archive:List-Unsubscribe:List-Id:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=bsbc2nketyoI9mrKtL/u3R4oAW3RnijAbFZr7vM2wMk=; b=eTV+4U/NeTqVRz
-	am1Zzv5PORUTOjJG+4MfVryCzjNg8AL9cdmwglLkdpegasx8osMNguJsNOyc83Qsp8mlFXaQ22z32
-	qS3qzSZ5UNtNWcga7ZN9fulSimwtlbgy0dFlQRRdORUwqrXgWTay4M34OvMbryzUXmiu3O1zUffZG
-	k2Xqevya604QMLACjnyiVmn5SeaxyzG1ayNeZQQS/oyZS0YUN3RzVZPV4MpT9qEGaRVtiB8jIZijn
-	CB/iATPniC/dA1b5KwMCaXsEKVB9p6RAGLO5SMw7JAZTB0AREpXB1+OVUfrOTSygIX9tG4Ew8HfzL
-	mps0HbVql4mdl5xRd7pQ==;
+	List-Owner; bh=zxTmilAgPWpdP2fPhknH4zWsQCdI/skBjJiUT0qwl90=; b=fO5HJ5jVOkqzFz
+	8mFnJqSzKsvt3ckKENf2nGH+YbtdIkXfU28z9XfQPJuONFlY0knbnRFlsQcvbEDKcd9e7YjkEAfVq
+	7U6EOnpDbQ8knGUDJv2WwI5VHQqS99z/kUYT+jkw6eKt/saio5vjugyjCqvlOfcdwMP4c6T/E0JXv
+	rhRuMDTaQ6bzVF6oSl+tK7rvfLHuS8hJzaW7NNEsI7+/fi6WpLR7YTNlZiOvw95I/K+YugNu8bpbX
+	N5RYzoI9UPsvKobdiB1DJJ+7Jp+n3eK9+qOv9AR/nY5XWMbqHtfRiXI9SUXSGmq98tq96hlHg0YXr
+	Zgs2FsW9cBDeQsX0af0g==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lprjF-000EK1-9q; Sun, 06 Jun 2021 12:18:09 +0000
-Received: from mout.kundenserver.de ([217.72.192.73])
+	id 1lprja-000ETh-RY; Sun, 06 Jun 2021 12:18:31 +0000
+Received: from mout.kundenserver.de ([212.227.17.13])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lpri3-000E0m-PO; Sun, 06 Jun 2021 12:16:57 +0000
+ id 1lpri3-000E00-TP; Sun, 06 Jun 2021 12:16:57 +0000
 Received: from localhost.localdomain ([37.4.249.157]) by
  mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1M4b5s-1lpJTP14fG-001gEM; Sun, 06 Jun 2021 14:16:37 +0200
+ id 1MrhHm-1l2AsK2p88-00ngV6; Sun, 06 Jun 2021 14:16:36 +0200
 From: Stefan Wahren <stefan.wahren@i2se.com>
 To: Rob Herring <robh+dt@kernel.org>,
  Nicolas Saenz Julienne <nsaenz@kernel.org>
@@ -50,28 +50,28 @@ Cc: Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>,
  Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
  linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
  linux-watchdog@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH V2 7/7] arm64: dts: broadcom: Add reference to RPi 400
-Date: Sun,  6 Jun 2021 14:16:17 +0200
-Message-ID: <1622981777-5023-8-git-send-email-stefan.wahren@i2se.com>
+Subject: [PATCH V2 6/7] ARM: dts: Add Raspberry Pi 400 support
+Date: Sun,  6 Jun 2021 14:16:16 +0200
+Message-ID: <1622981777-5023-7-git-send-email-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
 References: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
-X-Provags-ID: V03:K1:yQabTqkX47ibDNJg4fwGitdfVsJvfe3A8a/9Q17mnamUZCUWQD+
- 7uuOMkf4ZjSUPT8dwp9Aevg2o4CVeCNByyza3MEmZ0kTixP4SB4kbSBeX88RQjpLRlGyjvf
- 0eiSAXv816T4jzTXOzRsfYsbWvgTl9pJcusI3jqwQ/cxfwR14Np+9i48Mc0k7/F5lVmuiRm
- u79E49GcIYcyKP2hIQLYg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:age9Y4juz4M=:xKIjLn2ZqpPYY+UCVH1snQ
- t/NYA5TLET0jglDSd1zF/3HJVjCx/nevPejwPXUI4uMhW9ka6S2Lv4I6PCIwlMV9CoFceHfKH
- i3Umf4GKUbahxwHLJkvJIR7Dhb/0LjKigIxzGZp9FIEg2bhbsEQF5yDbzSf8vjf3oxq7Dyn/a
- DQxDNaWu945l1u4epTAMXg2y5ISauvSJogks/g8GYPNV4IyhYEFPPNx2vQmVI4Qjmbk5SsYgr
- gFmYbpIu7lDJjYNs814GBDAGAl2/c5eaEl8fDfFGhhD3X3n0COokR/UCWIcBmqTrlZcgLQl5Z
- 6Pyc+tEMGL/7LwgTGOMdkNec1RGEXYheo2Rm/rTUBtg/uOfBhY/jjKBWEGVR4C9epx6t80SQT
- c33B4zsGoz4uorHK6X2ds/2gFjwWRvxDMQWe6RVbHJh2TfYU/8dchXG4fxg1sQHvT/Nn/r2UI
- +mVqeBhqBXS8QJmb4X/YO1kIj+ByLHWxDkXPcV88CqYMGFW1TgQMYsw5EdtxUtPi8XfLizmga
- 4OSPBR9RGY9z+zyEc1QBak=
+X-Provags-ID: V03:K1:qDXNiQNnXszhu7ZZn9qpiJjEOk/8SKuGCRk5P1O58HSgHSRlMLV
+ 0xTH6Q+aPq28bWe7QSGDeV5lSsliVSiBA3k6TJs3CJKeIAEw7NFeK3ulpqriEj9rG7Kv09V
+ f5yU99ZAK5+2om8JacoafiHBpbVGX9mLuw67b41uH2+buQZXHhd/vEsMYJuZdrkoAqxavb0
+ XZzPZDPPXY9LZ3wix21Rw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TznBIvEQkDg=:GcLEDfRD80lGvCBDkMB65D
+ n2NlGC6mkIjaUFrd5E9zZjH4kw+x9NA0hx9T0NWVp1ziEK3LHEL0hbgRb1eGvl867sbWe8Q/e
+ F+/chJU1Mx0LnCpYtoSWFgn78hnQZJhGVxXq5//4mI3VEtfF9AR8GB+3HGCKfwrJIMGBo5Z5C
+ Kbv39tIHz3XTISYrHVYqeoxMUNOZQ33vvSjziiWgEbr8MNV4my2sannMZeUBZQ1rfAUiOwJdE
+ SafIVH+YbqGPYzy6kL1rz9v/wvq8qLcckHQlUI7bRNlhEUMt+smWFRhRRCDF6cnMKFbpNxf8N
+ cBTBrYFLng5QRI23HFhu4XUe22u54bxcSeBToKQ7m/X1ARrVXdad++bxXayrAO+wwp6+KjdsO
+ UGB4w5h4r4fw8SOAfV/4qpN4GcpWhnUdDQGkcIQFY4lXIGnOubFKi8EQK9Nu9O9Ky4v15aqXU
+ wlW2w05R7Nw3UkdBbPiUzlEKUKxOxWAdrONwwMZxYNrKR2vf/cjHXKSLx2b3F9MzPOiS/NmA1
+ J486J/wnFJuU58pVA9Dftc=
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210606_051656_135983_D38AF54E 
-X-CRM114-Status: GOOD (  14.29  )
+X-CRM114-CacheID: sfid-20210606_051656_294529_2C4D5ABB 
+X-CRM114-Status: GOOD (  14.96  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -88,39 +88,86 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210606121617.ob1zBYKoyx9sfhhKdkMLqHALkg0cgED8lACEBubEI7I@z>
+Message-ID: <20210606121616.qYnk0Vmwmo6qoT_yN2_I3phMkSlKt9QBwmphRj0tIDs@z>
 
-This adds a reference to the dts of the Raspberry Pi 400,
-so we don't need to maintain the content in arm64.
+The Raspberry Pi 400 is like a Pi 4 B designed into a keyboard. But there
+are some minor differences:
+
+- higher CPU clock rate (1.8 GHz)
+- different Wifi chip (BCM43456)
+- power off is now handled via GPIO
+- no ACT LED
 
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
 ---
- arch/arm64/boot/dts/broadcom/Makefile            | 3 ++-
- arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts | 2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts
+ arch/arm/boot/dts/Makefile            |  1 +
+ arch/arm/boot/dts/bcm2711-rpi-400.dts | 45 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
+ create mode 100644 arch/arm/boot/dts/bcm2711-rpi-400.dts
 
-diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
-index 998e240..11eae3e 100644
---- a/arch/arm64/boot/dts/broadcom/Makefile
-+++ b/arch/arm64/boot/dts/broadcom/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
--dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-4-b.dtb \
-+dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
-+			      bcm2711-rpi-4-b.dtb \
- 			      bcm2837-rpi-3-a-plus.dtb \
- 			      bcm2837-rpi-3-b.dtb \
- 			      bcm2837-rpi-3-b-plus.dtb \
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index f8f09c5..ec00dba 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -88,6 +88,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += \
+ 	bcm2837-rpi-3-b.dtb \
+ 	bcm2837-rpi-3-b-plus.dtb \
+ 	bcm2837-rpi-cm3-io3.dtb \
++	bcm2711-rpi-400.dtb \
+ 	bcm2711-rpi-4-b.dtb \
+ 	bcm2835-rpi-zero.dtb \
+ 	bcm2835-rpi-zero-w.dtb
+diff --git a/arch/arm/boot/dts/bcm2711-rpi-400.dts b/arch/arm/boot/dts/bcm2711-rpi-400.dts
 new file mode 100644
-index 0000000..b9000f5
+index 0000000..f4d2fc2
 --- /dev/null
-+++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts
-@@ -0,0 +1,2 @@
++++ b/arch/arm/boot/dts/bcm2711-rpi-400.dts
+@@ -0,0 +1,45 @@
 +// SPDX-License-Identifier: GPL-2.0
-+#include "arm/bcm2711-rpi-400.dts"
++/dts-v1/;
++#include "bcm2711-rpi-4-b.dts"
++
++/ {
++	compatible = "raspberrypi,400", "brcm,bcm2711";
++	model = "Raspberry Pi 400";
++
++	chosen {
++		/* 8250 auxiliary UART instead of pl011 */
++		stdout-path = "serial1:115200n8";
++	};
++
++	leds {
++		/delete-node/ led-act;
++
++		led-pwr {
++			gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
++		};
++	};
++
++	gpio-poweroff {
++		compatible = "gpio-poweroff";
++		gpios = <&expgpio 5 GPIO_ACTIVE_HIGH>;
++	};
++};
++
++&expgpio {
++	gpio-line-names = "BT_ON",
++			  "WL_ON",
++			  "",
++			  "GLOBAL_RESET",
++			  "VDD_SD_IO_SEL",
++			  "CAM_GPIO",
++			  "SD_PWR_ON",
++			  "SD_OC_N";
++};
++
++&genet_mdio {
++	clock-frequency = <1950000>;
++};
++
++&pm {
++	/delete-property/ system-power-controller;
++};
 -- 
 2.7.4
 
