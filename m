@@ -2,25 +2,26 @@ Return-Path: <SRS0=ICZO=LA=i2se.com=stefan.wahren@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D167C4743D
-	for <soc@archiver.kernel.org>; Sun,  6 Jun 2021 12:16:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25D53C47096
+	for <soc@archiver.kernel.org>; Sun,  6 Jun 2021 12:17:00 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 543F06140F; Sun,  6 Jun 2021 12:16:58 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+	id 0989D6124C; Sun,  6 Jun 2021 12:17:00 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7D823613EF;
-	Sun,  6 Jun 2021 12:16:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7D823613EF
+	by mail.kernel.org (Postfix) with ESMTPS id 41E6E61059;
+	Sun,  6 Jun 2021 12:16:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 41E6E61059
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=stefan.wahren@i2se.com
 Received: from localhost.localdomain ([37.4.249.157]) by
  mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MRTIx-1m2HvI0993-00NSMz; Sun, 06 Jun 2021 14:16:33 +0200
+ id 1M4b5s-1lpJTP14fG-001gEM; Sun, 06 Jun 2021 14:16:37 +0200
 From: Stefan Wahren <stefan.wahren@i2se.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	Nicolas Saenz Julienne <nsaenz@kernel.org>
@@ -39,71 +40,57 @@ Cc: Florian Fainelli <f.fainelli@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-watchdog@vger.kernel.org,
 	Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH V2 0/7] ARM: dts: Add Raspberry Pi 400 support
-Date: Sun,  6 Jun 2021 14:16:10 +0200
-Message-Id: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
+Subject: [PATCH V2 7/7] arm64: dts: broadcom: Add reference to RPi 400
+Date: Sun,  6 Jun 2021 14:16:17 +0200
+Message-Id: <1622981777-5023-8-git-send-email-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.7.4
-X-Provags-ID: V03:K1:cKdZAghuMN9u/MoXRONPhzTKOrn/mHEJNZp99Sxo8X78wXXiy6M
- tj7C3B3SeODAb/YZPhIv5eUGOIYbpEPWjmCqhS7HCmEhqYEr1gwB1A0VB304wDVTcgKs9mi
- n6Ldmd2vzgDV3U919Z3dgMok3snEs1Cbm+yji1DmRSohmcAKUu8px3k5mOa/0hYdA2T8JFZ
- DO9ssTRMA+pWHjWgWvy3A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:XRWkM5WYsaM=:+jSITSSqJUfariSKqZ7TNf
- aAI40weEZwnI1Pv/N4g4xBKBa6PxYU4H6o2WcGjKYWJ/CYr4IQGQeDWEbNBTj/Pf3gWv48ECS
- q9NLGyc8gJPThw2OFFh/KgAoyPHCZCxMaZEgfTpzvcck7djL6WLXaxiZyM1cJKRwUAAvQNVOq
- AwjzVIqXq/jKwHjAJN9uG1WhcIrvBSnOz8JonTTh5/t82ksTEpSE2Hksnk7RNxVqw4eDWVZqh
- RlCBOo8ZnRoPdDPf1BBp+U8DZF0LZeYfjWrmfq5WMbYb5GAfj/fIQL5OzHgHldCKJPC1j9yET
- jvX7GDapqmFQgzGdPhietSn/MQLnA2UI8H2ym8wu+ytBHDLoAcwVGZtHTtaLdysY95syb4RLF
- Q/GnphLqrlAULv14R9izCXdaQk65i72UVXgGy4C4gPO/Y9zBUpxjmU+VqmzFR05Bn4HQeOQv7
- K29X5y5XiU8WLXqbXZMMqpxCAuwvulst+pQOq7oX/YhUIFp02hvztLD+TlxDVPTLWw6KBSaUZ
- zIKrEdDrmH1IwFA0C27B9U=
+In-Reply-To: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
+References: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
+X-Provags-ID: V03:K1:yQabTqkX47ibDNJg4fwGitdfVsJvfe3A8a/9Q17mnamUZCUWQD+
+ 7uuOMkf4ZjSUPT8dwp9Aevg2o4CVeCNByyza3MEmZ0kTixP4SB4kbSBeX88RQjpLRlGyjvf
+ 0eiSAXv816T4jzTXOzRsfYsbWvgTl9pJcusI3jqwQ/cxfwR14Np+9i48Mc0k7/F5lVmuiRm
+ u79E49GcIYcyKP2hIQLYg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:age9Y4juz4M=:xKIjLn2ZqpPYY+UCVH1snQ
+ t/NYA5TLET0jglDSd1zF/3HJVjCx/nevPejwPXUI4uMhW9ka6S2Lv4I6PCIwlMV9CoFceHfKH
+ i3Umf4GKUbahxwHLJkvJIR7Dhb/0LjKigIxzGZp9FIEg2bhbsEQF5yDbzSf8vjf3oxq7Dyn/a
+ DQxDNaWu945l1u4epTAMXg2y5ISauvSJogks/g8GYPNV4IyhYEFPPNx2vQmVI4Qjmbk5SsYgr
+ gFmYbpIu7lDJjYNs814GBDAGAl2/c5eaEl8fDfFGhhD3X3n0COokR/UCWIcBmqTrlZcgLQl5Z
+ 6Pyc+tEMGL/7LwgTGOMdkNec1RGEXYheo2Rm/rTUBtg/uOfBhY/jjKBWEGVR4C9epx6t80SQT
+ c33B4zsGoz4uorHK6X2ds/2gFjwWRvxDMQWe6RVbHJh2TfYU/8dchXG4fxg1sQHvT/Nn/r2UI
+ +mVqeBhqBXS8QJmb4X/YO1kIj+ByLHWxDkXPcV88CqYMGFW1TgQMYsw5EdtxUtPi8XfLizmga
+ 4OSPBR9RGY9z+zyEc1QBak=
 
-This series adds support for the Raspberry Pi 400.
+This adds a reference to the dts of the Raspberry Pi 400,
+so we don't need to maintain the content in arm64.
 
-Changes in V2:
-- add collected Reviewed-by and Acked-by
-- add memory node, ethernet alias and gpio expander to bcm2711-rpi.dtsi
-- drop PCIe USB reset control from bcm2711-rpi.dtsi
-- add patch to fixup LED node names
-- include RPi 4 B dts into RPi 400 dts
-
-Stefan Wahren (7):
-  ARM: dts: bcm283x: Fix up MMC node names
-  watchdog: bcm2835_wdt: consider system-power-controller property
-  ARM: dts: Move BCM2711 RPi specific into separate dtsi
-  dt-bindings: arm: bcm2835: Add Raspberry Pi 400 to DT schema
-  ARM: dts: bcm283x: Fix up GPIO LED node names
-  ARM: dts: Add Raspberry Pi 400 support
-  arm64: dts: broadcom: Add reference to RPi 400
-
- .../devicetree/bindings/arm/bcm/bcm2835.yaml       |  1 +
- arch/arm/boot/dts/Makefile                         |  1 +
- arch/arm/boot/dts/bcm2711-rpi-4-b.dts              | 85 +++-------------------
- arch/arm/boot/dts/bcm2711-rpi-400.dts              | 45 ++++++++++++
- arch/arm/boot/dts/bcm2711-rpi.dtsi                 | 74 +++++++++++++++++++
- arch/arm/boot/dts/bcm2711.dtsi                     |  2 +-
- arch/arm/boot/dts/bcm2835-rpi-a-plus.dts           |  4 +-
- arch/arm/boot/dts/bcm2835-rpi-a.dts                |  2 +-
- arch/arm/boot/dts/bcm2835-rpi-b-plus.dts           |  4 +-
- arch/arm/boot/dts/bcm2835-rpi-b-rev2.dts           |  2 +-
- arch/arm/boot/dts/bcm2835-rpi-b.dts                |  2 +-
- arch/arm/boot/dts/bcm2835-rpi-cm1.dtsi             |  2 +-
- arch/arm/boot/dts/bcm2835-rpi-zero-w.dts           |  2 +-
- arch/arm/boot/dts/bcm2835-rpi-zero.dts             |  2 +-
- arch/arm/boot/dts/bcm2835-rpi.dtsi                 |  2 +-
- arch/arm/boot/dts/bcm2836-rpi-2-b.dts              |  4 +-
- arch/arm/boot/dts/bcm2837-rpi-3-a-plus.dts         |  4 +-
- arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts         |  4 +-
- arch/arm/boot/dts/bcm2837-rpi-3-b.dts              |  2 +-
- arch/arm/boot/dts/bcm2837-rpi-cm3.dtsi             |  2 +-
- arch/arm/boot/dts/bcm283x.dtsi                     |  2 +-
- arch/arm64/boot/dts/broadcom/Makefile              |  3 +-
- arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts   |  2 +
- drivers/watchdog/bcm2835_wdt.c                     | 10 ++-
- 24 files changed, 165 insertions(+), 98 deletions(-)
- create mode 100644 arch/arm/boot/dts/bcm2711-rpi-400.dts
- create mode 100644 arch/arm/boot/dts/bcm2711-rpi.dtsi
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
+---
+ arch/arm64/boot/dts/broadcom/Makefile            | 3 ++-
+ arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts | 2 ++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
  create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts
 
+diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
+index 998e240..11eae3e 100644
+--- a/arch/arm64/boot/dts/broadcom/Makefile
++++ b/arch/arm64/boot/dts/broadcom/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+-dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-4-b.dtb \
++dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
++			      bcm2711-rpi-4-b.dtb \
+ 			      bcm2837-rpi-3-a-plus.dtb \
+ 			      bcm2837-rpi-3-b.dtb \
+ 			      bcm2837-rpi-3-b-plus.dtb \
+diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts
+new file mode 100644
+index 0000000..b9000f5
+--- /dev/null
++++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts
+@@ -0,0 +1,2 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "arm/bcm2711-rpi-400.dts"
 -- 
 2.7.4
 
