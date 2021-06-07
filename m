@@ -1,80 +1,119 @@
-Return-Path: <linux-tegra-owner@kernel.org>
+Return-Path: <SRS0=ynGH=LB=lists.linux-foundation.org=iommu-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04F23C47082
-	for <linux-tegra@archiver.kernel.org>; Mon,  7 Jun 2021 08:49:17 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E499661245
-	for <linux-tegra@archiver.kernel.org>; Mon,  7 Jun 2021 08:49:16 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbhFGIvG (ORCPT <rfc822;linux-tegra@archiver.kernel.org>);
-        Mon, 7 Jun 2021 04:51:06 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:39465 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbhFGIvG (ORCPT
-        <rfc822;linux-tegra@vger.kernel.org>); Mon, 7 Jun 2021 04:51:06 -0400
-Received: from mail-wr1-f72.google.com ([209.85.221.72])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lqAwc-0004ko-Lc
-        for linux-tegra@vger.kernel.org; Mon, 07 Jun 2021 08:49:14 +0000
-Received: by mail-wr1-f72.google.com with SMTP id v15-20020a5d4a4f0000b0290118dc518878so7587409wrs.6
-        for <linux-tegra@vger.kernel.org>; Mon, 07 Jun 2021 01:49:14 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3494AC4743C
+	for <iommu@archiver.kernel.org>; Mon,  7 Jun 2021 08:49:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id C042061164
+	for <iommu@archiver.kernel.org>; Mon,  7 Jun 2021 08:49:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C042061164
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=iommu-bounces@lists.linux-foundation.org
+Received: from localhost (localhost [127.0.0.1])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81E6B831DA;
+	Mon,  7 Jun 2021 08:49:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G0ApQmwLJ1Ro; Mon,  7 Jun 2021 08:49:23 +0000 (UTC)
+Received: from lists.linuxfoundation.org (lf-lists.osuosl.org [140.211.9.56])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E99F0831E7;
+	Mon,  7 Jun 2021 08:49:22 +0000 (UTC)
+Received: from lf-lists.osuosl.org (localhost [127.0.0.1])
+	by lists.linuxfoundation.org (Postfix) with ESMTP id C1260C000D;
+	Mon,  7 Jun 2021 08:49:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists.linuxfoundation.org (Postfix) with ESMTP id 72BCCC0001
+ for <iommu@lists.linux-foundation.org>; Mon,  7 Jun 2021 08:49:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C05C831DA
+ for <iommu@lists.linux-foundation.org>; Mon,  7 Jun 2021 08:49:21 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7HPvjkhHK_mw for <iommu@lists.linux-foundation.org>;
+ Mon,  7 Jun 2021 08:49:17 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from youngberry.canonical.com (youngberry.canonical.com
+ [91.189.89.112])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DFC238322A
+ for <iommu@lists.linux-foundation.org>; Mon,  7 Jun 2021 08:49:16 +0000 (UTC)
+Received: from mail-wr1-f70.google.com ([209.85.221.70])
+ by youngberry.canonical.com with esmtps (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.93)
+ (envelope-from <krzysztof.kozlowski@canonical.com>)
+ id 1lqAwc-0004kr-NS
+ for iommu@lists.linux-foundation.org; Mon, 07 Jun 2021 08:49:14 +0000
+Received: by mail-wr1-f70.google.com with SMTP id
+ s8-20020adff8080000b0290114e1eeb8c6so7543631wrp.23
+ for <iommu@lists.linux-foundation.org>; Mon, 07 Jun 2021 01:49:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cZ1PobqwBPaq9OP1zdBWQXQtgWjqazmERJP5g1G4lIo=;
-        b=ho+PZUyRUmvfn6i4MmzGwYKoPxGRPowO6SqhvphtWe7M0dPJzPIr8wl17K5vLAIexA
-         R1etkh/bWu7rdWBBqha3MQkHZI1aZ6ZNidp6FdAc97iarZr5u1pMbi6RqNbnjouv7SY+
-         ep28mVhSbnAD3kGUOYEVohhczW+fV2bomu/Y2mVXSTp8e0dQxVr4WFucZQ9rX/N93dqb
-         eQP/yGL4JgFGoFlW4bqfO6e1HMx/d6NJO3jCDc9hyxEZAnzHkW76PXe0zki2S6at7Gv6
-         qWmMTCwpPEHrHkEgGkyUfMN3Z3lnHYixdSiiIZeV5vH0FH0QlRfxiVLs8xHPzc4n6i7r
-         uLBA==
-X-Gm-Message-State: AOAM531UDiIy4bJ9tRFyipfQCsAOQLhgBlNXBBy2vbQCoA6OatpBiMGJ
-        w2a2mehSNP80Xg3KRK9DchVRdrMJkkNHT1/QwAp6wiaHZ7Wh4IzLoyzn6x5ETRFypaGfu+fMV87
-        V07gYyeISuYeUb9YvkUTuSftHz00bQTYh44xhQG4v
-X-Received: by 2002:a05:6000:18a8:: with SMTP id b8mr15594903wri.208.1623055754367;
-        Mon, 07 Jun 2021 01:49:14 -0700 (PDT)
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=cZ1PobqwBPaq9OP1zdBWQXQtgWjqazmERJP5g1G4lIo=;
+ b=W9HH+8iTTQdwwvptE+BUU3q5nKYUelct+D1RbPwblVLGNLC83P62Py0jihvbV4BGlc
+ ZrR5FMv41VD1X/HFQyjIIlVUVsg7/1TRxT9PBnGVHVOfOBv1Q9c2zYJoCzaCBrX3Pz+n
+ oQKzmlbmeTmMGNyRBfyFJuDU9IrcLMhZauN5qsPosG5zmybi7/R1tfSjpRW1wjhpVSCn
+ tD3LL3+JwO5E1zb2bF0baeoPLJWbOlzHfIphrGRWQb3kMtfjoyfPu84zKnEVao+m5iYP
+ kQdnYfO7YGR6z+IkkPVB3vaUGQNEoVekT1XZ/GjyVTF3rfgZqA1xcsAAIlYsyBw7HOzS
+ IvKQ==
+X-Gm-Message-State: AOAM531HP+lZu9g6JRI6quzxyV6FoAYVl5pkh3nJXMbTraYyzpORpnT/
+ q5wq3eYa8xIv4cQLAYXTt7KN89rRcdkcDO4/z6nRlIZxkFt1K4yzf50nUt1mqYmzBXryKKAZ/TY
+ PB34xCZ1HkencfP7NP7YTBURv1VBBiVjGBGLj20CSE+1tkIY=
+X-Received: by 2002:a05:6000:18a8:: with SMTP id
+ b8mr15594916wri.208.1623055754370; 
+ Mon, 07 Jun 2021 01:49:14 -0700 (PDT)
 X-Google-Smtp-Source: ABdhPJzA7m3LT7tZJSbZni7ARguVUZ0E3Tcg3okMcx3uwOvjUO9dttwrLYXz7AJDCS5ICKmPinUN0w==
-X-Received: by 2002:a05:6000:18a8:: with SMTP id b8mr15594895wri.208.1623055754224;
-        Mon, 07 Jun 2021 01:49:14 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-185-9.adslplus.ch. [188.155.185.9])
-        by smtp.gmail.com with ESMTPSA id k16sm13380079wmr.42.2021.06.07.01.49.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jun 2021 01:49:13 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+X-Received: by 2002:a05:6000:18a8:: with SMTP id
+ b8mr15594895wri.208.1623055754224; 
+ Mon, 07 Jun 2021 01:49:14 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-185-9.adslplus.ch.
+ [188.155.185.9])
+ by smtp.gmail.com with ESMTPSA id k16sm13380079wmr.42.2021.06.07.01.49.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 07 Jun 2021 01:49:13 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Krishna Reddy <vdumpa@nvidia.com>, linux-tegra@vger.kernel.org,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org,
-        Dmitry Osipenko <digetx@gmail.com>
+To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+ arm@kernel.org, soc@kernel.org
 Subject: [GIT PULL] memory: Tegra memory controller for v5.14
-Date:   Mon,  7 Jun 2021 10:49:10 +0200
-Message-Id: <20210607084910.21024-1-krzysztof.kozlowski@canonical.com>
+Date: Mon,  7 Jun 2021 10:49:10 +0200
+Message-ID: <20210607084910.21024-1-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Precedence: bulk
-List-ID: <linux-tegra.vger.kernel.org>
-X-Mailing-List: linux-tegra@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+ Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+ Krzysztof Kozlowski <krzk@kernel.org>, Jon Hunter <jonathanh@nvidia.com>,
+ iommu@lists.linux-foundation.org, Thierry Reding <thierry.reding@gmail.com>,
+ Nicolin Chen <nicolinc@nvidia.com>, linux-tegra@vger.kernel.org,
+ Dmitry Osipenko <digetx@gmail.com>, Robin Murphy <robin.murphy@arm.com>,
+ linux-arm-kernel@lists.infradead.org
+X-BeenThere: iommu@lists.linux-foundation.org
+X-Mailman-Version: 2.1.15
+Precedence: list
+List-Id: Development issues for Linux IOMMU support
+ <iommu.lists.linux-foundation.org>
+List-Unsubscribe: <https://lists.linuxfoundation.org/mailman/options/iommu>,
+ <mailto:iommu-request@lists.linux-foundation.org?subject=unsubscribe>
+List-Archive: <http://lists.linuxfoundation.org/pipermail/iommu/>
+List-Post: <mailto:iommu@lists.linux-foundation.org>
+List-Help: <mailto:iommu-request@lists.linux-foundation.org?subject=help>
+List-Subscribe: <https://lists.linuxfoundation.org/mailman/listinfo/iommu>,
+ <mailto:iommu-request@lists.linux-foundation.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Errors-To: iommu-bounces@lists.linux-foundation.org
+Sender: "iommu" <iommu-bounces@lists.linux-foundation.org>
+Message-ID: <20210607084910.lASTVmOALaqxjp4DIx8re1uJLwF9rziCL1f2HPMf4Uw@z>
 
 Hi Olof and Arnd,
 
@@ -200,3 +239,7 @@ Thierry Reding (16):
  include/soc/tegra/mc.h                   |   65 +-
  33 files changed, 5566 insertions(+), 3973 deletions(-)
  create mode 100644 drivers/memory/tegra/tegra194.c
+_______________________________________________
+iommu mailing list
+iommu@lists.linux-foundation.org
+https://lists.linuxfoundation.org/mailman/listinfo/iommu
