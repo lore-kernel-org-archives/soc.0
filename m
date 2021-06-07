@@ -1,108 +1,202 @@
-Return-Path: <SRS0=Szqg=LA=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <linux-tegra-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BC09C4743D
-	for <linux-arm-kernel@archiver.kernel.org>; Sun,  6 Jun 2021 20:15:49 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BDDAD613AF
-	for <linux-arm-kernel@archiver.kernel.org>; Sun,  6 Jun 2021 20:15:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BDDAD613AF
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:List-Subscribe:List-Help:
-	List-Post:List-Archive:List-Unsubscribe:List-Id:Cc:To:Date:Message-Id:
-	References:In-Reply-To:From:Subject:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=/N15C+TG3JYg3XepD5EAFhnlZ7QCYwVlxZhbgA4Udco=; b=UElATzJL4tfkSK
-	SJ3Ha8Jr3Sd2cnyzcvQjpkfE3/gMyC4yEEN0LIDvhTdLom3fSc+Mb/cao4wgB894J3gnCr0peCep/
-	hQz640xSTFGH1ZYsP51UKRSO5rkDwHPGitKMdgCVLwAozXZCtUt9VaUPiq994d8UajV/mMMCjhMEq
-	u7NqvVYybgLiG5/gGnZq/31v375MO0FK2OSdh8mtxupWWnVEFz/o/0BfovY24dNuPfZzCYTdprLxp
-	geFLOxhCSY09FrIFYA326r+4Lln3ZhUzTRRxDhZQyx1mqc+3sJpQH8Uk9g+mdJvbXNNJygl2IrBWa
-	v/xfgHDer/I3wdZDrarA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lpz9s-000lHX-Vj; Sun, 06 Jun 2021 20:14:09 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lpz9q-000lHB-5N
- for linux-arm-kernel@lists.infradead.org; Sun, 06 Jun 2021 20:14:07 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4D522613AF;
- Sun,  6 Jun 2021 20:14:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1623010445;
- bh=qFIWkfsL3N/CxGgEuHQ+owwXxgek2OswTYnZmFjD04g=;
- h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
- b=KF7mcRp+jpHStZpKk5bnFTKE4iJWSRahuxf1XroxfUWayvPTu3JqzKZMZ07546c54
- 4LO7sxNK8W8cwNcFYNF2rST244VtQiG5yIDGlbSR6K+6Wwxmz+R5aZL/5xIlBHPeJt
- eXcRcfPMnD+wptYVsTOKbmSF5/N+ab/UYxXyXxD2JyLz3Idz6Ae979VuN1rWtR0rq2
- SSUn9oZl3BKCHqOIx2ZEqTmZlnzLcCHBifDNUsmlY69Yvv2kZRN65DlrzIYYr1tjHs
- ZlsbzNGmkl2UZzuo0E8BTPomIgPuO5neWxmZSQc4SKEc0S+OGDa+dZl2X89e3K0/8M
- rNu0HRXNw4s4A==
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.13
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20210606192724.GA7363@lx2k>
-References: <20210606192724.GA7363@lx2k>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <20210606192724.GA7363@lx2k>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
- tags/arm-soc-fixes-v5.13-2
-X-PR-Tracked-Commit-Id: b9c112f2c223ce50ef6579c9825a62813b205de4
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: decad3e1d1ed150588dd9d44beacf82295b9d5a5
-Message-ID: <162301044516.15135.10381507080461852412.pr-tracker-bot@kernel.org>
-Date: Sun, 06 Jun 2021 20:14:05 +0000
-To: Olof Johansson <olof@lixom.net>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04F23C47082
+	for <linux-tegra@archiver.kernel.org>; Mon,  7 Jun 2021 08:49:17 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id E499661245
+	for <linux-tegra@archiver.kernel.org>; Mon,  7 Jun 2021 08:49:16 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S230395AbhFGIvG (ORCPT <rfc822;linux-tegra@archiver.kernel.org>);
+        Mon, 7 Jun 2021 04:51:06 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:39465 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230311AbhFGIvG (ORCPT
+        <rfc822;linux-tegra@vger.kernel.org>); Mon, 7 Jun 2021 04:51:06 -0400
+Received: from mail-wr1-f72.google.com ([209.85.221.72])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lqAwc-0004ko-Lc
+        for linux-tegra@vger.kernel.org; Mon, 07 Jun 2021 08:49:14 +0000
+Received: by mail-wr1-f72.google.com with SMTP id v15-20020a5d4a4f0000b0290118dc518878so7587409wrs.6
+        for <linux-tegra@vger.kernel.org>; Mon, 07 Jun 2021 01:49:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cZ1PobqwBPaq9OP1zdBWQXQtgWjqazmERJP5g1G4lIo=;
+        b=ho+PZUyRUmvfn6i4MmzGwYKoPxGRPowO6SqhvphtWe7M0dPJzPIr8wl17K5vLAIexA
+         R1etkh/bWu7rdWBBqha3MQkHZI1aZ6ZNidp6FdAc97iarZr5u1pMbi6RqNbnjouv7SY+
+         ep28mVhSbnAD3kGUOYEVohhczW+fV2bomu/Y2mVXSTp8e0dQxVr4WFucZQ9rX/N93dqb
+         eQP/yGL4JgFGoFlW4bqfO6e1HMx/d6NJO3jCDc9hyxEZAnzHkW76PXe0zki2S6at7Gv6
+         qWmMTCwpPEHrHkEgGkyUfMN3Z3lnHYixdSiiIZeV5vH0FH0QlRfxiVLs8xHPzc4n6i7r
+         uLBA==
+X-Gm-Message-State: AOAM531UDiIy4bJ9tRFyipfQCsAOQLhgBlNXBBy2vbQCoA6OatpBiMGJ
+        w2a2mehSNP80Xg3KRK9DchVRdrMJkkNHT1/QwAp6wiaHZ7Wh4IzLoyzn6x5ETRFypaGfu+fMV87
+        V07gYyeISuYeUb9YvkUTuSftHz00bQTYh44xhQG4v
+X-Received: by 2002:a05:6000:18a8:: with SMTP id b8mr15594903wri.208.1623055754367;
+        Mon, 07 Jun 2021 01:49:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzA7m3LT7tZJSbZni7ARguVUZ0E3Tcg3okMcx3uwOvjUO9dttwrLYXz7AJDCS5ICKmPinUN0w==
+X-Received: by 2002:a05:6000:18a8:: with SMTP id b8mr15594895wri.208.1623055754224;
+        Mon, 07 Jun 2021 01:49:14 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-185-9.adslplus.ch. [188.155.185.9])
+        by smtp.gmail.com with ESMTPSA id k16sm13380079wmr.42.2021.06.07.01.49.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jun 2021 01:49:13 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc: torvalds@linux-foundation.org, olof@lixom.net, soc@kernel.org,
- arm@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210606_131406_239427_A31157C8 
-X-CRM114-Status: UNSURE (   3.53  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Krishna Reddy <vdumpa@nvidia.com>, linux-tegra@vger.kernel.org,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org,
+        Dmitry Osipenko <digetx@gmail.com>
+Subject: [GIT PULL] memory: Tegra memory controller for v5.14
+Date:   Mon,  7 Jun 2021 10:49:10 +0200
+Message-Id: <20210607084910.21024-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210606201405.ufHlCOP7RxiI4v3v_L0agwTno30xOFaB7StDhY2M5tI@z>
+Content-Transfer-Encoding: 8bit
+Precedence: bulk
+List-ID: <linux-tegra.vger.kernel.org>
+X-Mailing-List: linux-tegra@vger.kernel.org
 
-The pull request you sent on Sun, 6 Jun 2021 12:27:24 -0700:
+Hi Olof and Arnd,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-soc-fixes-v5.13-2
+Tegra memory controller driver changes with necessary dependency from Thierry
+(which you will also get from him):
+1. Dmitry's power domain work on Tegra MC drivers,
+2. Necessary clock and regulator dependencies for Dmitry's work.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/decad3e1d1ed150588dd9d44beacf82295b9d5a5
 
-Thank you!
+Hi Thierry and Will,
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+This is the pull for you to base further SMMU aptches (prevent early SMMU
+faults).
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Best regards,
+Krzysztof
+
+
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+
+  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-tegra-5.14
+
+for you to fetch changes up to 393d66fd2cacba3e6aa95d7bb38790bfb7b1cc3a:
+
+  memory: tegra: Implement SID override programming (2021-06-03 21:50:43 +0200)
+
+----------------------------------------------------------------
+Memory controller drivers for v5.14 - Tegra SoC
+
+1. Enable compile testing of Tegra memory controller drivers.
+2. Unify Tegra memory controller drivers. From Thierry Reding:
+   "This set of patches converges the feature sets of the pre-Tegra186
+   and the post-Tegra186 memory controller drivers such that newer chips
+   can take advantage of some features that were previously only
+   implemented on earlier chips."
+3. Implement SID override programming as part of work to prevent early
+   SMMU faults.
+4. Some simplifications, e.g. use devm-helpers.
+
+This pulls dedicated tag from Thierry Reding with necessary changes to
+Tegra memory controller drivers, as a pre-requisite to series applied
+here.  The changes from Thierry's tree also include their own
+dependencies: regulator and clock driver changes.
+
+----------------------------------------------------------------
+Dmitry Osipenko (18):
+      clk: tegra30: Use 300MHz for video decoder by default
+      clk: tegra: Fix refcounting of gate clocks
+      clk: tegra: Ensure that PLLU configuration is applied properly
+      clk: tegra: Halve SCLK rate on Tegra20
+      clk: tegra: Don't allow zero clock rate for PLLs
+      clk: tegra: cclk: Handle thermal DIV2 CPU frequency throttling
+      clk: tegra: Mark external clocks as not having reset control
+      clk: tegra: Don't deassert reset on enabling clocks
+      regulator: core: Add regulator_sync_voltage_rdev()
+      soc/tegra: regulators: Bump voltages on system reboot
+      soc/tegra: Add stub for soc_is_tegra()
+      soc/tegra: Add devm_tegra_core_dev_init_opp_table()
+      soc/tegra: fuse: Add stubs needed for compile-testing
+      clk: tegra: Add stubs needed for compile-testing
+      memory: tegra: Fix compilation warnings on 64bit platforms
+      memory: tegra: Enable compile testing for all drivers
+      memory: tegra20-emc: Use devm_tegra_core_dev_init_opp_table()
+      memory: tegra30-emc: Use devm_tegra_core_dev_init_opp_table()
+
+Krzysztof Kozlowski (1):
+      Merge tag 'tegra-for-5.14-memory' of https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into for-v5.14/tegra-mc
+
+Thierry Reding (16):
+      Merge branch 'for-5.14/regulator' into for-5.14/soc
+      Merge branch 'for-5.14/clk' into for-5.14/memory
+      Merge branch 'for-5.14/soc' into for-5.14/memory
+      memory: tegra: Consolidate register fields
+      memory: tegra: Unify struct tegra_mc across SoC generations
+      memory: tegra: Introduce struct tegra_mc_ops
+      memory: tegra: Push suspend/resume into SoC drivers
+      memory: tegra: Make per-SoC setup more generic
+      memory: tegra: Extract setup code into callback
+      memory: tegra: Parameterize interrupt handler
+      memory: tegra: Make IRQ support opitonal
+      memory: tegra: Only initialize reset controller if available
+      memory: tegra: Unify drivers
+      memory: tegra: Add memory client IDs to tables
+      memory: tegra: Split Tegra194 data into separate file
+      memory: tegra: Implement SID override programming
+
+ drivers/clk/tegra/clk-periph-gate.c      |   80 +-
+ drivers/clk/tegra/clk-periph.c           |   11 +
+ drivers/clk/tegra/clk-pll.c              |   12 +-
+ drivers/clk/tegra/clk-tegra-periph.c     |    6 +-
+ drivers/clk/tegra/clk-tegra-super-cclk.c |   16 +-
+ drivers/clk/tegra/clk-tegra20.c          |    6 +-
+ drivers/clk/tegra/clk-tegra30.c          |    6 +-
+ drivers/clk/tegra/clk.h                  |    4 -
+ drivers/iommu/tegra-smmu.c               |   16 +-
+ drivers/memory/tegra/Kconfig             |   18 +-
+ drivers/memory/tegra/Makefile            |    6 +-
+ drivers/memory/tegra/mc.c                |  321 +++---
+ drivers/memory/tegra/mc.h                |   25 +
+ drivers/memory/tegra/tegra114.c          | 1245 ++++++++++++----------
+ drivers/memory/tegra/tegra124-emc.c      |    4 +-
+ drivers/memory/tegra/tegra124.c          | 1306 ++++++++++++-----------
+ drivers/memory/tegra/tegra186.c          | 1679 +++++++++---------------------
+ drivers/memory/tegra/tegra194.c          | 1351 ++++++++++++++++++++++++
+ drivers/memory/tegra/tegra20-emc.c       |   48 +-
+ drivers/memory/tegra/tegra20.c           |  110 +-
+ drivers/memory/tegra/tegra210.c          | 1433 +++++++++++++------------
+ drivers/memory/tegra/tegra30-emc.c       |   52 +-
+ drivers/memory/tegra/tegra30.c           | 1292 ++++++++++++-----------
+ drivers/regulator/core.c                 |   23 +
+ drivers/soc/tegra/common.c               |   97 ++
+ drivers/soc/tegra/pmc.c                  |    5 -
+ drivers/soc/tegra/regulators-tegra20.c   |   75 +-
+ drivers/soc/tegra/regulators-tegra30.c   |   75 +-
+ include/linux/clk/tegra.h                |  100 +-
+ include/linux/regulator/driver.h         |    1 +
+ include/soc/tegra/common.h               |   31 +
+ include/soc/tegra/fuse.h                 |   20 +-
+ include/soc/tegra/mc.h                   |   65 +-
+ 33 files changed, 5566 insertions(+), 3973 deletions(-)
+ create mode 100644 drivers/memory/tegra/tegra194.c
