@@ -1,129 +1,63 @@
-Return-Path: <SRS0=B3vr=LB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=BsQ+=LC=gmail.com=joel.stan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB3FC47082
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  7 Jun 2021 09:21:42 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB513C47082
+	for <soc@archiver.kernel.org>; Tue,  8 Jun 2021 02:31:33 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id B522C610A1; Tue,  8 Jun 2021 02:31:33 +0000 (UTC)
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 723B7611AB
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  7 Jun 2021 09:21:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 723B7611AB
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:Cc:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:To
-	:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=CICgPHDaybS+6IKSsOm6v8N7gxmIVii9nQo7qEvTJNw=; b=B7BaNGK85cyzih
-	++5lwLkG4CMCkkGVnEX3Kp5efzxZ+wNy8tm4d47LYB9PZ+iOa3FA+L/DjXPFmkJOuoV2pAkR5+SzL
-	Q//SWlItPbKBFP3fW1QjzxY6UbswCN01es0EM0yJZMBNqqSQPN+ItVaDWysnmJhfZlTI3CRAYp7PQ
-	YHtPwHEhpXpE5ecuZYkWXNSkWyVTX6v9AJss6OuDkt8zcDemXgMc0wIaviai5gBbiK5ZMyyZkecH4
-	7Qn9vaw6c/y0i6RVqXfofJF4oy/LiI/wbPGAEFV7sVY4e1yLOgXINk0cbMcxXnd/WG1ecu3eI4zV6
-	T8nUnt8itmoeAXCr5muw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lqBPa-002XSr-4d; Mon, 07 Jun 2021 09:19:12 +0000
-Received: from youngberry.canonical.com ([91.189.89.112])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lqAwh-002PNx-1o
- for linux-arm-kernel@lists.infradead.org; Mon, 07 Jun 2021 08:49:21 +0000
-Received: from mail-wr1-f69.google.com ([209.85.221.69])
- by youngberry.canonical.com with esmtps (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.93)
- (envelope-from <krzysztof.kozlowski@canonical.com>)
- id 1lqAwc-0004kt-PE
- for linux-arm-kernel@lists.infradead.org; Mon, 07 Jun 2021 08:49:14 +0000
-Received: by mail-wr1-f69.google.com with SMTP id
- x9-20020a5d49090000b0290118d8746e06so7584221wrq.10
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 07 Jun 2021 01:49:14 -0700 (PDT)
+	by mail.kernel.org (Postfix) with ESMTPS id CE28160FDC
+	for <soc@kernel.org>; Tue,  8 Jun 2021 02:31:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CE28160FDC
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=joel.stan@gmail.com
+Received: by mail-qv1-f51.google.com with SMTP id im10so9170487qvb.3
+        for <soc@kernel.org>; Mon, 07 Jun 2021 19:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=X8PuT0wByoowhTlCtWl1lnUG0e3GVawCK0aUaYszsuo=;
+        b=dqdPDJkDCuEZ1Ah4vxQrDsiTr1jeFn6P/47b9G4+fG+MLusPHgEkYcvdJv+Hy86dEu
+         CSopIaCtJPCXLk0V8I/Z1KHKez+5U9UW5zhc9Xfdmpb0+Zj0jYe7qsMcDKVSbBMYeT5U
+         0Jhzg+CKm3wSGZDmC56mF8Ci2uDqS/oPXXEuo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=cZ1PobqwBPaq9OP1zdBWQXQtgWjqazmERJP5g1G4lIo=;
- b=ZAfc1KI9oyc3I+gRZ9hzdSB0lOktDj+IMd53dbwUOKQ27i28Dd2SAqNoQuljvC9Ifd
- xFsaRNmqkArdK31X43z5Wutbo0uEiUaZEIvB9gC99ZDryXrVGnntoLlSyaGlqCMPaVFp
- WSVM8ZsLT1gxxnF2i4XNjThH8oOg7t0qoY3eayRhyKu6XE3s+sbf84x8CF6hsnwdwLfR
- 2Nj1BQw/QJRnSVXXaCOcZ3KSSK/9D7HLea7QcuI0Ge0XJS5kpU8E8AJ1TrDoxZjUGktR
- VREUB7M3UNn6v1qmcjVqbkIGz/nOjesk8+4GCeQ7T/jmfDrZO4K5Zyo89IExofO9TZ77
- 0NXg==
-X-Gm-Message-State: AOAM532ZSnQoBINaoAHv6kvH0fOh9yOrgPIheaydCE+wV0H64EsVLYUJ
- jJpKPG0pOnjHgBvV0TbICpBW9XZ+4wHbaR/fNS1JMC6dtAah9Rx6rWWh/j0VBwnAh6IWdsnIDw3
- M7skA3wUpvNcBQTsEAeaTH/YiwabdYe0VJgqKTQnIhelay7vCHrpf
-X-Received: by 2002:a05:6000:18a8:: with SMTP id
- b8mr15594915wri.208.1623055754368; 
- Mon, 07 Jun 2021 01:49:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzA7m3LT7tZJSbZni7ARguVUZ0E3Tcg3okMcx3uwOvjUO9dttwrLYXz7AJDCS5ICKmPinUN0w==
-X-Received: by 2002:a05:6000:18a8:: with SMTP id
- b8mr15594895wri.208.1623055754224; 
- Mon, 07 Jun 2021 01:49:14 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-185-9.adslplus.ch.
- [188.155.185.9])
- by smtp.gmail.com with ESMTPSA id k16sm13380079wmr.42.2021.06.07.01.49.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 07 Jun 2021 01:49:13 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- arm@kernel.org, soc@kernel.org
-Subject: [GIT PULL] memory: Tegra memory controller for v5.14
-Date: Mon,  7 Jun 2021 10:49:10 +0200
-Message-ID: <20210607084910.21024-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=X8PuT0wByoowhTlCtWl1lnUG0e3GVawCK0aUaYszsuo=;
+        b=sOWXJoujBHtPmu4xDJ6qzlwzE+6tZlLbk3VedOMIUwDvLD7hRSG5Oq1hk994xlvTTV
+         prP3MK0DuEfF86v/yjJ0XGe5x+VrLlg+FqoFccjM0b8VaX80EJ6e/+datD2xmCtqX6FD
+         GWUj0+KuVOpcIPB+QSBwTWVynf7/b6uAsBQm2a8q7DQ4VYeYrgkSNWp8VLXNs9oUeBnb
+         KVd0xZs1bOepI/UTKX6MnTw4Q9H8xNSuW85H2x1FBRg4acvs43/sdJuRR96DW2/xGKmX
+         KLndty9J5LPmq0IL7gIL0teDnsAWbiVaTXgtd+nh26mDdG/SxiZITBbOb+gPDvW0EOEA
+         EfJg==
+X-Gm-Message-State: AOAM532r0bKFb9SnH+SE8SVhALmo42bet20Esbvbf+6EAyjAhIF7HyvF
+	1p4O1b3SPIBLLaYDOs2ILzapla3PwLdxNqigLnurG52OVtw=
+X-Google-Smtp-Source: ABdhPJzhXY/SJseg0VPNHlw2tkO3JkY6p7RIGqOsi5vobBUn+f6MbbHLg2B78ZJxHCzP4QGFMNWGkgF2DhTAh+9rrsE=
+X-Received: by 2002:ad4:4513:: with SMTP id k19mr5251381qvu.10.1623119491048;
+ Mon, 07 Jun 2021 19:31:31 -0700 (PDT)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210607_014919_286387_B0E256A4 
-X-CRM114-Status: GOOD (  15.35  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
- Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
- Krzysztof Kozlowski <krzk@kernel.org>, Jon Hunter <jonathanh@nvidia.com>,
- iommu@lists.linux-foundation.org, Thierry Reding <thierry.reding@gmail.com>,
- Nicolin Chen <nicolinc@nvidia.com>, linux-tegra@vger.kernel.org,
- Dmitry Osipenko <digetx@gmail.com>, Robin Murphy <robin.murphy@arm.com>,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210607084910.BmhlEErP6iK3Fwa7QXy9abN-1ODm-yARk1j6TSy8APc@z>
+From: Joel Stanley <joel@jms.id.au>
+Date: Tue, 8 Jun 2021 02:31:19 +0000
+Message-ID: <CACPK8XduV9F=piu1qh56g+YNOZOBYTW7b2Y=XVYafpYDwWmDYA@mail.gmail.com>
+Subject: [GIT PULL] ARM: aspeed: devicetree changes for 5.14
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>
+Cc: linux-aspeed <linux-aspeed@lists.ozlabs.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Andrew Jeffery <andrewrjeffery@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Olof and Arnd,
+Hello Soc maintainers,
 
-Tegra memory controller driver changes with necessary dependency from Thierry
-(which you will also get from him):
-1. Dmitry's power domain work on Tegra MC drivers,
-2. Necessary clock and regulator dependencies for Dmitry's work.
-
-
-Hi Thierry and Will,
-
-This is the pull for you to base further SMMU aptches (prevent early SMMU
-faults).
-
-Best regards,
-Krzysztof
-
+A normal looking Aspeed pull request for the next merge window.
 
 The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
@@ -131,109 +65,102 @@ The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-tegra-5.14
+  git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
+tags/aspeed-5.14-devicetree
 
-for you to fetch changes up to 393d66fd2cacba3e6aa95d7bb38790bfb7b1cc3a:
+for you to fetch changes up to dd87684c7c9b82ad450cf063c58b4131074ad8f2:
 
-  memory: tegra: Implement SID override programming (2021-06-03 21:50:43 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers for v5.14 - Tegra SoC
-
-1. Enable compile testing of Tegra memory controller drivers.
-2. Unify Tegra memory controller drivers. From Thierry Reding:
-   "This set of patches converges the feature sets of the pre-Tegra186
-   and the post-Tegra186 memory controller drivers such that newer chips
-   can take advantage of some features that were previously only
-   implemented on earlier chips."
-3. Implement SID override programming as part of work to prevent early
-   SMMU faults.
-4. Some simplifications, e.g. use devm-helpers.
-
-This pulls dedicated tag from Thierry Reding with necessary changes to
-Tegra memory controller drivers, as a pre-requisite to series applied
-here.  The changes from Thierry's tree also include their own
-dependencies: regulator and clock driver changes.
+  ARM: dts: aspeed: everest: Add pcie cable card indicator leds
+(2021-06-07 13:38:55 +0930)
 
 ----------------------------------------------------------------
-Dmitry Osipenko (18):
-      clk: tegra30: Use 300MHz for video decoder by default
-      clk: tegra: Fix refcounting of gate clocks
-      clk: tegra: Ensure that PLLU configuration is applied properly
-      clk: tegra: Halve SCLK rate on Tegra20
-      clk: tegra: Don't allow zero clock rate for PLLs
-      clk: tegra: cclk: Handle thermal DIV2 CPU frequency throttling
-      clk: tegra: Mark external clocks as not having reset control
-      clk: tegra: Don't deassert reset on enabling clocks
-      regulator: core: Add regulator_sync_voltage_rdev()
-      soc/tegra: regulators: Bump voltages on system reboot
-      soc/tegra: Add stub for soc_is_tegra()
-      soc/tegra: Add devm_tegra_core_dev_init_opp_table()
-      soc/tegra: fuse: Add stubs needed for compile-testing
-      clk: tegra: Add stubs needed for compile-testing
-      memory: tegra: Fix compilation warnings on 64bit platforms
-      memory: tegra: Enable compile testing for all drivers
-      memory: tegra20-emc: Use devm_tegra_core_dev_init_opp_table()
-      memory: tegra30-emc: Use devm_tegra_core_dev_init_opp_table()
+ASPEED device tree updates for 5.14
 
-Krzysztof Kozlowski (1):
-      Merge tag 'tegra-for-5.14-memory' of https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into for-v5.14/tegra-mc
+ - IBM Rainier and Everest LED descriptions. These systems have a large
+   number of LEDs attached via expanders.
 
-Thierry Reding (16):
-      Merge branch 'for-5.14/regulator' into for-5.14/soc
-      Merge branch 'for-5.14/clk' into for-5.14/memory
-      Merge branch 'for-5.14/soc' into for-5.14/memory
-      memory: tegra: Consolidate register fields
-      memory: tegra: Unify struct tegra_mc across SoC generations
-      memory: tegra: Introduce struct tegra_mc_ops
-      memory: tegra: Push suspend/resume into SoC drivers
-      memory: tegra: Make per-SoC setup more generic
-      memory: tegra: Extract setup code into callback
-      memory: tegra: Parameterize interrupt handler
-      memory: tegra: Make IRQ support opitonal
-      memory: tegra: Only initialize reset controller if available
-      memory: tegra: Unify drivers
-      memory: tegra: Add memory client IDs to tables
-      memory: tegra: Split Tegra194 data into separate file
-      memory: tegra: Implement SID override programming
+ - Ampere Mt Jade updates, as OpenBMC bringup continues for this
+   machine.
 
- drivers/clk/tegra/clk-periph-gate.c      |   80 +-
- drivers/clk/tegra/clk-periph.c           |   11 +
- drivers/clk/tegra/clk-pll.c              |   12 +-
- drivers/clk/tegra/clk-tegra-periph.c     |    6 +-
- drivers/clk/tegra/clk-tegra-super-cclk.c |   16 +-
- drivers/clk/tegra/clk-tegra20.c          |    6 +-
- drivers/clk/tegra/clk-tegra30.c          |    6 +-
- drivers/clk/tegra/clk.h                  |    4 -
- drivers/iommu/tegra-smmu.c               |   16 +-
- drivers/memory/tegra/Kconfig             |   18 +-
- drivers/memory/tegra/Makefile            |    6 +-
- drivers/memory/tegra/mc.c                |  321 +++---
- drivers/memory/tegra/mc.h                |   25 +
- drivers/memory/tegra/tegra114.c          | 1245 ++++++++++++----------
- drivers/memory/tegra/tegra124-emc.c      |    4 +-
- drivers/memory/tegra/tegra124.c          | 1306 ++++++++++++-----------
- drivers/memory/tegra/tegra186.c          | 1679 +++++++++---------------------
- drivers/memory/tegra/tegra194.c          | 1351 ++++++++++++++++++++++++
- drivers/memory/tegra/tegra20-emc.c       |   48 +-
- drivers/memory/tegra/tegra20.c           |  110 +-
- drivers/memory/tegra/tegra210.c          | 1433 +++++++++++++------------
- drivers/memory/tegra/tegra30-emc.c       |   52 +-
- drivers/memory/tegra/tegra30.c           | 1292 ++++++++++++-----------
- drivers/regulator/core.c                 |   23 +
- drivers/soc/tegra/common.c               |   97 ++
- drivers/soc/tegra/pmc.c                  |    5 -
- drivers/soc/tegra/regulators-tegra20.c   |   75 +-
- drivers/soc/tegra/regulators-tegra30.c   |   75 +-
- include/linux/clk/tegra.h                |  100 +-
- include/linux/regulator/driver.h         |    1 +
- include/soc/tegra/common.h               |   31 +
- include/soc/tegra/fuse.h                 |   20 +-
- include/soc/tegra/mc.h                   |   65 +-
- 33 files changed, 5566 insertions(+), 3973 deletions(-)
- create mode 100644 drivers/memory/tegra/tegra194.c
+ - Updated 64MB flash layout for systems using OpenBMC on NOR root file
+   systems.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ - Support for HS200 MMC on AST2600 EVB. This is only supported from A2,
+   so a new device tree is added to support A0 and A1.
+
+ - Update all command lines for early serial output.
+
+----------------------------------------------------------------
+Eddie James (1):
+      ARM: dts: aspeed: Rainier 4U: Remove fan updates
+
+Joel Stanley (2):
+      ARM: dts: aspeed: Set earlycon boot argument
+      ARM: dts: aspeed-g5: Add SCU phandle to GFX node
+
+Quan Nguyen (3):
+      ARM: dts: aspeed: mtjade: Enable OCP card support via NC-SI
+      ARM: dts: aspeed: mtjade: Add PSU support
+      ARM: dts: aspeed: mtjade: switch to 64MB flash layout
+
+Santosh Puranik (1):
+      ARM: dts: aspeed: Everest: Fix cable card PCA chips
+
+Steven Lee (4):
+      ARM: dts: aspeed: ast2600evb: Add sdhci node and gpio regulator
+for A2 evb.
+      ARM: dts: aspeed: ast2600evb: Add phase correction for emmc controller.
+      ARM: dts: aspeed: ast2600evb: Add dts file for A1 and A0
+      ARM: dts: aspeed-g6: Add pinctrl settings
+
+Troy Lee (1):
+      ARM: dts: aspeed: Grow u-boot partition 64MiB OpenBMC flash layout
+
+Vishwanatha Subbanna (7):
+      ARM: dts: aspeed: Everest: Add directly controlled LEDs
+      ARM: dts: aspeed: everest: Add system level indicator leds
+      ARM: dts: aspeed: everest: Add nvme and fan indicator leds
+      ARM: dts: aspeed: everest: Add pcie slot indicator leds
+      ARM: dts: aspeed: everest: Add dimm indicator leds
+      ARM: dts: aspeed: everest: Add vrm and other indicator leds
+      ARM: dts: aspeed: everest: Add pcie cable card indicator leds
+
+ arch/arm/boot/dts/Makefile                         |    1 +
+ arch/arm/boot/dts/aspeed-ast2500-evb.dts           |    2 +-
+ arch/arm/boot/dts/aspeed-ast2600-evb-a1.dts        |   15 +
+ arch/arm/boot/dts/aspeed-ast2600-evb.dts           |  119 +-
+ arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts      |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts     |   59 +-
+ .../boot/dts/aspeed-bmc-arm-centriq2400-rep.dts    |    2 +-
+ .../dts/aspeed-bmc-arm-stardragon4800-rep2.dts     |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts  |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts   |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-facebook-cmm.dts      |    2 +-
+ .../arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts       | 2060 ++++++++++++++++++--
+ arch/arm/boot/dts/aspeed-bmc-ibm-rainier-4u.dts    |   30 -
+ arch/arm/boot/dts/aspeed-bmc-inspur-fp5280g2.dts   |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-inspur-on5263m5.dts   |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-intel-s2600wf.dts     |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-lenovo-hr630.dts      |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-lenovo-hr855xg2.dts   |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-microsoft-olympus.dts |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-opp-lanyang.dts       |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts        |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-opp-mowgli.dts        |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-opp-nicole.dts        |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-opp-palmetto.dts      |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-opp-romulus.dts       |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-opp-swift.dts         |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts        |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts        |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-opp-witherspoon.dts   |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-opp-zaius.dts         |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-portwell-neptune.dts  |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-quanta-q71l.dts       |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-supermicro-x11spi.dts |    2 +-
+ arch/arm/boot/dts/aspeed-g5.dtsi                   |    1 +
+ arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi           |   10 +
+ arch/arm/boot/dts/openbmc-flash-layout-64.dtsi     |   18 +-
+ 37 files changed, 2116 insertions(+), 253 deletions(-)
+ create mode 100644 arch/arm/boot/dts/aspeed-ast2600-evb-a1.dts
