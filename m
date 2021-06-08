@@ -6,14 +6,14 @@ X-Spam-Status: No, score=-9.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F328DC47082
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Jun 2021 10:10:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7B7CC47082
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Jun 2021 10:11:21 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B64CC610C7
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Jun 2021 10:10:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B64CC610C7
+	by mail.kernel.org (Postfix) with ESMTPS id 9833261246
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  8 Jun 2021 10:11:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9833261246
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,32 +22,32 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Date:Cc:To:From:Subject:Message-ID:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=FFlEBM+Q/fYiZTJmgdhafJz0hppgWihC4lLZE/iK2xY=; b=zQ583aXou60gCL
-	NHxTgWecUxRcouLvpbJhM1Zf3+65xZr0SRXibk15ojpZl+nn7Fhvt/EN548ZbfM4tc12Pmdhs4c3n
-	IFD7JwWJO73TNdU1o7vAt2COiuKv/pWBQAOcOyTRO/4gASfisdWA6dd4YlH7XaGZWpFMd+w43CYSe
-	caqube3JOWZm24J8hqWi2NvHhV07OqFJNSaukUXcryEeO3QTmf5ZuTsC0dL353YcQJa6qczxAwdZW
-	zOWBHmAyZHTYBNdzOEv7ha8a2JnanyIjSF4HlqLjaY5tAFSaGZlxMdjWge3KrNnfP8u/jQHQt6Ayp
-	TeOdf3qb3SfcW7q5gQXQ==;
+	List-Owner; bh=TjVzpbRnYDQ1nhRG8SNnSVN1d5GLLy6ztOBdfAWCB6Y=; b=bsyX6H5AhIrPlW
+	gZX2cQRJUaQL09SSJb7fEBt9/+BAJdbf+aON73ldReSmaJYtvLkZLDuIUCC1LojF3Psol3bqSDcHf
+	NCgGzluHQ9P7UYYVQy8kWZrOf32lSerMNvRN4L7ckjIeAA1nxUW+oB8NzMNWNrDvbDZzFIPEY4Vbv
+	r/l60FUAINqoKsNQNsCTrCKBDxfPduBp0YPfqmGrLHSWbgWifvduFcF5LZCkTVAB8873tLvaxksTn
+	CSdCVPpwXcpnNDS6t8gNdthPeQ8Po/DFj42oMHkzpvU4WLT7RB6xQ9VbnBBx83p8mFtdi3j2zSb7F
+	osMOFKkJMzpPmO9/nXVw==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lqYfL-007cCP-RM; Tue, 08 Jun 2021 10:09:00 +0000
+	id 1lqYfk-007cOL-8C; Tue, 08 Jun 2021 10:09:24 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lqYfH-007cAr-5G; Tue, 08 Jun 2021 10:08:56 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EBD43610C7;
- Tue,  8 Jun 2021 10:08:51 +0000 (UTC)
+ id 1lqYfX-007cJi-T7; Tue, 08 Jun 2021 10:09:13 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B8F71610C7;
+ Tue,  8 Jun 2021 10:09:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1623146934;
- bh=sHlA+ACcUVq/vMizcuxob+sYrkGaRg/uGni6rq6akY0=;
+ s=k20201202; t=1623146951;
+ bh=bL8krRWZqQwWrNcRXEvYBsAx1JmcUcZdNphn+9i2syA=;
  h=Subject:From:To:List-Id:Cc:Date:In-Reply-To:References:From;
- b=J4mzUTfnMX3RKMvkHi/yt8DXqtdTXXN3DZLptA+Jys8ahVipB8TXhCYzYo6bhJVNu
- yae1fSxI/qyW8VotCHd7Zt2DXk2Uv0BbYMf7gw8rvPaq5VvjQ6pct1kTF99ny8dMON
- N1MD3XmT52c43NTv1rBSDSEsqBGwZ8bxL1JL0SJ4NwI1nBH114cN0fzbtmvo1eKDEV
- b7Y0Q3kBEbPsRmZaPah8nXhl90avUeG/wbTupThMnofv2RNgbsCFYPklFe3XgkiBJD
- npnnrxEBXpqHYOMki66p2c1Wp1nEtBpO2LZgXds2t4l62o/vDTuInbfclzIgm0mRCr
- /dGQKRMVArfsg==
-Message-ID: <e74b54347fa63b9bee7b2f89c42b9243d009576f.camel@kernel.org>
-Subject: Re: [PATCH V2 6/7] ARM: dts: Add Raspberry Pi 400 support
+ b=gvqGaSGsvkE1QAeo3jW8hAwHNBfo5KSzPBYuFVAi8PKVRkrej/XlJLdIG+/pWgsnZ
+ yrM5auanfsLycop10Q0Jj/4Qh7xDEBAYQiH2bBjJWdPR/PHfwDTMgMLLKG0916f8pY
+ LJyoYndrIjY0zExLPTeV4FSmVntn0VgwDL4Xj2X7EwIhYi62I1kBowoqGOK8LLK5CB
+ S+oohv3TzJWZaxNuDNg37FLf9zdFTVSqh78qqebPpu18kUYFs6GIXH2dbSN/VEC0Zp
+ IrnBIPHf1Ci8lRP9ONl/yJbfMqwwrfk84Wa/qgJd1eedHnX6n8KMOqi5eZBZLJbL+u
+ vF954asBsWONw==
+Message-ID: <53511fc7f1d01341596ba27d8269dfa712aec100.camel@kernel.org>
+Subject: Re: [PATCH V2 7/7] arm64: dts: broadcom: Add reference to RPi 400
 From: nicolas saenz julienne <nsaenz@kernel.org>
 To: Stefan Wahren <stefan.wahren@i2se.com>, Rob Herring <robh+dt@kernel.org>
 List-Id: <soc.lore.kernel.org>
@@ -58,15 +58,15 @@ Cc: Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>,
  <wim@linux-watchdog.org>,  Guenter Roeck <linux@roeck-us.net>,
  devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
  linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org
-Date: Tue, 08 Jun 2021 12:08:49 +0200
-In-Reply-To: <1622981777-5023-7-git-send-email-stefan.wahren@i2se.com>
+Date: Tue, 08 Jun 2021 12:09:06 +0200
+In-Reply-To: <1622981777-5023-8-git-send-email-stefan.wahren@i2se.com>
 References: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
- <1622981777-5023-7-git-send-email-stefan.wahren@i2se.com>
+ <1622981777-5023-8-git-send-email-stefan.wahren@i2se.com>
 User-Agent: Evolution 3.40.0 (3.40.0-1.fc34) 
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210608_030855_247448_1B6A638B 
-X-CRM114-Status: UNSURE (   7.66  )
+X-CRM114-CacheID: sfid-20210608_030911_987935_A44154A9 
+X-CRM114-Status: UNSURE (   7.24  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -83,18 +83,15 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210608100849.QMdngJU9CGsBWO6EDxoG2bZnxLEAtqHLN2OiZIq0f4Y@z>
+Message-ID: <20210608100906.DvAnPFEpTi9IoJ0Rn8r65pkZ4W3Xee78oGE5udpzWq8@z>
 
 On Sun, 2021-06-06 at 14:16 +0200, Stefan Wahren wrote:
-> The Raspberry Pi 400 is like a Pi 4 B designed into a keyboard. But there
-> are some minor differences:
-> 
-> - higher CPU clock rate (1.8 GHz)
-> - different Wifi chip (BCM43456)
-> - power off is now handled via GPIO
-> - no ACT LED
+> This adds a reference to the dts of the Raspberry Pi 400,
+> so we don't need to maintain the content in arm64.
 > 
 > Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
+> ---
 
 Applied for next.
 
