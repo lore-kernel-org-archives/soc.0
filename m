@@ -1,82 +1,125 @@
-Return-Path: <SRS0=66GR=LC=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=69++=LC=lists.linux-foundation.org=iommu-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21BBFC47082
-	for <soc@archiver.kernel.org>; Tue,  8 Jun 2021 14:37:10 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 04A1B61078; Tue,  8 Jun 2021 14:37:10 +0000 (UTC)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68AA6C47082
+	for <iommu@archiver.kernel.org>; Tue,  8 Jun 2021 14:37:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CC7CA61029;
-	Tue,  8 Jun 2021 14:37:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CC7CA61029
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=thierry.reding@gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id c5so21805956wrq.9;
-        Tue, 08 Jun 2021 07:37:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7Ue9KAC7qJaW16JeKkEn8iGR0sqX5WDTSVD1v13dL3I=;
-        b=Ukj+KDqPTO+UJF/BEvU3KpfMksSB2pQeL/ie4KKl0GFxijjAY4WcmnEWRNTrNrLOaR
-         2DHrxG3hpElAs9tZkRP0/ODEDEiC6gBkFv1fpWSr0VMyY7wW+JPwAEbQgknDjgG5FmEo
-         C2wvMPYo0K8Hdm4wtWOlJdLDWExLKL+oPLeJuNCXcgWheReYp+hJQ3Gk/cpnchtoXzMC
-         MSJWVzuoQc288K3blzLLEYrZvkWVx/tozHUzTKd1zNF1LEZVXU3AhdpyoECle1vQ9J4I
-         DDzvd9CzYYUTtfAgl0L3+b5AR0owWjNGEWOzjTWwVPHec8hl8BwT/qF2uxq6svFYXSI9
-         Z3Kw==
+	by mail.kernel.org (Postfix) with ESMTPS id B925361042
+	for <iommu@archiver.kernel.org>; Tue,  8 Jun 2021 14:37:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B925361042
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=iommu-bounces@lists.linux-foundation.org
+Received: from localhost (localhost [127.0.0.1])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71B7C4046A;
+	Tue,  8 Jun 2021 14:37:13 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yHQh5G7H0kSO; Tue,  8 Jun 2021 14:37:12 +0000 (UTC)
+Received: from lists.linuxfoundation.org (lf-lists.osuosl.org [140.211.9.56])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 092954037B;
+	Tue,  8 Jun 2021 14:37:12 +0000 (UTC)
+Received: from lf-lists.osuosl.org (localhost [127.0.0.1])
+	by lists.linuxfoundation.org (Postfix) with ESMTP id D39DAC000D;
+	Tue,  8 Jun 2021 14:37:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists.linuxfoundation.org (Postfix) with ESMTP id E5693C0001
+ for <iommu@lists.linux-foundation.org>; Tue,  8 Jun 2021 14:37:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C9E816067F
+ for <iommu@lists.linux-foundation.org>; Tue,  8 Jun 2021 14:37:10 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v1452H87KCNf for <iommu@lists.linux-foundation.org>;
+ Tue,  8 Jun 2021 14:37:10 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CBABC6005E
+ for <iommu@lists.linux-foundation.org>; Tue,  8 Jun 2021 14:37:09 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id y7so17210543wrh.7
+ for <iommu@lists.linux-foundation.org>; Tue, 08 Jun 2021 07:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=date:from:to:cc:subject:message-id:references:mime-version
+ :content-disposition:in-reply-to:user-agent;
+ bh=7Ue9KAC7qJaW16JeKkEn8iGR0sqX5WDTSVD1v13dL3I=;
+ b=Ukj+KDqPTO+UJF/BEvU3KpfMksSB2pQeL/ie4KKl0GFxijjAY4WcmnEWRNTrNrLOaR
+ 2DHrxG3hpElAs9tZkRP0/ODEDEiC6gBkFv1fpWSr0VMyY7wW+JPwAEbQgknDjgG5FmEo
+ C2wvMPYo0K8Hdm4wtWOlJdLDWExLKL+oPLeJuNCXcgWheReYp+hJQ3Gk/cpnchtoXzMC
+ MSJWVzuoQc288K3blzLLEYrZvkWVx/tozHUzTKd1zNF1LEZVXU3AhdpyoECle1vQ9J4I
+ DDzvd9CzYYUTtfAgl0L3+b5AR0owWjNGEWOzjTWwVPHec8hl8BwT/qF2uxq6svFYXSI9
+ Z3Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7Ue9KAC7qJaW16JeKkEn8iGR0sqX5WDTSVD1v13dL3I=;
-        b=J/5J5YvZXju0ANXMKHr19wBTTZsjjEwoBa9IBGNtLdAg5336p7wRQxiUTnaMRe7PoI
-         VMW/HsXjgH9ktr7M2KCjz4+/nQmRfyWlEkv+7dN87hWPnHmKoUCyd+eoezNXIn6FtxGT
-         PNWMx/ude9ZI1XpXRHmQ3XsgGNIQvsERrIeNKcSwsSLpKiDT2Za0JslRST0Vz/ZYaoAe
-         GB+UxjaSnRMr47eNbNvBp4TvVFiapahE9d2gf5hgW6U9VB68sbvTpHJJ4REff6/kUHmP
-         hIRunFk4tGhsfQQx4F1Uuv6WHQUmVW7+CaPlfuByr911apqtriYxwPMAj1gl2pw1nZ98
-         YCXA==
-X-Gm-Message-State: AOAM531+VHQe+0BmhemtPdvIweGP1LuLecquoNQ5Ym7z3aEhWptsRl96
-	JYntOWB/Ej4CD6UIDZ7T0Yggt+qAfvg=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+ :mime-version:content-disposition:in-reply-to:user-agent;
+ bh=7Ue9KAC7qJaW16JeKkEn8iGR0sqX5WDTSVD1v13dL3I=;
+ b=ZpHIZQ2RTIwxuJDz/5hWT7VP/7YIbSQoomAaclZZVfZ5lRkgBrYK3HYV0u89LCUFqa
+ jysRYHiF+p+61jG+vsxtt3oZ0DBholZNTfmW2OTQRxy1MZ80bhcyIm2FanJ+OG02BfYo
+ G72ixlUxHfPr255sVLGI3IHYi7K9PjVFLzfGPpl7TxOHCswOqEXfbGOWKnq5tWFevlPK
+ 1D0HzdbgI5fifWQDmuf06Q/C5owYcm7OgZtRZzc0fTH8iP4LA9K/9z5G/aC6GNkNtQYc
+ /AzZSkqBvibxVntH37BOe+xV6SFc9P/S8dA9Qh9xgIgJFmGpug0ZU+oUCt7+HYRtvRjT
+ bP3Q==
+X-Gm-Message-State: AOAM531Qv5FlFkgA1fZQXiQagERE7xMQE0Mos/cQejAiImJl526IASUw
+ 2khyXoI1SgP+s27uyadhmWE=
 X-Google-Smtp-Source: ABdhPJyNHULCu3Cz5QZT9AskYvCL9LY9HsQM39c8QCo5M9iEBotkmmSMw3983N23quI52NayDR2YUA==
-X-Received: by 2002:a5d:5987:: with SMTP id n7mr22858341wri.293.1623163027746;
-        Tue, 08 Jun 2021 07:37:07 -0700 (PDT)
+X-Received: by 2002:a5d:5987:: with SMTP id n7mr22858341wri.293.1623163027746; 
+ Tue, 08 Jun 2021 07:37:07 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id p5sm21015798wrd.25.2021.06.08.07.37.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jun 2021 07:37:06 -0700 (PDT)
+ by smtp.gmail.com with ESMTPSA id p5sm21015798wrd.25.2021.06.08.07.37.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 08 Jun 2021 07:37:06 -0700 (PDT)
 Date: Tue, 8 Jun 2021 16:38:48 +0200
 From: Thierry Reding <thierry.reding@gmail.com>
 To: Will Deacon <will@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org, soc@kernel.org, linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Krishna Reddy <vdumpa@nvidia.com>, linux-tegra@vger.kernel.org,
-	iommu@lists.linux-foundation.org,
-	linux-arm-kernel@lists.infradead.org,
-	Dmitry Osipenko <digetx@gmail.com>
 Subject: Re: [GIT PULL] memory: Tegra memory controller for v5.14
 Message-ID: <YL+A+MPjjaa3nSwq@orome.fritz.box>
 References: <20210607084910.21024-1-krzysztof.kozlowski@canonical.com>
  <20210608120128.GB10174@willie-the-truck>
 MIME-Version: 1.0
+In-Reply-To: <20210608120128.GB10174@willie-the-truck>
+User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+ linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+ Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org, soc@kernel.org,
+ arm@kernel.org, Nicolin Chen <nicolinc@nvidia.com>,
+ iommu@lists.linux-foundation.org, Dmitry Osipenko <digetx@gmail.com>,
+ Robin Murphy <robin.murphy@arm.com>, linux-arm-kernel@lists.infradead.org
+X-BeenThere: iommu@lists.linux-foundation.org
+X-Mailman-Version: 2.1.15
+Precedence: list
+List-Id: Development issues for Linux IOMMU support
+ <iommu.lists.linux-foundation.org>
+List-Unsubscribe: <https://lists.linuxfoundation.org/mailman/options/iommu>,
+ <mailto:iommu-request@lists.linux-foundation.org?subject=unsubscribe>
+List-Archive: <http://lists.linuxfoundation.org/pipermail/iommu/>
+List-Post: <mailto:iommu@lists.linux-foundation.org>
+List-Help: <mailto:iommu-request@lists.linux-foundation.org?subject=help>
+List-Subscribe: <https://lists.linuxfoundation.org/mailman/listinfo/iommu>,
+ <mailto:iommu-request@lists.linux-foundation.org?subject=subscribe>
+Content-Type: multipart/mixed; boundary="===============0823224380131988383=="
+Errors-To: iommu-bounces@lists.linux-foundation.org
+Sender: "iommu" <iommu-bounces@lists.linux-foundation.org>
+Message-ID: <20210608143848.24DD_kzxRAMzb9KCiQBnCh2gSkGOnamtN4btqK29E_s@z>
+
+
+--===============0823224380131988383==
 Content-Type: multipart/signed; micalg=pgp-sha256;
 	protocol="application/pgp-signature"; boundary="f7Os7LJ667BkQ0FG"
 Content-Disposition: inline
-In-Reply-To: <20210608120128.GB10174@willie-the-truck>
-User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
 
 
 --f7Os7LJ667BkQ0FG
@@ -155,3 +198,15 @@ aWasonEd33phX1sPzS0CucADcNfY4PaIkpbW+aM0w3qHdTmS05avnaU/5w2aRpZe
 -----END PGP SIGNATURE-----
 
 --f7Os7LJ667BkQ0FG--
+
+--===============0823224380131988383==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+iommu mailing list
+iommu@lists.linux-foundation.org
+https://lists.linuxfoundation.org/mailman/listinfo/iommu
+--===============0823224380131988383==--
