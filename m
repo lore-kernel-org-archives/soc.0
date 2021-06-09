@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0263FC48BCD
-	for <dri-devel@archiver.kernel.org>; Wed,  9 Jun 2021 12:11:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3919C48BCD
+	for <dri-devel@archiver.kernel.org>; Wed,  9 Jun 2021 12:11:10 +0000 (UTC)
 Received: from gabe.freedesktop.org (gabe.freedesktop.org [131.252.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9C9B56124C
-	for <dri-devel@archiver.kernel.org>; Wed,  9 Jun 2021 12:11:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9C9B56124C
+	by mail.kernel.org (Postfix) with ESMTPS id 5D09661285
+	for <dri-devel@archiver.kernel.org>; Wed,  9 Jun 2021 12:11:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5D09661285
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=dri-devel-bounces@lists.freedesktop.org
 Received: from gabe.freedesktop.org (localhost [127.0.0.1])
-	by gabe.freedesktop.org (Postfix) with ESMTP id 9DD9F6E28B;
+	by gabe.freedesktop.org (Postfix) with ESMTP id E1F5C6E8E7;
 	Wed,  9 Jun 2021 12:11:04 +0000 (UTC)
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de
  [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
- by gabe.freedesktop.org (Postfix) with ESMTPS id F0E066E8E7
+ by gabe.freedesktop.org (Postfix) with ESMTPS id F074C6E28B
  for <dri-devel@lists.freedesktop.org>; Wed,  9 Jun 2021 12:11:02 +0000 (UTC)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
  by metis.ext.pengutronix.de with esmtps
  (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim 4.92)
  (envelope-from <ore@pengutronix.de>)
- id 1lqx2q-0007WN-62; Wed, 09 Jun 2021 14:10:52 +0200
+ id 1lqx2q-0007WP-60; Wed, 09 Jun 2021 14:10:52 +0200
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
  (envelope-from <ore@pengutronix.de>)
- id 1lqx2o-0004t5-Te; Wed, 09 Jun 2021 14:10:50 +0200
+ id 1lqx2o-0004tE-Ub; Wed, 09 Jun 2021 14:10:50 +0200
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Daniel Vetter <daniel@ffwll.ch>,
@@ -39,9 +39,10 @@ To: Arnd Bergmann <arnd@arndb.de>, Daniel Vetter <daniel@ffwll.ch>,
  Rob Herring <robh+dt@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
  Shawn Guo <shawnguo@kernel.org>, soc@kernel.org,
  Thierry Reding <thierry.reding@gmail.com>
-Subject: [PATCH v1 2/4] dt-bindings: vendor-prefixes: Add an entry for SKOV A/S
-Date: Wed,  9 Jun 2021 14:10:48 +0200
-Message-ID: <20210609121050.18715-3-o.rempel@pengutronix.de>
+Subject: [PATCH v1 3/4] dt-bindings: arm: fsl: add SKOV imx6q and imx6dl based
+ boards
+Date: Wed,  9 Jun 2021 14:10:49 +0200
+Message-ID: <20210609121050.18715-4-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210609121050.18715-1-o.rempel@pengutronix.de>
 References: <20210609121050.18715-1-o.rempel@pengutronix.de>
@@ -71,28 +72,38 @@ Cc: devicetree@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
  linux-arm-kernel@lists.infradead.org
 Errors-To: dri-devel-bounces@lists.freedesktop.org
 Sender: "dri-devel" <dri-devel-bounces@lists.freedesktop.org>
-Message-ID: <20210609121048.kdqt0G-3U06xn9tLMTM_YGr7jXNWCf__rgeEk122T1c@z>
+Message-ID: <20210609121049._Km0Tx-zq5cMTOEuWnJoiWrt1JkibShXl6mYg4OsXqs@z>
 
-Add "skov" entry for the SKOV A/S: https://www.skov.com/en/
+Add SKOV imx6q/dl LT2, LT6 and mi1010ait-1cp1 boards.
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/arm/fsl.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index b868cefc7c55..4e1a9f6b51c0 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1056,6 +1056,8 @@ patternProperties:
-     description: Silicon Integrated Systems Corp.
-   "^sitronix,.*":
-     description: Sitronix Technology Corporation
-+  "^skov,.*":
-+    description: SKOV A/S
-   "^skyworks,.*":
-     description: Skyworks Solutions, Inc.
-   "^smartlabs,.*":
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index e3c50f231d71..a7c2a5e8649c 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -220,6 +220,9 @@ properties:
+               - prt,prti6q                # Protonic PRTI6Q board
+               - prt,prtwd2                # Protonic WD2 board
+               - rex,imx6q-rex-pro         # Rex Pro i.MX6 Quad Board
++              - skov,imx6q-skov-revc-lt2  # SKOV IMX6 CPU QuadCore lt2
++              - skov,imx6q-skov-revc-lt6  # SKOV IMX6 CPU QuadCore lt6
++              - skov,imx6q-skov-reve-mi1010ait-1cp1 # SKOV IMX6 CPU QuadCore mi1010ait-1cp1
+               - solidrun,cubox-i/q        # SolidRun Cubox-i Dual/Quad
+               - solidrun,hummingboard/q
+               - solidrun,hummingboard2/q
+@@ -376,6 +379,8 @@ properties:
+               - prt,prtvt7                # Protonic VT7 board
+               - rex,imx6dl-rex-basic      # Rex Basic i.MX6 Dual Lite Board
+               - riot,imx6s-riotboard      # RIoTboard i.MX6S
++              - skov,imx6dl-skov-revc-lt2 # SKOV IMX6 CPU SoloCore lt2
++              - skov,imx6dl-skov-revc-lt6 # SKOV IMX6 CPU SoloCore lt6
+               - solidrun,cubox-i/dl            # SolidRun Cubox-i Solo/DualLite
+               - solidrun,hummingboard/dl
+               - solidrun,hummingboard2/dl      # SolidRun HummingBoard2 Solo/DualLite
 -- 
 2.29.2
 
