@@ -1,157 +1,120 @@
-Return-Path: <SRS0=gFkl=LE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=piyp=LE=gmail.com=mnhagan88@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D808EC48BD1
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Jun 2021 22:28:22 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58F97C48BDF
+	for <soc@archiver.kernel.org>; Thu, 10 Jun 2021 23:28:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 39E5561403; Thu, 10 Jun 2021 23:28:16 +0000 (UTC)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A1E4C613DE
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Jun 2021 22:28:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A1E4C613DE
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=ZWAP0/EBEfO5GQSFVawi7GAQP7ODkUrgbq0zB5lzQc0=; b=zY2s3j3rlgUnUa
-	Rdfvf21qCLUXE28xjJ5lVq7B19joW0uLaiGH6WcaHwIN5KxeqPtn2PLAAbKNAS+BXMDy5aGXWv7ou
-	xCOyQkMEIKnZsgEPmNrxb+Da/CumFj/yD+Nq4uJupKVFSSfDgYkHS8VkSB0QkPvRfPGLm1rEco4Y+
-	/f4pBnVjOyNQ59XgCB8j4Fvgkch9YhwNpyMw8HVhDlS6cjpxs1m11wzBvc6OzDNH44kelkcX9v/nZ
-	HSIxismNXdG+yBoUxO/sqve94gdTo/igP5zhGTnw+epEI/DX32AkxCmLvbS0hW9m6S1DjFs5UXNci
-	g6DdIgFptT7BSqcTD5xA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lrT6K-002lKg-CC; Thu, 10 Jun 2021 22:24:36 +0000
-Received: from mail-lj1-f171.google.com ([209.85.208.171])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lrT6G-002lJR-Bj
- for linux-arm-kernel@lists.infradead.org; Thu, 10 Jun 2021 22:24:33 +0000
-Received: by mail-lj1-f171.google.com with SMTP id bn21so7044123ljb.1
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 10 Jun 2021 15:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=mime-version:from:date:message-id:subject:to:cc;
- bh=upPFWARj1vHFZRQDqKP9hbOCIWJSnJnB+X/H1bZtVZg=;
- b=g45/6eODNvJclK52BVGTTwaCQ4UNflJcKE+AuAReDKd8eph+m6ltQYmKB59c5igYZL
- 1gD0Yjjv57p0Z/7X6/qveb4gFGHjdkb0l8OYOdj8KOoJn09BsHLFteUDOWmlKFZsQ61p
- xcMlHi8cIkeaXaOm2i/9niGGoC5EJclbJdQBNk0ns0zzgU5E1SuemWZAMAxyUTmdc4N7
- IJmrh7xfSRoQaA3IvdYUfhvAtn8xf1dO+oFX8XNE/0xT8tYdAvFSjTFJHJkuVIciN/FN
- ktyIlH3sV8kBOoTEKCWAIaroKVW7tQWEMTGzfRFkIJIwP6NTxldeODZq4km93jhQXITD
- oKMw==
+	by mail.kernel.org (Postfix) with ESMTPS id 0CC1B613CB;
+	Thu, 10 Jun 2021 23:28:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0CC1B613CB
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=mnhagan88@gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id i94so4046701wri.4;
+        Thu, 10 Jun 2021 16:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NkHOILVMygEEoZYONCaDsk6m76wqea7EMgUYfwAkp6E=;
+        b=AyrM6aYYpCk/W3IH4jtqrK0gdAw7TpdyWoH75b18wAoaCzycuAPB/OMesODG2n27Ak
+         CJhmqFVk5R6G7f3zjKNhxwJvEeqTKVRhaNjSv2oHwSwzcLmMANt4ydOCjHqWDhPgCjQs
+         qwYoIk+YNbxnj+/Ww8DLfV+gwj7y0KZD5oFvuo36CxEu8kwPKfdsCuvI4UU4vFk+OeoR
+         Ij93lWV/1GQ94JZ+/TbrCxe2vQrhrZ4sfAvO/IvSqSpICf1n1iK3f7VoVeZPHCsgGSRO
+         jFx74kMtQU5BaLC7+huYoNyI6c9N1alScZmUAyg0a9oYC50y+820qMlRIIPt6AuIa4YQ
+         0nfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
- bh=upPFWARj1vHFZRQDqKP9hbOCIWJSnJnB+X/H1bZtVZg=;
- b=rmFaBMbSEdwLG+V4sKR0Q3+xW69OD/mEuU/YXXgdySxqXG6klh5Hp7Hvdc0USvENuo
- /XtqcNX43STh5hp2zgmFP7QeQDjRjCDhFluxP+6Jck4ol8eWoIXuTOHVTR6chXzmVlNA
- 7PsMwNwm20vls5PbV0CHRb6SDYBbtTUMFkrl1YQanlLK40xVLb1IjyEBHw8IyDa+NMyr
- C/kAWZApqWyu5n6HfEpN1SCy1qhJh+C4dC6QnGC6JFZEMgtjiBHuavu3h1FdU0w5kmUY
- aydxfp564rq0VpSyM2E3qeKsg5o10oD3+FuIC/aSiySeDZ+GQmMR3/N0n//vA2Kg8exh
- yxwg==
-X-Gm-Message-State: AOAM533OO/sWt6G1MUhqErzWq0TXbav9RnpFrgWcPyfmv6/6HutBwCBr
- XaWnorb/8LAjstwQcTLTMU+QUsGEM2q6db0TItIrvw==
-X-Google-Smtp-Source: ABdhPJx5i3to20WSxsPuB0EMWt578arivcS9fjm0W2+N5fF7i+MzOS7H+lQYCH1VimMHY+ePknYf1mp/34cFgGAAwkU=
-X-Received: by 2002:a05:651c:1057:: with SMTP id
- x23mr529393ljm.467.1623363810175; 
- Thu, 10 Jun 2021 15:23:30 -0700 (PDT)
-MIME-Version: 1.0
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 11 Jun 2021 00:23:19 +0200
-Message-ID: <CACRpkdYh9kZJU6PAxghPRGBco_61wRZgUnTZr_3qvySPCo5rBw@mail.gmail.com>
-Subject: [GIT PULL] Ux500 DTS changes for v5.14
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NkHOILVMygEEoZYONCaDsk6m76wqea7EMgUYfwAkp6E=;
+        b=CGnZOB1yZR+CGlRvs65RATKyYnacdH/7nszm3lsJZYoTepvAeb4tmyflVZ+SJQF/Qf
+         TBVLIjbU3bYzqcWFpHPUwIN2aXtj7Lwu7D7Xtrvs7H5igCMZHn8Ehu3obbvH2I6B2UZk
+         QTWvFHGL2ewCsnS0D0mtD3qcRkqAstNzVqHR2RuHF2dE0PL6/L1RF8YT277i5GlARcNJ
+         X+Tty2Y3OG/qFLH/cK3GN+pIB39+eCxySqMuKsJ24vDEcTq4yP8zNv9gYOB2C1xGTCzH
+         bGZxFWc4XyRF8GSCDcfFWR/uNZIA/f+mSatC5FfyXlCeAbChblfjAfBY0el/NYnLrmpa
+         x1sA==
+X-Gm-Message-State: AOAM5331v+BSGkMotayOFfrWgangwa7mRokvl13WOXL1RC31pOIBhPLg
+	+hZaMokxl+1fbm8pYvM30Z0=
+X-Google-Smtp-Source: ABdhPJypWTWUMZFBvZneUf16gGGhOmY/Vj3MErZvt8ucDJz8tXaOY9ccvLRmQnYzWdMk9kcOr9TuVA==
+X-Received: by 2002:adf:e8cb:: with SMTP id k11mr754337wrn.127.1623367694702;
+        Thu, 10 Jun 2021 16:28:14 -0700 (PDT)
+Received: from cluster5 ([80.76.206.81])
+        by smtp.gmail.com with ESMTPSA id w13sm5478549wrc.31.2021.06.10.16.28.13
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Thu, 10 Jun 2021 16:28:14 -0700 (PDT)
+From: Matthew Hagan <mnhagan88@gmail.com>
+To: 
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
- Sebastian Reichel <sre@kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210610_152432_438199_F537356D 
-X-CRM114-Status: UNSURE (   9.99  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210610222319.VUXdkSGl9c4hi6ulrR4pstdrL7l-wxh5gKHWe_ZrU14@z>
+Cc: Florian Fainelli <f.fainelli@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Matthew Hagan <mnhagan88@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	bcm-kernel-feedback-list@broadcom.com,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sam Ravnborg <sam@ravnborg.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 0/5] ARM: dts: NSP: add Meraki MX64/MX65
+Date: Fri, 11 Jun 2021 00:27:12 +0100
+Message-Id: <20210610232727.1383117-1-mnhagan88@gmail.com>
+X-Mailer: git-send-email 2.26.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi SoC maintainers,
+Changes from v1:
+- add dtb entries to Makefile
+- add bindings entries to brcm,nsp.yaml
+- change naming to include Meraki name
+- remove unnecessary portions, including pinctrl from meraki-mx6x-common
+- add A0 variant for MX64
 
-here is a collection of DTS changes for the Ux500 platform that
-have been circulated on the list, please pull them in!
-Details in the signed tag.
+Matthew Hagan (5):
+  dt-bindings: arm: bcm: NSP: add Meraki MX64/MX65
+  ARM: dts: NSP: Add Meraki MX64/MX65 to Makefile
+  ARM: dts: NSP: Add common bindings for MX64/MX65
+  ARM: dts: NSP: Add DT files for Meraki MX64 series
+  ARM: dts: NSP: Add DT files for Meraki MX65 series
 
-Thanks,
-Linus Walleij
+ .../devicetree/bindings/arm/bcm/brcm,nsp.yaml |   6 +
+ arch/arm/boot/dts/Makefile                    |   6 +
+ arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi | 298 ++++++++++++++++++
+ .../boot/dts/bcm958625-meraki-kingpin.dtsi    | 131 ++++++++
+ .../arm/boot/dts/bcm958625-meraki-mx64-a0.dts |  45 +++
+ arch/arm/boot/dts/bcm958625-meraki-mx64.dts   |  15 +
+ .../boot/dts/bcm958625-meraki-mx64w-a0.dts    |  55 ++++
+ arch/arm/boot/dts/bcm958625-meraki-mx64w.dts  |  23 ++
+ arch/arm/boot/dts/bcm958625-meraki-mx65.dts   |  15 +
+ arch/arm/boot/dts/bcm958625-meraki-mx65w.dts  |  23 ++
+ .../dts/bcm958625-meraki-mx6x-common.dtsi     | 148 +++++++++
+ 11 files changed, 765 insertions(+)
+ create mode 100644 arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi
+ create mode 100644 arch/arm/boot/dts/bcm958625-meraki-kingpin.dtsi
+ create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dts
+ create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx64.dts
+ create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dts
+ create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx64w.dts
+ create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx65.dts
+ create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx65w.dts
+ create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
 
-The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+-- 
+2.26.3
 
-  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
-tags/ux500-dts-v5.14
-
-for you to fetch changes up to e409c1e1d5cb164361229e3a3f084e4a32544fb6:
-
-  ARM: dts: ux500: Fix orientation of Janice accelerometer (2021-05-24
-01:19:27 +0200)
-
-----------------------------------------------------------------
-Some Ux500 DTS updates for v5.14:
-- Fix interrupt cells, GPIO controller node names in accordance
-  with new YAML schemas.
-- Add proper compatible strings for Broadcomm Wifi and BT.
-- Fix upp and add some mount matrices for accelerometers so
-  e.g. UI:s work as they should.
-- Drop the DRDY pin assignment for a non-existing pin on a
-  magnetometer.
-
-----------------------------------------------------------------
-Linus Walleij (5):
-      ARM: dts: ux500: Fix orientation of accelerometer
-      ARM: dts: ux500: Drop drdy pin assignment from magnetometer
-      ARM: dts: ux500: Fix some compatible strings
-      ARM: dts: href: Mount matrices for TVK R2
-      ARM: dts: ux500: Fix orientation of Janice accelerometer
-
-Sebastian Reichel (2):
-      ARM: dts: ux500: Fix interrupt cells
-      ARM: dts: ux500: Rename gpio-controller node
-
- arch/arm/boot/dts/ste-ab8500.dtsi              | 28 +++++++++++++-------------
- arch/arm/boot/dts/ste-ab8505.dtsi              | 24 +++++++++++-----------
- arch/arm/boot/dts/ste-href-ab8500.dtsi         |  2 +-
- arch/arm/boot/dts/ste-href-tvk1281618-r2.dtsi  |  6 ++++++
- arch/arm/boot/dts/ste-href-tvk1281618-r3.dtsi  |  4 +++-
- arch/arm/boot/dts/ste-href.dtsi                |  2 +-
- arch/arm/boot/dts/ste-snowball.dts             |  2 +-
- arch/arm/boot/dts/ste-ux500-samsung-golden.dts |  3 ++-
- arch/arm/boot/dts/ste-ux500-samsung-janice.dts | 11 +++++-----
- arch/arm/boot/dts/ste-ux500-samsung-skomer.dts |  3 ++-
- 10 files changed, 47 insertions(+), 38 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
