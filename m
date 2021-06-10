@@ -1,76 +1,67 @@
-Return-Path: <SRS0=Vfdp=LE=lists.linux-foundation.org=iommu-bounces@kernel.org>
+Return-Path: <SRS0=gFkl=LE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6E49C48BE0
-	for <iommu@archiver.kernel.org>; Thu, 10 Jun 2021 14:24:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F43AC47094
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Jun 2021 14:25:50 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 726ED613E7
-	for <iommu@archiver.kernel.org>; Thu, 10 Jun 2021 14:24:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 726ED613E7
+	by mail.kernel.org (Postfix) with ESMTPS id 0F04E613E7
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Jun 2021 14:25:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0F04E613E7
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=iommu-bounces@lists.linux-foundation.org
-Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4417383D4D;
-	Thu, 10 Jun 2021 14:24:04 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NGJmWmXyXcdE; Thu, 10 Jun 2021 14:24:03 +0000 (UTC)
-Received: from lists.linuxfoundation.org (lf-lists.osuosl.org [140.211.9.56])
-	by smtp1.osuosl.org (Postfix) with ESMTPS id 2BD8B83D56;
-	Thu, 10 Jun 2021 14:24:03 +0000 (UTC)
-Received: from lf-lists.osuosl.org (localhost [127.0.0.1])
-	by lists.linuxfoundation.org (Postfix) with ESMTP id 004F8C000E;
-	Thu, 10 Jun 2021 14:24:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists.linuxfoundation.org (Postfix) with ESMTP id A3329C000B
- for <iommu@lists.linux-foundation.org>; Thu, 10 Jun 2021 14:24:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8399040637
- for <iommu@lists.linux-foundation.org>; Thu, 10 Jun 2021 14:24:01 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oIKCushUcghj for <iommu@lists.linux-foundation.org>;
- Thu, 10 Jun 2021 14:24:00 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from youngberry.canonical.com (youngberry.canonical.com
- [91.189.89.112])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4019640633
- for <iommu@lists.linux-foundation.org>; Thu, 10 Jun 2021 14:24:00 +0000 (UTC)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:Cc:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:
+	Message-ID:From:References:To:Subject:Reply-To:Content-ID:Content-Description
+	:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=qY8vGneiFDtQSVjVWOd6u6u0uRiBN6AZB0z7GbebFN0=; b=Il4r4L2I3WpTOH
+	Pgg93y2ZvHjY050WjhezKL9qbqLkHtIIl8yBJ7pEdsNOa7rdwPAW77sqiuSceo+BYu5HhW+r6RMKW
+	/6OJ+kduAoR3sxsHZgzA5+bUOVim8TQy6ktEgdfxhdS2cm5G5kxfd9BnG93gYXfTOV/otqC975nzn
+	Rl9F+L5Tgg/eHuKoSbtb7MLdRzAkD7+oX3H+BJgliwFr3pHGNXYbROSa7lEepLwtspQL2OgQ7S5nd
+	frRTvaXb0DZANNuSH7xIW6sNhq7cuRsRnOoQO65eVFO7OQip7dOUDYCu92nr/tGHm+f5GkSRq+zHk
+	KAHczKGp0ts3Jv7ZbQbQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1lrLbJ-0017FY-Il; Thu, 10 Jun 2021 14:24:05 +0000
+Received: from youngberry.canonical.com ([91.189.89.112])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1lrLbF-0017EY-RT
+ for linux-arm-kernel@lists.infradead.org; Thu, 10 Jun 2021 14:24:03 +0000
 Received: from mail-wr1-f72.google.com ([209.85.221.72])
  by youngberry.canonical.com with esmtps (TLS1.2) tls
  TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.93)
  (envelope-from <krzysztof.kozlowski@canonical.com>)
- id 1lrLbC-0002JX-4H
- for iommu@lists.linux-foundation.org; Thu, 10 Jun 2021 14:23:58 +0000
+ id 1lrLbC-0002JU-3s
+ for linux-arm-kernel@lists.infradead.org; Thu, 10 Jun 2021 14:23:58 +0000
 Received: by mail-wr1-f72.google.com with SMTP id
- n2-20020adfb7420000b029010e47b59f31so957312wre.9
- for <iommu@lists.linux-foundation.org>; Thu, 10 Jun 2021 07:23:58 -0700 (PDT)
+ f22-20020a5d58f60000b029011634e39889so964367wrd.7
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 10 Jun 2021 07:23:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:subject:to:cc:references:from:message-id:date
  :user-agent:mime-version:in-reply-to:content-language
  :content-transfer-encoding;
  bh=+wqZL59v8SDuZCGAvgfZHpaTUmd/SqDTBj4hRdNKBbo=;
- b=Dzusu0H2fYBenxeQwSIDHjII80T/efXnj4d+x8giqZTRu2dmVx92rbl3T1BhFzyuKW
- M4OZHZLLLUfDHYQXNwBpnqqFDJHp0T0dHzZOqRSP/xqq9CrW6B8KclE5SAbPdUYzKRa8
- lFejDH+3X4AVf85Dg5SiBjImLdJWAn1uLtoSa+klntlG84xlJPxSDWzs5BoRx8NlxrtS
- Yp4gKgWkOTPeoWKlYiU18l8F5GZQtpIIykc2kQHQ5R4KWk73U5bEX/7hWf/UxsWqUX+/
- /pjieuECMkxHWR0Jq9XhFGVgyqw3xOqjdH/upPeiErHq9MDLkBbIVF66Vq1f4MAi+vak
- XFpQ==
-X-Gm-Message-State: AOAM532tElLRGef+czk+jA1erTopjLYj0rkP2pTBKR2Qzj8kYUNhq0+M
- dGC72QicUUX2vcWLTeN7pj+QK5jqlCqsWIxTAZOcwD7qs3ZM0izq1P2l3KoFE87BHI1LEAMlAME
- 455V89Fb8T2md9iI1HS13rgIgajZbHj8wf1mD3HIls1vLgC8=
-X-Received: by 2002:adf:ed8d:: with SMTP id c13mr5916074wro.164.1623335037669; 
+ b=YzWbfL18hvflKvLHqW2dwoSySg5ozdrn1mIIUu20Hm+gbmKc8JN5XxqjcnmjWZkbiP
+ DdA4qwKUUxjpq8DH6r7qUvn/GrrIzN9AHL4q54mNcX/9sZ1duwRz74FYyfSAsFGBNtSM
+ jOQ3wG2fKMvrKa8qYZv5KpSExanXkZBYPcoIyswx2X1xGUBEPH9ewgJjGB7x72yLICKb
+ 3qKf+giEFR6I31lFGI4C8fJJDAvFU55XHO/UPWJxGcmepUKQ06Sg1EI/Qf6mteK+E+SF
+ OrzPp5TADK8k8zPyK+bMt+ZoMqEd7HFuzs5vEfmPDTYAQx5pg87FlHMOoZCmOCoUmAwp
+ uBaA==
+X-Gm-Message-State: AOAM530N4ae9MQ4lKdefymLJ9QnP6ga55fXBWCnxqs02CemFFjXwEElc
+ bB31xUR40k4/ZmfGfsByygANGK+poXJYvvNmlwKJ3yLXIlEqh8yTPBhD1ecPNKJR3ep8mpSafti
+ nCJNv+CZjRBstHeVxqmYTH7GtjR7BAl7xeFFQEYKrHhA5bhZvJ6Md
+X-Received: by 2002:adf:ed8d:: with SMTP id c13mr5916072wro.164.1623335037661; 
  Thu, 10 Jun 2021 07:23:57 -0700 (PDT)
 X-Google-Smtp-Source: ABdhPJwWLlTc3t66M+OqJpzcEjLbLm8rLUWjRR9mtinW1Hr3buaD1/RibxYzmB57pMJb/ZxfXIgvyQ==
 X-Received: by 2002:adf:ed8d:: with SMTP id c13mr5916040wro.164.1623335037448; 
@@ -93,30 +84,32 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
 MIME-Version: 1.0
 In-Reply-To: <YMHZCaRiQNQCSsVr@orome.fritz.box>
 Content-Language: en-US
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210610_072401_930389_33F3A660 
+X-CRM114-Status: GOOD (  26.89  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>, iommu@lists.linux-foundation.org,
  linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
  Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org, soc@kernel.org,
  arm@kernel.org, Nicolin Chen <nicolinc@nvidia.com>,
- Dmitry Osipenko <digetx@gmail.com>, Robin Murphy <robin.murphy@arm.com>,
- linux-arm-kernel@lists.infradead.org
-X-BeenThere: iommu@lists.linux-foundation.org
-X-Mailman-Version: 2.1.15
-Precedence: list
-List-Id: Development issues for Linux IOMMU support
- <iommu.lists.linux-foundation.org>
-List-Unsubscribe: <https://lists.linuxfoundation.org/mailman/options/iommu>,
- <mailto:iommu-request@lists.linux-foundation.org?subject=unsubscribe>
-List-Archive: <http://lists.linuxfoundation.org/pipermail/iommu/>
-List-Post: <mailto:iommu@lists.linux-foundation.org>
-List-Help: <mailto:iommu-request@lists.linux-foundation.org?subject=help>
-List-Subscribe: <https://lists.linuxfoundation.org/mailman/listinfo/iommu>,
- <mailto:iommu-request@lists.linux-foundation.org?subject=subscribe>
+ Olof Johansson <olof@lixom.net>, Dmitry Osipenko <digetx@gmail.com>,
+ Robin Murphy <robin.murphy@arm.com>, linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Errors-To: iommu-bounces@lists.linux-foundation.org
-Sender: "iommu" <iommu-bounces@lists.linux-foundation.org>
-Message-ID: <20210610142356.mG4k1NDPDMLEMWwtX5s62j-6-Kn7p-Fyv2vQKp9HbKE@z>
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210610142356.0E8mlLMR0rZVVqrEds-cyUsD42DO70L-lT5TR5U-nG4@z>
 
 On 10/06/2021 11:19, Thierry Reding wrote:
 > On Tue, Jun 08, 2021 at 05:48:51PM +0100, Will Deacon wrote:
@@ -188,7 +181,8 @@ Arnd/Olof why they come through me.
 
 Best regards,
 Krzysztof
+
 _______________________________________________
-iommu mailing list
-iommu@lists.linux-foundation.org
-https://lists.linuxfoundation.org/mailman/listinfo/iommu
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
