@@ -1,247 +1,178 @@
-Return-Path: <SRS0=gFkl=LE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=H49W=LE=foss.st.com=prvs=0795380aa1=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76EAAC47094
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Jun 2021 15:07:02 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07902C48BE0
+	for <soc@archiver.kernel.org>; Thu, 10 Jun 2021 16:01:35 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id AC55161419; Thu, 10 Jun 2021 16:01:34 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4C04C613DD
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Jun 2021 15:07:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4C04C613DD
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:Cc:
-	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
-	In-Reply-To:MIME-Version:References:Message-ID:Subject:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=E52AwvhkoZ9TATPbR7Ek1OxF2aTSBNPRWtB7GXsOO14=; b=k4JpdSLqea7Q6FIRXDWnNPBhOI
-	AHGW4e5zJM0kFzujLgp+mMP6YM8tNIw6PxQ3f9CgfItfWaY7ttbGwMIul58VL6ZFDyUG3g9zN60CO
-	YK5VPg0kq9vbPBCd2Ypg31KFdoRmvKwjQdxQdaEpVGnnfbFvUeEohHktGsOqsXvbuWCvu6cVmx9zo
-	4aJIPUsK5BNRTl/o7OmVQofRdFMAlx3aloWTsKI0cDM8MjLclJyeSEzUu6RAuhpbAD5y8PCMQD4Y/
-	MJCVXRnhKxKcTyFqqWo0EU/F22NyGtPhcq/OVhWywO1TcJezzuKfTHrzUvlh2iuHAY8sGZEWcN84M
-	zHBENDzA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lrMEn-001Hru-0z; Thu, 10 Jun 2021 15:04:53 +0000
-Received: from mail-wr1-f49.google.com ([209.85.221.49])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lrMEg-001Hp7-JT
- for linux-arm-kernel@lists.infradead.org; Thu, 10 Jun 2021 15:04:50 +0000
-Received: by mail-wr1-f49.google.com with SMTP id m18so2716350wrv.2
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 10 Jun 2021 08:04:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=date:from:to:cc:subject:message-id:references:mime-version
- :content-disposition:in-reply-to:user-agent;
- bh=maDX1SqEQGmbJlvnWGoFUMoFJ5cg99gOE1aPzue8sQc=;
- b=CM3OxKfIneIAUiLf5Zk7CX1dZ+8sSdQ76IbHP2tuZgRjPcYy/z1Yv6PUlaqE9NYSBo
- QWw2VAs6hA/Rt5fp6On+lvmLyJXpiGVnNihRdFlPAjoGXJ361gMv8lMt4qkdtZAHUnlK
- +WB8MpPrfSQJoARGfQzv3XE4xtLN2foAvm4fcVvJdrgxn1B++udXsElXnAMJpTewDg2w
- ubV1bzDUShW6GGqKdbh+b5iiVANMa9DBWeBV3ce6k1PXFUK3ich76bw4yYXaTlTf/yY/
- idZsW7AX4esUjWByduaTJLezo70qlY0CUWWXtc/drySh17MBJAT8e/vM4/bav/3ulLIi
- 09DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to:user-agent;
- bh=maDX1SqEQGmbJlvnWGoFUMoFJ5cg99gOE1aPzue8sQc=;
- b=CNDOy8R3Etkm8u5XRSiKhWsSHJqOEXPzhFSDVhpghjxaOZdMYyBxmNFxlDnVP7hp3z
- lsmxVhXoc9zquFCg84K0VZPDgDmv36xzxwuCjHpLY3YIqxDrrxaRdFZ1XTFg0EK825dF
- eyE2MQo5I1lyycs8WYEfG6+P4/fUMwv7yjlltIKJ77PDidAQVkH+aNvr5Jl4P8yOOsFT
- CVojH9obxQ4hyi6bHy/oh9bPdb6oCd5Z6P71XAPSgy+vOgkyfYOQcqBZ/bZkzO4JJ571
- AeoMSIxTN8jwJZqcu/Cn1+Aa/cJ2Yi9UVdXU/xNRjNxC5b9Tspq2vBtAeXOZjaWwsv8N
- lunw==
-X-Gm-Message-State: AOAM533s0FusabpPFlNa/q0rEJZaUSJYxj50ApesXJ0onzwekRIsQ59v
- Kij9dIxC1Q9Ln6gNgrXbwRs=
-X-Google-Smtp-Source: ABdhPJwI0pDe52r2vhAsfmYMLDJnqn5RBM1d0jDdXYIV9WJl4CSRRI62IkWpVAjPBPaE3eD5NbX/ng==
-X-Received: by 2002:adf:f7d1:: with SMTP id a17mr6103816wrq.84.1623337424570; 
- Thu, 10 Jun 2021 08:03:44 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
- by smtp.gmail.com with ESMTPSA id m132sm3222349wmf.10.2021.06.10.08.03.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Jun 2021 08:03:43 -0700 (PDT)
-Date: Thu, 10 Jun 2021 17:05:27 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
- Will Deacon <will@kernel.org>
-Subject: Re: [GIT PULL] memory: Tegra memory controller for v5.14
-Message-ID: <YMIqNynz29Z9fYi3@orome.fritz.box>
-References: <20210607084910.21024-1-krzysztof.kozlowski@canonical.com>
- <20210608120128.GB10174@willie-the-truck>
- <YL+A+MPjjaa3nSwq@orome.fritz.box>
- <20210608164851.GB10994@willie-the-truck>
- <YMHZCaRiQNQCSsVr@orome.fritz.box>
- <8c18edeb-2e3e-9072-6bb4-11637d0ca3e5@canonical.com>
-MIME-Version: 1.0
-In-Reply-To: <8c18edeb-2e3e-9072-6bb4-11637d0ca3e5@canonical.com>
-User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210610_080446_695913_A428C455 
-X-CRM114-Status: GOOD (  39.66  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by mail.kernel.org (Postfix) with ESMTPS id D1CEA60E0B;
+	Thu, 10 Jun 2021 16:01:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D1CEA60E0B
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=prvs=0795380aa1=alexandre.torgue@foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15AFpHRk011785;
+	Thu, 10 Jun 2021 18:01:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : message-id : date : mime-version : content-type :
+ content-transfer-encoding; s=selector1;
+ bh=A9DmyvPCllcOG5+PI6vbGbebM1Cm8Cshi5CAB6LuuYM=;
+ b=X0HLqBWz5yfSn/I0NpVL1LtnsUrTg3SsemvKwUibyVnosZFnvrQRybSXK8N1c5gSleJf
+ x2jWrCkgALTNnyQiT5FYmCxJ0bw6qSf1COk2E1njESuMpxvM43oqgzOQ3M7mlherjkP2
+ 6pG8Umn5RVmTQdZvRDpwCXOgbLC5oaSHq4K960Zm4ZwIRzx6R8qZpsXwQcPrsm+dBcLU
+ hW3L1mXRM8j9SrA6sat7vqdASElbar2tp7nEs6AjFCD0HHVQYmsMzO9dcDsZxuhtvULo
+ ySULrCIeXhyVJh5Ohq878u2dcxSEGdsVC/MSiiKNYfg2/3EurRT7HcVT3bGs2jXIUuoY Sw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com with ESMTP id 393eqyjshk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Jun 2021 18:01:25 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 38B8F10002A;
+	Thu, 10 Jun 2021 18:01:24 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 131D422A6CE;
+	Thu, 10 Jun 2021 18:01:15 +0200 (CEST)
+Received: from lmecxl0912.lme.st.com (10.75.127.51) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 10 Jun
+ 2021 18:01:14 +0200
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, iommu@lists.linux-foundation.org,
- linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
- Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org, soc@kernel.org,
- arm@kernel.org, Nicolin Chen <nicolinc@nvidia.com>,
- Olof Johansson <olof@lixom.net>, Dmitry Osipenko <digetx@gmail.com>,
- Robin Murphy <robin.murphy@arm.com>, linux-arm-kernel@lists.infradead.org
-Content-Type: multipart/mixed; boundary="===============3477768206376093663=="
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210610150527.1EuUlOntN8owYiVVRHOA8Y2Qf1-gkljVbWbjYF3G-_0@z>
-
-
---===============3477768206376093663==
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="7mpR+8HugVK1gP7Y"
-Content-Disposition: inline
-
-
---7mpR+8HugVK1gP7Y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jun 10, 2021 at 04:23:56PM +0200, Krzysztof Kozlowski wrote:
-> On 10/06/2021 11:19, Thierry Reding wrote:
-> > On Tue, Jun 08, 2021 at 05:48:51PM +0100, Will Deacon wrote:
-> >> On Tue, Jun 08, 2021 at 04:38:48PM +0200, Thierry Reding wrote:
-> >>> On Tue, Jun 08, 2021 at 01:01:29PM +0100, Will Deacon wrote:
-> >>>> On Mon, Jun 07, 2021 at 10:49:10AM +0200, Krzysztof Kozlowski wrote:
-> >>>>> This is the pull for you to base further SMMU aptches (prevent earl=
-y SMMU
-> >>>>> faults).
-> >>>>
-> >>>> This is a tonne of code for me to pull into the SMMU tree given that=
- I only
-> >>>> want one patch!
-> >>>>
-> >>>> Thierry, if I just stick:
-> >>>>
-> >>>> https://lore.kernel.org/r/20210603164632.1000458-4-thierry.reding@gm=
-ail.com
-> >>>>
-> >>>> on its own branch, can you stitch together whatever you need?
-> >>>
-> >>> I'm not sure I understand what you're proposing. For reference, here's
-> >>> the set of patches that I sent out:
-> >>>
-> >>>   1. memory: tegra: Implement SID override programming
-> >>>   2. dt-bindings: arm-smmu: Add Tegra186 compatible string
-> >>>   3. iommu/arm-smmu: Implement ->probe_finalize()
-> >>>   4. iommu/arm-smmu: tegra: Detect number of instances at runtime
-> >>>   5. iommu/arm-smmu: tegra: Implement SID override programming
-> >>>   6. iommu/arm-smmu: Use Tegra implementation on Tegra186
-> >>>   7. arm64: tegra: Use correct compatible string for Tegra186 SMMU
-> >>>   8. arm64: tegra: Hook up memory controller to SMMU on Tegra186
-> >>>   9. arm64: tegra: Enable SMMU support on Tegra194
-> >>>
-> >>> Krzysztof already picked up patch 1 and I was assuming that you'd pick
-> >>> up 2-6 because they are to the ARM SMMU driver. However, if you're
-> >>> primarily interested in just patch 3, which is more "core" ARM SMMU t=
-han
-> >>> the rest, which are Tegra-specific, then I suppose what we could do is
-> >>> for you to give an Acked-by on the rest (2, 4-6) and then Krzysztof o=
-r I
-> >>> can pick them up and take them via ARM SoC, based on the stable branch
-> >>> from your tree that only has patch 3.
-> >>
-> >> I think you previously said that patch 5 depends on patch 1, so I can't
-> >> take 2-6 without also pulling in the memory controller queue.
-> >>
-> >>> Patch 6 touches arm-smmu-impl.c, though it's a two-line change that
-> >>> touches only the Tegra-specific matching bit in arm_smmu_impl_init(),=
- so
-> >>> the likelihood of that conflicting with anything else is fairly small.
-> >>>
-> >>> Is that what you were proposing?
-> >>
-> >> I can queue as much or as little of 2-6 as you like, but I would like =
-to
-> >> avoid pulling in the memory controller queue into the arm smmu tree. B=
-ut
-> >> yes, whichever of those I take, I can put them on a separate branch so
-> >> that you're not blocked for the later patches.
-> >>
-> >> You have a better handle on the dependencies, so please tell me what w=
-orks
-> >> for you. I just want to make sure that at least patch 3 lands in my tr=
-ee,
-> >> so we don't get late conflicts with other driver changes.
-> >=20
-> > Yes, if you could pick up patch 3 and send out a link with the stable
-> > branch, I think Krzysztof or I could pull in that branch and pick up the
-> > remaining patches. It'd be good if you could also ack the remaining SMMU
-> > patches so that ARM SoC knows that they've been sanctioned.
-> >=20
-> > Krzysztof: would you be okay with picking up patches 2 and 4-6 on top of
-> > your memory branch for v5.14?
->=20
-> You mean the iommu patches? Yes, I can take them and later explain to
-> Arnd/Olof why they come through me.
-
-Okay, great.
-
-Will, can you provide that stable branch? Or would you prefer if I
-prepared it and sent you a pull request? We're kind of running out of
-time, since for ARM SoC the cut-off point for new material is usually
--rc6 and that's coming up pretty fast.
-
-Thierry
-
---7mpR+8HugVK1gP7Y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmDCKjQACgkQ3SOs138+
-s6G9mxAAvng5nEyjLg9tvjEBYmqVzd3B9QUm5jd6sZZq6YdD6wjrUpmwWSTcP7XI
-dJ9T722dGWz3HENw9AIgv4zMj2/ws8g84+1dvjL/eo56PaWLoNdCpm2IokdKjl2G
-3sjYPEBPyEr+nqvsu+wIMbYeiXGfK2nndGg+Mw5wBnt/dQ5fYPLtKc/o5XSo5M5R
-7qmp3ekHSU5fD/X8F5+bCZajyaVyLFNU58FdsCf0yRTcqED5uWPO0TPp/VwPnlIw
-Q19s+JQD+V4XbFMgSadlPF8VP/Dht7W8tiUBl5WpoPMqFpBa8AtkZ6VrAjaM92tf
-fTyVdA/fZg04rh3M1yH8QpOOYA2z3YmGj3U2ShYAAQSnoiqLwW2fE+pEqQfmRDPI
-2rJdP8aTuXzxdMVFpklP7iTPjOd2aNSZc3gQ9U9xNF9tDd74DDYVJqCt3D3C0bhP
-Mk8hioQpf3HtY53fnBcF8g3zGgYrd2ZEQuAp5McB/mbhpmj+kiJs/iUZVVoYfu4H
-GWAERzA11dmouEHyWWjtmVGPujs/Jxt6eSJiNvn4WvuS6ezYP55NQ0Z7U+17/QqI
-1Xo+q01r+6JON6Rx730qOjuWJqqx8Oo1db+BBN/Tp/g1xlC0YmobTwchCC0RSgho
-YOaTy2yuc++OIrpXDJT80MHodI4MBVDJHKqqsOpeH1szjvdGpqc=
-=iL3y
------END PGP SIGNATURE-----
-
---7mpR+8HugVK1gP7Y--
-
-
---===============3477768206376093663==
-Content-Type: text/plain; charset="us-ascii"
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Kevin
+ Hilman <khilman@baylibre.com>, SoC Team <soc@kernel.org>,
+        arm-soc
+	<arm@kernel.org>
+CC: Marek Vasut <marex@denx.de>, Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        "linux-stm32@st-md-mailman.stormreply.com"
+	<linux-stm32@st-md-mailman.stormreply.com>,
+        Jagan Teki
+	<jagan@amarulasolutions.com>,
+        dillon min <dillon.minfei@gmail.com>
+Subject: [GIT PULL] STM32 DT changes for v5.14 #1
+Message-ID: <e4bfb255-63fb-74a8-d591-eb09821c93ee@foss.st.com>
+Date: Thu, 10 Jun 2021 18:01:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-06-10_10:2021-06-10,2021-06-10 signatures=0
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Hi ARM SoC maintainers,
 
---===============3477768206376093663==--
+Please consider this first round of STM32 DT updates for v5.14. This PR 
+provides mainly DT yaml verification fixes.
 
+regards
+Alex
+
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+
+   Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
+tags/stm32-dt-for-v5.14-1
+
+for you to fetch changes up to 4bf4abe19089245b7b12f35e5cafb5477b3e2c48:
+
+   ARM: dts: stm32: fix stpmic node for stm32mp1 boards (2021-06-10 
+16:08:18 +0200)
+
+----------------------------------------------------------------
+STM32 DT updates for v5.14, round 1
+
+Highlights:
+-----------
+
+MCU part:
+  - Fixes for Yaml verifications
+
+MPU part:
+  - Configure qspi's mdma transfer to block for stm32mp151
+
+  - ST boards:
+   - Fixes for yaml verifications
+
+  - DH boards:
+   - Fixes for yaml verifications
+   - Rework of LAN8710i on DHCOM SoM to fit with requested reset sequence.
+
+  - Odyssey boards:
+   - fix Sd card detectection (gpio line updated)
+   - fix eMMC VQMMC suuply (use vdd instead of v3v3)
+
+----------------------------------------------------------------
+Alexandre Torgue (9):
+       ARM: dts: stm32: fix gpio-keys node on STM32 MCU boards
+       ARM: dts: stm32: fix RCC node name on stm32f429 MCU
+       ARM: dts: stm32: fix timer nodes on STM32 MCU to prevent warnings
+       ARM: dts: stm32: update pinctrl node name on STM32 MCU to prevent 
+warnings
+       ARM: dts: stm32: fix i2c node name on stm32f746 to prevent warnings
+       ARM: dts: stm32: move stmmac axi config in ethernet node on stm32mp15
+       dt-bindings: net: document ptp_ref clk in dwmac
+       ARM: dts: stm32: fix ltdc pinctrl on microdev2.0-of7
+       ARM: dts: stm32: fix stpmic node for stm32mp1 boards
+
+Grzegorz Szymaszek (3):
+       ARM: dts: stm32: fix stm32mp157c-odyssey card detect pin
+       ARM: dts: stm32: add a new DCMI pins group on stm32mp15
+       ARM: dts: stm32: fix the Odyssey SoM eMMC VQMMC supply
+
+Marek Vasut (6):
+       ARM: dts: stm32: Rework LAN8710Ai PHY reset on DHCOM SoM
+       ARM: dts: stm32: Remove extra size-cells on dhcom-pdk2
+       ARM: dts: stm32: Fix touchscreen node on dhcom-pdk2
+       ARM: dts: stm32: Drop unused linux,wakeup from touchscreen node 
+on DHCOM SoM
+       ARM: dts: stm32: Rename eth@N to ethernet@N on DHCOM SoM
+       ARM: dts: stm32: Rename spi-flash/mx66l51235l@N to flash@N on 
+DHCOM SoM
+
+Patrice Chotard (1):
+       ARM: dts: stm32: Configure qspi's mdma transfer to block for 
+stm32mp151
+
+  .../devicetree/bindings/net/stm32-dwmac.yaml       |  6 +-
+  arch/arm/boot/dts/stm32429i-eval.dts               |  8 +--
+  arch/arm/boot/dts/stm32746g-eval.dts               |  6 +-
+  arch/arm/boot/dts/stm32f4-pinctrl.dtsi             |  2 +-
+  arch/arm/boot/dts/stm32f429-disco.dts              |  6 +-
+  arch/arm/boot/dts/stm32f429-pinctrl.dtsi           | 72 
+++++++++++-----------
+  arch/arm/boot/dts/stm32f429.dtsi                   | 10 +--
+  arch/arm/boot/dts/stm32f469-disco.dts              |  6 +-
+  arch/arm/boot/dts/stm32f469-pinctrl.dtsi           | 74 
+++++++++++------------
+  arch/arm/boot/dts/stm32f7-pinctrl.dtsi             |  2 +-
+  arch/arm/boot/dts/stm32f746.dtsi                   | 12 +---
+  arch/arm/boot/dts/stm32f769-disco.dts              |  6 +-
+  arch/arm/boot/dts/stm32h743.dtsi                   |  4 --
+  arch/arm/boot/dts/stm32mp15-pinctrl.dtsi           | 33 ++++++++++
+  arch/arm/boot/dts/stm32mp151.dtsi                  | 16 ++---
+  ...m32mp157a-microgea-stm32mp1-microdev2.0-of7.dts |  2 +-
+  arch/arm/boot/dts/stm32mp157a-stinger96.dtsi       |  7 +-
+  arch/arm/boot/dts/stm32mp157c-odyssey-som.dtsi     |  7 +-
+  arch/arm/boot/dts/stm32mp157c-odyssey.dts          |  2 +-
+  arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi      |  7 +-
+  arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi       | 17 +++--
+  arch/arm/boot/dts/stm32mp15xx-dhcor-som.dtsi       |  2 +-
+  arch/arm/boot/dts/stm32mp15xx-osd32.dtsi           |  7 +-
+  23 files changed, 151 insertions(+), 163 deletions(-)
