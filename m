@@ -1,182 +1,177 @@
-Return-Path: <SRS0=gFkl=LE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=CTpu=LE=gmail.com=thierry.reding@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 502B6C47094
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Jun 2021 07:45:04 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19EC8C47094
+	for <soc@archiver.kernel.org>; Thu, 10 Jun 2021 09:17:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id F34E561412; Thu, 10 Jun 2021 09:17:25 +0000 (UTC)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 18AB6613C8
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Jun 2021 07:45:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 18AB6613C8
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=m2XVjxEGootrXs8NJBM2z7digwZbqtXcRJbKT6PiM2w=; b=T3ZR9V8vAg7JP7
-	VONUcgsxLnPYyOqXTjPydQ+dMcTdpfd5utMXP3oXOvIkhDOtLSqAH8THknFektUqNNxK+25HKo0tm
-	5henimbzO4gjJRuI0sEN8vz57fl1dOGJKiTenl8AXM3YnW/sbdVXLGSt2vxxI68OVyLVhprMn4zog
-	2kYRhCfFeKmrcny1bBwDWL3J8MVY0rm7YqFF4aS2SUD1logF/0dDtaLOw6Qa0fhb3Cp9gOjNGzDOr
-	AdE82J8AOIuHv0d7RzvnjVbRZoJgELT0u7nRy8ew8t6IT7j78ZCCKjhuvLOYhKHEJflol91RayyEB
-	HRPZtSjAdt90VMJZnbQw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lrFJQ-00HFMP-0C; Thu, 10 Jun 2021 07:41:12 +0000
-Received: from youngberry.canonical.com ([91.189.89.112])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lrFJJ-00HFL0-Na
- for linux-arm-kernel@lists.infradead.org; Thu, 10 Jun 2021 07:41:09 +0000
-Received: from mail-wm1-f70.google.com ([209.85.128.70])
- by youngberry.canonical.com with esmtps (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.93)
- (envelope-from <krzysztof.kozlowski@canonical.com>)
- id 1lrFJH-0001ZG-Pd
- for linux-arm-kernel@lists.infradead.org; Thu, 10 Jun 2021 07:41:03 +0000
-Received: by mail-wm1-f70.google.com with SMTP id
- v25-20020a1cf7190000b0290197a4be97b7so2715790wmh.9
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 10 Jun 2021 00:41:03 -0700 (PDT)
+	by mail.kernel.org (Postfix) with ESMTPS id C4EB9613ED;
+	Thu, 10 Jun 2021 09:17:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C4EB9613ED
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=thierry.reding@gmail.com
+Received: by mail-wr1-f45.google.com with SMTP id z8so1396565wrp.12;
+        Thu, 10 Jun 2021 02:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lufrtSYaRB+3cU25JjfQ213i4rIMewljTlWV6qMFCfU=;
+        b=OfUdSJkaR48ZzMbKamaCpBecfRh/Ga7yYmiWthlZkjbRD2aBAsms4czdHt0TeYv14s
+         gfEl53pzpd2J0B7NlM1RnZc0iENloEpbv9IXOBmMTJ3b4d4LjI+mcXJbUNGsckCtlNtz
+         w7tDV32ehthcXQRyNSqbTDDwcbPO0nV3y2V57Qom5op6xzhPIOiQJVIJ54hkYns38aTL
+         9epRtsCLy5qMyBpvMBv18xMcZvm/Q6COwzdr0ZxD+J8BbPGzWtp/X9bV1kUpiY+vPdbP
+         ugkz7as3b1trF3cEiUxBP8Bh+PiBOTOupB/UI6IHha6W/S2giYgnZtGBPlvCFerb7+/a
+         ffxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=e2+wIvEzXuddcIq0HptNZ4S2HwP4Xp1f1Y9ZwuawFc4=;
- b=p8V7RJ1ddhoyciArw+eNDz+YRPz4nGXww5yeqY5TbZlh8vmwSs6/o/KLEYNpf5tQIu
- UlsIWjFhDo5vy/ZP4eyonFswzZd1TXv4w/jShDs8J69+s5qsibP9C0LBpq3oJJ5Ay02O
- X8MGpvdz9a2aOa6WLyDN1zR0mcAjpQf0cNFHgjRpOiJrYQCsWYqfa5VhXerEmHsXcEk+
- OZkzihdlrmNqQTNAQF7IbjHmu9sQEdE6EAU8dG8m7iEicUN/4Y4Ket6eEl7iFRBLUsuC
- zwrkQp1XFFl9XDGSEr+mwccs9Nl46/+vKUfzjKYvCv/8A98dST5eGI7x2l4eNaC9izw+
- ySOA==
-X-Gm-Message-State: AOAM533yVaKBaarMTELGl5eF5h0fh/dhAKbx2fVfmw1w6mGX4Othgux3
- lZuVsqDe15n5M18DD8xJTYyS5k4Yl7u86gzak3gzm7plQyrl+bYxhmoirjL1+ohNr77zTvfUECh
- 1mJCnOURiDTAkhyQ1VK2xFc1TmLFptww8/tNSM/Rb36G+KC2X3DKr
-X-Received: by 2002:a5d:4ecf:: with SMTP id s15mr3761926wrv.80.1623310863400; 
- Thu, 10 Jun 2021 00:41:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwZwFM7Mtml6+tDBHWQSvn1Ol2Wwfw1kgdH8lO0D7YcHyNXXoa62MbbMN9e/Cmg+98Wt0tHsw==
-X-Received: by 2002:a5d:4ecf:: with SMTP id s15mr3761833wrv.80.1623310862249; 
- Thu, 10 Jun 2021 00:41:02 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-177-222.adslplus.ch.
- [188.155.177.222])
- by smtp.gmail.com with ESMTPSA id k11sm8417229wmj.1.2021.06.10.00.41.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Jun 2021 00:41:01 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lufrtSYaRB+3cU25JjfQ213i4rIMewljTlWV6qMFCfU=;
+        b=n+NSnIgf+yE+AVaOOi5MTtFZXrWQgCNy9xt8fstxY+Wl8oHgqzU659bxZo+tjQhWPX
+         3p+lkxM3Ft1LguGVw+9zF3E9T8Igc4/YIAh6ANlCrvJUL5GFPyNyHEp2d7pOcstJjayZ
+         hVFNIJKrozG/hodDDI8Zt0ZJRpaS4DHWXr0yWuuXGoM/eMDUqFHSUq/2Fy0P3oNrGvGF
+         2zW8yxZ2Hs5ggwaMD2sBbXfJJ9O5NOJ3hOT+A0OM5XGbh2MxrFi3uCww/CzZck40v3um
+         hCbmQ4fsPaOjn6WdcQvvGU3tcbuXtD8IEXfSo0rMu0uWGUEJ5cbQfX3l0fdT/3t/gw8+
+         mpbg==
+X-Gm-Message-State: AOAM532P3KjmaiUnmNYpzIXr4xS1YSR/glRAPS1dwXyZIUqIfsNQNNOJ
+	U1dfrLxdikUKO7lei0WuCoQfXAz6l/k=
+X-Google-Smtp-Source: ABdhPJyW5m2MHrnAF1Ii+EvXADbLuM7bYTX9Cc1kCfjq7UI7PxLu4x3Bw7uYywoxvxiaKBPgYspf6A==
+X-Received: by 2002:a5d:564a:: with SMTP id j10mr4235390wrw.171.1623316643906;
+        Thu, 10 Jun 2021 02:17:23 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id t1sm2710631wrx.28.2021.06.10.02.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Jun 2021 02:17:22 -0700 (PDT)
+Date: Thu, 10 Jun 2021 11:19:05 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Will Deacon <will@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- arm@kernel.org, soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/2] ARM: dts: samsung: pull for v5.14
-Date: Thu, 10 Jun 2021 09:40:54 +0200
-Message-ID: <20210610074055.12474-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.27.0
+Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org, soc@kernel.org, linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Krishna Reddy <vdumpa@nvidia.com>, linux-tegra@vger.kernel.org,
+	iommu@lists.linux-foundation.org,
+	linux-arm-kernel@lists.infradead.org,
+	Dmitry Osipenko <digetx@gmail.com>
+Subject: Re: [GIT PULL] memory: Tegra memory controller for v5.14
+Message-ID: <YMHZCaRiQNQCSsVr@orome.fritz.box>
+References: <20210607084910.21024-1-krzysztof.kozlowski@canonical.com>
+ <20210608120128.GB10174@willie-the-truck>
+ <YL+A+MPjjaa3nSwq@orome.fritz.box>
+ <20210608164851.GB10994@willie-the-truck>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210610_004105_791408_15650A71 
-X-CRM114-Status: GOOD (  11.25  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210610074054.cUvm8XNh82Dmx_jgj50iKmQ04OxMLEUuAgV19wQSUyc@z>
-
-Hi,
-
-Few DTS changes. I will have slightly later also pulls for ARM64 and defconfig.
-
-Best regards,
-Krzysztof
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="jVj7juWizf7nxW9D"
+Content-Disposition: inline
+In-Reply-To: <20210608164851.GB10994@willie-the-truck>
+User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
 
 
-The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+--jVj7juWizf7nxW9D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+On Tue, Jun 08, 2021 at 05:48:51PM +0100, Will Deacon wrote:
+> On Tue, Jun 08, 2021 at 04:38:48PM +0200, Thierry Reding wrote:
+> > On Tue, Jun 08, 2021 at 01:01:29PM +0100, Will Deacon wrote:
+> > > On Mon, Jun 07, 2021 at 10:49:10AM +0200, Krzysztof Kozlowski wrote:
+> > > > This is the pull for you to base further SMMU aptches (prevent earl=
+y SMMU
+> > > > faults).
+> > >=20
+> > > This is a tonne of code for me to pull into the SMMU tree given that =
+I only
+> > > want one patch!
+> > >=20
+> > > Thierry, if I just stick:
+> > >=20
+> > > https://lore.kernel.org/r/20210603164632.1000458-4-thierry.reding@gma=
+il.com
+> > >=20
+> > > on its own branch, can you stitch together whatever you need?
+> >=20
+> > I'm not sure I understand what you're proposing. For reference, here's
+> > the set of patches that I sent out:
+> >=20
+> >   1. memory: tegra: Implement SID override programming
+> >   2. dt-bindings: arm-smmu: Add Tegra186 compatible string
+> >   3. iommu/arm-smmu: Implement ->probe_finalize()
+> >   4. iommu/arm-smmu: tegra: Detect number of instances at runtime
+> >   5. iommu/arm-smmu: tegra: Implement SID override programming
+> >   6. iommu/arm-smmu: Use Tegra implementation on Tegra186
+> >   7. arm64: tegra: Use correct compatible string for Tegra186 SMMU
+> >   8. arm64: tegra: Hook up memory controller to SMMU on Tegra186
+> >   9. arm64: tegra: Enable SMMU support on Tegra194
+> >=20
+> > Krzysztof already picked up patch 1 and I was assuming that you'd pick
+> > up 2-6 because they are to the ARM SMMU driver. However, if you're
+> > primarily interested in just patch 3, which is more "core" ARM SMMU than
+> > the rest, which are Tegra-specific, then I suppose what we could do is
+> > for you to give an Acked-by on the rest (2, 4-6) and then Krzysztof or I
+> > can pick them up and take them via ARM SoC, based on the stable branch
+> > from your tree that only has patch 3.
+>=20
+> I think you previously said that patch 5 depends on patch 1, so I can't
+> take 2-6 without also pulling in the memory controller queue.
+>=20
+> > Patch 6 touches arm-smmu-impl.c, though it's a two-line change that
+> > touches only the Tegra-specific matching bit in arm_smmu_impl_init(), so
+> > the likelihood of that conflicting with anything else is fairly small.
+> >=20
+> > Is that what you were proposing?
+>=20
+> I can queue as much or as little of 2-6 as you like, but I would like to
+> avoid pulling in the memory controller queue into the arm smmu tree. But
+> yes, whichever of those I take, I can put them on a separate branch so
+> that you're not blocked for the later patches.
+>=20
+> You have a better handle on the dependencies, so please tell me what works
+> for you. I just want to make sure that at least patch 3 lands in my tree,
+> so we don't get late conflicts with other driver changes.
 
-are available in the Git repository at:
+Yes, if you could pick up patch 3 and send out a link with the stable
+branch, I think Krzysztof or I could pull in that branch and pick up the
+remaining patches. It'd be good if you could also ack the remaining SMMU
+patches so that ARM SoC knows that they've been sanctioned.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-5.14
+Krzysztof: would you be okay with picking up patches 2 and 4-6 on top of
+your memory branch for v5.14?
 
-for you to fetch changes up to 135adbbee4c66f89b57519633cbf8c3c35b6c4da:
+Thierry
 
-  ARM: dts: exynos: Disable unused camera input for I9100 (2021-05-31 17:53:00 +0200)
+--jVj7juWizf7nxW9D
+Content-Type: application/pgp-signature; name="signature.asc"
 
-----------------------------------------------------------------
-Samsung DTS ARM changes for v5.14
+-----BEGIN PGP SIGNATURE-----
 
-1. Several cleanups and alignment with dtschema.  This includes removal
-   of unused properties and fixing LED brightness property.
-2. Enable PMIC RTC interrupt as a wakeup source (intended to wakeup for
-   example from Suspend to RAM where the PMIC RTC's power is still
-   supplied).
-3. Disable unused/not implemented camera on GT-I9100.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmDB2QcACgkQ3SOs138+
+s6EnLA//ZgBQdPoxTa9Yc7sswfHwAYyKCWSKQcgTH84rrCOszXWcAZORrfyMA4/d
+3OuzF8mlebPISC4OJoo3k9/EfITpQWbqFZSYQN03cqVDys/Kb+3woqyUvgrqmFUl
+rxrITRTsCOakoo3/OGgAtC0r3P+btzdZco6pqrsTr4PwQe1oUC+179jq6R536pVO
+n+liywt2NNxpGX1lI9rCpePyB777kLZZHI0oJO2HOtwLS/Z3TWLau3cRH1JSY7uy
+GpCUzS87izn2OPo65VOQDIHIDA67M6UiqesYQCOic0AY4fo4hvTIQ7DIdFMQYh0t
+Q2DUAr53VrV7m7DY313Xbo+ZGeq+c+ZQKn4JZ2KIOGDtucts8WpkEfmbJ2q7sUH7
+JnIBMeUs1k5v52eW8/GfZT6reyEcNzYCT/C1w2cSRwB/bCTc7j1+O4Iarc45mJgP
+pXFEsSZErCFLh0TBirnzJEqJ7eUyldWgSUy2jHndovEsS/hYJIuoKt6vILDlb4tn
+9KrMopwWp4gKN6fZwZZIV2dOgx07jzsVXpBjVjtnafnqad4IanU1RobRKOikiNkX
+xi97rLtRq5dB5oI1CTe3yHGUAz/A6gKyYtd3oQPP1hyeXglMAkThHJUBHTBlEAYy
+3GeB7oBGK6Cn/ZmG4qWFvsW82bxW9mjFzwOxW4zmSuLxPCFveG0=
+=Jpm0
+-----END PGP SIGNATURE-----
 
-----------------------------------------------------------------
-Krzysztof Kozlowski (16):
-      ARM: dts: exynos: align Broadcom WiFi with dtschema
-      ARM: dts: exynos: replace legacy MMS114 touchscreen x/y properties in GT-N7100
-      ARM: dts: exynos: fix PWM LED max brightness on Odroid XU/XU3
-      ARM: dts: exynos: fix PWM LED max brightness on Odroid HC1
-      ARM: dts: exynos: fix PWM LED max brightness on Odroid XU4
-      ARM: dts: s5pv210: remove unused Atmel touchscreen properties in Goni
-      ARM: dts: exynos: enable PMIC wakeup from suspend on Itop Core
-      ARM: dts: exynos: enable PMIC wakeup from suspend on Origen4412
-      ARM: dts: exynos: enable PMIC wakeup from suspend on Arndale
-      ARM: dts: exynos: enable PMIC wakeup from suspend on Odroid XU
-      ARM: dts: exynos: enable PMIC wakeup from suspend on Midas
-      ARM: dts: exynos: enable PMIC wakeup from suspend on Odroid X/U3
-      ARM: dts: exynos: enable PMIC wakeup from suspend on P4 Note
-      ARM: dts: exynos: enable PMIC wakeup from suspend on Arndale Octa
-      ARM: dts: exynos: enable PMIC wakeup from suspend on SMDK5420
-      ARM: dts: exynos: enable PMIC wakeup from suspend on Odroid XU3/XU4 family
-
-Timon Baetz (1):
-      ARM: dts: exynos: Disable unused camera input for I9100
-
- arch/arm/boot/dts/exynos3250-rinato.dts         | 2 +-
- arch/arm/boot/dts/exynos4210-i9100.dts          | 8 +++++---
- arch/arm/boot/dts/exynos4210-trats.dts          | 2 +-
- arch/arm/boot/dts/exynos4210-universal_c210.dts | 2 +-
- arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi | 1 +
- arch/arm/boot/dts/exynos4412-midas.dtsi         | 1 +
- arch/arm/boot/dts/exynos4412-n710x.dts          | 4 ++--
- arch/arm/boot/dts/exynos4412-odroid-common.dtsi | 1 +
- arch/arm/boot/dts/exynos4412-origen.dts         | 1 +
- arch/arm/boot/dts/exynos4412-p4note.dtsi        | 1 +
- arch/arm/boot/dts/exynos5250-arndale.dts        | 1 +
- arch/arm/boot/dts/exynos5410-odroidxu.dts       | 1 +
- arch/arm/boot/dts/exynos5420-arndale-octa.dts   | 1 +
- arch/arm/boot/dts/exynos5420-smdk5420.dts       | 1 +
- arch/arm/boot/dts/exynos5422-odroid-core.dtsi   | 1 +
- arch/arm/boot/dts/exynos5422-odroidhc1.dts      | 2 +-
- arch/arm/boot/dts/exynos5422-odroidxu4.dts      | 2 +-
- arch/arm/boot/dts/exynos54xx-odroidxu-leds.dtsi | 4 ++--
- arch/arm/boot/dts/s5pv210-goni.dts              | 9 ---------
- 19 files changed, 24 insertions(+), 21 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+--jVj7juWizf7nxW9D--
