@@ -1,154 +1,465 @@
-Return-Path: <SRS0=gFkl=LE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CC3BC48BDF
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Jun 2021 23:30:22 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 55E91613E1
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Jun 2021 23:30:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 55E91613E1
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=6iySEpKumntA710a+V7MBsRv9fnwM822RwGFl1bbz4Y=; b=hWC5A5s6HOSwon
-	AHnHnrwl//SZ86S5toPPu0MST1zumi4w9ma20g3/ygRphylitq5VEgyPjNsi06nZC5DEBt5AD1M0h
-	Uw0GTOaaUxo/bV45S996HeYkB+8FbSQDbNG9TM0ClbDCaXTxcO1quCPngXNlrqWRZxHU1Zhk3yf3a
-	5FjKZn0H5iOmrB7PdaX4tmqFrtEMBPB1S1LXwgYB1yt/PbtfozIPjO2HZWe1Ve9PwPKlZSSzKQ+lf
-	FQ1PHTlACVZ8alflo5yhNOp2J6y2N2bG1DmClwf2zEtL3X8f7QMJ3wgqbtpgQM87oROi/QoaI4Q5d
-	MO1ZuG3eTKu5G/m+EUWg==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lrU63-002syh-3R; Thu, 10 Jun 2021 23:28:23 +0000
-Received: from mail-wr1-x42d.google.com ([2a00:1450:4864:20::42d])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lrU5w-002sxH-Ot
- for linux-arm-kernel@lists.infradead.org; Thu, 10 Jun 2021 23:28:18 +0000
-Received: by mail-wr1-x42d.google.com with SMTP id m18so4041172wrv.2
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 10 Jun 2021 16:28:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=NkHOILVMygEEoZYONCaDsk6m76wqea7EMgUYfwAkp6E=;
- b=AyrM6aYYpCk/W3IH4jtqrK0gdAw7TpdyWoH75b18wAoaCzycuAPB/OMesODG2n27Ak
- CJhmqFVk5R6G7f3zjKNhxwJvEeqTKVRhaNjSv2oHwSwzcLmMANt4ydOCjHqWDhPgCjQs
- qwYoIk+YNbxnj+/Ww8DLfV+gwj7y0KZD5oFvuo36CxEu8kwPKfdsCuvI4UU4vFk+OeoR
- Ij93lWV/1GQ94JZ+/TbrCxe2vQrhrZ4sfAvO/IvSqSpICf1n1iK3f7VoVeZPHCsgGSRO
- jFx74kMtQU5BaLC7+huYoNyI6c9N1alScZmUAyg0a9oYC50y+820qMlRIIPt6AuIa4YQ
- 0nfQ==
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 253B8C48BD1
+	for <linux-devicetree@archiver.kernel.org>; Thu, 10 Jun 2021 23:30:24 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 029C0613E9
+	for <linux-devicetree@archiver.kernel.org>; Thu, 10 Jun 2021 23:30:23 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S230001AbhFJXcT (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Thu, 10 Jun 2021 19:32:19 -0400
+Received: from mail-wr1-f44.google.com ([209.85.221.44]:41783 "EHLO
+        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230451AbhFJXcT (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Thu, 10 Jun 2021 19:32:19 -0400
+Received: by mail-wr1-f44.google.com with SMTP id o3so4028353wri.8;
+        Thu, 10 Jun 2021 16:30:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HhcSQy57Xk+molyTSgrm3dx5SrUlr/2mzbjEv/WNMOU=;
+        b=jpnPaLg60jW07YzzHu0ChAhdSW5p348xAPpzJKBpHWzR4USG4MQxJD0GW2OGPTxp4q
+         mktJnQp6hB2S5FttzxSrRVK6VFiPry8axeMQwF+st8FKHA9UxiEE7oLgGHgEvr4ZsAsS
+         l/KFjye6H47nCGWIig+sQj5P4q/ZzJIqqJPTyMyKUhw4UIFB3ReobZTBbLu0YvGYSV0g
+         iT6GQF7KNzlKXQT1o1bT2j77C0fFkevKJAqDNiSvnPYIuORExrrowxt4Qd4lnIkJXTaB
+         s2efglSaUwdBnCmVOxMfHTO2W/ioZrkY3yg83DpYn25SoKHbAIqyUjCetIf71T8fsTrm
+         FoAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=NkHOILVMygEEoZYONCaDsk6m76wqea7EMgUYfwAkp6E=;
- b=gbb+hWhRV74+rEf6rlJGXs+dUzTw1zrBiWFMyl+LaJZuE3RN4IBUJga53dx52tKHsw
- DKGzcZ2665RXrbOy9gazibGsQ8sResVsnwsIn9m7FMhHPEkduUYTECLkhSX3bzcCmZJC
- 5nUxqa8LcmqkLVSUL0sF3qlnRAp0A9w4WeOoHg1fPchD43Q9ZRRZ5X66Ixf8NkHzmZdd
- PBpV4kbYuuAhAogU1c3sjO72snTdnnSr+o+apiiDyQVxVincco3DfIhE2CmZ9chPcDjq
- oJQVMRnE4iefLxexTOijWM9CNOftiCBwhN4KjEjq1llNvSx1FrBR7Sbho89SjyDgQ9Sh
- R71w==
-X-Gm-Message-State: AOAM530JxOWZYpnmdQllr/aCQ1dk5lk/C4iJQCAdJWiBxWTVneKPj4hs
- 6TLWAtNneyypGBiGr0WwXLGy1pM7CIE=
-X-Google-Smtp-Source: ABdhPJypWTWUMZFBvZneUf16gGGhOmY/Vj3MErZvt8ucDJz8tXaOY9ccvLRmQnYzWdMk9kcOr9TuVA==
-X-Received: by 2002:adf:e8cb:: with SMTP id k11mr754337wrn.127.1623367694702; 
- Thu, 10 Jun 2021 16:28:14 -0700 (PDT)
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HhcSQy57Xk+molyTSgrm3dx5SrUlr/2mzbjEv/WNMOU=;
+        b=VF69jtjozifYxRUtD3293c9kZUSgudAvkKcsF+Cht6Fsn0euOq6MNqIMEs0Qcj1G4D
+         5rIyDvszt5nLIkrX83j732DPxSHc9mPvjfEtHaEL5dMrZJyT2OWilNIcnQr7fecrDz+E
+         Z4i/AVzseTEM509AlHS5czZ2p+X7+vYZ3Y8cIzsKGHgt1i2jOahM2+Q3IqAtRIOUlV3T
+         mX+kcTiSq+nfE88MtuSiexVJGNPi46Lvub/lpUpHaGDa8WjEbugSwy15JCDD+xFs+nty
+         TT96fMRhde5Y87g0AeCUnGQpvASQoGqkU1ZT3bMgL2sEX4SfmSdL2/IuZODgAul+SErR
+         +AxA==
+X-Gm-Message-State: AOAM532rNL/qqDDwwloI/XoDcwPSSYo/sytFMqs/1S5sFU7gtIXD9J/o
+        yZtQY+iF0TG7rrh44uMAT/I=
+X-Google-Smtp-Source: ABdhPJwoti1dul8w+JOC/xKhLILahBFZgQncf7h90KOztRCshJATWa5qRQ6fZ/ywaE3tcbDmwGwJow==
+X-Received: by 2002:a5d:6a02:: with SMTP id m2mr793033wru.77.1623367749540;
+        Thu, 10 Jun 2021 16:29:09 -0700 (PDT)
 Received: from cluster5 ([80.76.206.81])
- by smtp.gmail.com with ESMTPSA id w13sm5478549wrc.31.2021.06.10.16.28.13
- (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
- Thu, 10 Jun 2021 16:28:14 -0700 (PDT)
-From: Matthew Hagan <mnhagan88@gmail.com>
-To: 
+        by smtp.gmail.com with ESMTPSA id 31sm5561644wrc.96.2021.06.10.16.29.08
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Thu, 10 Jun 2021 16:29:09 -0700 (PDT)
+From:   Matthew Hagan <mnhagan88@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
- Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
- Matthew Hagan <mnhagan88@gmail.com>, Rob Herring <robh+dt@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>,
- bcm-kernel-feedback-list@broadcom.com,
- Krzysztof Kozlowski <krzk@kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 0/5] ARM: dts: NSP: add Meraki MX64/MX65
-Date: Fri, 11 Jun 2021 00:27:12 +0100
-Message-ID: <20210610232727.1383117-1-mnhagan88@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Matthew Hagan <mnhagan88@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 5/5] ARM: dts: NSP: Add DT files for Meraki MX65 series
+Date:   Fri, 11 Jun 2021 00:27:17 +0100
+Message-ID: <20210610232727.1383117-6-mnhagan88@gmail.com>
 X-Mailer: git-send-email 2.26.3
+In-Reply-To: <20210610232727.1383117-1-mnhagan88@gmail.com>
+References: <20210610232727.1383117-1-mnhagan88@gmail.com>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210610_162816_840605_9DB1931F 
-X-CRM114-Status: GOOD (  11.59  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210610232712.PYQ1BQ3Cu6Pr34Jivh9GeOn9L_t4t79C7Mei-4aLSKA@z>
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210610232717.98IIiM_Yftb-097CePNpB_XbeKxIpBPSswSaGz5Z6_U@z>
 
-Changes from v1:
-- add dtb entries to Makefile
-- add bindings entries to brcm,nsp.yaml
-- change naming to include Meraki name
-- remove unnecessary portions, including pinctrl from meraki-mx6x-common
-- add A0 variant for MX64
+MX65 Hardware info:
+  - CPU: Broadcom BCM58625 Cortex A9 @ 1200Mhz
+  - RAM: 2 GB (4 x 4Gb SK Hynix H5TC4G83CFR)
+  - Storage: 1 GB (Micron MT29F8G08ABACA)
+  - Networking: BCM58625 switch (2x 1GbE ports, used for WAN ports 1 & 2)
+    2x Qualcomm QCA8337 switches (10x 1GbE ports, used for LAN ports 3-12)
+  - PSE: Broadcom BCM59111KMLG connected to LAN ports 11 & 12
+  - USB: 1x USB2.0
+  - Serial: Internal header
 
-Matthew Hagan (5):
-  dt-bindings: arm: bcm: NSP: add Meraki MX64/MX65
-  ARM: dts: NSP: Add Meraki MX64/MX65 to Makefile
-  ARM: dts: NSP: Add common bindings for MX64/MX65
-  ARM: dts: NSP: Add DT files for Meraki MX64 series
-  ARM: dts: NSP: Add DT files for Meraki MX65 series
+As with the MX64, the MX65 has 2x Broadcom BCM43520KMLG on the PCI bus.
 
- .../devicetree/bindings/arm/bcm/brcm,nsp.yaml |   6 +
- arch/arm/boot/dts/Makefile                    |   6 +
+Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
+---
  arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi | 298 ++++++++++++++++++
- .../boot/dts/bcm958625-meraki-kingpin.dtsi    | 131 ++++++++
- .../arm/boot/dts/bcm958625-meraki-mx64-a0.dts |  45 +++
- arch/arm/boot/dts/bcm958625-meraki-mx64.dts   |  15 +
- .../boot/dts/bcm958625-meraki-mx64w-a0.dts    |  55 ++++
- arch/arm/boot/dts/bcm958625-meraki-mx64w.dts  |  23 ++
  arch/arm/boot/dts/bcm958625-meraki-mx65.dts   |  15 +
  arch/arm/boot/dts/bcm958625-meraki-mx65w.dts  |  23 ++
- .../dts/bcm958625-meraki-mx6x-common.dtsi     | 148 +++++++++
- 11 files changed, 765 insertions(+)
+ 3 files changed, 336 insertions(+)
  create mode 100644 arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-kingpin.dtsi
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dts
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx64.dts
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dts
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx64w.dts
  create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx65.dts
  create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx65w.dts
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
 
+diff --git a/arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi b/arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi
+new file mode 100644
+index 000000000000..0ff78fb89b6d
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi
+@@ -0,0 +1,298 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Device Tree Bindings for Cisco Meraki MX65 series (Alamo).
++ *
++ * Copyright (C) 2021 Matthew Hagan <mnhagan88@gmail.com>
++ */
++
++#include "bcm958625-meraki-mx6x-common.dtsi"
++
++#include <dt-bindings/input/input.h>
++
++/ {
++	aliases {
++		mdio-mux-mmio = &mdiomux0;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		orange_power {
++			label = "orange:power";
++			gpios = <&gpioa 3 GPIO_ACTIVE_HIGH>;
++			default-state = "on";
++		};
++
++		wan1_right {
++			label = "green:wan1-right";
++			gpios = <&gpioa 24 GPIO_ACTIVE_LOW>;
++		};
++
++		wan1_left {
++			label = "green:wan1-left";
++			gpios = <&gpioa 25 GPIO_ACTIVE_LOW>;
++		};
++
++		wan2_right {
++			label = "green:wan2-right";
++			gpios = <&gpioa 26 GPIO_ACTIVE_LOW>;
++		};
++
++		wan2_left {
++			label = "green:wan2-left";
++			gpios = <&gpioa 27 GPIO_ACTIVE_LOW>;
++		};
++
++		white_status {
++			label = "white:status";
++			gpios = <&gpioa 31 GPIO_ACTIVE_HIGH>;
++		};
++	};
++
++	keys {
++		compatible = "gpio-keys-polled";
++		autorepeat;
++		poll-interval = <20>;
++
++		reset {
++			label = "reset";
++			linux,code = <KEY_RESTART>;
++			gpios = <&gpioa 8 GPIO_ACTIVE_LOW>;
++		};
++	};
++
++	mdio: mdio@18032000 {
++		compatible = "brcm,iproc-mdio";
++		reg = <0x18032000 0x8>;
++		#size-cells = <0>;
++		#address-cells = <1>;
++	};
++
++	mdiomux0: mdio-mux {
++		compatible = "mdio-mux-mmioreg";
++		reg = <0x18032000 0x4>;
++		mux-mask = <0x200>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		mdio-parent-bus = <&mdio>;
++
++		mdio_ext: mdio@200 {
++			reg = <0x200>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++	};
++
++	mdio-mii-mux {
++		compatible = "mdio-mux-mmioreg";
++		reg = <0x1803f1c0 0x4>;
++		mux-mask = <0x2000>;
++		mdio-parent-bus = <&mdio_ext>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		mdio@0 {
++			reg = <0x0>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			phy_port6: phy@0 {
++				reg = <0>;
++			};
++
++			phy_port7: phy@1 {
++				reg = <1>;
++			};
++
++			phy_port8: phy@2 {
++				reg = <2>;
++			};
++
++			phy_port9: phy@3 {
++				reg = <3>;
++			};
++
++			phy_port10: phy@4 {
++				reg = <4>;
++			};
++
++			switch@10 {
++				compatible = "qca,qca8337";
++				#address-cells = <1>;
++				#size-cells = <0>;
++				reg = <0x10>;
++				dsa,member = <1 0>;
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++					port@0 {
++						reg = <0>;
++						label = "cpu";
++						ethernet = <&sgmii1>;
++						phy-mode = "sgmii";
++						fixed-link {
++							speed = <1000>;
++							full-duplex;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						label = "lan8";
++						phy-handle = <&phy_port6>;
++					};
++
++					port@2 {
++						reg = <2>;
++						label = "lan9";
++						phy-handle = <&phy_port7>;
++					};
++
++					port@3 {
++						reg = <3>;
++						label = "lan10";
++						phy-handle = <&phy_port8>;
++					};
++
++					port@4 {
++						reg = <4>;
++						label = "lan11";
++						phy-handle = <&phy_port9>;
++					};
++
++					port@5 {
++						reg = <5>;
++						label = "lan12";
++						phy-handle = <&phy_port10>;
++					};
++				};
++			};
++		};
++
++		mdio-mii@2000 {
++			reg = <0x2000>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			phy_port1: phy@0 {
++				reg = <0>;
++			};
++
++			phy_port2: phy@1 {
++				reg = <1>;
++			};
++
++			phy_port3: phy@2 {
++				reg = <2>;
++			};
++
++			phy_port4: phy@3 {
++				reg = <3>;
++			};
++
++			phy_port5: phy@4 {
++				reg = <4>;
++			};
++
++			switch@10 {
++				compatible = "qca,qca8337";
++				#address-cells = <1>;
++				#size-cells = <0>;
++				reg = <0x10>;
++				dsa,member = <2 0>;
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++					port@0 {
++						reg = <0>;
++						label = "cpu";
++						ethernet = <&sgmii0>;
++						phy-mode = "sgmii";
++						fixed-link {
++							speed = <1000>;
++							full-duplex;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						label = "lan3";
++						phy-handle = <&phy_port1>;
++					};
++
++					port@2 {
++						reg = <2>;
++						label = "lan4";
++						phy-handle = <&phy_port2>;
++					};
++
++					port@3 {
++						reg = <3>;
++						label = "lan5";
++						phy-handle = <&phy_port3>;
++					};
++
++					port@4 {
++						reg = <4>;
++						label = "lan6";
++						phy-handle = <&phy_port4>;
++					};
++
++					port@5 {
++						reg = <5>;
++						label = "lan7";
++						phy-handle = <&phy_port5>;
++					};
++				};
++			};
++		};
++	};
++};
++
++&srab {
++	compatible = "brcm,bcm58625-srab", "brcm,nsp-srab";
++	status = "okay";
++	dsa,member = <0 0>;
++
++	ports {
++		port@0 {
++			label = "wan1";
++			reg = <0>;
++		};
++
++		port@1 {
++			label = "wan2";
++			reg = <1>;
++		};
++
++		sgmii0: port@4 {
++			label = "sw0";
++			reg = <4>;
++			fixed-link {
++				speed = <1000>;
++				full-duplex;
++			};
++		};
++
++		sgmii1: port@5 {
++			label = "sw1";
++			reg = <5>;
++			fixed-link {
++				speed = <1000>;
++				full-duplex;
++			};
++		};
++
++		port@8 {
++			ethernet = <&amac2>;
++			label = "cpu";
++			reg = <8>;
++			fixed-link {
++				speed = <1000>;
++				full-duplex;
++			};
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/bcm958625-meraki-mx65.dts b/arch/arm/boot/dts/bcm958625-meraki-mx65.dts
+new file mode 100644
+index 000000000000..aec86c3a4d05
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm958625-meraki-mx65.dts
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Device Tree Bindings for Cisco Meraki MX65.
++ *
++ * Copyright (C) 2021 Matthew Hagan <mnhagan88@gmail.com>
++ */
++
++/dts-v1/;
++
++#include "bcm958625-meraki-alamo.dtsi"
++
++/ {
++	model = "Cisco Meraki MX65";
++	compatible = "meraki,mx65", "brcm,bcm58625", "brcm,nsp";
++};
+diff --git a/arch/arm/boot/dts/bcm958625-meraki-mx65w.dts b/arch/arm/boot/dts/bcm958625-meraki-mx65w.dts
+new file mode 100644
+index 000000000000..0045a33055c1
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm958625-meraki-mx65w.dts
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Device Tree Bindings for Cisco Meraki MX65W.
++ *
++ * Copyright (C) 2021 Matthew Hagan <mnhagan88@gmail.com>
++ */
++
++/dts-v1/;
++
++#include "bcm958625-meraki-mx65x.dtsi"
++
++/ {
++	model = "Cisco Meraki MX65W";
++	compatible = "meraki,mx65w", "brcm,bcm58625", "brcm,nsp";
++};
++
++&pcie0 {
++	status = "okay";
++};
++
++&pcie1 {
++	status = "okay";
++};
 -- 
 2.26.3
 
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
