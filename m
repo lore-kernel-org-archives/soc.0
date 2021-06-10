@@ -1,116 +1,142 @@
-Return-Path: <SRS0=CGMp=LE=gmail.com=joel.stan@kernel.org>
+Return-Path: <SRS0=05Gg=LE=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C1A4C47094
-	for <soc@archiver.kernel.org>; Thu, 10 Jun 2021 04:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98A2DC48BD1
+	for <soc@archiver.kernel.org>; Thu, 10 Jun 2021 07:41:04 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id C5F93613C6; Thu, 10 Jun 2021 04:53:48 +0000 (UTC)
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 6BF2A613C6; Thu, 10 Jun 2021 07:41:04 +0000 (UTC)
+Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 03228613B3
-	for <soc@kernel.org>; Thu, 10 Jun 2021 04:53:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 03228613B3
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=joel.stan@gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id e1so318823plh.8
-        for <soc@kernel.org>; Wed, 09 Jun 2021 21:53:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/EVzBWdWsLalXKfuetjAlCv/NFhFJdcBJkrlzGHM19w=;
-        b=Rt0cQIZFTi1qhu8Q6Xs77Qv7GHqtUdDeqe87w9cafIIHN3SD+REuqfri76urnNYdzv
-         jy1k0nLgmY+rVd/dkngBgpS0+GEFAROxJmT+9Ehk5Yl3FO+rVBCF8+5roylx4zLoNUOL
-         D57feujiKQOABYLu+LgGQT/vYFCnOTI9fzzNyr/DtXaLYU1K8sjWsjHKCWNHLVhk5HlR
-         CzC5lUf+kX/8vI8bChnMLaE3cqCvzyJ1lOM36ZNkYAioYnUfpslwarYRzd/rk8u33sSd
-         ufLSrmSqUZnHq0yXgDRYyaCi0cUaKcu+Js51Xrjqr0dcuKtfQRY+f7oTKzRJ1Qc4B+Hi
-         jF1g==
+	by mail.kernel.org (Postfix) with ESMTPS id 279B6613DF
+	for <soc@kernel.org>; Thu, 10 Jun 2021 07:41:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 279B6613DF
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
+Received: from mail-wr1-f69.google.com ([209.85.221.69])
+	by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <krzysztof.kozlowski@canonical.com>)
+	id 1lrFJG-0001Yb-ML
+	for soc@kernel.org; Thu, 10 Jun 2021 07:41:02 +0000
+Received: by mail-wr1-f69.google.com with SMTP id z13-20020adfec8d0000b0290114cc6b21c4so458559wrn.22
+        for <soc@kernel.org>; Thu, 10 Jun 2021 00:41:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=/EVzBWdWsLalXKfuetjAlCv/NFhFJdcBJkrlzGHM19w=;
-        b=WD6vdpHCsFtCTkQbL2w0Jd7YLWXcNdUhDyXqM5lahluejjKkV998LfzGYVHI9dCyzl
-         kcevxPJC9Y00+6BTxOMwZbOII1HHNz+eE7bHWq7QOQ5PKQBMn6qHz9VdYhYNLw/ID8+q
-         D2Nav29MPh1zrzNcgRBx7FFO8hYz292JWeXsf5+hLQgy0GLbhUf2ennqnhSGbMjkKE7t
-         QtI35oy2N77lWGx4XCnIRyngILh/NEthxNDOz0YsGTFzoO9hss/EQ7vcJQR7FwRzrLVO
-         r3TUmMaSVJIYQZsi3rODmDtxWuB8Nn5yAQhb06YeoGQKN+eWzhvLCnIvhuxHJnfR68Hg
-         LTrA==
-X-Gm-Message-State: AOAM531G1wZt0ryyi0KWcgw6fRSD3V1sQdhtNskv/qt0522MPJl21hEV
-	16UW5VVBLROEqSOC6s9iiUVo6TykC2Q=
-X-Google-Smtp-Source: ABdhPJxyIsb2wFwbQ3IMB0S1EP1ABjboiw6KkI1a9C02hpDpcoJQJdubbqWrzTe3i8eAU/+GtTlWtg==
-X-Received: by 2002:a17:90a:df13:: with SMTP id gp19mr1377129pjb.11.1623300827001;
-        Wed, 09 Jun 2021 21:53:47 -0700 (PDT)
-Received: from localhost.localdomain ([45.124.203.19])
-        by smtp.gmail.com with ESMTPSA id w206sm1019728pff.1.2021.06.09.21.53.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e2+wIvEzXuddcIq0HptNZ4S2HwP4Xp1f1Y9ZwuawFc4=;
+        b=exvQ6qn1A+3KmafLF8XVh/q4L1NZYt6a0AoGT1NxzT1q3Izt4rbkHDVJG1/pHPt4Tc
+         E7ADEu96NKUgpjXWS1jZk/pmo8GH8ysflWgjXvhcxrLsGylbAYYqnDtx5uTf6kHEyhxA
+         zWxe18CVih20JkxsuS5YPkgDExQPWLNXQQB/ztj+rXQxjRBbNU12//aYqn3VUV5isb6M
+         MGJwrmgTqxG6pxHqrNjO7+NI67F1SVPsEQJd3RvpBNyAI0MXyz0JZnFfQ35WcxdU1DKh
+         i6z2K0SS3c8GOxvNDB3Pq4GJ0IO1MAtrjkdGGhdVAbeeVbCh8hppaBZw2ZbTS5Dogkh7
+         WFyg==
+X-Gm-Message-State: AOAM532bOFBGuumip8fbutIe2qJb8l/x5aNACYmclsLA7xwr3T12yVt/
+	0b7bmkLhbS/CpcX7eK/11dddbtjD4jGZTPgvzDDwnGEXQgfswLevWGYGk5mLGCQpgiRA+4XNiWy
+	eyLGI1bex9hRMEnhR8tWJ07Q=
+X-Received: by 2002:a5d:4ecf:: with SMTP id s15mr3761846wrv.80.1623310862384;
+        Thu, 10 Jun 2021 00:41:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwZwFM7Mtml6+tDBHWQSvn1Ol2Wwfw1kgdH8lO0D7YcHyNXXoa62MbbMN9e/Cmg+98Wt0tHsw==
+X-Received: by 2002:a5d:4ecf:: with SMTP id s15mr3761833wrv.80.1623310862249;
+        Thu, 10 Jun 2021 00:41:02 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
+        by smtp.gmail.com with ESMTPSA id k11sm8417229wmj.1.2021.06.10.00.41.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jun 2021 21:53:46 -0700 (PDT)
-Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
-From: Joel Stanley <joel@jms.id.au>
+        Thu, 10 Jun 2021 00:41:01 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Andrew Jeffery <andrew@aj.id.au>
-Subject: [PATCH] ARM: config: aspeed: Add DEBUG_FS and EXT4
-Date: Thu, 10 Jun 2021 14:23:38 +0930
-Message-Id: <20210610045338.99847-1-joel@jms.id.au>
-X-Mailer: git-send-email 2.30.2
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/2] ARM: dts: samsung: pull for v5.14
+Date: Thu, 10 Jun 2021 09:40:54 +0200
+Message-Id: <20210610074055.12474-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-DEBUG_FS was lost way back in v5.5, and EXT4 is used by ast2600 systems
-that have MMC.
+Hi,
 
-Fixes: 0e4a459f56c3 ("tracing: Remove unnecessary DEBUG_FS dependency")
-Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
-Link: https://lore.kernel.org/r/20210603040906.125109-1-joel@jms.id.au
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
-This is a standalone patch for v5.14 (or even earlier if you feel like
-it, as it's handy to have ext4 for doing CI)
+Few DTS changes. I will have slightly later also pulls for ARM64 and defconfig.
 
- arch/arm/configs/aspeed_g4_defconfig | 1 +
- arch/arm/configs/aspeed_g5_defconfig | 2 ++
- 2 files changed, 3 insertions(+)
+Best regards,
+Krzysztof
 
-diff --git a/arch/arm/configs/aspeed_g4_defconfig b/arch/arm/configs/aspeed_g4_defconfig
-index 58d293b63581..a3ee647b1ebb 100644
---- a/arch/arm/configs/aspeed_g4_defconfig
-+++ b/arch/arm/configs/aspeed_g4_defconfig
-@@ -254,6 +254,7 @@ CONFIG_DEBUG_INFO_REDUCED=y
- CONFIG_DEBUG_INFO_DWARF4=y
- CONFIG_GDB_SCRIPTS=y
- CONFIG_STRIP_ASM_SYMS=y
-+CONFIG_DEBUG_FS=y
- CONFIG_SCHED_STACK_END_CHECK=y
- CONFIG_PANIC_ON_OOPS=y
- CONFIG_PANIC_TIMEOUT=-1
-diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspeed_g5_defconfig
-index 047975eccefb..2db48438c5d2 100644
---- a/arch/arm/configs/aspeed_g5_defconfig
-+++ b/arch/arm/configs/aspeed_g5_defconfig
-@@ -247,6 +247,7 @@ CONFIG_FSI_MASTER_ASPEED=y
- CONFIG_FSI_SCOM=y
- CONFIG_FSI_SBEFIFO=y
- CONFIG_FSI_OCC=y
-+CONFIG_EXT4_FS=y
- CONFIG_FANOTIFY=y
- CONFIG_OVERLAY_FS=y
- CONFIG_TMPFS=y
-@@ -276,6 +277,7 @@ CONFIG_DEBUG_INFO_REDUCED=y
- CONFIG_DEBUG_INFO_DWARF4=y
- CONFIG_GDB_SCRIPTS=y
- CONFIG_STRIP_ASM_SYMS=y
-+CONFIG_DEBUG_FS=y
- CONFIG_SOFTLOCKUP_DETECTOR=y
- # CONFIG_DETECT_HUNG_TASK is not set
- CONFIG_WQ_WATCHDOG=y
--- 
-2.30.2
 
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+
+  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-5.14
+
+for you to fetch changes up to 135adbbee4c66f89b57519633cbf8c3c35b6c4da:
+
+  ARM: dts: exynos: Disable unused camera input for I9100 (2021-05-31 17:53:00 +0200)
+
+----------------------------------------------------------------
+Samsung DTS ARM changes for v5.14
+
+1. Several cleanups and alignment with dtschema.  This includes removal
+   of unused properties and fixing LED brightness property.
+2. Enable PMIC RTC interrupt as a wakeup source (intended to wakeup for
+   example from Suspend to RAM where the PMIC RTC's power is still
+   supplied).
+3. Disable unused/not implemented camera on GT-I9100.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (16):
+      ARM: dts: exynos: align Broadcom WiFi with dtschema
+      ARM: dts: exynos: replace legacy MMS114 touchscreen x/y properties in GT-N7100
+      ARM: dts: exynos: fix PWM LED max brightness on Odroid XU/XU3
+      ARM: dts: exynos: fix PWM LED max brightness on Odroid HC1
+      ARM: dts: exynos: fix PWM LED max brightness on Odroid XU4
+      ARM: dts: s5pv210: remove unused Atmel touchscreen properties in Goni
+      ARM: dts: exynos: enable PMIC wakeup from suspend on Itop Core
+      ARM: dts: exynos: enable PMIC wakeup from suspend on Origen4412
+      ARM: dts: exynos: enable PMIC wakeup from suspend on Arndale
+      ARM: dts: exynos: enable PMIC wakeup from suspend on Odroid XU
+      ARM: dts: exynos: enable PMIC wakeup from suspend on Midas
+      ARM: dts: exynos: enable PMIC wakeup from suspend on Odroid X/U3
+      ARM: dts: exynos: enable PMIC wakeup from suspend on P4 Note
+      ARM: dts: exynos: enable PMIC wakeup from suspend on Arndale Octa
+      ARM: dts: exynos: enable PMIC wakeup from suspend on SMDK5420
+      ARM: dts: exynos: enable PMIC wakeup from suspend on Odroid XU3/XU4 family
+
+Timon Baetz (1):
+      ARM: dts: exynos: Disable unused camera input for I9100
+
+ arch/arm/boot/dts/exynos3250-rinato.dts         | 2 +-
+ arch/arm/boot/dts/exynos4210-i9100.dts          | 8 +++++---
+ arch/arm/boot/dts/exynos4210-trats.dts          | 2 +-
+ arch/arm/boot/dts/exynos4210-universal_c210.dts | 2 +-
+ arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi | 1 +
+ arch/arm/boot/dts/exynos4412-midas.dtsi         | 1 +
+ arch/arm/boot/dts/exynos4412-n710x.dts          | 4 ++--
+ arch/arm/boot/dts/exynos4412-odroid-common.dtsi | 1 +
+ arch/arm/boot/dts/exynos4412-origen.dts         | 1 +
+ arch/arm/boot/dts/exynos4412-p4note.dtsi        | 1 +
+ arch/arm/boot/dts/exynos5250-arndale.dts        | 1 +
+ arch/arm/boot/dts/exynos5410-odroidxu.dts       | 1 +
+ arch/arm/boot/dts/exynos5420-arndale-octa.dts   | 1 +
+ arch/arm/boot/dts/exynos5420-smdk5420.dts       | 1 +
+ arch/arm/boot/dts/exynos5422-odroid-core.dtsi   | 1 +
+ arch/arm/boot/dts/exynos5422-odroidhc1.dts      | 2 +-
+ arch/arm/boot/dts/exynos5422-odroidxu4.dts      | 2 +-
+ arch/arm/boot/dts/exynos54xx-odroidxu-leds.dtsi | 4 ++--
+ arch/arm/boot/dts/s5pv210-goni.dts              | 9 ---------
+ 19 files changed, 24 insertions(+), 21 deletions(-)
