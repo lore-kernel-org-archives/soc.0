@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 634F7C48BD1
-	for <soc@archiver.kernel.org>; Thu, 10 Jun 2021 23:28:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31EA5C48BDF
+	for <soc@archiver.kernel.org>; Thu, 10 Jun 2021 23:28:38 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 48200613F5; Thu, 10 Jun 2021 23:28:27 +0000 (UTC)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	id 138EB613F5; Thu, 10 Jun 2021 23:28:38 +0000 (UTC)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 18870613E1;
-	Thu, 10 Jun 2021 23:28:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 18870613E1
+	by mail.kernel.org (Postfix) with ESMTPS id DA430613E9;
+	Thu, 10 Jun 2021 23:28:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DA430613E9
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=mnhagan88@gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id e11so4056789wrg.3;
-        Thu, 10 Jun 2021 16:28:27 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso7560765wmh.4;
+        Thu, 10 Jun 2021 16:28:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0nt1QAmwrT7KiwVRGBb2sEf7u5dtEbfMgMB1Y3n/d6U=;
-        b=Eq89jfHz5HtM/LYs41rCP41gcszr+5aevF46W868z1ggqWA7F2YEIbtWSBnz8t0fOb
-         G5WKgiPzhOkWyom+ib0Q48I5t+kZYmWkM01ILBhz5ooilZCDOQ6fDUQI0C/CRGX1Fevt
-         WK/MRIQOWUbg4yy1SFOB/Bs2aQwYzsopQ3ULXUwROcnkRK7HCB+JjAry/wYP99GgoyW0
-         cwJRLfVel4p5nK31KDMlW2Sh5Qmhag7QVxJ3c3WjnYNI4yvk1PE0SWH39XfgUL+rOTfY
-         iWOJlv7ngdCWc80UXbPKAwMAX0s7/Cik774swDTXSOXV5IRmoT/ZQycXo6PYKuWaC53/
-         yYgQ==
+        bh=fY39Ptk0sw5qXBAnjzWmLKrEgOiYPHLxRS1HTe3/ra8=;
+        b=a/MiVDn1JdEQF9wRpjW4aEDvLn1WR4dUr3dVfjAg2cV8yAdEsdR/hsZXp3Qxwq21Sd
+         4TI/x+j1vfVV5nfCkZe/1T6aPR+FAYy3wjVksI/ryDaU5Y7oyWLd46Bgi71YqG1pC/tv
+         Sft8hMp55HpAxY15hgXgls8SpkoWrsV3I4g9FU1uDIQ8vuNEH4BF/dTOqshCjrPOk22V
+         CTHZai335bSowLt1rNe7zUYkrGBMSkVtiJp67O7cCvA052LmtQTGXo067npFVKPZQkss
+         IoZVnZXCLAbXcsmTGV3mVqp6AVlw17PUr7w/iLvuhLjf61YtWsjCCImhia2CbSCpiEKj
+         1z7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0nt1QAmwrT7KiwVRGBb2sEf7u5dtEbfMgMB1Y3n/d6U=;
-        b=r1LWEFIeRein4efULwTNnAlOkTaPA6pnmygj/J8UercnWM1K0BICP3UF6MiSDOw57C
-         urf7AnyPqDagHtjjz/bmMncnoHyEkyYMQTC2Q3lKM+UO6Yjx7ClxcYMxMxTr8VZxgtFW
-         9bmmp2EZRRetAYhgaKntbd7lrOj5YmrLfcX8K8hV9RtEZi6ONjcg2IgUXlpEqZ9/kiHV
-         AFQ62WVzDVOnTVII88tAMCwzcDnKOSgSkKZdzRQwxhx5OnG4OMnqyuQ3EFO6o11Ukiy/
-         zjx1t+/CkrzZl20znANTbl/fSKEydgEVDIzPpQhFoLZvHHSdEO0glm52JE/yUcBWjLah
-         vMQA==
-X-Gm-Message-State: AOAM533hN+9tfeY85ROKtaKOO4suA/O+gzu3TJb1vgCXymc9dyyEw66l
-	+vhAg9+j/Hf20/FUuhFdVPE=
-X-Google-Smtp-Source: ABdhPJzkq1CzfZQJ8JofM0yC65tXnI8aWTVOPbJZPZymMPGbOqTy3A8A+IWO3hilqAsMDEWhYfPW0Q==
-X-Received: by 2002:a05:6000:18f:: with SMTP id p15mr820358wrx.102.1623367705704;
-        Thu, 10 Jun 2021 16:28:25 -0700 (PDT)
+        bh=fY39Ptk0sw5qXBAnjzWmLKrEgOiYPHLxRS1HTe3/ra8=;
+        b=QwFviPAqUXGGLcmecWxBULUHFXkuPD9b/oUJOy7tFa7iv8KF9RBy/rZod1z10z1ewa
+         9322SwdQBHekFIZ/RjSypDwGEOshmF43bzenXo8eTVNqvmt2gEjqobyxi1XwXZEIz2d8
+         jTs7WWYvvuQggLcBUtVUOf1UASeetqp1FsS9K07y8KJW0KIXGKe9oTMifSkHwukR3Ogi
+         8am3DG4w3RgEMvPG4m7h5QMtzd2gjCoBrih9TQaFpTsviYLbxyiHL2c5nhBR2gxFVNnf
+         S95FR7QBPO+vdmRMpKz9+BNW69XxqvMqBC+ZWMxtu89P/NVwjwEd2Y4bwENtbaKWvj77
+         Br9A==
+X-Gm-Message-State: AOAM530sWF0iY2Cf1y8cmb5k4DfMcYrsIpxhZGVfPiDpbCume48Riw76
+	AGiQudqXGwx2bQPeaMFdYaY=
+X-Google-Smtp-Source: ABdhPJy+s2yIZkcJEiGe84bEKlWeqiQEB0JakPzVhGXnIuj7SAMYOp9sVBFq4Je+XRMXvzk1PZe56w==
+X-Received: by 2002:a1c:ddc3:: with SMTP id u186mr17327237wmg.44.1623367716526;
+        Thu, 10 Jun 2021 16:28:36 -0700 (PDT)
 Received: from cluster5 ([80.76.206.81])
-        by smtp.gmail.com with ESMTPSA id d13sm3196182wrs.41.2021.06.10.16.28.25
+        by smtp.gmail.com with ESMTPSA id o7sm5433527wro.76.2021.06.10.16.28.35
         (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Thu, 10 Jun 2021 16:28:25 -0700 (PDT)
+        Thu, 10 Jun 2021 16:28:36 -0700 (PDT)
 From: Matthew Hagan <mnhagan88@gmail.com>
 To: 
 List-Id: <soc.lore.kernel.org>
@@ -67,46 +67,45 @@ Cc: Florian Fainelli <f.fainelli@gmail.com>,
 	Ray Jui <rjui@broadcom.com>,
 	Scott Branden <sbranden@broadcom.com>,
 	bcm-kernel-feedback-list@broadcom.com,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
 	Sam Ravnborg <sam@ravnborg.org>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 1/5] dt-bindings: arm: bcm: NSP: add Meraki MX64/MX65
-Date: Fri, 11 Jun 2021 00:27:13 +0100
-Message-Id: <20210610232727.1383117-2-mnhagan88@gmail.com>
+Subject: [PATCH v2 2/5] ARM: dts: NSP: Add Meraki MX64/MX65 to Makefile
+Date: Fri, 11 Jun 2021 00:27:14 +0100
+Message-Id: <20210610232727.1383117-3-mnhagan88@gmail.com>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20210610232727.1383117-1-mnhagan88@gmail.com>
 References: <20210610232727.1383117-1-mnhagan88@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add bindings for the Meraki MX64/MX65 series. Note this patch should be
-applied on top of "dt-bindings: arm: bcm: add NSP devices to SoCs".
+Add Makefile entries for the Meraki MX64/MX65 series devices.
 
 Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
 ---
- Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml | 6 ++++++
+ arch/arm/boot/dts/Makefile | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
-index 78dfa315f3d0..7d184ba7d180 100644
---- a/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
-+++ b/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
-@@ -62,6 +62,12 @@ properties:
-           - enum:
-               - brcm,bcm958625hr
-               - brcm,bcm958625k
-+              - meraki,mx64
-+              - meraki,mx64-a0
-+              - meraki,mx64w
-+              - meraki,mx64w-a0
-+              - meraki,mx65
-+              - meraki,mx65w
-           - const: brcm,bcm58625
-           - const: brcm,nsp
- 
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index f8f09c5066e7..033d9604db60 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -154,6 +154,12 @@ dtb-$(CONFIG_ARCH_BCM_NSP) += \
+ 	bcm958525xmc.dtb \
+ 	bcm958622hr.dtb \
+ 	bcm958623hr.dtb \
++	bcm958625-meraki-mx64.dtb \
++	bcm958625-meraki-mx64-a0.dtb \
++	bcm958625-meraki-mx64w.dtb \
++	bcm958625-meraki-mx64w-a0.dtb \
++	bcm958625-meraki-mx65.dtb \
++	bcm958625-meraki-mx65w.dtb \
+ 	bcm958625hr.dtb \
+ 	bcm988312hr.dtb \
+ 	bcm958625k.dtb
 -- 
 2.26.3
 
