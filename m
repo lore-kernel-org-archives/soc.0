@@ -1,110 +1,70 @@
-Return-Path: <SRS0=gFkl=LE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=jMxD=LE=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94FB8C48BDF
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Jun 2021 19:51:46 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C8BCC48BDF
+	for <soc@archiver.kernel.org>; Thu, 10 Jun 2021 22:23:32 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 2FBCB61403; Thu, 10 Jun 2021 22:23:32 +0000 (UTC)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5D503613DD
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 10 Jun 2021 19:51:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5D503613DD
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=+2VEyi5bamfm7Fw8Uv60h1DGz9Omk9pMYm3in8Z7iDU=; b=I9IqDsxOc4q50w
-	4591z+ezEZEG1Y2/SL0FHSsvAaJW4S1SIfOQreoZZ4kxw4Qwzf/8S5HON4ih/vZvgvv1OFQy1yhyS
-	jG3l4MqRfihUNNYq5CaSwdYdfL8qajqAhZ40MSsp2ntYc4I4PEmgl4UTfZsuriCD2eGFLFy+PEuua
-	CwsCXJAfoxzAXhGwABgZVCL4MU5arnlaNh40AleVGfi/BX9B+kxk0DpPGzDhYssUIRMzBtR01iAsM
-	J/v4mxZUT+qhRvCP8eJNyfuVrA0YSxZUUgwTHMTKfM4bpH4umTm0CIYzX2bbZPSSMxftbVYqQpQ6V
-	4v2sCyhUvTt9qYbiRmtw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lrQgr-002Gug-7g; Thu, 10 Jun 2021 19:50:09 +0000
-Received: from mail-pf1-f175.google.com ([209.85.210.175])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lrQgR-002GqI-RG
- for linux-arm-kernel@lists.infradead.org; Thu, 10 Jun 2021 19:49:45 +0000
-Received: by mail-pf1-f175.google.com with SMTP id d16so2479061pfn.12
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 10 Jun 2021 12:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=mfkFqsgpL3AznhJI9IfIu+Wtx+Hx/3rGiTa6HqGFLyY=;
- b=Q2RfP2asf3CSsji/OQajv4jZ7eZvHrmOSVgYKF1XxcKCXXfco/GE2qHzeHA80NOjuU
- cC5wghUH/khpIpcLk6c13/MmMj2nDEOHExgQs20C4EqsQV7D2aMWIKRZer475OeJnx2r
- 9bm3rAdBeeOwN9+8ws+VMpTIVsZ0BHxmIh8NErcGzFZFZEHqwk0QYGjGVtVmWPKpfV43
- JvZTniRrZMyk9JvZFYoQQhLMG2jEEk6mo3EuT8fVCeJ4GYZKL1NJlq3aoMD4KTy9ETiv
- WflaB+AOFgkoQCPO9fsAQKeecz2t4bvW5Fd8gBV11l+UhHKvnr7UW18VFUNY6z0kHE8B
- ivAA==
+	by mail.kernel.org (Postfix) with ESMTPS id 0727B613F1
+	for <soc@kernel.org>; Thu, 10 Jun 2021 22:23:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0727B613F1
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linus.walleij@linaro.org
+Received: by mail-lj1-f174.google.com with SMTP id e11so6954619ljn.13
+        for <soc@kernel.org>; Thu, 10 Jun 2021 15:23:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=upPFWARj1vHFZRQDqKP9hbOCIWJSnJnB+X/H1bZtVZg=;
+        b=g45/6eODNvJclK52BVGTTwaCQ4UNflJcKE+AuAReDKd8eph+m6ltQYmKB59c5igYZL
+         1gD0Yjjv57p0Z/7X6/qveb4gFGHjdkb0l8OYOdj8KOoJn09BsHLFteUDOWmlKFZsQ61p
+         xcMlHi8cIkeaXaOm2i/9niGGoC5EJclbJdQBNk0ns0zzgU5E1SuemWZAMAxyUTmdc4N7
+         IJmrh7xfSRoQaA3IvdYUfhvAtn8xf1dO+oFX8XNE/0xT8tYdAvFSjTFJHJkuVIciN/FN
+         ktyIlH3sV8kBOoTEKCWAIaroKVW7tQWEMTGzfRFkIJIwP6NTxldeODZq4km93jhQXITD
+         oKMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=mfkFqsgpL3AznhJI9IfIu+Wtx+Hx/3rGiTa6HqGFLyY=;
- b=hSRoc+ddvncWOjrKK4X5Y+byFe3rzMZePjiH2ao57L22sxYd1nTYkDwKEeCeAEank4
- Dw4Tp8js94eumOE0qP0upZ1Jr/XEZZbXJOwr/uYvkteuZ7vuqii9yZULUYX6OOeHXbW2
- Y3zGWo47as7WTS3J+eII3o9HU2jhjjE9IrxIoesfmQR91kWLgPCisbkX2vPtMgRjflYe
- qSm8745tFnXNE9EVw52zDEvt9Xzp4FzqIeYgOCrLnpYlv/iNd4yIDtGeLSEQeyU/ncCo
- zsazeT6pvBJsWtsShrw46xxGir8LrgLdRj+hksZ4+/6bDChvVjVigJ7TttFCO/69vZKg
- d3lQ==
-X-Gm-Message-State: AOAM530kyyO2K5ZdrxkCExcuQydz6HcIzN838TsYawc51YqmLDRa+Sd6
- fRfyXn0GufA0+PgJ5PIQ+78=
-X-Google-Smtp-Source: ABdhPJz+YwXnU+AdVmm62TGrYUB+6Dn54dkO2OBKuW4tVu1EN1D2o2JGb2ojoaD+3TgsJzFLFvyyng==
-X-Received: by 2002:a63:7e56:: with SMTP id o22mr64617pgn.278.1623354521803;
- Thu, 10 Jun 2021 12:48:41 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
- by smtp.gmail.com with ESMTPSA id oc10sm3118297pjb.44.2021.06.10.12.48.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Jun 2021 12:48:41 -0700 (PDT)
-From: Florian Fainelli <f.fainelli@gmail.com>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Zhen Lei <thunder.leizhen@huawei.com>,
- Florian Fainelli <f.fainelli@gmail.com>,
- linux-arm-kernel@lists.infradead.org, arnd@arndb.de, olof@lixom.net,
- khilman@kernel.org, bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 2/3] Broadcom devicetree-arm64 changes for 5.14
-Date: Thu, 10 Jun 2021 12:48:35 -0700
-Message-ID: <20210610194836.309869-2-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210610194836.309869-1-f.fainelli@gmail.com>
-References: <20210610194836.309869-1-f.fainelli@gmail.com>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=upPFWARj1vHFZRQDqKP9hbOCIWJSnJnB+X/H1bZtVZg=;
+        b=VMBhkcgEiVk2T5O6mrS5y1By/yP83z06Bn+PP+9BnYZIUN+h79c0tllKsjHzeIl2CE
+         b//pTExMezp8Y3/hL1mHwcRZKa/oEKbygNCXjZ3Nj75j5F77gOvSnWqb0a6hHq+jDtq8
+         wuSvM9fzkN+uQoUuAWpMM91RJySShLK5FCOCTfoFtTq+aZJsUjP73D5YYhXxmP2f/HLr
+         5usbZdHQbn7tBsT7F3KUrLfLH36isJhxkq31wOltWQySLSVyFZxUkmYKwICdGWkCACAH
+         JysjUgh8DM8QgUEK4qhYdqgCQ59O6oAlBVKDc70bPMSOg72DlsPj03wlmb1isxI7FOV9
+         y9bA==
+X-Gm-Message-State: AOAM532Wo4c3BMwjogyk4YZfAx7kr23Zfv+uJRC2isQbobsiXs9fiERX
+	/Cwef9UsxbeCrr1AZV2bdo6uvm8/sk7oT/cul1pE/ZgwYbapUQ==
+X-Google-Smtp-Source: ABdhPJx5i3to20WSxsPuB0EMWt578arivcS9fjm0W2+N5fF7i+MzOS7H+lQYCH1VimMHY+ePknYf1mp/34cFgGAAwkU=
+X-Received: by 2002:a05:651c:1057:: with SMTP id x23mr529393ljm.467.1623363810175;
+ Thu, 10 Jun 2021 15:23:30 -0700 (PDT)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210610_124943_901279_AC267C1F 
-X-CRM114-Status: UNSURE (   9.79  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210610194835.VlFBJi82J_lo9O4EhgE6u38TtD8jbPBW2Dy7cLZnWXY@z>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 11 Jun 2021 00:23:19 +0200
+Message-ID: <CACRpkdYh9kZJU6PAxghPRGBco_61wRZgUnTZr_3qvySPCo5rBw@mail.gmail.com>
+Subject: [GIT PULL] Ux500 DTS changes for v5.14
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Sebastian Reichel <sre@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+
+Hi SoC maintainers,
+
+here is a collection of DTS changes for the Ux500 platform that
+have been circulated on the list, please pull them in!
+Details in the signed tag.
+
+Thanks,
+Linus Walleij
 
 The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
@@ -112,27 +72,44 @@ The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.14/devicetree-arm64
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+tags/ux500-dts-v5.14
 
-for you to fetch changes up to cd49f71cff8de325c7602bb2d072bc6d2807387f:
+for you to fetch changes up to e409c1e1d5cb164361229e3a3f084e4a32544fb6:
 
-  arm64: dts: broadcom: normalize the node name of the UART devices (2021-05-20 11:45:43 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM64-based SoCs changes for 5.14,
-please pull the following:
-
-- Zhen fixes the Broadcom stingray serial node unit names to fix a DT
-  binding warning
+  ARM: dts: ux500: Fix orientation of Janice accelerometer (2021-05-24
+01:19:27 +0200)
 
 ----------------------------------------------------------------
-Zhen Lei (1):
-      arm64: dts: broadcom: normalize the node name of the UART devices
+Some Ux500 DTS updates for v5.14:
+- Fix interrupt cells, GPIO controller node names in accordance
+  with new YAML schemas.
+- Add proper compatible strings for Broadcomm Wifi and BT.
+- Fix upp and add some mount matrices for accelerometers so
+  e.g. UI:s work as they should.
+- Drop the DRDY pin assignment for a non-existing pin on a
+  magnetometer.
 
- arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+----------------------------------------------------------------
+Linus Walleij (5):
+      ARM: dts: ux500: Fix orientation of accelerometer
+      ARM: dts: ux500: Drop drdy pin assignment from magnetometer
+      ARM: dts: ux500: Fix some compatible strings
+      ARM: dts: href: Mount matrices for TVK R2
+      ARM: dts: ux500: Fix orientation of Janice accelerometer
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Sebastian Reichel (2):
+      ARM: dts: ux500: Fix interrupt cells
+      ARM: dts: ux500: Rename gpio-controller node
+
+ arch/arm/boot/dts/ste-ab8500.dtsi              | 28 +++++++++++++-------------
+ arch/arm/boot/dts/ste-ab8505.dtsi              | 24 +++++++++++-----------
+ arch/arm/boot/dts/ste-href-ab8500.dtsi         |  2 +-
+ arch/arm/boot/dts/ste-href-tvk1281618-r2.dtsi  |  6 ++++++
+ arch/arm/boot/dts/ste-href-tvk1281618-r3.dtsi  |  4 +++-
+ arch/arm/boot/dts/ste-href.dtsi                |  2 +-
+ arch/arm/boot/dts/ste-snowball.dts             |  2 +-
+ arch/arm/boot/dts/ste-ux500-samsung-golden.dts |  3 ++-
+ arch/arm/boot/dts/ste-ux500-samsung-janice.dts | 11 +++++-----
+ arch/arm/boot/dts/ste-ux500-samsung-skomer.dts |  3 ++-
+ 10 files changed, 47 insertions(+), 38 deletions(-)
