@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31EA5C48BDF
-	for <soc@archiver.kernel.org>; Thu, 10 Jun 2021 23:28:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 237FFC48BDF
+	for <soc@archiver.kernel.org>; Thu, 10 Jun 2021 23:28:49 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 138EB613F5; Thu, 10 Jun 2021 23:28:38 +0000 (UTC)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	id 05FC7613E9; Thu, 10 Jun 2021 23:28:49 +0000 (UTC)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DA430613E9;
-	Thu, 10 Jun 2021 23:28:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DA430613E9
+	by mail.kernel.org (Postfix) with ESMTPS id D08E8613E1;
+	Thu, 10 Jun 2021 23:28:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D08E8613E1
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=mnhagan88@gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso7560765wmh.4;
-        Thu, 10 Jun 2021 16:28:37 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso7560933wmh.4;
+        Thu, 10 Jun 2021 16:28:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fY39Ptk0sw5qXBAnjzWmLKrEgOiYPHLxRS1HTe3/ra8=;
-        b=a/MiVDn1JdEQF9wRpjW4aEDvLn1WR4dUr3dVfjAg2cV8yAdEsdR/hsZXp3Qxwq21Sd
-         4TI/x+j1vfVV5nfCkZe/1T6aPR+FAYy3wjVksI/ryDaU5Y7oyWLd46Bgi71YqG1pC/tv
-         Sft8hMp55HpAxY15hgXgls8SpkoWrsV3I4g9FU1uDIQ8vuNEH4BF/dTOqshCjrPOk22V
-         CTHZai335bSowLt1rNe7zUYkrGBMSkVtiJp67O7cCvA052LmtQTGXo067npFVKPZQkss
-         IoZVnZXCLAbXcsmTGV3mVqp6AVlw17PUr7w/iLvuhLjf61YtWsjCCImhia2CbSCpiEKj
-         1z7g==
+        bh=SyK9z77KPeuihLjFv6CL15mYQ8zBPJwgwgxafmnnN4I=;
+        b=GtV8tYpbysk23WR8WYdoLRG0IuES2TyMPeFoyWMZhkihp+JDhGcRInM9PnfPDcdpVQ
+         aIpYR9KtjmTYavCP1G0mYCwQNOSnXgzC+CpyPzkMDY/mkOOSLZuwBUYrOQAvxs1du7JU
+         VZqlBMNqfE4e72fBODuNlyri4cFqkOD0fiFOPUd/Sm5ophgBP04JPCTO06Rk5II0i3Tg
+         Fhc08Q8mjfUU/syBEhN9UU8EnWZ3Ygzy8NRyJQPUhvDobOfUiHpquFAyYV/I4sJpAclT
+         9SyPjRtK83/oV0pkJ9jcL2cXFpSEKokcGsBtYZTgnVNP8m5C1IdQQQyEF3d7mZJ2z1qT
+         auEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fY39Ptk0sw5qXBAnjzWmLKrEgOiYPHLxRS1HTe3/ra8=;
-        b=QwFviPAqUXGGLcmecWxBULUHFXkuPD9b/oUJOy7tFa7iv8KF9RBy/rZod1z10z1ewa
-         9322SwdQBHekFIZ/RjSypDwGEOshmF43bzenXo8eTVNqvmt2gEjqobyxi1XwXZEIz2d8
-         jTs7WWYvvuQggLcBUtVUOf1UASeetqp1FsS9K07y8KJW0KIXGKe9oTMifSkHwukR3Ogi
-         8am3DG4w3RgEMvPG4m7h5QMtzd2gjCoBrih9TQaFpTsviYLbxyiHL2c5nhBR2gxFVNnf
-         S95FR7QBPO+vdmRMpKz9+BNW69XxqvMqBC+ZWMxtu89P/NVwjwEd2Y4bwENtbaKWvj77
-         Br9A==
-X-Gm-Message-State: AOAM530sWF0iY2Cf1y8cmb5k4DfMcYrsIpxhZGVfPiDpbCume48Riw76
-	AGiQudqXGwx2bQPeaMFdYaY=
-X-Google-Smtp-Source: ABdhPJy+s2yIZkcJEiGe84bEKlWeqiQEB0JakPzVhGXnIuj7SAMYOp9sVBFq4Je+XRMXvzk1PZe56w==
-X-Received: by 2002:a1c:ddc3:: with SMTP id u186mr17327237wmg.44.1623367716526;
-        Thu, 10 Jun 2021 16:28:36 -0700 (PDT)
+        bh=SyK9z77KPeuihLjFv6CL15mYQ8zBPJwgwgxafmnnN4I=;
+        b=szvU0pWq5AjAEy+iN/4UpkT4nC4kDbNFARjDiWnR5TRDms8Jrav8niv6Sb/Hc3Souv
+         USXv3GwKGzB87Bfx4ceD77ratQNjgGjBSiWSwZofsasp3flI47FHF31YlUwrEJxc87V8
+         HLREC6Dw6y+pdWdgq1irCd/D1iggQ1WnVoyXTqPiATB2QhgHtls1TMffRlgUttsYSnEH
+         8cfrNj7IpC9Vkx7iFdyKw4Hih2QIdqz0Pn9xba/ZTISKTltZsvhwT593ZEcFYvO4UjKR
+         YFvBiZO8/aZgmBtAXuIe2wd/mbGSE9/Fssv73zvWttoUiD/34zaVOnIsktg29SKSfvzh
+         IfdQ==
+X-Gm-Message-State: AOAM530D8yrrT5FS02Wyn3ERdnrw+8cVhIZ4v156XnqRXB8ckDE591OX
+	/itvdtvJLggSqhJUvUJY5Ao=
+X-Google-Smtp-Source: ABdhPJxReN3yGxJyKbpYbQ91cIEM+68PrNx6S/fpAPT7jFhtMq+7YBxVgjndmP7se65wYIpXEAAaBQ==
+X-Received: by 2002:a05:600c:4f94:: with SMTP id n20mr17396630wmq.121.1623367727547;
+        Thu, 10 Jun 2021 16:28:47 -0700 (PDT)
 Received: from cluster5 ([80.76.206.81])
-        by smtp.gmail.com with ESMTPSA id o7sm5433527wro.76.2021.06.10.16.28.35
+        by smtp.gmail.com with ESMTPSA id g186sm4324045wme.6.2021.06.10.16.28.46
         (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Thu, 10 Jun 2021 16:28:36 -0700 (PDT)
+        Thu, 10 Jun 2021 16:28:47 -0700 (PDT)
 From: Matthew Hagan <mnhagan88@gmail.com>
 To: 
 List-Id: <soc.lore.kernel.org>
@@ -67,45 +67,183 @@ Cc: Florian Fainelli <f.fainelli@gmail.com>,
 	Ray Jui <rjui@broadcom.com>,
 	Scott Branden <sbranden@broadcom.com>,
 	bcm-kernel-feedback-list@broadcom.com,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
 	Sam Ravnborg <sam@ravnborg.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 2/5] ARM: dts: NSP: Add Meraki MX64/MX65 to Makefile
-Date: Fri, 11 Jun 2021 00:27:14 +0100
-Message-Id: <20210610232727.1383117-3-mnhagan88@gmail.com>
+Subject: [PATCH v2 3/5] ARM: dts: NSP: Add common bindings for MX64/MX65
+Date: Fri, 11 Jun 2021 00:27:15 +0100
+Message-Id: <20210610232727.1383117-4-mnhagan88@gmail.com>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20210610232727.1383117-1-mnhagan88@gmail.com>
 References: <20210610232727.1383117-1-mnhagan88@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add Makefile entries for the Meraki MX64/MX65 series devices.
+These bindings are required for all Meraki MX64/MX65 devices.
 
 Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
 ---
- arch/arm/boot/dts/Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../dts/bcm958625-meraki-mx6x-common.dtsi     | 148 ++++++++++++++++++
+ 1 file changed, 148 insertions(+)
+ create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index f8f09c5066e7..033d9604db60 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -154,6 +154,12 @@ dtb-$(CONFIG_ARCH_BCM_NSP) += \
- 	bcm958525xmc.dtb \
- 	bcm958622hr.dtb \
- 	bcm958623hr.dtb \
-+	bcm958625-meraki-mx64.dtb \
-+	bcm958625-meraki-mx64-a0.dtb \
-+	bcm958625-meraki-mx64w.dtb \
-+	bcm958625-meraki-mx64w-a0.dtb \
-+	bcm958625-meraki-mx65.dtb \
-+	bcm958625-meraki-mx65w.dtb \
- 	bcm958625hr.dtb \
- 	bcm988312hr.dtb \
- 	bcm958625k.dtb
+diff --git a/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi b/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
+new file mode 100644
+index 000000000000..47a30dedf7b3
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
+@@ -0,0 +1,148 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Common Bindings for Cisco Meraki MX64 (Kingpin) and MX65 (Alamo) devices.
++ *
++ * Copyright (C) 2021 Matthew Hagan <mnhagan88@gmail.com>
++ */
++
++#include "bcm-nsp.dtsi"
++#include <dt-bindings/gpio/gpio.h>
++
++/ {
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	memory {
++		device_type = "memory";
++		reg = <0x60000000 0x80000000>;
++	};
++
++	pwm-leds {
++		compatible = "pwm-leds";
++
++		red {
++			label = "red:led";
++			pwms = <&pwm 1 50000>;
++		};
++
++		green {
++			label = "green:led";
++			pwms = <&pwm 2 50000>;
++		};
++
++		blue {
++			label = "blue:led";
++			pwms = <&pwm 3 50000>;
++		};
++	};
++};
++
++&L2 {
++	arm,io-coherent;
++	prefetch-data = <1>;
++	prefetch-instr = <1>;
++};
++
++&uart0 {
++	clock-frequency = <62500000>;
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++	at24@50 {
++		compatible = "atmel,24c64";
++		pagesize = <32>;
++		reg = <0x50>;
++	};
++};
++
++&amac2 {
++	status = "okay";
++};
++
++&nand {
++	nandcs@0 {
++		compatible = "brcm,nandcs";
++		reg = <0>;
++		nand-on-flash-bbt;
++
++		#address-cells = <1>;
++		#size-cells = <1>;
++
++		nand-ecc-strength = <24>;
++		nand-ecc-step-size = <1024>;
++
++		brcm,nand-oob-sector-size = <27>;
++
++		partition@0 {
++			label = "u-boot";
++			reg = <0x0 0x80000>;
++			read-only;
++		};
++
++		partition@80000 {
++			label = "shmoo";
++			reg = <0x80000 0x80000>;
++			read-only;
++		};
++
++		partition@100000 {
++			label = "bootkernel1";
++			reg = <0x100000 0x300000>;
++		};
++
++		partition@400000 {
++			label = "senao_nvram";
++			reg = <0x400000 0x100000>;
++		};
++
++		partition@500000 {
++			label = "bootkernel2";
++			reg = <0x500000 0x300000>;
++		};
++
++		partition@800000 {
++			label = "ubi";
++			reg = <0x800000 0x3f700000>;
++		};
++	};
++};
++
++&qspi {
++	status = "disabled";
++};
++
++&ehci0 {
++	status = "okay";
++};
++
++&ohci0 {
++	status = "okay";
++};
++
++&pwm {
++	status = "okay";
++	#pwm-cells = <2>;
++	chan0 {
++		channel = <1>;
++		active_low = <1>;
++		};
++	chan1 {
++		channel = <2>;
++		active_low = <1>;
++	};
++	chan2 {
++		channel = <3>;
++		active_low = <1>;
++	};
++};
++
++&ccbtimer1 {
++	status = "disabled";
++};
++
++&sata_phy {
++	status = "disabled";
++};
 -- 
 2.26.3
 
