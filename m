@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64942C48BE5
-	for <soc@archiver.kernel.org>; Fri, 11 Jun 2021 16:43:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AFCEC48BE0
+	for <soc@archiver.kernel.org>; Fri, 11 Jun 2021 16:43:14 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 42EBF613D0; Fri, 11 Jun 2021 16:43:12 +0000 (UTC)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	id 41E92613BC; Fri, 11 Jun 2021 16:43:14 +0000 (UTC)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1B52961357;
-	Fri, 11 Jun 2021 16:43:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1B52961357
+	by mail.kernel.org (Postfix) with ESMTPS id 192EE6100A;
+	Fri, 11 Jun 2021 16:43:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 192EE6100A
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=thierry.reding@gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id h22-20020a05600c3516b02901a826f84095so8924889wmq.5;
-        Fri, 11 Jun 2021 09:43:12 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id z8so6751216wrp.12;
+        Fri, 11 Jun 2021 09:43:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/DDhEhmd/WWK/nmogtTO3okii3O3flMjdbqXxBBxu0U=;
-        b=lz6oU35YVQA5fAK7pA7HTI+BEiNXOMWV4Sh11Ysgg6MZU84SMNZDk/grXDOHr2dpmK
-         5JreUnXQrC+mc7KEujTHacVBcaRczS4HWp72t+JVoh+LCRDabWbTlAbk24gfhQKrZzMI
-         /+OtA/ZuuZiU5z1FRd90YnILbA1eIg4qXDiz5rpCp3plalERRqeEal9Et3PhFbRqJRqV
-         QbHwFy5H+aU8zi0kZsNo4xPcxwfhLtXx+fSSQZhIVvKLBuD0HoyhrCUmey2/Yz+X1MLi
-         x7SQXSmbr5C60h8W1xCwB2inVpMARJmhvjkBR8bo8ZyKJ8KLtixZ4/Ir+n9a4pfvY28p
-         ZpXw==
+        bh=V5XYrnY/xVnCPcibAwboKgHCmrwG1kEd9Tte7IqhonY=;
+        b=AT2W/U1lava1Ca/zNFJ6uPGusersVIS6uHclYO2H/J6Qp1tt86eedRIFMioYpe8fqs
+         yrD74cQCB7gTkJ/kRf4Fa2ZDARKHtlWEHK8gvqQBojB2HoPIRlTiyqeoAzLb31bjDOwU
+         2fOqkJjuIv2s32Ktao44dlmqzx8n0MqHplzQKIo52w2TgS1YTFBc7LTxsz44LekNZlk4
+         +/JNa06aUjBU2QjmyFo0UWIdMu4V0iRUcJJZY/duMgkHzvhbWsV1XwULSqhLiHm75T3K
+         cG6DWTBPdfFjw8a2Jkvt7WvEfdmK4GqT3hWfjSP5PZJH7CTxPDGg2tMwz70xIRtgVOGt
+         hLqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/DDhEhmd/WWK/nmogtTO3okii3O3flMjdbqXxBBxu0U=;
-        b=BOyjJVDxkLwhm7KOfP1H8a5Y1W1sTEp3Er6HSQcw9LrzcpE7cxBtIIKxjWRDaOJd4c
-         5w3PYNTLNfSoqCRfMxBZtUZX+xOcWzo8Zn+CvPzp1xaowWUcIbIrf6lf4t121pM7gMzI
-         dRM4fXAsIieQehCLna3xWXrKDlvzo2j2expJGg2YBvEsz9teiptsthEJjE+PGa1l6hHD
-         nWyIrnzQmvLzStLRhe7/rNryQm6QnyVSka19J7NaAlZcCXHUoqPyLD3/MdWrKLIloyG/
-         zfoA7femQxSUJnSWqeEdsqpseq0EhtCfE8+RzFvdmTMIlBdZkL+NqCTDjeM2SrZXk7lb
-         yh1Q==
-X-Gm-Message-State: AOAM532aa/xR3J1OXuvNHXtohvYu8UpjpMwozF608FA7M1x0as8LdNry
-	hNszbHXLvVIzMYZmfQaZGXXwUM6ShoQ=
-X-Google-Smtp-Source: ABdhPJxmSVTeUcIzERg8Pc4lCkUbFiPFHCflpAJq+LBSKHgIism1xc/jsLbY+QNRNkUHMKA5P+jErw==
-X-Received: by 2002:a05:600c:4fc5:: with SMTP id o5mr4925670wmq.148.1623429790181;
-        Fri, 11 Jun 2021 09:43:10 -0700 (PDT)
+        bh=V5XYrnY/xVnCPcibAwboKgHCmrwG1kEd9Tte7IqhonY=;
+        b=Fu+x8V4xqk6yghleTks2Jy/UAmpJCuaOHvqZphG9mt7Jg0I74pggm/tszUgd1XPyic
+         kMz3k03q21GnerL9EYu4tiTeeneXbxjb83Tjz+IH3BHdq2H1+/GeLqtJTHSVzDxUjua9
+         yqTQ+aFKVjohSTkOYm4ksg5tdFL6DP/O60gBfO5GsHulQeaQFUZW3/DNYwKUnRnXYqB6
+         fRhQlnuv2xkd+HKZZQonXifg5qebd/Y6q2e6VWU4KQkg1rTD8wfDhqAWloe8mMmzDKMH
+         2jZp/b3MTHUq//ahSazgT6UTMgtak9jvo5LQ3uPHv0IBLLbpZn8b8FBnLnsKqi8knWPB
+         +U/w==
+X-Gm-Message-State: AOAM532fnEKklyqaCpEtGr+WN9vN1gr8fekSCoyw0cZSU+QBVDh2KYw0
+	fApVf1UD19D7dFyy2glNq9h7/nsLQOM=
+X-Google-Smtp-Source: ABdhPJxlsbAOLOU1i27Ibi/lz52sIQVKiBthECxJn+E7iF+bsBneHJrvzhZpxGhPpbWTOw5uSu00yw==
+X-Received: by 2002:a5d:64c7:: with SMTP id f7mr5073620wri.36.1623429792242;
+        Fri, 11 Jun 2021 09:43:12 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id x10sm7604589wrt.26.2021.06.11.09.43.09
+        by smtp.gmail.com with ESMTPSA id p5sm8063831wrd.25.2021.06.11.09.43.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jun 2021 09:43:09 -0700 (PDT)
+        Fri, 11 Jun 2021 09:43:11 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -61,9 +61,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 4/6] ARM: tegra: Device tree changes for v5.14-rc1
-Date: Fri, 11 Jun 2021 18:44:35 +0200
-Message-Id: <20210611164437.3568059-4-thierry.reding@gmail.com>
+Subject: [GIT PULL 5/6] ARM: tegra: Default configuration changes for v5.14-rc1
+Date: Fri, 11 Jun 2021 18:44:36 +0200
+Message-Id: <20210611164437.3568059-5-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210611164437.3568059-1-thierry.reding@gmail.com>
 References: <20210611164437.3568059-1-thierry.reding@gmail.com>
@@ -79,51 +79,24 @@ The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.14-arm-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.14-arm-defconfig
 
-for you to fetch changes up to 4c101a4466983abe7798493ef17279cc3f8eb028:
+for you to fetch changes up to 4302331fdf4440b96dba583384a0e2b759cb13bd:
 
-  ARM: tegra: ouya: Enable memory frequency thermal throttling using ACTMON (2021-05-31 11:40:29 +0200)
+  ARM: tegra_defconfig: Enable CONFIG_DEVFREQ_THERMAL (2021-05-31 11:43:11 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-ARM: tegra: Device tree changes for v5.14-rc1
+ARM: tegra: Default configuration changes for v5.14-rc1
 
-This contains various improvements (such as microphone detection and
-thermal zones) for some older Tegra devices (such as the Nexus 7 or
-the Acer A500).
+Enables the devfreq thermal support to allow using the devfreq device as
+cooling device for the system.
 
 ----------------------------------------------------------------
-Dmitry Osipenko (13):
-      ARM: tegra: acer-a500: Improve microphone detection
-      ARM: tegra: acer-a500: Specify proper voltage for WiFi SDIO bus
-      ARM: tegra: acer-a500: Bump thermal trips by 10C
-      ARM: tegra: Add reg property to Tegra20 EMC table device-tree nodes
-      ARM: tegra: wm8903: Fix polarity of headphones-detection GPIO in device-trees
-      ARM: tegra: paz00: Add CPU thermal zone
-      ARM: tegra: nexus7: Add i2c-thermtrip node
-      ARM: tegra: nexus7: Improve thermal zones
-      ARM: tegra: nexus7: Remove monitored-battery property
-      ARM: tegra: nexus7: Correct 3v3 regulator GPIO of PM269 variant
-      ARM: tegra: Add cooling cells to ACTMON device-tree node
-      ARM: tegra: nexus7: Enable memory frequency thermal throttling using ACTMON
-      ARM: tegra: ouya: Enable memory frequency thermal throttling using ACTMON
+Dmitry Osipenko (1):
+      ARM: tegra_defconfig: Enable CONFIG_DEVFREQ_THERMAL
 
- arch/arm/boot/dts/tegra124.dtsi                    |  3 +-
- arch/arm/boot/dts/tegra20-acer-a500-picasso.dts    | 21 +++++++----
- arch/arm/boot/dts/tegra20-harmony.dts              |  2 +-
- arch/arm/boot/dts/tegra20-medcom-wide.dts          |  2 +-
- arch/arm/boot/dts/tegra20-paz00.dts                | 43 +++++++++++++++++++++-
- arch/arm/boot/dts/tegra20-plutux.dts               |  2 +-
- arch/arm/boot/dts/tegra20-seaboard.dts             |  2 +-
- arch/arm/boot/dts/tegra20-tec.dts                  |  2 +-
- arch/arm/boot/dts/tegra20-ventana.dts              |  2 +-
- .../dts/tegra30-asus-nexus7-grouper-common.dtsi    | 16 +++-----
- .../tegra30-asus-nexus7-grouper-maxim-pmic.dtsi    |  9 +++++
- .../dts/tegra30-asus-nexus7-grouper-ti-pmic.dtsi   | 11 +++++-
- arch/arm/boot/dts/tegra30-cardhu.dtsi              |  2 +-
- arch/arm/boot/dts/tegra30-ouya.dts                 |  4 +-
- arch/arm/boot/dts/tegra30.dtsi                     |  3 +-
- 15 files changed, 93 insertions(+), 31 deletions(-)
+ arch/arm/configs/tegra_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
