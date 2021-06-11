@@ -7,23 +7,23 @@ X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69FCAC48BE0
-	for <soc@archiver.kernel.org>; Fri, 11 Jun 2021 14:54:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78E08C48BE5
+	for <soc@archiver.kernel.org>; Fri, 11 Jun 2021 14:55:55 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 490A1613D0; Fri, 11 Jun 2021 14:54:31 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B7EBF611CD;
-	Fri, 11 Jun 2021 14:54:30 +0000 (UTC)
+	id 4E8D5613EE; Fri, 11 Jun 2021 14:55:55 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BE3BC60200;
+	Fri, 11 Jun 2021 14:55:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1623423271;
-	bh=jxHTWV3FElGfy8OMvqBt7d6sjtvxkidSgk8uWrYmKb4=;
+	s=k20201202; t=1623423355;
+	bh=w/BG8YY3jV6/GlxIobZ63Z5fE/8mHTGyBhH25xHGwj8=;
 	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=Mv0LaHDuo/Ml2376NBHv80WUUuJSHTfxJNziiPSP4DxecOzcTNHraM1UoAHvIuwD7
-	 IRGPR2AdYe7UfxDigTIJic1dfQ+JlmotdGk2wFnvfszRMa2gZs31SjWcZFGglVjlAZ
-	 zdtPEgomw9MtxZC/iN7hyAG63jm44Z9oqNDR+R45R7Gzi9bczxgmLax132kn5cnT2/
-	 tEjzema7CEbxidmHvpegxAtb5p9R1fZgogOgHL2CS6Dr/F03C9m/JzYmGcfTvz/KTL
-	 PHR/fZoVEefVq0z5LUBkJiM5giBAXIfSDjOs0IdNaHEogO0YXHn79BfQrxsIYdqoLg
-	 t19MW3zdtsYkQ==
-Date: Fri, 11 Jun 2021 16:54:29 +0200
+	b=QZhjhvoGArMOy7qS3fi/xFRfkciJLVE8AN/sCKVlkD4OcxRdFiwbHNmaHggtwry1R
+	 aJrPKTqbBfkWqOnwKL81OltzwOX2qpd965MjpkpDGreBaRS9y/GvQ2BsCMr8n6GyYL
+	 uy9xRjL+X+JsUxc0XaHCK/MNUiYn5QlSSraWy48QZ7G9TWCvIe1Wj7+hMxhmwzgUxX
+	 VrwtF3Fm4gaKRpXZoHepcsu5zUvoEBPFwFPXhvEtkrAL5QerMB2GFVO4GKYfggLJYD
+	 8sU4AEFVBzdsU1UvtFBKcynz+V8SmQBQEOqfwwd1h2I7Lc7IsdBuP4sjR8YoSCpLV4
+	 dNJSY//5sVesQ==
+Date: Fri, 11 Jun 2021 16:55:53 +0200
 From: Maxime Ripard <mripard@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org, soc@kernel.org
@@ -31,21 +31,21 @@ Cc: Maxime Ripard <mripard@kernel.org>,
 	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
 	Chen-Yu Tsai <wens@csie.org>,
 	Jernej Skrabec <jernej.skrabec@siol.net>
-Subject: [GIT PULL] Allwinner Fixes for 5.13
-Message-ID: <ad7ba352-315c-4201-b922-4bf914a00d98.lettre@localhost>
+Subject: [GIT PULL] Allwinner Platform Changes for 5.14
+Message-ID: <bf3431f6-2196-425c-9b43-0bf4de0b6d30.lettre@localhost>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="IbiEmVdNhj52aTiM"
+	protocol="application/pgp-signature"; boundary="DwZuxS5b5A0Qc9+5"
 Content-Disposition: inline
 
 
---IbiEmVdNhj52aTiM
+--DwZuxS5b5A0Qc9+5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hi,
 
-Please pull the following changes for the current release.
+Please pull the following changes for the next release.
 
 Thanks!
 Maxime
@@ -56,38 +56,34 @@ The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git refs/tags/sunxi-fixes-for-5.13-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git refs/tags/sunxi-core-for-5.14-1
 
-for you to fetch changes up to bd5431b2f9b30a70f6ed964dd5ee9a6d1c397c06:
+for you to fetch changes up to cbccad664927e98db0f12adb7434fdfe51d3073a:
 
-  arm64: dts: allwinner: a64-sopine-baseboard: change RGMII mode to TXID (2021-06-10 14:51:53 +0200)
-
-----------------------------------------------------------------
-Two patches to fix the GMAC PHY mode on some boards.
+  arm64: sunxi: Build the sun4i timer driver (2021-05-10 09:15:09 +0200)
 
 ----------------------------------------------------------------
-Icenowy Zheng (1):
-      arm64: dts: allwinner: a64-sopine-baseboard: change RGMII mode to TXID
+One patch to select one of our timer in the arm64 Kconfig option.
 
-Salvatore Bonaccorso (1):
-      ARM: dts: sun8i: h3: orangepi-plus: Fix ethernet phy-mode
-
-
- arch/arm/boot/dts/sun8i-h3-orangepi-plus.dts                  | 2 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64-sopine-baseboard.dts | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+----------------------------------------------------------------
+Samuel Holland (1):
+      arm64: sunxi: Build the sun4i timer driver
 
 
+ arch/arm64/Kconfig.platforms | 1 +
+ 1 file changed, 1 insertion(+)
 
---IbiEmVdNhj52aTiM
+
+
+--DwZuxS5b5A0Qc9+5
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYMN5JAAKCRDj7w1vZxhR
-xfKdAP9DP2gxkghiwsDVwqUVay66TLRmsDbDrXkT+PPTWBp3VgD/fjADN2OSCPlR
-yq33OpJqiAXAo99FRLJMDD8XPTteBQs=
-=O3V/
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYMN5eQAKCRDj7w1vZxhR
+xd6jAQDbl7BSRmL174s2Qk1CxnZVVZac8/jWZssuvMSSyyp1xQEA8uJNRquAY6FT
+7C/eiWK7xrZinzbfYoe1sV0xpoAHogY=
+=+rTJ
 -----END PGP SIGNATURE-----
 
---IbiEmVdNhj52aTiM--
+--DwZuxS5b5A0Qc9+5--
