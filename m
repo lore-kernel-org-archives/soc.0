@@ -8,14 +8,14 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFC3FC48BE5
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 16:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5EB2C48BE0
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 16:46:57 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7AD1B613BA
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 16:46:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7AD1B613BA
+	by mail.kernel.org (Postfix) with ESMTPS id A83BA61078
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 16:46:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A83BA61078
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -24,53 +24,54 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=YOpdyvtBpdEe1UGIlHNUdyDw6a1OPxi/Gvt3vePnCjk=; b=jv/TtKmlZO4cpw
-	dcEqhiDsAZkyNPHocNVPj737ViYLCmQCU0SSo7nUzXt2utDhM9HTsYg8mmIaM2DzyO9CuMcY3f21X
-	e52865R+QzMwyk0SiDtETlZI7G5EP4N/OQhKHlGL64DNrPnN34MF1TnfH5dKjpPL8g5OSHdkkx3sC
-	C9LmB9ZTm7jGYwkVa3ftMPr1ffjoDxxZC2z4lHGyTWMhuUSzH9HbQXbX1kQ6BLDpnGHvkGq1yyTXx
-	5dNnCpUr+aY2OV71KpP8dA+R18qe6NHzBqYA2fjUwkWTJr34+v3LfysvQnE7EEuGNahqahgO7IYfV
-	rHjhQx411idPK2Mu4Chg==;
+	List-Owner; bh=AXA8auMA2J9nICdm8yyPz9p2NCw7qlYPB5cIXzAdgrc=; b=LPMjL9lbXIQhF3
+	694OX7SkjWiR4QwBLMMR7/BzNeseHSn9LG8lJy1s/z/X5HV96AN0RI0cyJJACwn7kGcBYj7XjyeLg
+	KEzNv0OxCsHt4U7ckVg3M0vv0LUKECAk/A7llcPIAhr+juo2tC/6qCqpvwGmuLxkJrahJmce+2G2q
+	Rzmi1LKQOz2tfuutgvTFg7eFaSBxlNRAi22p3Qr69llQe+QdlDVGXPY3Y7UcKeKdFySjn63u8VX9t
+	mkhDBlPtbilTdG74jTClTXfwRXTSz7PQIB/CECaHxuclB2r9KuU4trBQsbdIjWd2e6oHw3j5wSo0y
+	wRXMG7jaOpNbWpttCRLw==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lrkGl-0064ej-0x; Fri, 11 Jun 2021 16:44:31 +0000
-Received: from mail-wm1-f52.google.com ([209.85.128.52])
+	id 1lrkH6-0064qS-6j; Fri, 11 Jun 2021 16:44:52 +0000
+Received: from mail-wm1-f51.google.com ([209.85.128.51])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lrkGM-0064QP-DO
- for linux-arm-kernel@lists.infradead.org; Fri, 11 Jun 2021 16:44:08 +0000
-Received: by mail-wm1-f52.google.com with SMTP id
- f16-20020a05600c1550b02901b00c1be4abso9017504wmg.2
+ id 1lrkGR-0064Te-I7
+ for linux-arm-kernel@lists.infradead.org; Fri, 11 Jun 2021 16:44:13 +0000
+Received: by mail-wm1-f51.google.com with SMTP id
+ 3-20020a05600c0243b029019f2f9b2b8aso8946175wmj.2
  for <linux-arm-kernel@lists.infradead.org>;
- Fri, 11 Jun 2021 09:44:06 -0700 (PDT)
+ Fri, 11 Jun 2021 09:44:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=1PGvWqmX79u2BDZddtKUNdJQ6hsV0VE7RF8nOBTNFPA=;
- b=QA5BVIhdRSLFSHl4Nt2kT2P14yFLZ/x9o/azS5r3wS6A3DFy5r2knf3shzwsymne/W
- TiACsvGeFHuftNHEQ+LeZ/mzkB2stV9I/xvCadQ4fk7M3IxVpvomQI+t5WoBWX2bwG7h
- QVpBJtR/56OTEQhnaWLquAokQvUmTFo7mZWp0H1BXTz0PHjfAmOk8xywHZ8+H06zGyq3
- q6oP9pp3VpqWpJxCp2met1k5d6zniIHx8Ehuv6d/bg+6umfQgi11EDv2fwrjw0OlH1Zv
- stZPAZ/m0lg+V51fWQZX8NLMQv5uRR20oYe7hgliN4hgBoD/5DKPmMwbOktJMxmiyFzP
- NEFA==
+ bh=/DDhEhmd/WWK/nmogtTO3okii3O3flMjdbqXxBBxu0U=;
+ b=lz6oU35YVQA5fAK7pA7HTI+BEiNXOMWV4Sh11Ysgg6MZU84SMNZDk/grXDOHr2dpmK
+ 5JreUnXQrC+mc7KEujTHacVBcaRczS4HWp72t+JVoh+LCRDabWbTlAbk24gfhQKrZzMI
+ /+OtA/ZuuZiU5z1FRd90YnILbA1eIg4qXDiz5rpCp3plalERRqeEal9Et3PhFbRqJRqV
+ QbHwFy5H+aU8zi0kZsNo4xPcxwfhLtXx+fSSQZhIVvKLBuD0HoyhrCUmey2/Yz+X1MLi
+ x7SQXSmbr5C60h8W1xCwB2inVpMARJmhvjkBR8bo8ZyKJ8KLtixZ4/Ir+n9a4pfvY28p
+ ZpXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=1PGvWqmX79u2BDZddtKUNdJQ6hsV0VE7RF8nOBTNFPA=;
- b=SFnw1sY+DApWjOuKzWkqjoJH9kyU9Lw07YBhOkHW4rKJ3WJqdVWuX/42iO5PoTLZyr
- VzKOEEM7pNUmVKwi6kgqqDxA4f+O0qSy6qJYvsUzZfw55Ohct0evUmkwWaYJP89R5Vay
- inWGjD/yS9acA8y3LtqZkzKt+R1mAY0K5XRtS3tEBVQwqMfLfKiigWC1nOrwGvVVyzJ6
- f1tOKYwJbCfZcn+RgRI/kHiQ/bMRAncSz9e2xNE7WmemB5fGvvVqrQPhOjrmT8hSU0EV
- W/av+5Unf7PiuhxBuLBoMQKp/AuTTMqKm4KEhOdILZPd7bhbvuUidxCc/LhXeqkxYmN+
- FfTA==
-X-Gm-Message-State: AOAM531wlfpYFGvRBaioiNJxownKyMk9bBo8HEpzNMFMZ7QV8Xv65uZd
- 8PQmjVtzDqpEEH7sQYahC/4=
-X-Google-Smtp-Source: ABdhPJx2UkSalCYd1QzObIlllEjvyEnv67FhhSHetKO+GWfONxgJYkAlN+YEcB4wtkH8YeCbtfpIaA==
-X-Received: by 2002:a1c:a516:: with SMTP id o22mr21577690wme.136.1623429785287; 
- Fri, 11 Jun 2021 09:43:05 -0700 (PDT)
+ bh=/DDhEhmd/WWK/nmogtTO3okii3O3flMjdbqXxBBxu0U=;
+ b=CfIixSC5vguyfoKi1mrCBYZLs+tAO3qOQOCKQiq3q6PyhjNlL9xUVlW+zK9YUnlyG/
+ UfxdC5Lqb7H1Zx/sAUZPIxIY2HcE5EXXdHB+ctpuzssxRUSoFGj6vGDzEDQR4/BIMspn
+ HKSxTuZB24suqZ5Cd5acW2SYnbzLsFUJdbQgb6uYJI/P5IEsxWhskw6/gXRtVbkeQyer
+ 0LheE3BZQq7VEWdtHCrml4TSwfCfu8WPexUHxUN2tB3v2ryZftGNgfkb2TjdiXQaJtTn
+ 30jlTJMmaTLhmgrCD2it7F2fsk41IFVOBbraLOK0jDLpmBxeu49ZbNdUHhhuLHIOzFZc
+ gxIg==
+X-Gm-Message-State: AOAM533s1n+022YTWnrxwSbZFezgTrQgRV18+4VmzJoFMSZ3M4KBNENV
+ 8usr0dVOciN7BRaGfBtiqYY=
+X-Google-Smtp-Source: ABdhPJxmSVTeUcIzERg8Pc4lCkUbFiPFHCflpAJq+LBSKHgIism1xc/jsLbY+QNRNkUHMKA5P+jErw==
+X-Received: by 2002:a05:600c:4fc5:: with SMTP id
+ o5mr4925670wmq.148.1623429790181; 
+ Fri, 11 Jun 2021 09:43:10 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
- by smtp.gmail.com with ESMTPSA id l31sm6502345wms.31.2021.06.11.09.43.04
+ by smtp.gmail.com with ESMTPSA id x10sm7604589wrt.26.2021.06.11.09.43.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Jun 2021 09:43:04 -0700 (PDT)
+ Fri, 11 Jun 2021 09:43:09 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -78,16 +79,16 @@ To: arm@kernel.org,
 Cc: Thierry Reding <thierry.reding@gmail.com>,
  Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/6] soc/tegra: Changes for v5.14-rc1
-Date: Fri, 11 Jun 2021 18:44:33 +0200
-Message-ID: <20210611164437.3568059-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 4/6] ARM: tegra: Device tree changes for v5.14-rc1
+Date: Fri, 11 Jun 2021 18:44:35 +0200
+Message-ID: <20210611164437.3568059-4-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210611164437.3568059-1-thierry.reding@gmail.com>
 References: <20210611164437.3568059-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210611_094406_505055_9CE0D856 
-X-CRM114-Status: GOOD (  10.82  )
+X-CRM114-CacheID: sfid-20210611_094411_661886_0FAAAFDF 
+X-CRM114-Status: GOOD (  11.00  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -103,60 +104,64 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210611164433.9d8bqMAGlVruh1N-1hO2ZdURtZrGLfIU8Fz8SFxKf7w@z>
+Message-ID: <20210611164435.Sy-CyvJxiEBUFM5BXUnBaYnfNcPJ_M8rQCpcNnmdS3s@z>
 
 Hi ARM SoC maintainers,
 
-The following changes since commit 380d2b2d5a0491e47dfa250b40e3d849a922871d:
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
-  regulator: core: Add regulator_sync_voltage_rdev() (2021-06-01 12:13:30 +0200)
+  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.14-soc
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.14-arm-dt
 
-for you to fetch changes up to e2d0ee225e49a5553986f3138dd2803852a31fd5:
+for you to fetch changes up to 4c101a4466983abe7798493ef17279cc3f8eb028:
 
-  soc/tegra: fuse: Fix Tegra234-only builds (2021-06-11 13:31:01 +0200)
+  ARM: tegra: ouya: Enable memory frequency thermal throttling using ACTMON (2021-05-31 11:40:29 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-soc/tegra: Changes for v5.14-rc1
+ARM: tegra: Device tree changes for v5.14-rc1
 
-These changes implement the core power domain for the PMC, and fix a
-couple of minor issues as well as add stubs to help some drivers be
-compile tested more easily.
+This contains various improvements (such as microphone detection and
+thermal zones) for some older Tegra devices (such as the Nexus 7 or
+the Acer A500).
 
 ----------------------------------------------------------------
-Dmitry Osipenko (7):
-      soc/tegra: regulators: Bump voltages on system reboot
-      soc/tegra: Add stub for soc_is_tegra()
-      soc/tegra: Add devm_tegra_core_dev_init_opp_table()
-      soc/tegra: fuse: Add stubs needed for compile-testing
-      soc/tegra: pmc: Add core power domain
-      soc/tegra: pmc: Add driver state syncing
-      soc/tegra: regulators: Support core domain state syncing
+Dmitry Osipenko (13):
+      ARM: tegra: acer-a500: Improve microphone detection
+      ARM: tegra: acer-a500: Specify proper voltage for WiFi SDIO bus
+      ARM: tegra: acer-a500: Bump thermal trips by 10C
+      ARM: tegra: Add reg property to Tegra20 EMC table device-tree nodes
+      ARM: tegra: wm8903: Fix polarity of headphones-detection GPIO in device-trees
+      ARM: tegra: paz00: Add CPU thermal zone
+      ARM: tegra: nexus7: Add i2c-thermtrip node
+      ARM: tegra: nexus7: Improve thermal zones
+      ARM: tegra: nexus7: Remove monitored-battery property
+      ARM: tegra: nexus7: Correct 3v3 regulator GPIO of PM269 variant
+      ARM: tegra: Add cooling cells to ACTMON device-tree node
+      ARM: tegra: nexus7: Enable memory frequency thermal throttling using ACTMON
+      ARM: tegra: ouya: Enable memory frequency thermal throttling using ACTMON
 
-Thierry Reding (2):
-      Merge branch 'for-5.14/regulator' into for-5.14/soc
-      soc/tegra: fuse: Fix Tegra234-only builds
-
-Yang Yingliang (1):
-      soc/tegra: fuse: Don't return -ENOMEM when allocate lookups failed
-
- drivers/soc/tegra/Kconfig              |   2 +
- drivers/soc/tegra/common.c             |  97 ++++++++++++++++++++++
- drivers/soc/tegra/fuse/fuse-tegra.c    |   6 +-
- drivers/soc/tegra/fuse/fuse-tegra30.c  |   3 +-
- drivers/soc/tegra/pmc.c                | 144 +++++++++++++++++++++++++++++++++
- drivers/soc/tegra/regulators-tegra20.c |  94 ++++++++++++++++++++-
- drivers/soc/tegra/regulators-tegra30.c |  93 ++++++++++++++++++++-
- include/soc/tegra/common.h             |  31 +++++++
- include/soc/tegra/fuse.h               |  20 ++++-
- include/soc/tegra/pmc.h                |   7 ++
- 10 files changed, 485 insertions(+), 12 deletions(-)
+ arch/arm/boot/dts/tegra124.dtsi                    |  3 +-
+ arch/arm/boot/dts/tegra20-acer-a500-picasso.dts    | 21 +++++++----
+ arch/arm/boot/dts/tegra20-harmony.dts              |  2 +-
+ arch/arm/boot/dts/tegra20-medcom-wide.dts          |  2 +-
+ arch/arm/boot/dts/tegra20-paz00.dts                | 43 +++++++++++++++++++++-
+ arch/arm/boot/dts/tegra20-plutux.dts               |  2 +-
+ arch/arm/boot/dts/tegra20-seaboard.dts             |  2 +-
+ arch/arm/boot/dts/tegra20-tec.dts                  |  2 +-
+ arch/arm/boot/dts/tegra20-ventana.dts              |  2 +-
+ .../dts/tegra30-asus-nexus7-grouper-common.dtsi    | 16 +++-----
+ .../tegra30-asus-nexus7-grouper-maxim-pmic.dtsi    |  9 +++++
+ .../dts/tegra30-asus-nexus7-grouper-ti-pmic.dtsi   | 11 +++++-
+ arch/arm/boot/dts/tegra30-cardhu.dtsi              |  2 +-
+ arch/arm/boot/dts/tegra30-ouya.dts                 |  4 +-
+ arch/arm/boot/dts/tegra30.dtsi                     |  3 +-
+ 15 files changed, 93 insertions(+), 31 deletions(-)
 
 _______________________________________________
 linux-arm-kernel mailing list
