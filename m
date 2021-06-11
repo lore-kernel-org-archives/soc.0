@@ -1,518 +1,108 @@
-Return-Path: <SRS0=IRvS=LF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=HVwK=LF=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B33CC48BE0
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 21:05:40 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 460C2C48BE0
+	for <soc@archiver.kernel.org>; Fri, 11 Jun 2021 22:07:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 1FD17613CF; Fri, 11 Jun 2021 22:07:16 +0000 (UTC)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4298561285
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 21:05:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4298561285
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=6qmOxbPaUSkPelBVBkNIyLgysCurxEXcUhFx+4Afglo=; b=p4U9aM9lS5uONU
-	myPc5bJcwYnauuoku2u1p91MNkaAv+1deLEZR+BB5hYbXhrpbeIDxvBDULq1heJ9hISoHUGslZTW5
-	mjK3jDD2iYcgHB4F9Q6U4JI7P8S4pzlTnfsTHzs4hZ6HTo2aTXnbx1sujkvDAww29YYEkZHrnLDt1
-	z1HrRbs+O+lW34Xj7WKwTL7TnrXdc65JJAVVvSfx20Ka1ANO31s9ol6zNaFdY2eskS1oscc4hlVFj
-	At4kpFucbQl/chrYtnA8jYtPLitugfLv7WhGUvy9/noUxIMT5n9aQJYJ19bymhA42XhDDj4eupsvJ
-	u2KtUn0Z93b59hL5ZjfA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lroJO-0077Rr-EL; Fri, 11 Jun 2021 21:03:31 +0000
-Received: from mail-ej1-f43.google.com ([209.85.218.43])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lro5T-0070Qz-0V
- for linux-arm-kernel@lists.infradead.org; Fri, 11 Jun 2021 20:49:10 +0000
-Received: by mail-ej1-f43.google.com with SMTP id he7so6339801ejc.13
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 11 Jun 2021 13:49:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=date:from:to:cc:subject:message-id:references:mime-version
- :content-disposition:in-reply-to;
- bh=YyrXNBhPnlWtgRvL1fSeCwot1NLFqCcTWBSbo3w5iHY=;
- b=vSyfBkhxydSAl19TTFxnwWXlPayZop/VtNYd6AO9paP8/Yk2SDHo9O9utiYie+LtRD
- w0WsjqdTBURyFMCxVNzdgm3FE/pjjouJyLcgekyE2VFZaqom/PwZ8LOuSE5albfj/sfW
- O3Dv9/YVvncd3tw4MdM9n6f+K7FvDnW9Q2DZgUtaeRzehXekuQ34JyLjev4ioLUvtPgt
- UNomMQ1sOuKE+ZHGBpCbaLNzZOJa8JQngHgHYNT/lUcYGqq7CCowGmMy8btL6Ag11XBU
- NO/bNQx73d8gus8M4YiGMuolkNYy/hobkGuSPnEovB9PFCwLqQuG+Cai617dPWYT4Sfb
- Qy1A==
+	by mail.kernel.org (Postfix) with ESMTPS id E2046613CD
+	for <soc@kernel.org>; Fri, 11 Jun 2021 22:07:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E2046613CD
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linus.walleij@linaro.org
+Received: by mail-lf1-f49.google.com with SMTP id x24so5042396lfr.10
+        for <soc@kernel.org>; Fri, 11 Jun 2021 15:07:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v+CJ5jUjZTJX38svdKnOCuqWhdmCpbOqqtQIHkEjacI=;
+        b=fqbyauwdHI6UcTK9bXEswNQ7KAH9to9Xs7Wn5DEYI5uuvw/F7tZJIsx787g3/IBxMX
+         A4JUp48EUg+Wuny2KPcz+Zyh1pI+jYgwyjQA0Qmd0ksGdmwX9fHAdrkACgJbQnqAVE59
+         I05mI9zYPhWxfR+PfYhs1cP7zJ5pCAF4H4I1MfjC7+q+8RI5cFWUskYd2Kf83zH3Qi+N
+         74UatAJqWpoxkNifFMzvX65/MjxD1QjPFZL1FBugGMeE3S3YhBI/PmfmKqMIIEEJJ8LA
+         7Y8mUlLfBNSrx8MzPAdbtFnohj9cRQu6Hp98kybbYyFtInIVPPK/tJFagBM7ZXIRflF9
+         zMyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=YyrXNBhPnlWtgRvL1fSeCwot1NLFqCcTWBSbo3w5iHY=;
- b=Gk0BeByS4rdu5vRdORY4u6sfdhGGM2xJ9Rc/Bv8qLQDJiY5hNIxe09lkg7tQ4qmCIF
- jmKA8t+iPGkLrEUDrMkZA4yHEBUhqCheixsnuSfP5zZerB5HxWA6bAAZpoRTEnqVuksv
- hmNjXNFm610SqWvDB/2YDBACV61ghYKpS5c4MXyDIwwHayfGIs8zQ6K1nJEcqVsO2DmO
- aTxSsH2NIHcdb8VypzLsyRWqP1P5XoqoyX/7ksso7ckOGbAbpHU1RRZ9gdURttVQ7m47
- NrWQXit+sbozD9A5MIZeN1yQQXpgLAgVko7fBmH+s54sFHSmwWZll+j7xAzPGErmRt5R
- ed/A==
-X-Gm-Message-State: AOAM532epjI8/zzq63tWquINCOQgsRWTLQ+ydEDXfs/xcbs+4htE8yAK
- NwSpmRrmPoXHO+mIH47rF2U=
-X-Google-Smtp-Source: ABdhPJwNErYxpmiURzhP2SjdJb3SF77QCdAyffTEkjR5HEBg5NrlEQ1kVo2bIfFQnpqDEQxIPBnXDg==
-X-Received: by 2002:a17:907:20dc:: with SMTP id
- qq28mr5292296ejb.440.1623444484654; 
- Fri, 11 Jun 2021 13:48:04 -0700 (PDT)
-Received: from skbuf ([188.26.52.84])
- by smtp.gmail.com with ESMTPSA id gw7sm2437478ejb.5.2021.06.11.13.48.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Jun 2021 13:48:04 -0700 (PDT)
-Date: Fri, 11 Jun 2021 23:48:02 +0300
-From: Vladimir Oltean <olteanv@gmail.com>
-To: Matthew Hagan <mnhagan88@gmail.com>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v+CJ5jUjZTJX38svdKnOCuqWhdmCpbOqqtQIHkEjacI=;
+        b=FmwUxPba5qhQA9hcPUggkstARMDHlZEhCs2bwwDkqRRv2rpJ1eJE6QawsPeJ7rxFgY
+         5YCwVMCnRDKeUwDCVI8WXzFUvoN20WZZRht2IftLD8vRdERawnUwxSHsuSm9Ny7vgriA
+         1GqMcyMRABa8rZHlFy4CHNQ1YAvC3TBQFWzRnmEBsRJYGTimfKiNdi44o2cfgLHRVaJX
+         w3Hm0Uhu1Rfkc3St/xdNxdnRPnWjnqEEanliiX9MhSWYITW6BI67lKdEXd9fJxS4J/oq
+         G5ZLMP/QY2RADn1hMyvdwLU76SnFVnTNkULA3daycZuIMj7CtVtRR+H3ilkNQwDv93fB
+         rWHA==
+X-Gm-Message-State: AOAM531q9qoGzRLs3n0nqlwMC282buXoEdCU14bcxmjJLaS9X6raAZGD
+	4GFxDMHI2ix1cPReXGu43zutDkUQkjRndQ==
+X-Google-Smtp-Source: ABdhPJy0xiGIQY6+yzGWZvlXFN+IXa8zqzzs+65ulnk5JrYeG26hyq3t0ogjcFc9r1kkY3pJnGSL2Q==
+X-Received: by 2002:a05:6512:31c5:: with SMTP id j5mr3902549lfe.116.1623449234293;
+        Fri, 11 Jun 2021 15:07:14 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id u25sm705454lfm.308.2021.06.11.15.07.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Jun 2021 15:07:14 -0700 (PDT)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Florian Fainelli <f.fainelli@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
- Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org,
- Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- bcm-kernel-feedback-list@broadcom.com,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Sam Ravnborg <sam@ravnborg.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 5/5] ARM: dts: NSP: Add DT files for Meraki MX65 series
-Message-ID: <20210611204802.bg2xoyttj5lbs6zq@skbuf>
-References: <20210610232727.1383117-1-mnhagan88@gmail.com>
- <20210610232727.1383117-6-mnhagan88@gmail.com>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Corentin Labbe <clabbe@baylibre.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH] ARM: dts: gemini: add crypto node
+Date: Sat, 12 Jun 2021 00:05:01 +0200
+Message-Id: <20210611220501.684997-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210610232727.1383117-6-mnhagan88@gmail.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210611_134907_141577_8A0FE3DB 
-X-CRM114-Status: GOOD (  23.91  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210611204802.0qRLrAVwNB7Ic-oKyO10Hevq37RYYb5axFXtqU3MRhY@z>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jun 11, 2021 at 12:27:17AM +0100, Matthew Hagan wrote:
-> MX65 Hardware info:
->   - CPU: Broadcom BCM58625 Cortex A9 @ 1200Mhz
->   - RAM: 2 GB (4 x 4Gb SK Hynix H5TC4G83CFR)
->   - Storage: 1 GB (Micron MT29F8G08ABACA)
->   - Networking: BCM58625 switch (2x 1GbE ports, used for WAN ports 1 & 2)
->     2x Qualcomm QCA8337 switches (10x 1GbE ports, used for LAN ports 3-12)
->   - PSE: Broadcom BCM59111KMLG connected to LAN ports 11 & 12
->   - USB: 1x USB2.0
->   - Serial: Internal header
-> 
-> As with the MX64, the MX65 has 2x Broadcom BCM43520KMLG on the PCI bus.
-> 
-> Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
-> ---
->  arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi | 298 ++++++++++++++++++
->  arch/arm/boot/dts/bcm958625-meraki-mx65.dts   |  15 +
->  arch/arm/boot/dts/bcm958625-meraki-mx65w.dts  |  23 ++
->  3 files changed, 336 insertions(+)
->  create mode 100644 arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi
->  create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx65.dts
->  create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx65w.dts
-> 
-> diff --git a/arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi b/arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi
-> new file mode 100644
-> index 000000000000..0ff78fb89b6d
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi
-> @@ -0,0 +1,298 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-> +/*
-> + * Device Tree Bindings for Cisco Meraki MX65 series (Alamo).
-> + *
-> + * Copyright (C) 2021 Matthew Hagan <mnhagan88@gmail.com>
-> + */
-> +
-> +#include "bcm958625-meraki-mx6x-common.dtsi"
-> +
-> +#include <dt-bindings/input/input.h>
-> +
-> +/ {
-> +	aliases {
-> +		mdio-mux-mmio = &mdiomux0;
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		orange_power {
-> +			label = "orange:power";
-> +			gpios = <&gpioa 3 GPIO_ACTIVE_HIGH>;
-> +			default-state = "on";
-> +		};
-> +
-> +		wan1_right {
-> +			label = "green:wan1-right";
-> +			gpios = <&gpioa 24 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		wan1_left {
-> +			label = "green:wan1-left";
-> +			gpios = <&gpioa 25 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		wan2_right {
-> +			label = "green:wan2-right";
-> +			gpios = <&gpioa 26 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		wan2_left {
-> +			label = "green:wan2-left";
-> +			gpios = <&gpioa 27 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		white_status {
-> +			label = "white:status";
-> +			gpios = <&gpioa 31 GPIO_ACTIVE_HIGH>;
-> +		};
-> +	};
-> +
-> +	keys {
-> +		compatible = "gpio-keys-polled";
-> +		autorepeat;
-> +		poll-interval = <20>;
-> +
-> +		reset {
-> +			label = "reset";
-> +			linux,code = <KEY_RESTART>;
-> +			gpios = <&gpioa 8 GPIO_ACTIVE_LOW>;
-> +		};
-> +	};
-> +
-> +	mdio: mdio@18032000 {
-> +		compatible = "brcm,iproc-mdio";
-> +		reg = <0x18032000 0x8>;
-> +		#size-cells = <0>;
-> +		#address-cells = <1>;
-> +	};
+From: Corentin Labbe <clabbe@baylibre.com>
 
-Odd that mdio@18032000 is under the / node and not under /soc? I don't
-think you can combine nodes with a unit address with nodes without in
-the same level of the hierarchy.
+The SL3516 SoC has a crypto offloader IP.
+This patch adds it on the gemini SoC Device-tree.
 
-Also, it is odd that you define something SoC-specific like this in a
-board file. Isn't this actually stray and not used?
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Hi SoC people, the crypto driver for Gemini made it in
+to this merge window as well so please merge this DTS
+snippet into the same branch as the other Gemini DTS
+changes for this merge window.
+---
+ arch/arm/boot/dts/gemini.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> +
-> +	mdiomux0: mdio-mux {
-> +		compatible = "mdio-mux-mmioreg";
-> +		reg = <0x18032000 0x4>;
-> +		mux-mask = <0x200>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		mdio-parent-bus = <&mdio>;
-> +
-> +		mdio_ext: mdio@200 {
-> +			reg = <0x200>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +	};
-> +
-> +	mdio-mii-mux {
-> +		compatible = "mdio-mux-mmioreg";
-> +		reg = <0x1803f1c0 0x4>;
-> +		mux-mask = <0x2000>;
-> +		mdio-parent-bus = <&mdio_ext>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		mdio@0 {
-> +			reg = <0x0>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			phy_port6: phy@0 {
-> +				reg = <0>;
-> +			};
-> +
-> +			phy_port7: phy@1 {
-> +				reg = <1>;
-> +			};
-> +
-> +			phy_port8: phy@2 {
-> +				reg = <2>;
-> +			};
-> +
-> +			phy_port9: phy@3 {
-> +				reg = <3>;
-> +			};
-> +
-> +			phy_port10: phy@4 {
-> +				reg = <4>;
-> +			};
-> +
-> +			switch@10 {
-> +				compatible = "qca,qca8337";
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
+diff --git a/arch/arm/boot/dts/gemini.dtsi b/arch/arm/boot/dts/gemini.dtsi
+index e5c15fe71a35..cc053af3c347 100644
+--- a/arch/arm/boot/dts/gemini.dtsi
++++ b/arch/arm/boot/dts/gemini.dtsi
+@@ -357,6 +357,14 @@ gmac1: ethernet-port@1 {
+ 			};
+ 		};
+ 
++		crypto: crypto@62000000 {
++			compatible = "cortina,sl3516-crypto";
++			reg = <0x62000000 0x10000>;
++			interrupts = <7 IRQ_TYPE_EDGE_RISING>;
++			resets = <&syscon GEMINI_RESET_SECURITY>;
++			clocks = <&syscon GEMINI_CLK_GATE_SECURITY>;
++		};
++
+ 		ide@63000000 {
+ 			compatible = "cortina,gemini-pata", "faraday,ftide010";
+ 			reg = <0x63000000 0x1000>;
+-- 
+2.31.1
 
-The "ports" node is adimensional, so address-cells and size-cells are
-not needed.
-
-> +				reg = <0x10>;
-> +				dsa,member = <1 0>;
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					port@0 {
-> +						reg = <0>;
-> +						label = "cpu";
-
-'label' property for the CPU port is not needed/used. We know it is a
-CPU port because it has the 'ethernet' property.
-
-> +						ethernet = <&sgmii1>;
-> +						phy-mode = "sgmii";
-> +						fixed-link {
-> +							speed = <1000>;
-> +							full-duplex;
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +						label = "lan8";
-> +						phy-handle = <&phy_port6>;
-> +					};
-> +
-> +					port@2 {
-> +						reg = <2>;
-> +						label = "lan9";
-> +						phy-handle = <&phy_port7>;
-> +					};
-> +
-> +					port@3 {
-> +						reg = <3>;
-> +						label = "lan10";
-> +						phy-handle = <&phy_port8>;
-> +					};
-> +
-> +					port@4 {
-> +						reg = <4>;
-> +						label = "lan11";
-> +						phy-handle = <&phy_port9>;
-> +					};
-> +
-> +					port@5 {
-> +						reg = <5>;
-> +						label = "lan12";
-> +						phy-handle = <&phy_port10>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		mdio-mii@2000 {
-> +			reg = <0x2000>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			phy_port1: phy@0 {
-> +				reg = <0>;
-> +			};
-> +
-> +			phy_port2: phy@1 {
-> +				reg = <1>;
-> +			};
-> +
-> +			phy_port3: phy@2 {
-> +				reg = <2>;
-> +			};
-> +
-> +			phy_port4: phy@3 {
-> +				reg = <3>;
-> +			};
-> +
-> +			phy_port5: phy@4 {
-> +				reg = <4>;
-> +			};
-> +
-> +			switch@10 {
-> +				compatible = "qca,qca8337";
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-
-Similar comment.
-
-> +				reg = <0x10>;
-> +				dsa,member = <2 0>;
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					port@0 {
-> +						reg = <0>;
-> +						label = "cpu";
-> +						ethernet = <&sgmii0>;
-> +						phy-mode = "sgmii";
-> +						fixed-link {
-> +							speed = <1000>;
-> +							full-duplex;
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +						label = "lan3";
-> +						phy-handle = <&phy_port1>;
-> +					};
-> +
-> +					port@2 {
-> +						reg = <2>;
-> +						label = "lan4";
-> +						phy-handle = <&phy_port2>;
-> +					};
-> +
-> +					port@3 {
-> +						reg = <3>;
-> +						label = "lan5";
-> +						phy-handle = <&phy_port3>;
-> +					};
-> +
-> +					port@4 {
-> +						reg = <4>;
-> +						label = "lan6";
-> +						phy-handle = <&phy_port4>;
-> +					};
-> +
-> +					port@5 {
-> +						reg = <5>;
-> +						label = "lan7";
-> +						phy-handle = <&phy_port5>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&srab {
-> +	compatible = "brcm,bcm58625-srab", "brcm,nsp-srab";
-> +	status = "okay";
-> +	dsa,member = <0 0>;
-> +
-> +	ports {
-> +		port@0 {
-> +			label = "wan1";
-> +			reg = <0>;
-> +		};
-> +
-> +		port@1 {
-> +			label = "wan2";
-> +			reg = <1>;
-> +		};
-> +
-> +		sgmii0: port@4 {
-> +			label = "sw0";
-> +			reg = <4>;
-> +			fixed-link {
-> +				speed = <1000>;
-> +				full-duplex;
-> +			};
-> +		};
-> +
-> +		sgmii1: port@5 {
-> +			label = "sw1";
-> +			reg = <5>;
-> +			fixed-link {
-> +				speed = <1000>;
-> +				full-duplex;
-> +			};
-> +		};
-> +
-> +		port@8 {
-> +			ethernet = <&amac2>;
-> +			label = "cpu";
-> +			reg = <8>;
-> +			fixed-link {
-> +				speed = <1000>;
-> +				full-duplex;
-> +			};
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm/boot/dts/bcm958625-meraki-mx65.dts b/arch/arm/boot/dts/bcm958625-meraki-mx65.dts
-> new file mode 100644
-> index 000000000000..aec86c3a4d05
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/bcm958625-meraki-mx65.dts
-> @@ -0,0 +1,15 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-> +/*
-> + * Device Tree Bindings for Cisco Meraki MX65.
-> + *
-> + * Copyright (C) 2021 Matthew Hagan <mnhagan88@gmail.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "bcm958625-meraki-alamo.dtsi"
-> +
-> +/ {
-> +	model = "Cisco Meraki MX65";
-> +	compatible = "meraki,mx65", "brcm,bcm58625", "brcm,nsp";
-> +};
-> diff --git a/arch/arm/boot/dts/bcm958625-meraki-mx65w.dts b/arch/arm/boot/dts/bcm958625-meraki-mx65w.dts
-> new file mode 100644
-> index 000000000000..0045a33055c1
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/bcm958625-meraki-mx65w.dts
-> @@ -0,0 +1,23 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-> +/*
-> + * Device Tree Bindings for Cisco Meraki MX65W.
-> + *
-> + * Copyright (C) 2021 Matthew Hagan <mnhagan88@gmail.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "bcm958625-meraki-mx65x.dtsi"
-> +
-> +/ {
-> +	model = "Cisco Meraki MX65W";
-> +	compatible = "meraki,mx65w", "brcm,bcm58625", "brcm,nsp";
-> +};
-> +
-> +&pcie0 {
-> +	status = "okay";
-> +};
-> +
-> +&pcie1 {
-> +	status = "okay";
-> +};
-> -- 
-> 2.26.3
-> 
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
