@@ -1,115 +1,103 @@
-Return-Path: <SRS0=IRvS=LF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=FjKb=LF=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0DF0C48BE0
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 12:58:40 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC39BC48BD1
+	for <soc@archiver.kernel.org>; Fri, 11 Jun 2021 14:07:05 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id C04F461400; Fri, 11 Jun 2021 14:07:05 +0000 (UTC)
+Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7340161029
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 12:58:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7340161029
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:Cc:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To
-	:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=1PG6Twd9sOFn6jNeRqHfszQ8AOPgrmG+2T2Rl2hrI9o=; b=DijWdHySPhdUwZ
-	7aGOHjVCTeIMQv6fPbT1VTBEClkyksqWRe0az+UQp+mP6R1GQgpjSK/eq46yCuXvqpr7y7dwgUJlh
-	EQ/+yfKr2Rv/c1TuEGpQlwES0TlHf7T5WdRWWgYizQFOFTjIW1+xpJIn+sjr85Eh7CrOaIywKSnVc
-	O9+jgp4tf5CbzvBn1vgsFAiVbZUhlAfrsfwQPniu+NRne6krw4Lx3B6xdPXg6BOlKxkhFwpoE4JkS
-	G57xQYioSIdCDOwCinjhxbRCcGV22zFJdQRdol8L3KQ1E2wL2dZw6s+FZ21Ph2jasor6/xIKue0Lz
-	4Xmvjs+dTIJN1p67ojEw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lrgik-005Kbf-Ja; Fri, 11 Jun 2021 12:57:10 +0000
-Received: from esa.microchip.iphmx.com ([68.232.154.123])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lrgih-005Kax-0U
- for linux-arm-kernel@lists.infradead.org; Fri, 11 Jun 2021 12:57:08 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1623416227; x=1654952227;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=dZmDcLeDM+mKZKjjsmFu5tdV39OQUBI69egq4Sidx8s=;
- b=X0qPJaDqpPqBa0QKAIC827EjTbGSSU32WGD7RUytc57ro8FXNoqzQ/Q0
- JQhGM9LpPTvlapgYgpoL2HhH6WDFFoFDayMCVmdFlMYwuXw/TZXynHKiL
- DJVyT+lJqc3s7G5jSm7Vpeexu3MxZc3U7OV8JPVHSAEb4hU1XPqVWIlT6
- RhAcKdbd/EB/TweJDrp/otZBLSAvZBOS7FOXUhphQxSL3PZLVlJhfTgFf
- 7Gp2ZkdPXckbE6McD9QMwlVbMJSTLDxBvQ/r7I6dQZbY0JfRtizHJ4Qpw
- 0S7Y+IN6+460yWDjWly/J6ix3RL2AtWqCDmr2YOAnqUoKxzqTTEKSAmtb Q==;
-IronPort-SDR: qxYOHCM/hY9V0HbXUG+Zh0qzt9aHe84/UhcY9AlVImyWeLX3VwAH2D3HJV2IZf5xaTGbtJJ1cP
- J672d+us8qFP+E5/mDVkQ5iuGYqT73MJ8NR54nvXU676i1oOm1kJNDmjtVnNhaDbDGA7/V5q9J
- 043E3GC++hjEtRBoh7YQGsbAr/FaqwJvoTBrPap5La/dArfaeicZDWMYJPGcR/K2JAUgxMbdK+
- XufpurzChEIrNxlMfUEED6EQmFkL+SPyG5+J+4LX7X+z7IqcM8H2OqMRIMPgvofibe5yyF7Kd8
- +wQ=
-X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; d="scan'208";a="120963641"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 11 Jun 2021 05:57:05 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 11 Jun 2021 05:57:05 -0700
-Received: from ness.home (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Fri, 11 Jun 2021 05:57:03 -0700
-From: <nicolas.ferre@microchip.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 658E3613C8
+	for <soc@kernel.org>; Fri, 11 Jun 2021 14:07:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 658E3613C8
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
+Received: from mail-wm1-f69.google.com ([209.85.128.69])
+	by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <krzysztof.kozlowski@canonical.com>)
+	id 1lrhoN-00086x-Qj
+	for soc@kernel.org; Fri, 11 Jun 2021 14:07:03 +0000
+Received: by mail-wm1-f69.google.com with SMTP id 18-20020a05600c0252b029019a0ce35d36so5446152wmj.4
+        for <soc@kernel.org>; Fri, 11 Jun 2021 07:07:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fIYGF4kspNC+k/efmO1vZxXOhwddBi7dkMQEKTd7Cos=;
+        b=X15+j6eMIetIoNJl+cGC3+cC5PqAwaCj38BtQM5hCI441F8NNvkkLkM+tW4ELcSRzU
+         DCjsT2bt7beHlsSwXJ3ttpRCq+JekHDnBbZeIWFLoorgWn90tAbFplXVrz20fyImH5v+
+         GuvzVx9yIqNDk9Hx7VUi5YlsWJDuiPczE02oGsUie/yxlhRaTkraJwI6QRn1zZnU1Zfi
+         O4Pbm4aVVmiTBwyzNUYwSfSmF9/E+4g8dPm8POXXlssvIpxXGM3vsLFVenZFqc/5eSPm
+         tFDU8VzD7mur3kWqXdrmOHds9yAnbLRQJufdWFP5F0MUs42i5al198JWk4w1VbSLkLlf
+         IDSA==
+X-Gm-Message-State: AOAM530dsVd+xYL7gKcsx9tl83Wq5IFtUT5y1kb2Ol6Fq7nDMpDWgJlN
+	rQcb51mAXxFjmuX+sJ9x6/8+1zjfz+4ONf0gGC2R6e7snmNbMWuGpJnsffIrAvSnMiBJ9PX5ySJ
+	7e8twb3kFBkZ1O3ayuIftf3w=
+X-Received: by 2002:a1c:f70b:: with SMTP id v11mr4217651wmh.186.1623420423075;
+        Fri, 11 Jun 2021 07:07:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxGufQ334fV4fgNhOR7AObH0Gf2OKOTDGDGEm9J4z1JDqAo/np5E4xxwSOZnijrJoyx734R9Q==
+X-Received: by 2002:a1c:f70b:: with SMTP id v11mr4217615wmh.186.1623420422784;
+        Fri, 11 Jun 2021 07:07:02 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
+        by smtp.gmail.com with ESMTPSA id j34sm12055035wms.19.2021.06.11.07.07.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Jun 2021 07:07:01 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, <soc@kernel.org>
-Subject: [GIT PULL] ARM: at91: defconfig for 5.14
-Date: Fri, 11 Jun 2021 14:56:59 +0200
-Message-ID: <20210611125659.25590-1-nicolas.ferre@microchip.com>
-X-Mailer: git-send-email 2.32.0
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/2] memory: drivers for v5.14
+Date: Fri, 11 Jun 2021 16:06:58 +0200
+Message-Id: <20210611140659.61980-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Organization: microchip
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210611_055707_142615_FD04DC63 
-X-CRM114-Status: UNSURE (   7.07  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- Linux Kernel list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210611125659.io1bMWkug-V0T4DkAhwJ070VhU4GfX-pUO5SuK3Qeog@z>
+Content-Transfer-Encoding: 8bit
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Hi,
 
-Arnd, Olof,
+This branch contains one change for pl353-smc driver, so might create merge
+with my second pull request here - tags/memory-controller-drv-pl353-5.14.
 
-Only one patch for this PR: take as a patch if you prefer.
-We have other defconfig patches in preparation but not ready yet and as it's
-getting late, I send what I have now.
+I did not experience conflict and git shows the merge as:
 
-Thanks, best regards,
-  Nicolas
+diff --cc drivers/memory/pl353-smc.c
+index b0b251bb207f,925d856663ac..f84b98278745
+--- a/drivers/memory/pl353-smc.c
++++ b/drivers/memory/pl353-smc.c
+@@@ -407,14 -116,10 +116,11 @@@ static int pl353_smc_probe(struct amba_
+                break;
+        }
+        if (!match) {
+ +              err = -ENODEV;
+                dev_err(&adev->dev, "no matching children\n");
+-               goto out_clk_disable;
++               goto disable_mem_clk;
+        }
+  
+-       init = match->data;
+-       if (init)
+-               init(adev, child);
+        of_platform_device_create(child, NULL, &adev->dev);
+  
+        return 0;
+
+
+Best regards,
+Krzysztof
+
 
 The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
@@ -117,28 +105,36 @@ The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-defconfig-5.14
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.14
 
-for you to fetch changes up to b249d97825ff461747421a5009794f395e99a032:
+for you to fetch changes up to 729a611e6f53da00ed62a181f2d5d2bcf22d74d1:
 
-  ARM: configs: at91_dt_defconfig: configs for sam9x60 (2021-06-07 12:02:36 +0200)
-
-----------------------------------------------------------------
-AT91 defconfig for 5.14:
-
-- Add the use of tickless and HR times to ARM9 defconfig
+  memory: emif: remove unused frequency and voltage notifiers (2021-06-10 09:24:46 +0200)
 
 ----------------------------------------------------------------
-Claudiu Beznea (1):
-      ARM: configs: at91_dt_defconfig: configs for sam9x60
+Memory controller drivers for v5.14
 
- arch/arm/configs/at91_dt_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Several small fixes and cleanups for stm32, atmel, pl353, renesas-rpc,
+TI emif and fsl_ifc.
 
--- 
-Nicolas Ferre
+----------------------------------------------------------------
+Krzysztof Kozlowski (7):
+      memory: stm32-fmc2-ebi: add missing of_node_put for loop iteration
+      memory: atmel-ebi: add missing of_node_put for loop iteration
+      memory: renesas-rpc-if: correct whitespace
+      MAINTAINERS: memory: cover also header file
+      memory: fsl_ifc: fix leak of IO mapping on probe failure
+      memory: fsl_ifc: fix leak of private memory on probe failure
+      memory: emif: remove unused frequency and voltage notifiers
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Zhen Lei (1):
+      memory: pl353: Fix error return code in pl353_smc_probe()
+
+ MAINTAINERS                     |   1 +
+ drivers/memory/atmel-ebi.c      |   4 +-
+ drivers/memory/emif.c           | 678 ----------------------------------------
+ drivers/memory/fsl_ifc.c        |   8 +-
+ drivers/memory/pl353-smc.c      |   1 +
+ drivers/memory/stm32-fmc2-ebi.c |   4 +
+ include/memory/renesas-rpc-if.h |   6 +-
+ 7 files changed, 16 insertions(+), 686 deletions(-)
