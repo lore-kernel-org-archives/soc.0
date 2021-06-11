@@ -5,16 +5,16 @@ X-Spam-Level:
 X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E02C1C48BE0
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 09:50:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B013C48BD1
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 09:50:15 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B1ED0613D9
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 09:50:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B1ED0613D9
+	by mail.kernel.org (Postfix) with ESMTPS id 4E629613DD
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 09:50:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4E629613DD
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,30 +23,30 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=U5dVevk4XdeX9hoCQNv4N6II4Xr1y4keRb23ESzrCrE=; b=qbJRE1vvZnQnew
-	q8cU4k2FvWiq/NLJVvYPb8TVlpAMP7rUW8r87unN/ZX+rWzVGGSVf/AuCGmWYqubgEttXndnzN+qa
-	URppsC4qG9F9kRCyDT4av7BOXcCUWMxfM6YgHfS625ac7pMRMIhKSCvy6z0Vs6Xu13ZCokzrNYWlL
-	gPOW9qszeXA6iFI5h84fEHYkOu6I5irZEIH+JO9xQMgDVKjsMSGR+O2li6n4t+Lf/4DegVeSQ/6Mo
-	txAQhRuSIqvijTwOy74k9FJ6I4/TJvRQ0AfkWLIUpBHWJnZgTiJdLRkmNyq0S4miu4yg3bmmGGNfX
-	NEnFclpbUYZG5DqRRwKQ==;
+	List-Owner; bh=/OErONDMmoXO72/JJUFuGQuxAdjPxZscPb9qS7vkW3Y=; b=HUY13xSlSCoVxn
+	qJQt3DBl+0hldhBuYht9a664EUvZDvczXSBIZJSJLJbWd/LzXYjE7MIjfSbVUSJd4aKoJ1lSMfYiv
+	3h7M4GuQ6qECSHFVk1oA7Q8x3XFgjjEcvda/0nnE0zt2Kpnk3gvReRqMiWOsH+2C/5rz237JGmJnZ
+	BO3nntAzPD/5JWYivAJHzX11OC4F/So4ITNqL+zc99BcsmWmpTu20xfUFU66085BnWIi+wedN1As+
+	anKy0MkesA1qu5z5i/XkaErex2hiJozdpuI5pXeofiToxgFkARGhs007q0oCsK2xKmRvRgr+EOa14
+	v9RhPFrw4xZEVwRWxTWQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lrdlg-004aiI-Lk; Fri, 11 Jun 2021 09:48:00 +0000
-Received: from andre.telenet-ops.be ([2a02:1800:120:4::f00:15])
+	id 1lrdls-004akw-CH; Fri, 11 Jun 2021 09:48:12 +0000
+Received: from xavier.telenet-ops.be ([2a02:1800:120:4::f00:14])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lrdl3-004ZiT-2m
+ id 1lrdl2-004ZiC-VM
  for linux-arm-kernel@lists.infradead.org; Fri, 11 Jun 2021 09:47:24 +0000
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:2411:a261:8fe2:b47f])
- by andre.telenet-ops.be with bizsmtp
- id FlnD2500T25eH3q01lnD5b; Fri, 11 Jun 2021 11:47:15 +0200
+ by xavier.telenet-ops.be with bizsmtp
+ id FlnD2500b25eH3q01lnEK7; Fri, 11 Jun 2021 11:47:14 +0200
 Received: from rox.of.borg ([192.168.97.57])
  by ramsan.of.borg with esmtps (TLS1.3) tls
  TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.93)
  (envelope-from <geert@linux-m68k.org>)
- id 1lrdkv-00FcQO-7c; Fri, 11 Jun 2021 11:47:13 +0200
+ id 1lrdkv-00FcQN-Hn; Fri, 11 Jun 2021 11:47:13 +0200
 Received: from geert by rox.of.borg with local (Exim 4.93)
  (envelope-from <geert@linux-m68k.org>)
- id 1lrdku-00CZr1-QG; Fri, 11 Jun 2021 11:47:12 +0200
+ id 1lrdku-00CZqt-Pd; Fri, 11 Jun 2021 11:47:12 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>,
@@ -54,17 +54,16 @@ To: arm-soc <arm@kernel.org>,
 Cc: Magnus Damm <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org,
  linux-renesas-soc@vger.kernel.org,
  Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 3/4] Renesas driver updates for v5.14
-Date: Fri, 11 Jun 2021 11:47:03 +0200
-Message-ID: <cover.1623403800.git.geert+renesas@glider.be>
+Subject: [GIT PULL 2/4] Renesas ARM DT updates for v5.14 (take two)
+Date: Fri, 11 Jun 2021 11:47:02 +0200
+Message-ID: <cover.1623403796.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1623403793.git.geert+renesas@glider.be>
 References: <cover.1623403793.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210611_024721_288845_31F11AB2 
-X-CRM114-Status: UNSURE (   6.90  )
-X-CRM114-Notice: Please train this message.
+X-CRM114-CacheID: sfid-20210611_024721_181627_01E83A67 
+X-CRM114-Status: GOOD (  11.46  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -80,33 +79,68 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210611094703.7APutz5jmThVAQBC8se7wNW6FlS0Tonk6ULFUopPGRw@z>
+Message-ID: <20210611094702.B0yGMZeKmTp-wcm_bA9kZY1bixXYolp19KMmOKP82c8@z>
 
-The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+The following changes since commit 1b32fce42bff899dfb9b72962f46ca5542c7647c:
 
-  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+  ARM: dts: alt: Add SW2 as GPIO keys (2021-05-27 15:46:21 +0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-drivers-for-v5.14-tag1
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.14-tag2
 
-for you to fetch changes up to 187cd57db09355fd169c661fa1c44bda06b013e8:
+for you to fetch changes up to 42bbd003910906229cb1dc0eaa812d9cc59e4c77:
 
-  soc: renesas: Add support to read LSI DEVID register of RZ/G2{L,LC} SoC's (2021-06-10 15:29:03 +0200)
-
-----------------------------------------------------------------
-Renesas driver updates for v5.14
-
-  - Initial support for the new RZ/G2L SoC variants.
+  arm64: dts: renesas: r9a07g044: Add SYSC node (2021-06-10 15:36:41 +0200)
 
 ----------------------------------------------------------------
-Lad Prabhakar (2):
-      soc: renesas: Add ARCH_R9A07G044 for the new RZ/G2L SoC's
-      soc: renesas: Add support to read LSI DEVID register of RZ/G2{L,LC} SoC's
+Renesas ARM DT updates for v5.14 (take two)
 
- drivers/soc/renesas/Kconfig       |  5 +++++
- drivers/soc/renesas/renesas-soc.c | 33 ++++++++++++++++++++++++++++++++-
- 2 files changed, 37 insertions(+), 1 deletion(-)
+  - External interrupt (INTC-EX) support for the R-Car M3-W+ SoC,
+  - Initial support for the new RZ/G2L SoC on the RZ/G2L SMARC EVK
+    board,
+  - Miscellaneous fixes and improvements.
+
+----------------------------------------------------------------
+Geert Uytterhoeven (9):
+      arm64: dts: renesas: Add missing opp-suspend properties
+      arm64: dts: renesas: r8a7796[01]: Fix OPP table entry voltages
+      ARM: dts: lager: Configure pull-up for SOFT_SW GPIO keys
+      ARM: dts: blanche: Configure pull-up for SOFT_SW and SW25 GPIO keys
+      ARM: dts: gose: Configure pull-up for SOFT_SW GPIO keys
+      ARM: dts: silk: Configure pull-up for SOFT_SW GPIO keys
+      arm64: dts: renesas: r8a77961: Add INTC-EX device node
+      arm64: dts: renesas: r8a779a0: Drop power-domains property from GIC node
+      Merge tag 'renesas-r9a07g044-dt-binding-defs-tag' into renesas-arm-dt-for-v5.14
+
+Lad Prabhakar (4):
+      dt-bindings: clock: Add r9a07g044 CPG Clock Definitions
+      arm64: dts: renesas: Add initial DTSI for RZ/G2{L,LC} SoC's
+      arm64: dts: renesas: Add initial device tree for RZ/G2L SMARC EVK
+      arm64: dts: renesas: r9a07g044: Add SYSC node
+
+ arch/arm/boot/dts/r8a7790-lager.dts               |   8 ++
+ arch/arm/boot/dts/r8a7792-blanche.dts             |   8 ++
+ arch/arm/boot/dts/r8a7793-gose.dts                |  10 +-
+ arch/arm/boot/dts/r8a7794-silk.dts                |  10 +-
+ arch/arm64/boot/dts/renesas/Makefile              |   2 +
+ arch/arm64/boot/dts/renesas/r8a774a1.dtsi         |   1 +
+ arch/arm64/boot/dts/renesas/r8a77960.dtsi         |   7 +-
+ arch/arm64/boot/dts/renesas/r8a77961.dtsi         |  18 ++-
+ arch/arm64/boot/dts/renesas/r8a779a0.dtsi         |   1 -
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi        | 132 ++++++++++++++++++++++
+ arch/arm64/boot/dts/renesas/r9a07g044l1.dtsi      |  25 ++++
+ arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts |  21 ++++
+ arch/arm64/boot/dts/renesas/r9a07g044l2.dtsi      |  13 +++
+ arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi      |  27 +++++
+ include/dt-bindings/clock/r9a07g044-cpg.h         |  89 +++++++++++++++
+ 15 files changed, 362 insertions(+), 10 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044l1.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044l2.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi
+ create mode 100644 include/dt-bindings/clock/r9a07g044-cpg.h
 
 _______________________________________________
 linux-arm-kernel mailing list
