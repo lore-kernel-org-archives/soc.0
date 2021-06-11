@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71F21C48BE0
-	for <soc@archiver.kernel.org>; Fri, 11 Jun 2021 16:43:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 908F1C48BE0
+	for <soc@archiver.kernel.org>; Fri, 11 Jun 2021 16:43:10 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 55F346100A; Fri, 11 Jun 2021 16:43:07 +0000 (UTC)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	id 7205961400; Fri, 11 Jun 2021 16:43:10 +0000 (UTC)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C80261357;
-	Fri, 11 Jun 2021 16:43:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2C80261357
+	by mail.kernel.org (Postfix) with ESMTPS id 49F926141C;
+	Fri, 11 Jun 2021 16:43:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 49F926141C
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=thierry.reding@gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id y13-20020a1c4b0d0000b02901c20173e165so1024412wma.0;
-        Fri, 11 Jun 2021 09:43:07 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id o3so6745065wri.8;
+        Fri, 11 Jun 2021 09:43:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1PGvWqmX79u2BDZddtKUNdJQ6hsV0VE7RF8nOBTNFPA=;
-        b=QA5BVIhdRSLFSHl4Nt2kT2P14yFLZ/x9o/azS5r3wS6A3DFy5r2knf3shzwsymne/W
-         TiACsvGeFHuftNHEQ+LeZ/mzkB2stV9I/xvCadQ4fk7M3IxVpvomQI+t5WoBWX2bwG7h
-         QVpBJtR/56OTEQhnaWLquAokQvUmTFo7mZWp0H1BXTz0PHjfAmOk8xywHZ8+H06zGyq3
-         q6oP9pp3VpqWpJxCp2met1k5d6zniIHx8Ehuv6d/bg+6umfQgi11EDv2fwrjw0OlH1Zv
-         stZPAZ/m0lg+V51fWQZX8NLMQv5uRR20oYe7hgliN4hgBoD/5DKPmMwbOktJMxmiyFzP
-         NEFA==
+        bh=G2y1nNc7K+FotKmCLrE2xc9UwhEMOudxdp6Ua/dpxnA=;
+        b=QVccNFWGssWk4k4ucBpwS+8fhjUb3TMNJNMl3t5FLIgQYgTmYAo8plKz5H+4I6bdxw
+         IavtWULG8FSlydKvTlF5wDV05v+xD0zIIEBNiwTirCs61LpCuoDGUEAOsWTujt2xjzww
+         co+cynmZegs1M4ZfA7dNcr7OVbDGxnXydXTbh5mbwDftvvdz9V8nqw1D+uLY7GJE+WmB
+         tguux8FWnY87SAfKaKtLIfMIt5RD9JxTuX48qUDwRZDQqY1BZxKNIm06y9SrP5CABZzd
+         3ScdNJe4dzNRoKCxM/IKKmcgvyDmbxxOWjd8lnwDWytgSCRcC5+yjQA1jvZ7W8Ngcg3E
+         nS2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1PGvWqmX79u2BDZddtKUNdJQ6hsV0VE7RF8nOBTNFPA=;
-        b=NZmJ9U23rbLGIW5cA//dE/CMd0jWX2NNLUD4QE8j5BTVc10DKdHMguQUEFBWVMN9CD
-         vRFS0biGfhycB7uRKKsEKpE+6bEFLrTOMjV+psuNV63CCsIXIMz4BL312xSAixjV583Z
-         VusFuMEMu7Qdh5Ub7CHUXH6yCP/JRcQz1qOtbTJdu0rH0Wj3Prhp61p/Ie9/DrABAmt7
-         zroWgD4blO3yoL8FcQwM2rCQ9K52J30VGaNIwzbifDK2pD7hXAm13HWQPoKFaPfuBM00
-         6mKrBpJ0ricVq3d1Oq/59s5S3vT6vRcPb0q7YkqAH3JUVVWXijM66XTfT2AX1uNaYpG2
-         2N+w==
-X-Gm-Message-State: AOAM532FNJuheqWMP+b2Ksk/6/I98SD/QJfUNN39WkSfb6GEJ/pHw4w3
-	iXkkU7+wQAN0JDl9E02nL9VEWmJgOWI=
-X-Google-Smtp-Source: ABdhPJx2UkSalCYd1QzObIlllEjvyEnv67FhhSHetKO+GWfONxgJYkAlN+YEcB4wtkH8YeCbtfpIaA==
-X-Received: by 2002:a1c:a516:: with SMTP id o22mr21577690wme.136.1623429785287;
-        Fri, 11 Jun 2021 09:43:05 -0700 (PDT)
+        bh=G2y1nNc7K+FotKmCLrE2xc9UwhEMOudxdp6Ua/dpxnA=;
+        b=NTkdEXrCwunF80+lZ0/vXtehXEOd4Z7mabTf/cl5lGmeBBd68GTV5GWE5nHRZ0ZwTq
+         h0hzgiZDj6tgCL5SJtXrtE8jkPUg03euOmz0P+tNXEdXoiUnt4YTn7A9IWiIaBio82Wq
+         KH2Wvok9fo+xwOIjbcojT6rRaKvA1sTNMUBEtFyp6YBDOVUz2V2aKGqm5yGdan3G+mHR
+         UMeBlewt7ClBTHN6T6eel7cSysbMToK3SEJRLmJZGOKNTkcZT4xNrDgQM0kZIWVDmZut
+         uK3JNI03kZ07fQacQcU5pXN5h6qKTbAnSr+exN7JbsPcCbpx1ITKEFe3JO2RAh8ZBYLf
+         2dMw==
+X-Gm-Message-State: AOAM5307cZzHI+A2Z5/q0g1DwLxi+VEKdDTvsKUc33fy04vRYf4aUUcO
+	vNCfJtGUsbF18Zlk4sHUw57eiLbXyDc=
+X-Google-Smtp-Source: ABdhPJxbh57z+wnedcBu6pjDDzsjRrMwjs2/RmVYmEKbEpOZMiesm6jZOqpG7ISItY/7hqRhGOo4mg==
+X-Received: by 2002:adf:a195:: with SMTP id u21mr4993145wru.367.1623429788401;
+        Fri, 11 Jun 2021 09:43:08 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id l31sm6502345wms.31.2021.06.11.09.43.04
+        by smtp.gmail.com with ESMTPSA id k8sm7725414wrp.3.2021.06.11.09.43.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jun 2021 09:43:04 -0700 (PDT)
+        Fri, 11 Jun 2021 09:43:07 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -61,9 +61,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/6] soc/tegra: Changes for v5.14-rc1
-Date: Fri, 11 Jun 2021 18:44:33 +0200
-Message-Id: <20210611164437.3568059-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/6] firmware: tegra: Changes for v5.14-rc1
+Date: Fri, 11 Jun 2021 18:44:34 +0200
+Message-Id: <20210611164437.3568059-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210611164437.3568059-1-thierry.reding@gmail.com>
 References: <20210611164437.3568059-1-thierry.reding@gmail.com>
@@ -73,53 +73,35 @@ Content-Transfer-Encoding: 8bit
 
 Hi ARM SoC maintainers,
 
-The following changes since commit 380d2b2d5a0491e47dfa250b40e3d849a922871d:
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
-  regulator: core: Add regulator_sync_voltage_rdev() (2021-06-01 12:13:30 +0200)
+  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.14-soc
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.14-firmware
 
-for you to fetch changes up to e2d0ee225e49a5553986f3138dd2803852a31fd5:
+for you to fetch changes up to bd778b893963d67d7eb01f49d84ffcd3eaf229dd:
 
-  soc/tegra: fuse: Fix Tegra234-only builds (2021-06-11 13:31:01 +0200)
+  firmware: tegra: bpmp: Fix Tegra234-only builds (2021-06-11 13:31:51 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-soc/tegra: Changes for v5.14-rc1
+firmware: tegra: Changes for v5.14-rc1
 
-These changes implement the core power domain for the PMC, and fix a
-couple of minor issues as well as add stubs to help some drivers be
-compile tested more easily.
+These changes contain two minor fixes for the Tegra BPMP driver.
 
 ----------------------------------------------------------------
-Dmitry Osipenko (7):
-      soc/tegra: regulators: Bump voltages on system reboot
-      soc/tegra: Add stub for soc_is_tegra()
-      soc/tegra: Add devm_tegra_core_dev_init_opp_table()
-      soc/tegra: fuse: Add stubs needed for compile-testing
-      soc/tegra: pmc: Add core power domain
-      soc/tegra: pmc: Add driver state syncing
-      soc/tegra: regulators: Support core domain state syncing
+Thierry Reding (1):
+      firmware: tegra: bpmp: Fix Tegra234-only builds
 
-Thierry Reding (2):
-      Merge branch 'for-5.14/regulator' into for-5.14/soc
-      soc/tegra: fuse: Fix Tegra234-only builds
+Zhen Lei (1):
+      firmware: tegra: Fix error return code in tegra210_bpmp_init()
 
-Yang Yingliang (1):
-      soc/tegra: fuse: Don't return -ENOMEM when allocate lookups failed
-
- drivers/soc/tegra/Kconfig              |   2 +
- drivers/soc/tegra/common.c             |  97 ++++++++++++++++++++++
- drivers/soc/tegra/fuse/fuse-tegra.c    |   6 +-
- drivers/soc/tegra/fuse/fuse-tegra30.c  |   3 +-
- drivers/soc/tegra/pmc.c                | 144 +++++++++++++++++++++++++++++++++
- drivers/soc/tegra/regulators-tegra20.c |  94 ++++++++++++++++++++-
- drivers/soc/tegra/regulators-tegra30.c |  93 ++++++++++++++++++++-
- include/soc/tegra/common.h             |  31 +++++++
- include/soc/tegra/fuse.h               |  20 ++++-
- include/soc/tegra/pmc.h                |   7 ++
- 10 files changed, 485 insertions(+), 12 deletions(-)
+ drivers/firmware/tegra/Makefile        | 1 +
+ drivers/firmware/tegra/bpmp-private.h  | 3 ++-
+ drivers/firmware/tegra/bpmp-tegra210.c | 2 +-
+ drivers/firmware/tegra/bpmp.c          | 3 ++-
+ 4 files changed, 6 insertions(+), 3 deletions(-)
