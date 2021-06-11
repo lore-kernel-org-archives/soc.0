@@ -6,70 +6,70 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 983FDC48BD1
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 16:46:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8E7EC48BE5
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 16:46:31 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 61255613D0
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 16:46:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 61255613D0
+	by mail.kernel.org (Postfix) with ESMTPS id 7A44761357
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 16:46:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7A44761357
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
 	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=rYzPx7yfuF6esyJWvldlpKSO2vXY/ItE1Vltah1gUmo=; b=0VXI/jeEVeweIQ
-	orNn79eOBCWtgtQz/JWxvSJBkdkJCmoYqDyzNJvpEcxoxsn0VIRbaqrlB7Ys9kEf7fEjYaMQXSk5Z
-	kHzlFeubOKVl4hCjENciUgFjxYcelJL6ZARll3R1rZ0ytTt9yZNW5n8SysnrctlXYPRD9X2jE0Ulp
-	lKh1L8QGZ5Vbz7+QkRnlhaPtEWYcpJ6BwRGhR3ZPXZWMvaYH1MxlW6z6FcmxXQo7yK3WlHlGVwC1+
-	CYkPvWPyC+OiBqNSuOnZhAAPLWV5Od8J5C9uk+xub2L8puC2/v519jATFxw7PMv72nuWXaveWC3CC
-	PqEF80TrabxqCj2MZ8cw==;
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=7dW4G5dhc9Zqhcuyy9oQeBiftV4VJggtFdAVZ2Y4mLg=; b=Ye8YBDsMA2m8tx
+	m7nh9Ls7NNrUMpb22otYzwhIYHRN7EDg3SG19tiowLlpdIHMr5TkMH3SpFTPZEc4mzqmGRjQGw1r2
+	8kJHACIG6h97vun4hzCu9hlELdXmQmkKscaCoFXE5doiVVBHt0FLbPCVvBEcFLAVKoj/w/FBB92Jq
+	6BplmSy1Ms3dAPBrm9dbnugLu1ntwWQcW8UflVhwkzGOheANyr9sKSqyLwjASJm4iphQRZ0AhFnCE
+	uR4CdpHXYRthUA9EURHWMVglEHdmy7UpWY/9AXfH+XkcJhXcEmjBBsZ7Eas0VP/bmNFehnsoQIGga
+	ApQpYdxjav0LI6SXsnxA==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lrkGP-0064RX-Da; Fri, 11 Jun 2021 16:44:10 +0000
-Received: from mail-wr1-f46.google.com ([209.85.221.46])
+	id 1lrkHM-0064xy-FW; Fri, 11 Jun 2021 16:45:08 +0000
+Received: from mail-wr1-f54.google.com ([209.85.221.54])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lrkGK-0064Or-7D
- for linux-arm-kernel@lists.infradead.org; Fri, 11 Jun 2021 16:44:05 +0000
-Received: by mail-wr1-f46.google.com with SMTP id a11so6748616wrt.13
+ id 1lrkGT-0064V8-Hw
+ for linux-arm-kernel@lists.infradead.org; Fri, 11 Jun 2021 16:44:14 +0000
+Received: by mail-wr1-f54.google.com with SMTP id n7so631263wri.3
  for <linux-arm-kernel@lists.infradead.org>;
- Fri, 11 Jun 2021 09:44:03 -0700 (PDT)
+ Fri, 11 Jun 2021 09:44:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Yl+waXKY/FzeWxugRNcrGJPBmosE4XJtLVOq9NfoCdA=;
- b=HQ8jsuewe8HfyaOnNtZa8C5X/GJcV53S3VkxFu9yC8g9zTX4sEGzIyxPhFj+cPab3V
- Bc1Uy4NJVc/PK9rnWKkbAM8WwrY+v5Ka491sb1RZNjBm5xejxmK7Vl/0x7jNvQDogSDw
- HsjS1IKSBaKvR8YU3G8EJkPWZ/yNzuF4ckpDQbTl69fhWnZVpqTU1ae7022Cg0IFU/ed
- I2478B4vbcuO5l1mIB3jOqscm4O8u03IounH/FhRTjeeqhH8YYunXY8wyYPQSeCzETK9
- VCOodVoz5I7gq/43RNE1bJtFytMWu+twO9WRXgo2PpNjXP0GvLVK3Rbk/Ly942RzS2iD
- eDew==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=V5XYrnY/xVnCPcibAwboKgHCmrwG1kEd9Tte7IqhonY=;
+ b=AT2W/U1lava1Ca/zNFJ6uPGusersVIS6uHclYO2H/J6Qp1tt86eedRIFMioYpe8fqs
+ yrD74cQCB7gTkJ/kRf4Fa2ZDARKHtlWEHK8gvqQBojB2HoPIRlTiyqeoAzLb31bjDOwU
+ 2fOqkJjuIv2s32Ktao44dlmqzx8n0MqHplzQKIo52w2TgS1YTFBc7LTxsz44LekNZlk4
+ +/JNa06aUjBU2QjmyFo0UWIdMu4V0iRUcJJZY/duMgkHzvhbWsV1XwULSqhLiHm75T3K
+ cG6DWTBPdfFjw8a2Jkvt7WvEfdmK4GqT3hWfjSP5PZJH7CTxPDGg2tMwz70xIRtgVOGt
+ hLqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Yl+waXKY/FzeWxugRNcrGJPBmosE4XJtLVOq9NfoCdA=;
- b=iBI1fMsxCCTJzOpjC+p1+Tlr/y6WXCAjydXTmhzsn1ZU9ltfQux+MJh9wX+b/M7yFE
- jRtUVP+KPEF6iuAX/cb7/pUcJVWFCdUS7sDOgnPEWHgk659RT+jGGh72w79QH+G0qTgQ
- /JkVhWZ3KvwDsHTHoIhHAg4La7FJH3VvcSuMb5pHZUId0hDruvLPQQAlamabiikuAtbE
- 3B1lYwkz1lp5aPflulYsZwRe5jFl66lLzEHSeq1aYBwzhXk2koB2yGTi/15sGK0pB0La
- 0wHoOhzIZJmDxR4oju+mDCHupm3OElnnSD+24e4zlZzGhZWW43qq79588q6cELrQhJRx
- LnyQ==
-X-Gm-Message-State: AOAM530xvfkK85iYr0rCGJ8x8UB5T+tzXpu993MTk7KcD/U3xqpxKe/h
- 8pRailpUI0xAF3W08G71HGM=
-X-Google-Smtp-Source: ABdhPJwpr82yBKai2lqfab3eosWyqwmbA9K9CMq+OT5UOv5auo2zvPeZCX49wZ5z9RhN8vfyvCX2MA==
-X-Received: by 2002:a5d:5987:: with SMTP id n7mr5118102wri.293.1623429782907; 
- Fri, 11 Jun 2021 09:43:02 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=V5XYrnY/xVnCPcibAwboKgHCmrwG1kEd9Tte7IqhonY=;
+ b=Cc7FlMgt3OWhVWqQdDKYcip3VyDHyzPjH7meiEEMpkxPoYt+SSx7jXImmOIbF8VWyo
+ hdOyGrygOkq9bym19BvrI9wxxLi9NV8A/kOIcevnlhMQKWZN7o3RbcTsHI+WQ11g1pJy
+ CLtt0DuZgklaBf84ESKgpgxTVkv6017BDo1yGV3CqOLVvX0tYC/mn2ryUec6PvWvo8Ln
+ wSlBNXJWP1nl3zeMJR36dQMJL1GSuWdi224jONm7dZMHSPD83YseIGWR9x9TKnEtzAxK
+ kViaosQkqUAiykm7IXq1cKCVlbbhbdBI79tGdipho3jpwQdzDelGGcpkgehe09EwrDmX
+ kv/Q==
+X-Gm-Message-State: AOAM5314dTWNjSxPtYVPPY7fbNNl92IM0250g3ld5RZFyn52UICPFzsp
+ SYHMR7mhPsOcEI+/fDUQAeH+8QBUbts=
+X-Google-Smtp-Source: ABdhPJxlsbAOLOU1i27Ibi/lz52sIQVKiBthECxJn+E7iF+bsBneHJrvzhZpxGhPpbWTOw5uSu00yw==
+X-Received: by 2002:a5d:64c7:: with SMTP id f7mr5073620wri.36.1623429792242;
+ Fri, 11 Jun 2021 09:43:12 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
- by smtp.gmail.com with ESMTPSA id r4sm8163109wre.84.2021.06.11.09.43.01
+ by smtp.gmail.com with ESMTPSA id p5sm8063831wrd.25.2021.06.11.09.43.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Jun 2021 09:43:01 -0700 (PDT)
+ Fri, 11 Jun 2021 09:43:11 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -77,14 +77,17 @@ To: arm@kernel.org,
 Cc: Thierry Reding <thierry.reding@gmail.com>,
  Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/6] dt-bindings: Changes for v5.14-rc1
-Date: Fri, 11 Jun 2021 18:44:32 +0200
-Message-ID: <20210611164437.3568059-1-thierry.reding@gmail.com>
+Subject: [GIT PULL 5/6] ARM: tegra: Default configuration changes for v5.14-rc1
+Date: Fri, 11 Jun 2021 18:44:36 +0200
+Message-ID: <20210611164437.3568059-5-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210611164437.3568059-1-thierry.reding@gmail.com>
+References: <20210611164437.3568059-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210611_094404_295711_5BA27984 
-X-CRM114-Status: GOOD (  10.36  )
+X-CRM114-CacheID: sfid-20210611_094413_639150_4B7F83F4 
+X-CRM114-Status: UNSURE (   9.10  )
+X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -100,7 +103,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210611164432.mmrloiT96KRnHOD8td22R4LOpw5NsgbFJ3YbZ8IQ6sA@z>
+Message-ID: <20210611164436.zxRD51RKubyGg-lkSSJLMp_R2yuDrgnsBuiARx5SyxQ@z>
 
 Hi ARM SoC maintainers,
 
@@ -110,43 +113,27 @@ The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.14-dt-bindings
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.14-arm-defconfig
 
-for you to fetch changes up to 5f459cb0d67d6df6f74eac253ea10de9e9986812:
+for you to fetch changes up to 4302331fdf4440b96dba583384a0e2b759cb13bd:
 
-  dt-bindings: soc: tegra-pmc: Document core power domain (2021-06-01 13:45:01 +0200)
+  ARM: tegra_defconfig: Enable CONFIG_DEVFREQ_THERMAL (2021-05-31 11:43:11 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-dt-bindings: Changes for v5.14-rc1
+ARM: tegra: Default configuration changes for v5.14-rc1
 
-This contains a conversion of the Tegra clock and reset controller
-device tree bindings to the new json-schema format and adds the core
-power domain to the PMC device tree bindings.
+Enables the devfreq thermal support to allow using the devfreq device as
+cooling device for the system.
 
 ----------------------------------------------------------------
-Dmitry Osipenko (2):
-      dt-bindings: clock: tegra: Convert to schema
-      dt-bindings: soc: tegra-pmc: Document core power domain
+Dmitry Osipenko (1):
+      ARM: tegra_defconfig: Enable CONFIG_DEVFREQ_THERMAL
 
- .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml     |  35 +++++++
- .../bindings/clock/nvidia,tegra114-car.txt         |  63 -----------
- .../bindings/clock/nvidia,tegra124-car.txt         | 107 -------------------
- .../bindings/clock/nvidia,tegra124-car.yaml        | 115 +++++++++++++++++++++
- .../bindings/clock/nvidia,tegra20-car.txt          |  63 -----------
- .../bindings/clock/nvidia,tegra20-car.yaml         |  69 +++++++++++++
- .../bindings/clock/nvidia,tegra210-car.txt         |  56 ----------
- .../bindings/clock/nvidia,tegra30-car.txt          |  63 -----------
- 8 files changed, 219 insertions(+), 352 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra114-car.txt
- delete mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra124-car.txt
- create mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
- delete mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra20-car.txt
- create mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
- delete mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra210-car.txt
- delete mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra30-car.txt
+ arch/arm/configs/tegra_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 _______________________________________________
 linux-arm-kernel mailing list
