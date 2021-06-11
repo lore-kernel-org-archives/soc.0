@@ -1,96 +1,51 @@
-Return-Path: <SRS0=IRvS=LF=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <mripard@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 414E6C48BE0
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 14:56:02 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0FB3760200
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 14:56:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0FB3760200
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:
-	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
-	MIME-Version:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-	References:List-Owner; bh=DzY5A7hArrFvC/AK6cUc8UJcFjAMU9Lsw6e8LM1VvKw=; b=09l
-	D9Cs5SZUOTMR6sEuZkip5xF765Kjhl4Q1DK1Sp/j91hgyfPNpPYHyCyPzlQ7zdI0EEk8ZOK+aHJlX
-	KQ+rHx24VXHBuQRuGTEtVS//8B1IeSmK6Ui0xfnI5mL1KhWP+BVZue9zFxF9Vm37IK1Sk+93FGug0
-	YFebdMJEEUv7Got2GW89CT5ekj69emn/O2tgNTm8hc5bRYMY5troBUT7mTQZYbnIJDmjv+Qc6moOu
-	lcUP091gQzlfrBAQbAiY2goGdqpjXOz/rDfo95+dEvDDAnwWHKuuqxTrbL4zC2cCbko+99NRmKGSX
-	usUJyp7BFV+PghZfPwQoKTiGhDifkRw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lriYN-005j4I-RG; Fri, 11 Jun 2021 14:54:35 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lriYK-005j3j-Bk
- for linux-arm-kernel@lists.infradead.org; Fri, 11 Jun 2021 14:54:33 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B7EBF611CD;
- Fri, 11 Jun 2021 14:54:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18F4CC48BE0
+	for <soc@archiver.kernel.org>; Fri, 11 Jun 2021 14:56:31 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id E6421613E1; Fri, 11 Jun 2021 14:56:30 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F64B60200;
+	Fri, 11 Jun 2021 14:56:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1623423271;
- bh=jxHTWV3FElGfy8OMvqBt7d6sjtvxkidSgk8uWrYmKb4=;
- h=Date:From:List-Id:To:Cc:Subject:From;
- b=Mv0LaHDuo/Ml2376NBHv80WUUuJSHTfxJNziiPSP4DxecOzcTNHraM1UoAHvIuwD7
- IRGPR2AdYe7UfxDigTIJic1dfQ+JlmotdGk2wFnvfszRMa2gZs31SjWcZFGglVjlAZ
- zdtPEgomw9MtxZC/iN7hyAG63jm44Z9oqNDR+R45R7Gzi9bczxgmLax132kn5cnT2/
- tEjzema7CEbxidmHvpegxAtb5p9R1fZgogOgHL2CS6Dr/F03C9m/JzYmGcfTvz/KTL
- PHR/fZoVEefVq0z5LUBkJiM5giBAXIfSDjOs0IdNaHEogO0YXHn79BfQrxsIYdqoLg
- t19MW3zdtsYkQ==
-Date: Fri, 11 Jun 2021 16:54:29 +0200
+	s=k20201202; t=1623423390;
+	bh=v49eswYzfxOiuLNJPex6gAUkVcyyd2R58vfPRyLPLgw=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=SXiX4EzoEu2tnFdWUn6dU6wz/FndQ9NUUxRYRfBtp+mcM3tsWmTHeqDfhScpoZszc
+	 iIY5PwQ6qvIMKKn8ZjNIHY6VliwsOki1toOs0nZeYiZO5RtH/qYOMuHgMbeZPjuT2C
+	 pghRxc9XquYWoyIvby8NMdjr1v1XdBqzjFGtU9+EzTOWTz9azqoHgBs4PIvLWo6W/M
+	 jJLXKNEqePXUQLcmNAXpQhaTFPsWKBtkYtrFVAJzFKwN88D3gFdBsOA1thuUA0hWjq
+	 cwQWzjzuR/Ta/gka2CgIsmtyQk38qs4ZnDkpnQw4dNJJhY/NVvWSNM/UFn6WofagFa
+	 pxk3wfz0qs3ng==
+Date: Fri, 11 Jun 2021 16:56:28 +0200
 From: Maxime Ripard <mripard@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org, soc@kernel.org
 Cc: Maxime Ripard <mripard@kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@siol.net>
-Subject: [GIT PULL] Allwinner Fixes for 5.13
-Message-ID: <ad7ba352-315c-4201-b922-4bf914a00d98.lettre@localhost>
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@siol.net>
+Subject: [GIT PULL] Allwinner Device Tree Changes for 5.14
+Message-ID: <96cc77ec-139d-4685-8a66-a60964cf39fd.lettre@localhost>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210611_075432_442620_03E54734 
-X-CRM114-Status: GOOD (  11.08  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6687368638778646674=="
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210611145429.WytLs3SfdbXHECgSKIARHzmZbGQPu9k7f8nShXNHDfI@z>
-
-
---===============6687368638778646674==
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="IbiEmVdNhj52aTiM"
+	protocol="application/pgp-signature"; boundary="nLrvI0CrUDil1gM+"
 Content-Disposition: inline
 
 
---IbiEmVdNhj52aTiM
+--nLrvI0CrUDil1gM+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hi,
 
-Please pull the following changes for the current release.
+Please pull the following changes for the next release.
 
 Thanks!
 Maxime
@@ -101,53 +56,104 @@ The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git refs/tags/sunxi-fixes-for-5.13-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git refs/tags/sunxi-dt-for-5.14-1
 
-for you to fetch changes up to bd5431b2f9b30a70f6ed964dd5ee9a6d1c397c06:
+for you to fetch changes up to d42b3e045a34ec7c88c818ee057f7c2ecc8f9fdd:
 
-  arm64: dts: allwinner: a64-sopine-baseboard: change RGMII mode to TXID (2021-06-10 14:51:53 +0200)
-
-----------------------------------------------------------------
-Two patches to fix the GMAC PHY mode on some boards.
+  ARM: dts: sun8i: v3s: enable emac for zero Dock (2021-05-31 11:43:03 +0200)
 
 ----------------------------------------------------------------
-Icenowy Zheng (1):
-      arm64: dts: allwinner: a64-sopine-baseboard: change RGMII mode to TXID
+Our usual bunch of patches to improve the Allwinner SoCs support,
+mainly:
+  - I2S Support for the V3
+  - Audio Codec Support for the V3s
+  - DMA support for the V3s
+  - PWM support for the V3s
+  - Support for Bluetooth Audio on the pinephone
+  - Add A10-like timers to the A64 and R40
+  - New boards: Forlinx OKA40i-C, Forlinx OKA40i-C, NanoPi R1S H5
 
-Salvatore Bonaccorso (1):
-      ARM: dts: sun8i: h3: orangepi-plus: Fix ethernet phy-mode
+----------------------------------------------------------------
+Andreas Rehn (1):
+      ARM: dts: sun8i: v3s: enable emac for zero Dock
+
+Arnaud Ferraris (1):
+      arm64: dts: allwinner: pinephone: Set audio card name
+
+Chukun Pan (2):
+      dt-bindings: arm: Add NanoPi R1S H5
+      arm64: dts: allwinner: h5: Add NanoPi R1S H5 support
+
+Ivan Uvarov (5):
+      ARM: dts: sun8i: r40: add /omit-if-no-ref/ to pinmux nodes for UARTs 0&3
+      ARM: dts: sun8i: r40: add pinmux settings for MMC3 and UARTs 2, 4, 5&7
+      dt-bindings: add compatible vendor prefix for Forlinx
+      dt-bindings: arm: add compatible for Forlinx OKA40i-C and FETA40i-C
+      ARM: dts: sun8i: r40: add devicetree for Forlinx FETA40i-C & OKA40i-C
+
+Jernej Skrabec (1):
+      ARM: dts: sun8i: r40: Add timer node
+
+Samuel Holland (10):
+      dt-bindings: timer: Simplify conditional expressions
+      dt-bindings: timer: Add compatibles for sun50i timers
+      arm64: dts: allwinner: a64: Sort watchdog node
+      arm64: dts: allwinner: Add sun4i MMIO timer nodes
+      ASoC: dt-bindings: sun8i-codec: Increase #sound-dai-cells
+      ARM: dts: sun8i-a33: Allow using multiple codec DAIs
+      arm64: dts: allwinner: a64: Allow using multiple codec DAIs
+      arm64: dts: allwinner: a64: Add pinmux nodes for AIF2/AIF3
+      arm64: dts: allwinner: a64: Allow multiple DAI links
+      arm64: dts: allwinner: pinephone: Add support for Bluetooth audio
+
+Tobias Schramm (9):
+      dt-bindings: pwm: allwinner: add v3s pwm compatible
+      ARM: dts: sun8i: v3s: add pwm controller to v3s dts
+      ARM: dts: sun8i: v3s: add DMA controller to v3s dts
+      ARM: dts: sun8i: v3s: add DMA properties to peripherals supporting DMA
+      ARM: dts: sun8i: v3s: add analog codec and frontend to v3s dts
+      ASoC: dt-bindings: sun8i-a23-codec-analog: add compatible for Allwinner V3
+      ARM: dts: sun8i: V3: add codec analog frontend to V3 dts
+      dt-bindings: sound: sun4i-i2s: add Allwinner V3 I2S compatible
+      ARM: dts: sun8i: V3: add I2S interface to V3 dts
 
 
- arch/arm/boot/dts/sun8i-h3-orangepi-plus.dts                  | 2 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64-sopine-baseboard.dts | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/arm/sunxi.yaml                              |  11 ++++-
+ Documentation/devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml            |   3 +-
+ Documentation/devicetree/bindings/sound/allwinner,sun4i-a10-i2s.yaml          |   3 +-
+ Documentation/devicetree/bindings/sound/allwinner,sun8i-a23-codec-analog.yaml |   9 ++--
+ Documentation/devicetree/bindings/sound/allwinner,sun8i-a33-codec.yaml        |   8 ++-
+ Documentation/devicetree/bindings/timer/allwinner,sun4i-a10-timer.yaml        |  42 +++++++----------
+ Documentation/devicetree/bindings/vendor-prefixes.yaml                        |   2 +-
+ arch/arm/boot/dts/Makefile                                                    |   1 +-
+ arch/arm/boot/dts/sun8i-a33.dtsi                                              |   4 +-
+ arch/arm/boot/dts/sun8i-r40-feta40i.dtsi                                      | 106 ++++++++++++++++++++++++++++++++++++++++++-
+ arch/arm/boot/dts/sun8i-r40-oka40i-c.dts                                      | 203 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ arch/arm/boot/dts/sun8i-r40.dtsi                                              |  56 ++++++++++++++++++++++-
+ arch/arm/boot/dts/sun8i-v3.dtsi                                               |  31 ++++++++++++-
+ arch/arm/boot/dts/sun8i-v3s-licheepi-zero-dock.dts                            |  17 +++++--
+ arch/arm/boot/dts/sun8i-v3s.dtsi                                              |  48 +++++++++++++++++++-
+ arch/arm64/boot/dts/allwinner/Makefile                                        |   1 +-
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi                       |  25 ++++++++++-
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi                                 |  62 +++++++++++++++++-------
+ arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts                     | 195 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi                                  |   9 ++++-
+ 20 files changed, 784 insertions(+), 52 deletions(-)
+ create mode 100644 arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
+ create mode 100644 arch/arm/boot/dts/sun8i-r40-oka40i-c.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts
 
 
 
---IbiEmVdNhj52aTiM
+--nLrvI0CrUDil1gM+
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYMN5JAAKCRDj7w1vZxhR
-xfKdAP9DP2gxkghiwsDVwqUVay66TLRmsDbDrXkT+PPTWBp3VgD/fjADN2OSCPlR
-yq33OpJqiAXAo99FRLJMDD8XPTteBQs=
-=O3V/
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYMN5nAAKCRDj7w1vZxhR
+xaNeAP4uB8ewTq3aQaH1eQKgE74woJec7ZNJerdJBjlpWkA/3wD9EItGOeOXILoi
+3YpNZCjKXr2vIPbkvfq+OcY1EFXahQM=
+=YXlM
 -----END PGP SIGNATURE-----
 
---IbiEmVdNhj52aTiM--
-
-
---===============6687368638778646674==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
---===============6687368638778646674==--
-
+--nLrvI0CrUDil1gM+--
