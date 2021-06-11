@@ -2,51 +2,51 @@ Return-Path: <SRS0=IRvS=LF=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 047C7C48BD1
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 09:49:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7375CC48BD1
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 09:50:02 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C6351613DD
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 09:49:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C6351613DD
+	by mail.kernel.org (Postfix) with ESMTPS id 46320613D9
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 11 Jun 2021 09:50:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 46320613D9
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
 	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=kLB9JRp08Jwoqtnu9NHBqMoUomh985IQbrtu/tN3isc=; b=RAksO8ooTTnKTs
-	sVwMfuHrTBo57m4PkDa5fcbmZEgdEsYStT3bfnJ250LTGPwcESc/qv5fOSygRpjgE9qoJQE9i/X9k
-	6fHTIULVP85LIt4Wy+UlQz0ksAOLQMSBjt4yVpAiNRQEzDjsNSHqBE0JL1vNY01MUDdKunz7gdYwV
-	Nad4s59Eo6yzvLthNnyX4/GlsWdI89Salp/cCtBcl3Mxo4ldNiWPv1N1H9lOkCKTPzek58EcmN42A
-	Mi+P5hhUMByc1FPpmrk8h9jowBy1nSuzX5+1e0Er2Hoz1rT/n7n87ztM63v6YeFdjDfNHK0qdOucE
-	ErFNs18fK4ABw2q/+HJQ==;
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=lI9zoUJDN2QuCEwVYhPYXJ8OL+7N1yyeiDGaXA5ZkG8=; b=fLUmel/qfFhLDj
+	IYkdlpXz/M+56U6DAnNGYyxG4fs0dcxGBteZmTTBrZZhqmgdCAW8WIqD0UVstwR/lVMUvkmJIJA4j
+	gIPpJ6keXp6hCDY163j6LSDX4Qz6QMtwqpNJqXI0cr4bBaY0vuBjGeMm+HdvG0utqk+LS+WWEB7CO
+	x/pjVHm26HBfoSHsvZ3B8pafMli9ckIn79ZRh5hpRXH0tHF/Dm/P42g5kfSGhDhNGKPnwpp4DPQ5P
+	CxPkwiCGWETvD+5Ip47DADSSIGvalcNlhv1Pzn9/lISvmPYrfN17mu7zVYSvm9i17wNmPI4rFmsKU
+	sh1MGqUDel5p+EGLnhIA==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lrdl8-004Zyw-CJ; Fri, 11 Jun 2021 09:47:26 +0000
+	id 1lrdlV-004agd-Qw; Fri, 11 Jun 2021 09:47:49 +0000
 Received: from xavier.telenet-ops.be ([2a02:1800:120:4::f00:14])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lrdl2-004ZiB-Sh
- for linux-arm-kernel@lists.infradead.org; Fri, 11 Jun 2021 09:47:23 +0000
+ id 1lrdl3-004ZiA-4C
+ for linux-arm-kernel@lists.infradead.org; Fri, 11 Jun 2021 09:47:24 +0000
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:2411:a261:8fe2:b47f])
  by xavier.telenet-ops.be with bizsmtp
- id FlnD2500a25eH3q01lnDK6; Fri, 11 Jun 2021 11:47:14 +0200
+ id FlnE2500M25eH3q01lnEKR; Fri, 11 Jun 2021 11:47:14 +0200
 Received: from rox.of.borg ([192.168.97.57])
  by ramsan.of.borg with esmtps (TLS1.3) tls
  TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.93)
  (envelope-from <geert@linux-m68k.org>)
- id 1lrdkv-00FcQL-I0; Fri, 11 Jun 2021 11:47:13 +0200
+ id 1lrdkv-00FcQP-Pt; Fri, 11 Jun 2021 11:47:13 +0200
 Received: from geert by rox.of.borg with local (Exim 4.93)
  (envelope-from <geert@linux-m68k.org>)
- id 1lrdku-00CZqj-NI; Fri, 11 Jun 2021 11:47:12 +0200
+ id 1lrdku-00CZr8-Qp; Fri, 11 Jun 2021 11:47:12 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>,
@@ -54,14 +54,17 @@ To: arm-soc <arm@kernel.org>,
 Cc: Magnus Damm <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org,
  linux-renesas-soc@vger.kernel.org,
  Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 0/4] Renesas ARM SoC updates for v5.14 (take two)
-Date: Fri, 11 Jun 2021 11:47:00 +0200
-Message-ID: <cover.1623403793.git.geert+renesas@glider.be>
+Subject: [GIT PULL 4/4] Renesas DT binding updates for v5.14
+Date: Fri, 11 Jun 2021 11:47:04 +0200
+Message-ID: <cover.1623403802.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1623403793.git.geert+renesas@glider.be>
+References: <cover.1623403793.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210611_024721_092351_5FE4386C 
-X-CRM114-Status: GOOD (  14.52  )
+X-CRM114-CacheID: sfid-20210611_024721_339687_00B8238E 
+X-CRM114-Status: UNSURE (   7.10  )
+X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -77,54 +80,37 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210611094700.qZ1qg7FFx4-mIZR3NyWmGJhD_U3BII7pvzEVIK-3hvw@z>
+Message-ID: <20210611094704.dEO5WqvAQT8rxk0Rs1pLAG1QkQUwyCdJ8dVIx3gIrVE@z>
 
-	Hi soc folks,
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
-This is my second pull request for the inclusion of Renesas SoC updates
-for v5.14.
+  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
 
-It consists of 4 parts:
+are available in the Git repository at:
 
-  [GIT PULL 1/4] Renesas ARM defconfig updates for v5.14 (take two)
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v5.14-tag1
 
-    - Enable support for the new RZ/G2L SoC variants in the arm64
-      defconfig.
+for you to fetch changes up to 972f67be8929ac095df6a8bbce738b4f39e984cb:
 
-  [GIT PULL 2/4] Renesas ARM DT updates for v5.14 (take two)
+  dt-bindings: power: renesas,rzg2l-sysc: Add DT binding documentation for SYSC controller (2021-06-10 15:26:49 +0200)
 
-    - External interrupt (INTC-EX) support for the R-Car M3-W+ SoC,
-    - Initial support for the new RZ/G2L SoC on the RZ/G2L SMARC EVK
-      board,
-    - Miscellaneous fixes and improvements.
+----------------------------------------------------------------
+Renesas DT binding updates for v5.14
 
-  [GIT PULL 3/4] Renesas driver updates for v5.14
+  - Document support for the new RZ/G2L, RZ/G2LC, and RZ/G2UL SoCs,
+  - Document support for the new RZ/G2L SMARC EVK board.
 
-    - Initial support for the new RZ/G2L SoC variants.
+----------------------------------------------------------------
+Lad Prabhakar (4):
+      dt-bindings: arm: renesas: Document Renesas RZ/G2UL SoC
+      dt-bindings: arm: renesas: Document Renesas RZ/G2{L,LC} SoC variants
+      dt-bindings: arm: renesas: Document SMARC EVK
+      dt-bindings: power: renesas,rzg2l-sysc: Add DT binding documentation for SYSC controller
 
-  [GIT PULL 4/4] Renesas DT binding updates for v5.14
-
-    - Document support for the new RZ/G2L, RZ/G2LC, and RZ/G2UL SoCs,
-    - Document support for the new RZ/G2L SMARC EVK board.
-
-Note that the new Renesas RZ/G2L DT Binding Definitions are shared by
-driver and DT source files, and thus included in multiple pull requests:
-  - "[GIT PULL] clk: renesas: Updates for v5.14 (take two)" (for clk),
-  - "[GIT PULL 2/4] Renesas ARM DT updates for v5.14 (take two)" (for
-    soc).
-
-Thanks for pulling!
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+ Documentation/devicetree/bindings/arm/renesas.yaml | 18 +++++++
+ .../bindings/power/renesas,rzg2l-sysc.yaml         | 63 ++++++++++++++++++++++
+ 2 files changed, 81 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/renesas,rzg2l-sysc.yaml
 
 _______________________________________________
 linux-arm-kernel mailing list
