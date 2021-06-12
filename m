@@ -2,41 +2,40 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D44E3C49EA5
-	for <soc@archiver.kernel.org>; Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CBA4C49EA7
+	for <soc@archiver.kernel.org>; Sat, 12 Jun 2021 16:10:17 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 72C48613D0; Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 58CCB613C6;
+	id 8185D613DF; Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 66D22613CD;
 	Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1623514216;
-	bh=3mST7YIkHkwB0HowLD2puApOQhwzxBjwnF5oy50EDWY=;
+	bh=/WW3ZIKJdY6XXb+y1lOde0KKduQEKhXvJlRrdmxd+jg=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=J6TeqfM/JMBX13VmRFH/47CiUBwGVuS2R5xVAX7jeCmFhdyhieRKerkD3mT7oK6jo
-	 9xpQPoRqjTdohzjvrQ0Cn+pH09G9e7x3i6oQYz6hmSzpm04ft22O0G/4FcJSMSxTWL
-	 84dxlGpdmTw4sGfi9ztHPdf+t9si54drgsj+s4iH762xwH6ExUSPsAfWCnqdpvEkAp
-	 HvuZpWDI558feI2IRrXPW64LMmGc2isNSBrjT5qCqhB8kLDBtGCPMyJ2HuE6gLxhwa
-	 ob7hGTndbEeodjuz93AeHeXzqRTSwm1Pq7Ke+Ns2hS994qba3mX30d6GBUkewcMv6c
-	 /NoL+nvHF6pMQ==
+	b=lteoOfLOHtgigYfFuf/ZbK9cRDQC9oEbuQAtsuNulzLP1otp4xmjxqFDTkmgRENz4
+	 AztASTk4CVs6Zx8R01vTdAHZYWkohlnl7GpuvWNXPUxEC6ndtB+00uUQ9U3D/dP+Pi
+	 C7Rxpq7TjNZ6e0zocdDPymXBX2NEEOHthrYc+A4lpLXWkQBoPf8n64V0SFZnsawyjJ
+	 VTHbU68zppkc4P9u1XHqv4y07toRfFCP6um8R+J+ac0Bchnf0k6XehVPrK0YtzWNpo
+	 uR8zEMFPvU1Y9/2jcmyKIyrQnkGjTLeHXr9CZQegGC+xEWXAjccyXtjiI0gLN7YbQm
+	 CgMdHa6oiZ0og==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4A39760A6C;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 5C06860D09;
 	Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/3] Cleanup for omaps for v5.14
+Subject: Re: [GIT PULL] ARM: at91: defconfig for 5.14
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162351421629.27448.8226037372870488420.git-patchwork-notify@kernel.org>
+ <162351421637.27448.8560813911861963810.git-patchwork-notify@kernel.org>
 Date: Sat, 12 Jun 2021 16:10:16 +0000
-References: <pull-1622618286-677305@atomide.com>
-In-Reply-To: <pull-1622618286-677305@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
+References: <20210611125659.25590-1-nicolas.ferre@microchip.com>
+In-Reply-To: <20210611125659.25590-1-nicolas.ferre@microchip.com>
+To: Nicolas Ferre <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -44,24 +43,20 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Wed,  2 Jun 2021 10:19:09 +0300 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
+On Fri, 11 Jun 2021 14:56:59 +0200 you wrote:
+> From: Nicolas Ferre <nicolas.ferre@microchip.com>
 > 
-> The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+> Arnd, Olof,
 > 
->   Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
-> 
-> are available in the Git repository at:
+> Only one patch for this PR: take as a patch if you prefer.
+> We have other defconfig patches in preparation but not ready yet and as it's
+> getting late, I send what I have now.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/3] Cleanup for omaps for v5.14
-    https://git.kernel.org/soc/soc/c/8639a12370ba
-  - [GIT,PULL,2/3] Defconfig changes for omaps for v5.14
-    https://git.kernel.org/soc/soc/c/3082a78502f6
-  - [GIT,PULL,3/3] Devicetree changes for omaps for v5.14
-    https://git.kernel.org/soc/soc/c/2d08a11e2d26
+  - [GIT,PULL] ARM: at91: defconfig for 5.14
+    https://git.kernel.org/soc/soc/c/ad9f81281ebe
 
 You are awesome, thank you!
 --
