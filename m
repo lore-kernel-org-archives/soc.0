@@ -2,58 +2,62 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1664C48BCF
-	for <soc@archiver.kernel.org>; Sat, 12 Jun 2021 16:10:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04631C48BE5
+	for <soc@archiver.kernel.org>; Sat, 12 Jun 2021 16:10:08 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 8849B613AD; Sat, 12 Jun 2021 16:10:07 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 70E20611CD
-	for <soc@kernel.org>; Sat, 12 Jun 2021 16:10:07 +0000 (UTC)
+	id 9054A611CD; Sat, 12 Jun 2021 16:10:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 799E361248;
+	Sat, 12 Jun 2021 16:10:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1623514207;
-	bh=cuhA6NyjddnR+HH3wxRGU2RUVXLFFEzjjz3gArAexvk=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=X2k4T61qthH+vWw9oEoZ51vrp2x9MBqgrV9xzvbOjLosIybD2GNhKjdmd6f2pONc7
-	 mkOpNWEY2DS2F2on7tMzlVB7VFml/OIIQPmVq1yXD2M+4vsAtIY2cEPuryCJH55evC
-	 9Wkt3M30JhtNMuF3M9VwGg+4QLGwNBSOP2OMZ9TbRNObyYpG7kGUDU00J5s5JuJM2X
-	 DJX7DR7erfUKUAhdwLQ2+HjYSgdzlHsyqjPT4+hFNbezEyf2eOYdOf1Ie6DB3tSDOT
-	 BTMNjkpeSsvbtQAoPIq27vjgF2xZ/OpuelOuh0VjmecNGIALEFVuDipkYm+4zhnslO
-	 hsm1Twb8lXlFg==
+	bh=2z0mk60F7UmQBhHNEIixwqLllOlbFl4VkGRwMmbKOPw=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=TTP3uMqCFu3va1nW2UGMXczlBcFErYjXBztN5hgO5uLZw1MCRAeGCoREc+0GW1CPR
+	 yBLmvEZjPfw/0Nu1kO1yUwIfOs8dI5ln1lpFq5HSPEoxBSruHZw7xnJwYzdCtoagZC
+	 nbP6a9bl1Ucu9JEGaIc2EFOQBjfaXxgqsppukMM5yjNIIwFvFUfBOZhXVOXbbeJvjD
+	 1EPJl1gjzilCRgA12gl9ZXcB6BJl31QPoRHSr1bfzlxJKgkhebr9buQEgMnj31J7lG
+	 sAoUMpRp9O7MWnRYvvury1kJ6pZIamivei4579r86VHF5KQ2N7HCAWSVsIGg+iSIxj
+	 0/c3n3SFDvzdw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 5E2CB60A6C;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 67A8460972;
 	Sat, 12 Jun 2021 16:10:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Rockchip dts fixes for 5.13
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162351420732.27448.12590691938276431087.git-patchwork-summary@kernel.org>
+ <162351420741.27448.10644576872953762249.git-patchwork-notify@kernel.org>
 Date: Sat, 12 Jun 2021 16:10:07 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <3405741.0S5aU1g85B@diego>
+In-Reply-To: <3405741.0S5aU1g85B@diego>
+To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (refs/heads/arm/fixes):
+This pull request was applied to soc/soc.git (refs/heads/arm/fixes):
 
-Patch: [GIT,PULL] Rockchip dts fixes for 5.13
-  Submitter: Heiko Stübner <heiko@sntech.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=499185
-  Lore link: https://lore.kernel.org/r/3405741.0S5aU1g85B@diego
-Patch: [GIT,PULL] Allwinner Fixes for 5.13
-  Submitter: Maxime Ripard <mripard@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=498971
-  Lore link: https://lore.kernel.org/r/ad7ba352-315c-4201-b922-4bf914a00d98.lettre@localhost
+On Sat, 12 Jun 2021 00:20:40 +0200 you wrote:
+> Hi Arnd, Kevin, Olof,
+> 
+> please find below a patch that unbreaks the PCIe on rk3399 that
+> broke in 5.13. As the tag messages states, there are more changes
+> pending that handle the backward compatiblity but will go through
+> the PCI subsystem.
+> 
+> [...]
 
-Total patches: 2
+Here is the summary with links:
+  - [GIT,PULL] Rockchip dts fixes for 5.13
+    https://git.kernel.org/soc/soc/c/e60cb06cde7e
 
+You are awesome, thank you!
 --
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
