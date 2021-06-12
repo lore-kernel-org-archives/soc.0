@@ -1,47 +1,89 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=LkPm=LG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A24CC48BCF
-	for <soc@archiver.kernel.org>; Sat, 12 Jun 2021 07:12:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id CD74861249; Sat, 12 Jun 2021 07:12:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36733C48BE8
+	for <linux-arm-kernel@archiver.kernel.org>; Sat, 12 Jun 2021 07:13:36 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 02670610C7
+	for <linux-arm-kernel@archiver.kernel.org>; Sat, 12 Jun 2021 07:13:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 02670610C7
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
+	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=jjyxUQRxQ4i6QpFBq/y/e8HIitDfnO9XzpD3yTaOyfs=; b=g2fpTIMtUogbqK
+	Yha2WBc8D8hZdtT3tnbUqW5P5R/0rhj8PmSEVY9Neq9GNUFngkoTGoEB5okjlRJRjgp24PfM8d4KU
+	29+LbQCk8+OqhTblvJQ8YDld6Bsr0pAG8B+21ZoRR3a82ZinTW/QvbU0Aa9Zfx3pPeLDXAwBTJxN4
+	MjpAKbH6cNn+kcHbMwR9BUbjDjXaI3q6LLusfJL2H6nvDIflzZkPR4ZYD/e/cWn6l4AO+76CqEbC7
+	ALXHc5uw/GibMR+lKtTk1yhcfEAoNBS2bT1oAUNcwd7kHp6DX6XISCLKJwEafz6DKWwtgha9TWU8M
+	oFFiJpmy3FqhRFBEYEpQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1lrxoP-007zXs-U2; Sat, 12 Jun 2021 07:12:10 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1lrxoL-007zXP-8o
+ for linux-arm-kernel@lists.infradead.org; Sat, 12 Jun 2021 07:12:07 +0000
 Received: by mail.kernel.org (Postfix) with ESMTPSA id 9763D61186;
-	Sat, 12 Jun 2021 07:12:02 +0000 (UTC)
+ Sat, 12 Jun 2021 07:12:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1623481924;
-	bh=nTenoKL1JT3bg1I0OvfGVG0E3kL9/XROONs5ImA9aoM=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=rNzU4zwbUg4fGDBHjcEKrDsrcsO5ygwj8NrIM6He0wBSDDox0630i1pEl0wwwpCh+
-	 +THjC9RDRWCzfr/4pqbhH1qDp2Gv20roi0KQPf3PMWQEV0Hl1Ruc9ReUOdYv/sMuII
-	 ogoz5pCJ2EKZSzhCo4ci3kI4d4uTdNX/rS1AG2V17Z52Upl9WWFi8//N50waIZrAwU
-	 dMjZVEjrz+pZ9Z2ySQY94bNBN7WxF+KstkvsSVTBpcYTOw8I5MHfR5SUdHW262KqsH
-	 Um910fbnxGbiZElJEkK5yFLT0Zhi55+WG0IZwjgyzrwhkCO1v0HRj4e6lwVUmW030T
-	 h8YPnGZarCEQA==
+ s=k20201202; t=1623481924;
+ bh=nTenoKL1JT3bg1I0OvfGVG0E3kL9/XROONs5ImA9aoM=;
+ h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+ b=rNzU4zwbUg4fGDBHjcEKrDsrcsO5ygwj8NrIM6He0wBSDDox0630i1pEl0wwwpCh+
+ +THjC9RDRWCzfr/4pqbhH1qDp2Gv20roi0KQPf3PMWQEV0Hl1Ruc9ReUOdYv/sMuII
+ ogoz5pCJ2EKZSzhCo4ci3kI4d4uTdNX/rS1AG2V17Z52Upl9WWFi8//N50waIZrAwU
+ dMjZVEjrz+pZ9Z2ySQY94bNBN7WxF+KstkvsSVTBpcYTOw8I5MHfR5SUdHW262KqsH
+ Um910fbnxGbiZElJEkK5yFLT0Zhi55+WG0IZwjgyzrwhkCO1v0HRj4e6lwVUmW030T
+ h8YPnGZarCEQA==
 Date: Sat, 12 Jun 2021 15:11:57 +0800
 From: Shawn Guo <shawnguo@kernel.org>
 To: Russell King <rmk+kernel@armlinux.org.uk>
 List-Id: <soc.lore.kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+ soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
 Subject: Re: [PATCH] ARM: dts: add SolidRun SolidSense support
 Message-ID: <20210612071157.GW29138@dragon>
 References: <E1lmZcz-0005Ze-UX@rmk-PC.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <E1lmZcz-0005Ze-UX@rmk-PC.armlinux.org.uk>
 User-Agent: Mutt/1.9.4 (2018-02-28)
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210612_001205_386019_ADBDDA8F 
+X-CRM114-Status: GOOD (  33.05  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210612071157.LUX0rj6h0m2kNYtD_NLwOUU8rpOVM6ywrwrUaot8ZHQ@z>
 
 On Fri, May 28, 2021 at 11:22:05AM +0100, Russell King wrote:
 > Add support for the SolidRun SolidSense platform, which is a
@@ -379,3 +421,8 @@ Shawn
 > -- 
 > 2.20.1
 > 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
