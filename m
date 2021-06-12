@@ -1,158 +1,139 @@
-Return-Path: <SRS0=LkPm=LG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=pync=LG=gmail.com=olteanv@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CAC1C48BCF
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 12 Jun 2021 09:24:37 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB4F5C48BCF
+	for <soc@archiver.kernel.org>; Sat, 12 Jun 2021 15:07:58 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 6CF60613AD; Sat, 12 Jun 2021 15:07:58 +0000 (UTC)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 00E726108E
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 12 Jun 2021 09:24:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 00E726108E
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:
-	Message-ID:From:References:Cc:To:Subject:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Owner;
-	bh=ur9sxEgjlkkScSRNG0i3ZF2xLGNdmEU4blmo83PCQBk=; b=TIl7RgZNl3zOggeKmNEBw9eOUZ
-	3d3qfqfWeUswo0pyRCPsfL0bC3GagKRgb/7RwUkWpfzici+m1Cdb/ICTG3DwWAchMo+f8tfCBVqK9
-	k8LFK1liSbNDTp5ielBa/DcQBd8yqES4QF8OBFWu/qfO3KU2EAhFRnXAMBYj4qCYt2am/1pjqCebK
-	39oQiKw5QU3jSkwviXqN4EO4stYNTS1OdjTaR1hk3cGUs2PiEYG5rJcaoMSAwhA4i0C1P8ByEDiuQ
-	wfLOAibgNAw0vb7VSSjmIxraQAf/JwqRoLHO3tLD6ATVQHRRJJxDSpnCn/+IMKHy6MwadZJjxww9Y
-	GM8npkAw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lrzrI-008Bz9-6O; Sat, 12 Jun 2021 09:23:16 +0000
-Received: from mail-wm1-x334.google.com ([2a00:1450:4864:20::334])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lrzrD-008Bxs-Nw
- for linux-arm-kernel@lists.infradead.org; Sat, 12 Jun 2021 09:23:13 +0000
-Received: by mail-wm1-x334.google.com with SMTP id
- l18-20020a1ced120000b029014c1adff1edso9968144wmh.4
- for <linux-arm-kernel@lists.infradead.org>;
- Sat, 12 Jun 2021 02:23:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=subject:to:cc:references:from:message-id:date:user-agent
- :mime-version:in-reply-to:content-transfer-encoding:content-language;
- bh=SLFVhursGu66Uj/3K3eYasv4quV8R1dSmz2H6vx5rpU=;
- b=WK28YEY+mxu0dajuAkqICfBIey1HTQatNZpyxGFo9qbiP9NBSr6fYEGQvGgZht6PvO
- zgZ3hO18JVXKaAmM5D+5Inm/QkSMB7qXQbOQMcjwXtI7AAGd9Ds6z+FYgTdRksPvHV9K
- NRddoj35bs0eD2qSjrmIN2XTtz9Sj39v/8mp/NQ0Hiizde9SEIpqONigfIa8lP7VWcFS
- +/oUqFA8gS2wSPDguVPykI/8tTIbcYVfG8Q7ozpdmng2VRC6U5s/yctnI7Y+29vn4FV5
- ajmyKmYRbD4drWDkWw9aUhJJtnFT2ke+bxA1q0v9yiwYG/hvWurJMQqq5/CXSvr/AVqv
- ohFg==
+	by mail.kernel.org (Postfix) with ESMTPS id 3478061287;
+	Sat, 12 Jun 2021 15:07:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3478061287
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=olteanv@gmail.com
+Received: by mail-ed1-f54.google.com with SMTP id r7so26225918edv.12;
+        Sat, 12 Jun 2021 08:07:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MyHAGIpkkv5FhdCV+dmubHT6fI0J4Qtzj9J4fslDtcQ=;
+        b=W0TBv8YxPCk0CMIX/i/QLdgS9KiKeQNoLDvGMD8SlDDMPEk6JkrNmNWNTTwzESG1DS
+         VocDE82KQpTdDCqbqJn9RnvauCxSTCdFPH0GvzqxPLAfzKxYE5RsZ4RIbhMQ5LDR+H35
+         zoRR+nzmC0a1z4dA97a7ZhTm6+eH4/zUC47HyMZKzVDU59gg250UVuGDeaVKnCvFbjb0
+         GJ2HEvLaGKba8mdh7LQ0i4DLMzZaRLWsayayPUaFwVAY054QBMNB2YrSpcOJtc/LEEB+
+         va0d42hOiUVzQa60NOHtISexG3n0qBdKgrIAy6bwb1z6ZtPsemBkGGQjvIXwkf+puHb1
+         uJ/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:cc:references:from:message-id:date
- :user-agent:mime-version:in-reply-to:content-transfer-encoding
- :content-language;
- bh=SLFVhursGu66Uj/3K3eYasv4quV8R1dSmz2H6vx5rpU=;
- b=eul2Od2BqiSpLwnzd16c5nXGxVYOE++gJ4g1MzGqNXgUuXKvlewbXG8/nWmCxmWh2c
- GwNUOLvIEtySSZgUHQn04xeZiArKC0JKR2kKuOv8fgNHKu631UXXV2BdIDoK3VAljnxO
- aCxKi1Pwv/54etuCxRuqMgdZFrH1g+lE+MGP10K3gqCBZ5kLG/S24gSQjAzo/nrcWmMH
- MCs6HO8p8KA0JmNeC48uY9P3JXINf2c4LFj0cx76xB2EMA5Isf8JZmljr6eL2baLCIM2
- cvOGN5J3D1gl1SdCH1YGWTXAYnNmcuW4eAYIek+LZ+8ZolPy7BVN+ErNZ9fMAnut7QMh
- 5XeA==
-X-Gm-Message-State: AOAM532kdZRt5VFtYkjBE/p0XakdG/lQxiQOK30T+YCn+GX0XOPISnVk
- 5LNLaLQjz+j0zcsjPcEC7Ldr7hFxZRdQ/Q==
-X-Google-Smtp-Source: ABdhPJzgicMpzLh5bZMPsx62eBNKrcy04WIKYCttKwTTO0YhKS4Ms+svmfp8nsdqmDgGKwUZ4BIHQw==
-X-Received: by 2002:a7b:c1ce:: with SMTP id a14mr24077747wmj.180.1623489788393; 
- Sat, 12 Jun 2021 02:23:08 -0700 (PDT)
-Received: from localhost.localdomain (haganm.plus.com. [212.159.108.31])
- by smtp.gmail.com with ESMTPSA id a3sm10262253wra.4.2021.06.12.02.23.07
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 12 Jun 2021 02:23:08 -0700 (PDT)
-Subject: Re: [PATCH v2 2/5] ARM: dts: NSP: Add Meraki MX64/MX65 to Makefile
-To: Vladimir Oltean <olteanv@gmail.com>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MyHAGIpkkv5FhdCV+dmubHT6fI0J4Qtzj9J4fslDtcQ=;
+        b=GJ5Ts5SvAudIBfz5bgdTEEE+MPKuU5ZrHJtzW3e0NT8h5xkPqVRmGTbLLRf6saUJZi
+         +R6lX43VTtiH9mhItA2a84WCzVa4fC3EjE3lubC+CQQGOix3+sdiK3Wq3iqQs7h1qoJ2
+         f1CbwXcBhapgIqKeGs8XFb5Nh8MgnnDAiH1L/QbOAFMDeFRzLaldU8LEhyib94S6uHdj
+         aeMASKuh3I+Vn62UFRQICy20acUSJfrneWO4iShq+DqvXQ9Yu/Rkhl+YImAlZrd0IbDA
+         tFaup/Hu2sktlGMdctZJy5d0bLe58CO1BOtzvefqeMpikkwZnKS1q7c3vxbK+hkvbu2O
+         P71A==
+X-Gm-Message-State: AOAM530cyReW3BaHoRAkvo/on+QNoUxRLUtnmLhJNtxM3HiGbgREKD5h
+	ApnXLSSU4chs7K65GqpuYvE=
+X-Google-Smtp-Source: ABdhPJzxp36MU7OxaYVh1dgVnXetWoZR9dLwm9Xiwc/QVPJuVTP+udohcInDHSZkGVZKBTRk6s1urA==
+X-Received: by 2002:a50:d943:: with SMTP id u3mr9250028edj.175.1623510476839;
+        Sat, 12 Jun 2021 08:07:56 -0700 (PDT)
+Received: from skbuf ([188.26.52.84])
+        by smtp.gmail.com with ESMTPSA id n5sm4002476edd.40.2021.06.12.08.07.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Jun 2021 08:07:56 -0700 (PDT)
+Date: Sat, 12 Jun 2021 18:07:55 +0300
+From: Vladimir Oltean <olteanv@gmail.com>
+To: Matthew Hagan <mnhagan88@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Florian Fainelli <f.fainelli@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
- Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- bcm-kernel-feedback-list@broadcom.com, Krzysztof Kozlowski
- <krzk@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- Sam Ravnborg <sam@ravnborg.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+	Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>, soc@kernel.org,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	bcm-kernel-feedback-list@broadcom.com,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sam Ravnborg <sam@ravnborg.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/5] dt-bindings: arm: bcm: NSP: add Meraki MX64/MX65
+Message-ID: <20210612150755.efb5hw3xujkkh2va@skbuf>
 References: <20210610232727.1383117-1-mnhagan88@gmail.com>
- <20210610232727.1383117-3-mnhagan88@gmail.com>
- <20210611202434.flnqrzbbxicw5c3t@skbuf>
-From: Matthew Hagan <mnhagan88@gmail.com>
-Message-ID: <e9d5fffd-4483-8342-c97e-a115894ca93b@gmail.com>
-Date: Sat, 12 Jun 2021 10:23:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ <20210610232727.1383117-2-mnhagan88@gmail.com>
+ <20210611194644.64lvhvp76wy6guqp@skbuf>
+ <f0af3f0a-ab13-ecdc-d834-c95ddcb52866@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210611202434.flnqrzbbxicw5c3t@skbuf>
-Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210612_022311_818247_4F20A4B9 
-X-CRM114-Status: GOOD (  18.56  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210612092306.9_rdS9WLZLKSg3D9pL6PV0RGvpVIx6fzDtqde2iuaSY@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0af3f0a-ab13-ecdc-d834-c95ddcb52866@gmail.com>
 
+On Sat, Jun 12, 2021 at 10:21:31AM +0100, Matthew Hagan wrote:
+> Hi Vladimir,
+> 
+> Many thanks for taking the time to review the submission.
+> 
+> On 11/06/2021 20:46, Vladimir Oltean wrote:
+> 
+> > On Fri, Jun 11, 2021 at 12:27:13AM +0100, Matthew Hagan wrote:
+> >> Add bindings for the Meraki MX64/MX65 series. Note this patch should be
+> >> applied on top of "dt-bindings: arm: bcm: add NSP devices to SoCs".
+> >>
+> >> Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
+> >> ---
+> >>  Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml | 6 ++++++
+> >>  1 file changed, 6 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
+> >> index 78dfa315f3d0..7d184ba7d180 100644
+> >> --- a/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
+> >> +++ b/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
+> >> @@ -62,6 +62,12 @@ properties:
+> >>            - enum:
+> >>                - brcm,bcm958625hr
+> >>                - brcm,bcm958625k
+> >> +              - meraki,mx64
+> >> +              - meraki,mx64-a0
+> >> +              - meraki,mx64w
+> >> +              - meraki,mx64w-a0
+> >> +              - meraki,mx65
+> >> +              - meraki,mx65w
+> >>            - const: brcm,bcm58625
+> >>            - const: brcm,nsp
+> >>  
+> >> -- 
+> >> 2.26.3
+> >>
+> > I think these compatibles describe SoCs, whereas Meraki MX64/MX65 are
+> > boards, so this is a miscategorization. Can you not just describe the
+> > Northstar Plus SoC that you are using in your compatible string?
+> 
+> My understanding is that the bcm958625hr and bcm958625k are dev boards
+> using the BCM58625 SoC variant of NSP. For reference, a close example
+> can be found in brcm,bcm4708.yaml in the same directory:
+> 
+>       - description: BCM53012 based boards
+>         items:
+>           - enum:
+>               - brcm,bcm953012er
+>               - brcm,bcm953012hr
+>               - brcm,bcm953012k
+>               - meraki,mr32
+>           - const: brcm,brcm53012
+>           - const: brcm,brcm53016
+>           - const: brcm,bcm4708
+> 
+> For the compatible string we would definitely need to specify a unique
+> device name for identification by the OS, rather than just the SoC.
+> 
+> Of course I could be mistaken. Will await confirmation on this.
 
-On 11/06/2021 21:24, Vladimir Oltean wrote:
-> On Fri, Jun 11, 2021 at 12:27:14AM +0100, Matthew Hagan wrote:
->> Add Makefile entries for the Meraki MX64/MX65 series devices.
->>
->> Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
->> ---
->>  arch/arm/boot/dts/Makefile | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
->> index f8f09c5066e7..033d9604db60 100644
->> --- a/arch/arm/boot/dts/Makefile
->> +++ b/arch/arm/boot/dts/Makefile
->> @@ -154,6 +154,12 @@ dtb-$(CONFIG_ARCH_BCM_NSP) += \
->>  	bcm958525xmc.dtb \
->>  	bcm958622hr.dtb \
->>  	bcm958623hr.dtb \
->> +	bcm958625-meraki-mx64.dtb \
->> +	bcm958625-meraki-mx64-a0.dtb \
->> +	bcm958625-meraki-mx64w.dtb \
->> +	bcm958625-meraki-mx64w-a0.dtb \
->> +	bcm958625-meraki-mx65.dtb \
->> +	bcm958625-meraki-mx65w.dtb \
->>  	bcm958625hr.dtb \
->>  	bcm988312hr.dtb \
->>  	bcm958625k.dtb
->> -- 
->> 2.26.3
->>
-> It is odd to add the device trees to the Makefile in a separate patch
-> compared to their actual introduction. Does the tree even compile at
-> this stage?
-
-Will rectify this. Thanks!
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Yeah, ok, fair, after rechecking I think you're right. I'm dropping this charge.
