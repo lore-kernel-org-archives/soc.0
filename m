@@ -2,63 +2,63 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF4B1C49ECA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8041C49ED7
 	for <soc@archiver.kernel.org>; Sat, 12 Jun 2021 16:10:17 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 1377461410; Sat, 12 Jun 2021 16:10:17 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id EDED361414;
-	Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
+	id 199D86141F; Sat, 12 Jun 2021 16:10:17 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 013F761419;
+	Sat, 12 Jun 2021 16:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1623514217;
-	bh=odR/I2HCc8VGcpoS3PLt4xbM1dB19YlqTSRxCnyMt1I=;
+	bh=YHselNMC0TyXfHp2emp9BPTAtcau29ca62asr8/b4nA=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=IFsHBsMiEflTZSr0OLNo/k1s8rAysOBFD6L4A6kqWqU3+LyAMckOJVxXKoJ5ZFD+1
-	 ZpsmbHUM1QnFZTVuyHA+xja5fF278pqlQGiQd/do9IpnDj5E53W0M4ZFYqzoj7S+3j
-	 jo2mVoOIPUV7tcHJeKDpFa3TXhPwwd3DUO9GZ2Ay7uXvzTCCE5bTXkWF/j/GIkkq9r
-	 e4qC/w0PPvAkfs/RuZPqFsMxQjB3RBTvKfJNlh6sRJYhGyYZF/+zX669cvwR80eIVC
-	 Kgh3XW5kKbvqgayQGb8Oo2cAqvgVLx+rjRENf960hHDUCpo7x5TI/620mTxa0i7aYG
-	 2xmXOQyraIdWA==
+	b=iRyhnMvVFQqG14bLBYKakezWVwNDAIwD6JMOvP4hOVwXZKCdX1ZHoH1fo6q5MO054
+	 WOGpY+41qnmdv3ACPynrWLnBbK2uJRlumO6A1yx2wP+XAJVjHOz6iRFszbO17bHHxB
+	 U4h96CRvjCvcoNNVCygt58UZrhBOddANmPnTtuWOMnGVf+1neJA/kF79LSTDkwJyI8
+	 A4z63F1HuvDgJiAN4PH9ETfENgY7BKcXYHTqKVPlGu9k5wrDG0OHm721F0+yZuOyeS
+	 AXcpK1e/IAYXiZ3yEGH+0LXplHStDd0083kmeigd3XM7MjfTEwZx8D0pAAty6SD1Su
+	 yu6qPIEdrb/Ew==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E6A3F60972;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id EE71C60A6C;
 	Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Gemini DTS updates for v5.14
+Subject: Re: [PATCH] ARM: dts: gemini: add crypto node
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162351421694.27448.7726536325960003501.git-patchwork-notify@kernel.org>
+ <162351421697.27448.587837368238562150.git-patchwork-notify@kernel.org>
 Date: Sat, 12 Jun 2021 16:10:16 +0000
-References: <CACRpkdZWpLAcAStq8dEyGL_d9Bvp-WNPu-2EuJw1eTL4kyvgig@mail.gmail.com>
-In-Reply-To: <CACRpkdZWpLAcAStq8dEyGL_d9Bvp-WNPu-2EuJw1eTL4kyvgig@mail.gmail.com>
+References: <20210611220501.684997-1-linus.walleij@linaro.org>
+In-Reply-To: <20210611220501.684997-1-linus.walleij@linaro.org>
 To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (refs/heads/for-next):
+This patch was applied to soc/soc.git (refs/heads/for-next):
 
-On Tue, 1 Jun 2021 11:44:56 +0200 you wrote:
-> Hi SoC maintainers,
+On Sat, 12 Jun 2021 00:05:01 +0200 you wrote:
+> From: Corentin Labbe <clabbe@baylibre.com>
 > 
-> here are some collected DTS-patches for Gemini destined
-> for the v5.14 kernel.
+> The SL3516 SoC has a crypto offloader IP.
+> This patch adds it on the gemini SoC Device-tree.
 > 
-> Corentin is working on some more really interesting stuff:
-> crypto acceleration and two new boards. If this gets finished
-> in time for v5.14 I will simply send another pull request on
-> top of this one.
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Gemini DTS updates for v5.14
-    https://git.kernel.org/soc/soc/c/b7c8bde730a8
+  - ARM: dts: gemini: add crypto node
+    https://git.kernel.org/soc/soc/c/83107b24c351
 
 You are awesome, thank you!
 --
