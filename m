@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9F3EC49EA3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA4BCC49EA4
 	for <soc@archiver.kernel.org>; Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 5B585613C8; Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4022261248;
+	id 7CC97613DC; Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 5BC03613CC;
 	Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1623514216;
-	bh=lcWvxPNUOnCYfrtBPyHYXb3vLzKufRivMTUZHfzu8vI=;
+	bh=+op6nSCt6O2Jqv0TQfdKRBwHWAAuikUeG9bGTfVGjjw=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=dKTDaGOXEcUu5EJ0DATKvOwYQEqmtxV1O4xW2+e7f2WHOf734E8xRmHAV3V6DAtmq
-	 JpeJ/mRJKlhsjLWQGK/70oyQdjWaUNR4Rfh1048o1hJkfK59jWUcuEq475Yj33XWnD
-	 SWfjnq9qvAZ96pjhEndCE1+0Gw3gp8H5cgm/lKnrp3zFdEkb/E7VbhY6PhS0mMlRRN
-	 oZDvtyaaVqDFy1b2a6NOFMqdopycvfeXqbo7BWfD/DPzQh+Kq02byJJG1zEmSJipSI
-	 ApfPLTyo7LY9u5wrlADFkIqzgIa7UdbL9MbvCRHDaY8Q7IA6fMrrjbdY8WOSG1SUVA
-	 gtU/fvGw7Yzng==
+	b=f4O/orzosKYWm82wV5EUU16YDXIQfqPI1Me5Tn9FolKBpfVw3+t6to6zEkUdgszvU
+	 PE8v+vdt4H5kTvKnqf3s0RDyhkkMp+ADDcqvq1NMkD6sWFiT3HWyl09jfKjcgpyLJi
+	 eynXIFa+GyWCKkaK/N2LPhE4guSLrzsPbw7eQF7FpMyXxSQTeBXh4ZWBpIPQjFk/tD
+	 XMhr2SqiXdwjsG1mT4H2bByjchG+oUXgrt5Lq+OcMwjDHMC2keM9roZBfNJzxY6cUj
+	 +k71gPXvmJTz1tYxY0/24+R4s6d/uFyOEKF2lYH//QkIAmalHLaXMmH69loPlwgPRd
+	 dghWWlHmvwLRg==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3A1CB60972;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 52EA660CE4;
 	Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] arm64: dts: juno: fixes for v5.14
+Subject: Re: [GIT PULL 1/2] ARM: dts: samsung: pull for v5.14
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162351421623.27448.12001695794657319028.git-patchwork-notify@kernel.org>
+ <162351421633.27448.16173532782505081030.git-patchwork-notify@kernel.org>
 Date: Sat, 12 Jun 2021 16:10:16 +0000
-References: <20210611075805.2813712-1-sudeep.holla@arm.com>
-In-Reply-To: <20210611075805.2813712-1-sudeep.holla@arm.com>
-To: Sudeep Holla <Sudeep.Holla@arm.com>
+References: <20210610074055.12474-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210610074055.12474-1-krzysztof.kozlowski@canonical.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -43,19 +43,21 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Fri, 11 Jun 2021 08:58:05 +0100 you wrote:
-> Hi ARM SoC Team,
+On Thu, 10 Jun 2021 09:40:54 +0200 you wrote:
+> Hi,
 > 
-> Please pull !
+> Few DTS changes. I will have slightly later also pulls for ARM64 and defconfig.
 > 
-> Regards,
-> Sudeep
+> Best regards,
+> Krzysztof
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] arm64: dts: juno: fixes for v5.14
-    https://git.kernel.org/soc/soc/c/9bfa3829358f
+  - [GIT,PULL,1/2] ARM: dts: samsung: pull for v5.14
+    https://git.kernel.org/soc/soc/c/523ad4e3490f
+  - [GIT,PULL,2/2] ARM: samsung: mach/soc for v5.14
+    https://git.kernel.org/soc/soc/c/05a3a767667e
 
 You are awesome, thank you!
 --
