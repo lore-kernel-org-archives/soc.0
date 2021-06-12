@@ -6,58 +6,57 @@ X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55DF7C49EBB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84D2DC49EC8
 	for <soc@archiver.kernel.org>; Sat, 12 Jun 2021 16:10:17 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id B0EDE6138C; Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 90FF1613BF;
+	id E76A361411; Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id CD86661407;
 	Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1623514216;
-	bh=++hSc+W+YybCzw4JpuUNPsbz4oRVW0JR+40H90LM1Zw=;
+	bh=wrpIPVPVfp0bf4fQbVpmqiROthfSwBnqc/AQvPh3Qz8=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=TcWSGIMOKmeqGq39QLlYoCGaxjwL4d+JusVQcYxaVyd61lxIx3p988F6BmBEeGyuV
-	 or+idqfUIqMDI6gB2ZJ2XPKVXBAbT6rrS1PgplNRGaAYDSWyjjJVBYlvhnRsse1kQD
-	 5IgjNJ6I8FfuAhaTSkVOnU6WHQE6WWYy62lrMBo+ZbyEU7TDVbIGmbry87OvWXCvm4
-	 R3kpiDxle9Rycl7qlrLhVyMfOyo1thZMO6hY1d0ke5RQuepSlBilKgir9jPmhqELhZ
-	 HFghXJjmvzJcjHhrW9/R4tgbbR0ZnwnCeXYoUmsDO7peWsjBmUSwEwiGN71EJKT/pE
-	 0KEVeTvzQNlkA==
+	b=EwyDEi7MPrG4o2fSqbF2gPx9yKwO0QgPl6HeEvmXRpzxfXYfzZ1B21pUnum370q14
+	 IfYBu/JNfHAO1nmZ4U7q8KiIUzh4g4Pz48eogIDEi9SGge4czfoKbJ3pUOtnJJOws2
+	 t4DdXOEDjiRdAZMShF8gKOmDtAB/gB0cBfPBLZNVC43KFqcGO9dEgRKccAhCDudV+b
+	 tZaPvHy5kVHjSOLkNoY9ksVpqdHqcuWOu8PqcFyNRbhN7xMFKcDfP3hU7Gq4Umvm6i
+	 NqAtIpsMOb3xQKnrtdoxUOGC02NBcXt1dC0nnGM+iLZoEyiBSoFAR7EOoxoIP6/Sc1
+	 sA3U+Lw94lLAA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 807D560A6C;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C4E3E60972;
 	Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 0/2] Renesas ARM SoC updates for v5.14
+Subject: Re: [GIT PULL] soc: amlogic: driver updates for v5.14
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162351421652.27448.9437344986993816799.git-patchwork-notify@kernel.org>
+ <162351421680.27448.11564782064088302952.git-patchwork-notify@kernel.org>
 Date: Sat, 12 Jun 2021 16:10:16 +0000
-References: <cover.1622188833.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1622188833.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+References: <58283600-2d9a-c259-4d80-6915e6e6c79e@baylibre.com>
+In-Reply-To: <58283600-2d9a-c259-4d80-6915e6e6c79e@baylibre.com>
+To: Neil Armstrong <narmstrong@baylibre.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (refs/heads/for-next):
+This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Fri, 28 May 2021 10:30:48 +0200 you wrote:
-> Hi soc folks,
+On Wed, 2 Jun 2021 10:41:46 +0200 you wrote:
+> Hi,
 > 
-> This is my first pull request for the inclusion of Renesas SoC updates
-> for v5.14.
+> Here's a single cosmetic drivers change for v5.14.
 > 
-> It consists of 2 parts:
+> Neil
+> 
+> The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] Renesas ARM defconfig updates for v5.14
-    https://git.kernel.org/soc/soc/c/3f43257e3c06
-  - [GIT,PULL,2/2] Renesas ARM DT updates for v5.14
-    https://git.kernel.org/soc/soc/c/09159b8025e0
+  - [GIT,PULL] soc: amlogic: driver updates for v5.14
+    https://git.kernel.org/soc/soc/c/bcac3fb57a44
 
 You are awesome, thank you!
 --
