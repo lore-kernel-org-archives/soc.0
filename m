@@ -6,62 +6,56 @@ X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D31EFC49EA2
-	for <soc@archiver.kernel.org>; Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F50DC49EA6
+	for <soc@archiver.kernel.org>; Sat, 12 Jun 2021 16:10:17 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 74862613D3; Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 5795E613C5;
+	id A3821613F1; Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 7D384613DE;
 	Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1623514216;
-	bh=OxKseVTY71QRmgWxrfGenJQQAR/SGY8MH1/P4RCEgpU=;
+	bh=BnSS9V+Xil8hspH8fr5C/peqGFS/P3ireIMMti+BSDc=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=HOOVdl5gtHX5iN1X6tM1yXpL3rqAqYafsw8pL62zAQqj5FNASaTnSGdEQVX3AfChs
-	 zwfwXYrNWCwFs0tcSx1fcXFUZvFKhLIste9M2AhLEjfUVPpN4pNNx+Mp9ucUkHUmbC
-	 QwEU+2RTEytwg3Nf/TWLZ1hIs3ZHLqHR5CKmh4AdVz2ZhW/o498qOP43yMcKxJu7l3
-	 JAXUhewNczSU+W0KL0RbiDiLpytM0Y4wa7Qo0pQrP2OZ2hsIlZO8y6uMpqOVcGotci
-	 DjIJm6PDd+S1soGw0rNiyOTWNBJU0cjt15djGPBjjpWSZ62bCDbLBWCNm82OXF+Ktr
-	 wkLBeMRumHLtw==
+	b=QMBeRthRyCK+JzBTNHJX36Yusb3blVzhbDO83/LuVL2Fyb95VWHhjff1w89q8ADjm
+	 jtUiB40oDSz+YtaaFIJveijf0wcTl5c9V5cZnqHsfTtdyoMXkZHz7usgVCjuLt6ExA
+	 M3Z8G5q7tsqcA9RUI30yVE/Q6DrFtLj3WmNUMVzJwmXW0Og9sWAlbd2wG96jSNuSWf
+	 2i2brPh0HGDAJFFmnAl02qcmEJXaiO1vPdE58nYUNS+Gg0ETJZFrjtNrUuAYBy6+r/
+	 s03Zh3VNTg0DyleZtwLGlA2HpgtIoi3iupAFS5exUtXz+qMDmCEj+ZU7U5Snq7aB3Y
+	 vVxfhvyGAEzUw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 420C660CE0;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 76F9060CE0;
 	Sat, 12 Jun 2021 16:10:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 0/4] Renesas ARM SoC updates for v5.14 (take two)
+Subject: Re: [GIT PULL] arm64: defconfig: mediatek updates for v5.14
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162351421626.27448.15439033843507300197.git-patchwork-notify@kernel.org>
+ <162351421648.27448.2807286611855451610.git-patchwork-notify@kernel.org>
 Date: Sat, 12 Jun 2021 16:10:16 +0000
-References: <cover.1623403793.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1623403793.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+References: <ad6f7f4e-7e4d-08b9-8781-71bd78444929@gmail.com>
+In-Reply-To: <ad6f7f4e-7e4d-08b9-8781-71bd78444929@gmail.com>
+To: Matthias Brugger <matthias.bgg@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (refs/heads/for-next):
+This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Fri, 11 Jun 2021 11:47:00 +0200 you wrote:
-> Hi soc folks,
+On Fri, 11 Jun 2021 13:03:52 +0200 you wrote:
+> Hi Arnd and Olof,
 > 
-> This is my second pull request for the inclusion of Renesas SoC updates
-> for v5.14.
+> Please have a look at the defconfig patches for v5.14
 > 
-> It consists of 4 parts:
+> Regards,
+> Matthias
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/4] Renesas ARM defconfig updates for v5.14 (take two)
-    https://git.kernel.org/soc/soc/c/f1b1d76afdc5
-  - [GIT,PULL,2/4] Renesas ARM DT updates for v5.14 (take two)
-    https://git.kernel.org/soc/soc/c/d4dd4699366c
-  - [GIT,PULL,3/4] Renesas driver updates for v5.14
-    https://git.kernel.org/soc/soc/c/ec7f5cff6eff
-  - [GIT,PULL,4/4] Renesas DT binding updates for v5.14
-    https://git.kernel.org/soc/soc/c/a3c52f08ab8f
+  - [GIT,PULL] arm64: defconfig: mediatek updates for v5.14
+    https://git.kernel.org/soc/soc/c/65a40301234e
 
 You are awesome, thank you!
 --
