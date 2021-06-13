@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 680E2C48BDF
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 13 Jun 2021 08:28:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15586C48BDF
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 13 Jun 2021 08:28:23 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2D81361042
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 13 Jun 2021 08:28:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2D81361042
+	by mail.kernel.org (Postfix) with ESMTPS id D0F3961042
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 13 Jun 2021 08:28:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D0F3961042
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:List-Subscribe:List-Help:
+	List-Post:List-Archive:List-Unsubscribe:List-Id:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=5Kr4D6taHwQIC+UIYPuir0lnoldFkAYhg3joZAHn5Dk=; b=I7ti0bD4GzLGZ1
-	cPwiZlcXXeB0bsjt3ojCyA2/o/a64yXolhir6PBZ8yeqXdIbawn0IPF3pncjWQHNDwG47qVgG29aS
-	A6w+tTn64I4yfv0g+mzHI6dr23r8BkjFoEh6ksfmLlm8aA/4ujRpSEguLDKnkxYAZlsbbZALUBh+i
-	JhKB4qRMLATvN2CYVmyWZe41MkThz9cDdZVJG4qnaFNXcczZkMm6Z6Vp4ygHXcXPCTNROiRev1lX+
-	MHwAe6irfWzm6HdoZKjObozwzrh4x4HiNbzpXqNZyPZbPBqAx4VMR9dGYUltM1Jjyq9fUXOeV5tiP
-	OkSvNIKcW/nAJFFF646g==;
+	List-Owner; bh=BOYyB9N5b36SgG23U2YfwVrYnGLoi4GpLe7rgPdqTL0=; b=jmB9rzmRlomJVq
+	9RScyfBS2lLIIJSFXUsy4YajFr4rb0w5vuytGycWMpDhLxRDDzQ65+vAGryWHyg63Aza9UlcoJ/S0
+	sMqGUCTCgnblb8rp4lLdACcWBRWXRblwMh5MevkOo/aVHnvcnvQnZ6TUmMpQtM8zBm5dRmJ5idhV3
+	OU3GZx3bn2hJx5BY4E6C14IPM1n2bznOcyjoFz/z+04kebAOIFIvygzAcoMwE/sED9cUVaJCVXRTj
+	I0Aa3Y0+HBbn7DxX/OE/wyQyCfzmmiAl47osUw+vnzKxv7WMJuHujY3bbi8V0mZdZZY8HyTUmoDeY
+	IG1CWm0cfX/YerEdHPlQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lsLS5-009wV2-OA; Sun, 13 Jun 2021 08:26:41 +0000
+	id 1lsLSG-009wYM-RC; Sun, 13 Jun 2021 08:26:52 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lsLRW-009wPl-Kz
- for linux-arm-kernel@lists.infradead.org; Sun, 13 Jun 2021 08:26:08 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 989C96108D;
- Sun, 13 Jun 2021 08:26:04 +0000 (UTC)
+ id 1lsLRY-009wQ9-Lu
+ for linux-arm-kernel@lists.infradead.org; Sun, 13 Jun 2021 08:26:09 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C30AA61248;
+ Sun, 13 Jun 2021 08:26:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1623572766;
- bh=LSa0htpDryMuUxmpqOuiUQ94owQpQJDkEM1GOeBkRTY=;
+ s=k20201202; t=1623572768;
+ bh=u9Jwpx++SXNrZEdO1Oq8f1ITcbNUJUkJdX08YNK19iU=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=uN0LdZlnVhTcSvUs0RmI5Up0QmIr71Sn5+SJrRWitGVFRFQttvLEteiDREfdj1tKM
- SUU+RTYfVSZ7Cle6ZwnCC8W6MUm+oZf69xe4A9w2uxhAFwLddbj7ST2JweDtVgjj8v
- iBnwRj1YNmQS5ygcGAneGreuo42hkSjzwmSQ2K7gtyu8MiH1ZSbce5qP9Mgq38tz+f
- g9g7NEjyDF7QEwELuLNNUzL6flouRscllC0bY7qLERhUweF2ZQCZeD1BT6m3kUlfIT
- E4cC2B43HC22hedHSHHRtjsdRv262hBwrzM9/iyFy/usDvZSYwjCEX9tfXYjXXACVP
- xV6Jv2FK1gaHA==
+ b=fnqcCvp+9e4U7I+zrSi07JBFuBlvKvZDmE9lL1H61mZCCAklNyH3Iny69islFG3Sn
+ XYQGGYhkdyc+9GyRroPgXv5FCndkBov2+2i6MxwtVCOIi2b6sBcuoUafpz9TFYtspw
+ rOA8OvgXkBZSw/DfB0WtTuA4Q87SdD+PD0EYJU7FIRvDRIVSrWSSEowU4WFbHPuEj/
+ gCzMGsoyJ7G3C1ucCu2CBWkvy6lhlRfMO6eTtNsrNcJq5bLttOzTPUu2aVA+yW8d8A
+ ijdX+CQnB+vlESeXT8RaPz4kSmC7EH0EqBmVAEDkdEgs9Vca3pE9rCC9GoBR2k8XsG
+ Fj1WaQ4+eoKnQ==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -56,16 +56,16 @@ Cc: Shawn Guo <shawnguo@kernel.org>, Fabio Estevam <festevam@gmail.com>,
  Stefan Agner <stefan@agner.ch>, Li Yang <leoyang.li@nxp.com>,
  kernel@pengutronix.de, linux-imx@nxp.com,
  linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 5/6] i.MX arm64 device tree changes for 5.14
-Date: Sun, 13 Jun 2021 16:25:43 +0800
-Message-ID: <20210613082544.16067-5-shawnguo@kernel.org>
+Subject: [GIT PULL 6/6] i.MX defconfig update for 5.14
+Date: Sun, 13 Jun 2021 16:25:44 +0800
+Message-ID: <20210613082544.16067-6-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210613082544.16067-1-shawnguo@kernel.org>
 References: <20210613082544.16067-1-shawnguo@kernel.org>
-MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210613_012606_748722_35D7DA2E 
-X-CRM114-Status: GOOD (  13.41  )
+X-CRM114-CacheID: sfid-20210613_012608_753435_F5AC6372 
+X-CRM114-Status: UNSURE (   4.90  )
+X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -77,95 +77,47 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210613082543.i7M1yCNzK11LdAlFvpxqWkahRX4rsd-2junhRfKPrQI@z>
+Message-ID: <20210613082544.9meII76EuueQb09JOhAjZvnSWp2Be6WfIOm96C3IEVE@z>
 
-VGhlIGZvbGxvd2luZyBjaGFuZ2VzIHNpbmNlIGNvbW1pdCA2ZWZiOTQzYjg2MTZlYzUzYTVlNDQ0
-MTkzZGNjZjFhZjlhZDYyN2I1OgoKICBMaW51eCA1LjEzLXJjMSAoMjAyMS0wNS0wOSAxNDoxNzo0
-NCAtMDcwMCkKCmFyZSBhdmFpbGFibGUgaW4gdGhlIEdpdCByZXBvc2l0b3J5IGF0OgoKICBnaXQ6
-Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc2hhd25ndW8vbGludXgu
-Z2l0IHRhZ3MvaW14LWR0NjQtNS4xNAoKZm9yIHlvdSB0byBmZXRjaCBjaGFuZ2VzIHVwIHRvIDIx
-Y2MxZjIyMmU4OTBmYTk4OWQxMzk1ZTQ3YjE2Nzc3ZmVhNDZlNWY6CgogIGFybTY0OiBkdHM6IGlt
-eDhtbi1ldms6IGRpc2FibGUgb3ZlciBjdXJyZW50IGZvciB1c2IgKDIwMjEtMDYtMTIgMTc6NTk6
-NDMgKzA4MDApCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tCmkuTVggYXJtNjQgZGV2aWNlIHRyZWUgY2hhZ25lcyBmb3IgNS4x
-NDoKCi0gTmV3IGJvYXJkIHN1cHBvcnQ6IGkuTVg4TU0gR2F0ZXdvcmtzIEdXNzkwMSBib2FyZC4K
-LSBBZGQgU1BCQSBidXMgZGVzY3JpcHRpb24gZm9yIGkuTVg4TU4gYW5kIGkuTVg4TU0uCi0gQSBz
-ZXJpZXMgb2YgdXBkYXRlIG9uIGlteDhtcS1uaXRyb2dlbiBib2FyZCB0byBhZGQgVVNCIE9URy9I
-b3N0IGFuZAogIExUODkxMiBNSVBJLURTSSB0byBIRE1JIHN1cHBvcnQuCi0gQ29ycmVjdCBlbmV0
-IGNsb2NrIGRlc2NyaXB0aW9uIGZvciBpLk1YOCBDb25uZWN0aW9uIFN1YnN5c3RlbS4KLSBBIGNv
-dXBsZSBvZiBwYXRjaGVzIGZyb20gSGVpa28gU2Nob2NoZXIgdG8gYWRkIEZsZXhTUEkgZGV2aWNl
-IGZvcgogIGkuTVg4TVAgU29DIGFuZCBlbmFibGUgU1BJIE5PUiBGbGFzaCBzdXBwb3J0IG9uIGlt
-eDhtcC1waHljb3JlLXNvbS4KLSBSZW1vdmUgdGhlIHJlZmVyZW5jZSB0byBhdWRpbyBJUEcgY2xv
-Y2sgb24gaS5NWDhNUC4KLSBFbmFibGUgRVFPUyBFdGhlcm5ldCBhbmQgUE1JQyBkZXZpY2Ugc3Vw
-cG9ydCBmb3IgaW14OG1wLWV2ay4KLSBEaXNhYmxlIFVTQiBvdmVyLWN1cnJlbnQgb24gaW14OG1t
-LWV2ayBhbmQgaW14OG1uLWV2ay4KLSBBZGQgZG1hLXJhbmdlcyBkZXNjcmlwdGlvbiBmb3IgaS5N
-WDhNTSBhbmQgaS5NWDhNTiBTb0MuCi0gQWRkIFBDSWUgY2xvY2sgZGVzY3JpcHRpb24gZm9yIGku
-TVg4TVEgU29DLgotIEVuYWJsZSBQQ0llIHN1cHBvcnQgb24gZnJlZXdheSBib2FyZC4KLSBFbmFi
-bGUgT1BURUUgc3VwcG9ydCBvbiBsczEwMjhhLXJkYiBib2FyZC4KCi0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KQWRhbSBGb3Jk
-ICgzKToKICAgICAgYXJtNjQ6IGR0czogaW14OG1uOiBBZGQgc3BiYTEgYnVzCiAgICAgIGFybTY0
-OiBkdHM6IGlteDhtbTogQWRkIHNwYmExIGFuZCBzcGJhMiBidXNlcwogICAgICBhcm02NDogZHRz
-OiBpbXg4bW4tYmVhY29uLXNvbTogQXNzaWduIFBNSUMgY2xvY2sKCkFkcmllbiBHcmFzc2VpbiAo
-Myk6CiAgICAgIGFybTY0OiBkdHM6IGlteDhtcS1uaXRyb2dlbjogYWRkIFVTQiBPVEcgc3VwcG9y
-dAogICAgICBhcm02NDogZHRzOiBpbXg4bXEtbml0cm9nZW46IGFkZCBVU0IgSE9TVCBzdXBwb3J0
-CiAgICAgIGFybTY0OiBkdHM6IGlteDhtcS1uaXRyb2dlbjogYWRkIGx0ODkxMiBNSVBJLURTSSB0
-byBIRE1JCgpEb25nIEFpc2hlbmcgKDEpOgogICAgICBhcm02NDogZHRzOiBpbXg4OiBjb25uOiBm
-aXggZW5ldCBjbG9jayBzZXR0aW5nCgpIZWlrbyBTY2hvY2hlciAoMik6CiAgICAgIGFybTY0OiBk
-dHM6IGlteDhtcDogYWRkIGZsZXhzcGkgbm9kZQogICAgICBhcm02NDogZHRzOiBpbXg4bXAtcGh5
-Y29yZS1zb206IGVuYWJsZSBzcGkgbm9yCgpKYWNreSBCYWkgKDEpOgogICAgICBhcm02NDogZHRz
-OiBpbXg4bXA6IFJlbW92ZSB0aGUgcmVmZXJlbmNlIHRvIGF1ZGlvIGlwZyBjbG9jayBvbiBpbXg4
-bXAKCkpvYWtpbSBaaGFuZyAoMSk6CiAgICAgIGFybTY0OiBkdHM6IGlteDhtcC1ldms6IGVuYWJs
-ZSBFUU9TIGV0aGVybmV0CgpLb3JuZWwgRHVsZWJhICgxKToKICAgICAgYXJtNjQ6IGR0czogZnNs
-LWxzMTAyOGE6IENvcnJlY3QgRUNBTSBQQ0lFIHdpbmRvdyByYW5nZXMKCkxpIEp1biAoMik6CiAg
-ICAgIGFybTY0OiBkdHM6IGlteDhtbS1ldms6IGRpc2FibGUgb3ZlciBjdXJyZW50IGZvciB1c2Ix
-CiAgICAgIGFybTY0OiBkdHM6IGlteDhtbi1ldms6IGRpc2FibGUgb3ZlciBjdXJyZW50IGZvciB1
-c2IKCkx1Y2FzIFN0YWNoICgzKToKICAgICAgYXJtNjQ6IGR0czogaW14OG1tOiBzcGVjaWZ5IGRt
-YS1yYW5nZXMKICAgICAgYXJtNjQ6IGR0czogaW14OG1uOiBzcGVjaWZ5IGRtYS1yYW5nZXMKICAg
-ICAgYXJtNjQ6IGR0czogaW14OG1xOiBhc3NpZ24gUENJZSBjbG9ja3MKCk1pYW4gWW91c2FmIEth
-dWthYiAoMik6CiAgICAgIGFybTY0OiBkdHM6IGxzMTAxMmE6IGVuYWJsZSBQQ0llIG9uIGZyZWV3
-YXkgYm9hcmQKICAgICAgYXJtNjQ6IGR0czogbHMyMDh4YTogcmVtb3ZlIGJ1cy1udW0gZnJvbSBk
-c3BpIG5vZGUKClJpY2hhcmQgWmh1ICgxKToKICAgICAgYXJtNjQ6IGR0czogaW14OG1xLWV2azog
-YWRkIG9uZSByZWd1bGF0b3IgdXNlZCB0byBwb3dlciB1cCBwY2llIHBoeQoKU2FoaWwgTWFsaG90
-cmEgKDEpOgogICAgICBhcm02NDogZHRzOiBsczEwMjhhLXJkYjogZW5hYmxlIG9wdGVlIG5vZGUK
-ClRpbSBIYXJ2ZXkgKDEpOgogICAgICBhcm02NDogZHRzOiBpbXg6IEFkZCBpLm14OG1tIEdhdGV3
-b3JrcyBndzc5MDEgZHRzIHN1cHBvcnQKClV3ZSBLbGVpbmUtS8O2bmlnICgxKToKICAgICAgYXJt
-NjQ6IGR0czogaW14OG1wLWV2azogQWRkIFBNSUMgZGV2aWNlCgpaaGVuIExlaSAoMSk6CiAgICAg
-IGFybTY0OiBkdHM6IGZyZWVzY2FsZTogU2VwYXJhdGUgZWFjaCBncm91cCBvZiBkYXRhIGluIHRo
-ZSBwcm9wZXJ0eSAncmVnJwoKIGFyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL01ha2VmaWxl
-ICAgICAgICAgICAgIHwgICAgMSArCiBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9mc2wt
-bHMxMDEyYS1mcnd5LmR0cyB8ICAgIDQgKwogYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUv
-ZnNsLWxzMTAxMmEuZHRzaSAgICAgfCAgIDE0ICstCiBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVz
-Y2FsZS9mc2wtbHMxMDI4YS1yZGIuZHRzICB8ICAgIDQgKwogYXJjaC9hcm02NC9ib290L2R0cy9m
-cmVlc2NhbGUvZnNsLWxzMTAyOGEuZHRzaSAgICAgfCAgIDI0ICstCiBhcmNoL2FybTY0L2Jvb3Qv
-ZHRzL2ZyZWVzY2FsZS9mc2wtbHMxMDQzYS5kdHNpICAgICB8ICAgMTIgKy0KIGFyY2gvYXJtNjQv
-Ym9vdC9kdHMvZnJlZXNjYWxlL2ZzbC1sczEwNDZhLmR0c2kgICAgIHwgICAyNCArLQogYXJjaC9h
-cm02NC9ib290L2R0cy9mcmVlc2NhbGUvZnNsLWxzMTA4OGEuZHRzaSAgICAgfCAgIDI0ICstCiBh
-cmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9mc2wtbHMyMDgwYS5kdHNpICAgICB8ICAgMTYg
-Ky0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL2ZzbC1sczIwODhhLmR0c2kgICAgIHwg
-ICAxNiArLQogYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUvZnNsLWxzMjA4eGEuZHRzaSAg
-ICAgfCAgICAxIC0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL2ZzbC1seDIxNjBhLmR0
-c2kgICAgIHwgICAyNCArLQogYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OC1zcy1j
-b25uLmR0c2kgICAgfCAgIDUwICstCiBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4
-bW0tZXZrLmR0c2kgICAgICB8ICAgIDEgKwogLi4uL2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4bW0t
-dmVuaWNlLWd3NzkwMS5kdHMgICAgfCAxMDE5ICsrKysrKysrKysrKysrKysrKysrCiBhcmNoL2Fy
-bTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4bW0uZHRzaSAgICAgICAgICB8ICAzNjMgKysrLS0t
-LQogLi4uL2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4bW4tYmVhY29uLXNvbS5kdHNpICAgICAgfCAg
-ICAzICsKIGFyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL2lteDhtbi1ldmsuZHRzaSAgICAg
-IHwgICAgMSArCiBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4bW4uZHRzaSAgICAg
-ICAgICB8ICAxNDcgKy0tCiBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4bXAtZXZr
-LmR0cyAgICAgICB8ICAxMzkgKysrCiAuLi4vYm9vdC9kdHMvZnJlZXNjYWxlL2lteDhtcC1waHlj
-b3JlLXNvbS5kdHNpICAgICB8ICAgMjUgKwogYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUv
-aW14OG1wLmR0c2kgICAgICAgICAgfCAgIDE4ICstCiBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVz
-Y2FsZS9pbXg4bXEtZXZrLmR0cyAgICAgICB8ICAgIDEgKwogYXJjaC9hcm02NC9ib290L2R0cy9m
-cmVlc2NhbGUvaW14OG1xLW5pdHJvZ2VuLmR0cyAgfCAgMTgyICsrKysKIGFyY2gvYXJtNjQvYm9v
-dC9kdHMvZnJlZXNjYWxlL2lteDhtcS5kdHNpICAgICAgICAgIHwgICAxNiArCiAyNSBmaWxlcyBj
-aGFuZ2VkLCAxNzg5IGluc2VydGlvbnMoKyksIDM0MCBkZWxldGlvbnMoLSkKIGNyZWF0ZSBtb2Rl
-IDEwMDY0NCBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4bW0tdmVuaWNlLWd3Nzkw
-MS5kdHMKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmxp
-bnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0CmxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFk
-ZWFkLm9yZwpodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4
-LWFybS1rZXJuZWwK
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+
+  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-defconfig-5.14
+
+for you to fetch changes up to 6252a42b0fd70b03aa17c58d218dcabd863cc02a:
+
+  ARM: imx_v6_v7_defconfig: Select the Wifi ath10k sdio driver (2021-06-12 15:42:40 +0800)
+
+----------------------------------------------------------------
+i.MX defconfig update for 5.14:
+
+- Enable LT8912B DRM bridge and Layerscape EDAC driver support in arm64
+  defconfig.
+- Enable WiFi ath10k SDIO driver in imx_v6_v7_defconfig.
+
+----------------------------------------------------------------
+Adrien Grassein (1):
+      arm64: defconfig: Enable LT8912B DRM bridge driver
+
+Fabio Estevam (1):
+      ARM: imx_v6_v7_defconfig: Select the Wifi ath10k sdio driver
+
+Michael Walle (1):
+      arm64: defconfig: enable Layerscape EDAC driver
+
+ arch/arm/configs/imx_v6_v7_defconfig | 2 ++
+ arch/arm64/configs/defconfig         | 2 ++
+ 2 files changed, 4 insertions(+)
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
