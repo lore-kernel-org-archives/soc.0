@@ -1,142 +1,104 @@
-Return-Path: <SRS0=VOD1=LH=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=k97u=LH=oracle.com=santosh.shilimkar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 322E1C48BCF
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 13 Jun 2021 02:10:55 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13D38C48BDF
+	for <soc@archiver.kernel.org>; Sun, 13 Jun 2021 06:01:03 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 9081A611ED; Sun, 13 Jun 2021 06:01:02 +0000 (UTC)
+Received: from aserp2120.oracle.com (aserp2120.oracle.com [141.146.126.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D9B0561105
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 13 Jun 2021 02:10:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D9B0561105
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:
-	Message-ID:From:References:Cc:To:Subject:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Owner;
-	bh=acMAeKIAACWHwDLOzgEIb4E+YiQUgQGthOmGYihzi5A=; b=2TtC0mq9igZe+R6HPbQwnT/54/
-	Mw03qrCL+ZCyFwXxTpMYGhxOg4gQmd/6/UxVd+1W8QfjE5yX/8w4ou0j4UDYn7kaBMJ/lT07fk057
-	/FzCa7sXvqjl/hEcS+kzmXAfvOyUQUFzXamDBjJrOR79sTqxpe+Fy4BQpFd+ciJrg1ZU/gfZPZpSZ
-	CnE9l37Zf8LI9MIV0AU8kTZQveEecbeWkxn4jTJWp5CuQEk5J8AHFwjjiAWoFFKnlR8bJZ0jjHJm0
-	xkju2E6hN7UtvCnLu1DXJB179i4pLDZ6FFS6kc533yOhin0OXh3Q09slu+7z4bf9uyLDPT3YliUvv
-	4mAJbQbw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lsFWL-009Srl-GP; Sun, 13 Jun 2021 02:06:41 +0000
-Received: from mail-pj1-f53.google.com ([209.85.216.53])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lsFWH-009SoE-Ja
- for linux-arm-kernel@lists.infradead.org; Sun, 13 Jun 2021 02:06:39 +0000
-Received: by mail-pj1-f53.google.com with SMTP id
- m13-20020a17090b068db02901656cc93a75so8015642pjz.3
- for <linux-arm-kernel@lists.infradead.org>;
- Sat, 12 Jun 2021 19:04:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=subject:to:cc:references:from:message-id:date:user-agent
- :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=GXniuSw9ZMF00jtVBbwWdNTHC0JQ2hlRGU6EisXwcVc=;
- b=XtYIKlxgbuwqIrJ/SFXLecxdONWGKycr4SZNgxgEOfoVsTwcZATs5qOSeWb0ICjbrW
- 0oFCIPP9x1a0Z0vTLis+8ojoMy1z7UkikPWNNrnavkV44YdqvGOLwAA+bIswzRHP1cTd
- goMPk+JGyp/pI+ycSs5Nhf41ex50VxmQOdUGOFwm4EVJ/BKnZ2RsETtcXM17LUKS+6zq
- CPO//54zmzJqjFg6i7Ni1EX+EB4HmvB1+ZX341+aC1S2u6exaWa4HbIMbeQxUqJwagGH
- Bm1L5L5fFdAoYpcXIgX19X6j5nRWPV3ZNKgGhPf8ehCkzu6UD+cC11yPAgIkuF/UznSh
- 0TDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:cc:references:from:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=GXniuSw9ZMF00jtVBbwWdNTHC0JQ2hlRGU6EisXwcVc=;
- b=N5LFTPfNy5gplSGpocEuL75ogkgqht0x8leut6Q4ZenqkeVF7m95x9ZUw+Ptrnslo2
- VcJwR/KpE5+F/mQitktG5z4FTaV3ioOknMfHCx+JfDyq4J9+/ckLf+Wr36Xuz2rnMa8y
- EVm0Q0UadEwttSbAoTqo8f+o6upMkK3VCkT06sTk606dpbRct5I74y69LTWxrrWHvMwN
- ij1cMVaywcOJKKlLEhH7qnjE8vcumb0oxdNhZiG07XCj5jaYxOvMwbFfP6H9n06jikFz
- T1Uu/B/Eak0gRRHhbbuAPAtniv+Hf57y2Bxo502bp8R7mz9o57Lw833hAOW6wCL2AW2W
- 8kNg==
-X-Gm-Message-State: AOAM532dWSTLYZ1XQTVa0l+asVD+rVENbSdXk9hOLUm01N7oYa7ZubrY
- OfMVtNp7ZOyaKkpWLByrssJCJzrjUvA=
-X-Google-Smtp-Source: ABdhPJzZxqHRGgsczR/Ffu5hOfnCDw/t60KeaFg1sev/yKbBqB1gL39zuW+KBj84curnuugQKMeWKw==
-X-Received: by 2002:a17:90a:b94c:: with SMTP id
- f12mr12110709pjw.32.1623549812731; 
- Sat, 12 Jun 2021 19:03:32 -0700 (PDT)
-Received: from [10.230.29.202] ([192.19.223.252])
- by smtp.gmail.com with ESMTPSA id b23sm8444278pfi.34.2021.06.12.19.03.29
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 12 Jun 2021 19:03:31 -0700 (PDT)
-Subject: Re: [PATCH v2 3/5] ARM: dts: NSP: Add common bindings for MX64/MX65
-To: Matthew Hagan <mnhagan88@gmail.com>, Vladimir Oltean <olteanv@gmail.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 3A187611CC;
+	Sun, 13 Jun 2021 06:01:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3A187611CC
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=oracle.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=santosh.shilimkar@oracle.com
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+	by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 15D5tdDB145614;
+	Sun, 13 Jun 2021 06:00:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=lrDHu/B7kRhqXFBy0o1juB+Fx+ejQRdmlkOp47EaafU=;
+ b=lwTtw9Q5e0OOKQxMhoYnqr1+XHjMJ7uAhn0ZGnlWw+OdQsq+FIvXS9wh2KOCmEG4KkVH
+ 1zVNqHaMA8aLbUPQcDpFtOIzGa8vjEpjB1RzlVAhIPltSOVL91vyz/ybLxSGeGJddJWi
+ sCmuzSQ4wGitqqS78Eb7m8ILPMBwjtJAXhSe5kkAUP4VbsLR0MqDC8utgh8lRD5S/IPN
+ HaMxb7HRJNZTzQrAFeIKMz44vdiIlGp3Kle6UTDU+CQr8OOgFNGCsra4jWnrgwPQnOH5
+ 9f19MlWj+o25gLuLOEaGzmyXrTUqx/E9TcIqaRH0/FBSwgY4t7Yzp2k5zNkBpI++ehOw aQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+	by aserp2120.oracle.com with ESMTP id 394mvn9dt3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 13 Jun 2021 06:00:57 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+	by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 15D5snRB177468;
+	Sun, 13 Jun 2021 06:00:57 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by aserp3020.oracle.com with ESMTP id 394mr3y2r3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 13 Jun 2021 06:00:57 +0000
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
+	by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 15D60u06007204;
+	Sun, 13 Jun 2021 06:00:56 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+	by aserp3020.oracle.com with ESMTP id 394mr3y2pq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 13 Jun 2021 06:00:56 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+	by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 15D60jqG009234;
+	Sun, 13 Jun 2021 06:00:45 GMT
+Received: from localhost.localdomain (/10.159.245.252)
+	by default (Oracle Beehive Gateway v4.0)
+	with ESMTP ; Sun, 13 Jun 2021 06:00:44 +0000
+From: Santosh Shilimkar <santosh.shilimkar@oracle.com>
+To: arm@kernel.org, arnd@arndb.de, olof@lixom.net
 List-Id: <soc.lore.kernel.org>
-Cc: Florian Fainelli <f.fainelli@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
- Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- bcm-kernel-feedback-list@broadcom.com, Sam Ravnborg <sam@ravnborg.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Viresh Kumar <viresh.kumar@linaro.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20210610232727.1383117-1-mnhagan88@gmail.com>
- <20210610232727.1383117-4-mnhagan88@gmail.com>
- <20210611203031.fj3g32o7kgupgzjy@skbuf>
- <0f3e81be-e99a-41fe-6898-42c4d25b21be@gmail.com>
-From: Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <670e1397-1b90-ca8d-c161-6a4c48d6bff4@gmail.com>
-Date: Sat, 12 Jun 2021 19:03:29 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.10.2
-MIME-Version: 1.0
-In-Reply-To: <0f3e81be-e99a-41fe-6898-42c4d25b21be@gmail.com>
-Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210612_190637_672757_EAFF8B8E 
-X-CRM114-Status: GOOD (  15.30  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210613020329.R_IGW7gCEeIbkcOqjoRbuzLH-1dGBytmx4xJQWuMAIY@z>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        santosh.shilimkar@oracle.com, soc@kernel.org
+Subject: [GIT PULL 1/2] ARM: DTS: Keystone K2G cleanup for v5.13
+Date: Sat, 12 Jun 2021 23:00:20 -0700
+Message-Id: <1623564020-9958-1-git-send-email-santosh.shilimkar@oracle.com>
+X-Mailer: git-send-email 1.9.1
+X-Proofpoint-ORIG-GUID: qnOH2JPI7zgfoKjMI5Lv8xD6DffMrukR
+X-Proofpoint-GUID: qnOH2JPI7zgfoKjMI5Lv8xD6DffMrukR
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10013 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ priorityscore=1501 clxscore=1011 mlxlogscore=904 phishscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106130045
 
-CgpPbiA2LzEyLzIwMjEgNDoxNCBQTSwgTWF0dGhldyBIYWdhbiB3cm90ZToKW3NuaXBdCj4+PiAr
-CXB3bS1sZWRzIHsKPj4+ICsJCWNvbXBhdGlibGUgPSAicHdtLWxlZHMiOwo+Pj4gKwo+Pj4gKwkJ
-cmVkIHsKPj4+ICsJCQlsYWJlbCA9ICJyZWQ6bGVkIjsKPj4+ICsJCQlwd21zID0gPCZwd20gMSA1
-MDAwMD47Cj4+PiArCQl9Owo+Pj4gKwo+Pj4gKwkJZ3JlZW4gewo+Pj4gKwkJCWxhYmVsID0gImdy
-ZWVuOmxlZCI7Cj4+PiArCQkJcHdtcyA9IDwmcHdtIDIgNTAwMDA+Owo+Pj4gKwkJfTsKPj4+ICsK
-Pj4+ICsJCWJsdWUgewo+Pj4gKwkJCWxhYmVsID0gImJsdWU6bGVkIjsKPj4+ICsJCQlwd21zID0g
-PCZwd20gMyA1MDAwMD47Cj4+PiArCQl9Owo+Pj4gKwl9OwoKW3NuaXBdCgo+PiBXaGF0IGlzIHRo
-ZSByZWFzb24gZm9yIG92ZXJyaWRpbmcgdGhpcyB0byAyPwo+IAo+IEkgY2FuJ3QgcHJvdmlkZSBh
-biBleHBsYW5hdGlvbiBvdGhlciB0aGFuIHRoYXQgaXQgb25seSB3b3JrcyBhdCAyLgo+IAo+IFdo
-ZW4gc2V0IHRvIDMgSSBnZXQgdGhlIGZvbGxvd2luZzoKPiAKPiBbwqDCoMKgIDAuNzg0MDUxXSBP
-RjogL3B3bS1sZWRzL3JlZDogI3B3bS1jZWxscyA9IDMgZm91bmQgLTEKPiBbwqDCoMKgIDAuNzg5
-MjAxXSBvZl9wd21fZ2V0KCk6IGNhbid0IHBhcnNlICJwd21zIiBwcm9wZXJ0eQo+IFvCoMKgwqAg
-MC43OTQyOTVdIGxlZHNfcHdtIHB3bS1sZWRzOiBlcnJvciAtRUlOVkFMOiB1bmFibGUgdG8gcmVx
-dWVzdCBQV00gZm9yIHJlZDpsZWQKPiBbwqDCoMKgIDAuODAxNjI4XSBsZWRzX3B3bTogcHJvYmUg
-b2YgcHdtLWxlZHMgZmFpbGVkIHdpdGggZXJyb3IgLTIyCgpTdHJhbmdlIGJlY2F1c2Ugd2l0aCBh
-ICNwd20tY2VsbHMgdmFsdWUgb2YgMywgb2ZfcHdtX3hsYXRlX3dpdGhfZmxhZ3MoKQp3b3VsZCB0
-cmVhdCB0aGUgZmxhZ3MgYXMgb3B0aW9uYWwgc28gdGhlIHdheSB5b3UgaGF2ZSBwdXQgaXQgbG9v
-a3MKY29ycmVjdCB0byBtZS4gSSBhbSBub3Qgc3VyZSB3aGF0IHRoZSBjaGFubmVsIHN1Yi1ub2Rl
-cyBhcmUgc3VwcG9zZWQgdG8KZG8sIHRoZXkgZG8gbm90IGFwcGVhciB0byBiZSBkb2N1bWVudGVk
-IHByb3BlcnRpZXMgb3IgcGFyc2VkIGJ5IHRoZSBQV00KY29yZT8KCklzIHlvdXIgRGV2aWNlIFRy
-ZWUgcG9zc2libHkgY29ycnVwdGVkIGhlcmU/Ci0tIApGbG9yaWFuCgpfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsaW51eC1hcm0ta2VybmVsIG1haWxpbmcg
-bGlzdApsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcKaHR0cDovL2xpc3RzLmlu
-ZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51eC1hcm0ta2VybmVsCg==
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+
+  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ssantosh/linux-keystone.git tags/keystone_dts_for_5.13
+
+for you to fetch changes up to 0b5194dec85b9f3971900129f9a3584a6cb5918d:
+
+  ARM: dts: keystone: k2g-evm: Move audio oscillator assigned clock to mcasp (2021-06-04 13:32:47 -0700)
+
+----------------------------------------------------------------
+ARM: DTS: Keystone K2G cleanup for v5.13
+
+  - Rename message manager node
+  - Rename the TI-SCI node and clock
+  - assign clock to McAsp
+
+----------------------------------------------------------------
+Nishanth Menon (4):
+      ARM: dts: keystone: k2g: Rename message-manager node
+      ARM: dts: keystone: k2g: Rename the TI-SCI node
+      ARM: dts: keystone: k2g: Rename the TI-SCI clocks node name
+      ARM: dts: keystone: k2g-evm: Move audio oscillator assigned clock to mcasp
+
+ arch/arm/boot/dts/keystone-k2g-evm.dts | 11 +++--------
+ arch/arm/boot/dts/keystone-k2g.dtsi    |  6 +++---
+ 2 files changed, 6 insertions(+), 11 deletions(-)
