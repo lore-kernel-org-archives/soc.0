@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 596C2C48BDF
-	for <soc@archiver.kernel.org>; Sun, 13 Jun 2021 08:25:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53285C48BDF
+	for <soc@archiver.kernel.org>; Sun, 13 Jun 2021 08:26:00 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id DB62F61248; Sun, 13 Jun 2021 08:25:57 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 268136120E;
-	Sun, 13 Jun 2021 08:25:55 +0000 (UTC)
+	id 0F26C6124C; Sun, 13 Jun 2021 08:26:00 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 32AA06108D;
+	Sun, 13 Jun 2021 08:25:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1623572757;
-	bh=S22NKWmIySv0C1XXeyvBtUZxb6Y71pYcQkpVQR4QzpE=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=m51NhEC31jb+X43u/ZvdjFrGQVSymt/aiUbl8/K9gAWEGJGCvDWvU0hsSBQGMpCj+
-	 u4N9w7/ZAt6t4w+CvnUop1lb1JM34+yST9tVpggU2NEsBEClOR+fhI38A+VkPvmC/i
-	 CclUlsSAorbFjASCDcVXDrSQF9YMAk/sX03K8Im9UY42YeIgcCHZJlVwHbjXWTHHf9
-	 xbB9NWNyj+2ZPschG90PR1UIRua8cSj2xahbjrC3mTCwhOnBdHenFdFXKZ4OJsWnkZ
-	 K4M0dFEfd1fGksh0SYntNFjbk2VSc2vwjt/m9Rvlxoqps397t/j7wMKy0EKTUg1UT7
-	 Wr+398JAX6gnQ==
+	s=k20201202; t=1623572760;
+	bh=wgVmKZtvUaEb+eyfGekTv3BJ91tsf33aH/xpOr0h88Q=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=OI9l+9Risxyr2d3nYy/yXNipznTSwyVK+tC84zejucqnoOAhMHplzdkfdAzMTCR99
+	 oUqm79XUgZFKrTtkOCng0RwrKtJXB3liXbAVVs63773+rlq4NnK0zdEzb9+G3yA1Kq
+	 AZT0Doo9TdiVV7ubr1MkOVvOVo3mYl/X1gqm8bjlVSprIUTrL9+tMiww8B5kyKpEgE
+	 EbaCIPQvFOXkoHNqpyQ4jz6JcWXxX7DVmiPDhH2q77hU3g6ctpThxztaKiGST66N0Q
+	 FVeDFxmsC7c5KQG3b9jXCt41xbHMoLolGid0U/mQBF6tSFonafgAQOgycwdsI5yW5R
+	 ZZmcGuS4UO4+A==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -34,10 +34,15 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/6] i.MX drivers update for 5.14
-Date: Sun, 13 Jun 2021 16:25:39 +0800
-Message-Id: <20210613082544.16067-1-shawnguo@kernel.org>
+Subject: [GIT PULL 2/6] i.MX SoC changes for 5.14
+Date: Sun, 13 Jun 2021 16:25:40 +0800
+Message-Id: <20210613082544.16067-2-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210613082544.16067-1-shawnguo@kernel.org>
+References: <20210613082544.16067-1-shawnguo@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
@@ -45,45 +50,55 @@ The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-5.14
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-5.14
 
-for you to fetch changes up to 2a53b9d47b13ae8816ce5a7e5adeb77009d2ca4d:
+for you to fetch changes up to e34645f45805d8308866de7b69f117f554605bb6:
 
-  soc: imx: gpcv2: add support for i.MX8MN power domains (2021-06-12 11:51:28 +0800)
-
-----------------------------------------------------------------
-i.MX drivers update for 5.14:
-
-- A patch series from Lucas Stach and Peng Fan adding i.MX8MM power
-  domains support into i.MX GPCv2 driver.
-- A couple of patches from Adam Ford adding i.MX8MN power domains on top
-  of i.MX8MM power domain support.
+  ARM: imx: add smp support for imx7d (2021-06-12 12:02:57 +0800)
 
 ----------------------------------------------------------------
-Adam Ford (2):
-      dt-bindings: add defines for i.MX8MN power domains
-      soc: imx: gpcv2: add support for i.MX8MN power domains
+i.MX SoC changes for 5.14:
 
-Lucas Stach (11):
-      soc: imx: gpcv2: move to more ideomatic error handling in probe
-      soc: imx: gpcv2: move domain mapping to domain driver probe
-      soc: imx: gpcv2: switch to clk_bulk_* API
-      soc: imx: gpcv2: split power up and power down sequence control
-      soc: imx: gpcv2: wait for ADB400 handshake
-      soc: imx: gpcv2: add runtime PM support for power-domains
-      soc: imx: gpcv2: allow domains without power-sequence control
-      soc: imx: gpcv2: add support for optional resets
-      dt-bindings: power: add defines for i.MX8MM power domains
-      soc: imx: gpcv2: add support for i.MX8MM power domains
-      soc: imx: gpcv2: Add support for missing i.MX8MM VPU/DISPMIX power domains
+- Add SMP support for i.MX7D, as there are i.MX7D devices running in
+  field with U-Boot that doesn't support PSCI.
+- Fix imx5_cpu_suspend_info reference in i.MX5 PM code comments.
+- Add SoC ID initialization for i.MX50.
+- Drop unnecessary of_platform_default_populate() call from i.MX6Q
+  .init_machine hook.
+- A series from Oleksij Rempel to remove most of the i.MX6/7 board
+  specific PHY fixups.
 
-Peng Fan (1):
-      soc: imx: gpcv2: move reset assert after requesting domain power up
+----------------------------------------------------------------
+Anson Huang (1):
+      ARM: imx: add smp support for imx7d
 
- .../devicetree/bindings/power/fsl,imx-gpcv2.yaml   |   3 +
- drivers/soc/imx/gpcv2.c                            | 634 +++++++++++++++++----
- include/dt-bindings/power/imx8mm-power.h           |  22 +
- include/dt-bindings/power/imx8mn-power.h           |  15 +
- 4 files changed, 559 insertions(+), 115 deletions(-)
- create mode 100644 include/dt-bindings/power/imx8mm-power.h
- create mode 100644 include/dt-bindings/power/imx8mn-power.h
+Jonathan Neuschäfer (2):
+      ARM: imx: pm-imx5: Fix references to imx5_cpu_suspend_info
+      ARM: imx: Initialize SoC ID on i.MX50
+
+Marco Felsch (1):
+      ARM: imx6q: drop of_platform_default_populate() from init_machine
+
+Oleksij Rempel (7):
+      ARM: imx6q: remove PHY fixup for KSZ9031
+      ARM: imx6q: remove part of ar8031_phy_fixup()
+      ARM: imx6q: remove BMCR_PDOWN handler in ar8035_phy_fixup()
+      ARM: imx6q: remove clk-out fixup for the Atheros AR8031 and AR8035 PHYs
+      ARM: imx6q: remove Atheros AR8035 SmartEEE fixup
+      ARM: imx6sx: remove Atheros AR8031 PHY fixup
+      ARM: imx7d: remove Atheros AR8031 PHY fixup
+
+ arch/arm/mach-imx/Makefile        |   2 +-
+ arch/arm/mach-imx/common.h        |   3 ++
+ arch/arm/mach-imx/headsmp.S       |   9 ++++
+ arch/arm/mach-imx/hotplug.c       |   3 ++
+ arch/arm/mach-imx/mach-imx50.c    |   7 +++
+ arch/arm/mach-imx/mach-imx6q.c    |  88 ---------------------------------
+ arch/arm/mach-imx/mach-imx6sx.c   |  26 ----------
+ arch/arm/mach-imx/mach-imx7d.c    |  25 +---------
+ arch/arm/mach-imx/platsmp.c       |  26 ++++++++++
+ arch/arm/mach-imx/src.c           | 101 ++++++++++++++++++++++++++++++++++----
+ arch/arm/mach-imx/suspend-imx53.S |   4 +-
+ drivers/soc/imx/soc-imx.c         |   3 ++
+ include/soc/imx/cpu.h             |   1 +
+ 13 files changed, 149 insertions(+), 149 deletions(-)
