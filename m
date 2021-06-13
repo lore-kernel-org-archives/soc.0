@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53285C48BDF
-	for <soc@archiver.kernel.org>; Sun, 13 Jun 2021 08:26:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45ECBC48BDF
+	for <soc@archiver.kernel.org>; Sun, 13 Jun 2021 08:26:02 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 0F26C6124C; Sun, 13 Jun 2021 08:26:00 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 32AA06108D;
-	Sun, 13 Jun 2021 08:25:58 +0000 (UTC)
+	id 1A3D561279; Sun, 13 Jun 2021 08:26:02 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5FE706124B;
+	Sun, 13 Jun 2021 08:26:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1623572760;
-	bh=wgVmKZtvUaEb+eyfGekTv3BJ91tsf33aH/xpOr0h88Q=;
+	s=k20201202; t=1623572762;
+	bh=jJ0NwJa/BMrRk20HsOC+mQpr9w+f7M7WNwTEQd0hEek=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OI9l+9Risxyr2d3nYy/yXNipznTSwyVK+tC84zejucqnoOAhMHplzdkfdAzMTCR99
-	 oUqm79XUgZFKrTtkOCng0RwrKtJXB3liXbAVVs63773+rlq4NnK0zdEzb9+G3yA1Kq
-	 AZT0Doo9TdiVV7ubr1MkOVvOVo3mYl/X1gqm8bjlVSprIUTrL9+tMiww8B5kyKpEgE
-	 EbaCIPQvFOXkoHNqpyQ4jz6JcWXxX7DVmiPDhH2q77hU3g6ctpThxztaKiGST66N0Q
-	 FVeDFxmsC7c5KQG3b9jXCt41xbHMoLolGid0U/mQBF6tSFonafgAQOgycwdsI5yW5R
-	 ZZmcGuS4UO4+A==
+	b=Ge4XTfj7FV3Xj7+KnWfY1lOqI+LdNBZwdDdH9bRtUBxR35CECfolhCK0GQm/yq9IO
+	 bbUtFUutObOfez7wvNUWw2FvnAkCMOTSGXWOaxP+/EJ1WlXy+YixmCz5g/Sc8PhqdO
+	 ZbQi17HOOdeR30IG7tv9VWl/QwkKqFpy68kY6Kou8Soqj0924riIXpVhZ0eDGrD9GT
+	 z/v6iG9vWDuemoKUWAGUQiSLP7HrF4QE6D+XaLQ16fAufGlsBp37X9OdyvZeTuH1Qg
+	 1MQ7vGFMKeYcjsJGwKmJ2Lx11hZ2N4G66h6zbDAeBtL6dsXI2aybDZ6/BnsqTJb9KS
+	 XGb5nF4p4knlQ==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -34,15 +34,12 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/6] i.MX SoC changes for 5.14
-Date: Sun, 13 Jun 2021 16:25:40 +0800
-Message-Id: <20210613082544.16067-2-shawnguo@kernel.org>
+Subject: [GIT PULL 3/6] i.MX dt-bindings update for 5.14
+Date: Sun, 13 Jun 2021 16:25:41 +0800
+Message-Id: <20210613082544.16067-3-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210613082544.16067-1-shawnguo@kernel.org>
 References: <20210613082544.16067-1-shawnguo@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
 The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
@@ -50,55 +47,36 @@ The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-5.14
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-5.14
 
-for you to fetch changes up to e34645f45805d8308866de7b69f117f554605bb6:
+for you to fetch changes up to cd044eafd7105275220f6b7140a8a8fb64e0e5af:
 
-  ARM: imx: add smp support for imx7d (2021-06-12 12:02:57 +0800)
-
-----------------------------------------------------------------
-i.MX SoC changes for 5.14:
-
-- Add SMP support for i.MX7D, as there are i.MX7D devices running in
-  field with U-Boot that doesn't support PSCI.
-- Fix imx5_cpu_suspend_info reference in i.MX5 PM code comments.
-- Add SoC ID initialization for i.MX50.
-- Drop unnecessary of_platform_default_populate() call from i.MX6Q
-  .init_machine hook.
-- A series from Oleksij Rempel to remove most of the i.MX6/7 board
-  specific PHY fixups.
+  dt-bindings: arm: fsl: add GE B1x5pv2 boards (2021-06-12 17:57:52 +0800)
 
 ----------------------------------------------------------------
-Anson Huang (1):
-      ARM: imx: add smp support for imx7d
+i.MX dt-bindings update for 5.14:
 
-Jonathan Neuschäfer (2):
-      ARM: imx: pm-imx5: Fix references to imx5_cpu_suspend_info
-      ARM: imx: Initialize SoC ID on i.MX50
+- Add vendor prefixes for congatec GmbH and DaSheng, Inc.
+- Add compatibles for i.MX6Q DaSheng COM-9XX SBC, GE B1x5pv2 and
+  i.MX8MM GW7901 boards.
+- Add an optional 'resets' property for i.MX GPCv2 bindings.
 
-Marco Felsch (1):
-      ARM: imx6q: drop of_platform_default_populate() from init_machine
+----------------------------------------------------------------
+Dillon Min (2):
+      dt-bindings: add dasheng vendor prefix
+      dt-bindings: arm: imx: Add i.mx6q DaSheng COM-9XX SBC
 
-Oleksij Rempel (7):
-      ARM: imx6q: remove PHY fixup for KSZ9031
-      ARM: imx6q: remove part of ar8031_phy_fixup()
-      ARM: imx6q: remove BMCR_PDOWN handler in ar8035_phy_fixup()
-      ARM: imx6q: remove clk-out fixup for the Atheros AR8031 and AR8035 PHYs
-      ARM: imx6q: remove Atheros AR8035 SmartEEE fixup
-      ARM: imx6sx: remove Atheros AR8031 PHY fixup
-      ARM: imx7d: remove Atheros AR8031 PHY fixup
+Lucas Stach (1):
+      dt-bindings: imx: gpcv2: add support for optional resets
 
- arch/arm/mach-imx/Makefile        |   2 +-
- arch/arm/mach-imx/common.h        |   3 ++
- arch/arm/mach-imx/headsmp.S       |   9 ++++
- arch/arm/mach-imx/hotplug.c       |   3 ++
- arch/arm/mach-imx/mach-imx50.c    |   7 +++
- arch/arm/mach-imx/mach-imx6q.c    |  88 ---------------------------------
- arch/arm/mach-imx/mach-imx6sx.c   |  26 ----------
- arch/arm/mach-imx/mach-imx7d.c    |  25 +---------
- arch/arm/mach-imx/platsmp.c       |  26 ++++++++++
- arch/arm/mach-imx/src.c           | 101 ++++++++++++++++++++++++++++++++++----
- arch/arm/mach-imx/suspend-imx53.S |   4 +-
- drivers/soc/imx/soc-imx.c         |   3 ++
- include/soc/imx/cpu.h             |   1 +
- 13 files changed, 149 insertions(+), 149 deletions(-)
+Sebastian Reichel (2):
+      dt-bindings: vendor-prefixes: add congatec
+      dt-bindings: arm: fsl: add GE B1x5pv2 boards
+
+Tim Harvey (1):
+      dt-bindings: arm: imx: add imx8mm gw7901 support
+
+ Documentation/devicetree/bindings/arm/fsl.yaml             | 13 +++++++++++++
+ Documentation/devicetree/bindings/power/fsl,imx-gpcv2.yaml | 10 ++++++++++
+ Documentation/devicetree/bindings/vendor-prefixes.yaml     |  4 ++++
+ 3 files changed, 27 insertions(+)
