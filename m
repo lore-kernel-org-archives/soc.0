@@ -2,19 +2,20 @@ Return-Path: <SRS0=Lfaw=LI=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBF54C2B9F4
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 14 Jun 2021 19:35:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76D9FC2B9F4
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 14 Jun 2021 19:35:43 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 769B361153
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 14 Jun 2021 19:35:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 769B361153
+	by mail.kernel.org (Postfix) with ESMTPS id 34F50611BE
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 14 Jun 2021 19:35:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 34F50611BE
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,55 +24,53 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=Bhfw+HCKq6EmsfPo29n6EOWTnv/bVw/iWQ7F0RlWlHw=; b=am+usZledhhpCM
-	bgco4sdQ/HlleG84qteFaQ/WFbq/RPyTEpM0LLwsk5mHXAmuzEUgkl4Krso0SgW34OqZ6uo+gXlRO
-	Sgxu4bBxlCj9IkT+TWVIU6T8Jcf9RnHGlvt+OpfCOfzbvBXhx7vgyQ7aq1YRe0IA3Z246snkIanMO
-	nk32fXRj9+JU5kQyAeFRiA3W1533DvydDkErukxVFSgMQUEDGuyxzKkmH4Z3AioT4nXFAY89ivT/q
-	RDyxUFhgAZz4sdxK+CqLexv+VBn+CM2ADHGUkf6GseG1bodosmoSqeB1WVs4oXmi5DraULedAKTUG
-	d/rkfmw/wplkX+WVVNzA==;
+	List-Owner; bh=FL24O9bCRBaevznoiqPK71S8K90t2qH655yfrZVviCY=; b=hPsElmTyddqAM4
+	+goGB7jtqtIUQjMU1/533NpuRerVnVhR7aVlRn3eaRKcPyLDA5AylQtjytQyDRC4IdwUCQl0VyrYl
+	g7K39AODxboK/LjgueruoaGcigbJPlf+txKNwSA3oGjbzaMKe9gJ2wuaxGNkZfkIBA8Txm7ZYCgjw
+	0TU9/pq5GFdamynjumHelb8FyLo0kP2GCi3OAjv3qyYmJYonoJAXSVxPt02j1idr83MKiI4IqBTFv
+	hqEmkP2ta/Y/a+00EHGIfTolbguPPo4rdqKK1Qh9qvI+3iNfPEx2i7bOz5W+hquTTvWb65sF/bLN7
+	SUSZFID4jruTko0YVNyw==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lssL0-00Ft1m-A7; Mon, 14 Jun 2021 19:33:34 +0000
+	id 1lssLC-00Ft4j-5M; Mon, 14 Jun 2021 19:33:46 +0000
 Received: from youngberry.canonical.com ([91.189.89.112])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lssKi-00FsxJ-71
- for linux-arm-kernel@lists.infradead.org; Mon, 14 Jun 2021 19:33:17 +0000
-Received: from mail-ed1-f70.google.com ([209.85.208.70])
+ id 1lssKj-00Fsy2-QE
+ for linux-arm-kernel@lists.infradead.org; Mon, 14 Jun 2021 19:33:19 +0000
+Received: from mail-ed1-f69.google.com ([209.85.208.69])
  by youngberry.canonical.com with esmtps (TLS1.2) tls
  TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.93)
  (envelope-from <krzysztof.kozlowski@canonical.com>)
- id 1lssKg-00009f-TF
- for linux-arm-kernel@lists.infradead.org; Mon, 14 Jun 2021 19:33:14 +0000
-Received: by mail-ed1-f70.google.com with SMTP id
- x12-20020a05640226ccb0290393aaa6e811so11019464edd.19
+ id 1lssKi-0000AM-7x
+ for linux-arm-kernel@lists.infradead.org; Mon, 14 Jun 2021 19:33:16 +0000
+Received: by mail-ed1-f69.google.com with SMTP id
+ z16-20020aa7d4100000b029038feb83da57so20775595edq.4
  for <linux-arm-kernel@lists.infradead.org>;
- Mon, 14 Jun 2021 12:33:14 -0700 (PDT)
+ Mon, 14 Jun 2021 12:33:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=P0NAZ9mvHQKtho19Kodk6x42SkLdwGG//84ME/Va0gs=;
- b=UxLOh574ldWl4bgfQeaBgY1BjBiQ/idhL4vpLdbWX3qxxHjqlkm4/Sr/MZ+dITrNyn
- p5YUeZrf7HAGkpLM2tRx8kbBafPIvhSVsVbs536Z1VdesPHD/J5IxK6Oy3+/Ond3UwR4
- tTQAFKjYiQNM54fAdPNz/WLW4p2OmSw75uxjddH8hhgjVniBJMVtGvdcE/JYZr426XWf
- QvmQnFRQnXdGdJSMr+eJZt59klLQVqrxL7EeQBBq5rqoXAzdPIg5jmlcoSpQud+Zi9Vg
- +WORqSYpOwjoSeigG6P9K6qomVq8Q0IMLaXKT6xoYWA7fg6WOVbc/BgXwvGd5V0A0Wao
- bfxg==
-X-Gm-Message-State: AOAM5301zmZzFoGfuIX/X6tI0eNbxxhHvbkJvjJLVGA7/n8bdlmnwx2b
- 1oZjQOmyOO6E0bbO7qHphU+AWFjYT/5Yr3bTHcWOAVyI1xiXe6jXw+eMt5bt95bDQSeq0ie4Bn5
- u+/cxYGcxTnOZNMw0i/KuymNvwz1WY1BcAll4nyi5swMjgMQV+W27
-X-Received: by 2002:a17:907:948c:: with SMTP id
- dm12mr16836642ejc.484.1623699194475; 
- Mon, 14 Jun 2021 12:33:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyegN5ZDLDC6CBLPN9tGzm/ZZQeDNEXIQaiFCbsU2xFKTD2cPTtg93ymP/DXtEWH2egOhXeeA==
-X-Received: by 2002:a17:907:948c:: with SMTP id
- dm12mr16836631ejc.484.1623699194295; 
- Mon, 14 Jun 2021 12:33:14 -0700 (PDT)
+ bh=qoNs0rkeMMUPf/jH63Pbn4GEa6xEussm8RBcM0JZAj0=;
+ b=L7XY0skTS9ILUYCsV2qUxbjkmml4Om8fG1P6t9nhV4D5bLRMHI2wGJb6Vp5QvT3J+6
+ E4hUT7Bit13/EZYqILOgI+HwtuUxBIrLaBGd5/WMciuydH93z6xEKlPCyQzfG3ddnnpi
+ Qn97ptTkKHUTEzmkkIOGrmg9reApd1i5qFP8Oyb3VCqAmKTHfAUsCulhd/8JDiqty4zo
+ iStyoyXzb6UJJ1/w0BXfwl0LfB6XeXa1t5qylhBIB8L+V3dJevudbjIVUAR6ozRBpSTk
+ 1jA8PLMtFeUpVIo9KohP6XdEZTwEhyC6Oy59h4moTy6np1Liff1xAYazM+q73kSAW7w3
+ AAvA==
+X-Gm-Message-State: AOAM533wgceE/PkUYlpxCf7xIrlD9I4w38blbenFqFzBobAxYynv5vR/
+ JVOvp39M8M+c5Leokxyk5osZSuab3w7x4sWS+m3T+Ds1SThbZZT1xmKpgknCqFhgPD0Ey711k53
+ pQosUeUKk97CEztqYwT6hOC3SYH1paDOAe6sRCB6/oqyd9BnMCYCB
+X-Received: by 2002:aa7:c818:: with SMTP id a24mr19448642edt.53.1623699196022; 
+ Mon, 14 Jun 2021 12:33:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzq1B8upiBsEetFmAjSMtxkDRFzyHcPey+4IkR631CQiOXVzgOKDik6rb85uCWnTOZsFAP0FQ==
+X-Received: by 2002:aa7:c818:: with SMTP id a24mr19448632edt.53.1623699195929; 
+ Mon, 14 Jun 2021 12:33:15 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-177-222.adslplus.ch.
  [188.155.177.222])
- by smtp.gmail.com with ESMTPSA id gw7sm8029291ejb.5.2021.06.14.12.33.13
+ by smtp.gmail.com with ESMTPSA id gw7sm8029291ejb.5.2021.06.14.12.33.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Jun 2021 12:33:13 -0700 (PDT)
+ Mon, 14 Jun 2021 12:33:15 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
@@ -79,17 +78,17 @@ To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
  linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/2][PATCH] arm64: dts: exynos: enable PMIC wakeup from
- suspend on TM2
-Date: Mon, 14 Jun 2021 21:33:08 +0200
-Message-ID: <20210614193309.20248-2-krzysztof.kozlowski@canonical.com>
+Subject: [GIT PULL 2/2] ARM/arm64: defconfig: samsung: pull for v5.14
+Date: Mon, 14 Jun 2021 21:33:09 +0200
+Message-ID: <20210614193309.20248-3-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210614193309.20248-1-krzysztof.kozlowski@canonical.com>
 References: <20210614193309.20248-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210614_123316_293649_E197B673 
-X-CRM114-Status: GOOD (  10.89  )
+X-CRM114-CacheID: sfid-20210614_123317_904040_D6819B0A 
+X-CRM114-Status: UNSURE (   8.62  )
+X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -105,32 +104,37 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210614193308.hfPw939torQImZxrGYLzSU5SrMX4G-j6GcwAfgrMalo@z>
+Message-ID: <20210614193309.qT_zx69scpKAZlTIR9S9AvIgPbexqarT9crgLte2myM@z>
 
-The RTC on S2MPS13 PMIC can wakeup the system from suspend to RAM.
-Add a generic property for this.
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Link: https://lore.kernel.org/r/20210420164943.11152-11-krzysztof.kozlowski@canonical.com
----
- arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
 
-diff --git a/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi b/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
-index 773d9abe3a44..cbcc01a66aab 100644
---- a/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
-@@ -391,6 +391,7 @@ pmic@66 {
- 		interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
- 		reg = <0x66>;
- 		samsung,s2mps11-wrstbi-ground;
-+		wakeup-source;
- 
- 		s2mps13_osc: clocks {
- 			compatible = "samsung,s2mps13-clk";
--- 
-2.27.0
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-defconfig-5.14
+
+for you to fetch changes up to 38f61ef1a0cefb4e3b37c3e7b16c0f68df34a3dc:
+
+  ARM: exynos_defconfig: restore framebuffer support (2021-06-11 12:54:33 +0200)
+
+----------------------------------------------------------------
+Samsung defconfig changes for v5.14
+
+1. Enable Exynos Universal Flash Storage (UFS) driver for Exynos7 arm64
+   boards.
+2. Restore framebuffer support in exynos_defconfig.
+
+----------------------------------------------------------------
+Alim Akhtar (1):
+      arm64: defconfig: Enable Exynos UFS driver
+
+Marek Szyprowski (1):
+      ARM: exynos_defconfig: restore framebuffer support
+
+ arch/arm/configs/exynos_defconfig | 1 +
+ arch/arm64/configs/defconfig      | 2 ++
+ 2 files changed, 3 insertions(+)
 
 _______________________________________________
 linux-arm-kernel mailing list
