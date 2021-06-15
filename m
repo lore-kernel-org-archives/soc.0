@@ -3,63 +3,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9186C49EA4
-	for <soc@archiver.kernel.org>; Tue, 15 Jun 2021 16:00:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D22EC49EA6
+	for <soc@archiver.kernel.org>; Tue, 15 Jun 2021 16:00:14 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 739A3614A7; Tue, 15 Jun 2021 16:00:13 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 5B19F6162A;
+	id 8D3C8616EA; Tue, 15 Jun 2021 16:00:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 7292E6162E;
 	Tue, 15 Jun 2021 16:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1623772813;
-	bh=vIOCt6232viQTarV5M1Nkfv7dBkFdXpNdI4sUPYQyrU=;
+	bh=vATTzdFbduH+yWklljn7F4x84tdKAQrT+eX9PeKyHdg=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=VIWAgMwQBqmq3JxmHC4S08N7JiQds9WeJ5F3ti22ecm+FeOBSSEVfJZtxWFxx0Zqa
-	 nChCE7GtQlBgjKk5LvYS+apbtsLlmeYuQlAR6NfwXre9Jf670hYh+k3BR+66YPEFp3
-	 9vIRQOKzohWBe3AO2E9CwDVz75hYEqL4GLsG13Z+5yOBPFN62sGlsAYPqRXOLqp5kG
-	 SJNY61KWBhiZw52FekIthwuDH9I9Uem3vhFGaHdcybW4G45A21tqvGG6LMumafLrM8
-	 dyWa4l9OwWDw9L/szFRyG73UlE26zVlE5vk2pqHc+kNOw5oyrIjAaWw4ozEDSsbRdJ
-	 HlMGX35RbKVqA==
+	b=M9MFAYHXIUx+hosEdho59aagfg0mG3tg8+HfpTPQS7HZhN0ckBvwzjBMvY2Ru2MBp
+	 IRMsRhhr8URaxoJ7KCWvaLeIZissWAMfMTmKEn6RmNPXLjnJOChmpS1eBwsayu26gK
+	 bU91dHByHaDKc7j0yw/AX4AFZ6UgAilY2+x624YHW2mdUaUlcngqtKg4R8rlhVJHNs
+	 xuCRL4Q0Gzy/ynPSxks3H2cN0q4vXU1iUkkPcjE09a4gi82GHiWzXr5zUIbc0JBq4J
+	 cDdab1wZPLyWvf/gINDznweFrCUDgS/ggyGf0U+zMXwz9VI8CtSQXNVztf4kvBkNhJ
+	 UMXbS/tvG/R9w==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 55CCD60CAA;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6724F609E4;
 	Tue, 15 Jun 2021 16:00:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] ARM: dts: imx28: Add DTS description of imx28 based XEA
- board
+Subject: Re: [GIT PULL] Qualcomm DTS fixes for v5.13
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162377281334.17464.11305682093609668397.git-patchwork-notify@kernel.org>
+ <162377281341.17464.565268305980555409.git-patchwork-notify@kernel.org>
 Date: Tue, 15 Jun 2021 16:00:13 +0000
-References: <20210518142857.26170-1-lukma@denx.de>
-In-Reply-To: <20210518142857.26170-1-lukma@denx.de>
-To: Lukasz Majewski <lukma@denx.de>
+References: <20210614215552.391887-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20210614215552.391887-1-bjorn.andersson@linaro.org>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (refs/heads/for-next):
+This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Tue, 18 May 2021 16:28:57 +0200 you wrote:
-> This patch adds DTS definition of the imx278 based XEA board.
+On Mon, 14 Jun 2021 16:55:52 -0500 you wrote:
+> The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 > 
-> Signed-off-by: Lukasz Majewski <lukma@denx.de>
+>   Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
 > 
-> ---
-> Changes for v3:
-> - Remove meaningless 'regulator-always-on' and 'enable-active-high'
-> - Provide proper order for ssp{023}
-> - Change memory start address to @40000000
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-fixes-for-5.13
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3] ARM: dts: imx28: Add DTS description of imx28 based XEA board
-    https://git.kernel.org/soc/soc/c/445ae16ac1c5
+  - [GIT,PULL] Qualcomm DTS fixes for v5.13
+    https://git.kernel.org/soc/soc/c/f2a4ba9ec23b
 
 You are awesome, thank you!
 --
