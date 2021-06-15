@@ -1,102 +1,107 @@
-Return-Path: <SRS0=gf/H=LJ=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=fFfY=LJ=lixom.net=olof@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28235C48BE5
-	for <soc@archiver.kernel.org>; Tue, 15 Jun 2021 15:34:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97A97C48BDF
+	for <soc@archiver.kernel.org>; Tue, 15 Jun 2021 15:50:37 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 0E2276162E; Tue, 15 Jun 2021 15:34:55 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by mail.kernel.org (Postfix) with ESMTP id B8AA2615A0;
-	Tue, 15 Jun 2021 15:34:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B8AA2615A0
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=sudeep.holla@arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D36DD6E;
-	Tue, 15 Jun 2021 08:34:54 -0700 (PDT)
-Received: from bogus (unknown [10.57.40.70])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EAD153F70D;
-	Tue, 15 Jun 2021 08:34:52 -0700 (PDT)
-Date: Tue, 15 Jun 2021 16:34:30 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Olof Johansson <olof@lixom.net>
+	id 8000861925; Tue, 15 Jun 2021 15:50:37 +0000 (UTC)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 389456192C
+	for <soc@kernel.org>; Tue, 15 Jun 2021 15:50:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 389456192C
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lixom.net
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=olof@lixom.net
+Received: by mail-lf1-f49.google.com with SMTP id a1so27755494lfr.12
+        for <soc@kernel.org>; Tue, 15 Jun 2021 08:50:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lixom-net.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=caPAnGjSd4h6+T+U8kn9IN5DYqDEbeO8s61SWfgGQiU=;
+        b=ykPY+pJTDeZbwHvJeaxD6YKg9kCRSQNAo/PnoLbZV1vKr4CisT3mtLmBV26r83KSO0
+         a3xTWbXaGu0a0FHS/2TInhTu3zvkcVbvfc1r0tPigWW8QrBt2aSHgMcaANe+2CbYtdco
+         1TFnF65IYwDaHEtf4Ozl7DBArc4xfGin8Q4qY/hZAbcBM21rb37EzEJLgdPVj6C4X3jj
+         r18qbUCgKWYx1NA5GRdcVQkYIiuLtpldL7UD6y2+BsuaaVXxBi5ZiXDbPQ7/lRMGINf8
+         8PH7MQK/1TzKQ8llgfmp81J4k/7hbtNP2q05WWY0iQ/UFc2iqyiBJ4OBuHbMzg0JGVl/
+         QApA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=caPAnGjSd4h6+T+U8kn9IN5DYqDEbeO8s61SWfgGQiU=;
+        b=bkephWBByM3RSRYVh+wBKyZfTPjH4/aRrUpnTMbAh691TvdtEViYYZBOQUYYFwonL+
+         9VqFvJyx1SAHJlrzrJg+nUsaUrAoYS+xAaqYdbuo2OrWBeSIYRcwdSyhYOysBk2tJ0O8
+         sYTYxB6LU/mPgu2Txgf5RLOfMAx5e+i2H8u836GaEja2uRMTEc8umZt8uSot8EDdhBkV
+         M96LEMn61Tgj2txdaf1sP4XIV36nc4sfqFeoVDri8XC1NFiq8sYv5e22HZpkj9eeGJq5
+         NWrdtd3y5jVq5opldIgbF553cWUqcfAmoEp89Y7lvYv/J6JFs/fte7VdKUMfE/N7K3be
+         wg7g==
+X-Gm-Message-State: AOAM532Pa6K8H+M3jK9lnjbmRq/N9ETptfNOhnmiOHZ6q/pwl0Ix/6Re
+	GhTiyjGH198GG4hl/u+HXxRG1A==
+X-Google-Smtp-Source: ABdhPJwxuB9tOQI6TVdHMSJ9B4bJ0fJNMtpEVn9u2b7PDdYteUCrpcuZd+KI1PPo11tnqSXSokqh0g==
+X-Received: by 2002:a05:6512:2206:: with SMTP id h6mr36436lfu.345.1623772235530;
+        Tue, 15 Jun 2021 08:50:35 -0700 (PDT)
+Received: from localhost (h85-30-9-151.cust.a3fiber.se. [85.30.9.151])
+        by smtp.gmail.com with ESMTPSA id x11sm2214844ljh.120.2021.06.15.08.50.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Jun 2021 08:50:34 -0700 (PDT)
+Date: Tue, 15 Jun 2021 08:41:55 -0700
+From: Olof Johansson <olof@lixom.net>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>,
-	Arnd Bergmann <arnd@arndb.de>, Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>, Kevin Hilman <khilman@kernel.org>
-Subject: Re: [GIT PULL] firmware: arm_ffa: Initial support for v5.14
-Message-ID: <20210615153430.qslynmqo5urwfugt@bogus>
-References: <20210601095838.GA838783@bogus>
- <20210614170856.rs7jrke3gvpmu4km@bogus>
- <20210615152149.GB11724@lx2k>
+Cc: Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org,
+	linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+	Thierry Reding <treding@nvidia.com>, Will Deacon <will@kernel.org>
+Subject: Re: [GIT PULL] memory: Tegra for v5.14, part two
+Message-ID: <20210615154155.GE11724@lx2k>
+References: <20210614195200.21657-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210615152149.GB11724@lx2k>
+In-Reply-To: <20210614195200.21657-1-krzysztof.kozlowski@canonical.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Olof,
+Hi,
 
-On Tue, Jun 15, 2021 at 08:21:49AM -0700, Olof Johansson wrote:
-> Hi,
->
-> On Mon, Jun 14, 2021 at 06:08:56PM +0100, Sudeep Holla wrote:
-> > Hi Olof,
-> >
-> > On Tue, Jun 01, 2021 at 10:58:38AM +0100, Sudeep Holla wrote:
-> > > Hi ARM SoC Team,
-> > >
-> > > Please pull !
-> > >
-> > > This is a new driver pull request. One of the arm64 patch is being
-> > > pulled from a stable arm64 branch for-next/ffa as the other patches
-> > > are dependent of the same.
-> > >
-> > > Background
-> > > ----------
-> > > This has been on the list for almost a year now with changing requirements.
-> > > Initially Arm KVM wanted to use this via userspace interface in VMM to
-> > > communicate with VMs. But it was later dropped in favour of arch-agnostic
-> > > interface[1].
-> > >
-> > > Also there was some discussion on the dt-bindings which was dropped
-> > > completely. Though we need to workaround the lack of full discoveribility
-> > > in v1.0 spec, it is now being fixed for the next version of the spec.
-> > >
-> >
-> > I see that you have pulled quite a lot of drivers and other SoC code
-> > including my scmi and juno ones that were sent more recently than this
-> > one. Just thought of checking if this is still in queue ? Sorry for the
-> > nag but this has been on a list almost a year. We missed v5.13 due to
-> > DT binding controveries(for good reasons) and we really don't want to
-> > miss v5.14
->
-> I held off because I wanted to spend a few cycles on looking into it before
-> blindly merging it.
->
 
-Sure, just wanted to make sure it was in your list.
+On Mon, Jun 14, 2021 at 09:52:00PM +0200, Krzysztof Kozlowski wrote:
+> Hi Arnd and Olof,
+> 
+> Tegra got quite big rework this cycle.  The last piece comes from Thierry,
+> however it depends on one patch in Will's tree.  Since the last Thierry's
+> patches depend both on that one patch and other memory controller drivers
+> changes, they are here.
+> 
+> Best regards,
+> Krzysztof
 
-> Are there any implemented users of this (on either side) today? We normally
-> don't merge a framework in the kernel without having at least one user of it
-> also available.
->
+So, this pull request is a bit weird. It contains a lot more than what the
+email indicates:
 
-Fair enough.
+> The following changes since commit 393d66fd2cacba3e6aa95d7bb38790bfb7b1cc3a:
+> 
+>   memory: tegra: Implement SID override programming (2021-06-03 21:50:43 +0200)
 
-Yes, OPTEE patches are on the list[1]. Just to avoid complexity in merging
-Jens(OPTEE maintainer) held it off for next cycle allowing more time. But we
-have been testing all the versions of this driver posted on the list with
-OPTEE. There are other users too but they need userspace interface which
-is still work in progress.
+This seems to be a patch in the middle of the new material in your branch, not
+the start of what we already have in our tree.
 
---
-Regards,
-Sudeep
+As a result, the diffstat when we merge looks completely different. While
+I generally trust you to not try to squeeze in material under the radar, it's
+also unfortunately making it hard to double-check that you didn't accidentally
+bring in something you didn't mean to.
 
-[1] https://lore.kernel.org/r/20210527081404.1433177-1-jens.wiklander@linaro.org/
+So, before I merge this.. can you confirm, or even better generate a full pull
+request summary/diffstat/pull request email that shows the full new material?
+
+
+Thanks!
+
+
+-Olof
+
