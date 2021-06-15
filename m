@@ -2,80 +2,96 @@ Return-Path: <SRS0=uLNJ=LJ=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F159C48BE5
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 15 Jun 2021 20:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFA3CC48BDF
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 15 Jun 2021 21:12:04 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F3336610EA
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 15 Jun 2021 20:43:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F3336610EA
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
+	by mail.kernel.org (Postfix) with ESMTPS id 6C53760FEB
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 15 Jun 2021 21:12:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6C53760FEB
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lixom.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
 	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=6VLAUEJuHEQSe+KcbqNSmoFzo8l74cTTicVLBa1nes4=; b=fy6n/DiteAvwkI
-	kh4z64MMM7zLKHr9gC0UiWnog2pQTyLtYnzl7qicWWRej0zK5JcINBcRxjHt1UcmCxXKz/zAvvrnm
-	xXJxHxIF4Ry1BeNMpcu6sNCbkuH2FitWOqmEXJnpOmk9fSm63tBKjk0RqL146jHk5z2q+7yyJLjKS
-	2cEtdBbwQ1nMfCQ7lYSawkLBS3z6+yzMnI4kflAnw2Bv3hxjmUwXVSjWHsNxI069gvbBkFY+Mt1Ie
-	n9r9oBzHCsnNnRqqVhIBBR+by1NB97WlkgjLKyaaIUPyxYSFau8smHgbZOlI1teIzLo4BPr512oq8
-	xxU0zawftOUUsUK+R+qQ==;
+	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
+	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=6DeB72rjVu0hDcvsiXD+1b70h9AV8wxeZoHWuv4nVs4=; b=xsMClWeNzKPCLE
+	vlAaULUvn1L+QoFUmM+v6cbjRPMnejUMKgiLX3l+cJtZLYsbJC4eUdXPISNf1U31oceraCOHUR4fI
+	OK3RaJzs/U8kMe3MWsYrw60qjapTGLayL8j+oFCjFOZ+QeDOrHcFTGWV5bUeRJNxnqYHfWmLPt064
+	0KCyUxnrBVRdj3N0bFQfVdQTEP7EKSFe08cOz2//Y6wOzLY3PX2IzdY889JlUygIKvTDPG6CCGM/E
+	7RQFGlZGuS93F8jVaxt94hNCbO7pcFWu+9L6iv3RWG6ovN0BVogsi0TmaJdJV3Bo0J4oXEj03khAw
+	8j7DIJIBdqG04jBjtj7Q==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1ltFs7-002roo-SA; Tue, 15 Jun 2021 20:41:21 +0000
-Received: from mail-qt1-x82d.google.com ([2607:f8b0:4864:20::82d])
+	id 1ltGJr-00324E-RA; Tue, 15 Jun 2021 21:10:00 +0000
+Received: from mail-lj1-x22e.google.com ([2a00:1450:4864:20::22e])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1ltC1B-001OPZ-Oj
- for linux-arm-kernel@lists.infradead.org; Tue, 15 Jun 2021 16:34:27 +0000
-Received: by mail-qt1-x82d.google.com with SMTP id e3so11743614qte.0
+ id 1ltCuC-001km4-9n
+ for linux-arm-kernel@lists.infradead.org; Tue, 15 Jun 2021 17:31:17 +0000
+Received: by mail-lj1-x22e.google.com with SMTP id l4so13633575ljg.0
  for <linux-arm-kernel@lists.infradead.org>;
- Tue, 15 Jun 2021 09:34:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
- h=mime-version:from:date:message-id:subject:to:cc;
- bh=Mpw+juSO14IXhbnXmpjJ5EumNB+SNd/QTzAxRngqZU0=;
- b=OwnhgWRxhm1q/Kky0ungmqIcs6YMw4kIeYIvfOPX05tXnfCQYLcWlXs3a49hwczWfv
- sityG8ukLre/6ZvG7QtHKDeDW0ooyQVt/8aiyd3+EYc4BfNRIKEue/5sPcAuptTUGhp4
- gr/DVnKkm31xdIPWXTKOl0neJU53IAzQh8mz8=
+ Tue, 15 Jun 2021 10:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=lixom-net.20150623.gappssmtp.com; s=20150623;
+ h=date:from:to:cc:subject:message-id:references:mime-version
+ :content-disposition:in-reply-to:user-agent;
+ bh=39g+12RbBupyfwOsZFzw4LYXqjKe0xK0TdY1WsE/9Rs=;
+ b=hFKT0mbDSgE50YhcOuclusC4U/fakLcKZIUN+lD7eiKVCwRQfMJdSLcg1pS9Ohf9ri
+ LTxJJowiL9WzmlsVXTvTATkKSjGGLpgRhh6CKqb8gNoTw8EiA8EQ0Z05PXvWgfjbXb4r
+ LiVujPlHGuH3zRnU5fUGp8lnJ9HNw7gzCnmDQcIBGXt8Q0fTQyKBcs9AVQro/ZZqaEK+
+ 9+WWTkL8sdln4yedRJXU8sHwapwVmDNJicATIx0JMlbIRniykpaomCH2Ytys15SzIhHl
+ GHdCcQtATZiW7kl5bgJWy5ro1+OzCAZpMbuhhHBOMGIoobKsPLLwZ74in44pPbzpRtA8
+ cZwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
- bh=Mpw+juSO14IXhbnXmpjJ5EumNB+SNd/QTzAxRngqZU0=;
- b=puYuU3iLGz7phPjaw/K1U6k040l/jL6uLA1HKvitqH3gnDfm7ZgQ5z83+8Ic3a4V46
- lUXtzXm9BRIJa2K8SSsrpUQ6n0S+z+OlQ4eilJQk2tFR6DJDHkkRSa4xVgMMInac0FTY
- Gl9725cBnePNneTPJNf1zavMnvWQ2rSY+/LVLXka+uFoWXqccCC2PWP3TaIzrcfaH6Jl
- 3PC7f8zH8ljRb0HmJdYLHD6CGxrUChw5kdKJAZBbS0BE4IdG98G/rS35I1RIBmHv0lWD
- Pk7RxN4DCj5ksJ6YJ8I2xi+83m6a4rC4E19heUEXXaNKND9pdzZKZiJKMeK0vLeNP3Ze
- SnYQ==
-X-Gm-Message-State: AOAM532h5yUxmafuttT72ygKfREGG6zEN0pAJ0MMC9boSYpCn049yZAw
- Ao7kDuRlk2fEx22NIQVoF9KDrV2zHmb+4q82sDVwjA==
-X-Google-Smtp-Source: ABdhPJyTt6WC6RRYHejEop/0hhJ8D7+6OUmp+FmVlPNOOZpIo46ZetWalSW1J1VyjP8Z9QFGNO88p7XWWl8nsCiAgPU=
-X-Received: by 2002:ac8:7ed8:: with SMTP id x24mr500539qtj.148.1623774861742; 
- Tue, 15 Jun 2021 09:34:21 -0700 (PDT)
-MIME-Version: 1.0
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Wed, 16 Jun 2021 01:36:25 +0900
-Message-ID: <CAFr9PXknSfSso6Uq0Fn_qJM5ZnJ4QK=YjJ32kKt4XYPrHK5x6w@mail.gmail.com>
-Subject: [GIT PULL] ARM: dts: mstar for 5.14
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+ :mime-version:content-disposition:in-reply-to:user-agent;
+ bh=39g+12RbBupyfwOsZFzw4LYXqjKe0xK0TdY1WsE/9Rs=;
+ b=roj+d9gsYRbtxQLIL74mGbUVQzfJ7bv2xwIy/iPsS2ja60kClGuWR/U1IVl2x6Onsj
+ +ZDu0kdUHY1JcXSOqtsMYx/sLSPW1FtQDyGHpXBT8wpICLbGs46AIRo8lgCnfpCCdWDq
+ d5/GY+hCqDS5ixG6tcNV4vHqvv52ZwtW9jL4woE9v3Ys1odLTzcnL+SWyo2u3exuABjC
+ AW2ZGwWGEM9jp43JB/lAGvnyNBbNf0qKoaNpWk55hceymq70VusyASmefWGJ0k0J143A
+ YMxkStQgNnKDi2mDPWuJeigiU6bOUkppe2jnOgN+QTtKUyCVZziAaQlg3/PXwsjnbJA6
+ fPYg==
+X-Gm-Message-State: AOAM532KNPcbKfP9mWvDqh12tV5A8vM+Ip2x9An2kYrCzPU+j1m5uiV7
+ wqxgPuxd0wTFRGYMqOx0JWW72g==
+X-Google-Smtp-Source: ABdhPJzDiI8gCBiGgk7ZlBw55YgjqqSepBm3KZuZW6eDjEhrP1bHzBemiKb9erh7MTymQCaTkw8jWw==
+X-Received: by 2002:a05:651c:50c:: with SMTP id
+ o12mr643041ljp.364.1623778274172; 
+ Tue, 15 Jun 2021 10:31:14 -0700 (PDT)
+Received: from localhost (h85-30-9-151.cust.a3fiber.se. [85.30.9.151])
+ by smtp.gmail.com with ESMTPSA id u13sm1871710lfq.201.2021.06.15.10.31.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 15 Jun 2021 10:31:13 -0700 (PDT)
+Date: Tue, 15 Jun 2021 09:47:24 -0700
+From: Olof Johansson <olof@lixom.net>
+To: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- SoC Team <soc@kernel.org>
-Cc: linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Romain Perier <romain.perier@gmail.com>, 
- Mohammed Billoo <mohammed.billoo@gmail.com>
+Cc: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>,
+ ALKML <linux-arm-kernel@lists.infradead.org>,
+ Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+ Kevin Hilman <khilman@kernel.org>
+Subject: Re: [GIT PULL] firmware: arm_ffa: Initial support for v5.14
+Message-ID: <20210615164724.GA6312@lx2k>
+References: <20210601095838.GA838783@bogus>
+ <20210614170856.rs7jrke3gvpmu4km@bogus>
+ <20210615152149.GB11724@lx2k>
+ <20210615153430.qslynmqo5urwfugt@bogus>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20210615153430.qslynmqo5urwfugt@bogus>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210615_093425_873341_869F6EBD 
-X-CRM114-Status: UNSURE (   6.61  )
-X-CRM114-Notice: Please train this message.
+X-CRM114-CacheID: sfid-20210615_103116_536234_F94C5867 
+X-CRM114-Status: GOOD (  39.73  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -91,26 +107,76 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210615163625.6-Fb6VwyowOuy3qs3-NtTB9aUrLMto9vSmE9NCP4kc0@z>
+Message-ID: <20210615164724.TThGH67kAoL3p7BvDtrcuxYF-66fYr9BpB2omgWk_4Y@z>
 
-The following changes since commit c4681547bcce777daf576925a966ffa824edd09d:
+On Tue, Jun 15, 2021 at 04:34:30PM +0100, Sudeep Holla wrote:
+> Hi Olof,
+> 
+> On Tue, Jun 15, 2021 at 08:21:49AM -0700, Olof Johansson wrote:
+> > Hi,
+> >
+> > On Mon, Jun 14, 2021 at 06:08:56PM +0100, Sudeep Holla wrote:
+> > > Hi Olof,
+> > >
+> > > On Tue, Jun 01, 2021 at 10:58:38AM +0100, Sudeep Holla wrote:
+> > > > Hi ARM SoC Team,
+> > > >
+> > > > Please pull !
+> > > >
+> > > > This is a new driver pull request. One of the arm64 patch is being
+> > > > pulled from a stable arm64 branch for-next/ffa as the other patches
+> > > > are dependent of the same.
+> > > >
+> > > > Background
+> > > > ----------
+> > > > This has been on the list for almost a year now with changing requirements.
+> > > > Initially Arm KVM wanted to use this via userspace interface in VMM to
+> > > > communicate with VMs. But it was later dropped in favour of arch-agnostic
+> > > > interface[1].
+> > > >
+> > > > Also there was some discussion on the dt-bindings which was dropped
+> > > > completely. Though we need to workaround the lack of full discoveribility
+> > > > in v1.0 spec, it is now being fixed for the next version of the spec.
+> > > >
+> > >
+> > > I see that you have pulled quite a lot of drivers and other SoC code
+> > > including my scmi and juno ones that were sent more recently than this
+> > > one. Just thought of checking if this is still in queue ? Sorry for the
+> > > nag but this has been on a list almost a year. We missed v5.13 due to
+> > > DT binding controveries(for good reasons) and we really don't want to
+> > > miss v5.14
+> >
+> > I held off because I wanted to spend a few cycles on looking into it before
+> > blindly merging it.
+> >
+> 
+> Sure, just wanted to make sure it was in your list.
 
- Linux 5.13-rc3 (2021-05-23 11:42:48 -1000)
+Yeah, thanks for the ping. Whenever we miss something we almost always say:
+"But you didn't ping us?!". You did, and it'd be awfully bad signaling if we
+somehow got upset by it if we want people to do it more often.
 
-are available in the Git repository at:
+> > Are there any implemented users of this (on either side) today? We normally
+> > don't merge a framework in the kernel without having at least one user of it
+> > also available.
+> >
+> 
+> Fair enough.
+> 
+> Yes, OPTEE patches are on the list[1]. Just to avoid complexity in merging
+> Jens(OPTEE maintainer) held it off for next cycle allowing more time. But we
+> have been testing all the versions of this driver posted on the list with
+> OPTEE. There are other users too but they need userspace interface which
+> is still work in progress.
 
- git://github.com/linux-chenxing/linux.git tags/mstar-dt-5.14
+Ok, thanks for that! Ideally, having that in the tag, i.e. also in cover letter
+for patch set would have avoided this round trip next time. But thanks for that
+detail.
 
-for you to fetch changes up to 8f610169a2865f6c6383d966ebbd6814c79d0116:
+I'll queue this up shortly.
 
- ARM: dts: mstar: Add watchdog device node (2021-06-16 01:22:52 +0900)
 
-----------------------------------------------------------------
-Romain Perier (1):
-     ARM: dts: mstar: Add watchdog device node
-
-arch/arm/boot/dts/mstar-v7.dtsi | 14 ++++++++++++++
-1 file changed, 14 insertions(+)
+-Olof
 
 _______________________________________________
 linux-arm-kernel mailing list
