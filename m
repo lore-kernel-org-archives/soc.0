@@ -1,25 +1,29 @@
-Return-Path: <SRS0=b5ND=LJ=0x0f.com=daniel@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E80C4C48BE5
-	for <soc@archiver.kernel.org>; Tue, 15 Jun 2021 16:01:46 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id C0AE361467; Tue, 15 Jun 2021 16:01:46 +0000 (UTC)
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4D18461465
-	for <soc@kernel.org>; Tue, 15 Jun 2021 16:01:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4D18461465
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=daniel@0x0f.com
-Received: by mail-qk1-f179.google.com with SMTP id u30so42470753qke.7
-        for <soc@kernel.org>; Tue, 15 Jun 2021 09:01:46 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D509EC48BDF
+	for <linux-kernel@archiver.kernel.org>; Tue, 15 Jun 2021 16:01:48 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id BFF6361465
+	for <linux-kernel@archiver.kernel.org>; Tue, 15 Jun 2021 16:01:48 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S231583AbhFOQDw (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Tue, 15 Jun 2021 12:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231486AbhFOQDu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 15 Jun 2021 12:03:50 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BD5C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Jun 2021 09:01:46 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id f70so27289100qke.13
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Jun 2021 09:01:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=0x0f.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -33,14 +37,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=7C7EVveR2N28ai5r9/J+2yOqz+gY5pQumT6AbxDu9NQ=;
-        b=AVtG/yUxMIOLRYVVTiZf6dNMeYBidTROE8mFt8C2YJrT2UT7HMcqfuGfyBu+qsVVfF
-         ZyQ6giKrGkNUclSFSzTQz1senFUqEaE8+k5WkzVzWVeImHPWF12WCpYAcDMYBhdfZaBS
-         1bID4ds7Y0hxJEPe8IsSfumf7dz3YzLdZVgdpHNL+ip4ABme6GxkKXl/vmwDoVYscJPd
-         m3TRBQmGKa2JQ9DDh8kZ8hIdBYgJxId/mRmiRJgnCZGhbayHkToSoF/NTX5WphY3kbGp
-         bqRi+Ty4mQvugLtrBpBXYD8UT6DSswIW15RPj5iZHI1FuZo/U59BTdek9OqtDtqR4Zdh
-         PuVw==
-X-Gm-Message-State: AOAM533hB50aJeiSfINnn5qwy7UorufERHpEEDTAkpTQeMEL+9YMwNLG
-	JpZmqomfOD3ex/sPU3xrTB7kw60/9ErQ+yZoCQuNTw==
+        b=hnoNQq9hBMV/yMhuYNeLs8snizJTgsizqoswvXotxk6VQO+AMGl5FF34hxB6klIWsm
+         2CDqEW4Hz5fkR/dHy2xl2MbeVEm5gWdqBMWK3z1Ggoa7yzeE9w/Euhd2DWlTlVNpXkdo
+         dmKCpehtJxdZtn0Fb6jthruqXl7uyRkLWjEUIsHY8IGswiBQRkzAYGqqUNhGe5bYJi+n
+         hRbwl9hkvYB31z3jl1tWR3jCV4HqeXKM5rmy4zpGuoy6LtfGb5veveU4YaOsdOMkq60O
+         1BQ+lRoPGC5+tzPINBiDgHFTCWdrlFcFEjrTpDAaeA1SKYXS0WFDwgDRmqAbMHT9h0Dc
+         VdLA==
+X-Gm-Message-State: AOAM5338MA+vG35Ma1qX2ERkeeWBRu/IcuvF5us/QawnIyx/zQhEuZ2T
+        ayxFcqk7Ivd7KsRIQ3WouO+H4F7kpcSmh5MkYPiM4w==
 X-Google-Smtp-Source: ABdhPJwMhLK3ojmLgXGBYK7lXx8LuQWFcV18TBkTwaLl6+qHJap0zIeFZXk+ggFYSjpX/FOfrM6i9m3q1kO7mfCsLi8=
 X-Received: by 2002:a05:620a:a87:: with SMTP id v7mr340087qkg.468.1623772905288;
  Tue, 15 Jun 2021 09:01:45 -0700 (PDT)
@@ -48,17 +52,22 @@ MIME-Version: 1.0
 References: <CAFr9PXnBb7OmOAMumDodC+0usWqRT-RXwC+YUHZ2Y43Xe_uTQQ@mail.gmail.com>
  <20210615152840.GD11724@lx2k>
 In-Reply-To: <20210615152840.GD11724@lx2k>
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Wed, 16 Jun 2021 01:03:49 +0900
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Wed, 16 Jun 2021 01:03:49 +0900
 Message-ID: <CAFr9PXkeqryzutzpV6woskee_SwbDMJFgxPtspvTk0-VS6A5xA@mail.gmail.com>
 Subject: Re: [GIT PULL] ARM: mstar for v5.14 v2
-To: Olof Johansson <olof@lixom.net>
+To:     Olof Johansson <olof@lixom.net>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, SoC Team <soc@kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Romain Perier <romain.perier@gmail.com>, 
-	Mohammed Billoo <mohammed.billoo@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, SoC Team <soc@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Romain Perier <romain.perier@gmail.com>,
+        Mohammed Billoo <mohammed.billoo@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210615160349.ZLbtRVpGJY8LqEmKnVKPy8kO83FWM4Rb7eqdrNs0kVY@z>
 
 Hi Olof,
 
