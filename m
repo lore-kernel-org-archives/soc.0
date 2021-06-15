@@ -2,20 +2,19 @@ Return-Path: <SRS0=uLNJ=LJ=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7DACC48BE5
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 15 Jun 2021 19:49:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF3B6C48BDF
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 15 Jun 2021 19:51:46 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 99B106137D
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 15 Jun 2021 19:49:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 99B106137D
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lixom.net
+	by mail.kernel.org (Postfix) with ESMTPS id 982CB610A3
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 15 Jun 2021 19:51:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 982CB610A3
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
@@ -23,72 +22,44 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
 	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=7YMU+b7NcOQwBlU62kCyDncs71D0IQJn+eCxRFJO7Kk=; b=yVoAHN9m22MGSE
-	a789mSQVOgyXTCIa8ea1bb9b6Jt8kVs06qNQNr5MCNI23w5Zzztpvh4MgEDwvEIVolKoblR/p3t8q
-	Rqz8LC+9Ol1aWKofn5vPwimLnvsBDLNv5LdI3QFzPav30Ywyyi/J64YqbvL8hMGidxB2suSVwImbJ
-	9hAEx4YaM48qjmZm/7YVB2NLK7x3ipIRn0hGTxeyrDdMcVA2kI+jNj7CXNjj/lE4/za/UjwtZJi2i
-	zQYxxANI0jcelizDEvFu4YQI5h04J41+lheMhelRT0mSOl7TZA9CDfBB3i0geR+fnzsMhgSBw/9Kp
-	gp8tu4P6Mu9a/Uyta/ug==;
+	List-Owner; bh=k1rDTysE5anJiornhhgFxneI6y4sY+NJC8QyuomXIbY=; b=K1/i/WmCB0gKxq
+	+yILwcoF/Abrj3BW21dkNxxYbSV2YOXzd/b2I06i/EW//AfwJj+5imXhsF9zyA5QWwQEkj5AuD8Ty
+	SG428Uth/A96cLRy2sSLjB5+/w5qfgpUmwq9daYsSO8jFy08KVijPFNJbnNytE0uLA+Lm+lB+FATi
+	fyxmikKaXPXjlTpVnQy/jdFkYm9NQTad3LtECNJg1tnQ8LPgPubHUPwaP9+j2JM9kCR10YDUFVR1Y
+	sPxnG/DuNcz1sqXrWjreCuanhwaMS0g890p9oKH0gXxJVj5r/aYUgagHfvpR2nlMU4se1oGhJkCQT
+	APNDmrKjxL2LS89sf4zA==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1ltF1p-002Z3k-Pe; Tue, 15 Jun 2021 19:47:19 +0000
-Received: from mail-lj1-x22f.google.com ([2a00:1450:4864:20::22f])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1ltB2b-000zRc-J2
- for linux-arm-kernel@lists.infradead.org; Tue, 15 Jun 2021 15:31:51 +0000
-Received: by mail-lj1-x22f.google.com with SMTP id x14so25598133ljp.7
- for <linux-arm-kernel@lists.infradead.org>;
- Tue, 15 Jun 2021 08:31:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=lixom-net.20150623.gappssmtp.com; s=20150623;
- h=date:from:to:cc:subject:message-id:references:mime-version
- :content-disposition:in-reply-to:user-agent;
- bh=pOcokHjn8C6eblfhNNWJ0wrgW2SVamVUGfojc7gGQjs=;
- b=swmvymsrhJ6L048X3+XStYbzujdk7jR5zt2V1M6/pTVdtObYp5LnqwfzCx0r99kO9W
- GY8NcGhwl/Gls7Sley676uGrVfa/yr87iknIs1gWqu07YJuYwqMaYDiHux/ZSdU6yM6y
- OGNrH26KrRzG9ftfskymNsZEV+ZJWfANr6n3SIvVfj0Ph23S6VZW4TS51eOzWsy9hloj
- ca3jKzYyMCAOofS3qUExqKEmH0QR80s4UeAQ4ZmCN38Q0AIt0lQy2hdhyATSkIUY1P6P
- AMvB1Uebqcl1hku3Dp4w3ZX9RCa8ksLeU57xBCQm3UBz/M3hJCQnJWGZWn5YoKXh+Xc8
- uiQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to:user-agent;
- bh=pOcokHjn8C6eblfhNNWJ0wrgW2SVamVUGfojc7gGQjs=;
- b=BFnqu/7/xjiCrp1xlgVupUjlWrex1sqZmquAqsdhuudI/ghmGts+njsbhUTV2/WXw4
- 4TnjfSShq/r5Q/0kalgRsvUzmmo7DLPIRfVb2m//W7TjKvbG9O1t+thoG0UtMCMhHED9
- 5v+wYzIRdIIYUOVzS7V7bh8i0gFWaf1gs8lGEwWB4VWlwdBggYnDZ/XxOJYAF+PpoZxq
- Ay/QSIirqO9Nyl88bXdRgEPd6X86NBcHvug3wI/DktVxm9OO4tG5et46A/ay92nwiYcc
- zRXMvDoxZaUKHAw2/DlvBwlnt7ywHCScHMuhM2GGL+obR0BYh5Nq43HyGEjgA/yoV/mL
- R+YA==
-X-Gm-Message-State: AOAM531xF1DFCXjIZ5GsccaizQ/Z27YwBRtHJF/enmt4K7CSvN/tLHMH
- qqLIIb/HymMRuj3srML87/QN2w==
-X-Google-Smtp-Source: ABdhPJzfs0hjW6mrhnb0kSABzAozuBYwYUHvShyjT8JHAxKkozmbsrKr+yWYDxG5gwqAVxtNPmE/VQ==
-X-Received: by 2002:a2e:9855:: with SMTP id e21mr152492ljj.295.1623771107330; 
- Tue, 15 Jun 2021 08:31:47 -0700 (PDT)
-Received: from localhost (h85-30-9-151.cust.a3fiber.se. [85.30.9.151])
- by smtp.gmail.com with ESMTPSA id z8sm1056119lfd.217.2021.06.15.08.31.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 15 Jun 2021 08:31:46 -0700 (PDT)
-Date: Tue, 15 Jun 2021 08:28:40 -0700
-From: Olof Johansson <olof@lixom.net>
-To: Daniel Palmer <daniel@0x0f.com>
+	id 1ltF4F-002ZvN-LE; Tue, 15 Jun 2021 19:49:48 +0000
+Received: from foss.arm.com ([217.140.110.172])
+ by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1ltB5b-0010iE-UV
+ for linux-arm-kernel@lists.infradead.org; Tue, 15 Jun 2021 15:34:57 +0000
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+ by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D36DD6E;
+ Tue, 15 Jun 2021 08:34:54 -0700 (PDT)
+Received: from bogus (unknown [10.57.40.70])
+ by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EAD153F70D;
+ Tue, 15 Jun 2021 08:34:52 -0700 (PDT)
+Date: Tue, 15 Jun 2021 16:34:30 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Olof Johansson <olof@lixom.net>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, SoC Team <soc@kernel.org>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Romain Perier <romain.perier@gmail.com>,
- Mohammed Billoo <mohammed.billoo@gmail.com>
-Subject: Re: [GIT PULL] ARM: mstar for v5.14 v2
-Message-ID: <20210615152840.GD11724@lx2k>
-References: <CAFr9PXnBb7OmOAMumDodC+0usWqRT-RXwC+YUHZ2Y43Xe_uTQQ@mail.gmail.com>
+Cc: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>,
+ ALKML <linux-arm-kernel@lists.infradead.org>,
+ Arnd Bergmann <arnd@arndb.de>, Sudeep Holla <sudeep.holla@arm.com>,
+ Arnd Bergmann <arnd@kernel.org>, Kevin Hilman <khilman@kernel.org>
+Subject: Re: [GIT PULL] firmware: arm_ffa: Initial support for v5.14
+Message-ID: <20210615153430.qslynmqo5urwfugt@bogus>
+References: <20210601095838.GA838783@bogus>
+ <20210614170856.rs7jrke3gvpmu4km@bogus>
+ <20210615152149.GB11724@lx2k>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <CAFr9PXnBb7OmOAMumDodC+0usWqRT-RXwC+YUHZ2Y43Xe_uTQQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210615152149.GB11724@lx2k>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210615_083149_697003_90884633 
-X-CRM114-Status: GOOD (  23.40  )
+X-CRM114-CacheID: sfid-20210615_083456_072085_E0485B1A 
+X-CRM114-Status: GOOD (  32.01  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -104,61 +75,68 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210615152840.bsy_bOQOg2Y0Yy3dkanL_1Bvz4-xGY-pRXPhVtERPpo@z>
+Message-ID: <20210615153430.c8ExFBcPdOxba3kIpK1wKDfv6rDx0q3HPdme78wyl0Q@z>
 
-On Sun, Jun 13, 2021 at 02:39:59AM +0900, Daniel Palmer wrote:
-> Hi Arnd, Olof,
-> 
-> Here is a fixed version of the PR with my s-o-b for Romain's patch.
-> 
-> Content is as before:
-> 
-> - Romain has stepped up to clean up some of the ~300 patch backlog for
-> MStar and he added support for earlyprintk in the process.
-> - In an effort to do things properly I've moved work on the MStar
-> stuff from my personal github account to one for this project. So
-> people can find it I've added a link in MAINTAINERS.
-> 
-> The following changes since commit 614124bea77e452aa6df7a8714e8bc820b489922:
-> 
->  Linux 5.13-rc5 (2021-06-06 15:47:27 -0700)
-> 
-> are available in the Git repository at:
-> 
->  https://github.com/linux-chenxing/linux.git tags/mstar-5.14-v2
-> 
-> for you to fetch changes up to eb5e7693630c6039d040e428840be82b7e3a8614:
-> 
->  MAINTAINERS: ARM/MStar/Sigmastar SoCs: Add a link to the MStar tree
-> (2021-06-13 02:12:18 +0900)
-> 
-> ----------------------------------------------------------------
-> Daniel Palmer (1):
->      MAINTAINERS: ARM/MStar/Sigmastar SoCs: Add a link to the MStar tree
-> 
-> Romain Perier (1):
->      ARM: debug: add UART early console support for MSTAR SoCs
-> 
-> MAINTAINERS            |  1 +
-> arch/arm/Kconfig.debug | 11 +++++++++++
+Hi Olof,
 
-Hi,
+On Tue, Jun 15, 2021 at 08:21:49AM -0700, Olof Johansson wrote:
+> Hi,
+>
+> On Mon, Jun 14, 2021 at 06:08:56PM +0100, Sudeep Holla wrote:
+> > Hi Olof,
+> >
+> > On Tue, Jun 01, 2021 at 10:58:38AM +0100, Sudeep Holla wrote:
+> > > Hi ARM SoC Team,
+> > >
+> > > Please pull !
+> > >
+> > > This is a new driver pull request. One of the arm64 patch is being
+> > > pulled from a stable arm64 branch for-next/ffa as the other patches
+> > > are dependent of the same.
+> > >
+> > > Background
+> > > ----------
+> > > This has been on the list for almost a year now with changing requirements.
+> > > Initially Arm KVM wanted to use this via userspace interface in VMM to
+> > > communicate with VMs. But it was later dropped in favour of arch-agnostic
+> > > interface[1].
+> > >
+> > > Also there was some discussion on the dt-bindings which was dropped
+> > > completely. Though we need to workaround the lack of full discoveribility
+> > > in v1.0 spec, it is now being fixed for the next version of the spec.
+> > >
+> >
+> > I see that you have pulled quite a lot of drivers and other SoC code
+> > including my scmi and juno ones that were sent more recently than this
+> > one. Just thought of checking if this is still in queue ? Sorry for the
+> > nag but this has been on a list almost a year. We missed v5.13 due to
+> > DT binding controveries(for good reasons) and we really don't want to
+> > miss v5.14
+>
+> I held off because I wanted to spend a few cycles on looking into it before
+> blindly merging it.
+>
 
-This time it seems like you based your branch on 5.14-rc5, which is a newer -rc
-than what we have the rest of our trees on. The general rule of thumb is to
-base it on the oldest meaningful rc for the release (rc1 or rc2, most of the
-time). We normally base our tree on rc2 or so, in this case I went forward to
-rc3 earlier.
+Sure, just wanted to make sure it was in your list.
 
-(Maybe you had the same base last time around, and I missed it -- my tooling
-failed out on the S-o-b checking before I noticed)
+> Are there any implemented users of this (on either side) today? We normally
+> don't merge a framework in the kernel without having at least one user of it
+> also available.
+>
 
-To avoid another roundtrip here, I'll apply the two patches directly, but
-please keep it in mind in the future, especially once you have more material
-for a cycle.
+Fair enough.
 
+Yes, OPTEE patches are on the list[1]. Just to avoid complexity in merging
+Jens(OPTEE maintainer) held it off for next cycle allowing more time. But we
+have been testing all the versions of this driver posted on the list with
+OPTEE. There are other users too but they need userspace interface which
+is still work in progress.
 
--Olof
+--
+Regards,
+Sudeep
+
+[1] https://lore.kernel.org/r/20210527081404.1433177-1-jens.wiklander@linaro.org/
 
 _______________________________________________
 linux-arm-kernel mailing list
