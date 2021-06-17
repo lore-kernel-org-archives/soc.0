@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90E0BC49EA2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6649BC49361
 	for <soc@archiver.kernel.org>; Thu, 17 Jun 2021 01:50:05 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 262EF613D5; Thu, 17 Jun 2021 01:50:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 0EAF8613DE;
+	id 1FEEB613E3; Thu, 17 Jun 2021 01:50:05 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 07A4A613DB;
 	Thu, 17 Jun 2021 01:50:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1623894605;
-	bh=wTk2x5j9f+09WS6ktH2+P+bhovETIhHzF1dFO+g1HM8=;
+	bh=D2Xzw4Qnv+Qzvbfq1/wPVlRqDaMIaBftRSLWj0NMCWc=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=mKB2Uty8xUmwGPSMB8l5KnyI/OlDJuH2t//M2C6SmqFIsQx1DZJSKjOaUdzUAFU1m
-	 gvI/h3cxKAZMyRsnxdQngbSve/0Lh4AiH8rjuJFifgby7i1KYU+XcDHGdUBdGOdjnY
-	 mBfs58t7s2gEeDR8Ar5iJeS6xyrujQ4IqGxqpohwQLZ6SYZk6PytVnBAlwr9XhSAtG
-	 iem4Agv2AenwQyIDAUn5qoYWZigFY0eIy0vifpCt75jXihk46pmv1OdTyor+iry4Cd
-	 nxZ6gUvWGO6drkQwwfhPwqhZJqMqFaoNi2kXES+Ls1W+TljVI86fpR0Onl6oNj9J61
-	 bnMQRTwx4n+ow==
+	b=je6wlIoX2SWgAAztv2iOEum5+XC4hlshdW7Ynof3UG9DSe8T7LO9TUp2MqfMUP29M
+	 OGgS8cop+y/iRDz2XZNHDlGbsaIofZE98J6s+FGHq2whZJThETkK9Ft3tDsSKbkSHO
+	 JRbfeB91eCahqGyyy06eNYqJyL6c4M+QzaE/oDSObKOEicOZzqfFFcbTIoofk4EVs4
+	 ZSXMBE20U/M0/gr1VqiCxZwR3zwDbR+AmFBiYE7Mhgy4PGooEeDqkH98QSNhOr1YHM
+	 o07A6/ZuRiY0XkIHr86BdCA3hNAaGJZiiXvLnPWqLXRT5rv4cpIsBTakfnP7Cutr/s
+	 bXiSudLFSB6WQ==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 00C5560CD7;
-	Thu, 17 Jun 2021 01:50:05 +0000 (UTC)
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id EC08860989;
+	Thu, 17 Jun 2021 01:50:04 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] arm: dts: amlogic updates for v5.14
+Subject: Re: [GIT PULL] memory: Tegra for v5.14, part two
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162389460499.26973.2335308281546800517.git-patchwork-notify@kernel.org>
+ <162389460496.26973.9044984526081713013.git-patchwork-notify@kernel.org>
 Date: Thu, 17 Jun 2021 01:50:04 +0000
-References: <2f19a5a1-3ed9-dd11-02f1-7d535cb1c25c@baylibre.com>
-In-Reply-To: <2f19a5a1-3ed9-dd11-02f1-7d535cb1c25c@baylibre.com>
-To: Neil Armstrong <narmstrong@baylibre.com>
+References: <20210614195200.21657-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210614195200.21657-1-krzysztof.kozlowski@canonical.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -43,20 +43,19 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Wed, 16 Jun 2021 08:26:40 +0200 you wrote:
-> Hi,
+On Mon, 14 Jun 2021 21:52:00 +0200 you wrote:
+> Hi Arnd and Olof,
 > 
-> Here's a single ARM DT changes for v5.14 to add UART FIFO size like the ARM64 SoCs support.
-> 
-> Neil
-> 
-> The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+> Tegra got quite big rework this cycle.  The last piece comes from Thierry,
+> however it depends on one patch in Will's tree.  Since the last Thierry's
+> patches depend both on that one patch and other memory controller drivers
+> changes, they are here.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] arm: dts: amlogic updates for v5.14
-    https://git.kernel.org/soc/soc/c/9be389934dc5
+  - [GIT,PULL] memory: Tegra for v5.14, part two
+    https://git.kernel.org/soc/soc/c/1eb5f83ee936
 
 You are awesome, thank you!
 --
