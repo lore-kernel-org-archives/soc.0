@@ -1,137 +1,66 @@
-Return-Path: <SRS0=b/9o=LL=lixom.net=olof@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC2EAC48BE8
-	for <soc@archiver.kernel.org>; Thu, 17 Jun 2021 01:36:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48EBEC48BE8
+	for <soc@archiver.kernel.org>; Thu, 17 Jun 2021 01:50:05 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 951D06112D; Thu, 17 Jun 2021 01:36:31 +0000 (UTC)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 55E72613D5
-	for <soc@kernel.org>; Thu, 17 Jun 2021 01:36:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 55E72613D5
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lixom.net
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=olof@lixom.net
-Received: by mail-lj1-f173.google.com with SMTP id b37so6429093ljr.13
-        for <soc@kernel.org>; Wed, 16 Jun 2021 18:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=DdalLyZlBTBXHIWH1visTtmvg926dUYs77hPwyHRCtw=;
-        b=yrXKHg4vzHZFodN/LDRp6qfTdwYKJBCO+H82Ho/nwE3yaeZGoKaBMEkHFqFjU65j2T
-         laujFBLakXqYvJpmFikQ81KIbPKC22lTkBUIdqtTOVI0y7LOXOiL0pusFBap4ZjeaSTE
-         QRESjd4Ira0qLOm84R4SEzOf/2EiVre9yFhldd7BPmlrlFNYd/KHhx4bQB/tlJvKf14Q
-         n0LCIHbn0lS/qY316oThRD2srsnE4knakM1W12rV/Own1oK85eMU1CQro+CbXJSt/DDO
-         H4Z9v2Rx9wMwXkQe/wPQfs89TCHmMhu6jbAU23iDP0GlK6iOTE8Ny54oHtV+LGnnttVN
-         56oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DdalLyZlBTBXHIWH1visTtmvg926dUYs77hPwyHRCtw=;
-        b=Ln7W2cB3OcDNd8bvFDb0PjBm5MpLKDFqQTlSKCFibgVat50wDXhyAm34qs/uMdlEz5
-         vY7/22B6yNXl1hMWaAVPZjT/FYTYtfHQuCsYxEau6L+V5FTjgjhD3H4T0wYb8GtSwkLn
-         SqUKULWPvvo/+a7CB2N4TKJZ/6lfWyTXgsN6C/akupaP/m8lvA47Z6wPWY1PubY+0MjS
-         /4C+F++czCqSJe2rVc+NkEJxLPfhxJSNtgNKg1ZcgOViXeJwNxXhmzfnVhHLQc8uxZWp
-         POHnY/8VZVg8HCNz7Z9JP19W7FHBfbxBVbHy/lriK6LyHbkl/jkXr6qEn6I8qZeKTKAC
-         pldA==
-X-Gm-Message-State: AOAM530hA1UB5ZxMYgk8eZqnTFevLHL9QwRqhpNBeRHZS0NaSog72M8+
-	0TogF231300UkORt5nDYZFEY5g==
-X-Google-Smtp-Source: ABdhPJzFIQQYCOqkl8w4GMt/J7LdBJyrfP63YWpJGFdO+JZQGLZafjEQYvfobFMVek1oJ2CJa5EXiQ==
-X-Received: by 2002:a2e:881a:: with SMTP id x26mr2401311ljh.161.1623893789404;
-        Wed, 16 Jun 2021 18:36:29 -0700 (PDT)
-Received: from localhost (h85-30-9-151.cust.a3fiber.se. [85.30.9.151])
-        by smtp.gmail.com with ESMTPSA id y22sm412153lfh.154.2021.06.16.18.36.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jun 2021 18:36:28 -0700 (PDT)
-Date: Wed, 16 Jun 2021 17:35:52 -0700
-From: Olof Johansson <olof@lixom.net>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org,
-	linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-	Thierry Reding <treding@nvidia.com>, Will Deacon <will@kernel.org>
-Subject: Re: [GIT PULL] memory: Tegra for v5.14, part two
-Message-ID: <20210617003552.GA7462@lx2k>
-References: <20210614195200.21657-1-krzysztof.kozlowski@canonical.com>
- <20210615154155.GE11724@lx2k>
- <f4f3762d-7036-15fd-2f05-fcd617634aef@canonical.com>
+	id 12F3F613E4; Thu, 17 Jun 2021 01:50:05 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id EF296613DD;
+	Thu, 17 Jun 2021 01:50:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1623894605;
+	bh=cl1jRqFW5igs2WeDp7ssJR5yA7cDSeBdGmXiS+9qkxk=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=AijsuL3yzyue1LF+dI5EpHEaUxFXbRjmnJ/Oz26bZsYATDhCTaI6xPiL4T7qeVL8Z
+	 uuaT+aBDRxGaY3yDMT7EGwXaUGRs12lvOmvCnH9mKlAIICmADgjGiDhYvKqosAujnQ
+	 etkDjPYjWvJG+GwbnmuXWarHjEbp6fxfK3TYjLp7akSv2wyBqHUJORrMwBj+5v9bWt
+	 KFdQZj1fOP7m+0UNXICH2IRsqgG7oMoxbWAHQ6hyPkP+5WmYiVqDyAXBRgEbb267Uw
+	 pYbe4RaYdDy9tmSnH/6qb80ZX06qWqXfEovQf1mDyb+34eR2PpayoVYhfCkOCpJBcl
+	 wkloFY6dsxfrA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E2DF060A6B;
+	Thu, 17 Jun 2021 01:50:04 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4f3762d-7036-15fd-2f05-fcd617634aef@canonical.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] arm64: dts: amlogic updates for v5.14, part 2
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <162389460492.26973.15492232222731488700.git-patchwork-notify@kernel.org>
+Date: Thu, 17 Jun 2021 01:50:04 +0000
+References: <c953e97a-f901-a749-1fb6-b1caa75b4748@baylibre.com>
+In-Reply-To: <c953e97a-f901-a749-1fb6-b1caa75b4748@baylibre.com>
+To: Neil Armstrong <narmstrong@baylibre.com>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-On Wed, Jun 16, 2021 at 09:20:59AM +0200, Krzysztof Kozlowski wrote:
-> On 15/06/2021 17:41, Olof Johansson wrote:
-> > Hi,
-> > 
-> > 
-> > On Mon, Jun 14, 2021 at 09:52:00PM +0200, Krzysztof Kozlowski wrote:
-> >> Hi Arnd and Olof,
-> >>
-> >> Tegra got quite big rework this cycle.  The last piece comes from Thierry,
-> >> however it depends on one patch in Will's tree.  Since the last Thierry's
-> >> patches depend both on that one patch and other memory controller drivers
-> >> changes, they are here.
-> >>
-> >> Best regards,
-> >> Krzysztof
-> > 
-> > So, this pull request is a bit weird. It contains a lot more than what the
-> > email indicates:
-> > 
-> >> The following changes since commit 393d66fd2cacba3e6aa95d7bb38790bfb7b1cc3a:
-> >>
-> >>   memory: tegra: Implement SID override programming (2021-06-03 21:50:43 +0200)
-> > 
-> > This seems to be a patch in the middle of the new material in your branch, not
-> > the start of what we already have in our tree.
-> > 
-> > As a result, the diffstat when we merge looks completely different. While
-> > I generally trust you to not try to squeeze in material under the radar, it's
-> > also unfortunately making it hard to double-check that you didn't accidentally
-> > bring in something you didn't mean to.
-> > 
-> > So, before I merge this.. can you confirm, or even better generate a full pull
-> > request summary/diffstat/pull request email that shows the full new material?
+Hello:
+
+This pull request was applied to soc/soc.git (refs/heads/for-next):
+
+On Wed, 16 Jun 2021 08:25:11 +0200 you wrote:
+> Hi,
 > 
-> There should be nothing hidden and I created this pull request on top of
-> my previous Tegra one:
-> "[GIT PULL] memory: Tegra memory controller for v5.14"
-> https://lore.kernel.org/lkml/20210607084910.21024-1-krzysztof.kozlowski@canonical.com/
+> Here's some changes to enhance support for the Odroid C4 & Odroid HC4 boards.
 > 
-> I had impression you pulled that in, but now I don't see the such branch
-> in the soc tree. Maybe that's the answer - the earlier material was never in?
-
-Ah, based on the discussion and the generation of a new stable branch that is
-shared, I interpreted it as you spinning the whole branch/pull request again,
-and indeed I never pulled in the base contents.
-
-That explains the difference here.
-
-(I also want to be clear that I wasn't accusing you of trying to hide material,
-but that it came across as a mistake and/or miscommunication, which indeed it
-was)
-
-> Anyway, before is the full diffstat of that branch so:
-> tags/memory-controller-drv-tegra-5.14 + tags/memory-controller-drv-tegra-5.14-2
+> Neil
 > 
-> However I think it is still good to pull
-> tags/memory-controller-drv-tegra-5.14 first, so the tag-message won't
-> get lost. That tag-message was also explaining why there is a pull from
-> Thierry (with clock and regulator).
-> The second pull does not mention earlier material.
+> The following changes since commit a270a2b24de5be0480136cbbd7805b9134762b97:
+> 
+> [...]
 
-Cool, sounds good. Merging.
+Here is the summary with links:
+  - [GIT,PULL] arm64: dts: amlogic updates for v5.14, part 2
+    https://git.kernel.org/soc/soc/c/194eb4eab5db
 
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
--Olof
 
