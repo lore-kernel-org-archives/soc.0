@@ -7,19 +7,19 @@ X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01640C48BDF
-	for <soc@archiver.kernel.org>; Fri, 18 Jun 2021 07:54:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 483D1C48BDF
+	for <soc@archiver.kernel.org>; Fri, 18 Jun 2021 07:54:53 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id DC3ED6120A; Fri, 18 Jun 2021 07:54:50 +0000 (UTC)
+	id 31D22613AA; Fri, 18 Jun 2021 07:54:53 +0000 (UTC)
 Received: from muru.com (muru.com [72.249.23.125])
-	by mail.kernel.org (Postfix) with ESMTP id 629146109E;
-	Fri, 18 Jun 2021 07:54:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 629146109E
+	by mail.kernel.org (Postfix) with ESMTP id CF6586109E;
+	Fri, 18 Jun 2021 07:54:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CF6586109E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=tony@atomide.com
 Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id 620BF807E;
-	Fri, 18 Jun 2021 07:54:59 +0000 (UTC)
+	by muru.com (Postfix) with ESMTP id C4C2C81AC;
+	Fri, 18 Jun 2021 07:55:01 +0000 (UTC)
 From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -27,44 +27,72 @@ Cc: arm@kernel.org,
 	linux-omap@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL 1/2] Non-urgent fixes for omaps for v5.14
-Date: Fri, 18 Jun 2021 10:54:45 +0300
-Message-Id: <pull-1624002812-396117@atomide.com>
+Subject: [GIT PULL 2/2] Devicetree binding clean-up for omaps for v5.14
+Date: Fri, 18 Jun 2021 10:54:46 +0300
+Message-Id: <pull-1624002812-396117@atomide.com-2>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <pull-1624002812-396117@atomide.com>
+References: <pull-1624002812-396117@atomide.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: "Tony Lindgren" <tony@atomide.com>
 
-The following changes since commit 78b4b165280d3d70e7a217599f0c06a4c0bb11f9:
+The following changes since commit 9e7f5ee1137397def6580461e27e5efcb68183ee:
 
-  ARM: dts: dra7: Fix duplicate USB4 target module node (2021-06-11 08:30:42 +0300)
+  ARM: dts: OMAP2+: Replace underscores in sub-mailbox node names (2021-05-27 15:12:33 +0300)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.14/fixes-not-urgent-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.14/dt-cleanup-signed
 
-for you to fetch changes up to 093a474ce10d8ea3db3ef2922aca5a38f34bab1b:
+for you to fetch changes up to 9b11fec7345f21995f4ea4bafb0e108b9a620238:
 
-  ARM: OMAP2+: Block suspend for am3 and am4 if PM is not configured (2021-06-11 10:43:08 +0300)
-
-----------------------------------------------------------------
-Non-urgent fixes for omaps for v5.14 merge window
-
-Warn and block suspend for am335x unless the PM related modules and
-firmware are loaded and warn otherwise. Otherwise we easily end up
-with a suspended system with nothing capable of waking it up.
-
-We also drop a duplicated prototype for am33xx_init_early().
+  ARM: dts: am437x: align ti,pindir-d0-out-d1-in property with dt-shema (2021-06-11 10:35:08 +0300)
 
 ----------------------------------------------------------------
-Alejandro Lucero (1):
-      ARM: OMAP2+: remove duplicated prototype
+Devicetree binding clean-up for omaps for v5.14
 
-Tony Lindgren (1):
-      ARM: OMAP2+: Block suspend for am3 and am4 if PM is not configured
+Minor devicetree clean-up for omaps for the binding checks:
 
- arch/arm/mach-omap2/common.h      |  1 -
- arch/arm/mach-omap2/pm33xx-core.c | 40 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 40 insertions(+), 1 deletion(-)
+- Drop unsupported dmas for omap2/3 i2c
+- Drop redundant ehrpwm compatible
+- Drop am33xx-ecap compatible no longer needed
+- Correct node names for ecap
+- Drop unsupported interrupts for ecap
+- Drop redundant ti,pcf8575
+- Correct usage for ti,pindir-d0-out-d1-in
+
+----------------------------------------------------------------
+Aswath Govindraju (2):
+      ARM: dts: am335x: align ti,pindir-d0-out-d1-in property with dt-shema
+      ARM: dts: am437x: align ti,pindir-d0-out-d1-in property with dt-shema
+
+Geert Uytterhoeven (1):
+      ARM: dts: dra7x-evm: Drop "ti,pcf8575"
+
+Lokesh Vutla (4):
+      ARM: dts: ti: drop usage of redundant compatible
+      ARM: dts: ti: Drop usage of ti,am33xx-ecap from DT nodes
+      ARM: dts: ti: Fix node name for all ecap dt nodes
+      ARM: dts: am33xx: Drop interrupt property from ecap nodes
+
+Vignesh Raghavendra (1):
+      ARM: dts: omap2/3: Drop dmas property from I2C node
+
+ arch/arm/boot/dts/am335x-cm-t335.dts    |  4 ++--
+ arch/arm/boot/dts/am335x-evm.dts        |  2 +-
+ arch/arm/boot/dts/am335x-evmsk.dts      |  2 +-
+ arch/arm/boot/dts/am33xx-l4.dtsi        | 30 +++++++++---------------------
+ arch/arm/boot/dts/am437x-l4.dtsi        | 33 ++++++++++++---------------------
+ arch/arm/boot/dts/am43x-epos-evm.dts    |  4 ++--
+ arch/arm/boot/dts/da850.dtsi            | 21 ++++++++-------------
+ arch/arm/boot/dts/dm816x.dtsi           |  4 ----
+ arch/arm/boot/dts/dra7-evm.dts          |  6 +++---
+ arch/arm/boot/dts/dra7-l4.dtsi          |  6 +++---
+ arch/arm/boot/dts/dra72-evm-common.dtsi |  4 ++--
+ arch/arm/boot/dts/dra76-evm.dts         |  6 +++---
+ arch/arm/boot/dts/omap2.dtsi            |  4 ----
+ arch/arm/boot/dts/omap3.dtsi            |  6 ------
+ 14 files changed, 46 insertions(+), 86 deletions(-)
