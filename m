@@ -5,16 +5,16 @@ X-Spam-Level:
 X-Spam-Status: No, score=-22.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ABECC48BE5
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 21 Jun 2021 16:51:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA50CC4743C
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 21 Jun 2021 16:52:16 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1FFEF6100B
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 21 Jun 2021 16:51:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1FFEF6100B
+	by mail.kernel.org (Postfix) with ESMTPS id B251E60200
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 21 Jun 2021 16:52:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B251E60200
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,54 +23,54 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
 	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=nJuil7LLEfRerPWmeC4ujOj+SwwtVo7aBOFQIPvyc3M=; b=ijpZi0Hdf8dUNg
-	q9+FyiOnIPvE+cI0y2Ynj5RyWpXHoQvCrKJ1kxf6i6NCmKvQBmiK0BFhC8b6GIElHzzoFNXVAHHRx
-	gFS/jXA+KhxYlprVaRK4U6SPgZY1pIToxuD6z3cPoInDzdquaqGuZpWjgIknLBbEUJFJS8rdRkpZh
-	xB8WCOntR8I3XloWk0eqDYfaZP46/g61g88f0cDbxfgaAeeGslQ3JtOq20/JUE5vBw4ZQIoU1507k
-	9dF7LgItzuXD9/tUIFIiDVf2qzo/TOo5pYnXPcWrWFPiH0Buy2BHIb13hY+TboRTdz7rTP33rts3o
-	aT4YtNK1iIzZMoKE7aBw==;
+	List-Owner; bh=YkPbOQcXfOtf0AZvwNSvLXVf2I9RFL+KK9ZrqeOWTlw=; b=nnzZ6wAj6YPE9r
+	1p6OFUglEj+jL559wvPV1YOVPyMYlzDZwGqmFjOqVcjsWi93YEjvcWil5xs93WSqrdjsWrya8xpZp
+	qMFUixtgooVFtFZ/bDLi2cfIa+ZLOxxNCYkyPYmoFRXSkJMfW3q4nXpsug0nLIWFF3cbag6maBcR5
+	O447Xm74AlZhICQEjWO/on1tKARWQ/J7P5t/sHuGPXxpA1Kj/F7aidS9TN2d3IOL7ECkC+Chkom4f
+	8EpLlVH37Y0/RqLkrDMCyUlT1ybUbTUUtKADjPVw3zcBgoskaWvQcYOcRiXKCiTFXNNaqThsPXCbV
+	a/wRKLIYigFhVjEHziHA==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lvN7R-004Bd1-Li; Mon, 21 Jun 2021 16:49:53 +0000
-Received: from mail-ot1-x330.google.com ([2607:f8b0:4864:20::330])
+	id 1lvN7t-004BgG-4c; Mon, 21 Jun 2021 16:50:21 +0000
+Received: from mail-ot1-x331.google.com ([2607:f8b0:4864:20::331])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lvN7N-004Bcb-J1
- for linux-arm-kernel@lists.infradead.org; Mon, 21 Jun 2021 16:49:51 +0000
-Received: by mail-ot1-x330.google.com with SMTP id
- f3-20020a0568301c23b029044ce5da4794so11774412ote.11
+ id 1lvN7p-004BfE-9F
+ for linux-arm-kernel@lists.infradead.org; Mon, 21 Jun 2021 16:50:18 +0000
+Received: by mail-ot1-x331.google.com with SMTP id
+ j11-20020a9d738b0000b02903ea3c02ded8so18365140otk.5
  for <linux-arm-kernel@lists.infradead.org>;
- Mon, 21 Jun 2021 09:49:48 -0700 (PDT)
+ Mon, 21 Jun 2021 09:50:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=bF7QAtOIvA59mvUdHWqxoxtNEuKey+y8GoZWC2X+gMI=;
- b=n78KEmPWL1THyfzZIIOeNDyHVeux4D4TRYL3kp9DI2e6FtU9e+PdLSHFTmlc5mjynZ
- AlGW+GVf5/MNbEvbI5NhluWTCC86LpTrJRY18ZxFyGI1RkQdPEbo1qIIunh0QUM2Rggm
- GwnsRr7n18j30d7L3og1YfwQb/P0i2ntjG9tMXqvK70fZ7SFAgNhbwBnJPdSQr1A25IY
- W/j4Ot2W5fvU6pxvHjZz92B8u6AvZa+a8LF4FNBU3bIuNIFmKkWb/h+pBpHuQEMZ4Nb2
- m+ksW8dVE4YsFu21puTwh5khnb6dUu9ELK/9X/yjvhx/QS/N9OgSGqY/ZmOEgyLgP1pQ
- u0XA==
+ bh=9JCax5gzpRXFjKOT7fUvz8rzc/IG8uAiWNtIkm2nNbY=;
+ b=Rn08BY9/tYgwbs9DDd8jLwNfj2gQyf4LDzySwhwTWXAbeKIP+wo18+4NObUz/okt6s
+ NV/KlHs6rGvDguY4LJjdbXfskE6WEsFQR/XsX7r/KhOvz2pk+oS5FRnCpnICGmj3G1hV
+ x2FY8fqhOJ/4m7S2os8EJw67MD9yvxveBcXngBNjSHzNU6g/Z6dRp1rEQoc0jLutvXeH
+ g9R7sIlIbcH3flzX0bsGtHA33dwnUEeR6cwP/3lkVgH/AjvyH3NpJ+ljH0ajwLDz/KPp
+ 7f/qunNM0hserXrYdNjXrwxF0RyNN1EXCS4dk+iOOHnxvbk3JyVln2ceeR3njHfZRR1Y
+ hxOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=bF7QAtOIvA59mvUdHWqxoxtNEuKey+y8GoZWC2X+gMI=;
- b=maEOHcf38tYSJiliMX68ANM9UdWUFY+I9BdT4QsWbfXgXFt6c3YLpzuWGLs7JdytzG
- clgK2OXUCZGdwBdHpPyI6Mm55uA11z9Sqo65SLi7W9z/n5V9M4MH32RArEtW6FBk6sU8
- zlhSktF+IsjwUPnbW+G1uVypkrvF7S9PXFqEeUiosEJiEq5g7WLJKuZBhBIskqCe2LA7
- GzHro4LyhBPbnEcsejb/0aCsl1HQVmfq9m4VkpoGNJw/pf0zSvTftVnvneRfdQa5lYYM
- GERphPeYO+BHSIJYY/fE0kIsyP0SrA8jaW8NA4vBoQBOOlIBdVf6ugnsac9fNsMYPqCY
- QBZg==
-X-Gm-Message-State: AOAM5321phyw54tkd8rJ1eB4Na6+K9HQVXhO+faoXSRWSyoSgUvd7Mka
- K7TJvjHdoJoiKzNxhAot6e3L0A==
-X-Google-Smtp-Source: ABdhPJwtDbjES/M8XjaVf0m3x5msPOevYePiKWNTzeCbGzJEYnX1+95ULEdO0KfYb1Wj5PxjQXu5Lw==
-X-Received: by 2002:a9d:2aa4:: with SMTP id e33mr20918339otb.330.1624294187842; 
- Mon, 21 Jun 2021 09:49:47 -0700 (PDT)
+ bh=9JCax5gzpRXFjKOT7fUvz8rzc/IG8uAiWNtIkm2nNbY=;
+ b=FJF4Rh8YJY40a5Ctf8RqeHqEDmXfbom+k8BZ4xzEmD0RxU/S9KiehhQ0hOcjx4zzor
+ pimHpEmj3oZ+1gJUWbuO1lvgAyrwQlZb0VykmvQx6HjxwD/Z3+ghRlLsm6wanIRt+hvi
+ 5NLEZQxMNQs/7k3XytGsxCxjYS/vC2h3/Qfg8LRzwPhMil8xNoDp3S2q3s0KzS7Mh/3+
+ 95HBdkQhCr2bY2uAexgl7QCDM+XuiH6FquGzNhO5RebPBy8Rbs3eVgc9pthhfk+RWZVB
+ 7YPTWcNY4rwTHRZgI8M33mTHcMvdPE9R3yoRsEjKUKAQQlySFJADy/3QrLzub4jwFABT
+ W4MQ==
+X-Gm-Message-State: AOAM530R8qFpYL+Yif9m9RRHlXQMTqL9naiKC26OKM3wVYdwrDp6lcuJ
+ WMXIYnSV+cOUm94QwgWEgbW0LQ==
+X-Google-Smtp-Source: ABdhPJyvKQhJHOmA0cSNzv4OzqARvZ+VxAzloXXJh95f6t6nKTRaotVwmPFGPRaJkBxjih1bg71zhw==
+X-Received: by 2002:a9d:346:: with SMTP id 64mr21834506otv.320.1624294216372; 
+ Mon, 21 Jun 2021 09:50:16 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net.
  [104.57.184.186])
- by smtp.gmail.com with ESMTPSA id u11sm3726682oot.41.2021.06.21.09.49.46
+ by smtp.gmail.com with ESMTPSA id o6sm3115098ote.81.2021.06.21.09.50.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 21 Jun 2021 09:49:47 -0700 (PDT)
+ Mon, 21 Jun 2021 09:50:16 -0700 (PDT)
 From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -78,18 +78,16 @@ To: arm@kernel.org,
 Cc: linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
  Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@baylibre.com>,
- Konrad Dybcio <konrad.dybcio@somainline.org>,
- Bhupesh Sharma <bhupesh.sharma@linaro.org>,
- Robert Marko <robimarko@gmail.com>,
- Shaik Sajida Bhanu <sbhanu@codeaurora.org>
-Subject: [GIT PULL] Additional Qualcomm ARM64 DT updates for v5.14
-Date: Mon, 21 Jun 2021 11:49:46 -0500
-Message-ID: <20210621164946.942956-1-bjorn.andersson@linaro.org>
+ Vinod Koul <vkoul@kernel.org>
+Subject: [GIT PULL] Additional Qualcomm ARM64 defconfig udpate for v5.14
+Date: Mon, 21 Jun 2021 11:50:15 -0500
+Message-ID: <20210621165015.943060-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210621_094949_680722_2B833DBC 
-X-CRM114-Status: GOOD (  11.92  )
+X-CRM114-CacheID: sfid-20210621_095017_370072_0DD4B770 
+X-CRM114-Status: UNSURE (   7.71  )
+X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -105,106 +103,33 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210621164946.b6xzTXr_FhE1I4wVWjAnVssPsTNTmHEIcNBFhEm1_lk@z>
+Message-ID: <20210621165015.IaF5cc592nL_wf_RiHFsyP9TmQ55qG7QPFjtFMByxAI@z>
 
-Hi soc@
+The following changes since commit e9cd414c1136aa31d34acc04c175bfaca4662f89:
 
-Sorry for this late pull request being so big, but I hope you're open to merge
-these interesting additions that arrived after the previous pull.
-
-Regards,
-Bjorn
-
-The following changes since commit 81cfa462e458405f58b23f45ddd9439c70bf5347:
-
-  arm64: dts: qcom: sc7180: Add xo clock for eMMC and Sd card (2021-06-14 11:29:46 -0500)
+  arm64: defconfig: add drivers needed for DragonBoard410c (2021-06-14 16:59:27 -0500)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.14-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-5.14-1
 
-for you to fetch changes up to abe66bb7a2f6e308f2fb059d60b1076df84306ad:
+for you to fetch changes up to 8ae030c34dce4f5764e945b325e8dc4d2adef044:
 
-  arm64: dts: ipq8074: Add QUP6 I2C node (2021-06-21 11:21:11 -0500)
-
-----------------------------------------------------------------
-Additional Qualcomm ARM64 DT updates for v5.14
-
-After a series of refactorings and additions to the SM8150 and SM8250
-platform definitions, this adds new devicetree definitions for Sony
-Xperia 1, 5, 1II and 5II.
-
-It defines the Qualcomm SA8155p automotive platform as a derrivative of
-SM8150 and introduces the Automotive Deveopment Platform board.
-
-Lastly ipq8074 gains the definiton of an additiona I2C master and the
-SDHCI bus votes for sc7180 are tweaked.
+  arm64: defconfig: Enable renesas usb xhci pci host controller (2021-06-15 19:19:58 -0500)
 
 ----------------------------------------------------------------
-Bhupesh Sharma (5):
-      dt-bindings: arm: qcom: Add compatible for sm8150-mtp board
-      dt-bindings: arm: qcom: Add compatible for SA8155p-adp board
-      arm64: dts: qcom: pmm8155au_1: Add base dts file
-      arm64: dts: qcom: pmm8155au_2: Add base dts file
-      arm64: dts: qcom: sa8155p-adp: Add base dts file
+Additional Qualcomm ARM64 defconfig udpate for v5.14
 
-Konrad Dybcio (18):
-      arm64: dts: qcom: sm8250: Don't disable MDP explicitly
-      arm64: dts: qcom: sm8250: Add size/address-cells to dsi[01]
-      arm64: dts: qcom: sm8250: Fix pcie2_lane unit address
-      arm64: dts: qcom: sm8250: Add GPI DMA nodes
-      arm64: dts: qcom: sm8250: Disable Adreno and Venus by default
-      arm64: dts: qcom: sm8150: Disable Adreno and modem by default
-      arm64: dts: qcom: sm8150: Add support for SONY Xperia 1 / 5 (Kumano platform)
-      arm64: dts: qcom: sm8250: Add SDHCI2 sleep mode pinctrl
-      arm64: dts: qcom: sm8250: Move gpio.h inclusion to SoC DTSI
-      arm64: dts: qcom: sm8250: Add support for SONY Xperia 1 II / 5 II (Edo platform)
-      arm64: dts: qcom: sm8[12]50-pm8150: Move RESIN to pm8150 dtsi
-      arm64: dts: qcom: sm8250-edo: Fix up double "pinctrl-1"
-      arm64: dts: qcom: sm8250-edo: Add hardware keys
-      arm64: dts: qcom: sm8250: Commonize PCIe pins
-      arm64: dts: qcom: sm8250-edo: Enable PCIe
-      arm64: dts: qcom: sm8250-edo: Enable ADSP/CDSP/SLPI
-      arm64: dts: qcom: sm8250-edo: Enable GPI DMA
-      arm64: dts: qcom: sm8250-edo: Add Samsung touchscreen
+The Qualcomm Robotics RB3 Development Kit has a Renesas USB HUB on one
+of the PCIe busses, which requires the releated driver to be enabled to
+provide functional Ethernet and additional USB host ports.
 
-Robert Marko (1):
-      arm64: dts: ipq8074: Add QUP6 I2C node
+----------------------------------------------------------------
+Vinod Koul (1):
+      arm64: defconfig: Enable renesas usb xhci pci host controller
 
-Shaik Sajida Bhanu (1):
-      arm64: dts: qcom: sc7180: bus votes for eMMC and SD card
-
- Documentation/devicetree/bindings/arm/qcom.yaml    |  13 +
- arch/arm64/boot/dts/qcom/Makefile                  |   5 +
- arch/arm64/boot/dts/qcom/ipq8074.dtsi              |  15 +
- arch/arm64/boot/dts/qcom/pm8150.dtsi               |  12 +-
- arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi          | 135 +++++
- arch/arm64/boot/dts/qcom/pmm8155au_2.dtsi          | 108 ++++
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts           |  98 +---
- arch/arm64/boot/dts/qcom/sa8155p-adp.dts           | 360 ++++++++++++
- arch/arm64/boot/dts/qcom/sc7180.dtsi               |  20 +-
- arch/arm64/boot/dts/qcom/sm8150-hdk.dts            |  28 +-
- arch/arm64/boot/dts/qcom/sm8150-mtp.dts            |  28 +-
- .../dts/qcom/sm8150-sony-xperia-kumano-bahamut.dts |  19 +
- .../dts/qcom/sm8150-sony-xperia-kumano-griffin.dts |  13 +
- .../boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi   | 452 +++++++++++++++
- arch/arm64/boot/dts/qcom/sm8150.dtsi               |   6 +
- arch/arm64/boot/dts/qcom/sm8250-hdk.dts            |  33 +-
- arch/arm64/boot/dts/qcom/sm8250-mtp.dts            |  10 +
- .../dts/qcom/sm8250-sony-xperia-edo-pdx203.dts     |  15 +
- .../dts/qcom/sm8250-sony-xperia-edo-pdx206.dts     |  35 ++
- .../boot/dts/qcom/sm8250-sony-xperia-edo.dtsi      | 636 +++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sm8250.dtsi               | 188 +++++-
- 21 files changed, 2090 insertions(+), 139 deletions(-)
- create mode 100644 arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/pmm8155au_2.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/sa8155p-adp.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-bahamut.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-griffin.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx203.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx206.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
+ arch/arm64/configs/defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
 _______________________________________________
 linux-arm-kernel mailing list
