@@ -1,181 +1,173 @@
-Return-Path: <SRS0=Ogrm=LO=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=OjpN=LP=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 315F1C48BDF
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 20 Jun 2021 22:35:33 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9EACC48BC2
+	for <soc@archiver.kernel.org>; Mon, 21 Jun 2021 16:49:48 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id B14E460FE3; Mon, 21 Jun 2021 16:49:48 +0000 (UTC)
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ACC41601FC
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 20 Jun 2021 22:35:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org ACC41601FC
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=sntech.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=Q8M+u13eC5HVHTPyF7PSkghlh8T09wOCX04CHDaS3uE=; b=oeHbbqYbvSsREP
-	rlgKZ+fbuWNpIiNkbUE69aEhbcC71GEA8YAt+KOvpiu6QuHBygUM5DCY0/T/3CM+gdQ/PL4gQahHS
-	WQQbH0+4mRhisBa97oUl8OGuvW4FNQupWgZQnAM2xIjLc2NOkwC1FXDhdcE53+abh7DI9KUySIhuo
-	ouyRMWTjBHqERgTKO9OmyQIKvg6tDtn6RXUrB2BqTgkqmMfAs0UIb/xlz1753xeIEBaqWwP1M1U0f
-	xfuskkMK8Ldb6LiJ/aEVlJRqaFWWAW2tqZe5u+SpEpPI9duiHHb13fVElTEOXVPjkm0bpz0CRcuO7
-	N886woZWjzrXmHsWQaqQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lv614-001h8F-6E; Sun, 20 Jun 2021 22:34:10 +0000
-Received: from gloria.sntech.de ([185.11.138.130])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lv610-001h6n-0c; Sun, 20 Jun 2021 22:34:07 +0000
-Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74]
- helo=phil.localnet)
- by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
- (Exim 4.92) (envelope-from <heiko@sntech.de>)
- id 1lv60y-0005WU-TP; Mon, 21 Jun 2021 00:34:04 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
+	by mail.kernel.org (Postfix) with ESMTPS id 8EF9C60FDC
+	for <soc@kernel.org>; Mon, 21 Jun 2021 16:49:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8EF9C60FDC
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=bjorn.andersson@linaro.org
+Received: by mail-ot1-f50.google.com with SMTP id j11-20020a9d738b0000b02903ea3c02ded8so18363536otk.5
+        for <soc@kernel.org>; Mon, 21 Jun 2021 09:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bF7QAtOIvA59mvUdHWqxoxtNEuKey+y8GoZWC2X+gMI=;
+        b=n78KEmPWL1THyfzZIIOeNDyHVeux4D4TRYL3kp9DI2e6FtU9e+PdLSHFTmlc5mjynZ
+         AlGW+GVf5/MNbEvbI5NhluWTCC86LpTrJRY18ZxFyGI1RkQdPEbo1qIIunh0QUM2Rggm
+         GwnsRr7n18j30d7L3og1YfwQb/P0i2ntjG9tMXqvK70fZ7SFAgNhbwBnJPdSQr1A25IY
+         W/j4Ot2W5fvU6pxvHjZz92B8u6AvZa+a8LF4FNBU3bIuNIFmKkWb/h+pBpHuQEMZ4Nb2
+         m+ksW8dVE4YsFu21puTwh5khnb6dUu9ELK/9X/yjvhx/QS/N9OgSGqY/ZmOEgyLgP1pQ
+         u0XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bF7QAtOIvA59mvUdHWqxoxtNEuKey+y8GoZWC2X+gMI=;
+        b=CQXxo2s2zY0jp4wapn3eiwvwgNr1iw0CWrKFDPx//ZJWuW7yUJb51NohAynu1yocQC
+         vIS3zVNEZyQ8+KuYNAbIcgnt7DsxVfg2mv0lP43sYlOsUKUzZYce/eT1OSbiAuPGIRWE
+         2Oy6vJN4llVkjkSF0KM0YTwdzIs5v+EM5kwL9GwUwR2Rd9mv3KqWbpnVHHWqeUSliVXj
+         RTtbBY3janO+77FU7so3MOtlTiw9o4kr5nUA9lZS+05mPMBFKSrguKtGCEbZk9AewaxR
+         R2BlsJd6IyTbFwEy+wYA4YKOHiifpgIK3tCHSjPTScN+8nbpoAvO54RSqeRfxhAuuhhd
+         YOeg==
+X-Gm-Message-State: AOAM531b34gnVBF/uBPnViV83+M/KCMOjJNlNRWmLcs92J0nTin4iFgR
+	7dZ/+0ilo3yzNWxEcUtVOxvBTA==
+X-Google-Smtp-Source: ABdhPJwtDbjES/M8XjaVf0m3x5msPOevYePiKWNTzeCbGzJEYnX1+95ULEdO0KfYb1Wj5PxjQXu5Lw==
+X-Received: by 2002:a9d:2aa4:: with SMTP id e33mr20918339otb.330.1624294187842;
+        Mon, 21 Jun 2021 09:49:47 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id u11sm3726682oot.41.2021.06.21.09.49.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jun 2021 09:49:47 -0700 (PDT)
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts64 changes for 5.14
-Date: Mon, 21 Jun 2021 00:34:04 +0200
-Message-ID: <2796982.e9J7NaK4W3@phil>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+	Robert Marko <robimarko@gmail.com>,
+	Shaik Sajida Bhanu <sbhanu@codeaurora.org>
+Subject: [GIT PULL] Additional Qualcomm ARM64 DT updates for v5.14
+Date: Mon, 21 Jun 2021 11:49:46 -0500
+Message-Id: <20210621164946.942956-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210620_153406_103309_6379ECD6 
-X-CRM114-Status: GOOD (  12.71  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210620223404.yl27kOpYRqUBFKXVobHcOXDDNrsw1yFoUnnxcgRhl7s@z>
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+Hi soc@
 
-  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+Sorry for this late pull request being so big, but I hope you're open to merge
+these interesting additions that arrived after the previous pull.
+
+Regards,
+Bjorn
+
+The following changes since commit 81cfa462e458405f58b23f45ddd9439c70bf5347:
+
+  arm64: dts: qcom: sc7180: Add xo clock for eMMC and Sd card (2021-06-14 11:29:46 -0500)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git ta=
-gs/v5.14-rockchip-dts64-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.14-1
 
-for you to fetch changes up to eb607cd4957fb0ef97beb2a8293478be6a54240a:
+for you to fetch changes up to abe66bb7a2f6e308f2fb059d60b1076df84306ad:
 
-  arm64: dts: rockchip: Re-add regulator-always-on for vcc_sdio for rk3399-=
-roc-pc (2021-06-19 23:55:10 +0200)
+  arm64: dts: ipq8074: Add QUP6 I2C node (2021-06-21 11:21:11 -0500)
 
 ----------------------------------------------------------------
-A lot of dt-yaml related fixes; PCIe, USB and pwm-fans for Helios64;
-Display rotation and audio codec for the Odroid Go Advance;
-IR, spdif and usb-c support for rk3399-firefly;
-USB support for rk3308 and some rk3328 boards and setting
-the PCIe link speed to actually only supported speed on rk3399.
+Additional Qualcomm ARM64 DT updates for v5.14
+
+After a series of refactorings and additions to the SM8150 and SM8250
+platform definitions, this adds new devicetree definitions for Sony
+Xperia 1, 5, 1II and 5II.
+
+It defines the Qualcomm SA8155p automotive platform as a derrivative of
+SM8150 and introduces the Automotive Deveopment Platform board.
+
+Lastly ipq8074 gains the definiton of an additiona I2C master and the
+SDHCI bus votes for sc7180 are tweaked.
 
 ----------------------------------------------------------------
-Alex Bee (3):
-      arm64: dts: rockchip: add ir-receiver for rk3399-roc-pc
-      arm64: dts: rockchip: Re-add regulator-boot-on, regulator-always-on f=
-or vdd_gpu on rk3399-roc-pc
-      arm64: dts: rockchip: Re-add regulator-always-on for vcc_sdio for rk3=
-399-roc-pc
+Bhupesh Sharma (5):
+      dt-bindings: arm: qcom: Add compatible for sm8150-mtp board
+      dt-bindings: arm: qcom: Add compatible for SA8155p-adp board
+      arm64: dts: qcom: pmm8155au_1: Add base dts file
+      arm64: dts: qcom: pmm8155au_2: Add base dts file
+      arm64: dts: qcom: sa8155p-adp: Add base dts file
 
-Benjamin Gaignard (1):
-      arm64: dts: rockchip: Remove useless interrupt-names properties from =
-px30 IOMMU nodes
+Konrad Dybcio (18):
+      arm64: dts: qcom: sm8250: Don't disable MDP explicitly
+      arm64: dts: qcom: sm8250: Add size/address-cells to dsi[01]
+      arm64: dts: qcom: sm8250: Fix pcie2_lane unit address
+      arm64: dts: qcom: sm8250: Add GPI DMA nodes
+      arm64: dts: qcom: sm8250: Disable Adreno and Venus by default
+      arm64: dts: qcom: sm8150: Disable Adreno and modem by default
+      arm64: dts: qcom: sm8150: Add support for SONY Xperia 1 / 5 (Kumano platform)
+      arm64: dts: qcom: sm8250: Add SDHCI2 sleep mode pinctrl
+      arm64: dts: qcom: sm8250: Move gpio.h inclusion to SoC DTSI
+      arm64: dts: qcom: sm8250: Add support for SONY Xperia 1 II / 5 II (Edo platform)
+      arm64: dts: qcom: sm8[12]50-pm8150: Move RESIN to pm8150 dtsi
+      arm64: dts: qcom: sm8250-edo: Fix up double "pinctrl-1"
+      arm64: dts: qcom: sm8250-edo: Add hardware keys
+      arm64: dts: qcom: sm8250: Commonize PCIe pins
+      arm64: dts: qcom: sm8250-edo: Enable PCIe
+      arm64: dts: qcom: sm8250-edo: Enable ADSP/CDSP/SLPI
+      arm64: dts: qcom: sm8250-edo: Enable GPI DMA
+      arm64: dts: qcom: sm8250-edo: Add Samsung touchscreen
 
-Cameron Nemo (1):
-      arm64: dts: rockchip: Enable USB3 for rk3328 Rock64
+Robert Marko (1):
+      arm64: dts: ipq8074: Add QUP6 I2C node
 
-Chen-Yu Tsai (4):
-      arm64: dts: rockchip: Enable USB3 for rk3328 ROC-RK3328-CC
-      arm64: dts: rockchip: Enable USB3 for rk3328 Rock Pi E
-      arm64: dts: rockchip: Enable USB3 Ethernet on rk3328 NanoPi R2S
-      arm64: dts: rockchip: Drop fephy pinctrl from gmac2phy on rk3328 rock=
--pi-e
+Shaik Sajida Bhanu (1):
+      arm64: dts: qcom: sc7180: bus votes for eMMC and SD card
 
-Chris Morgan (2):
-      arm64: dts: rockchip: add rk817 codec to Odroid Go
-      arm64: dts: rockchip: Add Rotation Property for OGA Panel
-
-Elaine Zhang (3):
-      arm64: dts: rockchip: Fix power-controller node names for px30
-      arm64: dts: rockchip: Fix power-controller node names for rk3328
-      arm64: dts: rockchip: Fix power-controller node names for rk3399
-
-Ezequiel Garcia (1):
-      arm64: dts: rockchip: add timer0 clocks on rk3368
-
-Johan Jonker (5):
-      arm64: dts: rockchip: fix pinctrl sleep nodename for rk3399.dtsi
-      arm64: dts: rockchip: add #power-domain-cells to power domain nodes
-      arm64: dts: rockchip: fix regulator-gpio states array
-      arm64: dts: rename grf-gpio nodename in rk3328.dtsi
-      arm64: dts: rockchip: rename nodename for phy-rockchip-inno-usb2
-
-Peter Robinson (5):
-      arm64: dts: rockchip: Use only supported PCIe link speed on rk3399
-      arm64: dts: rockchip: add SPDIF node for rk3399-firefly
-      arm64: dts: rockchip: add infrared receiver node to RK3399 Firefly
-      arm64: dts: rockchip: Sort rk3399 firefly pinmux entries
-      arm64: dts: rockchip: Add USB-C port details for rk3399 Firefly
-
-Tianling Shen (1):
-      arm64: dts: rockchip: rename LED label for NanoPi R4S
-
-Tobias Schramm (1):
-      arm64: dts: rockchip: add USB support to rk3308.dtsi
-
-Uwe Kleine-K=F6nig (3):
-      arm64: dts: rockchip: Add support for two PWM fans on helios64
-      arm64: dts: rockchip: Add support for PCIe on helios64
-      arm64: dts: rockchip: Add support for USB on helios64
-
- arch/arm64/boot/dts/rockchip/px30.dtsi             |  28 ++--
- arch/arm64/boot/dts/rockchip/rk3308-roc-cc.dts     |   4 +-
- arch/arm64/boot/dts/rockchip/rk3308.dtsi           |  74 +++++++++-
- arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts |  37 ++++-
- arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts |  36 ++++-
- arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dts     |   9 +-
- arch/arm64/boot/dts/rockchip/rk3328-rock-pi-e.dts  |   7 +-
- arch/arm64/boot/dts/rockchip/rk3328-rock64.dts     |   5 +
- arch/arm64/boot/dts/rockchip/rk3328.dtsi           |  13 +-
- arch/arm64/boot/dts/rockchip/rk3368.dtsi           |   2 +
- arch/arm64/boot/dts/rockchip/rk3399-firefly.dts    | 162 +++++++++++++++++=
-+---
- .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi      |   2 +-
- arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi       |   4 +-
- .../boot/dts/rockchip/rk3399-kobol-helios64.dts    | 121 +++++++++++++++
- arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts |   2 +-
- arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi   |   1 -
- arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi    |  16 ++
- arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi |   1 -
- arch/arm64/boot/dts/rockchip/rk3399.dtsi           |  66 ++++++---
- .../boot/dts/rockchip/rk3399pro-vmarc-som.dtsi     |   1 -
- 20 files changed, 515 insertions(+), 76 deletions(-)
-
-
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ Documentation/devicetree/bindings/arm/qcom.yaml    |  13 +
+ arch/arm64/boot/dts/qcom/Makefile                  |   5 +
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi              |  15 +
+ arch/arm64/boot/dts/qcom/pm8150.dtsi               |  12 +-
+ arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi          | 135 +++++
+ arch/arm64/boot/dts/qcom/pmm8155au_2.dtsi          | 108 ++++
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts           |  98 +---
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts           | 360 ++++++++++++
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |  20 +-
+ arch/arm64/boot/dts/qcom/sm8150-hdk.dts            |  28 +-
+ arch/arm64/boot/dts/qcom/sm8150-mtp.dts            |  28 +-
+ .../dts/qcom/sm8150-sony-xperia-kumano-bahamut.dts |  19 +
+ .../dts/qcom/sm8150-sony-xperia-kumano-griffin.dts |  13 +
+ .../boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi   | 452 +++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi               |   6 +
+ arch/arm64/boot/dts/qcom/sm8250-hdk.dts            |  33 +-
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts            |  10 +
+ .../dts/qcom/sm8250-sony-xperia-edo-pdx203.dts     |  15 +
+ .../dts/qcom/sm8250-sony-xperia-edo-pdx206.dts     |  35 ++
+ .../boot/dts/qcom/sm8250-sony-xperia-edo.dtsi      | 636 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               | 188 +++++-
+ 21 files changed, 2090 insertions(+), 139 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pmm8155au_2.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-bahamut.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-griffin.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx203.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx206.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
