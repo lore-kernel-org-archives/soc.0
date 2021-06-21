@@ -7,35 +7,35 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9773C4743C
-	for <soc@archiver.kernel.org>; Mon, 21 Jun 2021 19:10:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0E6BC4743C
+	for <soc@archiver.kernel.org>; Mon, 21 Jun 2021 20:21:36 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 8540D6044F; Mon, 21 Jun 2021 19:10:02 +0000 (UTC)
+	id 8EB04610C7; Mon, 21 Jun 2021 20:21:36 +0000 (UTC)
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9AE546115A
-	for <soc@kernel.org>; Mon, 21 Jun 2021 19:10:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9AE546115A
+	by mail.kernel.org (Postfix) with ESMTPS id 2213E608FC
+	for <soc@kernel.org>; Mon, 21 Jun 2021 20:21:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2213E608FC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=ukl@pengutronix.de
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
 	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1lvPJ1-00057o-Hg; Mon, 21 Jun 2021 21:09:59 +0200
+	id 1lvQQI-0004Fp-76; Mon, 21 Jun 2021 22:21:34 +0200
 Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1lvPJ1-0004er-7n; Mon, 21 Jun 2021 21:09:59 +0200
+	id 1lvQQH-0000Vu-R8; Mon, 21 Jun 2021 22:21:33 +0200
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
 To: Alexey Charkov <alchark@gmail.com>,
 	soc@kernel.org
-Cc: linux-arm-kernel@vger.kernel.org,
+Cc: linux-arm-kernel@lists.infradead.org,
 	kernel@pengutronix.de
 Subject: [PATCH] MAINTAINERS: Drop ARM/VT8500 entry
-Date: Mon, 21 Jun 2021 21:09:53 +0200
-Message-Id: <20210621190953.125666-1-u.kleine-koenig@pengutronix.de>
+Date: Mon, 21 Jun 2021 22:21:31 +0200
+Message-Id: <20210621202131.127802-1-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,6 +51,10 @@ entry.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
+I mistyped the address of the lakml in my first try, so resend to the
+right address now. Sorry to those of you who get the patch a second time
+now :-\
+
 Hello Alexey,
 
 back in January you said there were still users and so the platform
