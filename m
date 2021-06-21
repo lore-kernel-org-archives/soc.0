@@ -1,137 +1,103 @@
-Return-Path: <SRS0=5Wg8=LP=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=8EHu=LP=pengutronix.de=ukl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA50CC4743C
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 21 Jun 2021 16:52:16 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9773C4743C
+	for <soc@archiver.kernel.org>; Mon, 21 Jun 2021 19:10:02 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 8540D6044F; Mon, 21 Jun 2021 19:10:02 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B251E60200
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 21 Jun 2021 16:52:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B251E60200
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=YkPbOQcXfOtf0AZvwNSvLXVf2I9RFL+KK9ZrqeOWTlw=; b=nnzZ6wAj6YPE9r
-	1p6OFUglEj+jL559wvPV1YOVPyMYlzDZwGqmFjOqVcjsWi93YEjvcWil5xs93WSqrdjsWrya8xpZp
-	qMFUixtgooVFtFZ/bDLi2cfIa+ZLOxxNCYkyPYmoFRXSkJMfW3q4nXpsug0nLIWFF3cbag6maBcR5
-	O447Xm74AlZhICQEjWO/on1tKARWQ/J7P5t/sHuGPXxpA1Kj/F7aidS9TN2d3IOL7ECkC+Chkom4f
-	8EpLlVH37Y0/RqLkrDMCyUlT1ybUbTUUtKADjPVw3zcBgoskaWvQcYOcRiXKCiTFXNNaqThsPXCbV
-	a/wRKLIYigFhVjEHziHA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lvN7t-004BgG-4c; Mon, 21 Jun 2021 16:50:21 +0000
-Received: from mail-ot1-x331.google.com ([2607:f8b0:4864:20::331])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lvN7p-004BfE-9F
- for linux-arm-kernel@lists.infradead.org; Mon, 21 Jun 2021 16:50:18 +0000
-Received: by mail-ot1-x331.google.com with SMTP id
- j11-20020a9d738b0000b02903ea3c02ded8so18365140otk.5
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 21 Jun 2021 09:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=9JCax5gzpRXFjKOT7fUvz8rzc/IG8uAiWNtIkm2nNbY=;
- b=Rn08BY9/tYgwbs9DDd8jLwNfj2gQyf4LDzySwhwTWXAbeKIP+wo18+4NObUz/okt6s
- NV/KlHs6rGvDguY4LJjdbXfskE6WEsFQR/XsX7r/KhOvz2pk+oS5FRnCpnICGmj3G1hV
- x2FY8fqhOJ/4m7S2os8EJw67MD9yvxveBcXngBNjSHzNU6g/Z6dRp1rEQoc0jLutvXeH
- g9R7sIlIbcH3flzX0bsGtHA33dwnUEeR6cwP/3lkVgH/AjvyH3NpJ+ljH0ajwLDz/KPp
- 7f/qunNM0hserXrYdNjXrwxF0RyNN1EXCS4dk+iOOHnxvbk3JyVln2ceeR3njHfZRR1Y
- hxOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=9JCax5gzpRXFjKOT7fUvz8rzc/IG8uAiWNtIkm2nNbY=;
- b=FJF4Rh8YJY40a5Ctf8RqeHqEDmXfbom+k8BZ4xzEmD0RxU/S9KiehhQ0hOcjx4zzor
- pimHpEmj3oZ+1gJUWbuO1lvgAyrwQlZb0VykmvQx6HjxwD/Z3+ghRlLsm6wanIRt+hvi
- 5NLEZQxMNQs/7k3XytGsxCxjYS/vC2h3/Qfg8LRzwPhMil8xNoDp3S2q3s0KzS7Mh/3+
- 95HBdkQhCr2bY2uAexgl7QCDM+XuiH6FquGzNhO5RebPBy8Rbs3eVgc9pthhfk+RWZVB
- 7YPTWcNY4rwTHRZgI8M33mTHcMvdPE9R3yoRsEjKUKAQQlySFJADy/3QrLzub4jwFABT
- W4MQ==
-X-Gm-Message-State: AOAM530R8qFpYL+Yif9m9RRHlXQMTqL9naiKC26OKM3wVYdwrDp6lcuJ
- WMXIYnSV+cOUm94QwgWEgbW0LQ==
-X-Google-Smtp-Source: ABdhPJyvKQhJHOmA0cSNzv4OzqARvZ+VxAzloXXJh95f6t6nKTRaotVwmPFGPRaJkBxjih1bg71zhw==
-X-Received: by 2002:a9d:346:: with SMTP id 64mr21834506otv.320.1624294216372; 
- Mon, 21 Jun 2021 09:50:16 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net.
- [104.57.184.186])
- by smtp.gmail.com with ESMTPSA id o6sm3115098ote.81.2021.06.21.09.50.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 21 Jun 2021 09:50:16 -0700 (PDT)
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+	by mail.kernel.org (Postfix) with ESMTPS id 9AE546115A
+	for <soc@kernel.org>; Mon, 21 Jun 2021 19:10:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9AE546115A
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=ukl@pengutronix.de
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1lvPJ1-00057o-Hg; Mon, 21 Jun 2021 21:09:59 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1lvPJ1-0004er-7n; Mon, 21 Jun 2021 21:09:59 +0200
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
+To: Alexey Charkov <alchark@gmail.com>,
 	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@baylibre.com>,
- Vinod Koul <vkoul@kernel.org>
-Subject: [GIT PULL] Additional Qualcomm ARM64 defconfig udpate for v5.14
-Date: Mon, 21 Jun 2021 11:50:15 -0500
-Message-ID: <20210621165015.943060-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.31.0
+Cc: linux-arm-kernel@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH] MAINTAINERS: Drop ARM/VT8500 entry
+Date: Mon, 21 Jun 2021 21:09:53 +0200
+Message-Id: <20210621190953.125666-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210621_095017_370072_0DD4B770 
-X-CRM114-Status: UNSURE (   7.71  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210621165015.IaF5cc592nL_wf_RiHFsyP9TmQ55qG7QPFjtFMByxAI@z>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-The following changes since commit e9cd414c1136aa31d34acc04c175bfaca4662f89:
+Tony's email addresses bounces since at least January 2021 and Alexey
+Charkov claims already then he was MIA for quite a while. So drop the
+entry.
 
-  arm64: defconfig: add drivers needed for DragonBoard410c (2021-06-14 16:59:27 -0500)
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+Hello Alexey,
 
-are available in the Git repository at:
+back in January you said there were still users and so the platform
+wasn't removed. Arnd asked you for a MAINTAINERS update which didn't
+happen though.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-5.14-1
+If you think the entry should stay and you want to be listed (as either
+maintainer or odd fixer?) please speak up.
 
-for you to fetch changes up to 8ae030c34dce4f5764e945b325e8dc4d2adef044:
+If you want to get active, please have a look at the two patches I sent
+today: https://lore.kernel.org/r/20210621130458.118530-1-u.kleine-koenig@pengutronix.de
 
-  arm64: defconfig: Enable renesas usb xhci pci host controller (2021-06-15 19:19:58 -0500)
+Best regards
+Uwe
 
-----------------------------------------------------------------
-Additional Qualcomm ARM64 defconfig udpate for v5.14
+ MAINTAINERS | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
-The Qualcomm Robotics RB3 Development Kit has a Renesas USB HUB on one
-of the PCIe busses, which requires the releated driver to be enabled to
-provide functional Ethernet and additional USB host ports.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bd7aff0c120f..b59308a7646c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2726,24 +2726,6 @@ S:	Maintained
+ F:	arch/arm/mach-pxa/include/mach/vpac270.h
+ F:	arch/arm/mach-pxa/vpac270.c
+ 
+-ARM/VT8500 ARM ARCHITECTURE
+-M:	Tony Prisk <linux@prisktech.co.nz>
+-L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+-S:	Maintained
+-F:	Documentation/devicetree/bindings/i2c/i2c-wmt.txt
+-F:	arch/arm/mach-vt8500/
+-F:	drivers/clocksource/timer-vt8500.c
+-F:	drivers/i2c/busses/i2c-wmt.c
+-F:	drivers/mmc/host/wmt-sdmmc.c
+-F:	drivers/pwm/pwm-vt8500.c
+-F:	drivers/rtc/rtc-vt8500.c
+-F:	drivers/tty/serial/vt8500_serial.c
+-F:	drivers/usb/host/ehci-platform.c
+-F:	drivers/usb/host/uhci-platform.c
+-F:	drivers/video/fbdev/vt8500lcdfb.*
+-F:	drivers/video/fbdev/wm8505fb*
+-F:	drivers/video/fbdev/wmt_ge_rops.*
+-
+ ARM/ZIPIT Z2 SUPPORT
+ M:	Marek Vasut <marek.vasut@gmail.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+-- 
+2.30.2
 
-----------------------------------------------------------------
-Vinod Koul (1):
-      arm64: defconfig: Enable renesas usb xhci pci host controller
-
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
