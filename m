@@ -1,277 +1,105 @@
-Return-Path: <SRS0=h3nq=LQ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=9du6=LQ=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD96DC2B9F4
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 22 Jun 2021 07:14:46 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4606C2B9F4
+	for <soc@archiver.kernel.org>; Tue, 22 Jun 2021 07:42:30 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id B20DC611BF; Tue, 22 Jun 2021 07:42:30 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9A70160698
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 22 Jun 2021 07:14:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9A70160698
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:
-	Message-ID:From:References:Cc:To:Subject:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Owner;
-	bh=qZnQ+P95pvNDh1VoEdXTYfTX3xSb7C/KtVohK107J94=; b=Gzbf3QsKDd/ne91XyJAL6lnlX+
-	OOAaBLjxcQLfqHdmH0h7ouwW8KWuc8oEuKBu0sWkWwfl0Mj+P//x67eUZkbIhBM9Li0j06aWKjUEB
-	gBztowBY0I6l70ckSFneah501GLGD0pI/5JpJ4c+IwQB3djoeCyTtdGChURTFDOGoWSjHqKWA7d7R
-	oQraro/lVPrXOu13SyUfToJDFZRzQ25jtQuZ2gTdwjG+Jg8o/s5stByNh6we3Zv7j6ePdC/GEmF+L
-	bWXEvl6yh20R3eW3jHVENF0aC9lFvcGZTFz5IOVCVb5VngUPp1b6IXzFEsarxUgjtxAyvfivtKJdt
-	ZGWFBEew==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lvaad-005y1Q-D1; Tue, 22 Jun 2021 07:12:55 +0000
-Received: from mout.kundenserver.de ([212.227.126.130])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lvaaX-005xzq-Ie
- for linux-arm-kernel@lists.infradead.org; Tue, 22 Jun 2021 07:12:51 +0000
-Received: from [192.168.1.107] ([37.4.249.157]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MStKw-1lqjPS0caU-00UGTs; Tue, 22 Jun 2021 09:12:32 +0200
-Subject: Re: [PATCH V2 2/7] watchdog: bcm2835_wdt: consider
- system-power-controller property
-To: Guenter Roeck <linux@roeck-us.net>
-List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>,
- Nicolas Saenz Julienne <nsaenz@kernel.org>,
- Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>,
- bcm-kernel-feedback-list@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org,
- Wim Van Sebroeck <wim@linux-watchdog.org>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org
-References: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
- <1622981777-5023-3-git-send-email-stefan.wahren@i2se.com>
-From: Stefan Wahren <stefan.wahren@i2se.com>
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
- CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
- bXlZd21DR0tqRnRMCi9Eb1VNRVZIRHhDSjQ3Qk1YbzM0NGZIVjFDM0FudWRnTjFCZWhMb0J0
- TEh4bW5lQ3pnSDNLY1B0V1c3cHRqNEcKdEp2OUNRRFp5MjdTS29FUHh5YUk4Q0YweWdSeEpj
- NzJNOUk5d21zUFo1YlVIc0x1WVdNcVE3SmNSbVBzNkQ4ZwpCa2srOC95bmdFeU5FeHd4SnBS
- MXlsajVianhXREh5WVF2dUo1THpaS3VPOUxCM2xYVnNjNGJxWEVqYzZWRnVaCkZDQ2svc3lp
- by9ZaHNlOE4rUXN4N01RYWd6NHdLVWtRUWJmWGcxVnFrVG5BaXZYczQyVm5Ja211NWd6SXcv
- MHQKUkp2NTBGUmhIaHhweUtBSThCOG5oTjhRdng3TVZrUGM1dkRmZDN1R1lXNDdKUGhWUUJj
- VXdKd05rLzQ5RjllQQp2ZzJtdE1QRm5GT1JrV1VSdlArRzZGSmZtNitDdk92N1lmUDF1ZXdB
- aTRsbitKTzFnK2dqVklXbC9XSnB5MG5UCmlwZGZlSDlkSGtnU2lmUXVuWWN1Y2lzTXlvUmJG
- OTU1dENna0VZOUVNRWRZMXQ4aUdEaUNnWDZzNTBMSGJpM2sKNDUzdWFjcHhmUVhTYUF3UGtz
- bDhNa0NPc3YyZUVyNElOQ0hZUUR5WmljbEJ1dUNnOEVOYlI2QUdWdFpTUGNRYgplbnpTektS
- Wm9POUNhcUlEK2ZhdkxpQi9kaHptSEErOWJnSWhtWGZ2WFJMRFp6ZThwbzFkeXQzRTFzaFhp
- ZGRaClBBOE51SlZ6RUl0MmxtSTZWOHBaRHBuMjIxcmZLaml2UlFpYW9zNTRUZ1pqak1ZSTdu
- bko3ZTZ4endBUkFRQUIKdENCVGRHVm1ZVzRnVjJGb2NtVnVJRHgzWVdoeVpXNXpkRUJuYlhn
- dWJtVjBQb2tDTndRVEFRZ0FJUVVDWElkYwo0Z0liQXdVTENRZ0hBZ1lWQ0FrS0N3SUVGZ0lE
- QVFJZUFRSVhnQUFLQ1JDVWdld1BFWkR5MjFPVEQvOUdpWkxkCnRSWWNteVJKZ2x0aVFRekFp
- UWRjSUQ3OGxHb1dwL3grci92Y1U2YjZqdVl1ZVR3Z1Iwclc3djdsMklSQnlEN24KSEp4YSt0
- SVNvUVpCZ2hvbE1JZmI5TXRoR09KTENZNzdrL1FoQWhuMzJOR1prZWp3OXR6a3MvNDBtclpT
- VVQ4NApaeWJzUVhyTE0vSFI2VElJL0RlUEIwbktEM0ppcHBzMlVIUUQ5cUQySWpFd1NRUGxI
- akNPckVaaDQ1UFo3bTkrClo5M0x6aVRlc1dabFlRdUxpSndzNHJLcHRIVzFkL3dSZWxzaG1t
- NlFxY0wybDRDL2U0MGVEQjlncTRkU1poOVgKUEVZbGxpeU5RaDdhMkxTZHVtRTFyK2NTd0lq
- RS91ZHRSdmRPOWFLb0psT2JVSzVkTmpTUEg3d0tUYndkWGRZRApHUHdEaFhkNThOQXdyK1BY
- QmxQajB0STFMQ3ErTEJ4ZUt6aFdYK0dWcTlEb2pWanlVREV4Rk5Ga1h1b0M3ZzhtClY5VDB0
- ZUJpdVpSbm91WEt3VjJGcHRaT0hIN0JVRVd0a0t0aGgxZXRmT1dwaWdCemtVN2JQc2ZJWVQr
- cnk5dGIKMW9KK3Y0MVBOYXFaRW1QVXBKeHZmek5UN3Ayd01lRDdaajlmMHJ1YlJQdExBSjJR
- R2pyRkhzdVh3QU9xcHl6ZQoxOEVidHNZazBOMHp1SEVoY2orUEJJQmZoMFlJWWQ1MW9mNkdJ
- aU95UjlxMFhYdHBsVUo3VDIvSDF1UXFrWGxwCitnVzRWa2lmc2NJckl1eWZueFpXMTJlSXZq
- NnlicVdMN2FZS0dZbVQ2aUxDUGJIWXlZY2F5bDRFa0ZjckNGN0UKZTBXVC9zY1ZNaE8vNVgv
- SGFOQTVIQngvcjUycGdMY3Y0aTlNeExRbVUzUmxabUZ1SUZkaGFISmxiaUE4YzNSbApabUZ1
- TG5kaGFISmxia0JwTW5ObExtTnZiVDZKQWpnRUV3RUNBQ0lGQWx0NmdCTUNHd01HQ3drSUJ3
- TUNCaFVJCkFna0tDd1FXQWdNQkFoNEJBaGVBQUFvSkVKU0I3QThSa1BMYmpic1AvamdqYVNz
- NUh0bGtBSXZXUytGcm15N2MKaG5jT0F4TFRWL0Q2UkV3SU95R0poRkt3d29pck55UTJnOXZV
- YTNZQ1lDZjFmSjh3RWhhS09COWQwTHBNUm5MNApkRVQ4ZDgyMzhFL3BLK0hxTktpSXNKaHM2
- SnNLOFpnalZRR3JtbWZua0dyWisxdjBIQnV4ZGljZ0duUC9XdHVBClVsOGw2Mi9BTGJheXlq
- KzYxQ2xyc0V0UklhcU82N0xJWXdQaVBEUkkrWGlNek5pR3pIRi8xUTZHUjAyUkg2YTMKRjg5
- ejhhUHhjSGkxWnZDdDJ5a3o2VUVjaHpQMHI1Z3FGSisvTC9VcHU4ME1YaVk0djVlSWFCNTJn
- VlBnaXlNQQpsTDJkRHMxbUladm5yUkxSWTJ0YjNtQVlOa1Y1QjVJRFQzcGtXeTZrS281T0Nn
- SytZZFlPUjhGTloyb04ydDhPCnJLK1ZudGFLN01NU0tIbG1ZL3NPd3RSbEVoMU9CbXJjQ3dH
- d21wLzA1R2tSNDZmL0lzaFJWZUZPUmF3K0dBcXQKUDIrQ0ZhMkNOQS9JSG5aTm95aWtsRHpQ
- UUhVVUdzck5wcERyaFg5Sm1oQm1nMXYyeXdIMU5YdTFpRGZQMUJBdwpLZ29rdDVmNVVhUkY5
- c0FBNTN2V0V2YlVVTjllZXNGR0x6UFdkSkdRNWhwZC9WSDVJUXk5U0JyaC93SWNla3E1Cm4w
- a042cGJUSHhHRTUyU2kvTVZJa05UdURaM2FwbjJqbERaNHBPdHBCWEkydlAzYlBPK05pcUJa
- anNVM3R4TGkKV2R2MkZqeXp6NlhMUndlV1JZVkw1SGE2TER0eG9yMnZ1NlVQMDdwOXh6MXhS
- WmFPRFczb1lsSEZ6WXBhNFc1ZwpMSGIybEVrSXVVZlNjaWNHYmpqQXRDbFRkR1ZtWVc0Z1Yy
- Rm9jbVZ1SUR4emRHVm1ZVzR1ZDJGb2NtVnVRR2x1CkxYUmxZMmd1WTI5dFBva0NOd1FUQVFn
- QUlRVUNYSWRlaHdJYkF3VUxDUWdIQWdZVkNBa0tDd0lFRmdJREFRSWUKQVFJWGdBQUtDUkNV
- Z2V3UEVaRHkyeUhURC85VUY3UWxEa0d4elE3QWFDSTZOOTVpUWY4LzFvU1VhRE51Mlk2SQpL
- K0R6UXBiMVRiVE9yM1ZKd3dZOGEzT1d6NU5MU09MTVdlVnh0K29zTW1sUUlHdWJEM09EWko4
- aXpQbEcvSnJOCnQ1elNkbU41SUE1ZjNlc1dXUVZLdmdoWkFnVERxZHB2K1pIVzJFbXhuQUox
- dUxGWFhlUWQzVVpjQzVyMy9nL3YKU2FNbzl4ZWszSjVtTnVEbTcxbEVXc0FzL0JBY0ZjK3lu
- TGh4d0JXQld3c3Z3UjhiSHRKNURPTVd2YUt1RHNrcApJR0ZVZS9LYjJCK2pyYXZRM1RuNnMv
- SHFKTTBjZXhTSHo1cGUrMHNHdlArdDlKNzIzNEJGUXdlRkV4cmlleThVCkl4T3I0WEFiYWFi
- U3J5WW5VL3pWSDlVMWkyQUlRWk1XSkFldkN2VmdRL1UrTmVSaFh1ZGU5WVVtRE1EbzJzQjIK
- VkFGRUFxaUYyUVVIUEEybThhN0VPM3lmTDRyTWswaUh6TElLdmg2L3JIOFFDWThpM1h4VE5M
- OWlDTHpCV3UvTgpPbkNBYlMremx2TFphaVNNaDVFZnV4VHR2NFBsVmRFamY2MlArWkhJRDE2
- Z1VEd0VtYXpMQU1yeDY2NmpINWt1ClVDVFZ5bWJMMFR2Qis2TDZBUmw4QU55TTRBRG1rV2tw
- eU0yMmtDdUlTWUFFZlFSM3VXWFo5WWd4YVBNcWJWK3cKQnJoSmc0SGFONkM2eFRxR3YzcjRC
- MmFxYjc3L0NWb1JKMVo5Y3BIQ3dpT3pJYUFtdnl6UFU2TXhDRFhaOEZnWQpsVDR2MjNHNWlt
- SlAyemdYNXMrRjZBQ1VKOVVRUEQwdVRmK0o5RGEycitza2gvc1dPbloreWNvSE5CUXZvY1pF
- Ck5BSFFmN2tDRFFSYmVvQVRBUkFBMkhkMGZzRFZLNzJSTFNESGJ5ME9oZ0RjRGxWQk0yTSto
- WVlwTzNmWDFyKysKc2hpcVBLQ0hWQXNRNWJ4ZTdIbUppbUhhNEtLWXMya3YvbWx0L0NhdUNK
- Ly9wbWN5Y0JNN0d2d25Lem11WHp1QQpHbVZUWkM2V1I1TGtha0ZydEhPelZtc0VHcE52NVJj
- OWw2SFlGcExrYlNrVmk1U1BRWkp5K0VNZ01DRmdqclpmClZGNnlvdHdFMWFmN0hOdE1oTlBh
- TEROMW9VS0Y1aitSeVJnNWl3SnVDRGtuSGp3QlFWNHBndzIvNXZTOEE3WlEKdjJNYlcvVExF
- eXBLWGlmNzhJaGdBelh0RTJYck0xbi9vNlpINzFvUkZGS096NDJsRmR6ZHJTWDBZc3FYZ0hD
- WAo1Z0l0TGZxemoxcHNNYTlvMWVpTlRFbTFkVlFyVHFueXMwbDE4b2FsUk5zd1lsUW1uWUJ3
- cHdDa2FUSExNSHdLCmZHQmJvNWRMUEVzaHRWb3dJNm5zZ3FMVHlRSG1xSFlxVVpZSXBpZ21t
- QzNTd0JXWTFWNmZmVUVta3FwQUFDRW4KTDQvZ1Vnbjd5US81ZDBzZXFuQXEycFNCSE1VVW9D
- Y1R6RVFVV1ZraUR2M1JrN2hURm1oVHNNcTc4eHYyWFJzWApNUjZ5UWhTVFBGWkNZRFVFeEVs
- RXNTbzlGV0hXcjZ6SHlZY2M4cURMRnZHOUZQaG1RdVQyczlCbHg2Z0kzMjNHCm5FcTFsd1dQ
- SlZ6UDRqUWtKS0lBWHdGcHYrVzhDV0xxekRXT3ZkbHJEYVRhVk1zY0ZUZUg1VzZVcHJsNjVq
- cUYKUUdNcGNSR0NzOEdDVVcxM0gwSXlPdFF0d1dYQTRueStTTDgxcHZpQW1hU1hVOGxhS2FS
- dTkxVk9WYUY5ZjRzQQpFUUVBQVlrQ0h3UVlBUUlBQ1FVQ1czcUFFd0liREFBS0NSQ1VnZXdQ
- RVpEeTIrb1hELzljSEhSa0JaT2ZrbVNxCjE0U3Z4MDYyUHRVMEtWNDcwVFNucC9qV29ZSm5L
- SXczRzBtWElSZ3J0SDJkUHdwSWdWanNZeVJTVk1LbVNwdDUKWnJEZjlOdFRiTldnazhWb0xl
- WnpZRW8rSjNvUHFGclRNczNhWVl2N2U0K0pLNjk1WW5tUSttT0Q5bmlhOTE1dApyNUFaajk1
- VWZTVGx5VW15aWMxZDhvdnNmMWZQN1hDVVZSRmNSamZOZkRGMW9ML3BEZ01QNUdaMk93YVRl
- am15CkN1SGpNOElSMUNpYXZCcFlEbUJuVFlrN1B0aHk2YXRXdllsMGZ5L0NxYWpUS3N4Nytw
- OXh6aXU4WmZWWCtpS0IKQ2MrSGUrRURFZEdJRGh2TlovSVFIZk9CMlBVWFdHUytzOUZOVHhy
- L0E2bkxHWG5BOVk2dzkzaVBkWUl3eFM3SwpYTG9LSmVlMTBEamx6c1lzUmZsRk9XMFpPaVNp
- aElDWGlRVjF1cU02dHpGRzlndFJjaXVzNVVBdGhXYU8xT3dVClNDUW1mQ09tNGZ2TUlKSUE5
- cnh0b1M2T3FSUWNpRjNjcm1vMHJKQ3ROMmF3WmZnaThYRWlmN2Q2aGp2MEVLTTkKWFpvaUFa
- WVpEKy9pTG01VGFLV042b0dJdGkwVmpKdjhaWk9aT2ZDYjZ2cUZJa0pXK2FPdTRvclRMRk16
- MjhhbwpVM1F5V3BOQzhGRm1kWXNWdWE4czZnTjFOSWE2eTNxYS9aQjhiQS9pa3k1OUFFejRp
- RElScmdVek1FZzhBazdUCmZtMUtpWWVpVHRCRENvMjVCdlhqYnFzeXhrUUQxbmtSbTZGQVZ6
- RXVPUEllOEp1cVcyeEQ5aXhHWXZqVTVoa1IKZ0pwM2dQNWIrY25HM0xQcXF1UTJFNmdvS1VN
- TEFia0NEUVJiZmw5REFSQUFzRExjYStMbFAydm5mdEVHaHBjQQpCR1ZOUUVGbkdQckNhdVU2
- SGhOODA1V3RQVHRtc1JPdUp6cWdVVDBtcHFXSWZacTZzTXd5dkhLOVRzL0tIM0paClVWYlJD
- M3oyaDNLZmhIL0RhZjk1cGQ2bVBjL2g5dkYvT3kzK2VUV2hnR25QNmNBNWtsUitmTzFXaEc4
- VnJpWHYKck5lUkcyMHN6emplSG9jblNJY1Q1WHVaUjB1REhPaUd4T2l6MXNNUkZUR3h6R095
- MTlSOXJ2dTYzdGlJM2Q3dgpnYzc1T0NBZGtlQi9TZUNFbGFSdzBUZjdMWmJQampzRjI2M0JZ
- bk1mNGtrTkVLdnFXY1UyaWNNcCtxZXpqeW5CCnB2ZXVlMHJDVFFCWUFRbG9GQ1ZUR0hyV1dB
- NkQ0VzVPMkFmSWRJYzF1MUpDWnAyZjVMV1ZvVUZUVklyUW5RUVUKU0hDaWZyOU1aeExUdFBK
- ZFU1Mm9TUHczZGs0aExQOGlKSUx1dnYvYXZhakNzUVlIRXR3WXNiZUZaeGl1TGdscApBN1lj
- Sk5ObXBnQ3BNRDR3VWh2bEN0QUtOQlFXeXIyOTc2OThFUVRuNDZlQmVVNkttMkNpaFhrZ3dD
- eWY4ZXlLCkxFM3NYZXdhcTVrZ1pXdk5xNml1NXFZSVJCOXl3K2NYYzYwZE9aRE9scTkzWDVT
- QVJZemFvZXBrSHo0cmtMa1AKUG8rdENIeUhRUHNHblBYYzlXVDgwREM5Tm5KR2R2VWx5NXJk
- TUk0eHBaeWdlb2tqd293VlFsUFV1Y1M2TXluNwpmOHc4Y2dmQjdDMklBSWNEeDJwUC9IendY
- dmtDT1FOQTdtVjFsTTA4bitnVmtUcnpweGlwNURicTRDSW9ZeDJNCkpaVDhiR1JINlhqY1VE
- S2EwOVFoeVpzQUVRRUFBWWtFUkFRWUFRZ0FEd1VDVzM1ZlF3SWJBZ1VKQThKbkFBSXAKQ1JD
- VWdld1BFWkR5MjhGZElBUVpBUWdBQmdVQ1czNWZRd0FLQ1JCVnhETFBjVk1NamNkc0QvMFJo
- QXN1UVlPeQpyMTNCbDNOaFhrWUFaR3AyWkZER3VrZTdPU2tWOG9qT09UZFR5ei9jT1JHQ2J5
- ZEQrRGd2cUZ5VmRuT1hLZ08wCmxKbUd3ckdlTGRnZ0F2aDBpaHJwNU8wWVVKOWJCU1htR01t
- UVRZSC9BbUxUR2FkYnVqQ1dqNWZGVWtDeXd4aW0KSHV5MFBiMjRwelR2UzUwR1k1WStxSDBG
- SE5haWdka2tpV04zcnVnN0haRXUvQ3lsUFpqT1h6K0QxUVBNckV4dwo3ZC9NS2FiVis5YU5i
- UVlabGRJajk4UXd2VUYxS1N6YThqbFVJdnBoUnEyN0FUOGZER1lHUGZERU1nMmNCT2FlCkty
- N29uUXM0YjdhV082aWZEbHhRVHB6c3pvK0FuODA3Tk1TdFZFRmYrczNBaFZEM2U3bmY4SkJh
- dmJWckFlMGsKb20yNm96elBubnh6K2xxVlZ0dzZVazRYTUl6dGl4L0h3SFl3dUNuY1VYWndL
- MEkzeUFKd2pZd29vck9DaEozUwpFVWJKUVB0R3NneFJERXhWQkZlNk5MUC82MnhQOU82dGFj
- d09kYjBNbVAxYjM5cFJBVEM3YmdkMWxkVUxpNzVaCmxKckowL1NpVkVyb3FOWXk3OXRmbWdB
- WjJVeFptczlTckV5Nm85UVNmc24xYVh2K01QTDlKYUNHbWtQNnpiTFEKTm5kajBKY2FRbmtD
- MHZneWRPMUJtNk11OTZQOXVmbEtaY0FTNndtTE01SWRIT3lqTDg4d0h3anVjakFPQnRjdwpw
- MG9HVG5WT25Sc05ZU084VzhZWi9LZGJ1Nzg1ZGF6TXFKMmlOakFEdUJiZG02TjRqNUVkTW5r
- TG4wQklmUEpwCmRnbTR2bDJVcExqd1JHci9NM3dtbTVwdnMrNnVCN2hrL0ZKaUQvNGxsRU5Q
- NGVNMWg3U200aitWcTZOMSt6VEIKSVhKQWViSXFhc0RwNXlaUzdYcnk0STM2bjg1WEVZZkcw
- MWx0QXlob05WMkRPOFNJUlFwdWkydHErOVJQM1JLMQpKREJ4eEVKWTJFTzVKWjhNeGFQSFEw
- RFQwNWxSRmpLMkFsaGRFSXRqTGpwSjNmVW05c3FMeE1XeHpQNlV6M2lpCjJ1YTR1bnJ0Nk9D
- VHFRd2lqRi8zYlRXaXd2VkFBSG5NRlVpb1hzaEhhb2hWRGNWZm5lSU1mVjBiUUNYWWkzTnAK
- WTB2MFp3Y2lGSCtnU0M3cUQ2WE51aHBWR1NMNElpbGlGeS9TemNhSkV6QUhlTERTaFpQMkNX
- ZG5DNHZnbDM3dApocHg4aDU1WWhKbjZIU3VVelBnaGFLdFZCMmsrajdaZXlaK1NGeHA3SXVi
- SEN3TEhsUWhUNzVSd1EzaUF4S242CjBxajUxY1lUbnF4ZFpYVzZmSDNQa3VNellVNUdwcVIv
- MU9sNWMvd2ZJNmc2QW04eUtXLzBFVUx0K0tuNExGc1MKbTdZM201SDV2MTJVNkpCWXZWK3Ix
- M2paaW9zNEVFREU5M0Q1c05IMk1JeVJ6Q0RxMXpkZHQ0WHV5S0ZqUEtXMQo5aWJaRGZGVjdL
- dUNzdnVMMjNzQmMxc0NNb3ArRTFtVC9ReE9JQTZvRFQxTVFzdHdPVnVReURDdi9PdktTZ2Z6
- CjhGWEdMNkFQY2xqQ3FqOEFKaHhReXN4ZG9pUVA4bS92dStialdHR3Z4dzVzMWxncGlSRFRS
- VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
- bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
- LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <f4e62eec-a1c3-7759-3de3-dec98064dc4a@i2se.com>
-Date: Tue, 22 Jun 2021 09:12:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+	by mail.kernel.org (Postfix) with ESMTPS id DA04E6113D
+	for <soc@kernel.org>; Tue, 22 Jun 2021 07:42:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DA04E6113D
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arnd@arndb.de
+Received: from mail-wr1-f46.google.com ([209.85.221.46]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mzhf5-1l02ab1QpN-00vguw for <soc@kernel.org>; Tue, 22 Jun 2021 09:42:28
+ +0200
+Received: by mail-wr1-f46.google.com with SMTP id j2so11876761wrs.12
+        for <soc@kernel.org>; Tue, 22 Jun 2021 00:42:28 -0700 (PDT)
+X-Gm-Message-State: AOAM5313d1NzMV6M3I2E6r2ccOD7xj7Jh+pF4SI8JCTm6CKInTGew/cB
+	VlH3RaQJ1EQsTAE5jbIryMMZgTeRNgaoTjIOJEg=
+X-Google-Smtp-Source: ABdhPJyKvKuJF/dWQppGTkZZQVXvZbZUieWdyo+mrwK6HDTCF2UYRTAfX4ZpVRLzPLA/AqN/ajXhtSjb0V7cwDLBIBA=
+X-Received: by 2002:adf:f80a:: with SMTP id s10mr3001421wrp.165.1624347747989;
+ Tue, 22 Jun 2021 00:42:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1622981777-5023-3-git-send-email-stefan.wahren@i2se.com>
-Content-Language: en-US
-X-Provags-ID: V03:K1:TMbHguoK+A/fVRMlyTacEWepqntbnxMYkwAoA329TpwpoMjEKgT
- OROreHyncbqnGu74AKbg2/pP5oHhMxbNjOC5LKNKdEFl2oq3UEpa69H4plcSRC/Kfd29tWO
- ZTYtq/H58w4QVSKd9rHxqSNHHwkKpWQo0d4EuiaLjhRiGeH7JD4aH8VDtuk5uD97MvCwBzX
- 7S4XMffXgY/GBryG8pzBg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Gbi37pkNGNg=:Zu0f/91SneNgD+YCYKmGWq
- vc4PBaI4P5Kt1+HpAjEe2e3I/nmDofkLSTgU98SNT5xlM+wMkwRY1xPV5GgencdbxWuOC9Znt
- 4NgH3riH6NNK86TGVXS5GbhwjOn6gGBtE8Ke93dkE6VIYrzV2cTGJxUi5tT/pRZuhw4wS3y46
- uvrLE37u+CvAf+fDUXp9oV2wx2OpkKvq5ac1GVa33Ir7xFFAe8bzkGmUIvQfsQ84fNhTvjjww
- 30ngKZOSXdGfCHwTsG0KeIkoUHvVjVq4xMdgZ2C9aroVXIIwFjZaAgCXp63VNDCVRM6VRKu6t
- Enr/X86ENZPOdJNCJqIdH7rwePUD9b4jH/L69HIbUhX/iVMYBpIhj1PNbfktzA/kjBBA/pCsB
- UQBeZ5D7QZu5SDkofsYhtZvoH/qzG/m3/ZypfTqWr7S2rE9BGXVKnx51+obusJRF3hoRTK+Tz
- Iez/MMvHAdr6YEigwVLHdvsyMAJeeS2VRUZP8jmYzn7mXS9AWFCF53hV3G1OOTzhTgVPw0vCu
- fNYIXlSzn06+7YhCODXFdk=
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210622_001249_970392_49E01A3B 
-X-CRM114-Status: GOOD (  21.77  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210622071230.ZJFrfEps9sDJHabtVaWB64QW-ajAJmr7zoJcLtYlyCU@z>
+References: <20210621202131.127802-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20210621202131.127802-1-u.kleine-koenig@pengutronix.de>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Tue, 22 Jun 2021 09:40:09 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1Xx9JCpqQN+jBkz872jMy4i1zvROESnVYEpUgD2BxQKA@mail.gmail.com>
+Message-ID: <CAK8P3a1Xx9JCpqQN+jBkz872jMy4i1zvROESnVYEpUgD2BxQKA@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Drop ARM/VT8500 entry
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+List-Id: <soc.lore.kernel.org>
+Cc: Alexey Charkov <alchark@gmail.com>, SoC Team <soc@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Sascha Hauer <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:EltGjiz9wOypkEz4vxRMUb8CQcRtix11gQirkmS1nk/oE1bsDWv
+ GU5R0O/1lH5P0zLwKvK+KNPMdtMbc6qY3at9bySGyLo24lCzuw5uTEF1jYnT546LQlWaxuf
+ p23HY4PLKhNPhEMfCV0oCqJTw/JNKDid+fLDem46oIA9rksJpd7ag6/y4nxVWIrZa4Ebnhm
+ N91bSNhMmDlJ30/NhFu4w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:q1hzClkKmqs=:SIMbbwX7cuH2BaDWQqeb4z
+ twGXEW4kb4wUL1raxD5E3W2LpGHBs23+Z3MjZTdppkertI0K5MVXjj83QFwweSLfFspLuh2ne
+ 5xb4+zk9SBrsUzCDf/qHzsZ9LQIxhLmASejTtAiDlGiUCf2haofcCwUtZAK7aI2LdzuFexcsK
+ /RMj6azL6fymH4FL6WNfctF1b1hyUDyDPeolQV3SGcBkbouw86W3XVoegC+UeE/zyGNpX9vhM
+ m6xtUydyGK0Z6Gq2ApAfbvKqbM0QCOKr5wdBh/LoJo1UylJsTYviKS/yp/ytv216seBZll2XC
+ Ycf2NGNJeKb4jVPMvLuytKIpUsStAR/bG64XBbxJifAIOAS5soEttYXWUnGhdTyAaDel/8nfc
+ peFvPNzyR8BWkxQtZixUsUXfGTgp6gT5khI5nK/q1HmdiCyqGsc7v3RvEb2zfhDOFQ2cYyZ34
+ cySGEuUcNGmWSQwEasMeaxf9YHpbkBKNdV8mFgZtMhmurkQpnAGq1xfaVZ6r8JyXrRAFI9Jgd
+ At9AkyxvYtdFSBFfMuiT5w=
 
-Hi Guenter,
-
-Am 06.06.21 um 14:16 schrieb Stefan Wahren:
-> Until now all Raspberry Pi boards used the power off function of the SoC.
-> But the Raspberry Pi 400 uses gpio-poweroff for the whole board which
-> possibly cannot register the poweroff handler because the it's
-> already registered by this watchdog driver. So consider the
-> system-power-controller property for registering, which is already
-> defined in soc/bcm/brcm,bcm2835-pm.txt .
+On Mon, Jun 21, 2021 at 10:21 PM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
 >
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Tony's email addresses bounces since at least January 2021 and Alexey
+> Charkov claims already then he was MIA for quite a while. So drop the
+> entry.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 > ---
->  drivers/watchdog/bcm2835_wdt.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/watchdog/bcm2835_wdt.c b/drivers/watchdog/bcm2835_wdt.c
-> index dec6ca0..9490717 100644
-> --- a/drivers/watchdog/bcm2835_wdt.c
-> +++ b/drivers/watchdog/bcm2835_wdt.c
-> @@ -205,9 +205,13 @@ static int bcm2835_wdt_probe(struct platform_device *pdev)
->  	if (err)
->  		return err;
->  
-> -	if (pm_power_off == NULL) {
-> -		pm_power_off = bcm2835_power_off;
-> -		bcm2835_power_off_wdt = wdt;
-> +	if (of_device_is_system_power_controller(pdev->dev.parent->of_node)) {
-> +		if (!pm_power_off) {
-> +			pm_power_off = bcm2835_power_off;
-> +			bcm2835_power_off_wdt = wdt;
-> +		} else {
-> +			dev_info(dev, "Poweroff handler already present!\n");
-> +		}
->  	}
->  
->  	dev_info(dev, "Broadcom BCM2835 watchdog timer");
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index bd7aff0c120f..b59308a7646c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2726,24 +2726,6 @@ S:       Maintained
+>  F:     arch/arm/mach-pxa/include/mach/vpac270.h
+>  F:     arch/arm/mach-pxa/vpac270.c
+>
+> -ARM/VT8500 ARM ARCHITECTURE
+> -M:     Tony Prisk <linux@prisktech.co.nz>
+> -L:     linux-arm-kernel@lists.infradead.org (moderated for non-subscribe=
+rs)
+> -S:     Maintained
+> -F:     Documentation/devicetree/bindings/i2c/i2c-wmt.txt
+> -F:     arch/arm/mach-vt8500/
+> -F:     drivers/clocksource/timer-vt8500.c
+> -F:     drivers/i2c/busses/i2c-wmt.c
+> -F:     drivers/mmc/host/wmt-sdmmc.c
+> -F:     drivers/pwm/pwm-vt8500.c
+> -F:     drivers/rtc/rtc-vt8500.c
+> -F:     drivers/tty/serial/vt8500_serial.c
+> -F:     drivers/usb/host/ehci-platform.c
+> -F:     drivers/usb/host/uhci-platform.c
+> -F:     drivers/video/fbdev/vt8500lcdfb.*
+> -F:     drivers/video/fbdev/wm8505fb*
+> -F:     drivers/video/fbdev/wmt_ge_rops.*
+> -
 
-this isn't not applied yet. Can this go via the watchdog-next tree into
-5.14?
+I would prefer to leave the entry in place and just remove Tony's name here=
+,
+either adding Alexey with "S: Odd Fixes" (or even more if he wants), or
+leaving it as orphaned. That way we can double-check against the file list
+when we eventually remove the platform completely.
 
-Best regards
-Stefan
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+       Arnd
