@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_NONE autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A8A0C49EAF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 826E6C49EBA
 	for <soc@archiver.kernel.org>; Thu, 24 Jun 2021 02:40:11 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 2035A613CE; Thu, 24 Jun 2021 02:40:11 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 073F5613CA;
+	id 22C36613CF; Thu, 24 Jun 2021 02:40:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 09AFD613CB;
 	Thu, 24 Jun 2021 02:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1624502411;
-	bh=eS2E62w3ya670kYl9H/qe+u4ZkzqORXGhFJEhrIFoT0=;
+	bh=qM8m8AKCiU1eW+WacfJe0vVBjlFDsNH2srIBvhDriYU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=sdfTblSUMQ10idbTzfmavMPD8rv7LeWTlDOKKGg96juYBu/o43gO27Sj/gdGJYuE0
-	 ElSl1AwmBKbWS++I6NKmhixrxbflDy0G6stWmkCipL00ewckfyt7c/9kJNKd0oodWo
-	 blspMxbiFLIS9bo69hJX+BxO/2xEhikMCNpCJfMGrRk86vTFTh7OdI22i1Oe8/H2kH
-	 J3EynK/IILhq7vBeYBbqALx+5lRsNsdf3km5ivHyPUCQTwaaCQSAJu+MxhJNJUmTnK
-	 bkt7YKtUfOW50FeKxppI8VyT2JmXTJz+W7BLh68vQc6Gr/+2DSnVNrNcVKfpxgDYoF
-	 3dp/BwifTOxcw==
+	b=Gvr+y58xCVy5SVZ5GOUgUEDaYrUO+pR57car59IfX8+tL6oNapy3zVDhcUoo4sm7Y
+	 Qv2XIHrxy0CZMd6prm/aVJbJWhTJVZTkZ24WwES1Cz+DVDGMcKGrmDxCWkFSWfQWKn
+	 8kLNXEVj10ghVFXWt9nX4zeE7Is9kNareYBNARzscPgSEdUaqTgdfVxNuQDsEUPIrI
+	 3daTva5vIvKCHWeftJsggPGw5B5xHc+xcj6tF+vhfehjjUeBRenl7KXFVrM7BuuQwj
+	 CMkWPGLEXALdiL17QPgXlbBkdiy0JZag934lwXhgHu4Wm20O0umUS1XRWVhiVWjhkk
+	 ZT0ljEiKlxQXA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id ED3FF6094F;
-	Thu, 24 Jun 2021 02:40:10 +0000 (UTC)
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0237A609B1;
+	Thu, 24 Jun 2021 02:40:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts64 changes for 5.14 - #2
+Subject: Re: [GIT PULL] Additional Qualcomm ARM64 DT updates for v5.14
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162450241096.24025.5857493226134435096.git-patchwork-notify@kernel.org>
-Date: Thu, 24 Jun 2021 02:40:10 +0000
-References: <4876354.ZzFAyJQhcr@diego>
-In-Reply-To: <4876354.ZzFAyJQhcr@diego>
-To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
+ <162450241100.24025.5712802370897384721.git-patchwork-notify@kernel.org>
+Date: Thu, 24 Jun 2021 02:40:11 +0000
+References: <20210621164946.942956-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20210621164946.942956-1-bjorn.andersson@linaro.org>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -43,21 +43,20 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Tue, 22 Jun 2021 15:25:51 +0200 you wrote:
-> Hi Arnd, Kevin, Olof,
+On Mon, 21 Jun 2021 11:49:46 -0500 you wrote:
+> Hi soc@
 > 
-> another late (and now final addition) hopefully for 5.14.
-> Basic support for the new rk3568 SoC released some weeks ago.
+> Sorry for this late pull request being so big, but I hope you're open to merge
+> these interesting additions that arrived after the previous pull.
 > 
-> The core dtsi and evb support is isolated from the rest of course,
-> so hasn't really the capacity to break anything else and the yaml
-> dtbscheck was happy with the addition as well.
+> Regards,
+> Bjorn
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Rockchip dts64 changes for 5.14 - #2
-    https://git.kernel.org/soc/soc/c/b62b189f7e2c
+  - [GIT,PULL] Additional Qualcomm ARM64 DT updates for v5.14
+    https://git.kernel.org/soc/soc/c/c21cc3d89273
 
 You are awesome, thank you!
 --
