@@ -1,126 +1,103 @@
-Return-Path: <SRS0=h3nq=LQ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=9ZNB=LS=lixom.net=olof@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B09F0C2B9F4
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 22 Jun 2021 13:27:57 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DE6DC49EA6
+	for <soc@archiver.kernel.org>; Thu, 24 Jun 2021 02:01:14 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 01981613A9; Thu, 24 Jun 2021 02:01:14 +0000 (UTC)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 21AF061164
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 22 Jun 2021 13:27:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 21AF061164
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=sntech.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=mN3vY2QZfTVRXAwcJ53v4vjRSa+BX/utAxZzFte+iZM=; b=xP0hiClHVCvd72
-	wuQgIFju+wc/kMExrOrnJKqhLyG2Ssib/rg8KftKhZQDQsfRtSI0UdgyHSE4G1HYhC0F+pZJWnTef
-	JSsodnQy1Z7uOrqMIhFRAGODbe+AizBRlh9LaNGyjfjIm7Z/EP0ppclbi+nIuko7zklWLH4o/A2H4
-	RfZXyTsS5F0E2WBGFONGCwHq1yhqgZ3W1nV4ZxylRI5paAAhczvRsNNXCPd83iTWB2ZtpYR2H9uKY
-	OU9jzfz7vm+F9LtR82WGeTjfQY2ZDgqvf344Zb4Ot2pFEIg2zTqKZnbLcbslQzgPsqWFCupCiD6Cl
-	wcDO11s6CHmPh1+dMkhQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lvgPd-007IVz-PG; Tue, 22 Jun 2021 13:25:57 +0000
-Received: from gloria.sntech.de ([185.11.138.130])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lvgPZ-007IVN-Eo; Tue, 22 Jun 2021 13:25:54 +0000
-Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74]
- helo=diego.localnet)
- by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
- (Exim 4.92) (envelope-from <heiko@sntech.de>)
- id 1lvgPY-0003up-9M; Tue, 22 Jun 2021 15:25:52 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: arm@kernel.org
+	by mail.kernel.org (Postfix) with ESMTPS id B022161263
+	for <soc@kernel.org>; Thu, 24 Jun 2021 02:01:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B022161263
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lixom.net
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=olof@lixom.net
+Received: by mail-lf1-f43.google.com with SMTP id k10so7354958lfv.13
+        for <soc@kernel.org>; Wed, 23 Jun 2021 19:01:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lixom-net.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=19HBJWHMQyxDiRvqKGBEFDqxKqhNp8Mx2Tpeb33UONY=;
+        b=JmJFXA6L58I452WrD4ebIr+r0Pukq4y3LgY3UreLvGERGxracFG8UmZk5sBWYtbfCx
+         KsaU5FZT4xZzqtDVbf7fyq4hc5S1M0++UG4XuO1LtvO5AOIQ6DjscdTwafuRkt2Z24Vw
+         Tt9jw6byC8i0QQOynEKNkIYQqaiB993k0DowufhoHm6PbNIsqGfVayVUYyNZheHpXesH
+         7TUg46nHECk3P3e4qZya/523yjlKN4RFcsSrAy1GUfAtRjmjaPNRn2ApPT9QA1iIs/Tr
+         gZh9cOq4ro6Ihitfj1vK2TDKDpKtNNrRQ0VmWKsYuV+ugEhhHRpr/VW1usi0cOrZjh0K
+         xz3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=19HBJWHMQyxDiRvqKGBEFDqxKqhNp8Mx2Tpeb33UONY=;
+        b=OdKFEz8U6dqVYhbPuEQG6XsKZ2t6qA4Awc3wf0cn+Mo2mE4uu0qR1j/OZB71uzNMtg
+         jSlZ7LMG8aGDr/VQ6goSZna8mA30I93aYX1uTzayrgdnF/wThhFlxkbhSgLN4+ZGlthJ
+         hj3WECey7ytuAZ6RB8HGIO8Pzt0V/hce1Nz8+Q3AGHIhHrMAH656T7EQlBCyzc7VIL/F
+         0Wzrt+8t6wArxHCABWGia5+gJhqurBrgmKvar+lZ8B3JGvqOZp45fp1jF5oNbZkiaXUV
+         G/tgwZIaDKh9M5NWlzPzYi+eYUsK3lu43/vIB3gLYA1Xl4xbYijN8rRu4EvnFO5xJKOt
+         sgNA==
+X-Gm-Message-State: AOAM531o7BPLkCnRLNc8f9Wyw3YkMNdKpq9iKTkx0pJMAOC0++AM2gYR
+	QnRopA+kD3HTpIo73rWT0gmGiw==
+X-Google-Smtp-Source: ABdhPJyGG2jGkaKHEBj6nJanYsd6zVMqTW0lHIUCJs1MCNUhYI3ethHzRudJDJlxS0pVTkBbF9rN0w==
+X-Received: by 2002:a05:6512:1084:: with SMTP id j4mr1864919lfg.629.1624500071976;
+        Wed, 23 Jun 2021 19:01:11 -0700 (PDT)
+Received: from localhost (h85-30-9-151.cust.a3fiber.se. [85.30.9.151])
+        by smtp.gmail.com with ESMTPSA id x37sm65496lfa.265.2021.06.23.19.01.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Jun 2021 19:01:10 -0700 (PDT)
+Date: Wed, 23 Jun 2021 18:56:33 -0700
+From: Olof Johansson <olof@lixom.net>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts64 changes for 5.14 - #2
-Date: Tue, 22 Jun 2021 15:25:51 +0200
-Message-ID: <4876354.ZzFAyJQhcr@diego>
+Cc: Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org,
+	Andrew Lunn <andrew@lunn.ch>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] ARM: mvebu: fixes for v5.13 (#1)
+Message-ID: <20210624015633.GA19649@lx2k>
+References: <87eecx0w6s.fsf@BL-laptop>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210622_062553_555175_C2018261 
-X-CRM114-Status: GOOD (  10.86  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210622132551.cqXUJP8iPPWPGmCFcFCDU3lZuCOqhxE9GGB1L7XlhGs@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87eecx0w6s.fsf@BL-laptop>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Arnd, Kevin, Olof,
+On Sun, Jun 20, 2021 at 10:36:27AM +0200, Gregory CLEMENT wrote:
+> Hi,
+> 
+> Here is the first pull request for fixes for mvebu for v5.13.
+> 
+> Gregory
+> 
+> The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+> 
+>   Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-fixes-5.13-1
+> 
+> for you to fetch changes up to fae20160992269431507708fb74c1fd9f3c309c1:
+> 
+>   firmware: turris-mox-rwtm: show message about HWRNG registration (2021-06-17 14:55:09 +0200)
+> 
+> ----------------------------------------------------------------
+> mvebu fixes for 5.13 (part 1)
+> 
+> Few fixes for the Turris Mox rWTM firmware found on the Armada 3700
+> SoCs.
 
-another late (and now final addition) hopefully for 5.14.
-Basic support for the new rk3568 SoC released some weeks ago.
+Looks like these fixes were posted in March(!!), and obviously can't be all
+that urgent if it's taken until now to apply them. Doesn't seem like a severe
+enough regression to go in at -rc7, so I'll queue it for the merge window.
 
-The core dtsi and evb support is isolated from the rest of course,
-so hasn't really the capacity to break anything else and the yaml
-dtbscheck was happy with the addition as well.
+Thanks,
 
-So if it's still suitable, please pull.
-
-Thanks
-Heiko
-
-
-The following changes since commit eb607cd4957fb0ef97beb2a8293478be6a54240a:
-
-  arm64: dts: rockchip: Re-add regulator-always-on for vcc_sdio for rk3399-roc-pc (2021-06-19 23:55:10 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v5.14-rockchip-dts64-2
-
-for you to fetch changes up to 01610a24cefa182b155a17e38cd0b84f8a3f0529:
-
-  arm64: dts: rockchip: add basic dts for RK3568 EVB (2021-06-22 12:21:55 +0200)
-
-----------------------------------------------------------------
-Basic support for the new rk3568 soc.
-
-----------------------------------------------------------------
-Liang Chen (3):
-      arm64: dts: rockchip: add generic pinconfig settings used by most Rockchip socs
-      arm64: dts: rockchip: add core dtsi for RK3568 SoC
-      arm64: dts: rockchip: add basic dts for RK3568 EVB
-
- .../devicetree/bindings/arm/rockchip.yaml          |    5 +
- arch/arm64/boot/dts/rockchip/Makefile              |    1 +
- arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts   |   79 +
- arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi   | 3111 ++++++++++++++++++++
- arch/arm64/boot/dts/rockchip/rk3568.dtsi           |  593 ++++
- arch/arm64/boot/dts/rockchip/rockchip-pinconf.dtsi |  344 +++
- 6 files changed, 4133 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3568.dtsi
- create mode 100644 arch/arm64/boot/dts/rockchip/rockchip-pinconf.dtsi
-
-
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+-Olof
