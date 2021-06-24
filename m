@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_NONE autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D161DC49EBF
-	for <soc@archiver.kernel.org>; Thu, 24 Jun 2021 02:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07039C49EC8
+	for <soc@archiver.kernel.org>; Thu, 24 Jun 2021 02:40:12 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 54BB2613E1; Thu, 24 Jun 2021 02:40:11 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 39726613D6;
+	id 683E9613E8; Thu, 24 Jun 2021 02:40:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 4EA82613DF;
 	Thu, 24 Jun 2021 02:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1624502411;
-	bh=ZjNjwsPhHGd7qYeq4/86lHcofAMzkLF3pBImb8+3qTg=;
+	bh=hKHbg1ixglqr2Utj7Iq6V5peYG6rT8Wn9QPYcFbfad4=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=u+YAe6PtyCfxca/3ekORfI8gRQoWVMgtY8RAGcAjNwbSjAkKC/7AcMQ9Bw8vY1Tuk
-	 4nkpgvF9RM5n8n6Bw4iEdaTYq8mOCl5unvjq7xDG68kycVKUM+xiShnmRy0m9WkHtO
-	 3AtIwNPjTay3FuLiCbKlV+L9TrqtOeT8E6VAFUrM2dA0SQTNsWGfWsrPsA0kRnr0x+
-	 Jn0g9j42BJDtp69tFEJ7fJHNsby8uyGpttueldRBqupjeQ6mE3c3/3nwcvVhdnD1Da
-	 gRbcu+H0sZBghQF3gwTLofn19V8Z9eCihLk6SOB34lKVZlKFbmtI+st94ombQgrWMH
-	 O+POWtinKLuQQ==
+	b=OIMej4k21h96PeZUCc4clK7y9PhRXe9hRdC+AT9VFv7CPFOi+vtRqoVZ+A8O6dRHc
+	 cU6G3fbBNksZhJgzjEoGcfCHunZ3QWmvyYQGM0Ac9MlPhihWKnHrCjQjaWmTqzBXCB
+	 QWJcr7h9O0wn09DclvQ48VZ5fFncOmM94uNrtajXuKN5fJ4Au6eAEgoOVTCTU60zdq
+	 nn/Zrzo3umdKirTkXLN9RfjDV4bp16NL72GWJgw8vT5AOzKmHmyEMtyonrMQh7HyVw
+	 kWt7+6FYsumukf5zw7QzyYHkGNasR6JvLQ3QoHPragtpBVHLZeT4JGfgA72sxi/0gz
+	 3ZyQlFD9s0ujw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2ED6D60A54;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 41604609B1;
 	Thu, 24 Jun 2021 02:40:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts32 changes for 5.14 - #2
+Subject: Re: [GIT PULL] IXP4xx modernizations for v5.14
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162450241118.24025.11661141203099756948.git-patchwork-notify@kernel.org>
+ <162450241126.24025.3132734093518682766.git-patchwork-notify@kernel.org>
 Date: Thu, 24 Jun 2021 02:40:11 +0000
-References: <4611716.rnzMqkiUVr@diego>
-In-Reply-To: <4611716.rnzMqkiUVr@diego>
-To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
+References: <CACRpkdbw6HSpp7k6q1FYGmtafLmdAu8bFnpHQOdfBDYYsdLbkw@mail.gmail.com>
+In-Reply-To: <CACRpkdbw6HSpp7k6q1FYGmtafLmdAu8bFnpHQOdfBDYYsdLbkw@mail.gmail.com>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -43,19 +43,21 @@ Hello:
 
 This pull request was applied to soc/soc.git (refs/heads/for-next):
 
-On Tue, 22 Jun 2021 01:06:48 +0200 you wrote:
-> Hi Arnd, Kevin, Olof,
+On Fri, 18 Jun 2021 10:50:31 +0200 you wrote:
+> Hi ARM SoC maintainers,
 > 
-> the relevant driver changes landed in the media-tree a short while ago,
-> so if time still allows please also consider this 2nd pull request for rockchip
-> dts32 changes for 5.14 containing the nodes for the hantro-based
-> video-codec on these socs.
+> here is a constructive pull request for modernizing IXP4xx.
+> 
+> As modernizing architectures go, it's cutting some corners
+> and being a bit different from regular new architectures.
+> The main details of the contents are in the signed tag, but
+> note the following:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Rockchip dts32 changes for 5.14 - #2
-    https://git.kernel.org/soc/soc/c/2995b50376b9
+  - [GIT,PULL] IXP4xx modernizations for v5.14
+    https://git.kernel.org/soc/soc/c/95ef71523663
 
 You are awesome, thank you!
 --
