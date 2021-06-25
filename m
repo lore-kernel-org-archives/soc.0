@@ -2,114 +2,102 @@ Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDDD9C2B9F4
-	for <linux-devicetree@archiver.kernel.org>; Fri, 25 Jun 2021 09:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C1F3C2B9F4
+	for <linux-devicetree@archiver.kernel.org>; Fri, 25 Jun 2021 10:01:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B44A6613EF
-	for <linux-devicetree@archiver.kernel.org>; Fri, 25 Jun 2021 09:51:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 376146142E
+	for <linux-devicetree@archiver.kernel.org>; Fri, 25 Jun 2021 10:01:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbhFYJx2 (ORCPT
+        id S230126AbhFYKD5 (ORCPT
         <rfc822;linux-devicetree@archiver.kernel.org>);
-        Fri, 25 Jun 2021 05:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbhFYJx1 (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Fri, 25 Jun 2021 05:53:27 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A89C061760;
-        Fri, 25 Jun 2021 02:51:05 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id b3so9896933wrm.6;
-        Fri, 25 Jun 2021 02:51:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=i3RskP7ABczDPV/xayjgJz+jTz8nS+XbtsVOlwA5TU0=;
-        b=OcddEErbfOY6ExeISiSk7YFKrdvt8iiNzITQZIQpXEkMFnsJBVqW6omdPQrj+MI4t+
-         RQxMHVEsgRlByVTOZLNnx8ReJ5cL6+GL4mfOd29Q6fKLvHTOoJGy/JtTc+kjoUaErCMY
-         MbpC6MfUnN93kmPSghr5n0mdemefm14+Hke2HLaB5JxDQSO9JVYY1SD3M792mgnld594
-         /oR2Wxdaq2z2oRKgO5NCU08fOKj5PIjCwFb/a8SX0aeOH8dr2VoNRXbUvdaspjq93OFt
-         Gs7R5u9rjXb1Yjvs8rUHbtg6qvYUaTD8GqGlbB9g2wpu8fjfIXCjju4FMm+HT8HZEMNy
-         oLeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=i3RskP7ABczDPV/xayjgJz+jTz8nS+XbtsVOlwA5TU0=;
-        b=UVQFsjju3loVMg43Ztnw44EfstAqpm4E1YZIVsLGhUG0MjJhgkFnlFVzs/q7yNBB/W
-         DNSjKFvzffEkf4osk/CBzh7GdWOpPPVppYLoaeUbcfaJzrIpYlNqkUG4f5/T35h0dgTm
-         b118HLOpFsn1yWDXsGQ9d03HVMMGCl1+1sp86/Tf7wPK4t0eiTdWgNaV7X7OZ3cTbCIZ
-         sPcsxetusory+a/udUXpSpacdTTNKixbCohC89JxFfnOdEZ0L2SR0Xch5Ttm9q8EbUtI
-         sbG1KldN4lA/R1rwD30ud/U4hEf8tjjI7XG1merytcHANxER6FWt4evzmvcxp3j9YgHq
-         /G1A==
-X-Gm-Message-State: AOAM531M2JWhTbFqxY7x6sjX1eIbOE6Z66hNC2mg6zWbMxbp5ZUsOMyE
-        tIMk8xRe7X72auTnx2rPTvo=
-X-Google-Smtp-Source: ABdhPJyS2uk3MmSY2uN1krFSfu+xoBlyO0DZF7uSh/HopQ+aQVgpEfA/mvIw5qtHdIqKnhxkRiipWw==
-X-Received: by 2002:a5d:638b:: with SMTP id p11mr10104727wru.380.1624614664376;
-        Fri, 25 Jun 2021 02:51:04 -0700 (PDT)
-Received: from cluster5 ([80.76.206.81])
-        by smtp.gmail.com with ESMTPSA id t11sm5628277wrz.7.2021.06.25.02.51.03
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Fri, 25 Jun 2021 02:51:03 -0700 (PDT)
-From:   Matthew Hagan <mnhagan88@gmail.com>
+        Fri, 25 Jun 2021 06:03:57 -0400
+Received: from mout.kundenserver.de ([212.227.126.131]:34331 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230072AbhFYKDz (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Fri, 25 Jun 2021 06:03:55 -0400
+Received: from mail-wm1-f44.google.com ([209.85.128.44]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MAwsT-1m7Oom25ft-00BOEN; Fri, 25 Jun 2021 12:01:33 +0200
+Received: by mail-wm1-f44.google.com with SMTP id j11-20020a05600c1c0bb02901e23d4c0977so7454231wms.0;
+        Fri, 25 Jun 2021 03:01:33 -0700 (PDT)
+X-Gm-Message-State: AOAM530fqcPGyhm5ElcwnuJ28aGPwk3gP2KIEDObl0U1wgVVYKTT/N0D
+        UysqdouorJcwylwU7qQui56OggFtQSD6fcFxQSo=
+X-Google-Smtp-Source: ABdhPJyRRakIybOAARLEqgqFsAKTsqLCItavkxySt7puA/r0GJ3aVYwMKoJP0QL2cw8hz9fbIr1BZHd9ZDHu2XJ9KFw=
+X-Received: by 2002:a1c:c90f:: with SMTP id f15mr9700348wmb.142.1624615293093;
+ Fri, 25 Jun 2021 03:01:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210625095000.3358973-1-mnhagan88@gmail.com> <20210625095000.3358973-3-mnhagan88@gmail.com>
+In-Reply-To: <20210625095000.3358973-3-mnhagan88@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 25 Jun 2021 11:59:08 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3NAOgBa1j+Zsm6FwSm2ux49rFcnTEYJJsmSF8TggRnYA@mail.gmail.com>
+Message-ID: <CAK8P3a3NAOgBa1j+Zsm6FwSm2ux49rFcnTEYJJsmSF8TggRnYA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] ARM: dts: NSP: Add DT files for Meraki MX64 series
+To:     Matthew Hagan <mnhagan88@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         Vladimir Oltean <olteanv@gmail.com>,
-        Matthew Hagan <mnhagan88@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Ray Jui <rjui@broadcom.com>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 4/4] dt-bindings: arm: bcm: NSP: add Meraki MX64/MX65
-Date:   Fri, 25 Jun 2021 10:49:51 +0100
-Message-ID: <20210625095000.3358973-5-mnhagan88@gmail.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20210625095000.3358973-1-mnhagan88@gmail.com>
-References: <20210625095000.3358973-1-mnhagan88@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+        Sam Ravnborg <sam@ravnborg.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:cPZZH1H8tLkJZhzYVyg54dlhPrzq22n2d6a2s0M2uflfJSYFDxj
+ 8NO4E2VzN4gP0vhm7WVIIx06T/iI44gy0cIldB0ENBNcx/BUkHGScDNXtM7f3pPiAZHrwC8
+ AXRThtPcrGn538z/EE+K7B7gVnbeZsTYRk2M7xzDiBHuaoGcp2ZkJZEDFGhmnrJstrr9s8q
+ U5rKXEvk5LkNOEkAt8olA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fdZn1ST4yvo=:43VghYItvo8WWSMEG/1RpZ
+ xifz/d9vVILF7xi7WX6uv3vbTXMQ6dYmKehEHVeeNu+gOhJbjBn9S9F/6hi/s5Ks0MqSjUNDZ
+ dfaoj/8JFnhKyOF6oa4obXkLcDK93EUUxy+MtJ4foFLR3MR8uBxKwlYpq5vvRriFd5+QP7mlG
+ +4hyAamO5VKqItVCCsvL5MnkrjR57tZn4COWaVFbyoAPpQTR52+nkBpFme75q+nLZWcK1EMtu
+ 79D0WrJRX80CgzYQTLymng5xPWv6yjguvIphcKUYQRrdudFlmF4yKCBCuGsCf1E0CgnquF6xW
+ 0jk6grm7UlA/F5o3oq+0K26bBvSUjusN0r750C599fyDMiZrwWsmJpANsWXTsXwnthmHcEWdY
+ ebiDt78AzV1q8G8k5alVVoYIb37FzUnQFcpIFY0T4nFyOancc3otpnaO39UDAG6kUI7yYA2pX
+ NrMm+XOS3oX4/Q650JZDbP9inf9G9VajQBGw7OPxuk2hmOG0JxC6RHcByJkspRSX/CChaNmjS
+ qFxjqps9FgQAmVrmQLWpmxLdykLFGLYb3GBd0elJnbyGP9BVG9q80rBsGsMZi2nUFTDogBtmw
+ Q1N+cWUqHibyHWhqbqWVpeAX03C9nLYzPpi59tXqrXX++Sbse+AZCZ1rILRSU3U1l8+lc441u
+ 9UcU=
 Precedence: bulk
 List-ID: <devicetree.vger.kernel.org>
 X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20210625094951.OOw69h9z003CDgeEYgBWu-Lt9X8Fgx_7qDM3Uv8dz7I@z>
 
-Add bindings for the Meraki MX64/MX65 series.
+On Fri, Jun 25, 2021 at 11:52 AM Matthew Hagan <mnhagan88@gmail.com> wrote:
+>
+> MX64 & MX64W Hardware info:
+>   - CPU: Broadcom BCM58625 Cortex A9 @ 1200Mhz
+>   - RAM: 2 GB (4 x 4Gb SK Hynix H5TC4G83CFR)
+>   - Storage: 1 GB (Micron MT29F8G08ABACA)
+>   - Networking: BCM58625 internal switch (5x 1GbE ports)
+>   - USB: 1x USB2.0
+>   - Serial: Internal header
+>   - WLAN(MX64W only): 2x Broadcom BCM43520KMLG on the PCI bus
+>
+> This patch adds the Meraki MX64 series-specific bindings. Since some
+> devices make use of the older A0 SoC, changes need to be made to
+> accommodate this case, including removal of coherency options and
+> modification to the secondary-boot-reg.
+>
+> Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
 
-Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
----
- Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+Removing the dma-coherent flags in the dts file seemed really odd until
+I read the text above. It would seem more logical to me to have a .dtsi file
+that has all the a0 revision specific changes, and include that from the
+dts file.
 
-diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
-index 78dfa315f3d0..7d184ba7d180 100644
---- a/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
-+++ b/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
-@@ -62,6 +62,12 @@ properties:
-           - enum:
-               - brcm,bcm958625hr
-               - brcm,bcm958625k
-+              - meraki,mx64
-+              - meraki,mx64-a0
-+              - meraki,mx64w
-+              - meraki,mx64w-a0
-+              - meraki,mx65
-+              - meraki,mx65w
-           - const: brcm,bcm58625
-           - const: brcm,nsp
- 
--- 
-2.26.3
+On the other hand, the /chosen, /aliases and  /memory nodes that you have
+in the .dtsi file should probably get moved into the .dts files, as these tend
+to be board specific settings, even if the examples you have are all
+the same.
 
+       Arnd
