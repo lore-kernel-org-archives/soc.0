@@ -1,117 +1,126 @@
-Return-Path: <SRS0=wsnO=LT=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=r8q2=LT=gmail.com=mnhagan88@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 987FBC2B9F4
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 25 Jun 2021 10:57:20 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1385AC2B9F4
+	for <soc@archiver.kernel.org>; Fri, 25 Jun 2021 17:26:24 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id D5D79619A4; Fri, 25 Jun 2021 17:26:23 +0000 (UTC)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6189C61459
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 25 Jun 2021 10:57:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6189C61459
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=SFLdXYaT7xNtQSSAvfWr/b803ZXFnLrrCTsV7SYtGEU=; b=iM+Qr7nrk2P2/n
-	lnVVvwmu9boYBtoa+D3Ho2JY/voc+3rCQRHkdFFNYZjXZzrf6cddPHnXk8pcFKiNMgG07Mu4k2rPX
-	/oWSOBZwuEah/0vP5uMn74nLZkMaEFtT2NN077LdPZMMxKFTVtMxPU7ma0ULyP8YCbLh0m3uvcqSY
-	+MzgZXcdDxr3demCRAgfwaOpjcY5EdMmbquqDbnXQ+8xO1cHJtuz4zfZkkFfOInOamAyknL4OI4U2
-	6DJfu7ESrWayBXguswqkXQNTiZDZMPgiEcw5bBYOl9r29TaQIltuCRCXurm2SgPjDUgc38mgKTjjv
-	18vuugpgFNiic6y0nvmw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lwjV0-00197H-Cw; Fri, 25 Jun 2021 10:55:50 +0000
-Received: from foss.arm.com ([217.140.110.172])
- by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lwj4S-000xoQ-M6
- for linux-arm-kernel@lists.infradead.org; Fri, 25 Jun 2021 10:28:26 +0000
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 121CBED1;
- Fri, 25 Jun 2021 03:28:24 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 06D553F719;
- Fri, 25 Jun 2021 03:28:22 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
+	by mail.kernel.org (Postfix) with ESMTPS id AC9F06199C;
+	Fri, 25 Jun 2021 17:26:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AC9F06199C
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=mnhagan88@gmail.com
+Received: by mail-wr1-f50.google.com with SMTP id g7so6774451wri.7;
+        Fri, 25 Jun 2021 10:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=4QI+hOEPUjUXgGj/0NkLNcxkrgoIPtZX2ZwWHw7Tor0=;
+        b=JuXFHVRf8avdk6DJPLBA8wpDI1/HBLfgM4g2AX5CM/b6sZb1QPSzQw5+ymOX66jZLR
+         vg2/hAm9ZRwEnqX/AqZrKXE8uIFVZTGY846oips89npSGgAA+8Gk164AzP8FEDegFaeF
+         ehffEJ511FCWd4CKP/GFEFYzkkrUgO4UPB2qx1CfQ/C69sBdKK+MsloTrUQZV/WiNGT0
+         PSo39vzMbMNUcOhMeQ7aYX9pyqxMsBqKw4Ityz7v4Hsrzl+tPrHcy+xxWmshQbEk+sGA
+         WJHyWIzC8yPCEcIl9wPGpdeAy71bQlKy1JyvoTkYTZjwzNeA8s/KV8mTsQDtD5kJOi6C
+         Tyew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=4QI+hOEPUjUXgGj/0NkLNcxkrgoIPtZX2ZwWHw7Tor0=;
+        b=CihpN/d870BXinuINH7lIZeajUOaQGaJhNzvXoHx8tc4D3Ub6K5JgUdv4jL8psMcx3
+         IAAW1vABpPSn32CbZw9H7DmKsdLdEmSVFM0lcgQ6mKZA0AmlASJhjzYEOcyLDVnJlCeD
+         XR038+VQMAvSHM1H3FaJruN+HYR47UiNDRpMmptWoDtRenwye6N62KXkfUOLR+uoKdFg
+         oRjl/jkTwxbUjLzWz04m2LvpNcUkw0O4nJ+mJL9oyvIInblPzQMi/gjsMPrwX2vmFrvc
+         ICRpb+FzWYxsm+G8hnGKeEUaQnxDUQHKZURiVOWi0J2AeOW/xcVLkluKDuTdYCYXO6TG
+         XPfw==
+X-Gm-Message-State: AOAM533oM/A4S0zacPlIUJax9PwL/eNdyHINTBlUNPb4dZLNoltaSeUv
+	gcqs5WSAFG10CXMHZP+Qqjw=
+X-Google-Smtp-Source: ABdhPJwzxA9RRn9LlPBaD6PzNaRqzDeqYVg+jF+ZjyPUhEtVOcN/QYSI9Zjc9h5n1zVOWc2EAjbqcg==
+X-Received: by 2002:a5d:6d8d:: with SMTP id l13mr10740085wrs.358.1624641982413;
+        Fri, 25 Jun 2021 10:26:22 -0700 (PDT)
+Received: from localhost.localdomain (haganm.plus.com. [212.159.108.31])
+        by smtp.gmail.com with ESMTPSA id w9sm6609998wru.3.2021.06.25.10.26.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Jun 2021 10:26:22 -0700 (PDT)
+Subject: Re: [PATCH v4 2/4] ARM: dts: NSP: Add DT files for Meraki MX64 series
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>,
- ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>, Arnd Bergmann <arnd@kernel.org>,
- Cristian Marussi <cristian.marussi@arm.com>,
- Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v5.14(part 2)
-Date: Fri, 25 Jun 2021 11:28:19 +0100
-Message-ID: <20210625102819.206172-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.25.1
+Cc: Florian Fainelli <f.fainelli@gmail.com>,
+ Vladimir Oltean <olteanv@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+ Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+ Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Sam Ravnborg <sam@ravnborg.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ DTML <devicetree@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20210625095000.3358973-1-mnhagan88@gmail.com>
+ <20210625095000.3358973-3-mnhagan88@gmail.com>
+ <CAK8P3a3NAOgBa1j+Zsm6FwSm2ux49rFcnTEYJJsmSF8TggRnYA@mail.gmail.com>
+From: Matthew Hagan <mnhagan88@gmail.com>
+Message-ID: <bbf38c31-ed75-69d2-39ed-94f324b1f220@gmail.com>
+Date: Fri, 25 Jun 2021 18:26:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210625_032824_824267_962AF9D4 
-X-CRM114-Status: UNSURE (   7.41  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <CAK8P3a3NAOgBa1j+Zsm6FwSm2ux49rFcnTEYJJsmSF8TggRnYA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210625102819.FdOjRHfxTz_NZqmuzG7O94RUAO8XiuRhitZ-TGjN2F4@z>
+Content-Language: en-US
 
-Hi ARM SoC Team,
+On 25/06/2021 10:59, Arnd Bergmann wrote:
 
-Please pull !
+> On Fri, Jun 25, 2021 at 11:52 AM Matthew Hagan <mnhagan88@gmail.com> wrote:
+>> MX64 & MX64W Hardware info:
+>>   - CPU: Broadcom BCM58625 Cortex A9 @ 1200Mhz
+>>   - RAM: 2 GB (4 x 4Gb SK Hynix H5TC4G83CFR)
+>>   - Storage: 1 GB (Micron MT29F8G08ABACA)
+>>   - Networking: BCM58625 internal switch (5x 1GbE ports)
+>>   - USB: 1x USB2.0
+>>   - Serial: Internal header
+>>   - WLAN(MX64W only): 2x Broadcom BCM43520KMLG on the PCI bus
+>>
+>> This patch adds the Meraki MX64 series-specific bindings. Since some
+>> devices make use of the older A0 SoC, changes need to be made to
+>> accommodate this case, including removal of coherency options and
+>> modification to the secondary-boot-reg.
+>>
+>> Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
+> Removing the dma-coherent flags in the dts file seemed really odd until
+> I read the text above. It would seem more logical to me to have a .dtsi file
+> that has all the a0 revision specific changes, and include that from the
+> dts file.
 
-Regards,
-Sudeep
+How about having separate bcm-nsp-ax and bcm-nsp-bx dtsi files with the
+appropriate secondary-boot-reg and dma-coherent (or lack of)
+properties, which then include bcm-nsp.dtsi. Thus we can also avoid use
+of /delete-property/. Would this be preferable?
 
--->8
+>
+> On the other hand, the /chosen, /aliases and  /memory nodes that you have
+> in the .dtsi file should probably get moved into the .dts files, as these tend
+> to be board specific settings, even if the examples you have are all
+> the same.
 
-The following changes since commit 61832b35b4d953b2b4f6c668a3ad2a3013f40532:
+I did not come across any convention regarding this, though there are
+plenty of cases where the /chosen, /aliases and /memory nodes are
+defined in a .dtsi file and used by multiple similar boards. Also note
+in this case /aliases is defined in bcm-nsp.dtsi, not by me. Would we
+not prefer to avoid having 6x duplication?
 
-  firmware: arm_scmi: Avoid multiple initialisations of hdr->protocol_id (2021-06-08 16:06:12 +0100)
+>        Arnd
+>
+Matthew
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-5.14-2
-
-for you to fetch changes up to 8ecab77009297ee716c92ced1dd6d8487988b624:
-
-  firmware: arm_scmi: Ensure drivers provide a probe function (2021-06-25 10:51:25 +0100)
-
-----------------------------------------------------------------
-ARM SCMI updates for v5.14
-
-A single fix adding check for presence of probe while registering
-the driver to prevent NULL pointer access. There is also a minor cleanup
-dropping the duplicate check as the driver core already takes care of it.
-
-----------------------------------------------------------------
-Sudeep Holla (2):
-      firmware: arm_scmi: Simplify device probe function on the bus
-      firmware: arm_scmi: Ensure drivers provide a probe function
-
- drivers/firmware/arm_scmi/bus.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
