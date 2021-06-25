@@ -1,118 +1,112 @@
-Return-Path: <SRS0=ak/p=LS=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=Yn7A=LT=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2A57C49EA6
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 24 Jun 2021 20:24:25 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA850C2B9F4
+	for <soc@archiver.kernel.org>; Fri, 25 Jun 2021 07:36:10 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 8821D61428; Fri, 25 Jun 2021 07:36:10 +0000 (UTC)
+Received: from youngberry.canonical.com (youngberry.canonical.com [91.189.89.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A68F9613BA
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 24 Jun 2021 20:24:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A68F9613BA
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=NAeMtwk+fTMCNZ7/eCB0toNW6Zuwtu7eMKA86sd4Mso=; b=Th8clwy2ryv2QD
-	iWRlDumekXXoqJWvDm5xS0B5tVqVWIB7sRpADrZ8qpMzhMw+pwEtgvztrIoxRUbQme0bnZPnitG45
-	UeKnQXn2l2F0lyNIfIfndAT2/He0mJRoQgg2q9tLQpBa3rEolENvXTg7x8h6wmoTJxhyvaMFBXxm+
-	Pln39SFFNAkOYp33aHV6y7BybO+HDBxmtPsjQ8Ak2CoK+NczwOvhdmeC6pXh92a6jErJiNUHN9oV8
-	wJDeVGbHjcmacD1VLY2ztyVaWQhn6M8PoN+FVsvh67TpeU7HPHbn7DpDaw8/SdvBFVUW1I9dNy+fn
-	cB6GSgwQqKAfx21CmKuw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1lwVsC-00G9e7-NI; Thu, 24 Jun 2021 20:22:52 +0000
-Received: from mail-io1-f50.google.com ([209.85.166.50])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1lwVs4-00G9dZ-7V
- for linux-arm-kernel@lists.infradead.org; Thu, 24 Jun 2021 20:22:45 +0000
-Received: by mail-io1-f50.google.com with SMTP id g22so9915247iom.1
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 24 Jun 2021 13:22:43 -0700 (PDT)
+	by mail.kernel.org (Postfix) with ESMTPS id 31F3C613FA
+	for <soc@kernel.org>; Fri, 25 Jun 2021 07:36:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 31F3C613FA
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=krzysztof.kozlowski@canonical.com
+Received: from mail-wm1-f69.google.com ([209.85.128.69])
+	by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <krzysztof.kozlowski@canonical.com>)
+	id 1lwgNk-0003jG-F7
+	for soc@kernel.org; Fri, 25 Jun 2021 07:36:08 +0000
+Received: by mail-wm1-f69.google.com with SMTP id o29-20020a05600c511db02901e8210bb40dso235615wms.0
+        for <soc@kernel.org>; Fri, 25 Jun 2021 00:36:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=knEwkp+Z8llmgr1VJTsCXisfmU+yU/tJNLrDFp/f5Bg=;
- b=WXE1OolyHE9nJTdMbEehZvPGZ7NWpW7QdSrSf3/A3wiNM6CLl4ToQtN2UhGliMK4UB
- YxBS17YpT8E+9C/ap1KlrJSZm0Fy/ylfLIhSA5g+LhjqLpPelFOVJOmEsYXPHQTHBnYa
- gQwgF2Fz8hf9T56lroW5QhjyR/py4FEUGNA3yINIKKFF5/dKqTeitZePxmUKg7Mi9TOW
- /0/FLUEDORBXAlipgtvm6Me9rxVodWTX0ZOAirzoxWd3zgbd0HRNklGHWSWls0ZZRtrM
- aWKj5cLLsiEu90xfb02cLhoPTVN2MsHNMil1DSDUYSlVOJM/o3ntEltFmX0nn+VrQVjM
- uefg==
-X-Gm-Message-State: AOAM532NjNPpHF4xsRfcD9DSgoi6gOdymK/px+hFLiiQ0h8u+OhJbmyK
- C9JRphNT6CxtUFqvog0AwA==
-X-Google-Smtp-Source: ABdhPJwobF8PdC0NO8payPPWkGXZGT2rK/e9rI/graPZ4wi+ob3vqdYIhC/ZQ9+WAp50FD9qqZtjMw==
-X-Received: by 2002:a5d:8b8b:: with SMTP id p11mr5674403iol.77.1624566163505; 
- Thu, 24 Jun 2021 13:22:43 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
- by smtp.gmail.com with ESMTPSA id g8sm1954736iop.31.2021.06.24.13.22.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 24 Jun 2021 13:22:42 -0700 (PDT)
-Received: (nullmailer pid 1927038 invoked by uid 1000);
- Thu, 24 Jun 2021 20:22:37 -0000
-Date: Thu, 24 Jun 2021 14:22:37 -0600
-From: Rob Herring <robh@kernel.org>
-To: Matthew Hagan <mnhagan88@gmail.com>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nbaaKHR5ZpYe85F3BN+ohVLxdeR5Xvy5GBXCZuo0Jew=;
+        b=cRKZZbg8ukO9qxIw2EqXy+EkZPvOoa10ELCzFrwjg4P/W59DR/+lM5lvRWN7DeyUKO
+         R5ETP1+6YPbKBd+fEJtJVrEd6kYmjvZzPO7Nt1QOd10wgIGlwSdsuuifmOUU/p706JcR
+         9dxrHRlbHWF1bXF4KGjhC1M0rLZscA2AQhIU0YY2QrQ8OfthLAQLJAK9OWsHRX3lYm14
+         WfccIKIWGsRI+mbtEhLzfm5/d5pfZbARAAw1PKqiXmW4XFj6M6F3eVMao9EuD9G0TQVb
+         uKMUT/aDVDGw2bZvzw7Sz/Jl46DSKx8r/iFRESInpVNkWzSq0y68FLQFwil0KRAStvAM
+         ui7g==
+X-Gm-Message-State: AOAM532zgq8R6lCD+oWF5xeUk2rlXyByarm0+/QtzNcB8tPPH2BhZuLY
+	ozzCzrlPX81LTu476juFZH7szj6iMEfRKTwKWgSDAupXSkk26NoHdm2bIuXDDTB6FbTxpPwP3I9
+	JwJTPwtz76vqZK8K1EYQ4dg8=
+X-Received: by 2002:adf:f48c:: with SMTP id l12mr9338947wro.194.1624606568268;
+        Fri, 25 Jun 2021 00:36:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz3dKrCURHFg3PIpYiy6kcKs/cc8ALeRf55hqXv9kAgRiaHVuodNNseBYhflvBvEBS/f5ZiPg==
+X-Received: by 2002:adf:f48c:: with SMTP id l12mr9338931wro.194.1624606568114;
+        Fri, 25 Jun 2021 00:36:08 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
+        by smtp.gmail.com with ESMTPSA id d3sm5343681wrx.28.2021.06.25.00.36.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Jun 2021 00:36:07 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- Geert Uytterhoeven <geert+renesas@glider.be>, soc@kernel.org,
- devicetree@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
- Viresh Kumar <viresh.kumar@linaro.org>, linux-kernel@vger.kernel.org,
- Scott Branden <sbranden@broadcom.com>, Vladimir Oltean <olteanv@gmail.com>,
- Florian Fainelli <f.fainelli@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>,
- Ray Jui <rjui@broadcom.com>, bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [PATCH v3 4/4] dt-bindings: arm: bcm: NSP: add Meraki MX64/MX65
-Message-ID: <20210624202237.GA1926990@robh.at.kernel.org>
-References: <20210613101658.3242777-1-mnhagan88@gmail.com>
- <20210613101658.3242777-5-mnhagan88@gmail.com>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Thierry Reding <treding@nvidia.com>
+Subject: [GIT PULL] memory: tegra for v5.14, late fixes
+Date: Fri, 25 Jun 2021 09:36:04 +0200
+Message-Id: <20210625073604.13562-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210613101658.3242777-5-mnhagan88@gmail.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210624_132244_317308_F939CA15 
-X-CRM114-Status: GOOD (  11.92  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210624202237.rDZsBfekj_yJhy6BN6A3C47fgI213kYyR3bnvvMHPPU@z>
+Content-Transfer-Encoding: 8bit
 
-On Sun, 13 Jun 2021 11:16:48 +0100, Matthew Hagan wrote:
-> Add bindings for the Meraki MX64/MX65 series. Note this patch should be
-> applied on top of "dt-bindings: arm: bcm: add NSP devices to SoCs".
-> 
-> Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+Hi,
 
-Acked-by: Rob Herring <robh@kernel.org>
+Late fixes for Tegra memory controllers drivers for issues introduced in this
+branch in previous tags.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+On top of previous pull (memory-controller-drv-tegra-5.14-2).
+
+If it is too late, I can send as fixes after merge window, but maybe better to
+get these into merge windows earlier.
+
+Best regards,
+Krzysztof
+
+
+The following changes since commit 2c1bc371268862a991a6498e1dddc8971b9076b8:
+
+  iommu/arm-smmu: Use Tegra implementation on Tegra186 (2021-06-11 08:44:53 +0200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-tegra-5.14-3
+
+for you to fetch changes up to bf3ec9deaa33889630722c47f7bb86ba58872ea7:
+
+  dt-bindings: arm-smmu: Fix json-schema syntax (2021-06-23 07:55:10 +0200)
+
+----------------------------------------------------------------
+Memory controller drivers for v5.14 - Tegra SoC, late fixes
+
+Two fixes for recent series of changfesi n Tegra SoC memory controller
+drivers:
+1. Add a stub for tegra_mc_probe_device() to fix compile testing of
+   arm-smmu without TEGRA_MC.
+2. Fix arm-smmu dtschema syntax.
+
+----------------------------------------------------------------
+Thierry Reding (2):
+      memory: tegra: Add compile-test stub for tegra_mc_probe_device()
+      dt-bindings: arm-smmu: Fix json-schema syntax
+
+ Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 6 ++----
+ include/soc/tegra/mc.h                                | 9 +++++++--
+ 2 files changed, 9 insertions(+), 6 deletions(-)
