@@ -1,125 +1,93 @@
-Return-Path: <mani@kernel.org>
+Return-Path: <SRS0=r0Cw=LW=microchip.com=Eugen.Hristev@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA6E6C2B9F4
-	for <soc@archiver.kernel.org>; Mon, 28 Jun 2021 07:28:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F855C2B9F4
+	for <soc@archiver.kernel.org>; Mon, 28 Jun 2021 12:05:16 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id C1BA661C31; Mon, 28 Jun 2021 07:28:35 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 58C0A61AC0;
-	Mon, 28 Jun 2021 07:28:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1624865315;
-	bh=aMxSwzUPfiY+R6sibvgkSCcIdxzU2psw3KiAkUjVPLM=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=McHX3vwpmZejGt2gIlbxuB1p7eofMdlTNLidFZyWZOAnFYCywvtp93SJUVl73Em1o
-	 kTauRkeYkDFgSOYuBZ5Y28iBVwBG+zLfkt/6fNYCRNyWv7u/RWY6riheDMNOsrPgJQ
-	 f0/01QQjcFwCNKqMFntt65ELgM3fRzNIhzIsFeu7o3v11vmcqve+FfXAty8qnqPrb2
-	 XMqN1HPH34D/xKZIS5YlvI35VUK9JpZgUhtlKnxf4VvyjZoAvsd83CazcrKaAiCqNo
-	 skBJsf+fkvqeyC7AlsseJrkVyXfb8jhGHOoYOY9bT9H6n76rFXvYTQr6GX2P46Usy5
-	 W9IleD5aBbKgw==
-From: Manivannan Sadhasivam <mani@kernel.org>
+	id 1641461477; Mon, 28 Jun 2021 12:05:16 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 9CFD661C69;
+	Mon, 28 Jun 2021 12:05:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9CFD661C69
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=Eugen.Hristev@microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1624881915; x=1656417915;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=D1JleMTnSO1ymCUdXh/+hDEDMbLr8UzAtT0hHDbs/TM=;
+  b=l9sR77hlbGAGqzpquXG5IUEvNAccdqrWofSh7mG9AQmrlXdxiH/WwNWl
+   O3gCDQEyYHoNu4iGSnTKbxU29Kghp7eMAdViE0iVm/9o6IrQFjq3F8ZFZ
+   4pNmjTJxLF5MuMKdPPSQCwfdsIW0pJYowUoUDdMb9vMQqEty0v+zPpnXt
+   zltigpx2hlS7KUi62TKbfc34EfhGDO7bBaxLY2II0j+gyx3kYixY60orm
+   nnhNdz8IqjYUi+ydlk1lOOntdSzQMWnD74cCxxkssVVy9+oJ1/NHQz6uj
+   7Dd1EdwRKdgItWfbHc7TAged7Ffti6H0RjwNeKU8Q4vLXrNahzNi/eF1i
+   w==;
+IronPort-SDR: uwNKe2ztjzkSoZGpMhZPcQBzKONsvPI90wvwmw83jXzu6M4nMLglu7agH0C9ywbvwzXPyenmqn
+ jaAJDFCBZXLTazW1z4CaUNSnTS9mc17nEmgYkjq4GhCOGI4A0ld6xftoTTomhKb7Yr76eW1yqO
+ DMCPDQORGogJG0SVGNDwIDPQu2RP/GuF+we9bFiaFMtNEFSL4Qnxp44ez8o0ML8xcBYM4kph2s
+ QBxxDohXTRE1jZjiwkNDFc1VF/Xi+uklkp56P2AFv2IfVIz6T5uVadpo7PsSm12dZfsCDFB+w7
+ ZqA=
+X-IronPort-AV: E=Sophos;i="5.83,305,1616482800"; 
+   d="scan'208";a="120256120"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jun 2021 05:05:13 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 28 Jun 2021 05:05:14 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Mon, 28 Jun 2021 05:05:11 -0700
+From: Eugen Hristev <eugen.hristev@microchip.com>
+To: <nicolas.ferre@microchip.com>, <robh+dt@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: olof@lixom.net,
-	arnd@arndb.de,
-	afaerber@suse.de,
-	linux-actions@lists.infradead.org,
-	thomas.liau@actions-semi.com,
-	cristian.ciocaltea@gmail.com,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Manivannan Sadhasivam <mani@kernel.org>
-Subject: [PATCH 2/2] ARM: dts: owl-s500-roseapplepi: Add ethernet support
-Date: Mon, 28 Jun 2021 12:58:17 +0530
-Message-Id: <20210628072817.8269-3-mani@kernel.org>
+CC: <alexandre.belloni@bootlin.com>, <soc@kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <ludovic.desroches@microchip.com>,
+	<claudiu.beznea@microchip.com>, <codrin.ciubotariu@microchip.com>, "Eugen
+ Hristev" <eugen.hristev@microchip.com>, Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 1/4] dt-bindings: ARM: at91: document sama7g5ek board
+Date: Mon, 28 Jun 2021 15:04:49 +0300
+Message-ID: <20210628120452.74408-1-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210628072817.8269-1-mani@kernel.org>
-References: <20210628072817.8269-1-mani@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Document the SAMA7G5 Evaluation Kit based on sama7g5 SoC.
 
-Add pinctrl configuration for enabling the Ethernet MAC on RoseapplePi
-SBC. Additionally, provide the necessary properties for the generic S500
-ethernet node in order to setup PHY and MDIO.
-
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Link: https://lore.kernel.org/r/d0e1fbf81984127f0352eb740c7129424b5e40f9.1623401998.git.cristian.ciocaltea@gmail.com
-Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
- arch/arm/boot/dts/owl-s500-roseapplepi.dts | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ Documentation/devicetree/bindings/arm/atmel-at91.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm/boot/dts/owl-s500-roseapplepi.dts b/arch/arm/boot/dts/owl-s500-roseapplepi.dts
-index b8c5db2344aa..eb555f385283 100644
---- a/arch/arm/boot/dts/owl-s500-roseapplepi.dts
-+++ b/arch/arm/boot/dts/owl-s500-roseapplepi.dts
-@@ -225,6 +225,27 @@ bias1-pinconf {
- 			bias-pull-down;
- 		};
- 	};
-+
-+	ethernet_pins: ethernet-pins {
-+		eth_rmii-pinmux {
-+			groups = "rmii_txd0_mfp", "rmii_txd1_mfp",
-+				 "rmii_rxd0_mfp", "rmii_rxd1_mfp",
-+				 "rmii_txen_mfp", "rmii_rxen_mfp",
-+				 "rmii_crs_dv_mfp", "rmii_ref_clk_mfp";
-+			function = "eth_rmii";
-+		};
-+
-+		phy_clk-pinmux {
-+			groups = "clko_25m_mfp";
-+			function = "clko_25m";
-+		};
-+
-+		ref_clk-pinconf {
-+			groups = "rmii_ref_clk_drv";
-+			drive-strength = <2>;
-+		};
-+
-+	};
- };
+diff --git a/Documentation/devicetree/bindings/arm/atmel-at91.yaml b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+index 6fc5a22ad962..fba071b9af1d 100644
+--- a/Documentation/devicetree/bindings/arm/atmel-at91.yaml
++++ b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+@@ -145,6 +145,11 @@ properties:
+           - const: atmel,sama5d4
+           - const: atmel,sama5
  
- /* uSD */
-@@ -241,6 +262,30 @@ &mmc0 {
- 	vqmmc-supply = <&sd_vcc>;
- };
- 
-+&ethernet {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ethernet_pins>;
-+	phy-mode = "rmii";
-+	phy-handle = <&eth_phy>;
-+	status = "okay";
++      - items:
++          - const: microchip,sama7g5ek # SAMA7G5 Evaluation Kit
++          - const: microchip,sama7g5
++          - const: microchip,sama7
 +
-+	mdio {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		reset-gpios = <&pinctrl 88 GPIO_ACTIVE_LOW>; /* GPIOC24 */
-+		reset-delay-us = <10000>;
-+		reset-post-delay-us = <150000>;
-+
-+		eth_phy: ethernet-phy@3 {
-+			reg = <0x3>;
-+			max-speed = <100>;
-+			interrupt-parent = <&sirq>;
-+			interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
-+		};
-+	};
-+};
-+
- &twd_timer {
- 	status = "okay";
- };
+       - items:
+           - enum:
+               - atmel,sams70j19
 -- 
 2.25.1
 
