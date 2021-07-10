@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B038CC07E95
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD641C07E9C
 	for <linux-kernel@archiver.kernel.org>; Sat, 10 Jul 2021 16:48:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 983B361208
+	by mail.kernel.org (Postfix) with ESMTP id BEBF56135B
 	for <linux-kernel@archiver.kernel.org>; Sat, 10 Jul 2021 16:48:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbhGJQsR (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Sat, 10 Jul 2021 12:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
+        id S229882AbhGJQu7 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Sat, 10 Jul 2021 12:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbhGJQsQ (ORCPT
+        with ESMTP id S229500AbhGJQu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jul 2021 12:48:16 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7D0C0613DD
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jul 2021 09:45:31 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id f30so30684050lfj.1
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jul 2021 09:45:30 -0700 (PDT)
+        Sat, 10 Jul 2021 12:50:59 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B55C0613DD
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jul 2021 09:48:13 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id f13so30451033lfh.6
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jul 2021 09:48:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LccKoa1zF1Ue87qbczvb+yg8Tc9aMl+Aop1Gel1Zx9c=;
-        b=O2rBjXyzWsIJVf0JQAX3asSn1W5GsNf2YvRAj4999quiWviTiUb2LwFQTnmx7w7OD8
-         Z186pcU6lv0FdMdCYP5TLYoKSpqifwnIMGHTAfITbnhSYPBdsALl5I8WaxIbE1GDLeNB
-         UeAOwHMHcUI+qvE3Yy5tYxXcyNPm/x0yWofbs=
+        bh=UMwYm3Z5kzi/jKsZNKzSHFnOUpat3NrlV7AI13eBog0=;
+        b=h1J+0nIt4sfDSPrqc3+zf1KmH1ZX/FyrDYTxSHYZF5cNvUWD5k8W0IacYSS/7Yp2Tw
+         S7byUrDkJ2y8Pi727vaVaRBdIS7p16mRkrIZeUy2OcEJTZ++6E5T29c6GoFamaUUS4pQ
+         ADhYcYMcoNqrSzQOTx3Mfd79GREJ8Quw1wzs8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LccKoa1zF1Ue87qbczvb+yg8Tc9aMl+Aop1Gel1Zx9c=;
-        b=TTUee6sJlKGmqbd2RXrunJfORyLS/9wHynBekpB74Gc1lEmDU/MDmPJvD1qX1wQNU0
-         kiUELUDI2j4AXqE5s3z7gcZJCu0iyFvctNRJTzEI6DwenItIo9dV+qyTqakRdg+vQv3e
-         JLY+YQNEc3H5P/htm71N0et7n8/HZynPsg9DXHAR42HMLnJhG5HX6c6APTA9nzxkoMPo
-         jml/gIy571ZgNvSFxHD1Ar+m2xGljGMBUAYgxO6sr/B4Dwzyp/otJZCtNdxqcAyVnodX
-         CH/87//hV3Hhd+tg+9hcmT4BrHsEvrU05wfPNoT7Ka+ZpE90075oLA6BEpB/slDedZQc
-         6LmQ==
-X-Gm-Message-State: AOAM530Oo+pQ/J4CY9qQJuHwz4LzEknUaS711LYD3ZtODtuHYWAt+g5W
-        Ri6maRR9sAfhvjttK1FKHNVq+kKO8HNwKUAj
-X-Google-Smtp-Source: ABdhPJxMmMeaLnmiewvJ9hxXxTtQUDU0Cx8oYeXpogJvj+XkXUftjnQqS6uB2uz3zjXkpot4WfBTuw==
-X-Received: by 2002:a19:4907:: with SMTP id w7mr33387742lfa.136.1625935528967;
-        Sat, 10 Jul 2021 09:45:28 -0700 (PDT)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
-        by smtp.gmail.com with ESMTPSA id n16sm293763lfh.217.2021.07.10.09.45.28
+        bh=UMwYm3Z5kzi/jKsZNKzSHFnOUpat3NrlV7AI13eBog0=;
+        b=Q25t6g1HqnsLTYrlbIpMAaDQ7uRQeBPP8inG5+WRrmSBcyA1iXnxxwod94gjzJsS+c
+         JDPfqE5CVr66S/4hKMQiUGHblLRL9EIk7jvNYV/ETni/HCqBcHK96eles5vnkWPAJF67
+         Rsp21JkKJal/CpOglETRJe6PAIsQSDhNHczz95WEBtlFyhLLEEjPp8s+MdtCqyQwEMH7
+         mI4IJnQQeBS8jWG5f/TBPKNV/XTwCicZLyILSyytoF3rgyefW8tiyriBpmaB2bY5jsQ5
+         E0ZM0F0YT7VWXUI6trS327usk5a7YA2axj9lEQcGZjosJhQ7HWBsCmk55ET4DeCtAtCY
+         U+KA==
+X-Gm-Message-State: AOAM533kKt5UZqdnSOILDaHUdGml7GoyMTSC4eqnsiuMkacR5xEkru8b
+        F5MrskTSP7uqpBv6WPue2iOXryAjO+NZV2CU
+X-Google-Smtp-Source: ABdhPJxaMrGa9bogW5wc4swFx5alTfKE3kvK44l6gEplmg29gkMeauEWwH1cqkYCZPFicYcTFOKh2w==
+X-Received: by 2002:a19:7d04:: with SMTP id y4mr32924034lfc.201.1625935691270;
+        Sat, 10 Jul 2021 09:48:11 -0700 (PDT)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id o10sm8499lfi.41.2021.07.10.09.48.10
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jul 2021 09:45:28 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id a18so30581810lfs.10
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jul 2021 09:45:28 -0700 (PDT)
-X-Received: by 2002:a05:6512:2347:: with SMTP id p7mr3528712lfu.253.1625935527966;
- Sat, 10 Jul 2021 09:45:27 -0700 (PDT)
+        Sat, 10 Jul 2021 09:48:10 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id v14so30665075lfb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jul 2021 09:48:10 -0700 (PDT)
+X-Received: by 2002:a19:7d04:: with SMTP id y4mr32924003lfc.201.1625935690648;
+ Sat, 10 Jul 2021 09:48:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210709234054.10288-1-olof@lixom.net> <20210709234054.10288-2-olof@lixom.net>
-In-Reply-To: <20210709234054.10288-2-olof@lixom.net>
+References: <20210709234054.10288-1-olof@lixom.net> <20210709234054.10288-3-olof@lixom.net>
+In-Reply-To: <20210709234054.10288-3-olof@lixom.net>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 10 Jul 2021 09:45:12 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg2G+4K=wCnHBsiFX2HXH+zN5X_VhmMa9-RsFLL+xMFyg@mail.gmail.com>
-Message-ID: <CAHk-=wg2G+4K=wCnHBsiFX2HXH+zN5X_VhmMa9-RsFLL+xMFyg@mail.gmail.com>
-Subject: Re: [GIT PULL 2/4] ARM: Devicetree material for 5.14
+Date:   Sat, 10 Jul 2021 09:47:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg3Pb1LxbXkTX6itxRvgaV9JwBaSyGmE8zXUurJ98M2Bg@mail.gmail.com>
+Message-ID: <CAHk-=wg3Pb1LxbXkTX6itxRvgaV9JwBaSyGmE8zXUurJ98M2Bg@mail.gmail.com>
+Subject: Re: [GIT PULL 3/4] ARM: Drivers for 5.14
 To:     Olof Johansson <olof@lixom.net>
 List-Id: <soc.lore.kernel.org>
 Cc:     ARM SoC <arm@kernel.org>, SoC Team <soc@kernel.org>,
@@ -75,25 +75,12 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20210710164512.trKaXxedNZxIXp6rbpYZlb8uEC6D1i96_hlbO6WoZKw@z>
-
-What?
-
-My shortlog matches yours, but my diffstat isn't even close.
-
-You show 554 commits, but then your diffstat as not a single file from
-arch/arm*/boot/dts, and says:
+Message-ID: <20210710164754.dX32U_niMkvyjcgsE4Gtbb0rTRTXYbFtHa9XXIS2gMo@z>
 
 On Fri, Jul 9, 2021 at 4:41 PM Olof Johansson <olof@lixom.net> wrote:
 >
->  97 files changed, 8428 insertions(+), 5174 deletions(-)
+>   git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-drivers-5.14
 
-while mine is very different indeed:
+Ahh. You had switched the diffstats between pulls 2 and 3.
 
- 552 files changed, 24060 insertions(+), 3691 deletions(-)
-
-I suspect you got the diffstat from something else entirely, because
-mine looks a lot more believable and matches the commits listed in the
-shortlog a lot better..
-
-              Linus
+            Linus
