@@ -1,152 +1,116 @@
-Return-Path: <SRS0=hrpO=MD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=D9n6=MD=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0C3CC07E95
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 11 Jul 2021 01:43:57 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3435EC07E96
+	for <soc@archiver.kernel.org>; Sun, 11 Jul 2021 21:27:57 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id D2B1C61006; Sun, 11 Jul 2021 21:27:56 +0000 (UTC)
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7345F61278
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 11 Jul 2021 01:43:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7345F61278
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lixom.net
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=Gv8fNih1EJ8AAwh5EQ+knd38Ad7RPy+tXpAdd4VwdHs=; b=ahn9ZejBOCVXOE
-	iT5UcXUsfQ3zzhof5I2UsI8YsCiyyGfbp/NE6b4Jn/J+sqdD6m3QPJXcsdpBMiFFAw545eNkwD6hZ
-	T66/D8gsd5iWWFoBN1p+bE4xkVBad/4S21RtbeDOObZ+HOSjU9jSQaJCIh7qjLp53bCRMFpDQm/sg
-	rgeRcOxCxd9bxA6oNxCWGoJDyXf1x+qz0fRvCZ/iL7neZxysa+DMeW/Q/UkrnGN3m+lXway0aAFZ1
-	Uxo4Ucv4dc5ejO1v2v+8lyN+kY5FRR8AhALFiQcb3T4pRJi3Sm6v9c3dv5wSYcHvqGx8BzkN1wTNR
-	eCocDtfuBFRtT2vSjdRQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1m2OTv-004Tph-6Y; Sun, 11 Jul 2021 01:42:07 +0000
-Received: from mail-io1-xd35.google.com ([2607:f8b0:4864:20::d35])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1m2OTr-004Toq-KM
- for linux-arm-kernel@lists.infradead.org; Sun, 11 Jul 2021 01:42:05 +0000
-Received: by mail-io1-xd35.google.com with SMTP id l5so17639464iok.7
- for <linux-arm-kernel@lists.infradead.org>;
- Sat, 10 Jul 2021 18:42:02 -0700 (PDT)
+	by mail.kernel.org (Postfix) with ESMTPS id A4C2861005;
+	Sun, 11 Jul 2021 21:27:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A4C2861005
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=f.fainelli@gmail.com
+Received: by mail-pg1-f175.google.com with SMTP id 62so16101600pgf.1;
+        Sun, 11 Jul 2021 14:27:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=lixom-net.20150623.gappssmtp.com; s=20150623;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=DviByeW/MRd4o8QAxjQbNiyDl13TlKgHIeZcYevPf8U=;
- b=aEKYNlLyKmBIhtj2zpIjSnRJ+Qd4EOAwRFeseUtJvCj6OD+ekcsQK39PN/zn6cNbHl
- WGSEQ2S8qlVvBsOEXTGLUc/zrTpNltS/TXx2jqMA41Jqqjmj/Af+gcz+Wfc2H871qsbD
- kKOMiwfZo5T7EKQAU1PHMq4l/nkGMMHdValSnpEVrSptiF7e6jcC1kJ19HoiU7LfIZkF
- /XwH6CJ/JhwJf3FzqaXGVRZUtIzo6ZiOIzO6wkbPoi+W9jHLWPTMvUOdtbP8FR5nZFlA
- lC/t59OmgEJe5VGRTKxlrBEtrR3vgxjt1E3MV5HMMAyFnqCO9LazZ+8fTjSIz9M7RjA3
- IFVA==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7K3k85GaGJKCH9BuMuP8rpI2NCFrPnW80SQuzOhy2YY=;
+        b=E7ZzntjKoIoVFd2IYMi7mAM3c5BrxmMx+/lsxhBYTPiiOGTSSa/za7vEM1+AI56dya
+         /8rfcC3oyxeMu8D1jvI2HyNdwwySizqG4w5JIjwhuUtPjVt5LiCDWbBNV/1l50FQLa0I
+         tj/6UlDVRRQ3ac0Y6dnt4Nn2Dk+uk+ubWL6j4q+kMZY6LsiPQyvrx/9SFSc7l/SCGsdV
+         F/b0zif/6jB8LCh0f3XUVpZijxwC13azKoolkb/VhoU5OBvd7RDDqGgkmuTZfxfIJii2
+         8LAbjvgkPck4kmsxSryavCnlYGYWkpyftUCd5lUbZ1b48JCZBfPnns/XZy6r4W/YnKXS
+         mx2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=DviByeW/MRd4o8QAxjQbNiyDl13TlKgHIeZcYevPf8U=;
- b=nLSVtOU5bikbM1sZQ0vG5bl3BvHVkwnhT/mQhMqF2OjyC21+o4siAZZXD4ye8NPj8r
- 4gyd+kNZme/PhAzgwvtgpPmiQx198F0K2v18mIjicVzw9IQVKJIc4j9qdNPamUKCj4te
- c+N3XGkQ6TqD+I8fjeaaalYXAzxkdJT31JS/AhECqSz0maYqRocygIOIw6gXjeLz5u1r
- r0i4Q1+5xy3ceNXHODYoyCmaNo81w3qSFhGV6qb9gpi/U5AR8GYRuYflIIQ6vxmcmUTS
- b67hf0XoHbrAlUbIdZicirYwUzCyRwbbFaWTnE5ABVczctxmOqPGB0vZpJYClGNiWRvf
- 7USQ==
-X-Gm-Message-State: AOAM533JRZN6w9qVQREAE8+8U7XNkmsrmbcYbJIu58h+Ke7/g+9R2QF5
- BO+YVUKEh+z3l9YohKkH3BoeC65TvzswIomE3uDFyQ==
-X-Google-Smtp-Source: ABdhPJx+rpq4HSXSp6jfp7UQ0J9hdUAfM226zfK6hZLavZmabddYLhfL+ajhRe1PyVE3+Be8kXbBeehdncaxRpDO7es=
-X-Received: by 2002:a5d:9051:: with SMTP id v17mr33836994ioq.81.1625967721832; 
- Sat, 10 Jul 2021 18:42:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210709234054.10288-1-olof@lixom.net>
- <20210709234054.10288-2-olof@lixom.net>
- <CAHk-=wg2G+4K=wCnHBsiFX2HXH+zN5X_VhmMa9-RsFLL+xMFyg@mail.gmail.com>
-In-Reply-To: <CAHk-=wg2G+4K=wCnHBsiFX2HXH+zN5X_VhmMa9-RsFLL+xMFyg@mail.gmail.com>
-From: Olof Johansson <olof@lixom.net>
-Date: Sat, 10 Jul 2021 18:41:50 -0700
-Message-ID: <CAOesGMjzU7bgX97_N08sLPsEew_6iHeQAi4EKgFK9EZVmMP+sQ@mail.gmail.com>
-Subject: Re: [GIT PULL 2/4] ARM: Devicetree material for 5.14
-To: Linus Torvalds <torvalds@linux-foundation.org>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7K3k85GaGJKCH9BuMuP8rpI2NCFrPnW80SQuzOhy2YY=;
+        b=NSyy0AyCphWG4DFw+OS2Iw0YsjTq1hA1LOCa1qitIZJXcBLo79n1M50rFipSKLhmvm
+         Qw1Ezj5CCYqCsJictfB+uw3Ca4nG6HizExvDWRsJI7tAe3VYLmULZGNlVuTz1JBsmZ0I
+         Ri4APNzptbR4MHOSyIx6neZBhPKHkDv+sCk95BFoLdRzMg5r9LkLBFmuyvkMD6/t6xyP
+         7tymgU8xVRaYsIN2Uff4mUfmfjKANkdaE9uA8Go7HUvoCSK9yRRlJHwhRuuC0dTQDvg+
+         OROcbzZaupKs99eXYzz+5pdARks/gIROSfcGYuX0H8tjzYOBr7hpq+8LacZGiMNIMI28
+         59sg==
+X-Gm-Message-State: AOAM530Bo4gp3nhsYFVxEd5NGEVuW3J4V0dOaxyUhrjVQagxW3wRtXrl
+	MmnokvfoEtt87VOY+BXnOoQ=
+X-Google-Smtp-Source: ABdhPJygvwZX9yQpROduCWqOil93ELonKQkH/fzOvZ4NZjeUIgYDNWCOITxDJiX17Xe7UUBxsxHdvg==
+X-Received: by 2002:a63:f609:: with SMTP id m9mr50184529pgh.74.1626038876142;
+        Sun, 11 Jul 2021 14:27:56 -0700 (PDT)
+Received: from [10.230.31.46] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 194sm13261208pfy.51.2021.07.11.14.27.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Jul 2021 14:27:55 -0700 (PDT)
+Subject: Re: [PATCH] ARM: multi_v7_defconfig: Make NOP_USB_XCEIV driver
+ built-in
+To: Stefan Wahren <stefan.wahren@i2se.com>,
+ Nicolas Saenz Julienne <nsaenz@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: ARM SoC <arm@kernel.org>, SoC Team <soc@kernel.org>, 
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210710_184203_762520_8F338817 
-X-CRM114-Status: GOOD (  17.61  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ bcm-kernel-feedback-list@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, Saravana Kannan <saravanak@google.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, soc@kernel.org,
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+References: <1625915095-23077-1-git-send-email-stefan.wahren@i2se.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <d3154d8d-6f4c-b59b-add1-f3e75462309a@gmail.com>
+Date: Sun, 11 Jul 2021 14:27:46 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <1625915095-23077-1-git-send-email-stefan.wahren@i2se.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210711014150.wiA1uMtOTIgbYK8kIosDsGfyImlUJU115sPrCuzI4ps@z>
-
-On Sat, Jul 10, 2021 at 9:45 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> What?
->
-> My shortlog matches yours, but my diffstat isn't even close.
->
-> You show 554 commits, but then your diffstat as not a single file from
-> arch/arm*/boot/dts, and says:
->
-> On Fri, Jul 9, 2021 at 4:41 PM Olof Johansson <olof@lixom.net> wrote:
-> >
-> >  97 files changed, 8428 insertions(+), 5174 deletions(-)
->
-> while mine is very different indeed:
->
->  552 files changed, 24060 insertions(+), 3691 deletions(-)
->
-> I suspect you got the diffstat from something else entirely, because
-> mine looks a lot more believable and matches the commits listed in the
-> shortlog a lot better..
-
-Yeah, this was an operator error at my end due to the workflow I have
-when I generate the pull requests. Thanks for noticing, and as you saw
-on the 3rd branch, the info was swapped between them.
-
-For more detail in case anyone is interested:
-
-I merge the set of pull requests one by one on top of your branch, and
-then run a script that generates the pull requests. At least when we
-started out, git request-pull got confused and generated wrong info
-when we had complex merges.
-
-This time around I generated them backwards: Merged all 4, then
-generated the last pull request email, reset back to the next head
-(with the previous branch), generated that, etc.
-
-The mistake here is that I mixed up the order of the two middle ones.
-So I specified the tag (and got the commit message from it), but
-obviously the diffstats and the shortlogs ended up generated from what
-was in the working tree, i.e. the other branch.
-
-My bad, and something I'll double check for in the future or add a
-sanity-check for in the script.
 
 
--Olof
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+On 7/10/2021 4:04 AM, Stefan Wahren wrote:
+> The usage of usb-nop-xceiv PHY on Raspberry Pi boards with BCM283x has
+> been a "regression source" a lot of times. The last case is breakage of
+> USB mass storage boot has been commit e590474768f1 ("driver core: Set
+> fw_devlink=on by default") for multi_v7_defconfig. As long as
+> NOP_USB_XCEIV is configured as module, the dwc2 USB driver defer probing
+> endlessly and prevent booting from USB mass storage device. So make
+> the driver built-in as in bcm2835_defconfig and arm64/defconfig.
+
+Should not that be fixed somehow?
+
+> 
+> Reported-by: Ojaswin Mujoo <ojaswin98@gmail.com>
+> Fixes: e590474768f1 ("driver core: Set fw_devlink=on by default")
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> ---
+>   arch/arm/configs/multi_v7_defconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+> index 52a0400..d9abaae 100644
+> --- a/arch/arm/configs/multi_v7_defconfig
+> +++ b/arch/arm/configs/multi_v7_defconfig
+> @@ -821,7 +821,7 @@ CONFIG_USB_ISP1760=y
+>   CONFIG_USB_HSIC_USB3503=y
+>   CONFIG_AB8500_USB=y
+>   CONFIG_KEYSTONE_USB_PHY=m
+> -CONFIG_NOP_USB_XCEIV=m
+> +CONFIG_NOP_USB_XCEIV=y
+>   CONFIG_AM335X_PHY_USB=m
+>   CONFIG_TWL6030_USB=m
+>   CONFIG_USB_GPIO_VBUS=y
+> 
+
+-- 
+Florian
