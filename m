@@ -1,25 +1,29 @@
-Return-Path: <SRS0=I37k=MD=lixom.net=olof@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5044FC07E95
-	for <soc@archiver.kernel.org>; Sun, 11 Jul 2021 01:42:03 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id DE5236135C; Sun, 11 Jul 2021 01:42:02 +0000 (UTC)
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 88ED061289
-	for <soc@kernel.org>; Sun, 11 Jul 2021 01:42:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 88ED061289
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lixom.net
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=olof@lixom.net
-Received: by mail-io1-f53.google.com with SMTP id k11so17706162ioa.5
-        for <soc@kernel.org>; Sat, 10 Jul 2021 18:42:02 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1E31C07E95
+	for <linux-kernel@archiver.kernel.org>; Sun, 11 Jul 2021 01:42:09 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id BA09B61278
+	for <linux-kernel@archiver.kernel.org>; Sun, 11 Jul 2021 01:42:09 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S230408AbhGKBou (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Sat, 10 Jul 2021 21:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229640AbhGKBot (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 10 Jul 2021 21:44:49 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289CFC0613DD
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jul 2021 18:42:03 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id k16so17615387ios.10
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jul 2021 18:42:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=lixom-net.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -36,14 +40,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=DviByeW/MRd4o8QAxjQbNiyDl13TlKgHIeZcYevPf8U=;
-        b=TZd8RiScrPLxDAVc+VIpql3XxeKY214w8vhI0cOmL0Y/KbmaIH5PTDHZ4sLxEaCtp5
-         AHFzhRDdKTDb0J740PyjyEBTMmxuanytxFXu//hHCmKhkbLKrXwa4jWU1JftjhRI2yj5
-         aye9a1aZbGbS3AOXTKc0bMAvZ+Bb/D6b0UYVRFCG45DURX1YZGhoqgai0VatMryldgHr
-         u+r8/6JbGi3F5XK2+3c4XFUkFWZa4GPLwQjEyiJu+6am7WtGri9Bv48VJmbly7QrXkwe
-         VhCjguo/0pwSeHl7rSE+vGW1hu0J0lLF8t5EVwD6Eq+WYAe7pFTFghJxSfaLEjvmC9+c
-         Uomw==
-X-Gm-Message-State: AOAM532sXBG6IEgpQ61VBS/5uwQvVJzdPaZoROyt++YQNzORYFtQmg2m
-	LmH38cH9Pzf6dENSkqfGdajVInFgKeMer1pYfO82Ww==
+        b=ZOt1gTdVgFUZdT8J5ho3yHu0V7qu7LGh04WLhADNz76Rib7e5FrPiIONUA4tjk3ofL
+         zEAv72O+MOP/ON89LQF8lRftV4Kvc+i8OylFxbV844hIAxz4neCsIEPnkMEsrrly4JsH
+         uy2sZtZ0FKCMKUhH9cJD75/yPXMJz0jJj1VCb8oxL6lSM6zaElUQEj0AzMd8GJu2A+sJ
+         LeqHWE+KTIOHUGoj5OLYWDwqAvkp7jXVo5AVNuM07XCPYSAr7yUSTxfQZWSwYDWbkVew
+         D0c4J1nT9o8omYTGMbQt1w4IYx0GGGZL21gh7eZQb69u5GS1+iS+rYAJ1ayYNeFVRl0E
+         YZBw==
+X-Gm-Message-State: AOAM530aU2Ux4Zm9Tn6miqDl4XJMHVFpJQ5Z2kpEo1AhHw4SRATMSoXk
+        NH5BA5g3auoZ70VujHkWlub99LQ1EPPQMm3BftJAJZtOLWw=
 X-Google-Smtp-Source: ABdhPJx+rpq4HSXSp6jfp7UQ0J9hdUAfM226zfK6hZLavZmabddYLhfL+ajhRe1PyVE3+Be8kXbBeehdncaxRpDO7es=
 X-Received: by 2002:a5d:9051:: with SMTP id v17mr33836994ioq.81.1625967721832;
  Sat, 10 Jul 2021 18:42:01 -0700 (PDT)
@@ -51,16 +55,20 @@ MIME-Version: 1.0
 References: <20210709234054.10288-1-olof@lixom.net> <20210709234054.10288-2-olof@lixom.net>
  <CAHk-=wg2G+4K=wCnHBsiFX2HXH+zN5X_VhmMa9-RsFLL+xMFyg@mail.gmail.com>
 In-Reply-To: <CAHk-=wg2G+4K=wCnHBsiFX2HXH+zN5X_VhmMa9-RsFLL+xMFyg@mail.gmail.com>
-From: Olof Johansson <olof@lixom.net>
-Date: Sat, 10 Jul 2021 18:41:50 -0700
+From:   Olof Johansson <olof@lixom.net>
+Date:   Sat, 10 Jul 2021 18:41:50 -0700
 Message-ID: <CAOesGMjzU7bgX97_N08sLPsEew_6iHeQAi4EKgFK9EZVmMP+sQ@mail.gmail.com>
 Subject: Re: [GIT PULL 2/4] ARM: Devicetree material for 5.14
-To: Linus Torvalds <torvalds@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: ARM SoC <arm@kernel.org>, SoC Team <soc@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     ARM SoC <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210711014150.pK7Du0Sys2I-do7-Q53e5AO5Xmu8r0XYreqlqOSiVFI@z>
 
 On Sat, Jul 10, 2021 at 9:45 AM Linus Torvalds
 <torvalds@linux-foundation.org> wrote:
