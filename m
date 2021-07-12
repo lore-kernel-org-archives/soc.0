@@ -1,252 +1,119 @@
-Return-Path: <SRS0=GWmK=ME=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=onWN=ME=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59E75C07E99
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 12 Jul 2021 05:06:07 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72F67C07E99
+	for <soc@archiver.kernel.org>; Mon, 12 Jul 2021 08:57:29 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 463C561008; Mon, 12 Jul 2021 08:57:29 +0000 (UTC)
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 127DC60FE3
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 12 Jul 2021 05:06:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 127DC60FE3
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:
-	Message-ID:From:References:Cc:To:Subject:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Owner;
-	bh=8HrgWiKvuf+Gd/Vul3YrhgqzM4DsvFo8rUymBiUS7xM=; b=RRjNh7k34yqxyUTDcM4hOUZWjO
-	wURhgcmusu5i7cSsrBzrq3QmhP1P8+E6SgLg6SRjKqp3+JEIS0eXtmLjpRyNdE/mqXhkg5yVz5wO3
-	ugFJQWjYfDaifNGBARWCDirPSYNEoOC/m6MTJyl0gc9Z0yiLrOPFcQUbqK+Zh22sdomk8UC9VgiPD
-	UFoUGupok157yHidrryEfw4XCXtbw6dHzYse4XVxTUhsUZWPbYW6vUlhjoyC2I+IjcB7GWjsTBz6p
-	mo/MfdZ89l4EaAtmRenqC9l1Dg34cWv5TQyMklPJk9HdOd9jweOaNlOWT5Yz7ex09jH12txwfSlf5
-	VU4fmkNQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1m2o74-005uGl-Rf; Mon, 12 Jul 2021 05:04:15 +0000
-Received: from mout.kundenserver.de ([217.72.192.73])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1m2o70-005uFn-7e; Mon, 12 Jul 2021 05:04:12 +0000
-Received: from [192.168.1.107] ([37.4.249.97]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1Mn1mb-1lKymb1NcV-00k91Q; Mon, 12 Jul 2021 07:04:02 +0200
-Subject: Re: [PATCH] ARM: multi_v7_defconfig: Make NOP_USB_XCEIV driver
- built-in
-To: Florian Fainelli <f.fainelli@gmail.com>,
- Nicolas Saenz Julienne <nsaenz@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id 2241B600D1
+	for <soc@kernel.org>; Mon, 12 Jul 2021 08:57:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2241B600D1
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linus.walleij@linaro.org
+Received: by mail-lj1-f182.google.com with SMTP id a6so23010651ljq.3
+        for <soc@kernel.org>; Mon, 12 Jul 2021 01:57:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5d6Z92bis1FTsbZYPUBaQbOfE4flsBCQtpV5+LatB00=;
+        b=F5++UXDA11Wfgb719W7skABi9wqJd5dKd6NGsbKXukxIwJt3HCwUHBLkKpZbrnRFpz
+         aI5NOo1afGJpKUq4YqUw1GVRNH3/WfVnUOglu6ZjyGNyx35q3duyNCoOXrCidh2xm4/a
+         tamfZJ0yjlnGXTPc1402jLQ9h3RdG6Fam53w7+sdTpHfeCGlzBXcvdIKW1l+nNMzzaJg
+         DOWeoEgDf5eTd+S/7en3nV5gy0dsRY+xfXHLceOmY0qbCNwVRPClkj8pJkXQzERgEIPJ
+         rcjO+p+HyNEp9kf9l588CCjogcPJYwvHp/ASdxyT/J5oawl9oGgVEKpvhdYFi47e21Rz
+         u4Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5d6Z92bis1FTsbZYPUBaQbOfE4flsBCQtpV5+LatB00=;
+        b=mVHBRCASNITMQh8lWXIRG8q/rYN2bEtOiuYRNY+PxtY/EDb1zEVLkibuNqd7T0RUnr
+         PnfdaZsvqHa/hKvR2Oh37rPjm7tWv+BgXxUnGEdS4GdpMyGdG9D2gwtAlorfFnLnKfRV
+         mXNQ5QznHWutXwObNNQV2ZGMME13FcfSqIqc+oMvvJ1YAYTFgR4JhVZWfcwGS3JUNRHO
+         7vH37rAa8kYYGNYX/2vWimHKCNlit4GPLzoEEd0TnXtB0zhGJdPoXncJmMirvfkVW+3P
+         gswKYBU7OaP9qTKf8unBngC4NPVIihTpf5K3dNEMpjNlHMY/wqVY6HwvXbA3ErFYzOV7
+         qf8A==
+X-Gm-Message-State: AOAM531Rv0Yhn2ZyGSspodE/P7cg87d51qAJ15G/H9744BDHbiKDjGWu
+	3kwJtP6h7tSgoV5l+Q8H2xT0AQ==
+X-Google-Smtp-Source: ABdhPJxMQj3C87xonZdq4c5RPX0otxjo9WVQPCpypadAZeTCOpCRcvDW3cHhNiw8pRLDSPwQqatDYg==
+X-Received: by 2002:a2e:968a:: with SMTP id q10mr37860599lji.407.1626080247484;
+        Mon, 12 Jul 2021 01:57:27 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id e28sm683401lfb.58.2021.07.12.01.57.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jul 2021 01:57:27 -0700 (PDT)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- bcm-kernel-feedback-list@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, Saravana Kannan <saravanak@google.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, soc@kernel.org,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-References: <1625915095-23077-1-git-send-email-stefan.wahren@i2se.com>
- <d3154d8d-6f4c-b59b-add1-f3e75462309a@gmail.com>
-From: Stefan Wahren <stefan.wahren@i2se.com>
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
- CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
- bXlZd21DR0tqRnRMCi9Eb1VNRVZIRHhDSjQ3Qk1YbzM0NGZIVjFDM0FudWRnTjFCZWhMb0J0
- TEh4bW5lQ3pnSDNLY1B0V1c3cHRqNEcKdEp2OUNRRFp5MjdTS29FUHh5YUk4Q0YweWdSeEpj
- NzJNOUk5d21zUFo1YlVIc0x1WVdNcVE3SmNSbVBzNkQ4ZwpCa2srOC95bmdFeU5FeHd4SnBS
- MXlsajVianhXREh5WVF2dUo1THpaS3VPOUxCM2xYVnNjNGJxWEVqYzZWRnVaCkZDQ2svc3lp
- by9ZaHNlOE4rUXN4N01RYWd6NHdLVWtRUWJmWGcxVnFrVG5BaXZYczQyVm5Ja211NWd6SXcv
- MHQKUkp2NTBGUmhIaHhweUtBSThCOG5oTjhRdng3TVZrUGM1dkRmZDN1R1lXNDdKUGhWUUJj
- VXdKd05rLzQ5RjllQQp2ZzJtdE1QRm5GT1JrV1VSdlArRzZGSmZtNitDdk92N1lmUDF1ZXdB
- aTRsbitKTzFnK2dqVklXbC9XSnB5MG5UCmlwZGZlSDlkSGtnU2lmUXVuWWN1Y2lzTXlvUmJG
- OTU1dENna0VZOUVNRWRZMXQ4aUdEaUNnWDZzNTBMSGJpM2sKNDUzdWFjcHhmUVhTYUF3UGtz
- bDhNa0NPc3YyZUVyNElOQ0hZUUR5WmljbEJ1dUNnOEVOYlI2QUdWdFpTUGNRYgplbnpTektS
- Wm9POUNhcUlEK2ZhdkxpQi9kaHptSEErOWJnSWhtWGZ2WFJMRFp6ZThwbzFkeXQzRTFzaFhp
- ZGRaClBBOE51SlZ6RUl0MmxtSTZWOHBaRHBuMjIxcmZLaml2UlFpYW9zNTRUZ1pqak1ZSTdu
- bko3ZTZ4endBUkFRQUIKdENCVGRHVm1ZVzRnVjJGb2NtVnVJRHgzWVdoeVpXNXpkRUJuYlhn
- dWJtVjBQb2tDTndRVEFRZ0FJUVVDWElkYwo0Z0liQXdVTENRZ0hBZ1lWQ0FrS0N3SUVGZ0lE
- QVFJZUFRSVhnQUFLQ1JDVWdld1BFWkR5MjFPVEQvOUdpWkxkCnRSWWNteVJKZ2x0aVFRekFp
- UWRjSUQ3OGxHb1dwL3grci92Y1U2YjZqdVl1ZVR3Z1Iwclc3djdsMklSQnlEN24KSEp4YSt0
- SVNvUVpCZ2hvbE1JZmI5TXRoR09KTENZNzdrL1FoQWhuMzJOR1prZWp3OXR6a3MvNDBtclpT
- VVQ4NApaeWJzUVhyTE0vSFI2VElJL0RlUEIwbktEM0ppcHBzMlVIUUQ5cUQySWpFd1NRUGxI
- akNPckVaaDQ1UFo3bTkrClo5M0x6aVRlc1dabFlRdUxpSndzNHJLcHRIVzFkL3dSZWxzaG1t
- NlFxY0wybDRDL2U0MGVEQjlncTRkU1poOVgKUEVZbGxpeU5RaDdhMkxTZHVtRTFyK2NTd0lq
- RS91ZHRSdmRPOWFLb0psT2JVSzVkTmpTUEg3d0tUYndkWGRZRApHUHdEaFhkNThOQXdyK1BY
- QmxQajB0STFMQ3ErTEJ4ZUt6aFdYK0dWcTlEb2pWanlVREV4Rk5Ga1h1b0M3ZzhtClY5VDB0
- ZUJpdVpSbm91WEt3VjJGcHRaT0hIN0JVRVd0a0t0aGgxZXRmT1dwaWdCemtVN2JQc2ZJWVQr
- cnk5dGIKMW9KK3Y0MVBOYXFaRW1QVXBKeHZmek5UN3Ayd01lRDdaajlmMHJ1YlJQdExBSjJR
- R2pyRkhzdVh3QU9xcHl6ZQoxOEVidHNZazBOMHp1SEVoY2orUEJJQmZoMFlJWWQ1MW9mNkdJ
- aU95UjlxMFhYdHBsVUo3VDIvSDF1UXFrWGxwCitnVzRWa2lmc2NJckl1eWZueFpXMTJlSXZq
- NnlicVdMN2FZS0dZbVQ2aUxDUGJIWXlZY2F5bDRFa0ZjckNGN0UKZTBXVC9zY1ZNaE8vNVgv
- SGFOQTVIQngvcjUycGdMY3Y0aTlNeExRbVUzUmxabUZ1SUZkaGFISmxiaUE4YzNSbApabUZ1
- TG5kaGFISmxia0JwTW5ObExtTnZiVDZKQWpnRUV3RUNBQ0lGQWx0NmdCTUNHd01HQ3drSUJ3
- TUNCaFVJCkFna0tDd1FXQWdNQkFoNEJBaGVBQUFvSkVKU0I3QThSa1BMYmpic1AvamdqYVNz
- NUh0bGtBSXZXUytGcm15N2MKaG5jT0F4TFRWL0Q2UkV3SU95R0poRkt3d29pck55UTJnOXZV
- YTNZQ1lDZjFmSjh3RWhhS09COWQwTHBNUm5MNApkRVQ4ZDgyMzhFL3BLK0hxTktpSXNKaHM2
- SnNLOFpnalZRR3JtbWZua0dyWisxdjBIQnV4ZGljZ0duUC9XdHVBClVsOGw2Mi9BTGJheXlq
- KzYxQ2xyc0V0UklhcU82N0xJWXdQaVBEUkkrWGlNek5pR3pIRi8xUTZHUjAyUkg2YTMKRjg5
- ejhhUHhjSGkxWnZDdDJ5a3o2VUVjaHpQMHI1Z3FGSisvTC9VcHU4ME1YaVk0djVlSWFCNTJn
- VlBnaXlNQQpsTDJkRHMxbUladm5yUkxSWTJ0YjNtQVlOa1Y1QjVJRFQzcGtXeTZrS281T0Nn
- SytZZFlPUjhGTloyb04ydDhPCnJLK1ZudGFLN01NU0tIbG1ZL3NPd3RSbEVoMU9CbXJjQ3dH
- d21wLzA1R2tSNDZmL0lzaFJWZUZPUmF3K0dBcXQKUDIrQ0ZhMkNOQS9JSG5aTm95aWtsRHpQ
- UUhVVUdzck5wcERyaFg5Sm1oQm1nMXYyeXdIMU5YdTFpRGZQMUJBdwpLZ29rdDVmNVVhUkY5
- c0FBNTN2V0V2YlVVTjllZXNGR0x6UFdkSkdRNWhwZC9WSDVJUXk5U0JyaC93SWNla3E1Cm4w
- a042cGJUSHhHRTUyU2kvTVZJa05UdURaM2FwbjJqbERaNHBPdHBCWEkydlAzYlBPK05pcUJa
- anNVM3R4TGkKV2R2MkZqeXp6NlhMUndlV1JZVkw1SGE2TER0eG9yMnZ1NlVQMDdwOXh6MXhS
- WmFPRFczb1lsSEZ6WXBhNFc1ZwpMSGIybEVrSXVVZlNjaWNHYmpqQXRDbFRkR1ZtWVc0Z1Yy
- Rm9jbVZ1SUR4emRHVm1ZVzR1ZDJGb2NtVnVRR2x1CkxYUmxZMmd1WTI5dFBva0NOd1FUQVFn
- QUlRVUNYSWRlaHdJYkF3VUxDUWdIQWdZVkNBa0tDd0lFRmdJREFRSWUKQVFJWGdBQUtDUkNV
- Z2V3UEVaRHkyeUhURC85VUY3UWxEa0d4elE3QWFDSTZOOTVpUWY4LzFvU1VhRE51Mlk2SQpL
- K0R6UXBiMVRiVE9yM1ZKd3dZOGEzT1d6NU5MU09MTVdlVnh0K29zTW1sUUlHdWJEM09EWko4
- aXpQbEcvSnJOCnQ1elNkbU41SUE1ZjNlc1dXUVZLdmdoWkFnVERxZHB2K1pIVzJFbXhuQUox
- dUxGWFhlUWQzVVpjQzVyMy9nL3YKU2FNbzl4ZWszSjVtTnVEbTcxbEVXc0FzL0JBY0ZjK3lu
- TGh4d0JXQld3c3Z3UjhiSHRKNURPTVd2YUt1RHNrcApJR0ZVZS9LYjJCK2pyYXZRM1RuNnMv
- SHFKTTBjZXhTSHo1cGUrMHNHdlArdDlKNzIzNEJGUXdlRkV4cmlleThVCkl4T3I0WEFiYWFi
- U3J5WW5VL3pWSDlVMWkyQUlRWk1XSkFldkN2VmdRL1UrTmVSaFh1ZGU5WVVtRE1EbzJzQjIK
- VkFGRUFxaUYyUVVIUEEybThhN0VPM3lmTDRyTWswaUh6TElLdmg2L3JIOFFDWThpM1h4VE5M
- OWlDTHpCV3UvTgpPbkNBYlMremx2TFphaVNNaDVFZnV4VHR2NFBsVmRFamY2MlArWkhJRDE2
- Z1VEd0VtYXpMQU1yeDY2NmpINWt1ClVDVFZ5bWJMMFR2Qis2TDZBUmw4QU55TTRBRG1rV2tw
- eU0yMmtDdUlTWUFFZlFSM3VXWFo5WWd4YVBNcWJWK3cKQnJoSmc0SGFONkM2eFRxR3YzcjRC
- MmFxYjc3L0NWb1JKMVo5Y3BIQ3dpT3pJYUFtdnl6UFU2TXhDRFhaOEZnWQpsVDR2MjNHNWlt
- SlAyemdYNXMrRjZBQ1VKOVVRUEQwdVRmK0o5RGEycitza2gvc1dPbloreWNvSE5CUXZvY1pF
- Ck5BSFFmN2tDRFFSYmVvQVRBUkFBMkhkMGZzRFZLNzJSTFNESGJ5ME9oZ0RjRGxWQk0yTSto
- WVlwTzNmWDFyKysKc2hpcVBLQ0hWQXNRNWJ4ZTdIbUppbUhhNEtLWXMya3YvbWx0L0NhdUNK
- Ly9wbWN5Y0JNN0d2d25Lem11WHp1QQpHbVZUWkM2V1I1TGtha0ZydEhPelZtc0VHcE52NVJj
- OWw2SFlGcExrYlNrVmk1U1BRWkp5K0VNZ01DRmdqclpmClZGNnlvdHdFMWFmN0hOdE1oTlBh
- TEROMW9VS0Y1aitSeVJnNWl3SnVDRGtuSGp3QlFWNHBndzIvNXZTOEE3WlEKdjJNYlcvVExF
- eXBLWGlmNzhJaGdBelh0RTJYck0xbi9vNlpINzFvUkZGS096NDJsRmR6ZHJTWDBZc3FYZ0hD
- WAo1Z0l0TGZxemoxcHNNYTlvMWVpTlRFbTFkVlFyVHFueXMwbDE4b2FsUk5zd1lsUW1uWUJ3
- cHdDa2FUSExNSHdLCmZHQmJvNWRMUEVzaHRWb3dJNm5zZ3FMVHlRSG1xSFlxVVpZSXBpZ21t
- QzNTd0JXWTFWNmZmVUVta3FwQUFDRW4KTDQvZ1Vnbjd5US81ZDBzZXFuQXEycFNCSE1VVW9D
- Y1R6RVFVV1ZraUR2M1JrN2hURm1oVHNNcTc4eHYyWFJzWApNUjZ5UWhTVFBGWkNZRFVFeEVs
- RXNTbzlGV0hXcjZ6SHlZY2M4cURMRnZHOUZQaG1RdVQyczlCbHg2Z0kzMjNHCm5FcTFsd1dQ
- SlZ6UDRqUWtKS0lBWHdGcHYrVzhDV0xxekRXT3ZkbHJEYVRhVk1zY0ZUZUg1VzZVcHJsNjVq
- cUYKUUdNcGNSR0NzOEdDVVcxM0gwSXlPdFF0d1dYQTRueStTTDgxcHZpQW1hU1hVOGxhS2FS
- dTkxVk9WYUY5ZjRzQQpFUUVBQVlrQ0h3UVlBUUlBQ1FVQ1czcUFFd0liREFBS0NSQ1VnZXdQ
- RVpEeTIrb1hELzljSEhSa0JaT2ZrbVNxCjE0U3Z4MDYyUHRVMEtWNDcwVFNucC9qV29ZSm5L
- SXczRzBtWElSZ3J0SDJkUHdwSWdWanNZeVJTVk1LbVNwdDUKWnJEZjlOdFRiTldnazhWb0xl
- WnpZRW8rSjNvUHFGclRNczNhWVl2N2U0K0pLNjk1WW5tUSttT0Q5bmlhOTE1dApyNUFaajk1
- VWZTVGx5VW15aWMxZDhvdnNmMWZQN1hDVVZSRmNSamZOZkRGMW9ML3BEZ01QNUdaMk93YVRl
- am15CkN1SGpNOElSMUNpYXZCcFlEbUJuVFlrN1B0aHk2YXRXdllsMGZ5L0NxYWpUS3N4Nytw
- OXh6aXU4WmZWWCtpS0IKQ2MrSGUrRURFZEdJRGh2TlovSVFIZk9CMlBVWFdHUytzOUZOVHhy
- L0E2bkxHWG5BOVk2dzkzaVBkWUl3eFM3SwpYTG9LSmVlMTBEamx6c1lzUmZsRk9XMFpPaVNp
- aElDWGlRVjF1cU02dHpGRzlndFJjaXVzNVVBdGhXYU8xT3dVClNDUW1mQ09tNGZ2TUlKSUE5
- cnh0b1M2T3FSUWNpRjNjcm1vMHJKQ3ROMmF3WmZnaThYRWlmN2Q2aGp2MEVLTTkKWFpvaUFa
- WVpEKy9pTG01VGFLV042b0dJdGkwVmpKdjhaWk9aT2ZDYjZ2cUZJa0pXK2FPdTRvclRMRk16
- MjhhbwpVM1F5V3BOQzhGRm1kWXNWdWE4czZnTjFOSWE2eTNxYS9aQjhiQS9pa3k1OUFFejRp
- RElScmdVek1FZzhBazdUCmZtMUtpWWVpVHRCRENvMjVCdlhqYnFzeXhrUUQxbmtSbTZGQVZ6
- RXVPUEllOEp1cVcyeEQ5aXhHWXZqVTVoa1IKZ0pwM2dQNWIrY25HM0xQcXF1UTJFNmdvS1VN
- TEFia0NEUVJiZmw5REFSQUFzRExjYStMbFAydm5mdEVHaHBjQQpCR1ZOUUVGbkdQckNhdVU2
- SGhOODA1V3RQVHRtc1JPdUp6cWdVVDBtcHFXSWZacTZzTXd5dkhLOVRzL0tIM0paClVWYlJD
- M3oyaDNLZmhIL0RhZjk1cGQ2bVBjL2g5dkYvT3kzK2VUV2hnR25QNmNBNWtsUitmTzFXaEc4
- VnJpWHYKck5lUkcyMHN6emplSG9jblNJY1Q1WHVaUjB1REhPaUd4T2l6MXNNUkZUR3h6R095
- MTlSOXJ2dTYzdGlJM2Q3dgpnYzc1T0NBZGtlQi9TZUNFbGFSdzBUZjdMWmJQampzRjI2M0JZ
- bk1mNGtrTkVLdnFXY1UyaWNNcCtxZXpqeW5CCnB2ZXVlMHJDVFFCWUFRbG9GQ1ZUR0hyV1dB
- NkQ0VzVPMkFmSWRJYzF1MUpDWnAyZjVMV1ZvVUZUVklyUW5RUVUKU0hDaWZyOU1aeExUdFBK
- ZFU1Mm9TUHczZGs0aExQOGlKSUx1dnYvYXZhakNzUVlIRXR3WXNiZUZaeGl1TGdscApBN1lj
- Sk5ObXBnQ3BNRDR3VWh2bEN0QUtOQlFXeXIyOTc2OThFUVRuNDZlQmVVNkttMkNpaFhrZ3dD
- eWY4ZXlLCkxFM3NYZXdhcTVrZ1pXdk5xNml1NXFZSVJCOXl3K2NYYzYwZE9aRE9scTkzWDVT
- QVJZemFvZXBrSHo0cmtMa1AKUG8rdENIeUhRUHNHblBYYzlXVDgwREM5Tm5KR2R2VWx5NXJk
- TUk0eHBaeWdlb2tqd293VlFsUFV1Y1M2TXluNwpmOHc4Y2dmQjdDMklBSWNEeDJwUC9IendY
- dmtDT1FOQTdtVjFsTTA4bitnVmtUcnpweGlwNURicTRDSW9ZeDJNCkpaVDhiR1JINlhqY1VE
- S2EwOVFoeVpzQUVRRUFBWWtFUkFRWUFRZ0FEd1VDVzM1ZlF3SWJBZ1VKQThKbkFBSXAKQ1JD
- VWdld1BFWkR5MjhGZElBUVpBUWdBQmdVQ1czNWZRd0FLQ1JCVnhETFBjVk1NamNkc0QvMFJo
- QXN1UVlPeQpyMTNCbDNOaFhrWUFaR3AyWkZER3VrZTdPU2tWOG9qT09UZFR5ei9jT1JHQ2J5
- ZEQrRGd2cUZ5VmRuT1hLZ08wCmxKbUd3ckdlTGRnZ0F2aDBpaHJwNU8wWVVKOWJCU1htR01t
- UVRZSC9BbUxUR2FkYnVqQ1dqNWZGVWtDeXd4aW0KSHV5MFBiMjRwelR2UzUwR1k1WStxSDBG
- SE5haWdka2tpV04zcnVnN0haRXUvQ3lsUFpqT1h6K0QxUVBNckV4dwo3ZC9NS2FiVis5YU5i
- UVlabGRJajk4UXd2VUYxS1N6YThqbFVJdnBoUnEyN0FUOGZER1lHUGZERU1nMmNCT2FlCkty
- N29uUXM0YjdhV082aWZEbHhRVHB6c3pvK0FuODA3Tk1TdFZFRmYrczNBaFZEM2U3bmY4SkJh
- dmJWckFlMGsKb20yNm96elBubnh6K2xxVlZ0dzZVazRYTUl6dGl4L0h3SFl3dUNuY1VYWndL
- MEkzeUFKd2pZd29vck9DaEozUwpFVWJKUVB0R3NneFJERXhWQkZlNk5MUC82MnhQOU82dGFj
- d09kYjBNbVAxYjM5cFJBVEM3YmdkMWxkVUxpNzVaCmxKckowL1NpVkVyb3FOWXk3OXRmbWdB
- WjJVeFptczlTckV5Nm85UVNmc24xYVh2K01QTDlKYUNHbWtQNnpiTFEKTm5kajBKY2FRbmtD
- MHZneWRPMUJtNk11OTZQOXVmbEtaY0FTNndtTE01SWRIT3lqTDg4d0h3anVjakFPQnRjdwpw
- MG9HVG5WT25Sc05ZU084VzhZWi9LZGJ1Nzg1ZGF6TXFKMmlOakFEdUJiZG02TjRqNUVkTW5r
- TG4wQklmUEpwCmRnbTR2bDJVcExqd1JHci9NM3dtbTVwdnMrNnVCN2hrL0ZKaUQvNGxsRU5Q
- NGVNMWg3U200aitWcTZOMSt6VEIKSVhKQWViSXFhc0RwNXlaUzdYcnk0STM2bjg1WEVZZkcw
- MWx0QXlob05WMkRPOFNJUlFwdWkydHErOVJQM1JLMQpKREJ4eEVKWTJFTzVKWjhNeGFQSFEw
- RFQwNWxSRmpLMkFsaGRFSXRqTGpwSjNmVW05c3FMeE1XeHpQNlV6M2lpCjJ1YTR1bnJ0Nk9D
- VHFRd2lqRi8zYlRXaXd2VkFBSG5NRlVpb1hzaEhhb2hWRGNWZm5lSU1mVjBiUUNYWWkzTnAK
- WTB2MFp3Y2lGSCtnU0M3cUQ2WE51aHBWR1NMNElpbGlGeS9TemNhSkV6QUhlTERTaFpQMkNX
- ZG5DNHZnbDM3dApocHg4aDU1WWhKbjZIU3VVelBnaGFLdFZCMmsrajdaZXlaK1NGeHA3SXVi
- SEN3TEhsUWhUNzVSd1EzaUF4S242CjBxajUxY1lUbnF4ZFpYVzZmSDNQa3VNellVNUdwcVIv
- MU9sNWMvd2ZJNmc2QW04eUtXLzBFVUx0K0tuNExGc1MKbTdZM201SDV2MTJVNkpCWXZWK3Ix
- M2paaW9zNEVFREU5M0Q1c05IMk1JeVJ6Q0RxMXpkZHQ0WHV5S0ZqUEtXMQo5aWJaRGZGVjdL
- dUNzdnVMMjNzQmMxc0NNb3ArRTFtVC9ReE9JQTZvRFQxTVFzdHdPVnVReURDdi9PdktTZ2Z6
- CjhGWEdMNkFQY2xqQ3FqOEFKaHhReXN4ZG9pUVA4bS92dStialdHR3Z4dzVzMWxncGlSRFRS
- VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
- bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
- LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <b654ecdf-20f1-1a7d-2955-901e5579345d@i2se.com>
-Date: Mon, 12 Jul 2021 07:04:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	phone-devel@vger.kernel.org,
+	Kees Cook <keescook@chromium.org>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	newbyte@disroot.org
+Subject: [PATCH] ARM: configs: Update u8500_defconfig
+Date: Mon, 12 Jul 2021 10:55:22 +0200
+Message-Id: <20210712085522.672482-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <d3154d8d-6f4c-b59b-add1-f3e75462309a@gmail.com>
-Content-Language: en-US
-X-Provags-ID: V03:K1:zq8WuHr01YRMXw/GqDZ8TNqbEiVgSeWhkXBl3wF52aZ+Tu3Of0m
- DZHH1Vms8BnGTmBB0bHFQabY5Jzms60GiKJdlPmq8TRmc6W0W33g07knVw8gwZmJWvGiTDw
- S9XWpE5cJ0XSIv12LJ632yIH1V4Hy41UaccMMMzOFrjtpVqQfRwOk5k9PKIBhYikA0fOuvX
- cRUMQcBspB4AWJEQ1ENpQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9BRkc9MyFyU=:BCr5bdWx0V9NneEJk1vJ36
- EcQ5RMT3HjGs57hR/U0wrP6bYlSFzZRo1V2zEFwFREXOBXcABIarKRusWY6UGLmjYJSFQOg4n
- h/Dd0Jr+VQO0oxrAHddNSloI6rmyyf/8hJdtn2VVSmstDFvbEVXwCVoKwjskEUq7nRCbnxasO
- PXUIk8Y39LFQHIxReMI15f3n+9l3UNb0vtwC6sj52Fpy6LUfNncVLHPMM38fBhLhSuTHIhzO+
- 6jaBDzdjOxsWJplqFmUp9kD/4X7md9yRChLd212CgJGWo0v/HPpR/v0g+eqTP8dm8eN20tb0z
- 7iy5niKD2wkOX8jKXj9tzjp2e/fLkrfifm0ijXM6c0teCnrmQM2sp+BrTByjwf3X/D03za/gL
- 3nRmmYtqGV0+W49E+4AR0C4i4grwtU+EvTzXbE2GyNIRagmhgYSxyfZGAnETKxlvMXJxtU5rR
- uYYm6OgdFi9PH25CwkJk9nlDEmZ6XH6x1SUFbxvl89+UGAdKQdqDLVmBA+wjmQREKHq4mWNpl
- 3ZIguA1C+Cxrp136LvWNQGticw0weAMe6aIojN917fcbM9ztu5yThVgbmHA8vldLPtNfFPuD0
- PiVcYhQA9+JY2llUgCSpLC3u7rmTVbXgxV8fjT6VGyvTworlIaCkmmTXOEOR17jmS6SnJpL1V
- uQrAwnNL7xSQeJ2oUaR+XkEaW4IICGTYhhFSECdk3Fg/6xGAn58mtajPGEs87wKFqzaDJpPSy
- bcErSQIVhfVfZuwb+gWhHdzdc7ZHl2B2tjyIEsQ6iQK7A++xaj/uxYiyTDheWAeW4JD7hK+zN
- 4ducjIAqIldlfkPCbq0eZiBbh0fp240S2qYQGsEvnlD171Psf4p1ey3EPSohEZBK9++9sbszW
- iiFE+fYgx3BRr8YACvGw==
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210711_220410_618379_3A1D3FE0 
-X-CRM114-Status: GOOD (  12.28  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210712050401.NfZJ4tINRdfV7CDuCN5gdHvVZ_HDbouRa6wEq-KBdxE@z>
+Content-Transfer-Encoding: 8bit
 
-SGkgRmxvcmlhbiwKCkFtIDExLjA3LjIxIHVtIDIzOjI3IHNjaHJpZWIgRmxvcmlhbiBGYWluZWxs
-aToKPgo+Cj4gT24gNy8xMC8yMDIxIDQ6MDQgQU0sIFN0ZWZhbiBXYWhyZW4gd3JvdGU6Cj4+IFRo
-ZSB1c2FnZSBvZiB1c2Itbm9wLXhjZWl2IFBIWSBvbiBSYXNwYmVycnkgUGkgYm9hcmRzIHdpdGgg
-QkNNMjgzeCBoYXMKPj4gYmVlbiBhICJyZWdyZXNzaW9uIHNvdXJjZSIgYSBsb3Qgb2YgdGltZXMu
-IFRoZSBsYXN0IGNhc2UgaXMgYnJlYWthZ2Ugb2YKPj4gVVNCIG1hc3Mgc3RvcmFnZSBib290IGhh
-cyBiZWVuIGNvbW1pdCBlNTkwNDc0NzY4ZjEgKCJkcml2ZXIgY29yZTogU2V0Cj4+IGZ3X2Rldmxp
-bms9b24gYnkgZGVmYXVsdCIpIGZvciBtdWx0aV92N19kZWZjb25maWcuIEFzIGxvbmcgYXMKPj4g
-Tk9QX1VTQl9YQ0VJViBpcyBjb25maWd1cmVkIGFzIG1vZHVsZSwgdGhlIGR3YzIgVVNCIGRyaXZl
-ciBkZWZlciBwcm9iaW5nCj4+IGVuZGxlc3NseSBhbmQgcHJldmVudCBib290aW5nIGZyb20gVVNC
-IG1hc3Mgc3RvcmFnZSBkZXZpY2UuIFNvIG1ha2UKPj4gdGhlIGRyaXZlciBidWlsdC1pbiBhcyBp
-biBiY20yODM1X2RlZmNvbmZpZyBhbmQgYXJtNjQvZGVmY29uZmlnLgo+Cj4gU2hvdWxkIG5vdCB0
-aGF0IGJlIGZpeGVkIHNvbWVob3c/CgptYXliZSB0aGF0IHdoeSBzZW5kIHRoaXMgYnVnIHJlcG9y
-dCwgYnV0IG5ldmVyIGdldCBhIGZlZWRiYWNrIFsxXQoKTXkgc3BhcmUgdGltZSBpcyB0b28gbGlt
-aXRlZCB0byBmaWdodCBtdWx0aXBsZSByZWdyZXNzaW9ucyBvbiBSYXNwYmVycnkKUGksIHNvIGkg
-ZGVjaWRlZCBzZW5kIGF0IGxlYXN0IHRoaXMgc29sdXRpb24uCgpbMV0gLSBodHRwczovL3d3dy5z
-cGluaWNzLm5ldC9saXN0cy9hcm0ta2VybmVsL21zZzkwNTIwOC5odG1sCgo+Cj4+Cj4+IFJlcG9y
-dGVkLWJ5OiBPamFzd2luIE11am9vIDxvamFzd2luOThAZ21haWwuY29tPgo+PiBGaXhlczogZTU5
-MDQ3NDc2OGYxICgiZHJpdmVyIGNvcmU6IFNldCBmd19kZXZsaW5rPW9uIGJ5IGRlZmF1bHQiKQo+
-PiBTaWduZWQtb2ZmLWJ5OiBTdGVmYW4gV2FocmVuIDxzdGVmYW4ud2FocmVuQGkyc2UuY29tPgo+
-PiAtLS0gwqAKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpsaW51eC1hcm0ta2VybmVsIG1haWxpbmcgbGlzdApsaW51eC1hcm0ta2VybmVsQGxpc3RzLmlu
-ZnJhZGVhZC5vcmcKaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9s
-aW51eC1hcm0ta2VybmVsCg==
+The platform lost the framebuffer due to a commit solving a
+circular dependency in v5.14-rc1, so add it back in by explicitly
+selecting the framebuffer.
+
+The U8500 has also gained a few systems using touchscreens from
+Cypress, Melfas and Zinitix so add these at the same time as
+we're updating the defconfig anyway.
+
+Cc: phone-devel@vger.kernel.org
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Arnd Bergmann <arnd@kernel.org>
+Cc: Stephan Gerhold <stephan@gerhold.net>
+Cc: newbyte@disroot.org
+Fixes: f611b1e7624c ("drm: Avoid circular dependencies for CONFIG_FB")
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Hi SoC folks, please apply this for configs for v5.14 current.
+---
+ arch/arm/configs/u8500_defconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm/configs/u8500_defconfig b/arch/arm/configs/u8500_defconfig
+index dbb1ef601762..3b30913d7d8d 100644
+--- a/arch/arm/configs/u8500_defconfig
++++ b/arch/arm/configs/u8500_defconfig
+@@ -61,6 +61,10 @@ CONFIG_INPUT_TOUCHSCREEN=y
+ CONFIG_TOUCHSCREEN_ATMEL_MXT=y
+ CONFIG_TOUCHSCREEN_BU21013=y
+ CONFIG_TOUCHSCREEN_CY8CTMA140=y
++CONFIG_TOUCHSCREEN_CYTTSP_CORE=y
++CONFIG_TOUCHSCREEN_CYTTSP_SPI=y
++CONFIG_TOUCHSCREEN_MMS114=y
++CONFIG_TOUCHSCREEN_ZINITIX=y
+ CONFIG_INPUT_MISC=y
+ CONFIG_INPUT_AB8500_PONKEY=y
+ CONFIG_INPUT_GPIO_VIBRA=y
+@@ -100,6 +104,7 @@ CONFIG_DRM_PANEL_SAMSUNG_S6E63M0_DSI=y
+ CONFIG_DRM_PANEL_SONY_ACX424AKP=y
+ CONFIG_DRM_LIMA=y
+ CONFIG_DRM_MCDE=y
++CONFIG_FB=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ CONFIG_BACKLIGHT_KTD253=y
+ CONFIG_BACKLIGHT_GPIO=y
+-- 
+2.31.1
+
