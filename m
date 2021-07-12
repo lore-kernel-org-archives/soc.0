@@ -1,24 +1,41 @@
-Return-Path: <SRS0=lwQJ=ME=i2se.com=stefan.wahren@kernel.org>
+Return-Path: <SRS0=GWmK=ME=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35E2BC07E99
-	for <soc@archiver.kernel.org>; Mon, 12 Jul 2021 05:04:15 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id D1ACA610CA; Mon, 12 Jul 2021 05:04:14 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59E75C07E99
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 12 Jul 2021 05:06:07 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CD6DF610A7;
-	Mon, 12 Jul 2021 05:04:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CD6DF610A7
+	by mail.kernel.org (Postfix) with ESMTPS id 127DC60FE3
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 12 Jul 2021 05:06:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 127DC60FE3
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=stefan.wahren@i2se.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:
+	Message-ID:From:References:Cc:To:Subject:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Owner;
+	bh=8HrgWiKvuf+Gd/Vul3YrhgqzM4DsvFo8rUymBiUS7xM=; b=RRjNh7k34yqxyUTDcM4hOUZWjO
+	wURhgcmusu5i7cSsrBzrq3QmhP1P8+E6SgLg6SRjKqp3+JEIS0eXtmLjpRyNdE/mqXhkg5yVz5wO3
+	ugFJQWjYfDaifNGBARWCDirPSYNEoOC/m6MTJyl0gc9Z0yiLrOPFcQUbqK+Zh22sdomk8UC9VgiPD
+	UFoUGupok157yHidrryEfw4XCXtbw6dHzYse4XVxTUhsUZWPbYW6vUlhjoyC2I+IjcB7GWjsTBz6p
+	mo/MfdZ89l4EaAtmRenqC9l1Dg34cWv5TQyMklPJk9HdOd9jweOaNlOWT5Yz7ex09jH12txwfSlf5
+	VU4fmkNQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1m2o74-005uGl-Rf; Mon, 12 Jul 2021 05:04:15 +0000
+Received: from mout.kundenserver.de ([217.72.192.73])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1m2o70-005uFn-7e; Mon, 12 Jul 2021 05:04:12 +0000
 Received: from [192.168.1.107] ([37.4.249.97]) by mrelayeu.kundenserver.de
  (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
  1Mn1mb-1lKymb1NcV-00k91Q; Mon, 12 Jul 2021 07:04:02 +0200
@@ -171,8 +188,6 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
 In-Reply-To: <d3154d8d-6f4c-b59b-add1-f3e75462309a@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 Content-Language: en-US
 X-Provags-ID: V03:K1:zq8WuHr01YRMXw/GqDZ8TNqbEiVgSeWhkXBl3wF52aZ+Tu3Of0m
  DZHH1Vms8BnGTmBB0bHFQabY5Jzms60GiKJdlPmq8TRmc6W0W33g07knVw8gwZmJWvGiTDw
@@ -192,37 +207,46 @@ X-UI-Out-Filterresults: notjunk:1;V03:K0:9BRkc9MyFyU=:BCr5bdWx0V9NneEJk1vJ36
  bcErSQIVhfVfZuwb+gWhHdzdc7ZHl2B2tjyIEsQ6iQK7A++xaj/uxYiyTDheWAeW4JD7hK+zN
  4ducjIAqIldlfkPCbq0eZiBbh0fp240S2qYQGsEvnlD171Psf4p1ey3EPSohEZBK9++9sbszW
  iiFE+fYgx3BRr8YACvGw==
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210711_220410_618379_3A1D3FE0 
+X-CRM114-Status: GOOD (  12.28  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210712050401.NfZJ4tINRdfV7CDuCN5gdHvVZ_HDbouRa6wEq-KBdxE@z>
 
-Hi Florian,
-
-Am 11.07.21 um 23:27 schrieb Florian Fainelli:
->
->
-> On 7/10/2021 4:04 AM, Stefan Wahren wrote:
->> The usage of usb-nop-xceiv PHY on Raspberry Pi boards with BCM283x has=
-
->> been a "regression source" a lot of times. The last case is breakage o=
-f
->> USB mass storage boot has been commit e590474768f1 ("driver core: Set
->> fw_devlink=3Don by default") for multi_v7_defconfig. As long as
->> NOP_USB_XCEIV is configured as module, the dwc2 USB driver defer probi=
-ng
->> endlessly and prevent booting from USB mass storage device. So make
->> the driver built-in as in bcm2835_defconfig and arm64/defconfig.
->
-> Should not that be fixed somehow?
-
-maybe that why send this bug report, but never get a feedback [1]
-
-My spare time is too limited to fight multiple regressions on Raspberry
-Pi, so i decided send at least this solution.
-
-[1] - https://www.spinics.net/lists/arm-kernel/msg905208.html
-
->
->>
->> Reported-by: Ojaswin Mujoo <ojaswin98@gmail.com>
->> Fixes: e590474768f1 ("driver core: Set fw_devlink=3Don by default")
->> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
->> --- =C2=A0
-
+SGkgRmxvcmlhbiwKCkFtIDExLjA3LjIxIHVtIDIzOjI3IHNjaHJpZWIgRmxvcmlhbiBGYWluZWxs
+aToKPgo+Cj4gT24gNy8xMC8yMDIxIDQ6MDQgQU0sIFN0ZWZhbiBXYWhyZW4gd3JvdGU6Cj4+IFRo
+ZSB1c2FnZSBvZiB1c2Itbm9wLXhjZWl2IFBIWSBvbiBSYXNwYmVycnkgUGkgYm9hcmRzIHdpdGgg
+QkNNMjgzeCBoYXMKPj4gYmVlbiBhICJyZWdyZXNzaW9uIHNvdXJjZSIgYSBsb3Qgb2YgdGltZXMu
+IFRoZSBsYXN0IGNhc2UgaXMgYnJlYWthZ2Ugb2YKPj4gVVNCIG1hc3Mgc3RvcmFnZSBib290IGhh
+cyBiZWVuIGNvbW1pdCBlNTkwNDc0NzY4ZjEgKCJkcml2ZXIgY29yZTogU2V0Cj4+IGZ3X2Rldmxp
+bms9b24gYnkgZGVmYXVsdCIpIGZvciBtdWx0aV92N19kZWZjb25maWcuIEFzIGxvbmcgYXMKPj4g
+Tk9QX1VTQl9YQ0VJViBpcyBjb25maWd1cmVkIGFzIG1vZHVsZSwgdGhlIGR3YzIgVVNCIGRyaXZl
+ciBkZWZlciBwcm9iaW5nCj4+IGVuZGxlc3NseSBhbmQgcHJldmVudCBib290aW5nIGZyb20gVVNC
+IG1hc3Mgc3RvcmFnZSBkZXZpY2UuIFNvIG1ha2UKPj4gdGhlIGRyaXZlciBidWlsdC1pbiBhcyBp
+biBiY20yODM1X2RlZmNvbmZpZyBhbmQgYXJtNjQvZGVmY29uZmlnLgo+Cj4gU2hvdWxkIG5vdCB0
+aGF0IGJlIGZpeGVkIHNvbWVob3c/CgptYXliZSB0aGF0IHdoeSBzZW5kIHRoaXMgYnVnIHJlcG9y
+dCwgYnV0IG5ldmVyIGdldCBhIGZlZWRiYWNrIFsxXQoKTXkgc3BhcmUgdGltZSBpcyB0b28gbGlt
+aXRlZCB0byBmaWdodCBtdWx0aXBsZSByZWdyZXNzaW9ucyBvbiBSYXNwYmVycnkKUGksIHNvIGkg
+ZGVjaWRlZCBzZW5kIGF0IGxlYXN0IHRoaXMgc29sdXRpb24uCgpbMV0gLSBodHRwczovL3d3dy5z
+cGluaWNzLm5ldC9saXN0cy9hcm0ta2VybmVsL21zZzkwNTIwOC5odG1sCgo+Cj4+Cj4+IFJlcG9y
+dGVkLWJ5OiBPamFzd2luIE11am9vIDxvamFzd2luOThAZ21haWwuY29tPgo+PiBGaXhlczogZTU5
+MDQ3NDc2OGYxICgiZHJpdmVyIGNvcmU6IFNldCBmd19kZXZsaW5rPW9uIGJ5IGRlZmF1bHQiKQo+
+PiBTaWduZWQtb2ZmLWJ5OiBTdGVmYW4gV2FocmVuIDxzdGVmYW4ud2FocmVuQGkyc2UuY29tPgo+
+PiAtLS0gwqAKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpsaW51eC1hcm0ta2VybmVsIG1haWxpbmcgbGlzdApsaW51eC1hcm0ta2VybmVsQGxpc3RzLmlu
+ZnJhZGVhZC5vcmcKaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9s
+aW51eC1hcm0ta2VybmVsCg==
