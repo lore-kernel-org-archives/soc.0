@@ -1,113 +1,67 @@
-Return-Path: <SRS0=GWmK=ME=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=WedL=ME=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28A3FC07E99
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 12 Jul 2021 20:13:34 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B15E2C07E9C
+	for <soc@archiver.kernel.org>; Mon, 12 Jul 2021 20:14:30 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 909B760FF0; Mon, 12 Jul 2021 20:14:30 +0000 (UTC)
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ED8EE611F1
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 12 Jul 2021 20:13:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org ED8EE611F1
+	by mail.kernel.org (Postfix) with ESMTPS id 65D51611CB;
+	Mon, 12 Jul 2021 20:14:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 65D51611CB
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=Zkq+Y+Ci0/NTILicJ7oeHObGipks4fpLHul82HteInU=; b=dWXTZ0sQjUnXaR
-	w8z8AUBDgHBgVD/m+9Td22RVjxswtQTXnM3DbuFAIZ1tnKZC2B1YuklLQraI2WeKcIA8BvtbdPM4a
-	83LTAQmpruQ7E9N13xnkRcAl78pXaxF+MIzJEb9t91JPOPjhl8Pdw6fmhCWSpmwGCgQpkHepRMoty
-	asT/CO3mFcQqcqf7Q2V8DxodUeOlHGLYsGnZ65uhqUiosR5+vhA3XVWySBGiUnAirO7ghM0O2ZFZh
-	lKTPgAIhLTtptQmfUCUz4FXYfOXA6OX2XgTs/0OzMLEuJD/MGksZ62bwVmZfsAVB0Y0k25cGBflvB
-	JZ4aO8qxGL3gKAcxoCng==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1m32HW-008Lh4-08; Mon, 12 Jul 2021 20:11:58 +0000
-Received: from mail-io1-f54.google.com ([209.85.166.54])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1m32HQ-008Lfp-Fj
- for linux-arm-kernel@lists.infradead.org; Mon, 12 Jul 2021 20:11:54 +0000
-Received: by mail-io1-f54.google.com with SMTP id k11so24285693ioa.5
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 12 Jul 2021 13:11:51 -0700 (PDT)
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=robherring2@gmail.com
+Received: by mail-io1-f46.google.com with SMTP id d9so24228108ioo.2;
+        Mon, 12 Jul 2021 13:14:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=OxPIiCu8t6BRcFmXlg/qwdKH0Oy9r4vjSImMHgxaBOg=;
- b=XpCv2DFUYufuL8HbFxNA6OFEimnRy23TEKu3hBj6eOBDhrjf4xhVs4GH6tqrMzHo1w
- /zxLfAk2CGct736nZaW1OpKCbiqd7xdKdXag1vsXYJQrde9qdXBHZJy81UyaJj+mh5P+
- NbXtilqQt9mqIRfx4B5UdPWowwMQdxSuyTiP0D8JK/XtIwTQbvZs2xLtJGrELSB3ljQX
- LlKScVTYo1ea2/u4XKGnZ2wTrTzDgz/ThfQmcwFtKf6BA2SiukHxXEPLeG1ImtBTLTSj
- jAn6P3psRmDs+hNEXUTqzytk0MQ/tOo9dxO+FrsKiBYA0YLNHRK0QxOPwI8na7j2+k2y
- umHg==
-X-Gm-Message-State: AOAM533WG7wV4xRIVM+Y1RUlcFr/v74mgIDrZpJgDrR2JxDkC9Iy7LVU
- qi+47o7qFnGxQjBECKiylg==
-X-Google-Smtp-Source: ABdhPJzW6AFfFMICizJP5QMZjYZ9nJPabK3GBmxZyX2c4V5/uCYFdnz9UEb+6IfxFpZC/aQOCQm8sQ==
-X-Received: by 2002:a02:ca41:: with SMTP id i1mr657291jal.70.1626120711261;
- Mon, 12 Jul 2021 13:11:51 -0700 (PDT)
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ujFMA+hMrUmT7cVUeg1tfuvODZSAIYxTqES6NtonES4=;
+        b=YhkC5mRzwe9Qggk0ryOyL5Ck/yXYT4JyoHrpvKiFlGjP841SDnm/5EYNry1K2/IzYP
+         V/KaO/PI2Cd36neIj20/gqcL6+MHBuPV9K4bDxald29svKXWRV3cm+XB+Mr5ZTDTe4kF
+         GzxS6NZtX2TDXEFlnBoNjPFE8581GuELl9fmbiVe1AzD2m6TkuPt5ChOM7BNyKnG2HfH
+         yMRWziq/QElfD/+976Wc66HbVQWIN8u83sTfGvnfsHIomqmXlFUu9M9n9tbkIFk74l/5
+         fqfX8EJb/quVGZyjxk/pT+/H3q7yr9NIz3Zo0mjp4g1tLn3Cq1xMVXuKfeO55Amt6J1B
+         Er1g==
+X-Gm-Message-State: AOAM530ofA4rmD8vgGp2qKEUpsVWhh9xYpghbHLuAW88xTgbGzxsy4JD
+	DY+RryLRuWxTuXQOJwwSlw==
+X-Google-Smtp-Source: ABdhPJzOLn4APGVG1nKmc2qZ2z5S2MfzNNZt/cT3GpZl4Pv4O9svr42eRc1ndov0GLJQAPDrJRbBfw==
+X-Received: by 2002:a6b:fe09:: with SMTP id x9mr533070ioh.20.1626120869835;
+        Mon, 12 Jul 2021 13:14:29 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
- by smtp.gmail.com with ESMTPSA id b25sm8792990ios.36.2021.07.12.13.11.49
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 12 Jul 2021 13:11:50 -0700 (PDT)
-Received: (nullmailer pid 2408523 invoked by uid 1000);
- Mon, 12 Jul 2021 20:11:49 -0000
-Date: Mon, 12 Jul 2021 14:11:49 -0600
+        by smtp.gmail.com with ESMTPSA id h13sm3137813ila.44.2021.07.12.13.14.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jul 2021 13:14:28 -0700 (PDT)
+Received: (nullmailer pid 2412840 invoked by uid 1000);
+	Mon, 12 Jul 2021 20:14:27 -0000
+Date: Mon, 12 Jul 2021 14:14:27 -0600
 From: Rob Herring <robh@kernel.org>
-To: Corentin Labbe <clabbe@baylibre.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 List-Id: <soc.lore.kernel.org>
-Cc: arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, robh+dt@kernel.org, soc@kernel.org,
- olof@lixom.net, devicetree@vger.kernel.org, ulli.kroll@googlemail.com,
- linus.walleij@linaro.org
-Subject: Re: [PATCH v2 3/5] dt-bindings: add vendor prefix for ssi
-Message-ID: <20210712201149.GA2408465@robh.at.kernel.org>
-References: <20210618205533.1527384-1-clabbe@baylibre.com>
- <20210618205533.1527384-4-clabbe@baylibre.com>
+Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, Li Yang <leoyang.li@nxp.com>, NXP Linux Team <linux-imx@nxp.com>
+Subject: Re: [PATCH 1/2] dt-bindings: arm: fsl: add SolidSense boards
+Message-ID: <20210712201427.GA2412806@robh.at.kernel.org>
+References: <E1ludJe-0001rQ-8c@rmk-PC.armlinux.org.uk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210618205533.1527384-4-clabbe@baylibre.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210712_131152_689055_7EF2FAEE 
-X-CRM114-Status: GOOD (  10.86  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210712201149.vhtJamV8cD162ecFy13zUKPBO3n_OUACKL49N6odz2k@z>
+In-Reply-To: <E1ludJe-0001rQ-8c@rmk-PC.armlinux.org.uk>
 
-On Fri, 18 Jun 2021 20:55:31 +0000, Corentin Labbe wrote:
-> Add vendor prefix for SSI Computer Corp (https://www.ssi.com.tw/)
+On Sat, 19 Jun 2021 16:55:26 +0100, Russell King (Oracle) wrote:
+> Add SolidRun SolidSense boards.
 > 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  Documentation/devicetree/bindings/arm/fsl.yaml | 2 ++
 >  1 file changed, 2 insertions(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
