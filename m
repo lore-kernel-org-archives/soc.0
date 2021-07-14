@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-14.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CA30C07E9A
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 14 Jul 2021 16:39:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 517FAC07E9A
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 14 Jul 2021 16:39:31 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 34F9F60725
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 14 Jul 2021 16:39:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 34F9F60725
+	by mail.kernel.org (Postfix) with ESMTPS id 1C6556100C
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 14 Jul 2021 16:39:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1C6556100C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,67 +23,69 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
 	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=Z7XzvY8BhP+tlF27uVNfcpH2B47TjfQCAK/VmFtcYJc=; b=ORFYeSCORE5Nsi
-	co3fYIlOjLzvTJBfLKY/Siv3f8PISj3n9ep2yxQP5tz3ox7KaoYDNdO2nPosWgZWPCdBkM3icZ3Nr
-	gL8/BeJEghKv0fQ6lLjVwTTa8jpzajOk01sby2NKihaG0lCVfgrPkCDuOxHRMabwl/szZ8LfWAH2E
-	lBtwCe8/BORpDeRQUtwfDz2IeLvTEvnZYLQB4v/JJ5iXqDF55myAGA5lLVYzCwpGFn5PnQpWynuto
-	aClpE8rnLN/D/PrGviMaPDgxjURrf0yPMYXM923u2PJNTCnE5oanyBmd49WivLypIqbn15Fl9k5p1
-	zJXkLLZqA++NJ8h51v0g==;
+	List-Owner; bh=AdVfhb7h45vyJu892AbWnjLKtlOu3rWKI+zDn8zCMsI=; b=l8pdZUKI8Y2ZSD
+	b7vG+69UVXFk9VCpzXyS3WqLnJhrcMevGSrUDTsbLIVmZQU2epvnSDpAS0RBd69fFZOP3U7aoV8N4
+	7oZaJQPebMibF3q6Au6FBzFQL2VE93/07r9g4n+1cOmWN3AsQFDUdkyuBrA4PeMRtwrryMRmmNKOz
+	bNgT7ClFGIPP/z1Qtcjc1XP8pzUChDNl0hZF1QrD0hY5ZD+N/actmTt2Yvy3duC72IlQxTa2n5v4P
+	S1lPzYpon6TlTnNKcEI5MRcaxcZnuAepwhuabV07GN8YoZfCPIUcRoi6ETAuZOwiKvLt3kSNjiIly
+	C4dxGSIQw45LspMBlkCQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1m3htE-00E6jc-KE; Wed, 14 Jul 2021 16:37:40 +0000
-Received: from mail-io1-f45.google.com ([209.85.166.45])
+	id 1m3htP-00E6mM-CK; Wed, 14 Jul 2021 16:37:51 +0000
+Received: from mail-il1-f176.google.com ([209.85.166.176])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1m3htB-00E6iP-3T
- for linux-arm-kernel@lists.infradead.org; Wed, 14 Jul 2021 16:37:38 +0000
-Received: by mail-io1-f45.google.com with SMTP id z9so2842201iob.8
+ id 1m3htJ-00E6kX-Dn
+ for linux-arm-kernel@lists.infradead.org; Wed, 14 Jul 2021 16:37:46 +0000
+Received: by mail-il1-f176.google.com with SMTP id w1so2193668ilg.10
  for <linux-arm-kernel@lists.infradead.org>;
- Wed, 14 Jul 2021 09:37:36 -0700 (PDT)
+ Wed, 14 Jul 2021 09:37:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:date:from:to:cc:subject:message-id:references
  :mime-version:content-disposition:in-reply-to;
- bh=4tJeunAnZHlhQuigtds/Y0c5fgwGRcJ1HpFKTFeZvbU=;
- b=WzSWuAuss4CpLx6dj4GQ4JLlQfGG8GHGCT08THp3Cd/YjTJkV35dqUeZXXuZy/qKvw
- v4l+Km8qdg6ngT2lwKGVul64OT21AwtnHtHNrjD7LsXy4xdrc4b2hZOR6IyBXv8nWp8T
- DVotBKEPhvHq6XXcB0r+uSmjfx2kgGFZoRKIxdxXKjTO1l0p6ctCrk/4fIMJlZ6hQlFn
- iPgj+YbVbEJ7e97D415T25J01dCkdQFxkdyl761nV/y4BAfw7kGpWKeyF3ONlcQKrt5E
- s1cB0KPODpSi8dvo9W6z9FKf/2T1PQi/Q7GYaSP21Oy+Ujt0QFFxOKgy1/oR5OH8+ftA
- NzbA==
-X-Gm-Message-State: AOAM531o8QG9l37LCac7AZpeQxj4Qp2d7VB2VVW7DfcNLoTQca+cmASe
- rnV+OGlKLLVxP01uVqYlpA==
-X-Google-Smtp-Source: ABdhPJzVkkc1P8a634IL2iHsgXQyZ4AE005dkCM4T2KN3A+q4PdX0vgxBSC65J1kRJPnYNA0vZBkvg==
-X-Received: by 2002:a02:a595:: with SMTP id b21mr9600496jam.122.1626280656051; 
- Wed, 14 Jul 2021 09:37:36 -0700 (PDT)
+ bh=wvSV9DfDpsl5FoylhFtZyQDYFQqbILb6lth89U0RgXo=;
+ b=KiRSvVUrsFaDa2finML27+Q3+uPBck/BqxwkqnJlXygTAObKGKZ/JT6/hAAdu6AH1Y
+ Br2uJSkKsCQ662OcGCv7mviETDokn1X2GAdaHOdtsfRFC7ZnlLuMBsqWEC6y2iEvG1py
+ vsacpD0bwFOnptbYrLIyBX8lVeAlsK7Z9B3nS1RnniL55K+gPUcuCqMwLxZ5lYF+oO+4
+ CGVdcX8xx7odxxaUCcqBtp35pGYLFqPkVAoeNgVYZRnzs5R3QeW9mauftKvZ/bXQd6vp
+ Ua7QiDXEWWo03RyzJjNz7f1AH2nu4QrdxbXauW8gIWuStgkyP62UIZHmwuUetB+1FiYC
+ hiPw==
+X-Gm-Message-State: AOAM532q4GT7AhwZMt4SP6Mp6FAI1g//VpuLcVbaHtKuA8Yg2O+A/Nm8
+ 5NbCOImv3ljcfUNyWRgtcQ==
+X-Google-Smtp-Source: ABdhPJybfnKLyt3zWGR1Mz5MrmFhJLmJDYIPJ/v58lFR0tKBQH/gG7+vZ28acd295aiviIieUK1I9w==
+X-Received: by 2002:a05:6e02:1091:: with SMTP id
+ r17mr7232171ilj.160.1626280664250; 
+ Wed, 14 Jul 2021 09:37:44 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
- by smtp.gmail.com with ESMTPSA id c26sm1446889ioa.32.2021.07.14.09.37.32
+ by smtp.gmail.com with ESMTPSA id p6sm1543333ilg.4.2021.07.14.09.37.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 14 Jul 2021 09:37:35 -0700 (PDT)
-Received: (nullmailer pid 2719952 invoked by uid 1000);
- Wed, 14 Jul 2021 16:37:31 -0000
-Date: Wed, 14 Jul 2021 10:37:31 -0600
+ Wed, 14 Jul 2021 09:37:43 -0700 (PDT)
+Received: (nullmailer pid 2720225 invoked by uid 1000);
+ Wed, 14 Jul 2021 16:37:41 -0000
+Date: Wed, 14 Jul 2021 10:37:41 -0600
 From: Rob Herring <robh@kernel.org>
 To: Oleksij Rempel <o.rempel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Rob Herring <robh+dt@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>, soc@kernel.org, linux-kernel@vger.kernel.org,
- Thierry Reding <thierry.reding@gmail.com>, Olof Johansson <olof@lixom.net>,
- dri-devel@lists.freedesktop.org, Arnd Bergmann <arnd@arndb.de>,
- David Airlie <airlied@linux.ie>, Sam Ravnborg <sam@ravnborg.org>,
- Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, Sascha Hauer <s.hauer@pengutronix.de>
-Subject: Re: [PATCH v2 2/4] dt-bindings: vendor-prefixes: Add an entry for
- SKOV A/S
-Message-ID: <20210714163731.GA2719790@robh.at.kernel.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Shawn Guo <shawnguo@kernel.org>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
+ Fabio Estevam <festevam@gmail.com>, Sam Ravnborg <sam@ravnborg.org>,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org,
+ David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+ Arnd Bergmann <arnd@arndb.de>, soc@kernel.org
+Subject: Re: [PATCH v2 3/4] dt-bindings: arm: fsl: add SKOV imx6q and imx6dl
+ based boards
+Message-ID: <20210714163741.GB2719790@robh.at.kernel.org>
 References: <20210714045349.10963-1-o.rempel@pengutronix.de>
- <20210714045349.10963-3-o.rempel@pengutronix.de>
+ <20210714045349.10963-4-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20210714045349.10963-3-o.rempel@pengutronix.de>
+In-Reply-To: <20210714045349.10963-4-o.rempel@pengutronix.de>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210714_093737_186796_7274EC38 
-X-CRM114-Status: GOOD (  14.11  )
+X-CRM114-CacheID: sfid-20210714_093745_519700_047308CE 
+X-CRM114-Status: GOOD (  13.10  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -99,15 +101,15 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210714163731.lPEjNdrNxdkF7EEXr1bfpUoyIMF4M94mZMlohxY238E@z>
+Message-ID: <20210714163741.OAuo2n104t3VnMgVAwZdwUeJ4stzFTknLyXh3CrRm4A@z>
 
-On Wed, 14 Jul 2021 06:53:47 +0200, Oleksij Rempel wrote:
-> Add "skov" entry for the SKOV A/S: https://www.skov.com/en/
+On Wed, 14 Jul 2021 06:53:48 +0200, Oleksij Rempel wrote:
+> Add SKOV imx6q/dl LT2, LT6 and mi1010ait-1cp1 boards.
 > 
 > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  Documentation/devicetree/bindings/arm/fsl.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
 
 
