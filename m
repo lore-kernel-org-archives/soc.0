@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B43FC12002
-	for <soc@archiver.kernel.org>; Wed, 14 Jul 2021 19:13:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DC0AC12002
+	for <soc@archiver.kernel.org>; Wed, 14 Jul 2021 19:13:18 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E429D613BE; Wed, 14 Jul 2021 19:13:08 +0000 (UTC)
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	id 017EA613BE; Wed, 14 Jul 2021 19:13:18 +0000 (UTC)
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B335A613BF
-	for <soc@kernel.org>; Wed, 14 Jul 2021 19:13:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B335A613BF
+	by mail.kernel.org (Postfix) with ESMTPS id CE01F613BF
+	for <soc@kernel.org>; Wed, 14 Jul 2021 19:13:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org CE01F613BF
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=keescook@chromium.org
-Received: by mail-pl1-f171.google.com with SMTP id h1so1946831plf.6
-        for <soc@kernel.org>; Wed, 14 Jul 2021 12:13:08 -0700 (PDT)
+Received: by mail-pg1-f169.google.com with SMTP id y4so3477428pgl.10
+        for <soc@kernel.org>; Wed, 14 Jul 2021 12:13:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=tq5Rbv8bzwrDDVrwhgPg4WPczUOrV+tBerddQbsxWx0=;
-        b=bPOVbGgrvLLMODNizeKM276JiM3m/EbAyoGYd5cSE3Pv6J4MCTsQVvXXnfRZxSAv4u
-         Y6lFuUbaPvumFzMNZkb6jiug9Q24tKekLHXB5EZQqWlQyxZJdLGVR6QQMlqPstO8vvdX
-         bXcNF1EC9+/tuMxdP6D9951/B9AdWkOw9DRmw=
+        bh=+/banigT8xwzvpxkKLxwlDYN4IV5XsGacUdYBQgT9U0=;
+        b=diM5ZyN+GFC6bQxwpa6L5su/wU9F5NOhrQsyBHTo48LsHWaXB3Us8TvXKBffk4pzCu
+         oMGeg2nCZOBrWvs3fUbuopYlYGOVTYQGZqDBn5obMrurFTqg3vcAI76iIFQcHpyK019R
+         BDOcv8WeWzMh1TPAwJfz9Ggq5xKNt+FXraaGQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=tq5Rbv8bzwrDDVrwhgPg4WPczUOrV+tBerddQbsxWx0=;
-        b=WSaZcas4mGl/BYNGXGyU2NAg3wOO2KvI0BddtbC6qjT76mEmwd+3vVuSabD7aLOudY
-         PRwOUHUt5Lbsx7sEiJyjF9Wp/jbFFQtP4QtHP7em+584iS0pMFfi+cvrTzLbS15mY0w5
-         e9Fdr2hOIinjJY5x6EMzaWvr7uUa1J0JvrtJ1LqO6TdEgXEvjBdO5UXDCT9tDZORye1l
-         ceZD5rw+spsVaKmePaW7ra9attTv5ERQph8UBdu0tNFznusuInm1ReY3iuFphoqVJrfN
-         AY9Pw6Bnap7thmn5BS3x8BiSIUnK0s4OV+nK8nU+AmhKNL8o7jGDCCskf5ECXnAiOsXI
-         HK5A==
-X-Gm-Message-State: AOAM530BT+wiwtt0n+AoZlc4hqSNdpP60iWaOdF9a+ISPP607wD1gkyl
-	m/K0tpZYsCX4w1SB9erOTReBew==
-X-Google-Smtp-Source: ABdhPJwq15ih5GXZEwbgl+i76yyWHxGb9zn8gsjUpX1l6FrJH1ZpIzH89Q2H0ccCDLkUwl5HzsX8Gg==
-X-Received: by 2002:a17:903:2c3:b029:11b:cbb9:edfb with SMTP id s3-20020a17090302c3b029011bcbb9edfbmr8651889plk.12.1626289988382;
-        Wed, 14 Jul 2021 12:13:08 -0700 (PDT)
+        bh=+/banigT8xwzvpxkKLxwlDYN4IV5XsGacUdYBQgT9U0=;
+        b=QXvMK58zOoD3DB1INTChUuyu4Kym/yYecgPeDrq3wnX2qQpTDUTeYJMBqe9DvssIcN
+         pwTmYtgjJ1rnFFVW9Btpl7/6dYQM8g8Y8rD3Zl9MxEXix6z1FyQR3VxKFkARqIIdt4de
+         yB97EGlW/u+JsCZHx9MXV+sn4Lg5Z6SwSt2m9oX56za5ZsKEcbnKe46nrceD6E0ecubX
+         5n5bhHlE65Pbt7lJ7B8AViaTbVOVlScrBC+PnarkPCZcKUhVHXOtL1IEAS9bFV+ReXCA
+         8pRpEfZMvE9Zf3kNH+5ClXPHC6GJs1AOJ4l2VmTduKKo3hVXC9qOxUvtF5Ze7MAIWEEV
+         NKeQ==
+X-Gm-Message-State: AOAM531K9yLrgeHUiOWrY+Brncil0XoIEHY/6ghUB32czPhBRf1M7OnT
+	+6JbxHky6otpIFJqN3QiqrIBtg==
+X-Google-Smtp-Source: ABdhPJxc/zJXr7P3oa6w3B9/04zCMfiSpX9rkNPBLeFAfwHbasNyZk/owTSD8VytUuqZcFVG2edqaA==
+X-Received: by 2002:a63:e350:: with SMTP id o16mr9415540pgj.98.1626289997501;
+        Wed, 14 Jul 2021 12:13:17 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x30sm3655844pfh.126.2021.07.14.12.13.07
+        by smtp.gmail.com with ESMTPSA id z12sm2820786pjd.39.2021.07.14.12.13.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jul 2021 12:13:07 -0700 (PDT)
-Date: Wed, 14 Jul 2021 12:13:06 -0700
+        Wed, 14 Jul 2021 12:13:16 -0700 (PDT)
+Date: Wed, 14 Jul 2021 12:13:15 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: arm@kernel.org, soc@kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] ARM: configs: Update Versatile defconfig
-Message-ID: <202107141212.757559237F@keescook>
-References: <20210714081819.139210-1-linus.walleij@linaro.org>
+Subject: Re: [PATCH] ARM: configs: Update RealView defconfig
+Message-ID: <202107141213.BC463E00@keescook>
+References: <20210714090040.182381-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210714081819.139210-1-linus.walleij@linaro.org>
+In-Reply-To: <20210714090040.182381-1-linus.walleij@linaro.org>
 
-On Wed, Jul 14, 2021 at 10:18:19AM +0200, Linus Walleij wrote:
-> This updates the Versatile defconfig for the changes
+On Wed, Jul 14, 2021 at 11:00:40AM +0200, Linus Walleij wrote:
+> This updates the RealView defconfig for the changes
 > in the v5.14-rc1 kernel:
 > 
 > - The Framebuffer CONFIG_FB needs to be explicitly selected
@@ -71,15 +71,11 @@ On Wed, Jul 14, 2021 at 10:18:19AM +0200, Linus Walleij wrote:
 >   select FB because of circular dependency.
 > - The CONFIG_FB_MODE_HELPERS are not needed when using DRM
 >   framebuffer emulation as DRM does.
-> - The Acorn fonts are removed, the default framebuffer font
->   works fine. I don't know why this was selected in the first
->   place or how the Kconfig was altered so it was removed.
+> - Drop two unused penguin logos.
 > 
 > Fixes: f611b1e7624c ("drm: Avoid circular dependencies for CONFIG_FB")
 > Cc: Kees Cook <keescook@chromium.org>
 > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-
-Ah! Yes, thank you for catching these. :)
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
