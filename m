@@ -1,48 +1,43 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=XmkM=MG=lists.freedesktop.org=dri-devel-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBB40C07E95
-	for <soc@archiver.kernel.org>; Wed, 14 Jul 2021 02:48:55 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id CA6BE6138C; Wed, 14 Jul 2021 02:48:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25440C07E95
+	for <dri-devel@archiver.kernel.org>; Wed, 14 Jul 2021 02:48:59 +0000 (UTC)
+Received: from gabe.freedesktop.org (gabe.freedesktop.org [131.252.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id DBB6F613AA
+	for <dri-devel@archiver.kernel.org>; Wed, 14 Jul 2021 02:48:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DBB6F613AA
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=dri-devel-bounces@lists.freedesktop.org
+Received: from gabe.freedesktop.org (localhost [127.0.0.1])
+	by gabe.freedesktop.org (Postfix) with ESMTP id B0D9489B45;
+	Wed, 14 Jul 2021 02:48:57 +0000 (UTC)
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+ by gabe.freedesktop.org (Postfix) with ESMTPS id DCB0C89A75
+ for <dri-devel@lists.freedesktop.org>; Wed, 14 Jul 2021 02:48:55 +0000 (UTC)
 Received: by mail.kernel.org (Postfix) with ESMTPSA id 63C2A6136E;
-	Wed, 14 Jul 2021 02:48:51 +0000 (UTC)
+ Wed, 14 Jul 2021 02:48:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1626230935;
-	bh=CelvJVaumzXEnoE4PP1d9+H80RpsTtNbcLbnq2+UbgU=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=k3kAODQv6t6x1BJV5OuuM8Gxjn/fDauCG/+08fZjSXWJ1PTqPOj5mOFgrxYhhsh7d
-	 PJ0v0hDHhiVPGY0a71qTf26V0XnO699JaSPjyqDoeqKlVexv/c3SUtxhqoxylelhQm
-	 YyKdW7dGu0TDRvzAz/fI3C0bQ6oHfkIXGIQBavucMmxxW9dTQvo/vy/G73GmxwenJT
-	 0cW8/A03S3xs0+/xCZ83fOZioLjBjCqEDbGL/lXmnnRKr16depbVI4hQaYP2kVekkx
-	 plKsmlQkGIth1RitMWO0R7sRjyK/Z+ylaLLVUslgT+dpTxmHlRDfAWRAZCBnhFaVvw
-	 6gjXZoPUr+9zA==
+ s=k20201202; t=1626230935;
+ bh=CelvJVaumzXEnoE4PP1d9+H80RpsTtNbcLbnq2+UbgU=;
+ h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+ b=k3kAODQv6t6x1BJV5OuuM8Gxjn/fDauCG/+08fZjSXWJ1PTqPOj5mOFgrxYhhsh7d
+ PJ0v0hDHhiVPGY0a71qTf26V0XnO699JaSPjyqDoeqKlVexv/c3SUtxhqoxylelhQm
+ YyKdW7dGu0TDRvzAz/fI3C0bQ6oHfkIXGIQBavucMmxxW9dTQvo/vy/G73GmxwenJT
+ 0cW8/A03S3xs0+/xCZ83fOZioLjBjCqEDbGL/lXmnnRKr16depbVI4hQaYP2kVekkx
+ plKsmlQkGIth1RitMWO0R7sRjyK/Z+ylaLLVUslgT+dpTxmHlRDfAWRAZCBnhFaVvw
+ 6gjXZoPUr+9zA==
 Date: Wed, 14 Jul 2021 10:48:47 +0800
 From: Shawn Guo <shawnguo@kernel.org>
 To: Oleksij Rempel <o.rempel@pengutronix.de>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Daniel Vetter <daniel@ffwll.ch>,
-	David Airlie <airlied@linux.ie>, Olof Johansson <olof@lixom.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>, soc@kernel.org,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>,
-	Juergen Borleis <jbe@pengutronix.de>,
-	Ulrich =?iso-8859-1?Q?=D6lmann?= <u.oelmann@pengutronix.de>,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Marco Felsch <m.felsch@pengutronix.de>,
-	Lucas Stach <l.stach@pengutronix.de>, devicetree@vger.kernel.org,
-	Fabio Estevam <festevam@gmail.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	dri-devel@lists.freedesktop.org
 Subject: Re: [PATCH v1 4/4] ARM: dts: add SKOV imx6q and imx6dl based boards
 Message-ID: <20210714024846.GD31370@dragon>
 References: <20210609121050.18715-1-o.rempel@pengutronix.de>
@@ -53,6 +48,32 @@ Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <20210609121050.18715-5-o.rempel@pengutronix.de>
 User-Agent: Mutt/1.9.4 (2018-02-28)
+X-BeenThere: dri-devel@lists.freedesktop.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: Direct Rendering Infrastructure - Development
+ <dri-devel.lists.freedesktop.org>
+List-Unsubscribe: <https://lists.freedesktop.org/mailman/options/dri-devel>,
+ <mailto:dri-devel-request@lists.freedesktop.org?subject=unsubscribe>
+List-Archive: <https://lists.freedesktop.org/archives/dri-devel>
+List-Post: <mailto:dri-devel@lists.freedesktop.org>
+List-Help: <mailto:dri-devel-request@lists.freedesktop.org?subject=help>
+List-Subscribe: <https://lists.freedesktop.org/mailman/listinfo/dri-devel>,
+ <mailto:dri-devel-request@lists.freedesktop.org?subject=subscribe>
+List-Id: <soc.lore.kernel.org>
+Cc: Ulrich =?iso-8859-1?Q?=D6lmann?= <u.oelmann@pengutronix.de>,
+ Michael Grzeschik <m.grzeschik@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>, Arnd Bergmann <arnd@arndb.de>,
+ devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Juergen Borleis <jbe@pengutronix.de>,
+ Marco Felsch <m.felsch@pengutronix.de>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ =?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>,
+ Sam Ravnborg <sam@ravnborg.org>, linux-arm-kernel@lists.infradead.org
+Errors-To: dri-devel-bounces@lists.freedesktop.org
+Sender: "dri-devel" <dri-devel-bounces@lists.freedesktop.org>
+Message-ID: <20210714024847.1Nh45JlfXOCuKMVTYQEs75TTjfWtQO5lOom2eQ1VMIY@z>
 
 On Wed, Jun 09, 2021 at 02:10:50PM +0200, Oleksij Rempel wrote:
 > From: Sam Ravnborg <sam@ravnborg.org>
