@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EBC0C07E9A
-	for <soc@archiver.kernel.org>; Wed, 14 Jul 2021 16:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92C76C07E9A
+	for <soc@archiver.kernel.org>; Wed, 14 Jul 2021 16:58:35 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E63BF613C1; Wed, 14 Jul 2021 16:58:10 +0000 (UTC)
+	id 6C91B613C5; Wed, 14 Jul 2021 16:58:35 +0000 (UTC)
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by mail.kernel.org (Postfix) with ESMTP id 8D42261289;
-	Wed, 14 Jul 2021 16:58:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8D42261289
+	by mail.kernel.org (Postfix) with ESMTP id 14B8561289;
+	Wed, 14 Jul 2021 16:58:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 14B8561289
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
 Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=sudeep.holla@arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C216D6E;
-	Wed, 14 Jul 2021 09:58:10 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CA985D6E;
+	Wed, 14 Jul 2021 09:58:34 -0700 (PDT)
 Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 44FAD3F774;
-	Wed, 14 Jul 2021 09:58:09 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C91C53F774;
+	Wed, 14 Jul 2021 09:58:33 -0700 (PDT)
 From: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
 To: ARM SoC Team <arm@kernel.org>,
@@ -30,13 +30,13 @@ To: ARM SoC Team <arm@kernel.org>,
 	ALKML <linux-arm-kernel@lists.infradead.org>
 Cc: Sudeep Holla <sudeep.holla@arm.com>,
 	Arnd Bergmann <arnd@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
 	Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_ffa: fixes for v5.14
-Date: Wed, 14 Jul 2021 17:58:06 +0100
-Message-Id: <20210714165806.2617325-1-sudeep.holla@arm.com>
+Subject: [GIT PULL] firmware: arm_scmi: fixes for v5.14
+Date: Wed, 14 Jul 2021 17:58:31 +0100
+Message-Id: <20210714165831.2617437-1-sudeep.holla@arm.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 Hi ARM SoC Team,
@@ -54,31 +54,41 @@ The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/arm-ffa-fixes-5.14
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-fixes-5.14
 
-for you to fetch changes up to dd925db6f07556061c11ab1fbfa4a0145ae6b438:
+for you to fetch changes up to bdb8742dc6f7c599c3d61959234fe4c23638727b:
 
-  firmware: arm_ffa: Fix a possible ffa_linux_errmap buffer overflow (2021-07-12 14:20:08 +0100)
+  firmware: arm_scmi: Fix range check for the maximum number of pending messages (2021-07-13 11:42:20 +0100)
 
 ----------------------------------------------------------------
-Arm FF-A fixes for v5.14
+ARM SCMI fixes for v5.14
 
 A small set of fixes:
 - adding check for presence of probe while registering the driver to
   prevent NULL pointer access
 - dropping the duplicate check as the driver core already takes care of it
-- fixing possible ffa_linux_errmap buffer overflow and
-- fixing kernel-doc warning for comment style
+- fix for possible scmi_linux_errmap buffer overflow
+- fix to avoid sensor message structure padding
+- fix the range check for the maximum number of pending SCMI messages
+- fix for various kernel-doc warnings
 
 ----------------------------------------------------------------
-Sudeep Holla (2):
-      firmware: arm_ffa: Fix the comment style
-      firmware: arm_ffa: Fix a possible ffa_linux_errmap buffer overflow
+Cristian Marussi (3):
+      firmware: arm_scmi: Fix kernel doc warnings about return values
+      firmware: arm_scmi: Avoid padding in sensor message structure
+      firmware: arm_scmi: Fix range check for the maximum number of pending messages
 
-Uwe Kleine-König (2):
-      firmware: arm_ffa: Ensure drivers provide a probe function
-      firmware: arm_ffa: Simplify probe function
+Sudeep Holla (5):
+      firmware: arm_scmi: Simplify device probe function on the bus
+      firmware: arm_scmi: Ensure drivers provide a probe function
+      firmware: arm_scmi: Fix possible scmi_linux_errmap buffer overflow
+      firmware: arm_scmi: Fix kernel doc warnings
+      firmware: arm_scpi: Fix kernel doc warnings
 
- drivers/firmware/arm_ffa/bus.c    | 6 +++---
- drivers/firmware/arm_ffa/driver.c | 8 +++++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ drivers/firmware/arm_scmi/bus.c     |  8 +++-----
+ drivers/firmware/arm_scmi/driver.c  | 14 +++++++++-----
+ drivers/firmware/arm_scmi/notify.c  |  4 ++++
+ drivers/firmware/arm_scmi/sensors.c |  6 ++++--
+ include/linux/scmi_protocol.h       | 14 +++++++++-----
+ include/linux/scpi_protocol.h       |  8 ++++++++
+ 6 files changed, 37 insertions(+), 17 deletions(-)
