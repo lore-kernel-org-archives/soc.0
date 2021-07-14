@@ -1,100 +1,69 @@
-Return-Path: <SRS0=XmkM=MG=lists.freedesktop.org=dri-devel-bounces@kernel.org>
+Return-Path: <SRS0=cWqL=MG=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AAC3C11F66
-	for <dri-devel@archiver.kernel.org>; Wed, 14 Jul 2021 16:37:17 +0000 (UTC)
-Received: from gabe.freedesktop.org (gabe.freedesktop.org [131.252.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0DEEC07E9A
+	for <soc@archiver.kernel.org>; Wed, 14 Jul 2021 16:37:36 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id B474D613B6; Wed, 14 Jul 2021 16:37:36 +0000 (UTC)
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 50E0F613B6
-	for <dri-devel@archiver.kernel.org>; Wed, 14 Jul 2021 16:37:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 50E0F613B6
+	by mail.kernel.org (Postfix) with ESMTPS id 8B44E613C0;
+	Wed, 14 Jul 2021 16:37:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8B44E613C0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=dri-devel-bounces@lists.freedesktop.org
-Received: from gabe.freedesktop.org (localhost [127.0.0.1])
-	by gabe.freedesktop.org (Postfix) with ESMTP id 490336E429;
-	Wed, 14 Jul 2021 16:37:16 +0000 (UTC)
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com
- [209.85.166.46])
- by gabe.freedesktop.org (Postfix) with ESMTPS id 381F56E429
- for <dri-devel@lists.freedesktop.org>; Wed, 14 Jul 2021 16:37:15 +0000 (UTC)
-Received: by mail-io1-f46.google.com with SMTP id k16so2876344ios.10
- for <dri-devel@lists.freedesktop.org>; Wed, 14 Jul 2021 09:37:15 -0700 (PDT)
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=robherring2@gmail.com
+Received: by mail-io1-f48.google.com with SMTP id l18so2903443iow.4;
+        Wed, 14 Jul 2021 09:37:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:content-transfer-encoding
- :in-reply-to;
- bh=E4AvJhetNwASZem5dl8Fp/vANmJkc1r/xjwo+QbtJNI=;
- b=ly+kcOLDajsngxIwVbkcQZvDt5ezIZYBFaKax5EKDHNSw/lHAsa/tGPB/NDXUtsNVA
- VVxM8ZHGcD4WznB4vgUCxtFJh4IRYc1tq0APxjyfeafuoXVTj575sPDCFzKln/MNiF/x
- svSon1PnW/JUz6wr1wnf2R1vA1xpAC/IYwCksyIKRgSwh4j0egBeiKyFFDM7wiwVxePA
- qsWTyB70jgj0gBvNWjsHb/cdnWz1vBmXyAriwV5E7yhIygXXwLyQSXsQXnBJChGrwpWc
- +ackyEnYWEqUKm/iKI5h/ZNASX5+d4ZEwdKxjnJpUb3B/0mCtoxy6ci9g45eaCpP5Fnt
- dOzA==
-X-Gm-Message-State: AOAM533awMmlpGDb+KZiCsi5SBNr3AaLrwvsbJXBwN4CCHwm7ScZuuOY
- SDjEzX7kMs5nL2VobMl7ew==
-X-Google-Smtp-Source: ABdhPJyyqzjI4orQEKBGudclxA6i5CqYo1oBoYaIfnzXMXkj0ILABCTs+SeLuzpf8Is17w4C3VeFtg==
-X-Received: by 2002:a02:ad08:: with SMTP id s8mr9861761jan.40.1626280634475;
- Wed, 14 Jul 2021 09:37:14 -0700 (PDT)
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4tJeunAnZHlhQuigtds/Y0c5fgwGRcJ1HpFKTFeZvbU=;
+        b=NtMbetGp4xMtMy42zIS4N50QrsUIhKIeiXkUyQfAS9HE8yVcv2j37BSj+3QPpw2C4d
+         /HJspJavyjs0xGWOoFMsWtlpnCQKAu6/UZjdB/fQ/+FB9Yi09wvzSXjvLkrkz/sUX9R1
+         XFs4Y/5yQ1skDLttALSlJz+feTO7a6dRj1Z2W0uWT7Hr1cXV8ZwglKrrBbVbPZJ84LwT
+         j0R6td3RE6hElp1vWVDBCaIufyK+MdZPe9Rz8L5VvCmV9ydVjD9hwDbqmqe5kzNgXRiu
+         zMxZFylREuSeaoOpp6BgT8qPYEF99yPc0TeRUYlXu6jto+mDDo0L5PenBr/kUwxZuXK9
+         eE7Q==
+X-Gm-Message-State: AOAM532gn7zvJYtn/645zVTMMBRkTnRLXNW1CyIngxcInT4qe08hoO/i
+	cYDsclOG5QxTqRBii1LM7w==
+X-Google-Smtp-Source: ABdhPJzVkkc1P8a634IL2iHsgXQyZ4AE005dkCM4T2KN3A+q4PdX0vgxBSC65J1kRJPnYNA0vZBkvg==
+X-Received: by 2002:a02:a595:: with SMTP id b21mr9600496jam.122.1626280656051;
+        Wed, 14 Jul 2021 09:37:36 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
- by smtp.gmail.com with ESMTPSA id r1sm1078472ilt.37.2021.07.14.09.37.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 14 Jul 2021 09:37:13 -0700 (PDT)
-Received: (nullmailer pid 2719225 invoked by uid 1000);
- Wed, 14 Jul 2021 16:37:10 -0000
-Date: Wed, 14 Jul 2021 10:37:10 -0600
+        by smtp.gmail.com with ESMTPSA id c26sm1446889ioa.32.2021.07.14.09.37.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jul 2021 09:37:35 -0700 (PDT)
+Received: (nullmailer pid 2719952 invoked by uid 1000);
+	Wed, 14 Jul 2021 16:37:31 -0000
+Date: Wed, 14 Jul 2021 10:37:31 -0600
 From: Rob Herring <robh@kernel.org>
 To: Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH v2 1/4] dt-bindings: display: simple: add some Logic
- Technologies and Multi-Inno panels
-Message-ID: <20210714163710.GA2718995@robh.at.kernel.org>
-References: <20210714045349.10963-1-o.rempel@pengutronix.de>
- <20210714045349.10963-2-o.rempel@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210714045349.10963-2-o.rempel@pengutronix.de>
-X-BeenThere: dri-devel@lists.freedesktop.org
-X-Mailman-Version: 2.1.29
-Precedence: list
-List-Id: Direct Rendering Infrastructure - Development
- <dri-devel.lists.freedesktop.org>
-List-Unsubscribe: <https://lists.freedesktop.org/mailman/options/dri-devel>,
- <mailto:dri-devel-request@lists.freedesktop.org?subject=unsubscribe>
-List-Archive: <https://lists.freedesktop.org/archives/dri-devel>
-List-Post: <mailto:dri-devel@lists.freedesktop.org>
-List-Help: <mailto:dri-devel-request@lists.freedesktop.org?subject=help>
-List-Subscribe: <https://lists.freedesktop.org/mailman/listinfo/dri-devel>,
- <mailto:dri-devel-request@lists.freedesktop.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, Pengutronix Kernel Team <kernel@pengutronix.de>,
- Sam Ravnborg <sam@ravnborg.org>, David Airlie <airlied@linux.ie>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Rob Herring <robh+dt@kernel.org>, soc@kernel.org,
- Thierry Reding <thierry.reding@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
- linux-arm-kernel@lists.infradead.org
-Errors-To: dri-devel-bounces@lists.freedesktop.org
-Sender: "dri-devel" <dri-devel-bounces@lists.freedesktop.org>
-Message-ID: <20210714163710.B1U30_QGORejYGd-wltl2oNtMsvd5b1mD78hOrEI5JE@z>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, soc@kernel.org, linux-kernel@vger.kernel.org, Thierry Reding <thierry.reding@gmail.com>, Olof Johansson <olof@lixom.net>, dri-devel@lists.freedesktop.org, Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@linux.ie>, Sam Ravnborg <sam@ravnborg.org>, Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, Sascha Hauer <s.hauer@pengutronix.de>
+Subject: Re: [PATCH v2 2/4] dt-bindings: vendor-prefixes: Add an entry for
+ SKOV A/S
+Message-ID: <20210714163731.GA2719790@robh.at.kernel.org>
+References: <20210714045349.10963-1-o.rempel@pengutronix.de>
+ <20210714045349.10963-3-o.rempel@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210714045349.10963-3-o.rempel@pengutronix.de>
 
-On Wed, 14 Jul 2021 06:53:46 +0200, Oleksij Rempel wrote:
-> Add Logictechno and Multi-Inno panels:
-> - Logic Technologies LTTD800x480 L2RT 7" 800x480 TFT Resistive Touch Module
-> - Logic Technologies LTTD800480070-L6WH-RT 7” 800x480 TFT Resistive Touch Module
-> - Multi-Inno Technology Co.,Ltd MI1010AIT-1CP 10.1" 1280x800 LVDS IPS Cap Touch Mod.
+On Wed, 14 Jul 2021 06:53:47 +0200, Oleksij Rempel wrote:
+> Add "skov" entry for the SKOV A/S: https://www.skov.com/en/
 > 
 > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > ---
->  .../devicetree/bindings/display/panel/panel-simple.yaml     | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 
 
