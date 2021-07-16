@@ -3,59 +3,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C949C6377C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 467DEC6377A
 	for <soc@archiver.kernel.org>; Fri, 16 Jul 2021 21:22:06 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E547561403; Fri, 16 Jul 2021 21:22:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id CE073613FD;
+	id D7D1F61402; Fri, 16 Jul 2021 21:22:05 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id BD7E7613F3;
 	Fri, 16 Jul 2021 21:22:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1626470525;
-	bh=ht6Rb55tFPLedAD7gxBpsHCek76Km9s9VXvLPG5bG4s=;
+	bh=CO8/TztkSOJEbuUjGyM4sc9zh0EefoxKYfyesyoG70c=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=lfp4nGvirn7C8tmB7niaReYTNoikdjqCaLyI/QoY9Gl+qRmjrFHi6sXdDvfyVwqUY
-	 1IV+0xZ2q2VZUoIcRTfSpIbVlDPS9qaGth3s2UU9LPkIF8Jzi5XGQLKtfsBw3QnyyJ
-	 WL6t8z6jxfOkx/hWPevk7jqQJUDW+Q+WUPmVNnInRP+n+XVwvNe0Qgy6H+HtdsVDox
-	 WM7e6SNrr20cLh1Qlw8VXE55wXTcMrUCQKTMWRG8Dg+tO+ISeD5+YoS4ZSFC9U27Ie
-	 dTY1hJJ6QTWfkRP+cZf54fU0k5woaWkNNY+LsEqQv5qlKHyXbvbkMYQTSZQRKNwLdd
-	 AeY6Iw7Du6JJg==
+	b=GaRrqwiLUw2ciGW9zlY3gGm6I6jyW2nG4DuEEWYrjqgPKWwzkQ971TlOvH3p6HxbD
+	 V5fEZHoxF96cgCzAWBKwWjL4rbmmCCZwgVu7WMLdo/f0OFRwo4UYlzOzZG9gKiaK3z
+	 JQzQcg8Aus0uUDe7LWXvzqRY1fm0RK8egcOn8dqlIG6M+j4qO/BazQriNDZKqaz7xU
+	 YJmQSlH/mH1XpDHhSrBqxJeDwI0qxpv2/rZtd0QIFyM8zlZ/ogd0KfH+II2EDcBsf9
+	 O9e7poJ6kKDevjJ0GrSCPuvSVxo/7+ZDj4cjIKgXj9tnEqCWHa3k0P7LAcYYkv2xTc
+	 xq+cjEsrSYNTw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C5F07609EA;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id B349060BD8;
 	Fri, 16 Jul 2021 21:22:05 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] arm: Typo s/PCI_IXP4XX_LEGACY/IXP4XX_PCI_LEGACY/
+Subject: Re: [GIT PULL] arm64: tegra: Device tree fixes for v5.14-rc1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162647052580.25202.8251721693318839362.git-patchwork-notify@kernel.org>
+ <162647052573.25202.10969672447017490873.git-patchwork-notify@kernel.org>
 Date: Fri, 16 Jul 2021 21:22:05 +0000
-References: <82ce37c617293521f095a945a255456b9512769c.1626255077.git.geert+renesas@glider.be>
-In-Reply-To: <82ce37c617293521f095a945a255456b9512769c.1626255077.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+References: <20210709150220.2543875-1-thierry.reding@gmail.com>
+In-Reply-To: <20210709150220.2543875-1-thierry.reding@gmail.com>
+To: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (refs/heads/arm/fixes):
+This pull request was applied to soc/soc.git (refs/heads/arm/fixes):
 
-On Wed, 14 Jul 2021 11:33:43 +0200 you wrote:
-> Kconfig symbol PCI_IXP4XX_LEGACY does not exist, but IXP4XX_PCI_LEGACY
-> does.
+On Fri,  9 Jul 2021 17:02:20 +0200 you wrote:
+> Hi ARM SoC maintainers,
 > 
-> Fixes: d5d9f7ac58ea1041 ("ARM/ixp4xx: Make NEED_MACH_IO_H optional")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> The following changes since commit c7289b1c8a4e10bbbdb7097a71a90652beb767a1:
+> 
+>   arm64: tegra: Enable SMMU support on Tegra194 (2021-06-11 13:33:46 +0200)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] arm: Typo s/PCI_IXP4XX_LEGACY/IXP4XX_PCI_LEGACY/
-    https://git.kernel.org/soc/soc/c/5f291bfd33c8
+  - [GIT,PULL] arm64: tegra: Device tree fixes for v5.14-rc1
+    https://git.kernel.org/soc/soc/c/93346fb3f669
 
 You are awesome, thank you!
 --
