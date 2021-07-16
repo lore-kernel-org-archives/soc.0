@@ -6,56 +6,57 @@ X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AA9BC636CD
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF01C6377B
 	for <soc@archiver.kernel.org>; Fri, 16 Jul 2021 21:22:06 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id CF04E613FE; Fri, 16 Jul 2021 21:22:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id B555C613F1;
+	id F230E61404; Fri, 16 Jul 2021 21:22:05 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id D83BE61405;
 	Fri, 16 Jul 2021 21:22:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1626470525;
-	bh=NWsHYG84YeWx0coUHtyB3dZWq4lFj20eX/b1sDvgbcg=;
+	bh=UVHFxQi2Q0+r5XdD88kOrwMcRohJfUxje7/EUMsEk4A=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=KO1Y4LCCGHzv65ZpGLRAmb1RMf9S4z5wIg/i7zLGkAN0xJpCzaQxJLttE74mqHh6G
-	 ekw45+fRXanuXffDK3xdX6PvHK/R7qGvoscWgiO6AxMXvxAhkAEz43GTOwy3b86yaN
-	 cgGug41hFhyRHkl7YWRSF99yPKcEfzP+v4fsuJJ4TIH+aYKrJRODJx7yOhllXTfShd
-	 wtRLhZ7XD/yUtVAbLjBGJIhHlvNut16E4J26MX+fp3lQkOKLiREU0cJLBlQ3NKl8Bd
-	 K76dLIytF98EniIAVZ72zeu3e1FgWnXXkdbvOk3DWmdK8Mmq1Chsub9pAVaBwp5Eds
-	 cbWBNY6X50KwQ==
+	b=EXXvzqiO799WqUyAazdr+cyHRhJs9wsabPfLI63VKdcWIT1Yy1gOgCGlN8UL65ujx
+	 zRHMFtQRKKwTw2GVJ/4r/4x9Lq4aMLFT1lzOrYg3goyOp78i/A1MifqgXQLhFlq95s
+	 R30SQjNAS4rEDCbnzABgcmYRauGZ0H/fSc4pSxtOg2/hPi+B9cyqJgt9sIj9CJ92CI
+	 G9nUeTsEX4jbPhbVYWsLMksVoKEjaJD4iAybmKJzO2UrMQX/F8JueI9f/kyaweNNO+
+	 aAhopNeblHwSvQqoQ58TOpPCT6ttpDlTE8DZ/RQjU154C8tzrRsi/rnYxKr8W2ar87
+	 JRQtJ54n0TbcQ==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id AABFE60970;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id CF73160970;
 	Fri, 16 Jul 2021 21:22:05 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] firmware: arm_ffa: Updates for v5.14(part 2)
+Subject: Re: [PATCH] ARM: configs: Update u8500_defconfig
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <162647052569.25202.1871182000116909102.git-patchwork-notify@kernel.org>
+ <162647052584.25202.17721354059578369473.git-patchwork-notify@kernel.org>
 Date: Fri, 16 Jul 2021 21:22:05 +0000
-References: <20210625102807.206112-1-sudeep.holla@arm.com>
-In-Reply-To: <20210625102807.206112-1-sudeep.holla@arm.com>
-To: Sudeep Holla <Sudeep.Holla@arm.com>
+References: <20210712085522.672482-1-linus.walleij@linaro.org>
+In-Reply-To: <20210712085522.672482-1-linus.walleij@linaro.org>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (refs/heads/arm/fixes):
+This patch was applied to soc/soc.git (refs/heads/arm/fixes):
 
-On Fri, 25 Jun 2021 11:28:07 +0100 you wrote:
-> Hi ARM SoC Team,
+On Mon, 12 Jul 2021 10:55:22 +0200 you wrote:
+> The platform lost the framebuffer due to a commit solving a
+> circular dependency in v5.14-rc1, so add it back in by explicitly
+> selecting the framebuffer.
 > 
-> Please pull !
-> 
-> Regards,
-> Sudeep
+> The U8500 has also gained a few systems using touchscreens from
+> Cypress, Melfas and Zinitix so add these at the same time as
+> we're updating the defconfig anyway.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] firmware: arm_ffa: Updates for v5.14(part 2)
-    https://git.kernel.org/soc/soc/c/e73153ba0c7f
+  - ARM: configs: Update u8500_defconfig
+    https://git.kernel.org/soc/soc/c/042f2e107a2e
 
 You are awesome, thank you!
 --
