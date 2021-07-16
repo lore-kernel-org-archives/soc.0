@@ -3,60 +3,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8072CC636CA
-	for <soc@archiver.kernel.org>; Fri, 16 Jul 2021 21:25:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A8C9C12002
+	for <soc@archiver.kernel.org>; Fri, 16 Jul 2021 21:25:11 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 66DDA613EB; Fri, 16 Jul 2021 21:25:09 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 733B7613D8;
-	Fri, 16 Jul 2021 21:25:07 +0000 (UTC)
+	id 57FDD613F5; Fri, 16 Jul 2021 21:25:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BF116613F1;
+	Fri, 16 Jul 2021 21:25:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1626470709;
-	bh=RkIdMFkmULg3joPJGGPO4318+KhjAdgPxvf2niKsuXw=;
+	s=k20201202; t=1626470711;
+	bh=Zjg21wHJqPHvmV4tFZ4gJ3tQUfYDKYXxlNWnHU9YtH4=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TJDKE9VlU2Y+EFKT7/s6M2wve7mAgE3rFrNxz4L2tyvRM8T1vUGF0D1+KiEVMgKE4
-	 j9cV3dlHXltv/lG8ITFfrZWYYepBlSmh5+Ru2gRFOLZCd3Da0yAdRg/R3YGdEovlAP
-	 7lEu0UmtFviCc1wjUsSO4dATHFCiDgUsZDB8aIXSOujzBfYILJKNzEP9S/7T/FTODY
-	 omkuuhRhxVdKyV5ekCL+ECyS6WZaGKRP+06vcHLbNEUgkmQi3vuz/bt6KNwYDk1n3X
-	 /Bqmm7+viRl6MgUNUhv8LFdBrBBzWHqbF0+UWWoHAvjsLIKBEwQdTuZcwx8cIpJ1xe
-	 9OJ61GRbf7yyg==
+	b=D78NXYYWGLHrRzrUCP0RfpgYS/ThlRF5iY2tP8tD/zFxc6W+F9EQBQ1tsjlQ0YxQa
+	 p0JjSRsiqpfTHx/7FYNDf2mb61PkyawYi2n87JQNlzIpLKpR4tzg2sLkYiKmNKcpmN
+	 f4rmmKWsxM3imSwTAO9B8MHEyhG+CasSHYMpJ0QmQBKmLHO5GNJhjZCjuA69j5pxtg
+	 NhjJgAnFzvrBtxVQXqdIGobKVc13TmNfIPSL+Wl6zQbXYpMlJLv7vk1wCtHOtPrH2f
+	 ACdzUyzF0DKaYEl/aUxFxR2+UbtXKpm4PEkasNYmfr48rymTenU0enGkU+pwtC0nvm
+	 qqerByig5SlhQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org,
-	Olof Johansson <olof@lixom.net>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+	Linus Walleij <linus.walleij@linaro.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Thierry Reding <treding@nvidia.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] memory: tegra for v5.14, late fixes
-Date: Fri, 16 Jul 2021 23:24:45 +0200
-Message-Id: <162647049861.3478428.5789458369320645844.b4-ty@arndb.de>
+	Kees Cook <keescook@chromium.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] ARM: configs: Update Integrator defconfig
+Date: Fri, 16 Jul 2021 23:24:46 +0200
+Message-Id: <162647049954.3478428.6417418910198939224.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210625073604.13562-1-krzysztof.kozlowski@canonical.com>
-References: <20210625073604.13562-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210714122703.212609-1-linus.walleij@linaro.org>
+References: <20210714122703.212609-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 25 Jun 2021 09:36:04 +0200, Krzysztof Kozlowski wrote:
-> Late fixes for Tegra memory controllers drivers for issues introduced in this
-> branch in previous tags.
+On Wed, 14 Jul 2021 14:27:03 +0200, Linus Walleij wrote:
+> This updates the Integrator defconfig for the changes
+> in the v5.14-rc1 kernel:
 > 
-> On top of previous pull (memory-controller-drv-tegra-5.14-2).
-> 
-> If it is too late, I can send as fixes after merge window, but maybe better to
-> get these into merge windows earlier.
-> 
-> [...]
+> - The Framebuffer CONFIG_FB needs to be explicitly selected
+>   or we don't get any framebuffer anymore. DRM has stopped to
+>   select FB because of circular dependency.
+> - Drop the unused Matrox FB drivers that are only used with
+>   specific PCI cards.
 
-Merged into arm/fixes, thanks!
+Applied to arm/fixes, thanks!
 
-merge commit: b6e473d1e21262290b8e1a023eff9f091ab8041b
+[1/1] ARM: configs: Update Integrator defconfig
+      commit: 2096d6feec8359203de406c424242dcb977fe1d1
 
        Arnd
