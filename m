@@ -1,34 +1,61 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=Qqmt=MJ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-25.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-24.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5844AC636CA
-	for <soc@archiver.kernel.org>; Sat, 17 Jul 2021 22:22:31 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 0FC3061158; Sat, 17 Jul 2021 22:22:31 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EDF7161103
-	for <soc@kernel.org>; Sat, 17 Jul 2021 22:22:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10B56C636C9
+	for <linux-arm-kernel@archiver.kernel.org>; Sat, 17 Jul 2021 22:24:50 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id C998861008
+	for <linux-arm-kernel@archiver.kernel.org>; Sat, 17 Jul 2021 22:24:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C998861008
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
+	MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=fmHlyWi8ZhbRS4fJFQhkbJjtP1MbVFX1hNscJ1Xq51c=; b=A4/7hb+Pqvr9bP
+	8rJT2VR0WpX0gMYwFicyoGbZiagCaPxTxP+EnrFuo0sw76uRedfTRWu4T1pGOEa4v8P12NaN1fjYV
+	8R1T917Lq6pBRTKzWkJTJGPVjgJXsnF2sjxAdXhwJkZ+up8DjBEderYHL5IYVBhajXP/ShuxYzrPN
+	JJ4sm2L1lBet38QGoVIRfDr0EI/tyX8QYxY4pVk4FUmAfmvFeANXiq8y2lxpxEYywyNq7M4XqSqAr
+	iGvz75ZI920WAEzYy2PcvH4thx+b/iGUu2fCLbkkZY2Ofwt6uO+TUWhIt/Sz0srUafUdGl6311ei6
+	Wx2Fhe2GY8U+YDvPK0xQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1m4shg-00760G-5r; Sat, 17 Jul 2021 22:22:36 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1m4shc-0075zx-4f
+ for linux-arm-kernel@lists.infradead.org; Sat, 17 Jul 2021 22:22:33 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 01AC661106
+ for <linux-arm-kernel@lists.infradead.org>;
+ Sat, 17 Jul 2021 22:22:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1626560551;
-	bh=F+pe8G5tf1odjLKk1aOh3knoF5FZEOkua0uvvlUMwGA=;
-	h=From:Date:Subject:To:List-Id:Cc:From;
-	b=sS9Mm4Zl7lq59NKA3yvdYX9rGhsch7E/2EtK+h56ds0M732N+yy9MF0Fuh3YX2cBZ
-	 1jsbe1QzzeDDK1wiFeUndZI5XuprLHEVsazTcU24cwlFNwLx5zn34MsJvtwgiBd1zx
-	 vH3efIoN3IX6Fs5yKqVAaiigAJdddNmF+HahYvXMHWUcRKyXaSU8Dr/+LIyhIM5ggO
-	 zAgbODFhPZHMULDdgFZQXZdH2f+biqzgiIRyrN8RLdnm8oLE386UJFLXqUwNKrRXjg
-	 P4zZ5aDfuL4h/453InJ0cjNt3iZLQ0ZdzXeBZPPCiXKubc0zGWQczgqpe0qt5FBG91
-	 dz4HwlENfGdGg==
-Received: by mail-wr1-f45.google.com with SMTP id d2so16448506wrn.0
-        for <soc@kernel.org>; Sat, 17 Jul 2021 15:22:30 -0700 (PDT)
-X-Gm-Message-State: AOAM530vVEp3L6lQ5P6DUZ8SRUeGs25A6t0KEtZ0/sVkYuoTpx6563N5
-	6JmjmEouItE35CCupdETMoNDNnswHVCMZDrU+60=
+ s=k20201202; t=1626560551;
+ bh=F+pe8G5tf1odjLKk1aOh3knoF5FZEOkua0uvvlUMwGA=;
+ h=From:Date:Subject:To:List-Id:Cc:From;
+ b=sS9Mm4Zl7lq59NKA3yvdYX9rGhsch7E/2EtK+h56ds0M732N+yy9MF0Fuh3YX2cBZ
+ 1jsbe1QzzeDDK1wiFeUndZI5XuprLHEVsazTcU24cwlFNwLx5zn34MsJvtwgiBd1zx
+ vH3efIoN3IX6Fs5yKqVAaiigAJdddNmF+HahYvXMHWUcRKyXaSU8Dr/+LIyhIM5ggO
+ zAgbODFhPZHMULDdgFZQXZdH2f+biqzgiIRyrN8RLdnm8oLE386UJFLXqUwNKrRXjg
+ P4zZ5aDfuL4h/453InJ0cjNt3iZLQ0ZdzXeBZPPCiXKubc0zGWQczgqpe0qt5FBG91
+ dz4HwlENfGdGg==
+Received: by mail-wr1-f42.google.com with SMTP id i94so16375106wri.4
+ for <linux-arm-kernel@lists.infradead.org>;
+ Sat, 17 Jul 2021 15:22:30 -0700 (PDT)
+X-Gm-Message-State: AOAM531MjPqLbsuNWFhD7m+grwrSvY38UfK8D+kN7fdskbztxbov/YOA
+ VIxqhha2dkihE/pGmkYrPJ9esHu44r40lJRSIOc=
 X-Google-Smtp-Source: ABdhPJww3v2WZIz1aVBdlRBNtjhm3FDEjVVLoCUihUAupuKZjcqFEYEieJ0OpGJ6KIfW2jHTrrSzt4YTgvKC+mVPds4=
-X-Received: by 2002:a5d:438c:: with SMTP id i12mr21144071wrq.99.1626560549510;
+X-Received: by 2002:a5d:438c:: with SMTP id i12mr21144071wrq.99.1626560549510; 
  Sat, 17 Jul 2021 15:22:29 -0700 (PDT)
 MIME-Version: 1.0
 From: Arnd Bergmann <arnd@kernel.org>
@@ -38,162 +65,142 @@ Message-ID: <CAK8P3a2ZaPZ7y6-GKTuZ1QseNNmNOQP=kS8y8rEnF5LCvOF56Q@mail.gmail.com>
 Subject: [GIT PULL] ARM: SoC fixes for v5.14
 To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Thierry Reding <thierry.reding@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Sudeep Holla <sudeep.holla@arm.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Thierry Reding <thierry.reding@gmail.com>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210717_152232_260320_90927258 
+X-CRM114-Status: GOOD (  14.94  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210717222213.VfgAtPfqnysYcBWZNyYHHjI699vQOAFAd0nQ9LfgMJ8@z>
 
-The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3=
-:
-
-  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-tags/soc-fixes-5.14-1
-
-for you to fetch changes up to 82a1c67554dff610d6be4e1982c425717b3c6a23:
-
-  ARM: dts: versatile: Fix up interrupt controller node names
-(2021-07-16 23:05:35 +0200)
-
-----------------------------------------------------------------
-ARM: SoC fixes for v5.14
-
-Here are the patches for this week that came as the fallout of
-the merge window:
-
- - Two fixes for the NVidia memory controller driver
-
- - multiple defconfig files get patched to turn CONFIG_FB back on
-   after that is no longer selected by CONFIG_DRM
-
- - ffa and scmpi firmware drivers fixes, mostly addressing compiler
-   and documentation warnings
-
- - Platform specific fixes for device tree files on ASpeed,
-   Renesas and NVidia SoC, mostly for recent regressions.
-
- - A workaround for a regression on the USB PHY with devlink when
-   the usb-nop-xceiv driver is not available until the rootfs is
-   mounted.
-
- - Device tree compiler warnings in Arm Versatile-AB
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-----------------------------------------------------------------
-Andrew Jeffery (2):
-      ARM: dts: tacoma: Add phase corrections for eMMC
-      ARM: dts: everest: Add phase corrections for eMMC
-
-Arnd Bergmann (6):
-      Merge tag 'memory-controller-drv-tegra-5.14-3' of
-git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl into
-arm/fixes
-      Merge tag 'renesas-fixes-for-v5.14-tag1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into
-arm/fixes
-      Merge tag 'tegra-for-5.14-arm64-dt-fixes' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into
-arm/fixes
-      Merge tag 'arm-ffa-fixes-5.14' of
-git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into
-arm/fixes
-      Merge tag 'scmi-fixes-5.14' of
-git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into
-arm/fixes
-      Merge tag 'aspeed-5.14-devicetree-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc into arm/fixes
-
-B. J. Wyman (1):
-      ARM: dts: aspeed: everest: PSU #3 address change
-
-Biju Das (5):
-      clk: renesas: rzg2l: Add multi clock PM support
-      clk: renesas: r9a07g044: Rename divider table
-      clk: renesas: r9a07g044: Fix P1 Clock
-      clk: renesas: r9a07g044: Add P2 Clock support
-      dt-bindings: clock: r9a07g044-cpg: Update clock/reset definitions
-
-Cristian Marussi (3):
-      firmware: arm_scmi: Fix kernel doc warnings about return values
-      firmware: arm_scmi: Avoid padding in sensor message structure
-      firmware: arm_scmi: Fix range check for the maximum number of
-pending messages
-
-Geert Uytterhoeven (2):
-      ARM: shmobile: defconfig: Restore graphical consoles
-      arm: Typo s/PCI_IXP4XX_LEGACY/IXP4XX_PCI_LEGACY/
-
-Joel Stanley (1):
-      ARM: dts: aspeed: Fix AST2600 machines line names
-
-Linus Walleij (5):
-      ARM: configs: Update Integrator defconfig
-      ARM: configs: Update RealView defconfig
-      ARM: configs: Update Versatile defconfig
-      ARM: configs: Update Vexpress defconfig
-      ARM: configs: Update u8500_defconfig
-
-Stefan Wahren (1):
-      ARM: multi_v7_defconfig: Make NOP_USB_XCEIV driver built-in
-
-Sudeep Holla (8):
-      firmware: arm_scmi: Simplify device probe function on the bus
-      firmware: arm_scmi: Ensure drivers provide a probe function
-      firmware: arm_scmi: Fix possible scmi_linux_errmap buffer overflow
-      firmware: arm_ffa: Fix the comment style
-      firmware: arm_ffa: Fix a possible ffa_linux_errmap buffer overflow
-      firmware: arm_scmi: Fix kernel doc warnings
-      firmware: arm_scpi: Fix kernel doc warnings
-      ARM: dts: versatile: Fix up interrupt controller node names
-
-Thierry Reding (4):
-      memory: tegra: Add compile-test stub for tegra_mc_probe_device()
-      dt-bindings: arm-smmu: Fix json-schema syntax
-      arm64: tegra: Enable audio IOMMU support on Tegra194
-      arm64: tegra: Enable SMMU support for USB on Tegra194
-
-Uwe Kleine-K=C3=B6nig (2):
-      firmware: arm_ffa: Ensure drivers provide a probe function
-      firmware: arm_ffa: Simplify probe function
-
-Zev Weiss (1):
-      ARM: dts: aspeed: Update e3c246d4i vuart properties
-
- .../devicetree/bindings/iommu/arm,smmu.yaml        |   6 +-
- arch/arm/Kconfig                                   |   2 +-
- arch/arm/boot/dts/aspeed-bmc-asrock-e3c246d4i.dts  |   4 +-
- arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts       |   9 +-
- arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts       |   5 +-
- arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts        |   6 +-
- arch/arm/boot/dts/versatile-ab.dts                 |   5 +-
- arch/arm/boot/dts/versatile-pb.dts                 |   2 +-
- arch/arm/configs/integrator_defconfig              |   5 +-
- arch/arm/configs/multi_v7_defconfig                |   2 +-
- arch/arm/configs/realview_defconfig                |   4 +-
- arch/arm/configs/shmobile_defconfig                |   1 +
- arch/arm/configs/u8500_defconfig                   |   5 +
- arch/arm/configs/versatile_defconfig               |   4 +-
- arch/arm/configs/vexpress_defconfig                |  17 +-
- arch/arm64/boot/dts/nvidia/tegra194.dtsi           |  13 ++
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi         |   4 +-
- drivers/clk/renesas/r9a07g044-cpg.c                |  79 ++++---
- drivers/clk/renesas/renesas-rzg2l-cpg.c            | 110 +++++-----
- drivers/clk/renesas/renesas-rzg2l-cpg.h            |  37 +++-
- drivers/firmware/arm_ffa/bus.c                     |   6 +-
- drivers/firmware/arm_ffa/driver.c                  |   8 +-
- drivers/firmware/arm_scmi/bus.c                    |   8 +-
- drivers/firmware/arm_scmi/driver.c                 |  14 +-
- drivers/firmware/arm_scmi/notify.c                 |   4 +
- drivers/firmware/arm_scmi/sensors.c                |   6 +-
- include/dt-bindings/clock/r9a07g044-cpg.h          | 236 ++++++++++++++++-=
-----
- include/linux/scmi_protocol.h                      |  14 +-
- include/linux/scpi_protocol.h                      |   8 +
- include/soc/tegra/mc.h                             |   9 +-
- 30 files changed, 418 insertions(+), 215 deletions(-)
+VGhlIGZvbGxvd2luZyBjaGFuZ2VzIHNpbmNlIGNvbW1pdCBlNzNmMGYwZWU3NTQxMTcxZDg5ZjJl
+MjQ5MTEzMGM3NzcxYmE1OGQzOgoKICBMaW51eCA1LjE0LXJjMSAoMjAyMS0wNy0xMSAxNTowNzo0
+MCAtMDcwMCkKCmFyZSBhdmFpbGFibGUgaW4gdGhlIEdpdCByZXBvc2l0b3J5IGF0OgoKICBnaXQ6
+Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc29jL3NvYy5naXQKdGFn
+cy9zb2MtZml4ZXMtNS4xNC0xCgpmb3IgeW91IHRvIGZldGNoIGNoYW5nZXMgdXAgdG8gODJhMWM2
+NzU1NGRmZjYxMGQ2YmU0ZTE5ODJjNDI1NzE3YjNjNmEyMzoKCiAgQVJNOiBkdHM6IHZlcnNhdGls
+ZTogRml4IHVwIGludGVycnVwdCBjb250cm9sbGVyIG5vZGUgbmFtZXMKKDIwMjEtMDctMTYgMjM6
+MDU6MzUgKzAyMDApCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tCkFSTTogU29DIGZpeGVzIGZvciB2NS4xNAoKSGVyZSBhcmUg
+dGhlIHBhdGNoZXMgZm9yIHRoaXMgd2VlayB0aGF0IGNhbWUgYXMgdGhlIGZhbGxvdXQgb2YKdGhl
+IG1lcmdlIHdpbmRvdzoKCiAtIFR3byBmaXhlcyBmb3IgdGhlIE5WaWRpYSBtZW1vcnkgY29udHJv
+bGxlciBkcml2ZXIKCiAtIG11bHRpcGxlIGRlZmNvbmZpZyBmaWxlcyBnZXQgcGF0Y2hlZCB0byB0
+dXJuIENPTkZJR19GQiBiYWNrIG9uCiAgIGFmdGVyIHRoYXQgaXMgbm8gbG9uZ2VyIHNlbGVjdGVk
+IGJ5IENPTkZJR19EUk0KCiAtIGZmYSBhbmQgc2NtcGkgZmlybXdhcmUgZHJpdmVycyBmaXhlcywg
+bW9zdGx5IGFkZHJlc3NpbmcgY29tcGlsZXIKICAgYW5kIGRvY3VtZW50YXRpb24gd2FybmluZ3MK
+CiAtIFBsYXRmb3JtIHNwZWNpZmljIGZpeGVzIGZvciBkZXZpY2UgdHJlZSBmaWxlcyBvbiBBU3Bl
+ZWQsCiAgIFJlbmVzYXMgYW5kIE5WaWRpYSBTb0MsIG1vc3RseSBmb3IgcmVjZW50IHJlZ3Jlc3Np
+b25zLgoKIC0gQSB3b3JrYXJvdW5kIGZvciBhIHJlZ3Jlc3Npb24gb24gdGhlIFVTQiBQSFkgd2l0
+aCBkZXZsaW5rIHdoZW4KICAgdGhlIHVzYi1ub3AteGNlaXYgZHJpdmVyIGlzIG5vdCBhdmFpbGFi
+bGUgdW50aWwgdGhlIHJvb3RmcyBpcwogICBtb3VudGVkLgoKIC0gRGV2aWNlIHRyZWUgY29tcGls
+ZXIgd2FybmluZ3MgaW4gQXJtIFZlcnNhdGlsZS1BQgoKU2lnbmVkLW9mZi1ieTogQXJuZCBCZXJn
+bWFubiA8YXJuZEBhcm5kYi5kZT4KCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KQW5kcmV3IEplZmZlcnkgKDIpOgogICAgICBB
+Uk06IGR0czogdGFjb21hOiBBZGQgcGhhc2UgY29ycmVjdGlvbnMgZm9yIGVNTUMKICAgICAgQVJN
+OiBkdHM6IGV2ZXJlc3Q6IEFkZCBwaGFzZSBjb3JyZWN0aW9ucyBmb3IgZU1NQwoKQXJuZCBCZXJn
+bWFubiAoNik6CiAgICAgIE1lcmdlIHRhZyAnbWVtb3J5LWNvbnRyb2xsZXItZHJ2LXRlZ3JhLTUu
+MTQtMycgb2YKZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2ty
+emsvbGludXgtbWVtLWN0cmwgaW50bwphcm0vZml4ZXMKICAgICAgTWVyZ2UgdGFnICdyZW5lc2Fz
+LWZpeGVzLWZvci12NS4xNC10YWcxJyBvZgpnaXQ6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xp
+bnV4L2tlcm5lbC9naXQvZ2VlcnQvcmVuZXNhcy1kZXZlbCBpbnRvCmFybS9maXhlcwogICAgICBN
+ZXJnZSB0YWcgJ3RlZ3JhLWZvci01LjE0LWFybTY0LWR0LWZpeGVzJyBvZgpnaXQ6Ly9naXQua2Vy
+bmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdGVncmEvbGludXggaW50bwphcm0vZml4
+ZXMKICAgICAgTWVyZ2UgdGFnICdhcm0tZmZhLWZpeGVzLTUuMTQnIG9mCmdpdDovL2dpdC5rZXJu
+ZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9zdWRlZXAuaG9sbGEvbGludXggaW50bwph
+cm0vZml4ZXMKICAgICAgTWVyZ2UgdGFnICdzY21pLWZpeGVzLTUuMTQnIG9mCmdpdDovL2dpdC5r
+ZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9zdWRlZXAuaG9sbGEvbGludXggaW50
+bwphcm0vZml4ZXMKICAgICAgTWVyZ2UgdGFnICdhc3BlZWQtNS4xNC1kZXZpY2V0cmVlLTInIG9m
+CmdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9qb2VsL2JtYyBp
+bnRvIGFybS9maXhlcwoKQi4gSi4gV3ltYW4gKDEpOgogICAgICBBUk06IGR0czogYXNwZWVkOiBl
+dmVyZXN0OiBQU1UgIzMgYWRkcmVzcyBjaGFuZ2UKCkJpanUgRGFzICg1KToKICAgICAgY2xrOiBy
+ZW5lc2FzOiByemcybDogQWRkIG11bHRpIGNsb2NrIFBNIHN1cHBvcnQKICAgICAgY2xrOiByZW5l
+c2FzOiByOWEwN2cwNDQ6IFJlbmFtZSBkaXZpZGVyIHRhYmxlCiAgICAgIGNsazogcmVuZXNhczog
+cjlhMDdnMDQ0OiBGaXggUDEgQ2xvY2sKICAgICAgY2xrOiByZW5lc2FzOiByOWEwN2cwNDQ6IEFk
+ZCBQMiBDbG9jayBzdXBwb3J0CiAgICAgIGR0LWJpbmRpbmdzOiBjbG9jazogcjlhMDdnMDQ0LWNw
+ZzogVXBkYXRlIGNsb2NrL3Jlc2V0IGRlZmluaXRpb25zCgpDcmlzdGlhbiBNYXJ1c3NpICgzKToK
+ICAgICAgZmlybXdhcmU6IGFybV9zY21pOiBGaXgga2VybmVsIGRvYyB3YXJuaW5ncyBhYm91dCBy
+ZXR1cm4gdmFsdWVzCiAgICAgIGZpcm13YXJlOiBhcm1fc2NtaTogQXZvaWQgcGFkZGluZyBpbiBz
+ZW5zb3IgbWVzc2FnZSBzdHJ1Y3R1cmUKICAgICAgZmlybXdhcmU6IGFybV9zY21pOiBGaXggcmFu
+Z2UgY2hlY2sgZm9yIHRoZSBtYXhpbXVtIG51bWJlciBvZgpwZW5kaW5nIG1lc3NhZ2VzCgpHZWVy
+dCBVeXR0ZXJob2V2ZW4gKDIpOgogICAgICBBUk06IHNobW9iaWxlOiBkZWZjb25maWc6IFJlc3Rv
+cmUgZ3JhcGhpY2FsIGNvbnNvbGVzCiAgICAgIGFybTogVHlwbyBzL1BDSV9JWFA0WFhfTEVHQUNZ
+L0lYUDRYWF9QQ0lfTEVHQUNZLwoKSm9lbCBTdGFubGV5ICgxKToKICAgICAgQVJNOiBkdHM6IGFz
+cGVlZDogRml4IEFTVDI2MDAgbWFjaGluZXMgbGluZSBuYW1lcwoKTGludXMgV2FsbGVpaiAoNSk6
+CiAgICAgIEFSTTogY29uZmlnczogVXBkYXRlIEludGVncmF0b3IgZGVmY29uZmlnCiAgICAgIEFS
+TTogY29uZmlnczogVXBkYXRlIFJlYWxWaWV3IGRlZmNvbmZpZwogICAgICBBUk06IGNvbmZpZ3M6
+IFVwZGF0ZSBWZXJzYXRpbGUgZGVmY29uZmlnCiAgICAgIEFSTTogY29uZmlnczogVXBkYXRlIFZl
+eHByZXNzIGRlZmNvbmZpZwogICAgICBBUk06IGNvbmZpZ3M6IFVwZGF0ZSB1ODUwMF9kZWZjb25m
+aWcKClN0ZWZhbiBXYWhyZW4gKDEpOgogICAgICBBUk06IG11bHRpX3Y3X2RlZmNvbmZpZzogTWFr
+ZSBOT1BfVVNCX1hDRUlWIGRyaXZlciBidWlsdC1pbgoKU3VkZWVwIEhvbGxhICg4KToKICAgICAg
+ZmlybXdhcmU6IGFybV9zY21pOiBTaW1wbGlmeSBkZXZpY2UgcHJvYmUgZnVuY3Rpb24gb24gdGhl
+IGJ1cwogICAgICBmaXJtd2FyZTogYXJtX3NjbWk6IEVuc3VyZSBkcml2ZXJzIHByb3ZpZGUgYSBw
+cm9iZSBmdW5jdGlvbgogICAgICBmaXJtd2FyZTogYXJtX3NjbWk6IEZpeCBwb3NzaWJsZSBzY21p
+X2xpbnV4X2Vycm1hcCBidWZmZXIgb3ZlcmZsb3cKICAgICAgZmlybXdhcmU6IGFybV9mZmE6IEZp
+eCB0aGUgY29tbWVudCBzdHlsZQogICAgICBmaXJtd2FyZTogYXJtX2ZmYTogRml4IGEgcG9zc2li
+bGUgZmZhX2xpbnV4X2Vycm1hcCBidWZmZXIgb3ZlcmZsb3cKICAgICAgZmlybXdhcmU6IGFybV9z
+Y21pOiBGaXgga2VybmVsIGRvYyB3YXJuaW5ncwogICAgICBmaXJtd2FyZTogYXJtX3NjcGk6IEZp
+eCBrZXJuZWwgZG9jIHdhcm5pbmdzCiAgICAgIEFSTTogZHRzOiB2ZXJzYXRpbGU6IEZpeCB1cCBp
+bnRlcnJ1cHQgY29udHJvbGxlciBub2RlIG5hbWVzCgpUaGllcnJ5IFJlZGluZyAoNCk6CiAgICAg
+IG1lbW9yeTogdGVncmE6IEFkZCBjb21waWxlLXRlc3Qgc3R1YiBmb3IgdGVncmFfbWNfcHJvYmVf
+ZGV2aWNlKCkKICAgICAgZHQtYmluZGluZ3M6IGFybS1zbW11OiBGaXgganNvbi1zY2hlbWEgc3lu
+dGF4CiAgICAgIGFybTY0OiB0ZWdyYTogRW5hYmxlIGF1ZGlvIElPTU1VIHN1cHBvcnQgb24gVGVn
+cmExOTQKICAgICAgYXJtNjQ6IHRlZ3JhOiBFbmFibGUgU01NVSBzdXBwb3J0IGZvciBVU0Igb24g
+VGVncmExOTQKClV3ZSBLbGVpbmUtS8O2bmlnICgyKToKICAgICAgZmlybXdhcmU6IGFybV9mZmE6
+IEVuc3VyZSBkcml2ZXJzIHByb3ZpZGUgYSBwcm9iZSBmdW5jdGlvbgogICAgICBmaXJtd2FyZTog
+YXJtX2ZmYTogU2ltcGxpZnkgcHJvYmUgZnVuY3Rpb24KClpldiBXZWlzcyAoMSk6CiAgICAgIEFS
+TTogZHRzOiBhc3BlZWQ6IFVwZGF0ZSBlM2MyNDZkNGkgdnVhcnQgcHJvcGVydGllcwoKIC4uLi9k
+ZXZpY2V0cmVlL2JpbmRpbmdzL2lvbW11L2FybSxzbW11LnlhbWwgICAgICAgIHwgICA2ICstCiBh
+cmNoL2FybS9LY29uZmlnICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMiAr
+LQogYXJjaC9hcm0vYm9vdC9kdHMvYXNwZWVkLWJtYy1hc3JvY2stZTNjMjQ2ZDRpLmR0cyAgfCAg
+IDQgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL2FzcGVlZC1ibWMtaWJtLWV2ZXJlc3QuZHRzICAgICAg
+IHwgICA5ICstCiBhcmNoL2FybS9ib290L2R0cy9hc3BlZWQtYm1jLWlibS1yYWluaWVyLmR0cyAg
+ICAgICB8ICAgNSArLQogYXJjaC9hcm0vYm9vdC9kdHMvYXNwZWVkLWJtYy1vcHAtdGFjb21hLmR0
+cyAgICAgICAgfCAgIDYgKy0KIGFyY2gvYXJtL2Jvb3QvZHRzL3ZlcnNhdGlsZS1hYi5kdHMgICAg
+ICAgICAgICAgICAgIHwgICA1ICstCiBhcmNoL2FybS9ib290L2R0cy92ZXJzYXRpbGUtcGIuZHRz
+ICAgICAgICAgICAgICAgICB8ICAgMiArLQogYXJjaC9hcm0vY29uZmlncy9pbnRlZ3JhdG9yX2Rl
+ZmNvbmZpZyAgICAgICAgICAgICAgfCAgIDUgKy0KIGFyY2gvYXJtL2NvbmZpZ3MvbXVsdGlfdjdf
+ZGVmY29uZmlnICAgICAgICAgICAgICAgIHwgICAyICstCiBhcmNoL2FybS9jb25maWdzL3JlYWx2
+aWV3X2RlZmNvbmZpZyAgICAgICAgICAgICAgICB8ICAgNCArLQogYXJjaC9hcm0vY29uZmlncy9z
+aG1vYmlsZV9kZWZjb25maWcgICAgICAgICAgICAgICAgfCAgIDEgKwogYXJjaC9hcm0vY29uZmln
+cy91ODUwMF9kZWZjb25maWcgICAgICAgICAgICAgICAgICAgfCAgIDUgKwogYXJjaC9hcm0vY29u
+Zmlncy92ZXJzYXRpbGVfZGVmY29uZmlnICAgICAgICAgICAgICAgfCAgIDQgKy0KIGFyY2gvYXJt
+L2NvbmZpZ3MvdmV4cHJlc3NfZGVmY29uZmlnICAgICAgICAgICAgICAgIHwgIDE3ICstCiBhcmNo
+L2FybTY0L2Jvb3QvZHRzL252aWRpYS90ZWdyYTE5NC5kdHNpICAgICAgICAgICB8ICAxMyArKwog
+YXJjaC9hcm02NC9ib290L2R0cy9yZW5lc2FzL3I5YTA3ZzA0NC5kdHNpICAgICAgICAgfCAgIDQg
+Ky0KIGRyaXZlcnMvY2xrL3JlbmVzYXMvcjlhMDdnMDQ0LWNwZy5jICAgICAgICAgICAgICAgIHwg
+IDc5ICsrKystLS0KIGRyaXZlcnMvY2xrL3JlbmVzYXMvcmVuZXNhcy1yemcybC1jcGcuYyAgICAg
+ICAgICAgIHwgMTEwICsrKysrLS0tLS0KIGRyaXZlcnMvY2xrL3JlbmVzYXMvcmVuZXNhcy1yemcy
+bC1jcGcuaCAgICAgICAgICAgIHwgIDM3ICsrKy0KIGRyaXZlcnMvZmlybXdhcmUvYXJtX2ZmYS9i
+dXMuYyAgICAgICAgICAgICAgICAgICAgIHwgICA2ICstCiBkcml2ZXJzL2Zpcm13YXJlL2FybV9m
+ZmEvZHJpdmVyLmMgICAgICAgICAgICAgICAgICB8ICAgOCArLQogZHJpdmVycy9maXJtd2FyZS9h
+cm1fc2NtaS9idXMuYyAgICAgICAgICAgICAgICAgICAgfCAgIDggKy0KIGRyaXZlcnMvZmlybXdh
+cmUvYXJtX3NjbWkvZHJpdmVyLmMgICAgICAgICAgICAgICAgIHwgIDE0ICstCiBkcml2ZXJzL2Zp
+cm13YXJlL2FybV9zY21pL25vdGlmeS5jICAgICAgICAgICAgICAgICB8ICAgNCArCiBkcml2ZXJz
+L2Zpcm13YXJlL2FybV9zY21pL3NlbnNvcnMuYyAgICAgICAgICAgICAgICB8ICAgNiArLQogaW5j
+bHVkZS9kdC1iaW5kaW5ncy9jbG9jay9yOWEwN2cwNDQtY3BnLmggICAgICAgICAgfCAyMzYgKysr
+KysrKysrKysrKysrKy0tLS0tCiBpbmNsdWRlL2xpbnV4L3NjbWlfcHJvdG9jb2wuaCAgICAgICAg
+ICAgICAgICAgICAgICB8ICAxNCArLQogaW5jbHVkZS9saW51eC9zY3BpX3Byb3RvY29sLmggICAg
+ICAgICAgICAgICAgICAgICAgfCAgIDggKwogaW5jbHVkZS9zb2MvdGVncmEvbWMuaCAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgfCAgIDkgKy0KIDMwIGZpbGVzIGNoYW5nZWQsIDQxOCBpbnNl
+cnRpb25zKCspLCAyMTUgZGVsZXRpb25zKC0pCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpsaW51eC1hcm0ta2VybmVsIG1haWxpbmcgbGlzdApsaW51eC1h
+cm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcKaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9saW51eC1hcm0ta2VybmVsCg==
