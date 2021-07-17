@@ -1,142 +1,93 @@
-Return-Path: <SRS0=r7Jl=MI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=1FZl=MJ=gmail.com=geert.uytterhoeven@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C14C2C12002
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 16 Jul 2021 23:43:50 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18D36C636C9
+	for <soc@archiver.kernel.org>; Sat, 17 Jul 2021 21:26:37 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id C6C6461176; Sat, 17 Jul 2021 21:26:36 +0000 (UTC)
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 935E8613ED
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 16 Jul 2021 23:43:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 935E8613ED
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=sevtdwgg3LYysLWCWnp+T3h/icMT9ZFeghq0+NTbxH0=; b=eha7csU/lvRBcP
-	UUcGOn69MK7cBKZVLpeFUUmBTVOmatUIRKApED81yipy+Es6e8QOXKSdWRTrYuM9/kwYVmUkCcbM/
-	CM5/x99qfmQ2p83h76FLIj3aChUaV0jeguZPX1DozTw7QwvNBTCCn53ZRl+YH+a+YMjCu/SSnWyGN
-	YApUzP4mRBd9r9ad8ZYhrAAja16OUtE0/Fo/CPFV9167ug8Uz0lA4E9+X5QATthUuS/IdIrflxHkx
-	PEGRhS7fzbuNJzJC1OBeBaRCCycgc0qFuKCqHl//MXvskbQxLSE5n2Pqq9Ary08mPJ0Zkdn7Ro51b
-	NO3FMH8C0HmR21Z39wIw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1m4XSx-005cpZ-1j; Fri, 16 Jul 2021 23:42:00 +0000
-Received: from mail-wr1-x432.google.com ([2a00:1450:4864:20::432])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1m4XO9-005ajF-SR
- for linux-arm-kernel@lists.infradead.org; Fri, 16 Jul 2021 23:37:03 +0000
-Received: by mail-wr1-x432.google.com with SMTP id l7so13826399wrv.7
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 16 Jul 2021 16:37:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=aFrqnuOxWnNghnHgreX5L4xNHEhiU0UDW3cJN11PLf8=;
- b=MvIuIMqjYumtbh44qjjRozsAAdYcITm/9s2p9OPQdA+GM2Ab66yw1p7V+Nl4ORdsLY
- xFqwMJIvGuB1AaMJ92DoSStF7ZM/UMZyl9Q76N0axfICJ7KsdTOXryahc4b83Cq/OScs
- xrml6AAI6H+uoZDRowqrQL1ZzVKY6wHlcH06/7iaimCIE4QNF3jNrAMWXWyCeMApMlFd
- vl1i+irnZ5haQtHWkY1PT3FpJjZBH/ll/x3G4EyQmedq5+S/tVsSo+LNgSurxWXqItJ9
- R9z4co1Pq34hmrXcIktMqTKQlkyT6i8jKsvlmTfds4yP47N2o65exVjdh3r2CTQCtlD8
- Obmg==
+	by mail.kernel.org (Postfix) with ESMTPS id 4CB4161151;
+	Sat, 17 Jul 2021 21:26:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4CB4161151
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=geert.uytterhoeven@gmail.com
+Received: by mail-vk1-f169.google.com with SMTP id m23so564176vko.4;
+        Sat, 17 Jul 2021 14:26:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=aFrqnuOxWnNghnHgreX5L4xNHEhiU0UDW3cJN11PLf8=;
- b=SzOlP4c7F0c1IpDVMSbsjbYqu9TcakOypBPUIiL5WaCPHT8xVkhvD7b3rDqMN0NKXe
- 0h+THk/W5ZJEtxGTFihWxx+uj5Bh+WM+CHP+ZuoAyy5Jz80LN9/lKTcL9LZHlOM5650A
- 7KX9gedFEv+QIH5hHHCg92Jgr5pCdr9v8xyEvCANuKbUiUt4h7ddyHweqLfx/P2vCyto
- 9VVMaWKALbUQGGE+FZyhloemd98LlKL8vG2+nP8XezG/LZ7I+vOyG42jccnDUtfyX4Ki
- +3ocW5LTGQPBYTdSCHCPuJpqITLhOo1iIumx5vc6T31UYiFlvQffq9dloNhOTPE6KK+t
- K+dg==
-X-Gm-Message-State: AOAM5303+ewFCCLZ5vlqLVT6/2SYbJn6a47N2GghC44hfsawaoqh8eUk
- b6sx2QjI0HBkJUbMdUVIB0BpfzHuk4M=
-X-Google-Smtp-Source: ABdhPJz4ustaG9g3xZy9RSyi5wlvAUtBExjgHaBvQOOm6zEhvFpT5mamVE8voUvEkbl79WTJlrq6Zw==
-X-Received: by 2002:adf:f292:: with SMTP id k18mr15257499wro.265.1626478619581; 
- Fri, 16 Jul 2021 16:36:59 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
- by smtp.gmail.com with ESMTPSA id o19sm260893wmr.18.2021.07.16.16.36.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Jul 2021 16:36:58 -0700 (PDT)
-From: Thierry Reding <thierry.reding@gmail.com>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
- Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] arm64: tegra: Device tree fixes for v5.14-rc3
-Date: Sat, 17 Jul 2021 01:38:58 +0200
-Message-ID: <20210716233858.10096-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5XAK7+Gzh6ieUWzhfnNuMlvI9N6Gdn2a7QuEsKGdrmI=;
+        b=MR1l2ZxKB+sTvkLxB33WAFwzZSEPGLWMujY7TS7iEjAQry6Kjclsmu25pMaPWjS2As
+         VOM+RHPq+ZYRZf0ef75B6tzRavkcX2hhddyMxIc+QMAD4aA5otZLHXbG+J0wTQDBLcj8
+         jjKVoPFIhGkBV8OnF09ZDC3/n5oK1mV+BOfIEC8IDsR51B1OHIEI7sRUXuJ50tstuZte
+         OLUoaKBMLddjvWHVj2qvankf65vJpM251jBHyKovphqADTmjZ7mMxXg/aKAosR2wJPse
+         iC70XNm0i2qsIVQbOmxr9uXpNWY9o/Ficr3sxh7hXOmT9kO1pKnDz7hj//K3N0uDJt+3
+         p2mw==
+X-Gm-Message-State: AOAM531jaI1rmj+zaaZwC59sAFlSiZaZli1wVkQCqzpge8hmxHiTBJlT
+	tCb4DAhiC5a3NYyh3EYyvJLCryGEGJwzzukJkmTqV6e7
+X-Google-Smtp-Source: ABdhPJxKtXqo7qX7mahoa3XiRLqE8QXZHw2p1elWbvQVbW2yxP2VBcyH4F+ae1VpHCI1QWGOlvgIFuopgxhAvZh4mhc=
+X-Received: by 2002:a05:6122:a12:: with SMTP id 18mr18049497vkn.1.1626557195307;
+ Sat, 17 Jul 2021 14:26:35 -0700 (PDT)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210716_163701_973697_874F7AA9 
-X-CRM114-Status: UNSURE (   7.90  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210716233858.C06ZzilrSNDZTdgAO8RVxodtp-_zIFsoc4n8K031D90@z>
+References: <20201210200315.2965567-1-robh@kernel.org> <20201210200315.2965567-5-robh@kernel.org>
+In-Reply-To: <20201210200315.2965567-5-robh@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Sat, 17 Jul 2021 23:26:24 +0200
+Message-ID: <CAMuHMdU7f_zhHfnSNmY03bfBN5Kd2mO2N=yi5XTYwDNsd2XBFA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: Remove PicoXcell bindings
+To: Rob Herring <robh@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Jamie Iles <jamie@jamieiles.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, arm-soc <soc@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi ARM SoC maintainers,
+Hi Rob,
 
-The following changes since commit c667dcd4dfcd515ad2c9b3953a33d742985a0b5e:
+(replying to an old patch that was applied a while ago)
 
-  arm64: tegra: Enable SMMU support for USB on Tegra194 (2021-07-09 16:50:44 +0200)
+On Thu, Dec 10, 2020 at 9:06 PM Rob Herring <robh@kernel.org> wrote:
+> PicoXcell has had nothing but treewide cleanups for at least the last 8
+> years and no signs of activity. The most recent activity is a yocto vendor
+> kernel based on v3.0 in 2015.
+>
+> Cc: Jamie Iles <jamie@jamieiles.com>
+> Cc: linux-crypto@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-are available in the Git repository at:
+> --- a/Documentation/devicetree/bindings/net/macb.txt
+> +++ b/Documentation/devicetree/bindings/net/macb.txt
+> @@ -7,8 +7,6 @@ Required properties:
+>    Use "cdns,sam9x60-macb" for Microchip sam9x60 SoC.
+>    Use "cdns,np4-macb" for NP4 SoC devices.
+>    Use "cdns,at32ap7000-macb" for other 10/100 usage or use the generic form: "cdns,macb".
+> -  Use "cdns,pc302-gem" for Picochip picoXcell pc302 and later devices based on
+> -  the Cadence GEM, or the generic form: "cdns,gem".
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.14-rc3-arm64-dt
+Note that (a) the generic form is still used as the sole compatible
+value in arch/arm64/boot/dts/lg/lg131[23].dtsi, and the Linux driver
+matches against it, and (b) arch/arm/boot/dts/zynq-7000.dtsi uses
+the generic form as a secondary compatible value.
 
-for you to fetch changes up to ba02920c51debb9198e72b3a8726a7c5ae4ffb41:
+Gr{oetje,eeting}s,
 
-  arm64: tegra: Enable SMMU support for PCIe on Tegra194 (2021-07-17 01:27:10 +0200)
+                        Geert
 
-Here's another fix for SMMU support affecting PCIe that Vidya found. We
-do have a lack of test coverage in this area that we're working to fix.
 
-Thierry
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-----------------------------------------------------------------
-arm64: tegra: Device tree fixes for v5.14-rc3
-
-This contains one more fix for SMMU enablement on Tegra194, this time
-for PCIe.
-
-----------------------------------------------------------------
-Vidya Sagar (1):
-      arm64: tegra: Enable SMMU support for PCIe on Tegra194
-
- arch/arm64/boot/dts/nvidia/tegra194.dtsi | 60 ++++++++++++++++++++++++++++----
- 1 file changed, 54 insertions(+), 6 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
