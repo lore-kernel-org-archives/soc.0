@@ -1,25 +1,30 @@
-Return-Path: <SRS0=y4xS=MN=linaro.org=linus.walleij@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79301C6377B
-	for <soc@archiver.kernel.org>; Wed, 21 Jul 2021 22:00:36 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 4F57961249; Wed, 21 Jul 2021 22:00:36 +0000 (UTC)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 18AB76120E
-	for <soc@kernel.org>; Wed, 21 Jul 2021 22:00:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 18AB76120E
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linus.walleij@linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id u13so5382121lfs.11
-        for <soc@kernel.org>; Wed, 21 Jul 2021 15:00:35 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8AB1C6377B
+	for <linux-kernel@archiver.kernel.org>; Wed, 21 Jul 2021 22:00:38 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id C162B6120E
+	for <linux-kernel@archiver.kernel.org>; Wed, 21 Jul 2021 22:00:38 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S229965AbhGUVUB (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Wed, 21 Jul 2021 17:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229660AbhGUVUA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 21 Jul 2021 17:20:00 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31108C061575
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jul 2021 15:00:36 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id q16so5426321lfa.5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jul 2021 15:00:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -36,30 +41,36 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=JNYKfEC2XgIe4P22hQdCPlxP6b32Wm75jWfz9vNASdQ=;
-        b=O3EHqaJEc08TxS4Q85OPP6DDbNGhUUNR/5p1+myHgjAVB33CFHc6/NffGhBXkfAhsm
-         AXyQp2jNEbXN4qjCNCAXLyNMhG8ewhWgQj3DWyoGZWPwuB7qM0rvZ1Rd5S6mBlZmeDXI
-         MbHxeUqtU8FldCFRyM60+xqwTwGiwj1kR02kc7moGBUefGDg5JAsWM4R6WM7oGRvRGZl
-         2uOiaWsxSBG75rcrltY/EdpotaUMAXiVLKI9DG/lW8/zvy37dsRIjU7ENJGyLR22Y9xO
-         oyVYfcOrV6qoB2Dj8nU/EQe0wgu4KdHVniz0Vkg3aJn5GKcWutfIu3gaE9IDX9cTS6LX
-         CyoA==
-X-Gm-Message-State: AOAM5336XUPq3GmEFRY0BEejhhdnDkedewkVtpTarGbzmO8+xzHqM2s3
-	zC2PN7tcujry7WXaGA+HRzZnNKGmsSDA7rAiDtLwiQ==
+        b=sIqT37gMg5ujGiO2PddVN/mZffqGSfRIONRmvPH4BlZoZ6wNG2WdWAYzlqi+XoS/ty
+         qo0TKQ3LAT8gBHKNuYaVZ9gVBe9BMDLOgXE9RiWdX3NHxugFnPbyvm+LLMuU15Trsf/k
+         Kc1cAPY/D5hNLhagXLykvGrWz9kWWWnlmrBTx6FabSvmnJqMMlLbB1PLY1Xv376FFV6X
+         soSZ438dUalKUCT8DY2tz77U/0zxQm/A8xknNsA3DvBGR4QlpPibdcW/U0pM2UQ5uZFz
+         jb+zwEn+KRE1g/wqvh2Bn1p0v+xBM+WX/GUNGldrr+yupVQYHgZCeFVAxicvpOwz4vMm
+         vEbA==
+X-Gm-Message-State: AOAM532zA3hM4jUp7cbIjk/cH7S9lVKcaH5/JtgliPdYKG5SWFUm61Ik
+        Lcs2vW5SgxgLsNU3ru9dj9zCB9mkZOoEZVA3jHtmfpDcvQU=
 X-Google-Smtp-Source: ABdhPJx+2GQAUDXqohhrQt5LdzTObCbGRun5lWTid9GN2w85MRs7dgJ2BbU422eqrTMM9/HF54kKi36PNk7WBD242sU=
 X-Received: by 2002:a05:6512:3696:: with SMTP id d22mr27775866lfs.586.1626904834440;
  Wed, 21 Jul 2021 15:00:34 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210721211412.3537004-1-arnd@kernel.org>
 In-Reply-To: <20210721211412.3537004-1-arnd@kernel.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 22 Jul 2021 00:00:23 +0200
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 22 Jul 2021 00:00:23 +0200
 Message-ID: <CACRpkdZ3jWjPkVFYnizZ4CPHWsvS-gaGcUYZdp_4pi_BrZHjMQ@mail.gmail.com>
 Subject: Re: [PATCH v2] [SUBMITTED 20210721] ARM: ixp4xx: fix compile-testing
  soc drivers
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Geert Uytterhoeven <geert@linux-m68k.org>, SoC Team <soc@kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        SoC Team <soc@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210721220023.pqcRP9IesOhqo1ZruimZqaceSU1BMsiKR7v3iKH-8jk@z>
 
 On Wed, Jul 21, 2021 at 11:14 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
