@@ -1,68 +1,105 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=y4xS=MN=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D410C6377A
-	for <soc@archiver.kernel.org>; Wed, 21 Jul 2021 19:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77D76C6377C
+	for <soc@archiver.kernel.org>; Wed, 21 Jul 2021 20:24:19 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 501896124B; Wed, 21 Jul 2021 19:59:46 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3930B6121F
-	for <soc@kernel.org>; Wed, 21 Jul 2021 19:59:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1626897586;
-	bh=wlTPgqRNdyfSndBBg+ZDn4qkR+SwOI+M+YGpX3Y9Cz0=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=kwz3KTPan65MwKr7SkbvYb7wAb0bEl/Jk4cMw4JvCs5Xzn3VOzBMEciwBpiJxgZ1z
-	 5cTvWrNMxO6GgEY7oT2BW6kelxTPNUFB6BCnCGvn8U130+xWYhSvoI7j3pbmF7WBSU
-	 mmAAXsWShJWQB388b/TagKLmKdGvO0jF/0Kafuu7chb8SxW+R+GRdYjVb/C8qkH8AR
-	 U8iQJZA0dQwGQOWqIdSqrB6Qg57LGWhGRorf+tOMGsRwGwzsHdJypPRtsW69ADvnvA
-	 Z8XGlYt/hXPG1s+miCbGajbCVjTgC/OWeauNpAcAjARMpfb9EMQ0bSKAo4Xh2XhuNl
-	 kHEyMt0nLo5jQ==
-Received: by mail-wm1-f47.google.com with SMTP id 14-20020a05600c028eb0290228f19cb433so243299wmk.0
-        for <soc@kernel.org>; Wed, 21 Jul 2021 12:59:46 -0700 (PDT)
-X-Gm-Message-State: AOAM531UbAXSyHF7Fq96q4PuLoVOdWGTwegxPNBiBGM+wAfDcuf9P0aJ
-	QOkLgl/mVFYsx4eMK6LciCWBcgHGeccsbK3uROQ=
-X-Google-Smtp-Source: ABdhPJzyL50Dh8OOHmepowDDcih1qE0cwK3lajVQJev00+iVEeEliijxdrTGy/wa+5Gx37+0kdEMuVFl2xD3uBGz448=
-X-Received: by 2002:a1c:c90f:: with SMTP id f15mr5734852wmb.142.1626897584841;
- Wed, 21 Jul 2021 12:59:44 -0700 (PDT)
+	id 5624F61263; Wed, 21 Jul 2021 20:24:19 +0000 (UTC)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 3D75B6124B
+	for <soc@kernel.org>; Wed, 21 Jul 2021 20:24:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3D75B6124B
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linus.walleij@linaro.org
+Received: by mail-lf1-f46.google.com with SMTP id b26so5077247lfo.4
+        for <soc@kernel.org>; Wed, 21 Jul 2021 13:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D1fSEVFqUHw4YbE91AcPQyxQQAoQKEf3Quu62fEWYpM=;
+        b=eNPhHfJRAQmHqXGo9tKdmBMr74Yzifs4VEpKtVWbGpAw3a/ia6SnGPHN++Kg8qNYti
+         C2LVca0Zr+CXXv9RqN+9hrUMF8Dy5GlxC9gO2+cGGRoLca9eyCTkOiQkPm+LMc6HAe9K
+         LxdQgK7NHnJd5T1mUubdTOkVkknGaQKzOzFIzFfZV6bZFL/L47auyl/st/0JMNR4b5Wn
+         qy8/dPed+bfqT0AnW/VcqDSrlSFJ+mxn1G/89uIDBwPD1ADuA/q45pw1K0bH2X2TN+Tv
+         MJA+qsN0kRCWuq9Pm1AadJdT/Rce3ppBKvd+S0Ib7jw9IABUZiwoyQ3HC69WF1Jn8Yp8
+         Y1uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D1fSEVFqUHw4YbE91AcPQyxQQAoQKEf3Quu62fEWYpM=;
+        b=Nq3AvO5c7PRW4SyZbHxmuD8LmlVNxQEEY9iECZA4b8OT8lLbZ51srrE8kFWSsUBgHY
+         VKtI7Fkarp75rWBVZJCgRg7czTYkhAnWGqn5MiAoPDFGdq3ZCqBhHI8mLm0YIDkO83No
+         uhE1NZMq/Z7bU+rzLaMdCQGXVcoqAFvp0TJ8PPwSIsbb/FoMZiCfyD+xiw82lO7rWScM
+         e/YviftwhdNbNCDT4rohSY1d6gGxYMZF1utgq7m2wajzXL+wyZ+9O6Sax0xw12l0zPPT
+         49983ALkQgw3rB/9Bgu9b2WKPCo5ANEgstiCFo5jMWTdgq1c6UC8lESlr/3//cso/I+9
+         YVKA==
+X-Gm-Message-State: AOAM530ZEw6oibG/cXfU3nrTh2juQtBEGN23NJv04dDBnXvy7fboa1V5
+	9M2pNqBuJDx6QnBmkExWYxYNA9jD0CdoHGQ+Q+MXEA==
+X-Google-Smtp-Source: ABdhPJyGeXguhortkkfg6BjqS34WA20M1SIfJqsW4mpXW18zkOgpVQv39lVckpNO2cFGBH/aqAfnxROqkwH5q24AkQI=
+X-Received: by 2002:a05:6512:169e:: with SMTP id bu30mr6326301lfb.291.1626899057636;
+ Wed, 21 Jul 2021 13:24:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210721151457.2285669-1-arnd@kernel.org> <c9968f90-0633-9467-a3fb-725b92116fe2@gmail.com>
-In-Reply-To: <c9968f90-0633-9467-a3fb-725b92116fe2@gmail.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Wed, 21 Jul 2021 21:59:28 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0PFcEk5T7Ym+u+8PuWEyyZoZPkv5S5uP-mrBZ4NDZf0A@mail.gmail.com>
-Message-ID: <CAK8P3a0PFcEk5T7Ym+u+8PuWEyyZoZPkv5S5uP-mrBZ4NDZf0A@mail.gmail.com>
-Subject: Re: [PATCH] arm64: tegra: add regulator dependency
-To: Dmitry Osipenko <digetx@gmail.com>
+References: <20210721151546.2325937-1-arnd@kernel.org>
+In-Reply-To: <20210721151546.2325937-1-arnd@kernel.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 21 Jul 2021 22:24:06 +0200
+Message-ID: <CACRpkdbuXkvOkMNizqmRPwuYz-YU8j-yidtXsOAmEd4z3B0hVA@mail.gmail.com>
+Subject: Re: [PATCH] ARM: ixp4xx: fix building both pci drivers
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc: Linus Walleij <linusw@kernel.org>, SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Imre Kaloz <kaloz@openwrt.org>, Krzysztof Halasa <khalasa@piap.pl>, 
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>, Rob Herring <robh@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, linux-pci <linux-pci@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 21, 2021 at 5:29 PM Dmitry Osipenko <digetx@gmail.com> wrote:
-> 21.07.2021 18:14, Arnd Bergmann =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->
-> [1]
-> https://patchwork.ozlabs.org/project/linux-tegra/patch/20210621160739.224=
-48-1-digetx@gmail.com/
->
-> It looks like my variant of the fix should be a bit more correct since
-> it won't build the regulator drivers if both TEGRA=3Dn and REGULATOR=3Dn.
->
-> I guess it should be fine if you could take the patch directly, perhaps
-> Jon could ack the patch for that. Otherwise we could wait for Thierry to
-> return.
+On Wed, Jul 21, 2021 at 5:15 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
-Sounds good to me. Please send your patch to soc@kernel.org (with everyone
-on Cc) so it lands in our patchwork, and if Jon or Thierry acks it that mak=
-es it
-there as well.
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> When both the old and the new PCI drivers are enabled
+> in the same kernel, there are a couple of namespace
+> conflicts that cause a build failure:
+>
+> drivers/pci/controller/pci-ixp4xx.c:38: error: "IXP4XX_PCI_CSR" redefined [-Werror]
+>    38 | #define IXP4XX_PCI_CSR                  0x1c
+>       |
+> In file included from arch/arm/mach-ixp4xx/include/mach/hardware.h:23,
+>                  from arch/arm/mach-ixp4xx/include/mach/io.h:15,
+>                  from arch/arm/include/asm/io.h:198,
+>                  from include/linux/io.h:13,
+>                  from drivers/pci/controller/pci-ixp4xx.c:20:
+> arch/arm/mach-ixp4xx/include/mach/ixp4xx-regs.h:221: note: this is the location of the previous definition
+>   221 | #define IXP4XX_PCI_CSR(x) ((volatile u32 *)(IXP4XX_PCI_CFG_BASE_VIRT+(x)))
+>       |
+> drivers/pci/controller/pci-ixp4xx.c:148:12: error: 'ixp4xx_pci_read' redeclared as different kind of symbol
+>   148 | static int ixp4xx_pci_read(struct ixp4xx_pci *p, u32 addr, u32 cmd, u32 *data)
+>       |            ^~~~~~~~~~~~~~~
+>
+> Rename both the ixp4xx_pci_read/ixp4xx_pci_write functions and the
+> IXP4XX_PCI_CSR macro. In each case, I went with the version that
+> has fewer callers to keep the change small.
+>
+> Fixes: f7821b493458 ("PCI: ixp4xx: Add a new driver for IXP4xx")
+> Cc: soc@kernel.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-        Arnd
+I tried very hard to make it impossible to build both drivers at the
+same time :(
+
+Oh well I guess I failed. Kconfig ... say no more.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
