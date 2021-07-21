@@ -1,107 +1,149 @@
-Return-Path: <linux-kernel-owner@kernel.org>
+Return-Path: <SRS0=x48B=MN=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B55D0C6377A
-	for <linux-kernel@archiver.kernel.org>; Wed, 21 Jul 2021 20:25:16 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D53B61222
-	for <linux-kernel@archiver.kernel.org>; Wed, 21 Jul 2021 20:25:16 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbhGUToj (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Wed, 21 Jul 2021 15:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbhGUToh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jul 2021 15:44:37 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2825DC061575
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jul 2021 13:25:13 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id a12so5052118lfb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jul 2021 13:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MjXDOWyd73wlu1QIRqgI71CqpEzm7Ck3HKRbigN51sg=;
-        b=kQ6TYLiVfqICNhW3OwZxp8Qfd7xGJUzTJ1xFrBLx5DD2I2xKISmzOkio1Y72PHh0B6
-         Vu31dkKMQK56+NS8E2axT060bnbg8hN2uDHiYpRDnoA5Ge0mTiVIL30vY3OMxRJXPr7x
-         siTcNehJaQOMOjVXDVAGpHOUf6KCLhER79LafdIb4rV90jtBPOkPy6dStSKOGYECGzWm
-         HcHeLqJy/y/MJZ21LtTR62ZAkSgL9KdhpEfsLC4XcPlP3lzLOKyo0Q/PBTP6cDDQAkQ9
-         QjpJlWl+DIx5eQpnGHf7N8XSiJKFd6JSFcLTqHiX4Cdh04M/rqRYXDHePDNakG7+eZE3
-         p6XQ==
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65E88C6377B
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 21 Jul 2021 20:26:28 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 376AC6109F
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 21 Jul 2021 20:26:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 376AC6109F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
+	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=OrqBDCFyQ135x9yCdukjGnOekDoRWxPT0J6yoN0Y3J8=; b=ulkyt6ALrZOy9G
+	JQLSLEOGVh+gtcudqVMcy44QSrV9Ih0hq8TLJVAK7+3ibd99NHnW7g7cNhs6ywIPz5EPhCvFnscpH
+	YonbmJygTk+nNR5QML5lhCM8xcpxBL3UR/qGKi7vfsfhM3RkR0PvsvgYZchuBlUxmD4O24Jjl5r+H
+	lzX6g5/4dPEjrMsFEpWwCsBA2mj39mMHX++oyG7Om/r+qOwIIhuMdFbaKsrUnvMeM+BvPp8M+XXgb
+	mBMqein0w8PM4Y5wBDw5wgnX8ga/+0B7227A3472Pf3WRQbkrq6gSxk2SeAgEbqvZOfH6K+LTmh8+
+	6/65yYSXpKdGkR4kftDA==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1m6IlU-00H6tN-KV; Wed, 21 Jul 2021 20:24:24 +0000
+Received: from mail-lf1-x135.google.com ([2a00:1450:4864:20::135])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1m6IlQ-00H6sV-8B
+ for linux-arm-kernel@lists.infradead.org; Wed, 21 Jul 2021 20:24:21 +0000
+Received: by mail-lf1-x135.google.com with SMTP id b26so5077245lfo.4
+ for <linux-arm-kernel@lists.infradead.org>;
+ Wed, 21 Jul 2021 13:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=D1fSEVFqUHw4YbE91AcPQyxQQAoQKEf3Quu62fEWYpM=;
+ b=eNPhHfJRAQmHqXGo9tKdmBMr74Yzifs4VEpKtVWbGpAw3a/ia6SnGPHN++Kg8qNYti
+ C2LVca0Zr+CXXv9RqN+9hrUMF8Dy5GlxC9gO2+cGGRoLca9eyCTkOiQkPm+LMc6HAe9K
+ LxdQgK7NHnJd5T1mUubdTOkVkknGaQKzOzFIzFfZV6bZFL/L47auyl/st/0JMNR4b5Wn
+ qy8/dPed+bfqT0AnW/VcqDSrlSFJ+mxn1G/89uIDBwPD1ADuA/q45pw1K0bH2X2TN+Tv
+ MJA+qsN0kRCWuq9Pm1AadJdT/Rce3ppBKvd+S0Ib7jw9IABUZiwoyQ3HC69WF1Jn8Yp8
+ Y1uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MjXDOWyd73wlu1QIRqgI71CqpEzm7Ck3HKRbigN51sg=;
-        b=IifpMsJr72r2stxCdkn95OEpYFa7UkQvXWrJAcQow1QzcofcyUHOmtC6u3eG5SQwRu
-         Usho/uW6tgSQ0wFqGqND+ZmcFCwFPm3ZdngXk1ayY3RwxuGbrzEJTNLlYxIIJTc7VFE0
-         yxMoX1XSFPQ98C0Z0uKIoMJOXdY1KX425iMpVmbhHTA25DBgHwSTsvexZNmEUloeMBjx
-         ysjaNRnxgLMQB+MRTddF23Ft+BPPAomLbd3WfjF364LcufhnUzsRYa7+qrGXsAcRv3pt
-         wcmpZ6ZvRbZRhfTVIrcxx+m9d7MgX0rFo7xR6rUxHHCYmvkl8QZdkR3u3XQ+UTWAA2eA
-         4h9Q==
-X-Gm-Message-State: AOAM531eLxu/r5ADB8LgkZhJeyQV/oJmLp+Ff3/UeYh6BJh3ZZpSRZrj
-        ySPOFBU1WBWbN1SPAeg7rKR7LPe5KDeMpayIJaqyRw==
-X-Google-Smtp-Source: ABdhPJz+Ibpdq9t9/cUreWhO5XZT1p+ryHZn3jXNVmSjN+McdT77o4jR3PjGVJNH4azveTk6PTf1wq1eqskPw47GurI=
-X-Received: by 2002:ac2:5312:: with SMTP id c18mr25904144lfh.649.1626899111566;
- Wed, 21 Jul 2021 13:25:11 -0700 (PDT)
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=D1fSEVFqUHw4YbE91AcPQyxQQAoQKEf3Quu62fEWYpM=;
+ b=UDtwjh0lSQXy/VG8l5ciX5Eukb8/t604AVd+rpuMQ6bShme6lTWRuVNu3AtCTgJP/+
+ ih6eWCo3+2XJNyZKg+9daW4vq4Yffll/vTY4FXbPvfhHAWDKFxgHa99MwKz/rhJTxjSn
+ gblBH+wYB+CuiJsKPeO92oN3gU7/Su30A8YRnY4CUaRucsRCp6c1m/ZrwbWIICUoIdsc
+ ppkfuh0nmXI/ouPMCH3WtYSrnnNm4yo+pfZVrYfvpzn2SvqdEtZR1ZNwmndkiRK0bj5q
+ iycyWwGhOf2B5OM8SVMvMqTk6uODbrErAmL+a7a4fz1+LUBL1t0II7BPDXFV3NNA5Pif
+ SmIQ==
+X-Gm-Message-State: AOAM532gjLzvg+mNZiceHRsHxoQX+rbNKX7vmXb/nk/S/3lEQR9PVxio
+ f144cjqDVHByQhxIN9GF4ZEP0uTFOSxllToZAAXmPQ==
+X-Google-Smtp-Source: ABdhPJyGeXguhortkkfg6BjqS34WA20M1SIfJqsW4mpXW18zkOgpVQv39lVckpNO2cFGBH/aqAfnxROqkwH5q24AkQI=
+X-Received: by 2002:a05:6512:169e:: with SMTP id
+ bu30mr6326301lfb.291.1626899057636; 
+ Wed, 21 Jul 2021 13:24:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210721151620.2373500-1-arnd@kernel.org>
-In-Reply-To: <20210721151620.2373500-1-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 21 Jul 2021 22:25:00 +0200
-Message-ID: <CACRpkdbpb-mVHQackyJM=yP=TS2c=6zM+ZXfbHZPWfR6cR+xUw@mail.gmail.com>
-Subject: Re: [PATCH] ARM: ixp4xx: goramo_mlr depends on old PCI driver
-To:     Arnd Bergmann <arnd@kernel.org>
+References: <20210721151546.2325937-1-arnd@kernel.org>
+In-Reply-To: <20210721151546.2325937-1-arnd@kernel.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 21 Jul 2021 22:24:06 +0200
+Message-ID: <CACRpkdbuXkvOkMNizqmRPwuYz-YU8j-yidtXsOAmEd4z3B0hVA@mail.gmail.com>
+Subject: Re: [PATCH] ARM: ixp4xx: fix building both pci drivers
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc:     Linus Walleij <linusw@kernel.org>, SoC Team <soc@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <linux-kernel.vger.kernel.org>
-X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20210721202500.7duZ8dTUNRK3ve-Gdxksf1HAEB3UM1N7NF-Kxwj1Mh0@z>
+Cc: Linus Walleij <linusw@kernel.org>, SoC Team <soc@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, 
+ Imre Kaloz <kaloz@openwrt.org>, Krzysztof Halasa <khalasa@piap.pl>, 
+ Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>, Rob Herring <robh@kernel.org>, 
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+ linux-kernel <linux-kernel@vger.kernel.org>,
+ linux-pci <linux-pci@vger.kernel.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210721_132420_355379_3BDA53A8 
+X-CRM114-Status: GOOD (  18.54  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210721202406.fHWUdJsk9KknMjEylJmoZSy6N9LOPZA-3ZCulYGnyls@z>
 
-On Wed, Jul 21, 2021 at 5:16 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Wed, Jul 21, 2021 at 5:15 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> When this driver is disabled, the board file fails to build,
-> so add a dependency:
+> When both the old and the new PCI drivers are enabled
+> in the same kernel, there are a couple of namespace
+> conflicts that cause a build failure:
 >
-> arch/arm/mach-ixp4xx/goramo_mlr.c: In function 'gmlr_pci_preinit':
-> arch/arm/mach-ixp4xx/goramo_mlr.c:472:9: error: implicit declaration of function 'ixp4xx_pci_preinit'; did you mean 'iop3xx_pci_preinit'? [-Werror=implicit-function-declaration]
->   472 |         ixp4xx_pci_preinit();
->       |         ^~~~~~~~~~~~~~~~~~
->       |         iop3xx_pci_preinit
-> arch/arm/mach-ixp4xx/goramo_mlr.c: In function 'gmlr_pci_postinit':
-> arch/arm/mach-ixp4xx/goramo_mlr.c:481:22: error: implicit declaration of function 'ixp4xx_pci_read' [-Werror=implicit-function-declaration]
->   481 |                 if (!ixp4xx_pci_read(addr, NP_CMD_CONFIGREAD, &value)) {
->       |                      ^~~~~~~~~~~~~~~
-> arch/arm/mach-ixp4xx/goramo_mlr.c:231:35: error: 'IXP4XX_UART1_BASE_PHYS' undeclared here (not in a function)
->   231 |                 .start          = IXP4XX_UART1_BASE_PHYS,
->       |                                   ^~~~~~~~~~~~~~~~~~~~~~
-> arch/arm/mach-ixp4xx/goramo_mlr.c: In function 'gmlr_init':
-> arch/arm/mach-ixp4xx/goramo_mlr.c:376:9: error: implicit declaration of function 'ixp4xx_sys_init' [-Werror=implicit-function-declaration]
->   376 |         ixp4xx_sys_init();
->       |         ^~~~~~~~~~~~~~~
+> drivers/pci/controller/pci-ixp4xx.c:38: error: "IXP4XX_PCI_CSR" redefined [-Werror]
+>    38 | #define IXP4XX_PCI_CSR                  0x1c
+>       |
+> In file included from arch/arm/mach-ixp4xx/include/mach/hardware.h:23,
+>                  from arch/arm/mach-ixp4xx/include/mach/io.h:15,
+>                  from arch/arm/include/asm/io.h:198,
+>                  from include/linux/io.h:13,
+>                  from drivers/pci/controller/pci-ixp4xx.c:20:
+> arch/arm/mach-ixp4xx/include/mach/ixp4xx-regs.h:221: note: this is the location of the previous definition
+>   221 | #define IXP4XX_PCI_CSR(x) ((volatile u32 *)(IXP4XX_PCI_CFG_BASE_VIRT+(x)))
+>       |
+> drivers/pci/controller/pci-ixp4xx.c:148:12: error: 'ixp4xx_pci_read' redeclared as different kind of symbol
+>   148 | static int ixp4xx_pci_read(struct ixp4xx_pci *p, u32 addr, u32 cmd, u32 *data)
+>       |            ^~~~~~~~~~~~~~~
 >
-> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Rename both the ixp4xx_pci_read/ixp4xx_pci_write functions and the
+> IXP4XX_PCI_CSR macro. In each case, I went with the version that
+> has fewer callers to keep the change small.
+>
+> Fixes: f7821b493458 ("PCI: ixp4xx: Add a new driver for IXP4xx")
 > Cc: soc@kernel.org
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Ooops
+I tried very hard to make it impossible to build both drivers at the
+same time :(
+
+Oh well I guess I failed. Kconfig ... say no more.
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
