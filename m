@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B610C432BE
-	for <soc@archiver.kernel.org>; Thu, 22 Jul 2021 21:24:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06880C4320E
+	for <soc@archiver.kernel.org>; Thu, 22 Jul 2021 21:24:25 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id D50B560EB5; Thu, 22 Jul 2021 21:24:22 +0000 (UTC)
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+	id E064E60EBB; Thu, 22 Jul 2021 21:24:24 +0000 (UTC)
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
 	(using TLSv1.2 with cipher AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9219A60EB6;
-	Thu, 22 Jul 2021 21:24:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9219A60EB6
+	by mail.kernel.org (Postfix) with ESMTPS id A802260EB6;
+	Thu, 22 Jul 2021 21:24:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A802260EB6
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
 Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=quicinc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1626989062; x=1658525062;
+  t=1626989064; x=1658525064;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=b9U7KlNjO5J/+WVfc7lmVC0tSSbwnkEZUsnzlsBuwKk=;
-  b=Vwb0I4U/elRkJ3goBIeCpcLHgqy/0bZtvYdt9cO/ZoHV2JBLsF8j027I
-   2Oo6VDgjWEI315BBpOdUVTyChPX9sTWltlOBfcVNovcYw3YJnbxDTzq0l
-   UgPY8EG2VMvjKnQpaTDZqOApqlSmrd0kQpqPHc5XKEfX1kuhHKWagoyqx
-   M=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 22 Jul 2021 14:24:22 -0700
+  bh=Z6zOtxzK0SvEBwDx41Sq8+UntB+PqRhBZVtb+Sd6CmM=;
+  b=QzdbE1bah0lZ7VP3epHVThJOm+TTIBFv/Bz7n2sTHDDvhvzLFTfEwCJx
+   pJ2wcefFkoES6X5Qvzei1TY6aLRINQoRWQDvjakcY70FPH3/zEixWHuSL
+   o032htSPofo7/S/r9akUGZhWFnSVaf62YKQzRrF2Sic/yifrAQULuH+7k
+   c=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Jul 2021 14:24:24 -0700
 X-QCInternal: smtphost
 Received: from nasanexm03e.na.qualcomm.com ([10.85.0.48])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/AES256-SHA; 22 Jul 2021 14:24:22 -0700
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/AES256-SHA; 22 Jul 2021 14:24:24 -0700
 Received: from vamslank1-linux.qualcomm.com (10.80.80.8) by
  nasanexm03e.na.qualcomm.com (10.85.0.48) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 22 Jul 2021 14:24:21 -0700
+ 15.0.1497.23; Thu, 22 Jul 2021 14:24:23 -0700
 From: <quic_vamslank@quicinc.com>
 List-Id: <soc.lore.kernel.org>
 To: <agross@kernel.org>, <bjorn.andersson@linaro.org>, <olof@lixom.net>,
 	<soc@kernel.org>, <linus.walleij@linaro.org>, <robh+dt@kernel.org>
 CC: <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>, "Vamsi krishna
- Lanka" <quic_vamslank@quicinc.com>, Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 1/3] dt-bindings: arm: qcom: Document SDX65 platform and boards
-Date: Thu, 22 Jul 2021 14:24:03 -0700
-Message-ID: <500c75eb1bdc37ad66dc2ebd51ad21a211d9ed27.1626987430.git.quic_vamslank@quicinc.com>
+ Lanka" <quic_vamslank@quicinc.com>
+Subject: [PATCH v2 3/3] ARM: dts: qcom: sdx65: Add pincontrol node
+Date: Thu, 22 Jul 2021 14:24:05 -0700
+Message-ID: <728983e44148367ab5d6ba2c66420b1e37df72b7.1626987430.git.quic_vamslank@quicinc.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1626987430.git.quic_vamslank@quicinc.com>
 References: <cover.1626987430.git.quic_vamslank@quicinc.com>
@@ -56,43 +56,40 @@ Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanexm03d.na.qualcomm.com (10.85.0.91) To
  nasanexm03e.na.qualcomm.com (10.85.0.48)
-Message-ID: <20210722212403.1Rd1G7f77EfvVI__H_BlADfre7fNMBULdUnXbrdZzeY@z>
+Message-ID: <20210722212405.6VD1CX2uAqQQ_3_oOO8TWNhW6GMtqfBELyvtHRDupDE@z>
 
 From: Vamsi krishna Lanka <quic_vamslank@quicinc.com>
 
-Document the SDX65 platform binding and also the boards using it.
+This commit adds pincontrol node to SDX65 dts.
 
 Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/arm/boot/dts/qcom-sdx65.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-index 174134f920e1..bdf1da8fc557 100644
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -41,6 +41,7 @@ description: |
-         sdm660
-         sdm845
-         sdx55
-+        sdx65
-         sm8250
-         sm8350
+diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
+index fb240213cc35..db269c73c0e9 100644
+--- a/arch/arm/boot/dts/qcom-sdx65.dtsi
++++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
+@@ -79,6 +79,18 @@ blsp1_uart3: serial@831000 {
+ 			status = "disabled";
+ 		};
  
-@@ -174,6 +175,11 @@ properties:
-               - qcom,sdx55-mtp
-           - const: qcom,sdx55
- 
-+      - items:
-+          - enum:
-+              - qcom,sdx65-mtp
-+          - const: qcom,sdx65
++		tlmm: pinctrl@f100000 {
++			compatible = "qcom,sdx65-tlmm";
++			reg = <0xf100000 0x300000>;
++			interrupts = <GIC_SPI 212 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-ranges = <&tlmm 0 0 109>;
++			interrupt-controller;
++			interrupt-parent = <&intc>;
++			#interrupt-cells = <2>;
++		};
 +
-       - items:
-           - enum:
-               - qcom,ipq6018-cp01-c1
+ 		pdc: interrupt-controller@b210000 {
+ 			compatible = "qcom,sdx65-pdc", "qcom,pdc";
+ 			reg = <0xb210000 0x10000>;
 -- 
 2.32.0
 
