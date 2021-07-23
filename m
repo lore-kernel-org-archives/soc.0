@@ -1,95 +1,71 @@
-Return-Path: <SRS0=PaLb=MO=quicinc.com=quic_vamslank@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06880C4320E
-	for <soc@archiver.kernel.org>; Thu, 22 Jul 2021 21:24:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02F22C4338F
+	for <soc@archiver.kernel.org>; Fri, 23 Jul 2021 03:01:09 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E064E60EBB; Thu, 22 Jul 2021 21:24:24 +0000 (UTC)
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-	(using TLSv1.2 with cipher AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A802260EB6;
-	Thu, 22 Jul 2021 21:24:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A802260EB6
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=quicinc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1626989064; x=1658525064;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Z6zOtxzK0SvEBwDx41Sq8+UntB+PqRhBZVtb+Sd6CmM=;
-  b=QzdbE1bah0lZ7VP3epHVThJOm+TTIBFv/Bz7n2sTHDDvhvzLFTfEwCJx
-   pJ2wcefFkoES6X5Qvzei1TY6aLRINQoRWQDvjakcY70FPH3/zEixWHuSL
-   o032htSPofo7/S/r9akUGZhWFnSVaf62YKQzRrF2Sic/yifrAQULuH+7k
-   c=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Jul 2021 14:24:24 -0700
-X-QCInternal: smtphost
-Received: from nasanexm03e.na.qualcomm.com ([10.85.0.48])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/AES256-SHA; 22 Jul 2021 14:24:24 -0700
-Received: from vamslank1-linux.qualcomm.com (10.80.80.8) by
- nasanexm03e.na.qualcomm.com (10.85.0.48) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 22 Jul 2021 14:24:23 -0700
-From: <quic_vamslank@quicinc.com>
+	id 8DBBD60EBD; Fri, 23 Jul 2021 03:01:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9FA3260EB2;
+	Fri, 23 Jul 2021 03:01:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1627009268;
+	bh=+pVRuUCXuNnSNbnIJkHUZSfYHS173tYlhb7QGty12i4=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=ViDcLqMqUM/pqSKrSdsw3ca1tnANu4ijSt9Rz1rcjLbl4K0VuadCiwMaSTHrvMf/N
+	 ZQ3wksRxfBh7rBkNUzbgpJvwUa/U8KIdtgcACNEGgrbMWipk8zhdubG8i6AdWy+yZt
+	 jGQ3CePMasDLU7kF+VHEjGlVoTHzLxNfGty9Tz6LGxxU2w29XqBDq3n0tGx8ealcUp
+	 XcrozpLUhn01zGyd7bmUEnGyN9R0NsfUqD2zWV7QjxesKOHq/UDqkDWP5SlRSQqywi
+	 8mehkDzM8WGsYxUlLQo0GVupiLM2yMEDZADVKmTOQ2jmaP/VI2m14qDONtWwsrBR47
+	 XQtdbRBRZZjvA==
+Date: Fri, 23 Jul 2021 11:01:00 +0800
+From: Shawn Guo <shawnguo@kernel.org>
+To: Sam Ravnborg <sam@ravnborg.org>
 List-Id: <soc.lore.kernel.org>
-To: <agross@kernel.org>, <bjorn.andersson@linaro.org>, <olof@lixom.net>,
-	<soc@kernel.org>, <linus.walleij@linaro.org>, <robh+dt@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>, "Vamsi krishna
- Lanka" <quic_vamslank@quicinc.com>
-Subject: [PATCH v2 3/3] ARM: dts: qcom: sdx65: Add pincontrol node
-Date: Thu, 22 Jul 2021 14:24:05 -0700
-Message-ID: <728983e44148367ab5d6ba2c66420b1e37df72b7.1626987430.git.quic_vamslank@quicinc.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1626987430.git.quic_vamslank@quicinc.com>
-References: <cover.1626987430.git.quic_vamslank@quicinc.com>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>, Arnd Bergmann <arnd@arndb.de>,
+	Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+	Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>, soc@kernel.org,
+	Thierry Reding <thierry.reding@gmail.com>,
+	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>,
+	Juergen Borleis <jbe@pengutronix.de>,
+	Ulrich =?iso-8859-1?Q?=D6lmann?= <u.oelmann@pengutronix.de>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Marco Felsch <m.felsch@pengutronix.de>,
+	Lucas Stach <l.stach@pengutronix.de>, devicetree@vger.kernel.org,
+	Fabio Estevam <festevam@gmail.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 4/4] ARM: dts: add SKOV imx6q and imx6dl based boards
+Message-ID: <20210723030059.GG28658@dragon>
+References: <20210714045349.10963-1-o.rempel@pengutronix.de>
+ <20210714045349.10963-5-o.rempel@pengutronix.de>
+ <YPSNdvUhQ6fCTUjj@ravnborg.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanexm03d.na.qualcomm.com (10.85.0.91) To
- nasanexm03e.na.qualcomm.com (10.85.0.48)
-Message-ID: <20210722212405.6VD1CX2uAqQQ_3_oOO8TWNhW6GMtqfBELyvtHRDupDE@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YPSNdvUhQ6fCTUjj@ravnborg.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 
-From: Vamsi krishna Lanka <quic_vamslank@quicinc.com>
+On Sun, Jul 18, 2021 at 10:22:14PM +0200, Sam Ravnborg wrote:
+> Hi Oleksij,
+> On Wed, Jul 14, 2021 at 06:53:49AM +0200, Oleksij Rempel wrote:
+> > From: Sam Ravnborg <sam@ravnborg.org>
+> 
+> The real author one these dts files are Juergen Borleis IIRC.
+> I made some internal refactoring / renaming which is why I thing git
+> says otherwise.
+> So onless Juergen says otherwise we should give him the author credit.
+> 
+> Arnd - would it be OK if I take the bindings patches through
+> drm-misc-next, and then you can take the DTS files via arm-soc?
 
-This commit adds pincontrol node to SDX65 dts.
+Yeah, it makes sense to send panel-simple.yaml change (patch #1) via drm
+tree.
 
-Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
----
- arch/arm/boot/dts/qcom-sdx65.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
-index fb240213cc35..db269c73c0e9 100644
---- a/arch/arm/boot/dts/qcom-sdx65.dtsi
-+++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
-@@ -79,6 +79,18 @@ blsp1_uart3: serial@831000 {
- 			status = "disabled";
- 		};
- 
-+		tlmm: pinctrl@f100000 {
-+			compatible = "qcom,sdx65-tlmm";
-+			reg = <0xf100000 0x300000>;
-+			interrupts = <GIC_SPI 212 IRQ_TYPE_LEVEL_HIGH>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&tlmm 0 0 109>;
-+			interrupt-controller;
-+			interrupt-parent = <&intc>;
-+			#interrupt-cells = <2>;
-+		};
-+
- 		pdc: interrupt-controller@b210000 {
- 			compatible = "qcom,sdx65-pdc", "qcom,pdc";
- 			reg = <0xb210000 0x10000>;
--- 
-2.32.0
-
+Shawn
