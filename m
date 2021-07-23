@@ -1,228 +1,70 @@
-Return-Path: <SRS0=Eam1=MP=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38D23C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 23 Jul 2021 14:52:13 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 07F9160ED4
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 23 Jul 2021 14:52:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 07F9160ED4
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=VBb6voEH87sLPaR6Sl8rDNlXhd5w7zBNK1dygj6WRew=; b=YI8HGDcG7tiX90
-	quOySV9fdVzD3CBG7t0rIUmND/RceolQEKYPqmwI6ZDkNNhmRLTkDrSLUfVI8QyMqxIEx53VxIjMW
-	z6qSlThfa/Qug6Rf23mDh+cviWEbbevR8BSvYFzGSvDVSVxSRxIb/degYVEMtNONfHGDXZ6PG8T4n
-	r3B32Qo54vo5ZOSr2heJH3lcIdPNNFkx9TOsNiqkaI25fXI16PW8gxi2s8UQHo86P/xla3HKjO3T6
-	hXGTY8yp6xl4wAVd4ZCI0J6uHMbVgHhKtSVEDgCC6J11vx+zVxFEGpugMImCWioQdCkghefOpPWSX
-	BIn3oO8qwEsufML8Dhxw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1m6wVf-0053S5-2J; Fri, 23 Jul 2021 14:50:43 +0000
-Received: from foss.arm.com ([217.140.110.172])
- by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
- id 1m6wVa-0053Qy-01
- for linux-arm-kernel@lists.infradead.org; Fri, 23 Jul 2021 14:50:39 +0000
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E0BD1D6E;
- Fri, 23 Jul 2021 07:50:33 -0700 (PDT)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D9BC93F73D;
- Fri, 23 Jul 2021 07:50:31 -0700 (PDT)
-Date: Fri, 23 Jul 2021 15:50:26 +0100
-From: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To: Arnd Bergmann <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Linus Walleij <linusw@kernel.org>, soc@kernel.org,
- Arnd Bergmann <arnd@arndb.de>, Imre Kaloz <kaloz@openwrt.org>,
- Krzysztof Halasa <khalasa@piap.pl>, Rob Herring <robh@kernel.org>,
- Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
- Bjorn Helgaas <bhelgaas@google.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-pci@vger.kernel.org
-Subject: Re: [PATCH] ARM: ixp4xx: fix building both pci drivers
-Message-ID: <20210723145026.GA3330@lpieralisi>
-References: <20210721151546.2325937-1-arnd@kernel.org>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD4C3C4338F
+	for <soc@archiver.kernel.org>; Fri, 23 Jul 2021 18:43:01 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A32D760F39; Fri, 23 Jul 2021 18:43:01 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B50F60F12;
+	Fri, 23 Jul 2021 18:43:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1627065781;
+	bh=QYqg4gIDhqs1ZAAOUt89PxNpJdd1nRpEaEeaE2yiuJ0=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=lyNwv663UA1uuAm/0W4LHKx9BbRmD53xmGWEV7c7BeblUh5V56PcMwYkYKV76UglF
+	 YI5+UZvo8a4MsrRBDvJKFm29Ug48PumvDFCvJ5jKYhVlSJSxQsMIg5++7Hsq+k6+oJ
+	 pbccAFf+GTmGU72sMaWd8IY4OiiHZjafRwGxHq47dvvackKTpnKr779ic7z0xteGiw
+	 qGN7ZZ6NlHYums5NlZftD18fWRTmak0/jOjk57FvfHtELUrzWinHKnHabcamY78eaw
+	 HUxbS8Do0JT2+wS9eHRSSKXEuT//YkXwM31YW5eF9CXa21U/0EUgC2RVlSw9T6bsm7
+	 1wZN1AVJg39cA==
+Received: by mail-wr1-f48.google.com with SMTP id r2so3388407wrl.1;
+        Fri, 23 Jul 2021 11:43:01 -0700 (PDT)
+X-Gm-Message-State: AOAM5311DbJtbmZha3T3Dj1tcLw1DgYrregTdi2FED4o8G5msBFWPF/8
+	sDgSSBhYfq1Z010NtPpJx99EHCUCBqsL5u0+leI=
+X-Google-Smtp-Source: ABdhPJxoQq2VQ2w6DBydXsB6afqEER/ozdnaFLgwa9gVk2VkfIvkZepq+XzAelVd1ktGQjI+zhUop3cwvl2R/+k55N0=
+X-Received: by 2002:a5d:65cb:: with SMTP id e11mr6966911wrw.105.1627065780129;
+ Fri, 23 Jul 2021 11:43:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210721151546.2325937-1-arnd@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210723_075038_182899_EA0DDCB9 
-X-CRM114-Status: GOOD (  22.70  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210723145026.Jo0fjIGRQubwa13TuX3_Um_SWFcqUMvtBEEuZJqdsLs@z>
+References: <20210721151546.2325937-1-arnd@kernel.org> <20210723145026.GA3330@lpieralisi>
+In-Reply-To: <20210723145026.GA3330@lpieralisi>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Fri, 23 Jul 2021 20:42:44 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2C1JiVmcHnt0aJmvJWQ1Dnqhz5f781FhGWp+UE+=4N1Q@mail.gmail.com>
+Message-ID: <CAK8P3a2C1JiVmcHnt0aJmvJWQ1Dnqhz5f781FhGWp+UE+=4N1Q@mail.gmail.com>
+Subject: Re: [PATCH] ARM: ixp4xx: fix building both pci drivers
+To: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Linus Walleij <linusw@kernel.org>, SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Imre Kaloz <kaloz@openwrt.org>, Krzysztof Halasa <khalasa@piap.pl>, Rob Herring <robh@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-pci <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Jul 21, 2021 at 05:15:22PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> When both the old and the new PCI drivers are enabled
-> in the same kernel, there are a couple of namespace
-> conflicts that cause a build failure:
-> 
-> drivers/pci/controller/pci-ixp4xx.c:38: error: "IXP4XX_PCI_CSR" redefined [-Werror]
->    38 | #define IXP4XX_PCI_CSR                  0x1c
->       |
-> In file included from arch/arm/mach-ixp4xx/include/mach/hardware.h:23,
->                  from arch/arm/mach-ixp4xx/include/mach/io.h:15,
->                  from arch/arm/include/asm/io.h:198,
->                  from include/linux/io.h:13,
->                  from drivers/pci/controller/pci-ixp4xx.c:20:
-> arch/arm/mach-ixp4xx/include/mach/ixp4xx-regs.h:221: note: this is the location of the previous definition
->   221 | #define IXP4XX_PCI_CSR(x) ((volatile u32 *)(IXP4XX_PCI_CFG_BASE_VIRT+(x)))
->       |
-> drivers/pci/controller/pci-ixp4xx.c:148:12: error: 'ixp4xx_pci_read' redeclared as different kind of symbol
->   148 | static int ixp4xx_pci_read(struct ixp4xx_pci *p, u32 addr, u32 cmd, u32 *data)
->       |            ^~~~~~~~~~~~~~~
-> 
-> Rename both the ixp4xx_pci_read/ixp4xx_pci_write functions and the
-> IXP4XX_PCI_CSR macro. In each case, I went with the version that
-> has fewer callers to keep the change small.
-> 
-> Fixes: f7821b493458 ("PCI: ixp4xx: Add a new driver for IXP4xx")
-> Cc: soc@kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  .../mach-ixp4xx/include/mach/ixp4xx-regs.h    | 48 +++++++++----------
->  drivers/pci/controller/pci-ixp4xx.c           |  8 ++--
->  2 files changed, 28 insertions(+), 28 deletions(-)
+On Fri, Jul 23, 2021 at 4:51 PM Lorenzo Pieralisi
+<lorenzo.pieralisi@arm.com> wrote:
 
-Are you picking this up via arm-soc ? I can take this via the PCI tree,
-just let me know:
+> > Fixes: f7821b493458 ("PCI: ixp4xx: Add a new driver for IXP4xx")
+> > Cc: soc@kernel.org
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> >  .../mach-ixp4xx/include/mach/ixp4xx-regs.h    | 48 +++++++++----------
+> >  drivers/pci/controller/pci-ixp4xx.c           |  8 ++--
+> >  2 files changed, 28 insertions(+), 28 deletions(-)
+>
+> Are you picking this up via arm-soc ? I can take this via the PCI tree,
+> just let me know:
+>
+> Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 
-Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+I'm fine either way, if you have other fixes queued up already, please
+add this one
+to your tree.
 
-> diff --git a/arch/arm/mach-ixp4xx/include/mach/ixp4xx-regs.h b/arch/arm/mach-ixp4xx/include/mach/ixp4xx-regs.h
-> index abb07f105515..74e63d4531aa 100644
-> --- a/arch/arm/mach-ixp4xx/include/mach/ixp4xx-regs.h
-> +++ b/arch/arm/mach-ixp4xx/include/mach/ixp4xx-regs.h
-> @@ -218,30 +218,30 @@
->  /*
->   * PCI Control/Status Registers
->   */
-> -#define IXP4XX_PCI_CSR(x) ((volatile u32 *)(IXP4XX_PCI_CFG_BASE_VIRT+(x)))
-> -
-> -#define PCI_NP_AD               IXP4XX_PCI_CSR(PCI_NP_AD_OFFSET)
-> -#define PCI_NP_CBE              IXP4XX_PCI_CSR(PCI_NP_CBE_OFFSET)
-> -#define PCI_NP_WDATA            IXP4XX_PCI_CSR(PCI_NP_WDATA_OFFSET)
-> -#define PCI_NP_RDATA            IXP4XX_PCI_CSR(PCI_NP_RDATA_OFFSET)
-> -#define PCI_CRP_AD_CBE          IXP4XX_PCI_CSR(PCI_CRP_AD_CBE_OFFSET)
-> -#define PCI_CRP_WDATA           IXP4XX_PCI_CSR(PCI_CRP_WDATA_OFFSET)
-> -#define PCI_CRP_RDATA           IXP4XX_PCI_CSR(PCI_CRP_RDATA_OFFSET)
-> -#define PCI_CSR                 IXP4XX_PCI_CSR(PCI_CSR_OFFSET) 
-> -#define PCI_ISR                 IXP4XX_PCI_CSR(PCI_ISR_OFFSET)
-> -#define PCI_INTEN               IXP4XX_PCI_CSR(PCI_INTEN_OFFSET)
-> -#define PCI_DMACTRL             IXP4XX_PCI_CSR(PCI_DMACTRL_OFFSET)
-> -#define PCI_AHBMEMBASE          IXP4XX_PCI_CSR(PCI_AHBMEMBASE_OFFSET)
-> -#define PCI_AHBIOBASE           IXP4XX_PCI_CSR(PCI_AHBIOBASE_OFFSET)
-> -#define PCI_PCIMEMBASE          IXP4XX_PCI_CSR(PCI_PCIMEMBASE_OFFSET)
-> -#define PCI_AHBDOORBELL         IXP4XX_PCI_CSR(PCI_AHBDOORBELL_OFFSET)
-> -#define PCI_PCIDOORBELL         IXP4XX_PCI_CSR(PCI_PCIDOORBELL_OFFSET)
-> -#define PCI_ATPDMA0_AHBADDR     IXP4XX_PCI_CSR(PCI_ATPDMA0_AHBADDR_OFFSET)
-> -#define PCI_ATPDMA0_PCIADDR     IXP4XX_PCI_CSR(PCI_ATPDMA0_PCIADDR_OFFSET)
-> -#define PCI_ATPDMA0_LENADDR     IXP4XX_PCI_CSR(PCI_ATPDMA0_LENADDR_OFFSET)
-> -#define PCI_ATPDMA1_AHBADDR     IXP4XX_PCI_CSR(PCI_ATPDMA1_AHBADDR_OFFSET)
-> -#define PCI_ATPDMA1_PCIADDR     IXP4XX_PCI_CSR(PCI_ATPDMA1_PCIADDR_OFFSET)
-> -#define PCI_ATPDMA1_LENADDR     IXP4XX_PCI_CSR(PCI_ATPDMA1_LENADDR_OFFSET)
-> +#define _IXP4XX_PCI_CSR(x) ((volatile u32 *)(IXP4XX_PCI_CFG_BASE_VIRT+(x)))
-> +
-> +#define PCI_NP_AD               _IXP4XX_PCI_CSR(PCI_NP_AD_OFFSET)
-> +#define PCI_NP_CBE              _IXP4XX_PCI_CSR(PCI_NP_CBE_OFFSET)
-> +#define PCI_NP_WDATA            _IXP4XX_PCI_CSR(PCI_NP_WDATA_OFFSET)
-> +#define PCI_NP_RDATA            _IXP4XX_PCI_CSR(PCI_NP_RDATA_OFFSET)
-> +#define PCI_CRP_AD_CBE          _IXP4XX_PCI_CSR(PCI_CRP_AD_CBE_OFFSET)
-> +#define PCI_CRP_WDATA           _IXP4XX_PCI_CSR(PCI_CRP_WDATA_OFFSET)
-> +#define PCI_CRP_RDATA           _IXP4XX_PCI_CSR(PCI_CRP_RDATA_OFFSET)
-> +#define PCI_CSR                 _IXP4XX_PCI_CSR(PCI_CSR_OFFSET) 
-> +#define PCI_ISR                 _IXP4XX_PCI_CSR(PCI_ISR_OFFSET)
-> +#define PCI_INTEN               _IXP4XX_PCI_CSR(PCI_INTEN_OFFSET)
-> +#define PCI_DMACTRL             _IXP4XX_PCI_CSR(PCI_DMACTRL_OFFSET)
-> +#define PCI_AHBMEMBASE          _IXP4XX_PCI_CSR(PCI_AHBMEMBASE_OFFSET)
-> +#define PCI_AHBIOBASE           _IXP4XX_PCI_CSR(PCI_AHBIOBASE_OFFSET)
-> +#define PCI_PCIMEMBASE          _IXP4XX_PCI_CSR(PCI_PCIMEMBASE_OFFSET)
-> +#define PCI_AHBDOORBELL         _IXP4XX_PCI_CSR(PCI_AHBDOORBELL_OFFSET)
-> +#define PCI_PCIDOORBELL         _IXP4XX_PCI_CSR(PCI_PCIDOORBELL_OFFSET)
-> +#define PCI_ATPDMA0_AHBADDR     _IXP4XX_PCI_CSR(PCI_ATPDMA0_AHBADDR_OFFSET)
-> +#define PCI_ATPDMA0_PCIADDR     _IXP4XX_PCI_CSR(PCI_ATPDMA0_PCIADDR_OFFSET)
-> +#define PCI_ATPDMA0_LENADDR     _IXP4XX_PCI_CSR(PCI_ATPDMA0_LENADDR_OFFSET)
-> +#define PCI_ATPDMA1_AHBADDR     _IXP4XX_PCI_CSR(PCI_ATPDMA1_AHBADDR_OFFSET)
-> +#define PCI_ATPDMA1_PCIADDR     _IXP4XX_PCI_CSR(PCI_ATPDMA1_PCIADDR_OFFSET)
-> +#define PCI_ATPDMA1_LENADDR     _IXP4XX_PCI_CSR(PCI_ATPDMA1_LENADDR_OFFSET)
->  
->  /*
->   * PCI register values and bit definitions 
-> diff --git a/drivers/pci/controller/pci-ixp4xx.c b/drivers/pci/controller/pci-ixp4xx.c
-> index 896a45b24236..654ac4a82beb 100644
-> --- a/drivers/pci/controller/pci-ixp4xx.c
-> +++ b/drivers/pci/controller/pci-ixp4xx.c
-> @@ -145,7 +145,7 @@ static int ixp4xx_pci_check_master_abort(struct ixp4xx_pci *p)
->  	return 0;
->  }
->  
-> -static int ixp4xx_pci_read(struct ixp4xx_pci *p, u32 addr, u32 cmd, u32 *data)
-> +static int ixp4xx_pci_read_indirect(struct ixp4xx_pci *p, u32 addr, u32 cmd, u32 *data)
->  {
->  	ixp4xx_writel(p, IXP4XX_PCI_NP_AD, addr);
->  
-> @@ -170,7 +170,7 @@ static int ixp4xx_pci_read(struct ixp4xx_pci *p, u32 addr, u32 cmd, u32 *data)
->  	return ixp4xx_pci_check_master_abort(p);
->  }
->  
-> -static int ixp4xx_pci_write(struct ixp4xx_pci *p, u32 addr, u32 cmd, u32 data)
-> +static int ixp4xx_pci_write_indirect(struct ixp4xx_pci *p, u32 addr, u32 cmd, u32 data)
->  {
->  	ixp4xx_writel(p, IXP4XX_PCI_NP_AD, addr);
->  
-> @@ -308,7 +308,7 @@ static int ixp4xx_pci_read_config(struct pci_bus *bus, unsigned int devfn,
->  	dev_dbg(p->dev, "read_config from %d size %d dev %d:%d:%d address: %08x cmd: %08x\n",
->  		where, size, bus_num, PCI_SLOT(devfn), PCI_FUNC(devfn), addr, cmd);
->  
-> -	ret = ixp4xx_pci_read(p, addr, cmd, &val);
-> +	ret = ixp4xx_pci_read_indirect(p, addr, cmd, &val);
->  	if (ret)
->  		return PCIBIOS_DEVICE_NOT_FOUND;
->  
-> @@ -356,7 +356,7 @@ static int ixp4xx_pci_write_config(struct pci_bus *bus,  unsigned int devfn,
->  	dev_dbg(p->dev, "write_config_byte %#x to %d size %d dev %d:%d:%d addr: %08x cmd %08x\n",
->  		value, where, size, bus_num, PCI_SLOT(devfn), PCI_FUNC(devfn), addr, cmd);
->  
-> -	ret = ixp4xx_pci_write(p, addr, cmd, val);
-> +	ret = ixp4xx_pci_write_indirect(p, addr, cmd, val);
->  	if (ret)
->  		return PCIBIOS_DEVICE_NOT_FOUND;
->  
-> -- 
-> 2.29.2
-> 
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+       Arnd
