@@ -1,125 +1,69 @@
-Return-Path: <SRS0=Eam1=MP=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=h8Vk=MR=ravnborg.org=sam@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D4A1C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 23 Jul 2021 18:44:23 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34939C4338F
+	for <soc@archiver.kernel.org>; Sun, 25 Jul 2021 12:04:28 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id C308C60F13; Sun, 25 Jul 2021 12:04:27 +0000 (UTC)
+Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6635B60EB4
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 23 Jul 2021 18:44:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6635B60EB4
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=n6qni4gtO1+FNozyXB8MI1R0maref5mSPGAb5jEVViw=; b=ObaH34Gngps6jz
-	23oaGu4d35xDJFJjixzRUIgxv2WEQ04txDBIgpkzaAV7g/AXHeoFJuY+JIYOeM/07KsQEi1bDpyrP
-	fxSdvqbBcGNrSbibFgvwzHGCLcH+42CXSYHk/cb1fBrlyB67HSS7SwY5GbWvNb6E3BEyPPPrxytor
-	5UNNc9S2BsF4ZVmin4dbcj3T7BJzmZ+WKi0MDCvVI8YF8sy25lmwRn/qNEvoWrOx4DBQ2DiCuYa5a
-	57gNLcAdwj410b3GqjMl90nnay59q3WrmSjM0zgw07ZkeR79wxjxqC2yVhFsgBvtHSZkFLtJNBemf
-	zG27w5sGw7xdLu8LjtLA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1m708Y-005gas-1V; Fri, 23 Jul 2021 18:43:06 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1m708U-005gZw-8U
- for linux-arm-kernel@lists.infradead.org; Fri, 23 Jul 2021 18:43:03 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 94D5960F36
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 23 Jul 2021 18:43:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1627065781;
- bh=QYqg4gIDhqs1ZAAOUt89PxNpJdd1nRpEaEeaE2yiuJ0=;
- h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
- b=lyNwv663UA1uuAm/0W4LHKx9BbRmD53xmGWEV7c7BeblUh5V56PcMwYkYKV76UglF
- YI5+UZvo8a4MsrRBDvJKFm29Ug48PumvDFCvJ5jKYhVlSJSxQsMIg5++7Hsq+k6+oJ
- pbccAFf+GTmGU72sMaWd8IY4OiiHZjafRwGxHq47dvvackKTpnKr779ic7z0xteGiw
- qGN7ZZ6NlHYums5NlZftD18fWRTmak0/jOjk57FvfHtELUrzWinHKnHabcamY78eaw
- HUxbS8Do0JT2+wS9eHRSSKXEuT//YkXwM31YW5eF9CXa21U/0EUgC2RVlSw9T6bsm7
- 1wZN1AVJg39cA==
-Received: by mail-wr1-f50.google.com with SMTP id o1so3354153wrp.5
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 23 Jul 2021 11:43:01 -0700 (PDT)
-X-Gm-Message-State: AOAM5313TDbZIz/VzE8Es5MdivDVtFXMAa8STk4qAdMDGWKZExs+xkfX
- zmkigDhdcR2rIFA8jIe9bzKd84WAJEcNGVp/yMA=
-X-Google-Smtp-Source: ABdhPJxoQq2VQ2w6DBydXsB6afqEER/ozdnaFLgwa9gVk2VkfIvkZepq+XzAelVd1ktGQjI+zhUop3cwvl2R/+k55N0=
-X-Received: by 2002:a5d:65cb:: with SMTP id e11mr6966911wrw.105.1627065780129; 
- Fri, 23 Jul 2021 11:43:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210721151546.2325937-1-arnd@kernel.org>
- <20210723145026.GA3330@lpieralisi>
-In-Reply-To: <20210723145026.GA3330@lpieralisi>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 23 Jul 2021 20:42:44 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2C1JiVmcHnt0aJmvJWQ1Dnqhz5f781FhGWp+UE+=4N1Q@mail.gmail.com>
-Message-ID: <CAK8P3a2C1JiVmcHnt0aJmvJWQ1Dnqhz5f781FhGWp+UE+=4N1Q@mail.gmail.com>
-Subject: Re: [PATCH] ARM: ixp4xx: fix building both pci drivers
-To: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 0C82B60E09
+	for <soc@kernel.org>; Sun, 25 Jul 2021 12:04:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0C82B60E09
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=ravnborg.org
+Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
+	by mx1.smtp.larsendata.com (Halon) with ESMTPS
+	id 779d7b10-ed40-11eb-9082-0050568c148b;
+	Sun, 25 Jul 2021 12:04:30 +0000 (UTC)
+Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	(Authenticated sender: sam@ravnborg.org)
+	by mail01.mxhotel.dk (Postfix) with ESMTPSA id 3B24D194B1A;
+	Sun, 25 Jul 2021 14:04:43 +0200 (CEST)
+Date: Sun, 25 Jul 2021 14:04:22 +0200
+X-Report-Abuse-To: abuse@mxhotel.dk
+From: Sam Ravnborg <sam@ravnborg.org>
+To: Oleksij Rempel <o.rempel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Walleij <linusw@kernel.org>, SoC Team <soc@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, 
- Imre Kaloz <kaloz@openwrt.org>, Krzysztof Halasa <khalasa@piap.pl>,
- Rob Herring <robh@kernel.org>, 
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
- Bjorn Helgaas <bhelgaas@google.com>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>, 
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-pci <linux-pci@vger.kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210723_114302_361834_CBDC3D84 
-X-CRM114-Status: GOOD (  12.06  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210723184244.e1FJjreucDJ6gLg6xv4SPyYHxzmwRFFwFnFIabaJYTA@z>
+Cc: Arnd Bergmann <arnd@arndb.de>, Daniel Vetter <daniel@ffwll.ch>,
+	David Airlie <airlied@linux.ie>, Olof Johansson <olof@lixom.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>, soc@kernel.org,
+	Thierry Reding <thierry.reding@gmail.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: display: simple: add some Logic
+ Technologies and Multi-Inno panels
+Message-ID: <YP1TRtiWkJDG76Fr@ravnborg.org>
+References: <20210714045349.10963-1-o.rempel@pengutronix.de>
+ <20210714045349.10963-2-o.rempel@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210714045349.10963-2-o.rempel@pengutronix.de>
 
-On Fri, Jul 23, 2021 at 4:51 PM Lorenzo Pieralisi
-<lorenzo.pieralisi@arm.com> wrote:
+Hi Oleksij,
 
-> > Fixes: f7821b493458 ("PCI: ixp4xx: Add a new driver for IXP4xx")
-> > Cc: soc@kernel.org
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  .../mach-ixp4xx/include/mach/ixp4xx-regs.h    | 48 +++++++++----------
-> >  drivers/pci/controller/pci-ixp4xx.c           |  8 ++--
-> >  2 files changed, 28 insertions(+), 28 deletions(-)
->
-> Are you picking this up via arm-soc ? I can take this via the PCI tree,
-> just let me know:
->
-> Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+On Wed, Jul 14, 2021 at 06:53:46AM +0200, Oleksij Rempel wrote:
+> Add Logictechno and Multi-Inno panels:
+> - Logic Technologies LTTD800x480 L2RT 7" 800x480 TFT Resistive Touch Module
+> - Logic Technologies LTTD800480070-L6WH-RT 7” 800x480 TFT Resistive Touch Module
+> - Multi-Inno Technology Co.,Ltd MI1010AIT-1CP 10.1" 1280x800 LVDS IPS Cap Touch Mod.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-I'm fine either way, if you have other fixes queued up already, please
-add this one
-to your tree.
+Added to drm-misc-next with Rob's ack.
 
-       Arnd
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+	Sam
