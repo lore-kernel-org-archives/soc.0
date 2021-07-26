@@ -1,155 +1,129 @@
-Return-Path: <SRS0=oDMb=MS=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=7Wv3=MS=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80BE7C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 26 Jul 2021 02:34:44 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 458CAC4320A
+	for <soc@archiver.kernel.org>; Mon, 26 Jul 2021 08:10:43 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 23FD660F9F; Mon, 26 Jul 2021 08:10:43 +0000 (UTC)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4A7E160F11
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 26 Jul 2021 02:34:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4A7E160F11
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Subject:Cc:To:
-	From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=sVnJ2uStbxViPH3sFWdZWn5hvvAUe12rm6stgqI4oWA=; b=fFbd9JlNkVUcYP
-	jYBDwprqMchs6qeAhqyP4K4II/22rvbfKRNcl7bgOfIacXnbZxceC2aTB1OcdoO1AgiUn1eJL07Q5
-	6LGLiHn8hf/caQ8KhU/+XA3+FeSjhd7KITfMFl88jOqvG+Aek5RY3pMEUs+b9qaY/D9Nq9kWX2/Rp
-	74KXu+92u8K+3GkBeTMMqD8rPzwTZtjQLhkiK2mwVZhkeYUyTjwSAg/GsF+nH3q1+R1R6MwfMkspg
-	IAf7PsBAjJb7UQR/9ZMKgJXoSFZYzYi4Ugcl1ynAvllKIGyKJdH16mJZL9bmhpzPg4PTGdr+Tj8VQ
-	AfmUjFUs7up8f6P9YsRg==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1m7qPv-009R42-9A; Mon, 26 Jul 2021 02:32:31 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1m7qPs-009R3i-4Q
- for linux-arm-kernel@lists.infradead.org; Mon, 26 Jul 2021 02:32:29 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 345176052B;
- Mon, 26 Jul 2021 02:32:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1627266747;
- bh=f9+bxKqv/Sbfs02pnB0L78IU7T9ttqigp+msLHtScBs=;
- h=Date:From:List-Id:To:Cc:Subject:From;
- b=Zk+KQkClTxsxyaeayzoVYG+zkvbvhNUcfyw4YRy4FS4/uxcOhurAEkUiMIegbeaeB
- f0HHoy2q5C2aG7Vot4ofJ+aVN90C+40E8vq5K3Zj+dhNxKLHXtJDx0R1LJ5kt0eA/A
- RtWSQGqPIHJuMbQqns1x5boRP1tcUelAcS8w4F1KDVfAc/FlqiaZevJMzVVvynTu/F
- XgQOGOwpBaBu9b5qkOiKhaL3vmwyXvOlGF0q/RHk3Tf9kPkMdh7SVTLY/XT8wiJj5W
- NdRqFLAdtiMalfPx+d5IhkIV1bilKB/diHhDVnrT7N1lIrfsiApRDk6J41FvNk2BQ3
- 6HwkYfEMpoHwg==
-Date: Mon, 26 Jul 2021 10:32:22 +0800
-From: Shawn Guo <shawnguo@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id E91E260F52
+	for <soc@kernel.org>; Mon, 26 Jul 2021 08:10:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E91E260F52
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id a26so13879649lfr.11
+        for <soc@kernel.org>; Mon, 26 Jul 2021 01:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=uhBYFS3kcrFSzUp+99m4qpuPqHmdy7DA1vxoHG2YpBo=;
+        b=NMqlYTqW/lndtqqHyPiFLM6rKPoHHYZHYwW7+jnlb6T8g26zSGu5wBdOgmvlgttoD9
+         ubbH32dNkwfzgC+9alfK8agoc5+COrbTU16cAPLPc333Mldr2cuGOuezk7zKUQO3kGum
+         TJbTAPv4dtvb2SGwq2VENVB9H7UNNgi3tTd1qvmbPAWgURCGGrNAeAs728bElIhjRDps
+         CRqGXwAF5zVT3SWVH68uW9QD5hMaS/Q8opTCkca7GuJIU1QrNYZyrX9L7Akzi8CJva+C
+         6zl9IGO84AdkjSfN70jgi5fo1Ra+6yy+jIvL2cb2kwAL1LSaLnzmt1iXfDN1tb/vKTi+
+         7+fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=uhBYFS3kcrFSzUp+99m4qpuPqHmdy7DA1vxoHG2YpBo=;
+        b=q7BJ9L039bQ+qfzulqSiwB9hMPyFw78DgCSt7vU/1TpvrmRjmrp4MZpPG7Ook2UEKG
+         qPSQSfoethtnkJGub5OD1J0+6aQ8b2I6RNhYw1b1PP1TrK/JEOLp3P0WmPdc97+yqw0m
+         /C+IfyeNrlwd3tYRiWEMWPpXR2jbhRZfRZau0+mIds0Nm/LdIqQr20gD8OMS/b8bSWVA
+         rh6VJf+oblzw3GsENQ3jbwJAUUr1pkbx+J79R6hABlMN1WvX/kppIS71FfkaDdcILJMr
+         ZoZFp54Zo8YMOU1ka0MSVuWwWSTQnTRasi6Wu2/o1OKCZ2smdLnvMKBHOnXxvpEtGgsH
+         1BMw==
+X-Gm-Message-State: AOAM5331PFeIXBU0naTASIdBkFO3FYqXH+pCFrBqLIzltVjxuQukdGLA
+	bNwKfwAbGBxQldphKUr2sd3HfXUu5/hIMg==
+X-Google-Smtp-Source: ABdhPJzr0Z5y4Twf5n/G2SkMcR8Be0DIW4CEwE7lwxefCBKqF7n4oehjLY7Ar8Nd/ya3HmLfUYdS9w==
+X-Received: by 2002:ac2:4e09:: with SMTP id e9mr12539781lfr.431.1627287041314;
+        Mon, 26 Jul 2021 01:10:41 -0700 (PDT)
+Received: from jade (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
+        by smtp.gmail.com with ESMTPSA id t7sm2973379lfc.103.2021.07.26.01.10.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jul 2021 01:10:41 -0700 (PDT)
+Date: Mon, 26 Jul 2021 10:10:39 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
- Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
- linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 5.14
-Message-ID: <20210726023221.GF5901@dragon>
+To: arm@kernel.org, soc@kernel.org
+Cc: op-tee@lists.trustedfirmware.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Sumit Garg <sumit.garg@linaro.org>,
+	Tyler Hicks <tyhicks@linux.microsoft.com>
+Subject: [GIT PULL] TEE kexec fixes for v5.14
+Message-ID: <20210726081039.GA2482361@jade>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210725_193228_239721_270A4CD5 
-X-CRM114-Status: GOOD (  10.63  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210726023222.wMpNFn1r-WU8SyY7VBgw2XN1eWl6RshpC_7ZZW9j3Es@z>
 
-The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+Hello arm-soc maintainers,
 
-  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+Please pull these fixes relating to OP-TEE, ftpm (firmware TPM), and
+tee_bnxt_fw (Broadcom BNXT firmware manager) drivers in kexec and kdump
+(emergency kexec) based workflows.
+
+The two patches "firmware: tee_bnxt: Release TEE shm, session, and context
+during kexec" and "tpm_ftpm_tee: Free and unregister TEE shared memory
+during kexec" are acked by their respective maintainers.
+
+For more details please see the description of the last patch set
+https://lore.kernel.org/lkml/20210614223317.999867-1-tyhicks@linux.microsoft.com/
+
+Thanks,
+Jens
+
+The following changes since commit 2734d6c1b1a089fb593ef6a23d4b70903526fe0c:
+
+  Linux 5.14-rc2 (2021-07-18 14:13:49 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.14
+  git://git.linaro.org:/people/jens.wiklander/linux-tee.git tags/tee-kexec-fixes-for-v5.14
 
-for you to fetch changes up to 3d9e30a52047f2d464efdfd1d561ae1f707a0286:
+for you to fetch changes up to 914ab19e471d8fb535ed50dff108b0a615f3c2d8:
 
-  ARM: dts: imx: Swap M53Menlo pinctrl_power_button/pinctrl_power_out pins (2021-07-23 16:14:07 +0800)
-
-----------------------------------------------------------------
-i.MX fixes for 5.14:
-
-- A couple of fixes on MMDC driver to add missing iounmap() and
-  clk_disable_unprepare(), and a follow-up fix.
-- Fix missing-prototypes warning in SRC driver.
-- Revert commit 7d981405d0fd ("soc: imx8m: change to use platform
-  driver"), which breaks i.MX8M system that has CAAM driver enabled.
-- One fix on imx53-m53menlo pinctrl configuration.
-- Increase the PHY reset duration for imx6qdl-sr-som to fix intermittent
-  issues where the PHY would be unresponsive every once in a while.
-- Add missing flag for in-band signalling between PHY and MAC on
-  kontron-sl28-var2 board to fix network support.
-- Limit the SDIO Clock on Colibri iMX6ULL to 25MHz for fixing wireless
-  noise issue.
-- Fix sysclk node name for LS1028A so that U-Boot is able to update the
-  "clock-frequency" property.
+  firmware: tee_bnxt: Release TEE shm, session, and context during kexec (2021-07-21 07:55:50 +0200)
 
 ----------------------------------------------------------------
-Colin Ian King (1):
-      ARM: imx: fix missing 3rd argument in macro imx_mmdc_perf_init
+tee: Improve support for kexec and kdump
 
-Fabio Estevam (1):
-      ARM: imx: common: Move prototype outside the SMP block
+This fixes several bugs uncovered while exercising the OP-TEE, ftpm
+(firmware TPM), and tee_bnxt_fw (Broadcom BNXT firmware manager) drivers
+with kexec and kdump (emergency kexec) based workflows.
 
-Lucas Stach (1):
-      Revert "soc: imx8m: change to use platform driver"
+----------------------------------------------------------------
+Allen Pais (2):
+      optee: fix tee out of memory failure seen during kexec reboot
+      firmware: tee_bnxt: Release TEE shm, session, and context during kexec
 
-Marek Vasut (1):
-      ARM: dts: imx: Swap M53Menlo pinctrl_power_button/pinctrl_power_out pins
+Jens Wiklander (1):
+      tee: add tee_shm_alloc_kernel_buf()
 
-Maxime Chevallier (1):
-      ARM: dts: imx6qdl-sr-som: Increase the PHY reset duration to 10ms
+Sumit Garg (1):
+      tee: Correct inappropriate usage of TEE_SHM_DMA_BUF flag
 
-Michael Walle (1):
-      arm64: dts: ls1028: sl28: fix networking for variant 2
+Tyler Hicks (4):
+      optee: Fix memory leak when failing to register shm pages
+      optee: Refuse to load the driver under the kdump kernel
+      optee: Clear stale cache entries during initialization
+      tpm_ftpm_tee: Free and unregister TEE shared memory during kexec
 
-Oleksandr Suvorov (1):
-      ARM: dts: colibri-imx6ull: limit SDIO clock to 25MHz
-
-Vladimir Oltean (1):
-      arm64: dts: ls1028a: fix node name for the sysclk
-
-Yang Yingliang (2):
-      ARM: imx: add missing iounmap()
-      ARM: imx: add missing clk_disable_unprepare()
-
- arch/arm/boot/dts/imx53-m53menlo.dts               |  4 +-
- arch/arm/boot/dts/imx6qdl-sr-som.dtsi              |  8 ++-
- arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi        |  1 +
- arch/arm/mach-imx/common.h                         |  2 +-
- arch/arm/mach-imx/mmdc.c                           | 17 ++++-
- .../freescale/fsl-ls1028a-kontron-sl28-var2.dts    |  2 +
- arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi     |  2 +-
- drivers/soc/imx/soc-imx8m.c                        | 84 ++++------------------
- 8 files changed, 40 insertions(+), 80 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ drivers/char/tpm/tpm_ftpm_tee.c         |  8 +++---
+ drivers/firmware/broadcom/tee_bnxt_fw.c | 14 ++++++++---
+ drivers/tee/optee/call.c                | 38 ++++++++++++++++++++++++++---
+ drivers/tee/optee/core.c                | 43 ++++++++++++++++++++++++++++++++-
+ drivers/tee/optee/optee_private.h       |  1 +
+ drivers/tee/optee/rpc.c                 |  5 ++--
+ drivers/tee/optee/shm_pool.c            | 20 ++++++++++++---
+ drivers/tee/tee_shm.c                   | 20 ++++++++++++++-
+ include/linux/tee_drv.h                 |  2 ++
+ 9 files changed, 132 insertions(+), 19 deletions(-)
