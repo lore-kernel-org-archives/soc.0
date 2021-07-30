@@ -1,85 +1,60 @@
-Return-Path: <SRS0=BD2L=MW=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DCFCC4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 13:49:03 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1A79960EFF
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 13:49:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1A79960EFF
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=biot.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=WX404QiCec8PseE8eRHC8q1BJlFQS6oaBsQDVUTRvsc=; b=eOu6FpoP1ZIQ0g
-	TnKftOp7tqaJ/tM38/dVjRn+gfxIewZWsoe/hqwXTQYqkadFxMtQL3VyUBHHD1/eIYtS2dGlT4VWF
-	ot9Tg8x+rQsW0OlqHYcUjkIiEpynjLFevPyddm4KGJ7zW4isfsCLrw1+DFRowFKV6nw/NtulIrVTD
-	SZS6+wZrCs0DkXWSWdXBzk1BIezbhDEz3Gnwgtg7spn3GNie7MP78Z2hMa2q5+TLyRxIuqiubVT7t
-	C51GlGMbVygpuSegpu23BhO24JilKhC4bk5op1BZWxUUxUkzBGW7db6qNZ/kjmhQ0auIGglmsreSm
-	7rWQ07OHhFWKN4yvXVNw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1m9Sqe-008pFU-6N; Fri, 30 Jul 2021 13:46:48 +0000
-Received: from yawp.biot.com ([2a01:4f8:10a:8e::fce2])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1m9Sq4-008p7a-CN
- for linux-arm-kernel@lists.infradead.org; Fri, 30 Jul 2021 13:46:13 +0000
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02D09C432BE
+	for <linux-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 13:53:57 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id DF74560EFF
+	for <linux-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 13:53:56 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S239110AbhG3Nx6 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Fri, 30 Jul 2021 09:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239095AbhG3Nxz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 30 Jul 2021 09:53:55 -0400
+Received: from yawp.biot.com (yawp.biot.com [IPv6:2a01:4f8:10a:8e::fce2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09401C061796
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jul 2021 06:53:51 -0700 (PDT)
 Received: from debian-spamd by yawp.biot.com with sa-checked (Exim 4.93)
- (envelope-from <bert@biot.com>) id 1m9Sq2-006bVm-Rh
- for linux-arm-kernel@lists.infradead.org; Fri, 30 Jul 2021 15:46:11 +0200
+        (envelope-from <bert@biot.com>)
+        id 1m9Spz-006bUY-Nf
+        for linux-kernel@vger.kernel.org; Fri, 30 Jul 2021 15:46:07 +0200
 Received: from [2a02:578:460c:1:ae1f:6bff:fed1:9ca8] (helo=sumner.biot.com)
- by yawp.biot.com with esmtps (TLS1.3) tls
- TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.93)
- (envelope-from <bert@biot.com>)
- id 1m9Spw-006bTh-8k; Fri, 30 Jul 2021 15:46:04 +0200
+        by yawp.biot.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <bert@biot.com>)
+        id 1m9Spw-006bTh-8k; Fri, 30 Jul 2021 15:46:04 +0200
 Received: from bert by sumner.biot.com with local (Exim 4.93)
- (envelope-from <bert@biot.com>)
- id 1m9Spv-003a1j-PJ; Fri, 30 Jul 2021 15:46:03 +0200
-From: Bert Vermeulen <bert@biot.com>
+        (envelope-from <bert@biot.com>)
+        id 1m9Spv-003a1j-PJ; Fri, 30 Jul 2021 15:46:03 +0200
+From:   Bert Vermeulen <bert@biot.com>
 List-Id: <soc.lore.kernel.org>
-To: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>
-Cc: Bert Vermeulen <bert@biot.com>, John Crispin <john@phrozen.org>,
- Felix Fietkau <nbd@nbd.name>
+To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>
+Cc:     Bert Vermeulen <bert@biot.com>, John Crispin <john@phrozen.org>,
+        Felix Fietkau <nbd@nbd.name>
 Subject: [PATCH 3/5] ARM: dts: Add basic support for EcoNet EN7523
-Date: Fri, 30 Jul 2021 15:45:50 +0200
-Message-Id: <20210730134552.853350-4-bert@biot.com>
+Date:   Fri, 30 Jul 2021 15:45:50 +0200
+Message-ID: <20210730134552.853350-4-bert@biot.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210730134552.853350-1-bert@biot.com>
 References: <20210730134552.853350-1-bert@biot.com>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210730_064612_468454_293025F2 
-X-CRM114-Status: GOOD (  15.66  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Content-Transfer-Encoding: 8bit
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210730134550.RrVa8mW_tIKotEXRu51wVhf3Q4FhrYIyuOrrVK98wEY@z>
 
 From: John Crispin <john@phrozen.org>
 
@@ -271,8 +246,3 @@ index 000000000000..f4fe1c6f66e8
 -- 
 2.25.1
 
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
