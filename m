@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D204C4320E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDE79C4320A
 	for <soc@archiver.kernel.org>; Fri, 30 Jul 2021 13:19:09 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 2070A60F94; Fri, 30 Jul 2021 13:19:09 +0000 (UTC)
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
+	id 8A72660F5C; Fri, 30 Jul 2021 13:19:09 +0000 (UTC)
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 54C9860F5C
+	by mail.kernel.org (Postfix) with ESMTPS id AFD4461050
 	for <soc@kernel.org>; Fri, 30 Jul 2021 13:19:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 54C9860F5C
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AFD4461050
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:69f0:c617:e432:6919])
-	by baptiste.telenet-ops.be with bizsmtp
-	id bRK62500B2oLRg901RK65G; Fri, 30 Jul 2021 15:19:06 +0200
+	by xavier.telenet-ops.be with bizsmtp
+	id bRK62500T2oLRg901RK6vS; Fri, 30 Jul 2021 15:19:06 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1m9SPp-002GQs-Vp; Fri, 30 Jul 2021 15:19:05 +0200
+	id 1m9SPq-002GQq-3t; Fri, 30 Jul 2021 15:19:06 +0200
 Received: from geert by rox.of.borg with local (Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1m9SPp-00HJs6-Ho; Fri, 30 Jul 2021 15:19:05 +0200
+	id 1m9SPp-00HJrs-GP; Fri, 30 Jul 2021 15:19:05 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>,
@@ -38,36 +38,134 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 3/3] Renesas DT binding updates for v5.15
-Date: Fri, 30 Jul 2021 15:18:56 +0200
-Message-Id: <cover.1627650706.git.geert+renesas@glider.be>
+Subject: [GIT PULL 1/3] Renesas ARM DT updates for v5.15
+Date: Fri, 30 Jul 2021 15:18:54 +0200
+Message-Id: <cover.1627650696.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1627650695.git.geert+renesas@glider.be>
 References: <cover.1627650695.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+The following changes since commit 2734d6c1b1a089fb593ef6a23d4b70903526fe0c:
 
-  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+  Linux 5.14-rc2 (2021-07-18 14:13:49 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v5.15-tag1
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.15-tag1
 
-for you to fetch changes up to 3e82868e8523d5426f76866863704b02adacac3e:
+for you to fetch changes up to 651f8cffade8615bb4fce1ecb3a929892c5e60d7:
 
-  dt-bindings: arm: renesas: Document R-Car H3e-2G and M3e-2G SoCs and boards (2021-07-27 09:26:16 +0200)
-
-----------------------------------------------------------------
-Renesas DT binding updates for v5.15
-
-  - Document support for the new R-Car H3e-2G and M3e-2G SoCs and
-    boards.
+  arm64: dts: renesas: r8a77961: Add iommus to ipmmu_ds[01] related nodes (2021-07-30 15:07:25 +0200)
 
 ----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      dt-bindings: arm: renesas: Document R-Car H3e-2G and M3e-2G SoCs and boards
+Renesas ARM DT updates for v5.15
 
- Documentation/devicetree/bindings/arm/renesas.yaml | 50 +++++++++++++++++-----
- 1 file changed, 39 insertions(+), 11 deletions(-)
+  - Switches support for the Draak and Ebisu development boards,
+  - I2C support on RZ/G2L,
+  - I2C EEPROM support on the Ebisu development board,
+  - Sound support for the R-Car D3 SoC and the Draak development board,
+  - Support for the new R-Car H3e-2G and M3e-2G SoCs on the Salvator-XS
+    and ULCB development boards,
+  - IOMMU support for DMAC, EtherAVB, and SDHI on the R-Car M3-W+ SoC,
+  - Miscellaneous fixes and improvements.
+
+----------------------------------------------------------------
+Adam Ford (1):
+      arm64: dts: renesas: beacon: Enable micbias
+
+Biju Das (2):
+      arm64: dts: renesas: r9a07g044: Add I2C nodes
+      arm64: dts: renesas: hihope-rzg2-ex: Add EtherAVB internal rx delay
+
+Geert Uytterhoeven (21):
+      arm64: dts: renesas: salvator-x(s): Factor out HDMI1 parts
+      arm64: dts: renesas: salvator-x(s): Factor out SATA parts
+      arm64: dts: renesas: salvator-x(s): Factor out USB ch2 parts
+      arm64: dts: renesas: salvator-xs: Factor out USB ch3 parts
+      ARM: dts: r8a73a4: Remove non-functional DMA support
+      ARM: dts: rzg1: Add generic compatible strings to IIC nodes
+      arm64: dts: renesas: r8a774c0: Add generic compatible string to IIC node
+      arm64: dts: renesas: r8a77990: Add generic compatible string to IIC node
+      arm64: dts: renesas: rzg2: Rename i2c_dvfs to iic_pmic
+      arm64: dts: renesas: r8a779a0: Restore sort order
+      arm64: dts: renesas: r8a77995: draak: Remove bogus adv7511w properties
+      arm64: dts: renesas: r8a77990: ebisu: Add I2C EEPROM for PMIC
+      arm64: dts: renesas: rcar-gen3: Add SoC model to comment headers
+      arm64: dts: renesas: Add Renesas R8A779M1 SoC support
+      arm64: dts: renesas: Add Renesas R8A779M3 SoC support
+      arm64: dts: renesas: Add support for Salvator-XS with R-Car H3e-2G
+      arm64: dts: renesas: Add support for H3ULCB with R-Car H3e-2G
+      arm64: dts: renesas: Add support for H3ULCB+Kingfisher with R-Car H3e-2G
+      arm64: dts: renesas: Add support for Salvator-XS with R-Car M3e-2G
+      arm64: dts: renesas: Add support for M3ULCB with R-Car M3e-2G
+      arm64: dts: renesas: Add support for M3ULCB+Kingfisher with R-Car M3e-2G
+
+Kuninori Morimoto (2):
+      arm64: dts: renesas: r8a77995: Add R-Car Sound support
+      arm64: dts: renesas: r8a77995: draak: Add R-Car Sound support
+
+Magnus Damm (2):
+      arm64: dts: renesas: r8a77995: draak: Add SW56 support
+      arm64: dts: renesas: r8a77990: ebisu: Add SW4 support
+
+Yoshihiro Shimoda (1):
+      arm64: dts: renesas: r8a77961: Add iommus to ipmmu_ds[01] related nodes
+
+ arch/arm/boot/dts/r8a73a4.dtsi                     |  44 ------
+ arch/arm/boot/dts/r8a7742.dtsi                     |   4 +-
+ arch/arm/boot/dts/r8a7743.dtsi                     |   4 +-
+ arch/arm/boot/dts/r8a7744.dtsi                     |   4 +-
+ arch/arm64/boot/dts/renesas/Makefile               |   8 +
+ .../boot/dts/renesas/beacon-renesom-baseboard.dtsi |   8 +
+ arch/arm64/boot/dts/renesas/hihope-rzg2-ex.dtsi    |   1 +
+ arch/arm64/boot/dts/renesas/r8a774a1.dtsi          |   4 +-
+ arch/arm64/boot/dts/renesas/r8a774b1.dtsi          |   2 +-
+ arch/arm64/boot/dts/renesas/r8a774c0.dtsi          |   8 +-
+ .../arm64/boot/dts/renesas/r8a77950-salvator-x.dts |  73 ---------
+ arch/arm64/boot/dts/renesas/r8a77950-ulcb-kf.dts   |   2 +-
+ arch/arm64/boot/dts/renesas/r8a77950-ulcb.dts      |   2 +-
+ arch/arm64/boot/dts/renesas/r8a77950.dtsi          |   2 +
+ .../arm64/boot/dts/renesas/r8a77951-salvator-x.dts |  73 ---------
+ .../boot/dts/renesas/r8a77951-salvator-xs.dts      | 122 ---------------
+ arch/arm64/boot/dts/renesas/r8a77951-ulcb-kf.dts   |   2 +-
+ arch/arm64/boot/dts/renesas/r8a77951-ulcb.dts      |   2 +-
+ arch/arm64/boot/dts/renesas/r8a77951.dtsi          |   5 +
+ arch/arm64/boot/dts/renesas/r8a77960-ulcb-kf.dts   |   2 +-
+ arch/arm64/boot/dts/renesas/r8a77960-ulcb.dts      |   2 +-
+ arch/arm64/boot/dts/renesas/r8a77961-ulcb-kf.dts   |   2 +-
+ arch/arm64/boot/dts/renesas/r8a77961-ulcb.dts      |   3 +-
+ arch/arm64/boot/dts/renesas/r8a77961.dtsi          |  29 ++++
+ .../boot/dts/renesas/r8a77965-salvator-xs.dts      |  14 --
+ arch/arm64/boot/dts/renesas/r8a77965-ulcb-kf.dts   |   2 +-
+ arch/arm64/boot/dts/renesas/r8a77965-ulcb.dts      |   2 +-
+ arch/arm64/boot/dts/renesas/r8a77965.dtsi          |   2 +
+ arch/arm64/boot/dts/renesas/r8a77970-eagle.dts     |   2 +-
+ arch/arm64/boot/dts/renesas/r8a77980-condor.dts    |   2 +-
+ arch/arm64/boot/dts/renesas/r8a77990-ebisu.dts     |  50 +++++-
+ arch/arm64/boot/dts/renesas/r8a77990.dtsi          |   6 +-
+ arch/arm64/boot/dts/renesas/r8a77995-draak.dts     | 169 ++++++++++++++++++++-
+ arch/arm64/boot/dts/renesas/r8a77995.dtsi          | 158 +++++++++++++++++++
+ arch/arm64/boot/dts/renesas/r8a779a0-falcon.dts    |   2 +-
+ arch/arm64/boot/dts/renesas/r8a779a0.dtsi          |  26 ++--
+ .../boot/dts/renesas/r8a779m1-salvator-xs.dts      |  53 +++++++
+ arch/arm64/boot/dts/renesas/r8a779m1-ulcb-kf.dts   |  19 +++
+ arch/arm64/boot/dts/renesas/r8a779m1-ulcb.dts      |  54 +++++++
+ arch/arm64/boot/dts/renesas/r8a779m1.dtsi          |  12 ++
+ .../boot/dts/renesas/r8a779m3-salvator-xs.dts      |  46 ++++++
+ arch/arm64/boot/dts/renesas/r8a779m3-ulcb-kf.dts   |  18 +++
+ arch/arm64/boot/dts/renesas/r8a779m3-ulcb.dts      |  45 ++++++
+ arch/arm64/boot/dts/renesas/r8a779m3.dtsi          |  12 ++
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi         |  80 ++++++++++
+ arch/arm64/boot/dts/renesas/salvator-common.dtsi   |  76 ++++++++-
+ arch/arm64/boot/dts/renesas/salvator-xs.dtsi       |  56 +++++++
+ 47 files changed, 943 insertions(+), 371 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779m1-salvator-xs.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779m1-ulcb-kf.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779m1-ulcb.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779m1.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779m3-salvator-xs.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779m3-ulcb-kf.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779m3-ulcb.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779m3.dtsi
