@@ -1,28 +1,47 @@
-Return-Path: <SRS0=1xz3=MW=arm.com=andre.przywara@kernel.org>
+Return-Path: <SRS0=BD2L=MW=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E954BC4338F
-	for <soc@archiver.kernel.org>; Fri, 30 Jul 2021 16:47:50 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id CE1C260E09; Fri, 30 Jul 2021 16:47:50 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by mail.kernel.org (Postfix) with ESMTP id 65E0B60720;
-	Fri, 30 Jul 2021 16:47:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 65E0B60720
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C12B2C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 16:49:36 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 8DBBB60720
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 16:49:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8DBBB60720
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=arm.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=UlwPr5viainibwjjS9E9vZjf8ZIB3GI5wuKIyIsRagU=; b=dDkTijktZvusW3
+	P5r4Qxz7E+ys5gIg5r+XlzVG0BoMDxt0nIA/UuOVTyM4T+TXbIf46oMt/Mnk+YcV4rFe4GxOpI+TC
+	NHNIjCUzYRAWsGLkivGl9Rmr8wwSpRdQoHF/qLxB1/Y132jV9gKBpyyrw3ZVXzBew0HQZbYQPZIus
+	fw3hpr/sdNOu7sazx6cuLABICtESShgd8N9EfZQZeFKS60/qOEATgzD+9B89qyunWRfh22WASoGQg
+	VL9v6lB0gqoIT0XzUzEpyophBu1Fr0n3hBtNKL8riXr8QY+OFfFwuBmH61oHXn7zautS96m054wqu
+	xnqHrCNKbWS1fgnfBq3Q==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1m9Vfw-009Y5C-D4; Fri, 30 Jul 2021 16:47:56 +0000
+Received: from foss.arm.com ([217.140.110.172])
+ by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1m9Vfr-009Y4P-Ts
+ for linux-arm-kernel@lists.infradead.org; Fri, 30 Jul 2021 16:47:53 +0000
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE53F113E;
-	Fri, 30 Jul 2021 09:47:49 -0700 (PDT)
+ by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE53F113E;
+ Fri, 30 Jul 2021 09:47:49 -0700 (PDT)
 Received: from slackpad.fritz.box (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 35DB03F66F;
-	Fri, 30 Jul 2021 09:47:48 -0700 (PDT)
+ by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 35DB03F66F;
+ Fri, 30 Jul 2021 09:47:48 -0700 (PDT)
 Date: Fri, 30 Jul 2021 17:47:04 +0100
 From: Andre Przywara <andre.przywara@arm.com>
 To: Bert Vermeulen <bert@biot.com>
@@ -36,12 +55,29 @@ Subject: Re: [PATCH 3/5] ARM: dts: Add basic support for EcoNet EN7523
 Message-ID: <20210730174704.48c9a94f@slackpad.fritz.box>
 In-Reply-To: <20210730134552.853350-4-bert@biot.com>
 References: <20210730134552.853350-1-bert@biot.com>
-	<20210730134552.853350-4-bert@biot.com>
+ <20210730134552.853350-4-bert@biot.com>
 Organization: Arm Ltd.
 X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210730_094752_159131_D846F140 
+X-CRM114-Status: GOOD (  21.30  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210730164704.-oNOnCxAKG3zD3MbhccN4LBuZ_6XEwpcMrvPfCYbZkc@z>
 
 On Fri, 30 Jul 2021 15:45:50 +0200
 Bert Vermeulen <bert@biot.com> wrote:
@@ -255,3 +291,8 @@ Andre
 > +	};
 > +};
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
