@@ -2,21 +2,20 @@ Return-Path: <SRS0=BD2L=MW=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44813C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 13:21:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DCFCC4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 13:49:03 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 15E5260041
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 13:21:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 15E5260041
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+	by mail.kernel.org (Postfix) with ESMTPS id 1A79960EFF
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 13:49:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1A79960EFF
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=biot.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
@@ -24,47 +23,48 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=2y2rMR66/VJmOWQaxBzMjdIuY218ulg3s8Ah7PJBwG8=; b=P6Uk2mskTCYFrZ
-	DhW2UYoEkslXVsgVY6+sEe4qb7NV5YSgBVs0QvdURMpujEk2rY9+xVXKoA5qK7NNlJG5UTutXbY2m
-	isC0KTA9FHdOU2Y0lWGGEwQk698wI6hcPfmfuXJjkw3jEOx4NSYDK4iDyk28zjzigz19Bv39jSI7M
-	6rtK/dHlnPiJvSBaTRyXrHHlk4pX1N889zlhMlAgY/RgYdwtUM9BS+iY3L60tgBbu4eTamdduVsLc
-	DhjWdfadxM04GyfTep/XbOZkpvbmEYqr07z1SegOfk3rXmUe84cZKtnFoZgp/kfS+U0Y3SFoNs0B3
-	PNYKPdRN7X+bWTMR4XqQ==;
+	List-Owner; bh=WX404QiCec8PseE8eRHC8q1BJlFQS6oaBsQDVUTRvsc=; b=eOu6FpoP1ZIQ0g
+	TnKftOp7tqaJ/tM38/dVjRn+gfxIewZWsoe/hqwXTQYqkadFxMtQL3VyUBHHD1/eIYtS2dGlT4VWF
+	ot9Tg8x+rQsW0OlqHYcUjkIiEpynjLFevPyddm4KGJ7zW4isfsCLrw1+DFRowFKV6nw/NtulIrVTD
+	SZS6+wZrCs0DkXWSWdXBzk1BIezbhDEz3Gnwgtg7spn3GNie7MP78Z2hMa2q5+TLyRxIuqiubVT7t
+	C51GlGMbVygpuSegpu23BhO24JilKhC4bk5op1BZWxUUxUkzBGW7db6qNZ/kjmhQ0auIGglmsreSm
+	7rWQ07OHhFWKN4yvXVNw==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1m9SQW-008kml-8R; Fri, 30 Jul 2021 13:19:48 +0000
-Received: from xavier.telenet-ops.be ([2a02:1800:120:4::f00:14])
+	id 1m9Sqe-008pFU-6N; Fri, 30 Jul 2021 13:46:48 +0000
+Received: from yawp.biot.com ([2a01:4f8:10a:8e::fce2])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1m9SPw-008khf-7j
- for linux-arm-kernel@lists.infradead.org; Fri, 30 Jul 2021 13:19:15 +0000
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:69f0:c617:e432:6919])
- by xavier.telenet-ops.be with bizsmtp
- id bRK62500T2oLRg901RK6vS; Fri, 30 Jul 2021 15:19:06 +0200
-Received: from rox.of.borg ([192.168.97.57])
- by ramsan.of.borg with esmtps (TLS1.3) tls
+ id 1m9Sq4-008p7a-CN
+ for linux-arm-kernel@lists.infradead.org; Fri, 30 Jul 2021 13:46:13 +0000
+Received: from debian-spamd by yawp.biot.com with sa-checked (Exim 4.93)
+ (envelope-from <bert@biot.com>) id 1m9Sq2-006bVm-Rh
+ for linux-arm-kernel@lists.infradead.org; Fri, 30 Jul 2021 15:46:11 +0200
+Received: from [2a02:578:460c:1:ae1f:6bff:fed1:9ca8] (helo=sumner.biot.com)
+ by yawp.biot.com with esmtps (TLS1.3) tls
  TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.93)
- (envelope-from <geert@linux-m68k.org>)
- id 1m9SPq-002GQq-3t; Fri, 30 Jul 2021 15:19:06 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
- (envelope-from <geert@linux-m68k.org>)
- id 1m9SPp-00HJrs-GP; Fri, 30 Jul 2021 15:19:05 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+ (envelope-from <bert@biot.com>)
+ id 1m9Spw-006bTh-8k; Fri, 30 Jul 2021 15:46:04 +0200
+Received: from bert by sumner.biot.com with local (Exim 4.93)
+ (envelope-from <bert@biot.com>)
+ id 1m9Spv-003a1j-PJ; Fri, 30 Jul 2021 15:46:03 +0200
+From: Bert Vermeulen <bert@biot.com>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org,
- linux-renesas-soc@vger.kernel.org,
- Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 1/3] Renesas ARM DT updates for v5.15
-Date: Fri, 30 Jul 2021 15:18:54 +0200
-Message-ID: <cover.1627650696.git.geert+renesas@glider.be>
+To: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>
+Cc: Bert Vermeulen <bert@biot.com>, John Crispin <john@phrozen.org>,
+ Felix Fietkau <nbd@nbd.name>
+Subject: [PATCH 3/5] ARM: dts: Add basic support for EcoNet EN7523
+Date: Fri, 30 Jul 2021 15:45:50 +0200
+Message-Id: <20210730134552.853350-4-bert@biot.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1627650695.git.geert+renesas@glider.be>
-References: <cover.1627650695.git.geert+renesas@glider.be>
+In-Reply-To: <20210730134552.853350-1-bert@biot.com>
+References: <20210730134552.853350-1-bert@biot.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210730_061912_470706_F181651D 
-X-CRM114-Status: GOOD (  13.65  )
+X-CRM114-CacheID: sfid-20210730_064612_468454_293025F2 
+X-CRM114-Status: GOOD (  15.66  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -80,130 +80,197 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210730131854.75zV4RjwKWJwOp75rmENqEUxVWgUg9RKNvoAxEOiwq4@z>
 
-The following changes since commit 2734d6c1b1a089fb593ef6a23d4b70903526fe0c:
+From: John Crispin <john@phrozen.org>
 
-  Linux 5.14-rc2 (2021-07-18 14:13:49 -0700)
+Add basic support for EcoNet EN7523, enough for booting to console.
 
-are available in the Git repository at:
+The UART is basically 8250-compatible, except for the clock selection.
+A clock-frequency value is synthesized to get this to run at 115200 bps.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.15-tag1
+Signed-off-by: John Crispin <john@phrozen.org>
+Signed-off-by: Bert Vermeulen <bert@biot.com>
+---
+ arch/arm/boot/dts/Makefile       |   2 +
+ arch/arm/boot/dts/en7523-evb.dts |  17 ++++
+ arch/arm/boot/dts/en7523.dtsi    | 128 +++++++++++++++++++++++++++++++
+ 3 files changed, 147 insertions(+)
+ create mode 100644 arch/arm/boot/dts/en7523-evb.dts
+ create mode 100644 arch/arm/boot/dts/en7523.dtsi
 
-for you to fetch changes up to 651f8cffade8615bb4fce1ecb3a929892c5e60d7:
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 863347b6b65e..3eeb7715c6ce 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -174,6 +174,8 @@ dtb-$(CONFIG_ARCH_DAVINCI) += \
+ 	da850-lego-ev3.dtb
+ dtb-$(CONFIG_ARCH_DIGICOLOR) += \
+ 	cx92755_equinox.dtb
++dtb-$(CONFIG_ARCH_ECONET) += \
++	en7523-evb.dtb
+ dtb-$(CONFIG_ARCH_EXYNOS3) += \
+ 	exynos3250-artik5-eval.dtb \
+ 	exynos3250-monk.dtb \
+diff --git a/arch/arm/boot/dts/en7523-evb.dts b/arch/arm/boot/dts/en7523-evb.dts
+new file mode 100644
+index 000000000000..c5b75eb3715e
+--- /dev/null
++++ b/arch/arm/boot/dts/en7523-evb.dts
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
++#include "en7523.dtsi"
++
++/ {
++	model = "Econet EN7523 Evaluation Board";
++	compatible = "econet,en7523-evb", "econet,en7523";
++
++	aliases {
++		serial0 = &uart1;
++	};
++
++	chosen {
++		bootargs = "earlycon=uart8250,mmio32,0x1fbf0000 console=ttyS0,115200";
++		stdout-path = "serial0:115200n8";
++	};
++};
+diff --git a/arch/arm/boot/dts/en7523.dtsi b/arch/arm/boot/dts/en7523.dtsi
+new file mode 100644
+index 000000000000..f4fe1c6f66e8
+--- /dev/null
++++ b/arch/arm/boot/dts/en7523.dtsi
+@@ -0,0 +1,128 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++
++/ {
++	interrupt-parent = <&gic>;
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		npu_binary@84000000 {
++			no-map;
++			reg = <0x84000000 0xA00000>;
++		};
++
++		npu_flag@84B0000 {
++			no-map;
++			reg = <0x84B00000 0x100000>;
++		};
++
++		npu_pkt@85000000 {
++			no-map;
++			reg = <0x85000000 0x1A00000>;
++		};
++
++		npu_phyaddr@86B00000 {
++			no-map;
++			reg = <0x86B00000 0x100000>;
++		};
++
++		npu_rxdesc@86D00000 {
++			no-map;
++			reg = <0x86D00000 0x100000>;
++		};
++	};
++
++	psci {
++		compatible = "arm,psci-0.2";
++		method = "smc";
++	};
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu-map {
++			cluster0 {
++				core0 {
++					cpu = <&cpu0>;
++				};
++				core1 {
++					cpu = <&cpu1>;
++				};
++			};
++		};
++
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a7";
++			reg = <0x0>;
++			enable-method = "psci";
++			clock-frequency = <80000000>;
++			next-level-cache = <&L2_0>;
++
++		};
++
++		cpu1: cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a7";
++			reg = <0x1>;
++			enable-method = "psci";
++			clock-frequency = <80000000>;
++			next-level-cache = <&L2_0>;
++		};
++
++		L2_0: l2-cache0 {
++			compatible = "cache";
++		};
++	};
++
++	gic: interrupt-controller@09000000 {
++		compatible = "arm,gic-v3";
++		interrupt-controller;
++		#interrupt-cells = <3>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		reg = <0x09000000 0x20000>,
++			  <0x09080000 0x80000>;
++		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW>;
++
++		its: gic-its@09020000 {
++			compatible = "arm,gic-v3-its";
++			msi-controller;
++			#msi-cell = <1>;
++			reg = <0x090200000 0x20000>;
++		};
++	};
++
++	timer {
++		compatible = "arm,armv8-timer";
++		interrupt-parent = <&gic>;
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
++		clock-frequency = <25000000>;
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x40000000>;
++	};
++
++	uart1: serial@1fbf0000 {
++		compatible = "ns8250";
++		reg = <0x1fbf0000 0x30>;
++		reg-io-width = <4>;
++		reg-shift = <2>;
++		interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
++		clock-frequency = <1843200>;
++		status = "okay";
++	};
++};
+-- 
+2.25.1
 
-  arm64: dts: renesas: r8a77961: Add iommus to ipmmu_ds[01] related nodes (2021-07-30 15:07:25 +0200)
-
-----------------------------------------------------------------
-Renesas ARM DT updates for v5.15
-
-  - Switches support for the Draak and Ebisu development boards,
-  - I2C support on RZ/G2L,
-  - I2C EEPROM support on the Ebisu development board,
-  - Sound support for the R-Car D3 SoC and the Draak development board,
-  - Support for the new R-Car H3e-2G and M3e-2G SoCs on the Salvator-XS
-    and ULCB development boards,
-  - IOMMU support for DMAC, EtherAVB, and SDHI on the R-Car M3-W+ SoC,
-  - Miscellaneous fixes and improvements.
-
-----------------------------------------------------------------
-Adam Ford (1):
-      arm64: dts: renesas: beacon: Enable micbias
-
-Biju Das (2):
-      arm64: dts: renesas: r9a07g044: Add I2C nodes
-      arm64: dts: renesas: hihope-rzg2-ex: Add EtherAVB internal rx delay
-
-Geert Uytterhoeven (21):
-      arm64: dts: renesas: salvator-x(s): Factor out HDMI1 parts
-      arm64: dts: renesas: salvator-x(s): Factor out SATA parts
-      arm64: dts: renesas: salvator-x(s): Factor out USB ch2 parts
-      arm64: dts: renesas: salvator-xs: Factor out USB ch3 parts
-      ARM: dts: r8a73a4: Remove non-functional DMA support
-      ARM: dts: rzg1: Add generic compatible strings to IIC nodes
-      arm64: dts: renesas: r8a774c0: Add generic compatible string to IIC node
-      arm64: dts: renesas: r8a77990: Add generic compatible string to IIC node
-      arm64: dts: renesas: rzg2: Rename i2c_dvfs to iic_pmic
-      arm64: dts: renesas: r8a779a0: Restore sort order
-      arm64: dts: renesas: r8a77995: draak: Remove bogus adv7511w properties
-      arm64: dts: renesas: r8a77990: ebisu: Add I2C EEPROM for PMIC
-      arm64: dts: renesas: rcar-gen3: Add SoC model to comment headers
-      arm64: dts: renesas: Add Renesas R8A779M1 SoC support
-      arm64: dts: renesas: Add Renesas R8A779M3 SoC support
-      arm64: dts: renesas: Add support for Salvator-XS with R-Car H3e-2G
-      arm64: dts: renesas: Add support for H3ULCB with R-Car H3e-2G
-      arm64: dts: renesas: Add support for H3ULCB+Kingfisher with R-Car H3e-2G
-      arm64: dts: renesas: Add support for Salvator-XS with R-Car M3e-2G
-      arm64: dts: renesas: Add support for M3ULCB with R-Car M3e-2G
-      arm64: dts: renesas: Add support for M3ULCB+Kingfisher with R-Car M3e-2G
-
-Kuninori Morimoto (2):
-      arm64: dts: renesas: r8a77995: Add R-Car Sound support
-      arm64: dts: renesas: r8a77995: draak: Add R-Car Sound support
-
-Magnus Damm (2):
-      arm64: dts: renesas: r8a77995: draak: Add SW56 support
-      arm64: dts: renesas: r8a77990: ebisu: Add SW4 support
-
-Yoshihiro Shimoda (1):
-      arm64: dts: renesas: r8a77961: Add iommus to ipmmu_ds[01] related nodes
-
- arch/arm/boot/dts/r8a73a4.dtsi                     |  44 ------
- arch/arm/boot/dts/r8a7742.dtsi                     |   4 +-
- arch/arm/boot/dts/r8a7743.dtsi                     |   4 +-
- arch/arm/boot/dts/r8a7744.dtsi                     |   4 +-
- arch/arm64/boot/dts/renesas/Makefile               |   8 +
- .../boot/dts/renesas/beacon-renesom-baseboard.dtsi |   8 +
- arch/arm64/boot/dts/renesas/hihope-rzg2-ex.dtsi    |   1 +
- arch/arm64/boot/dts/renesas/r8a774a1.dtsi          |   4 +-
- arch/arm64/boot/dts/renesas/r8a774b1.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a774c0.dtsi          |   8 +-
- .../arm64/boot/dts/renesas/r8a77950-salvator-x.dts |  73 ---------
- arch/arm64/boot/dts/renesas/r8a77950-ulcb-kf.dts   |   2 +-
- arch/arm64/boot/dts/renesas/r8a77950-ulcb.dts      |   2 +-
- arch/arm64/boot/dts/renesas/r8a77950.dtsi          |   2 +
- .../arm64/boot/dts/renesas/r8a77951-salvator-x.dts |  73 ---------
- .../boot/dts/renesas/r8a77951-salvator-xs.dts      | 122 ---------------
- arch/arm64/boot/dts/renesas/r8a77951-ulcb-kf.dts   |   2 +-
- arch/arm64/boot/dts/renesas/r8a77951-ulcb.dts      |   2 +-
- arch/arm64/boot/dts/renesas/r8a77951.dtsi          |   5 +
- arch/arm64/boot/dts/renesas/r8a77960-ulcb-kf.dts   |   2 +-
- arch/arm64/boot/dts/renesas/r8a77960-ulcb.dts      |   2 +-
- arch/arm64/boot/dts/renesas/r8a77961-ulcb-kf.dts   |   2 +-
- arch/arm64/boot/dts/renesas/r8a77961-ulcb.dts      |   3 +-
- arch/arm64/boot/dts/renesas/r8a77961.dtsi          |  29 ++++
- .../boot/dts/renesas/r8a77965-salvator-xs.dts      |  14 --
- arch/arm64/boot/dts/renesas/r8a77965-ulcb-kf.dts   |   2 +-
- arch/arm64/boot/dts/renesas/r8a77965-ulcb.dts      |   2 +-
- arch/arm64/boot/dts/renesas/r8a77965.dtsi          |   2 +
- arch/arm64/boot/dts/renesas/r8a77970-eagle.dts     |   2 +-
- arch/arm64/boot/dts/renesas/r8a77980-condor.dts    |   2 +-
- arch/arm64/boot/dts/renesas/r8a77990-ebisu.dts     |  50 +++++-
- arch/arm64/boot/dts/renesas/r8a77990.dtsi          |   6 +-
- arch/arm64/boot/dts/renesas/r8a77995-draak.dts     | 169 ++++++++++++++++++++-
- arch/arm64/boot/dts/renesas/r8a77995.dtsi          | 158 +++++++++++++++++++
- arch/arm64/boot/dts/renesas/r8a779a0-falcon.dts    |   2 +-
- arch/arm64/boot/dts/renesas/r8a779a0.dtsi          |  26 ++--
- .../boot/dts/renesas/r8a779m1-salvator-xs.dts      |  53 +++++++
- arch/arm64/boot/dts/renesas/r8a779m1-ulcb-kf.dts   |  19 +++
- arch/arm64/boot/dts/renesas/r8a779m1-ulcb.dts      |  54 +++++++
- arch/arm64/boot/dts/renesas/r8a779m1.dtsi          |  12 ++
- .../boot/dts/renesas/r8a779m3-salvator-xs.dts      |  46 ++++++
- arch/arm64/boot/dts/renesas/r8a779m3-ulcb-kf.dts   |  18 +++
- arch/arm64/boot/dts/renesas/r8a779m3-ulcb.dts      |  45 ++++++
- arch/arm64/boot/dts/renesas/r8a779m3.dtsi          |  12 ++
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi         |  80 ++++++++++
- arch/arm64/boot/dts/renesas/salvator-common.dtsi   |  76 ++++++++-
- arch/arm64/boot/dts/renesas/salvator-xs.dtsi       |  56 +++++++
- 47 files changed, 943 insertions(+), 371 deletions(-)
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779m1-salvator-xs.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779m1-ulcb-kf.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779m1-ulcb.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779m1.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779m3-salvator-xs.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779m3-ulcb-kf.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779m3-ulcb.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779m3.dtsi
 
 _______________________________________________
 linux-arm-kernel mailing list
