@@ -1,248 +1,118 @@
-Return-Path: <linux-kernel-owner@kernel.org>
+Return-Path: <SRS0=eKiA=MW=foss.st.com=prvs=2845c6e582=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02D09C432BE
-	for <linux-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 13:53:57 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF74560EFF
-	for <linux-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 13:53:56 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239110AbhG3Nx6 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Fri, 30 Jul 2021 09:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239095AbhG3Nxz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jul 2021 09:53:55 -0400
-Received: from yawp.biot.com (yawp.biot.com [IPv6:2a01:4f8:10a:8e::fce2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09401C061796
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jul 2021 06:53:51 -0700 (PDT)
-Received: from debian-spamd by yawp.biot.com with sa-checked (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1m9Spz-006bUY-Nf
-        for linux-kernel@vger.kernel.org; Fri, 30 Jul 2021 15:46:07 +0200
-Received: from [2a02:578:460c:1:ae1f:6bff:fed1:9ca8] (helo=sumner.biot.com)
-        by yawp.biot.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1m9Spw-006bTh-8k; Fri, 30 Jul 2021 15:46:04 +0200
-Received: from bert by sumner.biot.com with local (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1m9Spv-003a1j-PJ; Fri, 30 Jul 2021 15:46:03 +0200
-From:   Bert Vermeulen <bert@biot.com>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90462C4338F
+	for <soc@archiver.kernel.org>; Fri, 30 Jul 2021 13:59:01 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 5FDA660EFF; Fri, 30 Jul 2021 13:59:01 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id A2FC060F12;
+	Fri, 30 Jul 2021 13:59:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A2FC060F12
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16UDulHZ028639;
+	Fri, 30 Jul 2021 15:58:57 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : message-id : date : mime-version : content-type :
+ content-transfer-encoding; s=selector1;
+ bh=MzQ8oKCDaWhRsIkt9+RoUCYLRwvPQ1J5VN1nlqw5bMc=;
+ b=KejYSZ5zYGOU6ukv2YMLt6/gryAGqEkvys3qwFa6OAh7ukNrjKh3Z9Oe8jLYsSlIqnQF
+ 9Wv6r/Ov5SFm89IZd0iaSLWjiBs/9Q5fs493T5amqRgwICNmbdx12mbBTU05K1oDCge9
+ E55nbqUZu+pRZlFjukKdSzEeY3virOFaKlsXW1TmIIdpsVKUJAWWHt1HxxPwgDxcMUdQ
+ vWS6gkUJnKff7d8XOx2KC2XpZi+NGj5U1LdekZ4UU8/Qpi4qJql/F5fUUcnZgTrvkLUp
+ F5CmKBOBeGvXv0Fc0Da5gjVHFB67/PjXufkRxZ8vbuu13j/jSA5BbWEvFA58q8I871Ue eg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com with ESMTP id 3a4fvygu6y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 30 Jul 2021 15:58:57 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B636710002A;
+	Fri, 30 Jul 2021 15:58:55 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 93A7A23150B;
+	Fri, 30 Jul 2021 15:58:55 +0200 (CEST)
+Received: from lmecxl0912.lme.st.com (10.75.127.47) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 30 Jul
+ 2021 15:58:54 +0200
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>
-Cc:     Bert Vermeulen <bert@biot.com>, John Crispin <john@phrozen.org>,
-        Felix Fietkau <nbd@nbd.name>
-Subject: [PATCH 3/5] ARM: dts: Add basic support for EcoNet EN7523
-Date:   Fri, 30 Jul 2021 15:45:50 +0200
-Message-ID: <20210730134552.853350-4-bert@biot.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210730134552.853350-1-bert@biot.com>
-References: <20210730134552.853350-1-bert@biot.com>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Kevin
+ Hilman <khilman@baylibre.com>, SoC Team <soc@kernel.org>,
+        arm-soc
+	<arm@kernel.org>
+CC: Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+        Marek Vasut <marex@denx.de>,
+        "linux-stm32@st-md-mailman.stormreply.com"
+	<linux-stm32@st-md-mailman.stormreply.com>
+Subject: [GIT PULL] STM32 DT fixes for v5.14 #1
+Message-ID: <c0b6031b-2de7-2ef8-71b2-a0af8f475932@foss.st.com>
+Date: Fri, 30 Jul 2021 15:58:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Precedence: bulk
-List-ID: <linux-kernel.vger.kernel.org>
-X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20210730134550.RrVa8mW_tIKotEXRu51wVhf3Q4FhrYIyuOrrVK98wEY@z>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-30_05:2021-07-30,2021-07-30 signatures=0
 
-From: John Crispin <john@phrozen.org>
+Hi Arnd, Olof and Kevin,
 
-Add basic support for EcoNet EN7523, enough for booting to console.
+Please consider this first round of STM32 DT fixes for v5.14. It 
+concerns DHCOM/DHCOR fixes.
 
-The UART is basically 8250-compatible, except for the clock selection.
-A clock-frequency value is synthesized to get this to run at 115200 bps.
+Thanks
+Alex
 
-Signed-off-by: John Crispin <john@phrozen.org>
-Signed-off-by: Bert Vermeulen <bert@biot.com>
----
- arch/arm/boot/dts/Makefile       |   2 +
- arch/arm/boot/dts/en7523-evb.dts |  17 ++++
- arch/arm/boot/dts/en7523.dtsi    | 128 +++++++++++++++++++++++++++++++
- 3 files changed, 147 insertions(+)
- create mode 100644 arch/arm/boot/dts/en7523-evb.dts
- create mode 100644 arch/arm/boot/dts/en7523.dtsi
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 863347b6b65e..3eeb7715c6ce 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -174,6 +174,8 @@ dtb-$(CONFIG_ARCH_DAVINCI) += \
- 	da850-lego-ev3.dtb
- dtb-$(CONFIG_ARCH_DIGICOLOR) += \
- 	cx92755_equinox.dtb
-+dtb-$(CONFIG_ARCH_ECONET) += \
-+	en7523-evb.dtb
- dtb-$(CONFIG_ARCH_EXYNOS3) += \
- 	exynos3250-artik5-eval.dtb \
- 	exynos3250-monk.dtb \
-diff --git a/arch/arm/boot/dts/en7523-evb.dts b/arch/arm/boot/dts/en7523-evb.dts
-new file mode 100644
-index 000000000000..c5b75eb3715e
---- /dev/null
-+++ b/arch/arm/boot/dts/en7523-evb.dts
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
-+#include "en7523.dtsi"
-+
-+/ {
-+	model = "Econet EN7523 Evaluation Board";
-+	compatible = "econet,en7523-evb", "econet,en7523";
-+
-+	aliases {
-+		serial0 = &uart1;
-+	};
-+
-+	chosen {
-+		bootargs = "earlycon=uart8250,mmio32,0x1fbf0000 console=ttyS0,115200";
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-diff --git a/arch/arm/boot/dts/en7523.dtsi b/arch/arm/boot/dts/en7523.dtsi
-new file mode 100644
-index 000000000000..f4fe1c6f66e8
---- /dev/null
-+++ b/arch/arm/boot/dts/en7523.dtsi
-@@ -0,0 +1,128 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+/ {
-+	interrupt-parent = <&gic>;
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		npu_binary@84000000 {
-+			no-map;
-+			reg = <0x84000000 0xA00000>;
-+		};
-+
-+		npu_flag@84B0000 {
-+			no-map;
-+			reg = <0x84B00000 0x100000>;
-+		};
-+
-+		npu_pkt@85000000 {
-+			no-map;
-+			reg = <0x85000000 0x1A00000>;
-+		};
-+
-+		npu_phyaddr@86B00000 {
-+			no-map;
-+			reg = <0x86B00000 0x100000>;
-+		};
-+
-+		npu_rxdesc@86D00000 {
-+			no-map;
-+			reg = <0x86D00000 0x100000>;
-+		};
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-0.2";
-+		method = "smc";
-+	};
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+			};
-+		};
-+
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a7";
-+			reg = <0x0>;
-+			enable-method = "psci";
-+			clock-frequency = <80000000>;
-+			next-level-cache = <&L2_0>;
-+
-+		};
-+
-+		cpu1: cpu@1 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a7";
-+			reg = <0x1>;
-+			enable-method = "psci";
-+			clock-frequency = <80000000>;
-+			next-level-cache = <&L2_0>;
-+		};
-+
-+		L2_0: l2-cache0 {
-+			compatible = "cache";
-+		};
-+	};
-+
-+	gic: interrupt-controller@09000000 {
-+		compatible = "arm,gic-v3";
-+		interrupt-controller;
-+		#interrupt-cells = <3>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		reg = <0x09000000 0x20000>,
-+			  <0x09080000 0x80000>;
-+		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW>;
-+
-+		its: gic-its@09020000 {
-+			compatible = "arm,gic-v3-its";
-+			msi-controller;
-+			#msi-cell = <1>;
-+			reg = <0x090200000 0x20000>;
-+		};
-+	};
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
-+		clock-frequency = <25000000>;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x40000000>;
-+	};
-+
-+	uart1: serial@1fbf0000 {
-+		compatible = "ns8250";
-+		reg = <0x1fbf0000 0x30>;
-+		reg-io-width = <4>;
-+		reg-shift = <2>;
-+		interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
-+		clock-frequency = <1843200>;
-+		status = "okay";
-+	};
-+};
--- 
-2.25.1
+The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
+   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
+tags/stm32-dt-for-v5.14-fixes-1
+
+for you to fetch changes up to 15f68f027ebd961b99a1c420f96ff3838c5e4450:
+
+   ARM: dts: stm32: Fix touchscreen IRQ line assignment on DHCOM 
+(2021-07-30 15:34:51 +0200)
+
+----------------------------------------------------------------
+STM32 DT fixes for v5.14, round 1
+
+Highlights:
+-----------
+
+  -Fixes are for DHCOM/DHCOR boards:
+   - Set HW RTC ad default RTC
+   - Disable EDPD LAN8710 feature as it is not a stable feature.
+   - Fix touchscreen IRQ line assignment
+
+----------------------------------------------------------------
+Marek Vasut (3):
+       ARM: dts: stm32: Prefer HW RTC on DHCOM SoM
+       ARM: dts: stm32: Disable LAN8710 EDPD on DHCOM
+       ARM: dts: stm32: Fix touchscreen IRQ line assignment on DHCOM
+
+  arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi | 24 
+++++++++++++++----------
+  arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi  |  5 ++++-
+  2 files changed, 18 insertions(+), 11 deletions(-)
