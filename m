@@ -1,157 +1,116 @@
-Return-Path: <SRS0=BD2L=MW=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=3nKo=MW=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D9A3C432BE
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 14:01:06 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89DF7C4338F
+	for <soc@archiver.kernel.org>; Fri, 30 Jul 2021 14:31:49 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 6A62860FE7; Fri, 30 Jul 2021 14:31:49 +0000 (UTC)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3AB7760F12
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 30 Jul 2021 14:01:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3AB7760F12
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=foss.st.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:
-	Content-Transfer-Encoding:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Subject:CC:To:From:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Owner;
-	bh=ZFxN6c63PmvVAxGWRfDZObAoZ4+YDCxy5DSlGkarMPk=; b=imlMH0drofO1FFVCJKpBIqq2mg
-	5SKCgnQWx5QB4vsQrhJgx0gGl0TqkhWPrI3m3ktcTH3GeGpjlHgJgODAxzVyldFqL3PZAgOE4X0bd
-	z6pRo9QW8vyhCKixCE1hcgCOWnUdU42k+SrQ22g7zsNqXqD+dk+p7ISDn70RA/jxHSrz+SmXNDi6c
-	fgXfF5MutOsUG67HIs3lD6POqh13tzwB9w7jRRslNeufVfvAFQ/sZcheCvZsYrfXwtU/DUlQ62EmU
-	7e921/Rmo3MIudqdzNYOeBomWkEc5WRBy+HHEvKW70fRxvqmTJ090SYANyi5CtV1LxL8dAISou1Nv
-	qMIed2RA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1m9T2Y-008tbb-UJ; Fri, 30 Jul 2021 13:59:07 +0000
-Received: from mx07-00178001.pphosted.com ([185.132.182.106])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1m9T2U-008tZx-TF
- for linux-arm-kernel@lists.infradead.org; Fri, 30 Jul 2021 13:59:04 +0000
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
- by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id
- 16UDulHZ028639; Fri, 30 Jul 2021 15:58:57 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
- h=from : to : cc :
- subject : message-id : date : mime-version : content-type :
- content-transfer-encoding; s=selector1;
- bh=MzQ8oKCDaWhRsIkt9+RoUCYLRwvPQ1J5VN1nlqw5bMc=;
- b=KejYSZ5zYGOU6ukv2YMLt6/gryAGqEkvys3qwFa6OAh7ukNrjKh3Z9Oe8jLYsSlIqnQF
- 9Wv6r/Ov5SFm89IZd0iaSLWjiBs/9Q5fs493T5amqRgwICNmbdx12mbBTU05K1oDCge9
- E55nbqUZu+pRZlFjukKdSzEeY3virOFaKlsXW1TmIIdpsVKUJAWWHt1HxxPwgDxcMUdQ
- vWS6gkUJnKff7d8XOx2KC2XpZi+NGj5U1LdekZ4UU8/Qpi4qJql/F5fUUcnZgTrvkLUp
- F5CmKBOBeGvXv0Fc0Da5gjVHFB67/PjXufkRxZ8vbuu13j/jSA5BbWEvFA58q8I871Ue eg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
- by mx07-00178001.pphosted.com with ESMTP id 3a4fvygu6y-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Fri, 30 Jul 2021 15:58:57 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
- by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B636710002A;
- Fri, 30 Jul 2021 15:58:55 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
- by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 93A7A23150B;
- Fri, 30 Jul 2021 15:58:55 +0200 (CEST)
-Received: from lmecxl0912.lme.st.com (10.75.127.47) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 30 Jul
- 2021 15:58:54 +0200
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Kevin
- Hilman <khilman@baylibre.com>, SoC Team <soc@kernel.org>, arm-soc
- <arm@kernel.org>
-CC: Alexandre TORGUE <alexandre.torgue@foss.st.com>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, Marek Vasut <marex@denx.de>,
- "linux-stm32@st-md-mailman.stormreply.com"
- <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [GIT PULL] STM32 DT fixes for v5.14 #1
-Message-ID: <c0b6031b-2de7-2ef8-71b2-a0af8f475932@foss.st.com>
-Date: Fri, 30 Jul 2021 15:58:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+	by mail.kernel.org (Postfix) with ESMTPS id 4690160F46
+	for <soc@kernel.org>; Fri, 30 Jul 2021 14:31:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4690160F46
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
+Received: by mail-lj1-f175.google.com with SMTP id h11so12590468ljo.12
+        for <soc@kernel.org>; Fri, 30 Jul 2021 07:31:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g9e2gORjPncqut/lk+rir6sVzd/s93Oq97n1N2vAdLQ=;
+        b=XGWUnR+AMlm5KbE7ohB//psgoZYeUKtPBYVg8mLRqZnYZ/LTos3O9DeFjsU1SjGYEM
+         1K7YRWmmPBWy5skTMvkp7mn9GriKGGrNZ/ATdpxXlPbwYONAmwx4psjv0tmN44DLHSsS
+         I6uvHTBzZKrwzWMgxf4DHmJeV11FTLFjupXkR7jRiL/G19Wh+r64t1HJrR9VI1kM0xa3
+         Adeb3/+ZZJI1eKbHh12FRkORlTei2CWkMx1Zj51QhyPjPQyHwuaVWBBg87IpuAOrhw50
+         ECZk00KdeT/AQvz7Oq9xJBtIc8KnKQmKQ6RAGNFEAAul7sLXmjgzx4B9mu2a8+jblkOr
+         MtOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g9e2gORjPncqut/lk+rir6sVzd/s93Oq97n1N2vAdLQ=;
+        b=kr0aZS0yLmUTvjSJydiQIfTh4UryShgXlB/fQAFPzxevn3F/A547NApAKQd6UjanPo
+         OiLqVdwhAQNdzdtmK9zroUoXiBVmZHXtzn4kxmov06QEsrDaSiORCgQsCQRIxgWyv4BA
+         okEdiljcdH8fJmYnDAh/Vef6bh1f6lu+eAzwy+Q56CHzUUMFzURGVjUmd0ku+MvviEMe
+         j8bhdz19j+WltOKF/5j+CU4+kfpPClI/58ok7FQZalX6T+wZ1nlpGWbu7FAzPYJWu9SQ
+         3Us1hWHyAggDmy9aCTZ3BhoNB3v8DoYA7u3DuzMYjMcgEpmK6qv6XS9Tjz/ZV+rX9az9
+         gfPQ==
+X-Gm-Message-State: AOAM530RlguG5EujyKLmw0q0RQLRI6SXpc3O8mggpR2Vw/km5XaoCMkH
+	M5vly66SlnT/SsLLRRvEiYSXhyGdl4ZDGm+roKEN6w==
+X-Google-Smtp-Source: ABdhPJwUi6ruX2JvFdTxX3N//7AGHOcJenoElF/S1ILL5z+OMowHXbAfQoJ32ZPpcT2tJBoucpswDQEtQOdQPOsCKaU=
+X-Received: by 2002:a2e:bc14:: with SMTP id b20mr1876294ljf.200.1627655507652;
+ Fri, 30 Jul 2021 07:31:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Language: en-US
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391, 18.0.790
- definitions=2021-07-30_05:2021-07-30,
- 2021-07-30 signatures=0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210730_065903_313182_63070391 
-X-CRM114-Status: GOOD (  14.24  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210730135854.YccFoxAOfYhw0a9GvRKgcPqPArWCKL_12sVj3QaqpPo@z>
+References: <20210730134552.853350-1-bert@biot.com> <20210730134552.853350-4-bert@biot.com>
+In-Reply-To: <20210730134552.853350-4-bert@biot.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 30 Jul 2021 16:31:36 +0200
+Message-ID: <CACRpkdYvMtE8b-Xiy6=Aiz20jvY0M0Bz9XmcEQDHhqeS+LErEA@mail.gmail.com>
+Subject: Re: [PATCH 3/5] ARM: dts: Add basic support for EcoNet EN7523
+To: Bert Vermeulen <bert@biot.com>, Marc Zyngier <maz@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>
+List-Id: <soc.lore.kernel.org>
+Cc: "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Arnd, Olof and Kevin,
+Paging Marc Z and Catalin just so they can see this:
 
-Please consider this first round of STM32 DT fixes for v5.14. It 
-concerns DHCOM/DHCOR fixes.
+On Fri, Jul 30, 2021 at 3:49 PM Bert Vermeulen <bert@biot.com> wrote:
 
-Thanks
-Alex
+> From: John Crispin <john@phrozen.org>
+>
+> Add basic support for EcoNet EN7523, enough for booting to console.
+>
+> The UART is basically 8250-compatible, except for the clock selection.
+> A clock-frequency value is synthesized to get this to run at 115200 bps.
+>
+> Signed-off-by: John Crispin <john@phrozen.org>
+> Signed-off-by: Bert Vermeulen <bert@biot.com>
+(...)
+> +       gic: interrupt-controller@09000000 {
+> +               compatible = "arm,gic-v3";
+> +               interrupt-controller;
+> +               #interrupt-cells = <3>;
+> +               #address-cells = <1>;
+> +               #size-cells = <1>;
+> +               reg = <0x09000000 0x20000>,
+> +                         <0x09080000 0x80000>;
+> +               interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW>;
+> +
+> +               its: gic-its@09020000 {
+> +                       compatible = "arm,gic-v3-its";
+> +                       msi-controller;
+> +                       #msi-cell = <1>;
+> +                       reg = <0x090200000 0x20000>;
+> +               };
+> +       };
 
+Yup GICv3 on ARM32-only silicon.
 
-The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+> +       timer {
+> +               compatible = "arm,armv8-timer";
+> +               interrupt-parent = <&gic>;
+> +               interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +                            <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +                            <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +                            <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+> +               clock-frequency = <25000000>;
+> +       };
 
-   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+Also arm,armv8-timer on ARM32-only silicon.
 
-are available in the Git repository at:
+This is kind of a first.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
-tags/stm32-dt-for-v5.14-fixes-1
-
-for you to fetch changes up to 15f68f027ebd961b99a1c420f96ff3838c5e4450:
-
-   ARM: dts: stm32: Fix touchscreen IRQ line assignment on DHCOM 
-(2021-07-30 15:34:51 +0200)
-
-----------------------------------------------------------------
-STM32 DT fixes for v5.14, round 1
-
-Highlights:
------------
-
-  -Fixes are for DHCOM/DHCOR boards:
-   - Set HW RTC ad default RTC
-   - Disable EDPD LAN8710 feature as it is not a stable feature.
-   - Fix touchscreen IRQ line assignment
-
-----------------------------------------------------------------
-Marek Vasut (3):
-       ARM: dts: stm32: Prefer HW RTC on DHCOM SoM
-       ARM: dts: stm32: Disable LAN8710 EDPD on DHCOM
-       ARM: dts: stm32: Fix touchscreen IRQ line assignment on DHCOM
-
-  arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi | 24 
-++++++++++++++----------
-  arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi  |  5 ++++-
-  2 files changed, 18 insertions(+), 11 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Yours,
+Linus Walleij
