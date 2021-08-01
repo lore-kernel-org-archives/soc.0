@@ -1,30 +1,31 @@
-Return-Path: <SRS0=2MMP=MY=arndb.de=arnd@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ECEAC4338F
-	for <soc@archiver.kernel.org>; Sun,  1 Aug 2021 09:41:12 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 41C5B60EE9; Sun,  1 Aug 2021 09:41:12 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 76ED160E76;
-	Sun,  1 Aug 2021 09:41:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 76ED160E76
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wm1-f45.google.com ([209.85.128.45]) by
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3B29C4320A
+	for <linux-devicetree@archiver.kernel.org>; Sun,  1 Aug 2021 09:41:22 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id C519260EE9
+	for <linux-devicetree@archiver.kernel.org>; Sun,  1 Aug 2021 09:41:22 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S231473AbhHAJl3 (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Sun, 1 Aug 2021 05:41:29 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:53899 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231732AbhHAJl2 (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Sun, 1 Aug 2021 05:41:28 -0400
+Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
  mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mf0Nm-1mpWWd3Y4o-00gZzz; Sun, 01 Aug 2021 11:41:09 +0200
-Received: by mail-wm1-f45.google.com with SMTP id e25-20020a05600c4b99b0290253418ba0fbso9188180wmp.1;
+ 1Mdevh-1mjjts3OXx-00Zg63; Sun, 01 Aug 2021 11:41:09 +0200
+Received: by mail-wm1-f49.google.com with SMTP id k38-20020a05600c1ca6b029025af5e0f38bso781025wms.5;
         Sun, 01 Aug 2021 02:41:09 -0700 (PDT)
-X-Gm-Message-State: AOAM532BpPSBIygbqs6rr0slvRd8VZNuyyDPCAbSuC7Dsh8aC6S2G8YH
-	cD1I6IHHNkbyfdhG/S2p3sByB1OVMPeiFab7Z+Q=
+X-Gm-Message-State: AOAM530cOIg0ovY9NuNCAVbtQxtcJgJFaHicCSsNMSSmouCmowE4/Iq+
+        hRPfKbqnbEauQxqfXMxAFHDuTf95Iz3zSwvqZZw=
 X-Google-Smtp-Source: ABdhPJy9Co8LhMruzZGyj4f3XArmEpslC++FxInWAY5kS6dN4F5T0Wp45K/4NLUe+uVYPfHG9aIG+H5EtkfDpdNsprE=
 X-Received: by 2002:a7b:ce10:: with SMTP id m16mr11249018wmc.75.1627810869409;
  Sun, 01 Aug 2021 02:41:09 -0700 (PDT)
@@ -33,39 +34,47 @@ References: <20210730134552.853350-1-bert@biot.com> <20210730134552.853350-4-ber
  <CACRpkdYvMtE8b-Xiy6=Aiz20jvY0M0Bz9XmcEQDHhqeS+LErEA@mail.gmail.com>
  <87y29n26po.wl-maz@kernel.org> <0fe113c6-4160-fd3c-488d-53d40b6043ee@biot.com>
 In-Reply-To: <0fe113c6-4160-fd3c-488d-53d40b6043ee@biot.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Sun, 1 Aug 2021 11:40:53 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sun, 1 Aug 2021 11:40:53 +0200
 X-Gmail-Original-Message-ID: <CAK8P3a3HrzAYtCnLuThO=9LuwyF8KduNjx-ZrJkXG=Y-i6RNbw@mail.gmail.com>
 Message-ID: <CAK8P3a3HrzAYtCnLuThO=9LuwyF8KduNjx-ZrJkXG=Y-i6RNbw@mail.gmail.com>
 Subject: Re: [PATCH 3/5] ARM: dts: Add basic support for EcoNet EN7523
-To: Bert Vermeulen <bert@biot.com>
+To:     Bert Vermeulen <bert@biot.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:zKXVUetTnavUszi0SuMoMjqJXPVbZq+ZCxlHSDPPgSs/jGdtMy4
- +umfQPZJYY0HbCoAqFqF4UY0sAeXXFtKgDSx3ZhPfUX+JFE1NyDqjy9W65C9a0iNg+ulKFv
- 7TKvCQGj7DnQaT3MExs9j2y4xTW4rin0up/BryICDFXHmQYhucF+MBD8ER76NeWee9gsN2a
- JaccM6NGPCVt1zsXpH6Pw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3bf9XdLMeDY=:6okVFMOuBkPzhbO//8tVmQ
- Pn+TyMDKOGEyvtYe1en/97FPtYUjzWdsWd5t80LWMAy3eCa2Y61INzJCZomzygV/2KXSuztUS
- vu1XIEBpllEauJ4RSuXKblsqyKqa+XGlJes4CqbX086bScK0so6D+eDKSMYuN+GNNXJBjOA5u
- 81k2EZjmAVGPCbxyjJwuYhL+p2NvVBQoWzjYrkyMqddgMoctO6PXxh6SlLnvIUEeyh7LZoT7L
- eBC91Xxs36yALiSMMacDmx7aTSMuZY6PeiGWQSfHvsHBZKp33nTsjqVRlv6DBUkYejErwuvlA
- REXL3rqp34cwCkhVHKEDKdK4sTBmltieTu0CV05/mozfj9ZoFdVIozIcif+3uFURXZuNgShrD
- BuiNP2+muszFWtPJvCLJndqpmKP5hXGzo1RnvvtyR/5vlIYkdurLmwqUZp0cXoflKmHdYdULF
- z0ZYv4kY/8YAXogkD0m5Asib+eubKKvjj//Hgga5nPD/7W3FGszYLYLFcSz4YMCNbw3dh60QF
- +dn8/awlGPpLqGF8OxBvfqQOU2ZrqHdpVy7NaLzmzvyZy8dVJbh+d2VsdbxEVLU2bV/3hZW9/
- OFPXkJVzqYslrL3g8j0jQ6dXiWTv3QeGvwhRHc8hlCs1EUrYLnql0CMQNeQVCJn/074ciGttj
- 6bkwvs6KU3aNdTIWNEoSwhJNOzQf/k5Ibp11xcC/9HMsBD1PurznqDvh4zwFXIOfWDtaazuld
- IeDICXaBprxVFXgLoeG8erdmuSpKY/kPmN/y5YospQwU5tvYa9txtuax/kJkRF3Ic7QCMKGVk
- W8aBiW9pnwkFumbBAbofLlTH4lsDAl/butKKkYH1Ri43/y0U+DybgwnnEOvgzR0DHQ7AOGizp
- HBs4UPqqb9e8X62Y/0LDzA7cu0E6qUYwGldf2FJSpjOnFfBBDcmnxnyt4g7LSZXV54gzeUjI7
- Xz2PT+6pULf8xBjSRl0KNQUEPZwTap5jRWitqurp6IvGWfGWyIzbf
+X-Provags-ID: V03:K1:w7dMDGbUB+xUuMwmTOi5thsE8Zee45eomh+gK0wWZuTHZgfswjG
+ o+hK1LRg5RuJsImSiBtnbQz4TEIWCEyYGxDuCXju9nsQFVth4/z5tpTA/x3Q0T98tNVnm9+
+ nqMELSK4MgBKqZKnoMX/WNbBgmph/8iy59JjWRh/H4HV/fEXtxUhkSL024jSie/1Qj2WTaL
+ nZz54n3qlDyytZ8HpfRDg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0ddko8OaYjY=:GeYrJRzww7NeC/aDlVYWPY
+ 64wCs9GdivEgBMMwGD4oEi4x6jBUPCAEaiU1Eut5RDq2//YfE/8JHHNi/mPRKYQSqD2QcD6v4
+ rwxT89aHdEnOHPicb/cFmKSbWJou6F5Txn7SAEFJbG/KLPiWQb1KxN/3IDbNuLAu4MgCxAYat
+ n9CTg3Uv7h1tlo1t2mliQ6F7jr3/xjHKtkhuBDSPuj8eRaYLNraHvlUpaD6U7MzUtM9/PMlwz
+ 1T4dcWsGxApumlwq6PRLpWj7FKKFonVnwa2iHERGiJyFQ8XQrugQz8mteV2EUvfvw6b4i38EQ
+ tY6QtY+9I4SY5uQZyC/D0tymLFba0wCXSyoQF4gHp259+HZBBGcY+T69exvYbsfxqXwpv86Ce
+ q1ta5pAH4P9AryXtaDHTMYkRQhrSqUVpR/25zqpK17Mnab6OAhkUJ/GU1fZzvS2ckeU2NMvf+
+ Y1Aav1Gzp3M8N2Rp40NVjsaul2nnDtaTlueAeUBs82mszTIXxUHdFBfehZpDOfUiw75pchmyQ
+ rbZthAqFVQjVYvFVbz3HVTBxNxcwwcM0Mo4pwiowonboer0ejbma540JvyPGKqmJFYSjIpBLJ
+ KMRr6nBUlhxgmNSWFsi8kOjF3EFalMo+XhgsHqWTKDXuhz0nmxnjyU3QpaZaAJuzfiVm2Au+y
+ qoc8+Fe6mCxg93KY8gPEaIMr2k37N9kJyZYNtoDc5HVCmF59DhBq7Y1kxpze5uOW1wWhEhwKG
+ /yzw0dLlhwNcPgn8gD6y2/Xs2xwgHkD1vTv/xLBO+6rc6mEKMx/Mpcvn7H9Q8/AhhmP7qhQih
+ qqyancnQL/ab87ZlQZXGu7blkSM80MTZRZe5JqvQqFptf6UJ/miZfF5pvArbTlC1XMiG9Bzq9
+ +qHUHWb3cr83HZhvwL4L44oSL6mBPIQNm+/og3Jh1n3DJmZ37WXQOPXgfb73D4y12Yq2HlNse
+ mruF5q2uKXaIzcEi7BpWz4pd+OnLe+ikA/sRWA+tpNztXK01Fm2xj
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210801094053.OuaIyRvMkG8jH_V8cIpvNTptCEJeOSn-eVXoC1cqy3o@z>
 
 On Sun, Aug 1, 2021 at 11:07 AM Bert Vermeulen <bert@biot.com> wrote:
 > On 7/30/21 4:53 PM, Marc Zyngier wrote: On Fri, 30 Jul 2021 15:31:36 +0100,
