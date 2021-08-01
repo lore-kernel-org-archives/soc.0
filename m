@@ -1,54 +1,64 @@
-Return-Path: <SRS0=fKvk=MY=biot.com=bert@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40D2AC4338F
-	for <soc@archiver.kernel.org>; Sun,  1 Aug 2021 09:07:59 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 0C24861057; Sun,  1 Aug 2021 09:07:59 +0000 (UTC)
-Received: from yawp.biot.com (yawp.biot.com [88.99.24.79])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5A9B260462
-	for <soc@kernel.org>; Sun,  1 Aug 2021 09:07:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5A9B260462
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=biot.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=biot.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99C56C4338F
+	for <linux-kernel@archiver.kernel.org>; Sun,  1 Aug 2021 09:08:20 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 6FB8E60462
+	for <linux-kernel@archiver.kernel.org>; Sun,  1 Aug 2021 09:08:20 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S231543AbhHAJI0 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Sun, 1 Aug 2021 05:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231415AbhHAJIW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 1 Aug 2021 05:08:22 -0400
+Received: from yawp.biot.com (yawp.biot.com [IPv6:2a01:4f8:10a:8e::fce2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7693C06175F
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Aug 2021 02:08:14 -0700 (PDT)
 Received: from debian-spamd by yawp.biot.com with sa-checked (Exim 4.93)
-	(envelope-from <bert@biot.com>)
-	id 1mA7Rs-006pH8-Hi
-	for soc@kernel.org; Sun, 01 Aug 2021 11:07:56 +0200
+        (envelope-from <bert@biot.com>)
+        id 1mA7S7-006pI0-JE
+        for linux-kernel@vger.kernel.org; Sun, 01 Aug 2021 11:08:11 +0200
 Received: from [2a02:578:460c:1:ae1f:6bff:fed1:9ca8]
-	by yawp.biot.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <bert@biot.com>)
-	id 1mA7Rl-006pGX-Fu; Sun, 01 Aug 2021 11:07:49 +0200
+        by yawp.biot.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <bert@biot.com>)
+        id 1mA7Rl-006pGX-Fu; Sun, 01 Aug 2021 11:07:49 +0200
 Subject: Re: [PATCH 3/5] ARM: dts: Add basic support for EcoNet EN7523
-To: Marc Zyngier <maz@kernel.org>, Linus Walleij <linus.walleij@linaro.org>
+To:     Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
 References: <20210730134552.853350-1-bert@biot.com>
  <20210730134552.853350-4-bert@biot.com>
  <CACRpkdYvMtE8b-Xiy6=Aiz20jvY0M0Bz9XmcEQDHhqeS+LErEA@mail.gmail.com>
  <87y29n26po.wl-maz@kernel.org>
-From: Bert Vermeulen <bert@biot.com>
+From:   Bert Vermeulen <bert@biot.com>
 Message-ID: <0fe113c6-4160-fd3c-488d-53d40b6043ee@biot.com>
-Date: Sun, 1 Aug 2021 11:07:48 +0200
+Date:   Sun, 1 Aug 2021 11:07:48 +0200
 MIME-Version: 1.0
 In-Reply-To: <87y29n26po.wl-maz@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210801090748.oh_cuBRrgk9u1ZqnsL5xzaCcQt_12AVLkchOeIBG5ok@z>
 
 On 7/30/21 4:53 PM, Marc Zyngier wrote:
 > On Fri, 30 Jul 2021 15:31:36 +0100,
