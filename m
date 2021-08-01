@@ -1,137 +1,233 @@
-Return-Path: <SRS0=3Suw=MY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <maz@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0A03C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Sun,  1 Aug 2021 09:43:19 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B8AC4338F
+	for <soc@archiver.kernel.org>; Sun,  1 Aug 2021 09:50:04 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 29948610A2; Sun,  1 Aug 2021 09:50:04 +0000 (UTC)
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B21E361058
-	for <linux-arm-kernel@archiver.kernel.org>; Sun,  1 Aug 2021 09:43:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B21E361058
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=059jL8VxdmN24fTjhhRL5HTKf3YRvL0AjtCAIMSLm1o=; b=Dw6ZBTXTyX5V8y
-	Kais3qAYa05y2M2scthZiXkWMkPtGP+NQaPD/Ueg5cySFFuePtUndccWcoT2Zv2t4NkzBu5vaeqi9
-	UwrWw3ogjGlcJOeOMBn5Drt0f0T1JMKP+vO/SbfajKHF6FFv2xT0pLUbAvQ6/0sd3XVjBUCwWF1sP
-	kwCp4WoIAmgLEhpA0NfCsKlc9r6+Iy29Y5Iwlj+kq6cz0zb1PLTHQCriNMXhll9myy91ahRB8ODK/
-	pC51NAUAGL2zMa+JMUhm0mRjtUyw1RGwbj6InhZuz2wS/FAVOidVgCoopdeq9m0PUOKt8SG0ef1OX
-	ceeuEipCyqw2KWRDbOSQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mA7yA-00D8v3-PI; Sun, 01 Aug 2021 09:41:18 +0000
-Received: from mout.kundenserver.de ([217.72.192.75])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mA7y6-00D8ug-6a
- for linux-arm-kernel@lists.infradead.org; Sun, 01 Aug 2021 09:41:15 +0000
-Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N8XDT-1nES3Q3SN7-014PiU for <linux-arm-kernel@lists.infradead.org>; Sun,
- 01 Aug 2021 11:41:09 +0200
-Received: by mail-wm1-f42.google.com with SMTP id m19so8629059wms.0
- for <linux-arm-kernel@lists.infradead.org>;
- Sun, 01 Aug 2021 02:41:09 -0700 (PDT)
-X-Gm-Message-State: AOAM530b1jq/iuUUHupHNuk+wNFHyQBd5+4XwI63+tw7WrmnZ6ZDDDM5
- xfcAShht62xniGn5NX9IJ4Zm6jBxJvjcywKW1PQ=
-X-Google-Smtp-Source: ABdhPJy9Co8LhMruzZGyj4f3XArmEpslC++FxInWAY5kS6dN4F5T0Wp45K/4NLUe+uVYPfHG9aIG+H5EtkfDpdNsprE=
-X-Received: by 2002:a7b:ce10:: with SMTP id m16mr11249018wmc.75.1627810869409; 
- Sun, 01 Aug 2021 02:41:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210730134552.853350-1-bert@biot.com>
- <20210730134552.853350-4-bert@biot.com>
- <CACRpkdYvMtE8b-Xiy6=Aiz20jvY0M0Bz9XmcEQDHhqeS+LErEA@mail.gmail.com>
- <87y29n26po.wl-maz@kernel.org> <0fe113c6-4160-fd3c-488d-53d40b6043ee@biot.com>
-In-Reply-To: <0fe113c6-4160-fd3c-488d-53d40b6043ee@biot.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Sun, 1 Aug 2021 11:40:53 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3HrzAYtCnLuThO=9LuwyF8KduNjx-ZrJkXG=Y-i6RNbw@mail.gmail.com>
-Message-ID: <CAK8P3a3HrzAYtCnLuThO=9LuwyF8KduNjx-ZrJkXG=Y-i6RNbw@mail.gmail.com>
-Subject: Re: [PATCH 3/5] ARM: dts: Add basic support for EcoNet EN7523
+	by mail.kernel.org (Postfix) with ESMTPSA id 0266661059;
+	Sun,  1 Aug 2021 09:50:04 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <maz@kernel.org>)
+	id 1mA86b-002Gr8-Sh; Sun, 01 Aug 2021 10:50:02 +0100
+Date: Sun, 01 Aug 2021 10:50:00 +0100
+Message-ID: <87r1fd1ol3.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
 To: Bert Vermeulen <bert@biot.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, 
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
- Linux ARM <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
- Rob Herring <robh+dt@kernel.org>, 
- John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-X-Provags-ID: V03:K1:n1XrCf9PoF+aaG7T3yG6MVYsgmLevJwVCbBAQSKIXPNWZzDrjol
- h1SAIYly8VF1yFhsxaseQE0zcXjkPT9zC527a8gdSAak76Qlp2qeUPDWW4S03py+6Hi+/5G
- miCjXXVBkWu9tafVEmOkuudhINdqi3crBlqnVS++CC+FHedU6M6k4bPoQQKI6qXenrr9cXG
- h4r3XpsR8UIE+NrEsjkSQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yrfkv6SwUXs=:mulXj1i3fcjkHTNEawo7Qp
- 5yxBzCoWOIgksbpiOIWmC8oQgjlERRXyTJz8dA/flz5VOkPqwoDzS5GtNIXNM3GzOCKbyc0Fr
- 1nMGf3xBaLGkk21v7VP76b49V9We7w0n9yy4Yn+pTy6AC5xnMS07wFOurgZgLJ3DEeUix+hja
- 8oWhnZuf9p1Yk91xdxxPZyOyqJXeSOjwkiTK/JCnVgFPHSFAYouAuRcPn9D6+H7oZZZWSdKI4
- jeD5f+5vuRN2syOfQ/pYmTcGc2LFWgN+tsMiGALtHbp1FbnBlNc9ToIs0SmZztZkcA7u7qRBY
- p7u1afdNRmpigDRwCytn8uIg39f8HVVu+av4f9n7oLfomCTzuUTaQM+tunXEOqbuefu9Ty3lb
- s1mnDeX4L7OD/Y+WwpQ5k2sJ2CbTmRaW6bYz7a/W0FB+ruYPqOBPcevhNZwU6rgOhVg7Gx/ZP
- /rxzkYVks5+ekEPm9K0hlpd/AljH9dh2CFcT9q9ETM+YRsgoMs/yhPPDfuhUqQQZhKwmcZJbi
- qQtnKURpQeNSJatu6k8i31O6N5KPIMIBRLbLp48nrCgbpxJjDja5MSbnOkacHoipmbSWPSszb
- 6GQ0sYf5U7hvXhrD5lTDowicFK9Ntm2Vs4DHbu0hiqRwtOhCE20IzqoDkXwv4HaARpYZ4xLuj
- hh1MIV4w9M1b1jaazbw/SI/qtaTCxKgl4GhqbWGCLEY7fgVKKp95qkyY5ZxsMr+rUUIkk4WjG
- 30gHB/JSStORalOACiGkAxhtQvpJ1UGCudKv6b1IqrBaXqT5yxMwTFxSN0ppdKItLDqv64q19
- onIMzZ6/fU6FJaMdPPfVw6BcBW8NFWKEZNSswLTzqt5E8Oq2cUJ6Cn5s6T5UMjsX27i2JxPTw
- zsyOKmXygYKAiyn9EKmQgTFeF33tHcgAZ3R//0fLyvuW/ITxuO2t9zJFILW8L+VBPHCMvdIow
- /WjXl0D4qT2NphX5q+DHnvFn/uIwGAVKX4k5eFdQZmaDikSkHyokN
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210801_024114_579746_16A6D9FC 
-X-CRM114-Status: GOOD (  17.88  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210801094053.MM13x6VG-X92QreDpMI1wqTS71O8INqH0WOB5VOwv4g@z>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	SoC Team <soc@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	John Crispin <john@phrozen.org>,
+	Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH 3/5] ARM: dts: Add basic support for EcoNet EN7523
+In-Reply-To: <0fe113c6-4160-fd3c-488d-53d40b6043ee@biot.com>
+References: <20210730134552.853350-1-bert@biot.com>
+	<20210730134552.853350-4-bert@biot.com>
+	<CACRpkdYvMtE8b-Xiy6=Aiz20jvY0M0Bz9XmcEQDHhqeS+LErEA@mail.gmail.com>
+	<87y29n26po.wl-maz@kernel.org>
+	<0fe113c6-4160-fd3c-488d-53d40b6043ee@biot.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: bert@biot.com, linus.walleij@linaro.org, catalin.marinas@arm.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org, john@phrozen.org, nbd@nbd.name
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Sun, Aug 1, 2021 at 11:07 AM Bert Vermeulen <bert@biot.com> wrote:
-> On 7/30/21 4:53 PM, Marc Zyngier wrote: On Fri, 30 Jul 2021 15:31:36 +0100,
+On Sun, 01 Aug 2021 10:07:48 +0100,
+Bert Vermeulen <bert@biot.com> wrote:
+> 
+> On 7/30/21 4:53 PM, Marc Zyngier wrote:
+> > On Fri, 30 Jul 2021 15:31:36 +0100,
+> > Linus Walleij <linus.walleij@linaro.org> wrote:
+> >> 
+> >> Paging Marc Z and Catalin just so they can see this:
+> >> 
+> >> On Fri, Jul 30, 2021 at 3:49 PM Bert Vermeulen <bert@biot.com> wrote:
+> >> 
+> >> > From: John Crispin <john@phrozen.org>
+> >> >
+> >> > Add basic support for EcoNet EN7523, enough for booting to console.
+> >> >
+> >> > The UART is basically 8250-compatible, except for the clock selection.
+> >> > A clock-frequency value is synthesized to get this to run at 115200 bps.
+> >> >
+> >> > Signed-off-by: John Crispin <john@phrozen.org>
+> >> > Signed-off-by: Bert Vermeulen <bert@biot.com>
+> >> (...)
+> >> > +       gic: interrupt-controller@09000000 {
+> >> > +               compatible = "arm,gic-v3";
+> >> > +               interrupt-controller;
+> >> > +               #interrupt-cells = <3>;
+> >> > +               #address-cells = <1>;
+> >> > +               #size-cells = <1>;
+> >> > +               reg = <0x09000000 0x20000>,
+> >> > +                         <0x09080000 0x80000>;
+> >> > +               interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW>;
+> >> > +
+> >> > +               its: gic-its@09020000 {
+> >> > +                       compatible = "arm,gic-v3-its";
+> >> > +                       msi-controller;
+> >> > +                       #msi-cell = <1>;
+> >> > +                       reg = <0x090200000 0x20000>;
+> >> > +               };
+> >> > +       };
+> >> 
+> >> Yup GICv3 on ARM32-only silicon.
+> > 
+> > Hey, why not. But that's very unlikely, as Cortex-A7 doesn't have a
+> > GICv3 CPU interface built in (it only has the memory mapped version),
+> > and A53/57 were the first CPUs to ever support GICv3. I don't believe
+> > the description of the CPU in the DT is accurate.
+> > 
+> > Bert, please send a kernel boot log.
+> 
+> At the bottom of this mail.
+> 
+> >> > +       timer {
+> >> > +               compatible = "arm,armv8-timer";
+> >> > +               interrupt-parent = <&gic>;
+> >> > +               interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> >> > +                            <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> >> > +                            <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> >> > +                            <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+> > 
+> > Copy paste bug. These are not valid intspecs for GICv3.
+> 
+> FWIW all these were taken verbatim from the vendor's SDK. Not that
+> this makes them necessarily correct :)
+
+Please, never copy anything verbatim from an existing DT, specially
+not a vendor pile of crap.
+
+Most integrators only cherry-picking DT random fragments without
+trying to understand what they imply, beat them together until there
+is a sign of life, and end-up with a monster that bears no resemblance
+with reality.
+
+Take an existing DT as a hint of what *could* be there, and work out
+from first principles what actually makes sense. Yes, it is a lot of
+work and involves reading specs, TRMs and whatnot. But at least it
+will be correct, which is the standard that upstream is supposed to
+uphold.
+
+A shining example is what is below:
+
+> 
+> >> > +               clock-frequency = <25000000>;
+> >> > +       };
+> >> 
+> >> Also arm,armv8-timer on ARM32-only silicon.
+> > 
 > > Probably because that's not what it actually is. My bet is on A53 with
 > > a crippled firmware.
->
+> 
+> kernel boot log:
+> 
 > [    0.000000] Booting Linux on physical CPU 0x0
 > [    0.000000] Linux version 5.14.0-rc3-00042-g3af70c6f8e95-dirty
-> (bert@sumner) (arm-linux-gnueabi-gcc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0,
-> GNU ld (GNU Binutils for Ubuntu) 2.34) #392 SMP Sun Aug 1 10:28:13 CEST 2021
+> (bert@sumner) (arm-linux-gnueabi-gcc (Ubuntu 9.3.0-17ubuntu1~20.04)
+> 9.3.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #392 SMP Sun Aug 1
+> 10:28:13 CEST 2021
 > [    0.000000] CPU: ARMv7 Processor [410fd034] revision 4 (ARMv7), cr=10c5383d
+
+As expected: 410fd034 = Cortex-A53 r0p4. Pretty far from a Cortex-A7,
+isn't it?
+
 > [    0.000000] CPU: div instructions available: patching division code
-> [    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
+> [    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing
+> instruction cache
+> [    0.000000] OF: fdt: Machine model: econet,en7523
+> [    0.000000] earlycon: uart8250 at MMIO32 0x1fbf0000 (options '')
+> [    0.000000] printk: bootconsole [uart8250] enabled
+> [    0.000000] Memory policy: Data cache writealloc
+> [    0.000000] Zone ranges:
+> [    0.000000]   Normal   [mem 0x0000000080000000-0x000000009fffffff]
+> [    0.000000]   HighMem  empty
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000080000000-0x0000000083ffffff]
+> [    0.000000]   node   0: [mem 0x0000000084000000-0x00000000849fffff]
+> [    0.000000]   node   0: [mem 0x0000000084a00000-0x0000000084afffff]
+> [    0.000000]   node   0: [mem 0x0000000084b00000-0x0000000084bfffff]
+> [    0.000000]   node   0: [mem 0x0000000084c00000-0x0000000084ffffff]
+> [    0.000000]   node   0: [mem 0x0000000085000000-0x00000000869fffff]
+> [    0.000000]   node   0: [mem 0x0000000086a00000-0x0000000086afffff]
+> [    0.000000]   node   0: [mem 0x0000000086b00000-0x0000000086bfffff]
+> [    0.000000]   node   0: [mem 0x0000000086c00000-0x0000000086cfffff]
+> [    0.000000]   node   0: [mem 0x0000000086d00000-0x0000000086dfffff]
+> [    0.000000]   node   0: [mem 0x0000000086e00000-0x000000009fffffff]
+> [    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x000000009fffffff]
+> [    0.000000] percpu: Embedded 15 pages/cpu s30604 r8192 d22644 u61440
+> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 129920
+> [    0.000000] Kernel command line:
+> earlycon=uart8250,mmio32,0x1fbf0000 console=ttyS0,115200
+> [    0.000000] Dentry cache hash table entries: 65536 (order: 6,
+> 262144 bytes, linear)
+> [    0.000000] Inode-cache hash table entries: 32768 (order: 5, 131072
+> bytes, linear)
+> [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+> [    0.000000] Memory: 461316K/524288K available (7168K kernel code,
+> 312K rwdata, 1488K rodata, 8192K init, 142K bss, 62972K reserved, 0K
+> cma-reserved, 0K highmem)
+> [    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+> [    0.000000] rcu: Hierarchical RCU implementation.
+> [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay
+> is 10 jiffies.
+> [    0.000000] NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
+> [    0.000000] GICv3: 256 SPIs implemented
+> [    0.000000] GICv3: 0 Extended SPIs implemented
+> [    0.000000] GICv3: Distributor has no Range Selector support
+> [    0.000000] GICv3: 16 PPIs implemented
+> [    0.000000] GICv3: CPU0: found redistributor 0 region 0:0x09080000
 
-Good guess! CPUID 410fd034 is a Cortex-53 (d03) indeed. I wish we
-would just print
-cleartext names for the CPUs that the kernel already knows about here, I think
-the fact that we just print 'ARMv7 processor' (which is wrong) and
-spell out the revision
-but not implementer/part/variant numbers is rather silly.
+Interestingly, we don't program the property/pending tables for the
+RD. Which means this SoC doesn't support LPIs, and thus *does not*
+have an ITS, despite what you advertise.
 
-Is there a way in the boot loader to boot up a 64-bit kernel?
+> [    0.000000] random: get_random_bytes called from
+> start_kernel+0x484/0x628 with crng_init=0
+> [    0.000000] arch_timer: cp15 timer(s) running at 25.00MHz (virt).
+> [    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff
+> max_cycles: 0x5c40939b5, max_idle_ns: 440795202646 ns
+> [    0.000000] sched_clock: 56 bits at 25MHz, resolution 40ns, wraps
+> every 4398046511100ns
+> [    0.008791] Switching to timer-based delay loop, resolution 40ns
+> [    0.015454] Calibrating delay loop (skipped), value calculated
+> using timer frequency.. 50.00 BogoMIPS (lpj=250000)
+> [    0.026833] pid_max: default: 32768 minimum: 301
+> [    0.032013] Mount-cache hash table entries: 1024 (order: 0, 4096
+> bytes, linear)
+> [    0.040047] Mountpoint-cache hash table entries: 1024 (order: 0,
+> 4096 bytes, linear)
+> [    0.049172] CPU: Testing write buffer coherency: ok
+> [    0.054780] CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+> [    0.061362] Setting up static identity map for 0x80100000 - 0x80100060
+> [    0.068667] rcu: Hierarchical SRCU implementation.
+> [    0.074290] gic-its@09020000: unable to locate ITS domain
 
-       Arnd
+Confirmed. No LPI support, no ITS.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
