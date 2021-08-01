@@ -1,57 +1,104 @@
-Return-Path: <maz@kernel.org>
+Return-Path: <SRS0=3Suw=MY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B8AC4338F
-	for <soc@archiver.kernel.org>; Sun,  1 Aug 2021 09:50:04 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 29948610A2; Sun,  1 Aug 2021 09:50:04 +0000 (UTC)
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3E04C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Sun,  1 Aug 2021 09:52:14 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPSA id 0266661059;
-	Sun,  1 Aug 2021 09:50:04 +0000 (UTC)
-Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <maz@kernel.org>)
-	id 1mA86b-002Gr8-Sh; Sun, 01 Aug 2021 10:50:02 +0100
+	by mail.kernel.org (Postfix) with ESMTPS id B7289610A0
+	for <linux-arm-kernel@archiver.kernel.org>; Sun,  1 Aug 2021 09:52:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B7289610A0
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Subject:Cc:To:From:Message-ID:Date:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=0yzNMJuacnt1bDhak5L/ymjFRgips6ZRldY/b7TNFbA=; b=LHn6Cp40V1jxB6
+	6zuiRdrccvlr95D1RyVb8c+R5rEkF+2gSNRP/DlMMW/SnBd0+nK0/DooJfb9YC004C6R0MatbF3UC
+	EVAjZzdoGbhl/cEUa8wjA2Pt9CkHMMhjAqRgQg8pBQkA64yn5WeV3bnQ/rKKdtzJVY2AVh3YL7Wo0
+	thHPpvUuFe7vCJrQVBkxw7Drv1p0Upaqo7ht173Q+LoH3VFPs03gVLMsvHddFJ1b/B4iJuCaG6UBq
+	ZAtyI9w/1iBlmufhZYEHQUq72ZFKJ1gLyv3MBJkSz9IjIjo+myMj1wWDRBeuF9k4XU6Ai4ULaFwwB
+	lEOq//S34OiJkigNW4dw==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mA86j-00D9yS-49; Sun, 01 Aug 2021 09:50:09 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mA86e-00D9xQ-GH
+ for linux-arm-kernel@lists.infradead.org; Sun, 01 Aug 2021 09:50:06 +0000
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org
+ [51.254.78.96])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.kernel.org (Postfix) with ESMTPSA id 0266661059;
+ Sun,  1 Aug 2021 09:50:04 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64]
+ helo=wait-a-minute.misterjones.org)
+ by disco-boy.misterjones.org with esmtpsa (TLS1.3) tls
+ TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94.2)
+ (envelope-from <maz@kernel.org>)
+ id 1mA86b-002Gr8-Sh; Sun, 01 Aug 2021 10:50:02 +0100
 Date: Sun, 01 Aug 2021 10:50:00 +0100
 Message-ID: <87r1fd1ol3.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Bert Vermeulen <bert@biot.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	SoC Team <soc@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	John Crispin <john@phrozen.org>,
-	Felix Fietkau <nbd@nbd.name>
+ Catalin Marinas <catalin.marinas@arm.com>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
 Subject: Re: [PATCH 3/5] ARM: dts: Add basic support for EcoNet EN7523
 In-Reply-To: <0fe113c6-4160-fd3c-488d-53d40b6043ee@biot.com>
 References: <20210730134552.853350-1-bert@biot.com>
-	<20210730134552.853350-4-bert@biot.com>
-	<CACRpkdYvMtE8b-Xiy6=Aiz20jvY0M0Bz9XmcEQDHhqeS+LErEA@mail.gmail.com>
-	<87y29n26po.wl-maz@kernel.org>
-	<0fe113c6-4160-fd3c-488d-53d40b6043ee@biot.com>
+ <20210730134552.853350-4-bert@biot.com>
+ <CACRpkdYvMtE8b-Xiy6=Aiz20jvY0M0Bz9XmcEQDHhqeS+LErEA@mail.gmail.com>
+ <87y29n26po.wl-maz@kernel.org>
+ <0fe113c6-4160-fd3c-488d-53d40b6043ee@biot.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: bert@biot.com, linus.walleij@linaro.org, catalin.marinas@arm.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org, john@phrozen.org, nbd@nbd.name
+X-SA-Exim-Rcpt-To: bert@biot.com, linus.walleij@linaro.org,
+ catalin.marinas@arm.com, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org,
+ john@phrozen.org, nbd@nbd.name
 X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org);
+ SAEximRunCond expanded to false
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210801_025004_635363_04D981E0 
+X-CRM114-Status: GOOD (  37.67  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210801095000.zCnXLD8tcR0sgyQMKn5JgNttxiiiil6qYsagJlXsQh4@z>
 
 On Sun, 01 Aug 2021 10:07:48 +0100,
 Bert Vermeulen <bert@biot.com> wrote:
@@ -231,3 +278,8 @@ Confirmed. No LPI support, no ITS.
 
 -- 
 Without deviation from the norm, progress is not possible.
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
