@@ -6,62 +6,57 @@ X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7B6FC4338F
-	for <soc@archiver.kernel.org>; Mon,  2 Aug 2021 13:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 081DAC43214
+	for <soc@archiver.kernel.org>; Mon,  2 Aug 2021 13:32:56 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 9520360FC1; Mon,  2 Aug 2021 13:32:53 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0F40861029;
-	Mon,  2 Aug 2021 13:32:51 +0000 (UTC)
+	id E338361029; Mon,  2 Aug 2021 13:32:55 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EC5E260FC4;
+	Mon,  2 Aug 2021 13:32:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1627911173;
-	bh=O6uto0DlYXqCQqQb66wSlu49Q+/+1O5wXTpmlkHf7qY=;
-	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MwkXUCH3i6xdHYOYGZu26AzBMsYK2pnCZGDkg8D80TLZ4wEqB+Qde6tCNS3ZO7cxT
-	 D0rZ7TtdeS0O12PGfOiXncCQ7ULhxAVG6i6ghjeo2NfitYtuOwyeEVtZx7hJpSqXFg
-	 aAVoCyYFiNght49QizNf34ddEg5syGGtqsPGzHumlTFN4+P5MPpulRhe7HmZQxI7Z5
-	 UKuocgwOm4wTw3fTChUNlxtSaUcZ6PyG//Ty7374FVsKiUm1eXTXzpSbQBvVLIuzx5
-	 1CEjwk1q1gHO/kE9caswNSxuESDgJwaAGswXs7XC5764sugNgDWAllsbWqLoagyJdO
-	 OjEP+khpISfwA==
+	s=k20201202; t=1627911175;
+	bh=unRRbhCk2BelKbyecUH1fgze+n6H59+umvsvHd2WUkk=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=eeFiaGVYMnErcMR8SUm4KwsFW8nC/Jw2CZVGk5QfwJn/zQtJah2PHhzaJdaVxxC7V
+	 7N9NGPgEPva6SpCSHZdZw6n6NwIG7HUuI0aPn4C2JXyDmioik/sqHooq206zov017W
+	 HvVQngeeENw2nZZ79gZSKCbAFyMhNzGfV2JS+N/91L0ERFKNPGcCalpw4Z17tEhVmu
+	 t2jU6BHbhVKYdLJ7lj8FXQRPHq10iUXBMH8oMF5hnlzFo8JzzDir7yTeiqn6eJfI+X
+	 lxPKMyVQfvNdiVUJjkvwvT/SYAjrsF3y/vWwNUbOwXcLG4E2RI6jcBOXzf3PHg7zqI
+	 9mnBosS0sxs/w==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Olof Johansson <olof@lixom.net>,
+	arm@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] [SUBMITTED 20210721] ARM: ixp4xx: fix compile-testing soc drivers
-Date: Mon,  2 Aug 2021 15:32:39 +0200
-Message-Id: <162791113519.1139989.827524355147954573.b4-ty@arndb.de>
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [GIT PULL] ARM: mvebu: fixes for v5.14 (#1)
+Date: Mon,  2 Aug 2021 15:32:40 +0200
+Message-Id: <162791113549.1139989.15144544679312934599.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210721211412.3537004-1-arnd@kernel.org>
-References: <20210721211412.3537004-1-arnd@kernel.org>
+In-Reply-To: <87k0l7zx4v.fsf@BL-laptop>
+References: <87k0l7zx4v.fsf@BL-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 21 Jul 2021 23:13:43 +0200, Arnd Bergmann wrote:
-> Randconfig builds on the ixp4xx ethernet driver showed that the qmgr and
-> npe drivers are not actually built even when compile testing is enabled:
+On Fri, 30 Jul 2021 16:36:48 +0200, Gregory CLEMENT wrote:
+> Here is the first pull request for fixes for mvebu for v5.14.
 > 
-> ERROR: modpost: "qmgr_stat_empty" [drivers/net/ethernet/xscale/ixp4xx_eth.ko] undefined!
-> ERROR: modpost: "qmgr_enable_irq" [drivers/net/ethernet/xscale/ixp4xx_eth.ko] undefined!
-> ERROR: modpost: "qmgr_set_irq" [drivers/net/ethernet/xscale/ixp4xx_eth.ko] undefined!
-> ERROR: modpost: "__qmgr_request_queue" [drivers/net/ethernet/xscale/ixp4xx_eth.ko] undefined!
-> ERROR: modpost: "npe_send_recv_message" [drivers/net/ethernet/xscale/ixp4xx_eth.ko] undefined!
-> ERROR: modpost: "npe_recv_message" [drivers/net/ethernet/xscale/ixp4xx_eth.ko] undefined!
-> ERROR: modpost: "npe_load_firmware" [drivers/net/ethernet/xscale/ixp4xx_eth.ko] undefined!
-> ERROR: modpost: "npe_running" [drivers/net/ethernet/xscale/ixp4xx_eth.ko] undefined!
-> ERROR: modpost: "qmgr_disable_irq" [drivers/net/ethernet/xscale/ixp4xx_eth.ko] undefined!
-> ERROR: modpost: "qmgr_stat_below_low_watermark" [drivers/net/ethernet/xscale/ixp4xx_eth.ko] undefined!
+> Gregory
+> 
+> The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+> 
+>   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
 > 
 > [...]
 
-Applied to arm/fixes, thanks!
+Merged into arm/fixes, thanks!
 
-[1/1] ARM: ixp4xx: fix compile-testing soc drivers
-      commit: 7f94b69ece515ac82defa60ef7cba2cf26180216
+merge commit: 6ebeca342f96a7c371ed5fe53189dd56fe0c0330
 
        Arnd
