@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60770C4338F
-	for <soc@archiver.kernel.org>; Mon,  2 Aug 2021 13:34:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80532C4338F
+	for <soc@archiver.kernel.org>; Mon,  2 Aug 2021 13:34:08 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 3397760F6D; Mon,  2 Aug 2021 13:34:06 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6DE1460FA0;
-	Mon,  2 Aug 2021 13:34:04 +0000 (UTC)
+	id 504FC60FF2; Mon,  2 Aug 2021 13:34:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8CE1960FC4;
+	Mon,  2 Aug 2021 13:34:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1627911246;
-	bh=oasDpz27kFmZh5itB/GUvE+3lwjuX2EwLqwaOKQdZLA=;
+	s=k20201202; t=1627911248;
+	bh=EeMU1k7JK0lGUWjAt7YcQieL8boQC4w/IvfTZ+BdQW0=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lp7I86J7tQqXGrfCeoowc7Zj3u5QFHLV545VSq3oeX1aHG0gXZtXeLMBPZRC3UPmb
-	 Km5L4x8B+dBlt0oh6C9bEF4b25IR+Fj4Pou/jiKr/pXHJnPf6Td8/B/Ei/ouU+T7nz
-	 5LnWgxnpi2+BiTawG7g3LWIwDh4NKG7o2wQszOBWdQ/89Spj6rrhulIlYdDH0W5waR
-	 a612Ndnz9848xF0oyiUN5YqqYjXcxn6Okfk8elh1oPLpKQ4EITo9tZywY0W4iEBnFk
-	 TCkrDceoXS0oFLTmSSacGRZxFm7e4POsinRjEKf5Mg66WMBYzKjLcFo9WarVwHh13c
-	 zKpkIe3oBY0mg==
+	b=HCp8N68W9YRlV8ZnmecG/aC3Ik7T1HvvIPbEqeMH6urgZuwnIE4bOCn1n2NAVf9VJ
+	 9vPos0y98C5bBIAd74aAB9Qv/Z4wwNGBdqFl4wV7vDXkOax+GjFdzZuOtG9aAG41nN
+	 svsKRXDq7lYQiVZhZbx3J7sAEPq5jeD1RRpqHy7PtUNXfffodzWM1KDrFnAUK7LKAj
+	 LA4fFts4ubfWoL90WUUKsMQV5cS4C6BiVEAX+CApB6hX2UjTn5hegZ45s+EpJbKo5Q
+	 DQ29XkIGph2LeUKnytMRue/xSj0W9cRpGKZfgEN4cIJfsRQkqg1zC1k6yzsmcVv2ul
+	 jvUinUJWtV+xA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc <soc@kernel.org>,
@@ -32,31 +32,31 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Magnus Damm <magnus.damm@gmail.com>,
 	linux-renesas-soc@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 1/3] Renesas ARM DT updates for v5.15
-Date: Mon,  2 Aug 2021 15:33:59 +0200
-Message-Id: <162791122493.1140356.14062105755897419012.b4-ty@arndb.de>
+Subject: Re: [GIT PULL 3/3] Renesas DT binding updates for v5.15
+Date: Mon,  2 Aug 2021 15:34:00 +0200
+Message-Id: <162791122501.1140356.6236184546400456466.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <cover.1627650696.git.geert+renesas@glider.be>
-References: <cover.1627650695.git.geert+renesas@glider.be> <cover.1627650696.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1627650706.git.geert+renesas@glider.be>
+References: <cover.1627650695.git.geert+renesas@glider.be> <cover.1627650706.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 30 Jul 2021 15:18:54 +0200, Geert Uytterhoeven wrote:
-> The following changes since commit 2734d6c1b1a089fb593ef6a23d4b70903526fe0c:
+On Fri, 30 Jul 2021 15:18:56 +0200, Geert Uytterhoeven wrote:
+> The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 > 
->   Linux 5.14-rc2 (2021-07-18 14:13:49 -0700)
+>   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.15-tag1
+>   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v5.15-tag1
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 272614ec1b6bde9ab56bf8c9a71c4ff9ccf2eff8
+merge commit: c4994975132eb2488ad1259c273812ae38f5fccd
 
        Arnd
