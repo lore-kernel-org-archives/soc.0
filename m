@@ -2,61 +2,64 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DFC3C4320E
-	for <soc@archiver.kernel.org>; Mon,  2 Aug 2021 13:32:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BA36C4338F
+	for <soc@archiver.kernel.org>; Mon,  2 Aug 2021 13:33:01 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 3D69B60FC2; Mon,  2 Aug 2021 13:32:58 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4979261050;
-	Mon,  2 Aug 2021 13:32:56 +0000 (UTC)
+	id E5F0B60FC2; Mon,  2 Aug 2021 13:33:00 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 97A6F60FC4;
+	Mon,  2 Aug 2021 13:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1627911178;
-	bh=ucmNHyUJ8JCTHkurrtpLG9CfhbsZcAzrbSacjcGRyjc=;
+	s=k20201202; t=1627911180;
+	bh=5Utd1jsqdXvkifa65CMmossDe8JRj7ZzI8zHwZTHDqU=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uy8TKULkAE5UFJlbLWHRUxmRcPvRy84T4KUpmiNd/07HrMcMJ1LArioRCBUsz34xJ
-	 IIblkdUCa0EvYDOGN8cdRI4mAwUAuNNhIEc0Z1pzKpu6eVn2FcSwt8mvo2Jt02sp/K
-	 gIhCstj9fSIVhzzqcL5EUjIPHnHtuMHu+3X/RltM9jsR7Eo/j5v3tCq4gLN0n0FCZy
-	 FD/NWjBIE9Hca1Aolk2/bCk0CyhpjMEhxRucc6IxHtFIM+nTl1ZXVvAZD0QpnwGfGu
-	 m+d6vpCztHvIpNyBlGm/TETQQ8JRAXfCUphZ4gyKwR51BryRBu0xCL51cNvzTWGSdp
-	 MleQ/dml8PHrw==
+	b=Z+9Nmg43m/vyoQ6+hKtTfxSetJyY0VfI+jYvecW9fd/dxu7xLfJsG6tQRtr51DC7/
+	 G0Tr/cwVtdsY5YHx0nQxgdAAlY6SFy43j8Co1PlZd61rk6+1ictczkw7ytA6zWA7c6
+	 0HOZqae6IpyY4st13ndHsP9FK1/FOf/8/Bj5vRojWigM2iOtZobxEyNqIQDfKEUWZX
+	 IahAWtWvoFvfWx2iwMxfeRirT1fIyOYCnHZ87hcHufDiTOJo1YrNFXBJpYXScRqzln
+	 v3074W7adMjdnMXrH+t6y/vgp1nXjCSBoE12LgS8XqJedvdco7m1LcUkmq9tbEMj6a
+	 tywufG5G5L0mg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
-	Jens Wiklander <jens.wiklander@linaro.org>,
+	Shawn Guo <shawnguo@kernel.org>,
 	arm@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Sumit Garg <sumit.garg@linaro.org>,
-	Tyler Hicks <tyhicks@linux.microsoft.com>,
-	op-tee@lists.trustedfirmware.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] TEE kexec fixes for v5.14
-Date: Mon,  2 Aug 2021 15:32:41 +0200
-Message-Id: <162791113532.1139989.17019256982120013702.b4-ty@arndb.de>
+	Li Yang <leoyang.li@nxp.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	kernel@pengutronix.de,
+	linux-arm-kernel@lists.infradead.org,
+	Stefan Agner <stefan@agner.ch>,
+	linux-imx@nxp.com
+Subject: Re: [GIT PULL] i.MX fixes for 5.14
+Date: Mon,  2 Aug 2021 15:32:42 +0200
+Message-Id: <162791113528.1139989.15546456709229753234.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210726081039.GA2482361@jade>
-References: <20210726081039.GA2482361@jade>
+In-Reply-To: <20210726023221.GF5901@dragon>
+References: <20210726023221.GF5901@dragon>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 26 Jul 2021 10:10:39 +0200, Jens Wiklander wrote:
-> Please pull these fixes relating to OP-TEE, ftpm (firmware TPM), and
-> tee_bnxt_fw (Broadcom BNXT firmware manager) drivers in kexec and kdump
-> (emergency kexec) based workflows.
+On Mon, 26 Jul 2021 10:32:22 +0800, Shawn Guo wrote:
+> The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 > 
-> The two patches "firmware: tee_bnxt: Release TEE shm, session, and context
-> during kexec" and "tpm_ftpm_tee: Free and unregister TEE shared memory
-> during kexec" are acked by their respective maintainers.
+>   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.14
 > 
 > [...]
 
 Merged into arm/fixes, thanks!
 
-merge commit: 64429b9e0e1dc05cbe4f88076909fe0c4d2d29dc
+merge commit: bee757485161e2bb43fd0bcd5f7e17cfe2b11bbf
 
        Arnd
