@@ -1,168 +1,119 @@
-Return-Path: <SRS0=DM4H=MZ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=XkFf=MZ=gmail.com=thierry.reding@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F16FC4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  2 Aug 2021 15:47:05 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F3E5C4338F
+	for <soc@archiver.kernel.org>; Mon,  2 Aug 2021 16:21:29 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7FBA860FC4; Mon,  2 Aug 2021 16:21:29 +0000 (UTC)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2D1B2610FB
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  2 Aug 2021 15:47:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2D1B2610FB
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	References:In-Reply-To:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=TYPYOsWX5ZTTFGsNwvlyB7M0u/yvLblm2VkO0po6TpI=; b=Cf45Dv56nbOW6V
-	vLF+sCExXOb42L3leHTtq3WNiVtBS3B+kYpQrwriQQ5FWBHSL+uEXRGk+rgxBaeXW4e1x7uWVArkN
-	qTK99rmu8P2iqVynWwxbWVb/y1tETN4IwjUD61Bc9ku/xUPof4n0naS7O0TVJufxNZboK/gNmIM77
-	IBs0Tbd1tG5aQXjBaRsxIYkX3NtLeJdKhAfaSO4teZIZqDZEVVwsOq9rY2DdBLkrwf4NclxrHwN6y
-	vlGvEeElAlfDs0AbrG2ZDHZRc9xdTADNsCAYTBCyyV37oBBmNQveSwPkCI+Xkpy/X4YD+e0fvCiT9
-	8SgLerqnWjrSfA6Lq+Xw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mAa84-00H1mV-Mb; Mon, 02 Aug 2021 15:45:24 +0000
-Received: from mail-ed1-x531.google.com ([2a00:1450:4864:20::531])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mAa81-00H1l1-A0
- for linux-arm-kernel@lists.infradead.org; Mon, 02 Aug 2021 15:45:22 +0000
-Received: by mail-ed1-x531.google.com with SMTP id y7so22847742eda.5
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 02 Aug 2021 08:45:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=mime-version:in-reply-to:references:from:date:message-id:subject:to
- :cc; bh=cMN4yc6Yg7k+g95Y7UmZLiL/P6GU424U+ZDesgvhHgU=;
- b=cQd6eHU1xNXbRSjFnHyZg5KKJ8qwmS312QYTIhTlKOvZHVz+vU5I1tTgW2BB0RFmES
- Z4EHxLLnIiMwBth28LK4Ahje7aFFktra/pnP5cFCug4SnUwmR6zGodWlrj8VYbluAqwQ
- YJi6LnO/Ryc3z7LAq+QKYt/TWmkRz5mZvE24aY7yFfW1JyXLaItJHEt86+y67qOOSTgE
- mt1yMy2iPuaKgK7CcNnSNx9YTscgoOCJgITwkVx9FihmNPRfqw5HHHBcqiZE9PhLGbYK
- lT1UqDwf/AQYapSCuVZ3aNLNUS30d0WEkBVdFHWhYEwB6rusx/Ph3bHdvZGhEx6h+usA
- nqnw==
+	by mail.kernel.org (Postfix) with ESMTPS id 53FB860F9E;
+	Mon,  2 Aug 2021 16:21:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 53FB860F9E
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id n12so22145854wrr.2;
+        Mon, 02 Aug 2021 09:21:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Eo/ko/cKXyffVXdy/1Hup8RlLilDw0wcG1gMwmDSxRA=;
+        b=bWW29oBh9sAPntXWB3hWAVN29lWeSqsKPgOKpS9sl+GDTCWiWizvTBm1jbQFljO3d1
+         I05t/uZVMo5kpEERlB4YppqlViue5NeWp1pN3++/uw6xHN27s8bRWe0dIGfrVFozl9Bl
+         tG/8TLeM4EOED0mIDfwKFwZ9DxNFXNIeQwPD36vsg0712PCfssoX3g32hrrmnC+NcxY0
+         YSMfYJ2fbSHGnXQoJb7pAPPAc6aKrS1C+r+TmzvVUiblEJNGY82DvxMrd6L3PDoYDC1W
+         DxJQ6qQJnWUmmF4MxZV8NWmyRCc2Up0sRQ/z5H/PqkCI+brQAIn1fmDWqccgQbeLjTy+
+         tgEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:in-reply-to:references:from:date
- :message-id:subject:to:cc;
- bh=cMN4yc6Yg7k+g95Y7UmZLiL/P6GU424U+ZDesgvhHgU=;
- b=L886LuLL23pYFu8DHbXrYfu8RKoME6NzooH2k5XmsjdO9EdOHLaVYOLkIpvqqpamJX
- o/NGHsd2V3rEx9aUZeU6vUw7X1oQzYUa3prbqdF1UQTh3VSh/E82io3mhwyGFHxS1X+z
- EdfrJl6wj8jyp8TJvLaoz9KQYxRUCgJvAzC8h7PK1qSCjzqAc/fTj0YAzFpKN3nFyQL3
- g9lS4zjru8xp5baIpxyeuGy1OdYqM8O193zXlVv+Yw/6w+V0/STps5gQSMsc0J7/k9PR
- Ha0RclLTwNGg4NnVF6OrBHnn8s9L7sxdcAaqMWTyadaieVo3y0mYHtlJ+Zjl1OyEVNef
- mh/Q==
-X-Gm-Message-State: AOAM533GVjf5vMzkCrAvMsMjIgfewstfqkbPASV7OY9jw8j7I+MIY7p4
- vSS+QJNfvFk+SBFJQGQLhh+FJlS1oM2Rxcfuhjk=
-X-Google-Smtp-Source: ABdhPJxT71L+T05yz/hq+Tsn15GIbWhZTIbquxkVkxucO5ulY894g/8MmOt6pCNq9/8xQxw7L9Urp1FEelq55p0lqoU=
-X-Received: by 2002:a05:6402:274f:: with SMTP id
- z15mr20502581edd.21.1627919118096; 
- Mon, 02 Aug 2021 08:45:18 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a17:906:3018:0:0:0:0 with HTTP; Mon, 2 Aug 2021 08:45:17
- -0700 (PDT)
-In-Reply-To: <20210802141245.1146772-1-arnd@kernel.org>
-References: <20210802141245.1146772-1-arnd@kernel.org>
-From: Martin Guy <martinwguy@gmail.com>
-Date: Mon, 2 Aug 2021 17:45:17 +0200
-Message-ID: <CAL4-wQqCL1S-GYu7VKJeTT37wh=rR=SMUuwgKiXnnn_Y=uydOA@mail.gmail.com>
-Subject: Re: [PATCH] ARM: ep93xx: remove MaverickCrunch support
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Eo/ko/cKXyffVXdy/1Hup8RlLilDw0wcG1gMwmDSxRA=;
+        b=pwOg877gYe1yOy6UQKnR9Wkz8oYsBPiHUJqJhMq+O7kvhlFv0bd+c9CnbcVQtfXJC4
+         SNS4mEl9wMcfzXijBbBZ3hiFuNcK1OO2k/3p5MRefn7TlaCad+p6kOTOe75sacEF4chJ
+         nlz9jEz1KZ6U2xLTZ9VeruB/r0ayWxQ6MXs0LtzFTMwlYpHQzRJGhMKRTFzK8eC8W+7V
+         ppIkGy90feBRtuhtwrB/RXujwTeBHpn6uygQkMscHRgdXQbljsot8LuWUwnWoKVRHNgk
+         DToNNKQLAgDzeEeVhJdoZkiLLwxZ020IpeaODwAMxpgcDlwo9vuaNh/H/wwUoFhhdq84
+         jlFw==
+X-Gm-Message-State: AOAM531crr83C5qiQeufZI6eUk7XOXO9vQeFLLUuMksCp7Scr04BKrt3
+	r4KpLYFad7s1/1eq5T5pEKUi5DR0scQ=
+X-Google-Smtp-Source: ABdhPJwMlXJ/6C6206MZvjQ+7RCGAygddlBwfk70hYzOjyW81IkrpCsWmySfMg+Qh3JNDcX8yeYThw==
+X-Received: by 2002:a5d:528d:: with SMTP id c13mr18746610wrv.343.1627921287427;
+        Mon, 02 Aug 2021 09:21:27 -0700 (PDT)
+Received: from localhost ([217.111.27.204])
+        by smtp.gmail.com with ESMTPSA id c10sm4321264wml.44.2021.08.02.09.21.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Aug 2021 09:21:26 -0700 (PDT)
+Date: Mon, 2 Aug 2021 18:23:45 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
 To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>,
- Hartley Sweeten <hsweeten@visionengravers.com>, 
- Alexander Sverdlin <alexander.sverdlin@gmail.com>, soc@kernel.org, 
- Nikita Shubin <nikita.shubin@maquefel.me>, Arnd Bergmann <arnd@arndb.de>, 
- Oleg Nesterov <oleg@redhat.com>, Hubert Feurstein <hubert.feurstein@contec.at>,
- Lukasz Majewski <lukma@denx.de>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, 
- Linus Walleij <linus.walleij@linaro.org>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210802_084521_393211_6FB2D359 
-X-CRM114-Status: GOOD (  23.58  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210802154517.SSmtmTFCZtbDR3xdS_Pj2qoCU1F5jtF9VXoHwLIT0c8@z>
+Cc: Dmitry Osipenko <digetx@gmail.com>, Thierry Reding <treding@nvidia.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Mark Brown <broonie@kernel.org>, SoC Team <soc@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH v2] soc/tegra: Make regulator couplers depend on
+ CONFIG_REGULATOR
+Message-ID: <YQgcEfv3DJy9jli1@orome.fritz.box>
+References: <20210721232616.1935-1-digetx@gmail.com>
+ <YQgC/POOrX4t9hUN@orome.fritz.box>
+ <CAK8P3a1oVOqdyYUNBM8UiakEkznQ--SPEHVz4U0HQOMy4DiCbw@mail.gmail.com>
+ <CAK8P3a1ycMhqZ-nvsxusPa5JijjL1hBOpBffhJ0okm5Kav0jzA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="vf3CEbbqSz/G3rGB"
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1ycMhqZ-nvsxusPa5JijjL1hBOpBffhJ0okm5Kav0jzA@mail.gmail.com>
+User-Agent: Mutt/2.1.1 (e2a89abc) (2021-07-12)
 
-On 02/08/2021, Arnd Bergmann <arnd@kernel.org> wrote:
-> The MaverickCrunch support for ep93xx never made it into glibc
 
-This is true, but is not needed except for preserving FP registers in
-catch/throw exeptions or longjmps.
+--vf3CEbbqSz/G3rGB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> was removed from gcc in its 4.8 release in 2012.
+On Mon, Aug 02, 2021 at 05:05:01PM +0200, Arnd Bergmann wrote:
+> On Mon, Aug 2, 2021 at 5:03 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > On Mon, Aug 2, 2021 at 4:35 PM Thierry Reding <thierry.reding@gmail.com=
+> wrote:
+> >
+> > If you have other fixes that are already in your fixes branch
+> ... that you want to have in rc5, please send them soon, as I'm going
+> to prepare that pull request in a few days.
+>=20
+> I'll probably do another one for -rc6 though.
 
-I was sad about that, as I had managed to get it working correctly in
-4.2 4.3 and 4.4.
-Unfortunately the GCC ARM maintainer at the time was paid by ARM, and
-they had no interest in it, as I gather the ARM-Cirrus partnership
-ended up disappointingly.
+Okay, will do. Thanks.
 
-> It is now one of
-> the last parts of arch/arm/ that fails to build with the clang
-> integrated assembler
+Thierry
 
-Even if crunch support is not configured?
+--vf3CEbbqSz/G3rGB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> According to Hartley Sweeten:
->
->  "Martin Guy did a lot of work trying to get the maverick crunch working
->   but I was never able to successfully use it for anything.
+-----BEGIN PGP SIGNATURE-----
 
->   It "kind" of works but depending on the EP93xx silicon revision
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmEIG7cACgkQ3SOs138+
+s6EkZA//ZdnqjrQ338ZZNlhh150PojQ/JfLtFYHYRj3fDGKXPbAfQiRMdjRYQ/yE
+Fd8sMWcT1rJ3r2+qkzt7BHyW9zkrRNGHWBRAI+zbMo1pME7ia/jAKDEEqan4aoA2
+FNByG96WD2TxmuBPflRzBRjCsPD/cTFsbVaPjlEwdx3m5SYDzP6jCD5DnkcCbjI7
+U/L2ihw0g7vqAkKvUrtr8RA2YcLccY/W2pimqdXmlQrAy1a87KEG447UtCk0PA2K
+H3DevLVu8vYRlOujkGw9LgZyNRmqh/54sILk+0d8I1apMgxVTWtU393WOZx9p2oW
+Kn17XRwaTD8vwZ4pyfLy9Q4PsqDJ6vri4sK07Dqwj7jGXtu/SHEk0LPNh3tiQV+2
+3dGuHiGR8+P2qMnAvW7UP3yQ6lJIV9qLsbKgMKfE+6iSEKMDgaH/3ZJNSh+vJJ6F
+P0NO4G8hrOn6kjNs2ehai4UMIr84NxYThop9QTvpU3Nc1yJ0d3GIYLsGqADPQGfQ
+xBejqW3YmnsUO08/K714WhnOki+TGxs4auBUlZUIi+JDPq08/QzZgJNTkD/0i2qa
+E59yyGqSWo4f8bjco+GH7l6I5PCNhykTuNTZhUjicKZFQ7tBnyvKgKZ4z5e+hNP1
+akXPKEigG7hAuWqc54tCqg5vk0iabq93tWP/XLSjl0UzAkllybo=
+=8TBq
+-----END PGP SIGNATURE-----
 
-It works fine on all production revisions except D0 (the first one)
-which is so rare as to be unfindable. All the others from D1 on have
-the exact same HW bugs.
-
->   there are still a number of hardware bugs that either give imprecise or garbage results.
-
-Not my experience, See http://martinwguy.net/crunch/#CorrectnessTests
-If "imprecise" means "doesn't handle unnormalized FP values correctly"
-then yes, that's a feature if you need the 2.5 to 4gimes speedup it
-provides.
-But I would be interested (Hartley) if you have a concrete example.
-
-> This touches mostly the ep93xx platform,
-
-The ep93xx is the only chip series it was ever included in.
-
-> If there are remaining users of MaverickCrunch, they can use LTS
-> kernels for at least another five years before kernel support ends.
-
-The only user ! am aware of is the HEAT deep space telescope in the Antarctic
-http://martinwguy.blogspot.com/2015/10/maverickcrunch-code-runs-on-heat-deep.html
-
-Personally I have no problem with removing kernel support if that
-makes people's lives easier in some way.
-
-  M
-
-   M
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+--vf3CEbbqSz/G3rGB--
