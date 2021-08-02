@@ -1,61 +1,75 @@
-Return-Path: <SRS0=2+8r=MZ=pengutronix.de=ore@kernel.org>
+Return-Path: <SRS0=1hwg=MZ=lists.freedesktop.org=dri-devel-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 992B9C432BE
-	for <soc@archiver.kernel.org>; Mon,  2 Aug 2021 10:36:26 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 7B11060FC0; Mon,  2 Aug 2021 10:36:26 +0000 (UTC)
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 048D9C4338F
+	for <dri-devel@archiver.kernel.org>; Mon,  2 Aug 2021 10:36:32 +0000 (UTC)
+Received: from gabe.freedesktop.org (gabe.freedesktop.org [131.252.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5CFB260F70
-	for <soc@kernel.org>; Mon,  2 Aug 2021 10:36:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5CFB260F70
+	by mail.kernel.org (Postfix) with ESMTPS id CA46D60F70
+	for <dri-devel@archiver.kernel.org>; Mon,  2 Aug 2021 10:36:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA46D60F70
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.freedesktop.org
+Received: from gabe.freedesktop.org (localhost [127.0.0.1])
+	by gabe.freedesktop.org (Postfix) with ESMTP id 4E7BF89FC5;
+	Mon,  2 Aug 2021 10:36:31 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de
+ [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+ by gabe.freedesktop.org (Postfix) with ESMTPS id 5C6D589FC5
+ for <dri-devel@lists.freedesktop.org>; Mon,  2 Aug 2021 10:36:30 +0000 (UTC)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1mAVIk-000238-KJ; Mon, 02 Aug 2021 12:36:06 +0200
+ by metis.ext.pengutronix.de with esmtps
+ (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim 4.92)
+ (envelope-from <ore@pengutronix.de>)
+ id 1mAVIk-000238-KJ; Mon, 02 Aug 2021 12:36:06 +0200
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1mAVIj-0007TR-0i; Mon, 02 Aug 2021 12:36:05 +0200
+ (envelope-from <ore@pengutronix.de>)
+ id 1mAVIj-0007TR-0i; Mon, 02 Aug 2021 12:36:05 +0200
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	David Airlie <airlied@linux.ie>,
-	Olof Johansson <olof@lixom.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	soc@kernel.org,
-	Thierry Reding <thierry.reding@gmail.com>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
-	devicetree@vger.kernel.org,
-	Fabio Estevam <festevam@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	dri-devel@lists.freedesktop.org,
-	Sam Ravnborg <sam@ravnborg.org>
+To: Arnd Bergmann <arnd@arndb.de>, Daniel Vetter <daniel@ffwll.ch>,
+ David Airlie <airlied@linux.ie>, Olof Johansson <olof@lixom.net>,
+ Rob Herring <robh+dt@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Shawn Guo <shawnguo@kernel.org>, soc@kernel.org,
+ Thierry Reding <thierry.reding@gmail.com>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>, devicetree@vger.kernel.org,
+ Fabio Estevam <festevam@gmail.com>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>
 Subject: [PATCH v3 0/3] Mainline imx6 based SKOV boards
 Date: Mon,  2 Aug 2021 12:36:00 +0200
-Message-Id: <20210802103603.28607-1-o.rempel@pengutronix.de>
+Message-ID: <20210802103603.28607-1-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
 X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: soc@kernel.org
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de);
+ SAEximRunCond expanded to false
+X-PTX-Original-Recipient: dri-devel@lists.freedesktop.org
+X-BeenThere: dri-devel@lists.freedesktop.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: Direct Rendering Infrastructure - Development
+ <dri-devel.lists.freedesktop.org>
+List-Unsubscribe: <https://lists.freedesktop.org/mailman/options/dri-devel>,
+ <mailto:dri-devel-request@lists.freedesktop.org?subject=unsubscribe>
+List-Archive: <https://lists.freedesktop.org/archives/dri-devel>
+List-Post: <mailto:dri-devel@lists.freedesktop.org>
+List-Help: <mailto:dri-devel-request@lists.freedesktop.org?subject=help>
+List-Subscribe: <https://lists.freedesktop.org/mailman/listinfo/dri-devel>,
+ <mailto:dri-devel-request@lists.freedesktop.org?subject=subscribe>
+Errors-To: dri-devel-bounces@lists.freedesktop.org
+Sender: "dri-devel" <dri-devel-bounces@lists.freedesktop.org>
+Message-ID: <20210802103600.2Ww-BCjaOkZVO7-e1MdefKpEVBebd90gSWHLd_bjSfY@z>
 
 changes v3:
 - drop panel bindings patches, it is already in drm-misc-next
