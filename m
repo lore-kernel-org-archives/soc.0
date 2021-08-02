@@ -2,18 +2,19 @@ Return-Path: <SRS0=DM4H=MZ=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C66DC432BE
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  2 Aug 2021 13:35:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48A55C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  2 Aug 2021 13:35:39 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5CEB060F6D
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  2 Aug 2021 13:35:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5CEB060F6D
+	by mail.kernel.org (Postfix) with ESMTPS id 1A79260F6D
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  2 Aug 2021 13:35:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1A79260F6D
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,49 +23,51 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=eqNSrr6t29LjlUpAiaCBpGthCnNS4v/P9MMzEFYiFAM=; b=x0WmTalxptSQ3N
-	JsByVWhP0WBCNAJpN2+JRkzoCQSj99tqVlN//DK/GvhNYR2AAuQNqxNoEH2Ben2PqMRwkSUIpe7eI
-	9b8yeTI3hxaei81RPSk6C1gqiuOkchxA5IX2WjwhWI7KVaCrSvZpMYovGoClryaWlvUoPg1/jQ5an
-	+y9H0qpuYb0Q8BlN5OqjcicK2uRfAOM9u9CEvyOzORbcRTRqKIGgPKUSfN+6yQsi3/OrWTAKL5BUr
-	6m1EPN+BWsCVABiQqd7hPv0BowS19fqGhai96TH95TYBM+9Ri8WJoWac25qJ4LI1WwHH14D+Uz6Dp
-	QVIYFM1SGO3s6ZC7JS6Q==;
+	List-Owner; bh=o4+qu87gJSUsbNhBFxxcknkugL+47yeYqKNLhtQFTw4=; b=DlnmpCAHkh/I6I
+	ySjl2XNRW3mmxDwa4uSSesheipUf183StQmmN0RdHPylELrOrDTrqGC3nCPezc7h56I2JuUxr8mOL
+	+iOOwdlCd/YmB5oUaxWFbB2j1N85Pe2ngFEjQp/Tnx+f7pM5crIFqjuHRYYRz0WoGVmkA6hghN374
+	UINC+1RhLO3G7aT77spYT6QLK4GZ8J2n/QL4CVyNHoPUwX7zVOwiPZmBTo1dMYGt08YcIxOCXK4zs
+	3kmaQ5y9jcw1fWW1Gkr9dZKSTcvBScpaWmHzrujHoaKTGZ+EpCDF1LQnUvPpnYUVKeUMpypChrGd/
+	HzrnabMKbUodNe/+nrdQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mAY3z-00GO5E-Oe; Mon, 02 Aug 2021 13:33:03 +0000
+	id 1mAY4K-00GO7F-Cx; Mon, 02 Aug 2021 13:33:24 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mAY3n-00GO2t-S2
- for linux-arm-kernel@lists.infradead.org; Mon, 02 Aug 2021 13:32:53 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9333E60FF2;
- Mon,  2 Aug 2021 13:32:49 +0000 (UTC)
+ id 1mAY3x-00GO4r-4Y
+ for linux-arm-kernel@lists.infradead.org; Mon, 02 Aug 2021 13:33:02 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 97A6F60FC4;
+ Mon,  2 Aug 2021 13:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1627911171;
- bh=ggIN/aD2j3157Mtr930iWnMMqRgd5R6xZUE1fassvjc=;
- h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
- b=owKtXUzqpVl2LnK/3+KH+w1MrePR7oR6NAzzV6QAtPaVurGmkCyYtI+9kanZPXvaJ
- 0w0osYKvRAMPCZg6o2DsT9SSYvj/6vTM2xy/gw/I0hBj33mGP6B5saDDP/ok5scGEY
- XQiPe77ozu15ls5uac8uOKeBmLgVQmvXcJASo/YnbpJlOBlkQAiJ16+BwrSnkGeK50
- SerOm3yauQ4kQU5D0RWa69kgx/GnY+/FeF6FV5fgGKJcrNzfqHOwQ/i47+u3qZWSTy
- pACPwH03BToISekWLo14MIY28xUODzuXBtJC8O9IoY677qbec/D2SSj4IqEJEZaQ09
- tjal2/bkyo1Iw==
+ s=k20201202; t=1627911180;
+ bh=5Utd1jsqdXvkifa65CMmossDe8JRj7ZzI8zHwZTHDqU=;
+ h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=Z+9Nmg43m/vyoQ6+hKtTfxSetJyY0VfI+jYvecW9fd/dxu7xLfJsG6tQRtr51DC7/
+ G0Tr/cwVtdsY5YHx0nQxgdAAlY6SFy43j8Co1PlZd61rk6+1ictczkw7ytA6zWA7c6
+ 0HOZqae6IpyY4st13ndHsP9FK1/FOf/8/Bj5vRojWigM2iOtZobxEyNqIQDfKEUWZX
+ IahAWtWvoFvfWx2iwMxfeRirT1fIyOYCnHZ87hcHufDiTOJo1YrNFXBJpYXScRqzln
+ v3074W7adMjdnMXrH+t6y/vgp1nXjCSBoE12LgS8XqJedvdco7m1LcUkmq9tbEMj6a
+ tywufG5G5L0mg==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Linus Walleij <linusw@kernel.org>,
-	Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
- Krzysztof Halasa <khalasa@piap.pl>, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, Imre Kaloz <kaloz@openwrt.org>,
- Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH] ARM: ixp4xx: goramo_mlr depends on old PCI driver
-Date: Mon,  2 Aug 2021 15:32:38 +0200
-Message-ID: <162791113519.1139989.4454280837316167458.b4-ty@arndb.de>
+To: soc@kernel.org,
+	Shawn Guo <shawnguo@kernel.org>,
+	arm@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Li Yang <leoyang.li@nxp.com>,
+ Fabio Estevam <festevam@gmail.com>, kernel@pengutronix.de,
+ linux-arm-kernel@lists.infradead.org, Stefan Agner <stefan@agner.ch>,
+ linux-imx@nxp.com
+Subject: Re: [GIT PULL] i.MX fixes for 5.14
+Date: Mon,  2 Aug 2021 15:32:42 +0200
+Message-ID: <162791113528.1139989.15546456709229753234.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210721151620.2373500-1-arnd@kernel.org>
-References: <20210721151620.2373500-1-arnd@kernel.org>
+In-Reply-To: <20210726023221.GF5901@dragon>
+References: <20210726023221.GF5901@dragon>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210802_063251_965102_F3D0E1AD 
-X-CRM114-Status: GOOD (  10.64  )
+X-CRM114-CacheID: sfid-20210802_063301_239708_E22D685F 
+X-CRM114-Status: UNSURE (   6.48  )
+X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -80,35 +83,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210802133238.hqJ4zWXGZtFnSCVNnkPqZpmKavXS6T9EHqO9cGMQTPk@z>
+Message-ID: <20210802133242.KObvGXAg2IyCbETisxeDMMjMSu7JH98L1eN-xuG69Xg@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 21 Jul 2021 17:16:04 +0200, Arnd Bergmann wrote:
-> When this driver is disabled, the board file fails to build,
-> so add a dependency:
+On Mon, 26 Jul 2021 10:32:22 +0800, Shawn Guo wrote:
+> The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 > 
-> arch/arm/mach-ixp4xx/goramo_mlr.c: In function 'gmlr_pci_preinit':
-> arch/arm/mach-ixp4xx/goramo_mlr.c:472:9: error: implicit declaration of function 'ixp4xx_pci_preinit'; did you mean 'iop3xx_pci_preinit'? [-Werror=implicit-function-declaration]
->   472 |         ixp4xx_pci_preinit();
->       |         ^~~~~~~~~~~~~~~~~~
->       |         iop3xx_pci_preinit
-> arch/arm/mach-ixp4xx/goramo_mlr.c: In function 'gmlr_pci_postinit':
-> arch/arm/mach-ixp4xx/goramo_mlr.c:481:22: error: implicit declaration of function 'ixp4xx_pci_read' [-Werror=implicit-function-declaration]
->   481 |                 if (!ixp4xx_pci_read(addr, NP_CMD_CONFIGREAD, &value)) {
->       |                      ^~~~~~~~~~~~~~~
-> arch/arm/mach-ixp4xx/goramo_mlr.c:231:35: error: 'IXP4XX_UART1_BASE_PHYS' undeclared here (not in a function)
->   231 |                 .start          = IXP4XX_UART1_BASE_PHYS,
->       |                                   ^~~~~~~~~~~~~~~~~~~~~~
-> arch/arm/mach-ixp4xx/goramo_mlr.c: In function 'gmlr_init':
-> arch/arm/mach-ixp4xx/goramo_mlr.c:376:9: error: implicit declaration of function 'ixp4xx_sys_init' [-Werror=implicit-function-declaration]
->   376 |         ixp4xx_sys_init();
->       |         ^~~~~~~~~~~~~~~
+>   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.14
+> 
+> [...]
 
-Applied to arm/fixes, thanks!
+Merged into arm/fixes, thanks!
 
-[1/1] ARM: ixp4xx: goramo_mlr depends on old PCI driver
-      commit: 796a8c85b1216618258e08b463d3bef0d7123760
+merge commit: bee757485161e2bb43fd0bcd5f7e17cfe2b11bbf
 
        Arnd
 
