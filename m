@@ -6,59 +6,69 @@ X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66931C4338F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D856FC4320A
 	for <soc@archiver.kernel.org>; Mon,  2 Aug 2021 13:32:51 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 3987360F6D; Mon,  2 Aug 2021 13:32:49 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1691160FC1;
-	Mon,  2 Aug 2021 13:32:46 +0000 (UTC)
+	id AB18061057; Mon,  2 Aug 2021 13:32:51 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9333E60FF2;
+	Mon,  2 Aug 2021 13:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1627911169;
-	bh=puYbUFN+ELiAKsMSCu8aPcfizFvxmdzFc6W44/WcFss=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vLGeUcacjmPVd9Jym1rch+TkjU4x91B0RRSTdk4KGDy3lyfdsRv5fTlnhOVwlPGpI
-	 GwGL0Y9/aYJztYaf48BAmNshSz7K280mK5Oym6aSLqKdx0ssG/ApceKj3U3akS0d6F
-	 6TcaC1x/Pga2cLX1tQvgK9b6FFkebuR/m9M1GQbmCu24aDmKWFAwZHxt9t3QuHIOaS
-	 UtmLF3VDoqAPMV+Aj4eNr5J/D8HxB06z5FS0PmV6wgP3pljvGy5XRx4MIfWHSzCKDj
-	 V+Cb8ahbrX+qGIiHUigv3/99QCArmz2Ozaf81Pxyl8OoYWlu1DP58iyZ1hoqql47Fs
-	 dDqSH0bTLRzlg==
+	s=k20201202; t=1627911171;
+	bh=ggIN/aD2j3157Mtr930iWnMMqRgd5R6xZUE1fassvjc=;
+	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
+	b=owKtXUzqpVl2LnK/3+KH+w1MrePR7oR6NAzzV6QAtPaVurGmkCyYtI+9kanZPXvaJ
+	 0w0osYKvRAMPCZg6o2DsT9SSYvj/6vTM2xy/gw/I0hBj33mGP6B5saDDP/ok5scGEY
+	 XQiPe77ozu15ls5uac8uOKeBmLgVQmvXcJASo/YnbpJlOBlkQAiJ16+BwrSnkGeK50
+	 SerOm3yauQ4kQU5D0RWa69kgx/GnY+/FeF6FV5fgGKJcrNzfqHOwQ/i47+u3qZWSTy
+	 pACPwH03BToISekWLo14MIY28xUODzuXBtJC8O9IoY677qbec/D2SSj4IqEJEZaQ09
+	 tjal2/bkyo1Iw==
 From: Arnd Bergmann <arnd@kernel.org>
+To: Linus Walleij <linusw@kernel.org>,
+	Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>,
-	Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-	Olof Johansson <olof@lixom.net>,
-	arm-soc <arm@kernel.org>,
-	Kevin Hilman <khilman@baylibre.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	Marek Vasut <marex@denx.de>,
-	"linux-stm32@st-md-mailman.stormreply.com" <linux-stm32@st-md-mailman.stormreply.com>
-Subject: Re: [GIT PULL] STM32 DT fixes for v5.14 #1
-Date: Mon,  2 Aug 2021 15:32:37 +0200
-Message-Id: <162791113541.1139989.12661940653007966330.b4-ty@arndb.de>
+	linux-kernel@vger.kernel.org,
+	Krzysztof Halasa <khalasa@piap.pl>,
+	soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Imre Kaloz <kaloz@openwrt.org>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH] ARM: ixp4xx: goramo_mlr depends on old PCI driver
+Date: Mon,  2 Aug 2021 15:32:38 +0200
+Message-Id: <162791113519.1139989.4454280837316167458.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <c0b6031b-2de7-2ef8-71b2-a0af8f475932@foss.st.com>
-References: <c0b6031b-2de7-2ef8-71b2-a0af8f475932@foss.st.com>
+In-Reply-To: <20210721151620.2373500-1-arnd@kernel.org>
+References: <20210721151620.2373500-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 30 Jul 2021 15:58:54 +0200, Alexandre TORGUE wrote:
-> Please consider this first round of STM32 DT fixes for v5.14. It
-> concerns DHCOM/DHCOR fixes.
+On Wed, 21 Jul 2021 17:16:04 +0200, Arnd Bergmann wrote:
+> When this driver is disabled, the board file fails to build,
+> so add a dependency:
 > 
-> Thanks
-> Alex
-> 
-> 
-> The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
-> 
-> [...]
+> arch/arm/mach-ixp4xx/goramo_mlr.c: In function 'gmlr_pci_preinit':
+> arch/arm/mach-ixp4xx/goramo_mlr.c:472:9: error: implicit declaration of function 'ixp4xx_pci_preinit'; did you mean 'iop3xx_pci_preinit'? [-Werror=implicit-function-declaration]
+>   472 |         ixp4xx_pci_preinit();
+>       |         ^~~~~~~~~~~~~~~~~~
+>       |         iop3xx_pci_preinit
+> arch/arm/mach-ixp4xx/goramo_mlr.c: In function 'gmlr_pci_postinit':
+> arch/arm/mach-ixp4xx/goramo_mlr.c:481:22: error: implicit declaration of function 'ixp4xx_pci_read' [-Werror=implicit-function-declaration]
+>   481 |                 if (!ixp4xx_pci_read(addr, NP_CMD_CONFIGREAD, &value)) {
+>       |                      ^~~~~~~~~~~~~~~
+> arch/arm/mach-ixp4xx/goramo_mlr.c:231:35: error: 'IXP4XX_UART1_BASE_PHYS' undeclared here (not in a function)
+>   231 |                 .start          = IXP4XX_UART1_BASE_PHYS,
+>       |                                   ^~~~~~~~~~~~~~~~~~~~~~
+> arch/arm/mach-ixp4xx/goramo_mlr.c: In function 'gmlr_init':
+> arch/arm/mach-ixp4xx/goramo_mlr.c:376:9: error: implicit declaration of function 'ixp4xx_sys_init' [-Werror=implicit-function-declaration]
+>   376 |         ixp4xx_sys_init();
+>       |         ^~~~~~~~~~~~~~~
 
-Merged into arm/fixes, thanks!
+Applied to arm/fixes, thanks!
 
-merge commit: b07bf042e678f5eac856052d332869423e365af0
+[1/1] ARM: ixp4xx: goramo_mlr depends on old PCI driver
+      commit: 796a8c85b1216618258e08b463d3bef0d7123760
 
        Arnd
