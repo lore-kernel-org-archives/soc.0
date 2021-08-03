@@ -1,26 +1,30 @@
-Return-Path: <SRS0=39e7=M2=gmail.com=martinwguy@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF861C432BE
-	for <soc@archiver.kernel.org>; Tue,  3 Aug 2021 11:41:00 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id A433760525; Tue,  3 Aug 2021 11:41:00 +0000 (UTC)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7A7B460560;
-	Tue,  3 Aug 2021 11:41:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7A7B460560
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id oz16so35874692ejc.7;
-        Tue, 03 Aug 2021 04:41:00 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 746F7C4338F
+	for <linux-kernel@archiver.kernel.org>; Tue,  3 Aug 2021 11:41:04 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 5762460BD3
+	for <linux-kernel@archiver.kernel.org>; Tue,  3 Aug 2021 11:41:04 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S235737AbhHCLlN (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Tue, 3 Aug 2021 07:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235596AbhHCLlM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 3 Aug 2021 07:41:12 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BF4C061757
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Aug 2021 04:41:00 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id hs10so27238462ejc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Aug 2021 04:41:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:in-reply-to:references:from:date:message-id:subject:to
@@ -37,14 +41,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:in-reply-to:references:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
         bh=UTH1xriYdp7u5xYL3QfzWmKRaaFC9ziEV6g6dXWdnAA=;
-        b=D3Pbm961S5FznI0J58KQ5u+Wlp7wXyC8aM5m7BsRDBwQislsjGrPQ45mXMoqKd1oGc
-         nNiCh65Ah2XRkiGLmt7lt2BWF6sHsEBArMvH4ukJ3w6k7fAJ+pmeToDARh9Lw3HmwLqR
-         KUVhlfA09pD38+dj45mT1WraeJE498NsNYL8bm7/zxddSMOXbYx5VPxhHxeA7uca5keN
-         92wNjfNZI4M17oOfI6KTdAYzaE3tXr+rhFA9vv0LeOKGRFg3Wbq8+EMeQ6sGw6Qh1ZHT
-         KKiJtMgQ1F816QNfo2F870wU4lhzObPjt7mG/N25gxjibW/9QoAe58yQUJjqiSlYCitd
-         3xtQ==
-X-Gm-Message-State: AOAM5314KD3OoxqSuKm6+hjfbX72GkK0osHX3yaiAWWSmkh+2oxPuOSK
-	6ssMpXuAdJhex4v/PGRKc7xoALZUIH6ue8K/IsteRjRcSweGIg==
+        b=t0b7e6SkBfviNIdhgPw42Blnk6YiiQjLiHZk0pmJQ5EHnhbdcbUi1e7IOfCl6i084H
+         KdT4n/+ie/Bvf+RcTWDt2Gqmwl9x+st4c4UMTH+NWyjpyuf5g4lnO5q2zoIPOUDsYc9t
+         kbvvOUySzbfQ1xc6g9FZeyxYxuJxpeyXnnYgX6UvhIgyJMDjURWpLu9V6x7yX/SmBZoc
+         4pl7ZML6aqvCwf+ib2A8wlUuZ/6W6v+i+mB3GNhwrJUf1ZdMgn+gZyALvOaz2ja8aHvA
+         GxGt75o/XdkuAkf0K8xTEsorRDzRSkHRKwb8yXn9flNED544k6T62xUzVVcgG+ckVb5X
+         CxpA==
+X-Gm-Message-State: AOAM533CZHcEp02F5fiE18Enf0U7IQT74eP+qpzNpITB2RMDamYWyqc6
+        0LViwj+dBC+hWRjSxLdgcGa02LhsRvsTMZxCmXM=
 X-Google-Smtp-Source: ABdhPJx+oRy7TDwar4JICPJWtGOTCfgTSmYrsw5qbLO26sc9JEqhl7vCfDGC77LJsFULHHYzz9kc6ojyUInie41FksE=
 X-Received: by 2002:a17:906:4d12:: with SMTP id r18mr19569693eju.537.1627990859185;
  Tue, 03 Aug 2021 04:40:59 -0700 (PDT)
@@ -53,22 +57,32 @@ Received: by 2002:a17:906:3018:0:0:0:0 with HTTP; Tue, 3 Aug 2021 04:40:58
  -0700 (PDT)
 In-Reply-To: <CAL4-wQqCL1S-GYu7VKJeTT37wh=rR=SMUuwgKiXnnn_Y=uydOA@mail.gmail.com>
 References: <20210802141245.1146772-1-arnd@kernel.org> <CAL4-wQqCL1S-GYu7VKJeTT37wh=rR=SMUuwgKiXnnn_Y=uydOA@mail.gmail.com>
-From: Martin Guy <martinwguy@gmail.com>
-Date: Tue, 3 Aug 2021 13:40:58 +0200
+From:   Martin Guy <martinwguy@gmail.com>
+Date:   Tue, 3 Aug 2021 13:40:58 +0200
 Message-ID: <CAL4-wQpKLtSj0xfNUXXLhbtN1wC051jpRneAuLYOi1riZfiinw@mail.gmail.com>
 Subject: Re: [PATCH] ARM: ep93xx: remove MaverickCrunch support
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>, Hartley Sweeten <hsweeten@visionengravers.com>, 
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>, soc@kernel.org, 
-	Nikita Shubin <nikita.shubin@maquefel.me>, Arnd Bergmann <arnd@arndb.de>, 
-	Oleg Nesterov <oleg@redhat.com>, Hubert Feurstein <hubert.feurstein@contec.at>, 
-	Lukasz Majewski <lukma@denx.de>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        soc@kernel.org, Nikita Shubin <nikita.shubin@maquefel.me>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Hubert Feurstein <hubert.feurstein@contec.at>,
+        Lukasz Majewski <lukma@denx.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210803114058.ronrDJKs9yIlBAT9gedtpLt2lmPh1nHreYCjmnebSeE@z>
 
 I forward opinion from people currently producing and supporting EP93XX boa=
 rds:
