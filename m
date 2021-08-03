@@ -1,25 +1,30 @@
-Return-Path: <SRS0=uzdW=M2=linaro.org=linus.walleij@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A955C4338F
-	for <soc@archiver.kernel.org>; Tue,  3 Aug 2021 12:12:46 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 6FF5260F70; Tue,  3 Aug 2021 12:12:46 +0000 (UTC)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5119E60E97
-	for <soc@kernel.org>; Tue,  3 Aug 2021 12:12:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5119E60E97
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id bq29so13761817lfb.5
-        for <soc@kernel.org>; Tue, 03 Aug 2021 05:12:46 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18D4FC4338F
+	for <linux-kernel@archiver.kernel.org>; Tue,  3 Aug 2021 12:12:50 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id F3D7460F35
+	for <linux-kernel@archiver.kernel.org>; Tue,  3 Aug 2021 12:12:49 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S235698AbhHCMM7 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Tue, 3 Aug 2021 08:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233906AbhHCMM6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 3 Aug 2021 08:12:58 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1D3C061757
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Aug 2021 05:12:46 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id p38so24412606lfa.0
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Aug 2021 05:12:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -36,37 +41,47 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=CjwFLstJrPnRmXg/rZRQYNcQZixdp2USEJZj3tF3f38=;
-        b=XrGpnWQW1DGs6hXxiou/KwxtXnJZjKnBrRfDObCScK7CyV/28qzHa9764LW3uAtqDD
-         ANyD3phjP4VNa4cFx1yQv74rtR1NAkq0EGPkgyspYVP8ptYcroyeveASbs5yMI1skElL
-         g9Gpi6zx4hgVIkYdOFJ4/sAoqRBqY1GZRiwYa/OCV3W1+XG73krvmSiUdNS8k4SVp2O9
-         kIZz7iWMtZM/1j2UuM22ziMOh7E0jQW4gwu5IZxSN2sqBWg1X0NB2uVI52a+G0KwG+Lb
-         IGg//ZO7qlccPm3BYJg13KqoNTDVLGJewBDU/iYGhHt8kATssn/VLFUpGIg7RGA2huU/
-         +QpA==
-X-Gm-Message-State: AOAM532xZzlDPTecXO/UAFcReQKDVJBOncY2oLvbs72Y1MxNiEeALv77
-	f72FNsh+4d+sk3Bm8sHbOrbKVl+DZjoUXx1kCuJAIQ==
+        b=sQL5L+oJhVUEm3BpK/juIHjDsiEwgZX3cOJZ2meYoh941L9Q/3hGZJD28ls3iXaPbM
+         pldfABWf3Sf/LCQlrfcQ6SXcchOqO+3NXu56FCygvXB5280RPq0cn29xejbQWTf9WzBJ
+         lNN1UaKgyUEhAKRvPpGnST3O0H+IGdWmqO+si0rQi86gm3uPTzoqgCm8XINVzyLRaxYe
+         /luG/HdJoCONNA4GkgWS2JC2/6GnapfBFdIyE3fkhPqjbCB2jfrvsrDqWtmHPM6wbJjd
+         s8Lnphp9RGHM6h+OO9MUMJ5UE49Krfr1WB+n43UsGPFKPB3su3HxIl6jCJit+0e+2R9v
+         8qvw==
+X-Gm-Message-State: AOAM533Vf6kPc2ju+5YTsi+Emw0Xq7oA927aJZc73AUel7jgeuYNYOh4
+        Od4oBFJqkzdnpFcKcez1HLb5EiG5auqPgdFoBpncOg==
 X-Google-Smtp-Source: ABdhPJz782mMUx2DQxPgWR7w25+Ro1pQSWnX/5zTyOK3W2u5RXz/AhlGd1Pib3weOa5vmkxj00IAN8QgYUu3dBYZqNw=
 X-Received: by 2002:a05:6512:132a:: with SMTP id x42mr15849594lfu.291.1627992764702;
  Tue, 03 Aug 2021 05:12:44 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210802141245.1146772-1-arnd@kernel.org> <CAL4-wQqCL1S-GYu7VKJeTT37wh=rR=SMUuwgKiXnnn_Y=uydOA@mail.gmail.com>
 In-Reply-To: <CAL4-wQqCL1S-GYu7VKJeTT37wh=rR=SMUuwgKiXnnn_Y=uydOA@mail.gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 3 Aug 2021 14:12:33 +0200
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 3 Aug 2021 14:12:33 +0200
 Message-ID: <CACRpkdbRbgjo1AkZVd0J1nhuo601o8=20rKR+ccaJR1+vqn6qg@mail.gmail.com>
 Subject: Re: [PATCH] ARM: ep93xx: remove MaverickCrunch support
-To: Martin Guy <martinwguy@gmail.com>
+To:     Martin Guy <martinwguy@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Russell King <linux@armlinux.org.uk>, 
-	Hartley Sweeten <hsweeten@visionengravers.com>, 
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>, SoC Team <soc@kernel.org>, 
-	Nikita Shubin <nikita.shubin@maquefel.me>, Arnd Bergmann <arnd@arndb.de>, 
-	Oleg Nesterov <oleg@redhat.com>, Hubert Feurstein <hubert.feurstein@contec.at>, 
-	Lukasz Majewski <lukma@denx.de>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <clang-built-linux@googlegroups.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        SoC Team <soc@kernel.org>,
+        Nikita Shubin <nikita.shubin@maquefel.me>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Hubert Feurstein <hubert.feurstein@contec.at>,
+        Lukasz Majewski <lukma@denx.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210803121233.sJTGZgOvWiqdqOHH6KkyOw6jzf7fhEmXtXYUfN2RJ1U@z>
 
 On Mon, Aug 2, 2021 at 5:45 PM Martin Guy <martinwguy@gmail.com> wrote:
 
