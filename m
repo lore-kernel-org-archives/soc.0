@@ -1,99 +1,134 @@
-Return-Path: <linux-omap-owner@kernel.org>
+Return-Path: <SRS0=WGdq=M2=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75541C4320A
-	for <linux-omap@archiver.kernel.org>; Tue,  3 Aug 2021 13:05:35 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 55E0560F38
-	for <linux-omap@archiver.kernel.org>; Tue,  3 Aug 2021 13:05:35 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235782AbhHCNFp (ORCPT <rfc822;linux-omap@archiver.kernel.org>);
-        Tue, 3 Aug 2021 09:05:45 -0400
-Received: from muru.com ([72.249.23.125]:34264 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235635AbhHCNFp (ORCPT <rfc822;linux-omap@vger.kernel.org>);
-        Tue, 3 Aug 2021 09:05:45 -0400
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id DFFB28050;
-        Tue,  3 Aug 2021 13:05:51 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52131C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  3 Aug 2021 13:06:40 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 21FCB60F8F
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  3 Aug 2021 13:06:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 21FCB60F8F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=foss.st.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=BxMDxyUodxGqHTME06sLmfbZiBWi95RjUwIlvWnxS/o=; b=duiz4wWRWq2gTD
+	L0dKL4U84VxT/8bvAp+tdkpJhi8dFvf6kd3IpUN/ag0nejqoCd6YUVRL67UYHsFDz5BG6gVmUY/QM
+	cB+jRRg4AMzznm9Kz8+Y1nEI5PfWvAXjCWyUy9y9jaLvXegaF3jK2UY3OqPHQm5gUZKZXJjZ77e98
+	UmjeQnxi6qyIGtb309/TSJRgqXkWSn2WtCVubOLQZQsgWU3WlDlKQDBvON3Q4v9XMszH0pXvOPhQ7
+	i30hTvgCxOb+65F4Fv8W/W1QTRTBMEl5CXX0FKKRr8bZjQH5MOJIdB06nRVDajacvGCfSdTPoWqyv
+	BrUnpSFNV5xk2z3xrDPw==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mAu5g-002q8P-92; Tue, 03 Aug 2021 13:04:18 +0000
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]
+ helo=mx07-00178001.pphosted.com)
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mAtnR-002j4t-Lp
+ for linux-arm-kernel@lists.infradead.org; Tue, 03 Aug 2021 12:45:27 +0000
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+ by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id
+ 173CXJ3k031828; Tue, 3 Aug 2021 14:45:18 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
+ h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=selector1;
+ bh=oQNf3irtNVfOxL6klUF0V/W94mMn2Ppq+SP44k3H70A=;
+ b=xaKS8i0FwVVngNQy4DNL0WZXiQju5Dvh/WF1scUUI8AkSWSlImuVRhEqkbrtvvbagPlp
+ Pr34/R19Qzy01G00zxGKublEnn8H2o87B/yVatAwjVnRvebjm/MyanPUFVpErFHzUeqq
+ ca5QE+bWlwJ/lYKIT/ORUdCXzIc0w++WI/YhsYBFlIXdqGXWgdyYljh8qdEowYuNw7YM
+ /WHgNa4Kc4jFchZBnXLjUeSVjx61D+aPdKdgeNqZX6gAw2sEMxfMnz1AyIY/f6IR1+rs
+ LjSWQs/xJ2QKa6ud4XUKWpwqI+H/diwSD3Z1Hdq3NC4a6LkfNaiycKigBH9qgv2nu4/T yw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+ by mx07-00178001.pphosted.com with ESMTP id 3a74mx8e24-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Tue, 03 Aug 2021 14:45:18 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+ by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6A72910002A;
+ Tue,  3 Aug 2021 14:45:18 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+ by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5F8ED222C86;
+ Tue,  3 Aug 2021 14:45:18 +0200 (CEST)
+Received: from localhost (10.75.127.45) by SFHDAG2NODE3.st.com (10.75.127.6)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 3 Aug 2021 14:45:17
+ +0200
+From: <patrice.chotard@foss.st.com>
+To: <robh+dt@kernel.org>, <mark.rutland@arm.com>, <linux@armlinux.org.uk>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+ <devicetree@vger.kernel.org>
 List-Id: <soc.lore.kernel.org>
-To:     soc@kernel.org
-Cc:     arm@kernel.org, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL] Fixes for omaps for v5.14-rc series
-Date:   Tue,  3 Aug 2021 16:05:29 +0300
-Message-Id: <pull-1627995895-406133@atomide.com>
-X-Mailer: git-send-email 2.32.0
+CC: <patrice.chotard@foss.st.com>, <soc@kernel.org>
+Subject: [PATCH 1/4] ARM: dts: sti: remove clk_ignore_unused from bootargs for
+ stih407-b2120
+Date: Tue, 3 Aug 2021 14:45:03 +0200
+Message-ID: <20210803124506.23365-2-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210803124506.23365-1-patrice.chotard@foss.st.com>
+References: <20210803124506.23365-1-patrice.chotard@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Precedence: bulk
-List-ID: <linux-omap.vger.kernel.org>
-X-Mailing-List: linux-omap@vger.kernel.org
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391, 18.0.790
+ definitions=2021-08-03_02:2021-08-03,
+ 2021-08-03 signatures=0
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210803_054526_111661_7A19A685 
+X-CRM114-Status: GOOD (  15.44  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210803124503.g_ruucMhGTfNj41711e39qLP-MRApE7VnAmbxfra3a4@z>
 
-From: "Tony Lindgren" <tony@atomide.com>
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+Remove clk_ignore_unused from bootargs as it's no more needed.
 
-  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ arch/arm/boot/dts/stih407-b2120.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
-are available in the Git repository at:
+diff --git a/arch/arm/boot/dts/stih407-b2120.dts b/arch/arm/boot/dts/stih407-b2120.dts
+index 31c85f945c6b..9c79982ee7ba 100644
+--- a/arch/arm/boot/dts/stih407-b2120.dts
++++ b/arch/arm/boot/dts/stih407-b2120.dts
+@@ -11,7 +11,6 @@
+ 	compatible = "st,stih407-b2120", "st,stih407";
+ 
+ 	chosen {
+-		bootargs = "clk_ignore_unused";
+ 		stdout-path = &sbc_serial0;
+ 	};
+ 
+-- 
+2.17.1
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.14/fixes-rc5-signed
 
-for you to fetch changes up to 353b7a55dcaf5fb8758e09ebe2ddf5f3adbac7c5:
-
-  Merge branch 'fixes-v5.14' into fixes (2021-07-27 11:25:08 +0300)
-
-----------------------------------------------------------------
-Fixes for omaps for v5.14-rc series
-
-Some fixes for regressions and boot issues for various devices:
-
-- Fix gpt12 system timer regression on earlier beagleboard revisions
-
-- Fix potential NULL pointer access for omap_hwmod_get_pwrdm()
-
-- Disable RNG on secure am335x variants as it's not accessible
-
-- Fix flakey DCDC2 voltage causing hangs on am43x-epos-evm by reducing
-  i2c0 bus speed for tps65218
-
-- Fix typo for am437x-l4 can@0 node
-
-- Fix omap5 regression caused by vdds_1v8_main fixed-regulator
-
-----------------------------------------------------------------
-Dario Binacchi (1):
-      ARM: dts: am437x-l4: fix typo in can@0 node
-
-Dave Gerlach (1):
-      ARM: dts: am43x-epos-evm: Reduce i2c0 bus speed for tps65218
-
-H. Nikolaus Schaller (1):
-      omap5-board-common: remove not physically existing vdds_1v8_main fixed-regulator
-
-Kevin Hilman (1):
-      bus: ti-sysc: AM3: RNG is GP only
-
-Tero Kristo (1):
-      ARM: omap2+: hwmod: fix potential NULL pointer access
-
-Tony Lindgren (2):
-      bus: ti-sysc: Fix gpt12 system timer issue with reserved status
-      Merge branch 'fixes-v5.14' into fixes
-
- arch/arm/boot/dts/am437x-l4.dtsi          |  2 +-
- arch/arm/boot/dts/am43x-epos-evm.dts      |  2 +-
- arch/arm/boot/dts/omap5-board-common.dtsi |  9 +--------
- arch/arm/mach-omap2/omap_hwmod.c          | 10 +++++++++-
- drivers/bus/ti-sysc.c                     | 22 +++++++++++++++-------
- 5 files changed, 27 insertions(+), 18 deletions(-)
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
