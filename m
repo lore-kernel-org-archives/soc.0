@@ -1,58 +1,62 @@
-Return-Path: <SRS0=xMhO=M2=savoirfairelinux.com=jerome.oufella@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EFC3C4338F
-	for <soc@archiver.kernel.org>; Tue,  3 Aug 2021 15:59:32 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 3596C61050; Tue,  3 Aug 2021 15:59:32 +0000 (UTC)
-X-Greylist: delayed 439 seconds by postgrey-1.37 at mail.kernel.org; Tue, 03 Aug 2021 15:59:30 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6A17D60187
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=savoirfairelinux.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=savoirfairelinux.com
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6A17D60187;
-	Tue,  3 Aug 2021 15:59:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 204BBC4320A
+	for <linux-kernel@archiver.kernel.org>; Tue,  3 Aug 2021 15:59:36 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id EAFF86104F
+	for <linux-kernel@archiver.kernel.org>; Tue,  3 Aug 2021 15:59:35 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S237189AbhHCP7p (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Tue, 3 Aug 2021 11:59:45 -0400
+Received: from mail.savoirfairelinux.com ([208.88.110.44]:40922 "EHLO
+        mail.savoirfairelinux.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237184AbhHCP7l (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 3 Aug 2021 11:59:41 -0400
+X-Greylist: delayed 439 seconds by postgrey-1.27 at vger.kernel.org; Tue, 03 Aug 2021 11:59:41 EDT
 Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 897E09C0C99;
-	Tue,  3 Aug 2021 11:52:10 -0400 (EDT)
+        by mail.savoirfairelinux.com (Postfix) with ESMTP id 897E09C0C99;
+        Tue,  3 Aug 2021 11:52:10 -0400 (EDT)
 Received: from mail.savoirfairelinux.com ([127.0.0.1])
-	by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id D5cXTajtjGVF; Tue,  3 Aug 2021 11:52:10 -0400 (EDT)
+        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id D5cXTajtjGVF; Tue,  3 Aug 2021 11:52:10 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id 178419C1908;
-	Tue,  3 Aug 2021 11:52:10 -0400 (EDT)
+        by mail.savoirfairelinux.com (Postfix) with ESMTP id 178419C1908;
+        Tue,  3 Aug 2021 11:52:10 -0400 (EDT)
 X-Virus-Scanned: amavisd-new at mail.savoirfairelinux.com
 Received: from mail.savoirfairelinux.com ([127.0.0.1])
-	by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ko32_KOWxwba; Tue,  3 Aug 2021 11:52:09 -0400 (EDT)
+        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ko32_KOWxwba; Tue,  3 Aug 2021 11:52:09 -0400 (EDT)
 Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [192.168.48.237])
-	by mail.savoirfairelinux.com (Postfix) with ESMTP id CD2A59C0C99;
-	Tue,  3 Aug 2021 11:52:09 -0400 (EDT)
-Date: Tue, 3 Aug 2021 11:52:09 -0400 (EDT)
-From: Jerome Oufella <jerome.oufella@savoirfairelinux.com>
-To: Arnd Bergmann <arnd@kernel.org>
+        by mail.savoirfairelinux.com (Postfix) with ESMTP id CD2A59C0C99;
+        Tue,  3 Aug 2021 11:52:09 -0400 (EDT)
+Date:   Tue, 3 Aug 2021 11:52:09 -0400 (EDT)
+From:   Jerome Oufella <jerome.oufella@savoirfairelinux.com>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: martinwguy <martinwguy@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Hartley Sweeten <hsweeten@visionengravers.com>, 
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
-	SoC Team <soc@kernel.org>, Nikita Shubin <nikita.shubin@maquefel.me>, 
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>, 
-	Hubert Feurstein <hubert.feurstein@contec.at>, 
-	Lukasz Majewski <lukma@denx.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <clang-built-linux@googlegroups.com>
+Cc:     martinwguy <martinwguy@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        SoC Team <soc@kernel.org>,
+        Nikita Shubin <nikita.shubin@maquefel.me>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Hubert Feurstein <hubert.feurstein@contec.at>,
+        Lukasz Majewski <lukma@denx.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
 Message-ID: <817752520.64672.1628005929651.JavaMail.zimbra@savoirfairelinux.com>
 In-Reply-To: <CAK8P3a2z_xxpz9hAYoBx5=bS81V=TkjEU6WHNhPi1UhQ3UScfw@mail.gmail.com>
 References: <20210802141245.1146772-1-arnd@kernel.org> <CAL4-wQqCL1S-GYu7VKJeTT37wh=rR=SMUuwgKiXnnn_Y=uydOA@mail.gmail.com> <CAL4-wQpKLtSj0xfNUXXLhbtN1wC051jpRneAuLYOi1riZfiinw@mail.gmail.com> <CAK8P3a2z_xxpz9hAYoBx5=bS81V=TkjEU6WHNhPi1UhQ3UScfw@mail.gmail.com>
@@ -63,7 +67,10 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - GC92 (Linux)/8.8.15_GA_4059)
 Thread-Topic: ep93xx: remove MaverickCrunch support
 Thread-Index: AhRjygBp3+fyk/ZVaeE61BpHQHrtaA==
-Message-ID: <20210803155209.gOHh96-RSRnxdJA9ShoPG0j9v3unckMyGEoELO0cE74@z>
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210803155209.Clwm-Z4nXh5icxUVXOBFmXbjphDW0YBcX4Li0NDJ9Ww@z>
 
 On Aug 3, 2021, at 7:58 AM, Arnd Bergmann arnd@kernel.org wrote:
 
