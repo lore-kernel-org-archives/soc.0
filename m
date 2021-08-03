@@ -1,106 +1,71 @@
-Return-Path: <linux-kernel-owner@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 204BBC4320A
-	for <linux-kernel@archiver.kernel.org>; Tue,  3 Aug 2021 15:59:36 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EAFF86104F
-	for <linux-kernel@archiver.kernel.org>; Tue,  3 Aug 2021 15:59:35 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237189AbhHCP7p (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Tue, 3 Aug 2021 11:59:45 -0400
-Received: from mail.savoirfairelinux.com ([208.88.110.44]:40922 "EHLO
-        mail.savoirfairelinux.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237184AbhHCP7l (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Aug 2021 11:59:41 -0400
-X-Greylist: delayed 439 seconds by postgrey-1.27 at vger.kernel.org; Tue, 03 Aug 2021 11:59:41 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id 897E09C0C99;
-        Tue,  3 Aug 2021 11:52:10 -0400 (EDT)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
-        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id D5cXTajtjGVF; Tue,  3 Aug 2021 11:52:10 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id 178419C1908;
-        Tue,  3 Aug 2021 11:52:10 -0400 (EDT)
-X-Virus-Scanned: amavisd-new at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
-        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ko32_KOWxwba; Tue,  3 Aug 2021 11:52:09 -0400 (EDT)
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [192.168.48.237])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id CD2A59C0C99;
-        Tue,  3 Aug 2021 11:52:09 -0400 (EDT)
-Date:   Tue, 3 Aug 2021 11:52:09 -0400 (EDT)
-From:   Jerome Oufella <jerome.oufella@savoirfairelinux.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc:     martinwguy <martinwguy@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        SoC Team <soc@kernel.org>,
-        Nikita Shubin <nikita.shubin@maquefel.me>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Hubert Feurstein <hubert.feurstein@contec.at>,
-        Lukasz Majewski <lukma@denx.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Message-ID: <817752520.64672.1628005929651.JavaMail.zimbra@savoirfairelinux.com>
-In-Reply-To: <CAK8P3a2z_xxpz9hAYoBx5=bS81V=TkjEU6WHNhPi1UhQ3UScfw@mail.gmail.com>
-References: <20210802141245.1146772-1-arnd@kernel.org> <CAL4-wQqCL1S-GYu7VKJeTT37wh=rR=SMUuwgKiXnnn_Y=uydOA@mail.gmail.com> <CAL4-wQpKLtSj0xfNUXXLhbtN1wC051jpRneAuLYOi1riZfiinw@mail.gmail.com> <CAK8P3a2z_xxpz9hAYoBx5=bS81V=TkjEU6WHNhPi1UhQ3UScfw@mail.gmail.com>
-Subject: Re: [PATCH] ARM: ep93xx: remove MaverickCrunch support
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C60BDC4338F
+	for <soc@archiver.kernel.org>; Tue,  3 Aug 2021 17:12:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 9C87661108; Tue,  3 Aug 2021 17:12:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 80663610FD;
+	Tue,  3 Aug 2021 17:12:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1628010726;
+	bh=YKZgz2PIIA5ojPbgTMT8sUlcZDB7x/kiBLPAv6SkSCI=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=hEyoyKRHMnlr78wASkDHdVfwUbx5SJ9S1rBsLSdki2lkS5wcrB3Zn/FNnh3lHOXNm
+	 KH4PO0xwCeNYsaABvvWrARC5xDBZrydayyPRczebhBBx92VOzA0o7nnfnTfDV6Jz+T
+	 /4wuV+RIoDIrOERkwtVuOa9MsYu0mf8Zexwtv0LMo0tpRgJ24Y0CYUp0u0pcCNIP6h
+	 c21Rkr9CMXd4sCVwvTlZ59frAdLz1faCVQdtx7v379LUyn7GYkKyB+/zkhRwDXTQcg
+	 3BW6zvWI/HdOSHD3DW0HIN2PFR5CHH6qrxAKM34ifoH2+xzQ/xfPMvbDIJXV1dXSAz
+	 +QCJv+z0yJ+fw==
+Received: by mail-wm1-f54.google.com with SMTP id n12-20020a05600c3b8cb029025a67bbd40aso2225957wms.0;
+        Tue, 03 Aug 2021 10:12:06 -0700 (PDT)
+X-Gm-Message-State: AOAM531H+GEjmrshaNU5QFAKm8kIGE4x4Ywxp8Am33OZ5bok5oP4BE3v
+	mEOhG+7mKwIVPEXoFSNU5OfuJmJbrMFp4CKEpTM=
+X-Google-Smtp-Source: ABdhPJyFUUcsrSm1AzyQx3pvEZx6TT8YFnsUeo4wDlqkyr7TYiklG+prW2K275cVpvzd/XKyHL8AAT06vnq0iveLKzg=
+X-Received: by 2002:a1c:208e:: with SMTP id g136mr5372161wmg.142.1628010725128;
+ Tue, 03 Aug 2021 10:12:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - GC92 (Linux)/8.8.15_GA_4059)
-Thread-Topic: ep93xx: remove MaverickCrunch support
-Thread-Index: AhRjygBp3+fyk/ZVaeE61BpHQHrtaA==
-Precedence: bulk
-List-ID: <linux-kernel.vger.kernel.org>
-X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20210803155209.Clwm-Z4nXh5icxUVXOBFmXbjphDW0YBcX4Li0NDJ9Ww@z>
+References: <20210802141245.1146772-1-arnd@kernel.org> <CAL4-wQqCL1S-GYu7VKJeTT37wh=rR=SMUuwgKiXnnn_Y=uydOA@mail.gmail.com>
+ <CAL4-wQpKLtSj0xfNUXXLhbtN1wC051jpRneAuLYOi1riZfiinw@mail.gmail.com>
+ <CAK8P3a2z_xxpz9hAYoBx5=bS81V=TkjEU6WHNhPi1UhQ3UScfw@mail.gmail.com> <817752520.64672.1628005929651.JavaMail.zimbra@savoirfairelinux.com>
+In-Reply-To: <817752520.64672.1628005929651.JavaMail.zimbra@savoirfairelinux.com>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Tue, 3 Aug 2021 19:11:49 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a042r2V10WY=M3mvhZS2Q9_iBHLDgSNzJpJEGgNJOD7zQ@mail.gmail.com>
+Message-ID: <CAK8P3a042r2V10WY=M3mvhZS2Q9_iBHLDgSNzJpJEGgNJOD7zQ@mail.gmail.com>
+Subject: Re: [PATCH] ARM: ep93xx: remove MaverickCrunch support
+To: Jerome Oufella <jerome.oufella@savoirfairelinux.com>
+List-Id: <soc.lore.kernel.org>
+Cc: martinwguy <martinwguy@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Hartley Sweeten <hsweeten@visionengravers.com>, 
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>, SoC Team <soc@kernel.org>, 
+	Nikita Shubin <nikita.shubin@maquefel.me>, Arnd Bergmann <arnd@arndb.de>, 
+	Oleg Nesterov <oleg@redhat.com>, Hubert Feurstein <hubert.feurstein@contec.at>, 
+	Lukasz Majewski <lukma@denx.de>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	clang-built-linux <clang-built-linux@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Aug 3, 2021, at 7:58 AM, Arnd Bergmann arnd@kernel.org wrote:
+On Tue, Aug 3, 2021 at 5:52 PM Jerome Oufella
+<jerome.oufella@savoirfairelinux.com> wrote:
+>
+> You are correct on assuming usage of softfloat toolchains and not
+> using the MaverickCrunch unit. AFAIK, I am not aware of active users
+> of this FPU on recent setups.
 
-> On Tue, Aug 3, 2021 at 1:41 PM Martin Guy <martinwguy@gmail.com> wrote:
->>
->> I forward opinion from people currently producing and supporting EP93XX boards:
-> 
-> Thanks a lot for bringing them in. I definitely don't want to remove support for
-> something that is actively being used, and we don't have to merge the patch
-> if they currently rely on MaverickCrunch on older platforms.
-> 
-> It does sound however like Jerome's customers are using a normal (softfloat)
-> Linus distro on EP93xx, rather than one using the original MaverickCrunch
-> FPU instructions. There are no plans to discontinue EP93xx support, there
-> is actually a good amount of recent work going into updating the platform.
-> 
-> Jerome, please let me know if I understood you correctly here. If your
-> customers do rely on MaverickCrunch support in user space, I would
-> leave that in the kernel for as long as ep93xx itself is supported, and instead
-> require building support with the GNU assembler to avoid having to
-> add support to the clang integrated assembler. If you don't know of anyone
-> using MaverickCrunch, I would go ahead with my patch to remove kernel
-> support.
-> 
->      Arnd
+Ok, thank you for the confirmation, I'll queue it up in the soc tree then.
 
-Arnd,
+Of course, as there is nothing wrong with the feature other than it
+probably having no users and breaking the build when using the
+clang integrated assembler, I don't mind reverting it later if we end
+up finding a user that does rely on ancient MaverickCrunch binaries
+to run on future kernels.
 
-You are correct on assuming usage of softfloat toolchains and not
-using the MaverickCrunch unit. AFAIK, I am not aware of active users
-of this FPU on recent setups.
-
- Jerome
+       Arnd
