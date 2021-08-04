@@ -1,74 +1,98 @@
-Return-Path: <linux-watchdog-owner@kernel.org>
+Return-Path: <SRS0=0Qs2=M3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC13FC432BE
-	for <linux-watchdog@archiver.kernel.org>; Wed,  4 Aug 2021 12:44:32 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C5A5560F35
-	for <linux-watchdog@archiver.kernel.org>; Wed,  4 Aug 2021 12:44:32 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238119AbhHDMoo (ORCPT
-        <rfc822;linux-watchdog@archiver.kernel.org>);
-        Wed, 4 Aug 2021 08:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236990AbhHDMon (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 4 Aug 2021 08:44:43 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37815C0613D5
-        for <linux-watchdog@vger.kernel.org>; Wed,  4 Aug 2021 05:44:31 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id t9so4191854lfc.6
-        for <linux-watchdog@vger.kernel.org>; Wed, 04 Aug 2021 05:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=KThPZotl2MnbNHnYwN0Cur48hqa8t2fsEOoHY+/KM0c=;
-        b=Gocdf1yXuPX8xeoaYI9oLI1JhocaQp6ZZyVcTlOJdDZI2/0vnch4E5lQGPm3MxwdUM
-         giqLR8+3StPTSF4eaI9QxPRAYgsQPOy3Sgy1vk6QHMGur8WgKk9JiwpBE7Q7NqhIFwt9
-         YVZHv5lFDRw148Wb0r8UWWKNpLe8xrYAqQDWLQuAbt5MPsHwKIZ92D+P+/WX5P4zRRJR
-         snno7CnnmIaYZRGMeNve6R+RMLZT4vIseAntmNcFNMogNI0duS3C7Rhms//adcYhnZ1B
-         JgYUmWHHnqKvaZCBz8Vai7whhh0nzb9P1JFctB31mbxCa5/w7d9XJZYYIGYyiaufHl03
-         +5sA==
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 238ECC4320A
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  4 Aug 2021 12:46:32 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id EC6F560F14
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  4 Aug 2021 12:46:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EC6F560F14
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
+	MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=/N4yDZq4RKHHdNBtupbTeBxXCXaS4lUhknZkzbkCiPQ=; b=FjFOhkY9jUNKJd
+	rpEIHPPoMR4S+yNv6Bw12W9lL492+xghRl2TCtbMCHnRYPmnCcBU2/u3V6D8Sf4aifrfne2GeKJuc
+	PJq+Ptpor1xQw6haCDYk6AXYSBx4AsmUaV3GkNinhUirnC1pICG6ljy1ssbzTROEesBUYwbjCNRVw
+	hXfWORxDsFbclV7KOxC79xrrh90nLCOHU5Z+6DoJpsAPYaBhLviV4H3n4mmSXL13k8nK8Xa0gCRjh
+	Q+lHBeF8MTrCn6+yzjRIGZwqaxQnhV/h9qhNGn44iPgBDOloYJkDfoOa5vdEUFwVXS+U5bA89lMuI
+	AMbaLCoXnWoUDuap58gA==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mBGGB-0061zu-14; Wed, 04 Aug 2021 12:44:35 +0000
+Received: from mail-lf1-x133.google.com ([2a00:1450:4864:20::133])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mBGG7-0061yi-5m
+ for linux-arm-kernel@lists.infradead.org; Wed, 04 Aug 2021 12:44:32 +0000
+Received: by mail-lf1-x133.google.com with SMTP id b6so4147362lff.10
+ for <linux-arm-kernel@lists.infradead.org>;
+ Wed, 04 Aug 2021 05:44:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
+ h=mime-version:from:date:message-id:subject:to:cc;
+ bh=KThPZotl2MnbNHnYwN0Cur48hqa8t2fsEOoHY+/KM0c=;
+ b=Gocdf1yXuPX8xeoaYI9oLI1JhocaQp6ZZyVcTlOJdDZI2/0vnch4E5lQGPm3MxwdUM
+ giqLR8+3StPTSF4eaI9QxPRAYgsQPOy3Sgy1vk6QHMGur8WgKk9JiwpBE7Q7NqhIFwt9
+ YVZHv5lFDRw148Wb0r8UWWKNpLe8xrYAqQDWLQuAbt5MPsHwKIZ92D+P+/WX5P4zRRJR
+ snno7CnnmIaYZRGMeNve6R+RMLZT4vIseAntmNcFNMogNI0duS3C7Rhms//adcYhnZ1B
+ JgYUmWHHnqKvaZCBz8Vai7whhh0nzb9P1JFctB31mbxCa5/w7d9XJZYYIGYyiaufHl03
+ +5sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=KThPZotl2MnbNHnYwN0Cur48hqa8t2fsEOoHY+/KM0c=;
-        b=bFxy8wJCWrP+EBjicxuPJd3vSXNV7jnCduqeINTe5rQcjD6sSy+lYfgJyYrpH5O2Kx
-         aMnnWK5kTQ/EQtKvXquhgea4XKMcw0vSmqJsrQq6YaUJbUf6pguTtU1QZ6SypX3NdInF
-         o/uqnOJDHSNVQS85hioGLzWEu0aeI4TkFFZ1KzWNzFMPGaZAXmlpW3hvHLTMDA0Pnlw2
-         Ua01m6GZymeCQr4m1rBcgLebAFK8ZKIEYfO0jQTK2R22G4U4VZMGRJopUxFtEA0LoJAX
-         A4QViPHerf1CKYkFkSipTZnyBEfSrDCuzvM10hZ3/J0whmVA5jNrVSH4OfARNqIH/blI
-         /g4Q==
-X-Gm-Message-State: AOAM531n4yJozknoqUOWaYdmmmLd2HyjmtH0ZpXStZttPcdXPiHD4Mts
-        SJ+cGCQ2bQph+6jsjnmoAAQ7H1jQWX6f8kQ1j66+8A==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+ bh=KThPZotl2MnbNHnYwN0Cur48hqa8t2fsEOoHY+/KM0c=;
+ b=KVIldZZMEetjnTjX8H/sboAxM9LeDsZfDTIX6F4FupP8vKV6D1kTaYOIuzUVaYA5cC
+ uOHLeOcBkx3VtwhlVcb50MZkNjLig+ARqXHJZhPTzBQJlgfnCZF4zFkontZIohrgpi3S
+ yDUtvI8fv4sswXU89C9WJyfztlo2TC/f4EljycRjjThu1MtR+LS1Ev6YhhSoOx4oTLZl
+ wvOWYtypVixFqpbFhw1DtqoLFp3wZCGBH4imrIBRWnOM0gk/fHoZp/vRUXfhsE39AB2C
+ gqsLj1V1OdN3McEcwGfKCI3tRIqM6cxufLNhl0fTG7RJfkXf79AIj0dOmYSCm1GAXtbk
+ 3fAg==
+X-Gm-Message-State: AOAM533xsOauSpyHFNwZtucyEJDiwiKD/oFhC2XzTi4z31kQh6rY0ycw
+ 2lHSi8BfnLwFO+00N9du1vLfX4P4PI8b8U3BQLj6ZA==
 X-Google-Smtp-Source: ABdhPJyDDyEf+9rLZyk+tYny9g+7KdGyN7lm64G/9thaqibRNfBCYr9r5bZvfT70hWlzM4bj90OnDOt9H++74lx9/Q4=
-X-Received: by 2002:ac2:4d0f:: with SMTP id r15mr12222472lfi.649.1628081069590;
+X-Received: by 2002:ac2:4d0f:: with SMTP id r15mr12222472lfi.649.1628081069590; 
  Wed, 04 Aug 2021 05:44:29 -0700 (PDT)
 MIME-Version: 1.0
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 4 Aug 2021 14:44:18 +0200
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 4 Aug 2021 14:44:18 +0200
 Message-ID: <CACRpkdZaCosXsgp02nuUbd_nEvdxm5-z0+d0oSA97UTWQ0RQQg@mail.gmail.com>
 Subject: [GIT PULL] IXP4xx driver updates for v5.15
 List-Id: <soc.lore.kernel.org>
-To:     SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <linux-watchdog.vger.kernel.org>
-X-Mailing-List: linux-watchdog@vger.kernel.org
-Message-ID: <20210804124418.8JCTx2xVxVRwv06jesommu7Akml_carRT5IL71IyLkI@z>
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Jens Axboe <axboe@kernel.dk>, Guenter Roeck <linux@roeck-us.net>, 
+ "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)"
+ <linux-ide@vger.kernel.org>, LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210804_054431_263589_7F11BE5B 
+X-CRM114-Status: GOOD (  17.64  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210804124418.MjSTpAks5ekQR7snDwhP5BPTUkJbWp1IEJc0KNMD1Ik@z>
 
 Hi SoC maintainers,
 
@@ -156,3 +180,8 @@ Documentation/devicetree/bindings/ata/intel,ixp4xx-compact-flash.yaml
  create mode 100644
 Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.yaml
  create mode 100644 drivers/bus/intel-ixp4xx-eb.c
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
