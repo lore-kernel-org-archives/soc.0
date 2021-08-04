@@ -1,47 +1,64 @@
-Return-Path: <SRS0=6aPj=M3=microchip.com=Nicolas.Ferre@kernel.org>
+Return-Path: <SRS0=0Qs2=M3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-22.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2DBBC4338F
-	for <soc@archiver.kernel.org>; Wed,  4 Aug 2021 08:17:59 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 6BC8F60EFD; Wed,  4 Aug 2021 08:17:59 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14C67C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  4 Aug 2021 08:19:58 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 00EA66056C;
-	Wed,  4 Aug 2021 08:17:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 00EA66056C
+	by mail.kernel.org (Postfix) with ESMTPS id CC7196056C
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  4 Aug 2021 08:19:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CC7196056C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=microchip.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:Cc:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To
+	:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=bLk9XUGrMZT1Sq9sJHyAdCbpNsvisCdnPxtUEuIzzPc=; b=mUFAw/bmLV5D3v
+	HwPyRNJ2fHsDX8bX+J9gWAtDskOBksLkZ06B05qG5ieOYdrNXWgxk3/Pou9IQiaaZupywGJ/jJcK8
+	QWr1ZAfpakoM1+uU4EW1HJQgCb74yZxYdIGagiHzJKzVPKP+67cIhI1N9H3+4QKDYcW7QgHNGHcAt
+	Lv+9i39mwjEsUJZh4yfGc4tM9EwOxmTvB7FIs4POS78MiJeA3nS0WSiALRnNwr48yiSHjjaGQcNNP
+	2lafFedKGrRD5Vew2SjZV3yOpvEiHRLYUqMOsuNXTmPqjrkvIhsuj2fGVnOJW0TcnOoFfdAbhcu+C
+	4E3bug8XC5WsTgs770WA==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mBC6H-0057Lb-98; Wed, 04 Aug 2021 08:18:05 +0000
+Received: from esa.microchip.iphmx.com ([68.232.154.123])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mBC6D-0057Kk-Ut
+ for linux-arm-kernel@lists.infradead.org; Wed, 04 Aug 2021 08:18:03 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1628065079; x=1659601079;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cISOfZdpIzxP9sgFljLgRKSvTcjwqZfCPbc2qQw1C1Y=;
-  b=ZD1stkbCEaA2EbXY250MovwRT+yGGfjqDkGJxCHiTpeXjzDS6mqqjTZx
-   LvsZCH44anrwSuPE9W8/QHaDWZx8IpHI/ewJygx8R+nTL3cs7OqCc0Ig1
-   zYA3gplb+35wDLvPd4a9CKIK4mlgAaQLCJNTFlDNaIhDdRBNYBQIS8H2P
-   J5ccmJ/Gp3NSNPy1bjKCF0xrYb46ncwYbXNpIR7yFBQrK5n35AVM1YaZW
-   0Lbaz3mF1T0ba27ZyrowXytRk0G8I3ARrRHAtjLv8pQrcausKOZh5mOma
-   8ZHZRGrXYocaY2cjZVVYQuTthB09wcrMx4OAmJj5HmM79TU1ph28hA6fm
-   g==;
+ d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+ t=1628065082; x=1659601082;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=cISOfZdpIzxP9sgFljLgRKSvTcjwqZfCPbc2qQw1C1Y=;
+ b=LnwMWVBiHhCuuIZKNKgHnhPc0cNIbk9FrOuvZrZh9U5uXf0pRUl9Hy48
+ 65IA6P9Q/tFhBl6FUEiYcBoc312kTyvscoORrBOXQgpBrN5w4OIOm32oa
+ vAIAWHOrEDYM7YNb8GoHoDa9WzCGlyPFvrFEswsMCAAWbpANSlxraEi0m
+ X3F9Y4StmgsraXsPYFwl3znxMmA2v2halfmmj8dY7DFyqE9y9j3C1SQnN
+ e/KXaIBf+ubNLj22RyW4GYLJH2/nTyJyrcqz7H0JavD8Y7OijGJ+5l1jN
+ OYLVmTe3Zx/QxzTI30jKTZlAd7+gsUIGMOyNlkqRgWcl451nmoPcCfqua w==;
 IronPort-SDR: MevOYCoExy2zLGIHnJL995+7Fzf6mDlBmOESYfE0lYAeef6gNOexkMxbX+7ayumH5zNvtb3xvu
  OM0EVeDqLOTq5WcLdSiSkSgNNNI9Be3Dxnb7ICXcVT0rhqDbnZW0dVlY7Ga/1k+3uo+bDX5xF9
  Txk+j1GMSMVnGqptdDl5FEP8OI4oES9BJMMmHsd4fCKlL2usL2E+XENToOGexZtjCGH/Ytko5v
  dv1qupeHcHOB+2Z0ZRkprVNchkPhcF0XD6ZMkj2NekTuRcIW/cb8cfIohFMGpVMj8XWin+AbG9
  61+VwA4ECPMBSIAE91SBBjIw
-X-IronPort-AV: E=Sophos;i="5.84,293,1620716400"; 
-   d="scan'208";a="127044258"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Aug 2021 01:17:58 -0700
+X-IronPort-AV: E=Sophos;i="5.84,293,1620716400"; d="scan'208";a="127044258"
+Received: from smtpout.microchip.com (HELO email.microchip.com)
+ ([198.175.253.82])
+ by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
+ 04 Aug 2021 01:17:58 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -52,22 +69,39 @@ Received: from ness.home (10.10.115.15) by chn-vm-ex03.mchp-main.com
 From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	<arm@kernel.org>, <soc@kernel.org>
-CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
-	<linux-kernel@vger.kernel.org>, linux-arm-kernel
-	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Ludovic Desroches
-	<ludovic.desroches@microchip.com>, Claudiu Beznea
-	<claudiu.beznea@microchip.com>, Eugen Hristev <eugen.hristev@microchip.com>,
-	Stephen Boyd <sboyd@kernel.org>
+ <arm@kernel.org>, <soc@kernel.org>
 Subject: [GIT PULL] ARM: at91: soc for 5.15
 Date: Wed, 4 Aug 2021 10:17:21 +0200
 Message-ID: <20210804081721.11093-1-nicolas.ferre@microchip.com>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Organization: microchip
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210804_011802_152257_ABC6A978 
+X-CRM114-Status: GOOD (  14.78  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Linux Kernel list <linux-kernel@vger.kernel.org>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Eugen Hristev <eugen.hristev@microchip.com>,
+ Claudiu Beznea <claudiu.beznea@microchip.com>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210804081721.7Bq3F2ZCTefHeRFbmQaTjejW4izXTg9R-AThwqBrC6M@z>
 
 From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
@@ -154,3 +188,8 @@ Eugen Hristev (3):
 
 -- 
 Nicolas Ferre
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
