@@ -6,59 +6,59 @@ X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B41B9C4320A
-	for <soc@archiver.kernel.org>; Wed,  4 Aug 2021 14:06:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9655C4338F
+	for <soc@archiver.kernel.org>; Wed,  4 Aug 2021 14:07:13 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 8E9E660F22; Wed,  4 Aug 2021 14:06:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B1D5F60E52;
-	Wed,  4 Aug 2021 14:06:03 +0000 (UTC)
+	id 84BD160F58; Wed,  4 Aug 2021 14:07:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A9A3160F22;
+	Wed,  4 Aug 2021 14:07:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1628085965;
-	bh=HvEWF7JuyNJklmFh71f36kZl3uxBU3pofSwou0L+lf8=;
+	s=k20201202; t=1628086033;
+	bh=nUKjfTjVVS41wLMPjd2wAc1xrHe9Ri5cKv/cFw+Myvc=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CwzVRssEoPw3PuBwDWuNUH7AMEhGTOrVbvkA0islivPcQ5Mvb/ke6k3HAxkaL1VFQ
-	 imJamjgO+MXbP8ZrOG1fSXFxcp/NDKAMPTW8CvdPGtWevOaByz/ykFhnSZ66ZVJ01e
-	 RA4RyMayKjhV5Y4WL2u4Ts8pY6KqGt3LAeXduIyI+7yRYkDCY4wrxLrB1BFQjiI9NH
-	 LzLgWL8AuGFjLYC5D+GTVgcjtYA+gX5BilN4RN6xulFFmP/qGpo/V2kha4yCXD9qyo
-	 l5Jl+/misjxxYLj3V3wkc9op6GG4u0Jr8riDvOIff+eshR+UATdd9FUqVfM+rCor0O
-	 jysFGtVKgW1oA==
+	b=c2Z8IvBIJjBeYfkeBtVHjvwxaDLDBFu0b2ZCg4aq0Z5ZJBCpx5QZG7QFt4dGSUcdY
+	 0ima0ahoIpvKWep+qQDMtf9bf0yakQwudYVO4CnpDtsKVgsmonZdV/vY0nmABIfHqR
+	 Gz4Edbkb840xlzFrvWA7yCeYyLhOM3eISiv7923HG1IMIW0ejw/VMqeg10JuAAGeSH
+	 kKXUIuq71ieYqhhPNMiaDk4RI4ipJWD7PHoQMmezmL+TPoJJ9YVFF11KNlBZebJQas
+	 9tIkZeNaCfLT2Ga0yZgUuBvFx1Ww5ie7/TqlE3mWPdjw5AJU2+i2kt1dbq/Zwrth57
+	 PvY3ipHniNlrg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	arm@kernel.org,
-	"nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-	soc@kernel.org
+To: Linus Walleij <linus.walleij@linaro.org>,
+	SoC Team <soc@kernel.org>,
+	arm-soc <arm@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linux Kernel list <linux-kernel@vger.kernel.org>,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	Ludovic Desroches <ludovic.desroches@microchip.com>
-Subject: Re: [GIT PULL v2] ARM: at91: soc for 5.15
-Date: Wed,  4 Aug 2021 16:06:01 +0200
-Message-Id: <162808595100.690655.10542947732336817960.b4-ty@arndb.de>
+	"open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" <linux-ide@vger.kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jens Axboe <axboe@kernel.dk>
+Subject: Re: [GIT PULL] IXP4xx driver updates for v5.15
+Date: Wed,  4 Aug 2021 16:07:08 +0200
+Message-Id: <162808601953.733405.10635566719744310466.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210804084316.12641-1-nicolas.ferre@microchip.com>
-References: <20210804081721.11093-1-nicolas.ferre@microchip.com> <20210804084316.12641-1-nicolas.ferre@microchip.com>
+In-Reply-To: <CACRpkdZaCosXsgp02nuUbd_nEvdxm5-z0+d0oSA97UTWQ0RQQg@mail.gmail.com>
+References: <CACRpkdZaCosXsgp02nuUbd_nEvdxm5-z0+d0oSA97UTWQ0RQQg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 4 Aug 2021 10:43:16 +0200, nicolas.ferre@microchip.com wrote:
-> Arnd, Olof,
+On Wed, 4 Aug 2021 14:44:18 +0200, Linus Walleij wrote:
+> this is a set of combined driver updates for IXP4xx targeted for the
+> v5.15 merge window.
 > 
-> Here are the soc changes for 5.15 which contains the introduction of our new
-> SoC family: the SAMA7G5.
-> Note that one header file is shared with the clock sub-system. We synchronized
-> with Stephen to make it appear in this Pull-Request.
+> I am sending it to the SoC tree because of the cross-subsystem
+> dependencies and since the corresponding DTS changes goes
+> into SoC. These will be sent separately.
 > 
-> - v1 -> v2: text of the signed tag aligned with kernel revision targeted.
+> Note the following:
 > 
 > [...]
 
-Merged into for-next, thanks!
+Merged into arm/drivers, thanks!
 
-merge commit: 318845985fa032a865784ef5373f182fcdf037a9
+merge commit: 775dea4deec679c24b525b258c341a45ff1de9ea
 
        Arnd
