@@ -1,174 +1,146 @@
-Return-Path: <SRS0=0Qs2=M3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=Wd/I=M3=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70BA2C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  4 Aug 2021 08:52:58 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A50A3C4338F
+	for <soc@archiver.kernel.org>; Wed,  4 Aug 2021 12:44:31 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 8536E601FD; Wed,  4 Aug 2021 12:44:31 +0000 (UTC)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2209460EBC
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  4 Aug 2021 08:52:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2209460EBC
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=huawei.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:
-	Content-Transfer-Encoding:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
-	References:CC:To:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=WKMxW/WT8KnaKB7mj1aaNFHGuC/nbW80ENWimYcfMs4=; b=SuMbo0Cr1Kz9k2EM2ZMttSBDCb
-	gOmx/wrzubJYQW2X1XZ1bWCQATm1RisnGqNUInVJWsYlVnZRFO4CBXmXO9OQrFXtF5GLBR27NBd55
-	D9w9xq1caq+YyYUPWfEFJfnr1RECz1faWsonY0f+3bn33QVdWAatWo8fxHfHhKpMSC5e2+X5cq4rD
-	4HjkhsP7AtUmGRsc5Qe41Pp1IZWlMjG/aaBd5eCzFd6ztmSaz7X/WTG1l1ry0ua8XSy/wXyZhP12h
-	ay+GcRs383DhEi6Y2i/56ll6PJv9mLdscbndA+zHKhKit/24zG1ICh4Sf/INqeml1HLQKg8bmPSff
-	4+JjkHFw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mBCcN-005DCE-2Y; Wed, 04 Aug 2021 08:51:15 +0000
-Received: from szxga03-in.huawei.com ([45.249.212.189])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mBCcH-005D92-IK
- for linux-arm-kernel@lists.infradead.org; Wed, 04 Aug 2021 08:51:11 +0000
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
- by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4GflhN2Y9tz82dS;
- Wed,  4 Aug 2021 16:46:12 +0800 (CST)
-Received: from dggema764-chm.china.huawei.com (10.1.198.206) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Wed, 4 Aug 2021 16:51:03 +0800
-Received: from [10.174.185.179] (10.174.185.179) by
- dggema764-chm.china.huawei.com (10.1.198.206) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Wed, 4 Aug 2021 16:51:01 +0800
-Subject: Re: [PATCH 3/5] ARM: remove zte zx platform
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <soc@kernel.org>
-CC: Jun Nie <jun.nie@linaro.org>, Shawn Guo <shawnguo@kernel.org>, "Arnd
- Bergmann" <arnd@arndb.de>
-References: <20210120124812.2800027-1-arnd@kernel.org>
- <20210120124812.2800027-4-arnd@kernel.org>
-From: Zenghui Yu <yuzenghui@huawei.com>
-Message-ID: <2ce5cd86-ed0d-3e5f-2ab4-717e055dfef4@huawei.com>
-Date: Wed, 4 Aug 2021 16:51:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+	by mail.kernel.org (Postfix) with ESMTPS id 625E960F22
+	for <soc@kernel.org>; Wed,  4 Aug 2021 12:44:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 625E960F22
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id bq29so4204570lfb.5
+        for <soc@kernel.org>; Wed, 04 Aug 2021 05:44:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=KThPZotl2MnbNHnYwN0Cur48hqa8t2fsEOoHY+/KM0c=;
+        b=Gocdf1yXuPX8xeoaYI9oLI1JhocaQp6ZZyVcTlOJdDZI2/0vnch4E5lQGPm3MxwdUM
+         giqLR8+3StPTSF4eaI9QxPRAYgsQPOy3Sgy1vk6QHMGur8WgKk9JiwpBE7Q7NqhIFwt9
+         YVZHv5lFDRw148Wb0r8UWWKNpLe8xrYAqQDWLQuAbt5MPsHwKIZ92D+P+/WX5P4zRRJR
+         snno7CnnmIaYZRGMeNve6R+RMLZT4vIseAntmNcFNMogNI0duS3C7Rhms//adcYhnZ1B
+         JgYUmWHHnqKvaZCBz8Vai7whhh0nzb9P1JFctB31mbxCa5/w7d9XJZYYIGYyiaufHl03
+         +5sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=KThPZotl2MnbNHnYwN0Cur48hqa8t2fsEOoHY+/KM0c=;
+        b=Zbz0keAH5hJ5xdBtiPMldX12vg6Ovd5VXpbXMMHfF908RnkTOR6evWMibayNbed/qN
+         LD7wKMllZvxTMUUL9dV7rm4QN1dOqSWPQiviNTNcY8qtRegBhFYuj1tByDzH5xVQrDvU
+         2Gc7oHB4sNgcZaKIrbM8CrK6NqxQHpSqpUMo83oyRKoSrTpOxpz/moc+uWivY+xWK8cD
+         eI2mq5XBlNAK/vpSCh2tA9qnfFbAmHrOTSXMy9k1Cj6B6caC5zXLtXuFf3esP6G5K0Wg
+         cDY13X+mjlYOzPtiLVvoD9D9U39wY4/fCLUWlDUCYOi6NJWJSUSrSj1Ez88AEbBpxDaQ
+         0DBQ==
+X-Gm-Message-State: AOAM5338X0SyKGd3DwtdGwTpqiFZ246PzMJA6q9MqnLphXVVU5RtgCdC
+	bGLkSU+POMlfUkxtzEfjev4pzYlvmnvR21IeNJrGK2ChmFU25g==
+X-Google-Smtp-Source: ABdhPJyDDyEf+9rLZyk+tYny9g+7KdGyN7lm64G/9thaqibRNfBCYr9r5bZvfT70hWlzM4bj90OnDOt9H++74lx9/Q4=
+X-Received: by 2002:ac2:4d0f:: with SMTP id r15mr12222472lfi.649.1628081069590;
+ Wed, 04 Aug 2021 05:44:29 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210120124812.2800027-4-arnd@kernel.org>
-Content-Language: en-US
-X-Originating-IP: [10.174.185.179]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggema764-chm.china.huawei.com (10.1.198.206)
-X-CFilter-Loop: Reflected
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210804_015109_994700_B46F6382 
-X-CRM114-Status: GOOD (  21.59  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210804085101.iZibbiyUsFovD83AcIkQPejIx2RATHZ2cBIgESt3I88@z>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 4 Aug 2021 14:44:18 +0200
+Message-ID: <CACRpkdZaCosXsgp02nuUbd_nEvdxm5-z0+d0oSA97UTWQ0RQQg@mail.gmail.com>
+Subject: [GIT PULL] IXP4xx driver updates for v5.15
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, Jens Axboe <axboe@kernel.dk>, 
+	Guenter Roeck <linux@roeck-us.net>, 
+	"open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" <linux-ide@vger.kernel.org>, LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 2021/1/20 20:48, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The ZTE ZX set-top-box SoC platform was added in 2015 by Jun Nie, with
-> Baoyou Xie and Shawn Guo subsequently becoming maintainers after the
-> addition of the 64-bit variant.
-> 
-> However, the only machines that were ever supported upstream are the
-> reference designs, not actual set-top-box devices that would benefit
-> from this support. All ZTE set-top-boxes from the past few years seem
-> to be based on third-party SoCs. While there is very little information
-> about zx296702 and zx296718 on the web, I found some references to other
-> chips from the same family, such as zx296716 and zx296719, which were
-> never submitted for upstream support. Finally, there is no support for
-> the GPU on either of them, with the lima and panfrost device drivers
-> having been added after work on the zx platform had stopped.
-> 
-> Shawn confirmed that he has not seen any interest in this platform for
-> the past four years, and that it can be removed.
-> 
-> Thanks to Jun and Shawn for maintaining this platform over the past
-> five years.
-> 
-> Cc: Jun Nie <jun.nie@linaro.org>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi SoC maintainers,
 
-[...]
+this is a set of combined driver updates for IXP4xx targeted for the
+v5.15 merge window.
 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index aeef69cbc7ec..54b5e6dee017 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2704,40 +2704,6 @@ S:	Maintained
->  F:	arch/arm/mach-pxa/include/mach/z2.h
->  F:	arch/arm/mach-pxa/z2.c
->   
-> -ARM/ZTE ARCHITECTURE
-> -M:	Jun Nie <jun.nie@linaro.org>
-> -M:	Shawn Guo <shawnguo@kernel.org>
-> -L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> -S:	Maintained
+I am sending it to the SoC tree because of the cross-subsystem
+dependencies and since the corresponding DTS changes goes
+into SoC. These will be sent separately.
 
-[...]
+Note the following:
 
-> -F:	include/dt-bindings/clock/zx2967*.h
+All new DT bindings in this patch set are ACKed by bindings
+maintainer Rob Herring.
 
-include/dt-bindings/clock/zx296718-clock.h hadn't been removed.
+The new expansion bus driver goes in through the SoC tree as is
+custom for bus drivers.
 
-> -F:	include/dt-bindings/soc/zte,*.h
+The watchdog maintainer has ACKed the watchdog patch, which
+also briefly affects the timer driver.
 
-include/dt-bindings/soc/zte,pm_domains.h neither.
+The PATA changes also have some mach dependencies.
+I have informed the libata maintainer that I intend to take these
+through ARM SoC.
+https://lore.kernel.org/linux-ide/CACRpkdbf9TfFyObuqCzOEe_QrS=Gru8i6x-1P7v_N-a11g_iiA@mail.gmail.com/
 
-> -DRM DRIVERS FOR ZTE ZX
-> -M:	Shawn Guo <shawnguo@kernel.org>
-> -L:	dri-devel@lists.freedesktop.org
-> -S:	Maintained
-> -T:	git git://anongit.freedesktop.org/drm/drm-misc
-> -F:	Documentation/devicetree/bindings/display/zte,vou.txt
-> -F:	drivers/gpu/drm/zte/
+Please pull it in!
 
-The whole zxdrm driver is still in tree, which smells like a leftover.
+Yours,
+Linus Walleij
 
-> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-> index 6eecdef538bd..ec3c0cb27d1e 100644
-> --- a/arch/arm64/Kconfig.platforms
-> +++ b/arch/arm64/Kconfig.platforms
-> @@ -317,12 +317,6 @@ config ARCH_XGENE
->  	help
->  	  This enables support for AppliedMicro X-Gene SOC Family
->  
-> -config ARCH_ZX
-> -	bool "ZTE ZX SoC Family"
-> -	select PINCTRL
-> -	help
-> -	  This enables support for ZTE ZX SoC Family
+The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
-And ARCH_ZX is still selected in arm64's defconfig (which is why I
-jumped in this series).
+  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+tags/ixp4xx-drivers-arm-soc-v5.15-1
+
+for you to fetch changes up to 47adef20e67d657696c953f4b8023017c6005c1b:
+
+  pata: ixp4xx: Rewrite to use device tree (2021-08-04 12:20:44 +0200)
+
+----------------------------------------------------------------
+IXP4xx driver updates for modernizing the IXP4xx platforms,
+taregeted for v5.15:
+
+- Add DT bindings to the expansion bus and PATA libata driver.
+
+- Add a new expansion bus driver.
+
+- Rewrite the watchdog driver to use the watchdog core and
+  spawn from the timer (clocksource) driver.
+
+- Refactor the PATA/libata driver to probe from the device
+  tree and use the expansion bus driver to manipulate chip
+  select timings directly.
+
+----------------------------------------------------------------
+Linus Walleij (8):
+      bus: ixp4xx: Add DT bindings for the IXP4xx expansion bus
+      bus: ixp4xx: Add a driver for IXP4xx expansion bus
+      watchdog: ixp4xx: Rewrite driver to use core
+      pata: ixp4xx: Use local dev variable
+      pata: ixp4xx: Use IS_ENABLED() to determine endianness
+      pata: ixp4xx: Refer to cmd and ctl rather than csN
+      pata: ixp4xx: Add DT bindings
+      pata: ixp4xx: Rewrite to use device tree
+
+ .../bindings/ata/intel,ixp4xx-compact-flash.yaml   |  61 +++
+ .../bus/intel,ixp4xx-expansion-bus-controller.yaml | 168 ++++++++
+ MAINTAINERS                                        |   2 +
+ drivers/ata/pata_ixp4xx_cf.c                       | 264 +++++++++----
+ drivers/bus/Kconfig                                |  11 +
+ drivers/bus/Makefile                               |   1 +
+ drivers/bus/intel-ixp4xx-eb.c                      | 429 +++++++++++++++++++++
+ drivers/clocksource/timer-ixp4xx.c                 |  48 ++-
+ drivers/watchdog/Kconfig                           |   1 +
+ drivers/watchdog/ixp4xx_wdt.c                      | 283 ++++++--------
+ include/linux/platform_data/pata_ixp4xx_cf.h       |   4 +-
+ 11 files changed, 1014 insertions(+), 258 deletions(-)
+ create mode 100644
+Documentation/devicetree/bindings/ata/intel,ixp4xx-compact-flash.yaml
+ create mode 100644
+Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.yaml
+ create mode 100644 drivers/bus/intel-ixp4xx-eb.c
