@@ -6,14 +6,14 @@ X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40335C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  4 Aug 2021 13:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEB74C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  4 Aug 2021 13:58:55 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 11C2160F14
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  4 Aug 2021 13:58:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 11C2160F14
+	by mail.kernel.org (Postfix) with ESMTPS id 78CE7601FD
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  4 Aug 2021 13:58:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 78CE7601FD
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,47 +22,53 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=QjJZNj23lCH365argeiC1fSkBP0rn2XcblR4Fp9JyLU=; b=yoU20pxRQjV/5x
-	/MihWxZqcr3CxqXMPyvSdHZHuwkP+EBy3PB9SuxV3K3C2lXY5UFKkEtsIVRA1wCYZMYYwa9pnHj3v
-	SJsBaGGduOyaVDtzaRjdzQydNyeSXHLy2HtwOAMwEkZ/Y7/8fdGf5o+H0iOszePDrZwJPpR/Hpo/x
-	UJAqRTtBzPRAHYdl6T/gSPmFMaFzo6cL9F7+0saWtybZ0Hg5qSuHywe/P4HypJ8yMERc/7wX70UFI
-	NtACe5OEJrQxUQrw4Z3R7IplY8LC6PRKaZOo/M60cW/EiV81YePixrroRbbz1IECpVBQLiImmAolR
-	Rr3hqSmkOdfI5nJ987/g==;
+	List-Owner; bh=HGT36IksmFkqiibOhpfl85ux+/lj83H6Wi9mW5yR03w=; b=Y+nxhENP0zGJrl
+	fzuOys/utEd16neuYtR7PeF/PGgLnFB27A4/yEqOjTTkNibOIDEduxRqAV37rGdNSXRVA8cBRYtqZ
+	fmN/fLKMXxTVtLINZLYKTPxIWgMPHEr/FjiGINI4XwdXqlef8ChH0vEe+3inUWzVIrfs7mla8svqk
+	twq94FsHXSDK3CoEsK1Jvoin7z8LD0fguqt54rgu6WLvlDKgZ/G5GZgBA3DXob4h/sX2jh+HJdREO
+	Yv1v+uo8axGrvFkyviUtEI9RkcJ8xZPmzRD6f85bdpl4Lwg9QpcOptF3Ktq5gXKKGTxNUpyYm53Rz
+	R1AuBqCLoN9nyqsPi8KQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mBHOM-006EQz-D9; Wed, 04 Aug 2021 13:57:06 +0000
+	id 1mBHOa-006EVx-2w; Wed, 04 Aug 2021 13:57:20 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mBHOH-006EPi-AC
- for linux-arm-kernel@lists.infradead.org; Wed, 04 Aug 2021 13:57:02 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BBD6460EE9;
- Wed,  4 Aug 2021 13:56:59 +0000 (UTC)
+ id 1mBHOK-006EQw-5h
+ for linux-arm-kernel@lists.infradead.org; Wed, 04 Aug 2021 13:57:05 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6AF6F60F58;
+ Wed,  4 Aug 2021 13:57:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1628085421;
- bh=uSKDVfXkjQyfGeNj9IN/e8YDTazOYowYnjxP434zn2A=;
+ s=k20201202; t=1628085423;
+ bh=CfPh8n7X/2HlYs0NevM2NSTKLSxtkrFdu5Iu+5YSy8I=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=F4D6A93B65XQK02mI5rGajm/OLrkZz+veO064hOjsIOxJsq4dpL4vJhx8SaRgkje8
- AAK7DsgzkEaAfPGjZGaQfzH2Wehvm3SPJSPLO9GcvKjJn7OU1nibntDT76Fv3w5ltS
- s7c+lHZyCbVPjoM3bC7ZFpxt/byJKLzvSTyYAqUT/ypRdvkCiV56NTvwhDS9IskvDL
- 7fv3eWV8LOn/bOIdNeSTshTSrTr62bTYSz0yWeeyJBuTeArnZHQN0nh0S0Ffa9Xeq/
- zxb/dUrmDmYpv8OqbdPAuUbkzirIN4InLYRg8oQNikppTNOFyPpmRx2Oqy1/LHXaD9
- Ti51oEqV9kIZw==
+ b=Xe84NgBFKitEXuISRyb4yeDj7QWpCq9GBv00gTgsZ9m3nD5iB8GV2ppSvcvbpyai3
+ TOmQVJd5ZetVLCAASFW4+ZnY5qMdpHmYGqUNqvCfHf6RQn/fI0D8kdSihmR9mxcPmh
+ GPP9J6E9rLhMAPpYhoLpLzlCxTowwkBqpWNpcrgJw/TuCLrC0d5+rhrMy7qnXd+l24
+ CCQd+nkkR5MOjjNRv6wVo6VPbcTaf6iFMuW+tdFweMeXX0gUw+ggoH5YkF107XlN5W
+ 3Im7CUZ9rWxLeANMbRxFbtoA6qYcMJsPjKGpybszDcBsNkjk5/tmc5sGti0SrPC9Sj
+ jTYvKoGAijDuw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- SoC Team <soc@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Stephan Gerhold <stephan@gerhold.net>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [GIT PULL] Ux500 DTS changes for the v5.15 kernel cycle
-Date: Wed,  4 Aug 2021 15:56:56 +0200
-Message-ID: <162808541212.328977.8507226322336641533.b4-ty@arndb.de>
+To: soc@kernel.org,
+ "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+ Olof Johansson <olof@lixom.net>, arm@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Eugen Hristev <eugen.hristev@microchip.com>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+ Claudiu Beznea <claudiu.beznea@microchip.com>,
+ Linux Kernel list <linux-kernel@vger.kernel.org>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [GIT PULL] ARM: at91: dt for 5.15
+Date: Wed,  4 Aug 2021 15:56:57 +0200
+Message-ID: <162808541220.328977.6437198660609674733.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <CACRpkdbjBv5ywZZD8rK07d5sLcHsG8o4iYD-3jHO=HLg6-nKnA@mail.gmail.com>
-References: <CACRpkdbjBv5ywZZD8rK07d5sLcHsG8o4iYD-3jHO=HLg6-nKnA@mail.gmail.com>
+In-Reply-To: <20210804085000.13233-1-nicolas.ferre@microchip.com>
+References: <20210804085000.13233-1-nicolas.ferre@microchip.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210804_065701_411322_E71D2035 
-X-CRM114-Status: GOOD (  10.53  )
+X-CRM114-CacheID: sfid-20210804_065704_303551_C5059543 
+X-CRM114-Status: UNSURE (   8.36  )
+X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -78,24 +84,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210804135656.gAuFs4U2f-f7UkVTjnyLlwZV69QM1kMFc_x1hOIZiFQ@z>
+Message-ID: <20210804135657.jEwcAx4mcYcFcMjl_UDrKOhZJwjYOj8oPycZa4Xc66M@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 3 Aug 2021 14:25:15 +0200, Linus Walleij wrote:
-> here is a first set of DTS changes for v5.15 that would be nice if
-> you could pull into the appropriate DTS branch in the SoC tree.
+On Wed, 4 Aug 2021 10:50:00 +0200, nicolas.ferre@microchip.com wrote:
+> Arnd, Olof,
 > 
-> The details are in the signed tag, mainly some new phones,
-> and some generic fixes.
+> Here are the dt changes for 5.15 which contains addition of SAMA7G5, some
+> enhancements to current boards and a couple of (low priority) fixes.
 > 
-> Please pull it in!
+> Thanks, best regards,
+>   Nicolas
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 72ee3b4dc2c8c56aca2608a0c04d0eedaf6fdc67
+merge commit: 8e816b9915a136c12ab726e92412b917d7e514f7
 
        Arnd
 
