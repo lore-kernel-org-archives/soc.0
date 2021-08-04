@@ -1,26 +1,31 @@
-Return-Path: <SRS0=Wd/I=M3=linaro.org=linus.walleij@kernel.org>
+Return-Path: <linux-watchdog-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A50A3C4338F
-	for <soc@archiver.kernel.org>; Wed,  4 Aug 2021 12:44:31 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 8536E601FD; Wed,  4 Aug 2021 12:44:31 +0000 (UTC)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 625E960F22
-	for <soc@kernel.org>; Wed,  4 Aug 2021 12:44:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 625E960F22
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id bq29so4204570lfb.5
-        for <soc@kernel.org>; Wed, 04 Aug 2021 05:44:31 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC13FC432BE
+	for <linux-watchdog@archiver.kernel.org>; Wed,  4 Aug 2021 12:44:32 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id C5A5560F35
+	for <linux-watchdog@archiver.kernel.org>; Wed,  4 Aug 2021 12:44:32 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S238119AbhHDMoo (ORCPT
+        <rfc822;linux-watchdog@archiver.kernel.org>);
+        Wed, 4 Aug 2021 08:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236990AbhHDMon (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 4 Aug 2021 08:44:43 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37815C0613D5
+        for <linux-watchdog@vger.kernel.org>; Wed,  4 Aug 2021 05:44:31 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id t9so4191854lfc.6
+        for <linux-watchdog@vger.kernel.org>; Wed, 04 Aug 2021 05:44:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:from:date:message-id:subject:to:cc;
@@ -35,28 +40,35 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
         bh=KThPZotl2MnbNHnYwN0Cur48hqa8t2fsEOoHY+/KM0c=;
-        b=Zbz0keAH5hJ5xdBtiPMldX12vg6Ovd5VXpbXMMHfF908RnkTOR6evWMibayNbed/qN
-         LD7wKMllZvxTMUUL9dV7rm4QN1dOqSWPQiviNTNcY8qtRegBhFYuj1tByDzH5xVQrDvU
-         2Gc7oHB4sNgcZaKIrbM8CrK6NqxQHpSqpUMo83oyRKoSrTpOxpz/moc+uWivY+xWK8cD
-         eI2mq5XBlNAK/vpSCh2tA9qnfFbAmHrOTSXMy9k1Cj6B6caC5zXLtXuFf3esP6G5K0Wg
-         cDY13X+mjlYOzPtiLVvoD9D9U39wY4/fCLUWlDUCYOi6NJWJSUSrSj1Ez88AEbBpxDaQ
-         0DBQ==
-X-Gm-Message-State: AOAM5338X0SyKGd3DwtdGwTpqiFZ246PzMJA6q9MqnLphXVVU5RtgCdC
-	bGLkSU+POMlfUkxtzEfjev4pzYlvmnvR21IeNJrGK2ChmFU25g==
+        b=bFxy8wJCWrP+EBjicxuPJd3vSXNV7jnCduqeINTe5rQcjD6sSy+lYfgJyYrpH5O2Kx
+         aMnnWK5kTQ/EQtKvXquhgea4XKMcw0vSmqJsrQq6YaUJbUf6pguTtU1QZ6SypX3NdInF
+         o/uqnOJDHSNVQS85hioGLzWEu0aeI4TkFFZ1KzWNzFMPGaZAXmlpW3hvHLTMDA0Pnlw2
+         Ua01m6GZymeCQr4m1rBcgLebAFK8ZKIEYfO0jQTK2R22G4U4VZMGRJopUxFtEA0LoJAX
+         A4QViPHerf1CKYkFkSipTZnyBEfSrDCuzvM10hZ3/J0whmVA5jNrVSH4OfARNqIH/blI
+         /g4Q==
+X-Gm-Message-State: AOAM531n4yJozknoqUOWaYdmmmLd2HyjmtH0ZpXStZttPcdXPiHD4Mts
+        SJ+cGCQ2bQph+6jsjnmoAAQ7H1jQWX6f8kQ1j66+8A==
 X-Google-Smtp-Source: ABdhPJyDDyEf+9rLZyk+tYny9g+7KdGyN7lm64G/9thaqibRNfBCYr9r5bZvfT70hWlzM4bj90OnDOt9H++74lx9/Q4=
 X-Received: by 2002:ac2:4d0f:: with SMTP id r15mr12222472lfi.649.1628081069590;
  Wed, 04 Aug 2021 05:44:29 -0700 (PDT)
 MIME-Version: 1.0
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 4 Aug 2021 14:44:18 +0200
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 4 Aug 2021 14:44:18 +0200
 Message-ID: <CACRpkdZaCosXsgp02nuUbd_nEvdxm5-z0+d0oSA97UTWQ0RQQg@mail.gmail.com>
 Subject: [GIT PULL] IXP4xx driver updates for v5.15
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, Jens Axboe <axboe@kernel.dk>, 
-	Guenter Roeck <linux@roeck-us.net>, 
-	"open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" <linux-ide@vger.kernel.org>, LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+To:     SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-watchdog.vger.kernel.org>
+X-Mailing-List: linux-watchdog@vger.kernel.org
+Message-ID: <20210804124418.8JCTx2xVxVRwv06jesommu7Akml_carRT5IL71IyLkI@z>
 
 Hi SoC maintainers,
 
