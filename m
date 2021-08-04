@@ -1,115 +1,111 @@
-Return-Path: <SRS0=2Com=M3=lists.freedesktop.org=dri-devel-bounces@kernel.org>
+Return-Path: <SRS0=0Qs2=M3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEA0CC4320A
-	for <dri-devel@archiver.kernel.org>; Wed,  4 Aug 2021 14:08:16 +0000 (UTC)
-Received: from gabe.freedesktop.org (gabe.freedesktop.org [131.252.210.177])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA868C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  4 Aug 2021 14:13:50 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9129860E52
-	for <dri-devel@archiver.kernel.org>; Wed,  4 Aug 2021 14:08:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9129860E52
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.freedesktop.org
-Received: from gabe.freedesktop.org (localhost [127.0.0.1])
-	by gabe.freedesktop.org (Postfix) with ESMTP id B55016E0A6;
-	Wed,  4 Aug 2021 14:08:15 +0000 (UTC)
-X-Greylist: delayed 761 seconds by postgrey-1.36 at gabe;
- Wed, 04 Aug 2021 14:08:13 UTC
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
- by gabe.freedesktop.org (Postfix) with ESMTPS id 758686E0A6
- for <dri-devel@lists.freedesktop.org>; Wed,  4 Aug 2021 14:08:13 +0000 (UTC)
-Received: from mail-wm1-f45.google.com ([209.85.128.45]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MmkjY-1mtio33Lh0-00juoX for <dri-devel@lists.freedesktop.org>; Wed, 04
- Aug 2021 15:55:29 +0200
-Received: by mail-wm1-f45.google.com with SMTP id u15so1270391wmj.1
- for <dri-devel@lists.freedesktop.org>; Wed, 04 Aug 2021 06:55:26 -0700 (PDT)
-X-Gm-Message-State: AOAM5329B2bcHXdnpClCGlsR2JEscTiRYmfTnz66xg9id8xYSLBHQoWF
- +5ZCIQlEhv8VVnDyfAY65ahWFF9bmU0Uan0JlAY=
-X-Google-Smtp-Source: ABdhPJwDFsHBF22f8Wqozeaut6UIlHtczJbkX0G3MU6rJlQNmQa5Uqm62X/H+k4KrenEDbOxO68Jg/vZ6B5uO0dsHAk=
-X-Received: by 2002:a1c:208e:: with SMTP id g136mr9939159wmg.142.1628085325875; 
- Wed, 04 Aug 2021 06:55:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210804043439.11757-1-o.rempel@pengutronix.de>
-In-Reply-To: <20210804043439.11757-1-o.rempel@pengutronix.de>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 4 Aug 2021 15:55:10 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0285V=N5HPS5grOTQ+q1HF8J6_PsxCLgLvYMsD0hVeUg@mail.gmail.com>
-Message-ID: <CAK8P3a0285V=N5HPS5grOTQ+q1HF8J6_PsxCLgLvYMsD0hVeUg@mail.gmail.com>
-Subject: Re: [PATCH v34 0/3] Mainline imx6 based SKOV boards
-To: Oleksij Rempel <o.rempel@pengutronix.de>
+	by mail.kernel.org (Postfix) with ESMTPS id 871D960E09
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  4 Aug 2021 14:13:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 871D960E09
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=C98RdkuiRoTqHpX0IZMqbNtdgDDouKS/nk1HyHUfMGQ=; b=Ep09SySONih+qu
+	EFw6DWFTjNKgfNnnpWNxpFnA0gweNiwcuyYiDavcj1NL7WUvR0dTliH7ypUeC1zJ3p+1qT3Ni0il4
+	Co8N+pFWFW6KtGqD4gOwjR1zlhbUIW6Rhw1s3snBDSR+0wP4xW1ZYsVAVhtdqO1hjKF3dgvUPRxB8
+	HsoZ7sGiiBkztYDEcjogfr4acdGByNFx4PK9N8BDpmi8gkbuTUTrAVnj2w1q3X4JuS6//rYZ2KGdi
+	wY8akAMfiHPchenhMlUPbEifW67P9maMUofxBjoP1XC0vqm4UrhERy8a78oOBkOHrSZKYbza8Z10O
+	0CBPqoFk1jR8WErzjw0g==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mBHch-006M99-Im; Wed, 04 Aug 2021 14:11:56 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mBHY9-006JTU-UA
+ for linux-arm-kernel@lists.infradead.org; Wed, 04 Aug 2021 14:07:15 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A9A3160F22;
+ Wed,  4 Aug 2021 14:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+ s=k20201202; t=1628086033;
+ bh=nUKjfTjVVS41wLMPjd2wAc1xrHe9Ri5cKv/cFw+Myvc=;
+ h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=c2Z8IvBIJjBeYfkeBtVHjvwxaDLDBFu0b2ZCg4aq0Z5ZJBCpx5QZG7QFt4dGSUcdY
+ 0ima0ahoIpvKWep+qQDMtf9bf0yakQwudYVO4CnpDtsKVgsmonZdV/vY0nmABIfHqR
+ Gz4Edbkb840xlzFrvWA7yCeYyLhOM3eISiv7923HG1IMIW0ejw/VMqeg10JuAAGeSH
+ kKXUIuq71ieYqhhPNMiaDk4RI4ipJWD7PHoQMmezmL+TPoJJ9YVFF11KNlBZebJQas
+ 9tIkZeNaCfLT2Ga0yZgUuBvFx1Ww5ie7/TqlE3mWPdjw5AJU2+i2kt1dbq/Zwrth57
+ PvY3ipHniNlrg==
+From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Daniel Vetter <daniel@ffwll.ch>,
- David Airlie <airlied@linux.ie>, 
- Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- SoC Team <soc@kernel.org>, 
- Thierry Reding <thierry.reding@gmail.com>, DTML <devicetree@vger.kernel.org>, 
- Fabio Estevam <festevam@gmail.com>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>, 
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- dri-devel <dri-devel@lists.freedesktop.org>, 
- Sam Ravnborg <sam@ravnborg.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Fyd0Gge/K/clP2iiDnSoAH9YF2Ip59sdPbDc5mbmeglV7VzAGGs
- B7IFVknCrc0kp/1lD+0n2UeVEeERNsNDkAdcSJiKHQBGcrbQDDlHYgQ1PvUi1/62xtPTJ0X
- rTye3SqRnKCujVQZrI56TyZmvw+UlSgm29Rl4bnXKoWuKtJnRJ43hfrE5s8xnCcKdfEzPrL
- oMORCJswy8Hihoj2WArVA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vqQCBJzaWa0=:VdCNxpRHoTjL/GbGvfYHZY
- M/fhSLQKgyGjrrvXENWemZ6PRwUw7DpcqrkadJ2PifR2eT6UE8/phOLsds7Mz7jLHsmrLMkSE
- IgiXIkMGZvlvV+6eNvuK/rLD7hUAuy9reCKeN1/55LxdFfT32DwrDkfEWCksHdiLSuHhgy3ox
- VjJLCCCilRNZR2Tt1ShxY/lEOehZh9jIaitQdpxVoVFWC0ExS2PQSGgwHHeLvY7MZWb3RVJB6
- 3zWT7qd59NbmCj2LRKZs6T7WJJeSr8xha3f1ycKmt/LR1xkQnTjAY0oCOeQRFIrqcvlyRQfQt
- T3wn4jhFYbePbXRJZqrvzhd7vqQJA1HcYz8hqLuZyRp1lYQ05tfSyHDKZQaVn70PVRdTNf4CL
- bm4ugo/Hb0HcFfxJKpmiK9smK4XowqJAk/RqX9rWaZsukRIceVTRBDTvFD7g01bGOrrWB688r
- sXJMAtkMZcLF3xVraLbewDpyF8X8DBfBsLkxqwjKu9vZhcwEqTj1CYptIKuIne07JFfmpjq3Y
- NztExkkhBxGGBVnk5iqy9sI1ssZLXuVcT9D3ue1N3Zk5XbVLkQ4jrs5AIUnsnv+Jv+vHnqkuD
- uxtM/QC3+GLSlCSC1osDzji2K5FLyQmLCcPawg//bP6NeMeLPZb+jjwCSQCupAMjtYLA/xiwa
- 5VAHwuZPWgjnSnbyDuao4cYxdIwcAagcPDJ0PHx5fgRcWdLn8bHbxajNfARL1vdbNYB/3WV+h
- 3IkHd6XJl105MowX0mNNegKtpvrOy0PKYrjg+ObiCQ5qPsBpXSikWJ97+VoeFX/4NGFDoVEnN
- ayIlcsOzOFC4t7NcMTHzZkeAgONZ9lAc4oe7Ey7FMCExUMV3picYDfFP3n46kw0lbGhsW7eFw
- JkhvQDg+SzBn8OAN28Trl3wH25K2vablfKs1pA5N7XSHQNKzoK0y3Po7XL3DywiksUq7bkm9f
- VEQI8UMt9EAuytf1PgIHiiXuhPT6EmLgM0J+X2gyGwssxwqnEfRIA
-X-BeenThere: dri-devel@lists.freedesktop.org
-X-Mailman-Version: 2.1.29
+To: Linus Walleij <linus.walleij@linaro.org>, SoC Team <soc@kernel.org>,
+ arm-soc <arm@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)"
+ <linux-ide@vger.kernel.org>, 
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+ Guenter Roeck <linux@roeck-us.net>, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [GIT PULL] IXP4xx driver updates for v5.15
+Date: Wed,  4 Aug 2021 16:07:08 +0200
+Message-ID: <162808601953.733405.10635566719744310466.b4-ty@arndb.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <CACRpkdZaCosXsgp02nuUbd_nEvdxm5-z0+d0oSA97UTWQ0RQQg@mail.gmail.com>
+References: <CACRpkdZaCosXsgp02nuUbd_nEvdxm5-z0+d0oSA97UTWQ0RQQg@mail.gmail.com>
+MIME-Version: 1.0
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210804_070714_103836_A041A4F9 
+X-CRM114-Status: UNSURE (   9.99  )
+X-CRM114-Notice: Please train this message.
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
 Precedence: list
-List-Id: Direct Rendering Infrastructure - Development
- <dri-devel.lists.freedesktop.org>
-List-Unsubscribe: <https://lists.freedesktop.org/mailman/options/dri-devel>,
- <mailto:dri-devel-request@lists.freedesktop.org?subject=unsubscribe>
-List-Archive: <https://lists.freedesktop.org/archives/dri-devel>
-List-Post: <mailto:dri-devel@lists.freedesktop.org>
-List-Help: <mailto:dri-devel-request@lists.freedesktop.org?subject=help>
-List-Subscribe: <https://lists.freedesktop.org/mailman/listinfo/dri-devel>,
- <mailto:dri-devel-request@lists.freedesktop.org?subject=subscribe>
-Errors-To: dri-devel-bounces@lists.freedesktop.org
-Sender: "dri-devel" <dri-devel-bounces@lists.freedesktop.org>
-Message-ID: <20210804135510.nW_9glQMAKI-Ji2ADwEHGaqiTkCv-XbXbO9AlFh2q5k@z>
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210804140708.UDAHW8Y6K8h3Z8bqEOCxZYagSfCUxISc1xyoN8iyAik@z>
 
-On Wed, Aug 4, 2021 at 6:36 AM Oleksij Rempel <o.rempel@pengutronix.de> wrote:
->
-> changes v4:
-> - add vref-supply to adc@0
-> - split gpio assignment for the mdio node
+From: Arnd Bergmann <arnd@arndb.de>
 
-Hi Oleksij,
+On Wed, 4 Aug 2021 14:44:18 +0200, Linus Walleij wrote:
+> this is a set of combined driver updates for IXP4xx targeted for the
+> v5.15 merge window.
+> 
+> I am sending it to the SoC tree because of the cross-subsystem
+> dependencies and since the corresponding DTS changes goes
+> into SoC. These will be sent separately.
+> 
+> Note the following:
+> 
+> [...]
 
-I've dropped the series from the soc patchwork, since this looks like
-something that
-should go through the i.MX tree. Please make it clear from the cover
-letter and from
-the 'to' list what you want to happen with the patches, and who should take care
-of them.
+Merged into arm/drivers, thanks!
 
-Any patches that are meant for platform maintainers should not get sent to
-soc@kernel.org. If you think you need me to review the patches, you can
-send them cc my personal address.
+merge commit: 775dea4deec679c24b525b258c341a45ff1de9ea
 
-      Arnd
+       Arnd
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
