@@ -1,51 +1,81 @@
-Return-Path: <linux-arm-msm-owner@kernel.org>
+Return-Path: <SRS0=zXmn=M4=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1316EC4338F
-	for <linux-arm-msm@archiver.kernel.org>; Thu,  5 Aug 2021 22:28:22 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0D8461151
-	for <linux-arm-msm@archiver.kernel.org>; Thu,  5 Aug 2021 22:28:21 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239260AbhHEW2f (ORCPT
-        <rfc822;linux-arm-msm@archiver.kernel.org>);
-        Thu, 5 Aug 2021 18:28:35 -0400
-Received: from relay01.th.seeweb.it ([5.144.164.162]:57831 "EHLO
-        relay01.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbhHEW2f (ORCPT
-        <rfc822;linux-arm-msm@vger.kernel.org>);
-        Thu, 5 Aug 2021 18:28:35 -0400
-Received: from localhost.localdomain (83.6.167.155.neoplus.adsl.tpnet.pl [83.6.167.155])
-        by m-r1.th.seeweb.it (Postfix) with ESMTPA id C546D200D9;
-        Fri,  6 Aug 2021 00:28:17 +0200 (CEST)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89D10C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  5 Aug 2021 22:30:41 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id D846F61102
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  5 Aug 2021 22:30:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D846F61102
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=somainline.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=C1YHEigSM2wSdyZP8s6qvQgKaqhK2TugVa6j0qaG2ow=; b=3qVlGQEuvKMk1N
+	NeZnEbmipt0akF9S39/PI/XhCbya7XCwmmXYdkWqD/5X63DK/0r9Lq8jsHpdgpJVXMeRv85V/WTOv
+	R2Iag3rOs4iVKdaAFvWuvlkGAyFYvQOVt4XTp+A+hLmdufrzRxBvWMz6ges7ieBWWE77wxP5q3EH4
+	nOzQ0RUrmbTvkd2qw/hsvP0uT487OG446II0R+a2Iu5duGmypyyUJ66WnxN9gzenPgHF/c2c4JEfn
+	v+6ZZXV2DOqdChMiZDxRnArIPTq5D6+49bOPYiMpYNRgF125UEhC3ykWG2z+OWw4iqloZPM6idbWT
+	V+VX9RjAlxIqBZosrfMA==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mBlr4-00Ax0e-JU; Thu, 05 Aug 2021 22:28:46 +0000
+Received: from m-r1.th.seeweb.it ([2001:4b7a:2000:18::170])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mBlql-00Awv2-Id
+ for linux-arm-kernel@lists.infradead.org; Thu, 05 Aug 2021 22:28:31 +0000
+Received: from localhost.localdomain (83.6.167.155.neoplus.adsl.tpnet.pl
+ [83.6.167.155])
+ by m-r1.th.seeweb.it (Postfix) with ESMTPA id C546D200D9;
+ Fri,  6 Aug 2021 00:28:17 +0200 (CEST)
+From: Konrad Dybcio <konrad.dybcio@somainline.org>
+To: ~postmarketos/upstreaming@lists.sr.ht
 List-Id: <soc.lore.kernel.org>
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc: martin.botka@somainline.org, angelogioacchino.delregno@somainline.org,
+ marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+ Konrad Dybcio <konrad.dybcio@somainline.org>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <bjorn.andersson@linaro.org>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
 Subject: [PATCH] ARM: dts: Add MDM9607, PM8019 and Quectel EG25-G DTS files
-Date:   Fri,  6 Aug 2021 00:28:10 +0200
-Message-Id: <20210805222812.40731-1-konrad.dybcio@somainline.org>
+Date: Fri,  6 Aug 2021 00:28:10 +0200
+Message-ID: <20210805222812.40731-1-konrad.dybcio@somainline.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Precedence: bulk
-List-ID: <linux-arm-msm.vger.kernel.org>
-X-Mailing-List: linux-arm-msm@vger.kernel.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210805_152827_993574_BB56CAEC 
+X-CRM114-Status: GOOD (  16.04  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210805222810.HJJHXijVPYTc_kRMAugXgQ8nOAiq_agkZl36Lcw3rOA@z>
 
 Add base DTS files for MDM9607 SoC, PM8019 PMIC and Quectel
 EG25-G USB LTE modem, used in devices like the Pine64 PinePhone.
@@ -1269,3 +1299,8 @@ index 000000000000..0827d06a1f75
 -- 
 2.32.0
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
