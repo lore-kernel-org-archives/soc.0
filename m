@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A3F9C4338F
-	for <soc@archiver.kernel.org>; Thu,  5 Aug 2021 15:57:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEE58C4338F
+	for <soc@archiver.kernel.org>; Thu,  5 Aug 2021 15:57:36 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 005AF6112F; Thu,  5 Aug 2021 15:57:32 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	id D5C736113E; Thu,  5 Aug 2021 15:57:36 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C58CB6105A;
-	Thu,  5 Aug 2021 15:57:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C58CB6105A
+	by mail.kernel.org (Postfix) with ESMTPS id 8A9916105A;
+	Thu,  5 Aug 2021 15:57:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8A9916105A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1628179052; x=1659715052;
+  t=1628179056; x=1659715056;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=u/FP3J42Jj1CUvIWoJWdIAW76KXzDQA0eBIvNVlOqIE=;
-  b=XKkrp5ypFIR33gweECBG0OVs/xDwV5i9D2mBTZCcAvNaryG7175fpDk4
-   r3NN/luYr5loixwTEJdFYg/NVvzMX+GyXT0ouz6g6+q1NF9aQPD+/gQsV
-   p5FmyLtE2CXX/nZtDXbElP11m2Ihjik6umRHDJzjW0CS41FNwfU1ybCow
-   fWzQPhV96ZOmqac4C24mMqg2tLxoXPW5WjSnBa1Za8Drv7uMCtR+knw8n
-   7SZzOmrh/x8D58Dnepb9bLqP1tFoW0vLFQTmEv2qC1P1KRWWsI+qwzps3
-   IsRp3VC/xMypD1ZDyHJ6yZJVv9goVftiUU29LO0kfizNrkoRHpIRHb8oJ
-   Q==;
-IronPort-SDR: GFZkV5EpqrR5KXm+N4PxVSN3Hm3IcViz9wPbaaqGcP86AuZzQ4IgoW/4ONmO2UDDTx9pg50uGe
- 9IIyV3Q46POSvliV4f8TBnlQny0CRw0Mw2SLbHYG3TSUbq1wjLvWu9BTJBFDgkXhPYhA9n9MgI
- uShU7AZOkGz70phMI3hnSf2d42oP/O32wmgNHp+v10m1EpqHm6k+vTobAQdvaOtDpS4HCGkxuw
- sAW62dqK2GBxzmrmadn72nm1lShNs6dHTiarfmJjN3zJ5adNPaynDZHNfCScmkdiqP0Spz2vl4
- 31p2FcS7LSRrM0xdIkfA8yWf
+  bh=AQl9AlCuDacGfJoIF98Qycj10z8f5287AQL5vcdN88k=;
+  b=TeXVFCBHPVWKctvrYcQ+3fuzCmis0XZ/8jUWNz3Wrfblv4oJTsPfH2jm
+   vZvuVRpbcI+0AeftRJvykGQOTUm775eGtIZVTQZOBOLjpLYpSiwdSXXkG
+   2BSBWVPiwz6eeP3nhdDDOvKslDdRa4RKs00J/Zb1uRYqzVLBoaGOzccj+
+   0zV9nr8IMLwbsZ4LNsqRY2BXdZLc9rKWxD4xfmRIJ01GfETWxA/8Te2rY
+   uuU9Tu95MSpeuulPGP3HVSz40TF6Cgb9mp+K5WUMvGGFGfJfvHX+lubMY
+   JK3eU+L3viIa21C/qy90BrdPGca+MBjizD8Jb23m+uKQxzapABAgXwHAV
+   A==;
+IronPort-SDR: UfZ+c3PsOzRwMGoeRX9G5K4cr37RM9qbpUsnKFxmPFvrtdZ9BtoYJdT8n/e2B1MKhNE0XNSzkW
+ 4PCYuEl39IzuUP2JiEHBRLqEmoABq/AwoGiT9Dq1Sq0sY7WNh7CcInijDO0JnxgZQ4456P2p/6
+ FDvnMH2euq9vjNOB/AMlVUUVpMDF87kyWB2RPpaI7AwCM0STBJlvf45GD7JYJFG2MaEc9vJ4yo
+ N0ZfPuLBS0KQIJrJxOVIiccgiphL6YrtV7GOA4c/v5lZ3Kfc1HNA03UU0sqWNACyyRrypfOvPp
+ tIH/Z26bgxSPSeXXBSbailrP
 X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="131188594"
+   d="scan'208";a="127242435"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Aug 2021 08:57:31 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Aug 2021 08:57:35 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 5 Aug 2021 08:57:30 -0700
+ 15.1.2176.2; Thu, 5 Aug 2021 08:57:35 -0700
 Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Thu, 5 Aug 2021 08:57:27 -0700
+ 15.1.2176.2 via Frontend Transport; Thu, 5 Aug 2021 08:57:31 -0700
 From: Claudiu Beznea <claudiu.beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
 	<ludovic.desroches@microchip.com>, <robh+dt@kernel.org>, <arnd@arndb.de>,
 	<olof@lixom.net>, <soc@kernel.org>
 CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 6/7] dt-bindings: ARM: at91: document CalAmp LMU5000 board
-Date: Thu, 5 Aug 2021 18:53:56 +0300
-Message-ID: <20210805155357.594414-7-claudiu.beznea@microchip.com>
+	<linux-kernel@vger.kernel.org>, Adam Porter <porter.adam@gmail.com>, "Claudiu
+ Beznea" <claudiu.beznea@microchip.com>
+Subject: [PATCH 7/7] ARM: dts: at91: add CalAmp LMU5000 board
+Date: Thu, 5 Aug 2021 18:53:57 +0300
+Message-ID: <20210805155357.594414-8-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210805155357.594414-1-claudiu.beznea@microchip.com>
 References: <20210805155357.594414-1-claudiu.beznea@microchip.com>
@@ -65,30 +66,193 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Document CalAmp LMU5000.
+From: Adam Porter <porter.adam@gmail.com>
 
+Add CalAmp LMU5000 board. The base device tree is from OpenWrt tree and
+with the addition of this patch there will be no need to maintain it
+separatelly in OpenWrt.
+
+[porter.adam: original author of patch in OpenWrt]
+Signed-off-by: Adam Porter <porter.adam@gmail.com>
+[claudiu.beznea: fixed compilation warnings, use &<lable> syntax,
+ sorted nodes in alphabetical order, adapted flash to new support
+ in kernel 5.14, use proper compatibles according to kernel 5.14,
+ use macros instead of hard coded numbers for pinctrl phandles and
+ for all pinctrl references, add pinctrl-names, pinctrl-X where
+ necessary]
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- Documentation/devicetree/bindings/arm/atmel-at91.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/arm/boot/dts/Makefile         |   1 +
+ arch/arm/boot/dts/at91-lmu5000.dts | 148 +++++++++++++++++++++++++++++
+ 2 files changed, 149 insertions(+)
+ create mode 100644 arch/arm/boot/dts/at91-lmu5000.dts
 
-diff --git a/Documentation/devicetree/bindings/arm/atmel-at91.yaml b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
-index a9ab18510fef..08efb259a947 100644
---- a/Documentation/devicetree/bindings/arm/atmel-at91.yaml
-+++ b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
-@@ -132,6 +132,12 @@ properties:
-           - const: atmel,at91sam9g20
-           - const: atmel,at91sam9
- 
-+      - description: Exegin Q5xR5 board
-+        items:
-+          - const: exegin,q5xr5
-+          - const: atmel,at91sam9g20
-+          - const: atmel,at91sam9
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 34f6ead22048..07be55262516 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -25,6 +25,7 @@ dtb-$(CONFIG_SOC_AT91SAM9) += \
+ 	usb_a9263.dtb \
+ 	at91-foxg20.dtb \
+ 	at91-kizbox.dtb \
++	at91-lmu5000.dtb \
+ 	at91sam9g20ek.dtb \
+ 	at91sam9g20ek_2mmc.dtb \
+ 	tny_a9g20.dtb \
+diff --git a/arch/arm/boot/dts/at91-lmu5000.dts b/arch/arm/boot/dts/at91-lmu5000.dts
+new file mode 100644
+index 000000000000..6a52728cc98f
+--- /dev/null
++++ b/arch/arm/boot/dts/at91-lmu5000.dts
+@@ -0,0 +1,148 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Device Tree file for CalAmp LMU5000 board
++ *
++ * Copyright (C) 2013 Adam Porter <porter.adam@gmail.com>
++ */
 +
-       - items:
-           - enum:
-               - atmel,sama5d31
++/dts-v1/;
++#include "at91sam9g20.dtsi"
++
++/ {
++	model = "CalAmp LMU5000";
++	compatible = "calamp,lmu5000", "atmel,at91sam9g20", "atmel,at91sam9";
++
++	chosen {
++		bootargs = "mem=64M console=ttyS0,115200 rootfstype=jffs2";
++	};
++
++	memory {
++		reg = <0x20000000 0x4000000>;
++	};
++
++	clocks {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		main_clock: clock@0 {
++			compatible = "atmel,osc", "fixed-clock";
++			clock-frequency = <18432000>;
++		};
++	};
++};
++
++&dbgu {
++	status = "okay";
++};
++
++&ebi {
++	status = "okay";
++
++	nand_controller: nand-controller {
++		pinctrl-0 = <&pinctrl_nand_cs &pinctrl_nand_rb>;
++		pinctrl-names = "default";
++		status = "okay";
++
++		nand@3 {
++			reg = <0x3 0x0 0x800000>;
++			rb-gpios = <&pioC 13 GPIO_ACTIVE_HIGH>;
++			cs-gpios = <&pioC 14 GPIO_ACTIVE_HIGH>;
++			nand-bus-width = <8>;
++			nand-ecc-mode = "soft";
++			nand-on-flash-bbt;
++			label = "atmel_nand";
++			status = "okay";
++
++			partitions {
++				compatible = "fixed-partitions";
++				#address-cells = <1>;
++				#size-cells = <1>;
++
++				kernel@0 {
++					label = "kernel";
++					reg = <0x0 0x400000>;
++				};
++
++				rootfs@400000 {
++					label = "rootfs";
++					reg = <0x400000 0x3C00000>;
++				};
++
++				user1@4000000 {
++					label = "user1";
++					reg = <0x4000000 0x2000000>;
++				};
++
++				user2@6000000 {
++					label = "user2";
++					reg = <0x6000000 0x2000000>;
++				};
++			};
++		};
++	};
++};
++
++&macb0 {
++	phy-mode = "mii";
++	status = "okay";
++};
++
++&pinctrl {
++	board {
++		pinctrl_pck0_as_mck: pck0_as_mck {
++			atmel,pins = <AT91_PIOC 1 AT91_PERIPH_B AT91_PINCTRL_NONE>;
++		};
++	};
++
++	usb0 {
++		pinctrl_usb1_vbus_gpio: usb0_vbus_gpio {
++			atmel,pins = <AT91_PIOC 5 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
++		};
++	};
++};
++
++&ssc0 {
++	status = "okay";
++	pinctrl-0 = <&pinctrl_ssc0_tx>;
++};
++
++&uart0 {
++	status = "okay";
++};
++
++&uart1 {
++	status = "okay";
++};
++
++&usart0 {
++	pinctrl-0 =
++		<&pinctrl_usart0
++		 &pinctrl_usart0_rts
++		 &pinctrl_usart0_cts
++		 &pinctrl_usart0_dtr_dsr
++		 &pinctrl_usart0_dcd
++		 &pinctrl_usart0_ri>;
++	status = "okay";
++};
++
++&usart2 {
++	status = "okay";
++};
++
++&usb0 {
++	num-ports = <2>;
++	status = "okay";
++};
++
++&usb1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usb1_vbus_gpio>;
++	atmel,vbus-gpio = <&pioC 5 GPIO_ACTIVE_HIGH>;
++	status = "okay";
++};
++
++&watchdog {
++	status = "okay";
++};
++
 -- 
 2.25.1
 
