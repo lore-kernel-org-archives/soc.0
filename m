@@ -6,16 +6,16 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10DC2C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  6 Aug 2021 20:47:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FDD6C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  6 Aug 2021 20:47:33 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B95986105A
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  6 Aug 2021 20:47:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B95986105A
+	by mail.kernel.org (Postfix) with ESMTPS id EFDE66105A
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  6 Aug 2021 20:47:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EFDE66105A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -24,52 +24,52 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=tvyMAp2iZTdr/payNLw8lckY4nIy88037cH6mcKsVjE=; b=F1V1jYxps54I9b
-	GYN4svHWF8sGOXON8Hn7bazw8UeQrrvKXLm1EPTwnuPWLMSZptbSvlgj/XMUjv4Ib0E5JL/vTznr2
-	Q93TfFkAwkfMT9oU5DpWtHHjxlAZBEpbPL5d8GYQALhDHInhavjuLe1mPZRPCcrzpzrsQd1mBCNkG
-	3r1nfMHl+z5MseSZo41/5QMpX2218V3eBcFsPtKbKfbjMt+Wtkc9wsbJJTmLEXF34nh0xRUbd81KI
-	WhkEJvhTz0e6FvOUPASZUg648tyyW4nr+x/JMQysUtL1fOwZhhpQAC3NiT33i9Guf8toxEtrj+iiu
-	kK/PNOoIcKBr9b05xXmQ==;
+	List-Owner; bh=Rn6mF2J2O+NruYx6+xj7GfZeiXBR5fR2wull7LXGzBU=; b=gTsUt0qfm2r0la
+	k0ZSXGIyS0P1pszGFF9EY6IanjKS+2RgBkPD8t+YsyYWPWVS1EuOYOKePGnMKqR5zNTf3pXTqBb/f
+	NB3MIFUEPA1k24re+fgC63FRyEZkyE60PFYgfxhKHlss8kqfJkoJit0caA8zVvg9dINxagh+x9kEC
+	mMLve+wdA8/pebVGj5jTq4wMZIfxv2O2+GWfg8/q7hlGd1Uj1HMqLAPEVbh4cY6DuP5lCaCkVIHXo
+	AhbCpsssiaMw2aMKJ73GLmcfXmsu+vYUgytl3vdno8BXC2r267mMVsMuLgc7fN8HC5mTEUmFLNhpY
+	WCd65FOmY05HZGF2rATg==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mC6iM-00DWj6-JB; Fri, 06 Aug 2021 20:45:10 +0000
+	id 1mC6iY-00DWm6-80; Fri, 06 Aug 2021 20:45:22 +0000
 Received: from mail-wr1-x42d.google.com ([2a00:1450:4864:20::42d])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mC6iI-00DWhz-BC
- for linux-arm-kernel@lists.infradead.org; Fri, 06 Aug 2021 20:45:07 +0000
-Received: by mail-wr1-x42d.google.com with SMTP id k4so12622203wrc.0
+ id 1mC6iS-00DWkP-I5
+ for linux-arm-kernel@lists.infradead.org; Fri, 06 Aug 2021 20:45:17 +0000
+Received: by mail-wr1-x42d.google.com with SMTP id q11so434642wrr.9
  for <linux-arm-kernel@lists.infradead.org>;
- Fri, 06 Aug 2021 13:45:05 -0700 (PDT)
+ Fri, 06 Aug 2021 13:45:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=4aoqpuygPFTPpZbPvJjLMKEd6jtzvkdTL12kqRjIbbc=;
- b=JIxB7o2KF77Eczxpr0Nqtu9dF1oEsUUzcp0JF0Vj8WJt8h+Y0q0JPjdJ5K0LduYyOW
- IQJs5IEHpTMgmBuyGcPd8UHX6XtgWv0plCu4zpnc0ysbnf/2j4/vV+xEb/nZmDEB4/MZ
- bwM2El85v2S+bSiKP7DmniWSqkawfRwzazT3hoYKCRX54pqgpWsPP7LPT7cV/+yUjR3D
- Yh+RaEYgVPKLyHnIllws1pwgfsj35TrklOuGuDU89V1U0pSKpk+2RrToItIuqCa8Acqg
- S5EConHaZXhgfF8Nijg/MiSOS+g1Sdrryu8d+l80/VJGuVm+qysjzngwTO5cphhob6Y+
- Wv9A==
+ bh=cwoA/pv3ZUZSHCBa6qfyFr8ICDq30GUiYkbbx1T4wK0=;
+ b=daRU8mYgzLPU+f0Hanhym4IViLdED3p+ub6jkJ7JvatPqYjw5h3tl+7GpJPpd2hFuN
+ WZqtdTNnqzaGZx0vOxwjIG3H98rEJRTMPsKdbwdKciruk0Qs9ozDa1zY8INaQ0jFgpEC
+ ZW6p/gyrajrRV+ELRkJTFjUmoA6+Au8TsHwYtYEe7ZfsOdADgk2itQThgqdk3fEzjpFG
+ NwIKWpBBLUQzjAmiUvEaiI2z+uEGk8ucvAIggMQa8unrz5JGB8UE3l6zH5bMgwpWMeDT
+ rTnY4sbiFgn2jaOcuZ8ERAXMZTa3CFuQYaD56woNjDIOH4S8RhWkLqfZeaIbrGqmRJ1m
+ od7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=4aoqpuygPFTPpZbPvJjLMKEd6jtzvkdTL12kqRjIbbc=;
- b=Kidvv78yGLpgeGY8wS38YdGwfE3WW2UZrmvr/MKEf6DSAxkuUPkVNUz/YTN9/TU7nT
- t1RSp5NeIJVJYQuoATH4OyJnjiEukXZyvNPpz1P0ldMYgPRFV0oB5LwxkCQy3xbz6QdQ
- GVd1wGoJ2IzHGOjkwdigFBGNFG6PjmL8rfb6EBqna6Zjhz5t50lKSA7IeP/UW6AUbaAe
- 4td+dQn4xbtWly8/LCBihT+B/YtRjpruCmWieraB8aDDeI5fyraii3bfpOlz1nQYOo0C
- EkuYy5peJbZtqktw+/syyPpAJwHVdplvn+Q/Iq/il9sCW/Y4mNzIE+++j8ZUnItesdUc
- 8IQg==
-X-Gm-Message-State: AOAM532WS6X6ayRy2qro11WMSsWNAxfYHUsn+3KL1Qo43hWvjnfWJe6A
- 8EeYfJKxqZ0d+qtXgWJMChP1CvuUro8=
-X-Google-Smtp-Source: ABdhPJxAObjD6fRA0SogD6Ki/nBvjD1RavORpv9+x4gri+QQeAV9kMShSoEBNrcfnioVz7Fnt6nh1A==
-X-Received: by 2002:a5d:6908:: with SMTP id t8mr12723792wru.421.1628282703887; 
- Fri, 06 Aug 2021 13:45:03 -0700 (PDT)
+ bh=cwoA/pv3ZUZSHCBa6qfyFr8ICDq30GUiYkbbx1T4wK0=;
+ b=b/vu6eyCuyEjYM+eL+qZ3PRRbuDGghLRNQ6bPj5/pWDrL5LmxExpkR4qieJ8SSQtif
+ IpubY/kGcvapYkVGcORicvB9BJNC70uh12N4c9CQdYNWvcpUPajqcH6gflYMfUOzu4NZ
+ 6VQyZpTLO7/r2nE8WDu8AgDBm2UlG9+LfOy15+rqTnh27wu/7eRJqbtjKemjunRvHHRf
+ IDepSB9yGUVdfr0usjCNmhsyqhGLOtesoMDAHE7dEH6leI3mJqHIOl1JLrYWEG7I9pTr
+ oX94ojodEebaJSTb3iu6s1ulnVaBjFD1mYrp0AQlkiMWr0cAP1Lq4I+47ojohkiqQQY4
+ sOYA==
+X-Gm-Message-State: AOAM530UenuZXTVBF1wgcPUdc3Jc+K9PjsSIW8HHHkOc+P/Fl6L4flgV
+ cwcubeaxP4VgvRO04Tgcu1lQqOgR7Pw=
+X-Google-Smtp-Source: ABdhPJxW1xiYkf/8JnrdaLw6OE+f2420fJdIo6QAZBWmqPXFHAfTrrvcAgQEHgF8qw0sut5BXnl2pw==
+X-Received: by 2002:a5d:5750:: with SMTP id q16mr12789808wrw.9.1628282715142; 
+ Fri, 06 Aug 2021 13:45:15 -0700 (PDT)
 Received: from cluster5 ([80.76.206.81])
- by smtp.gmail.com with ESMTPSA id u23sm12844445wmc.24.2021.08.06.13.45.03
+ by smtp.gmail.com with ESMTPSA id p8sm10975815wrn.79.2021.08.06.13.45.14
  (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
- Fri, 06 Aug 2021 13:45:03 -0700 (PDT)
+ Fri, 06 Aug 2021 13:45:14 -0700 (PDT)
 From: Matthew Hagan <mnhagan88@gmail.com>
 To: 
 List-Id: <soc.lore.kernel.org>
@@ -80,19 +80,20 @@ Cc: Vladimir Oltean <olteanv@gmail.com>,
  soc@kernel.org, Ray Jui <rjui@broadcom.com>,
  Scott Branden <sbranden@broadcom.com>,
  bcm-kernel-feedback-list@broadcom.com,
- Krzysztof Kozlowski <krzk@kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, devicetree@vger.kernel.org,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v5 1/5] ARM: dts: NSP: Add common bindings for MX64/MX65
-Date: Fri,  6 Aug 2021 21:44:32 +0100
-Message-ID: <20210806204446.2981299-2-mnhagan88@gmail.com>
+Subject: [PATCH v5 2/5] ARM: dts: NSP: Add Ax stepping modifications
+Date: Fri,  6 Aug 2021 21:44:33 +0100
+Message-ID: <20210806204446.2981299-3-mnhagan88@gmail.com>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20210806204446.2981299-1-mnhagan88@gmail.com>
 References: <20210806204446.2981299-1-mnhagan88@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210806_134506_442696_35E31100 
-X-CRM114-Status: GOOD (  14.96  )
+X-CRM114-CacheID: sfid-20210806_134516_647135_EE5B16F7 
+X-CRM114-Status: GOOD (  14.48  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -108,152 +109,94 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210806204432.GfZMKUNabtUOInVA2HuCiiaycdAffwiiQv0HrYQS7kk@z>
+Message-ID: <20210806204433.xxmNZPTm6YHFVmGszUdHRCL7S7L9gzdJFzhmk5mwWi8@z>
 
-These bindings are required for all Meraki MX64/MX65 devices. These
-common bindings include memory (2GB), PWM LEDs, AMAC, I2C (AT24), NAND
-partitions, EHCI, OHCI and pinctrl.
+While uncommon, some Ax NSP SoCs exist in the wild. This stepping
+requires a modified secondary CPU boot-reg and removal of DMA coherency
+properties. Without these modifications, the secondary CPU will be
+inactive and many peripherals will exhibit undefined behaviour.
 
 Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
 ---
- .../dts/bcm958625-meraki-mx6x-common.dtsi     | 129 ++++++++++++++++++
- 1 file changed, 129 insertions(+)
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
+ arch/arm/boot/dts/bcm-nsp-ax.dtsi | 70 +++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+ create mode 100644 arch/arm/boot/dts/bcm-nsp-ax.dtsi
 
-diff --git a/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi b/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
+diff --git a/arch/arm/boot/dts/bcm-nsp-ax.dtsi b/arch/arm/boot/dts/bcm-nsp-ax.dtsi
 new file mode 100644
-index 000000000000..bcdd38954f1d
+index 000000000000..a21e275935ce
 --- /dev/null
-+++ b/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
-@@ -0,0 +1,129 @@
++++ b/arch/arm/boot/dts/bcm-nsp-ax.dtsi
+@@ -0,0 +1,70 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
 +/*
-+ * Common Bindings for Cisco Meraki MX64 (Kingpin) and MX65 (Alamo) devices.
-+ *
-+ * Copyright (C) 2020-2021 Matthew Hagan <mnhagan88@gmail.com>
++ * Broadcom Northstar Plus Ax stepping-specific bindings.
++ * Notable differences from B0+ are the secondary-boot-reg and
++ * lack of DMA coherency.
 + */
 +
-+#include "bcm-nsp.dtsi"
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
++&cpu1 {
++	secondary-boot-reg = <0xffff042c>;
++};
 +
-+/ {
-+	pwm-leds {
-+		compatible = "pwm-leds";
++&dma {
++	/delete-property/ dma-coherent;
++};
 +
-+		led-1 {
-+			function = LED_FUNCTION_INDICATOR;
-+			color = <LED_COLOR_ID_RED>;
-+			pwms = <&pwm 1 50000>;
-+			max-brightness = <255>;
-+		};
++&sdio {
++	/delete-property/ dma-coherent;
++};
 +
-+		led-2 {
-+			function = LED_FUNCTION_INDICATOR;
-+			color = <LED_COLOR_ID_GREEN>;
-+			pwms = <&pwm 2 50000>;
-+			max-brightness = <255>;
-+		};
++&amac0 {
++	/delete-property/ dma-coherent;
++};
 +
-+		led-3 {
-+			function = LED_FUNCTION_INDICATOR;
-+			color = <LED_COLOR_ID_BLUE>;
-+			pwms = <&pwm 3 50000>;
-+			max-brightness = <255>;
-+		};
-+	};
++&amac1 {
++	/delete-property/ dma-coherent;
 +};
 +
 +&amac2 {
-+	status = "okay";
++	/delete-property/ dma-coherent;
 +};
 +
 +&ehci0 {
-+	status = "okay";
++	/delete-property/ dma-coherent;
 +};
 +
-+&i2c0 {
-+	status = "okay";
-+
-+	at24@50 {
-+		compatible = "atmel,24c64";
-+		reg = <0x50>;
-+		pagesize = <32>;
-+		read-only;
-+	};
++&mailbox {
++	/delete-property/ dma-coherent;
 +};
 +
-+&nand_controller {
-+	nand@0 {
-+		compatible = "brcm,nandcs";
-+		reg = <0>;
-+		nand-on-flash-bbt;
++&xhci {
++	/delete-property/ dma-coherent;
++};
 +
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+
-+		nand-ecc-strength = <24>;
-+		nand-ecc-step-size = <1024>;
-+
-+		brcm,nand-oob-sector-size = <27>;
-+
-+		partition@0 {
-+			label = "u-boot";
-+			reg = <0x0 0x80000>;
-+			read-only;
-+		};
-+
-+		partition@80000 {
-+			label = "shmoo";
-+			reg = <0x80000 0x80000>;
-+			read-only;
-+		};
-+
-+		partition@100000 {
-+			label = "bootkernel1";
-+			reg = <0x100000 0x300000>;
-+		};
-+
-+		partition@400000 {
-+			label = "nvram";
-+			reg = <0x400000 0x100000>;
-+		};
-+
-+		partition@500000 {
-+			label = "bootkernel2";
-+			reg = <0x500000 0x300000>;
-+		};
-+
-+		partition@800000 {
-+			label = "ubi";
-+			reg = <0x800000 0x3f700000>;
-+		};
-+	};
++&ehci0 {
++	/delete-property/ dma-coherent;
 +};
 +
 +&ohci0 {
-+	status = "okay";
++	/delete-property/ dma-coherent;
 +};
 +
-+&pinctrl {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pwm_leds>;
-+
-+	pwm_leds: pwm_leds {
-+		function = "pwm";
-+		groups = "pwm1_grp", "pwm2_grp", "pwm3_grp";
-+	};
++&i2c0 {
++	/delete-property/ dma-coherent;
 +};
 +
-+&pwm {
-+	status = "okay";
-+	#pwm-cells = <2>;
++&sata {
++	/delete-property/ dma-coherent;
 +};
 +
-+&uart0 {
-+	clock-frequency = <62500000>;
-+	status = "okay";
++&pcie0 {
++	/delete-property/ dma-coherent;
++};
++
++&pcie1 {
++	/delete-property/ dma-coherent;
++};
++
++&pcie2 {
++	/delete-property/ dma-coherent;
 +};
 -- 
 2.26.3
