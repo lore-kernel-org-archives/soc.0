@@ -2,75 +2,74 @@ Return-Path: <SRS0=HLeY=M5=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 831F2C432BE
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  6 Aug 2021 20:46:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10DC2C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  6 Aug 2021 20:47:11 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2AFFE6105A
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  6 Aug 2021 20:46:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2AFFE6105A
+	by mail.kernel.org (Postfix) with ESMTPS id B95986105A
+	for <linux-arm-kernel@archiver.kernel.org>; Fri,  6 Aug 2021 20:47:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B95986105A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
 	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=QQFZPWQII0iACxq1W0hTuG/dlmGgOIgHCp20j+8Oz2M=; b=w3xv+ypZYCujWn
-	bR3t06fVaAh2Jj2/aJKu4h/8jZ3jxqsUlXkBUbZt61jth0It4xlOaN/SlNE96AE+WPfKY+xej317v
-	gNlDtFGXzxcOy8NToGMrQqLeAmV+Sloi49PBV/gGq35OvJrBenMIiiWE0lR9eh14IOoOfrm5H+WgH
-	Nv9MhqLoyGgS+2m01oPXqOxpeE8kOfC2BveVJdnJo4C9TAcSS8LKXYD38trFPN9ZTkgVvqLPXUHNH
-	uAlOat+G1w7HGlsOb8ZPIlTkDOBJyy3kbeqDvzfMFXyGG1/eV2+4gk70gE7rWJdhQvGh373LDwdZc
-	AarS0WpJ3jJO0CGQUZHw==;
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=tvyMAp2iZTdr/payNLw8lckY4nIy88037cH6mcKsVjE=; b=F1V1jYxps54I9b
+	GYN4svHWF8sGOXON8Hn7bazw8UeQrrvKXLm1EPTwnuPWLMSZptbSvlgj/XMUjv4Ib0E5JL/vTznr2
+	Q93TfFkAwkfMT9oU5DpWtHHjxlAZBEpbPL5d8GYQALhDHInhavjuLe1mPZRPCcrzpzrsQd1mBCNkG
+	3r1nfMHl+z5MseSZo41/5QMpX2218V3eBcFsPtKbKfbjMt+Wtkc9wsbJJTmLEXF34nh0xRUbd81KI
+	WhkEJvhTz0e6FvOUPASZUg648tyyW4nr+x/JMQysUtL1fOwZhhpQAC3NiT33i9Guf8toxEtrj+iiu
+	kK/PNOoIcKBr9b05xXmQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mC6iA-00DWgd-Qd; Fri, 06 Aug 2021 20:44:59 +0000
-Received: from mail-wm1-x32b.google.com ([2a00:1450:4864:20::32b])
+	id 1mC6iM-00DWj6-JB; Fri, 06 Aug 2021 20:45:10 +0000
+Received: from mail-wr1-x42d.google.com ([2a00:1450:4864:20::42d])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mC6i7-00DWfW-3Z
- for linux-arm-kernel@lists.infradead.org; Fri, 06 Aug 2021 20:44:56 +0000
-Received: by mail-wm1-x32b.google.com with SMTP id
- d131-20020a1c1d890000b02902516717f562so6936002wmd.3
+ id 1mC6iI-00DWhz-BC
+ for linux-arm-kernel@lists.infradead.org; Fri, 06 Aug 2021 20:45:07 +0000
+Received: by mail-wr1-x42d.google.com with SMTP id k4so12622203wrc.0
  for <linux-arm-kernel@lists.infradead.org>;
- Fri, 06 Aug 2021 13:44:54 -0700 (PDT)
+ Fri, 06 Aug 2021 13:45:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bvqHVXKHi79eQa5zOD1wzmVDXkASnkyY1VkIn9290Rg=;
- b=UEqY9OVfruZl7dzVTxN6lV+4WokbppoNk8NEOo8TFgYBdJuifevBGY5DBQTViHnvaS
- sMcUyhtkCilGfcODGeqeUwKXw9W5bZKwCcXlU0sz0sWRe+TJQ8hAgAb4IMRKPij096t+
- /rPwzqvtlTMKyRyyqwc4BKbiM1CHOmkddg8wKkrv8e24Lw7lUx1UN4cgP8Evnx0qbAHf
- rbRCjRWj9aAXacAf3WLKTVC4EAezkQ2IBhTI9HpJiuDt0GcfhH8Yzru74mLHdmXjUu0k
- EZs6h+amVuxHV65413JNKAkTTHyicVEErNfK/NYTqe25OVGeQwRrA7EFN4x/57SdfmDG
- w6IQ==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=4aoqpuygPFTPpZbPvJjLMKEd6jtzvkdTL12kqRjIbbc=;
+ b=JIxB7o2KF77Eczxpr0Nqtu9dF1oEsUUzcp0JF0Vj8WJt8h+Y0q0JPjdJ5K0LduYyOW
+ IQJs5IEHpTMgmBuyGcPd8UHX6XtgWv0plCu4zpnc0ysbnf/2j4/vV+xEb/nZmDEB4/MZ
+ bwM2El85v2S+bSiKP7DmniWSqkawfRwzazT3hoYKCRX54pqgpWsPP7LPT7cV/+yUjR3D
+ Yh+RaEYgVPKLyHnIllws1pwgfsj35TrklOuGuDU89V1U0pSKpk+2RrToItIuqCa8Acqg
+ S5EConHaZXhgfF8Nijg/MiSOS+g1Sdrryu8d+l80/VJGuVm+qysjzngwTO5cphhob6Y+
+ Wv9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bvqHVXKHi79eQa5zOD1wzmVDXkASnkyY1VkIn9290Rg=;
- b=g9MTyx0J3wX49JZBnT7Dl23kZeCec+gwQtr6YbeUcB5MH1mSQWQPEQ0ZxizWaxfnFO
- uIjj5zwoZhMUM4PHggeB/1Hx3aE1dQOkqvOqme/mWtCQ4e8zKqBCr6/uj2El1hEF/6K3
- 6Jj7e3HJ2pdjpwPkQiPvOuOwJ1/2zehkzvkpvmCqgQG0DWHQJ09iGhmn3q6ETEyJSDRL
- 36FP5rNAzrPljanNtwZg3KbC+XJiPlbjel8SZtnKfk0+iqczBHqWU9vjWsiKNL2Gz3Cv
- iC4raud/XF3sfX+eh4woJMJ3EgR2d7vTMuxSzIPC4m6IKFYPoAJYg5Ey9c9HtEhgStCv
- iqmQ==
-X-Gm-Message-State: AOAM533sBmJG2UIiX/w2HJ2YN9Q8kUIDaAj8Lh6/KltO8NuRax7rulfK
- k5bFDkkLx5BlsMBMXoXsdlDBCkOyVSw=
-X-Google-Smtp-Source: ABdhPJzMC1EHegs5qGPHSILcdEi9QcJvuIMcf6GodC2xHJ6mbnAjX84IJC3GvI2DpCVk0MTQUVkeZg==
-X-Received: by 2002:a7b:c390:: with SMTP id s16mr5189879wmj.148.1628282692706; 
- Fri, 06 Aug 2021 13:44:52 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=4aoqpuygPFTPpZbPvJjLMKEd6jtzvkdTL12kqRjIbbc=;
+ b=Kidvv78yGLpgeGY8wS38YdGwfE3WW2UZrmvr/MKEf6DSAxkuUPkVNUz/YTN9/TU7nT
+ t1RSp5NeIJVJYQuoATH4OyJnjiEukXZyvNPpz1P0ldMYgPRFV0oB5LwxkCQy3xbz6QdQ
+ GVd1wGoJ2IzHGOjkwdigFBGNFG6PjmL8rfb6EBqna6Zjhz5t50lKSA7IeP/UW6AUbaAe
+ 4td+dQn4xbtWly8/LCBihT+B/YtRjpruCmWieraB8aDDeI5fyraii3bfpOlz1nQYOo0C
+ EkuYy5peJbZtqktw+/syyPpAJwHVdplvn+Q/Iq/il9sCW/Y4mNzIE+++j8ZUnItesdUc
+ 8IQg==
+X-Gm-Message-State: AOAM532WS6X6ayRy2qro11WMSsWNAxfYHUsn+3KL1Qo43hWvjnfWJe6A
+ 8EeYfJKxqZ0d+qtXgWJMChP1CvuUro8=
+X-Google-Smtp-Source: ABdhPJxAObjD6fRA0SogD6Ki/nBvjD1RavORpv9+x4gri+QQeAV9kMShSoEBNrcfnioVz7Fnt6nh1A==
+X-Received: by 2002:a5d:6908:: with SMTP id t8mr12723792wru.421.1628282703887; 
+ Fri, 06 Aug 2021 13:45:03 -0700 (PDT)
 Received: from cluster5 ([80.76.206.81])
- by smtp.gmail.com with ESMTPSA id w10sm10110029wrr.23.2021.08.06.13.44.51
+ by smtp.gmail.com with ESMTPSA id u23sm12844445wmc.24.2021.08.06.13.45.03
  (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
- Fri, 06 Aug 2021 13:44:52 -0700 (PDT)
+ Fri, 06 Aug 2021 13:45:03 -0700 (PDT)
 From: Matthew Hagan <mnhagan88@gmail.com>
 To: 
 List-Id: <soc.lore.kernel.org>
@@ -80,18 +79,20 @@ Cc: Vladimir Oltean <olteanv@gmail.com>,
  Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  soc@kernel.org, Ray Jui <rjui@broadcom.com>,
  Scott Branden <sbranden@broadcom.com>,
- bcm-kernel-feedback-list@broadcom.com, Sam Ravnborg <sam@ravnborg.org>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>, devicetree@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com,
+ Krzysztof Kozlowski <krzk@kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v5 0/5] ARM: dts: NSP: add Meraki MX64/MX65 series
-Date: Fri,  6 Aug 2021 21:44:31 +0100
-Message-ID: <20210806204446.2981299-1-mnhagan88@gmail.com>
+Subject: [PATCH v5 1/5] ARM: dts: NSP: Add common bindings for MX64/MX65
+Date: Fri,  6 Aug 2021 21:44:32 +0100
+Message-ID: <20210806204446.2981299-2-mnhagan88@gmail.com>
 X-Mailer: git-send-email 2.26.3
+In-Reply-To: <20210806204446.2981299-1-mnhagan88@gmail.com>
+References: <20210806204446.2981299-1-mnhagan88@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210806_134455_206921_9231AC00 
-X-CRM114-Status: GOOD (  15.06  )
+X-CRM114-CacheID: sfid-20210806_134506_442696_35E31100 
+X-CRM114-Status: GOOD (  14.96  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -107,75 +108,153 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210806204431.oPmbdLQQnetXQp9Bt6RHoBDg2bYwCeJQw6eA0Xl1acI@z>
+Message-ID: <20210806204432.GfZMKUNabtUOInVA2HuCiiaycdAffwiiQv0HrYQS7kk@z>
 
-Changes from v2:
-  - Introduce boards to Makefile in same patch as the board dts is added
-    (Vladimir Oltean)
-  - Use alphabetical ordering for labels (Vladimir Oltean)
-  - Remove address-cells and size-cells in qca8337 switch nodes (Vladimir
-    Oltean)
-  - Remove "cpu" labels from switch nodes' CPU ports (Vladimir Oltean)
-  - Various LED fixes, utilising dt-bindings/leds/common.h and correctly
-    specifying LEDs in the form "led-N" and with the color/function/
-    function-enumerator properties.
-  - Fix PWM LEDs and corresponding pinctrl bindings. (Vladimir Oltean)
+These bindings are required for all Meraki MX64/MX65 devices. These
+common bindings include memory (2GB), PWM LEDs, AMAC, I2C (AT24), NAND
+partitions, EHCI, OHCI and pinctrl.
 
-The following changes were submitted as a separate series:
-  - Introduce patches to disable QSPI by default and enable where used
-    (Vladimir Oltean)
-  - Move mdio@18032000 node from board related file to SoC (Vladimir
-    Oltean)
-  - In addition to above, relocate mdio-mux to bcm-nsp.dtsi and fix
-    the resulting usb3_phy issues
-
-Changes from v3:
-  - Sort labels on mx64 a0 dts files into alphabetical order as well
-  - move include directives for input/input.h and leds/common.h to
-    bcm958625-mx6x-common.dtsi
-  - Whitespace fixes in bcm958625-mx6x-common.dtsi
-  - rename "senao_nvram" partition to "nvram" 
-
-Changes from v4:
-  - Move chosen and memory nodes from bcm958625-mx6x-common.dtsi to
-    each .dts file (Arnd Bergmann).
-  - Append [@<unit-address>] to memory nodes.
-  - Create Ax stepping-specific dtsi for Ax devices (Arnd Bergmann).
-  - Append read-only property to at24 eeprom node.
-  - Remove L2 properties which should be defined at platform-level.
-  - Correct NAND node names.
-
-Matthew Hagan (5):
-  ARM: dts: NSP: Add common bindings for MX64/MX65
-  ARM: dts: NSP: Add Ax stepping modifications
-  ARM: dts: NSP: Add DT files for Meraki MX64 series
-  ARM: dts: NSP: Add DT files for Meraki MX65 series
-  dt-bindings: arm: bcm: NSP: add Meraki MX64/MX65
-
- .../devicetree/bindings/arm/bcm/brcm,nsp.yaml |   6 +
- arch/arm/boot/dts/Makefile                    |   6 +
- arch/arm/boot/dts/bcm-nsp-ax.dtsi             |  71 +++++
- arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi | 279 ++++++++++++++++++
- .../boot/dts/bcm958625-meraki-kingpin.dtsi    | 163 ++++++++++
- .../arm/boot/dts/bcm958625-meraki-mx64-a0.dts |  25 ++
- arch/arm/boot/dts/bcm958625-meraki-mx64.dts   |  24 ++
- .../boot/dts/bcm958625-meraki-mx64w-a0.dts    |  33 +++
- arch/arm/boot/dts/bcm958625-meraki-mx64w.dts  |  32 ++
- arch/arm/boot/dts/bcm958625-meraki-mx65.dts   |  24 ++
- arch/arm/boot/dts/bcm958625-meraki-mx65w.dts  |  32 ++
- .../dts/bcm958625-meraki-mx6x-common.dtsi     | 129 ++++++++
- 12 files changed, 824 insertions(+)
- create mode 100644 arch/arm/boot/dts/bcm-nsp-ax.dtsi
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-alamo.dtsi
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-kingpin.dtsi
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dts
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx64.dts
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dts
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx64w.dts
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx65.dts
- create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx65w.dts
+Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
+---
+ .../dts/bcm958625-meraki-mx6x-common.dtsi     | 129 ++++++++++++++++++
+ 1 file changed, 129 insertions(+)
  create mode 100644 arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
 
+diff --git a/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi b/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
+new file mode 100644
+index 000000000000..bcdd38954f1d
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
+@@ -0,0 +1,129 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Common Bindings for Cisco Meraki MX64 (Kingpin) and MX65 (Alamo) devices.
++ *
++ * Copyright (C) 2020-2021 Matthew Hagan <mnhagan88@gmail.com>
++ */
++
++#include "bcm-nsp.dtsi"
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
++
++/ {
++	pwm-leds {
++		compatible = "pwm-leds";
++
++		led-1 {
++			function = LED_FUNCTION_INDICATOR;
++			color = <LED_COLOR_ID_RED>;
++			pwms = <&pwm 1 50000>;
++			max-brightness = <255>;
++		};
++
++		led-2 {
++			function = LED_FUNCTION_INDICATOR;
++			color = <LED_COLOR_ID_GREEN>;
++			pwms = <&pwm 2 50000>;
++			max-brightness = <255>;
++		};
++
++		led-3 {
++			function = LED_FUNCTION_INDICATOR;
++			color = <LED_COLOR_ID_BLUE>;
++			pwms = <&pwm 3 50000>;
++			max-brightness = <255>;
++		};
++	};
++};
++
++&amac2 {
++	status = "okay";
++};
++
++&ehci0 {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++
++	at24@50 {
++		compatible = "atmel,24c64";
++		reg = <0x50>;
++		pagesize = <32>;
++		read-only;
++	};
++};
++
++&nand_controller {
++	nand@0 {
++		compatible = "brcm,nandcs";
++		reg = <0>;
++		nand-on-flash-bbt;
++
++		#address-cells = <1>;
++		#size-cells = <1>;
++
++		nand-ecc-strength = <24>;
++		nand-ecc-step-size = <1024>;
++
++		brcm,nand-oob-sector-size = <27>;
++
++		partition@0 {
++			label = "u-boot";
++			reg = <0x0 0x80000>;
++			read-only;
++		};
++
++		partition@80000 {
++			label = "shmoo";
++			reg = <0x80000 0x80000>;
++			read-only;
++		};
++
++		partition@100000 {
++			label = "bootkernel1";
++			reg = <0x100000 0x300000>;
++		};
++
++		partition@400000 {
++			label = "nvram";
++			reg = <0x400000 0x100000>;
++		};
++
++		partition@500000 {
++			label = "bootkernel2";
++			reg = <0x500000 0x300000>;
++		};
++
++		partition@800000 {
++			label = "ubi";
++			reg = <0x800000 0x3f700000>;
++		};
++	};
++};
++
++&ohci0 {
++	status = "okay";
++};
++
++&pinctrl {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pwm_leds>;
++
++	pwm_leds: pwm_leds {
++		function = "pwm";
++		groups = "pwm1_grp", "pwm2_grp", "pwm3_grp";
++	};
++};
++
++&pwm {
++	status = "okay";
++	#pwm-cells = <2>;
++};
++
++&uart0 {
++	clock-frequency = <62500000>;
++	status = "okay";
++};
 -- 
 2.26.3
 
