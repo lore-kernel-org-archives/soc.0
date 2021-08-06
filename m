@@ -1,25 +1,29 @@
-Return-Path: <SRS0=9VHM=M5=gmail.com=mnhagan88@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A7DCC4338F
-	for <soc@archiver.kernel.org>; Fri,  6 Aug 2021 20:44:54 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 330D4611B0; Fri,  6 Aug 2021 20:44:54 +0000 (UTC)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 045BD61181;
-	Fri,  6 Aug 2021 20:44:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 045BD61181
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id l34-20020a05600c1d22b02902573c214807so9819890wms.2;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96CB4C4338F
+	for <linux-devicetree@archiver.kernel.org>; Fri,  6 Aug 2021 20:44:56 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 7A7F461164
+	for <linux-devicetree@archiver.kernel.org>; Fri,  6 Aug 2021 20:44:56 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S245077AbhHFUpL (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Fri, 6 Aug 2021 16:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230221AbhHFUpL (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Fri, 6 Aug 2021 16:45:11 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1005CC0613CF;
+        Fri,  6 Aug 2021 13:44:54 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id l8-20020a05600c1d08b02902b5acf7d8b5so6220630wms.2;
         Fri, 06 Aug 2021 13:44:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
@@ -37,14 +41,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=bvqHVXKHi79eQa5zOD1wzmVDXkASnkyY1VkIn9290Rg=;
-        b=PI+N3wyK8rPJD/YxzFsUZAcO4HTZzWYO6A6M2A3jRK8qKjpN2/SH5Jd6V9AAwcYWwg
-         OttCiWo0eOr3NLJr5s5jLdeOBKXF2J0Yqy23LRpy9EjxsZqAKjalVxN65dLk+OEstHmo
-         1nDo0NJ7EF821WAydknCSJBc9OYhCC9HIqkd7O9rWZoDSBfWDE0rMXPz+M/s3sEHGGmK
-         C4PLhbMFBIe3s8pSfFxgHAyyGbUUXwDjkqgNqmqYOSVheVTMDuqqiAXkDHbe4Jlvkbkj
-         b5hAURCjn3p6GHuoCGkj/pOJhV0QovJnO1b48xgpfdF6D1lf7g/36riTpSjpJmAKtOr7
-         /0yA==
-X-Gm-Message-State: AOAM531wCkmYwvad8MPcSlBPyy83zilYBgCN56L6N7Y/7L4zJTENaZaz
-	rF5fisR/daDzfG4IqEiosLU=
+        b=aCu4U87HDeu8P5zFLAGnRZAKe1iXxdME/ubrJDGJZ8sIHV7KZzAg6F5JRLJ/nJ9XSy
+         airTmLJMsqWCFgA+lm1Vsd7x0MfBaObTIx4RlfqEZXKjFnwiWAIe4lPnPIVkq1a0VX1U
+         PnPbtXPdq5bALguycq/fQsyaup2sDcjPtQqOY/KspUVqo49l0K7PMse/VlegR2FvYSLH
+         mveL2Cbk4O7Sst9n9/rgjeCALfMXyqAl52A51TTvtbJOh+MDx5m9sXAwovwDlRXWleTq
+         uCqhkIFWvvtA27eHuW6ftLNm2Swpv0QccND4e+UFcJLzhQlZGYCqhobwwL+lJTNoYlQA
+         wuLw==
+X-Gm-Message-State: AOAM5324FQ6b0ljZWZPgeNMmrWgvz1zJ5CLnk0E5y6PW5tDeV4ePg3KB
+        D183vGNF7JkFIe2e5WQY8gsncBvxpCw=
 X-Google-Smtp-Source: ABdhPJzMC1EHegs5qGPHSILcdEi9QcJvuIMcf6GodC2xHJ6mbnAjX84IJC3GvI2DpCVk0MTQUVkeZg==
 X-Received: by 2002:a7b:c390:: with SMTP id s16mr5189879wmj.148.1628282692706;
         Fri, 06 Aug 2021 13:44:52 -0700 (PDT)
@@ -52,31 +56,32 @@ Received: from cluster5 ([80.76.206.81])
         by smtp.gmail.com with ESMTPSA id w10sm10110029wrr.23.2021.08.06.13.44.51
         (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
         Fri, 06 Aug 2021 13:44:52 -0700 (PDT)
-From: Matthew Hagan <mnhagan88@gmail.com>
-To: 
+From:   Matthew Hagan <mnhagan88@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Vladimir Oltean <olteanv@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Matthew Hagan <mnhagan88@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	bcm-kernel-feedback-list@broadcom.com,
-	Sam Ravnborg <sam@ravnborg.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthew Hagan <mnhagan88@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
 Subject: [PATCH v5 0/5] ARM: dts: NSP: add Meraki MX64/MX65 series
-Date: Fri,  6 Aug 2021 21:44:31 +0100
-Message-Id: <20210806204446.2981299-1-mnhagan88@gmail.com>
+Date:   Fri,  6 Aug 2021 21:44:31 +0100
+Message-ID: <20210806204446.2981299-1-mnhagan88@gmail.com>
 X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210806204431.jUk8GAZoIKela5Xy6lm3RmMYAhXDN9xWnCpNLEfGM7A@z>
 
 Changes from v2:
   - Introduce boards to Makefile in same patch as the board dts is added
