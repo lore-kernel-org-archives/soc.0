@@ -1,123 +1,89 @@
-Return-Path: <SRS0=5t0o=NA=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=/1P4=NA=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-22.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EC9EC4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  9 Aug 2021 13:47:56 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8632C4338F
+	for <soc@archiver.kernel.org>; Mon,  9 Aug 2021 15:26:54 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7B78060F8F; Mon,  9 Aug 2021 15:26:54 +0000 (UTC)
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0FC2160F25
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  9 Aug 2021 13:47:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0FC2160F25
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:Cc:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=8Em2yv5FfMjWl0T2ywcUDtkBT0OXPhC3vTh4uEJPKnY=; b=N8NJyhCwaokx/h
-	VLwYdvBNTLFYplENaOZfOZDY7iNZyY+08ALSE5Ueq+U9G+JCmrnK/ItGvbCI7SVQe8Q3ohDPZoegL
-	nefyylyq/+LQ49ZpaS2/1B8lYNRT48Me3TTAkgxOoeDK3eHdLz6OVaf3bHNckAK63blleCEYFMuhF
-	PjV34hzxnZK//RANDhSTWptZqQIhB0kcwgQgw2Cc3+2zk/68X3fPNV0Em4IaYUHzVJcEBSiN8XDxL
-	47Cnumxz81HgB2iegTZ+JcxQulzbDkLNCOE13ouoVmwnrfo+hrqhjsqcVofnIuWcGZoQWcAXHRy9j
-	Mgn5b2vJQxPhd3Y7776g==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mD5b5-000oMT-Le; Mon, 09 Aug 2021 13:45:43 +0000
-Received: from esa.microchip.iphmx.com ([68.232.154.123])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mD5b1-000oLd-VT
- for linux-arm-kernel@lists.infradead.org; Mon, 09 Aug 2021 13:45:41 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1628516740; x=1660052740;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=2oIIhO5Fu8GvdFVb5Lyvx66v0sHtOf2NnOJazlM74dk=;
- b=bKNmt47m84GJTzNI59U3GyWDv7gkw65hVd1CkA7riDeUQDiaurhcDsJm
- gQV2Ed7cJeUek7USgwYJEDSPFeD4WAr02PSWXUsjRHklpO7mNGrx8Emw6
- jR7mzxB0yu+swIRmgE9Qg+ywmqzEPJ3MTRmaIuafLEw6m17Ye6GwTs9qE
- rNXjYtVRcep71X0eFwVrdW7mp9kb1Og5tBv/SMiEDvBZExxYPxZ/B7lJt
- Zi0c70xqQdQFLMfKOONzktXYL5C2v7Z9H10CqjUQ/fml+kEc4NjY4lS69
- 8BlCOZOIJ/i/HIqOeDFNQFCcpwRvq3xREFMzy2oRubKiDu5smXIqc7ScU g==;
-IronPort-SDR: 1ZxTEx2HGugTM+LJDRVUhmoFTW3u/14G+7ktp9lJpnkR+cXqR6tIx9oiOZz9Wdx/ELcNt5SNts
- bfgBmnzczVrjuHduFytyq5KHay2Vu8lpcnZHy8UjtgcoS9Vj1QETxLtwBDeucmqagng3/m6cet
- 0kyrTh34dKXPHiXZZhr9/4ohplyN4erTfQFrRjlz+42H/a2NOlzCxlWdDcyYdtidbYruzH8n2N
- m9CRuLezykSF6Lt//mCktDRg6cVUhlpv79L+xYnbllFGLlvtPpPFCX/zGefUjL8dgUHrgXqwh4
- UGZmEXp/SFAVgPnw4/Wb+dyr
-X-IronPort-AV: E=Sophos;i="5.84,307,1620716400"; d="scan'208";a="127592839"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 09 Aug 2021 06:45:36 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 9 Aug 2021 06:45:35 -0700
-Received: from ness.home (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Mon, 9 Aug 2021 06:45:32 -0700
-From: <nicolas.ferre@microchip.com>
+	by mail.kernel.org (Postfix) with ESMTPS id F015F6101D
+	for <soc@kernel.org>; Mon,  9 Aug 2021 15:26:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F015F6101D
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPS id C7C563F358
+	for <soc@kernel.org>; Mon,  9 Aug 2021 15:26:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1628522811;
+	bh=bKc2q2GsSAUcXGWOiwttCYEPNo65JA70tLWaCsvxMvg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=VeRlSovdf6IGA5+6lM9BMIf6qV0TP24VsWpUTbm81qbeYPD+XwGcWMKPmepnJEljE
+	 7rOygxMybq+8ZPfJvYk5RaT2yIvhY1ud1aOsHV2kQyca0QzhjL5/BKymgls9i7tbeZ
+	 jb8Y2e5LZG68upJH+SEcG2BXH0hXovRerdw+9olA4fzp7iNcHlCW4r2Q6aCMTdm7gR
+	 TxmQDpkB/Jm8ba39Hd4pDgDWB60ReqCKec5fKnPw+V2lRoruoLrx4E8/txeIurn96y
+	 dRy5RaDNMC5Ig+e+1rUS6nHi8qYbbk+gQGVAjCSvhJlG5P2ImSw/3jD3VJHIWbdmrU
+	 4og+8yu6c1yng==
+Received: by mail-ed1-f69.google.com with SMTP id c16-20020aa7d6100000b02903bc4c2a387bso4587683edr.21
+        for <soc@kernel.org>; Mon, 09 Aug 2021 08:26:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bKc2q2GsSAUcXGWOiwttCYEPNo65JA70tLWaCsvxMvg=;
+        b=FyGPrTV9GRKDnhxRGUfjm/M10yi0WiNuD4dpuvIwEkv/zjprnZy4qwVVDTyedxZGf7
+         p+WsPl2xIiPqmx46kdvY7YfHV0KwGLrkSc4ID36LMSXI7bKOIQy0YkAMgaR8Bd0MqO5D
+         HLz3YTXvmh0k/9ac4fcCG54I4z2LZvSJd94SiEk2uWNjm1gIGu1SrSaUJPDdOVrwFArf
+         m2YDhMAYXnn+RGb4iVWA2Xj71Y4eRay74W07KbNJ2Vqr/yUhXd+fkSJ4XwGRR9MCu4Ps
+         FCahOrQSnrkrIcxacC7VDXwDMlh+Ejbju3gLdCJzHm9UwVvt/x5jT0mY3chHdnuDdkRj
+         mn8g==
+X-Gm-Message-State: AOAM532W3uQUePIPZTsTzP7gY2s3QUumOQFYNPTxgso+9BnsbdKclo9z
+	aMtiYNz3Vn7hxfOAjbBjfaQi36x4C21zk8efzhCqAcWxvGOaPrey1Hr0X+MB3njFhDq40CgE6t/
+	lankR6B6iWJU6xGzTnVgOEy8=
+X-Received: by 2002:a17:906:d147:: with SMTP id br7mr23527593ejb.126.1628522810897;
+        Mon, 09 Aug 2021 08:26:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz9H/dobnWwRqC8K7RHya8QBOc6Stqn0f87KhEofscI7OHEFlLrwSuPyBlXqQQYdXGLWouyyQ==
+X-Received: by 2002:a17:906:d147:: with SMTP id br7mr23527569ejb.126.1628522810704;
+        Mon, 09 Aug 2021 08:26:50 -0700 (PDT)
+Received: from localhost.localdomain ([86.32.42.198])
+        by smtp.gmail.com with ESMTPSA id fp5sm2604577ejc.6.2021.08.09.08.26.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Aug 2021 08:26:50 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, <soc@kernel.org>
-Subject: [GIT PULL v2] ARM: at91: defconfig for 5.15
-Date: Mon, 9 Aug 2021 15:45:21 +0200
-Message-ID: <20210809134521.10155-1-nicolas.ferre@microchip.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <CAK8P3a1Ru-qawBWtbmfJm-jiPpJTRJ9zSufXHNCZvxt1RCMFBA@mail.gmail.com>
-References: <CAK8P3a1Ru-qawBWtbmfJm-jiPpJTRJ9zSufXHNCZvxt1RCMFBA@mail.gmail.com>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] memory: changes for v5.14
+Date: Mon,  9 Aug 2021 17:26:39 +0200
+Message-Id: <20210809152639.110576-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Organization: microchip
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210809_064540_121132_C0C85126 
-X-CRM114-Status: UNSURE (   9.57  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Linux Kernel list <linux-kernel@vger.kernel.org>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Eugen Hristev <eugen.hristev@microchip.com>,
- Claudiu Beznea <claudiu.beznea@microchip.com>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210809134521.WlFAO-vgm1uzFS_QqmXGBupRjLeKCWmT0rwmM35fx4Y@z>
+Content-Transfer-Encoding: 8bit
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Hi,
 
-Arnd, Olof,
+I organized changes on separate topic branches just in case I need to share
+them with SoC maintainers.  They are all merged back to main branch.
 
-Here is the second attept about defconfig changes for 5.15 which contains
-addition for SAMA7G5.
+Best regards,
+Krzysztof
 
-v1 --> v2:
-- add more information to the tag message for explaining why we prefer
-  a new sama7_defconfig file.
-
-Thanks, best regards,
-  Nicolas
 
 The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
@@ -125,42 +91,36 @@ The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-defconfig-5.15
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.15
 
-for you to fetch changes up to b62869dcd4bcf341d3750a2bcad9a80c6d5562a8:
+for you to fetch changes up to c28b584deb1bc81f8a2454b43c82cdda17ed29f6:
 
-  ARM: multi_v7_defconfig: add sama7g5 SoC (2021-07-19 15:25:42 +0200)
-
-----------------------------------------------------------------
-AT91 defconfig for 5.15:
-
-- add defconfig entries for new SoC: SAMA7G5
-  - dedicated sama7_defconfig which avoids having to carry older drivers
-    and dependencies from the sama5 family:
-    CACHE_L2X0, CAN_AT91, TOUCHSCREEN_ADC, AT91SAM9X_WATCHDOG,
-    VIDEO_ATMEL_ISI, SND_ATMEL_SOC_I2S, MMC_ATMELMCI, AT_HDMAC, AT91_ADC,
-    REGULATOR_ACT*
-    Addition of new drivers that are not part of any sama5 SoC:
-    SND_MCHP_SOC_I2S_MCC, SND_MCHP_SOC_SPDIFTX|RX, MICROCHIP_PIT64B
-    plus upcoming MIPI pipeline, audio sample rate converter, ...
-    It also maintains both sama5 and sama7 defconfig tailored for their
-    respective families and easy to identify.
-  - addition to the generic multi_v7_defconfig
+  Merge branch 'for-v5.15/omap-gpmc' into for-next (2021-07-29 09:03:32 +0200)
 
 ----------------------------------------------------------------
-Eugen Hristev (2):
-      ARM: configs: at91: add defconfig for sama7 family of SoCs
-      ARM: multi_v7_defconfig: add sama7g5 SoC
+Memory controller drivers for v5.15
 
- arch/arm/configs/multi_v7_defconfig |   2 +
- arch/arm/configs/sama7_defconfig    | 209 +++++++++++++++++++++++++++++++++++
- 2 files changed, 211 insertions(+)
- create mode 100644 arch/arm/configs/sama7_defconfig
+Few minor fixes: maintainer pattern, unused-function warning in
+Tegra186 and suspend/resume in OMAP GPMC.
 
--- 
-Nicolas Ferre
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      memory: tegra: fix unused-function warning
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Krzysztof Kozlowski (2):
+      Merge branch 'for-v5.15/tegra-mc' into for-next
+      Merge branch 'for-v5.15/omap-gpmc' into for-next
+
+Mauro Carvalho Chehab (1):
+      MAINTAINERS: update arm,pl353-smc.yaml reference
+
+Tony Lindgren (2):
+      memory: omap-gpmc: Clear GPMC_CS_CONFIG7 register on restore if unused
+      memory: omap-gpmc: Drop custom PM calls with cpu_pm notifier
+
+ MAINTAINERS                     |   2 +-
+ arch/arm/mach-omap2/pm34xx.c    |   5 --
+ drivers/memory/omap-gpmc.c      | 191 +++++++++++++++++++++++++---------------
+ drivers/memory/tegra/tegra186.c |   2 +
+ include/linux/omap-gpmc.h       |   3 -
+ 5 files changed, 121 insertions(+), 82 deletions(-)
