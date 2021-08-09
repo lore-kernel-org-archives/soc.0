@@ -1,185 +1,78 @@
-Return-Path: <SRS0=5t0o=NA=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=Ovpt=NA=ti.com=nm@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC26BC4320A
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  9 Aug 2021 13:08:50 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71FD7C4338F
+	for <soc@archiver.kernel.org>; Mon,  9 Aug 2021 13:16:53 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 4FF8B6103B; Mon,  9 Aug 2021 13:16:53 +0000 (UTC)
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7C3E360EC0
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  9 Aug 2021 13:08:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7C3E360EC0
+	by mail.kernel.org (Postfix) with ESMTPS id 0EF0360F93;
+	Mon,  9 Aug 2021 13:16:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0EF0360F93
 Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:
-	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
-	MIME-Version:Message-ID:Subject:CC:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-	References:List-Owner; bh=8mxSBcRjtiMWIejBaYruhzdYHQDbumY/FhlomOK7Be0=; b=paB
-	O9LqqHfHQiZOC6Bg7kj/8zLh/4MBeTqA/82ipmo2BnjN518Einz9S/w+VJZ1hI64VlVMRmElDaQEs
-	w9Jas4FgPY2/+BPVxzcAWCZ1yh8rdcb7CDlqj5ALDNicda41avL6QyS/dUFi1AkPCRZ4i1ZxqjLqT
-	rIatl0/oihLcL6iTyv10QWXPLQz1KH+Mjm+AjCu+Y9xD9OECNnfzbdAhI1w9jub0jPQatusISoxHf
-	k9WiHPYcZCHTsl4dOPOPmJlk7h3Mic15LSEkdDaqoVAP0B/fIChT2BZ5gUS4epZUUZ+ceUPhDITce
-	XlOGomRTCkybaXyIJRR2yJ6JIKeRG4Q==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mD4zQ-000gO7-NQ; Mon, 09 Aug 2021 13:06:48 +0000
-Received: from fllv0015.ext.ti.com ([198.47.19.141])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mD4zF-000gLi-HA
- for linux-arm-kernel@lists.infradead.org; Mon, 09 Aug 2021 13:06:41 +0000
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
- by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 179D6WQ3000482;
- Mon, 9 Aug 2021 08:06:32 -0500
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 179DGonv005127;
+	Mon, 9 Aug 2021 08:16:50 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
- s=ti-com-17Q1; t=1628514392;
- bh=Dmzn28ceeZNMrQ8BgJ7PL0F6bEl8WRq1RqedliSDbNM=;
- h=Date:From:To:CC:Subject;
- b=GyrKkJepUgEOwCSCM7gItzqiI2CZJlejCy9crBSEppdb0Yi/1VbRIjm0UMA5G0T4k
- 4D8HeAfzEs74YjZNAWo37ab/aGPF67CVdLGOU1pkg7yvAEH0rTiJIzsCxzCeh8uOXI
- HsKAabNNXaWOIMjZ+AUSL17yOBr1upMTJYDDQSMo=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
- by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 179D6Wpf018478
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Mon, 9 Aug 2021 08:06:32 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+	s=ti-com-17Q1; t=1628515010;
+	bh=fUZ0tTf5iMFX3R8HzD3C0My5lq61Sw0xcf1hwlxWfQM=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=zPlfXqEln3B4EdxUE06FnhYN5c0CaJRJaotvCpUpf8LmmZgTNDtZwBLpZ3jzq6N/Q
+	 DDlFYXe7vH36Fe/b+GP/eCm1IdbhD7eT01yLdnBn1GVkO5cY0fbZZendMCdvDooztp
+	 TuXWMNliCe+qradd/xmjHeIs1txHl8IPnG0SHzLY=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 179DGoA8110694
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 9 Aug 2021 08:16:50 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 9 Aug
- 2021 08:06:32 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ 2021 08:15:15 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Mon, 9 Aug 2021 08:06:32 -0500
+ Frontend Transport; Mon, 9 Aug 2021 08:15:15 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
- by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 179D6V2a113330;
- Mon, 9 Aug 2021 08:06:31 -0500
-Date: Mon, 9 Aug 2021 08:06:31 -0500
+	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 179DFFEG061253;
+	Mon, 9 Aug 2021 08:15:15 -0500
+Date: Mon, 9 Aug 2021 08:15:15 -0500
 From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- <arm@kernel.org>, <soc@kernel.org>
-CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
- Nishanth Menon <nm@ti.com>
-Subject: arm64: dts: TI K3 updates for v5.15
-Message-ID: <20210809130631.pfvntcichsyeekbo@festive>
+        <arm@kernel.org>, <soc@kernel.org>
+CC: Tero Kristo <kristo@kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: arm64: dts: TI K3 updates for v5.15
+Message-ID: <20210809131515.akz2k5kvuhzmcavk@jasmine>
+References: <20210809130631.pfvntcichsyeekbo@festive>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20210809130631.pfvntcichsyeekbo@festive>
 User-Agent: NeoMutt/20171215
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210809_060637_701479_02F26CD5 
-X-CRM114-Status: UNSURE (   9.16  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8496654356510115704=="
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210809130631.2fTkZaUUt7XpECLxGNdDH1YBw_o4wdQpY37QdqfeAx4@z>
 
---===============8496654356510115704==
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tv6tlzcqd4ve3k6t"
-Content-Disposition: inline
+On 08:06-20210809, Nishanth Menon wrote:
+> Hi Arnd and Olof,
+> 
+> Here is the DT updates for 5.15. Just minor additions this time around.
+> 
 
---tv6tlzcqd4ve3k6t
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd and Olof,
 
-Here is the DT updates for 5.15. Just minor additions this time around.
+Ooops.. missed the [GIT PULL] prefix :(
 
-The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+Let me know if you folks want me to resend.
 
-  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/nmenon/linux.git tags/ti-k3=
--dt-for-v5.15
-
-for you to fetch changes up to c1fa5ac6c2f475b5140e6323801ed93c24e7e5cf:
-
-  arm64: dts: ti: k3-am642-sk: Add pwm nodes (2021-07-30 10:44:42 -0500)
-
-----------------------------------------------------------------
-Devicetree changes for TI K3 platforms for v5.15 merge window:
-
-* New features:
-  - AM64 adds pwm and ecap capability
-
-----------------------------------------------------------------
-Lokesh Vutla (4):
-      arm64: dts: ti: k3-am64-main: Add epwm nodes
-      arm64: dts: ti: k3-am64-main: Add ecap pwm nodes
-      arm64: dts: ti: k3-am642-evm: Add pwm nodes
-      arm64: dts: ti: k3-am642-sk: Add pwm nodes
-
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi | 114 +++++++++++++++++++++++++++=
-++++
- arch/arm64/boot/dts/ti/k3-am642-evm.dts  |  56 +++++++++++++++
- arch/arm64/boot/dts/ti/k3-am642-sk.dts   |  64 +++++++++++++++++
- 3 files changed, 234 insertions(+)
-
---=20
+-- 
 Regards,
 Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
-
---tv6tlzcqd4ve3k6t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmERKFEACgkQ3bWEnRc2
-JJ3ZCA/2PyVk/BhEQH6OnvxKgRCHW1hOUyXwQvZM6lfHfkEqyBCH+Yso9LAKmW3Q
-iLnyWXUlIX8ckPRIEcDbS4Zo7kF3eOEU7XTj8hNt+GDN3MrtvkcR2dgIar82rAKX
-SCFHZ+DLM53J+w11MSgvyj3Z64DTPAgiaZx4y+iWXE6rgK/ukQjfzwwzihOPZtYE
-xZB2dr277Oc8uMwbHETy56ElIpjW1Mn1dOv08oASqO7MR10QXOzkuDZMuH6xvtS6
-T6FEzsxEtiOYXuRCLm2lcvQO0Ytqnph3KL5QCEJBfmMd8z0MgEUKr5itP7wTdYl7
-pG35C/EiNGEaewaZH0X/l7qqAu/pC3XxfVKpKabDQqz7JNO5skeMfPt/KUcoQodB
-XsQfY4P/X4O3IBl3kNgsoDoDtqQGjiE9aZY2yrM+xOjTtrUhr/TU3VAeqnNdkt1l
-4MczYqGy5hm7EQFhE9w0N8o2NGnC2F3sPDidI+5TI+p8phfsQVaBpcYug5LwOWAe
-xYetsutAxdiYUqnxRC7Yv6MyqqyOlAWgq0JFjaQ+XUwjvScOiyt0SrCxDbHisq56
-/AqBnWOCtOekzhbqAEhXDxOoriMoUWCP4ucBuGszPkUXAwhAVfpgRRQont968F0m
-ED0O7DPSDYY/fVu57ICZzwRetLQDcJdK+Ol8/aeWOp7rMoZkXg==
-=H/px
------END PGP SIGNATURE-----
-
---tv6tlzcqd4ve3k6t--
-
-
---===============8496654356510115704==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
---===============8496654356510115704==--
-
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
