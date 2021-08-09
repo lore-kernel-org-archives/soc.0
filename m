@@ -8,65 +8,62 @@ X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AFF5C4338F
-	for <soc@archiver.kernel.org>; Mon,  9 Aug 2021 12:20:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7306C4338F
+	for <soc@archiver.kernel.org>; Mon,  9 Aug 2021 12:20:06 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 1A29560EBC; Mon,  9 Aug 2021 12:20:01 +0000 (UTC)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	id 813B460F35; Mon,  9 Aug 2021 12:20:06 +0000 (UTC)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D000060F35;
-	Mon,  9 Aug 2021 12:20:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D000060F35
+	by mail.kernel.org (Postfix) with ESMTPS id 5832660F55;
+	Mon,  9 Aug 2021 12:20:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5832660F55
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id n12so11095405wrr.2;
-        Mon, 09 Aug 2021 05:20:00 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id h13so21147017wrp.1;
+        Mon, 09 Aug 2021 05:20:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=to:cc:from:subject:message-id:date:user-agent:mime-version
          :content-language:content-transfer-encoding;
-        bh=n98GGkHlH75W8BYsH/I8e5W6Kr2vLzbeo4fbwBXJ3Dc=;
-        b=bmGSsMU69Z+FYDDa22CgTHJBsh2dLq/+bfM2lny9YS/ELdSulu3hKTeb4mePLV/rZg
-         zZM1OMp7+Cv0Fo4T/GEK5izk14ouAkvpbhCRd1+kuuwFFnZCGYEK2H5N4Qm0V+ReZcss
-         QRGmJ3h+EQBBMAmP522rfoLQdkM9wOVsezx6+yn16/Tx6xzAl2D7AmRk11qojajZjtPo
-         K7CztH98KGr7paPIK9fbruUJkTT94+18i/w/Ttl2H7msKdjLUpl3gcnwBLSSwd8mvtmj
-         ehrkT/6W4UTnvTLZ5crvJ9OSBPvuzvZAodhA/4ZGZPL6ki6gSZ6tpRyKoUQChbnY3cWA
-         QE2g==
+        bh=3rCwHQK8SMgm1OR5rvr9CshXBJqUQwBfTUHKUWVeIxY=;
+        b=qhe1YYIXtUvcb+6U7NQRrVFv9ofeYaGSOX5GQsi/y3oJHHC7bnUSdlUSdqf8vfP5dW
+         T/GQP297a8vVMhgQyBaPTlrcG+2cqF1ljtfibq8b4mAhWP/b9+oepdQqu57t8UQcWruj
+         C/aBMGf3SYWiO0WZ1tCPBjPLZTXqkV917REwCS+daYpm4hed7GVJfPs0z/HAlj2nqW8t
+         KRH8Y/7tAvFz5cRa8oy3bc4GS6XPoSr08Po/DpRcq658zHPv0sBCEIFYRZ9BWJ0iWFM6
+         HOgokeGs8OUeCvKQTgtqTqLxFHdluE5YfOzpMirAOZeeGeFYic3vPpuf+LdNbGaTUH05
+         0SoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
          :mime-version:content-language:content-transfer-encoding;
-        bh=n98GGkHlH75W8BYsH/I8e5W6Kr2vLzbeo4fbwBXJ3Dc=;
-        b=ineg87GSSZ7CFf+dGrL4iDfzY/68oELqDiA9hobDsy8Q/d8PNvzqgFrst4209eSRVv
-         mD6AhK+c7QdiXc5CnozhY7BHHuZSL1XKNQNoQFUHTdC42WquGQc0ayr85Ce/HIA9Icax
-         +9z8a5+ipsnID1xGyCLMh/V0Yih14bIvwczgmOjjSEtsLEFwG5+oCYGzWAKw5ykmk2Ah
-         JLWicvfrDmjUfKhwsNVnxlcQg/Q+kU8jLwX0qqmV0mosV0j96bcF/z5UqxbNTjFHAyil
-         G2D3M4edXYPbE74mP7OxaswkCVepSjHtw+hQcmBy36Ix1R4szx0Le186Gil8VDyRnv/1
-         cE8w==
-X-Gm-Message-State: AOAM533y+CEexSomjxe+6Jn1dOIsuJnlOnoPbK5+kpRRXkB1RbyfUXPB
-	BRFilLZEFKhgE0zSVsrT+8wo1fqLrc1kkw==
-X-Google-Smtp-Source: ABdhPJzLba9TFzKyPqRV5u3itGbSRV9z3VNqboRp4OBTfUlSM+1UsdSzLjx9sXxUXFICwP7z+4iCEw==
-X-Received: by 2002:a5d:474d:: with SMTP id o13mr6398647wrs.256.1628511599433;
-        Mon, 09 Aug 2021 05:19:59 -0700 (PDT)
+        bh=3rCwHQK8SMgm1OR5rvr9CshXBJqUQwBfTUHKUWVeIxY=;
+        b=cD0/8cQw2jk0KoQqvXLO9C8wkGCskOl9eFEUTdObpC9e+/O07dh7Jrfa7I/X+v7YPk
+         l1tyu/XC7/s+jJXIPo4CPfBRRtRJaMc97qJNjP+w9g1dtUbKQUDegslQ78oXi2DKqzPv
+         H4EoAx7Hjm8HF/rRkoeizW2qKPU5JAcoNvtJtct/K8ZLsS2dzMRs3sW+zO1163Ul9tVB
+         nqQIf2XCj0yh8LLL/OrQ8JOqg8SVi2vKXrRL+szl0mmUeq0lZ3MaGiEXM2VD+Jsb9N0M
+         C2vpvLSMhS2DgS0/t3BhRyWwMmmCM1a7B5Al//oQ1keoWABUBtqzo52toRy88SqSzBvd
+         Va4g==
+X-Gm-Message-State: AOAM531cMvQsSqvJsbxrKe/vM7KO9Ora09gAEx07bels5S7xXM41Cd8H
+	cLP4PtOaXUzQbMS3qVDMKlo=
+X-Google-Smtp-Source: ABdhPJy2R57UaMq6vJfQmeZYQpsWGUQaKaY/Ej8RoEDdffdUzDnY1DVimp+bOsclBVLvu9nQbwVMqA==
+X-Received: by 2002:a5d:688e:: with SMTP id h14mr24552655wru.117.1628511605028;
+        Mon, 09 Aug 2021 05:20:05 -0700 (PDT)
 Received: from ziggy.stardust (static-55-132-6-89.ipcom.comunitel.net. [89.6.132.55])
-        by smtp.gmail.com with ESMTPSA id s84sm4432299wme.12.2021.08.09.05.19.58
+        by smtp.gmail.com with ESMTPSA id l9sm5122871wrt.95.2021.08.09.05.20.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Aug 2021 05:19:59 -0700 (PDT)
+        Mon, 09 Aug 2021 05:20:04 -0700 (PDT)
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
 Cc: "moderated list:ARM/Mediatek SoC support"
  <linux-mediatek@lists.infradead.org>,
  "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, Bilal Wasim
- <bilalwasim676@gmail.com>, CK HU <ck.hu@mediatek.com>,
- Enric Balletbo i Serra <enric.balletbo@collabora.com>,
- Fabien Parent <fparent@baylibre.com>, Rob Herring <robh+dt@kernel.org>,
- Stephen Boyd <sboyd@kernel.org>
+ <linux-arm-kernel@lists.infradead.org>,
+ Frank Wunderlich <frank-w@public-files.de>
 From: Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [GIT PULL] drivers: soc: mediatek: updates for v5.15
-Message-ID: <49fc7bef-20db-b98c-9437-dd9e4d00e870@gmail.com>
-Date: Mon, 9 Aug 2021 14:19:57 +0200
+Subject: [GIT PULL] ARM: dts32 updates for v5.15
+Message-ID: <289ded1c-dae7-54ef-6b56-9433bfcaf9de@gmail.com>
+Date: Mon, 9 Aug 2021 14:20:03 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
@@ -74,19 +71,11 @@ Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 
-Hi Olof,
-Hi Arnd,
+Hi Olof and Arnd,
 
-Please have a look for the updates of the SoC drivers for Mediatek. If you
-wonder why there is no binding patch for the MT8365 mmsys: The binding was
-converted to YAML. This got taken by Rob. To minimize merge conflicts I left it
-to him to take other mmsys binding patches. Unfortunately there is one mmsys
-binding patch taken by Stephen through the clock tree. So there will be a
-trivial merge conflict (although not in your tree). A bit of a mess this time,
-I'll try to make sure that the bindings for drivers/soc will go through my tree
-in the future (which will make my life easier as well...).
+Please have a look on the single patch in this pull request for arm32 MediaTek.
 
-Regards,
+Thanks,
 Matthias
 
 ---
@@ -97,42 +86,18 @@ The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 are available in the Git repository at:
 
   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/
-tags/v5.14-next-soc
+tags/v5.14-next-dts32
 
-for you to fetch changes up to 25423731956b3d72bc35d336227c88ada49148e8:
+for you to fetch changes up to 293cb6b0ea19e628388959da4baa9558e891afc0:
 
-  soc: mediatek: mmsys: Fix missing UFOE component in mt8173 table routing
-(2021-08-06 16:43:23 +0200)
-
-----------------------------------------------------------------
-pm-domains:
-- correct mask define if used for update on TOPAXI bus
-- mt8173: enable regulator befor turning on MFG_ASYNC
-
-mmsys:
-- add a mask property to the routing information
-- add support for MT8365
-- add UFOE routing for MT8173
+  arm: dts: mt7623: increase passive cooling trip (2021-08-04 19:14:26 +0200)
 
 ----------------------------------------------------------------
-Bilal Wasim (2):
-      soc: mediatek: pm-domains: Use correct mask for bus_prot_clr
-      soc: mediatek: pm-domains: Add domain_supply cap for mfg_async PD
+Increase trip point on MT7623
 
-CK Hu (1):
-      soc: mmsys: mediatek: add mask to mmsys routes
+----------------------------------------------------------------
+Frank Wunderlich (1):
+      arm: dts: mt7623: increase passive cooling trip
 
-Enric Balletbo i Serra (1):
-      soc: mediatek: mmsys: Fix missing UFOE component in mt8173 table routing
-
-Fabien Parent (1):
-      soc: mediatek: mmsys: add MT8365 support
-
- drivers/soc/mediatek/mt8173-pm-domains.h |   1 +
- drivers/soc/mediatek/mt8183-mmsys.h      |  21 +++--
- drivers/soc/mediatek/mt8365-mmsys.h      |  60 ++++++++++++++
- drivers/soc/mediatek/mtk-mmsys.c         |  18 +++-
- drivers/soc/mediatek/mtk-mmsys.h         | 137 ++++++++++++++++++++++---------
- drivers/soc/mediatek/mtk-pm-domains.h    |   2 +-
- 6 files changed, 189 insertions(+), 50 deletions(-)
- create mode 100644 drivers/soc/mediatek/mt8365-mmsys.h
+ arch/arm/boot/dts/mt7623.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
