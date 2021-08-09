@@ -9,14 +9,14 @@ X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8463EC4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  9 Aug 2021 12:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC6BFC4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  9 Aug 2021 12:22:33 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4681760F38
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  9 Aug 2021 12:22:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4681760F38
+	by mail.kernel.org (Postfix) with ESMTPS id 955E660F35
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  9 Aug 2021 12:22:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 955E660F35
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -25,69 +25,69 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Subject:
 	From:Cc:To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=QJoOgnfYPSfw5GK9jn0wIPQUdMK3xa5omikklssac5o=; b=Mohr/v0MfkDJ3f
-	riySOEQJv/pjz98vJ4zssQK6Rr6TF385GqFnJySFzYl+zAL+9HZnRdEoANZM8Uk6QU5R9sE1sMzc1
-	ytrv9R4mpZjo86IwaxR+pVg3Cmls6C5jBchs44KlKmWxsVOyDYFuyOQSMKYr9IfPQUSmD6E79i+CY
-	iKP8PldHe7mJykQECgAfbPUCLFFy+LwU1YKlk9LKPslglf4HyPBlRkDNCjJyYXFNeLmo2CiPJgoWy
-	cyy+wqcDVaT7T+If0k+LMKzbpurH5KMVatuXNYthvXW+kqAv+F8ZLdDcj9Kc6PF7NvA4Gpy6GIDiI
-	e8WMZq/6iFyoY2azVCxg==;
+	List-Owner; bh=oATGRjA5pwe8fzot0z9rcNGC0VvOveebsOX/zY6f+Lo=; b=rtbYB8W9MumLbW
+	t0NsP9Eejsi2CMDOMG+oXZvZHULc6xi1hLWmR0eEO887mO1Qq70wrdBJlZO3/4IfE9P8bOr6YLJj9
+	wyBybChnZCqu5eQiFO3d5gbWYingyYc7rc8kgqtjuviNWTT8q7gjcRKhvOoeB3trvkElW9D8g8OZc
+	Y8sjIMCN5WOVFHjpXfHL/wdRCS5F3vOS1hr4Spv3NyonbMdbXkffDzLARex4VuaFwWWRBlpk/bryo
+	WKxHNLF2K6FshcxzxuyRpBY6/WpM9+y12QCjZO6HbqWzg2RFu9XIPlfbb3aGfBilKXY+x13TQSSwG
+	IfwP6QJSOpq63HGYtPBw==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mD4GP-000WNA-Uc; Mon, 09 Aug 2021 12:20:18 +0000
-Received: from mail-wr1-x42f.google.com ([2a00:1450:4864:20::42f])
+	id 1mD4Gb-000WPX-Gc; Mon, 09 Aug 2021 12:20:29 +0000
+Received: from mail-wr1-x434.google.com ([2a00:1450:4864:20::434])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mD4GE-000WLW-E5; Mon, 09 Aug 2021 12:20:07 +0000
-Received: by mail-wr1-x42f.google.com with SMTP id l18so21177753wrv.5;
- Mon, 09 Aug 2021 05:20:06 -0700 (PDT)
+ id 1mD4GM-000WMW-E3; Mon, 09 Aug 2021 12:20:15 +0000
+Received: by mail-wr1-x434.google.com with SMTP id b13so21173892wrs.3;
+ Mon, 09 Aug 2021 05:20:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=to:cc:from:subject:message-id:date:user-agent:mime-version
  :content-language:content-transfer-encoding;
- bh=3rCwHQK8SMgm1OR5rvr9CshXBJqUQwBfTUHKUWVeIxY=;
- b=qhe1YYIXtUvcb+6U7NQRrVFv9ofeYaGSOX5GQsi/y3oJHHC7bnUSdlUSdqf8vfP5dW
- T/GQP297a8vVMhgQyBaPTlrcG+2cqF1ljtfibq8b4mAhWP/b9+oepdQqu57t8UQcWruj
- C/aBMGf3SYWiO0WZ1tCPBjPLZTXqkV917REwCS+daYpm4hed7GVJfPs0z/HAlj2nqW8t
- KRH8Y/7tAvFz5cRa8oy3bc4GS6XPoSr08Po/DpRcq658zHPv0sBCEIFYRZ9BWJ0iWFM6
- HOgokeGs8OUeCvKQTgtqTqLxFHdluE5YfOzpMirAOZeeGeFYic3vPpuf+LdNbGaTUH05
- 0SoA==
+ bh=1/Vf6khXnMrxkAMIT2n3x/n+5pDItmvi3VuJWN3SJoc=;
+ b=Aag/zScHv2Uw7pewKl5p/Tli0gqoxQqe4OsnKmuW9smx2rAGXO8CCeVCjXblDpmYJt
+ nMVMMEwf6CRvU5T6qjOsvKV3PjdWRTDWl/YSuUUQ0uK4kL0mTLXDhJwKVk0M2AC9p07M
+ hQx073MNXcWmtA65uuLSP/ZHbJm07BPgW2gDCfjtIN7Arn+qOHwIsZVb+pOdUfbZC9ce
+ 4i2M/l4ahpImfqkLqnIZq4ry9gpv/HzB0ip+M2XrjEqv1VaYMTbk+la49hZFR4zqb+od
+ HL07drGAh7X7m3YGkwO75Tcl5RIeGRTdKRxiGY+/xRz7uNATiUhpb1TvraMcc+Cop8YL
+ h+mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
  :mime-version:content-language:content-transfer-encoding;
- bh=3rCwHQK8SMgm1OR5rvr9CshXBJqUQwBfTUHKUWVeIxY=;
- b=QxcwCQRMdXnKsKPz4iceyHsFU070vNXVKven5zy0DAusE4DoBJWdwo0ipGZdgyUTZw
- 6iCHpCWaXyW0/jfqXFGzR1bM6i6swDGKNpRsYEBMbrQg/ah0luyM8zCTjh4kSjZz6u0Y
- gAM/ypS8ZNoMCxnqhFTjQ4E1KVMS+XMpEoEwybMI2RtdxP9iIs3G+/o8d13xo/mq2XhG
- GmHXts9afRAg8kFS5r9GAHUUU+7pQyeALepU+3FqoFlV7hV9gFoYLZ/RcrJ6R8NZJo54
- 2leF8AiaF0d+9Jsxz7nDYiGdbYq5Dxsy4HdFB2B/l2J4aD1piBJFpf7jjUGwjPvp1LLw
- p/uA==
-X-Gm-Message-State: AOAM530YoZ/2suTSheyDEilB9q2HHSZ+tObk9t7J3Z+IK1qduQZyDT5W
- REu3tiMJ81hf5t86zEWv59uG92srbZk53w==
-X-Google-Smtp-Source: ABdhPJy2R57UaMq6vJfQmeZYQpsWGUQaKaY/Ej8RoEDdffdUzDnY1DVimp+bOsclBVLvu9nQbwVMqA==
-X-Received: by 2002:a5d:688e:: with SMTP id h14mr24552655wru.117.1628511605028; 
- Mon, 09 Aug 2021 05:20:05 -0700 (PDT)
+ bh=1/Vf6khXnMrxkAMIT2n3x/n+5pDItmvi3VuJWN3SJoc=;
+ b=DKC+PNsgP1yUpS0qUAM86/PJcbvS4Hc1N98N04HsMw2Y+cQRI6cUeiS1Uv0Hkf6vmJ
+ 2sc2hx6bO6a03hgh5QDnoU+do65IxKqJUMsn1Ia2jXEzQ4uYJ0Cjiu3pF14JwMNtwsX3
+ vvBI0B6N1u3gjIvKNDHSMHpz1tYn7bpS4qVuonrJ+kkzsNH4/vxr/FQINCBmV0CoxsMR
+ vX/2ZuKnNLxzsJB6KOo75CE2gklvB5GAE1xHyrJhQPvZyJpjuTyXQtLs95ldbB68j4vh
+ tF6IrrbIef7hNCDjK1scLTHAgtciVmf6uv/ZEwdFmGXeXFJEbRnazA0w5qfxvxSVjMUZ
+ qJ5Q==
+X-Gm-Message-State: AOAM531AKOdUey81JGuwj2DpgdVnXrSyJRtuggk/tWVswiFSIusrbODA
+ gehbXZK3V/Qe7BbD/I25VqQ=
+X-Google-Smtp-Source: ABdhPJyeQrS6U506drqM/mRWodOZkXMDuZnGOitClStMmWat9pBhcNXm2avMXsszjMO1sMPL+MwuWA==
+X-Received: by 2002:a5d:44cb:: with SMTP id z11mr25066859wrr.100.1628511613037; 
+ Mon, 09 Aug 2021 05:20:13 -0700 (PDT)
 Received: from ziggy.stardust (static-55-132-6-89.ipcom.comunitel.net.
  [89.6.132.55])
- by smtp.gmail.com with ESMTPSA id l9sm5122871wrt.95.2021.08.09.05.20.04
+ by smtp.gmail.com with ESMTPSA id j4sm17427937wmi.4.2021.08.09.05.20.12
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 09 Aug 2021 05:20:04 -0700 (PDT)
+ Mon, 09 Aug 2021 05:20:12 -0700 (PDT)
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
 Cc: "moderated list:ARM/Mediatek SoC support"
  <linux-mediatek@lists.infradead.org>,
  "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- Frank Wunderlich <frank-w@public-files.de>
+ <linux-arm-kernel@lists.infradead.org>, Bilal Wasim
+ <bilalwasim676@gmail.com>, Hsin-Yi Wang <hsinyi@chromium.org>
 From: Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [GIT PULL] ARM: dts32 updates for v5.15
-Message-ID: <289ded1c-dae7-54ef-6b56-9433bfcaf9de@gmail.com>
-Date: Mon, 9 Aug 2021 14:20:03 +0200
+Subject: [GIT PULL] arm64: dts updates for v5.15
+Message-ID: <26c4026a-9f26-d5a3-c30f-439120a4eaa0@gmail.com>
+Date: Mon, 9 Aug 2021 14:20:11 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
 Content-Language: en-US
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210809_052006_523440_65D72BEF 
-X-CRM114-Status: GOOD (  11.50  )
+X-CRM114-CacheID: sfid-20210809_052014_539577_9FAA6663 
+X-CRM114-Status: GOOD (  11.55  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -103,13 +103,15 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210809122003.YmXgOWKztPyAxdB1GL05PgqiwUAcVsXHqdyrqJAnhhw@z>
+Message-ID: <20210809122011.uQFtz6LDgT6iZoHUBVEsaDZYy8fenkSFILapopbgCn0@z>
 
-Hi Olof and Arnd,
+Hi Arnd and Olof,
 
-Please have a look on the single patch in this pull request for arm32 MediaTek.
+Please have a look for the arm64 DTS updates. This time we only have smaller
+changes for existing boards, but no new HW. But don't worry, probably for v5.16
+we will see some new SoCs.
 
-Thanks,
+Regards,
 Matthias
 
 ---
@@ -120,21 +122,39 @@ The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 are available in the Git repository at:
 
   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/
-tags/v5.14-next-dts32
+tags/v5.14-next-dts64
 
-for you to fetch changes up to 293cb6b0ea19e628388959da4baa9558e891afc0:
+for you to fetch changes up to ce5db043d2e8811f30de3ebb5d9e6bd8a33596c4:
 
-  arm: dts: mt7623: increase passive cooling trip (2021-08-04 19:14:26 +0200)
-
-----------------------------------------------------------------
-Increase trip point on MT7623
+  dt-bindings: mediatek: Add optional mediatek,gce-events property (2021-08-05
+17:37:54 +0200)
 
 ----------------------------------------------------------------
-Frank Wunderlich (1):
-      arm: dts: mt7623: increase passive cooling trip
+MT8173:
+- Add regulator for MFG_ASYNC power domain
+- Use alias for MMC to get fixed numbers
 
- arch/arm/boot/dts/mt7623.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+MT8183:
+- Use alia for MMC to get fixed numbers
+- Add optional event number for Global Comman Engine
+
+----------------------------------------------------------------
+Bilal Wasim (1):
+      arm64: dts: mediatek: mt8173: Add domain supply for mfg_async
+
+Hsin-Yi Wang (4):
+      arm64: dts: mt8183: kukui: Use aliases to mmc nodes
+      arm64: dts: mt8173: elm: Use aliases to mmc nodes
+      arm64: dts: mt8183: add mediatek,gce-events in mutex
+      dt-bindings: mediatek: Add optional mediatek,gce-events property
+
+ Documentation/devicetree/bindings/mailbox/mtk-gce.txt | 15 +++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi          | 10 ++++++++++
+ arch/arm64/boot/dts/mediatek/mt8173-evb.dts           |  4 ++++
+ arch/arm64/boot/dts/mediatek/mt8173.dtsi              |  2 +-
+ arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi        |  2 ++
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi              |  2 ++
+ 6 files changed, 34 insertions(+), 1 deletion(-)
 
 _______________________________________________
 linux-arm-kernel mailing list
