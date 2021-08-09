@@ -1,129 +1,138 @@
-Return-Path: <SRS0=5t0o=NA=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=hXuc=NA=gmail.com=matthias.bgg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7886EC4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  9 Aug 2021 07:20:51 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AFF5C4338F
+	for <soc@archiver.kernel.org>; Mon,  9 Aug 2021 12:20:01 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 1A29560EBC; Mon,  9 Aug 2021 12:20:01 +0000 (UTC)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3DB6260F4B
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  9 Aug 2021 07:20:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3DB6260F4B
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Subject:Cc:To:
-	From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=URqaMahPCbSPKE7iwOUC2MQvsf7UOLDrLAda0N+ayM4=; b=Fi4HyjVzGqnpu0
-	+PyL2ho9xqZYvuekG1kDwRkqRTXFuXv3ipaHkCs4cNqsr4pyvQUcXlsbICH1w1h7IYsy3oiyF90SX
-	nvaQ2GFbGClL1EnB62gqczFyFXI1OzSZT5q0ReyyxVHNo15QggOf2H2yrBgkI7ZJYz7ZQ1zpVA2Dj
-	m++4Iy71edG1+St82gm4JqXB88bHpSJOyo3+vuulV6J6Y8b1AaCRZY04HVSgm7QWooYDbHGgM5nW0
-	rEAkMG5PeAJCj8+iwyLdMJVE9I2u4A4SEfnmhqlBb5m6bGYT54yELlgnWD+0gGz9ug6P7BsGI2yJW
-	deyFDObiJfORt1auZO7g==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mCzYf-00HLP1-O5; Mon, 09 Aug 2021 07:18:49 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mCzYc-00HLOa-37
- for linux-arm-kernel@lists.infradead.org; Mon, 09 Aug 2021 07:18:47 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5827D60F11;
- Mon,  9 Aug 2021 07:18:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1628493525;
- bh=4CsALJqWTqRKUJgbpQqD09QUd6h5Q9m+xOpFrkVwZt8=;
- h=Date:From:List-Id:To:Cc:Subject:From;
- b=uBq2CIVXp7XByudQ4IH6kpQb5dCwf3R0y1FjmFlM2VtjQF/nyuyrHqdb+rW+SPdaY
- iw2EKslcwvx5QgDETlxGkaA+8i0SkEECtBHpylgrdpcMAJFO8rHhLB2kEj2ov8IkTv
- D+T4Ux0Ss58PSVQ0AuSO/l2nhoThiAZRXvEUgXqqPzX6cpK6xz6LR0dT+8u8jAKxfn
- kq0k7UesTzZ1PZruTzetpjNP5cxmkX9rIp1hOv2huHemtf7Eeifz7K7i0Fu4/3oNvB
- FIeg9/uJOaklOr3iZKU1iZNegSSQH5twRhZXijJtfkIYtQf6bGjUqJvXt53O7BOYVy
- Igo52edU67CNQ==
-Date: Mon, 9 Aug 2021 15:18:39 +0800
-From: Shawn Guo <shawnguo@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id D000060F35;
+	Mon,  9 Aug 2021 12:20:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D000060F35
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id n12so11095405wrr.2;
+        Mon, 09 Aug 2021 05:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=n98GGkHlH75W8BYsH/I8e5W6Kr2vLzbeo4fbwBXJ3Dc=;
+        b=bmGSsMU69Z+FYDDa22CgTHJBsh2dLq/+bfM2lny9YS/ELdSulu3hKTeb4mePLV/rZg
+         zZM1OMp7+Cv0Fo4T/GEK5izk14ouAkvpbhCRd1+kuuwFFnZCGYEK2H5N4Qm0V+ReZcss
+         QRGmJ3h+EQBBMAmP522rfoLQdkM9wOVsezx6+yn16/Tx6xzAl2D7AmRk11qojajZjtPo
+         K7CztH98KGr7paPIK9fbruUJkTT94+18i/w/Ttl2H7msKdjLUpl3gcnwBLSSwd8mvtmj
+         ehrkT/6W4UTnvTLZ5crvJ9OSBPvuzvZAodhA/4ZGZPL6ki6gSZ6tpRyKoUQChbnY3cWA
+         QE2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=n98GGkHlH75W8BYsH/I8e5W6Kr2vLzbeo4fbwBXJ3Dc=;
+        b=ineg87GSSZ7CFf+dGrL4iDfzY/68oELqDiA9hobDsy8Q/d8PNvzqgFrst4209eSRVv
+         mD6AhK+c7QdiXc5CnozhY7BHHuZSL1XKNQNoQFUHTdC42WquGQc0ayr85Ce/HIA9Icax
+         +9z8a5+ipsnID1xGyCLMh/V0Yih14bIvwczgmOjjSEtsLEFwG5+oCYGzWAKw5ykmk2Ah
+         JLWicvfrDmjUfKhwsNVnxlcQg/Q+kU8jLwX0qqmV0mosV0j96bcF/z5UqxbNTjFHAyil
+         G2D3M4edXYPbE74mP7OxaswkCVepSjHtw+hQcmBy36Ix1R4szx0Le186Gil8VDyRnv/1
+         cE8w==
+X-Gm-Message-State: AOAM533y+CEexSomjxe+6Jn1dOIsuJnlOnoPbK5+kpRRXkB1RbyfUXPB
+	BRFilLZEFKhgE0zSVsrT+8wo1fqLrc1kkw==
+X-Google-Smtp-Source: ABdhPJzLba9TFzKyPqRV5u3itGbSRV9z3VNqboRp4OBTfUlSM+1UsdSzLjx9sXxUXFICwP7z+4iCEw==
+X-Received: by 2002:a5d:474d:: with SMTP id o13mr6398647wrs.256.1628511599433;
+        Mon, 09 Aug 2021 05:19:59 -0700 (PDT)
+Received: from ziggy.stardust (static-55-132-6-89.ipcom.comunitel.net. [89.6.132.55])
+        by smtp.gmail.com with ESMTPSA id s84sm4432299wme.12.2021.08.09.05.19.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Aug 2021 05:19:59 -0700 (PDT)
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Vinod Koul <vkoul@kernel.org>,
- Mark Brown <broonie@kernel.org>, Robin Gong <yibin.gong@nxp.com>,
- Lucas Stach <l.stach@pengutronix.de>, kernel@pengutronix.de,
- linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX eCSPI errata handling for 5.15
-Message-ID: <20210809071838.GF30984@dragon>
+To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
+Cc: "moderated list:ARM/Mediatek SoC support"
+ <linux-mediatek@lists.infradead.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>, Bilal Wasim
+ <bilalwasim676@gmail.com>, CK HU <ck.hu@mediatek.com>,
+ Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+ Fabien Parent <fparent@baylibre.com>, Rob Herring <robh+dt@kernel.org>,
+ Stephen Boyd <sboyd@kernel.org>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [GIT PULL] drivers: soc: mediatek: updates for v5.15
+Message-ID: <49fc7bef-20db-b98c-9437-dd9e4d00e870@gmail.com>
+Date: Mon, 9 Aug 2021 14:19:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210809_001846_197706_28387529 
-X-CRM114-Status: UNSURE (   7.90  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210809071839.Q1-gqvQTPDYmqZfQUHJOaE1bKR9KREakNZHq0HTuMMw@z>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 
+Hi Olof,
+Hi Arnd,
+
+Please have a look for the updates of the SoC drivers for Mediatek. If you
+wonder why there is no binding patch for the MT8365 mmsys: The binding was
+converted to YAML. This got taken by Rob. To minimize merge conflicts I left it
+to him to take other mmsys binding patches. Unfortunately there is one mmsys
+binding patch taken by Stephen through the clock tree. So there will be a
+trivial merge conflict (although not in your tree). A bit of a mess this time,
+I'll try to make sure that the bindings for drivers/soc will go through my tree
+in the future (which will make my life easier as well...).
+
+Regards,
+Matthias
+
+---
 The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-ecspi-5.15
+  https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/
+tags/v5.14-next-soc
 
-for you to fetch changes up to 4e2b10be1f4fe06c9deaaf2c03a05abcff191791:
+for you to fetch changes up to 25423731956b3d72bc35d336227c88ada49148e8:
 
-  dmaengine: imx-sdma: add terminated list for freed descriptor in worker (2021-07-23 11:20:06 +0800)
-
-----------------------------------------------------------------
-i.MX eCSPI errata handling for 5.15:
-
-It includes all required changes for handling i.MX6/7 eCSPI errata
-ERR009165, which causes FIFO transfer to be sent twice in DMA mode.
-Both SPI and DMA maintainers agree to merge it through arm-soc tree.
+  soc: mediatek: mmsys: Fix missing UFOE component in mt8173 table routing
+(2021-08-06 16:43:23 +0200)
 
 ----------------------------------------------------------------
-Robin Gong (12):
-      Revert "ARM: dts: imx6q: Use correct SDMA script for SPI5 core"
-      Revert "ARM: dts: imx6: Use correct SDMA script for SPI cores"
-      Revert "dmaengine: imx-sdma: refine to load context only once"
-      dmaengine: imx-sdma: remove duplicated sdma_load_context
-      dmaengine: dma: imx-sdma: add fw_loaded and is_ram_script
-      dmaengine: imx-sdma: add mcu_2_ecspi script
-      spi: imx: fix ERR009165
-      spi: imx: remove ERR009165 workaround on i.mx6ul
-      dmaengine: imx-sdma: remove ERR009165 on i.mx6ul
-      dma: imx-sdma: add i.mx6ul compatible name
-      dmaengine: imx-sdma: add uart rom script
-      dmaengine: imx-sdma: add terminated list for freed descriptor in worker
+pm-domains:
+- correct mask define if used for update on TOPAXI bus
+- mt8173: enable regulator befor turning on MFG_ASYNC
 
- .../devicetree/bindings/dma/fsl-imx-sdma.txt       |  1 +
- arch/arm/boot/dts/imx6q.dtsi                       |  2 +-
- arch/arm/boot/dts/imx6qdl.dtsi                     |  8 +-
- drivers/dma/imx-sdma.c                             | 93 ++++++++++++++++------
- drivers/spi/spi-imx.c                              | 41 ++++++++--
- 5 files changed, 111 insertions(+), 34 deletions(-)
+mmsys:
+- add a mask property to the routing information
+- add support for MT8365
+- add UFOE routing for MT8173
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+----------------------------------------------------------------
+Bilal Wasim (2):
+      soc: mediatek: pm-domains: Use correct mask for bus_prot_clr
+      soc: mediatek: pm-domains: Add domain_supply cap for mfg_async PD
+
+CK Hu (1):
+      soc: mmsys: mediatek: add mask to mmsys routes
+
+Enric Balletbo i Serra (1):
+      soc: mediatek: mmsys: Fix missing UFOE component in mt8173 table routing
+
+Fabien Parent (1):
+      soc: mediatek: mmsys: add MT8365 support
+
+ drivers/soc/mediatek/mt8173-pm-domains.h |   1 +
+ drivers/soc/mediatek/mt8183-mmsys.h      |  21 +++--
+ drivers/soc/mediatek/mt8365-mmsys.h      |  60 ++++++++++++++
+ drivers/soc/mediatek/mtk-mmsys.c         |  18 +++-
+ drivers/soc/mediatek/mtk-mmsys.h         | 137 ++++++++++++++++++++++---------
+ drivers/soc/mediatek/mtk-pm-domains.h    |   2 +-
+ 6 files changed, 189 insertions(+), 50 deletions(-)
+ create mode 100644 drivers/soc/mediatek/mt8365-mmsys.h
