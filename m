@@ -1,142 +1,163 @@
-Return-Path: <SRS0=ACqz=M6=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=qS+w=NA=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 709CBC4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  7 Aug 2021 23:10:32 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83E4EC4338F
+	for <soc@archiver.kernel.org>; Mon,  9 Aug 2021 00:16:10 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 262A060F25; Mon,  9 Aug 2021 00:16:10 +0000 (UTC)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 26F4161050
-	for <linux-arm-kernel@archiver.kernel.org>; Sat,  7 Aug 2021 23:10:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 26F4161050
+	by mail.kernel.org (Postfix) with ESMTPS id E6B0560E96
+	for <soc@kernel.org>; Mon,  9 Aug 2021 00:16:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E6B0560E96
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=IQA00z4dsmsCjQ5aT5Ey5m9Z30w4v7qhKFWu9c2rjzQ=; b=IOuAKSAYrcR1Ri
-	9YuHe4KEsep/nmtV20KL5mmIWeMK8lZ17GG+aN7FfnL0Ymq3Pw3pNFMIyKoWhwuovTcmRAG7vC2H6
-	o/cqrNYFX80fZJfDXFEQO/8uVAYgRm0llNBg4ewhdAg1gG/8v4sg6uVWt/bNHFcIyD5hQ7O/7YElb
-	PypEOGQ+dlDXvEeItOD4/vGWkyQ7vlygVturV7Alqrq89l1tk/JDlr/a41rv0hxXSlApGanpgdi6g
-	1OoCw155tCYdxHyJDkmkSMSnsKc1ErMMnwCdg6QocAp/F7l5F+4uf3O/oYrDFM5+dA+BTAWkzzLnz
-	dswgcLuMGGikNrN1lkUA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mCVKm-00FHFr-9I; Sat, 07 Aug 2021 23:02:28 +0000
-Received: from mail-lf1-x132.google.com ([2a00:1450:4864:20::132])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mCVKi-00FHEv-Tx
- for linux-arm-kernel@lists.infradead.org; Sat, 07 Aug 2021 23:02:26 +0000
-Received: by mail-lf1-x132.google.com with SMTP id b6so9581377lff.10
- for <linux-arm-kernel@lists.infradead.org>;
- Sat, 07 Aug 2021 16:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=jlAaQFyXghmyzPJGW+GcQ9q9eakvQgsmdsfCvHm6fzw=;
- b=Wf6blrWiOJQpM23q0ZXVW/fSQGdONjouqHmvjtMIErDceCRB7geeaP+28xljiz7VU5
- r10LpZVmvWx+eV6AlSLSak4koy6GP9rJNwcJt6tIXjMqlnkKCnmZSiFRTpDzpSI40xf+
- 7MRW/hbjPqkiutQmJgAxLgxdE2W/r6TKF9AVWPuceIbwrncZQqLwrRUjnlaoyVL0Gxsk
- XZrp5kn3RLjba/sRM5IpnVQ2pVP2GbCkdIcRMbdvx5Ugps4vq8Khf/eG8oXZVHqJWhwY
- FgKeeeTlWAk5UbNdBf2niv9AzOwGk4GbDdwKfgRF2jrazf8k7xv0+v9ELEZAp6LO07Rn
- BW6Q==
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id c16so30366857lfc.2
+        for <soc@kernel.org>; Sun, 08 Aug 2021 17:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=SXCwGy8W/lyhDJAw8LeWy5sqKGzOBkB2ozVZa+PP2Vs=;
+        b=JolAq4UmFFsURHJrGBrfI0bS1rBwL8A8RT/8k0HuLQhvC0itcNAWl908S89VfZQ9ho
+         1QTjsUffdLYiC4dDLCZXBOkjKMgQHwnizBw4koBc7FHT4Ru25CJc0twOVWtFXKJg1YFi
+         QiwUNiyg1y1eC0PBHklj40JeDGM/hDJEK4DvHnDuF4+CXRbWD/vUh7KU5eqYmczB48xZ
+         oTsTclkKKmJJ2lR2+5I2SyPcHGXMvonnJ2AVVnAWlgDXh/GJ7h/lWVDUBkHvjUJuvW6O
+         Pr/LUfJ956tNjF7TSwUFHvx6c/HJXYtr6UvgfLYHtJstWS25MW1q3MPImzFFkfpPuS3l
+         8p8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=jlAaQFyXghmyzPJGW+GcQ9q9eakvQgsmdsfCvHm6fzw=;
- b=D6T+w/KIR7a9beNgtPD9/hsuoZQoMHFSmHG77YbrfJqmyZ0rDNJTYlDoR7RZeqzdFp
- f2/T5WocZGPnNUXRUbWFR3s/+iayVJRn2WbkdSXO27ZMpW1feXta1EfsHWacU/DbVk2p
- deyHnNmDr/8xTX4apnubyG4F9imr+vi7tudzpKxeVe1zy2dRUlmWAuRM2sUZIoKwyaep
- u8aB1iPGuly7JcYmZ3IaWkCHutu+bppuxeOi/pU1TPnPeVIIUpTGVD/SrGRkMhtkHNnr
- QFj3kJnLPP+26HJPFx0qLV/vFDh2Mu5qYLo+1fA4HGvSMj5UgiTqLDhx4wZCHPlCol0S
- y1Pg==
-X-Gm-Message-State: AOAM532HdcdsaPb8i4VP0jjnfPt6UeIsJmh57hwIfkF2w5ZkgQgLycGa
- O4v7EXBlbMbr2U6wP8LzLWSHdA==
-X-Google-Smtp-Source: ABdhPJyz10pFQqbxKs6fdRlk9g46fPS0tET1pzRZJeXmO2SDOoUq8WI3p22O7YQLRffCwH0LPA6xWQ==
-X-Received: by 2002:a05:6512:239e:: with SMTP id
- c30mr10204798lfv.417.1628377338778; 
- Sat, 07 Aug 2021 16:02:18 -0700 (PDT)
-Received: from localhost.localdomain
- (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
- by smtp.gmail.com with ESMTPSA id w6sm1100906ljw.8.2021.08.07.16.02.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 07 Aug 2021 16:02:18 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
- Dan Carpenter <dan.carpenter@oracle.com>,
- Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] bus: ixp4xx: return on error in ixp4xx_exp_probe()
-Date: Sun,  8 Aug 2021 01:00:16 +0200
-Message-ID: <20210807230016.3607666-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.31.1
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=SXCwGy8W/lyhDJAw8LeWy5sqKGzOBkB2ozVZa+PP2Vs=;
+        b=Tu0wTPCXiKGg1dlQCM72TF+fGp2IjPOy9CELp4aDdqBANx8j6xYyd6oYM4MVMnG330
+         KlT2hIXDkX/MoyPCDArOtehEsyuhWvuewfYWnDD+wFaCLmFvmqowN6lfSGdGmWMVfFG0
+         /tAC4RFuejdNwj5CJgx31YnHUSrYjWvYbIEWTVW/iEadSt0B9cYEpnSBWG75tOdkfxRr
+         tTKnMy2tVApORFCP7XigUhKnrpCs2CjrV/PfMZg7XVBkfrFpKbiJzJJ/CC3UF1II9lF3
+         bav3Pwp6mixuFeAqzeHXBmkPc5BAsLU3efvEoUF3qIx0VLKD2TCzVBIIRRnEjO6zC/HZ
+         enaA==
+X-Gm-Message-State: AOAM5323ZoqA0UX6DF/S4MEdv87aBDILUDRaC5S4qgDN2Dyjddrp0nId
+	VwPHr3GRDMgj+TvykfsTMhUuY2aA3OMGC9XKqN3JDBwUyjyiqQ==
+X-Google-Smtp-Source: ABdhPJx74Fr1izS++bpq2IWd4Q6ZWz4T+hWD0gQz0NNxzvm/rjrpHOJIbX+AQfiYJh+Z7mY7L0J6vIcqc7iigdyuzDA=
+X-Received: by 2002:a19:7b14:: with SMTP id w20mr15701715lfc.29.1628468168009;
+ Sun, 08 Aug 2021 17:16:08 -0700 (PDT)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210807_160225_136703_935002C0 
-X-CRM114-Status: GOOD (  14.99  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210807230016.MDo3HooltUgSHng8u3kL22LIoB10HkBPRj_daUvWBk4@z>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 9 Aug 2021 02:15:57 +0200
+Message-ID: <CACRpkdY19AvWT--OcmEKbwFue_EcThVs7uZeHkzORten7xj-RA@mail.gmail.com>
+Subject: [GIT PULL] IXP4xx DTS updates for v5.15
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, Imre Kaloz <kaloz@openwrt.org>, 
+	Krzysztof Halasa <khalasa@piap.pl>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+Hi SoC folks,
 
-This code was intended to return an error code if regmap_read() fails
-but the return statement was missing.
+this is the big DTS update for IXP4xx for kernel v5.15.
 
-Fixes: 1c953bda90ca ("bus: ixp4xx: Add a driver for IXP4xx expansion bus")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-SoC maintainers: please apply this to the same branch where the
-bus changes in the pull request "ixp4xx-drivers-arm-soc-v5.15-1"
-was pulled in.
----
- drivers/bus/intel-ixp4xx-eb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+There is still some two device trees that need some more work
+and some of these may need some additional hammering before
+they are perfect(TM) but the basic functionality for all these systems
+should be there and we can proceed to delete some boardfiles
+as soon as we have successful boots on them all or we get tired of
+waiting for someone to test them.
 
-diff --git a/drivers/bus/intel-ixp4xx-eb.c b/drivers/bus/intel-ixp4xx-eb.c
-index 9acd00da413c..a4388440aca7 100644
---- a/drivers/bus/intel-ixp4xx-eb.c
-+++ b/drivers/bus/intel-ixp4xx-eb.c
-@@ -369,7 +369,7 @@ static int ixp4xx_exp_probe(struct platform_device *pdev)
- 	/* We check that the regmap work only on first read */
- 	ret = regmap_read(eb->rmap, IXP4XX_EXP_CNFG0, &val);
- 	if (ret)
--		dev_err_probe(dev, ret, "cannot read regmap\n");
-+		return dev_err_probe(dev, ret, "cannot read regmap\n");
- 	if (val & IXP4XX_EXP_CNFG0_MEM_MAP)
- 		eb->bus_base = IXP4XX_EXP_BOOT_BASE;
- 	else
--- 
-2.31.1
+Please pull it in!
 
+Yours,
+Linus Walleij
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+
+  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+tags/ixp4xx-dts-arm-soc-v5.15-1
+
+for you to fetch changes up to f2841e3ab175da656e9124a9b032daf5a86c7ade:
+
+  ARM: dts: ixp4xx: Add a devicetree for Freecom FSG-3 (2021-08-09
+01:55:59 +0200)
+
+----------------------------------------------------------------
+IXP4xx DTS file updates for the v5.15 kernel cycle:
+
+- Fix up some (non-urgent) IRQ flags for the PCI buses.
+
+- Add the second UART to the generic ixp4xx.dtsi
+
+- Make use of the new expansion bus driver in all device
+  trees with e.g. flash memory on the expansion bus.
+
+- Adds the CF card slot to the Gateworks GW2358.
+
+- Add new device trees for:
+  - Iomega NAS 100D
+  - D-Link DSM-G600
+  - Netgear WG302v2
+  - Arcom Vulcan
+  - Gateworks Avila GW2348
+  - Intel IXPD425 and siblings
+  - Coyote and IXDPG425
+  - Linksys WRV54G
+
+----------------------------------------------------------------
+Linus Walleij (14):
+      ARM: dts: ixp4xx: Fix up bad interrupt flags
+      ARM: dts: ixp4xx: Add devicetree for Iomega NAS 100D
+      ARM: dts: ixp4xx: Move EPBX100 flash to external bus node
+      ARM: dts: ixp4xx: Add devicetree for D-Link DSM-G600 rev A
+      ARM: dts: ixp4xx: Add second UART
+      ARM: dts: ixp4xx: Use the expansion bus
+      ARM: dts: ixp4xx: Add devicetree for Netgear WG302v2
+      ARM: dts: ixp4xx: Add Arcom Vulcan device tree
+      ARM: dts: ixp4xx: Add Gateworks Avila GW2348 device tree
+      ARM: dts: ixp4xx: Add CF to GW2358
+      ARM: dts: ixp4xx: Add Intel IXDP425 etc reference designs
+      ARM: dts: ixp4xx: Add device trees for Coyote and IXDPG425
+      ARM: dts: ixp4xx: Add devicetree for Linksys WRV54G
+      ARM: dts: ixp4xx: Add a devicetree for Freecom FSG-3
+
+ arch/arm/boot/dts/Makefile                         |  14 +-
+ arch/arm/boot/dts/intel-ixp42x-adi-coyote.dts      | 110 +++++++++++++
+ arch/arm/boot/dts/intel-ixp42x-arcom-vulcan.dts    | 167 ++++++++++++++++++++
+ arch/arm/boot/dts/intel-ixp42x-dlink-dsm-g600.dts  | 145 +++++++++++++++++
+ arch/arm/boot/dts/intel-ixp42x-freecom-fsg-3.dts   | 158 +++++++++++++++++++
+ .../arm/boot/dts/intel-ixp42x-gateworks-gw2348.dts | 172 ++++++++++++++++++++
+ arch/arm/boot/dts/intel-ixp42x-iomega-nas100d.dts  | 146 +++++++++++++++++
+ arch/arm/boot/dts/intel-ixp42x-ixdp425.dts         |  72 +++++++++
+ arch/arm/boot/dts/intel-ixp42x-ixdpg425.dts        | 125 +++++++++++++++
+ arch/arm/boot/dts/intel-ixp42x-linksys-nslu2.dts   |  30 ++--
+ arch/arm/boot/dts/intel-ixp42x-linksys-wrv54g.dts  | 173 +++++++++++++++++++++
+ arch/arm/boot/dts/intel-ixp42x-netgear-wg302v2.dts |  95 +++++++++++
+ .../arm/boot/dts/intel-ixp42x-welltech-epbx100.dts |  84 +++++-----
+ arch/arm/boot/dts/intel-ixp42x.dtsi                |   5 +
+ .../arm/boot/dts/intel-ixp43x-gateworks-gw2358.dts |  81 ++++++----
+ arch/arm/boot/dts/intel-ixp43x-kixrp435.dts        |  68 ++++++++
+ arch/arm/boot/dts/intel-ixp43x.dtsi                |   6 +
+ arch/arm/boot/dts/intel-ixp45x-ixp46x.dtsi         |  11 ++
+ arch/arm/boot/dts/intel-ixp46x-ixdp465.dts         |  38 +++++
+ .../boot/dts/intel-ixp4xx-reference-design.dtsi    | 132 ++++++++++++++++
+ arch/arm/boot/dts/intel-ixp4xx.dtsi                |  44 +++++-
+ 21 files changed, 1784 insertions(+), 92 deletions(-)
+ create mode 100644 arch/arm/boot/dts/intel-ixp42x-adi-coyote.dts
+ create mode 100644 arch/arm/boot/dts/intel-ixp42x-arcom-vulcan.dts
+ create mode 100644 arch/arm/boot/dts/intel-ixp42x-dlink-dsm-g600.dts
+ create mode 100644 arch/arm/boot/dts/intel-ixp42x-freecom-fsg-3.dts
+ create mode 100644 arch/arm/boot/dts/intel-ixp42x-gateworks-gw2348.dts
+ create mode 100644 arch/arm/boot/dts/intel-ixp42x-iomega-nas100d.dts
+ create mode 100644 arch/arm/boot/dts/intel-ixp42x-ixdp425.dts
+ create mode 100644 arch/arm/boot/dts/intel-ixp42x-ixdpg425.dts
+ create mode 100644 arch/arm/boot/dts/intel-ixp42x-linksys-wrv54g.dts
+ create mode 100644 arch/arm/boot/dts/intel-ixp42x-netgear-wg302v2.dts
+ create mode 100644 arch/arm/boot/dts/intel-ixp43x-kixrp435.dts
+ create mode 100644 arch/arm/boot/dts/intel-ixp46x-ixdp465.dts
+ create mode 100644 arch/arm/boot/dts/intel-ixp4xx-reference-design.dtsi
