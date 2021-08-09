@@ -1,50 +1,67 @@
-Return-Path: <SRS0=qS+w=NA=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=5t0o=NA=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83E4EC4338F
-	for <soc@archiver.kernel.org>; Mon,  9 Aug 2021 00:16:10 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 262A060F25; Mon,  9 Aug 2021 00:16:10 +0000 (UTC)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1D56C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  9 Aug 2021 00:18:24 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E6B0560E96
-	for <soc@kernel.org>; Mon,  9 Aug 2021 00:16:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E6B0560E96
+	by mail.kernel.org (Postfix) with ESMTPS id 7607860F42
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  9 Aug 2021 00:18:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7607860F42
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id c16so30366857lfc.2
-        for <soc@kernel.org>; Sun, 08 Aug 2021 17:16:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=SXCwGy8W/lyhDJAw8LeWy5sqKGzOBkB2ozVZa+PP2Vs=;
-        b=JolAq4UmFFsURHJrGBrfI0bS1rBwL8A8RT/8k0HuLQhvC0itcNAWl908S89VfZQ9ho
-         1QTjsUffdLYiC4dDLCZXBOkjKMgQHwnizBw4koBc7FHT4Ru25CJc0twOVWtFXKJg1YFi
-         QiwUNiyg1y1eC0PBHklj40JeDGM/hDJEK4DvHnDuF4+CXRbWD/vUh7KU5eqYmczB48xZ
-         oTsTclkKKmJJ2lR2+5I2SyPcHGXMvonnJ2AVVnAWlgDXh/GJ7h/lWVDUBkHvjUJuvW6O
-         Pr/LUfJ956tNjF7TSwUFHvx6c/HJXYtr6UvgfLYHtJstWS25MW1q3MPImzFFkfpPuS3l
-         8p8g==
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
+	MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=jwJwm6sl015sY1t6wL0L2/WyZm3BpsD8+Y9Z7/1xch4=; b=OtJBg59weZh8vP
+	FNiV8L6rxg7N4oylgcaaTcbu5gnUrhkqN4wjEKLNP1WQPGQbgHmrRI4E076Va0N8uR5OnJS5PEZ6i
+	sG9wRELaT2VkIsI+GjdxcNz6G+pqII88hRLy9RSbH0tR3bK4AdxPGLVhWoK52Z45Z7ShUw9CFYjbi
+	MvdOdyepRqdL/zMf9Z6RTcDP7HdF9mIdmK/SO+NQkGzv/jKHCb7nxcKnwaHKC6noIecPtqhkvSU8X
+	AhST4mB2FecNN+ppeOJQlsCDqXBKMTKoDhemEp2Sus3OjbfNVc+i+3fsDdJmfDuWBf5/96uZ5l4tb
+	/kKFObjAVgjMZ3LGxb6g==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mCsxh-00Gmtr-QY; Mon, 09 Aug 2021 00:16:13 +0000
+Received: from mail-lf1-x129.google.com ([2a00:1450:4864:20::129])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mCsxe-00Gmsz-KU
+ for linux-arm-kernel@lists.infradead.org; Mon, 09 Aug 2021 00:16:12 +0000
+Received: by mail-lf1-x129.google.com with SMTP id z2so13542764lft.1
+ for <linux-arm-kernel@lists.infradead.org>;
+ Sun, 08 Aug 2021 17:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
+ h=mime-version:from:date:message-id:subject:to:cc;
+ bh=SXCwGy8W/lyhDJAw8LeWy5sqKGzOBkB2ozVZa+PP2Vs=;
+ b=JolAq4UmFFsURHJrGBrfI0bS1rBwL8A8RT/8k0HuLQhvC0itcNAWl908S89VfZQ9ho
+ 1QTjsUffdLYiC4dDLCZXBOkjKMgQHwnizBw4koBc7FHT4Ru25CJc0twOVWtFXKJg1YFi
+ QiwUNiyg1y1eC0PBHklj40JeDGM/hDJEK4DvHnDuF4+CXRbWD/vUh7KU5eqYmczB48xZ
+ oTsTclkKKmJJ2lR2+5I2SyPcHGXMvonnJ2AVVnAWlgDXh/GJ7h/lWVDUBkHvjUJuvW6O
+ Pr/LUfJ956tNjF7TSwUFHvx6c/HJXYtr6UvgfLYHtJstWS25MW1q3MPImzFFkfpPuS3l
+ 8p8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=SXCwGy8W/lyhDJAw8LeWy5sqKGzOBkB2ozVZa+PP2Vs=;
-        b=Tu0wTPCXiKGg1dlQCM72TF+fGp2IjPOy9CELp4aDdqBANx8j6xYyd6oYM4MVMnG330
-         KlT2hIXDkX/MoyPCDArOtehEsyuhWvuewfYWnDD+wFaCLmFvmqowN6lfSGdGmWMVfFG0
-         /tAC4RFuejdNwj5CJgx31YnHUSrYjWvYbIEWTVW/iEadSt0B9cYEpnSBWG75tOdkfxRr
-         tTKnMy2tVApORFCP7XigUhKnrpCs2CjrV/PfMZg7XVBkfrFpKbiJzJJ/CC3UF1II9lF3
-         bav3Pwp6mixuFeAqzeHXBmkPc5BAsLU3efvEoUF3qIx0VLKD2TCzVBIIRRnEjO6zC/HZ
-         enaA==
-X-Gm-Message-State: AOAM5323ZoqA0UX6DF/S4MEdv87aBDILUDRaC5S4qgDN2Dyjddrp0nId
-	VwPHr3GRDMgj+TvykfsTMhUuY2aA3OMGC9XKqN3JDBwUyjyiqQ==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+ bh=SXCwGy8W/lyhDJAw8LeWy5sqKGzOBkB2ozVZa+PP2Vs=;
+ b=W2HbM5rm/g1vcGuekrdgG/NpgLH46JfAOAEZmW4fj39i0PSNX07tmcqSgUmgzqKeeG
+ F9NiNgmPyueP0iT6yCaAzE9erjUI+fh6jcGvJLakQjC8mcgL7367X1LTNY2gn+dabBWl
+ 8aEKaPYmAarX3C5cSjPkfovlfgzpwm5yDZ5vWdXnbehMRGgoqvjQN7FZ5hZqp/bGoNwI
+ mhsnu17ckMJrdFx4idOQ6GfnxmBOio5vCJONs5r/K36PnJANDyuowtnDYUwQwTVcWTW4
+ /WYP77AqYwcVJ2tFSuf/vXqlmVyi4VbRQn7SNezFdEABOtwAb/8LSodxepnbHkdOEiqX
+ sDsA==
+X-Gm-Message-State: AOAM530h9eGSZDSGGjgZaW0yDo0bD55ZIUjByosaK7ouJDiq1v1DEqM5
+ CBseyATc030sZ4npHzFiLC/lSgwTPqHee2VIbocLaw==
 X-Google-Smtp-Source: ABdhPJx74Fr1izS++bpq2IWd4Q6ZWz4T+hWD0gQz0NNxzvm/rjrpHOJIbX+AQfiYJh+Z7mY7L0J6vIcqc7iigdyuzDA=
-X-Received: by 2002:a19:7b14:: with SMTP id w20mr15701715lfc.29.1628468168009;
+X-Received: by 2002:a19:7b14:: with SMTP id w20mr15701715lfc.29.1628468168009; 
  Sun, 08 Aug 2021 17:16:08 -0700 (PDT)
 MIME-Version: 1.0
 From: Linus Walleij <linus.walleij@linaro.org>
@@ -53,9 +70,27 @@ Message-ID: <CACRpkdY19AvWT--OcmEKbwFue_EcThVs7uZeHkzORten7xj-RA@mail.gmail.com>
 Subject: [GIT PULL] IXP4xx DTS updates for v5.15
 List-Id: <soc.lore.kernel.org>
 To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, Imre Kaloz <kaloz@openwrt.org>, 
-	Krzysztof Halasa <khalasa@piap.pl>
-Content-Type: text/plain; charset="UTF-8"
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Imre Kaloz <kaloz@openwrt.org>, Krzysztof Halasa <khalasa@piap.pl>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210808_171610_724717_D4AF4F67 
+X-CRM114-Status: GOOD (  15.79  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210809001557.Lr669kB8A4QHf97tSyOt-Sx8zHpG0f6B6zFKuhEJJXY@z>
 
 Hi SoC folks,
 
@@ -161,3 +196,8 @@ Linus Walleij (14):
  create mode 100644 arch/arm/boot/dts/intel-ixp43x-kixrp435.dts
  create mode 100644 arch/arm/boot/dts/intel-ixp46x-ixdp465.dts
  create mode 100644 arch/arm/boot/dts/intel-ixp4xx-reference-design.dtsi
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
