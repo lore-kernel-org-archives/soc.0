@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81F61C4338F
-	for <soc@archiver.kernel.org>; Tue, 10 Aug 2021 14:16:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D9B7C19F35
+	for <soc@archiver.kernel.org>; Tue, 10 Aug 2021 14:16:38 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 64FB1610FD; Tue, 10 Aug 2021 14:16:19 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 815F4610CF;
-	Tue, 10 Aug 2021 14:16:18 +0000 (UTC)
+	id E27D560F02; Tue, 10 Aug 2021 14:16:37 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0D57D60F94;
+	Tue, 10 Aug 2021 14:16:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1628604979;
-	bh=qNYRsj9g3X2YKXJVtom5LfSd2hBob2ktPurlVxyZx90=;
+	s=k20201202; t=1628604997;
+	bh=ceP+nQXc8e3q3MzfM/Je2UvzGY3M7qXoUsuOeb6Z5nY=;
 	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TttEPsqtTWEJcIeDGSoXz7r02H4trVvnnuDpX+w1uhvGktfQbl2eoD0HID1ejxzD/
-	 nslPPj7WsleidGtrgA4oyBmqU3O7pMBrGX5q5dr145hhkM3pyfMpOEYvyy+qgsDj9X
-	 jPgsbZnZc093KRYC5B0YFCDeLdirldeVJCtvuOHnHkkFzlB4TAsgqGNlTMIyCtx6KG
-	 aaSRFoiTYzA+1aHQR9al/yFkpguW4B7j0XVVaZ9uwz6mHXdJVO+ThfdXAVYM2Tbw0B
-	 ZgtSCuWsAiOSsaF9+jeiA8Kxxs6UiPV59UnUTFW7T9b02PoRpA3dEUH6xzX66ia8kf
-	 rBDn/ulWrla3A==
+	b=Bwb5ExcZH0+7sMpgQqT9tYZJBJMqeFqjWmuRQFRPAN4DrvOCG4vDMpGKs8G8oiLPm
+	 dAQIWaD+v0yct8lGpCokELNsYXWux9knsyaVTxcvkLHKIy9MHBV7VFmHdFNHb7fmZq
+	 f/lzVdifpw5RPpTmHKz1Nnv13fwnmB3Eq2hxRfl3MZyhMVzBzHVy83/hSVvHyjKvWt
+	 Q3hMpDUOl5ejG61ChXoLRJgJj4stiRDHWWtk6oOpmXZyh0PKr75zaE+Q/3ii4VzYpi
+	 daczhWpS040MU9cRFWVIQ71W5nvpWh7mgkAXtoPoWSYVZyPt8Lznnsa394eZBuatfr
+	 sEwlMLK1u7khg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -32,12 +32,12 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	soc@kernel.org,
 	Sasha Levin <sashal@kernel.org>,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 10/13] ARM: ixp4xx: goramo_mlr depends on old PCI driver
-Date: Tue, 10 Aug 2021 10:16:02 -0400
-Message-Id: <20210810141606.3117932-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 09/11] ARM: ixp4xx: goramo_mlr depends on old PCI driver
+Date: Tue, 10 Aug 2021 10:16:22 -0400
+Message-Id: <20210810141625.3118097-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210810141606.3117932-1-sashal@kernel.org>
-References: <20210810141606.3117932-1-sashal@kernel.org>
+In-Reply-To: <20210810141625.3118097-1-sashal@kernel.org>
+References: <20210810141625.3118097-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -79,10 +79,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm/mach-ixp4xx/Kconfig b/arch/arm/mach-ixp4xx/Kconfig
-index 165c184801e1..57e61e797189 100644
+index c342dc4e8a45..2489b6151ace 100644
 --- a/arch/arm/mach-ixp4xx/Kconfig
 +++ b/arch/arm/mach-ixp4xx/Kconfig
-@@ -89,6 +89,7 @@ config MACH_IXDP465
+@@ -76,6 +76,7 @@ config MACH_IXDP465
  
  config MACH_GORAMO_MLR
  	bool "GORAMO Multi Link Router"
