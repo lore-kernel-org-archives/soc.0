@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3376FC432BE
-	for <soc@archiver.kernel.org>; Tue, 10 Aug 2021 14:16:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84626C4338F
+	for <soc@archiver.kernel.org>; Tue, 10 Aug 2021 14:17:06 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 15E996112E; Tue, 10 Aug 2021 14:16:52 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 34D39610E9;
-	Tue, 10 Aug 2021 14:16:51 +0000 (UTC)
+	id 6689461154; Tue, 10 Aug 2021 14:17:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8897B61167;
+	Tue, 10 Aug 2021 14:17:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1628605012;
+	s=k20201202; t=1628605026;
 	bh=ceP+nQXc8e3q3MzfM/Je2UvzGY3M7qXoUsuOeb6Z5nY=;
 	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FvY9Gx2FkfvWuxbNJvuqx5WIE5mPZECYFKAc66vSRQBF+Vd0EznjwuolDTB9PNxqZ
-	 ljcXEr6F9qKyU2M2RwqeGqEbTe9QdQWeHhOFEufxbL5QQ5TqtU86VFUp73183lRqax
-	 PJe9D2pQgUl7LgRIIjs9W7LUpzrD6Yp5khI3G0dRStU5qouQWBhgvh1R8lL1kUj9pw
-	 bSRiFwctaA9vxJWKQBoYVi9tFpgaAHhucqsXM8W9yo/DquwOgxk6YS4V5Lbz6Z4vsL
-	 8Scd16VjdeE6WAxzA1k6NJtGFwJm03oe3HZfLOeUbWeWo7HngK5qASAD0nTrYhT/Hx
-	 j94gt6Le2PnxQ==
+	b=sUXcNWjJTU2eiHicbA7J8lB72kpP3lUyZ9pENEJlbqz6vmMQ9YSnmylaOjgNQK/Tq
+	 22Ng9y7uqYqrm5+s+hH2wNt8uHZpUgXn1bA/5nR9MeG44rKb+HXuXI8dMvds8HMAxZ
+	 0+0nFU2/FRoJrQ6KJ5iCH/isT+TBGRJZ8rAoWQbSfYmh+nyAidfXKnUmucg4/BWC8N
+	 /PKJTra1Se3cMkfCNevFRD0UY+jLPgd5cV/ZGMMHKzrGNSgBezAlaR9Hnf+4bqFN+l
+	 /3QyxBLjNnYQa4WgET5NcwJtPm0NsK9V5tdEOAlqrqhrJo+ddLiiJ4lA2bPMZdkuuk
+	 KnR7h0evSLjbg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -32,12 +32,12 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	soc@kernel.org,
 	Sasha Levin <sashal@kernel.org>,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.14 08/10] ARM: ixp4xx: goramo_mlr depends on old PCI driver
-Date: Tue, 10 Aug 2021 10:16:39 -0400
-Message-Id: <20210810141641.3118360-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 8/8] ARM: ixp4xx: goramo_mlr depends on old PCI driver
+Date: Tue, 10 Aug 2021 10:16:55 -0400
+Message-Id: <20210810141655.3118498-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210810141641.3118360-1-sashal@kernel.org>
-References: <20210810141641.3118360-1-sashal@kernel.org>
+In-Reply-To: <20210810141655.3118498-1-sashal@kernel.org>
+References: <20210810141655.3118498-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
