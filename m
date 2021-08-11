@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-11.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 748E3C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 11 Aug 2021 18:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA50C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 11 Aug 2021 18:42:50 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 16FBF6104F
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 11 Aug 2021 18:42:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 16FBF6104F
+	by mail.kernel.org (Postfix) with ESMTPS id 4868561019
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 11 Aug 2021 18:42:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4868561019
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,70 +23,68 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
 	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=gnQv+3nK+eDZ83STVw1n2Pc7i7yN6wWHnXN5sVM95QM=; b=fvf66oIOvdlpSk
-	spuGIWk0P1rHf+JXd/RHPSQc6rQoZksIXJtNAOSvMnHgK/+OQYdxvmL7mx099L3fnjY9ZXnLqcKsp
-	gb0AI4zkAeo+LC2TnztdOdaJM5ecASGqG0FdllSVcfjr+AysN5mwoTSyaLC3M/nwLCf3IlmvrK6hB
-	X02PcgKgshjkZHWtTrBEOycw0e7weHYZEBxNU2fzwhrMSUEhHaDBPGIUpAs0/GywqaHEGVPDO15jk
-	PmgAwyYAV749r/oH27nuH6UBOS4lonXCxpoBm6ywy4uDthlC+lptQLB4WocUKBxK2PK5NW1zlClsM
-	9gEPZv8N599ozhUGWc9Q==;
+	List-Owner; bh=4huJ5109ax4MliDEyNbExDGIuOoGD//9JZHgqia/ucA=; b=HkpzxB6cUxlnlb
+	N9F6qv4logphHTegDXQ7Y3aiV4k8LsNTvYbs/6w9K39xUhtt54grsqZfSMn/8ukuJuNdK9N1/MTjV
+	Oqs2A2deuTsqUgTG7Hr4vQ7q9j/4SbXVTsh4ybwzFEBISkmGFKFXYzwPcCYq16sdXZat2rhd5Ip8T
+	GoIZGC3IKCyK3CPaRLnJWWjho59eKhjB2FJSaGzELYLdVIz0PVIoUwQ9ocr584GCV10g6EtgXc4DX
+	MztIH9Goh1Tv2hVVyPZo/HtioQs9P87xNht8h6PCIov6g9+WdJ269KW1yDx4rT0ccKQM+b6EvFr2q
+	qRkwv1qJ8b4NjmfQYWlw==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mDt9X-007u4R-Vq; Wed, 11 Aug 2021 18:40:36 +0000
-Received: from mail-pj1-f50.google.com ([209.85.216.50])
+	id 1mDt9i-007u5q-II; Wed, 11 Aug 2021 18:40:46 +0000
+Received: from mail-pj1-f42.google.com ([209.85.216.42])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mDt9S-007u3d-14
- for linux-arm-kernel@lists.infradead.org; Wed, 11 Aug 2021 18:40:33 +0000
-Received: by mail-pj1-f50.google.com with SMTP id
- lw7-20020a17090b1807b029017881cc80b7so11050389pjb.3
+ id 1mDt9e-007u5A-FV
+ for linux-arm-kernel@lists.infradead.org; Wed, 11 Aug 2021 18:40:43 +0000
+Received: by mail-pj1-f42.google.com with SMTP id w14so4918874pjh.5
  for <linux-arm-kernel@lists.infradead.org>;
- Wed, 11 Aug 2021 11:40:29 -0700 (PDT)
+ Wed, 11 Aug 2021 11:40:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:date:from:to:cc:subject:message-id:references
  :mime-version:content-disposition:in-reply-to;
- bh=6XWZ7uipzmbT4b9s5UP3Dp3Et7I/DEvFdMWNyQg4EWo=;
- b=JtbU/sN195ExYvC3rEi88LylsbKzETpr1xrzek8RWKx5JbmKm229P6mg46Nylb4A9P
- nK4rZWp4MEIyepvvZbzSKPK7unoKl/1GjxW8p7+a58RShqtB1X8O4/5qkQDTnepFHwpC
- XohjBQVSf7s2buaeEGoKMiH9XiKI2V/rTwYJCrlXQcXFw8MmQko0oxmXdxQl3xD3F+2a
- WcwB4l8BoYKFrThd7g5UKgM4ZfQQrgUATl0xFtFoWPI+YyyA9dYwTzhKjGcuc/U9PZ5b
- 6AzaqP+5gg2WM/5kY/6DgIMz502QB5LViX3zmyjcXzS+TwlDRX9Pw4zrogpUFbmZjDNG
- Q/+g==
-X-Gm-Message-State: AOAM5335WfTlM8SNhKYhKtMfj//Bxae+6YJg7dIjmW2Uht/swYONQNFe
- szWcTjAyu9TKxHXJITrxLA==
-X-Google-Smtp-Source: ABdhPJydzGSNHHLbCABFjtI2hErQQ3Hvcs3ObcdrBQP2nvWLFn8lM3bPlQ55R/pujUDc+0x05iMkZw==
-X-Received: by 2002:a05:6a00:150d:b029:3c8:e86e:79ec with SMTP id
- q13-20020a056a00150db02903c8e86e79ecmr182380pfu.62.1628707228843; 
- Wed, 11 Aug 2021 11:40:28 -0700 (PDT)
+ bh=YgL5QZA+nttpaayeuohalxKILerIeWnfwKqrpAxGEV8=;
+ b=aeShcIIE6IOUf465zvBBc53DWBFZ0sEqEn/2Th2NwhCff0lNaKZSqYftZ+ZeLI0KYM
+ d4BFj3lrdFIsFCxULRIwGR5QJddai6NZvjPj2pyTAhsw4bnU3TqmYSK+3d5Hw7KCumTt
+ kHMYFYXNaJnYQCJNCfmjEhozY6XB1D7dQ408y+Ll2ufjVrRUoHIqP4dFJ63fWkjFH22W
+ suNs6OFgFh7ep+PnGQF8o2vze/W0g3fCxxbtpjsTwcSQBSbDMFGg8kehlKGcdgv/ndLs
+ wVbhKxQTa1iC5xR/+e9ACA4Kbwr3Kt8hL7bUTines+HisFRQutT19OU+Xaxa9hP8Aa3o
+ HnoA==
+X-Gm-Message-State: AOAM5304zqQYS4rMZVC1OS2UtCEg9ULsYPEeOitOBDA/uGmnnv4PfXpY
+ YlDVwkYd29Mu2VzvAkKWMQ==
+X-Google-Smtp-Source: ABdhPJwnahoo1EM8pHpP+QSc3xuGsCPXqSQ/jRidO7xuzVac8Xmgh3XG//7qIy7NBtmcjC/sj/1XOQ==
+X-Received: by 2002:aa7:9906:0:b029:3c7:a6a1:c73d with SMTP id
+ z6-20020aa799060000b02903c7a6a1c73dmr199239pff.1.1628707241447; 
+ Wed, 11 Aug 2021 11:40:41 -0700 (PDT)
 Received: from robh.at.kernel.org ([208.184.162.215])
- by smtp.gmail.com with ESMTPSA id u21sm218257pfh.163.2021.08.11.11.40.25
+ by smtp.gmail.com with ESMTPSA id d9sm224216pfv.161.2021.08.11.11.40.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 11 Aug 2021 11:40:27 -0700 (PDT)
-Received: (nullmailer pid 66990 invoked by uid 1000);
- Wed, 11 Aug 2021 18:40:23 -0000
-Date: Wed, 11 Aug 2021 12:40:23 -0600
+ Wed, 11 Aug 2021 11:40:40 -0700 (PDT)
+Received: (nullmailer pid 67452 invoked by uid 1000);
+ Wed, 11 Aug 2021 18:40:36 -0000
+Date: Wed, 11 Aug 2021 12:40:36 -0600
 From: Rob Herring <robh@kernel.org>
 To: Oleksij Rempel <o.rempel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Fabio Estevam <festevam@gmail.com>, Olof Johansson <olof@lixom.net>,
- dri-devel@lists.freedesktop.org, Arnd Bergmann <arnd@arndb.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Sascha Hauer <s.hauer@pengutronix.de>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, linux-arm-kernel@lists.infradead.org,
- soc@kernel.org, Thierry Reding <thierry.reding@gmail.com>,
- Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dt-bindings: vendor-prefixes: Add an entry for
- SKOV A/S
-Message-ID: <YRQZl94LsG9smzI0@robh.at.kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>, linux-arm-kernel@lists.infradead.org,
+ dri-devel@lists.freedesktop.org, Shawn Guo <shawnguo@kernel.org>,
+ David Airlie <airlied@linux.ie>, Thierry Reding <thierry.reding@gmail.com>,
+ Rob Herring <robh+dt@kernel.org>, Olof Johansson <olof@lixom.net>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>, devicetree@vger.kernel.org,
+ Daniel Vetter <daniel@ffwll.ch>, Fabio Estevam <festevam@gmail.com>,
+ soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, Sam Ravnborg <sam@ravnborg.org>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] dt-bindings: arm: fsl: add SKOV imx6q and imx6dl
+ based boards
+Message-ID: <YRQZpGn/+XfDy4Gj@robh.at.kernel.org>
 References: <20210804043439.11757-1-o.rempel@pengutronix.de>
- <20210804043439.11757-2-o.rempel@pengutronix.de>
+ <20210804043439.11757-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20210804043439.11757-2-o.rempel@pengutronix.de>
+In-Reply-To: <20210804043439.11757-3-o.rempel@pengutronix.de>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210811_114030_117039_BCA790A9 
-X-CRM114-Status: GOOD (  11.56  )
+X-CRM114-CacheID: sfid-20210811_114042_560740_D42ADE97 
+X-CRM114-Status: GOOD (  11.07  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -102,15 +100,15 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210811184023.SJIQYqQa4GBfrFjx-pOHGOocgWcZTK4DI8KDclDisck@z>
+Message-ID: <20210811184036.mCTqywGm0O2A998rxZ4sxarn9lDRE9Psfw1IJyK27oM@z>
 
-On Wed, 04 Aug 2021 06:34:37 +0200, Oleksij Rempel wrote:
-> Add "skov" entry for the SKOV A/S: https://www.skov.com/en/
+On Wed, 04 Aug 2021 06:34:38 +0200, Oleksij Rempel wrote:
+> Add SKOV imx6q/dl LT2, LT6 and mi1010ait-1cp1 boards.
 > 
 > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  Documentation/devicetree/bindings/arm/fsl.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
