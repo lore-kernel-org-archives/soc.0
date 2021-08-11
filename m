@@ -1,172 +1,115 @@
-Return-Path: <SRS0=byvG=NC=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=vXx5=NC=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0402EC432BE
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 11 Aug 2021 08:00:16 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CE1CC4338F
+	for <soc@archiver.kernel.org>; Wed, 11 Aug 2021 08:56:37 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id EAA6D60EB2; Wed, 11 Aug 2021 08:56:36 +0000 (UTC)
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BEBB460F38
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 11 Aug 2021 08:00:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BEBB460F38
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=hqeUzHWGBffu7+TJhj02UyUXfmiHc7vk2BadhdMAakY=; b=ImSo45jhTFtEzE
-	rRhByPBawjTk0NbUF+N7KnEeXnvIADMCKFTyQwJdiHql5YlKHXQMtZWhZv0NbMuPaDUg6THbFFjbc
-	m0R3m7zQcnwh4t9J0OPhD/VOL+YLDtziZR2vaWTG0GH6qDdwSnEV3tmFxmj+R+Tz/Wbw9pDgZH1zI
-	m4K5RXBhfbWaDObEAbbAIH6KompFJsWllBbWPWvv8TGTWZ0xM18BL1V7AkcuaPvC4h1IWoXsurOnp
-	Db0HDkskNTWf7B+DkXIQp8g/KvKUTFgbKSpgOP9x2h9/POAqO6jdFzhIjEzjOUd7dy9aArs7K3gYQ
-	OCMvHhUkrQUfHBGm9ibA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mDj7v-005wmN-Fi; Wed, 11 Aug 2021 07:58:15 +0000
-Received: from foss.arm.com ([217.140.110.172])
- by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mDj7o-005wkS-DE
- for linux-arm-kernel@lists.infradead.org; Wed, 11 Aug 2021 07:58:12 +0000
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C10EB6D;
- Wed, 11 Aug 2021 00:58:04 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A51CC3F70D;
- Wed, 11 Aug 2021 00:58:03 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 54E9F60EBD
+	for <soc@kernel.org>; Wed, 11 Aug 2021 08:56:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 54E9F60EBD
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPS id C89383F230
+	for <soc@kernel.org>; Wed, 11 Aug 2021 08:56:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1628672194;
+	bh=AkfNVRo7hHf9V8Un9aQjkE6FARkV1KO6bGOPkL8pwsg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=id8JtcjH3xJFhY+hcsRjXJkV21xaGm30LVc8zvQvR6rT8FdqfQY/viIcmmA5wVMXt
+	 NwM9NpGOaZsy2oU3Iv97v7PDo1feZ0ouPacw7QEQFOHQl+Cln2JN77jfacEzvbloTP
+	 PfD0ZoMttc2oBd10tHuA+n0CW3mJ5cnxRn1hjoKB2/jE6Ioi3uTE4WrQ+2mGRcp/YX
+	 WpIItxI5gyImZSh0XAIY1bNZZa/+C2YskHSchSdu3Ty0iSM/4Cm9KhaTIlAIfhWgyB
+	 2rkVKLbUBEnx3LbiTldX18litXjk35i3p2YPATiRmXbkAUnMlNNk6tJHzWk9NLbh9k
+	 +F3OAO7W9FZKA==
+Received: by mail-ej1-f72.google.com with SMTP id a19-20020a1709063e93b0290551ea218ea2so416880ejj.5
+        for <soc@kernel.org>; Wed, 11 Aug 2021 01:56:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AkfNVRo7hHf9V8Un9aQjkE6FARkV1KO6bGOPkL8pwsg=;
+        b=k/2mrVdFNP52EbM0lsoD/8BiXqD0dZsaZnSQrpZA/DZsURhVEsM5Jkjqj7QN93NU/V
+         D3rzKu4cb7AymOY4YUmO7TnI9cfICGrLHSQOqEu0hlauFkGo+CsSLLnC699H+6UiNGPi
+         lNhJtOa15GZY8O7cMmg72s/aWjZHApwLbhSOAnfYfjwFw3OxEGK+xut4guGVLSi6kxYi
+         T4Us66BICLfcYKF37IV4xcc3lsGD+5lsIrC7EFiRquh4elDWO/sgQlHAoTPPZXG4z3KA
+         ODAL2jjyNxyINvX67FU2tqjomnS7ljuXai1osaQX/GsxN935K27/FI9Bld+SfumK3FHr
+         B7Xg==
+X-Gm-Message-State: AOAM5316HEr5DYlgm89s9jQ/iHWyZpUEoeimeZG56TokuL5k48T8Hz29
+	hbYCJZKMmBigLJt/N0B7mmSRio1o3CSEXzlnp5JCiBxTepMJJClGDtwRuI3IOi7IM32yNx4eOn1
+	m7VkklQizD9/e1Xg2YqJjf7s=
+X-Received: by 2002:a05:6402:d49:: with SMTP id ec9mr10099878edb.333.1628672194555;
+        Wed, 11 Aug 2021 01:56:34 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwLaINYImBffGAxkeivDUKOJNEzYPQrtsNvBTAbFcoUG0Xlm7TBEfwmQhiR9WGSnXf07gHdDg==
+X-Received: by 2002:a05:6402:d49:: with SMTP id ec9mr10099869edb.333.1628672194408;
+        Wed, 11 Aug 2021 01:56:34 -0700 (PDT)
+Received: from localhost.localdomain ([86.32.42.198])
+        by smtp.gmail.com with ESMTPSA id x4sm7834003ejb.106.2021.08.11.01.56.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Aug 2021 01:56:34 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>,
- ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>, Arnd Bergmann <arnd@arndb.de>,
- Arnd Bergmann <arnd@kernel.org>,
- Cristian Marussi <cristian.marussi@arm.com>,
- Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v5.15
-Date: Wed, 11 Aug 2021 08:57:43 +0100
-Message-ID: <20210811075743.707961-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.25.1
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/2] ARM: dts: samsung: DT for v5.15
+Date: Wed, 11 Aug 2021 10:51:27 +0200
+Message-Id: <20210811085128.30103-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210811_005808_583218_36FB4ABC 
-X-CRM114-Status: GOOD (  13.30  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210811075743.eUhQtPwMkSXUT-qtrWNWU60adQwK4KAKPkUsBrhUGYg@z>
+Content-Transfer-Encoding: 8bit
 
-Hi ARM SoC Team,
+The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
-Please pull !
-
-Regards,
-Sudeep
-
--->8
-
-The following changes since commit bdb8742dc6f7c599c3d61959234fe4c23638727b:
-
-  firmware: arm_scmi: Fix range check for the maximum number of pending messages (2021-07-13 11:42:20 +0100)
+  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-5.15
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-5.15
 
-for you to fetch changes up to c0397c85b53d0bc6b081ff22d0d07e8eae149bba:
+for you to fetch changes up to 6cad6db75231a18f25dc7d610d5a0683160ac545:
 
-  firmware: arm_scmi: Use WARN_ON() to check configured transports (2021-08-09 11:43:32 +0100)
-
-----------------------------------------------------------------
-SCMI Updates for v5.15
-
-The bulk of the addition this time is mainly refactoring to add support
-for Virtio transport for SCMI and the addition of the support itself.
-The refactoring includes allowing transport specific init/exit calls,
-making each transport as compile time configurable, supporting
-monotonically increasing tokens instead of using the next available
-free buffer index as the token for scmi messages which eases handling
-concurrent and out-of-order messages which is a must have for virtio
-transport.
-
-Virtio support itself is conformant to the virtio SCMI device spec [1].
-Virtio device id 32 has been reserved for the SCMI device [2].
-
-Other than the virtio support, there is one bug fix in the probe failure
-clean up path.
-
-[1] https://github.com/oasis-tcs/virtio-spec/blob/master/virtio-scmi.tex
-[2] https://www.oasis-open.org/committees/ballot.php?id=3496
+  ARM: dts: exynos: add CPU topology to Exynos5422 (2021-08-05 09:24:04 +0200)
 
 ----------------------------------------------------------------
-Cristian Marussi (10):
-      firmware: arm_scmi: Add support for type handling in common functions
-      firmware: arm_scmi: Remove scmi_dump_header_dbg() helper
-      firmware: arm_scmi: Add optional transport_init/exit support
-      firmware: arm_scmi: Introduce monotonically increasing tokens
-      firmware: arm_scmi: Handle concurrent and out-of-order messages
-      firmware: arm_scmi: Make .clear_channel optional
-      firmware: arm_scmi: Make polling mode optional
-      firmware: arm_scmi: Make SCMI transports configurable
-      firmware: arm_scmi: Add priv parameter to scmi_rx_callback
-      firmware: arm_scmi: Use WARN_ON() to check configured transports
+Samsung DTS ARM changes for v5.15
 
-Igor Skalkin (4):
-      firmware: arm_scmi: Make shmem support optional for transports
-      firmware: arm_scmi: Add method to override max message number
-      dt-bindings: arm: Add virtio transport for SCMI
-      firmware: arm_scmi: Add virtio transport
+Add CPU topology to all Exynos DTSI files.
 
-Peter Hilber (2):
-      firmware: arm_scmi: Add message passing abstractions for transports
-      firmware: arm_scmi: Add optional link_supplier() transport op
+----------------------------------------------------------------
+Krzysztof Kozlowski (7):
+      ARM: dts: exynos: add CPU topology to Exynos3250
+      ARM: dts: exynos: add CPU topology to Exynos4210
+      ARM: dts: exynos: add CPU topology to Exynos4412
+      ARM: dts: exynos: add CPU topology to Exynos5250
+      ARM: dts: exynos: add CPU topology to Exynos5260
+      ARM: dts: exynos: add CPU topology to Exynos5420
+      ARM: dts: exynos: add CPU topology to Exynos5422
 
-Rishabh Bhatnagar (1):
-      firmware: arm_scmi: Free mailbox channels if probe fails
-
-kernel test robot (1):
-      firmware: arm_scmi: Fix boolconv.cocci warnings
-
- .../devicetree/bindings/firmware/arm,scmi.yaml     |   8 +-
- MAINTAINERS                                        |   1 +
- drivers/firmware/Kconfig                           |  34 +-
- drivers/firmware/arm_scmi/Kconfig                  |  95 +++
- drivers/firmware/arm_scmi/Makefile                 |   8 +-
- drivers/firmware/arm_scmi/common.h                 | 113 +++-
- drivers/firmware/arm_scmi/driver.c                 | 686 +++++++++++++++++----
- drivers/firmware/arm_scmi/mailbox.c                |   2 +-
- drivers/firmware/arm_scmi/msg.c                    | 111 ++++
- drivers/firmware/arm_scmi/smc.c                    |   3 +-
- drivers/firmware/arm_scmi/virtio.c                 | 491 +++++++++++++++
- include/uapi/linux/virtio_ids.h                    |   1 +
- include/uapi/linux/virtio_scmi.h                   |  24 +
- 13 files changed, 1429 insertions(+), 148 deletions(-)
- create mode 100644 drivers/firmware/arm_scmi/Kconfig
- create mode 100644 drivers/firmware/arm_scmi/msg.c
- create mode 100644 drivers/firmware/arm_scmi/virtio.c
- create mode 100644 include/uapi/linux/virtio_scmi.h
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ arch/arm/boot/dts/exynos3250.dtsi      | 11 ++++++++++
+ arch/arm/boot/dts/exynos4210.dtsi      | 11 ++++++++++
+ arch/arm/boot/dts/exynos4412.dtsi      | 17 +++++++++++++++
+ arch/arm/boot/dts/exynos5250.dtsi      | 11 ++++++++++
+ arch/arm/boot/dts/exynos5260.dtsi      | 38 ++++++++++++++++++++++++++++------
+ arch/arm/boot/dts/exynos5420-cpus.dtsi | 32 ++++++++++++++++++++++++++++
+ arch/arm/boot/dts/exynos5422-cpus.dtsi | 32 ++++++++++++++++++++++++++++
+ 7 files changed, 146 insertions(+), 6 deletions(-)
