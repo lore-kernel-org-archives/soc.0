@@ -1,52 +1,66 @@
-Return-Path: <SRS0=MIYb=NC=gmail.com=robherring2@kernel.org>
+Return-Path: <SRS0=Sc4B=NC=lists.freedesktop.org=dri-devel-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20A3CC4338F
-	for <soc@archiver.kernel.org>; Wed, 11 Aug 2021 18:40:42 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id EE9AA6108C; Wed, 11 Aug 2021 18:40:41 +0000 (UTC)
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9981BC4338F
+	for <dri-devel@archiver.kernel.org>; Wed, 11 Aug 2021 18:40:47 +0000 (UTC)
+Received: from gabe.freedesktop.org (gabe.freedesktop.org [131.252.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C0C0E61008;
-	Wed, 11 Aug 2021 18:40:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C0C0E61008
+	by mail.kernel.org (Postfix) with ESMTPS id 5DE6961077
+	for <dri-devel@archiver.kernel.org>; Wed, 11 Aug 2021 18:40:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5DE6961077
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id nt11so4971122pjb.2;
-        Wed, 11 Aug 2021 11:40:41 -0700 (PDT)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.freedesktop.org
+Received: from gabe.freedesktop.org (localhost [127.0.0.1])
+	by gabe.freedesktop.org (Postfix) with ESMTP id 5941E6E1A2;
+	Wed, 11 Aug 2021 18:40:46 +0000 (UTC)
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com
+ [209.85.216.42])
+ by gabe.freedesktop.org (Postfix) with ESMTPS id CB7E56E1B6
+ for <dri-devel@lists.freedesktop.org>; Wed, 11 Aug 2021 18:40:41 +0000 (UTC)
+Received: by mail-pj1-f42.google.com with SMTP id
+ s22-20020a17090a1c16b0290177caeba067so11144553pjs.0
+ for <dri-devel@lists.freedesktop.org>; Wed, 11 Aug 2021 11:40:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YgL5QZA+nttpaayeuohalxKILerIeWnfwKqrpAxGEV8=;
-        b=SO6NT+sox3sGfmqbT+2zZCZbL+dG5SrNjpWZAibmfl6PpUOGE6nhbr1FiteLl5JpW9
-         65KYI0BhS47hBkD1znJV4uV9ovLBpOjx9TMw5wj1fzerlNhhPU97rAuHFQWZt8rccceZ
-         fWOQuytvNXaD5Lb5hpWIm4fR7bsVLna18CcOFf6sWLNpxGD9IwpKo8uBievpNfD3rtCn
-         EdRKKE50Qury0Qhp/O7q9nnRtAYR7R5gL1fMbsesFhmxBrQFTAWxn4toIyGvaBhqfe1w
-         8t6ZeJscjOcvjkYAGy/+g4H0NSKRtUgm7a6LMnEr016YVblv+OGt3wV3DyRq8xd3Khrr
-         H2ag==
-X-Gm-Message-State: AOAM533UGY4WspK2dWSXPEvBKOBJeYhagJPe/Z6i9cf6CSolUzeLwAEx
-	7zCFiwlpPyTgR3fmhxbDCA==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+ :mime-version:content-disposition:in-reply-to;
+ bh=YgL5QZA+nttpaayeuohalxKILerIeWnfwKqrpAxGEV8=;
+ b=RbkihDirh22oVNSReXYhvj6QU3Or3IHs0L/fIG3O23e2mPGvLJHdErn16cHir9uTZ2
+ MYObhPO7H83/D+Qob4ef3bj9t6xL2afPjPPo/xIqLyzYlVnRnt5sEO0sX5zndfxzUbxh
+ 60iu+wORTb4RK3ujjFsbIqTH4f4xaaP89+g2A33w9pi2VqYJiblYW1rk76da3E6l9XbR
+ Jx+l2kIe5OenXLufQ5+Uxzgi0T/xG+r95dPELyOmfvK5Nqs2PZFpGgEQM2JuCSHYXFNq
+ sck94YkvwUeWdUQwnzaQ2pfCLMzCt/WRSlTtO8iHG3/ZrKIlJG3z20atbFiPfT+4Mk6a
+ TuoA==
+X-Gm-Message-State: AOAM533W7ZEwifpRn7Jcea61Q9zVX1Kom/dAAwRpBfRdQugJhzgNnIdW
+ q0Hb5C6gvoPWv/YnJ7J6dK1nYkevDA==
 X-Google-Smtp-Source: ABdhPJwnahoo1EM8pHpP+QSc3xuGsCPXqSQ/jRidO7xuzVac8Xmgh3XG//7qIy7NBtmcjC/sj/1XOQ==
-X-Received: by 2002:aa7:9906:0:b029:3c7:a6a1:c73d with SMTP id z6-20020aa799060000b02903c7a6a1c73dmr199239pff.1.1628707241447;
-        Wed, 11 Aug 2021 11:40:41 -0700 (PDT)
+X-Received: by 2002:aa7:9906:0:b029:3c7:a6a1:c73d with SMTP id
+ z6-20020aa799060000b02903c7a6a1c73dmr199239pff.1.1628707241447; 
+ Wed, 11 Aug 2021 11:40:41 -0700 (PDT)
 Received: from robh.at.kernel.org ([208.184.162.215])
-        by smtp.gmail.com with ESMTPSA id d9sm224216pfv.161.2021.08.11.11.40.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 11:40:40 -0700 (PDT)
+ by smtp.gmail.com with ESMTPSA id d9sm224216pfv.161.2021.08.11.11.40.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 11 Aug 2021 11:40:40 -0700 (PDT)
 Received: (nullmailer pid 67452 invoked by uid 1000);
-	Wed, 11 Aug 2021 18:40:36 -0000
+ Wed, 11 Aug 2021 18:40:36 -0000
 Date: Wed, 11 Aug 2021 12:40:36 -0600
 From: Rob Herring <robh@kernel.org>
 To: Oleksij Rempel <o.rempel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>, linux-arm-kernel@lists.infradead.org, dri-devel@lists.freedesktop.org, Shawn Guo <shawnguo@kernel.org>, David Airlie <airlied@linux.ie>, Thierry Reding <thierry.reding@gmail.com>, Rob Herring <robh+dt@kernel.org>, Olof Johansson <olof@lixom.net>, Pengutronix Kernel Team <kernel@pengutronix.de>, devicetree@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>, Fabio Estevam <festevam@gmail.com>, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org
+Cc: Sascha Hauer <s.hauer@pengutronix.de>, linux-arm-kernel@lists.infradead.org,
+ dri-devel@lists.freedesktop.org, Shawn Guo <shawnguo@kernel.org>,
+ David Airlie <airlied@linux.ie>, Thierry Reding <thierry.reding@gmail.com>,
+ Rob Herring <robh+dt@kernel.org>, Olof Johansson <olof@lixom.net>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>, devicetree@vger.kernel.org,
+ Daniel Vetter <daniel@ffwll.ch>, Fabio Estevam <festevam@gmail.com>,
+ soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, Sam Ravnborg <sam@ravnborg.org>,
+ linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v4 2/3] dt-bindings: arm: fsl: add SKOV imx6q and imx6dl
  based boards
 Message-ID: <YRQZpGn/+XfDy4Gj@robh.at.kernel.org>
@@ -56,6 +70,21 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20210804043439.11757-3-o.rempel@pengutronix.de>
+X-BeenThere: dri-devel@lists.freedesktop.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: Direct Rendering Infrastructure - Development
+ <dri-devel.lists.freedesktop.org>
+List-Unsubscribe: <https://lists.freedesktop.org/mailman/options/dri-devel>,
+ <mailto:dri-devel-request@lists.freedesktop.org?subject=unsubscribe>
+List-Archive: <https://lists.freedesktop.org/archives/dri-devel>
+List-Post: <mailto:dri-devel@lists.freedesktop.org>
+List-Help: <mailto:dri-devel-request@lists.freedesktop.org?subject=help>
+List-Subscribe: <https://lists.freedesktop.org/mailman/listinfo/dri-devel>,
+ <mailto:dri-devel-request@lists.freedesktop.org?subject=subscribe>
+Errors-To: dri-devel-bounces@lists.freedesktop.org
+Sender: "dri-devel" <dri-devel-bounces@lists.freedesktop.org>
+Message-ID: <20210811184036.QyPoH8TcBXVqiUG_6ug4sUhrOQoISf_tVrYHhe6Oi_A@z>
 
 On Wed, 04 Aug 2021 06:34:38 +0200, Oleksij Rempel wrote:
 > Add SKOV imx6q/dl LT2, LT6 and mi1010ait-1cp1 boards.
