@@ -1,44 +1,80 @@
-Return-Path: <SRS0=cIcV=NC=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=byvG=NC=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8120AC4338F
-	for <soc@archiver.kernel.org>; Wed, 11 Aug 2021 07:58:06 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 534EE60FC0; Wed, 11 Aug 2021 07:58:06 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by mail.kernel.org (Postfix) with ESMTP id 943C460F38;
-	Wed, 11 Aug 2021 07:58:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 943C460F38
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0402EC432BE
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 11 Aug 2021 08:00:16 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id BEBB460F38
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 11 Aug 2021 08:00:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BEBB460F38
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=arm.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=hqeUzHWGBffu7+TJhj02UyUXfmiHc7vk2BadhdMAakY=; b=ImSo45jhTFtEzE
+	rRhByPBawjTk0NbUF+N7KnEeXnvIADMCKFTyQwJdiHql5YlKHXQMtZWhZv0NbMuPaDUg6THbFFjbc
+	m0R3m7zQcnwh4t9J0OPhD/VOL+YLDtziZR2vaWTG0GH6qDdwSnEV3tmFxmj+R+Tz/Wbw9pDgZH1zI
+	m4K5RXBhfbWaDObEAbbAIH6KompFJsWllBbWPWvv8TGTWZ0xM18BL1V7AkcuaPvC4h1IWoXsurOnp
+	Db0HDkskNTWf7B+DkXIQp8g/KvKUTFgbKSpgOP9x2h9/POAqO6jdFzhIjEzjOUd7dy9aArs7K3gYQ
+	OCMvHhUkrQUfHBGm9ibA==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mDj7v-005wmN-Fi; Wed, 11 Aug 2021 07:58:15 +0000
+Received: from foss.arm.com ([217.140.110.172])
+ by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mDj7o-005wkS-DE
+ for linux-arm-kernel@lists.infradead.org; Wed, 11 Aug 2021 07:58:12 +0000
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C10EB6D;
-	Wed, 11 Aug 2021 00:58:04 -0700 (PDT)
+ by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C10EB6D;
+ Wed, 11 Aug 2021 00:58:04 -0700 (PDT)
 Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A51CC3F70D;
-	Wed, 11 Aug 2021 00:58:03 -0700 (PDT)
+ by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A51CC3F70D;
+ Wed, 11 Aug 2021 00:58:03 -0700 (PDT)
 From: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Olof Johansson <olof@lixom.net>
+To: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>,
+ ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>, Arnd Bergmann <arnd@arndb.de>,
+ Arnd Bergmann <arnd@kernel.org>,
+ Cristian Marussi <cristian.marussi@arm.com>,
+ Olof Johansson <olof@lixom.net>
 Subject: [GIT PULL] firmware: arm_scmi: Updates for v5.15
 Date: Wed, 11 Aug 2021 08:57:43 +0100
-Message-Id: <20210811075743.707961-1-sudeep.holla@arm.com>
+Message-ID: <20210811075743.707961-1-sudeep.holla@arm.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210811_005808_583218_36FB4ABC 
+X-CRM114-Status: GOOD (  13.30  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210811075743.eUhQtPwMkSXUT-qtrWNWU60adQwK4KAKPkUsBrhUGYg@z>
 
 Hi ARM SoC Team,
 
@@ -129,3 +165,8 @@ kernel test robot (1):
  create mode 100644 drivers/firmware/arm_scmi/msg.c
  create mode 100644 drivers/firmware/arm_scmi/virtio.c
  create mode 100644 include/uapi/linux/virtio_scmi.h
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
