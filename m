@@ -6,57 +6,49 @@ X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87386C4338F
-	for <soc@archiver.kernel.org>; Thu, 12 Aug 2021 20:44:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34794C432BE
+	for <soc@archiver.kernel.org>; Thu, 12 Aug 2021 20:44:14 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 67B71610CF; Thu, 12 Aug 2021 20:44:12 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D82A9610A3;
-	Thu, 12 Aug 2021 20:44:10 +0000 (UTC)
+	id 1461E610FC; Thu, 12 Aug 2021 20:44:14 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B26AD610EA;
+	Thu, 12 Aug 2021 20:44:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1628801052;
-	bh=jUYf9jPImCM6i193AyZ0olJFMMldGX6bYRnC5GXijE4=;
+	s=k20201202; t=1628801054;
+	bh=dGbtEwIfkRj3qTxeh3QQZJYMta1Yvfy9I6/Wj7nzINQ=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Olv3KCfQJF6o6qXswTZqFCEgMkSFluGEKmm6+lpUDpAWnWUKg0yM+qxmoywUKNOrq
-	 0T+gY+8wTBfUoZ5GQ8NzKZbWPdxaovwaKLl5DmK2hQqHE3mWK8YMu2L4FEIIpGgiI7
-	 rNp9yKzRZSrci/dQ7qkQgajH8EDsD/ln73uRQ6MtRQblE4KsxfHxjbzwJVaXbxlsGm
-	 p7MldWFeo1RauICxm25eoGIfxBP2X8PfXpnBRwCnnB5iCbCNokYf+Et5kdQalRhDvc
-	 hXMSS3ehChkzSzQW4YuHKXwNmmuYSpn3onl/K/QAG9FS9eIEc6QBjuQ0ZdWTZfU9hH
-	 JIHoebjEMfBcw==
+	b=qRCUsYWOy2LO+OYWrdAUWUxhU5wxjbU9R6N6qomWB3u9W8RHmczEHllcc4K2Zlbyl
+	 99/WBlqvSQti0a+pZNYHv12bmEofcsNm5utdkir5I0fzcTXWiviZASjRX0gFry3sUK
+	 MJjx5ndDHlG5ieS5hXwnUM6t5a49FbA3Tqu2vTg7n5dj4fMx++YB1PMXC7XTuR0pke
+	 3qvtIODyg+DbpCEYQ9F6dIVL+aJ9G8sozgFQmHRC5dfR7NYLjf325qTUoPM1d74Zo1
+	 hgkUaEJjH1t29RL+XpghD+TqzIQXHGd6vrmu1Ot599vbNQQtTV838X8g8jCNODdxuH
+	 9VdJ3PlpnC8Ng==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
+To: soc@kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
 	arm@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [GIT PULL] memory: changes for v5.14
-Date: Thu, 12 Aug 2021 22:44:00 +0200
-Message-Id: <162880092628.1372486.5099431301905888708.b4-ty@arndb.de>
+	linux-arm-kernel@lists.infradead.org,
+	Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH] bus: ixp4xx: return on error in ixp4xx_exp_probe()
+Date: Thu, 12 Aug 2021 22:44:01 +0200
+Message-Id: <162880092600.1372486.9999578242110413401.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210809152639.110576-1-krzysztof.kozlowski@canonical.com>
-References: <20210809152639.110576-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210807230016.3607666-1-linus.walleij@linaro.org>
+References: <20210807230016.3607666-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 9 Aug 2021 17:26:39 +0200, Krzysztof Kozlowski wrote:
-> I organized changes on separate topic branches just in case I need to share
-> them with SoC maintainers.  They are all merged back to main branch.
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
-> The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
-> 
-> [...]
+On Sun, 8 Aug 2021 01:00:16 +0200, Linus Walleij wrote:
+> This code was intended to return an error code if regmap_read() fails
+> but the return statement was missing.
 
-Merged into arm/drivers, thanks!
+Applied to arm/drivers, thanks!
 
-merge commit: 0dc76ecbbf15c43197f204c6631c6ef12f00d6ba
+[1/1] bus: ixp4xx: return on error in ixp4xx_exp_probe()
+      commit: d2c334f49c8305ff8ce31ea33183977a2935ba55
 
        Arnd
