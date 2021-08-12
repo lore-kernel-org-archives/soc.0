@@ -2,18 +2,19 @@ Return-Path: <SRS0=ZYY7=ND=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34883C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 12 Aug 2021 21:10:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5240C432BE
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 12 Aug 2021 21:11:00 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E8B5E60ED5
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 12 Aug 2021 21:10:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E8B5E60ED5
+	by mail.kernel.org (Postfix) with ESMTPS id 6C70960F57
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 12 Aug 2021 21:11:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6C70960F57
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,45 +23,48 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=8TEd1Jpx2UcqIcLduuSLFQ/rv4yxHTKDV5K1d7U8g3w=; b=Kv9npl735WGTBa
-	fbuTr/dP6WWw70xRdGF7xTx2b63MkA8Tq3fhGhrisCxdMcFcPtG90RL5VVqTgRiF2RDue+k1bSVxc
-	TT0EQXUNPVMtnq0UJrLdruce5JPesz4hft1PcGbTwfbdbTH+P4kmvlqO+3hQe0Za6Mdibk1q5dV5g
-	tpBNY/OyxT2ejedbdm3sqbCWHeAr1FtZzEhmy7WzfosmA9ftRVldvHshTgZlKLBTH5g7RTElychse
-	H0p4MRdaJDwmv2lQtxgRN5IL4LTTgAhqq0PlSwDXZmUw5xZAppeLKfLeSTMOyvMTBsMUfqdy+rs1f
-	x/z9+pDJygTwSNMvT03w==;
+	List-Owner; bh=o6/qZvCMul54Y8vZ+MVc6nIshDQyR+rpvl/iGxO6O2U=; b=bPuf9hiB6fNxbQ
+	rPzjojUbjeRCcNTxcqEBzeQFDFDJHM0RC56h3NK6NgX0EcVBXLlUwMuZuvozPV7Jz5ZXvb1v/HO6Q
+	/nxf+s1ia2L8u08Y3fSNMJekxkZI4aN5lT7ldmG/w29wgD/iIOC3L/cZcyiqdtfMIV4332GXoDtBk
+	A6jeaiazp39ru5NQKpetv3U2z7NSVtWEMR7kWe3kfuAs/pRT12FBYDB00RLuH5oK2uVemYfnaxY/L
+	7/vGysIRTWsqahM3eEMTmrqNu0z8y1FyRQu0qK7A46D4un30ON1C9b8e6BlBb2yyw8vtdVYdhuQcm
+	4Uc9dVJf792hI/cMKwFQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mEHvj-00BK9h-N5; Thu, 12 Aug 2021 21:08:00 +0000
+	id 1mEHwH-00BKSP-EI; Thu, 12 Aug 2021 21:08:33 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mEHtt-00BJWJ-2M; Thu, 12 Aug 2021 21:06:06 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7839F6103A;
- Thu, 12 Aug 2021 21:06:03 +0000 (UTC)
+ id 1mEHtv-00BJWu-7G
+ for linux-arm-kernel@lists.infradead.org; Thu, 12 Aug 2021 21:06:08 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2986560ED5;
+ Thu, 12 Aug 2021 21:06:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1628802364;
- bh=OGDIeApfqC8Joka7WYJErUv0ZmCZiuB0zUmzx9K00gg=;
+ s=k20201202; t=1628802366;
+ bh=+2yZQfXZdLsI6A6VkJSHVsxcag02zhr2MFnb2//BM0s=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=hOQ/MbxM+8ZUCvwedCiyMU+2eguLbFwo6djyOyWQeUAptNmUihcmFFG8V9TgE7lhd
- YIItxQkESyOx6bK1QsLGqyczM++PsTJVEPPqlKE5Nf7AFq0L0OBH1YHdA/Ir6bQ+sk
- Q1XJ6zutnWLi4f+i8E6ZfpJgxpBMRsKTcrCQndy/WTevGJzsJA2zltRTWH2qO4LfNi
- tu2B2yKY3qezOWND/s4jAqAqxfrQuDskSM0rRn9B5nnvyNLJcm8GVAt3TxPdWli6aB
- qfvwCpSqGfzoic1bdn7BSFOn1wSLCQtrTGdG8p2oJnebKLhhvk3SJ6SRhSQV2Lpxkb
- 5ogoPjJaZ9n2g==
+ b=KXEAOlZLBwj2lVNZ7epZMzDu9J6hnUX8K0bYqO1VBOGwVFPGLDZsv/pI84677VAAj
+ j8bGzrsgUPuvsu6sEFdLBEJmBcsJzHlyg/lXG/MsK++spe4IQyqVIz0lkamK3olziW
+ eeuWfOj3faDHBqM9TNfrkp8VHfQhS3U4WSmZhN5vC4ScKszmxatkif580Y+a877VCX
+ tWPudrwv+OksSWPLd6KQQPzB+ysWZv6w+pb7PvVhT478FlFiuIqoXXYAzLE9OdSBj4
+ gH6spko7VfDyYsSFkzqawtNv/6gvHPcG6tTjO4tP+LD1SuvUmVN1Y6ga1WSIx0zSrS
+ G66YJYUvtkMZw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Neil Armstrong <narmstrong@baylibre.com>, arm@kernel.org, soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-amlogic@lists.infradead.org,
+To: Nishanth Menon <nm@ti.com>, Olof Johansson <olof@lixom.net>,
+ arm@kernel.org, soc@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
  linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] arm: dts: amlogic updates for v5.15
-Date: Thu, 12 Aug 2021 23:05:42 +0200
-Message-ID: <162880206165.1376011.6655305408575524550.b4-ty@arndb.de>
+Subject: Re: arm64: dts: TI K3 updates for v5.15
+Date: Thu, 12 Aug 2021 23:05:43 +0200
+Message-ID: <162880206147.1376011.10431613497274194194.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <87519792-c9e7-76a6-5db5-0e955286b564@baylibre.com>
-References: <87519792-c9e7-76a6-5db5-0e955286b564@baylibre.com>
+In-Reply-To: <20210809130631.pfvntcichsyeekbo@festive>
+References: <20210809130631.pfvntcichsyeekbo@festive>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210812_140605_172386_7C0F35A3 
-X-CRM114-Status: UNSURE (   6.75  )
+X-CRM114-CacheID: sfid-20210812_140607_323216_9FE470E9 
+X-CRM114-Status: UNSURE (   8.07  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -77,25 +81,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210812210542.-DnT1LyTVs8r1RadD76cm_4fjk-uf6yiPHXIDEMnqBg@z>
+Message-ID: <20210812210543.mvoOccsczK4pvogaDePy2ISZmHZAzi9Vr-AIEVQUjdc@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 10 Aug 2021 09:45:21 +0200, Neil Armstrong wrote:
-> Here's Amlogic ARM DT changes for v5.15:
-> - meson8: use a default higher default GPU clock to solve probe failure
-> - meson: add AIU audio controller and codec for ec100
-> - meson8b: fix pwm regulator supply property name
-> 
-> Neil
+On Mon, 9 Aug 2021 08:06:31 -0500, Nishanth Menon wrote:
+> Here is the DT updates for 5.15. Just minor additions this time around.
 > 
 > The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+> 
+>   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: c2632c3afead6e4c6208f90348d142ce1bb372a2
+merge commit: 5f49f22db4a82285fbd76b34026051712fdc28ac
 
        Arnd
 
