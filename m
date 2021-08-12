@@ -2,18 +2,19 @@ Return-Path: <SRS0=ZYY7=ND=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BD8CC4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 12 Aug 2021 20:50:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B528C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 12 Aug 2021 20:52:23 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C344960560
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 12 Aug 2021 20:50:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C344960560
+	by mail.kernel.org (Postfix) with ESMTPS id 3074360ED5
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 12 Aug 2021 20:52:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3074360ED5
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,51 +23,50 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=rSsXT5vroOriiVl4GSfvfh+4d9wAXnhPicx++qsWt94=; b=mfzdniCHi2gl4r
-	J578VIDXWPiYjotCXiin0Mk30PBE+Tn6bGwoulAI8mW3G2+1NMDVBSmyFCgjS7rsNXmoVpSZAGFY8
-	Rkrqm0uBB7HpzXzdl3IrM68bPYpuvYauMQdXOZqBn4pSttWZY9nt89IL9E6G+ho4K78RMdfFY6f14
-	kWXa0njWJKL/HIckbKz59l/f3DXb6DNj//b9AFu2fs5t5VsC4oDO/RDqxjtIvQd4V2hTQKKJ7Yk18
-	frvbujnDSTIhpgvDEalHsFjGgCUjsf98b1bBPBGB7V6HPErU/PbUSVESiZwsu2F5dFoUceNJPjsHZ
-	ZOESFBcq+FTEDEXCv2ig==;
+	List-Owner; bh=HxJtg5iIqMVFWlPR3Infqgr5EoSlal2N7MEoAQIDZgY=; b=KlUzNt9IWZhXhb
+	KLxvkqfeKdm+5PDbdb8ynWU/S6kp49NtzdwcfENhF8Jjo26BBQkjoE+14GCaRKu4xxjhgjPz3ROE3
+	YDUdo5+RNaOsys7pQFpHHjMmiy64xVsZptaVTqdUIj7vRSo5ldJp0wW4VvIXYMCp9Jem5rWoSQN7W
+	gfmEDpiQ9Fx0MfD4U0aNGVN5pc+KJ9eW70tg23hYIu3wXURVisEg2/jtXneEZ4lA+caNdYWtYTHj/
+	4RXPSS+CP8wotDSzzKpyo4uY777lRmywlyiUsEMBVKnc+a+mioTXcvHkxreZ9SatthWhtnsAr2bEP
+	FDRkinbYp7O+aHz1yciQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mEHcd-00BENm-R2; Thu, 12 Aug 2021 20:48:17 +0000
+	id 1mEHdo-00BEsU-EE; Thu, 12 Aug 2021 20:49:29 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mEHYm-00BCbs-TJ; Thu, 12 Aug 2021 20:44:18 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 617C0610A3;
- Thu, 12 Aug 2021 20:44:14 +0000 (UTC)
+ id 1mEHYo-00BCcs-Px
+ for linux-arm-kernel@lists.infradead.org; Thu, 12 Aug 2021 20:44:20 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 01923610EA;
+ Thu, 12 Aug 2021 20:44:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1628801056;
- bh=3oBMhQTsZ0JGmoRoNan1Fu4e/2ROq4vLcJGLs+VXjQs=;
+ s=k20201202; t=1628801058;
+ bh=9WwxREJRR4U0+2CT6CqVEIrRLcjmcYZaGwYDsR3s8pY=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=kveoZYmEcRWdKMSslWCl833egZjWoeUiv2XV5POnBpH2goTk1uB9vb61JgHmfrNg1
- NFHvVfqG1/j2kDKYVXp3nZeCoTgbK9jktfgWuJ6dO54FXsTUJ7POm/3j1i285JDfKA
- tv9VURxE+hW/wYypxhl6idkgauHD0Dr/bEO7TpN5BksHVZuFGeGHzwGITW6HN426ie
- EzywVW/4HiI40dI42eEwBvwEAapz9EL8qr54rs4eq1xpRf9Rob2R8DpHJ3EkqWocWb
- PdKzuGkTlyb29C+Dv9VYHxTOpB5pszRerZ7SAgUNjIie66hRHqjGglgY+luT7fg0IX
- IugecXToOP+wg==
+ b=aIlCSO4z2Poa0fj9tw+WeDbIPQCoAzP1kHWVj9dEXBvl9ugo3pLxtHeA0NeoKKxnZ
+ g8Y/qtDXQ85YIeKft3TUsdLsSNJirztqQc6mOAl373pA0gBxlGfO61XSZaqmtqNfWm
+ 1YH3+RR2KY4X9D+tJn0/zDjPldrCT0X3yN5Nv7nJgoFdU9BMNKhJja3iWdvwbGkQ3u
+ K+5NoRdBJh9lxnpMkB3Xhe8/hcyvEvzgcx3UPRG+kR0OMmXx8FYreoGEBzBQ6T/HTZ
+ KvqlltJ3It7Wno46eI4LnDPv5gknrUlarOuwS3jSkazKjcs4Bgq26+ZkRalJWKm8Bw
+ 3YoDeTJBuWwBA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- "moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
- Rob Herring <robh+dt@kernel.org>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
- Stephen Boyd <sboyd@kernel.org>, Fabien Parent <fparent@baylibre.com>,
- Enric Balletbo i Serra <enric.balletbo@collabora.com>,
- CK HU <ck.hu@mediatek.com>, Bilal Wasim <bilalwasim676@gmail.com>
-Subject: Re: [GIT PULL] drivers: soc: mediatek: updates for v5.15
-Date: Thu, 12 Aug 2021 22:44:02 +0200
-Message-ID: <162880092618.1372486.1035988848948197417.b4-ty@arndb.de>
+To: "soc@kernel.org" <soc@kernel.org>,
+ Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+ "olof@lixom.net" <olof@lixom.net>
+Cc: Arnd Bergmann <arnd@arndb.de>, "arm@kernel.org" <arm@kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [GIT PULL] soc: Keystone driver update for v5.15
+Date: Thu, 12 Aug 2021 22:44:03 +0200
+Message-ID: <162880092637.1372486.15700318335948204747.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <49fc7bef-20db-b98c-9437-dd9e4d00e870@gmail.com>
-References: <49fc7bef-20db-b98c-9437-dd9e4d00e870@gmail.com>
+In-Reply-To: <0A637A41-2353-4900-962C-DBE50BBDE75A@oracle.com>
+References: <0A637A41-2353-4900-962C-DBE50BBDE75A@oracle.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210812_134417_009083_E8015598 
-X-CRM114-Status: GOOD (  12.66  )
+X-CRM114-CacheID: sfid-20210812_134418_943984_62410E93 
+X-CRM114-Status: UNSURE (   7.46  )
+X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -82,27 +82,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210812204402.v-SoShFtBKDa6ezSTVL_wYzS1wQ_jceVCoi6vrD4IsI@z>
+Message-ID: <20210812204403.iwYgH83aku7OXJrJ8bkWeq3BG5cCDwZDWkuM26HY-Us@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 9 Aug 2021 14:19:57 +0200, Matthias Brugger wrote:
-> Hi Arnd,
+On Tue, 10 Aug 2021 23:38:07 +0000, Santosh Shilimkar wrote:
+> The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 > 
-> Please have a look for the updates of the SoC drivers for Mediatek. If you
-> wonder why there is no binding patch for the MT8365 mmsys: The binding was
-> converted to YAML. This got taken by Rob. To minimize merge conflicts I left it
-> to him to take other mmsys binding patches. Unfortunately there is one mmsys
-> binding patch taken by Stephen through the clock tree. So there will be a
-> trivial merge conflict (although not in your tree). A bit of a mess this time,
-> I'll try to make sure that the bindings for drivers/soc will go through my tree
-> in the future (which will make my life easier as well...).
+>   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+> 
+> are available in the git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/ssantosh/linux-keystone.git tags/drivers_soc_for_5.15
 > 
 > [...]
 
 Merged into arm/drivers, thanks!
 
-merge commit: a8c371f0cfe7224e4bc3f3f0495e54a035107653
+merge commit: 866e1691ed5beee933c0f8c9268963c33377ede6
 
        Arnd
 
