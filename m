@@ -1,4 +1,4 @@
-Return-Path: <SRS0=aNRX=NE=lists.infradead.org=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=C417=NE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -8,14 +8,14 @@ X-Spam-Status: No, score=-20.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 708D1C4338F
-	for <linux-amlogic@archiver.kernel.org>; Fri, 13 Aug 2021 14:13:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F37BC4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 14:15:04 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E7E7060FBF
-	for <linux-amlogic@archiver.kernel.org>; Fri, 13 Aug 2021 14:13:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E7E7060FBF
+	by mail.kernel.org (Postfix) with ESMTPS id 1C51F60FC4
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 14:15:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C51F60FC4
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -24,21 +24,22 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Cc:To:
 	Subject:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=csC+Gzc5OzYdI5fCE5JibqvD0G2G32vttCoPPJg8Akg=; b=g/3oL+Zezx5pxT
-	/b/iE9WSx9ixZiFqTSCyO0j/P7ADxOiKORiAQpwMj6wCIXbaAaaoCNhbxejfKgd2FMZFTCa5/Ynaz
-	04h7ZtkcwfLu4ELKXpr9RIErlyxtfPjsca6zaNfna7XCqizJByjwHX4n2378OkssP/RfxjfJ1SbKT
-	5slcQtFe85+kFlTuOlyrSfvUhdJ4j8g3l2quHl3+pYnCrQR7rxlxmUB93nbFCjuoWAIn+wTBjFGqh
-	BgQ5qNAzVmse72D7nO71zTRohUcPthC0+XlB6oR1iMW0mPmqAdjvK74YBJasmQfbXN5Cv0nDhpfXk
-	tQB+k0zUyLsrzdZywqrg==;
+	List-Owner; bh=O+yWI0Za6eu48Bd51V2NxvUDbBMYAudQvM/n5/Lo+Ug=; b=y0BMl/3/WklZ26
+	uG4bK8AU/8LtTkhPJJdsXvVZ+QwTFvoR7WIJd66cK2qgs4BBgqH3FjjRE9putav0BZQg+QF6FJ99a
+	F21rQ2Cwh+l8S8YHCGzzs/1R+AuoGidHqoBfiXzkzNvQSoKZnyhc1sJrk5DzZ22rU57QtJi+Ns1dg
+	PkLey9YYKyvXd1j3SWTRbPJRvDjJSjc/0XeHXVrBNEDSseVJrZ1A4KnDurnqVLh3Lu0jWdfHnQmHO
+	6xSA8ewakioVe/Ob4xVmyX5UwJo22gIV6B77D94rt4jwMYAiI7Qw+1Vzpw4A5Fwaw1ZuLW2lrLjiw
+	uM4ewA3RjTXwXe7Xdorg==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mEXvn-00ClAb-E3; Fri, 13 Aug 2021 14:13:07 +0000
-Received: from mail-wm1-x32f.google.com ([2a00:1450:4864:20::32f])
+	id 1mEXvp-00ClAi-3B; Fri, 13 Aug 2021 14:13:09 +0000
+Received: from mail-wm1-x335.google.com ([2a00:1450:4864:20::335])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mEXvk-00Cl9t-64
- for linux-amlogic@lists.infradead.org; Fri, 13 Aug 2021 14:13:05 +0000
-Received: by mail-wm1-x32f.google.com with SMTP id k4so6979713wms.3
- for <linux-amlogic@lists.infradead.org>; Fri, 13 Aug 2021 07:13:02 -0700 (PDT)
+ id 1mEXvj-00Cl9s-Vw
+ for linux-arm-kernel@lists.infradead.org; Fri, 13 Aug 2021 14:13:05 +0000
+Received: by mail-wm1-x335.google.com with SMTP id 6so6984727wme.5
+ for <linux-arm-kernel@lists.infradead.org>;
+ Fri, 13 Aug 2021 07:13:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=baylibre-com.20150623.gappssmtp.com; s=20150623;
  h=from:subject:to:cc:organization:message-id:date:user-agent
@@ -55,14 +56,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=x-gm-message-state:from:subject:to:cc:organization:message-id:date
  :user-agent:mime-version:content-language:content-transfer-encoding;
  bh=jd2PnuxQ53Mi4klFMZrE2PRRg/Ii7zJi7JDhmX3RAbU=;
- b=pNGHI0URpOHNWGUctgaA3xxlHDQcBNPA1emJEVQR2BqSsBRWZxg5ZPnAq13HXDJvla
- Nehhi5e5QAKCISczUZcqUjkxJAsN5Btsm8gBFnSumMnqXJueronU/9Lk0RaOCPCf98jU
- IiDt1/XgmIFspghksa/8NQBS5SGfAaPlsQ5/FNnJtzhRQSvmyxLuoeg2FE1tkPbp2bfZ
- jjPv8o5eDjwjEoU9t5LNio2QxzEnKlfUotRW6nWpZVQ09DD0qGR5WgrVStbytTnFPay6
- aKyO7pvghgAkBN1+yrhhDI62o1k/HAmu7oZ5//tKEA36uA3sXj9ZkWJ55L9Y2Mdvlwlv
- SFUg==
-X-Gm-Message-State: AOAM533s7WIvWaKAiSSW94vduss4iHPQJm/Oo5LJFvxS7HO9EHNQq+qh
- ngIh25D1CM6GmFG2P9xdRaTMR8DGBUViAh/P
+ b=tByFxh12OHQTGF4D7wiqrVtgufqskwZponuwZJ/AqqQ8g82kinUa+ZF92gbLTO8Non
+ d74Useo9BjGX//2YKpbi01mAUnzJ4q9XimT7J9KP+T5OU4RJqpMWs4TOje8qo65xEXD8
+ LRFxa+ad8hO85QekZp7mWSVAjCI9U6bLJKSVDtsNeurCypiAMfX4XzbBTAfJqTPlpR9+
+ 1sZafW8nm07vm7JC4g5FqTQPoytx2CFTmEzsL7LqQSGkZC3IYB7tRYRCARwehw3ZU5Oj
+ LgWqRYpG7LedVoRhzG5RBQyBt8/YFsFEqCoSXLG/e8uIHEbvV4gFHe5WcW02hF71rjwI
+ i+5w==
+X-Gm-Message-State: AOAM5300RcXor71ut9Yx1oJVwg0tkwJIRflOW6z9Skxn0RN+9rzC2AjZ
+ sLjgeMVUcEFkiDdvtAGdOeBo5tI2/IYi11yj
 X-Google-Smtp-Source: ABdhPJyW3rK8Kj1V7N9Xm0sorD6ZAt5rlYeqbz7zXybHaZJXijOtk+DEvUc1XI9MFzAs3pMz+Kv1rQ==
 X-Received: by 2002:a1c:26c5:: with SMTP id m188mr2956951wmm.19.1628863980959; 
  Fri, 13 Aug 2021 07:13:00 -0700 (PDT)
@@ -84,25 +85,24 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
 MIME-Version: 1.0
 Content-Language: en-US
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210813_071304_259444_83BB7737 
-X-CRM114-Status: UNSURE (   9.98  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-amlogic@lists.infradead.org
+X-CRM114-CacheID: sfid-20210813_071304_157188_54A731E7 
+X-CRM114-Status: GOOD (  11.60  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
-List-Id: <linux-amlogic.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-amlogic>, 
- <mailto:linux-amlogic-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-amlogic/>
-List-Post: <mailto:linux-amlogic@lists.infradead.org>
-List-Help: <mailto:linux-amlogic-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-amlogic>,
- <mailto:linux-amlogic-request@lists.infradead.org?subject=subscribe>
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Sender: "linux-amlogic" <linux-amlogic-bounces@lists.infradead.org>
-Errors-To: linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210813141259.kaFnHkX6hQhvhlnvPAoDk4FzZxGmlT0hs4xHVE4U5Eg@z>
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210813141259.0yvZqnqPyO03YG06MXfruw4miacGj1-iS0Uj-WxUtG0@z>
 
 Hi,
 
@@ -138,6 +138,6 @@ Christian Hewitt (2):
  2 files changed, 122 insertions(+)
 
 _______________________________________________
-linux-amlogic mailing list
-linux-amlogic@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-amlogic
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
