@@ -2,51 +2,52 @@ Return-Path: <SRS0=C417=NE=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59971C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 10:25:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8DB0C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 10:25:28 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2099C6109D
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 10:25:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2099C6109D
+	by mail.kernel.org (Postfix) with ESMTPS id B77EC6109D
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 10:25:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B77EC6109D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
 	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=EcGKPt/Mse5QSD70Y0UT9Un9oIAkCN9twNG3t6jDH2o=; b=VFDOijXMUgpXRt
-	Qex0eatMeX+1LyrnjWdC/6Pp6FNqeG/enakgT9eGGjj9N/66XD7+R6riP1cjO6UKvcgCqy55QzrPA
-	yMPUYpfRqo7wglScZyttsraAg+PJ7DeqooKWngX28Qt+sg9dtPJD/Z6fEcfuJDXa5/NlWpaNAoBkf
-	YtTeh9Nr518gfYbxEO2Jt85AuPThIfAwll2sn3MCIdaTP4dJz7xPAnVDfPSHoJlFPvCyzHv1eogix
-	jAo/XO/v7k9cBSEiu0lf3aHEGf1VFS6E5SFuxJZ9S5Se+0UIh4cBLqfvwnd6rJTpwQPqlsw1As/j9
-	sPlCBSHTBeIjt463B6Tg==;
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=zejgSbBnyzIoAJPLbvg63yEpjP9af+wNyoHCfGw64Mw=; b=IdloSnDVSoW6Cr
+	S9Qoo7w6LmAUIXvAYeAa1V7hexIwyTi7bqKtel2XoGqTb7HLIO2NZvJU69TIavocaynCBuxsBoNmk
+	GsKGiYNJslO/MhuwMSDC47bkgisOkA7zRAndYNjjVNhu/9I7k/jePY7wVrU5P8PaZbEJ2jUZzP2C8
+	r2pKA1advdwKVPXtBwvfyvLovVbY70Qq6IEnLb3rj33QcLSGSXq2Pm9LYpzSq1WC1Y1+PDjlGdVJt
+	+EcX9Py+cULkL8zHpFlCxRT2vVIj1P3YvxL0e+bUcZKfuPyEctrSYPD0PbzqgT2Xh93s8j9He5HA2
+	ZdZ+3YBi9itGXVpbLF7Q==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mEULO-00CQwh-1F; Fri, 13 Aug 2021 10:23:18 +0000
-Received: from albert.telenet-ops.be ([2a02:1800:110:4::f00:1a])
+	id 1mEULC-00CQvj-Ff; Fri, 13 Aug 2021 10:23:06 +0000
+Received: from michel.telenet-ops.be ([2a02:1800:110:4::f00:18])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mEUKz-00CQtY-14
- for linux-arm-kernel@lists.infradead.org; Fri, 13 Aug 2021 10:22:56 +0000
+ id 1mEUKz-00CQtg-1H
+ for linux-arm-kernel@lists.infradead.org; Fri, 13 Aug 2021 10:22:55 +0000
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:b151:f011:b544:c545])
- by albert.telenet-ops.be with bizsmtp
- id gyNo2500B1MlFFN06yNo76; Fri, 13 Aug 2021 12:22:48 +0200
+ by michel.telenet-ops.be with bizsmtp
+ id gyNp2500R1MlFFN06yNpLG; Fri, 13 Aug 2021 12:22:49 +0200
 Received: from rox.of.borg ([192.168.97.57])
  by ramsan.of.borg with esmtps (TLS1.3) tls
  TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.93)
  (envelope-from <geert@linux-m68k.org>)
- id 1mEUKu-002Wod-0H; Fri, 13 Aug 2021 12:22:48 +0200
+ id 1mEUKv-002Woo-GM; Fri, 13 Aug 2021 12:22:49 +0200
 Received: from geert by rox.of.borg with local (Exim 4.93)
  (envelope-from <geert@linux-m68k.org>)
- id 1mEUKt-007SUX-G4; Fri, 13 Aug 2021 12:22:47 +0200
+ id 1mEUKu-007SUl-Vu; Fri, 13 Aug 2021 12:22:49 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>,
@@ -54,14 +55,17 @@ To: arm-soc <arm@kernel.org>,
 Cc: Magnus Damm <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org,
  linux-renesas-soc@vger.kernel.org,
  Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 0/2] Renesas SoC updates for v5.15 (take two)
-Date: Fri, 13 Aug 2021 12:22:34 +0200
-Message-ID: <cover.1628849621.git.geert+renesas@glider.be>
+Subject: [GIT PULL 1/2] Renesas ARM DT updates for v5.15 (take two)
+Date: Fri, 13 Aug 2021 12:22:35 +0200
+Message-ID: <cover.1628849623.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1628849621.git.geert+renesas@glider.be>
+References: <cover.1628849621.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210813_032253_284978_2A0831AC 
-X-CRM114-Status: GOOD (  14.29  )
+X-CRM114-CacheID: sfid-20210813_032253_286655_304C9D45 
+X-CRM114-Status: UNSURE (   8.80  )
+X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -77,44 +81,47 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210813102234.-zoua9Jqi4NFIwin8AAH4PjS6WCiU4V-mRBH7L9BFA8@z>
+Message-ID: <20210813102235.qWErulSAXgm0LFXZ6pSa40F3ShYkWhF4fDq4HjIdAzU@z>
 
-	Hi soc folks,
+The following changes since commit 651f8cffade8615bb4fce1ecb3a929892c5e60d7:
 
-This is my second pull request for the inclusion of Renesas SoC updates
-for v5.15.
+  arm64: dts: renesas: r8a77961: Add iommus to ipmmu_ds[01] related nodes (2021-07-30 15:07:25 +0200)
 
-It consists of two parts:
+are available in the Git repository at:
 
-  [GIT PULL 1/2] Renesas ARM DT updates for v5.15 (take two)
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.15-tag2
 
-    - Pin control, ADC, and CANFD support for the RZ/G2L SoC,
-    - Add interrupt-names properties to the Renesas RZ/A and RZ/G2L I2C
-      Bus Interface.
+for you to fetch changes up to 13bf92e6dec0e2be1ef0c7dd483f2d8b34eaa905:
 
-  [GIT PULL 2/2] Renesas driver updates for v5.15 (take two)
+  dt-bindings: i2c: renesas,riic: Make interrupt-names required (2021-08-12 12:43:41 +0200)
 
-    - Prefer memcpy() over strcpy().
+----------------------------------------------------------------
+Renesas ARM DT updates for v5.15 (take two)
 
-Note that the first part includes another update (append-only) to the
-Renesas RZ/G2L DT Binding Definitions, which are shared by driver and DT
-source files, and thus included in multiple pull requests:
-  - "[GIT PULL] clk: renesas: Updates for v5.15" (for clk),
-  - "[GIT PULL 1/2] Renesas ARM DT updates for v5.15 (take two)" (for
-    soc).
+  - Pin control, ADC, and CANFD support for the RZ/G2L SoC,
+  - Add interrupt-names properties to the Renesas RZ/A and RZ/G2L I2C
+    Bus Interface.
 
-Thanks for pulling!
+----------------------------------------------------------------
+Geert Uytterhoeven (5):
+      Merge tag 'renesas-r9a07g044-dt-binding-defs-tag2' into HEAD
+      dt-bindings: i2c: renesas,riic: Add interrupt-names
+      ARM: dts: rza: Add I2C interrupt-names
+      arm64: dts: renesas: r9a07g044: Add I2C interrupt-names
+      dt-bindings: i2c: renesas,riic: Make interrupt-names required
 
-Gr{oetje,eeting}s,
+Lad Prabhakar (4):
+      dt-bindings: clock: r9a07g044-cpg: Add entry for P0_DIV2 core clock
+      arm64: dts: renesas: r9a07g044: Add pinctrl node
+      arm64: dts: renesas: r9a07g044: Add ADC node
+      arm64: dts: renesas: r9a07g044: Add CANFD node
 
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+ .../devicetree/bindings/i2c/renesas,riic.yaml      |  30 ++++--
+ arch/arm/boot/dts/r7s72100.dtsi                    |   8 ++
+ arch/arm/boot/dts/r7s9210.dtsi                     |   8 ++
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi         | 104 +++++++++++++++++++++
+ include/dt-bindings/clock/r9a07g044-cpg.h          |   1 +
+ 5 files changed, 143 insertions(+), 8 deletions(-)
 
 _______________________________________________
 linux-arm-kernel mailing list
