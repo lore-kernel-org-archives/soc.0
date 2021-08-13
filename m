@@ -9,68 +9,68 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BCA3C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 16:24:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74A29C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 16:24:41 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 587DB60462
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 16:24:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 587DB60462
+	by mail.kernel.org (Postfix) with ESMTPS id 3B8BD60462
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 16:24:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3B8BD60462
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
 	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=XaIDtyb+sNbLdRJ4Ng6ZaIRTqrAKgU7TDsecVM5Mjz8=; b=tx3FdxsTwik52w
-	TKGiA8w/CJ77BzCywIrA/ifA/9CeKOW00B8gcq70j7I3lZIZf2/zaQpQ3DTnf4F4b83bT0RPagnL2
-	TCI1JifWttW6GmaFjV4F9QaTpCiwzMvUQbPQrKJdaVFCAzRfcbTvdRaznO5eFKv8snyQbOeiKy2Sv
-	s2HrrIxIpta6djYS40ba/5aC+CDFHwGuifG8fNy4xWBF44pVPyN4+uA9n82/tmCVggdTS4v0q3/xm
-	H6pfbeBTyewwgPZZj81j8F8nycev2Pshplr7xAM9xKGmCXSYz95eybqKtVY+1QYBnaDtcmE1WZKn2
-	yYXu/mS7dQveVFFeRCiQ==;
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=vo8LOvMHgL8UBrr01YJfp4y2xkSv9nQuG7+6t7BxF1U=; b=cXwSd59ciEy60W
+	MvJktK/gH+dn4Bz3KEzkOv8k9HMkqfbQTQ5O+MH8Ar2yNM50y7GL3fNtX9c/SEQoOHLudvQbbEwT4
+	znRzgd1aNXEGhVhD/AOI595rXniJ3+2pkmWPD7vBCclog/0FEVL0+kEKYULJTWqPtLTYUoU9gdkbT
+	EBCmobxz6fcy22F68hzoy/kF9VA/deKra/1hRq1Lqx+mDmP6W7oRl59lz9a7F9EeMAxl9pf/Mmvgt
+	jWsY0A5FvmZx5JyjMNTBEY+OEIUCIZ70bTXC4CrxWBOUrhRo3jYvJUOUl1Vzmafuw0L2qm46Mtv5k
+	ps5JiLjE0tF3qkNOyJ4g==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mEZwZ-00D5BX-V4; Fri, 13 Aug 2021 16:22:04 +0000
-Received: from mail-wm1-x32d.google.com ([2a00:1450:4864:20::32d])
+	id 1mEZwk-00D5Dw-PV; Fri, 13 Aug 2021 16:22:14 +0000
+Received: from mail-wr1-x435.google.com ([2a00:1450:4864:20::435])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mEZwX-00D5Ai-15
- for linux-arm-kernel@lists.infradead.org; Fri, 13 Aug 2021 16:22:02 +0000
-Received: by mail-wm1-x32d.google.com with SMTP id g138so7220577wmg.4
+ id 1mEZwa-00D5B6-1u
+ for linux-arm-kernel@lists.infradead.org; Fri, 13 Aug 2021 16:22:05 +0000
+Received: by mail-wr1-x435.google.com with SMTP id r6so14060388wrt.4
  for <linux-arm-kernel@lists.infradead.org>;
- Fri, 13 Aug 2021 09:22:00 -0700 (PDT)
+ Fri, 13 Aug 2021 09:22:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=cvMCxY97+19NBnX/9se1xiPhL0qxZh2NAax8kyQ2dwo=;
- b=dUbSPwhvwSjHPMw92H/M1+w9GaV/wRo54rK6vfEWeNEM5Ajh2pCT2OG8xFbmxWMnCf
- 2tUTRHwNcIfsApSO9jYxTE7E6gXiLGRYFWjlnYu4WdQs5OMNKQSDw8WLWlBfVVEOb7BF
- /pEnKizufa1clufaDdxhNJBqX9MgLmMuCB5x2Ky7b+u0Omw427lGZmx9BIiSeZio+/ZB
- yVFHvlBl53sEUpf9YmEcMx1xqOiURmTtm6T6sorfxt6fy7DuhZg9x20uJYeJ/gCdDvYV
- 9gLZR2MFU9gr8zBntLqAuLjMewdKGHqjV18al/pUGEgRhn4wgYHuqKQkIN++hlLTXfaC
- mq5Q==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=vu2kk2+ZSy2NLtNn5/uqEi9lhMnezhSZVswShT8ce2g=;
+ b=Rld7Vvb9ZG4tAOM1XIDqx8C2J+r9MEFewhf8Y4n6MgbrByII00sJIlTmofYPxb6U6d
+ PhLtXfccBAK078PbfN6ysepaxLB+g9Nf7bUwLis6Xvc+cPsLLl/0RMmYWdScimLqtwW1
+ 72guLKcLb1/ofF/AB6Pq/FYH9WxfRRHyCuBAP1Dx/0Obm00F6toV1lO7b/oI4A+YiY3i
+ XA73VWPf4+6sPh6LFXWe5XkhYTpPxDWFgxP1oJ6tgbNaq9YbXdGswgRlJey7dICkwelF
+ RhYiksX/WD32mb0PEcjozFG5bJCk2FXjlB+BaFjM2Ejvjl8XUZpUZkjcM/oacB3sAs17
+ ZgWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=cvMCxY97+19NBnX/9se1xiPhL0qxZh2NAax8kyQ2dwo=;
- b=YM/gwWk6GvP46L6EriOys03ty3kpiyPMjXDRDv7ns4/2NhvT+B146n2ggn95XsI4fR
- 07HXyEdr9SDkKPtVpiRvgrPbwkLkaE3uWuP3XLX/JAEruQFYrjjevdzmon7IcueybciW
- KE3gLJwdgLZMaM0fTQ9Gka5awtqwm8wOv9C/tepjl5EiqiWZSalHqt9nUn5gCHapZxiD
- Vq51gf1TzodB7UQEvIrnjGBviPJ1FcN20wegQFY/O107FjNFE26dzbA/AkHmutzvVgT1
- w4/kXJmxcIzlorDjHtvNHytkiYbVXOi5uGUCJYnjwwEdQ04EMvs4+8vZqs+zAeDhnVwZ
- APcA==
-X-Gm-Message-State: AOAM530sUoPCAf3J0rkCr8c4ss671R1T2NhkmpR9ljnePmkOmiENqNgt
- C4dglmkAvBJB7jZd34UA5Zc=
-X-Google-Smtp-Source: ABdhPJwn/ymZnHrGWDZ5iKAtYE+5ZRurgB6fOyOH3CXkBKWzIk2EWBxsfrai5X2NWibh+8KUsGe2mw==
-X-Received: by 2002:a7b:cf0c:: with SMTP id l12mr3467826wmg.62.1628871719342; 
- Fri, 13 Aug 2021 09:21:59 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=vu2kk2+ZSy2NLtNn5/uqEi9lhMnezhSZVswShT8ce2g=;
+ b=fGzluOguCXXsI+aMDDFd9/8cYiHn/PVAZwS47KXUckbJ+zR3biCfRw9ikxRBwKPa8B
+ X/tjouAcWLnsjqYUk9IlmwieZn7zNkzdRrfRvjyjIreRnt4EI7/mlMgM/IeK1RBWJ4kx
+ u/QgGCHGk7fQJMdNnnSrDFxtNujICvcD3+zRZjs0auf2rvRMbCs1WP+IAiKHNAcdQO4L
+ GwDFEJkIZpIO4Q3GaMMwBwY0b5fBRC6KHZms3xONKhEh7X8D//6yO8+IYn+I1O7MYMEw
+ AdxtPPb5NJFCxp0FIZAv6/SOY9wDaoDkmrR6NcpjgovwZjuv8w+Yi/RTDroNtUwArPs7
+ BxEQ==
+X-Gm-Message-State: AOAM532V1zF+yZgCm4INuNfeHC07zw5gXy1liDvWKHjz7uFxauJ0zKZi
+ mjqtb4ixPmV+36hbYdjJ1t8=
+X-Google-Smtp-Source: ABdhPJy1OK90uercdsSGG5Ae3o0Qo/i4GTUPe8bm4EuAq0uwal93ERQZ/MFwHkPnl0udGsTYDoUqSg==
+X-Received: by 2002:adf:f141:: with SMTP id y1mr4096811wro.173.1628871721527; 
+ Fri, 13 Aug 2021 09:22:01 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
- by smtp.gmail.com with ESMTPSA id l38sm1769106wmp.15.2021.08.13.09.21.58
+ by smtp.gmail.com with ESMTPSA id t1sm1925515wma.25.2021.08.13.09.22.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Aug 2021 09:21:58 -0700 (PDT)
+ Fri, 13 Aug 2021 09:22:00 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -78,14 +78,16 @@ To: arm@kernel.org,
 Cc: Thierry Reding <thierry.reding@gmail.com>,
  Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/6] dt-bindings: Changes for v5.15-rc1
-Date: Fri, 13 Aug 2021 18:21:52 +0200
-Message-ID: <20210813162157.2820913-1-thierry.reding@gmail.com>
+Subject: [GIT PULL 2/6] firmware: tegra: Changes for v5.15-rc1
+Date: Fri, 13 Aug 2021 18:21:53 +0200
+Message-ID: <20210813162157.2820913-2-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210813162157.2820913-1-thierry.reding@gmail.com>
+References: <20210813162157.2820913-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210813_092201_137504_EF376EFF 
-X-CRM114-Status: UNSURE (   8.54  )
+X-CRM114-CacheID: sfid-20210813_092204_143591_B28A988A 
+X-CRM114-Status: UNSURE (   9.53  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -102,7 +104,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210813162152.Y6q5vK69A-segP19-vr17yobEDhJGxGAmr8LXRYHv-8@z>
+Message-ID: <20210813162153.w2cDfLfhO5A2yTDcSPJ6vDX49gsYKr9D6ZMgNyYirDw@z>
 
 Hi ARM SoC maintainers,
 
@@ -112,27 +114,26 @@ The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-dt-bindings
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-firmware
 
-for you to fetch changes up to 900a486ac73dfdf9b1629e7e4df6eacc92da7578:
+for you to fetch changes up to dd00d75007d27677158bf6e64000d2e266035294:
 
-  dt-bindings: tegra: Document NVIDIA Jetson TX2 NX developer kit (2021-08-12 15:06:28 +0200)
+  firmware: tegra: Stop using seq_get_buf() (2021-08-11 12:17:18 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-dt-bindings: Changes for v5.15-rc1
+firmware: tegra: Changes for v5.15-rc1
 
-This contains a single patch that adds the compatible string for the
-NVIDIA Jetson TX2 NX developer kit.
+This contains a single fix to stop a slight abuse of the seq_buf API.
 
 ----------------------------------------------------------------
-Thierry Reding (1):
-      dt-bindings: tegra: Document NVIDIA Jetson TX2 NX developer kit
+Christoph Hellwig (1):
+      firmware: tegra: Stop using seq_get_buf()
 
- Documentation/devicetree/bindings/arm/tegra.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/firmware/tegra/bpmp-debugfs.c | 58 ++++++++++++++++++++++++++++-------
+ 1 file changed, 47 insertions(+), 11 deletions(-)
 
 _______________________________________________
 linux-arm-kernel mailing list
