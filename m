@@ -1,65 +1,82 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=xTtj=NE=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E867C432BE
-	for <soc@archiver.kernel.org>; Thu, 12 Aug 2021 21:20:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C4EBC4338F
+	for <soc@archiver.kernel.org>; Fri, 13 Aug 2021 10:22:51 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 6847860FED; Thu, 12 Aug 2021 21:20:23 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 524146109D;
-	Thu, 12 Aug 2021 21:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1628803223;
-	bh=hdOhPbtmvi0vz3nVNbYpgmPHgT3cp87rExl8OatX8/I=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=bfxiJSWkH8xEYiYlhHMn2ZkCR9bb1naPq088KrVhjF5gxh2z6b5jStvquMOLuV816
-	 oJn/uZLmXhgX7V5VAJndnYclBcEdfiAT0zU1FsPgpNuZgFGlWwDWZEUHethmYYMx2q
-	 rLVKf94NLxjlLpulqlhM2Tcfw+e51vUqUUW9XA7pK/pzINgztRqrJoikxHdH2Qu10s
-	 9Wfy7WuQNtXoCEoKktKQwq6jEk5oxKUvfdaroFcut5rN3CW4Y3skPV7eYReQDoyX6e
-	 ySazWTJsMa0dRp6WgEzoQ/S9Dt6kIvcz81o7JQQc0/PsAVV6VdyR0RuOS3FsJrLjD8
-	 hK6CVW+/MBbVw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4B6F9608FA;
-	Thu, 12 Aug 2021 21:20:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 00157610F7; Fri, 13 Aug 2021 10:22:51 +0000 (UTC)
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 33FA4610CC
+	for <soc@kernel.org>; Fri, 13 Aug 2021 10:22:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 33FA4610CC
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:b151:f011:b544:c545])
+	by albert.telenet-ops.be with bizsmtp
+	id gyNo2500B1MlFFN06yNo76; Fri, 13 Aug 2021 12:22:48 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1mEUKu-002Wod-0H; Fri, 13 Aug 2021 12:22:48 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1mEUKt-007SUX-G4; Fri, 13 Aug 2021 12:22:47 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+List-Id: <soc.lore.kernel.org>
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL 0/2] Renesas SoC updates for v5.15 (take two)
+Date: Fri, 13 Aug 2021 12:22:34 +0200
+Message-Id: <cover.1628849621.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL v2] ARM: at91: defconfig for 5.15
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <162880322330.12191.13287301801642512695.git-patchwork-notify@kernel.org>
-Date: Thu, 12 Aug 2021 21:20:23 +0000
-References: <20210809134521.10155-1-nicolas.ferre@microchip.com>
-In-Reply-To: <20210809134521.10155-1-nicolas.ferre@microchip.com>
-To: Nicolas Ferre <nicolas.ferre@microchip.com>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
 
-Hello:
+	Hi soc folks,
 
-This pull request was applied to soc/soc.git (refs/heads/for-next):
+This is my second pull request for the inclusion of Renesas SoC updates
+for v5.15.
 
-On Mon, 9 Aug 2021 15:45:21 +0200 you wrote:
-> From: Nicolas Ferre <nicolas.ferre@microchip.com>
-> 
-> Arnd, Olof,
-> 
-> Here is the second attept about defconfig changes for 5.15 which contains
-> addition for SAMA7G5.
-> 
-> [...]
+It consists of two parts:
 
-Here is the summary with links:
-  - [GIT,PULL,v2] ARM: at91: defconfig for 5.15
-    https://git.kernel.org/soc/soc/c/b528dede9bca
+  [GIT PULL 1/2] Renesas ARM DT updates for v5.15 (take two)
 
-You are awesome, thank you!
+    - Pin control, ADC, and CANFD support for the RZ/G2L SoC,
+    - Add interrupt-names properties to the Renesas RZ/A and RZ/G2L I2C
+      Bus Interface.
+
+  [GIT PULL 2/2] Renesas driver updates for v5.15 (take two)
+
+    - Prefer memcpy() over strcpy().
+
+Note that the first part includes another update (append-only) to the
+Renesas RZ/G2L DT Binding Definitions, which are shared by driver and DT
+source files, and thus included in multiple pull requests:
+  - "[GIT PULL] clk: renesas: Updates for v5.15" (for clk),
+  - "[GIT PULL 1/2] Renesas ARM DT updates for v5.15 (take two)" (for
+    soc).
+
+Thanks for pulling!
+
+Gr{oetje,eeting}s,
+
+						Geert
+
 --
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
