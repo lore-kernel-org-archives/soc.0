@@ -9,14 +9,14 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 381A2C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 16:25:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37B56C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 16:25:48 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EB26161042
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 16:25:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EB26161042
+	by mail.kernel.org (Postfix) with ESMTPS id 08FF0610A4
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 16:25:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 08FF0610A4
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -25,52 +25,52 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=1oXgp9x3n4SBUcHPMMxt4ykZQuvP+rZwOyBAK7Zk0OA=; b=TJn7RQuIzKmHLD
-	xYTSBuvhNs8OBcQzMbbUkt6lSasNt+xfM0pHQB00WCOGhYaulEQK7s5NB7VoPmjzDrHVjC43BTi33
-	kF/VHZ+qBJvyYgLxju6J+QO/uqJuKUE2121e+621jLKVc4RvvTq3kEulq8/D1GO5Zm8N39uEaZdGN
-	YFVVlrIMkvydq04pYG/MCqZxkctqph0titdm7Q8j9VkOt30YpS1osAlmpYvDqvq7M3xASt5mV/1Ao
-	jJ34duHhgjdKF0okekFtzJJ1LvzmPRoDtqZ/84T9mvwA7/2uNMDdccR6YcaKfMY5ZRAWrGRc2SWCI
-	E1lh3YJC6widr1+CLKvQ==;
+	List-Owner; bh=chq+7yAKpt5NKxLyQrlyzELjOu3WV69VFWe6Xv2enbU=; b=es6qqfQES1gvj3
+	S2VAux87i2FDAKTaSVEElsGs/6TNv44dEvo8QrujQzL8LHk51FtApyexK0Kv+KutYraQRJT6mpUWa
+	ug5jnGg+yb4DPdqr1UlhhetPTDV6IxCw0B6u9UZyryOgo6JGy1x5YXCGhVRbBZne5Dzu5mhvX9n4x
+	T2HigFePUSY8UKxpuYy6izk287wTdL45gpP3wyF2AQNAm0EWFVnJNwUCN8bhJ7L/+kz2kC+IAXoLK
+	MH74hR/7q+6PbO55a9WrfpyueNPVE1BXtCauDOGWqFhChTatwTUCQjx2CXXgRvN453GagAVBjIs7c
+	SRjv/aC/b1VAn3WlzQbQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mEZxN-00D5Oc-GY; Fri, 13 Aug 2021 16:22:53 +0000
-Received: from mail-wr1-x42f.google.com ([2a00:1450:4864:20::42f])
+	id 1mEZxd-00D5Tl-Ie; Fri, 13 Aug 2021 16:23:09 +0000
+Received: from mail-wr1-x429.google.com ([2a00:1450:4864:20::429])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mEZwf-00D5Ce-41
- for linux-arm-kernel@lists.infradead.org; Fri, 13 Aug 2021 16:22:10 +0000
-Received: by mail-wr1-x42f.google.com with SMTP id q10so14062378wro.2
+ id 1mEZwh-00D5DE-5n
+ for linux-arm-kernel@lists.infradead.org; Fri, 13 Aug 2021 16:22:12 +0000
+Received: by mail-wr1-x429.google.com with SMTP id r7so14109940wrs.0
  for <linux-arm-kernel@lists.infradead.org>;
- Fri, 13 Aug 2021 09:22:08 -0700 (PDT)
+ Fri, 13 Aug 2021 09:22:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=hL2E+OHMaEPvpW4ofvFox1pZWIDm0uZSMYdfM4ARIh8=;
- b=sZhtKvUnMsvvGQjtf3803c3v8rIIlRbZdxTiwZFpS207ksRQ4dK4EwS/c+XIWwih7E
- PX7cU7ob6GiI+qri200jPcbtzqAYlkNM+trDulTpJw5ck/rweHRdejz9f4vQOMcKLMAJ
- qWeFCO9pQa2+UrPOV3SG+S7puwjC3NJQlOO1/WkhwMbISyzVzaVsaSM/RSlx8jfpM7SR
- jUV1J0cUaP6VMnNzpwwAHz9YDLc1KlnvTOsJFeR0BdO5DBO7/tALZ3BFvLXrylHiU3eQ
- TFFimCWLYGfvrKE5JAmN5v3cWwttQnEhiHGO+eyJEgvUdCh84tXQx+SqrdD8guVWDRr0
- Sxxg==
+ bh=EwFtsY9WKlIQaf6vBR9fws+JXXBLzo++aqaXVjpQVqs=;
+ b=DNiMu6irbvG49ZtZ4LNvF4KVh8zmgPuzwVytqLq20G775Pc2kP8ZC/0z5yp4TRNXil
+ jBm7rdh6craWwVmCSwK7vp2QwX/lQjFUY2ZGhuvQrXH/DAlE2qiIb1aRTDDpLCdRQ64k
+ 4UWkZPn+acvCzFokq1ySG+AayMA7sXstb5+rIaauMvUHc6XN52+UZiR3y+NowfS7IKDY
+ ljiknFIM6f50+qHK3sbrKDBQTB3zfKAVUEgXAyRT7CpOy9s8HAMbmiyfrEx+MzP+0u/y
+ hWtp9m3AJ+W7odsgokhfeCTKLemHlr/41hAsNn3hpTnsg1jv8IRX+9u1Tt0P4ajPFB/t
+ 9z3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=hL2E+OHMaEPvpW4ofvFox1pZWIDm0uZSMYdfM4ARIh8=;
- b=FCyDqc2efQxIaR92UC20HmaeqlnOyVi/schSHhcxajkWsB5I86fBRwlwYrUJg3lIhd
- 6MIDMMpx41UcN8MpbYsQG3ZlQG7lOM+lnOakQdrtVPGpBlL+S/kXCAX535JHMwGUBula
- VTTj3oeW2mlxR2lTEYI9ASftnP/a9Gafuq3DxIQTeNW9vaTuBNeQyOjR7p0iiPAgNfiy
- x/tiIOfG1DcObCOc1eEAA3DcketLRqQm/7zcDYaO6SjPXKfu6XvYRm0zYEAXeXJz46JR
- fSFXV6apweRr1CqDf3CZSNgJn3cQw6/8/xhMJZBbomtaShYEQfx+GKBYzb0sATezIMNj
- vs8Q==
-X-Gm-Message-State: AOAM531GEr3ePy8SatBD/MkfQqId6FnaLxXJPwfcXB5fJygnV/qqXady
- KoamwKMygJacTCFSH7zidBo=
-X-Google-Smtp-Source: ABdhPJwzR+Uowa5MQLzSxcsOnFulMAAm1lotJXL0blvGBNnYk/iRwy07QQUX8ZBrJwBpuoQ2jds9KQ==
-X-Received: by 2002:a5d:4dc3:: with SMTP id f3mr4226800wru.302.1628871727392; 
- Fri, 13 Aug 2021 09:22:07 -0700 (PDT)
+ bh=EwFtsY9WKlIQaf6vBR9fws+JXXBLzo++aqaXVjpQVqs=;
+ b=L6w1xeQneK0fas/1/hJlbHFrDWHuknyvYErc3Ld6AZUjKPGruLhMooFH6tHoDYNifQ
+ LgkBEtYkXOOqJx0bkDwcetFoDlWlgehWRh/lO5eLtGp4H7dUDoz5HSfL6cHDHgor/zB/
+ 3odN/nafbtF/c1dpRUoYJSsO1Ci271cP51dvGGFtGcxjxRDi2zKkpZTxJx4bXo3XZ9vv
+ XiXSKEvo10T+vHKuC5/4qs9oI4QjfGNmtfax58v7RWba5ifccjvsaGzkqARPmtcWdjnr
+ if5Lm+mSRu08wqJtGqocoW6gpIh4cCajZsGj/5ZqURnZJLXyS/jrH9P4kwKi+rZ3AHVA
+ p9Kw==
+X-Gm-Message-State: AOAM530024L3rLvIbZ0U5YpgakdaLo8Fh7hE5lPIDZV9w9or0hQlvgnH
+ YcM9AeZ1IJ19lVZphtg7v7U=
+X-Google-Smtp-Source: ABdhPJwnOWfP+I35usYEUsx2VvRIg5MxLc+LvcRDXBfbgRrG4h5gDq9y0E9A+/gFBy3D1W0qwaVQTA==
+X-Received: by 2002:adf:e48d:: with SMTP id i13mr4253214wrm.288.1628871729461; 
+ Fri, 13 Aug 2021 09:22:09 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
- by smtp.gmail.com with ESMTPSA id g9sm1812124wmk.34.2021.08.13.09.22.06
+ by smtp.gmail.com with ESMTPSA id y19sm1993919wmq.5.2021.08.13.09.22.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Aug 2021 09:22:06 -0700 (PDT)
+ Fri, 13 Aug 2021 09:22:08 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -78,16 +78,16 @@ To: arm@kernel.org,
 Cc: Thierry Reding <thierry.reding@gmail.com>,
  Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 5/6] ARM: tegra: Default configuration changes for v5.15-rc1
-Date: Fri, 13 Aug 2021 18:21:56 +0200
-Message-ID: <20210813162157.2820913-5-thierry.reding@gmail.com>
+Subject: [GIT PULL 6/6] arm64: tegra: Device tree changes for v5.15-rc1
+Date: Fri, 13 Aug 2021 18:21:57 +0200
+Message-ID: <20210813162157.2820913-6-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210813162157.2820913-1-thierry.reding@gmail.com>
 References: <20210813162157.2820913-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210813_092209_206158_4BF0138B 
-X-CRM114-Status: GOOD (  10.03  )
+X-CRM114-CacheID: sfid-20210813_092211_264730_4E1A22D6 
+X-CRM114-Status: GOOD (  12.40  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -103,7 +103,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210813162156.ZAtEKMDd3xziaBltjOlmnUTQYrOtMw4o4DcuYGmNwjU@z>
+Message-ID: <20210813162157.4wxrmO3ZGHtVJEVyrkSPMct0S2UmocifKlUb8vzVNBA@z>
 
 Hi ARM SoC maintainers,
 
@@ -113,37 +113,42 @@ The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-arm-defconfig
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-arm64-dt
 
-for you to fetch changes up to 806b99206b840bcf3bfa44227dc978880d13ed1b:
+for you to fetch changes up to f865d0292ff3c0ca09414436510eb4c815815509:
 
-  ARM: multi_v7_defconfig: Enable CONFIG_TEGRA30_TSENSOR (2021-08-11 12:15:48 +0200)
+  arm64: tegra: Fix compatible string for Tegra132 CPUs (2021-08-13 18:01:01 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-ARM: tegra: Default configuration changes for v5.15-rc1
+arm64: tegra: Device tree changes for v5.15-rc1
 
-Enables a couple of drivers by default so that the configuration is
-useful on more devices. This also rebuilds the tegra_defconfig, which
-hasn't been done in a long time.
+Contains a couple of fixes across the board and adds support for the
+recently released NVIDIA Jetson TX2 NX Developer Kit.
 
 ----------------------------------------------------------------
-Dmitry Osipenko (5):
-      ARM: tegra: Enable CONFIG_TEGRA30_TSENSOR
-      ARM: tegra: Enable CONFIG_FB
-      ARM: tegra: Enable Acer A500 drivers
-      ARM: multi_v7_defconfig: Enable Acer A500 drivers
-      ARM: multi_v7_defconfig: Enable CONFIG_TEGRA30_TSENSOR
+Dmitry Osipenko (1):
+      arm64: tegra194: p2888: Correct interrupt trigger type of temperature sensor
 
-Maxim Schwalm (2):
-      ARM: tegra: Enable CONFIG_CROS_EC
-      ARM: tegra: Rebuild default configuration
+Thierry Reding (4):
+      arm64: tegra: Add PWM nodes on Tegra186
+      arm64: tegra: Add NVIDIA Jetson TX2 NX Developer Kit support
+      arm64: tegra: Add missing interconnects property for USB on Tegra186
+      arm64: tegra: Fix compatible string for Tegra132 CPUs
 
- arch/arm/configs/multi_v7_defconfig |  4 ++++
- arch/arm/configs/tegra_defconfig    | 25 ++++++++-----------------
- 2 files changed, 12 insertions(+), 17 deletions(-)
+Vidya Sagar (1):
+      arm64: tegra: Fix Tegra194 PCIe EP compatible string
+
+ arch/arm64/boot/dts/nvidia/Makefile                |   1 +
+ arch/arm64/boot/dts/nvidia/tegra132.dtsi           |   4 +-
+ .../dts/nvidia/tegra186-p3509-0000+p3636-0001.dts  | 718 +++++++++++++++++++++
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi           |  91 +++
+ arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi     |   2 +-
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi           |   6 +-
+ 6 files changed, 816 insertions(+), 6 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts
 
 _______________________________________________
 linux-arm-kernel mailing list
