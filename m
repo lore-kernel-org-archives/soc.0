@@ -1,75 +1,108 @@
-Return-Path: <SRS0=BwRQ=NE=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=C417=NE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2162C4338F
-	for <soc@archiver.kernel.org>; Fri, 13 Aug 2021 16:22:11 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 8A26F610F7; Fri, 13 Aug 2021 16:22:11 +0000 (UTC)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BCA3C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 16:24:12 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6325160462;
-	Fri, 13 Aug 2021 16:22:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6325160462
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id f5so13974904wrm.13;
-        Fri, 13 Aug 2021 09:22:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EwFtsY9WKlIQaf6vBR9fws+JXXBLzo++aqaXVjpQVqs=;
-        b=DNiMu6irbvG49ZtZ4LNvF4KVh8zmgPuzwVytqLq20G775Pc2kP8ZC/0z5yp4TRNXil
-         jBm7rdh6craWwVmCSwK7vp2QwX/lQjFUY2ZGhuvQrXH/DAlE2qiIb1aRTDDpLCdRQ64k
-         4UWkZPn+acvCzFokq1ySG+AayMA7sXstb5+rIaauMvUHc6XN52+UZiR3y+NowfS7IKDY
-         ljiknFIM6f50+qHK3sbrKDBQTB3zfKAVUEgXAyRT7CpOy9s8HAMbmiyfrEx+MzP+0u/y
-         hWtp9m3AJ+W7odsgokhfeCTKLemHlr/41hAsNn3hpTnsg1jv8IRX+9u1Tt0P4ajPFB/t
-         9z3g==
+	by mail.kernel.org (Postfix) with ESMTPS id 587DB60462
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 16:24:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 587DB60462
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=XaIDtyb+sNbLdRJ4Ng6ZaIRTqrAKgU7TDsecVM5Mjz8=; b=tx3FdxsTwik52w
+	TKGiA8w/CJ77BzCywIrA/ifA/9CeKOW00B8gcq70j7I3lZIZf2/zaQpQ3DTnf4F4b83bT0RPagnL2
+	TCI1JifWttW6GmaFjV4F9QaTpCiwzMvUQbPQrKJdaVFCAzRfcbTvdRaznO5eFKv8snyQbOeiKy2Sv
+	s2HrrIxIpta6djYS40ba/5aC+CDFHwGuifG8fNy4xWBF44pVPyN4+uA9n82/tmCVggdTS4v0q3/xm
+	H6pfbeBTyewwgPZZj81j8F8nycev2Pshplr7xAM9xKGmCXSYz95eybqKtVY+1QYBnaDtcmE1WZKn2
+	yYXu/mS7dQveVFFeRCiQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mEZwZ-00D5BX-V4; Fri, 13 Aug 2021 16:22:04 +0000
+Received: from mail-wm1-x32d.google.com ([2a00:1450:4864:20::32d])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mEZwX-00D5Ai-15
+ for linux-arm-kernel@lists.infradead.org; Fri, 13 Aug 2021 16:22:02 +0000
+Received: by mail-wm1-x32d.google.com with SMTP id g138so7220577wmg.4
+ for <linux-arm-kernel@lists.infradead.org>;
+ Fri, 13 Aug 2021 09:22:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=cvMCxY97+19NBnX/9se1xiPhL0qxZh2NAax8kyQ2dwo=;
+ b=dUbSPwhvwSjHPMw92H/M1+w9GaV/wRo54rK6vfEWeNEM5Ajh2pCT2OG8xFbmxWMnCf
+ 2tUTRHwNcIfsApSO9jYxTE7E6gXiLGRYFWjlnYu4WdQs5OMNKQSDw8WLWlBfVVEOb7BF
+ /pEnKizufa1clufaDdxhNJBqX9MgLmMuCB5x2Ky7b+u0Omw427lGZmx9BIiSeZio+/ZB
+ yVFHvlBl53sEUpf9YmEcMx1xqOiURmTtm6T6sorfxt6fy7DuhZg9x20uJYeJ/gCdDvYV
+ 9gLZR2MFU9gr8zBntLqAuLjMewdKGHqjV18al/pUGEgRhn4wgYHuqKQkIN++hlLTXfaC
+ mq5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EwFtsY9WKlIQaf6vBR9fws+JXXBLzo++aqaXVjpQVqs=;
-        b=nvvWmiyH++H42bN1f0DBfBRklK+9koj1yq7mEWpkIWAIanHPOrZy2CBCFzYze+gX+f
-         EYBEO6Vi9icnimHaOFRJe0EGLH0yL0l6r2GhdmMWoInrj3/Arw3UY148CBgUW+uFoXnL
-         rI3JszVcksBk+e0ae10OJbDYZIprinqsUzVIRKT7o5gVVpyFBmTYZAkFuoPP+8Jt4Hge
-         m/ARIITYvo2yyG8YZJt5i4Stlw/IlENDli1y2wtyjgDMCZJLGRtkQwRdNeKuEdCg3AYf
-         zrp/UFgNiXR8pwncmy86PHotS5yhnJYOn3/vR+rPIIkakioggJlkVhXj05p2Fg+U0M/C
-         1ZiA==
-X-Gm-Message-State: AOAM5335zvc3+qZxhdLcIafyPR1K4SmbQ3ShLRocvAOk7pFfTMcxGjUh
-	EnFWrAnRLUDzREJz5KYbI/aEfwW+2TI=
-X-Google-Smtp-Source: ABdhPJwnOWfP+I35usYEUsx2VvRIg5MxLc+LvcRDXBfbgRrG4h5gDq9y0E9A+/gFBy3D1W0qwaVQTA==
-X-Received: by 2002:adf:e48d:: with SMTP id i13mr4253214wrm.288.1628871729461;
-        Fri, 13 Aug 2021 09:22:09 -0700 (PDT)
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=cvMCxY97+19NBnX/9se1xiPhL0qxZh2NAax8kyQ2dwo=;
+ b=YM/gwWk6GvP46L6EriOys03ty3kpiyPMjXDRDv7ns4/2NhvT+B146n2ggn95XsI4fR
+ 07HXyEdr9SDkKPtVpiRvgrPbwkLkaE3uWuP3XLX/JAEruQFYrjjevdzmon7IcueybciW
+ KE3gLJwdgLZMaM0fTQ9Gka5awtqwm8wOv9C/tepjl5EiqiWZSalHqt9nUn5gCHapZxiD
+ Vq51gf1TzodB7UQEvIrnjGBviPJ1FcN20wegQFY/O107FjNFE26dzbA/AkHmutzvVgT1
+ w4/kXJmxcIzlorDjHtvNHytkiYbVXOi5uGUCJYnjwwEdQ04EMvs4+8vZqs+zAeDhnVwZ
+ APcA==
+X-Gm-Message-State: AOAM530sUoPCAf3J0rkCr8c4ss671R1T2NhkmpR9ljnePmkOmiENqNgt
+ C4dglmkAvBJB7jZd34UA5Zc=
+X-Google-Smtp-Source: ABdhPJwn/ymZnHrGWDZ5iKAtYE+5ZRurgB6fOyOH3CXkBKWzIk2EWBxsfrai5X2NWibh+8KUsGe2mw==
+X-Received: by 2002:a7b:cf0c:: with SMTP id l12mr3467826wmg.62.1628871719342; 
+ Fri, 13 Aug 2021 09:21:59 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id y19sm1993919wmq.5.2021.08.13.09.22.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Aug 2021 09:22:08 -0700 (PDT)
+ by smtp.gmail.com with ESMTPSA id l38sm1769106wmp.15.2021.08.13.09.21.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 13 Aug 2021 09:21:58 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
 Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 6/6] arm64: tegra: Device tree changes for v5.15-rc1
-Date: Fri, 13 Aug 2021 18:21:57 +0200
-Message-Id: <20210813162157.2820913-6-thierry.reding@gmail.com>
+ Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/6] dt-bindings: Changes for v5.15-rc1
+Date: Fri, 13 Aug 2021 18:21:52 +0200
+Message-ID: <20210813162157.2820913-1-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210813162157.2820913-1-thierry.reding@gmail.com>
-References: <20210813162157.2820913-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210813_092201_137504_EF376EFF 
+X-CRM114-Status: UNSURE (   8.54  )
+X-CRM114-Notice: Please train this message.
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210813162152.Y6q5vK69A-segP19-vr17yobEDhJGxGAmr8LXRYHv-8@z>
 
 Hi ARM SoC maintainers,
 
@@ -79,39 +112,29 @@ The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-arm64-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-dt-bindings
 
-for you to fetch changes up to f865d0292ff3c0ca09414436510eb4c815815509:
+for you to fetch changes up to 900a486ac73dfdf9b1629e7e4df6eacc92da7578:
 
-  arm64: tegra: Fix compatible string for Tegra132 CPUs (2021-08-13 18:01:01 +0200)
+  dt-bindings: tegra: Document NVIDIA Jetson TX2 NX developer kit (2021-08-12 15:06:28 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-arm64: tegra: Device tree changes for v5.15-rc1
+dt-bindings: Changes for v5.15-rc1
 
-Contains a couple of fixes across the board and adds support for the
-recently released NVIDIA Jetson TX2 NX Developer Kit.
+This contains a single patch that adds the compatible string for the
+NVIDIA Jetson TX2 NX developer kit.
 
 ----------------------------------------------------------------
-Dmitry Osipenko (1):
-      arm64: tegra194: p2888: Correct interrupt trigger type of temperature sensor
+Thierry Reding (1):
+      dt-bindings: tegra: Document NVIDIA Jetson TX2 NX developer kit
 
-Thierry Reding (4):
-      arm64: tegra: Add PWM nodes on Tegra186
-      arm64: tegra: Add NVIDIA Jetson TX2 NX Developer Kit support
-      arm64: tegra: Add missing interconnects property for USB on Tegra186
-      arm64: tegra: Fix compatible string for Tegra132 CPUs
+ Documentation/devicetree/bindings/arm/tegra.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Vidya Sagar (1):
-      arm64: tegra: Fix Tegra194 PCIe EP compatible string
-
- arch/arm64/boot/dts/nvidia/Makefile                |   1 +
- arch/arm64/boot/dts/nvidia/tegra132.dtsi           |   4 +-
- .../dts/nvidia/tegra186-p3509-0000+p3636-0001.dts  | 718 +++++++++++++++++++++
- arch/arm64/boot/dts/nvidia/tegra186.dtsi           |  91 +++
- arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi     |   2 +-
- arch/arm64/boot/dts/nvidia/tegra194.dtsi           |   6 +-
- 6 files changed, 816 insertions(+), 6 deletions(-)
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
