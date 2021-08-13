@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F2B6C4320A
-	for <soc@archiver.kernel.org>; Fri, 13 Aug 2021 16:22:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2162C4338F
+	for <soc@archiver.kernel.org>; Fri, 13 Aug 2021 16:22:11 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 8506C610EA; Fri, 13 Aug 2021 16:22:09 +0000 (UTC)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	id 8A26F610F7; Fri, 13 Aug 2021 16:22:11 +0000 (UTC)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5A77861042;
-	Fri, 13 Aug 2021 16:22:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5A77861042
+	by mail.kernel.org (Postfix) with ESMTPS id 6325160462;
+	Fri, 13 Aug 2021 16:22:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6325160462
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id l18so14033332wrv.5;
-        Fri, 13 Aug 2021 09:22:09 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id f5so13974904wrm.13;
+        Fri, 13 Aug 2021 09:22:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hL2E+OHMaEPvpW4ofvFox1pZWIDm0uZSMYdfM4ARIh8=;
-        b=sZhtKvUnMsvvGQjtf3803c3v8rIIlRbZdxTiwZFpS207ksRQ4dK4EwS/c+XIWwih7E
-         PX7cU7ob6GiI+qri200jPcbtzqAYlkNM+trDulTpJw5ck/rweHRdejz9f4vQOMcKLMAJ
-         qWeFCO9pQa2+UrPOV3SG+S7puwjC3NJQlOO1/WkhwMbISyzVzaVsaSM/RSlx8jfpM7SR
-         jUV1J0cUaP6VMnNzpwwAHz9YDLc1KlnvTOsJFeR0BdO5DBO7/tALZ3BFvLXrylHiU3eQ
-         TFFimCWLYGfvrKE5JAmN5v3cWwttQnEhiHGO+eyJEgvUdCh84tXQx+SqrdD8guVWDRr0
-         Sxxg==
+        bh=EwFtsY9WKlIQaf6vBR9fws+JXXBLzo++aqaXVjpQVqs=;
+        b=DNiMu6irbvG49ZtZ4LNvF4KVh8zmgPuzwVytqLq20G775Pc2kP8ZC/0z5yp4TRNXil
+         jBm7rdh6craWwVmCSwK7vp2QwX/lQjFUY2ZGhuvQrXH/DAlE2qiIb1aRTDDpLCdRQ64k
+         4UWkZPn+acvCzFokq1ySG+AayMA7sXstb5+rIaauMvUHc6XN52+UZiR3y+NowfS7IKDY
+         ljiknFIM6f50+qHK3sbrKDBQTB3zfKAVUEgXAyRT7CpOy9s8HAMbmiyfrEx+MzP+0u/y
+         hWtp9m3AJ+W7odsgokhfeCTKLemHlr/41hAsNn3hpTnsg1jv8IRX+9u1Tt0P4ajPFB/t
+         9z3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hL2E+OHMaEPvpW4ofvFox1pZWIDm0uZSMYdfM4ARIh8=;
-        b=Sh7ZBlmYPxAj2ANdVGjMalzhYOh/HI0C8Per6xnrYaZCAWpVD3e6c+tbSGoO0Gj5sj
-         ZTZAj6dyKoAdU6k6LgM2IqPr1ZxNtO/1Mq2Xn3GIFXa4POvEfVoAnS0oL4GkMR0S5KsT
-         AfeeWGxFXU3QOabgg8E0iW3bJkQkBzWvPLEzu3+1yLsewY2Vsi+JSPJ9TnpMLsgN/mX8
-         /aItngfQxObJrtZhYY9Nl85TTz85n5Rus4heOT7TYa0pi9wOORDnP2UGu6BkNxPEXBRZ
-         2cnTaUyIGBmME9lxFLrDBvlY33F0efk2fZVLpgiBcfwFuVyoKT1cygIG5CltSbT+mwXz
-         2isg==
-X-Gm-Message-State: AOAM530+7fwD1IuhGov4oObaCEGtxoQjqNRNZX4+nrgJn1G2bhBg5Gm4
-	mAcGW78r8L2PizDVGeO6OAo4+Oo5s5s=
-X-Google-Smtp-Source: ABdhPJwzR+Uowa5MQLzSxcsOnFulMAAm1lotJXL0blvGBNnYk/iRwy07QQUX8ZBrJwBpuoQ2jds9KQ==
-X-Received: by 2002:a5d:4dc3:: with SMTP id f3mr4226800wru.302.1628871727392;
-        Fri, 13 Aug 2021 09:22:07 -0700 (PDT)
+        bh=EwFtsY9WKlIQaf6vBR9fws+JXXBLzo++aqaXVjpQVqs=;
+        b=nvvWmiyH++H42bN1f0DBfBRklK+9koj1yq7mEWpkIWAIanHPOrZy2CBCFzYze+gX+f
+         EYBEO6Vi9icnimHaOFRJe0EGLH0yL0l6r2GhdmMWoInrj3/Arw3UY148CBgUW+uFoXnL
+         rI3JszVcksBk+e0ae10OJbDYZIprinqsUzVIRKT7o5gVVpyFBmTYZAkFuoPP+8Jt4Hge
+         m/ARIITYvo2yyG8YZJt5i4Stlw/IlENDli1y2wtyjgDMCZJLGRtkQwRdNeKuEdCg3AYf
+         zrp/UFgNiXR8pwncmy86PHotS5yhnJYOn3/vR+rPIIkakioggJlkVhXj05p2Fg+U0M/C
+         1ZiA==
+X-Gm-Message-State: AOAM5335zvc3+qZxhdLcIafyPR1K4SmbQ3ShLRocvAOk7pFfTMcxGjUh
+	EnFWrAnRLUDzREJz5KYbI/aEfwW+2TI=
+X-Google-Smtp-Source: ABdhPJwnOWfP+I35usYEUsx2VvRIg5MxLc+LvcRDXBfbgRrG4h5gDq9y0E9A+/gFBy3D1W0qwaVQTA==
+X-Received: by 2002:adf:e48d:: with SMTP id i13mr4253214wrm.288.1628871729461;
+        Fri, 13 Aug 2021 09:22:09 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id g9sm1812124wmk.34.2021.08.13.09.22.06
+        by smtp.gmail.com with ESMTPSA id y19sm1993919wmq.5.2021.08.13.09.22.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Aug 2021 09:22:06 -0700 (PDT)
+        Fri, 13 Aug 2021 09:22:08 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -61,9 +61,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 5/6] ARM: tegra: Default configuration changes for v5.15-rc1
-Date: Fri, 13 Aug 2021 18:21:56 +0200
-Message-Id: <20210813162157.2820913-5-thierry.reding@gmail.com>
+Subject: [GIT PULL 6/6] arm64: tegra: Device tree changes for v5.15-rc1
+Date: Fri, 13 Aug 2021 18:21:57 +0200
+Message-Id: <20210813162157.2820913-6-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210813162157.2820913-1-thierry.reding@gmail.com>
 References: <20210813162157.2820913-1-thierry.reding@gmail.com>
@@ -79,34 +79,39 @@ The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-arm-defconfig
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-arm64-dt
 
-for you to fetch changes up to 806b99206b840bcf3bfa44227dc978880d13ed1b:
+for you to fetch changes up to f865d0292ff3c0ca09414436510eb4c815815509:
 
-  ARM: multi_v7_defconfig: Enable CONFIG_TEGRA30_TSENSOR (2021-08-11 12:15:48 +0200)
+  arm64: tegra: Fix compatible string for Tegra132 CPUs (2021-08-13 18:01:01 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-ARM: tegra: Default configuration changes for v5.15-rc1
+arm64: tegra: Device tree changes for v5.15-rc1
 
-Enables a couple of drivers by default so that the configuration is
-useful on more devices. This also rebuilds the tegra_defconfig, which
-hasn't been done in a long time.
+Contains a couple of fixes across the board and adds support for the
+recently released NVIDIA Jetson TX2 NX Developer Kit.
 
 ----------------------------------------------------------------
-Dmitry Osipenko (5):
-      ARM: tegra: Enable CONFIG_TEGRA30_TSENSOR
-      ARM: tegra: Enable CONFIG_FB
-      ARM: tegra: Enable Acer A500 drivers
-      ARM: multi_v7_defconfig: Enable Acer A500 drivers
-      ARM: multi_v7_defconfig: Enable CONFIG_TEGRA30_TSENSOR
+Dmitry Osipenko (1):
+      arm64: tegra194: p2888: Correct interrupt trigger type of temperature sensor
 
-Maxim Schwalm (2):
-      ARM: tegra: Enable CONFIG_CROS_EC
-      ARM: tegra: Rebuild default configuration
+Thierry Reding (4):
+      arm64: tegra: Add PWM nodes on Tegra186
+      arm64: tegra: Add NVIDIA Jetson TX2 NX Developer Kit support
+      arm64: tegra: Add missing interconnects property for USB on Tegra186
+      arm64: tegra: Fix compatible string for Tegra132 CPUs
 
- arch/arm/configs/multi_v7_defconfig |  4 ++++
- arch/arm/configs/tegra_defconfig    | 25 ++++++++-----------------
- 2 files changed, 12 insertions(+), 17 deletions(-)
+Vidya Sagar (1):
+      arm64: tegra: Fix Tegra194 PCIe EP compatible string
+
+ arch/arm64/boot/dts/nvidia/Makefile                |   1 +
+ arch/arm64/boot/dts/nvidia/tegra132.dtsi           |   4 +-
+ .../dts/nvidia/tegra186-p3509-0000+p3636-0001.dts  | 718 +++++++++++++++++++++
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi           |  91 +++
+ arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi     |   2 +-
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi           |   6 +-
+ 6 files changed, 816 insertions(+), 6 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts
