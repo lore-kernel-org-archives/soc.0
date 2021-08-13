@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA5A5C432BE
-	for <soc@archiver.kernel.org>; Fri, 13 Aug 2021 16:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B727C43214
+	for <soc@archiver.kernel.org>; Fri, 13 Aug 2021 16:22:05 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 94537610FC; Fri, 13 Aug 2021 16:22:03 +0000 (UTC)
+	id 6A661610FE; Fri, 13 Aug 2021 16:22:05 +0000 (UTC)
 Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6B93D610E9;
-	Fri, 13 Aug 2021 16:22:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6B93D610E9
+	by mail.kernel.org (Postfix) with ESMTPS id 30FFC61042;
+	Fri, 13 Aug 2021 16:22:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 30FFC61042
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id q10so14062161wro.2;
-        Fri, 13 Aug 2021 09:22:03 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id q6so2512943wrv.6;
+        Fri, 13 Aug 2021 09:22:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vu2kk2+ZSy2NLtNn5/uqEi9lhMnezhSZVswShT8ce2g=;
-        b=Rld7Vvb9ZG4tAOM1XIDqx8C2J+r9MEFewhf8Y4n6MgbrByII00sJIlTmofYPxb6U6d
-         PhLtXfccBAK078PbfN6ysepaxLB+g9Nf7bUwLis6Xvc+cPsLLl/0RMmYWdScimLqtwW1
-         72guLKcLb1/ofF/AB6Pq/FYH9WxfRRHyCuBAP1Dx/0Obm00F6toV1lO7b/oI4A+YiY3i
-         XA73VWPf4+6sPh6LFXWe5XkhYTpPxDWFgxP1oJ6tgbNaq9YbXdGswgRlJey7dICkwelF
-         RhYiksX/WD32mb0PEcjozFG5bJCk2FXjlB+BaFjM2Ejvjl8XUZpUZkjcM/oacB3sAs17
-         ZgWA==
+        bh=uRtDnJs579S8DQ0elL799P54sAOR8oc9lSTGgP3ImMM=;
+        b=mq/x1BjkO89XxfqlypJiDWRNrxxIHgUjX1881n5Wnsk52axruxmKwRv0CBu5966Z5i
+         38BPHe4HiBfI88cAGDzWPtUEBcikX/L6vX9BPPo1eZL3Ape8nsMZRNUWbV10wpEuW8ws
+         TyNB5phwmi+rcKBh9R8hjC4lvj6tOZZBm9WfhSRGIS5acy4i7ka3V+cxYTgkNe3QOv+G
+         i6dL2kojTFCo5sDhLYGWDzEjvexRPtlMexEIGsEYBruScrUDKHZH/O9f0kamKI4j1dDh
+         5+omiiGgTfvU0QZ4r31u4343z3BnkFJ0hgIhp0gqAlm1/aQsD6OUUhuntN1Dy4BMSbBZ
+         fz8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vu2kk2+ZSy2NLtNn5/uqEi9lhMnezhSZVswShT8ce2g=;
-        b=cIr8c7JvCw9PuEqdscTTez2vGA/lTsLEkOVOq9ZfM7rMBQxuQ4G8LpkHv+mZ0T9MjZ
-         XZbWKiPVGlbfNipgQ70kwdVyyCofCXBTuymMT9ylH39dg74ZaxNGGMA/dYoPKEjW6++c
-         pfVOdTjZUGKrjhSbfEssGbFxOjMHuD5rxrIGD7SuDznUer4JnnXZvawHgU/CL3z4nuQN
-         yaj+Za8c4mvCS3ZvCTbfPM/gu9jjl4viW2DBtLNNNuzr8aHhQ6b3h2SD8JBJ5R5AkMgC
-         b+wTjtsvDIXcrWqfL5NAnZqUFa25Mim2J6lzMqbJLo3GDScKm/JqcTbherp53YAliWw8
-         rRkQ==
-X-Gm-Message-State: AOAM530g0CBddkW7zHD7DxD9Xi9BlnQuopIPJT/0cMhn/Bwdwwm+ud9r
-	DGvKFMlz4wZIIB/KQSvUmAf1+iTsiyg=
-X-Google-Smtp-Source: ABdhPJy1OK90uercdsSGG5Ae3o0Qo/i4GTUPe8bm4EuAq0uwal93ERQZ/MFwHkPnl0udGsTYDoUqSg==
-X-Received: by 2002:adf:f141:: with SMTP id y1mr4096811wro.173.1628871721527;
-        Fri, 13 Aug 2021 09:22:01 -0700 (PDT)
+        bh=uRtDnJs579S8DQ0elL799P54sAOR8oc9lSTGgP3ImMM=;
+        b=k90yjc4Y8685F9oqN9sHLqo+YrvnF4fzOUJ2Qa4AJMoYGZ7HZ+Ar/P3hQmSqZKzMDT
+         bWp8EI/xVd0let+zAgSP4czjUBjhSK2yjyT/plH8YacWE3xbMfQ6Yzs6IcYhiyhM4wnv
+         yzQqJ026L6LlNfZONz4n0MO4QFuRR4gx1ox6B0OhBhHETyqhcDqmjYCvJQ/KTTQfaZ+3
+         VJvlz9Y0vnd0t2smB64f2ZcNLiqb+fwB1VP3PjvGdy1yA8XtXEnE69u/WIh9u/1JeL2f
+         BAqYmOh0ViDjorcWn6UbDqTLx18cQot0JFW0EhMWjYn5fMksW10jBg9H4+xeSimfe65U
+         ZReg==
+X-Gm-Message-State: AOAM533PMLAF9yG20fu3xVUPXsai6RpzOef+4esFN3MwWLPQx/BjeKyR
+	jfasIl59zxzW3sEjACrsvJH5CTZB/kk=
+X-Google-Smtp-Source: ABdhPJwRzJ1/teEVA+58c0ZHKHWrTdY6YACsc16HWVMeCFJctL3uAmd72gnNyIbsheE4zzJdBLD+UA==
+X-Received: by 2002:a5d:5592:: with SMTP id i18mr4096606wrv.271.1628871723366;
+        Fri, 13 Aug 2021 09:22:03 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id t1sm1925515wma.25.2021.08.13.09.22.00
+        by smtp.gmail.com with ESMTPSA id b10sm2380957wrn.9.2021.08.13.09.22.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Aug 2021 09:22:00 -0700 (PDT)
+        Fri, 13 Aug 2021 09:22:02 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -61,9 +61,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/6] firmware: tegra: Changes for v5.15-rc1
-Date: Fri, 13 Aug 2021 18:21:53 +0200
-Message-Id: <20210813162157.2820913-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/6] soc/tegra: Changes for v5.15-rc1
+Date: Fri, 13 Aug 2021 18:21:54 +0200
+Message-Id: <20210813162157.2820913-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210813162157.2820913-1-thierry.reding@gmail.com>
 References: <20210813162157.2820913-1-thierry.reding@gmail.com>
@@ -79,23 +79,39 @@ The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-firmware
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-soc
 
-for you to fetch changes up to dd00d75007d27677158bf6e64000d2e266035294:
+for you to fetch changes up to 59c6fceb2ecc382c3d20508a235b539bf23af1f0:
 
-  firmware: tegra: Stop using seq_get_buf() (2021-08-11 12:17:18 +0200)
+  soc/tegra: fuse: Enable fuse clock on suspend for Tegra124 (2021-08-11 11:55:56 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-firmware: tegra: Changes for v5.15-rc1
+soc/tegra: Changes for v5.15-rc1
 
-This contains a single fix to stop a slight abuse of the seq_buf API.
+Implements runtime PM support for the FUSE block and prepares the driver
+to work better in conjunction with the CPUIDLE driver.
 
 ----------------------------------------------------------------
-Christoph Hellwig (1):
-      firmware: tegra: Stop using seq_get_buf()
+Cai Huoqing (1):
+      soc/tegra: bpmp: Remove unused including <linux/version.h>
 
- drivers/firmware/tegra/bpmp-debugfs.c | 58 ++++++++++++++++++++++++++++-------
- 1 file changed, 47 insertions(+), 11 deletions(-)
+Dmitry Osipenko (4):
+      soc/tegra: pmc: Prevent racing with cpuilde driver
+      soc/tegra: fuse: Clear fuse->clk on driver probe failure
+      soc/tegra: fuse: Add runtime PM support
+      soc/tegra: fuse: Enable fuse clock on suspend for Tegra124
+
+ arch/arm/mach-tegra/pm.c              |  2 +-
+ arch/arm/mach-tegra/pm.h              |  6 ----
+ arch/arm/mach-tegra/tegra.c           |  2 --
+ drivers/soc/tegra/fuse/fuse-tegra.c   | 60 +++++++++++++++++++++++++++++++++++
+ drivers/soc/tegra/fuse/fuse-tegra20.c | 11 ++++---
+ drivers/soc/tegra/fuse/fuse-tegra30.c | 16 +++++++---
+ drivers/soc/tegra/fuse/fuse.h         |  2 ++
+ drivers/soc/tegra/pmc.c               | 14 +++++++-
+ drivers/soc/tegra/powergate-bpmp.c    |  1 -
+ include/soc/tegra/pm.h                |  6 ++++
+ 10 files changed, 100 insertions(+), 20 deletions(-)
