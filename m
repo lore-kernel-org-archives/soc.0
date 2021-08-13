@@ -1,143 +1,100 @@
-Return-Path: <SRS0=C417=NE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=BwRQ=NE=gmail.com=thierry.reding@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F37BC4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 14:15:04 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B037C4338F
+	for <soc@archiver.kernel.org>; Fri, 13 Aug 2021 16:22:02 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id CA06060462; Fri, 13 Aug 2021 16:22:01 +0000 (UTC)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1C51F60FC4
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 13 Aug 2021 14:15:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C51F60FC4
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Cc:To:
-	Subject:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=O+yWI0Za6eu48Bd51V2NxvUDbBMYAudQvM/n5/Lo+Ug=; b=y0BMl/3/WklZ26
-	uG4bK8AU/8LtTkhPJJdsXvVZ+QwTFvoR7WIJd66cK2qgs4BBgqH3FjjRE9putav0BZQg+QF6FJ99a
-	F21rQ2Cwh+l8S8YHCGzzs/1R+AuoGidHqoBfiXzkzNvQSoKZnyhc1sJrk5DzZ22rU57QtJi+Ns1dg
-	PkLey9YYKyvXd1j3SWTRbPJRvDjJSjc/0XeHXVrBNEDSseVJrZ1A4KnDurnqVLh3Lu0jWdfHnQmHO
-	6xSA8ewakioVe/Ob4xVmyX5UwJo22gIV6B77D94rt4jwMYAiI7Qw+1Vzpw4A5Fwaw1ZuLW2lrLjiw
-	uM4ewA3RjTXwXe7Xdorg==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mEXvp-00ClAi-3B; Fri, 13 Aug 2021 14:13:09 +0000
-Received: from mail-wm1-x335.google.com ([2a00:1450:4864:20::335])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mEXvj-00Cl9s-Vw
- for linux-arm-kernel@lists.infradead.org; Fri, 13 Aug 2021 14:13:05 +0000
-Received: by mail-wm1-x335.google.com with SMTP id 6so6984727wme.5
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 13 Aug 2021 07:13:02 -0700 (PDT)
+	by mail.kernel.org (Postfix) with ESMTPS id 8F69B610E9;
+	Fri, 13 Aug 2021 16:22:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8F69B610E9
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id f10so4109255wml.2;
+        Fri, 13 Aug 2021 09:22:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=baylibre-com.20150623.gappssmtp.com; s=20150623;
- h=from:subject:to:cc:organization:message-id:date:user-agent
- :mime-version:content-language:content-transfer-encoding;
- bh=jd2PnuxQ53Mi4klFMZrE2PRRg/Ii7zJi7JDhmX3RAbU=;
- b=IUH7GO8/qkee4KkNOsGKb2/9NXmZMGIWqZZC9vk2ifx9ertS9p5mhAEXFFbUoGO99U
- 6l3kOBOy4q+T8syOG3cZ9L5u1TJi24y3yq4bIdxalO4xTpcG7QadQg8l46KJ0K4lqDXM
- ZRYEJ0wszTMLafPpNGIiQPlpv0EzF33H6ryZJlHBidnHqEkKiBsQefvQT5BC4IPBVX40
- E2sNZh99s7ceN+q5vRvnTUmt6CH3gc6gsT8qk7MeFWrV+hO8pGiIzE3CR9UZTh9bMIAF
- NKHPwn7Sp7Fzzydg/Z7SwiUMwSeTYBR+chw2YKxG6pv9vZsgE4KDWdOGXAzFWG0sFhNM
- IRXA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cvMCxY97+19NBnX/9se1xiPhL0qxZh2NAax8kyQ2dwo=;
+        b=dUbSPwhvwSjHPMw92H/M1+w9GaV/wRo54rK6vfEWeNEM5Ajh2pCT2OG8xFbmxWMnCf
+         2tUTRHwNcIfsApSO9jYxTE7E6gXiLGRYFWjlnYu4WdQs5OMNKQSDw8WLWlBfVVEOb7BF
+         /pEnKizufa1clufaDdxhNJBqX9MgLmMuCB5x2Ky7b+u0Omw427lGZmx9BIiSeZio+/ZB
+         yVFHvlBl53sEUpf9YmEcMx1xqOiURmTtm6T6sorfxt6fy7DuhZg9x20uJYeJ/gCdDvYV
+         9gLZR2MFU9gr8zBntLqAuLjMewdKGHqjV18al/pUGEgRhn4wgYHuqKQkIN++hlLTXfaC
+         mq5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:subject:to:cc:organization:message-id:date
- :user-agent:mime-version:content-language:content-transfer-encoding;
- bh=jd2PnuxQ53Mi4klFMZrE2PRRg/Ii7zJi7JDhmX3RAbU=;
- b=tByFxh12OHQTGF4D7wiqrVtgufqskwZponuwZJ/AqqQ8g82kinUa+ZF92gbLTO8Non
- d74Useo9BjGX//2YKpbi01mAUnzJ4q9XimT7J9KP+T5OU4RJqpMWs4TOje8qo65xEXD8
- LRFxa+ad8hO85QekZp7mWSVAjCI9U6bLJKSVDtsNeurCypiAMfX4XzbBTAfJqTPlpR9+
- 1sZafW8nm07vm7JC4g5FqTQPoytx2CFTmEzsL7LqQSGkZC3IYB7tRYRCARwehw3ZU5Oj
- LgWqRYpG7LedVoRhzG5RBQyBt8/YFsFEqCoSXLG/e8uIHEbvV4gFHe5WcW02hF71rjwI
- i+5w==
-X-Gm-Message-State: AOAM5300RcXor71ut9Yx1oJVwg0tkwJIRflOW6z9Skxn0RN+9rzC2AjZ
- sLjgeMVUcEFkiDdvtAGdOeBo5tI2/IYi11yj
-X-Google-Smtp-Source: ABdhPJyW3rK8Kj1V7N9Xm0sorD6ZAt5rlYeqbz7zXybHaZJXijOtk+DEvUc1XI9MFzAs3pMz+Kv1rQ==
-X-Received: by 2002:a1c:26c5:: with SMTP id m188mr2956951wmm.19.1628863980959; 
- Fri, 13 Aug 2021 07:13:00 -0700 (PDT)
-Received: from ?IPv6:2001:861:44c0:66c0:f772:22f3:b804:55d6?
- ([2001:861:44c0:66c0:f772:22f3:b804:55d6])
- by smtp.gmail.com with ESMTPSA id r129sm1532540wmr.7.2021.08.13.07.13.00
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 13 Aug 2021 07:13:00 -0700 (PDT)
-From: Neil Armstrong <narmstrong@baylibre.com>
-Subject: [GIT PULL] arm64: dts: amlogic updates for v5.15 part 2
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cvMCxY97+19NBnX/9se1xiPhL0qxZh2NAax8kyQ2dwo=;
+        b=L4Km9LHIBmQdTXC4GeJkon1Lf6PclVbarEqS4frUMiy88f3cGgdXdV8B01RJOLpFkG
+         KHXjcEPMBZTiodNDxFlY1yg5XhlkBionDDRqTUJPhwWmuslPW3gm+wtQ/M6Mo4F5zfxi
+         LtRxOOyJ+UI43ZDsR+mL+azfQ+30eDTLluS0oO8Lxnf41ak1wJOvK1/uYVkRXJhjAJVY
+         JFXbdiQS4HoCnVSdN8jlgZ7I36Wtuwr9Tm0mmSIKNmcYVFLWpcPUdLOyDqjwLayUMD1+
+         eSzRrh05s3UjjF1gJLqNHbp4BHIp2e4BGnEjD6r5nVMVt443ELgaW2z1XGnZECZK8Gu3
+         xSgQ==
+X-Gm-Message-State: AOAM532+3GSCoujayvSpSKdu2cUtf62cii23sfgVpIiVywW0LYmFG6Hh
+	ljkKNgH363swHZS9b5fakvLVYyynkf8=
+X-Google-Smtp-Source: ABdhPJwn/ymZnHrGWDZ5iKAtYE+5ZRurgB6fOyOH3CXkBKWzIk2EWBxsfrai5X2NWibh+8KUsGe2mw==
+X-Received: by 2002:a7b:cf0c:: with SMTP id l12mr3467826wmg.62.1628871719342;
+        Fri, 13 Aug 2021 09:21:59 -0700 (PDT)
+Received: from localhost ([217.111.27.204])
+        by smtp.gmail.com with ESMTPSA id l38sm1769106wmp.15.2021.08.13.09.21.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Aug 2021 09:21:58 -0700 (PDT)
+From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org
-Organization: Baylibre
-Message-ID: <47d77095-eee7-bbd9-d3aa-1dabeea3f0b9@baylibre.com>
-Date: Fri, 13 Aug 2021 16:12:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	linux-tegra@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/6] dt-bindings: Changes for v5.15-rc1
+Date: Fri, 13 Aug 2021 18:21:52 +0200
+Message-Id: <20210813162157.2820913-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.32.0
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210813_071304_157188_54A731E7 
-X-CRM114-Status: GOOD (  11.60  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210813141259.0yvZqnqPyO03YG06MXfruw4miacGj1-iS0Uj-WxUtG0@z>
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Hi ARM SoC maintainers,
 
-Here's the second set of ARM64 DT changes for v5.15:
-- add audio nodes for vega-s95 & nexbox-a1
+The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
-Neil
-
-The following changes since commit 4b5260032ec691b11a9185f7f38f5761e67fab48:
-
-  arm64: dts: meson: improve gxm-khadas-vim2 wifi (2021-07-26 10:08:16 +0200)
+  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git amlogic-arm64-dt-for-v5.15-v2
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-dt-bindings
 
-for you to fetch changes up to c6cf488e3bfdf92427686317d99e0342516753de:
+for you to fetch changes up to 900a486ac73dfdf9b1629e7e4df6eacc92da7578:
 
-  arm64: dts: meson: add audio playback to vega-s95 dtsi (2021-08-10 09:57:05 +0200)
+  dt-bindings: tegra: Document NVIDIA Jetson TX2 NX developer kit (2021-08-12 15:06:28 +0200)
 
-----------------------------------------------------------------
-Amlogic ARM64 DT changes for v5.15 part 2:
-- add audio to nodes vega-s95
-- add audio to nodes nexbox-a1
+Thanks,
+Thierry
 
 ----------------------------------------------------------------
-Christian Hewitt (2):
-      arm64: dts: meson: add audio playback to nexbox-a1
-      arm64: dts: meson: add audio playback to vega-s95 dtsi
+dt-bindings: Changes for v5.15-rc1
 
- .../boot/dts/amlogic/meson-gxbb-vega-s95.dtsi      | 61 ++++++++++++++++++++++
- .../arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dts | 61 ++++++++++++++++++++++
- 2 files changed, 122 insertions(+)
+This contains a single patch that adds the compatible string for the
+NVIDIA Jetson TX2 NX developer kit.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+----------------------------------------------------------------
+Thierry Reding (1):
+      dt-bindings: tegra: Document NVIDIA Jetson TX2 NX developer kit
+
+ Documentation/devicetree/bindings/arm/tegra.yaml | 1 +
+ 1 file changed, 1 insertion(+)
