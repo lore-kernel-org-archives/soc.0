@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A42BC4338F
-	for <soc@archiver.kernel.org>; Fri, 13 Aug 2021 16:22:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F2B6C4320A
+	for <soc@archiver.kernel.org>; Fri, 13 Aug 2021 16:22:09 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 80E1D610F7; Fri, 13 Aug 2021 16:22:07 +0000 (UTC)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	id 8506C610EA; Fri, 13 Aug 2021 16:22:09 +0000 (UTC)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 58FC161042;
-	Fri, 13 Aug 2021 16:22:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 58FC161042
+	by mail.kernel.org (Postfix) with ESMTPS id 5A77861042;
+	Fri, 13 Aug 2021 16:22:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5A77861042
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id q11-20020a7bce8b0000b02902e6880d0accso10065793wmj.0;
-        Fri, 13 Aug 2021 09:22:07 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id l18so14033332wrv.5;
+        Fri, 13 Aug 2021 09:22:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=na+WKuSW69ggX7scxHBH8lK2fDYI3JGQA48xr5ljTBg=;
-        b=uAI8DEbf+fOWer1VlBt0DU6R9RoJXUdqwH+7FrhTJ2M3emj0lIdaQsVys7sYtZytv4
-         4V+PaD8MqEk0+DOAUVnQLrRDmNXKC+UQl3KLKQJbK7zS6MAKiPs3+2HN8WHa6PBacvGl
-         ig9tQL93P3ZTY+GisuEs9vJARu2WQS2WnCr8Jj2wRB6T+XlmrJldcZ4MOcfy0uKwKOnC
-         OCEhpK2YRr/O8vfJ7AQWwOhQ1Ce9NyUzmgc3doU7NXQBPSo6m1MkOcj7q2SQ6VVfOETI
-         Zgj/U/W+M2TQscUyOd4C51uuW9Nga25Bbtl37cVXKoETmpy5V7bycEDiZxn7I08fO+uc
-         XVlw==
+        bh=hL2E+OHMaEPvpW4ofvFox1pZWIDm0uZSMYdfM4ARIh8=;
+        b=sZhtKvUnMsvvGQjtf3803c3v8rIIlRbZdxTiwZFpS207ksRQ4dK4EwS/c+XIWwih7E
+         PX7cU7ob6GiI+qri200jPcbtzqAYlkNM+trDulTpJw5ck/rweHRdejz9f4vQOMcKLMAJ
+         qWeFCO9pQa2+UrPOV3SG+S7puwjC3NJQlOO1/WkhwMbISyzVzaVsaSM/RSlx8jfpM7SR
+         jUV1J0cUaP6VMnNzpwwAHz9YDLc1KlnvTOsJFeR0BdO5DBO7/tALZ3BFvLXrylHiU3eQ
+         TFFimCWLYGfvrKE5JAmN5v3cWwttQnEhiHGO+eyJEgvUdCh84tXQx+SqrdD8guVWDRr0
+         Sxxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=na+WKuSW69ggX7scxHBH8lK2fDYI3JGQA48xr5ljTBg=;
-        b=MO/abUoA3UKOPNvoKdJCXcTvl5D9JnPuYAQrk2l29+qyRyzuizJ+011nCaXBKIgQ5+
-         0m0d8MnNO/PxuD6IB18Y78lf5hoyeV0cQoVWRlNaPvSlpxqU9XZHta3gFD6bH08oN6l+
-         HL2R8tO/uXGnw+QVJXgw445SNoeabtP3gBHVMPPZNe1xpNXJsMqtkqFEZC0rIo8gpoqQ
-         M5M8pFortON93oPPKGdPmkxUuUjERQUbPnPiY90SpRwPIiWdE1TM0YB8aFfAurt5JvUE
-         9Z3AVUm4LPgGyy2iYm4TcqJtbXsUmrd0Fh7+arnk3IQUiwN/pemjMlZCHzhXP1Gj0kFi
-         mGJA==
-X-Gm-Message-State: AOAM533h5k2IYiXO5aJMVUox1vd6tgqtjVh1WqR3vuAS6V6CTXCZYtri
-	avUJW1UnrOfLU33m8Iq5hw2GoUG9czY=
-X-Google-Smtp-Source: ABdhPJyR7mqyoJ/Ie3E1m/so/oG020CZ4raAk3ZnLRHH7Obbkp76F1v2zZNFWMVZkiXU2gCjnniS+w==
-X-Received: by 2002:a05:600c:1ca7:: with SMTP id k39mr3650192wms.115.1628871725411;
-        Fri, 13 Aug 2021 09:22:05 -0700 (PDT)
+        bh=hL2E+OHMaEPvpW4ofvFox1pZWIDm0uZSMYdfM4ARIh8=;
+        b=Sh7ZBlmYPxAj2ANdVGjMalzhYOh/HI0C8Per6xnrYaZCAWpVD3e6c+tbSGoO0Gj5sj
+         ZTZAj6dyKoAdU6k6LgM2IqPr1ZxNtO/1Mq2Xn3GIFXa4POvEfVoAnS0oL4GkMR0S5KsT
+         AfeeWGxFXU3QOabgg8E0iW3bJkQkBzWvPLEzu3+1yLsewY2Vsi+JSPJ9TnpMLsgN/mX8
+         /aItngfQxObJrtZhYY9Nl85TTz85n5Rus4heOT7TYa0pi9wOORDnP2UGu6BkNxPEXBRZ
+         2cnTaUyIGBmME9lxFLrDBvlY33F0efk2fZVLpgiBcfwFuVyoKT1cygIG5CltSbT+mwXz
+         2isg==
+X-Gm-Message-State: AOAM530+7fwD1IuhGov4oObaCEGtxoQjqNRNZX4+nrgJn1G2bhBg5Gm4
+	mAcGW78r8L2PizDVGeO6OAo4+Oo5s5s=
+X-Google-Smtp-Source: ABdhPJwzR+Uowa5MQLzSxcsOnFulMAAm1lotJXL0blvGBNnYk/iRwy07QQUX8ZBrJwBpuoQ2jds9KQ==
+X-Received: by 2002:a5d:4dc3:: with SMTP id f3mr4226800wru.302.1628871727392;
+        Fri, 13 Aug 2021 09:22:07 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id g9sm1812046wmk.34.2021.08.13.09.22.04
+        by smtp.gmail.com with ESMTPSA id g9sm1812124wmk.34.2021.08.13.09.22.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Aug 2021 09:22:04 -0700 (PDT)
+        Fri, 13 Aug 2021 09:22:06 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -61,9 +61,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 4/6] ARM: tegra: Device tree changes for v5.15-rc1
-Date: Fri, 13 Aug 2021 18:21:55 +0200
-Message-Id: <20210813162157.2820913-4-thierry.reding@gmail.com>
+Subject: [GIT PULL 5/6] ARM: tegra: Default configuration changes for v5.15-rc1
+Date: Fri, 13 Aug 2021 18:21:56 +0200
+Message-Id: <20210813162157.2820913-5-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210813162157.2820913-1-thierry.reding@gmail.com>
 References: <20210813162157.2820913-1-thierry.reding@gmail.com>
@@ -79,54 +79,34 @@ The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-arm-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-arm-defconfig
 
-for you to fetch changes up to 2270ad2f4e123336af685ecedd1618701cb4ca1e:
+for you to fetch changes up to 806b99206b840bcf3bfa44227dc978880d13ed1b:
 
-  ARM: tegra: tamonten: Fix UART pad setting (2021-08-13 17:59:41 +0200)
+  ARM: multi_v7_defconfig: Enable CONFIG_TEGRA30_TSENSOR (2021-08-11 12:15:48 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-ARM: tegra: Device tree changes for v5.15-rc1
+ARM: tegra: Default configuration changes for v5.15-rc1
 
-The majority of this is temperature sensor additions for various devices
-and fixes to the trigger type of the thermal interrupts.
-
-Other than that there are various minor fixes across the board.
+Enables a couple of drivers by default so that the configuration is
+useful on more devices. This also rebuilds the tegra_defconfig, which
+hasn't been done in a long time.
 
 ----------------------------------------------------------------
-Andreas Obergschwandtner (1):
-      ARM: tegra: tamonten: Fix UART pad setting
+Dmitry Osipenko (5):
+      ARM: tegra: Enable CONFIG_TEGRA30_TSENSOR
+      ARM: tegra: Enable CONFIG_FB
+      ARM: tegra: Enable Acer A500 drivers
+      ARM: multi_v7_defconfig: Enable Acer A500 drivers
+      ARM: multi_v7_defconfig: Enable CONFIG_TEGRA30_TSENSOR
 
-Dmitry Osipenko (15):
-      ARM: tegra: Add SoC thermal sensor to Tegra30 device-trees
-      ARM: tegra: ouya: Add interrupt to temperature sensor node
-      ARM: tegra: paz00: Add interrupt to temperature sensor node
-      ARM: tegra: nexus7: Add interrupt to temperature sensor node
-      ARM: tegra: acer-a500: Add interrupt to temperature sensor node
-      ARM: tegra: nyan: Correct interrupt trigger type of temperature sensor
-      ARM: tegra: apalis: Correct interrupt trigger type of temperature sensor
-      ARM: tegra: cardhu: Correct interrupt trigger type of temperature sensor
-      ARM: tegra: dalmore: Correct interrupt trigger type of temperature sensor
-      ARM: tegra: jetson-tk1: Correct interrupt trigger type of temperature sensor
-      ARM: tegra: acer-a500: Remove bogus USB VBUS regulators
-      ARM: tegra: acer-a500: Add power supplies to accelerometer
-      ARM: tegra: acer-a500: Use verbose variant of atmel,wakeup-method value
-      ARM: tegra: acer-a500: Improve thermal zones
-      ARM: tegra: nexus7: Improve thermal zones
+Maxim Schwalm (2):
+      ARM: tegra: Enable CONFIG_CROS_EC
+      ARM: tegra: Rebuild default configuration
 
- arch/arm/boot/dts/tegra114-dalmore.dts             |  2 +-
- arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi        |  2 +-
- arch/arm/boot/dts/tegra124-apalis.dtsi             |  2 +-
- arch/arm/boot/dts/tegra124-jetson-tk1.dts          |  2 +-
- arch/arm/boot/dts/tegra124-nyan.dtsi               |  2 +-
- arch/arm/boot/dts/tegra20-acer-a500-picasso.dts    | 90 ++++++++++++++--------
- arch/arm/boot/dts/tegra20-paz00.dts                |  4 +
- arch/arm/boot/dts/tegra20-tamonten.dtsi            | 14 ++--
- .../dts/tegra30-asus-nexus7-grouper-common.dtsi    | 60 ++++++++++++++-
- arch/arm/boot/dts/tegra30-cardhu.dtsi              |  2 +-
- arch/arm/boot/dts/tegra30-ouya.dts                 | 13 ++--
- arch/arm/boot/dts/tegra30.dtsi                     | 87 ++++++++++++++++++++-
- 12 files changed, 218 insertions(+), 62 deletions(-)
+ arch/arm/configs/multi_v7_defconfig |  4 ++++
+ arch/arm/configs/tegra_defconfig    | 25 ++++++++-----------------
+ 2 files changed, 12 insertions(+), 17 deletions(-)
