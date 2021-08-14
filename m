@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-23.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 795EBC4338F
-	for <soc@archiver.kernel.org>; Sat, 14 Aug 2021 13:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F3F5C4338F
+	for <soc@archiver.kernel.org>; Sat, 14 Aug 2021 13:39:13 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id E51CB60F91; Sat, 14 Aug 2021 13:39:10 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3749760F48;
-	Sat, 14 Aug 2021 13:39:09 +0000 (UTC)
+	id 0B9E060F9F; Sat, 14 Aug 2021 13:39:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3782860F92;
+	Sat, 14 Aug 2021 13:39:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1628948350;
-	bh=0BI8Cf8cXNjZtl2BGJ0xZotV/euLVb17InFI8CNieIY=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=c2INEHk9EcmhOaqX6a43j8KrtUOt8DXepKOcZgez5yzboCf1tMU+O2m7GSDMFjmhg
-	 CeTXjSDjvCepaonZxf69h2EYHQBD+kc5R6lZovte5sxEOg2vajQw1AdckaOK1TRyKB
-	 AcZAyOC2YqQU4Uxxl3aoBA4ZlFvGtBV0vmIaAbySaDzF45oKuC2mExDG44e3w2U0kU
-	 BdXgF2+1J8VDjYoJaMUC1Omntd/XiYREpWxZ8BgKHatpfDJWc+vNfDyYCg99hikksp
-	 3C6hwq5fL0Td0l4Bj+Zr6QckNo/Ka5jqoKdBDfIbM8gMBbblr5aG/43o8STAXTJiRV
-	 BRlQRVjeMGkpQ==
+	s=k20201202; t=1628948352;
+	bh=LX+ERigAyoR/GYeAckGr0gGDAcTboOLSNey/VX1tzmY=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Ryp8v8cDVte1CyM9BTDvBVvjIezKkOAQ/NkajkfZTY8NJNIUjxXyIrjDB8gM2ZjtG
+	 GRnCCC2CDZCPevPM8XpBn2axRgUOg1Aw6CdMdVbnUSFY0Q5+c0XpHKbEkug1DA1ca7
+	 xJ+xuWzMv7AsZ2fqSgNSh7uWxKORMcK/5XuZ3JaacZ/9XdvYPywgat+53MMstdfBwt
+	 xV/KbxqC8a9y2RyIEIYTGkEHjxvSa6Z0qVceVpn6SMDO+0sfqaycgvS3KBUBNptufb
+	 hDomRIK8L2pxvjbDhqcOxKPZn8aHHR+oaaAC/KSc4OJLz/odwTPkzbutBw+LEsfkYT
+	 W82GoYr6HCqpw==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -34,10 +34,12 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/4] i.MX DT bindings update for 5.15
-Date: Sat, 14 Aug 2021 21:38:50 +0800
-Message-Id: <20210814133853.9981-1-shawnguo@kernel.org>
+Subject: [GIT PULL 2/4] i.MX arm32 device tree changes for 5.15
+Date: Sat, 14 Aug 2021 21:38:51 +0800
+Message-Id: <20210814133853.9981-2-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210814133853.9981-1-shawnguo@kernel.org>
+References: <20210814133853.9981-1-shawnguo@kernel.org>
 
 The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
@@ -45,48 +47,108 @@ The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-5.15
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt-5.15
 
-for you to fetch changes up to 0fdedc09af18d231aa581331821c9ab6ef0903f1:
+for you to fetch changes up to 87a8c7164022d2e5c558bc0e14075c7a50af7f95:
 
-  dt-bindings: arm: fsl: Add Traverse Ten64 (LS1088A) board (2021-08-14 13:52:36 +0800)
-
-----------------------------------------------------------------
-i.MX DT bindings update for 5.15:
-
-- Add vendor prefix for MNT Research GmbH, SKOV A/S and Traverse
-  Technologies.
-- Add compatible for Nitrogen8 SoM, MNT Reform2, Traverse Ten64,
-  SKOV i.MX6, SolidSense and i.MX8M GW7902 boards.
-- Add compatible for i.MX8QM JPEG codec.
+  ARM: dts: imx6qp-prtwd3: configure ENET_REF clock to 125MHz (2021-08-14 13:45:58 +0800)
 
 ----------------------------------------------------------------
-Christoph Niedermaier (1):
-      dt-bindings: arm: fsl: Add DHCOM PicoITX and DHCOM DRC02 boards
+i.MX arm32 device tree changes for 5.15:
 
-Lucas Stach (3):
-      dt-bindings: arm: fsl: add Nitrogen8 SoM
-      dt-bindings: vendor-prefixes: add mntre
-      dt-bindings: arm: fsl: add MNT Reform2 board
+- A series from Christoph Niedermaier to clean up i.MX6 DHCOM support.
+- New board support: DHCOM based PicoITX, DHSOM based DRC02, SolidRun
+  SolidSense, SKOV i.MX6 boards.
+- Add WiFi support for i.MX7D base reMkarkable2 device.
+- Add FTM devices for i.MX7 to have Flex Timers support.
+- Configure ENET_REF clock to 125MHz for imx6qp-prtwd3 to support RGMII
+  PHY mode.
+- Drop unneeded #address-cells and #size-cells from vf610-zii SPI EEPROM
+  device node.
+- Add missing USB OTG OC pinmux and Crypto device for i.MX6QDL Gateworks
+  boards.
 
-Mathew McBride (2):
-      dt-bindings: vendor-prefixes: add Traverse Technologies
-      dt-bindings: arm: fsl: Add Traverse Ten64 (LS1088A) board
+----------------------------------------------------------------
+Alistair Francis (1):
+      ARM: dts: imx7d-remarkable2: Add WiFi support
 
-Mirela Rabulea (1):
-      dt-bindings: media: imx-jpeg: Add compatible for i.MX8QM JPEG codec
+Aswath Govindraju (1):
+      ARM: dts: vf610-zii-dev-rev-b: Remove #address-cells and #size-cells property from at93c46d dt node
 
-Oleksij Rempel (2):
-      dt-bindings: vendor-prefixes: Add an entry for SKOV A/S
-      dt-bindings: arm: fsl: add SKOV imx6q and imx6dl based boards
+Christoph Niedermaier (15):
+      ARM: dts: imx6q-dhcom: Add the parallel system bus
+      ARM: dts: imx6q-dhcom: Add interrupt and compatible to the ethernet PHY
+      ARM: dts: imx6q-dhcom: Fill GPIO line names on DHCOM SoM
+      ARM: dts: imx6q-dhcom: Adding Wake pin to the PCIe pinctrl
+      ARM: dts: imx6q-dhcom: Align stdout-path with other DHCOM SoMs
+      ARM: dts: imx6q-dhcom: Add keys and leds to the PDK2 board
+      ARM: dts: imx6q-dhcom: Remove ddc-i2c-bus property
+      ARM: dts: imx6q-dhcom: Set minimum memory size of all DHCOM i.MX6 variants
+      ARM: dts: imx6q-dhcom: Use 1G ethernet on the PDK2 board
+      ARM: dts: imx6q-dhcom: Rework of the DHCOM GPIO pinctrls
+      ARM: dts: imx6q-dhcom: Rearrange of iomux
+      ARM: dts: imx6q-dhcom: Cleanup of the devicetrees
+      ARM: dts: imx6qdl-dhcom: Split SoC-independent parts of DHCOM SOM and PDK2
+      ARM: dts: imx6qdl-dhcom: Add DHCOM based PicoITX board
+      ARM: dts: imx6qdl-dhcom: Add DHSOM based DRC02 board
 
-Russell King (Oracle) (1):
-      dt-bindings: arm: fsl: add SolidSense boards
+Oleksij Rempel (1):
+      ARM: dts: imx6qp-prtwd3: configure ENET_REF clock to 125MHz
 
-Tim Harvey (1):
-      dt-bindings: arm: imx: add imx8mm/imx8mn GW7902 support
+Russell King (1):
+      ARM: dts: add SolidRun SolidSense support
 
- Documentation/devicetree/bindings/arm/fsl.yaml     | 29 ++++++++++++++++++++++
- .../devicetree/bindings/media/nxp,imx8-jpeg.yaml   | 19 ++++++++------
- .../devicetree/bindings/vendor-prefixes.yaml       |  6 +++++
- 3 files changed, 47 insertions(+), 7 deletions(-)
+Sam Ravnborg (1):
+      ARM: dts: add SKOV imx6q and imx6dl based boards
+
+Thomas Perrot (1):
+      ARM: dts: imx7: add ftm nodes for Flex Timers
+
+Tim Harvey (2):
+      ARM: dts: imx6qdl-gw5xxx: add missing USB OTG OC pinmux
+      ARM: dts: imx6qdl-gw5904: atecc508a support
+
+ arch/arm/boot/dts/Makefile                         |  11 +-
+ arch/arm/boot/dts/imx6dl-dhcom-picoitx.dts         |  20 +
+ arch/arm/boot/dts/imx6dl-skov-revc-lt2.dts         |  13 +
+ arch/arm/boot/dts/imx6dl-skov-revc-lt6.dts         | 106 ++++
+ arch/arm/boot/dts/imx6dl-solidsense.dts            |  54 ++
+ arch/arm/boot/dts/imx6q-dhcom-pdk2.dts             | 270 +--------
+ arch/arm/boot/dts/imx6q-skov-revc-lt2.dts          |  36 ++
+ arch/arm/boot/dts/imx6q-skov-revc-lt6.dts          | 128 +++++
+ .../boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts    | 127 +++++
+ arch/arm/boot/dts/imx6q-solidsense.dts             |  54 ++
+ arch/arm/boot/dts/imx6qdl-dhcom-drc02.dtsi         | 139 +++++
+ arch/arm/boot/dts/imx6qdl-dhcom-pdk2.dtsi          | 361 ++++++++++++
+ arch/arm/boot/dts/imx6qdl-dhcom-picoitx.dtsi       |  69 +++
+ ...imx6q-dhcom-som.dtsi => imx6qdl-dhcom-som.dtsi} | 631 +++++++++++++++------
+ arch/arm/boot/dts/imx6qdl-gw51xx.dtsi              |   1 +
+ arch/arm/boot/dts/imx6qdl-gw52xx.dtsi              |   1 +
+ arch/arm/boot/dts/imx6qdl-gw54xx.dtsi              |   1 +
+ arch/arm/boot/dts/imx6qdl-gw553x.dtsi              |   1 +
+ arch/arm/boot/dts/imx6qdl-gw5904.dtsi              |   5 +
+ arch/arm/boot/dts/imx6qdl-skov-cpu-revc.dtsi       |  54 ++
+ arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi            | 477 ++++++++++++++++
+ arch/arm/boot/dts/imx6qdl-solidsense.dtsi          | 160 ++++++
+ arch/arm/boot/dts/imx6qp-prtwd3.dts                |   2 +
+ arch/arm/boot/dts/imx6s-dhcom-drc02.dts            |  30 +
+ arch/arm/boot/dts/imx7d-remarkable2.dts            |  91 +++
+ arch/arm/boot/dts/imx7s.dtsi                       |  28 +
+ arch/arm/boot/dts/vf610-zii-dev-rev-b.dts          |   2 -
+ 27 files changed, 2431 insertions(+), 441 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx6dl-dhcom-picoitx.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-skov-revc-lt2.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-skov-revc-lt6.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-solidsense.dts
+ create mode 100644 arch/arm/boot/dts/imx6q-skov-revc-lt2.dts
+ create mode 100644 arch/arm/boot/dts/imx6q-skov-revc-lt6.dts
+ create mode 100644 arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
+ create mode 100644 arch/arm/boot/dts/imx6q-solidsense.dts
+ create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-drc02.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-pdk2.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-picoitx.dtsi
+ rename arch/arm/boot/dts/{imx6q-dhcom-som.dtsi => imx6qdl-dhcom-som.dtsi} (57%)
+ create mode 100644 arch/arm/boot/dts/imx6qdl-skov-cpu-revc.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6qdl-solidsense.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6s-dhcom-drc02.dts
