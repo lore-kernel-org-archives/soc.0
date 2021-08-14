@@ -5,16 +5,16 @@ X-Spam-Level:
 X-Spam-Status: No, score=-22.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D43D9C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 14 Aug 2021 13:41:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4B48C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Sat, 14 Aug 2021 13:41:25 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9482960EE4
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 14 Aug 2021 13:41:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9482960EE4
+	by mail.kernel.org (Postfix) with ESMTPS id A9F2260EE0
+	for <linux-arm-kernel@archiver.kernel.org>; Sat, 14 Aug 2021 13:41:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A9F2260EE0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,31 +23,31 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Post:List-Archive:List-Unsubscribe:List-Id:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=T+j2+6jbqnmqoGjF1i9xxstf6nC/6AKLVLiMlr3zrqE=; b=vrJuRgz5I0FbIK
-	AA+VeA5mnn90//hPoKlPZVP45QvI7/arNzs/kwkdx4c9QlHWaS8ZcgbB7qJAQZRlHBHM+9UUL7tqy
-	L3fClZrjWZjr9mJRGgTg0WUipNqtgDbZe/d6qI43cDXKAZiRVlZGhU3MJMKo+610MVjeiXSkp8MF0
-	xVzBfPeyPqU70HHnOHm8EGVIATKjfPZ9z77MUY7Id85N+Kb3SECfjKwclH2WM6B14FRTaLjQH/4Vs
-	w1yrHhBCN7xA6SDLjnZM1LgE1EPjlQKG2ZXqL8WAozOa0qf02y00DSCxBJSRRvLT9XbytP8Wmv0V6
-	R9LbnLkT298UaNcQ6Uhw==;
+	List-Owner; bh=yBaVtVRflYqT8clUul3RN5c1cqXnlDMfUUMPEtizyo0=; b=rKPPABCLYYkm3h
+	tjMUgLP5DMasZ6yvoA8L3cxrl3J/QG1lxg2hy3YB2LRszCm4UwsaO4ZHNXnmffvQQBU4ZQa7YB0Hm
+	uHgUbI5BTkcn94/MD10r6VQ/B5lqfe5fS9h0deFrqChOUCCss8PVUeq0mPyCv+EyVij5RShl9SVNZ
+	s9RrV56zKwtwf6Rs8Twt9UWBEQFttUwvO28/PZik6HNxN0crOmsH7icWuCnYgm2Dlw7u0S57jAHsC
+	JQ8hmInhDeCR68iM/u/BX+jR4stj/CGPwUeDQmuI9BgMFHR8EceZzR6Frplb5ta9HYM0XQf4UBw2k
+	rvQBJoq4xQYZD10tza1Q==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mEtt8-00ECxP-08; Sat, 14 Aug 2021 13:39:50 +0000
+	id 1mEtsl-00ECuq-KK; Sat, 14 Aug 2021 13:39:27 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mEtsb-00ECtz-CH
- for linux-arm-kernel@lists.infradead.org; Sat, 14 Aug 2021 13:39:21 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7EB7A6103A;
- Sat, 14 Aug 2021 13:39:15 +0000 (UTC)
+ id 1mEtsX-00ECtD-6I
+ for linux-arm-kernel@lists.infradead.org; Sat, 14 Aug 2021 13:39:17 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3782860F92;
+ Sat, 14 Aug 2021 13:39:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1628948357;
- bh=zHbtbeKUJqo0sHvc4hxV+jhPtYhWxMhgdp6htMvVLyU=;
+ s=k20201202; t=1628948352;
+ bh=LX+ERigAyoR/GYeAckGr0gGDAcTboOLSNey/VX1tzmY=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=nOfRLEL3QXmmmS31BMkeHfC+Wkd9tWI4QntwWjnAieO/JKmZel87RU3gf9Une3O3G
- GVPJBKfIJb3P9BRPy0FDROXdnsDo3l61yy9nR2/h4neUHS48YJ/OP0LQnj/7aKCwFb
- 1f+2rHnD3qMk1vhAVFnkneJUhaC66oy8kM4PrMnIiR5bQA+07hR0CJL/DK42Vnl6yX
- X9Gsn2wYSlZ/hRKAXdyqLS+C6ivcVh/gt9s9vXSDNWRlr8cKeekyfsGBRM3rTjVaIY
- L4bBY+5Q/FQEht/VBX01ikxSB9sx20dJr+Gk6T7Sho881M3Q1NF6ypR+B7p4hADuxh
- WYFe2486zq0/Q==
+ b=Ryp8v8cDVte1CyM9BTDvBVvjIezKkOAQ/NkajkfZTY8NJNIUjxXyIrjDB8gM2ZjtG
+ GRnCCC2CDZCPevPM8XpBn2axRgUOg1Aw6CdMdVbnUSFY0Q5+c0XpHKbEkug1DA1ca7
+ xJ+xuWzMv7AsZ2fqSgNSh7uWxKORMcK/5XuZ3JaacZ/9XdvYPywgat+53MMstdfBwt
+ xV/KbxqC8a9y2RyIEIYTGkEHjxvSa6Z0qVceVpn6SMDO+0sfqaycgvS3KBUBNptufb
+ hDomRIK8L2pxvjbDhqcOxKPZn8aHHR+oaaAC/KSc4OJLz/odwTPkzbutBw+LEsfkYT
+ W82GoYr6HCqpw==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -56,16 +56,15 @@ Cc: Shawn Guo <shawnguo@kernel.org>, Fabio Estevam <festevam@gmail.com>,
  Stefan Agner <stefan@agner.ch>, Li Yang <leoyang.li@nxp.com>,
  kernel@pengutronix.de, linux-imx@nxp.com,
  linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 4/4] i.MX defconfig update for 5.15
-Date: Sat, 14 Aug 2021 21:38:53 +0800
-Message-ID: <20210814133853.9981-4-shawnguo@kernel.org>
+Subject: [GIT PULL 2/4] i.MX arm32 device tree changes for 5.15
+Date: Sat, 14 Aug 2021 21:38:51 +0800
+Message-ID: <20210814133853.9981-2-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210814133853.9981-1-shawnguo@kernel.org>
 References: <20210814133853.9981-1-shawnguo@kernel.org>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210814_063917_518613_6755147A 
-X-CRM114-Status: UNSURE (   4.73  )
-X-CRM114-Notice: Please train this message.
+X-CRM114-CacheID: sfid-20210814_063913_307704_B518F757 
+X-CRM114-Status: GOOD (  11.11  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -82,7 +81,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210814133853.Jx0iLDljuDi-MXYIUTeOCDUeyOhjyH4wv6Gy63SBlf8@z>
+Message-ID: <20210814133851.hkLO2MQyXmyGoDRdP7-KZyF3d2Qtg5Z3srA_azExa_0@z>
 
 The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
@@ -90,28 +89,111 @@ The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-defconfig-5.15
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt-5.15
 
-for you to fetch changes up to 7fd19c58e48fb774de9190f27f2b06a6526f2d3c:
+for you to fetch changes up to 87a8c7164022d2e5c558bc0e14075c7a50af7f95:
 
-  ARM: imx_v6_v7_defconfig: enable driver of the LTC3676 PMIC (2021-08-14 13:38:42 +0800)
-
-----------------------------------------------------------------
-i.MX defconfig update for 5.15:
-
-- Enable LTC3676 PMIC, SCSI_LOWLEVEL and KPROBES support in
-  imx_v6_v7_defconfig.
+  ARM: dts: imx6qp-prtwd3: configure ENET_REF clock to 125MHz (2021-08-14 13:45:58 +0800)
 
 ----------------------------------------------------------------
-Fabio Estevam (2):
-      ARM: imx_v6_v7_defconfig: Select CONFIG_KPROBES
-      ARM: imx_v6_v7_defconfig: Let CONFIG_SCSI_LOWLEVEL be selected
+i.MX arm32 device tree changes for 5.15:
 
-Pascal Zimmermann (1):
-      ARM: imx_v6_v7_defconfig: enable driver of the LTC3676 PMIC
+- A series from Christoph Niedermaier to clean up i.MX6 DHCOM support.
+- New board support: DHCOM based PicoITX, DHSOM based DRC02, SolidRun
+  SolidSense, SKOV i.MX6 boards.
+- Add WiFi support for i.MX7D base reMkarkable2 device.
+- Add FTM devices for i.MX7 to have Flex Timers support.
+- Configure ENET_REF clock to 125MHz for imx6qp-prtwd3 to support RGMII
+  PHY mode.
+- Drop unneeded #address-cells and #size-cells from vf610-zii SPI EEPROM
+  device node.
+- Add missing USB OTG OC pinmux and Crypto device for i.MX6QDL Gateworks
+  boards.
 
- arch/arm/configs/imx_v6_v7_defconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+----------------------------------------------------------------
+Alistair Francis (1):
+      ARM: dts: imx7d-remarkable2: Add WiFi support
+
+Aswath Govindraju (1):
+      ARM: dts: vf610-zii-dev-rev-b: Remove #address-cells and #size-cells property from at93c46d dt node
+
+Christoph Niedermaier (15):
+      ARM: dts: imx6q-dhcom: Add the parallel system bus
+      ARM: dts: imx6q-dhcom: Add interrupt and compatible to the ethernet PHY
+      ARM: dts: imx6q-dhcom: Fill GPIO line names on DHCOM SoM
+      ARM: dts: imx6q-dhcom: Adding Wake pin to the PCIe pinctrl
+      ARM: dts: imx6q-dhcom: Align stdout-path with other DHCOM SoMs
+      ARM: dts: imx6q-dhcom: Add keys and leds to the PDK2 board
+      ARM: dts: imx6q-dhcom: Remove ddc-i2c-bus property
+      ARM: dts: imx6q-dhcom: Set minimum memory size of all DHCOM i.MX6 variants
+      ARM: dts: imx6q-dhcom: Use 1G ethernet on the PDK2 board
+      ARM: dts: imx6q-dhcom: Rework of the DHCOM GPIO pinctrls
+      ARM: dts: imx6q-dhcom: Rearrange of iomux
+      ARM: dts: imx6q-dhcom: Cleanup of the devicetrees
+      ARM: dts: imx6qdl-dhcom: Split SoC-independent parts of DHCOM SOM and PDK2
+      ARM: dts: imx6qdl-dhcom: Add DHCOM based PicoITX board
+      ARM: dts: imx6qdl-dhcom: Add DHSOM based DRC02 board
+
+Oleksij Rempel (1):
+      ARM: dts: imx6qp-prtwd3: configure ENET_REF clock to 125MHz
+
+Russell King (1):
+      ARM: dts: add SolidRun SolidSense support
+
+Sam Ravnborg (1):
+      ARM: dts: add SKOV imx6q and imx6dl based boards
+
+Thomas Perrot (1):
+      ARM: dts: imx7: add ftm nodes for Flex Timers
+
+Tim Harvey (2):
+      ARM: dts: imx6qdl-gw5xxx: add missing USB OTG OC pinmux
+      ARM: dts: imx6qdl-gw5904: atecc508a support
+
+ arch/arm/boot/dts/Makefile                         |  11 +-
+ arch/arm/boot/dts/imx6dl-dhcom-picoitx.dts         |  20 +
+ arch/arm/boot/dts/imx6dl-skov-revc-lt2.dts         |  13 +
+ arch/arm/boot/dts/imx6dl-skov-revc-lt6.dts         | 106 ++++
+ arch/arm/boot/dts/imx6dl-solidsense.dts            |  54 ++
+ arch/arm/boot/dts/imx6q-dhcom-pdk2.dts             | 270 +--------
+ arch/arm/boot/dts/imx6q-skov-revc-lt2.dts          |  36 ++
+ arch/arm/boot/dts/imx6q-skov-revc-lt6.dts          | 128 +++++
+ .../boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts    | 127 +++++
+ arch/arm/boot/dts/imx6q-solidsense.dts             |  54 ++
+ arch/arm/boot/dts/imx6qdl-dhcom-drc02.dtsi         | 139 +++++
+ arch/arm/boot/dts/imx6qdl-dhcom-pdk2.dtsi          | 361 ++++++++++++
+ arch/arm/boot/dts/imx6qdl-dhcom-picoitx.dtsi       |  69 +++
+ ...imx6q-dhcom-som.dtsi => imx6qdl-dhcom-som.dtsi} | 631 +++++++++++++++------
+ arch/arm/boot/dts/imx6qdl-gw51xx.dtsi              |   1 +
+ arch/arm/boot/dts/imx6qdl-gw52xx.dtsi              |   1 +
+ arch/arm/boot/dts/imx6qdl-gw54xx.dtsi              |   1 +
+ arch/arm/boot/dts/imx6qdl-gw553x.dtsi              |   1 +
+ arch/arm/boot/dts/imx6qdl-gw5904.dtsi              |   5 +
+ arch/arm/boot/dts/imx6qdl-skov-cpu-revc.dtsi       |  54 ++
+ arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi            | 477 ++++++++++++++++
+ arch/arm/boot/dts/imx6qdl-solidsense.dtsi          | 160 ++++++
+ arch/arm/boot/dts/imx6qp-prtwd3.dts                |   2 +
+ arch/arm/boot/dts/imx6s-dhcom-drc02.dts            |  30 +
+ arch/arm/boot/dts/imx7d-remarkable2.dts            |  91 +++
+ arch/arm/boot/dts/imx7s.dtsi                       |  28 +
+ arch/arm/boot/dts/vf610-zii-dev-rev-b.dts          |   2 -
+ 27 files changed, 2431 insertions(+), 441 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx6dl-dhcom-picoitx.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-skov-revc-lt2.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-skov-revc-lt6.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-solidsense.dts
+ create mode 100644 arch/arm/boot/dts/imx6q-skov-revc-lt2.dts
+ create mode 100644 arch/arm/boot/dts/imx6q-skov-revc-lt6.dts
+ create mode 100644 arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
+ create mode 100644 arch/arm/boot/dts/imx6q-solidsense.dts
+ create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-drc02.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-pdk2.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-picoitx.dtsi
+ rename arch/arm/boot/dts/{imx6q-dhcom-som.dtsi => imx6qdl-dhcom-som.dtsi} (57%)
+ create mode 100644 arch/arm/boot/dts/imx6qdl-skov-cpu-revc.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6qdl-solidsense.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6s-dhcom-drc02.dts
 
 _______________________________________________
 linux-arm-kernel mailing list
