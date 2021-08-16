@@ -1,112 +1,136 @@
-Return-Path: <linux-arm-msm-owner@kernel.org>
+Return-Path: <SRS0=o35/=NH=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+X-Spam-Status: No, score=-22.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72CF4C4320A
-	for <linux-arm-msm@archiver.kernel.org>; Mon, 16 Aug 2021 23:12:27 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 56F0260F4B
-	for <linux-arm-msm@archiver.kernel.org>; Mon, 16 Aug 2021 23:12:27 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbhHPXM6 (ORCPT
-        <rfc822;linux-arm-msm@archiver.kernel.org>);
-        Mon, 16 Aug 2021 19:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232597AbhHPXM6 (ORCPT
-        <rfc822;linux-arm-msm@vger.kernel.org>);
-        Mon, 16 Aug 2021 19:12:58 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9CBC061764
-        for <linux-arm-msm@vger.kernel.org>; Mon, 16 Aug 2021 16:12:26 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id f16-20020a056830205000b00519b99d3dcbso1916592otp.2
-        for <linux-arm-msm@vger.kernel.org>; Mon, 16 Aug 2021 16:12:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cJDww2QKwaG5UxSU79OCSXCPa4nkLZpLQevsgJIxBTU=;
-        b=MEg0pmRm0aNWyFeoabK/rETBcjiKGQcZQPGkjPSdH3zNb+UR7LQVbRDhF9ykT1kn4M
-         LfOUIxuQHKoyds/ordQXguakZJfu9qmXYkOAHY+FsW8W6xABke79ipj3gKls9Kn5y6iM
-         36abUQLzNB+TYJdzfC/rhoYKVWNZKW7EXzQxa8dhHeCECg7w9iHHv/Nc285CcCTI4FsY
-         lSCxQXbvzrZ2I/pboKaF20WZcpjYD4bVexyFgfK1lH4daJipIp4/m8hDLOkercg1srE1
-         qQHRV5RXLmT+BegLg9BVHOQkXSoLUFdjKQd77IpPZVKmMyQCDdn9MrvkXBVHKEBMhSmQ
-         eqKg==
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65710C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 23:14:27 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 1A879604D7
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 23:14:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1A879604D7
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=dyOI5C58pMKLPToOkKV/wUvs0yLZfsthp4T0VV9trKM=; b=UgC/1YiBVhKFHn
+	R9AzsCsaW7ci3sjMN2pTM/AEyis4Wq/O18yCMeJAVJXAX7aHSWumBOmxK4GZYz8pnwXb52P30qz3b
+	IU1mkTuZqMl9Mthm+kC/+BZ6UgZ1rPN78pAVMq+htVeOUbQlHDjF1ADfFklMmPFntIZdJWH0C87Nd
+	EGFk9zB9tYl4dZKnP+Orfb/d/M6A7ERyez5yZf9R5BQy3D4dkNNoN/VmlsgVrod/gtMIIZdEQvWWt
+	Mq54PSEWetPk9hU7ELHfSnMbEjoptLktyvXPiqddQ89g5sRrqwOJaqCj+K9gBvaTYRvRWchapIM0+
+	hiwT5MVragEebYfO1wMg==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mFlmS-000UA8-MO; Mon, 16 Aug 2021 23:12:32 +0000
+Received: from mail-ot1-x336.google.com ([2607:f8b0:4864:20::336])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mFlmM-000U9n-UH
+ for linux-arm-kernel@lists.infradead.org; Mon, 16 Aug 2021 23:12:30 +0000
+Received: by mail-ot1-x336.google.com with SMTP id
+ r17-20020a0568302371b0290504f3f418fbso22856683oth.12
+ for <linux-arm-kernel@lists.infradead.org>;
+ Mon, 16 Aug 2021 16:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=cJDww2QKwaG5UxSU79OCSXCPa4nkLZpLQevsgJIxBTU=;
+ b=MEg0pmRm0aNWyFeoabK/rETBcjiKGQcZQPGkjPSdH3zNb+UR7LQVbRDhF9ykT1kn4M
+ LfOUIxuQHKoyds/ordQXguakZJfu9qmXYkOAHY+FsW8W6xABke79ipj3gKls9Kn5y6iM
+ 36abUQLzNB+TYJdzfC/rhoYKVWNZKW7EXzQxa8dhHeCECg7w9iHHv/Nc285CcCTI4FsY
+ lSCxQXbvzrZ2I/pboKaF20WZcpjYD4bVexyFgfK1lH4daJipIp4/m8hDLOkercg1srE1
+ qQHRV5RXLmT+BegLg9BVHOQkXSoLUFdjKQd77IpPZVKmMyQCDdn9MrvkXBVHKEBMhSmQ
+ eqKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cJDww2QKwaG5UxSU79OCSXCPa4nkLZpLQevsgJIxBTU=;
-        b=t4D5lj2H2xo9Re40C5HPBwAA+m4n58nA+f0brFwAM/HYrMhUT5B7+bpJjBGowMe7RN
-         IWJ6Cqgr6QlUTjXD7HZmSCJR0zlPb8CQHyKLbvLjb7qk9WjvPNfa1JRjnSbQcCTjXdXo
-         x0/u0kSCYEMyLuo9Gbo/gcNOvN3Gh+/UeCCXtVTyg1KWdAWKsQceQb0846wo3GwkxV+T
-         +twGCop2RXBy5K/yzbJ6JWM0PvAgn7tXY4QtnzmEEQLZVXgmIXyGaVyJcUmmhhCITJ4N
-         JT3fLTYkRUYNdpw0emeCSTIo//GLurij6I6KJYIZEfr3evYSwrZBKkPSsSx3qS93WrGn
-         +bRg==
-X-Gm-Message-State: AOAM531ssGvQc7euyZa2r7WfTdpeq7FciJlEffFT9Qtb2DV+nXQDsrcQ
-        CKv5jHQJaPnTl3JQ6f3BobB++w==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=cJDww2QKwaG5UxSU79OCSXCPa4nkLZpLQevsgJIxBTU=;
+ b=RVEDLn6WdAX+9Zu9zfRkLC2Q8ieZsH9jgKp0Jxe1XAl2rdU1+P2Cy/6TyftOVx/6as
+ mLbdZ+gl6WcPneU5nQmG5KVgsmqiyuPc/WZr+a5PzQR8JNWIvJOzEje/Wa7uvRhGopHd
+ QostOKr+jGXp+vtRxrmbVbA7KGNVHf5RDwRXRejMA6dAXmgsHZiWmhR3QbNulotJduk9
+ fjlX3epHj24mXAGS7UW45HudzvAZ6FDjOKZwsdfzWj/QDvZ7OU/+Hv7bA9obVz2bmGcb
+ wL/BEH/qv5/LVgvUucpzM5z6WBxPcfP+o36pHLvqDVD2ehalxlltRkPoizJXdspwlFCt
+ FXEw==
+X-Gm-Message-State: AOAM533Ei/A05EjmlKflEFV4ppHgnv5JLQlkWXhbNp2bFFPLpSpTPeEM
+ RFGuDQ4OtvXMQ1FddspAPywj6tngXXuT/g==
 X-Google-Smtp-Source: ABdhPJxhfYCZa16ambCb4b0oMrh8uwWyP7Y/u0p8AToOvJCwALxmiDwhCeJKUn6eh2IXO64zrzLSyg==
-X-Received: by 2002:a05:6830:114d:: with SMTP id x13mr385910otq.105.1629155545304;
-        Mon, 16 Aug 2021 16:12:25 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id o24sm91389oie.17.2021.08.16.16.12.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Aug 2021 16:12:24 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+X-Received: by 2002:a05:6830:114d:: with SMTP id
+ x13mr385910otq.105.1629155545304; 
+ Mon, 16 Aug 2021 16:12:25 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net.
+ [104.57.184.186])
+ by smtp.gmail.com with ESMTPSA id o24sm91389oie.17.2021.08.16.16.12.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 16 Aug 2021 16:12:24 -0700 (PDT)
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To:     arm@kernel.org, soc@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Alex Elder <elder@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Caleb Connolly <caleb@connolly.tech>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Gokul Sriram Palanisamy <gokulsri@codeaurora.org>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Robert Marko <robimarko@gmail.com>,
-        V Sujith Kumar Reddy <vsujithk@codeaurora.org>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Douglas Anderson <dianders@chromium.org>,
-        Felipe Balbi <felipe.balbi@microsoft.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Kathiravan T <kathirav@codeaurora.org>,
-        Kuogee Hsieh <khsieh@codeaurora.org>,
-        Ravi Kumar Bokka <rbokka@codeaurora.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Selvam Sathappan Periakaruppan <speriaka@codeaurora.org>,
-        Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        satya priya <skakit@codeaurora.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@baylibre.com>,
+ Konrad Dybcio <konrad.dybcio@somainline.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+ Vinod Koul <vkoul@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Alex Elder <elder@linaro.org>, Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+ Stephan Gerhold <stephan@gerhold.net>,
+ Rajendra Nayak <rnayak@codeaurora.org>,
+ Sandeep Maheswaram <sanm@codeaurora.org>,
+ Thara Gopinath <thara.gopinath@linaro.org>,
+ Caleb Connolly <caleb@connolly.tech>,
+ Georgi Djakov <georgi.djakov@linaro.org>,
+ Gokul Sriram Palanisamy <gokulsri@codeaurora.org>,
+ Judy Hsiao <judyhsiao@chromium.org>,
+ Martin Botka <martin.botka@somainline.org>,
+ Robert Marko <robimarko@gmail.com>,
+ V Sujith Kumar Reddy <vsujithk@codeaurora.org>,
+ Baruch Siach <baruch@tkos.co.il>, Douglas Anderson <dianders@chromium.org>,
+ Felipe Balbi <felipe.balbi@microsoft.com>,
+ Jonathan Marek <jonathan@marek.ca>, Kathiravan T <kathirav@codeaurora.org>,
+ Kuogee Hsieh <khsieh@codeaurora.org>,
+ Ravi Kumar Bokka <rbokka@codeaurora.org>,
+ Robert Foss <robert.foss@linaro.org>,
+ Selvam Sathappan Periakaruppan <speriaka@codeaurora.org>,
+ Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
+ Sibi Sankar <sibis@codeaurora.org>, Wesley Cheng <wcheng@codeaurora.org>,
+ Yassine Oudjana <y.oudjana@protonmail.com>,
+ satya priya <skakit@codeaurora.org>
 Subject: [GIT PULL] Qualcomm ARM64 updates for v5.15
-Date:   Mon, 16 Aug 2021 18:12:23 -0500
+Date: Mon, 16 Aug 2021 18:12:23 -0500
 Message-ID: <20210816231223.586597-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Precedence: bulk
-List-ID: <linux-arm-msm.vger.kernel.org>
-X-Mailing-List: linux-arm-msm@vger.kernel.org
-Message-ID: <20210816231223.kd5PBehlXi-lPLRrx_Zgyp0wwZpQe9J7lB1T6jNh6x4@z>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210816_161227_038929_62F2FD84 
+X-CRM114-Status: GOOD (  17.22  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210816231223.uXWbW--ugVQW-CcrbqMBcJVKrN5bWede1z923crOd0Y@z>
 
 The following changes since commit ff1176468d368232b684f75e82563369208bc371:
 
@@ -425,3 +449,8 @@ satya priya (1):
  create mode 100644 arch/arm64/boot/dts/qcom/sdm636.dtsi
  create mode 100644 arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
  create mode 100644 arch/arm64/boot/dts/qcom/sm6125.dtsi
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
