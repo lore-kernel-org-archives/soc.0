@@ -1,348 +1,116 @@
-Return-Path: <SRS0=o35/=NH=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=E6oP=NH=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57747C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 06:51:12 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE479C4338F
+	for <soc@archiver.kernel.org>; Mon, 16 Aug 2021 20:50:32 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id D096D60F39; Mon, 16 Aug 2021 20:50:32 +0000 (UTC)
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2183861406
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 06:51:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2183861406
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=VjagAbsabztJlI3WDCUJ+BBADiXkIXLVOhN0mToBQ6g=; b=CA2vRhea0uhcGE
-	KCoO+3Wdn3o9PqhlEWD+HWtz+PkvNyZhNTzLGG/T317X2OzQUstut9vlaGp+FXt5Lywo7P0HtpFzE
-	JTsMu6N8cVeiPXB+fWm6Kytlb79DW5OiFkz5uhsjZXhnR5JbPG2FUsknfAdq4OdZG9wfH9lAidNly
-	/rdVnup0f9+Mfa27SnVZM5Rglf1Ac7EjXrO7wJDLKEFfBaPlxl3KhsVSy4en/Sy1cKYCxTiO43yCt
-	6ckuVki3elbp8F508HRlyRQ/uH/J1lUkVFDlR1pErpvKrekzekT4QOPCc0ZuIX61AnKszroNUU3pE
-	68riTQUTdI+/B+AWxc6A==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mFWQV-00GH9B-2y; Mon, 16 Aug 2021 06:48:51 +0000
-Received: from esa.microchip.iphmx.com ([68.232.153.233])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mFWOb-00GGQz-B2
- for linux-arm-kernel@lists.infradead.org; Mon, 16 Aug 2021 06:46:57 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1629096413; x=1660632413;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=PiqvCX1MQm/EGD8KRuh49+Z+0O1Y0bW1x+51DVd1FEI=;
- b=G2lLpUwt71XRAlPea08RFUzvlDKnLYEIF4VIp3Xc4bsyHAExWd/5s/Eg
- RVjMEU59woarewY5TDlg/eDS3Wf2rjREzdFATu1AGjjcVYQjE39sfW9G+
- lAa+3OhBf/fo8JlbX3lQuI6banSXhJ0HKQ57pt+JuhIpfsdQLnITJJ4Ge
- edoTVtWKpxShVkYWeCaphKTUBVDl8UXI1CNYKn5V9lsAWncggMDeQa/JH
- iuZhU8LH0giWs+ZIPAMpmrku6K4CvcA/nHg/eaRnpZaM5Vz7LDVkL52aO
- XI5noIq4EuGIo0skYWGTej29gHaUt1J/Jpo/Ru0Xng+/cmw44UMES2UiE A==;
-IronPort-SDR: QNzyo2JBIAJtU7vFpsfzv+UW6kY2xf9e6qDeYB7Z+mNccIqhAPjlz3ir7n3LCV4uEmrLzNv6sK
- Hm5e+6hZ1LG2neXQmrqLYn7RELbJ24Yz/3F3vdSkIApzHhUzzPVE/biyjJVQEimJiw4Bc6vv65
- 4/3kCWi34OT5xzZAJIm9kYE5MnCYhZcfqlFQBQn6nGfvaciggwpfzvmlg+lEQ528Wo3JqfP1pk
- gt54QtbOGZDocjY6xbo661F/b5O/pb/LiihUxCUm20Vw4NKYET+djh9fWokfr3rsU8D0zvCr9I
- gbBpuGbD9AX8N2M17RxmJfHp
-X-IronPort-AV: E=Sophos;i="5.84,324,1620716400"; d="scan'208";a="132919610"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 15 Aug 2021 23:46:51 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Sun, 15 Aug 2021 23:46:51 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Sun, 15 Aug 2021 23:46:47 -0700
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+	by mail.kernel.org (Postfix) with ESMTPS id A889E60F36
+	for <soc@kernel.org>; Mon, 16 Aug 2021 20:50:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A889E60F36
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
+Received: by mail-oi1-f181.google.com with SMTP id u25so28617904oiv.5
+        for <soc@kernel.org>; Mon, 16 Aug 2021 13:50:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Kmoyu7jA1eM6PaqAOcqPLI/aOuRdV7qLJPPT17KbiDI=;
+        b=q2X7wvK9pcvNaogEd8Ar6JEEEeqLAc7E6w0HPK+t067zJfM+lR5RYCvNa0ufdOm9U7
+         lrT7RUoj5+bRra73kvYEhHmdFZJ7NsaQaHiIMG4SyAjhY67XFWowwcAawb/oCc1YlaTe
+         0UP4uJvpykvX6JiKfjDlg1SZ4GvUgmCvwme1qvw8TJ2hGGdqDuLgYs3upXZbqXhdoJpt
+         XcVDWBsqiQqFhP3L7LJpI+4jOYImeR+1voO9JgefRjio3F4YWty+Ke5j6MLugTZakMuT
+         Va2reXB+2++OEZ7mB6WScN7RZyuiGbFID1UkDDvIiQT2YPatmpecleqFYqoWuwfbCjPy
+         J6bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Kmoyu7jA1eM6PaqAOcqPLI/aOuRdV7qLJPPT17KbiDI=;
+        b=sYrTCB9i7GHoxPO0HPHtLxbX6GOzCdPSpmXzV49u9A72UqbdZ8+hWpZzatjGDxxjud
+         02dSDPPfzyXvkRvfy0dPPDB4XSviKpWxtTxUEo7DTlqtT0yntHUy94A2XOaUcMLNrBqA
+         lAo6A3j3cn68BjlKeIvMmcWby2URCps/tdEzU0lxFTy5rXlhAhOl3Yt4QMLREgfTwAm2
+         TL987DuVF8t9/nb5FQbWJQgfc0gOQXu0sfhRzOLFMWQzuB8ZoYqxfdNHgseLiA/9aqgg
+         D7g7RdcKqU1xjU4lHM8NipkRgo0E5+ULbo68yrKNZqf6XPJRyXtsdOAcpR043OuIn47M
+         t4Iw==
+X-Gm-Message-State: AOAM532SGUIUwjXGJhM1UEZnT1JR5NDMZ+l15qmV37mCzzWLU78dNVHW
+	sq05WyUh6vxFBlLJ3F/69GrK9A==
+X-Google-Smtp-Source: ABdhPJz10oI7Rxo2X6IakrDLahBN9gbmx3EWQdxvFF72jJraf0Rg5G3BCec9uWhOKhrnWsYakPvOFg==
+X-Received: by 2002:a05:6808:56:: with SMTP id v22mr570895oic.49.1629147031966;
+        Mon, 16 Aug 2021 13:50:31 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id i19sm26244ooe.44.2021.08.16.13.50.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Aug 2021 13:50:31 -0700 (PDT)
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
- <ludovic.desroches@microchip.com>, <robh+dt@kernel.org>, <arnd@arndb.de>,
- <olof@lixom.net>, <soc@kernel.org>
-CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, Owen Kirby <osk@exegin.com>, Claudiu Beznea
- <claudiu.beznea@microchip.com>
-Subject: [PATCH v2 7/7] ARM: dts: at91: add Exegin Q5xR5 board
-Date: Mon, 16 Aug 2021 09:44:16 +0300
-Message-ID: <20210816064416.1630674-8-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210816064416.1630674-1-claudiu.beznea@microchip.com>
-References: <20210816064416.1630674-1-claudiu.beznea@microchip.com>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Petr Vorel <petr.vorel@gmail.com>,
+	Caleb Connolly <caleb@connolly.tech>,
+	Sibi Sankar <sibis@codeaurora.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [GIT PULL] Qualcomm ARM64 fixes for v5.14
+Date: Mon, 16 Aug 2021 15:50:30 -0500
+Message-Id: <20210816205030.576348-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210815_234653_450877_4A806FA2 
-X-CRM114-Status: GOOD (  14.38  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210816064416.B4Oail9CAGNCvHs_POnH-msczGeJi7vr--yeY3ZuAb8@z>
+Content-Transfer-Encoding: 8bit
 
-From: Owen Kirby <osk@exegin.com>
+The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
-Add Exegin Q5xR5. The base device tree is from OpenWrt tree and with
-the addition of this patch there will be no need to maintain it
-separatelly in OpenWrt.
+  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
 
-[osk: original author of patch in OpenWrt]
-Signed-off-by: Owen Kirby <osk@exegin.com>
-[claudiu.beznea: use "&<label> {" syntax, sorted nodes in alphabetical
- order, adapted flash to new support in kernel 5.14, use proper
- compatibles according to kernel 5.14, use macros instead of
- hardcoded numbers for pinctrl phandles and for all pinctrl references,
- add pinctrl-names, pinctrl-X where necessaray]
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- arch/arm/boot/dts/Makefile       |   1 +
- arch/arm/boot/dts/at91-q5xr5.dts | 200 +++++++++++++++++++++++++++++++
- 2 files changed, 201 insertions(+)
- create mode 100644 arch/arm/boot/dts/at91-q5xr5.dts
+are available in the Git repository at:
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 249216d4a145..07be55262516 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -41,6 +41,7 @@ dtb-$(CONFIG_SOC_AT91SAM9) += \
- 	at91-kizboxmini-base.dtb \
- 	at91-kizboxmini-mb.dtb \
- 	at91-kizboxmini-rd.dtb \
-+	at91-q5xr5.dtb \
- 	at91-smartkiz.dtb \
- 	at91-wb45n.dtb \
- 	at91sam9g15ek.dtb \
-diff --git a/arch/arm/boot/dts/at91-q5xr5.dts b/arch/arm/boot/dts/at91-q5xr5.dts
-new file mode 100644
-index 000000000000..4866f1c6ccf9
---- /dev/null
-+++ b/arch/arm/boot/dts/at91-q5xr5.dts
-@@ -0,0 +1,200 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Device Tree file for Exegin Q5xR5 board
-+ *
-+ * Copyright (C) 2014 Owen Kirby <osk@exegin.com>
-+ */
-+
-+/dts-v1/;
-+#include "at91sam9g20.dtsi"
-+
-+/ {
-+	model = "Exegin Q5x (rev5)";
-+	compatible = "exegin,q5xr5", "atmel,at91sam9g20", "atmel,at91sam9";
-+
-+	chosen {
-+		bootargs = "console=ttyS0,115200 rootfstype=squashfs,jffs2";
-+	};
-+
-+	memory {
-+		reg = <0x20000000 0x0>;
-+	};
-+
-+	clocks {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		main_clock: clock@0 {
-+			compatible = "atmel,osc", "fixed-clock";
-+			clock-frequency = <18432000>;
-+		};
-+
-+		slow_xtal {
-+			clock-frequency = <32768>;
-+		};
-+
-+		main_xtal {
-+			clock-frequency = <18432000>;
-+		};
-+	};
-+};
-+
-+&dbgu {
-+	status = "okay";
-+};
-+
-+&ebi {
-+	status = "okay";
-+
-+	flash: flash@0 {
-+		compatible = "cfi-flash";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		reg = <0x0 0x1000000 0x800000>;
-+		bank-width = <2>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			kernel@0 {
-+				label = "kernel";
-+				reg = <0x0 0x200000>;
-+			};
-+
-+			rootfs@200000 {
-+				label = "rootfs";
-+				reg = <0x200000 0x600000>;
-+			};
-+		};
-+	};
-+};
-+
-+&macb0 {
-+	phy-mode = "mii";
-+	status = "okay";
-+};
-+
-+&pinctrl {
-+	board {
-+		pinctrl_pck0_as_mck: pck0_as_mck {
-+			atmel,pins = <AT91_PIOC 1 AT91_PERIPH_B AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	spi0 {
-+		pinctrl_spi0: spi0-0 {
-+			atmel,pins =
-+				<AT91_PIOA 0 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOA 1 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOA 2 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_spi0_npcs0: spi0_npcs0 {
-+			atmel,pins = <AT91_PIOA 3 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_spi0_npcs1: spi0_npcs1 {
-+			atmel,pins = <AT91_PIOC 11 AT91_PERIPH_B AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	spi1 {
-+		pinctrl_spi1: spi1-0 {
-+			atmel,pins =
-+				<AT91_PIOB 0 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOB 1 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOB 2 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_spi1_npcs0: spi1_npcs0 {
-+			atmel,pins = <AT91_PIOB 3 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_spi1_npcs1: spi1_npcs1 {
-+			atmel,pins = <AT91_PIOC 5 AT91_PERIPH_B AT91_PINCTRL_NONE>;
-+		};
-+	};
-+};
-+
-+&spi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_spi0 &pinctrl_spi0_npcs0 &pinctrl_spi0_npcs1>;
-+	cs-gpios = <&pioA 3 GPIO_ACTIVE_HIGH>, <&pioC 11 GPIO_ACTIVE_LOW>, <0>, <0>;
-+	status = "okay";
-+
-+	m25p80@0 {
-+		compatible = "jedec,spi-nor";
-+		spi-max-frequency = <20000000>;
-+		reg = <0>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+
-+		at91boot@0 {
-+			label = "at91boot";
-+			reg = <0x0 0x4000>;
-+		};
-+
-+		uenv@4000 {
-+			label = "uboot-env";
-+			reg = <0x4000 0x4000>;
-+		};
-+
-+		uboot@8000 {
-+			label = "uboot";
-+			reg = <0x8000 0x3E000>;
-+		};
-+	};
-+
-+	spidev@1 {
-+		compatible = "spidev";
-+		spi-max-frequency = <2000000>;
-+		reg = <1>;
-+	};
-+};
-+
-+&spi1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_spi1 &pinctrl_spi1_npcs0 &pinctrl_spi1_npcs1>;
-+	cs-gpios = <&pioB 3 GPIO_ACTIVE_HIGH>, <&pioC 5 GPIO_ACTIVE_LOW>, <0>, <0>;
-+	status = "okay";
-+
-+	spidev@0 {
-+		compatible = "spidev";
-+		spi-max-frequency = <2000000>;
-+		reg = <0>;
-+	};
-+
-+	spidev@1 {
-+		compatible = "spidev";
-+		spi-max-frequency = <2000000>;
-+		reg = <1>;
-+	};
-+};
-+
-+&usart0 {
-+	pinctrl-0 =
-+		<&pinctrl_usart0
-+		 &pinctrl_usart0_rts
-+		 &pinctrl_usart0_cts
-+		 &pinctrl_usart0_dtr_dsr
-+		 &pinctrl_usart0_dcd
-+		 &pinctrl_usart0_ri>;
-+	status = "okay";
-+};
-+
-+&usb0 {
-+	num-ports = <2>;
-+	status = "okay";
-+};
-+
-+&usb1 {
-+	status = "okay";
-+};
-+
-+&watchdog {
-+	status = "okay";
-+};
-+
--- 
-2.25.1
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-5.14
 
+for you to fetch changes up to d77c95bf9a64d8620662151b2b10efd8221f4bcc:
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+  arm64: dts: qcom: sdm845-oneplus: fix reserved-mem (2021-08-05 10:36:04 -0500)
+
+----------------------------------------------------------------
+Qualcomm ARM64 fixes for v5.14
+
+This fixes three regressions across Angler and Bullhead, introduced by
+advancements in the platform definition. It then corrects the powerdown
+GPIOs for the speaker amps on C630 and lastly fixes a typo that assigned
+CPU7 in SC7280 to the wrong CPUfreq domain.
+
+----------------------------------------------------------------
+Caleb Connolly (1):
+      arm64: dts: qcom: sdm845-oneplus: fix reserved-mem
+
+Petr Vorel (3):
+      arm64: dts: qcom: msm8992-bullhead: Remove PSCI
+      arm64: dts: qcom: msm8992-bullhead: Fix cont_splash_mem mapping
+      arm64: dts: qcom: msm8994-angler: Disable cont_splash_mem
+
+Sibi Sankar (1):
+      arm64: dts: qcom: sc7280: Fixup cpufreq domain info for cpu7
+
+Srinivas Kandagatla (1):
+      arm64: dts: qcom: c630: fix correct powerdown pin for WSA881x
+
+ arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts | 12 ++++++++++++
+ arch/arm64/boot/dts/qcom/msm8994-angler-rev-101.dts   |  4 ++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi                  |  2 +-
+ arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi   |  4 ++--
+ arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts  |  4 ++--
+ 5 files changed, 21 insertions(+), 5 deletions(-)
