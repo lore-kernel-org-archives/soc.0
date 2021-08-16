@@ -2,18 +2,19 @@ Return-Path: <SRS0=o35/=NH=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97EC2C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 21:16:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0671C432BE
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 21:16:56 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 63FD060F41
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 21:16:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 63FD060F41
+	by mail.kernel.org (Postfix) with ESMTPS id 804B060F41
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 21:16:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 804B060F41
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,46 +23,48 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=x+UDCT1iMVXR8YKvNlE4lKRyj3DKvq5mZZTAlGzXFFs=; b=N+UgtacdLyawHO
-	BkssEGsdaDk0BJ/bZUmxTbh/oZPeLYUnjEqIDPoS/hO/LvpdScxL6/jQrcqgAprSUMgbTb6wqYPNu
-	W3HjgBA2kIpZiyBOH0pVSEpJ+rHIgckzJ15PPUFUOWnCSinu1Z+1L5jp+MQGG4b7NmHA99ptBC62I
-	mmZqLK8KjTy17G/+TPXqzg60CwY8Jwoy146QkEQMWDFnPww3DjWL2rH96OpfhweIy9CIxjJ98f82o
-	b/JPbvQweJcOUuSaZzVoAPFoBGHBTkqO1pyDR3PzY/JfZ20H/rrcFtMESP2nBgCsXGO8mCc7E4vZo
-	QnaBOl6e6ENLFl0NsxjA==;
+	List-Owner; bh=rphvPR7scP7y7A7OnLpmmtJ7x1aAjnlyiYIsW/RqMgk=; b=OLLUeMuWpntD8h
+	qnV3aNZL6NqQ3HBsIhSfhLLJOUTEN7/4Q8H7v2A6P2f+2oFsMFy6ueFsuvaruWDTcUACj+5V6yxuV
+	VdsoPsZHI3c409D5Q+7li1SFnZaEkF1PxH3Yjz9ygzglaDWXnNjmWpsuvqCZihKgBRKkP5ecHJMGn
+	O+dyZ+hr9/Wk4go0VWfsKNJL3hlhL9Y7T02N0vozBK6Ml7N8S5VevCBHSOmJmHWrJlpW0vtjqLP6K
+	PJin0Y7Ic8UE1i8wEnA+8h2Ir4IeKfEpWt+F7MRw55HwqegTh9uIJ81mZi9rXW9nFSfW2RsAuokr4
+	p8ieM2eVLh4ZNcdjbFug==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mFjwa-000J7a-Ee; Mon, 16 Aug 2021 21:14:52 +0000
+	id 1mFjwQ-000J7G-Fm; Mon, 16 Aug 2021 21:14:42 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mFjwO-000J73-UG
- for linux-arm-kernel@lists.infradead.org; Mon, 16 Aug 2021 21:14:42 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 60ACA61053;
- Mon, 16 Aug 2021 21:14:39 +0000 (UTC)
+ id 1mFjwM-000J6j-TX
+ for linux-arm-kernel@lists.infradead.org; Mon, 16 Aug 2021 21:14:40 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D253861042;
+ Mon, 16 Aug 2021 21:14:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1629148480;
- bh=vFfHS6ri4OrW2M+HU8eNzG+V4pD2HdHaaiuBD7QCIL8=;
+ s=k20201202; t=1629148478;
+ bh=RUGjOEJb5rWbfkFJdM4qNiMKq1B6zkdeIA44CA1G11o=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=Q2bAla3/lYhJoAoyvZ9zZ2quPXnusX/zLcQ0IoqzPwCJ/+4zwn/lqKyU4HFEJ+WYj
- Uc7QZZQaP7qu4FKkzcqf7GAMRPd4XftL6ckPBR+C3JEiwfCGkmLtGk12AvKhkqhFV3
- OHw7UIrmpD/EEVDFbNcIwsEgbqfwDIut8lM1X7UjTOieRIV2GmLmNR9lBpFX7XMC2A
- i0j/6zubnGLODjIBaDsXyx8iyPyN4m6HHRKWEdyrHWPp74O4ZgR2hrOIICdaIF7T32
- nDiXiBzTheun44SIk70cRJ3SGjHz459/4hBp0WIZOZhobGfKQ0EyqyFvdQvujMa2xx
- ETHoneUCXrnGg==
+ b=n+Tqbmfk4njJ3Y36diwB8Bygs0Qew5v1KlFRacwIFkoigvMa2P3sEHQrHs4VLONrC
+ zvuzDJo8Q50EECXi1IcBJjX9G9eyIGStHregwDFEmnKPRFiFi6A3TqDbasf6wbc1ge
+ 2AAYv8j77jf+Dl1p1AT782c8+WJ7fsBdIsmusURutx0br1JacAE4/AMwui+P9uS8ik
+ 2luuvaVeoHxmx47TRQCKq3JxaK+dZxpSVmY6aHNVf9j+C15GG5UHRz6k0X/oBRoRxu
+ KNOGFPP4hsikusAFmF3e0z7/yXDa1mCjX7pNcWcW59iFpb/tgsOhsqsOeSoab31Onl
+ HKfjPj6pXWj6g==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, Linus Walleij <linus.walleij@linaro.org>, arm@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
- Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] ARM: configs: Update the nhk8815_defconfig
-Date: Mon, 16 Aug 2021 23:14:34 +0200
-Message-ID: <162914846686.237742.12685570963154533210.b4-ty@arndb.de>
+To: soc@kernel.org,
+	arm@kernel.org,
+	Li Yang <leoyang.li@nxp.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, shawnguo@kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] soc/fsl drivers changes for fix(v5.14)
+Date: Mon, 16 Aug 2021 23:14:33 +0200
+Message-ID: <162914846696.237742.13028145809209351673.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210807225518.3607126-1-linus.walleij@linaro.org>
-References: <20210807225518.3607126-1-linus.walleij@linaro.org>
+In-Reply-To: <20210813222305.13663-1-leoyang.li@nxp.com>
+References: <20210813222305.13663-1-leoyang.li@nxp.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210816_141441_032892_F865C1D8 
-X-CRM114-Status: UNSURE (   9.07  )
+X-CRM114-CacheID: sfid-20210816_141439_009661_623F79CF 
+X-CRM114-Status: UNSURE (   7.01  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -78,22 +81,25 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210816211434.cOCTrFpksIJh3V6m9Mo-hpImYqOlfqMlWPrWx-wYNfo@z>
+Message-ID: <20210816211433.SG0s6EvMuQS9rtHD9YrATCT426uenEeGJcQ-cbdUDSs@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sun, 8 Aug 2021 00:55:18 +0200, Linus Walleij wrote:
-> The platform lost the framebuffer due to a commit solving a
-> circular dependency in v5.14-rc1, so add it back in by explicitly
-> selecting the framebuffer.
+On Fri, 13 Aug 2021 17:23:05 -0500, Li Yang wrote:
+> Please merge the following fixes for soc/fsl drivers.
 > 
-> Also fix up some Kconfig options that got dropped or moved around
-> while we're at it.
+> Regards,
+> Leo
+> 
+> The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+> 
+>   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+> 
+> [...]
 
-Applied to arm/fixes, thanks!
+Merged into arm/fixes, thanks!
 
-[1/1] ARM: configs: Update the nhk8815_defconfig
-      commit: 813bacf4109802926d86f2d7c6583c6c0a0fddb5
+merge commit: df97e5f3b21c3ed41385fa61cfb6e191044957ce
 
        Arnd
 
