@@ -1,218 +1,419 @@
-Return-Path: <SRS0=o35/=NH=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=E6oP=NH=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 535CCC4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 21:50:40 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BB8DC4338F
+	for <soc@archiver.kernel.org>; Mon, 16 Aug 2021 23:12:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 4B50860F38; Mon, 16 Aug 2021 23:12:26 +0000 (UTC)
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 10A1F6024A
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 21:50:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 10A1F6024A
+	by mail.kernel.org (Postfix) with ESMTPS id 2459060EFF
+	for <soc@kernel.org>; Mon, 16 Aug 2021 23:12:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2459060EFF
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=7HypA8ZnxuvnTOoMlrcfKnKYG6x0jeimHdHcgK7E1g4=; b=aVJ1KhjONy3RkI
-	ZoLcbmxIHumaYJxz8p0CfS0+BJc9ePh00ZkSRVRTylwKr2mPwMF0WoijpxKC83ucMY0CCMAujasYb
-	aamTyYxMDl7tN5eXz99waVOx95jKIaABIvMB2sDgMIn8cpdx8DxlMklp6Mk3jDlL7ddUvqgkC9h5G
-	wW4/jA3hLLd27U+nmOEL3uep9EtmuiMKkmt92EvOvv+ziXyVZVKV6gNl1qVgCo9SB3XB6Fc1iQgJJ
-	xwfFUrkSkAfudMd8E4NYR9x+VYpFHk/Mw1hgfSNEPjsYRAeQEyN861kScbfjWpQSQ3+YxjEHwJXtr
-	vbO3c6AavdbSdt6jJmyw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mFkTU-000QIp-My; Mon, 16 Aug 2021 21:48:52 +0000
-Received: from mail-oi1-x22f.google.com ([2607:f8b0:4864:20::22f])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mFkTK-000QHX-Ve
- for linux-arm-kernel@lists.infradead.org; Mon, 16 Aug 2021 21:48:50 +0000
-Received: by mail-oi1-x22f.google.com with SMTP id bf25so20065994oib.10
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 16 Aug 2021 14:48:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=PDYxqFE/CWqy58DQxmymohk6TT+/HRY/YJqeo41m6QE=;
- b=lq9gNB55sPPejjQ+diDADMcszFLtHT90QT1cicyG62KLrBs7sKSNycBk/A94bWwUye
- b79HlbvDZ2enQbzAjvA2ezvGcvpKqFwmjn6xEOLNHJ7jKw/9QfX6Ag346lT23PxuoL2d
- YUwNGkcJfaAMTePKNC+bipucoDRsbgNCGxean9P/pPISKb+n3ukiNWJM4SWdTEG3FjSi
- Qo5lHq6ZAzl3aK30o0/4xX/eu5jF4t5R1zdRz/DScCmrjCulHlDmVeszDYP4yCC2T0rC
- azo93V4cqHuOjRZ2kdlGxGW7cXMl9Oa+DnXDez/vMdDgfgG0JO/kP1pNhevC5lP6TbzD
- u5/g==
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
+Received: by mail-ot1-f50.google.com with SMTP id r16-20020a0568304190b02904f26cead745so22863374otu.10
+        for <soc@kernel.org>; Mon, 16 Aug 2021 16:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cJDww2QKwaG5UxSU79OCSXCPa4nkLZpLQevsgJIxBTU=;
+        b=MEg0pmRm0aNWyFeoabK/rETBcjiKGQcZQPGkjPSdH3zNb+UR7LQVbRDhF9ykT1kn4M
+         LfOUIxuQHKoyds/ordQXguakZJfu9qmXYkOAHY+FsW8W6xABke79ipj3gKls9Kn5y6iM
+         36abUQLzNB+TYJdzfC/rhoYKVWNZKW7EXzQxa8dhHeCECg7w9iHHv/Nc285CcCTI4FsY
+         lSCxQXbvzrZ2I/pboKaF20WZcpjYD4bVexyFgfK1lH4daJipIp4/m8hDLOkercg1srE1
+         qQHRV5RXLmT+BegLg9BVHOQkXSoLUFdjKQd77IpPZVKmMyQCDdn9MrvkXBVHKEBMhSmQ
+         eqKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=PDYxqFE/CWqy58DQxmymohk6TT+/HRY/YJqeo41m6QE=;
- b=W4tOU4xKPww0QlMFIayrdL+2/YvFoxtqusOsxj63oivrF+jUru8vlDT2xDecXcXOBl
- Jv/Yt+2h8Pe+zI9Tfvdy9anQNFjRPD4w0tc931KGz2aq84sbhqS2klhkZ2lmN/DH6gHs
- p7sPt9zOgijc03SN6X5immyLvT5wUTD8q3jMz8dpUtxLpIatWaC1tyK3nwbz+stGuDX2
- PHICeCpyuYmUWP66uuIm9nNVFyeeb6/H01yAOfSb8UFXbSoMm+AqykDUGVnBu0DfGWSx
- WNYky+7CWTWA+u7rTLSUUcLIUtwQ95bOGh14WcUSoMiKuonFCQshqeEWohNgn/XiTyUz
- UgVg==
-X-Gm-Message-State: AOAM533WRhPr/A/059KEm94ZlELq3LYqa2apEHBGlkAauTTLMIbrShMI
- c3q3x1w4XlTALRwLwRB7L5RwCw==
-X-Google-Smtp-Source: ABdhPJzo2V8StsZGnjUwA5FIEBjMqlgcI9aMORZKOjv+r1G5beGSJVL6/m43bis0aR2MM2UsIOyqNQ==
-X-Received: by 2002:a05:6808:10d4:: with SMTP id
- s20mr1866ois.143.1629150521697; 
- Mon, 16 Aug 2021 14:48:41 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net.
- [104.57.184.186])
- by smtp.gmail.com with ESMTPSA id c11sm56944oot.25.2021.08.16.14.48.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Aug 2021 14:48:41 -0700 (PDT)
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cJDww2QKwaG5UxSU79OCSXCPa4nkLZpLQevsgJIxBTU=;
+        b=fNk3GXQRVfovDde/ZLfrJAEqczzvsvawmAJaqF0pNzfxyBhbEikgFbWhdZaAcUOVGb
+         Lp9XtdwprHpXQwJ/pEVxUH7r8RfHp15vinmt1EsaY19anZT1QkQPR4hTw0+drnVSXzA3
+         Cb171q++yEMsvY5qzxhzgIzzvDIZG4ab5QEeLt7tnp2Sd1RFhkywoT5qgWTc5MKo79lR
+         fwjOx3envhiCfhej3YIpzP7074zmtt57BQ5I3pchzIvh3OwsLrrjE/t6bAMacDJx4vTN
+         QbG+OCZoQafgKrmc2ToIOVh1VRraHBloqZJyaBvkA3oV6nDbZPdbQ5+B80rvHmHO5qBb
+         E6CA==
+X-Gm-Message-State: AOAM531kqNqJuKy5Ah1nByjx2jOi0NHtU255w8lwv+q/FSsc69Ng0yTV
+	KeswX65cbq+gvveKUVLuirsCNQ==
+X-Google-Smtp-Source: ABdhPJxhfYCZa16ambCb4b0oMrh8uwWyP7Y/u0p8AToOvJCwALxmiDwhCeJKUn6eh2IXO64zrzLSyg==
+X-Received: by 2002:a05:6830:114d:: with SMTP id x13mr385910otq.105.1629155545304;
+        Mon, 16 Aug 2021 16:12:25 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id o24sm91389oie.17.2021.08.16.16.12.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Aug 2021 16:12:24 -0700 (PDT)
 From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@baylibre.com>,
- Iskren Chernev <iskren.chernev@gmail.com>,
- Stephan Gerhold <stephan@gerhold.net>, Stephen Boyd <swboyd@chromium.org>,
- Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@linaro.org>,
- Caleb Connolly <caleb@connolly.tech>,
- Douglas Anderson <dianders@chromium.org>,
- John Stultz <john.stultz@linaro.org>, Junlin Yang <yangjunlin@yulong.com>,
- Manivannan Sadhasivam <mani@kernel.org>
-Subject: [GIT PULL] Qualcomm driver updates for v5.15
-Date: Mon, 16 Aug 2021 16:48:40 -0500
-Message-ID: <20210816214840.581244-1-bjorn.andersson@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Alex Elder <elder@linaro.org>,
+	Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	Rajendra Nayak <rnayak@codeaurora.org>,
+	Sandeep Maheswaram <sanm@codeaurora.org>,
+	Thara Gopinath <thara.gopinath@linaro.org>,
+	Caleb Connolly <caleb@connolly.tech>,
+	Georgi Djakov <georgi.djakov@linaro.org>,
+	Gokul Sriram Palanisamy <gokulsri@codeaurora.org>,
+	Judy Hsiao <judyhsiao@chromium.org>,
+	Martin Botka <martin.botka@somainline.org>,
+	Robert Marko <robimarko@gmail.com>,
+	V Sujith Kumar Reddy <vsujithk@codeaurora.org>,
+	Baruch Siach <baruch@tkos.co.il>,
+	Douglas Anderson <dianders@chromium.org>,
+	Felipe Balbi <felipe.balbi@microsoft.com>,
+	Jonathan Marek <jonathan@marek.ca>,
+	Kathiravan T <kathirav@codeaurora.org>,
+	Kuogee Hsieh <khsieh@codeaurora.org>,
+	Ravi Kumar Bokka <rbokka@codeaurora.org>,
+	Robert Foss <robert.foss@linaro.org>,
+	Selvam Sathappan Periakaruppan <speriaka@codeaurora.org>,
+	Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
+	Sibi Sankar <sibis@codeaurora.org>,
+	Wesley Cheng <wcheng@codeaurora.org>,
+	Yassine Oudjana <y.oudjana@protonmail.com>,
+	satya priya <skakit@codeaurora.org>
+Subject: [GIT PULL] Qualcomm ARM64 updates for v5.15
+Date: Mon, 16 Aug 2021 18:12:23 -0500
+Message-Id: <20210816231223.586597-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210816_144843_093397_7921CB80 
-X-CRM114-Status: GOOD (  16.67  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210816214840.em8McL-ogQfHEVe_bV_eiHOvVQfxbdxJArmHKZDfNKY@z>
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+The following changes since commit ff1176468d368232b684f75e82563369208bc371:
 
-  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+  Linux 5.14-rc3 (2021-07-25 15:35:14 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-5.15
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.15
 
-for you to fetch changes up to e3d4571955050736bbf3eda0a9538a09d9fcfce8:
+for you to fetch changes up to 198b8c8ede36d2135df73fee19506276059a0f8e:
 
-  soc: qcom: smsm: Fix missed interrupts if state changes while masked (2021-08-04 22:20:09 -0500)
-
-----------------------------------------------------------------
-Qualcomm driver updates for v5.15
-
-This fixes the "shared memory state machine" (SMSM) interrupt logic to
-avoid missing transitions happening while the interrupts are masked.
-
-SM6115 support is added to smd-rpm and rpmpd.
-
-The Qualcomm SCM firmware driver is once again made possible to compile
-and load as a kernel module.
-
-An out-of-bounds error related to the cooling devices of the AOSS driver
-is corrected. The binding is converted to YAML and a generic compatible
-is introduced to reduce the driver churn.
-
-The GENI wrapper gains a helper function used in I2C and SPI for
-switching the serial engine hardware to use the wrapper's DMA-engine.
-
-Lastly it contains a number of cleanups and smaller fixes for rpmhpd,
-socinfo, CPR, mdt_loader and the GENI DT binding.
+  Merge tag 'v5.14-rc3' into arm64-for-5.15 (2021-08-16 18:02:26 -0500)
 
 ----------------------------------------------------------------
-Alex Elder (1):
-      soc: qcom: mdt_loader: be more informative on errors
+Qualcomm ARM64 updates for v5.15
 
-Bjorn Andersson (4):
-      dt-bindings: soc: qcom: aoss: Add SC8180X and generic compatible
-      dt-bindings: soc: qcom: aoss: Convert to YAML
-      soc: qcom: aoss: Add generic compatible
-      soc: qcom: rpmhpd: Use corner in power_off
+SDM660 and SDM630 was concluded to be similar enough that they should be
+merged, and the derivative SDM636 was added to the bunch. The combined
+platform gained support for GPU, DMA, I2C, IMEM, display, power-domains,
+SDHCI, thermal, USB, interconnects, VADC, WLED and audio remoteproc. The
+Sony Xperia "Ganges" platform was similarly merged with "Nile", got
+cleaned up and gained touchscreen, USB, volume keys and uSD support.
 
-Caleb Connolly (1):
-      dt-bindings: qcom: geni-se: document iommus
+IPQ6018 gains USB2 and PCIe support and a few minor fixes. IPQ8074
+gains SCM, PRNG and Crypto support and a DT style update of the PCIe
+nodes.
+
+MSM8916 gains Coresight STM support. The Xiaomi Redmi 2 is introduced,
+with touchscreen, notification LED and IMU support. MSM8996 gains
+support for GPU cooling and v3.0 of the SoC, which is used to introduce
+support for the Sony Xperia X Performance, XZ and XZs phones.
+
+SC7180 finally gains DisplayPort support and LPASS is updated
+accordingly. A number of fixes are introduced and with the newly
+introduced DRM aux bus in place Trogdor's panel is moved under the eDP
+bridge. SC7280 gained USB, eMMC, SD-card, QFPROM and IPA support, the
+new IDP2 board was added.
+
+SM6126 (aka Snapdragon 665) was introduced, together with the Sony
+Xperia 10II phone with support for framebuffer, USB, eMMC and volume
+keys.
+
+SM8150 gained inline crypto support for UFS enabled, CPU opp-tables was
+introduced to scale DDR and L3 frequencies and SPI nodes where added, in
+addition to a number of smaller fixes.
+
+SM8250 gained a number of minor fixes and had its serial engines wired
+up to use the GENI wrappers' DMA engines.
+
+SM8350 had wakeup-parent defined for the TLMM gpio node and I2C13 was
+introduced.
+
+SDM845 display clocks was corrected and Lenovo Yoga C630 got IPA enabled
+and now has working LTE connectivity.
+
+Additionally a number of minor fixes throughout to correct DT validation
+warnings.
+
+Lastly v5.14-rc3 is merge in to resolve the merge conflicts caused by
+the USB maintainer deciding to fix a regression in his tree.
+
+----------------------------------------------------------------
+Alex Elder (4):
+      arm64: dts: qcom: sc7280: add IPA information
+      arm64: dts: qcom: sc7280: enable IPA for sc7280-idp
+      arm64: dts: qcom: sc7180: define ipa_fw_mem node
+      arm64: dts: qcom: sm8350: fix IPA interconnects
+
+AngeloGioacchino Del Regno (14):
+      arm64: dts: qcom: Add support for SONY Xperia X Performance / XZ / XZs (msm8996, Tone platform)
+      arm64: dts: qcom: sdm630: Rewrite memory map
+      arm64: dts: qcom: sdm630: Add qfprom subnodes
+      arm64: dts: qcom: sdm630: Fix TLMM node and pinctrl configuration
+      arm64: dts: qcom: sdm630: Add SDHCI2 node
+      arm64: dts: qcom: sdm630: Add interconnect and opp table to sdhc_1
+      arm64: dts: qcom: sdm630: Add GPU Clock Controller node
+      arm64: dts: qcom: sdm630: Add clocks and power domains to SMMU nodes
+      arm64: dts: qcom: sdm630: Add qcom,adreno-smmu compatible
+      arm64: dts: qcom: sdm630: Add Adreno 508 GPU configuration
+      arm64: dts: qcom: pm660: Support SPMI regulators on PMIC sid 1
+      arm64: dts: qcom: pm660l: Support SPMI regulators on PMIC sid 3
+      arm64: dts: qcom: sdm630: Configure the camera subsystem
+      arm64: dts: qcom: sdm630-xperia-nile: Add all RPM and fixed regulators
+
+Baruch Siach (1):
+      arm64: dts: qcom: ipq6018: correct TCSR block area
+
+Bhupesh Sharma (4):
+      arm64: dts: qcom: sm8150: Add UFS ICE capability
+      arm64: dts: qcom: Use correct naming for dwc3 usb nodes in dts files
+      arm64: dts: qcom: sm8150: Sort dc_noc and gem_noc nodes
+      arm64: dts: qcom: Fix usb entries for SA8155p adp board
+
+Bjorn Andersson (3):
+      arm64: dts: qcom: sdm850-yoga: Enable IPA
+      arm64: dts: qcom: sm8350: Add wakeup-parent to tlmm
+      Merge tag 'v5.14-rc3' into arm64-for-5.15
+
+Caleb Connolly (2):
+      arm64: dts: qcom: sdm845-oneplus-common: enable debug UART
+      arm64: dts: qcom: sdm845-oneplus: add ipa firmware names
+
+Dmitry Baryshkov (7):
+      arm64: dts: qcom: sm8250: fix usb2 qmp phy node
+      arm64: dts: qcom: sdm845: move bus clock to mdp node for sdm845 target
+      arm64: dts: qcom: sm8250: remove bus clock from the mdss node for sm8250 target
+      arm64: dts: qcom: sc7180: assign DSI clock source parents
+      arm64: dts: qcom: sdm845: assign DSI clock source parents
+      arm64: dts: qcom: sdm845-mtp: assign DSI clock source parents
+      arm64: dts: qcom: sm8250: assign DSI clock source parents
 
 Douglas Anderson (1):
-      PM: AVS: qcom-cpr: Use nvmem_cell_read_variable_le_u32()
+      arm64: dts: qcom: sc7180-trogdor: Move panel under the bridge chip
 
-Iskren Chernev (4):
-      dt-bindings: soc: qcom: smd-rpm: Add SM6115 compatible
-      dt-bindings: power: rpmpd: Add SM6115 to rpmpd binding
-      drivers: soc: qcom: rpmpd: Add SM6115 RPM Power Domains
-      soc: qcom: smd-rpm: Add SM6115 compatible
+Felipe Balbi (1):
+      arm64: dts: qcom: sm8150: add SPI nodes
 
-John Stultz (1):
-      firmware: qcom_scm: Allow qcom_scm driver to be loadable as a permenent module
+Georgi Djakov (2):
+      arm64: dts: qcom: sm8250: Fix epss_l3 unit address
+      arm64: dts: qcom: msm8916: Enable CoreSight STM component
 
-Junlin Yang (1):
-      firmware: qcom_scm: remove a duplicative condition
+Gokul Sriram Palanisamy (2):
+      arm64: dts: qcom: ipq6018: Update WCSS PIL driver compatible
+      arm64: dts: qcom: ipq8074: Add scm on IPQ8074 SoCs
 
-Manivannan Sadhasivam (1):
-      soc: qcom: aoss: Fix the out of bound usage of cooling_devs
+Jonathan Marek (1):
+      arm64: dts: qcom: sm8350: add qupv3_id_1/i2c13 nodes
 
-Stephan Gerhold (2):
-      soc: qcom: smsm: Implement support for get_irqchip_state
-      soc: qcom: smsm: Fix missed interrupts if state changes while masked
+Judy Hsiao (2):
+      arm64: dts: qcom: sc7180: Set adau wakeup delay to 80 ms
+      arm64: dts: qcom: sc7180: trogdor: Update audio codec to Max98360A
 
-Stephen Boyd (2):
-      firmware: qcom_scm: Mark string array const
-      soc: qcom: socinfo: Don't print anything if nothing found
+Kathiravan T (1):
+      arm64: dts: qcom: ipq6018: enable USB2 support
 
-Vinod Koul (2):
-      soc: qcom: geni: move GENI_IF_DISABLE_RO to common header
-      soc: qcom: geni: Add support for gpi dma
+Konrad Dybcio (31):
+      arm64: dts: qcom: Add PMI8996 DTSI file
+      arm64: dts: qcom: Add MSM8996v3.0 DTSI file
+      arm64: dts: qcom: msm8996-*: Disable HDMI by default
+      arm64: dts: qcom: sdm630: Add RPMPD nodes
+      arm64: dts: qcom: sdm630: Add MMCC node
+      arm64: dts: qcom: sdm630: Add interconnect provider nodes
+      arm64: dts: qcom: sdm630: Add MDSS nodes
+      arm64: dts: qcom: sdm630: Add USB configuration
+      arm64: dts: qcom: sdm630: Add TSENS node
+      arm64: dts: qcom: sdm630: Add modem/ADSP SMP2P nodes
+      arm64: dts: qcom: sdm630: Add thermal-zones configuration
+      arm64: dts: qcom: sdm630: Add ADSP remoteproc configuration
+      arm64: dts: qcom: sdm630: Raise tcsr_mutex_regs size
+      arm64: dts: qcom: pm660l: Add WLED support
+      arm64: dts: qcom: pm660(l): Add VADC and temp alarm nodes
+      arm64: dts: qcom: sdm660: Make the DTS an overlay on top of 630
+      arm64: dts: qcom: Add device tree for SDM636
+      arm64: dts: qcom: sdm630: Add IMEM node
+      arm64: dts: qcom: sdm660: Add required nodes for DSI1
+      arm64: dts: qcom: sdm630-nile: Use &labels
+      arm64: dts: qcom: sdm630-nile: Add USB
+      arm64: dts: qcom: sdm630-nile: Add Volume up key
+      arm64: dts: qcom: sdm630-xperia: Retire sdm630-sony-xperia-ganges.dtsi
+      arm64: dts: qcom: sdm630-nile: Add Synaptics touchscreen.
+      arm64: dts: qcom: sdm630-nile: Specify ADSP firmware name
+      arm64: dts: qcom: sdm630-nile: Enable uSD card slot
+      arm64: dts: qcom: sdm630-nile: Remove gpio-keys autorepeat
+      arm64: dts: qcom: sdm630: Add I2C functions to I2C pins
+      arm64: dts: qcom: sdm630: Add DMA to I2C hosts
+      arm64: dts: qcom: sm8250: Add DMA to I2C/SPI
+      arm64: dts: qcom: pm8004: Enable the PMIC peripherals by default
 
- .../devicetree/bindings/power/qcom,rpmpd.yaml      |   1 +
- .../devicetree/bindings/soc/qcom/qcom,aoss-qmp.txt |  87 ----------------
- .../bindings/soc/qcom/qcom,aoss-qmp.yaml           | 114 +++++++++++++++++++++
- .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml |   3 +
- .../devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml |   1 +
- drivers/firmware/Kconfig                           |   2 +-
- drivers/firmware/Makefile                          |   3 +-
- drivers/firmware/qcom_scm.c                        |   8 +-
- drivers/iommu/Kconfig                              |   2 +
- drivers/net/wireless/ath/ath10k/Kconfig            |   1 +
- drivers/soc/qcom/cpr.c                             |  43 +-------
- drivers/soc/qcom/mdt_loader.c                      |  18 ++--
- drivers/soc/qcom/qcom-geni-se.c                    |  30 +++++-
- drivers/soc/qcom/qcom_aoss.c                       |   9 +-
- drivers/soc/qcom/rpmhpd.c                          |   5 +-
- drivers/soc/qcom/rpmpd.c                           |  28 +++++
- drivers/soc/qcom/smd-rpm.c                         |   1 +
- drivers/soc/qcom/smsm.c                            |  28 ++++-
- drivers/soc/qcom/socinfo.c                         |   4 +-
- include/dt-bindings/power/qcom-rpmpd.h             |  10 ++
- include/linux/qcom-geni-se.h                       |  19 +++-
- 21 files changed, 269 insertions(+), 148 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,aoss-qmp.txt
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,aoss-qmp.yaml
+Kuogee Hsieh (1):
+      arm64: dts: qcom: sc7180: Add DisplayPort node
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Martin Botka (2):
+      arm64: dts: qcom: Add support for SM6125
+      arm64: dts: qcom: sm6125: Add support for Sony Xperia 10II
+
+Rajendra Nayak (3):
+      arm64: dts: qcom: sc7280: Add qfprom node
+      dt-bindings: arm: qcom: Document qcom,sc7280-idp2 board
+      arm64: dts: qcom: sc7280-idp: Add device tree files for IDP2
+
+Ravi Kumar Bokka (1):
+      arm64: dts: qcom: sc7180:: modified qfprom CORR size as per RAW size
+
+Robert Foss (1):
+      arm64: dts: qcom: sm8350: Rename GENI serial engine DT node
+
+Robert Marko (2):
+      arm64: dts: qcom: ipq8074: add crypto nodes
+      arm64: dts: qcom: ipq8074: add PRNG node
+
+Sandeep Maheswaram (3):
+      arm64: dts: qcom: sc7280: Add USB related nodes
+      arm64: dts: qcom: sc7280: Add USB nodes for IDP board
+      arm64: dts: qcom: sc7280: Add interconnect properties for USB
+
+Selvam Sathappan Periakaruppan (1):
+      arm64: dts: qcom: ipq6018: Add pcie support
+
+Shaik Sajida Bhanu (1):
+      arm64: dts: qcom: sc7280: Add nodes for eMMC and SD card
+
+Sibi Sankar (1):
+      arm64: dts: qcom: sc7280: Fixup the cpufreq node
+
+Stephan Gerhold (4):
+      arm64: dts: qcom: Add device tree for Xiaomi Redmi 2 (wingtech-wt88047)
+      arm64: dts: qcom: msm8916-wingtech-wt88047: Add touchscreen
+      arm64: dts: qcom: msm8916-wingtech-wt88047: Add notification LED
+      arm64: dts: qcom: msm8916-wingtech-wt88047: Add IMU
+
+Thara Gopinath (3):
+      arm64: dts: qcom: sm8150: Add CPU opp tables
+      arm64: dts: qcom: sm8150-mtp: Add 8150 compatible string
+      arm64: dts: qcom: sm8150: Fix incorrect cpu opp table entry
+
+V Sujith Kumar Reddy (2):
+      arm64: dts: qcom: sc7180: Update lpass cpu node for audio over dp
+      arm64: dts: qcom: sc7180-trogdor: Add lpass dai link for HDMI
+
+Vinod Koul (11):
+      arm64: dts: qcom: msm8996: don't use empty memory node
+      arm64: dts: qcom: msm8998: don't use empty memory node
+      arm64: dts: qcom: sdm630: don't use empty memory node
+      arm64: dts: qcom: ipq8074: fix pci node reg property
+      arm64: dts: qcom: sdm660: use reg value for memory node
+      arm64: dts: qcom: ipq6018: drop '0x' from unit address
+      arm64: dts: qcom: sdm630: don't use underscore in node name
+      arm64: dts: qcom: msm8994: don't use underscore in node name
+      arm64: dts: qcom: msm8996: don't use underscore in node name
+      dt-bindings: arm: qcom: Document alcatel,idol347 board
+      dt-bindings: arm: qcom: Drop qcom,mtp
+
+Wesley Cheng (1):
+      arm64: dts: qcom: pm8150b: Add DTS node for PMIC VBUS booster
+
+Yassine Oudjana (1):
+      arm64: dts: qcom: msm8996: Add gpu cooling support
+
+satya priya (1):
+      arm64: dts: qcom: sc7280: Remove pm8350 and pmr735b for sc7280-idp
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    4 +
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |    1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    9 +
+ arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi          |    1 +
+ arch/arm64/boot/dts/qcom/apq8096-ifc6640.dts       |    8 +
+ arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts       |    8 +
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi              |  157 ++-
+ arch/arm64/boot/dts/qcom/ipq8074-hk01.dts          |    2 +-
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi              |   54 +-
+ arch/arm64/boot/dts/qcom/msm8916-mtp.dts           |    3 +-
+ .../boot/dts/qcom/msm8916-wingtech-wt88047.dts     |  313 +++++
+ arch/arm64/boot/dts/qcom/msm8916.dtsi              |   27 +
+ arch/arm64/boot/dts/qcom/msm8994.dtsi              |    8 +-
+ arch/arm64/boot/dts/qcom/msm8996-mtp.dtsi          |    8 +
+ .../qcom/msm8996-pmi8996-sony-xperia-tone-dora.dts |   11 +
+ .../msm8996-pmi8996-sony-xperia-tone-kagura.dts    |   11 +
+ .../msm8996-pmi8996-sony-xperia-tone-keyaki.dts    |   11 +
+ .../dts/qcom/msm8996-sony-xperia-tone-dora.dts     |   27 +
+ .../dts/qcom/msm8996-sony-xperia-tone-kagura.dts   |   15 +
+ .../dts/qcom/msm8996-sony-xperia-tone-keyaki.dts   |   26 +
+ .../boot/dts/qcom/msm8996-sony-xperia-tone.dtsi    |  956 +++++++++++++
+ arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi         |   63 +
+ arch/arm64/boot/dts/qcom/msm8996.dtsi              |   44 +-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi              |    4 +-
+ arch/arm64/boot/dts/qcom/pm660.dtsi                |  133 ++
+ arch/arm64/boot/dts/qcom/pm660l.dtsi               |   54 +
+ arch/arm64/boot/dts/qcom/pm8004.dtsi               |    2 -
+ arch/arm64/boot/dts/qcom/pm8150b.dtsi              |    6 +
+ arch/arm64/boot/dts/qcom/pmi8996.dtsi              |   15 +
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts           |   60 +-
+ .../arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi |    2 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       |   62 +-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |  102 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts            |  241 +---
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |  341 +++++
+ arch/arm64/boot/dts/qcom/sc7280-idp2.dts           |   23 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  419 +++++-
+ .../dts/qcom/sdm630-sony-xperia-ganges-kirin.dts   |   14 +-
+ .../boot/dts/qcom/sdm630-sony-xperia-ganges.dtsi   |   40 -
+ .../dts/qcom/sdm630-sony-xperia-nile-discovery.dts |    1 +
+ .../dts/qcom/sdm630-sony-xperia-nile-pioneer.dts   |    1 +
+ .../dts/qcom/sdm630-sony-xperia-nile-voyager.dts   |    1 +
+ .../boot/dts/qcom/sdm630-sony-xperia-nile.dtsi     |  527 ++++++-
+ arch/arm64/boot/dts/qcom/sdm630.dtsi               | 1441 ++++++++++++++++++--
+ .../dts/qcom/sdm636-sony-xperia-ganges-mermaid.dts |   14 +-
+ arch/arm64/boot/dts/qcom/sdm636.dtsi               |   23 +
+ .../arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dts |    2 -
+ arch/arm64/boot/dts/qcom/sdm660.dtsi               |  519 +++----
+ arch/arm64/boot/dts/qcom/sdm845-mtp.dts            |    3 +
+ .../arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi |   11 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |   35 +-
+ .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      |    5 +
+ .../dts/qcom/sm6125-sony-xperia-seine-pdx201.dts   |  139 ++
+ arch/arm64/boot/dts/qcom/sm6125.dtsi               |  566 ++++++++
+ arch/arm64/boot/dts/qcom/sm8150-mtp.dts            |    2 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi               |  797 ++++++++++-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               |  217 ++-
+ arch/arm64/boot/dts/qcom/sm8350-hdk.dts            |    2 +-
+ arch/arm64/boot/dts/qcom/sm8350-mtp.dts            |    2 +-
+ arch/arm64/boot/dts/qcom/sm8350.dtsi               |   53 +-
+ 60 files changed, 6754 insertions(+), 892 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pmi8996.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-idp2.dts
+ delete mode 100644 arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm636.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sm6125.dtsi
