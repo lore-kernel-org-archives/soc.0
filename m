@@ -7,59 +7,56 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5BB7C432BE
-	for <soc@archiver.kernel.org>; Mon, 16 Aug 2021 21:21:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B090BC4338F
+	for <soc@archiver.kernel.org>; Mon, 16 Aug 2021 21:21:06 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id B802460F58; Mon, 16 Aug 2021 21:21:04 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B887C60E97;
-	Mon, 16 Aug 2021 21:21:02 +0000 (UTC)
+	id 8F45660F39; Mon, 16 Aug 2021 21:21:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 10D4060F5C;
+	Mon, 16 Aug 2021 21:21:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1629148864;
-	bh=Vf5zjb4Z1qIlo36eCK7cNzo8Q3QPU2Z5sOLdOAQnjsI=;
+	s=k20201202; t=1629148866;
+	bh=KXkdranSjGiD0FZJmV0BdAng2XKwcQNGJhAAroPbTLM=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QtyknsGc1Rl4r8+b6N2pzG33gCMLu+kw+Q/A3fBCJ3shyo5dMZHiU2UqO1Q+WBVVw
-	 FOO7YTsxQm7qWSsakM9AUin18GkNQb79k3HSrNXaCYhAE3D0dz+m6d89b3UuJj2OvX
-	 9zT/Bmo1nUZec98Fw5GVK4LJtfAbwdTswIfl1lZt8HiVVxqO2raJbZ3U0iCGNb0AXB
-	 DAJVUBZgLegueN0rhq1leHT8ULyhv5u5S9MbBTvyImJ7QdB9kj6rN3NlkZ4TsqrWA4
-	 4dull0L/VjQYH7B4PKUEXbAtCCQgA3qLGQEuDqOnDAOs/9FHeYBiR7WCfM4EYD33ZS
-	 9OMNY9sOMbBFw==
+	b=Ni9fk84hOIVPsAtJobH5+WGNJELJ6POCinvUAdf1dgUaeQD0fuXJHM11X7sq/xQR2
+	 BwrijzPmKXl4SgSwGa3d7MxreQpHVgWeVn8yEQko8ib9kgcxzO55ivDvAriTspcVsb
+	 /h2zbYsOTjsNgUMSSDr7z9t5VudobpuzF75wND5jzF+vDDXnN09TgxhM5EgSk9USYm
+	 VFsTf4s0ioDjUfdFO7ocGMEMDE4CvJ++4uQwZkA5jubQy+W7ypHEDq/bm4jqxg8TwQ
+	 VFmx+q4gtDRNxQmOaH9BJkQvWZM4ryeKHWil8OfMG9vutBDKXjJ4+Ldx+2LJJZ/4XY
+	 epSfrmlkTI6uw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Shawn Guo <shawnguo@kernel.org>,
-	soc@kernel.org,
-	arm@kernel.org
+To: soc@kernel.org,
+	arm@kernel.org,
+	Thierry Reding <thierry.reding@gmail.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-arm-kernel@lists.infradead.org,
-	Stefan Agner <stefan@agner.ch>,
-	kernel@pengutronix.de,
-	Li Yang <leoyang.li@nxp.com>,
-	Fabio Estevam <festevam@gmail.com>,
-	linux-imx@nxp.com
-Subject: Re: [GIT PULL 3/4] i.MX arm64 device tree changes for 5.15
-Date: Mon, 16 Aug 2021 23:20:51 +0200
-Message-Id: <162914852275.237905.12467380733542319999.b4-ty@arndb.de>
+	Jon Hunter <jonathanh@nvidia.com>,
+	linux-tegra@vger.kernel.org
+Subject: Re: [GIT PULL 1/6] dt-bindings: Changes for v5.15-rc1
+Date: Mon, 16 Aug 2021 23:20:52 +0200
+Message-Id: <162914852238.237905.17270063246440695138.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210814133853.9981-3-shawnguo@kernel.org>
-References: <20210814133853.9981-1-shawnguo@kernel.org> <20210814133853.9981-3-shawnguo@kernel.org>
+In-Reply-To: <20210813162157.2820913-1-thierry.reding@gmail.com>
+References: <20210813162157.2820913-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sat, 14 Aug 2021 21:38:52 +0800, Shawn Guo wrote:
+On Fri, 13 Aug 2021 18:21:52 +0200, Thierry Reding wrote:
 > The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 > 
 >   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt64-5.15
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-dt-bindings
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 6d640913126db109f2e3389173f0fe42413a8183
+merge commit: b05cff9f4d38cd4a9ccc387a8054f9efe8e8414f
 
        Arnd
