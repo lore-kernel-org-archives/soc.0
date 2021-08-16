@@ -7,14 +7,14 @@ X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBA4DC4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 21:23:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08DA6C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 21:24:00 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 81AC160E97
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 21:23:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 81AC160E97
+	by mail.kernel.org (Postfix) with ESMTPS id C62E260F11
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 21:23:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C62E260F11
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -23,50 +23,46 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=x3QOoiwe6bt1IIW2lrgLL7bFbyEgzZb+2IQBwQpjTrE=; b=Qy7gwo26pRej2e
-	iqTZHMOo9cBVd+KtJ2qjJkMx+ws3gKdt7dhJHrJZEuu1t5LmtwaGyhU9XvdGUQjH2tyjbHydBWega
-	EGFL01rgXHVQ2NUbfRiwTTXUPwH7G+4pM17s6kqSEhYQgvHmLqRFz83seChH5sQUDf7sOhgGMMrzK
-	DG/H42TCPOajUxldaSl2dGNque85jsqIwPH/8r81gC1zok83BxCa27ytqAs+xwsbKosAsvU1+sphB
-	uAmxWK03Sh8GbwCuo9bCYVdW7uQH2K84tguIpi6B95pdzNASLGeTGeXXLalIiPiwB0fE7R8be9LC3
-	Rlk/DPTDBW6lVIGZdo/A==;
+	List-Owner; bh=/3gTBqel/NyszrD3wZkzH1WeGWnJgd36RWD38DC/e3I=; b=Th/mg8v/g2l2MU
+	I2z0nTeTxFSOT0mVUjrVW0CCDLvQt+zcZl6fM5/8HyKw7uMRzdiegu0bktySb5pqviSaXthf7EXzE
+	kT5frNqeYBEHy6b2GPsrxlzRPB/f2TpNOjyOyMyHV0SVDRQi5LOGEaL3AI/2jB2qbw2UEZIwxXWtf
+	UAcKZkzmoeE98Jr2lBfRXZMtHMD8a/vjLJywv7g+u7wOoXkwi6lJ6p7tUKgptQftGkAkiFHx2jLbz
+	/2d2ea32SX9HqYYBKslyhBLuzwtERFMz49ifj69iTlpu8Trfor9f5NIl2zNbNJDsPHi6vEUEutsuT
+	YDcACMAAJwfcYuAfR3CQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mFk3G-000Kc7-GA; Mon, 16 Aug 2021 21:21:46 +0000
+	id 1mFk3Z-000Kjy-FV; Mon, 16 Aug 2021 21:22:06 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mFk2Y-000KNY-MH
- for linux-arm-kernel@lists.infradead.org; Mon, 16 Aug 2021 21:21:06 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BD0260F41;
- Mon, 16 Aug 2021 21:21:00 +0000 (UTC)
+ id 1mFk2c-000KPB-P7
+ for linux-arm-kernel@lists.infradead.org; Mon, 16 Aug 2021 21:21:08 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 10D4060F5C;
+ Mon, 16 Aug 2021 21:21:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1629148862;
- bh=Emb5YdknXpn4P/KykFLgzd9ybCudZq6evQKOErNRsXw=;
+ s=k20201202; t=1629148866;
+ bh=KXkdranSjGiD0FZJmV0BdAng2XKwcQNGJhAAroPbTLM=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=uY4jgdpmOYYtQcwbgBiQ6zdFzrp6bjR/5qMdlmO+L7xhifBm6K+KNROdwbUEll9iI
- LSGc6JxhYXSJL6LJW1uRbyP0Anhc+15QPqLbQsvtnNsBbOYg1CZbfmSFUL7lbdL3QE
- +ilUKJHSEIGKLM6kBld2eMde5tdYuQNfjNzoC4LHRE5mshnG6hcyIXY5Vx7WDEamug
- NQNn4WN2PKvyTq07EjwMXskHpESSktdI3KD8J4MMM69o48jmd+siNFAmcT02Jmx34S
- XIyZV8m0NT4169XO42TYWd9UJB+4+9ZvMPRX1TiNtQmjww5ZOk+c88u4GQX/e6dDWA
- xZi4dD28ysoVg==
+ b=Ni9fk84hOIVPsAtJobH5+WGNJELJ6POCinvUAdf1dgUaeQD0fuXJHM11X7sq/xQR2
+ BwrijzPmKXl4SgSwGa3d7MxreQpHVgWeVn8yEQko8ib9kgcxzO55ivDvAriTspcVsb
+ /h2zbYsOTjsNgUMSSDr7z9t5VudobpuzF75wND5jzF+vDDXnN09TgxhM5EgSk9USYm
+ VFsTf4s0ioDjUfdFO7ocGMEMDE4CvJ++4uQwZkA5jubQy+W7ypHEDq/bm4jqxg8TwQ
+ VFmx+q4gtDRNxQmOaH9BJkQvWZM4ryeKHWil8OfMG9vutBDKXjJ4+Ldx+2LJJZ/4XY
+ epSfrmlkTI6uw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Shawn Guo <shawnguo@kernel.org>,
-	soc@kernel.org,
-	arm@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, kernel@pengutronix.de,
- Stefan Agner <stefan@agner.ch>, linux-arm-kernel@lists.infradead.org,
- Li Yang <leoyang.li@nxp.com>, Fabio Estevam <festevam@gmail.com>,
- linux-imx@nxp.com
-Subject: Re: [GIT PULL 1/4] i.MX DT bindings update for 5.15
-Date: Mon, 16 Aug 2021 23:20:50 +0200
-Message-ID: <162914852265.237905.13250400572485864130.b4-ty@arndb.de>
+To: soc@kernel.org, arm@kernel.org, Thierry Reding <thierry.reding@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
+ Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org
+Subject: Re: [GIT PULL 1/6] dt-bindings: Changes for v5.15-rc1
+Date: Mon, 16 Aug 2021 23:20:52 +0200
+Message-ID: <162914852238.237905.17270063246440695138.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210814133853.9981-1-shawnguo@kernel.org>
-References: <20210814133853.9981-1-shawnguo@kernel.org>
+In-Reply-To: <20210813162157.2820913-1-thierry.reding@gmail.com>
+References: <20210813162157.2820913-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210816_142102_790403_65728D36 
-X-CRM114-Status: UNSURE (   5.75  )
+X-CRM114-CacheID: sfid-20210816_142106_879796_1CFDDDEC 
+X-CRM114-Status: UNSURE (   6.65  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -83,24 +79,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210816212050.16mexBwMP_Lsgay2HL13wGchFAp8VD6qF3d2xRoXoKo@z>
+Message-ID: <20210816212052.sJTwx-AP1IyaKkS7KjMMeLexK8MFUgwzdKK35FZ_9c0@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sat, 14 Aug 2021 21:38:50 +0800, Shawn Guo wrote:
+On Fri, 13 Aug 2021 18:21:52 +0200, Thierry Reding wrote:
 > The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 > 
 >   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-5.15
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-dt-bindings
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: fe3be9941e3c5cebd59d3ad02477db86af85e2da
+merge commit: b05cff9f4d38cd4a9ccc387a8054f9efe8e8414f
 
        Arnd
 
