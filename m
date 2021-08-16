@@ -7,59 +7,56 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14C33C4338F
-	for <soc@archiver.kernel.org>; Mon, 16 Aug 2021 21:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73F6BC432BE
+	for <soc@archiver.kernel.org>; Mon, 16 Aug 2021 21:34:07 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id D684360FD7; Mon, 16 Aug 2021 21:34:03 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DC27F60F5C;
-	Mon, 16 Aug 2021 21:34:01 +0000 (UTC)
+	id 56F2960F4B; Mon, 16 Aug 2021 21:34:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C8D9660F46;
+	Mon, 16 Aug 2021 21:34:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1629149643;
-	bh=irFg21km5G6NjoALA2TXJaOOVa6FN620B3pXiw89jSc=;
+	s=k20201202; t=1629149647;
+	bh=d80uXTMxW1pO0QATDsUyZ1RBrTniSVeKF84TRRg5Xes=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bRO6ymDV+m5C5OEQ80YaEW/rrroPEGmdS5yxIfEEy3Jc8Z8PdvS/nIrACiW25IbPr
-	 H5NkczuL6SKUhYFzfMVoiIKj9ZxCfOk5Ho4/wM4NuyOWZuXTCLT1wUjDsB/0o7uEA4
-	 NCHrQMds5iW/G5Yuuwp97/rtqu9UCknaccytu4xJdKKv2pEM+ITU0qLIZRd6eLwQ6p
-	 GadWx1Rn8ScVJVMDy3jKwnKk7J+Zpy4YHrMp9XG+R/PGcWo1Z132AvClx0Xv2JaS3S
-	 fIqZiVP2zjRyFO058TqqgcFNu0E2oBjEa+o/d+4gswRPKVxNwvkc+gigJji0eBZOoA
-	 1NJWRSN/VG3rQ==
+	b=Ksx3zfUnygjrm3gOr5Pj6kikv5zP/Onn8pLSAaZ9Q0PCrcgS+RDoMy7yJqo43T28f
+	 YNgTAYfeF4kbDyqY0S39Hmd0h4qbkatGGr3OnaXcv1Nml2L+UcG3PKIoZG2dK2EOtC
+	 6O+JytFW5br1030Rn/nymR2MxCe11xx/+Nh7RI/pfive1bpwZbW1xFesrvCH/JaL7z
+	 9f4nrCyR44+vzANFZlcCrijgDfKHGuLibsIootYbEVmmtLFLSmtsS8MFr2pCzccceK
+	 r7+lZI++/WDPJUT+sE0VoKtMvhxKx/NgOQ4zCzIRmvHLMW8dKJjk4et+cy+C2/47Ek
+	 Ouq9lgz0I+thg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
-	Shawn Guo <shawnguo@kernel.org>,
-	arm@kernel.org
+	arm@kernel.org,
+	Thierry Reding <thierry.reding@gmail.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
+	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	Li Yang <leoyang.li@nxp.com>,
-	Stefan Agner <stefan@agner.ch>,
-	linux-imx@nxp.com,
-	kernel@pengutronix.de,
-	Fabio Estevam <festevam@gmail.com>
-Subject: Re: [GIT PULL 4/4] i.MX defconfig update for 5.15
-Date: Mon, 16 Aug 2021 23:33:55 +0200
-Message-Id: <162914958924.240013.14798086285090389269.b4-ty@arndb.de>
+	Jon Hunter <jonathanh@nvidia.com>
+Subject: Re: [GIT PULL 5/6] ARM: tegra: Default configuration changes for v5.15-rc1
+Date: Mon, 16 Aug 2021 23:33:56 +0200
+Message-Id: <162914958916.240013.16079818037354285640.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210814133853.9981-4-shawnguo@kernel.org>
-References: <20210814133853.9981-1-shawnguo@kernel.org> <20210814133853.9981-4-shawnguo@kernel.org>
+In-Reply-To: <20210813162157.2820913-5-thierry.reding@gmail.com>
+References: <20210813162157.2820913-1-thierry.reding@gmail.com> <20210813162157.2820913-5-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sat, 14 Aug 2021 21:38:53 +0800, Shawn Guo wrote:
+On Fri, 13 Aug 2021 18:21:56 +0200, Thierry Reding wrote:
 > The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 > 
 >   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-defconfig-5.15
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-arm-defconfig
 > 
 > [...]
 
 Merged into arm/defconfig, thanks!
 
-merge commit: 1f69aabe1ac06cd5005352fb9314e7409b712487
+merge commit: 03bc43c09d0cd7f4a7813b10433d653ec5a02b09
 
        Arnd
