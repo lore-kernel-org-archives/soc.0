@@ -1,62 +1,105 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=wHyG=NH=lists.infradead.org=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C081C4338F
-	for <soc@archiver.kernel.org>; Mon, 16 Aug 2021 21:21:10 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 3EC8B60232; Mon, 16 Aug 2021 21:21:10 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B3ED660F5C;
-	Mon, 16 Aug 2021 21:21:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D609AC432BE
+	for <linux-amlogic@archiver.kernel.org>; Mon, 16 Aug 2021 21:21:25 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id A63A560232
+	for <linux-amlogic@archiver.kernel.org>; Mon, 16 Aug 2021 21:21:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A63A560232
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=HPMEAWLrHYwF0rTsVrzB4ZCLZbsyi3qpDAn7IFU5PCg=; b=Z4VW4VPFXT6sDh
+	pgdGZCKAvbSE43+3WUIeELEh0mQnxmIkkwsgYrkkZ0k2CUzvIKXvqV1U3CP3SAJU+IwcvHr0PB8f3
+	ysQpnzcr47BPFA3fIu80PEp3eHGpSLBXrVX/QSm5BDbIiyHBpjN4Z19cb4YL1xEqdp9wCm4z3cWal
+	k7yT94VUbrYW8SOBqNo4tDVwTOftA5kjJ09g/xWVKpRkek8KKmpp0vj5/esXWGs21w5NwPDBruR8/
+	4+IdioTbILDPh5HuwLUq07xovhiv7rgMOZBlWj6Rq+mSJutGly0SAZQbIhxZq8gfnr/kSJ9Rnwosj
+	m/ps0td9kQcAZpv7Y2Bg==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mFk2q-000KTV-Qh; Mon, 16 Aug 2021 21:21:20 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mFk2W-000KMI-9g; Mon, 16 Aug 2021 21:21:01 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BAB3260232;
+ Mon, 16 Aug 2021 21:20:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1629148870;
-	bh=MVhs7hiwPdDtFcUQZRD8fkkOdFDOTlOTBzwc30qz4/w=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=J/GVqsPFsk/4MPWj9cn07aqAmzjufvbnotRiyp/A9a2fGf1/90SnM1QXFUpcrhlqc
-	 v6Z9YFjnYu4L0HgJ0gtn2XiXAk/p2T0HKeQukhBvgFOJbQRHD3VAmCSApir0qKgrbV
-	 pV3nCDx496LU5/fjmkbVvAtGcavo+9Zj+QLQw+5Jfy+KymFi1vxHH2O7Xp3wZO9gHl
-	 efj6Vco7iF7h+5RpbilbZtnYixhe602zzCekV84GIDj/IyDlXjSmldUxM+Dk+r2qX6
-	 2MAUaJgjcpBbOEiHr9KCepbxBwcclwq9k/gVucT9HtyRTXDV+fP611F/oc6YJER0EY
-	 K2oMItXNfDyhg==
+ s=k20201202; t=1629148860;
+ bh=/dLDdxhN4wN84E8SgCqPOUOIc7KQmce8hgFwVOioDWU=;
+ h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=f//CBE2CFwFnceXN187DOQMPnMdNWox59GkEs3+eyIIOK+gGyAZ2pk5gQMPKsE2xO
+ X3OY3mTyLAt5m95LxNVHJnZqEf4yRpfQgawtF93G8dNJFD5KDCtsBljeZMPwfVsKOU
+ fqv4//tOtcah8wCdex5dvahdwg/i8CTCM0BZqMHWtNH7SHJ4rynkfEBlP6KLBArccr
+ GzxLCs0A5tlKQDbH8XYJ5Yx+XKyOu9L1G3vce5+YObPGr2cFmDAoH9jD6doTWqruPY
+ mIPvqFevZnS3cRVVWmflHjBs0hHWfKLCWm/PmApDZGnCgyOZ3o5mrlpPvKA8HB663D
+ iB5peO3+SgQgQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	arm@kernel.org,
-	Thierry Reding <thierry.reding@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-kernel@lists.infradead.org,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org
-Subject: Re: [GIT PULL 6/6] arm64: tegra: Device tree changes for v5.15-rc1
-Date: Mon, 16 Aug 2021 23:20:54 +0200
-Message-Id: <162914852256.237905.7021775229797910596.b4-ty@arndb.de>
+To: Neil Armstrong <narmstrong@baylibre.com>, soc@kernel.org, arm@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
+ linux-amlogic@lists.infradead.org
+Subject: Re: [GIT PULL] arm64: dts: amlogic updates for v5.15 part 2
+Date: Mon, 16 Aug 2021 23:20:49 +0200
+Message-ID: <162914852228.237905.17625199363925328243.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210813162157.2820913-6-thierry.reding@gmail.com>
-References: <20210813162157.2820913-1-thierry.reding@gmail.com> <20210813162157.2820913-6-thierry.reding@gmail.com>
+In-Reply-To: <47d77095-eee7-bbd9-d3aa-1dabeea3f0b9@baylibre.com>
+References: <47d77095-eee7-bbd9-d3aa-1dabeea3f0b9@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210816_142100_388663_3ADF5C17 
+X-CRM114-Status: UNSURE (   7.53  )
+X-CRM114-Notice: Please train this message.
+X-BeenThere: linux-amlogic@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-amlogic.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-amlogic>, 
+ <mailto:linux-amlogic-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-amlogic/>
+List-Post: <mailto:linux-amlogic@lists.infradead.org>
+List-Help: <mailto:linux-amlogic-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-amlogic>,
+ <mailto:linux-amlogic-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-amlogic" <linux-amlogic-bounces@lists.infradead.org>
+Errors-To: linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210816212049.ubMT_LZAwha_aMqrrH8dmsS6xrsEIo8xrY2tWYfidP0@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 13 Aug 2021 18:21:57 +0200, Thierry Reding wrote:
-> The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+On Fri, 13 Aug 2021 16:12:59 +0200, Neil Armstrong wrote:
+> Here's the second set of ARM64 DT changes for v5.15:
+> - add audio nodes for vega-s95 & nexbox-a1
 > 
->   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+> Neil
 > 
-> are available in the Git repository at:
+> The following changes since commit 4b5260032ec691b11a9185f7f38f5761e67fab48:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.15-arm64-dt
+>   arm64: dts: meson: improve gxm-khadas-vim2 wifi (2021-07-26 10:08:16 +0200)
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 1de48932389887f83f0f560c741dd57cc69a40b2
+merge commit: fba65f104ea83d188ef470a3f32c519a7f4b5796
 
        Arnd
+
+_______________________________________________
+linux-amlogic mailing list
+linux-amlogic@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-amlogic
