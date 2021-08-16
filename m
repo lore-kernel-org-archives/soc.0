@@ -2,60 +2,64 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5204AC4338F
-	for <soc@archiver.kernel.org>; Mon, 16 Aug 2021 21:21:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88E07C4338F
+	for <soc@archiver.kernel.org>; Mon, 16 Aug 2021 21:21:02 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 1EE7E60F46; Mon, 16 Aug 2021 21:21:00 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BAB3260232;
-	Mon, 16 Aug 2021 21:20:58 +0000 (UTC)
+	id 6B5BC60232; Mon, 16 Aug 2021 21:21:02 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BD0260F41;
+	Mon, 16 Aug 2021 21:21:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1629148860;
-	bh=/dLDdxhN4wN84E8SgCqPOUOIc7KQmce8hgFwVOioDWU=;
+	s=k20201202; t=1629148862;
+	bh=Emb5YdknXpn4P/KykFLgzd9ybCudZq6evQKOErNRsXw=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=f//CBE2CFwFnceXN187DOQMPnMdNWox59GkEs3+eyIIOK+gGyAZ2pk5gQMPKsE2xO
-	 X3OY3mTyLAt5m95LxNVHJnZqEf4yRpfQgawtF93G8dNJFD5KDCtsBljeZMPwfVsKOU
-	 fqv4//tOtcah8wCdex5dvahdwg/i8CTCM0BZqMHWtNH7SHJ4rynkfEBlP6KLBArccr
-	 GzxLCs0A5tlKQDbH8XYJ5Yx+XKyOu9L1G3vce5+YObPGr2cFmDAoH9jD6doTWqruPY
-	 mIPvqFevZnS3cRVVWmflHjBs0hHWfKLCWm/PmApDZGnCgyOZ3o5mrlpPvKA8HB663D
-	 iB5peO3+SgQgQ==
+	b=uY4jgdpmOYYtQcwbgBiQ6zdFzrp6bjR/5qMdlmO+L7xhifBm6K+KNROdwbUEll9iI
+	 LSGc6JxhYXSJL6LJW1uRbyP0Anhc+15QPqLbQsvtnNsBbOYg1CZbfmSFUL7lbdL3QE
+	 +ilUKJHSEIGKLM6kBld2eMde5tdYuQNfjNzoC4LHRE5mshnG6hcyIXY5Vx7WDEamug
+	 NQNn4WN2PKvyTq07EjwMXskHpESSktdI3KD8J4MMM69o48jmd+siNFAmcT02Jmx34S
+	 XIyZV8m0NT4169XO42TYWd9UJB+4+9ZvMPRX1TiNtQmjww5ZOk+c88u4GQX/e6dDWA
+	 xZi4dD28ysoVg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Neil Armstrong <narmstrong@baylibre.com>,
+To: Shawn Guo <shawnguo@kernel.org>,
 	soc@kernel.org,
 	arm@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
+	kernel@pengutronix.de,
+	Stefan Agner <stefan@agner.ch>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org
-Subject: Re: [GIT PULL] arm64: dts: amlogic updates for v5.15 part 2
-Date: Mon, 16 Aug 2021 23:20:49 +0200
-Message-Id: <162914852228.237905.17625199363925328243.b4-ty@arndb.de>
+	Li Yang <leoyang.li@nxp.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	linux-imx@nxp.com
+Subject: Re: [GIT PULL 1/4] i.MX DT bindings update for 5.15
+Date: Mon, 16 Aug 2021 23:20:50 +0200
+Message-Id: <162914852265.237905.13250400572485864130.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <47d77095-eee7-bbd9-d3aa-1dabeea3f0b9@baylibre.com>
-References: <47d77095-eee7-bbd9-d3aa-1dabeea3f0b9@baylibre.com>
+In-Reply-To: <20210814133853.9981-1-shawnguo@kernel.org>
+References: <20210814133853.9981-1-shawnguo@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 13 Aug 2021 16:12:59 +0200, Neil Armstrong wrote:
-> Here's the second set of ARM64 DT changes for v5.15:
-> - add audio nodes for vega-s95 & nexbox-a1
+On Sat, 14 Aug 2021 21:38:50 +0800, Shawn Guo wrote:
+> The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 > 
-> Neil
+>   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
 > 
-> The following changes since commit 4b5260032ec691b11a9185f7f38f5761e67fab48:
+> are available in the Git repository at:
 > 
->   arm64: dts: meson: improve gxm-khadas-vim2 wifi (2021-07-26 10:08:16 +0200)
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-5.15
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: fba65f104ea83d188ef470a3f32c519a7f4b5796
+merge commit: fe3be9941e3c5cebd59d3ad02477db86af85e2da
 
        Arnd
