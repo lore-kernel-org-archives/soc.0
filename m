@@ -1,173 +1,168 @@
-Return-Path: <SRS0=o35/=NH=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=tEDI=NI=gmail.com=joel.stan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F04AC4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 23:56:20 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 354AFC4338F
+	for <soc@archiver.kernel.org>; Tue, 17 Aug 2021 07:52:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 1783260F5E; Tue, 17 Aug 2021 07:52:08 +0000 (UTC)
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 47A946054F
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 16 Aug 2021 23:56:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 47A946054F
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=SgicuSIHqlPhNmWzQUuKVVu79xd9GHNnwXL8hxb9sZI=; b=pOW3I5cCmY5j73
-	L4PhwiHJrcIzcQ9q4bDGTKHYVY9kJEWhW/KkRQ6hp3d4KLXAg7EGYgWUOKYwyWMkIRO2xQQa4Xyqj
-	szFhZiINpRj9+jasX1lkb4zehekVfWpaVSdglB2vHBXSOxbPyiUfreJm3wUnKYR8l1BAGMHqsfCCP
-	6weFqh2FB2XMezgmjVdcK6G597+UmlsYFcQnWSqoq+vETjzNrQeS6QlQQ0RviktW0w93+IkwSijrY
-	ZSJchW02Zkv+A+ZqaMfBiLJvvjRjuNizYuq2ih36UsaVRA1o4c7HHcyLc4tl/mv3jJaV/RcI0NcYh
-	PcpaKVvB1/BMHxS3yTSA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mFmR5-000X2F-PS; Mon, 16 Aug 2021 23:54:31 +0000
-Received: from mail-ot1-x333.google.com ([2607:f8b0:4864:20::333])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mFmQz-000X1T-D0
- for linux-arm-kernel@lists.infradead.org; Mon, 16 Aug 2021 23:54:29 +0000
-Received: by mail-ot1-x333.google.com with SMTP id
- l36-20020a0568302b24b0290517526ce5e3so15550552otv.11
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 16 Aug 2021 16:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=date:from:to:cc:subject:message-id:references:mime-version
- :content-disposition:in-reply-to;
- bh=C/+tcWxYcIbJj6nDg1OA6yUYjPHVJrZBuqhcQg7Ah6s=;
- b=tzJb0+FxFuiQBpr+lK5+jBOnv3wL/4natRvzyL0KVnCyd4W30Dl0MtiOyb30nizQIQ
- xe6EF+PpGytDyXHhvsOqSbyZB5t9dhfQfo5qY6yaRMdvGdBb8uY0NlvRteOHmIPoqEtX
- dqmkJdFcMwleJjUhXK+PJnsfT43aJVz+K+0G/GT/X/NhxZhSTV+sJX45XvcWDBUHYT3O
- SsMC6EBSZIwdpqD/Hwr6ra/28kJPl12uesV69IwYgc4DGzUpKLA7tFIi2BSx3a4rhfLB
- Bwy3FaM3ASXasvXMqfRljNWoLdLHrQGsYctYoWZPrY2ESciKLEqpzZgLCQLfERkKIUV7
- 5yUA==
+	by mail.kernel.org (Postfix) with ESMTPS id 3482C60EFF
+	for <soc@kernel.org>; Tue, 17 Aug 2021 07:52:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3482C60EFF
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f174.google.com with SMTP id x1so2991043qtw.5
+        for <soc@kernel.org>; Tue, 17 Aug 2021 00:52:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=sYsUG/NPZIBujIh9hacdzMbIEijzFzCoj/G7iIt4alA=;
+        b=WTQvyBhSFaH0kQ9XuClZSoEzRDenz7OtNePSY1feYXSOiMhWE2Gux6tItSCNdsIqlb
+         RRt5k3y2zkMKlOUbnPvL9JrtNG9D3vFfcYPrV/eEONn3dLgoHQlO2Y+XKZn3Tkyuk00n
+         ADBEO8LK3V4w39Slu2yfTdkl+di5UEF26Uauw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=C/+tcWxYcIbJj6nDg1OA6yUYjPHVJrZBuqhcQg7Ah6s=;
- b=ph2d1eozqk1Djvgp9iHJFcZBkaO4UL41oNvng7BOoaj3aS4QVtq34I5PiTBEbnNA/5
- x7zY8OaBk0TY2yiB2thuSXks7K45VE6h2uWvrwO2pIPUaXBJuM7oJfHsHolW3kxW2xzK
- KVW8Pq0vmm9/rLppcXZnmGogZgP2h0zoX9lbRCFksNvONK34tagGD3XEF817H7tZp2dA
- ZeYH6poejaAZzm2bbyR3jcW/CYgid6m9ntvtSBRsnrXHjtmJ8GsBddW53waK/UItOOrT
- PASb6O0O/b2xsC5PN8vvJrq8U9SOZicfwhQ1NnboUoPDmLAtmiw1QMh92FtmgG4xuoKP
- bzZA==
-X-Gm-Message-State: AOAM533t2WaCntWP4lFfMUhhToTkY5YeV4iEn63zDeFiwMMud2DQLYJb
- Ag82+0gU+LTldlX1lNaqAbC8Mg==
-X-Google-Smtp-Source: ABdhPJx9K0ZcVWdYg96uteYKBxPeb5UKmYEvO1kAGGbeqVsZ6BCoMhiWIgX69AX7RO50tkTYlN0H2A==
-X-Received: by 2002:a9d:266a:: with SMTP id a97mr516885otb.114.1629158062896; 
- Mon, 16 Aug 2021 16:54:22 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net.
- [104.57.184.186])
- by smtp.gmail.com with ESMTPSA id r1sm113739ooi.21.2021.08.16.16.54.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Aug 2021 16:54:22 -0700 (PDT)
-Date: Mon, 16 Aug 2021 18:54:20 -0500
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
-To: Doug Anderson <dianders@chromium.org>
-List-Id: <soc.lore.kernel.org>
-Cc: arm@kernel.org, SoC Team <soc@kernel.org>,
- linux-arm-msm <linux-arm-msm@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@baylibre.com>,
- Konrad Dybcio <konrad.dybcio@somainline.org>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
- Vinod Koul <vkoul@kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Alex Elder <elder@linaro.org>, Bhupesh Sharma <bhupesh.sharma@linaro.org>,
- Stephan Gerhold <stephan@gerhold.net>,
- Rajendra Nayak <rnayak@codeaurora.org>,
- Sandeep Maheswaram <sanm@codeaurora.org>,
- Thara Gopinath <thara.gopinath@linaro.org>,
- Caleb Connolly <caleb@connolly.tech>,
- Georgi Djakov <georgi.djakov@linaro.org>,
- Gokul Sriram Palanisamy <gokulsri@codeaurora.org>,
- Judy Hsiao <judyhsiao@chromium.org>,
- Martin Botka <martin.botka@somainline.org>,
- Robert Marko <robimarko@gmail.com>,
- V Sujith Kumar Reddy <vsujithk@codeaurora.org>,
- Baruch Siach <baruch@tkos.co.il>,
- Felipe Balbi <felipe.balbi@microsoft.com>,
- Jonathan Marek <jonathan@marek.ca>, Kathiravan T <kathirav@codeaurora.org>,
- Kuogee Hsieh <khsieh@codeaurora.org>,
- Ravi Kumar Bokka <rbokka@codeaurora.org>,
- Robert Foss <robert.foss@linaro.org>,
- Selvam Sathappan Periakaruppan <speriaka@codeaurora.org>,
- Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
- Sibi Sankar <sibis@codeaurora.org>, Wesley Cheng <wcheng@codeaurora.org>,
- Yassine Oudjana <y.oudjana@protonmail.com>,
- satya priya <skakit@codeaurora.org>
-Subject: Re: [GIT PULL] Qualcomm ARM64 updates for v5.15
-Message-ID: <YRr6rLXRn0m4KUMx@builder.lan>
-References: <20210816231223.586597-1-bjorn.andersson@linaro.org>
- <CAD=FV=XHOOjVgoQsS7vMDzeov0p6groC6Qnxz_TWpFj7dh7XLQ@mail.gmail.com>
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=sYsUG/NPZIBujIh9hacdzMbIEijzFzCoj/G7iIt4alA=;
+        b=G7WMaSGFBC1pc35l0vl0fzTQIy2fPHceOP+yIT8kMGStXAHw2Odn4St8C7rHs72yx2
+         4xESIIvrObWq/zxceuxXA/r3z/RB2VSKIhPLVbIKuuHyO6em+fSktT6910eXW9iod8xV
+         IRWtZmtSjZvSyKd5qjBpAzF15edWcNNnUgmDLGBDOpM7G344Y1vYg2dq7SRIloQ/UjF6
+         pFcX3LBavRaG2VJ56KX4YxuEWiDAuwxcchL4RHmOQZKuSO1CevMXAzdB9a4Ljk0H6U6I
+         iVicI16Y/R/2Hs7K9vVfEjZvlh3pqtQinn1F2RW18f0LdYJF6EajICmTPSZoTUie05bq
+         l00g==
+X-Gm-Message-State: AOAM5300bA4XEUVZuO2zP9gDUANkLckIylv03thXOvJwIq0FVQ7KIZM6
+	SVlly0rDPaFu7a2c8TYqv19mjcqJik8LH9wZWUCa6w6JAos=
+X-Google-Smtp-Source: ABdhPJw8feCldLj7Vhc6iKE3JJaHj+my9WkV2PsvQhwYUggdZ9tUjdGKV0GGDotySpd7kIReJnHO1FO9/bXwb6aGkEY=
+X-Received: by 2002:ac8:5bcc:: with SMTP id b12mr1879604qtb.176.1629186725533;
+ Tue, 17 Aug 2021 00:52:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=XHOOjVgoQsS7vMDzeov0p6groC6Qnxz_TWpFj7dh7XLQ@mail.gmail.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210816_165425_554599_3AA940E2 
-X-CRM114-Status: GOOD (  16.75  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210816235420.TGw0O1OZpGGhFvBJvgZfAyHMMDG4SPbyrM9q6O9e3f0@z>
+From: Joel Stanley <joel@jms.id.au>
+Date: Tue, 17 Aug 2021 07:51:54 +0000
+Message-ID: <CACPK8XdWRBb9cuDWGQPfK8R8TsZuydJQHsL4_e2w=HvCKAMogg@mail.gmail.com>
+Subject: [GIT PULL] ARM: aspeed: devicetree changes for 5.15
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, Andrew Jeffery <andrew@aj.id.au>, 
+	linux-aspeed <linux-aspeed@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon 16 Aug 18:41 CDT 2021, Doug Anderson wrote:
+Hello Soc maintainers,
 
-> Hi,
-> 
-> On Mon, Aug 16, 2021 at 4:12 PM Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> >
-> > Douglas Anderson (1):
-> >       arm64: dts: qcom: sc7180-trogdor: Move panel under the bridge chip
-> 
-> I hope the above patch doesn't cause problems. I had landed it in the
-> drm-misc-next tree as per:
-> 
-> https://lore.kernel.org/linux-arm-msm/YMDdyEzCpdttQyNu@builder.lan/
-> 
-> Presumably git will magically do the right thing here since nothing
-> else on nearby lines is changing, but I at least wanted to point this
-> out in case there are any issues. Right now in linuxnext I see both
-> changes:
-> 
-> ab428819ee3f arm64: dts: qcom: sc7180-trogdor: Move panel under the bridge chip
-> ab6f24b404c9 arm64: dts: qcom: sc7180-trogdor: Move panel under the bridge chip
-> 
+Here are the aspeed changes for 5.15.
 
-Yes, we agreed that you should take it through drm-misc and I must have
-forgotten about that as I drained the patchwork queue.
+The following changes since commit 2734d6c1b1a089fb593ef6a23d4b70903526fe0c:
 
-This has been sitting in linux-next for a while now and I've not seen
-any reports from Stephen, so I think we're good.
+  Linux 5.14-rc2 (2021-07-18 14:13:49 -0700)
 
-Regards,
-Bjorn
+are available in the Git repository at:
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+  git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
+tags/aspeed-5.15-devicetree
+
+for you to fetch changes up to 6b8b31269898b8891f1f3a95578ceeb109393e23:
+
+  ARM: dts: aspeed: p10bmc: Add power control pins (2021-08-17 13:52:46 +0930)
+
+----------------------------------------------------------------
+ASPEED device tree updates for 5.15
+
+ - New machines
+
+  * Facebook's Cloudripper
+  * Facebook's Elbert
+  * Facebook's Fuji
+
+  All three carry the description of "Facebook's next generation switch
+  platform with an AST2600 BMC integrated for health monitoring
+  purpose."
+
+  They share a 128 MB SPI NOR flash layout that is also used by some
+  older platforms.
+
+  * Inspur's NF5280M6, an x86 platform server with an AST2500-based BMC
+
+ - SGPIO updates including AST2600 support
+
+ - GPIO descriptions for the IBM AST2600 machines
+
+ - Pinctrl fix
+
+ - Updates to Facebook's AST2500 based machines
+
+----------------------------------------------------------------
+Andrew Jeffery (1):
+      ARM: dts: everest: Add phase corrections for eMMC
+
+Dylan Hung (1):
+      ARM: dts: aspeed-g6: Fix HVI3C function-group in pinctrl dtsi
+
+Jim Wright (1):
+      ARM: dts: aspeed: p10bmc: Add power control pins
+
+Joel Stanley (3):
+      ARM: dts: rainier, everest: Add TPM reset GPIO
+      ARM: dts: aspeed: tacoma: Add TPM reset GPIO
+      ARM: dts: aspeed: ast2500evb: Enable built in RTC
+
+Ping Guo (1):
+      ARM: dts: aspeed: Add Inspur NF5280M6 BMC machine
+
+Steven Lee (4):
+      dt-bindings: aspeed-sgpio: Convert txt bindings to yaml.
+      dt-bindings: aspeed-sgpio: Add ast2600 sgpio
+      ARM: dts: aspeed-g6: Add SGPIO node.
+      ARM: dts: aspeed-g5: Remove ngpios from sgpio node.
+
+Tao Ren (12):
+      ARM: dts: aspeed: Enable ADC in Facebook AST2400 common dtsi
+      ARM: dts: aspeed: wedge40: Remove redundant ADC device
+      ARM: dts: aspeed: galaxy100: Remove redundant ADC device
+      ARM: dts: aspeed: wedge100: Enable ADC channels
+      ARM: dts: Add Facebook BMC 128MB flash layout
+      ARM: dts: aspeed: wedge400: Use common flash layout
+      ARM: dts: aspeed: Common dtsi for Facebook AST2600 Network BMCs
+      ARM: dts: aspeed: Add Facebook Cloudripper (AST2600) BMC
+      ARM: dts: aspeed: Add Facebook Elbert (AST2600) BMC
+      ARM: dts: aspeed: Add Facebook Fuji (AST2600) BMC
+      ARM: dts: aspeed: minipack: Update flash partition table
+      ARM: dts: aspeed: cloudripper: Add comments for "mdio1"
+
+ .../devicetree/bindings/gpio/aspeed,sgpio.yaml     |   77 ++
+ .../devicetree/bindings/gpio/sgpio-aspeed.txt      |   46 -
+ arch/arm/boot/dts/Makefile                         |    4 +
+ arch/arm/boot/dts/aspeed-ast2500-evb.dts           |    4 +
+ .../boot/dts/aspeed-bmc-facebook-cloudripper.dts   |  544 +++++++++
+ arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts   |  185 +++
+ arch/arm/boot/dts/aspeed-bmc-facebook-fuji.dts     | 1251 ++++++++++++++++++++
+ .../arm/boot/dts/aspeed-bmc-facebook-galaxy100.dts |    4 -
+ arch/arm/boot/dts/aspeed-bmc-facebook-minipack.dts |    8 +-
+ arch/arm/boot/dts/aspeed-bmc-facebook-wedge100.dts |    5 +
+ arch/arm/boot/dts/aspeed-bmc-facebook-wedge40.dts  |    4 -
+ arch/arm/boot/dts/aspeed-bmc-facebook-wedge400.dts |   48 +-
+ arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts       |    4 +-
+ arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts       |    2 +-
+ arch/arm/boot/dts/aspeed-bmc-inspur-nf5280m6.dts   |  691 +++++++++++
+ arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts        |    2 +-
+ arch/arm/boot/dts/aspeed-g5.dtsi                   |    1 -
+ arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi           |    4 +-
+ arch/arm/boot/dts/aspeed-g6.dtsi                   |   28 +
+ .../boot/dts/ast2400-facebook-netbmc-common.dtsi   |    4 +
+ .../boot/dts/ast2600-facebook-netbmc-common.dtsi   |  169 +++
+ .../boot/dts/facebook-bmc-flash-layout-128.dtsi    |   60 +
+ 22 files changed, 3033 insertions(+), 112 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/aspeed,sgpio.yaml
+ delete mode 100644 Documentation/devicetree/bindings/gpio/sgpio-aspeed.txt
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-cloudripper.dts
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fuji.dts
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-inspur-nf5280m6.dts
+ create mode 100644 arch/arm/boot/dts/ast2600-facebook-netbmc-common.dtsi
+ create mode 100644 arch/arm/boot/dts/facebook-bmc-flash-layout-128.dtsilin
