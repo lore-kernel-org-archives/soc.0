@@ -1,105 +1,64 @@
-Return-Path: <SRS0=cSn/=NI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=hQyD=NI=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A10E0C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 17 Aug 2021 18:48:47 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C60FC4338F
+	for <soc@archiver.kernel.org>; Tue, 17 Aug 2021 22:18:39 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 742C060E90; Tue, 17 Aug 2021 22:18:39 +0000 (UTC)
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 711B360EFF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 17 Aug 2021 18:48:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 711B360EFF
+	by mail.kernel.org (Postfix) with ESMTPS id 4A1A660EE0;
+	Tue, 17 Aug 2021 22:18:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4A1A660EE0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:Cc:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
-	Message-ID:Subject:To:From:Date:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=QvmmzpQoM3k/eaxedZtVqmkG674FqNuM+G9Huy8Qw2U=; b=mXr6mKba6IEwCk
-	ipwN6TMOvB9miK9YCsCPrrCOwXJr0D1ChoPr139KaOHONeIn2KSEi6JlP+i+pUPg8bKFju9WSkOCR
-	ZaU8WmLE5AakkFH+TjVnIqtB9Pfcz0NnRhZA+9W34g/3m5qtD5aYVlEltE9N8arOWRxS8DP6lpflI
-	I5uMTR1PCVYgzlG2wYTSyv73HLRkb8tt731Lj4UjQhyuanqYcq2NlUhQtrw4qvbY6s15bRcyPFiZK
-	5sBTxHCTirbQI0d2gtfXK2sC1qvcQdQna3OEibkgEuoeLAMLBjCzHJixRU4VZCbKouxaz0mW746JC
-	9UJCvDGSTEI2OEhYDl6w==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mG46p-003G5k-Oj; Tue, 17 Aug 2021 18:46:47 +0000
-Received: from mail-oi1-f182.google.com ([209.85.167.182])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mG46l-003G5I-W7
- for linux-arm-kernel@lists.infradead.org; Tue, 17 Aug 2021 18:46:45 +0000
-Received: by mail-oi1-f182.google.com with SMTP id u25so541959oiv.5
- for <linux-arm-kernel@lists.infradead.org>;
- Tue, 17 Aug 2021 11:46:43 -0700 (PDT)
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f48.google.com with SMTP id h63-20020a9d14450000b02904ce97efee36so309238oth.7;
+        Tue, 17 Aug 2021 15:18:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=b4LH5u0KhUfAlgd1fdyz9ZjG+CpygTQr8w8JJtZ1B74=;
- b=ZqrWB2802JeFL0DeCgXEY8x5pUVu0L8ehgtyK6NmxLg2AtWHfpmGOUWa3JldQL6Yys
- sWq/KLA6ly5eYYjFDC3+YRCv0KkAZcVhHraz0XVRdzcQTRxI2WD8QlabqLzMQweOZZxG
- MHnpKXUhwArZeBQSD+81o+PAZWzgEiPOnp86HZPBiXW9a1e2Ad1pJ7S3bYGFLAeu5CDz
- CObNNJBUMDlCKJCcoyynbq5GPmnFubyW0k78iz+KRRek/rFlUTFoQJD/CsLncB8rgWYZ
- obqB0ZeeqOAVYNEWOF8eT2JyJ2EFkmvJcXUAgDRiqpOobEvrX8meF6FWKshWRAMBm3bG
- 6qfA==
-X-Gm-Message-State: AOAM5315mkeZD/R/jE1UFd/+Ka5TleadaJzz+xKA5qpgVkvErqE4cCHF
- MyyZLBkx9W7LCtn+41s5tg==
-X-Google-Smtp-Source: ABdhPJyb+e3INPAtFRLFklMWl+fZQxDDn2l23zD16hQgbtUM3bjFJ83mJs0R8MOWe+/4wpRFVgwPeQ==
-X-Received: by 2002:a05:6808:7c2:: with SMTP id
- f2mr2342723oij.20.1629226002922; 
- Tue, 17 Aug 2021 11:46:42 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net.
- [24.155.109.49])
- by smtp.gmail.com with ESMTPSA id y24sm551038oto.40.2021.08.17.11.46.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 Aug 2021 11:46:42 -0700 (PDT)
-Received: (nullmailer pid 640500 invoked by uid 1000);
- Tue, 17 Aug 2021 18:46:41 -0000
-Date: Tue, 17 Aug 2021 13:46:41 -0500
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hH6x0kKNvTVTngzAJglfbn28xI8QAAWrgkjyn1ogaAA=;
+        b=kNN0Eki+iIeJG6jWWx9cyCCZaXtYUzHsJ6LRazm7gth6BoqmN59Ur3C4RINPdSnqBV
+         fIE5CYaExKaSp3uHstZKvkDk7plO5xKsCXR0YbrQsqQYpjcvKUjFDQWT6ONdRpTZQzhF
+         K6nBXisrbfGUT33DToPDSWnd3xiXNTX6REdLIXamJbnN5dYiscdBtJCgz6YTHxwo61/+
+         LBfpH5wDNYZy83gx9hRC2oCIqX8qy6uSI49rUJ4MCZpJjZnqxG6p7h6zQ0Cx3q0yeVjx
+         LNTR35AYwmmVesqSZXavab6rDff37lFG/a50pMO2/G3tGIPyY5hJTU30W+M9Mgd4g6Sm
+         eOZQ==
+X-Gm-Message-State: AOAM530zRYVdtOSGB8pv7ViY2bIXjU1dBKeHp+ytP85FkYWAhi5NgPDN
+	1XfwHfR2Tx9Lo0x+qbOb3w==
+X-Google-Smtp-Source: ABdhPJyZkwXaIBIiV+RYqjeipQRsYMSwJcPUjKRxBFM10YNTOL1cqAvlf+PDs3/94oHBkGxuqgjARA==
+X-Received: by 2002:a9d:77da:: with SMTP id w26mr4522551otl.293.1629238718681;
+        Tue, 17 Aug 2021 15:18:38 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id s12sm654598otk.21.2021.08.17.15.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 15:18:37 -0700 (PDT)
+Received: (nullmailer pid 939324 invoked by uid 1000);
+	Tue, 17 Aug 2021 22:18:36 -0000
+Date: Tue, 17 Aug 2021 17:18:36 -0500
 From: Rob Herring <robh@kernel.org>
 To: Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH v2 6/7] dt-bindings: ARM: at91: document exegin q5xr5 board
-Message-ID: <YRwEEQ0SgQRDnd7t@robh.at.kernel.org>
-References: <20210816064416.1630674-1-claudiu.beznea@microchip.com>
- <20210816064416.1630674-7-claudiu.beznea@microchip.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210816064416.1630674-7-claudiu.beznea@microchip.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210817_114644_076383_C2C097D8 
-X-CRM114-Status: GOOD (  12.03  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, alexandre.belloni@bootlin.com, arnd@arndb.de,
- linux-kernel@vger.kernel.org, soc@kernel.org, robh+dt@kernel.org,
- ludovic.desroches@microchip.com, olof@lixom.net,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210817184641.igfrWMVkRwIhbKbnMeF2R_knUyRj7uDJPM9u0bKpPrw@z>
+Cc: alexandre.belloni@bootlin.com, soc@kernel.org, arnd@arndb.de, nicolas.ferre@microchip.com, linux-arm-kernel@lists.infradead.org, olof@lixom.net, linux-kernel@vger.kernel.org, ludovic.desroches@microchip.com, robh+dt@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] dt-bindings: ARM: at91: document CalAmp LMU5000
+ board
+Message-ID: <YRw1vN9KHSY1hCmR@robh.at.kernel.org>
+References: <20210816064416.1630674-1-claudiu.beznea@microchip.com>
+ <20210816064416.1630674-4-claudiu.beznea@microchip.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210816064416.1630674-4-claudiu.beznea@microchip.com>
 
-On Mon, 16 Aug 2021 09:44:15 +0300, Claudiu Beznea wrote:
-> Document Exegin Q5xR5 board.
+On Mon, 16 Aug 2021 09:44:12 +0300, Claudiu Beznea wrote:
+> Document CalAmp LMU5000.
 > 
 > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 > ---
@@ -107,15 +66,4 @@ On Mon, 16 Aug 2021 09:44:15 +0300, Claudiu Beznea wrote:
 >  1 file changed, 6 insertions(+)
 > 
 
-
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-If a tag was not added on purpose, please state why and what changed.
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Acked-by: Rob Herring <robh@kernel.org>
