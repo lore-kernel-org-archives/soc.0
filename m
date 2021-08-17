@@ -1,47 +1,64 @@
-Return-Path: <SRS0=tEDI=NI=gmail.com=joel.stan@kernel.org>
+Return-Path: <SRS0=cSn/=NI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 354AFC4338F
-	for <soc@archiver.kernel.org>; Tue, 17 Aug 2021 07:52:08 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 1783260F5E; Tue, 17 Aug 2021 07:52:08 +0000 (UTC)
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D687C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 17 Aug 2021 07:58:03 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3482C60EFF
-	for <soc@kernel.org>; Tue, 17 Aug 2021 07:52:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3482C60EFF
+	by mail.kernel.org (Postfix) with ESMTPS id 2A29460F11
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 17 Aug 2021 07:58:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2A29460F11
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f174.google.com with SMTP id x1so2991043qtw.5
-        for <soc@kernel.org>; Tue, 17 Aug 2021 00:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=sYsUG/NPZIBujIh9hacdzMbIEijzFzCoj/G7iIt4alA=;
-        b=WTQvyBhSFaH0kQ9XuClZSoEzRDenz7OtNePSY1feYXSOiMhWE2Gux6tItSCNdsIqlb
-         RRt5k3y2zkMKlOUbnPvL9JrtNG9D3vFfcYPrV/eEONn3dLgoHQlO2Y+XKZn3Tkyuk00n
-         ADBEO8LK3V4w39Slu2yfTdkl+di5UEF26Uauw=
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
+	MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=5vh58UQbsnFEQ9bdQVVxmDRZcG4oOFQ6rSqoPj1a1dg=; b=Qd5w+PFP+da5IX
+	JXMU5kUF1aQUzOG+Vq7ZYjWpziDiCAAvlHZ+d3O9a4KM2E18I6ojH1gMeBTO58g7npAKll/qUwu+R
+	D5PuNs/Vfo7uQv5bMJNo5D8YqhcOpSAPmOTaglAWowhnsD+CaN7xlPcD+V33yNrFNFUfsC5aroL5g
+	ffBvYNF2KamceZhUhiGWCxDpWS6+f+qsSr2Ykz7ecl/oYOTWpKxXjQRcYSuxfR9jUlQxYdW6qZ0Yk
+	xkWjTRUa4GyC9qaGHPRqTaKL0sV8f/Br86XE9NkdGWc6rbAc988zkNVdu6SfpuKSBHCsyyW6FHHy+
+	XU6PyLCE1e8r5VlJkzWg==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mFtwj-001R3p-Kj; Tue, 17 Aug 2021 07:55:41 +0000
+Received: from mail-qt1-x836.google.com ([2607:f8b0:4864:20::836])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mFttH-001PbL-O5
+ for linux-arm-kernel@lists.infradead.org; Tue, 17 Aug 2021 07:52:11 +0000
+Received: by mail-qt1-x836.google.com with SMTP id b1so16479368qtx.0
+ for <linux-arm-kernel@lists.infradead.org>;
+ Tue, 17 Aug 2021 00:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
+ h=mime-version:from:date:message-id:subject:to:cc;
+ bh=sYsUG/NPZIBujIh9hacdzMbIEijzFzCoj/G7iIt4alA=;
+ b=WTQvyBhSFaH0kQ9XuClZSoEzRDenz7OtNePSY1feYXSOiMhWE2Gux6tItSCNdsIqlb
+ RRt5k3y2zkMKlOUbnPvL9JrtNG9D3vFfcYPrV/eEONn3dLgoHQlO2Y+XKZn3Tkyuk00n
+ ADBEO8LK3V4w39Slu2yfTdkl+di5UEF26Uauw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=sYsUG/NPZIBujIh9hacdzMbIEijzFzCoj/G7iIt4alA=;
-        b=G7WMaSGFBC1pc35l0vl0fzTQIy2fPHceOP+yIT8kMGStXAHw2Odn4St8C7rHs72yx2
-         4xESIIvrObWq/zxceuxXA/r3z/RB2VSKIhPLVbIKuuHyO6em+fSktT6910eXW9iod8xV
-         IRWtZmtSjZvSyKd5qjBpAzF15edWcNNnUgmDLGBDOpM7G344Y1vYg2dq7SRIloQ/UjF6
-         pFcX3LBavRaG2VJ56KX4YxuEWiDAuwxcchL4RHmOQZKuSO1CevMXAzdB9a4Ljk0H6U6I
-         iVicI16Y/R/2Hs7K9vVfEjZvlh3pqtQinn1F2RW18f0LdYJF6EajICmTPSZoTUie05bq
-         l00g==
-X-Gm-Message-State: AOAM5300bA4XEUVZuO2zP9gDUANkLckIylv03thXOvJwIq0FVQ7KIZM6
-	SVlly0rDPaFu7a2c8TYqv19mjcqJik8LH9wZWUCa6w6JAos=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+ bh=sYsUG/NPZIBujIh9hacdzMbIEijzFzCoj/G7iIt4alA=;
+ b=TcYpwb04Buu64gofv8NFkjkXpomdstUatuafsVA2f5CkfwjCAYZxJtWkb/MY5gWZO9
+ rbc5gSeQHl0zPUZOFr4mBFe+B/Hz9u3t08lh0GhVtjVtIpqoNbWx53CbHtVCj37du6Jp
+ +g6BrRDto25tdxrRw8z3Z3K+GYZt2X+1gVFQvOJjOSN9NL9lrOag0uq957V0BYJdNmxy
+ Y7ztYerw+6XkUXM6juUt3VeZT8j6/5+nb8lBTDdRmWHsoYrLxztcUQGKE2jLILsVaJG+
+ LeEaorrHoeLIkACLj5PSVUkY6H8AlDEJFNUf5DOAVH0NhA2uzt5oMkDcxAifKyhqOb1D
+ Kn+w==
+X-Gm-Message-State: AOAM530wVJH63eGlxWgiivvo3dJ0hnkf0t6zzRcQcIbGSFOI2lhKjiws
+ dmwfYHbCKGicgivo7LhLrolAUKiw510ECdGnXhg=
 X-Google-Smtp-Source: ABdhPJw8feCldLj7Vhc6iKE3JJaHj+my9WkV2PsvQhwYUggdZ9tUjdGKV0GGDotySpd7kIReJnHO1FO9/bXwb6aGkEY=
-X-Received: by 2002:ac8:5bcc:: with SMTP id b12mr1879604qtb.176.1629186725533;
+X-Received: by 2002:ac8:5bcc:: with SMTP id b12mr1879604qtb.176.1629186725533; 
  Tue, 17 Aug 2021 00:52:05 -0700 (PDT)
 MIME-Version: 1.0
 From: Joel Stanley <joel@jms.id.au>
@@ -50,9 +67,28 @@ Message-ID: <CACPK8XdWRBb9cuDWGQPfK8R8TsZuydJQHsL4_e2w=HvCKAMogg@mail.gmail.com>
 Subject: [GIT PULL] ARM: aspeed: devicetree changes for 5.15
 List-Id: <soc.lore.kernel.org>
 To: SoC Team <soc@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, Andrew Jeffery <andrew@aj.id.au>, 
-	linux-aspeed <linux-aspeed@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Andrew Jeffery <andrew@aj.id.au>, 
+ linux-aspeed <linux-aspeed@lists.ozlabs.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210817_005208_109522_327B5DFA 
+X-CRM114-Status: GOOD (  13.57  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210817075154.HZI1d4yY4bUwctcivUCofmqGrEbQCMTAe6oRs0rw3GI@z>
 
 Hello Soc maintainers,
 
@@ -166,3 +202,8 @@ Tao Ren (12):
  create mode 100644 arch/arm/boot/dts/aspeed-bmc-inspur-nf5280m6.dts
  create mode 100644 arch/arm/boot/dts/ast2600-facebook-netbmc-common.dtsi
  create mode 100644 arch/arm/boot/dts/facebook-bmc-flash-layout-128.dtsilin
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
