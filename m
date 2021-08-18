@@ -1,221 +1,95 @@
-Return-Path: <SRS0=NLw9=NJ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CAF7C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 18 Aug 2021 07:19:42 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3F03161076
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 18 Aug 2021 07:19:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F03161076
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:Cc:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Content-ID:In-Reply-To:
-	References:Message-ID:Date:Subject:To:From:Reply-To:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=hqseOz+3+ZcFEx82SZhrliAqe5JwCTs+6pVw0Osf9Gg=; b=L9coX4aiPBJirS
-	YvuLcW/1z3XOIhfqcNIE702Ed6CEka+x57CF02nI8hyWHJCc0qwZ6tS4kZLcfDDsiQa3L+kUDsjb3
-	mX0eexWte3QEeArKluIaM3qA6xqZqFo85NVgvKaWuWhqYKEc/onDGQAUhqi0UBKBcDQOPiqRBp1+M
-	iShjBBIOyKtvoVZaVHkMkADi+zXvDqaykAgkOZsox+PrWxp/LrzsAizM5Hfiwmy65yz86AP95E1En
-	Ru6kE8wfBaCQ7hMOvcn48/DwHZu6hb3AYRilH0HwtQA+cukanRUsKApxNZr9lOPUAS9CGafqqJVBH
-	9ol6GrM8K3DO/xtptOQQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mGFpO-004U3P-FT; Wed, 18 Aug 2021 07:17:34 +0000
-Received: from esa.microchip.iphmx.com ([68.232.153.233])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mGFpI-004U2t-Nt
- for linux-arm-kernel@lists.infradead.org; Wed, 18 Aug 2021 07:17:32 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1629271048; x=1660807048;
- h=from:to:cc:subject:date:message-id:references:
- in-reply-to:content-id:content-transfer-encoding: mime-version;
- bh=ZVirQ9gyMezgRxR7QOJvPGZT3UszS7emgFdPHmDwOtM=;
- b=nvOgdCm/erkIBmIF4mKesdWDnK0JVeVOkfpx1EHdF71R9utoSdG/1iD+
- riGxNqw0s6V21Pl+4k/zBQwCumoH7mNFiM2jC+Hj8eVvA7DkXO2i0dhYJ
- ZMvScfnyxoCwwo56TRHHqRlOfpdnveCdKwVDLMMSI83ithPy6/Iy8QViU
- sI3HiU2Ot8Lw+3sBQxqdyIblvql9qJQA+85hLFO79kH4/3tuFOJMA8rkd
- XcKgSYI9AWCQS6gWUytZDaAx3SBTY7dQrpdUFyhNWvCJD1JhYPadQAd3r
- IM2X7fX6e7CfPpTXidH//SsZL1Te91HqS/5YrK0jF8Vaom9X48R1W6inz A==;
-IronPort-SDR: mfTHezeIqSbK8oeiyTFxxUdm/xUFtDN6NpE43WGPWr2SEx/esajyxBbePkNN1Jw5hJDjbxGjdh
- SmtlWpGoexQRksUohmPLuF5/RSxWY8eqw4gIuXFj0sSTibIkMcDm/z8Wf5kflcilZnSmG46r5L
- nIMD9RN0YE17Ilcy8celpF+4rQBOjvceMRWrFr3nhDg05XKNJghU6ZZMVlC6xhqpHzHUvxiL9Y
- h0ONUzJrEkWoLDJMLwVTl3jmibZl4QzRXTsQjwrrIJKtN27gfZva3QmdeEkAm4xu6VktHuGPtK
- 4sCZdq7IAZeRTybPBT8QCQF3
-X-IronPort-AV: E=Sophos;i="5.84,330,1620716400"; d="scan'208";a="140574159"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 18 Aug 2021 00:17:27 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 18 Aug 2021 00:17:26 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14 via Frontend Transport; Wed, 18 Aug 2021 00:17:26 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y43YUeh/Q62iEbKhwz8ZksnicM7Pc25s1qvdwNCDtoyTuJtPo7vZpEIezYzL6nZT07/t3M9Bz8sxyKHAIv/HOOFq9Lz27pjRqI4EvPkr6Epc27TupOMGMJzeE4/z/CL4Wu6QkhwvydycW4OFy5P3I7pqBgZTS7RuizyJNtd+X+FMQ9u/ffKi98FxOtuX5qnBCxPVGFVVrZJLXTjW9p0hb9HBZVi0VW3/nn8Oz9VFc6HGlYhbl3F/731SXGCuVPZl44G3y3U+1rMPgk4Aj0E0/yuuI11NT5Hd5ObN44ROOGDbICAz5beJAqn6NWWly+Jtb9dWF4qvglmyRtbAKGW5Rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZVirQ9gyMezgRxR7QOJvPGZT3UszS7emgFdPHmDwOtM=;
- b=aEXn3VUf8N6EuOAXXFLTK3mZGd9CKRQcI9dtWdKJM7goHVGlnSP0HjZoPMgkIreBfSUa8UbaBhgUgQC3oM+pvz6ruOHAYkJPQRMO1fkBwF5eh9QZ6yGKBDZww2zk1bOpxgJ7VKGFrSWzU0WzCpI46DayhALXN/WQQ6divwCu/cchaX+JSBHRSWUOyjt5F37YF69RgfBPkT1bR3Bnu1wnuypg0BL8hlEjBpmkedcNTk1D/D0H2HoBtLM/b103yfTuAEdzQpDKbrH5URNxvzSNeugMkyO6Na0Wt5U127w6BOAg8cgwqsQLDWnmnWTKK8/GEUAGPwEgj4skUCGF/YTeTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZVirQ9gyMezgRxR7QOJvPGZT3UszS7emgFdPHmDwOtM=;
- b=q152f8m64juvaHMtkO2INdrN2O1Pw3aandzKHRQdxfqH4eJCQihVCTITreYYC4uxcfJAYVNy+WdN2ufQvOPoiqMqpldu3nkPRGWNRA8ywOIqVCZ4600CDUuzhh1BsNSoM7SXYWW/fNa7iJ7XV1SMrL/iIxLgzpj9x6ANk3duFK8=
-Received: from DM6PR11MB3420.namprd11.prod.outlook.com (2603:10b6:5:69::31) by
- DM5PR11MB1580.namprd11.prod.outlook.com (2603:10b6:4:10::19) with
- Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4415.16; Wed, 18 Aug 2021 07:17:25 +0000
-Received: from DM6PR11MB3420.namprd11.prod.outlook.com
- ([fe80::e155:7e54:f51f:ff5c]) by DM6PR11MB3420.namprd11.prod.outlook.com
- ([fe80::e155:7e54:f51f:ff5c%7]) with mapi id 15.20.4415.024; Wed, 18 Aug 2021
- 07:17:25 +0000
-From: <Claudiu.Beznea@microchip.com>
-To: <robh@kernel.org>
-Subject: Re: [PATCH v2 6/7] dt-bindings: ARM: at91: document exegin q5xr5 board
-Thread-Topic: [PATCH v2 6/7] dt-bindings: ARM: at91: document exegin q5xr5
- board
-Thread-Index: AQHXlAEXXQ4p6SL5vU2609JASMprJA==
-Date: Wed, 18 Aug 2021 07:17:25 +0000
-Message-ID: <c9814716-b662-8e44-fc27-32b0c2692415@microchip.com>
-References: <20210816064416.1630674-1-claudiu.beznea@microchip.com>
- <20210816064416.1630674-7-claudiu.beznea@microchip.com>
- <YRwEEQ0SgQRDnd7t@robh.at.kernel.org>
-In-Reply-To: <YRwEEQ0SgQRDnd7t@robh.at.kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3e3abbdb-a2ab-4434-0e03-08d962183af9
-x-ms-traffictypediagnostic: DM5PR11MB1580:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM5PR11MB15802603111AD9FBFD8958A587FF9@DM5PR11MB1580.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PqqUg/QB0wapTuFcYhkfnnBhfJi7I4RPgeUFvOb78ILn1kOyDfLng53HI5J2/f54V3QgxoXwRpErMpHnp3bqW0T0FKL7L8f3yqmy72lS46dmhIwR26AAG3ZnY9NL8jfojojAXTPK9ToGVzO9sgojNwOcQ4GPWLp5nT2hsF+edYX/9P2HfiMvbC2TLz2TNIG2ClmhEfAbK9Oydv/UQjDklSHmbILHbpgtd7Ug5uVUkOQ4YFHVJFS9aNz1LbvchRY5BV4CR5uUMas0STxrPPf9YHttVQ3N82rIzotJ3Xd94iBoM+AAVksB4/A5jpfsNxehDJbSo++2hUgoMKGaQYV7pnU1F9/RoaPfqpnpC/ULdFPSFqInZVONgvXLgklLhM2EBoMQRiXomMWr8qj+ekEMl1KisNgNUNOjY3UlkZGry+ZBeymJNksMu9ZqNxj/VluSstjOYEdMwY2Q5ovpxydoPyy0EaRlJ+TN01NNYZZoQRHD8hXHWbN5yyJ1apGdY69jZ+yOvkhRmxWKynrRK1GzRGSDgfNtelXLw261yy0j8wAbE+klQ4q8ActqCK2nqY1bc6NN0w5KQHrz2Zqe6ZBIBdb9aAgKZDijwCgpU7fx/UqMuKkyEikNrDQq+bCXsDNE1TJUnfZa4V5+Tm1a+ASpjH6ZRiCcvwt0WoWgPBz8Yi3lxmNFrdVY8lu80g3CshNSC653vYy6GVlEjcd6D+ZsDMLmNePFwJW4jhl95pDjL1N4ZsnyMsEIYSDHr4xdz1EWC3G6tZwGh1NTL4qgSQKkKQ==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DM6PR11MB3420.namprd11.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(366004)(38070700005)(53546011)(6506007)(122000001)(6916009)(31686004)(38100700002)(2906002)(5660300002)(508600001)(54906003)(4744005)(4326008)(316002)(107886003)(2616005)(71200400001)(8936002)(66556008)(26005)(66446008)(31696002)(64756008)(76116006)(91956017)(66476007)(66946007)(8676002)(6512007)(86362001)(36756003)(6486002)(186003)(45980500001)(43740500002);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bStkL2V4emtUYk0wZVdNdWxvQ1RpYjF6SmZzaGVzczlSaGMvWWtSSEpVL2xs?=
- =?utf-8?B?VlJxaHozSEJrK2VYbWt0blY3a09EU1lUUVc3eWFmdkxZVUVYd29EMFRJVWgz?=
- =?utf-8?B?Vjk1djF0K0plQ29YZis1SzZOODViZXNkUmJydURld3pRSE9xS0E2cG5jZUVI?=
- =?utf-8?B?NWNocjNsUzBzdHc0dUNrQzNVNndpZ0IwY0xaMlNQQll3MFdOWURlZCtabzdM?=
- =?utf-8?B?R0NBSVhtdVZodnFCS05NcVdnamgzS2xnTG5kS1JwZUR2TjBYYlY2TU5TTkxO?=
- =?utf-8?B?MlZhc0ZuRSt1STdySXRqVnpJM2lNd1l4TXpWVmZ2clhTYTdOajlVVmZlaEt3?=
- =?utf-8?B?SnRiQ3JYeHpYcmFic2todHV5WEcwK2NWQU45SDd2d2NnbVNEdUxxaDBnaFo2?=
- =?utf-8?B?cFNnSE5HNGVLRTViYXZtempTd3phRXljblJKKytxMXA2Mzg3Y2dFSXZnQlNH?=
- =?utf-8?B?cWNSZDBMbkwwVjVjY1dTUlI0dzl5a0lOU1I0b0syczF4ZGpUMEpnREsxY2lq?=
- =?utf-8?B?TGFEUmQzZTk3S3BRYk8vZjhRT2VJSVdnakxqRUlTRGVQeThBdWhURERPR2RW?=
- =?utf-8?B?UVFTN2k3N05VTHd5aUZucVlINGN5cHBlT3ZnL3BtWE12ZGVQS3p1eGlEem52?=
- =?utf-8?B?MWtFN0dJb1h1eE4rVXlDU2ZJUGhoUXNnZ0hyLzlieGhFRWdSRHIrNVRzYldo?=
- =?utf-8?B?Z1ZkUC9GdVJaT3Z1UFNIc2hNMG52eW9QU051S2R0eFRad0lBaXNrL1d6djFj?=
- =?utf-8?B?TnVoMkt0cDB1L3lpUmM5Zk5QVjdwNys5VGoyY0VCeUR2NzY0bG00Sk9VMUpV?=
- =?utf-8?B?WWo0TXdHMjhEUXhXbnl3eHJqa3gxZy95UDgzQVJ5NVV6R0NsTmVZOGJveThu?=
- =?utf-8?B?K09QTms4RUxOOE14bTE4SmxDM25DdTJjZ0FnMm5LaWlmL0IzMHF4T1A3bVFS?=
- =?utf-8?B?WXo4YUpWdHJqc0FXVmdua25iZ2xIdVVBWVZhSXdLUXZIUHA1UDIyS3BjWVRo?=
- =?utf-8?B?NlJzWk5ZaUNzYi9pdXZObUdrZkJjdjFRVWNnT0ZVWjlBVDR4SGo4ZDFsZEs0?=
- =?utf-8?B?Y3ZybVYyMUxEYk01bm9iOXZRUTZaN3Rza3JGcng5MXovbXptOGxwQzVFQnhG?=
- =?utf-8?B?L0twMmdmQ1RTRDU4Q3RVeEtqeUlWZDdSMW5WSWdka3JHMmJ3RStBY21NYzdj?=
- =?utf-8?B?U3JQTFdnVmFGdVhXZDdFSFd1ZkZaeVpoMkI1YzN0QlJGS25MNkJvVkdlV0Ni?=
- =?utf-8?B?RlJicjJCWmM1TDdtdmRpN0F3NzRPWHA4Snh5NytIWVBNcXdCd3hvU3dtcmxk?=
- =?utf-8?B?cG92S01vQlB0d0dpUjNiWE9PaEdkK1oweW5hMnR3ZXA3MkE0Q0NFdmVvSUlk?=
- =?utf-8?B?MnlKM25SV2JvQzd6UzRUR2NDdmlyRC8wd1NyeFJ3WUNyQStFQmw3NWJaSGV2?=
- =?utf-8?B?Q244YU5XL0lyOSttZURZcFphQ2E5STZ2bFJSQ2xORURRQ1dIMWNRNVROSWd5?=
- =?utf-8?B?ckRwMWNQdEttK1p2d0pRY2h1RkQxWFZBNXFadVFaYWpFUEdPNi9QM2J6VkNH?=
- =?utf-8?B?ZytHREVLSnRYZCt6Q05CWmErWEU3ZGdVaFVmMU94dWRCeDhWWmlNM3JDYjly?=
- =?utf-8?B?K0ZQR0FNek5TV3pIWDZnOHNpRDh1SjF6WlBvMEZ6eUlOazF4dnR2NXdWbEI2?=
- =?utf-8?B?d1pwN3BiYnhaVzErbHVVaHErakVlay9CR2FubXlNblU3R0dsMC9PUUM3cWU4?=
- =?utf-8?Q?ovlYR0MtkZT7viMiRk=3D?=
-Content-ID: <3F5AFBF692D3674EB6338327EECAC53A@namprd11.prod.outlook.com>
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3420.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e3abbdb-a2ab-4434-0e03-08d962183af9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2021 07:17:25.6284 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: p3r2OJprIV34RNPNxFT6edLi+wPD36quCksiwkVZDbsF3oaxa70gk9URjBKR+bjLWhAmRNDgv7S7KXFQflFkGiaLVHT0mK/BsVYC20oTDmk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1580
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210818_001728_904976_6529CF16 
-X-CRM114-Status: GOOD (  17.96  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91EC0C4338F
+	for <soc@archiver.kernel.org>; Wed, 18 Aug 2021 12:59:41 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 2031B61058; Wed, 18 Aug 2021 12:59:41 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 13EF3600D4;
+	Wed, 18 Aug 2021 12:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1629291581;
+	bh=6LJXht9xHb9GLhl4f2c4k/QdVVJdiRxUmRy4Fg5gMzw=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=VKTNNXavNLoB2JMY27WDPWcN3MFs9ScWewKHSjcuGNpvLQV/VCsYpBb4mKttGKbjm
+	 JfjkjY8nCBALiWRV30x6FYGDKOxfen6AABVSr/RVnj6Mj2TZj1BUX/MwCL5Bs2BtVD
+	 UYBq1yQaK/QWIDspxQ773j8ZQzUq8UcZ4hQA56C7p3+OqS8j+V+yMfiunkEQrH97lY
+	 t2WGJC3bOqXbn31faPEcdSxUOnA/OlsdLoUg1pP5bMM55C6tAIz3Bq6CRuF75MvVNA
+	 /iefQjJjgJv4ky4L2pcqgx3lfTFpTr4ps5i/4Z5p3n0wmvvi2oL+ywAtJe9P59enUL
+	 spwXjkjuQcmGg==
+From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, alexandre.belloni@bootlin.com, arnd@arndb.de,
- linux-kernel@vger.kernel.org, soc@kernel.org, robh+dt@kernel.org,
- Ludovic.Desroches@microchip.com, olof@lixom.net,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210818071725.XSiQpGg0duwVcLG084-uK_6skgohKmygXLDN3yzr6zI@z>
+To: arm@kernel.org,
+	soc@kernel.org,
+	Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Yassine Oudjana <y.oudjana@protonmail.com>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	Kathiravan T <kathirav@codeaurora.org>,
+	Olof Johansson <olof@lixom.net>,
+	linux-arm-msm@vger.kernel.org,
+	Gokul Sriram Palanisamy <gokulsri@codeaurora.org>,
+	V Sujith Kumar Reddy <vsujithk@codeaurora.org>,
+	Rajendra Nayak <rnayak@codeaurora.org>,
+	Alex Elder <elder@linaro.org>,
+	Georgi Djakov <georgi.djakov@linaro.org>,
+	Sandeep Maheswaram <sanm@codeaurora.org>,
+	Thara Gopinath <thara.gopinath@linaro.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	Judy Hsiao <judyhsiao@chromium.org>,
+	Robert Foss <robert.foss@linaro.org>,
+	Jonathan Marek <jonathan@marek.ca>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	Selvam Sathappan Periakaruppan <speriaka@codeaurora.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+	Felipe Balbi <felipe.balbi@microsoft.com>,
+	Andy Gross <agross@kernel.org>,
+	Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
+	satya priya <skakit@codeaurora.org>,
+	Martin Botka <martin.botka@somainline.org>,
+	Caleb Connolly <caleb@connolly.tech>,
+	Robert Marko <robimarko@gmail.com>,
+	Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+	Kuogee Hsieh <khsieh@codeaurora.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Sibi Sankar <sibis@codeaurora.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Wesley Cheng <wcheng@codeaurora.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Ravi Kumar Bokka <rbokka@codeaurora.org>,
+	linux-arm-kernel@lists.infradead.org,
+	Baruch Siach <baruch@tkos.co.il>
+Subject: Re: [GIT PULL] Qualcomm ARM64 updates for v5.15
+Date: Wed, 18 Aug 2021 14:59:22 +0200
+Message-Id: <162929137182.372162.1107207134095888693.b4-ty@arndb.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210816231223.586597-1-bjorn.andersson@linaro.org>
+References: <20210816231223.586597-1-bjorn.andersson@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On 17.08.2021 21:46, Rob Herring wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> On Mon, 16 Aug 2021 09:44:15 +0300, Claudiu Beznea wrote:
->> Document Exegin Q5xR5 board.
->>
->> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
->> ---
->>  Documentation/devicetree/bindings/arm/atmel-at91.yaml | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
-> 
-> 
-> Please add Acked-by/Reviewed-by tags when posting new versions. However,
-> there's no need to repost patches *only* to add the tags. The upstream
-> maintainer will do that for acks received on the version they apply.
-> 
-> If a tag was not added on purpose, please state why and what changed.
-> 
+From: Arnd Bergmann <arnd@arndb.de>
 
-On this patch I haven't received a tag on v1 as I swapped the commit msg
-and diff b/w this one and patch 3/7. On patch 3/7 I got a tag from you but
-you had taken it back when (probably) you realized I did the swapping.
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+On Mon, 16 Aug 2021 18:12:23 -0500, Bjorn Andersson wrote:
+> The following changes since commit ff1176468d368232b684f75e82563369208bc371:
+> 
+>   Linux 5.14-rc3 (2021-07-25 15:35:14 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.15
+> 
+> [...]
+
+Merged into arm/dt, thanks!
+
+merge commit: a0f480dc6546b9d97027bf7bc8145aad48ddad00
+
+       Arnd
