@@ -1,29 +1,45 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=soWq=NK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+X-Spam-Status: No, score=-14.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A9D1C4338F
-	for <linux-devicetree@archiver.kernel.org>; Thu, 19 Aug 2021 16:24:43 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 003E5608FE
-	for <linux-devicetree@archiver.kernel.org>; Thu, 19 Aug 2021 16:24:42 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbhHSQZS (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Thu, 19 Aug 2021 12:25:18 -0400
-Received: from mail-eopbgr10128.outbound.protection.outlook.com ([40.107.1.128]:36007
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229497AbhHSQZR (ORCPT <rfc822;devicetree@vger.kernel.org>);
-        Thu, 19 Aug 2021 12:25:17 -0400
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9110C432BE
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 19 Aug 2021 16:27:05 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id B88A360551
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 19 Aug 2021 16:27:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B88A360551
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=toradex.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Content-ID:In-Reply-To:
+	References:Message-ID:Date:Subject:CC:To:From:Reply-To:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=Te/RPxVjVuax0SGqSSGfut2pDZVeRzO64L2xHyBzfiU=; b=oL7clxI2XomG9D
+	0w1V720t+htLWCZQoKtpY4wAEaeal4TBDoTHed4Lwkp2RFdkMe45LoOpaS4qqFIlTG56q5VA6JcyD
+	gkg9jKHLaLmJVccdUEe9g3d+SraeRV3jNmIIziqqGGoArNi7Z2/0ao0oVftLIjzb52GgDguE7ruR3
+	+1rTt5M4DiOq4YaDVKgdXoztYIapVvGjkskDYkCvUQRAHv+fvuic72AcrGyT+iwCfcNQ5zr7OjZlN
+	+0in/5p6eD0Cs3osifWZaXNe9CdGJ8m6ZGLlSS42nAUJ9ChI3qaL2e5cR0RniTh2ItkV/Vlay/bDy
+	FeM3ebslrR8olUgPrgRA==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mGkqX-008wfi-Jh; Thu, 19 Aug 2021 16:24:49 +0000
+Received: from mail-eopbgr20100.outbound.protection.outlook.com
+ ([40.107.2.100] helo=EUR02-VE1-obe.outbound.protection.outlook.com)
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mGkqR-008wdE-B6
+ for linux-arm-kernel@lists.infradead.org; Thu, 19 Aug 2021 16:24:47 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=kFqqSUKGkF4y3dUBhWYvb+HDc7tU+jGvQ4qn0h0RTuAMGP7zGKcLz6zQcYImCsbwV4nC8DrNox1dtkPhaDLdQzFCfbDmvHjld9TJijCP3lwOUXNO6f1R1DldVXyyAVAMdx5BFzV0OkUaHdKxZxm6Et+Er/ZySUuxbljAsqAQSKS1MiOUN6MEjZJCTLLgMu/982HIJsA9jyTq34YnCt9GoTklEQ/o5xVVnyEOdQiiqVWbOUxidk0fmeMWU/FXCrAYAYHwG/Cx6btwfsBE8QdnTGPND+kDtLBmEVDrXkThA5jKB2ZHJpsOBrQGedLmAuVFHHm88vLybIEdSCeJvpL/RA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
  bh=rZVIA7HCyOq6xn5unWCgqqVFq+IzEuRa32I5Ols+g98=;
@@ -45,30 +61,28 @@ Received: from DB7PR05MB5431.eurprd05.prod.outlook.com
  ([fe80::8f4:9f42:ea10:e8e7]) by DB7PR05MB5431.eurprd05.prod.outlook.com
  ([fe80::8f4:9f42:ea10:e8e7%3]) with mapi id 15.20.4415.024; Thu, 19 Aug 2021
  16:24:38 +0000
-From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
-To:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+To: "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>
 List-Id: <soc.lore.kernel.org>
-CC:     "soc@kernel.org" <soc@kernel.org>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "frowand.list@gmail.com" <frowand.list@gmail.com>,
-        "olof@lixom.net" <olof@lixom.net>, "arnd@arndb.de" <arnd@arndb.de>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
+CC: "soc@kernel.org" <soc@kernel.org>, Max Krummenacher
+ <max.krummenacher@toradex.com>, "kernel@pengutronix.de"
+ <kernel@pengutronix.de>, "linux-imx@nxp.com" <linux-imx@nxp.com>,
+ "festevam@gmail.com" <festevam@gmail.com>, "linux@armlinux.org.uk"
+ <linux@armlinux.org.uk>, "devicetree@vger.kernel.org"
+ <devicetree@vger.kernel.org>, "frowand.list@gmail.com"
+ <frowand.list@gmail.com>, "olof@lixom.net" <olof@lixom.net>, "arnd@arndb.de"
+ <arnd@arndb.de>, "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "robh+dt@kernel.org" <robh+dt@kernel.org>, "shawnguo@kernel.org"
+ <shawnguo@kernel.org>
 Subject: Re: [PATCH v1 7/7] ARM: dts: colibri-imx6ull-emmc: add device trees
 Thread-Topic: [PATCH v1 7/7] ARM: dts: colibri-imx6ull-emmc: add device trees
 Thread-Index: AQHXlQMkuwghHZtcSUCQfnhPvcQ5Dqt7A2GA
-Date:   Thu, 19 Aug 2021 16:24:38 +0000
+Date: Thu, 19 Aug 2021 16:24:38 +0000
 Message-ID: <81b0c6edf6d2b50cea08a02650b07df95eb424d7.camel@toradex.com>
 References: <20210819140345.357167-1-marcel@ziswiler.com>
-         <20210819140345.357167-8-marcel@ziswiler.com>
+ <20210819140345.357167-8-marcel@ziswiler.com>
 In-Reply-To: <20210819140345.357167-8-marcel@ziswiler.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
@@ -87,7 +101,10 @@ x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
 x-microsoft-antispam-message-info: LQql5lIUj0wa11RVKDBo7dlbXVbvKy+SnVFLjqvANcPd00KBmgaYgqjOTDFRu6wUsJcg9UQFfyjVLrHx5Q/jOkF2eikxLS0qJD2sespaPcwfd1K1ZTsNa0kN3QDDh5/6Y0FbIxcGeaECLOQfK3dgV22mtwZP4kvz+dB4qd7lXp5wuZsnNYFXJJgPtc5+cbb3qvg1HUiZywOnokYvtHCCJghtHmrQTH0G+VXhuzkYS3n1l3o9a6jpzZ31tx4y9pPGOub0qAgZDNmGTFznK6DIaHLb+bEogY+9XYwkkdZIVpKE6YnXdQdIeUGILGZPv0hw0xRE5L1UU78r0i3GNxTu5eofMjNnFMsNa1brhM4eBt4VXXTiJJYj9H3joL+Cmf0NaQ1YaXE3aTt7biZfLOBli23dx+f0naHbyOSuMAy8jC7YkupVDgW77t+2ebKYoAcb7kNOQ6gMPRs2BPHFmGYAoMMG3WGqAa0b/yZU57MBULt/13C9cZNMwPJd73IZvCm1F2m06Hh1x0YsA4jf52YuC7Nq7tzdd6Uvv4F75o1Pnxnq+df8pane9pNLhp2xg9ntyJJCfJRuF5GEg02qp76976szY2wv33vDsFIjVWKjqulS6tILoVWJO6lO5+rlEg+fHtxWSkhYGcO26SJcGM5le1yfR1F7gNul0X7Fq4r5sxCFBeUnUnf7CV+6yVDnGOqKzWGQECBCcnMHqDQFGIhC2Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR05MB5431.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39830400003)(366004)(346002)(136003)(396003)(376002)(6512007)(44832011)(5660300002)(38100700002)(122000001)(71200400001)(4326008)(2616005)(54906003)(38070700005)(7416002)(6486002)(186003)(36756003)(8676002)(66946007)(8936002)(478600001)(86362001)(76116006)(2906002)(64756008)(66446008)(83380400001)(316002)(66556008)(6916009)(91956017)(66476007)(6506007)(26005);DIR:OUT;SFP:1102;
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:DB7PR05MB5431.eurprd05.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(4636009)(39830400003)(366004)(346002)(136003)(396003)(376002)(6512007)(44832011)(5660300002)(38100700002)(122000001)(71200400001)(4326008)(2616005)(54906003)(38070700005)(7416002)(6486002)(186003)(36756003)(8676002)(66946007)(8936002)(478600001)(86362001)(76116006)(2906002)(64756008)(66446008)(83380400001)(316002)(66556008)(6916009)(91956017)(66476007)(6506007)(26005);
+ DIR:OUT; SFP:1102; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YlVaUnNTVkttM05MNm5ZNnhFSkd0YjJIUlhmc0FGV25JSWJXeWE4Zi81VzMz?=
  =?utf-8?B?U1pYZVBVS0VjVjdla0NUQlA0alpxTFJMR3VhaWZPMkEzTHJKWDQwRzA0M0tE?=
@@ -120,25 +137,37 @@ x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YlVaUnNTVkttM05MNm5ZNnhFSkd0YjJI
  =?utf-8?B?ODU3N0NuNThPZTEwQmQ2a2pkSW9zNm5uT2ZUSEZYK1loTExjOFVKL09tSEJL?=
  =?utf-8?B?SENXNytNdlJBUUN0UmQyQWx6ZTJtV3g0eUlHMXBVbktUZTNEQVcrOStzbVRm?=
  =?utf-8?B?R1pvL3g1alY2aW5qRnpmQT09?=
-Content-Type: text/plain; charset="utf-8"
 Content-ID: <52A690C217556349A0CE24FA2104330E@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-OriginatorOrg: toradex.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DB7PR05MB5431.eurprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-Network-Message-Id: 8446c884-3a7c-448f-f6c7-08d9632dd716
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Aug 2021 16:24:38.2140
- (UTC)
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Aug 2021 16:24:38.2140 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: i0uxqbddQedosKdGacyERuiOUQLQvNdiiWD0eIVcFpy+6WZrSc501gQlEQwcn0KKqUmBCbzCiaIctfObMQnwsaIVHoZnsWJTZgL8SH1n3Lg=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR05MB7191
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20210819162438.kuvujK7C2P-dUSkXbjaPSwtYuCVuCHA4kLewmyUq4Es@z>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210819_092443_422526_6C99EE62 
+X-CRM114-Status: GOOD (  20.24  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210819162438.O5b7teBk0hxvKVcFrRx6nkl758wgIAJfum9U8iWvA3c@z>
 
 T24gVGh1LCAyMDIxLTA4LTE5IGF0IDE2OjAzICswMjAwLCBNYXJjZWwgWmlzd2lsZXIgd3JvdGU6
 Cj4gRnJvbTogTWF4IEtydW1tZW5hY2hlciA8bWF4LmtydW1tZW5hY2hlckB0b3JhZGV4LmNvbT4K
@@ -219,4 +248,7 @@ oMKgwqB9Owo+ICsKCkRpdHRvIGFib3ZlLgoKPiDCoMKgwqDCoMKgwqDCoMKgcGluY3RybF93ZG9n
 OiB3ZG9nLWdycCB7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBmc2wscGlucyA9
 IDwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBNWDZV
 TF9QQURfTENEX1JFU0VUX19XRE9HMV9XRE9HX0FOWcKgwqDCoCAweDMwYjAKCkNoZWVycwoKTWFy
-Y2VsCg==
+Y2VsCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmxpbnV4
+LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0CmxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFk
+Lm9yZwpodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFy
+bS1rZXJuZWwK
