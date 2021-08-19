@@ -2,82 +2,92 @@ Return-Path: <SRS0=soWq=NK=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2FF7C4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 19 Aug 2021 22:13:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70B81C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 19 Aug 2021 22:15:05 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 745CD60FDA
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 19 Aug 2021 22:13:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 745CD60FDA
+	by mail.kernel.org (Postfix) with ESMTPS id 3044560FDA
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 19 Aug 2021 22:15:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3044560FDA
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ziswiler.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
 	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=ywEHgyTUBEmSFs7HnE7B/CQRwjDc7xBiga1ajRekxKY=; b=BDrrhU+kcge8Mr
-	hJOipZCpmMlKIEdoAS8XC7C0K+7xqEI8DpkNE+lnK/15kAWr7B0ERTIk6J5K4One29mLaVHsSlf5q
-	lHtwhTpDSB8Qh/bCzcURlTgWn9+S7rDyXBR3RNvosdp6i3qWdDgOVWm/gdhoqzSR37PdddXj1cLr1
-	xkvt0NtXDn2TvZUcpCw/hPRZ11aA8t+mdOikCg7K/64vYyATbeSlivlmNwtMDdIZf2V2WWfWmqIYQ
-	LvxQMMCMlljAGQt/6d/qOv9rSsaMnvfzvUPG9r2qorwWHQ624mzLb7qBTE3l6t+x+WxMiatPu/RTs
-	cOLDdrIkHXTo/qCqMObQ==;
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=zeSMQWpOBum5cZJuvmHrKn2ThFsJpWDNvCjfSSVror4=; b=k8DDQPZoyh0YPm
+	K9aI4Rl3EyL6lTuP3fvV0eC14pD6xMEwgmruChac9zhXpOI1RFTLSA4BWrcBf3HkebeIilKiZQ4r5
+	WUHi5ZKuueuQoI9jNl/1TlPvWKLr+N5mqPJVeVHJ6bQuBqxNBcTR8/VfEecyF3Z17ooBgRETogixf
+	Am8ZhFj3AKm4KOWVPAECmFb6YYI4mt2D6i0x6wahDUjfaijqZZxuLRJZvteXGGRb55Bb3tlGJRKk6
+	fyn8KgE8i7ackXPK48uDIQRHXb2nh+YdXyaRPr/7OtwuXXxGEK5nN5L8zOO25wbRK7mHqK2kh+jmo
+	CJSgoF7DD7BiUbopZYwA==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mGqG1-009Zsd-DZ; Thu, 19 Aug 2021 22:11:29 +0000
-Received: from mout.perfora.net ([74.208.4.194])
+	id 1mGqHo-009anD-1s; Thu, 19 Aug 2021 22:13:20 +0000
+Received: from mout.perfora.net ([74.208.4.197])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mGqEd-009ZPV-On
- for linux-arm-kernel@lists.infradead.org; Thu, 19 Aug 2021 22:10:05 +0000
+ id 1mGqEr-009ZSu-QG
+ for linux-arm-kernel@lists.infradead.org; Thu, 19 Aug 2021 22:10:19 +0000
 Received: from toolbox.cardiotech.int ([81.221.236.183]) by mrelay.perfora.net
  (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id
- 0MLNES-1mGI001Juk-000YiD; Fri, 20 Aug 2021 00:09:46 +0200
+ 0MUYKb-1mgvhI3nyl-00RKn6; Fri, 20 Aug 2021 00:09:24 +0200
 From: Marcel Ziswiler <marcel@ziswiler.com>
 To: linux-arm-kernel@lists.infradead.org
 List-Id: <soc.lore.kernel.org>
-Cc: Max Krummenacher <max.krummenacher@toradex.com>,
- Marcel Ziswiler <marcel.ziswiler@toradex.com>,
- Arnd Bergmann <arnd@arndb.de>, Fabio Estevam <festevam@gmail.com>,
- Frank Rowand <frowand.list@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
- Olof Johansson <olof@lixom.net>,
+Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+ Alexei Starovoitov <ast@kernel.org>,
+ Andreas Kemnade <andreas@kemnade.info>,
+ Andrii Nakryiko <andrii@kernel.org>, Anson Huang <Anson.Huang@nxp.com>,
+ Arnd Bergmann <arnd@arndb.de>, Daniel Borkmann <daniel@iogearbox.net>,
+ Fabio Estevam <festevam@gmail.com>, Frank Rowand <frowand.list@gmail.com>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+ Marek Vasut <marex@denx.de>, Martin KaFai Lau <kafai@fb.com>,
+ NXP Linux Team <linux-imx@nxp.com>,
+ Oleksij Rempel <linux@rempel-privat.de>, Olof Johansson <olof@lixom.net>,
+ Otavio Salvador <otavio@ossystems.com.br>,
+ Pascal Zimmermann <pzimmermann@dh-electronics.com>,
  Pengutronix Kernel Team <kernel@pengutronix.de>,
  Rob Herring <robh+dt@kernel.org>, Russell King <linux@armlinux.org.uk>,
  Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, soc@kernel.org
-Subject: [PATCH v2 8/9] ARM: dts: colibri-imx6ull-emmc: add device tree
-Date: Fri, 20 Aug 2021 00:09:09 +0200
-Message-ID: <20210819220910.586819-9-marcel@ziswiler.com>
+ Song Liu <songliubraving@fb.com>,
+ Stefan Riedmueller <s.riedmueller@phytec.de>, Yonghong Song <yhs@fb.com>,
+ bpf@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, soc@kernel.org
+Subject: [PATCH v2 0/9] ARM: prepare and add colibri imx6ull 1gb (emmc) support
+Date: Fri, 20 Aug 2021 00:09:01 +0200
+Message-ID: <20210819220910.586819-1-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210819220910.586819-1-marcel@ziswiler.com>
-References: <20210819220910.586819-1-marcel@ziswiler.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:YL9p3kPmW5Z981+z8Totimw3C6Dc19Zn0Hs5H0Iu2ymNqvYOZkl
- sfAvOgLJlI0oLaVIDxfjHVcX2BdZ4EGgnyhyLwxnz+cnRdVPm+irjNiFYSrHDSaqeasy7EY
- e0jWacI+u2U1lpHuV1IX+bcPnbwod11gYLP1gGb+/x4nRfyufbErY0rQp1DARDdpynJa/lQ
- 0/ajHDGxeceCZulIuD0Vw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:36bRlvOlwT8=:CmGB9CbwJc4c1ISna78rka
- 4R/5zOK+q7JbdAz3OCL6LVNJ/IaaCU0b9i4n3uSzuS3BPFXamtEmN8IZMm8O9xWTXs2l+RViR
- bfWwaCsuFgf6icLI16vS0Q2sB0FaLgHSXfPLZc0/PoUtm9xTaD5qobvX5Nj2OEANf+UMpGSi6
- SLNoEg2HOSgh8uXniXBGAgUQYNx8GSEIqInzledHwI4EP1NRpgAUhKwjmX35TRAnPbzhrgGVd
- UJcmi1gZdzbEzUwjXujD5v9uLuWD87rdov4JA2NacMnXeVd1jBc4F2PCF68LrKugdNwJDnkRM
- DFl+Lr7+8ez/KTjyTpeG1Xb9r0TVIQXeCqPwKWGcugcx5rcDOejHCCstlooLvoifWbXvFyxpj
- 8yAnHjomq7XTLDvZNPRKZqTDmHKfdhc6qCQyCEgRWpBtSlvL0a2oknAj1GLmekdrLhGvBxNtd
- fXquPYRyFFHFKC7YTpbXQB91rf9RQym/Tc8Gbn0zbt3qrhsEbhEqfvYgq2gnx6V+rIQ4CGeAM
- JnENUJCG1z+PYHmt5tSzew4RXz2z6sm9/lsErLcubB8WD7mgBobUCkC6Fpu1dehR6iCEZnJns
- 1NVE4I7kSUm750SW0c3hXygCqzMUuyxP6z2CaUtbrJc2TMERQ5vj1TS8I/FZYIx7bok8fqtLz
- S7NqtUmUBfpTGIwY1LgFjyFATjgMkWyPIbGjS1PPPfD27aZeBwanMK+xzqLEsyFkkJWqCVL/h
- 0BqjcXZTb7YT/4e/wgaRJdFwdcdgLkmNm0owBzJsSFtoJ6MVrS48TbUJzFaHdRDwXgrNDaTMf
- zlGCMIXL3+E4qvOuk3+bjdqx4bbrrokjIaZNv4CXNQTN7aw5pJ2SNVvOXv7hens34ukOSD5
+X-Provags-ID: V03:K1:M7jZ1dV3SMzKEadODKaF8SQsj8meK+kkTJZ10fSsSmTujoPQ3+A
+ DB3wjDJ8+8oaqu00xJ68VSf6dLBG24Iu6X62NiJiDVB8y9FDg3WOmVdGOjdD0UnRmhberzd
+ J2jljSe/ue0HzlFhkpc9oGHDXqtSRWeETubdPTtXrgdHYWNCFBEfs3VEXdzkNF30zWuo2Tv
+ 1IGM1o3XZKZq6s0C7tLzg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yFDIVQYoi3E=:4EZnkmZOdg0/SrB0ZKogLB
+ fdUNGtW3x39RntUiihgpR5nI8ZWLV9z1L8ut9781mTCnxyfd8/vF4xXk+0tVAjLqjW6vG+2af
+ YOfbuVuZEilyqM5ajgp9AFEYFJPAu/SrM/5LTCf0ukLHW/00C7k7kDzsAzAgMN8RVOyA5fFBB
+ e352fRP26DwGE6CjHpqwwEItIspaBbpQ1J1VG7di0ikkZy3KHaqym8IBn7bDL6dvsI8gcVWM3
+ oyf1l5cHA611lfKUS2Qamp6chrJHYtJ00iRJhWOnFX1SsBI3QW5GsLGaM++pASZnyGNNEZmy7
+ FSwNmDb9HygsTZb63kadqtTGMg/vKvL+aGQLu3V0S3b/uVprJ7z6GLUttrJn03QyiekmTOYQZ
+ amiWYSWj5v8mTqv6Jk8H0PlSGebJj+BnjlLkcOBmlJeKfB3NGIK5cN8z8YQu6A0MbIG0M8r4O
+ K4YNqbXqpouC41qZm7jkiI4Z/TSBqHvASFBGsWTZP3Qr9H8hD+mr12Y/MuvJnME7n2x9hHm9c
+ GS7+p21JbJdjG1Uop9+hA8p8eLtZEP8cI/cNFxRovsamN5aQOcOqSMgi+5Fye+qwA7P1Bw10a
+ ihgLpWPM8x+geW7eADnbc/SnIlUv/HsH73MH1jCdt4cVg6OeNNmeaTsCsv6hW3+hZInmELAkc
+ 51ecRMEamRqBSe+OhdMFGMkzOiV2ZPJeSXIQwTL271fkpjnIefoXq3C24LapGV4HXDWt4rrf+
+ y+iJjG06SsHHgb7ruCMILq/wTxSx7zXxNJgT8VieG71b0fErMm+U912smIETOpr8+IXrjJnjF
+ 8UX0oo79mzhyTCW73pY1V0Z/FUIGFYFrpuCrOaEaWlh5s3XJSZjg9o7uKmD0OSgT0ka+QDE
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210819_151003_933662_942C0792 
-X-CRM114-Status: GOOD (  17.18  )
+X-CRM114-CacheID: sfid-20210819_151017_961672_55E6324D 
+X-CRM114-Status: UNSURE (   9.49  )
+X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -93,313 +103,46 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210819220909.xP0aObm3x5UWKH2i07p9dr9azSSHiqC97DGyURhNdc8@z>
+Message-ID: <20210819220901.oIQ7Aax9w4EABx8SBY9xIicWl3JVo8bFOunyKjSaraI@z>
 
-From: Max Krummenacher <max.krummenacher@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Add a device tree for a Colibri iMX6ULL 1GB which has a eMMC instead of
-the raw NAND used on other SKUs.
 
-Related-to: ELB-4056, ELB-4058, ELB-4070
-Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-
----
+Clean-up imx_v6_v7_defconfig and then add support for the new Colibri
+iMX6ULL 1GB (eMMC) which builds on the success of the existing Colibri
+iMX6ULL SKUs using raw NAND but replaces this with more RAM (1 GB) and
+an eMMC (4 GB).
 
 Changes in v2:
+- New patch cleaning-up dt-bindings documentation.
 - Fix indentation.
 - Use latest agreed upon SPDX-License-Identifier GPL-2.0+ OR MIT.
 - Drop AG in our copyright statement as recommended by our legal.
+- New patch documenting dt-bindings.
 
+Marcel Ziswiler (8):
+  ARM: imx_v6_v7_defconfig: enable mtd physmap
+  ARM: imx_v6_v7_defconfig: enable fb
+  ARM: imx_v6_v7_defconfig: change snd soc tlv320aic3x to i2c variant
+  ARM: imx_v6_v7_defconfig: rebuild default configuration
+  ARM: imx_v6_v7_defconfig: build imx sdma driver as module
+  ARM: imx_v6_v7_defconfig: enable bpf syscall and cgroup bpf
+  dt-bindings: arm: fsl: clean-up all toradex boards/modules
+  dt-bindings: arm: fsl: add toradex,colibri-imx6ull-emmc
+
+Max Krummenacher (1):
+  ARM: dts: colibri-imx6ull-emmc: add device tree
+
+ .../devicetree/bindings/arm/fsl.yaml          |  87 ++++----
  arch/arm/boot/dts/Makefile                    |   1 +
  .../boot/dts/imx6ull-colibri-emmc-eval-v3.dts |  17 ++
  .../dts/imx6ull-colibri-emmc-nonwifi.dtsi     | 185 ++++++++++++++++++
  arch/arm/boot/dts/imx6ull-colibri.dtsi        |  32 ++-
- 4 files changed, 233 insertions(+), 2 deletions(-)
+ arch/arm/configs/imx_v6_v7_defconfig          |  46 ++---
+ 6 files changed, 299 insertions(+), 69 deletions(-)
  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts
  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7e0934180724d..f88ddcc40b6ac 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -671,6 +671,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
- 	imx6ul-tx6ul-0011.dtb \
- 	imx6ul-tx6ul-mainboard.dtb \
- 	imx6ull-14x14-evk.dtb \
-+	imx6ull-colibri-emmc-eval-v3.dtb \
- 	imx6ull-colibri-eval-v3.dtb \
- 	imx6ull-colibri-wifi-eval-v3.dtb \
- 	imx6ull-myir-mys-6ulx-eval.dtb \
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts b/arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts
-new file mode 100644
-index 0000000000000..61b93cb040c7f
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: GPL-2.0+ OR MIT
-+/*
-+ * Copyright 2021 Toradex
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx6ull-colibri-emmc-nonwifi.dtsi"
-+#include "imx6ull-colibri-eval-v3.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX6ULL 1GB (eMMC) on Colibri Evaluation Board V3";
-+	compatible = "toradex,colibri-imx6ull-emmc-eval",
-+		     "toradex,colibri-imx6ull-emmc",
-+		     "toradex,colibri-imx6ull",
-+		     "fsl,imx6ull";
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
-new file mode 100644
-index 0000000000000..a099abfdfa27c
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
-@@ -0,0 +1,185 @@
-+// SPDX-License-Identifier: GPL-2.0+ OR MIT
-+/*
-+ * Copyright 2021 Toradex
-+ */
-+
-+#include "imx6ull-colibri.dtsi"
-+
-+/ {
-+	aliases {
-+		mmc0 = &usdhc2; /* eMMC */
-+		mmc1 = &usdhc1; /* MMC 4bit slot */
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x10000000>;
-+	};
-+};
-+
-+&gpio1 {
-+	gpio-line-names = "SODIMM_8",
-+			  "SODIMM_6",
-+			  "SODIMM_129",
-+			  "SODIMM_89",
-+			  "SODIMM_19",
-+			  "SODIMM_21",
-+			  "UNUSABLE_SODIMM_180",
-+			  "UNUSABLE_SODIMM_184",
-+			  "SODIMM_4",
-+			  "SODIMM_2",
-+			  "SODIMM_106",
-+			  "SODIMM_71",
-+			  "SODIMM_23",
-+			  "SODIMM_31",
-+			  "SODIMM_99",
-+			  "SODIMM_102",
-+			  "SODIMM_33",
-+			  "SODIMM_35",
-+			  "SODIMM_25",
-+			  "SODIMM_27",
-+			  "SODIMM_36",
-+			  "SODIMM_38",
-+			  "SODIMM_32",
-+			  "SODIMM_34",
-+			  "SODIMM_135",
-+			  "SODIMM_77",
-+			  "SODIMM_100",
-+			  "SODIMM_186",
-+			  "SODIMM_196",
-+			  "SODIMM_194";
-+};
-+
-+&gpio2 {
-+	gpio-line-names = "SODIMM_55",
-+			  "SODIMM_63",
-+			  "SODIMM_178",
-+			  "SODIMM_188",
-+			  "SODIMM_73",
-+			  "SODIMM_30",
-+			  "SODIMM_67",
-+			  "SODIMM_104",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "SODIMM_190",
-+			  "SODIMM_47",
-+			  "SODIMM_192",
-+			  "SODIMM_49",
-+			  "SODIMM_51",
-+			  "SODIMM_53";
-+};
-+
-+&gpio3 {
-+	gpio-line-names = "SODIMM_56",
-+			  "SODIMM_44",
-+			  "SODIMM_68",
-+			  "SODIMM_82",
-+			  "",
-+			  "SODIMM_76",
-+			  "SODIMM_70",
-+			  "SODIMM_60",
-+			  "SODIMM_58",
-+			  "SODIMM_78",
-+			  "SODIMM_72",
-+			  "SODIMM_80",
-+			  "SODIMM_46",
-+			  "SODIMM_62",
-+			  "SODIMM_48",
-+			  "SODIMM_74",
-+			  "SODIMM_50",
-+			  "SODIMM_52",
-+			  "SODIMM_54",
-+			  "SODIMM_66",
-+			  "SODIMM_64",
-+			  "SODIMM_57",
-+			  "SODIMM_61",
-+			  "SODIMM_29",
-+			  "SODIMM_37",
-+			  "SODIMM_88",
-+			  "SODIMM_86",
-+			  "SODIMM_92",
-+			  "SODIMM_90";
-+};
-+
-+&gpio4 {
-+	gpio-line-names = "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "SODIMM_140",
-+			  "SODIMM_59",
-+			  "SODIMM_142",
-+			  "SODIMM_144",
-+			  "SODIMM_133",
-+			  "SODIMM_146",
-+			  "SODIMM_28",
-+			  "SODIMM_75",
-+			  "SODIMM_96",
-+			  "SODIMM_81",
-+			  "SODIMM_94",
-+			  "SODIMM_101",
-+			  "SODIMM_103",
-+			  "SODIMM_79",
-+			  "SODIMM_97",
-+			  "SODIMM_69",
-+			  "SODIMM_98",
-+			  "SODIMM_85",
-+			  "SODIMM_65";
-+};
-+
-+&gpio5 {
-+	gpio-line-names = "SODIMM_43",
-+			  "SODIMM_45",
-+			  "SODIMM_137",
-+			  "SODIMM_95",
-+			  "SODIMM_107",
-+			  "SODIMM_131",
-+			  "SODIMM_93",
-+			  "",
-+			  "SODIMM_138",
-+			  "",
-+			  "SODIMM_105",
-+			  "SODIMM_127";
-+};
-+
-+&gpmi {
-+	status = "disabled";
-+};
-+
-+&iomuxc {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_gpio1 &pinctrl_gpio2 &pinctrl_gpio3
-+		&pinctrl_gpio4 &pinctrl_gpio6 &pinctrl_gpio7
-+		&pinctrl_gpmi_gpio>;
-+};
-+
-+&iomuxc_snvs {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_snvs_gpio1 &pinctrl_snvs_gpio3>;
-+};
-+
-+&usdhc2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usdhc2emmc>;
-+	assigned-clocks = <&clks IMX6UL_CLK_USDHC2_SEL>, <&clks IMX6UL_CLK_USDHC2>;
-+	assigned-clock-parents = <&clks IMX6UL_CLK_PLL2_PFD2>;
-+	assigned-clock-rates = <0>, <198000000>;
-+	bus-width = <8>;
-+	keep-power-in-suspend;
-+	no-1-8-v;
-+	non-removable;
-+	vmmc-supply = <&reg_module_3v3>;
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index 0cdbf7b6e7285..7f35a06dff95b 100644
---- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-@@ -1,6 +1,6 @@
--// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+// SPDX-License-Identifier: GPL-2.0+ OR MIT
- /*
-- * Copyright 2018 Toradex AG
-+ * Copyright 2018-2021 Toradex
-  */
- 
- #include "imx6ull.dtsi"
-@@ -345,6 +345,19 @@ MX6UL_PAD_ENET1_RX_DATA1__GPIO2_IO01	0xb0b0 /* SODIMM 63 */
- 		>;
- 	};
- 
-+	/*
-+	 * With an eMMC instead of a raw NAND device the following pins
-+	 * are available at SODIMM pins
-+	 */
-+	pinctrl_gpmi_gpio: gpmi-gpio-grp {
-+		fsl,pins = <
-+			MX6UL_PAD_NAND_ALE__GPIO4_IO10		0x10b0 /* SODIMM 140 */
-+			MX6UL_PAD_NAND_CE0_B__GPIO4_IO13	0x10b0 /* SODIMM 144 */
-+			MX6UL_PAD_NAND_CLE__GPIO4_IO15		0x10b0 /* SODIMM 146 */
-+			MX6UL_PAD_NAND_READY_B__GPIO4_IO12	0x10b0 /* SODIMM 142 */
-+		>;
-+	};
-+
- 	pinctrl_gpmi_nand: gpmi-nand-grp {
- 		fsl,pins = <
- 			MX6UL_PAD_NAND_DATA00__RAWNAND_DATA00	0x100a9
-@@ -533,6 +546,21 @@ MX6UL_PAD_GPIO1_IO03__OSC32K_32K_OUT	0x10
- 		>;
- 	};
- 
-+	pinctrl_usdhc2emmc: usdhc2emmcgrp {
-+		fsl,pins = <
-+			MX6UL_PAD_NAND_RE_B__USDHC2_CLK     0x17059
-+			MX6UL_PAD_NAND_WE_B__USDHC2_CMD     0x17059
-+			MX6UL_PAD_NAND_DATA00__USDHC2_DATA0 0x17059
-+			MX6UL_PAD_NAND_DATA01__USDHC2_DATA1 0x17059
-+			MX6UL_PAD_NAND_DATA02__USDHC2_DATA2 0x17059
-+			MX6UL_PAD_NAND_DATA03__USDHC2_DATA3 0x17059
-+			MX6UL_PAD_NAND_DATA04__USDHC2_DATA4 0x17059
-+			MX6UL_PAD_NAND_DATA05__USDHC2_DATA5 0x17059
-+			MX6UL_PAD_NAND_DATA06__USDHC2_DATA6 0x17059
-+			MX6UL_PAD_NAND_DATA07__USDHC2_DATA7 0x17059
-+		>;
-+	};
-+
- 	pinctrl_wdog: wdog-grp {
- 		fsl,pins = <
- 			MX6UL_PAD_LCD_RESET__WDOG1_WDOG_ANY    0x30b0
 -- 
 2.26.2
 
