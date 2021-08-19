@@ -1,140 +1,372 @@
-Return-Path: <SRS0=soWq=NK=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=5Y3q=NK=ziswiler.com=marcel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91FC3C432BE
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 19 Aug 2021 14:08:44 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 233DCC432BE
+	for <soc@archiver.kernel.org>; Thu, 19 Aug 2021 14:10:10 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id F2D7261151; Thu, 19 Aug 2021 14:10:09 +0000 (UTC)
+X-Greylist: delayed 327 seconds by postgrey-1.37 at mail.kernel.org; Thu, 19 Aug 2021 14:10:09 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 982CE6113B
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ziswiler.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=ziswiler.com
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 62D4E6113B
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 19 Aug 2021 14:08:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 62D4E6113B
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ziswiler.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=Ma5DvHPITSWKSebXVm9Mif/JxWlxKgikpCM/YpMHs9Q=; b=3PT+n8viTgvOni
-	IGX/xKQ1Xi8cfZW3cu2Yepu2RZvFcvjsYX8S8AEc1lBvT2iMKRYmdHwATF4mRzAQytFF4KIh7sRMu
-	GxnM3w5EHnzKtnVkatP5G87TfgX6cLuOzUsyriGooI0/oUCw442ewoeyCdan0aJcIbWp9clvzIJgA
-	Fut9hc9OP8RJZxMX8xySQ98Xc/RLon2HO6GH1PYj0p9eaq5axsRTUFNzGydjrudPKN/IT8PAucGEX
-	lfFjRudoD6d1OGzgLuBimDCZfcPOvtaUrCcO8rJqzf27vrEjAl4+GN4bvp295158Y/EDE1Tw6WoG1
-	SKaxIjjle2l4xF0YgDfw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mGigL-008YUm-0Y; Thu, 19 Aug 2021 14:06:09 +0000
-Received: from mout.perfora.net ([74.208.4.197])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mGif8-008Y4T-N8
- for linux-arm-kernel@lists.infradead.org; Thu, 19 Aug 2021 14:04:56 +0000
+	by mail.kernel.org (Postfix) with ESMTPS id 982CE6113B;
+	Thu, 19 Aug 2021 14:10:09 +0000 (UTC)
 Received: from toolbox.cardiotech.int ([81.221.236.183]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id
- 0M7ZR3-1n1pE204ut-00xMEi; Thu, 19 Aug 2021 16:03:57 +0200
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LyX1k-1nAJXg2X6E-015upF;
+ Thu, 19 Aug 2021 16:04:19 +0200
 From: Marcel Ziswiler <marcel@ziswiler.com>
 To: linux-arm-kernel@lists.infradead.org
 List-Id: <soc.lore.kernel.org>
-Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>,
- Alexei Starovoitov <ast@kernel.org>,
- Andreas Kemnade <andreas@kemnade.info>,
- Andrii Nakryiko <andrii@kernel.org>, Anson Huang <Anson.Huang@nxp.com>,
- Arnd Bergmann <arnd@arndb.de>, Daniel Borkmann <daniel@iogearbox.net>,
- Fabio Estevam <festevam@gmail.com>, Frank Rowand <frowand.list@gmail.com>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Marek Vasut <marex@denx.de>, Martin KaFai Lau <kafai@fb.com>,
- NXP Linux Team <linux-imx@nxp.com>, Olof Johansson <olof@lixom.net>,
- Otavio Salvador <otavio@ossystems.com.br>,
- Pascal Zimmermann <pzimmermann@dh-electronics.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Rob Herring <robh+dt@kernel.org>, Russell King <linux@armlinux.org.uk>,
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
- bpf@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, soc@kernel.org
-Subject: [PATCH v1 0/7] ARM: prepare and add colibri imx6ull 1gb (emmc) support
-Date: Thu, 19 Aug 2021 16:03:38 +0200
-Message-Id: <20210819140345.357167-1-marcel@ziswiler.com>
+Cc: Max Krummenacher <max.krummenacher@toradex.com>,
+	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Olof Johansson <olof@lixom.net>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org
+Subject: [PATCH v1 7/7] ARM: dts: colibri-imx6ull-emmc: add device trees
+Date: Thu, 19 Aug 2021 16:03:45 +0200
+Message-ID: <20210819140345.357167-8-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210819140345.357167-1-marcel@ziswiler.com>
+References: <20210819140345.357167-1-marcel@ziswiler.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:lx5GBGXPRAQ1C2RGAY9/BxYJ6AKfNJ32vg25PpQG17n/6Pk2u7J
- j0IrCvlaDcncp28bcdtMZIR/DwKQVvCWFr7vbql1AglQzGyZwh9oLK0G32II0gQxXr+KoEO
- YlarmDCsgoaZn3VKxmD9TDVL/XOw4pV+gxmsZRPGcCYDGOQ0+6A7pOHxAyDkALGxGqTawBq
- oh5ehsLsIEqorCggir/4w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zxIafc4BlW8=:MZu7xopxkSoQxDPOR+f7ht
- X9CwQW4Hm7a7K7DvQN6oet+kwt0AeAKewsW7Rds20sxGXu4Lt2Ni/mpc+vuIGIweWyCLrFMsP
- ES3GnD4tj73pR0zyHAosxbRb27GyIyBrWsDJjB3Xgt9TEc2VQqiMXJp02yJOJOPJRXQ5MPBwm
- oA5Bf9/qqyRwGFLY7PK4k+G0ROjgUMbMpU2l2vRumTgqtdrvMSx06fAUZRaL7jTjKPDva/LD+
- 2MlI3vC/uRhE2TIBudmDhdFv/sTAz3K996wnMNvOsKkZBhPu9vflXHu1ZryQhyl8uuCjFh/f9
- KzJG3dCtNXws6+e9D1P68Qj/gBQSwS7Gr+eM7hEFtE80x2TR6m4uwva6bmN0CnQdLpEPwnX++
- qBDKtHUZGbeqkbLzrSQOTHBURORvZX2JbxvVpmgwYe+XsecYvAFznTbQr0yeFdTLVG5vUCQWV
- 2zEBKeff2X8cUfHZzKnFqz2bWPLhG7NIm0Ko81JKQsNK0Aav+J4k0CN5A+uikExGXaUFs7QpT
- fNygYQ1qj2iEwUdkmsNmZz51ldfiaiuiMOwnIqji4kJX2vFR5IkQerQQLLs7+mWJlaZCQhhGC
- DLTpYU2Nnh29rEQO7u+h8tih3ew22F5fl/fGL2ZrnuFEiad3Rmh1/GiC2Zd1Z1umZipT6+vLR
- pQeW6vL9QjjTOYSLBLgyB/lyF6QFr8y4OghuyLR1lFj9wqRr/w6QNyOOknsSsuCG8E9DmAX7r
- /Tzdpn3On/QY7m1WSBr/ZWsSAV8/1CCGaF2XcmvHPbZfbf7EYycgXegoVz72SlFmNmC4U3rYR
- Nzp0ITSYRJHjX2Vk3xqvsics0vUo1DuTZYHuKxZd/GNxqLC3ehNA2el2Z+9RcP40rC17BG/
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210819_070454_931419_5242375B 
-X-CRM114-Status: UNSURE (   8.10  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:cGQ2OQwWXLChEXAfqbJIkrTXASzWSHIbnhPFXtF8s3yQNJtYj6b
+ FhEz6pE8zeZfuPwOQO97T0Hj+9Vridruvq7Y+ABF87zv6O16egNoif/KO23Ywy9/2m3wW2s
+ 4iRG/rwDKf7GyWg7qTS+RiolrKy7zZYb68LCqXg6gCKP9pOsSyPSF2lyvqHcNw/b68zRZJp
+ meXbRnj5RrSsQL2m9DCPA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8zvSYGhE6YI=:v66aVD6dNs16vJCF6TOm3M
+ UCZOIY/C87kk3gCtclkXy2mhoQt9en9f2H8bv3Jx1hfndNPv6E+wXYSvk5D/5u3OS3Bc4HLGR
+ Jbya8SctO8zI8Ek5ywLyR4k6bndmdQgQySb3cgNqz72pev3eWKQuo9pSIN3y3QVrdzCkAJH+Q
+ 9Cul9tidUTaDSLrC0HwHEZUDNDoG6vrCKefIlF6oe6Itq7zvkgIGabNPWI67oUVh0Btf5OqFF
+ VpAFVWNlpoTBG/yhBC4J5svq8fYhY/Kt5jeHMVqZAFaxubZW+NQciWZzvwO5eS5R2qSh5zDXl
+ CK462aVnekrlBpCHY0JLGSWlrbVzZVQsy/F51eCFdUP7qlB2QlzEKHDwjuXwIGA7rpCYRQNfI
+ zmeOap8sgSt877njkwEyP6He7rhqHuEtPVFQ2nuoQ7F0645N87MNTbyekpDEJgModDjJ/FmbM
+ 2RI7vINaqLcama+M9Jp50CJV8dTZ1b2QtU4hyD3K0D1WWikkcVi5w4aQvLmGz91ti2YpxSvp9
+ 0Ty4fOjjzroACeJzVVce8MinTyKzEaHAN4IvjX9lFmFhUYVxTHmWJFEU8k7HlcZ7V0YVQubsz
+ /7lJLL7KLHxAfphHkcs4LLShaOgPpnlsmko7ZFLMC40PSg7+nY3yPvOSEzq/VHtzNzvICv2x0
+ ZdwvmAGHhY2tSN3uPS5hv/lPGF0m1fm/lF2X/Q5m5xTW//A49pXu27Q98phobJ0aIpg2yoSpU
+ KnVyFqi23QWZPWIoLpJchr2tVbXFV+Ps2XlZMnr+roGnfLuSugJu71gnYiy+KCNSdT3dUVmjx
+ 6A/Wmwf6S0LE+2BSjp8gUftrAathHNbtRrsGQ0CeDF8bpwO5IUD67qrLEYnCwQeLaJ3YI/2
+Message-ID: <20210819140345.7nd32rX87XPNDpgRMnsZ-UDBMc4vaZpVbAFCFhJA2Go@z>
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+From: Max Krummenacher <max.krummenacher@toradex.com>
 
+Add devices trees for a Colibri iMX6ULL 1GB which has a eMMC instead of
+the raw NAND used on other SKUs.
 
-Clean-up imx_v6_v7_defconfig and then add support for the new Colibri
-iMX6ULL 1GB (eMMC) which builds on the success of the existing Colibri
-iMX6ULL SKUs using raw NAND but replaces this by more RAM (1 GB) and an
-eMMC (4 GB).
+Related-to: ELB-4056, ELB-4058
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-
-Marcel Ziswiler (6):
-  ARM: imx_v6_v7_defconfig: enable mtd physmap
-  ARM: imx_v6_v7_defconfig: enable fb
-  ARM: imx_v6_v7_defconfig: change snd soc tlv320aic3x to i2c variant
-  ARM: imx_v6_v7_defconfig: rebuild default configuration
-  ARM: imx_v6_v7_defconfig: build imx sdma driver as module
-  ARM: imx_v6_v7_defconfig: enable bpf syscall and cgroup bpf
-
-Max Krummenacher (1):
-  ARM: dts: colibri-imx6ull-emmc: add device trees
+---
 
  arch/arm/boot/dts/Makefile                    |   1 +
  .../boot/dts/imx6ull-colibri-emmc-eval-v3.dts |  17 ++
  .../dts/imx6ull-colibri-emmc-nonwifi.dtsi     | 185 ++++++++++++++++++
  arch/arm/boot/dts/imx6ull-colibri.dtsi        |  30 ++-
- arch/arm/configs/imx_v6_v7_defconfig          |  46 ++---
- 5 files changed, 249 insertions(+), 30 deletions(-)
+ 4 files changed, 232 insertions(+), 1 deletion(-)
  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts
  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
 
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7e0934180724d..f88ddcc40b6ac 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -671,6 +671,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
+ 	imx6ul-tx6ul-0011.dtb \
+ 	imx6ul-tx6ul-mainboard.dtb \
+ 	imx6ull-14x14-evk.dtb \
++	imx6ull-colibri-emmc-eval-v3.dtb \
+ 	imx6ull-colibri-eval-v3.dtb \
+ 	imx6ull-colibri-wifi-eval-v3.dtb \
+ 	imx6ull-myir-mys-6ulx-eval.dtb \
+diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts b/arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts
+new file mode 100644
+index 0000000000000..70104a6c5bac9
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright 2021 Toradex AG
++ */
++
++/dts-v1/;
++
++#include "imx6ull-colibri-emmc-nonwifi.dtsi"
++#include "imx6ull-colibri-eval-v3.dtsi"
++
++/ {
++	model = "Toradex Colibri iMX6ULL 1GB (eMMC) on Colibri Evaluation Board V3";
++	compatible = "toradex,colibri-imx6ull-emmc-eval",
++		     "toradex,colibri-imx6ull-emmc",
++		     "toradex,colibri-imx6ull",
++		     "fsl,imx6ull";
++};
+diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
+new file mode 100644
+index 0000000000000..df055617e51f7
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
+@@ -0,0 +1,185 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright 2021 Toradex AG
++ */
++
++#include "imx6ull-colibri.dtsi"
++
++/ {
++	aliases {
++		mmc0 = &usdhc2; /* eMMC */
++		mmc1 = &usdhc1; /* MMC 4bit slot */
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x10000000>;
++	};
++};
++
++&gpio1 {
++	gpio-line-names = "SODIMM_8",
++			  "SODIMM_6",
++			  "SODIMM_129",
++			  "SODIMM_89",
++			  "SODIMM_19",
++			  "SODIMM_21",
++			  "UNUSABLE_SODIMM_180",
++			  "UNUSABLE_SODIMM_184",
++			  "SODIMM_4",
++			  "SODIMM_2",
++			  "SODIMM_106",
++			  "SODIMM_71",
++			  "SODIMM_23",
++			  "SODIMM_31",
++			  "SODIMM_99",
++			  "SODIMM_102",
++			  "SODIMM_33",
++			  "SODIMM_35",
++			  "SODIMM_25",
++			  "SODIMM_27",
++			  "SODIMM_36",
++			  "SODIMM_38",
++			  "SODIMM_32",
++			  "SODIMM_34",
++			  "SODIMM_135",
++			  "SODIMM_77",
++			  "SODIMM_100",
++			  "SODIMM_186",
++			  "SODIMM_196",
++			  "SODIMM_194";
++};
++
++&gpio2 {
++	gpio-line-names = "SODIMM_55",
++			  "SODIMM_63",
++			  "SODIMM_178",
++			  "SODIMM_188",
++			  "SODIMM_73",
++			  "SODIMM_30",
++			  "SODIMM_67",
++			  "SODIMM_104",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "SODIMM_190",
++			  "SODIMM_47",
++			  "SODIMM_192",
++			  "SODIMM_49",
++			  "SODIMM_51",
++			  "SODIMM_53";
++};
++
++&gpio3 {
++	gpio-line-names = "SODIMM_56",
++			  "SODIMM_44",
++			  "SODIMM_68",
++			  "SODIMM_82",
++			  "",
++			  "SODIMM_76",
++			  "SODIMM_70",
++			  "SODIMM_60",
++			  "SODIMM_58",
++			  "SODIMM_78",
++			  "SODIMM_72",
++			  "SODIMM_80",
++			  "SODIMM_46",
++			  "SODIMM_62",
++			  "SODIMM_48",
++			  "SODIMM_74",
++			  "SODIMM_50",
++			  "SODIMM_52",
++			  "SODIMM_54",
++			  "SODIMM_66",
++			  "SODIMM_64",
++			  "SODIMM_57",
++			  "SODIMM_61",
++			  "SODIMM_29",
++			  "SODIMM_37",
++			  "SODIMM_88",
++			  "SODIMM_86",
++			  "SODIMM_92",
++			  "SODIMM_90";
++};
++
++&gpio4 {
++	gpio-line-names = "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "SODIMM_140",
++			  "SODIMM_59",
++			  "SODIMM_142",
++			  "SODIMM_144",
++			  "SODIMM_133",
++			  "SODIMM_146",
++			  "SODIMM_28",
++			  "SODIMM_75",
++			  "SODIMM_96",
++			  "SODIMM_81",
++			  "SODIMM_94",
++			  "SODIMM_101",
++			  "SODIMM_103",
++			  "SODIMM_79",
++			  "SODIMM_97",
++			  "SODIMM_69",
++			  "SODIMM_98",
++			  "SODIMM_85",
++			  "SODIMM_65";
++};
++
++&gpio5 {
++	gpio-line-names = "SODIMM_43",
++			  "SODIMM_45",
++			  "SODIMM_137",
++			  "SODIMM_95",
++			  "SODIMM_107",
++			  "SODIMM_131",
++			  "SODIMM_93",
++			  "",
++			  "SODIMM_138",
++			  "",
++			  "SODIMM_105",
++			  "SODIMM_127";
++};
++
++&gpmi {
++	status = "disabled";
++};
++
++&iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_gpio1 &pinctrl_gpio2 &pinctrl_gpio3
++		&pinctrl_gpio4 &pinctrl_gpio6 &pinctrl_gpio7
++		&pinctrl_gpmi_gpio>;
++};
++
++&iomuxc_snvs {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_snvs_gpio1 &pinctrl_snvs_gpio3>;
++};
++
++&usdhc2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usdhc2emmc>;
++	assigned-clocks = <&clks IMX6UL_CLK_USDHC2_SEL>, <&clks IMX6UL_CLK_USDHC2>;
++	assigned-clock-parents = <&clks IMX6UL_CLK_PLL2_PFD2>;
++	assigned-clock-rates = <0>, <198000000>;
++	bus-width = <8>;
++	keep-power-in-suspend;
++	no-1-8-v;
++	non-removable;
++	vmmc-supply = <&reg_module_3v3>;
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
+index 0cdbf7b6e7285..f432fc0a6a530 100644
+--- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
++++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: (GPL-2.0 OR MIT)
+ /*
+- * Copyright 2018 Toradex AG
++ * Copyright 2018-2021 Toradex AG
+  */
+ 
+ #include "imx6ull.dtsi"
+@@ -345,6 +345,19 @@ MX6UL_PAD_ENET1_RX_DATA1__GPIO2_IO01	0xb0b0 /* SODIMM 63 */
+ 		>;
+ 	};
+ 
++		/*
++		 * With an eMMC instead of a raw NAND device the following pins
++		 * are available at SODIMM pins
++		 */
++		pinctrl_gpmi_gpio: gpmi-gpio-grp {
++			fsl,pins = <
++				MX6UL_PAD_NAND_ALE__GPIO4_IO10		0x10b0 /* SODIMM 140 */
++				MX6UL_PAD_NAND_CE0_B__GPIO4_IO13	0x10b0 /* SODIMM 144 */
++				MX6UL_PAD_NAND_CLE__GPIO4_IO15		0x10b0 /* SODIMM 146 */
++				MX6UL_PAD_NAND_READY_B__GPIO4_IO12	0x10b0 /* SODIMM 142 */
++			>;
++		};
++
+ 	pinctrl_gpmi_nand: gpmi-nand-grp {
+ 		fsl,pins = <
+ 			MX6UL_PAD_NAND_DATA00__RAWNAND_DATA00	0x100a9
+@@ -533,6 +546,21 @@ MX6UL_PAD_GPIO1_IO03__OSC32K_32K_OUT	0x10
+ 		>;
+ 	};
+ 
++		pinctrl_usdhc2emmc: usdhc2emmcgrp {
++			fsl,pins = <
++				MX6UL_PAD_NAND_RE_B__USDHC2_CLK     0x17059
++				MX6UL_PAD_NAND_WE_B__USDHC2_CMD     0x17059
++				MX6UL_PAD_NAND_DATA00__USDHC2_DATA0 0x17059
++				MX6UL_PAD_NAND_DATA01__USDHC2_DATA1 0x17059
++				MX6UL_PAD_NAND_DATA02__USDHC2_DATA2 0x17059
++				MX6UL_PAD_NAND_DATA03__USDHC2_DATA3 0x17059
++				MX6UL_PAD_NAND_DATA04__USDHC2_DATA4 0x17059
++				MX6UL_PAD_NAND_DATA05__USDHC2_DATA5 0x17059
++				MX6UL_PAD_NAND_DATA06__USDHC2_DATA6 0x17059
++				MX6UL_PAD_NAND_DATA07__USDHC2_DATA7 0x17059
++			>;
++		};
++
+ 	pinctrl_wdog: wdog-grp {
+ 		fsl,pins = <
+ 			MX6UL_PAD_LCD_RESET__WDOG1_WDOG_ANY    0x30b0
 -- 
 2.26.2
 
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
