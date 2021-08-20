@@ -1,27 +1,46 @@
-Return-Path: <SRS0=Cau+=NL=synaptics.com=Jisheng.Zhang@kernel.org>
+Return-Path: <SRS0=Tcyv=NL=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 967F2C4338F
-	for <soc@archiver.kernel.org>; Fri, 20 Aug 2021 09:31:26 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 70CB2610E6; Fri, 20 Aug 2021 09:31:26 +0000 (UTC)
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2053.outbound.protection.outlook.com [40.107.212.53])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BB2AC4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 20 Aug 2021 09:33:41 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 286B860F44;
-	Fri, 20 Aug 2021 09:31:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 286B860F44
+	by mail.kernel.org (Postfix) with ESMTPS id 533FF60ED5
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 20 Aug 2021 09:33:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 533FF60ED5
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=synaptics.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=synaptics.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Subject:Cc:To:
+	From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=RsWEra0Vgq3wNVHwxGCpUHGxy3dy82l02ZqgceNKkZs=; b=lFutSOEgrontbg
+	HUtjBRr06EXRGtGjMrAwGoyjebGpKLpYhYYNYpivUZnVPapH3NOJZ8PlUXFfFKEVj7NkS5jmI33cQ
+	EMteMYYhCzdkjRxuiRh40P29AiUZGI1106sRNekcD6uhSz64O4XMbYV0qKDQ3YUGGLnjAwCQVaD+M
+	otVLpwfUDmjYHjOZkScA2IzCu0zCljC02f0noenXnFooiMGmzPfJh0xO2vTDdPoz43yY9RnjRFE6w
+	2Et3erj7gdGicnuAL9pxuhnVGzY9v03Fn+BcGqzE3+LPMFSdilVGGHiEZOoj3YlBEkYv/qZ8sz5Kd
+	OkkpRkyfsgAelT+Xsx5A==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mH0sQ-00AV9d-7N; Fri, 20 Aug 2021 09:31:50 +0000
+Received: from mail-co1nam11on2065.outbound.protection.outlook.com
+ ([40.107.220.65] helo=NAM11-CO1-obe.outbound.protection.outlook.com)
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mH0s4-00AV0k-OP
+ for linux-arm-kernel@lists.infradead.org; Fri, 20 Aug 2021 09:31:30 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=EXC7O6IoUTmXYdoAIcA3H4cJsh7WsPG+AMJAbsCbV7ED9NEqQgh40QMywGn/y+D8xT51LayjbkFVHT2EoVAgI4K4J1hG5F3KPOCax3olqGcGu2Ls/X1Sz6MI+J0ut74GWY5A9ghR9t1gT2Aar9+Lve3Fg7iiIh7V/yO/ibfFROacckMhlVXBXH/GuZEhW55pFTnsd75PtbpXNpug93oWT2yLtKykw7juHAS8OWj33VZiENm9eK9vAd2kjfZ8NYhiyDKdZ2TZS+Xneix6rBLXPA71UhRJlr6G6pi+2jSUitXLhoe0qz37k0G1/FHdJ90d+s6lErKE1zcO2BOlT46RnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
  bh=G0ymnsqEltTWxKbr7jG+Fgc1QTRR26Ir7xi+Ft9H61Q=;
@@ -37,8 +56,8 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 Authentication-Results: arndb.de; dkim=none (message not signed)
  header.d=none;arndb.de; dmarc=none action=none header.from=synaptics.com;
 Received: from BN9PR03MB6058.namprd03.prod.outlook.com (2603:10b6:408:137::15)
- by BN6PR03MB2611.namprd03.prod.outlook.com (2603:10b6:404:55::22) with
- Microsoft SMTP Server (version=TLS1_2,
+ by BN6PR03MB2611.namprd03.prod.outlook.com (2603:10b6:404:55::22)
+ with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4415.18; Fri, 20 Aug
  2021 09:31:24 +0000
 Received: from BN9PR03MB6058.namprd03.prod.outlook.com
@@ -56,30 +75,31 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
 Subject: [PATCH] arm64: dts: synaptics: add DT for AS370-RDK
 Message-ID: <20210820173108.01d5c6de@xhacker.debian>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: BY3PR10CA0027.namprd10.prod.outlook.com
  (2603:10b6:a03:255::32) To BN9PR03MB6058.namprd03.prod.outlook.com
  (2603:10b6:408:137::15)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from xhacker.debian (192.147.44.204) by BY3PR10CA0027.namprd10.prod.outlook.com (2603:10b6:a03:255::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.19 via Frontend Transport; Fri, 20 Aug 2021 09:31:21 +0000
+Received: from xhacker.debian (192.147.44.204) by
+ BY3PR10CA0027.namprd10.prod.outlook.com (2603:10b6:a03:255::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.19 via Frontend
+ Transport; Fri, 20 Aug 2021 09:31:21 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-Correlation-Id: 3b4c8672-f10f-45d9-999c-08d963bd46fd
 X-MS-TrafficTypeDiagnostic: BN6PR03MB2611:
-X-Microsoft-Antispam-PRVS:
-	<BN6PR03MB26113DDBFDBAC8656DE27931EDC19@BN6PR03MB2611.namprd03.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <BN6PR03MB26113DDBFDBAC8656DE27931EDC19@BN6PR03MB2611.namprd03.prod.outlook.com>
 X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	CPErIwlyU1WV42v2pMy29cKbYoXzcaw60ZJkvFQJBSqWg9RSU/8zeDnU2Kd3RBTa+MYlx4FOFso5hu6tp2rOgNKD+WK+oopnrvNiKz98rZitOKZvYMmud1poNdstFKD7yW546O4A+ULRq09Rg6FwE05a1IKQ5FLPKZrF3YCCrtqa+BrL1ZIu2DbsRfdArsQKvXxb6YrkQau805xUkbxo/XGS2dME4VMSlf/V+L+or4mfeyLmJ+DiJIj5e8j+y9eZqFC9EjS73KEG8B8t1eyKsl3T09Vw5ms35B353BkZ88NQ2tajf+PUgab5QxzzA53z8eq1Vm2od/g3fKFywkwVFzNTxYxr88JAHGiU1Fgf/spUjAE2CEXhRTvSj8eE7Abhvf43YSxpEj0IKN1M8uvzjbhuyvzoaGkwr4gcxWxYG2qdAMjF5bFo48tnrqoQLf35xJ8XpSU8PqhVLqVZKsHYiL6IOOmOEE+APp9lPlwvQnqleA/Sqv6UlGDO+jYLy53ru3fs3wKG8qwS4AEn4H5yusTs7wEwjvaFnyLnR/+DfOdpzmMeiEqOx0dHa/Id05t+lm2tLLGnxCmiWWa+IGhVf0Xm0+vVPOXSqTvtsU5nh3omYlGw6pywjArYTOLp5HH+ImPqFu/v2CeVGgEUfUaAWKp9IxWCim3tQ3gOzDoHC4NSpQOaazg49rIwXEnVf93t5sm9R744sQfjpjTvEie9bg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR03MB6058.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(136003)(346002)(366004)(39850400004)(396003)(66556008)(66946007)(6506007)(66476007)(1076003)(38100700002)(38350700002)(8676002)(55016002)(9686003)(956004)(7696005)(4326008)(186003)(52116002)(5660300002)(2906002)(110136005)(86362001)(316002)(26005)(478600001)(8936002)(6666004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: CPErIwlyU1WV42v2pMy29cKbYoXzcaw60ZJkvFQJBSqWg9RSU/8zeDnU2Kd3RBTa+MYlx4FOFso5hu6tp2rOgNKD+WK+oopnrvNiKz98rZitOKZvYMmud1poNdstFKD7yW546O4A+ULRq09Rg6FwE05a1IKQ5FLPKZrF3YCCrtqa+BrL1ZIu2DbsRfdArsQKvXxb6YrkQau805xUkbxo/XGS2dME4VMSlf/V+L+or4mfeyLmJ+DiJIj5e8j+y9eZqFC9EjS73KEG8B8t1eyKsl3T09Vw5ms35B353BkZ88NQ2tajf+PUgab5QxzzA53z8eq1Vm2od/g3fKFywkwVFzNTxYxr88JAHGiU1Fgf/spUjAE2CEXhRTvSj8eE7Abhvf43YSxpEj0IKN1M8uvzjbhuyvzoaGkwr4gcxWxYG2qdAMjF5bFo48tnrqoQLf35xJ8XpSU8PqhVLqVZKsHYiL6IOOmOEE+APp9lPlwvQnqleA/Sqv6UlGDO+jYLy53ru3fs3wKG8qwS4AEn4H5yusTs7wEwjvaFnyLnR/+DfOdpzmMeiEqOx0dHa/Id05t+lm2tLLGnxCmiWWa+IGhVf0Xm0+vVPOXSqTvtsU5nh3omYlGw6pywjArYTOLp5HH+ImPqFu/v2CeVGgEUfUaAWKp9IxWCim3tQ3gOzDoHC4NSpQOaazg49rIwXEnVf93t5sm9R744sQfjpjTvEie9bg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BN9PR03MB6058.namprd03.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(376002)(136003)(346002)(366004)(39850400004)(396003)(66556008)(66946007)(6506007)(66476007)(1076003)(38100700002)(38350700002)(8676002)(55016002)(9686003)(956004)(7696005)(4326008)(186003)(52116002)(5660300002)(2906002)(110136005)(86362001)(316002)(26005)(478600001)(8936002)(6666004);
+ DIR:OUT; SFP:1101; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?u52s9kJ/f/KrKy5/kb1UvKB5NS/u/h1i3gPnhnXwX0rNd5rH+BaK9OZHjs8z?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?u52s9kJ/f/KrKy5/kb1UvKB5NS/u/h1i3gPnhnXwX0rNd5rH+BaK9OZHjs8z?=
  =?us-ascii?Q?rr+Di8PozwxFuLqiKY7E2i/SB5rWzTCyqQBFyLZK+a+qBlEGrW/lzyCpxu9i?=
  =?us-ascii?Q?54RXZVO9eb7J+8iS0tnR3gmvf7n8e0Es4cTW0mfpgDjbjqiMD47P3SV0Y0cp?=
  =?us-ascii?Q?GexHHS07jhU6FwCc81qMCZZdwOVN2LSarLZskKpL3zRNcL8imYWnxMzg2A4P?=
@@ -106,13 +126,31 @@ X-OriginatorOrg: synaptics.com
 X-MS-Exchange-CrossTenant-Network-Message-Id: 3b4c8672-f10f-45d9-999c-08d963bd46fd
 X-MS-Exchange-CrossTenant-AuthSource: BN9PR03MB6058.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2021 09:31:24.2352
- (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2021 09:31:24.2352 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
 X-MS-Exchange-CrossTenant-UserPrincipalName: cewd6rK0niw1EkwjzPJripGM0c3fJFmES7pmTKF4P5WtCOTZh5qLvLxLKihGKrA5w8DQMVS7YamV0LFrEdckUg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR03MB2611
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210820_023128_855297_654F0DED 
+X-CRM114-Status: GOOD (  14.95  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210820093108.UVR6RTUkPKFTAd8w4bVM5RVr2cKuyn7dsRVaSfNfdBc@z>
 
 Add a basic support for AS370-RDK board based on the AS370 SoC. We can
 get a basic shell on the uart console now.
@@ -178,3 +216,8 @@ index 000000000000..6f5c37c98be6
 -- 
 2.33.0
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
