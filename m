@@ -1,30 +1,31 @@
-Return-Path: <SRS0=d+vD=NL=arndb.de=arnd@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25B9DC4338F
-	for <soc@archiver.kernel.org>; Fri, 20 Aug 2021 19:56:12 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id D758D60F8F; Fri, 20 Aug 2021 19:56:11 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0CF6660E78;
-	Fri, 20 Aug 2021 19:56:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0CF6660E78
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Ml72g-1ml2Gb22ua-00lX3E; Fri, 20 Aug 2021 21:56:09 +0200
-Received: by mail-wr1-f44.google.com with SMTP id q10so15790758wro.2;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ADD1C432BE
+	for <linux-devicetree@archiver.kernel.org>; Fri, 20 Aug 2021 19:56:12 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 10F7B60E78
+	for <linux-devicetree@archiver.kernel.org>; Fri, 20 Aug 2021 19:56:12 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S232417AbhHTT4t (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Fri, 20 Aug 2021 15:56:49 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:38371 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229812AbhHTT4t (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Fri, 20 Aug 2021 15:56:49 -0400
+Received: from mail-wr1-f46.google.com ([209.85.221.46]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mi23L-1mvCKe1wi9-00e5XP; Fri, 20 Aug 2021 21:56:09 +0200
+Received: by mail-wr1-f46.google.com with SMTP id x12so15712968wrr.11;
         Fri, 20 Aug 2021 12:56:09 -0700 (PDT)
-X-Gm-Message-State: AOAM530p03xErpoT7RgVb9x5sGeDhtsP+dbMotedFXVYp13hFtLZg75B
-	gielZ0q4j9QDTYhnEcw6Pmjo8eZGeu3HUl4reyo=
+X-Gm-Message-State: AOAM533XIR7RoESpMDFEl4xCveGTGfuz0wRwnWy8BDtQohlQP3Nc36yn
+        jmLlCwnIpSbVdoeyOHl+vocCRTK5MblTeWFE27g=
 X-Google-Smtp-Source: ABdhPJxlsOZO56JajrT3f4dcrPBCUnIdfw1q5w7mc1qjtBPwrpWswZjsj3ahvDK6RwyOb2e2+QJZRAZJL69/UIIllqY=
 X-Received: by 2002:adf:e107:: with SMTP id t7mr485780wrz.165.1629489369140;
  Fri, 20 Aug 2021 12:56:09 -0700 (PDT)
@@ -32,36 +33,42 @@ MIME-Version: 1.0
 References: <20210820173108.01d5c6de@xhacker.debian> <29e96ece-8541-a7a2-c6a9-453be6644eed@canonical.com>
  <20210820182708.51d13e29@xhacker.debian>
 In-Reply-To: <20210820182708.51d13e29@xhacker.debian>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Fri, 20 Aug 2021 21:55:53 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 20 Aug 2021 21:55:53 +0200
 X-Gmail-Original-Message-ID: <CAK8P3a2vkZVt1bb7-iDGaSHp20U9d8QXu6AcrUMceJSS9Q_-4Q@mail.gmail.com>
 Message-ID: <CAK8P3a2vkZVt1bb7-iDGaSHp20U9d8QXu6AcrUMceJSS9Q_-4Q@mail.gmail.com>
 Subject: Re: [PATCH] arm64: dts: synaptics: add DT for AS370-RDK
-To: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+To:     Jisheng Zhang <Jisheng.Zhang@synaptics.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, Arnd Bergmann <arnd@arndb.de>, 
-	SoC Team <soc@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>, SoC Team <soc@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:1zEAhe2ATod3w4FUH4b2Wuwu22USPjuiErwZWdhTjRRnaJvJVv2
- 7Je4yjYVMR6PsYxG0Zb67xV3A2vOEaDrqlptxpf1lBjKpe14ydIC+OrgjASns3aum9EnoUm
- EP5bEc1LV9gR2RNlPeW+09QRF3LbMWA9BNKq/J1+r7VXNZUcrCBH0I6gQ9foxcykha9ocec
- +UixPo3tyXuuwdiYr38kA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:QffU9aTovFY=:epjIwRvZtkhSPKvkb2K+Av
- RfGu/OF3yi63yMg8DChfczGKdWuUms1hzV9QoY5tz1CFgyUv+3X5NLRRy9If3x6cGT+iRSZTR
- 64DQXfmaXYpGUkmRUrxwMpjzyn+TSz/9U/EeWM+j131v9V7AvNKIlT+O7s/HRN0BYBqCSvyeN
- TXbZ/l4vhy8RUjF3rLQ24/YuufaeeZFCBePZYl0d31Vml//uXvq9n4ACjZKzgftUUMCKIShB3
- 2J8pdy16EpOTXPFiS8keiuqDNkSSLi5OOZ2LRARk5C3pr1AIoxaCiamA+qj3+m+Q8Pf6Y28+m
- QJBre3Qw7twPXueUzXZTAU11z7n8xXVQzSXvdSQdzEDF1yGxaxUsxdaKMB10FTS7jLvcdgn5g
- kk+zrGqe8R640tSL61v1E2nORESblRHoiWVJogQEW2hfE+101mz4ZbAbaSUEohxVTtVZw8S1t
- Kr04AllqtEy+r2aM7lfgmUL3GFsz9SYCh4lJ5MEAdQ4ssrY4/dhQq5zqRUCh9Af1S3YtX8xFj
- DOxtuFF52IQPZmHfuiNZSYWbOf9WX67Vvr3xK435bW8W8Rqg2w86oA7EIVsm6uG4j5U3f7Tcr
- VPaoV/MCAJSr0mGmM/uxkKyTALbqx2uzzN0bRi2BrwrDMCkKEdc5iYoCnbx6EFyC0wNhQTwsM
- uc4ghsfrqXVkdl0vbBfRuqjLJ8TOWKVRJ4j6T/ckAZKRhdlVopLZJ4IwqKEdx9he9X6mV4z04
- YcKx09kRvOthMcTqAf+87qecQKAgrT+5gNVBql/pbUQXpt7/duweaJaV1JRVsJ8+D/wM3/RC4
- bSUUYAiMRz9CEiCGMXv9QPBKB6tUxUbRrNnnO1y5XQN+fKUt+mG1hQn65queCN2YSL2jXRm
+X-Provags-ID: V03:K1:QimpFDRslHCiuY63cyRM+AAa7RQ8Z9xxAuK1gjDezpm3GVvJuEh
+ p5CLs+z3EixRSaw6tjsF/NTP5DIzEgx0kuT4tlfAYQD4DbJUZFz+NxVLCK3/8RR+wl7hroa
+ hXAITDyQe5cdbG1e8gR8FOAQMcz0gtLhbOajS6GoGqnfmsyXXYWG3LIk//vl6BRq1Na36dO
+ 6ezvm8CLyRXpl3PqQAqHQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mLwtpR0sOQ0=:T0fTHYR5S5lsmlPd0tTNEx
+ n38jf770zHkF5KbhPwOWOXm5DHuzSeuFnZGWGkd9aoOSOSMBI2YGehNDUu9Nx3gPu31YmcHMl
+ 0xDPdkJa0JqtXHCMkebr9V3ja+3kIAIFGh2XzIiJmni4wg6nedzFk8lMMs70NMTMQvDYQtYEn
+ VvLnYwMMGncaPfgzEYiej0NrD369Dj/4iCswsv/89y6qwQyguRg2gtJSg3N5ZVTSQHbnDleMA
+ DFoD4lc4FUgniWFBGZyERmXSGbF3eQu7hNqh9ihT87SMF2JGAWLLi7qxtQHOPtx2x5a6dnBih
+ 1IC7kv++8AssIzXZB27rbyO1SessWkI2DKJsEKoinvzIOqcHXXU7CpcoC25g/l6wabQpDCac4
+ muEkpVEMzDYWEKyCbkxHK5tOJv9socRfyCqM3qvl6PgmmfuxL3CcjA4sflitGdU1NQlAtQlaI
+ tkdivyVJV1yLLLY3JFbGCJAVZosTz5hXZexKKqKgGeP+f53niXi7n1S8dGT5Hascu+/0DOSLD
+ bR7Huz8l+0an6TrpSTcOG9wsGCP2rklencgyIimquAwH50aTI301uWtBouO2qVzv1Hcf45Hk8
+ MmWzUQvkNlEmhVtXZeYCUjkFvhZUeaG7Q0+kTcuCoc3qbXnX4/c1qMjyzWb7+yRJqwevcsUct
+ WlCTR0om0GDgk674hY3DsBAQjy/2z+FtuuYp819KT2bwe31SmGbr9jYgy5ggwBrkZDVFuwTqC
+ M5a3flpfPY1BbUaI2+ELCWzPY4xSuI0Iw3JXXSj9Shw9BsvJjTa+4DBMmvoCGrBkIC4YvrFxx
+ MBmwUxQkM/AhH3C18yFHcx1hO02zIfUorjsykpRWGIE8+CoaTUJOoHH8MG5PQVhN1VM3fTY
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210820195553.QLDGz-moTr8ZXEgF-HCECUH6TRtZ9g2KTprrxumBRew@z>
 
 On Fri, Aug 20, 2021 at 12:27 PM Jisheng Zhang
 <Jisheng.Zhang@synaptics.com> wrote:
