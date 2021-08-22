@@ -2,91 +2,121 @@ Return-Path: <SRS0=40XK=NN=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9788EC4338F
-	for <soc@archiver.kernel.org>; Sun, 22 Aug 2021 19:11:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 123B6C4338F
+	for <soc@archiver.kernel.org>; Sun, 22 Aug 2021 19:12:13 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 5486B611C8; Sun, 22 Aug 2021 19:11:11 +0000 (UTC)
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	id DECF061206; Sun, 22 Aug 2021 19:12:12 +0000 (UTC)
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 23BD961206;
-	Sun, 22 Aug 2021 19:11:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 23BD961206
+	by mail.kernel.org (Postfix) with ESMTPS id B2CFE6126A;
+	Sun, 22 Aug 2021 19:12:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B2CFE6126A
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f170.google.com with SMTP id e7so14553424pgk.2;
-        Sun, 22 Aug 2021 12:11:11 -0700 (PDT)
+Received: by mail-pl1-f179.google.com with SMTP id c4so8876531plh.7;
+        Sun, 22 Aug 2021 12:12:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5WOhtJyCLvDyk28Uv6Zj5si2SYr4yFsA2nofOG2/o1k=;
-        b=Wz0kZ27KKW6Mkr0Ljumz+UEeVmlScKBd3SqmrVBy6KUfr0wF7nyeSOKn17vo71LplZ
-         oZ2FRQhL3WZekO7gvtgQDi99tK5ZmTJFqu8qfP7zzNuQVSAkx0+fxEkR//gcJ5Dh/X1r
-         B6LyfFsNTSZv3XnjF0RInJ0sFom9tDOsnjcaZwD1/sKl7H70ggBXS1n/0xU9jRaJcL/j
-         TzoxI0ObF11ea83IhP7yeEfwZAfd5SDKZ9WqS2w53TTFaqZqUJy2I/1aABEg7lw79ejV
-         y3nfCNPkOcgLdIoeT6EmOETyueHNf5R7e29BP7/Xkw4L6HzEv4dmvvkMDtpbnv98FR4W
-         VJqA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HqLZmepQrKc9lx/z79M6Ifhxm7Ymq86aEQN8GvgSv6g=;
+        b=X3yQc6GnrI6r7AnR/mfCNcjXqy+BU5BYcuUxpvM58lspw5iipOWSTgIh5brI8lsusH
+         /xauYGJn9piNjwYgmoa7SL/ztltx+XKI3bi8GIvl0+3ASaVjkB0Tm06Wjox0Dm/fBpC9
+         0uqRHJJwZ2ShJNrR4ERs1kwVdN1jzj/4zie3gpZl6IaIgIne/JYBD/fC7jgnsAb95Fn6
+         kUjs+c7clZUCXYMtsQeZTDGR7y7Ypr7PemHP3hmp1d8VKVOQ5y8HutalhtbuYUOL1x+W
+         sZC+p15f4CloQ4U7R3j2NKKv/5j5PZI7XiWNrckDp86waAlBCYclCxOzIuXfcFPG5jOG
+         HpEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5WOhtJyCLvDyk28Uv6Zj5si2SYr4yFsA2nofOG2/o1k=;
-        b=phdjUnI1qw8RrvADgGuv55GuGv9jbz7UkclCBPPIPCWfl5tNWunix7pW6a7depzmBf
-         GOB33X428SZUu4cIiYplolTzFjIG5L4yJr19zioVnu8m3oRUjqmAfS5kpx/b/zTBV/G8
-         Q89upevaENbZSGIi+J7/prtbkRBkGxyZ/IIdItK8JaBcq5L5Jzc71fBc7wOER1RFD39K
-         zj+cG0/Yu74IOqtEdDcbtmwaLBgSO2yhIs5aKSK0qY9x+B7aYcODZRXhGr5B0sXK/m4t
-         tUALaudS3isactjT3fZdw9c47do7Hs7dzDPUu3dPOzQ2xDJswDNyWcZP/xqzS5DtaZVR
-         ndCg==
-X-Gm-Message-State: AOAM532bMZpGy4Or5O/wk+KV9MMNV3VyYeohXk22hew/PudISZGcHZGo
-	rt2I0tQXvtMtj0w4T7eB9Jc=
-X-Google-Smtp-Source: ABdhPJxYC7o83eBX/pP5vI/s2sm27ag7i588rxJM1xgfgu0UDLC/aq3mqIR7U+jtN3rxmI4KNTSelA==
-X-Received: by 2002:a63:dc03:: with SMTP id s3mr28947680pgg.88.1629659470822;
-        Sun, 22 Aug 2021 12:11:10 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id u9sm15542103pgp.83.2021.08.22.12.11.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Aug 2021 12:11:10 -0700 (PDT)
-From: Florian Fainelli <f.fainelli@gmail.com>
-To: bcm-kernel-feedback-list@broadcom.com,
-	Matthew Hagan <mnhagan88@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HqLZmepQrKc9lx/z79M6Ifhxm7Ymq86aEQN8GvgSv6g=;
+        b=FOzVxlssjx1Ih5qWUqn/DiuakCH285F6Cp7pdflYQQqlw47s6Gzl5GXeST7Jzrza+B
+         ChIBF0D+f2+SK/n4TyQUeO6CqXWNa817hkv8/EYXoKSKyYfv+zA1CsWPDW6ZhABRnEZy
+         g9ieMHO2vi886FLf3/LgVrFv/msCnMsfZi7c2MNE8P4vvVns7NqWVRHSyvY6LDJmTe6A
+         btgoKnpg1FsRa01Pjj3aZa30B3OuGIUJLQhyLe5p+BMie74y+CoTnyQghOP0pmyIsqu0
+         DZiWIfZpKApK12hKmrlRHoU0vzR3/qkxHow0paKZ6QWIN8JvONviThhxiaQ2xrpjB94i
+         xS2g==
+X-Gm-Message-State: AOAM530GIjm0/oYrkGnEUzUx7JNOyoB0VSy5o0Y17DXJc3M9OGiliq89
+	dOKUX6RWEOwCcKZVxJEbtAE=
+X-Google-Smtp-Source: ABdhPJwD6IqDxQ/V4tvshJc+8M1kmIbPfg9RNGWammXPYoviFSDArmXwwDAOrgxg30KkyhWwRgWZag==
+X-Received: by 2002:a17:902:aa06:b0:12f:66dc:be7f with SMTP id be6-20020a170902aa0600b0012f66dcbe7fmr6831383plb.9.1629659532350;
+        Sun, 22 Aug 2021 12:12:12 -0700 (PDT)
+Received: from [10.230.31.46] ([192.19.223.252])
+        by smtp.gmail.com with UTF8SMTPSA id u25sm13115374pfn.209.2021.08.22.12.12.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Aug 2021 12:12:11 -0700 (PDT)
+Message-ID: <f8510e24-3f1d-47e2-3981-7415f0926a1d@gmail.com>
+Date: Sun, 22 Aug 2021 21:11:57 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.0.1
+Subject: Re: [PATCH v5 0/5] ARM: dts: NSP: add Meraki MX64/MX65 series
+Content-Language: en-US
+To: Matthew Hagan <mnhagan88@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Vladimir Oltean <olteanv@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 5/5] dt-bindings: arm: bcm: NSP: add Meraki MX64/MX65
-Date: Sun, 22 Aug 2021 12:11:00 -0700
-Message-Id: <20210822191100.3714613-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210806204446.2981299-6-mnhagan88@gmail.com>
-References: <20210806204446.2981299-1-mnhagan88@gmail.com> <20210806204446.2981299-6-mnhagan88@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+ Florian Fainelli <f.fainelli@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, Ray Jui <rjui@broadcom.com>,
+ Scott Branden <sbranden@broadcom.com>,
+ bcm-kernel-feedback-list@broadcom.com, Sam Ravnborg <sam@ravnborg.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20210806204446.2981299-1-mnhagan88@gmail.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20210806204446.2981299-1-mnhagan88@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri,  6 Aug 2021 21:44:36 +0100, Matthew Hagan <mnhagan88@gmail.com> wrote:
-> Add bindings for the Meraki MX64/MX65 series.
+
+
+On 8/6/2021 10:44 PM, Matthew Hagan wrote:
+> Changes from v2:
+>    - Introduce boards to Makefile in same patch as the board dts is added
+>      (Vladimir Oltean)
+>    - Use alphabetical ordering for labels (Vladimir Oltean)
+>    - Remove address-cells and size-cells in qca8337 switch nodes (Vladimir
+>      Oltean)
+>    - Remove "cpu" labels from switch nodes' CPU ports (Vladimir Oltean)
+>    - Various LED fixes, utilising dt-bindings/leds/common.h and correctly
+>      specifying LEDs in the form "led-N" and with the color/function/
+>      function-enumerator properties.
+>    - Fix PWM LEDs and corresponding pinctrl bindings. (Vladimir Oltean)
 > 
-> Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
+> The following changes were submitted as a separate series:
+>    - Introduce patches to disable QSPI by default and enable where used
+>      (Vladimir Oltean)
+>    - Move mdio@18032000 node from board related file to SoC (Vladimir
+>      Oltean)
+>    - In addition to above, relocate mdio-mux to bcm-nsp.dtsi and fix
+>      the resulting usb3_phy issues
+> 
+> Changes from v3:
+>    - Sort labels on mx64 a0 dts files into alphabetical order as well
+>    - move include directives for input/input.h and leds/common.h to
+>      bcm958625-mx6x-common.dtsi
+>    - Whitespace fixes in bcm958625-mx6x-common.dtsi
+>    - rename "senao_nvram" partition to "nvram"
+> 
+> Changes from v4:
+>    - Move chosen and memory nodes from bcm958625-mx6x-common.dtsi to
+>      each .dts file (Arnd Bergmann).
+>    - Append [@<unit-address>] to memory nodes.
+>    - Create Ax stepping-specific dtsi for Ax devices (Arnd Bergmann).
+>    - Append read-only property to at24 eeprom node.
+>    - Remove L2 properties which should be defined at platform-level.
+>    - Correct NAND node names.
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
---
+I applied patch 1 first such that we don't get warnings when we apply 
+patches from there on during bisection builds.
+-- 
 Florian
