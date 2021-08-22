@@ -8,14 +8,14 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6275BC4338F
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 22 Aug 2021 19:09:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1045CC432BE
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 22 Aug 2021 19:09:43 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 25C6D6126A
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 22 Aug 2021 19:09:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 25C6D6126A
+	by mail.kernel.org (Postfix) with ESMTPS id D263461250
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 22 Aug 2021 19:09:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D263461250
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -24,53 +24,53 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=AdhBJGjYOLX52kyIKKqPvX7TxZbzmw4b9pR0uqSxNxc=; b=2I9vH2YHcpSdy2
-	i/dSY6romjkxWh+RxmrdEHdpSuMqsWmBi2XKVwOI4DKV1gYpgvY5U9QPJuSz5inC1nfLclSN3j9jN
-	VY9NJ7APjTSPUC8QKO8Y81V9kZSYiG97pdeqD1zs2KPF/iEe8CX4CyJElL61xnaziLE9L07LT27je
-	Uua5Rdt2rRF+Qi1niGlPXugcpPT6xt0PKNdsVl4BH5YXmAqiq9E/H17BMHqNVPwShnRV+Xqm8G1NL
-	ykNI5/ORfYkC1mxej1A4hmfiT3lYRLqq9eLzHujRAg4aVBRkfIOP+w8iueC9mQX6o3PdRFMqw+sMT
-	/nM3aglMcQUNzRdmm6CA==;
+	List-Owner; bh=NMCaxJ7wmM48mm9TnpHTLuFahLFimXhthNQfHcAFrN4=; b=OcES1YxvFvOfp2
+	v0RV90fT5oCjuaEHL5uTDJ2+DLBUFETNZ4CC9C58Zeq4P8BMLk+yM8OGTN3lZnzZLb4xpFJjABQlv
+	1YYy7xG8zPhKEihhiQCu3gFPW1NB+MwljQ60XkPYa7fIK8HQ5cQyEVk/rU8SZlgXxVClWP2/E5hkA
+	iHJ8r8nacx5f5lT3pSDicOAJmHubNY2fUqV8CzPKYLTOXe12sRWDJDNe1gIuQ8S0XURZHZnZZQONC
+	+a+45HuEceKdY1OHcIeTs5gnwHRAv0wHDlvwoXxfjcjgpqjAnBE9jQBOLRpuN14hSiKUUNnPRfrVF
+	Hcp5pn7GJq036VSOawxA==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mHsoX-00EYot-0L; Sun, 22 Aug 2021 19:07:25 +0000
-Received: from mail-pl1-x630.google.com ([2607:f8b0:4864:20::630])
+	id 1mHsoC-00EYlo-Bb; Sun, 22 Aug 2021 19:07:04 +0000
+Received: from mail-pg1-x52b.google.com ([2607:f8b0:4864:20::52b])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mHsoU-00EYoO-2u
- for linux-arm-kernel@lists.infradead.org; Sun, 22 Aug 2021 19:07:23 +0000
-Received: by mail-pl1-x630.google.com with SMTP id b9so4501929plx.2
+ id 1mHso8-00EYlP-Nl
+ for linux-arm-kernel@lists.infradead.org; Sun, 22 Aug 2021 19:07:02 +0000
+Received: by mail-pg1-x52b.google.com with SMTP id t1so14553227pgv.3
  for <linux-arm-kernel@lists.infradead.org>;
- Sun, 22 Aug 2021 12:07:21 -0700 (PDT)
+ Sun, 22 Aug 2021 12:07:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=zxXXhh0DEqjiPk1bf4TGcus3ngVBbA5mFl/MCDhfwBQ=;
- b=MLptEgfw0gVbD2H1/ibOdWn1rw3SMv+6nXCsV+5RBRBP2zY/bq2myNmj+tNlYHZK4n
- Cu2Yk8jFsHhhZFaYzuTf4yuq/Lj3lNiIiDPCRTr/hS/FhsTLtRQPFrfP512rkeqmpIJJ
- WrJ+1l2/43sZei+NGQtCnkLh2sEQe2tGdfOILUy3A1/f0tZBv6go1Fmbx/l38VyuIFoy
- ygYfJaVI68vmPzPfG1GxNw+88nmTIiIBU+dakSy6PqipHMi+cgEsswbuPl2CklJV6w4M
- COcG9RN6jlI4I0iw5FXFu4Wcg7oBKKF4S8nRyRjvkUQ0NY+DxJf/eJsRqjqALD+Ry1Di
- 6nKQ==
+ bh=QChRC5bsvV5GsGHtGsawsuaXm1RQ/2QbEQSA8oSl42s=;
+ b=X7x1jGQ6jvPK5Ng6oNKbipRs+whc4v/ZBhTbx/hriXIHDKB+xOQ4xbLPAgFiFFp4q+
+ 5C6MUCmF/Ncg2S5j3TqDLO5Fa932Tx7097vE5q7QVAY8F4JHbFpItZzFFrsLdngit0gi
+ oUIM/ZnA2J+AQhY85BjOofHjqLq4i9wJnvJxduNGNE+G7LNIZGiUywrT14V0cF9Juk6x
+ keXb1B3FOnx1H3VAU0aq5EccZAkkebLqC+1uEZlDWTiy3w7bOxAH+heZrnzGQyWH2p3g
+ 2ZQzZpuYzVSRZzE0D2HExmpMvR9PxpFmuJErLapOShFXakB9Yh3L17wNIn1RGlRQR2vO
+ w4yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=zxXXhh0DEqjiPk1bf4TGcus3ngVBbA5mFl/MCDhfwBQ=;
- b=RyZ8OoAivwAkDQbtNmSg6d9bKjJSzFKoSSl9x46K/XhU336Y5xz5sCHVKw54gzUlXH
- Ie0+7YGOTFD86vIxdyxQHrtI1jP3hhWFf2gaYXm1ULEliERRzqkoC0DpTCPTJMlwBlz7
- pWp6QL+TrrRNGymrHa3kQTteVfVYXX9LPXthMFWgMu5nZOB0hlJXLFt7sZ0kbrWPu/fp
- /JBwFdfNoNWSqPpioW1v3PSCH3FGPIEBAxly2hSW0EX99OgLryzzG7YnD54XLxarL1qM
- MKyGoGenxB3RGJmYfs57O+GI5O6E/dZfma5vZIG4eSN7R88loLrLszr1m3g7rVZtTIXC
- EJsg==
-X-Gm-Message-State: AOAM533YOW+HEDP3HFiBeTANlFrPQ2nTMkom45ZiD1O9OaAEwd2zEeK4
- c/IuUD5I4hno7MYv8HSuLGk=
-X-Google-Smtp-Source: ABdhPJwVjTddJ7AzPTybQWZeiR2U0S6mCXyGLOYG0JqbA7fWLv9Nco4FHAB1gSqfjAeO0hPkCXE2Rw==
-X-Received: by 2002:a17:902:ce8e:b0:12d:ab00:2518 with SMTP id
- f14-20020a170902ce8e00b0012dab002518mr25396743plg.58.1629659241414; 
- Sun, 22 Aug 2021 12:07:21 -0700 (PDT)
+ bh=QChRC5bsvV5GsGHtGsawsuaXm1RQ/2QbEQSA8oSl42s=;
+ b=YlwXQCKwsxVGRProAQ+0Acwz+5TCCdfYdeXjVd6IeJPJMFTBzGA2GvLinzBTQrF4DO
+ m0g4wQernCBf87X/K6c41lCcybu3pM8Z2qqWeXZIX8/cjYMxKJUTDHFRgHlk2hXFXbaz
+ qcqVQ/kiODGN0TD0iUTgT2nkm93N9XFwxuLeFmROU5Zv4i0fz4pINSOdxEdCtyZxno+y
+ 83RtYG7EWdU58RBVWfbvbBS7oS1OaUOgOXTc/slbzd/vNSUZT+hFVTBWzMbYxsg158dc
+ WDMURbg9u/vA10Xf+JfBeQVKRzKwm25PyJP6KrDh3nLjNvx3QxmCwfh0+3U3CFxOBqkY
+ HpXw==
+X-Gm-Message-State: AOAM533SGyVFhZtAauEA3szq6I5xlYXVWCAW/HtDqvMOf4g52O64szyQ
+ HE1FWHYpriALQjf6NkZfC7E0U6FmuTHtjg==
+X-Google-Smtp-Source: ABdhPJyYv9kHBYTe3Pqh1Lt1N0bT8OWr/15WQznm6TVO/nUMDch7ktyIiIRuPMQHNk4Ghq7FqLWqEQ==
+X-Received: by 2002:aa7:888b:0:b0:3e1:6855:a01f with SMTP id
+ z11-20020aa7888b000000b003e16855a01fmr30210507pfe.75.1629659219785; 
+ Sun, 22 Aug 2021 12:06:59 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
- by smtp.gmail.com with ESMTPSA id b20sm12962871pfl.9.2021.08.22.12.07.15
+ by smtp.gmail.com with ESMTPSA id l8sm16915842pjy.42.2021.08.22.12.06.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 22 Aug 2021 12:07:20 -0700 (PDT)
+ Sun, 22 Aug 2021 12:06:59 -0700 (PDT)
 From: Florian Fainelli <f.fainelli@gmail.com>
 To: bcm-kernel-feedback-list@broadcom.com, Matthew Hagan <mnhagan88@gmail.com>
 List-Id: <soc.lore.kernel.org>
@@ -78,21 +78,20 @@ Cc: Vladimir Oltean <olteanv@gmail.com>, Rob Herring <robh+dt@kernel.org>,
  Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  soc@kernel.org, Ray Jui <rjui@broadcom.com>,
  Scott Branden <sbranden@broadcom.com>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>, devicetree@vger.kernel.org,
+ Krzysztof Kozlowski <krzk@kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 2/5] ARM: dts: NSP: Add Ax stepping modifications
-Date: Sun, 22 Aug 2021 12:07:11 -0700
-Message-ID: <20210822190711.3714024-1-f.fainelli@gmail.com>
+Subject: Re: [PATCH v5 1/5] ARM: dts: NSP: Add common bindings for MX64/MX65
+Date: Sun, 22 Aug 2021 12:06:49 -0700
+Message-ID: <20210822190649.3713909-1-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210806204446.2981299-3-mnhagan88@gmail.com>
+In-Reply-To: <20210806204446.2981299-2-mnhagan88@gmail.com>
 References: <20210806204446.2981299-1-mnhagan88@gmail.com>
- <20210806204446.2981299-3-mnhagan88@gmail.com>
+ <20210806204446.2981299-2-mnhagan88@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210822_120722_173633_E38248E3 
-X-CRM114-Status: GOOD (  10.47  )
+X-CRM114-CacheID: sfid-20210822_120700_831261_445B9342 
+X-CRM114-Status: GOOD (  10.27  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -108,13 +107,12 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210822190711.cJnZ4XoKJsnc9FibMU5flCy_ruPZUxUJGYd5yvENHN4@z>
+Message-ID: <20210822190649.HmTeb43n7OCXYh5UV6JT0bVlwlMp2VMsXjgm1UTxtgI@z>
 
-On Fri,  6 Aug 2021 21:44:33 +0100, Matthew Hagan <mnhagan88@gmail.com> wrote:
-> While uncommon, some Ax NSP SoCs exist in the wild. This stepping
-> requires a modified secondary CPU boot-reg and removal of DMA coherency
-> properties. Without these modifications, the secondary CPU will be
-> inactive and many peripherals will exhibit undefined behaviour.
+On Fri,  6 Aug 2021 21:44:32 +0100, Matthew Hagan <mnhagan88@gmail.com> wrote:
+> These bindings are required for all Meraki MX64/MX65 devices. These
+> common bindings include memory (2GB), PWM LEDs, AMAC, I2C (AT24), NAND
+> partitions, EHCI, OHCI and pinctrl.
 > 
 > Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
 > ---
