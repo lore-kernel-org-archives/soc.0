@@ -1,56 +1,96 @@
-Return-Path: <SRS0=EGTb=NO=gmail.com=robherring2@kernel.org>
+Return-Path: <SRS0=GAqo=NO=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 854B8C4338F
-	for <soc@archiver.kernel.org>; Mon, 23 Aug 2021 16:51:35 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 64F86613A8; Mon, 23 Aug 2021 16:51:35 +0000 (UTC)
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0A49C4338F
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 23 Aug 2021 16:53:59 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3DBB361371
-	for <soc@kernel.org>; Mon, 23 Aug 2021 16:51:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3DBB361371
+	by mail.kernel.org (Postfix) with ESMTPS id 898BA613B1
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 23 Aug 2021 16:53:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 898BA613B1
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f42.google.com with SMTP id y14-20020a0568302a0e00b0051acbdb2869so31226152otu.2
-        for <soc@kernel.org>; Mon, 23 Aug 2021 09:51:35 -0700 (PDT)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=GFi0309eFLub+iO0m7S/tQ7Uv9gDiyDIKRjSgsJLAZY=; b=QZD56ynp63lUSn
+	xzzOeSFgYiQoHGSXN2ySsDgLxELlihgTC0FSHIVQsc/myMxsyWIIFGmtntmYjpt5uo7MC4ffRGDnb
+	HzKgzS7+/kxnbh6CH5zS6SSPwVHOpQJ2Qo6PsXwDqDk86uPPK1hzehOyMnLr+w9Ai1OFmzUTqAOsu
+	HO0HMJTeLOPLNDVYvjbx24s0k27IHLamH0flW6Hg7FC70/VYy2tNMy9ez9ZILEsxGtXS5LsZq4cso
+	WyUXzJddF6/D/HgBVtppg6TahoT7VlhS3D5qBimVeluRemaSyWFrWHnlCuiACVQOO7YDcTftuv+mR
+	x2tS7he22zSXWOTKu2qw==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mIDAi-0003MH-2h; Mon, 23 Aug 2021 16:51:40 +0000
+Received: from mail-ot1-f52.google.com ([209.85.210.52])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mIDAd-0003Lb-Lc
+ for linux-arm-kernel@lists.infradead.org; Mon, 23 Aug 2021 16:51:38 +0000
+Received: by mail-ot1-f52.google.com with SMTP id
+ g66-20020a9d12c8000000b0051aeba607f1so29521060otg.11
+ for <linux-arm-kernel@lists.infradead.org>;
+ Mon, 23 Aug 2021 09:51:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UDttmrL3qkGY99O3sazRRvmpTIwGQDXC9kFpDK8dALQ=;
-        b=BzAraSIECVV2oU1PUZDiq6yVHiom/TL7B8/qK8fBpmmBl1bFP4YydxSfmL+9ZtOLY+
-         wqZuwCmE+mJsX7Ladm2nTPTfugriTw9v2o8DROQwikwRJT8985zGdni/oM/nIqEImo7Z
-         OPDGIQ1qjyiSVqz+rLdJb9Gl1NTYYr1Gc5NCQgiz7Oi8fdWBJg0PJ5T635TGRW2JaU+k
-         mV9KQXhIegLqUQ50Kp65sBRSzIxH3ylldyfaL2NNrFTR4V2Hv3UPg2Spp59oTtUvj0M0
-         WyQ2cf6lE5j6M32zYNrV4HmQ9GUY2rJmSjzjPyoFz5DgohNHYNQUsOUF9NonuDXtgMMR
-         35+Q==
-X-Gm-Message-State: AOAM530G/WN5D8nHTrkTiS52fSA6BBrpBVVKUPJHJoJB+axmZRbyxxYq
-	SI55zd/5cH6XLBOdcDNte7j/EvW41A==
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=UDttmrL3qkGY99O3sazRRvmpTIwGQDXC9kFpDK8dALQ=;
+ b=BfMVQnWbKnV9RBG7LWOoH42bKj952KtZ0CbwpVkJFzOxVTM45DnkR3hecQXTSvitMQ
+ eRa+RsHnh1oujwtFWEQs3rdMHAGFGmK38XMv/UVYXG4/Z+tzCa3Y0TypDosGj6MNYQkx
+ OH/F3YbpFUlTtQfIDBibRpixi8tFH+cDPzxXR4uRrd8g2DuLd72gOj6ivPxO5TrH4c0A
+ WOS3x3Iwp6PaPEds5zKR3MeOGK1E4r7pXHFXV3PDyj/riINDkmpLzkU5JNYbYXei2axg
+ Il0jc+nxqcr/raI6NCLhc3EyhRxRRxPCB3EuMTx/6b8ZPJS6XEACWaZFURj0IFECRJ/W
+ Gkhw==
+X-Gm-Message-State: AOAM533ZQoiDjXZ2fWGoEhHq5aVlPyi6pJQoRZk2m5EsNXbsTyKSV7R1
+ lAcrIdT8JqJPH7pZCV5d6ivVFeqMJw==
 X-Google-Smtp-Source: ABdhPJzVPFNHjoTnOGse9poCrgW5sZyAhkWWGtqRCkFEDQzIi/Lsc/nIF3km+UJ55+z7k475BhIgOQ==
-X-Received: by 2002:a9d:6a4b:: with SMTP id h11mr29603442otn.5.1629737494070;
-        Mon, 23 Aug 2021 09:51:34 -0700 (PDT)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id l8sm3524141oom.19.2021.08.23.09.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Aug 2021 09:51:33 -0700 (PDT)
+X-Received: by 2002:a9d:6a4b:: with SMTP id h11mr29603442otn.5.1629737494070; 
+ Mon, 23 Aug 2021 09:51:34 -0700 (PDT)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net.
+ [66.90.148.213])
+ by smtp.googlemail.com with ESMTPSA id l8sm3524141oom.19.2021.08.23.09.51.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 23 Aug 2021 09:51:33 -0700 (PDT)
 From: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2] arm/arm64: dts: Fix remaining dtc 'unit_address_format' warnings
+Subject: [PATCH v2] arm/arm64: dts: Fix remaining dtc 'unit_address_format'
+ warnings
 Date: Mon, 23 Aug 2021 11:51:26 -0500
-Message-Id: <20210823165126.2320910-1-robh@kernel.org>
+Message-ID: <20210823165126.2320910-1-robh@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210823_095135_765794_504C1C49 
+X-CRM114-Status: GOOD (  13.89  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210823165126.Ucb0nyhsv_jkFQ6fx6Uv2XwGJ0FulWBfotNNmPnl5rA@z>
 
 Fix all the remaining dtc 'unit_address_format' warnings except for the ones
 related to 'register-bit-led'. For those, we need to decide on and document
@@ -678,3 +718,8 @@ index 9fa5b028e4f3..23ee1bfa4318 100644
 -- 
 2.30.2
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
