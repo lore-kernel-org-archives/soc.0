@@ -1,125 +1,109 @@
-Return-Path: <SRS0=s/Qz=NQ=gmail.com=joel.stan@kernel.org>
+Return-Path: <SRS0=5QJf=NQ=monstr.eu=monstr@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FFE4C4338F
-	for <soc@archiver.kernel.org>; Wed, 25 Aug 2021 00:12:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A8C0C4338F
+	for <soc@archiver.kernel.org>; Wed, 25 Aug 2021 07:28:59 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 3174A611EF; Wed, 25 Aug 2021 00:12:37 +0000 (UTC)
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	id BB5E06138B; Wed, 25 Aug 2021 07:28:58 +0000 (UTC)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F307C610A6
-	for <soc@kernel.org>; Wed, 25 Aug 2021 00:12:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F307C610A6
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id z24-20020a17090acb1800b0018e87a24300so3558318pjt.0
-        for <soc@kernel.org>; Tue, 24 Aug 2021 17:12:36 -0700 (PDT)
+	by mail.kernel.org (Postfix) with ESMTPS id D847261178
+	for <soc@kernel.org>; Wed, 25 Aug 2021 07:28:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D847261178
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=monstr.eu
+Received: by mail-ej1-f41.google.com with SMTP id u14so24710668ejf.13
+        for <soc@kernel.org>; Wed, 25 Aug 2021 00:28:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FS1rSkA+fXAPOA6CB3lp7CTsa420KR1zgvw7ZpPtuNk=;
-        b=Gov3sLMj6oj0xQ8V+D7ZsVrJw9vBljQSHgGp+lWxosHkUBtMcTxPnTGRZ63P8deAtL
-         zeM1ENQi7qMkbE3eDbUXLXceqYS1djEkmFxhDglDfE04UBezbEqM0//e4zqiwCCFf1Ni
-         OrPi6CG1fll0mdJoQcrDMNQAZfqoXqvOHBJMRPj6FcsalRsXC5W5j3vWtOqMLfdAVRBf
-         A3Oi2NYgUVAy0ho6Hmdd4fC+SuQ6iBzOibOQsVyx1X08ZODjrTPSM8UViSiAT5Pav4iC
-         4TqX5PI/Bm2XDz7j49jxrEGx+FOGswC7K0wrq6058KYaTjQ7uR4koddeuTmCD1I+XcYd
-         YdoA==
+        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=EWkv2LY4ATYPWVUsgzFkn/MR1kSUr3gSJNpViVJ9w2g=;
+        b=MXhkijdXuekbIWw615VyzNQ8aLwUnZKOxWrp3lVywq9GjnMwcHZE7lrRaC2XN0i1st
+         XON0UatRG/BLPxGzQ9A7UgFmo+OBiLUfoQi9hfu+5WY7h7jrOJQp2T30fFyrH1elBNZc
+         UfmydetaBDObN/Rb4rnqEv8a7laJEWiVCHAgKNyzHfAjoGwnU88/RbsOzt1gSjFKBPXY
+         FAINQpXeDn9kJbZPa8ptwCxNdI5cLxbfEU8aRAYTNyW+h0P6/SRg0HdMb7KfnxDxbbNI
+         XjTvx2ihKVFANnnPyIBnzI888pH6yCfH+kc5UOZ+om5NAJOqxRqRV3/BN80kI0Ccm5XK
+         mTQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=FS1rSkA+fXAPOA6CB3lp7CTsa420KR1zgvw7ZpPtuNk=;
-        b=mHJ+UUSlY3S2lMjfXJc3G1HYMNdAJDZd4XpMsZhuqvIG/wnOKL3XDgkxaBjsAUGVF3
-         +2P/g0vAKZAeWyp8sSNquYgElCEwZAdHxKJWxHhxaN/nObg6tju7txdqm7Xn8XFCYK0j
-         MCrC20PJeRvuW3cGxOE6cc6MIFL1Y26rWx/FiTTfcaoZwi98jJSWmGDdeASeg9/FZzjR
-         o+gbK0wHMbe3J81hqBcqsr8lMz3GSJfqfa37PNYfdvj2QF4/5ldEia32wl0qnuwhqiCv
-         QxOmXhQVDQ/9010/pDb9sFhYvcrzK9rbeqzFbEl/ONo+prs7OsSIRZhlJ0bQY3ZiK93L
-         i2vw==
-X-Gm-Message-State: AOAM532EDA9Yewq1bvY35zC6SPUR605ORWzmSoufIAfREBN/ND5p8sLk
-	StZdPaI3APnDKyp4XF/p2ZnBey4RYx4=
-X-Google-Smtp-Source: ABdhPJw/zMnhQCVZYyssVzCneRY5mxWSQNvSFHJORT9ECX3nSCryPlt8HHbNbOOIrb+N4t9Q6siwqg==
-X-Received: by 2002:a17:90a:2fc2:: with SMTP id n2mr6961183pjm.112.1629850355992;
-        Tue, 24 Aug 2021 17:12:35 -0700 (PDT)
-Received: from voyager.lan ([45.124.203.15])
-        by smtp.gmail.com with ESMTPSA id g19sm3426853pjl.25.2021.08.24.17.12.33
-        for <soc@kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Aug 2021 17:12:35 -0700 (PDT)
-Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
-From: Joel Stanley <joel@jms.id.au>
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=EWkv2LY4ATYPWVUsgzFkn/MR1kSUr3gSJNpViVJ9w2g=;
+        b=ELxEbg/yCiIH9e8QDnASmh4ovEIomEYP+1i+o2Z7ie1GnbFb4C2BtU6PRkcenvo1ny
+         oRDWz04dAiOWRSOjS8pXu7Kj7ezpctUSCgqMF5VgAFb5NGqQy3/Xw3fRICS/JTs/4F4Y
+         B89nE2Mqokatv+Dp53yofQYWKdUT/G0G5DH+VYhxEzWEiue80sn3ZfymcvToDZTQFQsp
+         b2/SWJ3TzfD0aJinjiRM/kHrdgStOe6Q2XNzO75Q560zoy9WsB3XNpy5vrtCQbAD+MTR
+         m2saNFMVoN+MiWwLAx9CtStMOpYIpv2BRYgOuoNqwG8x11B5z2xZMYN8lJZNvxM8nufJ
+         z+mg==
+X-Gm-Message-State: AOAM531KiXB76DUZfS4K3x+LxmXiJMONfMf0I5kLOqsdtqRz7ycIQzRI
+	TTyRdgBcIRLghVXX8AoNY9hDlA==
+X-Google-Smtp-Source: ABdhPJx5sJVhqc6ZZhm+ZMukInZb9NG7LBF1Wt+ZH+SrbtAqaeeg1M48XOZYZDofUQ9cXWHULadQAg==
+X-Received: by 2002:a17:906:6ad4:: with SMTP id q20mr46387480ejs.433.1629876536424;
+        Wed, 25 Aug 2021 00:28:56 -0700 (PDT)
+Received: from ?IPv6:2a02:768:2307:40d6::e05? ([2a02:768:2307:40d6::e05])
+        by smtp.gmail.com with ESMTPSA id b18sm4412707ejl.90.2021.08.25.00.28.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Aug 2021 00:28:56 -0700 (PDT)
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: [PATCH] soc: aspeed-lpc-ctrl: Fix clock cleanup in error path
-Date: Wed, 25 Aug 2021 09:42:14 +0930
-Message-Id: <20210825001214.3056193-1-joel@jms.id.au>
-X-Mailer: git-send-email 2.33.0
+To: SoC Team <soc@kernel.org>
+Cc: arm-soc <arm@kernel.org>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+From: Michal Simek <monstr@monstr.eu>
+Subject: [GIT PULL] ARM: dts zynq: Xilinx DT changes for v5.15
+Message-ID: <f3dc69c8-8a22-e938-4ddf-b1052b8c1437@monstr.eu>
+Date: Wed, 25 Aug 2021 09:28:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+Hi,
 
-Move syscon_regmap_lookup_by_compatible() above the
-devm_clk_get() to avoid missing clk_disable_unprepare().
+please pull these two patches to your tree.
 
-Fixes: 2f9b25fa6682 ("soc: aspeed: Re-enable FWH2AHB on AST2600")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-Link: https://lore.kernel.org/r/20210824085522.1849410-1-yangyingliang@huawei.com
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
-soc maintainers, please apply this for v5.15. It's a fix for a patch
-that is already queued for merging.
+Thanks,
+Michal
 
- drivers/soc/aspeed/aspeed-lpc-ctrl.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
 
-diff --git a/drivers/soc/aspeed/aspeed-lpc-ctrl.c b/drivers/soc/aspeed/aspeed-lpc-ctrl.c
-index 6893c5ec3259..72771e018c42 100644
---- a/drivers/soc/aspeed/aspeed-lpc-ctrl.c
-+++ b/drivers/soc/aspeed/aspeed-lpc-ctrl.c
-@@ -295,6 +295,16 @@ static int aspeed_lpc_ctrl_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
-+	if (of_device_is_compatible(dev->of_node, "aspeed,ast2600-lpc-ctrl")) {
-+		lpc_ctrl->fwh2ahb = true;
-+
-+		lpc_ctrl->scu = syscon_regmap_lookup_by_compatible("aspeed,ast2600-scu");
-+		if (IS_ERR(lpc_ctrl->scu)) {
-+			dev_err(dev, "couldn't find scu\n");
-+			return PTR_ERR(lpc_ctrl->scu);
-+		}
-+	}
-+
- 	lpc_ctrl->clk = devm_clk_get(dev, NULL);
- 	if (IS_ERR(lpc_ctrl->clk)) {
- 		dev_err(dev, "couldn't get clock\n");
-@@ -306,16 +316,6 @@ static int aspeed_lpc_ctrl_probe(struct platform_device *pdev)
- 		return rc;
- 	}
- 
--	if (of_device_is_compatible(dev->of_node, "aspeed,ast2600-lpc-ctrl")) {
--		lpc_ctrl->fwh2ahb = true;
--
--		lpc_ctrl->scu = syscon_regmap_lookup_by_compatible("aspeed,ast2600-scu");
--		if (IS_ERR(lpc_ctrl->scu)) {
--			dev_err(dev, "couldn't find scu\n");
--			return PTR_ERR(lpc_ctrl->scu);
--		}
--	}
--
- 	lpc_ctrl->miscdev.minor = MISC_DYNAMIC_MINOR;
- 	lpc_ctrl->miscdev.name = DEVICE_NAME;
- 	lpc_ctrl->miscdev.fops = &aspeed_lpc_ctrl_fops;
+  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+
+are available in the Git repository at:
+
+  https://github.com/Xilinx/linux-xlnx.git tags/zynq-dt-for-v5.15
+
+for you to fetch changes up to c387eea58f931fe5d008df88cc75dfc3c704e3bf:
+
+  ARM: dts: ebaz4205: enable NAND support (2021-08-06 12:22:40 +0200)
+
+----------------------------------------------------------------
+ARM: dts: Zynq DT changes for v5.15
+
+- Enable nand flash controller for ebaz4205 board
+
+----------------------------------------------------------------
+Michael Walle (2):
+      ARM: dts: zynq: add NAND flash controller node
+      ARM: dts: ebaz4205: enable NAND support
+
+ arch/arm/boot/dts/zynq-7000.dtsi    | 21 +++++++++++++++++++++
+ arch/arm/boot/dts/zynq-ebaz4205.dts | 12 ++++++++++++
+ 2 files changed, 33 insertions(+)
+
 -- 
-2.33.0
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
 
