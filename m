@@ -1,246 +1,65 @@
-Return-Path: <SRS0=ky5b=NR=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D48EEC432BE
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 26 Aug 2021 14:38:57 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A014F61027
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 26 Aug 2021 14:38:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A014F61027
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Subject:
-	From:Cc:To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=bHsECygsGpz7AR2EHVAqSKnhAkkbrIPVZoDkGebxh/k=; b=HMu+25hsIcEAa2
-	CxvUq9LtxrWa0FyRVFQZgJRyOfFLMaoE8tz9kGVjNQ4Vu+g+B2P0+a2U8s0Np2rt2x3Z3IS/cNohe
-	q5Zz5BVCznj8g3NMqCCds2kd/E6aoSrwMcqxTSWWcFr6lila3XMR8T1KRXp/6GIxci70BQVHpCYeb
-	kEtaBDDCtYO5AXQ+aVNJDU/cKIfNkcItRiprKfL+BeeFjxCMbDOLGEO355c2sBl55nyD6fJD3WQkH
-	bAvTbVLDttBjNZhqW6F0uZChZZqQLQlefJeQPTq/mD4+s9FJryVdPVfqkp/BdYdgjrwLz52HVHny/
-	wHkldSttek9UT8u/STSg==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mJGUb-00ANyn-5J; Thu, 26 Aug 2021 14:36:33 +0000
-Received: from mail-ej1-x62c.google.com ([2a00:1450:4864:20::62c])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mJGUV-00ANyR-GD
- for linux-arm-kernel@lists.infradead.org; Thu, 26 Aug 2021 14:36:31 +0000
-Received: by mail-ej1-x62c.google.com with SMTP id lc21so6763259ejc.7
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 26 Aug 2021 07:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=monstr-eu.20150623.gappssmtp.com; s=20150623;
- h=to:cc:from:subject:message-id:date:user-agent:mime-version
- :content-language:content-transfer-encoding;
- bh=fqdn4lJUKRzdj4mN8Ayb3pqc13SnwWbXjGY05d9xh+Q=;
- b=wVlDegPjS9L8hoURYj3Y+W5NGFfPrnPMKhMhEhVCov91ymzvuFVeoEWdC3saj2RQdi
- rfifYbkqipoQHWBYqoAVTkpKkF6HbPXrzYZvmhmoM2POtF6+3TxIIV8uXcKwaoY3MjmW
- 79wCV21pQxHbBCHK+MZtDTDUykRid2VKBR0spX/b36mmD06bEbAtdxEiFtWhUDKHM/tB
- EBPvfCUSZFRyZDaDNuEHTYgR3io2/jGv8SsFmj3y15WryIyO4kBnO+7dMVZMQAyzo2aD
- 4bdWfXxNRNwGGTatl7CJ+FJ6N+gmzAaD0FRpweS6isBjvSwwR70Onk4v3JlIRUgc4cId
- pY5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
- :mime-version:content-language:content-transfer-encoding;
- bh=fqdn4lJUKRzdj4mN8Ayb3pqc13SnwWbXjGY05d9xh+Q=;
- b=oWTsX45YiteBxT/JdXa+s4jIki/WCgDeVGknu7DntrJJtNyx4+oxXdmF/bH6Lj6DME
- AfRyC2ZRfRa1gg5Y4dpo+pAon9fJKyQMytSkLwa2NGGn0maf5m4V4Ckyfjmg23mtubWN
- LljSY2J5LPgUJPC3BPJxai5GV+sO/J6xEeWxUHUnnCnMXCa/B0RdwhXO0++7jfJFrtBz
- 1RiH2mGa4A5CevICFbG4CtcSELFsNUa6EkE8iFt0tQnIJdbMYUxQtVcQ21LjojnJRqSs
- /J2cXnHxTD2bg4OGN5enHM2OHbKDmMsWgriyxz/z/HL+NUTnndNtX985hyqPS3u39Fr+
- c2Ew==
-X-Gm-Message-State: AOAM530IhPro1zuSRpgId+mbnL3DcAheqVtiPFDoHR95hU52FvjNTLZq
- 4J3hfX9irg+oFnn79m4NlEL8oQGDNaQkowO3
-X-Google-Smtp-Source: ABdhPJx7n3T+TpuxqqN6SWdBLuuk9zF8TxZNII/uEhIKYg2j9fKFNdhsQNZuQpoxYNH+M/zeQ+xtkA==
-X-Received: by 2002:a17:906:8506:: with SMTP id
- i6mr4662885ejx.397.1629988582828; 
- Thu, 26 Aug 2021 07:36:22 -0700 (PDT)
-Received: from ?IPv6:2a02:768:2307:40d6::45a? ([2a02:768:2307:40d6::45a])
- by smtp.gmail.com with ESMTPSA id y24sm1488268ejc.80.2021.08.26.07.36.22
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 26 Aug 2021 07:36:22 -0700 (PDT)
-List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Cc: arm-soc <arm@kernel.org>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-From: Michal Simek <monstr@monstr.eu>
-Subject: [GIT PULL] arm64: dts: ZynqMP DT changes for v5.15
-Message-ID: <cec98151-d7a9-3fdb-ba5c-dc1fd182c2c4@monstr.eu>
-Date: Thu, 26 Aug 2021 16:36:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 143C5C432BE
+	for <soc@archiver.kernel.org>; Fri, 27 Aug 2021 22:10:09 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id DBE1560FE7; Fri, 27 Aug 2021 22:10:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id C580560FD8
+	for <soc@kernel.org>; Fri, 27 Aug 2021 22:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1630102208;
+	bh=ilHv9TOzqKN0LDQZDCTFoe0K5SErn3JYN4TFP6Cp680=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=szrG1b7/mbm0uxMFg4r6wtFbL7rJ42uREaZKMrK4aj6g/uU7ilJ4CRYeB8Rprrtuy
+	 rwQtcq10x0xA4Wobv+13lJkH616B+heqxQiGwCwctKbkPtDk9VdhiVh5kFO1qx6cY4
+	 VoIlxcmbvTcC3JqWdaK2D3CsgqaUwQrfIZm57wgUJOUnOq/R1mRRlTztPsX3fktovA
+	 mWBA5AuDbbex9owsSpGX4rqq9fcvj/hXgGdJ/GCLemM2iLB47OkeQZ8A/uxBfWvrus
+	 NxELvVspHldhNOZsy7x8SqMZc22MueYu+bFxz77+D42Zx1784I7fB9Y2bELTMkCicb
+	 Vhx9KK7KDk0tQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id AC31660A14;
+	Fri, 27 Aug 2021 22:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210826_073627_662535_8746E8DE 
-X-CRM114-Status: GOOD (  18.23  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210826143621.w67w2_cobHqVPt729PyGNfPtra9csxDNfMl51pPGeyw@z>
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <163010220864.19400.4423592109344236397.git-patchwork-summary@kernel.org>
+Date: Fri, 27 Aug 2021 22:10:08 +0000
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-Hi,
+Hello:
 
-please pull these patches to your tree. I have one more patch for adding
-new Xilinx Kria platform but that discussion about compatible nodes in
-overlay is not finished yes. That's why I am sending this pull request
-without it.
-A lot patches are coming from dtbs_check fixing and synchronization
-among boards to better see differences. But also couple of drivers were
-already merged that's why make sense to enable it.
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (refs/heads/for-next):
 
-Thanks,
-Michal
+Patch: [GIT,PULL] arm64: dts: ZynqMP DT changes for v5.15
+  Submitter: Michal Simek <monstr@monstr.eu>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=537835
+  Lore link: https://lore.kernel.org/r/cec98151-d7a9-3fdb-ba5c-dc1fd182c2c4@monstr.eu
+Patch: [GIT,PULL] Rockchip dts64 changes for 5.15
+  Submitter: Heiko Stuebner <heiko@sntech.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=535453
+  Lore link: https://lore.kernel.org/r/4327460.usQuhbGJ8B@phil
+Patch: [GIT,PULL] Rockchip dts64 changes for 5.15 - #2
+  Submitter: Heiko Stuebner <heiko@sntech.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=536067
+  Lore link: https://lore.kernel.org/r/6569432.ejJDZkT8p0@phil
 
+Total patches: 3
 
-
-The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
-
-  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
-
-are available in the Git repository at:
-
-  https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-dt-for-v5.15
-
-for you to fetch changes up to 479c46133c0573b6549e437165bff1422634f45f:
-
-  arm64: zynqmp: Wire psgtr for zc1751-xm013 (2021-08-25 08:29:27 +0200)
-
-----------------------------------------------------------------
-arm64: dts: ZynqMP DT changes for v5.13
-
-- Fix issues reported by dtbs_check
-- Enable DMAs, DP, USB, NAND on various boards
-- Add description for irps5401
-- Add pinctrl description
-- Add psgtr description for usb3, sata and DP
-- Start to use nvmem alias for eeprom reference
-- Clean up aliases list
-- Wire qspi and usb3.0
-- Add support for zcu102-rev1.1
-- Couple of minor fixes and sync patches
-
-----------------------------------------------------------------
-Amit Kumar Mahapatra (1):
-      arm64: zynqmp: Do not duplicate flash partition label property
-
-Michal Simek (32):
-      arm64: zynqmp: Disable CCI by default
-      arm64: zynqmp: Enable fpd_dma for zcu104 platforms
-      arm64: zynqmp: Fix irps5401 device nodes
-      arm64: zynqmp: Add pinctrl description for all boards
-      arm64: zynqmp: Correct zcu111 psgtr description
-      arm64: zynqmp: Wire psgtr for zc1751-xm015
-      arm64: zynqmp: Correct psgtr description for zcu100-revC
-      arm64: zynqmp: Add phy description for usb3.0
-      arm64: zynqmp: Disable WP on zcu111
-      arm64: zynqmp: Add missing mio-bank properties to dc1 and dc5
-      arm64: zynqmp: Wire DP and DPDMA for dc1/dc4
-      arm64: zynqmp: Enable nand driver for dc2 and dc3
-      arm64: zynqmp: Remove additional newline
-      arm64: zynqmp: Move clock node to zynqmp-clk-ccf.dtsi
-      arm64: zynqmp: Add nvmem alises for eeproms
-      arm64: zynqmp: List reset property for ethernet phy
-      arm64: zynqmp: Remove can aliases from zc1751
-      arm64: zynqmp: Move DP nodes to the end of file on zcu106
-      arm64: zynqmp: Add note about UHS mode on some boards
-      arm64: zynqmp: Remove information about dma clock on zcu106
-      arm64: zynqmp: Wire qspi on multiple boards
-      arm64: zynqmp: Move rtc to different location on zcu104-revA
-      arm64: zynqmp: Add reset description for sata
-      arm64: zynqmp: Sync psgtr node location with zcu104-revA
-      arm64: zynqmp: Remove description for 8T49N287 and si5382 chips
-      arm64: zynqmp: Add support for zcu102-rev1.1 board
-      arm64: zynqmp: Add psgtr description to zc1751 dc1 board
-      arm64: zynqmp: Remove not documented is-dual property
-      arm64: zynqmp: Fix serial compatible string
-      arm64: zynqmp: Enable gpio and qspi for zc1275-revA
-      arm64: zynqmp: Enable xlnx,zynqmp-dwc3 driver for xilinx boards
-      arm64: zynqmp: Wire psgtr for zc1751-xm013
-
-Mounika Grace Akula (1):
-      arm64: zynqmp: Add reset-on-timeout to all boards and modify
-default timeout value
-
-Srinivas Neeli (1):
-      arm64: zynqmp: Update rtc calibration value
-
-Stefano Stabellini (1):
-      arm64: zynqmp: Add missing SMID for pcie to zynqmp.dtsi
-
- Documentation/devicetree/bindings/arm/xilinx.yaml      |   1 +
- arch/arm64/boot/dts/xilinx/Makefile                    |   1 +
- arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi         |  13 ++++++++++++-
- arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dts      |  16
-+++++++++++++++-
- arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dts      |  16
-+++++++++++++++-
- arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dts      |  18
-+++++++++++++++++-
- arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts | 298
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
- arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts | 342
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----
- arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dts |  49
-++++++++++++++++++++++++++++++++++++++++++++++++-
- arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dts |  24
-+++++++++++++++++++++++-
- arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts | 330
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
- arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts      | 264
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------
- arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dts    |  15
-+++++++++++++++
- arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts      | 320
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--
- arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dts      |   3 ++-
- arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts      | 292
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------
- arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts      | 250
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------
- arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts      | 340
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------
- arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts      | 274
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------
- arch/arm64/boot/dts/xilinx/zynqmp.dtsi                 |  93
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--------------------------------
- 20 files changed, 2861 insertions(+), 98 deletions(-)
- create mode 100644 arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dts
-
--- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
