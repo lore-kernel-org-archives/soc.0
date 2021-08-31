@@ -1,46 +1,89 @@
-Return-Path: <SRS0=De2Q=NW=paulmck-ThinkPad-P17-Gen-1.home=paulmck@kernel.org>
+Return-Path: <SRS0=ZvFH=NW=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-4.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A8BAC432BE
-	for <soc@archiver.kernel.org>; Tue, 31 Aug 2021 15:54:00 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 0DA9160F46; Tue, 31 Aug 2021 15:54:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CCC7C432BE
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 31 Aug 2021 15:56:39 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id ED2CE60F25
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 31 Aug 2021 15:56:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ED2CE60F25
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:Reply-To:List-Subscribe:List-Help:
+	List-Post:List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=bKeVlrJXZkRfu5Sq76YC8Ocamt2E2Y9IuDe0uECMHvw=; b=pflS9pchUEzbud
+	4W6mvIIAIox4/Wmu+fWUzQzkroKe61H4INpm7AqSOtwPkIgcv4oNYQCWGmdFeeersPfqGeU5xLwNi
+	KL40sMrjaymDb6KtGQer7fgquh7eLOHbkQXscidfSaI3eQUQAOzNrh0SrKUhM0VnQlHzPFl8ACRTQ
+	8GzSJYbOmXcy6eLUpFWYnI+/ChKqaTmCLcWARTFZS1JR6akK0GWR8+hS7KzX2SognfoQVv5/3vq7e
+	bWdPwXHJhKvNKFeDhq8x5rdv8jcmT2SxZZxKH+PrPaQ1CPMXvuyOnlYHn4jW6+32AOdI8wSPoXVZH
+	oCpVxr5DPTlwrqVw5ZEA==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mL65N-002fYb-0o; Tue, 31 Aug 2021 15:54:05 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mL65J-002fYC-0f
+ for linux-arm-kernel@lists.infradead.org; Tue, 31 Aug 2021 15:54:02 +0000
 Received: by mail.kernel.org (Postfix) with ESMTPSA id E739261027;
-	Tue, 31 Aug 2021 15:53:59 +0000 (UTC)
+ Tue, 31 Aug 2021 15:53:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1630425239;
-	bh=Y3kg8LcpF+SZJ/Qt4mvCjZMSeVo5km019zcaEL/mH3Q=;
-	h=Date:From:To:List-Id:Cc:Subject:Reply-To:References:In-Reply-To:
-	 From;
-	b=SG3F1Ttt5bWN4Vog/w48SR31sL7xXuNpR0twz6hzpgO7mWK7zLk9N7k4qTFghW3I+
-	 l1vlurw8HILIH1dt2BVj+/UK0wx4xyLwuLZYq+jP09zql3dONfgl3FJcqr2n0k2W9f
-	 vpkkqf6F7clFeFx64A3U9eqkajz8T98H7yZ08c1FPxQmrmq3ajQ9gwC5UN55wOomb5
-	 RZLyZCNDIoqomj0SdL5x3vtETMHmgHl8BOvAHQ75mW5SQakTO6nST0VX3Wfh0CnfsZ
-	 tie24weWSPkvKCTeRr+WkQUpsLjilPriFWhJGCu1RbbVGDeDWiFXD7HY/Kxmvup0+y
-	 8/JmNWshsSAgw==
+ s=k20201202; t=1630425239;
+ bh=Y3kg8LcpF+SZJ/Qt4mvCjZMSeVo5km019zcaEL/mH3Q=;
+ h=Date:From:To:List-Id:Cc:Subject:Reply-To:References:In-Reply-To:
+ From;
+ b=SG3F1Ttt5bWN4Vog/w48SR31sL7xXuNpR0twz6hzpgO7mWK7zLk9N7k4qTFghW3I+
+ l1vlurw8HILIH1dt2BVj+/UK0wx4xyLwuLZYq+jP09zql3dONfgl3FJcqr2n0k2W9f
+ vpkkqf6F7clFeFx64A3U9eqkajz8T98H7yZ08c1FPxQmrmq3ajQ9gwC5UN55wOomb5
+ RZLyZCNDIoqomj0SdL5x3vtETMHmgHl8BOvAHQ75mW5SQakTO6nST0VX3Wfh0CnfsZ
+ tie24weWSPkvKCTeRr+WkQUpsLjilPriFWhJGCu1RbbVGDeDWiFXD7HY/Kxmvup0+y
+ 8/JmNWshsSAgw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id A57125C019C; Tue, 31 Aug 2021 08:53:59 -0700 (PDT)
+ id A57125C019C; Tue, 31 Aug 2021 08:53:59 -0700 (PDT)
 Date: Tue, 31 Aug 2021 08:53:59 -0700
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
 List-Id: <soc.lore.kernel.org>
 Cc: josh@joshtriplett.org, rostedt@goodmis.org,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	joel@joelfernandes.org, rcu@vger.kernel.org, soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org
+ mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+ joel@joelfernandes.org, rcu@vger.kernel.org, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org
 Subject: Re: rcu_preempt detected stalls
 Message-ID: <20210831155359.GB4156@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
 References: <20210831152144.GA28128@trex>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20210831152144.GA28128@trex>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210831_085401_137013_F0A6F6A7 
+X-CRM114-Status: GOOD (  21.00  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Reply-To: paulmck@kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210831155359.Lf_X-nNhopb2XqSc-L34l6LeYKbvMZK-etHxz_l8K68@z>
 
 On Tue, Aug 31, 2021 at 05:21:44PM +0200, Jorge Ramirez-Ortiz, Foundries wrote:
 > Hi
@@ -112,3 +155,8 @@ but I suggest looking closely at what stress-ng is doing first.
 Please let me know how it goes!
 
 							Thanx, Paul
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
