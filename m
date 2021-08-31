@@ -1,91 +1,93 @@
-Return-Path: <SRS0=ZvFH=NW=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=EW/6=NW=gmail.com=zhouzhouyi@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CCC7C432BE
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 31 Aug 2021 15:56:39 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 941D2C432BE
+	for <soc@archiver.kernel.org>; Tue, 31 Aug 2021 17:01:25 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 6C32960FC3; Tue, 31 Aug 2021 17:01:25 +0000 (UTC)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ED2CE60F25
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 31 Aug 2021 15:56:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ED2CE60F25
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:Reply-To:List-Subscribe:List-Help:
-	List-Post:List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=bKeVlrJXZkRfu5Sq76YC8Ocamt2E2Y9IuDe0uECMHvw=; b=pflS9pchUEzbud
-	4W6mvIIAIox4/Wmu+fWUzQzkroKe61H4INpm7AqSOtwPkIgcv4oNYQCWGmdFeeersPfqGeU5xLwNi
-	KL40sMrjaymDb6KtGQer7fgquh7eLOHbkQXscidfSaI3eQUQAOzNrh0SrKUhM0VnQlHzPFl8ACRTQ
-	8GzSJYbOmXcy6eLUpFWYnI+/ChKqaTmCLcWARTFZS1JR6akK0GWR8+hS7KzX2SognfoQVv5/3vq7e
-	bWdPwXHJhKvNKFeDhq8x5rdv8jcmT2SxZZxKH+PrPaQ1CPMXvuyOnlYHn4jW6+32AOdI8wSPoXVZH
-	oCpVxr5DPTlwrqVw5ZEA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mL65N-002fYb-0o; Tue, 31 Aug 2021 15:54:05 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mL65J-002fYC-0f
- for linux-arm-kernel@lists.infradead.org; Tue, 31 Aug 2021 15:54:02 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E739261027;
- Tue, 31 Aug 2021 15:53:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1630425239;
- bh=Y3kg8LcpF+SZJ/Qt4mvCjZMSeVo5km019zcaEL/mH3Q=;
- h=Date:From:To:List-Id:Cc:Subject:Reply-To:References:In-Reply-To:
- From;
- b=SG3F1Ttt5bWN4Vog/w48SR31sL7xXuNpR0twz6hzpgO7mWK7zLk9N7k4qTFghW3I+
- l1vlurw8HILIH1dt2BVj+/UK0wx4xyLwuLZYq+jP09zql3dONfgl3FJcqr2n0k2W9f
- vpkkqf6F7clFeFx64A3U9eqkajz8T98H7yZ08c1FPxQmrmq3ajQ9gwC5UN55wOomb5
- RZLyZCNDIoqomj0SdL5x3vtETMHmgHl8BOvAHQ75mW5SQakTO6nST0VX3Wfh0CnfsZ
- tie24weWSPkvKCTeRr+WkQUpsLjilPriFWhJGCu1RbbVGDeDWiFXD7HY/Kxmvup0+y
- 8/JmNWshsSAgw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
- id A57125C019C; Tue, 31 Aug 2021 08:53:59 -0700 (PDT)
-Date: Tue, 31 Aug 2021 08:53:59 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id 3D684604AC;
+	Tue, 31 Aug 2021 17:01:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3D684604AC
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f42.google.com with SMTP id lc21so180034ejc.7;
+        Tue, 31 Aug 2021 10:01:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UUhWLNcWSWOnl5kqANocbTsE1QeFdXAz85Aj3mnCjBo=;
+        b=QUFto79k64TAYN3H7IB68xAhGgy9oW1Mv+kVHRRFb6Kx7dUz6naOv45XL9G1MVMsXS
+         /a8hrpln913QQWYRkTCu1LdXkVEaRtsjLeKYbj40LHsC1MsE3yccKewxj77WGnmmkCRk
+         56JdYbURMd8vbEEKGegNGM7SmyIbqp5QqU6dn+WASbfcHNtDv/IDmJhF5sq9JzvBzAxM
+         IpMbZFMttVQOBcGb5a1GdEQKQnVKPZdrtpbMzax03UCPht8G+yuzyBS78aTWrsQmpSfd
+         2yrNVG7tv+Ks6+ladLFANIMXqtqVdVOtHIPRb2sSFdHeH3/1azvyXG3yjLP720Zeczra
+         UZ3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UUhWLNcWSWOnl5kqANocbTsE1QeFdXAz85Aj3mnCjBo=;
+        b=iU4VR5ykwY34wia7nx0RDh1uhkWM45dRJQHaRjHew5NQ38XGAObUQozHmerwxCvJsK
+         nK2O1sLTm7VkoeNXrZNk5x1+ct8YUN0YBto0MYS7aZxey/3Eof8adx6lZIjNLl0pZMBW
+         cm/+W5Sem++IMt2Jy33IXd8ZTTJO6/x6VayBcaEkdSCAo7TZTZU5BogGWxMIlTz/u09e
+         NHfXJRajXiK1UJHQAuben6CwsjN1k6zq2N5361QJkf3YpyVE8iYyIR/N2JKCJTOxv7wI
+         mmHCOjOvDEdlqGUGZokDWBAbGh7P7TZpdw5TORUCAuSGBFCfsLcoOmKN6TkjDYz+kuEW
+         oLmw==
+X-Gm-Message-State: AOAM532ohc7cUhXgfm/0sirVb0e99nBzd7B9uejbYKgPwvXOZPzGZmRt
+	l1SE4MjxXCG+5ftnrn7rFrBe6TK5pE3lW7YgxDk=
+X-Google-Smtp-Source: ABdhPJz0gnb6PCm0K3MaVqstg2NfN2htDI9dKbMAjYIJBMa0gS5XmWE47gpsNXu+1uKuUKkoEC+ZEA2UCKStfsee9SM=
+X-Received: by 2002:a17:906:6c8f:: with SMTP id s15mr31765631ejr.52.1630429283934;
+ Tue, 31 Aug 2021 10:01:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210831152144.GA28128@trex>
+In-Reply-To: <20210831152144.GA28128@trex>
+From: Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date: Wed, 1 Sep 2021 01:01:11 +0800
+Message-ID: <CAABZP2xGnSLVbgxqjKMq=Oj_H7rYfYjuCvmBpmZ4tRptGs3SEw@mail.gmail.com>
+Subject: Re: rcu_preempt detected stalls
 To: "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
 List-Id: <soc.lore.kernel.org>
-Cc: josh@joshtriplett.org, rostedt@goodmis.org,
- mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
- joel@joelfernandes.org, rcu@vger.kernel.org, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org
-Subject: Re: rcu_preempt detected stalls
-Message-ID: <20210831155359.GB4156@paulmck-ThinkPad-P17-Gen-1>
-References: <20210831152144.GA28128@trex>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210831152144.GA28128@trex>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210831_085401_137013_F0A6F6A7 
-X-CRM114-Status: GOOD (  21.00  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Reply-To: paulmck@kernel.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210831155359.Lf_X-nNhopb2XqSc-L34l6LeYKbvMZK-etHxz_l8K68@z>
+Cc: paulmck@kernel.org, Josh Triplett <josh@joshtriplett.org>, 
+	rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Lai Jiangshan <jiangshanlai@gmail.com>, "Joel Fernandes, Google" <joel@joelfernandes.org>, 
+	rcu <rcu@vger.kernel.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Aug 31, 2021 at 05:21:44PM +0200, Jorge Ramirez-Ortiz, Foundries wrote:
+I did an experiment just now on x86_64 virtual machines, rcu did not
+complain after 10 minutes's test, I hope my effort can provide some
+clue.
+
+1. I clone the fresh new linux kernel (git clone
+https://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git/torvalds/linux.git)
+2. compile the kernel without CONFIG_RCU_BOOST (: # CONFIG_RCU_BOOST is not set)
+3. boot the kernel on a x86_64 VM (kvm -cpu host -smp 16  -hda
+./debian10.qcow2 -m 4096 -net
+user,hostfwd=tcp::5556-:22,hostfwd=tcp::5555-:19 -net nic,model=e1000
+-vnc :30)
+4. run the test (stress-ng --sequential 16  --class scheduler -t 5m --times)
+5. monitor the system by constantly typing top and dmesg
+6. after 10 minutes, nothing else happens except that the dmesg report
+following two messages
+[  672.528192] sched: DL replenish lagged too much
+[  751.127790] hrtimer: interrupt took 12143 ns
+
+So, I guess CONFIG_RCU_BOOST is not necessary for x86_64 virtual machines
+
+Zhouyi
+
+On Tue, Aug 31, 2021 at 11:24 PM Jorge Ramirez-Ortiz, Foundries
+<jorge@foundries.io> wrote:
+>
 > Hi
 >
 > When enabling CONFIG_PREEMPT and running the stress-ng scheduler class
@@ -97,11 +99,6 @@ On Tue, Aug 31, 2021 at 05:21:44PM +0200, Jorge Ramirez-Ortiz, Foundries wrote:
 > +->qsmask 0x0
 > [   62.603086] rcu: rcu_preempt kthread starved for 5258 jiffies! g3017 f0x2 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=1
 > [   62.613246] rcu:     Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
-
-The message above really does mean what it says:  If your workload
-prevents RCU's grace-period kthread ("rcu_preempt" in this case) from
-running, you just bought yourself an OOM.
-
 > [   62.622359] rcu: RCU grace-period kthread stack dump:
 > [   62.627395] task:rcu_preempt     state:R  running task     stack:    0 pid:   14 ppid:     2 flags:0x00000028
 > [   62.637308] Call trace:
@@ -132,31 +129,13 @@ running, you just bought yourself an OOM.
 > RCU priority boosting does work around this issue but it seems to me
 > a workaround more than a fix (otherwise boosting would be enabled
 > by CONFIG_PREEMPT for arm64 I guess?).
-
-RCU priority boosting sets the rcu_preempt kthread's scheduling priority
-to SCHED_FIFO priority level 1 instead of the normal SCHED_OTHER.
-Therefore, if you build with CONFIG_RCU_BOOST=n, but manually set the
-priority of rcu_preempt to SCHED_FIFO priority level 1, you might also
-see this RCU CPU stall warning go away.
-
+>
 > The question is: is this an arm64 bug that should be investigated? or
 > is this some known corner case of running stress-ng that is already
 > understood?
-
-I have not looked at stress-ng, but it is possible to configure your
-system so that rcu_preempt gets little or no CPU time, for example,
-by placing it into a CPU-poor cgroup on the one hand or by disabling
-throttling and running a heavy real-time workload on the other.
-Is stress-ng doing something like this?
-
-There could of course also be an arm64 problem that affect scheduling,
-but I suggest looking closely at what stress-ng is doing first.
-
-Please let me know how it goes!
-
-							Thanx, Paul
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>
+> thanks
+> Jorge
+>
+>
+>
