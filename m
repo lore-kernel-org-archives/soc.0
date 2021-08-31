@@ -1,26 +1,29 @@
-Return-Path: <SRS0=EW/6=NW=gmail.com=zhouzhouyi@kernel.org>
+Return-Path: <rcu-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88733C432BE
-	for <soc@archiver.kernel.org>; Tue, 31 Aug 2021 17:12:15 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 5CF576108B; Tue, 31 Aug 2021 17:12:15 +0000 (UTC)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 313C861090;
-	Tue, 31 Aug 2021 17:12:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 313C861090
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id d6so27931638edt.7;
-        Tue, 31 Aug 2021 10:12:15 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9932CC4320E
+	for <rcu@archiver.kernel.org>; Tue, 31 Aug 2021 17:12:16 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 7DC116109E
+	for <rcu@archiver.kernel.org>; Tue, 31 Aug 2021 17:12:16 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S238832AbhHaRNL (ORCPT <rfc822;rcu@archiver.kernel.org>);
+        Tue, 31 Aug 2021 13:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229602AbhHaRNK (ORCPT <rfc822;rcu@vger.kernel.org>);
+        Tue, 31 Aug 2021 13:13:10 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F4AC061575
+        for <rcu@vger.kernel.org>; Tue, 31 Aug 2021 10:12:15 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id u19so11230126edb.3
+        for <rcu@vger.kernel.org>; Tue, 31 Aug 2021 10:12:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -37,31 +40,38 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=ZbHfXvVhh4iun/ZRNpYXmFxLkzcbeoToQ9hWGOmo5g4=;
-        b=EAmtekNWnqGRsZeX3t7z+TWumenq48J6sS+pqfsJuVMkpQuPMQ0gfluwxU+EU7iTW5
-         9MCPpIvwr330ZezdtIg9fMFM/M+sJ79M1cAfZhDgnSwlxDBVfFJPgcx785OMSfhsMOAD
-         wA1diR6Hf2hlkR6Pe5I9HJMCxNgmX8ziv78iWM6yxAXy/rIjQmzpS6mS92sOp1dS1FRw
-         r348XYZL51FhWPtZBd4RY20a2wock97rA9tCxksnBNQrY5GtFhosreWB89T6jpL28P2m
-         lgx28TJgjde13Jcu+pQYT6wtul9PUmi9MgR1zFPfncl7hUAQLIqLYplrNsBX3JC41PQU
-         DykA==
-X-Gm-Message-State: AOAM531kM9QWZ8xE6/jxw98o1qhlkaSNrML/fOP76JusbWNpqZPDnOQc
-	MrDVF+dSBwVQl/F2JyEr9kdibbRzok2c5EkWyW+dWFKuCuDm1g==
+        b=s8elgD9Il5UpikA/cY783SpwQj14K65/4VSg/xCSeyaMfP4JJilEpQ9rIuFiCf+IkL
+         Vv5gkCnhze7Y8gW0ug8ayHkKq4i3PhoC1xtxvguzG4S0LSPpgiKQhuzk+ZibzW4MYTV7
+         zKZS8SmA02bQsPtT/bpeopYzfUFD+h13SWElPX4tryG3GVShYzlxHj5Z/6Go5I/a4G9a
+         A7jpuw39ONWdrbwjImm7dMH92UWdEkAcnsfh/0P0ZsS76Wv5dWPAL7Xif0t0nhosTpAl
+         tJ94lTZQ1KU1Qn0a7KCN39iz9T4XN9ahHi6soJHr4TLogGuyXb9c3vBWTXnNast+yTEx
+         tvxw==
+X-Gm-Message-State: AOAM533sKrEhwyJDOXhnHXO94wSv8ClmR6w81jWlmrgfFoF9POInC8d9
+        KoE2DvNpQ2z/978LX7uXr3Nwmo6vDNSRLBlydTI=
 X-Google-Smtp-Source: ABdhPJykAyAX75ZlSvAzih6ZHrougq8MBknQsYjWB5ZbxRRItoWAMaMQWvYbyCb6guNARJMVDBXxl1uHrjsAQF6A+EQ=
 X-Received: by 2002:aa7:d6d1:: with SMTP id x17mr31085378edr.64.1630429933895;
  Tue, 31 Aug 2021 10:12:13 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210831152144.GA28128@trex> <CAABZP2xGnSLVbgxqjKMq=Oj_H7rYfYjuCvmBpmZ4tRptGs3SEw@mail.gmail.com>
 In-Reply-To: <CAABZP2xGnSLVbgxqjKMq=Oj_H7rYfYjuCvmBpmZ4tRptGs3SEw@mail.gmail.com>
-From: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date: Wed, 1 Sep 2021 01:11:59 +0800
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Wed, 1 Sep 2021 01:11:59 +0800
 Message-ID: <CAABZP2wUdToiAWOAgqDZrZtkuEdrXEv9GDgbioW3PZAyseOSgA@mail.gmail.com>
 Subject: Re: rcu_preempt detected stalls
-To: "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
+To:     "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
 List-Id: <soc.lore.kernel.org>
-Cc: paulmck@kernel.org, Josh Triplett <josh@joshtriplett.org>, 
-	rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Lai Jiangshan <jiangshanlai@gmail.com>, "Joel Fernandes, Google" <joel@joelfernandes.org>, 
-	rcu <rcu@vger.kernel.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     paulmck@kernel.org, Josh Triplett <josh@joshtriplett.org>,
+        rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Joel Fernandes, Google" <joel@joelfernandes.org>,
+        rcu <rcu@vger.kernel.org>, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <rcu.vger.kernel.org>
+X-Mailing-List: rcu@vger.kernel.org
+Message-ID: <20210831171159.Caiy93dta2elfXEUStSbVXz6SIVAGVd8q_RXZaHHxrA@z>
 
 followings are some of my kernel config options:
 CONFIG_PREEMPT=y
