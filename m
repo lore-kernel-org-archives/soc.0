@@ -1,26 +1,29 @@
-Return-Path: <SRS0=EW/6=NW=gmail.com=zhouzhouyi@kernel.org>
+Return-Path: <rcu-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 941D2C432BE
-	for <soc@archiver.kernel.org>; Tue, 31 Aug 2021 17:01:25 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 6C32960FC3; Tue, 31 Aug 2021 17:01:25 +0000 (UTC)
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3D684604AC;
-	Tue, 31 Aug 2021 17:01:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3D684604AC
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id lc21so180034ejc.7;
-        Tue, 31 Aug 2021 10:01:25 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B019BC4320E
+	for <rcu@archiver.kernel.org>; Tue, 31 Aug 2021 17:01:26 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 8D53D604AC
+	for <rcu@archiver.kernel.org>; Tue, 31 Aug 2021 17:01:26 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S239889AbhHaRCV (ORCPT <rfc822;rcu@archiver.kernel.org>);
+        Tue, 31 Aug 2021 13:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239848AbhHaRCU (ORCPT <rfc822;rcu@vger.kernel.org>);
+        Tue, 31 Aug 2021 13:02:20 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531DCC061575
+        for <rcu@vger.kernel.org>; Tue, 31 Aug 2021 10:01:25 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id t19so160752ejr.8
+        for <rcu@vger.kernel.org>; Tue, 31 Aug 2021 10:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -37,31 +40,38 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=UUhWLNcWSWOnl5kqANocbTsE1QeFdXAz85Aj3mnCjBo=;
-        b=iU4VR5ykwY34wia7nx0RDh1uhkWM45dRJQHaRjHew5NQ38XGAObUQozHmerwxCvJsK
-         nK2O1sLTm7VkoeNXrZNk5x1+ct8YUN0YBto0MYS7aZxey/3Eof8adx6lZIjNLl0pZMBW
-         cm/+W5Sem++IMt2Jy33IXd8ZTTJO6/x6VayBcaEkdSCAo7TZTZU5BogGWxMIlTz/u09e
-         NHfXJRajXiK1UJHQAuben6CwsjN1k6zq2N5361QJkf3YpyVE8iYyIR/N2JKCJTOxv7wI
-         mmHCOjOvDEdlqGUGZokDWBAbGh7P7TZpdw5TORUCAuSGBFCfsLcoOmKN6TkjDYz+kuEW
-         oLmw==
-X-Gm-Message-State: AOAM532ohc7cUhXgfm/0sirVb0e99nBzd7B9uejbYKgPwvXOZPzGZmRt
-	l1SE4MjxXCG+5ftnrn7rFrBe6TK5pE3lW7YgxDk=
+        b=prU6/+Np9jvL1jNz89ZhS68+Y9egKE5Y4gxLMX72Ur6FmzgtB1gh0G2XftiYHiMJuf
+         zrj+o1CQ4zuj1rnHWSARzcq1L9ijDFcmCmjtBu5bdmJoPjphqXCcZWtTyxCI6c+umBg/
+         N9Lbs5tOPRTZUXyYHwU5RZDFyI0zsW6DlEBIbQJB7Cyn40lSIsC108WPA5u2hF13vpgs
+         Uajuhm9nxtw3dtRiZZlgOcASu4jqyMLPurffBwyc/ByG3S1/Rpf7NYPmJDFe21Uk3sLc
+         V3QDjRKuEfnTxfHHICK4ImH0P/IxLk5oNVnlJQHjNKHbsrSHgOnbRqqHZzg/v5BoMW5e
+         5bGQ==
+X-Gm-Message-State: AOAM5316UxPD8p9H1k0hcC2vndoaQzXPAsOTb9GsdMKMMBfZA6biCbrv
+        FF5T5N6SVdk8wjdxN+S2FQ5MDslrv62dkqUW/pw=
 X-Google-Smtp-Source: ABdhPJz0gnb6PCm0K3MaVqstg2NfN2htDI9dKbMAjYIJBMa0gS5XmWE47gpsNXu+1uKuUKkoEC+ZEA2UCKStfsee9SM=
 X-Received: by 2002:a17:906:6c8f:: with SMTP id s15mr31765631ejr.52.1630429283934;
  Tue, 31 Aug 2021 10:01:23 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210831152144.GA28128@trex>
 In-Reply-To: <20210831152144.GA28128@trex>
-From: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date: Wed, 1 Sep 2021 01:01:11 +0800
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Wed, 1 Sep 2021 01:01:11 +0800
 Message-ID: <CAABZP2xGnSLVbgxqjKMq=Oj_H7rYfYjuCvmBpmZ4tRptGs3SEw@mail.gmail.com>
 Subject: Re: rcu_preempt detected stalls
-To: "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
+To:     "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
 List-Id: <soc.lore.kernel.org>
-Cc: paulmck@kernel.org, Josh Triplett <josh@joshtriplett.org>, 
-	rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Lai Jiangshan <jiangshanlai@gmail.com>, "Joel Fernandes, Google" <joel@joelfernandes.org>, 
-	rcu <rcu@vger.kernel.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     paulmck@kernel.org, Josh Triplett <josh@joshtriplett.org>,
+        rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Joel Fernandes, Google" <joel@joelfernandes.org>,
+        rcu <rcu@vger.kernel.org>, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <rcu.vger.kernel.org>
+X-Mailing-List: rcu@vger.kernel.org
+Message-ID: <20210831170111.ZLS_kwXaNlX0nl_TtJAw9zH9GxVWdepDFu0DccAEE38@z>
 
 I did an experiment just now on x86_64 virtual machines, rcu did not
 complain after 10 minutes's test, I hope my effort can provide some
