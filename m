@@ -1,26 +1,30 @@
-Return-Path: <SRS0=Q489=NX=gmail.com=zhouzhouyi@kernel.org>
+Return-Path: <rcu-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D08FEC4320E
-	for <soc@archiver.kernel.org>; Wed,  1 Sep 2021 01:03:45 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id AEB5E6103D; Wed,  1 Sep 2021 01:03:45 +0000 (UTC)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 804F760F91;
-	Wed,  1 Sep 2021 01:03:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 804F760F91
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id u19so1320730edb.3;
-        Tue, 31 Aug 2021 18:03:45 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8E0CC432BE
+	for <rcu@archiver.kernel.org>; Wed,  1 Sep 2021 01:03:48 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id D465C60F9E
+	for <rcu@archiver.kernel.org>; Wed,  1 Sep 2021 01:03:48 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S234036AbhIABEm (ORCPT <rfc822;rcu@archiver.kernel.org>);
+        Tue, 31 Aug 2021 21:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241544AbhIABEl (ORCPT <rfc822;rcu@vger.kernel.org>);
+        Tue, 31 Aug 2021 21:04:41 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98ED9C061575
+        for <rcu@vger.kernel.org>; Tue, 31 Aug 2021 18:03:45 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id q3so1299975edt.5
+        for <rcu@vger.kernel.org>; Tue, 31 Aug 2021 18:03:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -37,14 +41,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=Og2XeLLtBDyQbgZF40moaeubFtlUHVE06sOHR2tsRHs=;
-        b=CzrFXDmZJqOgaBFr/x4GfHP0IjpZjXqUiEDfcGUKz5xNJNlo+9thgSCT/MX9MOAxXd
-         +T0SZSjxEBqf1+ySL1nxRbaJnzMWydJGPR94jkbFrKLcNTMtOL033EYwq+yApf3G4mUU
-         uh1QtZ3M4vfo60dvwYqxj5qxK+MgXjN+SMJKKrW9VXp4w4+ixBHWE9snx+ugnDchnZQT
-         yN6yDEQC7MtUlzmB4p1beJyBCVvy3F+qtFqmBgmxwMGPFUoHfU0oJuXOO97SCqkJh9AM
-         EH8bMAIcCEr1lA89UUjFTxeWZVADnkl7jjIejSwWv+VGW1ToU0B4gO8qZlrbXWonmS4F
-         n00w==
-X-Gm-Message-State: AOAM532UzjChzRgWdwyESKQipZzry0xDJsziZ4mRHS5pD/bb6NOygz0o
-	wMlEMHYCbmLyFb7AA/1eOju9VVKvfOYb+8Tk+WU=
+        b=lYIRNRa31yTce66n6r1/CyMV/bubL2R1EtRGxSg5jms0VcJHtfZ1lW264pNReq2avZ
+         YG2yOXb95s587cClF3qC4kOJwU4inpeuxK3opYPtcDToCOMZLMhOrpklfRLlBipgQtCo
+         AA0g/vPBozBR9Hg7tRGar90sUkL2TZ4P7VknoyX2WunMl6lYfPMQmXxwIDzC8LNBK0M8
+         dYAHW72Fi455dgF9+YU/gBvTvlePq8Lcm51i5f9B96T/K/vwBM3rSZ+lHeVpDwPgXXgl
+         IF1Lz88dnvBqQwQ3+vQ14yvMC42SJqr99YSyWSA9ayE9JDV0UWSvcKBvWLTW9W/sMcGw
+         PHsw==
+X-Gm-Message-State: AOAM530NOTLsBCVNGgztZNH5hlq2jrw9WQNyxsm/Dn95ue7g4L+HCd37
+        A+g+BKtj9rqWrqV9s+VzJxyqKbSniHmoN8nodps=
 X-Google-Smtp-Source: ABdhPJzS13zlLX9f5v7YH5ZUNeeL9gre2rXFbLFjq3BtXfcNmmHeW1mfS0YcUHMl9MKkKLWw3KVUdofvBPFF645TctY=
 X-Received: by 2002:a05:6402:221b:: with SMTP id cq27mr21568440edb.374.1630458224183;
  Tue, 31 Aug 2021 18:03:44 -0700 (PDT)
@@ -52,17 +56,24 @@ MIME-Version: 1.0
 References: <20210831152144.GA28128@trex> <CAABZP2xGnSLVbgxqjKMq=Oj_H7rYfYjuCvmBpmZ4tRptGs3SEw@mail.gmail.com>
  <CAABZP2wUdToiAWOAgqDZrZtkuEdrXEv9GDgbioW3PZAyseOSgA@mail.gmail.com>
 In-Reply-To: <CAABZP2wUdToiAWOAgqDZrZtkuEdrXEv9GDgbioW3PZAyseOSgA@mail.gmail.com>
-From: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date: Wed, 1 Sep 2021 09:03:32 +0800
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Wed, 1 Sep 2021 09:03:32 +0800
 Message-ID: <CAABZP2zg8c_gkm4+h4-mPCv_uDf5-iJFHEExCDFoES0jmBeuKw@mail.gmail.com>
 Subject: Re: rcu_preempt detected stalls
-To: "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
+To:     "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
 List-Id: <soc.lore.kernel.org>
-Cc: paulmck@kernel.org, Josh Triplett <josh@joshtriplett.org>, 
-	rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Lai Jiangshan <jiangshanlai@gmail.com>, "Joel Fernandes, Google" <joel@joelfernandes.org>, 
-	rcu <rcu@vger.kernel.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     paulmck@kernel.org, Josh Triplett <josh@joshtriplett.org>,
+        rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Joel Fernandes, Google" <joel@joelfernandes.org>,
+        rcu <rcu@vger.kernel.org>, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <rcu.vger.kernel.org>
+X-Mailing-List: rcu@vger.kernel.org
+Message-ID: <20210901010332.KDUJpJSoq89aP6ZB6tNfGApExXi-gy2SxfRiSGRrRhA@z>
 
 Hi,
 
