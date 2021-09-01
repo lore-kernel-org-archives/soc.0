@@ -1,129 +1,115 @@
-Return-Path: <SRS0=S75E=NX=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64958C432BE
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  1 Sep 2021 17:06:19 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1F9F960F4B
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  1 Sep 2021 17:06:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1F9F960F4B
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:
-	Message-ID:From:References:Cc:To:Subject:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Owner;
-	bh=/TxxuHKlSk4H6NPxQlxE7xGKC4PWRhx18UB4t88tkFE=; b=i6pk82aJO5yRtDamUC/V15QHMq
-	uBWT2VMlvqZI+QT5CbZnwEXrcxqkBFcVXuCmmD0p8s85vkFlEHGW0cx/oJlKFvxBKFOKZcQPIDs0t
-	fdFuVqInBfxQNZwCzfjd+CBWZIxP89Z1sX+siOU4oMAn00415H1mcgFwdoPPvvYnUnLOLlfYuGMCt
-	cUk2Z57OYyA1yDBWG9XppXkhX92Qt8OmTjSBIP1/uuWkzCMx3fKcQgPR3skHX504P35ZHy26Y3w47
-	V2cs5GzAqtlD5TtY6sdRFsLPVZH6AuJGzU9h2CK9PfQhtyIrlbgRQMKH1mCfTJNjRNZ7uDEvJH5eW
-	hzsGxS5w==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mLTfA-006gUy-1u; Wed, 01 Sep 2021 17:04:36 +0000
-Received: from foss.arm.com ([217.140.110.172])
- by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mLTf6-006gU4-BS
- for linux-arm-kernel@lists.infradead.org; Wed, 01 Sep 2021 17:04:33 +0000
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A0B71042;
- Wed,  1 Sep 2021 10:04:23 -0700 (PDT)
-Received: from [192.168.0.14] (unknown [172.31.20.19])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 087883F694;
- Wed,  1 Sep 2021 10:04:21 -0700 (PDT)
-Subject: Re: About resctrl code rebase
-To: "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
-List-Id: <soc.lore.kernel.org>
-Cc: "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
- "'linux-arm-kernel@lists.infradead.org'"
- <linux-arm-kernel@lists.infradead.org>, "'soc@kernel.org'" <soc@kernel.org>,
- "'tony.luck@intel.com'" <tony.luck@intel.com>,
- "'arnd@arndb.de'" <arnd@arndb.de>, "'will@kernel.org'" <will@kernel.org>,
- "'catalin.marinas@arm.com'" <catalin.marinas@arm.com>,
- "'olof@lixom.net'" <olof@lixom.net>,
- "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
-References: <TYAPR01MB6330CE3CB67CF8F602D44D098BCD9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-From: James Morse <james.morse@arm.com>
-Message-ID: <97164928-e2d7-fd3f-e063-9174b028ed65@arm.com>
-Date: Wed, 1 Sep 2021 18:04:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23474C432BE
+	for <soc@archiver.kernel.org>; Wed,  1 Sep 2021 19:54:50 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id F2BE1610A1; Wed,  1 Sep 2021 19:54:49 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DC7666109E
+	for <soc@kernel.org>; Wed,  1 Sep 2021 19:54:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1630526089;
+	bh=pH6akMMCftdaAdl/OZD0bcwyKaRWhox1RHbH2G0EZbs=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=D+Xh3jtE8WsuaxrzBbReytgowBls6DXR0hn6qJ4hv4wd9PIobITexodwwfugAJeGR
+	 bM1qzUtukiEc5nA7Yu/dGKtYF5JP0Db1KBgdDcbRjO9mR/p5veszvLFIyTQjrznq++
+	 /OPidiqHhRPYvulgMAQ7vY3vS1WStjcyEAu4QjVzHG1cX+8HQ27Gb7d+8PzqS3WYfe
+	 VVvjGIEOlpymiaISn62XeKxNRqf1UTGb+7qx5/CwrYjq1oogZTGACYRrUkUOMud/uB
+	 dS/TWvmlW3eAOX2gqBsMOPfYBbJ+VE98Oz3zlaWmMLsfJZdpmG2z623kyZ328K30qQ
+	 onkvKQmg9gQTg==
+Received: by mail-wr1-f43.google.com with SMTP id u9so1335039wrg.8
+        for <soc@kernel.org>; Wed, 01 Sep 2021 12:54:49 -0700 (PDT)
+X-Gm-Message-State: AOAM531xH11lSDhbEXyFAsws/WjyQ8s3CuUBR3qwnLq9OzGL1D4nC2Au
+	Ak17ktN72PhkUKiSWIMgAfmOPj/1f6j7OCF8Ju8=
+X-Google-Smtp-Source: ABdhPJwnnitnVbJ+nH9+HM07f9rYnl2x86i2JnjsTb9oPXz3oPngU0lYo94kP4dHEvxPm+1FPIcn3RZjXcc1xKgSLnM=
+X-Received: by 2002:a5d:58c8:: with SMTP id o8mr1183593wrf.361.1630526088549;
+ Wed, 01 Sep 2021 12:54:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <TYAPR01MB6330CE3CB67CF8F602D44D098BCD9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-Content-Language: en-GB
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210901_100432_531342_32DD208B 
-X-CRM114-Status: GOOD (  13.07  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210901170420.65KFdDatm7mKlrWIB5eDJIuh9nXnVk_MIyBoAWWLMxs@z>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Wed, 1 Sep 2021 19:54:32 +0000
+X-Gmail-Original-Message-ID: <CAK8P3a2GtDmpEz0KzeeKXEZZScLff-_=vv3UkOr3Ds9605g-oA@mail.gmail.com>
+Message-ID: <CAK8P3a2GtDmpEz0KzeeKXEZZScLff-_=vv3UkOr3Ds9605g-oA@mail.gmail.com>
+Subject: [GIT PULL 0/4] ARM SoC branches for 5.15
+To: Linus Torvalds <torvalds@linux-foundation.org>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Tan Shaopeng,
+I'm still on vacation, so here is a little shorter summary than
+usual. We got a few new SoCs, all of which are related to
+already supported ones, and some cleanup for 32-bit platforms.
+Overall nothing exceptional this time, just as we like it for
+what will likely become the LTS kernel.
 
-On 01/09/2021 09:35, tan.shaopeng@fujitsu.com wrote:
->> As you known, Fujitsu is implementing a feature that add A64FX's cache 
->> control function into resctrl.
+There are four branches included this time, but I have another
+"late" branch for a few things that got sent at the last minute.
+Unless there are any problems, I plan to send those early next
+week.
 
->> Fujitsu will implement this feature base
->> on your rebased code. I think the commit of refactoring arch/x86 
->> implementation of resctrl has been merged into the x86/cache branch. 
->> https://lore.kernel.org/lkml/162871088112.395.12879267279872673224.tip-bot2@tip-bot2/ 
+There are 740 patches in total, mostly from the usual suspects.
+I pulled in 61 branches from 22 platform and subsystem maintainers.
+The most patches came from:
 
-I'm afraid this was only a small part of it.
+     39 Linus Walleij
+     32 Michal Simek
+     31 Konrad Dybcio
+     29 Geert Uytterhoeven
+     26 Claudiu Beznea
+     25 Dmitry Osipenko
+     16 Grygorii Strashko
+     16 Christoph Niedermaier
+     14 AngeloGioacchino Del Regno
+     13 Vinod Koul
+     13 Suman Anna
+     13 Alain Volmat
+     12 Tao Ren
+     12 Robin Gong
+     12 Peter Geis
+     12 Johan Jonker
+     10 Michael Riesch
+     10 Cristian Marussi
 
-I've also posted the next series here:
-https://lore.kernel.org/lkml/20210729223610.29373-1-james.morse@arm.com/
-
-and there are a couple more after that.
-
-
->> I would like to know whether you have rebased these codes that move 
->> the common parts of multiple architectures to somewhere. 
->> And where is the rebase code? 
->> In addition, when will you release the latest MPAM patch?
-
-I will keep posting 'the next part' of the x86 changes once the earlier part is reviewed.
-(please help!)
-
-I can't push the latest branch until the ACPI spec is published, but I hope that will
-happen this month.
-
-
-> I'm afraid that my message may not have reached you.
-
-Yes, I'm horribly behind with email!
-
-
-Thanks,
-
-James
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Dirstat:
+   0.4% Documentation/devicetree/bindings/arm/
+   0.4% Documentation/devicetree/bindings/bus/
+   0.3% Documentation/devicetree/bindings/gpio/
+   1.3% Documentation/devicetree/bindings/power/
+   0.4% Documentation/devicetree/bindings/reset/
+   0.4% Documentation/devicetree/bindings/soc/qcom/
+   0.4% Documentation/devicetree/bindings/
+  34.2% arch/arm/boot/dts/
+   0.5% arch/arm/configs/
+   1.7% arch/arm/mach-at91/
+   0.9% arch/arm/mach-ep93xx/
+   7.7% arch/arm/mach-ixp4xx/
+   0.3% arch/arm/
+   0.2% arch/arm64/boot/dts/amlogic/
+   0.2% arch/arm64/boot/dts/exynos/
+   5.7% arch/arm64/boot/dts/freescale/
+   3.6% arch/arm64/boot/dts/marvell/
+   1.3% arch/arm64/boot/dts/nvidia/
+  14.1% arch/arm64/boot/dts/qcom/
+   2.5% arch/arm64/boot/dts/renesas/
+   6.8% arch/arm64/boot/dts/rockchip/
+   0.4% arch/arm64/boot/dts/ti/
+   4.7% arch/arm64/boot/dts/xilinx/
+   0.7% drivers/ata/
+   1.0% drivers/bus/
+   0.2% drivers/dma/
+   3.6% drivers/firmware/arm_scmi/
+   0.2% drivers/firmware/
+   0.3% drivers/memory/
+   0.5% drivers/reset/
+   0.7% drivers/soc/mediatek/
+   0.4% drivers/soc/qcom/
+   0.6% drivers/soc/
+   0.6% drivers/watchdog/
+   0.2% drivers/
+   0.4% include/soc/at91/
+   0.2% include/
