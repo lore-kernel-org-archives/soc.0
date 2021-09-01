@@ -1,79 +1,107 @@
-Return-Path: <rcu-owner@kernel.org>
+Return-Path: <SRS0=S75E=NX=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8E0CC432BE
-	for <rcu@archiver.kernel.org>; Wed,  1 Sep 2021 01:03:48 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D465C60F9E
-	for <rcu@archiver.kernel.org>; Wed,  1 Sep 2021 01:03:48 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234036AbhIABEm (ORCPT <rfc822;rcu@archiver.kernel.org>);
-        Tue, 31 Aug 2021 21:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241544AbhIABEl (ORCPT <rfc822;rcu@vger.kernel.org>);
-        Tue, 31 Aug 2021 21:04:41 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98ED9C061575
-        for <rcu@vger.kernel.org>; Tue, 31 Aug 2021 18:03:45 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id q3so1299975edt.5
-        for <rcu@vger.kernel.org>; Tue, 31 Aug 2021 18:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Og2XeLLtBDyQbgZF40moaeubFtlUHVE06sOHR2tsRHs=;
-        b=B1ZDrgpE8Fz5Q2c3nyWfPKKalpP10I5KztGo2sQF1uY6PEtiGUOQL3He7qlrm8nSHf
-         yYbZyNtApEcJxJP5Za5emr9jiQ3g+OIGCVyHFb3jGWvY/btWBU9UdLAv0LxdmH0flad9
-         ErmTqSZSpt8y8/Rq1uIC+IIubM7IpHgj/J8rG36mTvEWgJ+x61HkBMA2KNdHC3Qf+yf/
-         VAbsJYuBStORBNk9XkNh4a433rC60wPM3q0f6aXifKf013VU4dfuOUAfalLQ/lSZ4g7p
-         uJuX7/KmJqAKblkbynxUJDwIAdaXz+shxOJSnePvxrQHxe1ttDj221jlQ92/4VaLnREE
-         Zrgg==
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20CAEC432BE
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  1 Sep 2021 01:07:05 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id D9B516056B
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  1 Sep 2021 01:07:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D9B516056B
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
+	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=j5fV9UsluK14+WXJtXG7GpjRWnLDFf3HjwvhOtqSj9w=; b=KSCVZJb1niA0Nm
+	gIoLwyd4L1lNf6r8UVT/cDjRnLNM7wfYizn5eZZDC1eYP9hAExQ1Y29eJFZ1gHEfX8n2EWsmKfMUT
+	IJPjNfS+32+tJJJXFBI1DG2E84UtGkm42R8jkE3iXCcpH+XlfSwVCs+YOsAjUamILHDC7OJWOtkqn
+	0bmp3wJo/Ryjym8vsVOI3XJj4gywG4Lz6l7zO3psatowERTcoNA5GSwQQyvb/1BSpBJH9dqkvSY6L
+	hs5nq/0u8c7PlHzyL1AilUBQQZWxZNpZGiQNFO9s+jzgcBrtkWdIZ3UkzM/OTYzcv0mlfhUrX/aiL
+	a65vwwLlU7FLfY8Hv2+A==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mLEfP-003TEy-Jb; Wed, 01 Sep 2021 01:03:51 +0000
+Received: from mail-ed1-x534.google.com ([2a00:1450:4864:20::534])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mLEfJ-003TDO-KQ
+ for linux-arm-kernel@lists.infradead.org; Wed, 01 Sep 2021 01:03:49 +0000
+Received: by mail-ed1-x534.google.com with SMTP id q17so1332537edv.2
+ for <linux-arm-kernel@lists.infradead.org>;
+ Tue, 31 Aug 2021 18:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=Og2XeLLtBDyQbgZF40moaeubFtlUHVE06sOHR2tsRHs=;
+ b=B1ZDrgpE8Fz5Q2c3nyWfPKKalpP10I5KztGo2sQF1uY6PEtiGUOQL3He7qlrm8nSHf
+ yYbZyNtApEcJxJP5Za5emr9jiQ3g+OIGCVyHFb3jGWvY/btWBU9UdLAv0LxdmH0flad9
+ ErmTqSZSpt8y8/Rq1uIC+IIubM7IpHgj/J8rG36mTvEWgJ+x61HkBMA2KNdHC3Qf+yf/
+ VAbsJYuBStORBNk9XkNh4a433rC60wPM3q0f6aXifKf013VU4dfuOUAfalLQ/lSZ4g7p
+ uJuX7/KmJqAKblkbynxUJDwIAdaXz+shxOJSnePvxrQHxe1ttDj221jlQ92/4VaLnREE
+ Zrgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Og2XeLLtBDyQbgZF40moaeubFtlUHVE06sOHR2tsRHs=;
-        b=lYIRNRa31yTce66n6r1/CyMV/bubL2R1EtRGxSg5jms0VcJHtfZ1lW264pNReq2avZ
-         YG2yOXb95s587cClF3qC4kOJwU4inpeuxK3opYPtcDToCOMZLMhOrpklfRLlBipgQtCo
-         AA0g/vPBozBR9Hg7tRGar90sUkL2TZ4P7VknoyX2WunMl6lYfPMQmXxwIDzC8LNBK0M8
-         dYAHW72Fi455dgF9+YU/gBvTvlePq8Lcm51i5f9B96T/K/vwBM3rSZ+lHeVpDwPgXXgl
-         IF1Lz88dnvBqQwQ3+vQ14yvMC42SJqr99YSyWSA9ayE9JDV0UWSvcKBvWLTW9W/sMcGw
-         PHsw==
-X-Gm-Message-State: AOAM530NOTLsBCVNGgztZNH5hlq2jrw9WQNyxsm/Dn95ue7g4L+HCd37
-        A+g+BKtj9rqWrqV9s+VzJxyqKbSniHmoN8nodps=
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=Og2XeLLtBDyQbgZF40moaeubFtlUHVE06sOHR2tsRHs=;
+ b=CezU7R8vUnYP7Zj6/npr5B3SWtUeZj5UJ4kj7VWboEAD1nAhtKRiWSNzGzvBTCDoz5
+ /a+p94uh9nrMGVo0vqrHxqzn6FViihffeboAs/cahMKXNlFbnEUs7wEq9NpMkAI0kpMB
+ dZsgT3zbg/KVCx2+G0HvabFIN6s1AxplbfYzCiLptX0PEn/Fdwm9WLNhpTwumuS84leB
+ iA7ysyzreS/Nqfr3thBLxCfXdIvPM0MspXjesx7GQ4kCsDakVzeHbz1DXk0v0Kj66sbt
+ QjZUOIw9jO2N7s75EXuf5PwQHvT/R+SfIdK9JC7YQUQwHdTLAd5lboYfb96SS4LM9AG3
+ nNYA==
+X-Gm-Message-State: AOAM5321YbXBIMmS6vCXCN32+kAtORqvdonWHvuztqrB4isfITkZhJ8k
+ cfALCXquQSdM1IwUcUY8o8o5vouBFzEGbv0sBHo=
 X-Google-Smtp-Source: ABdhPJzS13zlLX9f5v7YH5ZUNeeL9gre2rXFbLFjq3BtXfcNmmHeW1mfS0YcUHMl9MKkKLWw3KVUdofvBPFF645TctY=
-X-Received: by 2002:a05:6402:221b:: with SMTP id cq27mr21568440edb.374.1630458224183;
+X-Received: by 2002:a05:6402:221b:: with SMTP id
+ cq27mr21568440edb.374.1630458224183; 
  Tue, 31 Aug 2021 18:03:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210831152144.GA28128@trex> <CAABZP2xGnSLVbgxqjKMq=Oj_H7rYfYjuCvmBpmZ4tRptGs3SEw@mail.gmail.com>
+References: <20210831152144.GA28128@trex>
+ <CAABZP2xGnSLVbgxqjKMq=Oj_H7rYfYjuCvmBpmZ4tRptGs3SEw@mail.gmail.com>
  <CAABZP2wUdToiAWOAgqDZrZtkuEdrXEv9GDgbioW3PZAyseOSgA@mail.gmail.com>
 In-Reply-To: <CAABZP2wUdToiAWOAgqDZrZtkuEdrXEv9GDgbioW3PZAyseOSgA@mail.gmail.com>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Wed, 1 Sep 2021 09:03:32 +0800
+From: Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date: Wed, 1 Sep 2021 09:03:32 +0800
 Message-ID: <CAABZP2zg8c_gkm4+h4-mPCv_uDf5-iJFHEExCDFoES0jmBeuKw@mail.gmail.com>
 Subject: Re: rcu_preempt detected stalls
-To:     "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
+To: "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
 List-Id: <soc.lore.kernel.org>
-Cc:     paulmck@kernel.org, Josh Triplett <josh@joshtriplett.org>,
-        rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Joel Fernandes, Google" <joel@joelfernandes.org>,
-        rcu <rcu@vger.kernel.org>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Precedence: bulk
-List-ID: <rcu.vger.kernel.org>
-X-Mailing-List: rcu@vger.kernel.org
-Message-ID: <20210901010332.KDUJpJSoq89aP6ZB6tNfGApExXi-gy2SxfRiSGRrRhA@z>
+Cc: paulmck@kernel.org, Josh Triplett <josh@joshtriplett.org>, 
+ rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ Lai Jiangshan <jiangshanlai@gmail.com>, "Joel Fernandes,
+ Google" <joel@joelfernandes.org>, 
+ rcu <rcu@vger.kernel.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210831_180345_737377_912A7DF7 
+X-CRM114-Status: GOOD (  30.49  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210901010332.atavvn1KrA_ubxTIThV4OTrLSH5nQAB3vaUEFWHzgho@z>
 
 Hi,
 
@@ -250,3 +278,8 @@ On Wed, Sep 1, 2021 at 1:11 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
 > > >
 > > >
 > > >
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
