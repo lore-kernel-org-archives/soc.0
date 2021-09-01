@@ -1,285 +1,268 @@
-Return-Path: <SRS0=S75E=NX=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <bounce+9f2a44.be9e4a-soc=kernel.org@codeaurora.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20CAEC432BE
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  1 Sep 2021 01:07:05 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1C12C432BE
+	for <soc@archiver.kernel.org>; Wed,  1 Sep 2021 04:08:24 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 69C0560462; Wed,  1 Sep 2021 04:08:24 +0000 (UTC)
+Received: from so254-9.mailgun.net (so254-9.mailgun.net [198.61.254.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D9B516056B
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  1 Sep 2021 01:07:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D9B516056B
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=j5fV9UsluK14+WXJtXG7GpjRWnLDFf3HjwvhOtqSj9w=; b=KSCVZJb1niA0Nm
-	gIoLwyd4L1lNf6r8UVT/cDjRnLNM7wfYizn5eZZDC1eYP9hAExQ1Y29eJFZ1gHEfX8n2EWsmKfMUT
-	IJPjNfS+32+tJJJXFBI1DG2E84UtGkm42R8jkE3iXCcpH+XlfSwVCs+YOsAjUamILHDC7OJWOtkqn
-	0bmp3wJo/Ryjym8vsVOI3XJj4gywG4Lz6l7zO3psatowERTcoNA5GSwQQyvb/1BSpBJH9dqkvSY6L
-	hs5nq/0u8c7PlHzyL1AilUBQQZWxZNpZGiQNFO9s+jzgcBrtkWdIZ3UkzM/OTYzcv0mlfhUrX/aiL
-	a65vwwLlU7FLfY8Hv2+A==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mLEfP-003TEy-Jb; Wed, 01 Sep 2021 01:03:51 +0000
-Received: from mail-ed1-x534.google.com ([2a00:1450:4864:20::534])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mLEfJ-003TDO-KQ
- for linux-arm-kernel@lists.infradead.org; Wed, 01 Sep 2021 01:03:49 +0000
-Received: by mail-ed1-x534.google.com with SMTP id q17so1332537edv.2
- for <linux-arm-kernel@lists.infradead.org>;
- Tue, 31 Aug 2021 18:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=Og2XeLLtBDyQbgZF40moaeubFtlUHVE06sOHR2tsRHs=;
- b=B1ZDrgpE8Fz5Q2c3nyWfPKKalpP10I5KztGo2sQF1uY6PEtiGUOQL3He7qlrm8nSHf
- yYbZyNtApEcJxJP5Za5emr9jiQ3g+OIGCVyHFb3jGWvY/btWBU9UdLAv0LxdmH0flad9
- ErmTqSZSpt8y8/Rq1uIC+IIubM7IpHgj/J8rG36mTvEWgJ+x61HkBMA2KNdHC3Qf+yf/
- VAbsJYuBStORBNk9XkNh4a433rC60wPM3q0f6aXifKf013VU4dfuOUAfalLQ/lSZ4g7p
- uJuX7/KmJqAKblkbynxUJDwIAdaXz+shxOJSnePvxrQHxe1ttDj221jlQ92/4VaLnREE
- Zrgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=Og2XeLLtBDyQbgZF40moaeubFtlUHVE06sOHR2tsRHs=;
- b=CezU7R8vUnYP7Zj6/npr5B3SWtUeZj5UJ4kj7VWboEAD1nAhtKRiWSNzGzvBTCDoz5
- /a+p94uh9nrMGVo0vqrHxqzn6FViihffeboAs/cahMKXNlFbnEUs7wEq9NpMkAI0kpMB
- dZsgT3zbg/KVCx2+G0HvabFIN6s1AxplbfYzCiLptX0PEn/Fdwm9WLNhpTwumuS84leB
- iA7ysyzreS/Nqfr3thBLxCfXdIvPM0MspXjesx7GQ4kCsDakVzeHbz1DXk0v0Kj66sbt
- QjZUOIw9jO2N7s75EXuf5PwQHvT/R+SfIdK9JC7YQUQwHdTLAd5lboYfb96SS4LM9AG3
- nNYA==
-X-Gm-Message-State: AOAM5321YbXBIMmS6vCXCN32+kAtORqvdonWHvuztqrB4isfITkZhJ8k
- cfALCXquQSdM1IwUcUY8o8o5vouBFzEGbv0sBHo=
-X-Google-Smtp-Source: ABdhPJzS13zlLX9f5v7YH5ZUNeeL9gre2rXFbLFjq3BtXfcNmmHeW1mfS0YcUHMl9MKkKLWw3KVUdofvBPFF645TctY=
-X-Received: by 2002:a05:6402:221b:: with SMTP id
- cq27mr21568440edb.374.1630458224183; 
- Tue, 31 Aug 2021 18:03:44 -0700 (PDT)
-MIME-Version: 1.0
+	by mail.kernel.org (Postfix) with ESMTPS id 90F0960241
+	for <soc@kernel.org>; Wed,  1 Sep 2021 04:08:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 90F0960241
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=mg.codeaurora.org
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1630469304; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=w4ZnWlbQyBqQPC2d63fDVjc/+3hn5i/lQ0ipwySTshA=; b=QwYtiQH+51GKTKR/PlYlQxITCcryeLTNLeYwje1Et9iMjmXcwGvG0LQUX5gNL04FcKbeElH9
+ bf9SKwS1fQp9RsEVWMQCGFV7ImrzHpUEm+nz68RxDiavNRvX8Z7ntrkdi9O6qJCb0VYxc2US
+ lfdfWr8EiQMm8J8DqP1etqDD/nU=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5NzkyOSIsICJzb2NAa2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 612efca989cdb62061fa6e97 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 01 Sep 2021 04:08:09
+ GMT
+Sender: neeraju=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+	id 9B546C4360D; Wed,  1 Sep 2021 04:08:09 +0000 (UTC)
+Received: from [192.168.0.106] (unknown [103.199.158.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	(Authenticated sender: neeraju)
+	by smtp.codeaurora.org (Postfix) with ESMTPSA id 92D1DC4338F;
+	Wed,  1 Sep 2021 04:08:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 92D1DC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: rcu_preempt detected stalls
+To: Zhouyi Zhou <zhouzhouyi@gmail.com>,
+ "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
+List-Id: <soc.lore.kernel.org>
+Cc: paulmck@kernel.org, Josh Triplett <josh@joshtriplett.org>,
+ rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>,
+ "Joel Fernandes, Google" <joel@joelfernandes.org>, rcu
+ <rcu@vger.kernel.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20210831152144.GA28128@trex>
  <CAABZP2xGnSLVbgxqjKMq=Oj_H7rYfYjuCvmBpmZ4tRptGs3SEw@mail.gmail.com>
  <CAABZP2wUdToiAWOAgqDZrZtkuEdrXEv9GDgbioW3PZAyseOSgA@mail.gmail.com>
-In-Reply-To: <CAABZP2wUdToiAWOAgqDZrZtkuEdrXEv9GDgbioW3PZAyseOSgA@mail.gmail.com>
-From: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date: Wed, 1 Sep 2021 09:03:32 +0800
-Message-ID: <CAABZP2zg8c_gkm4+h4-mPCv_uDf5-iJFHEExCDFoES0jmBeuKw@mail.gmail.com>
-Subject: Re: rcu_preempt detected stalls
-To: "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
-List-Id: <soc.lore.kernel.org>
-Cc: paulmck@kernel.org, Josh Triplett <josh@joshtriplett.org>, 
- rostedt <rostedt@goodmis.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Lai Jiangshan <jiangshanlai@gmail.com>, "Joel Fernandes,
- Google" <joel@joelfernandes.org>, 
- rcu <rcu@vger.kernel.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210831_180345_737377_912A7DF7 
-X-CRM114-Status: GOOD (  30.49  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+ <CAABZP2zg8c_gkm4+h4-mPCv_uDf5-iJFHEExCDFoES0jmBeuKw@mail.gmail.com>
+From: Neeraj Upadhyay <neeraju@codeaurora.org>
+Message-ID: <2712e554-2058-d3c3-72ae-cca7562a2ec7@codeaurora.org>
+Date: Wed, 1 Sep 2021 09:38:00 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <CAABZP2zg8c_gkm4+h4-mPCv_uDf5-iJFHEExCDFoES0jmBeuKw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210901010332.atavvn1KrA_ubxTIThV4OTrLSH5nQAB3vaUEFWHzgho@z>
 
 Hi,
 
-I  perform following two new rounds of experiments:
+ >[   62.603086] rcu: rcu_preempt kthread starved for 5258 jiffies! 
+g3017 f0x2 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=1
+ >[   62.613246] rcu:     Unless rcu_preempt kthread gets sufficient CPU 
+time, OOM is now expected behavior.
 
+These logs tells us, rcu_preempt thread is in RUNNING state, however, 
+the thread is not scheduled for long. So, can you please check the
+activity (scheduler traces, runqueue) on the CPU where rcu_preempt 
+kthread is running (->cpu=1 in this case) , to see why rcu_preempt
+is starved of CPU cycles?
 
-Test environment (x86_64 debian10 virtual machine: kvm -cpu host -smp
-8 -hda ./debian10.qcow2 -m 4096 -net
-user,hostfwd=tcp::5556-:22,hostfwd=tcp::5555-:19 -net nic,model=e1000
--vnc :30)
-
-1.   CONFIG_RCU_BOOST=y
-1.1 as root, run #stress-ng --sequential 100  --class scheduler -t 5m --times
-1.2 as regular user at the same time, run $stress-ng --sequential 100
---class scheduler -t 5m --times
-
-System begin OOM kill after 6 minutes:
-31 19:41:12 debian kernel: [  847.171884] task:kworker/1:0     state:D
-stack:    0 pid: 1634 ppid:     2 flag\
-s:0x00004000
-Aug 31 19:41:12 debian kernel: [  847.171890] Workqueue: ipv6_addrconf
-addrconf_verify_work
-Aug 31 19:41:12 debian kernel: [  847.171897] Call Trace:
-Aug 31 19:41:12 debian kernel: [  847.171903]  __schedule+0x368/0xa40
-Aug 31 19:41:12 debian kernel: [  847.171915]  schedule+0x44/0xe0
-Aug 31 19:41:12 debian kernel: [  847.171921]
-schedule_preempt_disabled+0x14/0x20
-Aug 31 19:41:12 debian kernel: [  847.171924]  __mutex_lock+0x4b1/0xa10
-Aug 31 19:41:12 debian kernel: [  847.171935]  ? addrconf_verify_work+0xa/0x20
-Aug 31 19:41:12 debian kernel: [  847.171948]  ? addrconf_verify_work+0xa/0x20
-Aug 31 19:41:12 debian kernel: [  847.171951]  addrconf_verify_work+0xa/0x20
-Aug 31 19:41:12 debian kernel: [  847.171955]  process_one_work+0x1fa/0x5b0
-Aug 31 19:41:12 debian kernel: [  847.171967]  worker_thread+0x64/0x3d0
-Aug 31 19:41:12 debian kernel: [  847.171974]  ? process_one_work+0x5b0/0x5b0
-Aug 31 19:41:12 debian kernel: [  847.171978]  kthread+0x131/0x180
-Aug 31 19:41:12 debian kernel: [  847.171982]  ? set_kthread_struct+0x40/0x40
-Aug 31 19:41:12 debian kernel: [  847.171989]  ret_from_fork+0x1f/0x30
-Aug 31 19:41:12 debian kernel: [  847.176007]
-Aug 31 19:41:12 debian kernel: [  847.176007] Showing all locks held
-in the system:
-Aug 31 19:41:12 debian kernel: [  847.176016] 1 lock held by khungtaskd/56:
-Aug 31 19:41:12 debian kernel: [  847.176018]  #0: ffffffff82918b60
-(rcu_read_lock){....}-{1:2}, at: debug_show_a\
-ll_locks+0xe/0x1a0
-
-2.  # CONFIG_RCU_BOOST is not set
-2.1 as root, run #stress-ng --sequential 100  --class scheduler -t 5m --times
-2.2 as regular user at the same time, run $stress-ng --sequential 100
---class scheduler -t 5m --times
-System begin OOM kill after 6 minutes:
-The system is so dead, that I can't save the backtrace to file nor did
-kernel has a chance to save the log to /var/log/messages
 
 Thanks
-Zhouyi
+Neeraj
 
-On Wed, Sep 1, 2021 at 1:11 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
->
-> followings are some of my kernel config options:
-> CONFIG_PREEMPT=y
-> CONFIG_PREEMPT_COUNT=y
-> CONFIG_PREEMPTION=y
-> CONFIG_PREEMPT_DYNAMIC=y
-> CONFIG_PREEMPT_RCU=y
-> CONFIG_HAVE_PREEMPT_DYNAMIC=y
-> CONFIG_TREE_RCU=y
-> CONFIG_PREEMPT_RCU=y
-> CONFIG_RCU_EXPERT=y
-> CONFIG_SRCU=y
-> CONFIG_TREE_SRCU=y
-> CONFIG_TASKS_RCU_GENERIC=y
-> CONFIG_TASKS_RCU=y
-> CONFIG_TASKS_RUDE_RCU=y
-> CONFIG_TASKS_TRACE_RCU=y
-> CONFIG_RCU_STALL_COMMON=y
-> CONFIG_RCU_NEED_SEGCBLIST=y
-> CONFIG_RCU_FANOUT=64
-> CONFIG_RCU_FANOUT_LEAF=16
-> # CONFIG_RCU_FAST_NO_HZ is not set
-> # CONFIG_RCU_BOOST is not set
-> CONFIG_RCU_NOCB_CPU=y
-> # CONFIG_TASKS_TRACE_RCU_READ_MB is not set
-> # end of RCU Subsystem
-> CONFIG_MMU_GATHER_RCU_TABLE_FREE=y
-> CONFIG_LOCKDEP_CIRCULAR_QUEUE_BITS=12
-> # RCU Debugging
-> CONFIG_PROVE_RCU=y
-> # CONFIG_PROVE_RCU_LIST is not set
-> # CONFIG_RCU_SCALE_TEST is not set
-> CONFIG_RCU_TORTURE_TEST=m
-> # CONFIG_RCU_REF_SCALE_TEST is not set
-> CONFIG_RCU_CPU_STALL_TIMEOUT=21
-> # CONFIG_RCU_TRACE is not set
-> # CONFIG_RCU_EQS_DEBUG is not set
->
+On 9/1/2021 6:33 AM, Zhouyi Zhou wrote:
+> Hi,
+> 
+> I  perform following two new rounds of experiments:
+> 
+> 
+> Test environment (x86_64 debian10 virtual machine: kvm -cpu host -smp
+> 8 -hda ./debian10.qcow2 -m 4096 -net
+> user,hostfwd=tcp::5556-:22,hostfwd=tcp::5555-:19 -net nic,model=e1000
+> -vnc :30)
+> 
+> 1.   CONFIG_RCU_BOOST=y
+> 1.1 as root, run #stress-ng --sequential 100  --class scheduler -t 5m --times
+> 1.2 as regular user at the same time, run $stress-ng --sequential 100
+> --class scheduler -t 5m --times
+> 
+> System begin OOM kill after 6 minutes:
+> 31 19:41:12 debian kernel: [  847.171884] task:kworker/1:0     state:D
+> stack:    0 pid: 1634 ppid:     2 flag\
+> s:0x00004000
+> Aug 31 19:41:12 debian kernel: [  847.171890] Workqueue: ipv6_addrconf
+> addrconf_verify_work
+> Aug 31 19:41:12 debian kernel: [  847.171897] Call Trace:
+> Aug 31 19:41:12 debian kernel: [  847.171903]  __schedule+0x368/0xa40
+> Aug 31 19:41:12 debian kernel: [  847.171915]  schedule+0x44/0xe0
+> Aug 31 19:41:12 debian kernel: [  847.171921]
+> schedule_preempt_disabled+0x14/0x20
+> Aug 31 19:41:12 debian kernel: [  847.171924]  __mutex_lock+0x4b1/0xa10
+> Aug 31 19:41:12 debian kernel: [  847.171935]  ? addrconf_verify_work+0xa/0x20
+> Aug 31 19:41:12 debian kernel: [  847.171948]  ? addrconf_verify_work+0xa/0x20
+> Aug 31 19:41:12 debian kernel: [  847.171951]  addrconf_verify_work+0xa/0x20
+> Aug 31 19:41:12 debian kernel: [  847.171955]  process_one_work+0x1fa/0x5b0
+> Aug 31 19:41:12 debian kernel: [  847.171967]  worker_thread+0x64/0x3d0
+> Aug 31 19:41:12 debian kernel: [  847.171974]  ? process_one_work+0x5b0/0x5b0
+> Aug 31 19:41:12 debian kernel: [  847.171978]  kthread+0x131/0x180
+> Aug 31 19:41:12 debian kernel: [  847.171982]  ? set_kthread_struct+0x40/0x40
+> Aug 31 19:41:12 debian kernel: [  847.171989]  ret_from_fork+0x1f/0x30
+> Aug 31 19:41:12 debian kernel: [  847.176007]
+> Aug 31 19:41:12 debian kernel: [  847.176007] Showing all locks held
+> in the system:
+> Aug 31 19:41:12 debian kernel: [  847.176016] 1 lock held by khungtaskd/56:
+> Aug 31 19:41:12 debian kernel: [  847.176018]  #0: ffffffff82918b60
+> (rcu_read_lock){....}-{1:2}, at: debug_show_a\
+> ll_locks+0xe/0x1a0
+> 
+> 2.  # CONFIG_RCU_BOOST is not set
+> 2.1 as root, run #stress-ng --sequential 100  --class scheduler -t 5m --times
+> 2.2 as regular user at the same time, run $stress-ng --sequential 100
+> --class scheduler -t 5m --times
+> System begin OOM kill after 6 minutes:
+> The system is so dead, that I can't save the backtrace to file nor did
+> kernel has a chance to save the log to /var/log/messages
+> 
 > Thanks
 > Zhouyi
->
-> On Wed, Sep 1, 2021 at 1:01 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
-> >
-> > I did an experiment just now on x86_64 virtual machines, rcu did not
-> > complain after 10 minutes's test, I hope my effort can provide some
-> > clue.
-> >
-> > 1. I clone the fresh new linux kernel (git clone
-> > https://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git/torvalds/linux.git)
-> > 2. compile the kernel without CONFIG_RCU_BOOST (: # CONFIG_RCU_BOOST is not set)
-> > 3. boot the kernel on a x86_64 VM (kvm -cpu host -smp 16  -hda
-> > ./debian10.qcow2 -m 4096 -net
-> > user,hostfwd=tcp::5556-:22,hostfwd=tcp::5555-:19 -net nic,model=e1000
-> > -vnc :30)
-> > 4. run the test (stress-ng --sequential 16  --class scheduler -t 5m --times)
-> > 5. monitor the system by constantly typing top and dmesg
-> > 6. after 10 minutes, nothing else happens except that the dmesg report
-> > following two messages
-> > [  672.528192] sched: DL replenish lagged too much
-> > [  751.127790] hrtimer: interrupt took 12143 ns
-> >
-> > So, I guess CONFIG_RCU_BOOST is not necessary for x86_64 virtual machines
-> >
-> > Zhouyi
-> >
-> > On Tue, Aug 31, 2021 at 11:24 PM Jorge Ramirez-Ortiz, Foundries
-> > <jorge@foundries.io> wrote:
-> > >
-> > > Hi
-> > >
-> > > When enabling CONFIG_PREEMPT and running the stress-ng scheduler class
-> > > tests on arm64 (xilinx zynqmp and imx imx8mm SoCs) we are observing the following.
-> > >
-> > > [   62.578917] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> > > [   62.585015]  (detected by 0, t=5253 jiffies, g=3017, q=2972)
-> > > [   62.590663] rcu: All QSes seen, last rcu_preempt kthread activity 5254 (4294907943-4294902689), jiffies_till_next_fqs=1, root
-> > > +->qsmask 0x0
-> > > [   62.603086] rcu: rcu_preempt kthread starved for 5258 jiffies! g3017 f0x2 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=1
-> > > [   62.613246] rcu:     Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
-> > > [   62.622359] rcu: RCU grace-period kthread stack dump:
-> > > [   62.627395] task:rcu_preempt     state:R  running task     stack:    0 pid:   14 ppid:     2 flags:0x00000028
-> > > [   62.637308] Call trace:
-> > > [   62.639748]  __switch_to+0x11c/0x190
-> > > [   62.643319]  __schedule+0x3b8/0x8d8
-> > > [   62.646796]  schedule+0x4c/0x108
-> > > [   62.650018]  schedule_timeout+0x1ac/0x358
-> > > [   62.654021]  rcu_gp_kthread+0x6a8/0x12b8
-> > > [   62.657933]  kthread+0x14c/0x158
-> > > [   62.661153]  ret_from_fork+0x10/0x18
-> > > [   62.682919] BUG: scheduling while atomic: stress-ng-hrtim/831/0x00000002
-> > > [   62.689604] Preemption disabled at:
-> > > [   62.689614] [<ffffffc010059418>] irq_enter_rcu+0x30/0x58
-> > > [   62.698393] CPU: 0 PID: 831 Comm: stress-ng-hrtim Not tainted 5.10.42+ #5
-> > > [   62.706296] Hardware name: Zynqmp new (DT)
-> > > [   62.710115] Call trace:
-> > > [   62.712548]  dump_backtrace+0x0/0x240
-> > > [   62.716202]  show_stack+0x2c/0x38
-> > > [   62.719510]  dump_stack+0xcc/0x104
-> > > [   62.722904]  __schedule_bug+0x78/0xc8
-> > > [   62.726556]  __schedule+0x70c/0x8d8
-> > > [   62.730037]  schedule+0x4c/0x108
-> > > [   62.733259]  do_notify_resume+0x224/0x5d8
-> > > [   62.737259]  work_pending+0xc/0x2a4
-> > >
-> > > The error results in OOM eventually.
-> > >
-> > > RCU priority boosting does work around this issue but it seems to me
-> > > a workaround more than a fix (otherwise boosting would be enabled
-> > > by CONFIG_PREEMPT for arm64 I guess?).
-> > >
-> > > The question is: is this an arm64 bug that should be investigated? or
-> > > is this some known corner case of running stress-ng that is already
-> > > understood?
-> > >
-> > > thanks
-> > > Jorge
-> > >
-> > >
-> > >
+> 
+> On Wed, Sep 1, 2021 at 1:11 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
+>>
+>> followings are some of my kernel config options:
+>> CONFIG_PREEMPT=y
+>> CONFIG_PREEMPT_COUNT=y
+>> CONFIG_PREEMPTION=y
+>> CONFIG_PREEMPT_DYNAMIC=y
+>> CONFIG_PREEMPT_RCU=y
+>> CONFIG_HAVE_PREEMPT_DYNAMIC=y
+>> CONFIG_TREE_RCU=y
+>> CONFIG_PREEMPT_RCU=y
+>> CONFIG_RCU_EXPERT=y
+>> CONFIG_SRCU=y
+>> CONFIG_TREE_SRCU=y
+>> CONFIG_TASKS_RCU_GENERIC=y
+>> CONFIG_TASKS_RCU=y
+>> CONFIG_TASKS_RUDE_RCU=y
+>> CONFIG_TASKS_TRACE_RCU=y
+>> CONFIG_RCU_STALL_COMMON=y
+>> CONFIG_RCU_NEED_SEGCBLIST=y
+>> CONFIG_RCU_FANOUT=64
+>> CONFIG_RCU_FANOUT_LEAF=16
+>> # CONFIG_RCU_FAST_NO_HZ is not set
+>> # CONFIG_RCU_BOOST is not set
+>> CONFIG_RCU_NOCB_CPU=y
+>> # CONFIG_TASKS_TRACE_RCU_READ_MB is not set
+>> # end of RCU Subsystem
+>> CONFIG_MMU_GATHER_RCU_TABLE_FREE=y
+>> CONFIG_LOCKDEP_CIRCULAR_QUEUE_BITS=12
+>> # RCU Debugging
+>> CONFIG_PROVE_RCU=y
+>> # CONFIG_PROVE_RCU_LIST is not set
+>> # CONFIG_RCU_SCALE_TEST is not set
+>> CONFIG_RCU_TORTURE_TEST=m
+>> # CONFIG_RCU_REF_SCALE_TEST is not set
+>> CONFIG_RCU_CPU_STALL_TIMEOUT=21
+>> # CONFIG_RCU_TRACE is not set
+>> # CONFIG_RCU_EQS_DEBUG is not set
+>>
+>> Thanks
+>> Zhouyi
+>>
+>> On Wed, Sep 1, 2021 at 1:01 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
+>>>
+>>> I did an experiment just now on x86_64 virtual machines, rcu did not
+>>> complain after 10 minutes's test, I hope my effort can provide some
+>>> clue.
+>>>
+>>> 1. I clone the fresh new linux kernel (git clone
+>>> https://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git/torvalds/linux.git)
+>>> 2. compile the kernel without CONFIG_RCU_BOOST (: # CONFIG_RCU_BOOST is not set)
+>>> 3. boot the kernel on a x86_64 VM (kvm -cpu host -smp 16  -hda
+>>> ./debian10.qcow2 -m 4096 -net
+>>> user,hostfwd=tcp::5556-:22,hostfwd=tcp::5555-:19 -net nic,model=e1000
+>>> -vnc :30)
+>>> 4. run the test (stress-ng --sequential 16  --class scheduler -t 5m --times)
+>>> 5. monitor the system by constantly typing top and dmesg
+>>> 6. after 10 minutes, nothing else happens except that the dmesg report
+>>> following two messages
+>>> [  672.528192] sched: DL replenish lagged too much
+>>> [  751.127790] hrtimer: interrupt took 12143 ns
+>>>
+>>> So, I guess CONFIG_RCU_BOOST is not necessary for x86_64 virtual machines
+>>>
+>>> Zhouyi
+>>>
+>>> On Tue, Aug 31, 2021 at 11:24 PM Jorge Ramirez-Ortiz, Foundries
+>>> <jorge@foundries.io> wrote:
+>>>>
+>>>> Hi
+>>>>
+>>>> When enabling CONFIG_PREEMPT and running the stress-ng scheduler class
+>>>> tests on arm64 (xilinx zynqmp and imx imx8mm SoCs) we are observing the following.
+>>>>
+>>>> [   62.578917] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+>>>> [   62.585015]  (detected by 0, t=5253 jiffies, g=3017, q=2972)
+>>>> [   62.590663] rcu: All QSes seen, last rcu_preempt kthread activity 5254 (4294907943-4294902689), jiffies_till_next_fqs=1, root
+>>>> +->qsmask 0x0
+>>>> [   62.603086] rcu: rcu_preempt kthread starved for 5258 jiffies! g3017 f0x2 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=1
+>>>> [   62.613246] rcu:     Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
+>>>> [   62.622359] rcu: RCU grace-period kthread stack dump:
+>>>> [   62.627395] task:rcu_preempt     state:R  running task     stack:    0 pid:   14 ppid:     2 flags:0x00000028
+>>>> [   62.637308] Call trace:
+>>>> [   62.639748]  __switch_to+0x11c/0x190
+>>>> [   62.643319]  __schedule+0x3b8/0x8d8
+>>>> [   62.646796]  schedule+0x4c/0x108
+>>>> [   62.650018]  schedule_timeout+0x1ac/0x358
+>>>> [   62.654021]  rcu_gp_kthread+0x6a8/0x12b8
+>>>> [   62.657933]  kthread+0x14c/0x158
+>>>> [   62.661153]  ret_from_fork+0x10/0x18
+>>>> [   62.682919] BUG: scheduling while atomic: stress-ng-hrtim/831/0x00000002
+>>>> [   62.689604] Preemption disabled at:
+>>>> [   62.689614] [<ffffffc010059418>] irq_enter_rcu+0x30/0x58
+>>>> [   62.698393] CPU: 0 PID: 831 Comm: stress-ng-hrtim Not tainted 5.10.42+ #5
+>>>> [   62.706296] Hardware name: Zynqmp new (DT)
+>>>> [   62.710115] Call trace:
+>>>> [   62.712548]  dump_backtrace+0x0/0x240
+>>>> [   62.716202]  show_stack+0x2c/0x38
+>>>> [   62.719510]  dump_stack+0xcc/0x104
+>>>> [   62.722904]  __schedule_bug+0x78/0xc8
+>>>> [   62.726556]  __schedule+0x70c/0x8d8
+>>>> [   62.730037]  schedule+0x4c/0x108
+>>>> [   62.733259]  do_notify_resume+0x224/0x5d8
+>>>> [   62.737259]  work_pending+0xc/0x2a4
+>>>>
+>>>> The error results in OOM eventually.
+>>>>
+>>>> RCU priority boosting does work around this issue but it seems to me
+>>>> a workaround more than a fix (otherwise boosting would be enabled
+>>>> by CONFIG_PREEMPT for arm64 I guess?).
+>>>>
+>>>> The question is: is this an arm64 bug that should be investigated? or
+>>>> is this some known corner case of running stress-ng that is already
+>>>> understood?
+>>>>
+>>>> thanks
+>>>> Jorge
+>>>>
+>>>>
+>>>>
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
+member of the Code Aurora Forum, hosted by The Linux Foundation
