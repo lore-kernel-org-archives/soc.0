@@ -1,26 +1,30 @@
-Return-Path: <SRS0=Q489=NX=gmail.com=zhouzhouyi@kernel.org>
+Return-Path: <rcu-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF5D6C432BE
-	for <soc@archiver.kernel.org>; Wed,  1 Sep 2021 06:47:32 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id BE54361027; Wed,  1 Sep 2021 06:47:32 +0000 (UTC)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 800566101B;
-	Wed,  1 Sep 2021 06:47:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 800566101B
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id s25so2353758edw.0;
-        Tue, 31 Aug 2021 23:47:32 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08083C4320E
+	for <rcu@archiver.kernel.org>; Wed,  1 Sep 2021 06:47:34 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id E098E6101A
+	for <rcu@archiver.kernel.org>; Wed,  1 Sep 2021 06:47:33 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S242352AbhIAGs3 (ORCPT <rfc822;rcu@archiver.kernel.org>);
+        Wed, 1 Sep 2021 02:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242346AbhIAGs3 (ORCPT <rfc822;rcu@vger.kernel.org>);
+        Wed, 1 Sep 2021 02:48:29 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94357C061575
+        for <rcu@vger.kernel.org>; Tue, 31 Aug 2021 23:47:32 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id r7so2254514edd.6
+        for <rcu@vger.kernel.org>; Tue, 31 Aug 2021 23:47:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -37,14 +41,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=bEwQFqSQuhp1iQWPoEU85Xv7s9pAts70QYOC9bZTmAA=;
-        b=JNS5aj5uqiaKWjeof4GqjzVKSLJkH1RGCZcuJ7XXWSkUfuytr/PqwTGQ4RgEsimxZ8
-         ZHnnKeFgnLPGhU/ufMJgNgqR6LVCueBGeGUmf7kunL95enbNzPL9fPNmRdbdvCTsAftu
-         Cx8ZHEFRe0HojC/l4tor37vLyZH2k/utohIQQ+6eL/hUArtBAf+5/JX8ct9/fIRqzaVF
-         Hfhj+x+RC2JqneeJL8nj17P3YmZUXU5SYSszo1/8iTf+Q0KTHyVMz6xZFvGwyLkomv2P
-         Zb4Hi8oRSUusw2uozR7jDmnFoEGO7O/Oz/oOwLhHrAyW1HerY8lPgF6FRNgq0es/ps/c
-         vXbg==
-X-Gm-Message-State: AOAM53268R00NSfcSNIBPx5Q6cdrJxbLAqJ9q7ZYfkPcIh2zUUI9HQ3F
-	s7F0nsolWtcgez3bDyalckIZtl5lHCj6R9utHJk=
+        b=ktx71LYxBTfdWltfZ0eTY5fq1P2mu6bp3U+Ih6P2j9S8Dx3bhk2vr4C92DG4EEwnt0
+         O7aAJ4aGn2kdvjtu/MnhBH6XTXhnLf5QJyV29S+0oW7Qc1lNBn0BkkdNIlPsY2GvWqKL
+         I+Z7J66jZhVnvlhA5soiqenERIvsnqPn81NByy6OS2X/sdNUIgrHAsZ+O+9oPiSALBuu
+         EiJ6vYvYvQJBlEwM79D6KDXPbEjPqJ0AKFaPI5hH3ti1GXpABeS+xVCGxWDtNYvQoQH8
+         +iFDsGoy7oJSOATQG+zF6bAWNBKCUdcXNBq2c+kkCki4qggla6hxDT0My1mKq8SDNv8M
+         CRYg==
+X-Gm-Message-State: AOAM530iqghnxPxhE69izhHiXyEYYZ77VBph+dcdzfDK+Su/zB2Iidn8
+        NxoIBum63y6EpOY4Au+38ep0QjPBM/xoSeJvC1k=
 X-Google-Smtp-Source: ABdhPJyVpkCSNQLUPBLFMqC8Rl33Vn6B1RfYHVShW+5gsmdXb/pZnMH64OEPZc5lF/G5v/84Mw8akeg8G9MJKt3hgk0=
 X-Received: by 2002:a05:6402:221b:: with SMTP id cq27mr22841118edb.374.1630478851091;
  Tue, 31 Aug 2021 23:47:31 -0700 (PDT)
@@ -53,18 +57,25 @@ References: <20210831152144.GA28128@trex> <CAABZP2xGnSLVbgxqjKMq=Oj_H7rYfYjuCvmB
  <CAABZP2wUdToiAWOAgqDZrZtkuEdrXEv9GDgbioW3PZAyseOSgA@mail.gmail.com>
  <CAABZP2zg8c_gkm4+h4-mPCv_uDf5-iJFHEExCDFoES0jmBeuKw@mail.gmail.com> <2712e554-2058-d3c3-72ae-cca7562a2ec7@codeaurora.org>
 In-Reply-To: <2712e554-2058-d3c3-72ae-cca7562a2ec7@codeaurora.org>
-From: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date: Wed, 1 Sep 2021 14:47:18 +0800
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Wed, 1 Sep 2021 14:47:18 +0800
 Message-ID: <CAABZP2w5tqwKBEh7gJ8h02ZVj6gGdYnPy1gBsD7DEbtbA-9KxQ@mail.gmail.com>
 Subject: Re: rcu_preempt detected stalls
-To: Neeraj Upadhyay <neeraju@codeaurora.org>
+To:     Neeraj Upadhyay <neeraju@codeaurora.org>
 List-Id: <soc.lore.kernel.org>
-Cc: "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>, paulmck@kernel.org, 
-	Josh Triplett <josh@joshtriplett.org>, rostedt <rostedt@goodmis.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>, 
-	"Joel Fernandes, Google" <joel@joelfernandes.org>, rcu <rcu@vger.kernel.org>, soc@kernel.org, 
-	linux-arm-kernel@lists.infradead.org
+Cc:     "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>,
+        paulmck@kernel.org, Josh Triplett <josh@joshtriplett.org>,
+        rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Joel Fernandes, Google" <joel@joelfernandes.org>,
+        rcu <rcu@vger.kernel.org>, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <rcu.vger.kernel.org>
+X-Mailing-List: rcu@vger.kernel.org
+Message-ID: <20210901064718.W_JUPlx6sG8QdqH1qaqj4p2FqTvLpOHhCAZzmouAjAM@z>
 
 Hi Neeraj
 
