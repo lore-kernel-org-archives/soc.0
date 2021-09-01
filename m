@@ -1,42 +1,48 @@
-Return-Path: <SRS0=k76B=NX=arm.com=james.morse@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99F97C432BE
-	for <soc@archiver.kernel.org>; Wed,  1 Sep 2021 17:04:24 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 75CD361053; Wed,  1 Sep 2021 17:04:24 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by mail.kernel.org (Postfix) with ESMTP id 14EA561058;
-	Wed,  1 Sep 2021 17:04:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 14EA561058
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=arm.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2754DC432BE
+	for <linux-kernel@archiver.kernel.org>; Wed,  1 Sep 2021 17:05:08 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id F419461074
+	for <linux-kernel@archiver.kernel.org>; Wed,  1 Sep 2021 17:05:07 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1344256AbhIARGD (ORCPT
+        <rfc822;linux-kernel@archiver.kernel.org>);
+        Wed, 1 Sep 2021 13:06:03 -0400
+Received: from foss.arm.com ([217.140.110.172]:39898 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346380AbhIARFW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Sep 2021 13:05:22 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A0B71042;
-	Wed,  1 Sep 2021 10:04:23 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A0B71042;
+        Wed,  1 Sep 2021 10:04:23 -0700 (PDT)
 Received: from [192.168.0.14] (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 087883F694;
-	Wed,  1 Sep 2021 10:04:21 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 087883F694;
+        Wed,  1 Sep 2021 10:04:21 -0700 (PDT)
 Subject: Re: About resctrl code rebase
-To: "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
+To:     "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
 List-Id: <soc.lore.kernel.org>
-Cc: "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
- "'linux-arm-kernel@lists.infradead.org'"
- <linux-arm-kernel@lists.infradead.org>, "'soc@kernel.org'" <soc@kernel.org>,
- "'tony.luck@intel.com'" <tony.luck@intel.com>,
- "'arnd@arndb.de'" <arnd@arndb.de>, "'will@kernel.org'" <will@kernel.org>,
- "'catalin.marinas@arm.com'" <catalin.marinas@arm.com>,
- "'olof@lixom.net'" <olof@lixom.net>,
- "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
+Cc:     "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
+        "'linux-arm-kernel@lists.infradead.org'" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "'soc@kernel.org'" <soc@kernel.org>,
+        "'tony.luck@intel.com'" <tony.luck@intel.com>,
+        "'arnd@arndb.de'" <arnd@arndb.de>,
+        "'will@kernel.org'" <will@kernel.org>,
+        "'catalin.marinas@arm.com'" <catalin.marinas@arm.com>,
+        "'olof@lixom.net'" <olof@lixom.net>,
+        "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
 References: <TYAPR01MB6330CE3CB67CF8F602D44D098BCD9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-From: James Morse <james.morse@arm.com>
+From:   James Morse <james.morse@arm.com>
 Message-ID: <97164928-e2d7-fd3f-e063-9174b028ed65@arm.com>
-Date: Wed, 1 Sep 2021 18:04:20 +0100
+Date:   Wed, 1 Sep 2021 18:04:20 +0100
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.0
 MIME-Version: 1.0
@@ -44,6 +50,10 @@ In-Reply-To: <TYAPR01MB6330CE3CB67CF8F602D44D098BCD9@TYAPR01MB6330.jpnprd01.prod
 Content-Type: text/plain; charset=iso-2022-jp
 Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210901170420.dELSIqzlOlPcKUMGvdxkVdMjN_kfIReIVyYPmoAI758@z>
 
 Hi Tan Shaopeng,
 
