@@ -1,46 +1,63 @@
-Return-Path: <linux-kernel-owner@kernel.org>
+Return-Path: <SRS0=b2Fa=N4=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2B08C433EF
-	for <linux-kernel@archiver.kernel.org>; Mon,  6 Sep 2021 06:19:18 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6B8560F92
-	for <linux-kernel@archiver.kernel.org>; Mon,  6 Sep 2021 06:19:18 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239408AbhIFGUV (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Mon, 6 Sep 2021 02:20:21 -0400
-Received: from esa14.fujitsucc.c3s2.iphmx.com ([68.232.156.101]:5049 "EHLO
-        esa14.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239474AbhIFGUS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Sep 2021 02:20:18 -0400
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F1F2C433EF
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  6 Sep 2021 06:22:19 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 1C79260ED8
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  6 Sep 2021 06:22:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C79260ED8
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=fujitsu.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:In-Reply-To:References:
+	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=UC7yLsSKAx7DuH+uYlIrVoKRQqDuQesdCpLRVBT3HVQ=; b=yGQc8fs2dyDAJz
+	yPnwG2rrboKS+u08WRr/8lxcF1Jos4Og7n3z2RU2BpIOyVTaSOkn1teuSKUrO/NfDHFj9J6iAPI77
+	IAywDIeq1q2dctz+oA9VmgzxqKFclJlZLNDrwq9vJH7wIMprJBKfC6G1EPRFEeyWwx2yFjQFJcc3i
+	8j42R1afn9yRqLEeCGOOV19f4BluCgab/VODyK7miIKLj44qdzsPCAii500k9wLNofHj9jUsWRkXz
+	TYizYHyZVdaa+KcFEllFBRksooRqJeRBrsVdwpIGPqcZi1eBDIhI6fPDkS0HKKuk8l/9A5y1UHg81
+	NMXyCHFdYFlxN8mRpO1w==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mN7yU-00HORQ-Me; Mon, 06 Sep 2021 06:19:23 +0000
+Received: from esa14.fujitsucc.c3s2.iphmx.com ([68.232.156.101])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mN7yP-00HOPa-9o
+ for linux-arm-kernel@lists.infradead.org; Mon, 06 Sep 2021 06:19:19 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1630909156; x=1662445156;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=0urNThEh47TkunWe2oWsdOogZ9Rvmb+yGq+s3vBKec8=;
-  b=clnuRno7xbYPmUXEnp+Sv+aAQ6WyYXqaiahIPnwpN27LkTJjN/s0tlqv
-   LFJcztfXOV/iRDHjGBw1AL4iuaSZXxY8QwQ62HUgFbTpfcR1xB0816rZQ
-   0g2FoxgL0NIoB9WVoPfvMqFq9xfsMNzI1oJ8brFriGHOB8qCHVtl521RG
-   9vgX3cwNV75LMcqliPcwWCgi89lR5fcnpCumWT5b7NyHY8pWq2TcrPuBa
-   KP8EdI3Oq4OIteKOlmJyMNA//7irCjSH9goU2yeTjFQ19GyLgp7dGp5uB
-   iFLCmNx+r/dzbnpV5D5XmjhA6MeQpzeGj6inO/kjp23tOEV5cWwtbqQuJ
-   w==;
+ d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+ t=1630909158; x=1662445158;
+ h=from:to:cc:subject:date:message-id:references:
+ in-reply-to:content-transfer-encoding:mime-version;
+ bh=0urNThEh47TkunWe2oWsdOogZ9Rvmb+yGq+s3vBKec8=;
+ b=MO+OjFe4eNNIWGidzsAlQQlgehKSKpKD/s6phC82DowIM29iggzLb2oE
+ 8cVXr7a7bLCkwW7c5yGM3wE9xg8aq2841hCAwIkCx3APVO5kZunVBWukT
+ 5MMh8hPdFaM/PJiefRkZikxLJLapunknixy7+8u6BjBL9lt/Qpc3SJXMn
+ w40Gq7srM1vI7v5yXdJ6iNgSdHPMHLNqq2KhCRL0VtZjsjyy0q5BzaKol
+ Bhb5JY4Z/uz1PrRtieUHUKguPrEA+VSuQXWeocy4wj3k1CLy1GNRzbsrr
+ 4Yhal4KyWLl54p4Ev0dw7oMpl0rVYjzCNw1Kd03c+50zQ8vFVwVJG0g6K A==;
 X-IronPort-AV: E=McAfee;i="6200,9189,10098"; a="38492157"
-X-IronPort-AV: E=Sophos;i="5.85,271,1624287600"; 
-   d="scan'208";a="38492157"
-Received: from mail-pu1apc01lp2059.outbound.protection.outlook.com (HELO APC01-PU1-obe.outbound.protection.outlook.com) ([104.47.126.59])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2021 15:19:11 +0900
+X-IronPort-AV: E=Sophos;i="5.85,271,1624287600"; d="scan'208";a="38492157"
+Received: from mail-pu1apc01lp2059.outbound.protection.outlook.com (HELO
+ APC01-PU1-obe.outbound.protection.outlook.com) ([104.47.126.59])
+ by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 06 Sep 2021 15:19:11 +0900
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=KyoP8hvnGCZEJ4r+lg9Kx5Cygv133Co67DItto50aA9bk/umt7bFqSMFDY5yzk97P7Wbrr+VfbUNF11/kh3DG7qomNc1ZX7e0pm4wnjVvHVWQEuOBL6p4sGEej6+UZfJwX/OtgAhKrmWpF1b3ElBMR8iRf3M31GDs4NuP9xS6GKzV4Jl1B8p2BtGnVNdW9nE6GUfxrhYxDTwb0040j4zlhIzUwyWBaQ2DnjE/n1vzd+qzm/X6No9OKo1p4+Wk63IOR8G0icdbxO1JWIVPJL/wELRlkS1IMKNip9RNbvRNrUJz9X8fC1dRv8b82MXB4BCyqL+1TaV2Ttqkwl4hi/2jw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version; 
  bh=0urNThEh47TkunWe2oWsdOogZ9Rvmb+yGq+s3vBKec8=;
  b=ezXPeFD111HlBo/O9QUV14xGEnw/AcnWwhm3qoVX6YPJhW4jY8b8PeGO7De3DlBUXG77rr/cFZYQzahCgg8p/WM9NWv3nMjI8WuDy8InVI9X2SPgYKZT2KJdjPIxMmtl3aCq4DP7G9oOeqsG+MEegcATHgenvQH9HEWcDi9FhDWj5sLSYMC+u/qszzT6McW1Aq9ncbbYBk+m9oMNe0WhlGZCaNZ4S/RM6ORPFQNXKY/lYxDuks3EGz279sMVXsId7VA9+dGe5MQdkehRb/NkJbNuhB/WOpqwWhbxatIE4l24DG2r5aMOwCB3tWvImlXYM06mswy5OS5n1CguhDf2DQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
@@ -52,31 +69,28 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  bh=0urNThEh47TkunWe2oWsdOogZ9Rvmb+yGq+s3vBKec8=;
  b=hh71Q4Yo/rmlHXjZui7QpExn7cUW7McTrvO0nXGP/5Vzf7pa6yD3Njrk7FoT/gdnDytt6OqBSA0z+w3QczQsFnnzFNWoUoTW/7BlLuJ30PHkkSRDYCqYGKoI4QXllGp8Wq8RMj/CpBexBSj4mgD2MrnlJhQpSjxayaGu12Xhu68=
 Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com (2603:1096:402:3e::12)
- by TY2PR01MB2650.jpnprd01.prod.outlook.com (2603:1096:404:79::20) with
- Microsoft SMTP Server (version=TLS1_2,
+ by TY2PR01MB2650.jpnprd01.prod.outlook.com (2603:1096:404:79::20)
+ with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.23; Mon, 6 Sep
  2021 06:19:07 +0000
 Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com
  ([fe80::b94b:d5ad:b6ff:956b]) by TYAPR01MB6330.jpnprd01.prod.outlook.com
  ([fe80::b94b:d5ad:b6ff:956b%4]) with mapi id 15.20.4478.025; Mon, 6 Sep 2021
  06:19:07 +0000
-From:   "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
-To:     'James Morse' <james.morse@arm.com>
+From: "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
+To: 'James Morse' <james.morse@arm.com>
 List-Id: <soc.lore.kernel.org>
-CC:     "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
-        "'linux-arm-kernel@lists.infradead.org'" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "'soc@kernel.org'" <soc@kernel.org>,
-        "'tony.luck@intel.com'" <tony.luck@intel.com>,
-        "'arnd@arndb.de'" <arnd@arndb.de>,
-        "'will@kernel.org'" <will@kernel.org>,
-        "'catalin.marinas@arm.com'" <catalin.marinas@arm.com>,
-        "'olof@lixom.net'" <olof@lixom.net>,
-        "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
+CC: "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
+ "'linux-arm-kernel@lists.infradead.org'"
+ <linux-arm-kernel@lists.infradead.org>, "'soc@kernel.org'" <soc@kernel.org>,
+ "'tony.luck@intel.com'" <tony.luck@intel.com>, "'arnd@arndb.de'"
+ <arnd@arndb.de>, "'will@kernel.org'" <will@kernel.org>,
+ "'catalin.marinas@arm.com'" <catalin.marinas@arm.com>, "'olof@lixom.net'"
+ <olof@lixom.net>, "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
 Subject: RE: About resctrl code rebase
 Thread-Topic: About resctrl code rebase
 Thread-Index: AQHXn1NwTLwp8TDbHk+k0EwVJVXXBKuWjhqQ
-Date:   Mon, 6 Sep 2021 06:19:07 +0000
+Date: Mon, 6 Sep 2021 06:19:07 +0000
 Message-ID: <TYAPR01MB6330974317488E525DBA4E2E8BD29@TYAPR01MB6330.jpnprd01.prod.outlook.com>
 References: <TYAPR01MB6330CE3CB67CF8F602D44D098BCD9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
  <97164928-e2d7-fd3f-e063-9174b028ed65@arm.com>
@@ -110,7 +124,10 @@ x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
 x-microsoft-antispam-message-info: rHWe5kckb4V/j2dBDdR92L+FVied3abelEfMu0cmPpgMeUf9/Ytq2cKUfZUiq2gOU8YMO4s30/Ir7AoC6wtZaqJsLogHIx9hb+aDqvfS06SGd7xsObdhyjGYomyHCj/XG2vSRboZp+j3OaALvSQhmPCYQknLBG0a0GyF46I58FVLrONxinq9eVv5A5eTTLbM0rvD32XUdxzc2Zy6I098v8QLWJslSJv77MR89GW2Bxv9jztLrD9oBtiJjZCDeyuFuGLkeq1s4YjYHqm0pJvCsn5d7jQo5mth0ZMnrrYZwLu3BeYpTUxix8dBd1/zASXcaLDUHDVCGOfo92UCT4AJJBrpeMDiL1D9JLXjgSHIVkc/ebJvrtDUhVbpYpsZBgDIryU0h0oR6vdb8wdQ8uFKYp8KnOvpRzpGaKLPpoiSrhROx7kv/rJ30wU8WBTP1awAF4IWJzbsTpwqCnCuc7gW9eEX+4MH4exOxNp4UrsjXyg0FrwdoIL0+OTltKzn4a4Uy6GGqyj38Na8cUTNYra0muMzJwzJ8dIPjgYmZNWaaodY5omnO2etiMkK8t6f4ycTJVv7Il4Pkq7vW3n7bE3Dk268kQBvXQwwB8BTURKhq2Ei0LQZxJW6wVzonb5B7A8GmSItoESgJgRbIAVa0bn7nuZzuoLI3OcRUE67LDSQRtR/sQbBeF95p+9hc0TDNLuLYF4Re3QOfqEv8I0tE8cWNpqSFhUoqAxprq2VTEEGrUWmNPXOucp1oitO17Dl9fgxGhkveFb65H+b1f3lgvPUjKRDsOwVj/c2qcYiObVSOdIFIUnw5USdahWSoryKuBGwhbqgtACeRERlYEpjjkXxXg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6330.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39860400002)(366004)(396003)(376002)(346002)(107886003)(4326008)(38070700005)(38100700002)(478600001)(8936002)(316002)(966005)(8676002)(5660300002)(9686003)(33656002)(54906003)(83380400001)(2906002)(7696005)(55016002)(52536014)(53546011)(3480700007)(6916009)(86362001)(66946007)(6506007)(26005)(71200400001)(186003)(85182001)(66476007)(66556008)(64756008)(66446008)(76116006)(122000001);DIR:OUT;SFP:1101;
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:TYAPR01MB6330.jpnprd01.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(4636009)(136003)(39860400002)(366004)(396003)(376002)(346002)(107886003)(4326008)(38070700005)(38100700002)(478600001)(8936002)(316002)(966005)(8676002)(5660300002)(9686003)(33656002)(54906003)(83380400001)(2906002)(7696005)(55016002)(52536014)(53546011)(3480700007)(6916009)(86362001)(66946007)(6506007)(26005)(71200400001)(186003)(85182001)(66476007)(66556008)(64756008)(66446008)(76116006)(122000001);
+ DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?dm9YY3lkdWw2cGtIak0wQTUvMU5QeUxnYWRSWWpLNlNRN0NJSmliQm5Y?=
  =?iso-2022-jp?B?Q0VXaHRiTXhFbVZoeVlieUYvbC9XY1k1VDY5czBDd0hPVkhDMURYYUdR?=
@@ -144,24 +161,36 @@ x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?dm9YY3lkdWw2cGtIak0wQTUvMU
  =?iso-2022-jp?B?TzdFL3gvV3E0RkRGZjFMSTZPL2JYMUJ5SUVxWlVqamJXY0t5SWNnZG5M?=
  =?iso-2022-jp?B?K3FvNktrZmxFZDZvVm1YWUFpSVFRb3FNL1RHRVY0U29qTmk1YzRhMXE1?=
  =?iso-2022-jp?B?Z1lVdkZJRVpPbU1udW1SOGdFK1ozZnR2ZmtRVXNoS2t4OHBFTWY5RENE?=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: fujitsu.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6330.jpnprd01.prod.outlook.com
 X-MS-Exchange-CrossTenant-Network-Message-Id: 30db8375-a919-4e8f-a07e-08d970fe3b9f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2021 06:19:07.2762
- (UTC)
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2021 06:19:07.2762 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: McRTxRz7rGswgV5u2l+lc8q7MjTRcw2W43JL6lCatuFLKOKFcOFt63TLTwv0nnL/Dx0apbV5HWDvU3v/SiVMWFkH2Xi7PwuczO0H08BUcpM=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB2650
-Precedence: bulk
-List-ID: <linux-kernel.vger.kernel.org>
-X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20210906061907.xdzm6nbE_ww65OtN0FQ0mmMSORt2uY1MHqXl-7Xpb3Y@z>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210905_231917_825544_A5667808 
+X-CRM114-Status: GOOD (  20.38  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210906061907.zRxgWS4hpDpFAJYpGB0XapTra9BTfiqCe1FFEmEIhlc@z>
 
 Hi, James Morse
 
@@ -170,45 +199,48 @@ Thanks for your reply.
 > On 01/09/2021 09:35, tan.shaopeng@fujitsu.com wrote:
 > >> As you known, Fujitsu is implementing a feature that add A64FX's
 > >> cache control function into resctrl.
->=20
+> 
 > >> Fujitsu will implement this feature base on your rebased code. I
 > >> think the commit of refactoring arch/x86 implementation of resctrl
 > >> has been merged into the x86/cache branch.
 > >> https://lore.kernel.org/lkml/162871088112.395.12879267279872673224.ti
 > >> p-bot2@tip-bot2/
->=20
+> 
 > I'm afraid this was only a small part of it.
->=20
+> 
 > I've also posted the next series here:
 > https://lore.kernel.org/lkml/20210729223610.29373-1-james.morse@arm.com
 > /
->=20
+> 
 > and there are a couple more after that.
 
 I understand.
-=20
+ 
 > >> I would like to know whether you have rebased these codes that move
 > >> the common parts of multiple architectures to somewhere.
 > >> And where is the rebase code?
 > >> In addition, when will you release the latest MPAM patch?
->=20
-> I will keep posting 'the next part' of the x86 changes once the earlier p=
-art is
+> 
+> I will keep posting 'the next part' of the x86 changes once the earlier part is
 > reviewed.
 > (please help!)
 
 I will check these patches.
-And I'm going to test these patches on machine with x86.=20
+And I'm going to test these patches on machine with x86. 
 
 Best regards,
 Tan Shaopeng
 
-> I can't push the latest branch until the ACPI spec is published, but I ho=
-pe that
+> I can't push the latest branch until the ACPI spec is published, but I hope that
 > will happen this month.
->=20
->=20
+> 
+> 
 > > I'm afraid that my message may not have reached you.
->=20
+> 
 > Yes, I'm horribly behind with email!
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
