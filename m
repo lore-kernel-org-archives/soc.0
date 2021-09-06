@@ -1,36 +1,37 @@
-Return-Path: <SRS0=Ewj+=N4=fujitsu.com=tan.shaopeng@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46EFCC433F5
-	for <soc@archiver.kernel.org>; Mon,  6 Sep 2021 06:19:15 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 1E31060F12; Mon,  6 Sep 2021 06:19:15 +0000 (UTC)
-Received: from esa14.fujitsucc.c3s2.iphmx.com (esa14.fujitsucc.c3s2.iphmx.com [68.232.156.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4F075600CC;
-	Mon,  6 Sep 2021 06:19:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4F075600CC
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=fujitsu.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=fujitsu.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2B08C433EF
+	for <linux-kernel@archiver.kernel.org>; Mon,  6 Sep 2021 06:19:18 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id C6B8560F92
+	for <linux-kernel@archiver.kernel.org>; Mon,  6 Sep 2021 06:19:18 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S239408AbhIFGUV (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Mon, 6 Sep 2021 02:20:21 -0400
+Received: from esa14.fujitsucc.c3s2.iphmx.com ([68.232.156.101]:5049 "EHLO
+        esa14.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239474AbhIFGUS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Sep 2021 02:20:18 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1630909155; x=1662445155;
+  t=1630909156; x=1662445156;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
   bh=0urNThEh47TkunWe2oWsdOogZ9Rvmb+yGq+s3vBKec8=;
-  b=SkCZExI/+Zgt5F+UF7Bmt/vYZYz2JSD8ywoYyrNdFdM5I0P3lclET+oz
-   uXprUpfHVghpS2kGcY5cpwlWr44oh3I5tGk7SktH0k6/Oy2h5LdKgHJEc
-   V/sOX2HIXIN6R+DPcWWbzYAJPchWe6NvJBZ+hrBhbqIogHV2OoTuKM9rw
-   H/xhhc5G4bB4U7/QMARI5DrC/2ebLql5V9aVg5Cxw2c8xZDlR4KOMYn2c
-   5QNu2GhT1Uc/2fMewTNxOhqbMWwkmrBQ6C1qkaPvSYyezM6hG7iE9oo1j
-   6Rd88BdGdRyO3LU22EVkyN/yZbZpqtVq3yZymSMDLOE8M2c2wHR9C9RNs
-   A==;
+  b=clnuRno7xbYPmUXEnp+Sv+aAQ6WyYXqaiahIPnwpN27LkTJjN/s0tlqv
+   LFJcztfXOV/iRDHjGBw1AL4iuaSZXxY8QwQ62HUgFbTpfcR1xB0816rZQ
+   0g2FoxgL0NIoB9WVoPfvMqFq9xfsMNzI1oJ8brFriGHOB8qCHVtl521RG
+   9vgX3cwNV75LMcqliPcwWCgi89lR5fcnpCumWT5b7NyHY8pWq2TcrPuBa
+   KP8EdI3Oq4OIteKOlmJyMNA//7irCjSH9goU2yeTjFQ19GyLgp7dGp5uB
+   iFLCmNx+r/dzbnpV5D5XmjhA6MeQpzeGj6inO/kjp23tOEV5cWwtbqQuJ
+   w==;
 X-IronPort-AV: E=McAfee;i="6200,9189,10098"; a="38492157"
 X-IronPort-AV: E=Sophos;i="5.85,271,1624287600"; 
    d="scan'208";a="38492157"
@@ -59,32 +60,32 @@ Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com
  ([fe80::b94b:d5ad:b6ff:956b]) by TYAPR01MB6330.jpnprd01.prod.outlook.com
  ([fe80::b94b:d5ad:b6ff:956b%4]) with mapi id 15.20.4478.025; Mon, 6 Sep 2021
  06:19:07 +0000
-From: "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
-To: 'James Morse' <james.morse@arm.com>
+From:   "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
+To:     'James Morse' <james.morse@arm.com>
 List-Id: <soc.lore.kernel.org>
-CC: "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
-	"'linux-arm-kernel@lists.infradead.org'"
-	<linux-arm-kernel@lists.infradead.org>, "'soc@kernel.org'" <soc@kernel.org>,
-	"'tony.luck@intel.com'" <tony.luck@intel.com>, "'arnd@arndb.de'"
-	<arnd@arndb.de>, "'will@kernel.org'" <will@kernel.org>,
-	"'catalin.marinas@arm.com'" <catalin.marinas@arm.com>, "'olof@lixom.net'"
-	<olof@lixom.net>, "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
+CC:     "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
+        "'linux-arm-kernel@lists.infradead.org'" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "'soc@kernel.org'" <soc@kernel.org>,
+        "'tony.luck@intel.com'" <tony.luck@intel.com>,
+        "'arnd@arndb.de'" <arnd@arndb.de>,
+        "'will@kernel.org'" <will@kernel.org>,
+        "'catalin.marinas@arm.com'" <catalin.marinas@arm.com>,
+        "'olof@lixom.net'" <olof@lixom.net>,
+        "misono.tomohiro@fujitsu.com" <misono.tomohiro@fujitsu.com>
 Subject: RE: About resctrl code rebase
 Thread-Topic: About resctrl code rebase
 Thread-Index: AQHXn1NwTLwp8TDbHk+k0EwVJVXXBKuWjhqQ
-Date: Mon, 6 Sep 2021 06:19:07 +0000
-Message-ID:
- <TYAPR01MB6330974317488E525DBA4E2E8BD29@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-References:
- <TYAPR01MB6330CE3CB67CF8F602D44D098BCD9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+Date:   Mon, 6 Sep 2021 06:19:07 +0000
+Message-ID: <TYAPR01MB6330974317488E525DBA4E2E8BD29@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+References: <TYAPR01MB6330CE3CB67CF8F602D44D098BCD9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
  <97164928-e2d7-fd3f-e063-9174b028ed65@arm.com>
 In-Reply-To: <97164928-e2d7-fd3f-e063-9174b028ed65@arm.com>
 Accept-Language: ja-JP, en-US
 Content-Language: ja-JP
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- =?iso-2022-jp?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZl?=
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: =?iso-2022-jp?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZl?=
  =?iso-2022-jp?B?Y2UwNTBfQWN0aW9uSWQ9ZTUyNWQ5NjktYzZkYi00OWFhLTgzZjgtOTI5?=
  =?iso-2022-jp?B?YzcyMjcyMTM1O01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFi?=
  =?iso-2022-jp?B?NGQtM2IwZjRmZWNlMDUwX0NvbnRlbnRCaXRzPTA7TVNJUF9MYWJlbF9h?=
@@ -103,19 +104,15 @@ x-ms-publictraffictype: Email
 x-ms-office365-filtering-correlation-id: 30db8375-a919-4e8f-a07e-08d970fe3b9f
 x-ms-traffictypediagnostic: TY2PR01MB2650:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs:
- <TY2PR01MB26500A34C8177D5D668238EA8BD29@TY2PR01MB2650.jpnprd01.prod.outlook.com>
+x-microsoft-antispam-prvs: <TY2PR01MB26500A34C8177D5D668238EA8BD29@TY2PR01MB2650.jpnprd01.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- rHWe5kckb4V/j2dBDdR92L+FVied3abelEfMu0cmPpgMeUf9/Ytq2cKUfZUiq2gOU8YMO4s30/Ir7AoC6wtZaqJsLogHIx9hb+aDqvfS06SGd7xsObdhyjGYomyHCj/XG2vSRboZp+j3OaALvSQhmPCYQknLBG0a0GyF46I58FVLrONxinq9eVv5A5eTTLbM0rvD32XUdxzc2Zy6I098v8QLWJslSJv77MR89GW2Bxv9jztLrD9oBtiJjZCDeyuFuGLkeq1s4YjYHqm0pJvCsn5d7jQo5mth0ZMnrrYZwLu3BeYpTUxix8dBd1/zASXcaLDUHDVCGOfo92UCT4AJJBrpeMDiL1D9JLXjgSHIVkc/ebJvrtDUhVbpYpsZBgDIryU0h0oR6vdb8wdQ8uFKYp8KnOvpRzpGaKLPpoiSrhROx7kv/rJ30wU8WBTP1awAF4IWJzbsTpwqCnCuc7gW9eEX+4MH4exOxNp4UrsjXyg0FrwdoIL0+OTltKzn4a4Uy6GGqyj38Na8cUTNYra0muMzJwzJ8dIPjgYmZNWaaodY5omnO2etiMkK8t6f4ycTJVv7Il4Pkq7vW3n7bE3Dk268kQBvXQwwB8BTURKhq2Ei0LQZxJW6wVzonb5B7A8GmSItoESgJgRbIAVa0bn7nuZzuoLI3OcRUE67LDSQRtR/sQbBeF95p+9hc0TDNLuLYF4Re3QOfqEv8I0tE8cWNpqSFhUoqAxprq2VTEEGrUWmNPXOucp1oitO17Dl9fgxGhkveFb65H+b1f3lgvPUjKRDsOwVj/c2qcYiObVSOdIFIUnw5USdahWSoryKuBGwhbqgtACeRERlYEpjjkXxXg==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6330.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39860400002)(366004)(396003)(376002)(346002)(107886003)(4326008)(38070700005)(38100700002)(478600001)(8936002)(316002)(966005)(8676002)(5660300002)(9686003)(33656002)(54906003)(83380400001)(2906002)(7696005)(55016002)(52536014)(53546011)(3480700007)(6916009)(86362001)(66946007)(6506007)(26005)(71200400001)(186003)(85182001)(66476007)(66556008)(64756008)(66446008)(76116006)(122000001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: rHWe5kckb4V/j2dBDdR92L+FVied3abelEfMu0cmPpgMeUf9/Ytq2cKUfZUiq2gOU8YMO4s30/Ir7AoC6wtZaqJsLogHIx9hb+aDqvfS06SGd7xsObdhyjGYomyHCj/XG2vSRboZp+j3OaALvSQhmPCYQknLBG0a0GyF46I58FVLrONxinq9eVv5A5eTTLbM0rvD32XUdxzc2Zy6I098v8QLWJslSJv77MR89GW2Bxv9jztLrD9oBtiJjZCDeyuFuGLkeq1s4YjYHqm0pJvCsn5d7jQo5mth0ZMnrrYZwLu3BeYpTUxix8dBd1/zASXcaLDUHDVCGOfo92UCT4AJJBrpeMDiL1D9JLXjgSHIVkc/ebJvrtDUhVbpYpsZBgDIryU0h0oR6vdb8wdQ8uFKYp8KnOvpRzpGaKLPpoiSrhROx7kv/rJ30wU8WBTP1awAF4IWJzbsTpwqCnCuc7gW9eEX+4MH4exOxNp4UrsjXyg0FrwdoIL0+OTltKzn4a4Uy6GGqyj38Na8cUTNYra0muMzJwzJ8dIPjgYmZNWaaodY5omnO2etiMkK8t6f4ycTJVv7Il4Pkq7vW3n7bE3Dk268kQBvXQwwB8BTURKhq2Ei0LQZxJW6wVzonb5B7A8GmSItoESgJgRbIAVa0bn7nuZzuoLI3OcRUE67LDSQRtR/sQbBeF95p+9hc0TDNLuLYF4Re3QOfqEv8I0tE8cWNpqSFhUoqAxprq2VTEEGrUWmNPXOucp1oitO17Dl9fgxGhkveFb65H+b1f3lgvPUjKRDsOwVj/c2qcYiObVSOdIFIUnw5USdahWSoryKuBGwhbqgtACeRERlYEpjjkXxXg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6330.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39860400002)(366004)(396003)(376002)(346002)(107886003)(4326008)(38070700005)(38100700002)(478600001)(8936002)(316002)(966005)(8676002)(5660300002)(9686003)(33656002)(54906003)(83380400001)(2906002)(7696005)(55016002)(52536014)(53546011)(3480700007)(6916009)(86362001)(66946007)(6506007)(26005)(71200400001)(186003)(85182001)(66476007)(66556008)(64756008)(66446008)(76116006)(122000001);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-2022-jp?B?dm9YY3lkdWw2cGtIak0wQTUvMU5QeUxnYWRSWWpLNlNRN0NJSmliQm5Y?=
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?dm9YY3lkdWw2cGtIak0wQTUvMU5QeUxnYWRSWWpLNlNRN0NJSmliQm5Y?=
  =?iso-2022-jp?B?Q0VXaHRiTXhFbVZoeVlieUYvbC9XY1k1VDY5czBDd0hPVkhDMURYYUdR?=
  =?iso-2022-jp?B?QlJWdXNsd2xTdlpiRk1WMHJycFZpSFVabS9JYWJlT1F3dUFjblB4RHM1?=
  =?iso-2022-jp?B?UkJSbzlwVHhTSk1nNHIyWjlVb2RyOU9aR25DVCtxdW11VlMxVmxnV2V2?=
@@ -161,6 +158,10 @@ X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: McRTxRz7rGswgV5u2l+lc8q7MjTRcw2W43JL6lCatuFLKOKFcOFt63TLTwv0nnL/Dx0apbV5HWDvU3v/SiVMWFkH2Xi7PwuczO0H08BUcpM=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB2650
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20210906061907.xdzm6nbE_ww65OtN0FQ0mmMSORt2uY1MHqXl-7Xpb3Y@z>
 
 Hi, James Morse
 
