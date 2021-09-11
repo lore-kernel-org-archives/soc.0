@@ -1,25 +1,29 @@
-Return-Path: <SRS0=mnBx=OB=gmail.com=romain.perier@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E47F4C433F5
-	for <soc@archiver.kernel.org>; Sat, 11 Sep 2021 12:20:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id B89D0611B0; Sat, 11 Sep 2021 12:20:05 +0000 (UTC)
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8BC7E60FDA;
-	Sat, 11 Sep 2021 12:20:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8BC7E60FDA
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f47.google.com with SMTP id o124so4023179vsc.6;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52319C433FE
+	for <linux-devicetree@archiver.kernel.org>; Sat, 11 Sep 2021 12:20:07 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 2E0BD611AD
+	for <linux-devicetree@archiver.kernel.org>; Sat, 11 Sep 2021 12:20:07 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S235750AbhIKMVS (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Sat, 11 Sep 2021 08:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230249AbhIKMVS (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Sat, 11 Sep 2021 08:21:18 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944C4C061574;
+        Sat, 11 Sep 2021 05:20:05 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id a21so4014507vsp.12;
         Sat, 11 Sep 2021 05:20:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
@@ -37,14 +41,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
         bh=7H4xpqYSY81qruCKg0gMtRjcT5K5rttH7wg/f9oDRUM=;
-        b=vbyPCiGGy3regYvodYCjgkKLLEvcK4kNy27ohDXSmA9t2cyiXF0J56gGWT6u5THa1v
-         AosFe1OqGFfIeEK4PvZQjx+zcbcFkqdnq7OQHJvnCWl72ICwDDxdQQcApQ9i+s3zorL3
-         dwEMMyeftlbxEO0D7MCqAIs92uS+5xtajjog15jBhomGXOFK6I2FkSftejgxzX88bD5n
-         9ESVUwfoNQKqzbiUMd86SNTOZ1zeJn2ylqxcskYrRtKDAW6+9WBCkC573dikpCA0soYZ
-         tATBHGCT1a6KmJi/zSnQSUy6cpOwo1Ckc+i4qlkvw8I1AIEXRZPFv3lZkoO3cFd9QzI3
-         er3g==
-X-Gm-Message-State: AOAM532Yga1cyAWuwtyTbj/PQfnpJh1bY3Eiz0HZ2ATGUWfgGJts04lp
-	Vg+b+sQ9Yp30Urt7yH77JwpKaDymzCenZFn1s5c=
+        b=0cWBifenGshzDDQegqzFnydgN3bXu+7CIdoNMngUSM6e68+J9o1swRDVHMv48uUE7i
+         W6ju2jBG9NslUqPZNGpzywJmhbckiVcFaeYs02Jfdp0Oohyu1rBxadIZXL8looAPjRrZ
+         HiuAJMn2Hj1s0eU9SLDzX7/5vf4GJ6H+aiXsDYJrx0bwI6qHiz3nio6W70hgEqWov0jy
+         um9TNV4CPh4xlssW+Lv3b/9u3iUMV7JMr4jRC5hoWFjvRH6Mi6EtOlC1iDymDq8gqxtU
+         6oTIlWXeo3yL9Ilk4eSo4nfj3xPmBV9tXXtEj3U1FyZPUIkAYAj9YpLeImwK40VIe93e
+         amMw==
+X-Gm-Message-State: AOAM5302p5ulyzG55JMQIvmgSDWmtgo5iiggbZk2DAkHK7zKPVqP/4ay
+        AUvbTmaxUJio+3RWo9OkYj5LY6kT+9Jq/8dIHZ7QEALm
 X-Google-Smtp-Source: ABdhPJwx8ta3pvKIUZJBToP9h/NasPw2m0chELd5Fz7tfkbqg/HunG1xeb+C+1VTrJrxG0KT4myBNizMQaCNb+rNFsI=
 X-Received: by 2002:a67:ef85:: with SMTP id r5mr756445vsp.32.1631362804642;
  Sat, 11 Sep 2021 05:20:04 -0700 (PDT)
@@ -52,18 +56,23 @@ MIME-Version: 1.0
 References: <20210910190322.27058-1-romain.perier@gmail.com>
  <20210910190322.27058-3-romain.perier@gmail.com> <CAFr9PXmRXcu_ifE62dT5AwZv2uFbYVfAc5ZX5qBoRkEPKGB+JA@mail.gmail.com>
 In-Reply-To: <CAFr9PXmRXcu_ifE62dT5AwZv2uFbYVfAc5ZX5qBoRkEPKGB+JA@mail.gmail.com>
-From: Romain Perier <romain.perier@gmail.com>
-Date: Sat, 11 Sep 2021 14:19:53 +0200
+From:   Romain Perier <romain.perier@gmail.com>
+Date:   Sat, 11 Sep 2021 14:19:53 +0200
 Message-ID: <CABgxDoLBbD8P-PhRH+SmuuQ8jNR53Ti=8brFL3NXMmiotXU5ww@mail.gmail.com>
 Subject: Re: [PATCH 2/4] ARM: dts: mstar: Add the Wireless Tag IDO-SBC2D06-V1B-22W
-To: Daniel Palmer <daniel@0x0f.com>
+To:     Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
-	SoC Team <soc@kernel.org>, linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	DTML <devicetree@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210911121953.RD693luphoelS1yjvVLtrvcdVEAEyn8e3mP-kDZaqQw@z>
 
 Hi Daniel,
 
