@@ -1,217 +1,114 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=mnBx=OB=gmail.com=romain.perier@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52319C433FE
-	for <linux-devicetree@archiver.kernel.org>; Sat, 11 Sep 2021 12:20:07 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2E0BD611AD
-	for <linux-devicetree@archiver.kernel.org>; Sat, 11 Sep 2021 12:20:07 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235750AbhIKMVS (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Sat, 11 Sep 2021 08:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbhIKMVS (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Sat, 11 Sep 2021 08:21:18 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944C4C061574;
-        Sat, 11 Sep 2021 05:20:05 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id a21so4014507vsp.12;
-        Sat, 11 Sep 2021 05:20:05 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A078AC433F5
+	for <soc@archiver.kernel.org>; Sat, 11 Sep 2021 12:21:10 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 767F060FDA; Sat, 11 Sep 2021 12:21:10 +0000 (UTC)
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 465D7611AD;
+	Sat, 11 Sep 2021 12:21:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 465D7611AD
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f175.google.com with SMTP id t186so1623471vkd.3;
+        Sat, 11 Sep 2021 05:21:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=7H4xpqYSY81qruCKg0gMtRjcT5K5rttH7wg/f9oDRUM=;
-        b=EjO+h+qRdpbAaxSWbNySY0QHC1aHKW7nV63e4IqtLrd636xgC/5uI+LtnX69vgv0wx
-         XJUILMykuNMsKd+JQRY7VEYrGKnKytB+LHSkmoC2sgf9U3WQ3lpoxM6jqgabw01fOqSV
-         aPyoRXE1I+uuZInytFq6ZMW9wC9m9XVqbOVi2Xe2Nf+EIT6TPJIwCW2MSM9G7KP3o23p
-         lPicPE5P2YpprhhSTM3AJa3F61nDbAuXHIHT3ZbhdXIFbPSpkmL83BKOJPQ79uEvohMP
-         W6lDSC3YZe+2fE4kOjj4MRn6V0TMXY2QbR/lONQmIP6HRASOqyvzufMxTMlyTeNOmnXQ
-         LUHQ==
+        bh=JFcWtn6lUh5qSG7OOiLxD5ZahmIxrMGf1j5Q5s8lXfU=;
+        b=ooYnU0AqSisGN9gV0Nwzw8AH4IeUcF8jgJbCHu0G/PUcShcVArw2J6lI2X4Ms4B2My
+         VpvWZfww5r2EQVNIv1MC3z7HRTimN0vh8BfUVCXbih0m78iAIFaPRrSfjdn3tmCCVYec
+         tKSNWscw2gSKm14wIE7CFOR5w1kPL8d8CwlKE3E0GS7QFG/OHsPep/YqMUpEXobd462U
+         JG+3L/mknZJR5/6b8wFabqtBlBeEuZkVmV/PhtwOw/ToE5Mg8sFKjLfsmYBebAk4EPtU
+         fGVxCh+OSqWgE5520DU5Cqy8EKC1ljmMT18ly+2QeIDL/EibCMN5fPQenbiU/SDSulAU
+         Tugw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7H4xpqYSY81qruCKg0gMtRjcT5K5rttH7wg/f9oDRUM=;
-        b=0cWBifenGshzDDQegqzFnydgN3bXu+7CIdoNMngUSM6e68+J9o1swRDVHMv48uUE7i
-         W6ju2jBG9NslUqPZNGpzywJmhbckiVcFaeYs02Jfdp0Oohyu1rBxadIZXL8looAPjRrZ
-         HiuAJMn2Hj1s0eU9SLDzX7/5vf4GJ6H+aiXsDYJrx0bwI6qHiz3nio6W70hgEqWov0jy
-         um9TNV4CPh4xlssW+Lv3b/9u3iUMV7JMr4jRC5hoWFjvRH6Mi6EtOlC1iDymDq8gqxtU
-         6oTIlWXeo3yL9Ilk4eSo4nfj3xPmBV9tXXtEj3U1FyZPUIkAYAj9YpLeImwK40VIe93e
-         amMw==
-X-Gm-Message-State: AOAM5302p5ulyzG55JMQIvmgSDWmtgo5iiggbZk2DAkHK7zKPVqP/4ay
-        AUvbTmaxUJio+3RWo9OkYj5LY6kT+9Jq/8dIHZ7QEALm
-X-Google-Smtp-Source: ABdhPJwx8ta3pvKIUZJBToP9h/NasPw2m0chELd5Fz7tfkbqg/HunG1xeb+C+1VTrJrxG0KT4myBNizMQaCNb+rNFsI=
-X-Received: by 2002:a67:ef85:: with SMTP id r5mr756445vsp.32.1631362804642;
- Sat, 11 Sep 2021 05:20:04 -0700 (PDT)
+        bh=JFcWtn6lUh5qSG7OOiLxD5ZahmIxrMGf1j5Q5s8lXfU=;
+        b=OPVN0MwkJq8gFq96YF/WiunITnJn8wzy2YYcyVc/ir1y0rZU/Z2BsX/W+UC0X+vpX4
+         dPgRQIRbnRdZ+Sn03MAWMfF8e93NhBtCEqv3neM/3UxaEtMDADes7KfekOUUjrX9yPXa
+         tHpVT3hQoaoeEJBTQ7osOsybgxDvWpRNIerLwp/vBhhra4glWZjKNF8mLRbAYOZ331Fh
+         JnCpBLpdCmgHbxTiBP/WhYM6C8FbROmipB38b72i/JbT4EOJanv7npjfSSVHIpAgboa1
+         vEtB+/gDpqKAm8AbYVjm1Fek3dQYNkJNKJp1Drh2ptI16jeR8FGrXs2KQbVCRo2nJmMg
+         GJdg==
+X-Gm-Message-State: AOAM530EdY8AOz31iuv8d+PaaZP4u7NCSygnXRU1fVHLfldTCYEXce8l
+	7Sdz2K4WBGQKwixKc8nKR5KeE97T0IIbM4z+4DDuJm1i
+X-Google-Smtp-Source: ABdhPJwrH1e4m8h6HaHj1QK9JEMdnD/N4f+EvyVU7cY41tx7OAAFn/bJT6S+BdYNEzFERGS/IXAURi3UdeeLL+l6HTI=
+X-Received: by 2002:a1f:9e11:: with SMTP id h17mr785852vke.16.1631362869518;
+ Sat, 11 Sep 2021 05:21:09 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210910190322.27058-1-romain.perier@gmail.com>
- <20210910190322.27058-3-romain.perier@gmail.com> <CAFr9PXmRXcu_ifE62dT5AwZv2uFbYVfAc5ZX5qBoRkEPKGB+JA@mail.gmail.com>
-In-Reply-To: <CAFr9PXmRXcu_ifE62dT5AwZv2uFbYVfAc5ZX5qBoRkEPKGB+JA@mail.gmail.com>
-From:   Romain Perier <romain.perier@gmail.com>
-Date:   Sat, 11 Sep 2021 14:19:53 +0200
-Message-ID: <CABgxDoLBbD8P-PhRH+SmuuQ8jNR53Ti=8brFL3NXMmiotXU5ww@mail.gmail.com>
-Subject: Re: [PATCH 2/4] ARM: dts: mstar: Add the Wireless Tag IDO-SBC2D06-V1B-22W
-To:     Daniel Palmer <daniel@0x0f.com>
+ <20210910190322.27058-4-romain.perier@gmail.com> <CAFr9PXmwRDfXmDR9UOGoQ2+_LDaSGgmg7n=Ek4RtBdiC2kfuLA@mail.gmail.com>
+In-Reply-To: <CAFr9PXmwRDfXmDR9UOGoQ2+_LDaSGgmg7n=Ek4RtBdiC2kfuLA@mail.gmail.com>
+From: Romain Perier <romain.perier@gmail.com>
+Date: Sat, 11 Sep 2021 14:20:58 +0200
+Message-ID: <CABgxDo+9WnjE5pu=ijN01htLucFYko--w2fJ+ZVazBg_cSLZ1w@mail.gmail.com>
+Subject: Re: [PATCH 3/4] dt-bindings: add vendor prefix for Wireless Tag
+To: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
+	SoC Team <soc@kernel.org>, linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	DTML <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20210911121953.RD693luphoelS1yjvVLtrvcdVEAEyn8e3mP-kDZaqQw@z>
 
 Hi Daniel,
 
-Ack, I will fix it (remove "common" from the file name and the unneeded spa=
-ce)
-
-Thanks,
-Romain
-
-Le sam. 11 sept. 2021 =C3=A0 05:18, Daniel Palmer <daniel@0x0f.com> a =C3=
+Le sam. 11 sept. 2021 =C3=A0 04:59, Daniel Palmer <daniel@0x0f.com> a =C3=
 =A9crit :
 >
 > Hi Romain,
+> Sorry for sending this again. Gmail decided to switch to html email so
+> the first version bounced from the mailing lists.
 >
 > On Sat, 11 Sept 2021 at 04:03, Romain Perier <romain.perier@gmail.com> wr=
 ote:
-> > +              - wirelesstag,ido-som2d01 # Wireless Tag IDO-SOM2D01
-> > +              - wirelesstag,ido-sbc2d06-v1b-22w # Wireless Tag IDO-SBC=
-2D06-1VB-22W
->
-> For anyone wondering why we have two strings here:
-> The SBC board is made up of a SoM and a board with the connectors.
-> The SoM could be used standalone so we might as well have a compatible
-> for it too.
-> We have some dtsis for the SoM but really those could be built as is
-> to support someone using the SoM on it's own.
->
-> > +++ b/arch/arm/boot/dts/mstar-infinity2m-ssd201-som2d01-common.dtsi
->
-> For anyone wondering:
->
-> The som2d01 can come with an SSD201 (64MB DDR2 integrated) or SSD202D
-> (128MB DDR3 integrated) and they need different fixed regulators for
-> the DDR supply.
-> So we have a common dtsi and then override the regulator in another
-> layer of dtsi for the SSD202D version.
->
-> Thinking about it now I think we can drop common from the file name.
->
-> > @@ -0,0 +1,21 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-> > +/*
-> > + * Copyright (c) 2021 thingy.jp.
-> > + * Author: Daniel Palmer <daniel@thingy.jp>
-> > + * Author: Romain Perier <romain.perier@gmail.com>
-> > + */
-> > +
-> > +/ {
-> > +
->
-> Unneeded space.
->
-> > +       reg_vcc_dram: regulator-vcc-dram {
-> > +               compatible =3D "regulator-fixed";
-> > +               regulator-name =3D "vcc_dram";
-> > +               regulator-min-microvolt =3D <1800000>;
-> > +               regulator-max-microvolt =3D <1800000>;
-> > +               regulator-boot-on;
-> > +       };
-> > +};
-> > +
-> > +&pm_uart {
-> > +       status =3D "okay";
-> > +};
-> > diff --git a/arch/arm/boot/dts/mstar-infinity2m-ssd202d-wirelesstag-ido=
--sbc2d06-v1b-22w.dts b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-wirelesst=
-ag-ido-sbc2d06-v1b-22w.dts
-> > new file mode 100644
-> > index 000000000000..20b40b711d4f
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-wirelesstag-ido-sbc2d0=
-6-v1b-22w.dts
-> > @@ -0,0 +1,23 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-> > +/*
-> > + * Copyright (c) 2021 thingy.jp.
-> > + * Author: Daniel Palmer <daniel@thingy.jp>
-> > + * Author: Romain Perier <romain.perier@gmail.com>
-> > + */
-> > +
-> > +/dts-v1/;
-> > +#include "mstar-infinity2m-ssd202d-wirelesstag-ido-som2d01.dtsi"
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +
-> > +/ {
-> > +       model =3D "Wireless Tag IDO-SBC2D06-1VB-22W";
-> > +       compatible =3D "wirelesstag,ido-sbc2d06-v1b-22w", "wirelesstag,=
-ido-som2d01", "mstar,infinity2m";
-> > +
-> > +       leds {
-> > +               compatible =3D "gpio-leds";
-> > +               sys_led {
-> > +                       gpios =3D <&gpio SSD20XD_GPIO_GPIO85 GPIO_ACTIV=
-E_LOW>;
-> > +                       linux,default-trigger =3D "heartbeat";
-> > +               };
-> > +       };
-> > +};
-> > diff --git a/arch/arm/boot/dts/mstar-infinity2m-ssd202d-wirelesstag-ido=
--som2d01.dtsi b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-wirelesstag-ido-=
-som2d01.dtsi
-> > new file mode 100644
-> > index 000000000000..06567a5219c5
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-wirelesstag-ido-som2d0=
-1.dtsi
-> > @@ -0,0 +1,28 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-> > +/*
-> > + * Copyright (c) 2021 thingy.jp.
-> > + * Author: Daniel Palmer <daniel@thingy.jp>
-> > + * Author: Romain Perier <romain.perier@gmail.com>
-> > + */
-> > +
-> > +/dts-v1/;
-> > +#include "mstar-infinity2m-ssd202d.dtsi"
-> > +#include "mstar-infinity2m-ssd201-som2d01-common.dtsi"
-> > +
-> > +/ {
-> > +       model =3D "Wireless Tag IDO-SOM2D01 (SSD202D)";
-> > +       compatible =3D "wirelesstag,ido-som2d01", "mstar,infinity2m";
-> > +
-> > +       aliases {
-> > +               serial0 =3D &pm_uart;
-> > +       };
-> > +
-> > +       chosen {
-> > +               stdout-path =3D "serial0:115200n8";
-> > +       };
-> > +};
-> > +
-> > +&reg_vcc_dram {
-> > +       regulator-min-microvolt =3D <1500000>;
-> > +       regulator-max-microvolt =3D <1500000>;
-> > +};
+> >
+> > This adds a vendor prefix for wireless tag boards and SOMs.
+> >
+> > Signed-off-by: Romain Perier <romain.perier@gmail.com>
+> > ---
+> >  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/D=
+ocumentation/devicetree/bindings/vendor-prefixes.yaml
+> > index a867f7102c35..b50d62dde7c5 100644
+> > --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > @@ -517,6 +517,8 @@ patternProperties:
+> >      description: International Business Machines (IBM)
+> >    "^icplus,.*":
+> >      description: IC Plus Corp.
+> > +  "^wirelesstag,.*":
+> > +    description: Wireless Tag (qiming yunduan)
+> >    "^idt,.*":
+> >      description: Integrated Device Technologies, Inc.
+> >    "^ifi,.*":
 > > --
 > > 2.33.0
 > >
 >
-> Cheers,
+> This should be in alphabetical order.
+> Also, this commit should be before adding the DT for the board I think.
+> The prefix should be in before something that uses it.
 >
-> Daniel
+> Thanks,
+
+Ack, I will fix it.
+
+Cheers,
+Romain
