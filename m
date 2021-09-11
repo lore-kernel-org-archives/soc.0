@@ -1,140 +1,182 @@
-Return-Path: <SRS0=hxhK=OB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=EptG=OB=0x0f.com=daniel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68426C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 11 Sep 2021 03:01:17 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65C73C433EF
+	for <soc@archiver.kernel.org>; Sat, 11 Sep 2021 03:18:44 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 18D4B611BD; Sat, 11 Sep 2021 03:18:44 +0000 (UTC)
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1BCBE611F0
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 11 Sep 2021 03:01:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1BCBE611F0
+	by mail.kernel.org (Postfix) with ESMTPS id B2EE66103D
+	for <soc@kernel.org>; Sat, 11 Sep 2021 03:18:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B2EE66103D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=lb+8PIeaUkG2SgUaHDgnyzTj/IW+qdJ1FOmooRB2JLw=; b=FIGwRQp5BvX75y
-	E0kgPdjTY99FsbHBMQ+R3e0ARNvHP0qBwob30Z+epCGcVxmxvMbyixX/ufQmKKG2K1lhvx4w8rY7i
-	/H6IP7OF5iy2xjcEiNv3+eb3TNr60pCQHyBYfdYAk/00VN82L0Bx3qQRfa3RCPCAWgBtjr7zVe4IR
-	hLcQtoWMzwFlSNxUcQ+WFxzNMUnL30MDV9zRrUdAuB1260KssYPmN2pQ64MAHORkwkr8GZ0oN8E6O
-	KZv1lwL50zfNylG6y6QHXAu7JayKJuBjQrK6zpaGGi8e2rSaJUIVb41RR+Lgdv+9ko9896r5EJ1qp
-	HbFLrae+urgeaS7Bl9zQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mOtEv-00ECCa-68; Sat, 11 Sep 2021 02:59:37 +0000
-Received: from mail-qv1-xf2e.google.com ([2607:f8b0:4864:20::f2e])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mOtEq-00ECBK-UI
- for linux-arm-kernel@lists.infradead.org; Sat, 11 Sep 2021 02:59:34 +0000
-Received: by mail-qv1-xf2e.google.com with SMTP id o10so9001qvo.1
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 10 Sep 2021 19:59:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=QLsl1b3NpV63ZgEOzfho19a1Y601LOSFY9by5dYQ2vk=;
- b=ZuJTyoJ2Az9c1Is3XTu1LV5/RcY65XnXmK9vMWCubV36heqTW7cF4yLUQU9PtDVMM0
- fnXovV3tnPfgC5oaX9jyX6JtQEEgHRvOt6pnEvvrOlUiNsbD9Vv3TJZrvF+S0kZyHHFS
- E98OaS1d0Tpyt77mNYlHPOHMmTywNyO4wZQ+w=
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=0x0f.com
+Received: by mail-qk1-f176.google.com with SMTP id 22so4323219qkg.2
+        for <soc@kernel.org>; Fri, 10 Sep 2021 20:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yglhQiqMuWRPXEcp/S7cp6xw4g2Boo9OI0xnp6CMYq0=;
+        b=WIz8lZM8PLGizh5UoEnFP8TfCrOQRzhtjoMSFgBW6nZVGw1g7pIgTv2s7R4uf7BE7i
+         1Vcn6md5a/DpD/uE0Z0jbqm3xF+uW+OJ5FNv465mG9zup5WjKMvfgXkPtpdqUb6ibXaD
+         +ebjUbCnGE5zhrzDu0fCNtIWBpGDOoWEO3TC0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=QLsl1b3NpV63ZgEOzfho19a1Y601LOSFY9by5dYQ2vk=;
- b=JzBVfLLuILN7wb3lulcCvodKAEgfpzZfp3VUcWr6PVMQODmDPqus4oM65Am42RPWKx
- BmJJsFx7DprncbyYbbKKfDwoa7cE2BZu3VzEBvHKKinxnZnRGIvjNd+K/P8kcXBYYgqq
- Q1C2zmjNJt0X1rWX55Yq2YUOz8meM8V/9TpZUEdVn3Wlh6myaLG26mGtJL52aqsDGsc3
- TMjdJ5iKRS/FrEy+JFgWmpU/QkKZv8frtk8W7y/ms7zSOM81s4LeH9Xu9DkNFtlKf+QJ
- oaUZhWK13xFF6kavBA0XGgbggwyp1Y7qkRxO92e9oiNIb6pB930RspmaJrGXN5RVlKM5
- 90mg==
-X-Gm-Message-State: AOAM532PRxWOiPrploaYounmxc135bXuxaUhMgxDqdZIv0LNQbWHhdh0
- 3Eim+wnqhPy/gCx89XajUjBd5ttzL+oGB4yQ/072/Q==
-X-Google-Smtp-Source: ABdhPJxlXs7FidNs06MWxVYHLmOrbib25biafBKZ0BHrdEoITRWXuaidDQ8sY+mPr9EqtO+a/mftg06B0puO2QvO5HU=
-X-Received: by 2002:a0c:aac5:: with SMTP id g5mr666903qvb.23.1631329171737;
- Fri, 10 Sep 2021 19:59:31 -0700 (PDT)
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yglhQiqMuWRPXEcp/S7cp6xw4g2Boo9OI0xnp6CMYq0=;
+        b=v/YuM6PjIGQvoFqF6t1jwAvYqH/THl46MTR8ax8IqB5CpR97Fr4ogSttJOoI4FAjJr
+         C2pw5DMtN3iLVnPNI/s3K1DInVErfx22eh8+LtzK46N72H9Zu9G+v4oQv5Q6YLE0RPhc
+         mEy3DOOty2+GhHx80zFuciwIIjQlFuyS2WV7sR9GDKh/oMB/81bEl/Z98koDAi5w6vjn
+         UvEn4yeBtQYviL2ftLeuzS0DEKBNo5MLwHFcyB/ENFevdpW+D43SfnXpO80SRovc+Wzk
+         U6Lc3wcIsX1AmWBZI+i0dUih9cUOSowRktRumsGQOqrhEBovvleRiYPOLnzOihK2HMyv
+         duIg==
+X-Gm-Message-State: AOAM533GETFEqux8MPU71Vc4Zs/iN7NNAOcUnt2wsR4/WjJOdMAmiR68
+	UJvdygEMNkMpYg/z3KoXmrEMsCnorqI8mZ48YIiaq62LlK4=
+X-Google-Smtp-Source: ABdhPJxrshc0/e0qK2u4rQeCBzQr0P9W4mE/w2bCGPbHuyvvD1MoYhyx+d2tpScTXawu9idjHi4apmLNG0MU0Rawwm4=
+X-Received: by 2002:a05:620a:228a:: with SMTP id o10mr545406qkh.342.1631330322890;
+ Fri, 10 Sep 2021 20:18:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210910190322.27058-1-romain.perier@gmail.com>
- <20210910190322.27058-4-romain.perier@gmail.com>
-In-Reply-To: <20210910190322.27058-4-romain.perier@gmail.com>
+References: <20210910190322.27058-1-romain.perier@gmail.com> <20210910190322.27058-3-romain.perier@gmail.com>
+In-Reply-To: <20210910190322.27058-3-romain.perier@gmail.com>
 From: Daniel Palmer <daniel@0x0f.com>
-Date: Sat, 11 Sep 2021 11:59:21 +0900
-Message-ID: <CAFr9PXmwRDfXmDR9UOGoQ2+_LDaSGgmg7n=Ek4RtBdiC2kfuLA@mail.gmail.com>
-Subject: Re: [PATCH 3/4] dt-bindings: add vendor prefix for Wireless Tag
+Date: Sat, 11 Sep 2021 12:18:32 +0900
+Message-ID: <CAFr9PXmRXcu_ifE62dT5AwZv2uFbYVfAc5ZX5qBoRkEPKGB+JA@mail.gmail.com>
+Subject: Re: [PATCH 2/4] ARM: dts: mstar: Add the Wireless Tag IDO-SBC2D06-V1B-22W
 To: Romain Perier <romain.perier@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
- DTML <devicetree@vger.kernel.org>, 
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210910_195933_017305_F699D7AF 
-X-CRM114-Status: GOOD (  17.07  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210911025921.UtZhdDpABm5BJya3ddE8il1-rQQrQnCPy8lf195ECQc@z>
+Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
+	SoC Team <soc@kernel.org>, linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	DTML <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
 Hi Romain,
-Sorry for sending this again. Gmail decided to switch to html email so
-the first version bounced from the mailing lists.
 
 On Sat, 11 Sept 2021 at 04:03, Romain Perier <romain.perier@gmail.com> wrote:
->
-> This adds a vendor prefix for wireless tag boards and SOMs.
->
-> Signed-off-by: Romain Perier <romain.perier@gmail.com>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index a867f7102c35..b50d62dde7c5 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -517,6 +517,8 @@ patternProperties:
->      description: International Business Machines (IBM)
->    "^icplus,.*":
->      description: IC Plus Corp.
-> +  "^wirelesstag,.*":
-> +    description: Wireless Tag (qiming yunduan)
->    "^idt,.*":
->      description: Integrated Device Technologies, Inc.
->    "^ifi,.*":
+> +              - wirelesstag,ido-som2d01 # Wireless Tag IDO-SOM2D01
+> +              - wirelesstag,ido-sbc2d06-v1b-22w # Wireless Tag IDO-SBC2D06-1VB-22W
+
+For anyone wondering why we have two strings here:
+The SBC board is made up of a SoM and a board with the connectors.
+The SoM could be used standalone so we might as well have a compatible
+for it too.
+We have some dtsis for the SoM but really those could be built as is
+to support someone using the SoM on it's own.
+
+> +++ b/arch/arm/boot/dts/mstar-infinity2m-ssd201-som2d01-common.dtsi
+
+For anyone wondering:
+
+The som2d01 can come with an SSD201 (64MB DDR2 integrated) or SSD202D
+(128MB DDR3 integrated) and they need different fixed regulators for
+the DDR supply.
+So we have a common dtsi and then override the regulator in another
+layer of dtsi for the SSD202D version.
+
+Thinking about it now I think we can drop common from the file name.
+
+> @@ -0,0 +1,21 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Copyright (c) 2021 thingy.jp.
+> + * Author: Daniel Palmer <daniel@thingy.jp>
+> + * Author: Romain Perier <romain.perier@gmail.com>
+> + */
+> +
+> +/ {
+> +
+
+Unneeded space.
+
+> +       reg_vcc_dram: regulator-vcc-dram {
+> +               compatible = "regulator-fixed";
+> +               regulator-name = "vcc_dram";
+> +               regulator-min-microvolt = <1800000>;
+> +               regulator-max-microvolt = <1800000>;
+> +               regulator-boot-on;
+> +       };
+> +};
+> +
+> +&pm_uart {
+> +       status = "okay";
+> +};
+> diff --git a/arch/arm/boot/dts/mstar-infinity2m-ssd202d-wirelesstag-ido-sbc2d06-v1b-22w.dts b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-wirelesstag-ido-sbc2d06-v1b-22w.dts
+> new file mode 100644
+> index 000000000000..20b40b711d4f
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-wirelesstag-ido-sbc2d06-v1b-22w.dts
+> @@ -0,0 +1,23 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Copyright (c) 2021 thingy.jp.
+> + * Author: Daniel Palmer <daniel@thingy.jp>
+> + * Author: Romain Perier <romain.perier@gmail.com>
+> + */
+> +
+> +/dts-v1/;
+> +#include "mstar-infinity2m-ssd202d-wirelesstag-ido-som2d01.dtsi"
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +/ {
+> +       model = "Wireless Tag IDO-SBC2D06-1VB-22W";
+> +       compatible = "wirelesstag,ido-sbc2d06-v1b-22w", "wirelesstag,ido-som2d01", "mstar,infinity2m";
+> +
+> +       leds {
+> +               compatible = "gpio-leds";
+> +               sys_led {
+> +                       gpios = <&gpio SSD20XD_GPIO_GPIO85 GPIO_ACTIVE_LOW>;
+> +                       linux,default-trigger = "heartbeat";
+> +               };
+> +       };
+> +};
+> diff --git a/arch/arm/boot/dts/mstar-infinity2m-ssd202d-wirelesstag-ido-som2d01.dtsi b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-wirelesstag-ido-som2d01.dtsi
+> new file mode 100644
+> index 000000000000..06567a5219c5
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-wirelesstag-ido-som2d01.dtsi
+> @@ -0,0 +1,28 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Copyright (c) 2021 thingy.jp.
+> + * Author: Daniel Palmer <daniel@thingy.jp>
+> + * Author: Romain Perier <romain.perier@gmail.com>
+> + */
+> +
+> +/dts-v1/;
+> +#include "mstar-infinity2m-ssd202d.dtsi"
+> +#include "mstar-infinity2m-ssd201-som2d01-common.dtsi"
+> +
+> +/ {
+> +       model = "Wireless Tag IDO-SOM2D01 (SSD202D)";
+> +       compatible = "wirelesstag,ido-som2d01", "mstar,infinity2m";
+> +
+> +       aliases {
+> +               serial0 = &pm_uart;
+> +       };
+> +
+> +       chosen {
+> +               stdout-path = "serial0:115200n8";
+> +       };
+> +};
+> +
+> +&reg_vcc_dram {
+> +       regulator-min-microvolt = <1500000>;
+> +       regulator-max-microvolt = <1500000>;
+> +};
 > --
 > 2.33.0
 >
 
-This should be in alphabetical order.
-Also, this commit should be before adding the DT for the board I think.
-The prefix should be in before something that uses it.
-
-Thanks,
+Cheers,
 
 Daniel
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
