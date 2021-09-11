@@ -1,26 +1,30 @@
-Return-Path: <SRS0=EptG=OB=0x0f.com=daniel@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 120BEC433FE
-	for <soc@archiver.kernel.org>; Sat, 11 Sep 2021 02:59:33 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id DFD7561211; Sat, 11 Sep 2021 02:59:32 +0000 (UTC)
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8A16E611F0
-	for <soc@kernel.org>; Sat, 11 Sep 2021 02:59:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8A16E611F0
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=0x0f.com
-Received: by mail-qv1-f47.google.com with SMTP id 93so2580396qva.7
-        for <soc@kernel.org>; Fri, 10 Sep 2021 19:59:32 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AABEFC433EF
+	for <linux-devicetree@archiver.kernel.org>; Sat, 11 Sep 2021 02:59:33 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 8D4AA6120A
+	for <linux-devicetree@archiver.kernel.org>; Sat, 11 Sep 2021 02:59:33 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S235228AbhIKDAo (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Fri, 10 Sep 2021 23:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235227AbhIKDAo (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Fri, 10 Sep 2021 23:00:44 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A114C061756
+        for <devicetree@vger.kernel.org>; Fri, 10 Sep 2021 19:59:32 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id s16so2558831qvt.13
+        for <devicetree@vger.kernel.org>; Fri, 10 Sep 2021 19:59:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=0x0f.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -34,31 +38,36 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=QLsl1b3NpV63ZgEOzfho19a1Y601LOSFY9by5dYQ2vk=;
-        b=2QffZFn7FEmVlH9mQHa5smGAf1tdpxzEJdBfjrI7KzU91xnlUvjMNksMHe+ATkLzBW
-         Pyjpxhu0UI8MB/mWkNhe+gJHgoEqxgse9GsFbpRQ3R7znlQMV6TGoeKr04nCSyE71dJU
-         lhOjzKqfZWT24ivHCjSIIiUniRdyhepbvKNErQUuIXuNKlnJqW7kASyXINN0fyE+m2FR
-         IRSv5W3hDSrCpCYJAu8NNXh1aqFsAdNaXzRlPDcYP/mLmahEANz/cMjIXxzV7aERbiit
-         TwTdGRnizINNRtfUULa8wDpboI6I9q1whyIZi5Z7WLiU5f48o6QbyAOldiTtHgMq6TwF
-         3NIw==
-X-Gm-Message-State: AOAM533R6KoCrdwIDJT3jfckg5uof26pDLIKSvWxMTbkUSC3PDgXmx94
-	cLuIyKt+bJLMGCVAVxooTnLdMekNfJghwv/pqgvLhA==
+        b=X3YquLbefx/PHSQXvNgmuUoJ2iNU96/u4Ln7BTl8gqjsULYd9XYWP+j5zNYZOabkyc
+         KO1lLgPc6GLmp/FmGgxQ45CAvDxUhVYkv5WzqRgQRVyz06LTIf3dTx47gSfF5N3Cc97b
+         6gh/ZMyQNio4T2RAtudH/OqggzcxBSTct9k3Hfwxo4DgbFi8IvttV+xd1MePobjwfyZw
+         3J9t90R36J6Qq/lZhkIn6qJ8AC+z/LTS7apMuNduWizRWVkC05mKTX6NU1IYI0cjnKHB
+         bB78xAZ3o6bdBrXsBgCl7s80o2TeZxCkXT5WTSIVpokhQFFwO+KEmiAz9GZsvUvdE+r4
+         vi2Q==
+X-Gm-Message-State: AOAM533W/jteNgYN9de34Cg1oHKsrdg1O7E1Y898nscfl3ziiWlynZe+
+        Ke4ITMS3YsD1Pz0+kwUagV2qQiCS4DJi7rzqzuXHHg==
 X-Google-Smtp-Source: ABdhPJxlXs7FidNs06MWxVYHLmOrbib25biafBKZ0BHrdEoITRWXuaidDQ8sY+mPr9EqtO+a/mftg06B0puO2QvO5HU=
 X-Received: by 2002:a0c:aac5:: with SMTP id g5mr666903qvb.23.1631329171737;
  Fri, 10 Sep 2021 19:59:31 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210910190322.27058-1-romain.perier@gmail.com> <20210910190322.27058-4-romain.perier@gmail.com>
 In-Reply-To: <20210910190322.27058-4-romain.perier@gmail.com>
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Sat, 11 Sep 2021 11:59:21 +0900
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Sat, 11 Sep 2021 11:59:21 +0900
 Message-ID: <CAFr9PXmwRDfXmDR9UOGoQ2+_LDaSGgmg7n=Ek4RtBdiC2kfuLA@mail.gmail.com>
 Subject: Re: [PATCH 3/4] dt-bindings: add vendor prefix for Wireless Tag
-To: Romain Perier <romain.perier@gmail.com>
+To:     Romain Perier <romain.perier@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
-	SoC Team <soc@kernel.org>, linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	DTML <devicetree@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210911025921.Kio6i6NXUv3upMoGZGxkvERIddr1b7GomRfI1Cdg5vU@z>
 
 Hi Romain,
 Sorry for sending this again. Gmail decided to switch to html email so
