@@ -1,133 +1,325 @@
-Return-Path: <SRS0=hxhK=OB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <linux-arm-msm-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20B98C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 11 Sep 2021 12:22:52 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E07F760FE3
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 11 Sep 2021 12:22:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E07F760FE3
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=y6zP/7F0gzc4UtK1ZuGGKdxLThd9rxqSFCDNKjwJajY=; b=AMVxRIBpLkyuAd
-	wESRFbOFzBN4VckP1JiKNBEPOkRTw9BeugxyUzLGmAgzvDPUXZqIzlVriiZaqcabzepN2YRg+qQLB
-	MwqUqa7XyQLvJyO9FjIF3xEvWnEMAi2H4QbZg1fFmF94tR+u1w5DH67bSo7RX0VPzFTG32OYDcKbI
-	5JV4hMxqCpBgIGPuvo43lDxIMhe9F/1Ui+nq+vV8WTGQ9HNs3NqY4teSodvQaf2Bh+I01Drv/27ST
-	p0zro2K/mOaal2SOQTR4uv6M8gEn4K4pI2oKXXe2dRi9vUzUFrWfsZfIm44FSgy+2KdAZU46WeBF4
-	HB6Jk2gLeqS65NkhZZBw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mP20S-00EmVD-LE; Sat, 11 Sep 2021 12:21:16 +0000
-Received: from mail-vk1-xa2c.google.com ([2607:f8b0:4864:20::a2c])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mP20P-00EmTv-9O
- for linux-arm-kernel@lists.infradead.org; Sat, 11 Sep 2021 12:21:14 +0000
-Received: by mail-vk1-xa2c.google.com with SMTP id k124so1620092vke.5
- for <linux-arm-kernel@lists.infradead.org>;
- Sat, 11 Sep 2021 05:21:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=JFcWtn6lUh5qSG7OOiLxD5ZahmIxrMGf1j5Q5s8lXfU=;
- b=ooYnU0AqSisGN9gV0Nwzw8AH4IeUcF8jgJbCHu0G/PUcShcVArw2J6lI2X4Ms4B2My
- VpvWZfww5r2EQVNIv1MC3z7HRTimN0vh8BfUVCXbih0m78iAIFaPRrSfjdn3tmCCVYec
- tKSNWscw2gSKm14wIE7CFOR5w1kPL8d8CwlKE3E0GS7QFG/OHsPep/YqMUpEXobd462U
- JG+3L/mknZJR5/6b8wFabqtBlBeEuZkVmV/PhtwOw/ToE5Mg8sFKjLfsmYBebAk4EPtU
- fGVxCh+OSqWgE5520DU5Cqy8EKC1ljmMT18ly+2QeIDL/EibCMN5fPQenbiU/SDSulAU
- Tugw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=JFcWtn6lUh5qSG7OOiLxD5ZahmIxrMGf1j5Q5s8lXfU=;
- b=RWyRbpcJ6T/vCkw3fcg2PHHaFWPlTXyTxAdAh5reSF53vS9cat4DyN0kRTgchVD5pb
- mhFbcpTC1NBNIvU+kMZ3kkJRiYU+h6RjjfctRSVFBq6IOR4OoshfXK81DCXe9g0+FBgu
- TF2QgUTlhqMI9lgwxFK27M3sh4dgcGaP6xP4NboTlCQj+ruexcC+oJDJZReFemtZQYF/
- p2j7vKis+KOt2sMFbUKGPFK8zSJSVpsZ5cWt0qd55BMshUuiNHNBT1idFgYO/0etUEXR
- hzbK+F997JzIU7aRNbsHQclRzS+DPuHQlrdM6NZrKgzKw8k/f8krPrZcFEyXFQpAvH9a
- HXOg==
-X-Gm-Message-State: AOAM532Hfr8BhRxjavQ4NhJEmar4x0hVo8vuDGoofXKzTLG+95zjd6xc
- 7RGNhVhXXm8rYtrwvsSxE+vAD1Npd5QpMtLApTc=
-X-Google-Smtp-Source: ABdhPJwrH1e4m8h6HaHj1QK9JEMdnD/N4f+EvyVU7cY41tx7OAAFn/bJT6S+BdYNEzFERGS/IXAURi3UdeeLL+l6HTI=
-X-Received: by 2002:a1f:9e11:: with SMTP id h17mr785852vke.16.1631362869518;
- Sat, 11 Sep 2021 05:21:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210910190322.27058-1-romain.perier@gmail.com>
- <20210910190322.27058-4-romain.perier@gmail.com>
- <CAFr9PXmwRDfXmDR9UOGoQ2+_LDaSGgmg7n=Ek4RtBdiC2kfuLA@mail.gmail.com>
-In-Reply-To: <CAFr9PXmwRDfXmDR9UOGoQ2+_LDaSGgmg7n=Ek4RtBdiC2kfuLA@mail.gmail.com>
-From: Romain Perier <romain.perier@gmail.com>
-Date: Sat, 11 Sep 2021 14:20:58 +0200
-Message-ID: <CABgxDo+9WnjE5pu=ijN01htLucFYko--w2fJ+ZVazBg_cSLZ1w@mail.gmail.com>
-Subject: Re: [PATCH 3/4] dt-bindings: add vendor prefix for Wireless Tag
-To: Daniel Palmer <daniel@0x0f.com>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E573C43217
+	for <linux-arm-msm@archiver.kernel.org>; Sat, 11 Sep 2021 23:28:18 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 8695F60F6C
+	for <linux-arm-msm@archiver.kernel.org>; Sat, 11 Sep 2021 23:28:18 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S234806AbhIKX32 (ORCPT
+        <rfc822;linux-arm-msm@archiver.kernel.org>);
+        Sat, 11 Sep 2021 19:29:28 -0400
+Received: from mail.z3ntu.xyz ([128.199.32.197]:56516 "EHLO mail.z3ntu.xyz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234643AbhIKX3Z (ORCPT <rfc822;linux-arm-msm@vger.kernel.org>);
+        Sat, 11 Sep 2021 19:29:25 -0400
+Received: from localhost.localdomain (ip-213-127-63-121.ip.prioritytelecom.net [213.127.63.121])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id CCC61CB201;
+        Sat, 11 Sep 2021 23:28:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1631402891; bh=vmQ4rNn9xJWouEc9m40mcIxw0axx16PXLSt9GfYTuFM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=nNFw4kxUDtCedYnt3PKINnVoATt+CXO0+C0jVgGkkC2mRgemdY0okPhOH5LvmnI1b
+         LFmhpnbju2WpvK5k7AJ/QWp4vh/mbcz1ad2RRnv9nq+SfHkvMzPMIe/z6QOnvykJJL
+         f38X2ldlW80KJFNkGrYSIYiKJH1qm+7ZFLyeoIQ8=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
- DTML <devicetree@vger.kernel.org>, 
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210911_052113_356914_CA1DDE1E 
-X-CRM114-Status: GOOD (  20.89  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210911122058.1QibK7bSO8D1CnKmHwsH_7kMRLwBwVaKeULAbmLi3_M@z>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, bartosz.dudziak@snejp.pl,
+        Luca Weiss <luca@z3ntu.xyz>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 8/8] ARM: dts: qcom: Add support for LG G Watch R
+Date:   Sun, 12 Sep 2021 01:27:02 +0200
+Message-Id: <20210911232707.259615-9-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20210911232707.259615-1-luca@z3ntu.xyz>
+References: <20210911232707.259615-1-luca@z3ntu.xyz>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Precedence: bulk
+List-ID: <linux-arm-msm.vger.kernel.org>
+X-Mailing-List: linux-arm-msm@vger.kernel.org
 
-SGkgRGFuaWVsLAoKTGUgc2FtLiAxMSBzZXB0LiAyMDIxIMOgIDA0OjU5LCBEYW5pZWwgUGFsbWVy
-IDxkYW5pZWxAMHgwZi5jb20+IGEgw6ljcml0IDoKPgo+IEhpIFJvbWFpbiwKPiBTb3JyeSBmb3Ig
-c2VuZGluZyB0aGlzIGFnYWluLiBHbWFpbCBkZWNpZGVkIHRvIHN3aXRjaCB0byBodG1sIGVtYWls
-IHNvCj4gdGhlIGZpcnN0IHZlcnNpb24gYm91bmNlZCBmcm9tIHRoZSBtYWlsaW5nIGxpc3RzLgo+
-Cj4gT24gU2F0LCAxMSBTZXB0IDIwMjEgYXQgMDQ6MDMsIFJvbWFpbiBQZXJpZXIgPHJvbWFpbi5w
-ZXJpZXJAZ21haWwuY29tPiB3cm90ZToKPiA+Cj4gPiBUaGlzIGFkZHMgYSB2ZW5kb3IgcHJlZml4
-IGZvciB3aXJlbGVzcyB0YWcgYm9hcmRzIGFuZCBTT01zLgo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6
-IFJvbWFpbiBQZXJpZXIgPHJvbWFpbi5wZXJpZXJAZ21haWwuY29tPgo+ID4gLS0tCj4gPiAgRG9j
-dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3ZlbmRvci1wcmVmaXhlcy55YW1sIHwgMiAr
-Kwo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykKPiA+Cj4gPiBkaWZmIC0tZ2l0
-IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3ZlbmRvci1wcmVmaXhlcy55YW1s
-IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3ZlbmRvci1wcmVmaXhlcy55YW1s
-Cj4gPiBpbmRleCBhODY3ZjcxMDJjMzUuLmI1MGQ2MmRkZTdjNSAxMDA2NDQKPiA+IC0tLSBhL0Rv
-Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy92ZW5kb3ItcHJlZml4ZXMueWFtbAo+ID4g
-KysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3ZlbmRvci1wcmVmaXhlcy55
-YW1sCj4gPiBAQCAtNTE3LDYgKzUxNyw4IEBAIHBhdHRlcm5Qcm9wZXJ0aWVzOgo+ID4gICAgICBk
-ZXNjcmlwdGlvbjogSW50ZXJuYXRpb25hbCBCdXNpbmVzcyBNYWNoaW5lcyAoSUJNKQo+ID4gICAg
-Il5pY3BsdXMsLioiOgo+ID4gICAgICBkZXNjcmlwdGlvbjogSUMgUGx1cyBDb3JwLgo+ID4gKyAg
-Il53aXJlbGVzc3RhZywuKiI6Cj4gPiArICAgIGRlc2NyaXB0aW9uOiBXaXJlbGVzcyBUYWcgKHFp
-bWluZyB5dW5kdWFuKQo+ID4gICAgIl5pZHQsLioiOgo+ID4gICAgICBkZXNjcmlwdGlvbjogSW50
-ZWdyYXRlZCBEZXZpY2UgVGVjaG5vbG9naWVzLCBJbmMuCj4gPiAgICAiXmlmaSwuKiI6Cj4gPiAt
-LQo+ID4gMi4zMy4wCj4gPgo+Cj4gVGhpcyBzaG91bGQgYmUgaW4gYWxwaGFiZXRpY2FsIG9yZGVy
-Lgo+IEFsc28sIHRoaXMgY29tbWl0IHNob3VsZCBiZSBiZWZvcmUgYWRkaW5nIHRoZSBEVCBmb3Ig
-dGhlIGJvYXJkIEkgdGhpbmsuCj4gVGhlIHByZWZpeCBzaG91bGQgYmUgaW4gYmVmb3JlIHNvbWV0
-aGluZyB0aGF0IHVzZXMgaXQuCj4KPiBUaGFua3MsCgpBY2ssIEkgd2lsbCBmaXggaXQuCgpDaGVl
-cnMsClJvbWFpbgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KbGludXgtYXJtLWtlcm5lbCBtYWlsaW5nIGxpc3QKbGludXgtYXJtLWtlcm5lbEBsaXN0cy5p
-bmZyYWRlYWQub3JnCmh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8v
-bGludXgtYXJtLWtlcm5lbAo=
+Add a device tree for the LG G Watch R smartwatch, manufactured by LG
+Electronics and based on the msm8226 platform (apq8026).
+
+Currently UART, internal storage, power button and touchscreen are
+supported.
+
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ arch/arm/boot/dts/Makefile                   |   1 +
+ arch/arm/boot/dts/qcom-apq8026-lge-lenok.dts | 237 +++++++++++++++++++
+ 2 files changed, 238 insertions(+)
+ create mode 100644 arch/arm/boot/dts/qcom-apq8026-lge-lenok.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7e0934180724..8cb859728bd9 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -939,6 +939,7 @@ dtb-$(CONFIG_ARCH_OXNAS) += \
+ 	ox810se-wd-mbwe.dtb \
+ 	ox820-cloudengines-pogoplug-series-3.dtb
+ dtb-$(CONFIG_ARCH_QCOM) += \
++	qcom-apq8026-lge-lenok.dtb \
+ 	qcom-apq8060-dragonboard.dtb \
+ 	qcom-apq8064-cm-qs600.dtb \
+ 	qcom-apq8064-ifc6410.dtb \
+diff --git a/arch/arm/boot/dts/qcom-apq8026-lge-lenok.dts b/arch/arm/boot/dts/qcom-apq8026-lge-lenok.dts
+new file mode 100644
+index 000000000000..02c8dfb0988a
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-apq8026-lge-lenok.dts
+@@ -0,0 +1,237 @@
++// SPDX-License-Identifier: BSD-3-Clause
++/*
++ * Copyright (c) 2021, Luca Weiss <luca@z3ntu.xyz>
++ */
++
++/dts-v1/;
++
++#include "qcom-msm8226.dtsi"
++#include "qcom-pm8226.dtsi"
++
++/ {
++	model = "LG G Watch R";
++	compatible = "lge,lenok", "qcom,apq8026";
++	qcom,board-id = <132 0x0a>;
++	qcom,msm-id = <199 0x20000>;
++
++	aliases {
++		serial0 = &blsp1_uart3;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++};
++
++&blsp1_i2c5 {
++	status = "okay";
++	clock-frequency = <384000>;
++
++	touchscreen@20 {
++		compatible = "syna,rmi4-i2c";
++		reg = <0x20>;
++
++		interrupts-extended = <&tlmm 17 IRQ_TYPE_EDGE_FALLING>;
++		vdd-supply = <&pm8226_l15>;
++		vio-supply = <&pm8226_l22>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&touch_pins>;
++
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		rmi4-f01@1 {
++			reg = <0x1>;
++			syna,nosleep-mode = <1>;
++		};
++
++		rmi4-f12@12 {
++			reg = <0x12>;
++			syna,sensor-type = <1>;
++		};
++	};
++};
++
++&blsp1_uart3 {
++	status = "okay";
++};
++
++&sdhc_1 {
++	status = "okay";
++
++	vmmc-supply = <&pm8226_l17>;
++	vqmmc-supply = <&pm8226_l6>;
++
++	bus-width = <8>;
++	non-removable;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&sdhc1_pin_a>;
++};
++
++&rpm_requests {
++	pm8226-regulators {
++		compatible = "qcom,rpm-pm8226-regulators";
++
++		pm8226_s1: s1 {
++			regulator-min-microvolt = <500000>;
++			regulator-max-microvolt = <1275000>;
++		};
++		pm8226_s3: s3 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1350000>;
++		};
++		pm8226_s4: s4 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2200000>;
++		};
++		pm8226_s5: s5 {
++			regulator-min-microvolt = <1150000>;
++			regulator-max-microvolt = <1150000>;
++		};
++
++		pm8226_l1: l1 {
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1225000>;
++		};
++		pm8226_l2: l2 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++		pm8226_l3: l3 {
++			regulator-min-microvolt = <750000>;
++			regulator-max-microvolt = <1337500>;
++		};
++		pm8226_l4: l4 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++		pm8226_l5: l5 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++		pm8226_l6: l6 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++		pm8226_l7: l7 {
++			regulator-min-microvolt = <1850000>;
++			regulator-max-microvolt = <1850000>;
++		};
++		pm8226_l8: l8 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++		pm8226_l9: l9 {
++			regulator-min-microvolt = <2050000>;
++			regulator-max-microvolt = <2050000>;
++		};
++		pm8226_l10: l10 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++		pm8226_l12: l12 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++		pm8226_l14: l14 {
++			regulator-min-microvolt = <2750000>;
++			regulator-max-microvolt = <2750000>;
++		};
++		pm8226_l15: l15 {
++			regulator-min-microvolt = <3300000>;
++			regulator-max-microvolt = <3300000>;
++		};
++		pm8226_l16: l16 {
++			regulator-min-microvolt = <3000000>;
++			regulator-max-microvolt = <3350000>;
++		};
++		pm8226_l17: l17 {
++			regulator-min-microvolt = <2950000>;
++			regulator-max-microvolt = <2950000>;
++		};
++		pm8226_l18: l18 {
++			regulator-min-microvolt = <3000000>;
++			regulator-max-microvolt = <3300000>;
++		};
++		pm8226_l19: l19 {
++			regulator-min-microvolt = <3000000>;
++			regulator-max-microvolt = <3000000>;
++		};
++		pm8226_l20: l20 {
++			regulator-min-microvolt = <3075000>;
++			regulator-max-microvolt = <3075000>;
++		};
++		pm8226_l21: l21 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++		pm8226_l22: l22 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++		pm8226_l23: l23 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++		pm8226_l24: l24 {
++			regulator-min-microvolt = <1300000>;
++			regulator-max-microvolt = <1350000>;
++		};
++		pm8226_l25: l25 {
++			regulator-min-microvolt = <1775000>;
++			regulator-max-microvolt = <2125000>;
++		};
++		pm8226_l26: l26 {
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1225000>;
++		};
++		pm8226_l27: l27 {
++			regulator-min-microvolt = <2050000>;
++			regulator-max-microvolt = <2050000>;
++		};
++		pm8226_l28: l28 {
++			regulator-min-microvolt = <2700000>;
++			regulator-max-microvolt = <3000000>;
++		};
++
++		pm8226_lvs1: lvs1 {};
++	};
++};
++
++&tlmm {
++	sdhc1_pin_a: sdhc1-pin-active {
++		clk {
++			pins = "sdc1_clk";
++			drive-strength = <10>;
++			bias-disable;
++		};
++
++		cmd-data {
++			pins = "sdc1_cmd", "sdc1_data";
++			drive-strength = <10>;
++			bias-pull-up;
++		};
++	};
++
++	touch_pins: touch {
++		irq {
++			pins = "gpio17";
++			function = "gpio";
++
++			drive-strength = <8>;
++			bias-pull-down;
++			input-enable;
++		};
++
++		reset {
++			pins = "gpio16";
++			function = "gpio";
++
++			drive-strength = <8>;
++			bias-disable;
++			output-high;
++		};
++	};
++};
+-- 
+2.33.0
+
