@@ -1,56 +1,88 @@
-Return-Path: <linux-arm-msm-owner@kernel.org>
+Return-Path: <SRS0=hxhK=OB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E573C43217
-	for <linux-arm-msm@archiver.kernel.org>; Sat, 11 Sep 2021 23:28:18 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8695F60F6C
-	for <linux-arm-msm@archiver.kernel.org>; Sat, 11 Sep 2021 23:28:18 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234806AbhIKX32 (ORCPT
-        <rfc822;linux-arm-msm@archiver.kernel.org>);
-        Sat, 11 Sep 2021 19:29:28 -0400
-Received: from mail.z3ntu.xyz ([128.199.32.197]:56516 "EHLO mail.z3ntu.xyz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234643AbhIKX3Z (ORCPT <rfc822;linux-arm-msm@vger.kernel.org>);
-        Sat, 11 Sep 2021 19:29:25 -0400
-Received: from localhost.localdomain (ip-213-127-63-121.ip.prioritytelecom.net [213.127.63.121])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id CCC61CB201;
-        Sat, 11 Sep 2021 23:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AD37C433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Sat, 11 Sep 2021 23:48:19 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 1084D6101D
+	for <linux-arm-kernel@archiver.kernel.org>; Sat, 11 Sep 2021 23:48:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1084D6101D
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=z3ntu.xyz
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=HE/QdggZEglB+OBZvImrLjso+Q08RCqRjCXf+9hrcSg=; b=TqpB/RA9UizL2F
+	ChjSHnT4J1hNLk3m2rgxurWPW8iU2CeRu56YC2yqOEU/TVd6Q3v6zpvuA9ZAMQVypUoKdTVNY+EnD
+	OHtRuudhqFz94K/r3Yc3zlXz4skXmcwBi/U0k9rQsDlTJhU6V5cDw24Ns6NSdLhqkrpeacO7PDC5W
+	PiFDTyjeHsvI45YV2D3h6bTaGuNllpvnmtARBtMhJRgqUJ2L9/mO+ZQH83YuQprPxL3XdByevyz6B
+	DevmzUkQQwpdKUJlP70zpkreh7LdRe2CZtHguIvQ43Y4ClbUB9m9uow+lGk82iZsi1yeInLCUve4I
+	HZ8tvjwmlQhy7h/MLeyg==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mPChR-00FZpd-PR; Sat, 11 Sep 2021 23:46:21 +0000
+Received: from mail.z3ntu.xyz ([128.199.32.197])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mPChE-00FZoU-KR
+ for linux-arm-kernel@lists.infradead.org; Sat, 11 Sep 2021 23:46:10 +0000
+Received: from localhost.localdomain (ip-213-127-63-121.ip.prioritytelecom.net
+ [213.127.63.121])
+ by mail.z3ntu.xyz (Postfix) with ESMTPSA id CCC61CB201;
+ Sat, 11 Sep 2021 23:28:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1631402891; bh=vmQ4rNn9xJWouEc9m40mcIxw0axx16PXLSt9GfYTuFM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=nNFw4kxUDtCedYnt3PKINnVoATt+CXO0+C0jVgGkkC2mRgemdY0okPhOH5LvmnI1b
-         LFmhpnbju2WpvK5k7AJ/QWp4vh/mbcz1ad2RRnv9nq+SfHkvMzPMIe/z6QOnvykJJL
-         f38X2ldlW80KJFNkGrYSIYiKJH1qm+7ZFLyeoIQ8=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
+ t=1631402891; bh=vmQ4rNn9xJWouEc9m40mcIxw0axx16PXLSt9GfYTuFM=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=nNFw4kxUDtCedYnt3PKINnVoATt+CXO0+C0jVgGkkC2mRgemdY0okPhOH5LvmnI1b
+ LFmhpnbju2WpvK5k7AJ/QWp4vh/mbcz1ad2RRnv9nq+SfHkvMzPMIe/z6QOnvykJJL
+ f38X2ldlW80KJFNkGrYSIYiKJH1qm+7ZFLyeoIQ8=
+From: Luca Weiss <luca@z3ntu.xyz>
+To: linux-arm-msm@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, bartosz.dudziak@snejp.pl,
-        Luca Weiss <luca@z3ntu.xyz>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Cc: ~postmarketos/upstreaming@lists.sr.ht, bartosz.dudziak@snejp.pl,
+ Luca Weiss <luca@z3ntu.xyz>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <bjorn.andersson@linaro.org>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 Subject: [PATCH 8/8] ARM: dts: qcom: Add support for LG G Watch R
-Date:   Sun, 12 Sep 2021 01:27:02 +0200
-Message-Id: <20210911232707.259615-9-luca@z3ntu.xyz>
+Date: Sun, 12 Sep 2021 01:27:02 +0200
+Message-ID: <20210911232707.259615-9-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210911232707.259615-1-luca@z3ntu.xyz>
 References: <20210911232707.259615-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Precedence: bulk
-List-ID: <linux-arm-msm.vger.kernel.org>
-X-Mailing-List: linux-arm-msm@vger.kernel.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210911_164608_839658_7015CCF7 
+X-CRM114-Status: GOOD (  14.88  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210911232702.obLzaq2VfgksUJtWGc9BNVjUpbUVQysnRH0V-oa6VKA@z>
 
 Add a device tree for the LG G Watch R smartwatch, manufactured by LG
 Electronics and based on the msm8226 platform (apq8026).
@@ -323,3 +355,8 @@ index 000000000000..02c8dfb0988a
 -- 
 2.33.0
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
