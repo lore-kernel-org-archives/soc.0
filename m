@@ -1,30 +1,31 @@
-Return-Path: <SRS0=uBN8=OE=arndb.de=arnd@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6651C433F5
-	for <soc@archiver.kernel.org>; Tue, 14 Sep 2021 15:26:29 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 91CD961165; Tue, 14 Sep 2021 15:26:29 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C179861159;
-	Tue, 14 Sep 2021 15:26:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C179861159
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MqZE0-1nCNF50MQC-00mcVN; Tue, 14 Sep 2021 17:26:27 +0200
-Received: by mail-wr1-f44.google.com with SMTP id w29so20101576wra.8;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41F35C4332F
+	for <linux-devicetree@archiver.kernel.org>; Tue, 14 Sep 2021 15:26:37 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 2865860F58
+	for <linux-devicetree@archiver.kernel.org>; Tue, 14 Sep 2021 15:26:37 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S234108AbhINP1x (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Tue, 14 Sep 2021 11:27:53 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:48877 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234167AbhINP1w (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Tue, 14 Sep 2021 11:27:52 -0400
+Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MX00X-1mOFSs0K8v-00XMMD; Tue, 14 Sep 2021 17:26:27 +0200
+Received: by mail-wr1-f42.google.com with SMTP id d21so13187870wra.12;
         Tue, 14 Sep 2021 08:26:27 -0700 (PDT)
-X-Gm-Message-State: AOAM532HZaYY7EZ3T32E8bDSYUhm/5Ch+r26jPYQe9shY6Gr7PuhgKSU
-	TuSwzh4j+z6w8TLEDwurxUobLb36DAB3PDroKkA=
+X-Gm-Message-State: AOAM531Bw8nrt96Metxb7d3vMiS7JhYl8fPUuKYf93SWVITPbEWwvALC
+        x4rn/J5vXK8nKyYrRUleK73P5v95wQoMvpA4L98=
 X-Google-Smtp-Source: ABdhPJx58PLXLbIDPH3agyMnNUczBn+6WHGZgh2cx7ovkyQCQ1tT2E26eQzrosGp+LginhSbFYIKP6merOG8OWf3s2g=
 X-Received: by 2002:a5d:528b:: with SMTP id c11mr18953468wrv.369.1631633186700;
  Tue, 14 Sep 2021 08:26:26 -0700 (PDT)
@@ -33,34 +34,41 @@ References: <20210910190322.27058-1-romain.perier@gmail.com>
  <20210910190322.27058-5-romain.perier@gmail.com> <CAFr9PXnLZC1zfs4e1GqZU4UU3knU-BwREe0-abrWNq7akrTntw@mail.gmail.com>
  <CAK8P3a24NTmkyh01OEzDQ8=oTWpUnDtwWQgUUxUbW2wxsgAFeA@mail.gmail.com> <CAFr9PXkipBnVDBOpdYhUD4bYNaL8qybPhGJi7YwSHaCNrPz6rw@mail.gmail.com>
 In-Reply-To: <CAFr9PXkipBnVDBOpdYhUD4bYNaL8qybPhGJi7YwSHaCNrPz6rw@mail.gmail.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Tue, 14 Sep 2021 17:26:10 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 14 Sep 2021 17:26:10 +0200
 X-Gmail-Original-Message-ID: <CAK8P3a1=GTcgbqkwnzsFtBtFZTtf4Lop7U5hsCAid-fCgs07yQ@mail.gmail.com>
 Message-ID: <CAK8P3a1=GTcgbqkwnzsFtBtFZTtf4Lop7U5hsCAid-fCgs07yQ@mail.gmail.com>
 Subject: Re: [PATCH 4/4] MAINTAINERS: Add myself as MStar/Sigmastar Armv7 SoC maintainers
-To: Daniel Palmer <daniel@0x0f.com>
+To:     Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Romain Perier <romain.perier@gmail.com>, 
-	Rob Herring <robh+dt@kernel.org>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Romain Perier <romain.perier@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:LIEWIyyXpJS7PKHDhBZ+Rv++qUZSwsTNVmnjWmKJfMYR9/PYM4/
- CBSAAUcBUJWVUI3gfnF12x/YTX5DvGuGEr3jfyFe3aUW8Oq0gXTRodwhGRKocUTReI4t6bj
- 1VQc56Fr/jnC2pb4a4+UhKKqGDvRj9egOPGpnArD198iG4fa4GySn/re9KT5unUtfXkw+46
- v8e2ifth4wYNIrsEUiCUg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:L6LBIrsk4II=:ZSU37vJO/OsFW5H/hBey4F
- nBdS7Z9SmW58Eo75n8U2LiWlqPcF+LA93yJpG9rIJCvQr3NcIc/CwZE+jHlluxzPQz80iLxvC
- +D9y4dgzGr9MwRDKp6eQL5ZWgcn5dlkRNifU/n9Jwve8e3a3i/gJbvARcPDdoRCthaD1ey4gg
- 55TeSgVz3RjnbQm0yEFhWyJt3jVYnx2an3E0JMuezlxHmcrduw6+TShVHKKXUj8v9xBv7NzDZ
- YSg9wzp4+Y39Padsfm/QqGFriBOsgP+KfWLG4aU+FlWhDUAFvRM3h/mPDXCFfTSRfClG1D+qP
- 6U8BMHecGdJOAtOwqTAaKjyUWc05oABEF6nBLfjyTU3vrcrqHJc7VCvMKYyRueOwgvCE1sMXK
- /j51JC6Z86uN1z1U1xR1S0jRn/4MQp+w515Ud5isub/yhllyOAxu7nAZxH1pxp48RP+1OeDwg
- e9vgRT4ixJZDQRtO1pSjdUaxThc7e2RyXyFlERen4wHSOeWJI/o31hLFa/Ba7haeD/n2pdeGm
- V3VVKYN/6ylnQoTF0hLzosrhtHSKzEKE3GhcvcDMcuDA548r/ylmWX3CYeYlUoUwiZHifIYT6
- o3PMU/J3Fu5yw7ZlqhPQfGF8YVvF4ugsZ8YG7kY++SHYQxsGWcyXBhPZzeecMJF4v3uim6sza
- t+zA76qIQbFjBYDrpV+2MRUgkyZa7q3nuBy/u/3BFPsIHsplNLkzB3n3P3Hr0gE0tDNyR85gf
- QYd7gNXs00ZZlzyPf/Q+x1AQfBta8AKrd77r2A==
+X-Provags-ID: V03:K1:VnVHxWypdRtpTbbOUa3/mrs9CuHe1McNGJueNVuhoFnIryByfgv
+ gnhVwKUfnik/lAGj/0SBJ3aNpwaRx4z5vX5x4GhkU0odrAe8BnzBkVrd/WS8EV4ncrzwYQm
+ CdASMDKwEIp+zr5sjoRJeELJSW0pfkzUHJ8NxD/WwsnRx+YnIHMTb/wks0+3jJD9OEve6gE
+ g4+9KQRv47kfTfUKwG1KA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qjObmYm+w2w=:vN4YTObWx7sfcSi4+rQb9j
+ Wydj7yVS0y/R447f1vtO0c2rfQBvfCzIwEtw+hIv4QREpG3EJUXuaPZQpe0MUDRXqBmqwcb3o
+ lJK+J7M9epXQQVAcQ0BwgZMdBqV7PmufSkek02wjInMAMy8TyC2wN2m4Llv/U+wETnNALqnFr
+ Us7FKhJ7Wrmlo2CrKT1nzo4IcPl9ERRqvZNh/JcvvKWAds9EglYQKuK/BRR8E7UxWcu1GHGKu
+ EIybfSZdgn8PyfM+Tex/55EoWB1FN/OztrGMr9N0g5T0Wut/jnXq1VkGY3xwoAkCO5lBslSmT
+ ntaRX5vMhD+1KXPXkKE5c8yZ3fO4rj+QYb81odICBeiyfhPPvfY9tCbje+l8PhyXWZsT+0bI5
+ oKjU8Upekf0o7v3w/HvJqYz17lqdM//oRzhR4rWNrmLJqzR8jK1RqNZI12wfvLIMDtdqiCm0z
+ zbrnayozAKmNqpcvus0EPZipIWkIJmePcLobd/3SIkXBCw9nlX+4Qmc6sKDJJzFZfdm1WBjNm
+ +FaZFWM/9pebNKZpqChePwb+kDFoHpHi4U4bx7w82+SPCDDnLd7GF1juuFUTCeYFhDfsk6i/s
+ UaTe89lD8XDSK3omw9M1fa1VMvyLz2KwvKajuCl5JAN14l/zckp96fdkYRy4mYQOL4Ev3Mhfw
+ U53vOKWzCV3GWma2TltFD4/mKVNs5mocAYZyW0Jq8kC+8SdGgT3eHdNpuGIddFs97HNRgbGEP
+ dXSIVO+CP29L8lc+dM+e9oI9OlTYVrfj7s0++Q==
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20210914152610.tLlLNKtcCavHT4jHT5nr9WK4SiWz7k0LGibywl9MVUA@z>
 
 On Tue, Sep 14, 2021 at 5:03 PM Daniel Palmer <daniel@0x0f.com> wrote:
 > On Tue, 14 Sept 2021 at 22:54, Arnd Bergmann <arnd@arndb.de> wrote:
