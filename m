@@ -1,150 +1,86 @@
-Return-Path: <SRS0=cUWt=OE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=uBN8=OE=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BBB6C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 14 Sep 2021 15:04:53 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6651C433F5
+	for <soc@archiver.kernel.org>; Tue, 14 Sep 2021 15:26:29 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 91CD961165; Tue, 14 Sep 2021 15:26:29 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 46B76610A6
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 14 Sep 2021 15:04:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 46B76610A6
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=QuAP9jQI9L1hYu9Xpa7I7vJw4mr5Bjtxp4aifqm06Ac=; b=d/rC21O7fh34nS
-	phaJTpsPG7OzsqnGcMx2JfsHqS3OpvDX1zG4hknwipI0v4vghJ1eVqXhaUvtb/3WQUqnXoPmlfGyn
-	A1UBo4SuZ2IoTS0K/3GcS4PgQ658hgd339RYIztUkTGXripz7N4u5SGcuiiLxiBoBkPJDdjKHtAjh
-	Pkskbqay22jXPBZzr3JNw7jrmQYw7hSrQpcWs6zt9oHsb/nJgXkZh2h0w1EH5fxMSJyUYPygeBxWE
-	werW53455Eh2h4ydiyzGjE7UtqFbvex23T0ftvL65HX0QG5B/SW0p0l3lumaAvIXoULV6KjsPmLf1
-	I4YQ62iMdG/wOhNoiYMQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mQ9xB-0067bm-Tm; Tue, 14 Sep 2021 15:02:34 +0000
-Received: from mail-qk1-x736.google.com ([2607:f8b0:4864:20::736])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mQ9x5-0067aI-V5
- for linux-arm-kernel@lists.infradead.org; Tue, 14 Sep 2021 15:02:31 +0000
-Received: by mail-qk1-x736.google.com with SMTP id c10so15115260qko.11
- for <linux-arm-kernel@lists.infradead.org>;
- Tue, 14 Sep 2021 08:02:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=0x0f.com; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=ikRfZznVPSXgOHZwn7JV71/YZkay7rEY3B5GGPhJJ+U=;
- b=biWj6oOhhZxdxpaxbui8CnDRKvz3RAAV0JLgdSoWpp1s6sxukGfPhlHQql85u5sKC+
- eWAsEdfVzc4X63GeAFgSUC37oIZ9Qk7Z0iQ9/YARn8S7JZ9e0PyrsEDNqE9JMHEzHl14
- ZrSwlOi5vSL1nO4tt2CSeAWhK2qu2G34II0M0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=ikRfZznVPSXgOHZwn7JV71/YZkay7rEY3B5GGPhJJ+U=;
- b=AyXiksZovX58DOYewdE436/Ir1tt49FtxNYq72JRKW+yAoXJnMNTdSKaB9FE+trnPY
- sL3DfaIXKqaG532dSdPR7L6ZdJON3Ar4DtdAnmvW4t8oA5u5g5iXrHoruMIMYjtTuEKg
- AWX1CXiym7ZkZmXpNfj6xN6BowfioR4WhV7dPfBEvOCTvctM6hn+N5fdE+CLsrbV3Srp
- z0CWQOzqKD+PzAhdypZc5NmlPikh+jgdVyRjlUrJTMV6mrmhG1EnsTrqrQFSgeEGiKNP
- OvbnfSxDVfoVARJaTLt345BW5IyqQIPc+k2UFOKHE9AqRRBkjSxy1pftr2DRHNf0oAWk
- bgpA==
-X-Gm-Message-State: AOAM532OLxDK+kpzfZliqiMwShDA5QD02+/QhPFd2OpTHld2od+gdemD
- 72/bmyS+FXnJG1H/Dg0tcbyTx+cDW12YN88IuFJ5sw==
-X-Google-Smtp-Source: ABdhPJy5FtjBECS7D5pqnI7V2Px/Rkc9Hc6UzmLi6RECLOhHNEvqX50enNMA3OI7/seaVcoHAcaFc+Ldf77gvG30rUs=
-X-Received: by 2002:a37:a905:: with SMTP id s5mr5380057qke.63.1631631745930;
- Tue, 14 Sep 2021 08:02:25 -0700 (PDT)
+	by mail.kernel.org (Postfix) with ESMTPS id C179861159;
+	Tue, 14 Sep 2021 15:26:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C179861159
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MqZE0-1nCNF50MQC-00mcVN; Tue, 14 Sep 2021 17:26:27 +0200
+Received: by mail-wr1-f44.google.com with SMTP id w29so20101576wra.8;
+        Tue, 14 Sep 2021 08:26:27 -0700 (PDT)
+X-Gm-Message-State: AOAM532HZaYY7EZ3T32E8bDSYUhm/5Ch+r26jPYQe9shY6Gr7PuhgKSU
+	TuSwzh4j+z6w8TLEDwurxUobLb36DAB3PDroKkA=
+X-Google-Smtp-Source: ABdhPJx58PLXLbIDPH3agyMnNUczBn+6WHGZgh2cx7ovkyQCQ1tT2E26eQzrosGp+LginhSbFYIKP6merOG8OWf3s2g=
+X-Received: by 2002:a5d:528b:: with SMTP id c11mr18953468wrv.369.1631633186700;
+ Tue, 14 Sep 2021 08:26:26 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210910190322.27058-1-romain.perier@gmail.com>
- <20210910190322.27058-5-romain.perier@gmail.com>
- <CAFr9PXnLZC1zfs4e1GqZU4UU3knU-BwREe0-abrWNq7akrTntw@mail.gmail.com>
- <CAK8P3a24NTmkyh01OEzDQ8=oTWpUnDtwWQgUUxUbW2wxsgAFeA@mail.gmail.com>
-In-Reply-To: <CAK8P3a24NTmkyh01OEzDQ8=oTWpUnDtwWQgUUxUbW2wxsgAFeA@mail.gmail.com>
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Wed, 15 Sep 2021 00:04:44 +0900
-Message-ID: <CAFr9PXkipBnVDBOpdYhUD4bYNaL8qybPhGJi7YwSHaCNrPz6rw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] MAINTAINERS: Add myself as MStar/Sigmastar Armv7 SoC
- maintainers
-To: Arnd Bergmann <arnd@arndb.de>
+ <20210910190322.27058-5-romain.perier@gmail.com> <CAFr9PXnLZC1zfs4e1GqZU4UU3knU-BwREe0-abrWNq7akrTntw@mail.gmail.com>
+ <CAK8P3a24NTmkyh01OEzDQ8=oTWpUnDtwWQgUUxUbW2wxsgAFeA@mail.gmail.com> <CAFr9PXkipBnVDBOpdYhUD4bYNaL8qybPhGJi7YwSHaCNrPz6rw@mail.gmail.com>
+In-Reply-To: <CAFr9PXkipBnVDBOpdYhUD4bYNaL8qybPhGJi7YwSHaCNrPz6rw@mail.gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Tue, 14 Sep 2021 17:26:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1=GTcgbqkwnzsFtBtFZTtf4Lop7U5hsCAid-fCgs07yQ@mail.gmail.com>
+Message-ID: <CAK8P3a1=GTcgbqkwnzsFtBtFZTtf4Lop7U5hsCAid-fCgs07yQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] MAINTAINERS: Add myself as MStar/Sigmastar Armv7 SoC maintainers
+To: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Romain Perier <romain.perier@gmail.com>, Rob Herring <robh+dt@kernel.org>, 
- Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- DTML <devicetree@vger.kernel.org>, 
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210914_080228_232887_0E40B099 
-X-CRM114-Status: GOOD (  22.58  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210914150444.KCVx_MJa2Vc8LA3wb1jkWhLtrwkAWTIfN0saCXwQTn4@z>
+Cc: Arnd Bergmann <arnd@arndb.de>, Romain Perier <romain.perier@gmail.com>, 
+	Rob Herring <robh+dt@kernel.org>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:LIEWIyyXpJS7PKHDhBZ+Rv++qUZSwsTNVmnjWmKJfMYR9/PYM4/
+ CBSAAUcBUJWVUI3gfnF12x/YTX5DvGuGEr3jfyFe3aUW8Oq0gXTRodwhGRKocUTReI4t6bj
+ 1VQc56Fr/jnC2pb4a4+UhKKqGDvRj9egOPGpnArD198iG4fa4GySn/re9KT5unUtfXkw+46
+ v8e2ifth4wYNIrsEUiCUg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:L6LBIrsk4II=:ZSU37vJO/OsFW5H/hBey4F
+ nBdS7Z9SmW58Eo75n8U2LiWlqPcF+LA93yJpG9rIJCvQr3NcIc/CwZE+jHlluxzPQz80iLxvC
+ +D9y4dgzGr9MwRDKp6eQL5ZWgcn5dlkRNifU/n9Jwve8e3a3i/gJbvARcPDdoRCthaD1ey4gg
+ 55TeSgVz3RjnbQm0yEFhWyJt3jVYnx2an3E0JMuezlxHmcrduw6+TShVHKKXUj8v9xBv7NzDZ
+ YSg9wzp4+Y39Padsfm/QqGFriBOsgP+KfWLG4aU+FlWhDUAFvRM3h/mPDXCFfTSRfClG1D+qP
+ 6U8BMHecGdJOAtOwqTAaKjyUWc05oABEF6nBLfjyTU3vrcrqHJc7VCvMKYyRueOwgvCE1sMXK
+ /j51JC6Z86uN1z1U1xR1S0jRn/4MQp+w515Ud5isub/yhllyOAxu7nAZxH1pxp48RP+1OeDwg
+ e9vgRT4ixJZDQRtO1pSjdUaxThc7e2RyXyFlERen4wHSOeWJI/o31hLFa/Ba7haeD/n2pdeGm
+ V3VVKYN/6ylnQoTF0hLzosrhtHSKzEKE3GhcvcDMcuDA548r/ylmWX3CYeYlUoUwiZHifIYT6
+ o3PMU/J3Fu5yw7ZlqhPQfGF8YVvF4ugsZ8YG7kY++SHYQxsGWcyXBhPZzeecMJF4v3uim6sza
+ t+zA76qIQbFjBYDrpV+2MRUgkyZa7q3nuBy/u/3BFPsIHsplNLkzB3n3P3Hr0gE0tDNyR85gf
+ QYd7gNXs00ZZlzyPf/Q+x1AQfBta8AKrd77r2A==
 
-Hi Arnd,
+On Tue, Sep 14, 2021 at 5:03 PM Daniel Palmer <daniel@0x0f.com> wrote:
+> On Tue, 14 Sept 2021 at 22:54, Arnd Bergmann <arnd@arndb.de> wrote:
 
-On Tue, 14 Sept 2021 at 22:54, Arnd Bergmann <arnd@arndb.de> wrote:
-> Sounds good to me.
+> > FWIW, I'd suggest merging the MAINTAINERS file change as a
+> > bugfix for 5.15, it's generally better to do these as early as possible
+> > to make sure any patches reach all the right people.
 >
-> One process issue though: These emails were sent 'cc:soc@kernel.org', so
-> they end up in patchwork, but I'm guessing they were not actually meant
-> for us to apply from there. I'm happy to take merge these patches (or
-> a future version of the series) directly from patchwork if that's what you
-> both had in mind, but for clarity please either
->
-> a) drop soc@kernel.org from Cc for patches that are meant for review
-> and will be part of a pull request.
->
-> or
->
-> b) put soc@kernel.org in the 'to:' field after they have been reviewed
-> and you want them to get merged.
+> That makes sense.
+> Would it be possible for you to merge that single commit for me?
 
-Noted for the future. Until now we haven't done pull requests so
-having the patches go into the soc patchwork made sense but from now
-on we'll send pull requests when needed to you and Olof for the ARM
-specific bits. Which I don't think there will be much aside from dts
-stuff.
+Done, merged into arm/fixes.
 
-> Or even better, add an explicit sentence below the '---' line asking
-> for the patches to be merged directly into the soc tree when this
-> is what you want.
+> Seems like that would be easier than me creating a fixes branch for a
+> single commit, sending you a PR, finding out I still don't actually
+> know how to do PR properly.. :)
+> If it's a hassle I'll do the PR though.
 
-Noted.
+If you only have one or two patches, sending that patch to soc@kernel.org
+is usually the easiest way anyway, unless there is a reason to keep the
+branch description separate from the patch description in the git log.
 
-> FWIW, I'd suggest merging the MAINTAINERS file change as a
-> bugfix for 5.15, it's generally better to do these as early as possible
-> to make sure any patches reach all the right people.
-
-That makes sense.
-Would it be possible for you to merge that single commit for me?
-Seems like that would be easier than me creating a fixes branch for a
-single commit, sending you a PR, finding out I still don't actually
-know how to do PR properly.. :)
-If it's a hassle I'll do the PR though.
-
-Cheers,
-
-Daniel
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+      Arnd
