@@ -1,133 +1,131 @@
-Return-Path: <SRS0=cUWt=OE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=vItm=OE=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DC44C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 14 Sep 2021 15:28:44 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C143AC433EF
+	for <soc@archiver.kernel.org>; Tue, 14 Sep 2021 16:23:37 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A759A610FB; Tue, 14 Sep 2021 16:23:37 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 22C9061157
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 14 Sep 2021 15:28:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 22C9061157
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=zIkO+AJJA3N5AF+sncCcwS05GPU8kafSJMJKU++3fzM=; b=Pb24byGU9m9Qhh
-	I4HGmC+MUzZTlx2cE39HBIkvcJrwrxF7Ma+1ctjZdX5Aa03D0SdYTj3cOHVMPxMQpNYr2a8pK2ocQ
-	l+j+O8WZBHCeMQcUZXZwbdLVlYnUmIGJQoSWuGsO+A8MJidv0KI9e9FeH3KHkxNcUKDi3+ROgEopf
-	yIzhgEAW3FSXGqqCq1tmQGR3AEutyxvNIH7v1oEJmtRM7wTyVOfuSHYp7UOB1GHNsk9d8hQvP1dT3
-	eC1hLmhcdcW8jBxB+YkGQ/2IdzG4zBz7WhbsBTVCryJ+0qnaOP/RC+320ogHPmOb7sPrPKB4zfXP1
-	+R+gFm2VHI+IlwmtkqOA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mQAKR-006Dc1-FP; Tue, 14 Sep 2021 15:26:35 +0000
-Received: from mout.kundenserver.de ([212.227.17.13])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mQAKM-006Dau-Ve
- for linux-arm-kernel@lists.infradead.org; Tue, 14 Sep 2021 15:26:32 +0000
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N6LIF-1mxJEb1xw9-016dbU for <linux-arm-kernel@lists.infradead.org>; Tue,
- 14 Sep 2021 17:26:28 +0200
-Received: by mail-wr1-f50.google.com with SMTP id x6so20855664wrv.13
- for <linux-arm-kernel@lists.infradead.org>;
- Tue, 14 Sep 2021 08:26:27 -0700 (PDT)
-X-Gm-Message-State: AOAM530zQWDTs6BoIFXdEipcLv/nJ8QKine4EidwUnEAfjyq8taPQeDS
- unuTHFMOPEV0PBdh+lPVk1wqKM1yyKCXV2Ute/Y=
-X-Google-Smtp-Source: ABdhPJx58PLXLbIDPH3agyMnNUczBn+6WHGZgh2cx7ovkyQCQ1tT2E26eQzrosGp+LginhSbFYIKP6merOG8OWf3s2g=
-X-Received: by 2002:a5d:528b:: with SMTP id c11mr18953468wrv.369.1631633186700; 
- Tue, 14 Sep 2021 08:26:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210910190322.27058-1-romain.perier@gmail.com>
- <20210910190322.27058-5-romain.perier@gmail.com>
- <CAFr9PXnLZC1zfs4e1GqZU4UU3knU-BwREe0-abrWNq7akrTntw@mail.gmail.com>
- <CAK8P3a24NTmkyh01OEzDQ8=oTWpUnDtwWQgUUxUbW2wxsgAFeA@mail.gmail.com>
- <CAFr9PXkipBnVDBOpdYhUD4bYNaL8qybPhGJi7YwSHaCNrPz6rw@mail.gmail.com>
-In-Reply-To: <CAFr9PXkipBnVDBOpdYhUD4bYNaL8qybPhGJi7YwSHaCNrPz6rw@mail.gmail.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Tue, 14 Sep 2021 17:26:10 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1=GTcgbqkwnzsFtBtFZTtf4Lop7U5hsCAid-fCgs07yQ@mail.gmail.com>
-Message-ID: <CAK8P3a1=GTcgbqkwnzsFtBtFZTtf4Lop7U5hsCAid-fCgs07yQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] MAINTAINERS: Add myself as MStar/Sigmastar Armv7 SoC
- maintainers
-To: Daniel Palmer <daniel@0x0f.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 5CAFC60F9F;
+	Tue, 14 Sep 2021 16:23:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5CAFC60F9F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1631636617; x=1663172617;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Z404bEPrvwr60WJ43wElB+2Jlcdg7Ky4eRj0OBYyGPw=;
+  b=t6sU/uUmPU0ZyfE6BKVXnCBCjq026PHpX+gARN58c4XcC6EmCxs1BIG3
+   mlCJRoUVND0a1MIJDOUxgfx3XD1qqrg/nEndIu3DXTsKiw/wKAan8Ku9e
+   eE/hxUVBhEfZ/e9eQz+KU6/gMlJgkUXPHmFLQhlvr3xo6dkD4B5DwyKxc
+   qf5zY/2ILXVIBH4hYqoORPGoXv369Nnqv9vl2aUil7bnRdJuoPC6rE8DQ
+   8duipUyxv/CdA/TtW30Qw7aAoxkiB/kHteCNq+ctCpNoRYOMHggJ1dZte
+   6l9nQSb/mB2SUQcEqUUf1MWZQGAFcPt9UapMp5e11dCsntBPh3Wpic61I
+   g==;
+IronPort-SDR: tSt0bZ4A5NvKb5e92OURoGkgcXEqpKmNoi8GsKtCqYvvkbwK09Va777CWYQqsoqT15SfVGNeYh
+ W2Jkj7O7YckLbe73QmuL3kapvj3SaB4hEQtCA7l5pkX35xiMw2WUM/P5rOcCkb1Kc5gNvuAMh3
+ hVhoLOjtXpQzY/dAftCFi3MVMdWWUDOPe5Nk906RB2x12MWjMu4qG4nYxZpi3CyNzMDJgP9KGK
+ Gs9ykwYOV+G62qV0DSedJluLFTcuVjJmv9jbpYIvO78kNeJ4bhe4uadDKsFC378w38YYESW4Hx
+ k+WCuNzdTAAfyFvCti5oMVuA
+X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
+   d="scan'208";a="144068526"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Sep 2021 09:23:36 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 14 Sep 2021 09:23:35 -0700
+Received: from ness.home (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Tue, 14 Sep 2021 09:23:33 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Romain Perier <romain.perier@gmail.com>, 
- Rob Herring <robh+dt@kernel.org>, Olof Johansson <olof@lixom.net>,
- SoC Team <soc@kernel.org>, 
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- DTML <devicetree@vger.kernel.org>, 
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Provags-ID: V03:K1:q/JG7NvTDf09wNeOWglyy2EmXEFo8tCNzrXM7Fc1VZN5zONicW6
- bRMeTOn/21E9FqIg2KM/LDiqOC5Qfx6oD9mDA8sdWjQidpy9TLSxvTUSRf4j792k3nvOZs1
- O0MUi3ALvODbJtFwy4jxzX4MsPU7oszmjbNxFnMRksbbeUrZwmrb8PesXEQiumovwfBm66e
- RvUuWM/GElUi6oNuzNO7Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8jy+h11j5pk=:/oPFKPU10OWFQ0+azQQa6b
- 7X7ydn2cmrpddYWtdixfRH0sGrUH3KXZL4tiRQqDGS7fQFYkhdKeLecpnRkU5NZi5IqDQGGqb
- MtCR6h65LfLty/0atHAiqkDrs0uUYhvym3ROfzQrzvR1hIu1Q7glB88weN6myX4LZYyS0Jwm2
- ITicpFkl3V2zGX3n2AjQMy0nnWlXTr6uIxeRspGEVrfrMRob8ki8SyfRRrrnjZuRo8lXfiA8f
- jQExUEkKpWrHwiex5xRlkXK1+x7r9/OSP3p0Z1U/Lnso9gto/nqx9V7bZ95NSg/houE9jr2qO
- 6seDkvxsuqj30ir5J3VbazQKLy9C92VCdNXDzbJIsE1lWnR8hCa4DzbDafb0HfLmw3govT/Z1
- dvZDroYX9/ZsNg2CXYWUz1eoBOLLpinN5uyy4GQRzkq5hGI/wteIs8FZppgupRw9iWmOl2Pvl
- YJgplZk9JCC0THHUenHRID3tlSP1u8EjYWpIrILWrOAZ+DfL1rRsd/+4i9uIqhQe/uevPAdpc
- 9ZU4pxRD74bpdVoBBfJG0GlE5cwCuWM1oY8LWyY7Swhbw6rpZhVJC6XEmjshKEER1uc7Yqif8
- VSBBvZyIuASCwxt+Ik9xi6xgO6lcivOF6DNEgbg5CuKN9xrzIGyq+pQl6LgcsaYEUrJiSEo92
- tIz7Y6m+IKGrNuK+iEueqB5n/nnFL2qVwtYKTJ3+xbDuvQoTj092jUsVp5/J4S8mGfe9paJwo
- 7RerX15kzCm+m0wpHwhI29hB7Vd8KvZSn8wudg==
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210914_082631_346391_0E8A3324 
-X-CRM114-Status: GOOD (  18.78  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210914152610.naiVsGyusiPbf9b_3tTofLoTeN2hYqpowPYkjGvi4gw@z>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea
+	<claudiu.beznea@microchip.com>, Eugen Hristev <eugen.hristev@microchip.com>,
+	Ludovic Desroches <ludovic.desroches@microchip.com>
+Subject: [GIT PULL] ARM: at91: fixes for 5.15
+Date: Tue, 14 Sep 2021 18:23:14 +0200
+Message-ID: <20210914162314.54347-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Tue, Sep 14, 2021 at 5:03 PM Daniel Palmer <daniel@0x0f.com> wrote:
-> On Tue, 14 Sept 2021 at 22:54, Arnd Bergmann <arnd@arndb.de> wrote:
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-> > FWIW, I'd suggest merging the MAINTAINERS file change as a
-> > bugfix for 5.15, it's generally better to do these as early as possible
-> > to make sure any patches reach all the right people.
->
-> That makes sense.
-> Would it be possible for you to merge that single commit for me?
+Arnd, Olof,
 
-Done, merged into arm/fixes.
+Here is the first batch of fixes for 5.15. It is mostly targeted to our new
+SAMA7G5 and fix the PM on this platform a fix and with elements that were
+missing.
+I queue a fix for another board which is not a regression but we are early in
+the stabilization cyle.
 
-> Seems like that would be easier than me creating a fixes branch for a
-> single commit, sending you a PR, finding out I still don't actually
-> know how to do PR properly.. :)
-> If it's a hassle I'll do the PR though.
+Note that I've just updated my GPG keys and that I use a newly deployed
+signature sub-key of my already known master key. Keys are deployed to the
+kernel dev. keyring:
+https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
 
-If you only have one or two patches, sending that patch to soc@kernel.org
-is usually the easiest way anyway, unless there is a reason to keep the
-branch description separate from the patch description in the git log.
+Don't hesitate to tell me if I need to review some part of this process.
 
-      Arnd
+Thanks, best regards,
+  Nicolas
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-5.15
+
+for you to fetch changes up to 4348cc10da6377a86940beb20ad357933b8f91bb:
+
+  ARM: dts: at91: sama5d2_som1_ek: disable ISC node by default (2021-09-14 17:05:40 +0200)
+
+----------------------------------------------------------------
+AT91 fixes #1 for 5.15:
+
+- Fixes for newly introduced SAMA7G5 and its Power Management code.
+  Associated core peripherals need to be instantiated in DT for
+  benefiting from best PM support like Backup mode with DDR in
+  Self-Refresh.
+- Add chip ID for SAMA7G5 for easing the kernel log identification.
+- Avoid Camera Sensor probe error on sama5d27 som1 ek board.
+
+----------------------------------------------------------------
+Claudiu Beznea (6):
+      ARM: at91: pm: do not panic if ram controllers are not enabled
+      ARM: dts: at91: sama7g5: add ram controllers
+      ARM: dts: at91: sama7g5: add securam node
+      ARM: dts: at91: sama7g5: add shdwc node
+      ARM: dts: at91: sama7g5: add chipid
+      ARM: at91: pm: switch backup area to vbat in backup mode
+
+Eugen Hristev (1):
+      ARM: dts: at91: sama5d2_som1_ek: disable ISC node by default
+
+ arch/arm/boot/dts/at91-sama5d27_som1_ek.dts |   1 -
+ arch/arm/boot/dts/at91-sama7g5ek.dts        |   9 ++
+ arch/arm/boot/dts/sama7g5.dtsi              |  39 +++++++++
+ arch/arm/mach-at91/pm.c                     | 130 ++++++++++++++++++++++++----
+ 4 files changed, 162 insertions(+), 17 deletions(-)
+
+-- 
+Nicolas Ferre
