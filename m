@@ -1,125 +1,82 @@
-Return-Path: <SRS0=cUWt=OE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=MVv1=OF=monstr.eu=monstr@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA9C2C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 14 Sep 2021 16:25:08 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D320C433EF
+	for <soc@archiver.kernel.org>; Wed, 15 Sep 2021 08:09:18 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7E52C61212; Wed, 15 Sep 2021 08:09:18 +0000 (UTC)
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 50FE6610F9
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 14 Sep 2021 16:25:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 50FE6610F9
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:Cc:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To
-	:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=ShqLQ1u+Ut6W+kEfh0IIByxG1LpfilZYQWz2xrJj3WM=; b=xyTkuMGreRJyNM
-	AE5aMcMvFhYO9Y1Q6NszFMEwJIa6HMa2Mj9NNbL1Hv6EJsMFEsjQyXbuQ6DKDnEeIrZSQbYL7mnzD
-	wKTU72rlB70webIWlnObY1dPo80tcsNjL7weQhkkWnmUsNuKLdYrgrgUXCpUcFVandxqvlt9UiSni
-	Qm7U/2Rp2Qnc0dj8XJQQBxd8IyqY60UKkKVGM6EZgp1nyla3uDW8YOypRuLtmlqfE8KmhynsucrBr
-	CPMwEKNJyFb6OFrA1LSrkfmGuQWVbASXYtcVCT/cD1QqdX+fabdkes4yGPyI4xPTI3xAo7rDOJq5E
-	cFj5e36dsKEMGtwMasSQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mQBDk-006RiR-80; Tue, 14 Sep 2021 16:23:44 +0000
-Received: from esa.microchip.iphmx.com ([68.232.153.233])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mQBDe-006Rh6-3h
- for linux-arm-kernel@lists.infradead.org; Tue, 14 Sep 2021 16:23:41 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1631636617; x=1663172617;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=Z404bEPrvwr60WJ43wElB+2Jlcdg7Ky4eRj0OBYyGPw=;
- b=t6sU/uUmPU0ZyfE6BKVXnCBCjq026PHpX+gARN58c4XcC6EmCxs1BIG3
- mlCJRoUVND0a1MIJDOUxgfx3XD1qqrg/nEndIu3DXTsKiw/wKAan8Ku9e
- eE/hxUVBhEfZ/e9eQz+KU6/gMlJgkUXPHmFLQhlvr3xo6dkD4B5DwyKxc
- qf5zY/2ILXVIBH4hYqoORPGoXv369Nnqv9vl2aUil7bnRdJuoPC6rE8DQ
- 8duipUyxv/CdA/TtW30Qw7aAoxkiB/kHteCNq+ctCpNoRYOMHggJ1dZte
- 6l9nQSb/mB2SUQcEqUUf1MWZQGAFcPt9UapMp5e11dCsntBPh3Wpic61I g==;
-IronPort-SDR: tSt0bZ4A5NvKb5e92OURoGkgcXEqpKmNoi8GsKtCqYvvkbwK09Va777CWYQqsoqT15SfVGNeYh
- W2Jkj7O7YckLbe73QmuL3kapvj3SaB4hEQtCA7l5pkX35xiMw2WUM/P5rOcCkb1Kc5gNvuAMh3
- hVhoLOjtXpQzY/dAftCFi3MVMdWWUDOPe5Nk906RB2x12MWjMu4qG4nYxZpi3CyNzMDJgP9KGK
- Gs9ykwYOV+G62qV0DSedJluLFTcuVjJmv9jbpYIvO78kNeJ4bhe4uadDKsFC378w38YYESW4Hx
- k+WCuNzdTAAfyFvCti5oMVuA
-X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; d="scan'208";a="144068526"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 14 Sep 2021 09:23:36 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 14 Sep 2021 09:23:35 -0700
-Received: from ness.home (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Tue, 14 Sep 2021 09:23:33 -0700
-From: <nicolas.ferre@microchip.com>
+	by mail.kernel.org (Postfix) with ESMTPS id E64A2608FB
+	for <soc@kernel.org>; Wed, 15 Sep 2021 08:09:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E64A2608FB
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=monstr.eu
+Received: by mail-ej1-f45.google.com with SMTP id kt8so4198985ejb.13
+        for <soc@kernel.org>; Wed, 15 Sep 2021 01:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=YStp2qtLbcS0HTF6as203y7oEMSYP7Q6WpFfPubppdk=;
+        b=pyUGgLnY7Zn5s5whkfzV/sqzjVcjoQ52gkrDwi06p4BKILQht5/8CNWjB8zpc5Fa+a
+         cN+R0bax3uwg5Yp1FZiUro0JgIJLP8LLOFSMFD0O9Ninn5RZf0hvFwQUryv7tNiFBs0U
+         1nL4QGySqLuoi/dHVvAW1o6KYlDqY77TNNfeflHJSt+syW8OcxjQiWHzJbaadWvX3lgc
+         SfyB1IxNuu9S0Nleq/ei+dXOFeARzxfaBZ1qUgb16/LEr1ZEUFGegzOSTQT4WwpSciBQ
+         +IXc8dvCuIicAUKf/WxyzLCNujuaQEaeerPGXaO7P+S5e4MzH5N+LAS+/+oG5uIIwXrv
+         Ij0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=YStp2qtLbcS0HTF6as203y7oEMSYP7Q6WpFfPubppdk=;
+        b=xzIaft4t16pSOEFNl1BG0WDu43dWeJ1MqN3Tlzk0KGjgfSlSOWqe28zLVg3JMsQiwF
+         gQPRi02/1Clzxc/ZFscYf4XFP3UvDEZedr8Dr0111SG2Zbuy2SUkgm1DZ1cfJFv3ZTpO
+         QMfLZyhSPMsEzqGFKCNBqVrqheKoBXipluRVW7AlnPyTiN9f3y19aR8PdEsNOBf92pOs
+         qaDR3NwcYtPLx6m6KUtodXVSxQpP41rdoZ53B0O3W3MxPMcHgWLedgS8W9WVuoaK4oNU
+         SGongoWORnG6sHSCpNPZ75D3DKGj8vyS8uz0XXHvJgw9aaV6M8bBIUU9wApa8foEOyeE
+         dr8g==
+X-Gm-Message-State: AOAM532wfg7nQBswbtwTUe687z3yUtvwwUH6U1NAxSX9BQZaPehuQtAj
+	oyGRosFW6zFMLUGBxQvhuBxxIQ==
+X-Google-Smtp-Source: ABdhPJwfrrktf/Xfvz+hxtoH0QcGVRjQbleUQmOsnRZS9oirXWymnyCLo7rbI/KDOuz+IVKUPHkd4g==
+X-Received: by 2002:a17:906:1454:: with SMTP id q20mr24383663ejc.446.1631693356433;
+        Wed, 15 Sep 2021 01:09:16 -0700 (PDT)
+Received: from ?IPv6:2a02:768:2307:40d6:f666:9af6:3fed:e53b? ([2a02:768:2307:40d6:f666:9af6:3fed:e53b])
+        by smtp.gmail.com with ESMTPSA id d25sm6643175edt.33.2021.09.15.01.09.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Sep 2021 01:09:15 -0700 (PDT)
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, <soc@kernel.org>
-Subject: [GIT PULL] ARM: at91: fixes for 5.15
-Date: Tue, 14 Sep 2021 18:23:14 +0200
-Message-ID: <20210914162314.54347-1-nicolas.ferre@microchip.com>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Organization: microchip
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210914_092338_253628_A1D2001A 
-X-CRM114-Status: GOOD (  12.02  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Linux Kernel list <linux-kernel@vger.kernel.org>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Eugen Hristev <eugen.hristev@microchip.com>,
- Claudiu Beznea <claudiu.beznea@microchip.com>,
+To: SoC Team <soc@kernel.org>
+Cc: arm-soc <arm@kernel.org>,
  linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
+From: Michal Simek <monstr@monstr.eu>
+Subject: [GIT PULL] arm64: dts: ZynqMP DT changes for v5.16
+Message-ID: <b1cbd05d-ab40-e1fc-4001-6cf88e1e81f9@monstr.eu>
+Date: Wed, 15 Sep 2021 10:09:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20210914162314.JlMeDDVvATySVrt9brMtQUVT3O5cHaN1k6P_si16y6A@z>
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Hi,
 
-Arnd, Olof,
+based on discussion at
+https://lore.kernel.org/r/CAK8P3a0ZWxsUrGA2J8d=M-G=0Bbw16XfxuL=Uu=cXvPpMyQkgQ@mail.gmail.com
+I am sending new pull request for adding DT changes which didn't go to
+v5.15. There is likely be another pull request later for v5.16 kernel.
 
-Here is the first batch of fixes for 5.15. It is mostly targeted to our new
-SAMA7G5 and fix the PM on this platform a fix and with elements that were
-missing.
-I queue a fix for another board which is not a regression but we are early in
-the stabilization cyle.
+Thanks,
+Michal
 
-Note that I've just updated my GPG keys and that I use a newly deployed
-signature sub-key of my already known master key. Keys are deployed to the
-kernel dev. keyring:
-https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-Don't hesitate to tell me if I need to review some part of this process.
-
-Thanks, best regards,
-  Nicolas
 
 The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
@@ -127,44 +84,112 @@ The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-5.15
+  https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-dt-for-v5.16
 
-for you to fetch changes up to 4348cc10da6377a86940beb20ad357933b8f91bb:
+for you to fetch changes up to 35a7430dad4dd83fe295917b8232595f437bb208:
 
-  ARM: dts: at91: sama5d2_som1_ek: disable ISC node by default (2021-09-14 17:05:40 +0200)
-
-----------------------------------------------------------------
-AT91 fixes #1 for 5.15:
-
-- Fixes for newly introduced SAMA7G5 and its Power Management code.
-  Associated core peripherals need to be instantiated in DT for
-  benefiting from best PM support like Backup mode with DDR in
-  Self-Refresh.
-- Add chip ID for SAMA7G5 for easing the kernel log identification.
-- Avoid Camera Sensor probe error on sama5d27 som1 ek board.
+  arm64: zynqmp: Wire psgtr for zc1751-xm013 (2021-09-13 08:55:56 +0200)
 
 ----------------------------------------------------------------
-Claudiu Beznea (6):
-      ARM: at91: pm: do not panic if ram controllers are not enabled
-      ARM: dts: at91: sama7g5: add ram controllers
-      ARM: dts: at91: sama7g5: add securam node
-      ARM: dts: at91: sama7g5: add shdwc node
-      ARM: dts: at91: sama7g5: add chipid
-      ARM: at91: pm: switch backup area to vbat in backup mode
+arm64: dts: ZynqMP DT changes for v5.16
 
-Eugen Hristev (1):
-      ARM: dts: at91: sama5d2_som1_ek: disable ISC node by default
+- Fix issues reported by dtbs_check
+- Enable DMAs, DP, USB, NAND on various boards
+- Add description for irps5401
+- Add pinctrl description
+- Add psgtr description for usb3, sata and DP
+- Start to use nvmem alias for eeprom reference
+- Clean up aliases list
+- Wire qspi and usb3.0
+- Add support for zcu102-rev1.1
+- Couple of minor fixes and sync patches
 
- arch/arm/boot/dts/at91-sama5d27_som1_ek.dts |   1 -
- arch/arm/boot/dts/at91-sama7g5ek.dts        |   9 ++
- arch/arm/boot/dts/sama7g5.dtsi              |  39 +++++++++
- arch/arm/mach-at91/pm.c                     | 130 ++++++++++++++++++++++++----
- 4 files changed, 162 insertions(+), 17 deletions(-)
+----------------------------------------------------------------
+Amit Kumar Mahapatra (1):
+      arm64: zynqmp: Do not duplicate flash partition label property
+
+Michal Simek (32):
+      arm64: zynqmp: Disable CCI by default
+      arm64: zynqmp: Enable fpd_dma for zcu104 platforms
+      arm64: zynqmp: Fix irps5401 device nodes
+      arm64: zynqmp: Add pinctrl description for all boards
+      arm64: zynqmp: Correct zcu111 psgtr description
+      arm64: zynqmp: Wire psgtr for zc1751-xm015
+      arm64: zynqmp: Correct psgtr description for zcu100-revC
+      arm64: zynqmp: Add phy description for usb3.0
+      arm64: zynqmp: Disable WP on zcu111
+      arm64: zynqmp: Add missing mio-bank properties to dc1 and dc5
+      arm64: zynqmp: Wire DP and DPDMA for dc1/dc4
+      arm64: zynqmp: Enable nand driver for dc2 and dc3
+      arm64: zynqmp: Remove additional newline
+      arm64: zynqmp: Move clock node to zynqmp-clk-ccf.dtsi
+      arm64: zynqmp: Add nvmem alises for eeproms
+      arm64: zynqmp: List reset property for ethernet phy
+      arm64: zynqmp: Remove can aliases from zc1751
+      arm64: zynqmp: Move DP nodes to the end of file on zcu106
+      arm64: zynqmp: Add note about UHS mode on some boards
+      arm64: zynqmp: Remove information about dma clock on zcu106
+      arm64: zynqmp: Wire qspi on multiple boards
+      arm64: zynqmp: Move rtc to different location on zcu104-revA
+      arm64: zynqmp: Add reset description for sata
+      arm64: zynqmp: Sync psgtr node location with zcu104-revA
+      arm64: zynqmp: Remove description for 8T49N287 and si5382 chips
+      arm64: zynqmp: Add support for zcu102-rev1.1 board
+      arm64: zynqmp: Add psgtr description to zc1751 dc1 board
+      arm64: zynqmp: Remove not documented is-dual property
+      arm64: zynqmp: Fix serial compatible string
+      arm64: zynqmp: Enable gpio and qspi for zc1275-revA
+      arm64: zynqmp: Enable xlnx,zynqmp-dwc3 driver for xilinx boards
+      arm64: zynqmp: Wire psgtr for zc1751-xm013
+
+Mounika Grace Akula (1):
+      arm64: zynqmp: Add reset-on-timeout to all boards and modify
+default timeout value
+
+Srinivas Neeli (1):
+      arm64: zynqmp: Update rtc calibration value
+
+Stefano Stabellini (1):
+      arm64: zynqmp: Add missing SMID for pcie to zynqmp.dtsi
+
+ Documentation/devicetree/bindings/arm/xilinx.yaml      |   1 +
+ arch/arm64/boot/dts/xilinx/Makefile                    |   1 +
+ arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi         |  13 +++++-
+ arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dts      |  16 +++++++-
+ arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dts      |  16 +++++++-
+ arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dts      |  18 ++++++++-
+ arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts | 298
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts | 342
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---
+ arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dts |  49
+++++++++++++++++++++++-
+ arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dts |  24 ++++++++++-
+ arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts | 330
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts      | 264
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dts    |  15 +++++++
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts      | 320
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dts      |   3 +-
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts      | 292
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts      | 250
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts      | 340
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts      | 274
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----
+ arch/arm64/boot/dts/xilinx/zynqmp.dtsi                 |  93
+++++++++++++++++++++++++++++---------------
+ 20 files changed, 2861 insertions(+), 98 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dts
 
 -- 
-Nicolas Ferre
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
