@@ -1,269 +1,438 @@
-Return-Path: <SRS0=cZMy=OI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=i4le=OI=kemnade.info=andreas@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EADECC433FE
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 18 Sep 2021 14:19:16 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DE89C433F5
+	for <soc@archiver.kernel.org>; Sat, 18 Sep 2021 14:55:33 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 0404161284; Sat, 18 Sep 2021 14:55:33 +0000 (UTC)
+X-Greylist: delayed 2336 seconds by postgrey-1.37 at mail.kernel.org; Sat, 18 Sep 2021 14:55:32 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF50561019
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=kemnade.info
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=kemnade.info
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [85.214.55.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B926561244
-	for <linux-arm-kernel@archiver.kernel.org>; Sat, 18 Sep 2021 14:19:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B926561244
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=kemnade.info
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+	by mail.kernel.org (Postfix) with ESMTPS id AF50561019;
+	Sat, 18 Sep 2021 14:55:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=1s9ypY6AuvwPrMHWcgFy27Fs6R0ZlC6mqi2K90PbIio=; b=2v5f4dMHOj5vxb
-	UfcrLNgf8gwgBuHXgKrXRc7ullL+alWd/PqPrXGVz2oEHFJynhLVuLwxJHxQaI3F6wQ+J1VikHY3v
-	O9lzjLl3Aml0HCOUovQKe3fY2feg9R36dVYD9/5li4BVtBdihQQaa0JsR9DUPnSyrnmuzuBZLXGPb
-	VTffKZBBuCVICq1sLhSFbzZ5ScyJvMQwdgxePMYQEdPQO/5gLhEDJQXcX42cp5LSNW/k57uzRhGXp
-	NzTrla4oe+6puPs5iOzJz+fDPunuusoDF0f0l7VCIBM/Vv08JxJDxVf7sMEEt+iqj9TuLR0Px2Teu
-	jnKjgcICnVlsS9h0oKQQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mRb9h-00FxT9-Qs; Sat, 18 Sep 2021 14:17:25 +0000
-Received: from mail.andi.de1.cc ([2a01:238:4321:8900:456f:ecd6:43e:202c])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mRb91-00FxOq-NM
- for linux-arm-kernel@lists.infradead.org; Sat, 18 Sep 2021 14:16:46 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
- MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
- :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
- Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
- List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
- bh=2LTqMifk/SF/qrhOV9U2O1PRi7uDM05d38MP58VKg30=; b=fhoT6diXc41byyw4knzVO/XEc/
- 6IUuGg+jgQp5Qtpf52pQBWPSNXTINjlUeXHRhsZInBeheU4yb3dm1UYY6vOwoM7aPSDzKawRVCURH
- dxBGTaTU3B//VywNkGQDG+MtCFx6U6+ig2RL52Sp8KXJMxLilt0AZXXHZ/zenKdwFtEw=;
-Received: from p200300ccff3476001a3da2fffebfd33a.dip0.t-ipconnect.de
- ([2003:cc:ff34:7600:1a3d:a2ff:febf:d33a] helo=aktux)
- by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
- (Exim 4.89) (envelope-from <andreas@kemnade.info>)
- id 1mRb8u-0003mw-48; Sat, 18 Sep 2021 16:16:36 +0200
+	d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=mSTsHVG7EdIVZKxZ2/wH8XaPCJcYH2eDoGrEE70hq+4=; b=RA/jiwdCMbxFoI6SWn834RdOon
+	aaL2w1xTP+cDT2GghAWaBKiBZR/Tnqf+dq7omJz29hwhId0MMufyuRZpH7lyGdCVS6abM6yM8eDaL
+	gIWmT7NwRDNT6IO0GV/45ARA/VVJqVNZXnvKmEy91lqNF3hnOfL+28tVgox/sfmHagBs=;
+Received: from p200300ccff3476001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff34:7600:1a3d:a2ff:febf:d33a] helo=aktux)
+	by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.89)
+	(envelope-from <andreas@kemnade.info>)
+	id 1mRb8t-0003mj-KZ; Sat, 18 Sep 2021 16:16:36 +0200
 Received: from andi by aktux with local (Exim 4.94.2)
- (envelope-from <andreas@kemnade.info>)
- id 1mRb8t-008zMs-KS; Sat, 18 Sep 2021 16:16:35 +0200
+	(envelope-from <andreas@kemnade.info>)
+	id 1mRb8t-008zMo-4R; Sat, 18 Sep 2021 16:16:35 +0200
 From: Andreas Kemnade <andreas@kemnade.info>
 List-Id: <soc.lore.kernel.org>
-To: robh+dt@kernel.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
- shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
- festevam@gmail.com, linux-imx@nxp.com, krzk@kernel.org, leoyang.li@nxp.com,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
+To: robh+dt@kernel.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	linux-imx@nxp.com,
+	krzk@kernel.org,
+	leoyang.li@nxp.com,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
 Cc: Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH 4/4] ARM: dts: imx: add devicetree for Tolino Vision 5
-Date: Sat, 18 Sep 2021 16:16:27 +0200
-Message-Id: <20210918141627.2142457-5-andreas@kemnade.info>
+Subject: [PATCH 3/4] ARM: dts: imx: add devicetree for Kobo Libra H2O
+Date: Sat, 18 Sep 2021 16:16:26 +0200
+Message-ID: <20210918141627.2142457-4-andreas@kemnade.info>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210918141627.2142457-1-andreas@kemnade.info>
 References: <20210918141627.2142457-1-andreas@kemnade.info>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210918_071643_952353_8B4F6B4F 
-X-CRM114-Status: GOOD (  14.85  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Content-Transfer-Encoding: 8bit
+Message-ID: <20210918141626.Z1BZv-xa8VDpZu1uSzO15g4gQJ6UR2Kot7DF2jiwzBs@z>
 
-VGhpcyBhZGRzIGEgZGV2aWNldHJlZSBmb3IgdGhlIFRvbGlubyBWaXNpb24gNSBFYm9vayByZWFk
-ZXIuIEl0IGlzCmJhc2VkIG9uIGJvYXJkcyBjYWxsZWQgwqhlNzBrMDLCqC4gSXQgaXMgZXF1aXBw
-ZWQgd2l0aCBhbiBpbXg2c2wgU29DLgoKU2lnbmVkLW9mZi1ieTogQW5kcmVhcyBLZW1uYWRlIDxh
-bmRyZWFzQGtlbW5hZGUuaW5mbz4KLS0tCiBhcmNoL2FybS9ib290L2R0cy9NYWtlZmlsZSAgICAg
-ICAgICAgICAgICAgIHwgICAxICsKIGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZzbC10b2xpbm8tdmlz
-aW9uNS5kdHMgfCAzNDkgKysrKysrKysrKysrKysrKysrKysKIDIgZmlsZXMgY2hhbmdlZCwgMzUw
-IGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2FybS9ib290L2R0cy9pbXg2
-c2wtdG9saW5vLXZpc2lvbjUuZHRzCgpkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvTWFr
-ZWZpbGUgYi9hcmNoL2FybS9ib290L2R0cy9NYWtlZmlsZQppbmRleCA3OGZjMjZmZjJjYWMuLjFk
-YzEzNjY4ZjE0OCAxMDA2NDQKLS0tIGEvYXJjaC9hcm0vYm9vdC9kdHMvTWFrZWZpbGUKKysrIGIv
-YXJjaC9hcm0vYm9vdC9kdHMvTWFrZWZpbGUKQEAgLTYzNSw2ICs2MzUsNyBAQCBkdGItJChDT05G
-SUdfU09DX0lNWDZTTCkgKz0gXAogCWlteDZzbC1ldmsuZHRiIFwKIAlpbXg2c2wtdG9saW5vLXNo
-aW5lMmhkLmR0YiBcCiAJaW14NnNsLXRvbGluby1zaGluZTMuZHRiIFwKKwlpbXg2c2wtdG9saW5v
-LXZpc2lvbjUuZHRiIFwKIAlpbXg2c2wtd2FycC5kdGIKIGR0Yi0kKENPTkZJR19TT0NfSU1YNlNM
-TCkgKz0gXAogCWlteDZzbGwtZXZrLmR0YiBcCmRpZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0
-cy9pbXg2c2wtdG9saW5vLXZpc2lvbjUuZHRzIGIvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnNsLXRv
-bGluby12aXNpb241LmR0cwpuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwMDAu
-LjY4N2RlZDBmODI1MAotLS0gL2Rldi9udWxsCisrKyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZz
-bC10b2xpbm8tdmlzaW9uNS5kdHMKQEAgLTAsMCArMSwzNDkgQEAKKy8vIFNQRFgtTGljZW5zZS1J
-ZGVudGlmaWVyOiAoR1BMLTIuMCkKKy8qCisgKiBEZXZpY2UgdHJlZSBmb3IgdGhlIFRvbGlubyBW
-aXNpb24gNSBlYm9vayByZWFkZXIKKyAqCisgKiBOYW1lIG9uIG1haW5ib2FyZCBpczogMzdOQi1F
-NzBLME0rNkEzCisgKiBTZXJpYWxzIHN0YXJ0IHdpdGg6IEU3MEswMiAoYSBudW1iZXIgYWxzbyBz
-ZWVuIGluCisgKiB2ZW5kb3Iga2VybmVsIHNvdXJjZXMpCisgKgorICogVGhpcyBtYWluYm9hcmQg
-c2VlbXMgdG8gYmUgZXF1aXBwZWQgd2l0aCBkaWZmZXJlbnQgU29Dcy4KKyAqIEluIHRoZSBUb2xp
-bm8gVmlzaW9uIDUgZWJvb2sgcmVhZGVyIGl0IGlzIGEgaS5NWDZTTAorICoKKyAqIENvcHlyaWdo
-dCAyMDIxIEFuZHJlYXMgS2VtbmFkZQorICogYmFzZWQgb24gd29ya3MKKyAqIENvcHlyaWdodCAy
-MDE2IEZyZWVzY2FsZSBTZW1pY29uZHVjdG9yLCBJbmMuCisgKi8KKworL2R0cy12MS87CisKKyNp
-bmNsdWRlIDxkdC1iaW5kaW5ncy9pbnB1dC9pbnB1dC5oPgorI2luY2x1ZGUgPGR0LWJpbmRpbmdz
-L2dwaW8vZ3Bpby5oPgorI2luY2x1ZGUgImlteDZzbC5kdHNpIgorI2luY2x1ZGUgImU3MGswMi5k
-dHNpIgorCisvIHsKKwltb2RlbCA9ICJUb2xpbm8gVmlzaW9uIDUiOworCWNvbXBhdGlibGUgPSAi
-a29ibyx0b2xpbm8tdmlzaW9uNSIsICJmc2wsaW14NnNsIjsKK307CisKKyZncGlvX2tleXMgewor
-CXBpbmN0cmwtbmFtZXMgPSAiZGVmYXVsdCI7CisJcGluY3RybC0wID0gPCZwaW5jdHJsX2dwaW9f
-a2V5cz47Cit9OworCismaTJjMSB7CisJcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0Iiwic2xlZXAi
-OworCXBpbmN0cmwtMCA9IDwmcGluY3RybF9pMmMxPjsKKwlwaW5jdHJsLTEgPSA8JnBpbmN0cmxf
-aTJjMV9zbGVlcD47Cit9OworCismaTJjMiB7CisJcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0Iiwi
-c2xlZXAiOworCXBpbmN0cmwtMCA9IDwmcGluY3RybF9pMmMyPjsKKwlwaW5jdHJsLTEgPSA8JnBp
-bmN0cmxfaTJjMl9zbGVlcD47Cit9OworCismaTJjMyB7CisJcGluY3RybC1uYW1lcyA9ICJkZWZh
-dWx0IjsKKwlwaW5jdHJsLTAgPSA8JnBpbmN0cmxfaTJjMz47Cit9OworCismaW9tdXhjIHsKKwlw
-aW5jdHJsLW5hbWVzID0gImRlZmF1bHQiOworCXBpbmN0cmwtMCA9IDwmcGluY3RybF9ob2c+Owor
-CisJcGluY3RybF9ncGlvX2tleXM6IGdwaW8ta2V5c2dycCB7CisJCWZzbCxwaW5zID0gPAorCQkJ
-TVg2U0xfUEFEX0ZFQ19DUlNfRFZfX0dQSU80X0lPMjUJMHgxNzA1OQkvKiBQV1JfU1cgKi8KKwkJ
-CU1YNlNMX1BBRF9GRUNfTURDX19HUElPNF9JTzIzCTB4MTcwNTkJLyogSEFMTF9FTiAqLworCQkJ
-TVg2U0xfUEFEX0tFWV9DT0w0X19HUElPNF9JTzAwCQkweDE3MDU5CS8qIFBBR0VfVVAgKi8KKwkJ
-CU1YNlNMX1BBRF9LRVlfQ09MNV9fR1BJTzRfSU8wMgkJMHgxNzA1OQkvKiBQQUdFX0RPV04gKi8K
-KwkJPjsKKwl9OworCisJcGluY3RybF9ob2c6IGhvZ2dycCB7CisJCWZzbCxwaW5zID0gPAorCQkJ
-TVg2U0xfUEFEX0xDRF9EQVQxX19HUElPMl9JTzIxCTB4NzkKKwkJCU1YNlNMX1BBRF9MQ0RfREFU
-NF9fR1BJTzJfSU8yNAkweDc5CisJCQlNWDZTTF9QQURfTENEX0RBVDVfX0dQSU8yX0lPMjUJMHg3
-OQorCQkJTVg2U0xfUEFEX0xDRF9EQVQ2X19HUElPMl9JTzI2CTB4NzkKKwkJCU1YNlNMX1BBRF9M
-Q0RfREFUN19fR1BJTzJfSU8yNwkweDc5CisJCQlNWDZTTF9QQURfTENEX0RBVDhfX0dQSU8yX0lP
-MjgJMHg3OQorCQkJTVg2U0xfUEFEX0xDRF9EQVQ5X19HUElPMl9JTzI5CTB4NzkKKwkJCU1YNlNM
-X1BBRF9MQ0RfREFUMTBfX0dQSU8yX0lPMzAJMHg3OQorCQkJTVg2U0xfUEFEX0xDRF9EQVQxMV9f
-R1BJTzJfSU8zMQkweDc5CisJCQlNWDZTTF9QQURfTENEX0RBVDEyX19HUElPM19JTzAwCTB4NzkK
-KwkJCU1YNlNMX1BBRF9MQ0RfREFUMTNfX0dQSU8zX0lPMDEJMHg3OQorCQkJTVg2U0xfUEFEX0xD
-RF9EQVQxNF9fR1BJTzNfSU8wMgkweDc5CisJCQlNWDZTTF9QQURfTENEX0RBVDE1X19HUElPM19J
-TzAzCTB4NzkKKwkJCU1YNlNMX1BBRF9MQ0RfREFUMTZfX0dQSU8zX0lPMDQJMHg3OQorCQkJTVg2
-U0xfUEFEX0xDRF9EQVQxN19fR1BJTzNfSU8wNQkweDc5CisJCQlNWDZTTF9QQURfTENEX0RBVDE4
-X19HUElPM19JTzA2CTB4NzkKKwkJCU1YNlNMX1BBRF9MQ0RfREFUMTlfX0dQSU8zX0lPMDcJMHg3
-OQorCQkJTVg2U0xfUEFEX0xDRF9EQVQyMF9fR1BJTzNfSU8wOAkweDc5CisJCQlNWDZTTF9QQURf
-TENEX0RBVDIxX19HUElPM19JTzA5CTB4NzkKKwkJCU1YNlNMX1BBRF9MQ0RfREFUMjJfX0dQSU8z
-X0lPMTAJMHg3OQorCQkJTVg2U0xfUEFEX0xDRF9EQVQyM19fR1BJTzNfSU8xMQkweDc5CisJCQlN
-WDZTTF9QQURfTENEX0NMS19fR1BJTzJfSU8xNQkJMHg3OQorCQkJTVg2U0xfUEFEX0xDRF9FTkFC
-TEVfX0dQSU8yX0lPMTYJMHg3OQorCQkJTVg2U0xfUEFEX0xDRF9IU1lOQ19fR1BJTzJfSU8xNwkw
-eDc5CisJCQlNWDZTTF9QQURfTENEX1ZTWU5DX19HUElPMl9JTzE4CTB4NzkKKwkJCU1YNlNMX1BB
-RF9MQ0RfUkVTRVRfX0dQSU8yX0lPMTkJMHg3OQorCQkJTVg2U0xfUEFEX0ZFQ19UWF9DTEtfX0dQ
-SU80X0lPMjEJMHg3OQorCQkJTVg2U0xfUEFEX0ZFQ19SRUZfQ0xLX19HUElPNF9JTzI2CTB4NzkK
-KwkJCU1YNlNMX1BBRF9LRVlfQ09MM19fR1BJTzNfSU8zMAkJMHg3OQorCQkJTVg2U0xfUEFEX0tF
-WV9ST1c3X19HUElPNF9JTzA3CQkweDc5CisJCQlNWDZTTF9QQURfRUNTUEkyX01PU0lfX0dQSU80
-X0lPMTMJMHg3OQorCQk+OworCX07CisKKwlwaW5jdHJsX2kyYzE6IGkyYzFncnAgeworCQlmc2ws
-cGlucyA9IDwKKwkJCU1YNlNMX1BBRF9JMkMxX1NDTF9fSTJDMV9TQ0wJIDB4NDAwMWY4YjEKKwkJ
-CU1YNlNMX1BBRF9JMkMxX1NEQV9fSTJDMV9TREEJIDB4NDAwMWY4YjEKKwkJPjsKKwl9OworCisJ
-cGluY3RybF9pMmMxX3NsZWVwOiBpMmMxZ3JwLXNsZWVwIHsKKwkJZnNsLHBpbnMgPSA8CisJCQlN
-WDZTTF9QQURfSTJDMV9TQ0xfX0kyQzFfU0NMCSAweDQwMDEwOGIxCisJCQlNWDZTTF9QQURfSTJD
-MV9TREFfX0kyQzFfU0RBCSAweDQwMDEwOGIxCisJCT47CisJfTsKKworCXBpbmN0cmxfaTJjMjog
-aTJjMmdycCB7CisJCWZzbCxwaW5zID0gPAorCQkJTVg2U0xfUEFEX0kyQzJfU0NMX19JMkMyX1ND
-TAkgMHg0MDAxZjhiMQorCQkJTVg2U0xfUEFEX0kyQzJfU0RBX19JMkMyX1NEQQkgMHg0MDAxZjhi
-MQorCQk+OworCX07CisKKwlwaW5jdHJsX2kyYzJfc2xlZXA6IGkyYzJncnAtc2xlZXAgeworCQlm
-c2wscGlucyA9IDwKKwkJCU1YNlNMX1BBRF9JMkMyX1NDTF9fSTJDMl9TQ0wJIDB4NDAwMTA4YjEK
-KwkJCU1YNlNMX1BBRF9JMkMyX1NEQV9fSTJDMl9TREEJIDB4NDAwMTA4YjEKKwkJPjsKKwl9Owor
-CisJcGluY3RybF9pMmMzOiBpMmMzZ3JwIHsKKwkJZnNsLHBpbnMgPSA8CisJCQlNWDZTTF9QQURf
-UkVGX0NMS18yNE1fX0kyQzNfU0NMICAweDQwMDFmOGIxCisJCQlNWDZTTF9QQURfUkVGX0NMS18z
-MktfX0kyQzNfU0RBICAweDQwMDFmOGIxCisJCT47CisJfTsKKworCXBpbmN0cmxfbGVkOiBsZWRn
-cnAgeworCQlmc2wscGlucyA9IDwKKwkJCU1YNlNMX1BBRF9GRUNfUlhEMF9fR1BJTzRfSU8xNwkw
-eDEwMDU5CisJCT47CisJfTsKKworCXBpbmN0cmxfbG0zNjMwYV9ibF9ncGlvOiBsbTM2MzBhLWJs
-LWdwaW9ncnAgeworCQlmc2wscGlucyA9IDwKKwkJCU1YNlNMX1BBRF9FUERDX1BXUkNUUkwzX19H
-UElPMl9JTzEwCQkweDEwMDU5IC8qIEhXRU4gKi8KKwkJPjsKKwl9OworCisJcGluY3RybF9yaWNv
-aF9ncGlvOiByaWNvaF9ncGlvZ3JwIHsKKwkJZnNsLHBpbnMgPSA8CisJCQlNWDZTTF9QQURfRkVD
-X01ESU9fX0dQSU80X0lPMjAJCTB4MWI4YjEgLyogcmljb2g2MTkgY2hnICovCisJCQlNWDZTTF9Q
-QURfRkVDX1JYX0VSX19HUElPNF9JTzE5CQkweDFiOGIxIC8qIHJpY29oNjE5IGlycSAqLworCQkJ
-TVg2U0xfUEFEX0tFWV9DT0wyX19HUElPM19JTzI4CQkweDFiOGIxIC8qIHJpY29oNjE5IGJhdF9s
-b3dfaW50ICovCisJCT47CisJfTsKKworCXBpbmN0cmxfdWFydDE6IHVhcnQxZ3JwIHsKKwkJZnNs
-LHBpbnMgPSA8CisJCQlNWDZTTF9QQURfVUFSVDFfVFhEX19VQVJUMV9UWF9EQVRBIDB4MWIwYjEK
-KwkJCU1YNlNMX1BBRF9VQVJUMV9SWERfX1VBUlQxX1JYX0RBVEEgMHgxYjBiMQorCQk+OworCX07
-CisKKwlwaW5jdHJsX3VzYm90ZzE6IHVzYm90ZzFncnAgeworCQlmc2wscGlucyA9IDwKKwkJCU1Y
-NlNMX1BBRF9FUERDX1BXUkNPTV9fVVNCX09URzFfSUQgMHgxNzA1OQorCQk+OworCX07CisKKwlw
-aW5jdHJsX3VzZGhjMTogdXNkaGMxZ3JwIHsKKwkJZnNsLHBpbnMgPSA8CisJCQlNWDZTTF9QQURf
-U0QxX0NNRF9fU0QxX0NNRAkweDE3MDU5CisJCQlNWDZTTF9QQURfU0QxX0NMS19fU0QxX0NMSwkw
-eDE3MDU5CisJCQlNWDZTTF9QQURfU0QxX0RBVDBfX1NEMV9EQVRBMAkweDE3MDU5CisJCQlNWDZT
-TF9QQURfU0QxX0RBVDFfX1NEMV9EQVRBMQkweDE3MDU5CisJCQlNWDZTTF9QQURfU0QxX0RBVDJf
-X1NEMV9EQVRBMgkweDE3MDU5CisJCQlNWDZTTF9QQURfU0QxX0RBVDNfX1NEMV9EQVRBMwkweDE3
-MDU5CisJCQlNWDZTTF9QQURfU0QxX0RBVDRfX1NEMV9EQVRBNAkweDE3MDU5CisJCQlNWDZTTF9Q
-QURfU0QxX0RBVDVfX1NEMV9EQVRBNQkweDE3MDU5CisJCQlNWDZTTF9QQURfU0QxX0RBVDZfX1NE
-MV9EQVRBNgkweDE3MDU5CisJCQlNWDZTTF9QQURfU0QxX0RBVDdfX1NEMV9EQVRBNwkweDE3MDU5
-CisJCT47CisJfTsKKworCXBpbmN0cmxfdXNkaGMxXzEwMG1oejogdXNkaGMxZ3JwXzEwMG1oeiB7
-CisJCWZzbCxwaW5zID0gPAorCQkJTVg2U0xfUEFEX1NEMV9DTURfX1NEMV9DTUQJMHgxNzBiOQor
-CQkJTVg2U0xfUEFEX1NEMV9DTEtfX1NEMV9DTEsJMHgxNzBiOQorCQkJTVg2U0xfUEFEX1NEMV9E
-QVQwX19TRDFfREFUQTAJMHgxNzBiOQorCQkJTVg2U0xfUEFEX1NEMV9EQVQxX19TRDFfREFUQTEJ
-MHgxNzBiOQorCQkJTVg2U0xfUEFEX1NEMV9EQVQyX19TRDFfREFUQTIJMHgxNzBiOQorCQkJTVg2
-U0xfUEFEX1NEMV9EQVQzX19TRDFfREFUQTMJMHgxNzBiOQorCQkJTVg2U0xfUEFEX1NEMV9EQVQ0
-X19TRDFfREFUQTQJMHgxNzBiOQorCQkJTVg2U0xfUEFEX1NEMV9EQVQ1X19TRDFfREFUQTUJMHgx
-NzBiOQorCQkJTVg2U0xfUEFEX1NEMV9EQVQ2X19TRDFfREFUQTYJMHgxNzBiOQorCQkJTVg2U0xf
-UEFEX1NEMV9EQVQ3X19TRDFfREFUQTcJMHgxNzBiOQorCQk+OworCX07CisKKwlwaW5jdHJsX3Vz
-ZGhjMV8yMDBtaHo6IHVzZGhjMWdycF8yMDBtaHogeworCQlmc2wscGlucyA9IDwKKwkJCU1YNlNM
-X1BBRF9TRDFfQ01EX19TRDFfQ01ECTB4MTcwZjkKKwkJCU1YNlNMX1BBRF9TRDFfQ0xLX19TRDFf
-Q0xLCTB4MTcwZjkKKwkJCU1YNlNMX1BBRF9TRDFfREFUMF9fU0QxX0RBVEEwCTB4MTcwZjkKKwkJ
-CU1YNlNMX1BBRF9TRDFfREFUMV9fU0QxX0RBVEExCTB4MTcwZjkKKwkJCU1YNlNMX1BBRF9TRDFf
-REFUMl9fU0QxX0RBVEEyCTB4MTcwZjkKKwkJCU1YNlNMX1BBRF9TRDFfREFUM19fU0QxX0RBVEEz
-CTB4MTcwZjkKKwkJCU1YNlNMX1BBRF9TRDFfREFUNF9fU0QxX0RBVEE0CTB4MTcwYjkKKwkJCU1Y
-NlNMX1BBRF9TRDFfREFUNV9fU0QxX0RBVEE1CTB4MTcwYjkKKwkJCU1YNlNMX1BBRF9TRDFfREFU
-Nl9fU0QxX0RBVEE2CTB4MTcwYjkKKwkJCU1YNlNMX1BBRF9TRDFfREFUN19fU0QxX0RBVEE3CTB4
-MTcwYjkKKwkJPjsKKwl9OworCisJcGluY3RybF91c2RoYzFfc2xlZXA6IHVzZGhjMWdycF9zbGVl
-cCB7CisJCWZzbCxwaW5zID0gPAorCQkJTVg2U0xfUEFEX1NEMV9DTURfX1NEMV9DTUQJMHgxMDA1
-OQorCQkJTVg2U0xfUEFEX1NEMV9DTEtfX1NEMV9DTEsJMHgxMDA1OQorCQkJTVg2U0xfUEFEX1NE
-MV9EQVQwX19TRDFfREFUQTAJMHgxMDA1OQorCQkJTVg2U0xfUEFEX1NEMV9EQVQxX19TRDFfREFU
-QTEJMHgxMDA1OQorCQkJTVg2U0xfUEFEX1NEMV9EQVQyX19TRDFfREFUQTIJMHgxMDA1OQorCQkJ
-TVg2U0xfUEFEX1NEMV9EQVQzX19TRDFfREFUQTMJMHgxMDA1OQorCQkJTVg2U0xfUEFEX1NEMV9E
-QVQ0X19TRDFfREFUQTQJMHgxMDA1OQorCQkJTVg2U0xfUEFEX1NEMV9EQVQ1X19TRDFfREFUQTUJ
-MHgxMDA1OQorCQkJTVg2U0xfUEFEX1NEMV9EQVQ2X19TRDFfREFUQTYJMHgxMDA1OQorCQkJTVg2
-U0xfUEFEX1NEMV9EQVQ3X19TRDFfREFUQTcJMHgxMDA1OQorCQk+OworCX07CisKKwlwaW5jdHJs
-X3VzZGhjMzogdXNkaGMzZ3JwIHsKKwkJZnNsLHBpbnMgPSA8CisJCQlNWDZTTF9QQURfU0QzX0NN
-RF9fU0QzX0NNRAkweDExMDU5CisJCQlNWDZTTF9QQURfU0QzX0NMS19fU0QzX0NMSwkweDExMDU5
-CisJCQlNWDZTTF9QQURfU0QzX0RBVDBfX1NEM19EQVRBMAkweDExMDU5CisJCQlNWDZTTF9QQURf
-U0QzX0RBVDFfX1NEM19EQVRBMQkweDExMDU5CisJCQlNWDZTTF9QQURfU0QzX0RBVDJfX1NEM19E
-QVRBMgkweDExMDU5CisJCQlNWDZTTF9QQURfU0QzX0RBVDNfX1NEM19EQVRBMwkweDExMDU5CisJ
-CT47CisJfTsKKworCXBpbmN0cmxfdXNkaGMzXzEwMG1oejogdXNkaGMzZ3JwXzEwMG1oeiB7CisJ
-CWZzbCxwaW5zID0gPAorCQkJTVg2U0xfUEFEX1NEM19DTURfX1NEM19DTUQJMHgxNzBiOQorCQkJ
-TVg2U0xfUEFEX1NEM19DTEtfX1NEM19DTEsJMHgxNzBiOQorCQkJTVg2U0xfUEFEX1NEM19EQVQw
-X19TRDNfREFUQTAJMHgxNzBiOQorCQkJTVg2U0xfUEFEX1NEM19EQVQxX19TRDNfREFUQTEJMHgx
-NzBiOQorCQkJTVg2U0xfUEFEX1NEM19EQVQyX19TRDNfREFUQTIJMHgxNzBiOQorCQkJTVg2U0xf
-UEFEX1NEM19EQVQzX19TRDNfREFUQTMJMHgxNzBiOQorCQk+OworCX07CisKKwlwaW5jdHJsX3Vz
-ZGhjM18yMDBtaHo6IHVzZGhjM2dycF8yMDBtaHogeworCQlmc2wscGlucyA9IDwKKwkJCU1YNlNM
-X1BBRF9TRDNfQ01EX19TRDNfQ01ECTB4MTcwZjkKKwkJCU1YNlNMX1BBRF9TRDNfQ0xLX19TRDNf
-Q0xLCTB4MTcwZjkKKwkJCU1YNlNMX1BBRF9TRDNfREFUMF9fU0QzX0RBVEEwCTB4MTcwZjkKKwkJ
-CU1YNlNMX1BBRF9TRDNfREFUMV9fU0QzX0RBVEExCTB4MTcwZjkKKwkJCU1YNlNMX1BBRF9TRDNf
-REFUMl9fU0QzX0RBVEEyCTB4MTcwZjkKKwkJCU1YNlNMX1BBRF9TRDNfREFUM19fU0QzX0RBVEEz
-CTB4MTcwZjkKKwkJPjsKKwl9OworCisJcGluY3RybF91c2RoYzNfc2xlZXA6IHVzZGhjM2dycF9z
-bGVlcCB7CisJCWZzbCxwaW5zID0gPAorCQkJTVg2U0xfUEFEX1NEM19DTURfX0dQSU81X0lPMjEJ
-MHgxMDBjMQorCQkJTVg2U0xfUEFEX1NEM19DTEtfX0dQSU81X0lPMTgJMHgxMDBjMQorCQkJTVg2
-U0xfUEFEX1NEM19EQVQwX19HUElPNV9JTzE5CTB4MTAwYzEKKwkJCU1YNlNMX1BBRF9TRDNfREFU
-MV9fR1BJTzVfSU8yMAkweDEwMGMxCisJCQlNWDZTTF9QQURfU0QzX0RBVDJfX0dQSU81X0lPMTYJ
-MHgxMDBjMQorCQkJTVg2U0xfUEFEX1NEM19EQVQzX19HUElPNV9JTzE3CTB4MTAwYzEKKwkJPjsK
-Kwl9OworCisJcGluY3RybF93aWZpX3Bvd2VyOiB3aWZpLXBvd2VyZ3JwIHsKKwkJZnNsLHBpbnMg
-PSA8CisJCQlNWDZTTF9QQURfU0QyX0RBVDZfX0dQSU80X0lPMjkJMHgxMDA1OQkgLyogV0lGSV8z
-VjNfT04gKi8KKwkJPjsKKwl9OworCisJcGluY3RybF93aWZpX3Jlc2V0OiB3aWZpLXJlc2V0Z3Jw
-IHsKKwkJZnNsLHBpbnMgPSA8CisJCQlNWDZTTF9QQURfU0QyX0RBVDdfX0dQSU81X0lPMDAJMHgx
-MDA1OQkvKiBXSUZJX1JTVCAqLworCQk+OworCX07Cit9OworCismbGVkcyB7CisJcGluY3RybC1u
-YW1lcyA9ICJkZWZhdWx0IjsKKwlwaW5jdHJsLTAgPSA8JnBpbmN0cmxfbGVkPjsKK307CisKKyZs
-bTM2MzBhIHsKKwlwaW5jdHJsLW5hbWVzID0gImRlZmF1bHQiOworCXBpbmN0cmwtMCA9IDwmcGlu
-Y3RybF9sbTM2MzBhX2JsX2dwaW8+OworfTsKKworJnJlZ193aWZpIHsKKwlwaW5jdHJsLW5hbWVz
-ID0gImRlZmF1bHQiOworCXBpbmN0cmwtMCA9IDwmcGluY3RybF93aWZpX3Bvd2VyPjsKK307CisK
-KyZyZWdfdmRkMXAxIHsKKwl2aW4tc3VwcGx5ID0gPCZkY2RjMl9yZWc+OworfTsKKworJnJlZ192
-ZGQycDUgeworCXZpbi1zdXBwbHkgPSA8JmRjZGMyX3JlZz47Cit9OworCismcmVnX2FybSB7CisJ
-dmluLXN1cHBseSA9IDwmZGNkYzNfcmVnPjsKK307CisKKyZyZWdfc29jIHsKKwl2aW4tc3VwcGx5
-ID0gPCZkY2RjMV9yZWc+OworfTsKKworJnJlZ19wdSB7CisJdmluLXN1cHBseSA9IDwmZGNkYzFf
-cmVnPjsKK307CisKKyZyaWNvaDYxOSB7CisJcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsKKwlw
-aW5jdHJsLTAgPSA8JnBpbmN0cmxfcmljb2hfZ3Bpbz47Cit9OworCismdWFydDEgeworCXBpbmN0
-cmwtbmFtZXMgPSAiZGVmYXVsdCI7CisJcGluY3RybC0wID0gPCZwaW5jdHJsX3VhcnQxPjsKK307
-CisKKyZ1c2RoYzEgeworCXBpbmN0cmwtbmFtZXMgPSAiZGVmYXVsdCIsICJzdGF0ZV8xMDBtaHoi
-LCAic3RhdGVfMjAwbWh6Iiwic2xlZXAiOworCXBpbmN0cmwtMCA9IDwmcGluY3RybF91c2RoYzE+
-OworCXBpbmN0cmwtMSA9IDwmcGluY3RybF91c2RoYzFfMTAwbWh6PjsKKwlwaW5jdHJsLTIgPSA8
-JnBpbmN0cmxfdXNkaGMxXzIwMG1oej47CisJcGluY3RybC0zID0gPCZwaW5jdHJsX3VzZGhjMV9z
-bGVlcD47Cit9OworCismdXNkaGMzIHsKKwlwaW5jdHJsLW5hbWVzID0gImRlZmF1bHQiLCAic3Rh
-dGVfMTAwbWh6IiwgInN0YXRlXzIwMG1oeiIsInNsZWVwIjsKKwlwaW5jdHJsLTAgPSA8JnBpbmN0
-cmxfdXNkaGMzPjsKKwlwaW5jdHJsLTEgPSA8JnBpbmN0cmxfdXNkaGMzXzEwMG1oej47CisJcGlu
-Y3RybC0yID0gPCZwaW5jdHJsX3VzZGhjM18yMDBtaHo+OworCXBpbmN0cmwtMyA9IDwmcGluY3Ry
-bF91c2RoYzNfc2xlZXA+OworfTsKKworJndpZmlfcHdyc2VxIHsKKwlwaW5jdHJsLW5hbWVzID0g
-ImRlZmF1bHQiOworCXBpbmN0cmwtMCA9IDwmcGluY3RybF93aWZpX3Jlc2V0PjsKK307Ci0tIAoy
-LjMwLjIKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
-aW51eC1hcm0ta2VybmVsIG1haWxpbmcgbGlzdApsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJh
-ZGVhZC5vcmcKaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51
-eC1hcm0ta2VybmVsCg==
+This adds a devicetree for the Kobo Libra H2O Ebook reader. It is based on
+boards called e70k02. It is equipped with an imx6sll SoC.
+
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+ arch/arm/boot/dts/Makefile                 |   3 +-
+ arch/arm/boot/dts/imx6sll-kobo-librah2o.dts | 339 +++++++++++++++++++++
+ 2 files changed, 341 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/imx6sll-kobo-librah2o.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7e0934180724..78fc26ff2cac 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -638,7 +638,8 @@ dtb-$(CONFIG_SOC_IMX6SL) += \
+ 	imx6sl-warp.dtb
+ dtb-$(CONFIG_SOC_IMX6SLL) += \
+ 	imx6sll-evk.dtb \
+-	imx6sll-kobo-clarahd.dtb
++	imx6sll-kobo-clarahd.dtb \
++	imx6sll-kobo-librah2o.dtb
+ dtb-$(CONFIG_SOC_IMX6SX) += \
+ 	imx6sx-nitrogen6sx.dtb \
+ 	imx6sx-sabreauto.dtb \
+diff --git a/arch/arm/boot/dts/imx6sll-kobo-librah2o.dts b/arch/arm/boot/dts/imx6sll-kobo-librah2o.dts
+new file mode 100644
+index 000000000000..44522f6a54ca
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6sll-kobo-librah2o.dts
+@@ -0,0 +1,339 @@
++// SPDX-License-Identifier: (GPL-2.0)
++/*
++ * Device tree for the Kobo Libra H2O ebook reader
++ *
++ * Name on mainboard is: 37NB-E70K0M+6A3
++ * Serials start with: E70K02 (a number also seen in
++ * vendor kernel sources)
++ *
++ * This mainboard seems to be equipped with different SoCs.
++ * In the Kobo Libra H2O ebook reader it is an i.MX6SLL
++ *
++ * Copyright 2021 Andreas Kemnade
++ * based on works
++ * Copyright 2016 Freescale Semiconductor, Inc.
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/gpio/gpio.h>
++#include "imx6sll.dtsi"
++#include "e70k02.dtsi"
++
++/ {
++	model = "Kobo Libra H2O";
++	compatible = "kobo,librah2o", "fsl,imx6sll";
++};
++
++&clks {
++	assigned-clocks = <&clks IMX6SLL_CLK_PLL4_AUDIO_DIV>;
++	assigned-clock-rates = <393216000>;
++};
++
++&cpu0 {
++	arm-supply = <&dcdc3_reg>;
++	soc-supply = <&dcdc1_reg>;
++};
++
++&gpio_keys {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_gpio_keys>;
++};
++
++&i2c1 {
++	pinctrl-names = "default","sleep";
++	pinctrl-0 = <&pinctrl_i2c1>;
++	pinctrl-1 = <&pinctrl_i2c1_sleep>;
++};
++
++&i2c2 {
++	pinctrl-names = "default","sleep";
++	pinctrl-0 = <&pinctrl_i2c2>;
++	pinctrl-1 = <&pinctrl_i2c2_sleep>;
++};
++
++&i2c3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c3>;
++};
++
++&iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_hog>;
++
++	pinctrl_gpio_keys: gpio-keysgrp {
++		fsl,pins = <
++			MX6SLL_PAD_GPIO4_IO25__GPIO4_IO25	0x17059	/* PWR_SW */
++			MX6SLL_PAD_GPIO4_IO23__GPIO4_IO23	0x17059	/* HALL_EN */
++			MX6SLL_PAD_KEY_COL4__GPIO4_IO00		0x17059	/* PAGE_UP */
++			MX6SLL_PAD_KEY_COL5__GPIO4_IO02		0x17059	/* PAGE_DOWN */
++		>;
++	};
++
++	pinctrl_hog: hoggrp {
++		fsl,pins = <
++			MX6SLL_PAD_LCD_DATA01__GPIO2_IO21	0x79
++			MX6SLL_PAD_LCD_DATA04__GPIO2_IO24	0x79
++			MX6SLL_PAD_LCD_DATA05__GPIO2_IO25	0x79
++			MX6SLL_PAD_LCD_DATA06__GPIO2_IO26	0x79
++			MX6SLL_PAD_LCD_DATA07__GPIO2_IO27	0x79
++			MX6SLL_PAD_LCD_DATA08__GPIO2_IO28	0x79
++			MX6SLL_PAD_LCD_DATA09__GPIO2_IO29	0x79
++			MX6SLL_PAD_LCD_DATA10__GPIO2_IO30	0x79
++			MX6SLL_PAD_LCD_DATA11__GPIO2_IO31	0x79
++			MX6SLL_PAD_LCD_DATA12__GPIO3_IO00	0x79
++			MX6SLL_PAD_LCD_DATA13__GPIO3_IO01	0x79
++			MX6SLL_PAD_LCD_DATA14__GPIO3_IO02	0x79
++			MX6SLL_PAD_LCD_DATA15__GPIO3_IO03	0x79
++			MX6SLL_PAD_LCD_DATA16__GPIO3_IO04	0x79
++			MX6SLL_PAD_LCD_DATA17__GPIO3_IO05	0x79
++			MX6SLL_PAD_LCD_DATA18__GPIO3_IO06	0x79
++			MX6SLL_PAD_LCD_DATA19__GPIO3_IO07	0x79
++			MX6SLL_PAD_LCD_DATA20__GPIO3_IO08	0x79
++			MX6SLL_PAD_LCD_DATA21__GPIO3_IO09	0x79
++			MX6SLL_PAD_LCD_DATA22__GPIO3_IO10	0x79
++			MX6SLL_PAD_LCD_DATA23__GPIO3_IO11	0x79
++			MX6SLL_PAD_LCD_CLK__GPIO2_IO15		0x79
++			MX6SLL_PAD_LCD_ENABLE__GPIO2_IO16	0x79
++			MX6SLL_PAD_LCD_HSYNC__GPIO2_IO17	0x79
++			MX6SLL_PAD_LCD_VSYNC__GPIO2_IO18	0x79
++			MX6SLL_PAD_LCD_RESET__GPIO2_IO19	0x79
++			MX6SLL_PAD_GPIO4_IO21__GPIO4_IO21	0x79
++			MX6SLL_PAD_GPIO4_IO26__GPIO4_IO26	0x79
++			MX6SLL_PAD_KEY_COL3__GPIO3_IO30		0x79
++			MX6SLL_PAD_KEY_ROW7__GPIO4_IO07		0x79
++			MX6SLL_PAD_ECSPI2_MOSI__GPIO4_IO13	0x79
++		>;
++	};
++
++	pinctrl_i2c1: i2c1grp {
++		fsl,pins = <
++			MX6SLL_PAD_I2C1_SCL__I2C1_SCL   0x4001f8b1
++			MX6SLL_PAD_I2C1_SDA__I2C1_SDA   0x4001f8b1
++		>;
++	};
++
++	pinctrl_i2c1_sleep: i2c1grp-sleep {
++		fsl,pins = <
++			MX6SLL_PAD_I2C1_SCL__I2C1_SCL   0x400108b1
++			MX6SLL_PAD_I2C1_SDA__I2C1_SDA   0x400108b1
++		>;
++	};
++
++	pinctrl_i2c2: i2c2grp {
++		fsl,pins = <
++			MX6SLL_PAD_I2C2_SCL__I2C2_SCL   0x4001f8b1
++			MX6SLL_PAD_I2C2_SDA__I2C2_SDA   0x4001f8b1
++		>;
++	};
++
++	pinctrl_i2c2_sleep: i2c2grp-sleep {
++		fsl,pins = <
++			MX6SLL_PAD_I2C2_SCL__I2C2_SCL   0x400108b1
++			MX6SLL_PAD_I2C2_SDA__I2C2_SDA   0x400108b1
++		>;
++	};
++
++	pinctrl_i2c3: i2c3grp {
++		fsl,pins = <
++			MX6SLL_PAD_REF_CLK_24M__I2C3_SCL 0x4001f8b1
++			MX6SLL_PAD_REF_CLK_32K__I2C3_SDA 0x4001f8b1
++		>;
++	};
++
++	pinctrl_led: ledgrp {
++		fsl,pins = <
++			MX6SLL_PAD_GPIO4_IO17__GPIO4_IO17	0x10059
++		>;
++	};
++
++	pinctrl_lm3630a_bl_gpio: lm3630a-bl-gpiogrp {
++		fsl,pins = <
++			MX6SLL_PAD_EPDC_PWR_CTRL3__GPIO2_IO10   0x10059 /* HWEN */
++		>;
++	};
++
++	pinctrl_ricoh_gpio: ricoh-gpiogrp {
++		fsl,pins = <
++			MX6SLL_PAD_GPIO4_IO20__GPIO4_IO20	0x1b8b1 /* ricoh619 chg */
++			MX6SLL_PAD_GPIO4_IO19__GPIO4_IO19	0x1b8b1 /* ricoh619 irq */
++			MX6SLL_PAD_KEY_COL2__GPIO3_IO28		0x1b8b1 /* ricoh619 bat_low_int */
++		>;
++	};
++
++	pinctrl_uart1: uart1grp {
++		fsl,pins = <
++			MX6SLL_PAD_UART1_TXD__UART1_DCE_TX 0x1b0b1
++			MX6SLL_PAD_UART1_RXD__UART1_DCE_RX 0x1b0b1
++		>;
++	};
++
++	pinctrl_usbotg1: usbotg1grp {
++		fsl,pins = <
++			MX6SLL_PAD_EPDC_PWR_COM__USB_OTG1_ID 0x17059
++		>;
++	};
++
++	pinctrl_usdhc1: usdhc1grp {
++		fsl,pins = <
++			MX6SLL_PAD_SD1_CMD__SD1_CMD	0x17059
++			MX6SLL_PAD_SD1_CLK__SD1_CLK	0x17059
++			MX6SLL_PAD_SD1_DATA0__SD1_DATA0	0x17059
++			MX6SLL_PAD_SD1_DATA1__SD1_DATA1	0x17059
++			MX6SLL_PAD_SD1_DATA2__SD1_DATA2	0x17059
++			MX6SLL_PAD_SD1_DATA3__SD1_DATA3	0x17059
++			MX6SLL_PAD_SD1_DATA4__SD1_DATA4	0x17059
++			MX6SLL_PAD_SD1_DATA5__SD1_DATA5	0x17059
++			MX6SLL_PAD_SD1_DATA6__SD1_DATA6	0x17059
++			MX6SLL_PAD_SD1_DATA7__SD1_DATA7	0x17059
++		>;
++	};
++
++	pinctrl_usdhc1_100mhz: usdhc1grp_100mhz {
++		fsl,pins = <
++			MX6SLL_PAD_SD1_CMD__SD1_CMD	0x170b9
++			MX6SLL_PAD_SD1_CLK__SD1_CLK	0x170b9
++			MX6SLL_PAD_SD1_DATA0__SD1_DATA0	0x170b9
++			MX6SLL_PAD_SD1_DATA1__SD1_DATA1	0x170b9
++			MX6SLL_PAD_SD1_DATA2__SD1_DATA2	0x170b9
++			MX6SLL_PAD_SD1_DATA3__SD1_DATA3	0x170b9
++			MX6SLL_PAD_SD1_DATA4__SD1_DATA4	0x170b9
++			MX6SLL_PAD_SD1_DATA5__SD1_DATA5	0x170b9
++			MX6SLL_PAD_SD1_DATA6__SD1_DATA6	0x170b9
++			MX6SLL_PAD_SD1_DATA7__SD1_DATA7	0x170b9
++		>;
++	};
++
++	pinctrl_usdhc1_200mhz: usdhc1grp_200mhz {
++		fsl,pins = <
++			MX6SLL_PAD_SD1_CMD__SD1_CMD	0x170f9
++			MX6SLL_PAD_SD1_CLK__SD1_CLK	0x170f9
++			MX6SLL_PAD_SD1_DATA0__SD1_DATA0	0x170f9
++			MX6SLL_PAD_SD1_DATA1__SD1_DATA1	0x170f9
++			MX6SLL_PAD_SD1_DATA2__SD1_DATA2	0x170f9
++			MX6SLL_PAD_SD1_DATA3__SD1_DATA3	0x170f9
++			MX6SLL_PAD_SD1_DATA4__SD1_DATA4	0x170b9
++			MX6SLL_PAD_SD1_DATA5__SD1_DATA5	0x170b9
++			MX6SLL_PAD_SD1_DATA6__SD1_DATA6	0x170b9
++			MX6SLL_PAD_SD1_DATA7__SD1_DATA7	0x170b9
++		>;
++	};
++
++	pinctrl_usdhc1_sleep: usdhc1grp_sleep {
++		fsl,pins = <
++			MX6SLL_PAD_SD1_CMD__SD1_CMD	0x10059
++			MX6SLL_PAD_SD1_CLK__SD1_CLK	0x10059
++			MX6SLL_PAD_SD1_DATA0__SD1_DATA0	0x10059
++			MX6SLL_PAD_SD1_DATA1__SD1_DATA1	0x10059
++			MX6SLL_PAD_SD1_DATA2__SD1_DATA2	0x10059
++			MX6SLL_PAD_SD1_DATA3__SD1_DATA3	0x10059
++			MX6SLL_PAD_SD1_DATA4__SD1_DATA4	0x10059
++			MX6SLL_PAD_SD1_DATA5__SD1_DATA5	0x10059
++			MX6SLL_PAD_SD1_DATA6__SD1_DATA6	0x10059
++			MX6SLL_PAD_SD1_DATA7__SD1_DATA7	0x10059
++		>;
++	};
++
++	pinctrl_usdhc3: usdhc3grp {
++		fsl,pins = <
++			MX6SLL_PAD_SD3_CMD__SD3_CMD	0x11059
++			MX6SLL_PAD_SD3_CLK__SD3_CLK	0x11059
++			MX6SLL_PAD_SD3_DATA0__SD3_DATA0	0x11059
++			MX6SLL_PAD_SD3_DATA1__SD3_DATA1	0x11059
++			MX6SLL_PAD_SD3_DATA2__SD3_DATA2	0x11059
++			MX6SLL_PAD_SD3_DATA3__SD3_DATA3	0x11059
++		>;
++	};
++
++	pinctrl_usdhc3_100mhz: usdhc3grp_100mhz {
++		fsl,pins = <
++			MX6SLL_PAD_SD3_CMD__SD3_CMD	0x170b9
++			MX6SLL_PAD_SD3_CLK__SD3_CLK	0x170b9
++			MX6SLL_PAD_SD3_DATA0__SD3_DATA0	0x170b9
++			MX6SLL_PAD_SD3_DATA1__SD3_DATA1	0x170b9
++			MX6SLL_PAD_SD3_DATA2__SD3_DATA2	0x170b9
++			MX6SLL_PAD_SD3_DATA3__SD3_DATA3	0x170b9
++		>;
++	};
++
++	pinctrl_usdhc3_200mhz: usdhc3grp_200mhz {
++		fsl,pins = <
++			MX6SLL_PAD_SD3_CMD__SD3_CMD	0x170f9
++			MX6SLL_PAD_SD3_CLK__SD3_CLK	0x170f9
++			MX6SLL_PAD_SD3_DATA0__SD3_DATA0	0x170f9
++			MX6SLL_PAD_SD3_DATA1__SD3_DATA1	0x170f9
++			MX6SLL_PAD_SD3_DATA2__SD3_DATA2	0x170f9
++			MX6SLL_PAD_SD3_DATA3__SD3_DATA3	0x170f9
++		>;
++	};
++
++	pinctrl_usdhc3_sleep: usdhc3grp_sleep {
++		fsl,pins = <
++			MX6SLL_PAD_SD3_CMD__GPIO5_IO21	0x100c1
++			MX6SLL_PAD_SD3_CLK__GPIO5_IO18	0x100c1
++			MX6SLL_PAD_SD3_DATA0__GPIO5_IO19	0x100c1
++			MX6SLL_PAD_SD3_DATA1__GPIO5_IO20	0x100c1
++			MX6SLL_PAD_SD3_DATA2__GPIO5_IO16	0x100c1
++			MX6SLL_PAD_SD3_DATA3__GPIO5_IO17	0x100c1
++		>;
++	};
++
++	pinctrl_wifi_power: wifi-powergrp {
++		fsl,pins = <
++			MX6SLL_PAD_SD2_DATA6__GPIO4_IO29	0x10059	 /* WIFI_3V3_ON */
++		>;
++	};
++
++	pinctrl_wifi_reset: wifi-resetgrp {
++		fsl,pins = <
++			MX6SLL_PAD_SD2_DATA7__GPIO5_IO00	0x10059	 /* WIFI_RST */
++		>;
++	};
++};
++
++&leds {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_led>;
++};
++
++&lm3630a {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lm3630a_bl_gpio>;
++};
++
++&reg_wifi {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wifi_power>;
++};
++
++&ricoh619 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_ricoh_gpio>;
++};
++
++&uart1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart1>;
++};
++
++&usdhc1 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz","sleep";
++	pinctrl-0 = <&pinctrl_usdhc1>;
++	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
++	pinctrl-3 = <&pinctrl_usdhc1_sleep>;
++};
++
++&usdhc3 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz","sleep";
++	pinctrl-0 = <&pinctrl_usdhc3>;
++	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
++	pinctrl-3 = <&pinctrl_usdhc3_sleep>;
++};
++
++&wifi_pwrseq {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wifi_reset>;
++};
+-- 
+2.30.2
+
