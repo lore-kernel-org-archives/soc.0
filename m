@@ -3,39 +3,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MENTIONS_GIT_HOSTING,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C9BFC433EF
-	for <soc@archiver.kernel.org>; Sat, 18 Sep 2021 14:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49377C433F5
+	for <soc@archiver.kernel.org>; Sat, 18 Sep 2021 14:55:40 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 5EEE26128A; Sat, 18 Sep 2021 14:55:38 +0000 (UTC)
+	id 31AB36127B; Sat, 18 Sep 2021 14:55:40 +0000 (UTC)
 Received: from mail.andi.de1.cc (mail.andi.de1.cc [85.214.55.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 19A6561019;
-	Sat, 18 Sep 2021 14:55:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 19A6561019
+	by mail.kernel.org (Postfix) with ESMTPS id E3A5061019;
+	Sat, 18 Sep 2021 14:55:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E3A5061019
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=kemnade.info
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=kemnade.info
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=pVMUuxlIP6jTGtPA9HirkcO62g0chCPvUE5SjO1ir58=; b=YmLPElUHDL74qD5Fmp0gPYTbVD
-	kra1SoDI/+2AB6K5BKMtKMwTD9i0sWdNpcZR4h6NVe7mdQ0ybBf5zZmc7L7DalHrR6bzoo71niPNU
-	lPCD/Nv2lEtoQcxwA7vbF6X98pFsyTI+MCs9AfHif1jMqqEyYon6myRLDjCsd7kC68Kg=;
+	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=2LTqMifk/SF/qrhOV9U2O1PRi7uDM05d38MP58VKg30=; b=fhoT6diXc41byyw4knzVO/XEc/
+	6IUuGg+jgQp5Qtpf52pQBWPSNXTINjlUeXHRhsZInBeheU4yb3dm1UYY6vOwoM7aPSDzKawRVCURH
+	dxBGTaTU3B//VywNkGQDG+MtCFx6U6+ig2RL52Sp8KXJMxLilt0AZXXHZ/zenKdwFtEw=;
 Received: from p200300ccff3476001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff34:7600:1a3d:a2ff:febf:d33a] helo=aktux)
 	by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.89)
 	(envelope-from <andreas@kemnade.info>)
-	id 1mRb8r-0003mD-Nw; Sat, 18 Sep 2021 16:16:33 +0200
+	id 1mRb8u-0003mw-48; Sat, 18 Sep 2021 16:16:36 +0200
 Received: from andi by aktux with local (Exim 4.94.2)
 	(envelope-from <andreas@kemnade.info>)
-	id 1mRb8r-008zMd-2u; Sat, 18 Sep 2021 16:16:33 +0200
+	id 1mRb8t-008zMs-KS; Sat, 18 Sep 2021 16:16:35 +0200
 From: Andreas Kemnade <andreas@kemnade.info>
 List-Id: <soc.lore.kernel.org>
 To: robh+dt@kernel.org,
@@ -53,44 +53,394 @@ To: robh+dt@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
 Cc: Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH 0/4] ARM: dts: add E70K02 based eBook readers
-Date: Sat, 18 Sep 2021 16:16:23 +0200
-Message-ID: <20210918141627.2142457-1-andreas@kemnade.info>
+Subject: [PATCH 4/4] ARM: dts: imx: add devicetree for Tolino Vision 5
+Date: Sat, 18 Sep 2021 16:16:27 +0200
+Message-ID: <20210918141627.2142457-5-andreas@kemnade.info>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210918141627.2142457-1-andreas@kemnade.info>
+References: <20210918141627.2142457-1-andreas@kemnade.info>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-ID: <20210918141623.f9j9Otp3NYPwH9kfdc_nCQciqW_PxO-lJPEBb4-BO-A@z>
+Message-ID: <20210918141627.bL0dj5jXkttjkI7m0ZLKqA-pnOUPWSUnD76ASGjeTaM@z>
 
-Add devicetrees for E70K02 based ebook readers. 
-Name on mainboard is: 37NB-E70K0M+6A3
-Serials start with: E70K02 (a number also seen in vendor kernel
-sources).
+This adds a devicetree for the Tolino Vision 5 Ebook reader. It is
+based on boards called ¨e70k02¨. It is equipped with an imx6sl SoC.
 
-These boards are found in the Kobo Libra H2O with an i.MX6SLL and
-in the Tolino Vision 5 with an i.MX6SL.
-
-Work is based on code from the vendor kernel at
-https://github.com/kobolabs/Kobo-Reader/blob/master/hw/imx6sll-librah2o/kernel.tar.bz2
-but things need to be heavily reworked due to
-incompatible bindings
-
-Andreas Kemnade (4):
-  dt-bindings: arm: fsl: Add E70K02 based ebook readers
-  ARM: dts: add Netronix E70K02 board common file
-  ARM: dts: imx: add devicetree for Kobo Libra H2O
-  ARM: dts: imx: add devicetree for Tolino Vision 5
-
- .../devicetree/bindings/arm/fsl.yaml          |   2 +
- arch/arm/boot/dts/Makefile                    |   4 +-
- arch/arm/boot/dts/e70k02.dtsi                 | 320 ++++++++++++++++
- arch/arm/boot/dts/imx6sl-tolino-vision5.dts   | 349 ++++++++++++++++++
- arch/arm/boot/dts/imx6sll-kobo-librah2o.dts    | 339 +++++++++++++++++
- 5 files changed, 1013 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/boot/dts/e70k02.dtsi
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+ arch/arm/boot/dts/Makefile                  |   1 +
+ arch/arm/boot/dts/imx6sl-tolino-vision5.dts | 349 ++++++++++++++++++++
+ 2 files changed, 350 insertions(+)
  create mode 100644 arch/arm/boot/dts/imx6sl-tolino-vision5.dts
- create mode 100644 arch/arm/boot/dts/imx6sll-kobo-librah2o.dts
 
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 78fc26ff2cac..1dc13668f148 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -635,6 +635,7 @@ dtb-$(CONFIG_SOC_IMX6SL) += \
+ 	imx6sl-evk.dtb \
+ 	imx6sl-tolino-shine2hd.dtb \
+ 	imx6sl-tolino-shine3.dtb \
++	imx6sl-tolino-vision5.dtb \
+ 	imx6sl-warp.dtb
+ dtb-$(CONFIG_SOC_IMX6SLL) += \
+ 	imx6sll-evk.dtb \
+diff --git a/arch/arm/boot/dts/imx6sl-tolino-vision5.dts b/arch/arm/boot/dts/imx6sl-tolino-vision5.dts
+new file mode 100644
+index 000000000000..687ded0f8250
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6sl-tolino-vision5.dts
+@@ -0,0 +1,349 @@
++// SPDX-License-Identifier: (GPL-2.0)
++/*
++ * Device tree for the Tolino Vision 5 ebook reader
++ *
++ * Name on mainboard is: 37NB-E70K0M+6A3
++ * Serials start with: E70K02 (a number also seen in
++ * vendor kernel sources)
++ *
++ * This mainboard seems to be equipped with different SoCs.
++ * In the Tolino Vision 5 ebook reader it is a i.MX6SL
++ *
++ * Copyright 2021 Andreas Kemnade
++ * based on works
++ * Copyright 2016 Freescale Semiconductor, Inc.
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/gpio/gpio.h>
++#include "imx6sl.dtsi"
++#include "e70k02.dtsi"
++
++/ {
++	model = "Tolino Vision 5";
++	compatible = "kobo,tolino-vision5", "fsl,imx6sl";
++};
++
++&gpio_keys {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_gpio_keys>;
++};
++
++&i2c1 {
++	pinctrl-names = "default","sleep";
++	pinctrl-0 = <&pinctrl_i2c1>;
++	pinctrl-1 = <&pinctrl_i2c1_sleep>;
++};
++
++&i2c2 {
++	pinctrl-names = "default","sleep";
++	pinctrl-0 = <&pinctrl_i2c2>;
++	pinctrl-1 = <&pinctrl_i2c2_sleep>;
++};
++
++&i2c3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c3>;
++};
++
++&iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_hog>;
++
++	pinctrl_gpio_keys: gpio-keysgrp {
++		fsl,pins = <
++			MX6SL_PAD_FEC_CRS_DV__GPIO4_IO25	0x17059	/* PWR_SW */
++			MX6SL_PAD_FEC_MDC__GPIO4_IO23	0x17059	/* HALL_EN */
++			MX6SL_PAD_KEY_COL4__GPIO4_IO00		0x17059	/* PAGE_UP */
++			MX6SL_PAD_KEY_COL5__GPIO4_IO02		0x17059	/* PAGE_DOWN */
++		>;
++	};
++
++	pinctrl_hog: hoggrp {
++		fsl,pins = <
++			MX6SL_PAD_LCD_DAT1__GPIO2_IO21	0x79
++			MX6SL_PAD_LCD_DAT4__GPIO2_IO24	0x79
++			MX6SL_PAD_LCD_DAT5__GPIO2_IO25	0x79
++			MX6SL_PAD_LCD_DAT6__GPIO2_IO26	0x79
++			MX6SL_PAD_LCD_DAT7__GPIO2_IO27	0x79
++			MX6SL_PAD_LCD_DAT8__GPIO2_IO28	0x79
++			MX6SL_PAD_LCD_DAT9__GPIO2_IO29	0x79
++			MX6SL_PAD_LCD_DAT10__GPIO2_IO30	0x79
++			MX6SL_PAD_LCD_DAT11__GPIO2_IO31	0x79
++			MX6SL_PAD_LCD_DAT12__GPIO3_IO00	0x79
++			MX6SL_PAD_LCD_DAT13__GPIO3_IO01	0x79
++			MX6SL_PAD_LCD_DAT14__GPIO3_IO02	0x79
++			MX6SL_PAD_LCD_DAT15__GPIO3_IO03	0x79
++			MX6SL_PAD_LCD_DAT16__GPIO3_IO04	0x79
++			MX6SL_PAD_LCD_DAT17__GPIO3_IO05	0x79
++			MX6SL_PAD_LCD_DAT18__GPIO3_IO06	0x79
++			MX6SL_PAD_LCD_DAT19__GPIO3_IO07	0x79
++			MX6SL_PAD_LCD_DAT20__GPIO3_IO08	0x79
++			MX6SL_PAD_LCD_DAT21__GPIO3_IO09	0x79
++			MX6SL_PAD_LCD_DAT22__GPIO3_IO10	0x79
++			MX6SL_PAD_LCD_DAT23__GPIO3_IO11	0x79
++			MX6SL_PAD_LCD_CLK__GPIO2_IO15		0x79
++			MX6SL_PAD_LCD_ENABLE__GPIO2_IO16	0x79
++			MX6SL_PAD_LCD_HSYNC__GPIO2_IO17	0x79
++			MX6SL_PAD_LCD_VSYNC__GPIO2_IO18	0x79
++			MX6SL_PAD_LCD_RESET__GPIO2_IO19	0x79
++			MX6SL_PAD_FEC_TX_CLK__GPIO4_IO21	0x79
++			MX6SL_PAD_FEC_REF_CLK__GPIO4_IO26	0x79
++			MX6SL_PAD_KEY_COL3__GPIO3_IO30		0x79
++			MX6SL_PAD_KEY_ROW7__GPIO4_IO07		0x79
++			MX6SL_PAD_ECSPI2_MOSI__GPIO4_IO13	0x79
++		>;
++	};
++
++	pinctrl_i2c1: i2c1grp {
++		fsl,pins = <
++			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x4001f8b1
++			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x4001f8b1
++		>;
++	};
++
++	pinctrl_i2c1_sleep: i2c1grp-sleep {
++		fsl,pins = <
++			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x400108b1
++			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x400108b1
++		>;
++	};
++
++	pinctrl_i2c2: i2c2grp {
++		fsl,pins = <
++			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x4001f8b1
++			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x4001f8b1
++		>;
++	};
++
++	pinctrl_i2c2_sleep: i2c2grp-sleep {
++		fsl,pins = <
++			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x400108b1
++			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x400108b1
++		>;
++	};
++
++	pinctrl_i2c3: i2c3grp {
++		fsl,pins = <
++			MX6SL_PAD_REF_CLK_24M__I2C3_SCL  0x4001f8b1
++			MX6SL_PAD_REF_CLK_32K__I2C3_SDA  0x4001f8b1
++		>;
++	};
++
++	pinctrl_led: ledgrp {
++		fsl,pins = <
++			MX6SL_PAD_FEC_RXD0__GPIO4_IO17	0x10059
++		>;
++	};
++
++	pinctrl_lm3630a_bl_gpio: lm3630a-bl-gpiogrp {
++		fsl,pins = <
++			MX6SL_PAD_EPDC_PWRCTRL3__GPIO2_IO10		0x10059 /* HWEN */
++		>;
++	};
++
++	pinctrl_ricoh_gpio: ricoh_gpiogrp {
++		fsl,pins = <
++			MX6SL_PAD_FEC_MDIO__GPIO4_IO20		0x1b8b1 /* ricoh619 chg */
++			MX6SL_PAD_FEC_RX_ER__GPIO4_IO19		0x1b8b1 /* ricoh619 irq */
++			MX6SL_PAD_KEY_COL2__GPIO3_IO28		0x1b8b1 /* ricoh619 bat_low_int */
++		>;
++	};
++
++	pinctrl_uart1: uart1grp {
++		fsl,pins = <
++			MX6SL_PAD_UART1_TXD__UART1_TX_DATA 0x1b0b1
++			MX6SL_PAD_UART1_RXD__UART1_RX_DATA 0x1b0b1
++		>;
++	};
++
++	pinctrl_usbotg1: usbotg1grp {
++		fsl,pins = <
++			MX6SL_PAD_EPDC_PWRCOM__USB_OTG1_ID 0x17059
++		>;
++	};
++
++	pinctrl_usdhc1: usdhc1grp {
++		fsl,pins = <
++			MX6SL_PAD_SD1_CMD__SD1_CMD	0x17059
++			MX6SL_PAD_SD1_CLK__SD1_CLK	0x17059
++			MX6SL_PAD_SD1_DAT0__SD1_DATA0	0x17059
++			MX6SL_PAD_SD1_DAT1__SD1_DATA1	0x17059
++			MX6SL_PAD_SD1_DAT2__SD1_DATA2	0x17059
++			MX6SL_PAD_SD1_DAT3__SD1_DATA3	0x17059
++			MX6SL_PAD_SD1_DAT4__SD1_DATA4	0x17059
++			MX6SL_PAD_SD1_DAT5__SD1_DATA5	0x17059
++			MX6SL_PAD_SD1_DAT6__SD1_DATA6	0x17059
++			MX6SL_PAD_SD1_DAT7__SD1_DATA7	0x17059
++		>;
++	};
++
++	pinctrl_usdhc1_100mhz: usdhc1grp_100mhz {
++		fsl,pins = <
++			MX6SL_PAD_SD1_CMD__SD1_CMD	0x170b9
++			MX6SL_PAD_SD1_CLK__SD1_CLK	0x170b9
++			MX6SL_PAD_SD1_DAT0__SD1_DATA0	0x170b9
++			MX6SL_PAD_SD1_DAT1__SD1_DATA1	0x170b9
++			MX6SL_PAD_SD1_DAT2__SD1_DATA2	0x170b9
++			MX6SL_PAD_SD1_DAT3__SD1_DATA3	0x170b9
++			MX6SL_PAD_SD1_DAT4__SD1_DATA4	0x170b9
++			MX6SL_PAD_SD1_DAT5__SD1_DATA5	0x170b9
++			MX6SL_PAD_SD1_DAT6__SD1_DATA6	0x170b9
++			MX6SL_PAD_SD1_DAT7__SD1_DATA7	0x170b9
++		>;
++	};
++
++	pinctrl_usdhc1_200mhz: usdhc1grp_200mhz {
++		fsl,pins = <
++			MX6SL_PAD_SD1_CMD__SD1_CMD	0x170f9
++			MX6SL_PAD_SD1_CLK__SD1_CLK	0x170f9
++			MX6SL_PAD_SD1_DAT0__SD1_DATA0	0x170f9
++			MX6SL_PAD_SD1_DAT1__SD1_DATA1	0x170f9
++			MX6SL_PAD_SD1_DAT2__SD1_DATA2	0x170f9
++			MX6SL_PAD_SD1_DAT3__SD1_DATA3	0x170f9
++			MX6SL_PAD_SD1_DAT4__SD1_DATA4	0x170b9
++			MX6SL_PAD_SD1_DAT5__SD1_DATA5	0x170b9
++			MX6SL_PAD_SD1_DAT6__SD1_DATA6	0x170b9
++			MX6SL_PAD_SD1_DAT7__SD1_DATA7	0x170b9
++		>;
++	};
++
++	pinctrl_usdhc1_sleep: usdhc1grp_sleep {
++		fsl,pins = <
++			MX6SL_PAD_SD1_CMD__SD1_CMD	0x10059
++			MX6SL_PAD_SD1_CLK__SD1_CLK	0x10059
++			MX6SL_PAD_SD1_DAT0__SD1_DATA0	0x10059
++			MX6SL_PAD_SD1_DAT1__SD1_DATA1	0x10059
++			MX6SL_PAD_SD1_DAT2__SD1_DATA2	0x10059
++			MX6SL_PAD_SD1_DAT3__SD1_DATA3	0x10059
++			MX6SL_PAD_SD1_DAT4__SD1_DATA4	0x10059
++			MX6SL_PAD_SD1_DAT5__SD1_DATA5	0x10059
++			MX6SL_PAD_SD1_DAT6__SD1_DATA6	0x10059
++			MX6SL_PAD_SD1_DAT7__SD1_DATA7	0x10059
++		>;
++	};
++
++	pinctrl_usdhc3: usdhc3grp {
++		fsl,pins = <
++			MX6SL_PAD_SD3_CMD__SD3_CMD	0x11059
++			MX6SL_PAD_SD3_CLK__SD3_CLK	0x11059
++			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x11059
++			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x11059
++			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x11059
++			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x11059
++		>;
++	};
++
++	pinctrl_usdhc3_100mhz: usdhc3grp_100mhz {
++		fsl,pins = <
++			MX6SL_PAD_SD3_CMD__SD3_CMD	0x170b9
++			MX6SL_PAD_SD3_CLK__SD3_CLK	0x170b9
++			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x170b9
++			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x170b9
++			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x170b9
++			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x170b9
++		>;
++	};
++
++	pinctrl_usdhc3_200mhz: usdhc3grp_200mhz {
++		fsl,pins = <
++			MX6SL_PAD_SD3_CMD__SD3_CMD	0x170f9
++			MX6SL_PAD_SD3_CLK__SD3_CLK	0x170f9
++			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x170f9
++			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x170f9
++			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x170f9
++			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x170f9
++		>;
++	};
++
++	pinctrl_usdhc3_sleep: usdhc3grp_sleep {
++		fsl,pins = <
++			MX6SL_PAD_SD3_CMD__GPIO5_IO21	0x100c1
++			MX6SL_PAD_SD3_CLK__GPIO5_IO18	0x100c1
++			MX6SL_PAD_SD3_DAT0__GPIO5_IO19	0x100c1
++			MX6SL_PAD_SD3_DAT1__GPIO5_IO20	0x100c1
++			MX6SL_PAD_SD3_DAT2__GPIO5_IO16	0x100c1
++			MX6SL_PAD_SD3_DAT3__GPIO5_IO17	0x100c1
++		>;
++	};
++
++	pinctrl_wifi_power: wifi-powergrp {
++		fsl,pins = <
++			MX6SL_PAD_SD2_DAT6__GPIO4_IO29	0x10059	 /* WIFI_3V3_ON */
++		>;
++	};
++
++	pinctrl_wifi_reset: wifi-resetgrp {
++		fsl,pins = <
++			MX6SL_PAD_SD2_DAT7__GPIO5_IO00	0x10059	/* WIFI_RST */
++		>;
++	};
++};
++
++&leds {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_led>;
++};
++
++&lm3630a {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lm3630a_bl_gpio>;
++};
++
++&reg_wifi {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wifi_power>;
++};
++
++&reg_vdd1p1 {
++	vin-supply = <&dcdc2_reg>;
++};
++
++&reg_vdd2p5 {
++	vin-supply = <&dcdc2_reg>;
++};
++
++&reg_arm {
++	vin-supply = <&dcdc3_reg>;
++};
++
++&reg_soc {
++	vin-supply = <&dcdc1_reg>;
++};
++
++&reg_pu {
++	vin-supply = <&dcdc1_reg>;
++};
++
++&ricoh619 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_ricoh_gpio>;
++};
++
++&uart1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart1>;
++};
++
++&usdhc1 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz","sleep";
++	pinctrl-0 = <&pinctrl_usdhc1>;
++	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
++	pinctrl-3 = <&pinctrl_usdhc1_sleep>;
++};
++
++&usdhc3 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz","sleep";
++	pinctrl-0 = <&pinctrl_usdhc3>;
++	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
++	pinctrl-3 = <&pinctrl_usdhc3_sleep>;
++};
++
++&wifi_pwrseq {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wifi_reset>;
++};
 -- 
 2.30.2
 
