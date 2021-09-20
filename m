@@ -1,129 +1,120 @@
-Return-Path: <SRS0=hDLm=OK=semihalf.com=pan@kernel.org>
+Return-Path: <SRS0=k7nY=OK=lists.infradead.org=linux-mtd-bounces+linux-mtd=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECDA2C4332F
-	for <soc@archiver.kernel.org>; Mon, 20 Sep 2021 12:42:12 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id C87FC61019; Mon, 20 Sep 2021 12:42:12 +0000 (UTC)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2331C433EF
+	for <linux-mtd@archiver.kernel.org>; Mon, 20 Sep 2021 12:43:06 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ABEF660FA0
-	for <soc@kernel.org>; Mon, 20 Sep 2021 12:42:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ABEF660FA0
+	by mail.kernel.org (Postfix) with ESMTPS id A60F860F43
+	for <linux-mtd@archiver.kernel.org>; Mon, 20 Sep 2021 12:43:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A60F860F43
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=semihalf.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=semihalf.com
-Received: by mail-lf1-f54.google.com with SMTP id b20so8605921lfv.3
-        for <soc@kernel.org>; Mon, 20 Sep 2021 05:42:12 -0700 (PDT)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=tQdY0DBrAxCzjYhPzq81XHMomcDVTVwki5ARNbZdw9E=; b=ARswRmARMqjGzY
+	zky2lfm5wg8gWDMRH2sMNtrYgdVm7xevlGZx3Icm4LRC0ri6iXdA9j17wAKUXi8lFU6RmIxhw8eat
+	BvWXMFC1fOBmioe23LEOMOH8hEpXGFcmfG2hNy2TLpVjNf3sZ5ePOs8IH+FxDD26JSXr0+06NCS5c
+	a9QZzj7gcbOnse3OhPDMwkkYcMoK9U8bNUhbrrJ3gvtpDMoJXDMZzadRp313dqt1vVfFx2J3g/iLK
+	77Tv1Q/S7FAUekIzp7+DoWsrL7MpyByAlAiY6w0WqlVK1sBNAQx3AqSa6I/30XH6bFOrVLOj0NZ7o
+	nRc0RePoEnCNsENaP9Fg==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mSIcn-001cGz-BY; Mon, 20 Sep 2021 12:42:21 +0000
+Received: from mail-lf1-x130.google.com ([2a00:1450:4864:20::130])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mSIcY-001cBe-Sq
+ for linux-mtd@lists.infradead.org; Mon, 20 Sep 2021 12:42:08 +0000
+Received: by mail-lf1-x130.google.com with SMTP id m3so65008109lfu.2
+ for <linux-mtd@lists.infradead.org>; Mon, 20 Sep 2021 05:42:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aD0ZimcpDdMwxxDkok8INnwAF4L8JkxKG7hlNjJNuc4=;
-        b=ROkKUP5Wti0ZceJVkqlAW1hw9pw2rtGO+UYdzPbSZg0ZsAEcFmWUy5DNCnc2MIrx4b
-         BYp0RUGvkHwf934xqPgpQ6UUwcdgw6xDoe22pz4EAJzNIkulRo31v++TUs9ymGhu5K5u
-         tFmeYg86tBZ7B0TP8fKKkgwBNWF29JNbAnbvAilubZMvvjqh33+omk3tgv1z+6L1bSvw
-         FCli+M02Sz/IhIHZXabClzluGQtQlRj9xfOIJWpPK6WGTy5EPC3C9NjyvqDaeSeKSJCU
-         Vakycw1Ed8PiorDWqI1+IUXUUnKX7kJZHW55ViIYHRIy6ZFT8OOia60WSN3/sQxWirf6
-         jpSg==
+ d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=3Jyaaz7vsLz5usd/SRKYitd1GGLRRfy3n82omug9pAA=;
+ b=L/kr3gQxhCNlhY6qH1CLUHlheQzY/Uh+X/1bxbkbfOsRhN5fgPZdylx7AksknyVZx0
+ ZavNwA4iIjTf8EcdStQfTAE/CRJna1NdH2D1H7fxIYHEiQ+0MHOPC7853nFtRKP48Vb1
+ GJzyA8LSMUDfFgdLyXv74OeaA8br/7jymBKqKQKfeYRtMB2s0FkIFGGt5rTgnSKxV8mU
+ X4NlHShLxa3rlaPq+R/xlNlW86R+vVxLpXI2xSERkAr/iLu0cn1PCrZkVQlCaSVrLeQt
+ SndtPNzU3Ga5dMxXpv6OGJSxycuUZb6UBdv2g/0rC2zCOClhczAXcpdZBuLYOnmaI5kz
+ GHMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aD0ZimcpDdMwxxDkok8INnwAF4L8JkxKG7hlNjJNuc4=;
-        b=JDrK+qJmtBG8diQqSgeSTGm/poUkSm/03gNW5wRe9YmYAQeducP1x0SdWvIyRhA9UY
-         4i8OsGXuWObharxvbERdFKpkqcYZE+WK/HPKIF96r29El5rt1/ypPsLZJqggZ9JwbLD2
-         f4yPkVjrpeBVV+XdpR/AEHKNIsq5TwRU9sGjUnzQCGGCHbGV0wvCBmqlhmGH6l0EiASi
-         Xrmxs2g5CkZDYyK4vhsEc+hCrDyPrCnIvvEWIDngfWnVg7nMCGQw9vP2fsUMRj9mQbMw
-         cLoyQybWPfGyGrcS/s45DeapC3Z1ZEcgGXPMOxAgUzsojGzxjGXzRAZUKTdYRDT6NdoR
-         jmaw==
-X-Gm-Message-State: AOAM5332pHu/BHauuF/cmHKwOCcmJRiGkVXEzZuANGXNH2npK2B/iAUI
-	hyr8euOVoU5yEX3XQHe96RQX2Q==
-X-Google-Smtp-Source: ABdhPJzdjJvEESBsRijWxynJclTM1jLd3jz584eIX1nzT8MgbP4/OcLKY9ulXqJbDoTj+2jHr5+kVA==
-X-Received: by 2002:a2e:9a07:: with SMTP id o7mr6991825lji.125.1632141730817;
-        Mon, 20 Sep 2021 05:42:10 -0700 (PDT)
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=3Jyaaz7vsLz5usd/SRKYitd1GGLRRfy3n82omug9pAA=;
+ b=LFr+8ibVyJNw54R/xM7NK86ePFqzrCVP1+Xes2Wzeg2j9rfc48WUbII6x9xtrpd6eo
+ ibeOUmC0GiCHUONvtVKdrC09wTpvr5Uzq1EYBbNPMTSa+y+YJkaBkjaUfkR+j8VXCubF
+ HOdv/QmyNq6CiyGv//sh30ImjiyKzcPmr3b805eBv7YMDQfnbhTUvq6HwOpTs1hJK5DK
+ dTfJMVPM0VGH0GVnIUXAKMYi1qZq+xRbZ35//OgVLHLi4jvD75CLWdMVjdqsCYYy4Gjl
+ tA6a3kr3YZIeSAYfptD29dxP1y8pooTakotejBHDPyrcrO/3O2kmQuelvMTnI1Cgpl7X
+ 6CYQ==
+X-Gm-Message-State: AOAM530YpKLJ3GUe2Vms84J3ZWgLyVPdlVM7eZphFSxDcaGRzi7Iw5ff
+ vk4zHQTD5Yu/KzrQ8SMMJf/fKw==
+X-Google-Smtp-Source: ABdhPJwptMV9N4Ai1/dhNdrr/uDN6aHZsMXxgGcaXehA6fzWLlCPes1ne4JSuGwqmkcUqu3FgLPPGw==
+X-Received: by 2002:a2e:501a:: with SMTP id e26mr20763529ljb.57.1632141723926; 
+ Mon, 20 Sep 2021 05:42:03 -0700 (PDT)
 Received: from grasshopper.googchameleon.semihalf.net ([83.142.187.85])
-        by smtp.gmail.com with ESMTPSA id v1sm630944lfo.308.2021.09.20.05.42.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Sep 2021 05:42:10 -0700 (PDT)
+ by smtp.gmail.com with ESMTPSA id v1sm630944lfo.308.2021.09.20.05.42.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 20 Sep 2021 05:42:03 -0700 (PDT)
 From: =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
 List-Id: <soc.lore.kernel.org>
-To: miquel.raynal@bootlin.com,
-	richard@nod.at,
-	vigneshr@ti.com,
-	robh+dt@kernel.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	soc@kernel.org,
-	dinguyen@kernel.org,
-	p.zabel@pengutronix.de
-Cc: linux-mtd@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	tn@semihalf.com,
-	ka@semihalf.com,
-	jam@semihalf.com,
-	=?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
-Subject: [PATCH 3/3] reset: socfpga: add empty driver allowing consumers to probe
-Date: Mon, 20 Sep 2021 14:41:41 +0200
-Message-Id: <20210920124141.1166544-4-pan@semihalf.com>
+To: miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+ robh+dt@kernel.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+ dinguyen@kernel.org, p.zabel@pengutronix.de
+Cc: linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ tn@semihalf.com, ka@semihalf.com, jam@semihalf.com,
+ =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
+Subject: [PATCH 0/3] Add support for the Mercury+ AA1 module
+Date: Mon, 20 Sep 2021 14:41:38 +0200
+Message-ID: <20210920124141.1166544-1-pan@semihalf.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210920124141.1166544-1-pan@semihalf.com>
-References: <20210920124141.1166544-1-pan@semihalf.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210920_054207_027433_B6B50BBE 
+X-CRM114-Status: GOOD (  11.05  )
+X-BeenThere: linux-mtd@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: Linux MTD discussion mailing list <linux-mtd.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mtd>,
+ <mailto:linux-mtd-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mtd/>
+List-Post: <mailto:linux-mtd@lists.infradead.org>
+List-Help: <mailto:linux-mtd-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mtd>,
+ <mailto:linux-mtd-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: "linux-mtd" <linux-mtd-bounces@lists.infradead.org>
+Errors-To: linux-mtd-bounces+linux-mtd=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210920124138.218jlZUMWzmaKpG3Te-EXAZvCCZ-at2YvquwBZQAr6A@z>
 
-The early reset driver doesn't ever probe, which causes consuming
-devices to be unable to probe. Add an empty driver to set this device
-as available, allowing consumers to probe.
-
-Signed-off-by: Paweł Anikiel <pan@semihalf.com>
----
- drivers/reset/reset-socfpga.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/drivers/reset/reset-socfpga.c b/drivers/reset/reset-socfpga.c
-index 2a72f861f798..8c6492e5693c 100644
---- a/drivers/reset/reset-socfpga.c
-+++ b/drivers/reset/reset-socfpga.c
-@@ -92,3 +92,29 @@ void __init socfpga_reset_init(void)
- 	for_each_matching_node(np, socfpga_early_reset_dt_ids)
- 		a10_reset_init(np);
- }
-+
-+/*
-+ * The early driver is problematic, because it doesn't register
-+ * itself as a driver. This causes certain device links to prevent
-+ * consumer devices from probing. The hacky solution is to register
-+ * an empty driver, whose only job is to attach itself to the reset
-+ * manager and call probe.
-+ */
-+static const struct of_device_id socfpga_reset_dt_ids[] = {
-+	{ .compatible = "altr,rst-mgr", },
-+	{ /* sentinel */ },
-+};
-+
-+static int reset_simple_probe(struct platform_device *pdev)
-+{
-+	return 0;
-+}
-+
-+static struct platform_driver reset_socfpga_driver = {
-+	.probe	= reset_simple_probe,
-+	.driver = {
-+		.name		= "socfpga-reset",
-+		.of_match_table	= socfpga_reset_dt_ids,
-+	},
-+};
-+builtin_platform_driver(reset_socfpga_driver);
--- 
-2.25.1
-
+VGhlIGZvbGxvd2luZyBwYXRjaGVzIGFkZCBzdXBwb3J0IGZvciB0aGUgTWVyY3VyeSsgQUExIHdp
+dGggYW4KQXJyaWEgMTAgU29DRlBHQSwgbmFtZWx5IGEgZGV2aWNlIHRyZWUsIGFuZCBhIGZpeCBy
+ZWdhcmRpbmcgdGhlCkFycmlhIDEwIHJlc2V0IG1hbmFnZXIgZHJpdmVyLgoKUGF3ZcWCIEFuaWtp
+ZWwgKDMpOgogIGR0LWJpbmRpbmdzOiBtdGQ6IHNwaS1ub3I6IGFkZCBuMjVxMDAgc2NoZW1hCiAg
+ZHRzOiBzb2NmcGdhOiBBZGQgTWVyY3VyeSsgQUExIGRldmljZXRyZWUKICByZXNldDogc29jZnBn
+YTogYWRkIGVtcHR5IGRyaXZlciBhbGxvd2luZyBjb25zdW1lcnMgdG8gcHJvYmUKCiAuLi4vYmlu
+ZGluZ3MvbXRkL2plZGVjLHNwaS1ub3IueWFtbCAgICAgICAgICAgfCAgIDIgKy0KIGFyY2gvYXJt
+L2Jvb3QvZHRzL01ha2VmaWxlICAgICAgICAgICAgICAgICAgICB8ICAgMSArCiAuLi4vYm9vdC9k
+dHMvc29jZnBnYV9hcnJpYTEwX21lcmN1cnlfYWExLmR0cyAgfCAxMjcgKysrKysrKysrKysrKysr
+KysrCiBkcml2ZXJzL3Jlc2V0L3Jlc2V0LXNvY2ZwZ2EuYyAgICAgICAgICAgICAgICAgfCAgMjYg
+KysrKwogNCBmaWxlcyBjaGFuZ2VkLCAxNTUgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQog
+Y3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtL2Jvb3QvZHRzL3NvY2ZwZ2FfYXJyaWExMF9tZXJj
+dXJ5X2FhMS5kdHMKCi0tIAoyLjI1LjEKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KTGludXggTVREIGRpc2N1c3Npb24gbWFpbGluZyBsaXN0
+Cmh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtbXRkLwo=
