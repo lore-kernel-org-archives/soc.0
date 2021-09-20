@@ -1,43 +1,74 @@
-Return-Path: <SRS0=Q1jH=OJ=emailverificado.com=us@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: *
-X-Spam-Status: No, score=1.1 required=3.0 tests=BAYES_50,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Level: 
+X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11C31C433FE
-	for <soc@archiver.kernel.org>; Sun, 19 Sep 2021 20:52:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F28BC433F5
+	for <soc@archiver.kernel.org>; Mon, 20 Sep 2021 10:06:18 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id D612261151; Sun, 19 Sep 2021 20:52:54 +0000 (UTC)
-Received: from emailverificado.com (unknown [181.229.43.185])
-	(using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0A8C861056
-	for <soc@kernel.org>; Sun, 19 Sep 2021 20:52:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0A8C861056
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=emailverificado.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=emailverificado.com
-Reply-To: us@emailverificado.com
-From: ISA Email Marketing <us@emailverificado.com>
+	id 21E6460F9B; Mon, 20 Sep 2021 10:06:18 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 50D6F60F5D;
+	Mon, 20 Sep 2021 10:06:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1632132378;
+	bh=cWNYxGntqMjtuFTPah0ukt4ZiP3ZlHgC+JMjq3iH+5E=;
+	h=From:To:List-Id:Cc:Subject:Date:From;
+	b=P9Yh1cfompD9ktsrZYxFoVUgjbEI2p/Bg/fSwNmz7vsSj8VZV1GMrHmDhE9moHVnG
+	 NFPvqwD/odAt4lKq8cifYgxEnm8qmE7sKeSCYyy6NzGFtEyiCsPSUsIGXs21oqTATI
+	 xfgcWVIJmFdyGAdWH6/bnvwLbW/7nNsPm0oxgIBtXdSuCVoUegZdNQt46/HX1teFmt
+	 82DbyVQGtHajToYyDtBaICap5cJq+ImFZrEYSI2sZHllh5hXfudyepLtUzV7oiRBNc
+	 3OTnGErcmgpxmK86zFth4gI+X1mHuBQFVeqJkyDTN1FfLS3XERyj1rERSCKQsWHF9I
+	 yqFRnFKLQuyyA==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: information about email marketing
-Date: 19 Sep 2021 17:52:51 -0300
-Message-ID: <20210919175251.CDE93550B604B07B@emailverificado.com>
+Cc: soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Pankaj Dubey <pankaj.dubey@samsung.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] soc: samsung: exynos-pmu: select CONFIG_MFD_CORE
+Date: Mon, 20 Sep 2021 12:06:08 +0200
+Message-Id: <20210920100613.1613919-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Good morning
+From: Arnd Bergmann <arnd@arndb.de>
 
-My name is Fabian Torre and  I am an Email Marketing technician
-I would like to know if you are interested in receiving=20
-information about products and services for Email Marketing, and=20
-to what email address I can send it.
+Using devm_mfd_add_devices() fails if no driver selects the
+MFD core code:
 
-Thanks
+aarch64-linux-ld: drivers/soc/samsung/exynos-pmu.o: in function `exynos_pmu_probe':
+exynos-pmu.c:(.text+0xa0): undefined reference to `devm_mfd_add_devices'
 
-Whatsapp: +55 719 9204-2292
-Skype: chronskype
+Add the missing select statement.
+
+Fixes: 93618e344a5e ("soc: samsung: exynos-pmu: instantiate clkout driver as MFD")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/soc/samsung/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/soc/samsung/Kconfig b/drivers/soc/samsung/Kconfig
+index 5745d7e5908e..1f643c0f5c93 100644
+--- a/drivers/soc/samsung/Kconfig
++++ b/drivers/soc/samsung/Kconfig
+@@ -25,6 +25,7 @@ config EXYNOS_PMU
+ 	bool "Exynos PMU controller driver" if COMPILE_TEST
+ 	depends on ARCH_EXYNOS || ((ARM || ARM64) && COMPILE_TEST)
+ 	select EXYNOS_PMU_ARM_DRIVERS if ARM && ARCH_EXYNOS
++	select MFD_CORE
+ 
+ # There is no need to enable these drivers for ARMv8
+ config EXYNOS_PMU_ARM_DRIVERS
+-- 
+2.29.2
 
