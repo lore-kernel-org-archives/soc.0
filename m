@@ -1,38 +1,66 @@
-Return-Path: <krzk@kernel.org>
+Return-Path: <SRS0=I0Tm=OM=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY autolearn=ham
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97393C433EF
-	for <soc@archiver.kernel.org>; Wed, 22 Sep 2021 07:41:51 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 732496124A; Wed, 22 Sep 2021 07:41:51 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 59F66610A1;
-	Wed, 22 Sep 2021 07:41:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF420C433EF
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 22 Sep 2021 07:44:07 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 9E5BD61178
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 22 Sep 2021 07:44:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9E5BD61178
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
+	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=dbup0hfdSghwIIl0VUZsR3HoZE0cme1QtHTHTdLRJTQ=; b=IvwksEpPHwhLof
+	gMbIFnYNDW5ejkw3OSNGbg20dIUEmFD/cy3uYcTCFLNdvNxIg4TZMqig/5A7MMZR39tawExRFYi+/
+	O1KzBzTaziXLFCNwAzmAmrkzhDVNiQHlwAoh46rFRf/E9UpWetmlLmChy4pXUUrMPBrSr4vWys+bE
+	pip9rAEvk7o2sFc6rexj97piSyzyz8cyaNs33EWhdnBePWgpfLlPPRWGJiI7okrOtOp5D8G3x/f7o
+	K28suM0YLqMczzBj715Ewnm5Sbmh1TbJLbvRpCJ7kxHBWuhfkHBgp3yKiJq2D38rLSjGlZj/Csk1u
+	HVX0AyymjSthRMD7wlew==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mSwtA-007LVH-Am; Wed, 22 Sep 2021 07:41:56 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mSwt6-007LUE-3G
+ for linux-arm-kernel@lists.infradead.org; Wed, 22 Sep 2021 07:41:53 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 55E6B61178
+ for <linux-arm-kernel@lists.infradead.org>;
+ Wed, 22 Sep 2021 07:41:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632296511;
-	bh=xfAJfK3RpZVOx1Cdx75iDvpFNMkfCGNlqlZv6y9rU9s=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=B8g5GbZ/kwSxGNGYU8Lf+HK2ZueHtN5X4tmPrqYRXeXH+B3I+HIctCU4ci8eFGSCD
-	 kZie/5i8PySwi+OMmnKKCk8jJK8CHdIwnO6HASZkEo6VOrf4aA1171vyof9ST+Lrt7
-	 VAeitFTHWG5PM6kvZbVFjHC5A6HWLMY/UpMksIXHMRnVD6BDvBOarndIGY/FBJqNv0
-	 h+FtI5aNTSXCNffFDYkFEoTpLbG/VXKc8E4L1hdb70SUGUHfROqL/i/aW1bd2Mv57U
-	 68Y/MppeFG5/0ZmE4QGSkD7Ps323CPI1h1tf9HGtX8PYa/IM/pqndjAgVD594E1IL3
-	 w28u8/EdOm+eA==
-Received: by mail-pj1-f44.google.com with SMTP id il14-20020a17090b164e00b0019c7a7c362dso3391770pjb.0;
-        Wed, 22 Sep 2021 00:41:51 -0700 (PDT)
-X-Gm-Message-State: AOAM532Kxoe1IOz/PkQaGToGX4B6CNpVs8PXgRmaDHnGYaLh/+PYe4AZ
-	Y3iEUBj91zlNbUMJLAkvL5dAhNTxKR5xCicUGzo=
+ s=k20201202; t=1632296511;
+ bh=xfAJfK3RpZVOx1Cdx75iDvpFNMkfCGNlqlZv6y9rU9s=;
+ h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+ b=B8g5GbZ/kwSxGNGYU8Lf+HK2ZueHtN5X4tmPrqYRXeXH+B3I+HIctCU4ci8eFGSCD
+ kZie/5i8PySwi+OMmnKKCk8jJK8CHdIwnO6HASZkEo6VOrf4aA1171vyof9ST+Lrt7
+ VAeitFTHWG5PM6kvZbVFjHC5A6HWLMY/UpMksIXHMRnVD6BDvBOarndIGY/FBJqNv0
+ h+FtI5aNTSXCNffFDYkFEoTpLbG/VXKc8E4L1hdb70SUGUHfROqL/i/aW1bd2Mv57U
+ 68Y/MppeFG5/0ZmE4QGSkD7Ps323CPI1h1tf9HGtX8PYa/IM/pqndjAgVD594E1IL3
+ w28u8/EdOm+eA==
+Received: by mail-pl1-f176.google.com with SMTP id v2so1181367plp.8
+ for <linux-arm-kernel@lists.infradead.org>;
+ Wed, 22 Sep 2021 00:41:51 -0700 (PDT)
+X-Gm-Message-State: AOAM5313qLQImgGCWkOW55V7ZtqmC0qOlp7iz/uqwecck54YJS+7fdqZ
+ gQCpXX8pU9KlcWCSf8KTFpdZZrhRvDTF5VqCy7k=
 X-Google-Smtp-Source: ABdhPJxckvyy9QLR6UpyAzNRWOJa/aBvvnjc5Hj9xT7NZRCgVBx2gIHztVtHEXGL02re1cA1UMK2Ivk5BB7223O6mYs=
 X-Received: by 2002:a17:902:8307:b0:13c:ac55:5e1d with SMTP id
  bd7-20020a170902830700b0013cac555e1dmr25963916plb.56.1632296510922; Wed, 22
  Sep 2021 00:41:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210918141627.2142457-1-andreas@kemnade.info> <20210918141627.2142457-4-andreas@kemnade.info>
+References: <20210918141627.2142457-1-andreas@kemnade.info>
+ <20210918141627.2142457-4-andreas@kemnade.info>
 In-Reply-To: <20210918141627.2142457-4-andreas@kemnade.info>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Date: Wed, 22 Sep 2021 09:41:39 +0200
@@ -41,12 +69,32 @@ Message-ID: <CAJKOXPfQrfOm=LWh97tq6q16v6aGXazksYF+kYxj5ghd0x7LUg@mail.gmail.com>
 Subject: Re: [PATCH 3/4] ARM: dts: imx: add devicetree for Kobo Libra H2O
 To: Andreas Kemnade <andreas@kemnade.info>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
-	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
-	festevam@gmail.com, linux-imx@nxp.com, leoyang.li@nxp.com, 
-	devicetree@vger.kernel.org, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Cc: robh+dt@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org, 
+ shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+ festevam@gmail.com, linux-imx@nxp.com, leoyang.li@nxp.com, 
+ devicetree@vger.kernel.org, 
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210922_004152_243671_D35D2E18 
+X-CRM114-Status: GOOD (  21.43  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210922074139.oijGI3bX6_oWVvHdGFfrE4I0L3g-mqQ5xJQN_oZ2Pv8@z>
 
 On Sat, 18 Sept 2021 at 16:55, Andreas Kemnade <andreas@kemnade.info> wrote:
 >
@@ -282,3 +330,8 @@ suffix. This remark applies to other cases below.
 
 Best regards,
 Krzysztof
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
