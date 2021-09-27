@@ -1,42 +1,80 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=MvIc=OR=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BE5EC433F5
-	for <soc@archiver.kernel.org>; Mon, 27 Sep 2021 14:41:23 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id F2C3F60F46; Mon, 27 Sep 2021 14:41:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53D0DC433EF
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 27 Sep 2021 14:43:29 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 14A8660FC2
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 27 Sep 2021 14:43:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 14A8660FC2
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=hC9auWpOPjbYGmRz7Ig7IowQbMm2z2xketgYtsOFEuI=; b=eWYlHwVy2QFrRB
+	SHnNvBPQsi5illz1AwF0o7e3NnhV2Km9y5cgwplGt4UjFWALRILYGH4xD7DF9+94wQovCL0Z5UdZb
+	tofaroLuARhnb6hsypYEof71jg3jIG1hjsIPlnzuutM1uxzKIfi7eoqA6FvMZf1FHpM+iPT79SQxj
+	Q8lNzjb30nbIjp6mSETrQIbbKG2yIvCY/T9v+AIKL5ivQ1sftJfpJ2VICM8RT0NhixgyMUfbrS3j5
+	XL4hdc033MBiqduRlhlnrL3yZFBj6C7mHc43HoLzCZH35j0L62eKHA1/9in5a0tgA25dY1nHqmoCq
+	YVgv6ZM3EylzzfIlVkmw==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mUrot-002wJe-HE; Mon, 27 Sep 2021 14:41:27 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mUrop-002wJ8-8l
+ for linux-arm-kernel@lists.infradead.org; Mon, 27 Sep 2021 14:41:25 +0000
 Received: by mail.kernel.org (Postfix) with ESMTPSA id D57B060FC0;
-	Mon, 27 Sep 2021 14:41:20 +0000 (UTC)
+ Mon, 27 Sep 2021 14:41:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1632753682;
-	bh=0PWiE7aBehQZctgpSRfrxYiWBiaogEbKlW2Cy/ew6P8=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=b6NHKIP3HqzsMEojCHdLzj/TojlhAgwhcuA04VzndKKmm7GtRO38qccDjY5Gi3ceZ
-	 b/fdfURYBK2iD5Cvi6n4d36lJhdNsvcBCzSZhn4jA1Saborc1wVJACj8CuEv3eiWPV
-	 3BYIS2MGSWpSs0DDIENBcXdEf569K/P6b5BJYiPUixMeWqw7U5jXlgKVLBIFaZNxqG
-	 1mEruPW1Q69Ij+8k8jytPzgPPpPEjBef1ft6XsHzfFE2dt4r3jCk8iu/Xqwwiwar/k
-	 7AXJicaKdYxQK0+okdaD1opeP+jZXzmnfmRLyX3Z85ItUWp6Fzu8I90h8U5fYNFS19
-	 CB6TemyX88m8w==
+ s=k20201202; t=1632753682;
+ bh=0PWiE7aBehQZctgpSRfrxYiWBiaogEbKlW2Cy/ew6P8=;
+ h=From:List-Id:To:Cc:Subject:Date:From;
+ b=b6NHKIP3HqzsMEojCHdLzj/TojlhAgwhcuA04VzndKKmm7GtRO38qccDjY5Gi3ceZ
+ b/fdfURYBK2iD5Cvi6n4d36lJhdNsvcBCzSZhn4jA1Saborc1wVJACj8CuEv3eiWPV
+ 3BYIS2MGSWpSs0DDIENBcXdEf569K/P6b5BJYiPUixMeWqw7U5jXlgKVLBIFaZNxqG
+ 1mEruPW1Q69Ij+8k8jytPzgPPpPEjBef1ft6XsHzfFE2dt4r3jCk8iu/Xqwwiwar/k
+ 7AXJicaKdYxQK0+okdaD1opeP+jZXzmnfmRLyX3Z85ItUWp6Fzu8I90h8U5fYNFS19
+ CB6TemyX88m8w==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Tony Lindgren <tony@atomide.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Felipe Balbi <felipe.balbi@linux.intel.com>,
-	linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
+To: soc@kernel.org, Aaro Koskinen <aaro.koskinen@iki.fi>,
+ Tony Lindgren <tony@atomide.com>, Alan Stern <stern@rowland.harvard.edu>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Felipe Balbi <felipe.balbi@linux.intel.com>,
+ linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Subject: [PATCH] ARM: omap1: move omap15xx local bus handling to usb.c
 Date: Mon, 27 Sep 2021 16:40:50 +0200
-Message-Id: <20210927144118.2464881-1-arnd@kernel.org>
+Message-ID: <20210927144118.2464881-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210927_074123_375088_83470586 
+X-CRM114-Status: GOOD (  30.10  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20210927144050.v5rfCdoATd3uZe7kebEAIMEbNu8AZ2B52YKlfzGkLtM@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
@@ -381,3 +419,8 @@ index 43b5ce139c37..878e572a78bf 100644
 -- 
 2.29.2
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
