@@ -2,51 +2,51 @@ Return-Path: <SRS0=H+38=OU=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54DC3C433EF
-	for <soc@archiver.kernel.org>; Thu, 30 Sep 2021 02:55:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D12EC433EF
+	for <soc@archiver.kernel.org>; Thu, 30 Sep 2021 02:55:28 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 3012D61880; Thu, 30 Sep 2021 02:55:11 +0000 (UTC)
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	id EF805617E4; Thu, 30 Sep 2021 02:55:27 +0000 (UTC)
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 141E36187D
-	for <soc@kernel.org>; Thu, 30 Sep 2021 02:55:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 141E36187D
+	by mail.kernel.org (Postfix) with ESMTPS id D407C6187F
+	for <soc@kernel.org>; Thu, 30 Sep 2021 02:55:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D407C6187F
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
 Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
-Received: by mail-oi1-f181.google.com with SMTP id q16so5489238oiw.10
-        for <soc@kernel.org>; Wed, 29 Sep 2021 19:55:11 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id d12-20020a05683025cc00b0054d8486c6b8so5563663otu.0
+        for <soc@kernel.org>; Wed, 29 Sep 2021 19:55:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+1ST1IwMq7SdLN8IVWaHSe9jzpTADx+oCW9sYTruZ8Q=;
-        b=hDRMWj4AyHsqYsMPUVFDfAJoc/59eTDFl+JDDVqRnSLT8YLgzTsoSQgDThD+hvsAF6
-         vy/5x4rZjFMg0fec/cc1gzn6KRxIGE/4dPLWGCRb4fmBsT8UKpt9Tt1Kl7hWUH0lLNjs
-         CD5wPz9FHeseaYWEQa51a4XLgo5LVpGiTlYPxe5L3xZqBPoRMP8hAd9NVTE4WWEuoLeu
-         tAaDKApIfE4wJk5paOKCh9b7ciAfSX37AVxvz/52zs7oO4GxT7PKpxQ9t9HKGuQRpAkK
-         DPNPbA+aEjI4F7xlLLT0jJvUgHh2PvtCMc8FdK5Jnq9mqaTVPStvz33LviCPG6pI5Vxq
-         ge3Q==
+        bh=JJWG2OEeplITAKWNwOIX3nc4uerEIugG53buzU1RsdY=;
+        b=H5k3EYAxITPFMuZqEBLKmqnIhBiwLXm8+Ok+Lhtw2TbFArLgQDpDKjh16JVmYhrNfQ
+         LaqEdgWJ6GjeLcpRrFwn0uhTqfd1SM92f1Utj76bZde8vOG58JgfDtS4LPPj2i4LRhzQ
+         8Aq6FgozxwddjOhRw82heD78xIa88lPU2OhWO3zUsW7lnSw1fC9VraR7faejoGi7p2Rl
+         +FV1ZrXBjhEXugr7QCBOSXr4PnKiF7ieW/3ZM0i7KinkmDtZuBVyIF78Js/P8gxWif2C
+         mxDyPveg/7YQ6gN4++tgF/fm3n/jVxgczjU5R/8abqn2skP/xFlQ1mUOEtrRerZTOeJd
+         sNEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+1ST1IwMq7SdLN8IVWaHSe9jzpTADx+oCW9sYTruZ8Q=;
-        b=ovNF9bcfL0LDYMINxQwKAs+F9WIIAT+DPNCCG5UFP4SnJBUXClO2XFtRk9BzHlHc7k
-         OnluohvHZ7WWAHW7wxG+oauznbIyvCjsffiByZhzXxx31AACa6HdQX5fRxxeR+HSdEXH
-         xzzSQGmieF5U2C70tIJF4UNzN8/XRTuFOmnR77fz2QGq28iRU9OdySoBahZv7TpoBznv
-         kub+JvUcg+pj9OS5RYnGu2G3y6chQ2fNE+SJ70K+Ti9wppIb97CBNlJlvSoT/SwEsK8g
-         BAY3Gcb4eYffscvCgNe026R86S4R6xm3xqyKcrx4ofErC3FTYtAYfpAIhPfFrc7PzNWy
-         uB1A==
-X-Gm-Message-State: AOAM532THdAQQaG3o+WJDeABNE/3ge+LcHNZ4Sw3a7bzpcCQc752S6rr
-	snlC0uJNP/Ks3QDBSt/69Xg0Og==
-X-Google-Smtp-Source: ABdhPJxGDBULmmB1HwFnluqAi6juGLR+lBmZye4slIGlDBjO9z62aUEnz9vq2OafqnFVDQO58Conpg==
-X-Received: by 2002:aca:c641:: with SMTP id w62mr833261oif.102.1632970510404;
-        Wed, 29 Sep 2021 19:55:10 -0700 (PDT)
+        bh=JJWG2OEeplITAKWNwOIX3nc4uerEIugG53buzU1RsdY=;
+        b=L2CsMuMxqFSPALNmgLCI/yt+ejMdwvK96rjGS1YgETcS/C/pPNClR8EOremgT3QQ7T
+         wV4abxe5VVd5JNKmkOdApfWiQeW1PjR3XXx6NWcsziW5pisWb9RGFhFa590D+k7Bm/9u
+         H3iEVJF99i3/WzOcWt62R9VKcRv8PBkx6eI4ZIPNNmKAx1r9k606yzkr9p8+tRAdKLik
+         jBOlV/+Ii7qO9VluIOAZZCpV/1skbmfJT+vv1xVm7tWY1k247yneijGstOn20h+YXhG9
+         bf6ePo+cTwbs95YknknDor3SuVOy/V3KwIxLgHuhBRGlBuEaeI2iJ9jzPzpcuCn260g2
+         7FLg==
+X-Gm-Message-State: AOAM533Tu29l5WH4kmlyZkYPIbSmR2+fNWOpnDKoJOb3tp0z3rzyC5O7
+	Mz9Gm/TIwEZFXrKqnhwHvGBVCg==
+X-Google-Smtp-Source: ABdhPJxRRRu9Jy4mBGdA2FQ+J3cuyWDSDAy6FAREe8NCBpOsAJk5JDiyzn2C1v00Ta0ixkFlQXM4/Q==
+X-Received: by 2002:a9d:4910:: with SMTP id e16mr2935855otf.170.1632970527171;
+        Wed, 29 Sep 2021 19:55:27 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id z17sm350459ooz.38.2021.09.29.19.55.09
+        by smtp.gmail.com with ESMTPSA id x28sm370202ote.24.2021.09.29.19.55.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 19:55:09 -0700 (PDT)
+        Wed, 29 Sep 2021 19:55:26 -0700 (PDT)
 From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -57,14 +57,11 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	Kevin Hilman <khilman@baylibre.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Amit Pundir <amit.pundir@linaro.org>,
-	Douglas Anderson <dianders@chromium.org>,
-	Shawn Guo <shawn.guo@linaro.org>,
-	Stephen Boyd <swboyd@chromium.org>
-Subject: [GIT PULL] Qualcomm ARM64 DTS fixes for 5.15
-Date: Wed, 29 Sep 2021 21:55:09 -0500
-Message-Id: <20210930025509.1091-1-bjorn.andersson@linaro.org>
+	David Heidelberg <david@ixit.cz>,
+	Marijn Suijten <marijn.suijten@somainline.org>
+Subject: [GIT PULL] Qualcomm DTS fixes for v5.15
+Date: Wed, 29 Sep 2021 21:55:26 -0500
+Message-Id: <20210930025526.1146-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,51 +72,27 @@ The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-5.15
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-fixes-for-5.15
 
-for you to fetch changes up to 1878f4b7ec9ed013da8a7efb63fed1fbae0215ae:
+for you to fetch changes up to ecf5b34cd5182180ff47ca14ecaca0a90db7fd1d:
 
-  arm64: dts: qcom: sdm630: Add missing a2noc qos clocks (2021-09-24 10:05:22 -0500)
-
-----------------------------------------------------------------
-Qualcomm ARM64 DTS fixes for 5.15
-
-This starts by reverting the SC7280 CPUfreq update, which was merged
-before concensus about the associated drivers changes was reached.
-
-It then moves the reserved-memory changes done to get IPA working on the
-Lenovo Yoga C630 into the Yoga specific DTS, as changing the memory map
-on the platform level did break a couple of the other boards.
-
-It fixes the HDMI audio on Trogdor and add missing Aggre2 NOC qos clocks
-on SDM6{30,36,60} which prevented some boards from booting.
-
-Lastly it enables the PON module on SM8250/QRB5165, as the lack thereof
-is blocking automated testing in LKFT.
+  ARM: dts: qcom: apq8064: update Adreno clock names (2021-09-19 23:11:27 -0500)
 
 ----------------------------------------------------------------
-Amit Pundir (1):
-      arm64: dts: qcom: sdm850-yoga: Reshuffle IPA memory mappings
+Qualcomm DTS fixes for v5.15
 
-Dmitry Baryshkov (3):
-      arm64: dts: qcom: pm8150: use qcom,pm8998-pon binding
-      arm64: dts: qcom: pm8150: specify reboot mode magics
-      arm64: dts: qcom: qrb5165-rb5: enabled pwrkey and resin nodes
+This corrects the use of depricated chipid and clock names, for which
+support was finally dropped from the driver. It also ensures that the
+DSI PLL is fed by the correct clock, now that it's being migrated to not
+rely on global clock names.
 
-Douglas Anderson (1):
-      Revert "arm64: dts: qcom: sc7280: Fixup the cpufreq node"
+----------------------------------------------------------------
+David Heidelberg (2):
+      ARM: dts: qcom: apq8064: use compatible which contains chipid
+      ARM: dts: qcom: apq8064: update Adreno clock names
 
-Shawn Guo (1):
-      arm64: dts: qcom: sdm630: Add missing a2noc qos clocks
+Marijn Suijten (1):
+      ARM: dts: qcom: apq8064: Use 27MHz PXO clock as DSI PLL reference
 
-Stephen Boyd (1):
-      arm64: dts: qcom: sc7180-trogdor: Fix lpass dai link for HDMI
-
- arch/arm64/boot/dts/qcom/pm8150.dtsi               |  4 ++-
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts           | 10 +++++++
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       |  9 +++---
- arch/arm64/boot/dts/qcom/sc7280.dtsi               |  6 ++--
- arch/arm64/boot/dts/qcom/sdm630.dtsi               | 15 ++++++++--
- arch/arm64/boot/dts/qcom/sdm845.dtsi               | 21 ++++++++-----
- .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      | 34 ++++++++++++++++++++++
- 7 files changed, 80 insertions(+), 19 deletions(-)
+ arch/arm/boot/dts/qcom-apq8064.dtsi | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
