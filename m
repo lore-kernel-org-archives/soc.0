@@ -1,15 +1,15 @@
-Return-Path: <SRS0=Jblq=OZ=lists.infradead.org=linux-mtd-bounces+linux-mtd=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=xXpd=OZ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21593C433EF
-	for <linux-mtd@archiver.kernel.org>; Tue,  5 Oct 2021 12:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5B8AC433EF
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  5 Oct 2021 12:01:14 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CD88F61409
-	for <linux-mtd@archiver.kernel.org>; Tue,  5 Oct 2021 12:00:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CD88F61409
+	by mail.kernel.org (Postfix) with ESMTPS id A0A1461409
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  5 Oct 2021 12:01:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A0A1461409
 Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -18,15 +18,15 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Content-ID:In-Reply-To:
 	References:Message-ID:Date:Subject:CC:To:From:Reply-To:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=z7l+FNUGPs6LbNFOZXEuocjb+uZjBnvsjP0n7CR5Xc4=; b=DeObOEySNX84De
-	3t3ltt94wx5Jd/wgfLr1ExLGQ/aqJbJHJC/osmIQCSTY4k/38bW+IyZ3vOQ5X9vewDA6CM7x/zDpD
-	1Yy3KgGOMUv2+7DFwlF4KR1JxEBgMgiZ7Q2EtFezS31D1HHAc57zRh4HiSzp0PzaK+aSXzG7xsh+y
-	VJDsuwrMIl4kkR9OoMNQ7HGYa7ZP2+HTXkUvrev11NW7x75vYYSBXNw9p72arAMrb7IDfD++ASpFi
-	cejjF45JgAkqHvwy9thzdBFkomfW47/JM1XgS/atGUYV9GHf1wZ/2aHFGaATtAghd0J5r/zTaDsB7
-	Edont2sJ48IW/zZrcnmQ==;
+	List-Owner; bh=PaBo756tKlzaz80hrYuCGUI2ATHI7HsQ+RzlLr+tonU=; b=UTA4J/w6v/GyP3
+	GJBquX8uSC3TGB3i1X47fUzNPKRvFDWZt5ChdDYFoZoAhiwdl0tmneHlw97Yj8J0ogIl58O2Jh1yH
+	sPkjS4TK9rF6j39cEugQLPBa+3Hq0mCVpBc19ReA60Gv76XaTKFS9EQrPqcV6Bmir0CVy6p4i4Kem
+	M6eNOBtczNqbhRmxt1DJ9m2tgI2vkwmqgCF0WxlRFdAwj8im9wW8p50kp69xdYjkILidwJHS8SZpO
+	78g9moROTEjwTdxeUH/uADfnGTNx4F3NF1pnw6g0hBP9JIWLNJ99xMQWnvrqbD9Ciz88f5Vjkm+QO
+	yFFANInGRtFglPavZBoA==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mXj6V-00AFdH-2N; Tue, 05 Oct 2021 11:59:27 +0000
+	id 1mXj6L-00AFaK-1d; Tue, 05 Oct 2021 11:59:17 +0000
 Received: from esa.microchip.iphmx.com ([68.232.154.123])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
  id 1mXj6G-00AFZU-4f; Tue, 05 Oct 2021 11:59:15 +0000
@@ -170,22 +170,22 @@ X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4891
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
 X-CRM114-CacheID: sfid-20211005_045912_396032_7B92087F 
 X-CRM114-Status: GOOD (  15.30  )
-X-BeenThere: linux-mtd@lists.infradead.org
+X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
-List-Id: Linux MTD discussion mailing list <linux-mtd.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mtd>,
- <mailto:linux-mtd-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-mtd/>
-List-Post: <mailto:linux-mtd@lists.infradead.org>
-List-Help: <mailto:linux-mtd-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mtd>,
- <mailto:linux-mtd-request@lists.infradead.org?subject=subscribe>
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
-Sender: "linux-mtd" <linux-mtd-bounces@lists.infradead.org>
-Errors-To: linux-mtd-bounces+linux-mtd=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211005115906.sVeqCk7Lbj-UbEQBqo8aQDAVjC_bmmDQ6QaO3ChH2n4@z>
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211005115906.OPmZk5xv5LmR5bVlUSWFMF4MGT2MgbdWRzmpEimW7vM@z>
 
 T24gOS8yMy8yMSA5OjU5IFBNLCBQcmF0eXVzaCBZYWRhdiB3cm90ZToNCj4gRVhURVJOQUwgRU1B
 SUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25v
@@ -213,5 +213,6 @@ Cg0KdGhhdCdzIGNvcnJlY3QsIHRoZSBnZW5lcmljIGNvbXBhdGlibGUgc2hvdWxkIHN1ZmZpY2Ug
 Zm9yIHRoZXNlIGZsYXNoZXMuDQoNCj4gDQo+IFVudGlsIHlvdSBqdXN0aWZ5IHRoYXQgcmVhc29u
 LA0KPiANCj4gTmFja2VkLWJ5OiBQcmF0eXVzaCBZYWRhdiA8cC55YWRhdkB0aS5jb20+DQoNCkkg
 YWdyZWUuDQoNCkNoZWVycywNCnRhDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KTGludXggTVREIGRpc2N1c3Npb24gbWFpbGluZyBsaXN0Cmh0
-dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtbXRkLwo=
+X19fX19fX19fX19fXwpsaW51eC1hcm0ta2VybmVsIG1haWxpbmcgbGlzdApsaW51eC1hcm0ta2Vy
+bmVsQGxpc3RzLmluZnJhZGVhZC5vcmcKaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9saW51eC1hcm0ta2VybmVsCg==
