@@ -1,15 +1,15 @@
-Return-Path: <SRS0=Jblq=OZ=lists.infradead.org=linux-mtd-bounces+linux-mtd=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=xXpd=OZ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FA9DC433EF
-	for <linux-mtd@archiver.kernel.org>; Tue,  5 Oct 2021 10:13:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1C3AC433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  5 Oct 2021 10:14:32 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 07E146113A
-	for <linux-mtd@archiver.kernel.org>; Tue,  5 Oct 2021 10:13:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 07E146113A
+	by mail.kernel.org (Postfix) with ESMTPS id ABA046113A
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  5 Oct 2021 10:14:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ABA046113A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=semihalf.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -18,21 +18,22 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
 	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=y109DDvThUuWFCz40gBKD0CVI08SWTPU1l3LT7eulSU=; b=Fn3Nod5n7L10nW
-	A1voTQfAeANl8U3ThwGk1K6J5V6GotYP7UENhxbHMGYLBvtF6MsRPoUhPjptrg9C1G6YrcFKcU52w
-	g16Q1pwBkfWuPs+OcmAOKlwtsNbftdh2GU49vwYUnnOn8fzFrlY8/J3HAHa+4dLYPGiZrRi/zRUi3
-	ydIh8BWp3ORVWbUOUN9FpKi166fuySxPSR3JeM2CqRRVim6HD8oNPTg4SYu04lizQ0u9OGZCRvWan
-	eoKz43VSUr0NPj6186wE2uXoH0xRgxRUlOOO3mn9tBSGpHMpzNPVtstEpb2bJ8/ox4iKzkiirejPr
-	oJ8+dZGbLLdJgmpeYBFA==;
+	List-Owner; bh=xkaW45VoyCpbPp3FUSg1qqFmqWtZuDp7iERc21UR2Lo=; b=JuQNQO3TLD0OYc
+	Y/esP828DiPV2KNWooEgH6LvH+QON1WFxNigkDCVNAb5PzTyjCUrFxqoChF5mvMnx8AyrEEVtolZ7
+	UWmi2g7JSKs5jmSiivY4CCi8FB/JJE6d5ijm/5RZo8RzEwtgVRndvdorNtnOSRJT0pPyAZcLbyWVh
+	PLRH0c1s03EPW10c7guvswaLH1ELMqwutdC8yFUUE6NUANgt71YYxEfzNtBkxsryj50g7G6nB2BnJ
+	W1Gtg5PBgOe2QC9hmq8t86BsdKCCrTktYMahpSTc6KtIyQyejgQN4OLXwuxp6yX+kZ/DsCthWGMuW
+	kH4Fbnt9y5saDdyo7XNA==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mXhQr-009we1-As; Tue, 05 Oct 2021 10:12:21 +0000
-Received: from mail-lf1-x12e.google.com ([2a00:1450:4864:20::12e])
+	id 1mXhR5-009wgx-JV; Tue, 05 Oct 2021 10:12:35 +0000
+Received: from mail-lf1-x129.google.com ([2a00:1450:4864:20::129])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mXhQo-009wcw-VG
- for linux-mtd@lists.infradead.org; Tue, 05 Oct 2021 10:12:20 +0000
-Received: by mail-lf1-x12e.google.com with SMTP id y23so44686453lfb.0
- for <linux-mtd@lists.infradead.org>; Tue, 05 Oct 2021 03:12:17 -0700 (PDT)
+ id 1mXhQp-009wcx-Fw
+ for linux-arm-kernel@lists.infradead.org; Tue, 05 Oct 2021 10:12:21 +0000
+Received: by mail-lf1-x129.google.com with SMTP id u18so84136762lfd.12
+ for <linux-arm-kernel@lists.infradead.org>;
+ Tue, 05 Oct 2021 03:12:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=semihalf-com.20210112.gappssmtp.com; s=20210112;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -49,14 +50,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc:content-transfer-encoding;
  bh=Fd2bVG3T2aDLLsUGg65DNy9VZxuxLh/QslDXMizwJK8=;
- b=Cxvq3s+/xg9ZQ0FDzJc9KkJlYMgRcg6BXY/tSBSK/AEbZRkQIC7syv/9RQkhe4omGT
- h53gE8oaRKxQtywZvtVEWM6+vKe1O9R7I+is5rPz3zvjFYqkkafzfNB4HMpWuBoYi1oh
- nLeBKUp7SW9/vGTHuJmqbYsKt+QdKOJ1DhIKrtBGXG/1L7XScYrEWUPVrl2yNU/+y1Nm
- bod3VOAGTMnMOFtLHSpT1pGNZlgvDWBQzs17yVnzvWQ5DvDb6EmpNEDQeI/Auby27yTY
- Z+X71efc7irbJZJSx5qGlC64XA5jNMTjLKGyY294hs2KRoDqLCZKihKte6aHWjNNzWIO
- cBoA==
-X-Gm-Message-State: AOAM5304dcCQNnQaemvumms26Ow86oKifhseJmshd4ng3ohy26WiIpWl
- 1bCE41DVf15OSKxQ7Byts/JSTeWRa7eURjcvr7VMJg==
+ b=UpatOuK3egExYBzs160slHWJBR8YKVUJ+H3yU4DvAK9P53jutaVF54ILIuDWciO+wj
+ KEGuTRUcIEX4luIOJxupQXxKs7jyL2Mzz4L3G9c/pp1sCOCQaVsFRBJRMzbJnHX/6iiO
+ RzyFTRtcqfUjwXCerRk2nKVIakYswhnwlPmcHpEQI8c6CdhgUv7snTUmFFu2R6BoC6WE
+ Zz/7+WFlDc73jwq48A8FrkEFGbZZdTPjsP86qk/csbZtniYE2F3ejdpTuRTX0e6yYwMA
+ bgeHLjQMbUynZdquy9mz0JSsSVC0jlfs/+0wtt89aMIja4S3fBkJI0IYaKjwTUEwyGdV
+ 9tHA==
+X-Gm-Message-State: AOAM533PhYaxOK3peA39jTQ4zx/VZOt1sXJ7M/3KfgS1kn4IRdXQspIF
+ KfP1Miri9lIYtbsbSqKz8IJ+rmWGucnnVTIFVpibIA==
 X-Google-Smtp-Source: ABdhPJweYgnhJ9wfwnhC1naOEgjt465iKJfu5aOyclroBOPqShbw0RGuw1NZisfc1hj6jMsbtIvWVkehVRtpOKozveQ=
 X-Received: by 2002:a2e:b8cd:: with SMTP id s13mr21300509ljp.44.1633428736539; 
  Tue, 05 Oct 2021 03:12:16 -0700 (PDT)
@@ -80,24 +81,24 @@ Cc: linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
  Tomasz Nowicki <tn@semihalf.com>, Konrad Adamczyk <ka@semihalf.com>,
  Jacek Majkowski <jam@semihalf.com>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211005_031219_072776_73D2AA98 
-X-CRM114-Status: GOOD (  32.40  )
-X-BeenThere: linux-mtd@lists.infradead.org
+X-CRM114-CacheID: sfid-20211005_031219_544213_43DE9E09 
+X-CRM114-Status: GOOD (  33.16  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
-List-Id: Linux MTD discussion mailing list <linux-mtd.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mtd>,
- <mailto:linux-mtd-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-mtd/>
-List-Post: <mailto:linux-mtd@lists.infradead.org>
-List-Help: <mailto:linux-mtd-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mtd>,
- <mailto:linux-mtd-request@lists.infradead.org?subject=subscribe>
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
-Sender: "linux-mtd" <linux-mtd-bounces@lists.infradead.org>
-Errors-To: linux-mtd-bounces+linux-mtd=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211005111205.ZiCYCEHJTbQy5jlzp9j7HbbqrXbmvra3jt_qXW4bAwo@z>
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211005111205.yhacoo2AdAdnUkQ86NaPU0ASEexP3rjoqfZSlZF-dlI@z>
 
 T24gVHVlLCBPY3QgNSwgMjAyMSBhdCAxMTozNCBBTSBQaGlsaXBwIFphYmVsIDxwLnphYmVsQHBl
 bmd1dHJvbml4LmRlPiB3cm90ZToKPgo+IEhpIFBhd2XFgiwKPgo+IE9uIE1vbiwgMjAyMS0wOS0y
@@ -152,6 +153,6 @@ V2l0aG91dCB0aGlzIHBhdGNoIHRoZSBrZXJuZWwgc2VlbXMgdG8gd29yawo+PiBmaW5lIG9uIGFu
 IEFycmlhIDEwICh3aXRoIE1lcmN1cnkgQUExIG1vZHVsZSkuIFdoYXQncyB0aGUgZXhhY3QgcmVh
 c29uCj4+IGEgcmVndWxhciBwbGF0Zm9ybSBkcml2ZXIgaXNuJ3Qgc3VmZmljaWVudD8KPj4KPj4g
 QmVzdCByZWdhcmRzLAo+PiBQYXdlxYIKPj4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpMaW51eCBNVEQgZGlzY3Vzc2lvbiBtYWlsaW5nIGxp
-c3QKaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51eC1tdGQv
-Cg==
+X19fX19fX19fX19fX19fX19fCmxpbnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0CmxpbnV4LWFy
+bS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZwpodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9t
+YWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFybS1rZXJuZWwK
