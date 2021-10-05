@@ -1,134 +1,64 @@
-Return-Path: <SRS0=xXpd=OZ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <gregkh@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 469AAC433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  5 Oct 2021 10:24:28 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0661E61251
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  5 Oct 2021 10:24:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0661E61251
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Date:Cc:To:From:Subject:Message-ID:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=njcnLzRzCliTjxzcZe18HX816axXRHTOx7bcRn9OvN4=; b=3nAordZc3Zu6x4
-	uASR8Tj7yUd+nZ1Jc98MoEUCY+/rw5HEiUF8LhqYwWuXRBA5rMahVBiJi3/i2YYLJ1aFIM1+MKgdn
-	JSorqfgL0u0qSRK0DhmnY+2q3x0SbA4DgXKBdPZ903ZM0R7U/KsJk3T4S4r6ZALM4Qzipyfg5XcuM
-	JsJhzEPI8OE4VKO67J0BEEWX7ekrW8lw+WZLoiGATdHsYniOJAvCw9CNpW7wEMvujbjhpXbgflPs8
-	K7N66X1W0TJ+o+YAPf5MOfB8t8QUk4SNoLEGUsD5N8++M3YrJfLbDICzFbMztgoLSdArG8SsM8+/y
-	0F9k/WA7ZddPygRvkH3A==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mXhar-009ynH-Ut; Tue, 05 Oct 2021 10:22:42 +0000
-Received: from metis.ext.pengutronix.de ([2001:67c:670:201:290:27ff:fe1d:cc33])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mXhao-009ymX-7A
- for linux-arm-kernel@lists.infradead.org; Tue, 05 Oct 2021 10:22:39 +0000
-Received: from lupine.hi.pengutronix.de
- ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
- by metis.ext.pengutronix.de with esmtps
- (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim 4.92)
- (envelope-from <p.zabel@pengutronix.de>)
- id 1mXhac-00027b-W0; Tue, 05 Oct 2021 12:22:26 +0200
-Received: from pza by lupine with local (Exim 4.92)
- (envelope-from <p.zabel@pengutronix.de>)
- id 1mXhab-0006B5-TG; Tue, 05 Oct 2021 12:22:25 +0200
-Message-ID: <6993ccdaf8f3f248f4ff1c739445e0f798ee0efa.camel@pengutronix.de>
-Subject: Re: [PATCH 3/3] reset: socfpga: add empty driver allowing consumers
- to probe
-From: Philipp Zabel <p.zabel@pengutronix.de>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86EE0C433EF
+	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 10:44:04 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 6230161502; Tue,  5 Oct 2021 10:44:04 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CF37061381;
+	Tue,  5 Oct 2021 10:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1633430644;
+	bh=M2hZaujgFevVqNaO32AihHFD4liY2HQLb1NvmtGHhBY=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=iRMwbvPBZyCJXzY4tn1tPwSaJ+mRddV2KdsuNFEDAkVocTHkMsnqnRjPtkf5JW8Li
+	 Ub9UNWSBR8kQTT922wpA7lafQu34gG7JAY0nyxSxPCTiBSlkeoK7tkNU9drT374yr4
+	 os/AEE7dZf1q11KqASrjNKfRLprlsoDGtv3neQLM=
+Date: Tue, 5 Oct 2021 12:44:02 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: =?UTF-8?Q?Pawe=C5=82?= Anikiel <pan@semihalf.com>, 
- miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
- robh+dt@kernel.org,  arnd@arndb.de, olof@lixom.net, soc@kernel.org,
- dinguyen@kernel.org
-Cc: linux-mtd@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, Tomasz
- Nowicki <tn@semihalf.com>, Konrad Adamczyk <ka@semihalf.com>, Jacek
- Majkowski <jam@semihalf.com>
-Date: Tue, 05 Oct 2021 12:22:25 +0200
-In-Reply-To: <CAF9_jYQVpG8imn3zjAGKeZqZqDPtWRYWLQjNSXi2SXjjzAKvfA@mail.gmail.com>
-References: <20210920124141.1166544-1-pan@semihalf.com>
- <20210920124141.1166544-4-pan@semihalf.com>
- <ce254cc123f2809976c2f2404941a9074c458309.camel@pengutronix.de>
- <CAF9_jYQVpG8imn3zjAGKeZqZqDPtWRYWLQjNSXi2SXjjzAKvfA@mail.gmail.com>
-User-Agent: Evolution 3.30.5-1.1 
+Cc: soc@kernel.org, Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Tony Lindgren <tony@atomide.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Felipe Balbi <felipe.balbi@linux.intel.com>,
+	linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] ARM: omap1: move omap15xx local bus handling to usb.c
+Message-ID: <YVwscgtmTP14DH92@kroah.com>
+References: <20210927144118.2464881-1-arnd@kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de);
- SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-arm-kernel@lists.infradead.org
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211005_032238_291308_80DF86E4 
-X-CRM114-Status: GOOD (  29.86  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211005102225.PzZXA7w0Qn5d_3_cHQbe86EPWtaa_CBoQpc89EEeouA@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210927144118.2464881-1-arnd@kernel.org>
 
-T24gVHVlLCAyMDIxLTEwLTA1IGF0IDEzOjEyICswMjAwLCBQYXdlxYIgQW5pa2llbCB3cm90ZToK
-PiBPbiBUdWUsIE9jdCA1LCAyMDIxIGF0IDExOjM0IEFNIFBoaWxpcHAgWmFiZWwgPHAuemFiZWxA
-cGVuZ3V0cm9uaXguZGU+IHdyb3RlOgo+ID4gSGkgUGF3ZcWCLAo+ID4gCj4gPiBPbiBNb24sIDIw
-MjEtMDktMjAgYXQgMTQ6NDEgKzAyMDAsIFBhd2XFgiBBbmlraWVsIHdyb3RlOgo+ID4gPiBUaGUg
-ZWFybHkgcmVzZXQgZHJpdmVyIGRvZXNuJ3QgZXZlciBwcm9iZSwgd2hpY2ggY2F1c2VzIGNvbnN1
-bWluZwo+ID4gPiBkZXZpY2VzIHRvIGJlIHVuYWJsZSB0byBwcm9iZS4gQWRkIGFuIGVtcHR5IGRy
-aXZlciB0byBzZXQgdGhpcyBkZXZpY2UKPiA+ID4gYXMgYXZhaWxhYmxlLCBhbGxvd2luZyBjb25z
-dW1lcnMgdG8gcHJvYmUuCj4gPiA+IAo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBQYXdlxYIgQW5pa2ll
-bCA8cGFuQHNlbWloYWxmLmNvbT4KPiA+ID4gLS0tCj4gPiA+ICBkcml2ZXJzL3Jlc2V0L3Jlc2V0
-LXNvY2ZwZ2EuYyB8IDI2ICsrKysrKysrKysrKysrKysrKysrKysrKysrCj4gPiA+ICAxIGZpbGUg
-Y2hhbmdlZCwgMjYgaW5zZXJ0aW9ucygrKQo+ID4gPiAKPiA+ID4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvcmVzZXQvcmVzZXQtc29jZnBnYS5jIGIvZHJpdmVycy9yZXNldC9yZXNldC1zb2NmcGdhLmMK
-PiA+ID4gaW5kZXggMmE3MmY4NjFmNzk4Li44YzY0OTJlNTY5M2MgMTAwNjQ0Cj4gPiA+IC0tLSBh
-L2RyaXZlcnMvcmVzZXQvcmVzZXQtc29jZnBnYS5jCj4gPiA+ICsrKyBiL2RyaXZlcnMvcmVzZXQv
-cmVzZXQtc29jZnBnYS5jCj4gPiA+IEBAIC05MiwzICs5MiwyOSBAQCB2b2lkIF9faW5pdCBzb2Nm
-cGdhX3Jlc2V0X2luaXQodm9pZCkKPiA+ID4gICAgICAgZm9yX2VhY2hfbWF0Y2hpbmdfbm9kZShu
-cCwgc29jZnBnYV9lYXJseV9yZXNldF9kdF9pZHMpCj4gPiA+ICAgICAgICAgICAgICAgYTEwX3Jl
-c2V0X2luaXQobnApOwo+ID4gPiAgfQo+ID4gPiArCj4gPiA+ICsvKgo+ID4gPiArICogVGhlIGVh
-cmx5IGRyaXZlciBpcyBwcm9ibGVtYXRpYywgYmVjYXVzZSBpdCBkb2Vzbid0IHJlZ2lzdGVyCj4g
-PiA+ICsgKiBpdHNlbGYgYXMgYSBkcml2ZXIuIFRoaXMgY2F1c2VzIGNlcnRhaW4gZGV2aWNlIGxp
-bmtzIHRvIHByZXZlbnQKPiA+ID4gKyAqIGNvbnN1bWVyIGRldmljZXMgZnJvbSBwcm9iaW5nLiBU
-aGUgaGFja3kgc29sdXRpb24gaXMgdG8gcmVnaXN0ZXIKPiA+ID4gKyAqIGFuIGVtcHR5IGRyaXZl
-ciwgd2hvc2Ugb25seSBqb2IgaXMgdG8gYXR0YWNoIGl0c2VsZiB0byB0aGUgcmVzZXQKPiA+ID4g
-KyAqIG1hbmFnZXIgYW5kIGNhbGwgcHJvYmUuCj4gPiA+ICsgKi8KPiA+ID4gK3N0YXRpYyBjb25z
-dCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIHNvY2ZwZ2FfcmVzZXRfZHRfaWRzW10gPSB7Cj4gPiA+ICsg
-ICAgIHsgLmNvbXBhdGlibGUgPSAiYWx0cixyc3QtbWdyIiwgfSwKPiA+ID4gKyAgICAgeyAvKiBz
-ZW50aW5lbCAqLyB9LAo+ID4gPiArfTsKPiA+ID4gKwo+ID4gPiArc3RhdGljIGludCByZXNldF9z
-aW1wbGVfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPiA+ID4gK3sKPiA+ID4g
-KyAgICAgcmV0dXJuIDA7Cj4gPiA+ICt9Cj4gPiA+ICsKPiA+ID4gK3N0YXRpYyBzdHJ1Y3QgcGxh
-dGZvcm1fZHJpdmVyIHJlc2V0X3NvY2ZwZ2FfZHJpdmVyID0gewo+ID4gPiArICAgICAucHJvYmUg
-ID0gcmVzZXRfc2ltcGxlX3Byb2JlLAo+ID4gPiArICAgICAuZHJpdmVyID0gewo+ID4gPiArICAg
-ICAgICAgICAgIC5uYW1lICAgICAgICAgICA9ICJzb2NmcGdhLXJlc2V0IiwKPiA+ID4gKyAgICAg
-ICAgICAgICAub2ZfbWF0Y2hfdGFibGUgPSBzb2NmcGdhX3Jlc2V0X2R0X2lkcywKPiA+ID4gKyAg
-ICAgfSwKPiA+ID4gK307Cj4gPiA+ICtidWlsdGluX3BsYXRmb3JtX2RyaXZlcihyZXNldF9zb2Nm
-cGdhX2RyaXZlcik7Cj4gPiAKPiA+IElmIHdlIGNhbiBqdXN0IGxldCBkZXZsaW5rIGRlbGF5IGFs
-bCBjb25zdW1lcnMgdW50aWwgdGhlIGVtcHR5IGRyaXZlciBpcwo+ID4gcHJvYmVkLCBkb2VzIHRo
-ZSByZXNldCBjb250cm9sbGVyIGhhdmUgdG8gYmUgcmVnaXN0ZXJlZCBlYXJseSBhdCBhbGw/Cj4g
-PiAKPiA+IHJlZ2FyZHMKPiA+IFBoaWxpcHAKPiAKPiBJIGFza2VkIERpbmggaWYgdGhlIHJlc2V0
-IGNvbnRyb2xsZXIgY29kZSBuZWVkcyB0byBiZSBjYWxsZWQgZWFybHk6Cj4gCj4gPiBUaGF0J3Mg
-Y29ycmVjdC4gSXQncyBmb3Igb25lIG9mIHRoZSBTUCB0aW1lcnMuCgpBaCwgcmlnaHQsIHRob3Nl
-IGNhbGwgb2ZfcmVzZXRfY29udHJvbF9nZXQoKSBmcm9tIFRJTUVSX09GX0RFQ0xBUkUoKS4KVGhh
-bmsgeW91LCBJJ2xsIGFwcGx5IHRoaXMgdG8gcmVzZXQvZml4ZXMuCgpyZWdhcmRzClBoaWxpcHAK
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmxpbnV4LWFy
-bS1rZXJuZWwgbWFpbGluZyBsaXN0CmxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9y
-ZwpodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFybS1r
-ZXJuZWwK
+On Mon, Sep 27, 2021 at 04:40:50PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Commit 38225f2ef2f4 ("ARM/omap1: switch to use dma_direct_set_offset for
+> lbus DMA offsets") removed a lot of mach/memory.h, but left the USB
+> offset handling split into arch/arm/mach-omap1/usb.c and
+> drivers/usb/host/ohci-omap.c.
+> 
+> This can cause a randconfig build warning that now fails the build
+> with -Werror:
+> 
+> arch/arm/mach-omap1/usb.c:561:30: error: 'omap_1510_usb_ohci_nb' defined but not used [-Werror=unused-variable]
+>   561 | static struct notifier_block omap_1510_usb_ohci_nb = {
+>       |                              ^~~~~~~~~~~~~~~~~~~~~
+> 
+> Move it all into the platform file to get rid of the final
+> location that relies on mach/memory.h.
+> 
+> Acked-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> If there are no objections, I'd apply this to the soc tree for
+> 5.16, or let Tony pick it up into his tree. This was originally
+> part of a longer series to bring omap1 closer to an allmodconfig
+> build. If I manage to find some time, I'll also try to resurrect
+> the rest of that series.
+
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
