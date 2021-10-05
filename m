@@ -1,131 +1,229 @@
-Return-Path: <SRS0=pPb6=OZ=semihalf.com=pan@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89BE9C43217
-	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 14:38:19 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 7255A613E6; Tue,  5 Oct 2021 14:38:19 +0000 (UTC)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 59BFF61372
-	for <soc@kernel.org>; Tue,  5 Oct 2021 14:38:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 59BFF61372
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=semihalf.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=semihalf.com
-Received: by mail-lf1-f42.google.com with SMTP id u18so87445135lfd.12
-        for <soc@kernel.org>; Tue, 05 Oct 2021 07:38:19 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C13AC433EF
+	for <linux-devicetree@archiver.kernel.org>; Tue,  5 Oct 2021 14:38:30 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 84504613D5
+	for <linux-devicetree@archiver.kernel.org>; Tue,  5 Oct 2021 14:38:30 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S235635AbhJEOkQ (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Tue, 5 Oct 2021 10:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235682AbhJEOkP (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Tue, 5 Oct 2021 10:40:15 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0C2C0613EC
+        for <devicetree@vger.kernel.org>; Tue,  5 Oct 2021 07:38:24 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id r19so4520186lfe.10
+        for <devicetree@vger.kernel.org>; Tue, 05 Oct 2021 07:38:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=aD0ZimcpDdMwxxDkok8INnwAF4L8JkxKG7hlNjJNuc4=;
-        b=xr/EbJQXsQv4f8TFJbE2w6XzhEQf/jsX9u4gGwqhd0AvcG1AQDhsxEeR3pfpTpw9c/
-         KWVwcxUDdoeM0yqquLJuLWpJAAopOx97wTP2Q+143laE4khIxbb7JeDeJkR0gOb8oIYC
-         41ZvV95CrLfPsQoREGzi1/nO++3VwdYgi7hfrL1aUdWK/pibrAd2XGwDYYRuFNx+X2/j
-         gcsZYfGj1GvbBlX1TeaPjFFx5ZmBKAMWu6nLTQlVGsYEgOUO5gOnH6phW7sFkuA0VJp7
-         0bdXaeVjd+P/1BCvlgovSJPtphlexKfI7yWMs6mFzykdj73vQENifMenCHBjmbdX5E9Y
-         gEOw==
+        bh=Bft5UO0IvHnnqu7NpeleauDM+2TITH2jaKZbwnmA6VM=;
+        b=UU9L+06t7QQJbnIFm6uKYIL3+oggbtuy1cE6fNaxN5loz+ex+Wx1xNM0Y61247WKKq
+         t5Z+Q7lDLXzCH4RFCU2qjmOSqghXPGLyiEfq5cFrAcCd2Dtp3giGhL0aYbaeH2ZbQkh+
+         pBVgWY2c7yWewZ76+sPWg3r5Y47Ll/aR1h+PRecw3yYibWciEUrsXmyfEVCUYQstqFXb
+         EOl9cEQZteQwpvPuEVEp/opTKIeazXBV6PD+n7k07E2+5qnKaiOcjXlEXlNC+6iKasjO
+         XhSPAZOpi9xso7qEzN/vIQsecPJrYLN2XLDfNyWcZ/zig5mNwz5Rj5YGIAoj/pVNSsN7
+         wuAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=aD0ZimcpDdMwxxDkok8INnwAF4L8JkxKG7hlNjJNuc4=;
-        b=UsDyUJ8gxn6KK4jIoqj3OLXnYPi2YLeqLbG1DQMKEPsh7ov5lqNCgZ5Ay7te5WTPDb
-         I0R22JKmn1TYBLyZUH8wkST2lLC3Qv8BsI7o6uhxp56iQCMHEVfQHixTfK3m5d5XGfcu
-         0U8z8kVaui3/vvdu7ya0W/XHxFv+Pcrwt3iRh5IF82TGxS3YhajngJrFQQTu0MmZm5Xv
-         8tEWmWPyT2Kr8YkWUJl87MFROCcNa2cGuCQaIZ52irQWjOC/XpGzr45QPnCrmow6wDKE
-         O4SiFj5fyNCsfTaF6JZIG1GBLVS8jY5C+VxAopuqX/C4LFkGfqmFSVqQfbgtHcJ8dX1v
-         dziQ==
-X-Gm-Message-State: AOAM530/5FQcdNg9dTa3hW1HMMnSqiHGpXSvmhVna3aa7yw7ydKn8dCS
-	dFLB9rXU0rMsT0Bxs2mUJHXemQ==
-X-Google-Smtp-Source: ABdhPJz1Gqoll+/R0fBf7HkcMgpMiilGz9sNSE96xW6sZExUwmOViaK4fIephyq2Ege3h6LgH4KT9Q==
-X-Received: by 2002:a05:6512:1053:: with SMTP id c19mr3819153lfb.283.1633444697355;
-        Tue, 05 Oct 2021 07:38:17 -0700 (PDT)
+        bh=Bft5UO0IvHnnqu7NpeleauDM+2TITH2jaKZbwnmA6VM=;
+        b=PuMv+Gx6DreHvPRcLgmrzmqRWK8wrwG1FvnKtKZAW0uztnz9giMfY6Ta9aHv+aILPs
+         Bu821CdLArBexJXQQ8u8qRGjbJ0YvfvzxJWzvDKere1FhFtXqeXUcSl6EPLudDUNRUyp
+         3j7LXfwIBzph1b1/IrRCkTzm/xUotHvf92PQY5Cxuzb5xG9i7G35JjSS2OuLviWYiyPb
+         t0U8OTUoiibeodo1rRA7saqssbP25V3fWMNZS6G2c7cUz5/MQoBnKvkP0iGP9qXJNcxp
+         Ek+UN6VU9GP9G3MMReU8fXG5zA1DCuYp3DxwsPILH9EZFd/IUqKVv5p5gvaJkDb7ODWs
+         CzdQ==
+X-Gm-Message-State: AOAM530ZEzG0nxN/5l+J2tR8eV7AJuJz0X7GSK5sSHF97UgEkujgNUQE
+        p8A4L0U5A523s/Uy3spICPo/7A==
+X-Google-Smtp-Source: ABdhPJxtNs3DBnnLdW1v/+5GPBOiTJoGXMzrfQcqBWcrRZZgflaIbwl8qX/DwjWUYD8Pej361yO4XA==
+X-Received: by 2002:a05:6512:21c:: with SMTP id a28mr3890008lfo.626.1633444701917;
+        Tue, 05 Oct 2021 07:38:21 -0700 (PDT)
 Received: from grasshopper.googchameleon.semihalf.net ([83.142.187.85])
-        by smtp.gmail.com with ESMTPSA id u25sm1973835lfc.176.2021.10.05.07.38.16
+        by smtp.gmail.com with ESMTPSA id u25sm1973835lfc.176.2021.10.05.07.38.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Oct 2021 07:38:17 -0700 (PDT)
-From: =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
+        Tue, 05 Oct 2021 07:38:21 -0700 (PDT)
+From:   =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
 List-Id: <soc.lore.kernel.org>
-To: jarkko.nikula@linux.intel.com,
-	andriy.shevchenko@linux.intel.com,
-	mika.westerberg@linux.intel.com,
-	robh+dt@kernel.org,
-	p.zabel@pengutronix.de,
-	arnd@arndb.de,
-	olof@lixom.net,
-	soc@kernel.org,
-	dinguyen@kernel.org,
-	p.yadav@ti.com,
-	Tudor.Ambarus@microchip.com
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	alexandre.belloni@bootlin.com,
-	sre@kernel.org,
-	thunder.leizhen@huawei.com,
-	Jonathan.Cameron@huawei.com,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	ka@semihalf.com,
-	tn@semihalf.com,
-	jam@semihalf.com,
-	amstan@google.com,
-	=?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
-Subject: [PATCH v2 3/4] reset: socfpga: add empty driver allowing consumers to probe
-Date: Tue,  5 Oct 2021 16:37:47 +0200
-Message-Id: <20211005143748.2471647-4-pan@semihalf.com>
+To:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, robh+dt@kernel.org,
+        p.zabel@pengutronix.de, arnd@arndb.de, olof@lixom.net,
+        soc@kernel.org, dinguyen@kernel.org, p.yadav@ti.com,
+        Tudor.Ambarus@microchip.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alexandre.belloni@bootlin.com, sre@kernel.org,
+        thunder.leizhen@huawei.com, Jonathan.Cameron@huawei.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        ka@semihalf.com, tn@semihalf.com, jam@semihalf.com,
+        amstan@google.com,
+        =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>,
+        Joanna Brozek <jbrozek@antmicro.com>,
+        Mariusz Glebocki <mglebocki@antmicro.com>,
+        Tomasz Gorochowik <tgorochowik@antmicro.com>,
+        Maciej Mikunda <mmikunda@antmicro.com>
+Subject: [PATCH v2 4/4] dts: socfpga: Add Mercury+ AA1 devicetree
+Date:   Tue,  5 Oct 2021 16:37:48 +0200
+Message-Id: <20211005143748.2471647-5-pan@semihalf.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211005143748.2471647-1-pan@semihalf.com>
 References: <20211005143748.2471647-1-pan@semihalf.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
 
-The early reset driver doesn't ever probe, which causes consuming
-devices to be unable to probe. Add an empty driver to set this device
-as available, allowing consumers to probe.
+Add support for the Mercury+ AA1 module for Arria 10 SoC FPGA.
 
 Signed-off-by: Paweł Anikiel <pan@semihalf.com>
+Signed-off-by: Joanna Brozek <jbrozek@antmicro.com>
+Signed-off-by: Mariusz Glebocki <mglebocki@antmicro.com>
+Signed-off-by: Tomasz Gorochowik <tgorochowik@antmicro.com>
+Signed-off-by: Maciej Mikunda <mmikunda@antmicro.com>
 ---
- drivers/reset/reset-socfpga.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/socfpga_arria10_mercury_aa1.dts  | 111 ++++++++++++++++++
+ 2 files changed, 112 insertions(+)
+ create mode 100644 arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dts
 
-diff --git a/drivers/reset/reset-socfpga.c b/drivers/reset/reset-socfpga.c
-index 2a72f861f798..8c6492e5693c 100644
---- a/drivers/reset/reset-socfpga.c
-+++ b/drivers/reset/reset-socfpga.c
-@@ -92,3 +92,29 @@ void __init socfpga_reset_init(void)
- 	for_each_matching_node(np, socfpga_early_reset_dt_ids)
- 		a10_reset_init(np);
- }
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7e0934180724..0a7809eb3795 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1078,6 +1078,7 @@ dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) += \
+ 	socfpga_arria10_socdk_nand.dtb \
+ 	socfpga_arria10_socdk_qspi.dtb \
+ 	socfpga_arria10_socdk_sdmmc.dtb \
++	socfpga_arria10_mercury_aa1.dtb \
+ 	socfpga_cyclone5_chameleon96.dtb \
+ 	socfpga_cyclone5_mcvevk.dtb \
+ 	socfpga_cyclone5_socdk.dtb \
+diff --git a/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dts b/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dts
+new file mode 100644
+index 000000000000..1e11168b80db
+--- /dev/null
++++ b/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dts
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
 +
-+/*
-+ * The early driver is problematic, because it doesn't register
-+ * itself as a driver. This causes certain device links to prevent
-+ * consumer devices from probing. The hacky solution is to register
-+ * an empty driver, whose only job is to attach itself to the reset
-+ * manager and call probe.
-+ */
-+static const struct of_device_id socfpga_reset_dt_ids[] = {
-+	{ .compatible = "altr,rst-mgr", },
-+	{ /* sentinel */ },
++#include "socfpga_arria10.dtsi"
++
++/ {
++
++	model = "Enclustra Mercury AA1";
++	compatible = "altr,socfpga-arria10", "altr,socfpga";
++
++	aliases {
++		ethernet0 = &gmac0;
++		serial1 = &uart1;
++	};
++
++	memory@0 {
++		name = "memory";
++		device_type = "memory";
++		reg = <0x0 0x80000000>; /* 2GB */
++	};
++
++	chosen {
++		stdout-path = "serial1:115200n8";
++	};
 +};
 +
-+static int reset_simple_probe(struct platform_device *pdev)
-+{
-+	return 0;
-+}
-+
-+static struct platform_driver reset_socfpga_driver = {
-+	.probe	= reset_simple_probe,
-+	.driver = {
-+		.name		= "socfpga-reset",
-+		.of_match_table	= socfpga_reset_dt_ids,
-+	},
++&eccmgr {
++	sdmmca-ecc@ff8c2c00 {
++		compatible = "altr,socfpga-sdmmc-ecc";
++		reg = <0xff8c2c00 0x400>;
++		altr,ecc-parent = <&mmc>;
++		interrupts = <15 IRQ_TYPE_LEVEL_HIGH>,
++			     <47 IRQ_TYPE_LEVEL_HIGH>,
++			     <16 IRQ_TYPE_LEVEL_HIGH>,
++			     <48 IRQ_TYPE_LEVEL_HIGH>;
++	};
 +};
-+builtin_platform_driver(reset_socfpga_driver);
++
++&gmac0 {
++	phy-mode = "rgmii";
++	phy-addr = <0xffffffff>; /* probe for phy addr */
++
++	max-frame-size = <3800>;
++	status = "okay";
++
++	phy-handle = <&phy3>;
++
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		compatible = "snps,dwmac-mdio";
++		phy3: ethernet-phy@3 {
++			txd0-skew-ps = <0>; /* -420ps */
++			txd1-skew-ps = <0>; /* -420ps */
++			txd2-skew-ps = <0>; /* -420ps */
++			txd3-skew-ps = <0>; /* -420ps */
++			rxd0-skew-ps = <420>; /* 0ps */
++			rxd1-skew-ps = <420>; /* 0ps */
++			rxd2-skew-ps = <420>; /* 0ps */
++			rxd3-skew-ps = <420>; /* 0ps */
++			txen-skew-ps = <0>; /* -420ps */
++			txc-skew-ps = <1860>; /* 960ps */
++			rxdv-skew-ps = <420>; /* 0ps */
++			rxc-skew-ps = <1680>; /* 780ps */
++			reg = <3>;
++		};
++	};
++};
++
++&gpio0 {
++	status = "okay";
++};
++
++&gpio1 {
++	status = "okay";
++};
++
++&gpio2 {
++	status = "okay";
++};
++
++&i2c1 {
++	status = "okay";
++	busno = <1>;
++	isl12022: isl12022@6f {
++		status = "okay";
++		compatible = "isil,isl12022";
++		reg = <0x6f>;
++	};
++};
++
++/* Following mappings are taken from arria10 socdk dts */
++&mmc {
++	status = "okay";
++	cap-sd-highspeed;
++	broken-cd;
++	bus-width = <4>;
++};
++
++&osc1 {
++	clock-frequency = <33330000>;
++};
++
++&uart1 {
++	status = "okay";
++};
++
++&usb0 {
++	status = "okay";
++	dr_mode = "host";
++};
 -- 
 2.25.1
 
