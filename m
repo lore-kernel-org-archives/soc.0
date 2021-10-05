@@ -1,432 +1,102 @@
-Return-Path: <SRS0=xXpd=OZ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=5Yy3=OZ=pengutronix.de=p.zabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C2DAC433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  5 Oct 2021 06:06:59 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 188CDC4332F
+	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 09:34:18 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id EB20E614C8; Tue,  5 Oct 2021 09:34:17 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EA5D560F38
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  5 Oct 2021 06:06:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EA5D560F38
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ziswiler.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=vZgPm+yJpm+eu9ibFTk5Kkq19kl3DweTarYUj6T5eTk=; b=k6nWDWeNWNAWh/
-	jDyBrbDfTglnvSAb/566qoahv5NdxAHQ+AUwm0nNpaXeS8prM7eAKiAkffWvNQanywDmxmEZ5X25h
-	kEDPovfDXvuz6HbwApSgmHO1JybU9W2gpbpx2SLFDNLoW/crhssFDvD9ssHrwQuKyq4jH3qxrIQGQ
-	He7D1EV6zzkScWoqWiTQTmlDrNuIgnNgYwsd54b4wFdDuxWg7CoAq+p3bTQMHBrkyXHaWfKyEH5GV
-	OAB1SGBvOe4ETEzNLTa6m4axaW59h+xKENuKyXND7lSCEGIWPhiFqZAptST/Yo8BsdRi83sqMQu7N
-	DpvETMy6aQyt0KVmyafQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mXdZU-0094g1-8c; Tue, 05 Oct 2021 06:05:00 +0000
-Received: from mout.perfora.net ([74.208.4.194])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mXdYW-0094IO-25
- for linux-arm-kernel@lists.infradead.org; Tue, 05 Oct 2021 06:04:03 +0000
-Received: from toolbox.soleil.gust ([63.147.84.106]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Md2do-1mFPue23gQ-00IDmR; 
- Tue, 05 Oct 2021 08:03:50 +0200
-From: Marcel Ziswiler <marcel@ziswiler.com>
-To: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+	by mail.kernel.org (Postfix) with ESMTPS id 47573615A6
+	for <soc@kernel.org>; Tue,  5 Oct 2021 09:34:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 47573615A6
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1mXgpt-0004TB-7y; Tue, 05 Oct 2021 11:34:09 +0200
+Received: from pza by lupine with local (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1mXgpr-0003p8-Es; Tue, 05 Oct 2021 11:34:07 +0200
+Message-ID: <ce254cc123f2809976c2f2404941a9074c458309.camel@pengutronix.de>
+Subject: Re: [PATCH 3/3] reset: socfpga: add empty driver allowing consumers
+ to probe
+From: Philipp Zabel <p.zabel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>, Marcel Ziswiler <marcel@ziswiler.com>,
- Arnd Bergmann <arnd@arndb.de>, Frank Rowand <frowand.list@gmail.com>,
- Gregory Clement <gregory.clement@bootlin.com>,
- Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>,
- Russell King <linux@armlinux.org.uk>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, soc@kernel.org
-Subject: [PATCH v1 4/4] ARM: dts: mvebu: add device tree for netgear gs110emx
- switch
-Date: Tue,  5 Oct 2021 08:03:34 +0200
-Message-ID: <20211005060334.203818-5-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20211005060334.203818-1-marcel@ziswiler.com>
-References: <20211005060334.203818-1-marcel@ziswiler.com>
+To: =?UTF-8?Q?Pawe=C5=82?= Anikiel <pan@semihalf.com>, 
+ miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+ robh+dt@kernel.org,  arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+ dinguyen@kernel.org
+Cc: linux-mtd@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	tn@semihalf.com, ka@semihalf.com, jam@semihalf.com
+Date: Tue, 05 Oct 2021 11:34:07 +0200
+In-Reply-To: <20210920124141.1166544-4-pan@semihalf.com>
+References: <20210920124141.1166544-1-pan@semihalf.com>
+	 <20210920124141.1166544-4-pan@semihalf.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:uK5vcLb1GP24U6qIBEzVLUa9DVIFBWAH2JWb6ncTKrB6U9qdJk1
- BffoqWvYF57R649ATeQROdK0TVbg5Eatr4uerN2zmBTNpo3Ip5J+AygciMbgVKaPK/iCoyx
- Vo+3rbIs6C7uCQE+FdlTmWkscjeW+yX8FSiQtSXjFt456wqgKCF/IWHmUz10NlK8TrREmQB
- bBzxIKD+5ZfEeQdxAHrQQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+0khJ/3ANeE=:4skKWLnKQVKjha/CNo0hvP
- GSQTXTgThNFilxz1N6pN7ieVLBOeEHEWyv18YWPQMQHN9M0nfn9XAUlDzKAWMtbzozP6Bj61r
- k+zY45ARd94M5CDyNDqHcEbI3G5E6ywDwm2IVKUvP+a60bwQABjz8ck/lCEtfPHI6K27uPpVg
- 56Q9zO67Y7J0R1wTE3h1r9qpBnEeClwmxeQzIc1s0v2MdRf5N/MBm1P6tqMjcbM3w37Uxm/WN
- DkEuWIvGGb4NFWx6PzsFdtMtDpR9PnpiRTsIiRwN3axP7KEWaZpUaWvIeiH9rSaUWDwzZjwYW
- OGqWQv22EuRCeBasHw/4gmpBXmBPVgt/xuWEQL3/kVXJvgiElC8RzS6T4ywtqUj8ZlCJK1Rme
- wsh7ZjlB3vtYgOw/nezFrVGvfEkoRm1zDJEJTvO3ydCKvmRWqDixPKt9a+VskoqZhb9dMXVpd
- PyRsJGXZxLuYCNhpZ+dJjJBLEfWXqJwoDcTbtoVZ5XuZa5e/vfk0G8bmicgo65Zt6cIFlAn7b
- kLQNTSVGkQ5Gty2swotHPJiYdyNClyoIKDoKRGqSrr1kFt9fK/lObheYzfwSgBd/iH5PvMhoj
- ESGA0g0PtRnukPHjSUOV1DRyemG0YURccYpLKSffjWSTtlIB+ogrmClaXsBzX9zZLB+24M5DT
- VE1HGe1hjvVaJYXBC6e1NOWsG+WTxfg7iMkBxJAqtWJJngNFsSNIZ8s6VT323IGpuzI+eTUeR
- 5UE3bCvW65UoHj4T+M0llR5dSxUY8i9uxeddOA==
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211004_230400_230727_0E2A9931 
-X-CRM114-Status: GOOD (  17.52  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211005060334.Nm-V8_isQ8t6CowOA-jV0Dy80rYcBcNOmB7uxb6xZDE@z>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-Add the device tree for a Netgear GS110EMX switch featuring 8 Gigabit
-ports and 2 Multi-Gig ports (100M/1G/2.5G/5G/10G). An 88E6390X switch
-sits at its core connecting to two 88X3310P 10G PHYs. The control plane
-is handled by an 88F6811 Armada 381 SoC.
+Hi Pawe=C5=82,
 
-The following functionality is tested:
-- 8 gigabit Ethernet ports connecting via 88E6390X to the 88F6811
-- serial console UART
-- 128 MB commercial grade DDR3L SDRAM
-- 16 MB serial SPI NOR flash
+On Mon, 2021-09-20 at 14:41 +0200, Pawe=C5=82 Anikiel wrote:
+> The early reset driver doesn't ever probe, which causes consuming
+> devices to be unable to probe. Add an empty driver to set this device
+> as available, allowing consumers to probe.
+>=20
+> Signed-off-by: Pawe=C5=82 Anikiel <pan@semihalf.com>
+> ---
+>  drivers/reset/reset-socfpga.c | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>=20
+> diff --git a/drivers/reset/reset-socfpga.c b/drivers/reset/reset-socfpga.=
+c
+> index 2a72f861f798..8c6492e5693c 100644
+> --- a/drivers/reset/reset-socfpga.c
+> +++ b/drivers/reset/reset-socfpga.c
+> @@ -92,3 +92,29 @@ void __init socfpga_reset_init(void)
+>  	for_each_matching_node(np, socfpga_early_reset_dt_ids)
+>  		a10_reset_init(np);
+>  }
+> +
+> +/*
+> + * The early driver is problematic, because it doesn't register
+> + * itself as a driver. This causes certain device links to prevent
+> + * consumer devices from probing. The hacky solution is to register
+> + * an empty driver, whose only job is to attach itself to the reset
+> + * manager and call probe.
+> + */
+> +static const struct of_device_id socfpga_reset_dt_ids[] =3D {
+> +	{ .compatible =3D "altr,rst-mgr", },
+> +	{ /* sentinel */ },
+> +};
+> +
+> +static int reset_simple_probe(struct platform_device *pdev)
+> +{
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver reset_socfpga_driver =3D {
+> +	.probe	=3D reset_simple_probe,
+> +	.driver =3D {
+> +		.name		=3D "socfpga-reset",
+> +		.of_match_table	=3D socfpga_reset_dt_ids,
+> +	},
+> +};
+> +builtin_platform_driver(reset_socfpga_driver);
 
-The two 88X3310P 10G PHYs while detected during boot seem neither to
-detect any link nor pass any traffic.
+If we can just let devlink delay all consumers until the empty driver is
+probed, does the reset controller have to be registered early at all?
 
-Signed-off-by: Marcel Ziswiler <marcel@ziswiler.com>
-
----
-
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/armada-381-netgear-gs110emx.dts  | 293 ++++++++++++++++++
- 2 files changed, 294 insertions(+)
- create mode 100644 arch/arm/boot/dts/armada-381-netgear-gs110emx.dts
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 5ffab04866654..e2fcb55c99c6b 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1392,6 +1392,7 @@ dtb-$(CONFIG_MACH_ARMADA_370) += \
- dtb-$(CONFIG_MACH_ARMADA_375) += \
- 	armada-375-db.dtb
- dtb-$(CONFIG_MACH_ARMADA_38X) += \
-+	armada-381-netgear-gs110emx.dtb \
- 	armada-382-rd-ac3x-48g4x2xl.dtb \
- 	armada-385-atl-x530.dtb\
- 	armada-385-clearfog-gtr-s4.dtb \
-diff --git a/arch/arm/boot/dts/armada-381-netgear-gs110emx.dts b/arch/arm/boot/dts/armada-381-netgear-gs110emx.dts
-new file mode 100644
-index 0000000000000..e37baeb12bd01
---- /dev/null
-+++ b/arch/arm/boot/dts/armada-381-netgear-gs110emx.dts
-@@ -0,0 +1,293 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/* Copyright (c) 2021, Marcel Ziswiler <marcel@ziswiler.com> */
-+
-+/dts-v1/;
-+#include "armada-385.dtsi"
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+
-+/ {
-+	model = "Netgear GS110EMX";
-+	compatible = "netgear,gs110emx", "marvell,armada380";
-+
-+	aliases {
-+		/* So that mvebu u-boot can update the MAC addresses */
-+		ethernet1 = &eth0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-0 = <&front_button_pins>;
-+		pinctrl-names = "default";
-+
-+		factory_default {
-+			label = "Factory Default";
-+			gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_RESTART>;
-+		};
-+	};
-+
-+	memory {
-+		device_type = "memory";
-+		reg = <0x00000000 0x08000000>; /* 128 MB */
-+	};
-+
-+	reg_3p3v: regulator-3p3v {
-+		compatible = "regulator-fixed";
-+		regulator-always-on;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-name = "3P3V";
-+	};
-+
-+	soc {
-+		ranges = <MBUS_ID(0xf0, 0x01) 0 0xf1000000 0x100000
-+			  MBUS_ID(0x01, 0x1d) 0 0xfff00000 0x100000
-+			  MBUS_ID(0x09, 0x19) 0 0xf1100000 0x10000
-+			  MBUS_ID(0x09, 0x15) 0 0xf1110000 0x10000
-+			  MBUS_ID(0x0c, 0x04) 0 0xf1200000 0x100000>;
-+
-+		internal-regs {
-+			rtc@a3800 {
-+				/*
-+				 * If the rtc doesn't work, run "date reset"
-+				 * twice in u-boot.
-+				 */
-+				status = "okay";
-+			};
-+		};
-+	};
-+};
-+
-+&eth0 {
-+	/* ethernet@70000 */
-+	bm,pool-long = <0>;
-+	bm,pool-short = <1>;
-+	buffer-manager = <&bm>;
-+	phy-mode = "rgmii-id";
-+	pinctrl-0 = <&ge0_rgmii_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	fixed-link {
-+		full-duplex;
-+		pause;
-+		speed = <1000>;
-+	};
-+};
-+
-+&mdio {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mdio_pins>;
-+	status = "okay";
-+
-+	switch@0 {
-+		compatible = "marvell,mv88e6190";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0>;
-+
-+		mdio {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			switch0phy0: switch0phy0@1 {
-+				reg = <0x1>;
-+			};
-+
-+			switch0phy1: switch0phy1@2 {
-+				reg = <0x2>;
-+			};
-+
-+			switch0phy2: switch0phy2@3 {
-+				reg = <0x3>;
-+			};
-+
-+			switch0phy3: switch0phy3@4 {
-+				reg = <0x4>;
-+			};
-+
-+			switch0phy4: switch0phy4@5 {
-+				reg = <0x5>;
-+			};
-+
-+			switch0phy5: switch0phy5@6 {
-+				reg = <0x6>;
-+			};
-+
-+			switch0phy6: switch0phy6@7 {
-+				reg = <0x7>;
-+			};
-+
-+			switch0phy7: switch0phy7@8 {
-+				reg = <0x8>;
-+			};
-+		};
-+
-+		mdio-external {
-+			compatible = "marvell,mv88e6xxx-mdio-external";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			phy1: ethernet-phy@b {
-+				reg = <0xb>;
-+				compatible = "ethernet-phy-ieee802.3-c45";
-+			};
-+
-+			phy2: ethernet-phy@c {
-+				reg = <0xc>;
-+				compatible = "ethernet-phy-ieee802.3-c45";
-+			};
-+		};
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				ethernet = <&eth0>;
-+				label = "cpu";
-+				reg = <0>;
-+
-+				fixed-link {
-+					full-duplex;
-+					pause;
-+					speed = <1000>;
-+				};
-+			};
-+
-+			port@1 {
-+				label = "lan1";
-+				phy-handle = <&switch0phy0>;
-+				reg = <1>;
-+			};
-+
-+			port@2 {
-+				label = "lan2";
-+				phy-handle = <&switch0phy1>;
-+				reg = <2>;
-+			};
-+
-+			port@3 {
-+				label = "lan3";
-+				phy-handle = <&switch0phy2>;
-+				reg = <3>;
-+			};
-+
-+			port@4 {
-+				label = "lan4";
-+				phy-handle = <&switch0phy3>;
-+				reg = <4>;
-+			};
-+
-+			port@5 {
-+				label = "lan5";
-+				phy-handle = <&switch0phy4>;
-+				reg = <5>;
-+			};
-+
-+			port@6 {
-+				label = "lan6";
-+				phy-handle = <&switch0phy5>;
-+				reg = <6>;
-+			};
-+
-+			port@7 {
-+				label = "lan7";
-+				phy-handle = <&switch0phy6>;
-+				reg = <7>;
-+			};
-+
-+			port@8 {
-+				label = "lan8";
-+				phy-handle = <&switch0phy7>;
-+				reg = <8>;
-+			};
-+
-+			port@9 {
-+				/* 88X3310P external phy */
-+				label = "lan9";
-+				phy-handle = <&phy1>;
-+				phy-mode = "xaui";
-+				reg = <9>;
-+			};
-+
-+			port@a {
-+				/* 88X3310P external phy */
-+				label = "lan10";
-+				phy-handle = <&phy2>;
-+				phy-mode = "xaui";
-+				reg = <0xa>;
-+			};
-+		};
-+	};
-+};
-+
-+&pinctrl {
-+	front_button_pins: front-button-pins {
-+		marvell,pins = "mpp38";
-+		marvell,function = "gpio";
-+	};
-+};
-+
-+&spi0 {
-+	pinctrl-0 = <&spi0_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	spi-flash@0 {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "jedec,spi-nor";
-+		reg = <0>; /* Chip select 0 */
-+		spi-max-frequency = <3000000>;
-+//mtdparts=spi0.0:1m(boot),64k(env),64k(rsv),9m(image0),3m(config),-(debug)
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "boot";
-+				read-only;
-+				reg = <0x00000000 0x00100000>;
-+			};
-+
-+			partition@100000 {
-+				label = "env";
-+				reg = <0x00100000 0x00010000>;
-+			};
-+
-+			partition@200000 {
-+				label = "rsv";
-+				reg = <0x00110000 0x00010000>;
-+			};
-+
-+			partition@300000 {
-+				label = "image0";
-+				reg = <0x00120000 0x00900000>;
-+			};
-+
-+			partition@400000 {
-+				label = "config";
-+				reg = <0x00a20000 0x00300000>;
-+			};
-+
-+			partition@480000 {
-+				label = "debug";
-+				reg = <0x00d20000 0x002e0000>;
-+			};
-+		};
-+	};
-+};
-+
-+&uart0 {
-+	pinctrl-0 = <&uart0_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
--- 
-2.26.2
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+regards
+Philipp
