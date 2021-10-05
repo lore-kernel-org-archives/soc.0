@@ -1,66 +1,73 @@
-Return-Path: <SRS0=5Yy3=OZ=pengutronix.de=p.zabel@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 188CDC4332F
-	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 09:34:18 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id EB20E614C8; Tue,  5 Oct 2021 09:34:17 +0000 (UTC)
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 47573615A6
-	for <soc@kernel.org>; Tue,  5 Oct 2021 09:34:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 47573615A6
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D38FC433EF
+	for <linux-devicetree@archiver.kernel.org>; Tue,  5 Oct 2021 09:34:22 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id E9E2A61425
+	for <linux-devicetree@archiver.kernel.org>; Tue,  5 Oct 2021 09:34:21 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S233656AbhJEJgK convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Tue, 5 Oct 2021 05:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233641AbhJEJgJ (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Tue, 5 Oct 2021 05:36:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B90C061745
+        for <devicetree@vger.kernel.org>; Tue,  5 Oct 2021 02:34:19 -0700 (PDT)
 Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1mXgpt-0004TB-7y; Tue, 05 Oct 2021 11:34:09 +0200
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mXgpt-0004TB-7y; Tue, 05 Oct 2021 11:34:09 +0200
 Received: from pza by lupine with local (Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1mXgpr-0003p8-Es; Tue, 05 Oct 2021 11:34:07 +0200
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mXgpr-0003p8-Es; Tue, 05 Oct 2021 11:34:07 +0200
 Message-ID: <ce254cc123f2809976c2f2404941a9074c458309.camel@pengutronix.de>
 Subject: Re: [PATCH 3/3] reset: socfpga: add empty driver allowing consumers
  to probe
-From: Philipp Zabel <p.zabel@pengutronix.de>
+From:   Philipp Zabel <p.zabel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-To: =?UTF-8?Q?Pawe=C5=82?= Anikiel <pan@semihalf.com>, 
- miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
- robh+dt@kernel.org,  arnd@arndb.de, olof@lixom.net, soc@kernel.org,
- dinguyen@kernel.org
-Cc: linux-mtd@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	tn@semihalf.com, ka@semihalf.com, jam@semihalf.com
-Date: Tue, 05 Oct 2021 11:34:07 +0200
+To:     =?UTF-8?Q?Pawe=C5=82?= Anikiel <pan@semihalf.com>,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        dinguyen@kernel.org
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        tn@semihalf.com, ka@semihalf.com, jam@semihalf.com
+Date:   Tue, 05 Oct 2021 11:34:07 +0200
 In-Reply-To: <20210920124141.1166544-4-pan@semihalf.com>
 References: <20210920124141.1166544-1-pan@semihalf.com>
-	 <20210920124141.1166544-4-pan@semihalf.com>
+         <20210920124141.1166544-4-pan@semihalf.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
 X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
 X-SA-Exim-Mail-From: p.zabel@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: soc@kernel.org
+X-PTX-Original-Recipient: devicetree@vger.kernel.org
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20211005093407.jXvLQu5OcoRL3lRP0fcKpgsQUsFgeDRX8K6hMlOWhmM@z>
 
-Hi Pawe=C5=82,
+Hi Paweł,
 
-On Mon, 2021-09-20 at 14:41 +0200, Pawe=C5=82 Anikiel wrote:
+On Mon, 2021-09-20 at 14:41 +0200, Paweł Anikiel wrote:
 > The early reset driver doesn't ever probe, which causes consuming
 > devices to be unable to probe. Add an empty driver to set this device
 > as available, allowing consumers to probe.
->=20
-> Signed-off-by: Pawe=C5=82 Anikiel <pan@semihalf.com>
+> 
+> Signed-off-by: Paweł Anikiel <pan@semihalf.com>
 > ---
 >  drivers/reset/reset-socfpga.c | 26 ++++++++++++++++++++++++++
 >  1 file changed, 26 insertions(+)
->=20
-> diff --git a/drivers/reset/reset-socfpga.c b/drivers/reset/reset-socfpga.=
-c
+> 
+> diff --git a/drivers/reset/reset-socfpga.c b/drivers/reset/reset-socfpga.c
 > index 2a72f861f798..8c6492e5693c 100644
 > --- a/drivers/reset/reset-socfpga.c
 > +++ b/drivers/reset/reset-socfpga.c
@@ -76,8 +83,8 @@ c
 > + * an empty driver, whose only job is to attach itself to the reset
 > + * manager and call probe.
 > + */
-> +static const struct of_device_id socfpga_reset_dt_ids[] =3D {
-> +	{ .compatible =3D "altr,rst-mgr", },
+> +static const struct of_device_id socfpga_reset_dt_ids[] = {
+> +	{ .compatible = "altr,rst-mgr", },
 > +	{ /* sentinel */ },
 > +};
 > +
@@ -86,11 +93,11 @@ c
 > +	return 0;
 > +}
 > +
-> +static struct platform_driver reset_socfpga_driver =3D {
-> +	.probe	=3D reset_simple_probe,
-> +	.driver =3D {
-> +		.name		=3D "socfpga-reset",
-> +		.of_match_table	=3D socfpga_reset_dt_ids,
+> +static struct platform_driver reset_socfpga_driver = {
+> +	.probe	= reset_simple_probe,
+> +	.driver = {
+> +		.name		= "socfpga-reset",
+> +		.of_match_table	= socfpga_reset_dt_ids,
 > +	},
 > +};
 > +builtin_platform_driver(reset_socfpga_driver);
