@@ -1,19 +1,21 @@
-Return-Path: <SRS0=b1Up=OZ=toradex.com=marcel.ziswiler@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B629C433F5
-	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 04:13:22 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id E63916140A; Tue,  5 Oct 2021 04:13:21 +0000 (UTC)
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150115.outbound.protection.outlook.com [40.107.15.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6321061406;
-	Tue,  5 Oct 2021 04:13:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6321061406
-Authentication-Results: mail.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=toradex.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=toradex.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65798C433EF
+	for <linux-devicetree@archiver.kernel.org>; Tue,  5 Oct 2021 04:13:23 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 3B07A61409
+	for <linux-devicetree@archiver.kernel.org>; Tue,  5 Oct 2021 04:13:23 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S229488AbhJEEPL (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Tue, 5 Oct 2021 00:15:11 -0400
+Received: from mail-eopbgr60114.outbound.protection.outlook.com ([40.107.6.114]:13892
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230321AbhJEEPL (ORCPT <rfc822;devicetree@vger.kernel.org>);
+        Tue, 5 Oct 2021 00:15:11 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=XclWXeJ1VsYZNp7z/HTWUEjRnOceX/gW7CAgLAJDGE8rE6IBLNkfogHIPAa5gIwx5/Dj7P+xm/9XMwmRmHaMu4Pi35OVDsR8VIjgL4lbx69Qc2/+A0q42M/oiblucHgS1CP5nuMsw3an1Pl0vy5EhWOTZ/GbgM18BuH5DFGe2iQyMhO0bAo95J3cI8wzQKcxL5E9Y8t0tjqi4hyeW3uab2GnNiFu/v3OPjnHXvDLflMKQ6qQ1jqBl0+MKjfqTa7/to5M5leCu14lGaP9jVBVpgQSjKkNc5G7gTQSV2L0mg8T1VG0p3BHNX3NZXtL7hEoFxb/2QihnS3itGkX7Y9vTw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
@@ -38,53 +40,52 @@ Received: from DB7PR05MB5431.eurprd05.prod.outlook.com
  ([fe80::8f4:9f42:ea10:e8e7]) by DB7PR05MB5431.eurprd05.prod.outlook.com
  ([fe80::8f4:9f42:ea10:e8e7%3]) with mapi id 15.20.4566.022; Tue, 5 Oct 2021
  04:13:18 +0000
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-To: "shawnguo@kernel.org" <shawnguo@kernel.org>
+From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
+To:     "shawnguo@kernel.org" <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-CC: "soc@kernel.org" <soc@kernel.org>, Max Krummenacher
-	<max.krummenacher@toradex.com>, "kernel@pengutronix.de"
-	<kernel@pengutronix.de>, "linux-imx@nxp.com" <linux-imx@nxp.com>,
-	"festevam@gmail.com" <festevam@gmail.com>, "linux@armlinux.org.uk"
-	<linux@armlinux.org.uk>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "frowand.list@gmail.com"
-	<frowand.list@gmail.com>, "olof@lixom.net" <olof@lixom.net>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "s.hauer@pengutronix.de"
-	<s.hauer@pengutronix.de>, "arnd@arndb.de" <arnd@arndb.de>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
+CC:     "soc@kernel.org" <soc@kernel.org>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "frowand.list@gmail.com" <frowand.list@gmail.com>,
+        "olof@lixom.net" <olof@lixom.net>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v4 8/9] ARM: dts: colibri-imx6ull-emmc: add device tree
 Thread-Topic: [PATCH v4 8/9] ARM: dts: colibri-imx6ull-emmc: add device tree
 Thread-Index: AQHXri7ZPTtZIttACEae7k6TN8gMoKvD1cqAgAAMfAA=
-Date: Tue, 5 Oct 2021 04:13:18 +0000
+Date:   Tue, 5 Oct 2021 04:13:18 +0000
 Message-ID: <ebfcf9b509a768d5495f362bd82df9d628dee69d.camel@toradex.com>
 References: <20210920144938.314588-1-marcel@ziswiler.com>
-	 <20210920144938.314588-9-marcel@ziswiler.com>
-	 <20211005032834.GG20743@dragon>
+         <20210920144938.314588-9-marcel@ziswiler.com>
+         <20211005032834.GG20743@dragon>
 In-Reply-To: <20211005032834.GG20743@dragon>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
 authentication-results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=toradex.com;
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-correlation-id: dcd326d1-db29-4ea3-e96a-08d987b67601
 x-ms-traffictypediagnostic: DB7PR05MB4491:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs:
- <DB7PR05MB4491B122F12D6E46F02FF1E9FBAF9@DB7PR05MB4491.eurprd05.prod.outlook.com>
+x-microsoft-antispam-prvs: <DB7PR05MB4491B122F12D6E46F02FF1E9FBAF9@DB7PR05MB4491.eurprd05.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- bF8JJ2pZx9CaT73OI+dEbAJBB2ERhP25WdyGwJx+NZ15NqS+mmZv+UAvmK8k6/8jAPVrtP3B79Z8benzcJ06qZnxZBbVI5asw7xZQufeQICFcXiUYhjsDvALNUgd1gvJXUkRVLxMkVnubCtQ9/Aa91vVq5Xl4z+R6UpGCuvK/69mG5I+6aFvCsBlly4co5XpXIvJCLNC06dF7do46PbhGGPabvV/Kx+OrnzDk9ZHZRZo7DZbYxmo8E7vhMV9Q57mAC7FF39Qki3QQeSYuPQooFbhZPqQL2jNl8kADgm/3Uo6ubcJgoTNNjPBDtVJ6lsU1pCnbusRn9clK2wR5GSzIn5lP2Ccse4qTAKsZ61ylUpLdW/gykUzV6D+0YQhEvYLBXKZWrYZUvmt5Kr8wOvlXULFN+GL+A7eKZxGiF4XsKTEC98oAtSW+jMYgUBbGlqdzG0ZlziBNbHT+V88dONet5Hc3DHUHK1UOqPvy4siGSx9ScCRfaata77I6HfkvVWE+qakdQ+PaUaShrClg9CaqBhTy0dJsmkY6JESQaAmUjlltqCAJbKlRAeu2pEzyVJkYQB/sjpE8qjCGZh9BLH/0Z6nO2EYBdpWgkHeLeUrIuQCpBnpKe84anLw96+UiMj914BaLUdmDOqSDBfdM9F0C3anI0el8sPrBO7t6xXcjkxNUDrN980HmxQtoft/s5uUluCyfzbXj5HiAp7xM1fvVvmE0lepOkCcGS3XJp/SaqAUG6eWysJSxZfZHbG3uIHMmggp3rVFTm5wlDm79lEwSeMFW23S89wp7MrO0BBCcTk=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR05MB5431.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(2906002)(8936002)(76116006)(91956017)(38100700002)(44832011)(7416002)(54906003)(36756003)(966005)(6506007)(6916009)(66946007)(66476007)(66556008)(64756008)(66446008)(86362001)(71200400001)(122000001)(6512007)(83380400001)(38070700005)(4326008)(26005)(5660300002)(6486002)(8676002)(2616005)(508600001)(186003);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: bF8JJ2pZx9CaT73OI+dEbAJBB2ERhP25WdyGwJx+NZ15NqS+mmZv+UAvmK8k6/8jAPVrtP3B79Z8benzcJ06qZnxZBbVI5asw7xZQufeQICFcXiUYhjsDvALNUgd1gvJXUkRVLxMkVnubCtQ9/Aa91vVq5Xl4z+R6UpGCuvK/69mG5I+6aFvCsBlly4co5XpXIvJCLNC06dF7do46PbhGGPabvV/Kx+OrnzDk9ZHZRZo7DZbYxmo8E7vhMV9Q57mAC7FF39Qki3QQeSYuPQooFbhZPqQL2jNl8kADgm/3Uo6ubcJgoTNNjPBDtVJ6lsU1pCnbusRn9clK2wR5GSzIn5lP2Ccse4qTAKsZ61ylUpLdW/gykUzV6D+0YQhEvYLBXKZWrYZUvmt5Kr8wOvlXULFN+GL+A7eKZxGiF4XsKTEC98oAtSW+jMYgUBbGlqdzG0ZlziBNbHT+V88dONet5Hc3DHUHK1UOqPvy4siGSx9ScCRfaata77I6HfkvVWE+qakdQ+PaUaShrClg9CaqBhTy0dJsmkY6JESQaAmUjlltqCAJbKlRAeu2pEzyVJkYQB/sjpE8qjCGZh9BLH/0Z6nO2EYBdpWgkHeLeUrIuQCpBnpKe84anLw96+UiMj914BaLUdmDOqSDBfdM9F0C3anI0el8sPrBO7t6xXcjkxNUDrN980HmxQtoft/s5uUluCyfzbXj5HiAp7xM1fvVvmE0lepOkCcGS3XJp/SaqAUG6eWysJSxZfZHbG3uIHMmggp3rVFTm5wlDm79lEwSeMFW23S89wp7MrO0BBCcTk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR05MB5431.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(2906002)(8936002)(76116006)(91956017)(38100700002)(44832011)(7416002)(54906003)(36756003)(966005)(6506007)(6916009)(66946007)(66476007)(66556008)(64756008)(66446008)(86362001)(71200400001)(122000001)(6512007)(83380400001)(38070700005)(4326008)(26005)(5660300002)(6486002)(8676002)(2616005)(508600001)(186003);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?dUd3SzcyQzYxWW9xTmFqQWdEWEhjSzI4UlR1dFJmTkRzSXdEZytUQzhPeUt2?=
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dUd3SzcyQzYxWW9xTmFqQWdEWEhjSzI4UlR1dFJmTkRzSXdEZytUQzhPeUt2?=
  =?utf-8?B?aWkwZktGYkpEWE1leHEweXgwVm1wV2lWR3VpdFJDR3lQQWpFamIrcWZSeml5?=
  =?utf-8?B?QXdWV1MxVVpiOU4vaEtRTS9pcjRnVDNzS0wzc0hGRkw3Y09ZVy9STUk2anp6?=
  =?utf-8?B?ZUtLa3dUMmhLN2VHekpmc0ZKL2l3VjZXYm5zcGc4Ky9wYm1McHR6d05ob09H?=
@@ -129,6 +130,10 @@ X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: oh0lZn9iUYoWkDUC1laOzBUiE0gf/+L1oLiDI2tPp/jiBFWeQlS++5oQ5Yj3auacgiHD5pIjUPjR3VH8wGauoEoLBaIse8jAJmdTBBi5t34=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR05MB4491
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20211005041318.QSkLQFmTCthiBE_S9fAwXXe8yCScilWokdB12pEtOuc@z>
 
 T24gVHVlLCAyMDIxLTEwLTA1IGF0IDExOjI4ICswODAwLCBTaGF3biBHdW8gd3JvdGU6Cj4gT24g
 TW9uLCBTZXAgMjAsIDIwMjEgYXQgMDQ6NDk6MzdQTSArMDIwMCwgTWFyY2VsIFppc3dpbGVyIHdy
