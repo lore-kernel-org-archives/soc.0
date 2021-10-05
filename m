@@ -1,110 +1,131 @@
-Return-Path: <linux-i2c-owner@kernel.org>
+Return-Path: <SRS0=pPb6=OZ=semihalf.com=pan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 030D2C433F5
-	for <linux-i2c@archiver.kernel.org>; Tue,  5 Oct 2021 14:38:19 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDA49613D5
-	for <linux-i2c@archiver.kernel.org>; Tue,  5 Oct 2021 14:38:18 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235518AbhJEOkH (ORCPT <rfc822;linux-i2c@archiver.kernel.org>);
-        Tue, 5 Oct 2021 10:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234084AbhJEOkH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Oct 2021 10:40:07 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60006C061755
-        for <linux-i2c@vger.kernel.org>; Tue,  5 Oct 2021 07:38:16 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id i4so88027499lfv.4
-        for <linux-i2c@vger.kernel.org>; Tue, 05 Oct 2021 07:38:16 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89BE9C43217
+	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 14:38:19 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7255A613E6; Tue,  5 Oct 2021 14:38:19 +0000 (UTC)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 59BFF61372
+	for <soc@kernel.org>; Tue,  5 Oct 2021 14:38:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 59BFF61372
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=semihalf.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=semihalf.com
+Received: by mail-lf1-f42.google.com with SMTP id u18so87445135lfd.12
+        for <soc@kernel.org>; Tue, 05 Oct 2021 07:38:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Z8yJ3pPZ9+WPMdAHGwCAtozfSgkyhJMEnQnMA+Z0TQI=;
-        b=0CE3XJmx7D6euF5qrA2Opsb+C3uYz+egZm36W2sRX5c0XlTlmxj9meTCHFzWx4P+kC
-         cj7WYKZkaziTQJItkQNcG7FDbGdy2qByNwUkZpr+z6QaJP7FXZoBHmna27omLi+1F+Pc
-         Zy/BR3dISsxo34DCfGR0fF5qio1t59z8jfvYWCErYDjplgL/HQK99Rmtx8zEVqSLWCjN
-         lR+icNyvVSyx2f6juS3dvQ5LpJQFDiQk0mchttG5xqk73hhNfin+cpSLYVsaljqYgc+j
-         1yUACMgYpNoGKLAihzOuQ8bgVHvsppCKtWcDD40kSsbV+A8y9AhDFawtDfZWWIgmOdNr
-         ZLrw==
+        bh=aD0ZimcpDdMwxxDkok8INnwAF4L8JkxKG7hlNjJNuc4=;
+        b=xr/EbJQXsQv4f8TFJbE2w6XzhEQf/jsX9u4gGwqhd0AvcG1AQDhsxEeR3pfpTpw9c/
+         KWVwcxUDdoeM0yqquLJuLWpJAAopOx97wTP2Q+143laE4khIxbb7JeDeJkR0gOb8oIYC
+         41ZvV95CrLfPsQoREGzi1/nO++3VwdYgi7hfrL1aUdWK/pibrAd2XGwDYYRuFNx+X2/j
+         gcsZYfGj1GvbBlX1TeaPjFFx5ZmBKAMWu6nLTQlVGsYEgOUO5gOnH6phW7sFkuA0VJp7
+         0bdXaeVjd+P/1BCvlgovSJPtphlexKfI7yWMs6mFzykdj73vQENifMenCHBjmbdX5E9Y
+         gEOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Z8yJ3pPZ9+WPMdAHGwCAtozfSgkyhJMEnQnMA+Z0TQI=;
-        b=qF9rgCBD2djuI/EXiHtnMuspYDLftpdB5qDyiRkixl4Xp3SM/yoiDnveYmnt5TFjon
-         TjJ/67Rf8n8J8QgCuRlx0oKSdsjBZKKyQhsSfZp39uGLYuB7UIonXX0yrQrGahBBtCXr
-         aIc+0mHZG1QvcKLtFlTbFaOtIeoHbjTuCkvYUqxZAQANNFRLvxChqy/fyaASAdEPafZI
-         HQKZc5qtCQpWSMNxLebOBEixrw24r0K5Bbw1CWUV++NPdk1JhJ/6A6jtolRr8079cTa3
-         fJhcvFkJdhfxDXIJBloAOVU6eqeuNxFmj8c4NQeLYm0jp+l7SHHFE1KQPKvf/Fam6OcA
-         tBTA==
-X-Gm-Message-State: AOAM533ctCosh82ewDe7ZBEv/Q6aOHcdPyA8ki659ErtqcF4wBxJ9nBw
-        XMnGKKsdC70Tr6vOdBEtFYwGrg==
-X-Google-Smtp-Source: ABdhPJzaxO4ySi1hxPEHc55AKtXS0CtE0M+NBzHPCG+qdRxgDm6cu0AbkYqr8+G8n3cVtkEUfe7g0g==
-X-Received: by 2002:a19:4802:: with SMTP id v2mr3839955lfa.49.1633444694743;
-        Tue, 05 Oct 2021 07:38:14 -0700 (PDT)
+        bh=aD0ZimcpDdMwxxDkok8INnwAF4L8JkxKG7hlNjJNuc4=;
+        b=UsDyUJ8gxn6KK4jIoqj3OLXnYPi2YLeqLbG1DQMKEPsh7ov5lqNCgZ5Ay7te5WTPDb
+         I0R22JKmn1TYBLyZUH8wkST2lLC3Qv8BsI7o6uhxp56iQCMHEVfQHixTfK3m5d5XGfcu
+         0U8z8kVaui3/vvdu7ya0W/XHxFv+Pcrwt3iRh5IF82TGxS3YhajngJrFQQTu0MmZm5Xv
+         8tEWmWPyT2Kr8YkWUJl87MFROCcNa2cGuCQaIZ52irQWjOC/XpGzr45QPnCrmow6wDKE
+         O4SiFj5fyNCsfTaF6JZIG1GBLVS8jY5C+VxAopuqX/C4LFkGfqmFSVqQfbgtHcJ8dX1v
+         dziQ==
+X-Gm-Message-State: AOAM530/5FQcdNg9dTa3hW1HMMnSqiHGpXSvmhVna3aa7yw7ydKn8dCS
+	dFLB9rXU0rMsT0Bxs2mUJHXemQ==
+X-Google-Smtp-Source: ABdhPJz1Gqoll+/R0fBf7HkcMgpMiilGz9sNSE96xW6sZExUwmOViaK4fIephyq2Ege3h6LgH4KT9Q==
+X-Received: by 2002:a05:6512:1053:: with SMTP id c19mr3819153lfb.283.1633444697355;
+        Tue, 05 Oct 2021 07:38:17 -0700 (PDT)
 Received: from grasshopper.googchameleon.semihalf.net ([83.142.187.85])
-        by smtp.gmail.com with ESMTPSA id u25sm1973835lfc.176.2021.10.05.07.38.13
+        by smtp.gmail.com with ESMTPSA id u25sm1973835lfc.176.2021.10.05.07.38.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Oct 2021 07:38:14 -0700 (PDT)
-From:   =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
+        Tue, 05 Oct 2021 07:38:17 -0700 (PDT)
+From: =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
 List-Id: <soc.lore.kernel.org>
-To:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, robh+dt@kernel.org,
-        p.zabel@pengutronix.de, arnd@arndb.de, olof@lixom.net,
-        soc@kernel.org, dinguyen@kernel.org, p.yadav@ti.com,
-        Tudor.Ambarus@microchip.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexandre.belloni@bootlin.com, sre@kernel.org,
-        thunder.leizhen@huawei.com, Jonathan.Cameron@huawei.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        ka@semihalf.com, tn@semihalf.com, jam@semihalf.com,
-        amstan@google.com,
-        =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
-Subject: [PATCH v2 2/4] dt-bindings: add bus number property
-Date:   Tue,  5 Oct 2021 16:37:46 +0200
-Message-Id: <20211005143748.2471647-3-pan@semihalf.com>
+To: jarkko.nikula@linux.intel.com,
+	andriy.shevchenko@linux.intel.com,
+	mika.westerberg@linux.intel.com,
+	robh+dt@kernel.org,
+	p.zabel@pengutronix.de,
+	arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org,
+	dinguyen@kernel.org,
+	p.yadav@ti.com,
+	Tudor.Ambarus@microchip.com
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	alexandre.belloni@bootlin.com,
+	sre@kernel.org,
+	thunder.leizhen@huawei.com,
+	Jonathan.Cameron@huawei.com,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	ka@semihalf.com,
+	tn@semihalf.com,
+	jam@semihalf.com,
+	amstan@google.com,
+	=?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
+Subject: [PATCH v2 3/4] reset: socfpga: add empty driver allowing consumers to probe
+Date: Tue,  5 Oct 2021 16:37:47 +0200
+Message-Id: <20211005143748.2471647-4-pan@semihalf.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211005143748.2471647-1-pan@semihalf.com>
 References: <20211005143748.2471647-1-pan@semihalf.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Precedence: bulk
-List-ID: <linux-i2c.vger.kernel.org>
-X-Mailing-List: linux-i2c@vger.kernel.org
 
-On SoCFPGA systems, it's desireable to have fixed numbering for
-i2c busses, while being able to enable/disable them (e.g. have i2c1
-be mapped to /dev/i2c-1, even though i2c0 is disabled). This can also
-be achieved using devicetree aliases (see i2c_add_adapter). However,
-having the driver be self-contained without relying on aliases is more
-robust.
+The early reset driver doesn't ever probe, which causes consuming
+devices to be unable to probe. Add an empty driver to set this device
+as available, allowing consumers to probe.
 
 Signed-off-by: Paweł Anikiel <pan@semihalf.com>
 ---
- .../devicetree/bindings/i2c/snps,designware-i2c.yaml         | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/reset/reset-socfpga.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-index d9293c57f573..1e02ddcbd690 100644
---- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-@@ -93,6 +93,11 @@ properties:
-       - const: tx
-       - const: rx
- 
-+  busno:
-+    description: |
-+      The property should contain the desired bus number (as opposed to
-+      being assigned automatically)
+diff --git a/drivers/reset/reset-socfpga.c b/drivers/reset/reset-socfpga.c
+index 2a72f861f798..8c6492e5693c 100644
+--- a/drivers/reset/reset-socfpga.c
++++ b/drivers/reset/reset-socfpga.c
+@@ -92,3 +92,29 @@ void __init socfpga_reset_init(void)
+ 	for_each_matching_node(np, socfpga_early_reset_dt_ids)
+ 		a10_reset_init(np);
+ }
 +
- unevaluatedProperties: false
- 
- required:
++/*
++ * The early driver is problematic, because it doesn't register
++ * itself as a driver. This causes certain device links to prevent
++ * consumer devices from probing. The hacky solution is to register
++ * an empty driver, whose only job is to attach itself to the reset
++ * manager and call probe.
++ */
++static const struct of_device_id socfpga_reset_dt_ids[] = {
++	{ .compatible = "altr,rst-mgr", },
++	{ /* sentinel */ },
++};
++
++static int reset_simple_probe(struct platform_device *pdev)
++{
++	return 0;
++}
++
++static struct platform_driver reset_socfpga_driver = {
++	.probe	= reset_simple_probe,
++	.driver = {
++		.name		= "socfpga-reset",
++		.of_match_table	= socfpga_reset_dt_ids,
++	},
++};
++builtin_platform_driver(reset_socfpga_driver);
 -- 
 2.25.1
 
