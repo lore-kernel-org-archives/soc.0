@@ -2,61 +2,60 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1D25C4332F
-	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 13:55:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE5ACC433F5
+	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 13:55:19 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id BAAC961526; Tue,  5 Oct 2021 13:55:14 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C2E3615E6;
-	Tue,  5 Oct 2021 13:55:12 +0000 (UTC)
+	id A2FBD61503; Tue,  5 Oct 2021 13:55:19 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7B2EC6023D;
+	Tue,  5 Oct 2021 13:55:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1633442114;
-	bh=0yFLZfiig6DnOFmH1BxwGDCchrWxNojEqVqmvxccNEs=;
+	s=k20201202; t=1633442119;
+	bh=dL0FGtRiz8iLH2Xof9EcpJ2EZOleGZqnCdSdnFG41iQ=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Dvj+1UNbR8kKCFrZ0ySq+u90hm854TnBluJHQx3Lu4HSEZ2D3bw53z/vf6yQ8wPVP
-	 89H/0qezVcQn+bn5r0JNv3wqkoB8bC8XxuxfxF7zdVwA24QkQYL1I+F4IYOV92duB5
-	 kkJYpOWu+IHaeOFVqKEGuU0hInrg/s6y6e50mxXan7tXmTAJmDDu9d/WTqMVuDkIIT
-	 1gkJma+toGRPOWkp28BTASQYMVEh6pje73816UbPEU+9iZc334HX+nKGGHo6Ky2JKk
-	 tubZNK7K/94AY7rC37zULzDpNOVCobXkllFvhYqQWkp17TJ3s1vxMOg7xzVTjhhQhf
-	 Q992RYBpNsrnA==
+	b=C3BDtsZWTaDWdli7a7B7xBL5Y0ffMsLsY7u4vu09KwS28DW95gFJYH8e0vUtAZSSr
+	 ryzl/Z0P4H3gKuBVVmg935RklhV7uQb7d5CfGuL0biebgmdchRNfOnQM97/gkTdx2A
+	 tiDlUeygQQwx4xwiVmtUkjlgseFo/uPuzz8Oe0S51uwRBmyOVolSMCBGtHmbSXhamJ
+	 IXQc3LdGlfAPKbSiyad82jsBhQeh0cNQjniWM3ZH96JIq5l/GM/z/TAYwqbRWeD2OA
+	 iP6l7xUrhJAAGtXX1slCbTnahzh/Wz4ukK/JXJV0TrjGAv5tiQP83wvMko9G6HeRWW
+	 k2szR2q+xWpdQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org,
 	Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
+	David Heidelberg <david@ixit.cz>,
 	linux-arm-kernel@lists.infradead.org,
-	Shawn Guo <shawn.guo@linaro.org>,
 	Olof Johansson <olof@lixom.net>,
 	Andy Gross <agross@kernel.org>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
 	Kevin Hilman <khilman@baylibre.com>,
-	Antonio Martorana <amartora@codeaurora.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
 	linux-arm-msm@vger.kernel.org
-Subject: Re: [GIT PULL] Qualcomm driver fixes for v5.15
-Date: Tue,  5 Oct 2021 15:55:08 +0200
-Message-Id: <163344208491.2721567.2925197313159262269.b4-ty@arndb.de>
+Subject: Re: [GIT PULL] Qualcomm DTS fixes for v5.15
+Date: Tue,  5 Oct 2021 15:55:09 +0200
+Message-Id: <163344208489.2721567.9809348887551925791.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210930025456.1035-1-bjorn.andersson@linaro.org>
-References: <20210930025456.1035-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20210930025526.1146-1-bjorn.andersson@linaro.org>
+References: <20210930025526.1146-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 29 Sep 2021 21:54:56 -0500, Bjorn Andersson wrote:
-> Arnd, I noticed that I've had the QCOM_SCM change from Geert in linux-next for
-> a little while now and would prefer not to rebase my tree. I do believe per our
-> other discussion on this subject that QCOM_SCM becomes hidden and therefor
-> shouldn't depend on ARCH_QCOM again.
+On Wed, 29 Sep 2021 21:55:26 -0500, Bjorn Andersson wrote:
+> The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 > 
-> Would you prefer me to respin this with a revert of Geert's patch, or can you
-> effectively revert this as you're applying your patches on top?
+>   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-fixes-for-5.15
 > 
 > [...]
 
 Merged into arm/fixes, thanks!
 
-merge commit: 6147eb53bb80a8d12f1c9de4e3474bc9524053ec
+merge commit: c147392b652b6af7d96f1f844a4938a6bb4921b8
 
        Arnd
