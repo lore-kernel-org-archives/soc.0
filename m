@@ -1,21 +1,25 @@
-Return-Path: <SRS0=pPb6=OZ=semihalf.com=pan@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37466C433F5
-	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 10:12:19 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 1A7336113A; Tue,  5 Oct 2021 10:12:19 +0000 (UTC)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C149661247
-	for <soc@kernel.org>; Tue,  5 Oct 2021 10:12:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C149661247
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=semihalf.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=semihalf.com
-Received: by mail-lf1-f50.google.com with SMTP id n8so28091024lfk.6
-        for <soc@kernel.org>; Tue, 05 Oct 2021 03:12:18 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DBC8C433FE
+	for <linux-devicetree@archiver.kernel.org>; Tue,  5 Oct 2021 10:12:20 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 011A461247
+	for <linux-devicetree@archiver.kernel.org>; Tue,  5 Oct 2021 10:12:19 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S233469AbhJEKOJ (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Tue, 5 Oct 2021 06:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233290AbhJEKOI (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Tue, 5 Oct 2021 06:14:08 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E798C06161C
+        for <devicetree@vger.kernel.org>; Tue,  5 Oct 2021 03:12:18 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id b20so84546829lfv.3
+        for <devicetree@vger.kernel.org>; Tue, 05 Oct 2021 03:12:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -32,14 +36,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
         bh=Fd2bVG3T2aDLLsUGg65DNy9VZxuxLh/QslDXMizwJK8=;
-        b=NSru9RMKJamtbKDhoh1h888FN3mRO++LBp+xU06luV6KvkbbVQ98pWYvDwXeVR50Xo
-         MScZoA1CEqfuBCIBvxgIz9gZirfAgrnozH69Ha0qKgBifszIz/iYfp/m3AzL5XPIcwo6
-         tGe8GNAIHURxuoW0pLJ5qLhEPJ3R+UIIZeMctFiv2QrVOz0EyoTmNv7htAhpZKtlPID/
-         IWekEg/pgvSxlKu7rVdYUeZpQDvNkHyJ2kk6VM/Bdn85+nMCkG3DOxdX2Cum9ErZlpbO
-         jJfCQd4ouzlM741bzF6/3fDXddR+j8XpOy7Qx9ZJXISkSbM6QZ7Qbu4hKS/F9ol1wCCV
-         y36Q==
-X-Gm-Message-State: AOAM531/VqwnbNfrSvLSpFPUGsLmHlmO7RxPDAZIshui5UiMmWqMfvAy
-	MjgnBT6tezpl8+OM+8G94wXt7VXeViEN3aBP8vrPsg==
+        b=7/0ShjIp3jNjyyqAtFCrTysf3e68R1+2EIiOuYndOV20Kydcd8Q7xplzAJ11FK6pv0
+         UWqacEPiFCTAXISLoqL57GXW+VRAEk9SoL++OCpkOy4iMpcsI7RZGBEje3/OA0zBs+/o
+         jkXUsHZCAXtBIZLkgnjEDBaG4FClaimLMh/3rDoyLU+TY5C6jgcgdb1y+LtsmY+3ojum
+         k2k14G3cWe3FsmUCUDHV7bqQ+BQ7UnaK04QA90KK9jb0a37aBz3UmRw9cLIsqO3icXnd
+         p/3+NmntjXSPTEJk8ecFeNGB5H7AU4RRAf5SNuPRcibOZnQC8JQta0lXQ3y+cBQISASv
+         TnvQ==
+X-Gm-Message-State: AOAM531GnM2gWrI48i96Vwi/Ch9ISehOoILmH+C2U0MxwLyFjv3xaqKg
+        H2sF2Tmabfavhm0fEown2V1Js4GV3u+sjDTh1A6q5Q==
 X-Google-Smtp-Source: ABdhPJweYgnhJ9wfwnhC1naOEgjt465iKJfu5aOyclroBOPqShbw0RGuw1NZisfc1hj6jMsbtIvWVkehVRtpOKozveQ=
 X-Received: by 2002:a2e:b8cd:: with SMTP id s13mr21300509ljp.44.1633428736539;
  Tue, 05 Oct 2021 03:12:16 -0700 (PDT)
@@ -47,20 +51,26 @@ MIME-Version: 1.0
 References: <20210920124141.1166544-1-pan@semihalf.com> <20210920124141.1166544-4-pan@semihalf.com>
  <ce254cc123f2809976c2f2404941a9074c458309.camel@pengutronix.de>
 In-Reply-To: <ce254cc123f2809976c2f2404941a9074c458309.camel@pengutronix.de>
-From: =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
-Date: Tue, 5 Oct 2021 13:12:05 +0200
+From:   =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
+Date:   Tue, 5 Oct 2021 13:12:05 +0200
 Message-ID: <CAF9_jYQVpG8imn3zjAGKeZqZqDPtWRYWLQjNSXi2SXjjzAKvfA@mail.gmail.com>
 Subject: Re: [PATCH 3/3] reset: socfpga: add empty driver allowing consumers
  to probe
 List-Id: <soc.lore.kernel.org>
-To: Philipp Zabel <p.zabel@pengutronix.de>, miquel.raynal@bootlin.com, richard@nod.at, 
-	vigneshr@ti.com, robh+dt@kernel.org, arnd@arndb.de, olof@lixom.net, 
-	soc@kernel.org, dinguyen@kernel.org
-Cc: linux-mtd@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Tomasz Nowicki <tn@semihalf.com>, Konrad Adamczyk <ka@semihalf.com>, Jacek Majkowski <jam@semihalf.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, robh+dt@kernel.org, arnd@arndb.de,
+        olof@lixom.net, soc@kernel.org, dinguyen@kernel.org
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Konrad Adamczyk <ka@semihalf.com>,
+        Jacek Majkowski <jam@semihalf.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20211005111205.wF9DTMTojuk4JpTAzITFpr5a4MynUV1bKYvFX6hKG_4@z>
 
 On Tue, Oct 5, 2021 at 11:34 AM Philipp Zabel <p.zabel@pengutronix.de> wrot=
 e:
