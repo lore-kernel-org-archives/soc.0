@@ -2,63 +2,61 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7222C4332F
-	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 13:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1D25C4332F
+	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 13:55:14 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id BE2366120D; Tue,  5 Oct 2021 13:54:26 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 26EEE6023D;
-	Tue,  5 Oct 2021 13:54:23 +0000 (UTC)
+	id BAAC961526; Tue,  5 Oct 2021 13:55:14 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C2E3615E6;
+	Tue,  5 Oct 2021 13:55:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1633442066;
-	bh=QRyqinl4PMVbQ7Hm9SGv+YX+OH4lBkNZw8ZzZOdgDPo=;
+	s=k20201202; t=1633442114;
+	bh=0yFLZfiig6DnOFmH1BxwGDCchrWxNojEqVqmvxccNEs=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=W/pPxagP1GNPp88nx9DJ978vOtGm3uQGgepzF/mt3AbpA0quFJS5lv91PfT6ZVnpM
-	 ISlBXjPnNrZkMcpR2JkfNdamOk44ZD5OhbF6wNf6ueVr8FZhMCreoZcXuFJfhvRNJW
-	 cFfBQMrGKgEQ1XmqNJRbSb+/ENzgn764vR1V7bVs3kohr/3+WDKZJXWmRRfbMGY66/
-	 mcq3qxlRsVWjsrXcLwdNiVyfGuHHbCP4JBWqOhpclnkObHeT4gJaLTnA04hzO/nVfN
-	 myjWaE2AaBe/5hOj7z59KjcGC6p6x5bOO4TgAF7izWVq+MlZSZkp9aqiOsfkjjQ9tC
-	 usOCqmQBpBIag==
+	b=Dvj+1UNbR8kKCFrZ0ySq+u90hm854TnBluJHQx3Lu4HSEZ2D3bw53z/vf6yQ8wPVP
+	 89H/0qezVcQn+bn5r0JNv3wqkoB8bC8XxuxfxF7zdVwA24QkQYL1I+F4IYOV92duB5
+	 kkJYpOWu+IHaeOFVqKEGuU0hInrg/s6y6e50mxXan7tXmTAJmDDu9d/WTqMVuDkIIT
+	 1gkJma+toGRPOWkp28BTASQYMVEh6pje73816UbPEU+9iZc334HX+nKGGHo6Ky2JKk
+	 tubZNK7K/94AY7rC37zULzDpNOVCobXkllFvhYqQWkp17TJ3s1vxMOg7xzVTjhhQhf
+	 Q992RYBpNsrnA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>,
+To: arm@kernel.org,
 	soc@kernel.org,
-	arm@kernel.org
+	Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Stephen Boyd <swboyd@chromium.org>,
-	linux-arm-msm@vger.kernel.org,
-	Amit Pundir <amit.pundir@linaro.org>,
-	Douglas Anderson <dianders@chromium.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Olof Johansson <olof@lixom.net>,
 	linux-arm-kernel@lists.infradead.org,
 	Shawn Guo <shawn.guo@linaro.org>,
-	Andy Gross <agross@kernel.org>
-Subject: Re: [GIT PULL] Qualcomm ARM64 DTS fixes for 5.15
-Date: Tue,  5 Oct 2021 15:54:21 +0200
-Message-Id: <163344201899.2721334.537065914671320241.b4-ty@arndb.de>
+	Olof Johansson <olof@lixom.net>,
+	Andy Gross <agross@kernel.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Antonio Martorana <amartora@codeaurora.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [GIT PULL] Qualcomm driver fixes for v5.15
+Date: Tue,  5 Oct 2021 15:55:08 +0200
+Message-Id: <163344208491.2721567.2925197313159262269.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210930025509.1091-1-bjorn.andersson@linaro.org>
-References: <20210930025509.1091-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20210930025456.1035-1-bjorn.andersson@linaro.org>
+References: <20210930025456.1035-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 29 Sep 2021 21:55:09 -0500, Bjorn Andersson wrote:
-> The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+On Wed, 29 Sep 2021 21:54:56 -0500, Bjorn Andersson wrote:
+> Arnd, I noticed that I've had the QCOM_SCM change from Geert in linux-next for
+> a little while now and would prefer not to rebase my tree. I do believe per our
+> other discussion on this subject that QCOM_SCM becomes hidden and therefor
+> shouldn't depend on ARCH_QCOM again.
 > 
->   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-5.15
+> Would you prefer me to respin this with a revert of Geert's patch, or can you
+> effectively revert this as you're applying your patches on top?
 > 
 > [...]
 
 Merged into arm/fixes, thanks!
 
-merge commit: 04e0ae8d2b96a3d992e1024b215071c61e45512f
+merge commit: 6147eb53bb80a8d12f1c9de4e3474bc9524053ec
 
        Arnd
