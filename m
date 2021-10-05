@@ -1,111 +1,87 @@
-Return-Path: <SRS0=xXpd=OZ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=Pp5d=OZ=ziswiler.com=marcel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABD0CC433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  5 Oct 2021 05:42:42 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74052C4332F
+	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 06:04:02 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 4A14260EE2; Tue,  5 Oct 2021 06:04:02 +0000 (UTC)
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7E51661074
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  5 Oct 2021 05:42:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7E51661074
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=tedukNAm9AZpK1Wwpfzw5bZsUHBC73ctmZPCvZJag/0=; b=lQ9Pp1wz//WsS9
-	oVRvU0EuVTRbaiEVOlchO4x2aBhXn24eUcQygZ4q5oC6lKpQIQ8oUWXYRvMkkuDn4P68dzrlMa34R
-	b9ANnJPPpvgBMOsZc9aoK6EqSC13KmwdCpjg22CpBHyXUV0HsyUwujH9ubOz1R6ZGwcNV132qJxBW
-	/+IwTmEG5S7mL9/OcproORkVJ1foHRtzJJ/mZvdGfDJXKlTqY4KD/iGsZKFWvBwMGX6WBi9gQjjKv
-	+g9JSYS6vBesHtuvnQ5bje838FFSJjiNkEo80pOLYVpXSZTJoVmT4c4p0RVKyXL3hUtSOQ/x/q3YD
-	6DNfIvoPIXR1RFPjouQA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mXdCD-008zzd-FQ; Tue, 05 Oct 2021 05:40:57 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mXdC9-008zz4-9M
- for linux-arm-kernel@lists.infradead.org; Tue, 05 Oct 2021 05:40:54 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A60A6124F;
- Tue,  5 Oct 2021 05:40:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1633412452;
- bh=w5ucb4+0Z/Zj+8BnKuW+MTsTn0BjzDzqBW39H/ChTqA=;
- h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
- b=iRNrQdxr7tHjn+h9xtVu7o4j9nAsIqmagzTGU/kESiPKuUzrymvzttyL4u2ZrnGu3
- IEiF846SjAt7jO7Zl4sfWp97hfn6J45HF3om1o3tZj+/uSVg08V3rrqb8V2j7t4Cs+
- VL2qUIIRwjm92d2zJMwDkDcFV/DygcUBYeSHTzOzkmbxUE+pWVYW+4ijM4qDSZeGuR
- rQyid+YuIFSXyB+E3rdcvqN9vxgrOYnC8ZeKAcjP6iEsLM3jlcdEu6PBdPQZ93BmcP
- dM8ygvFM+pFbIXqzrmKEtT3YYTIsYEgB6Q6bpbEsP2G/0cGE/3Y85V3vEgj7Mf2aCF
- DRKzCOl17j7dA==
-Date: Tue, 5 Oct 2021 13:40:46 +0800
-From: Shawn Guo <shawnguo@kernel.org>
-To: Andreas Kemnade <andreas@kemnade.info>
+	by mail.kernel.org (Postfix) with ESMTPS id CACD360E98;
+	Tue,  5 Oct 2021 06:04:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CACD360E98
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ziswiler.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=ziswiler.com
+Received: from toolbox.soleil.gust ([63.147.84.106]) by mrelay.perfora.net
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M3i1X-1mokrY1IIb-00rHkS;
+ Tue, 05 Oct 2021 08:03:45 +0200
+From: Marcel Ziswiler <marcel@ziswiler.com>
+To: devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
- s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
- linux-imx@nxp.com, krzk@kernel.org, leoyang.li@nxp.com,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 0/4] ARM: dts: add E70K02 based eBook readers
-Message-ID: <20211005054037.GL20743@dragon>
-References: <20210924085832.2560317-1-andreas@kemnade.info>
+Cc: Andrew Lunn <andrew@lunn.ch>,
+	Marcel Ziswiler <marcel@ziswiler.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Olof Johansson <olof@lixom.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Vivien Didelot <vivien.didelot@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	soc@kernel.org
+Subject: [PATCH v1 0/4] ARM: prepare and add netgear gs110emx support
+Date: Tue,  5 Oct 2021 08:03:30 +0200
+Message-Id: <20211005060334.203818-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210924085832.2560317-1-andreas@kemnade.info>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211004_224053_365138_9F0B18BE 
-X-CRM114-Status: GOOD (  12.36  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211005054046.2t6dHM4VnIrdCs9C6SbmnrXjEp3i0RKppZM7q8WDvwI@z>
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:PHZoUWbg+wewrRDzZRFpkPO+la0hiffCSnS48JQgyvbfQBxdxal
+ p+9TtNNMHp6vTPS36lRHMte5osoJBw7cEr1nEdexu0OX0tNpeD6ibRG9wpuBBgsqeWfPegL
+ MaLNPyzVvZWN62Bkio9WP8W7UC2dkVa2lVjoJb1SGXRCw6EDoZhTmVajRsiqlzUfMx3MIbx
+ Wp4tj2rNCuMDsevU7xfkA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TCXgmKTrsOg=:HkEzz4khVLTBJfI+EmcSJC
+ F+3Qrah5ofmBt0yP04evSgdAMrpyM8V92TSqYpLAwgZSiDoB1+TcuZIle0Ru2fPvv5CAtP86D
+ lVxEALw7xkq+Krc2Mad6iB77RQq3XWSK9V/VhS81535F1B5NeSZYQzKhDhjRcdfJcFuLhsR2/
+ UwShkj7SFm5NQ40TQQ6m9zMOBgESjwnoCqi0N2LRRMIy7uOh6vkSCenMZAQo3OC9Co7st0Jk4
+ hZk8LSqV8eHciMyZLFEdWGBC+or5SnT5yY0GV6jjFdnWmxetB27Ckvp5FCaI6Ts0PxlXiM/hw
+ +pjxYYS7ii1E2NSrNS8SgkUdI9vteezup2Zymc4X4YU8z7WiYsHtyq1XMMi/HgZ1qjX72xoUh
+ U3lFkmUjZVqqeJf9z+GeE1YptiC+3/RhQsVfQLc3cSgz/ASqmQBnWt5g1P4ROcQ5JbSUn+jMQ
+ KplXkfwF52lfBP1B3QrDIgt28Vs0lofsXVrWn4yHPhPqP1pL7/LOO85p0K+7jqLiCJkzeAUr3
+ PRs1mgcvgjxwEw85o8HkfhnsRKUpz5yuSgIJ2DMn+0Y7kFgetLbiEyFI4xWl1QlIbznjpxoMp
+ t/wJC8HUgKS/9OrSz1q24iJNQ21L5goMV3l30P78pTGmlPoS/DLhJfrHMBRv6OJS8xK2uLCPM
+ 2ows0/TnholAQAGpXRjZudYGBFAulan4TgwHprS1Es2YJqPCdfPEOpyPzpaJVu2D/HqKOgA6q
+ bNsfjuv7yuEeT8AaEK9Ea9SFc9ic3FyvlRAkqg==
 
-On Fri, Sep 24, 2021 at 10:58:28AM +0200, Andreas Kemnade wrote:
-> Add devicetrees for E70K02 based ebook readers. 
-> Name on mainboard is: 37NB-E70K0M+6A3
-> Serials start with: E70K02 (a number also seen in vendor kernel
-> sources).
-> 
-> These boards are found in the Kobo Libra H2O with an i.MX6SLL and
-> in the Tolino Vision 5 with an i.MX6SL.
-> 
-> Work is based on code from the vendor kernel at
-> https://github.com/kobolabs/Kobo-Reader/blob/master/hw/imx6sll-librah2o/kernel.tar.bz2
-> but things need to be heavily reworked due to
-> incompatible bindings.
-> 
-> Changes in v2:
-> 
-> Node names style cleanup, mainly mmc stuff, s/_/-/
-> 
-> Andreas Kemnade (4):
->   dt-bindings: arm: fsl: Add E70K02 based ebook readers
->   ARM: dts: add Netronix E70K02 board common file
->   ARM: dts: imx: add devicetree for Kobo Libra H2O
->   ARM: dts: imx: add devicetree for Tolino Vision 5
 
-Applied all, thanks!
+Cleanup mvebu_v7_defconfig and then add support for the Netgear
+GS110EMX which is an 8 port Gigabit switch with two additional
+Multi-Gig ports. An 88E6390X switch sits at its core connecting to two
+88X3310P 10G PHYs while the control plane is handled by an 88F6811
+Armada 381 SoC.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+Marcel Ziswiler (4):
+  dt-bindings: net: dsa: marvell: fix compatible in example
+  ARM: mvebu_v7_defconfig: enable mtd physmap
+  ARM: mvebu_v7_defconfig: rebuild default configuration
+  ARM: dts: mvebu: add device tree for netgear gs110emx switch
+
+ .../devicetree/bindings/net/dsa/marvell.txt   |   2 +-
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/armada-381-netgear-gs110emx.dts  | 293 ++++++++++++++++++
+ arch/arm/configs/mvebu_v7_defconfig           |  18 +-
+ 4 files changed, 303 insertions(+), 11 deletions(-)
+ create mode 100644 arch/arm/boot/dts/armada-381-netgear-gs110emx.dts
+
+-- 
+2.26.2
+
