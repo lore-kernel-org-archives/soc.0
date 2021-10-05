@@ -1,66 +1,64 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CB4AC41535
-	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 13:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7222C4332F
+	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 13:54:26 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 929126197A; Tue,  5 Oct 2021 13:50:09 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 7B04C61872;
-	Tue,  5 Oct 2021 13:50:09 +0000 (UTC)
+	id BE2366120D; Tue,  5 Oct 2021 13:54:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 26EEE6023D;
+	Tue,  5 Oct 2021 13:54:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1633441809;
-	bh=+WNJMVC6B3+832lZVIXNon12NMdnMugyI8DkalKgJwA=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=WiklXPIkO1ZkWU5yzmwPRnm2nTKc8o8Vdt+Kb7yfZLQJDEMTd/HIvj3x04R7K2Xdj
-	 l2Q2zjBTsCq9k/M9uBKiKK2InfvW/KEJlzEKMh+S3QL9iyQPObrf3ZUgk2HtqE46hL
-	 pSK2m9SUcJfEgxLuKpBwG7DUvbNY26Me99wrP/d/aMPw21op7TRAl6Hco5fWpJWuq7
-	 usBnRI4JoN1yuLF9kg+0pXVHNJDuA/yTeipQvQXfJKPfF0whV5dMvoG13Raq8ukIwN
-	 xdfjcQv/r35NlHjEJ/pFQByZPW2CCs+Ve1fr7LgO4YsnSJn3INZYiqXBOAvDbjde6z
-	 fzz/IiGxcOPiw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 7276660A1B;
-	Tue,  5 Oct 2021 13:50:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] [RESEND] ARM: sharpsl_param: work around -Wstringop-overread
- warning
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <163344180946.2242.16359198571616577949.git-patchwork-notify@kernel.org>
-Date: Tue, 05 Oct 2021 13:50:09 +0000
-References: <20210927145332.2784005-1-arnd@kernel.org>
-In-Reply-To: <20210927145332.2784005-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
+	s=k20201202; t=1633442066;
+	bh=QRyqinl4PMVbQ7Hm9SGv+YX+OH4lBkNZw8ZzZOdgDPo=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=W/pPxagP1GNPp88nx9DJ978vOtGm3uQGgepzF/mt3AbpA0quFJS5lv91PfT6ZVnpM
+	 ISlBXjPnNrZkMcpR2JkfNdamOk44ZD5OhbF6wNf6ueVr8FZhMCreoZcXuFJfhvRNJW
+	 cFfBQMrGKgEQ1XmqNJRbSb+/ENzgn764vR1V7bVs3kohr/3+WDKZJXWmRRfbMGY66/
+	 mcq3qxlRsVWjsrXcLwdNiVyfGuHHbCP4JBWqOhpclnkObHeT4gJaLTnA04hzO/nVfN
+	 myjWaE2AaBe/5hOj7z59KjcGC6p6x5bOO4TgAF7izWVq+MlZSZkp9aqiOsfkjjQ9tC
+	 usOCqmQBpBIag==
+From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+To: Bjorn Andersson <bjorn.andersson@linaro.org>,
+	soc@kernel.org,
+	arm@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Stephen Boyd <swboyd@chromium.org>,
+	linux-arm-msm@vger.kernel.org,
+	Amit Pundir <amit.pundir@linaro.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Olof Johansson <olof@lixom.net>,
+	linux-arm-kernel@lists.infradead.org,
+	Shawn Guo <shawn.guo@linaro.org>,
+	Andy Gross <agross@kernel.org>
+Subject: Re: [GIT PULL] Qualcomm ARM64 DTS fixes for 5.15
+Date: Tue,  5 Oct 2021 15:54:21 +0200
+Message-Id: <163344201899.2721334.537065914671320241.b4-ty@arndb.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210930025509.1091-1-bjorn.andersson@linaro.org>
+References: <20210930025509.1091-1-bjorn.andersson@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hello:
+From: Arnd Bergmann <arnd@arndb.de>
 
-This patch was applied to soc/soc.git (refs/heads/arm/fixes):
-
-On Mon, 27 Sep 2021 16:53:25 +0200 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Wed, 29 Sep 2021 21:55:09 -0500, Bjorn Andersson wrote:
+> The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 > 
-> gcc warns that accessing a pointer based on a numeric constant may
-> be an offset into a NULL pointer, and would therefore has zero
-> accessible bytes:
+>   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 > 
-> arch/arm/common/sharpsl_param.c: In function ‘sharpsl_save_param’:
-> arch/arm/common/sharpsl_param.c:43:9: error: ‘memcpy’ reading 64 bytes from a region of size 0 [-Werror=stringop-overread]
->    43 |         memcpy(&sharpsl_param, param_start(PARAM_BASE), sizeof(struct sharpsl_param_info));
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-5.15
 > 
 > [...]
 
-Here is the summary with links:
-  - [RESEND] ARM: sharpsl_param: work around -Wstringop-overread warning
-    https://git.kernel.org/soc/soc/c/34186b48d29b
+Merged into arm/fixes, thanks!
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+merge commit: 04e0ae8d2b96a3d992e1024b215071c61e45512f
 
-
+       Arnd
