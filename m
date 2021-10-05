@@ -1,105 +1,108 @@
-Return-Path: <SRS0=xXpd=OZ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=pPb6=OZ=semihalf.com=pan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B77CDC4332F
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  5 Oct 2021 13:57:48 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 375DBC433EF
+	for <soc@archiver.kernel.org>; Tue,  5 Oct 2021 14:38:10 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 17724613D5; Tue,  5 Oct 2021 14:38:10 +0000 (UTC)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 89C0C610EA
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  5 Oct 2021 13:57:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 89C0C610EA
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=KXVh+iX0/p6aGlaKDG6Y40Kg/cm24dw+8G0ZamoCIJ0=; b=jmcO2NaVIP2O9V
-	Q2FYJbOT5cDnitN0O16r5vWUpy73zQmypBZVczGPCGF3P+ej7GJLQ1P5uhqFI/7uL/ZIsC4kE46eE
-	YtUrrKBN7zmffej7qaqLsdpG/Ainrk9VbQsyfLt6gYbcRCLTKG2IT1x68HglT8/kC71XSnZyoNISB
-	nWMzWnBwHlyEHZp2pXv49K6VB4mRGtLi9b6xu3QKDpaJWCgWxJxv6wF27F7GsVcU3oX5e6krBB6Op
-	rU3HkwdZ3etXSuxkw7qg9X1/JS91c9vlR2oHTEYzyDWKqn/EL0tziB5OJq4WuZmNwkYvO/4BFTEJr
-	+dWCKMYhHC2sVfzk+XjQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mXkvE-00AhsJ-CI; Tue, 05 Oct 2021 13:55:57 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mXkud-00AhNA-Ss
- for linux-arm-kernel@lists.infradead.org; Tue, 05 Oct 2021 13:55:21 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7B2EC6023D;
- Tue,  5 Oct 2021 13:55:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1633442119;
- bh=dL0FGtRiz8iLH2Xof9EcpJ2EZOleGZqnCdSdnFG41iQ=;
- h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=C3BDtsZWTaDWdli7a7B7xBL5Y0ffMsLsY7u4vu09KwS28DW95gFJYH8e0vUtAZSSr
- ryzl/Z0P4H3gKuBVVmg935RklhV7uQb7d5CfGuL0biebgmdchRNfOnQM97/gkTdx2A
- tiDlUeygQQwx4xwiVmtUkjlgseFo/uPuzz8Oe0S51uwRBmyOVolSMCBGtHmbSXhamJ
- IXQc3LdGlfAPKbSiyad82jsBhQeh0cNQjniWM3ZH96JIq5l/GM/z/TAYwqbRWeD2OA
- iP6l7xUrhJAAGtXX1slCbTnahzh/Wz4ukK/JXJV0TrjGAv5tiQP83wvMko9G6HeRWW
- k2szR2q+xWpdQ==
-From: Arnd Bergmann <arnd@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id ED79F61372
+	for <soc@kernel.org>; Tue,  5 Oct 2021 14:38:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ED79F61372
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=semihalf.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=semihalf.com
+Received: by mail-lf1-f45.google.com with SMTP id i4so88025899lfv.4
+        for <soc@kernel.org>; Tue, 05 Oct 2021 07:38:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=msJiBzyUeKV8FpoS/TYzjgGtnwD3uWYer6ogIVTmynQ=;
+        b=A9uNkZL1Zeuo7Tspc6oQR2fBKHxSVRHx+WgNkJwJfw83LPMlNQQjYSsYKu6+1NGJ8O
+         NB2CeH19fARPh9GsfBeEH/spe+gxRk3cY9v2/C+vlB4S4nEvS1XhNbMTMskxuATQrB5C
+         U07yEvNOLUjOYFkrynNrUwD0iRyAOydH56W+ZvnHPe960sqryoPlAH3D81I71O4iGbOh
+         c/8EkoNjOn1xAsDtaWTwSoxm9ya4RsuhlfokputHxqq1Aef21AepJiG+xFCCblgHEZ4C
+         3Bv1uCy7CsYQNmCRngk4/PcoMYBF42wAZRtgAJbaRhxNsc42FMIM5ALwp/+8UsEtUZRA
+         2/yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=msJiBzyUeKV8FpoS/TYzjgGtnwD3uWYer6ogIVTmynQ=;
+        b=BbgGR7jPrJTWxKTML7STzDCHLoacaiYuSkYLsADhZoBzW5D+ClxzO8KnN/BaWAr106
+         5Wh8TKzaYWDzML+bgWwPaJ83HHqvB/KVJ+WVsTeHXoAOJFeDAbF6dRNKoTGOKzzA3o4s
+         e2nH+naa2x7I0O+mdiSWkmkkx2slhN3FLz9lVX268V4H7/Jby9YmKpu4PxzqK6tCOw4N
+         fhCDWDzvLiRQw1cLr40ORh/DvVjUgwJmAmtbbQsLxGudSoSG3fhr8BSDU1DabSO/Dp0s
+         JwwYN/wYkG7WXFDPqPuDxNyYaUisq5kMZBRuxo9iMD37NSUryARWiL7xdkstIxmLYHwv
+         fTPg==
+X-Gm-Message-State: AOAM530Nh4ODMlMR7Iz7/XiGeIFj8agu2+mesBMDicloMkcuOTT1xuqA
+	0d7o5UhdQnjz5rsFUWAPsPPNPA==
+X-Google-Smtp-Source: ABdhPJwjHFt3CH4sjkux3RohVRrB59RZWeObwoAjO4ak37gG3wQ/jeQOUiIaNRGdJyngodBj+RX0UQ==
+X-Received: by 2002:a05:6512:3501:: with SMTP id h1mr3770923lfs.446.1633444688364;
+        Tue, 05 Oct 2021 07:38:08 -0700 (PDT)
+Received: from grasshopper.googchameleon.semihalf.net ([83.142.187.85])
+        by smtp.gmail.com with ESMTPSA id u25sm1973835lfc.176.2021.10.05.07.38.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Oct 2021 07:38:08 -0700 (PDT)
+From: =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org,
- Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, David Heidelberg <david@ixit.cz>,
- linux-arm-kernel@lists.infradead.org, Olof Johansson <olof@lixom.net>,
- Andy Gross <agross@kernel.org>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- Kevin Hilman <khilman@baylibre.com>, linux-arm-msm@vger.kernel.org
-Subject: Re: [GIT PULL] Qualcomm DTS fixes for v5.15
-Date: Tue,  5 Oct 2021 15:55:09 +0200
-Message-ID: <163344208489.2721567.9809348887551925791.b4-ty@arndb.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210930025526.1146-1-bjorn.andersson@linaro.org>
-References: <20210930025526.1146-1-bjorn.andersson@linaro.org>
+To: jarkko.nikula@linux.intel.com,
+	andriy.shevchenko@linux.intel.com,
+	mika.westerberg@linux.intel.com,
+	robh+dt@kernel.org,
+	p.zabel@pengutronix.de,
+	arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org,
+	dinguyen@kernel.org,
+	p.yadav@ti.com,
+	Tudor.Ambarus@microchip.com
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	alexandre.belloni@bootlin.com,
+	sre@kernel.org,
+	thunder.leizhen@huawei.com,
+	Jonathan.Cameron@huawei.com,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	ka@semihalf.com,
+	tn@semihalf.com,
+	jam@semihalf.com,
+	amstan@google.com,
+	=?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
+Subject: [PATCH v2 0/4] Add support for the Mercury+ AA1 module
+Date: Tue,  5 Oct 2021 16:37:44 +0200
+Message-Id: <20211005143748.2471647-1-pan@semihalf.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211005_065519_992510_41FACD97 
-X-CRM114-Status: UNSURE (   6.70  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211005135509.KkOxATJahhLiL01atDNZfFynGFUkt8JpBi3V4pBo0eE@z>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+The following patches add support for the Mercury+ AA1 with an
+Arria 10 SoCFPGA.
 
-On Wed, 29 Sep 2021 21:55:26 -0500, Bjorn Andersson wrote:
-> The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
-> 
->   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-fixes-for-5.15
-> 
-> [...]
+This version differs from the previous one by removing the spi
+flash node, renaming the memory and mdio nodes, adding gpio nodes,
+and adding a bus number property to Synopsys DesignWare i2c
+controller node.
 
-Merged into arm/fixes, thanks!
+Paweł Anikiel (4):
+  i2c: check bus number property in DesignWare I2C Controller
+  dt-bindings: add bus number property
+  reset: socfpga: add empty driver allowing consumers to probe
+  dts: socfpga: Add Mercury+ AA1 devicetree
 
-merge commit: c147392b652b6af7d96f1f844a4938a6bb4921b8
+ .../bindings/i2c/snps,designware-i2c.yaml     |  5 +
+ arch/arm/boot/dts/Makefile                    |  1 +
+ .../boot/dts/socfpga_arria10_mercury_aa1.dts  | 99 +++++++++++++++++++
+ drivers/i2c/busses/i2c-designware-platdrv.c   |  3 +-
+ drivers/reset/reset-socfpga.c                 | 26 +++++
+ 5 files changed, 133 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dts
 
-       Arnd
+-- 
+2.25.1
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
