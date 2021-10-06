@@ -1,143 +1,116 @@
-Return-Path: <SRS0=GOBS=O2=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=2m49=O2=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F466C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  6 Oct 2021 08:31:19 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0680CC433F5
+	for <soc@archiver.kernel.org>; Wed,  6 Oct 2021 09:41:37 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id D8C04610A3; Wed,  6 Oct 2021 09:41:36 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6F2F3610FB
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  6 Oct 2021 08:31:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6F2F3610FB
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=semihalf.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=JjqPXuFQc1K02PUpRWF93g0LAxvV35iyrYivKT5m1+s=; b=0sfIlHuuWUeHhg
-	rQWDc6aecU0QKJvrv+jZiXkJEV0e33hVz+LjESbSqRQ9JlGdgrMfPi7b8lSITqfOOEdhC6brkl0KL
-	ewl41uHbTe5CfTe3Uvu9QVkhHkd5WZk6TmTn4IhGSImRtU5s/jn4z1i2lWLatqZEpSd1MGdLAJYDv
-	QhBg6zSm+wqKkB3CThqkv76cTUApgp1KvX6i65qF70583Jeu0wQdzHrNQvvYCec+/iKvZaslemcJv
-	MRjr3IY0GLrw8DlcmECIgmekAluaM1byml06eeyDCdn6kcxh7JTtzqrIHfp7H0ctPoa06B6WwvK5o
-	fBd3qo/LAaEPfmsAJUHg==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mY2Ii-00DTHP-Pj; Wed, 06 Oct 2021 08:29:20 +0000
-Received: from mail-lf1-x132.google.com ([2a00:1450:4864:20::132])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mY2Ie-00DTGg-PR
- for linux-arm-kernel@lists.infradead.org; Wed, 06 Oct 2021 08:29:18 +0000
-Received: by mail-lf1-x132.google.com with SMTP id i4so7171914lfv.4
- for <linux-arm-kernel@lists.infradead.org>;
- Wed, 06 Oct 2021 01:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=semihalf-com.20210112.gappssmtp.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=Cs32oKjPY880HhRcpboK0pON5dPQmpZCrv3AmYoudi4=;
- b=Y7jduTBLBpq47YNLGK+8Fs1peBjDqtnqaIvJ71rnYHl2LKlBGz14YVXsbSX59h/7Y1
- Mpy86aVzDlMC7vyhQDY0ggy1MsBXlPo/Ri//HkNUdIFfOGLV40yK1Trpb03j940CkDcv
- aAi/bqPh8x4BcyfK9LhFAKp78v/GNsJe/AjNjzTLXl5ez3JblOovjZ2YaxpfDaASzd7K
- kimrxEauFPfupzQ6Nknzw562FDT0tk6D8TVLUU5SA23Moj0PXlw0yo3uP2eWMEzUUkHm
- GFjDlEiJHZj48oW2v7cLjvTKto/78fzY5Td0AE8ohTmVRtoxxTZux0z8S0solecVTL/f
- UYZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=Cs32oKjPY880HhRcpboK0pON5dPQmpZCrv3AmYoudi4=;
- b=26tH3bSQQgGVoupB8wckogfUJlBN2yVyxQasw2kSHfebMhQSLMg6jjdOBAKiXdzVgT
- gUbJzLkiL8rXhm5ApbG38zRVOsH6lVaYK+0VHHtwCyDRkAgxXT96JgKeR4k8j2keG4J1
- L/l+rm98e+/P5Ynxq/NGiXjAXwgmKCrizADhKrLGtbujQwYOBbph3ZWQ+bKFrcTF0+5q
- tRdwXa0WUTt7tlgpRoFp9UZczKxHAEs9u0lxzbmJU5WbBc8i6z1BvRvGVpGJViemlLi2
- YDjy4mKWO8wPniOkh4qz9ILMNLUxm4/XKQeSJUV96DNa+w2BIsi8CPOT3haaAHfTZqFm
- A4fw==
-X-Gm-Message-State: AOAM533S8y8BxFkY5Ml+h+zjUebiy+R2p5cCLdAGwjSIwUgNuYP8AImf
- 4ILFiGJPzRyN7Ct52o1/id4HWRPcvtCfn+G3lTueNw==
-X-Google-Smtp-Source: ABdhPJwgbKRqUWndz/R/ob0yYOvX+zmWUkoW3ELAssaKrTJCToZ4rmrps0L8dLDx2abTjB7pRmhWDo7HUxDlivZuBuU=
-X-Received: by 2002:a05:6512:21cb:: with SMTP id
- d11mr8276307lft.579.1633508954553; 
- Wed, 06 Oct 2021 01:29:14 -0700 (PDT)
+	by mail.kernel.org (Postfix) with ESMTPS id 193B361042;
+	Wed,  6 Oct 2021 09:41:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 193B361042
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N9cDF-1msizL2EJp-015aWz; Wed, 06 Oct 2021 11:41:34 +0200
+Received: by mail-wr1-f47.google.com with SMTP id e12so6926803wra.4;
+        Wed, 06 Oct 2021 02:41:34 -0700 (PDT)
+X-Gm-Message-State: AOAM533//ovHCW9lee8yXEvURbybsEFrLEcnRADU6L3fwLXRH9AT1wfS
+	YPXGIeSc4WmARxp0Azgi9IubOUS72Xk2vLNypFQ=
+X-Google-Smtp-Source: ABdhPJzuUsHOXGfVTMW+P7qssYpQP5oaRsPeV3BXJdI5XYLdC7KWD9rwYpR6EFP3ZXNbb0wReeC/Muz0a9i/u3qzDE0=
+X-Received: by 2002:adf:ab46:: with SMTP id r6mr4566458wrc.71.1633513294130;
+ Wed, 06 Oct 2021 02:41:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211005143748.2471647-1-pan@semihalf.com>
- <20211005143748.2471647-3-pan@semihalf.com>
+References: <20211005143748.2471647-1-pan@semihalf.com> <20211005143748.2471647-3-pan@semihalf.com>
  <CAK8P3a1kj1G3TkM7bK3ckXoG8_PTLURAcpDRmDxdnjutEPMsug@mail.gmail.com>
- <YVx9IMk7cJSCK79/@piout.net>
-In-Reply-To: <YVx9IMk7cJSCK79/@piout.net>
-From: =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
-Date: Wed, 6 Oct 2021 11:29:03 +0200
-Message-ID: <CAF9_jYT7_9Oz-HFSy5z7uiieoHtujUD_En9MTi68PxGb7gxphw@mail.gmail.com>
+ <YVx9IMk7cJSCK79/@piout.net> <CAF9_jYT6mbk6dr8=ZYZ8B=gxnuHas7QBfDfuoTJnMzSKZt=WGw@mail.gmail.com>
+In-Reply-To: <CAF9_jYT6mbk6dr8=ZYZ8B=gxnuHas7QBfDfuoTJnMzSKZt=WGw@mail.gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Wed, 6 Oct 2021 11:41:17 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0f=fahxax1jOz32uLzitV_PRPoHAfrQLx_qccmh_gcXg@mail.gmail.com>
+Message-ID: <CAK8P3a0f=fahxax1jOz32uLzitV_PRPoHAfrQLx_qccmh_gcXg@mail.gmail.com>
 Subject: Re: [PATCH v2 2/4] dt-bindings: add bus number property
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, jarkko.nikula@linux.intel.com, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Rob Herring <robh+dt@kernel.org>, 
- Philipp Zabel <p.zabel@pengutronix.de>, Olof Johansson <olof@lixom.net>,
- SoC Team <soc@kernel.org>, 
- Dinh Nguyen <dinguyen@kernel.org>, Pratyush Yadav <p.yadav@ti.com>, 
- Tudor Ambarus <Tudor.Ambarus@microchip.com>,
- Linux I2C <linux-i2c@vger.kernel.org>, 
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Sebastian Reichel <sre@kernel.org>, 
- "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
- DTML <devicetree@vger.kernel.org>, 
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Konrad Adamczyk <ka@semihalf.com>, 
- Tomasz Nowicki <tn@semihalf.com>, Jacek Majkowski <jam@semihalf.com>,
- Alexandru Stan <amstan@google.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211006_012916_849720_B2AFDE53 
-X-CRM114-Status: GOOD (  20.55  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211006092903.A-w9OTOPZGWXPAJIqh-5D8g9oKE98CQ5F_LqTxvtFXQ@z>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, 
+	jarkko.nikula@linux.intel.com, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, Rob Herring <robh+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Pratyush Yadav <p.yadav@ti.com>, 
+	Tudor Ambarus <Tudor.Ambarus@microchip.com>, Linux I2C <linux-i2c@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	"Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+	DTML <devicetree@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Konrad Adamczyk <ka@semihalf.com>, 
+	Tomasz Nowicki <tn@semihalf.com>, Jacek Majkowski <jam@semihalf.com>, Alexandru Stan <amstan@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:CiAyugX5ATgCsZ3P3EPYe1KJZP+Ringeh//xIkN/67jZKeZmt7c
+ M5CMrv+x4xEHzptRCGYVLzjUMndnQhEm0d4TUOOCZ8SdIT/9ahmTz5au4K8TLlXkmzsvSQd
+ OuZ3151YXAIoXr9RPcflyNPkUUuBhghOD5G6hd/Pp5mLmVLwrBXNhtFo5tQWgB0b3m/xs8L
+ BVr1k4dVjXz41fcTKR7pQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:w5uT/upH+7o=:5ThFTpQ+FiuzNmec+CWh/H
+ 0o2BqAarvxpghYCR57Z0ObXDe+qoIySJhHFqp/xFEQYcBDi/1knhGDaid49ihdZ+caz4xhvbB
+ 8Akd+BHQ0V2GkAQ4jwFVhc9ZwGCLhwgsNb/Fg7MyTLMoC5TMxtI6UanM8aPcY56qX8xAZRzMl
+ k6vl2VsHSsfqo3qMtPk+F0RVcDjMf1oMX7BN3zs0jZ1DX0Bv/1o3yATWw3QZ251+93bT2nSiJ
+ IsZZRlkRlCnEBTkiD3us7yWBygLCSQIzPrKJD+tlm7Lxk6X0alOsAinPY+AGUsto3xWXTxzLw
+ D+X09cpORGhpVsMl5C7/CLS9xHPa1ji8X1AHr6VfSlYbFgXXlmouWttYbCQN6lv8UEQ8/q/0u
+ 1Yr19ZPLmb2Fe+Jnjvs1OH2uufjbgCnsFP7KMEciAv28RXJNQef47DWsck8pEyFTfRbSHVfe+
+ W02WJtdUQq203FEmKAJraeCJYsZdlsKezDk2JvWalcmfSEI5ehn2FpR/xrMih6ueg2MfNcgqL
+ Z38m+bbVZab5DWkMCrOd/NpLyfKdMi0HjN3pB/OBU4V0a8LuoZSO0his4ru0hr/koe8LbJmUQ
+ KzpvLDmiL61iqfOOkd1gTQb6RzBZd+W4/mgSNnRdsOR2St7peFaLxWtprOJiTgmB1DkyK9GNd
+ KA+2afYJgDBbZo9UPOCcPrg55GsM3Lh4iUeGAOlm2oeOG+43yUfTXSoIerKqIvgfndGA38Bf5
+ bZue8Hc75sR/5K3XftjiURRfIftl/mAPzkbA4q3kmBebHAhKTJE0odeRp5OHKCpMkkBgYCLjy
+ ESmSi1obWkezETngHHi+HWL0ZgUXYjMuCzJPkSWpwERG7JLryWTY2pwBnjnzj0k0JZ1ZYTufO
+ FAd0U89cjz+hFKWSNfwA==
 
-T24gVHVlLCBPY3QgNSwgMjAyMSBhdCA2OjI4IFBNIEFsZXhhbmRyZSBCZWxsb25pCjxhbGV4YW5k
-cmUuYmVsbG9uaUBib290bGluLmNvbT4gd3JvdGU6Cj4KPiBPbiAwNS8xMC8yMDIxIDE4OjIyOjEy
-KzAyMDAsIEFybmQgQmVyZ21hbm4gd3JvdGU6Cj4gPiBPbiBUdWUsIE9jdCA1LCAyMDIxIGF0IDQ6
-MzcgUE0gUGF3ZcWCIEFuaWtpZWwgPHBhbkBzZW1paGFsZi5jb20+IHdyb3RlOgo+ID4gPgo+ID4g
-PiBPbiBTb0NGUEdBIHN5c3RlbXMsIGl0J3MgZGVzaXJlYWJsZSB0byBoYXZlIGZpeGVkIG51bWJl
-cmluZyBmb3IKPiA+ID4gaTJjIGJ1c3Nlcywgd2hpbGUgYmVpbmcgYWJsZSB0byBlbmFibGUvZGlz
-YWJsZSB0aGVtIChlLmcuIGhhdmUgaTJjMQo+ID4gPiBiZSBtYXBwZWQgdG8gL2Rldi9pMmMtMSwg
-ZXZlbiB0aG91Z2ggaTJjMCBpcyBkaXNhYmxlZCkuIFRoaXMgY2FuIGFsc28KPiA+ID4gYmUgYWNo
-aWV2ZWQgdXNpbmcgZGV2aWNldHJlZSBhbGlhc2VzIChzZWUgaTJjX2FkZF9hZGFwdGVyKS4gSG93
-ZXZlciwKPiA+ID4gaGF2aW5nIHRoZSBkcml2ZXIgYmUgc2VsZi1jb250YWluZWQgd2l0aG91dCBy
-ZWx5aW5nIG9uIGFsaWFzZXMgaXMgbW9yZQo+ID4gPiByb2J1c3QuCj4gPiA+Cj4gPiA+IFNpZ25l
-ZC1vZmYtYnk6IFBhd2XFgiBBbmlraWVsIDxwYW5Ac2VtaWhhbGYuY29tPgo+ID4KPiA+IEkgZG9u
-J3Qgc2VlIGhvdyBhZGRpbmcgYSBub25zdGFuZGFyZCBwcm9wZXJ0eSBpbiBvbmUgb2YgdGhlIGky
-YyBidXMKPiA+IGRyaXZlcnMgaGVscHMgYXQgYWxsLiBIb3cgZG8geW91IGV4cGVjdCB0aGlzIHRv
-IHdvcmsgd2hlbiB0aGVyZSBhcmUKPiA+IG11bHRpcGxlIGkyYyBjb250cm9sbGVycyBpbiB0aGUg
-c3lzdGVtIHVzaW5nIGRpZmZlcmVudCBkcml2ZXJzPyBXaGF0Cj4gPiBzaG91bGQgaGFwcGVuIGlm
-IGJvdGggYW4gYWxpYXMgYW5kIHRoZSBidXNubyBwcm9wZXJ0eSBhcmUgc2V0Pwo+ID4KPgo+IFdo
-YXQgaGFwcGVucyB3aGVuIHR3byBub2RlcyBoYXZlIHRoZSBzYW1lIGJ1c25vIHByb3BlcnR5IGJl
-Y2F1c2UgZS5nLgo+IG9uZSBpcyBpbiBhIGR0c2kgYW5kIHRoZSBvdGhlciBvbmUgaXMgaW4gYSBk
-dHM/Cj4KCklmIGJ1c25vIGlzIHNldCwgdGhlIGFsaWFzIGlzIGlnbm9yZWQgKHRoZSBjb2RlIHRo
-YXQgY2hlY2tzIGFsaWFzZXMKaXMgbmV2ZXIgcmVhY2hlZCkuIElmIHR3byBub2RlcyBoYXZlIHRo
-ZSBzYW1lIGJ1c25vIHByb3BlcnR5LCB3ZSBnZXQKYSBXQVJOIGluIGRyaXZlcnMvaTJjL2kyYy1j
-b3JlLWJhc2UuYzoxNjM3LCBhbmQgb25seSBvbiBvZiB0aGVtCmdldHMgYXR0YWNoZWQuCgpXaGF0
-IGlzIGEgYmV0dGVyIHdheSBvZiBkb2luZyB0aGlzIHRoZW4/IElzIGFkZGluZyBhbGlhc2VzIHRv
-IHRoZQpkZXZpY2V0cmVlIGxpa2UgdGhpcyBva2F5PwoKYWxpYXNlcyB7Ci4uLgppMmMwID0gJmky
-YzA7CmkyYzEgPSAmaTJjMTsKfTsKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmxpbnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0CmxpbnV4LWFybS1rZXJu
-ZWxAbGlzdHMuaW5mcmFkZWFkLm9yZwpodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFu
-L2xpc3RpbmZvL2xpbnV4LWFybS1rZXJuZWwK
+On Wed, Oct 6, 2021 at 11:21 AM Pawe=C5=82 Anikiel <pan@semihalf.com> wrote=
+:
+> On Tue, Oct 5, 2021 at 6:28 PM Alexandre Belloni <alexandre.belloni@bootl=
+in.com> wrote:
+>>
+>> What happens when two nodes have the same busno property because e.g.
+>> one is in a dtsi and the other one is in a dts?
+>
+>
+> If busno is set, the alias is ignored (the code that checks aliases
+> is never reached). If two nodes have the same busno property, we get
+> a WARN in drivers/i2c/i2c-core-base.c:1637, and only on of them
+> gets attached.
+>
+> What is a better way of doing this then? Is adding aliases to the
+> devicetree like this okay?
+>
+> aliases {
+> ...
+> i2c0 =3D &i2c0;
+> i2c1 =3D &i2c1;
+> };
+
+Yes, this is the normal way to do it.
+
+The way I tend to think of it is that the soc.dtsi file contains a descript=
+ion
+of hardware that exists inside of the chip and is as much as possible
+detached from how an OS uses it or what is connected to it on the
+outside. You then have the board.dts file that contains everything specific
+to the board.
+
+The /chosen and /aliases nodes in turn are specific to the individual
+machine, based on local configuration, installed OS and boot loader,
+and how the devices on the board are used.
+
+We tend to have the /aliases node populated with a sensible configuration
+of how we expect them to be used for a given board. So if your machine
+connects two of the internal i2c buses on the SoC, it makes sense to assign
+them the aliases i2c0 and i2c1. On the other hand, if one of them is
+not connected anywhere, you may skip that, or if there is an additional
+i2c controller in programmable logic or behind some gpio lines, you can
+make that your i2c0 alias.
+
+      Arnd
