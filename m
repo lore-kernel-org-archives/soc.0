@@ -1,190 +1,100 @@
-Return-Path: <SRS0=FMRd=O3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=BHr2=O3=baylibre.com=narmstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDD86C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  7 Oct 2021 07:23:04 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98016C433F5
+	for <soc@archiver.kernel.org>; Thu,  7 Oct 2021 09:44:01 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 7D879611C1; Thu,  7 Oct 2021 09:44:01 +0000 (UTC)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 819A561139
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  7 Oct 2021 07:23:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 819A561139
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=xilinx.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Subject:
-	From:CC:To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=UWKIQGcN5zYsFZuFgD1L2mvIkjm2268mAxd/wdfNBqg=; b=p3R2pjFqR4bACJ
-	ATvPDe56KbIMp9KTaIvMvHVx9CIx7+bgjS6paFkPHr5IL00VEnTsH2GeHbTqzGkZJ99d6Ppy37aui
-	BV7U9kPZsEWHXxVOiHxxfuhuXmfJgUxou+u3BPLqsvSxxBl2iBvg8JnlDsmCIJilrkg8Pe97gv9tB
-	UO3+AE1ZaLQ9a7ICd92nW1hhzfHxNUlE2hxmYzWwHLlX7JapnIwkVmEU+FQSaM8QHWsjtflWjYcun
-	UX26smdaT+4et2j5lO4I0F7/br2b060CnjJXCx9kgQFkBkVWt3c8OvAZFlipvv70UloShRb0H5Ln2
-	+bL8u6hs6znvjnhIppnQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mYNiN-00GPYC-6m; Thu, 07 Oct 2021 07:21:15 +0000
-Received: from mail-dm6nam08on2073.outbound.protection.outlook.com
- ([40.107.102.73] helo=NAM04-DM6-obe.outbound.protection.outlook.com)
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mYNiI-00GPWo-9j
- for linux-arm-kernel@lists.infradead.org; Thu, 07 Oct 2021 07:21:12 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L3Pt/ETx2GV+Fh5/CVONdu9CyahDcmsnoZFzg4MW4IGBLNcc+Nepxt2HgQMCwS51tzoNLC3C+bgT+mh+y74GsfZpYNQxie7A+qhbLnKJRB3C+MmlaB7I767Vpny/JpcYg1knWwWMQbeABEzyPzviBr0QQryH75e4X7QmIy1xcjeEHH9NskOSJ+rBeh4w+Kp51nB27ggytYAh36edUTMBAAFqdsrJTfZKCVOuxtACwSa559EzuEpEixdj0PGl1yzd5I4QiLITUnE2+s3Y9aETM1ZOw4Pcn6IOXglQOx0Uos6DMXsqecsRjSdEry1wv8qDG0NcCN96183WG2JGMQe6JA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5WkiW0ZjVAJ8YZJQgbb5KhUm4J9ADI6k8mqqV1Rxf5M=;
- b=mPze7xbVFKoRwSIlBgA2jYSvAIOJB57Q5SZAgR2COU7TbFsxXCumX1GtZ5lj4wvAfJNzu7gknfrNtK7LYF3aUVL2OPlmU/KsAubz6s8gbB1j5cf1mtWRfZtQOAkeZdnUM4JYlYs5PEiaqhP0+yx6+OhilBWAbJJaHMJf/3ZXH13GX4fg5Ob/ZokCOYK8E0DItQtBASkudDlq85Z9X/k/5J1sl3mrq1hnoRcq9ijsBML1pqdVqOJNvdhcMYWXj6bw9vjRA+hHXvv0xzsffOUqzWo5W8y0Xd1cdPi8Fa7knIWPV0Qq9TUv95MII1WFHEXwICz3JfzTWLRsDLKm1eRFpg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=lists.infradead.org
- smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
- header.from=xilinx.com; dkim=none (message not signed); arc=none
+	by mail.kernel.org (Postfix) with ESMTPS id 6480A6113E
+	for <soc@kernel.org>; Thu,  7 Oct 2021 09:44:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6480A6113E
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f54.google.com with SMTP id r10so17160113wra.12
+        for <soc@kernel.org>; Thu, 07 Oct 2021 02:44:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5WkiW0ZjVAJ8YZJQgbb5KhUm4J9ADI6k8mqqV1Rxf5M=;
- b=SUIcwwVMmAvoxE1zMArUdDW4tK3YC8kMTZ425N14o4hdEOxV9icwQNJ9miDdf/3PPh4bxzm9JbktrsW62w2TeXM4ted5l48UqXZar/cIpjJs5BKbFmummKz1OjyEbM9ExQf4UIHhjVBxAl/lvZQy4r/X3JZhNbgCynT5H24MLvI=
-Received: from DM6PR03CA0086.namprd03.prod.outlook.com (2603:10b6:5:333::19)
- by SJ0PR02MB7263.namprd02.prod.outlook.com (2603:10b6:a03:2a0::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.19; Thu, 7 Oct
- 2021 07:21:07 +0000
-Received: from DM3NAM02FT033.eop-nam02.prod.protection.outlook.com
- (2603:10b6:5:333:cafe::6c) by DM6PR03CA0086.outlook.office365.com
- (2603:10b6:5:333::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.14 via Frontend
- Transport; Thu, 7 Oct 2021 07:21:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; lists.infradead.org; dkim=none (message not signed)
- header.d=none;lists.infradead.org; dmarc=pass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT033.mail.protection.outlook.com (10.13.4.101) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4587.18 via Frontend Transport; Thu, 7 Oct 2021 07:21:06 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 7 Oct 2021 00:21:05 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 7 Oct 2021 00:21:05 -0700
-Received: from [10.254.241.49] (port=45974)
- by smtp.xilinx.com with esmtp (Exim 4.90)
- (envelope-from <michal.simek@xilinx.com>)
- id 1mYNiD-0006f2-AI; Thu, 07 Oct 2021 00:21:05 -0700
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:subject:to:cc:organization:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=QD+HD8BwN73T8hSH2EBA+YOCVTYU3XnPzy636LmBS7o=;
+        b=77LbEWi0vaKzcvkgwF/xS3QtpVUTmzCtksMCJD5VmVOdHu1Jo0ROokYFfSD1hZOlAS
+         c800Au2cPgl5dm4KUrwwIVb43QBNFa+2geFuwflK4DnSVK8l/9LB1tdR8IdqPn2mvZxj
+         PnBx7+GQtkrIbJBZNeQDrgwK9GgDWlTiT1cW/0f45/34z8iGP5JAaZK5YnYpEETxPV5C
+         0HSkn8A8powgFT8SB5yL62hrQPBvm0wP+1p53O8NaoOQgoPTyEecAMtfh4qlyszBlEgx
+         aMhvm55OPtGG4R4F2WW5mIOU/RyO60OK39mac3wbZvuaxOWuNFPv1NZcHqpLpesc/qfi
+         7fvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:organization:message-id:date
+         :user-agent:mime-version:content-language:content-transfer-encoding;
+        bh=QD+HD8BwN73T8hSH2EBA+YOCVTYU3XnPzy636LmBS7o=;
+        b=pheHF5AmHVrZ1mXRA0HNvyA8icqF7Trm4B6zNpbmAcUG8KpYrB3z7ZCzoRg2VQnD2I
+         TOvW21Y963ZdO7erj1b7QMXwx22I2FM03hmuwjyk3lqhRtGmh4pK2WHMYP8W/w6/9ofZ
+         +zXMZ3eKBskoND5MhOnO6/Si2+KuHTT1jRTO0ssYryyobvVzb+em3I2aC3wrQu90DMtb
+         EADvY3rSBcfwMluiG1J4MGq5Dx+Nlmb9jvzuX+Y1Kls0i9mQfDxa2rAaq/CVs609cm0W
+         McAUpr/gRyLPv+pRl2wsIJVDtxIAsNvx1p9ouFYLCdKR4R5HEq9uEvpKMzcsFHwkgx6r
+         i/0w==
+X-Gm-Message-State: AOAM532tVi6rbX9xLTEBDzOaaU6JGkDoqNpd5mmX+77qTGxaiLVeMkZ+
+	idmg/Nwg55W5TLOGXfe7cF6uhbsy6yqm9Q==
+X-Google-Smtp-Source: ABdhPJxsFjLkZCniD6IRfiQRZ1/fv1t8CsejyLmU0BUJ0vQjW8kY3wWkxuEy5oj48ajwm/byNtbejg==
+X-Received: by 2002:a5d:6da9:: with SMTP id u9mr4105039wrs.84.1633599838932;
+        Thu, 07 Oct 2021 02:43:58 -0700 (PDT)
+Received: from ?IPv6:2001:861:44c0:66c0:4e6:6eee:3312:b574? ([2001:861:44c0:66c0:4e6:6eee:3312:b574])
+        by smtp.gmail.com with ESMTPSA id k18sm7414519wrn.81.2021.10.07.02.43.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Oct 2021 02:43:58 -0700 (PDT)
+From: Neil Armstrong <narmstrong@baylibre.com>
+Subject: [GIT PULL] soc: amlogic: driver updates for v5.16
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-CC: arm-soc <arm@kernel.org>, linux-arm-kernel
- <linux-arm-kernel@lists.infradead.org>
-From: Michal Simek <michal.simek@xilinx.com>
-Subject: [GIT PULL] arm64: dts: ZynqMP DT changes for v5.16-v2
-Message-ID: <9815867c-ffbb-fc9d-64b9-badee5e2862b@xilinx.com>
-Date: Thu, 7 Oct 2021 09:21:03 +0200
+To: soc@kernel.org, "arm@kernel.org" <arm@kernel.org>
+Cc: linux-amlogic@lists.infradead.org,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Organization: Baylibre
+Message-ID: <f8e020d3-29f7-0745-3864-01975edd20f7@baylibre.com>
+Date: Thu, 7 Oct 2021 11:43:57 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8eb00e05-24e6-4c86-4af5-08d989630763
-X-MS-TrafficTypeDiagnostic: SJ0PR02MB7263:
-X-Microsoft-Antispam-PRVS: <SJ0PR02MB72630BB4EE5932A27F4D049DC6B19@SJ0PR02MB7263.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iM5s5qeF3DMaitUOv4Mym/TU31LdVh4kfTKtScwT4jiTGVTGxn7CPL0WZkgbnbwBfNSrvppQSuLDXbqfByJI1EQZElvb+cxtrtaTZpPz10XWcykflJbbhzjDF8mdhK9zlagzhke2CUxfgh8OswDIijSbi36xD88oWxkgXkvLaF+6HYE9i9+p9axuMT3o0AbdCrBOSJDTdjzsoO0b15rYmqZN3KTowQn7tD3Mf31pj7Dc7C1ifgJgRCCDX9JNYqjahZAJbYmvNTehvmoxskLScJEYnACZilfztyfblimSVes203aEUU2clHHNMHgKg+OMDHIgji3HWfffyYX5wGu0nyFOb6mcfiujjlRsAT3w931lQiFeplqPy/cQysOoMmfBUM9qs2n86bkSUGrTUE+rply90dGpWEPMRf8MdQ1TAOAbpb6X8cHvEXDPqeg/u1qSrrtI0jmh8nnug3OBCA3jIG5zDXj/Wnf4+NZCP5p3dU5kK+NG215QLAmzcVw6WoSyKTrZZSFjC/mufqrbtjmZ+fj9MoM6fHXl1ygXV1sbZWAJAQgfUOOEw6/GLj/9ITGSD+OiJfZL7C4203df6Qhjb4dTak7TGDMNsyGOK4dofbVON6tQjCbNduG/+sDdX6OTSTsbLxmn6Lrn95MvSbJw1UQuLYD2A2lhI4YiWIS8Wb1DsfxYM2gxk4ivnWcqmaKa4z+eLT75H+A/OnIdWTcfpXbFF0aoZrmgeU2MCfXOITJLgAN90lfo2+in8y9bliCsUzeLAUj/9r7GtqjuDWHdVd9oARaAdTErauJpqnbSIeDYVxeRBplJHuGWZddyotypYi8B0HDnHW6qEvDZP4uEwxuVnMjZUokXvNu+OR50A7g=
-X-Forefront-Antispam-Report: CIP:149.199.62.198; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:xsj-pvapexch02.xlnx.xilinx.com;
- PTR:unknown-62-198.xilinx.com; CAT:NONE;
- SFS:(46966006)(36840700001)(83380400001)(966005)(70586007)(70206006)(508600001)(36756003)(5660300002)(44832011)(2906002)(356005)(7636003)(9786002)(54906003)(6916009)(26005)(36906005)(8676002)(316002)(47076005)(2616005)(31696002)(186003)(8936002)(31686004)(426003)(336012)(4326008)(82310400003)(36860700001)(50156003)(43740500002);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2021 07:21:06.7431 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8eb00e05-24e6-4c86-4af5-08d989630763
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c; Ip=[149.199.62.198];
- Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT033.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7263
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211007_002110_398278_06DDBB8F 
-X-CRM114-Status: GOOD (  10.85  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211007072103.5UZcvPIzvn_X1QbiYO_ImKOv-2astBNpUoD8M9J9PKg@z>
 
 Hi,
 
-please pull this one patch to your tree. It was acked by Rob already
-and it is based on zynq/dt branch you have in soc.git tree.
+Please find for v5.16 two devm_platform_ioremap_resource() updates and a change adding a new SOC ID used in the new Radxa Zero board.
 
-Thanks,
-Michal
+Neil
 
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
-The following changes since commit 35a7430dad4dd83fe295917b8232595f437bb208:
-
-  arm64: zynqmp: Wire psgtr for zc1751-xm013 (2021-09-13 08:55:56 +0200)
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 
 are available in the Git repository at:
 
-  https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-dt-for-v5.16-v2
+  https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v5.16
 
-for you to fetch changes up to 7a4c31ee877a40053e39b80fe1d61c42b49f1078:
+for you to fetch changes up to d54dbe9f0ec05935e10d6a38d81e54e2ec8b8a68:
 
-  arm64: zynqmp: Add support for Xilinx Kria SOM board (2021-09-29
-13:48:21 +0200)
-
-----------------------------------------------------------------
-arm64: dts: ZynqMP DT changes for v5.16-v2
-
-- Add support for Kria SOM board
+  soc: amlogic: meson-clk-measure: Make use of the helper function devm_platform_ioremap_resource() (2021-09-13 09:43:00 +0200)
 
 ----------------------------------------------------------------
-Michal Simek (1):
-      arm64: zynqmp: Add support for Xilinx Kria SOM board
+Amlogic Drivers updates for v5.16:
+- soc: amlogic: meson-gx-socinfo: Add the SOC ID for the S905Y2 used in the Radxa Zero
+- soc: amlogic: meson-clk-measure/canvas: Make use of devm_platform_ioremap_resource()
 
- Documentation/devicetree/bindings/arm/xilinx.yaml   |  16 ++++
- arch/arm64/boot/dts/xilinx/Makefile                 |  13 +++
- arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dts | 315
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dts | 298
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts   | 289
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dts  |  21 +++++
- 6 files changed, 952 insertions(+)
- create mode 100644 arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dts
- create mode 100644 arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dts
- create mode 100644 arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
- create mode 100644 arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dts
+----------------------------------------------------------------
+Cai Huoqing (2):
+      soc: amlogic: canvas: Make use of the helper function devm_platform_ioremap_resource()
+      soc: amlogic: meson-clk-measure: Make use of the helper function devm_platform_ioremap_resource()
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Christian Hewitt (1):
+      soc: amlogic: meson-gx-socinfo: Add S905Y2 ID for Radxa Zero
+
+ drivers/soc/amlogic/meson-canvas.c      | 4 +---
+ drivers/soc/amlogic/meson-clk-measure.c | 4 +---
+ drivers/soc/amlogic/meson-gx-socinfo.c  | 1 +
+ 3 files changed, 3 insertions(+), 6 deletions(-)
