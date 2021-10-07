@@ -1,119 +1,102 @@
-Return-Path: <SRS0=FMRd=O3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFB7DC433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  7 Oct 2021 12:28:56 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7FD7761038
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  7 Oct 2021 12:28:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7FD7761038
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=S4buPi23jyvxuygCMgzKY+PbEYTe19qu5fgTU3eyr6Q=; b=lTwqhiHWri7bIw
-	6NV+kdxTYTuWb6cYCDsyiAhhQ0x9kS2zUv2WCc0/Osrdzap5O4vahaVE4AlZIYqn2dHW3Hc+9Kl1d
-	y9vb2fc4VF5uJ+8ITPSu1HwEJTnUO1DfJhaGLMaRw5oBb+QkTeM1LDXi2rVoadzX1klDjo0bO7Int
-	4G3ggu0ThE51b3u/0li1H5bF9pEeN4kt386f6lRzA+kqREP28KVLP2ABSrYyO5Yk3VqV0sPiDCHIU
-	CD90+sI02JFHiM5Iskl5lSbyRpcv2mVbUQayDqkrKqUk2DD2oKPDBMcRx/Xzn/S2i5VIgNZ+WgpwI
-	nZG//2Ot46YmeUUOkmyA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mYSU3-00HFuL-66; Thu, 07 Oct 2021 12:26:47 +0000
-Received: from muru.com ([72.249.23.125])
- by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mYSTs-00HFsg-US
- for linux-arm-kernel@lists.infradead.org; Thu, 07 Oct 2021 12:26:38 +0000
-Received: from hillo.muru.com (localhost [127.0.0.1])
- by muru.com (Postfix) with ESMTP id 3C03C80C7;
- Thu,  7 Oct 2021 12:27:04 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org, linux-omap@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, "Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL] Fix for omaps for v5.15-rc cycle
-Date: Thu,  7 Oct 2021 15:26:31 +0300
-Message-ID: <pull-1633609552-789682@atomide.com>
-X-Mailer: git-send-email 2.33.0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A2FEC433F5
+	for <linux-kernel@archiver.kernel.org>; Thu,  7 Oct 2021 13:15:14 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 41F0461090
+	for <linux-kernel@archiver.kernel.org>; Thu,  7 Oct 2021 13:15:14 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S241097AbhJGNQi (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 7 Oct 2021 09:16:38 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:46653 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241423AbhJGNQd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 7 Oct 2021 09:16:33 -0400
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MAfQk-1mf2nO0dVA-00B6Ua for <linux-kernel@vger.kernel.org>; Thu, 07 Oct
+ 2021 15:14:38 +0200
+Received: by mail-wr1-f54.google.com with SMTP id u18so19022744wrg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Oct 2021 06:14:38 -0700 (PDT)
+X-Gm-Message-State: AOAM532yO0zrvnz4qFMbB4UE5V5OukIwkxFk6VbzgQqPCQ8cva9fNrwD
+        A70TfvLMGyihWAw1yX7PuJEUNpbwjVQpWRfJMqs=
+X-Google-Smtp-Source: ABdhPJxlorxaf1Zgj5Rs+eFsSNCfJHstb4n53ThIOsns1KYcxF/bXpbsGzOdHOqKwYnWgIneWV4ZKX7ki2fMu7OD7KY=
+X-Received: by 2002:adf:b1c4:: with SMTP id r4mr5369225wra.428.1633612477750;
+ Thu, 07 Oct 2021 06:14:37 -0700 (PDT)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211007_052637_100400_1E96C50E 
-X-CRM114-Status: UNSURE (   8.79  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211007122631.JyutSOy8OJO_w43jivuuNW0exs1CEQh7YYrkwUfBkus@z>
+References: <20210821030519.127-1-yuzenghui@huawei.com> <39c2b2f9-4de2-8e7d-2135-96f1dab750e0@canonical.com>
+ <5991e347-18f0-30cd-58b9-9e3276bd98bd@huawei.com> <YV7HGniKSKe7nXp/@arm.com> <1ebc899f-b7d7-fff4-9204-a0edd2be4387@huawei.com>
+In-Reply-To: <1ebc899f-b7d7-fff4-9204-a0edd2be4387@huawei.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 7 Oct 2021 15:14:21 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a30pdkERK2CREDmpVDtL9+mVBU3iok8DkNoayOTSE9yFQ@mail.gmail.com>
+Message-ID: <CAK8P3a30pdkERK2CREDmpVDtL9+mVBU3iok8DkNoayOTSE9yFQ@mail.gmail.com>
+Subject: Re: [PATCH] arm64: defconfig: drop obsolete ARCH_* configs
+To:     Zenghui Yu <yuzenghui@huawei.com>
+List-Id: <soc.lore.kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        SoC Team <soc@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Will Deacon <will@kernel.org>, wanghaibin.wang@huawei.com,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:owYkorfnfKwyyEY8o4vBxo58nirKiC3h5Qo28a4N/E2iWaf2GWk
+ Sq+jpt9LXXuQBXjCP1OpIW8oAzMepApgkHBfaVOCBmZZxeWycuFaqepc8e3JAOEG1u7057M
+ bSZA3w73qm/1I86JRpiHsTTvnxONv0FczKjMc2TTtfKXTApKZxxyV9/lA4GO8mj9vcET80c
+ FvZ8k+qCgVf53K4Wrq4CQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:nB2KQLBt0Tk=:UQYbVq+StdtuXQmng3+hy4
+ kV08cl3Sfce5VSp+kC91tfvUWNtR687pTWDX3IZGN1UFdJaoHSLzxPPESZbkKf3zlwTT7sxm0
+ k51X+b2Q0q9dJ4xn/m2YtOsD/o72lkg/gFZV/gjkuZbVad5XZc0UBZDzlUNY/SfbAXrG3uHLE
+ oIEyhT7Aeh67Ka0skcMQm8fVB16dCfVsOecAU7QMTF8Ad4Vxv6OjpNdUy72ep9LUuSLNllqsP
+ Gdr7nIN9jbrzZHxbMNbMo+ZGCt14kUsUzMuEtcNsgCO280kLXivTZYeVLe7izTgNAPnt69dHW
+ K0rWYtOn+XNHGo5jKgUQDvQzQdtNUAR+kz0eP3cVON2hn2DTBeCjFPN8zHVrh4Bck3QDZrDfy
+ 62WGFfxgZhkKPseA18W0mgvGOv+owmxq3LNJI6muAc8j5HZV11YV05lURHcBnhIEbv8kK+klB
+ JoQMnNhdyO8pXn2XuMVQjKXj9dMrTkgEoOxJOFh00UKqWITId5nThwL+yQ0QjZPoeLcxD11JV
+ SdXca6oKAwm+HHeLX51Ovx/U5u5Mc/HQK1QQ20o47LMr7w2u1Ychh1myJbxAd2dWzpbovWXV5
+ 37UTA/VN6BvN6nNDhkxCe0tXAhCbBk457kbPnYr9ggVBL3O3iRqBytbHnFktQCm0UNF8xR1C1
+ k8C4rdAEzox9V9l/MEk+wvl+cCK7LwvI03qAcpWyO8hMo/SJhx5OKebSEXJ2wwPH6685FB73m
+ rGCgkl4PjIlHIFvsmK60ro3AIJ9ohChPf+zKi6x6qRkc0I7+BFqvnIB0s2Kr8gbrcmPHB/I64
+ kdHIibpp2cpw3QiZmV5QOVt682jtzx49GraEpTkD4hZjEKpwmxfAqcTHUPBB53o6HoqCdVyVg
+ OR1QsIQkFGeDd2v50AMQ==
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Tony Lindgren" <tony@atomide.com>
+On Thu, Oct 7, 2021 at 12:24 PM Zenghui Yu <yuzenghui@huawei.com> wrote:
+>
+> On 2021/10/7 18:08, Catalin Marinas wrote:
+> > On Thu, Oct 07, 2021 at 05:42:46PM +0800, Zenghui Yu wrote:
+> >> On 2021/8/23 21:01, Krzysztof Kozlowski wrote:
+> >>> On 21/08/2021 05:05, Zenghui Yu wrote:
+> >>>> Per commit 4a9a1a5602d8 ("arm64: socfpga: merge Agilex and N5X into
+> >>>> ARCH_INTEL_SOCFPGA") and commit 89d4f98ae90d ("ARM: remove zte zx
+> >>>> platform"), they can be dropped from defconfig now.
+> >>>>
+> >>>> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> >>>> Cc: Arnd Bergmann <arnd@arndb.de>
+> >>>> Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
+> >>>> ---
+> >>>>  arch/arm64/configs/defconfig | 3 ---
+> >>>>  1 file changed, 3 deletions(-)
+> >>>
+> >>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> >>
+> >> I have no idea about which tree should this patch go via, so a gentle
+> >> ping here. I've verified that this can still be applied cleanly on top
+> >> of today's -next.
+> >
+> > Usually defconfig changes go in via the arm-soc tree rather than the
+> > arm64 one.
+>
+> Thanks for the pointer!
+>
+> [+ soc@kernel.org]
 
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+Applied to the arm/defconfig branch for 5.16, thanks!
 
-  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.15/fixes-rc4
-
-for you to fetch changes up to 80d680fdccba214e8106dc1aa33de5207ad75394:
-
-  ARM: dts: omap3430-sdp: Fix NAND device node (2021-10-06 08:05:08 +0300)
-
-----------------------------------------------------------------
-Fixes for omaps for v5.15
-
-Few regression fixes for omaps for the v5.15-rc cycle. There is a fix
-for boot time hangs that can happen on some am335x devices that started
-when the pruss devicetree nodes were added. The other fixes are less
-critical:
-
-- Fix compiler warning for sysc_init_soc() that got recently introduced
-
-- Fix external abort for am335x pruss as otherwise some am335x will hang
-
-- Use CLKDM_NOAUTO quirk also for dra7 dcan1
-
-- Fix older NAND device node regression for omap3-sdp
-
-----------------------------------------------------------------
-Nathan Chancellor (1):
-      bus: ti-sysc: Add break in switch statement in sysc_init_soc()
-
-Roger Quadros (1):
-      ARM: dts: omap3430-sdp: Fix NAND device node
-
-Tony Lindgren (3):
-      soc: ti: omap-prm: Fix external abort for am335x pruss
-      Merge branch 'pruss-fix' into fixes
-      bus: ti-sysc: Use CLKDM_NOAUTO for dra7 dcan1 for errata i893
-
- arch/arm/boot/dts/omap3430-sdp.dts |  2 +-
- arch/arm/mach-omap2/omap_hwmod.c   |  2 ++
- drivers/bus/ti-sysc.c              |  4 ++++
- drivers/soc/ti/omap_prm.c          | 27 +++++++++++++++------------
- 4 files changed, 22 insertions(+), 13 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+        Arnd
