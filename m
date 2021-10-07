@@ -1,179 +1,81 @@
-Return-Path: <SRS0=FMRd=O3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=RpJy=O3=huawei.com=yuzenghui@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E26C5C433FE
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  7 Oct 2021 09:48:29 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED34AC433EF
+	for <soc@archiver.kernel.org>; Thu,  7 Oct 2021 10:24:39 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id C82A560C4C; Thu,  7 Oct 2021 10:24:39 +0000 (UTC)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B2BA361090
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  7 Oct 2021 09:48:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B2BA361090
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Date:Message-ID:Cc:To:
-	Subject:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=q+3+EuC178lwFJJrkKQZCIcW5z4GkbPe9s5N19Rhfes=; b=H846jjLhdqDCWJ
-	zgfoMBwvIu3Ng95f6JYtKL+zfjQ0yFdk62/2I4mb7O6aAHEx4wRBrYRwszU4fNzf50my5oQtMc3JM
-	W5+UfF5vOr+1QXSfJ707gTWn1I3ocF6kLWKONQ2Wfv8kks/9ugCJ1khWjwvUEsK6DwBLITCuNOrKo
-	w+X4HuKeDXBCt3Beq7en4itshDsAun4CqDHjygOh1vGPm74ka4Sh1oFJPiWLt6ODda2IOf0GEcS6A
-	Q0A8bGvqzZ/hujaClAxDUwmqZiCF9o7VNO/1CaCRmNnfuPhnLTI6gzAliEIRvS7SJ4svUuE2T0CnR
-	CzSd+GkRfcXbHkBnxUxw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mYPz7-00Gk1k-0M; Thu, 07 Oct 2021 09:46:41 +0000
-Received: from mail-wr1-x433.google.com ([2a00:1450:4864:20::433])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mYPz3-00Gjzo-Af
- for linux-arm-kernel@lists.infradead.org; Thu, 07 Oct 2021 09:46:38 +0000
-Received: by mail-wr1-x433.google.com with SMTP id t2so17154568wrb.8
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 07 Oct 2021 02:46:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=baylibre-com.20210112.gappssmtp.com; s=20210112;
- h=from:subject:to:cc:organization:message-id:date:user-agent
- :mime-version:content-language:content-transfer-encoding;
- bh=iWTS7oHCoZVg5zouR9Tuoxsiq0YaEFJDM1al7WC4J3s=;
- b=buHVxDnV3f+pKmmTu04hbbcDB0DXwRJGVgwSKfUd9u9vif92QrQnEVe6GrRG+ktz4w
- wwie1c/3x2FezIA0SQGFgzZu8Zj/zzPViubHclsVok12znM7HKIDEI4LVcV52pzaZc/1
- k2VsUmS+KDF9yhkiYD+XSLM7k8cbo9GejkdPUJZtzHRitlgG6SJEBC/HtsWOzg6S5lcN
- FzRlH6zkUNAFf66QP9fkdDq/sxJWj1xGMaIbM1dezVvQUswKkSf9/F9N4LXhucCG+C7G
- ILnvcPXFw3EOlMUwKTaG3ne6j2hDIA29rLea+hl/Wjxk+x5vgyFAA8uopWVpVLIT9Biq
- /wCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:subject:to:cc:organization:message-id:date
- :user-agent:mime-version:content-language:content-transfer-encoding;
- bh=iWTS7oHCoZVg5zouR9Tuoxsiq0YaEFJDM1al7WC4J3s=;
- b=fuGz7IVyIOawRnYDix9wAejR7RXlPsNQOwrrnGPEuHEha9CWFSBQO/1otTVmRbCbyf
- eGXXEdQLYwHaz7dSUbC3HMLQnwkgKAIMGAxPZF4xCE+u+jspxXqac8xYROKquNbZZmgA
- wzGxT1NxscJkg8PEAETrGXoeYNAqLuI+IBsKHLahXeos6mEbrPNLO9N8753/CtXbMO41
- TZNvPFHcKi5pReoHAK30pfqPnI+DvnDCh8sCJugwRQ193/R/O4CcwKByNs7HxQbBl4/a
- N8MjOiN5Les66QDG+5GapqJ35QQpSuQ56pn/4/gOEP64BcRgJl7MIt3fzIt4zFXw1BRZ
- rL7Q==
-X-Gm-Message-State: AOAM531nuVLPMYs9zTdzMMTrXGtHYmSkYe0ipDVplcegoTAW0uIl50Hz
- STNLIZPdLC4RviR7NaszNWiQ9+wYc86bBw==
-X-Google-Smtp-Source: ABdhPJyfwpiYZPK/OXR6nM8mVjfxSSxSIK82PCV2KMn51CsEL+5QgCymXGLRrUth7x9+Wyn6xFaxiQ==
-X-Received: by 2002:adf:d1c4:: with SMTP id b4mr4122567wrd.233.1633599994546; 
- Thu, 07 Oct 2021 02:46:34 -0700 (PDT)
-Received: from ?IPv6:2001:861:44c0:66c0:4e6:6eee:3312:b574?
- ([2001:861:44c0:66c0:4e6:6eee:3312:b574])
- by smtp.gmail.com with ESMTPSA id w9sm1852001wro.93.2021.10.07.02.46.33
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 07 Oct 2021 02:46:34 -0700 (PDT)
-From: Neil Armstrong <narmstrong@baylibre.com>
-Subject: [GIT PULL] arm64: dts: amlogic updates for v5.16
+	by mail.kernel.org (Postfix) with ESMTPS id 35E6760F57;
+	Thu,  7 Oct 2021 10:24:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 35E6760F57
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=huawei.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=huawei.com
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HQ6kv2Ss0z907Q;
+	Thu,  7 Oct 2021 18:19:51 +0800 (CST)
+Received: from dggema764-chm.china.huawei.com (10.1.198.206) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.8; Thu, 7 Oct 2021 18:24:36 +0800
+Received: from [10.174.185.179] (10.174.185.179) by
+ dggema764-chm.china.huawei.com (10.1.198.206) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.8; Thu, 7 Oct 2021 18:24:35 +0800
+Subject: Re: [PATCH] arm64: defconfig: drop obsolete ARCH_* configs
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org
-Organization: Baylibre
-Message-ID: <cc0a3af0-b1b1-dbe1-f553-cf58a1c63d0b@baylibre.com>
-Date: Thu, 7 Oct 2021 11:46:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+To: Catalin Marinas <catalin.marinas@arm.com>, <soc@kernel.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<will@kernel.org>, <wanghaibin.wang@huawei.com>, Arnd Bergmann
+	<arnd@arndb.de>
+References: <20210821030519.127-1-yuzenghui@huawei.com>
+ <39c2b2f9-4de2-8e7d-2135-96f1dab750e0@canonical.com>
+ <5991e347-18f0-30cd-58b9-9e3276bd98bd@huawei.com> <YV7HGniKSKe7nXp/@arm.com>
+From: Zenghui Yu <yuzenghui@huawei.com>
+Message-ID: <1ebc899f-b7d7-fff4-9204-a0edd2be4387@huawei.com>
+Date: Thu, 7 Oct 2021 18:24:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
+In-Reply-To: <YV7HGniKSKe7nXp/@arm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211007_024637_403089_CA0B5521 
-X-CRM114-Status: GOOD (  14.44  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211007094633.R605lPH9yFVLhwORwhQdcEencLRPT649mcCUFpKNz98@z>
+X-Originating-IP: [10.174.185.179]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggema764-chm.china.huawei.com (10.1.198.206)
+X-CFilter-Loop: Reflected
 
-Hi,
+On 2021/10/7 18:08, Catalin Marinas wrote:
+> On Thu, Oct 07, 2021 at 05:42:46PM +0800, Zenghui Yu wrote:
+>> On 2021/8/23 21:01, Krzysztof Kozlowski wrote:
+>>> On 21/08/2021 05:05, Zenghui Yu wrote:
+>>>> Per commit 4a9a1a5602d8 ("arm64: socfpga: merge Agilex and N5X into
+>>>> ARCH_INTEL_SOCFPGA") and commit 89d4f98ae90d ("ARM: remove zte zx
+>>>> platform"), they can be dropped from defconfig now.
+>>>>
+>>>> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>>> Cc: Arnd Bergmann <arnd@arndb.de>
+>>>> Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
+>>>> ---
+>>>>  arch/arm64/configs/defconfig | 3 ---
+>>>>  1 file changed, 3 deletions(-)
+>>>
+>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>
+>> I have no idea about which tree should this patch go via, so a gentle
+>> ping here. I've verified that this can still be applied cleanly on top
+>> of today's -next.
+> 
+> Usually defconfig changes go in via the arm-soc tree rather than the
+> arm64 one.
 
-Here's a set of Amlogic ARM64 DT changes for v5.16, adding three new Boards:
-- Radxa Zero
-- Jethub D1 & H1 home automation controllers
-with the corresponding bindings and some misc DT fixes & additions.
+Thanks for the pointer!
 
-Neil
+[+ soc@kernel.org]
 
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
-
-  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v5.16
-
-for you to fetch changes up to ecff7bab5c9c2e2b6f5739b328347e08415879ec:
-
-  arm64: dts: meson-g12b-odroid-n2: add 5v regulator gpio (2021-09-21 09:24:14 +0200)
-
-----------------------------------------------------------------
-Amlogic ARM64 DT changes for v5.16:
-- New Boards (with bindings):
-  - Radxa Zero
-  - Jethub D1 & H1 home automation controllers
-- Misc Changes:
-  - add Ethernet PHY reset line for ODROID-C4/HC4
-  - add audio playback nodes to rbox-pro
-  - Fix the pwm regulator supply properties
-  - meson-g12b-odroid-n2: add missing 5v regulator gpio
-
-----------------------------------------------------------------
-Anand Moon (4):
-      arm64: dts: meson-g12a: Fix the pwm regulator supply properties
-      arm64: dts: meson-g12b: Fix the pwm regulator supply properties
-      arm64: dts: meson-sm1: Fix the pwm regulator supply properties
-      arm64: dts: meson-g12b-odroid-n2: add 5v regulator gpio
-
-Christian Hewitt (3):
-      dt-bindings: arm: amlogic: add support for Radxa Zero
-      arm64: dts: amlogic: add support for Radxa Zero
-      arm64: dts: meson: add audio playback to rbox-pro
-
-Dongjin Kim (1):
-      arm64: dts: meson: sm1: add Ethernet PHY reset line for ODROID-C4/HC4
-
-Vyacheslav Bocharov (4):
-      dt-bindings: arm: amlogic: add bindings for Jethub D1/H1
-      dt-bindings: vendor-prefixes: add jethome prefix
-      arm64: dts: meson-gxl: add support for JetHub H1
-      arm64: dts: meson-axg: add support for JetHub D1
-
- Documentation/devicetree/bindings/arm/amlogic.yaml |   3 +
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- arch/arm64/boot/dts/amlogic/Makefile               |   3 +
- .../dts/amlogic/meson-axg-jethome-jethub-j100.dts  | 362 ++++++++++++++++++
- .../boot/dts/amlogic/meson-g12a-radxa-zero.dts     | 405 +++++++++++++++++++++
- arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts  |   2 +-
- arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts    |   2 +-
- arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts |   2 +-
- .../boot/dts/amlogic/meson-g12b-khadas-vim3.dtsi   |   4 +-
- .../boot/dts/amlogic/meson-g12b-odroid-n2.dtsi     |   6 +-
- arch/arm64/boot/dts/amlogic/meson-g12b-w400.dtsi   |   4 +-
- .../amlogic/meson-gxl-s905w-jethome-jethub-j80.dts | 241 ++++++++++++
- arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dts |  61 ++++
- .../boot/dts/amlogic/meson-sm1-bananapi-m5.dts     |   2 +-
- .../boot/dts/amlogic/meson-sm1-khadas-vim3l.dts    |   2 +-
- arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi  |   6 +-
- arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts   |   2 +-
- 17 files changed, 1096 insertions(+), 13 deletions(-)
- create mode 100644 arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
- create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dts
- create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Zenghui
