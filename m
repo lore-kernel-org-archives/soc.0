@@ -1,75 +1,67 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06C9EC433EF
-	for <linux-devicetree@archiver.kernel.org>; Thu,  7 Oct 2021 21:00:12 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D48476103C
-	for <linux-devicetree@archiver.kernel.org>; Thu,  7 Oct 2021 21:00:11 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbhJGVCF (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Thu, 7 Oct 2021 17:02:05 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:55284 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231513AbhJGVCE (ORCPT <rfc822;devicetree@vger.kernel.org>);
-        Thu, 7 Oct 2021 17:02:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=5t9Uq9pDfGhlTNstnpRIElreH30LAAQahsG93S0mqW8=; b=PP+d+28YbI6hZeLEUq8WuW2Tmt
-        VECZkv2+recIqjG7oVmDJRTlqWC/lHSI4UBM5CfxuAaonRa4PNrwH95gy7OkLK9k606LTA40itT1S
-        itflcBJYdlUxgghG0U9v4IfSkz7sKsSJVQpsUUUQZj0ba5klsP0M8Ao0g0NeyBeffWTY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mYaUk-009zgc-Ff; Thu, 07 Oct 2021 23:00:02 +0200
-Date:   Thu, 7 Oct 2021 23:00:02 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-List-Id: <soc.lore.kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        soc@kernel.org
-Subject: Re: [PATCH v3 3/3] ARM: dts: mvebu: add device tree for netgear
- gs110emx switch
-Message-ID: <YV9f0qhwn770Hf8+@lunn.ch>
-References: <20211007205659.702842-1-marcel@ziswiler.com>
- <20211007205659.702842-4-marcel@ziswiler.com>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B56A5C433F5
+	for <soc@archiver.kernel.org>; Thu,  7 Oct 2021 21:00:19 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 9312461212; Thu,  7 Oct 2021 21:00:19 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 7CCD66120D
+	for <soc@kernel.org>; Thu,  7 Oct 2021 21:00:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1633640419;
+	bh=E8X2YgkQ9VBMP4gtfiqgUjSh1nVhDOoUDUdMMpAn2n0=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=fVAXcbHS5rikk0Nhj5iRoWN/OK0MC8Vd552QlSUAYqF5WmN91IPoVhdGKYoah2Dov
+	 /D/Agyir9GBRsAreK/HrGapGyNkgd9uL1L+NN09aTxvuG/O7MHE4/fflf9BL/5kLX1
+	 XJalg7KYjpdDAzcoiKueGjVsdHNx3Z9ZgHaglioXW972kXXlcPKja6HV5FfZutI6va
+	 X2wvwozrW9tdz0sYQmt8rVxA4ptQ4m70XyoDoDEkDvmIjje7DI8lJP70L92ZIM0mt1
+	 crqPDZWBikSwgO8gvNxZcMSX/gJB4Wi+s33t6c/HL2PtLIYnL8VBNlDjUahzN51FQC
+	 8U2axVwozrGGw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6E68C60971;
+	Thu,  7 Oct 2021 21:00:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211007205659.702842-4-marcel@ziswiler.com>
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <163364041938.28878.9911554088843137003.git-patchwork-summary@kernel.org>
+Date: Thu, 07 Oct 2021 21:00:19 +0000
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-On Thu, Oct 07, 2021 at 10:56:59PM +0200, Marcel Ziswiler wrote:
-> Add the device tree for a Netgear GS110EMX switch featuring 8 Gigabit
-> ports and 2 Multi-Gig ports (100M/1G/2.5G/5G/10G). An 88E6390X switch
-> sits at its core connecting to two 88X3310P 10G PHYs. The control plane
-> is handled by an 88F6811 Armada 381 SoC.
-> 
-> The following functionality is tested:
-> - 8 gigabit Ethernet ports connecting via 88E6390X to the 88F6811
-> - serial console UART
-> - 128 MB commercial grade DDR3L SDRAM
-> - 16 MB serial SPI NOR flash
-> 
-> The two 88X3310P 10G PHYs while detected during boot seem neither to
-> detect any link nor pass any traffic.
-> 
-> Signed-off-by: Marcel Ziswiler <marcel@ziswiler.com>
+Hello:
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-    Andrew
+Patch: [GIT,PULL] firmware: arm_scmi: Fixes for v5.15
+  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=559015
+  Lore link: https://lore.kernel.org/r/20211007102822.27886-1-sudeep.holla@arm.com
+
+Patch: [GIT,PULL] Apple SoC fixes for 5.15
+  Submitter: Hector Martin <marcan@marcan.st>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=559299
+  Lore link: https://lore.kernel.org/r/a50a9015-0e62-c451-4d0d-668233b35b85@marcan.st
+
+Patch: [GIT,PULL] Fix for omaps for v5.15-rc cycle
+  Submitter: Tony Lindgren <tony@atomide.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=559099
+  Lore link: https://lore.kernel.org/r/pull-1633609552-789682@atomide.com
+
+
+Total patches: 3
+
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
