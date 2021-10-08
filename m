@@ -2,51 +2,51 @@ Return-Path: <SRS0=/M0+=O4=gmail.com=thierry.reding@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0CECC4332F
-	for <soc@archiver.kernel.org>; Fri,  8 Oct 2021 20:11:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A4A2C433FE
+	for <soc@archiver.kernel.org>; Fri,  8 Oct 2021 20:11:47 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id C59DB61019; Fri,  8 Oct 2021 20:11:45 +0000 (UTC)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	id 71DDF610E5; Fri,  8 Oct 2021 20:11:47 +0000 (UTC)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8D03060F93;
-	Fri,  8 Oct 2021 20:11:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8D03060F93
+	by mail.kernel.org (Postfix) with ESMTPS id 4956B60F93;
+	Fri,  8 Oct 2021 20:11:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4956B60F93
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id m22so33181718wrb.0;
-        Fri, 08 Oct 2021 13:11:45 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id r10so33084023wra.12;
+        Fri, 08 Oct 2021 13:11:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=GaMkCDXAPf2zzbzPSS3SHKXSx5UyLXsAaofkvKwRahc=;
-        b=qrHEyjZyO2e45qwd0XdaUIYhv+hUXOcwbsFQhJU9Wtcp8uP11nBRBOhSpCmpBZfQTg
-         iy4stduEugSUQM83ajywaXEyFoD+anZYXAgDjs3ys8/ToCfJ3fXJ18LEMl6f1CURBMOo
-         F17yA8CFqD/JEJHYWN2hODJy0Zoi5rllvoB2SaR7eWJdXppS0qNhUawk8hx72sgYlXZ4
-         M1+u1gXp4eVsImi4xOh2z88q2j0nwIpmWtBpyUrjVupEX3iY5CcG5cDe3KkIQ2NxtzqO
-         7feSky/t16fkRF9RDW/gPu863nRnY+rw6u65aPBgfR93ko9BUMywzqR9qV/2tGyOqobu
-         DWiw==
+        bh=CJBkgInhT6PLCmAU8FT+r7FUkf+LpzjWJN55V3vRhsM=;
+        b=jNAIOVRVou5pRLaLljnHnuuDcM+O8yh7ViN38/lGI4LU8NdL4usiHkE/sSjz1iahDL
+         dZhz8MHiLg0dk33XZ0lh9z2FmjgAW7NUMSH4Dvgoarka10VUwCOBakAzmod++EacZuqi
+         L6M6DImyN4aMlzbNN10s/PM5ZEjN96TqqJ0P0IyJA8UKBi6u/3iZ2kcjcmfSirYlDfig
+         gacwMgq3XurCP7LxsfBOobR0sksyMpjT0FB6SD9HxtzLGf96VkGn21/qDnbrpkjL7JGA
+         BB98ZPBSPlNTboITjzsiamrIGKkWLYwpd9dlyLWnbsydlPYed0TUS/v7QV1vWNbYZQSO
+         twQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=GaMkCDXAPf2zzbzPSS3SHKXSx5UyLXsAaofkvKwRahc=;
-        b=FSA31M7LbvIOex3M6KX0+KJjnkNZtgKKmDoJ28fdLcXMlKgGIjMxf7dISr6W1SX2Eu
-         wfL+76PIKqDGNLR2l50EJgv5ViO5guu41nf9CnBRFUiotvD9HbNEc7Pqg97V0emqjU8N
-         P+0CmuGobnczXTMKfifJJ8zhP3m+Du7vfvAHss6Z6Jk8IhzDOrW4Lvc+dD+xFcnQ3XK+
-         z0ran9qsouNgwBwTtJSpiqN6gi0CYcBbSCEeGyGJf8479kiyzjLViocp2Ip+Qg8CBOWf
-         yYeT/DNWB0x00cwaER1U5MjZA8uaZdWry1x/MlII2p3ob2tLAz1YDU1Bf9UkLDNHyd+5
-         zXuA==
-X-Gm-Message-State: AOAM531QCm5FZGLzOquW4/Ie3qus4IqZnENOUz/zgW6mMeGbXtP5MZfZ
-	M5tMGxld2BQvJSBskkKXba3sjnqIoRY=
-X-Google-Smtp-Source: ABdhPJzUdsl+jyJQtzEmc3jeD02XVww5KUUKF1zqP1bw43gWE3PSySMJnKXFuahVkKblKjJhWQBl8w==
-X-Received: by 2002:adf:a2d7:: with SMTP id t23mr6896509wra.156.1633723903685;
-        Fri, 08 Oct 2021 13:11:43 -0700 (PDT)
+        bh=CJBkgInhT6PLCmAU8FT+r7FUkf+LpzjWJN55V3vRhsM=;
+        b=jsvROC4m4ZZX1Q81kYzzTeJY+b1fobk2w+XkYRXvA2kDyNwJq5b8zBrqdpgFsxG7yR
+         P14P6L5ccaJiMPXg4iUhavWxY8DAjPIWWIrCeUtRmqcjo2tx7/wQWLmKspsHLTh+FWuB
+         jI/a8aUV6my7fVDPK5sFesOz0Dgq3hUFsFFXke9y80kWYrBfGCqZu2WmpvCAHxGNJ48O
+         v9VoDM5wTWr/dUDiRW8L/U0ehCIIXgdbUQJk/MYZiQQnr94kbUFBIkgQFtHySqpvpuYJ
+         D7ndu7q0syxtZf7SIT45OwXwhLN+rxBt6tLRJBrOC9H7o2xKsmGZNLenusdSqnpOeOkl
+         zhyA==
+X-Gm-Message-State: AOAM532BvLtOhS4Sn3iQY5kAjWhYcXd89FLgJAGfkgKz7DwXMQHzTTGI
+	B5bMJAZ8gKwi50RZNsq9WrTvdPVJ/hY=
+X-Google-Smtp-Source: ABdhPJyCi6SYxdSoPHScuvGYOUYb3kBIEa8OHcQM2/3o2YR/dtdUGf7iinL4/1CLgqhr0PiwSX6cCA==
+X-Received: by 2002:a7b:c8d1:: with SMTP id f17mr5776836wml.35.1633723905379;
+        Fri, 08 Oct 2021 13:11:45 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id u24sm12018470wmj.48.2021.10.08.13.11.42
+        by smtp.gmail.com with ESMTPSA id s14sm281313wro.76.2021.10.08.13.11.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 13:11:43 -0700 (PDT)
+        Fri, 08 Oct 2021 13:11:44 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -55,9 +55,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 5/7] ARM: tegra: Device tree changes for v5.16-rc1
-Date: Fri,  8 Oct 2021 22:11:30 +0200
-Message-Id: <20211008201132.1678814-6-thierry.reding@gmail.com>
+Subject: [GIT PULL 6/7] arm64: tegra: Device tree changes for v5.16-rc1
+Date: Fri,  8 Oct 2021 22:11:31 +0200
+Message-Id: <20211008201132.1678814-7-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211008201132.1678814-1-thierry.reding@gmail.com>
 References: <20211008201132.1678814-1-thierry.reding@gmail.com>
@@ -73,40 +73,59 @@ The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.16-arm-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.16-arm64-dt
 
-for you to fetch changes up to 96f4adcd888d7ecb17ba5c88c141ed107cedf913:
+for you to fetch changes up to b9e2404c8bb280e0b7cbf1c2e9b491baab107137:
 
-  ARM: tegra: Remove useless usb-ehci compatible string (2021-10-07 20:59:48 +0200)
+  arm64: tegra: Fix pcie-ep DT nodes (2021-10-07 21:23:37 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-ARM: tegra: Device tree changes for v5.16-rc1
+arm64: tegra: Device tree changes for v5.16-rc1
 
-This contains various cleanup patches to 32-bit ARM Tegra device trees
-and enables USB OTG mode on the Nexus 7.
+This enables additional interrupts on the Tegra194 GPIO controller for
+better load balancing and/or virtualization, adds audio support on
+Jetson TX2 NX, enables the NVDEC video decoder on Tegra186 and later and
+enables more audio processors that are found on Tegra210 and later.
+
+Various cleanups across the board top things off.
 
 ----------------------------------------------------------------
-David Heidelberg (2):
-      ARM: tegra: acer-a500: Correct compatible of ak8975 magnetometer
-      ARM: tegra: Remove unused backlight-boot-off property
+David Heidelberg (1):
+      arm64: tegra: Remove unused backlight-boot-off property
 
-Dmitry Osipenko (3):
-      ARM: tegra: Update Broadcom Bluetooth device-tree nodes
-      ARM: tegra: Add new properties to USB PHY device-tree nodes
-      ARM: tegra: nexus7: Enable USB OTG mode
+Dmitry Osipenko (1):
+      arm64: tegra: Add new USB PHY properties on Tegra132
+
+Mauro Carvalho Chehab (1):
+      arm64: tegra: Fix pcie-ep DT nodes
+
+Mikko Perttunen (1):
+      arm64: tegra: Add NVDEC to Tegra186/194 device trees
+
+Sameer Pujar (4):
+      arm64: tegra: Audio graph sound card for Jetson TX2 NX
+      arm64: tegra: Update HDA card name on Jetson TX2 NX
+      arm64: tegra: Add few AHUB devices for Tegra210 and later
+      arm64: tegra: Extend APE audio support on Jetson platforms
 
 Thierry Reding (1):
-      ARM: tegra: Remove useless usb-ehci compatible string
+      arm64: tegra: Remove useless usb-ehci compatible string
 
- arch/arm/boot/dts/tegra114.dtsi                    |  8 ++++--
- arch/arm/boot/dts/tegra124.dtsi                    | 12 ++++++---
- arch/arm/boot/dts/tegra20-acer-a500-picasso.dts    |  7 +++--
- arch/arm/boot/dts/tegra20-paz00.dts                |  2 --
- arch/arm/boot/dts/tegra20.dtsi                     | 13 +++++++---
- .../dts/tegra30-asus-nexus7-grouper-common.dtsi    | 30 +++++++++++++++++++---
- arch/arm/boot/dts/tegra30-ouya.dts                 |  5 +++-
- arch/arm/boot/dts/tegra30.dtsi                     | 12 ++++++---
- 8 files changed, 69 insertions(+), 20 deletions(-)
+pshete (1):
+      arm64: tegra: Add additional GPIO interrupt entries on Tegra194
+
+ arch/arm64/boot/dts/nvidia/tegra132-norrin.dts     |    2 -
+ arch/arm64/boot/dts/nvidia/tegra132.dtsi           |   12 +-
+ arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts | 1244 +++++++++++++++++++
+ .../dts/nvidia/tegra186-p3509-0000+p3636-0001.dts  |  506 +++++++-
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi           |  136 +++
+ arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts | 1243 ++++++++++++++++++-
+ .../arm64/boot/dts/nvidia/tegra194-p3509-0000.dtsi | 1246 +++++++++++++++++++-
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi           |  209 +++-
+ arch/arm64/boot/dts/nvidia/tegra210-p2371-2180.dts |  876 ++++++++++++++
+ arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts |  876 ++++++++++++++
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   81 +-
+ 11 files changed, 6416 insertions(+), 15 deletions(-)
