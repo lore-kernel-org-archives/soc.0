@@ -1,106 +1,95 @@
-Return-Path: <SRS0=FMRd=O3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=ge7R=O4=gmail.com=zhang.lyra@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA6B6C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  7 Oct 2021 21:06:06 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17C30C433F5
+	for <soc@archiver.kernel.org>; Fri,  8 Oct 2021 03:45:57 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id E0C0961027; Fri,  8 Oct 2021 03:45:56 +0000 (UTC)
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 89E7061056
-	for <linux-arm-kernel@archiver.kernel.org>; Thu,  7 Oct 2021 21:06:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 89E7061056
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:List-Subscribe:List-Help:
-	List-Post:List-Archive:List-Unsubscribe:List-Id:Cc:To:Date:Message-Id:
-	References:In-Reply-To:From:Subject:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=SJtp+esrBCWakEhMhxpB5qgxehbUdMNS0RKE5cB3m+k=; b=GCFONDd7Oh9Esp
-	DtrrouB5BwyK5SgtNF+i03U7KgfDOmIOWjlQF9cw2ETEniiosMq4VjWvlBIcU/98Je3xDBrdKmqZO
-	jljCoDE7ZnIm5lhMMk3pxdamgkOQnFJnUm8v/zlQL3CVSIrgwuUpuxmIiMC+tKtJnw57cAktzbuZV
-	U4MzIV7oAoZ9URzYdq+xM6y7q26eqAFOOVXmDj+Lh6qJXaIIdIsnR9uF5WlyKS5pJJF9KBeeiDXNs
-	oNXQhOlPB8oti2lfd0Py/bVSUnWaEeYS1d1ms96XSVDGkItbcIw2ySQfA6YapQ2HcloMtqJE4boQ9
-	yvGZjTpCUurt93Q9aMjA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mYaYx-000m7Q-2i; Thu, 07 Oct 2021 21:04:23 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mYaYt-000m6m-Nt
- for linux-arm-kernel@lists.infradead.org; Thu, 07 Oct 2021 21:04:21 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPS id 436DB61056;
- Thu,  7 Oct 2021 21:04:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1633640659;
- bh=v4oLcjeW1xaih2bFoNyRKXDjpxexseaJaBHiIQXsZEw=;
- h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
- b=ENAjR722V5oWQbcgL0D+tFGPXQrvgMP21tx8ZmPvjljCaiwHPHaIE1FcYfe/JfOgO
- WNsXsBiUFaGLBagvn3FQVJculIh77d6MZC0+BvDOFCM/5bNXj3sWJQJFyU4UKw0BZ4
- S1wc1U6WunPGdYMIwZWi7aSil6KLTmrLEKphW4Z0TIZaeVYs5bHrtyzF+7lcD281Cp
- M/z3U5Mlb4N0auirFjbrFQ70psUZLoR3VwP+7gQ5SuPrfHUb3DDRVjMt2XXUSOwNBB
- roHE+rjSXgHXp6PnjrPGutFTNQ0z9Sb70ZwP/87QiSQ/KJvBfekrFkxPTO5e3Z1Lvf
- xU7GTlaIeyplg==
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.15
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAK8P3a2aqDaL0dh0k+ZXJ2xq5LKa5z2r2r_WUBdC9m8eKxavXA@mail.gmail.com>
-References: <CAK8P3a2aqDaL0dh0k+ZXJ2xq5LKa5z2r2r_WUBdC9m8eKxavXA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
-X-PR-Tracked-Message-Id: <CAK8P3a2aqDaL0dh0k+ZXJ2xq5LKa5z2r2r_WUBdC9m8eKxavXA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
- tags/armsoc-fixes-5.15
-X-PR-Tracked-Commit-Id: 897c2e746cc795870361fcf9cbf282524589fa5f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3e899c7209dd8f7afca59518c5ace0f03385dbc3
-Message-ID: <163364065912.30969.4669198160716269013.pr-tracker-bot@kernel.org>
-Date: Thu, 07 Oct 2021 21:04:19 +0000
-To: Arnd Bergmann <arnd@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id B64E360FC3;
+	Fri,  8 Oct 2021 03:45:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B64E360FC3
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id y5so5310972pll.3;
+        Thu, 07 Oct 2021 20:45:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hX9WiA94/+jITIvegMFY+BuTehbQ371zzW5Ogx2JYVE=;
+        b=PstNJ6j+e+spvgvj/PM3BNyz6iThcz8hLiTZ8+8dPRItcTo8jpoS3i5D8fkk7DWGgU
+         lfRHcOVpEYXRNZDQOktbeczSlRPGYRqn44Ifvs4DlCqo0I6BlxXObFR9bI0lc21wNqpZ
+         ybDQ55HTvTTGgq4H1uF2OkLU6ziPjL5L5omzki6DZbNncYllPwVtfZiNzrz9O0dWO3Lv
+         jRgUdKsM/+A0NdMiLyIB7+D3A5dbV6+8PvEdUYzlknoHks27YFaHfFHs0w8IyDK8G1in
+         zX8r2R1X+krF6/NV1W5meykRiqtbggctfgyougL7nFrhaOWXmC7z6CjtpYlLeVU5NjE0
+         NW9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hX9WiA94/+jITIvegMFY+BuTehbQ371zzW5Ogx2JYVE=;
+        b=BrMYsKkhiwZV9d1iz4gzLqybRri8tPbDTWS+a1ouO9/nmJib8L1CWfJXzhKyZnaRr6
+         dFO/kk6yIrWci6f6LDRz9YII8pzW8VuSrgtTi4Bh+w0zHuJXbWISBoBLvZuyfDMRLvK7
+         b66tZW4D4+OCpk+7ijwPccbTJ/QZhzTAJc7NJUe5aoQbku/BvHf5QjW2m1gxWTK2bhM1
+         LRP/CBeyB821gesPuUolKthRFRxXDm2zXnaLhakcOQUkFIiH+DVsMyUfNgOYxgOM5xrI
+         ZnqFG3DGEW4a5Boe3YrTlxM1a0pwgn49dIa1xYN8G9aUnhBtdMe45AhmRzOfS9JxTAeD
+         V5mQ==
+X-Gm-Message-State: AOAM530bccMZFmMOyWSigUGVzWzWcKv9gZ3Vwph/dY1/Ro9yb7mw4plu
+	hx81rwPOkUT6KcHaXFDuEDSILUwow7s=
+X-Google-Smtp-Source: ABdhPJwB+r1IpmlatcbsfmuqWj+ewWl15JdshFm3gch2kAxCjvlYZWE6/bMa9OLzG887MLO57o1khg==
+X-Received: by 2002:a17:902:f703:b029:12c:982:c9ae with SMTP id h3-20020a170902f703b029012c0982c9aemr7593316plo.20.1633664756205;
+        Thu, 07 Oct 2021 20:45:56 -0700 (PDT)
+Received: from ubt.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id s3sm9253776pjr.1.2021.10.07.20.45.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Oct 2021 20:45:55 -0700 (PDT)
+From: Chunyan Zhang <zhang.lyra@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- Tony Lindgren <tony@atomide.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Bjorn Andersson <bjorn.andersson@linaro.org>, SoC Team <soc@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211007_140419_814335_0D3B2B9C 
-X-CRM114-Status: UNSURE (   4.36  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+To: soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Rob Herring <robh+dt@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	Baolin Wang <baolin.wang7@gmail.com>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Chunyan Zhang <chunyan.zhang@unisoc.com>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/2] Add Unisoc's UMS512 support
+Date: Fri,  8 Oct 2021 11:45:31 +0800
+Message-Id: <20211008034533.343167-1-zhang.lyra@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211007210419.zee7CMKsjmVmUtMh12y4o1DxiYW6dzRU43UaKB8bn8Q@z>
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Thu, 7 Oct 2021 22:55:50 +0200:
+From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/armsoc-fixes-5.15
+Unisoc's UMS512 has Octa-core ARM Cortex A55 application processor.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3e899c7209dd8f7afca59518c5ace0f03385dbc3
+Changes since v1:
+* Renamed regulator node name and add required 'reg' property for it;
+* Removed sprd-uart.yaml which got merged already;
+* Added Rob's Acked-by for bindings changes.
 
-Thank you!
+Chunyan Zhang (2):
+  dt-bindings: arm: Add bindings for Unisoc's UMS512
+  arm64: dts: Add support for Unisoc's UMS512
+
+ .../devicetree/bindings/arm/sprd/sprd.yaml    |   5 +
+ arch/arm64/boot/dts/sprd/Makefile             |   3 +-
+ arch/arm64/boot/dts/sprd/sc2730.dtsi          | 263 +++++
+ arch/arm64/boot/dts/sprd/ums512-1h10.dts      |  69 ++
+ arch/arm64/boot/dts/sprd/ums512.dtsi          | 919 ++++++++++++++++++
+ 5 files changed, 1258 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/sprd/sc2730.dtsi
+ create mode 100644 arch/arm64/boot/dts/sprd/ums512-1h10.dts
+ create mode 100644 arch/arm64/boot/dts/sprd/ums512.dtsi
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.25.1
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
