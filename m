@@ -2,51 +2,51 @@ Return-Path: <SRS0=/M0+=O4=gmail.com=thierry.reding@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F250EC433F5
-	for <soc@archiver.kernel.org>; Fri,  8 Oct 2021 20:11:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0CECC4332F
+	for <soc@archiver.kernel.org>; Fri,  8 Oct 2021 20:11:45 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id D66EF6112D; Fri,  8 Oct 2021 20:11:43 +0000 (UTC)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	id C59DB61019; Fri,  8 Oct 2021 20:11:45 +0000 (UTC)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ADC44610E5;
-	Fri,  8 Oct 2021 20:11:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ADC44610E5
+	by mail.kernel.org (Postfix) with ESMTPS id 8D03060F93;
+	Fri,  8 Oct 2021 20:11:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8D03060F93
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id s15so33143288wrv.11;
-        Fri, 08 Oct 2021 13:11:43 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id m22so33181718wrb.0;
+        Fri, 08 Oct 2021 13:11:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Q6coWZ7sMS8/cnYc4yrmrrCkk64EbPdSf+pzLA8E51A=;
-        b=IqPhVpTHqsTU+BKEpiOq4SqR7eH28X0HUfiFkPXDXgwQc/rBHq4AUxlI7zJwfEb9Km
-         4/F6vSgIa6f1U00Iz8KLxcC9T3c+wD6BMzUpwfID29Vd0Mj3I3kgceoTlBmy/3QyJ4YG
-         pO2p+9+CFeGIqXWd7LGDZl6GHQzT2d12iUROXXZCmwA0btugMBgIeoSLtaoYh5jFfwZ8
-         jVXHhXUY9Yq5+jfoJLk9hyaiEROo0iXUPQk8niUX43lqz/enp8qnGCybIwhVLBjPBv35
-         /60OGetlDcO7Txg5yiCNmUsFd25JqjdDwDOfEF1wlAtDXAb7onBi1LNSZAe01KL9NbW7
-         WRiQ==
+        bh=GaMkCDXAPf2zzbzPSS3SHKXSx5UyLXsAaofkvKwRahc=;
+        b=qrHEyjZyO2e45qwd0XdaUIYhv+hUXOcwbsFQhJU9Wtcp8uP11nBRBOhSpCmpBZfQTg
+         iy4stduEugSUQM83ajywaXEyFoD+anZYXAgDjs3ys8/ToCfJ3fXJ18LEMl6f1CURBMOo
+         F17yA8CFqD/JEJHYWN2hODJy0Zoi5rllvoB2SaR7eWJdXppS0qNhUawk8hx72sgYlXZ4
+         M1+u1gXp4eVsImi4xOh2z88q2j0nwIpmWtBpyUrjVupEX3iY5CcG5cDe3KkIQ2NxtzqO
+         7feSky/t16fkRF9RDW/gPu863nRnY+rw6u65aPBgfR93ko9BUMywzqR9qV/2tGyOqobu
+         DWiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Q6coWZ7sMS8/cnYc4yrmrrCkk64EbPdSf+pzLA8E51A=;
-        b=EOgZhwKwCSqSKbaDI+6t3erZk014W1BOgRZaz5MSPSOnMaGpCLvRndtOkT/06RKB1F
-         uwXAJOfkFDpeepRoI1InDmTSlsuT8ZLKrJWrEvE4Mou6pbY26ZiKXZt0qK79plyOUNO7
-         Di+Ww0aSmUh7VzSLwuS27BxAAzga5HKxTEZScgI/hLUGScZb/OJbNr/DvuglB1+iYMpK
-         NPIE8zFt0m7p+mSbG9WTiG7wZ927Q2mJbv1f/yK22I/3JusBAlkuxXoRWBuqPNlTHdm3
-         SgksMIT8atjVpu5vYrFrM3zWCZT3FJQK4w0HL+PqIvHAA+O607p1QLpvk6JxNo3nVBoP
-         wp8w==
-X-Gm-Message-State: AOAM531ZurHmzb7W3cWgU7359rdFxk3vOacD5UfuAuDhBqF2iGH+rvgf
-	Oxj9L2soG2Rmtl1M6wrfdQ6klDJZHkY=
-X-Google-Smtp-Source: ABdhPJzVbW3ng2xhAjX1HA9rXvPa/cMP6LypEzqShOYN23bF47ZPoQO9I9yNR6Zau8N7dS/b+z2lyQ==
-X-Received: by 2002:adf:a78a:: with SMTP id j10mr6623943wrc.231.1633723901801;
-        Fri, 08 Oct 2021 13:11:41 -0700 (PDT)
+        bh=GaMkCDXAPf2zzbzPSS3SHKXSx5UyLXsAaofkvKwRahc=;
+        b=FSA31M7LbvIOex3M6KX0+KJjnkNZtgKKmDoJ28fdLcXMlKgGIjMxf7dISr6W1SX2Eu
+         wfL+76PIKqDGNLR2l50EJgv5ViO5guu41nf9CnBRFUiotvD9HbNEc7Pqg97V0emqjU8N
+         P+0CmuGobnczXTMKfifJJ8zhP3m+Du7vfvAHss6Z6Jk8IhzDOrW4Lvc+dD+xFcnQ3XK+
+         z0ran9qsouNgwBwTtJSpiqN6gi0CYcBbSCEeGyGJf8479kiyzjLViocp2Ip+Qg8CBOWf
+         yYeT/DNWB0x00cwaER1U5MjZA8uaZdWry1x/MlII2p3ob2tLAz1YDU1Bf9UkLDNHyd+5
+         zXuA==
+X-Gm-Message-State: AOAM531QCm5FZGLzOquW4/Ie3qus4IqZnENOUz/zgW6mMeGbXtP5MZfZ
+	M5tMGxld2BQvJSBskkKXba3sjnqIoRY=
+X-Google-Smtp-Source: ABdhPJzUdsl+jyJQtzEmc3jeD02XVww5KUUKF1zqP1bw43gWE3PSySMJnKXFuahVkKblKjJhWQBl8w==
+X-Received: by 2002:adf:a2d7:: with SMTP id t23mr6896509wra.156.1633723903685;
+        Fri, 08 Oct 2021 13:11:43 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id x17sm301964wrc.51.2021.10.08.13.11.40
+        by smtp.gmail.com with ESMTPSA id u24sm12018470wmj.48.2021.10.08.13.11.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 13:11:41 -0700 (PDT)
+        Fri, 08 Oct 2021 13:11:43 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -55,9 +55,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 4/7] cpuidle: tegra: Changes for v5.16-rc1
-Date: Fri,  8 Oct 2021 22:11:29 +0200
-Message-Id: <20211008201132.1678814-5-thierry.reding@gmail.com>
+Subject: [GIT PULL 5/7] ARM: tegra: Device tree changes for v5.16-rc1
+Date: Fri,  8 Oct 2021 22:11:30 +0200
+Message-Id: <20211008201132.1678814-6-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211008201132.1678814-1-thierry.reding@gmail.com>
 References: <20211008201132.1678814-1-thierry.reding@gmail.com>
@@ -73,40 +73,40 @@ The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.16-cpuidle
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.16-arm-dt
 
-for you to fetch changes up to bdb1ffdad3b73e4d0538098fc02e2ea87a6b27cd:
+for you to fetch changes up to 96f4adcd888d7ecb17ba5c88c141ed107cedf913:
 
-  cpuidle: tegra: Check whether PMC is ready (2021-10-05 19:11:40 +0200)
+  ARM: tegra: Remove useless usb-ehci compatible string (2021-10-07 20:59:48 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-cpuidle: tegra: Changes for v5.16-rc1
+ARM: tegra: Device tree changes for v5.16-rc1
 
-This pulls in the for-5.16/clk and for-5.16/soc branches and uses the
-stubs added in them to enable compile testing of the cpuidle driver.
-While at it, this also fixes a potential driver probe order race
-condition between the PMC and the cpuidle driver.
+This contains various cleanup patches to 32-bit ARM Tegra device trees
+and enables USB OTG mode on the Nexus 7.
 
 ----------------------------------------------------------------
-Dmitry Osipenko (5):
-      soc/tegra: fuse: Add stubs needed for compile testing
-      soc/tegra: irq: Add stubs needed for compile testing
-      soc/tegra: pm: Make stubs usable for compile testing
-      cpuidle: tegra: Enable compile testing
-      cpuidle: tegra: Check whether PMC is ready
+David Heidelberg (2):
+      ARM: tegra: acer-a500: Correct compatible of ak8975 magnetometer
+      ARM: tegra: Remove unused backlight-boot-off property
 
-Thierry Reding (3):
-      clk: tegra: Add stubs needed for compile testing
-      Merge branch 'for-5.16/clk' into for-5.16/cpuidle
-      Merge branch 'for-5.16/soc' into for-5.16/cpuidle
+Dmitry Osipenko (3):
+      ARM: tegra: Update Broadcom Bluetooth device-tree nodes
+      ARM: tegra: Add new properties to USB PHY device-tree nodes
+      ARM: tegra: nexus7: Enable USB OTG mode
 
- drivers/cpuidle/Kconfig.arm     |  2 +-
- drivers/cpuidle/cpuidle-tegra.c |  3 +++
- include/linux/clk/tegra.h       | 24 +++++++++++++++++++++++-
- include/soc/tegra/fuse.h        | 31 ++++++++++++++++++++++++++-----
- include/soc/tegra/irq.h         |  9 ++++++++-
- include/soc/tegra/pm.h          |  2 +-
- 6 files changed, 62 insertions(+), 9 deletions(-)
+Thierry Reding (1):
+      ARM: tegra: Remove useless usb-ehci compatible string
+
+ arch/arm/boot/dts/tegra114.dtsi                    |  8 ++++--
+ arch/arm/boot/dts/tegra124.dtsi                    | 12 ++++++---
+ arch/arm/boot/dts/tegra20-acer-a500-picasso.dts    |  7 +++--
+ arch/arm/boot/dts/tegra20-paz00.dts                |  2 --
+ arch/arm/boot/dts/tegra20.dtsi                     | 13 +++++++---
+ .../dts/tegra30-asus-nexus7-grouper-common.dtsi    | 30 +++++++++++++++++++---
+ arch/arm/boot/dts/tegra30-ouya.dts                 |  5 +++-
+ arch/arm/boot/dts/tegra30.dtsi                     | 12 ++++++---
+ 8 files changed, 69 insertions(+), 20 deletions(-)
