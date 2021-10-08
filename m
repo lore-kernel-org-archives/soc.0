@@ -1,21 +1,25 @@
-Return-Path: <SRS0=PTeu=O4=chromium.org=amstan@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51B25C433EF
-	for <soc@archiver.kernel.org>; Fri,  8 Oct 2021 18:59:17 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 2B31360F38; Fri,  8 Oct 2021 18:59:17 +0000 (UTC)
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F026860F93
-	for <soc@kernel.org>; Fri,  8 Oct 2021 18:59:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F026860F93
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qt1-f170.google.com with SMTP id c20so10498486qtb.2
-        for <soc@kernel.org>; Fri, 08 Oct 2021 11:59:16 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79202C433F5
+	for <linux-devicetree@archiver.kernel.org>; Fri,  8 Oct 2021 19:04:37 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 5454C60F39
+	for <linux-devicetree@archiver.kernel.org>; Fri,  8 Oct 2021 19:04:37 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S231459AbhJHTGb (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Fri, 8 Oct 2021 15:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231388AbhJHTGb (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Fri, 8 Oct 2021 15:06:31 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A674DC061570
+        for <devicetree@vger.kernel.org>; Fri,  8 Oct 2021 12:04:35 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id o15so6790725vsr.13
+        for <devicetree@vger.kernel.org>; Fri, 08 Oct 2021 12:04:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -29,46 +33,54 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
         bh=+PFG95vsWGuyHt4PcF9O/qQQtXb2/roNae5ZiPerc+I=;
-        b=3jWLpv9nHSnI2hTh5sfGHg9zPa7iZjxZSVFwv/FD+7WYtnvL80u26OXhsOfwEjrl2t
-         V7oDYPjHp0+BqyfELpXPsky7xfwfeA+0FrTpP8J95DBMvyrYwWFUnqbRhhCF9WBIPfA4
-         vGBhghITrOSLHJ92ZrOdZIku6mTKOM/9/ztNHwKSbGyvE/TcgoYZoesagsu7H3v1Pr4r
-         9GM+w8eLZKQ2ouxNyUYe8ZUU473wnaI73e66n4ii1zYat1v+Zrec8T00thO1I4E2L2Ad
-         TteaW5eEgTKEHIEuOhpXQTAG1woEkDY2qcsiODwoLcQLqIcZiZSOjNxoL9UEL43wFBaH
-         jnlA==
-X-Gm-Message-State: AOAM531epPrO7+IGcFouGXUVAq8S9U0722yysAB7MxwvXeXQsoaN8ZJz
-	Lg5/WfBECV7IgwUVinWe0r9TeNfEOkaQfQ==
-X-Google-Smtp-Source: ABdhPJwSd8YKFg7a3j7mGPcHR+NR/5djKKJEYn2Zu+mk8sm2M6hBMJ34c2rMWJI2a911K4t7pa3kFw==
-X-Received: by 2002:ac8:1006:: with SMTP id z6mr75032qti.36.1633719555300;
-        Fri, 08 Oct 2021 11:59:15 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id a22sm129241qtx.7.2021.10.08.11.59.13
-        for <soc@kernel.org>
+        b=fcHiRxD+cP6ygitXYBVe8Cu7g1Hb0cwA30+Kg4ikfkkMG+Vuv3WnUuV5v98bNOWy+b
+         DrqURRPlXFKAe1Wpd+3zaCpoKggIET9nr5dzQs6IuP4EIW2g5/7A/L7vlVYAoAOdKZ9n
+         xVAF3DLNXzVTVlQrsnKmEkc1UveS7ANAHGyj4fq1Guslr739zMpN4kE3+R/Is2lBoSrz
+         fdYGlKQ+urUSBWLdlrqojFNjQ8lZQ9Ni4XYsdWOnlLE1B6jELwGwFFnLSpnYCHik/SKq
+         6OhKgNsSBXwLbqT0loydSm8sTU7PXBWIPv9vduLMFgWL5wikY7M01vcur3Kg7LCV+AM/
+         AJ3g==
+X-Gm-Message-State: AOAM530YOcwHJTjbCnyBb48e63xxjMcrBWdncaKVwzDROOFoPxFHF758
+        00BJc1fTWYfJuKkLSEG/faxtxTZFJsA1BA==
+X-Google-Smtp-Source: ABdhPJyp6Eo0xZNLPvmQ1bzgqCM/aJPjLfhKaoiQAxHcTe8bh/Pat7a7zADU4ltkrhQwXouSWYkt8Q==
+X-Received: by 2002:a05:6102:e54:: with SMTP id p20mr13205074vst.22.1633719874499;
+        Fri, 08 Oct 2021 12:04:34 -0700 (PDT)
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
+        by smtp.gmail.com with ESMTPSA id t64sm29300vke.24.2021.10.08.12.04.34
+        for <devicetree@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Oct 2021 11:59:14 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id i84so23113925ybc.12
-        for <soc@kernel.org>; Fri, 08 Oct 2021 11:59:13 -0700 (PDT)
+        Fri, 08 Oct 2021 12:04:34 -0700 (PDT)
+Received: by mail-ua1-f50.google.com with SMTP id i15so3232282uap.0
+        for <devicetree@vger.kernel.org>; Fri, 08 Oct 2021 12:04:34 -0700 (PDT)
 X-Received: by 2002:a25:db91:: with SMTP id g139mr5128084ybf.391.1633719553275;
  Fri, 08 Oct 2021 11:59:13 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211008140735.3290892-1-pan@semihalf.com> <20211008140735.3290892-2-pan@semihalf.com>
 In-Reply-To: <20211008140735.3290892-2-pan@semihalf.com>
-From: Alexandru M Stan <amstan@chromium.org>
-Date: Fri, 8 Oct 2021 11:58:37 -0700
+From:   Alexandru M Stan <amstan@chromium.org>
+Date:   Fri, 8 Oct 2021 11:58:37 -0700
 X-Gmail-Original-Message-ID: <CAHNYxRxuj_p-+zHCO9iEK3H7QrBAPy1Cx0tCh3ufRqYnK124qQ@mail.gmail.com>
 Message-ID: <CAHNYxRxuj_p-+zHCO9iEK3H7QrBAPy1Cx0tCh3ufRqYnK124qQ@mail.gmail.com>
 Subject: Re: [PATCH v3 1/1] dts: socfpga: Add Mercury+ AA1 devicetree
-To: =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
+To:     =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
 List-Id: <soc.lore.kernel.org>
-Cc: arnd@arndb.de, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
-	Rob Herring <robh+dt@kernel.org>, dinguyen@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel <linux-kernel@vger.kernel.org>, upstream@semihalf.com, 
-	Marcin Wojtas <mw@semihalf.com>, Konrad Adamczyk <ka@semihalf.com>, Tomasz Nowicki <tn@semihalf.com>, 
-	Jacek Majkowski <jam@semihalf.com>, Joanna Brozek <jbrozek@antmicro.com>, 
-	Mariusz Glebocki <mglebocki@antmicro.com>, Tomasz Gorochowik <tgorochowik@antmicro.com>, 
-	Maciej Mikunda <mmikunda@antmicro.com>
+Cc:     arnd@arndb.de, Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>, dinguyen@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        upstream@semihalf.com, Marcin Wojtas <mw@semihalf.com>,
+        Konrad Adamczyk <ka@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Jacek Majkowski <jam@semihalf.com>,
+        Joanna Brozek <jbrozek@antmicro.com>,
+        Mariusz Glebocki <mglebocki@antmicro.com>,
+        Tomasz Gorochowik <tgorochowik@antmicro.com>,
+        Maciej Mikunda <mmikunda@antmicro.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20211008185837.4XofKU6AlOXaV4eNfqeP62Sg17ic3o2WIpadG35yvWU@z>
 
 On Fri, Oct 8, 2021 at 7:08 AM Pawe=C5=82 Anikiel <pan@semihalf.com> wrote:
 >
