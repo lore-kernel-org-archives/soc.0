@@ -2,59 +2,60 @@ Return-Path: <SRS0=ZoBd=O6=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA712C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8A37C433F5
 	for <soc@archiver.kernel.org>; Sun, 10 Oct 2021 17:58:43 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id B829E610D1; Sun, 10 Oct 2021 17:58:43 +0000 (UTC)
+	id B89FB61100; Sun, 10 Oct 2021 17:58:43 +0000 (UTC)
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 322C760F45
+	by mail.kernel.org (Postfix) with ESMTPS id 33216610C7
 	for <soc@kernel.org>; Sun, 10 Oct 2021 17:58:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 322C760F45
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 33216610C7
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BCB4540013
-	for <soc@kernel.org>; Sun, 10 Oct 2021 17:58:40 +0000 (UTC)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C373C40019
+	for <soc@kernel.org>; Sun, 10 Oct 2021 17:58:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1633888720;
-	bh=NrDH+pD98VXNyjr2vH7l+H1QFNZaZ87D1CmJMseVHwg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-	b=QZCykrbtHBkTcGpPQ6Q3SGqjz5awgscmHnj9bNhxq31UU7rhXl2rd0Noc4vwiDQHe
-	 FRujc+MHWUN6lvFyab4nIrAYZ6lQI6MKWv1aHnfJKFC9vTS6T3T8PjKi1Jxm5tKi50
-	 AG6BBliATNpKih981ShdeIwc5EnUf+hc2OTtFl0koRkn3f2DqdL+EAecLviInAaGWU
-	 Na01I0zZYz7nysU/PNLa+j0PjUl/SvEnOC+eBLd7faOweg8VnosQ0ccA+wetQI6dmO
-	 eJPzOMZ9pNEBLd5i/G4ElNeiHEs39AsLBkpZ5bMDMnoAgVHm4ZkuBBMCLsZl/uTpUY
-	 rz2D/VK1rGQCA==
-Received: by mail-ed1-f70.google.com with SMTP id r11-20020aa7cfcb000000b003d4fbd652b9so11687005edy.14
-        for <soc@kernel.org>; Sun, 10 Oct 2021 10:58:40 -0700 (PDT)
+	s=20210705; t=1633888721;
+	bh=rKgAfJ12hcF8DFHLqF0Uys+r8EW0o0/y+bAD3IeB/jg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version;
+	b=a7C5ewQC0cUHfoWAlclgqjpTh3c9Gqg340O8gOsaz9S1hyPsPxZ3JNoao3xNmJXQi
+	 Ik9bLE10zCz8p7MW3L67MwHXkzY78h1zCm5w7ehkPQGHvSBcMJJVN3dJxoD1rkpDFH
+	 xOR8ScoXZNrxjyWRzKH4/vyWMY7ImsBLTYc7WsdPfd+Iq4QPX69xrBhjQ6dsB4WTVr
+	 Larb+fg/hIr746fDjiZdFzjJ2Bz8iapJzdL5cSe6W8Z5CO34iCF8VQJKYQ5u/qPriv
+	 Nx5MSfcXoi8ytoasjhDc2VDiTKFFfaeGfhEmFr633J9wmBf2orDrlql8qF5ZRMyksl
+	 6CdHWe3jFW9rQ==
+Received: by mail-ed1-f70.google.com with SMTP id h19-20020aa7de13000000b003db6ad5245bso5113538edv.9
+        for <soc@kernel.org>; Sun, 10 Oct 2021 10:58:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NrDH+pD98VXNyjr2vH7l+H1QFNZaZ87D1CmJMseVHwg=;
-        b=7JoqKohAlIvnJy4bKG5mE8IHdzBM2ly771Je6/S20l3UcXIfVjhIqsDVL7pN42/ujs
-         2Z2SWg6jdC7EaKOaSRHDtgH+0v1cSHeMiyPecdj/zpANGCUFf5eT6rD8CpaCbvVri7kz
-         DmM/ol7N0vzeFXx12ZXV+v/IGtBYF5xLLtEWhI0mEZ+Kc/o1FgL6I4ntvwkTyB530KqU
-         /2AMMDiQPruotV1Q4UHwJV4Qe10tRMmpwZZJoIvbagdymK6gEf0H6pPI56S/B9LlexD+
-         RVC2h+6Nl4lLkOaPrLj1AEM7YaeAEspwQfmf9z1kVZxiiZfOrHz0d3poR7BL1Bd62zxe
-         N+Vw==
-X-Gm-Message-State: AOAM530KCLuTWbqfDqDCtaydyKhdvMT/vApXfp8mh9I6uwUXBCTediNS
-	nLhhyrHwBq6eL+7Ntm4AuswcVDwhIAtMB/dWACfH52stpUT/OYhphD5okmoHSKD9yYnDPm7Ohqv
-	AwHD233277/2VWZTMFPUN5C8=
-X-Received: by 2002:a05:6402:410:: with SMTP id q16mr34342278edv.286.1633888720339;
-        Sun, 10 Oct 2021 10:58:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzRBcHo7+oZQEmrhMN0Ckl6vC4HpNLDrOgA8llriI5pHb/ju1hwmod3EdbAZOO9ZCwlbohnQA==
-X-Received: by 2002:a05:6402:410:: with SMTP id q16mr34342257edv.286.1633888720207;
-        Sun, 10 Oct 2021 10:58:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=rKgAfJ12hcF8DFHLqF0Uys+r8EW0o0/y+bAD3IeB/jg=;
+        b=YslzygUdYxNDOZ5rjpSRCtNlwwCKDkzG+LyJWTZtsQMguXQBwH18g78YYC5lrwnHcC
+         n9a8YL4+5xJu56U+li/qQicpHZiwpuwC3wfgtB8Q4/h1oGFbC5paHEwHovcU643Wpp3g
+         HKoEN0f4Lh6U888ir9W79c9iwnWcJ8EBu3O1fFqAWz8m/DQhooU+01Da4pUgEKKgW78l
+         /wU0768cgQ+/U8IPGNk/25XsO0gDGYLuVpmas0z8OH3qW0X7PKnED0qEapo96NCEDVOP
+         kRnuj4YT8fZ0cOx5AjxVCT89LtgNZY3opn6ovIG2XUuYdl6NTtEKspnNSD30/HhNKmHV
+         lvRQ==
+X-Gm-Message-State: AOAM533N8pXGCMjugWYMjjT6mXve55R6lmoOq/U5zSPC6LQd0/c4lr48
+	Ge+NJ+6ikN0cXfsb7YhNQ9ovMvPg0IkWK0EkOy7j0uUfhrBYRb+rNmi1UflLg8NkKdVkqZC1zIk
+	ERanotl1mDZeQADxKw8/RzuE=
+X-Received: by 2002:a17:906:9b46:: with SMTP id ep6mr19750388ejc.226.1633888721432;
+        Sun, 10 Oct 2021 10:58:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx1MgPOzxF07OexmASNsOYS3ctHTEtd/77o+u4QWFFDgfbBbWBc3P/wIao7oselGzuUMsiqAw==
+X-Received: by 2002:a17:906:9b46:: with SMTP id ep6mr19750372ejc.226.1633888721285;
+        Sun, 10 Oct 2021 10:58:41 -0700 (PDT)
 Received: from localhost.localdomain (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id au26sm2347948ejc.53.2021.10.10.10.58.39
+        by smtp.gmail.com with ESMTPSA id au26sm2347948ejc.53.2021.10.10.10.58.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Oct 2021 10:58:39 -0700 (PDT)
+        Sun, 10 Oct 2021 10:58:40 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -64,12 +65,22 @@ To: Olof Johansson <olof@lixom.net>,
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
 	linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/3] memory: drivers for v5.16
-Date: Sun, 10 Oct 2021 19:58:34 +0200
-Message-Id: <20211010175836.13302-1-krzysztof.kozlowski@canonical.com>
+Subject: [GIT PULL 2/3] memory: mediatek for v5.16
+Date: Sun, 10 Oct 2021 19:58:35 +0200
+Message-Id: <20211010175836.13302-2-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211010175836.13302-1-krzysztof.kozlowski@canonical.com>
+References: <20211010175836.13302-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+
+Hi,
+
+A topic branch specific to Mediatek.
+
+Best regards,
+Krzysztof
+
 
 The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
@@ -77,47 +88,37 @@ The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.16
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-mtk-5.16
 
-for you to fetch changes up to d611d7ea120bbef45e836565dfa2ddc85a168c16:
+for you to fetch changes up to 93403ede5aa4edeec2c63541b185d9c4fc9ae1e4:
 
-  Merge branch 'for-v5.16/renesas-rpc' into mem-ctrl-next (2021-10-10 19:45:00 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers for v5.16
-
-1. Renesas RPC: fix unaligned bus access and QSPI data transfers in
-   manual modes.
-2. Renesas RPC: select RESET_CONTROLLER as it is necessary for
-   operation.
-3. FSL IFC: fix error paths.
-4. Broadcom: allow building as module.
+  MAINTAINERS: Add entry for MediaTek SMI (2021-09-22 08:43:09 +0200)
 
 ----------------------------------------------------------------
-Andrew Gabbasov (1):
-      memory: renesas-rpc-if: Avoid unaligned bus access for HyperFlash
+Memory controller drivers for v5.14 - Mediatek
 
-Dongliang Mu (1):
-      memory: fsl_ifc: fix leak of irq and nand_irq in fsl_ifc_ctrl_probe
+Add MT8195 support to the Mediatek SMI memory controller driver.  This
+brings also several cleanups and minor enhancements before adding actual
+new device support.
 
-Florian Fainelli (1):
-      memory: brcmstb_dpfe: Allow building Broadcom STB DPFE as module
+----------------------------------------------------------------
+Yong Wu (13):
+      dt-bindings: memory: mediatek: Add mt8195 smi binding
+      dt-bindings: memory: mediatek: Add mt8195 smi sub common
+      memory: mtk-smi: Use clk_bulk clock ops
+      memory: mtk-smi: Rename smi_gen to smi_type
+      memory: mtk-smi: Adjust some code position
+      memory: mtk-smi: Add error handle for smi_probe
+      memory: mtk-smi: Add device link for smi-sub-common
+      memory: mtk-smi: Add clocks for smi-sub-common
+      memory: mtk-smi: Use devm_platform_ioremap_resource
+      memory: mtk-smi: mt8195: Add smi support
+      memory: mtk-smi: mt8195: Add initial setting for smi-common
+      memory: mtk-smi: mt8195: Add initial setting for smi-larb
+      MAINTAINERS: Add entry for MediaTek SMI
 
-Geert Uytterhoeven (1):
-      memory: renesas-rpc-if: RENESAS_RPCIF should select RESET_CONTROLLER
-
-Krzysztof Kozlowski (2):
-      memory: samsung: describe drivers in KConfig
-      Merge branch 'for-v5.16/renesas-rpc' into mem-ctrl-next
-
-Wolfram Sang (2):
-      dt-bindings: rpc: renesas-rpc-if: Add support for the R8A779A0 RPC-IF
-      memory: renesas-rpc-if: Correct QSPI data transfer in Manual mode
-
- .../memory-controllers/renesas,rpc-if.yaml         |   1 +
- drivers/memory/Kconfig                             |   5 +-
- drivers/memory/fsl_ifc.c                           |  13 +-
- drivers/memory/renesas-rpc-if.c                    | 159 ++++++++++++++++-----
- drivers/memory/samsung/Kconfig                     |  13 +-
- include/memory/renesas-rpc-if.h                    |   1 +
- 6 files changed, 141 insertions(+), 51 deletions(-)
+ .../memory-controllers/mediatek,smi-common.yaml    |  34 +-
+ .../memory-controllers/mediatek,smi-larb.yaml      |   3 +
+ MAINTAINERS                                        |   8 +
+ drivers/memory/mtk-smi.c                           | 596 ++++++++++++---------
+ 4 files changed, 393 insertions(+), 248 deletions(-)
