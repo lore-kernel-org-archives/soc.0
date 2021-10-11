@@ -2,19 +2,19 @@ Return-Path: <SRS0=8OOU=O7=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C831DC433EF
-	for <soc@archiver.kernel.org>; Mon, 11 Oct 2021 11:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 849A5C433EF
+	for <soc@archiver.kernel.org>; Mon, 11 Oct 2021 11:02:55 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 9E99A60EFE; Mon, 11 Oct 2021 11:02:52 +0000 (UTC)
+	id 6266F60EB4; Mon, 11 Oct 2021 11:02:55 +0000 (UTC)
 Received: from muru.com (muru.com [72.249.23.125])
-	by mail.kernel.org (Postfix) with ESMTP id 3F42D61039;
-	Mon, 11 Oct 2021 11:02:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F42D61039
+	by mail.kernel.org (Postfix) with ESMTP id 2073960EB1;
+	Mon, 11 Oct 2021 11:02:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2073960EB1
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=atomide.com
 Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id 5A9F28102;
-	Mon, 11 Oct 2021 11:03:22 +0000 (UTC)
+	by muru.com (Postfix) with ESMTP id 470E28061;
+	Mon, 11 Oct 2021 11:03:25 +0000 (UTC)
 From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -22,9 +22,9 @@ Cc: arm@kernel.org,
 	linux-omap@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL 2/3] Driver changes for ti-sysc for v5.16
-Date: Mon, 11 Oct 2021 14:02:43 +0300
-Message-Id: <pull-1633950030-501948@atomide.com-2>
+Subject: [GIT PULL 3/3] Devicetree changes for omaps for v5.16
+Date: Mon, 11 Oct 2021 14:02:44 +0300
+Message-Id: <pull-1633950030-501948@atomide.com-3>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <pull-1633950030-501948@atomide.com>
 References: <pull-1633950030-501948@atomide.com>
@@ -40,49 +40,42 @@ The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.16/ti-sysc-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.16/dt-signed
 
-for you to fetch changes up to 1b1da99b845337362a3dafe0f7b49927ab4ae041:
+for you to fetch changes up to 02794dbdc892a20479995cb9083a69a2ff213d96:
 
-  bus: ti-sysc: Fix variable set but not used warning for reinit_modules (2021-10-06 08:38:09 +0300)
-
-----------------------------------------------------------------
-Driver changes for ti-sysc for v5.16
-
-Changes for ti-sysc driver for improved system suspend and resume
-support as some drivers need to be reinitialized on resume. Also
-a non-urgent resume warning fix, and dropping of legacy flags for
-gpio and sham:
-
-- Fix timekeeping suspended warning on resume. Probably no need to merge
-  this into fixes as it's gone unnoticed for a while.
-
-- Check for context loss for reinit of a module
-
-- Add add quirk handling to reinit on context loss, and also fix a
-  build warning it caused
-
-- Add quirk handling to reset on reinit
-
-- Use context loss quirk for gpmc and otg
-
-- Handle otg force-idle quirk even if no driver is loaded
-
-- Drop legacy flags for gpio and sham
+  ARM: dts: dra7: add entry for bb2d module (2021-10-06 10:46:44 +0300)
 
 ----------------------------------------------------------------
-Tony Lindgren (10):
-      bus: ti-sysc: Fix timekeeping_suspended warning on resume
-      bus: ti-sysc: Check for lost context in sysc_reinit_module()
-      bus: ti-sysc: Add quirk handling for reinit on context lost
-      bus: ti-sysc: Add quirk handling for reset on re-init
-      bus: ti-sysc: Use context lost quirks for gpmc
-      bus: ti-sysc: Use context lost quirk for otg
-      bus: ti-sysc: Handle otg force idle quirk
-      bus: ti-sysc: Drop legacy quirk flag for gpio
-      bus: ti-sysc: Drop legacy quirk flag for sham
-      bus: ti-sysc: Fix variable set but not used warning for reinit_modules
+Devicetree changes for omaps for v5.16
 
- drivers/bus/ti-sysc.c                 | 276 +++++++++++++++++++++++++++++-----
- include/linux/platform_data/ti-sysc.h |   3 +
- 2 files changed, 244 insertions(+), 35 deletions(-)
+These changes configure devices for am335x and dra7, and fixes
+various devicetree check warnings for gta04:
+
+- Update am335x-pocketbeagle to use pinconf-single
+
+- A series of devicetree warning fixes for omap3 and gta04
+
+- Configure bb2d Vivante GC 2D Accelerator for dra7
+
+----------------------------------------------------------------
+Andreas Kemnade (6):
+      ARM: dts: omap3: fix cpu thermal label name
+      arm: dts: omap3-gta04: cleanup LCD definition
+      arm: dts: omap3-gta04: fix missing sensor supply
+      arm: dts: omap3-gta04a5: fix missing sensor supply
+      arm: dts: omap3-gta04a4: accelerometer irq fix
+      arm: dts: omap3-gta04: cleanup led node names
+
+Drew Fustini (1):
+      ARM: dts: am335x-pocketbeagle: switch to pinconf-single
+
+Gowtham Tammana (1):
+      ARM: dts: dra7: add entry for bb2d module
+
+ arch/arm/boot/dts/am335x-pocketbeagle.dts |  1 +
+ arch/arm/boot/dts/dra7.dtsi               | 19 +++++++++++++++++++
+ arch/arm/boot/dts/omap3-cpu-thermal.dtsi  |  2 +-
+ arch/arm/boot/dts/omap3-gta04.dtsi        | 23 +++++++++++++----------
+ arch/arm/boot/dts/omap3-gta04a5.dts       |  2 ++
+ 5 files changed, 36 insertions(+), 11 deletions(-)
