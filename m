@@ -1,63 +1,72 @@
-Return-Path: <SRS0=7AiC=O7=arndb.de=arnd@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45FE7C433F5
-	for <soc@archiver.kernel.org>; Mon, 11 Oct 2021 21:01:27 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 26DF060F43; Mon, 11 Oct 2021 21:01:27 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5B7A260F3A;
-	Mon, 11 Oct 2021 21:01:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5B7A260F3A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MQNF3-1mNCXV31E1-00MOdQ; Mon, 11 Oct 2021 23:01:24 +0200
-Received: by mail-wr1-f54.google.com with SMTP id e12so60118378wra.4;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88926C433EF
+	for <linux-devicetree@archiver.kernel.org>; Mon, 11 Oct 2021 21:01:27 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 6863E60F23
+	for <linux-devicetree@archiver.kernel.org>; Mon, 11 Oct 2021 21:01:27 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S230392AbhJKVD0 (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Mon, 11 Oct 2021 17:03:26 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:54917 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230299AbhJKVD0 (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Mon, 11 Oct 2021 17:03:26 -0400
+Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M4skB-1mZl2Z2v0p-001zC4; Mon, 11 Oct 2021 23:01:24 +0200
+Received: by mail-wr1-f50.google.com with SMTP id g25so13608434wrb.2;
         Mon, 11 Oct 2021 14:01:24 -0700 (PDT)
-X-Gm-Message-State: AOAM5314PYvr0D6w01bitEg3/d6Movn6qLGRK/n90YH2xf/nRPaLaap5
-	04oIlieGNYqdIKPuu2ZBB/LphXmXsqkV19mAzoU=
+X-Gm-Message-State: AOAM530j6sS0/vQ+Rj01Q2xxQbQB5U5o81ALsKYzexVpZoP1LIJmIwl4
+        J0Hu4ZGmJW8D7GKN92ZJ9XcKaj8OLQHwUjh8ojA=
 X-Google-Smtp-Source: ABdhPJwJlum4oCdRbc3gkZC+CU0jqqrsb2c79AL+PGtKmiX7j5JjRUVa5I5C2ZIVTw28c/jHjdNNO1NBcNYOXZnCGJY=
 X-Received: by 2002:a05:600c:4f4d:: with SMTP id m13mr1388672wmq.82.1633986084389;
  Mon, 11 Oct 2021 14:01:24 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211008034533.343167-3-zhang.lyra@gmail.com> <202110120420.QA3lbmW1-lkp@intel.com>
 In-Reply-To: <202110120420.QA3lbmW1-lkp@intel.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 11 Oct 2021 23:01:08 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 11 Oct 2021 23:01:08 +0200
 X-Gmail-Original-Message-ID: <CAK8P3a0bDn3Eu6sTjrg1=vx-jrrvvrrkA7GVVj3puSF28BZ+Hg@mail.gmail.com>
 Message-ID: <CAK8P3a0bDn3Eu6sTjrg1=vx-jrrvvrrkA7GVVj3puSF28BZ+Hg@mail.gmail.com>
 Subject: Re: [PATCH v2 2/2] arm64: dts: Add support for Unisoc's UMS512
-To: kernel test robot <lkp@intel.com>
+To:     kernel test robot <lkp@intel.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Chunyan Zhang <zhang.lyra@gmail.com>, SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Mark Rutland <mark.rutland@arm.com>, Rob Herring <robh+dt@kernel.org>, kbuild-all@lists.01.org, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>, 
-	Baolin Wang <baolin.wang7@gmail.com>, Orson Zhai <orsonzhai@gmail.com>, 
-	LKML <linux-kernel@vger.kernel.org>
+Cc:     Chunyan Zhang <zhang.lyra@gmail.com>, SoC Team <soc@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, kbuild-all@lists.01.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:nFyh4XI8/S+MAe63HsPiBkx/aRX405VXPR4yZZ7PZ433vil6pEX
- 38n7GWk41AIZqUYza6iIyqT6iLrJAE+sgwUj/cP8PNe8tb9od7IzyHttHyuhd4ajxPvfSud
- 7ZpiCGK4TqOP0AZnoXZRpV8VuePXdqPyawfpAoxHhQZNAB6NNgdkr1ZjSA/cT+6CDyQl60M
- JFSbssM1b9d8VRIOBf3YA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Upbe7CQi8BE=:4i3oo0OBq1o/LwW2W+Jpgq
- RaUB9v2jgpru1xpDHRqF5ZsAl/xdR/eBVuY4B9fCc8eKGOZOdiTKRnhfcSdKX+99YNwFDyPXr
- 2lb1Yckteh37uumqeMEwkcoLhu00v09S5W7nRWbiZ8O9q7lNBKT6UggcbfNkxkG4+Ae3pS8ih
- nMjbCtu9nnFCFHnarB+pZxXKfjD+zQj9DWL3zK/BBZE4vDpePZxR9Wsw+lOFbtOvvap+0AY/j
- f0R17f6atzJVf5aFJTRSrWr+pA73dzBj8bUPN9tDNjFeG3nzDwWzE7ThATDDjraIO8FOY429v
- sd/FoxllszWWwlZj/N7ecu3xwOJ/7XkwYaAzuu8aWolWPIDTpBBD1ZmfzcdnUzW2F6dlL4RyD
- 3rp7X+ESOq5HRRPXvF4a5iODBOASym6w2beldODEcECgQXspUHr1HxnzpobtcYwStqO1CcroP
- D9Tk4oND/XwLhYuu5sqfD8DE/Qfulq5JOU/CQ3r0yHwijNALH/oYVE1/Mfum43uFywr9fF2nI
- 5hgjp1BMOyaa1FuejAY3hNAngsWQ4XfWDhhbTMOU2BSzqRo543u2xQClyermD5VmfFrj8oGUp
- lCAhctoCxHku2rueJNGO5/jty3j9YVVe4IGW/j5A/FwbLd3Qs79LT3/Lcs3wYBHpM8OzFzUwf
- AXF9txqO9kVbOOo5RV1fOxg16Y0cx1HXxfS6/WBM2ZCFkSpKnGsb7XJ0nYAT566jg9j9I58AN
- sZ66CcinH01dNCPgv9j8vmkvUu0bwuxpz7TNMJIcfMBVXJkyGhMS35H/bm4avGZRcFm3Q3RvQ
- 1Koc3fBwEYCK2umIHj7V7tfet8fITl9bt/6+gKi1xqpSrzlbRx0vKJLDspMfSRlBlHIZqRPR2
- EytRwCVlJnqoPvcCl4DQ==
+X-Provags-ID: V03:K1:ep6wLfA0Cq3ObMz0ONTD+ygspTTb2tPJid699+a3dW0f//HuWx1
+ lNu1KSEd+76RDKs2kZa4ADGRSA3ATgXgl890Lr2HHDdHpZokfFj6mY5jZ/1/cwv5UT10XB3
+ I/70YJRO/tn23c0IGCIhcCkYm78YKrO5hdcmWABQN2b3pf9+bU3x8dasLZfysuAn0CwQBxE
+ PG5LRvjVT+YQWH7BCusww==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0so7U7GFGVE=:Z89U3ucftHILPVkTFCeI+S
+ Tspt5A4lhvpUESGl1hiaaAjMKhsO+AuqpXIk8nFXlwdDzV/j/puqQpqEviCaem91sj60GFBvx
+ /ZyYqdY48NdHLhYZm0Qn1wE3dD1YqVNq3m/gR5d7oBv0T2BP42qARMGyD8G0LtT+/bde8y4Tp
+ +eMWfMJD7kOjdcytqm5LUWNmpFvGQRELxG2e0P0jFfOZPqBK6vck2woAZH/roXaVnjDDSTkCn
+ NWrvED2K8U0XSTJ+Jbjh4b+JOhSIPgQ5HNcPjo1AQ9b5FJ//m3ZeesY0Mn3Los/tdswJypXQA
+ eOhKayulSez9mXLR0282p70HAzeFJZLf1EmaVnmf7Y9QaSikzKaR1bcsLMYujNCw7Z+/f8e+o
+ fAxoXL+AzCbl1AngRIJrXPwdhtMCNLXE8uPWSTBZkx1JbodtghIHmNUGSvMUQdE38xOraviTy
+ yR0oKipWCjLyJxjnkRsgIgUUa13D8clGXBBIXLJ28bB7pKkQS1eu3xktce9eZmweHuRVebuEw
+ wl/46DiRIRrjtAy7QuWvR1h3IMkE8sAMoTj7dHJGYbt3qIMbUHTGwZa2U4Ewut91hXzdg6z9r
+ m4zuAv4zENydtgo2bGaCqfb4yxRvnJvh6BPfeMwFvs0lw9XpQKTXudGIATHyImgddmRh6holF
+ RCcCLkk7eP50DDZaCWLqxIDDPFxEGrsr0O7UpXuekNVyvKc7BbCz2fAf068R8MpcKed1QY750
+ WDpu0xUXMiFg8CuX1BTKS+37Mzho9QVreZ6ZcAXaNTIMV0+vGSwrDvc82Hu+FnSOijoZhLXBa
+ e3sGsFlQeQuoaHCXI3NoDnQJj9VvND8kk8VdMjWrOsDlFcxOs4mQGTIOpn78uCmGh6f0kfXjn
+ aFl/osKKIq0Pb84wJTCQ==
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20211011210108.6SIRYX7MgHb5x9pp8woQ54ZGPABZWRQ4O_msvshEsys@z>
 
 On Mon, Oct 11, 2021 at 10:29 PM kernel test robot <lkp@intel.com> wrote:
 >
