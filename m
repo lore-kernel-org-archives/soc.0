@@ -2,96 +2,89 @@ Return-Path: <SRS0=7AiC=O7=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 483C1C433F5
-	for <soc@archiver.kernel.org>; Mon, 11 Oct 2021 20:40:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45FE7C433F5
+	for <soc@archiver.kernel.org>; Mon, 11 Oct 2021 21:01:27 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 10BA8603E7; Mon, 11 Oct 2021 20:40:08 +0000 (UTC)
+	id 26DF060F43; Mon, 11 Oct 2021 21:01:27 +0000 (UTC)
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 64E5260C4C;
-	Mon, 11 Oct 2021 20:40:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 64E5260C4C
+	by mail.kernel.org (Postfix) with ESMTPS id 5B7A260F3A;
+	Mon, 11 Oct 2021 21:01:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5B7A260F3A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MxmBi-1mxZu42bUM-00zIfu; Mon, 11 Oct 2021 22:35:02 +0200
-Received: by mail-wr1-f53.google.com with SMTP id i12so47242372wrb.7;
-        Mon, 11 Oct 2021 13:35:02 -0700 (PDT)
-X-Gm-Message-State: AOAM530ZqU/JKQwShHeDxXe8L83ky6ysE52qP9PsdBfd9yCzHxo9E4CH
-	2dJnRuROzTVrNH0/1LgClxTCzuq+qyQcDTQZs88=
-X-Google-Smtp-Source: ABdhPJx1wv+/ttFg8R4RChMinfeT7b//HX1BFbtzP0lK46YNi2vSxuV3p6bdSOkKi7UXRbaumdbBbEZ7F9jL4U0kXhQ=
-X-Received: by 2002:a05:600c:208:: with SMTP id 8mr1181367wmi.173.1633984502286;
- Mon, 11 Oct 2021 13:35:02 -0700 (PDT)
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MQNF3-1mNCXV31E1-00MOdQ; Mon, 11 Oct 2021 23:01:24 +0200
+Received: by mail-wr1-f54.google.com with SMTP id e12so60118378wra.4;
+        Mon, 11 Oct 2021 14:01:24 -0700 (PDT)
+X-Gm-Message-State: AOAM5314PYvr0D6w01bitEg3/d6Movn6qLGRK/n90YH2xf/nRPaLaap5
+	04oIlieGNYqdIKPuu2ZBB/LphXmXsqkV19mAzoU=
+X-Google-Smtp-Source: ABdhPJwJlum4oCdRbc3gkZC+CU0jqqrsb2c79AL+PGtKmiX7j5JjRUVa5I5C2ZIVTw28c/jHjdNNO1NBcNYOXZnCGJY=
+X-Received: by 2002:a05:600c:4f4d:: with SMTP id m13mr1388672wmq.82.1633986084389;
+ Mon, 11 Oct 2021 14:01:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <1a3d63a3-c020-3319-26f6-a2ec338cc42e@gmail.com>
-In-Reply-To: <1a3d63a3-c020-3319-26f6-a2ec338cc42e@gmail.com>
+References: <20211008034533.343167-3-zhang.lyra@gmail.com> <202110120420.QA3lbmW1-lkp@intel.com>
+In-Reply-To: <202110120420.QA3lbmW1-lkp@intel.com>
 From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 11 Oct 2021 22:34:46 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a06SKo+Y+DiFpozrO0R+67ht1ad6U9dyTa-M9TtD73VcQ@mail.gmail.com>
-Message-ID: <CAK8P3a06SKo+Y+DiFpozrO0R+67ht1ad6U9dyTa-M9TtD73VcQ@mail.gmail.com>
-Subject: Re: [GIT PULL] arm64: dts64: mediatek updates for v5.16
-To: Matthias Brugger <matthias.bgg@gmail.com>
+Date: Mon, 11 Oct 2021 23:01:08 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0bDn3Eu6sTjrg1=vx-jrrvvrrkA7GVVj3puSF28BZ+Hg@mail.gmail.com>
+Message-ID: <CAK8P3a0bDn3Eu6sTjrg1=vx-jrrvvrrkA7GVVj3puSF28BZ+Hg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] arm64: dts: Add support for Unisoc's UMS512
+To: kernel test robot <lkp@intel.com>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	Chuanjia Liu <chuanjia.liu@mediatek.com>, Chun-Jie Chen <chun-jie.chen@mediatek.com>, 
-	Enric Balletbo i Serra <enric.balletbo@collabora.com>, Kansho Nishida <kansho@chromium.org>
+Cc: Chunyan Zhang <zhang.lyra@gmail.com>, SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Mark Rutland <mark.rutland@arm.com>, Rob Herring <robh+dt@kernel.org>, kbuild-all@lists.01.org, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>, 
+	Baolin Wang <baolin.wang7@gmail.com>, Orson Zhai <orsonzhai@gmail.com>, 
+	LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:9o5Udwejo70PU8XXR4tyh587qGFr6Gf+9HOAIxEc+PZm9724s9X
- CFUp0Fklewoav4XZLqrUvON5J+WVtaVd+50dmcBv04Y5dg9EuT+GdihhOuRxkooRv7vJPSX
- lOJixwsfR33gbSS9LZ/i9eqGt6en8Qqyfs21X82BMsIQoW7fRVDx9aH2/SGbF8ql4S9Aeth
- XeD5fVq+TxudWXeyPF1Tg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yM8Meg27WWs=:6U8nakIwODyiT7AqJOpcl/
- vNYHuSU9BH1fVTUFxPJVb/MFCi9y8AdXgyYU+8NZ/5VWwFHEzZB+6/DZlKB3b01JbKvM2WcUr
- RqYD5odYp/huAzHrjGBXnhZE8fkv0++z1OGuR8bdSzopr9bpEvxZd5HqGobfUOpzXPSUuWjSh
- 6Oa8dOzATqDpvYHTLgQn6CKBhFUIeNvh/xem/QDc22JoAa3yQum0LrGmIlTTIPW2Uead1iRl5
- zlf4yaVd9b1P8ovfYuSdH3L1v5dP/pHsOJzY0hzMz5JHgGmZWXsTpf49xnoQzItV1TpSn/GKP
- noL9xN9ii8QhkZt4fPAGutCvYHb05HCSJvVcbgHB0yAwv0rLKW50VTbpA9kLA71SfAPGxHEoI
- h0cX9A8TFKxKJaB1mH+QiOV8/iroeJDaOXSkJHToMiuaPQ5S871gX2jUMvF3e1WUba/0Zm6YJ
- RjpEzxEjs3fDxz4JnaUyGtI8Zwu0abgXyTrB9BzGPySGttoiuSJovCyDGGb1FPUSY8sp6tF/m
- zqmtE5oKsuMS25BdUG49knIvar1bo2YAEY7DB/A/4jVt1NDzI3MzBf/VPdZswPIoCzARngy+/
- GJudCjCXvbf+YhCayQgIPlgG8iH9WCZjRrMLPn7nLm+NsUdflmgaZKRHsxmJdcqLFcXMI0sOG
- quwY2PKup6ojESW6LxEiPdpr60qX1sE80SHl6ROW3VHqwY3yTzZDOIjThRfvPIyE+77RGkTcM
- FuOm2hi+N6OBRCQROGMdEfx9Pdwl5iPYcJbNOgdLS3WYQadGHH4373dTz5lcfiZSazFpB4FUF
- oQ/er1HEjDFvjLgnCj/kbvYmToaZjt0Kr8qUdiObpPj9LyzOMQQFH3Jfr1CpdB+i9AmEq34lk
- eoyPLYhvAUnUO6TuWG2w==
-Message-ID: <20211011203446.rZfe_3QQcdbtwV9iKJL03Hgc3u5JoiR6iV4iyL-EuC8@z>
+X-Provags-ID: V03:K1:nFyh4XI8/S+MAe63HsPiBkx/aRX405VXPR4yZZ7PZ433vil6pEX
+ 38n7GWk41AIZqUYza6iIyqT6iLrJAE+sgwUj/cP8PNe8tb9od7IzyHttHyuhd4ajxPvfSud
+ 7ZpiCGK4TqOP0AZnoXZRpV8VuePXdqPyawfpAoxHhQZNAB6NNgdkr1ZjSA/cT+6CDyQl60M
+ JFSbssM1b9d8VRIOBf3YA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Upbe7CQi8BE=:4i3oo0OBq1o/LwW2W+Jpgq
+ RaUB9v2jgpru1xpDHRqF5ZsAl/xdR/eBVuY4B9fCc8eKGOZOdiTKRnhfcSdKX+99YNwFDyPXr
+ 2lb1Yckteh37uumqeMEwkcoLhu00v09S5W7nRWbiZ8O9q7lNBKT6UggcbfNkxkG4+Ae3pS8ih
+ nMjbCtu9nnFCFHnarB+pZxXKfjD+zQj9DWL3zK/BBZE4vDpePZxR9Wsw+lOFbtOvvap+0AY/j
+ f0R17f6atzJVf5aFJTRSrWr+pA73dzBj8bUPN9tDNjFeG3nzDwWzE7ThATDDjraIO8FOY429v
+ sd/FoxllszWWwlZj/N7ecu3xwOJ/7XkwYaAzuu8aWolWPIDTpBBD1ZmfzcdnUzW2F6dlL4RyD
+ 3rp7X+ESOq5HRRPXvF4a5iODBOASym6w2beldODEcECgQXspUHr1HxnzpobtcYwStqO1CcroP
+ D9Tk4oND/XwLhYuu5sqfD8DE/Qfulq5JOU/CQ3r0yHwijNALH/oYVE1/Mfum43uFywr9fF2nI
+ 5hgjp1BMOyaa1FuejAY3hNAngsWQ4XfWDhhbTMOU2BSzqRo543u2xQClyermD5VmfFrj8oGUp
+ lCAhctoCxHku2rueJNGO5/jty3j9YVVe4IGW/j5A/FwbLd3Qs79LT3/Lcs3wYBHpM8OzFzUwf
+ AXF9txqO9kVbOOo5RV1fOxg16Y0cx1HXxfS6/WBM2ZCFkSpKnGsb7XJ0nYAT566jg9j9I58AN
+ sZ66CcinH01dNCPgv9j8vmkvUu0bwuxpz7TNMJIcfMBVXJkyGhMS35H/bm4avGZRcFm3Q3RvQ
+ 1Koc3fBwEYCK2umIHj7V7tfet8fITl9bt/6+gKi1xqpSrzlbRx0vKJLDspMfSRlBlHIZqRPR2
+ EytRwCVlJnqoPvcCl4DQ==
 
-On Mon, Oct 11, 2021 at 11:58 AM Matthias Brugger
-<matthias.bgg@gmail.com> wrote:
+On Mon, Oct 11, 2021 at 10:29 PM kernel test robot <lkp@intel.com> wrote:
 >
-> Hi Arnd and Olof,
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 >
-> Here come the latest updates for arm64 DTS cahgnes.
-> Biggest change is, that we have now support for a reset controller inside the
-> mmsys. This goes inhand with changes to the driver, that you will find in the
-> soc pull request.
+> All errors (new ones prefixed by >>):
+>
+>    In file included from arch/arm64/boot/dts/sprd/ums512-1h10.dts:11:
+> >> arch/arm64/boot/dts/sprd/ums512.dtsi:8:10: fatal error: dt-bindings/clock/sprd,ums512-clk.h: No such file or directory
+>        8 | #include <dt-bindings/clock/sprd,ums512-clk.h>
+>          |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    compilation terminated.
 >
 >
->    arm64: dts: mt8183: Add the mmsys reset bit to reset the dsi0 (2021-10-08
-> 15:11:14 +0200)
+> vim +8 arch/arm64/boot/dts/sprd/ums512.dtsi
 >
-> ----------------------------------------------------------------
-> - mt8173: add reset for dsi0 to mmsys
-> - move dt-bindings reset controller includes to correct folder
-> - split PCIe node to use new format for mt2712 and mt7622
-> - mt8183: add audio node to chromebook devices
-> - mt8192: add clock controller node
+>    > 8  #include <dt-bindings/clock/sprd,ums512-clk.h>
+>      9  #include <dt-bindings/interrupt-controller/arm-gic.h>
 
-I skipped this one for now, need some clarification. The PCIe node
-looks like you are doing an incompatible change to the DT binding,
-but that is something that should be explained in the tag description
-or (ideally) avoided if at all possible.
+Thanks for the report.
 
-Did I misread that patch, or did you forget about it here?
+Unfortunately I just pulled this, and then a bunch of other things on top.
 
-On a related note, the tag description should better have full
-sentences like your introductory text above it, that makes for
-a better changelog text in the end. Enumerating all the changes
-is not helpful here because the list of commits is also part of
-the changeset description after I commit it.
+Looking at linux-next, the binding is not merged yet, which means I should
+not take this one anyway.
 
-          Arnd
+I'll keep the first patch and revert this one.
+
+         Arnd
