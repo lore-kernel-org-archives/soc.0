@@ -1,15 +1,15 @@
-Return-Path: <SRS0=jkUD=O7=lists.infradead.org=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=oOjZ=O7=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6675FC433F5
-	for <linux-amlogic@archiver.kernel.org>; Mon, 11 Oct 2021 14:55:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BCF0C433F5
+	for <linux-mediatek@archiver.kernel.org>; Mon, 11 Oct 2021 14:55:09 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3884A60E98
-	for <linux-amlogic@archiver.kernel.org>; Mon, 11 Oct 2021 14:55:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3884A60E98
+	by mail.kernel.org (Postfix) with ESMTPS id 6BA2A60E98
+	for <linux-mediatek@archiver.kernel.org>; Mon, 11 Oct 2021 14:55:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6BA2A60E98
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -18,84 +18,83 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=HGvVehf+FPNpBZPSNcyZVXN86nSDm4qH8CbAvK+nbIo=; b=AqyL74uP90PI1Z
-	LS8Vbjjzu61nv0V1gLLzNU6Yedbjtjrw0krzWMSxjGdFmneozjYKwzfhBctMFZ9gc/2hR9qKKTNR3
-	xESdt2bVIlgb2yJyIPyNQCROMipPuCx24VZCdopy88u3g7dc2tqm9ZcfJSEav7UCl1OgUuWPTht2a
-	jak+jHL/yh0NhlnWHF4M6fFMRX8svBsTm0RX1yFUT6P+k1xIVBTXk6yJyFaocb92MJs6fMx4tj2Wa
-	0RHkalObsGgEMaWhCphRDysEajSDqK0Iano5ne5Vz+OgtfPjkWfKbW8NwEW0tlBUnyD510iNwr3A7
-	0SQ0z/Eo0ykHgntbvegQ==;
+	List-Owner; bh=25MXGfrF35GRSL5PhGcHl92K3Il9oJJvqt8D2psnxoQ=; b=W1YU6xWjUfStuF
+	slIAA7q8lNkfxsB5+pRXcacjBkSZLEoE0BkxKb6IRl2h3uFBWSjLhYgT+P7yiAPi8bx8QAmr/CFQ4
+	2Us8Ue7ZnUr4ikFcsl4yIFcYxepiqvf2zDaA5OFqBMrVNhwJ0oQ3UFicUdbOyocda6dANpRioahXR
+	VUQHLA1ItE5Y/4iyEuqSi+iVBIDCPmTZqDYXfk/MJpdOg/wUOQiebHT9nY542Ry7QAIlpc4wyXFuF
+	AeNHa6OiPNkcihR3D7vbxAgTLsboMl+MbTJSPTZ4Wn9LZC6vg9a2SUFjN9qCwzeHm/ymRU4UIdRHA
+	Sym3wTYwSQT8/3ynzRAQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mZwhf-009q2W-2r; Mon, 11 Oct 2021 14:54:59 +0000
+	id 1mZwhd-009q2I-QR; Mon, 11 Oct 2021 14:54:57 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mZwhQ-009py0-HV; Mon, 11 Oct 2021 14:54:45 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0472860EE5;
- Mon, 11 Oct 2021 14:54:42 +0000 (UTC)
+ id 1mZwhO-009pxQ-Ui; Mon, 11 Oct 2021 14:54:44 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0308160BD3;
+ Mon, 11 Oct 2021 14:54:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1633964084;
- bh=C+r4dLx6Ys+xr9OG/lS4p3ctbdi36eShMGEjAuZymw0=;
+ s=k20201202; t=1633964082;
+ bh=gwJSn9/WH7jBGPOAUDejmOq4MucxMh1nnl8hVskmGKg=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=rLQ4Oros8AgSX4MQNsGHNoi8T0zrIlCSMBBA/wYGbakokMdfYJDhIEwuUaLy1GbiA
- iu3zQ5UYdDsRY0IPeG670Q6eFXdcKzL6dFf2G+lwoX4rJIsdviGxG2EgVllT3wDq8I
- ugZXMMOtwfUdGSOLpXkPo7DBcp6Hu3p7ztpaBe4/ClowKOF2XRbD8GMDmhbng752Wo
- ufoMirfIsY3UHz5fT3DXuKTOw2fHYZhPpd7/vBluSP/+6cKEsmnJ/p52u8l13J3mWx
- i9d6R1lGQGExK/MRjtGx1cfkvhCvjYa0dkKa1efceWBgxAuiiO1g4oYjGoJuqJyedw
- SZVpQAFcnLmlg==
+ b=RLXL8JTtS9kxXS/WevrlPHbybeW2+Wj3vREClcrUCBJWTTwurdSVFo4p+j1QWcbUF
+ fwg8dtLQWpv7CuRYEjHjh6vm+FxRCC+R7EInaVvaYKD9Z6g7HahhEI1gRMu9RfgqOI
+ UZDppynooEe86MhXQMeuBd7B0JwEUnsqilu/qAQ60euugDk6t9Hh7/5cVU1qU5jQvp
+ WZpbunu7835k3aDb2E8Jx2uLUkQuZ8DblxbpouZ//MiV9VPxE/pUYrJH8VSRViQoje
+ c3l70DsVLVELapC7akV49aOZGkQJWLxjVVrvXJGq/PM/n2BAcJDea+WQE6gjhln6xH
+ Ea4iSPcYY+DzQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: "arm@kernel.org" <arm@kernel.org>, soc@kernel.org,
- Neil Armstrong <narmstrong@baylibre.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-amlogic@lists.infradead.org,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [GIT PULL] soc: amlogic: driver updates for v5.16
-Date: Mon, 11 Oct 2021 16:54:28 +0200
-Message-ID: <163396399096.3170841.5782337655825464618.b4-ty@arndb.de>
+To: arm-soc <arm@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ SoC Team <soc@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+ "moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
+ Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Subject: Re: [GIT PULL] soc: mediatek updates for v5.16
+Date: Mon, 11 Oct 2021 16:54:27 +0200
+Message-ID: <163396399141.3170841.8977960189531317594.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <f8e020d3-29f7-0745-3864-01975edd20f7@baylibre.com>
-References: <f8e020d3-29f7-0745-3864-01975edd20f7@baylibre.com>
+In-Reply-To: <b1d364d0-f2ae-488b-b3f7-c694049c20d3@gmail.com>
+References: <b1d364d0-f2ae-488b-b3f7-c694049c20d3@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211011_075444_617091_4C9E0DCB 
-X-CRM114-Status: UNSURE (   6.14  )
+X-CRM114-CacheID: sfid-20211011_075443_029236_DB5A8669 
+X-CRM114-Status: UNSURE (   7.26  )
 X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-amlogic@lists.infradead.org
+X-BeenThere: linux-mediatek@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
-List-Id: <linux-amlogic.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-amlogic>, 
- <mailto:linux-amlogic-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-amlogic/>
-List-Post: <mailto:linux-amlogic@lists.infradead.org>
-List-Help: <mailto:linux-amlogic-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-amlogic>,
- <mailto:linux-amlogic-request@lists.infradead.org?subject=subscribe>
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Sender: "linux-amlogic" <linux-amlogic-bounces@lists.infradead.org>
-Errors-To: linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211011145428.q_hpj-IKlhXYFc_qhqfigqXruSg-6qa-pbM44z3rIn8@z>
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211011145427.awIyQ9zwn970PQiNOp97ePmNffUd_HjDMQ_lIBa-54I@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Thu, 7 Oct 2021 11:43:57 +0200, Neil Armstrong wrote:
-> Please find for v5.16 two devm_platform_ioremap_resource() updates and a change adding a new SOC ID used in the new Radxa Zero board.
+On Mon, 11 Oct 2021 12:01:04 +0200, Matthias Brugger wrote:
+> Please have a look on the changes for this round.
+> We have support for mt8192 in the mmsys and mutex driver. Apart mmsys now
+> enables it's integrated reset controller.
 > 
-> Neil
-> 
-> The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
-> 
->   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
-> 
-> [...]
+> Thanks,
+> Matthias
 
 Merged into arm/drivers, thanks!
 
-merge commit: 88557618909a70460a3c1a898cdcc10c43a2aad1
+merge commit: 24e18b0f45c7830a74400aa599e4e3d67155ae1c
 
        Arnd
 
 _______________________________________________
-linux-amlogic mailing list
-linux-amlogic@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-amlogic
+Linux-mediatek mailing list
+Linux-mediatek@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-mediatek
