@@ -1,32 +1,33 @@
-Return-Path: <SRS0=rhIi=O7=microchip.com=Nicolas.Ferre@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5020C433F5
-	for <soc@archiver.kernel.org>; Mon, 11 Oct 2021 12:46:58 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 9789160EFE; Mon, 11 Oct 2021 12:46:58 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3E06E60F3A;
-	Mon, 11 Oct 2021 12:46:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3E06E60F3A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=microchip.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70E6AC433F5
+	for <linux-kernel@archiver.kernel.org>; Mon, 11 Oct 2021 12:47:00 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 43C1D60F3A
+	for <linux-kernel@archiver.kernel.org>; Mon, 11 Oct 2021 12:47:00 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S236706AbhJKMs7 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Mon, 11 Oct 2021 08:48:59 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:9054 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235034AbhJKMs5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 11 Oct 2021 08:48:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1633956418; x=1665492418;
+  t=1633956417; x=1665492417;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
   bh=jR4VLxh2n5xrvKbxAr/Rz+ZWsobmRxxPA6ztv3jzo5Y=;
-  b=tFuxhPPQyyAkvQ+E/+COsA7u/MI+KENE4wtUr6B9CH8DgVPF5nVgCFgn
-   HEGDfhUa2jxW0gDeoKLhQeAjtL2sggR6kSYbPVX3XBxgmmgXBj+8BSRQs
-   h5xH/WTIbQtr0+JCcmuJyyDsxTxnvG+xIPSVmRQzOjdTr3O4lJYZmtMe1
-   nIK8muBYsKVps9tvJd+nGXOQRTpzPYI89lcIkN1MVGDw/KElIOYe30zDn
-   g+ZvELeiB25MAF6m6RzuDrs+wgeCpWGwXjqd7KWPeJhfzrC1J1dlzs9s3
-   qLSYtuPX7f0Bd2NMJkuPkxeUj7RwATmvmdjtsnxJd5XvUGNoBLwwDw0MR
-   Q==;
+  b=HnjOgo44w8EECvo5yMzsnRxG6VeYlTp5BQp15Xa+9rXQ73lA3SydkxAZ
+   bu4TxdsSQydf8r+EjlBGli5OK0rFSruwmtrSDIJ/DlbOcvauh6U/MsqLP
+   Vvl85r+1OFeMhe8FWfFeKCheVQnEVm++jVQoH5uwY1W14cJGfeJToxxJi
+   f7hGyCAgV91QJ9WWA/gKTG59LQZnsYP34EdOhYK64f2fUm0zWvoqhrjBz
+   JRcvihDFzJMpA5/oDBAVKH/h7nnqOCHqVeBL00t9Dz7aoMYV7eYpc+bek
+   Atul/gFrjld4Iref5K1n7+z+XIohMQd7D+rL34L4ZQiTrVQyHeADmqCud
+   A==;
 IronPort-SDR: X42KZZDPyQaa+T8ATntHjJcZxHb52QJuGuGjbsyKrSRRFVNbBTdE3QGejyswvNRYX43DXglH5j
  cM5PUXq2ceda7Svum7SfewApl+pA+C6w6ncQf8XGN3vdeM9Hs3g6eB+cE6kvXlkhoA276BBYCM
  oAUjJPfrebXWIk9ZE9YitXJbc0NY2FQx2E5BYFUMpf86nwu0lCRQUlRpPumI+onWAIT1mygVb8
@@ -43,24 +44,29 @@ Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
 Received: from ness.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
  Transport; Mon, 11 Oct 2021 05:46:54 -0700
-From: <nicolas.ferre@microchip.com>
+From:   <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	<arm@kernel.org>, <soc@kernel.org>
-CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
-	<linux-kernel@vger.kernel.org>, linux-arm-kernel
-	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Kavyasree Kotagiri - I30978
-	<Kavyasree.Kotagiri@microchip.com>, Ludovic Desroches
-	<ludovic.desroches@microchip.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Linux Kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Kavyasree Kotagiri - I30978 
+        <Kavyasree.Kotagiri@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
 Subject: [GIT PULL] ARM: at91: soc for 5.16
-Date: Mon, 11 Oct 2021 14:46:50 +0200
+Date:   Mon, 11 Oct 2021 14:46:50 +0200
 Message-ID: <20211011124650.17218-1-nicolas.ferre@microchip.com>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Organization: microchip
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20211011124650.BrhXsy_lGJgpNvUCwJIM2NL8vI-zvcviZ-LvQ6ElWEU@z>
 
 From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
