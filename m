@@ -1,45 +1,28 @@
-Return-Path: <SRS0=0Wma=O7=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=7AiC=O7=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35C9AC433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 11 Oct 2021 20:37:10 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 483C1C433F5
+	for <soc@archiver.kernel.org>; Mon, 11 Oct 2021 20:40:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 10BA8603E7; Mon, 11 Oct 2021 20:40:08 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EAC43603E7
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 11 Oct 2021 20:37:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EAC43603E7
+	by mail.kernel.org (Postfix) with ESMTPS id 64E5260C4C;
+	Mon, 11 Oct 2021 20:40:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 64E5260C4C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=2Czc6Jz3HRZuWwqsK6TSUbMYWJ5mvRE7Z63pXh1qGVk=; b=ekI+gvcgq5piBQ
-	KTwUzL0XKOBqR+iIWMcTS41k573olpxsOy7Qa+XoxR2BOT5AHNZIPpZK1wTieulfWzx5C63pWvBmH
-	kGRqsK3m/bmLkA5peEaSsw5S/EUxNMzSdtC/0eKE7U0DlEqsUdiywMetQzTBVbtL5c9jYuVwVS/ss
-	lTTXJ7oajVX99RRApS4/g8Er1z07NJZcPVUqa0JMFZwkDmJxR3J+yKoCZzcjHTamKbV7fjLJey2n3
-	UNZbneoCntD5mi4Y5aCuF4IZvFxAFSs0yf/sJCmvjFyZstklg5Wl8QMhMgMEDVj7FoDiFnl5zQwqT
-	I1HfBrh6+362hlUMMCuw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1ma20t-00Absm-Oh; Mon, 11 Oct 2021 20:35:11 +0000
-Received: from mout.kundenserver.de ([212.227.17.13])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1ma20o-00AbrW-9f; Mon, 11 Oct 2021 20:35:07 +0000
-Received: from mail-wr1-f46.google.com ([209.85.221.46]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M1ZUb-1md2on3tLn-0032eT; Mon, 11 Oct 2021 22:35:02 +0200
-Received: by mail-wr1-f46.google.com with SMTP id o20so59726497wro.3;
- Mon, 11 Oct 2021 13:35:02 -0700 (PDT)
-X-Gm-Message-State: AOAM5313d+2wq8ZiGcyypkDIlyZBHGxwAucWAHG3ZUiQhtHutL2ri3gq
- gxNEwmCqubePvcBcD8QzuuLgJzrUqjhMDIg8vwM=
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MxmBi-1mxZu42bUM-00zIfu; Mon, 11 Oct 2021 22:35:02 +0200
+Received: by mail-wr1-f53.google.com with SMTP id i12so47242372wrb.7;
+        Mon, 11 Oct 2021 13:35:02 -0700 (PDT)
+X-Gm-Message-State: AOAM530ZqU/JKQwShHeDxXe8L83ky6ysE52qP9PsdBfd9yCzHxo9E4CH
+	2dJnRuROzTVrNH0/1LgClxTCzuq+qyQcDTQZs88=
 X-Google-Smtp-Source: ABdhPJx1wv+/ttFg8R4RChMinfeT7b//HX1BFbtzP0lK46YNi2vSxuV3p6bdSOkKi7UXRbaumdbBbEZ7F9jL4U0kXhQ=
-X-Received: by 2002:a05:600c:208:: with SMTP id
- 8mr1181367wmi.173.1633984502286; 
+X-Received: by 2002:a05:600c:208:: with SMTP id 8mr1181367wmi.173.1633984502286;
  Mon, 11 Oct 2021 13:35:02 -0700 (PDT)
 MIME-Version: 1.0
 References: <1a3d63a3-c020-3319-26f6-a2ec338cc42e@gmail.com>
@@ -52,49 +35,30 @@ Subject: Re: [GIT PULL] arm64: dts64: mediatek updates for v5.16
 To: Matthias Brugger <matthias.bgg@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
- "moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
- Chuanjia Liu <chuanjia.liu@mediatek.com>,
- Chun-Jie Chen <chun-jie.chen@mediatek.com>, 
- Enric Balletbo i Serra <enric.balletbo@collabora.com>,
- Kansho Nishida <kansho@chromium.org>
-X-Provags-ID: V03:K1:8t/gLvq9ZJKZ/zVCUWIjXktv4vO911So+/Gb319eBmQH3jlrY8+
- /OZjkyunQU7TeO5hr2IgAajZIijiObBr1zKqymiArJ0MiteFeygSs8Apvx/YBM/66CYMs9g
- jV+cmSlN2Q/zEfkwpHTG8V/uhDNetdRpvPfFtr0P46igr2MEtDSxGN7kFDzDZ/NEsO+Jb7r
- S0AmdJiKxZtRmaE7w8+YQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yj+BYAWQtKk=:TjpfHNWQzfHO5buRdCsEUr
- J3mitA+vwdziye2mWFBzCoh2yN1CGUMUs1fYRoLnYq44l9odh+fVsc5TckXufHoHa1ZgA39Ro
- im/UoLS+bgcNOJPKV1wCh/LgycZbpMoMMoOJoeulv5IrfPC45qtBSUVOEIY4rmBaKPO5BnKL+
- 6Xl7aZ3bi9CWzivKP5ufvYM7RnKWkMVm4OYijlEmlAdZ1jIu35F20J2Ni24HrsUecywhw8WYR
- l+p1K8NJVqaZltHOwFURAVbIATW2hzCjJ0zfuf6AOoJ81Z7CXfx/n6P6u+Bo5VHt2YywIquJ5
- hK3zPIWw18pUiUGMBm0fHMUm5s5Ev8nS1KtZ5hlakjgHF9gd355QnuZe/Bcq1hdcsNetgB0gi
- 14pFi70nvlR511kkkba2XSv2ra2N/QTGZ2K8aQmujof0gp5Za0v/r8OMoj3yaTvZGQfT8jLEs
- APomXI8fvy/rHqiOGprY1N0KxuEYLJLyzujPiPXMZgzuZTFJtmy1Yzu2ROu+hZf2gdtPeON9B
- buD9wqty94rg1pXqB+46vp7N3xdfsynKNWIQVooqwRHoc2/Ix+p3kvrBdwavcySLtXcml5oEv
- 061ufjYtwQ+M9/VLuOTvRXUOrXpFLSBRKEJxHxgVmMMaOO/9FDPJI8qNNTs52FEiKHqFOmvT+
- 5YFK0up8akuDciS2aD4/hN7FX6rCmPXXnmHw9bu+al7fh078NgxRJzgHuIzwC7Yqqp2fc+Nht
- OYjXzplw76i7SyS+VrxJ5Hrw/DBsEFdr6cOAgTFU2moDEZAxtNSjrO/EIMPKRXeAdBD8L3h6R
- TF0ep3M9R4tW64QaFr5Td41p6aX8nOfJFhmuPCxmRerjBuTs0SImj5g2h8p+fTRPb3HAiPARL
- n8vFmmagPCzp3dUqNg+w==
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211011_133506_663807_878AADD8 
-X-CRM114-Status: GOOD (  16.94  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211011203446.i3lZjHTHp-AsBQECRLRtTk0NAyuANr9c1kFppf09EAA@z>
+	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	Chuanjia Liu <chuanjia.liu@mediatek.com>, Chun-Jie Chen <chun-jie.chen@mediatek.com>, 
+	Enric Balletbo i Serra <enric.balletbo@collabora.com>, Kansho Nishida <kansho@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:9o5Udwejo70PU8XXR4tyh587qGFr6Gf+9HOAIxEc+PZm9724s9X
+ CFUp0Fklewoav4XZLqrUvON5J+WVtaVd+50dmcBv04Y5dg9EuT+GdihhOuRxkooRv7vJPSX
+ lOJixwsfR33gbSS9LZ/i9eqGt6en8Qqyfs21X82BMsIQoW7fRVDx9aH2/SGbF8ql4S9Aeth
+ XeD5fVq+TxudWXeyPF1Tg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yM8Meg27WWs=:6U8nakIwODyiT7AqJOpcl/
+ vNYHuSU9BH1fVTUFxPJVb/MFCi9y8AdXgyYU+8NZ/5VWwFHEzZB+6/DZlKB3b01JbKvM2WcUr
+ RqYD5odYp/huAzHrjGBXnhZE8fkv0++z1OGuR8bdSzopr9bpEvxZd5HqGobfUOpzXPSUuWjSh
+ 6Oa8dOzATqDpvYHTLgQn6CKBhFUIeNvh/xem/QDc22JoAa3yQum0LrGmIlTTIPW2Uead1iRl5
+ zlf4yaVd9b1P8ovfYuSdH3L1v5dP/pHsOJzY0hzMz5JHgGmZWXsTpf49xnoQzItV1TpSn/GKP
+ noL9xN9ii8QhkZt4fPAGutCvYHb05HCSJvVcbgHB0yAwv0rLKW50VTbpA9kLA71SfAPGxHEoI
+ h0cX9A8TFKxKJaB1mH+QiOV8/iroeJDaOXSkJHToMiuaPQ5S871gX2jUMvF3e1WUba/0Zm6YJ
+ RjpEzxEjs3fDxz4JnaUyGtI8Zwu0abgXyTrB9BzGPySGttoiuSJovCyDGGb1FPUSY8sp6tF/m
+ zqmtE5oKsuMS25BdUG49knIvar1bo2YAEY7DB/A/4jVt1NDzI3MzBf/VPdZswPIoCzARngy+/
+ GJudCjCXvbf+YhCayQgIPlgG8iH9WCZjRrMLPn7nLm+NsUdflmgaZKRHsxmJdcqLFcXMI0sOG
+ quwY2PKup6ojESW6LxEiPdpr60qX1sE80SHl6ROW3VHqwY3yTzZDOIjThRfvPIyE+77RGkTcM
+ FuOm2hi+N6OBRCQROGMdEfx9Pdwl5iPYcJbNOgdLS3WYQadGHH4373dTz5lcfiZSazFpB4FUF
+ oQ/er1HEjDFvjLgnCj/kbvYmToaZjt0Kr8qUdiObpPj9LyzOMQQFH3Jfr1CpdB+i9AmEq34lk
+ eoyPLYhvAUnUO6TuWG2w==
+Message-ID: <20211011203446.rZfe_3QQcdbtwV9iKJL03Hgc3u5JoiR6iV4iyL-EuC8@z>
 
 On Mon, Oct 11, 2021 at 11:58 AM Matthias Brugger
 <matthias.bgg@gmail.com> wrote:
@@ -131,8 +95,3 @@ is not helpful here because the list of commits is also part of
 the changeset description after I commit it.
 
           Arnd
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
