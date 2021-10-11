@@ -1,57 +1,101 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=jkUD=O7=lists.infradead.org=linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F287FC433F5
-	for <soc@archiver.kernel.org>; Mon, 11 Oct 2021 14:54:49 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id D380760E98; Mon, 11 Oct 2021 14:54:49 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 575D860EE2;
-	Mon, 11 Oct 2021 14:54:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6675FC433F5
+	for <linux-amlogic@archiver.kernel.org>; Mon, 11 Oct 2021 14:55:05 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 3884A60E98
+	for <linux-amlogic@archiver.kernel.org>; Mon, 11 Oct 2021 14:55:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3884A60E98
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=HGvVehf+FPNpBZPSNcyZVXN86nSDm4qH8CbAvK+nbIo=; b=AqyL74uP90PI1Z
+	LS8Vbjjzu61nv0V1gLLzNU6Yedbjtjrw0krzWMSxjGdFmneozjYKwzfhBctMFZ9gc/2hR9qKKTNR3
+	xESdt2bVIlgb2yJyIPyNQCROMipPuCx24VZCdopy88u3g7dc2tqm9ZcfJSEav7UCl1OgUuWPTht2a
+	jak+jHL/yh0NhlnWHF4M6fFMRX8svBsTm0RX1yFUT6P+k1xIVBTXk6yJyFaocb92MJs6fMx4tj2Wa
+	0RHkalObsGgEMaWhCphRDysEajSDqK0Iano5ne5Vz+OgtfPjkWfKbW8NwEW0tlBUnyD510iNwr3A7
+	0SQ0z/Eo0ykHgntbvegQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mZwhf-009q2W-2r; Mon, 11 Oct 2021 14:54:59 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mZwhQ-009py0-HV; Mon, 11 Oct 2021 14:54:45 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0472860EE5;
+ Mon, 11 Oct 2021 14:54:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1633964089;
-	bh=+SeONx+qFJ4IgkySGTxq3TiA/eU6y5Oq2tRn7U8EWG8=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=l6ZQ07TvC0KsLyyFW7QCgG1N8p6+Pzwd5j5zd39doZG9VF+HtWlMCTnBlRH2LncIu
-	 HahYybWIEnZFhOC1Hy5Hg3V195RtJ4QOqqEy0HyMCZkWUXGrEzxfjl0aYf+/7rvGZS
-	 PFjynqpobNxpQ/C9e4Y+qukovFxhUd5PdAwpHsU79VPb5fxE+YcRMcTuRFhs+lTTXW
-	 U6bmf4y1RKvwvwNotVe4O8V+ghAvQuVQ52i+7av9culuOW9xhmZZgBFNNsruTH8GIa
-	 9CHveNkL0GW0iIBz4+1Pi/BCGCveMPORNQlkMdVfGVoQGGVdfvMFzodu5/ZZ/FMTNn
-	 9z9dsUHCH0ZVg==
+ s=k20201202; t=1633964084;
+ bh=C+r4dLx6Ys+xr9OG/lS4p3ctbdi36eShMGEjAuZymw0=;
+ h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=rLQ4Oros8AgSX4MQNsGHNoi8T0zrIlCSMBBA/wYGbakokMdfYJDhIEwuUaLy1GbiA
+ iu3zQ5UYdDsRY0IPeG670Q6eFXdcKzL6dFf2G+lwoX4rJIsdviGxG2EgVllT3wDq8I
+ ugZXMMOtwfUdGSOLpXkPo7DBcp6Hu3p7ztpaBe4/ClowKOF2XRbD8GMDmhbng752Wo
+ ufoMirfIsY3UHz5fT3DXuKTOw2fHYZhPpd7/vBluSP/+6cKEsmnJ/p52u8l13J3mWx
+ i9d6R1lGQGExK/MRjtGx1cfkvhCvjYa0dkKa1efceWBgxAuiiO1g4oYjGoJuqJyedw
+ SZVpQAFcnLmlg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org,
-	Thierry Reding <thierry.reding@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-tegra@vger.kernel.org,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 4/7] cpuidle: tegra: Changes for v5.16-rc1
-Date: Mon, 11 Oct 2021 16:54:31 +0200
-Message-Id: <163396399115.3170841.17824361993367334178.b4-ty@arndb.de>
+To: "arm@kernel.org" <arm@kernel.org>, soc@kernel.org,
+ Neil Armstrong <narmstrong@baylibre.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-amlogic@lists.infradead.org,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [GIT PULL] soc: amlogic: driver updates for v5.16
+Date: Mon, 11 Oct 2021 16:54:28 +0200
+Message-ID: <163396399096.3170841.5782337655825464618.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20211008201132.1678814-5-thierry.reding@gmail.com>
-References: <20211008201132.1678814-1-thierry.reding@gmail.com> <20211008201132.1678814-5-thierry.reding@gmail.com>
+In-Reply-To: <f8e020d3-29f7-0745-3864-01975edd20f7@baylibre.com>
+References: <f8e020d3-29f7-0745-3864-01975edd20f7@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211011_075444_617091_4C9E0DCB 
+X-CRM114-Status: UNSURE (   6.14  )
+X-CRM114-Notice: Please train this message.
+X-BeenThere: linux-amlogic@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-amlogic.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-amlogic>, 
+ <mailto:linux-amlogic-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-amlogic/>
+List-Post: <mailto:linux-amlogic@lists.infradead.org>
+List-Help: <mailto:linux-amlogic-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-amlogic>,
+ <mailto:linux-amlogic-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-amlogic" <linux-amlogic-bounces@lists.infradead.org>
+Errors-To: linux-amlogic-bounces+linux-amlogic=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211011145428.q_hpj-IKlhXYFc_qhqfigqXruSg-6qa-pbM44z3rIn8@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 8 Oct 2021 22:11:29 +0200, Thierry Reding wrote:
+On Thu, 7 Oct 2021 11:43:57 +0200, Neil Armstrong wrote:
+> Please find for v5.16 two devm_platform_ioremap_resource() updates and a change adding a new SOC ID used in the new Radxa Zero board.
+> 
+> Neil
+> 
 > The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 > 
 >   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.16-cpuidle
 > 
 > [...]
 
 Merged into arm/drivers, thanks!
 
-merge commit: 55ab5942316d92d70fa465c114846dba7b7fc0a6
+merge commit: 88557618909a70460a3c1a898cdcc10c43a2aad1
 
        Arnd
+
+_______________________________________________
+linux-amlogic mailing list
+linux-amlogic@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-amlogic
