@@ -2,14 +2,14 @@ Return-Path: <SRS0=0Wma=O7=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12424C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 11 Oct 2021 14:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9889BC433EF
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 11 Oct 2021 14:57:38 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D870C60C4D
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 11 Oct 2021 14:57:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D870C60C4D
+	by mail.kernel.org (Postfix) with ESMTPS id 5DC9D60C4D
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 11 Oct 2021 14:57:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5DC9D60C4D
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -18,46 +18,46 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=gwHaTjDj76/Ga0NPI9/pwy4IIAABsYZ7/I8hQXcche8=; b=wgWWPOqPK4E89s
-	jkXx8IiyjhhmFb9x1tk1jkhvTKUd3A8uKOwaPw1LfGqru0+Ic5bo1jksoLPvg1MVrGe6rX8F5syhv
-	Du6uu6QshrwcxtDvCHWrJ8+TDGUyJIhMSXd7fYWo8k5QO9YSWfxeIrLRaxbHjdTGzlTKnJYY05ueO
-	Dqz1w+9RUoGZIFkUWRo5A3nw92tS2wKjzNloeAZnAms+Avj6eb6VyLsBtSoZR7WalmO34UdC2ps87
-	VJXj8HYOYRcXL0OXW1J59sweDkhPkCpBHCg3fjjyo8UCIg16ruKLl/iyDmrZoQAOKCcczAe7lj5Q/
-	A4aPLl2Mb0yH1BnRepLA==;
+	List-Owner; bh=e5UmqkXxm4q1CJemrPkfuj5JuMXgg0QO4JW369U6yF0=; b=jn3f8a9B8tvT+u
+	SNPTUqYKsAQoY7KHT+aXmJhY7h3lfhhbDHp+oXas5OGrtYsWd3Nb0O/Y+SF1eNd+DwNUxN4jTwIoy
+	Lhkl8gfaxboghzZx4zFhpugiWOSSOQ+TA8B16pkUYL9wsmKzZ6/yzFaK//xb4MWzIdPB+mexIP7gp
+	ST7PEL5A0jV5Q4LHc35SfHWlrs7QzrNUYuJLOZdBOZn5PTra+3GWqGu8cB1BbVA0ReN7QlXWZfDyb
+	Bi8d23GwZBN+d9lQDfhmN+SXzPpUwUfm8F2yt1t4E+gcwX0Eo+6kkGZTpxtKuwjXhz2Us6F/3rM87
+	iZzrflmaTOfKnXWWKFBw==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mZwiG-009qF3-1y; Mon, 11 Oct 2021 14:55:36 +0000
+	id 1mZwi5-009qBY-4A; Mon, 11 Oct 2021 14:55:25 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mZwhW-009q0h-1c
- for linux-arm-kernel@lists.infradead.org; Mon, 11 Oct 2021 14:54:51 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 575D860EE2;
- Mon, 11 Oct 2021 14:54:48 +0000 (UTC)
+ id 1mZwhU-009q00-BL
+ for linux-arm-kernel@lists.infradead.org; Mon, 11 Oct 2021 14:54:49 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8018060EE5;
+ Mon, 11 Oct 2021 14:54:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1633964089;
- bh=+SeONx+qFJ4IgkySGTxq3TiA/eU6y5Oq2tRn7U8EWG8=;
+ s=k20201202; t=1633964087;
+ bh=pZ+xEJlsAEr0VTBwghNLcMmvrnqahk/7Ny9f+WldpfI=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=l6ZQ07TvC0KsLyyFW7QCgG1N8p6+Pzwd5j5zd39doZG9VF+HtWlMCTnBlRH2LncIu
- HahYybWIEnZFhOC1Hy5Hg3V195RtJ4QOqqEy0HyMCZkWUXGrEzxfjl0aYf+/7rvGZS
- PFjynqpobNxpQ/C9e4Y+qukovFxhUd5PdAwpHsU79VPb5fxE+YcRMcTuRFhs+lTTXW
- U6bmf4y1RKvwvwNotVe4O8V+ghAvQuVQ52i+7av9culuOW9xhmZZgBFNNsruTH8GIa
- 9CHveNkL0GW0iIBz4+1Pi/BCGCveMPORNQlkMdVfGVoQGGVdfvMFzodu5/ZZ/FMTNn
- 9z9dsUHCH0ZVg==
+ b=M8MgE1kCRF8wcwMaeyjJ9VXBi32ZUj0Qw7Q1OgB7RDuZAwiGOUur7Je0oOh8047Px
+ 5Pgkoq7eTL3g09p9j0609Lr6zVpqdLG1vnTV4No3CVXK0jxehHxYC5QjhN0h29glHf
+ 7HcEI1byvE92TOHXOLqSLXkLZsn0JdRUm9jidd7jfDwQ8rUaeMjmH3oXzYb0XGgP+T
+ 9b5noTqTcbPDapVa+7m6BDOD9eTxuwSfVXOeHz5PHkOqXke3V2ecVViF1KRO5Upwbp
+ X9o/d89mUJu0GZCt9/vAndApwEhAccOzX7QJZaB1GEMIB09j3teZ6cOMZwcV8kI1Dg
+ JL0uGSSOT90YQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org, soc@kernel.org, Thierry Reding <thierry.reding@gmail.com>
 Cc: Arnd Bergmann <arnd@arndb.de>, linux-tegra@vger.kernel.org,
  Jon Hunter <jonathanh@nvidia.com>, linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 4/7] cpuidle: tegra: Changes for v5.16-rc1
-Date: Mon, 11 Oct 2021 16:54:31 +0200
-Message-ID: <163396399115.3170841.17824361993367334178.b4-ty@arndb.de>
+Subject: Re: [GIT PULL 3/7] soc/tegra: Changes for v5.16-rc1
+Date: Mon, 11 Oct 2021 16:54:30 +0200
+Message-ID: <163396399109.3170841.4569162737029202550.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20211008201132.1678814-5-thierry.reding@gmail.com>
+In-Reply-To: <20211008201132.1678814-4-thierry.reding@gmail.com>
 References: <20211008201132.1678814-1-thierry.reding@gmail.com>
- <20211008201132.1678814-5-thierry.reding@gmail.com>
+ <20211008201132.1678814-4-thierry.reding@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211011_075450_133063_785EEEFF 
+X-CRM114-CacheID: sfid-20211011_075448_470035_B6166EC1 
 X-CRM114-Status: UNSURE (   6.33  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
@@ -75,24 +75,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211011145431.gQFJVwgdNPN1vg85YQ8XQUvlWKtdzeh65hy9IpwDebU@z>
+Message-ID: <20211011145430.UbGKwZRJ9LrPm3SnSzvx30q1aaHyc5l5ZZ7VLx0fVYE@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 8 Oct 2021 22:11:29 +0200, Thierry Reding wrote:
+On Fri, 8 Oct 2021 22:11:28 +0200, Thierry Reding wrote:
 > The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 > 
 >   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.16-cpuidle
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.16-soc
 > 
 > [...]
 
 Merged into arm/drivers, thanks!
 
-merge commit: 55ab5942316d92d70fa465c114846dba7b7fc0a6
+merge commit: 94b847c76692b56ab9b9a76c62b831d42b23e18e
 
        Arnd
 
