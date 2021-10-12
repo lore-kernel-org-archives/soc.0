@@ -1,33 +1,50 @@
-Return-Path: <SRS0=b05Z=PA=ti.com=nm@kernel.org>
+Return-Path: <SRS0=hZui=PA=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10385C433EF
-	for <soc@archiver.kernel.org>; Tue, 12 Oct 2021 12:08:21 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id D6FB9610C9; Tue, 12 Oct 2021 12:08:20 +0000 (UTC)
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46525C433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 12 Oct 2021 12:11:04 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 988EA60F92;
-	Tue, 12 Oct 2021 12:08:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 988EA60F92
+	by mail.kernel.org (Postfix) with ESMTPS id 0F79060F92
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 12 Oct 2021 12:11:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0F79060F92
 Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=ti.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:
+	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
+	MIME-Version:Message-ID:Subject:CC:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+	References:List-Owner; bh=c10vH0295ngvvEh+xa7odEvqTnH0pkZBSEsTdTPrMr0=; b=24N
+	9Z/GGdNPFlU3r33yNkeIgFrXmeRBv24q3R1uOQ8V7LBsBl3CyxRIMZ7DcwKPAAzEzrDM3Qvq6tGh2
+	wPTorCuROnYugqX8PNnLIURyRKSP+PcjlP5aCcgZ6yLwa0yYGi41UHiWpCKrwWWFpB3cqUNzisLM0
+	vPwOo2noZya9D0tPeoiat7jlj060CcXtUDcBmqxXD7w0XzbyWYhtxh+eeEdTog8QWSGHI5LG4EScU
+	t+MHMRAp/r+VNNoIo2JmpJ1E8OiFsWrxUhAj9R5ncyCrKVMcP9er/qAVXZYWm2p8E5nVLUohsp42t
+	1lBeLPHqP7MOKpODhl5DcpVNYt8cTHQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1maGaI-00Cj9T-TI; Tue, 12 Oct 2021 12:08:43 +0000
+Received: from fllv0016.ext.ti.com ([198.47.19.142])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1maGa4-00Cj5S-TE
+ for linux-arm-kernel@lists.infradead.org; Tue, 12 Oct 2021 12:08:31 +0000
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 19CC8Hso051427;
-	Tue, 12 Oct 2021 07:08:17 -0500
+ by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 19CC8Hso051427;
+ Tue, 12 Oct 2021 07:08:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1634040497;
-	bh=4oOkOKVmpHRmmefNMWhNF9KUMmYSnPAMUu8b9ZRQ18E=;
-	h=Date:From:To:CC:Subject;
-	b=UGUe7sdYZgAmBT6Ha8B6h+Lg4Ekf7dpH/zL35Bavwn+JbVTsel+gWQyqxM8nHeVfr
-	 JDGyRWt2dpojhi7wBzjdeSS2jj8A5LVr3cZtIq5k0J9m1CgTzarfp7wh+PwZyqT4L6
-	 bxu6pbfiyvoJco5Z6RAoJ9LJknQwS+3mkEn94SLw=
+ s=ti-com-17Q1; t=1634040497;
+ bh=4oOkOKVmpHRmmefNMWhNF9KUMmYSnPAMUu8b9ZRQ18E=;
+ h=Date:From:To:CC:Subject;
+ b=UGUe7sdYZgAmBT6Ha8B6h+Lg4Ekf7dpH/zL35Bavwn+JbVTsel+gWQyqxM8nHeVfr
+ JDGyRWt2dpojhi7wBzjdeSS2jj8A5LVr3cZtIq5k0J9m1CgTzarfp7wh+PwZyqT4L6
+ bxu6pbfiyvoJco5Z6RAoJ9LJknQwS+3mkEn94SLw=
 Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 19CC8HfM051869
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 12 Oct 2021 07:08:17 -0500
+ by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 19CC8HfM051869
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Tue, 12 Oct 2021 07:08:17 -0500
 Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE109.ent.ti.com
  (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
@@ -37,24 +54,44 @@ Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
  Frontend Transport; Tue, 12 Oct 2021 07:08:17 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-	by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 19CC8Ho3002677;
-	Tue, 12 Oct 2021 07:08:17 -0500
+ by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 19CC8Ho3002677;
+ Tue, 12 Oct 2021 07:08:17 -0500
 Date: Tue, 12 Oct 2021 07:08:17 -0500
 From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        <arm@kernel.org>, <soc@kernel.org>
+ <arm@kernel.org>, <soc@kernel.org>
 CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>
+ <linux-kernel@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Nishanth Menon <nm@ti.com>
 Subject: [GIT PULL] arm64: dts: TI K3 updates for v5.16
 Message-ID: <20211012120817.beqhp4tygnf3xyi5@wireless>
 MIME-Version: 1.0
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211012_050829_128799_543A5D85 
+X-CRM114-Status: GOOD (  15.54  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: multipart/mixed; boundary="===============7285213477097956927=="
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211012120817.PY2HnHdqx3WmegQK8C2pFCp6kAbfhBW7YlEISpDN9TU@z>
+
+--===============7285213477097956927==
 Content-Type: multipart/signed; micalg=pgp-sha512;
 	protocol="application/pgp-signature"; boundary="kcl6uq6jur7wwyyd"
 Content-Disposition: inline
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
 --kcl6uq6jur7wwyyd
 Content-Type: text/plain; charset=us-ascii
@@ -207,3 +244,18 @@ NldTry7S7zwiG61YjcDPRWejZt8bU5gvnA2uJdgafzvo8PUNkD9wSBcIAKyTsrMI
 -----END PGP SIGNATURE-----
 
 --kcl6uq6jur7wwyyd--
+
+
+--===============7285213477097956927==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+--===============7285213477097956927==--
+
