@@ -1,53 +1,69 @@
-Return-Path: <SRS0=kpQH=PB=gmail.com=matthias.bgg@kernel.org>
+Return-Path: <SRS0=m4qr=PB=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09BA0C433EF
-	for <soc@archiver.kernel.org>; Wed, 13 Oct 2021 16:20:40 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id E222360E96; Wed, 13 Oct 2021 16:20:39 +0000 (UTC)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0A33C433EF
+	for <linux-mediatek@archiver.kernel.org>; Wed, 13 Oct 2021 16:20:59 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B70FE60D42;
-	Wed, 13 Oct 2021 16:20:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B70FE60D42
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id e3so10069863wrc.11;
-        Wed, 13 Oct 2021 09:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=0WQtejUs0U+1oNTFLhT9yrIgvAfHwe1zgZIDzP381OQ=;
-        b=LIKdnhYCduCXhInUyS5BRlABtNFROrwdW/EsLhswGTImNb51Qv+m7tO7Q+UbNx6d7I
-         D1I4uq3Po+1HPFpssO8o/bCYubjv7OSHBw/7yI6yhb5F9UMdJ1kRqTkE6ProseNlymbD
-         DLH65t2Spme47VNFQY++FPKcfIKkTqvu4YD+WDUEMB3vANa0SUBQ84L+KohX7s8P/Fvq
-         bB2vzf79xwQedrDSPQJALNT2f/u9ZSACdidUPyFJVJHAWXi4j2y+f+O712iYn2awRqCU
-         pxaJDjfSVc8rFNbXPtG1533QKhPfo0AfATriXepb0fbaoFVWBl0Zc3WviK14fmjUXw+I
-         cewQ==
+	by mail.kernel.org (Postfix) with ESMTPS id B206960D42
+	for <linux-mediatek@archiver.kernel.org>; Wed, 13 Oct 2021 16:20:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B206960D42
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:
+	Content-Transfer-Encoding:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:Subject:From:References:Cc:To:
+	MIME-Version:Date:Message-ID:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=s8GEQjkaAMDddOSCubK72WDocO3Pjuo99DHyw6vZ9hk=; b=eHiyok92Aljqql
+	uEWqt1P540vLEIr9aZpGbQMwDDqQEb+7LUaK6hQh6Hf1WgET9p/TArrImbqet6lt0EuIITBLTECk0
+	Ha+VSlNGq+0Q/hi+aCalNAGbvdGNb7Uqx9tUpU9RTuSjmMRJk0jsf/ZPR/rQKOQr8eKVNLOGgDyc5
+	B99BkUD+oMyRCN5IDTweW4mV0NGQlBHW/4+2bm7AB1sLLuV+QTz3RgvBzcNmweG2OIkqZIa8l3uFl
+	mYl1BPz7sP0MbcZch2zjpMRiwBqLVD1MDolVH/ZLOWPKWYd4tXlPXEXHzaKr15J6W8UvEUnv1n/3k
+	uDr9ri8vNS/gxMOfBDxA==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1magzj-0000fc-KT; Wed, 13 Oct 2021 16:20:43 +0000
+Received: from mail-wr1-x42a.google.com ([2a00:1450:4864:20::42a])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1magzf-0000e4-Ve; Wed, 13 Oct 2021 16:20:41 +0000
+Received: by mail-wr1-x42a.google.com with SMTP id i12so10193337wrb.7;
+ Wed, 13 Oct 2021 09:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:content-language:to:cc
+ :references:from:subject:in-reply-to:content-transfer-encoding;
+ bh=0WQtejUs0U+1oNTFLhT9yrIgvAfHwe1zgZIDzP381OQ=;
+ b=LIKdnhYCduCXhInUyS5BRlABtNFROrwdW/EsLhswGTImNb51Qv+m7tO7Q+UbNx6d7I
+ D1I4uq3Po+1HPFpssO8o/bCYubjv7OSHBw/7yI6yhb5F9UMdJ1kRqTkE6ProseNlymbD
+ DLH65t2Spme47VNFQY++FPKcfIKkTqvu4YD+WDUEMB3vANa0SUBQ84L+KohX7s8P/Fvq
+ bB2vzf79xwQedrDSPQJALNT2f/u9ZSACdidUPyFJVJHAWXi4j2y+f+O712iYn2awRqCU
+ pxaJDjfSVc8rFNbXPtG1533QKhPfo0AfATriXepb0fbaoFVWBl0Zc3WviK14fmjUXw+I
+ cewQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=0WQtejUs0U+1oNTFLhT9yrIgvAfHwe1zgZIDzP381OQ=;
-        b=RFPA3ykWoxPhFcS+dJduV3NGUolqCoGZhO+7UZVEAaqqvmXZtdOw5/d0Q2B6nPnYsL
-         QcT0Y6Of4L+Cih/JxUhONZXlTIL1zXXdObrh2ii34GhClk0xPL2cDziIXm1tVy4EZgZ5
-         xFW78ZKLLkJWQRzc4zwWJqh8/mQWjL+6LcwZpF/qZmHPL8e9mOsKgc7rt7LAzTLca9wm
-         Cq/Y/8s55DdUdAKYTzqdFpsQt1bBV1XwUiOpinlR72P/FDmN+TuWAY5M30uMx1NI6NnK
-         U4GCb8fhpSNTGQWjOU63lqYhY/p/EHhp2PsjKx/9IoN0jECdAmPBkzNv2j3cgidLzVZ5
-         bZlQ==
-X-Gm-Message-State: AOAM533Psbak7/dgljngWh0AMbe3Kh1ucz0pkn2xNnj8scQojb8BRTU6
-	fJkOf/8y7D2YjkoznhABsYo=
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent
+ :content-language:to:cc:references:from:subject:in-reply-to
+ :content-transfer-encoding;
+ bh=0WQtejUs0U+1oNTFLhT9yrIgvAfHwe1zgZIDzP381OQ=;
+ b=57KLWGtC+EvxyqzUefo2iJEcr5n4GQ+a2vTxwVbkvFThdbAN0yzDp4+ArcNfVmxCvF
+ /SL/Q+BM8QeAal9Ue7OlagwGvJkD1FIZ1TLQmqLxVALhDWjttAmoOcBJR1vEX5VL740x
+ oK5UG6pB5sCZbIB1lFqyKSVdaD2t1Lf33UGiZFy1Ctvc8oSC8kycIt2EM7wP66bJ0CMz
+ xs8ROW6QBlj6dAaMJFwEDCZU2XrqeEA1aGaVQCbUJ59V/n5tf79+bWzw1qUzL+JRo39k
+ lXslskxdTix+ZfCZRiAOF2lt4MXVr84WI7kJGXBP07fnDguh/jehv92xews/xfKMpxyS
+ Kg8w==
+X-Gm-Message-State: AOAM530E8URjMGITyyiz4NK/b95XH+z+G0Rzi/5h5o6WmiZjiaIFcxEG
+ 7F/b3YX6I3O3ZkiqY0x7pHY=
 X-Google-Smtp-Source: ABdhPJwvK29YiRXmRWUBqDWD4P+uxY6vfiqSKI6fNBN1Oisbb1TTAIl6Xk0ysRuB7CviCTIGY18aDw==
 X-Received: by 2002:adf:a496:: with SMTP id g22mr108648wrb.13.1634142038182;
-        Wed, 13 Oct 2021 09:20:38 -0700 (PDT)
-Received: from ?IPV6:2620:113:80c0:8000:c::779? (nat0.nue.suse.com. [2001:67c:2178:4000::1111])
-        by smtp.gmail.com with ESMTPSA id r9sm20051wrn.95.2021.10.13.09.20.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Oct 2021 09:20:37 -0700 (PDT)
+ Wed, 13 Oct 2021 09:20:38 -0700 (PDT)
+Received: from ?IPV6:2620:113:80c0:8000:c::779? (nat0.nue.suse.com.
+ [2001:67c:2178:4000::1111])
+ by smtp.gmail.com with ESMTPSA id r9sm20051wrn.95.2021.10.13.09.20.34
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 13 Oct 2021 09:20:37 -0700 (PDT)
 Message-ID: <d6e47a80-9d35-3236-f631-0e3bf8f9db17@gmail.com>
 Date: Wed, 13 Oct 2021 18:20:34 +0200
 MIME-Version: 1.0
@@ -69,8 +85,25 @@ References: <20211005202833.96526-1-luca@z3ntu.xyz>
 From: Matthias Brugger <matthias.bgg@gmail.com>
 Subject: Re: [PATCH 2/2] arm: dts: mt6589: Add device tree for Fairphone 1
 In-Reply-To: <5755444.lOV4Wx5bFT@g550jk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211013_092040_081896_ED8963FA 
+X-CRM114-Status: GOOD (  34.44  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211013162034.oJeHHYIjdSRlO5J5fmKOWkPPgMGqAB4hA9y-6exywzo@z>
 
 
 
@@ -213,3 +246,8 @@ Matthias
 > 
 > 
 > 
+
+_______________________________________________
+Linux-mediatek mailing list
+Linux-mediatek@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-mediatek
