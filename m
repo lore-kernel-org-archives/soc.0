@@ -1,253 +1,103 @@
-Return-Path: <SRS0=+cAE=PB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=dXuL=PB=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFB51C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 13 Oct 2021 16:23:03 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5635C433F5
+	for <soc@archiver.kernel.org>; Wed, 13 Oct 2021 16:24:24 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id BE90361053; Wed, 13 Oct 2021 16:24:24 +0000 (UTC)
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9B26061053
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 13 Oct 2021 16:23:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9B26061053
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:
-	Content-Transfer-Encoding:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:Subject:From:References:Cc:To:
-	MIME-Version:Date:Message-ID:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=gQaI+Qr9O/I7c6U38xIlINYV+tstKh2ywPZzLXxTBeA=; b=Wm0wxwQlGk0AJV
-	t4PyP6cDOuqZ8mXbu7+sV3slTQQQoQ/56ni09xqB/FI57fjQIXvfYLlna0EWiWY0GWWth2Ycol7H9
-	U7UuSrLIoccGuV73xgE1hbM6BvX0B8JrlB5SX/s6oufl27NNdoGLMfaOovJ4gM1+KbmMy0f1IXGcY
-	mqVjl/3UzFOI6xm3el5qqDEgdIw+JmXB1rexccGnmYly+mUQ6pw32dq7CxnJrzFlaZnrmZjeEZZ2A
-	it2RMU7gTjGbtlY5Kv79WQ9nFvnWalNayVe+noD71ERTzlALi4BnjlCvhU6pryW04ikU8X2UrK0Ft
-	kiEqdOCSdnJlR7z7zwHA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1magzm-0000g1-Vm; Wed, 13 Oct 2021 16:20:47 +0000
-Received: from mail-wr1-x42a.google.com ([2a00:1450:4864:20::42a])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1magzf-0000e4-Ve; Wed, 13 Oct 2021 16:20:41 +0000
-Received: by mail-wr1-x42a.google.com with SMTP id i12so10193337wrb.7;
- Wed, 13 Oct 2021 09:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:content-language:to:cc
- :references:from:subject:in-reply-to:content-transfer-encoding;
- bh=0WQtejUs0U+1oNTFLhT9yrIgvAfHwe1zgZIDzP381OQ=;
- b=LIKdnhYCduCXhInUyS5BRlABtNFROrwdW/EsLhswGTImNb51Qv+m7tO7Q+UbNx6d7I
- D1I4uq3Po+1HPFpssO8o/bCYubjv7OSHBw/7yI6yhb5F9UMdJ1kRqTkE6ProseNlymbD
- DLH65t2Spme47VNFQY++FPKcfIKkTqvu4YD+WDUEMB3vANa0SUBQ84L+KohX7s8P/Fvq
- bB2vzf79xwQedrDSPQJALNT2f/u9ZSACdidUPyFJVJHAWXi4j2y+f+O712iYn2awRqCU
- pxaJDjfSVc8rFNbXPtG1533QKhPfo0AfATriXepb0fbaoFVWBl0Zc3WviK14fmjUXw+I
- cewQ==
+	by mail.kernel.org (Postfix) with ESMTPS id 3289061168
+	for <soc@kernel.org>; Wed, 13 Oct 2021 16:24:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3289061168
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5B8213FFDE
+	for <soc@kernel.org>; Wed, 13 Oct 2021 16:24:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1634142262;
+	bh=rIEj21HHKhJcsySyHApcwExmEsShxKv23rfMFAlFGSI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=V4rg/Cz/R+BoFKXe4B+BYQ0rHB/1jqbZ8RqoHNbCPlWmfuyllcIezoMCb0hltroJH
+	 gn2nn6w2JGMWRLUuNT+G2Ylw7zPf5ZWng82mNNq6V4dz0st0F0ItEGQL0PsVz+cbKe
+	 0iQ6HF9n6i2/4OR88H+w0qUnHwIQb0PGbRowcsXnNPXUZJ0jKOh99pckIxAlvTlg66
+	 UcT43/rBnhQvZNeNDlmRODXAnx1JnEL5HA8h6pJ1itPBMmyqazDBhrdCdEmOSnYRdB
+	 AvHF/d1qP7x/yP/Xl7ttfKNstkDq9Px3X7ajE0poDAR4De6x7T23BXW/DIPsbaDzhv
+	 60QJSsLEgEQzA==
+Received: by mail-lf1-f69.google.com with SMTP id b36-20020a0565120ba400b003fda644089bso2374918lfv.18
+        for <soc@kernel.org>; Wed, 13 Oct 2021 09:24:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent
- :content-language:to:cc:references:from:subject:in-reply-to
- :content-transfer-encoding;
- bh=0WQtejUs0U+1oNTFLhT9yrIgvAfHwe1zgZIDzP381OQ=;
- b=57KLWGtC+EvxyqzUefo2iJEcr5n4GQ+a2vTxwVbkvFThdbAN0yzDp4+ArcNfVmxCvF
- /SL/Q+BM8QeAal9Ue7OlagwGvJkD1FIZ1TLQmqLxVALhDWjttAmoOcBJR1vEX5VL740x
- oK5UG6pB5sCZbIB1lFqyKSVdaD2t1Lf33UGiZFy1Ctvc8oSC8kycIt2EM7wP66bJ0CMz
- xs8ROW6QBlj6dAaMJFwEDCZU2XrqeEA1aGaVQCbUJ59V/n5tf79+bWzw1qUzL+JRo39k
- lXslskxdTix+ZfCZRiAOF2lt4MXVr84WI7kJGXBP07fnDguh/jehv92xews/xfKMpxyS
- Kg8w==
-X-Gm-Message-State: AOAM530E8URjMGITyyiz4NK/b95XH+z+G0Rzi/5h5o6WmiZjiaIFcxEG
- 7F/b3YX6I3O3ZkiqY0x7pHY=
-X-Google-Smtp-Source: ABdhPJwvK29YiRXmRWUBqDWD4P+uxY6vfiqSKI6fNBN1Oisbb1TTAIl6Xk0ysRuB7CviCTIGY18aDw==
-X-Received: by 2002:adf:a496:: with SMTP id g22mr108648wrb.13.1634142038182;
- Wed, 13 Oct 2021 09:20:38 -0700 (PDT)
-Received: from ?IPV6:2620:113:80c0:8000:c::779? (nat0.nue.suse.com.
- [2001:67c:2178:4000::1111])
- by smtp.gmail.com with ESMTPSA id r9sm20051wrn.95.2021.10.13.09.20.34
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 13 Oct 2021 09:20:37 -0700 (PDT)
-Message-ID: <d6e47a80-9d35-3236-f631-0e3bf8f9db17@gmail.com>
-Date: Wed, 13 Oct 2021 18:20:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.2
-Content-Language: en-US
-To: Luca Weiss <luca@z3ntu.xyz>, linux-mediatek@lists.infradead.org
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rIEj21HHKhJcsySyHApcwExmEsShxKv23rfMFAlFGSI=;
+        b=bT/MC01u2aEXryOnV4xRG1bCcEQ6nC6VOBM5fsPIaLL4hEoa8fl009sCku4k0MrUlZ
+         /uBYESXXQbZB77L1COn67jsPaduGvt6fnTixrP5PuzDMb19iEtctqgPicUuK2cue4jCb
+         KBol3VJdVITG1d9WqA0vUw4jWCsUroX5cHlZi+hoq3xuTO8g/42jfti31bIZ+hZrcUWD
+         JKVIYicBfVQ2r81sr8oyaEX3E5Q2iAmSmJvvGHHeZOGFTQHAxIGyI0xz3Kq8tSQKIAPD
+         7LMILgArCsChWjZzgZPB6rbpWRIkcecOBsX9s2NB9pwUfDTKnT4eX9hqEwyecaKHIhKL
+         9NwA==
+X-Gm-Message-State: AOAM530lZw8sULvRsjcUArJRnCvRwuayqjHfhKGOrff17A9LKewCyuhi
+	kWJaZMZrCdABgQYhCF2OlwKKf0yXVlfEP8Vpb0J/GIdvu/DOq5rgTo7Ur5DzOvWg6B4gN6Axv58
+	QfsWZr/5CalHQyhgg7+XEn9g=
+X-Received: by 2002:a2e:9790:: with SMTP id y16mr323444lji.175.1634142261793;
+        Wed, 13 Oct 2021 09:24:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyoTIiea+8iBrlt5YSeJhanTDXQjxIM9l83Tywf3oR1RICkS2ZGaOCR5f49WvdAq4nAXfiLdA==
+X-Received: by 2002:a2e:9790:: with SMTP id y16mr323422lji.175.1634142261620;
+        Wed, 13 Oct 2021 09:24:21 -0700 (PDT)
+Received: from kozik-lap.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id r3sm1372281lfc.169.2021.10.13.09.24.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Oct 2021 09:24:21 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, Arnd Bergmann <arnd@arndb.de>,
- Enric Balletbo i Serra <enric.balletbo@collabora.com>,
- Fabien Parent <fparent@baylibre.com>, Hsin-Yi Wang <hsinyi@chromium.org>,
- Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>,
- Sean Wang <sean.wang@mediatek.com>, Seiya Wang <seiya.wang@mediatek.com>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, soc@kernel.org
-References: <20211005202833.96526-1-luca@z3ntu.xyz>
- <20211005202833.96526-2-luca@z3ntu.xyz>
- <686404ce-2e0b-5470-b095-1c1fd7c18250@gmail.com> <5755444.lOV4Wx5bFT@g550jk>
-From: Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH 2/2] arm: dts: mt6589: Add device tree for Fairphone 1
-In-Reply-To: <5755444.lOV4Wx5bFT@g550jk>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211013_092040_081896_ED8963FA 
-X-CRM114-Status: GOOD (  34.44  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211013162034.7uAEjpQUH7UU_09bUnEr8vYpH7Ds31YHVHR2yiPO_OY@z>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/2] ARM: dts: samsung: dts for v5.16
+Date: Wed, 13 Oct 2021 18:24:17 +0200
+Message-Id: <20211013162418.43072-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 
-On 12/10/2021 19:54, Luca Weiss wrote:
-> Hi Matthias,
-> 
-> On Freitag, 8. Oktober 2021 13:49:25 CEST Matthias Brugger wrote:
->> On 05/10/2021 22:28, Luca Weiss wrote:
->>> Add rudimentary support for the Fairphone 1, based on MT6589 to boot to
->>> UART console.
->>>
->>> The recently added SMP support needs to be disabled for this board as
->>> the kernel panics executing /init with it, even though the CPUs seem to
->>> start up fine - maybe a stability issue.
->>>
->>> [    0.072010] smp: Bringing up secondary CPUs ...
->>> [    0.131888] CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
->>> [    0.191889] CPU2: thread -1, cpu 2, socket 0, mpidr 80000002
->>> [    0.251890] CPU3: thread -1, cpu 3, socket 0, mpidr 80000003
->>> [    0.251982] smp: Brought up 1 node, 4 CPUs
->>> [    0.254745] SMP: Total of 4 processors activated (7982.28 BogoMIPS).
->>> [    0.255582] CPU: All CPU(s) started in SVC mode.
->>>
->>> [    0.472039] Run /init as init process
->>> [    0.473317] Kernel panic - not syncing: Attempted to kill init!
->>> exitcode=0x00000004
->> Would be nice to find out why. Did you tried to boot the system with
->> enable-method set but with bringing up just one or two cpus?
-> 
-> Answered further down.
-> 
->>
->>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
->>> ---
->>>
->>>    arch/arm/boot/dts/Makefile                 |  1 +
->>>    arch/arm/boot/dts/mt6589-fairphone-fp1.dts | 30 ++++++++++++++++++++++
->>>    2 files changed, 31 insertions(+)
->>>    create mode 100644 arch/arm/boot/dts/mt6589-fairphone-fp1.dts
->>>
->>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
->>> index 7e0934180724..24f402db2613 100644
->>> --- a/arch/arm/boot/dts/Makefile
->>> +++ b/arch/arm/boot/dts/Makefile
->>> @@ -1437,6 +1437,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += \
->>>
->>>    	mt2701-evb.dtb \
->>>    	mt6580-evbp1.dtb \
->>>    	mt6589-aquaris5.dtb \
->>>
->>> +	mt6589-fairphone-fp1.dtb \
->>>
->>>    	mt6592-evb.dtb \
->>>    	mt7623a-rfb-emmc.dtb \
->>>    	mt7623a-rfb-nand.dtb \
->>>
->>> diff --git a/arch/arm/boot/dts/mt6589-fairphone-fp1.dts
->>> b/arch/arm/boot/dts/mt6589-fairphone-fp1.dts new file mode 100644
->>> index 000000000000..32c14ecf2244
->>> --- /dev/null
->>> +++ b/arch/arm/boot/dts/mt6589-fairphone-fp1.dts
->>> @@ -0,0 +1,30 @@
->>> +// SPDX-License-Identifier: BSD-3-Clause
->>> +/*
->>> + * Copyright (c) 2021, Luca Weiss <luca@z3ntu.xyz>
->>> + */
->>> +
->>> +/dts-v1/;
->>> +#include "mt6589.dtsi"
->>> +
->>> +/ {
->>> +	model = "Fairphone 1";
->>> +	compatible = "fairphone,fp1", "mediatek,mt6589";
->>> +
->>> +	chosen {
->>> +		stdout-path = &uart3;
->>> +	};
->>> +
->>> +	cpus {
->>
->> I'd expected "&cpus" why can we overwrite delete the node property like this
->> here?
-> 
-> Both results in the same, dtc just merges everything together, so as long as
-> the node name is identical, it works.
-> Also I cannot use &cpus because cpus in mt6589.dtsi doesn't have a label set.
-> 
+are available in the Git repository at:
 
-Then I think we should add a label and use &cpus, as this is the standard way to go.
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-5.16
 
-> Regarding SMP:
-> I have tried setting maxcpus=2 in cmdline and that still makes the kernel
-> panic. With maxcpus=1 and leaving the deleting out of the dts the kernel is
-> stable and works properly.
-> 
-> So I think it's better to leave this out of the dts and keep maxcpus=1 in
-> cmdline (until this gets fixed).
-> 
+for you to fetch changes up to 7ec804d6025c952e3122ad7fe768178efca3300e:
 
-I'd prefer to disable the enable-method in DTS. You can see the four cores up 
-and running without that, so it seems that is already done in the FW, right?
+  ARM: dts: exynos: use spaces instead of tabs around '=' (2021-09-30 13:45:55 +0200)
 
-> I've also heard from the person adding enable-method to mt6589.dtsi that it
-> still works on their board, so something's different, maybe a different SoC
-> revision, different bootloader behavior or whatever.
-> 
+----------------------------------------------------------------
+Samsung DTS ARM changes for v5.16
 
-Sounds like a different bootloader behaviour.
+Minor cleanups - from undocumented or unused properties, coding style.
 
-> If that's fine with you, I'll send a v2 with that fixed.
-> 
->>> +		/* SMP is not stable on this board, makes the kernel
-> panic */
->>> +		/delete-property/ enable-method;
->>> +	};
->>> +
->>> +	memory {
-> 
-> Also I was told off-list that this should be called memory@80000000 because of
-> the reg, will fix in v2.
-> 
+----------------------------------------------------------------
+Krzysztof Kozlowski (3):
+      ARM: dts: exynos: drop undocumented samsung,sata-freq property in Exynos5250
+      ARM: dts: exynos: remove unneeded DVS voltages from PMIC on Arndale
+      ARM: dts: exynos: use spaces instead of tabs around '='
 
-Correct :)
-
-Thanks,
-Matthias
-
-> Regards
-> Luca
-> 
->>> +		device_type = "memory";
->>> +		reg = <0x80000000 0x40000000>;
->>> +	};
->>> +};
->>> +
->>> +&uart3 {
->>> +	status = "okay";
->>> +};
-> 
-> 
-> 
-> 
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ arch/arm/boot/dts/exynos4210-origen.dts  | 24 ++++++++++++------------
+ arch/arm/boot/dts/exynos4412-origen.dts  | 14 +++++++-------
+ arch/arm/boot/dts/exynos5250-arndale.dts |  3 ---
+ arch/arm/boot/dts/exynos5250.dtsi        |  1 -
+ 4 files changed, 19 insertions(+), 23 deletions(-)
