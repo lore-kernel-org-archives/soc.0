@@ -2,33 +2,33 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ED55C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F693C43217
 	for <soc@archiver.kernel.org>; Wed, 13 Oct 2021 19:40:07 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 0E3B2611BF; Wed, 13 Oct 2021 19:40:07 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id EB91661168
-	for <soc@kernel.org>; Wed, 13 Oct 2021 19:40:06 +0000 (UTC)
+	id 70108611CA; Wed, 13 Oct 2021 19:40:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 594DE611CB
+	for <soc@kernel.org>; Wed, 13 Oct 2021 19:40:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1634154007;
-	bh=AQ7cWfFYa4JLMeB3OWvUR+t3ePY6IIqvD4uwuNclVyE=;
+	bh=q7ALS/yh08xgqWKE2g+jamkE1DxaeDAfSfZaJbEI7wU=;
 	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=ZtK5M6aScV3kb4m6obvqIQ/WgnenVJKDRCwj8px07kX5XeduGGDzE6ZnGEWNfO5og
-	 MpfJyVZ42CPmIqz611oN0v2KkkyyEEHtFlPF9af2llUCz+ur/qKFbFZRM7BmXpMC8q
-	 QoFeESH+W9EFPz8IOi+lmvuaAG9nJ7aFSTXWUAS/e/Mu9927CO86St+9q6od/5VPf8
-	 6qExawppoLou7HXHZiYcbIV7V0Sv+zgBvxqLzYtHORl2GWdCfyeGXGoi2Gsl+toXkE
-	 o9GXk1L0eRDa2TMKa6wcKaKkjKzvdsIsb8lyruKJo/tc7JBZIs3ux0SFbD+lnRDJc9
-	 xnWTb37bkarKQ==
+	b=qUI11a53E9Fm7PRngvqvWYdcB7ieBXXVcu4KCkCiPzI5quT9Jcsq2KMHV8aORDzej
+	 goRwU0tEtjQoB1h3Vb/bHu2EoPp9BhiSm4PRI5+OQVynzIRxZSHw+F8vdJS3NzGKXo
+	 1cvqp1Mx0aWjiQYBWGXDuce+Iz79I7xIR0mpt6nk1blmsJiE9yKLDHFZ3/WgzuQPaY
+	 RLDjtE/O250oLjM+ShSKo+d/Sxjrp7V4j+9gV3kB7+dV7hwV9WLUgLf7s4xgADxrQ1
+	 DWyDOva4kF8FIVpRTbUOL0ngfpdrdkQfAz/36/pcAiFg8uYMhB6apDSt6XCa735nTt
+	 QzghWte15KZLQ==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D9E7C60966;
-	Wed, 13 Oct 2021 19:40:06 +0000 (UTC)
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 51FFF60173;
+	Wed, 13 Oct 2021 19:40:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <163415400683.8098.6027840091671534691.git-patchwork-summary@kernel.org>
-Date: Wed, 13 Oct 2021 19:40:06 +0000
+ <163415400733.8098.1121908961189721666.git-patchwork-summary@kernel.org>
+Date: Wed, 13 Oct 2021 19:40:07 +0000
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
@@ -37,7 +37,7 @@ Cc: soc@kernel.org
 Hello:
 
 The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+soc/soc.git (for-next):
 
 Patch: [GIT,PULL] another OP-TEE fix for v5.15
   Submitter: Jens Wiklander <jens.wiklander@linaro.org>
