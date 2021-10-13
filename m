@@ -1,21 +1,25 @@
-Return-Path: <SRS0=WY91=PB=linaro.org=linus.walleij@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAA96C433F5
-	for <soc@archiver.kernel.org>; Wed, 13 Oct 2021 23:43:26 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id A69ED61164; Wed, 13 Oct 2021 23:43:26 +0000 (UTC)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 82C72610CE
-	for <soc@kernel.org>; Wed, 13 Oct 2021 23:43:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 82C72610CE
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
-Received: by mail-ed1-f51.google.com with SMTP id g10so17009598edj.1
-        for <soc@kernel.org>; Wed, 13 Oct 2021 16:43:26 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F032FC433EF
+	for <linux-devicetree@archiver.kernel.org>; Wed, 13 Oct 2021 23:43:27 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id D255461181
+	for <linux-devicetree@archiver.kernel.org>; Wed, 13 Oct 2021 23:43:27 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S229927AbhJMXpb (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Wed, 13 Oct 2021 19:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229879AbhJMXpa (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Wed, 13 Oct 2021 19:45:30 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849B9C061570
+        for <devicetree@vger.kernel.org>; Wed, 13 Oct 2021 16:43:26 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id y30so446958edi.0
+        for <devicetree@vger.kernel.org>; Wed, 13 Oct 2021 16:43:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -32,32 +36,40 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=70WgJz68301W4YAWeUnEt0QpDAyQBF+Qn8eRADlWcZg=;
-        b=n11qxd3tpeHrf7TF+3f5xdX2bmIOlBneSJdV/xpIZkN8h0hvtIUvmRCTWHfkhs/PyO
-         Fy9uqEaXBdrW51SWabuuWadb2cNMSzO7DvNVxaKAyVS9JIJlnyJ3ebhe7Msk6FvCqqDQ
-         6Dxuu04QxeSYxVzM5CxVntR1EPbVSbe++oSRYVkLlXLxvdnt6QIJizPhoLKunfFz2wYw
-         b6EEbMMSQ2gahU5l4cnprnUSTfNjxnpbvR0hidf0ii2jqJsT4P56XDOs9Eq1WK9DT+gg
-         uHtaAYloDpsG3calY2UIXGehCQGfc2n726X1k7eGP12lnJWagpw9lQZinafLK/jMoMK+
-         2K5Q==
-X-Gm-Message-State: AOAM532Pixn9Um3jkXpUtvPXu7jLe+neb+WZAqSNtWFt5Vdb6QL+VOYt
-	h4eVu2jJX5fpdhkSVpbBq+DN7PBaqYwv+lp26s64IQ==
+        b=QSim/eif3JYoUEO2BVtUzYkAp0x0xFz61uf4DXqH16dgXWlaceSYLUNL4WY2RbOfy6
+         zy0JJ3Qz1OokJz4Pxxslsh/rCBk0fwmUh/00JLYsy7uyrrNMePQ7WvT7QmScr6wL5eag
+         4VSLPJ4Ocz/3173lRpRsw/hyNsGnZI61boIgnE97JJ5Iq0hXMnuImRdtz+mYSuJTqSJf
+         kxaJ6zqV2bHqo6eqA21q6aVJ6qr5lZXHarjViyzNZ4EAkqUswQc0PQlBFnOedtL4G5M+
+         9DTqpjE03C6uGNQjbD+qy41mFHp/WcIBPKbD+8JmtcaQhkJ2+dGkARG9tpflVrVwcaMd
+         U2tQ==
+X-Gm-Message-State: AOAM530JwFmtNk3uatcBjzNC9RUEhmGqXQz8GQtkFN/mLbawOR33tacJ
+        cPNertfoAYW8ThqRRcHhj5jf9MEd2VPil43KJfy7FVyzcGw=
 X-Google-Smtp-Source: ABdhPJxUMstUt73PfXbllHC9NHBVobh37BXe7qV1Bk73wDAlJ9lF1d+353wJ5XQjmhvwV9GfreivHf/BEnZFxTyfbZg=
 X-Received: by 2002:a05:6402:34f:: with SMTP id r15mr3664494edw.111.1634168605027;
  Wed, 13 Oct 2021 16:43:25 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211013143810.2101838-1-arnd@kernel.org>
 In-Reply-To: <20211013143810.2101838-1-arnd@kernel.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 14 Oct 2021 01:43:14 +0200
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 14 Oct 2021 01:43:14 +0200
 Message-ID: <CACRpkdbbZo1VUk1yBWuuEswiThf5Vrbgq0SFo07Z_FMy4vvibw@mail.gmail.com>
 Subject: Re: [PATCH 1/2] ARM: versatile: remove leading 0 on unit address
-To: Arnd Bergmann <arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Liviu Dudau <liviu.dudau@arm.com>, 
-	SoC Team <soc@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rui Miguel Silva <rui.silva@linaro.org>, Sudeep Holla <sudeep.holla@arm.com>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Liviu Dudau <liviu.dudau@arm.com>, SoC Team <soc@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rui Miguel Silva <rui.silva@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20211013234314.a3j0Lx-Tbjlr0HaO24XSjoPMP7XgJIryhvwLsR0ikK8@z>
 
 On Wed, Oct 13, 2021 at 4:38 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
