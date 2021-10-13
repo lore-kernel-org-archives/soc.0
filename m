@@ -1,131 +1,96 @@
-Return-Path: <SRS0=+cAE=PB=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=dXuL=PB=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E05FC433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 13 Oct 2021 14:45:16 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04E63C433EF
+	for <soc@archiver.kernel.org>; Wed, 13 Oct 2021 15:01:19 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id D792561163; Wed, 13 Oct 2021 15:01:18 +0000 (UTC)
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DFB4261166
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 13 Oct 2021 14:45:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DFB4261166
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:References
-	:In-Reply-To:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=bsKvvXK51gWUnJF3yfi0DODeErJ/pjAXBxmg2nDL7GU=; b=OFMhScrqunILyQ
-	ceipbdYX0ZC6quVqf7oxy4dQilz2vPyjVSCzGwsqY3/EFXMRAmXf8n04XGVZJ0YEEwmmCr5Bj9+MR
-	m/fw+17/iBiUedxsYIsIWPqj02w+1eLyXasuIzwu/JM9TsIAT4/5QkM9EOuF15uQslMqm0Yto89zf
-	bMBzPgD4IqxNaNHWW3brqVd8nJsh06f3HMvvMQ0MvK0R3xmT357pHorYSp5NyJfJgVT7EeQWnhKmZ
-	BCpX1k9Dcx/c4EBYsmtZ8Jhfzsr8+GYiwaQwAp2e5afVIbYYHliQC085By3cq1HF5kfSIYLaLnNWt
-	o5q3xQa5QcxnEckYv2qw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mafU7-00HD7i-1g; Wed, 13 Oct 2021 14:43:59 +0000
-Received: from relay8-d.mail.gandi.net ([217.70.183.201])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mafTv-00HD5E-Ku
- for linux-arm-kernel@lists.infradead.org; Wed, 13 Oct 2021 14:43:49 +0000
-Received: (Authenticated sender: gregory.clement@bootlin.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 70C2D1BF205;
- Wed, 13 Oct 2021 14:43:44 +0000 (UTC)
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Marcel Ziswiler <marcel@ziswiler.com>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>, Marcel Ziswiler <marcel@ziswiler.com>,
- Arnd Bergmann <arnd@arndb.de>, Frank Rowand <frowand.list@gmail.com>, Olof
- Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>, Russell King
- <linux@armlinux.org.uk>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, soc@kernel.org
-Subject: Re: [PATCH v3 0/3] ARM: prepare and add netgear gs110emx support
-In-Reply-To: <20211007205659.702842-1-marcel@ziswiler.com>
-References: <20211007205659.702842-1-marcel@ziswiler.com>
-Date: Wed, 13 Oct 2021 16:43:38 +0200
-Message-ID: <87ily1dlyd.fsf@BL-laptop>
+	by mail.kernel.org (Postfix) with ESMTPS id 5A95B6113E
+	for <soc@kernel.org>; Wed, 13 Oct 2021 15:01:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5A95B6113E
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4DC4B40010
+	for <soc@kernel.org>; Wed, 13 Oct 2021 15:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1634137276;
+	bh=xYuV2MmQladXcPP7bw44n/vAd85hc1wnSNxzKdpoKHU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=h/QXGNQ6m1uR7tRK3CIgv+bWw+nupVn7pe1kAe5t9gLcWICbqxFktHubqMlefJyXZ
+	 r9h/t08O0MBlx3IK3OB0k+exGFDs55Zs+JezlrzE6UtYngOOJQsf6SVXd2+QPql2Ex
+	 omo5Zh/p+ywpyP2Z4NPqn0X9bmxlz2Bzi3lDwV4tC5uZ9Vg8Wbs93ORlvyuZRZ20rQ
+	 9o69lMx7hNW9oRyHC/o09MJSDcgx8mpp4P/vShDjdMR/yR1U1xyQFxyumsND5uE59I
+	 I9+CwOPfynNFba8zHE7e7RDXwvUUBp03k6Le/XRWTqfNbsXtAIR2jD6uK+8cDnHxem
+	 T9zFtS9pJZ13w==
+Received: by mail-ed1-f70.google.com with SMTP id d3-20020a056402516300b003db863a248eso2474238ede.16
+        for <soc@kernel.org>; Wed, 13 Oct 2021 08:01:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xYuV2MmQladXcPP7bw44n/vAd85hc1wnSNxzKdpoKHU=;
+        b=pgACoiQrSlWW3mfmgWxXeDHE5n0tNoHGyLoHjfiF6T50KzSLVXY3qJOYUQLQrocF+/
+         7cn6srgNxkvnuxPHVrUWN4JZXI1Ed10DjNFqQmIH82w4QQ8JMgE5LPDJ9d6PPqNaPqSL
+         JjogdaQd2i4gkhi8TH4jLdiEnv9b/J2JkGaFv4IKeKouutYA6WE7tA46wDBgZa2A2A8C
+         5PtrdQjmx8Loqu9GQYzQsclsxfvF2hBZLZSbCIOxKZ0GF7UR8HNmatxzI1qSL02IL1MA
+         3NaV3pZz8rC+QC4oFX+3LENmE2Minp198bRPlm+3kKLH+yuz1l18QmgQecK5ILKRXjY2
+         EXqQ==
+X-Gm-Message-State: AOAM5305qU318t1Uv2bA21DeOobQkPBDjK9A87TaKDr1mo435ubNhUqz
+	vBDAjQzhP/CJHN/KrU3G7h0Und4kCK7xuHtMusy2p/+f5cwlW+rxEkDTUlLWiEIhHAXZTpCe/K2
+	Kilb4KMWEZ5/COiooWbaS5DBqfxHXk/RzwkZw5Og=
+X-Received: by 2002:a50:cf87:: with SMTP id h7mr10281322edk.330.1634137275950;
+        Wed, 13 Oct 2021 08:01:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwegVNQSzIUZzqwL+kBl/pg71DIpq9sCZIiDU4Wb8xJespMOYwK9v10kYYfIdkQ4bJOR0ucGyI5yMK1rTxX1ro=
+X-Received: by 2002:a50:cf87:: with SMTP id h7mr10281285edk.330.1634137275716;
+ Wed, 13 Oct 2021 08:01:15 -0700 (PDT)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211013_074347_860668_195FA42F 
-X-CRM114-Status: GOOD (  13.44  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211013144338.6scATs67S7EAOBZV8PWwGAy98FJlPGTLvnXy_9V8JdY@z>
+References: <20211013143810.2101838-1-arnd@kernel.org> <20211013143810.2101838-2-arnd@kernel.org>
+In-Reply-To: <20211013143810.2101838-2-arnd@kernel.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Date: Wed, 13 Oct 2021 17:01:04 +0200
+Message-ID: <CA+Eumj5Fx6tQv9B9R9iBCP4C=f2dk3szCGcisvPHYfMWpsCCfw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: exynos: fix cpu unit name warnings
+To: Arnd Bergmann <arnd@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>, Chanho Park <chanho61.park@samsung.com>, soc@kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, 
+	"linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello Marcel Ziswiler,
-
-> Cleanup mvebu_v7_defconfig and then add support for the Netgear
-> GS110EMX which is an 8 port Gigabit switch with two additional
-> Multi-Gig ports. An 88E6390X switch sits at its core connecting to two
-> 88X3310P 10G PHYs while the control plane is handled by an 88F6811
-> Armada 381 SoC.
+On Wed, 13 Oct 2021 at 16:38, Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> Changes in v3:
-> - Got rid of unused 3.3 volt regulator as suggested by Andrew.
-> - Got rid of partitioning comment.
-> - Added switch interrupt GPIO configuration.
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> Changes in v2:
-> - Add Andrew's reviewed-by tag.
-> - Add Andrew's reviewed-by tag.
-> - Send previous first patch separately to netdev mailing list as
->   suggested by Andrew.
-> - Fix numbering of the PHY labels as suggested by Andrew.
+> dtc started warning about some of the CPU addresses:
 >
-> Marcel Ziswiler (3):
->   ARM: mvebu_v7_defconfig: enable mtd physmap
->   ARM: mvebu_v7_defconfig: rebuild default configuration
-
-Both applied on mvebu/defconfig
-
->   ARM: dts: mvebu: add device tree for netgear gs110emx switch
-
-Applied on mvebu/dt
-
-Thanks,
-
-Gregory
-
+> arch/arm64/boot/dts/exynos/exynosautov9.dtsi:78.20-83.5: Warning (unit_address_format): /cpus/cpu@000000: unit name should not have leading 0s
+> arch/arm64/boot/dts/exynos/exynosautov9.dtsi:85.20-90.5: Warning (unit_address_format): /cpus/cpu@000100: unit name should not have leading 0s
+> arch/arm64/boot/dts/exynos/exynosautov9.dtsi:92.20-97.5: Warning (unit_address_format): /cpus/cpu@000200: unit name should not have leading 0s
+> arch/arm64/boot/dts/exynos/exynosautov9.dtsi:99.20-104.5: Warning (unit_address_format): /cpus/cpu@000300: unit name should not have leading 0s
 >
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/armada-381-netgear-gs110emx.dts  | 295 ++++++++++++++++++
->  arch/arm/configs/mvebu_v7_defconfig           |  18 +-
->  3 files changed, 304 insertions(+), 10 deletions(-)
->  create mode 100644 arch/arm/boot/dts/armada-381-netgear-gs110emx.dts
+> Remove the leading zeroes.
 >
-> -- 
-> 2.26.2
->
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> Fixes: f695b3f4c45d ("arm64: dts: exynos: add initial support for exynosautov9 SoC")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Thanks Arnd, but this was fixed with the next version of patchset.
+It's my bad because I did not drop the patch from my next branch after
+spotting it, knowing that Chanho will resubmit the next day and then I
+would replace it. This replacement happened next day but linux next
+got the older/buggy patch.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+Best regards,
+Krzysztof
