@@ -1,108 +1,69 @@
-Return-Path: <SRS0=WMNB=PC=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=BzVa=PC=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86761C433FE
-	for <soc@archiver.kernel.org>; Thu, 14 Oct 2021 16:44:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D79EC433F5
+	for <soc@archiver.kernel.org>; Thu, 14 Oct 2021 16:46:51 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 597C961108; Thu, 14 Oct 2021 16:44:10 +0000 (UTC)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	id 8192F61156; Thu, 14 Oct 2021 16:46:51 +0000 (UTC)
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C5A460EBB
-	for <soc@kernel.org>; Thu, 14 Oct 2021 16:44:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C5A460EBB
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id y26so29729823lfa.11
-        for <soc@kernel.org>; Thu, 14 Oct 2021 09:44:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=vCU6ojwh+dKcX10IObMSSn07IYYcVauIvQZUzyoiKMk=;
-        b=JBhLM81UcR6td0xbPvt8v/V/HG8tUsxQQ5u3sFKnNC9tJY518kXgz/orzt4hZyaF5l
-         rRUOUvdi/2+lRAODGS93BFH0/vR+dn0jxWPO4CRag323IBbO3ruLuKS7gUG9SBrFQpB0
-         hdrk0o3j1sNbgIjycddI3ZNEq5AmZfMVv6TO8Z7hz29KMB1z0cJAHWihs5ziXMWHOG9O
-         iT5HkBfsOa0FN8r5Pz7V0yqHiqC643YZ1wHcps+XNTE5FhZPtBMajRVGkRd+eHGTcNKM
-         RT7+2Szt/2ou0KOPyKCBYbedAzIqZcAov0pHJkJOIYl+XR3BhixXxYUB0p8+pyiCeCny
-         xpxw==
+	by mail.kernel.org (Postfix) with ESMTPS id 49DAA61108;
+	Thu, 14 Oct 2021 16:46:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 49DAA61108
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f47.google.com with SMTP id 62-20020a9d0a44000000b00552a6f8b804so8446834otg.13;
+        Thu, 14 Oct 2021 09:46:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=vCU6ojwh+dKcX10IObMSSn07IYYcVauIvQZUzyoiKMk=;
-        b=A7/AXI54xQqNgWxFOgKwBR7xcQ96vmAJIkhdPuvNqu9jVxps3qMNPZCem+aeDI/EOR
-         RWnk6v92svRhqb/negmQJw8vZbxTputTmZ3scnroRBIGg4Vqra1PWqyPSSj6NALhluyj
-         ycZ1sY29rtEpeqjVsKbH5G7b8ZbWAAGrBrS9kQUZU/01EHWfi1PVLPVeoLJYnC8KOP8M
-         OtBEYIQ7t8F9vfCbzCcXC6+BwLrsnu60KrmR1oiSS9HVXnH/LucC1l21VmiQfZYR8EoM
-         2mvAzaXtiSj2FOcOh3vx7yNJ/jEWci2lniiHX9xjnR0gAzynYc2UdWVG9MQsd3i6T6DW
-         1E6Q==
-X-Gm-Message-State: AOAM532a6MrkKk3xIDtdEBaqdsrkzIUOjQinkP9+34Xtr1Z2pIUubDtB
-	5UEK1ZdYyj0oODiPzNrBH4MNv1Efar7txMxxrgiBg88SrmdMFg==
-X-Google-Smtp-Source: ABdhPJzd4oHSTyeXqa+AbHo2kBEmcMfAGrgrzKFJ6HQ5sVCwDljKmalad0yYvcQgURQhnXV++0CPLQmUL81Nl4yd0rM=
-X-Received: by 2002:a2e:7f05:: with SMTP id a5mr7013939ljd.261.1634229848170;
- Thu, 14 Oct 2021 09:44:08 -0700 (PDT)
-MIME-Version: 1.0
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 14 Oct 2021 18:43:57 +0200
-Message-ID: <CACRpkdYf5GwRvG1Gemk4mE+aw6UnAVTY8OudwsVNPQXThHXu6g@mail.gmail.com>
-Subject: [GIT PULL] Ux500 DTS updates for v5.16
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ujHcRvCirmqYyP/G9OIlII3v2dI92/qrzyNIDCv4hDA=;
+        b=cZiuAk/T1LSKjl/w9HcyvCn6NkBS0IhJxoyXQSHaeIihQQUh5RaQqUruIrRhtfwdFA
+         4sym64yxgoE6ujXul9FoFoDsk7z/YF9jwsSFEej0gmBNDj0yTNdLAhX2whzzb5LMLot9
+         Bt2P9NZoKSaRn3OtDFSAk2PDRFvuOg4JVp4oNZKXM+kOzqLCzk8YiN9IOkj1bGqoXHJJ
+         2ctHQdCXPQjPqZhkVi9dEJY4Blu70S3V5R0vJ8hmHjc1MCbV/Q6vFeq9dQpRd3WqPKwK
+         FpagGVMmmnTzhQX+JtgU8jiaz4dDYxa4uQpJsBsVGrsQGgrY17CT3x5Tv1xHAu0eFLxG
+         QqZA==
+X-Gm-Message-State: AOAM531kjDQORol8PjN9zm+BGbgzOqtcDkEZKVhWqohshZtCqx8U8T9x
+	caf6Txy0KYXUb7O+M9OrIQ==
+X-Google-Smtp-Source: ABdhPJxVtfNRxyb4DCtNbXuq+R80ABq48UJGCYahUiRCZ8f5QF2NeHuamoz+are7uUC04PrCG01Myw==
+X-Received: by 2002:a9d:4616:: with SMTP id y22mr3493410ote.215.1634230010558;
+        Thu, 14 Oct 2021 09:46:50 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id j6sm532430oot.18.2021.10.14.09.46.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Oct 2021 09:46:50 -0700 (PDT)
+Received: (nullmailer pid 3518479 invoked by uid 1000);
+	Thu, 14 Oct 2021 16:46:48 -0000
+Date: Thu, 14 Oct 2021 11:46:48 -0500
+From: Rob Herring <robh@kernel.org>
+To: =?utf-8?B?UGF3ZcWC?= Anikiel <pan@semihalf.com>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com, p.zabel@pengutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org, dinguyen@kernel.org, p.yadav@ti.com, Tudor.Ambarus@microchip.com, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com, sre@kernel.org, thunder.leizhen@huawei.com, Jonathan.Cameron@huawei.com, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, ka@semihalf.com, tn@semihalf.com, jam@semihalf.com, amstan@google.com
+Subject: Re: [PATCH v2 2/4] dt-bindings: add bus number property
+Message-ID: <YWhe+NfiY0l0ILrA@robh.at.kernel.org>
+References: <20211005143748.2471647-1-pan@semihalf.com>
+ <20211005143746.xE5rCkt-P_XlNkn9bJ8ZqYPY4nQQ7doqzSd4FrAlICY@z>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211005143746.xE5rCkt-P_XlNkn9bJ8ZqYPY4nQQ7doqzSd4FrAlICY@z>
 
-Hi SoC maintainers,
+On Tue, Oct 05, 2021 at 04:37:46PM +0200, Paweł Anikiel wrote:
+> On SoCFPGA systems, it's desireable to have fixed numbering for
+> i2c busses, while being able to enable/disable them (e.g. have i2c1
+> be mapped to /dev/i2c-1, even though i2c0 is disabled). This can also
+> be achieved using devicetree aliases (see i2c_add_adapter). However,
+> having the driver be self-contained without relying on aliases is more
+> robust.
 
-here are some Ux500 DTS updates for the v5.16 merge window.
+Your header is a bit weird as you have 2 Message-IDs:
 
-Details in the signed tag!
-
-Please pull it in.
-
-Yours,
-Linus Walleij
-
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
-
-  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
-tags/ux500-dts-for-v5.16
-
-for you to fetch changes up to be3a60a94390651499ea317ae6853bdb5c756065:
-
-  ARM: dts: ux500: Switch battery nodes to standard (2021-10-14 17:41:10 +0200)
-
-----------------------------------------------------------------
-Ux500 DTS updates:
-
-- Flag the janice SPI display lines properly for the right line
-  semantics.
-- Fix some errors in the Skomer regulator configuration.
-- Fix some SD card pin configurations on Skomer.
-- Assign the Skomer SD card a 300 ms power-on delay.
-- Rewrite the battery nodes to use the standard binding
-  "monitored-battery" as used in the updated bindings, and
-  provide the right Samsung battery compatibles for the Samsung
-  phones.
-
-----------------------------------------------------------------
-Linus Walleij (5):
-      ARM: dts: ux500: Tag Janice display SPI correct
-      ARM: dts: ux500: Skomer regulator fixes
-      ARM: dts: ux500: Fix up SD card pin config
-      ARM: dts: ux500: Skomer eMMC needs 300 ms power on
-      ARM: dts: ux500: Switch battery nodes to standard
-
- arch/arm/boot/dts/ste-ab8500.dtsi              | 13 +++------
- arch/arm/boot/dts/ste-ab8505.dtsi              | 13 +++------
- arch/arm/boot/dts/ste-href.dtsi                |  6 ++++
- arch/arm/boot/dts/ste-snowball.dts             |  6 ++++
- arch/arm/boot/dts/ste-ux500-samsung-codina.dts |  4 +++
- arch/arm/boot/dts/ste-ux500-samsung-gavini.dts |  4 +++
- arch/arm/boot/dts/ste-ux500-samsung-golden.dts |  4 +++
- arch/arm/boot/dts/ste-ux500-samsung-janice.dts |  7 +++++
- arch/arm/boot/dts/ste-ux500-samsung-kyle.dts   |  4 +++
- arch/arm/boot/dts/ste-ux500-samsung-skomer.dts | 38 ++++++++++++--------------
- 10 files changed, 61 insertions(+), 38 deletions(-)
+> Message-ID: <20211005143748.2471647-3-pan@semihalf.com>                                                                                                     
+> X-Mailer: git-send-email 2.25.1                                                                                                                             
+> Message-ID: <20211005143746.xE5rCkt-P_XlNkn9bJ8ZqYPY4nQQ7doqzSd4FrAlICY@z>                                                                                  
