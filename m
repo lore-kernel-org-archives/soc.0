@@ -1,130 +1,129 @@
-Return-Path: <SRS0=jErW=PC=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=+qiu=PC=gmail.com=matthias.bgg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D2A4C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 14 Oct 2021 00:55:44 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FA8AC433F5
+	for <soc@archiver.kernel.org>; Thu, 14 Oct 2021 09:26:24 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 62CE561108; Thu, 14 Oct 2021 09:26:24 +0000 (UTC)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 42179610E8
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 14 Oct 2021 00:55:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 42179610E8
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=ub7EpqOi+wwK7aCl8rlfTn1eaeWgMHlZVjk/YnbFTpY=; b=2s3TKQSW7CjDhH
-	s2gbkhEs3HVG7OqGJs318DVVIQa80UBGa/tz7WACQySSkzQmyTBgYge+BzbuTJOTREg4xQG37hAFm
-	lYbX6w7eGZfu8X2mD9ydADEkT0Zbc40JEdABXyA4vbVgvLxFW5Me/LMmYQ9ZpsJfySWbzGCDMN1gy
-	NK3JA2GK5250e2O8FphgQAriUsEg1pkRA87gnuZgJgsAmOCxCQquvFEhtXt84ZRgoLVTgzTzYLHUG
-	0sDwTADJ+5WOCJ1QOuhFqpbKfz8y1NZ+uuDN67AGoWwzdCbBDem5vchmjk99Ub6JGXfT5sNHdA0+D
-	xEvJLc9DrddTw0/e8OJQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1map07-0019Gq-VZ; Thu, 14 Oct 2021 00:53:40 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1map04-0019GK-GI
- for linux-arm-kernel@lists.infradead.org; Thu, 14 Oct 2021 00:53:37 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AC61061181
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 14 Oct 2021 00:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1634172815;
- bh=3KPseUxRNqX7s5JgcKYolFJTKXSJAtZzfaDv0lxJBP8=;
- h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
- b=AhEsh3JJvcMjZFBhZvn/lvZeLjQk/sbi09VXw5sPo91c0861Z9Aw6tmhVY//UAWE0
- W6LwWEQIcdKFWthsfp2S2U9CIZ9NizH5SMzfRF9vo1tRD7m51+NzJ5FHzNg3eXkSjX
- xtgSyt1z+gOZg78EWcoZ49nLJsUJ6oKPpsw8s8LCeRS8c9gj641IPO81+nxbz3jae8
- PZmjmeNLqAGDE0Vf1OaUtFkLWgTVxquZTfVqqyY67x4aB354nbjTWatQmWDh5nnVJu
- ypuCVWGIrsbzutu7NQkmZ2wDxEpujgIL3gZG4e/acJKzXq4CL+7RTFHBDM/Bm9abqa
- xVtv7RLH/oPmQ==
-Received: by mail-ed1-f45.google.com with SMTP id a25so17382222edx.8
- for <linux-arm-kernel@lists.infradead.org>;
- Wed, 13 Oct 2021 17:53:35 -0700 (PDT)
-X-Gm-Message-State: AOAM532D4kjidgJ+Uijz8IHRhA1Q0DgOyOeb0vMqktDv5iReRIjbv7W6
- gxhOhKZSP5HjJnXWAxLEOxyotiicgPwxMQFtsA==
-X-Google-Smtp-Source: ABdhPJzmdBxqGuN5Y6dvnAmkJ+FPUu9AdVj2ElG+Da9w19ioQt2w4/WNtq9K9kc99aoUc0NmAZWyg7kd9vPJF9egBPY=
-X-Received: by 2002:a17:906:5a47:: with SMTP id
- my7mr157436ejc.128.1634172814079; 
- Wed, 13 Oct 2021 17:53:34 -0700 (PDT)
+	by mail.kernel.org (Postfix) with ESMTPS id 3869E610D2;
+	Thu, 14 Oct 2021 09:26:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3869E610D2
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f50.google.com with SMTP id y3so17451716wrl.1;
+        Thu, 14 Oct 2021 02:26:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=snfOBT2Y32E/2SaHG65K+s5HBFNed3uLDzrXbLPDkkU=;
+        b=e3fd5m61Xys/SwuLvhUq+kKDvP4Yq3z6Mx+wgOTweU2UzJe7t9Dtu9td/2VWPGw11l
+         6MIyGmNEC2/V5XNIjtfHmVKCcXdYVby04Qni8Pfe+DBad+BeklL5v2rIYKnKkzsX7K51
+         7f1xuH4w4c9sl8ytNgr003JAq5+9NwkKk5IlTMEzVSwGZZTwSROmn3pAktMDENiGtEgR
+         iqZ6+HnKoL9qDS+fwGBT+HQ7HXsYPBzCoFqdVYpnMDXmEIJY5dOcllJrwAxDN86FWEcq
+         lJwD1gCzkQfkYRzvHv84P/PCH23/Z0Uoex1dtjdlpdTSqksaah5vh7K3KpkfV+d88c/j
+         rbqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=snfOBT2Y32E/2SaHG65K+s5HBFNed3uLDzrXbLPDkkU=;
+        b=Ii99/tbhDfcc8m1UUueVQenqNN7Wm+j1dvn0VBOLj8bfWE/OwHHodbViE8I4jybnDQ
+         aNVo5juKCkhgogT1kyvqGiCiy8YfNN9CPAKLs8Efyn3Zwz2PeJmiSfXP2gijOFdiFmKA
+         mmA2Qcr37imNo+iw8+3EKkbeFrkTIEdggLJ/CB3IUl4InfPkJllt2Bofitbra/2O6LEh
+         24nphpMZ4BaxhtdOoxLP414nJRRei+oCUSwRC40W+MGWib//RMJxgxe4nC3OehbN2eKJ
+         nlTQZi2yOjO5z5G+UPfaNjmBXAOjmKUh/Hbj/iyxGNIP0cVBHyRaL4mWeELZIyTwdP47
+         q7Ag==
+X-Gm-Message-State: AOAM531lSTbvcHqsr232Q0IFFxbLxCpTUBuqUzUwovAPRkYoYUtmx8v4
+	jzcOIHdFfhQ77VjG94ftAF4=
+X-Google-Smtp-Source: ABdhPJyqplZlUjr+rcowDy1Ll1m3D6XCjhzt/+I3QHynf7iACzDNtZWsAWL488SjsJLQrdi2VljUpQ==
+X-Received: by 2002:adf:b355:: with SMTP id k21mr5330494wrd.380.1634203582679;
+        Thu, 14 Oct 2021 02:26:22 -0700 (PDT)
+Received: from ?IPV6:2620:113:80c0:8000:c::779? (nat0.nue.suse.com. [2001:67c:2178:4000::1111])
+        by smtp.gmail.com with ESMTPSA id f18sm1865739wrg.3.2021.10.14.02.26.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Oct 2021 02:26:22 -0700 (PDT)
+Message-ID: <93377766-a1b9-ee29-f874-ebf0e2bf3a8a@gmail.com>
+Date: Thu, 14 Oct 2021 11:26:21 +0200
 MIME-Version: 1.0
-References: <20211013143810.2101838-1-arnd@kernel.org>
-In-Reply-To: <20211013143810.2101838-1-arnd@kernel.org>
-From: Rob Herring <robh+dt@kernel.org>
-Date: Wed, 13 Oct 2021 19:53:22 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+WqboHoqHN-c5KAWPzMZm3dgExWr8RT7+-5bzwSA5BUQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+WqboHoqHN-c5KAWPzMZm3dgExWr8RT7+-5bzwSA5BUQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] ARM: versatile: remove leading 0 on unit address
-To: Arnd Bergmann <arnd@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.2
+Subject: Re: [GIT PULL] arm64: dts64: mediatek updates for v5.16
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
- Liviu Dudau <liviu.dudau@arm.com>, SoC Team <soc@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rui Miguel Silva <rui.silva@linaro.org>, 
- Sudeep Holla <sudeep.holla@arm.com>, 
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- devicetree@vger.kernel.org, 
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211013_175336_584543_6649AAB1 
-X-CRM114-Status: GOOD (  13.04  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>,
+ "moderated list:ARM/Mediatek SoC support"
+ <linux-mediatek@lists.infradead.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ Chuanjia Liu <chuanjia.liu@mediatek.com>,
+ Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+ Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+ Kansho Nishida <kansho@chromium.org>
+References: <1a3d63a3-c020-3319-26f6-a2ec338cc42e@gmail.com>
+ <CAK8P3a06SKo+Y+DiFpozrO0R+67ht1ad6U9dyTa-M9TtD73VcQ@mail.gmail.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <CAK8P3a06SKo+Y+DiFpozrO0R+67ht1ad6U9dyTa-M9TtD73VcQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211014005322.UKmTWDI2VngfYgBKGmJObzYakZMzNfpqGSao9HCsHsw@z>
 
-On Wed, Oct 13, 2021 at 9:38 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> dtc now warns for the LED nodes on the versatile-ab board:
->
-> versatile-ab.dts:126.12-132.5: Warning (unit_address_format): /core-module@10000000/led@08.7: unit name should not have leading 0s
-> versatile-ab-ib2.dts:17.12-24.5: Warning (unit_address_format): /syscon@27000000/led@00.4: unit name should not have leading 0s
->
-> Remove the extra zeroes.
->
-> Fixes: 07ebfa59b9db ("ARM: versatile: add the syscon LEDs to the DT")
-> Fixes: 7fbe5f7ff267 ("ARM: dts: Add Versatile IB2 device tree")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/boot/dts/arm-realview-eb.dtsi    | 18 +++++++++---------
->  arch/arm/boot/dts/arm-realview-pb1176.dts | 18 +++++++++---------
->  arch/arm/boot/dts/arm-realview-pb11mp.dts | 18 +++++++++---------
->  arch/arm/boot/dts/arm-realview-pbx.dtsi   | 18 +++++++++---------
->  arch/arm/boot/dts/versatile-ab-ib2.dts    |  2 +-
->  arch/arm/boot/dts/versatile-ab.dts        | 16 ++++++++--------
->  6 files changed, 45 insertions(+), 45 deletions(-)
 
-Please apply these instead:
-https://lore.kernel.org/all/20210913192816.1225025-7-robh@kernel.org/
-https://lore.kernel.org/all/20210913192816.1225025-8-robh@kernel.org/
 
-There's also also these fixes that I sent:
-https://lore.kernel.org/all/20210928192143.1841497-1-robh@kernel.org/
-https://lore.kernel.org/all/20210928192210.1842377-1-robh@kernel.org/
-https://lore.kernel.org/all/20210928192123.1840842-1-robh@kernel.org/
-https://lore.kernel.org/all/20210928191759.1835325-1-robh@kernel.org/
+On 11/10/2021 22:34, Arnd Bergmann wrote:
+> On Mon, Oct 11, 2021 at 11:58 AM Matthias Brugger
+> <matthias.bgg@gmail.com> wrote:
+>>
+>> Hi Arnd and Olof,
+>>
+>> Here come the latest updates for arm64 DTS cahgnes.
+>> Biggest change is, that we have now support for a reset controller inside the
+>> mmsys. This goes inhand with changes to the driver, that you will find in the
+>> soc pull request.
+>>
+>>
+>>     arm64: dts: mt8183: Add the mmsys reset bit to reset the dsi0 (2021-10-08
+>> 15:11:14 +0200)
+>>
+>> ----------------------------------------------------------------
+>> - mt8173: add reset for dsi0 to mmsys
+>> - move dt-bindings reset controller includes to correct folder
+>> - split PCIe node to use new format for mt2712 and mt7622
+>> - mt8183: add audio node to chromebook devices
+>> - mt8192: add clock controller node
+> 
+> I skipped this one for now, need some clarification. The PCIe node
+> looks like you are doing an incompatible change to the DT binding,
+> but that is something that should be explained in the tag description
+> or (ideally) avoided if at all possible.
+> 
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Mediatek PCI device tree binding described the root port in a wrong. The IP 
+actaully implements several root complex with everyone having a single root port.
+
+We need to fix the DT in an incompatible way to describe the HW as it is. This 
+also fixes a problem that no IRQ bigger then 32 could be handled.
+
+The only public available HW that is affected by this is the BananaPi R64. I'm 
+not aware that there is a big user base using the upstream kernel. In this 
+boards PCI is only used for extension cards, so I don't expect any boot problems.
+
+> Did I misread that patch, or did you forget about it here?
+> 
+> On a related note, the tag description should better have full
+> sentences like your introductory text above it, that makes for
+> a better changelog text in the end. Enumerating all the changes
+> is not helpful here because the list of commits is also part of
+> the changeset description after I commit it.
+> 
+
+Got it, I'll write a full sentence description I use to do for the pull request 
+emails in the tag.
+
+Regards,
+Matthias
