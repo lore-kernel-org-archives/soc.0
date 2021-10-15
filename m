@@ -2,72 +2,66 @@ Return-Path: <SRS0=kCD1=PD=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9C17C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 15 Oct 2021 20:50:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F60BC433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 15 Oct 2021 23:01:31 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6D1CE60F39
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 15 Oct 2021 20:50:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6D1CE60F39
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	by mail.kernel.org (Postfix) with ESMTPS id C9543610E8
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 15 Oct 2021 23:01:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C9543610E8
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=toshiba.co.jp
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
 	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Subject:Cc:To:
+	From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=apcXHcMhpzrEmIEXFaqZ9U3X8TrPVbBaYlb2HKxIHXg=; b=EJFZ1sNe1jn5CK
-	jkNXhIUFyj1etrZGd/z2HKIxCb5H0c/XIk86Yj7+ml+uEfGGnpPN5obIyg4qhMqjgkCsqegaHeTK0
-	niIu62zFMfJLr3Tao4vqcEk/IYQNpWcCL1goqPdDpeLuxz1SRJtk9Zp3njY7lqeq0ncxq3vpRnc3l
-	8GbP9ZEo3mj+7q2lm7fr5NbR1v3CHFceVO/WfPLMyKGUX7N2Uedhqar8GCqSJvTRtQ2qGMjVhB489
-	SUAMR+KQDWHKg3VUwO/mgpJh1AcbKHi09lTOeBfaiMpYa+tkrt9vS3UJTPDiVlgAJbmSVYoSsPdlz
-	o3QKxt11QZmbr8ywqcww==;
+	List-Owner; bh=L5byy4Ch8W5tYudhK0X3OCySH00Pr3YM/Flr2JpbW4E=; b=30YS2En0h0NXzN
+	xKE/0tXA21SVrDybo5xdBTI5INlEWNxp0YMyomB4O89ykBq2GqkJXe6CauFosybAfUXyAi0SPVQVE
+	ArE0waYNTRHJOtcbqTB8vIvem2Kc8kk1OVf2CTkp806mHtSo9Vn0aYD68DaWmDRD6yD1XlKAnpPCh
+	eSLx15SdA5V5HbytE+17PcJUbhqteSa/QZjbNtaLkEgXJZK4vNADSEYAcolkqafkERjtnlf5L87ou
+	l3IR/LhQA1eUWtbeAWsvnTOdVdOqOuLR+TvkqamDQp6EICfaCR+wzJY7/MOLqW47v3jSdYmTpQ7Sr
+	hncboJzwlpdqbTzyWXDg==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbU8i-008joJ-SP; Fri, 15 Oct 2021 20:49:17 +0000
-Received: from mail.kernel.org ([198.145.29.99])
+	id 1mbWBC-0092P1-Tw; Fri, 15 Oct 2021 22:59:59 +0000
+Received: from mo-csw1516.securemx.jp ([210.130.202.155]
+ helo=mo-csw.securemx.jp)
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mbU8f-008jnz-EL
- for linux-arm-kernel@lists.infradead.org; Fri, 15 Oct 2021 20:49:15 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D20360F39
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 15 Oct 2021 20:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1634330952;
- bh=hTQqIJAXfkYzMtbecl+TIUILN847dPsJwJ/V2hEwDZA=;
- h=From:Date:Subject:To:List-Id:Cc:From;
- b=OiLKv85r7WqrtZaDaNYu3w5cUtbpVirhQwR8jtTjHgYeRuP29VLKSmbNIv6SHf4fa
- C6NWiAzUB6oo58qCOkpfM5JrOukCqe6U9YaqQtvSB+nPyjxQRjxv7JV1NkTQUAFUeY
- KHf4kJvZz5BIqLyhkOHOu7vnD1jSkDMLm21w++59Yp7I65aG5SaZVdDqHHQ6xVUfBP
- 7vPcpLmtq2ZaQYnLCR63Liqz0ftiVDjltgsrKxFMlGEGrS2SRQAgDGHP2RML8dE1sK
- JU/9/Bz19hVimEgBypWTGAyWU7t0E53r9qt56Twx46j4CSdr9Gow1NnTntHKswwDkv
- LeBUddbVxJR7Q==
-Received: by mail-wm1-f43.google.com with SMTP id
- g198-20020a1c20cf000000b0030d60cd7fd6so3220741wmg.0
- for <linux-arm-kernel@lists.infradead.org>;
- Fri, 15 Oct 2021 13:49:12 -0700 (PDT)
-X-Gm-Message-State: AOAM5334xjwch/N/pixzNmy844ECXw9GmPg6ALb4RzrX+EgGnqorCmMM
- qX8lAiMAssgMrXsGbtAa+2CuHikgjxmX41bBRUY=
-X-Google-Smtp-Source: ABdhPJxwMhWUZIRW4VvePREhjnc5kLwPlo/zVPm9nUOHq2x9uI/YUHY52L+T1mUj74sv0sqjhTyRRzF1MB+hyAFP59s=
-X-Received: by 2002:a05:600c:1548:: with SMTP id
- f8mr14975652wmg.35.1634330950701; 
- Fri, 15 Oct 2021 13:49:10 -0700 (PDT)
-MIME-Version: 1.0
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 15 Oct 2021 22:48:54 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a17ccHJKteXL6Q+LxVR8m1BbedvNiVsmn_tQh6vj=bHmg@mail.gmail.com>
-Message-ID: <CAK8P3a17ccHJKteXL6Q+LxVR8m1BbedvNiVsmn_tQh6vj=bHmg@mail.gmail.com>
-Subject: [GIT PULL] ARM: SoC fixes for 5.15, part 2
-To: Linus Torvalds <torvalds@linux-foundation.org>
+ id 1mbWB8-0092Ob-L9
+ for linux-arm-kernel@lists.infradead.org; Fri, 15 Oct 2021 22:59:56 +0000
+Received: by mo-csw.securemx.jp (mx-mo-csw1516) id 19FMxjRV005947;
+ Sat, 16 Oct 2021 07:59:45 +0900
+X-Iguazu-Qid: 34tMdwO14ei5xGVltA
+X-Iguazu-QSIG: v=2; s=0; t=1634338785; q=34tMdwO14ei5xGVltA;
+ m=2j2560C2Jw86r6crSB0xEUS9On2eM4UzFpdzItxzekc=
+Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
+ by relay.securemx.jp (mx-mr1512) id 19FMxh5r002877
+ (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+ Sat, 16 Oct 2021 07:59:44 +0900
+Received: from enc01.toshiba.co.jp (enc01.toshiba.co.jp [106.186.93.100])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by imx2-a.toshiba.co.jp (Postfix) with ESMTPS id 2F0B71000F9;
+ Sat, 16 Oct 2021 07:59:43 +0900 (JST)
+Received: from hop001.toshiba.co.jp ([133.199.164.63])
+ by enc01.toshiba.co.jp  with ESMTP id 19FMxg4e009487;
+ Sat, 16 Oct 2021 07:59:42 +0900
+Date: Sat, 16 Oct 2021 07:59:42 +0900
+From: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 List-Id: <soc.lore.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
- Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>, 
- Florian Fainelli <f.fainelli@gmail.com>, Sudeep Holla <sudeep.holla@arm.com>
+To: soc@kernel.org, olof@lixom.net, arnd@arndb.de
+Cc: yuji2.ishikawa@toshiba.co.jp, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] ARM: Visconti: device tree changes for 5.16
+X-TSB-HOP: ON
+Message-ID: <YWoH3g7vU1ZEAp+P@toshiba.co.jp>
+MIME-Version: 1.0
+Content-Disposition: inline
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211015_134913_572446_99F4BD5A 
-X-CRM114-Status: GOOD (  11.03  )
+X-CRM114-CacheID: sfid-20211015_155954_929602_51791C3D 
+X-CRM114-Status: GOOD (  11.87  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -83,92 +77,52 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211015204854.iquKP0M2gU_aomqBC1gbzwuMcqDeVbkxQZcAoys83QA@z>
 
-The following changes since commit 64570fbc14f8d7cb3fe3995f20e26bc25ce4b2cc:
+Hi SoC team,
 
-  Linux 5.15-rc5 (2021-10-10 17:01:59 -0700)
+This request includes the PCIe and VisROBO VRB board DT patch for the
+Visconti SoC.
+Please pull for v5.16 kernel cycle.
+
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-tags/arm-soc-fixes-5.15-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/iwamatsu/linux-visconti.git tags/visconti-arm-dt-for-v5.16
 
-for you to fetch changes up to 011ace4a7fadcbe8670b615e0db1e8d7b813ee6c:
+for you to fetch changes up to 518d432fd52913c8cb2fe20b140b182f07e0357d:
 
-  Merge tag 'imx-fixes-5.15-3' of
-git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
-arm/fixes (2021-10-15 20:48:08 +0200)
+  arm64: dts: visconti: Add DTS for the VisROBO board (2021-10-16 07:09:42 +0900)
 
 ----------------------------------------------------------------
-ARM: SoC fixes for 5.15, part 2
+Visconti device tree updates for 5.16
 
-A small number fixes this time, mostly touching actual code:
-
- - Add platform device for i.MX System Reset Controller (SRC) to fix
-   a regression caused by fw_devlink change.
-
- - A fixup for a boot regression caused by my own rework for the
-   Qualcomm SCM driver.
-
- - Multiple bugfixes for the Arm FFA and optee firmware drivers,
-   addressing problems when they are built as a loadable module.
-
- - Four dts bugfixes for the Broadcom SoC used in Raspberry pi, addressing
-   VEC (video encoder), MDIO bus controller #address-cells/#size-cells,
-   SDIO voltage and PCIe host bridge dtc warnings.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+ - Add DT support for Toshiba Visconti5 PCIe driver
+ - Add 150MHz fixed clock to TMPV7708 SoC
+ - Add DT support for VisROBO VRB boardi
 
 ----------------------------------------------------------------
-Arnd Bergmann (5):
-      Merge tag 'ffa-fixes-5.15' of
-git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into
-arm/fixes
-      Merge tag 'arm-soc/for-5.15/devicetree' of
-https://github.com/Broadcom/stblinux into arm/fixes
-      Merge tag 'optee-fix2-for-v5.15' of
-git://git.linaro.org/people/jens.wiklander/linux-tee into arm/fixes
-      iommu/arm: fix ARM_SMMU_QCOM compilation
-      Merge tag 'imx-fixes-5.15-3' of
-git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
-arm/fixes
+Nobuhiro Iwamatsu (1):
+      arm64: dts: visconti: Add PCIe host controller support for TMPV7708 SoC
 
-Florian Fainelli (1):
-      Merge tag 'tags/bcm2835-dt-fixes-2021-10-06' into devicetree/fixes
+Yuji Ishikawa (3):
+      arm64: dts: visconti: Add 150MHz fixed clock to TMPV7708 SoC
+      dt-bindings: arm: toshiba: Add the TMPV7708 VisROBO VRB board
+      arm64: dts: visconti: Add DTS for the VisROBO board
 
-Mateusz Kwiatkowski (1):
-      ARM: dts: bcm283x: Fix VEC address for BCM2711
+ Documentation/devicetree/bindings/arm/toshiba.yaml    |  1 +
+ arch/arm64/boot/dts/toshiba/Makefile                  |  1 +
+ arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts      |  6 ++++++
+ arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrb.dts  | 61 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrc.dtsi | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ arch/arm64/boot/dts/toshiba/tmpv7708.dtsi             | 59 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 172 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrb.dts
+ create mode 100644 arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrc.dtsi
 
-Nicolas Saenz Julienne (2):
-      ARM: dts: bcm2711-rpi-4-b: Fix pcie0's unit address formatting
-      ARM: dts: bcm2711-rpi-4-b: Fix usb's unit address
 
-Philipp Zabel (1):
-      ARM: imx: register reset controller from a platform driver
-
-Stefan Wahren (2):
-      ARM: dts: bcm2711: fix MDIO #address- and #size-cells
-      ARM: dts: bcm2711-rpi-4-b: fix sd_io_1v8_reg regulator states
-
-Sudeep Holla (2):
-      firmware: arm_ffa: Add missing remove callback to ffa_bus_type
-      firmware: arm_ffa: Fix __ffa_devices_unregister
-
-Sumit Garg (1):
-      tee: optee: Fix missing devices unregister during optee_remove
-
- arch/arm/boot/dts/bcm2711-rpi-4-b.dts | 11 +++++-----
- arch/arm/boot/dts/bcm2711.dtsi        | 12 +++++++++--
- arch/arm/boot/dts/bcm2835-common.dtsi |  8 +++++++
- arch/arm/boot/dts/bcm283x.dtsi        |  8 -------
- arch/arm/mach-imx/src.c               | 40 +++++++++++++++++++++++++++--------
- drivers/firmware/arm_ffa/bus.c        | 10 ++++++++-
- drivers/iommu/Kconfig                 |  8 +++++++
- drivers/tee/optee/core.c              |  3 +++
- drivers/tee/optee/device.c            | 22 +++++++++++++++++++
- drivers/tee/optee/optee_private.h     |  1 +
- 10 files changed, 98 insertions(+), 25 deletions(-)
 
 _______________________________________________
 linux-arm-kernel mailing list
