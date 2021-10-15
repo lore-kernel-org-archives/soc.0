@@ -2,60 +2,52 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3322CC433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12436C433F5
 	for <soc@archiver.kernel.org>; Fri, 15 Oct 2021 20:10:07 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id BBD1961181; Fri, 15 Oct 2021 20:10:06 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9E8DA61053;
-	Fri, 15 Oct 2021 20:10:06 +0000 (UTC)
+	id B336D60F48; Fri, 15 Oct 2021 20:10:06 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 9B2ED60EE2
+	for <soc@kernel.org>; Fri, 15 Oct 2021 20:10:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1634328606;
-	bh=b0Ca6VCo0/IVh06wCvEvmDQNhcpMcRN6dm8YmuiVuyw=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=OFNQn2UCv9c724Eof1BFi3kd+d86K7R+SUU6XRYl4qEzW7/YCXOl/hCQuqOnP1yLq
-	 GG/NiGfLGG8AKafsOGqD/BySt8y0DdlB01MGqcncF8mejqjQsYCzkiNsm255IT9ct8
-	 7ivJtRuIo+HNU/GAqx1zAtJeXVpfSnMrkJ/x7W2lHNXdpBqGq1XRn9WFSf/iAkIaRR
-	 lL44Xr9LV/3j4zwtEFdJGtpYQdCUSeJH4jh/cUtkPrt392J2G1RV3/LDLfmpeuWT+Q
-	 QpRcPvgtFojudlAbP2dky1GmNY9TGmyISzJMoLpxy/LKibulftIMVuJL4CwkkYtwRI
-	 eDt0HT3e+5D+A==
+	bh=igK2eKgsty0K147kVf++iv//+sllMht2RbELHN+i+GA=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=uNxzZGlbtDhOlTztpe613ICyqG7deUW2A/QovI0zONu+4wNZOMReuKzU75pEkWI2o
+	 Xg9a1/aT2/vsfSGFS1ygT+bsw3Ygd7Y1gVe+WH21av8Y95iMXhKmTgsvV6GnY+gx1f
+	 N62fQUOtP21fzqN+HRJ4582Ot79yV9g7T0Q/D8HPeIBJnmwC5dP6HpHds4SweJFVQ+
+	 iXrIQynWlqcytzBSBcJpJz6V0CHqPrOpOrjrfwiMlGHlhwSEj+TSkPajwd2zCKPrG5
+	 vbW45dVhbXke6vvNpQ2wxlJWU1J7fKq8HDb1ni+ZeLrFKhAPsFCHr/GJKDLCdX8/EP
+	 uvANba5mETgmw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 84A30609ED;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 7A7B360A44;
 	Fri, 15 Oct 2021 20:10:06 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 5.15, round 3
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <163432860653.16882.10321546209043901949.git-patchwork-notify@kernel.org>
+ <163432860644.16882.15379073449352674890.git-patchwork-summary@kernel.org>
 Date: Fri, 15 Oct 2021 20:10:06 +0000
-References: <20211015070017.GI22881@dragon>
-In-Reply-To: <20211015070017.GI22881@dragon>
-To: Shawn Guo <shawnguo@kernel.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Fri, 15 Oct 2021 15:00:22 +0800 you wrote:
-> The following changes since commit 3518441dda666696707afe933586151c0fb29db0:
-> 
->   arm64: dts: imx8m*-venice-gw7902: fix M2_RST# gpio (2021-10-05 14:26:21 +0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.15-3
-> 
-> [...]
+Patch: [GIT,PULL] i.MX fixes for 5.15, round 3
+  Submitter: Shawn Guo <shawnguo@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=563941
+  Lore link: https://lore.kernel.org/r/20211015070017.GI22881@dragon
 
-Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 5.15, round 3
-    https://git.kernel.org/soc/soc/c/011ace4a7fad
 
-You are awesome, thank you!
+Total patches: 1
+
 --
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
