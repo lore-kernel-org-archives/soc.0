@@ -1,42 +1,60 @@
-Return-Path: <SRS0=rSjf=PD=gmail.com=joel.stan@kernel.org>
+Return-Path: <SRS0=kCD1=PD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFAA6C433F5
-	for <soc@archiver.kernel.org>; Fri, 15 Oct 2021 04:01:44 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 933AE610E5; Fri, 15 Oct 2021 04:01:44 +0000 (UTC)
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCB84C433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 15 Oct 2021 04:03:24 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1B35D610D1
-	for <soc@kernel.org>; Fri, 15 Oct 2021 04:01:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1B35D610D1
+	by mail.kernel.org (Postfix) with ESMTPS id 8C680610D2
+	for <linux-arm-kernel@archiver.kernel.org>; Fri, 15 Oct 2021 04:03:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8C680610D2
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f178.google.com with SMTP id b12so7754853qtq.3
-        for <soc@kernel.org>; Thu, 14 Oct 2021 21:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=ECBOEkwsFwUl/LQLvdaX8K1iYZNdAdzVqfvemry/2Js=;
-        b=gIXasXOqP3ZyNyTBXLwyCySfZifxVIYOiEQJmV+nxk/PHLSxGrhrIGcgesEMSwYtbw
-         rzulIvfb37aOBwzkHvO/2jsQxTxGQCaJN3hoFAMCgszHfdGgpZNds6+SChBW9PRQorza
-         /pZ8u0n1z1AHojts8kU0xMlPWIGuBgf7+oBjA=
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
+	MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=Rc0xuh3YtSEufgVBOl5l1fF45ndqPqdkKmGKKrOt/jo=; b=scE+y6yBCt1uz6
+	1qTjnVKcMYAdWcmK+GBjSPpEXHEhfF46E/kFXEfUG+Jgbxd+IKgzJ5JPBzk1Z5fclLB8e6weT7ie2
+	JyoWlQkh8MF20phiUvCEL9ef2I8WIg4iMpmgaJH8Hv4ldSs7JjKRMnm/PoKado12HkStllxVevjTy
+	bAlsAYQ04o+9hq3jWi/ZubLKOMfIIjJmKFU9Efta3Z0q61Eelgo7E7swwy+7CXnOC0ubXqvUaDR6V
+	YTiNraCOdzySjN6cJ9EJdiMzvLUxT5fx41j71kEiRgrZGEzQ/tALu/Tdyc4O+e2wDzSSXr7XMpZwe
+	v9bT60G2yhqc8cLXiT7Q==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mbEPn-005Mm2-Av; Fri, 15 Oct 2021 04:01:51 +0000
+Received: from mail-qt1-x831.google.com ([2607:f8b0:4864:20::831])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mbEPj-005MlB-Gi
+ for linux-arm-kernel@lists.infradead.org; Fri, 15 Oct 2021 04:01:49 +0000
+Received: by mail-qt1-x831.google.com with SMTP id y11so7686621qtn.13
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 14 Oct 2021 21:01:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
+ h=mime-version:from:date:message-id:subject:to:cc;
+ bh=ECBOEkwsFwUl/LQLvdaX8K1iYZNdAdzVqfvemry/2Js=;
+ b=gIXasXOqP3ZyNyTBXLwyCySfZifxVIYOiEQJmV+nxk/PHLSxGrhrIGcgesEMSwYtbw
+ rzulIvfb37aOBwzkHvO/2jsQxTxGQCaJN3hoFAMCgszHfdGgpZNds6+SChBW9PRQorza
+ /pZ8u0n1z1AHojts8kU0xMlPWIGuBgf7+oBjA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=ECBOEkwsFwUl/LQLvdaX8K1iYZNdAdzVqfvemry/2Js=;
-        b=4cNXcVlfsDi/UucrVB0TWS3dVmB8Vp6zNA+EezugFK+lKysUikbys6ZhxLRuslUAhX
-         a8DXxZFzYPoMndrrDeUuv+SEHI6XEqmH8lAqUfpP4KeA+3Af9tap1/IyOQ4Zz5r/8neU
-         LUhYiPKUo7uxuX52oJOwqAqO36v0KnEXwg9Bu3VN6bGWSIPk38+X/DQXOitKVTlmMpp1
-         Kzt8qhT8MnbB631BPVnvG2xy749zsq8KKjZjxXzIlxAxxhV713xnZx+LpbARGV/KAySu
-         4VBfXmJFVQ/4zDlMh7szYsdtw2K012VW4EDjQofbzRsGBwViiJiCT2pyGgjkE82A1nNY
-         yqhg==
-X-Gm-Message-State: AOAM532v920nhT2FNEXqjpr+Rf3gXW8ZuWVju6RgahJLMzJOEAcWJZH+
-	9CtpVXCyzfeipkIz8K5q0t8ClF8gG79FdripnSY7QuXsAo0=
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+ bh=ECBOEkwsFwUl/LQLvdaX8K1iYZNdAdzVqfvemry/2Js=;
+ b=fmQKllr7dp4/UvMfH5fsHROOFdV+cB00ZvEqGNI6We5LwsAKurycqYB8WGxjhljq+W
+ RpK1wFT7ergVd/ZFJxtNG8KSdJTJF0C8phHdyIWEEUqBHx82/tEf4ugaeLjOfuLzvl0k
+ EQA3jDzfBAUN0qR4HE/MZG58EjAtmYZ6+yCmtx41Vl7S329lWKFn3eZfC839QF/us2B5
+ C1m9SKSiucbhW2P36keDAxVa1Rxx8j/tpNcDytP3eLeHZ0kpfTWTO7JEZVCsCEVeww5G
+ 3COHD54odmxl1Kw9KeMs7EpDZFJ6/ELh8W+h/wCbNmBg4R7rkYl04TWILgIoKRl7smgq
+ srkA==
+X-Gm-Message-State: AOAM533zZ/NNPHCBOfIXlL7UpTy4YeSckFZ1FJQp/gg8bn+7odbVLeMU
+ MLGWsUIuWFitz/UwFtHjR74hhsQMnSJls9LgdPI=
 X-Google-Smtp-Source: ABdhPJz5ihCwKgESTZKbaaX82wih0wrKU9fUlqSYcBkxd2H4K+BVYtLy0hdfzMJuRZWu1v78+2JJaDVjGuxV09hydak=
-X-Received: by 2002:a05:622a:1451:: with SMTP id v17mr11094292qtx.25.1634270501310;
+X-Received: by 2002:a05:622a:1451:: with SMTP id
+ v17mr11094292qtx.25.1634270501310; 
  Thu, 14 Oct 2021 21:01:41 -0700 (PDT)
 MIME-Version: 1.0
 From: Joel Stanley <joel@jms.id.au>
@@ -46,8 +64,27 @@ Subject: [GIT PULL] ARM: aspeed: devicetree changes for 5.16
 List-Id: <soc.lore.kernel.org>
 To: SoC Team <soc@kernel.org>
 Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	linux-aspeed <linux-aspeed@lists.ozlabs.org>, Andrew Jeffery <andrewrjeffery@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+ linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+ Andrew Jeffery <andrewrjeffery@gmail.com>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211014_210147_806407_645224FB 
+X-CRM114-Status: GOOD (  11.08  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211015040130.3u3VU8oFQFgpRrZJQ080-FHNeYIEeoeUSLcNuIqDwbg@z>
 
 Hello Soc maintainers,
 
@@ -128,3 +165,8 @@ Quan Nguyen (1):
  arch/arm/boot/dts/aspeed-g6.dtsi                 |   20 +
  8 files changed, 2075 insertions(+), 224 deletions(-)
  create mode 100644 arch/arm/boot/dts/aspeed-bmc-tyan-s7106.dts
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
