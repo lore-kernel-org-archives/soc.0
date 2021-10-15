@@ -1,133 +1,124 @@
-Return-Path: <SRS0=kCD1=PD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=rUpC=PD=foss.st.com=prvs=492207a22c=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40481C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 15 Oct 2021 11:46:10 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74720C433EF
+	for <soc@archiver.kernel.org>; Fri, 15 Oct 2021 15:17:12 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 5870F611C1; Fri, 15 Oct 2021 15:17:12 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0BFC160F8F
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 15 Oct 2021 11:46:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0BFC160F8F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=PvQPh7+/mtRa2kUbI5nb0Y2JqU3auQKXBvEWy79tLHU=; b=E1BEpMFQAaLD0B
-	Ujim8ECc3GjTkZthVFMUVbidTkEdaolKi8PSAGjxtdnJFDsVEzXAU8zM0PWIb8dZmNS7ErE4iXbua
-	1m8JY64h/c63byB2BuVQz4ekf25Pzk0cgVEr7l0F8TyjycOWJfeezMWTlJIDNRmeCYEG9suLqv/q9
-	hjst7P4aretzyjlVvV6UXOpZUEzeJZYipxxvdCu+ZiLL0t4QL2r9hTASTVYcqv6Aha5QdkS58841q
-	6FEqLYD6glWXfvIly0dNaGy9Tqv03Sxa4KsISInrrK1Z5Cxf7CHE5Una0mxm16WnmH2Xp01yBvgrM
-	okzGDga4MUPvM7sHk0jA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbLdp-006nIy-4Z; Fri, 15 Oct 2021 11:44:49 +0000
-Received: from baptiste.telenet-ops.be ([2a02:1800:120:4::f00:13])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mbLdk-006nHx-Dx
- for linux-arm-kernel@lists.infradead.org; Fri, 15 Oct 2021 11:44:46 +0000
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:ad48:4534:27c0:db4b])
- by baptiste.telenet-ops.be with bizsmtp
- id 6Bke260020SQF6f01Bkebj; Fri, 15 Oct 2021 13:44:38 +0200
-Received: from rox.of.borg ([192.168.97.57])
- by ramsan.of.borg with esmtps (TLS1.3) tls
- TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.93)
- (envelope-from <geert@linux-m68k.org>)
- id 1mbLdd-0053bD-Ns; Fri, 15 Oct 2021 13:44:37 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
- (envelope-from <geert@linux-m68k.org>)
- id 1mbLdd-004hf4-AR; Fri, 15 Oct 2021 13:44:37 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+	by mail.kernel.org (Postfix) with ESMTPS id 75F9D60F9E;
+	Fri, 15 Oct 2021 15:17:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 75F9D60F9E
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19FF5wMZ020296;
+	Fri, 15 Oct 2021 17:17:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : message-id : date : mime-version : content-type :
+ content-transfer-encoding; s=selector1;
+ bh=Ve+5qj6A1LJAcZzHAYGeQ9tET+26x7KZReEC0Ytg7Ik=;
+ b=uiK89ZLlTBV4bmni+dVShJLRE6HWFROpytSKOh/+gDC5J9kO6qvN5wKwGhpkqagWczA6
+ XEvrUDi/5MMaotDKsyMOuevNVmOBK4xt3vP9yrlslm2D3Y8ooAeTrJ7WmsH/2yugArdY
+ oofHuroA+AP97iW4XGwQr+O3JCchctcLpDpuAIILdkh6qg5+HoKKX5BSNAr595YJpRlv
+ 8cMlEFoOZbBuH87Z/R1dlqRwy1skph+YIuu3wqbwhEw81KBl23KXI6HXUi8S2UGErucQ
+ 8b93u/Blc3e07gPmnTHMb9BFYLxhmZ++RhiJbA4Wza16oLtPN7wuTV+3VmJMF8WNmpyC +w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com with ESMTP id 3bqc04r1ub-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Oct 2021 17:17:08 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9269610002A;
+	Fri, 15 Oct 2021 17:16:04 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7754C24FE00;
+	Fri, 15 Oct 2021 17:16:04 +0200 (CEST)
+Received: from lmecxl0912.lme.st.com (10.75.127.44) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 15 Oct
+ 2021 17:16:03 +0200
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org,
- linux-renesas-soc@vger.kernel.org,
- Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL] Renesas ARM DT updates for v5.16 (take two)
-Date: Fri, 15 Oct 2021 13:44:30 +0200
-Message-ID: <cover.1634298094.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Kevin
+ Hilman <khilman@baylibre.com>, SoC Team <soc@kernel.org>,
+        arm-soc
+	<arm@kernel.org>
+CC: Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+        "linux-stm32@st-md-mailman.stormreply.com"
+	<linux-stm32@st-md-mailman.stormreply.com>
+Subject: [GIT PULL] STM32 SoC changes for v5.16 #1
+Message-ID: <0b6c9657-dcca-3bad-601f-610dfc81d9ae@foss.st.com>
+Date: Fri, 15 Oct 2021 17:16:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211015_044444_654910_58A25B51 
-X-CRM114-Status: GOOD (  16.59  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211015114430.OQ_KughBZUFahQ-6O1R6sCjwEqAviHHJfmnTyX-e0W8@z>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-15_04,2021-10-14_02,2020-04-07_01
 
-CUhpIHNvYyBmb2xrcywKClRoZSBmb2xsb3dpbmcgY2hhbmdlcyBzaW5jZSBjb21taXQgNzMyZThl
-ZTAzNTFjNTlkZWQ0ZDg4MTA2NDM3YTdhZDFjZmY0Y2I4MzoKCiAgYXJtNjQ6IGR0czogcmVuZXNh
-czogcmNhci1nZW4zOiBBZGQgbWlzc2luZyBFdGhlcm5ldCBQSFkgcmVzZXRzICgyMDIxLTA5LTI4
-IDA5OjU5OjI2ICswMjAwKQoKYXJlIGF2YWlsYWJsZSBpbiB0aGUgR2l0IHJlcG9zaXRvcnkgYXQ6
-CgogIGdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9nZWVydC9y
-ZW5lc2FzLWRldmVsLmdpdCB0YWdzL3JlbmVzYXMtYXJtLWR0LWZvci12NS4xNi10YWcyCgpmb3Ig
-eW91IHRvIGZldGNoIGNoYW5nZXMgdXAgdG8gNmJlODVkYjQwMTM1ZmI1NTg4M2YzNTQ3NmExZWRk
-MDBlYjdhOWE2YjoKCiAgbWFpbG1hcDogRml4IHRleHQgZW5jb2RpbmcgZm9yIE5pa2xhcyBTw7Zk
-ZXJsdW5kICgyMDIxLTEwLTE1IDA5OjUwOjEyICswMjAwKQoKLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpSZW5lc2FzIEFSTSBE
-VCB1cGRhdGVzIGZvciB2NS4xNiAodGFrZSB0d28pCgogIC0gU1BJIE11bHRpIEkvTyBCdXMsIFNE
-SEksIGFuZCBFdGhlcm5ldCBzdXBwb3J0IGZvciB0aGUgUlovRzJMIFNvQywKICAtIFNQSSBNdWx0
-aSBJL08gQnVzLCBjYW1lcmEsIGFuZCB2aWRlby1vbiBzdXBwb3J0IGZvciB0aGUgUi1DYXIgVjNV
-CiAgICBTb0MsCiAgLSBTUEkgRkxBU0ggc3VwcG9ydCBmb3IgdGhlIEZhbGNvbiBkZXZlbG9wbWVu
-dCBib2FyZCwKICAtIGVNTUMsIG1pY3JvU0QsIGFuZCBFdGhlcm5ldCBzdXBwb3J0IGZvciB0aGUg
-UlovRzJMIFNNQVJDIEVWSwogICAgZGV2ZWxvcG1lbnQgYm9hcmQsCiAgLSAyIEdIeiBIaWdoLVBl
-cmZvcm1hbmNlIHN1cHBvcnQgZm9yIHRoZSBSLUNhciBIM2UtMkcsIE0zZS0yRywgYW5kCiAgICBN
-M05lLTJHIFNvQ3MsCiAgLSBNaXNjZWxsYW5lb3VzIGZpeGVzIGFuZCBpbXByb3ZlbWVudHMuCgpU
-aGFua3MgZm9yIHB1bGxpbmchCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCkJpanUgRGFzICg1KToKICAgICAgYXJtNjQ6IGR0
-czogcmVuZXNhczogcjlhMDdnMDQ0OiBBZGQgU0RISSBub2RlcwogICAgICBhcm02NDogZHRzOiBy
-ZW5lc2FzOiByemcybC1zbWFyYy1zb206IEVuYWJsZSBlTU1DIG9uIFNNQVJDIHBsYXRmb3JtCiAg
-ICAgIGFybTY0OiBkdHM6IHJlbmVzYXM6IHJ6ZzJsLXNtYXJjOiBFbmFibGUgbWljcm9TRCBvbiBT
-TUFSQyBwbGF0Zm9ybQogICAgICBhcm02NDogZHRzOiByZW5lc2FzOiByOWEwN2cwNDQ6IEFkZCBH
-YkV0aGVybmV0IG5vZGVzCiAgICAgIGFybTY0OiBkdHM6IHJlbmVzYXM6IHJ6ZzJsLXNtYXJjLXNv
-bTogRW5hYmxlIEV0aGVybmV0CgpEdWMgTmd1eWVuICgxKToKICAgICAgYXJtNjQ6IGR0czogcmVu
-ZXNhczogcjhhNzc5YTA6IEFkZCBSUEMgbm9kZQoKR2VlcnQgVXl0dGVyaG9ldmVuICgxKToKICAg
-ICAgYXJtNjQ6IGR0czogcmVuZXNhczogcmNhci1nZW4zZTogQWRkIENvcnRleC1BNTcgMiBHSHog
-b3BwcwoKTGFkIFByYWJoYWthciAoMSk6CiAgICAgIGFybTY0OiBkdHM6IHJlbmVzYXM6IHI5YTA3
-ZzA0NDogQWRkIFNQSSBNdWx0aSBJL08gQnVzIGNvbnRyb2xsZXIgbm9kZQoKTmlrbGFzIFPDtmRl
-cmx1bmQgKDMpOgogICAgICBhcm02NDogZHRzOiByZW5lc2FzOiByOGE3NzlhMDogQWRkIGFuZCBj
-b25uZWN0IGFsbCBDU0ktMiwgSVNQIGFuZCBWSU4gbm9kZXMKICAgICAgYXJtNjQ6IGR0czogcmVu
-ZXNhczogQWRkIHBvcnRzIG5vZGUgdG8gYWxsIGFkdjc0ODIgbm9kZXMKICAgICAgbWFpbG1hcDog
-Rml4IHRleHQgZW5jb2RpbmcgZm9yIE5pa2xhcyBTw7ZkZXJsdW5kCgpXb2xmcmFtIFNhbmcgKDEp
-OgogICAgICBhcm02NDogZHRzOiByZW5lc2FzOiBmYWxjb24tY3B1OiBBZGQgU1BJIGZsYXNoIHZp
-YSBSUEMKCiAubWFpbG1hcCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICB8ICAgIDEgKwogYXJjaC9hcm02NC9ib290L2R0cy9yZW5lc2FzL2ViaXN1LmR0c2kgICAgICAg
-ICAgICAgfCAgIDQwICstCiAuLi4vYm9vdC9kdHMvcmVuZXNhcy9yOGE3NzlhMC1mYWxjb24tY3B1
-LmR0c2kgICAgICB8ICAgMzMgKwogYXJjaC9hcm02NC9ib290L2R0cy9yZW5lc2FzL3I4YTc3OWEw
-LmR0c2kgICAgICAgICAgfCAxMzQ5ICsrKysrKysrKysrKysrKysrKysrCiBhcmNoL2FybTY0L2Jv
-b3QvZHRzL3JlbmVzYXMvcjhhNzc5bTEuZHRzaSAgICAgICAgICB8ICAgIDkgKwogYXJjaC9hcm02
-NC9ib290L2R0cy9yZW5lc2FzL3I4YTc3OW0zLmR0c2kgICAgICAgICAgfCAgICA5ICsKIGFyY2gv
-YXJtNjQvYm9vdC9kdHMvcmVuZXNhcy9yOGE3NzltNS5kdHNpICAgICAgICAgIHwgICAgOSArCiBh
-cmNoL2FybTY0L2Jvb3QvZHRzL3JlbmVzYXMvcjlhMDdnMDQ0LmR0c2kgICAgICAgICB8ICAgODkg
-KysKIGFyY2gvYXJtNjQvYm9vdC9kdHMvcmVuZXNhcy9yemcybC1zbWFyYy1zb20uZHRzaSAgIHwg
-IDI0MCArKysrCiBhcmNoL2FybTY0L2Jvb3QvZHRzL3JlbmVzYXMvcnpnMmwtc21hcmMuZHRzaSAg
-ICAgICB8ICAgNjMgKy0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvcmVuZXNhcy9zYWx2YXRvci1jb21t
-b24uZHRzaSAgIHwgICA1NCArLQogMTEgZmlsZXMgY2hhbmdlZCwgMTg1MCBpbnNlcnRpb25zKCsp
-LCA0NiBkZWxldGlvbnMoLSkKCkdye29ldGplLGVldGluZ31zLAoKCQkJCQkJR2VlcnQKCi0tCkdl
-ZXJ0IFV5dHRlcmhvZXZlbiAtLSBUaGVyZSdzIGxvdHMgb2YgTGludXggYmV5b25kIGlhMzIgLS0g
-Z2VlcnRAbGludXgtbTY4ay5vcmcKCkluIHBlcnNvbmFsIGNvbnZlcnNhdGlvbnMgd2l0aCB0ZWNo
-bmljYWwgcGVvcGxlLCBJIGNhbGwgbXlzZWxmIGEgaGFja2VyLiBCdXQKd2hlbiBJJ20gdGFsa2lu
-ZyB0byBqb3VybmFsaXN0cyBJIGp1c3Qgc2F5ICJwcm9ncmFtbWVyIiBvciBzb21ldGhpbmcgbGlr
-ZSB0aGF0LgoJCQkJCQkJICAgIC0tIExpbnVzIFRvcnZhbGRzCgpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsaW51eC1hcm0ta2VybmVsIG1haWxpbmcgbGlz
-dApsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcKaHR0cDovL2xpc3RzLmluZnJh
-ZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51eC1hcm0ta2VybmVsCg==
+Hi ARM SoC maintainers,
+
+Please consider this first round of STM32 SoC updates for v5.16. As 
+you'll see it adds a new STM32 MPU SoC.
+
+regards
+Alex
+
+
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+
+   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
+tags/stm32-soc-for-v5.16-1
+
+for you to fetch changes up to e0302638a3b43c83ff26840df6e496d60c56cbbd:
+
+   ARM: stm32: add initial support for STM32MP13 family (2021-09-20 
+08:54:42 +0200)
+
+----------------------------------------------------------------
+STM32 SoC for v5.16, round 1
+
+Highlights:
+----------
+
+Add support of new STM32MP13 SoC which enhances current
+STM32 MPU family. It is mainly a derivative of STM32MP15 SoCs
+(one Cortex-A7 plus standard peripherals).
+
+The STM32MP13 SoC diversity is composed by:
+     -STM32MP131:
+       -core: 1*CA7, 17*TIMERS, 5*LPTIMERS, DMA/MDMA/DMAMUX
+       -storage: 3*SDMCC, 1*QSPI, FMC
+       -com: USB (OHCI/EHCI, OTG), 5*I2C, 5*SPI/I2S, 8*U(S)ART
+       -audio: 2*SAI
+       -network: 1*ETH(GMAC)
+     -STM32MP133: STM32MP131 + 2*CAN, ETH2(GMAC), ADC1
+     -STM32MP135: STM32MP133 + DCMIPP, LTDC
+
+----------------------------------------------------------------
+Alexandre Torgue (2):
+       docs: arm: stm32: introduce STM32MP13 SoCs
+       ARM: stm32: add initial support for STM32MP13 family
+
+  Documentation/arm/index.rst                    |  1 +
+  Documentation/arm/stm32/stm32mp13-overview.rst | 37 
+++++++++++++++++++++++++++
+  arch/arm/mach-stm32/Kconfig                    |  8 ++++++
+  arch/arm/mach-stm32/board-dt.c                 |  3 +++
+  4 files changed, 49 insertions(+)
+  create mode 100644 Documentation/arm/stm32/stm32mp13-overview.rst
