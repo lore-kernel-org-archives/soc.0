@@ -2,36 +2,36 @@ Return-Path: <SRS0=hAZI=PD=bootlin.com=gregory.clement@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97F03C433F5
-	for <soc@archiver.kernel.org>; Fri, 15 Oct 2021 16:38:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C526C433EF
+	for <soc@archiver.kernel.org>; Fri, 15 Oct 2021 16:38:58 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 71C3D61164; Fri, 15 Oct 2021 16:38:05 +0000 (UTC)
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+	id 5394861151; Fri, 15 Oct 2021 16:38:58 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E199D60E0C;
-	Fri, 15 Oct 2021 16:38:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E199D60E0C
+	by mail.kernel.org (Postfix) with ESMTPS id 6303860C41;
+	Fri, 15 Oct 2021 16:38:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6303860C41
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: (Authenticated sender: gregory.clement@bootlin.com)
-	by relay11.mail.gandi.net (Postfix) with ESMTPSA id 057FA10000A;
-	Fri, 15 Oct 2021 16:37:59 +0000 (UTC)
+	by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id A77CB60009;
+	Fri, 15 Oct 2021 16:38:52 +0000 (UTC)
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  <arm@kernel.org>, soc@kernel.org
 Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
  <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt64 for v5.16 (#1)
-Date: Fri, 15 Oct 2021 18:37:53 +0200
-Message-ID: <877deemefy.fsf@BL-laptop>
+Subject: [GIT PULL] ARM: mvebu: dt for v5.16 (#1)
+Date: Fri, 15 Oct 2021 18:38:42 +0200
+Message-ID: <874k9imeel.fsf@BL-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain
 
 Hi,
 
-Here is the first pull request for dt64 for mvebu for v5.16.
+Here is the first pull request for dt for mvebu for v5.16.
 
 Gregory
 
@@ -41,26 +41,25 @@ The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt64-5.16-1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt-5.16-1
 
-for you to fetch changes up to 73792919128304938412194d047be3c61cccc76d:
+for you to fetch changes up to bf05b706a6eaf769b7a99c475ac702b7e29fc25a:
 
-  arm64: dts: marvell: add Globalscale MOCHAbin (2021-10-13 16:45:59 +0200)
-
-----------------------------------------------------------------
-mvebu dt64 for 5.16 (part 1)
-
-Add support for Globalscale MOCHAbin an Armada 7040 based development
-board.
+  ARM: dts: mvebu: add device tree for netgear gs110emx switch (2021-10-13 16:41:44 +0200)
 
 ----------------------------------------------------------------
-Robert Marko (1):
-      arm64: dts: marvell: add Globalscale MOCHAbin
+mvebu dt for 5.16 (part 1)
 
- arch/arm64/boot/dts/marvell/Makefile               |   1 +
- .../boot/dts/marvell/armada-7040-mochabin.dts      | 458 +++++++++++++++++++++
- 2 files changed, 459 insertions(+)
- create mode 100644 arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts
+Add support for Netgear GS110EMX switch (Armada 381 SoC based)
+
+----------------------------------------------------------------
+Marcel Ziswiler (1):
+      ARM: dts: mvebu: add device tree for netgear gs110emx switch
+
+ arch/arm/boot/dts/Makefile                        |   1 +
+ arch/arm/boot/dts/armada-381-netgear-gs110emx.dts | 295 ++++++++++++++++++++++
+ 2 files changed, 296 insertions(+)
+ create mode 100644 arch/arm/boot/dts/armada-381-netgear-gs110emx.dts
 
 -- 
 Gregory Clement, Bootlin
