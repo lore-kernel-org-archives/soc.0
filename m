@@ -1,107 +1,120 @@
-Return-Path: <SRS0=kCD1=PD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=KV7r=PD=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66583C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 15 Oct 2021 07:01:48 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87B25C433EF
+	for <soc@archiver.kernel.org>; Fri, 15 Oct 2021 11:44:41 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 33EC3610E8; Fri, 15 Oct 2021 11:44:41 +0000 (UTC)
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 381AE6108B
-	for <linux-arm-kernel@archiver.kernel.org>; Fri, 15 Oct 2021 07:01:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 381AE6108B
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Subject:Cc:To:
-	From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=LlH0+Bq9NbpW1IL9sT6ntViTTR1n1iVxcVZgrCRw+8I=; b=JiB7RN3GG2uTx+
-	bSRD9eIdga+aLXXgu+qkQphfSRfkaUrYhfSGlv5jlvhUP+278Skdc4eRQ2g3riQTOcoCQXeBbS4zI
-	VZN95MxqgIXj2o30I2JJhH3WC0L065J/w+fNSa/rVmxGDEHuMqVaAoGBif27fMLtLX/eRso6Eg+7Z
-	FrK9ec4PB/4NzmUhlY8UFrt14H6MAVpOBNYGqCBEi+/ozkohkpKk/qiGpZ7uzSj7mqjIqtzyVe1Xd
-	9MEIHOV+FJhweLAxdBZjr4Yi3Wf+EhutpHkhAaTtdhrUELyYyve8kDBz0ee2uTNftte00Fh5j35oQ
-	VEsY7XM+c6ipKoi0vbGw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbHCi-005dhZ-0R; Fri, 15 Oct 2021 07:00:32 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mbHCe-005dh5-TD
- for linux-arm-kernel@lists.infradead.org; Fri, 15 Oct 2021 07:00:30 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CCF656108B;
- Fri, 15 Oct 2021 07:00:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1634281228;
- bh=ZdbIWoWbV0Jf2S8p/rqDHwmcj+pmcu4J/c3RWMASNtc=;
- h=Date:From:List-Id:To:Cc:Subject:From;
- b=iihmB383d77TE9dqJ4ss8yuPtz1hRt8lzOGdn5tClAYoViMOpLbX8KDadmx2njxMl
- 6UlpcE4oUXz8Fwl7pdduHzGkaY3iwOZBCxP6tjEI/5d2opS0+SnNlZXOi1OpPRlahW
- S205YWA+P5PAPBourbOeDmDxGTSQ7EiRXSum/uY4SLz964zcFBIK5eZuDdWZHXQkvs
- v27EJcUsRlEPYcwPiMTE8nVX/C1eXdvTao2tju7WnkYgLI9yycaQx1C6lyahDm9abj
- juXxjKSJOvHW4UB1dloae4D4d/p2fXMRm3Ci/Xr4SH9q04c6Am+w6uuSj143N8W4AS
- AXt2scKX94O8w==
-Date: Fri, 15 Oct 2021 15:00:22 +0800
-From: Shawn Guo <shawnguo@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id 6FA9460FDA
+	for <soc@kernel.org>; Fri, 15 Oct 2021 11:44:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6FA9460FDA
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:ad48:4534:27c0:db4b])
+	by baptiste.telenet-ops.be with bizsmtp
+	id 6Bke260020SQF6f01Bkebj; Fri, 15 Oct 2021 13:44:38 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1mbLdd-0053bD-Ns; Fri, 15 Oct 2021 13:44:37 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1mbLdd-004hf4-AR; Fri, 15 Oct 2021 13:44:37 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
- Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
- linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 5.15, round 3
-Message-ID: <20211015070017.GI22881@dragon>
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL] Renesas ARM DT updates for v5.16 (take two)
+Date: Fri, 15 Oct 2021 13:44:30 +0200
+Message-Id: <cover.1634298094.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211015_000028_984627_19342DAE 
-X-CRM114-Status: UNSURE (   6.06  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211015070022.N186zPtHu3Uz-0GGASN865TUq6E-9TUyRHPvFmzIXwI@z>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit 3518441dda666696707afe933586151c0fb29db0:
+	Hi soc folks,
 
-  arm64: dts: imx8m*-venice-gw7902: fix M2_RST# gpio (2021-10-05 14:26:21 +0800)
+The following changes since commit 732e8ee0351c59ded4d88106437a7ad1cff4cb83:
+
+  arm64: dts: renesas: rcar-gen3: Add missing Ethernet PHY resets (2021-09-28 09:59:26 +0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.15-3
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.16-tag2
 
-for you to fetch changes up to a1467faa10414ab3d91be7ef6d2b11272ec00e95:
+for you to fetch changes up to 6be85db40135fb55883f35476a1edd00eb7a9a6b:
 
-  ARM: imx: register reset controller from a platform driver (2021-10-15 09:38:06 +0800)
-
-----------------------------------------------------------------
-i.MX fixes for 5.15, round 3:
-
-- Add platform device for i.MX System Reset Controller (SRC) to fix
-  a regression caused by fw_devlink change.
+  mailmap: Fix text encoding for Niklas Söderlund (2021-10-15 09:50:12 +0200)
 
 ----------------------------------------------------------------
-Philipp Zabel (1):
-      ARM: imx: register reset controller from a platform driver
+Renesas ARM DT updates for v5.16 (take two)
 
- arch/arm/mach-imx/src.c | 40 +++++++++++++++++++++++++++++++---------
- 1 file changed, 31 insertions(+), 9 deletions(-)
+  - SPI Multi I/O Bus, SDHI, and Ethernet support for the RZ/G2L SoC,
+  - SPI Multi I/O Bus, camera, and video-on support for the R-Car V3U
+    SoC,
+  - SPI FLASH support for the Falcon development board,
+  - eMMC, microSD, and Ethernet support for the RZ/G2L SMARC EVK
+    development board,
+  - 2 GHz High-Performance support for the R-Car H3e-2G, M3e-2G, and
+    M3Ne-2G SoCs,
+  - Miscellaneous fixes and improvements.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Thanks for pulling!
+
+----------------------------------------------------------------
+Biju Das (5):
+      arm64: dts: renesas: r9a07g044: Add SDHI nodes
+      arm64: dts: renesas: rzg2l-smarc-som: Enable eMMC on SMARC platform
+      arm64: dts: renesas: rzg2l-smarc: Enable microSD on SMARC platform
+      arm64: dts: renesas: r9a07g044: Add GbEthernet nodes
+      arm64: dts: renesas: rzg2l-smarc-som: Enable Ethernet
+
+Duc Nguyen (1):
+      arm64: dts: renesas: r8a779a0: Add RPC node
+
+Geert Uytterhoeven (1):
+      arm64: dts: renesas: rcar-gen3e: Add Cortex-A57 2 GHz opps
+
+Lad Prabhakar (1):
+      arm64: dts: renesas: r9a07g044: Add SPI Multi I/O Bus controller node
+
+Niklas Söderlund (3):
+      arm64: dts: renesas: r8a779a0: Add and connect all CSI-2, ISP and VIN nodes
+      arm64: dts: renesas: Add ports node to all adv7482 nodes
+      mailmap: Fix text encoding for Niklas Söderlund
+
+Wolfram Sang (1):
+      arm64: dts: renesas: falcon-cpu: Add SPI flash via RPC
+
+ .mailmap                                           |    1 +
+ arch/arm64/boot/dts/renesas/ebisu.dtsi             |   40 +-
+ .../boot/dts/renesas/r8a779a0-falcon-cpu.dtsi      |   33 +
+ arch/arm64/boot/dts/renesas/r8a779a0.dtsi          | 1349 ++++++++++++++++++++
+ arch/arm64/boot/dts/renesas/r8a779m1.dtsi          |    9 +
+ arch/arm64/boot/dts/renesas/r8a779m3.dtsi          |    9 +
+ arch/arm64/boot/dts/renesas/r8a779m5.dtsi          |    9 +
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi         |   89 ++
+ arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi   |  240 ++++
+ arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi       |   63 +-
+ arch/arm64/boot/dts/renesas/salvator-common.dtsi   |   54 +-
+ 11 files changed, 1850 insertions(+), 46 deletions(-)
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
