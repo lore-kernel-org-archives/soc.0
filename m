@@ -2,22 +2,22 @@ Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C468CC433F5
-	for <soc@archiver.kernel.org>; Sat, 16 Oct 2021 14:02:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D99B5C433F5
+	for <soc@archiver.kernel.org>; Sat, 16 Oct 2021 14:02:19 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id A2D33610D2; Sat, 16 Oct 2021 14:02:16 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 51B10611C3;
-	Sat, 16 Oct 2021 14:02:14 +0000 (UTC)
+	id BA30F61244; Sat, 16 Oct 2021 14:02:19 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 134FA61212;
+	Sat, 16 Oct 2021 14:02:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634392936;
-	bh=fAceuljAgSt4ycdaT0OV51wbYrC1XGwW6wCwEoSUElQ=;
+	s=k20201202; t=1634392939;
+	bh=J6Egu8iKzm0l6OmLd6MKkBuibN7S/2beuAcLWYh36tg=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=a1khe6s+DUEpyF8akg155GWXKXhO2ZXakDVyLpW4c8VmYqrjTz45El6hKC5DmQPDw
-	 Wn2w8vdAnPSXrJjedctNhXt1Oc5OGtHNNEIRAmBfPiIZQ1u6kPj5bM2bcO4P9UBvD6
-	 LwQcJ7xYyp09S7GRxxepZzP69yT5kx9KeuZgz2/1DvowVG0dota4muoqp0tc0MljFI
-	 VaiFTNWrI7NNkaUG1ouznTcJTJQNb2g8/HY6jzfW8aawluXXKQkKiUcRcZzIq46eZj
-	 7M2U40gc9B2jaGuFBg3sD/x6+/2VAkdKoK7t8NE2pXvPXYsH1iA/rk49tDbKmwl5s4
-	 BSOxIBqQasfNw==
+	b=t/+jLSVGNvZt2GRmZ8rGJ69326aYhiaoPypiDS+7jTe1BlPt3B6PREQpQSCHysFwH
+	 MqdioKchG8u+eigTdJ6kvLuAMfpe9h7pLEcoCLlbfz6UG9UI0R212/eC/T1tzGb3xa
+	 +qw0mdvg21ONnCu/KbHsBp0/c+AYsloOrjREhr1rvapj0N1Cb4W970qIHNTsKz/WSz
+	 TjA+nhTn6fGuFT8dsNrtiWODSwltgSjTXiCKn3pMoAlWA/4YY356C3EOn9aUHWds5i
+	 e9VjMKlcEKpPlbCLre1UdDH88tQoDsFZLiaRqwZZoixnFOS71+b1mMnNqxGnY6HMc7
+	 VVmkiu1tppwWA==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -29,9 +29,9 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 3/6] i.MX device tree changes for 5.16
-Date: Sat, 16 Oct 2021 22:01:35 +0800
-Message-Id: <20211016140138.1603-3-shawnguo@kernel.org>
+Subject: [GIT PULL 4/6] i.MX arm64 device tree changes for 5.16
+Date: Sat, 16 Oct 2021 22:01:36 +0800
+Message-Id: <20211016140138.1603-4-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211016140138.1603-1-shawnguo@kernel.org>
 References: <20211016140138.1603-1-shawnguo@kernel.org>
@@ -39,148 +39,134 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi,
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
-To resolve the dependency on a fix, the pull-request is built on commit
-9b663b34c94a ("ARM: dts: imx6dl-yapp4: Fix lp5562 LED driver probe"),
-which had landed on mainline.  Please consider to pull, thanks!
-
-Shawn
-
-
-The following changes since commit 9b663b34c94a78f39fa2c7a8271b1f828b546e16:
-
-  ARM: dts: imx6dl-yapp4: Fix lp5562 LED driver probe (2021-09-22 11:06:49 +0800)
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt-5.16
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt64-5.16
 
-for you to fetch changes up to 05e63b48b20fa70726be505a7660d1a07bc1cffb:
+for you to fetch changes up to ec1e91d400bf21def54c441552bdf2976ce36e3b:
 
-  ARM: dts: ls1021a-tsn: use generic "jedec,spi-nor" compatible for flash (2021-10-15 11:16:58 +0800)
-
-----------------------------------------------------------------
-i.MX device tree changes for 5.16:
-
-- New board support: Kobo Libra H2O, Tolino Vision 5, SKOV LT2 and
-  Colibri i.MX6ULL eMMC variants.
-- A series from Fabio Estevam to correct SPI chipselect polarity for
-  various i.MX6/7 boards.
-- A couple of patches from Krzysztof Kozlowski to clean up unsupported
-  properties from imx6dl-b1x5v2 and imx6dl-prtrvt boards.
-- A series from Li Yang to clean up LS1021a based boards and add missing
-  device nodes.
-- A series from Matthias Schiffer to fix typo, add SPI-NOR flash and
-  partition layout for imx7-tqma7/mba7 boards.
-- Fix the schema check errors in i.MX PCIe device nodes.
-- Other random and small fix-up and device additions.
+  arm64: dts: imx8mm-kontron: Add support for ultra high speed modes on SD card (2021-10-16 15:28:27 +0800)
 
 ----------------------------------------------------------------
-Andreas Kemnade (6):
-      ARM: dts: add Netronix E70K02 board common file
-      ARM: dts: imx: add devicetree for Kobo Libra H2O
-      ARM: dts: imx: add devicetree for Tolino Vision 5
-      ARM: dts: imx: e60k02: correct led node name
-      ARM: dts: imx6sl: fixup of operating points
-      ARM: dts: imx6sll: fixup of operating points
+i.MX arm64 device tree changes for 5.16:
 
-Fabio Estevam (8):
-      ARM: dts: imx6dl-alti6p: Fix the SPI chipselect polarity
-      ARM: dts: imx6qp-prtwd3: Fix the SPI chipselect polarity
-      ARM: dts: imx6qdl-tqma6: Fix the SPI chipselect polarity
-      ARM: dts: imx7d-sdb: Fix the SPI chipselect polarity
-      ARM: dts: imx6qdl-apalis: Avoid underscore in node name
-      ARM: dts: imx6qdl-apalis: Pass 'io-channel-cells' to the ADC
-      ARM: dts: imx6qdl-apalis: Add a label for the touchscreen
-      ARM: dts: imx6qdl-apalis: Fix typo in ADC comment
+- New board support: LX2160A based BlueBox3, S32G2 EVB and RDB2 boards.
+- Quite some updates on imx8mq-librem5 board: delay the startup of the
+  SDIO, add power sequencing for M.2 cards, add wifi regulator, add
+  panel reset GPIO, fix led_r and led_g pinctrl, etc.
+- Fix the SPI chipselect polarity for a couple of i.MX8MM boards.
+- Add GPU nodes for i.MX8MM 2D and 3D core.
+- Add VPU and DISP blk-ctrl devices for i.MX8MM.
+- A series from Michael Walle to LS1028A device trees and add GPU
+  support.
+- Random and small updates on various boards.
 
-Krzysztof Kozlowski (2):
-      ARM: dts: imx6dl-b1x5v2: drop unsupported vcc-supply for MPL3115A2
-      ARM: dts: imx6dl-prtrvt: drop undocumented TRF7970A NFC properties
+----------------------------------------------------------------
+Angus Ainslie (3):
+      arm64: dts: imx8mq-librem5: delay the startup of the SDIO
+      arm64: dts: imx8mq-librem5: add power sequencing for M.2 cards
+      arm64: dts: imx8mq-librem5: Limit the max sdio frequency
 
-Li Yang (16):
-      ARM: dts: ls1021a: remove clock-names property for i2c nodes
-      ARM: dts: ls1021a: change dma channels order to match schema
-      ARM: dts: ls1021a: change to use SPDX identifiers
-      ARM: dts: ls1021a-qds: Add node for QSPI flash
-      ARM: dts: ls1021a: update pcie nodes for dt-schema check
-      ARM: dts: ls1021a: fix board compatible to follow binding schema
-      ARM: dts: ls1021a: breakup long values in thermal node
-      ARM: dts: ls1021a: disable ifc node by default
-      ARM: dts: ls1021a: remove regulators simple-bus
-      ARM: dts: ls1021a: fix memory node for schema check
-      ARM: dts: ls1021a: add #dma-cells to qdma node
-      ARM: dts: ls1021a: add #power-domain-cells for power-controller node
-      ARM: dts: ls1021a-qds: change fpga to simple-mfd device
-      ARM: dts: ls1021a-tsn: remove undocumented property "position" from mma8452 node
-      ARM: dts: ls1021a: move thermal-zones node out of soc/
-      ARM: dts: ls1021a-tsn: use generic "jedec,spi-nor" compatible for flash
+Chester Lin (4):
+      arm64: dts: add NXP S32G2 support
+      arm64: dts: s32g2: add serial/uart support
+      arm64: dts: s32g2: add VNP-EVB and VNP-RDB2 support
+      arm64: dts: s32g2: add memory nodes for evb and rdb2
 
-Matthias Schiffer (3):
-      ARM: dts: imx7-tqma7/mba7: correct spelling of "TQ-Systems"
-      ARM: dts: imx7-tqma7: add SPI-NOR flash
-      ARM: dts: imx7-mba7: add default SPI-NOR flash partition layout
+Fabio Estevam (2):
+      arm64: dts: imx8mm-kontron-n801x-som: Fix the SPI chipselect polarity
+      arm64: dts: imx8mm-venice: Fix the SPI chipselect polarity
 
-Max Krummenacher (1):
-      ARM: dts: colibri-imx6ull-emmc: add device tree
+Frieder Schrempf (3):
+      arm64: dts: imx8mm: Add GPU nodes for 2D and 3D core
+      arm64: dts: imx8mm-kontron: Fix reset delays for ethernet PHY
+      arm64: dts: imx8mm-kontron: Add support for ultra high speed modes on SD card
 
-Michal Vokáč (1):
-      ARM: dts: imx6dl-yapp4: Remove the unused white LED channel
+Guido Günther (1):
+      arm64: dts: imx8mq-librem5: wire up the wifi regulator
 
-Oleksij Rempel (1):
-      ARM: dts: imx6: skov: provide panel support for lt2 variants
+Krzysztof Kozlowski (1):
+      arm64: dts: freescale: imx8mq-librem5: align operating-points table name with dtschema
+
+Kuldeep Singh (2):
+      arm64: dts: imx8mp: Reorder flexspi clock-names entry
+      arm64: dts: ls1012a: Add serial alias for ls1012a-rdb
+
+Lucas Stach (6):
+      arm64: dts: imx8mq-reform2: add uSDHC2 CD pinctrl
+      arm64: dts: zii-ultra: add PCIe PHY supply
+      arm64: dts: imx8mm: add GPC node
+      arm64: dts: imx8mm: put USB controllers into power-domains
+      arm64: dts: imx8mm: add VPU blk-ctrl
+      arm64: dts: imx8mm: add DISP blk-ctrl
+
+Martin Kepplinger (1):
+      arm64: dts: imx8mq-librem5: add reset gpio to mantix panel description
+
+Michael Walle (7):
+      arm64: dts: freescale: fix arm,sp805 compatible string
+      arm64: dts: ls1028a: move pixel clock pll into /soc
+      arm64: dts: ls1028a: move Mali DP500 node into /soc
+      arm64: dts: ls1028a: add Vivante GPU node
+      arm64: dts: ls1028a: disable usb controller by default
+      arm64: dts: ls1028a: move PHY nodes to MDIO controller
+      arm64: dts: ls1028a: use phy-mode instead of phy-connection-type
 
 Richard Zhu (1):
-      ARM: dts: imx: fix the schema check errors
+      arm64: dts: imx8mq: fix the schema check errors
 
-Yunus Bas (2):
-      ARM: dts: imx6: phycore-som: Disable micro-SD write protection
-      ARM: dts: imx6: phytec: Add gpio pinctrl for i2c bus recovery
+Rob Herring (1):
+      arm64: dts: freescale: Fix 'interrupt-map' parent address cells
 
- arch/arm/boot/dts/Makefile                         |   5 +-
- arch/arm/boot/dts/e60k02.dtsi                      |   2 +-
- arch/arm/boot/dts/e70k02.dtsi                      | 320 +++++++++++++++++++
- arch/arm/boot/dts/imx6dl-alti6p.dts                |   2 +-
- arch/arm/boot/dts/imx6dl-b1x5v2.dtsi               |   1 -
- arch/arm/boot/dts/imx6dl-prtrvt.dts                |   2 -
- arch/arm/boot/dts/imx6dl-skov-revc-lt2.dts         |   1 +
- arch/arm/boot/dts/imx6dl-yapp4-common.dtsi         |   8 -
- arch/arm/boot/dts/imx6q-skov-revc-lt2.dts          |   1 +
- arch/arm/boot/dts/imx6qdl-apalis.dtsi              |   7 +-
- arch/arm/boot/dts/imx6qdl-phytec-mira.dtsi         |  31 +-
- arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi  |  12 +-
- arch/arm/boot/dts/imx6qdl-skov-revc-lt2.dtsi       |  99 ++++++
- arch/arm/boot/dts/imx6qdl-tqma6.dtsi               |   2 +-
- arch/arm/boot/dts/imx6qdl.dtsi                     |   7 +-
- arch/arm/boot/dts/imx6qp-prtwd3.dts                |   4 +-
- arch/arm/boot/dts/imx6qp.dtsi                      |   2 +-
- arch/arm/boot/dts/imx6sl-tolino-vision5.dts        | 349 +++++++++++++++++++++
- arch/arm/boot/dts/imx6sl.dtsi                      |  18 +-
- arch/arm/boot/dts/imx6sll-kobo-librah2o.dts        | 339 ++++++++++++++++++++
- arch/arm/boot/dts/imx6sll.dtsi                     |  22 +-
- arch/arm/boot/dts/imx6sx.dtsi                      |   6 +-
- arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi   |  12 +-
- arch/arm/boot/dts/imx6ul-phytec-segin.dtsi         |   1 +
- arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts |  17 +
- .../arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi | 185 +++++++++++
- arch/arm/boot/dts/imx6ull-colibri.dtsi             |  32 +-
- arch/arm/boot/dts/imx7-mba7.dtsi                   |  42 ++-
- arch/arm/boot/dts/imx7-tqma7.dtsi                  |  47 ++-
- arch/arm/boot/dts/imx7d-mba7.dts                   |   6 +-
- arch/arm/boot/dts/imx7d-sdb.dts                    |   2 +-
- arch/arm/boot/dts/imx7d-tqma7.dtsi                 |   4 +-
- arch/arm/boot/dts/imx7d.dtsi                       |   7 +-
- arch/arm/boot/dts/imx7s-mba7.dts                   |   6 +-
- arch/arm/boot/dts/imx7s-tqma7.dtsi                 |   4 +-
- arch/arm/boot/dts/ls1021a-qds.dts                  |  85 ++---
- arch/arm/boot/dts/ls1021a-tsn.dts                  |   4 +-
- arch/arm/boot/dts/ls1021a-twr.dts                  |  63 +---
- arch/arm/boot/dts/ls1021a.dtsi                     | 219 ++++++-------
- 39 files changed, 1649 insertions(+), 327 deletions(-)
- create mode 100644 arch/arm/boot/dts/e70k02.dtsi
- create mode 100644 arch/arm/boot/dts/imx6qdl-skov-revc-lt2.dtsi
- create mode 100644 arch/arm/boot/dts/imx6sl-tolino-vision5.dts
- create mode 100644 arch/arm/boot/dts/imx6sll-kobo-librah2o.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
+Sebastian Krzyszkowiak (2):
+      arm64: dts: imx8mq-librem5: Fix led_r and led_g pinctrl assignments
+      arm64: dts: imx8mq-librem5: set debounce interval of volume buttons to 50ms
+
+Tim Harvey (1):
+      arm64: dts: imx8mm-venice-gw7901.dts: disable pgc_gpumix
+
+Vladimir Oltean (1):
+      arm64: dts: ls1028a: mark internal links between Felix and ENETC as capable of flow control
+
+Wasim Khan (1):
+      arm64: dts: add device tree for the LX2160A on the NXP BlueBox3 board
+
+ arch/arm64/boot/dts/freescale/Makefile             |   4 +
+ arch/arm64/boot/dts/freescale/fsl-ls1012a-rdb.dts  |   1 +
+ .../freescale/fsl-ls1028a-kontron-sl28-var1.dts    |  60 +-
+ .../freescale/fsl-ls1028a-kontron-sl28-var2.dts    |  17 +-
+ .../freescale/fsl-ls1028a-kontron-sl28-var4.dts    |  49 +-
+ .../dts/freescale/fsl-ls1028a-kontron-sl28.dts     |  31 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts  |  10 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts  |  19 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi     |  72 ++-
+ arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi     |  40 +-
+ arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi     |  40 +-
+ .../dts/freescale/fsl-lx2160a-bluebox3-rev-a.dts   |  34 ++
+ .../boot/dts/freescale/fsl-lx2160a-bluebox3.dts    | 658 +++++++++++++++++++++
+ arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi     |  24 +-
+ .../boot/dts/freescale/imx8mm-kontron-n801x-s.dts  |  32 +-
+ .../dts/freescale/imx8mm-kontron-n801x-som.dtsi    |   4 +-
+ .../boot/dts/freescale/imx8mm-venice-gw71xx.dtsi   |   2 +-
+ .../boot/dts/freescale/imx8mm-venice-gw72xx.dtsi   |   2 +-
+ .../boot/dts/freescale/imx8mm-venice-gw73xx.dtsi   |   2 +-
+ .../boot/dts/freescale/imx8mm-venice-gw7901.dts    |  24 +
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi          | 180 ++++++
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi          |   2 +-
+ arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi  |  46 +-
+ .../boot/dts/freescale/imx8mq-mnt-reform2.dts      |   1 +
+ .../arm64/boot/dts/freescale/imx8mq-zii-ultra.dtsi |   2 +
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi          |  10 +-
+ arch/arm64/boot/dts/freescale/s32g2.dtsi           | 124 ++++
+ arch/arm64/boot/dts/freescale/s32g274a-evb.dts     |  34 ++
+ arch/arm64/boot/dts/freescale/s32g274a-rdb2.dts    |  40 ++
+ 29 files changed, 1374 insertions(+), 190 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/fsl-lx2160a-bluebox3-rev-a.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/fsl-lx2160a-bluebox3.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/s32g2.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/s32g274a-evb.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/s32g274a-rdb2.dts
