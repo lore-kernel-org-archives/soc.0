@@ -1,113 +1,148 @@
-Return-Path: <SRS0=UpmX=PG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <mripard@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 978F9C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 18 Oct 2021 00:11:55 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6366560FF2
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 18 Oct 2021 00:11:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6366560FF2
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Subject:Cc:To:
-	From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=BWGcl1vYiLz+vVTUe4wrCtls/rjsdXkQm5Hc7IUTyzE=; b=P5zXo19S6Qu2pN
-	FCtKtXq3bf5d2biHtc2OvQqekWqyLd26jqDJaWqG24gygovIbg26ubxaAnCz/gxrzFO/TDYC6YWJB
-	n6dXdeYFmPgvk4mkLy7BkfBNItDjX8ZOzlMKYj4xTJ/qF/Zou+wZ599rYwanGAXpjRuWrwDrPwfxa
-	mtIthej2Gxm3MqBHv1AHTzOOeTSMkqzszPDnZP8LREXnLK6JbFzabCZc9NcLUbFcxxBn7VGAXdAf0
-	JFKw2Q20j1J1NCtMkRQDsmusP4j1JEZTUlGLmNZ63RJfioBwktNl5J9aywrYn3e00ObuRRV4UwVb+
-	riPi4tsQFjmfBcZ9mdEA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mcGEI-00DWj5-1x; Mon, 18 Oct 2021 00:10:14 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mcGEE-00DWiT-HB
- for linux-arm-kernel@lists.infradead.org; Mon, 18 Oct 2021 00:10:11 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 086F060F9E;
- Mon, 18 Oct 2021 00:10:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F05FBC433F5
+	for <soc@archiver.kernel.org>; Mon, 18 Oct 2021 08:00:50 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id D567161279; Mon, 18 Oct 2021 08:00:50 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 522936103B;
+	Mon, 18 Oct 2021 08:00:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1634515809;
- bh=DWiEhkbm5/S9y24lWBiHqjrvXC61zA6uoExWq6A74Ug=;
- h=Date:From:List-Id:To:Cc:Subject:From;
- b=cSFNGRDV6d4oIlVI0e5nOZdDCMay1M+HjKGpnUMKiWLu9rZCUiy7pQvWZzE0oxZZU
- 1fRCMlnYSJUwk9uZ7DEp/urY/wvqu6xhZ+ZLqCN6AD9JfzcFiaNfQuM1od8QLZLQM/
- 3yjsmFu5nOPazwRVA5wiVz5BHf5DvFkDE69xYKgrmOiF5FMlMb77gMtsHNrbHoowm8
- Vt9O6GGArVipB6GFHvNeb5Cq3uAC9ORv2l499Oxvn053yQaQezCc3ZB7RKoFdnRZ75
- hgxtgaYWR8GcSehrJDGpH0aSkoqJgm46w+M6t3jYZh0P0orLCLi96tczSXe1j//t/Y
- BfJ5n3b2jDksA==
-Date: Mon, 18 Oct 2021 08:10:02 +0800
-From: Shawn Guo <shawnguo@kernel.org>
+	s=k20201202; t=1634544050;
+	bh=Fvjzc4T5TjBhoyKMz3427aDPyksy8MLYHcJyJ514b2M=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=fWpYpup4rAnWuXvn6EGywhuskVBXJ20+QoEzRTTeEcEj6NVVzFnwmbIPMjHsQrQR5
+	 2gXEOt4IHgXFHpi56ESjuuXYjXZz8eCCad9QRP/X3XwMQAqelG7Tq45taRnr1A/+jX
+	 Q2p4NbbvJ9z0BXTzhHZBzc/TVjQLivnVvuT5BIStueFlIDJOhLAYu7nTC+1GmF2Cn/
+	 I2FSJMQqOyg8nQzhI4DZ9gKU4VJOjvFA3yTE4FGTjggzk1G88EZsnavfeeTHI4EIl6
+	 O1JqU3xViO8q0yZ5qhtsIpiJ45HoxksS8WSZ7kxAXa/hdQah9cuTkoSYf25ge/cMDW
+	 6M5WVQd5LMMFw==
+Date: Mon, 18 Oct 2021 10:00:48 +0200
+From: Maxime Ripard <mripard@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
- Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
- linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 5.15, round 4
-Message-ID: <20211018000958.GC25810@dragon>
+To: arm@kernel.org, soc@kernel.org
+Cc: Maxime Ripard <mripard@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@siol.net>
+Subject: [GIT PULL] Allwinner Device Tree Changes for 5.16
+Message-ID: <5cad5ac6-187d-4d36-9437-5821c6e8242d.lettre@localhost>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="FS2jB7Fm9+cP35Vs"
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211017_171010_621108_23757B5A 
-X-CRM114-Status: UNSURE (   7.55  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211018001002.X27lXzXLaG1mQ4V2cSIi_0G7hW091YBqEMzg0Xtb6dA@z>
 
-The following changes since commit a1467faa10414ab3d91be7ef6d2b11272ec00e95:
 
-  ARM: imx: register reset controller from a platform driver (2021-10-15 09:38:06 +0800)
+--FS2jB7Fm9+cP35Vs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi,
+
+Please pull the following changes for the next release.
+
+Thanks!
+Maxime
+
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.15-4
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git refs/tags/sunxi-dt-for-5.16-1
 
-for you to fetch changes up to 0b28c41e3c951ea3d4f012cfa9da5ebd6512cf6e:
+for you to fetch changes up to d7b101a35ad0a72868da227cdee83bcac0303b80:
 
-  arm64: dts: imx8mm-kontron: Fix connection type for VSC8531 RGMII PHY (2021-10-16 15:30:00 +0800)
-
-----------------------------------------------------------------
-i.MX fixes for 5.15, round 4:
-
-- A series from Frieder Schrempf to fix i.MX8MM Kontron N801x board on
-  various aspects, voltage settings, GPIO polarity, SPI clock frequency
-  and Ethernet PHY type.
+  dt-bindings: interconnect: sunxi: Add R40 MBUS compatible (2021-10-15 10:07:16 +0200)
 
 ----------------------------------------------------------------
-Frieder Schrempf (5):
-      arm64: dts: imx8mm-kontron: Make sure SOC and DRAM supply voltages are correct
-      arm64: dts: imx8mm-kontron: Set lower limit of VDD_SNVS to 800 mV
-      arm64: dts: imx8mm-kontron: Fix polarity of reg_rst_eth2
-      arm64: dts: imx8mm-kontron: Fix CAN SPI clock frequency
-      arm64: dts: imx8mm-kontron: Fix connection type for VSC8531 RGMII PHY
+Our usual round of DT patches for the 5.16 merge window, with:
+  - DT schema fixes
+  - I2S support for the R40
+  - HDMI support for the pinetab
+  - devfreq support for the A64 GPU
 
- arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts    | 8 +++++---
- arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi | 8 +++++---
- 2 files changed, 10 insertions(+), 6 deletions(-)
+----------------------------------------------------------------
+Chukun Pan (1):
+      arm64: dts: allwinner: NanoPi R1S H5: Add generic compatible string for I2C EEPROM
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Dang Huynh (1):
+      arm64: dts: allwinner: pinetab: Add HDMI support
+
+Jernej Skrabec (3):
+      dt-bindings: sound: sun4i-i2s: add Allwinner R40 I2S compatible
+      ARM: dts: sun8i: r40: Add I2S nodes
+      arm64: dts: allwinner: a64: Add GPU opp table
+
+Maxime Ripard (16):
+      dt-bindings: sunxi: Add CPU Configuration Controller Binding
+      dt-bindings: sunxi: Add Allwinner A80 PRCM Binding
+      ARM: dts: sunxi: Rename power-supply names
+      ARM: dts: sunxi: Rename gpio pinctrl names
+      ARM: dts: sunxi: Fix OPP arrays
+      ARM: dts: sunxi: Fix OPPs node name
+      ARM: dts: sunxi: Fix the SPI NOR node names
+      ARM: dts: tbs711: Fix touchscreen compatible
+      ARM: dts: cubieboard4: Remove the dumb-vga-dac compatible
+      arm64: dts: allwinner: h5: Fix GPU thermal zone node name
+      arm64: dts: allwinner: h6: Fix de3 parent clocks ordering
+      arm64: dts: allwinner: a100: Fix thermal zone node name
+      arm64: dts: allwinner: pinetab: Change regulator node name to avoid warning
+      arm64: dts: allwinner: teres-i: Add missing reg
+      arm64: dts: allwinner: teres-i: Remove wakekup-source from the PMIC
+      dt-bindings: interconnect: sunxi: Add R40 MBUS compatible
+
+
+ Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml      |  1 +
+ Documentation/devicetree/bindings/arm/sunxi/allwinner,sun6i-a31-cpuconfig.yaml | 38 ++++++++++++++++++++++++++++++++++++++
+ Documentation/devicetree/bindings/arm/sunxi/allwinner,sun9i-a80-prcm.yaml      | 33 +++++++++++++++++++++++++++++++++
+ Documentation/devicetree/bindings/sound/allwinner,sun4i-a10-i2s.yaml           |  3 +++
+ arch/arm/boot/dts/axp209.dtsi                                                  |  6 +++---
+ arch/arm/boot/dts/axp22x.dtsi                                                  |  6 +++---
+ arch/arm/boot/dts/axp81x.dtsi                                                  | 10 +++++-----
+ arch/arm/boot/dts/sun4i-a10-olinuxino-lime.dts                                 | 11 +++++------
+ arch/arm/boot/dts/sun4i-a10.dtsi                                               | 11 +++++------
+ arch/arm/boot/dts/sun5i-a13.dtsi                                               | 15 +++++++--------
+ arch/arm/boot/dts/sun6i-a31.dtsi                                               | 44 ++++++++++++++++++++------------------------
+ arch/arm/boot/dts/sun7i-a20-bananapi.dts                                       | 17 ++++++++---------
+ arch/arm/boot/dts/sun7i-a20.dtsi                                               | 34 ++++++++++++++++------------------
+ arch/arm/boot/dts/sun8i-a33.dtsi                                               |  4 ++--
+ arch/arm/boot/dts/sun8i-a83t-tbs-a711.dts                                      |  2 +-
+ arch/arm/boot/dts/sun8i-a83t.dtsi                                              |  4 ++--
+ arch/arm/boot/dts/sun8i-h3.dtsi                                                |  4 ++--
+ arch/arm/boot/dts/sun8i-r40.dtsi                                               | 39 +++++++++++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/sun8i-v3-sl631.dtsi                                          |  2 +-
+ arch/arm/boot/dts/sun9i-a80-cubieboard4.dts                                    |  2 +-
+ arch/arm/boot/dts/sunxi-libretech-all-h3-it.dtsi                               |  2 +-
+ arch/arm64/boot/dts/allwinner/axp803.dtsi                                      | 10 +++++-----
+ arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi                                 |  6 +++---
+ arch/arm64/boot/dts/allwinner/sun50i-a64-cpu-opp.dtsi                          |  2 +-
+ arch/arm64/boot/dts/allwinner/sun50i-a64-orangepi-win.dts                      |  2 +-
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dts                           | 28 +++++++++++++++++++++++++++-
+ arch/arm64/boot/dts/allwinner/sun50i-a64-teres-i.dts                           |  3 ++-
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi                                  | 17 +++++++++++++++++
+ arch/arm64/boot/dts/allwinner/sun50i-h5-cpu-opp.dtsi                           |  2 +-
+ arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts                      |  9 ++++++++-
+ arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi                                   |  2 +-
+ arch/arm64/boot/dts/allwinner/sun50i-h6-cpu-opp.dtsi                           |  2 +-
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi                                   |  8 ++++----
+ 33 files changed, 267 insertions(+), 112 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/sunxi/allwinner,sun6i-a31-cpuconfig.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/sunxi/allwinner,sun9i-a80-prcm.yaml
+
+
+
+--FS2jB7Fm9+cP35Vs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYW0psAAKCRDj7w1vZxhR
+xaU1AQDAzfPdbm/SX8NwtbhE68n4NsbFqfq6TykoDz8YdznakQEAzfHO5yBfWMpm
+t2rSj2B32ZdapEiJLaBfF8tdm+lPoQo=
+=s1DX
+-----END PGP SIGNATURE-----
+
+--FS2jB7Fm9+cP35Vs--
