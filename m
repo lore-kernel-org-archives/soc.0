@@ -1,131 +1,101 @@
-Return-Path: <SRS0=UpmX=PG=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=ouft=PG=gmail.com=alexander.sverdlin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68D8EC433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 18 Oct 2021 10:00:28 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D196C433EF
+	for <soc@archiver.kernel.org>; Mon, 18 Oct 2021 10:33:34 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 287E46103B; Mon, 18 Oct 2021 10:33:34 +0000 (UTC)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 394A360F57
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 18 Oct 2021 10:00:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 394A360F57
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=Le9IdIoaQId0XY2WkKW285u/qUJvMjcNkVPCwKIAjzs=; b=m8zE1/1TrutRuW
-	BRXR2ROFOYzVeUcUze9664Fl1XbWoCDPMno5G5HhbYIMrVC1wp0LEuQJcTwe+n+0ZgEct+tNW4xLv
-	BzzCryXqpH+x58hZIdoIaOyVfyEuPVtfflSvwy5to5ymxTPrqJwAKknsgNbBh7+Z47FNMhYqSPPuo
-	BI6vEzJYrMshxzG3K/+msY/lUXBksL4dAaks7SB8nfgZW0y4gKuyfznOpe1sYrVQkGTu9yXcVnvbW
-	qb9j29Qxk1NH3rWy4eK2CfKDTxSgrymPsboS/wdxKK4daZvj9ESTaHMmiO4WBkkcNUq+fI5Hbs+wA
-	Bp1WOl+APAc8xESoZD/A==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mcPQJ-00ErJX-LD; Mon, 18 Oct 2021 09:59:15 +0000
-Received: from mail-wr1-x42b.google.com ([2a00:1450:4864:20::42b])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mcPQE-00ErI6-Th
- for linux-arm-kernel@lists.infradead.org; Mon, 18 Oct 2021 09:59:12 +0000
-Received: by mail-wr1-x42b.google.com with SMTP id u18so40395645wrg.5
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 18 Oct 2021 02:59:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ez9mbYG7dlgdhn9DND4IOScLuOYSIdJep7VgoVti+SU=;
- b=B9l2H+QZhkUorTGtrqoWbmg9pHgLN6o/lwXWs6RUWrV2WxlyyBHxmgdlaKNxqmG2sq
- ni+bGosqtScoJ3G4HKplSeIgvQbvTCj/VI9lTVPmsXXWulQUg8B2TcwLfPhZYBoo9mK/
- lOjIUCVGbtvAKHgDs+2OhcnVhFl9w2uUt9auHdT02PK/2grYM/LHXpAS/3XEiME+4Kpe
- 6wZdXvFwaqzLJGKzOUFrQaLRe4kiQU9bAYL9fxXHQCzjiMyS1hiLifhI0E4Bnmv3lopN
- Kd68rVhmGP5VHutG5XA26eyDXPx8YE5WoB3eq0mug1s0pH9mkbW/3hNFQ39H/AUElxtR
- LJ+A==
+	by mail.kernel.org (Postfix) with ESMTPS id F331760FDC;
+	Mon, 18 Oct 2021 10:33:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F331760FDC
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f42.google.com with SMTP id y3so40586643wrl.1;
+        Mon, 18 Oct 2021 03:33:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=moJQ78F9oXsWwcjsOjRc3VK50C8FMLYVsh1+aqFOWVI=;
+        b=SGbLdHaCHPafWnkcsKJrt8C7uSJJKjuE1s0WSZxitXueyV10vheKPI1GlKLjamhR/h
+         mzJe7a7FXuugyTVhDzqGFD5GuQghM67V3ISQDyrU8nPg/cQiSrXe3J66oFyhkHih/NF0
+         BdCrNdo5R+hFb42+dri9MqiCvzR/dhNPv8Q+J4EMAb8qm7RRslzt4ax60VC8rcXsi9ge
+         MC/DGjcXXBt3mjSLfYrF2HDt9weYL8Rh2SeZVHeczTZ9PyR4Si7FmCJgZGUwxVUGCVe9
+         nyiMg/NnHmrPgQSEx1pL2fXo2x/kqd4BbGTYkSfhDE3Sx5hBcAx/dLpadpjASFYPGjp8
+         Ku5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ez9mbYG7dlgdhn9DND4IOScLuOYSIdJep7VgoVti+SU=;
- b=JU5P0Y/Uy/9vDcrWn7MzAt7Z1FXDzXNrk+FdyPNs6Yon0NwJneHlcVTXqrdG2Ply64
- ScMwyVSRl1jsSjAXcsm/E8EEzVdBQOO4+aZYqLMUZR0TzODNPH2GaJ9XHqqKHN0+inB2
- YfQD1a7vbyr2cmk8q/Bw7LQggkPL7aEJeFSOrpFS5zjaw1kmjEStYkISB+A5J/Ury6PD
- FZ6J8QxIh/7oBrUjFQkTaLMHGdsYa8R6PhNR0ITySVTunWVYtTnABPlcR64sxaY2G4Zq
- CuUS/ixOOq4/TTJv1qkVnkSZc2lSs9zm7wv2y8y9pF3JiuAJGVs9atukMMVCYvIYwYPs
- nnrA==
-X-Gm-Message-State: AOAM533Wh5IfvIQUGCAXy8/do/5RgbcYApXHpIpy1JRv+EfZ5VWF2vXh
- bzzUU4PGYNCVgnXpJw9BYZI=
-X-Google-Smtp-Source: ABdhPJwDo6uDJUvqKMwObGEwGoRekkvSL6t9p/QE07mSMIF3yjAZd0SCynhMTMhOAjbORzhY9ITBPQ==
-X-Received: by 2002:a5d:598a:: with SMTP id n10mr33842460wri.93.1634551147675; 
- Mon, 18 Oct 2021 02:59:07 -0700 (PDT)
-Received: from debby (234.ip-51-91-57.eu. [51.91.57.234])
- by smtp.gmail.com with ESMTPSA id g33sm11047177wmp.45.2021.10.18.02.59.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Oct 2021 02:59:07 -0700 (PDT)
-From: Romain Perier <romain.perier@gmail.com>
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=moJQ78F9oXsWwcjsOjRc3VK50C8FMLYVsh1+aqFOWVI=;
+        b=40//1dgOcMmZoNHoyp5etj7fa/7wpwP6KxC/rwEnE1y+QQIZKOdNyPYrIxj4mecJwQ
+         cgKSAuKX2yGEhi2SIWTG5xZ9nRShvx9uMfkygcEZDD0/4xJeqmsOOcpGS49aouB5VAoG
+         4vc9m5TLH0HopBYuT85ayCcbISYngDz+1UFu1Yj9eH1/fxkNOKWGjAEwFbosexdSPf7s
+         tpqgfJkFIHmHvBRWxVIR+aC7sIUIYhgnCnxtub2ijDM/oSMMZkKuqdoON7A/Q10pnkBl
+         1L281gIRJQ33z67GtGmyZ1RyiCHuProgBFwq+Fl8OyiU2kKF0/r6stW1xZDIg4IBqohl
+         xd1w==
+X-Gm-Message-State: AOAM532ErPrf7KcDHJigQg5dd6jsbm3jjbMMQIyppH8b9gAZdIXRKUnC
+	vMRy/zEC/zD0g4j/FpDPwpiAtcUyF2c=
+X-Google-Smtp-Source: ABdhPJx+JeHhyFTrMDRiVtMFDM8Kd4upVKRwte0zT1MHPBh7pH9grloOuAgxFRGNtd41Is/2nY1F8g==
+X-Received: by 2002:a5d:6888:: with SMTP id h8mr16880082wru.395.1634553212482;
+        Mon, 18 Oct 2021 03:33:32 -0700 (PDT)
+Received: from localhost.localdomain ([195.245.16.219])
+        by smtp.gmail.com with ESMTPSA id o8sm19062252wme.38.2021.10.18.03.33.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Oct 2021 03:33:31 -0700 (PDT)
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	arm@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, Daniel Palmer <daniel@0x0f.com>,
- Romain Perier <romain.perier@gmail.com>
-Subject: [GIT PULL] ARM: dts: mstar: updates for v5.16
-Date: Mon, 18 Oct 2021 11:58:48 +0200
-Message-ID: <20211018095848.19101-1-romain.perier@gmail.com>
-X-Mailer: git-send-email 2.20.1
+To: soc@kernel.org
+Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Nikita Shubin <nikita.shubin@maquefel.me>,
+	Hartley Sweeten <hsweeten@visionengravers.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Mark Brown <broonie@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	alsa-devel@alsa-project.org
+Subject: [PATCH v3 0/2] arm: ep93xx: CCF conversion
+Date: Mon, 18 Oct 2021 12:31:03 +0200
+Message-Id: <20211018103105.146380-1-alexander.sverdlin@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211018_025910_983214_7917896A 
-X-CRM114-Status: UNSURE (   8.47  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211018095848.nHQyzmx3gsD99EazuwBqcz6KaFxLP0H3AFu_6pcjXyk@z>
+Content-Transfer-Encoding: 8bit
 
-Hi,
-Here's the ARM DTS changes for v5.16:
- - mstar-v7: Mark the arch timer as not being initialized by the firmware
-   and rely on the physical timers.
- - mstar-v7: enable rtc
+This series series of patches converts ep93xx to Common Clock Framework.
 
-Regards,
-Romain
+It consists of preparation patches to use clk_prepare_enable where it is
+needed, instead of clk_enable used in ep93xx drivers prior to CCF and
+a patch converting mach-ep93xx/clock.c to CCF.
 
-The following changes since commit 64570fbc14f8d7cb3fe3995f20e26bc25ce4b2cc:
+Link: https://lore.kernel.org/patchwork/cover/1445563/
+Link: https://lore.kernel.org/patchwork/patch/1435884/
 
-  Linux 5.15-rc5 (2021-10-10 17:01:59 -0700)
+v2->v3:
+Rebased the series onto v5.15-rc5
+v1->v2:
+- added SoB
 
-are available in the Git repository at:
+Alexander Sverdlin (1):
+  ASoC: cirrus: i2s: Prepare clock before using it
 
-  https://github.com/linux-chenxing/linux.git mstar-dt-next
+Nikita Shubin (1):
+  ep93xx: clock: convert in-place to COMMON_CLK
 
-for you to fetch changes up to 7e626b6d71e7678e85e9e06e9e2271b5923741fd:
+ arch/arm/Kconfig              |   2 +-
+ arch/arm/mach-ep93xx/clock.c  | 975 +++++++++++++++++++---------------
+ arch/arm/mach-ep93xx/core.c   |   2 +-
+ arch/arm/mach-ep93xx/soc.h    |  42 +-
+ sound/soc/cirrus/ep93xx-i2s.c |  12 +-
+ 5 files changed, 587 insertions(+), 446 deletions(-)
 
-  ARM: dts: mstar: Mark timer with arm,cpu-registers-not-fw-configured (2021-10-13 18:53:48 +0200)
+-- 
+2.33.0
 
-----------------------------------------------------------------
-Romain Perier (2):
-      ARM: dts: mstar: Add rtc device node
-      ARM: dts: mstar: Mark timer with arm,cpu-registers-not-fw-configured
-
- arch/arm/boot/dts/mstar-v7.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
