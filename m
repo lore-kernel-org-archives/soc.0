@@ -2,100 +2,126 @@ Return-Path: <SRS0=ouft=PG=gmail.com=alexander.sverdlin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D196C433EF
-	for <soc@archiver.kernel.org>; Mon, 18 Oct 2021 10:33:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BE77C433F5
+	for <soc@archiver.kernel.org>; Mon, 18 Oct 2021 10:33:35 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 287E46103B; Mon, 18 Oct 2021 10:33:34 +0000 (UTC)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	id 2A6E3610A6; Mon, 18 Oct 2021 10:33:35 +0000 (UTC)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F331760FDC;
-	Mon, 18 Oct 2021 10:33:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F331760FDC
+	by mail.kernel.org (Postfix) with ESMTPS id F1FBB60FDC;
+	Mon, 18 Oct 2021 10:33:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F1FBB60FDC
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id y3so40586643wrl.1;
-        Mon, 18 Oct 2021 03:33:33 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id g25so40314559wrb.2;
+        Mon, 18 Oct 2021 03:33:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=moJQ78F9oXsWwcjsOjRc3VK50C8FMLYVsh1+aqFOWVI=;
-        b=SGbLdHaCHPafWnkcsKJrt8C7uSJJKjuE1s0WSZxitXueyV10vheKPI1GlKLjamhR/h
-         mzJe7a7FXuugyTVhDzqGFD5GuQghM67V3ISQDyrU8nPg/cQiSrXe3J66oFyhkHih/NF0
-         BdCrNdo5R+hFb42+dri9MqiCvzR/dhNPv8Q+J4EMAb8qm7RRslzt4ax60VC8rcXsi9ge
-         MC/DGjcXXBt3mjSLfYrF2HDt9weYL8Rh2SeZVHeczTZ9PyR4Si7FmCJgZGUwxVUGCVe9
-         nyiMg/NnHmrPgQSEx1pL2fXo2x/kqd4BbGTYkSfhDE3Sx5hBcAx/dLpadpjASFYPGjp8
-         Ku5A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=cGn43/LGWV9yHPcjMkf3TCrUECrY0/XNXt2QNLZSx3Y=;
+        b=GxmpyZ8aS8/cSgSoLniK7/q4OxJ45GEcM3HKfOdecelTtSYraAqBZd1BCaT5wBDswF
+         8Y9fMfDIUWaLh6fkzpv2NfyNjA1J5SnrK5NkMFpdBiy2QeEf/jl7d68d+ZXeO1fLXDYz
+         4AotQeZLj/fs4ihw36rPE3iloDRcfW9V8Py+IFWetqX6Uc3g3JgT/NKJDGBJzjXCQleP
+         YyCcrvRyaGLnPGtyinYwTr2cxJdSmqUIXTc414vSuqRaggTskG3iIZjOmfhVsODPwXO3
+         I/gAvBIIn1Y+c4Xnp9l5sodFMCvwn9Lkd2KYov1RANmRVCR6pKUJCmM23xwvvOu1+54U
+         VXiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=moJQ78F9oXsWwcjsOjRc3VK50C8FMLYVsh1+aqFOWVI=;
-        b=40//1dgOcMmZoNHoyp5etj7fa/7wpwP6KxC/rwEnE1y+QQIZKOdNyPYrIxj4mecJwQ
-         cgKSAuKX2yGEhi2SIWTG5xZ9nRShvx9uMfkygcEZDD0/4xJeqmsOOcpGS49aouB5VAoG
-         4vc9m5TLH0HopBYuT85ayCcbISYngDz+1UFu1Yj9eH1/fxkNOKWGjAEwFbosexdSPf7s
-         tpqgfJkFIHmHvBRWxVIR+aC7sIUIYhgnCnxtub2ijDM/oSMMZkKuqdoON7A/Q10pnkBl
-         1L281gIRJQ33z67GtGmyZ1RyiCHuProgBFwq+Fl8OyiU2kKF0/r6stW1xZDIg4IBqohl
-         xd1w==
-X-Gm-Message-State: AOAM532ErPrf7KcDHJigQg5dd6jsbm3jjbMMQIyppH8b9gAZdIXRKUnC
-	vMRy/zEC/zD0g4j/FpDPwpiAtcUyF2c=
-X-Google-Smtp-Source: ABdhPJx+JeHhyFTrMDRiVtMFDM8Kd4upVKRwte0zT1MHPBh7pH9grloOuAgxFRGNtd41Is/2nY1F8g==
-X-Received: by 2002:a5d:6888:: with SMTP id h8mr16880082wru.395.1634553212482;
-        Mon, 18 Oct 2021 03:33:32 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cGn43/LGWV9yHPcjMkf3TCrUECrY0/XNXt2QNLZSx3Y=;
+        b=PkaqvnVcoztNPz7A6873HCMUD6vlZGwrjqSfhTS+p7DNqvVsiQzPbyeXpswhCar68V
+         NtF9ifdtu+Fz16f96adLrtySOB7wed++qR9ypzlA8t8Ti14nbo8LmCpCP/NOxXvXUslp
+         gVDHeCgjZRJlgGntkbL3yPdOWDn6+cwq2Mgq2ZYXxZon8TOsDibm24xKH0HKkJQSMuk5
+         uHt4qvfpVdoPVUt3uuLzwVVOAEMr5GhN22BttSbVRKdy1GdVi6gd1PIrzyuT60a2Lo13
+         7AGHLQyqNi956gDDbEJ49LHYfG27QVgZZ1wPG7mWF4ptuFgvqrPL8n1Rhb61771KO6/9
+         Z+MQ==
+X-Gm-Message-State: AOAM531RBjEi5/6LVopKaiQcjmjd8/f6279dGaNfV+9juX8L68mRC77D
+	5usk+nqP+4OeJH32RbfAzdH3vx2qHr0=
+X-Google-Smtp-Source: ABdhPJxBlzTAQpkU3yiExmcuxDUQHvrCikPJsCPEIqWTQoJ+xLeFEuRno453UyTdReHeyeOmlTGrtw==
+X-Received: by 2002:a5d:64c5:: with SMTP id f5mr33763933wri.321.1634553213568;
+        Mon, 18 Oct 2021 03:33:33 -0700 (PDT)
 Received: from localhost.localdomain ([195.245.16.219])
-        by smtp.gmail.com with ESMTPSA id o8sm19062252wme.38.2021.10.18.03.33.30
+        by smtp.gmail.com with ESMTPSA id o8sm19062252wme.38.2021.10.18.03.33.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Oct 2021 03:33:31 -0700 (PDT)
+        Mon, 18 Oct 2021 03:33:33 -0700 (PDT)
 From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
 	Geert Uytterhoeven <geert@linux-m68k.org>,
 	Nikita Shubin <nikita.shubin@maquefel.me>,
-	Hartley Sweeten <hsweeten@visionengravers.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Mark Brown <broonie@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
 	Liam Girdwood <lgirdwood@gmail.com>,
 	Jaroslav Kysela <perex@perex.cz>,
 	Takashi Iwai <tiwai@suse.com>,
-	alsa-devel@alsa-project.org
-Subject: [PATCH v3 0/2] arm: ep93xx: CCF conversion
-Date: Mon, 18 Oct 2021 12:31:03 +0200
-Message-Id: <20211018103105.146380-1-alexander.sverdlin@gmail.com>
+	linux-kernel@vger.kernel.org,
+	alsa-devel@alsa-project.org,
+	Mark Brown <broonie@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v3 1/2] ASoC: cirrus: i2s: Prepare clock before using it
+Date: Mon, 18 Oct 2021 12:31:04 +0200
+Message-Id: <20211018103105.146380-2-alexander.sverdlin@gmail.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211018103105.146380-1-alexander.sverdlin@gmail.com>
+References: <20211018103105.146380-1-alexander.sverdlin@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series series of patches converts ep93xx to Common Clock Framework.
+Use clk_prepare_enable()/clk_disable_unprepare() in preparation for switch
+to Common Clock Framework, otherwise the following is visible:
 
-It consists of preparation patches to use clk_prepare_enable where it is
-needed, instead of clk_enable used in ep93xx drivers prior to CCF and
-a patch converting mach-ep93xx/clock.c to CCF.
+WARNING: CPU: 0 PID: 97 at drivers/clk/clk.c:1011 clk_core_enable+0x9c/0xbc
+Enabling unprepared mclk
+...
+Hardware name: Cirrus Logic EDB9302 Evaluation Board
+...
+clk_core_enable
+clk_core_enable_lock
+ep93xx_i2s_hw_params
+snd_soc_dai_hw_params
+soc_pcm_hw_params
+snd_pcm_hw_params
+snd_pcm_ioctl
+...
 
-Link: https://lore.kernel.org/patchwork/cover/1445563/
-Link: https://lore.kernel.org/patchwork/patch/1435884/
+Acked-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+---
+ sound/soc/cirrus/ep93xx-i2s.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-v2->v3:
-Rebased the series onto v5.15-rc5
-v1->v2:
-- added SoB
-
-Alexander Sverdlin (1):
-  ASoC: cirrus: i2s: Prepare clock before using it
-
-Nikita Shubin (1):
-  ep93xx: clock: convert in-place to COMMON_CLK
-
- arch/arm/Kconfig              |   2 +-
- arch/arm/mach-ep93xx/clock.c  | 975 +++++++++++++++++++---------------
- arch/arm/mach-ep93xx/core.c   |   2 +-
- arch/arm/mach-ep93xx/soc.h    |  42 +-
- sound/soc/cirrus/ep93xx-i2s.c |  12 +-
- 5 files changed, 587 insertions(+), 446 deletions(-)
-
+diff --git a/sound/soc/cirrus/ep93xx-i2s.c b/sound/soc/cirrus/ep93xx-i2s.c
+index 0d26550d0df8..4d3179f03202 100644
+--- a/sound/soc/cirrus/ep93xx-i2s.c
++++ b/sound/soc/cirrus/ep93xx-i2s.c
+@@ -111,9 +111,9 @@ static void ep93xx_i2s_enable(struct ep93xx_i2s_info *info, int stream)
+ 	if ((ep93xx_i2s_read_reg(info, EP93XX_I2S_TX0EN) & 0x1) == 0 &&
+ 	    (ep93xx_i2s_read_reg(info, EP93XX_I2S_RX0EN) & 0x1) == 0) {
+ 		/* Enable clocks */
+-		clk_enable(info->mclk);
+-		clk_enable(info->sclk);
+-		clk_enable(info->lrclk);
++		clk_prepare_enable(info->mclk);
++		clk_prepare_enable(info->sclk);
++		clk_prepare_enable(info->lrclk);
+ 
+ 		/* Enable i2s */
+ 		ep93xx_i2s_write_reg(info, EP93XX_I2S_GLCTRL, 1);
+@@ -156,9 +156,9 @@ static void ep93xx_i2s_disable(struct ep93xx_i2s_info *info, int stream)
+ 		ep93xx_i2s_write_reg(info, EP93XX_I2S_GLCTRL, 0);
+ 
+ 		/* Disable clocks */
+-		clk_disable(info->lrclk);
+-		clk_disable(info->sclk);
+-		clk_disable(info->mclk);
++		clk_disable_unprepare(info->lrclk);
++		clk_disable_unprepare(info->sclk);
++		clk_disable_unprepare(info->mclk);
+ 	}
+ }
+ 
 -- 
 2.33.0
 
