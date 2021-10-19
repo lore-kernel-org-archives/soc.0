@@ -2,92 +2,81 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEE89C433EF
-	for <soc@archiver.kernel.org>; Tue, 19 Oct 2021 15:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58B65C433F5
+	for <soc@archiver.kernel.org>; Tue, 19 Oct 2021 15:42:52 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id BCC67610D0; Tue, 19 Oct 2021 15:42:32 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 34C4A610C7;
-	Tue, 19 Oct 2021 15:42:29 +0000 (UTC)
+	id 3D08E610D0; Tue, 19 Oct 2021 15:42:52 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C5435610C7;
+	Tue, 19 Oct 2021 15:42:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634658152;
-	bh=PzKP3/tt8FyXJKALEVAz3Lzi8tiJUSHRmqxuTbhlj5A=;
-	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=HmCMkgqKwEn05FCXBNK9w77enTzERmW4F0dO1h3jQEgTuP9Trg6M7FapzjzpTt+o4
-	 jsN87ioTkEOcVDXc59WL1kzsgJ55v9AgS528cQlAO4xz2/BOv6pq59hIhmrpGxTbZp
-	 HPiwqKzpzKLpiEGDY5NfhA7WGlZzZ7keC2qOPGjuFciXi+toweBX7dL8XQKOA5JJs8
-	 t3kb/72wuz9cNc57mKFMQ5AaWOf/2Zt0RveauI2WgqqdO3Y9yfCpTguk4BOG4MRcKG
-	 sn1OpJDLpSpJZSrPscdGBYaLm70+tXO07wvNk2seqJdolliGJOqiYrbCjc8zf7WJlc
-	 yIWiKT1hkn75A==
+	s=k20201202; t=1634658172;
+	bh=M2/DuCNHUjvCKFyP3G3bM4ucVMkbsqwMpxtgwkUAdV4=;
+	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
+	b=TGYxGhZP3QNX+PVQnpvdd55aC6FI7RSV/BNGegiUx6dfWI3c+cr0zfoumxmXLVGnZ
+	 Ad5P8xVF1/boXaxkAdFVRaHx5xDOwkMkBz4KDDsY8rkVIFP81tqQdwEFieL9TwWc94
+	 99Wqjp+O1+ojOU6VPC3aOTKXJ0KChLTj1vhwF6q10nVisbF09vPH/HSz6tMRjQm48S
+	 2T61OLeUd7UULGLkbKNI+TG07WjOkcGAlohqTMvvyb39/NOOxDwfM+yD2SU8sWUOBx
+	 /rR7qJySE9w9DMeK0TR2ThBoy1pK1Ml1lW3/ojhiCNlWeNV2DhJJmrfDmoXuxU+rra
+	 UwB/X0nhf1R4A==
 From: Arnd Bergmann <arnd@kernel.org>
-To: linux-pm@vger.kernel.org
+To: linux-pm@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
 	linux-arm-msm@vger.kernel.org,
 	Bjorn Andersson <bjorn.andersson@linaro.org>,
 	Arnd Bergmann <arnd@arndb.de>,
-	Andy Gross <agross@kernel.org>,
-	Lina Iyer <ilina@codeaurora.org>,
-	John Stultz <john.stultz@linaro.org>,
-	Maulik Shah <mkshah@codeaurora.org>,
-	Stephen Boyd <swboyd@chromium.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Mahesh Sivasubramanian <msivasub@codeaurora.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
+	Dmitry Osipenko <digetx@gmail.com>,
 	Stephan Gerhold <stephan@gerhold.net>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
 	He Ying <heying24@huawei.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+	Thierry Reding <treding@nvidia.com>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] qcom: spm: allow compile-testing
-Date: Tue, 19 Oct 2021 17:42:02 +0200
-Message-Id: <20211019154224.624204-1-arnd@kernel.org>
+Subject: [PATCH 2/3] cpuidle: tegra: add ARCH_SUSPEND_POSSIBLE dependency
+Date: Tue, 19 Oct 2021 17:42:03 +0200
+Message-Id: <20211019154224.624204-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20211019154224.624204-1-arnd@kernel.org>
+References: <20211019154224.624204-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-ARM_QCOM_SPM_CPUIDLE can be selected when compile-testing on
-other architectures, but this causes a Kconfig warning
-for QCOM_SPM:
+Some StrongARM processors don't support suspend, which leads
+to a build failure with the tegra cpuidle driver:
 
-WARNING: unmet direct dependencies detected for QCOM_SPM
-  Depends on [n]: ARCH_QCOM [=n]
+WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+  Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
   Selected by [y]:
-  - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
+  - ARM_TEGRA_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_TEGRA [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
 
-Make it possible to also compile-test this one, which can
-be done now that v5.15-rc5 lets you select QCOM_SCM everywhere.
+arch/arm/kernel/sleep.o: in function `__cpu_suspend':
+(.text+0x68): undefined reference to `cpu_sa110_suspend_size'
 
-Fixes: a871be6b8eee ("cpuidle: Convert Qualcomm SPM driver to a generic CPUidle driver")
-Fixes: 498ba2a8a275 ("cpuidle: Fix ARM_QCOM_SPM_CPUIDLE configuration")
+Add an explicit dependency to make randconfig builds avoid
+this combination.
+
+Fixes: faae6c9f2e68 ("cpuidle: tegra: Enable compile testing")
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-Bjorn, if you think this is the right solution, let me know and I can
-apply it on top of the drivers branch that I have already pulled
-into the soc tree.
+ drivers/cpuidle/Kconfig.arm | 1 +
+ 1 file changed, 1 insertion(+)
 
-Alternatively, this could go through the cpuidle tree, along with
-the other two patches.
----
- drivers/soc/qcom/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index 3cf3a6b41182..e718b8735444 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -192,7 +192,7 @@ config QCOM_SOCINFO
- 
- config QCOM_SPM
- 	tristate "Qualcomm Subsystem Power Manager (SPM)"
--	depends on ARCH_QCOM
-+	depends on ARCH_QCOM || COMPILE_TEST
- 	select QCOM_SCM
+diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+index 15d6c46c0a47..74df12e23546 100644
+--- a/drivers/cpuidle/Kconfig.arm
++++ b/drivers/cpuidle/Kconfig.arm
+@@ -100,6 +100,7 @@ config ARM_MVEBU_V7_CPUIDLE
+ config ARM_TEGRA_CPUIDLE
+ 	bool "CPU Idle Driver for NVIDIA Tegra SoCs"
+ 	depends on (ARCH_TEGRA || COMPILE_TEST) && !ARM64 && MMU
++	depends on ARCH_SUSPEND_POSSIBLE
+ 	select ARCH_NEEDS_CPU_IDLE_COUPLED if SMP
+ 	select ARM_CPU_SUSPEND
  	help
- 	  Enable the support for the Qualcomm Subsystem Power Manager, used
 -- 
 2.29.2
 
