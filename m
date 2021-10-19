@@ -2,36 +2,36 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FC2C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 676E4C43217
 	for <soc@archiver.kernel.org>; Tue, 19 Oct 2021 22:20:15 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id A804C6135F; Tue, 19 Oct 2021 22:20:14 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 921BF61260;
+	id BAC186136F; Tue, 19 Oct 2021 22:20:14 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id A03B86134F;
 	Tue, 19 Oct 2021 22:20:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1634682014;
-	bh=/x/1indlv1wBjJVaofPd9F9MlCKpAnwsoV2xz7d3bAk=;
+	bh=h8k0jjxwA8ojD3bMWckLMOIV40rL2QtqPldsogXU7J4=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=bBWPplhNEayus/758Gnwm1nnCejB3FUIOLJulfHgv6Uq3hbKrus4mF1rS9d66C1n8
-	 foGuWuif+kr6UG1NwXrGiSUuQH6eF5IPb6T47v3VmP+59KneVcbQYupIb1822SZmMt
-	 rWCLc/5TQGqHYFqSA3tz9WN9y1huXrPwV7ou9YeAf9dlbm/8vGr5Sx8ew/TVbwBH1o
-	 BbaYNaWjSoPNzeRbnhsfWeOR40CNtWlrzotAp9HHiq20rPaFQsuWeOZ4YUUwLEKZfr
-	 YeDyWQG/z7bmNLye7N6n5Zn+pExRJ472vwjjgKhR5k8T8HNWemrBQ1J9cZR84yASgK
-	 fq3m9E43pfgFw==
+	b=SsD0uEPtPxe9n2o5kBYDc0pRBP0fuB1WBZytciKNT+bP00SK/fIXyMKZaA7HK+vyH
+	 lm4WWpLgqiYmIOfEFyy4JNEKMHGmFP0y6r3xooao5S5cUoErsnHoQ5sO0Ofg93EEih
+	 MP5tdjiJDapjluiMhiX45IXJ27hZv1Y9mnT0G0Tg+lFnXzpyrB49kFwOWvLoU6urvG
+	 KJ+vedr4D5+evxtZLxPPZbSSBgMW0Z/2e2R5pNJdAvbyntFguj3GFv6bH2aJiQ7aGV
+	 G1is6SzBRR7UiVDBq3CeCSoMXy1e0LNUWK9jBvpBcy7ryA7ofLCl5iXYOmcYqWhi6S
+	 uGQKVH5/sNeGw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8063460A4D;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 92E0E609E3;
 	Tue, 19 Oct 2021 22:20:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Ux500 DTS updates for v5.16
+Subject: Re: [GIT PULL] ARM: aspeed: devicetree changes for 5.16
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <163468201452.1188.11940342890729772453.git-patchwork-notify@kernel.org>
+ <163468201459.1188.7617975508807867505.git-patchwork-notify@kernel.org>
 Date: Tue, 19 Oct 2021 22:20:14 +0000
-References: <CACRpkdYf5GwRvG1Gemk4mE+aw6UnAVTY8OudwsVNPQXThHXu6g@mail.gmail.com>
-In-Reply-To: <CACRpkdYf5GwRvG1Gemk4mE+aw6UnAVTY8OudwsVNPQXThHXu6g@mail.gmail.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+References: <CACPK8XdrMzY9tzdof7KpzxKquTo7GcWW4N9Zqwtmmu73C7htXA@mail.gmail.com>
+In-Reply-To: <CACPK8XdrMzY9tzdof7KpzxKquTo7GcWW4N9Zqwtmmu73C7htXA@mail.gmail.com>
+To: Joel Stanley <joel@jms.id.au>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -40,20 +40,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 14 Oct 2021 18:43:57 +0200 you wrote:
-> Hi SoC maintainers,
+On Fri, 15 Oct 2021 04:01:30 +0000 you wrote:
+> Hello Soc maintainers,
 > 
-> here are some Ux500 DTS updates for the v5.16 merge window.
+> Here are the aspeed device tree changes for v5.16.
 > 
-> Details in the signed tag!
+> The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 > 
-> Please pull it in.
+>   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Ux500 DTS updates for v5.16
-    https://git.kernel.org/soc/soc/c/514d507811b3
+  - [GIT,PULL] ARM: aspeed: devicetree changes for 5.16
+    https://git.kernel.org/soc/soc/c/f6bfe0146895
 
 You are awesome, thank you!
 --
