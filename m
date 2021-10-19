@@ -2,36 +2,36 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45CD4C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FC2C4332F
 	for <soc@archiver.kernel.org>; Tue, 19 Oct 2021 22:20:15 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id A3B7D60FDA; Tue, 19 Oct 2021 22:20:14 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 8752361156;
+	id A804C6135F; Tue, 19 Oct 2021 22:20:14 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 921BF61260;
 	Tue, 19 Oct 2021 22:20:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1634682014;
-	bh=/++ciIvv8DOsp2jKbgAAT7QbF2UqWA+tlRYjQugD9Y4=;
+	bh=/x/1indlv1wBjJVaofPd9F9MlCKpAnwsoV2xz7d3bAk=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Sqx7W5qWXEIH5+TQkyJ0YqWCC8nMkraGS1rsAOsq3fR9sJV/OswUn1AbwYRjcC6eh
-	 drGUublpw30qjG+NRuBNzxFjHhqaKjch5rP5xh4f5YFx+M5qRz588u/voIE/ALpP4B
-	 3mt4fE8UsP9pjjZQsOGfrCV4fWqmdMpu/u3j7y+1GJpq2oCdApfZ9P05vqW1lEQZNu
-	 qKBEFVsmu5cpEpSy6jUJHEPXSulyiVzFfHVMvlENJWKVQDncD77QUDl7ZiJAJE3uJR
-	 iaUYHViCKAQcZIFxgY5Asqk3yDdfFGrocPAWNNORnxlZeKaJhvpN4bBwBMxixq68aE
-	 mrvSXuz5sEYjw==
+	b=bBWPplhNEayus/758Gnwm1nnCejB3FUIOLJulfHgv6Uq3hbKrus4mF1rS9d66C1n8
+	 foGuWuif+kr6UG1NwXrGiSUuQH6eF5IPb6T47v3VmP+59KneVcbQYupIb1822SZmMt
+	 rWCLc/5TQGqHYFqSA3tz9WN9y1huXrPwV7ou9YeAf9dlbm/8vGr5Sx8ew/TVbwBH1o
+	 BbaYNaWjSoPNzeRbnhsfWeOR40CNtWlrzotAp9HHiq20rPaFQsuWeOZ4YUUwLEKZfr
+	 YeDyWQG/z7bmNLye7N6n5Zn+pExRJ472vwjjgKhR5k8T8HNWemrBQ1J9cZR84yASgK
+	 fq3m9E43pfgFw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 76A39609D8;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8063460A4D;
 	Tue, 19 Oct 2021 22:20:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Renesas ARM DT updates for v5.16 (take two)
+Subject: Re: [GIT PULL] Ux500 DTS updates for v5.16
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <163468201448.1188.3374883404187429930.git-patchwork-notify@kernel.org>
+ <163468201452.1188.11940342890729772453.git-patchwork-notify@kernel.org>
 Date: Tue, 19 Oct 2021 22:20:14 +0000
-References: <cover.1634298094.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1634298094.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+References: <CACRpkdYf5GwRvG1Gemk4mE+aw6UnAVTY8OudwsVNPQXThHXu6g@mail.gmail.com>
+In-Reply-To: <CACRpkdYf5GwRvG1Gemk4mE+aw6UnAVTY8OudwsVNPQXThHXu6g@mail.gmail.com>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -40,20 +40,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 15 Oct 2021 13:44:30 +0200 you wrote:
-> Hi soc folks,
+On Thu, 14 Oct 2021 18:43:57 +0200 you wrote:
+> Hi SoC maintainers,
 > 
-> The following changes since commit 732e8ee0351c59ded4d88106437a7ad1cff4cb83:
+> here are some Ux500 DTS updates for the v5.16 merge window.
 > 
->   arm64: dts: renesas: rcar-gen3: Add missing Ethernet PHY resets (2021-09-28 09:59:26 +0200)
+> Details in the signed tag!
 > 
-> are available in the Git repository at:
+> Please pull it in.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Renesas ARM DT updates for v5.16 (take two)
-    https://git.kernel.org/soc/soc/c/f97ee3e963b3
+  - [GIT,PULL] Ux500 DTS updates for v5.16
+    https://git.kernel.org/soc/soc/c/514d507811b3
 
 You are awesome, thank you!
 --
