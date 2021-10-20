@@ -2,36 +2,36 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DCD3C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52D1AC4167B
 	for <soc@archiver.kernel.org>; Wed, 20 Oct 2021 13:50:14 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id D08D66138D; Wed, 20 Oct 2021 13:50:13 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id B8F8F61373;
+	id E3A1B6138F; Wed, 20 Oct 2021 13:50:13 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id CB8B361361;
 	Wed, 20 Oct 2021 13:50:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1634737813;
-	bh=laloZUJoFkN0URe6ruqdS45Y+DN8Xjez+03MIqYlg3M=;
+	bh=Dc5+doz4ou0ZbbcHgJ1PSkz1hKaTxV/BJEXi/J8FTvU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=YYNOjve8czAOkRmK74w3bWLe4HAlO0KDvXezmMyuY/9S9Ds6DE27755x512OHfahg
-	 ysF1J/TCNXWJQq/OdT/T1Nd4B5ghCB6mbPpYTKHXY7Tz8t/9lOjQRAEVqypPHjPoZn
-	 JyjpXM9gFXJeTB8JLk9uVOJqhmWhD/s/jqzlBXMvvzgVDKyJky4vDh2QZB7hm1C72I
-	 uL9LexHs3nEzxQ5sOvpNccy513+hD8r7Om5jkGdtuLTsF825yiiJklwDGDPwRUO1sU
-	 uqspLSaoh8Goc4BmuSO15vA0Y0TuKMsVVV5XxiboRoC6rFDKzmdpar9YVjXI+N9E3I
-	 feu6Wgy/NKAGA==
+	b=ERfN/N9sK2cvw5zK/EWxArUOQPTv74VZEGDyB7qJR3HVETHp0ybocBr3/4O4U6MFm
+	 BIXJZqj1W3pD6oybj3XEufcsEtvvzlq2AZlfJzWMCly6frtWCuN3g/Ahr7uVIy4ZXN
+	 7RWi2XlDPGKl4pf1SecB+POPHF88xY+JGSndLQprLBfroHGzCbGjPeNenlgBzjz+GD
+	 qRV1rsYih5DT2S1dD2WxFawk51QGp279/YN+n5DW/51TPQCqY/tCucRBL95SaumS2n
+	 YXwJ+dWelqVcIwt0MUn3jQvpgbcT5vK2jA0m56FIhWwlM5IWSj4otFxv/8GqkwcqyU
+	 L+VAkiPGTYAsw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id AE914609F7;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C169160A24;
 	Wed, 20 Oct 2021 13:50:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Gemini DTS changes for v5.16
+Subject: Re: [GIT PULL] ARM: mvebu: dt64 for v5.16 (#1)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <163473781371.13902.2752092944646475032.git-patchwork-notify@kernel.org>
+ <163473781378.13902.13621250614432133069.git-patchwork-notify@kernel.org>
 Date: Wed, 20 Oct 2021 13:50:13 +0000
-References: <CACRpkdac5Sbt42CtuLMgCazfHdhcP98mEKGjeZ-DVcb=_N90Bg@mail.gmail.com>
-In-Reply-To: <CACRpkdac5Sbt42CtuLMgCazfHdhcP98mEKGjeZ-DVcb=_N90Bg@mail.gmail.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+References: <877deemefy.fsf@BL-laptop>
+In-Reply-To: <877deemefy.fsf@BL-laptop>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -40,19 +40,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 20 Oct 2021 02:50:14 +0200 you wrote:
-> Hi SoC maintainers,
+On Fri, 15 Oct 2021 18:37:53 +0200 you wrote:
+> Hi,
 > 
-> these are some DTS changes for the Gemini platform for
-> v5.16.
+> Here is the first pull request for dt64 for mvebu for v5.16.
 > 
-> Sorry for being late. Details in the signed tag.
+> Gregory
+> 
+> The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Gemini DTS changes for v5.16
-    https://git.kernel.org/soc/soc/c/7b27dc2769ba
+  - [GIT,PULL] ARM: mvebu: dt64 for v5.16 (#1)
+    https://git.kernel.org/soc/soc/c/e844804baa07
 
 You are awesome, thank you!
 --
