@@ -2,56 +2,58 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1685AC433EF
-	for <soc@archiver.kernel.org>; Wed, 20 Oct 2021 16:00:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 051E8C433F5
+	for <soc@archiver.kernel.org>; Wed, 20 Oct 2021 16:00:45 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id F29436138F; Wed, 20 Oct 2021 16:00:41 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 997B16136F;
-	Wed, 20 Oct 2021 16:00:40 +0000 (UTC)
+	id E19296137C; Wed, 20 Oct 2021 16:00:44 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E7E361373;
+	Wed, 20 Oct 2021 16:00:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634745641;
-	bh=k4aADcYr2Vm+5Df9wGPuIbaYI912G5FOFGxfObEkVf4=;
+	s=k20201202; t=1634745644;
+	bh=9+oQ5QtKkswCP0/5OyFH3wR7AwYAn4bsNIz73pLh23o=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KJzE4iscBjFqa+Vt3FSTekv0sQM9HuDkUUP4BbuR2ReINycGOMYuRQhD9pRSzjkJY
-	 Hz94MCoZbWq2rL9q+O89rIosYNR8ZWhrM047MRSGCKxYR2/g6pJgaDzwM/0330rM1o
-	 Kn/tOU9iQ3jU3pPy0lpMCsT3QjmIXpe8UD3dxWokTsDBP76WzBDa55sq9Gc8L3wIDK
-	 6McAWG/F3+UIYnTATb3NAyVbNt3R35XhWzuAPqLhGK3ULXee5qCwLGJhPhmWNeGcX0
-	 R/ku46FsOkJBhWgb02vwVleMSE06yQPhj6CP/D27RYkH1lz96IIMD43P4tQo+fw45o
-	 I3reO64CyyJZw==
+	b=cXxDLOTM8tatKT7LiwMzFLdwZ6KRHpsqlQWiFqV5CVHEnbRTdp5bEFwBm3910+JVz
+	 hEzPe9nqudmgldxEmVGTcdUcqjYAR1SPJv5iSGlpUeyiXr5bgcmu9KJN36h8SXACpx
+	 nFJ8Aj9YMnTfNFVhZkRLGuoIkXu7PDv0p3d+G91mvorfVY7xt9pTeAlfKuU0gye314
+	 XoCqY557FdiX6CDThN0pFJ4YJG7JPef7FA1VRGuCNIqZAXGk6THSd6RuM7+VsbZgk6
+	 dlo3L6cfRq3wCyECOAZPc9ou2OXGsvFOdyis2HtQVwclsdlb9M3kLBFzYfe5aFxTKL
+	 Ho5CyjIaQ63mA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Jens Wiklander <jens.wiklander@linaro.org>,
-	soc@kernel.org,
-	arm@kernel.org
+To: soc@kernel.org,
+	arm@kernel.org,
+	Maxime Ripard <mripard@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	op-tee@lists.trustedfirmware.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] OP-TEE FF-A for V5.16
-Date: Wed, 20 Oct 2021 18:00:31 +0200
-Message-Id: <163474562374.2274953.13067132975473108014.b4-ty@arndb.de>
+	linux-sunxi@lists.linux.dev,
+	Jernej Skrabec <jernej.skrabec@siol.net>,
+	Chen-Yu Tsai <wens@csie.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] Allwinner Drivers Changes for 5.16
+Date: Wed, 20 Oct 2021 18:00:32 +0200
+Message-Id: <163474562261.2274953.5755457766453207269.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20211018121324.GA2943530@jade>
-References: <20211018121324.GA2943530@jade>
+In-Reply-To: <ad0aa469-9e1b-4bb6-a116-92648ed774fa.lettre@localhost>
+References: <ad0aa469-9e1b-4bb6-a116-92648ed774fa.lettre@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 18 Oct 2021 14:13:24 +0200, Jens Wiklander wrote:
-> Please pull these patches which adds support for FF-A [1] in the OP-TEE
-> driver. There's a bit of shuffling in the code where everyhting related to
-> the old SMC based ABI is moved to drivers/tee/optee/smc_abi.c, but there
-> should not be any changed in behavior for with the old ABI.
+On Mon, 18 Oct 2021 10:02:01 +0200, Maxime Ripard wrote:
+> Please pull the following changes for the next release.
 > 
-> Note that this is based on top of the recent fix 7f565d0ead26 ("tee: optee:
-> Fix missing devices unregister during optee_remove") which has already been
-> requested to be pulled.
+> Thanks!
+> Maxime
+> 
+> The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+> 
+>   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 > 
 > [...]
 
 Merged into arm/drivers, thanks!
 
-merge commit: 20f6d9586eee5734072886cf052b72807b0afc4c
+merge commit: 409d8a9c1dbe504a28b5e5c2f7ecdb8be9f9da45
 
        Arnd
