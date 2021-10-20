@@ -1,104 +1,75 @@
-Return-Path: <SRS0=+LcQ=PI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=LSP4=PI=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E21BC433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 09:28:55 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DAF9C433EF
+	for <soc@archiver.kernel.org>; Wed, 20 Oct 2021 13:31:19 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 293ED6136A; Wed, 20 Oct 2021 13:31:19 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E28C960EE9
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 09:28:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E28C960EE9
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=sntech.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=iC2MB5IkxLNRlVXOqU7TLkCLJiIMiNTStNshk6QqW30=; b=4ZZIWpPdz0Yc1b
-	KGDiq05hP6Cn5vixQiS4lyzPkkRzZGFaF07l6U9sX/d8VVz5a7qCzfCdaFo5w9tPGV44yIkEsqlJT
-	ZyS71oGTcZ8FCv3v4EQ6NlH8aYAQoQwM3LRbIch75Cgr349cTc9nc8nL3RXbFMU23Nk5zu7aJhBB+
-	I+TM/VHBCZg+wlJr6NB/BixdXZZ0gGhXldYdpoA87uuCthjqXWkE2HsOEH/iRljO7DefRRSR7/SMS
-	48o6rpACXjV3DAoGIUSUyHfPWQW/3x62trOZi8NUDbFjE+j3YVwjXysI0FJNEMmgUvH+H4zA6Ksdf
-	pPSPLGoXlpWsE7uDLDjw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1md7sj-003z6H-3D; Wed, 20 Oct 2021 09:27:33 +0000
-Received: from gloria.sntech.de ([185.11.138.130])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1md7sf-003z5B-8n; Wed, 20 Oct 2021 09:27:30 +0000
-Received: from [213.208.157.36] (helo=phil.localnet)
- by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
- (Exim 4.92) (envelope-from <heiko@sntech.de>)
- id 1md7sd-0002Zf-UB; Wed, 20 Oct 2021 11:27:28 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts32 changes for 5.16 #2
-Date: Wed, 20 Oct 2021 11:27:22 +0200
-Message-ID: <3630369.N7QejLDta5@phil>
+	by mail.kernel.org (Postfix) with ESMTPS id 30B636128E;
+	Wed, 20 Oct 2021 13:31:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 30B636128E
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MPXxi-1mHmxK2T3q-00McqL; Wed, 20 Oct 2021 15:31:16 +0200
+Received: by mail-wm1-f41.google.com with SMTP id o24so11623964wms.0;
+        Wed, 20 Oct 2021 06:31:16 -0700 (PDT)
+X-Gm-Message-State: AOAM533BA7DpHYcnkCeeGkD7XVezmEDyF9XPeGDdVMuD8wiM8NOSHTp0
+	UjhAh6QrfYG5D+RIPl3nK+ugslD0hhnFsASNuMU=
+X-Google-Smtp-Source: ABdhPJxKVpH5wqYslRICglnTTCwvnfIARjkCHAfultNMD0mtol7UBcncx8Fq5w3uXSIA3llnjypoIoGL1Bhg8ZDtKwY=
+X-Received: by 2002:a05:6000:18c7:: with SMTP id w7mr3065306wrq.411.1634736676095;
+ Wed, 20 Oct 2021 06:31:16 -0700 (PDT)
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211020_022729_339250_3894C578 
-X-CRM114-Status: UNSURE (   7.93  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211020092722.frebFI5y_teP4pTF9CGwYCr_MxBeMMhUGirHCXRpc0g@z>
+References: <20211018095848.19101-1-romain.perier@gmail.com>
+In-Reply-To: <20211018095848.19101-1-romain.perier@gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Wed, 20 Oct 2021 15:30:59 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3vOyqFOf0iFZ9UaUdH-kF13ckYA4Qh56zmSzSvr5dGLg@mail.gmail.com>
+Message-ID: <CAK8P3a3vOyqFOf0iFZ9UaUdH-kF13ckYA4Qh56zmSzSvr5dGLg@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: dts: mstar: updates for v5.16
+To: Romain Perier <romain.perier@gmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Daniel Palmer <daniel@0x0f.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Rygoyi3gRsfI08fzR+RX+fhxsNr3+aoEr95vladdBcAT4BGw2zB
+ amQ0Y4CM4vrnc8E17VIySeG5jtAtfbslnlHi+TQRFwdHtCQGQ2k3fBVYb7cKDwmGRlt/mKP
+ chgKzV56sEK57GzjCgFzJDQKeU30QCjfkI5TY8Lak7SKYFlp3ogO5JLNIcNgbnm9d/4jtzr
+ etKxVtk+ernb3hXjwYv9g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:x5RtZT+Bp4o=:h+JW6aUe6J5iJsi4zoRGxN
+ 7G4sut7v9cpNlaM/qPIm3ywdXRwAWd8p5prY0vUbzshWZaNCNdyplksa8Tlgg69nwDChWqhbi
+ dFWkF7oS5xSPbsl2vr3NOBrIHqZwMa3kJcKppS0rnc7t4epkXkOvcTD8SQNHwYUVwYs9156nD
+ AEiZrjpJyCqAirXLwm0PKaltVmOt034Q0/DoybOTyCu/T+z3933CORR6bB+3Qeb2oMWrrj2EJ
+ rS+2xU2cnE+ceTUS12jK5uOpy1s7Xe/AJ8N8zQxGmd4n42eXHqLYwXYgDowbCPrmcacwrtffa
+ xBOkOHWU9Znyzxif/Sqmhn44eDj39+VOb6wyZbynxTkaeATj+ONncrwOdE+51mIIamaotYPdw
+ r7af07kI7ditnV5c99SQKasIsil2NZJBFkVZ6hwdhNio4lwO/tV7slDuwBjK8EZXqnF+qOGCD
+ wphKA4XykNjHpSaEjqbQGMrBZiiP0s6zjPajVZVp62PJTClwqEFnYGLbzeaC2XOcO+1+kM+2e
+ IQm4HJxHrq/SznO2xtlsADNWA53aDdU49YDQ8Be1/gwsXURHWtkAQ7+P+tuwmG/0Cp5UQmPRo
+ QfzQrs3p5I5jrdGNEz5wYbual0OxwWS1PoOHRNShTNRTeyNw4V3ZTV00k/o9zW/dk+vA3XGzW
+ ymZSK8h4Do0MWc/Poymd/iMZP6m7Jq96UFg7A18KPFAQedthmNwHanTWF20794FWiR1cQ+Xa4
+ Y2Ps2ehK1ZWd9aobR2gp2xy0ZNErVj+i/yPIXg==
 
-The following changes since commit 3e6f8124a78840d074fab36853ee1f5a2e7cffe5:
+On Mon, Oct 18, 2021 at 11:58 AM Romain Perier <romain.perier@gmail.com> wrote:
+>
+> The following changes since commit 64570fbc14f8d7cb3fe3995f20e26bc25ce4b2cc:
+>
+>   Linux 5.15-rc5 (2021-10-10 17:01:59 -0700)
+>
+> are available in the Git repository at:
+>
+>   https://github.com/linux-chenxing/linux.git mstar-dt-next
+>
+> for you to fetch changes up to 7e626b6d71e7678e85e9e06e9e2271b5923741fd:
 
-  ARM: dts: rockchip: swap timer clock-names (2021-09-20 15:22:48 +0200)
+The contents are ok, but you have based the tree on -rc5, which would require
+me to backmerge the new upstream contents into my branch and mess up the
+git history.
 
-are available in the Git repository at:
+Please rebase on top of v5.15-rc1 and resend.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v5.16-rockchip-dts32-2
-
-for you to fetch changes up to 97ef6931208f7ab09f52dd291320aa53878aaa53:
-
-  ARM: dts: rockchip: remove usb-phy fallback string from rk3066a/rk3188 (2021-10-20 09:39:26 +0200)
-
-----------------------------------------------------------------
-Adapt gpio subnode names to match the yaml binding and removal
-of the actually non-matching fallback-string for usb-phys
-on rk3066/rk3188 (most-specific compatible is and must always
-be used).
-
-----------------------------------------------------------------
-Johan Jonker (2):
-      ARM: dts: rockchip: change gpio nodenames
-      ARM: dts: rockchip: remove usb-phy fallback string from rk3066a/rk3188
-
- arch/arm/boot/dts/rk3036.dtsi  |  6 +++---
- arch/arm/boot/dts/rk3066a.dtsi | 15 +++++++--------
- arch/arm/boot/dts/rk3188.dtsi  | 11 +++++------
- arch/arm/boot/dts/rk322x.dtsi  |  8 ++++----
- arch/arm/boot/dts/rk3288.dtsi  | 18 +++++++++---------
- arch/arm/boot/dts/rv1108.dtsi  |  8 ++++----
- 6 files changed, 32 insertions(+), 34 deletions(-)
-
-
-
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+       Arnd
