@@ -1,100 +1,105 @@
-Return-Path: <devicetree-owner@kernel.org>
+Return-Path: <SRS0=+LcQ=PI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBDD2C433EF
-	for <linux-devicetree@archiver.kernel.org>; Wed, 20 Oct 2021 14:52:42 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C716B61359
-	for <linux-devicetree@archiver.kernel.org>; Wed, 20 Oct 2021 14:52:42 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbhJTOyz (ORCPT
-        <rfc822;linux-devicetree@archiver.kernel.org>);
-        Wed, 20 Oct 2021 10:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbhJTOyy (ORCPT
-        <rfc822;devicetree@vger.kernel.org>); Wed, 20 Oct 2021 10:54:54 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3121EC06161C
-        for <devicetree@vger.kernel.org>; Wed, 20 Oct 2021 07:52:39 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id y15so15605622lfk.7
-        for <devicetree@vger.kernel.org>; Wed, 20 Oct 2021 07:52:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=uF9hWW3HRUf/pq/5JlaNIpHT0L4GbqCbpiYbDrZSHOA=;
-        b=0rQGLB9YZvEkHvK2gZzkK/wXAshQ/85L4jcpnYTn/ZXKOUozcal+MHq8WwbHBllJ/n
-         bBhmmBhdYW3pchY/eHmwbgkO+eCnMnP/yygJY6Vygqo9ypWELyqpAa/6esI4rE5QR97j
-         k5k+RO5/XNlSP9bzowUY4wEmKd6fkztxB2AOq1MOoFLTE/yVe9rZe69DN1meqlbLLyEF
-         8KvC2hK/OP/gWiHtVpZ4Kx97+PEKx9bpipD138oGEVd0cEadzRHZ4/yFG1cujSwWN6Ku
-         tnJs3hCq2ImnBErlD9yQYGzg3GC/FBNBd6mO/i2yCZ5e6qiKKsNjyaAM6oTNHI4NqjJ2
-         QJGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uF9hWW3HRUf/pq/5JlaNIpHT0L4GbqCbpiYbDrZSHOA=;
-        b=NgWUkwt+HnQruNKx9FKe5q18uTbGF/3KAOpphklJYw2T5AsRMxfqVBpPNiBBl4fFX5
-         PR4GEnCsY617v4G+k+l/Kc3C9UBxMQvhD7Zdl5p1fPB38a1kLH4vmffj1o7TTPYLO6Fc
-         zmyqx4MRDp4afwWq61MsyexmUCR4+u73Xj3g/vUcErGX2cXnD/ePreKR8W9ooLyqSY1l
-         qbbOh3EhYUAPUgTIzcRbVObsrG+i+oSJhfUgvvyjHJYtSnzmT83HuFM+OZGJ/yiSFIZa
-         r+XubTi12Fz6ilXMZITLWQdh+aoDXGFqUrkNAUdmvicKyaPFbvz2ocsLw87lYNPWks3n
-         VDNQ==
-X-Gm-Message-State: AOAM532NYr9/C5Tb8DnJmMdVa74fHylE3zrtELejhCgECDFe2mLKl8p6
-        csrewHp3RNEcIGMsj/An4k/Zt9WTVp3s8n2/ZSoWcg==
-X-Google-Smtp-Source: ABdhPJxpXDFarFNfEzRY7wsOM/9m/aFfKd6h5mqPvuRmjwEt9qei7dVsoAhUSKaOcnD8t59mJNjsNOJJ1O+LDQVLYbY=
-X-Received: by 2002:a19:c201:: with SMTP id l1mr252650lfc.92.1634741557199;
- Wed, 20 Oct 2021 07:52:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211019141228.1271617-1-pan@semihalf.com> <20211019141228.1271617-2-pan@semihalf.com>
- <CAK8P3a0g82DoivaADueeOcKOjNVDiutZLAAWAROzgvuYt83Z3w@mail.gmail.com>
-In-Reply-To: <CAK8P3a0g82DoivaADueeOcKOjNVDiutZLAAWAROzgvuYt83Z3w@mail.gmail.com>
-From:   =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
-Date:   Wed, 20 Oct 2021 17:52:28 +0200
-Message-ID: <CAF9_jYQt6ObUcaA0_aKHnQDoKuYPAYT48jfA3_RKE=q1OkCang@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] socfpga: dts: move arria10 aliases to socfpga_arria10.dtsi
-To:     Arnd Bergmann <arnd@arndb.de>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40878C433EF
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 14:54:29 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 03E936135F
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 14:54:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 03E936135F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=LPV3vuTlR5T2pMmbBuJRWoIhd04PMLfNdkO6JYd8KE8=; b=IovfB2+YAzpyiM
+	MyK9U1evShaM/hiH7oaybzQa13+2zO2uArr8HgfY41APChe/uKVFjoHXk1OF9VkAf54DkLq2DJOVp
+	gIsOJcwMrUoGi6C0IrLaIfohbsg5f15hqjUma67mIh78Up0UCvrsN5jk+hLK05Hn8xvMueNgdCLDN
+	fuIelzFU7xvWSf32LIgr0UHReZxmBRzixZyOVNqQgJRJDWPuSRUMIRTg68zFcaKckK1hV0MjfBYUV
+	OCqvSqtZY0ct/cOHM57LN6T+FWXEjROmzAhKYvZMiAmUHV6uwUVyCjHUTMvkeBpZaMxnXRagO12eu
+	BxfrymjgqfmDxdwG7MIg==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mdCwx-004qQy-Ch; Wed, 20 Oct 2021 14:52:17 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mdCpE-004oqM-39
+ for linux-arm-kernel@lists.infradead.org; Wed, 20 Oct 2021 14:44:17 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 04653610A1;
+ Wed, 20 Oct 2021 14:44:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+ s=k20201202; t=1634741055;
+ bh=y+PkBJkdDwyPtZbZaFNFm5XmnIabiJnkg8sO5+l1eZA=;
+ h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=PEbBj09g25OZMVlqoLmkGQexel8my6YfCSwsMkvnzG3awC6iXh4MfL4uyHcI0B58Q
+ y++sdOLQeLzUhIAtUpa+HTaFa+izbIWoXFxIz35KeFJo2UmpS7IMl9ED6J1gG6UmAt
+ y0ZRRzwK7HnXd+Uk73XuJeq5ua1t+TSf9mhQGDci5V/6eXXJnvOWoRqELMUEOrAwjZ
+ 55mMEjlIgHe6d7ne1210Kw76gkaqI0xKX/sqXMSddo1nfyFsXqNN1OZjkE+vdTUaQ+
+ 8epOBl5pdapraoEOh/32RvYAtj2U1fQHSmzDsCg8nx0Uzu4rHvayhkjqy2I6rLbCZD
+ SQJ6JNlazBmBw==
+From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc:     Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        upstream@semihalf.com, Marcin Wojtas <mw@semihalf.com>,
-        Jacek Majkowski <jam@semihalf.com>,
-        Konrad Adamczyk <ka@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Alexandru Stan <amstan@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Precedence: bulk
-List-ID: <devicetree.vger.kernel.org>
-X-Mailing-List: devicetree@vger.kernel.org
-Message-ID: <20211020155228.dusMh-XMjMdvVSuq2C0Bhc5MXvrO0u2m8sd3Pro6f4Y@z>
+To: soc@kernel.org,
+	arm@kernel.org,
+	Maxime Ripard <mripard@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Jernej Skrabec <jernej.skrabec@siol.net>,
+ linux-sunxi@lists.linux.dev, Chen-Yu Tsai <wens@csie.org>,
+ linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] Allwinner Fixes for 5.15
+Date: Wed, 20 Oct 2021 16:44:09 +0200
+Message-ID: <163474104514.3915621.2292250382784060564.b4-ty@arndb.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <d4c41c71-f1ff-4464-a26f-1bfd4b52fd78.lettre@localhost>
+References: <d4c41c71-f1ff-4464-a26f-1bfd4b52fd78.lettre@localhost>
+MIME-Version: 1.0
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211020_074416_201750_B37D39B8 
+X-CRM114-Status: UNSURE (   8.28  )
+X-CRM114-Notice: Please train this message.
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211020144409.iT0l6eCj_SyiTg7Uf42C4JFK6Z_u4YU2juMNrFxJzLg@z>
 
-On Wed, Oct 20, 2021 at 3:33 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Oct 19, 2021 at 4:12 PM Pawe=C5=82 Anikiel <pan@semihalf.com> wro=
-te:
-> >
-> > socfpga_arria10_socdk.dtsi declares aliases which will most likely
-> > be used by other arria10 boards in the exact same way. move these
-> > aliases to the parent file.
-> >
-> > Signed-off-by: Pawe=C5=82 Anikiel <pan@semihalf.com>
->
-> No, please move them into the .dts files instead for consistency.
->
-> Each board may use a different subset of them, or have them
-> numbered differently, so keep it out of the .dtsi file.
->
->      Arnd
+From: Arnd Bergmann <arnd@arndb.de>
 
-Thank you for your remark. The aliases per .dts file were in the v3
-patch, however this change was explicitly requested. I will bring that
-back and resubmit.
+On Mon, 18 Oct 2021 10:01:25 +0200, Maxime Ripard wrote:
+> Please pull the following changes for the current release.
+> 
+> Thanks!
+> Maxime
+> 
+> The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+> 
+>   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+> 
+> [...]
 
-Thanks, Pawe=C5=82.
+Merged into arm/fixes, thanks!
+
+merge commit: e23c7487f5a74f5cc9f7e1090f1d83c3e33ae315
+
+       Arnd
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
