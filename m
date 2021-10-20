@@ -2,54 +2,59 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EA63C433EF
-	for <soc@archiver.kernel.org>; Wed, 20 Oct 2021 14:44:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0342C433F5
+	for <soc@archiver.kernel.org>; Wed, 20 Oct 2021 14:44:20 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 364A06138B; Wed, 20 Oct 2021 14:44:18 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0731D6138D;
-	Wed, 20 Oct 2021 14:44:16 +0000 (UTC)
+	id 8721F6135F; Wed, 20 Oct 2021 14:44:20 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 866686139F;
+	Wed, 20 Oct 2021 14:44:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634741058;
-	bh=w1HEOzqw9am88vvGSLDdAUDpJuhlNzmKJw8lfg6RO8M=;
+	s=k20201202; t=1634741060;
+	bh=kEBysfS/YBZVOGFNt6jdMv44BC+4gnb4c7TOErSvrNs=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FAAbNyUiYhdsQKEjq0wiq+k0lWVZXUKYukWZ5iyuA+FaovKE/Edl96Ni1VhwAYF1K
-	 AHL1rUe2T41ot0Rrm959j1ZyU76aWkclcrEMdaJgkCqcZfEoqt2ff3k7HX3mlvBm1/
-	 BHCKUivp+JMFW99cANEEh9VO3W38j5uvQsHmJN8O4bWz/GwvMQk+SlPVR0LrFuySug
-	 ZKWKRLndJJOKQ41z5yebkJdJ2cZWvfK5Le7vcibnpNKOBL/4UbwDPjoJ85FewHhgxU
-	 ulSMSHqXKP6KnDFpKlA1ucRqNhG/HY/KRK0bPRMfl6fBN7tXjRXmR3vG6esh6rZ6ZV
-	 P77Gyj21BzPdw==
+	b=cUnG7a40slWx2KtXnwSau6VV5qIyWi2uGap9qXRdmCGgXRuLoODo6Ics92Na2pN1J
+	 WlWHQKOK8KRtdZZF2IsBQapVwD+Ay7mu/guo9pc3x2SM4zMCN9KzX6wNYXUooVmw7n
+	 JdEF2UFQ2N/Gg/fu4a+Hv3gF7/QikjNKo+tiMEv/SmgxhgvfuBxL7/Ha9cvAZK5jQk
+	 amD7BTnufHxt9Fykvq+YO4zgt1T/5aDupcnFRf9VepGVTiioHN46v/DB7rcVlv7uFX
+	 W7SVvFSIZVBpo8tLPwm9kA00LXXXPAXasOHS5Y/4T5clLjwssu9mERJdA5D21W2EQs
+	 Ftz+j8lyGUNfg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
-	Philipp Zabel <p.zabel@pengutronix.de>
+	arm@kernel.org,
+	Shawn Guo <shawnguo@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-arm-kernel@lists.infradead.org,
-	kernel@pengutronix.de
-Subject: Re: [GIT PULL] Reset controller fixes for v5.15
-Date: Wed, 20 Oct 2021 16:44:10 +0200
-Message-Id: <163474104528.3915621.6394652804482446474.b4-ty@arndb.de>
+	Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>,
+	linux-imx@nxp.com,
+	kernel@pengutronix.de,
+	Fabio Estevam <festevam@gmail.com>
+Subject: Re: [GIT PULL] i.MX fixes for 5.15, round 4
+Date: Wed, 20 Oct 2021 16:44:11 +0200
+Message-Id: <163474104501.3915621.6629377896939659320.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <b378f2aae54538db6a13c98561b4cbcacbef937c.camel@pengutronix.de>
-References: <b378f2aae54538db6a13c98561b4cbcacbef937c.camel@pengutronix.de>
+In-Reply-To: <20211018000958.GC25810@dragon>
+References: <20211018000958.GC25810@dragon>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 19 Oct 2021 17:12:51 +0200, Philipp Zabel wrote:
-> The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+On Mon, 18 Oct 2021 08:10:02 +0800, Shawn Guo wrote:
+> The following changes since commit a1467faa10414ab3d91be7ef6d2b11272ec00e95:
 > 
->   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+>   ARM: imx: register reset controller from a platform driver (2021-10-15 09:38:06 +0800)
 > 
 > are available in the Git repository at:
 > 
->   git://git.pengutronix.de/pza/linux tags/reset-fixes-for-v5.15
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.15-4
 > 
 > [...]
 
 Merged into arm/fixes, thanks!
 
-merge commit: 36b6dcbc1245a3b4dd6bc5cc6b0284c9f05cdddc
+merge commit: 72cd4e3bde4e8ad178f9a698996275e20d235b63
 
        Arnd
