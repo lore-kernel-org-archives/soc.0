@@ -2,22 +2,22 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51A39C433EF
-	for <soc@archiver.kernel.org>; Wed, 20 Oct 2021 14:50:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 980A8C433F5
+	for <soc@archiver.kernel.org>; Wed, 20 Oct 2021 14:50:52 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 35ABC6138B; Wed, 20 Oct 2021 14:50:50 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 358DC610A1;
-	Wed, 20 Oct 2021 14:50:48 +0000 (UTC)
+	id 7EAF561373; Wed, 20 Oct 2021 14:50:52 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 831086137C;
+	Wed, 20 Oct 2021 14:50:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634741450;
-	bh=Z5+UTrR17kZse33IBvH6TAo2pcZtD+hXyaksbzLQJy4=;
+	s=k20201202; t=1634741452;
+	bh=TRfYW+7MPGUxn08FBnDf5ZZdhIN+j92I/689B273xSo=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iI7W7qANHi8ewOG70L/ICmUTlG4FD8eTBcn+xb8p0Pr3ql9qk2Jm4YQVWnvjyT4+s
-	 BXI2I1KtepMoVESXW8Yj/KrW1Jr6dRUTMMTCPY1+suKAz4Horbqd6awxc6d/hzuYyC
-	 +TmXDUVEzBX9yyULKlp4pf1WE7Cf7ewQhCfzgeQ4Bxf8Fc8PEIdrKvxU8o5TV6R6XB
-	 Gs15uNt8OeuOaWO0rXnMSLfAbzt6uqbqM+tTxeFwINW84eTjLSpwUCXFrKdjAitwCU
-	 bazAlCwLx9jyYki3Kk/gG//rn6vMRHYn9Yx5XCuc29FBDqxmnrTQ2O0E0oJbjHacd9
-	 mwsgnklpw9Jdg==
+	b=TWPzRAtGzR2Ywc2xN9s11edkSebx1q9ooDcXEv35am/OCYyWYAnOKlQZiOnHOaM1T
+	 CHLhyisq+WTkz+weoEKV47eebcGfwwnGAavB+/Uogc8KY/RdAamMBSFuLv9OkE7GCF
+	 JLzXvxo7h1Jtk7/s8FG8v42z6AaFqspN3lGPj5G7B8qRb1aFzxIKHO1H78aK49pXPT
+	 71ddPRIhLwztCje8gK9d2F9Hgaw9EGCeb7MHy8Z74M2oH+yMwbze0JbcElCS/GCKwi
+	 KXYPtPEnY3HB133skaGULgPeNO78bGPmbMNQPluYTlChb6SincGMoae0fawmKA8oF7
+	 8xebrnO3IH7aw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -30,31 +30,32 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Fabio Estevam <festevam@gmail.com>,
 	Stefan Agner <stefan@agner.ch>,
 	Li Yang <leoyang.li@nxp.com>
-Subject: Re: [GIT PULL 1/6] i.MX DT bindings update for 5.16
-Date: Wed, 20 Oct 2021 16:50:18 +0200
-Message-Id: <163474139787.4099414.8954767744128108224.b4-ty@arndb.de>
+Subject: Re: [GIT PULL 3/6] i.MX device tree changes for 5.16
+Date: Wed, 20 Oct 2021 16:50:19 +0200
+Message-Id: <163474139794.4099414.13320436095409865623.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20211016140138.1603-1-shawnguo@kernel.org>
-References: <20211016140138.1603-1-shawnguo@kernel.org>
+In-Reply-To: <20211016140138.1603-3-shawnguo@kernel.org>
+References: <20211016140138.1603-1-shawnguo@kernel.org> <20211016140138.1603-3-shawnguo@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sat, 16 Oct 2021 22:01:33 +0800, Shawn Guo wrote:
-> The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+On Sat, 16 Oct 2021 22:01:35 +0800, Shawn Guo wrote:
+> To resolve the dependency on a fix, the pull-request is built on commit
+> 9b663b34c94a ("ARM: dts: imx6dl-yapp4: Fix lp5562 LED driver probe"),
+> which had landed on mainline.  Please consider to pull, thanks!
 > 
->   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+> Shawn
 > 
-> are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-5.16
+> The following changes since commit 9b663b34c94a78f39fa2c7a8271b1f828b546e16:
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 353bbb3d07e836738869a74e23f2deba0a34aa80
+merge commit: 8bd8822c83785ae669a23080d1638b0a534203b1
 
        Arnd
