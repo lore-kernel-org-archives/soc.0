@@ -1,60 +1,112 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=Jips=PI=alsa-project.org=alsa-devel-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38D34C433EF
-	for <soc@archiver.kernel.org>; Wed, 20 Oct 2021 16:00:49 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 1D5DD61374; Wed, 20 Oct 2021 16:00:49 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 21A4F6138D;
-	Wed, 20 Oct 2021 16:00:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8C7CC433FE
+	for <alsa-devel@archiver.kernel.org>; Wed, 20 Oct 2021 16:01:47 +0000 (UTC)
+Received: from alsa0.perex.cz (alsa0.perex.cz [77.48.224.243])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 85F526136F
+	for <alsa-devel@archiver.kernel.org>; Wed, 20 Oct 2021 16:01:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 85F526136F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=alsa-project.org
+Received: from alsa1.perex.cz (alsa1.perex.cz [207.180.221.201])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by alsa0.perex.cz (Postfix) with ESMTPS id B301C1657;
+	Wed, 20 Oct 2021 18:00:53 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 alsa0.perex.cz B301C1657
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=alsa-project.org;
+	s=default; t=1634745703;
+	bh=yZQGqcixn3akt3DO+10qEkc/glUASyUfxkV9M8n6qCc=;
+	h=From:To:Subject:Date:In-Reply-To:References:Cc:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=gMjT/oVRLJdm2ChBI/1oN9OGJ3hkoSV+97+gMtnC3ullr1KHuAofrX6XnuSc2l1Ey
+	 4Tt77vAbzyM1EXa4EesBfhO+PYgkTtx2GN9r+lAdOFU69DFFEo5cgnKt8i2P4SMqSu
+	 xF4to+ta2S1+QZG4ZDEUD2fxMWleKUC2gR5z5WIA=
+Received: from alsa1.perex.cz (localhost.localdomain [127.0.0.1])
+	by alsa1.perex.cz (Postfix) with ESMTP id 3B2A3F80224;
+	Wed, 20 Oct 2021 18:00:53 +0200 (CEST)
+Received: by alsa1.perex.cz (Postfix, from userid 50401)
+ id 6E14AF80229; Wed, 20 Oct 2021 18:00:50 +0200 (CEST)
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+ (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+ (No client certificate requested)
+ by alsa1.perex.cz (Postfix) with ESMTPS id A66FBF800ED
+ for <alsa-devel@alsa-project.org>; Wed, 20 Oct 2021 18:00:42 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 alsa1.perex.cz A66FBF800ED
+Authentication-Results: alsa1.perex.cz;
+ dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
+ header.b="Rjt9JHUW"
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 82FF8611F2;
+ Wed, 20 Oct 2021 16:00:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634745649;
-	bh=HAPxmvT5vMWojU4Nfnvqe7bWdj+84pKoOwup/E++ha8=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qqZyCBU0xbB1WLR+QvKsH+KK6yRUvmqePzFQ+vA/iukv/v8GHmeYt3mlCyQCAOva7
-	 dqAXWUuZZsxGIVihDFe9W/JCGJs4mu5KLr4+kZdGei6R1SiDXxgs3ZMsxo9ovI1Tk2
-	 v71yMzZmvFqVUoRIAYuqMGFchfXwO4JMvLATHac/DeKb8B8z00eVSYk5qtYtiwoZWn
-	 em0eY7Brfx2pNbj0qUJ4cX5RxahAiQhYCIWUgDW5JA5KgLuirBCr9tofaTOxX+U+H6
-	 Rkupvxaewa08oOr7cbt9puBZ2XX0YvWcaZOKFsTkLPmSh7kZe+QWZYHp94J+oqYA8L
-	 gKkVV3m5wmsNQ==
+ s=k20201202; t=1634745638;
+ bh=yZQGqcixn3akt3DO+10qEkc/glUASyUfxkV9M8n6qCc=;
+ h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=Rjt9JHUW7MQXkOkcU+8UEdlOyGBRl7yVL+E94b+xSJ5dQHIrlLkVTRtf29Wd/VLB2
+ A7/QP51NKa47c1EymIrdVwvzHHMu6d7lDcxXEJNAGJmOc6mbLCCk5k0YnjP9L2hfQe
+ UzBRl8dXLtF6i6mbyT8dltAzy0mTIaD3d8a/bhEHltOds57SjD1ElmX0KCtWA36KLX
+ h3mgWwwuOJjzrDL/4ffEb6woupTaTuceG+8MvBQ5T9YRuJjGeVSJA7cVRiVX+2hZoT
+ SBAotHk0MO2QxQaGcu3F+JlKDk6DdBODZ8+UPno5XJrAtMWWbjswQeoo/oMfZizaLF
+ ChYR4Px6Hb4Fg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
-	arm@kernel.org,
-	Shawn Guo <shawnguo@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-imx@nxp.com,
-	Li Yang <leoyang.li@nxp.com>,
-	kernel@pengutronix.de,
-	Fabio Estevam <festevam@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Stefan Agner <stefan@agner.ch>
-Subject: Re: [GIT PULL 2/6] i.MX drivers update for 5.16
-Date: Wed, 20 Oct 2021 18:00:33 +0200
-Message-Id: <163474562255.2274953.11163203221275152113.b4-ty@arndb.de>
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Subject: Re: [PATCH v3 0/2] arm: ep93xx: CCF conversion
+Date: Wed, 20 Oct 2021 18:00:30 +0200
+Message-ID: <163474562303.2274953.3990592094326359852.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20211016140138.1603-2-shawnguo@kernel.org>
-References: <20211016140138.1603-1-shawnguo@kernel.org> <20211016140138.1603-2-shawnguo@kernel.org>
+In-Reply-To: <20211018103105.146380-1-alexander.sverdlin@gmail.com>
+References: <20211018103105.146380-1-alexander.sverdlin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Cc: alsa-devel@alsa-project.org, Arnd Bergmann <arnd@arndb.de>,
+ Nikita Shubin <nikita.shubin@maquefel.me>, linux-kernel@vger.kernel.org,
+ Liam Girdwood <lgirdwood@gmail.com>, Takashi Iwai <tiwai@suse.com>,
+ Hartley Sweeten <hsweeten@visionengravers.com>,
+ Mark Brown <broonie@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ linux-arm-kernel@lists.infradead.org
+X-BeenThere: alsa-devel@alsa-project.org
+X-Mailman-Version: 2.1.15
+Precedence: list
+List-Id: "Alsa-devel mailing list for ALSA developers -
+ http://www.alsa-project.org" <alsa-devel.alsa-project.org>
+List-Unsubscribe: <https://mailman.alsa-project.org/mailman/options/alsa-devel>, 
+ <mailto:alsa-devel-request@alsa-project.org?subject=unsubscribe>
+List-Archive: <http://mailman.alsa-project.org/pipermail/alsa-devel/>
+List-Post: <mailto:alsa-devel@alsa-project.org>
+List-Help: <mailto:alsa-devel-request@alsa-project.org?subject=help>
+List-Subscribe: <https://mailman.alsa-project.org/mailman/listinfo/alsa-devel>, 
+ <mailto:alsa-devel-request@alsa-project.org?subject=subscribe>
+Errors-To: alsa-devel-bounces@alsa-project.org
+Sender: "Alsa-devel" <alsa-devel-bounces@alsa-project.org>
+Message-ID: <20211020160030.cMCroQa8JXYVxk_HBPtPKKenjt9K8TNs4GdO_qTY9gE@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sat, 16 Oct 2021 22:01:34 +0800, Shawn Guo wrote:
-> The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+On Mon, 18 Oct 2021 12:31:03 +0200, Alexander Sverdlin wrote:
+> This series series of patches converts ep93xx to Common Clock Framework.
 > 
->   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+> It consists of preparation patches to use clk_prepare_enable where it is
+> needed, instead of clk_enable used in ep93xx drivers prior to CCF and
+> a patch converting mach-ep93xx/clock.c to CCF.
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-5.16
+> Link: https://lore.kernel.org/patchwork/cover/1445563/
+> Link: https://lore.kernel.org/patchwork/patch/1435884/
 > 
 > [...]
 
-Merged into arm/drivers, thanks!
+Applied to arm/drivers, thanks!
 
-merge commit: 4a47ce1fab475285a21b4e291400221ca2ae50fc
+[1/2] ASoC: cirrus: i2s: Prepare clock before using it
+      commit: f4ff6b56bc8ab2fcad6885813cd28ccc81224981
+[2/2] ep93xx: clock: convert in-place to COMMON_CLK
+      commit: 9645ccc7bd7a16cd73c3be9dee70cd702b03be37
 
        Arnd
