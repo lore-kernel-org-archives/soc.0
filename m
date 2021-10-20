@@ -2,58 +2,59 @@ Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59861C433EF
-	for <soc@archiver.kernel.org>; Wed, 20 Oct 2021 21:26:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43E96C433EF
+	for <soc@archiver.kernel.org>; Wed, 20 Oct 2021 21:26:29 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 2C2B9611ED; Wed, 20 Oct 2021 21:26:26 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7C995610E7;
-	Wed, 20 Oct 2021 21:26:24 +0000 (UTC)
+	id 075366138B; Wed, 20 Oct 2021 21:26:29 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0906E61372;
+	Wed, 20 Oct 2021 21:26:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1634765186;
-	bh=+Rp2vscxbxg3jT6N4n0or5HcOx4VLKMx3dxZ67B0u+U=;
+	s=k20201202; t=1634765188;
+	bh=ILFqD0hIgtQRhj/iA53Be2tsfeuZQD08Te1lqGwHYRU=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=K4Nn9ED424rlzASOiKgZwTdkMJkiM6Jzk50IqpOOfE09VXsGYVMwnoG2sFGUz+i+Z
-	 nGeJ7Plu15WlnuQXcqiDlW03NcUh03Wpjt/yb0JhgVyfw3eiD89Rxf1LC/PF8MYQMD
-	 BNRYeWGVnyDAd2XoWNLJZCwkQ0ZF3BmOxEDzFQVdA/KAbk1g5YJUu6a1BLsJ42RwxT
-	 VaVTIP6b1GuzouZIc2z88egLkOK41ucP1ITXGE5G8cQ3M7Ncdo81W0O3jkA5eZiuso
-	 ZiKJvHg+eXlB8/L2uS8UJNXqU+uhWLG1JohMlFGFnC/d6w/ts4Sy9tLFHy7/qRcqVS
-	 nnzzLJu6CZpIw==
+	b=pMGMuMhq4jTWatJY6e22EPiZeUsnz4OZ56VRAfo7gINu8AOjMozffTsM/lNkPMWGj
+	 yzX7BHGcCQN4rOuuj4HLziNH/1MTstq9CfzbIdDMe3shjHnv8GILjTMfCXLa/TRpb+
+	 REnYeaEj1047ana7ONe4KB+cr5xD/MfuLNzaLAzdxSdgu/3VLDT1PfXKWatRSE6r8w
+	 SLISX4ruEztChf2t4/NJeUGSTEqxuSXMpvB8zly6+haaTvNXrWkLcepdmP02Zx9CAI
+	 +i81KbG/JRrmUQfhrP+VBahOiW4ZQ2/62F/lTKoFAnppVS5b2cFgSd0ic5nf/trsC2
+	 pLMRuKqzQN/6g==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Maxime Ripard <mripard@kernel.org>,
-	arm@kernel.org,
-	soc@kernel.org
+To: arm@kernel.org,
+	soc@kernel.org,
+	Shawn Guo <shawnguo@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Jernej Skrabec <jernej.skrabec@siol.net>,
+	Fabio Estevam <festevam@gmail.com>,
+	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	Chen-Yu Tsai <wens@csie.org>
-Subject: Re: [GIT PULL] Allwinner Platform Changes for 5.16
-Date: Wed, 20 Oct 2021 23:25:52 +0200
-Message-Id: <163476513266.4063285.114162714174187124.b4-ty@arndb.de>
+	Li Yang <leoyang.li@nxp.com>,
+	Stefan Agner <stefan@agner.ch>,
+	kernel@pengutronix.de
+Subject: Re: [GIT PULL 6/6] i.MX maintainers update for 5.16
+Date: Wed, 20 Oct 2021 23:25:53 +0200
+Message-Id: <163476513260.4063285.15086446429701644695.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <0ceaad3e-dc26-4be6-b98f-d25e51a41b81.lettre@localhost>
-References: <0ceaad3e-dc26-4be6-b98f-d25e51a41b81.lettre@localhost>
+In-Reply-To: <20211016140138.1603-6-shawnguo@kernel.org>
+References: <20211016140138.1603-1-shawnguo@kernel.org> <20211016140138.1603-6-shawnguo@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 18 Oct 2021 10:06:27 +0200, Maxime Ripard wrote:
-> Please pull the following changes for the next release.
-> 
-> Thanks!
-> Maxime
-> 
+On Sat, 16 Oct 2021 22:01:38 +0800, Shawn Guo wrote:
 > The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 > 
 >   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-maintainers-5.16
 > 
 > [...]
 
 Merged into arm/soc, thanks!
 
-merge commit: 5cec64e5f97efa55a3f0a7f625263e66d09198f7
+merge commit: 17c129caec5de2190dbf469ddee78ff0d182b379
 
        Arnd
