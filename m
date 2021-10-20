@@ -2,14 +2,14 @@ Return-Path: <SRS0=+LcQ=PI=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76F2BC433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 21:32:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 648F2C433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 21:32:15 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3F35760F59
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 21:32:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F35760F59
+	by mail.kernel.org (Postfix) with ESMTPS id 26292610CF
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 21:32:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 26292610CF
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -18,47 +18,48 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=STn1tcsXytqdp/XCNZpSBOUOzoVuveAvYx8M/MG1sf8=; b=TEvOy6YYHzFcYv
-	l7M+74QsiNDGba+MzDbhgfiWkj23T6We+5nJbsMdolOuo53vAw6mEFl+YIJcMKrUuQbWz746P69aH
-	9nsYpeLSXUOo56SR54MqKCkA3FuuZpeGdhDERVpD0Rj+KO0dY07KRbJAZy8akfBLvbrza/EG45/gH
-	alKAlgiLoKqcKH0tG9MhZzx4HsiagLyD3r/cZHf09CKNN8Fzh+65G6+YonNC8KTTW8ekkL7Eb3Qn9
-	NtaBc1I8JSq/2Ug/GdAAPJvD3m5NHXZEuQotdPFXGFwCAzlCPQw/bGgxtEqhM64dP1ieVI1YLS27Z
-	ci+dNsdGgyYw6yIqcneA==;
+	List-Owner; bh=3RYpMnITCck9/4Pya2pnZaxT+eHBmy0edSjV16OoKJY=; b=xHpbsC8TQXRgwf
+	2FsR0ckt1lT38xbZF8m9z3AbGD3GDJlm5l8uaFglKUrKC2Tg19x2ViwS3NgLJV6i0yAeR4hcCTU7p
+	t1hAS03nuIX97YIn653kexJN2jS32BeSVjVrz4Rz1HREyFvI9Y9X0X4aXHXaNMyVp8YchuRm4nYjY
+	n1Rcg4lrh+6HQex6hfjqSKhN0vQsrRUWtV/svzVL4OATomqWhpP8WoJ8u33LTRPZv564I7+HeOkXK
+	jg3ojsCZu9MhtzcPeX0bdyEeXwX5NrYoQkDwbjKDxh4eagT1W9XABkVzhNajfiozIwY+nVsr3i07I
+	MvJel7UXA4H3rYXhcnJQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mdJAl-005rh6-GO; Wed, 20 Oct 2021 21:30:55 +0000
+	id 1mdJAa-005rfD-MO; Wed, 20 Oct 2021 21:30:44 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mdJAZ-005rex-8F
- for linux-arm-kernel@lists.infradead.org; Wed, 20 Oct 2021 21:30:44 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AB59D61284;
- Wed, 20 Oct 2021 21:30:41 +0000 (UTC)
+ id 1mdJAX-005reQ-JF
+ for linux-arm-kernel@lists.infradead.org; Wed, 20 Oct 2021 21:30:42 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B0FB1610E7;
+ Wed, 20 Oct 2021 21:30:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1634765442;
- bh=+di8/CKCwnYc9P6WoxftUMkSrSNJKw1OrByoQVD7PBI=;
+ s=k20201202; t=1634765441;
+ bh=oxBxWZ7IXZjLdZvVIvjDqrsvZFGaxwm86AhEiLf1h4o=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=U/sa0ZDjRPAbFdwDxt1siRKm9Kqm9m6XVWw5Ux2zrd5jCNAz5cgl9u/ACCeT6TCGE
- q8AikMcXbK89ddId63Iu0BS/3rjZ1kDG0af2JCDNF47AAPLccYD3HLErKd+iT0i6yK
- af+bOUHvtEKofwysdL+RmnmSgTRRGzrhLktVhPIRlFVlqxPshXRhbwT68huwZMeem8
- 5+U00MxWckyHINSyBOgjw+ZEI2tolvEmqOEBvfGUCDNQ1o2mCZxO5F2IMhgAZkG1ts
- 4fnw94zBYtrXJR8vpiONAeOusPhPyqHmByw/3rdJr3Idv7V6tlDnHJOOylM486N44G
- QB4HiBNmGRoEg==
+ b=lWRnqmizho83dALiowQUCezkHw4VVCgnGBuo4W8GscjkAcgdU2BfMN7szWkxYt4sg
+ RIxlG5DtvJWRVUOGBW4VmbP0jLyVwZebTKgX8JkgcAOSjakqLfkNhn/baCAhDKxNYJ
+ 3loNhUZBmpV3Mw1/2c7Z+EGykQoP+AWng4Tn9tb6aLQms+K30hK2euV34hp+S1FVbZ
+ cbXAoJXZS6SWJl4hEZmCNBS/dutGpqrLibefxY1BvnhwyhmTB5tcgaoDl22cEDEhhH
+ 0+n49ApSlgOf/fqlJFqqpaoa1UaC95eN3SiYrzCC7vItrYSrEy5eXxXRKGOS1vUZyl
+ iVy7u4Fnw1YnA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, olof@lixom.net,
- soc@kernel.org
+To: Olof Johansson <olof@lixom.net>, arm@kernel.org,
+ Gregory CLEMENT <gregory.clement@bootlin.com>, soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
- yuji2.ishikawa@toshiba.co.jp
-Subject: Re: [GIT PULL] ARM: Visconti: defconfig changes for 5.16
-Date: Wed, 20 Oct 2021 23:30:36 +0200
-Message-ID: <163476542780.4156336.10346978324196950813.b4-ty@arndb.de>
+ Andrew Lunn <andrew@lunn.ch>,
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+Subject: Re: [GIT PULL] ARM: mvebu: defconfig for v5.16 (#1)
+Date: Wed, 20 Oct 2021 23:30:35 +0200
+Message-ID: <163476542773.4156336.15519125893349486430.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <YWoIf4xPoQtLhC3x@toshiba.co.jp>
-References: <YWoIf4xPoQtLhC3x@toshiba.co.jp>
+In-Reply-To: <871r4mmecw.fsf@BL-laptop>
+References: <871r4mmecw.fsf@BL-laptop>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211020_143043_333035_923D7F31 
-X-CRM114-Status: UNSURE (   7.79  )
+X-CRM114-CacheID: sfid-20211020_143041_673477_A348306E 
+X-CRM114-Status: UNSURE (   7.50  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -75,25 +76,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211020213036.E9QtLxgQPy1l6YrE5YCz3tTwAOapUXSPUtHmRMzn5Ks@z>
+Message-ID: <20211020213035.c3-j-o_X0CuWqtQK6bmb3xso3uajAXN6IiN2WF6QV7A@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Sat, 16 Oct 2021 08:02:23 +0900, Nobuhiro Iwamatsu wrote:
-> This request includes patches that enables PCIe for Visconti SoC in defconfig.
-> Please pull for v5.16 kernel cycle.
+On Fri, 15 Oct 2021 18:39:43 +0200, Gregory CLEMENT wrote:
+> Here is the first pull request for defconfig for mvebu for v5.16.
+> 
+> Gregory
 > 
 > The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 > 
 >   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 > 
-> are available in the Git repository at:
-> 
 > [...]
 
 Merged into arm/defconfigs, thanks!
 
-merge commit: ddcb48fa7d60bae6c3f2db7cc84250d33177388d
+merge commit: a307ca926028bc79d12eb2f686f4a557f064f598
 
        Arnd
 
