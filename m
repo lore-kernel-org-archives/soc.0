@@ -2,14 +2,14 @@ Return-Path: <SRS0=+LcQ=PI=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 648F2C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 21:32:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BE4FC433FE
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 21:32:26 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 26292610CF
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 21:32:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 26292610CF
+	by mail.kernel.org (Postfix) with ESMTPS id E8D51611B0
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 21:32:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E8D51611B0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -18,48 +18,51 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=3RYpMnITCck9/4Pya2pnZaxT+eHBmy0edSjV16OoKJY=; b=xHpbsC8TQXRgwf
-	2FsR0ckt1lT38xbZF8m9z3AbGD3GDJlm5l8uaFglKUrKC2Tg19x2ViwS3NgLJV6i0yAeR4hcCTU7p
-	t1hAS03nuIX97YIn653kexJN2jS32BeSVjVrz4Rz1HREyFvI9Y9X0X4aXHXaNMyVp8YchuRm4nYjY
-	n1Rcg4lrh+6HQex6hfjqSKhN0vQsrRUWtV/svzVL4OATomqWhpP8WoJ8u33LTRPZv564I7+HeOkXK
-	jg3ojsCZu9MhtzcPeX0bdyEeXwX5NrYoQkDwbjKDxh4eagT1W9XABkVzhNajfiozIwY+nVsr3i07I
-	MvJel7UXA4H3rYXhcnJQ==;
+	List-Owner; bh=CxEE8Oc7shmX3XyR5NrtYbmLTuCd2wbVwtUufDFON5k=; b=wXiKRMSEkMEp/u
+	698vmAuy+ne1haeBpPy8eG3sS/pzt7l9qdJQZj5uasSTYFTEn38THrVow23rJjXkrWZGZwjo79yrz
+	PT+d6WRTNBkxQlpJDIuXcMC/yfHXfkg4iGkxd6KSuVoWbyK1B8Ga+Y88OoZNpt2kxYWSLVOd2Bep2
+	lAjAhtUqdYtMTwjez9fmeBVEs0Mu0BD8DFxR+xFV6e3LN1opa5UBLP+7X3IqWnLHBERUyrdGTw6Ex
+	cNESk4Pl1Gs0kd5fntyPyODvaxWYKevS/DKk2R1MPl2FQmB5Tt1i9Hzp92Hh3VM1FLwa4m8YqnCD6
+	tpqEp7IORH0BgEDPMn9A==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mdJAa-005rfD-MO; Wed, 20 Oct 2021 21:30:44 +0000
+	id 1mdJAx-005rjk-Qn; Wed, 20 Oct 2021 21:31:07 +0000
 Received: from mail.kernel.org ([198.145.29.99])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mdJAX-005reQ-JF
- for linux-arm-kernel@lists.infradead.org; Wed, 20 Oct 2021 21:30:42 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B0FB1610E7;
- Wed, 20 Oct 2021 21:30:39 +0000 (UTC)
+ id 1mdJAb-005rfc-HX
+ for linux-arm-kernel@lists.infradead.org; Wed, 20 Oct 2021 21:30:46 +0000
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5742A611ED;
+ Wed, 20 Oct 2021 21:30:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1634765441;
- bh=oxBxWZ7IXZjLdZvVIvjDqrsvZFGaxwm86AhEiLf1h4o=;
+ s=k20201202; t=1634765445;
+ bh=AiFsYIA6f06gt6RRpLBteGxRCVCZI1Vj7i9REFIzEJc=;
  h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=lWRnqmizho83dALiowQUCezkHw4VVCgnGBuo4W8GscjkAcgdU2BfMN7szWkxYt4sg
- RIxlG5DtvJWRVUOGBW4VmbP0jLyVwZebTKgX8JkgcAOSjakqLfkNhn/baCAhDKxNYJ
- 3loNhUZBmpV3Mw1/2c7Z+EGykQoP+AWng4Tn9tb6aLQms+K30hK2euV34hp+S1FVbZ
- cbXAoJXZS6SWJl4hEZmCNBS/dutGpqrLibefxY1BvnhwyhmTB5tcgaoDl22cEDEhhH
- 0+n49ApSlgOf/fqlJFqqpaoa1UaC95eN3SiYrzCC7vItrYSrEy5eXxXRKGOS1vUZyl
- iVy7u4Fnw1YnA==
+ b=s21wpqPvSoosfjAxjPb0B0yTMmjMxY9BiyHObBgD84UQh4kJ6fjElXehpCpGdq7Vx
+ ILruSnl7piHJlG7ZV8dNKNJrW1JgdqEW4pBEFZCY6rtuG5vBxEka/K7SEGVlBk9tNY
+ ZmwwwSu/nG4eA8dXAXgVlt1n4zLXayFtYPaw19EVOsP+PHeHQr8wqU0fklDfF49w7m
+ +xuKfp++l79Uvf0Csf3RgHL/Y8/UbctcO8DVPr2zjXGVI3iSVKvq5NvY0w/OiZt202
+ KehEmwX0/OqiJ+XSqWiu2RnohTgz6Pj8eYRuw2/NLfqdwCWIFOZnCXD494fRQEuImB
+ 5sQAvs74+y6Og==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, arm@kernel.org,
- Gregory CLEMENT <gregory.clement@bootlin.com>, soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
- Andrew Lunn <andrew@lunn.ch>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Subject: Re: [GIT PULL] ARM: mvebu: defconfig for v5.16 (#1)
-Date: Wed, 20 Oct 2021 23:30:35 +0200
-Message-ID: <163476542773.4156336.15519125893349486430.b4-ty@arndb.de>
+To: arm@kernel.org,
+	Shawn Guo <shawnguo@kernel.org>,
+	soc@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-imx@nxp.com,
+ Stefan Agner <stefan@agner.ch>, Fabio Estevam <festevam@gmail.com>,
+ kernel@pengutronix.de, Li Yang <leoyang.li@nxp.com>,
+ linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL 5/6] i.MX defconfig update for 5.16
+Date: Wed, 20 Oct 2021 23:30:37 +0200
+Message-ID: <163476542786.4156336.16607243920223748744.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <871r4mmecw.fsf@BL-laptop>
-References: <871r4mmecw.fsf@BL-laptop>
+In-Reply-To: <20211016140138.1603-5-shawnguo@kernel.org>
+References: <20211016140138.1603-1-shawnguo@kernel.org>
+ <20211016140138.1603-5-shawnguo@kernel.org>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211020_143041_673477_A348306E 
-X-CRM114-Status: UNSURE (   7.50  )
+X-CRM114-CacheID: sfid-20211020_143045_631938_32747722 
+X-CRM114-Status: UNSURE (   6.15  )
 X-CRM114-Notice: Please train this message.
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
@@ -76,24 +79,24 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211020213035.c3-j-o_X0CuWqtQK6bmb3xso3uajAXN6IiN2WF6QV7A@z>
+Message-ID: <20211020213037.Mvv4b3ZOl7nJ_TPO4IxG2nJCvjUerveqmQmGGHRQDwQ@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 15 Oct 2021 18:39:43 +0200, Gregory CLEMENT wrote:
-> Here is the first pull request for defconfig for mvebu for v5.16.
-> 
-> Gregory
-> 
+On Sat, 16 Oct 2021 22:01:37 +0800, Shawn Guo wrote:
 > The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 > 
 >   Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-defconfig-5.16
 > 
 > [...]
 
 Merged into arm/defconfigs, thanks!
 
-merge commit: a307ca926028bc79d12eb2f686f4a557f064f598
+merge commit: 48fe205ada2d6c6bc6a08154c1b797c7c237dd2d
 
        Arnd
 
