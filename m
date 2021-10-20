@@ -1,46 +1,36 @@
-Return-Path: <SRS0=Jips=PI=alsa-project.org=alsa-devel-bounces@kernel.org>
+Return-Path: <SRS0=+LcQ=PI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8C7CC433FE
-	for <alsa-devel@archiver.kernel.org>; Wed, 20 Oct 2021 16:01:47 +0000 (UTC)
-Received: from alsa0.perex.cz (alsa0.perex.cz [77.48.224.243])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32AC4C433EF
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 16:02:25 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 85F526136F
-	for <alsa-devel@archiver.kernel.org>; Wed, 20 Oct 2021 16:01:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 85F526136F
+	by mail.kernel.org (Postfix) with ESMTPS id F4105610A2
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 16:02:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F4105610A2
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=alsa-project.org
-Received: from alsa1.perex.cz (alsa1.perex.cz [207.180.221.201])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by alsa0.perex.cz (Postfix) with ESMTPS id B301C1657;
-	Wed, 20 Oct 2021 18:00:53 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 alsa0.perex.cz B301C1657
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=alsa-project.org;
-	s=default; t=1634745703;
-	bh=yZQGqcixn3akt3DO+10qEkc/glUASyUfxkV9M8n6qCc=;
-	h=From:To:Subject:Date:In-Reply-To:References:Cc:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=gMjT/oVRLJdm2ChBI/1oN9OGJ3hkoSV+97+gMtnC3ullr1KHuAofrX6XnuSc2l1Ey
-	 4Tt77vAbzyM1EXa4EesBfhO+PYgkTtx2GN9r+lAdOFU69DFFEo5cgnKt8i2P4SMqSu
-	 xF4to+ta2S1+QZG4ZDEUD2fxMWleKUC2gR5z5WIA=
-Received: from alsa1.perex.cz (localhost.localdomain [127.0.0.1])
-	by alsa1.perex.cz (Postfix) with ESMTP id 3B2A3F80224;
-	Wed, 20 Oct 2021 18:00:53 +0200 (CEST)
-Received: by alsa1.perex.cz (Postfix, from userid 50401)
- id 6E14AF80229; Wed, 20 Oct 2021 18:00:50 +0200 (CEST)
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
- (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
- (No client certificate requested)
- by alsa1.perex.cz (Postfix) with ESMTPS id A66FBF800ED
- for <alsa-devel@alsa-project.org>; Wed, 20 Oct 2021 18:00:42 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 alsa1.perex.cz A66FBF800ED
-Authentication-Results: alsa1.perex.cz;
- dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
- header.b="Rjt9JHUW"
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=O7/22yNlDpSE0b4YjOzs1XBNtbfNiC6lT2jlXB5ekEQ=; b=20qqfnWZXlI1LF
+	bmY7KynfsFCrzY1GankToXfKmdVpZ7U9xHPuIi+65l5kUI7AhTtQ/sd74yhiOkekiMHBvOZBwcSmJ
+	hszzKfe7aHLUQPd7AeDs/hPWpsHY90AWxw1coWhE7vD+XOIl6gFEz5NEM1WC0FMB/C7sw+sfhrhap
+	mcE9EVMFRol40ZFo5d0UjfA57l3Y2KSZ1hKbQNpv6acBH4wwJofnOBBU2KF83wC5QxeLB8R3VVSY5
+	OnDnbo1tBfltjwA7VmVL7BcFELUnMXn+Dwm6faJm7W7NCWeWtUHOUtqycQxi7q7rIY1WS1+oOg1eu
+	2FahEbGVdFIc/OFEimXQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mdE1C-0059wP-NM; Wed, 20 Oct 2021 16:00:42 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mdE19-0059w0-OD
+ for linux-arm-kernel@lists.infradead.org; Wed, 20 Oct 2021 16:00:41 +0000
 Received: by mail.kernel.org (Postfix) with ESMTPSA id 82FF8611F2;
  Wed, 20 Oct 2021 16:00:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
@@ -57,6 +47,12 @@ From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
 	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Nikita Shubin <nikita.shubin@maquefel.me>,
+ Hartley Sweeten <hsweeten@visionengravers.com>,
+ alsa-devel@alsa-project.org, Mark Brown <broonie@kernel.org>,
+ Liam Girdwood <lgirdwood@gmail.com>, Takashi Iwai <tiwai@suse.com>,
+ linux-kernel@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Jaroslav Kysela <perex@perex.cz>, linux-arm-kernel@lists.infradead.org
 Subject: Re: [PATCH v3 0/2] arm: ep93xx: CCF conversion
 Date: Wed, 20 Oct 2021 18:00:30 +0200
 Message-ID: <163474562303.2274953.3990592094326359852.b4-ty@arndb.de>
@@ -64,29 +60,26 @@ X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20211018103105.146380-1-alexander.sverdlin@gmail.com>
 References: <20211018103105.146380-1-alexander.sverdlin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Cc: alsa-devel@alsa-project.org, Arnd Bergmann <arnd@arndb.de>,
- Nikita Shubin <nikita.shubin@maquefel.me>, linux-kernel@vger.kernel.org,
- Liam Girdwood <lgirdwood@gmail.com>, Takashi Iwai <tiwai@suse.com>,
- Hartley Sweeten <hsweeten@visionengravers.com>,
- Mark Brown <broonie@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>,
- linux-arm-kernel@lists.infradead.org
-X-BeenThere: alsa-devel@alsa-project.org
-X-Mailman-Version: 2.1.15
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211020_090039_829667_D23B5155 
+X-CRM114-Status: UNSURE (   9.77  )
+X-CRM114-Notice: Please train this message.
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
 Precedence: list
-List-Id: "Alsa-devel mailing list for ALSA developers -
- http://www.alsa-project.org" <alsa-devel.alsa-project.org>
-List-Unsubscribe: <https://mailman.alsa-project.org/mailman/options/alsa-devel>, 
- <mailto:alsa-devel-request@alsa-project.org?subject=unsubscribe>
-List-Archive: <http://mailman.alsa-project.org/pipermail/alsa-devel/>
-List-Post: <mailto:alsa-devel@alsa-project.org>
-List-Help: <mailto:alsa-devel-request@alsa-project.org?subject=help>
-List-Subscribe: <https://mailman.alsa-project.org/mailman/listinfo/alsa-devel>, 
- <mailto:alsa-devel-request@alsa-project.org?subject=subscribe>
-Errors-To: alsa-devel-bounces@alsa-project.org
-Sender: "Alsa-devel" <alsa-devel-bounces@alsa-project.org>
-Message-ID: <20211020160030.cMCroQa8JXYVxk_HBPtPKKenjt9K8TNs4GdO_qTY9gE@z>
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211020160030.Lz_LwK1l5HxR1HeCJfMaCjkaefoR710xtL-sA_GnX8I@z>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
@@ -110,3 +103,8 @@ Applied to arm/drivers, thanks!
       commit: 9645ccc7bd7a16cd73c3be9dee70cd702b03be37
 
        Arnd
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
