@@ -1,125 +1,90 @@
-Return-Path: <SRS0=+LcQ=PI=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=3HjL=PI=gmail.com=romain.perier@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24B67C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 16:24:32 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 937FBC433F5
+	for <soc@archiver.kernel.org>; Wed, 20 Oct 2021 16:30:09 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 753BC61354; Wed, 20 Oct 2021 16:30:09 +0000 (UTC)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D5364611F2
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 20 Oct 2021 16:24:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D5364611F2
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Date:Cc:To:From:Subject:
-	Message-ID:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=kZ1qrp24YifEjDK7ZsSNIgj2ctU3hK+Zrq3TqcwQ+2A=; b=Om54+kcDifce+q
-	hZGm1Y7TVwwCRrJbU8qSIHOr+5tX1MbdFsbAIxHT3ZvjpTfxy+jqePGf83EwyHyMTbPgAUrk8MN/W
-	836scuUIz/kBv3+eCzh7l0U0Z2cZcEp7VpfhoPk/9TfuRu5sjmTZp55MM06Gnx6nL+mEnhA7z9jlz
-	W03Iu2HjMwAAhawtPaA5/7H0dpEi5gKmGdt8OyZyJ3v3MLStgFfvmCihnGj70197nkd+JpH2hpg+k
-	Tnyhz04E8w04CqGIkmonZxIIvY8KkNl/KkdnFSchQoz2sm/ukO583nVaS9s5YduaSPx4E78cHnQ9n
-	ClV5JnI0NAfmw8Le4pFQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mdEN4-005EJ3-8V; Wed, 20 Oct 2021 16:23:18 +0000
-Received: from metis.ext.pengutronix.de ([2001:67c:670:201:290:27ff:fe1d:cc33])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mdEN0-005EI5-AQ
- for linux-arm-kernel@lists.infradead.org; Wed, 20 Oct 2021 16:23:15 +0000
-Received: from lupine.hi.pengutronix.de
- ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
- by metis.ext.pengutronix.de with esmtps
- (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim 4.92)
- (envelope-from <p.zabel@pengutronix.de>)
- id 1mdEMw-0000xn-Eq; Wed, 20 Oct 2021 18:23:10 +0200
-Received: from pza by lupine with local (Exim 4.92)
- (envelope-from <p.zabel@pengutronix.de>)
- id 1mdEMv-0000lF-QX; Wed, 20 Oct 2021 18:23:09 +0200
-Message-ID: <96e686f78f0e42bad666df5ec0cbcb2dcdc270a3.camel@pengutronix.de>
-Subject: Reset controller updates for v5.16
-From: Philipp Zabel <p.zabel@pengutronix.de>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
-Date: Wed, 20 Oct 2021 18:23:09 +0200
-User-Agent: Evolution 3.30.5-1.1 
+	by mail.kernel.org (Postfix) with ESMTPS id 4AAA961260;
+	Wed, 20 Oct 2021 16:30:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4AAA961260
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f41.google.com with SMTP id u5so7662593uao.13;
+        Wed, 20 Oct 2021 09:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5caiCMTP2cHNzS4IuisPKtBRNIaBTwtP2qKMTIl/yAE=;
+        b=CDHhkFvkKFsn5S8MYqdHwzYlGwxiaE3OmWB3tLSf3ZMH4N4y3S3+XCgeodxSbJQ+62
+         Xfc+CO/d5B/KFnW93ZZEXuNTYp9PW6VS7M4fneoVpYjdxMG0du7vfZcPox7OAMNbQ2gB
+         8VX9pnaeHVN+KPRWRuePg++ukZVS82HY7SMMbAa690rXL4VrdRrdSgxBCvC7M4jPE8E1
+         wibJIqvYkGcd/3ge4TCF2qA+sUNExDUlwzPe99NglFdZBPstMQolcmYzp38oDNEsCTIa
+         9ynSKTZ3rW1p3nz6VRrWibYBBFKyWZikxwC9zSq8qURFhYKqlIqbOdJwKs3YEia8IFAA
+         taTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5caiCMTP2cHNzS4IuisPKtBRNIaBTwtP2qKMTIl/yAE=;
+        b=0+/yW20eyF1qZ2ssdq4oBOO97hbMKpNJ2O7P02znymoiPiWbzlGvm1kkQAT2W/DHiQ
+         7WHDGmwv2UCH9rh0p9Dr3RzEFo9bELhatFW62sV/dLq9FMsniyw3Kd2r6aE7objORZaK
+         1RwTCod95HtKFojkHGmZR7d6DKILeBF6K21asKxjfmK0BgOz4yi5KiMjfLVQo7aGsT04
+         KeBUhVJ8BQRS3zr26B9VF23zMFis9PoK//FZsbXFWjw96eJUw0Jskk2xnJ+X73SjpvUj
+         UhPTb4oExCVPqYFl+2JzhldXoAEnkMZIfDiSMw9SkTeBGuI/jPQPzc1Wb0IRLuqDCnAF
+         Q5Xg==
+X-Gm-Message-State: AOAM531rVMome03/vDIHBbcWL97TiabTEvmlVDGUk+OUsKj1SXoMphbn
+	0+L9lHXoeaz56ikrBmiwP9B5FGsQeHxqMbzdJkEQtRmv
+X-Google-Smtp-Source: ABdhPJy13kMUma4/p0kTk20RSSMl2/hidWbgRe17hUa1/tUPefdY4Ij5jef6A43XRsbYgwgCd9hunLVT4hKjvEslYc8=
+X-Received: by 2002:ab0:7a53:: with SMTP id a19mr218376uat.126.1634747408383;
+ Wed, 20 Oct 2021 09:30:08 -0700 (PDT)
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de);
- SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-arm-kernel@lists.infradead.org
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211020_092314_384331_0D3B8D90 
-X-CRM114-Status: UNSURE (   9.50  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211020162309.3s6hRTWnW_IWOdyXhOc7rpiHUNbh4PyBbDdguUon4ms@z>
+References: <20211018095848.19101-1-romain.perier@gmail.com> <CAK8P3a3vOyqFOf0iFZ9UaUdH-kF13ckYA4Qh56zmSzSvr5dGLg@mail.gmail.com>
+In-Reply-To: <CAK8P3a3vOyqFOf0iFZ9UaUdH-kF13ckYA4Qh56zmSzSvr5dGLg@mail.gmail.com>
+From: Romain Perier <romain.perier@gmail.com>
+Date: Wed, 20 Oct 2021 18:29:56 +0200
+Message-ID: <CABgxDoL1c4kVEzj7sAn-8FTx6kB90yY0we9Zzfpi+r3+6mYQng@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: dts: mstar: updates for v5.16
+To: Arnd Bergmann <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Daniel Palmer <daniel@0x0f.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Dear SoC maintainers,
+Arf, my bad ^^
 
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+Ok then,
+Romain
 
-  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
-
-are available in the Git repository at:
-
-  git://git.pengutronix.de/pza/linux tags/reset-for-v5.16
-
-for you to fetch changes up to 8c81620ac1ace77dd0cbcc2193d4c7311f77d49b:
-
-  reset: mchp: sparx5: Extend support for lan966x (2021-10-18 14:09:57 +0200)
-
-----------------------------------------------------------------
-Reset controller updates for v5.16
-
-Allow building the reset-brcmstb-rescal driver as module, add reset
-lines for the Uniphier PXs3 audio and video input subsystems and
-bindings for the Uniphier NX1 SoC, and add lan966x switch reset support
-to the reset-microchip-sparx5 driver.
-
-----------------------------------------------------------------
-Florian Fainelli (1):
-      reset: Allow building Broadcom STB RESCAL as module
-
-Horatiu Vultur (2):
-      dt-bindings: reset: Add lan966x support
-      reset: mchp: sparx5: Extend support for lan966x
-
-Kunihiko Hayashi (3):
-      reset: uniphier: Add audio system and video input reset control for PXs3
-      dt-bindings: reset: uniphier: Add NX1 reset control binding
-      reset: uniphier: Add NX1 reset support
-
- .../devicetree/bindings/reset/microchip,rst.yaml   |  4 ++-
- .../reset/socionext,uniphier-glue-reset.yaml       |  1 +
- .../bindings/reset/socionext,uniphier-reset.yaml   |  3 ++
- drivers/reset/Kconfig                              |  4 +--
- drivers/reset/reset-microchip-sparx5.c             | 40 +++++++++++++++++-----
- drivers/reset/reset-uniphier-glue.c                |  4 +++
- drivers/reset/reset-uniphier.c                     | 27 +++++++++++++++
- 7 files changed, 72 insertions(+), 11 deletions(-)
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Le mer. 20 oct. 2021 =C3=A0 15:31, Arnd Bergmann <arnd@arndb.de> a =C3=A9cr=
+it :
+>
+> On Mon, Oct 18, 2021 at 11:58 AM Romain Perier <romain.perier@gmail.com> =
+wrote:
+> >
+> > The following changes since commit 64570fbc14f8d7cb3fe3995f20e26bc25ce4=
+b2cc:
+> >
+> >   Linux 5.15-rc5 (2021-10-10 17:01:59 -0700)
+> >
+> > are available in the Git repository at:
+> >
+> >   https://github.com/linux-chenxing/linux.git mstar-dt-next
+> >
+> > for you to fetch changes up to 7e626b6d71e7678e85e9e06e9e2271b5923741fd=
+:
+>
+> The contents are ok, but you have based the tree on -rc5, which would req=
+uire
+> me to backmerge the new upstream contents into my branch and mess up the
+> git history.
+>
+> Please rebase on top of v5.15-rc1 and resend.
+>
+>        Arnd
