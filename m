@@ -1,68 +1,105 @@
-Return-Path: <SRS0=/S2V=PJ=dabbelt.com=palmer@kernel.org>
+Return-Path: <SRS0=XH8j=PJ=lists.infradead.org=linux-riscv-bounces+linux-riscv=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11642C433EF
-	for <soc@archiver.kernel.org>; Thu, 21 Oct 2021 16:00:35 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id E8BEA6120C; Thu, 21 Oct 2021 16:00:34 +0000 (UTC)
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40DFEC433EF
+	for <linux-riscv@archiver.kernel.org>; Thu, 21 Oct 2021 16:00:47 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A4AD3611CB
-	for <soc@kernel.org>; Thu, 21 Oct 2021 16:00:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A4AD3611CB
+	by mail.kernel.org (Postfix) with ESMTPS id 03C38611CB
+	for <linux-riscv@archiver.kernel.org>; Thu, 21 Oct 2021 16:00:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 03C38611CB
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=dabbelt.com
-Received: by mail-pf1-f169.google.com with SMTP id m14so1028250pfc.9
-        for <soc@kernel.org>; Thu, 21 Oct 2021 09:00:34 -0700 (PDT)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:
+	Content-Transfer-Encoding:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:Mime-Version:Message-ID:To:From:CC:In-Reply-To:
+	Subject:Date:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:List-Owner;
+	bh=6cCvphkPNFUKWKRRGdwkEIvOhPOLrMLFgpDdxJ+tS5A=; b=M0UPeB2onniCUqWNTBI4pWoSyF
+	+0jn12pd32yuEEi2U0h0D8h1fVrTUhwOeifVOFS33um7vnDxtsaQDc20W1NGEFHL3mAeT0UIk56/1
+	rK9fuDfmn22j691yBmX8rES9ee+pIxgmHs9RgZvGTku0tRIJew18WqhKdj/kQwj/XNokesIg01Xmv
+	p7yBRwcT3GkLLH39TqXLBscaVxPqzIeDNSCgOMyl/3DzmWiaaLnU2C0xVqAgMIuZmd6FaQNZjW4vh
+	a6Wj2xU3Unzc4A9PZPO0Ctk19IkSvpxuSEttE9EldoekfV1fqdK2e27IX5O4FY3rTHRjZx/o8KrVS
+	BzMYH6FA==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mdaUh-008HKS-9s; Thu, 21 Oct 2021 16:00:39 +0000
+Received: from mail-pf1-x433.google.com ([2607:f8b0:4864:20::433])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mdaUd-008HJb-Uz
+ for linux-riscv@lists.infradead.org; Thu, 21 Oct 2021 16:00:37 +0000
+Received: by mail-pf1-x433.google.com with SMTP id q19so1050913pfl.4
+ for <linux-riscv@lists.infradead.org>; Thu, 21 Oct 2021 09:00:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YeTXUC7FXIs4b0FtOSVjfSUiqqnC2var+RaHYD8npIk=;
-        b=oL8WFg9f6dcbR0BF8YA9iQSaSwvjwmeFVYq1KbCyOFulTiD7osu4EfPWBt91PD0KyX
-         JTzu8EiH661uLT6WMte5/P6x75NYyixjPbmj2v2J/wjh0uFvmYk37jcsLM07eaGE4f5E
-         JTwe2gNcdGzYyt4g1vft3y37g9RBAGV3IJkqy5CDoGWY7rBmuKEJZJ63VWKumX7YQwjG
-         M7rBvz6KpM+DFCV3+sbzK71xpyzUAovxwtGjreBTRGXRxAEzYN82WvmpPVpq55FueO7R
-         GTrKWNnwqBZyhT7/BM/1ue2vFOyC4SRDpNS45sDdCcMRjd06GL6vQARufQHAvpZ0oIs8
-         lIUg==
+ d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+ h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YeTXUC7FXIs4b0FtOSVjfSUiqqnC2var+RaHYD8npIk=;
+ b=oL8WFg9f6dcbR0BF8YA9iQSaSwvjwmeFVYq1KbCyOFulTiD7osu4EfPWBt91PD0KyX
+ JTzu8EiH661uLT6WMte5/P6x75NYyixjPbmj2v2J/wjh0uFvmYk37jcsLM07eaGE4f5E
+ JTwe2gNcdGzYyt4g1vft3y37g9RBAGV3IJkqy5CDoGWY7rBmuKEJZJ63VWKumX7YQwjG
+ M7rBvz6KpM+DFCV3+sbzK71xpyzUAovxwtGjreBTRGXRxAEzYN82WvmpPVpq55FueO7R
+ GTrKWNnwqBZyhT7/BM/1ue2vFOyC4SRDpNS45sDdCcMRjd06GL6vQARufQHAvpZ0oIs8
+ lIUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=YeTXUC7FXIs4b0FtOSVjfSUiqqnC2var+RaHYD8npIk=;
-        b=yNZLXTw1hD37o3Wtw5zXObSQqVr//8ix1lA6UCnvLURmnpZijF2jAVNEaWGNdu1+wR
-         8XBOyrusGCJiqjcEdu3KGDq39GGDtgF5luhSUQzoooVlsdD9l7DnX+ig2C7cvG0u05+U
-         ECImxCaUvO3zWM9c+HMVLSRgnoO/BIjzToztSiIpnK85eQK128gILcHYfOem+ul3YcvH
-         szpSF0hPjjqvTSpt8foy0UaTMpVXBKCKuE+d60Eg5DgLl/vgeAHLrJ4nb4WffLpSg0RH
-         piFGZHLGCX9ilPoI9OLq6f/3XUNh2OlvuwfP9l5syYExNDsEy16566/9nVjP1phjw6LE
-         Dyhw==
-X-Gm-Message-State: AOAM530iAfBKvZJ3DI1YZST67pM42xzGxQWzgZ5PyThXsjtOEGDTtW4p
-	aLdbO1gRPffz1hO8psDpKlPKGw==
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+ :mime-version:content-transfer-encoding;
+ bh=YeTXUC7FXIs4b0FtOSVjfSUiqqnC2var+RaHYD8npIk=;
+ b=K9Rmjf898iK+mitx0a6r1dA5Ru/5gKtjzyCbfqKkZNRDdsK5ij38MjyQRoKhVtprMZ
+ bjG0ivhs8F5BSRAUgtzxvsFU3jMqJDW/UZWXqOqgdkEp/itR4PjaPera0OHqSAs2QtLx
+ 3TcLlCKj6BMG9mt1RIvDPxMN/SJNGIRvAb1cm/2qSoXVK+9nR5oj8CvT4UsFl+feeDRI
+ 6R3VvPKqJKHHa5zJs3Bpvj1KtZ16Wg1f9J1aNaAJlEKKn9CSPdSDiFqmuuCBCCIZCXFR
+ PPf3kcB2JqHimNWJH8H9aHianU0VWmzE25UgawgjQNSmVP0FD2mjGZfsNqWuywP0hl3T
+ eyqQ==
+X-Gm-Message-State: AOAM532Fu/sOUuJOjY8x1pUg3Tn5tMp9ice6bOCrGBcHRAxkSKAun6B0
+ TpqoaHBqCpPHkKAmhUV0zGaIbw==
 X-Google-Smtp-Source: ABdhPJytyx4F+hrgvUvw2MPlr5EhMd87gJY71gV7pQ+9ZFhz7HeNUW+zuglLq18P4mNhOQq5Fbal1w==
-X-Received: by 2002:a63:b21a:: with SMTP id x26mr5122686pge.418.1634832033956;
-        Thu, 21 Oct 2021 09:00:33 -0700 (PDT)
+X-Received: by 2002:a63:b21a:: with SMTP id x26mr5122686pge.418.1634832033956; 
+ Thu, 21 Oct 2021 09:00:33 -0700 (PDT)
 Received: from localhost ([2620:0:1000:5e10:459d:a8c7:78e4:f487])
-        by smtp.gmail.com with ESMTPSA id j6sm5624696pgq.0.2021.10.21.09.00.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 09:00:33 -0700 (PDT)
+ by smtp.gmail.com with ESMTPSA id j6sm5624696pgq.0.2021.10.21.09.00.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 21 Oct 2021 09:00:33 -0700 (PDT)
 Date: Thu, 21 Oct 2021 09:00:33 -0700 (PDT)
 X-Google-Original-Date: Thu, 21 Oct 2021 09:00:30 PDT (-0700)
-Subject:     Re: [PATCH] soc: add polarfire soc system controller
+Subject: Re: [PATCH] soc: add polarfire soc system controller
 In-Reply-To: <79ae46c3-c028-2c99-2428-b601e4fb03d4@microchip.com>
 CC: robh+dt@kernel.org, Damien Le Moal <Damien.LeMoal@wdc.com>,
-  jassisinghbrar@gmail.com, aou@eecs.berkeley.edu, Paul Walmsley <paul.walmsley@sifive.com>,
-  linux-riscv@lists.infradead.org, j.neuschaefer@gmx.net, Stephen Rothwell <sfr@canb.auug.org.au>,
-  Cyril.Jean@microchip.com, Daire.McNamara@microchip.com, Atish Patra <Atish.Patra@wdc.com>
+ jassisinghbrar@gmail.com, aou@eecs.berkeley.edu,
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ linux-riscv@lists.infradead.org, j.neuschaefer@gmx.net,
+ Stephen Rothwell <sfr@canb.auug.org.au>, 
+ Cyril.Jean@microchip.com, Daire.McNamara@microchip.com,
+ Atish Patra <Atish.Patra@wdc.com>
 From: Palmer Dabbelt <palmer@dabbelt.com>
 List-Id: <soc.lore.kernel.org>
 To: Conor.Dooley@microchip.com, Arnd Bergmann <arnd@arndb.de>,
-  Olof Johansson <olof@lixom.net>, soc@kernel.org
+ Olof Johansson <olof@lixom.net>, soc@kernel.org
 Message-ID: <mhng-a25d4570-1744-44ef-988b-43914d5bc17d@palmerdabbelt-glaptop>
 Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211021_090036_105583_BF6BF5B7 
+X-CRM114-Status: GOOD (  36.52  )
+X-BeenThere: linux-riscv@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-riscv.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-riscv>,
+ <mailto:linux-riscv-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-riscv/>
+List-Post: <mailto:linux-riscv@lists.infradead.org>
+List-Help: <mailto:linux-riscv-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-riscv>,
+ <mailto:linux-riscv-request@lists.infradead.org?subject=subscribe>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Sender: "linux-riscv" <linux-riscv-bounces@lists.infradead.org>
+Errors-To: linux-riscv-bounces+linux-riscv=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211021160033.QKeU_q7Zr10NLZVn-VIEbp8oCFVdcbT4m46SHNlzCio@z>
 
 On Thu, 21 Oct 2021 06:13:35 PDT (-0700), Conor.Dooley@microchip.com wrote:
 > On 05/10/2021 13:47, conor.dooley@microchip.com wrote:
@@ -288,3 +325,8 @@ get out of hand pretty quickly.
 >> +MODULE_DESCRIPTION("MPFS system controller driver");
 > 
 > 
+
+_______________________________________________
+linux-riscv mailing list
+linux-riscv@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-riscv
