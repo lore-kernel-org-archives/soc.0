@@ -1,134 +1,102 @@
-Return-Path: <SRS0=B8Jt=PJ=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=i2pQ=PJ=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44BD1C4332F
-	for <soc@archiver.kernel.org>; Thu, 21 Oct 2021 09:30:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D7FBC433F5
+	for <soc@archiver.kernel.org>; Thu, 21 Oct 2021 11:31:00 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 2225B61205; Thu, 21 Oct 2021 09:30:09 +0000 (UTC)
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	id EB04F60F56; Thu, 21 Oct 2021 11:30:59 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C56A361004
-	for <soc@kernel.org>; Thu, 21 Oct 2021 09:30:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C56A361004
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E03A73FFF7
-	for <soc@kernel.org>; Thu, 21 Oct 2021 09:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1634808606;
-	bh=lGRdlVVI98glg7ntrSV8ab4TJAzQBo6Stek2XYxVhxg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-	b=Maz0eBZ/Lb+nRlTVByq4Yqvs4m4MK5mURJBB4OEsoM0Z9KLqGBmmpXJRuYVVjaQo1
-	 7EVTDMHVEM6jb3SFrbcOt4nuhrHBLHYf7F7j9IeBm+5ON31wRZZMPyCJBDCxjfaPgs
-	 OK94tQeyOmBDCoWsjVNlPaljdmocLeNG2+AJkvoPQhoj/eYt6yGDBzAiwP/CSL2lPQ
-	 N6lNYKszNKVqxGveCAOxbRwUgkRjuydX3JYBObo4PtieDnqBlUbvU8mi9MVmfuxaHo
-	 QWDkE03gtbmlgK23hHyIzd6O/E3PsOce++MbWtvV2AYE2nPEKev4R2SDwuNU9KHYWA
-	 S/pqk8k4O4KCA==
-Received: by mail-lf1-f71.google.com with SMTP id k8-20020a0565123d8800b003fd6e160c77so4389091lfv.17
-        for <soc@kernel.org>; Thu, 21 Oct 2021 02:30:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lGRdlVVI98glg7ntrSV8ab4TJAzQBo6Stek2XYxVhxg=;
-        b=5sBK03YoLtBVpK5nI4wD/BflRUwgLyjWa1spBI5Lvs1/MPeUnI4Yvg90mboJwLN7Zy
-         m7RepbG2yseuGOw+y/YK4v8hfuao1xST97hoZJwb7R/e13XuHNVts3Rr8dTWnenp2aVl
-         V6B/zOBdDWm3K8n3PCzDdPTSThIY6S3MWFyTRrMH/sB4WmGcK5Febj+UZfb7HaP3QnTg
-         /F5AhAo8j167ggdHih8JOeVGPlnnzDDHlcjz5ZzvsSZYfooh+oCoTFPC2EcOeU9L9Nbt
-         LpnuWVtkOK9/PjzGxrNzNQ7TuVxpu6yH88vd2Y6QmXeN+WILYi6C/rK4/tUv2QBEzuaO
-         77Gw==
-X-Gm-Message-State: AOAM532/uUQ69WZEgXhWDg/QTLEmjmeGjhPIT/LHve4qqOusvirgRutZ
-	1S/R1W9lP9uldBFGufYXZxyKPC1UkNVO1YfvoGu0CQyT/uZvDlPoD/8dq6ZieFM99ffi5Qh/avo
-	rRhV1i10FCqLrPWaost6W92o=
-X-Received: by 2002:a05:6512:31b:: with SMTP id t27mr4548371lfp.688.1634808606193;
-        Thu, 21 Oct 2021 02:30:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyRCWa8XhZR6dH15N8eWqRYbXncemNhMtimPyQuIdMZaYT4R2Z807Gq6JVJCz623+OFDkhPEQ==
-X-Received: by 2002:a05:6512:31b:: with SMTP id t27mr4548339lfp.688.1634808605920;
-        Thu, 21 Oct 2021 02:30:05 -0700 (PDT)
-Received: from kozik-lap.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id c19sm489959ljj.130.2021.10.21.02.30.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 02:30:05 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: drivers for v5.16, part 2
-Date: Thu, 21 Oct 2021 11:30:02 +0200
-Message-Id: <20211021093002.118192-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.30.2
+	by mail.kernel.org (Postfix) with ESMTPS id 09B9160EFE;
+	Thu, 21 Oct 2021 11:30:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 09B9160EFE
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MKbwg-1mP8fM0fJE-00Kv9n; Thu, 21 Oct 2021 13:30:56 +0200
+Received: by mail-wr1-f42.google.com with SMTP id e12so575539wra.4;
+        Thu, 21 Oct 2021 04:30:56 -0700 (PDT)
+X-Gm-Message-State: AOAM530CXKV5TdB8UC3yJAekmuCtTfwKHu2GrEaQXMZOQVub57uhQchX
+	q0idxZcJH9R/9Up6spuGq8xmC4lP3hghfcauWHs=
+X-Google-Smtp-Source: ABdhPJzcazkfKoonw6SZah3e238itbP12J74p79Qz07ksYN7hvsrDFAzWhgeXXpFqRr6x5tkdlMCty5l3RadM5Cj6F0=
+X-Received: by 2002:adf:d0c6:: with SMTP id z6mr5050441wrh.336.1634815855802;
+ Thu, 21 Oct 2021 04:30:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211018121324.GA2943530@jade>
+In-Reply-To: <20211018121324.GA2943530@jade>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 21 Oct 2021 13:30:39 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0Z-Hh9xav1peg8LqGoPaHnrt9eo453QmwKrWcWwWAEXw@mail.gmail.com>
+Message-ID: <CAK8P3a0Z-Hh9xav1peg8LqGoPaHnrt9eo453QmwKrWcWwWAEXw@mail.gmail.com>
+Subject: Re: [GIT PULL] OP-TEE FF-A for V5.16
+To: Jens Wiklander <jens.wiklander@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, 
+	OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:MDXkwUeC8CmEtfhlBPghmGeYH8GIy7gaqRA1dhNTpDR9UPHe7RS
+ 0I9P6WU4gBYf1k3Ss5ll/Td09oQ4DVMcGySTghw0bIYG5kXV1nlnmt7+6jVFb6MoaiY5n2r
+ Z243R6JHCcgk23CpX9INtzKjismowB5csJhT0elkbfeKz1x0SawVYCbOHW4kudT+1fSfQv/
+ d6ypmih3uB+c0f7Wdyqwg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LruSMZaPkzg=:ZXomJSpZUDmqeOF9QWIlyy
+ uDgbUB9M8bLZyWbPZNCAhGt6VDABznr2KC9qmRUsKmHoICJcNjMTb2lhVBmhcbNt7vmGS8a0K
+ Jz+NP1BVI9uPTTpTlyHNBmfY0BUKJG8BS4yREDhN+kFFnFSKF0GhlHVU/Ipd2VKDYpYPycSZM
+ jfi3bqs1ejhViX/1gOJGK/HKmunow76NTf/YsJO3Uaa/bD/mIqWRRk0t926LCdp3gNLrfEHR5
+ Ezk6p8j9slbE8h7rr+ty2q4lnI0GPoP/NyF1D/BJ3keYHKd85VCZaTuW9Y+mn5Nzt1VfrQ6WD
+ j/ECeiFLq/YlkEm4uyXv3psU/tLi+aPGClB20SKHQ7GmOQcVE7mFe/0q2/fSyk64c5VJG2BDC
+ qoEJPE5dR1PirR5LNc/YumJ7bukzLfAaJ8br/E/jCvK4FdLB1FnwPDPWs2iDFbIqNNDxi94ZO
+ a71/YRXa7nasq0CV71hqXdgAbA9/oJGda2jxGUsK5p2KXG7ZsnwFEuT22jMo9jGN+YF3xO0hx
+ mff5uS+SmtQBR626gRU2d6/4RO1UtqY2Mg2Vk6bKrl3h4qbeEet8xD8+nmoFC6QIjkA77/HDs
+ d+nrSQfVnWOhu9XSQRGkejaaCsfWC4UMIoWuEOLy0bJAhfJr8F6OmOylzApa6dKXN75VZpxm+
+ sOi/KwtjBPPjc+djTQCzCP7K5IJJL86O/QIHrdjc9gobmG+ZqjnLy/ucDVRYotaGBnZ0=
 
-Hi,
+On Mon, Oct 18, 2021 at 2:13 PM Jens Wiklander
+<jens.wiklander@linaro.org> wrote:
+>       optee: isolate smc abi
 
-Second pull request for memory controller drivers, mostly touching Tegra. On
-top of previous tags/memory-controller-drv-5.16.
+This one caused a randconfig build regression on 32-bit arm:
 
-Best regards,
-Krzysztof
+/git/arm-soc/drivers/tee/optee/smc_abi.c:405:15: error: implicit
+declaration of function 'page_to_section'
+[-Werror,-Wimplicit-function-declaration]
+        optee_page = page_to_phys(*pages) +
+                     ^
+/git/arm-soc/arch/arm/include/asm/memory.h:148:43: note: expanded from
+macro 'page_to_phys'
+#define page_to_phys(page)      (__pfn_to_phys(page_to_pfn(page)))
+                                               ^
+/git/arm-soc/include/asm-generic/memory_model.h:52:21: note: expanded
+from macro 'page_to_pfn'
+#define page_to_pfn __page_to_pfn
+                    ^
+/git/arm-soc/include/asm-generic/memory_model.h:35:14: note: expanded
+from macro '__page_to_pfn'
+        int __sec = page_to_section(__pg);                      \
+                    ^
+/git/arm-soc/drivers/tee/optee/smc_abi.c:405:15: note: did you mean
+'__nr_to_section'?
+/git/arm-soc/arch/arm/include/asm/memory.h:148:43: note: expanded from
+macro 'page_to_phys'
+#define page_to_phys(page)      (__pfn_to_phys(page_to_pfn(page)))
+                                               ^
+/git/arm-soc/include/asm-generic/memory_model.h:52:21: note: expanded
+from macro 'page_to_pfn'
+#define page_to_pfn __page_to_pfn
+                    ^
+/git/arm-soc/include/asm-generic/memory_model.h:35:14: note: expanded
+from macro '__page_to_pfn'
+        int __sec = page_to_section(__pg);                      \
+                    ^
+/git/arm-soc/include/linux/mmzone.h:1365:35: note: '__nr_to_section'
+declared here
+static inline struct mem_section *__nr_to_section(unsigned long nr)
 
+I have not investigated it, but it's probably trivial. Can have a look
+and send a fix to
+soc@kernel.org?
 
-The following changes since commit d611d7ea120bbef45e836565dfa2ddc85a168c16:
-
-  Merge branch 'for-v5.16/renesas-rpc' into mem-ctrl-next (2021-10-10 19:45:00 +0200)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.16-2
-
-for you to fetch changes up to 14b43c20c283de36131da0cb44f3170b9ffa7630:
-
-  memory: tegra20-emc: Add runtime dependency on devfreq governor module (2021-10-21 11:18:08 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers for v5.16, part two
-
-1. Convert LPDDR2 bindings to dtschema and extend them with new
-   properties.
-2. Tegra 20 EMC: support matching timings by LPDDR2 configuration from
-   devicetree.
-
-----------------------------------------------------------------
-Dmitry Osipenko (9):
-      dt-bindings: Relocate DDR bindings
-      dt-bindings: memory: lpddr2: Convert to schema
-      dt-bindings: memory: lpddr2: Add revision-id properties
-      dt-bindings: memory: lpddr2: Document Elpida B8132B2PB-6D-F
-      dt-bindings: Add vendor prefix for Elpida Memory
-      dt-bindings: memory: tegra20: emc: Document new LPDDR2 sub-node
-      memory: Add LPDDR2-info helpers
-      memory: tegra20-emc: Support matching timings by LPDDR2 configuration
-      memory: tegra20-emc: Add runtime dependency on devfreq governor module
-
- Documentation/devicetree/bindings/ddr/lpddr2.txt   | 102 ----------
- .../memory-controllers/ddr/jedec,lpddr2.yaml       | 223 +++++++++++++++++++++
- .../ddr/lpddr2-timings.txt                         |   0
- .../ddr/lpddr3-timings.txt                         |   0
- .../{ => memory-controllers}/ddr/lpddr3.txt        |   5 +-
- .../memory-controllers/nvidia,tegra20-emc.yaml     |  23 ++-
- .../memory-controllers/samsung,exynos5422-dmc.yaml |   3 +-
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- drivers/memory/jedec_ddr.h                         |  47 +++++
- drivers/memory/jedec_ddr_data.c                    |  41 ++++
- drivers/memory/of_memory.c                         |  87 ++++++++
- drivers/memory/of_memory.h                         |   9 +
- drivers/memory/tegra/Kconfig                       |   1 +
- drivers/memory/tegra/tegra20-emc.c                 | 200 ++++++++++++++++--
- 14 files changed, 622 insertions(+), 121 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/ddr/lpddr2.txt
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
- rename Documentation/devicetree/bindings/{ => memory-controllers}/ddr/lpddr2-timings.txt (100%)
- rename Documentation/devicetree/bindings/{ => memory-controllers}/ddr/lpddr3-timings.txt (100%)
- rename Documentation/devicetree/bindings/{ => memory-controllers}/ddr/lpddr3.txt (94%)
+      Arnd
