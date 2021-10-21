@@ -1,15 +1,15 @@
-Return-Path: <SRS0=XH8j=PJ=lists.infradead.org=linux-riscv-bounces+linux-riscv=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=6Q0g=PJ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87568C433F5
-	for <linux-riscv@archiver.kernel.org>; Thu, 21 Oct 2021 12:25:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1955FC433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Oct 2021 12:27:08 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2CBA7611CE
-	for <linux-riscv@archiver.kernel.org>; Thu, 21 Oct 2021 12:25:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2CBA7611CE
+	by mail.kernel.org (Postfix) with ESMTPS id C954360F59
+	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Oct 2021 12:27:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C954360F59
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -19,26 +19,27 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Message-ID:From:References:Cc:To:Subject:Reply-To:Content-ID:
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Owner;
-	bh=5fYrQUgaqK8LlcM8hRDBD2i7BXimHK60QQy83HPDtXk=; b=tKPM6RZ261jbVRUfv9PMcP5F5k
-	dsxOJkQeQwP6Aie8lL/Yg1rH+V99gGQGbg/vJ9dNM/kUN0sK/0PsJBUOvIK05pKM+Z6L53pm54PFx
-	8XfoOGvdoSIFYIyW9FkjtJXSnNuE+xmBVe6uI/vb54+GpXUflWo902LvmIj7/WQfgQ0NvPHXSBzVB
-	RcPfzJ0vmg6ObT+0/EKaaNGpFxr+iNJzLAXjx7MmXvqie0WhOOT3v+9/IqKN01pBbBs2GSTn4qAYg
-	m2JPRbwDfTu/VFaGtEjI3DGEBYH4uQmo1b+bI8YRSxzhzQ0IFzoj42Ry7oxfjAM/2C4QPKrdRdTK2
-	fqPKnqmg==;
+	bh=uWevu2aReiveTEKh/YW7ZaR9TCDhB3ky7ytEBk5gHtE=; b=LQNUOjppHGI0a36rkcd9igdU1j
+	aCFL3wejKNe2V3QVk7pSAN88ebi43E/DWumwKBvew1rzGE3+G//WRF30Mmri7XlZ6cboqJbyvH4jb
+	mnUK5PyeAKwgoxXcjpbWfzZ3VHEGjDmW9M11QH2KzNpfGPEglZg4usjmJonnQmbl6nCB/SHGZ8NYm
+	vTslcqr09g0XxLYbfsfGONh9jYiTlmebWrekLxCtZPEvF69vCyPYW13nth/ExkqKpj0cWYbofQWVD
+	AZnUSq7++96WiESFNl6/E7r9Yt6Gjmb+HHmH2I4brPWhoeP7dmIQXnlfVfqI4dHWLUCpRjUyzBqcx
+	E1Gv0vvg==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mdX8c-007TKW-Ss; Thu, 21 Oct 2021 12:25:38 +0000
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122])
+	id 1mdX8h-007TLf-3b; Thu, 21 Oct 2021 12:25:43 +0000
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mdX8a-007TIf-5S
- for linux-riscv@lists.infradead.org; Thu, 21 Oct 2021 12:25:37 +0000
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69])
+ id 1mdX8a-007TIe-5X
+ for linux-arm-kernel@lists.infradead.org; Thu, 21 Oct 2021 12:25:37 +0000
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7AA37402E7
- for <linux-riscv@lists.infradead.org>; Thu, 21 Oct 2021 12:25:33 +0000 (UTC)
+ by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id F2BDD40004
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 21 Oct 2021 12:25:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
  s=20210705; t=1634819133;
  bh=OEvgfMSIzLFlHfTd+aj6jAI5gittIjBiCSXpIdeWxOQ=;
@@ -50,26 +51,27 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
  p1Yh/x0cUzx3w06y1hhWCjM+hA9LZ1+e1aJ2OrXO1j8eDLbmuoK/fTMwnQZKbc9TnV
  zFFF1LoJLeBQ+QDXInXb8jhiZrQxxVZWfW1s1+dzjW9bETkih7TI0oy4FreQc5L/Ki
  Sbkx3qvw56Y/w==
-Received: by mail-lf1-f69.google.com with SMTP id
- i6-20020a056512318600b003fd8c8c2677so233065lfe.1
- for <linux-riscv@lists.infradead.org>; Thu, 21 Oct 2021 05:25:33 -0700 (PDT)
+Received: by mail-lf1-f71.google.com with SMTP id
+ u17-20020a05651206d100b003fd714d9a38so221294lff.8
+ for <linux-arm-kernel@lists.infradead.org>;
+ Thu, 21 Oct 2021 05:25:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:subject:to:cc:references:from:message-id:date
  :user-agent:mime-version:in-reply-to:content-language
  :content-transfer-encoding;
  bh=OEvgfMSIzLFlHfTd+aj6jAI5gittIjBiCSXpIdeWxOQ=;
- b=Y7YVXSBkYYNIGbsdWlcpbrALrm14YUqENdkjjipfCdRnRjO/Tk/HVto+furjdY5Caq
- cNmVgY5a6M4q3LhvTbaa5mMJ7Rcu4jA6mtC6qLmpoFXvgjZBEI2XPsgtrNIzW0aWZOH/
- VAFOroz7UFWNKF8+0hlpXg0itO7g9N5K3nPWCVc5OE5UOUIBF2zHNtsTVcr8/bYx3zRW
- ZmrGUM89Azr72tsRO6Ux6mhzhETeCSCqklne12SoNaI/Q4tx3SbaWX+diEnDFYzaV4pX
- KiY0y7WN29F47Plp7GqExf2i9kCTo2sXm+69VVml4vlD2yXXa6X4nu3JRVWiNHS55tXw
- rMAg==
-X-Gm-Message-State: AOAM5318SE/MTqf1AxWtmkiDw0gm6vqnVr9x+m3ErULbnINXEPYBWj/z
- 4kJLVA1RI/b5DANanBd1fQcyLY3Lw+FXwH4G4j374O2UwnNWzVfImWcBBTm6Wl6hYEYJqlDEy+b
- 7wjtU8MHOppVuQB5wMJuPu2gVrNxkqBXP2ygg3t7zqHnZsw==
+ b=gFb9HkpnOQ3Li+0S10co//bw7LLy1pFXAEmZ4pT/rIiYpt0PsG0tShIUuVP6ksgBma
+ 9eYMGxREz4PTKU5Vnn9qqScbz2O7zhNzvf5UiZ6EDtjRp8IsGZuNrGzbSgRn0W3NEszB
+ 4mmYzbJbg6uuLdcerSPkcw0/1f1CXvYe9Cu6g/Qt92CP7T+p/t2d2w84XVIB7K0qPi9C
+ 4cf0rDqnEzBWmfE5cOuuXAp9a5+kgF6uUaJMP5+NeUNugaIVKf64yFP8rwlIuK1fG0cJ
+ vrhe+LvmkZisRf3RfMsrwE7nGLgtZVYOqYaPtzo3suYQmWbKiBRIC+DPw/motNgmzyNp
+ nKVw==
+X-Gm-Message-State: AOAM5320f5kmHcKBKgASVMwJ6jbMiyFnZxkO6Yw78/isl8EFn2ECFYFH
+ jse0zQC6V8RwUN9t1wWeJvM1Q3nciSN9A8DqwBtO/3j+nTvqoVkmTVporvlC5uO3JAnWdXSs+yw
+ k23RpEeElajImKu+DKvMC9SsqtgiwZf8R0vdCk3gPRLAQMt+jdJmr
 X-Received: by 2002:a05:651c:230e:: with SMTP id
- bi14mr5404542ljb.467.1634819132524; 
+ bi14mr5404529ljb.467.1634819132389; 
  Thu, 21 Oct 2021 05:25:32 -0700 (PDT)
 X-Google-Smtp-Source: ABdhPJz0/8NcGHTrSWS0H6+LXQbRBX3Abg2xVQ13rASma1FIwjNQK3yxWARDRCPBIvJmD3bqslQp8Q==
 X-Received: by 2002:a05:651c:230e:: with SMTP id
@@ -102,24 +104,24 @@ MIME-Version: 1.0
 In-Reply-To: <CAK8P3a08QiwA4+zPGLt3xA=01HLiBcLcC4gM1+8N6uo5KMTQLw@mail.gmail.com>
 Content-Language: en-US
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211021_052536_473123_4807E37F 
-X-CRM114-Status: GOOD (  17.99  )
-X-BeenThere: linux-riscv@lists.infradead.org
+X-CRM114-CacheID: sfid-20211021_052536_477725_34116D19 
+X-CRM114-Status: GOOD (  19.54  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
-List-Id: <linux-riscv.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-riscv>,
- <mailto:linux-riscv-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-riscv/>
-List-Post: <mailto:linux-riscv@lists.infradead.org>
-List-Help: <mailto:linux-riscv-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-riscv>,
- <mailto:linux-riscv-request@lists.infradead.org?subject=subscribe>
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Sender: "linux-riscv" <linux-riscv-bounces@lists.infradead.org>
-Errors-To: linux-riscv-bounces+linux-riscv=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211021122530.WEYdczxdu1BKeqY76dTkOJTsRkFM7-iXrt8cRI0WQIg@z>
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211021122530.cCVb8slgvouN_roKG6lCz3AMGZGIrbPMgFuaYvBms3k@z>
 
 On 21/10/2021 14:23, Arnd Bergmann wrote:
 > On Thu, Oct 21, 2021 at 11:09 AM Krzysztof Kozlowski
@@ -151,6 +153,6 @@ Best regards,
 Krzysztof
 
 _______________________________________________
-linux-riscv mailing list
-linux-riscv@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-riscv
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
