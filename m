@@ -1,142 +1,125 @@
-Return-Path: <SRS0=6Q0g=PJ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=B8Jt=PJ=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93342C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Oct 2021 07:00:43 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45009C433F5
+	for <soc@archiver.kernel.org>; Thu, 21 Oct 2021 09:10:14 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 2184D60FD8; Thu, 21 Oct 2021 09:10:14 +0000 (UTC)
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5355160FC1
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Oct 2021 07:00:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5355160FC1
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	MIME-Version:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=iuEkuH+lgD+V3pMTg6Kf9Y4xAwyfvA4Q3c+b+F4ze3w=; b=WEZpbYNjRs2/vD
-	doraFbrY/GBoF4Q4yQCyR0HLnBdN29YCOcroSHvGt0SFHk++ArqHf6cxruUfy+rKMZ4j7u6WioZJe
-	1iV1Jk+gsZqCX9DfXRLPmeNoyjknOdT4/p0Khnqo2au6le/EG2hvpBAnB28L2vd4U9uXlKKhFdWxz
-	0ANdiPwYsjziVi+9XfwXqWU2z8xR7GrjBSSRD6PFv2wgn6829H8mYN3G6HnC6nQ1wLqOiRj1TaINx
-	zSl8N2heG+2/uRC5pkRlu07C608kxwPFZe1NqSxaYIAbMzdYGw8IrUN6Zj2O2kc6KsoUNRrxrhMiA
-	7r783+/172NFUh7JMtSg==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mdS2v-006beT-Pc; Thu, 21 Oct 2021 06:59:25 +0000
-Received: from mail-qk1-x72f.google.com ([2607:f8b0:4864:20::72f])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mdS2t-006bdz-0H
- for linux-arm-kernel@lists.infradead.org; Thu, 21 Oct 2021 06:59:24 +0000
-Received: by mail-qk1-x72f.google.com with SMTP id bl14so6083808qkb.4
- for <linux-arm-kernel@lists.infradead.org>;
- Wed, 20 Oct 2021 23:59:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
- h=mime-version:from:date:message-id:subject:to:cc
- :content-transfer-encoding;
- bh=N//rb+m4pmHWM2In2ypTAyaR2MvFzxgR0R9cpQ84nZA=;
- b=lALUmGpxCJbC96/zmuF9gHKCXTP4nrjuxWYNttCdVFtygtabvSPcmHoo0NT3LKuMKg
- K94P752P5emkntHyXyXxbKi60kcnTjPZPWv/beOtcKrx+lkEkBqNIhlYYnaJiwqugFEZ
- wVt9FuDJ4GGnmWuCdOR4MZN3VlZPHuzTHlLjE=
+	by mail.kernel.org (Postfix) with ESMTPS id BFB686112D
+	for <soc@kernel.org>; Thu, 21 Oct 2021 09:10:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BFB686112D
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com [209.85.208.200])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 82B0F3FFFE
+	for <soc@kernel.org>; Thu, 21 Oct 2021 09:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1634807411;
+	bh=bbSHRxsR73bGstaaNlqrnr2h4OekYl5/Y0NpOv9VPBw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=GiU2ougumgmG6uUTccWbtxnuXlWgVr3da9PbCxCKBeDFG/r5nSGbd27f0fPQdp9Qk
+	 zMpP8NuMd69UlfOcHqnQ2wZnV82hAZNalisRtj1eqeBRcX4D4uLIc8jwyzQhSEq/7W
+	 oGoFINOMP3IKltFK04IK5U0dcuj+H8ta0hzy9ogjd5tnnHW7XNE8unhF6OeG4FHvNs
+	 Dx1Cix6eB/TKFN6ovimHQqgNz7IoAiscFS9xU7rCyaP33b2fAFQAoAlMN2JYftnziW
+	 kewhpBsjMhgQMIoumEls940J/I+TjLUzrGlioCZzxKr1NZw6MyS8/pZ6wTMgHxI5fP
+	 lDYkka2ciCSOA==
+Received: by mail-lj1-f200.google.com with SMTP id u21-20020a2e91d5000000b00210e16996e5so2570865ljg.5
+        for <soc@kernel.org>; Thu, 21 Oct 2021 02:10:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
- :content-transfer-encoding;
- bh=N//rb+m4pmHWM2In2ypTAyaR2MvFzxgR0R9cpQ84nZA=;
- b=jVuUK77Fr9KWK6PzJIv57eZ8IA3uvSSIiE+QoZaOr+UBxJjpymM7yf5oquW+BOlFnU
- Sz5cbIhuhVWMMDv6ADoZqe/khXehrox3CkshZH77NTEu88Ym3YITbT9Ms9M6TQ/WS2Ub
- pLEEQQkse1UfmgRaQwWVsijWDCOFTdBM/dFWXggQynChIP26hqKuikKduWXguIiHMCR+
- q7QErc/63ZdyNWP2D47Nr/LytAGayCw5BLW3EoMpijB8RxZPAwnq1TsMr7V29Q0LBQwv
- 4oK69y2ZvNFXI41H1bg1QIurUvjajqIQ9qiHN2VoO1aXp1OX3BJsu3IQd3K7maotdyhN
- YuxQ==
-X-Gm-Message-State: AOAM532y0ard5GHJ4yLg4HxJAmaShlnBOREmrswgXXCiIOZmBAAMF1d3
- /Co/8/H7z6SqZGhMXQH543WE7aTjwaJVpcibNtA=
-X-Google-Smtp-Source: ABdhPJy7LpdJkyKOVfpFc2II+KybhaG4y7eBWsQMf1M8zZAqipes7m1MQxwVLb6ADiNS2ub2DlQuRD6wRcaRxUlWqEU=
-X-Received: by 2002:a37:68c4:: with SMTP id d187mr3020098qkc.36.1634799562103; 
- Wed, 20 Oct 2021 23:59:22 -0700 (PDT)
-MIME-Version: 1.0
-From: Joel Stanley <joel@jms.id.au>
-Date: Thu, 21 Oct 2021 06:59:10 +0000
-Message-ID: <CACPK8Xd=eAMk-S3akhGgL4i_K190Nz9t=_CrdHQMJ+nbW172mg@mail.gmail.com>
-Subject: [GIT PULL] ARM: aspeed: devicetree changes for 5.16, round 2
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bbSHRxsR73bGstaaNlqrnr2h4OekYl5/Y0NpOv9VPBw=;
+        b=iGMFzDIRBVAqQlFzmGp+k0qho42r0md7HsXWNpJ8OLQApcjsVJToSrN8Ah5nm4vrRi
+         9T98IePQe7yeJOI/uPM1ZhIYr9IMGNjQyWblKgALGYFGrhxEWuW7Mdd3i9awjMM0KM6a
+         Y4DTJBXTWPsQFuAIvJ90FhumMAZyrAMqEw/Szxxtd4uwXrqkwX11Ykm/gMxzpoleSipN
+         m6MdJDgkslX5Ss6J+5iGtffdoniTVCgWOHATeVJg4r9chl92cOAIyb8k4bm7dajzXaEk
+         uzU5I65YTzwisPoEvDvwiXqfUMh37Og2NoEWDPca8WkaEHRXYTNaIYUO1W5wiQU1QUVl
+         btkQ==
+X-Gm-Message-State: AOAM533r1PKLwt394VzyYQEh3wbex82yB37acHN8nhqzMhvfgJrZ3WGc
+	tDKhno2aROA9U3jqR8NfG4QGr2N/ideMk/qyZsJn/WvEqifg4krk5AYwfrMNEHU/r9G6lYsQSK4
+	W1qfbA+CN0sZV90X6pu0B0pQ=
+X-Received: by 2002:a2e:a171:: with SMTP id u17mr4669574ljl.371.1634807410798;
+        Thu, 21 Oct 2021 02:10:10 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxJi51V3uLcQ6VQf22lZE+UEugXH6TyHQQH8xsi40Ilosw8EeaKsw6tjG5kUM2pWTCLIevk/g==
+X-Received: by 2002:a2e:a171:: with SMTP id u17mr4669547ljl.371.1634807410497;
+        Thu, 21 Oct 2021 02:10:10 -0700 (PDT)
+Received: from kozik-lap.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id v7sm523707lji.81.2021.10.21.02.10.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Oct 2021 02:10:10 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
- linux-aspeed <linux-aspeed@lists.ozlabs.org>, Andrew Jeffery <andrew@aj.id.au>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211020_235923_072800_C0D3318F 
-X-CRM114-Status: GOOD (  10.89  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211021065910.pPi49JfIh3-VcFR-QqR_hphX5kwTsDXw12Omeym5ddE@z>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: [GIT PULL] riscv: dts: few cleanups for v5.16
+Date: Thu, 21 Oct 2021 11:09:55 +0200
+Message-Id: <20211021090955.115005-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-SGVsbG8gc29jIG1haW50YWluZXJzLAoKSG90IG9uIHRoZSBoZWVscyBvZiB5b3UgbWVyZ2luZyBt
-eSBmaXJzdCBwdWxsIHJlcXVlc3QsIGhlcmUncyBhIHNlY29uZApvbmUgd2l0aCBzb21lIGNoYW5n
-ZXMgSSBtaXNzZWQgdGhlIGZpcnN0IHRpbWUsIGFuZCBzb21lIHBhdGNoZXMgdGhhdApjYW1lIGlu
-IHNpbmNlLgoKT2Ygbm90ZSB0aGUgdHdvIElCTSBQMTAgcGxhdGZvcm1zIG5vdyBoYXZlIGFsbCBv
-ZiB0aGVpciBkZXZpY2UgdHJlZQpjaGFuZ2VzIGluIG1haW5saW5lLCBzbyB0aGF0J3MgYSBtaWxl
-c3RvbmUgZm9yIHRoZW0uIFRoZXkgYXJlIG91cgpiaWdnZXN0IEFzcGVlZCBCTUMgZGV2aWNlIHRy
-ZWVzLCBjb21pbmcgaW4gYXQgMjQwMCBhbmQgMzYwMCBsaW5lcyBvZgpkZXNjcmlwdGlvbi4KClRo
-ZSBmb2xsb3dpbmcgY2hhbmdlcyBzaW5jZSBjb21taXQgNGViN2ZlMzMzM2EwMjFjOGQwZjM1YmNi
-NWNkN2M0ZTQyODAwZGY2MjoKCiAgQVJNOiBkdHM6IGFzcGVlZDogZnA1MjgwZzI6IFVzZSB0aGUg
-NjRNIGxheW91dCAoMjAyMS0xMC0xNCAxODoyNToxNyArMTAzMCkKCmFyZSBhdmFpbGFibGUgaW4g
-dGhlIEdpdCByZXBvc2l0b3J5IGF0OgoKICBnaXQ6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xp
-bnV4L2tlcm5lbC9naXQvam9lbC9ibWMuZ2l0CnRhZ3MvYXNwZWVkLTUuMTYtZGV2aWNldHJlZS0y
-Cgpmb3IgeW91IHRvIGZldGNoIGNoYW5nZXMgdXAgdG8gZjkyNDFmZThiOTY1MmU2NzUxZjRhZTY4
-NGVmZTAxNDhlM2MxNTdjNzoKCiAgQVJNOiBkdHM6IGFzcGVlZDogQWRkIHVhcnQgcm91dGluZyB0
-byBkZXZpY2UgdHJlZSAoMjAyMS0xMC0yMSAxNjo1OTo1MyArMTAzMCkKCi0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KQVNQRUVE
-IGRldmljZSB0cmVlIHVwZGF0ZXMgZm9yIDUuMTYsIHJvdW5kIDIKCiAtIE5ldyBtYWNoaW5lczoK
-CiAgKiBJbnZlbnRlYyBUcmFuc2Zvcm1lcnMsIGFuIHg4NiBmYW1pbHkgc2VydmVyIHdpdGggYW4g
-QVNUMjYwMCBCTUMKCiAtIFVwZGF0ZXMgdG8gdGhlIEV2ZXJlc3QgYW5kIFJhaW5pZXIgc2Vuc29y
-cywgZ3Bpb3MgYW5kIEtDUyBkZXZpY2VzCgogLSBOZXcgVUFSVCByb3V0aW5nIGRldmljZSB0cmVl
-IGRlc2NyaXB0aW9uCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tCkFuZHJldyBKZWZmZXJ5ICgyKToKICAgICAgQVJNOiBkdHM6
-IGFzcGVlZDogcDEwYm1jOiBVc2UgS0NTIDMgZm9yIE1DVFAgYmluZGluZwogICAgICBBUk06IGR0
-czogYXNwZWVkOiBwMTBibWM6IEVuYWJsZSBLQ1MgY2hhbm5lbCAyCgpCLiBKLiBXeW1hbiAoMSk6
-CiAgICAgIEFSTTogZHRzOiBhc3BlZWQ6IHJhaW5pZXI6IFJlbW92ZSBQU1UgZ3Bpby1rZXlzCgpD
-aGlhLVdlaSBXYW5nICgxKToKICAgICAgQVJNOiBkdHM6IGFzcGVlZDogQWRkIHVhcnQgcm91dGlu
-ZyB0byBkZXZpY2UgdHJlZQoKRWRkaWUgSmFtZXMgKDcpOgogICAgICBBUk06IGR0czogYXNwZWVk
-OiBwMTBibWM6IEZpeCBBREMgaWlvLWh3bW9uIGJhdHRlcnkgbm9kZSBuYW1lCiAgICAgIEFSTTog
-ZHRzOiBhc3BlZWQ6IHJhaW5pZXIgYW5kIGV2ZXJlc3Q6IFJlbW92ZSBQQ0EgZ3BpbyBzcGVjaWZp
-Y2F0aW9uCiAgICAgIEFSTTogZHRzOiBhc3BlZWQ6IGV2ZXJlc3Q6IEFkZCBJMkMgc3dpdGNoIG9u
-IGJ1cyA4CiAgICAgIEFSTTogZHRzOiBhc3BlZWQ6IGV2ZXJlc3Q6IEFkZCBJQk0gT3BlcmF0aW9u
-IFBhbmVsIEkyQyBkZXZpY2UKICAgICAgQVJNOiBkdHM6IGFzcGVlZDogZXZlcmVzdDogRml4IGJ1
-cyAxNSBtdXhlZCBlZXByb21zCiAgICAgIEFSTTogZHRzOiBhc3BlZWQ6IHJhaW5pZXI6IEFkZCBl
-ZXByb20gb24gYnVzIDEyCiAgICAgIEFSTTogZHRzOiBhc3BlZWQ6IHJhaW5pZXI6IFJlbW92ZSBn
-cGlvIGhvZyBmb3IgR1BJT1A3CgpJc2FhYyBLdXJ0aCAoMSk6CiAgICAgIEFSTTogZHRzOiBhc3Bl
-ZWQ6IHJhaW5pZXI6IEFkZCAnZmFjdG9yeS1yZXNldC10b2dnbGUnIGFzIEdQSU9GNgoKSm9lbCBT
-dGFubGV5ICgyKToKICAgICAgQVJNOiBkdHM6IGFzcGVlZDogcmFpbmllcjogQWRkIGZyb250IHBh
-bmVsIExFRHMKICAgICAgQVJNOiBkdHM6IGFzcGVlZDogcmFpbmllcjogRW5hYmxlIGVhcmx5Y29u
-CgpMaW4uVG9tbXlTQyDmnpfkuJbmrL0gVEFPICgxKToKICAgICAgQVJNOiBkdHM6IGFzcGVlZDog
-QWRkaW5nIEludmVudGVjIFRyYW5zZm9ybWVycyBCTUMKCiBhcmNoL2FybS9ib290L2R0cy9NYWtl
-ZmlsZSAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMSArCiBhcmNoL2FybS9ib290L2R0cy9h
-c3BlZWQtYm1jLWlibS1ldmVyZXN0LmR0cyAgICAgICB8IDczNSArKy0tLS0tLS0tLS0tLS0tLS0t
-LS0KIGFyY2gvYXJtL2Jvb3QvZHRzL2FzcGVlZC1ibWMtaWJtLXJhaW5pZXIuZHRzICAgICAgIHwg
-NjM0ICsrLS0tLS0tLS0tLS0tLS0tLQogLi4uL2Jvb3QvZHRzL2FzcGVlZC1ibWMtaW52ZW50ZWMt
-dHJhbnNmb3JtZXJzLmR0cyAgfCAzMjggKysrKysrKysrCiBhcmNoL2FybS9ib290L2R0cy9hc3Bl
-ZWQtZzQuZHRzaSAgICAgICAgICAgICAgICAgICB8ICAgNiArCiBhcmNoL2FybS9ib290L2R0cy9h
-c3BlZWQtZzUuZHRzaSAgICAgICAgICAgICAgICAgICB8ICAgNiArCiBhcmNoL2FybS9ib290L2R0
-cy9hc3BlZWQtZzYuZHRzaSAgICAgICAgICAgICAgICAgICB8ICAgNiArCiA3IGZpbGVzIGNoYW5n
-ZWQsIDQ3MCBpbnNlcnRpb25zKCspLCAxMjQ2IGRlbGV0aW9ucygtKQogY3JlYXRlIG1vZGUgMTAw
-NjQ0IGFyY2gvYXJtL2Jvb3QvZHRzL2FzcGVlZC1ibWMtaW52ZW50ZWMtdHJhbnNmb3JtZXJzLmR0
-cwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbGludXgt
-YXJtLWtlcm5lbCBtYWlsaW5nIGxpc3QKbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQu
-b3JnCmh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtYXJt
-LWtlcm5lbAo=
+Hi Arnd and Olof,
+
+I have an old patchset for RISC-V dts cleanups which I sent to mailing lists in
+August 2021 (v1, v2), resent in September and pinged two times.  They got some
+review (from Alexandre Ghiti for SiFive, from Conor Dooley for Microchip) but
+unfortunately Palmer (RISC-V maintainer) did not respond here.
+
+The usual RISC-V patches go via Palmer to Linus and I am not planning to change
+that, but I want to get these fixed.
+
+Could you grab these to soc tree?
+
+Best regards,
+Krzysztof
+
+
+
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/riscv-sifive-dt-5.16
+
+for you to fetch changes up to 9962a066f3c1d4588d0dd876ceac2c03ef87acf3:
+
+  riscv: dts: sifive: add missing compatible for plic (2021-10-19 10:59:57 +0200)
+
+----------------------------------------------------------------
+RISC-V DTS changes for v5.16
+
+Cleanups of RISC-V SiFive and Microchip DTSes with dtschema.  These are
+few minor fixes to make DTSes pass the dtschema, without actual
+functional effect.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (5):
+      riscv: dts: sifive: use only generic JEDEC SPI NOR flash compatible
+      riscv: dts: sifive: fix Unleashed board compatible
+      riscv: dts: sifive: drop duplicated nodes and properties in sifive
+      riscv: dts: microchip: add missing compatibles for clint and plic
+      riscv: dts: sifive: add missing compatible for plic
+
+ arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi   |  4 ++--
+ arch/riscv/boot/dts/sifive/fu540-c000.dtsi          |  2 +-
+ arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts | 10 +++-------
+ arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts |  7 +------
+ 4 files changed, 7 insertions(+), 16 deletions(-)
