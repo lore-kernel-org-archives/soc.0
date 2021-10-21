@@ -1,31 +1,52 @@
-Return-Path: <SRS0=i2pQ=PJ=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=XH8j=PJ=lists.infradead.org=linux-riscv-bounces+linux-riscv=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D708AC433EF
-	for <soc@archiver.kernel.org>; Thu, 21 Oct 2021 18:35:13 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id A42D361038; Thu, 21 Oct 2021 18:35:13 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF0E1C433EF
+	for <linux-riscv@archiver.kernel.org>; Thu, 21 Oct 2021 18:47:35 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B2C9A60E54;
-	Thu, 21 Oct 2021 18:35:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B2C9A60E54
+	by mail.kernel.org (Postfix) with ESMTPS id 6FBAC60EFE
+	for <linux-riscv@archiver.kernel.org>; Thu, 21 Oct 2021 18:47:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6FBAC60EFE
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wm1-f52.google.com ([209.85.128.52]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MFbmS-1mUEiH0Dvy-00H3f4; Thu, 21 Oct 2021 20:35:11 +0200
-Received: by mail-wm1-f52.google.com with SMTP id s198-20020a1ca9cf000000b0030d6986ea9fso506764wme.1;
-        Thu, 21 Oct 2021 11:35:10 -0700 (PDT)
-X-Gm-Message-State: AOAM5309XQhhmsjGPYrNPw7Z9kBBV7gBS3KoVu4aqmXmrQrmns9inqSQ
-	PG0KFvVSsCXlurLZ9R08hoZYqOQPUvSaqNgUsWM=
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
+	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=+HYLdorXl9pw9Djkwf/mTzT5FnqKAvaZEYXC2uH9EY4=; b=4sUsCr+vLzMfMx
+	Ou2nRbU4Cdo8xA+C/BguavmVeRQv9fe3PZn16KiI8eMBQfL/bmHG+TrceGZJt+S1RNAXMNI5TNn1q
+	xevPoLtsXGBjasDPD/jft8m19T4xYA+G3I3QvmWFKNooOsTZclQrYqYgwdYQw5kUThp7YTfgqehgr
+	+R++g+gTkMmbkqQSiVtUAemMwgN0hRWxMekbID/9S+c4m/mzM8hFVgFJUqxAKLeUsOqZh6WUd/I2x
+	Mzwl++PCDIQ9qFfbQ/FpxNQMGnAM5riGu2j4bLZIvj9yeJgqfvY1wmxOpKEArRXprSNjI7VrqTXB5
+	32P26r1ns/BWYbIVioCg==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mdd65-008t0z-Ax; Thu, 21 Oct 2021 18:47:25 +0000
+Received: from mout.kundenserver.de ([212.227.126.134])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mdcuJ-008noX-8v
+ for linux-riscv@lists.infradead.org; Thu, 21 Oct 2021 18:35:17 +0000
+Received: from mail-wm1-f48.google.com ([209.85.128.48]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MYvTs-1m8qTv08ga-00Uo23 for <linux-riscv@lists.infradead.org>; Thu, 21 Oct
+ 2021 20:35:11 +0200
+Received: by mail-wm1-f48.google.com with SMTP id
+ y22-20020a1c7d16000000b003231ea3d705so648007wmc.4
+ for <linux-riscv@lists.infradead.org>; Thu, 21 Oct 2021 11:35:10 -0700 (PDT)
+X-Gm-Message-State: AOAM531TP37jWH8hSNzHor2MX3gD6XGqGrZKER9gEfRQJH+eBnEJko2+
+ GbCp81o+FYmo9YX3bILfRAXgKo0YmnJLeLwVLN0=
 X-Google-Smtp-Source: ABdhPJxJnttZVYDDq1wT7sqVg/34xA2ViJzSZlZ8uydGsF2cMPPIn30u8q+0i/QxoA4crgnhZkdmcwVqK+m7oJgBKVg=
-X-Received: by 2002:a05:600c:1548:: with SMTP id f8mr8597496wmg.35.1634841310501;
+X-Received: by 2002:a05:600c:1548:: with SMTP id
+ f8mr8597496wmg.35.1634841310501; 
  Thu, 21 Oct 2021 11:35:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <79ae46c3-c028-2c99-2428-b601e4fb03d4@microchip.com> <mhng-a25d4570-1744-44ef-988b-43914d5bc17d@palmerdabbelt-glaptop>
+References: <79ae46c3-c028-2c99-2428-b601e4fb03d4@microchip.com>
+ <mhng-a25d4570-1744-44ef-988b-43914d5bc17d@palmerdabbelt-glaptop>
 In-Reply-To: <mhng-a25d4570-1744-44ef-988b-43914d5bc17d@palmerdabbelt-glaptop>
 From: Arnd Bergmann <arnd@arndb.de>
 Date: Thu, 21 Oct 2021 20:34:54 +0200
@@ -35,33 +56,54 @@ Subject: Re: [PATCH] soc: add polarfire soc system controller
 To: Palmer Dabbelt <palmer@dabbelt.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Conor.Dooley@microchip.com, Arnd Bergmann <arnd@arndb.de>, 
-	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Damien Le Moal <Damien.LeMoal@wdc.com>, Jassi Brar <jassisinghbrar@gmail.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, 
-	"nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>, Stephen Rothwell <sfr@canb.auug.org.au>, Cyril.Jean@microchip.com, 
-	Daire McNamara <Daire.McNamara@microchip.com>, Atish Patra <Atish.Patra@wdc.com>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Ludovic Desroches <ludovic.desroches@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:tmCwJs/7MYE3BYomjydcv2bx9GVLOKjaAX2lDbaWflQoIZAGpaP
- CuaVf4onOOHH9J6DWYxH74duYDU0lRursvyVkTonnXyE3P3Za2Riy3LFvSFhs8qAfwQf5JU
- UfjrsKmghiHJULUAvYi6tRZfYuAtRVcKY2LwHQuf4G2zZplb0586Q/OJF8okMJgRm0JYJeX
- mQrz/+KOsdU5fRcwOHu9Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5WsrBBkUBF4=:bob6ndJd4iSLRwOdoM5Dq2
- R5qqjNWkJHE7REf8fLZAlIXY+QljG98vcZG/aexDoFVSW1ctBHfTTriumYMrUSnyETWYysKB2
- eoNX4ldQ6u7UNbz6b6/n0isPdxENUXyitqGTZ0f2UT4EMrN6LMU9KXz5VQU0HL7XAtSaHQr2s
- uKYc09xr3Da8rJtPfjHOQjZ18Y6EsPlAO74i6j6P1OXRX4O88YHSX8UZ14owivBWFaLWuNRMz
- x/2nqpzTxSieVBlHkUCKAsuklbn1Yf/VOtzis3i0KgIzcN8rBXNcK7UFV9cxmVKcFN7c3Nhl2
- 8gizIJQTXn2wDC0cU7iSOplJoDEfoUbznohb5B21RkAEo576UBkYcW+bIZ+uEkCLAXDhaF4bo
- AQc2XQLqPY4zEqaMQbiUfi2JMZ4wCfMfgX5aQzgFHUhD1K+DHiFyl7avfA8R30uxrPa1GtPUY
- A5sMOof+6PYNUFuJfO5fO5yWTQaqaIJqZXFRn3Mnf9CPSwT9eB2ABHiqw6ctUCIuVHZeQVD67
- z+sLlI2fjqRCy8tJ5OuPiQrjjEbN3qP/ZHVx9Gj1Qk6ryaQUMWlyfiw8tOQ3opPL3Lom5wk5d
- E3jA68e9NcTk/kI92A6IA8vkWAWXZFY0yv/7wfhntBfekK5fDiqklsbFYD5oy5Xnxk27DEPJi
- PUMlQ5fYSbHYeACOUSl0bfrJcUU7ZzVk15gJvRYefydklfVoD1SHni1VDtGrVW2uyv73TMs8m
- hH5L0RG0r4FZXtPCvRihZlTT6o/weJUwS6PfVlvIZY8IqyTrK0ze+F2kPrndP6Buq8vVoyZW8
- DjH0sXGPWmPvcxDiwoc9S7XtlAxitS5QTH+dgkN2aBjjMaFLtI=
+ Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>, 
+ Damien Le Moal <Damien.LeMoal@wdc.com>, Jassi Brar <jassisinghbrar@gmail.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Paul Walmsley <paul.walmsley@sifive.com>, 
+ linux-riscv <linux-riscv@lists.infradead.org>, 
+ "nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>,
+ Stephen Rothwell <sfr@canb.auug.org.au>, Cyril.Jean@microchip.com, 
+ Daire McNamara <Daire.McNamara@microchip.com>,
+ Atish Patra <Atish.Patra@wdc.com>, 
+ Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Ludovic Desroches <ludovic.desroches@microchip.com>
+X-Provags-ID: V03:K1:47h3Z3W35bmVNBUFMr8n8sb2DhxJGqFMY4IYevEqtjFASvMAjUH
+ Q3+LKLd3RQRj2wrlO6CM4grz5f4sU5a2BF/dP6B86jrz+aL2+pRGyghwArw5ATiy9CXhzC3
+ fupEM/oXuIlAnEJuLcXHtlHp9T7ENlI6E5xWssHakrFUdEIq/EKDCVse1Kkcm2+l/xQWO6r
+ E47Wz62IDElfYdOOmtgDw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:N2HDL2WKee8=:WPYNlWYhJ8kX73oHlmFsMp
+ ikWD1CCShz1aAxz/yHBq3hwPUJBDdoLNjDr2RTxiKf3lLpjBvxvsWe3ZsPMVfYRvJO3FT/Rg5
+ ZRt546J5czJSE4CIwjCg5Y4qGeLTHKQLFu3Y7sG537mdHOktkPQEdOLjtVXOQpoP9anAPJuD4
+ 3fGdFU6rYQqrrR9yeMrqJ+z+3FtR5Tes3D+lKGz+mH7XTJS44gt0f06Uk3OdZVYaKICxEpNl7
+ ixXOw77W6pEtgMQaud9MRAF3qqerUcbC4zGko5awE2WzCkVTCGnT6y1+nG5e/AIF5imJbPjm3
+ dZ3f1Gtorg1GBjJBRIw3AfkEnTxW2UPgcyTvINRSSUzJpeAkRcmoY9BFzMDxHkjgM1JO9Y7dM
+ Jvpwnhwe80Y2zdp2VJVzh6gP0eyqwuBOKDyZ3n8CwMiKR5IIun4C7+iFPGNqlFcUqFt6SLZ2N
+ i2t479XYZfMTGIqJivYV1LUy9LzU9u6f8fCi0Q9qqfQj9husXjrC6kLvJ9/PNhV/jFMELunfF
+ bdPZ3Qa2+Eu/tEWSP6yWWnBdCa3/CRHvfFKD0r3d860e8cnHUC4pYsrojmLwecA/vaL9ztoVn
+ fru89cPTyzu0d6CQR7+I3S167zvLmkm+pbPrFSy42DcTEo/mqZVyPnMSpLTV9IxskhN1BoZRJ
+ VVVzJUWiEzzu2Bi3mOWhwsnpKFQHrFqWvzl3847/8H89yOO9A59lcY5HMdsUMMkouDe5yCPqv
+ /pQzcf9/FZ50TXlU7XRGAC3xgfwKwrMxTqX+1E5mamhSeRf51j018xp7g3Hl25KGTwo/Lp+qh
+ ERrky6uy/u09j8ZOmmx/0QasQQwzkUALN0/ZkgPV2he9gmBcTE=
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211021_113515_662382_4CB21DC6 
+X-CRM114-Status: GOOD (  35.09  )
+X-BeenThere: linux-riscv@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-riscv.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-riscv>,
+ <mailto:linux-riscv-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-riscv/>
+List-Post: <mailto:linux-riscv@lists.infradead.org>
+List-Help: <mailto:linux-riscv-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-riscv>,
+ <mailto:linux-riscv-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-riscv" <linux-riscv-bounces@lists.infradead.org>
+Errors-To: linux-riscv-bounces+linux-riscv=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211021183454.mFWGGEdaSlIHJC_0_mNUOBu0Ge2AWdqHrAXeQzI0fw0@z>
 
 On Thu, Oct 21, 2021 at 6:00 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
 > On Thu, 21 Oct 2021 06:13:35 PDT (-0700), Conor.Dooley@microchip.com wrote:
@@ -139,3 +181,8 @@ It might also help to make this take a phandle instead of a device node
 for lookup, to spare the client the extra phandle to node conversion.
 
        Arnd
+
+_______________________________________________
+linux-riscv mailing list
+linux-riscv@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-riscv
