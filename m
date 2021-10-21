@@ -1,73 +1,64 @@
-Return-Path: <linux-samsung-soc-owner@kernel.org>
+Return-Path: <SRS0=i2pQ=PJ=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F198C433F5
-	for <linux-samsung-soc@archiver.kernel.org>; Thu, 21 Oct 2021 12:23:53 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 78B75611CE
-	for <linux-samsung-soc@archiver.kernel.org>; Thu, 21 Oct 2021 12:23:53 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbhJUM0I (ORCPT
-        <rfc822;linux-samsung-soc@archiver.kernel.org>);
-        Thu, 21 Oct 2021 08:26:08 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:38159 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbhJUM0I (ORCPT
-        <rfc822;linux-samsung-soc@vger.kernel.org>);
-        Thu, 21 Oct 2021 08:26:08 -0400
-Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MoNyA-1n1sRb0lGS-00oq7C; Thu, 21 Oct 2021 14:23:51 +0200
-Received: by mail-wm1-f49.google.com with SMTP id o24-20020a05600c511800b0030d9da600aeso569957wms.4;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2CF1C433EF
+	for <soc@archiver.kernel.org>; Thu, 21 Oct 2021 12:23:53 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 8D74E61362; Thu, 21 Oct 2021 12:23:53 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id D924C61205;
+	Thu, 21 Oct 2021 12:23:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D924C61205
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N1x2P-1moLlu0w01-012KWb; Thu, 21 Oct 2021 14:23:51 +0200
+Received: by mail-wm1-f46.google.com with SMTP id d198-20020a1c1dcf000000b00322f53b9b89so611527wmd.0;
         Thu, 21 Oct 2021 05:23:51 -0700 (PDT)
-X-Gm-Message-State: AOAM533nYoAv7Nga0rYzq0eXeDcPw6Pp5vaYi/kyJhXZ6px6l7ilUFQS
-        WKK8LIn3AXyK7v5dYcAZlREEUWsJS6DTlA73+aQ=
+X-Gm-Message-State: AOAM530jeYtZPsXFXWXdhmfqxQOM2mmd40xNrgYpLw+hdkbOnRQUhdXf
+	VTxkrHzyfkqWBl1WHCkviVDmeR+uRE7CPKV4oAg=
 X-Google-Smtp-Source: ABdhPJyySfMSOhtA5bv4hxMOMgjYtqe9qUbX0g4CfeIRPIhQyBDPW11VeAk2UNQWRemVY//cA3QTl+gSHiVN9uJF8ao=
 X-Received: by 2002:a1c:4b08:: with SMTP id y8mr6575841wma.98.1634819030835;
  Thu, 21 Oct 2021 05:23:50 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211021090955.115005-1-krzysztof.kozlowski@canonical.com>
 In-Reply-To: <20211021090955.115005-1-krzysztof.kozlowski@canonical.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 21 Oct 2021 14:23:34 +0200
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 21 Oct 2021 14:23:34 +0200
 X-Gmail-Original-Message-ID: <CAK8P3a08QiwA4+zPGLt3xA=01HLiBcLcC4gM1+8N6uo5KMTQLw@mail.gmail.com>
 Message-ID: <CAK8P3a08QiwA4+zPGLt3xA=01HLiBcLcC4gM1+8N6uo5KMTQLw@mail.gmail.com>
 Subject: Re: [GIT PULL] riscv: dts: few cleanups for v5.16
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>
+Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, arm-soc <arm@kernel.org>, 
+	SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Palmer Dabbelt <palmerdabbelt@google.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv <linux-riscv@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:5cU6HKrOiO2TBoYF1mEMk9QxcLbM2PxzkkRnZAeqqqIWG+vefuo
- EqZXivRcg+M2vtLRx/R11SojLlW0T9kkajzh+sFNZOOGm0jT60UofPeskhs9AF4/GC8CB/j
- fiKCVy186ggQ9C2M1Q0mRgGNq4Ad1lVYHUmoLP6VSvY8mNSl0m+lEuw0yNgNVJ5zEGYeFyi
- XwI+KB7q7yNh97L24cE2g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9Kx47QAr4+I=:B9JWvyalr6w/+sGWkXYoLB
- vOEJ2rFMp5JWqoqchaL0mHbdBLDlivySlVqhf7umoYb1Op8qYsJvwqi/1OoZyluiMDKn31MC/
- AdGQmedPIWg6GilNUQ41ZolP/GOFkBj7wxBVr2doLKwXbHOVV3gCy+AdbzpXTYE461lBRwo+X
- WiS3GA9oKJ6j3ODv7Vl8JRGWD1QkbJzCWmjVE/HYNzxCQ1yZvHI5tx84kk0JA71PM3BbCbqrq
- K9mHqYtGj6ochJNzfZTeNzF/5o/nnaiSr4WVsm9pWPKLsH0vNswwoJhg25SzHhwqYKgrLLjBs
- QyCCfMHkhOgajucIiVxpa5mTpFCLIqzb8AoPaNCaGBqtp7LpDWUkNWyg1k/bW88TTnnSp7vnG
- DTRsDKMOS+PwaBfbpHsynPeLawxYlok8mokZRJR/nQWJz8qdjwEJQbAZk7VLq9bIxR6OFpYg2
- CFct8f4t8xGuMCSCylZ96a+bRmjWqf7V+cwNOsbXt5w85HVs5CzGLqudpMH5Js9hwLXnrDEYz
- AShybyjl+cQVHY8YsUPOWHAf7JwPMCMKVZoPgz7do4eApV/MFCs9U32nyf0cDGAMI8JsGGJYo
- yErpe8gyRCXQnKH1WlwBsa/Gbec8Xnn9BbkBGv482KOWOd9AgBPxLx09rCuOJXTZflgLunrfv
- 6eX8CwX0XlkyhD+bJJy0GFXqSa2bLIdRMWxkJ3LClEKdjko1nc0n6ircFU0Za5ztH3eWAoUNS
- YTHCgSdlZSmnVPHZ/86aEhEmlDBmTS0wuo0r1zXzx49wQQI4Sm/2DPLQZsGppoX6iEfVnFvpx
- 8PKa4D40B1HtVz/VDloqhJ8eLSnD6g/8AjArDJDfDFdyXqLCQo=
-Precedence: bulk
-List-ID: <linux-samsung-soc.vger.kernel.org>
-X-Mailing-List: linux-samsung-soc@vger.kernel.org
+X-Provags-ID: V03:K1:Rvpjvq3ld5HFiUu65M0+yZpLIImSXpv4YAGE888wD0Czl1XREbu
+ lpYubGHuL/D72IhGdQhF2vvXvU5KtPbIaoFAV7c1DU2e7azIRCfmVG+ZJ3nPvV42n1LYdPr
+ QAMsRPpwabWo/ZHlumqVOse3RoQHxArp+or5+0QeguzE7hHXzlZf/E5MRk/mLi8XLfv3ksq
+ piyQ2LrsRUy9ypQWSeRpQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PeZ3TRqNlf4=:5vvQaOgarXh3C7ZLWWzk+D
+ wrbxDT7Gl42mWPb7ZxTZad5WZICDSHhHRa7PRmoCRudCufruHD5D1sFysGGlrOsCEWfj+Z+vb
+ m+AMCE98DUoWdUiJj04T7YL109O6hqvc6C+6vJ/WoXaXWmFrGB9qOA+5pPx+1SSPwEha8ocIO
+ BdnQyIttdvXKPbuxoSoaP1pya7GT8RGVyNQwuoyQTS0aC6xDKInsaU77+TWbZciOAIGiFXnwW
+ m67zmI0lpVAaWcgnOK0FX3YV7mJ76X+PNVgkvRJmhRDQKBH+MoRRDLanIgxJOqy1mGphalhrN
+ SVCZ8QDSG6VTgAeoZ2bq/aCAuAwNZDqAp6mY8lqw71K79de3sqcaawwuELO5N5tWimUoen9ZH
+ fEIpW/YlW/WNfSWa8srnCo8+XUQiU0JkZGxonD300UOdCtG9Cpl3B2UUCJwxvKpumYdiefepy
+ VsdaAtwoJbhZcDlvaGO5gFVrXAQ5xFJt5TheW7U21ZPnuZVaOtrVhEludLcOZyifkHgNYhbCr
+ qFxVgVAhL1C6dxujcJW9CwMuvh7Fm9i5IOk21LrKfKQIB9voPJPHZT4tsDx+kcHacSvaw6nM/
+ uCB9QJpSNnnj2gn4Qp0364EszMJ/TM7mTCLf3VYUKTrCOh+m6hDQ8eVK4xExmWFivM+k1DJDe
+ UCwdnIddISJRwqI89Xg32aM9vYQAntN5CpCGIcrqM94aCsrV0ZTtPMuPD0a4v8zS8+Fz7aB0h
+ 555q1mck2xlfu8NTIGd0vqJWjDZUtOqDq/e3h2Ujh4xYHulUk58bcq5ZMnRCSoLQjoPUkQa6d
+ eCiz+T9J8cakz5u/EwtP8OWAjPnk4CIS/4EotNwL1NKkwqnI9s=
+Message-ID: <20211021122334.d9-C4bMXhhqIBAKRzVt3GfBnZh4jIAt1-ZpeIWPVjR0@z>
 
 On Thu, Oct 21, 2021 at 11:09 AM Krzysztof Kozlowski
 <krzysztof.kozlowski@canonical.com> wrote:
