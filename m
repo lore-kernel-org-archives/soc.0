@@ -1,158 +1,127 @@
-Return-Path: <SRS0=6Q0g=PJ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=qzOq=PJ=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1955FC433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Oct 2021 12:27:08 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC635C433F5
+	for <soc@archiver.kernel.org>; Thu, 21 Oct 2021 12:55:48 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A4E0160F25; Thu, 21 Oct 2021 12:55:48 +0000 (UTC)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C954360F59
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 21 Oct 2021 12:27:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C954360F59
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:
-	Message-ID:From:References:Cc:To:Subject:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Owner;
-	bh=uWevu2aReiveTEKh/YW7ZaR9TCDhB3ky7ytEBk5gHtE=; b=LQNUOjppHGI0a36rkcd9igdU1j
-	aCFL3wejKNe2V3QVk7pSAN88ebi43E/DWumwKBvew1rzGE3+G//WRF30Mmri7XlZ6cboqJbyvH4jb
-	mnUK5PyeAKwgoxXcjpbWfzZ3VHEGjDmW9M11QH2KzNpfGPEglZg4usjmJonnQmbl6nCB/SHGZ8NYm
-	vTslcqr09g0XxLYbfsfGONh9jYiTlmebWrekLxCtZPEvF69vCyPYW13nth/ExkqKpj0cWYbofQWVD
-	AZnUSq7++96WiESFNl6/E7r9Yt6Gjmb+HHmH2I4brPWhoeP7dmIQXnlfVfqI4dHWLUCpRjUyzBqcx
-	E1Gv0vvg==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mdX8h-007TLf-3b; Thu, 21 Oct 2021 12:25:43 +0000
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mdX8a-007TIe-5X
- for linux-arm-kernel@lists.infradead.org; Thu, 21 Oct 2021 12:25:37 +0000
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id F2BDD40004
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 21 Oct 2021 12:25:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
- s=20210705; t=1634819133;
- bh=OEvgfMSIzLFlHfTd+aj6jAI5gittIjBiCSXpIdeWxOQ=;
- h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
- In-Reply-To:Content-Type;
- b=QdcMk4Jj1Cp/tQU67s3GhkmBC1/xhsmui+sH8BAezONB8rB2lfhIdEfqspxEQhirS
- sqoD7o/X7WDgMamjKO9WrrBhUCwIlDPKZiSqMEyYpdpjf3RrquP+dAJzNGseSMLFC/
- CDw13dFbHT9K/FpGrtMItVAfX6XPWwT6QQgyo5nLu/z2J/lYc2gF9cljWmPEZLzsYq
- p1Yh/x0cUzx3w06y1hhWCjM+hA9LZ1+e1aJ2OrXO1j8eDLbmuoK/fTMwnQZKbc9TnV
- zFFF1LoJLeBQ+QDXInXb8jhiZrQxxVZWfW1s1+dzjW9bETkih7TI0oy4FreQc5L/Ki
- Sbkx3qvw56Y/w==
-Received: by mail-lf1-f71.google.com with SMTP id
- u17-20020a05651206d100b003fd714d9a38so221294lff.8
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 21 Oct 2021 05:25:32 -0700 (PDT)
+	by mail.kernel.org (Postfix) with ESMTPS id 87E5E61186
+	for <soc@kernel.org>; Thu, 21 Oct 2021 12:55:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 87E5E61186
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
+Received: by mail-lf1-f52.google.com with SMTP id x27so690804lfu.5
+        for <soc@kernel.org>; Thu, 21 Oct 2021 05:55:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AeWqycYIuVt19sWOnyHEv1PGs8MPa9Z3i7y2gAAE/yk=;
+        b=NawLACvWDNKuQZVM7gNhU33JZAmxzGAz0vAmzpC5uZmVYq9AxySnJhJUX7p4ZldZdf
+         +LZOrKPc0ZBTJ1LxLk/yCZbuT8EOCxT93xgzD6jcR77fab2x2z0EP8GMxYLm6ecL+eKS
+         Qo4TDqE3Skv/DOpgzZV0MRDfgEJHaHxMcMqGZv8/zJf2Bwsx52rQWramOL0xY+ZYc3A5
+         lOzTOMiegLmfaM7ZWuMYvOIrZc6dBmPN68MK6/U7RjeOAXH1t8tuYKyR+MlkDP/nWrlt
+         PVuDS1e6CSQffOi1epq0sOqsdA7FmEFdiwqrSVCl+yMiFZvZ5cdxb35WQrxDFJ3dVOcz
+         /lSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:subject:to:cc:references:from:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=OEvgfMSIzLFlHfTd+aj6jAI5gittIjBiCSXpIdeWxOQ=;
- b=gFb9HkpnOQ3Li+0S10co//bw7LLy1pFXAEmZ4pT/rIiYpt0PsG0tShIUuVP6ksgBma
- 9eYMGxREz4PTKU5Vnn9qqScbz2O7zhNzvf5UiZ6EDtjRp8IsGZuNrGzbSgRn0W3NEszB
- 4mmYzbJbg6uuLdcerSPkcw0/1f1CXvYe9Cu6g/Qt92CP7T+p/t2d2w84XVIB7K0qPi9C
- 4cf0rDqnEzBWmfE5cOuuXAp9a5+kgF6uUaJMP5+NeUNugaIVKf64yFP8rwlIuK1fG0cJ
- vrhe+LvmkZisRf3RfMsrwE7nGLgtZVYOqYaPtzo3suYQmWbKiBRIC+DPw/motNgmzyNp
- nKVw==
-X-Gm-Message-State: AOAM5320f5kmHcKBKgASVMwJ6jbMiyFnZxkO6Yw78/isl8EFn2ECFYFH
- jse0zQC6V8RwUN9t1wWeJvM1Q3nciSN9A8DqwBtO/3j+nTvqoVkmTVporvlC5uO3JAnWdXSs+yw
- k23RpEeElajImKu+DKvMC9SsqtgiwZf8R0vdCk3gPRLAQMt+jdJmr
-X-Received: by 2002:a05:651c:230e:: with SMTP id
- bi14mr5404529ljb.467.1634819132389; 
- Thu, 21 Oct 2021 05:25:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz0/8NcGHTrSWS0H6+LXQbRBX3Abg2xVQ13rASma1FIwjNQK3yxWARDRCPBIvJmD3bqslQp8Q==
-X-Received: by 2002:a05:651c:230e:: with SMTP id
- bi14mr5404491ljb.467.1634819132086; 
- Thu, 21 Oct 2021 05:25:32 -0700 (PDT)
-Received: from [192.168.3.161] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
- by smtp.gmail.com with ESMTPSA id o15sm537797ljm.139.2021.10.21.05.25.31
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 21 Oct 2021 05:25:31 -0700 (PDT)
-Subject: Re: [GIT PULL] riscv: dts: few cleanups for v5.16
-To: Arnd Bergmann <arnd@arndb.de>
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AeWqycYIuVt19sWOnyHEv1PGs8MPa9Z3i7y2gAAE/yk=;
+        b=MuCh49gB7BgyuAmyKmrrmmmo5SVfoSlWeZHZa83cAYbnPCWh1k0UNBkHL7W0LTOXXY
+         QvDP3wwsiMhGiGK/9FrnduIkUd6BUaPj3l7vmR7nyUC1qkTk0sP0Ixi2PQwwZ3Il6p9V
+         rvpizvATKx7KnL4TYNwerRdkfO/Us3UAXLPD0bR9pzmMLJU2w9W0vfVXKV3RYtXTmy1P
+         /2jNxBCYHHkl+sYSJJzJ6vekG1Me0P8PgzQTw1+JEYyL7H0bccNBvDEQVn/DP6P+2nKd
+         XzZYkz8pp7but69+tiQmLELd+SYUpxnrZQeirKrCXLYNNx927JPYJ2K2JeeVZMoeIvjB
+         q+Rg==
+X-Gm-Message-State: AOAM530qwqUmJwzq4KyQlLMTTaub/iTyAngm4kMOWaFUZFFwUetqGaZw
+	KAySiGjjtr3Ouk0yScGwuHAuc1QCd9N/DA==
+X-Google-Smtp-Source: ABdhPJxFzmGm3er4wZIEDT2Ppy5LMXVNyzH3mHvH0sSXnZoZwxhSW/0taeZrEqARBPg20tX5wEYXAw==
+X-Received: by 2002:ac2:4bc1:: with SMTP id o1mr5100924lfq.553.1634820945937;
+        Thu, 21 Oct 2021 05:55:45 -0700 (PDT)
+Received: from jade.urgonet (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
+        by smtp.gmail.com with ESMTPSA id r30sm455285lfp.298.2021.10.21.05.55.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Oct 2021 05:55:45 -0700 (PDT)
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Olof Johansson <olof@lixom.net>, arm-soc <arm@kernel.org>,
- SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>,
- "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES"
- <linux-samsung-soc@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- Palmer Dabbelt <palmerdabbelt@google.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Albert Ou <aou@eecs.berkeley.edu>,
- linux-riscv <linux-riscv@lists.infradead.org>
-References: <20211021090955.115005-1-krzysztof.kozlowski@canonical.com>
- <CAK8P3a08QiwA4+zPGLt3xA=01HLiBcLcC4gM1+8N6uo5KMTQLw@mail.gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <4f9141f6-a35f-e412-7a9e-a00a7c8376b2@canonical.com>
-Date: Thu, 21 Oct 2021 14:25:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+To: SoC Team <soc@kernel.org>
+Cc: arm-soc <arm@kernel.org>,
+	OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Jens Wiklander <jens.wiklander@linaro.org>
+Subject: [PATCH] optee: smc_abi.c: add missing #include <linux/mm.h>
+Date: Thu, 21 Oct 2021 14:55:39 +0200
+Message-Id: <20211021125539.3858495-1-jens.wiklander@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a08QiwA4+zPGLt3xA=01HLiBcLcC4gM1+8N6uo5KMTQLw@mail.gmail.com>
-Content-Language: en-US
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211021_052536_477725_34116D19 
-X-CRM114-Status: GOOD (  19.54  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211021122530.cCVb8slgvouN_roKG6lCz3AMGZGIrbPMgFuaYvBms3k@z>
+Content-Transfer-Encoding: 8bit
 
-On 21/10/2021 14:23, Arnd Bergmann wrote:
-> On Thu, Oct 21, 2021 at 11:09 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->>
->> Hi Arnd and Olof,
->>
->> I have an old patchset for RISC-V dts cleanups which I sent to mailing lists in
->> August 2021 (v1, v2), resent in September and pinged two times.  They got some
->> review (from Alexandre Ghiti for SiFive, from Conor Dooley for Microchip) but
->> unfortunately Palmer (RISC-V maintainer) did not respond here.
->>
->> The usual RISC-V patches go via Palmer to Linus and I am not planning to change
->> that, but I want to get these fixed.
->>
->> Could you grab these to soc tree?
-> 
-> Sure, I can add them to a separate branch in the soc tree, in case the
-> riscv maintainers
-> take them after all. I notice that you have only Cc'd Palmer, but not
-> the other two
-> maintainers or the RISC-V mainling list. Adding them here to maybe get their
-> attention.
+Adds missing #include <linux/mm.h> drivers/tee/optee/smc_abi.c to fix
+compile errors like:
+drivers/tee/optee/smc_abi.c:405:15: error: implicit
+declaration of function 'page_to_section'
+[-Werror,-Wimplicit-function-declaration]
+        optee_page = page_to_phys(*pages) +
+                     ^
+arch/arm/include/asm/memory.h:148:43: note: expanded from
+macro 'page_to_phys'
+                                               ^
+include/asm-generic/memory_model.h:52:21: note: expanded
+from macro 'page_to_pfn'
+                    ^
+include/asm-generic/memory_model.h:35:14: note: expanded
+from macro '__page_to_pfn'
+        int __sec = page_to_section(__pg);                      \
+                    ^
+drivers/tee/optee/smc_abi.c:405:15: note: did you mean
+'__nr_to_section'?
+arch/arm/include/asm/memory.h:148:43: note: expanded from
+macro 'page_to_phys'
+                                               ^
+include/asm-generic/memory_model.h:52:21: note: expanded
+from macro 'page_to_pfn'
+                    ^
+include/asm-generic/memory_model.h:35:14: note: expanded
+from macro '__page_to_pfn'
+        int __sec = page_to_section(__pg);                      \
+                    ^
+include/linux/mmzone.h:1365:35: note: '__nr_to_section'
+declared here
+static inline struct mem_section *__nr_to_section(unsigned long nr)
 
-Yes, my bad. Thanks for cc-ing them.
+Fixes: c51a564a5b48 ("optee: isolate smc abi")
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+---
+
+I wasn't able to reproduce the error above. It obviously involves
+CONFIG_SPARSEMEM=y, but something more seems to be needed to trigger the
+error. Nonetheless, including <linux/mm.h> should fix the error.
+
+Thanks,
+Jens
 
 
-Best regards,
-Krzysztof
+ drivers/tee/optee/smc_abi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+index 9a787fb4f5e5..6196d7c3888f 100644
+--- a/drivers/tee/optee/smc_abi.c
++++ b/drivers/tee/optee/smc_abi.c
+@@ -10,6 +10,7 @@
+ #include <linux/errno.h>
+ #include <linux/io.h>
+ #include <linux/sched.h>
++#include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
+-- 
+2.31.1
+
