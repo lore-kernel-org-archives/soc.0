@@ -1,108 +1,94 @@
-Return-Path: <linux-kernel-owner@kernel.org>
+Return-Path: <linux-samsung-soc-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15FB6C433FE
-	for <linux-kernel@archiver.kernel.org>; Thu, 21 Oct 2021 11:31:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F198C433F5
+	for <linux-samsung-soc@archiver.kernel.org>; Thu, 21 Oct 2021 12:23:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0FE46109F
-	for <linux-kernel@archiver.kernel.org>; Thu, 21 Oct 2021 11:31:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 78B75611CE
+	for <linux-samsung-soc@archiver.kernel.org>; Thu, 21 Oct 2021 12:23:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbhJULdb (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Thu, 21 Oct 2021 07:33:31 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:46235 "EHLO
+        id S231309AbhJUM0I (ORCPT
+        <rfc822;linux-samsung-soc@archiver.kernel.org>);
+        Thu, 21 Oct 2021 08:26:08 -0400
+Received: from mout.kundenserver.de ([212.227.17.10]:38159 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbhJULdR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Oct 2021 07:33:17 -0400
-Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
+        with ESMTP id S230425AbhJUM0I (ORCPT
+        <rfc822;linux-samsung-soc@vger.kernel.org>);
+        Thu, 21 Oct 2021 08:26:08 -0400
+Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
  mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MMGZM-1mNUlq0RSI-00JHDl for <linux-kernel@vger.kernel.org>; Thu, 21 Oct
- 2021 13:30:56 +0200
-Received: by mail-wr1-f47.google.com with SMTP id u18so68706wrg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Oct 2021 04:30:56 -0700 (PDT)
-X-Gm-Message-State: AOAM531JZEa8A6xnC7BZWW107IhO4iFwWfuA6z+JNMkLZYhDH85k7CMu
-        7l5DEKG5TXSOP+JvSBdHGVZrO2DDpKo4uIm6YI0=
-X-Google-Smtp-Source: ABdhPJzcazkfKoonw6SZah3e238itbP12J74p79Qz07ksYN7hvsrDFAzWhgeXXpFqRr6x5tkdlMCty5l3RadM5Cj6F0=
-X-Received: by 2002:adf:d0c6:: with SMTP id z6mr5050441wrh.336.1634815855802;
- Thu, 21 Oct 2021 04:30:55 -0700 (PDT)
+ id 1MoNyA-1n1sRb0lGS-00oq7C; Thu, 21 Oct 2021 14:23:51 +0200
+Received: by mail-wm1-f49.google.com with SMTP id o24-20020a05600c511800b0030d9da600aeso569957wms.4;
+        Thu, 21 Oct 2021 05:23:51 -0700 (PDT)
+X-Gm-Message-State: AOAM533nYoAv7Nga0rYzq0eXeDcPw6Pp5vaYi/kyJhXZ6px6l7ilUFQS
+        WKK8LIn3AXyK7v5dYcAZlREEUWsJS6DTlA73+aQ=
+X-Google-Smtp-Source: ABdhPJyySfMSOhtA5bv4hxMOMgjYtqe9qUbX0g4CfeIRPIhQyBDPW11VeAk2UNQWRemVY//cA3QTl+gSHiVN9uJF8ao=
+X-Received: by 2002:a1c:4b08:: with SMTP id y8mr6575841wma.98.1634819030835;
+ Thu, 21 Oct 2021 05:23:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211018121324.GA2943530@jade>
-In-Reply-To: <20211018121324.GA2943530@jade>
+References: <20211021090955.115005-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211021090955.115005-1-krzysztof.kozlowski@canonical.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 21 Oct 2021 13:30:39 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0Z-Hh9xav1peg8LqGoPaHnrt9eo453QmwKrWcWwWAEXw@mail.gmail.com>
-Message-ID: <CAK8P3a0Z-Hh9xav1peg8LqGoPaHnrt9eo453QmwKrWcWwWAEXw@mail.gmail.com>
-Subject: Re: [GIT PULL] OP-TEE FF-A for V5.16
-To:     Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 21 Oct 2021 14:23:34 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a08QiwA4+zPGLt3xA=01HLiBcLcC4gM1+8N6uo5KMTQLw@mail.gmail.com>
+Message-ID: <CAK8P3a08QiwA4+zPGLt3xA=01HLiBcLcC4gM1+8N6uo5KMTQLw@mail.gmail.com>
+Subject: Re: [GIT PULL] riscv: dts: few cleanups for v5.16
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc:     arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-        OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:3lB6jItQFKoow/pJKTEHCoL3phQgjPuKixB+e5hP7Y3FWxOfgRB
- a2u9XNWEz5tAytc0YUpgPSMgea1YEw0JO22LBEnnGpbIIm+VMbtu3THgfZ2PJZNgoewwK4d
- dJuC8K8EBwtVky/F5x3O5hCeC2GkTtC+I+hDRDatDpBy97j1vVKOCIw+9EDCg+Xulphs604
- DVSAB+w1kqFCrsDxQUpxA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kT5AKmdWuU0=:YQvk2HjRHh9FPvRgzFbCJi
- RsYYHEGgS7pzfOycMazERdW+w5AErHk7SYrO4+VC/ttYzSxyw5MaB3DhIMfeoMZBPCk5p/46i
- pR9qy7MxOc0TEt7xBE07tNTIe0Moy9yiyYQ0AsPLC5tN/XyZ1PqZJje+xNVc8YHJVqhgQfpb0
- Z9h4Yt8y7Lingb41sOY77ZZBz3pI9prZdBQ3DzayOXpPFCGfu2p+Ojq8ve2tBEdBjif5g+BrT
- unpW9Co4wA++e//MTpDtQvp6cEUaGrl7cR/HScKI16ixw4lY8A/JgZdXRsnx94z/tE9Q4yWde
- xKpIaCaeKjFmpvkz1KUE8F1Wr/DLk4c+rNowL+G0ThpUCmoJq+hxkSV9BB2ldgFFYd1htYTnc
- Bfkj8qbYRVdCTFEd4385I4FnDZ3bLvt7McxYureaWewAMYD9Dj8c7qstu1WOK5xuQuoRFIkj6
- UY9/5NNruIyhiOomHf+jWBQ3lnD4hg6I2S8wrAL6lwh7K7Q9At20HucJkRYa+Rt0UbgwtfQa3
- LbiasIlALzi7QBrYqkz06W/vLNGQGpgimh0QQDtIqltpC1dCuAjgunurmFneL9zDYAgQp1PvH
- p546RlrKjBwgPCoI3xwm2IoantSgtfeb+k3MS9+FuC1jNEIb0Z6frvRrc20pwoWj43qB7ffT5
- trHcKugLqHRX2DubJ7bSuKN2C8xWYhQ4JBrWPc8Dw5xlJeDPvIMrEZxBUQCg/iT5JNCk=
+X-Provags-ID: V03:K1:5cU6HKrOiO2TBoYF1mEMk9QxcLbM2PxzkkRnZAeqqqIWG+vefuo
+ EqZXivRcg+M2vtLRx/R11SojLlW0T9kkajzh+sFNZOOGm0jT60UofPeskhs9AF4/GC8CB/j
+ fiKCVy186ggQ9C2M1Q0mRgGNq4Ad1lVYHUmoLP6VSvY8mNSl0m+lEuw0yNgNVJ5zEGYeFyi
+ XwI+KB7q7yNh97L24cE2g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9Kx47QAr4+I=:B9JWvyalr6w/+sGWkXYoLB
+ vOEJ2rFMp5JWqoqchaL0mHbdBLDlivySlVqhf7umoYb1Op8qYsJvwqi/1OoZyluiMDKn31MC/
+ AdGQmedPIWg6GilNUQ41ZolP/GOFkBj7wxBVr2doLKwXbHOVV3gCy+AdbzpXTYE461lBRwo+X
+ WiS3GA9oKJ6j3ODv7Vl8JRGWD1QkbJzCWmjVE/HYNzxCQ1yZvHI5tx84kk0JA71PM3BbCbqrq
+ K9mHqYtGj6ochJNzfZTeNzF/5o/nnaiSr4WVsm9pWPKLsH0vNswwoJhg25SzHhwqYKgrLLjBs
+ QyCCfMHkhOgajucIiVxpa5mTpFCLIqzb8AoPaNCaGBqtp7LpDWUkNWyg1k/bW88TTnnSp7vnG
+ DTRsDKMOS+PwaBfbpHsynPeLawxYlok8mokZRJR/nQWJz8qdjwEJQbAZk7VLq9bIxR6OFpYg2
+ CFct8f4t8xGuMCSCylZ96a+bRmjWqf7V+cwNOsbXt5w85HVs5CzGLqudpMH5Js9hwLXnrDEYz
+ AShybyjl+cQVHY8YsUPOWHAf7JwPMCMKVZoPgz7do4eApV/MFCs9U32nyf0cDGAMI8JsGGJYo
+ yErpe8gyRCXQnKH1WlwBsa/Gbec8Xnn9BbkBGv482KOWOd9AgBPxLx09rCuOJXTZflgLunrfv
+ 6eX8CwX0XlkyhD+bJJy0GFXqSa2bLIdRMWxkJ3LClEKdjko1nc0n6ircFU0Za5ztH3eWAoUNS
+ YTHCgSdlZSmnVPHZ/86aEhEmlDBmTS0wuo0r1zXzx49wQQI4Sm/2DPLQZsGppoX6iEfVnFvpx
+ 8PKa4D40B1HtVz/VDloqhJ8eLSnD6g/8AjArDJDfDFdyXqLCQo=
 Precedence: bulk
-List-ID: <linux-kernel.vger.kernel.org>
-X-Mailing-List: linux-kernel@vger.kernel.org
-Message-ID: <20211021113039.SLRbv2o_FN68HiZLYzaWYOlV5Beu99JKPDDONa7JsQY@z>
+List-ID: <linux-samsung-soc.vger.kernel.org>
+X-Mailing-List: linux-samsung-soc@vger.kernel.org
 
-On Mon, Oct 18, 2021 at 2:13 PM Jens Wiklander
-<jens.wiklander@linaro.org> wrote:
->       optee: isolate smc abi
+On Thu, Oct 21, 2021 at 11:09 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> Hi Arnd and Olof,
+>
+> I have an old patchset for RISC-V dts cleanups which I sent to mailing lists in
+> August 2021 (v1, v2), resent in September and pinged two times.  They got some
+> review (from Alexandre Ghiti for SiFive, from Conor Dooley for Microchip) but
+> unfortunately Palmer (RISC-V maintainer) did not respond here.
+>
+> The usual RISC-V patches go via Palmer to Linus and I am not planning to change
+> that, but I want to get these fixed.
+>
+> Could you grab these to soc tree?
 
-This one caused a randconfig build regression on 32-bit arm:
+Sure, I can add them to a separate branch in the soc tree, in case the
+riscv maintainers
+take them after all. I notice that you have only Cc'd Palmer, but not
+the other two
+maintainers or the RISC-V mainling list. Adding them here to maybe get their
+attention.
 
-/git/arm-soc/drivers/tee/optee/smc_abi.c:405:15: error: implicit
-declaration of function 'page_to_section'
-[-Werror,-Wimplicit-function-declaration]
-        optee_page = page_to_phys(*pages) +
-                     ^
-/git/arm-soc/arch/arm/include/asm/memory.h:148:43: note: expanded from
-macro 'page_to_phys'
-#define page_to_phys(page)      (__pfn_to_phys(page_to_pfn(page)))
-                                               ^
-/git/arm-soc/include/asm-generic/memory_model.h:52:21: note: expanded
-from macro 'page_to_pfn'
-#define page_to_pfn __page_to_pfn
-                    ^
-/git/arm-soc/include/asm-generic/memory_model.h:35:14: note: expanded
-from macro '__page_to_pfn'
-        int __sec = page_to_section(__pg);                      \
-                    ^
-/git/arm-soc/drivers/tee/optee/smc_abi.c:405:15: note: did you mean
-'__nr_to_section'?
-/git/arm-soc/arch/arm/include/asm/memory.h:148:43: note: expanded from
-macro 'page_to_phys'
-#define page_to_phys(page)      (__pfn_to_phys(page_to_pfn(page)))
-                                               ^
-/git/arm-soc/include/asm-generic/memory_model.h:52:21: note: expanded
-from macro 'page_to_pfn'
-#define page_to_pfn __page_to_pfn
-                    ^
-/git/arm-soc/include/asm-generic/memory_model.h:35:14: note: expanded
-from macro '__page_to_pfn'
-        int __sec = page_to_section(__pg);                      \
-                    ^
-/git/arm-soc/include/linux/mmzone.h:1365:35: note: '__nr_to_section'
-declared here
-static inline struct mem_section *__nr_to_section(unsigned long nr)
-
-I have not investigated it, but it's probably trivial. Can have a look
-and send a fix to
-soc@kernel.org?
-
-      Arnd
+        Arnd
