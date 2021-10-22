@@ -1,59 +1,67 @@
-Return-Path: <SRS0=T102=PK=arndb.de=arnd@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 254D4C433EF
-	for <soc@archiver.kernel.org>; Fri, 22 Oct 2021 19:55:00 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id BC02F611CB; Fri, 22 Oct 2021 19:54:59 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 91DCF6103D;
-	Fri, 22 Oct 2021 19:54:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 91DCF6103D
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MirfI-1nA1WW2oaa-00ewzc; Fri, 22 Oct 2021 21:54:56 +0200
-Received: by mail-wr1-f47.google.com with SMTP id y3so1763010wrl.1;
-        Fri, 22 Oct 2021 12:54:56 -0700 (PDT)
-X-Gm-Message-State: AOAM533FnHxAVH2crJ2Tq0BASaO+tleFUfZ5S58hwAsTn0EhwPwMLlrw
-	IMjcmBmFdcefgThoZrxjkpzqdSitWrO5VrCm01g=
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C4C0C433EF
+	for <linux-kernel@archiver.kernel.org>; Fri, 22 Oct 2021 19:55:12 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 0B527610A4
+	for <linux-kernel@archiver.kernel.org>; Fri, 22 Oct 2021 19:55:12 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S234000AbhJVT53 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Fri, 22 Oct 2021 15:57:29 -0400
+Received: from mout.kundenserver.de ([212.227.126.131]:51065 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232291AbhJVT51 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 22 Oct 2021 15:57:27 -0400
+Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MHXSD-1mQYEb2aZt-00DWRX for <linux-kernel@vger.kernel.org>; Fri, 22 Oct 2021
+ 21:54:56 +0200
+Received: by mail-wr1-f45.google.com with SMTP id e12so87135wra.4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Oct 2021 12:54:56 -0700 (PDT)
+X-Gm-Message-State: AOAM532RgcPfsd3E10wah+hRNxHP8t1bxk3CMWN2U/7EOv2K5rt0TW8p
+        cj80uGqikkBIq7e+eSnPvcnubtFJPCnPbx/XCcs=
 X-Google-Smtp-Source: ABdhPJxaBoY+j7evAJR9nKHPeSqSpIWsO9lvFcI+piIA0yZoVJhYPemgz55zc/SnlURZX+C7pDp9Gk55MCbMvJ8lpW0=
 X-Received: by 2002:adf:e292:: with SMTP id v18mr2180860wri.369.1634932496330;
  Fri, 22 Oct 2021 12:54:56 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211022010027.11866-1-leoyang.li@nxp.com>
 In-Reply-To: <20211022010027.11866-1-leoyang.li@nxp.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Fri, 22 Oct 2021 21:54:40 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 22 Oct 2021 21:54:40 +0200
 X-Gmail-Original-Message-ID: <CAK8P3a35adaG9OzWWFSvjJcQo+hEnEJuLCL-8je-m+78JfjWxQ@mail.gmail.com>
 Message-ID: <CAK8P3a35adaG9OzWWFSvjJcQo+hEnEJuLCL-8je-m+78JfjWxQ@mail.gmail.com>
 Subject: Re: [GIT PULL] soc/fsl drivers changes for fix(v5.15)
-To: Li Yang <leoyang.li@nxp.com>
+To:     Li Yang <leoyang.li@nxp.com>
 List-Id: <soc.lore.kernel.org>
-Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Ioana Ciornei <ioana.ciornei@nxp.com>, Diana Craciun <diana.craciun@nxp.com>
+Cc:     arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Diana Craciun <diana.craciun@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:xoHyhrCt7yvmbyAOdRG6Dh82rq5sAbMjkksUrjI0T5hKi32Szrn
- xGcvCQ8NLkRgISkT/Aqhe3FFvJ88Mv2X8CcdwQ7H7CeVEtR6lR7UG0ccRLfwaT3qA0StiUz
- oUmfn3r6E47wh5DUCrKnVdxi4H5sc2/t5NkLMjenGic44Ey54wtqc6/5xlyfHs4ITavUg9I
- /S60FKRkwI1IYmbm1W2rA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:QyoQHH5CKC8=:icRftqPHh3kh7iGSxXEHvI
- Lnb6BXItgwVrl5GQ35Q8CMvGARM1oX8L6waZTs1zCCbylZ3EfUismJzUffNnshWxVn19vFgMN
- MFt5rUY7FOODdikJOwuF5d50Hru+0RljWxs1Qf3ohsXbU0uwn1FqD5IacZ5WWnRtnI062R8Vc
- FaZ3RaQBlwCkitEJC3svfaOK0jO9eLZRirms3UwvFqjXHujSSI5BifBBXhTkyhuAysq5le/cW
- +5Cn7f1vG1kJSxBvu9e2c//JHf8b7VdMDagvedmrmZFClD7D895VAFCNxMcso9TWo5gjkyNBn
- 5fEOpb0RJ8h5Vmcc6DGVmjcSxlOTLxM0iI9gjPNZM/Bnq1q8OtgCo6b6h0H8/K1d88Ej1Q37J
- R6CmFknbUL44B5cIVAxbVgl3CCIR6Osdl8NEKcswOuDmQexHqZhktGTxomxTXznbl2qMo6RFY
- mg4lqPQaekRDEy2Jpw5JXr7vV9fMY5LKQb43EdNDkdHTBbvBoWnhjhGDfQKnvNYAl4BY5EaEv
- M0WahHCL0wnpmFFKnFOVpFoqoSDx1CiJ3ag/cTBF+sjioULKttFmuDpN5r2X9gDYST91vMnas
- TadUy7yJPW3h+HtXj16N+kvwKLW8+Cr6rQKbD5MRyPneGfJ2xh3m/QeEfXij9wiYqkiRR6fWl
- QEg+PrlhNJrgQVSkQXKtkjD3BBT282jVJL7LjbZmrxoMfQE8S42fQWVUWaAJWVbLxd2o=
+X-Provags-ID: V03:K1:niigE9SUguy9iIEO+QBnEtiZsR3EvE1qxGPJk0C0G7bRSIGxYOj
+ PUu5kszQ1ozzgcemRqokmIBA9fL19nW/W7eUA/LJzhCz3Kjy9XpJ8KPNmkdEIvVmeHTQkxP
+ YwbEl7/RE/IHBYxctopNs80Vbrgcf9sYasYVwJriASJTfk9PI8flapsYiAtzn1c3OR9kRUf
+ fsKx5MlQtMWtWTiiVOt8A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+wFLdvmtpSU=:QDGytyCGudjfsTCnl21RBd
+ zk3IGoK8gfJ+n3MwteVQy1Cz13I/rMDQ0GfgZXuN+9nVsL54r55xQaezsa2BUW4HkMDgZ5uUC
+ f0dZc8Vhpf+AxVgKh3JvlNMJAViWq+AqYh1mSWbSduZXQzq+qLQL3mwKI0nb7kbxWAsIiM2wJ
+ +Mz8wDAJqPOrroMWb9ZdujkIUtWA6sIeTOiGt7M0VWhjS4b8/E496r9nYiJdU0yKdndtAe2Hr
+ KJoxYhpda2YrxXltNg8oZdNiARfPxwnSmF9cM4lED+DSxnZS8FdwiBoWy18dNQgBvUxUtKlxV
+ y44IErIS4t/If1ANFDlayommJC31dlaFq1ea+L4oGUTU6Y2BAlt3vkBC5T8FfadMNNTCTYdxS
+ /oalWipx/M9O/xYkurTlb4P7BCXHkeZ3WG2w7dQhSbMfxJUqWBEz8oG4+4Gma7V3HJeJEgYrB
+ iD9WfgHK+pfiVE+ZQ/Vxjif3zGgBTQOePCFAKjMPs60ebzqqlHhghtSxn9m6x/t7e8fEEFoF5
+ JLfZUZkZ4XfFux20Qyhz5dyOLJK3i7OsL97mmComwTSJOGQkRr6vT5Fcp18VVx8JnCS9b4gr3
+ d7Mxka3KRTns6CeCV9Y0MfGRI60QQ34tdz8aaTtLx/XaDE0mW2OU2XZn804GuGp9ZPgIboepg
+ Y+p/dMV6b24OXdzuVaiUtL7YI56eYxHrxZonP7Z9hKEreYVGtga/7l+Xwo35vWC7gyUg=
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20211022195440.qR4Uri9VEV2yx08uBDl1NMoqN0MhEZffg40xA_y-Uoc@z>
 
 On Fri, Oct 22, 2021 at 3:00 AM Li Yang <leoyang.li@nxp.com> wrote:
 > ----------------------------------------------------------------
