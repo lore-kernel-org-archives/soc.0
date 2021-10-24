@@ -1,47 +1,78 @@
-Return-Path: <SRS0=npcr=PM=z3ntu.xyz=luca@kernel.org>
+Return-Path: <SRS0=8pCq=PM=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93C25C433EF
-	for <soc@archiver.kernel.org>; Sun, 24 Oct 2021 08:46:14 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 5124A60F6F; Sun, 24 Oct 2021 08:46:14 +0000 (UTC)
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3CDDC433F5
+	for <linux-mediatek@archiver.kernel.org>; Sun, 24 Oct 2021 08:46:47 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CA12E60F57;
-	Sun, 24 Oct 2021 08:46:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA12E60F57
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=z3ntu.xyz
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=z3ntu.xyz
-Received: from localhost.localdomain (ip-213-127-63-241.ip.prioritytelecom.net [213.127.63.241])
-	by mail.z3ntu.xyz (Postfix) with ESMTPSA id 20B91C6C78;
-	Sun, 24 Oct 2021 08:46:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 90F0D60F9B
+	for <linux-mediatek@archiver.kernel.org>; Sun, 24 Oct 2021 08:46:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 90F0D60F9B
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=z3ntu.xyz
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=ERrzxBN/AzM4C/+Qrpm/h7I91wQc+d4q6MFQOwmu26c=; b=M1HOQtXTvrEVag
+	xezMPSsCSAXm4q1JsJJBIPq+KEAfcsz2Sef993ZCubkyLLJbc72yZATHPOzNnCjd7JuPioEyN0BxA
+	IlOFSgtnSSsdslitknrg+0WrP9kEs6GsXEJMRo8YIhF9MEi+ioWjD9hZLtYvare7673gzTK0Cl0iX
+	OAH631DI7dkgJrkF9pJtCmkE1/dOburV0gcxWXfw64AmhRNtgVKsuWnsST3QNPusblGonPXS4X5RX
+	fXeO9JluRFZ6y9wtXFHhiHd0O7t9Dw0F4eF95LoQGGCDWX+BwLKTo9CbJ5JJN9JHZaCu8wl9KYEuh
+	0abEOYxdC/H4ziXwemmg==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1meZ9F-00Dnvu-6k; Sun, 24 Oct 2021 08:46:33 +0000
+Received: from mail.z3ntu.xyz ([128.199.32.197])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1meZ8z-00Dnum-Lw; Sun, 24 Oct 2021 08:46:19 +0000
+Received: from localhost.localdomain (ip-213-127-63-241.ip.prioritytelecom.net
+ [213.127.63.241])
+ by mail.z3ntu.xyz (Postfix) with ESMTPSA id 20B91C6C78;
+ Sun, 24 Oct 2021 08:46:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-	t=1635065172; bh=MNGJb5x5e9bvi6TMYXpldSbHD+QFVn7vCYvD1jNOx5g=;
-	h=From:To:Cc:Subject:Date;
-	b=ZFpGK+m/ztWbYs29/omZeQw80VQNdOgfuyQJl4AqCJN+wG0CbLP0ULFVtYqLFnlw/
-	 hXbbJZoyzgL/mbDKEMvAXbYf0HoFizw8QUiJsoLev500RU8V7weB/9wwJ0HtZi1duP
-	 K1zu+G+WuMg5pFK/lQhWMK0HaiR2cdIhE8w3Jlug=
+ t=1635065172; bh=MNGJb5x5e9bvi6TMYXpldSbHD+QFVn7vCYvD1jNOx5g=;
+ h=From:To:Cc:Subject:Date;
+ b=ZFpGK+m/ztWbYs29/omZeQw80VQNdOgfuyQJl4AqCJN+wG0CbLP0ULFVtYqLFnlw/
+ hXbbJZoyzgL/mbDKEMvAXbYf0HoFizw8QUiJsoLev500RU8V7weB/9wwJ0HtZi1duP
+ K1zu+G+WuMg5pFK/lQhWMK0HaiR2cdIhE8w3Jlug=
 From: Luca Weiss <luca@z3ntu.xyz>
 To: linux-mediatek@lists.infradead.org
 List-Id: <soc.lore.kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht,
-	Luca Weiss <luca@z3ntu.xyz>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+Cc: ~postmarketos/upstreaming@lists.sr.ht, Luca Weiss <luca@z3ntu.xyz>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 Subject: [PATCH v2] arm: dts: mt6589: Add device tree for Fairphone 1
 Date: Sun, 24 Oct 2021 10:45:35 +0200
-Message-Id: <20211024084535.30959-1-luca@z3ntu.xyz>
+Message-ID: <20211024084535.30959-1-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211024_014617_898804_079FC73A 
+X-CRM114-Status: GOOD (  17.01  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>, 
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211024084535.9nwAe9pBhp-TURzh4iKb_GmGWVwFY005YctAFnGwA48@z>
 
 Add rudimentary support for the Fairphone 1, based on MT6589 to boot to
 UART console.
@@ -133,3 +164,8 @@ index 70df00a7bb26..c6babc8ad2ba 100644
 -- 
 2.33.1
 
+
+_______________________________________________
+Linux-mediatek mailing list
+Linux-mediatek@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-mediatek
