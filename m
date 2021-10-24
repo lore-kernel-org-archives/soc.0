@@ -2,51 +2,51 @@ Return-Path: <SRS0=jRGM=PM=gmail.com=mr.bossman075@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E480FC433EF
-	for <soc@archiver.kernel.org>; Sun, 24 Oct 2021 15:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05BFAC433FE
+	for <soc@archiver.kernel.org>; Sun, 24 Oct 2021 15:40:35 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id C493D60FBF; Sun, 24 Oct 2021 15:40:30 +0000 (UTC)
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+	id DEA816103E; Sun, 24 Oct 2021 15:40:34 +0000 (UTC)
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8FD1A60F6F;
-	Sun, 24 Oct 2021 15:40:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8FD1A60F6F
+	by mail.kernel.org (Postfix) with ESMTPS id AC9A760EBC;
+	Sun, 24 Oct 2021 15:40:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AC9A760EBC
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f49.google.com with SMTP id d6so5675539qvb.3;
-        Sun, 24 Oct 2021 08:40:30 -0700 (PDT)
+Received: by mail-qk1-f180.google.com with SMTP id 77so9568378qkh.6;
+        Sun, 24 Oct 2021 08:40:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LV+Kgtvh7+La2ITtz0O2xUdXeTpFbYkBF1tkOGmeqvo=;
-        b=W8sl0oty4LeSR/wD4twzLfVyyTY9S3Ml1JSOgTX1o8FBFMPDEzNMEbBGerE9WlXQ/+
-         Vjw6h+ZFPZn8ivalJy7pppYq7YWG5czHuAsuVi76+baVObp20qqawXV6NR6YxZRCGE0r
-         1NIzvWlXWaze7PK+kDq9J3yJfqC4H19jda0oKMKDauhnR2gBJ0txw9brYJg3PMuYpiB5
-         sQ9j7b+mr2FKFCp8wDODpJ8ibvy0acsuanHLDqD7zVKYknWbM06zb5xeBft7o+/Gjj2S
-         6fHMxbyR/dF1CYC9znrHTeE7rBr7ykQyUc32B4bHtn99qzj2bIXXFUW1lDoab8vAbPaB
-         VU7g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=LIEq5WFYWlVHRg5jQfKDO8H8SVF/ng+FulfmYxIiEeM=;
+        b=fxvDkIWQSPpOWDyxm35z+5uaq1Xscsol9mtVYvE06ytjwj7WpF3ohvK1hRNoLmDitc
+         ED7ys95utlmjebr1nDo8nHPQydIL37M3gW63TjpC8IMwsrLlEr3UbrSdjxDsymgcAMMI
+         T47oghcvqhrBk47ZjibgK70s+XTWTGzw3NsCfqKxik12F3DN8T859CvlbDchPysTHvBF
+         59JNmkb6UtaT00kOA0X+GIwSP3durBaLISTINIdAMhDzjJvH/c9lav0L3Qb4Fb3NpHUk
+         vivoSZmUS5LisEZerHj3L6Uo2vDttjyZI8ZSNvKaFqOPeYBcSsi4hSsQ0vvTn4aHnW29
+         iA+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LV+Kgtvh7+La2ITtz0O2xUdXeTpFbYkBF1tkOGmeqvo=;
-        b=RF0+R9Q0Jl2v1IR5mIZhGKYARsupPScjdEvBpUT/up1Rsj0dJYiwuNfzjOLJMvscRr
-         bxfsDMfyCuDuyZ1sbGxCrLETbOHveQ0eGw8pUdNhkYQWrsdpEy+adUSoBO6/6jv4+ji8
-         wxv0kCQBupWNvqbjUwGDkLo5xiFYz9/2cvV/ky4rSfMLPYL6v9XCqjr24eMkubQnAObA
-         /tii8WRShxb5NgMLteTTg7mpEP1XXEgJTCGiQmyNuqSzuoXR/ymdywRhrjyjRI7oM3zi
-         S60NgUiaEDmyWa9sbHgq/2mmfj5uqYnA4DQgUQzA9WtuhvG77sXhVEpbrtE3NmjfCb7q
-         PRMg==
-X-Gm-Message-State: AOAM532S1VvSngh9B1karuq4aJQBxHnQS2h8JJkvM5E5q8NdfJBtPfIq
-	nv4RyGqXiyTjWvgBLfpbbmA=
-X-Google-Smtp-Source: ABdhPJxrfcYCPfz68n11err6efPvJC+z85O2b06D7iuXsggzwGZIZGXiSuLoNWvtuBAH76Yljnt2Ww==
-X-Received: by 2002:a0c:cdd0:: with SMTP id a16mr11304302qvn.40.1635090029708;
-        Sun, 24 Oct 2021 08:40:29 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=LIEq5WFYWlVHRg5jQfKDO8H8SVF/ng+FulfmYxIiEeM=;
+        b=JxyMB1Z7wRjFRr4fvhp1l0jmyzVgVDALqn58MtZ4aHfXRFWzBfTdd7l5Msaau/DyvX
+         UfA34wC3RRHcbd2qOhoy0sfh92hrxyVzoLR809Ocj8ToPiI8S9xUtKc1G87MePDyNY64
+         MO6NYovS0kGeMeSNU3fi4WEyZMyNi6ZfJ9TX9s7sGuPUuw93C1PbjYWp8f/p1h0MhFBD
+         GpuQWWi0idHWMjDhQM9yw/7Wtl8a8ZchX2+7MOywuJo1h63FeCaE8iydbsURJ+/8gAPP
+         k1RjoZ+cLqvsO9ADjbpE6N9W9VcVlP9kri53jnzpP8S1QJFHq5G7EJe5Qowl/uEAn+PC
+         K4Lg==
+X-Gm-Message-State: AOAM533cPwV3xOfki5XMD5zhDEaces/X0GMwLpPJYcH0C+RJ7MIZ6Y6/
+	M5OOpsyC6ErVtiLIpnUfDBM=
+X-Google-Smtp-Source: ABdhPJy2L0usqJBt3NmxqI6WeZY6OuH4bCPxn6l+GmtMevu7MsqRv6MSPqRyNjgH6eh+qC5w2GqVcw==
+X-Received: by 2002:a37:6556:: with SMTP id z83mr9335530qkb.211.1635090033848;
+        Sun, 24 Oct 2021 08:40:33 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id x9sm7291731qtw.84.2021.10.24.08.40.28
+        by smtp.gmail.com with ESMTPSA id x9sm7291731qtw.84.2021.10.24.08.40.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Oct 2021 08:40:29 -0700 (PDT)
+        Sun, 24 Oct 2021 08:40:33 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -83,73 +83,89 @@ Cc: mturquette@baylibre.com,
 	linux-mmc@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
 	linux-serial@vger.kernel.org
-Subject: [PATCH 00/13] This patchset aims to add initial support for the i.MXRT10xx family
-Date: Sun, 24 Oct 2021 11:40:14 -0400
-Message-Id: <20211024154027.1479261-1-Mr.Bossman075@gmail.com>
+Subject: [PATCH 01/13] ARM: imx: add initial support for i.MXRT10xx family
+Date: Sun, 24 Oct 2021 11:40:15 -0400
+Message-Id: <20211024154027.1479261-2-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211024154027.1479261-1-Mr.Bossman075@gmail.com>
+References: <20211024154027.1479261-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add initial support for the i.MXRT10xx SoC family
-starting with the i.IMXRT1050 SoC.
-This patchset contains:
-- i.MXRT10xx family infrastructure
-- i.MXRT1050 pinctrl driver adaption
-- i.MXRT1050 clock driver adaption
-- i.MXRT1050 sd-card driver adaption
-- i.MXRT1050 uart driver adaption
-- i.MXRT1050-evk basic support
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Giulio Benetti (6):
-  ARM: imx: add initial support for i.MXRT10xx family
-  dt-bindings: imx: Add pinctrl binding doc for i.MXRT1050
-  pinctrl: freescale: Add i.MXRT1050 pinctrl driver support
-  dt-bindings: imx: Add clock binding for i.MXRT1050
-  ARM: dts: imx: add i.MXRT1050-EVK support
-  ARM: imxrt_defconfig: add i.MXRT family defconfig
+The i.MXRT10xx family of processors features NXP's implementation of the
+Arm Cortex-M7 core and in some case the Arm Cortex-M4 core too.
 
-Jesse Taube (7):
-  dt-bindings: pinctrl: add i.MXRT1050 pinctrl binding doc
-  dt-bindings: clock: imx: Add documentation for i.MXRT clock
-  clk: imx: Add initial support for i.MXRT clock driver
-  dt-bindings: serial: fsl-lpuart: add i.MXRT compatible
-  tty: serial: fsl_lpuart: add i.MXRT support
-  dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT compatible string
-  mmc: sdhci-esdhc-imx: Add sdhc support for i.MXRT series
+This patch aims to add an initial support for imxrt.
 
- .../bindings/clock/imxrt-clock.yaml           |  57 +
- .../bindings/mmc/fsl-imx-esdhc.yaml           |   1 +
- .../bindings/pinctrl/fsl,imxrt1050.yaml       |  85 ++
- .../bindings/serial/fsl-lpuart.yaml           |   1 +
- arch/arm/boot/dts/Makefile                    |   2 +
- arch/arm/boot/dts/imxrt1050-evk.dts           | 164 +++
- arch/arm/boot/dts/imxrt1050.dtsi              | 179 ++++
- arch/arm/configs/imxrt_defconfig              | 157 +++
- arch/arm/mach-imx/Kconfig                     |   9 +
- arch/arm/mach-imx/Makefile                    |   2 +
- arch/arm/mach-imx/mach-imxrt.c                |  19 +
- drivers/clk/imx/Kconfig                       |   3 +
- drivers/clk/imx/Makefile                      |   1 +
- drivers/clk/imx/clk-imxrt.c                   | 156 +++
- drivers/mmc/host/sdhci-esdhc-imx.c            |   7 +
- drivers/pinctrl/freescale/Kconfig             |   7 +
- drivers/pinctrl/freescale/Makefile            |   1 +
- drivers/pinctrl/freescale/pinctrl-imxrt1050.c | 349 ++++++
- drivers/tty/serial/fsl_lpuart.c               |   8 +
- include/dt-bindings/clock/imxrt1050-clock.h   |  72 ++
- include/dt-bindings/pinctrl/pins-imxrt1050.h  | 993 ++++++++++++++++++
- 21 files changed, 2273 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/imxrt-clock.yaml
- create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml
- create mode 100644 arch/arm/boot/dts/imxrt1050-evk.dts
- create mode 100644 arch/arm/boot/dts/imxrt1050.dtsi
- create mode 100644 arch/arm/configs/imxrt_defconfig
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+---
+ arch/arm/mach-imx/Kconfig      |  9 +++++++++
+ arch/arm/mach-imx/Makefile     |  2 ++
+ arch/arm/mach-imx/mach-imxrt.c | 19 +++++++++++++++++++
+ 3 files changed, 30 insertions(+)
  create mode 100644 arch/arm/mach-imx/mach-imxrt.c
- create mode 100644 drivers/clk/imx/clk-imxrt.c
- create mode 100644 drivers/pinctrl/freescale/pinctrl-imxrt1050.c
- create mode 100644 include/dt-bindings/clock/imxrt1050-clock.h
- create mode 100644 include/dt-bindings/pinctrl/pins-imxrt1050.h
 
+diff --git a/arch/arm/mach-imx/Kconfig b/arch/arm/mach-imx/Kconfig
+index b407b024dde3..fd190c8e0c99 100644
+--- a/arch/arm/mach-imx/Kconfig
++++ b/arch/arm/mach-imx/Kconfig
+@@ -239,6 +239,15 @@ config SOC_IMX7ULP
+ 	help
+ 	  This enables support for Freescale i.MX7 Ultra Low Power processor.
+ 
++config SOC_IMXRT
++	bool "i.MXRT support"
++	depends on ARM_SINGLE_ARMV7M || ARCH_MULTI_V7
++	select ARMV7M_SYSTICK if ARM_SINGLE_ARMV7M
++	select ARM_GIC if ARCH_MULTI_V7
++	select PINCTRL_IMXRT
++	help
++	  This enables support for Freescale i.MXRT Crossover processor.
++
+ config SOC_VF610
+ 	bool "Vybrid Family VF610 support"
+ 	select ARM_GIC if ARCH_MULTI_V7
+diff --git a/arch/arm/mach-imx/Makefile b/arch/arm/mach-imx/Makefile
+index d1506ef7a537..3b1145722a44 100644
+--- a/arch/arm/mach-imx/Makefile
++++ b/arch/arm/mach-imx/Makefile
+@@ -65,6 +65,8 @@ obj-$(CONFIG_SOC_IMX50) += mach-imx50.o
+ obj-$(CONFIG_SOC_IMX51) += mach-imx51.o
+ obj-$(CONFIG_SOC_IMX53) += mach-imx53.o
+ 
++obj-$(CONFIG_SOC_IMXRT) += mach-imxrt.o
++
+ obj-$(CONFIG_SOC_VF610) += mach-vf610.o
+ 
+ obj-$(CONFIG_SOC_LS1021A) += mach-ls1021a.o
+diff --git a/arch/arm/mach-imx/mach-imxrt.c b/arch/arm/mach-imx/mach-imxrt.c
+new file mode 100644
+index 000000000000..2063a3059c84
+--- /dev/null
++++ b/arch/arm/mach-imx/mach-imxrt.c
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2019
++ * Author(s): Giulio Benetti <giulio.benetti@benettiengineering.com>
++ */
++
++#include <linux/kernel.h>
++#include <asm/mach/arch.h>
++#include <asm/v7m.h>
++
++static const char *const imxrt_compat[] __initconst = {
++	"fsl,imxrt1050",
++	NULL
++};
++
++DT_MACHINE_START(IMXRTDT, "IMXRT (Device Tree Support)")
++	.dt_compat = imxrt_compat,
++	.restart = armv7m_restart,
++MACHINE_END
 -- 
 2.33.0
 
