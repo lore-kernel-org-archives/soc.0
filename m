@@ -1,75 +1,91 @@
-Return-Path: <SRS0=TWVE=PM=arndb.de=arnd@kernel.org>
+Return-Path: <linux-gpio-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16AD8C433F5
-	for <soc@archiver.kernel.org>; Sun, 24 Oct 2021 18:07:13 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id E200A61052; Sun, 24 Oct 2021 18:07:12 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3431C60E09;
-	Sun, 24 Oct 2021 18:07:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3431C60E09
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wm1-f53.google.com ([209.85.128.53]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MFK8N-1mTQRD1u5h-00FmMJ; Sun, 24 Oct 2021 20:07:10 +0200
-Received: by mail-wm1-f53.google.com with SMTP id 84-20020a1c0457000000b003232b0f78f8so10563271wme.0;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12C0AC433F5
+	for <linux-gpio@archiver.kernel.org>; Sun, 24 Oct 2021 18:07:42 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id E6CDA61050
+	for <linux-gpio@archiver.kernel.org>; Sun, 24 Oct 2021 18:07:41 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S232012AbhJXSKB (ORCPT <rfc822;linux-gpio@archiver.kernel.org>);
+        Sun, 24 Oct 2021 14:10:01 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:57217 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232124AbhJXSJd (ORCPT
+        <rfc822;linux-gpio@vger.kernel.org>); Sun, 24 Oct 2021 14:09:33 -0400
+Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MUXd0-1mELKI1wQq-00QUNj; Sun, 24 Oct 2021 20:07:10 +0200
+Received: by mail-wm1-f51.google.com with SMTP id 62-20020a1c0241000000b0032ca21cffeeso6635149wmc.1;
         Sun, 24 Oct 2021 11:07:10 -0700 (PDT)
-X-Gm-Message-State: AOAM533JWZb0cffYj52A+ZmalfW5pyQqtvBGDdzj7vWqSy2YxvhqSIre
-	dtBQ49rad4ur4KhsM1mIJPXGTBNkToZmfTQHB8M=
+X-Gm-Message-State: AOAM530Z7cgZIoK7uLht4FY6miDP0DyyxpNQ1g9hQ2Yrl1Kem7YX+UuX
+        ANxdYXgmSoSQSjGuF3w3XynOd38o7K9dAffFk4M=
 X-Google-Smtp-Source: ABdhPJxtbVJrHWYPggYA8yPeJNUl2q0CmjGNKBR3lA5Z+IxWQD60zbwZCG/IT3XsglTcMiUM4ygKRYscIv8VMUDJQ9I=
 X-Received: by 2002:a7b:ce93:: with SMTP id q19mr1339077wmj.98.1635098830063;
  Sun, 24 Oct 2021 11:07:10 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211024154027.1479261-1-Mr.Bossman075@gmail.com> <20211024154027.1479261-4-Mr.Bossman075@gmail.com>
 In-Reply-To: <20211024154027.1479261-4-Mr.Bossman075@gmail.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Sun, 24 Oct 2021 20:06:54 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sun, 24 Oct 2021 20:06:54 +0200
 X-Gmail-Original-Message-ID: <CAK8P3a2sZtPAh-++7oH59g9BQSzXN+yheFxeac0XBJjzbFqakQ@mail.gmail.com>
 Message-ID: <CAK8P3a2sZtPAh-++7oH59g9BQSzXN+yheFxeac0XBJjzbFqakQ@mail.gmail.com>
 Subject: Re: [PATCH 03/13] dt-bindings: imx: Add pinctrl binding doc for i.MXRT1050
-To: Jesse Taube <mr.bossman075@gmail.com>
+To:     Jesse Taube <mr.bossman075@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: NXP Linux Team <linux-imx@nxp.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Sascha Hauer <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Dong Aisheng <aisheng.dong@nxp.com>, Stefan Agner <stefan@agner.ch>, 
-	Linus Walleij <linus.walleij@linaro.org>, gregkh <gregkh@linuxfoundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
-	Russell King - ARM Linux <linux@armlinux.org.uk>, Abel Vesa <abel.vesa@nxp.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Jiri Slaby <jirislaby@kernel.org>, 
-	giulio.benetti@benettiengineering.com, 
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, 
-	Leonard Crestez <leonard.crestez@nxp.com>, b20788@freescale.com, 
-	Andy Duan <fugang.duan@nxp.com>, linux-clk <linux-clk@vger.kernel.org>, 
-	DTML <devicetree@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-mmc <linux-mmc@vger.kernel.org>, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	"open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        SoC Team <soc@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        giulio.benetti@benettiengineering.com,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        b20788@freescale.com, Andy Duan <fugang.duan@nxp.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:tPUTrcrVyb56jEbN4C+OmvyGOaA7oXuJZFPHJ+u76Ahn79iY3T1
- hvANBa6bSzN7WU0mFu/ie39frcsvr+9xzysD8lrjhOHSwPwI3642OHB/jwQIETognsb5bT3
- nAETBp4xfZPQCxw++blwXgTz97OLQLAaBlwMqmTmjMG+5u7j+IMb7mA/PWB9/p6tJPvGQAN
- 7s4DzOSALIFNsDgGWjxZA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:sIFMz9MITrg=:PFwpoeCs7e31u+PNUUSvL9
- QsJwugo08gukR923NHkyOYYm60g5OaIzIQ/Tk0AddJyYnTx4dUVPmIwGL8Y1xqSd+Zzqw/+IK
- cMIVMLk797jmpzjVt82eY7oFnLRLqkGrlX1YmlnLAI/sFCB2hsx970UGAEouH3dMuoTttaCIO
- hqRX3txNRKpzWvtTvZpzxczhkc1eYP9VqgTIFL7b9hVAgZ0B3lQ0sCrfnWRaFB2EUwR4l6C49
- W/gqH8Vsh1DCsf4X9Ic6rh2tyz2mrHku+pYNx31Q0Q0qwCWHO89VDFL8TWDrcAKQ8IWgBm5p+
- ypUvDd+h3I7aL5menWbSaJe9/yi4SeLllQ2/Gig22TW+NEZz524phC2PhNWR75XZELY/bqftx
- TYypPSq/uQTN0g+WPV7hvCK6zEb5yhBNi3UMx+dV38elxRQZyhIvsDZ98BTU/stosdDI+P1bb
- yYviCDoBs3c3xO0TuXdOIEEsnYFdqrlsCu0Bl4BGeZoF5XmEg6wQpU95Uw2JHm/BxiRXkWXsq
- HmdUzhtYGnHp4MwdMamxCphpawsCKPzRj6705lMsQfGke4maDuGOjGO69kVw4WwpI82CiSjU+
- 2li64VtnI71W3QQpSq2KJfPcrOf2EkB+Uc6fxkcld44LsNniFI03uidizQLsynomh+biBma94
- iyl8tDe+4wrb3RPCFyzIt0EQzc3qVbn4f4Jsagm0IjR3870I08021zEk8Hp3Ic0KWaBS7Mx7f
- c3r0OCYO1cBWM20gpoTBUAz/LJ/f3R5T3sfDuaYgL/a0RPnpChtGNpAbyMzzYZPyKGpRKCuFL
- 5Nd4hJI2zwX4Qq8dh9G72hnXpda/ipQ8AP3794nrEDgrm4osfo=
+X-Provags-ID: V03:K1:ng9ql4UQ+cIo8gV19g2bstZgV/zDfKwfNuXRq5alZaRvAbikTu5
+ 62hnCF6q41QGCfV7NxuGszwTNXkBXnrd7HfxqRICp4PPCWbPTGPq+AfSBqiUI517O0J9A6i
+ 8jClQZQ0oGVrHshCTHJegP9+WeUsgi8VUDebgHm4DzAx1HFdse8/kZjsj5HmuJlhbjI1EkW
+ o2RjozbFGLbYTKwipAvZg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BQDbPqq5jcY=:u16L+VEQmRjLHoHhwnoZpt
+ kn20RRpYfotpZL3nrIlnNB1L91LbFi7BLpNGGBM3QHZAfKtWkAiB63OhTEgqzqup3RzRJCf/O
+ IqQh/dUscNJ/ogR6Id9WGdc/Syp/8TVAYYgKuiwftWKxPrODjKJ/bUCawYkNBNNgeyXAf3JKd
+ RVHt/shOOLJLw9SmtE2eApftY4MiVLO4jG7900sA33b/m7RsgdO09X5rLNGuo/DxeyceImF24
+ 7Pj573RQqPC035GQKyKVFktyy3Y+Q9pWJfUMUQm+LDe81UlBPnYxC/jL1cOBsLJ6QYmOY/cJf
+ ysM/1r+lRuenLSwvGDot1xgV6PTepPbvPTEToybJ6sxsaqICmQ6HGUAivWmthw1ZwfYjvHmMZ
+ PqJSN1IHfie822o/1TloYPvWzT3RCtajNaYMi76g4AP+LR/kQU3x3uHPjMhw/AO7KnCYvWaj4
+ PUtLN6n704ddzWFoWjaUB5gge6GFqhYoHTccvRP7Fmo0p01GWYvq3IU4nWG19mm4jsEDt7CWE
+ PFyUqvHuxgFDGSFSsazzTyJzwhDlEHxiAz32pU/3G1eqxpQ2vJQ1T1nGNN3zm/G/cP7v6Eomn
+ fRWMhdgxR69OWmKRUgSVCSBltv/MEuSiVdHXmda0rdLwEo7vYFrKMvYneKd2QM9nzwhAzl59R
+ dGmU7k1m7iaztY9csJ97r5YU/TWe7+VYG6Fz1WQfVLEv54jkGzRtU/DCjM+84KJ55Dxep8XwI
+ aQjO4zF6hTTBiNfxW2iVa/5KyKydD4rkZjMsuncuoy6PTdVC76XHUuteJ/xujncUzeyhPejd8
+ hUeSKGEb8x5EvYRUCBdjw4R/QZeu31v9EIZl51DZG3pMyk1kr8=
+Precedence: bulk
+List-ID: <linux-gpio.vger.kernel.org>
+X-Mailing-List: linux-gpio@vger.kernel.org
+Message-ID: <20211024180654.DzcbovRTvRyQIKsRruQSqMc9m62Zzt4qz6d__8lyOl0@z>
 
 On Sun, Oct 24, 2021 at 5:40 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
 > +/*
