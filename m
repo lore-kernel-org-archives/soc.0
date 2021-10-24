@@ -2,14 +2,14 @@ Return-Path: <SRS0=tGbD=PM=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A528C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 24 Oct 2021 15:44:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1847AC433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 24 Oct 2021 15:44:44 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 49ABC60F12
-	for <linux-arm-kernel@archiver.kernel.org>; Sun, 24 Oct 2021 15:44:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 49ABC60F12
+	by mail.kernel.org (Postfix) with ESMTPS id D0D0060F46
+	for <linux-arm-kernel@archiver.kernel.org>; Sun, 24 Oct 2021 15:44:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D0D0060F46
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -18,54 +18,55 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=MXa16QPOCWApAKOhuXPesiFT65aceUH72OWSmuOWxbo=; b=0suSvkOoTk9WEE
-	t5eiRAPEXmNa7Wb94YpM8jm0V8Z/B4XxUZhZPTAMDnliJ+BNs5xJiegB0FDodD3Yoh6o04R/y2xFU
-	sYDXJMkNcvI4/HTM8qIgqEDPRrQHYbIXeZqe7wobEEmHd7YbwbFd+kANDn6vquYpacFSDVx1VqjOI
-	mqsmQcPiB3Mgsh7eQ7tM9ROecSIkN50+VNrZBnGM+AHBpyjbRGVmq1DO52/5ZOMTpynczEVgiDnHx
-	DdKGbyUWkumktlBvXX2mO8qa68t/ZbaF2AFPAXcduHUrQIfZ5R8kiUbJkPhrlyGWcAOEyxgE7ez+L
-	8phfh6/mrLQmhHmkwYLg==;
+	List-Owner; bh=3iJNsS16AqfRCxvAip+3hUUpvch+HK6WsVBcYWSN37k=; b=Ii5h1uKsaprXl5
+	i/GiVTa22PrOaA1MI2Ihez/hXMpMHZ0N411shSajRVn05Xuq0A77/kvbU+mH5dj2i7PQDgk/AyK0/
+	mYzC80PmbiOqPXxqKM37FfmhgijR1KrlLPdJyz9zrphCMz+WDdwvxdIWB9l5BCfIUiV1B7gYReZl+
+	LsPo6yGw8/QlKzCBYT03YOnUdSKQ/WFNZX78KOg1clCSRXjI3INiPVZUsAUUvJrfN/PbWxtq51Du5
+	BKsxp7d17Vh2QuTje2uaKL7+S9fkFKdCiTR59qO+cVjeiQkD5QReb+nBDHZjcKnxYCTYpqEDcdKTW
+	pgCBjFmCstf8USjT4/JQ==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mefdd-00ED8M-5x; Sun, 24 Oct 2021 15:42:21 +0000
-Received: from mail-qk1-x731.google.com ([2607:f8b0:4864:20::731])
+	id 1mefeJ-00EDUe-AH; Sun, 24 Oct 2021 15:43:03 +0000
+Received: from mail-qv1-xf2e.google.com ([2607:f8b0:4864:20::f2e])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mefc6-00ECTs-Je
- for linux-arm-kernel@lists.infradead.org; Sun, 24 Oct 2021 15:40:48 +0000
-Received: by mail-qk1-x731.google.com with SMTP id bl14so9627884qkb.4
+ id 1mefc7-00ECUB-Em
+ for linux-arm-kernel@lists.infradead.org; Sun, 24 Oct 2021 15:40:49 +0000
+Received: by mail-qv1-xf2e.google.com with SMTP id x13so1710960qvk.2
  for <linux-arm-kernel@lists.infradead.org>;
- Sun, 24 Oct 2021 08:40:46 -0700 (PDT)
+ Sun, 24 Oct 2021 08:40:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=KLaMi0PjecgqH9q6xdREGuXIuHpv+l05lfMg4lrWRM0=;
- b=U2sUeme9KDMAkiU+LubwbYqgrPTmBpkB3glBm48fRP3JvzUaGRsf16LZQFndRgfQVy
- BCRE5GOdG+Eqr9FVP7gFxa8mRSUtdhOE6VBowIZyKlGrX7qmVP5OtxK/CtItSfeKSxZT
- AKRicU+TXJ4iIaXmODjoA13KK+pHaElZ6csBw01V7NPPzyUotOMuosojuggPMPVP5jG0
- lwIEs74cMs7gtoYj7H9dM3ZrN7siDs99tk3o7X5k4nhIDqSYC4NxFIqg1JHH4LRrQipz
- Uy6ErKUVnxgdvJwrxRmYZVQ0eBd3i75qqpx3ZfQTBbNsJ8V70iSzM36+F0OEt5MElssa
- ftQw==
+ bh=IxYKSh+QdzBJn1YoTIi6gjxv21nMXY3wDp0TVq1y+NA=;
+ b=NnjPKCAqxxMOqBfslfwk3NtxDQg1iKVGxJAnPDV77DlXajAwGp2pbIVq0HOfbujyYJ
+ 4sy32WRS+uaKwGuJhNzEGGmV6GE1RSiGkP3P+I2JXxn0smeLqXiqT4+Twyp6AQcA9Nod
+ YOHmqOEpE3NOF6JSP2jHUSWukbYexcqRUHpwSQ1ytGgEe3aFXZQy6B444fDFXDlkFuuf
+ jN65pegGggE5LMEN1H5Ako1+XNcXlGeUaYDvLA6kg8/T0UNRtOgyUQy9UAbtHZIq06a1
+ kFnu3anWo6s9b5lUHWKbr56nsXn7neyPoVZ0RavTJpU6xe6kUuUwWw8OFuKRegogtdSy
+ /pYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=KLaMi0PjecgqH9q6xdREGuXIuHpv+l05lfMg4lrWRM0=;
- b=YAHgWXi3HsZbA9y+dyp7wdlGFgFyVX7/vjB4c0tKpuhdXyFKqeLpnkBORWXI1Xn3x6
- Yto1h2fa9qFcbfpqRWV3oLpq0xjP1IzOrW4gy61lsc0NcFvbls6Uv813EFkGGGhb7Hsm
- 8rXORzMgnHJXmWDgHiVoXaoR50132JgNMd0vCQ9osVCES+XQWLh93F/Ig/ONhYeTR35o
- p6uc22ZroflTsjX2wvN7yjb9jq1jF81sQ5blhvxnRJjpWkgEYk8GQDIF5LyLeeg6mH5v
- PbJ5TSOI28uNpoFTk4woMhouNqkHiUBIR4Jjw+0l/Zbzs01zRHLNs+PeJHUgSW5vGo23
- jxYg==
-X-Gm-Message-State: AOAM532TNrqr3tJYeCw3+7NNquDz6MbYY4rBepxTskxlgOyaxEbi6vG7
- 04PqqGC9pLmmrUNKLkFs4zI=
-X-Google-Smtp-Source: ABdhPJy9P9jjgymuGD+hjGuutud3QqZ6FQXwfzaibrHuMzBaHwHpi8yxpzE1VeuLxZa7eKj8Aj9T+w==
-X-Received: by 2002:a37:9307:: with SMTP id v7mr9447815qkd.371.1635090044481; 
- Sun, 24 Oct 2021 08:40:44 -0700 (PDT)
+ bh=IxYKSh+QdzBJn1YoTIi6gjxv21nMXY3wDp0TVq1y+NA=;
+ b=8O6QXb9xhx/I39m1WigWCrV8NISFGoYkFoIaxJbB7ujjkQXXH91dn1Ee/uBe722aoa
+ WwY9BWJ6JO8CncvpGtaKNsQziJo/JmAk20cQLihqh+IbOA+dOgwtBpG3akTX7roUPrtF
+ AXTfcyBPJQ60eiz+gf2EsCcpwuUOmJE5BlsGEiSE8rU8ntB+896deCA/CwdNSxet0pGx
+ bMTBUSJzT5EsBjJdh8vtDgKTVh9hH+4SWuya7+DpWawZnT8bVDhKPTH8ToDeJ5kTGMrJ
+ dVLCI1U9oDlNA4FwQkDeyqOBhR3SlfCSpPtUzwf9FfOtejmXBDR1DYQhB/yuzdaws9Qh
+ EmGg==
+X-Gm-Message-State: AOAM5338t0KcXwZX55oXvKw2BC0VoS0EIMkBa5JkxEO9jPaIxvscWOy3
+ qVf0DZU/tq7bInNSnrVCJso=
+X-Google-Smtp-Source: ABdhPJwiR1ULYFYFI2hnzDaBAjLN1JLpZUKqimSRf08JNuyQgDxVRK7pfV54DERLMU8oEC4yQZRgKw==
+X-Received: by 2002:a05:6214:1ccb:: with SMTP id
+ g11mr11131319qvd.64.1635090046415; 
+ Sun, 24 Oct 2021 08:40:46 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab
  (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com.
  [146.115.144.188])
- by smtp.gmail.com with ESMTPSA id x9sm7291731qtw.84.2021.10.24.08.40.43
+ by smtp.gmail.com with ESMTPSA id x9sm7291731qtw.84.2021.10.24.08.40.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Oct 2021 08:40:44 -0700 (PDT)
+ Sun, 24 Oct 2021 08:40:46 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -82,17 +83,16 @@ Cc: mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
  linux-serial@vger.kernel.org
-Subject: [PATCH 05/13] dt-bindings: clock: imx: Add documentation for i.MXRT
- clock
-Date: Sun, 24 Oct 2021 11:40:19 -0400
-Message-ID: <20211024154027.1479261-6-Mr.Bossman075@gmail.com>
+Subject: [PATCH 06/13] dt-bindings: imx: Add clock binding for i.MXRT1050
+Date: Sun, 24 Oct 2021 11:40:20 -0400
+Message-ID: <20211024154027.1479261-7-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211024154027.1479261-1-Mr.Bossman075@gmail.com>
 References: <20211024154027.1479261-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211024_084046_675367_7C575F41 
-X-CRM114-Status: GOOD (  13.82  )
+X-CRM114-CacheID: sfid-20211024_084047_549790_7C197352 
+X-CRM114-Status: GOOD (  13.17  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -108,80 +108,100 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211024154019.6xT_npRUyZAqbSq4rUV6G_mZpyOSqrfnPIPqsvNgw48@z>
+Message-ID: <20211024154020.Ia-KB7xqi9xheJI8oapZ-9W-qAlGiPCfUJJmnWFs38w@z>
 
-Add DT binding documentation for i.MXRT clock driver.
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Add the clock binding doc for i.MXRT1050.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Giulio: added all clocks up to IMXRT1050_CLK_USBOH3]
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+[Jesse: added clocks from IMXRT1050_CLK_IPG_PDOF to
+IMXRT1050_CLK_DMA_MUX and moved IMXRT1050_CLK_END on]
 ---
- .../bindings/clock/imxrt-clock.yaml           | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/imxrt-clock.yaml
+ include/dt-bindings/clock/imxrt1050-clock.h | 72 +++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 include/dt-bindings/clock/imxrt1050-clock.h
 
-diff --git a/Documentation/devicetree/bindings/clock/imxrt-clock.yaml b/Documentation/devicetree/bindings/clock/imxrt-clock.yaml
+diff --git a/include/dt-bindings/clock/imxrt1050-clock.h b/include/dt-bindings/clock/imxrt1050-clock.h
 new file mode 100644
-index 000000000000..f432aa81b849
+index 000000000000..6e78ac382a0a
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/imxrt-clock.yaml
-@@ -0,0 +1,57 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/imxrt-clock.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/include/dt-bindings/clock/imxrt1050-clock.h
+@@ -0,0 +1,72 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/*
++ * Copyright(C) 2019
++ * Author(s): Giulio Benetti <giulio.benetti@benettiengineering.com>
++ */
 +
-+title: Clock bindings for Freescale i.MXRT
++#ifndef __DT_BINDINGS_CLOCK_IMXRT1050_H
++#define __DT_BINDINGS_CLOCK_IMXRT1050_H
 +
-+maintainers:
-+  - Giulio Benetti <giulio.benetti@benettiengineering.com>
-+  - Jesse Taube <Mr.Bossman075@gmail.com>
++#define IMXRT1050_CLK_DUMMY			0
++#define IMXRT1050_CLK_CKIL			1
++#define IMXRT1050_CLK_CKIH			2
++#define IMXRT1050_CLK_OSC			3
++#define IMXRT1050_CLK_PLL2_PFD0_352M		4
++#define IMXRT1050_CLK_PLL2_PFD1_594M		5
++#define IMXRT1050_CLK_PLL2_PFD2_396M		6
++#define IMXRT1050_CLK_PLL3_PFD0_720M		7
++#define IMXRT1050_CLK_PLL3_PFD1_664_62M		8
++#define IMXRT1050_CLK_PLL3_PFD2_508_24M		9
++#define IMXRT1050_CLK_PLL3_PFD3_454_74M		10
++#define IMXRT1050_CLK_PLL2_198M			11
++#define IMXRT1050_CLK_PLL3_120M			12
++#define IMXRT1050_CLK_PLL3_80M			13
++#define IMXRT1050_CLK_PLL3_60M			14
++#define IMXRT1050_CLK_PLL1_BYPASS		15
++#define IMXRT1050_CLK_PLL2_BYPASS		16
++#define IMXRT1050_CLK_PLL3_BYPASS		17
++#define IMXRT1050_CLK_PLL5_BYPASS		19
++#define IMXRT1050_CLK_PLL1_REF_SEL		20
++#define IMXRT1050_CLK_PLL2_REF_SEL		21
++#define IMXRT1050_CLK_PLL3_REF_SEL		22
++#define IMXRT1050_CLK_PLL5_REF_SEL		23
++#define IMXRT1050_CLK_PRE_PERIPH_SEL		24
++#define IMXRT1050_CLK_PERIPH_SEL		25
++#define IMXRT1050_CLK_SEMC_ALT_SEL		26
++#define IMXRT1050_CLK_SEMC_SEL			27
++#define IMXRT1050_CLK_USDHC1_SEL		28
++#define IMXRT1050_CLK_USDHC2_SEL		29
++#define IMXRT1050_CLK_LPUART_SEL		30
++#define IMXRT1050_CLK_LCDIF_SEL			31
++#define IMXRT1050_CLK_VIDEO_POST_DIV_SEL	32
++#define IMXRT1050_CLK_VIDEO_DIV			33
++#define IMXRT1050_CLK_ARM_PODF			34
++#define IMXRT1050_CLK_LPUART_PODF		35
++#define IMXRT1050_CLK_USDHC1_PODF		36
++#define IMXRT1050_CLK_USDHC2_PODF		37
++#define IMXRT1050_CLK_SEMC_PODF			38
++#define IMXRT1050_CLK_AHB_PODF			39
++#define IMXRT1050_CLK_LCDIF_PRED		40
++#define IMXRT1050_CLK_LCDIF_PODF		41
++#define IMXRT1050_CLK_USDHC1			42
++#define IMXRT1050_CLK_USDHC2			43
++#define IMXRT1050_CLK_LPUART1			44
++#define IMXRT1050_CLK_SEMC			45
++#define IMXRT1050_CLK_LCDIF_APB			46
++#define IMXRT1050_CLK_PLL1_ARM			47
++#define IMXRT1050_CLK_PLL2_SYS			48
++#define IMXRT1050_CLK_PLL3_USB_OTG		49
++#define IMXRT1050_CLK_PLL4_AUDIO		50
++#define IMXRT1050_CLK_PLL5_VIDEO		51
++#define IMXRT1050_CLK_PLL6_ENET			52
++#define IMXRT1050_CLK_PLL7_USB_HOST		53
++#define IMXRT1050_CLK_LCDIF_PIX			54
++#define IMXRT1050_CLK_USBOH3			55
++#define IMXRT1050_CLK_IPG_PDOF			56
++#define IMXRT1050_CLK_PER_CLK_SEL		57
++#define IMXRT1050_CLK_PER_PDOF			58
++#define IMXRT1050_CLK_DMA			59
++#define IMXRT1050_CLK_DMA_MUX			60
++#define IMXRT1050_CLK_END			70
 +
-+description: |
-+  The clock consumer should specify the desired clock by having the clock
-+  ID in its "clocks" phandle cell. See include/dt-bindings/clock/imxrt*-clock.h
-+  for the full list of i.MXRT clock IDs.
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - fsl,imxrt1050-ccm
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#clock-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    ccm@400fc000 {
-+      compatible = "fsl,imxrt1050-ccm";
-+      reg = <0x400fc000 0x4000>;
-+      interrupts = <95>,<96>;
-+      clocks = <&osc>;
-+      clock-names = "osc";
-+      #clock-cells = <1>;
-+    };
-+
-+    gpt: timer@401ec000 {
-+      compatible = "fsl,imx53-gpt", "fsl,imx31-gpt";
-+      reg = <0x401ec000 0x4000>;
-+      interrupts = <100>;
-+      clocks = <&clks IMXRT1050_CLK_OSC>;
-+      clock-names = "per";
-+    };
++#endif /* __DT_BINDINGS_CLOCK_IMXRT1050_H */
 -- 
 2.33.0
 
