@@ -2,72 +2,75 @@ Return-Path: <SRS0=GqV7=PN=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A81D6C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 25 Oct 2021 06:56:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5A49C433FE
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 25 Oct 2021 07:40:18 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 736F460FBF
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 25 Oct 2021 06:56:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 736F460FBF
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linuxfoundation.org
+	by mail.kernel.org (Postfix) with ESMTPS id 8D85360FD7
+	for <linux-arm-kernel@archiver.kernel.org>; Mon, 25 Oct 2021 07:40:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8D85360FD7
+Authentication-Results: mail.kernel.org; dmarc=fail (p=reject dis=none) header.from=dh-electronics.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
 	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=a4ZlB8zGjIVni57mvjnrNR+NG9cnWqSsIcbopqPgg3M=; b=ars9J8njv+/TBR
-	Gk72OkRXFwzJhcJInb9uEm52LvlYmEi8Rc4gBd+3apvKXW9dI0e2IB4Q7mzUxhx/O0FYyGkeLpHa7
-	fnMBr5XpKAqWDzjZAg56a7sA4k/FUrjkfYTzEWpW284zGMcpwPq3yt94b3L2zARLgAuPi57H7oKrp
-	MPrCZvrULiuDKQBqy1mpQxPRzIO+LWz9C/iS7BrnR/+F8YuUFisWykLFcigPHoPbtwV8yhND76xf2
-	nHJGlE2s/+nFWBZNebOJKkeIvzwuDrPRXTeBrzThitWtZ4HkqQFdqbcPdcPqseaTojDEYZT2d5nPU
-	pKImEduCHptx/KyBbHKg==;
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:CC
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=DJ9g5z1vjGNUYBDmoM92nEZsEbKvAiCsXBZneGTHDkw=; b=nNkVk/ntxEqfH6
+	bmrjEKIjohvHVOLtEbP/yi80MVlJU1TaGV6ZuoepiWp9rh5X/Frw297m/aUse+3zksIX9u1UVWq3j
+	4IGyuThLYqfKVfjvXysDX2/asi9lYmMAM9/xnGkgPRVKxFjvObq82+rqnY2Bjqez9Gpsye0rnqXoh
+	K2SXjxnNnxDJdQiBrvkUpJjsr8C2X6K9d7q9MTp9MbR5a36101SA48sXF+zupIwzeIYgoHSYZCwcO
+	EMbViRLD6YXn9lBE3nq4cgYwoqgA7TtpET9TcA8L+7Brkj8jyJwlrNxvWc3tuAVNhFBXcyGMlbNCZ
+	Yd5KZZm3rOdzl8ZRGoKg==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1metsd-00FSJj-2U; Mon, 25 Oct 2021 06:54:47 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1metsZ-00FSJN-Iv
- for linux-arm-kernel@lists.infradead.org; Mon, 25 Oct 2021 06:54:44 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A59BB60E0C;
- Mon, 25 Oct 2021 06:54:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
- s=korg; t=1635144883;
- bh=aMM8nxIsnq28/SQaQXsgdHLfh+uLt3aqCHFseCYI4Zg=;
- h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
- b=u9OAZcqtQOZTTuwy6Nh9JiM0xUnhh2YJys/eb1CgTxX4oFQH/2g7zw/8FnAblaWDy
- dqc8oAOYTWTmPm4RUE2Cr7rx6vFPzv5qTAm+OCydHXs59MdI502JCfthKlKgmACEpO
- EMlt0h1caUtJCEhooVuzPxrsyMLf+PqI6WlQUqZY=
-Date: Mon, 25 Oct 2021 08:54:41 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jesse Taube <mr.bossman075@gmail.com>
+	id 1meuZM-00FeZ5-H0; Mon, 25 Oct 2021 07:38:56 +0000
+Received: from mx2.securetransport.de ([188.68.39.254])
+ by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1meuZH-00FeWP-7R
+ for linux-arm-kernel@lists.infradead.org; Mon, 25 Oct 2021 07:38:54 +0000
+Received: from mail.dh-electronics.com
+ (business-24-134-97-169.pool2.vodafone-ip.de [24.134.97.169])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mx2.securetransport.de (Postfix) with ESMTPSA id 649E35E8AB;
+ Mon, 25 Oct 2021 09:38:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+ s=dhelectronicscom; t=1635147515;
+ bh=kx1P8W4qyfT/TfaLi3bO415+yY1pKjzYldhhNRTAwpA=;
+ h=From:To:CC:Subject:Date:From;
+ b=r0ekW7zxhHfQTmzKE/8BFng4nCfwkD90GbkckK5i8IlFyhzV2aHAncyCIVCQ8Bh4a
+ T/2bYE6xBC5ITIBED1i3mAsZ7W10JhQKk1gcGqqo0xgY4ywEKo3kdbuBVxUfLTtwhU
+ XRXzDsU6dW5YvhFeOoIW7lzcdOEcMpYfb7bYHNFElAopX+Ro3lv+fQyD252IbJPJTk
+ X0QbO4Lgx1fST581ud64kMwExa/8iPPWfgd1TK0B40313hhivU+eXXLdccsEQx20lO
+ aHo1o/rlHZJ/kbBcV4mVJEewVPStqDvhG+xGuE9qPbeCiUyP7yuxARRdr18qnCkTnp
+ HtuMuoEDJ4/wA==
+Received: from DHPWEX01.DH-ELECTRONICS.ORG (2001:470:76a7:2::30) by
+ DHPWEX01.DH-ELECTRONICS.ORG (2001:470:76a7:2::30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; 
+ Mon, 25 Oct 2021 09:38:31 +0200
+Received: from localhost.localdomain (172.16.51.18) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9
+ via Frontend Transport; Mon, 25 Oct 2021 09:38:31 +0200
+From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
- robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
- kernel@pengutronix.de, festevam@gmail.com, ulf.hansson@linaro.org,
- aisheng.dong@nxp.com, stefan@agner.ch, linus.walleij@linaro.org,
- arnd@arndb.de, olof@lixom.net, soc@kernel.org,
- linux@armlinux.org.uk, abel.vesa@nxp.com, adrian.hunter@intel.com,
- jirislaby@kernel.org, giulio.benetti@benettiengineering.com,
- nobuhiro1.iwamatsu@toshiba.co.jp, leonard.crestez@nxp.com,
- b20788@freescale.com, fugang.duan@nxp.com,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-serial@vger.kernel.org
-Subject: Re: [PATCH 09/13] tty: serial: fsl_lpuart: add i.MXRT support
-Message-ID: <YXZUscHQt9YRbZG2@kroah.com>
-References: <20211024154027.1479261-1-Mr.Bossman075@gmail.com>
- <20211024154027.1479261-10-Mr.Bossman075@gmail.com>
+To: <soc@kernel.org>, <linux-kernel@vger.kernel.org>
+CC: Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+ <linux-arm-kernel@lists.infradead.org>, <kernel@dh-electronics.com>,
+ <arnd@arndb.de>
+Subject: [PATCH V2] MAINTAINERS: Add maintainers for DHCOM i.MX6 and
+ DHCOM/DHCOR STM32MP1
+Date: Mon, 25 Oct 2021 09:37:06 +0200
+Message-ID: <20211025073706.2794-1-cniedermaier@dh-electronics.com>
+X-Mailer: git-send-email 2.11.0
+X-klartext: yes
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211024154027.1479261-10-Mr.Bossman075@gmail.com>
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211024_235443_669960_C10C3B1E 
-X-CRM114-Status: UNSURE (   6.92  )
-X-CRM114-Notice: Please train this message.
+X-CRM114-CacheID: sfid-20211025_003851_590704_1D79D7EC 
+X-CRM114-Status: GOOD (  10.67  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -83,15 +86,49 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211025065441.YKExId0LwKGP0TcPllFqZXhvxL6IltJg_aItfxb7i4M@z>
 
-On Sun, Oct 24, 2021 at 11:40:23AM -0400, Jesse Taube wrote:
-> Add support for i.MXRT1050's uart.
-> 
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Add maintainers for DH electronics DHCOM i.MX6
+and DHCOM/DHCOR STM32MP1 boards.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: kernel@dh-electronics.com
+Cc: arnd@arndb.de
+To: soc@kernel.org
+To: linux-kernel@vger.kernel.org
+---
+V2: - Rebase on next-20211022
+---
+ MAINTAINERS | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 88fcc4e7ff37..affedd5585f3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5506,6 +5506,19 @@ F:	include/net/devlink.h
+ F:	include/uapi/linux/devlink.h
+ F:	net/core/devlink.c
+ 
++DH ELECTRONICS IMX6 DHCOM BOARD SUPPORT
++M:	Christoph Niedermaier <cniedermaier@dh-electronics.com>
++L:	kernel@dh-electronics.com
++S:	Maintained
++F:	arch/arm/boot/dts/imx6*-dhcom-*
++
++DH ELECTRONICS STM32MP1 DHCOM/DHCOR BOARD SUPPORT
++M:	Marek Vasut <marex@denx.de>
++L:	kernel@dh-electronics.com
++S:	Maintained
++F:	arch/arm/boot/dts/stm32mp1*-dhcom-*
++F:	arch/arm/boot/dts/stm32mp1*-dhcor-*
++
+ DIALOG SEMICONDUCTOR DRIVERS
+ M:	Support Opensource <support.opensource@diasemi.com>
+ S:	Supported
+-- 
+2.11.0
+
 
 _______________________________________________
 linux-arm-kernel mailing list
