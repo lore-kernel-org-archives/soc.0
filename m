@@ -1,148 +1,102 @@
-Return-Path: <SRS0=GqV7=PN=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=LxLS=PN=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15FFAC433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 25 Oct 2021 16:35:56 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCBD1C433EF
+	for <soc@archiver.kernel.org>; Mon, 25 Oct 2021 20:12:15 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id A211E603E5; Mon, 25 Oct 2021 20:12:15 +0000 (UTC)
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D4A1460F46
-	for <linux-arm-kernel@archiver.kernel.org>; Mon, 25 Oct 2021 16:35:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D4A1460F46
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:Cc:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:To
-	:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=ufcr4A3cPZ+lLEzjY7sz4jX/nQAirLuAf3WO2wU+B6Q=; b=0fV8gSOPUMdGFz
-	U3+EYmnwQOjCve2DoCC6yirh4H/+T3kx97Di+Ab86wx60/USsMOlDDfCPXJXELeSwWQgsvacy4OV8
-	tJ9RVB/vCzhs1WUR5EjgJIC5NGyOSp0rNKbW0i6Hh0XhgW1Nd4zoZu+0/aEdMIVJfGcLo1+f0G7ID
-	xLPbqnf5BxXLg2izQkrQpipTN+h5f8C+1m+H15s6qQpldryRQ3+xu7yYsGSP1P6uhkMKZCJPgq28n
-	s/7INExf/zd1F97dQoBruCvXeP017PkhjGo3Ab3CG3inRXcLQYIr9U5vezKN8ktWWy6ajYhuTI3lk
-	fE4kL3F7AqlWuNW7Eo3w==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mf2vp-00H4D7-5W; Mon, 25 Oct 2021 16:34:41 +0000
-Received: from esa.microchip.iphmx.com ([68.232.154.123])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mf2vk-00H4Bn-F1
- for linux-arm-kernel@lists.infradead.org; Mon, 25 Oct 2021 16:34:39 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1635179676; x=1666715676;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=HtlEET3sshwSu3d9oyto6pYaMpqazwviYxoxvTQEnUo=;
- b=U6hOamJc4dXXw/QDPJhUOnrESiQeFUH9ekOhvsechWWKXEjFC7o6BELP
- 7E6Pihhxqompy5AjwsMNzLfrvK8V4DJbmMFhoVNXdTn84bfRGhvl96uZe
- dUUygrEtIjyWU0XB90tioqyIQfevHdilWPX4zTHWlOfWatxejp2goJw0c
- fnATNlJJQ1Dfg5s3xy7fxaaR7jzD8X530RXS1TQHjPTAGey8NnIFs4v3k
- /Gni9ECU54274n7vgcn2xLC9HI4qfN9R/KorPTL3ZmMn237Je/j+xK65/
- 8YzpYTxOxiyzirn1uVXoAUlUh4oiw42pkJZ7sdm0jn/OxgsqnlAEde3ln w==;
-IronPort-SDR: NO1D6j8D/bwDSF62n9QxiKRX2BAcgsPw4rYw+Bk44fMyBEFHE7VcsGNjgRSxq+b7LKr4EpI10D
- Byyu3bE3VHUgmAwPrxD4KUogl1lsR8qJh/paxjWEQES2dxPPJyjF8CCf3wHiTV59lygmryovBF
- 35UXXcmwk3cKeBeGwC0U5LHAG7nnt+Q+WOPVmlSXCe8KvWocTv2frm24wLXf0YQDczZNGZQO6V
- FrV8terSDfs/cAUcLuYskZR4/lcQke2FPut/81jj1Qh96lirpf7jflG1t4kXpRmUW03C/bTp1L
- EO31rMipyiAwnUrnJynDNmbE
-X-IronPort-AV: E=Sophos;i="5.87,181,1631602800"; d="scan'208";a="74197464"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 25 Oct 2021 09:34:33 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 25 Oct 2021 09:34:33 -0700
-Received: from ness.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.14 via
- Frontend Transport; Mon, 25 Oct 2021 09:34:31 -0700
-From: <nicolas.ferre@microchip.com>
+	by mail.kernel.org (Postfix) with ESMTPS id 7BDCC604E9
+	for <soc@kernel.org>; Mon, 25 Oct 2021 20:12:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7BDCC604E9
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
+Received: by mail-ot1-f48.google.com with SMTP id v2-20020a05683018c200b0054e3acddd91so14036401ote.8
+        for <soc@kernel.org>; Mon, 25 Oct 2021 13:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vA/CE8tf842bYqq8xkTI5gJmfVh7UR2D5fj0Mld4W6s=;
+        b=HgciXcK1j11C3WxpCUFggFy42vlLBbDqPAH8m/VUMHP9glyYYXAF1orhW+CdfObMSj
+         wk7G5OC+Fy79xi3J4Vn/owoj74VwCoxe9qNpy0vDODL02E0h9JBq8/r/n2IM087M9C1D
+         fWjrkgvPJlroPmE5AvcVmR3axTOCuwMlOEyQta6+3t8rH8Hp7SXdixuHPLRZ3CUSICMz
+         B5+Dt1UqbqXcVaEUPkqL2nC12A/dK0WjeFNsZtLSgUcdjyoNu4GnxDy9BF1YPxe9iJ+3
+         t5WdSSKs3ufgvUsWXLVFOGP+Qq8Rkk3eMU6CXE4blXrlL4WE6EE75Qia9fo2K/JKRSOJ
+         C8aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vA/CE8tf842bYqq8xkTI5gJmfVh7UR2D5fj0Mld4W6s=;
+        b=LAEuPL+QNXKI9VguXh+YvKCVuZAi2nUYD2O9LMDc+E6e1y9gfPL9pCgMgisx3biTDB
+         tz9wDcqsYKfR8DAMCVUS5EgmS96ow05cCLS6KsMT+JRcDo/qCllCXGANLTTdfzmT7iQ0
+         dcGsu7Fdv0l3MSxo6tR4iE63Kyi7sVrO93zj85xdGjzHUUbAo7KcuYV0G+3qOw2klfiC
+         dcFXxrh3ov3vp0bjGJQBMGbg6MC1PtZij2SFwAST5Dxf00ZQfDLwbmJa6pQCDzQK021o
+         0//ndl0Dfu1UCB2cho2ESduw00YMVVQc1UnlYSutjuMNDaeqkLq0gdGS47aHWb4W4/U1
+         ipfQ==
+X-Gm-Message-State: AOAM531U035udGTZspUJk18hwv9I8E2h0OoeWsXUTtO+Hjip3rE7SWFn
+	UGVYri0lSDV74HId1ym6KlT7EQ==
+X-Google-Smtp-Source: ABdhPJxq+gvESjkG+CE4IiqKiokANqUfFi8wFAY+fGKV2JBeSFGrVLYJWNB03zZZvt34VIw7q5yLzw==
+X-Received: by 2002:a05:6830:1c64:: with SMTP id s4mr14998879otg.174.1635192734647;
+        Mon, 25 Oct 2021 13:12:14 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id v9sm3822211oth.62.2021.10.25.13.12.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Oct 2021 13:12:13 -0700 (PDT)
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, <soc@kernel.org>
-Subject: [GIT PULL] ARM: at91: dt for 5.16 #2
-Date: Mon, 25 Oct 2021 18:34:28 +0200
-Message-ID: <20211025163428.26285-1-nicolas.ferre@microchip.com>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Amit Pundir <amit.pundir@linaro.org>
+Subject: [GIT PULL] Qualcomm ARM64 DTS one more fix for 5.15
+Date: Mon, 25 Oct 2021 15:12:13 -0500
+Message-Id: <20211025201213.1145348-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Organization: microchip
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211025_093436_641802_879CF55E 
-X-CRM114-Status: UNSURE (   8.42  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Linux Kernel list <linux-kernel@vger.kernel.org>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Claudiu Beznea <claudiu.beznea@microchip.com>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211025163428.sttwAxYNe404bW-zAxUY4K6oXOxFa3kPNR3LUkaU3EY@z>
+Content-Transfer-Encoding: 8bit
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Sorry for the late fix, I hope we can still squeeze this in to make sure the
+Qualcomm RB5 boards will boot v5.15.
 
-Arnd, Olof,
+Thanks,
+Bjorn
 
-Here are a couple more dt changes for 5.16. As we are late in the
-development cycle, you can surely postpone their inclusion for 5.17.
-They are in linux-next for a handful of days.
+The following changes since commit 1878f4b7ec9ed013da8a7efb63fed1fbae0215ae:
 
-Thanks, best regards,
-  Nicolas
-
-The following changes since commit 4c46b991bab640ee91f16967be2b0d00b7d5f992:
-
-  ARM: at91: dts: sama5d29: Add dtsi file for sama5d29 (2021-09-21 12:37:07 +0200)
+  arm64: dts: qcom: sdm630: Add missing a2noc qos clocks (2021-09-24 10:05:22 -0500)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-5.16-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-5.15-2
 
-for you to fetch changes up to f3c0366411d6893360be21a7544595bf275bc9b2:
+for you to fetch changes up to e091b836a3baee4c8b1423a969589196b88a9e06:
 
-  ARM: dts: at91: sama7g5-ek: use blocks 0 and 1 of TCB0 as cs and ce (2021-10-21 13:45:16 +0200)
-
-----------------------------------------------------------------
-AT91 DT #2 for 5.16:
-
-- Add DT nodes for TCB and RTC blocks on SAMA7G5
-- Add TCB0 for clocksource and clockevent functionality fallback only in
-  case PIT64B will fail to probe and as a testbed for this feature on
-  the Evaluation Kit.
+  Revert "arm64: dts: qcom: sm8250: remove bus clock from the mdss node for sm8250 target" (2021-10-25 14:26:00 -0500)
 
 ----------------------------------------------------------------
-Claudiu Beznea (2):
-      ARM: dts: at91: sama7g5: add tcb nodes
-      ARM: dts: at91: sama7g5-ek: use blocks 0 and 1 of TCB0 as cs and ce
+Qualcomm ARM64 DTS one more fix for 5.15
 
-Eugen Hristev (1):
-      ARM: dts: at91: sama7g5: add rtc node
+This reverts a clock change in the Qualcomm RB5 devicetree which in some
+combinations of firmware and configuration causes the device to crash
+during boot.
 
- arch/arm/boot/dts/at91-sama7g5ek.dts | 12 ++++++++++++
- arch/arm/boot/dts/sama7g5.dtsi       | 27 +++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+)
+Data on an adjacent platform indicates that this is probably not be the
+root cause of the problem, but this resolves the regression seen on RB5
+and will allow the SM8250 platform to boot v5.15.
 
--- 
-Nicolas Ferre
+----------------------------------------------------------------
+Amit Pundir (1):
+      Revert "arm64: dts: qcom: sm8250: remove bus clock from the mdss node for sm8250 target"
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
