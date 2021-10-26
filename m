@@ -1,149 +1,115 @@
-Return-Path: <linux-samsung-soc-owner@kernel.org>
+Return-Path: <SRS0=np67=PO=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F85DC433F5
-	for <linux-samsung-soc@archiver.kernel.org>; Tue, 26 Oct 2021 09:47:19 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD82C60FC2
-	for <linux-samsung-soc@archiver.kernel.org>; Tue, 26 Oct 2021 09:47:18 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233335AbhJZJtl (ORCPT
-        <rfc822;linux-samsung-soc@archiver.kernel.org>);
-        Tue, 26 Oct 2021 05:49:41 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:53886
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232308AbhJZJtk (ORCPT
-        <rfc822;linux-samsung-soc@vger.kernel.org>);
-        Tue, 26 Oct 2021 05:49:40 -0400
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E9E6040265
-        for <linux-samsung-soc@vger.kernel.org>; Tue, 26 Oct 2021 09:47:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 566D1C43219
+	for <soc@archiver.kernel.org>; Tue, 26 Oct 2021 09:47:19 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 3E05961040; Tue, 26 Oct 2021 09:47:19 +0000 (UTC)
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id BB52360EC0
+	for <soc@kernel.org>; Tue, 26 Oct 2021 09:47:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BB52360EC0
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 796D83F173
+	for <soc@kernel.org>; Tue, 26 Oct 2021 09:47:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1635241635;
-        bh=cYZ6vLVJzKfmCMrRSQ5rwJQ1AQl6SdnwWfSPPnNLfrY=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=BZPzJQOhHpo+7q+TZ5YaCoucAyZf1jNGNRF9AU+yUtHi4BhN+ZoD3106mXBjHjC2g
-         VxukDRoEctiZeu29JQKInyhe0sOFoj8Vk80WMbi3YgWFo+Q14Zg/CzCskiwvpLBK4j
-         JWzD48x/3Ik1i8ehKRxT7OSQAOIIov3lpyPMt6WSvQEQJcbyd4Rza3164jR80zpWOw
-         tvQhl2fthOLhjhyfjYrSJzizr4I5+nMjOBxI//zv0f0Pai5sMAvQ+kgTjOmb8QrtHe
-         iNYTXAwQsuRh5gU2iTtyLe4Y6yJwpzDPYYgBqe34fpBCJaS6kziWoxxCqrhQoBM2w1
-         VAdcY8c78Zl3Q==
-Received: by mail-lf1-f71.google.com with SMTP id h21-20020a0565123c9500b003ffa23a0577so2800948lfv.18
-        for <linux-samsung-soc@vger.kernel.org>; Tue, 26 Oct 2021 02:47:15 -0700 (PDT)
+	s=20210705; t=1635241637;
+	bh=sbYrCs8J0Q0Rz6cp+rkJ/lhh0zXOz8q9lqlVQx/f+TQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version;
+	b=ViRhBYrSYOihVgD4YISG9VcebSWK8X9boI0Jvi0uYwz5I2Q+FtYLycmRFhYbRCPGa
+	 ZmUuphIU+//3tZwNNqJokLc2PWPoNfow/8bUC15MF3XA+QG90zZ9sR2ElOPKF4M0n/
+	 WIvfYtZmLS/ihm1E65TrQj02wBSpr2Ob/u/653JzQL6rzogJau2S1zfddE+dUFARVf
+	 Z+ky6NK86uOp2TVW/S9X/t/WCkR5gmNbVnUuiULZx4tWrN//fPXAxY9BcODw6WyNKk
+	 Lb2MFlzGw8ONX6++arsv54zlylwMyamnqZV2tuXH+xd3AfRCRt/LoxDiWB8veiCmEn
+	 zCP3AqWYj4+Ag==
+Received: by mail-lj1-f197.google.com with SMTP id 136-20020a2e098e000000b002110b902242so4041477ljj.20
+        for <soc@kernel.org>; Tue, 26 Oct 2021 02:47:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cYZ6vLVJzKfmCMrRSQ5rwJQ1AQl6SdnwWfSPPnNLfrY=;
-        b=hb2YCOCH5G299JZ+QcYnfgfHqB7UYiTBTtXCLXbV/XBEHDYtTYju7L4Deeta3Ol6/j
-         N4i/0tk/WWDHorr1ZNHyJ/kX3m9SDuGcH8GwDAd3SbeM6MRdAEu+WXPydrwlIi5aCnQ3
-         OQMaSBa9sbyD9FchHNB71f8c8uSiqAW45DK6VjbrBnM1e/FqCOyLZbSmjUbdOVG9adLV
-         jDARWpKP1GVVvcCmjgSB+Px7mCFgfuS7FHxPyQPSDMTbOFziMaIq+7/1APWqZk4eAVM9
-         K1LXwr8t1NaNeqLj0eLTyIF4Dh1IbM4UCvIGNdPVzp4Lfz4JPD7ddiMNssySzSSVnXY9
-         brGA==
-X-Gm-Message-State: AOAM530uAUUGf8Yp4Ocii/LelPS+68pMVMDIE8Ef5HRyHasvaRdrl58+
-        j260gDeemg7+1Hk3wTbYjuYv3g89C8TLrdgLLiiCh/Lzoa+GvYdXsZnfQTpzWfQuu+hSWwabj8n
-        GOjW+n00Nqxp7QvKiL8jD7mgdH0LxnYTkrQuGAyfbPuXLxxcJ
-X-Received: by 2002:a05:6512:68b:: with SMTP id t11mr21162785lfe.586.1635241634812;
-        Tue, 26 Oct 2021 02:47:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzlQgrckrQHX3Yvswq5svDMfRPICsoGQMe4d5hGv/Expe3ttKtnyzJNWvaJkOw7N4Zei2O1cQ==
-X-Received: by 2002:a05:6512:68b:: with SMTP id t11mr21162737lfe.586.1635241634261;
-        Tue, 26 Oct 2021 02:47:14 -0700 (PDT)
+        bh=sbYrCs8J0Q0Rz6cp+rkJ/lhh0zXOz8q9lqlVQx/f+TQ=;
+        b=kxK+nC5Q6baehfZPqYtTmiA2fS0y/Y5i4FUK5owXa4wIh0A8LEj2gPoF881YcIJh78
+         m4HpHbSBbjVH8mtjHFe/z+3hdhYGDavJg+4Qsgxz3EW5P65VEHvBeaT7swTlJWbN2r3G
+         pBzAtnueZKvZMk3K4eeonqijMUL7lCYPJ5/m5It/s/e/UqCd/BZVFPnasGkORovzfAEu
+         Dz2udf5AURgqAzMjCR8BuGgarVRz2nTszgGAt3M9ovLOyH3QfeLGXxHVUFsrWsBPjDh3
+         sOF1W2hWer9++t4SWLk7UwzCzXUzFleefTf765aFO9F08XVDim86QXq6LsplAX3rErXE
+         12OQ==
+X-Gm-Message-State: AOAM533w4jNmZuQnnhgK7XxUUHe5IJt4owOKvmB7Ydgo0UeMsknf2MQK
+	f8D3toNZj5OFGgcIMS12ojr7HybP9/zJtYpPT5HcqKRgaBBlzzVbCrcyYLjSqBsISC5PEMzv4BG
+	PDmXxJPF83L/HO9Zy6G1cTao=
+X-Received: by 2002:a2e:7304:: with SMTP id o4mr886886ljc.385.1635241636727;
+        Tue, 26 Oct 2021 02:47:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzKSsLVNoJZPREVg5VqEAatQtzjWaBPxJNdTK1B4zkn7s0ddrcueJak0ah7O3ADQwivq+qDAQ==
+X-Received: by 2002:a2e:7304:: with SMTP id o4mr886837ljc.385.1635241636293;
+        Tue, 26 Oct 2021 02:47:16 -0700 (PDT)
 Received: from kozik-lap.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id v17sm113794lfo.167.2021.10.26.02.47.13
+        by smtp.gmail.com with ESMTPSA id v17sm113794lfo.167.2021.10.26.02.47.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Oct 2021 02:47:13 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+        Tue, 26 Oct 2021 02:47:15 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/4] soc: samsung: drivers for v5.16
-Date:   Tue, 26 Oct 2021 11:47:06 +0200
-Message-Id: <20211026094709.75692-2-krzysztof.kozlowski@canonical.com>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] arm64: dts: samsung: exynos for v5.16
+Date: Tue, 26 Oct 2021 11:47:08 +0200
+Message-Id: <20211026094709.75692-4-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211026094709.75692-1-krzysztof.kozlowski@canonical.com>
 References: <20211026094709.75692-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Precedence: bulk
-List-ID: <linux-samsung-soc.vger.kernel.org>
-X-Mailing-List: linux-samsung-soc@vger.kernel.org
 
 Hi,
 
-Set of changes mostly around Exynos ChipID driver. I hope it is not too late
-for this. These were sitting in my tree for some time, so they got linux-next
-coverage.
+On top of previous pull.
 
 Best regards,
 Krzysztof
 
 
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+The following changes since commit 2b663ae7152f785732d35ce38ad20ad10aca3116:
 
-  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+  arm64: dts: exynos: add minimal support for exynosautov9 sadk board (2021-10-12 14:20:57 +0200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-5.16
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.16-2
 
-for you to fetch changes up to b417d1e88f32645ed62a00d43c347b4386a0a021:
+for you to fetch changes up to b2f217cc7fbd3e6a097021b8b663328a649ea232:
 
-  soc: samsung: exynos-chipid: add exynosautov9 SoC support (2021-10-26 09:16:53 +0200)
+  arm64: dts: exynos: add chipid node for exynosautov9 SoC (2021-10-26 09:17:42 +0200)
 
 ----------------------------------------------------------------
-Samsung SoC drivers changes for v5.16
+Samsung DTS ARM64 changes for v5.16, part two
 
-1. Convert Exynos ChipID and ASV driver to a module and make it a
-   default, instead of selected. The driver is not essential, so it
-   could be disabled, if needed.
-2. Add support for Exynos850 and Exynos Auto v9 to Exynos ChipID and ASV
-   driver.
-3. Get rid of HAVE_S3C_RTC because it was adding just another layer
-   instead of direct dependencies.
-4. Minor cleanups.
+1. Add chassis-type property.
+2. Add ChipID node to ExynosAutov9 DTSI.
 
 ----------------------------------------------------------------
 Chanho Park (1):
-      soc: samsung: exynos-chipid: add exynosautov9 SoC support
+      arm64: dts: exynos: add chipid node for exynosautov9 SoC
 
-David Virag (1):
-      soc: samsung: exynos-pmu: Fix compilation when nothing selects CONFIG_MFD_CORE
+Krzysztof Kozlowski (1):
+      arm64: dts: exynos: add 'chassis-type' property
 
-Krzysztof Kozlowski (4):
-      soc: samsung: exynos-chipid: avoid soc_device_to_device()
-      soc: samsung: exynos-chipid: convert to a module
-      soc: samsung: exynos-chipid: do not enforce built-in
-      soc: samsung: pm_domains: drop unused is_off field
-
-Sam Protsenko (3):
-      soc: samsung: exynos-chipid: Pass revision reg offsets
-      dt-bindings: samsung: exynos-chipid: Document Exynos850 compatible
-      soc: samsung: exynos-chipid: Add Exynos850 support
-
-Will McVicker (2):
-      arm64: exynos: don't have ARCH_EXYNOS select EXYNOS_CHIPID
-      rtc: s3c: remove HAVE_S3C_RTC in favor of direct dependencies
-
- .../bindings/arm/samsung/exynos-chipid.yaml        |  5 +-
- arch/arm/Kconfig                                   |  1 -
- arch/arm/mach-exynos/Kconfig                       |  2 -
- arch/arm/mach-s5pv210/Kconfig                      |  1 -
- arch/arm64/Kconfig.platforms                       |  2 -
- drivers/rtc/Kconfig                                | 10 +--
- drivers/soc/samsung/Kconfig                        |  5 +-
- drivers/soc/samsung/Makefile                       |  3 +-
- drivers/soc/samsung/exynos-chipid.c                | 94 ++++++++++++++++++----
- drivers/soc/samsung/exynos5422-asv.c               |  1 +
- drivers/soc/samsung/pm_domains.c                   |  1 -
- include/linux/soc/samsung/exynos-chipid.h          |  6 +-
- 12 files changed, 94 insertions(+), 37 deletions(-)
+ arch/arm64/boot/dts/exynos/exynos5433-tm2.dts  | 1 +
+ arch/arm64/boot/dts/exynos/exynos5433-tm2e.dts | 1 +
+ arch/arm64/boot/dts/exynos/exynosautov9.dtsi   | 5 +++++
+ 3 files changed, 7 insertions(+)
