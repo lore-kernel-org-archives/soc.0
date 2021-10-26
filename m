@@ -1,20 +1,24 @@
-Return-Path: <SRS0=ryGg=PO=gmail.com=aladyshev22@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1547BC433EF
-	for <soc@archiver.kernel.org>; Tue, 26 Oct 2021 20:01:25 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id E4EAA60F39; Tue, 26 Oct 2021 20:01:24 +0000 (UTC)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BC23C60200;
-	Tue, 26 Oct 2021 20:01:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BC23C60200
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f171.google.com with SMTP id s19so723301ljj.11;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00AF8C433FE
+	for <linux-devicetree@archiver.kernel.org>; Tue, 26 Oct 2021 20:01:27 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id D228D60F9B
+	for <linux-devicetree@archiver.kernel.org>; Tue, 26 Oct 2021 20:01:26 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S231703AbhJZUDu (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Tue, 26 Oct 2021 16:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239079AbhJZUDt (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Tue, 26 Oct 2021 16:03:49 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D1BC061570;
+        Tue, 26 Oct 2021 13:01:24 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id q16so804480ljg.3;
         Tue, 26 Oct 2021 13:01:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
@@ -32,14 +36,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=ixtBSKhlM5RJeYoi6sIB/twD1T61aXRVqcD6skfC0C4=;
-        b=Zl6yd9ptdw+EmcERBgI/1iD9KDzt+4WqQbcl1ULmJgUuze5ow0lFVIVpp9O2rloGoB
-         hmek2KgdfQb70O31LacrI2FzSuYN1wQ5OXDqzqSR6Oo9yWmGbJ+LjGd1+2z1B7YjThpv
-         GelAKYufNIBT4Z0claNgegTdU12nLw3ogNmhxIXdufY8nfoiAT9OT717xPZDpETBVOjG
-         1lO3W1s9JKZ00urLGMBEynsJg4Q7yHgX8hw7qaqrGyvX1PCg+QuOufUin5EMDEGkvAzg
-         oqkZi7WnOEuLGYWjnGzDarzAE6ZV19m8Zjy3RIfe1KQwhYfTWqsO9tzEpG+7vZIdQp2V
-         ioPw==
-X-Gm-Message-State: AOAM530yH1PGtjiGTVENKkDw3FbkjXHvEO+F4PauVJPblDciROxlz3Kk
-	PCx31Tb4eaG/MXZtLXMbFpc=
+        b=VSfxwyoz6EPTiUrqSvJefOCk0nJli+BInPBmkh/yemBMeKPzvQGrRa8DSeTBwggv/W
+         lzZV2QfVzQ5Z1sGtdBMvljUJ79Tz8EbX9i9riX1mfMJNqOS1QlcDh5r9NPoQKvgHGTQP
+         nWRpDIkKfoOR+JTZhxX0FAocvN5gjNSSe4LOH7wfJGPiotFXzPgSohqNCtS3mc26ldOK
+         Qe5UcXcYDw7+GttBkZZZqD8RN8TZSQ6S7pS7ni/anCB5cRigPvIGiDKxJTZqsNeK4v4L
+         oA3EX1coJyopbZRAhucx4P56HddOv6iu26K08aIFsY51+p6dgF6lEP3e7BYQ9fTg8UgE
+         Mu9Q==
+X-Gm-Message-State: AOAM532cRUsMlsgN0NxeagORP4mH7JlWlOE0muD9wWI8KE1Oxz06+i4E
+        6NpHS+yvChWsXWiXO+Jwc0JUyCUOmM2qIA==
 X-Google-Smtp-Source: ABdhPJzIfFctBTfgVls2IZEdAjOeMzERzyJj26kMXRMddH9jsu2AwiH0X/heXUB/4NLOJSZOLi7w0w==
 X-Received: by 2002:a05:651c:2104:: with SMTP id a4mr1861591ljq.82.1635278483010;
         Tue, 26 Oct 2021 13:01:23 -0700 (PDT)
@@ -47,27 +51,26 @@ Received: from DESKTOP-GSFPEC9.localdomain (broadband-46-242-11-233.ip.moscow.rt
         by smtp.gmail.com with ESMTPSA id x7sm2020720lfu.116.2021.10.26.13.01.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 26 Oct 2021 13:01:22 -0700 (PDT)
-From: Konstantin Aladyshev <aladyshev22@gmail.com>
-To: 
+From:   Konstantin Aladyshev <aladyshev22@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: supreeth.venkatesh@amd.com,
-	aladyshev22@gmail.com,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@aj.id.au>,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-aspeed@lists.ozlabs.org
+Cc:     supreeth.venkatesh@amd.com, aladyshev22@gmail.com,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
 Subject: [PATCH] ARM: dts: aspeed: Add AMD DaytonaX BMC
-Date: Tue, 26 Oct 2021 23:00:56 +0300
-Message-Id: <20211026200058.2183-1-aladyshev22@gmail.com>
+Date:   Tue, 26 Oct 2021 23:00:56 +0300
+Message-ID: <20211026200058.2183-1-aladyshev22@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20211026200056.vG6B7kmdB5fA8q4V2g-HiygXIDYBa_2NsAaj696J4oY@z>
 
 Add initial version of device tree for the BMC in the AMD DaytonaX
 platform.
