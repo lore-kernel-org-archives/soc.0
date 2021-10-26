@@ -1,468 +1,412 @@
-Return-Path: <SRS0=ATq6=PO=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=GGsf=PO=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF170C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 26 Oct 2021 20:02:56 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BE71C433F5
+	for <soc@archiver.kernel.org>; Tue, 26 Oct 2021 20:12:30 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 2DDA06058D; Tue, 26 Oct 2021 20:12:30 +0000 (UTC)
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9DD6D60C40
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 26 Oct 2021 20:02:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9DD6D60C40
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=92zAyksV6tgRE54nMf7ZFlXfdbOoQiaan7a+whIz0P0=; b=wDPSHXbjwY/jlW
-	HE+sjRl4nBQvHbbp6mjyILpMJPIO0MJqSDeWsBoFI1row7QNdJVOHypSv0KL+kWEj3kddDrgWLv0T
-	+IFDwHwTvZSG2a5pWFJaAaS1K1nT1HGznUmHFfnbnpcGAeqjbE4LFuwqwo3hDS8nZH1vN7Jl/Ui8P
-	iHu2Fod1B45ecY4KH+qUfo/mjIl59kiTMSS1aN3CsvIFOghudk/ToA/4peGBH5Uf/VwFwtowGDrsv
-	psuLxujdJCDd81ltkAiaioBKYXjOKo2qJVJu2XKP3J0QdsM6epfj5rJuIfO9EBfCRG4KXrUErUKcl
-	q7vQclPFmBWsDaASlaMA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mfSdU-002yCP-Vr; Tue, 26 Oct 2021 20:01:29 +0000
-Received: from mail-lj1-x234.google.com ([2a00:1450:4864:20::234])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mfSdR-002yBw-8F
- for linux-arm-kernel@lists.infradead.org; Tue, 26 Oct 2021 20:01:26 +0000
-Received: by mail-lj1-x234.google.com with SMTP id d13so878608ljg.0
- for <linux-arm-kernel@lists.infradead.org>;
- Tue, 26 Oct 2021 13:01:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ixtBSKhlM5RJeYoi6sIB/twD1T61aXRVqcD6skfC0C4=;
- b=OASvt0WNZosZEZgHQuH8VNU02bUZyY3BDytmDoB62eyIAfV6yXTow0cBabMkYAbWYy
- oIBB7Qxosao/Vpidt1V33S9hhybw/bgbj9zDM/dKUg74KiYjgW1/VMsGAu3v9HWIwrXi
- kCOFdXz+PdAvF8c5clnbl3luoqQhr0sZY8imjodZVbu8UycGKoawN/SelKj0cCmGAg1V
- reL3pVF77cyAThFPXCCd7yw/X8GVS4vWMmvaqISoszSXzeTb1MX9k7vzQ80k1a77D1yx
- EP/R753qh8Zb//YZVscmYaryJRpA76F9VxwDCeKJk2l/mQtRLpAmHUScsvvaLI+QvIAx
- uCKQ==
+	by mail.kernel.org (Postfix) with ESMTPS id 0E36160C40
+	for <soc@kernel.org>; Tue, 26 Oct 2021 20:12:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0E36160C40
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
+Received: by mail-oi1-f176.google.com with SMTP id y207so246665oia.11
+        for <soc@kernel.org>; Tue, 26 Oct 2021 13:12:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U6pfmmfqDzPo/dC0ZUU+Hph5f+zxN3I1Xpz+IDrrVyQ=;
+        b=PbOKdpiH6Dz1OzS03y+FsoBsOnJJV3Xj9ghJyq2lsQkfP7guMREwdm9SVp5ZKXmvLo
+         xQ3/Xur3nusaAnaJafv8VZ8iUBw+WbK1SPjMJ7LccHJriuKrAF4RT+eL5tdHidk/l1gX
+         POT1xJoFPnDF85NNtIWO/EDXb/vhwyedEIFCLNRLTZgVmhHPNGMJwyUFTqv9qlfvc/6c
+         RVEbjk0SQvj6Y3wZxJWNSY+QKxQKOInNipDcSwyjy5jTbOJvqjPgh4R87qrLV34GiS3A
+         bl8IUuIWjWNfrhoyW6hyU2AQx0q8cZAPdb2VlucHXTOQOvbcKRP6U1y46kvGIn3+yKLZ
+         j1Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ixtBSKhlM5RJeYoi6sIB/twD1T61aXRVqcD6skfC0C4=;
- b=EkXHGI2mSBr8+GomsEeC30lBtXkqN4LzW9Hn7JLjGq5Qvm5tlBuAE1lB2lADn2cFmz
- 9Dw2dKQu79IbByfcqKUOk4FB6+3fErawI1zraFL/Fhw8qUPcY2S1P0m8+b1CaPpkx/pn
- vT266N41+TVi9Ceh21Q7EbRpAnCDwMpgCzrPl9sMNB8MjymVEdMzB3NW3fjTJXdjsrHN
- uh/uExKqFa8piGYEwWPhyGvnZZTnV81+8EzGxYfg0sQRHc+k2WsIXFwJxk5flb1IZDim
- E9M6uFaCMVpYwooBgij+bhkKz9ZBiv6j+1+jQGag+gDq1fQQp+TCLUTmT8JARanYqhaO
- MSCw==
-X-Gm-Message-State: AOAM53390m9iVLQ+4UpAH5twsApkbcdrmHcy/2mpBO7WUMV/SoYTIZAD
- 9SomkwdqZ9nmzjhPJMamdfM=
-X-Google-Smtp-Source: ABdhPJzIfFctBTfgVls2IZEdAjOeMzERzyJj26kMXRMddH9jsu2AwiH0X/heXUB/4NLOJSZOLi7w0w==
-X-Received: by 2002:a05:651c:2104:: with SMTP id
- a4mr1861591ljq.82.1635278483010; 
- Tue, 26 Oct 2021 13:01:23 -0700 (PDT)
-Received: from DESKTOP-GSFPEC9.localdomain
- (broadband-46-242-11-233.ip.moscow.rt.ru. [46.242.11.233])
- by smtp.gmail.com with ESMTPSA id x7sm2020720lfu.116.2021.10.26.13.01.22
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Oct 2021 13:01:22 -0700 (PDT)
-From: Konstantin Aladyshev <aladyshev22@gmail.com>
-To: 
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U6pfmmfqDzPo/dC0ZUU+Hph5f+zxN3I1Xpz+IDrrVyQ=;
+        b=3hYlu1hYJ2o3q6CLcaoZA0cZ4i35h1fzm95n/ZXOjdfJO2vHMJ6vl/uoGOuGTeA+nu
+         6UOu4uH+Ooyw0lxCALCNpv8L4nSssNVCI6f5s6xNUehmcKLCkwix00cX2KgYvljm2fYC
+         7CVYnoFGb4VuAI4kkkEfojajW9fi5qA9VHbbJd2nl9M6UTpk2FtQq8bVmNskZQymaHit
+         gQX1hq1W5CE2otqhrLbEcBO0HrFV8ZFJtbi0KT9I7hVPqC1E6y+xXo2lwW4VdUf4RaBr
+         eHW8Gr/1Df+FX4MSYnhz6im2ZVUrjbOa+5fwrrBSQP4aytpNXiRG1LqH9JrbJtt9Nlf+
+         bYpg==
+X-Gm-Message-State: AOAM533sKer7jlPFDZ5NsZA7N46V7nHUsahAdrFQRw7tQN0ytzcurhLb
+	mrTUZEfeFIslXexh+5fqv6xUaA==
+X-Google-Smtp-Source: ABdhPJxrDc3oMzL1Qm7H5hrxLhxCoV+5GY0PHTYduxOACldOmxSZFuVT6FmMYRsUnoPtTeeNAF+T/A==
+X-Received: by 2002:aca:4307:: with SMTP id q7mr657424oia.3.1635279149159;
+        Tue, 26 Oct 2021 13:12:29 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id e28sm5098870oiy.10.2021.10.26.13.12.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Oct 2021 13:12:28 -0700 (PDT)
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: supreeth.venkatesh@amd.com, aladyshev22@gmail.com,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
-Subject: [PATCH] ARM: dts: aspeed: Add AMD DaytonaX BMC
-Date: Tue, 26 Oct 2021 23:00:56 +0300
-Message-ID: <20211026200058.2183-1-aladyshev22@gmail.com>
-X-Mailer: git-send-email 2.25.1
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	Shawn Guo <shawn.guo@linaro.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Luca Weiss <luca@z3ntu.xyz>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+	"J . R . Divya Antony" <d.antony.jr@gmail.com>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Amit Pundir <amit.pundir@linaro.org>,
+	Maulik Shah <mkshah@codeaurora.org>,
+	Philip Chen <philipchen@chromium.org>,
+	Prasad Malisetty <pmaliset@codeaurora.org>,
+	Rajesh Patil <rajpat@codeaurora.org>,
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Arnaud Ferraris <arnaud.ferraris@collabora.com>,
+	Caleb Connolly <caleb@connolly.tech>,
+	Chukun Pan <amadeus@jmu.edu.cn>,
+	David Heidelberg <david@ixit.cz>,
+	Douglas Anderson <dianders@chromium.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Ola Jeppsson <ola@snap.com>,
+	Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
+	Rob Herring <robh@kernel.org>
+Subject: [GIT PULL] Qualcomm ARM64 DTS additional patches for v5.16
+Date: Tue, 26 Oct 2021 15:12:27 -0500
+Message-Id: <20211026201227.1226633-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211026_130125_324217_8D99402A 
-X-CRM114-Status: GOOD (  15.00  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211026200056.WxwKN4fCQQcDLEMD6BwZ77_7heCUMZu3swH2ZuqKC5A@z>
+Content-Transfer-Encoding: 8bit
 
-Add initial version of device tree for the BMC in the AMD DaytonaX
-platform.
+The following changes since commit c22441a7cbd014e2546329af89363b2a43cc8bf2:
 
-AMD DaytonaX platform is a customer reference board (CRB) with an
-Aspeed ast2500 BMC manufactured by AMD.
+  arm64: dts: qcom: sdm630-nile: Correct regulator label name (2021-09-28 10:36:30 -0500)
 
-Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts | 327 ++++++++++++++++++
- 2 files changed, 328 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
+are available in the Git repository at:
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7e0934180724..01cfd803d273 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1457,6 +1457,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-ast2600-evb-a1.dtb \
- 	aspeed-ast2600-evb.dtb \
- 	aspeed-bmc-amd-ethanolx.dtb \
-+	aspeed-bmc-amd-daytonax.dtb \
- 	aspeed-bmc-ampere-mtjade.dtb \
- 	aspeed-bmc-arm-centriq2400-rep.dtb \
- 	aspeed-bmc-arm-stardragon4800-rep2.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
-new file mode 100644
-index 000000000000..93ad4262a786
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
-@@ -0,0 +1,327 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 AMD Inc.
-+// Author: Supreeth Venkatesh <supreeth.venkatesh@amd.com>
-+/dts-v1/;
-+
-+#include "aspeed-g5.dtsi"
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+
-+/ {
-+	model = "AMD DaytonaX BMC";
-+	compatible = "amd,daytonax-bmc", "aspeed,ast2500";
-+
-+	memory@80000000 {
-+		reg = <0x80000000 0x20000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		video_engine_memory: jpegbuffer {
-+			size = <0x02000000>;	/* 32M */
-+			alignment = <0x01000000>;
-+			compatible = "shared-dma-pool";
-+			reusable;
-+		};
-+	};
-+
-+
-+	aliases {
-+		serial0 = &uart1;
-+		serial4 = &uart5;
-+	};
-+	chosen {
-+		stdout-path = &uart5;
-+		bootargs = "console=ttyS4,115200 earlycon";
-+	};
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		fault {
-+			gpios = <&gpio ASPEED_GPIO(A, 2) GPIO_ACTIVE_LOW>;
-+		};
-+
-+		identify {
-+			gpios = <&gpio ASPEED_GPIO(A, 3) GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
-+			      <&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>,
-+			      <&adc 10>, <&adc 11>, <&adc 12>, <&adc 13>, <&adc 14>,
-+			      <&adc 15>;
-+	};
-+};
-+
-+&fmc {
-+	status = "okay";
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		#include "openbmc-flash-layout.dtsi"
-+	};
-+};
-+
-+
-+&mac0 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii1_default>;
-+	clocks = <&syscon ASPEED_CLK_GATE_MAC1CLK>,
-+		 <&syscon ASPEED_CLK_MAC1RCLK>;
-+	clock-names = "MACCLK", "RCLK";
-+};
-+
-+&uart1 {
-+	//Host Console
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_txd1_default
-+		     &pinctrl_rxd1_default>;
-+};
-+
-+&uart5 {
-+	//BMC Console
-+	status = "okay";
-+};
-+
-+&adc {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc0_default
-+		     &pinctrl_adc1_default
-+		     &pinctrl_adc2_default
-+		     &pinctrl_adc4_default
-+		     &pinctrl_adc5_default
-+		     &pinctrl_adc6_default
-+		     &pinctrl_adc7_default
-+		     &pinctrl_adc8_default
-+		     &pinctrl_adc9_default
-+		     &pinctrl_adc10_default
-+		     &pinctrl_adc11_default
-+		     &pinctrl_adc12_default
-+		     &pinctrl_adc13_default
-+		     &pinctrl_adc14_default
-+		     &pinctrl_adc15_default>;
-+};
-+
-+&gpio {
-+	status = "okay";
-+	gpio-line-names =
-+	/*A0-A7*/	"","","FAULT_LED","","","","","",
-+	/*B0-B7*/	"","","","","","","","",
-+	/*C0-C7*/	"CHASSIS_ID_BTN","","","","","","","",
-+	/*D0-D7*/	"","","ASSERT_BMC_READY","","","","","",
-+	/*E0-E7*/	"MON_P0_RST_BTN","ASSERT_RST_BTN","MON_P0_PWR_BTN","ASSERT_PWR_BTN","",
-+			"MON_P0_PWR_GOOD","MON_PWROK","",
-+	/*F0-F7*/	"","","","","","","","",
-+	/*G0-G7*/	"","","","","","","","",
-+	/*H0-H7*/	"","","","","","","","",
-+	/*I0-I7*/	"","","","","","","","",
-+	/*J0-J7*/	"","","","","","","","",
-+	/*K0-K7*/	"","","","","","","","",
-+	/*L0-L7*/	"","","","","","","","",
-+	/*M0-M7*/	"","","","","","","","",
-+	/*N0-N7*/	"","","","","","","","",
-+	/*O0-O7*/	"","","","","","","","",
-+	/*P0-P7*/	"","","","","","","","",
-+	/*Q0-Q7*/	"","","","","","","","",
-+	/*R0-R7*/	"","","","","","","","",
-+	/*S0-S7*/	"","","","","","","","",
-+	/*T0-T7*/	"","","","","","","","",
-+	/*U0-U7*/	"","","","","","","","",
-+	/*V0-V7*/	"","","","","","","","",
-+	/*W0-W7*/	"","","","","","","","",
-+	/*X0-X7*/	"","","","","","","","",
-+	/*Y0-Y7*/	"","","","","","","","",
-+	/*Z0-Z7*/	"","","","","","","","",
-+	/*AA0-AA7*/	"","","","","","","","",
-+	/*AB0-AB7*/	"","","","","","","","",
-+	/*AC0-AC7*/	"","","","","","","","";
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+};
-+
-+&i2c2 {
-+	status = "okay";
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+};
-+
-+&i2c11 {
-+	status = "okay";
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+};
-+
-+&kcs1 {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0x60>;
-+};
-+
-+&kcs2 {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0x62>;
-+};
-+
-+&kcs3 {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0xCA2>;
-+};
-+
-+&kcs4 {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0x97DE>;
-+};
-+
-+&lpc_snoop {
-+	status = "okay";
-+	snoop-ports = <0x80>, <0x81>;
-+};
-+
-+&lpc_ctrl {
-+	//Enable lpc clock
-+	status = "okay";
-+};
-+
-+&pwm_tacho {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pwm0_default
-+	&pinctrl_pwm1_default
-+	&pinctrl_pwm2_default
-+	&pinctrl_pwm3_default
-+	&pinctrl_pwm4_default
-+	&pinctrl_pwm5_default
-+	&pinctrl_pwm6_default
-+	&pinctrl_pwm7_default>;
-+
-+	fan@0 {
-+		reg = <0x00>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x00>;
-+	};
-+
-+	fan@1 {
-+		reg = <0x01>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x01>;
-+	};
-+
-+	fan@2 {
-+		reg = <0x02>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x02>;
-+	};
-+
-+	fan@3 {
-+		reg = <0x03>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x03>;
-+	};
-+
-+	fan@4 {
-+		reg = <0x04>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x04>;
-+	};
-+
-+	fan@5 {
-+		reg = <0x05>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x05>;
-+	};
-+
-+	fan@6 {
-+		reg = <0x06>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x06>;
-+	};
-+
-+	fan@7 {
-+		reg = <0x07>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x07>;
-+	};
-+
-+	fan@8 {
-+		reg = <0x08>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x08>;
-+	};
-+
-+	fan@9 {
-+		reg = <0x09>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x09>;
-+	};
-+
-+	fan@10 {
-+		reg = <0x0a>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0a>;
-+	};
-+
-+	fan@11 {
-+		reg = <0x0b>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0b>;
-+	};
-+
-+	fan@12 {
-+		reg = <0x0c>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0c>;
-+	};
-+
-+	fan@13 {
-+		reg = <0x0d>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0d>;
-+	};
-+
-+	fan@14 {
-+		reg = <0x0e>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0e>;
-+	};
-+
-+	fan@15 {
-+		reg = <0x0f>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0f>;
-+	};
-+};
-+
-+&video {
-+	status = "okay";
-+	memory-region = <&video_engine_memory>;
-+};
-+
-+&vhub {
-+	status = "okay";
-+};
-+
--- 
-2.25.1
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.16-2
 
+for you to fetch changes up to b34a82f06f7eaab799b902841e0558b4e70d9b0d:
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+  Revert "arm64: dts: qcom: msm8916-asus-z00l: Add sensors" (2021-10-24 17:31:14 -0500)
+
+----------------------------------------------------------------
+Qualcomm ARM64 DTS additional patches for v5.16
+
+The RPM and RPMh sleep stats are introduced on a number of platforms, to
+aid the enablement of entering low power mode.
+
+The MSM8916 support receives some polishing touches, followed by
+introduction of the necessary pieces to use the DeviceTree on 32-bit
+variants of the MSM8916 platform, in particular to boot the secondary
+CPUs. Based on this support for the Samsung Galaxy S4 Mini Value Edition
+is introduced.
+
+The Asus Zenfone 2 Laser gained touchscreen, sensors and sdcard support.
+
+MSM8996 got support for the its crypto hardware and the Xiaomi Mi 5
+gained a description of its LCD panel.
+
+The Trogdor device on SC7180 gained support for a second source eDP
+brigde, while SC7280 gains PCIe support and the newly introduced
+Herobrine device.
+
+Both MSM8916 and SDM845 has their standalong SMEM node dropped, in favour
+of the newly introduced support for specifying the compatible directly
+on the reserved-memory node.
+
+The SM7225 platform is introduced, as a derrivative of SM6350, initial
+support for the PM6350 PMIC and based on this the Fairphone 4 is
+introduced.
+
+The RB3 and RB5 devices gains msm-id and board-id, to allow the two DTBs
+to be baked into a single boot.img that can be booted on both devices.
+
+As the GDSC driver has been extended to properly describe the
+relationship between MMCX and MDSS_GDSC, the now deprecated mmcx
+regulator is removed from SM8250.
+
+SM8350 gained CPU topology, idle-states and fastrpc support. FastRPC was
+also added for SM8150 and the SA8155p ADP got a couple of remoteprocs
+enabled.
+
+Additionally a number of DT validation issues was corrected across the
+various platforms and devices.
+
+----------------------------------------------------------------
+Amit Pundir (2):
+      arm64: dts: qcom: sdm845-db845c: Add msm-id and board-id
+      arm64: dts: qcom: qrb5165-rb5: Add msm-id and board-id
+
+AngeloGioacchino Del Regno (1):
+      arm64: dts: qcom: sdm630: Add disabled Venus support
+
+Arnaud Ferraris (1):
+      arm64: dts: qcom: add 'chassis-type' property
+
+Bhupesh Sharma (4):
+      arm64: dts: qcom: sm8150: Add fastrpc nodes
+      arm64: dts: qcom: sa8155p-adp: Enable remoteproc capabilities
+      arm64: dts: qcom: ipq6018: Remove unused 'qcom,config-pipe-trust-reg' property
+      arm64: dts: qcom: ipq6018: Remove unused 'iface_clk' property from dma-controller node
+
+Bjorn Andersson (3):
+      arm64: dts: qcom: sdm845: Drop standalone smem node
+      arm64: dts: qcom: sm8350: Add CPU topology and idle-states
+      Revert "arm64: dts: qcom: msm8916-asus-z00l: Add sensors"
+
+Caleb Connolly (1):
+      arm64: dts: qcom: sdm845-oneplus: enable second wifi channel
+
+Chukun Pan (1):
+      arm64: dts: qcom: ipq8074: Add QUP5 I2C node
+
+David Heidelberg (1):
+      arm64: dts: qcom: sdm845-oneplus: remove devinfo-size from ramoops node
+
+Dmitry Baryshkov (6):
+      arm64: dts: qcom: sm8250: remove mmcx regulator
+      arm64: dts: qcom: pm8916: fix mpps device tree node
+      arm64: dts: qcom: pm8994: fix mpps device tree node
+      arm64: dts: qcom: apq8016-sbc: fix mpps state names
+      arm64: dts: qcom: pm8916: add interrupt controller properties
+      arm64: dts: qcom: pm8994: add interrupt controller properties
+
+Douglas Anderson (1):
+      arm64: dts: qcom: pmk8350: Make RTC disabled by default; enable on sc7280-idp
+
+J.R. Divya Antony (4):
+      arm64: dts: qcom: msm8916-asus-z00l: Add sensors
+      arm64: dts: qcom: msm8916-asus-z00l: Add touchscreen
+      arm64: dts: qcom: msm8916-asus-z00l: Add SDCard
+      arm64: dts: qcom: msm8916-asus-z00l: Add sensors
+
+Konrad Dybcio (5):
+      arm64: dts: qcom: sdm845: Add XO clock to SDHCI
+      arm64: dts: qcom: sdm845: Disable Adreno, modem and Venus by default
+      arm64: dts: qcom: sdm845: Don't disable MDP explicitly
+      arm64: dts: qcom: sdm845: Add size/address-cells to dsi[01]
+      arm64: dts: qcom: sdm845: Move gpio.h inclusion to SoC DTSI
+
+Krzysztof Kozlowski (1):
+      arm64: dts: qcom: msm8996: move clock-frequency from PN547 NFC to I2C bus
+
+Luca Weiss (6):
+      arm64: dts: qcom: Add PM6350 PMIC
+      arm64: dts: qcom: sm6350: add debug uart
+      dt-bindings: arm: cpus: Add Kryo 570 CPUs
+      dt-bindings: arm: qcom: Document sm7225 and fairphone,fp4 board
+      arm64: dts: qcom: Add SM7225 device tree
+      arm64: dts: qcom: sm7225: Add device tree for Fairphone 4
+
+Marijn Suijten (4):
+      arm64: dts: qcom: pmi8994: Fix "eternal"->"external" typo in WLED node
+      arm64: dts: qcom: pmi8994: Remove hardcoded linear WLED enabled-strings
+      arm64: dts: qcom: Move WLED num-strings from pmi8994 to sony-xperia-tone
+      arm64: dts: qcom: pm660l: Remove board-specific WLED configuration
+
+Matthias Kaehlcke (1):
+      arm64: dts: qcom: sc7280: Add Herobrine
+
+Maulik Shah (2):
+      arm64: dts: qcom: Enable RPMh Sleep stats
+      arm64: dts: qcom: Enable RPM Sleep stats
+
+Ola Jeppsson (1):
+      arm64: dts: qcom: sm8350: Add fastrpc nodes
+
+Philip Chen (2):
+      arm64: dts: sc7180: Factor out ti-sn65dsi86 support
+      arm64: dts: sc7180: Support Parade ps8640 edp bridge
+
+Prasad Malisetty (2):
+      arm64: dts: qcom: sc7280: Add PCIe and PHY related nodes
+      arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board
+
+Raffaele Tranquillini (1):
+      arm64: dts: qcom: msm8996: xiaomi-gemini: Enable JDI LCD panel
+
+Rajesh Patil (2):
+      arm64: dts: qcom: sc7180: Add qspi compatible
+      arm64: dts: qcom: sc7280: Add 200MHz in qspi_opp_table
+
+Rob Herring (1):
+      arm64: dts: qcom: Fix 'interrupt-map' parent address cells
+
+Shawn Guo (7):
+      arm64: dts: qcom: msm8996: Move '#clock-cells' to QMP PHY child node
+      arm64: dts: qcom: Correct QMP PHY child node name
+      arm64: dts: qcom: Drop max-microamp and vddp-ref-clk properties from QMP PHY
+      arm64: dts: qcom: Drop reg-names from QMP PHY nodes
+      arm64: dts: qcom: msm8998-clamshell: Add missing vdda supplies
+      arm64: dts: qcom: Fix IPQ8074 PCIe PHY nodes
+      arm64: dts: qcom: ipq8074-hk01: Add dummy supply for QMP USB3 PHY
+
+Stephan Gerhold (15):
+      arm64: dts: qcom: apq8016-sbc: Clarify firmware-names
+      arm64: dts: qcom: msm8916: Drop underscore in node name
+      arm64: dts: qcom: Add device tree for Samsung Galaxy S4 Mini Value Edition
+      arm64: dts: qcom: msm8916-samsung-serranove: Add touch screen
+      arm64: dts: qcom: msm8916-samsung-serranove: Add touch key
+      arm64: dts: qcom: msm8916-samsung-serranove: Add IMU
+      arm64: dts: qcom: msm8916-samsung-serranove: Add rt5033 battery
+      arm64: dts: qcom: msm8916-samsung-serranove: Add NFC
+      ARM: qcom: Add ARCH_MSM8916 for MSM8916 on ARM32
+      arm64: dts: qcom: msm8916: Add CPU ACC and SAW/SPM
+      ARM: dts: qcom: msm8916: Add include for SMP without PSCI on ARM32
+      ARM: dts: qcom: msm8916-samsung-serranove: Include dts from arm64
+      arm64: dts: qcom: Fix node name of rpm-msg-ram device nodes
+      arm64: dts: qcom: msm8916: Drop standalone smem node
+      arm64: dts: qcom: Drop unneeded extra device-specific includes
+
+Vladimir Zapolskiy (2):
+      arm64: dts: qcom: msm8996: Add device tree entries to support crypto engine
+      arm64: dts: qcom: sdm845: Fix Qualcomm crypto engine bus clock
+
+ Documentation/devicetree/bindings/arm/cpus.yaml    |    1 +
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    6 +
+ arch/arm/boot/dts/Makefile                         |    1 +
+ .../boot/dts/qcom-msm8916-samsung-serranove.dts    |    3 +
+ arch/arm/boot/dts/qcom-msm8916-smp.dtsi            |   62 +
+ arch/arm/mach-qcom/Kconfig                         |   10 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    3 +
+ arch/arm64/boot/dts/qcom/apq8016-sbc.dts           |  832 +++++++++++-
+ arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi          |  838 ------------
+ .../apq8094-sony-xperia-kitakami-karin_windy.dts   |    1 +
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dts        | 1070 ++++++++++++++-
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi       | 1076 ---------------
+ arch/arm64/boot/dts/qcom/apq8096-ifc6640.dts       |    3 -
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi              |    8 +-
+ arch/arm64/boot/dts/qcom/ipq8074-hk01.dts          |    6 +
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi              |   69 +-
+ .../boot/dts/qcom/msm8916-alcatel-idol347.dts      |    1 +
+ arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts     |  126 ++
+ arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts     |    1 +
+ .../boot/dts/qcom/msm8916-longcheer-l8150.dts      |    1 +
+ .../boot/dts/qcom/msm8916-longcheer-l8910.dts      |    1 +
+ arch/arm64/boot/dts/qcom/msm8916-mtp.dts           |   15 +-
+ arch/arm64/boot/dts/qcom/msm8916-mtp.dtsi          |   21 -
+ .../boot/dts/qcom/msm8916-samsung-a3u-eur.dts      |    1 +
+ .../boot/dts/qcom/msm8916-samsung-a5u-eur.dts      |    1 +
+ .../boot/dts/qcom/msm8916-samsung-serranove.dts    |  534 ++++++++
+ .../boot/dts/qcom/msm8916-wingtech-wt88047.dts     |    1 +
+ arch/arm64/boot/dts/qcom/msm8916.dtsi              |   73 +-
+ .../boot/dts/qcom/msm8992-bullhead-rev-101.dts     |    2 +
+ .../qcom/msm8992-msft-lumia-octagon-talkman.dts    |    1 +
+ arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts  |    2 +
+ .../arm64/boot/dts/qcom/msm8994-angler-rev-101.dts |    1 +
+ .../qcom/msm8994-msft-lumia-octagon-cityman.dts    |    1 +
+ .../dts/qcom/msm8994-sony-xperia-kitakami-ivy.dts  |    1 +
+ .../qcom/msm8994-sony-xperia-kitakami-karin.dts    |    1 +
+ .../qcom/msm8994-sony-xperia-kitakami-satsuki.dts  |    1 +
+ .../qcom/msm8994-sony-xperia-kitakami-sumire.dts   |    1 +
+ .../qcom/msm8994-sony-xperia-kitakami-suzuran.dts  |    1 +
+ arch/arm64/boot/dts/qcom/msm8994.dtsi              |    2 +-
+ arch/arm64/boot/dts/qcom/msm8996-mtp.dts           |   24 +-
+ arch/arm64/boot/dts/qcom/msm8996-mtp.dtsi          |   30 -
+ .../dts/qcom/msm8996-sony-xperia-tone-dora.dts     |    1 +
+ .../dts/qcom/msm8996-sony-xperia-tone-kagura.dts   |    1 +
+ .../dts/qcom/msm8996-sony-xperia-tone-keyaki.dts   |    1 +
+ .../boot/dts/qcom/msm8996-sony-xperia-tone.dtsi    |    1 +
+ .../arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi |    2 +-
+ arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts |   34 +
+ .../arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts |    1 +
+ arch/arm64/boot/dts/qcom/msm8996.dtsi              |   43 +-
+ .../boot/dts/qcom/msm8998-asus-novago-tp370ql.dts  |    1 +
+ arch/arm64/boot/dts/qcom/msm8998-clamshell.dtsi    |    2 +
+ arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts    |    1 +
+ arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dts    |    1 +
+ .../boot/dts/qcom/msm8998-lenovo-miix-630.dts      |    1 +
+ arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi          |    4 -
+ .../boot/dts/qcom/msm8998-oneplus-cheeseburger.dts |    1 +
+ .../boot/dts/qcom/msm8998-oneplus-common.dtsi      |    4 -
+ .../boot/dts/qcom/msm8998-oneplus-dumpling.dts     |    1 +
+ .../dts/qcom/msm8998-sony-xperia-yoshino-lilac.dts |    1 +
+ .../dts/qcom/msm8998-sony-xperia-yoshino-maple.dts |    1 +
+ .../qcom/msm8998-sony-xperia-yoshino-poplar.dts    |    1 +
+ arch/arm64/boot/dts/qcom/msm8998.dtsi              |   23 +-
+ arch/arm64/boot/dts/qcom/pm6350.dtsi               |   54 +
+ arch/arm64/boot/dts/qcom/pm660l.dtsi               |    7 -
+ arch/arm64/boot/dts/qcom/pm8916.dtsi               |    9 +-
+ arch/arm64/boot/dts/qcom/pm8994.dtsi               |   13 +-
+ arch/arm64/boot/dts/qcom/pmi8994.dtsi              |    5 +-
+ arch/arm64/boot/dts/qcom/pmk8350.dtsi              |    1 +
+ arch/arm64/boot/dts/qcom/qcs404.dtsi               |    7 +-
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts           |    4 +-
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts           |   12 +-
+ .../arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi |    1 +
+ .../boot/dts/qcom/sc7180-trogdor-homestar.dtsi     |    1 +
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi |    1 +
+ .../dts/qcom/sc7180-trogdor-parade-ps8640.dtsi     |  109 ++
+ .../arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi |    1 +
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts     |    1 +
+ .../boot/dts/qcom/sc7180-trogdor-ti-sn65dsi86.dtsi |   90 ++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       |   86 --
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |    9 +-
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dts      |   14 +
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi     | 1412 ++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   12 +
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |   50 +
+ arch/arm64/boot/dts/qcom/sc7280-idp2.dts           |    8 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  130 +-
+ .../dts/qcom/sdm630-sony-xperia-ganges-kirin.dts   |    1 +
+ .../dts/qcom/sdm630-sony-xperia-nile-discovery.dts |    1 +
+ .../dts/qcom/sdm630-sony-xperia-nile-pioneer.dts   |    1 +
+ .../dts/qcom/sdm630-sony-xperia-nile-voyager.dts   |    1 +
+ arch/arm64/boot/dts/qcom/sdm630.dtsi               |   58 +-
+ .../arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dts |    1 +
+ arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi         |   17 +-
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts         |   16 +-
+ arch/arm64/boot/dts/qcom/sdm845-mtp.dts            |   18 +-
+ .../arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi |   26 +-
+ .../boot/dts/qcom/sdm845-oneplus-enchilada.dts     |    1 +
+ arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dts |    1 +
+ .../boot/dts/qcom/sdm845-xiaomi-beryllium.dts      |   19 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |   61 +-
+ .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      |   16 +-
+ .../dts/qcom/sm6125-sony-xperia-seine-pdx201.dts   |    1 +
+ arch/arm64/boot/dts/qcom/sm6125.dtsi               |    7 +-
+ .../dts/qcom/sm6350-sony-xperia-lena-pdx213.dts    |    1 +
+ arch/arm64/boot/dts/qcom/sm6350.dtsi               |   31 +
+ arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts  |  320 +++++
+ arch/arm64/boot/dts/qcom/sm7225.dtsi               |   16 +
+ arch/arm64/boot/dts/qcom/sm8150-hdk.dts            |    2 -
+ .../boot/dts/qcom/sm8150-microsoft-surface-duo.dts |    3 +-
+ arch/arm64/boot/dts/qcom/sm8150-mtp.dts            |    2 -
+ .../dts/qcom/sm8150-sony-xperia-kumano-bahamut.dts |    1 +
+ .../dts/qcom/sm8150-sony-xperia-kumano-griffin.dts |    1 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi               |  133 +-
+ arch/arm64/boot/dts/qcom/sm8250-hdk.dts            |    2 -
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts            |    2 -
+ .../dts/qcom/sm8250-sony-xperia-edo-pdx203.dts     |    1 +
+ .../dts/qcom/sm8250-sony-xperia-edo-pdx206.dts     |    1 +
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               |   30 +-
+ arch/arm64/boot/dts/qcom/sm8350-hdk.dts            |    2 -
+ arch/arm64/boot/dts/qcom/sm8350-mtp.dts            |    6 +-
+ arch/arm64/boot/dts/qcom/sm8350.dtsi               |  272 +++-
+ 121 files changed, 5812 insertions(+), 2256 deletions(-)
+ create mode 100644 arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dts
+ create mode 100644 arch/arm/boot/dts/qcom-msm8916-smp.dtsi
+ delete mode 100644 arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi
+ delete mode 100644 arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi
+ delete mode 100644 arch/arm64/boot/dts/qcom/msm8916-mtp.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
+ delete mode 100644 arch/arm64/boot/dts/qcom/msm8996-mtp.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm6350.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-parade-ps8640.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-ti-sn65dsi86.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sm7225.dtsi
