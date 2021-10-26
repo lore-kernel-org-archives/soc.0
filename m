@@ -1,189 +1,166 @@
-Return-Path: <SRS0=ATq6=PO=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=GGsf=PO=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55EF7C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 26 Oct 2021 14:00:24 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 713C7C433EF
+	for <soc@archiver.kernel.org>; Tue, 26 Oct 2021 14:07:09 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 514F960C51; Tue, 26 Oct 2021 14:07:09 +0000 (UTC)
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1E69860C41
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 26 Oct 2021 14:00:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1E69860C41
+	by mail.kernel.org (Postfix) with ESMTPS id 2BAAA60724
+	for <soc@kernel.org>; Tue, 26 Oct 2021 14:07:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2BAAA60724
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=THL0NyTqepPcCZLtod3yXyuyUBe+6ORf+hrmTvEeodc=; b=Gp9dBOYfTrREj6
-	aCAU4tmFFlnoFIxvibsRZhfsvta46DD2xr2eI1USi/ZxATAIQpGc4B+MCGAINXADJzMgSWElCcnSz
-	SLThcVgIAFrkZaUX3VXMDahZQ0ksTC5DKZofRdTz0JP/5heJphNYCeHQF/38xAz3yS9Urx4IKVQ+2
-	3G0sCbQTbTLPzLm/dUdkKlFxdetGANi3ALc8kVHNVSmiLtdXBkh0Rr23tD3Z9J2MUJAbBX5E9r2g1
-	tUVuylfCD2y2in2W0XbZGKkVz7RQLFyh8mhVnmJ/cHT3hXF2ld+k5LBDmQuh5fe3SvDa8MBmlCWrd
-	VatER7/FLacCWhAOVmdg==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mfMyk-001y6R-OR; Tue, 26 Oct 2021 13:59:02 +0000
-Received: from mail-oi1-x22d.google.com ([2607:f8b0:4864:20::22d])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mfMyg-001y63-H0
- for linux-arm-kernel@lists.infradead.org; Tue, 26 Oct 2021 13:59:00 +0000
-Received: by mail-oi1-x22d.google.com with SMTP id y207so20659568oia.11
- for <linux-arm-kernel@lists.infradead.org>;
- Tue, 26 Oct 2021 06:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=kWZgU+JuFT3e4VWZdwEk4RH2Do7tIF1ny74QqfwM6aU=;
- b=KAwpsckzrPqR2p3Fay61wYUUmQLZeij2KfPAzODLuvDQ2eI7ngke2Dop47vPxBgvjd
- 1Dsn3Xs/RD50SVa8USAffsz6kEJrf8AgKbSlrMnW3usb7ZAfU3IgxMW0MPb3rUZ0o+30
- /5U+WMnuiB5ZcuBe2dGv44HpcRC6OR+4EI4YP8mOwi/XUWXetoPTAF3RgL9KPOIZMgcE
- zYRO60E2Nrrd3Zvbzpe2pdNieS6x0TJ5B9KTOX3SfOmK0F+7tycdXPhBZGAVKYivCLth
- HcUC2+waDM6UtS7AqM2RDxm6SM+6I3AwLHBa9qrjfr3duc50gzslbuXS6Hkhp5fMKJoi
- Y7Lw==
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
+Received: by mail-ot1-f54.google.com with SMTP id v2-20020a05683018c200b0054e3acddd91so17422385ote.8
+        for <soc@kernel.org>; Tue, 26 Oct 2021 07:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G5Qlx1y7ALla3mofzLviDldMhP9x8JiihdYD246zlCY=;
+        b=JmNzDIh4MWt3N9J8HsHlhZS+nlhV7KoxC7nizgJuk8hQsmjIouKI6bZ5bpUnuqfv9F
+         eYV+4iGHhN5KXAdPqk14uGbuD89z20WMaKbJ3yHzvhJ5b+1OEVg34W+Fze33WKrTBCNg
+         ksxMj0PjQNXIkkeWcxguTLeeSKKuYwATCYfMlf+RklW+iae+QVlRAvbAkzB0cnE/D8qn
+         1Xa5yEy4VEvsh5vlETy2qNsjMsqnFzPDdIh33FdFP7oSUpmcsfIEI8g6WvNneS0+x86E
+         wd7FgHSN0dvPvMXYrXFZsTLwdU/lCpty2XRCuhk+tybAdZ0rGPumQ/58kbLyufSdZ0e6
+         GMMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=kWZgU+JuFT3e4VWZdwEk4RH2Do7tIF1ny74QqfwM6aU=;
- b=syj4zDA5VYJj/Pcd310yI3MKKSG+9/ECOnhxGB7d89empqqfHIe7KbzXRFddQN8wg0
- B2+lUVlJueLBMRCtWEW2nK+XpzqOWfDv8Gbn/PWpoA6jPi/6BohbTKQ+XqZaFykUosti
- vgVq+L4NPofVEqKKZMQhkfinkJACpz4E8XuB9JW1GP6SMMhTZ/GAok2SqvB93g/3P3eu
- agSy5fppucfeBLZzxdcgTds18g0WpAHvVofxM+4x+t/fN4kMnQkxikwtfBIhVh80leo1
- 2ZsU71IC3m8k+98yiQ2lJz3Vr+bWzLw4UOj0A1fJkLr3weTgo1PyJD/6TWt0E5ktU0O9
- R8ig==
-X-Gm-Message-State: AOAM5315JGjRsO89Zu2OoGltsnWNYOnx/iXCQYpDHPVqtvcN+cAvSfTZ
- Ia3JuIIFfN9OPTmtkBx5Z5tezg==
-X-Google-Smtp-Source: ABdhPJy3FKvJLwrDzsDU+3QarCP0LjFyaQTBLcEwMBLFMZsd4/60SkIbgQorpAXlob7bcwwS51/Lvg==
-X-Received: by 2002:a54:4f8f:: with SMTP id g15mr17378805oiy.169.1635256736390; 
- Tue, 26 Oct 2021 06:58:56 -0700 (PDT)
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G5Qlx1y7ALla3mofzLviDldMhP9x8JiihdYD246zlCY=;
+        b=vdpQlMZSvi4bDrIXRXq96xDH+FBB9Y7fYtTvMWKqS6TXf629hW7SD0q0fYzKU/LkGm
+         2ouGtmivY+5K9NQRu1Iv9/oKfBOcySkbnEV4jkYbp/rvmpFY5Buvo1fC/c46xfEV0a7I
+         /e5vlQVTKCFwx3fIWxeAX++XeImDyYKhXTJgoeem7byt//Vfs171d4WOAiuu3lYEMHHT
+         UYlv+pJQgNdFuJX0VFDfILOjxqcT44qCSJINJOWA7isK4bApFSh7KVLV3UAnUjpx59Ug
+         QaJuz5VHIrSwr8G/f2Z90YSKiREuJ2IxCH6e3j3mmDKcaLLkcE7Q8DQfwmyraeoEdc06
+         Bd4g==
+X-Gm-Message-State: AOAM531FQ4fETF6oaI4UhbcZ/VmkX5fBbf98ThAzv7NU0ry2lKb0IK2t
+	3PssVYajs7xA4QjekHvL1T/h3Q==
+X-Google-Smtp-Source: ABdhPJySoYtqBF6E1gZIxLymCcbN+YVTvANHlMP5w77ok+wlM6XMABiz0bKovqVOltEZwyU2aKVweQ==
+X-Received: by 2002:a05:6830:60f:: with SMTP id w15mr1773894oti.150.1635257228425;
+        Tue, 26 Oct 2021 07:07:08 -0700 (PDT)
 Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
- by smtp.gmail.com with ESMTPSA id t5sm4607363oic.4.2021.10.26.06.58.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Oct 2021 06:58:55 -0700 (PDT)
+        by smtp.gmail.com with ESMTPSA id f8sm4473429otp.63.2021.10.26.07.07.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Oct 2021 07:07:07 -0700 (PDT)
 From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@baylibre.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- David Heidelberg <david@ixit.cz>, Luca Weiss <luca@z3ntu.xyz>,
- Shawn Guo <shawn.guo@linaro.org>
-Subject: [GIT PULL] Qualcomm DTS more changes for v5.16
-Date: Tue, 26 Oct 2021 08:58:54 -0500
-Message-ID: <20211026135855.1205262-1-bjorn.andersson@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Mahesh Sivasubramanian <msivasub@codeaurora.org>,
+	Wan Jiabing <wanjiabing@vivo.com>,
+	Chris Lew <clew@codeaurora.org>,
+	Guru Das Srinagesh <quic_gurus@quicinc.com>,
+	Lina Iyer <lina.iyer@linaro.org>,
+	Maulik Shah <mkshah@codeaurora.org>
+Subject: [GIT PULL] More Qualcomm driver updates for v5.16
+Date: Tue, 26 Oct 2021 09:07:06 -0500
+Message-Id: <20211026140706.1205989-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211026_065858_596464_43072D27 
-X-CRM114-Status: GOOD (  11.97  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211026135854.81f6pP2ds48EJ3ptVZiRmUVHzKn0-UbS7i8KbJ2PRMw@z>
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit 9304af37d07b63244e4b3c80e5a245c978beb015:
+The following changes since commit f27591125a56c8c50491919b159569ab5730878d:
 
-  dt-bindings: arm: qcom, add missing devices (2021-09-19 23:33:06 -0500)
+  Merge tag '20210927135559.738-6-srinivas.kandagatla@linaro.org' into drivers-for-5.16 (2021-09-27 22:13:45 -0500)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-for-5.16-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-5.16-2
 
-for you to fetch changes up to 036e6c9f0336f50532ad6bedfaebf01856168a1d:
+for you to fetch changes up to c50031f03dfe1c1462f326973ddc5f0db839fb68:
 
-  ARM: dts: qcom: fix typo in IPQ8064 thermal-sensor node (2021-10-24 18:45:29 -0500)
-
-----------------------------------------------------------------
-Qualcomm DTS more changes for v5.16
-
-The multi-purpose-pin (MPP) driver is finally migrated to use
-hierarchical IRQ domains, so this bring the associated changes.
-
-The remainder of the changes are correcting binding issues, primarily
-found through DT validation.
+  firmware: qcom: scm: Don't break compile test on non-ARM platforms (2021-10-25 14:21:34 -0500)
 
 ----------------------------------------------------------------
-David Heidelberg (9):
-      ARM: dts: qcom: mdm9615: fix memory node for Sierra Wireless WP8548
-      dt-bindings: arm: qcom-ipq4019: add missing device compatible
-      ARM: dts: ipq4019-ap.dk01.1-c1: add device compatible in the dts
-      dt-bindings: arm: qcom: Fix Nexus 4 vendor prefix
-      ARM: dts: qcom: fix memory and mdio nodes naming for RB3011
-      ARM: dts: qcom: correct mmc node naming
-      ARM: dts: qcom: fix flash node naming for RB3011
-      ARM: dts: qcom: fix thermal zones naming
-      ARM: dts: qcom: fix typo in IPQ8064 thermal-sensor node
+More Qualcomm driver updates for v5.16
 
-Dmitry Baryshkov (14):
-      ARM: dts: qcom-apq8064: stop using legacy clock names for HDMI
-      ARM: dts: qcom-apq8064: add gpio-ranges to mpps nodes
-      ARM: dts: qcom-msm8660: add gpio-ranges to mpps nodes
-      ARM: dts: qcom-pm8841: add gpio-ranges to mpps nodes
-      ARM: dts: qcom-pm8941: add gpio-ranges to mpps nodes
-      ARM: dts: qcom-pma8084: add gpio-ranges to mpps nodes
-      ARM: dts: qcom-mdm9615: add gpio-ranges to mpps node, fix its name
-      ARM: dts: qcom-apq8060-dragonboard: fix mpps state names
-      ARM: dts: qcom-apq8064: add interrupt controller properties
-      ARM: dts: qcom-mdm9615: add interrupt controller properties
-      ARM: dts: qcom-msm8660: add interrupt controller properties
-      ARM: dts: qcom-pm8841: add interrupt controller properties
-      ARM: dts: qcom-pm8941: add interrupt controller properties
-      ARM: dts: qcom-pma8084: add interrupt controller properties
+This introduces the Qualcomm "sleep stats" driver, which aids the
+efforts of bringing various Qualcomm platforms into low power mode.
 
-Luca Weiss (2):
-      dt-bindings: arm: qcom: rename vendor of apq8026-lenok
-      ARM: dts: qcom: apq8026-lg-lenok: rename board vendor
+The SMP2P driver gains support for negotiating the "SSR" feature, which
+is used to better synchronize some corner cases that might appear as the
+remoteproc is recovering from a crash.
 
-Shawn Guo (1):
-      ARM: dts: qcom: sdx55: Drop '#clock-cells' from QMP PHY node
+The socinfo driver learns about a few new PMICs.
 
- Documentation/devicetree/bindings/arm/qcom.yaml    |  5 ++-
- arch/arm/boot/dts/Makefile                         |  2 +-
- ...026-lge-lenok.dts => qcom-apq8026-lg-lenok.dts} |  2 +-
- arch/arm/boot/dts/qcom-apq8060-dragonboard.dts     | 10 ++---
- arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts |  2 +-
- arch/arm/boot/dts/qcom-apq8064-cm-qs600.dts        |  6 +--
- arch/arm/boot/dts/qcom-apq8064-ifc6410.dts         |  6 +--
- .../arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dts |  4 +-
- arch/arm/boot/dts/qcom-apq8064.dtsi                | 45 ++++++++--------------
- arch/arm/boot/dts/qcom-apq8084.dtsi                |  8 ++--
- arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dts    |  2 +-
- arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi      |  1 -
- arch/arm/boot/dts/qcom-ipq8064-rb3011.dts          |  8 ++--
- arch/arm/boot/dts/qcom-ipq8064.dtsi                | 26 ++++++-------
- arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi         |  2 +-
- arch/arm/boot/dts/qcom-mdm9615.dtsi                | 16 +++-----
- arch/arm/boot/dts/qcom-msm8660-surf.dts            |  4 +-
- arch/arm/boot/dts/qcom-msm8660.dtsi                | 27 ++++---------
- arch/arm/boot/dts/qcom-msm8960-cdp.dts             |  4 +-
- arch/arm/boot/dts/qcom-msm8960.dtsi                |  4 +-
- arch/arm/boot/dts/qcom-msm8974.dtsi                | 12 +++---
- arch/arm/boot/dts/qcom-pm8841.dtsi                 |  7 ++--
- arch/arm/boot/dts/qcom-pm8941.dtsi                 | 11 ++----
- arch/arm/boot/dts/qcom-pma8084.dtsi                | 11 ++----
- arch/arm/boot/dts/qcom-sdx55.dtsi                  |  1 -
- 25 files changed, 94 insertions(+), 132 deletions(-)
- rename arch/arm/boot/dts/{qcom-apq8026-lge-lenok.dts => qcom-apq8026-lg-lenok.dts} (99%)
+SMEM is updated so that it's possible to put the compatible property
+directly in the reserved-memory node, to avoid having to have a separate
+node just pointing to the memory-region.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Lastly it fixes some bugs in smp2p, apr, rpmhpd drivers, notably
+avoiding the issue where powering on a power-domain using rpmhpd while
+keeping the performance_state at 0 is a nop
+
+----------------------------------------------------------------
+Bjorn Andersson (6):
+      dt-bindings: sram: Document qcom,rpm-msg-ram
+      dt-bindings: soc: smem: Make indirection optional
+      soc: qcom: smem: Support reserved-memory description
+      soc: qcom: rpmhpd: Make power_on actually enable the domain
+      soc: qcom: socinfo: Add PM8150C and SMB2351 models
+      firmware: qcom: scm: Don't break compile test on non-ARM platforms
+
+Chris Lew (1):
+      soc: qcom: smp2p: add feature negotiation and ssr ack feature support
+
+Dmitry Baryshkov (2):
+      soc: qcom: socinfo: add two missing PMIC IDs
+      soc: qcom: rpmhpd: fix sm8350_mxc's peer domain
+
+Guru Das Srinagesh (1):
+      firmware: qcom_scm: Fix error retval in __qcom_scm_is_call_available()
+
+Lina Iyer (1):
+      soc: qcom: spm: Add 8916 SPM register data
+
+Mahesh Sivasubramanian (2):
+      dt-bindings: Introduce QCOM Sleep stats bindings
+      soc: qcom: Add Sleep stats driver
+
+Maulik Shah (1):
+      soc: qcom: qcom_stats: Fix client votes offset
+
+Stephan Gerhold (4):
+      dt-bindings: soc: qcom: spm: Document qcom,msm8916-saw2-v3.0-cpu
+      firmware: qcom: scm: Add support for MC boot address API
+      ARM: qcom: Add qcom,msm8916-smp enable-method identical to MSM8226
+      dt-bindings: arm: cpus: Document qcom,msm8916-smp enable-method
+
+Wan Jiabing (2):
+      soc: qcom: apr: Add of_node_put() before return
+      soc: qcom: smp2p: Add of_node_put() before goto
+
+ Documentation/devicetree/bindings/arm/cpus.yaml    |   5 +-
+ .../devicetree/bindings/soc/qcom/qcom,smem.yaml    |  34 ++-
+ .../devicetree/bindings/soc/qcom/qcom,spm.yaml     |   1 +
+ .../devicetree/bindings/soc/qcom/qcom-stats.yaml   |  47 ++++
+ Documentation/devicetree/bindings/sram/sram.yaml   |   5 +-
+ arch/arm/mach-qcom/platsmp.c                       |   1 +
+ drivers/firmware/qcom_scm.c                        |  96 +++++--
+ drivers/firmware/qcom_scm.h                        |   4 +
+ drivers/of/platform.c                              |   1 +
+ drivers/soc/qcom/Kconfig                           |  10 +
+ drivers/soc/qcom/Makefile                          |   1 +
+ drivers/soc/qcom/apr.c                             |   2 +
+ drivers/soc/qcom/qcom_stats.c                      | 277 +++++++++++++++++++++
+ drivers/soc/qcom/rpmhpd.c                          |  20 +-
+ drivers/soc/qcom/smem.c                            |  57 +++--
+ drivers/soc/qcom/smp2p.c                           | 134 +++++++---
+ drivers/soc/qcom/socinfo.c                         |   6 +-
+ drivers/soc/qcom/spm.c                             |  21 ++
+ 18 files changed, 645 insertions(+), 77 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom-stats.yaml
+ create mode 100644 drivers/soc/qcom/qcom_stats.c
