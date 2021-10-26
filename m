@@ -1,21 +1,26 @@
-Return-Path: <SRS0=GGsf=PO=linaro.org=bjorn.andersson@kernel.org>
+Return-Path: <linux-arm-msm-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BE71C433F5
-	for <soc@archiver.kernel.org>; Tue, 26 Oct 2021 20:12:30 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 2DDA06058D; Tue, 26 Oct 2021 20:12:30 +0000 (UTC)
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0E36160C40
-	for <soc@kernel.org>; Tue, 26 Oct 2021 20:12:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0E36160C40
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
-Received: by mail-oi1-f176.google.com with SMTP id y207so246665oia.11
-        for <soc@kernel.org>; Tue, 26 Oct 2021 13:12:30 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5BB1C433FE
+	for <linux-arm-msm@archiver.kernel.org>; Tue, 26 Oct 2021 20:12:31 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 973A760E09
+	for <linux-arm-msm@archiver.kernel.org>; Tue, 26 Oct 2021 20:12:31 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S234444AbhJZUOz (ORCPT
+        <rfc822;linux-arm-msm@archiver.kernel.org>);
+        Tue, 26 Oct 2021 16:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234301AbhJZUOy (ORCPT
+        <rfc822;linux-arm-msm@vger.kernel.org>);
+        Tue, 26 Oct 2021 16:14:54 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26B9C061570
+        for <linux-arm-msm@vger.kernel.org>; Tue, 26 Oct 2021 13:12:29 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id t4so290911oie.5
+        for <linux-arm-msm@vger.kernel.org>; Tue, 26 Oct 2021 13:12:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
@@ -32,14 +37,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=U6pfmmfqDzPo/dC0ZUU+Hph5f+zxN3I1Xpz+IDrrVyQ=;
-        b=3hYlu1hYJ2o3q6CLcaoZA0cZ4i35h1fzm95n/ZXOjdfJO2vHMJ6vl/uoGOuGTeA+nu
-         6UOu4uH+Ooyw0lxCALCNpv8L4nSssNVCI6f5s6xNUehmcKLCkwix00cX2KgYvljm2fYC
-         7CVYnoFGb4VuAI4kkkEfojajW9fi5qA9VHbbJd2nl9M6UTpk2FtQq8bVmNskZQymaHit
-         gQX1hq1W5CE2otqhrLbEcBO0HrFV8ZFJtbi0KT9I7hVPqC1E6y+xXo2lwW4VdUf4RaBr
-         eHW8Gr/1Df+FX4MSYnhz6im2ZVUrjbOa+5fwrrBSQP4aytpNXiRG1LqH9JrbJtt9Nlf+
-         bYpg==
-X-Gm-Message-State: AOAM533sKer7jlPFDZ5NsZA7N46V7nHUsahAdrFQRw7tQN0ytzcurhLb
-	mrTUZEfeFIslXexh+5fqv6xUaA==
+        b=Hj/elBi7Tcm+XX30ItfdLrmC6DI4XKGgt89rpdjUaJ5UqRncefF+YtxjtD8ENsLCZI
+         teg408F2qs88zEIgdgLzeSkOPIWCSeYC0lkmkb5ATub8QeqwOmxDf4RqvhEFvolHngL4
+         qwXBGeT6H6hD/1g4RSqCJraK71duFNN40j+Of+21D3KEiGT9aAsov79fDOcXIRu4Rp0H
+         pm0pUheRFUAsy018PwH7Z53YFpmREMnx0NsKYeouk2EEu/7iQj8uylpcUTE3j5yur/TB
+         17bpH7VNDeprdbZWyUqQM78GG1F2QhI81rnvJrZiO3BHDf1IVl+dcOgZY3r0VjYPD97q
+         wX7Q==
+X-Gm-Message-State: AOAM531xrkoRkdOPr24knRRT1M570f59xu/jACKfF/Vp/0yKDNXUhGJl
+        tQS196RH7rajWWpL1QGfQGVD2A==
 X-Google-Smtp-Source: ABdhPJxrDc3oMzL1Qm7H5hrxLhxCoV+5GY0PHTYduxOACldOmxSZFuVT6FmMYRsUnoPtTeeNAF+T/A==
 X-Received: by 2002:aca:4307:: with SMTP id q7mr657424oia.3.1635279149159;
         Tue, 26 Oct 2021 13:12:29 -0700 (PDT)
@@ -47,47 +52,50 @@ Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
         by smtp.gmail.com with ESMTPSA id e28sm5098870oiy.10.2021.10.26.13.12.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 26 Oct 2021 13:12:28 -0700 (PDT)
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Shawn Guo <shawn.guo@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Luca Weiss <luca@z3ntu.xyz>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>,
-	Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-	"J . R . Divya Antony" <d.antony.jr@gmail.com>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	Amit Pundir <amit.pundir@linaro.org>,
-	Maulik Shah <mkshah@codeaurora.org>,
-	Philip Chen <philipchen@chromium.org>,
-	Prasad Malisetty <pmaliset@codeaurora.org>,
-	Rajesh Patil <rajpat@codeaurora.org>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Arnaud Ferraris <arnaud.ferraris@collabora.com>,
-	Caleb Connolly <caleb@connolly.tech>,
-	Chukun Pan <amadeus@jmu.edu.cn>,
-	David Heidelberg <david@ixit.cz>,
-	Douglas Anderson <dianders@chromium.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	Matthias Kaehlcke <mka@chromium.org>,
-	Ola Jeppsson <ola@snap.com>,
-	Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
-	Rob Herring <robh@kernel.org>
+To:     arm@kernel.org, soc@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        "J . R . Divya Antony" <d.antony.jr@gmail.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        Philip Chen <philipchen@chromium.org>,
+        Prasad Malisetty <pmaliset@codeaurora.org>,
+        Rajesh Patil <rajpat@codeaurora.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Chukun Pan <amadeus@jmu.edu.cn>,
+        David Heidelberg <david@ixit.cz>,
+        Douglas Anderson <dianders@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ola Jeppsson <ola@snap.com>,
+        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
+        Rob Herring <robh@kernel.org>
 Subject: [GIT PULL] Qualcomm ARM64 DTS additional patches for v5.16
-Date: Tue, 26 Oct 2021 15:12:27 -0500
-Message-Id: <20211026201227.1226633-1-bjorn.andersson@linaro.org>
+Date:   Tue, 26 Oct 2021 15:12:27 -0500
+Message-ID: <20211026201227.1226633-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Precedence: bulk
+List-ID: <linux-arm-msm.vger.kernel.org>
+X-Mailing-List: linux-arm-msm@vger.kernel.org
+Message-ID: <20211026201227.2Cz6sBeQBja4mYL6tQ9XOqVW4_BiXIblpTiw-WgXofc@z>
 
 The following changes since commit c22441a7cbd014e2546329af89363b2a43cc8bf2:
 
