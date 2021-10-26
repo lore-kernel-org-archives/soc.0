@@ -1,66 +1,432 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=ryGg=PO=gmail.com=aladyshev22@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D9F3C433FE
-	for <soc@archiver.kernel.org>; Tue, 26 Oct 2021 16:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1547BC433EF
+	for <soc@archiver.kernel.org>; Tue, 26 Oct 2021 20:01:25 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id DEA286109D; Tue, 26 Oct 2021 16:30:10 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id C63576108B;
-	Tue, 26 Oct 2021 16:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1635265810;
-	bh=4aLluw0yL9wmNmb8Nub2BEHvZmuwvcFreDn4AZUZBVs=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=UIHrGOzlPHlCyVibbgI08pLcW4Y863DDr6xaDm1u6NRY03Uagv1iKGp5xRZ6GWrFX
-	 aIFCl6OwYZ29bshX60i36GvuQIPuer27rrThygqwxJLK/4Ozxk/sN7DskJxhTCVCsV
-	 zxmp3XubvBTjMWSZE8mW+SdRYpAwG9XwECO3zKSbyQa1IYMkNDDpHYQtzz/Ks1tX+o
-	 OqOEXODf2vSkfM8lEDNH3bzAksVr55B9soTV4tH840jkj+1oY96D92V/DjVSGISrHL
-	 D1SA79arAbUK2/etNMO5wxjg5B2WztnHbTs1OlVGl0Bl263KBkI/0URM9weg60+2AR
-	 2B0kb0zSVPofw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id BBB8D60A17;
-	Tue, 26 Oct 2021 16:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id E4EAA60F39; Tue, 26 Oct 2021 20:01:24 +0000 (UTC)
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id BC23C60200;
+	Tue, 26 Oct 2021 20:01:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BC23C60200
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f171.google.com with SMTP id s19so723301ljj.11;
+        Tue, 26 Oct 2021 13:01:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ixtBSKhlM5RJeYoi6sIB/twD1T61aXRVqcD6skfC0C4=;
+        b=OASvt0WNZosZEZgHQuH8VNU02bUZyY3BDytmDoB62eyIAfV6yXTow0cBabMkYAbWYy
+         oIBB7Qxosao/Vpidt1V33S9hhybw/bgbj9zDM/dKUg74KiYjgW1/VMsGAu3v9HWIwrXi
+         kCOFdXz+PdAvF8c5clnbl3luoqQhr0sZY8imjodZVbu8UycGKoawN/SelKj0cCmGAg1V
+         reL3pVF77cyAThFPXCCd7yw/X8GVS4vWMmvaqISoszSXzeTb1MX9k7vzQ80k1a77D1yx
+         EP/R753qh8Zb//YZVscmYaryJRpA76F9VxwDCeKJk2l/mQtRLpAmHUScsvvaLI+QvIAx
+         uCKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ixtBSKhlM5RJeYoi6sIB/twD1T61aXRVqcD6skfC0C4=;
+        b=Zl6yd9ptdw+EmcERBgI/1iD9KDzt+4WqQbcl1ULmJgUuze5ow0lFVIVpp9O2rloGoB
+         hmek2KgdfQb70O31LacrI2FzSuYN1wQ5OXDqzqSR6Oo9yWmGbJ+LjGd1+2z1B7YjThpv
+         GelAKYufNIBT4Z0claNgegTdU12nLw3ogNmhxIXdufY8nfoiAT9OT717xPZDpETBVOjG
+         1lO3W1s9JKZ00urLGMBEynsJg4Q7yHgX8hw7qaqrGyvX1PCg+QuOufUin5EMDEGkvAzg
+         oqkZi7WnOEuLGYWjnGzDarzAE6ZV19m8Zjy3RIfe1KQwhYfTWqsO9tzEpG+7vZIdQp2V
+         ioPw==
+X-Gm-Message-State: AOAM530yH1PGtjiGTVENKkDw3FbkjXHvEO+F4PauVJPblDciROxlz3Kk
+	PCx31Tb4eaG/MXZtLXMbFpc=
+X-Google-Smtp-Source: ABdhPJzIfFctBTfgVls2IZEdAjOeMzERzyJj26kMXRMddH9jsu2AwiH0X/heXUB/4NLOJSZOLi7w0w==
+X-Received: by 2002:a05:651c:2104:: with SMTP id a4mr1861591ljq.82.1635278483010;
+        Tue, 26 Oct 2021 13:01:23 -0700 (PDT)
+Received: from DESKTOP-GSFPEC9.localdomain (broadband-46-242-11-233.ip.moscow.rt.ru. [46.242.11.233])
+        by smtp.gmail.com with ESMTPSA id x7sm2020720lfu.116.2021.10.26.13.01.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Oct 2021 13:01:22 -0700 (PDT)
+From: Konstantin Aladyshev <aladyshev22@gmail.com>
+To: 
+List-Id: <soc.lore.kernel.org>
+Cc: supreeth.venkatesh@amd.com,
+	aladyshev22@gmail.com,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org
+Subject: [PATCH] ARM: dts: aspeed: Add AMD DaytonaX BMC
+Date: Tue, 26 Oct 2021 23:00:56 +0300
+Message-Id: <20211026200058.2183-1-aladyshev22@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: dts: arm: Update ICST clock nodes 'reg' and node names
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <163526581076.16112.7925468828190496542.git-patchwork-notify@kernel.org>
-Date: Tue, 26 Oct 2021 16:30:10 +0000
-References: <20211024232239.211822-1-linus.walleij@linaro.org>
-In-Reply-To: <20211024232239.211822-1-linus.walleij@linaro.org>
-To: Linus Walleij <linus.walleij@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
 
-Hello:
+Add initial version of device tree for the BMC in the AMD DaytonaX
+platform.
 
-This patch was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+AMD DaytonaX platform is a customer reference board (CRB) with an
+Aspeed ast2500 BMC manufactured by AMD.
 
-On Mon, 25 Oct 2021 01:22:39 +0200 you wrote:
-> From: Rob Herring <robh@kernel.org>
-> 
-> Add a 'reg' entry for ICST clock nodes on the Arm Ltd platforms. The 'reg'
-> entry is the VCO register address. With this, the node name can be updated
-> to use a generic node name, 'clock-controller', and a unit-address.
-> 
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> 
-> [...]
+Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts | 327 ++++++++++++++++++
+ 2 files changed, 328 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
 
-Here is the summary with links:
-  - ARM: dts: arm: Update ICST clock nodes 'reg' and node names
-    https://git.kernel.org/soc/soc/c/2d3de197a818
-
-You are awesome, thank you!
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7e0934180724..01cfd803d273 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1457,6 +1457,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+ 	aspeed-ast2600-evb-a1.dtb \
+ 	aspeed-ast2600-evb.dtb \
+ 	aspeed-bmc-amd-ethanolx.dtb \
++	aspeed-bmc-amd-daytonax.dtb \
+ 	aspeed-bmc-ampere-mtjade.dtb \
+ 	aspeed-bmc-arm-centriq2400-rep.dtb \
+ 	aspeed-bmc-arm-stardragon4800-rep2.dtb \
+diff --git a/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
+new file mode 100644
+index 000000000000..93ad4262a786
+--- /dev/null
++++ b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
+@@ -0,0 +1,327 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 AMD Inc.
++// Author: Supreeth Venkatesh <supreeth.venkatesh@amd.com>
++/dts-v1/;
++
++#include "aspeed-g5.dtsi"
++#include <dt-bindings/gpio/aspeed-gpio.h>
++
++/ {
++	model = "AMD DaytonaX BMC";
++	compatible = "amd,daytonax-bmc", "aspeed,ast2500";
++
++	memory@80000000 {
++		reg = <0x80000000 0x20000000>;
++	};
++
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		video_engine_memory: jpegbuffer {
++			size = <0x02000000>;	/* 32M */
++			alignment = <0x01000000>;
++			compatible = "shared-dma-pool";
++			reusable;
++		};
++	};
++
++
++	aliases {
++		serial0 = &uart1;
++		serial4 = &uart5;
++	};
++	chosen {
++		stdout-path = &uart5;
++		bootargs = "console=ttyS4,115200 earlycon";
++	};
++	leds {
++		compatible = "gpio-leds";
++
++		fault {
++			gpios = <&gpio ASPEED_GPIO(A, 2) GPIO_ACTIVE_LOW>;
++		};
++
++		identify {
++			gpios = <&gpio ASPEED_GPIO(A, 3) GPIO_ACTIVE_LOW>;
++		};
++	};
++	iio-hwmon {
++		compatible = "iio-hwmon";
++		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
++			      <&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>,
++			      <&adc 10>, <&adc 11>, <&adc 12>, <&adc 13>, <&adc 14>,
++			      <&adc 15>;
++	};
++};
++
++&fmc {
++	status = "okay";
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		#include "openbmc-flash-layout.dtsi"
++	};
++};
++
++
++&mac0 {
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rmii1_default>;
++	clocks = <&syscon ASPEED_CLK_GATE_MAC1CLK>,
++		 <&syscon ASPEED_CLK_MAC1RCLK>;
++	clock-names = "MACCLK", "RCLK";
++};
++
++&uart1 {
++	//Host Console
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_txd1_default
++		     &pinctrl_rxd1_default>;
++};
++
++&uart5 {
++	//BMC Console
++	status = "okay";
++};
++
++&adc {
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_adc0_default
++		     &pinctrl_adc1_default
++		     &pinctrl_adc2_default
++		     &pinctrl_adc4_default
++		     &pinctrl_adc5_default
++		     &pinctrl_adc6_default
++		     &pinctrl_adc7_default
++		     &pinctrl_adc8_default
++		     &pinctrl_adc9_default
++		     &pinctrl_adc10_default
++		     &pinctrl_adc11_default
++		     &pinctrl_adc12_default
++		     &pinctrl_adc13_default
++		     &pinctrl_adc14_default
++		     &pinctrl_adc15_default>;
++};
++
++&gpio {
++	status = "okay";
++	gpio-line-names =
++	/*A0-A7*/	"","","FAULT_LED","","","","","",
++	/*B0-B7*/	"","","","","","","","",
++	/*C0-C7*/	"CHASSIS_ID_BTN","","","","","","","",
++	/*D0-D7*/	"","","ASSERT_BMC_READY","","","","","",
++	/*E0-E7*/	"MON_P0_RST_BTN","ASSERT_RST_BTN","MON_P0_PWR_BTN","ASSERT_PWR_BTN","",
++			"MON_P0_PWR_GOOD","MON_PWROK","",
++	/*F0-F7*/	"","","","","","","","",
++	/*G0-G7*/	"","","","","","","","",
++	/*H0-H7*/	"","","","","","","","",
++	/*I0-I7*/	"","","","","","","","",
++	/*J0-J7*/	"","","","","","","","",
++	/*K0-K7*/	"","","","","","","","",
++	/*L0-L7*/	"","","","","","","","",
++	/*M0-M7*/	"","","","","","","","",
++	/*N0-N7*/	"","","","","","","","",
++	/*O0-O7*/	"","","","","","","","",
++	/*P0-P7*/	"","","","","","","","",
++	/*Q0-Q7*/	"","","","","","","","",
++	/*R0-R7*/	"","","","","","","","",
++	/*S0-S7*/	"","","","","","","","",
++	/*T0-T7*/	"","","","","","","","",
++	/*U0-U7*/	"","","","","","","","",
++	/*V0-V7*/	"","","","","","","","",
++	/*W0-W7*/	"","","","","","","","",
++	/*X0-X7*/	"","","","","","","","",
++	/*Y0-Y7*/	"","","","","","","","",
++	/*Z0-Z7*/	"","","","","","","","",
++	/*AA0-AA7*/	"","","","","","","","",
++	/*AB0-AB7*/	"","","","","","","","",
++	/*AC0-AC7*/	"","","","","","","","";
++};
++
++&i2c0 {
++	status = "okay";
++};
++
++&i2c1 {
++	status = "okay";
++};
++
++&i2c2 {
++	status = "okay";
++};
++
++&i2c3 {
++	status = "okay";
++};
++
++&i2c4 {
++	status = "okay";
++};
++
++&i2c5 {
++	status = "okay";
++};
++
++&i2c6 {
++	status = "okay";
++};
++
++&i2c7 {
++	status = "okay";
++};
++
++&i2c8 {
++	status = "okay";
++};
++
++&i2c10 {
++	status = "okay";
++};
++
++&i2c11 {
++	status = "okay";
++};
++
++&i2c12 {
++	status = "okay";
++};
++
++&kcs1 {
++	status = "okay";
++	aspeed,lpc-io-reg = <0x60>;
++};
++
++&kcs2 {
++	status = "okay";
++	aspeed,lpc-io-reg = <0x62>;
++};
++
++&kcs3 {
++	status = "okay";
++	aspeed,lpc-io-reg = <0xCA2>;
++};
++
++&kcs4 {
++	status = "okay";
++	aspeed,lpc-io-reg = <0x97DE>;
++};
++
++&lpc_snoop {
++	status = "okay";
++	snoop-ports = <0x80>, <0x81>;
++};
++
++&lpc_ctrl {
++	//Enable lpc clock
++	status = "okay";
++};
++
++&pwm_tacho {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm0_default
++	&pinctrl_pwm1_default
++	&pinctrl_pwm2_default
++	&pinctrl_pwm3_default
++	&pinctrl_pwm4_default
++	&pinctrl_pwm5_default
++	&pinctrl_pwm6_default
++	&pinctrl_pwm7_default>;
++
++	fan@0 {
++		reg = <0x00>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x00>;
++	};
++
++	fan@1 {
++		reg = <0x01>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x01>;
++	};
++
++	fan@2 {
++		reg = <0x02>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x02>;
++	};
++
++	fan@3 {
++		reg = <0x03>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x03>;
++	};
++
++	fan@4 {
++		reg = <0x04>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x04>;
++	};
++
++	fan@5 {
++		reg = <0x05>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x05>;
++	};
++
++	fan@6 {
++		reg = <0x06>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x06>;
++	};
++
++	fan@7 {
++		reg = <0x07>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x07>;
++	};
++
++	fan@8 {
++		reg = <0x08>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x08>;
++	};
++
++	fan@9 {
++		reg = <0x09>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x09>;
++	};
++
++	fan@10 {
++		reg = <0x0a>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0a>;
++	};
++
++	fan@11 {
++		reg = <0x0b>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0b>;
++	};
++
++	fan@12 {
++		reg = <0x0c>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0c>;
++	};
++
++	fan@13 {
++		reg = <0x0d>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0d>;
++	};
++
++	fan@14 {
++		reg = <0x0e>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0e>;
++	};
++
++	fan@15 {
++		reg = <0x0f>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0f>;
++	};
++};
++
++&video {
++	status = "okay";
++	memory-region = <&video_engine_memory>;
++};
++
++&vhub {
++	status = "okay";
++};
++
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 
