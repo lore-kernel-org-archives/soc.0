@@ -2,14 +2,14 @@ Return-Path: <SRS0=ATq6=PO=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE7EFC433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 26 Oct 2021 09:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2A66C433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 26 Oct 2021 09:49:13 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B329161039
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 26 Oct 2021 09:49:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B329161039
+	by mail.kernel.org (Postfix) with ESMTPS id 6DF2560EC0
+	for <linux-arm-kernel@archiver.kernel.org>; Tue, 26 Oct 2021 09:49:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6DF2560EC0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -18,68 +18,66 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
 	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
 	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=XAoS88mGuhOQJVIDmnrX48dFF4OvVr9rODbXBMdCZ48=; b=KnU2r6bj7gAj16
-	ZLJENupLGgbI04+QYgnucKWvxwHeZhoXjknpzndSCdRPHTnDda/HTJnt8oma5G2ej7F9llvMtLMsJ
-	WJ3zPuEkjvOseFGIN1yLsWagDhNcESll6LXXY6qDzi5W3ruf0gOQMisCAzakF63GRMp90C4qNU9A9
-	Jr6FJbEpiaNsfd5pJgkrXNCsBSMFwd7w47Y/tiAXAqijsAzKh6OKYoDSryRfamxJ5vDIgPhpfs2zE
-	sV3pEyijYvqQ/Cbosso/L8H6QMnAxkwNtW1BtynuAUH+qUOBKT8v9osk2opp2nZmWOWvIcBA6aKBs
-	EVvjGuUUe3kHiVKHwDuQ==;
+	List-Owner; bh=ahLVhL9swH683NROPL7wkqYrxl2QkQFEJqU/LpS9D2o=; b=pRfJ8vb+GzE7PH
+	d9EGt9HUnx8QpJfMjGDoyP6Y3EwSwteWIZuraa6V1X7dvM5qSptcduweQSGwLf9Tu84gjhlZNMSIT
+	5XuEaBURrWYaAFWh2++MssNP9PZlNSrVwuKNO0JBNZvdo5JBxNq5ChIMyGlvRoapId7efCP2/zxSM
+	fdrTv2frvkUR070c7y1CxpvM2HzlwDJRxq7OU9Be9MC69DOLoKwu0h4ZHmeBT+qCdgylLanQUQGT8
+	pW0nrcCqE9ScmHVdMmVfglFxI8mpOF9r0TmaHZJRe7v30EEMJm9f+IB6eq8BK/wpmdPCjoMwKcQHE
+	zOKOW/2e3HM/0mSDy+Kw==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mfJ3K-001LyH-8R; Tue, 26 Oct 2021 09:47:30 +0000
+	id 1mfJ3V-001Lzo-2J; Tue, 26 Oct 2021 09:47:41 +0000
 Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123])
  by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mfJ38-001LvC-GW
- for linux-arm-kernel@lists.infradead.org; Tue, 26 Oct 2021 09:47:20 +0000
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70])
+ id 1mfJ39-001Lvl-Nm
+ for linux-arm-kernel@lists.infradead.org; Tue, 26 Oct 2021 09:47:21 +0000
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 53B3D3FFF9
+ by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 27A5D40283
  for <linux-arm-kernel@lists.infradead.org>;
- Tue, 26 Oct 2021 09:47:15 +0000 (UTC)
+ Tue, 26 Oct 2021 09:47:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
- s=20210705; t=1635241635;
- bh=cYZ6vLVJzKfmCMrRSQ5rwJQ1AQl6SdnwWfSPPnNLfrY=;
+ s=20210705; t=1635241638;
+ bh=sbYrCs8J0Q0Rz6cp+rkJ/lhh0zXOz8q9lqlVQx/f+TQ=;
  h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
  MIME-Version;
- b=BZPzJQOhHpo+7q+TZ5YaCoucAyZf1jNGNRF9AU+yUtHi4BhN+ZoD3106mXBjHjC2g
- VxukDRoEctiZeu29JQKInyhe0sOFoj8Vk80WMbi3YgWFo+Q14Zg/CzCskiwvpLBK4j
- JWzD48x/3Ik1i8ehKRxT7OSQAOIIov3lpyPMt6WSvQEQJcbyd4Rza3164jR80zpWOw
- tvQhl2fthOLhjhyfjYrSJzizr4I5+nMjOBxI//zv0f0Pai5sMAvQ+kgTjOmb8QrtHe
- iNYTXAwQsuRh5gU2iTtyLe4Y6yJwpzDPYYgBqe34fpBCJaS6kziWoxxCqrhQoBM2w1
- VAdcY8c78Zl3Q==
-Received: by mail-lf1-f70.google.com with SMTP id
- k15-20020a0565123d8f00b003ffb31e2ea9so29760lfv.17
+ b=WDWOOTBOp40P4WUqmfPtWma2G67VefpJK4k6RaeZr2fzAcf5+5U9SYtyS+WJmmaY0
+ rtNg/2bNzUlyJGCmvUNNd01C9cSfSOF4zyhF8P89899rAXCfYKcplsMP0H/XHR8nsn
+ ZFz8TKDYaw16PWKGXhrzVdHHY+wT7oZfya+tVbJ+nSWNtf3utiwl64PM5DY3LA6Gka
+ IR7FDgn/9kuzca+bbR1HdkZW1dbXiUbXxnTuHfU91IqlsUaBUkFfRknU+XOx+joNSt
+ WWFlLYTSvW0ZEiB8jT4SZqadaOu2D2xSq/DqFdwHNSdZy6bhqQ2Cp9577MOJgm3X2v
+ pwIbqMJtcTqdg==
+Received: by mail-lj1-f199.google.com with SMTP id
+ f6-20020a2e9e86000000b00211349f9ce3so4086744ljk.3
  for <linux-arm-kernel@lists.infradead.org>;
- Tue, 26 Oct 2021 02:47:15 -0700 (PDT)
+ Tue, 26 Oct 2021 02:47:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=cYZ6vLVJzKfmCMrRSQ5rwJQ1AQl6SdnwWfSPPnNLfrY=;
- b=IqiueCmYhFaXrhghUg6Khn6tZh+lEuosHMjKPFFAr8R5U+a6ZY/TmFyLFnClqqQBhl
- a1wTGkT0lm0T6BuZLCsW+kbvn7KnG0WITkGGlyQ421BHKyktOsiLuyHSfO+ctEeNnJpi
- Ta2TJDrpfBWJwKTpOq8FZouMhN3SAACkusQeaAsoK5fINS9wpal7juIsRgN4V9pVU1HT
- uDzzkrdUiX97wGVWwjr3jPvCmVf87Igxh0DdJ4lcOW2QWzlL4jsGhpN+58rviV9B5sqS
- dtNk5iqnyoY1Eke87ypb6AfwkBN4RHZfgVPkZj7YFPFXNM18M5uNBfBkRZ1k9uyYaSgd
- ovwQ==
-X-Gm-Message-State: AOAM530sSZ1Dnsi5X92Pb9hGxSVwjVrUc2XqBDhVkR9Hd+dk2DN94yQT
- r6u/lbBKKffrAiYDJvBN824xCFN6UmI4dpRO3G6dl3EZ8LoFBsqK++l6MoWuih6mCbzCl+gNEHv
- 1TEJKZusxqC29aDTRIDIxtJiyJ6qe/sV8zaYl8fXtBARDLnswDeCA
-X-Received: by 2002:a05:6512:68b:: with SMTP id
- t11mr21162781lfe.586.1635241634811; 
- Tue, 26 Oct 2021 02:47:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzlQgrckrQHX3Yvswq5svDMfRPICsoGQMe4d5hGv/Expe3ttKtnyzJNWvaJkOw7N4Zei2O1cQ==
-X-Received: by 2002:a05:6512:68b:: with SMTP id
- t11mr21162737lfe.586.1635241634261; 
- Tue, 26 Oct 2021 02:47:14 -0700 (PDT)
+ bh=sbYrCs8J0Q0Rz6cp+rkJ/lhh0zXOz8q9lqlVQx/f+TQ=;
+ b=AZC7E0SHwL8x+mTabXknWNKqlm+hl3Y1XB93tjR8GqMmMdmbasmcNSWW9pAVA3U50E
+ RJ1r22dtyiZ2qL8gq+adICIdUFmCXadNBOV6Atpyq/q278A5vLUBR6+OUk1RNRgWKCtv
+ Ojds5c9OHCKdZmGRqyxUW+2h57BrnNryizcBt3DFUyYMC7DJUdCMcbJ6b5KSz4gn5wj1
+ 1GZ2FxUrkcD9Ulh2W3w1lyy74x/I/fGOYrAG+ylFxBc5G6jyxQWI66rezdT8zE5ChLMD
+ KkKYo3eM4AkfcBz7fmAo0rB4q6ZRkpfF2dPayfJFJ59pCx/ZVVfeFvBZ7mzKwRtOSLsj
+ b+9A==
+X-Gm-Message-State: AOAM5314mvosteIN8odckaCMcERWoFio1faCDdr4t9eKaK3i0l2TDung
+ 4JnzOshlPGOFK0Ql9G8y1WwEtNw/SS8HocQXA89s+toaGmnMzXujpclTGV6PqQaPNLZJxfco+GN
+ yjzmTtfrgYuN/gKOQuvuJ/xPyCQ3z41wR6sya8Lv8vMLSu3WifSvT
+X-Received: by 2002:a2e:7304:: with SMTP id o4mr886885ljc.385.1635241636728;
+ Tue, 26 Oct 2021 02:47:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzKSsLVNoJZPREVg5VqEAatQtzjWaBPxJNdTK1B4zkn7s0ddrcueJak0ah7O3ADQwivq+qDAQ==
+X-Received: by 2002:a2e:7304:: with SMTP id o4mr886837ljc.385.1635241636293;
+ Tue, 26 Oct 2021 02:47:16 -0700 (PDT)
 Received: from kozik-lap.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
  by smtp.gmail.com with ESMTPSA id
- v17sm113794lfo.167.2021.10.26.02.47.13
+ v17sm113794lfo.167.2021.10.26.02.47.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Oct 2021 02:47:13 -0700 (PDT)
+ Tue, 26 Oct 2021 02:47:15 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
@@ -87,16 +85,16 @@ To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
  linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/4] soc: samsung: drivers for v5.16
-Date: Tue, 26 Oct 2021 11:47:06 +0200
-Message-ID: <20211026094709.75692-2-krzysztof.kozlowski@canonical.com>
+Subject: [GIT PULL] arm64: dts: samsung: exynos for v5.16
+Date: Tue, 26 Oct 2021 11:47:08 +0200
+Message-ID: <20211026094709.75692-4-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211026094709.75692-1-krzysztof.kozlowski@canonical.com>
 References: <20211026094709.75692-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211026_024718_724219_F72340B9 
-X-CRM114-Status: GOOD (  14.33  )
+X-CRM114-CacheID: sfid-20211026_024719_934699_E237C72D 
+X-CRM114-Status: GOOD (  11.58  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -112,77 +110,45 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211026094706.FnP8uCX0lfLEWeV8_HHofSW8dorDImMq2DsCzhu5GlE@z>
+Message-ID: <20211026094708.L7OlI8fgfF1PCbRw1XOBDqW_0ZtN1uKmg1jdmJrWVhk@z>
 
 Hi,
 
-Set of changes mostly around Exynos ChipID driver. I hope it is not too late
-for this. These were sitting in my tree for some time, so they got linux-next
-coverage.
+On top of previous pull.
 
 Best regards,
 Krzysztof
 
 
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+The following changes since commit 2b663ae7152f785732d35ce38ad20ad10aca3116:
 
-  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+  arm64: dts: exynos: add minimal support for exynosautov9 sadk board (2021-10-12 14:20:57 +0200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-5.16
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.16-2
 
-for you to fetch changes up to b417d1e88f32645ed62a00d43c347b4386a0a021:
+for you to fetch changes up to b2f217cc7fbd3e6a097021b8b663328a649ea232:
 
-  soc: samsung: exynos-chipid: add exynosautov9 SoC support (2021-10-26 09:16:53 +0200)
+  arm64: dts: exynos: add chipid node for exynosautov9 SoC (2021-10-26 09:17:42 +0200)
 
 ----------------------------------------------------------------
-Samsung SoC drivers changes for v5.16
+Samsung DTS ARM64 changes for v5.16, part two
 
-1. Convert Exynos ChipID and ASV driver to a module and make it a
-   default, instead of selected. The driver is not essential, so it
-   could be disabled, if needed.
-2. Add support for Exynos850 and Exynos Auto v9 to Exynos ChipID and ASV
-   driver.
-3. Get rid of HAVE_S3C_RTC because it was adding just another layer
-   instead of direct dependencies.
-4. Minor cleanups.
+1. Add chassis-type property.
+2. Add ChipID node to ExynosAutov9 DTSI.
 
 ----------------------------------------------------------------
 Chanho Park (1):
-      soc: samsung: exynos-chipid: add exynosautov9 SoC support
+      arm64: dts: exynos: add chipid node for exynosautov9 SoC
 
-David Virag (1):
-      soc: samsung: exynos-pmu: Fix compilation when nothing selects CONFIG_MFD_CORE
+Krzysztof Kozlowski (1):
+      arm64: dts: exynos: add 'chassis-type' property
 
-Krzysztof Kozlowski (4):
-      soc: samsung: exynos-chipid: avoid soc_device_to_device()
-      soc: samsung: exynos-chipid: convert to a module
-      soc: samsung: exynos-chipid: do not enforce built-in
-      soc: samsung: pm_domains: drop unused is_off field
-
-Sam Protsenko (3):
-      soc: samsung: exynos-chipid: Pass revision reg offsets
-      dt-bindings: samsung: exynos-chipid: Document Exynos850 compatible
-      soc: samsung: exynos-chipid: Add Exynos850 support
-
-Will McVicker (2):
-      arm64: exynos: don't have ARCH_EXYNOS select EXYNOS_CHIPID
-      rtc: s3c: remove HAVE_S3C_RTC in favor of direct dependencies
-
- .../bindings/arm/samsung/exynos-chipid.yaml        |  5 +-
- arch/arm/Kconfig                                   |  1 -
- arch/arm/mach-exynos/Kconfig                       |  2 -
- arch/arm/mach-s5pv210/Kconfig                      |  1 -
- arch/arm64/Kconfig.platforms                       |  2 -
- drivers/rtc/Kconfig                                | 10 +--
- drivers/soc/samsung/Kconfig                        |  5 +-
- drivers/soc/samsung/Makefile                       |  3 +-
- drivers/soc/samsung/exynos-chipid.c                | 94 ++++++++++++++++++----
- drivers/soc/samsung/exynos5422-asv.c               |  1 +
- drivers/soc/samsung/pm_domains.c                   |  1 -
- include/linux/soc/samsung/exynos-chipid.h          |  6 +-
- 12 files changed, 94 insertions(+), 37 deletions(-)
+ arch/arm64/boot/dts/exynos/exynos5433-tm2.dts  | 1 +
+ arch/arm64/boot/dts/exynos/exynos5433-tm2e.dts | 1 +
+ arch/arm64/boot/dts/exynos/exynosautov9.dtsi   | 5 +++++
+ 3 files changed, 7 insertions(+)
 
 _______________________________________________
 linux-arm-kernel mailing list
