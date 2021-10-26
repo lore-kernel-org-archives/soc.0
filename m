@@ -2,63 +2,52 @@ Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01F36C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01F60C433FE
 	for <soc@archiver.kernel.org>; Tue, 26 Oct 2021 16:30:09 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id DBA4B60EBD; Tue, 26 Oct 2021 16:30:08 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id C4ECA60527;
-	Tue, 26 Oct 2021 16:30:08 +0000 (UTC)
+	id D9C6060EB4; Tue, 26 Oct 2021 16:30:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id C276160C40
+	for <soc@kernel.org>; Tue, 26 Oct 2021 16:30:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1635265808;
-	bh=CkaH7R26nkxcXZrEJCK325YZN5ehq3pkxOWS/++pXEo=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=vGbxNqo0edcYIlM2ts1nafbAchKPyeNjv3iB3PbND9DAVAJ0SmvXjA+E/veHZlzMI
-	 KWWlF4guLJ8v0K0QBa2E9TqkkZnGSB9ugXFOMjce6FS1SMW0dHisNrJLK72+K6ZMyT
-	 eGpaXsqN/l7ZQ9JD67xFnn0mqmMMc5aK4CYVtLkGvZ6KyCksrggVgMeU1SPf2a9/xW
-	 eWZ8+mcJBI/kk0KWKcSLzMMjUshzZluwYv9wSPUjOdZcc3Nu8h65mb53wO9HQY6epU
-	 BZ7KEHiraagOqX6Sjo9yWo/Qkze2xDLrEaB3YLATLyD+yJ9uSdUhVLOnVTLluSPKw+
-	 bcD4aG8qO9UBA==
+	bh=NB/A42+0/3Q0uV9z5NZfOc096PyqyT+pPddzGNRwEfQ=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=Bjzr9fbD8KUD6qVNQN4+ImFwkCs7nUBuy4/IUFxdSheku/qH+1vY7Lbp2fwXFn5Di
+	 SBA0qEMzpJi9Qs/XqWoOo8ihlzWouujL/gFLa67xawOwH+MguEwq1JiZV5uo4Rsua2
+	 OviPNrRhrfp3hhn3WMuyGhvTFHoXsq6VwqJbw0MUmeXpVCiuB7LdU6ckzSf1wig/Uv
+	 nSFL7JZJZ6I9oC6NlOdgMHFCC34iSLOXH3zZi0SVyN//qosUsXSzWdl9RFZcz1f3gL
+	 WZv/xIBWAgavro4jg6rkF0YzvD+yS+UdCEVik2qSNtx+TNK2Z1T2I+yftDjKfIM9WF
+	 rQOClhZKlOPpA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id B6AAC608FE;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id AD25760726;
 	Tue, 26 Oct 2021 16:30:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH V2] MAINTAINERS: Add maintainers for DHCOM i.MX6 and
- DHCOM/DHCOR STM32MP1
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <163526580874.16112.11360212425163603945.git-patchwork-notify@kernel.org>
+ <163526580865.16112.11579400459154595054.git-patchwork-summary@kernel.org>
 Date: Tue, 26 Oct 2021 16:30:08 +0000
-References: <20211025073706.2794-1-cniedermaier@dh-electronics.com>
-In-Reply-To: <20211025073706.2794-1-cniedermaier@dh-electronics.com>
-To: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Mon, 25 Oct 2021 09:37:06 +0200 you wrote:
-> Add maintainers for DH electronics DHCOM i.MX6
-> and DHCOM/DHCOR STM32MP1 boards.
-> 
-> Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: kernel@dh-electronics.com
-> Cc: arnd@arndb.de
-> To: soc@kernel.org
-> To: linux-kernel@vger.kernel.org
-> 
-> [...]
+Patch: [V2] MAINTAINERS: Add maintainers for DHCOM i.MX6 and DHCOM/DHCOR STM32MP1
+  Submitter: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=569375
+  Lore link: https://lore.kernel.org/r/20211025073706.2794-1-cniedermaier@dh-electronics.com
 
-Here is the summary with links:
-  - [V2] MAINTAINERS: Add maintainers for DHCOM i.MX6 and DHCOM/DHCOR STM32MP1
-    https://git.kernel.org/soc/soc/c/05d5da3cb11c
 
-You are awesome, thank you!
+Total patches: 1
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
