@@ -1,61 +1,65 @@
-Return-Path: <SRS0=ZdmY=PP=arndb.de=arnd@kernel.org>
+Return-Path: <linux-arm-msm-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99007C433EF
-	for <soc@archiver.kernel.org>; Wed, 27 Oct 2021 08:50:03 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 7011660F9D; Wed, 27 Oct 2021 08:50:03 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ADB2C60F0F;
-	Wed, 27 Oct 2021 08:50:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ADB2C60F0F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M7Jj2-1ma9Nl054G-007pGu; Wed, 27 Oct 2021 10:50:01 +0200
-Received: by mail-wr1-f52.google.com with SMTP id e4so2781822wrc.7;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41A1EC433FE
+	for <linux-arm-msm@archiver.kernel.org>; Wed, 27 Oct 2021 08:50:04 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 28CAA60FC0
+	for <linux-arm-msm@archiver.kernel.org>; Wed, 27 Oct 2021 08:50:04 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S239613AbhJ0Iw2 (ORCPT
+        <rfc822;linux-arm-msm@archiver.kernel.org>);
+        Wed, 27 Oct 2021 04:52:28 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:43025 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239598AbhJ0Iw1 (ORCPT
+        <rfc822;linux-arm-msm@vger.kernel.org>);
+        Wed, 27 Oct 2021 04:52:27 -0400
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N8EdM-1mkHEn02am-014Aqh; Wed, 27 Oct 2021 10:50:01 +0200
+Received: by mail-wr1-f54.google.com with SMTP id d3so2769158wrh.8;
         Wed, 27 Oct 2021 01:50:00 -0700 (PDT)
-X-Gm-Message-State: AOAM530KHMEZhWOQZN87qdkXs7Fs57p8DX2BoLfrUF/kdSJTO16hmaEN
-	y4CvF4tFWWhApuVfZoQN4GKj1JMyjYyk2dzVtrM=
+X-Gm-Message-State: AOAM531QdkrkptBmL4a8v4YR7lBE2jfuzL06RIDg48xhApAYgiQpEU7C
+        fpllDg4XXgHE5K5svuTl0TY4HLAW74txhcjOJEs=
 X-Google-Smtp-Source: ABdhPJzulGMx2l8bar1I6qe5RSM/d5wpOaG0F+fU8zqeLRJg7K2lynybU0xg8HdVMMVSnCWSe2GfQO1flqIYXN352eE=
 X-Received: by 2002:a5d:47a3:: with SMTP id 3mr26057935wrb.336.1635324600576;
  Wed, 27 Oct 2021 01:50:00 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211027072427.2730827-1-arnd@kernel.org>
 In-Reply-To: <20211027072427.2730827-1-arnd@kernel.org>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 27 Oct 2021 10:49:44 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 27 Oct 2021 10:49:44 +0200
 X-Gmail-Original-Message-ID: <CAK8P3a1CjfRmJsc0p2P2ja1DB6QFsuwnkBdXk1CfdzGjGpK-3A@mail.gmail.com>
 Message-ID: <CAK8P3a1CjfRmJsc0p2P2ja1DB6QFsuwnkBdXk1CfdzGjGpK-3A@mail.gmail.com>
 Subject: Re: [PATCH] firmware: qcom: scm: fix non-SMP build
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>, Andy Gross <agross@kernel.org>, 
-	Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <swboyd@chromium.org>, 
-	linux-arm-msm <linux-arm-msm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+To:     SoC Team <soc@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <swboyd@chromium.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:JtQ+UGB1wHaP+HUH3ghjoCoaZaAgbcOTVowvyTo8YHkO0d7XBVf
- z+311xmyFybO0XDpbq3m/b17O3FOfbZrenmekojOeWS+cXssV7B28Nmrq5CBe4RHkoI9boZ
- bK/3OWr1AVNLJaKsJ1VKfgbjK9oULpj3Caayk1M8TfFxRXcqVoIVV5Xc+VWxQReHDwCluzN
- 5ivJugs0pDoWpYXmZVLBg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8lu4xfRPOHQ=:UoNYf14w0qeslHWJj+vSBn
- QwPUR5Ih6W+QlEytw6EjM9AWkhW9gRUswqbbIWVXaawfp+RU6K4F83M/s7ZjiH45MtGWucnMu
- knChbIlsqew/mczzh1TSFf9hCGKb9JWHeMtWKycCWcZUpjZpzRqRysfqLGx2aDAirzdFw2aYo
- Dg8yTtNeha4dEZvznt3Wqm7R2eUfQOu3KziU0/7E2MrMI61HbKyQPqQvtNCU1RBJfuOUuropu
- kuzGCNvOJ/z93vBzU39WkJexZ5td66dP988/vyTVGeD0LptwQKIm/orsqu7ZTNPoa0bsdzXKc
- s6YoaINvvhZDdgj9Kr3fkcAd7TYMT+5Le9I/iVVZHF9iaSCI3LOr2PyQoPNDlyJF1EGtzPj6F
- Mm8vkzVlTDZkthDG7vGOUMI5ifuUbgeB906l0yRDryak2B7sVQ++AMb2B+PNT/95cqrAnzJSG
- sH4m1qU9ZZMLbVEiKy4G0DxzXeoCjOkfeCJbr6ApE7TEcWfYB33OwKhNcFAsfnVL7FSBCvoaX
- GhnShbFRyeJ9GSeJNOjarRyeDWTgZS7Z+qORVYx53TtOYZwFb2dDILIL58CN1nMexzJMu3ubH
- qcOWlFzLibw87gBrBD2Fm2KvUx+1GSE2yg6umVM4gIEMqgcLQ1PUtWtUKtLywDVg1ZoYF/USd
- DWoanBCUGqG0J763hVBC9PW1jdOx6TP7SOcy2c1GKXfvkh2N9d58Uha1Btd4TCyhVRKVHc0Bv
- 5i+fIeDMnZa96yFMmW/iVfeJZIA7rhnL8a2ncdkth3d66c2YbjXFAUcevowgRW3kK462/ENdV
- RTrcajVNYVl/RXJieJk1vUW+3KAp8HdfUmLGxnZkqFRzvf1tZw=
+X-Provags-ID: V03:K1:fEB5JwCg9vpw7hi98kLJDbVZrQBzCf6yHr9+RwrbiguzpI2AGSp
+ 1xbKqgevc+xxZ9kiFXv1dAbzzCu6zFfrrepTW48zPVd2Jtz7najqeEmUVmjQc4htphUohev
+ St/FThT2gyX9tFT6x6PpjfAXmJOZ39/aSYqEGAqt0xYfZGOPjmIX9TJdhTGJ3cZeOFxYV7V
+ bpBHChcIJPdJdO/3jHpeA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:573zewDPWK4=:O1MKOcBLcpipS/3M6AAze+
+ zcun/VtbiqoE9HjGrdhXSoSKQGyX8hQSZPRZ0VOB7EFXN9uq1ZxkhPLigpGC8nYpzwERNgtAt
+ tOjVHzewC1wB1rNf9pd307Mhn8goc+f0lh/j32m016Mny+wj6nJi2DuZeE+o92iBlUCFUZ1gK
+ NWngcxEdjzJegPbkUwdikFLbYGeeTUHy8b/ULMxAVqty42CXUMDPXJdD5sfI4AoqTrFEzZim6
+ wBFX0k464F9BcxlHwJLYGUugPFVeRiYO4Y4zFfQlfpjopyr4Uc2AHy6jJOon1o+dRh+117I6o
+ v37XnpqFPweOT87Z4vXGay1ysfH8j1N7B5/Y44O1vmrGjHybIF6U0KzlYsQPNdoApRmm9H9YS
+ Vwu79Tqwh82ob5r6QnPcRJmg1LCXwfrMnm4mAXlC9BLLuVsMEDzV4xGjGmiY41rplTEg/io+H
+ UqsfYKV4Z4S6cUZj51nww6L/BEomHsNjLZM0bybQVJ/BsyahDEOD+EV1YJ+7e9TUksUjQdjKc
+ lyX68bl1kX3vXoF2LgMbwpf7sxxmXQiJP0CZiSYge0NLkK2N5kBZgbqe9CN46WeHDFNYoFbX2
+ 2So8XWLivaunG/A15RJ4EO03LFEU3iOIDdzdUgIxyqdAaOHLzqkyNxpPbIo7lVdSzhcptgHa9
+ 9ta4vF0rHy/CYipBc+MPwQ9+XK/+VrQBmh7QlbkMxDenj60lCjTrmUb88Jxr2nikk2gM=
+Precedence: bulk
+List-ID: <linux-arm-msm.vger.kernel.org>
+X-Mailing-List: linux-arm-msm@vger.kernel.org
+Message-ID: <20211027084944.hF31FQ8s5E-9RimayvEa_59PH7TZJuqcB42rq5h5aH0@z>
 
 On Wed, Oct 27, 2021 at 9:24 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
