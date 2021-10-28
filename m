@@ -1,128 +1,90 @@
-Return-Path: <SRS0=p3wX=PQ=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=Xfx9=PQ=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61119C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 28 Oct 2021 16:39:21 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC87BC433F5
+	for <soc@archiver.kernel.org>; Thu, 28 Oct 2021 18:51:46 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 8A877610C8; Thu, 28 Oct 2021 18:51:46 +0000 (UTC)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 24F4761056
-	for <linux-arm-kernel@archiver.kernel.org>; Thu, 28 Oct 2021 16:39:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 24F4761056
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
-	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
-	List-Owner; bh=DQKi+oqcZcSsR3+cnLRj4n9ZRtki6lCKnWKRqzJ8N+s=; b=mpEZqs4NHFzNLP
-	CJh++FRLAfPZxeb68i6h/K/5nStZcCMO4LieaOqWeQyaUzMiD5Acky48WwS1d9rPBH31fOHqUjU0H
-	F+1VSXFkqwqhOkeYJ78izbU06X1mddOGixle80gL9xr3U1nuEVAjt4UP0YgOChjoCPgOX47BIWTwv
-	k6VHjAxmYK1x7z+T446bgVSO9IkqHk8atk+In6NU4OjNDLGLEt2ZYszx1uSU+Mqmz3u+osrazhALl
-	lOUf1ke91zxt2hU0veCHrNgqXASvCdCWOxZwhLXo7Ih02bOlBsYdFRTdudrdBcb4/tsygAlpnR8sA
-	J7tEs68jRsAGxNyQufXA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mg8Pj-008bIK-5D; Thu, 28 Oct 2021 16:38:03 +0000
-Received: from mail-pj1-x102c.google.com ([2607:f8b0:4864:20::102c])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mg8Pg-008bHS-05
- for linux-arm-kernel@lists.infradead.org; Thu, 28 Oct 2021 16:38:01 +0000
-Received: by mail-pj1-x102c.google.com with SMTP id
- na16-20020a17090b4c1000b0019f5bb661f9so5248315pjb.0
- for <linux-arm-kernel@lists.infradead.org>;
- Thu, 28 Oct 2021 09:37:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=PkruJgvCEKtNeBSTAXmn2WZSAWgjf0MRa1oVEnouC/M=;
- b=X7tHd4KEratHyV1cjf9TZ3xzAajzacshGUPb0/1twCiqXn6CscCL63H+tTB+9gFXso
- wc8/Feq2gDuQskNPyy9X7bR439iQUB0fMZH/As9CE6A7y5T05Qbx1jGMGyCZPFVQ/71h
- XbQHGCVtJZnHWBH4ZM5nBBwBcMqDe85PlYP7hrC+YVeysOzIdOsoerHnKXAqjTmFhsBv
- nCJGJeHI5MOpV2be0rFE3Eck/lCfeUOWXU9iQHJdErUPMgIscQ6TZSs+XUKM2Gzmp5z9
- uxlCP2bTUZstLxYPafkt2+ncYXsQzKKU0Wdj1Y9Jad49DS+Dx1sHRDvdYKsPT7NAYs2q
- xu+w==
+	by mail.kernel.org (Postfix) with ESMTPS id 6162D60C4B
+	for <soc@kernel.org>; Thu, 28 Oct 2021 18:51:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6162D60C4B
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
+Received: by mail-lf1-f46.google.com with SMTP id x27so15627004lfu.5
+        for <soc@kernel.org>; Thu, 28 Oct 2021 11:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=xuK+PVCpGoo5TXNGceaR1z13nIhhcB5eydr90mLDPII=;
+        b=SGJj+zOmM28+pJw7UAZXKqgJd5UpR393id6/o8uFKPAqrAJpW23gBSZxsOAldjRxsF
+         e4TwMTj/tWNPmPCjjFnuG7cPNoSJldpBM2N0l+nwhwXAOvteE4NdqZH+Lsi7d9AkLE0E
+         D1Xyn8tY4K7ASs7lQwgm6g2lRraa4+fMddrrA5JILFkt4hp0g8or7Po1jpJuP/v3TRpy
+         VfiUj+OUn+RYbzfrr1YwdQag3Yqe4Qcz+Z810ibf//gme58Y/Pwrbxo1pjGSG1yNyOC6
+         LTvAfihEiQokhzA/9Hy/kqSyriF8Q3dMH/HUQEuzkvUTXEQB0qy6ZTH9XcbwATyPeuc3
+         9MzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=PkruJgvCEKtNeBSTAXmn2WZSAWgjf0MRa1oVEnouC/M=;
- b=UFdQq67kangobRfzg2VWLvI8U3bzCghVezZvglji0XJS6UVPBRoDaXKzoC+nzA2Z+4
- zaZf/GOphhC8wxo3hUjca9JD6m6Nf/o0sgHnKMzVqeMcuOfdxCCQbQkwSJXf+TjRljOj
- 8MZ5yNic/S3Uv7oJxVUxeBdGdNLnVWtzSvwuq3RZdOx0RgJtwk/qCTp2R8/Ea3B4mm6g
- uPBUlryhTFXLSQYqmm7QnGixedkzZLT1zBuYZ38tCJGtPDvgGJ5hQNH25ryR0n6NKyCs
- 4PO/TsVUUArdGyUKIaslUZdbPxKRCyZ/rV4kvS3birNhoLd13y3td4CF0F29gycG29+L
- TOvw==
-X-Gm-Message-State: AOAM530EmojjCEV1OHRM2gLcXHZ++aBbzdrhd31EQjtWaZhtFIJ+eLiL
- 3AEHBsL97FpMzsTQxcy7jKkOWacSl2M=
-X-Google-Smtp-Source: ABdhPJzAA+I1WxBM6NEmBXEEiJJfndd52j2hrja2YR3AE4b0sWzFdJEA/mzD84O6sNsdW5j0zrznAQ==
-X-Received: by 2002:a17:902:da90:b0:140:55f8:ca63 with SMTP id
- j16-20020a170902da9000b0014055f8ca63mr4883894plx.72.1635439078522; 
- Thu, 28 Oct 2021 09:37:58 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
- by smtp.gmail.com with ESMTPSA id d2sm4445481pfj.42.2021.10.28.09.37.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 28 Oct 2021 09:37:58 -0700 (PDT)
-From: Florian Fainelli <f.fainelli@gmail.com>
-To: linux-arm-kernel@lists.infradead.org
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=xuK+PVCpGoo5TXNGceaR1z13nIhhcB5eydr90mLDPII=;
+        b=mO+ICosp5C4OYk3BnYTdgmKNqH6RFFyGDT/jovnUp7FzZ7lNVe7MknlBxBGwZcvmSs
+         7JGQZRw1drRnwMNjmvEnznzh60a3nFmuFkd4oq3Mxa9P4MoYVrTqjlnedv6EY5hOU0RJ
+         NDb4iIAxpo5xCxx6Sm9+vTGBgt6JxFSQ6UeVaR4gDOaI7/8ARKIseMG0PlX/vPUFlGWA
+         xUiC2pGUemUctcV8B+ygYIVnOxz6UGFjRVxRKx5tOOXHntZdAWUyA2eDP8U3t4/WpnHG
+         Xs1Du9ViyLHU+6VEfUI2Y2NW6mpfIOpMEG2lDa0YgqIpk2S9AuwxRzFG8Vw501NmI88j
+         xZIw==
+X-Gm-Message-State: AOAM5300dOpU2hZ9v/w8NtEyeKveM0BLYQMoBjj/jcRy/a1xrYnmvC6i
+	6z0I7nkvoJZoJZk3BCIQuzStK+CQpwFWN72s
+X-Google-Smtp-Source: ABdhPJzBnfa4mBA0AnC37UOa9fGUbSIMG7jpPJRp30ImMtv7XDpSn8ilUPF1pyTBhW89l82LvVDBsQ==
+X-Received: by 2002:a05:6512:5c7:: with SMTP id o7mr4449258lfo.105.1635447104690;
+        Thu, 28 Oct 2021 11:51:44 -0700 (PDT)
+Received: from jade (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
+        by smtp.gmail.com with ESMTPSA id e2sm348226lfs.85.2021.10.28.11.51.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Oct 2021 11:51:44 -0700 (PDT)
+Date: Thu, 28 Oct 2021 20:51:42 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
- linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] MAINTAINERS: Update BCM7XXX entry with additional patterns
-Date: Thu, 28 Oct 2021 09:37:56 -0700
-Message-ID: <20211028163756.4014059-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+To: arm@kernel.org, soc@kernel.org
+Cc: op-tee@lists.trustedfirmware.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] OP-TEE FF-A fix for V5.16
+Message-ID: <20211028185142.GA2489375@jade>
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211028_093800_075323_D1BC4E87 
-X-CRM114-Status: UNSURE (   9.76  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211028163756.RgohDnV0ippVkVm7PZI4dStTffWyKqDK050EzZo2WY4@z>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Broadcom STB systems use the bcm7038 pattern as well as the bcm7120
-pattern for some of its drivers, add those to the existing entry.
+Hello arm-soc maintainers,
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+Please pull this small OP-TEE driver fix which takes care of a couple of
+spell errors in a few log messages. These log messages was added in the
+recently pulled 4615e5a34b95 ("optee: add FF-A support").
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index eeb4c70b3d5b..c61fd406acc5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3609,6 +3609,8 @@ F:	arch/arm/mm/cache-b15-rac.c
- F:	drivers/bus/brcmstb_gisb.c
- F:	drivers/pci/controller/pcie-brcmstb.c
- N:	brcmstb
-+N:	bcm7038
-+N:	bcm7120
- 
- BROADCOM BDC DRIVER
- M:	Al Cooper <alcooperx@gmail.com>
--- 
-2.25.1
+Thanks,
+Jens
 
+The following changes since commit 4615e5a34b95e0d81467f6d2176f19a5d184cb5d:
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+  optee: add FF-A support (2021-10-18 11:44:23 +0200)
+
+are available in the Git repository at:
+
+  git://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-ffa-fix-for-v5.16
+
+for you to fetch changes up to 1b73a9e4986a4e9065bacf1e5ab2dfda17b54161:
+
+  optee: Fix spelling mistake "reclain" -> "reclaim" (2021-10-28 11:41:39 +0200)
+
+----------------------------------------------------------------
+Fix spell errors in OP-TEE FF-A driver log messages
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      optee: Fix spelling mistake "reclain" -> "reclaim"
+
+ drivers/tee/optee/ffa_abi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
