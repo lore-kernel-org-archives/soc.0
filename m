@@ -2,51 +2,51 @@ Return-Path: <SRS0=V3zi=PV=gmail.com=mr.bossman075@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C048C4332F
-	for <soc@archiver.kernel.org>; Tue,  2 Nov 2021 22:57:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48EA7C19777
+	for <soc@archiver.kernel.org>; Tue,  2 Nov 2021 22:57:21 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 8393F610E5; Tue,  2 Nov 2021 22:57:19 +0000 (UTC)
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	id 209E661073; Tue,  2 Nov 2021 22:57:21 +0000 (UTC)
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4AB2B60041;
-	Tue,  2 Nov 2021 22:57:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4AB2B60041
+	by mail.kernel.org (Postfix) with ESMTPS id DD59E60041;
+	Tue,  2 Nov 2021 22:57:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DD59E60041
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f45.google.com with SMTP id a24so611883qvb.5;
-        Tue, 02 Nov 2021 15:57:19 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id d6so618159qvb.3;
+        Tue, 02 Nov 2021 15:57:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9kENO6dT6bi8+vAAwG2HaEh0fV06gXedhlAWHwtHs6k=;
-        b=OedOtHC1F+mL4hUypyXtk5qQSumKxhtC81bPGg4Hc/JX1oppAkyUIxMsY4BuimdO5E
-         /exXic+LeeBTJ3HLL+dKh8pTi65nyce4OTkCvxuur9Gk2sQuLQONijX7sm2Ok/le81/w
-         t/7lM8PICS6c1HPpPyXNiqQzuIhkx9iIX2woL3+lMXzhy3lhVcKQuJa11oZLxtrT9ooB
-         xdvHmiv0PMfTJQtd15Rmaa9r4RvisiIicPpQlmoiTewH3djiTHG70mQGVsh2fcre5unk
-         QGrN57hQa+T0DA5aA1qNnMKse1iFArbY+zPefnebZM1Kv0/YrTOpxLIJf3DkUkpgNEVY
-         bGvg==
+        bh=IL3OGRIIMFUvv6ERH/SkSwRuJ7jwKuspNRDZqrtOGDc=;
+        b=DyZ94o0+FQapY+J2rZGkoXsLLRkGrxuOD1iAX7zCkinTqnJQtKhnlPzPST9jAIF53r
+         t4hR9tfTJuOst3R2jZuV3ik2uN5iG5H+gwTo8EgR5Jh0TO1tuFcSlyvxe+ggPYTXl84l
+         cV6GMTfbNyoYZrdG36nx7Bjkb6JM8d75JrX72XaQbEtBofIEGV7QNsuxN/SR1hfGBNLy
+         5HAJ+09LherHqBSp/nnbD0aVPMYgEGzCoqcK2aaTDkNzMVwF/oLYDtTqT5htLnQLZ7wf
+         E5aXGmyiXnQFxlHhAhJ33A3Pgit7HcLH6bJGNDWRDm246WuBYCRrzUeZflEwwRln44ZL
+         NtbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9kENO6dT6bi8+vAAwG2HaEh0fV06gXedhlAWHwtHs6k=;
-        b=HGKXTXvK0t7hbMhFB2nQ+m/5dPBy5shiS5bqG3YEIwyh+jsFI29VPBT9sSCUBwe+bP
-         EXirs+PRQJd1ckbC/jEY6A3HWflS9Uirlx9CiqXPCrTGCgCxEs/zTu89yKMUjFGAoTWv
-         mRGx9PRdLsM83IwMm9kjOhp50W4wD8wH+Y1K2lY9Xy5GP3m+28CTlCqXvbn0InZNT6F0
-         RpCmgxs75f6FOpyB0gXm4T8fEP3KrxD1mbV9Zq4/bAyyQOtHAYiK6g4tP+CcrdQ0+ZGD
-         gZ+Lw/7Qlf5IVg36sD3JY5MdUrhTBdczaWgGsPxYkNhiVKiqODWbw7CCxrrWPTvTnmbC
-         Tzew==
-X-Gm-Message-State: AOAM532wHL8RNVp9C/Dgco3nVvV2ohe/ILP1q4BbUYFJpCIFyeUK0oSJ
-	nkTNVvcGhl3W2UHRty7lJ0A=
-X-Google-Smtp-Source: ABdhPJyQxEEKYdwrDtQ897WKes/oYEhB6qtV5+w2s7/My+JbXJMFLXmxAM54+mEmzDz621wqH1OtLQ==
-X-Received: by 2002:ac8:7044:: with SMTP id y4mr41252982qtm.64.1635893838350;
-        Tue, 02 Nov 2021 15:57:18 -0700 (PDT)
+        bh=IL3OGRIIMFUvv6ERH/SkSwRuJ7jwKuspNRDZqrtOGDc=;
+        b=uiUASayimeodBLlmJZ0tj+Po70eTMOAQHaoUQfS6i5GNs0uc3Vs8uRGl8Ww5uQM/qi
+         nEQWPpO1YI3rbJ5nZfgl9qFIpzX/tW0ZglVyScscn631v4bTpdzt2UbsJNpTVORQSUDb
+         nrrQK5lRFbtbDoAtd/G47Ou3wOLt1O1DM1wasjHZ7XDHzDAlKqFfkgW/EHmdu467KFe7
+         UjHLGE1WM0/ckVBXx0RhOXhtQ3HzYiqDPD7EAFcjl0mGjQlEqsgNQrR40kT1Y4rqo3Ov
+         55uAq/R8YcSQm7zQsmUHgKA3zqiDwQRujE0OsoJdmJUjVSdSdlvvNU/jacIC0OzYroJt
+         nzUA==
+X-Gm-Message-State: AOAM5338RDirrmXd8R99uREXvuwABOrpgdf5B+vnum1QjK0Ww0yk3ycV
+	gpXUDoer4f0/5j5wA8LIS5dIWSab0OqgtXj3
+X-Google-Smtp-Source: ABdhPJzvncT8jsqO17WmjFqU6dV6qTNP9fA3RJ7MZ0N0WVKoE7yR2jImRsI9mqAM64mBQA1Ci/knDA==
+X-Received: by 2002:a05:622a:84:: with SMTP id o4mr32151612qtw.41.1635893840049;
+        Tue, 02 Nov 2021 15:57:20 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id v19sm351222qtk.6.2021.11.02.15.57.16
+        by smtp.gmail.com with ESMTPSA id v19sm351222qtk.6.2021.11.02.15.57.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Nov 2021 15:57:17 -0700 (PDT)
+        Tue, 02 Nov 2021 15:57:19 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -81,9 +81,9 @@ Cc: mturquette@baylibre.com,
 	linux-gpio@vger.kernel.org,
 	linux-serial@vger.kernel.org,
 	Jesse Taube <mr.bossman075@gmail.com>
-Subject: [PATCH v2 09/13] tty: serial: fsl_lpuart: add i.MXRT support
-Date: Tue,  2 Nov 2021 18:56:57 -0400
-Message-Id: <20211102225701.98944-10-Mr.Bossman075@gmail.com>
+Subject: [PATCH v2 10/13] dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT compatible string
+Date: Tue,  2 Nov 2021 18:56:58 -0400
+Message-Id: <20211102225701.98944-11-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
 References: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
@@ -92,58 +92,29 @@ Content-Transfer-Encoding: 8bit
 
 From: Jesse Taube <mr.bossman075@gmail.com>
 
-Add support for i.MXRT1050's uart.
+Add i.MXRT documentation for compatible string.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
 V1->V2:
-* Add ack by Greg
+* Nothing done
 ---
- drivers/tty/serial/fsl_lpuart.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index b1e7190ae483..1db083905d75 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -247,6 +247,7 @@ enum lpuart_type {
- 	LS1028A_LPUART,
- 	IMX7ULP_LPUART,
- 	IMX8QXP_LPUART,
-+	IMXRT_LPUART,
- };
- 
- struct lpuart_port {
-@@ -310,6 +311,11 @@ static struct lpuart_soc_data imx8qxp_data = {
- 	.iotype = UPIO_MEM32,
- 	.reg_off = IMX_REG_OFF,
- };
-+static struct lpuart_soc_data imxrt_data = {
-+	.devtype = IMXRT_LPUART,
-+	.iotype = UPIO_MEM32,
-+	.reg_off = IMX_REG_OFF,
-+};
- 
- static const struct of_device_id lpuart_dt_ids[] = {
- 	{ .compatible = "fsl,vf610-lpuart",	.data = &vf_data, },
-@@ -317,6 +323,7 @@ static const struct of_device_id lpuart_dt_ids[] = {
- 	{ .compatible = "fsl,ls1028a-lpuart",	.data = &ls1028a_data, },
- 	{ .compatible = "fsl,imx7ulp-lpuart",	.data = &imx7ulp_data, },
- 	{ .compatible = "fsl,imx8qxp-lpuart",	.data = &imx8qxp_data, },
-+	{ .compatible = "fsl,imxrt-lpuart",	.data = &imxrt_data},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, lpuart_dt_ids);
-@@ -2625,6 +2632,7 @@ OF_EARLYCON_DECLARE(lpuart, "fsl,vf610-lpuart", lpuart_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1021a-lpuart", lpuart32_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1028a-lpuart", ls1028a_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,imx7ulp-lpuart", lpuart32_imx_early_console_setup);
-+OF_EARLYCON_DECLARE(lpuart32, "fsl,imxrt-lpuart", lpuart32_imx_early_console_setup);
- EARLYCON_DECLARE(lpuart, lpuart_early_console_setup);
- EARLYCON_DECLARE(lpuart32, lpuart32_early_console_setup);
- 
+diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+index 19621a2f8beb..bbb600f0e105 100644
+--- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
++++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+@@ -34,6 +34,7 @@ properties:
+           - fsl,imx6ull-usdhc
+           - fsl,imx7d-usdhc
+           - fsl,imx7ulp-usdhc
++          - fsl,imxrt-usdhc
+           - nxp,s32g2-usdhc
+       - items:
+           - enum:
 -- 
 2.33.1
 
