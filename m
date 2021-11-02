@@ -1,271 +1,216 @@
-Return-Path: <SRS0=V3zi=PV=gmail.com=mr.bossman075@kernel.org>
+Return-Path: <SRS0=YOEr=PV=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D45EC4167E
-	for <soc@archiver.kernel.org>; Tue,  2 Nov 2021 22:57:27 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 685B661152; Tue,  2 Nov 2021 22:57:27 +0000 (UTC)
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93D34C433FE
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  2 Nov 2021 22:58:31 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 37155601FC;
-	Tue,  2 Nov 2021 22:57:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 37155601FC
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f43.google.com with SMTP id gh1so601282qvb.8;
-        Tue, 02 Nov 2021 15:57:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=faYsQkoH+za1MQCwAYJ7NuwAaVZGTQV023m/UbZTbUo=;
-        b=M5dKuVvuuSOnbIGPW2WU4MB2VK288BRNL2x2c0n9AmDbt8z5muPFfhuXIVy6zbrkZ5
-         wkK2cwfU/Dv0d3Pvtrwe3JhFxJb2vLpnGVvJa3DU2aKRDDVvfl6vg72egHl92wgXPqM+
-         /Ts/Nfat3Z6ENW3F3WEeDMuegD71w/92vlAZYUuxetPbYRYDgxOiSxWQs2bKqhuDnp7f
-         WNZb4NSKFzFe8Rbf/RKmIhq4jkvOGaGg+OEtFBGuAaTevIucI+BXELir7fETNbB5LaoZ
-         SiMPLnA4cnncd4mbGhCHqTEu88AVehICt+4MYAB7dkJnh1mrgev0LuDXatgrE0Fo7i/m
-         oXPg==
+	by mail.kernel.org (Postfix) with ESMTPS id 6941D601FC
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  2 Nov 2021 22:58:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6941D601FC
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=HKve45B0YyTbrSZKYZsjHqiDlYBxmJNwTpjr7YPCMxU=; b=H3+finlp2qZ8dA
+	iOXoEAVGShJcVNu3jTes6FDHW6w4zEN+Nqmql0Lofr9Nmh39EzutAbaPR4qw1VGHCbIGuM6hZHea2
+	Ig+iidcWpSJZ7qQXM6Iy3zGMoaRdVvEyOEv2VBa87UcTx2WVCjxpXwoSlWC6Rbnit+GUUB+yUKekt
+	yngv3iXJqY9tFs9aGbIabIG41VqrNcoMeRE8tsnJN063M3/B2LWelx/RA9cJuyMczxggF7oaW/gCY
+	1wjkrhl/iSeaG8vtSPkxhffIIT3ddB6TKIgZOitlAxhBSbgDkhwm3tbuAPQDh9mxbhyl+L1mZrehH
+	n3QBX2ct+nmKFiRPScGQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mi2iL-003Eit-9S; Tue, 02 Nov 2021 22:57:09 +0000
+Received: from mail-qk1-x730.google.com ([2607:f8b0:4864:20::730])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mi2iH-003EiB-Rd
+ for linux-arm-kernel@lists.infradead.org; Tue, 02 Nov 2021 22:57:07 +0000
+Received: by mail-qk1-x730.google.com with SMTP id bm28so580234qkb.9
+ for <linux-arm-kernel@lists.infradead.org>;
+ Tue, 02 Nov 2021 15:57:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=KIYisbZsaWO2J//hyz2WxZPwqBd239vjWte2s5yR2ys=;
+ b=LL2bPORTmHw5LJecj4U/ZA0GNrmoo7CQe0IRKm7B8NabGS0i4Zmp0WLIxzChPUQSgq
+ AeU4nFkaupYIQzpLkKphcy0RuzmbeMDUx/WuoBOWfIREIWo4U0JZ6Pm64KI7qQ+y7nLk
+ T4++3+zUDvm2qtP5zFRZGvLElcEzTfyt1MBCpvx2/+jSTFkdzQbezCl9+pPU1/+3u7G3
+ xcEs7R/s00fiiXVExSt6uBoUu5jIr0z9FyfEzIke42ETx3Vt6QDOTBj3u6lo5a4NqpHt
+ WdzG1aCWfdpxFqZX8Gk195mbhQTaar8LeuBmJv4Z6xUJPN0tGNh1333R7biHfaTBfRBH
+ BFFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=faYsQkoH+za1MQCwAYJ7NuwAaVZGTQV023m/UbZTbUo=;
-        b=qLbLi8tP0xPqLMFtftQZGppMKs0gkFEuRmwtNPCvPyd1HDUoN2Brk6QT+83QoWQ9N9
-         T1Y3ku/LtlLs5hcXg4W5Stq8pYoZi7+4oSRUFzCes03sBHxxiZJjEDR8b6XTv6rOxD84
-         YrF074O5cp3SVemJxJeFRGac8G7jtUFaTLFmv6OZlzU/OfQH6fpRkZdliDk66NogYHSG
-         he/rvQXiGXGQcQtiZIvyAK4GTds9rXgY9uYp2V0MVZF4ClxNXAURHJHxuUxkFYMQXhcb
-         c3J2hOTyDK0m0zQ7tx0FyaldGsxGsFe4j/uYnGtpXzfwG26b/zosfqmRbhv7iOuuhkzv
-         5lFw==
-X-Gm-Message-State: AOAM532QxAVl+fpjnwj88NFpCH/k3XWZyQ8mllQ4NHRTVHzAxWixnFvH
-	I1WqfW4JszEak5RHONTnTcU=
-X-Google-Smtp-Source: ABdhPJwpGlv2PFrNgmHP40Uv4ohZC5QvSgu5a75wm5y6HdaTYKB2U49QyDGCNyfI6WDN2yUEzdJ0sw==
-X-Received: by 2002:a05:6214:2428:: with SMTP id gy8mr7666266qvb.18.1635893846378;
-        Tue, 02 Nov 2021 15:57:26 -0700 (PDT)
-Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id v19sm351222qtk.6.2021.11.02.15.57.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Nov 2021 15:57:25 -0700 (PDT)
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=KIYisbZsaWO2J//hyz2WxZPwqBd239vjWte2s5yR2ys=;
+ b=6HDIhSJow9CwIcHq2qHihLvdOGr/BZ1vfZ8pSC1lXOZNDzFZjLTI4Q9JTnslL8hOYE
+ c8qNKkFeyh80C6y0vzwL0usveBRPipmtmdX0g+X5sG5zxFroqX8EHSSimXIFAlMxhwIb
+ Xc52S5I+q8XY1Gt1ScZQ7fgHn1LZR+kt4vA081ziqqDkN2/dqaym03SbSD/nnQs3wntV
+ Y41hP+slxdGCJ8u63AwHodT59E6lLrn9LZJsAW4BNFjrw2zvwe5XaPTyQYaSjTrwmJqo
+ otuy67QKyelJ+VtZr4SIs/+NXwpGaKvHCaJRLRj1MZQGj2wa+cGP4JzUKOUk8q6i8VVy
+ ekig==
+X-Gm-Message-State: AOAM531BherX6Kildyi7ezWqcuswHG0NWJhF8ZTtrWInsbSPl9VmJPNu
+ TTPW/xwA37y3WfLIPwQ0mjw=
+X-Google-Smtp-Source: ABdhPJz6W+2d5SZUl1RkGSRUkSfqY9CHmb9HCjjkEoKiGlQNTqAyGyj8o91AAI6XjdcklmMMiXHbnQ==
+X-Received: by 2002:a05:620a:40c4:: with SMTP id
+ g4mr25496206qko.14.1635893824295; 
+ Tue, 02 Nov 2021 15:57:04 -0700 (PDT)
+Received: from jesse-desktop.jtp-bos.lab
+ (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com.
+ [146.115.144.188])
+ by smtp.gmail.com with ESMTPSA id v19sm351222qtk.6.2021.11.02.15.57.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 02 Nov 2021 15:57:03 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
 List-Id: <soc.lore.kernel.org>
-Cc: mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh+dt@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	ulf.hansson@linaro.org,
-	aisheng.dong@nxp.com,
-	stefan@agner.ch,
-	linus.walleij@linaro.org,
-	gregkh@linuxfoundation.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	soc@kernel.org,
-	linux@armlinux.org.uk,
-	abel.vesa@nxp.com,
-	adrian.hunter@intel.com,
-	jirislaby@kernel.org,
-	giulio.benetti@benettiengineering.com,
-	nobuhiro1.iwamatsu@toshiba.co.jp,
-	Mr.Bossman075@gmail.com,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Subject: [PATCH v2 13/13] ARM: imxrt_defconfig: add i.MXRT family defconfig
-Date: Tue,  2 Nov 2021 18:57:01 -0400
-Message-Id: <20211102225701.98944-14-Mr.Bossman075@gmail.com>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+ shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+ festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com,
+ stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org,
+ arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk,
+ abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org,
+ giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+ Mr.Bossman075@gmail.com, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH v2 00/13] Add initial support for the i.MXRTxxxx SoC family
+ starting from i.IMXRT1050 SoC.
+Date: Tue,  2 Nov 2021 18:56:48 -0400
+Message-ID: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
-References: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211102_155705_938025_936A5461 
+X-CRM114-Status: GOOD (  21.40  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211102225648.PSn1OO_M1KuPWvgejA2SKX60FaCyOpb9odXSPTZssRs@z>
 
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+This patchset contains:
+- i.MXRT10xx family infrastructure
+- i.MXRT1050 pinctrl driver adaption
+- i.MXRT1050 clock driver adaption
+- i.MXRT1050 sd-card driver adaption
+- i.MXRT1050 uart driver adaption
+- i.MXRT1050-evk basic support
 
-Add generic i.MXRT family defconfig.
+The i.MXRTxxxx family that could have support by Linux actually spreads
+from i.MXRT1020 to i.MXRT1170 with the first one supporting 1 USB OTG &
+100M ethernet with a cortex-M7@500Mhz up to the latter with i.MXRT1170
+with cortex-M7@1Ghz and cortex-M4@400Mhz, 2MB of internal SRAM, 2D GPU,
+2x 1Gb and 1x 100Mb ENET. The i.MXRT family is NXP's answer to
+STM32F7XX, as it uses only simple SDRAM, it gives the chance of a 4 or
+less layer PCBs. Seeing that these chips are comparable to the
+STM32F7XXs which have linux ported to them it seems reasonable to add
+support for them.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
----
-V1->V2:
-* Nothing done
----
- arch/arm/configs/imxrt_defconfig | 157 +++++++++++++++++++++++++++++++
- 1 file changed, 157 insertions(+)
+Giving Linux support to this family should ease the development process,
+instead of using a RTOS they could use Embedded Linux allowing for more
+portability, ease of design and will broaden the scope of people using
+embedded linux.
+
+The EVK has very little SDRAM, generally 32MB starting from
+i.MXRT1020(the lowest P/N), although the i.MXRT1160/70 provide instead
+64MB of SDRAM for more functionality.
+
+At the moment we do not support XIP for either u-boot or Linux but it
+should be done in the future. XIP will also save SDRAM.
+
+Another interesting fact is the amount of internal SRAM, as the P/N
+increases the SRAM will reach up to 2MB(some could be for cache and
+some would be for video).
+
+Also, some parts have embed flash of 4MB that can be used for
+u-boot/Linux, if both correctly sized it will leave the SDRAM free.
+
+External flash can be Quad SPI and HyperFlash, so throughput would be
+decent.
+
+The i.MXRT11xx series supports MIPI interface too.
+
+The family in general provide CAN bus, audio I/O, 1 or more
+USB(otg/host), 1 or more 100Mb/1Gb ethernet, camera interface, sd-card.
+
+All this can be used for simple GUIs, web-servers, point-of-sale
+stations, etc.
+
+Giulio Benetti (5):
+  ARM: imx: add initial support for i.MXRT10xx family
+  pinctrl: freescale: Add i.MXRT1050 pinctrl driver support
+  dt-bindings: imx: Add clock binding for i.MXRT1050
+  ARM: dts: imx: add i.MXRT1050-EVK support
+  ARM: imxrt_defconfig: add i.MXRT family defconfig
+
+Jesse Taube (8):
+  dt-bindings: pinctrl: add i.MXRT1050 pinctrl binding doc
+  ARM: dts: imxrt1050-pinfunc: Add pinctrl binding header
+  dt-bindings: clock: imx: Add documentation for i.MXRT clock
+  clk: imx: Add initial support for i.MXRT clock driver
+  dt-bindings: serial: fsl-lpuart: add i.MXRT compatible
+  tty: serial: fsl_lpuart: add i.MXRT support
+  dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT compatible string
+  mmc: sdhci-esdhc-imx: Add sdhc support for i.MXRT series
+
+ .../bindings/clock/imxrt-clock.yaml           |  70 ++
+ .../bindings/mmc/fsl-imx-esdhc.yaml           |   1 +
+ .../bindings/pinctrl/fsl,imxrt1050.yaml       |  83 ++
+ .../bindings/serial/fsl-lpuart.yaml           |   1 +
+ arch/arm/boot/dts/Makefile                    |   2 +
+ arch/arm/boot/dts/imxrt1050-evk.dts           |  89 ++
+ arch/arm/boot/dts/imxrt1050-pinfunc.h         | 993 ++++++++++++++++++
+ arch/arm/boot/dts/imxrt1050.dtsi              | 187 ++++
+ arch/arm/configs/imxrt_defconfig              | 157 +++
+ arch/arm/mach-imx/Kconfig                     |   7 +
+ arch/arm/mach-imx/Makefile                    |   2 +
+ arch/arm/mach-imx/mach-imxrt.c                |  19 +
+ drivers/clk/imx/Kconfig                       |   4 +
+ drivers/clk/imx/Makefile                      |   1 +
+ drivers/clk/imx/clk-imxrt.c                   | 149 +++
+ drivers/mmc/host/sdhci-esdhc-imx.c            |   7 +
+ drivers/pinctrl/freescale/Kconfig             |   7 +
+ drivers/pinctrl/freescale/Makefile            |   1 +
+ drivers/pinctrl/freescale/pinctrl-imxrt1050.c | 349 ++++++
+ drivers/tty/serial/fsl_lpuart.c               |   8 +
+ include/dt-bindings/clock/imxrt1050-clock.h   |  72 ++
+ 21 files changed, 2209 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/imxrt-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml
+ create mode 100644 arch/arm/boot/dts/imxrt1050-evk.dts
+ create mode 100644 arch/arm/boot/dts/imxrt1050-pinfunc.h
+ create mode 100644 arch/arm/boot/dts/imxrt1050.dtsi
  create mode 100644 arch/arm/configs/imxrt_defconfig
+ create mode 100644 arch/arm/mach-imx/mach-imxrt.c
+ create mode 100644 drivers/clk/imx/clk-imxrt.c
+ create mode 100644 drivers/pinctrl/freescale/pinctrl-imxrt1050.c
+ create mode 100644 include/dt-bindings/clock/imxrt1050-clock.h
 
-diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
-new file mode 100644
-index 000000000000..d673745a5462
---- /dev/null
-+++ b/arch/arm/configs/imxrt_defconfig
-@@ -0,0 +1,157 @@
-+# CONFIG_LOCALVERSION_AUTO is not set
-+CONFIG_SYSVIPC=y
-+CONFIG_USELIB=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BPF_SYSCALL=y
-+CONFIG_PREEMPT_VOLUNTARY=y
-+CONFIG_BSD_PROCESS_ACCT=y
-+CONFIG_BSD_PROCESS_ACCT_V3=y
-+CONFIG_PSI=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=18
-+CONFIG_MEMCG=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CFS_BANDWIDTH=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_RDMA=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_CGROUP_PERF=y
-+CONFIG_CGROUP_BPF=y
-+CONFIG_NAMESPACES=y
-+CONFIG_USER_NS=y
-+CONFIG_CHECKPOINT_RESTORE=y
-+CONFIG_SCHED_AUTOGROUP=y
-+CONFIG_RELAY=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_EXPERT=y
-+CONFIG_SGETMASK_SYSCALL=y
-+# CONFIG_FUTEX is not set
-+CONFIG_KALLSYMS_ALL=y
-+CONFIG_PC104=y
-+# CONFIG_SLUB_DEBUG is not set
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_SLAB_FREELIST_RANDOM=y
-+CONFIG_SLAB_FREELIST_HARDENED=y
-+CONFIG_PROFILING=y
-+# CONFIG_MMU is not set
-+CONFIG_ARCH_MXC=y
-+CONFIG_SOC_IMXRT=y
-+# CONFIG_ARM_DMA_MEM_BUFFERABLE is not set
-+CONFIG_SET_MEM_PARAM=y
-+CONFIG_DRAM_BASE=0x80000000
-+CONFIG_DRAM_SIZE=0x02000000
-+CONFIG_HZ_250=y
-+CONFIG_FORCE_MAX_ZONEORDER=14
-+CONFIG_PARAVIRT=y
-+# CONFIG_ATAGS is not set
-+CONFIG_CMDLINE="console=ttyS0 root=/dev/mmcblk0p2 rw earlycon rootwait"
-+CONFIG_BLK_DEV_BSGLIB=y
-+CONFIG_BLK_DEV_INTEGRITY=y
-+CONFIG_BLK_DEV_ZONED=y
-+CONFIG_BLK_DEV_THROTTLING=y
-+CONFIG_BLK_WBT=y
-+CONFIG_BLK_SED_OPAL=y
-+CONFIG_PARTITION_ADVANCED=y
-+CONFIG_BSD_DISKLABEL=y
-+CONFIG_MINIX_SUBPARTITION=y
-+CONFIG_SOLARIS_X86_PARTITION=y
-+CONFIG_UNIXWARE_DISKLABEL=y
-+CONFIG_LDM_PARTITION=y
-+CONFIG_CMDLINE_PARTITION=y
-+# CONFIG_MQ_IOSCHED_KYBER is not set
-+CONFIG_BINFMT_FLAT=y
-+CONFIG_CLEANCACHE=y
-+CONFIG_ZPOOL=y
-+CONFIG_ZBUD=y
-+CONFIG_Z3FOLD=y
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+# CONFIG_STANDALONE is not set
-+CONFIG_FW_LOADER_USER_HELPER=y
-+CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y
-+CONFIG_IMX_WEIM=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_RAM_COUNT=1
-+CONFIG_BLK_DEV_RAM_SIZE=65536
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO is not set
-+CONFIG_LEGACY_PTY_COUNT=2
-+CONFIG_SERIAL_FSL_LPUART=y
-+CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
-+CONFIG_SERIAL_NONSTANDARD=y
-+CONFIG_SERIAL_DEV_BUS=y
-+CONFIG_TTY_PRINTK=y
-+CONFIG_TTY_PRINTK_LEVEL=7
-+CONFIG_PINCTRL_IMXRT1050=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_GPIO_MXC=y
-+# CONFIG_HWMON is not set
-+# CONFIG_HID is not set
-+# CONFIG_USB_SUPPORT is not set
-+CONFIG_MMC=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
-+CONFIG_MMC_SDHCI_ESDHC_IMX=y
-+CONFIG_DMADEVICES=y
-+CONFIG_FSL_EDMA=y
-+# CONFIG_MX3_IPU is not set
-+# CONFIG_VIRTIO_MENU is not set
-+# CONFIG_VHOST_MENU is not set
-+CONFIG_MEMORY=y
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT2_FS_XATTR=y
-+CONFIG_EXT2_FS_POSIX_ACL=y
-+CONFIG_EXT2_FS_SECURITY=y
-+CONFIG_EXT3_FS=y
-+CONFIG_EXT3_FS_POSIX_ACL=y
-+CONFIG_EXT3_FS_SECURITY=y
-+# CONFIG_FILE_LOCKING is not set
-+# CONFIG_DNOTIFY is not set
-+CONFIG_QUOTA=y
-+# CONFIG_PRINT_QUOTA_WARNING is not set
-+CONFIG_AUTOFS4_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_FAT_DEFAULT_UTF8=y
-+CONFIG_EXFAT_FS=y
-+CONFIG_CONFIGFS_FS=y
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NLS_DEFAULT="cp437"
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_LSM="yama,loadpin,integrity,apparmor"
-+# CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
-+# CONFIG_CRYPTO_HW is not set
-+CONFIG_PRINTK_TIME=y
-+CONFIG_CONSOLE_LOGLEVEL_DEFAULT=15
-+CONFIG_CONSOLE_LOGLEVEL_QUIET=15
-+CONFIG_MESSAGE_LOGLEVEL_DEFAULT=7
-+CONFIG_DYNAMIC_DEBUG=y
-+# CONFIG_DEBUG_BUGVERBOSE is not set
-+CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF4=y
-+CONFIG_GDB_SCRIPTS=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=0x01b6
-+CONFIG_DEBUG_FS=y
-+CONFIG_PAGE_POISONING=y
-+CONFIG_SCHED_STACK_END_CHECK=y
-+CONFIG_SOFTLOCKUP_DETECTOR=y
-+CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=1
-+# CONFIG_SCHED_DEBUG is not set
-+CONFIG_SCHEDSTATS=y
-+CONFIG_STACKTRACE=y
-+CONFIG_DEBUG_USER=y
-+CONFIG_DEBUG_LL=y
-+CONFIG_DEBUG_UNCOMPRESS=y
-+CONFIG_EARLY_PRINTK=y
-+# CONFIG_RUNTIME_TESTING_MENU is not set
-+CONFIG_MEMTEST=y
 -- 
 2.33.1
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
