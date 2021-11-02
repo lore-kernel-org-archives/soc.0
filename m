@@ -2,74 +2,50 @@ Return-Path: <SRS0=YOEr=PV=lists.infradead.org=linux-arm-kernel-bounces+linux-ar
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ED60C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  2 Nov 2021 23:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69B46C433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  2 Nov 2021 23:09:06 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 43C9D61053
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  2 Nov 2021 23:05:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 43C9D61053
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 33E3060F5A
+	for <linux-arm-kernel@archiver.kernel.org>; Tue,  2 Nov 2021 23:09:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 33E3060F5A
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=enX0H860BZEXN2abdL1nNHjB23H71Ea7OwgDfrW8M3s=; b=x140Nr+PaiS9wO
-	tutXolW4EIFyRYqXZJOJmU6GlM0oo//C5UFJ0+pHuxdx8ao7fA3b+eWhq9VT6ciTbm79BDjVdzfSv
-	qJowTMxDXImCXokGvyhiOLgQpQrAaaQN8pbkTfxyRh3YeGRRJwULE2lf+0OehTYevJJBcPv6FAT3v
-	3YHWfU36qIUIzYPdWmPYjoU4qzEumjKIwA7g8ZGqS4pjklJOdMsdYq2cOEW8gIvJyHLQaTpkZQEE3
-	nT7zvw/NNMIK7ftvyUvu1hwP0Bqt/8kwF+srVpkBd6Gk+zit9K1RFgMBVmLNx9TVJ0lBRwHhwTKIO
-	f84Y6c/M65L9wFEznwSQ==;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:
+	Content-Transfer-Encoding:List-Subscribe:List-Help:List-Post:List-Archive:
+	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
+	References:Cc:To:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	bh=LGouh1FkCj2qc2IsvRNVdJQyPgpoFF5juDdXEnVcRik=; b=oXULsK4STL1DkHGrIjah6voUNK
+	+fNKtBz6w36OBLYQHXevo6oCtts1iYBTD4uRjZJv6CxJi/whRxHPwh1f65tnig1L4krErpu2WNquW
+	KjvbBKRMrIhJf7bReqbnR00AclHzclVxDEWXiX4zJ3KQ1ty/fAE3L2M7uy30F9C8nVju8nSTIhOOJ
+	KSJUy1qqzl1ILEYAs8EBpmCtTUB6m713+NYeV9P9+gr7uMRN2bORkR8NiffqIdYtwvTkTIvcf6I+Z
+	kz9WdcVBjfvwjZ7KcvqmVz4/ZhJPfqYVkSi2IS1robzDuOyfha5GjaQYOo4fLTGv8hoYF3NbtQNDN
+	yVpxsSow==;
 Received: from localhost ([::1] helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mi2p1-003Hr5-PV; Tue, 02 Nov 2021 23:04:05 +0000
-Received: from mail-qv1-xf31.google.com ([2607:f8b0:4864:20::f31])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mi2id-003Era-3y
- for linux-arm-kernel@lists.infradead.org; Tue, 02 Nov 2021 22:57:28 +0000
-Received: by mail-qv1-xf31.google.com with SMTP id a24so612316qvb.5
- for <linux-arm-kernel@lists.infradead.org>;
- Tue, 02 Nov 2021 15:57:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=faYsQkoH+za1MQCwAYJ7NuwAaVZGTQV023m/UbZTbUo=;
- b=M5dKuVvuuSOnbIGPW2WU4MB2VK288BRNL2x2c0n9AmDbt8z5muPFfhuXIVy6zbrkZ5
- wkK2cwfU/Dv0d3Pvtrwe3JhFxJb2vLpnGVvJa3DU2aKRDDVvfl6vg72egHl92wgXPqM+
- /Ts/Nfat3Z6ENW3F3WEeDMuegD71w/92vlAZYUuxetPbYRYDgxOiSxWQs2bKqhuDnp7f
- WNZb4NSKFzFe8Rbf/RKmIhq4jkvOGaGg+OEtFBGuAaTevIucI+BXELir7fETNbB5LaoZ
- SiMPLnA4cnncd4mbGhCHqTEu88AVehICt+4MYAB7dkJnh1mrgev0LuDXatgrE0Fo7i/m
- oXPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=faYsQkoH+za1MQCwAYJ7NuwAaVZGTQV023m/UbZTbUo=;
- b=eQQxTVSgTMopv10AUxIMFqHR7hGxjwsKy/bCgBX7GSMLYJlX9nkUCJdTyu1Y4LZhDO
- oR2nI1DzzZBpsdw99Xvis0qgWTdT+UYX/FOFe0lh6hScrPl6DXFfVoPwuNOo5ed9HGOa
- BlwUvvTA85XRrr+gtE6ZuheI88mkRMFwZwGcHQFHQItv3CrBne/+JfNaiYSdGCaLPZlY
- cg+7wF7V5de7p/DHPD0qq1YDwDuadohi2WzBp4MMaTnQSAR6jxiosvin1tTZlfW17tAu
- ZKJIMREpwU+VvCjsEpAUeEKbj4DKmg7yklols1wVBWTrA2tD/rdPMH47IrspEn3fnXP4
- M9JQ==
-X-Gm-Message-State: AOAM533JoM7gcxydC6lKEHYGaV0+rMx+D7zYfS5bjE1u8WzP/k69yNAc
- wVto/jU0Ey4BQpfxydjM+No=
-X-Google-Smtp-Source: ABdhPJwpGlv2PFrNgmHP40Uv4ohZC5QvSgu5a75wm5y6HdaTYKB2U49QyDGCNyfI6WDN2yUEzdJ0sw==
-X-Received: by 2002:a05:6214:2428:: with SMTP id
- gy8mr7666266qvb.18.1635893846378; 
- Tue, 02 Nov 2021 15:57:26 -0700 (PDT)
-Received: from jesse-desktop.jtp-bos.lab
- (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com.
- [146.115.144.188])
- by smtp.gmail.com with ESMTPSA id v19sm351222qtk.6.2021.11.02.15.57.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Nov 2021 15:57:25 -0700 (PDT)
-From: Jesse Taube <mr.bossman075@gmail.com>
-X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
-To: linux-imx@nxp.com
+	id 1mi2s1-003Ixo-0A; Tue, 02 Nov 2021 23:07:10 +0000
+Received: from smtpcmd13147.aruba.it ([62.149.156.147])
+ by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mi2nS-003H6G-EE
+ for linux-arm-kernel@lists.infradead.org; Tue, 02 Nov 2021 23:02:28 +0000
+Received: from [192.168.153.129] ([146.241.216.221])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id i2nFm97pQueW5i2nFmhbKy; Wed, 03 Nov 2021 00:02:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1635894138; bh=oK87bVnkYiUtGJyUmet+/HBPLdMRnwtDKTiOXteInjQ=;
+ h=Subject:To:From:Date:MIME-Version:Content-Type;
+ b=af9Fqkc8rTCEDQmqZTV4tg2Z5+pgBaFydeNISwHypnv5wrE45WUznIIEL+wZl66dr
+ EbJlWFSbo0O10xt9GIe0dwRykOC6iRW7i7rvCo2qGu6s+5lJ+TBgGBWiiNpGcPSYkE
+ SpySBaN42zgsr1vNVyfdgSoISMZVnKo849oKDIuXLlG8wluh+hEGH3XmynmR3yKrY0
+ vONSQIjWFF7puji50eRAlLwEUbhF9RB8cqe2Lmnz/wg6HBaj9qyWaRmGw7iAWG+r5h
+ 3BvZoR5jFBZGllmXn9EuigU3T29/o9FUwcqprpohqsXOzqGub60BubHe6vvLcHDcis
+ /5h6X9cv+hhQw==
+Subject: Re: [PATCH v2 11/13] mmc: sdhci-esdhc-imx: Add sdhc support for
+ i.MXRT series
+To: Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
 List-Id: <soc.lore.kernel.org>
 Cc: mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
  shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
@@ -77,21 +53,33 @@ Cc: mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
  stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org,
  arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk,
  abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org,
- giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp,
- Mr.Bossman075@gmail.com, linux-clk@vger.kernel.org,
+ nobuhiro1.iwamatsu@toshiba.co.jp, linux-clk@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
  linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v2 13/13] ARM: imxrt_defconfig: add i.MXRT family defconfig
-Date: Tue,  2 Nov 2021 18:57:01 -0400
-Message-ID: <20211102225701.98944-14-Mr.Bossman075@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
 References: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
+ <20211102225701.98944-12-Mr.Bossman075@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <d52ec837-a936-0312-0322-7e3a061984b9@benettiengineering.com>
+Date: Wed, 3 Nov 2021 00:02:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <20211102225701.98944-12-Mr.Bossman075@gmail.com>
+Content-Language: en-US
+X-CMAE-Envelope: MS4wfJgmuaRDniGb9KZ6FZ4QyMEMS2aKi6SERw8sh1OzYMKDB/NA1B7vRiCroRDe6acGggzP8wENsLq6qLxSryxtKRnW+3qt7gNN0A6cCJHR+G1OVwyHuOL6
+ T7Fmxiu4O7KNABNkcUCCOdapFoTQqYCFd6TJGaa1wldydiSjIAixnffyCvnmkPPCzSFG5di0q7fErw7oEkfu3dIfHiI034n40eYLFbERrXtY98ZJgnLqpQ47
+ xx3QkLPZE9U52WXzIAqu6ELAkcn7ZNhATR8qhm0SLXgVaBuXU+5a2cqVnWP+7bP3SU/8PATpfYqPfDq7KgIjxD2YUPxcrI9uGm4cPqlBv6IJyT5hRo20tYq5
+ SppOmk+VZzrKwQeAtVyOxtCjzlSlV1O02Rxpv8PwGzfalc8eNXvvimN1bF4Vy2BSii2Awnxx5L1dx9fEjHbIqu7xMzXZY7VSgVfvB38By6m7EdI4lHhvuV2V
+ Ut33bBdqg4++BbE9kZhiPxdlxsm19Fq7rj+ovMJtnUqC7Qmm7oQM6EkWtOVH1LHxW0G4TF06BecSyHHoQQLZ+29zDD38YbArjbV2clXUzHro0CwY9LA1uI7k
+ FfuWJbF3tdRUIQoPydsFiVkKOZXg5jezsORQosD0bC4yTvaT7+amwE3CUGMftUwqiXGZUZVCKO3f4/pgehmJxJnJAMo2x2Kg6qijtRHpwGdE8O8dwhTcbB6s
+ JoL5IHHwlYPsd4mZ3kMp9LtP5933w488c3w720kmzg7S0X4m8t/twprBv+oAUDHxF8qka9AhLvt255TDuS0n6rUzEkvxW35kWJjDWCxm+0FbyrmqFI8lyTLQ
+ kiVWF8EWSwOYIQWHJzUbkl/hW2HFe8tO4dF9Ghm2wmcqvSV9ro/oOfm0DRBF51X//vrZvvKerkMwsfl+KXiLkSiPvW2/TZcbmIKtamzNaqJh86rnoQbb+y0+
+ zI++y+iCxdprMgAxMhVL1LCEsiI7xi+VyTFlIVdo+RbCtDsgx2Bn3gMyjE5uUi8NXqLPi63NxoTdkMf6CNNmEMeMPIS4fHwIv0seearHmrD42u0IYm7qGAP1
+ 3QJruOF1Yh1Jt/6SCxTgdBZv20uMrWRNPtzzSNNIgu6bhpl0bSyzS+lwP5PYyevelWBh2VsleL8rq7EQkv9bVUk2Wi0bszQXG4U=
 X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211102_155727_229418_C415DE22 
-X-CRM114-Status: GOOD (  14.11  )
+X-CRM114-CacheID: sfid-20211102_160226_759260_34178A12 
+X-CRM114-Status: GOOD (  19.08  )
 X-BeenThere: linux-arm-kernel@lists.infradead.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -103,191 +91,61 @@ List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
 List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
 List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
 Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211102225701.9l4sTCwsCd50Yk8_tRfAbLLu_rSLdPG_tQTwh0Dsj2k@z>
+Message-ID: <20211102230213.6hGfqX2ZFSaC6huL7ORRmgdcpDaxcRMNHwRQqcGkKjQ@z>
 
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Hi Jesse,
 
-Add generic i.MXRT family defconfig.
+On 11/2/21 11:56 PM, Jesse Taube wrote:
+> From: Jesse Taube <mr.bossman075@gmail.com>
+> 
+> Add support for i.MXRT1050's sdhc.
+> 
+> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>---
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
----
-V1->V2:
-* Nothing done
----
- arch/arm/configs/imxrt_defconfig | 157 +++++++++++++++++++++++++++++++
- 1 file changed, 157 insertions(+)
- create mode 100644 arch/arm/configs/imxrt_defconfig
+Here the 3 dashes are missing(---)
 
-diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
-new file mode 100644
-index 000000000000..d673745a5462
---- /dev/null
-+++ b/arch/arm/configs/imxrt_defconfig
-@@ -0,0 +1,157 @@
-+# CONFIG_LOCALVERSION_AUTO is not set
-+CONFIG_SYSVIPC=y
-+CONFIG_USELIB=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BPF_SYSCALL=y
-+CONFIG_PREEMPT_VOLUNTARY=y
-+CONFIG_BSD_PROCESS_ACCT=y
-+CONFIG_BSD_PROCESS_ACCT_V3=y
-+CONFIG_PSI=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=18
-+CONFIG_MEMCG=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CFS_BANDWIDTH=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_RDMA=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_CGROUP_PERF=y
-+CONFIG_CGROUP_BPF=y
-+CONFIG_NAMESPACES=y
-+CONFIG_USER_NS=y
-+CONFIG_CHECKPOINT_RESTORE=y
-+CONFIG_SCHED_AUTOGROUP=y
-+CONFIG_RELAY=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_EXPERT=y
-+CONFIG_SGETMASK_SYSCALL=y
-+# CONFIG_FUTEX is not set
-+CONFIG_KALLSYMS_ALL=y
-+CONFIG_PC104=y
-+# CONFIG_SLUB_DEBUG is not set
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_SLAB_FREELIST_RANDOM=y
-+CONFIG_SLAB_FREELIST_HARDENED=y
-+CONFIG_PROFILING=y
-+# CONFIG_MMU is not set
-+CONFIG_ARCH_MXC=y
-+CONFIG_SOC_IMXRT=y
-+# CONFIG_ARM_DMA_MEM_BUFFERABLE is not set
-+CONFIG_SET_MEM_PARAM=y
-+CONFIG_DRAM_BASE=0x80000000
-+CONFIG_DRAM_SIZE=0x02000000
-+CONFIG_HZ_250=y
-+CONFIG_FORCE_MAX_ZONEORDER=14
-+CONFIG_PARAVIRT=y
-+# CONFIG_ATAGS is not set
-+CONFIG_CMDLINE="console=ttyS0 root=/dev/mmcblk0p2 rw earlycon rootwait"
-+CONFIG_BLK_DEV_BSGLIB=y
-+CONFIG_BLK_DEV_INTEGRITY=y
-+CONFIG_BLK_DEV_ZONED=y
-+CONFIG_BLK_DEV_THROTTLING=y
-+CONFIG_BLK_WBT=y
-+CONFIG_BLK_SED_OPAL=y
-+CONFIG_PARTITION_ADVANCED=y
-+CONFIG_BSD_DISKLABEL=y
-+CONFIG_MINIX_SUBPARTITION=y
-+CONFIG_SOLARIS_X86_PARTITION=y
-+CONFIG_UNIXWARE_DISKLABEL=y
-+CONFIG_LDM_PARTITION=y
-+CONFIG_CMDLINE_PARTITION=y
-+# CONFIG_MQ_IOSCHED_KYBER is not set
-+CONFIG_BINFMT_FLAT=y
-+CONFIG_CLEANCACHE=y
-+CONFIG_ZPOOL=y
-+CONFIG_ZBUD=y
-+CONFIG_Z3FOLD=y
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+# CONFIG_STANDALONE is not set
-+CONFIG_FW_LOADER_USER_HELPER=y
-+CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y
-+CONFIG_IMX_WEIM=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_RAM_COUNT=1
-+CONFIG_BLK_DEV_RAM_SIZE=65536
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO is not set
-+CONFIG_LEGACY_PTY_COUNT=2
-+CONFIG_SERIAL_FSL_LPUART=y
-+CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
-+CONFIG_SERIAL_NONSTANDARD=y
-+CONFIG_SERIAL_DEV_BUS=y
-+CONFIG_TTY_PRINTK=y
-+CONFIG_TTY_PRINTK_LEVEL=7
-+CONFIG_PINCTRL_IMXRT1050=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_GPIO_MXC=y
-+# CONFIG_HWMON is not set
-+# CONFIG_HID is not set
-+# CONFIG_USB_SUPPORT is not set
-+CONFIG_MMC=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
-+CONFIG_MMC_SDHCI_ESDHC_IMX=y
-+CONFIG_DMADEVICES=y
-+CONFIG_FSL_EDMA=y
-+# CONFIG_MX3_IPU is not set
-+# CONFIG_VIRTIO_MENU is not set
-+# CONFIG_VHOST_MENU is not set
-+CONFIG_MEMORY=y
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT2_FS_XATTR=y
-+CONFIG_EXT2_FS_POSIX_ACL=y
-+CONFIG_EXT2_FS_SECURITY=y
-+CONFIG_EXT3_FS=y
-+CONFIG_EXT3_FS_POSIX_ACL=y
-+CONFIG_EXT3_FS_SECURITY=y
-+# CONFIG_FILE_LOCKING is not set
-+# CONFIG_DNOTIFY is not set
-+CONFIG_QUOTA=y
-+# CONFIG_PRINT_QUOTA_WARNING is not set
-+CONFIG_AUTOFS4_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_FAT_DEFAULT_UTF8=y
-+CONFIG_EXFAT_FS=y
-+CONFIG_CONFIGFS_FS=y
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NLS_DEFAULT="cp437"
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_LSM="yama,loadpin,integrity,apparmor"
-+# CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
-+# CONFIG_CRYPTO_HW is not set
-+CONFIG_PRINTK_TIME=y
-+CONFIG_CONSOLE_LOGLEVEL_DEFAULT=15
-+CONFIG_CONSOLE_LOGLEVEL_QUIET=15
-+CONFIG_MESSAGE_LOGLEVEL_DEFAULT=7
-+CONFIG_DYNAMIC_DEBUG=y
-+# CONFIG_DEBUG_BUGVERBOSE is not set
-+CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF4=y
-+CONFIG_GDB_SCRIPTS=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=0x01b6
-+CONFIG_DEBUG_FS=y
-+CONFIG_PAGE_POISONING=y
-+CONFIG_SCHED_STACK_END_CHECK=y
-+CONFIG_SOFTLOCKUP_DETECTOR=y
-+CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=1
-+# CONFIG_SCHED_DEBUG is not set
-+CONFIG_SCHEDSTATS=y
-+CONFIG_STACKTRACE=y
-+CONFIG_DEBUG_USER=y
-+CONFIG_DEBUG_LL=y
-+CONFIG_DEBUG_UNCOMPRESS=y
-+CONFIG_EARLY_PRINTK=y
-+# CONFIG_RUNTIME_TESTING_MENU is not set
-+CONFIG_MEMTEST=y
+Best regards
 -- 
-2.33.1
+Giulio Benetti
+Benetti Engineering sas
+
+> V1->V2:
+> * Nothing done
+> ---
+>   drivers/mmc/host/sdhci-esdhc-imx.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
+> index afaf33707d46..c852a6df5611 100644
+> --- a/drivers/mmc/host/sdhci-esdhc-imx.c
+> +++ b/drivers/mmc/host/sdhci-esdhc-imx.c
+> @@ -305,6 +305,12 @@ static struct esdhc_soc_data usdhc_imx7ulp_data = {
+>   			| ESDHC_FLAG_PMQOS | ESDHC_FLAG_HS400
+>   			| ESDHC_FLAG_STATE_LOST_IN_LPMODE,
+>   };
+> +static struct esdhc_soc_data usdhc_imxrt_data = {
+> +	.flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_MAN_TUNING
+> +			| ESDHC_FLAG_HS200 | ESDHC_FLAG_ERR004536
+> +			| ESDHC_FLAG_BROKEN_AUTO_CMD23,
+> +};
+> +
+>   
+>   static struct esdhc_soc_data usdhc_imx8qxp_data = {
+>   	.flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_STD_TUNING
+> @@ -357,6 +363,7 @@ static const struct of_device_id imx_esdhc_dt_ids[] = {
+>   	{ .compatible = "fsl,imx7ulp-usdhc", .data = &usdhc_imx7ulp_data, },
+>   	{ .compatible = "fsl,imx8qxp-usdhc", .data = &usdhc_imx8qxp_data, },
+>   	{ .compatible = "fsl,imx8mm-usdhc", .data = &usdhc_imx8mm_data, },
+> +	{ .compatible = "fsl,imxrt-usdhc", .data = &usdhc_imxrt_data, },
+>   	{ .compatible = "nxp,s32g2-usdhc", .data = &usdhc_s32g2_data, },
+>   	{ /* sentinel */ }
+>   };
+> 
 
 
 _______________________________________________
