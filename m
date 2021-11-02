@@ -1,21 +1,24 @@
-Return-Path: <SRS0=Qo2+=PV=gmail.com=festevam@kernel.org>
+Return-Path: <linux-clk-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 381B9C433EF
-	for <soc@archiver.kernel.org>; Tue,  2 Nov 2021 23:17:31 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 1B0C961101; Tue,  2 Nov 2021 23:17:31 +0000 (UTC)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DC79F60EB9;
-	Tue,  2 Nov 2021 23:17:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DC79F60EB9
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f45.google.com with SMTP id l43so1102659uad.4;
-        Tue, 02 Nov 2021 16:17:30 -0700 (PDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 737FAC433EF
+	for <linux-clk@archiver.kernel.org>; Tue,  2 Nov 2021 23:17:33 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 55C34610E8
+	for <linux-clk@archiver.kernel.org>; Tue,  2 Nov 2021 23:17:33 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S231732AbhKBXUH (ORCPT <rfc822;linux-clk@archiver.kernel.org>);
+        Tue, 2 Nov 2021 19:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231745AbhKBXUH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 2 Nov 2021 19:20:07 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D57CC061203;
+        Tue,  2 Nov 2021 16:17:31 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id e5so1042104uam.11;
+        Tue, 02 Nov 2021 16:17:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -32,43 +35,60 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=ZsNw+rozMJw0uF1kikrp6ToQQ8yZiRgQpxArMCQC7PY=;
-        b=stD7MKdnFrIt+WVkjftw3d68fhh+hrWc628Um4EQMJrHYA6aSnuvyNclqs3DcLhHsQ
-         OWACXJPBEVOjd8JUl97/mgRwveZV6pK1/8q1B0YwLjUkbdHR4p3EEkx024DbX/x5/Lyt
-         g7lxwLTd5ykUlRCkmRhbk6xEjQERLbO41ukIuj2w3KTI4gZHbjEghkHScEQsAOKGaztG
-         WRsabg1fSO4UX16tkDIHgSHTt6bZGhF1pBwZJPrXQsRCaztvIrIYSF3MmuXEiPF0dLtK
-         w8ucMcW/4dzp6UyvCVhGMQHelmjZ2EfVZ/1S9gGX9nF318O7PG1/b4ba5AK81TIKdKHd
-         zz9w==
-X-Gm-Message-State: AOAM530A0M2McJYvf/30wXY5ohgZRwhazwsmeZejK5xJQVJ66O2pdQnc
-	LLaiB6gEUhN9+YOHXyZ1a3000rpgTpsMpdmUcaw=
+        b=eO3NI9erepxl0Eoa1BMxhiIZho/TDNaxkNMfsbNgQFUkLNpyYCQpZpfOoY1XFBgJRg
+         uoHMSibTPSnI/dZuifoMfBLPKSpRf0MMUIM9lyJYbvtVHWb/3gZgFq72h84uzz5cEzM9
+         8+zOAhjuEzmDdHNBHeYhlEu12eDyRsqfOvY9dY5YCjHY32K1s2GtM2GWY1BBcI56VK/9
+         22cB3WZzgzIUoZQBudtUU7I72IfUQ9SKMoIq75l9D3j/2llxOfr9obot4yroiSPMicMF
+         6M7252q9+otgs14ooh3iSzU6dOgvtqfKw7sdTix+QEChZJwQovUSsDj11wixFEbLBeul
+         cjkQ==
+X-Gm-Message-State: AOAM531ZtEHJLhS6vYwP6/BHpr2ffrr9OJDIcsuhD+y2tGgi4UPWdpr2
+        1Er+SRaswhhlj744A50MWpOOz7XzrARnb9tW2ao=
 X-Google-Smtp-Source: ABdhPJyKSz6TCwnh7C+kJRYFN36Ph1nCIbuAY9M8q8RU9WcxjgDuFfVym1xz6Ue87gxiQx13egUc+1+Z88EDJpe8oCo=
 X-Received: by 2002:ab0:6ca7:: with SMTP id j7mr31958596uaa.133.1635895049876;
  Tue, 02 Nov 2021 16:17:29 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211102225701.98944-1-Mr.Bossman075@gmail.com> <20211102225701.98944-12-Mr.Bossman075@gmail.com>
 In-Reply-To: <20211102225701.98944-12-Mr.Bossman075@gmail.com>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 2 Nov 2021 20:17:19 -0300
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 2 Nov 2021 20:17:19 -0300
 Message-ID: <CAOMZO5AxMXxDkNDqGJDhtepqSUxGRCWO+L=c67O==4fx66M7XQ@mail.gmail.com>
 Subject: Re: [PATCH v2 11/13] mmc: sdhci-esdhc-imx: Add sdhc support for
  i.MXRT series
-To: Jesse Taube <mr.bossman075@gmail.com>
+To:     Jesse Taube <mr.bossman075@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: NXP Linux Team <linux-imx@nxp.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Sascha Hauer <kernel@pengutronix.de>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>, 
-	Stefan Agner <stefan@agner.ch>, Linus Walleij <linus.walleij@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Olof Johansson <olof@lixom.net>, soc@kernel.org, 
-	Russell King - ARM Linux <linux@armlinux.org.uk>, Abel Vesa <abel.vesa@nxp.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Jiri Slaby <jirislaby@kernel.org>, 
-	Giulio Benetti <giulio.benetti@benettiengineering.com>, 
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, linux-clk <linux-clk@vger.kernel.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
-	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, linux-mmc <linux-mmc@vger.kernel.org>, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, linux-serial@vger.kernel.org
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-clk.vger.kernel.org>
+X-Mailing-List: linux-clk@vger.kernel.org
+Message-ID: <20211102231719.L4sEMF53K3hzbATY8SrVEXQr9krWqk2hwWpfev9gubg@z>
 
 On Tue, Nov 2, 2021 at 7:57 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
 
