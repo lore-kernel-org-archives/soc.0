@@ -1,173 +1,119 @@
-Return-Path: <SRS0=YOEr=PV=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <linux-clk-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14892C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  2 Nov 2021 23:01:58 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D9AD461053
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  2 Nov 2021 23:01:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D9AD461053
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=L+drEC7VIA6SJPQZiWI2Q5R3m5XdQJL7vp/7sM+sRWk=; b=io+ge/UsIRe0qb
-	zKYoz9pKe84JUqJiwxwqjursIOI2ZYYcBQhQRSA1fZdQRd+CbM8U9b9PTG7oTzs9smjb4o3Sj65gx
-	DY+2wBXC2btAEgQCd1SDLXD/BaGTXHmPL1oRS9rsExEcub8zg/W83jOctsGn5YTAZV+jzE0cF1yLJ
-	OLZu2P9XEiOf6X/b4Jks5lngCTasnk46yTn5/vJQTbM3OL9ARL2+FSnV+GS44ZnBcZdM0pH6IW7v9
-	z214HmUAS9jjUp+7+Pu2mi+80AVi7FHaa1KxgINOJgdpvxytCY/m+mb5HKKcXV1itY0LpBIDCBl9i
-	HyJM3qyIiApZylVv6psQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mi2lE-003G6u-0q; Tue, 02 Nov 2021 23:00:08 +0000
-Received: from mail-qv1-xf33.google.com ([2607:f8b0:4864:20::f33])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mi2iV-003Enl-4w
- for linux-arm-kernel@lists.infradead.org; Tue, 02 Nov 2021 22:57:20 +0000
-Received: by mail-qv1-xf33.google.com with SMTP id b11so606232qvm.7
- for <linux-arm-kernel@lists.infradead.org>;
- Tue, 02 Nov 2021 15:57:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=9kENO6dT6bi8+vAAwG2HaEh0fV06gXedhlAWHwtHs6k=;
- b=OedOtHC1F+mL4hUypyXtk5qQSumKxhtC81bPGg4Hc/JX1oppAkyUIxMsY4BuimdO5E
- /exXic+LeeBTJ3HLL+dKh8pTi65nyce4OTkCvxuur9Gk2sQuLQONijX7sm2Ok/le81/w
- t/7lM8PICS6c1HPpPyXNiqQzuIhkx9iIX2woL3+lMXzhy3lhVcKQuJa11oZLxtrT9ooB
- xdvHmiv0PMfTJQtd15Rmaa9r4RvisiIicPpQlmoiTewH3djiTHG70mQGVsh2fcre5unk
- QGrN57hQa+T0DA5aA1qNnMKse1iFArbY+zPefnebZM1Kv0/YrTOpxLIJf3DkUkpgNEVY
- bGvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=9kENO6dT6bi8+vAAwG2HaEh0fV06gXedhlAWHwtHs6k=;
- b=d1uPhDECOJofFNbc0MsNDCj/xSfV0h4gY/t9IyJhk3hPGig7e3IWFhAwwt7eaB26EN
- MwdvErT6QFthCtm7fpEe/xBnZs530vskcxNTCYpfAatw42RhIA0XNIekDVMb5rvAzcr/
- INJFEgvgtyk4ZZM+teLe+J91QzxJyDIkyZCt4pl7wnzHNk/WowEZTLcNKIq7igbTNy6z
- puCfnTKc9HfIeqzoiix7oTzaKDzwcSramLMw37u46DxhMhxN8SIWwVGI6XweVJeLq8bZ
- 74x6rE8xFQEi2aj/S6ys1zr7PdMHGWspl2NiOWfSwCH2LNZXUet5FetNvjsxEuJHRf1X
- 179g==
-X-Gm-Message-State: AOAM530CoT4qNwq5HcgtUDRNBoccX0PVFWxDZExh/R85wdOBPETov/ey
- mQkrcyIBLOvDYm93DfI5eZeIn9HVxsJVpGho
-X-Google-Smtp-Source: ABdhPJyQxEEKYdwrDtQ897WKes/oYEhB6qtV5+w2s7/My+JbXJMFLXmxAM54+mEmzDz621wqH1OtLQ==
-X-Received: by 2002:ac8:7044:: with SMTP id y4mr41252982qtm.64.1635893838350; 
- Tue, 02 Nov 2021 15:57:18 -0700 (PDT)
-Received: from jesse-desktop.jtp-bos.lab
- (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com.
- [146.115.144.188])
- by smtp.gmail.com with ESMTPSA id v19sm351222qtk.6.2021.11.02.15.57.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Nov 2021 15:57:17 -0700 (PDT)
-From: Jesse Taube <mr.bossman075@gmail.com>
-X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
-To: linux-imx@nxp.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C788C433F5
+	for <linux-clk@archiver.kernel.org>; Tue,  2 Nov 2021 23:02:21 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 4F09F60C4A
+	for <linux-clk@archiver.kernel.org>; Tue,  2 Nov 2021 23:02:21 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S231254AbhKBXEz (ORCPT <rfc822;linux-clk@archiver.kernel.org>);
+        Tue, 2 Nov 2021 19:04:55 -0400
+Received: from smtpcmd13147.aruba.it ([62.149.156.147]:44444 "EHLO
+        smtpcmd13147.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229900AbhKBXEz (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 2 Nov 2021 19:04:55 -0400
+Received: from [192.168.153.129] ([146.241.216.221])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id i2nFm97pQueW5i2nFmhbKy; Wed, 03 Nov 2021 00:02:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1635894138; bh=oK87bVnkYiUtGJyUmet+/HBPLdMRnwtDKTiOXteInjQ=;
+        h=Subject:To:From:Date:MIME-Version:Content-Type;
+        b=af9Fqkc8rTCEDQmqZTV4tg2Z5+pgBaFydeNISwHypnv5wrE45WUznIIEL+wZl66dr
+         EbJlWFSbo0O10xt9GIe0dwRykOC6iRW7i7rvCo2qGu6s+5lJ+TBgGBWiiNpGcPSYkE
+         SpySBaN42zgsr1vNVyfdgSoISMZVnKo849oKDIuXLlG8wluh+hEGH3XmynmR3yKrY0
+         vONSQIjWFF7puji50eRAlLwEUbhF9RB8cqe2Lmnz/wg6HBaj9qyWaRmGw7iAWG+r5h
+         3BvZoR5jFBZGllmXn9EuigU3T29/o9FUwcqprpohqsXOzqGub60BubHe6vvLcHDcis
+         /5h6X9cv+hhQw==
+Subject: Re: [PATCH v2 11/13] mmc: sdhci-esdhc-imx: Add sdhc support for
+ i.MXRT series
+To:     Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
 List-Id: <soc.lore.kernel.org>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
- shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
- festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com,
- stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org,
- arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk,
- abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org,
- giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp,
- Mr.Bossman075@gmail.com, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
- Jesse Taube <mr.bossman075@gmail.com>
-Subject: [PATCH v2 09/13] tty: serial: fsl_lpuart: add i.MXRT support
-Date: Tue,  2 Nov 2021 18:56:57 -0400
-Message-ID: <20211102225701.98944-10-Mr.Bossman075@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com,
+        stefan@agner.ch, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org, arnd@arndb.de, olof@lixom.net,
+        soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com,
+        adrian.hunter@intel.com, jirislaby@kernel.org,
+        nobuhiro1.iwamatsu@toshiba.co.jp, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
 References: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
+ <20211102225701.98944-12-Mr.Bossman075@gmail.com>
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <d52ec837-a936-0312-0322-7e3a061984b9@benettiengineering.com>
+Date:   Wed, 3 Nov 2021 00:02:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211102_155719_261778_D5385AB3 
-X-CRM114-Status: GOOD (  13.23  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <20211102225701.98944-12-Mr.Bossman075@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211102225657.qP0BJe2F0zSwEeccfa2goSnh8cbaokjQRz_fnLtwzGg@z>
+X-CMAE-Envelope: MS4wfJgmuaRDniGb9KZ6FZ4QyMEMS2aKi6SERw8sh1OzYMKDB/NA1B7vRiCroRDe6acGggzP8wENsLq6qLxSryxtKRnW+3qt7gNN0A6cCJHR+G1OVwyHuOL6
+ T7Fmxiu4O7KNABNkcUCCOdapFoTQqYCFd6TJGaa1wldydiSjIAixnffyCvnmkPPCzSFG5di0q7fErw7oEkfu3dIfHiI034n40eYLFbERrXtY98ZJgnLqpQ47
+ xx3QkLPZE9U52WXzIAqu6ELAkcn7ZNhATR8qhm0SLXgVaBuXU+5a2cqVnWP+7bP3SU/8PATpfYqPfDq7KgIjxD2YUPxcrI9uGm4cPqlBv6IJyT5hRo20tYq5
+ SppOmk+VZzrKwQeAtVyOxtCjzlSlV1O02Rxpv8PwGzfalc8eNXvvimN1bF4Vy2BSii2Awnxx5L1dx9fEjHbIqu7xMzXZY7VSgVfvB38By6m7EdI4lHhvuV2V
+ Ut33bBdqg4++BbE9kZhiPxdlxsm19Fq7rj+ovMJtnUqC7Qmm7oQM6EkWtOVH1LHxW0G4TF06BecSyHHoQQLZ+29zDD38YbArjbV2clXUzHro0CwY9LA1uI7k
+ FfuWJbF3tdRUIQoPydsFiVkKOZXg5jezsORQosD0bC4yTvaT7+amwE3CUGMftUwqiXGZUZVCKO3f4/pgehmJxJnJAMo2x2Kg6qijtRHpwGdE8O8dwhTcbB6s
+ JoL5IHHwlYPsd4mZ3kMp9LtP5933w488c3w720kmzg7S0X4m8t/twprBv+oAUDHxF8qka9AhLvt255TDuS0n6rUzEkvxW35kWJjDWCxm+0FbyrmqFI8lyTLQ
+ kiVWF8EWSwOYIQWHJzUbkl/hW2HFe8tO4dF9Ghm2wmcqvSV9ro/oOfm0DRBF51X//vrZvvKerkMwsfl+KXiLkSiPvW2/TZcbmIKtamzNaqJh86rnoQbb+y0+
+ zI++y+iCxdprMgAxMhVL1LCEsiI7xi+VyTFlIVdo+RbCtDsgx2Bn3gMyjE5uUi8NXqLPi63NxoTdkMf6CNNmEMeMPIS4fHwIv0seearHmrD42u0IYm7qGAP1
+ 3QJruOF1Yh1Jt/6SCxTgdBZv20uMrWRNPtzzSNNIgu6bhpl0bSyzS+lwP5PYyevelWBh2VsleL8rq7EQkv9bVUk2Wi0bszQXG4U=
+Precedence: bulk
+List-ID: <linux-clk.vger.kernel.org>
+X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Jesse Taube <mr.bossman075@gmail.com>
+Hi Jesse,
 
-Add support for i.MXRT1050's uart.
+On 11/2/21 11:56 PM, Jesse Taube wrote:
+> From: Jesse Taube <mr.bossman075@gmail.com>
+> 
+> Add support for i.MXRT1050's sdhc.
+> 
+> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>---
 
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-V1->V2:
-* Add ack by Greg
----
- drivers/tty/serial/fsl_lpuart.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Here the 3 dashes are missing(---)
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index b1e7190ae483..1db083905d75 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -247,6 +247,7 @@ enum lpuart_type {
- 	LS1028A_LPUART,
- 	IMX7ULP_LPUART,
- 	IMX8QXP_LPUART,
-+	IMXRT_LPUART,
- };
- 
- struct lpuart_port {
-@@ -310,6 +311,11 @@ static struct lpuart_soc_data imx8qxp_data = {
- 	.iotype = UPIO_MEM32,
- 	.reg_off = IMX_REG_OFF,
- };
-+static struct lpuart_soc_data imxrt_data = {
-+	.devtype = IMXRT_LPUART,
-+	.iotype = UPIO_MEM32,
-+	.reg_off = IMX_REG_OFF,
-+};
- 
- static const struct of_device_id lpuart_dt_ids[] = {
- 	{ .compatible = "fsl,vf610-lpuart",	.data = &vf_data, },
-@@ -317,6 +323,7 @@ static const struct of_device_id lpuart_dt_ids[] = {
- 	{ .compatible = "fsl,ls1028a-lpuart",	.data = &ls1028a_data, },
- 	{ .compatible = "fsl,imx7ulp-lpuart",	.data = &imx7ulp_data, },
- 	{ .compatible = "fsl,imx8qxp-lpuart",	.data = &imx8qxp_data, },
-+	{ .compatible = "fsl,imxrt-lpuart",	.data = &imxrt_data},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, lpuart_dt_ids);
-@@ -2625,6 +2632,7 @@ OF_EARLYCON_DECLARE(lpuart, "fsl,vf610-lpuart", lpuart_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1021a-lpuart", lpuart32_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1028a-lpuart", ls1028a_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,imx7ulp-lpuart", lpuart32_imx_early_console_setup);
-+OF_EARLYCON_DECLARE(lpuart32, "fsl,imxrt-lpuart", lpuart32_imx_early_console_setup);
- EARLYCON_DECLARE(lpuart, lpuart_early_console_setup);
- EARLYCON_DECLARE(lpuart32, lpuart32_early_console_setup);
- 
+Best regards
 -- 
-2.33.1
+Giulio Benetti
+Benetti Engineering sas
 
+> V1->V2:
+> * Nothing done
+> ---
+>   drivers/mmc/host/sdhci-esdhc-imx.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
+> index afaf33707d46..c852a6df5611 100644
+> --- a/drivers/mmc/host/sdhci-esdhc-imx.c
+> +++ b/drivers/mmc/host/sdhci-esdhc-imx.c
+> @@ -305,6 +305,12 @@ static struct esdhc_soc_data usdhc_imx7ulp_data = {
+>   			| ESDHC_FLAG_PMQOS | ESDHC_FLAG_HS400
+>   			| ESDHC_FLAG_STATE_LOST_IN_LPMODE,
+>   };
+> +static struct esdhc_soc_data usdhc_imxrt_data = {
+> +	.flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_MAN_TUNING
+> +			| ESDHC_FLAG_HS200 | ESDHC_FLAG_ERR004536
+> +			| ESDHC_FLAG_BROKEN_AUTO_CMD23,
+> +};
+> +
+>   
+>   static struct esdhc_soc_data usdhc_imx8qxp_data = {
+>   	.flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_STD_TUNING
+> @@ -357,6 +363,7 @@ static const struct of_device_id imx_esdhc_dt_ids[] = {
+>   	{ .compatible = "fsl,imx7ulp-usdhc", .data = &usdhc_imx7ulp_data, },
+>   	{ .compatible = "fsl,imx8qxp-usdhc", .data = &usdhc_imx8qxp_data, },
+>   	{ .compatible = "fsl,imx8mm-usdhc", .data = &usdhc_imx8mm_data, },
+> +	{ .compatible = "fsl,imxrt-usdhc", .data = &usdhc_imxrt_data, },
+>   	{ .compatible = "nxp,s32g2-usdhc", .data = &usdhc_s32g2_data, },
+>   	{ /* sentinel */ }
+>   };
+> 
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
