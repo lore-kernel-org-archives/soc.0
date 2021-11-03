@@ -1,64 +1,73 @@
-Return-Path: <SRS0=VBla=PW=benettiengineering.com=giulio.benetti@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 980D2C433F5
-	for <soc@archiver.kernel.org>; Wed,  3 Nov 2021 19:10:46 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 6F40361156; Wed,  3 Nov 2021 19:10:46 +0000 (UTC)
-Received: from smtpcmd0756.aruba.it (smtpcmd0756.aruba.it [62.149.156.56])
-	by mail.kernel.org (Postfix) with ESMTP id 56D4761139
-	for <soc@kernel.org>; Wed,  3 Nov 2021 19:10:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 56D4761139
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=benettiengineering.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4430C433EF
+	for <linux-devicetree@archiver.kernel.org>; Wed,  3 Nov 2021 19:10:46 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id B3E866112E
+	for <linux-devicetree@archiver.kernel.org>; Wed,  3 Nov 2021 19:10:46 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S231392AbhKCTNW (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Wed, 3 Nov 2021 15:13:22 -0400
+Received: from smtpcmd0756.aruba.it ([62.149.156.56]:34294 "EHLO
+        smtpcmd0756.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231157AbhKCTNW (ORCPT
+        <rfc822;devicetree@vger.kernel.org>); Wed, 3 Nov 2021 15:13:22 -0400
 Received: from [192.168.153.129] ([146.241.216.221])
-	by Aruba Outgoing Smtp  with ESMTPSA
-	id iLehmQUVD4n4riLehmFuEJ; Wed, 03 Nov 2021 20:10:44 +0100
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id iLehmQUVD4n4riLehmFuEJ; Wed, 03 Nov 2021 20:10:44 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-	t=1635966644; bh=0/31yxmO9a/oC0P8HSIAOi7F4D8XhUglntlI8cyweIg=;
-	h=Subject:To:From:Date:MIME-Version:Content-Type;
-	b=JHt8XzSjYLi1rWyUyi2ykyjLwTWrBHdvKgItGaNHY9vgQDx4CIXQIBALXxgxMWPRM
-	 oGtbjIF7McsY1X/k1uP2Acdeqw2BIas+OYupr81C2Dcca7XMa2Vp0Sp0FJTrwpcsSX
-	 gFRfNMSc4dWtlo/n9+z2VXPjPRkCSC59N3R0G8+8JwmsfgviQHXTaF7kvRBJuWubei
-	 hx+F0V/WiqGSUyEdMZ1mqAWtMsH7ZhpC7rP9NDKtvKOajBIDiWHDZJL7lyTxdyUfDg
-	 n4sufjnQVMtJZjMUz4pfih0uAXT2MavO/91P0GGzNZ/d33kaReBHi5j6jAzzW4d6FZ
-	 +cACDqCxUK6YQ==
+        t=1635966644; bh=0/31yxmO9a/oC0P8HSIAOi7F4D8XhUglntlI8cyweIg=;
+        h=Subject:To:From:Date:MIME-Version:Content-Type;
+        b=JHt8XzSjYLi1rWyUyi2ykyjLwTWrBHdvKgItGaNHY9vgQDx4CIXQIBALXxgxMWPRM
+         oGtbjIF7McsY1X/k1uP2Acdeqw2BIas+OYupr81C2Dcca7XMa2Vp0Sp0FJTrwpcsSX
+         gFRfNMSc4dWtlo/n9+z2VXPjPRkCSC59N3R0G8+8JwmsfgviQHXTaF7kvRBJuWubei
+         hx+F0V/WiqGSUyEdMZ1mqAWtMsH7ZhpC7rP9NDKtvKOajBIDiWHDZJL7lyTxdyUfDg
+         n4sufjnQVMtJZjMUz4pfih0uAXT2MavO/91P0GGzNZ/d33kaReBHi5j6jAzzW4d6FZ
+         +cACDqCxUK6YQ==
 Subject: Re: [PATCH v2 11/13] mmc: sdhci-esdhc-imx: Add sdhc support for
  i.MXRT series
-To: Fabio Estevam <festevam@gmail.com>
+To:     Fabio Estevam <festevam@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Jesse Taube <mr.bossman075@gmail.com>, NXP Linux Team
- <linux-imx@nxp.com>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Sascha Hauer <kernel@pengutronix.de>, Ulf Hansson <ulf.hansson@linaro.org>,
- Dong Aisheng <aisheng.dong@nxp.com>, Stefan Agner <stefan@agner.ch>,
- Linus Walleij <linus.walleij@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
- Abel Vesa <abel.vesa@nxp.com>, Adrian Hunter <adrian.hunter@intel.com>,
- Jiri Slaby <jirislaby@kernel.org>,
- Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
- linux-clk <linux-clk@vger.kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>,
- "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE"
- <linux-arm-kernel@lists.infradead.org>,
- linux-kernel <linux-kernel@vger.kernel.org>,
- linux-mmc <linux-mmc@vger.kernel.org>,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-serial@vger.kernel.org
+Cc:     Jesse Taube <mr.bossman075@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-serial@vger.kernel.org
 References: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
  <20211102225701.98944-12-Mr.Bossman075@gmail.com>
  <CAOMZO5AxMXxDkNDqGJDhtepqSUxGRCWO+L=c67O==4fx66M7XQ@mail.gmail.com>
  <c1610093-95ae-68d3-57ae-93b1bc9715d7@gmail.com>
  <5ebe48f5-7b9c-be99-d50c-65a056084b96@benettiengineering.com>
  <CAOMZO5DHCYaxzSASKq6Bk8ALkiQeVjPOHOyk-pKYepJFJk6oFQ@mail.gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
 Message-ID: <78cba8ec-72b0-89b8-d6e3-09ecea19ca7b@benettiengineering.com>
-Date: Wed, 3 Nov 2021 20:10:39 +0100
+Date:   Wed, 3 Nov 2021 20:10:39 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
@@ -76,6 +85,10 @@ X-CMAE-Envelope: MS4wfF6/WWjL7PJeZTTfz9UiWozyugqncNHx9tTkfwkkeDbnl31INXrmdyJqCSD
  JMyFerHaBWkngEyHrqz25mjCOQMODTDTsNvvVliBq93lDPsgK3mJEl0Habe+NGvFA2p8EJtf0FwLgL0DRkJHzdhMV88ocFN+5a1+J0RrGZr4w1tABUN/5cm1
  WudLVrZSILp4LPugdLhbdtWqzTVqLr7Z5bwjuyY0ykWP1Okhj8x8edAs9QHPcNhSXogZq6iiuo5o1gC6xSOGhsYvQsVxL3miS8s3fPyG/QjEvDLLBWrnRyF1
  0glwqRkuoJSHoK/FA3aAdIQ9Aeg2lDGEs3pbsWIwLor0bSAzNFFlUwrWmx7Z5ykPs8sZoNMAWTJRAnNPRjzG87S0dPFSboLuLSo=
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20211103191039.Me1ZK2LeYE4qeAt4wzWK6fuISqdzJ3He7mB8OmIULRA@z>
 
 Hi Fabio, Jesse, Rob, All,
 
