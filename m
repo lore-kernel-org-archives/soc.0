@@ -1,150 +1,1261 @@
-Return-Path: <SRS0=8DV1=PW=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=sn/Y=PW=gmail.com=howard10703049@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA3C5C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  3 Nov 2021 02:50:34 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06B44C433F5
+	for <soc@archiver.kernel.org>; Wed,  3 Nov 2021 07:16:45 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id DAFD66103C; Wed,  3 Nov 2021 07:16:44 +0000 (UTC)
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 98BEC60F39
-	for <linux-arm-kernel@archiver.kernel.org>; Wed,  3 Nov 2021 02:50:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 98BEC60F39
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:To:In-Reply-To:Cc:References:Message-Id
-	:Date:Subject:Mime-Version:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=SsF3wBjAzKYGiAoBY7F3t+AGX8xtWhqUwEsXCSIE51U=; b=bPIT0Xo7CWfN7H
-	Yk6LN7lHkC8gkGFaTOTWBc3gV6mbXTx5ImZR74flNDzx9HD2IQmYGRyNRBWhfR4hkgaDjiH/+rnpF
-	G3+ar0rtrwutNzdmQeJhXwuLRKua2tsZyDP4qjqeUz5dJsTKlvMfH3DpK1D8N77R2uj8MgesUQBRu
-	05kUx7mxlL9SqCDMAeLPXWZVrsGFyjrH+NxcF3EqaSVu63gV7BFOuDE6SaA7EomNZJlI7zrDmpMkH
-	LQSmW/0HyhZjcYP08DMoX2fSEpK7utDdFsf8V9nSul3Xgyf1BV9KYQV7/Mh8IeC1Y4OKY2AiSEue/
-	nIQpTUOhgFPFz/33o6Fg==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mi6Ko-003uYx-G3; Wed, 03 Nov 2021 02:49:06 +0000
-Received: from smtpcmd11117.aruba.it ([62.149.156.117])
- by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mi6Kk-003uY9-O2
- for linux-arm-kernel@lists.infradead.org; Wed, 03 Nov 2021 02:49:04 +0000
-Received: from smtpclient.apple ([146.241.216.221])
- by Aruba Outgoing Smtp  with ESMTPA
- id i6KdmWeslumo4i6KdmXOCm; Wed, 03 Nov 2021 03:48:58 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1635907738; bh=vn0en0EIlHgkPwPZZERx136vgq1/nmIMJ6ZT4dkZqag=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=J9naTf+IAohR2xOuGFgEzMfooC6CT8nvH3rCcxEWgk4ynOkf9Na/5Aqb8CB1TYo6O
- E72mOAH0K6Haxm+L3WXrEe/q9WMjDSlZd5pngARGRVwsq1+tUy5onszIqxfCDTHDSw
- FJqY5awdjZXgfm/Z33r99rSTvYbfrSaei0yvkgo895UNDUgzzsfwvlsL4GZT5zf8g4
- mlgBpKAQEB6xb/Nih89L56sQBD2benwgBCFHMJXdhbWd1w9XRNB2i+f+KJ5UaLAXax
- xyAM63MAPZlAmH/xCTEiZZWeY0G7t6TrNo2hUg29dncGJPIvgBy6Z765r06VGFHqS3
- /ZU34wbBbftfA==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH 08/13] dt-bindings: serial: fsl-lpuart: add i.MXRT
- compatible
-Date: Wed, 3 Nov 2021 03:48:54 +0100
-Message-ID: <D0A3E11F-FEDE-4B2D-90AB-63DFC245A935@benettiengineering.com>
-References: <CAL_JsqJR6EfDsmwPmXxgdaC1GB7CLGYpjmDnOkD_f53Frsq6LA@mail.gmail.com>
+	by mail.kernel.org (Postfix) with ESMTPS id ACC5060EB4;
+	Wed,  3 Nov 2021 07:16:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ACC5060EB4
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f178.google.com with SMTP id n23so1603250pgh.8;
+        Wed, 03 Nov 2021 00:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sw2ZfxdhteQblMHs+KiJAQ/BwsczDF3dqqFFUzXxrXE=;
+        b=T1ppavJnFKWb16xfwDAB8AemYcwiaiSud5MMCedgSfnCWOflus8tK1K9pI04o99oWU
+         7U8qYJ7G2bFCjZrJXaD7MsEZI5V69SVHG8OjKPqj/p+TFTqu1HVWsHOGEeP91jOC+60M
+         iYFe5nqZmfge/Ta6B2nQuv6+hSFiJvYWjAAh+0gCmM4hm0XVz1i83edwU0vWpaKL494i
+         tE08nodeunw6K1qYXHgmlQd6VcuhGuOwlBaWsHlStjwJwKb3KH/98H8Aonl/F93uUeIr
+         /rWsxW8KJ6aaqa1D8kZu0Ky/yuG7CFJ7kAP9L3rRRDl+rY0qzSlLU+Bi5jEyH/LJtxfK
+         uF+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sw2ZfxdhteQblMHs+KiJAQ/BwsczDF3dqqFFUzXxrXE=;
+        b=oPqGhy7roN4y5ii0nZumODU4Py7pB3SdfETb959Kf9EdEFI13vOF0oVZmfVib0RZ2a
+         DVtNaC/qs6VOVF4+nvkInTHZ1wu8hDbv/HRGiI2Rh/Y1Cv1LHx8Bw05oJ6xi073XLDVv
+         tKms6Pr4XN141VD95yhyMNqQssxaCEBmxLSPHz49wGxELlO7MEXgPsG5xuXcqCyL+TIE
+         kLgUZmwDIF55v1maPwH/DuupWSMnR7ro1TtGibf0okYncHN3oBeYs1Qu80RwfypWFJGn
+         9HVdv1w2mGr+oJW3DMGUEeYKulyMgHI8nA9JAjwqJIbijO0wo0Mf5wlIZdXgw3EWZ1sP
+         9J9g==
+X-Gm-Message-State: AOAM531nUoTUMUVAlU60/sbgPig0e7wibPcoepFyz5aJh2j4aEw6CyxK
+	KdVqb7Rsmc8DXU7AHUv0UWw=
+X-Google-Smtp-Source: ABdhPJxfUtmBMU09f037nYGfNCimCCCS2wUatgv2jcaqjr2OkX3AWUQJqMM1sg6TRB3LXHp1ABMf9g==
+X-Received: by 2002:a62:7f4a:0:b0:44d:292f:cc24 with SMTP id a71-20020a627f4a000000b0044d292fcc24mr42299793pfd.58.1635923804171;
+        Wed, 03 Nov 2021 00:16:44 -0700 (PDT)
+Received: from howard-System-Product-Name.dhcpserver.bu9bmc.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
+        by smtp.gmail.com with ESMTPSA id b2sm1039281pgh.33.2021.11.03.00.16.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Nov 2021 00:16:43 -0700 (PDT)
+From: Howard Chiu <howard10703049@gmail.com>
+X-Google-Original-From: Howard Chiu <howard.chiu@quantatw.com>
+To: arnd@arndb.de,
+	olof@lixom.net,
+	robh+dt@kernel.org,
+	joel@jms.id.au,
+	andrew@aj.id.au
 List-Id: <soc.lore.kernel.org>
-Cc: Jesse Taube <mr.bossman075@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
- Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Sascha Hauer <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>,
- Stefan Agner <stefan@agner.ch>, Linus Walleij <linus.walleij@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- SoC Team <soc@kernel.org>, Russell King <linux@armlinux.org.uk>,
- Abel Vesa <abel.vesa@nxp.com>, Adrian Hunter <adrian.hunter@intel.com>,
- Jiri Slaby <jirislaby@kernel.org>,
- Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
- Leonard Crestez <leonard.crestez@nxp.com>,
- Anson Huang <b20788@freescale.com>, Fugang Duan <fugang.duan@nxp.com>,
- linux-clk <linux-clk@vger.kernel.org>, devicetree@vger.kernel.org,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- linux-kernel@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
-In-Reply-To: <CAL_JsqJR6EfDsmwPmXxgdaC1GB7CLGYpjmDnOkD_f53Frsq6LA@mail.gmail.com>
-To: Rob Herring <robh@kernel.org>
-X-Mailer: iPhone Mail (18H17)
-X-CMAE-Envelope: MS4wfATmIMv5GA3j34nA+iOgc1h+7L3tNW3abl9oCE6PZB8OMXI5H3mb85Frc03sGYy21FlO+oJkV4yTBbwgW5Rj/0du+RvtJQeN4d3pTWoUGmPhXXFYvLcV
- QNuPaJZ09aPj0+mshEem7c3H/dDtmBF6Js+GbUpl3X77ZVu54p7RysYHkjD72LZmj1H9nrKMau+2FU6gAH8OfwkJcqu+K/QuRnCIGQyGPr3XRSCMWIAeXcnh
- 14cBS5S+yv55Rx3kGkl8t/GASJe4FVaWXcwh2TmSlklGOJv0BnitVeN15pb+g3w02oFJrUgKwPJ60fOGTuEBSmuaWhDSUp0BnITKWVtU8NWjCdg22E/rK3ua
- UvuthcK4Gt+pMHdeNuelu7OQNeUa4osFW/xmS2SqnXAjQ/zXPIoKDZ9wYTW69+lVlUjcEQaQSIL5cDlAWhgyLYe58s0lVB+PUteYTjf5XPopnlNbF4BlhSUn
- 1703ZYebBfSnDYcMuwywTgcke/l6oZOuiSXUAER9Kw+NQDUTm6vTA1zd63V6/2mI8V6fIuErDfUgGhwidKoWGZgy8w0lMux5lnPF152l3b+t+PRXsgoo8Fup
- vyE5oPOG87RvxafyxS+PGYtiDRSgb5g6gBK+6HKCBnCITIepAP0MxaYELLdoZIxHd2jQNXlyEXbPoapsLfCN839NHGj5xtHTF+RdCX6xRJLv7QbeBGv2lxdk
- WQuMJJl1glCO71l/9HImQMgssA4qHKsCwrUS4eVH4UwdhuKJRRfzXYZJNepCANMb5jUUomkTVI3BMVMYPLFcPn2lylrtW6uuvCzwHaPbLJuHEchajyGi9mPy
- cNs/j1wljxUbrkXF2DSbjxuGxED1hrUDrV4auoDE5lUYgSroodiTneWziQtrRVB/JzYl4C6iYazCH18QbLDLZc0W24SBjADnoy2c3JaRoN05Me4ZYOFsc4Lp
- Rc/MtcuLY1/6kPE7+x4/Pu0oLxAPRi9gvMjOAn+TcU4p3/lAW2Cj8/Kzy9ZtRUlfltDpjFZJDqdxAgCh7oCj9sIreifIVrSwfCx6JcENijeCT6gpQ4OzTaxq
- mwcnYVUpvxOA21nMdUUvMEJlVoadyglqlr9tgcp/tZNlXbX2jPakmS1Bx/8Q/gOFJTP6kTQF5NkXBVxbUWxgSoRnllcDGy2LlCt2WmbbdKWGh7d8jt98gwJD
- czQA9XU4BZVnndLpD6YTF4YbKlfBqXsPIzN57bT3ahyvfyxxMEVyQ+no+RY503EiVcfZf3vMJa6jb/9lw3xxrA==
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211102_194903_118630_1E8759CF 
-X-CRM114-Status: GOOD (  15.33  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211103024854.aLr2eEOu8x-c1aAfB96VLGkHvnNSbb0d7mT75HfWwoo@z>
+Cc: soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org,
+	Howard Chiu <howard.chiu@quantatw.com>
+Subject: [PATCH v1] ARM: dts: aspeed: Adding Facebook Bletchley BMC
+Date: Wed,  3 Nov 2021 15:14:18 +0800
+Message-Id: <20211103071417.388388-1-howard.chiu@quantatw.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-SGVsbG8gUm9iLCBKZXNzZSwgQWxsLAoKPiBJbCBnaW9ybm8gMyBub3YgMjAyMSwgYWxsZSBvcmUg
-MDE6NDksIFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+IGhhIHNjcml0dG86Cj4gCj4g77u/
-T24gTW9uLCBOb3YgMSwgMjAyMSBhdCA2OjM0IFBNIEplc3NlIFRhdWJlIDxtci5ib3NzbWFuMDc1
-QGdtYWlsLmNvbT4gd3JvdGU6Cj4+IAo+PiAKPj4gCj4+PiBPbiAxMS8xLzIxIDE2OjEzLCBSb2Ig
-SGVycmluZyB3cm90ZToKPj4+IE9uIFN1biwgT2N0IDI0LCAyMDIxIGF0IDExOjQwOjIyQU0gLTA0
-MDAsIEplc3NlIFRhdWJlIHdyb3RlOgo+Pj4+IEFkZCBpLk1YUlQgZG9jdW1lbnRhdGlvbiBmb3Ig
-Y29tcGF0aWJsZSBzdHJpbmcuCj4+Pj4gCj4+Pj4gQ2M6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8u
-YmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+Pj4+IFNpZ25lZC1vZmYtYnk6IEplc3Nl
-IFRhdWJlIDxNci5Cb3NzbWFuMDc1QGdtYWlsLmNvbT4KPj4+PiAtLS0KPj4+PiBEb2N1bWVudGF0
-aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc2VyaWFsL2ZzbC1scHVhcnQueWFtbCB8IDEgKwo+Pj4+
-IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQo+Pj4+IAo+Pj4+IGRpZmYgLS1naXQgYS9E
-b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc2VyaWFsL2ZzbC1scHVhcnQueWFtbCBi
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9zZXJpYWwvZnNsLWxwdWFydC55YW1s
-Cj4+Pj4gaW5kZXggYTkwYzk3MWI0ZjFmLi40YjQzNDBkZWYyYWEgMTAwNjQ0Cj4+Pj4gLS0tIGEv
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NlcmlhbC9mc2wtbHB1YXJ0LnlhbWwK
-Pj4+PiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc2VyaWFsL2ZzbC1s
-cHVhcnQueWFtbAo+Pj4+IEBAIC0yMSw2ICsyMSw3IEBAIHByb3BlcnRpZXM6Cj4+Pj4gICAgICAg
-ICAgIC0gZnNsLGxzMTAyOGEtbHB1YXJ0Cj4+Pj4gICAgICAgICAgIC0gZnNsLGlteDd1bHAtbHB1
-YXJ0Cj4+Pj4gICAgICAgICAgIC0gZnNsLGlteDhxbS1scHVhcnQKPj4+PiArICAgICAgICAgIC0g
-ZnNsLGlteHJ0LWxwdWFydAo+Pj4gCj4+PiBBY3R1YWxseSwgJ3J0JyBpcyBub3QgYSBzaW5nbGUg
-cGFydCBpcyBpdD8gSWYgdGhlIHZhcmlhdGlvbnMgYXJlIHNhbWUKPj4+IGRpZSwgYnV0IGZ1c2Vk
-IG9mZiB0aGVuIG5vIG5lZWQgdG8gZGlzdGluZ3Vpc2guIE90aGVyd2lzZSwgdGhlc2Ugc2hvdWxk
-Cj4+PiBiZSBTb0Mgc3BlY2lmaWMuCj4+PiAKPj4gSSBkb24ndCBleGFjdGx5IGtub3cgd2hhdCAi
-YnV0IGZ1c2VkIG9mZiIgbWVhbnMgSSB3b3VsZCBhc3N1bWUKPj4gZGlzY29ubmVjdGVkIGJ1dCBv
-bi1kaWU/Cj4gCj4gUmlnaHQuIE9yIG5vdCBwaW5uZWQgb3V0IGlzIGFub3RoZXIgcG9zc2liaWxp
-dHkuCj4gCj4+IFRoZSBpbXhydHh4eCBpcyBhIHNlcmllcyB0aGF0IGhhcyB0aGUgc2FtZSBVQVJU
-Cj4+IGNvbnRyb2xsZXIgYWNyb3NzIHRoZW0uIFNob3VsZCBJIGFkZCBBQ0s/Cj4gCj4gTG9va2lu
-ZyBhdCB0aGUgZXJyYXRhIGRvY3MgYnJpZWZseSwgdGhlcmUncyBhdCBsZWFzdCAyIGRpZSBhcyBz
-b21lIG9mCj4gdGhlIGVycmF0YSBkb2NzIGdpdmUgdGhlIG1hc2sgaWQuIFNvIHRoZXkgYXJlbid0
-IG5lY2Vzc2FyaWx5ICd0aGUKPiBzYW1lJy4KClRoYW5rIHlvdSBmb3IgcG9pbnRpbmcsIHdl4oCZ
-dmUgbWlzc2VkIHRoaXMgcGFydGljdWxhci4KCj4gWW91IHdhbnQgdGhlIGNvbXBhdGlibGUgc3Ry
-aW5ncyB0byBiZSBzcGVjaWZpYyBlbm91Z2ggdG8gaGFuZGxlCj4gYW55IGRpZmZlcmVuY2VzIG9y
-IGVycmF0YS4gSWYgeW91IG9ubHkgY2FyZSBhYm91dCB0aGUgaW14cnQxMDUwLCB0aGVuCj4gSSdk
-IGp1c3QgdXNlIHRoYXQgYW5kIG1vdmUgb24uCgpXZSBwbGFuIHRvIGFkZCBmcm9tIGlteHJ0MTAy
-MCB0byBpbXhydDExNzAgYW5kIGV2ZW50dWFsIG5ldyBTb0MsIHNvIHdlIGRlZmluaXRlbHkgbmVl
-ZCBzZXBhcmF0ZQouY29tcGF0aWJsZSBzdHJpbmdzLgoKQEplc3NlLCBjYW4geW91IHBsZWFzZSB1
-cGRhdGUgd2l0aCDigJhmc2wsaW14cnQxMDUw4oCdPwoKPiBPdGhlcndpc2UsIG1heWJlIHNvbWVv
-bmUgZnJvbSBOWFAgd2FudHMKPiB0byBjb21tZW50PwoKQW55IE5YUCBjb21tZW50IGlzIHdlbGNv
-bWUhCgpCZXN0IHJlZ2FyZHMKR2l1bGlvIEJlbmV0dGkKQmVuZXR0aSBlbmdpbmVlcmluZyBzYXMK
-Cj4gCj4gUm9iCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KbGludXgtYXJtLWtlcm5lbCBtYWlsaW5nIGxpc3QKbGludXgtYXJtLWtlcm5lbEBsaXN0cy5p
-bmZyYWRlYWQub3JnCmh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8v
-bGludXgtYXJtLWtlcm5lbAo=
+Initial introduction of Facebook Bletchley equipped with
+Aspeed 2600 BMC SoC.
+
+Signed-off-by: Howard Chiu <howard.chiu@quantatw.com>
+---
+ arch/arm/boot/dts/Makefile                    |    1 +
+ .../dts/aspeed-bmc-facebook-bletchley.dts     | 1160 +++++++++++++++++
+ 2 files changed, 1161 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7e0934180724..2cc2d804e75a 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1474,6 +1474,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+ 	aspeed-bmc-facebook-wedge400.dtb \
+ 	aspeed-bmc-facebook-yamp.dtb \
+ 	aspeed-bmc-facebook-yosemitev2.dtb \
++	aspeed-bmc-facebook-bletchley.dtb \
+ 	aspeed-bmc-ibm-everest.dtb \
+ 	aspeed-bmc-ibm-rainier.dtb \
+ 	aspeed-bmc-ibm-rainier-1s4u.dtb \
+diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+new file mode 100644
+index 000000000000..af30be95fb23
+--- /dev/null
++++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+@@ -0,0 +1,1160 @@
++// SPDX-License-Identifier: GPL-2.0+
++// Copyright (c) 2021 Facebook Inc.
++/dts-v1/;
++
++#include "aspeed-g6.dtsi"
++#include <dt-bindings/gpio/aspeed-gpio.h>
++#include <dt-bindings/leds/leds-pca955x.h>
++#include <dt-bindings/usb/pd.h>
++
++/ {
++	model = "Facebook Bletchley BMC";
++	compatible = "facebook,bletchley-bmc", "aspeed,ast2600";
++
++	aliases {
++		serial4 = &uart5;
++	};
++
++	chosen {
++		bootargs = "console=ttyS4,115200n8";
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x80000000>;
++	};
++
++	iio-hwmon {
++		compatible = "iio-hwmon";
++		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
++		  <&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
++		  <&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
++		  <&adc1 4>, <&adc1 5>, <&adc1 6>, <&adc1 7>;
++	};
++
++	spi_gpio: spi-gpio {
++		status = "okay";
++		compatible = "spi-gpio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		gpio-sck = <&gpio0 ASPEED_GPIO(Z, 3) GPIO_ACTIVE_HIGH>;
++		gpio-mosi = <&gpio0 ASPEED_GPIO(Z, 4) GPIO_ACTIVE_HIGH>;
++		gpio-miso = <&gpio0 ASPEED_GPIO(Z, 5) GPIO_ACTIVE_HIGH>;
++		num-chipselects = <1>;
++		cs-gpios = <&gpio0 ASPEED_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
++
++		tpmdev@0 {
++			compatible = "tcg,tpm_tis-spi";
++			spi-max-frequency = <33000000>;
++			reg = <0>;
++		};
++	};
++
++	switchphy: ethernet-phy@0 {
++		// Fixed-link
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		sys_log_id {
++			retain-state-shutdown;
++			default-state = "keep";
++			gpios = <&front_leds 0 GPIO_ACTIVE_HIGH>;
++		};
++		fan0_blue {
++			retain-state-shutdown;
++			default-state = "on";
++			gpios = <&fan_ioexp 8 GPIO_ACTIVE_HIGH>;
++		};
++		fan1_blue {
++			retain-state-shutdown;
++			default-state = "on";
++			gpios = <&fan_ioexp 9 GPIO_ACTIVE_HIGH>;
++		};
++		fan2_blue {
++			retain-state-shutdown;
++			default-state = "on";
++			gpios = <&fan_ioexp 10 GPIO_ACTIVE_HIGH>;
++		};
++		fan3_blue {
++			retain-state-shutdown;
++			default-state = "on";
++			gpios = <&fan_ioexp 11 GPIO_ACTIVE_HIGH>;
++		};
++		fan0_ember {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&fan_ioexp 12 GPIO_ACTIVE_HIGH>;
++		};
++		fan1_ember {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&fan_ioexp 13 GPIO_ACTIVE_HIGH>;
++		};
++		fan2_ember {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&fan_ioexp 14 GPIO_ACTIVE_HIGH>;
++		};
++		fan3_ember {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&fan_ioexp 15 GPIO_ACTIVE_HIGH>;
++		};
++		sled0_ember {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled0_leds 0 GPIO_ACTIVE_LOW>;
++		};
++		sled0_blue {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled0_leds 1 GPIO_ACTIVE_LOW>;
++		};
++		sled1_ember {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled1_leds 0 GPIO_ACTIVE_LOW>;
++		};
++		sled1_blue {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled1_leds 1 GPIO_ACTIVE_LOW>;
++		};
++		sled2_ember {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled2_leds 0 GPIO_ACTIVE_LOW>;
++		};
++		sled2_blue {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled2_leds 1 GPIO_ACTIVE_LOW>;
++		};
++		sled3_ember {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled3_leds 0 GPIO_ACTIVE_LOW>;
++		};
++		sled3_blue {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled3_leds 1 GPIO_ACTIVE_LOW>;
++		};
++		sled4_ember {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled4_leds 0 GPIO_ACTIVE_LOW>;
++		};
++		sled4_blue {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled4_leds 1 GPIO_ACTIVE_LOW>;
++		};
++		sled5_ember {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled5_leds 0 GPIO_ACTIVE_LOW>;
++		};
++		sled5_blue {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled5_leds 1 GPIO_ACTIVE_LOW>;
++		};
++	};
++};
++
++&mac2 {
++	status = "okay";
++	phy-mode = "rgmii";
++	phy-handle = <&switchphy>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rgmii3_default>;
++
++	fixed-link {
++		speed = <1000>;
++		full-duplex;
++	};
++};
++
++&rtc {
++	status = "okay";
++};
++
++&fmc {
++	status = "okay";
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "bmc";
++		spi-max-frequency = <50000000>;
++#include "openbmc-flash-layout-64.dtsi"
++	};
++};
++
++&spi2 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_spi2_default>;
++
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "pnor";
++		spi-max-frequency = <100000000>;
++	};
++};
++
++&uart5 {
++	// Workaround for A0
++	compatible = "snps,dw-apb-uart";
++};
++
++&i2c0 {
++	status = "okay";
++	/* TODO: Add HSC MP5023 */
++	/* TODO: Add ADC INA230 */
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	sled0_ioexp: pca9539@76 {
++		compatible = "nxp,pca9539";
++		reg = <0x76>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"","SLED0_BMC_CCG5_INT","SLED0_INA230_ALERT","SLED0_P12V_STBY_ALERT",
++		"SLED0_SSD_ALERT","SLED0_MS_DETECT","SLED0_MD_REF_PWM","",
++		"SLED0_MD_STBY_RESET","SLED0_MD_IOEXP_EN_FAULT","SLED0_MD_DIR","SLED0_MD_DECAY",
++		"SLED0_MD_MODE1","SLED0_MD_MODE2","SLED0_MD_MODE3","SLED0_AC_PWR_EN";
++
++		gpio@0 {
++			reg = <0>;
++		};
++		gpio@1 {
++			reg = <1>;
++		};
++		gpio@2 {
++			reg = <2>;
++		};
++		gpio@3 {
++			reg = <3>;
++		};
++		gpio@4 {
++			reg = <4>;
++		};
++		gpio@5 {
++			reg = <5>;
++		};
++		gpio@6 {
++			reg = <6>;
++		};
++		gpio@7 {
++			reg = <7>;
++		};
++		gpio@8 {
++			reg = <8>;
++		};
++		gpio@9 {
++			reg = <9>;
++		};
++		gpio@10 {
++			reg = <10>;
++		};
++		gpio@11 {
++			reg = <11>;
++		};
++		gpio@12 {
++			reg = <12>;
++		};
++		gpio@13 {
++			reg = <13>;
++		};
++		gpio@14 {
++			reg = <14>;
++		};
++		gpio@15 {
++			reg = <15>;
++		};
++	};
++
++	sled0_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SLED0_EMBER_LED","SLED0_BLUE_LED","SLED0_RST_IOEXP","",
++		"","","","",
++		"","","","",
++		"","","","";
++
++		gpio@0 {
++			reg = <0>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@1 {
++			reg = <1>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@2 {
++			reg = <2>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++	};
++
++	sled0_fusb302: typec-portc@54 {
++		compatible = "fcs,fusb302";
++		reg = <0x54>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
++
++		usb_con: connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			try-power-role = "sink";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++					PDO_VAR(3000, 12000, 3000)
++					PDO_PPS_APDO(3000, 11000, 3000)>;
++			op-sink-microwatt = <10000000>;
++		};
++	};
++};
++
++&i2c1 {
++	status = "okay";
++	/* TODO: Add HSC MP5023 */
++	/* TODO: Add ADC INA230 */
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	sled1_ioexp: pca9539@76 {
++		compatible = "nxp,pca9539";
++		reg = <0x76>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"","SLED1_BMC_CCG5_INT","SLED1_INA230_ALERT","SLED1_P12V_STBY_ALERT",
++		"SLED1_SSD_ALERT","SLED1_MS_DETECT","SLED1_MD_REF_PWM","",
++		"SLED1_MD_STBY_RESET","SLED1_MD_IOEXP_EN_FAULT","SLED1_MD_DIR","SLED1_MD_DECAY",
++		"SLED1_MD_MODE1","SLED1_MD_MODE2","SLED1_MD_MODE3","SLED1_AC_PWR_EN";
++
++		gpio@0 {
++			reg = <0>;
++		};
++		gpio@1 {
++			reg = <1>;
++		};
++		gpio@2 {
++			reg = <2>;
++		};
++		gpio@3 {
++			reg = <3>;
++		};
++		gpio@4 {
++			reg = <4>;
++		};
++		gpio@5 {
++			reg = <5>;
++		};
++		gpio@6 {
++			reg = <6>;
++		};
++		gpio@7 {
++			reg = <7>;
++		};
++		gpio@8 {
++			reg = <8>;
++		};
++		gpio@9 {
++			reg = <9>;
++		};
++		gpio@10 {
++			reg = <10>;
++		};
++		gpio@11 {
++			reg = <11>;
++		};
++		gpio@12 {
++			reg = <12>;
++		};
++		gpio@13 {
++			reg = <13>;
++		};
++		gpio@14 {
++			reg = <14>;
++		};
++		gpio@15 {
++			reg = <15>;
++		};
++	};
++
++	sled1_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SLED1_EMBER_LED","SLED1_BLUE_LED","SLED1_RST_IOEXP","",
++		"","","","",
++		"","","","",
++		"","","","";
++
++		gpio@0 {
++			reg = <0>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@1 {
++			reg = <1>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@2 {
++			reg = <2>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++	};
++
++	sled1_fusb302: typec-portc@54 {
++		compatible = "fcs,fusb302";
++		reg = <0x54>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
++
++		usb_con: connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			try-power-role = "sink";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++					PDO_VAR(3000, 12000, 3000)
++					PDO_PPS_APDO(3000, 11000, 3000)>;
++			op-sink-microwatt = <10000000>;
++		};
++	};
++};
++
++&i2c2 {
++	status = "okay";
++	/* TODO: Add HSC MP5023 */
++	/* TODO: Add ADC INA230 */
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	sled2_ioexp: pca9539@76 {
++		compatible = "nxp,pca9539";
++		reg = <0x76>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"","SLED2_BMC_CCG5_INT","SLED2_INA230_ALERT","SLED2_P12V_STBY_ALERT",
++		"SLED2_SSD_ALERT","SLED2_MS_DETECT","SLED2_MD_REF_PWM","",
++		"SLED2_MD_STBY_RESET","SLED2_MD_IOEXP_EN_FAULT","SLED2_MD_DIR","SLED2_MD_DECAY",
++		"SLED2_MD_MODE1","SLED2_MD_MODE2","SLED2_MD_MODE3","SLED2_AC_PWR_EN";
++
++		gpio@0 {
++			reg = <0>;
++		};
++		gpio@1 {
++			reg = <1>;
++		};
++		gpio@2 {
++			reg = <2>;
++		};
++		gpio@3 {
++			reg = <3>;
++		};
++		gpio@4 {
++			reg = <4>;
++		};
++		gpio@5 {
++			reg = <5>;
++		};
++		gpio@6 {
++			reg = <6>;
++		};
++		gpio@7 {
++			reg = <7>;
++		};
++		gpio@8 {
++			reg = <8>;
++		};
++		gpio@9 {
++			reg = <9>;
++		};
++		gpio@10 {
++			reg = <10>;
++		};
++		gpio@11 {
++			reg = <11>;
++		};
++		gpio@12 {
++			reg = <12>;
++		};
++		gpio@13 {
++			reg = <13>;
++		};
++		gpio@14 {
++			reg = <14>;
++		};
++		gpio@15 {
++			reg = <15>;
++		};
++	};
++
++	sled2_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SLED2_EMBER_LED","SLED2_BLUE_LED","SLED2_RST_IOEXP","",
++		"","","","",
++		"","","","",
++		"","","","";
++
++		gpio@0 {
++			reg = <0>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@1 {
++			reg = <1>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@2 {
++			reg = <2>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++	};
++
++	sled2_fusb302: typec-portc@54 {
++		compatible = "fcs,fusb302";
++		reg = <0x54>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
++
++		usb_con: connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			try-power-role = "sink";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++					PDO_VAR(3000, 12000, 3000)
++					PDO_PPS_APDO(3000, 11000, 3000)>;
++			op-sink-microwatt = <10000000>;
++		};
++	};
++};
++
++&i2c3 {
++	status = "okay";
++	/* TODO: Add HSC MP5023 */
++	/* TODO: Add ADC INA230 */
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	sled3_ioexp: pca9539@76 {
++		compatible = "nxp,pca9539";
++		reg = <0x76>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"","SLED3_BMC_CCG5_INT","SLED3_INA230_ALERT","SLED3_P12V_STBY_ALERT",
++		"SLED3_SSD_ALERT","SLED3_MS_DETECT","SLED3_MD_REF_PWM","",
++		"SLED3_MD_STBY_RESET","SLED3_MD_IOEXP_EN_FAULT","SLED3_MD_DIR","SLED3_MD_DECAY",
++		"SLED3_MD_MODE1","SLED3_MD_MODE2","SLED3_MD_MODE3","SLED3_AC_PWR_EN";
++
++		gpio@0 {
++			reg = <0>;
++		};
++		gpio@1 {
++			reg = <1>;
++		};
++		gpio@2 {
++			reg = <2>;
++		};
++		gpio@3 {
++			reg = <3>;
++		};
++		gpio@4 {
++			reg = <4>;
++		};
++		gpio@5 {
++			reg = <5>;
++		};
++		gpio@6 {
++			reg = <6>;
++		};
++		gpio@7 {
++			reg = <7>;
++		};
++		gpio@8 {
++			reg = <8>;
++		};
++		gpio@9 {
++			reg = <9>;
++		};
++		gpio@10 {
++			reg = <10>;
++		};
++		gpio@11 {
++			reg = <11>;
++		};
++		gpio@12 {
++			reg = <12>;
++		};
++		gpio@13 {
++			reg = <13>;
++		};
++		gpio@14 {
++			reg = <14>;
++		};
++		gpio@15 {
++			reg = <15>;
++		};
++	};
++
++	sled3_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SLED3_EMBER_LED","SLED3_BLUE_LED","SLED3_RST_IOEXP","",
++		"","","","",
++		"","","","",
++		"","","","";
++
++		gpio@0 {
++			reg = <0>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@1 {
++			reg = <1>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@2 {
++			reg = <2>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++	};
++
++	sled3_fusb302: typec-portc@54 {
++		compatible = "fcs,fusb302";
++		reg = <0x54>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
++
++		usb_con: connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			try-power-role = "sink";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++					PDO_VAR(3000, 12000, 3000)
++					PDO_PPS_APDO(3000, 11000, 3000)>;
++			op-sink-microwatt = <10000000>;
++		};
++	};
++};
++
++&i2c4 {
++	status = "okay";
++	/* TODO: Add HSC MP5023 */
++	/* TODO: Add ADC INA230 */
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	sled4_ioexp: pca9539@76 {
++		compatible = "nxp,pca9539";
++		reg = <0x76>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"","SLED4_BMC_CCG5_INT","SLED4_INA230_ALERT","SLED4_P12V_STBY_ALERT",
++		"SLED4_SSD_ALERT","SLED4_MS_DETECT","SLED4_MD_REF_PWM","",
++		"SLED4_MD_STBY_RESET","SLED4_MD_IOEXP_EN_FAULT","SLED4_MD_DIR","SLED4_MD_DECAY",
++		"SLED4_MD_MODE1","SLED4_MD_MODE2","SLED4_MD_MODE3","SLED4_AC_PWR_EN";
++
++		gpio@0 {
++			reg = <0>;
++		};
++		gpio@1 {
++			reg = <1>;
++		};
++		gpio@2 {
++			reg = <2>;
++		};
++		gpio@3 {
++			reg = <3>;
++		};
++		gpio@4 {
++			reg = <4>;
++		};
++		gpio@5 {
++			reg = <5>;
++		};
++		gpio@6 {
++			reg = <6>;
++		};
++		gpio@7 {
++			reg = <7>;
++		};
++		gpio@8 {
++			reg = <8>;
++		};
++		gpio@9 {
++			reg = <9>;
++		};
++		gpio@10 {
++			reg = <10>;
++		};
++		gpio@11 {
++			reg = <11>;
++		};
++		gpio@12 {
++			reg = <12>;
++		};
++		gpio@13 {
++			reg = <13>;
++		};
++		gpio@14 {
++			reg = <14>;
++		};
++		gpio@15 {
++			reg = <15>;
++		};
++	};
++
++	sled4_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SLED4_EMBER_LED","SLED4_BLUE_LED","SLED4_RST_IOEXP","",
++		"","","","",
++		"","","","",
++		"","","","";
++
++		gpio@0 {
++			reg = <0>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@1 {
++			reg = <1>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@2 {
++			reg = <2>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++	};
++
++	sled4_fusb302: typec-portc@54 {
++		compatible = "fcs,fusb302";
++		reg = <0x54>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
++
++		usb_con: connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			try-power-role = "sink";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++					PDO_VAR(3000, 12000, 3000)
++					PDO_PPS_APDO(3000, 11000, 3000)>;
++			op-sink-microwatt = <10000000>;
++		};
++	};
++};
++
++&i2c5 {
++	status = "okay";
++	/* TODO: Add HSC MP5023 */
++	/* TODO: Add ADC INA230 */
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	sled5_ioexp: pca9539@76 {
++		compatible = "nxp,pca9539";
++		reg = <0x76>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"","SLED5_BMC_CCG5_INT","SLED5_INA230_ALERT","SLED5_P12V_STBY_ALERT",
++		"SLED5_SSD_ALERT","SLED5_MS_DETECT","SLED5_MD_REF_PWM","",
++		"SLED5_MD_STBY_RESET","SLED5_MD_IOEXP_EN_FAULT","SLED5_MD_DIR","SLED5_MD_DECAY",
++		"SLED5_MD_MODE1","SLED5_MD_MODE2","SLED5_MD_MODE3","SLED5_AC_PWR_EN";
++
++		gpio@0 {
++			reg = <0>;
++		};
++		gpio@1 {
++			reg = <1>;
++		};
++		gpio@2 {
++			reg = <2>;
++		};
++		gpio@3 {
++			reg = <3>;
++		};
++		gpio@4 {
++			reg = <4>;
++		};
++		gpio@5 {
++			reg = <5>;
++		};
++		gpio@6 {
++			reg = <6>;
++		};
++		gpio@7 {
++			reg = <7>;
++		};
++		gpio@8 {
++			reg = <8>;
++		};
++		gpio@9 {
++			reg = <9>;
++		};
++		gpio@10 {
++			reg = <10>;
++		};
++		gpio@11 {
++			reg = <11>;
++		};
++		gpio@12 {
++			reg = <12>;
++		};
++		gpio@13 {
++			reg = <13>;
++		};
++		gpio@14 {
++			reg = <14>;
++		};
++		gpio@15 {
++			reg = <15>;
++		};
++	};
++
++	sled5_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SLED5_EMBER_LED","SLED5_BLUE_LED","SLED5_RST_IOEXP","",
++		"","","","",
++		"","","","",
++		"","","","";
++
++		gpio@0 {
++			reg = <0>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@1 {
++			reg = <1>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@2 {
++			reg = <2>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++	};
++
++	sled5_fusb302: typec-portc@54 {
++		compatible = "fcs,fusb302";
++		reg = <0x54>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
++
++		usb_con: connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			try-power-role = "sink";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++					PDO_VAR(3000, 12000, 3000)
++					PDO_PPS_APDO(3000, 11000, 3000)>;
++			op-sink-microwatt = <10000000>;
++		};
++	};
++};
++
++&i2c6 {
++	status = "okay";
++
++	eeprom@56 {
++		compatible = "atmel,24c64";
++		reg = <0x56>;
++	};
++
++	rtc@51 {
++		compatible = "nxp,pcf85263";
++		reg = <0x51>;
++	};
++};
++
++&i2c10 {
++	status = "okay";
++
++	hdc1080@40 {
++		compatible = "ti,hdc1080";
++		reg = <0x40>;
++	};
++
++	front_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SYSTEM_LOG_ID_LED","PWRGD_P5V_STBY","PWRGD_P1V0_DVDD","PWRGD_P1V0_AVDD",
++		"","","","",
++		"","","","",
++		"","","","";
++
++		gpio@0 {
++			reg = <0>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@1 {
++			reg = <1>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@2 {
++			reg = <2>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@3 {
++			reg = <3>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++	};
++};
++
++&i2c12 {
++	status = "okay";
++
++	adm1278@11 {
++		compatible = "adi,adm1278";
++		reg = <0x11>;
++	};
++
++	tmp421@4c {
++		compatible = "ti,tmp421";
++		reg = <0x4c>;
++	};
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	fan_ioexp: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"FAN0_PRSNT","FAN1_PRSNT","FAN2_PRSNT","FAN3_PRSNT",
++		"FAN0_PWRGD","FAN1_PWRGD","FAN2_PWRGD","FAN3_PWRGD",
++		"","","","",
++		"","","","";
++
++		gpio@0 {
++			reg = <0>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@1 {
++			reg = <1>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@2 {
++			reg = <2>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@3 {
++			reg = <3>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@4 {
++			reg = <4>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@5 {
++			reg = <5>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@6 {
++			reg = <6>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@7 {
++			reg = <7>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@8 {
++			reg = <8>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@9 {
++			reg = <9>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@10 {
++			reg = <10>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@11 {
++			reg = <11>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@12 {
++			reg = <12>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@13 {
++			reg = <13>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@14 {
++			reg = <14>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++		gpio@15 {
++			reg = <15>;
++			type = <PCA955X_TYPE_GPIO>;
++		};
++	};
++};
++
++&i2c13 {
++	multi-master;
++	aspeed,hw-timeout-ms = <1000>;
++	status = "okay";
++};
++
++&gpio0 {
++	gpio-line-names =
++	/*A0-A7*/	"","","","","","","","",
++	/*B0-B7*/	"","","","","","","","",
++	/*C0-C7*/	"","","","","","","","",
++	/*D0-D7*/	"","","","","","","","",
++	/*E0-E7*/	"","","","","","","","",
++	/*F0-F7*/	"","","","","","","","",
++	/*G0-G7*/	"","","","","","","","",
++	/*H0-H7*/	"","","","","","","","",
++	/*I0-I7*/	"","","","","","","","",
++	/*J0-J7*/	"","","","","","","","",
++	/*K0-K7*/	"","","","","","","","",
++	/*L0-L7*/	"","","","","","","","",
++	/*M0-M7*/	"alert_sled1","alert_sled2",
++			"alert_sled3","alert_sled4",
++			"alert_sled5","alert_sled6",
++			"p12v_aux_alert1","",
++	/*N0-N7*/	"","","","","","","","",
++	/*O0-O7*/	"","","","","","","","",
++	/*P0-P7*/	"","","","","","","","",
++	/*Q0-Q7*/	"","","","","","","","",
++	/*R0-R7*/	"","","","","","","","",
++	/*S0-S7*/	"","","","","","","","",
++	/*T0-T7*/	"","","","","","","","",
++	/*U0-U7*/	"","","","","","","","",
++	/*V0-V7*/	"","","","","","","","",
++	/*W0-W7*/	"","","","","","","","",
++	/*X0-X7*/	"","","","","","","","",
++	/*Y0-Y7*/	"","","","","","","","",
++	/*Z0-Z7*/	"","","","","","","","";
++};
++
++&adc0 {
++	vref = <1800>;
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
++		&pinctrl_adc2_default &pinctrl_adc3_default
++		&pinctrl_adc4_default &pinctrl_adc5_default
++		&pinctrl_adc6_default &pinctrl_adc7_default>;
++};
++
++&adc1 {
++	vref = <2500>;
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
++		&pinctrl_adc10_default &pinctrl_adc11_default
++		&pinctrl_adc12_default &pinctrl_adc13_default
++		&pinctrl_adc14_default &pinctrl_adc15_default>;
++};
+-- 
+2.25.1
+
