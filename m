@@ -1,19 +1,20 @@
-Return-Path: <SRS0=kJGq=PW=nxp.com=haibo.chen@kernel.org>
+Return-Path: <linux-clk-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F0CDC433EF
-	for <soc@archiver.kernel.org>; Wed,  3 Nov 2021 02:19:49 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id F3002610E8; Wed,  3 Nov 2021 02:19:48 +0000 (UTC)
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2063.outbound.protection.outlook.com [40.107.21.63])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6EE376103C;
-	Wed,  3 Nov 2021 02:19:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6EE376103C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=nxp.com
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=nxp.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DA06C433FE
+	for <linux-clk@archiver.kernel.org>; Wed,  3 Nov 2021 02:19:50 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 24CCE6103C
+	for <linux-clk@archiver.kernel.org>; Wed,  3 Nov 2021 02:19:50 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S230132AbhKCCWY (ORCPT <rfc822;linux-clk@archiver.kernel.org>);
+        Tue, 2 Nov 2021 22:22:24 -0400
+Received: from mail-eopbgr40044.outbound.protection.outlook.com ([40.107.4.44]:45327
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229592AbhKCCWY (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 2 Nov 2021 22:22:24 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=FKWLHU2WGw4AttIJSDSJ8fATRX9IFsToPrCGFBHUTIwt8lFgBfBDXi7lHQRon4jeqMq9MP5zUWiRbPFMJrRHRmJPyXb5nTjZkevPHilmD3fpfdwZtB1x/wbFHS7Nn9sey8hkAhA0QM/L5ZCCzBoaka9I6HvS11z0M4Ld/f6wf0GV7UMwaQI7fvFgl7VyHoLaPavMR95+pJhzWZ1fQ/p57sZbWOuJBKbomu5Ip7g3Jy+pIvD63VGH0m08GuPCa0KyOtXD73u8Mr62GmYknmH+EnBhSxxNT/rrjbDqm8ZjMAuIVisLRQ9Jo3n8zgXApkzmhwsCrA4Tbf7X316hT+OPrQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
@@ -36,65 +37,67 @@ Received: from DB7PR04MB4010.eurprd04.prod.outlook.com
  ([fe80::94cc:8972:12cd:5bef]) by DB7PR04MB4010.eurprd04.prod.outlook.com
  ([fe80::94cc:8972:12cd:5bef%3]) with mapi id 15.20.4669.010; Wed, 3 Nov 2021
  02:19:45 +0000
-From: Bough Chen <haibo.chen@nxp.com>
-To: Jesse Taube <mr.bossman075@gmail.com>, dl-linux-imx <linux-imx@nxp.com>
+From:   Bough Chen <haibo.chen@nxp.com>
+To:     Jesse Taube <mr.bossman075@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>
 List-Id: <soc.lore.kernel.org>
-CC: "mturquette@baylibre.com" <mturquette@baylibre.com>, "sboyd@kernel.org"
-	<sboyd@kernel.org>, "robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"shawnguo@kernel.org" <shawnguo@kernel.org>, "s.hauer@pengutronix.de"
-	<s.hauer@pengutronix.de>, "kernel@pengutronix.de" <kernel@pengutronix.de>,
-	"festevam@gmail.com" <festevam@gmail.com>, "ulf.hansson@linaro.org"
-	<ulf.hansson@linaro.org>, Aisheng Dong <aisheng.dong@nxp.com>,
-	"stefan@agner.ch" <stefan@agner.ch>, "linus.walleij@linaro.org"
-	<linus.walleij@linaro.org>, "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>, "arnd@arndb.de" <arnd@arndb.de>,
-	"olof@lixom.net" <olof@lixom.net>, "soc@kernel.org" <soc@kernel.org>,
-	"linux@armlinux.org.uk" <linux@armlinux.org.uk>, Abel Vesa
-	<abel.vesa@nxp.com>, "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-	"jirislaby@kernel.org" <jirislaby@kernel.org>,
-	"giulio.benetti@benettiengineering.com"
-	<giulio.benetti@benettiengineering.com>, "nobuhiro1.iwamatsu@toshiba.co.jp"
-	<nobuhiro1.iwamatsu@toshiba.co.jp>, "linux-clk@vger.kernel.org"
-	<linux-clk@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-mmc@vger.kernel.org"
-	<linux-mmc@vger.kernel.org>, "linux-gpio@vger.kernel.org"
-	<linux-gpio@vger.kernel.org>, "linux-serial@vger.kernel.org"
-	<linux-serial@vger.kernel.org>
+CC:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "stefan@agner.ch" <stefan@agner.ch>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
+        "soc@kernel.org" <soc@kernel.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "giulio.benetti@benettiengineering.com" 
+        <giulio.benetti@benettiengineering.com>,
+        "nobuhiro1.iwamatsu@toshiba.co.jp" <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
 Subject: RE: [PATCH v2 11/13] mmc: sdhci-esdhc-imx: Add sdhc support for
  i.MXRT series
 Thread-Topic: [PATCH v2 11/13] mmc: sdhci-esdhc-imx: Add sdhc support for
  i.MXRT series
 Thread-Index: AQHX0D0AJ7FLhc5hlkSFa85u3j6wJ6vxDoKw
-Date: Wed, 3 Nov 2021 02:19:45 +0000
-Message-ID:
- <DB7PR04MB401021F7155E723194BA857E908C9@DB7PR04MB4010.eurprd04.prod.outlook.com>
+Date:   Wed, 3 Nov 2021 02:19:45 +0000
+Message-ID: <DB7PR04MB401021F7155E723194BA857E908C9@DB7PR04MB4010.eurprd04.prod.outlook.com>
 References: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
  <20211102225701.98944-12-Mr.Bossman075@gmail.com>
 In-Reply-To: <20211102225701.98944-12-Mr.Bossman075@gmail.com>
 Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator:
+X-MS-TNEF-Correlator: 
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-correlation-id: 4443a71b-345e-41dd-7353-08d99e706748
 x-ms-traffictypediagnostic: DB7PR04MB4380:
-x-microsoft-antispam-prvs:
- <DB7PR04MB4380E56C50CF974B11C8D5FE908C9@DB7PR04MB4380.eurprd04.prod.outlook.com>
+x-microsoft-antispam-prvs: <DB7PR04MB4380E56C50CF974B11C8D5FE908C9@DB7PR04MB4380.eurprd04.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:89;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- nFkOPZmgm7NnfyYHBUIwyhd+7BBLyaDlb+/m09PYxgwsH6vxgvEK3OHID92nqB8gSTQodemu9lSFf7o7GCYI3fyfjEiMJmFWgqEI9dJbflxR7MO3BVTUtuWnFpWiV3gxRzflnZnvM28Bzjx6HC3VJScxkkufRiaUq5XdttPhR9LDJ5X+BwnZI1QDitQeMUdaBm+h5MN684hnjQgTXsUR617aSy1G/UuEF3pQR8bTqngTPDFCnj0QIBzjuagfk89CMtqf62ICiJuLrcyvK8S92q20fV4NpNpEOOKHdXJrM2FGPFBdnC4eDk7Jj7NJR+vtCb7GqfWlV/NoC1MLybzfJWJKp6NcF/LFxXCmKcvdiz21yQk+8InX3rwiXihpGyHgAytc5B2xWs0JzsIo9TxfnMxc3y2DO11TyKq9YMtpQYn73WWV6mvdolj3fKb0njr7+bUI1fQw6FyIJTMhSyvQIjYNEr/wruwpMvgRFv4n90kyfgJvrOvBM4FIYsL1aZ5QsdoR3tk3MPPQ2g8WicFb7dZtI/i0mSW8FjoGPMWuq0f9JnNsCpoHvNS8Ul/TWdOi4mWBwPbJi33P015oMUeWSjGla/MfZEKC4ppAFZZIpI404+zKLdTu0WtWWG9SKSW70W/NL0btQVrGWMmVFZTYFwLqeonBnYeBJiPTB9Do6U0K1sIz0L67guqkrNmIVH6kVHnaOl8lEjNfdu8V1y47XQ==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4010.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(26005)(66946007)(316002)(71200400001)(76116006)(55016002)(7416002)(2906002)(9686003)(86362001)(53546011)(38100700002)(66556008)(83380400001)(64756008)(66446008)(122000001)(66476007)(8676002)(508600001)(5660300002)(52536014)(8936002)(6506007)(186003)(110136005)(54906003)(4326008)(99936003)(6636002)(7696005)(38070700005)(33656002);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: nFkOPZmgm7NnfyYHBUIwyhd+7BBLyaDlb+/m09PYxgwsH6vxgvEK3OHID92nqB8gSTQodemu9lSFf7o7GCYI3fyfjEiMJmFWgqEI9dJbflxR7MO3BVTUtuWnFpWiV3gxRzflnZnvM28Bzjx6HC3VJScxkkufRiaUq5XdttPhR9LDJ5X+BwnZI1QDitQeMUdaBm+h5MN684hnjQgTXsUR617aSy1G/UuEF3pQR8bTqngTPDFCnj0QIBzjuagfk89CMtqf62ICiJuLrcyvK8S92q20fV4NpNpEOOKHdXJrM2FGPFBdnC4eDk7Jj7NJR+vtCb7GqfWlV/NoC1MLybzfJWJKp6NcF/LFxXCmKcvdiz21yQk+8InX3rwiXihpGyHgAytc5B2xWs0JzsIo9TxfnMxc3y2DO11TyKq9YMtpQYn73WWV6mvdolj3fKb0njr7+bUI1fQw6FyIJTMhSyvQIjYNEr/wruwpMvgRFv4n90kyfgJvrOvBM4FIYsL1aZ5QsdoR3tk3MPPQ2g8WicFb7dZtI/i0mSW8FjoGPMWuq0f9JnNsCpoHvNS8Ul/TWdOi4mWBwPbJi33P015oMUeWSjGla/MfZEKC4ppAFZZIpI404+zKLdTu0WtWWG9SKSW70W/NL0btQVrGWMmVFZTYFwLqeonBnYeBJiPTB9Do6U0K1sIz0L67guqkrNmIVH6kVHnaOl8lEjNfdu8V1y47XQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4010.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(26005)(66946007)(316002)(71200400001)(76116006)(55016002)(7416002)(2906002)(9686003)(86362001)(53546011)(38100700002)(66556008)(83380400001)(64756008)(66446008)(122000001)(66476007)(8676002)(508600001)(5660300002)(52536014)(8936002)(6506007)(186003)(110136005)(54906003)(4326008)(99936003)(6636002)(7696005)(38070700005)(33656002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?gb2312?B?dWU3dUlQMkxQdmlKWnAzOHFmVXRKZVVBa3ZKRERwOFU2WFFZQUhHVW1KM3Ix?=
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?dWU3dUlQMkxQdmlKWnAzOHFmVXRKZVVBa3ZKRERwOFU2WFFZQUhHVW1KM3Ix?=
  =?gb2312?B?WFFNeE9HVTd0YmoxbDN6RG1wYzFKd2ROSkgxUTFFaFpxU0xpUTAyVFIweHhn?=
  =?gb2312?B?UXBBMEZnMXZzeFozdnFqNkQzU05jTy9TTFlaVmJBbHlHY3RtQ3MzVk9SSStC?=
  =?gb2312?B?Q1RTdWNaRk5ORFcyYy9weXdEZWliYWpkMTZUc0VXalBmS3JQbkhIYnkxcnpE?=
@@ -132,9 +135,9 @@ x-ms-exchange-antispam-messagedata-0:
  =?gb2312?B?YnJsdmkza1M5eTc3STVoMDE3Tm5LcTQvby95N29yb3ArTTVmR00xSE9ISHRn?=
  =?gb2312?B?VHc9PQ==?=
 Content-Type: multipart/signed;
-	protocol="application/x-pkcs7-signature";
-	micalg=SHA1;
-	boundary="----=_NextPart_000_0148_01D7D09C.509274D0"
+        protocol="application/x-pkcs7-signature";
+        micalg=SHA1;
+        boundary="----=_NextPart_000_0148_01D7D09C.509274D0"
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
@@ -147,6 +150,10 @@ X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: dVpq0Z8p/tuuDpnyYH9Jrmcm4dJrg3cbADNRabCkIW15DaWxWFKvQxR3kUtH9ueeM4w82pDveP6riWDYg/W3Cw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4380
+Precedence: bulk
+List-ID: <linux-clk.vger.kernel.org>
+X-Mailing-List: linux-clk@vger.kernel.org
+Message-ID: <20211103021945.loqi7OoEcDgab1ZzFGQYF-HifhiNGQwu1yyYjkeVNLg@z>
 
 ------=_NextPart_000_0148_01D7D09C.509274D0
 Content-Type: text/plain;
