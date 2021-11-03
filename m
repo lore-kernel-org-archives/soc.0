@@ -1,62 +1,79 @@
-Return-Path: <SRS0=g3aR=PW=stwcx.xyz=patrick@kernel.org>
+Return-Path: <SRS0=8DV1=PW=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F731C433F5
-	for <soc@archiver.kernel.org>; Wed,  3 Nov 2021 14:20:40 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 55C2A61053; Wed,  3 Nov 2021 14:20:40 +0000 (UTC)
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD73BC433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  3 Nov 2021 14:22:21 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A5C0760F9D;
-	Wed,  3 Nov 2021 14:20:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A5C0760F9D
+	by mail.kernel.org (Postfix) with ESMTPS id 7289A6103C
+	for <linux-arm-kernel@archiver.kernel.org>; Wed,  3 Nov 2021 14:22:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7289A6103C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=stwcx.xyz
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=stwcx.xyz
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:
+	List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:
+	In-Reply-To:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date
+	:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
+	bh=6vOnaQ4EXhw+T9CdLRfxPwnZ+zEH93hdZBAjDTTK4bQ=; b=eoSJpaEGZx3cHFK8JkMs9TnQKh
+	wTayiSGpoOu8X/Pe9TX2hWKjRR9yZt/0ITjJrJIGfugcHsNz0ao7vP8xGTjB5e2YcXtMsRj9M8LAI
+	AeZ8QrptNHfLJlC3qeLC8bJgQO3HyTJgtAJLwZN30NTUEjibg2AvCVgG6/t3syyAckYC0N2iItEdP
+	m3oKXfH7M2JEzV7UlgsA7zsnEKr8z4Cr2Y509nHm874ZJNdOlz3Gd6H0O5hmstbvS+8yxBvcOjNHf
+	toUhaFmYW7BkGpmKZC0pCn4VpalwrIm//bAAk9l9v540PU7ougTtNvyI3CcPMcPHVwICJetzjhvpI
+	Q/WRER9Q==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1miH8C-005Ps0-Ug; Wed, 03 Nov 2021 14:20:49 +0000
+Received: from new1-smtp.messagingengine.com ([66.111.4.221])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1miH88-005Pq0-HO
+ for linux-arm-kernel@lists.infradead.org; Wed, 03 Nov 2021 14:20:46 +0000
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.nyi.internal (Postfix) with ESMTP id B779558064C;
-	Wed,  3 Nov 2021 10:20:38 -0400 (EDT)
+ by mailnew.nyi.internal (Postfix) with ESMTP id B779558064C;
+ Wed,  3 Nov 2021 10:20:38 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 03 Nov 2021 10:20:38 -0400
+ by compute3.internal (MEProxy); Wed, 03 Nov 2021 10:20:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=fm3; bh=tlyyf9ABd9leYDuixOZBsq3FaRp
-	fxSPQhOflw8Bwob0=; b=p7/giRW05Py516639NaVVmYpMrp5zRfPdHpCQEWmbsR
-	ffm1PNdqgBZfS2IXS+yxL95NlZO2vJnbbrHtJzW3a+Jjctc70t5VwF5FlO4jprLZ
-	wW59rWt0d5jsKLKNzRJZc0E0NEjwP0cewUjv/egBujVcHiplj7bbFZeV9f6Twnyg
-	Ewt3oi64mK1kAvvFcgQ8rtNGnG4r7h8HSXDPllTgUgSX0dxdx0MrUWOgEL+HS060
-	rM2G4rBtm6h9Tb6hS1dKmb+4zU9fTsuveEXNNpBhqPq+bnPsCD1VhphRIhJqCuss
-	yLHjBLJdRwAuB7hur85uMiMi39RbrOsYH9gH9cYffCw==
+ date:from:to:cc:subject:message-id:references:mime-version
+ :content-type:in-reply-to; s=fm3; bh=tlyyf9ABd9leYDuixOZBsq3FaRp
+ fxSPQhOflw8Bwob0=; b=p7/giRW05Py516639NaVVmYpMrp5zRfPdHpCQEWmbsR
+ ffm1PNdqgBZfS2IXS+yxL95NlZO2vJnbbrHtJzW3a+Jjctc70t5VwF5FlO4jprLZ
+ wW59rWt0d5jsKLKNzRJZc0E0NEjwP0cewUjv/egBujVcHiplj7bbFZeV9f6Twnyg
+ Ewt3oi64mK1kAvvFcgQ8rtNGnG4r7h8HSXDPllTgUgSX0dxdx0MrUWOgEL+HS060
+ rM2G4rBtm6h9Tb6hS1dKmb+4zU9fTsuveEXNNpBhqPq+bnPsCD1VhphRIhJqCuss
+ yLHjBLJdRwAuB7hur85uMiMi39RbrOsYH9gH9cYffCw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=tlyyf9
-	ABd9leYDuixOZBsq3FaRpfxSPQhOflw8Bwob0=; b=A/QZnJdt1b0fP0jEDlZgk4
-	TbZfm6lf8yaaVRWLse2RLROqdkSyeVbpWVUo0iPTxhxuXGDRyobBPKxn2nC2tcVV
-	xHzxbWKCMa1j06klCrn7kTeyub+SUQzhs/E7SM8Z+jm07RsPlDObdPVvq9O2D2MH
-	mhWJItocf+SAE2tWaJYcaplX5BC/yiOE9d+ARAHMS5R21eugOUQyLPKuN8rfhLBj
-	ekWtW6TuEW3K0y6ydTnb3KN2WF59qalWpLz0Q7swwFP72MUFSD1KfB/5uZ0zRxYB
-	7Nywt11QdfXTDCPMAuf97K94RFLua8LGs/QcE1FpOaofQ48NEekHCvLsyIB7LC6g
-	==
+ messagingengine.com; h=cc:content-type:date:from:in-reply-to
+ :message-id:mime-version:references:subject:to:x-me-proxy
+ :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=tlyyf9
+ ABd9leYDuixOZBsq3FaRpfxSPQhOflw8Bwob0=; b=A/QZnJdt1b0fP0jEDlZgk4
+ TbZfm6lf8yaaVRWLse2RLROqdkSyeVbpWVUo0iPTxhxuXGDRyobBPKxn2nC2tcVV
+ xHzxbWKCMa1j06klCrn7kTeyub+SUQzhs/E7SM8Z+jm07RsPlDObdPVvq9O2D2MH
+ mhWJItocf+SAE2tWaJYcaplX5BC/yiOE9d+ARAHMS5R21eugOUQyLPKuN8rfhLBj
+ ekWtW6TuEW3K0y6ydTnb3KN2WF59qalWpLz0Q7swwFP72MUFSD1KfB/5uZ0zRxYB
+ 7Nywt11QdfXTDCPMAuf97K94RFLua8LGs/QcE1FpOaofQ48NEekHCvLsyIB7LC6g
+ ==
 X-ME-Sender: <xms:tZqCYQGxC79otChLtyCmedivQQ-5zLuab2lwn1Bzf8m0Gz-nF5IrkQ>
-    <xme:tZqCYZVf4yv9_qqOJdwSROfotXzrnW59sEmNw5osWN6E52WnHgeVRaUhXyeJIAXxC
-    m8KWVi8a03etkB70qY>
+ <xme:tZqCYZVf4yv9_qqOJdwSROfotXzrnW59sEmNw5osWN6E52WnHgeVRaUhXyeJIAXxC
+ m8KWVi8a03etkB70qY>
 X-ME-Received: <xmr:tZqCYaLoa0L3JgGrsfFYQjYvkCG7cq2faahcp2flLULzc17fKcIBg2z17-2J-Pr_jNbP5JgE7Kw0ONNs4qpz4hV_UeidK9om>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrtddvgdeitdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
-    hrlhcuvffnffculdefhedmnecujfgurhepfffhvffukfhfgggtuggjsehgtdorredttddv
-    necuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghksehsth
-    iftgigrdighiiiqeenucggtffrrghtthgvrhhnpeetudehleehtddtjefhgedtjeejjeeg
-    teefjeefgeeukeeuheekteekhefhueetieenucffohhmrghinhepghhithhhuhgsrdgtoh
-    hmpdguvghvihgtvgdqthhrvggvqdhgphhiohdqnhgrmhhinhhgrdhmugenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsth
-    iftgigrdighiii
+ curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+ uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
+ hrlhcuvffnffculdefhedmnecujfgurhepfffhvffukfhfgggtuggjsehgtdorredttddv
+ necuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghksehsth
+ iftgigrdighiiiqeenucggtffrrghtthgvrhhnpeetudehleehtddtjefhgedtjeejjeeg
+ teefjeefgeeukeeuheekteekhefhueetieenucffohhmrghinhepghhithhhuhgsrdgtoh
+ hmpdguvghvihgtvgdqthhrvggvqdhgphhiohdqnhgrmhhinhhgrdhmugenucevlhhushht
+ vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsth
+ iftgigrdighiii
 X-ME-Proxy: <xmx:tZqCYSEFL3E_hx0YCURMLUgRpfQkz6VMzBoSyfvj_BE6wriGjrxHlg>
-    <xmx:tZqCYWWZUASLhsptBp1ZJqS8Lv34kv3h75A8jDFkL4N7aFAN13dGzA>
-    <xmx:tZqCYVOqJMD1VS-sfJbbsMUjJYJR7P_e3G95YY8A86TbSUU0iws-Pw>
-    <xmx:tpqCYfNO1KsHb2QKngE-D9TMWlgLjKY9dtAy_NBJArE38DHfPwEy_g>
+ <xmx:tZqCYWWZUASLhsptBp1ZJqS8Lv34kv3h75A8jDFkL4N7aFAN13dGzA>
+ <xmx:tZqCYVOqJMD1VS-sfJbbsMUjJYJR7P_e3G95YY8A86TbSUU0iws-Pw>
+ <xmx:tpqCYfNO1KsHb2QKngE-D9TMWlgLjKY9dtAy_NBJArE38DHfPwEy_g>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
  3 Nov 2021 10:20:37 -0400 (EDT)
 Date: Wed, 3 Nov 2021 09:20:36 -0500
@@ -64,18 +81,39 @@ From: Patrick Williams <patrick@stwcx.xyz>
 To: Howard Chiu <howard10703049@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: arnd@arndb.de, olof@lixom.net, robh+dt@kernel.org, joel@jms.id.au,
-	andrew@aj.id.au, soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	Howard Chiu <howard.chiu@quantatw.com>
+ andrew@aj.id.au, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+ Howard Chiu <howard.chiu@quantatw.com>
 Subject: Re: [PATCH v1] ARM: dts: aspeed: Adding Facebook Bletchley BMC
 Message-ID: <YYKatBCCroiYxLew@heinlein>
 References: <20211103071417.388388-1-howard.chiu@quantatw.com>
 MIME-Version: 1.0
+In-Reply-To: <20211103071417.388388-1-howard.chiu@quantatw.com>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211103_072044_715568_71B509FE 
+X-CRM114-Status: GOOD (  19.70  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: multipart/mixed; boundary="===============5992406729608310113=="
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211103142036.M9SVDVe-2hxTSg69QeyqVBQOT3GJrVoLEVHoqJk5zzM@z>
+
+
+--===============5992406729608310113==
 Content-Type: multipart/signed; micalg=pgp-sha256;
 	protocol="application/pgp-signature"; boundary="76EoKyP6xdfx7kPV"
 Content-Disposition: inline
-In-Reply-To: <20211103071417.388388-1-howard.chiu@quantatw.com>
 
 
 --76EoKyP6xdfx7kPV
@@ -219,3 +257,18 @@ wi2kfsRMOYrJ1Kem1LGNnGT5/tuK31FkOeqmybFcwhbMuLArh1M=
 -----END PGP SIGNATURE-----
 
 --76EoKyP6xdfx7kPV--
+
+
+--===============5992406729608310113==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+--===============5992406729608310113==--
+
