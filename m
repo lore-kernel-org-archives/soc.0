@@ -1,44 +1,45 @@
-Return-Path: <SRS0=WpDJ=PX=stwcx.xyz=patrick@kernel.org>
+Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15C23C433F5
-	for <soc@archiver.kernel.org>; Thu,  4 Nov 2021 09:30:19 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id E5F5461157; Thu,  4 Nov 2021 09:30:18 +0000 (UTC)
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5067961058;
-	Thu,  4 Nov 2021 09:30:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5067961058
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=stwcx.xyz
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=stwcx.xyz
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B3BFC4332F
+	for <linux-kernel@archiver.kernel.org>; Thu,  4 Nov 2021 09:30:20 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 81D1961216
+	for <linux-kernel@archiver.kernel.org>; Thu,  4 Nov 2021 09:30:20 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S231147AbhKDJc4 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 4 Nov 2021 05:32:56 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:40547 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230410AbhKDJcz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 4 Nov 2021 05:32:55 -0400
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 5A196580881;
-	Thu,  4 Nov 2021 05:30:17 -0400 (EDT)
+        by mailnew.nyi.internal (Postfix) with ESMTP id 5A196580881;
+        Thu,  4 Nov 2021 05:30:17 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
   by compute6.internal (MEProxy); Thu, 04 Nov 2021 05:30:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=fm3; bh=qYCY7tttcemIZgcojAlZUXbTUNV
-	NVtf/FEcSNSxidEo=; b=ti54t+gBbZVWISv3Jrb2lUE9jcs840yKwzRgKPqto+i
-	dyzTrPXpmInqIea+1dpmYei7g9abeESIBj/6UX/Dds5P7VbFKzTy4F6myN0iF7Eb
-	73y/eT7DRInhfL9iRduWzdHQEzXdjcfJKLpmSgW8VDy5jmI4FI3U4CQJ5N/Wrcct
-	/D6aFyYHvy4QYirnpiFDvGawCWXuDZmvLDGroEMqrDWIEDlwYZQOd+hU3DhHoME0
-	qcp0W5pZoQrws7caYnAtfYHxPYBPwF25Ce6jgc5vGmx6q8MG9x6rL5I+8gxXzRIm
-	W8dXEESC6+BdyYSgfM6gT+nDwJroBUWKKP/KKGyDwWA==
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=qYCY7tttcemIZgcojAlZUXbTUNV
+        NVtf/FEcSNSxidEo=; b=ti54t+gBbZVWISv3Jrb2lUE9jcs840yKwzRgKPqto+i
+        dyzTrPXpmInqIea+1dpmYei7g9abeESIBj/6UX/Dds5P7VbFKzTy4F6myN0iF7Eb
+        73y/eT7DRInhfL9iRduWzdHQEzXdjcfJKLpmSgW8VDy5jmI4FI3U4CQJ5N/Wrcct
+        /D6aFyYHvy4QYirnpiFDvGawCWXuDZmvLDGroEMqrDWIEDlwYZQOd+hU3DhHoME0
+        qcp0W5pZoQrws7caYnAtfYHxPYBPwF25Ce6jgc5vGmx6q8MG9x6rL5I+8gxXzRIm
+        W8dXEESC6+BdyYSgfM6gT+nDwJroBUWKKP/KKGyDwWA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=qYCY7t
-	ttcemIZgcojAlZUXbTUNVNVtf/FEcSNSxidEo=; b=enq4j17WhFBFEgYNiXpZv4
-	byWi20QvDq2Tr3q1BH9RcodcPniXzwekDF/LHtZcREVXKr0WpnJ91wrS1vCsu1Ar
-	0jqVUZ9dmbzh36n5RVEJBXU6ZDrx2BASB4kSrZ//v9LQw+jzEfwdZYiOwpl3UM+r
-	2H71TTgYxaYr3QbBuhLeQKi0x47/EDCZ0mxT/SXd8IeTWPD6TbZWRXKuH9W1m7W7
-	yUoKXTRJuEZhR0sBjnE0miVKL3nxk9XfEHohKXMYE+zQ6Dr+KvTX5y6oquH8P08L
-	DcLg5PLjqJuDr1Ia3g3St/tbtWutrP4A2dkT9mv4kM0AOHFnU7Lmv1szAVwPqiIw
-	==
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=qYCY7t
+        ttcemIZgcojAlZUXbTUNVNVtf/FEcSNSxidEo=; b=enq4j17WhFBFEgYNiXpZv4
+        byWi20QvDq2Tr3q1BH9RcodcPniXzwekDF/LHtZcREVXKr0WpnJ91wrS1vCsu1Ar
+        0jqVUZ9dmbzh36n5RVEJBXU6ZDrx2BASB4kSrZ//v9LQw+jzEfwdZYiOwpl3UM+r
+        2H71TTgYxaYr3QbBuhLeQKi0x47/EDCZ0mxT/SXd8IeTWPD6TbZWRXKuH9W1m7W7
+        yUoKXTRJuEZhR0sBjnE0miVKL3nxk9XfEHohKXMYE+zQ6Dr+KvTX5y6oquH8P08L
+        DcLg5PLjqJuDr1Ia3g3St/tbtWutrP4A2dkT9mv4kM0AOHFnU7Lmv1szAVwPqiIw
+        ==
 X-ME-Sender: <xms:KKiDYUJzzV7vWYg7opkojjVIH8ayQkJFNLIc6tTVimmTbyIoXN4WCA>
     <xme:KKiDYUJ71bepFVH-ot2Gd2oUO0z7ewAM6UzszVKNUZaMQ9hb2MkZ2HGQsk47ZfX96
     a_GhWmzImYJZ_spzqs>
@@ -58,20 +59,22 @@ X-ME-Proxy: <xmx:KKiDYRYhcVFDnQN_AQKAuZLvAO1xtvlOxfIFHi-pzRNm8iEZtOVJzA>
     <xmx:KaiDYYRKtBkdVcvjyrkctFy02Y0MueW0VJ8azSpn2kgu7N5wyhIL4g>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
  4 Nov 2021 05:30:16 -0400 (EDT)
-Date: Thu, 4 Nov 2021 04:30:14 -0500
-From: Patrick Williams <patrick@stwcx.xyz>
-To: Howard Chiu =?utf-8?B?KOmCseWGoOedvyk=?= <Howard.Chiu@quantatw.com>
+Date:   Thu, 4 Nov 2021 04:30:14 -0500
+From:   Patrick Williams <patrick@stwcx.xyz>
+To:     Howard Chiu =?utf-8?B?KOmCseWGoOedvyk=?= 
+        <Howard.Chiu@quantatw.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Howard Chiu <howard10703049@gmail.com>, "arnd@arndb.de" <arnd@arndb.de>,
-	"olof@lixom.net" <olof@lixom.net>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"joel@jms.id.au" <joel@jms.id.au>,
-	"andrew@aj.id.au" <andrew@aj.id.au>,
-	"soc@kernel.org" <soc@kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
+Cc:     Howard Chiu <howard10703049@gmail.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "soc@kernel.org" <soc@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
 Subject: Re: [PATCH v1] ARM: dts: aspeed: Adding Facebook Bletchley BMC
 Message-ID: <YYOoJgXyOdgNmI6B@heinlein>
 References: <20211103071417.388388-1-howard.chiu@quantatw.com>
@@ -79,9 +82,13 @@ References: <20211103071417.388388-1-howard.chiu@quantatw.com>
  <HKAPR04MB40039608E14195D859DE7EC5968D9@HKAPR04MB4003.apcprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="pNxo54Czgw/SMy95"
+        protocol="application/pgp-signature"; boundary="pNxo54Czgw/SMy95"
 Content-Disposition: inline
 In-Reply-To: <HKAPR04MB40039608E14195D859DE7EC5968D9@HKAPR04MB4003.apcprd04.prod.outlook.com>
+Precedence: bulk
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Message-ID: <20211104093014.U90EsQr3_FFK1J6L61waRd9JWXvLQY9m5aNBX5jUZu4@z>
 
 
 --pNxo54Czgw/SMy95
