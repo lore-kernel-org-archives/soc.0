@@ -1,70 +1,81 @@
-Return-Path: <linux-clk-owner@kernel.org>
+Return-Path: <SRS0=ZqES=PX=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66774C433FE
-	for <linux-clk@archiver.kernel.org>; Thu,  4 Nov 2021 02:30:41 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4681461157
-	for <linux-clk@archiver.kernel.org>; Thu,  4 Nov 2021 02:30:41 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbhKDCdR (ORCPT <rfc822;linux-clk@archiver.kernel.org>);
-        Wed, 3 Nov 2021 22:33:17 -0400
-Received: from smtpcmd11116.aruba.it ([62.149.156.116]:44798 "EHLO
-        smtpcmd11116.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbhKDCdQ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 3 Nov 2021 22:33:16 -0400
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB4F1C433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Nov 2021 02:32:36 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 6B178604AC
+	for <linux-arm-kernel@archiver.kernel.org>; Thu,  4 Nov 2021 02:32:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6B178604AC
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:To:In-Reply-To:Cc:References:Message-Id
+	:Date:Subject:Mime-Version:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=NR9CKKH314BqrHl+kDqKX6YnHXU5t0lfKXdYWjz0L58=; b=yoFCgvzJ9fNbH5
+	ZDsvE1a6LKJDwbwo8uMXd7dFJs552LQnCj4lNmBvxnpOAB+cqxDmDWtj+JGVgXpu9JwXoMLeJ97mm
+	rA426iSkwGX3eL8uCzHGRmgEkE5tW0BUj/HNZG2KmvEbgO4x5fsg4l9QkgmYZCX5esm/cQjbxoEdu
+	BYGFwUDJo4tpOPh06hpNSLJi98XQgLfE+Sfln3ejC86TrFIHdgiXo77mMOnUKnqJ4AJ4j2SrYuwFL
+	SCXek/mHYDAIRQLuZSEfbRm0rE8ccButQiZ7wWyLgzGZQt4g9rIUPOsZKKeP/E/R1akptmJq9sXRD
+	igxCPUuocBpEPzSJz7Zg==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1miSWc-007cSa-No; Thu, 04 Nov 2021 02:30:46 +0000
+Received: from smtpcmd11116.aruba.it ([62.149.156.116])
+ by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1miSWY-007cR6-IM
+ for linux-arm-kernel@lists.infradead.org; Thu, 04 Nov 2021 02:30:44 +0000
 Received: from smtpclient.apple ([146.241.216.221])
-        by Aruba Outgoing Smtp  with ESMTPA
-        id iSWPmxR5yumo4iSWQmmgHU; Thu, 04 Nov 2021 03:30:37 +0100
+ by Aruba Outgoing Smtp  with ESMTPA
+ id iSWPmxR5yumo4iSWQmmgHU; Thu, 04 Nov 2021 03:30:37 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1635993037; bh=DZRFcy1A7pDPfjI/xc1yZ9deWpS/ap+fHvhGYQj6qt8=;
-        h=Content-Type:From:Mime-Version:Subject:Date:To;
-        b=N8Q8E/6Lo/V5C07x9Zz6934M8WwsfhWu8eM5yC4g709131ZDfKQ+D2c5MBrLa7p8x
-         ru3wUQY9WIsXCbt/L2HiBHbiQGWmNkrQ2mWW0vwk8VXfTuQrwLsgXeT195gWsUWpov
-         p5zFaVPIfEUSAGvculvT1gtSBlOeQk96cGl9ilrpLS2B8aF1nxxbK01xJlW+7xnLOT
-         2UPvC5XV3ecGPXATf3UDklKW0SAkWIVa3mZKJ1keCBTn8Ps60mWQzWRHT+8F3Ky78r
-         pA6IcEVkF4LDaFay0QoPvnCvQQjDNS6/yFtI72vD1ggnsBccLyiEgan2HHuiryO3cT
-         AVHBkNzusU5dQ==
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+ t=1635993037; bh=DZRFcy1A7pDPfjI/xc1yZ9deWpS/ap+fHvhGYQj6qt8=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=N8Q8E/6Lo/V5C07x9Zz6934M8WwsfhWu8eM5yC4g709131ZDfKQ+D2c5MBrLa7p8x
+ ru3wUQY9WIsXCbt/L2HiBHbiQGWmNkrQ2mWW0vwk8VXfTuQrwLsgXeT195gWsUWpov
+ p5zFaVPIfEUSAGvculvT1gtSBlOeQk96cGl9ilrpLS2B8aF1nxxbK01xJlW+7xnLOT
+ 2UPvC5XV3ecGPXATf3UDklKW0SAkWIVa3mZKJ1keCBTn8Ps60mWQzWRHT+8F3Ky78r
+ pA6IcEVkF4LDaFay0QoPvnCvQQjDNS6/yFtI72vD1ggnsBccLyiEgan2HHuiryO3cT
+ AVHBkNzusU5dQ==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v2 11/13] mmc: sdhci-esdhc-imx: Add sdhc support for i.MXRT series
-Date:   Thu, 4 Nov 2021 03:30:33 +0100
+Subject: Re: [PATCH v2 11/13] mmc: sdhci-esdhc-imx: Add sdhc support for
+ i.MXRT series
+Date: Thu, 4 Nov 2021 03:30:33 +0100
 Message-ID: <B67A91BD-DAE9-468B-8731-251DE86E6B5B@benettiengineering.com>
 References: <YYMx28VvhR7nvMlt@robh.at.kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc:     Jesse Taube <mr.bossman075@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-serial@vger.kernel.org
+Cc: Jesse Taube <mr.bossman075@gmail.com>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
+ Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Sascha Hauer <kernel@pengutronix.de>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Dong Aisheng <aisheng.dong@nxp.com>, Stefan Agner <stefan@agner.ch>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
+ Abel Vesa <abel.vesa@nxp.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ Jiri Slaby <jirislaby@kernel.org>,
+ Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+ linux-clk <linux-clk@vger.kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>, 
+ "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE"
+ <linux-arm-kernel@lists.infradead.org>, 
+ linux-kernel <linux-kernel@vger.kernel.org>,
+ linux-mmc <linux-mmc@vger.kernel.org>,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-serial@vger.kernel.org
 In-Reply-To: <YYMx28VvhR7nvMlt@robh.at.kernel.org>
-To:     Rob Herring <robh@kernel.org>
+To: Rob Herring <robh@kernel.org>
 X-Mailer: iPhone Mail (18H107)
 X-CMAE-Envelope: MS4wfA6GKfpXsRSNdwkIFTYQmUTZuqvvSqJg+QZ+U7tg2NH81o4pATFmJwAt9hr+3r2mNiS/sSK61vhtevF2cYqatJs6yFEDZMD5XAiD/Unil39uyjcDlR+E
  BcLXaIVZu4wKmq7xHmquyZQ9nQ3yxwcQ9iSgSki4StzrrvVTODPwjlAoDCbWXg3JeXCnJwf3N31U3quzLH0FFn7keK841utBPTSj8wFLVizEXBcybktsurWu
@@ -76,83 +87,65 @@ X-CMAE-Envelope: MS4wfA6GKfpXsRSNdwkIFTYQmUTZuqvvSqJg+QZ+U7tg2NH81o4pATFmJwAt9hr
  K3NgAhha3vddkCcY3pZ1YQ0QdxIrxSxM3K1ghN1U0pGG7/1T2cJ7Llfyva+k7TeMnDBBs0OV4f27BaCakDrK0CxFN1WjJmWUvm2+dBfQzwlxEANSxS9Urs3E
  RMhlMRxuU/4Ua8NvOM98GwPGVJF0No5AZb+M3grJE22WMJIFMw9RfciVdeleM15p9AcbsN6JdtHOaELVhDCxubtWKXnENjFT/Yg+Ju2qq6LUk0KtwtBnQr8N
  BCSy73MRVwLhTUucDQcoIUon2spbaJDehjTz12VXFJ+PYw7RSXKGvdT/t3XmqQiiXvoRt71Z4lN5yuyulmkB5laNulworHZJU94=
-Precedence: bulk
-List-ID: <linux-clk.vger.kernel.org>
-X-Mailing-List: linux-clk@vger.kernel.org
-Message-ID: <20211104023033.xJhqfNvaW9An6GD5K36lcIJLhYjUux74xCTRhg0hzV4@z>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211103_193042_806972_A9226AFE 
+X-CRM114-Status: GOOD (  19.33  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211104023033.7io2t3Du9ooBS4D3hRsD1h1-UFV51osHpLK4cpFlqdE@z>
 
-Hello Rob, Jesse, All,
-
-> Il giorno 4 nov 2021, alle ore 02:05, Rob Herring <robh@kernel.org> ha scr=
-itto:
->=20
-> =EF=BB=BFOn Wed, Nov 03, 2021 at 12:30:17AM +0100, Giulio Benetti wrote:
->> Hi Fabio, Jesse, All,
->>=20
->>> On 11/3/21 12:25 AM, Jesse Taube wrote:
->>>=20
->>>=20
->>> On 11/2/21 19:17, Fabio Estevam wrote:
->>>> On Tue, Nov 2, 2021 at 7:57 PM Jesse Taube <mr.bossman075@gmail.com> wr=
-ote:
->>>>=20
->>>>>   static struct esdhc_soc_data usdhc_imx8qxp_data =3D {
->>>>>          .flags =3D ESDHC_FLAG_USDHC | ESDHC_FLAG_STD_TUNING
->>>>> @@ -357,6 +363,7 @@ static const struct of_device_id imx_esdhc_dt_ids[=
-] =3D {
->>>>>          { .compatible =3D "fsl,imx7ulp-usdhc", .data =3D &usdhc_imx7u=
-lp_data, },
->>>>>          { .compatible =3D "fsl,imx8qxp-usdhc", .data =3D &usdhc_imx8q=
-xp_data, },
->>>>>          { .compatible =3D "fsl,imx8mm-usdhc", .data =3D &usdhc_imx8mm=
-_data, },
->>>>> +       { .compatible =3D "fsl,imxrt-usdhc", .data =3D &usdhc_imxrt_da=
-ta, },
->>>>=20
->>>> I thought Rob suggested to use the SoC name, so this would be:
->>>>=20
->>> Uh i think that may have been for the UART.
->>>> { .compatible =3D "fsl,imxrt1050-usdhc", .data =3D &usdhc_imxrt1050_dat=
-a, },
->>>>=20
->>>> The same applies to the other bindings in the series.
->>>>=20
->>>> This way it would be possible to differentiate between future
->>>> supported i.MX RT devices.
->>>>=20
->>> This makes sense will do in V3.
->>>=20
->>=20
->> If we add every SoC we will end up having a long list for every device
->> driver. At the moment it would be 7 parts:
->> 1) imxrt1020
->> 2) imxrt1024
->> .
->> .
->> .
->> 7) imxrt1170
->=20
-> You don't need a driver update if you use a fallback. When you add=20
-> the 2nd chip, if you think it is 'the same', then you do:
->=20
-> compatible =3D "fsl,imxrt1024-usdhc", "fsl,imxrt1050-usdhc";
->=20
-> That requires no driver update until the driver needs to handle some=20
-> difference. And when there is a difference, you don't need a DT update.
-
-This solution is pretty fine, we=E2=80=99re going with that then, for this a=
-nd every driver involved.
-
-Thank you for pointing us.
-
-Best regards
-Giulio Benetti
-Benetti Engineering sas
-
->=20
-> You could make "fsl,imxrt-usdhc" the fallback from the start if you are=20=
-
-> adverse to the first way.
->=20
-> Rob
-
+SGVsbG8gUm9iLCBKZXNzZSwgQWxsLAoKPiBJbCBnaW9ybm8gNCBub3YgMjAyMSwgYWxsZSBvcmUg
+MDI6MDUsIFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+IGhhIHNjcml0dG86Cj4gCj4g77u/
+T24gV2VkLCBOb3YgMDMsIDIwMjEgYXQgMTI6MzA6MTdBTSArMDEwMCwgR2l1bGlvIEJlbmV0dGkg
+d3JvdGU6Cj4+IEhpIEZhYmlvLCBKZXNzZSwgQWxsLAo+PiAKPj4+IE9uIDExLzMvMjEgMTI6MjUg
+QU0sIEplc3NlIFRhdWJlIHdyb3RlOgo+Pj4gCj4+PiAKPj4+IE9uIDExLzIvMjEgMTk6MTcsIEZh
+YmlvIEVzdGV2YW0gd3JvdGU6Cj4+Pj4gT24gVHVlLCBOb3YgMiwgMjAyMSBhdCA3OjU3IFBNIEpl
+c3NlIFRhdWJlIDxtci5ib3NzbWFuMDc1QGdtYWlsLmNvbT4gd3JvdGU6Cj4+Pj4gCj4+Pj4+ICAg
+c3RhdGljIHN0cnVjdCBlc2RoY19zb2NfZGF0YSB1c2RoY19pbXg4cXhwX2RhdGEgPSB7Cj4+Pj4+
+ICAgICAgICAgIC5mbGFncyA9IEVTREhDX0ZMQUdfVVNESEMgfCBFU0RIQ19GTEFHX1NURF9UVU5J
+TkcKPj4+Pj4gQEAgLTM1Nyw2ICszNjMsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2Rldmlj
+ZV9pZCBpbXhfZXNkaGNfZHRfaWRzW10gPSB7Cj4+Pj4+ICAgICAgICAgIHsgLmNvbXBhdGlibGUg
+PSAiZnNsLGlteDd1bHAtdXNkaGMiLCAuZGF0YSA9ICZ1c2RoY19pbXg3dWxwX2RhdGEsIH0sCj4+
+Pj4+ICAgICAgICAgIHsgLmNvbXBhdGlibGUgPSAiZnNsLGlteDhxeHAtdXNkaGMiLCAuZGF0YSA9
+ICZ1c2RoY19pbXg4cXhwX2RhdGEsIH0sCj4+Pj4+ICAgICAgICAgIHsgLmNvbXBhdGlibGUgPSAi
+ZnNsLGlteDhtbS11c2RoYyIsIC5kYXRhID0gJnVzZGhjX2lteDhtbV9kYXRhLCB9LAo+Pj4+PiAr
+ICAgICAgIHsgLmNvbXBhdGlibGUgPSAiZnNsLGlteHJ0LXVzZGhjIiwgLmRhdGEgPSAmdXNkaGNf
+aW14cnRfZGF0YSwgfSwKPj4+PiAKPj4+PiBJIHRob3VnaHQgUm9iIHN1Z2dlc3RlZCB0byB1c2Ug
+dGhlIFNvQyBuYW1lLCBzbyB0aGlzIHdvdWxkIGJlOgo+Pj4+IAo+Pj4gVWggaSB0aGluayB0aGF0
+IG1heSBoYXZlIGJlZW4gZm9yIHRoZSBVQVJULgo+Pj4+IHsgLmNvbXBhdGlibGUgPSAiZnNsLGlt
+eHJ0MTA1MC11c2RoYyIsIC5kYXRhID0gJnVzZGhjX2lteHJ0MTA1MF9kYXRhLCB9LAo+Pj4+IAo+
+Pj4+IFRoZSBzYW1lIGFwcGxpZXMgdG8gdGhlIG90aGVyIGJpbmRpbmdzIGluIHRoZSBzZXJpZXMu
+Cj4+Pj4gCj4+Pj4gVGhpcyB3YXkgaXQgd291bGQgYmUgcG9zc2libGUgdG8gZGlmZmVyZW50aWF0
+ZSBiZXR3ZWVuIGZ1dHVyZQo+Pj4+IHN1cHBvcnRlZCBpLk1YIFJUIGRldmljZXMuCj4+Pj4gCj4+
+PiBUaGlzIG1ha2VzIHNlbnNlIHdpbGwgZG8gaW4gVjMuCj4+PiAKPj4gCj4+IElmIHdlIGFkZCBl
+dmVyeSBTb0Mgd2Ugd2lsbCBlbmQgdXAgaGF2aW5nIGEgbG9uZyBsaXN0IGZvciBldmVyeSBkZXZp
+Y2UKPj4gZHJpdmVyLiBBdCB0aGUgbW9tZW50IGl0IHdvdWxkIGJlIDcgcGFydHM6Cj4+IDEpIGlt
+eHJ0MTAyMAo+PiAyKSBpbXhydDEwMjQKPj4gLgo+PiAuCj4+IC4KPj4gNykgaW14cnQxMTcwCj4g
+Cj4gWW91IGRvbid0IG5lZWQgYSBkcml2ZXIgdXBkYXRlIGlmIHlvdSB1c2UgYSBmYWxsYmFjay4g
+V2hlbiB5b3UgYWRkIAo+IHRoZSAybmQgY2hpcCwgaWYgeW91IHRoaW5rIGl0IGlzICd0aGUgc2Ft
+ZScsIHRoZW4geW91IGRvOgo+IAo+IGNvbXBhdGlibGUgPSAiZnNsLGlteHJ0MTAyNC11c2RoYyIs
+ICJmc2wsaW14cnQxMDUwLXVzZGhjIjsKPiAKPiBUaGF0IHJlcXVpcmVzIG5vIGRyaXZlciB1cGRh
+dGUgdW50aWwgdGhlIGRyaXZlciBuZWVkcyB0byBoYW5kbGUgc29tZSAKPiBkaWZmZXJlbmNlLiBB
+bmQgd2hlbiB0aGVyZSBpcyBhIGRpZmZlcmVuY2UsIHlvdSBkb24ndCBuZWVkIGEgRFQgdXBkYXRl
+LgoKVGhpcyBzb2x1dGlvbiBpcyBwcmV0dHkgZmluZSwgd2XigJlyZSBnb2luZyB3aXRoIHRoYXQg
+dGhlbiwgZm9yIHRoaXMgYW5kIGV2ZXJ5IGRyaXZlciBpbnZvbHZlZC4KClRoYW5rIHlvdSBmb3Ig
+cG9pbnRpbmcgdXMuCgpCZXN0IHJlZ2FyZHMKR2l1bGlvIEJlbmV0dGkKQmVuZXR0aSBFbmdpbmVl
+cmluZyBzYXMKCj4gCj4gWW91IGNvdWxkIG1ha2UgImZzbCxpbXhydC11c2RoYyIgdGhlIGZhbGxi
+YWNrIGZyb20gdGhlIHN0YXJ0IGlmIHlvdSBhcmUgCj4gYWR2ZXJzZSB0byB0aGUgZmlyc3Qgd2F5
+Lgo+IAo+IFJvYgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmxpbnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0CmxpbnV4LWFybS1rZXJuZWxAbGlzdHMu
+aW5mcmFkZWFkLm9yZwpodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZv
+L2xpbnV4LWFybS1rZXJuZWwK
