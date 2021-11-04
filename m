@@ -1,19 +1,21 @@
-Return-Path: <SRS0=xsOA=PX=quantatw.com=Howard.Chiu@kernel.org>
+Return-Path: <devicetree-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C890C433F5
-	for <soc@archiver.kernel.org>; Thu,  4 Nov 2021 03:30:13 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id D031F60F39; Thu,  4 Nov 2021 03:30:12 +0000 (UTC)
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-eopbgr1310138.outbound.protection.outlook.com [40.107.131.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D8E0F6103C;
-	Thu,  4 Nov 2021 03:30:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D8E0F6103C
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=quantatw.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=quantatw.com
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D074C433EF
+	for <linux-devicetree@archiver.kernel.org>; Thu,  4 Nov 2021 03:30:14 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 0B15B61053
+	for <linux-devicetree@archiver.kernel.org>; Thu,  4 Nov 2021 03:30:14 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S229907AbhKDDcu (ORCPT
+        <rfc822;linux-devicetree@archiver.kernel.org>);
+        Wed, 3 Nov 2021 23:32:50 -0400
+Received: from mail-eopbgr1310122.outbound.protection.outlook.com ([40.107.131.122]:55328
+        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229893AbhKDDct (ORCPT <rfc822;devicetree@vger.kernel.org>);
+        Wed, 3 Nov 2021 23:32:49 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
  b=TOR/LGrnWn2pNFjOZCWw6kI9omFTWhygN7F9y4AoKok+8uvc453q+JqYKm4Yr553oSnav3KCBl68ZKXWLn575N/eHRMLSJ4NRZJ6FDrcFLmvHXQUBJhIIlJFxQRYaWuLsIQb2WLBw7UiMN+wDzz/riZ3Zxfn/CNJtOb314FUuNGiFxgpapyIy7sDL32CX4AlsOxx27K5RKFG5zWp7wT55mvMfsJN0M7QlEgIV11wl45AsUStWNqUXd6c26Wk4hwH6CfbtdC08HOEB41BZGzzLuaM0xpa3dvtj4YEuJjurpNvElP6/TVA7kSYYnOwOrMtU1+91vKCy/r7meF+nckoSQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
@@ -38,49 +40,46 @@ Received: from HKAPR04MB4003.apcprd04.prod.outlook.com
  ([fe80::bc14:ea40:ec:43af]) by HKAPR04MB4003.apcprd04.prod.outlook.com
  ([fe80::bc14:ea40:ec:43af%3]) with mapi id 15.20.4669.011; Thu, 4 Nov 2021
  03:30:08 +0000
-From: =?big5?B?SG93YXJkIENoaXUgKKr0q2G6zSk=?= <Howard.Chiu@quantatw.com>
-To: Patrick Williams <patrick@stwcx.xyz>, Howard Chiu
-	<howard10703049@gmail.com>
+From:   =?big5?B?SG93YXJkIENoaXUgKKr0q2G6zSk=?= <Howard.Chiu@quantatw.com>
+To:     Patrick Williams <patrick@stwcx.xyz>,
+        Howard Chiu <howard10703049@gmail.com>
 List-Id: <soc.lore.kernel.org>
-CC: "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>, "joel@jms.id.au" <joel@jms.id.au>,
-	"andrew@aj.id.au" <andrew@aj.id.au>, "soc@kernel.org" <soc@kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>
+CC:     "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "soc@kernel.org" <soc@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
 Subject: RE: [PATCH v1] ARM: dts: aspeed: Adding Facebook Bletchley BMC
 Thread-Topic: [PATCH v1] ARM: dts: aspeed: Adding Facebook Bletchley BMC
 Thread-Index: AQHX0L4GVObJRPhBBkedf8m4Kd5flKvyqs2w
-Date: Thu, 4 Nov 2021 03:30:08 +0000
-Message-ID:
- <HKAPR04MB40039608E14195D859DE7EC5968D9@HKAPR04MB4003.apcprd04.prod.outlook.com>
+Date:   Thu, 4 Nov 2021 03:30:08 +0000
+Message-ID: <HKAPR04MB40039608E14195D859DE7EC5968D9@HKAPR04MB4003.apcprd04.prod.outlook.com>
 References: <20211103071417.388388-1-howard.chiu@quantatw.com>
  <YYKatBCCroiYxLew@heinlein>
 In-Reply-To: <YYKatBCCroiYxLew@heinlein>
 Accept-Language: zh-TW, en-US
 Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
 authentication-results: stwcx.xyz; dkim=none (message not signed)
  header.d=none;stwcx.xyz; dmarc=none action=none header.from=quantatw.com;
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-correlation-id: bcd667d1-027a-449d-19be-08d99f4366d8
 x-ms-traffictypediagnostic: HK0PR04MB2900:
-x-microsoft-antispam-prvs:
- <HK0PR04MB29001A7178D67E5274D9E2B4968D9@HK0PR04MB2900.apcprd04.prod.outlook.com>
+x-microsoft-antispam-prvs: <HK0PR04MB29001A7178D67E5274D9E2B4968D9@HK0PR04MB2900.apcprd04.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- QSOGgkZ+0raVwAX5SZF5t2JdWc5WlrYMWwTM2NCpTR7x5AvhLJAYB2DUYsMyFlT8kXbSYQwZb6Pr/n7aHZa23yc8UVABjjO6IG+tc68hkav2eHmNnV6MCLVWv4Bpy9dGn2r1D/kM36w/6gAm4x+eh27ng8hm8+lzu2NKTKb26iF9TuS4nDtqqVNLTbR6FfzibcOtVvWgGgGz84NHbTa64mx8OwhJk6c+xXL221gxUsIieKQ6WlopPRBhf1BFl306oWUDwTwrvGVA13jQbbKMfE16caSlcPJvFGxKNlvPY9MswY+34M0uh1G6bOLppN6Nh86dbbi4wKDv60tzCPtI1eEZ95TGP/NaCcHSts8g1i1QKDFYZwDvw1d3BTAAvB60NZEph+hgN3fzfqyOceOjy6ixBpb4RQT3PLlr82ZBDV7v6xBPqJXT64WnmmTB7qMmbi4L3/xeSrePhLwcsq0uT3cuqHonHo6+pNjcfM2fmLCg9/1q8MbLheQ/oNIBVEh73Gn2V1T5d8GMv8GHS2DdpCU7sBcjiiKcBlSMgIhIOVPhc+V3blbhgshmCOzr1UEbtUtijX+ETC7wTYbXWiE+aZxInBXXbSdA1yWPvv7L4on+yri16HfcI3wthXO9MRqpTFrOwxBs+3/3PgJILG4vcBQliBPEuRoPd+OCU8N8bpFfe6+7z1beM0OHgYMY7qsEJUX7BWHZ+zopG8MUAggHhhvWjt74DFV1lHEr0yeyPdGVwNtHbTm7wfilRbYaVmJZ4+CgqZ5ZUMFkB33/a0rl8qjaZzI0w5MeNammYM7xALk=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HKAPR04MB4003.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(47680400002)(71200400001)(122000001)(8936002)(7696005)(8676002)(316002)(54906003)(33656002)(86362001)(7416002)(508600001)(966005)(85182001)(66556008)(66476007)(186003)(64756008)(66446008)(38070700005)(110136005)(52536014)(38100700002)(66946007)(9686003)(55016002)(26005)(2906002)(5660300002)(6506007)(83380400001)(76116006)(4326008);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: QSOGgkZ+0raVwAX5SZF5t2JdWc5WlrYMWwTM2NCpTR7x5AvhLJAYB2DUYsMyFlT8kXbSYQwZb6Pr/n7aHZa23yc8UVABjjO6IG+tc68hkav2eHmNnV6MCLVWv4Bpy9dGn2r1D/kM36w/6gAm4x+eh27ng8hm8+lzu2NKTKb26iF9TuS4nDtqqVNLTbR6FfzibcOtVvWgGgGz84NHbTa64mx8OwhJk6c+xXL221gxUsIieKQ6WlopPRBhf1BFl306oWUDwTwrvGVA13jQbbKMfE16caSlcPJvFGxKNlvPY9MswY+34M0uh1G6bOLppN6Nh86dbbi4wKDv60tzCPtI1eEZ95TGP/NaCcHSts8g1i1QKDFYZwDvw1d3BTAAvB60NZEph+hgN3fzfqyOceOjy6ixBpb4RQT3PLlr82ZBDV7v6xBPqJXT64WnmmTB7qMmbi4L3/xeSrePhLwcsq0uT3cuqHonHo6+pNjcfM2fmLCg9/1q8MbLheQ/oNIBVEh73Gn2V1T5d8GMv8GHS2DdpCU7sBcjiiKcBlSMgIhIOVPhc+V3blbhgshmCOzr1UEbtUtijX+ETC7wTYbXWiE+aZxInBXXbSdA1yWPvv7L4on+yri16HfcI3wthXO9MRqpTFrOwxBs+3/3PgJILG4vcBQliBPEuRoPd+OCU8N8bpFfe6+7z1beM0OHgYMY7qsEJUX7BWHZ+zopG8MUAggHhhvWjt74DFV1lHEr0yeyPdGVwNtHbTm7wfilRbYaVmJZ4+CgqZ5ZUMFkB33/a0rl8qjaZzI0w5MeNammYM7xALk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HKAPR04MB4003.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(47680400002)(71200400001)(122000001)(8936002)(7696005)(8676002)(316002)(54906003)(33656002)(86362001)(7416002)(508600001)(966005)(85182001)(66556008)(66476007)(186003)(64756008)(66446008)(38070700005)(110136005)(52536014)(38100700002)(66946007)(9686003)(55016002)(26005)(2906002)(5660300002)(6506007)(83380400001)(76116006)(4326008);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?big5?B?WkRTbjJNT2FlbXlDUmVSS1hQS2ZoWG9NWWtEeXNnbTN4UDlBbThqQk10VWM0aHUz?=
+x-ms-exchange-antispam-messagedata-0: =?big5?B?WkRTbjJNT2FlbXlDUmVSS1hQS2ZoWG9NWWtEeXNnbTN4UDlBbThqQk10VWM0aHUz?=
  =?big5?B?bDJHUklCK003a3pxcEVVQVNPTjh0dFdWK0FsMG5rNFlsbzBqTnBYY0RCc1plSHIv?=
  =?big5?B?cncreHJHYlAyTzhXQS8weHdEa2VZRDVTNGRYdVowc3Y5ZXpxYWpwRnc0bWVOSkZQ?=
  =?big5?B?czg3ZUM2Z1l6NmlncldsSDdDSkVPM2ZRQ2tlRlh6Q05xdzZmVWNxa3VXazNSREND?=
@@ -130,6 +129,10 @@ X-MS-Exchange-CrossTenant-id: 179b0327-07fc-4973-ac73-8de7313561b2
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: D2+j+HTOsJiQjX6rmFW+V7xCFjaIvvAm3OlvF+FlybkKxrJKqJhyv27iLNHASndtPI/DTkLb8PggRGiTVNYdsv0WLLba+X7vE8PdA5ypgoc=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR04MB2900
+Precedence: bulk
+List-ID: <devicetree.vger.kernel.org>
+X-Mailing-List: devicetree@vger.kernel.org
+Message-ID: <20211104033008.My7ioEG4TdguVM5uBvGW3L-G-5KKQEbS7g6XqkR_d9U@z>
 
 SGkgUGF0cmljaw0KDQo+IEhlbGxvIEhvd2FyZCwNCj4gDQo+IFRoYW5rcyBmb3Igc3VwcGx5aW5n
 IHRoaXMuICBJIGhhdmUgYSBmZXcgY29tbWVudHMgYmVsb3cuDQo+IA0KPiBPbiBXZWQsIE5vdiAw
