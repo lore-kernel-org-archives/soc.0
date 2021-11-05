@@ -1,330 +1,189 @@
-Return-Path: <SRS0=NKgK=PY=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=JG1S=PY=oracle.com=santosh.shilimkar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E44C8C433F5
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  5 Nov 2021 09:44:13 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C841C433F5
+	for <soc@archiver.kernel.org>; Fri,  5 Nov 2021 16:18:10 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 5FA17611C1; Fri,  5 Nov 2021 16:18:10 +0000 (UTC)
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A208061212
-	for <linux-arm-kernel@archiver.kernel.org>; Fri,  5 Nov 2021 09:44:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A208061212
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:Content-Type:
-	Content-Transfer-Encoding:List-Subscribe:List-Help:List-Post:List-Archive:
-	List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:Date:Message-ID:From:
-	References:Cc:To:Subject:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Owner;
-	bh=le+a32EjJQIhPlnRx2AJSab9AndYCvz0qFugtjKwUQ4=; b=ohdCkSerHB3K2XTx/WVyWL8aeP
-	tc5rStcOW3IqsW7tAdWgGSXpXZXQTqhN7wotGwHg3W6Aeq2lUpcvMH2eUbE+/F9+PcBEl8Uxgvy0R
-	5SRRcRGZ1+pITo2BIsenU/fajD7CD0zABvU0WLYmqRqAAAlwIuJCaDsJw60XIXKx5+9qlryyrL6+0
-	huEsx8pb2zQ4GkOsF35GDxrjdFIf6an8rLGIdzzX0kpwlIcavV0BZW9DX46hIrMjOOQWcvpOf0ORK
-	1PeyVh0x8FsCFuODlHYfpteNHYLFerbBYsdRpx2YcnXYWuUbNrWkOwd8V4C+97q9Cihs1p7Cw+ovi
-	5A3DI4iw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mivkC-00Azn6-VC; Fri, 05 Nov 2021 09:42:45 +0000
-Received: from smtpcmd0987.aruba.it ([62.149.156.87])
- by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mivk7-00AzkO-5Y
- for linux-arm-kernel@lists.infradead.org; Fri, 05 Nov 2021 09:42:41 +0000
-Received: from [192.168.153.129] ([146.241.216.221])
- by Aruba Outgoing Smtp  with ESMTPSA
- id ivjdmdpVVsfk3ivjfmPM8G; Fri, 05 Nov 2021 10:42:32 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1636105352; bh=1GP6cpeDo31RshdJGVY27pg4jdAQLLhr1b3EHvlqG9U=;
- h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=RdWsBvQOUh0y5sMKxC/8qFCZqAKgVNldIM4KBq+GnvYKRPU65iFvMatCxpaYtRjd1
- dBO645DPZ7Gl9iIyVBiIkepIRRddD4/oy6U95t3jSBNjDgN2CR1cfelwJHV9ES9k/P
- cBJWjEba0HW5ZGAqYREHOHLyt+JpPYyp5a9NErtbCOz6El3RU77PFBxSa3+vZ9tCvx
- PjNADZNdF3CYI1xtdHOIawJ+45Zi4+KBs5joppbNdfbDqstBLAfSKapdHvrN+YDdG8
- oH32WUPzflKxn21mjJM6NxBiccP0rzXximOAjhnBxly/9Xn58f9ViPAj16EA3s0/Oj
- 4GxF0yr1c0n5Q==
-Subject: Re: [PATCH v2 07/13] clk: imx: Add initial support for i.MXRT clock
- driver
-To: Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
+	by mail.kernel.org (Postfix) with ESMTPS id 2730D611C4;
+	Fri,  5 Nov 2021 16:18:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2730D611C4
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=oracle.com
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A5Ft6iM003132;
+	Fri, 5 Nov 2021 16:18:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=LiMl7+frWKHnuo2d/R6WXCSNAcHWPM+ltuzefmlKNfc=;
+ b=aq62snMYE2etkHoxjezcfMRHuSkO4YtnPNTyyVljEq8DfnOkJlJla/z2ZawK+qHzgNGP
+ g4ugHlUjtFRLDPhDI4R8cZuaDemaVzhQ1rqk6UApyj7RsDPQahm+8EfR9oyeNUUNzmzO
+ +a/pU3DqU3w1lcAjaxfatjk16GMUDOB/ubJF/DT4w3pG3iGz9IknGj778/mGlOLJGc4N
+ RHMd67XgyKeGvKrBEPp6OS20Jvao8/qKCuofwLvYPbW7RSq2nW0yqopUpBM3EgjEmwbi
+ NCcwpCLApg4xx6sIcYzeR9sHgT8d1R3K5YPGrn1xWkQj3yhBd9pWHWdXoBDbNm4QRT4+ Bg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+	by mx0b-00069f02.pphosted.com with ESMTP id 3c4t7buamw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 05 Nov 2021 16:18:03 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+	by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1A5GFBu0029980;
+	Fri, 5 Nov 2021 16:18:02 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2101.outbound.protection.outlook.com [104.47.70.101])
+	by userp3030.oracle.com with ESMTP id 3c4t5d64u9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 05 Nov 2021 16:18:02 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OfPrqavTv6IeB0MC+5bUKlPfAD84siAkIbZBQcHuRLkii5f2QaUf+yAiQPOewLUqYKaq/DvF8tmjdrVCvfP6RHu8Lx65kpMU1BMIDrjFmomM+mNgZlU5axCnxGG6jYdIjJ3nd1fkioL4r8Wb1XYJlj5t4GECUA2fSDROXzJ4JkM/gmKnl7lIwd2skx01CjHr8d1d/Miq1gtZ1Ghu/D86VWTGrWRCwB+M8p4jpVHZMKpNkQQtEzbsWnSo1SYMDvsM/88qg6HUN2a+510KqB9JlScGZBkkb0WseOz3qT7n824jiDy2nRc9yqFta9gb2kkY/ikCEbLUHIDe8zFbBD/ivA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LiMl7+frWKHnuo2d/R6WXCSNAcHWPM+ltuzefmlKNfc=;
+ b=Ma8mPvw5Yrc5Ea56XFB6eEM08pKAckVHKoEPpwNAipQbSFyWHHdG7Taqjklx8sK3JE7BAE0DU4gNUgNLMke9N3Dc6nLiFTpF8ASWfLDbuVqPnfeHYgmSluE7vTS0q1O1FULUH8LbRtEA71MLwmUDuOE9UpRlMAMBtX2ehg4rN/Z5I494kpevhjfJet9QkjaOTr57U7eWD726721tj+WQ/5y1FSJib9kY94yXJZOcOzaTp1ZaSndVnwaHDdM8kIamfxn+8jVQnWarHS3dpbHv3RYzU/OFWbpcqavUBSmXU/FCySTZeB9bXXPoiNAdN/yhWdiRn0QVjqeHTE0knqW4hw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LiMl7+frWKHnuo2d/R6WXCSNAcHWPM+ltuzefmlKNfc=;
+ b=LowBmzP6DlGNoJl4XBJg2JXe5XiuF1akaX/0Rs8kcTkrB0hs0RIWsK5c//iUJXmobvlg/1gqCzgjokQEE20H8cy35rgHUnoy2b79VVPVvA4T45RtiKsuJ3ZfE0u2reNIB5XmrzCJ2j1eVSDC+eourjnYKrbCaLyE7EQUY+YerEw=
+Received: from BYAPR10MB3270.namprd10.prod.outlook.com (2603:10b6:a03:159::25)
+ by BYAPR10MB3605.namprd10.prod.outlook.com (2603:10b6:a03:129::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.10; Fri, 5 Nov
+ 2021 16:17:59 +0000
+Received: from BYAPR10MB3270.namprd10.prod.outlook.com
+ ([fe80::715c:4853:52ce:dd7e]) by BYAPR10MB3270.namprd10.prod.outlook.com
+ ([fe80::715c:4853:52ce:dd7e%5]) with mapi id 15.20.4649.020; Fri, 5 Nov 2021
+ 16:17:59 +0000
+From: Santosh Shilimkar <santosh.shilimkar@oracle.com>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
- shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
- festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com,
- stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org,
- arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk,
- abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org,
- nobuhiro1.iwamatsu@toshiba.co.jp, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
- <20211102225701.98944-8-Mr.Bossman075@gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <01336852-e6fa-cfe6-21be-9c03cb567fde@benettiengineering.com>
-Date: Fri, 5 Nov 2021 10:42:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <20211102225701.98944-8-Mr.Bossman075@gmail.com>
+CC: Santosh Shilimkar <ssantosh@kernel.org>,
+        "Eric W. Biederman"
+	<ebiederm@xmission.com>,
+        Dave Gerlach <d-gerlach@ti.com>, Tony Lindgren
+	<tony@atomide.com>,
+        "soc@kernel.org" <soc@kernel.org>, Arnd Bergmann
+	<arnd@arndb.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Zhen Lei
+	<thunder.leizhen@huawei.com>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] soc: ti: fix wkup_m3_rproc_boot_thread return type
+Thread-Topic: [PATCH] soc: ti: fix wkup_m3_rproc_boot_thread return type
+Thread-Index: AQHX0mCzyDluYOvIlUuUPwqCbkMc2A==
+Date: Fri, 5 Nov 2021 16:17:59 +0000
+Message-ID: <7A4FCE6D-292C-4E04-BAF2-03C85E94ABDF@oracle.com>
+References: <20211105075119.2327190-1-arnd@kernel.org>
+In-Reply-To: <20211105075119.2327190-1-arnd@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-X-CMAE-Envelope: MS4wfGHZCGviNtSTv00RKTlbWw4QzIQHqj2J0gHEQJVYrIkWDxivZ2LS7bPvRjwyVHcSDYfpVwJpkj+AGOcq6htQ3mirYuJdnMDtXLXWapvNehq92jrNsHUK
- m7Kwml9wPX7+BzX9ImcYS+h5cfDTbUywzpUjtD0YLA2qq8DxB2CzpiQGi9ndy1awhC5+0syO378gLAtqjPFZCAfMYGWoOp8o6VALHQUGya3sgT+neZeYUxNQ
- k7I5s9fOg7iZHJnHzyTCoABl1u8C6FazaKEIbWwsi0Zl8FFf64c3WqJkqhcMtEfNUrhZd1Kk19X+Ga2DyQeXVF6i9y2Lvx09wgPy5+Mmblmv7fG5ly2HdvG4
- l1a4AhBKErOW1vFPstLToHlq5/hb0HpdyYK8EOL5BXg1K01KSTbJn34+u0PJGO2wp9Kq+/yHMzDM4GeAOIrBVyxc/RLt8P9rmgejkkHklHkriih7WK5iUOw7
- j5N910PqyCbjyFauy4dRqMCgEM14bt8/uY9mONpQdQi6gJXQ+JGtMQYoL6BSE8wNW+HXDAwsoQBFY6txyGC0o0L8jk37LUC/mBLu7UxhR1/CJ148JLpr/h0p
- dleOKGVAjijot+BarE3+s3cFROly7khgfHE2wZ0//tH2q3EMWAXceXAb3IRcUDK24cveUd8fZ7Na2xC3lgUTAjzvxNMLyD+TBZClsPA+sb9ZOZd4CAwJHfs4
- nBuhoEefmCxTpYFYgtIXikl2RthZWX+ozCAN6LH3xpvWPCRXjpuuKmIxJpRO99ut+EgtcDwZN+zfFHE0iQoJx/DwjfenLmbxT52K1h0+haU8FBYe6fgkiwfp
- dXLIcBlCLYdFIckrJjMWK5FVvngblxxZJrxJhm53696YB++iMmIQUJAysCRk2wtfM9GdXLEeozZ5H5bxn/ICkir1b4m1EESV81h1EZoithxsJLpYiTvTpjja
- 1vEfRQ15G94yhSVV54KlyDg74O5s+D9aGG7F/4t/AI6mZDRj74uq5pZQOzFZw26V3IkuTiCGNBl5UK0sQFHeAyC0VkVpUN7fVbla1zBc1YwOv/vvwcs+J/SD
- QICKnQtBGtmj8+KPkiCthtkKo5EYWwkGMuOfYKx/+fK72712NJuT9xb5v+7Qz9vcJOA/SM0WB6AJiri2Jm3xgCHd90oF9dQ32Dg=
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211105_024239_603876_28B8ED1E 
-X-CRM114-Status: GOOD (  25.33  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211105094209.At9N8lW2wjOwxtOYSCcAKMHFxHkF7AzQhXuwChVoVwc@z>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3608.120.23.2.4)
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=oracle.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: febe80b7-d039-4154-72de-08d9a077d5ba
+x-ms-traffictypediagnostic: BYAPR10MB3605:
+x-microsoft-antispam-prvs: 
+ <BYAPR10MB36056D748E88BB90B71D5781938E9@BYAPR10MB3605.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4125;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ 21+wD6RDi3gzSkSExHF7bD8EgdMOTI96rzBIUtQsDliz8e4BykC3sQ7YGTq77BbZsWQjdMPBGJ4inIZBgYBI5T3MIH3yDuBNSVeHIv4za9xWUOI9i0gu39O0Gt+ATzTKGPw+woyz9MAvzmG+n5puJwDlSn4f2Eo53zzGwmeQ3S1TIj4hN2/0SfMZYnCjqSYLpxUJUblnRohWRaCWPxT+3ps44US/Vm0n9YqYWrdzRXN3sxQ/VYJJ0KSYFTxkpCnWSy5NRxrgdTCBYwB5ppHJfD+CWNx8T6DELbuME6qU4E1oDJrygfNtqVK4DiQRQGjLVk21/EidUjLaFDf1zVlXGjknho9I23NGFQIVxCAcI+cyAhXBvrsyEMs72XPYhm7RFgBBYQmIery2eixHJB8m4HYDcUxm6eD+ztdy0PrlmPJk1oA4hoQBgvpFPeDtl1fOhU3IMLogBGOn2S/3hBvPOydOTrE5+DlFo3HXHvonddFzHE8c91mXWK/KZsnHGFbNoI/FBthCZwxg87MXao6MeFaEZ9F/eg6L8BIKzv4iOmE+eG3r0GWc+VQmekOCaAxAep4KjIpcvnPM9iisCgUCfVm+rLQmioYwABQkwPRuyClFx5EvMZhan0jmBIYP5+JpgnNCGt64oLvNfvLsD0Nv8aheG+4A6Zk4C+woQLN+afbKhKRgNKXUl8NmfRMvDOSr6DcHULSnqtqJcOvYcgxWMqHPyc/yv8hS8pW3mTY1jbzyNCA1ePR9578UBD+ncD90
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3270.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6506007)(71200400001)(122000001)(66946007)(53546011)(86362001)(4326008)(6486002)(26005)(6512007)(66476007)(33656002)(66446008)(64756008)(76116006)(2906002)(8676002)(38100700002)(8936002)(4744005)(91956017)(5660300002)(186003)(66556008)(7416002)(36756003)(6916009)(44832011)(2616005)(38070700005)(54906003)(316002)(508600001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?utf-8?B?VGZZWTZMbThHUWlqOHJIeDAxUGI1dGwyNlZDbUF6YTFBMVZUZVZhRklyMVJT?=
+ =?utf-8?B?dnUvdmpwSU5TbjlIZGhudnpTeHpnYWR1bzVjbEcrTFhMcVdmRnczUXloTmdY?=
+ =?utf-8?B?ZXN6d2libjdDWlBWazIxdnZPZjFrNml1S29TVUd3cWJmeEhxS251bERYT0Vu?=
+ =?utf-8?B?aTZiUklGc0JSS3ZQOUI2Y0dXcngxNG81K3BkcnM4Z3Nwa1VDTy9rdDZtNXA2?=
+ =?utf-8?B?elJoVUN6aWR5dXk0TVRma0lSRjJnS1lnOEhUYXd2b2FUVVpBZys5OExmK2cy?=
+ =?utf-8?B?cmdMcEIwMkRid09VU3NGa2xpSS9XbUhhTWRiazVKR3JjUlJhdWJrSzV1Znk2?=
+ =?utf-8?B?U3JZQ3dDMVVXcmRTL0w1VmI2K0pIL285WDJUNXJ2Smw2TE1RdlpvMWZJR0Jk?=
+ =?utf-8?B?Sk80NGtTbjhrSVUxQjFvNFcxTGJodjhTK3FmWFpHR2pXbER1emxJMGNOSjVF?=
+ =?utf-8?B?TW1jRlVsdlBhSXAxeWpRNS8xenVPdEJ2UGlKenRDZGIydjQrYmRhU3o2UkJC?=
+ =?utf-8?B?eWZ6elFiWTU2Skx2dlJ0MFpjdGNiZWxOZ2xyNmZHTHdhSmNuaXdqeVRRQVdM?=
+ =?utf-8?B?MWR2Z1h4VjhzdWhCWTIzTmlua1VvN3pIZHdXcVN5Z0xWV3cyRXM3a01XTGJn?=
+ =?utf-8?B?ODRCL094Q3UzdVJUb0R5SzhGODJvNDNNQnZPRm5WRis0MUZHcW1hQng0aW14?=
+ =?utf-8?B?L3MrNDJUQXFxVW9vd1NLaEdxWjIyQmVmbzdlakFidDdBSGJzdDBLTTVaU1F2?=
+ =?utf-8?B?bHNXVkwzUTdybmxiczJnZ2ZJaUljNUVadHJ0VzdYOTk2WGhTRllzQWpvUVlP?=
+ =?utf-8?B?TTg5NmZVRjVRQlJudUZBTHE4UmxyaUk2U3RNOERtdTNWTWVPQ3ZVN09IbHdm?=
+ =?utf-8?B?R0hNbElDd0x2MDFuRWMwRjBGeHFRbnkvWHhiRS9aZ2lFVThTcDhqMXJZQm02?=
+ =?utf-8?B?TS8xZytDZldDRi9pMURjSHlJVEl5aGpwMlZGc0J4MnBEQVFzRVRwSkdBaUww?=
+ =?utf-8?B?bUNaRUh1bFVycmx0SFBmOStsQ1dFS2c1NGRKZHUrNVkrTzlCdnUyd1U3ZDRn?=
+ =?utf-8?B?Ti9mejFmNTZvNWhLTzg0SHdieXo5RW43a0ZDUno1SWZOTmR1Q2lxeWVocExL?=
+ =?utf-8?B?OGl3WUdlTm00SjVIMythR3ZhM09oVUo2WjUxTlVFU2lSSVZrTEp5UnFLcEYx?=
+ =?utf-8?B?c2M3WmRMbC9KSXNCaytvYTYyV1A0L0pBN29tcFhnSDYvdDMvVU5WbnNnbElz?=
+ =?utf-8?B?M2FJcnJOWGxoR3NvVGtpZUwwVWRWQ1B1ajZobkpvRHkySEFhN0o2aFluSDUz?=
+ =?utf-8?B?UG93KzlYRmVybUl2WUlBYVVJSys4MURTblp1a25rMDJEMTg4YVl0VVp6dUlh?=
+ =?utf-8?B?V1FRUHpzUHpoRmNiS1ptcytpOEIwUjhpdTI2RmR0MHZaVFZLeUhJMEFhZktE?=
+ =?utf-8?B?K0hJUnRENGZDd2NOd0Nudk1kb1daRXNxMjJKOGpoK3ZTdWJsS0N0cElRQTFi?=
+ =?utf-8?B?WEplYmYwOVhaTFU4dTVlcTBOd1NtWW8rYWloTnZXNjhFWkJIZUZ4M2dyMFpH?=
+ =?utf-8?B?M1dXVHlobkZhZU1sSFE2VHZnQUxtVWJCYlhKY2FweUtqVU52c1AzZGFCeU9I?=
+ =?utf-8?B?bVJhVUkvMHdEa21mK1ZwNkNTLzlZdWtBQjJMUzdVdWpKQmtFL1IrSGZ4UTRQ?=
+ =?utf-8?B?WXRKTm84R0VZN2RCZURMWlYyVlVXOFJPTXVSTFlLSU4yK0FDZVJRdFFtN1Yx?=
+ =?utf-8?B?c2FpTDkvWWtQeXl5UHhqcjV0NUlmOGpYMVdZbDdUeG1KajVJdG9YcjJ6Mkxw?=
+ =?utf-8?B?cjRSUTFFL3JqdWtHRmpabzhyOEVSNjE1MUllYlRYVjZaVmkzd0pjemhnZXNT?=
+ =?utf-8?B?Vmd1ZEJseGdwdjRMbjlnMTQyLys4dHN0eENnOUZGM1RpQmxiMTUrZGNnK0J2?=
+ =?utf-8?B?ZzNBUkJYOGdtalhvNU4yeHI2aXlsZXJYUVIzY1o4OTNqZCtwREkvTGNvd0NL?=
+ =?utf-8?B?TktHUjk4eC85VTVudGN0Si9idElIWFg4TlcvYWVidGNRNkN2d21TQnRLcWVD?=
+ =?utf-8?B?VmZQZEw2K3dGMjhocnRPdnZ2Rk1sQ3hZYlVCR0xtdWxXRmN0Q2NLUWpnS2Ez?=
+ =?utf-8?B?L0VsK3hiU3VRWkZCY3o5cHhTRHVORDREZ20yRzJsV2UveWxFZm9kdEZGZ2lZ?=
+ =?utf-8?B?MDNNMlZ1UlkyQXM2elgrY21KOWVMaW5mRWFPdE5DL2NPV0F6REVXWVJ5cm5D?=
+ =?utf-8?Q?41IaDX7EhSKJ/XhkxSbQ7LMIkGokuxiWKPj3zewoSQ=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0CE13D97E719704A80283799AF25DE16@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3270.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: febe80b7-d039-4154-72de-08d9a077d5ba
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Nov 2021 16:17:59.6074
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XZVxa/Z182rMrx4UEmze67BsRCxVCdJEj8MBdNY8F/+myP/IjpvnmnOXys5P42HKt+hcaloeGbLwVsdh7T9YwYYCKcnX7lJ2OSmzRwnxGk8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB3605
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10159 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 bulkscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111050092
+X-Proofpoint-GUID: 5QClNwbjkbZY2MBQnphy9FSnXGmRTyD9
+X-Proofpoint-ORIG-GUID: 5QClNwbjkbZY2MBQnphy9FSnXGmRTyD9
 
-Hi Jesse, All,
-
-this is a specific driver for imxrt1050, for example imxrt1020 is 
-totally different while imxrt1060 is similar, so commit log needs to 
-change to i.MXRT1050,
-
-On 11/2/21 11:56 PM, Jesse Taube wrote:
-> From: Jesse Taube <mr.bossman075@gmail.com>
-> 
-> This patch adds initial clock driver support for the i.MXRT series.
-
-Here too ^^^
-
-> 
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> Suggested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
-> V1->V2:
-> * Kconfig: Add new line
-> * clk-imxrt.c: Remove unused const
-> * clk-imxrt.c: Remove set parents
-> * clk-imxrt.c: Use fsl,imxrt-anatop for anatop base address
-> ---
->   drivers/clk/imx/Kconfig     |   4 +
->   drivers/clk/imx/Makefile    |   1 +
->   drivers/clk/imx/clk-imxrt.c | 149 ++++++++++++++++++++++++++++++++++++
-
-Here we need this file ^^^ to be clk-imxrt1050.c
-
->   3 files changed, 154 insertions(+)
->   create mode 100644 drivers/clk/imx/clk-imxrt.c
-> 
-> diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
-> index 47d9ec3abd2f..f83ba5fe8cd3 100644
-> --- a/drivers/clk/imx/Kconfig
-> +++ b/drivers/clk/imx/Kconfig
-> @@ -98,3 +98,7 @@ config CLK_IMX8QXP
->   	select MXC_CLK_SCU
->   	help
->   	  Build the driver for IMX8QXP SCU based clocks.
-> +
-> +config CLK_IMXRT
-
-CLK_IMXRT1050
-
-> +	def_bool SOC_IMXRT
-> +	select MXC_CLK
-> diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
-> index c24a2acbfa56..6a3fee6cd9af 100644
-> --- a/drivers/clk/imx/Makefile
-> +++ b/drivers/clk/imx/Makefile
-> @@ -45,3 +45,4 @@ obj-$(CONFIG_CLK_IMX6UL) += clk-imx6ul.o
->   obj-$(CONFIG_CLK_IMX7D)  += clk-imx7d.o
->   obj-$(CONFIG_CLK_IMX7ULP) += clk-imx7ulp.o
->   obj-$(CONFIG_CLK_VF610)  += clk-vf610.o
-> +obj-$(CONFIG_CLK_IMXRT)  += clk-imxrt.o
-
-CONFIG_CLK_IMXRT1050
-
-> diff --git a/drivers/clk/imx/clk-imxrt.c b/drivers/clk/imx/clk-imxrt.c
-> new file mode 100644
-> index 000000000000..8e235925cdb7
-> --- /dev/null
-> +++ b/drivers/clk/imx/clk-imxrt.c
-> @@ -0,0 +1,149 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-> +/*
-> + * Copyright (C) 2021
-> + * Author(s):
-> + * Jesse Taube <Mr.Bossman075@gmail.com>
-> + * Giulio Benetti <giulio.benetti@benettiengineering.com>
-> + */
-> +#include <linux/mm.h>
-> +#include <linux/delay.h>
-> +#include <linux/clk.h>
-> +#include <linux/io.h>
-> +#include <linux/clkdev.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/err.h>
-> +#include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/sizes.h>
-> +#include <soc/imx/revision.h>
-> +#include <dt-bindings/clock/imxrt1050-clock.h>
-
-Indeed here the include is imxrt1050-clock.h and every macro below 
-starts with IMXRT1050_ prefix
-
-> +
-> +#include "clk.h"
-> +#define ANATOP_BASE_ADDR	0x400d8000
-> +
-> +static const char * const pll_ref_sels[] = {"osc", "dummy", };
-> +static const char * const per_sels[] = {"ipg_pdof", "osc", };
-> +static const char * const pll1_bypass_sels[] = {"pll1_arm", "pll1_arm_ref_sel", };
-> +static const char * const pll2_bypass_sels[] = {"pll2_sys", "pll2_sys_ref_sel", };
-> +static const char * const pll3_bypass_sels[] = {"pll3_usb_otg", "pll3_usb_otg_ref_sel", };
-> +static const char * const pll5_bypass_sels[] = {"pll5_video", "pll5_video_ref_sel", };
-> +static const char *const pre_periph_sels[] = {
-> +	"pll2_sys", "pll2_pfd2_396m", "pll2_pfd0_352m", "arm_podf", };
-> +static const char *const periph_sels[] = { "pre_periph_sel", "todo", };
-> +static const char *const usdhc_sels[] = { "pll2_pfd2_396m", "pll2_pfd0_352m", };
-> +static const char *const lpuart_sels[] = { "pll3_80m", "osc", };
-> +static const char *const lcdif_sels[] = {
-> +	"pll2_sys", "pll3_pfd3_454_74m", "pll5_video", "pll2_pfd0_352m",
-> +	"pll2_pfd1_594m", "pll3_pfd1_664_62m", };
-> +
-> +static struct clk *clk[IMXRT1050_CLK_END];
-> +static struct clk_onecell_data clk_data;
-> +
-> +static void __init imxrt_clocks_common_init(void __iomem *base)
-> +{
-> +	/* Anatop clocks */
-> +	clk[IMXRT1050_CLK_DUMMY] = imx_clk_fixed("dummy", 0UL);
-> +
-> +	clk[IMXRT1050_CLK_PLL1_REF_SEL] = imx_clk_mux("pll1_arm_ref_sel",
-> +		base + 0x0, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
-> +	clk[IMXRT1050_CLK_PLL2_REF_SEL] = imx_clk_mux("pll2_sys_ref_sel",
-> +		base + 0x30, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
-> +	clk[IMXRT1050_CLK_PLL3_REF_SEL] = imx_clk_mux("pll3_usb_otg_ref_sel",
-> +		base + 0x10, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
-> +	clk[IMXRT1050_CLK_PLL5_REF_SEL] = imx_clk_mux("pll5_video_ref_sel",
-> +		base + 0xa0, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
-> +
-> +	clk[IMXRT1050_CLK_PLL1_ARM] = imx_clk_pllv3(IMX_PLLV3_SYS, "pll1_arm",
-> +		"pll1_arm_ref_sel", base + 0x0, 0x7f);
-> +	clk[IMXRT1050_CLK_PLL2_SYS] = imx_clk_pllv3(IMX_PLLV3_GENERIC, "pll2_sys",
-> +		"pll2_sys_ref_sel", base + 0x30, 0x1);
-> +	clk[IMXRT1050_CLK_PLL3_USB_OTG] = imx_clk_pllv3(IMX_PLLV3_USB, "pll3_usb_otg",
-> +		"pll3_usb_otg_ref_sel", base + 0x10, 0x1);
-> +	clk[IMXRT1050_CLK_PLL5_VIDEO] = imx_clk_pllv3(IMX_PLLV3_AV, "pll5_video",
-> +		"pll5_video_ref_sel", base + 0xa0, 0x7f);
-> +
-> +	/* PLL bypass out */
-> +	clk[IMXRT1050_CLK_PLL1_BYPASS] = imx_clk_mux_flags("pll1_bypass", base + 0x0, 16, 1,
-> +		pll1_bypass_sels, ARRAY_SIZE(pll1_bypass_sels), CLK_SET_RATE_PARENT);
-> +	clk[IMXRT1050_CLK_PLL2_BYPASS] = imx_clk_mux_flags("pll2_bypass", base + 0x30, 16, 1,
-> +		pll2_bypass_sels, ARRAY_SIZE(pll2_bypass_sels), CLK_SET_RATE_PARENT);
-> +	clk[IMXRT1050_CLK_PLL3_BYPASS] = imx_clk_mux_flags("pll3_bypass", base + 0x10, 16, 1,
-> +		pll3_bypass_sels, ARRAY_SIZE(pll3_bypass_sels), CLK_SET_RATE_PARENT);
-> +	clk[IMXRT1050_CLK_PLL5_BYPASS] = imx_clk_mux_flags("pll5_bypass", base + 0xa0, 16, 1,
-> +		pll5_bypass_sels, ARRAY_SIZE(pll5_bypass_sels), CLK_SET_RATE_PARENT);
-> +
-> +	clk[IMXRT1050_CLK_VIDEO_POST_DIV_SEL] = imx_clk_divider("video_post_div_sel",
-> +		"pll5_video", base + 0xa0, 19, 2);
-> +	clk[IMXRT1050_CLK_VIDEO_DIV] = imx_clk_divider("video_div",
-> +		"video_post_div_sel", base + 0x170, 30, 2);
-> +
-> +	clk[IMXRT1050_CLK_PLL3_80M] = imx_clk_fixed_factor("pll3_80m",  "pll3_usb_otg", 1, 6);
-> +
-> +	clk[IMXRT1050_CLK_PLL2_PFD0_352M] = imx_clk_pfd("pll2_pfd0_352m", "pll2_sys", base + 0x100, 0);
-> +	clk[IMXRT1050_CLK_PLL2_PFD1_594M] = imx_clk_pfd("pll2_pfd1_594m", "pll2_sys", base + 0x100, 1);
-> +	clk[IMXRT1050_CLK_PLL2_PFD2_396M] = imx_clk_pfd("pll2_pfd2_396m", "pll2_sys", base + 0x100, 2);
-> +	clk[IMXRT1050_CLK_PLL3_PFD1_664_62M] = imx_clk_pfd("pll3_pfd1_664_62m", "pll3_usb_otg", base + 0xf0, 1);
-> +	clk[IMXRT1050_CLK_PLL3_PFD3_454_74M] = imx_clk_pfd("pll3_pfd3_454_74m", "pll3_usb_otg", base + 0xf0, 3);
-> +}
-> +
-> +static void __init imxrt1050_clocks_init(struct device_node *np)
-> +{
-> +	void __iomem *ccm_base;
-> +	void __iomem *pll_base;
-> +	struct device_node *anp;
-> +
-> +	clk[IMXRT1050_CLK_OSC] = of_clk_get_by_name(np, "osc");
-> +
-> +	anp = of_find_compatible_node(NULL, NULL, "fsl,imxrt-anatop");
-> +	pll_base = of_iomap(anp, 0);
-> +	WARN_ON(!pll_base);
-> +	imxrt_clocks_common_init(pll_base);
-> +	/* CCM clocks */
-> +	ccm_base = of_iomap(np, 0);
-> +	WARN_ON(!ccm_base);
-> +
-> +	clk[IMXRT1050_CLK_ARM_PODF] = imx_clk_divider("arm_podf", "pll1_arm", ccm_base + 0x10, 0, 3);
-> +	clk[IMXRT1050_CLK_PRE_PERIPH_SEL] = imx_clk_mux("pre_periph_sel", ccm_base + 0x18, 18, 2,
-> +		pre_periph_sels, ARRAY_SIZE(pre_periph_sels));
-> +	clk[IMXRT1050_CLK_PERIPH_SEL] = imx_clk_mux("periph_sel", ccm_base + 0x14, 25, 1,
-> +		periph_sels, ARRAY_SIZE(periph_sels));
-> +	clk[IMXRT1050_CLK_USDHC1_SEL] = imx_clk_mux("usdhc1_sel", ccm_base + 0x1c, 16, 1,
-> +		usdhc_sels, ARRAY_SIZE(usdhc_sels));
-> +	clk[IMXRT1050_CLK_USDHC2_SEL] = imx_clk_mux("usdhc2_sel", ccm_base + 0x1c, 17, 1,
-> +		usdhc_sels, ARRAY_SIZE(usdhc_sels));
-> +	clk[IMXRT1050_CLK_LPUART_SEL] = imx_clk_mux("lpuart_sel", ccm_base + 0x24, 6, 1,
-> +		lpuart_sels, ARRAY_SIZE(lpuart_sels));
-> +	clk[IMXRT1050_CLK_LCDIF_SEL] = imx_clk_mux("lcdif_sel", ccm_base + 0x38, 15, 3,
-> +		lcdif_sels, ARRAY_SIZE(lcdif_sels));
-> +	clk[IMXRT1050_CLK_PER_CLK_SEL] = imx_clk_mux("per_sel", ccm_base + 0x1C, 6, 1,
-> +		per_sels, ARRAY_SIZE(per_sels));
-> +
-> +	clk[IMXRT1050_CLK_AHB_PODF] = imx_clk_divider("ahb", "periph_sel", ccm_base + 0x14, 10, 3);
-> +	clk[IMXRT1050_CLK_IPG_PDOF] = imx_clk_divider("ipg", "ahb", ccm_base + 0x14, 8, 2);
-> +	clk[IMXRT1050_CLK_PER_PDOF] = imx_clk_divider("per", "per_sel", ccm_base + 0x1C, 0, 5);
-> +
-> +	clk[IMXRT1050_CLK_USDHC1_PODF] = imx_clk_divider("usdhc1_podf", "usdhc1_sel", ccm_base + 0x24, 11, 3);
-> +	clk[IMXRT1050_CLK_USDHC2_PODF] = imx_clk_divider("usdhc2_podf", "usdhc2_sel", ccm_base + 0x24, 16, 3);
-> +	clk[IMXRT1050_CLK_LPUART_PODF] = imx_clk_divider("lpuart_podf", "lpuart_sel", ccm_base + 0x24, 0, 6);
-> +	clk[IMXRT1050_CLK_LCDIF_PRED] = imx_clk_divider("lcdif_pred", "lcdif_sel", ccm_base + 0x38, 12, 3);
-> +	clk[IMXRT1050_CLK_LCDIF_PODF] = imx_clk_divider("lcdif_podf", "lcdif_pred", ccm_base + 0x18, 23, 3);
-> +
-> +	clk[IMXRT1050_CLK_USDHC1] = imx_clk_gate2("usdhc1", "usdhc1_podf", ccm_base + 0x80, 2);
-> +	clk[IMXRT1050_CLK_USDHC2] = imx_clk_gate2("usdhc2", "usdhc2_podf", ccm_base + 0x80, 4);
-> +	clk[IMXRT1050_CLK_LPUART1] = imx_clk_gate2("lpuart1", "lpuart_podf", ccm_base + 0x7c, 24);
-> +	clk[IMXRT1050_CLK_LCDIF_APB] = imx_clk_gate2("lcdif", "lcdif_podf", ccm_base + 0x74, 10);
-> +	clk[IMXRT1050_CLK_DMA] = imx_clk_gate("dma", "ipg", ccm_base + 0x7C, 6);
-> +	clk[IMXRT1050_CLK_DMA_MUX] = imx_clk_gate("dmamux0", "ipg", ccm_base + 0x7C, 7);
-> +
-> +	imx_check_clocks(clk, ARRAY_SIZE(clk));
-> +	clk_data.clks = clk;
-> +	clk_data.clk_num = ARRAY_SIZE(clk);
-> +	of_clk_add_provider(np, of_clk_src_onecell_get, &clk_data);
-> +	clk_prepare_enable(clk[IMXRT1050_CLK_PLL1_ARM]);
-> +	clk_prepare_enable(clk[IMXRT1050_CLK_PLL2_SYS]);
-> +	clk_prepare_enable(clk[IMXRT1050_CLK_PLL3_USB_OTG]);
-> +	clk_prepare_enable(clk[IMXRT1050_CLK_PLL3_PFD1_664_62M]);
-> +	clk_prepare_enable(clk[IMXRT1050_CLK_PLL2_PFD2_396M]);
-> +}
-> +CLK_OF_DECLARE(imxrt_ccm, "fsl,imxrt1050-ccm", imxrt1050_clocks_init);
-> 
-
-Thank you
-and
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+DQoNCj4gT24gTm92IDUsIDIwMjEsIGF0IDEyOjUxIEFNLCBBcm5kIEJlcmdtYW5uIDxhcm5kQGtl
+cm5lbC5vcmc+IHdyb3RlOg0KPiANCj4gRnJvbTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5k
+ZT4NCj4gDQo+IFRoZSB3a3VwX20zX3Jwcm9jX2Jvb3RfdGhyZWFkKCkgZnVuY3Rpb24gdXNlcyBh
+IG5vbnN0YW5kYXJkIHByb3RvdHlwZSwNCj4gd2hpY2ggYnJva2UgYWZ0ZXIgRXJpYydzIHJlY2Vu
+dCBjbGVhbnVwOg0KPiANCj4gZHJpdmVycy9zb2MvdGkvd2t1cF9tM19pcGMuYzogSW4gZnVuY3Rp
+b24gJ3drdXBfbTNfcnByb2NfYm9vdF90aHJlYWQnOg0KPiBkcml2ZXJzL3NvYy90aS93a3VwX20z
+X2lwYy5jOjQyOToxNjogZXJyb3I6ICdyZXR1cm4nIHdpdGggYSB2YWx1ZSwgaW4gZnVuY3Rpb24g
+cmV0dXJuaW5nIHZvaWQgWy1XZXJyb3I9cmV0dXJuLXR5cGVdDQo+ICA0MjkgfCAgICAgICAgIHJl
+dHVybiAwOw0KPiAgICAgIHwgICAgICAgICAgICAgICAgXg0KPiBkcml2ZXJzL3NvYy90aS93a3Vw
+X20zX2lwYy5jOjQxNjoxMzogbm90ZTogZGVjbGFyZWQgaGVyZQ0KPiAgNDE2IHwgc3RhdGljIHZv
+aWQgd2t1cF9tM19ycHJvY19ib290X3RocmVhZChzdHJ1Y3Qgd2t1cF9tM19pcGMgKm0zX2lwYykN
+Cj4gICAgICB8ICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCj4gDQo+IENo
+YW5nZSBpdCB0byB0aGUgbm9ybWFsIHByb3RvdHlwZSBhcyBpdCBzaG91bGQgaGF2ZSBiZWVuIGZy
+b20gdGhlDQo+IHN0YXJ0Lg0KPiANCj4gRml4ZXM6IDExMWU3MDQ5MGQyYSAoImV4aXQva3RocmVh
+ZDogSGF2ZSBrZXJuZWwgdGhyZWFkcyByZXR1cm4gaW5zdGVhZCBvZiBjYWxsaW5nIGRvX2V4aXQi
+KQ0KPiBGaXhlczogY2RkNWRlNTAwYjJjICgic29jOiB0aTogQWRkIHdrdXBfbTNfaXBjIGRyaXZl
+ciIpDQo+IFNpZ25lZC1vZmYtYnk6IEFybmQgQmVyZ21hbm4gPGFybmRAYXJuZGIuZGU+DQo+IOKA
+lA0KDQpMb29rcyBnb29kIHRvIG1lLiBUaGFua3MgISENCg0KQWNrZWQtYnk6IFNhbnRvc2ggU2hp
+bGlta2FyIDxzc2FudG9zaEBrZXJuZWwub3JnPg==
