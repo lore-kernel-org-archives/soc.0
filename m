@@ -1,148 +1,175 @@
-Return-Path: <SRS0=LkCy=P3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=ZxEA=P3=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A1CDC433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Nov 2021 17:02:40 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EEC1C4332F
+	for <soc@archiver.kernel.org>; Mon,  8 Nov 2021 17:06:05 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 27BF26120A; Mon,  8 Nov 2021 17:06:05 +0000 (UTC)
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5F47C6120A
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Nov 2021 17:02:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5F47C6120A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=xmission.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Subject:MIME-Version:Message-ID:
-	In-Reply-To:Date:References:Cc:To:From:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Owner;
-	bh=3QZCZJNTWkWRiI77lcJSKhMHebLX/rgo34aPcb6uFa0=; b=g1m5FL+XOkPVM5h2oREJu4Ph7v
-	/p9VpGv4CJl/rhoYWrb+XN6ZNaOGN9ZACjWIGmaWIoimitQ7URqsfbE8US3tRiXeyvt9BzFkcFU+u
-	ZJcVanrQImHc2mH7ffxkGzNps7FK/t4MBQRA5qJQfAyOAs4CooyPa0r5atmX55ihPN62oePd1KbL3
-	MU6mar0yfNB7vwJBGUw67Rtrd9x2UqPfXdSxe9qXeC2aO6CCkxWuw+AONsqLPX6pKkwbrPueZ+WuG
-	SVT6+IXP82fgZluWOeMqlHaNSkslRCXqF7LtMkdZV7rAQ53AWJ5mFuJjZVAf1GbOsFwqhhARYz+eC
-	mxemJBuQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mk80r-00H1Mv-NB; Mon, 08 Nov 2021 17:00:53 +0000
-Received: from out03.mta.xmission.com ([166.70.13.233])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mk80o-00H1La-FF
- for linux-arm-kernel@lists.infradead.org; Mon, 08 Nov 2021 17:00:51 +0000
-Received: from in02.mta.xmission.com ([166.70.13.52]:42358)
- by out03.mta.xmission.com with esmtps (TLS1.3) tls
- TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.93)
- (envelope-from <ebiederm@xmission.com>)
- id 1mk80V-00Dm7O-2T; Mon, 08 Nov 2021 10:00:31 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:53774
- helo=email.xmission.com)
- by in02.mta.xmission.com with esmtpsa (TLS1.3) tls
- TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.93)
- (envelope-from <ebiederm@xmission.com>)
- id 1mk80U-001noj-5H; Mon, 08 Nov 2021 10:00:30 -0700
-From: ebiederm@xmission.com (Eric W. Biederman)
-To: Arnd Bergmann <arnd@kernel.org>
+	by mail.kernel.org (Postfix) with ESMTPS id EDCBF61406;
+	Mon,  8 Nov 2021 17:06:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EDCBF61406
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f54.google.com with SMTP id g25-20020a9d5f99000000b0055af3d227e8so22157060oti.11;
+        Mon, 08 Nov 2021 09:06:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+wQZvNgyyjn3+v8l34ysdaksISh5LnqUaxH3QVKQ1xw=;
+        b=pkgAM+rvk6UpYbKGICeYXvp6EXRiICxElSU5DlI7B81Rh+8UpVQiVpsimNvv62dXFV
+         zxrjr6+UaaCqScKYm1GLb6KuK46Ff2Zi6Yhqp+0L01qoKTjPFS3mZyegUOtvDaiet3ly
+         f6EIjnTzu43iqXBYAy3rd90CU3U4FxH1z+VSlBnFcrOQSfku/S9vVJ2NRkTuiKaN6fQX
+         C2QswJrLJE5skw9D9wEioIu/kBto8ViPfDNTq6BQ20F5JFk4ENeF3GsIHoxzZ8BBUZqH
+         RbOFL0zKIkfS1QpCn2GG5GYxM1bb8QW3CZbiSQ7uxxEgwinv8b0AqEFglPWVr/2DACQ9
+         QNhw==
+X-Gm-Message-State: AOAM533zRQsUNpz4cESD62JNjqeW7CG3mYwrB6gTqHggq3GLBexfQhPp
+	ajow2vbNStxYReVHXBVo2A==
+X-Google-Smtp-Source: ABdhPJyE2m9Bd0mTaoOq+L1k+wveMzvoclq85f8PRR1u9eZbzhJbadk37zweFJPvLaJOuibGv4aDZw==
+X-Received: by 2002:a9d:5c2:: with SMTP id 60mr457729otd.104.1636391164189;
+        Mon, 08 Nov 2021 09:06:04 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id q29sm5703534oof.38.2021.11.08.09.06.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Nov 2021 09:06:03 -0800 (PST)
+Received: (nullmailer pid 3517392 invoked by uid 1000);
+	Mon, 08 Nov 2021 17:06:01 -0000
+Date: Mon, 8 Nov 2021 11:06:01 -0600
+From: Rob Herring <robh@kernel.org>
+To: Jesse Taube <mr.bossman075@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Santosh Shilimkar <ssantosh@kernel.org>, Dave Gerlach <d-gerlach@ti.com>,
- Tony Lindgren <tony@atomide.com>, soc@kernel.org,
- Arnd Bergmann <arnd@arndb.de>, Lee Jones <lee.jones@linaro.org>,
- Zhen Lei <thunder.leizhen@huawei.com>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-References: <20211105075119.2327190-1-arnd@kernel.org>
-Date: Mon, 08 Nov 2021 11:00:03 -0600
-In-Reply-To: <20211105075119.2327190-1-arnd@kernel.org> (Arnd Bergmann's
- message of "Fri, 5 Nov 2021 08:51:12 +0100")
-Message-ID: <87k0hipoq4.fsf@disp2133>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Cc: linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com, stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org, giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 05/13] dt-bindings: clock: imx: Add documentation for
+ i.MXRT clock
+Message-ID: <YYlY+S9iuTjRNFW+@robh.at.kernel.org>
+References: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
+ <20211102225653.W9X4uTuBfjTBCe44PlQdYj5pRnczkEUmvmbnCVeKkeM@z>
 MIME-Version: 1.0
-X-XM-SPF: eid=1mk80U-001noj-5H; ; ; mid=<87k0hipoq4.fsf@disp2133>; ; ;
- hst=in02.mta.xmission.com; ; ; ip=68.227.160.95; ; ; frm=ebiederm@xmission.com;
- ; ; spf=neutral
-X-XM-AID: U2FsdGVkX19xWBTX/qOTO5dbjayArZR1W6WXfYyeGgc=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: Re: [PATCH] soc: ti: fix wkup_m3_rproc_boot_thread return type
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211108_090050_533080_11BDDBFE 
-X-CRM114-Status: GOOD (  22.08  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211108170003.Mba-9ykax_JbOhOn3umKfRshvVOBWCTD__eONeOqHpc@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211102225653.W9X4uTuBfjTBCe44PlQdYj5pRnczkEUmvmbnCVeKkeM@z>
 
-Arnd Bergmann <arnd@kernel.org> writes:
-
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The wkup_m3_rproc_boot_thread() function uses a nonstandard prototype,
-> which broke after Eric's recent cleanup:
->
-> drivers/soc/ti/wkup_m3_ipc.c: In function 'wkup_m3_rproc_boot_thread':
-> drivers/soc/ti/wkup_m3_ipc.c:429:16: error: 'return' with a value, in function returning void [-Werror=return-type]
->   429 |         return 0;
->       |                ^
-> drivers/soc/ti/wkup_m3_ipc.c:416:13: note: declared here
->   416 | static void wkup_m3_rproc_boot_thread(struct wkup_m3_ipc *m3_ipc)
->       |             ^~~~~~~~~~~~~~~~~~~~~~~~~
->
-> Change it to the normal prototype as it should have been from the
-> start.
-
-Thanks for catching this.  I will add it to my tree.
-
-Eric
-
->
-> Fixes: 111e70490d2a ("exit/kthread: Have kernel threads return instead of calling do_exit")
-> Fixes: cdd5de500b2c ("soc: ti: Add wkup_m3_ipc driver")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Tue, Nov 02, 2021 at 06:56:53PM -0400, Jesse Taube wrote:
+> From: Jesse Taube <mr.bossman075@gmail.com>
+> 
+> Add DT binding documentation for i.MXRT clock driver.
+> 
+> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 > ---
->  drivers/soc/ti/wkup_m3_ipc.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
-> index 0733443a2631..72386bd393fe 100644
-> --- a/drivers/soc/ti/wkup_m3_ipc.c
-> +++ b/drivers/soc/ti/wkup_m3_ipc.c
-> @@ -413,8 +413,9 @@ void wkup_m3_ipc_put(struct wkup_m3_ipc *m3_ipc)
->  }
->  EXPORT_SYMBOL_GPL(wkup_m3_ipc_put);
->  
-> -static void wkup_m3_rproc_boot_thread(struct wkup_m3_ipc *m3_ipc)
-> +static int wkup_m3_rproc_boot_thread(void *arg)
->  {
-> +	struct wkup_m3_ipc *m3_ipc = arg;
->  	struct device *dev = m3_ipc->dev;
->  	int ret;
->  
-> @@ -500,7 +501,7 @@ static int wkup_m3_ipc_probe(struct platform_device *pdev)
->  	 * can boot the wkup_m3 as soon as it's ready without holding
->  	 * up kernel boot
->  	 */
-> -	task = kthread_run((void *)wkup_m3_rproc_boot_thread, m3_ipc,
-> +	task = kthread_run(wkup_m3_rproc_boot_thread, m3_ipc,
->  			   "wkup_m3_rproc_loader");
->  
->  	if (IS_ERR(task)) {
+> V1->V2:
+> * Replace macros with values
+> ---
+>  .../bindings/clock/imxrt-clock.yaml           | 70 +++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/imxrt-clock.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/imxrt-clock.yaml b/Documentation/devicetree/bindings/clock/imxrt-clock.yaml
+> new file mode 100644
+> index 000000000000..4e92f79cf707
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/imxrt-clock.yaml
+> @@ -0,0 +1,70 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/imxrt-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Clock bindings for Freescale i.MXRT
+> +
+> +maintainers:
+> +  - Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +  - Jesse Taube <Mr.Bossman075@gmail.com>
+> +
+> +description: |
+> +  The clock consumer should specify the desired clock by having the clock
+> +  ID in its "clocks" phandle cell. See include/dt-bindings/clock/imxrt*-clock.h
+> +  for the full list of i.MXRT clock IDs.
 
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+blank line
+
+> +properties:
+> +  compatible:
+> +    oneOf:
+
+Don't need oneOf for a single entry.
+
+> +      - enum:
+> +          - fsl,imxrt1050-ccm
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +
+> +  clock-names:
+> +    minItems: 1
+
+You have to define the name.
+
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    anatop: anatop@400d8000 {
+> +      compatible = "fsl,imxrt-anatop";
+> +      reg = <0x400d8000 0x4000>;
+> +    };
+
+Not relevant to the example.
+
+> +
+> +    ccm@400fc000 {
+> +      compatible = "fsl,imxrt1050-ccm";
+> +      reg = <0x400fc000 0x4000>;
+> +      interrupts = <95>,<96>;
+> +      clocks = <&osc>;
+> +      clock-names = "osc";
+> +      #clock-cells = <1>;
+> +    };
+> +
+> +    gpt: timer@401ec000 {
+
+Drop unused labels.
+
+> +      compatible = "fsl,imx53-gpt", "fsl,imx31-gpt";
+
+Probably should be: "fsl,imxrt1050-gpt", "fsl,imx31-gpt"
+
+Unless there's same features/quirks as the MX53 version?
+
+> +      reg = <0x401ec000 0x4000>;
+> +      interrupts = <100>;
+> +      clocks = <&clks 3>;
+> +      clock-names = "per";
+> +    };
+> -- 
+> 2.33.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
