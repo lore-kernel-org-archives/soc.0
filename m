@@ -1,57 +1,105 @@
-Return-Path: <SRS0=ZxEA=P3=gmail.com=robherring2@kernel.org>
+Return-Path: <SRS0=LkCy=P3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EEC1C4332F
-	for <soc@archiver.kernel.org>; Mon,  8 Nov 2021 17:06:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id 27BF26120A; Mon,  8 Nov 2021 17:06:05 +0000 (UTC)
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B5A1C433EF
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Nov 2021 17:07:27 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EDCBF61406;
-	Mon,  8 Nov 2021 17:06:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EDCBF61406
+	by mail.kernel.org (Postfix) with ESMTPS id 4699060EE9
+	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Nov 2021 17:07:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4699060EE9
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f54.google.com with SMTP id g25-20020a9d5f99000000b0055af3d227e8so22157060oti.11;
-        Mon, 08 Nov 2021 09:06:04 -0800 (PST)
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
+	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=aXwiwjvk2v3VLyVEAMlcgE3y/xT7tfRMWXAXm9FXdk8=; b=f3bXqz8UiGofOy
+	nDggWR48k+ttrf31/ByuTnqZPAVbAFISRYjs0LqEgcJxwY6BU6fdQ4farr/vDyNL57Swsxr53x5dJ
+	U2wgAF9uAnJ5rNo61JoMgAFh4suUfbiA2VQnfw9ojjzWdQt10A0FCfUzfvW5LkI6Qji2qL1Y7Tnh9
+	awYFI3gmUceNVQhvXB2MJpmnoVYMwbtpjVjG/QeqMSt9L/Bn3Nv25SM11XKQ8hTzi9PGcl0db/Pyh
+	bBbecSZ3nWiKfOh0/3eWppOkbmqN+PEKPMh3Q7n7YYZVh25JASBEj1qZ6Xk2oR7g4MnhxvPyQSMEl
+	TD0ZwlWLw4HnHFS9Bonw==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mk85y-00H23F-Sv; Mon, 08 Nov 2021 17:06:11 +0000
+Received: from mail-ot1-f50.google.com ([209.85.210.50])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mk85t-00H21V-Lo
+ for linux-arm-kernel@lists.infradead.org; Mon, 08 Nov 2021 17:06:09 +0000
+Received: by mail-ot1-f50.google.com with SMTP id
+ h16-20020a9d7990000000b0055c7ae44dd2so10541676otm.10
+ for <linux-arm-kernel@lists.infradead.org>;
+ Mon, 08 Nov 2021 09:06:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+wQZvNgyyjn3+v8l34ysdaksISh5LnqUaxH3QVKQ1xw=;
-        b=pkgAM+rvk6UpYbKGICeYXvp6EXRiICxElSU5DlI7B81Rh+8UpVQiVpsimNvv62dXFV
-         zxrjr6+UaaCqScKYm1GLb6KuK46Ff2Zi6Yhqp+0L01qoKTjPFS3mZyegUOtvDaiet3ly
-         f6EIjnTzu43iqXBYAy3rd90CU3U4FxH1z+VSlBnFcrOQSfku/S9vVJ2NRkTuiKaN6fQX
-         C2QswJrLJE5skw9D9wEioIu/kBto8ViPfDNTq6BQ20F5JFk4ENeF3GsIHoxzZ8BBUZqH
-         RbOFL0zKIkfS1QpCn2GG5GYxM1bb8QW3CZbiSQ7uxxEgwinv8b0AqEFglPWVr/2DACQ9
-         QNhw==
-X-Gm-Message-State: AOAM533zRQsUNpz4cESD62JNjqeW7CG3mYwrB6gTqHggq3GLBexfQhPp
-	ajow2vbNStxYReVHXBVo2A==
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+ :mime-version:content-disposition:in-reply-to;
+ bh=+wQZvNgyyjn3+v8l34ysdaksISh5LnqUaxH3QVKQ1xw=;
+ b=sRExyYH04X2Jgl/Qw/4wjm980awm9Gl+5LxoygKByeMBn8+7VOLGcfG1Fd11uGauHy
+ B5nKC01xhGTwzixxhoWu++ESfD++specmYONtZ/5qdhfFodk05M/S8js0FEj51XCysCo
+ NM7b4wY7FbylXMoABSN8cXqxjhO85NBrOgmBFDzUmJMiQ32FmuTVtbPx6vor8M5v1vG3
+ nTbo77j28x6hnHzm/ievdsHnDkxix7VPild/UsAZjH+4fuwbeXo8NwxfhTHd3tufRzdx
+ XaJmdji6LtSw7UuFt1XDERwUKAp63pqJQ91yLRcbruej3GjvrcB3LQSOX5FuhkivocEu
+ cIAg==
+X-Gm-Message-State: AOAM531W9U79AcFZp1hcD0B/w7jJho44n3rng9DizkSMvjuFc+69ZKWJ
+ dRyMuOOW+21XC0O2PdgPSA==
 X-Google-Smtp-Source: ABdhPJyE2m9Bd0mTaoOq+L1k+wveMzvoclq85f8PRR1u9eZbzhJbadk37zweFJPvLaJOuibGv4aDZw==
 X-Received: by 2002:a9d:5c2:: with SMTP id 60mr457729otd.104.1636391164189;
-        Mon, 08 Nov 2021 09:06:04 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id q29sm5703534oof.38.2021.11.08.09.06.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Nov 2021 09:06:03 -0800 (PST)
+ Mon, 08 Nov 2021 09:06:04 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net.
+ [66.90.148.213])
+ by smtp.gmail.com with ESMTPSA id q29sm5703534oof.38.2021.11.08.09.06.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 08 Nov 2021 09:06:03 -0800 (PST)
 Received: (nullmailer pid 3517392 invoked by uid 1000);
-	Mon, 08 Nov 2021 17:06:01 -0000
+ Mon, 08 Nov 2021 17:06:01 -0000
 Date: Mon, 8 Nov 2021 11:06:01 -0600
 From: Rob Herring <robh@kernel.org>
 To: Jesse Taube <mr.bossman075@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com, stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org, giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
+Cc: linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
+ shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+ festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com,
+ stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org,
+ arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk,
+ abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org,
+ giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-serial@vger.kernel.org
 Subject: Re: [PATCH v2 05/13] dt-bindings: clock: imx: Add documentation for
  i.MXRT clock
 Message-ID: <YYlY+S9iuTjRNFW+@robh.at.kernel.org>
 References: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
  <20211102225653.W9X4uTuBfjTBCe44PlQdYj5pRnczkEUmvmbnCVeKkeM@z>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20211102225653.W9X4uTuBfjTBCe44PlQdYj5pRnczkEUmvmbnCVeKkeM@z>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211108_090605_741774_82A30952 
+X-CRM114-Status: GOOD (  22.74  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211108170601.gz8EWaL5n8GtyBar0_70NUaA0HSfaquyj_u1x2kpaUg@z>
 
 On Tue, Nov 02, 2021 at 06:56:53PM -0400, Jesse Taube wrote:
 > From: Jesse Taube <mr.bossman075@gmail.com>
@@ -173,3 +221,8 @@ Unless there's same features/quirks as the MX53 version?
 > linux-arm-kernel@lists.infradead.org
 > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 > 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
