@@ -1,228 +1,77 @@
-Return-Path: <SRS0=LkCy=P3=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <robh@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B5A1C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Nov 2021 17:07:27 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4699060EE9
-	for <linux-arm-kernel@archiver.kernel.org>; Mon,  8 Nov 2021 17:07:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4699060EE9
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:In-Reply-To:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=aXwiwjvk2v3VLyVEAMlcgE3y/xT7tfRMWXAXm9FXdk8=; b=f3bXqz8UiGofOy
-	nDggWR48k+ttrf31/ByuTnqZPAVbAFISRYjs0LqEgcJxwY6BU6fdQ4farr/vDyNL57Swsxr53x5dJ
-	U2wgAF9uAnJ5rNo61JoMgAFh4suUfbiA2VQnfw9ojjzWdQt10A0FCfUzfvW5LkI6Qji2qL1Y7Tnh9
-	awYFI3gmUceNVQhvXB2MJpmnoVYMwbtpjVjG/QeqMSt9L/Bn3Nv25SM11XKQ8hTzi9PGcl0db/Pyh
-	bBbecSZ3nWiKfOh0/3eWppOkbmqN+PEKPMh3Q7n7YYZVh25JASBEj1qZ6Xk2oR7g4MnhxvPyQSMEl
-	TD0ZwlWLw4HnHFS9Bonw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mk85y-00H23F-Sv; Mon, 08 Nov 2021 17:06:11 +0000
-Received: from mail-ot1-f50.google.com ([209.85.210.50])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mk85t-00H21V-Lo
- for linux-arm-kernel@lists.infradead.org; Mon, 08 Nov 2021 17:06:09 +0000
-Received: by mail-ot1-f50.google.com with SMTP id
- h16-20020a9d7990000000b0055c7ae44dd2so10541676otm.10
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 08 Nov 2021 09:06:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=+wQZvNgyyjn3+v8l34ysdaksISh5LnqUaxH3QVKQ1xw=;
- b=sRExyYH04X2Jgl/Qw/4wjm980awm9Gl+5LxoygKByeMBn8+7VOLGcfG1Fd11uGauHy
- B5nKC01xhGTwzixxhoWu++ESfD++specmYONtZ/5qdhfFodk05M/S8js0FEj51XCysCo
- NM7b4wY7FbylXMoABSN8cXqxjhO85NBrOgmBFDzUmJMiQ32FmuTVtbPx6vor8M5v1vG3
- nTbo77j28x6hnHzm/ievdsHnDkxix7VPild/UsAZjH+4fuwbeXo8NwxfhTHd3tufRzdx
- XaJmdji6LtSw7UuFt1XDERwUKAp63pqJQ91yLRcbruej3GjvrcB3LQSOX5FuhkivocEu
- cIAg==
-X-Gm-Message-State: AOAM531W9U79AcFZp1hcD0B/w7jJho44n3rng9DizkSMvjuFc+69ZKWJ
- dRyMuOOW+21XC0O2PdgPSA==
-X-Google-Smtp-Source: ABdhPJyE2m9Bd0mTaoOq+L1k+wveMzvoclq85f8PRR1u9eZbzhJbadk37zweFJPvLaJOuibGv4aDZw==
-X-Received: by 2002:a9d:5c2:: with SMTP id 60mr457729otd.104.1636391164189;
- Mon, 08 Nov 2021 09:06:04 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net.
- [66.90.148.213])
- by smtp.gmail.com with ESMTPSA id q29sm5703534oof.38.2021.11.08.09.06.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Nov 2021 09:06:03 -0800 (PST)
-Received: (nullmailer pid 3517392 invoked by uid 1000);
- Mon, 08 Nov 2021 17:06:01 -0000
-Date: Mon, 8 Nov 2021 11:06:01 -0600
-From: Rob Herring <robh@kernel.org>
-To: Jesse Taube <mr.bossman075@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
- shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
- festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com,
- stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org,
- arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk,
- abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org,
- giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 05/13] dt-bindings: clock: imx: Add documentation for
- i.MXRT clock
-Message-ID: <YYlY+S9iuTjRNFW+@robh.at.kernel.org>
-References: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
- <20211102225653.W9X4uTuBfjTBCe44PlQdYj5pRnczkEUmvmbnCVeKkeM@z>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E451C433F5
+	for <soc@archiver.kernel.org>; Tue,  9 Nov 2021 00:26:03 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 481DD61242; Tue,  9 Nov 2021 00:26:03 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3178D61178;
+	Tue,  9 Nov 2021 00:26:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1636417563;
+	bh=tNyHmn7MoFG7hGgzaH5iztXIDQ91XHEjgXIf7yVyImg=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=tEBqybOJxNaLmxWJg40hpf+l8w9g/ZPAo/0zDbagXH+0uKT4OOi6bksxuXMI91Rw6
+	 wx/uOt102JX1Vdni+9yVGrSRTzxTdGgwVUw5taC0yviF39/nfezDbefmjUpAUVvn85
+	 o5r0yiqxBSIV9RfKkt68QLnoaARB/coEcrbVgVTQZn3O3/nv3Qfbf9YaHBBVaotRmh
+	 Pr5rxUiCVkgeVmEUaS+6O/wfbkXU5TyM9Z5Lr/bklLIcvrHPIxYBnQlyCkSfUoibZ/
+	 MaEjrvu+4RPhF/HeUYQ0KHHVJgBQyM/0mvfaXWh3yp5Xy/7XDj4zEM0rdIVYk5IMyF
+	 9sSxcEGNfZBHg==
+Received: by mail-ed1-f47.google.com with SMTP id ee33so69894674edb.8;
+        Mon, 08 Nov 2021 16:26:03 -0800 (PST)
+X-Gm-Message-State: AOAM532REPGuISWdnGu0AKXJNroLk1bhrT/mPYsk5zD8kBQd4PgVuftc
+	18CVVjIPVoQ2PzFllDvlI5MOJaUq4yWzPZO7mA==
+X-Google-Smtp-Source: ABdhPJwOg7U7/SkPH9Z9GutFtAb8W9OtiSRxQGQ5YxNEBT5VNJyIgLfLqyka+tL2yoRRAm53DoLYkgdk5kNLrUyxb+s=
+X-Received: by 2002:a50:da06:: with SMTP id z6mr4231493edj.355.1636417561688;
+ Mon, 08 Nov 2021 16:26:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211102225653.W9X4uTuBfjTBCe44PlQdYj5pRnczkEUmvmbnCVeKkeM@z>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211108_090605_741774_82A30952 
-X-CRM114-Status: GOOD (  22.74  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211108170601.gz8EWaL5n8GtyBar0_70NUaA0HSfaquyj_u1x2kpaUg@z>
+References: <20211024232003.211484-1-linus.walleij@linaro.org> <20211105183930.GA1448386@roeck-us.net>
+In-Reply-To: <20211105183930.GA1448386@roeck-us.net>
+From: Rob Herring <robh@kernel.org>
+Date: Mon, 8 Nov 2021 18:25:50 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+XAVio9Drvi-XPN=wHojE2PaxLa3pjxdO73H_0iVXi3A@mail.gmail.com>
+Message-ID: <CAL_Jsq+XAVio9Drvi-XPN=wHojE2PaxLa3pjxdO73H_0iVXi3A@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dts: arm: Update register-bit-led nodes 'reg' and
+ node names
+To: Guenter Roeck <linux@roeck-us.net>
+List-Id: <soc.lore.kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>, ARM-SoC Maintainers <arm@kernel.org>, SoC Team <soc@kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, Liviu Dudau <liviu.dudau@arm.com>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Nov 02, 2021 at 06:56:53PM -0400, Jesse Taube wrote:
-> From: Jesse Taube <mr.bossman075@gmail.com>
-> 
-> Add DT binding documentation for i.MXRT clock driver.
-> 
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> ---
-> V1->V2:
-> * Replace macros with values
-> ---
->  .../bindings/clock/imxrt-clock.yaml           | 70 +++++++++++++++++++
->  1 file changed, 70 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/imxrt-clock.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/imxrt-clock.yaml b/Documentation/devicetree/bindings/clock/imxrt-clock.yaml
-> new file mode 100644
-> index 000000000000..4e92f79cf707
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/imxrt-clock.yaml
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/imxrt-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Clock bindings for Freescale i.MXRT
-> +
-> +maintainers:
-> +  - Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +  - Jesse Taube <Mr.Bossman075@gmail.com>
-> +
-> +description: |
-> +  The clock consumer should specify the desired clock by having the clock
-> +  ID in its "clocks" phandle cell. See include/dt-bindings/clock/imxrt*-clock.h
-> +  for the full list of i.MXRT clock IDs.
+On Fri, Nov 5, 2021 at 1:39 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> Hi,
+>
+> On Mon, Oct 25, 2021 at 01:20:03AM +0200, Linus Walleij wrote:
+> > From: Rob Herring <robh@kernel.org>
+> >
+> > Add a 'reg' entry for register-bit-led nodes on the Arm Ltd platforms.
+> > The 'reg' entry is the LED control register address. With this, the node
+> > name can be updated to use a generic node name, 'led', and a
+> > unit-address.
+> >
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: Liviu Dudau <liviu.dudau@arm.com>
+> > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> > Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> > ---
+> > SoC folks: please apply this directly for v5.16.
+>
+> This patch results in widespread sysfs backtraces with various qemu arm
+> emulations (versatilepb, versatileab, realview-pb-a8, realview-pbx-a9,
+> realview-eb, realview-eb-mpcore, integratorcp, mps2-an385).
 
-blank line
+Sigh. I'm working on a fix for this. Though the only way to fix
+without a DT ABI break is reverting. A stable kernel update is
+probably good enough.
 
-> +properties:
-> +  compatible:
-> +    oneOf:
+There's a problem with the clock changes, too, but it looks like it
+just affects the CLCD.
 
-Don't need oneOf for a single entry.
-
-> +      - enum:
-> +          - fsl,imxrt1050-ccm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +
-> +  clock-names:
-> +    minItems: 1
-
-You have to define the name.
-
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - '#clock-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    anatop: anatop@400d8000 {
-> +      compatible = "fsl,imxrt-anatop";
-> +      reg = <0x400d8000 0x4000>;
-> +    };
-
-Not relevant to the example.
-
-> +
-> +    ccm@400fc000 {
-> +      compatible = "fsl,imxrt1050-ccm";
-> +      reg = <0x400fc000 0x4000>;
-> +      interrupts = <95>,<96>;
-> +      clocks = <&osc>;
-> +      clock-names = "osc";
-> +      #clock-cells = <1>;
-> +    };
-> +
-> +    gpt: timer@401ec000 {
-
-Drop unused labels.
-
-> +      compatible = "fsl,imx53-gpt", "fsl,imx31-gpt";
-
-Probably should be: "fsl,imxrt1050-gpt", "fsl,imx31-gpt"
-
-Unless there's same features/quirks as the MX53 version?
-
-> +      reg = <0x401ec000 0x4000>;
-> +      interrupts = <100>;
-> +      clocks = <&clks 3>;
-> +      clock-names = "per";
-> +    };
-> -- 
-> 2.33.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Rob
