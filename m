@@ -1,123 +1,99 @@
-Return-Path: <SRS0=3r8u=P4=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=75Zl=P4=gmail.com=mr.bossman075@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B292EC433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Nov 2021 01:35:01 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A7FDC433EF
+	for <soc@archiver.kernel.org>; Tue,  9 Nov 2021 02:59:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id 0691561288; Tue,  9 Nov 2021 02:59:11 +0000 (UTC)
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 762C7610A3
-	for <linux-arm-kernel@archiver.kernel.org>; Tue,  9 Nov 2021 01:35:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 762C7610A3
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=X3Qbs0BfmjOEiiLPhSh3CmxvwtFB5EIFBrmz3SbqZ4U=; b=0/M13AH2YwWC2K
-	uMe/HHbxTI1Qz2fS/NwX4aBNUnfmRxAda5O0KZqdjBRfpTFNUE6LKS/nU7TdGw/Kcnps8by1bOHcA
-	6g9Dp55yju2HjYBeRjE4Lvpjsx0/D1vML2AuRdLmr4bckRkrTxiNpFP+9/10oacFEGZIepGy9Pe3j
-	VtMCxE79rE6WPdBQHbus9jqKcBsEODjwZ6Vh0gOPKL2T4rzIfAU3Nq5ZBzVeDyCB+tlhwMlTcdDGe
-	Ul9JtSFoKPx3aV98I6NrsDmFfDOPCF0UkyGKY8Hz+VVFB+HQGOIKeUKk9xkHWReWLK54VRkpVXlM9
-	RVGgqvmtW088+oFpY8Zw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mkG0j-000N9h-E8; Tue, 09 Nov 2021 01:33:18 +0000
-Received: from mail-oo1-xc35.google.com ([2607:f8b0:4864:20::c35])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mkFbi-000Dgn-EM
- for linux-arm-kernel@lists.infradead.org; Tue, 09 Nov 2021 01:07:27 +0000
-Received: by mail-oo1-xc35.google.com with SMTP id
- z11-20020a4a870b000000b002b883011c77so6471788ooh.5
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 08 Nov 2021 17:07:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linaro.org; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=ednwC4rk+fMRoZ56y8enAsmD1OcJ155WuvM3vrzbF0g=;
- b=kW2VZKXq10e3+j2pN2rREnvfGn/ed2pBKv/FDDZGYkiJ1B/Tm+e592rBZOssvxp1nL
- lJ8uNMknOuWUpEbsMD9f5YGmpAyp6iPS1isss6b24feSEfiOdZDz5BB1kClvWeRx3m+k
- nSKJo7mf0P6cENwhEMcYQl79zQf2G4kpxcTjF8qti3XLvenzR4E8B9owfJGlT5swp/tO
- 0E211Heecg5kaSUuT4hqK7LMmN/Dv9ANQuL2x50Vl2dhZTV7X4DyPTdhV7FFap/gkuZA
- a7curh+yVVMTtyUoMlA9s4fMN4nseVOWXU0tC4BMuT7AR0lvBWHgKVcMoJw8R1BKkXeI
- mtJg==
+	by mail.kernel.org (Postfix) with ESMTPS id B661261107;
+	Tue,  9 Nov 2021 02:59:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B661261107
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f170.google.com with SMTP id v4so15758921qtw.8;
+        Mon, 08 Nov 2021 18:59:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KTb+7uV/W+NPaaM9VZAqKHX3rqV7nBXAeF1f2Hw+bI4=;
+        b=ij+A9vEaG/2b35tGtQspRFkQMmic+mzirQ6ss4f/MwfoH4dzDnv59zb8J+Z+6X+kh7
+         4yjzK5yktnBWaipNbGhofbMEcLokPg7SctncpMsolsWZCuvWq7gJSy7Gai6sWstsXsrb
+         CMf6vZW/0s4TevvgP7k2kMqwgi89Tcvt0JJJVRhUtQUSKEbx4eO1+RaNnHexPy6SE4F8
+         wCVdqB0/ghtqKkXCYW4O7akYJrWwXwCCzvIW8M4H3/qOhLvf4PJmRjuIgDD5YfkSCr5y
+         4rP3pBXOd0s5VfWM3hWx75mee76G+majcCOiD/sB3Tw/sUYZt3TVVz/bhAQAMicr6/ta
+         WsAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=ednwC4rk+fMRoZ56y8enAsmD1OcJ155WuvM3vrzbF0g=;
- b=AhhEphX+f48sU74Nu4djdZCopv50xRxuL6lipOY9RXl68n2Yma+0vh7CBs2QIVTs7o
- gEkmv69ruSdvAQ2tUp6eIq+eCZrJTehsqSo34Qs07C0W7PdYTAuWEoNHqBWD6Tq5OuUc
- iywLCpstfMxgpnbf4IRUVacF7XfQ+5lFqe3rt1N4dinWYIroeEEjNTDEyu3pJXa43ZOG
- LY6N+VUd2Q8ZA0NXrktD4pCEHIKDHmm7PgBhePUEyIn8MS+hLAOqJGj0yhnjOUoj1D4x
- HErYpGrstPtIIiiR9XIXjWj/CBHToddra6U0NV91pvXqZoQNh+7bqPd5RbVlQaTBzVBg
- /syg==
-X-Gm-Message-State: AOAM5323AxxVEkus7JRRsWb3uX7TGHMyMj+HdhWWPk7PD5u60MG3Z2ek
- J/orjOl4Jab3hf3XUSaz1OHFTUnG+3OEZ4h61uIfBA==
-X-Google-Smtp-Source: ABdhPJxZSqASgOxakIs7bpwXgWYlDpKIrlNu94fm32sHo3EvuzrjMEZORAzZOMFOE3CUot1IZlKvoozayP2kRdmgAXQ=
-X-Received: by 2002:a4a:e5cd:: with SMTP id r13mr1831608oov.84.1636420045513; 
- Mon, 08 Nov 2021 17:07:25 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KTb+7uV/W+NPaaM9VZAqKHX3rqV7nBXAeF1f2Hw+bI4=;
+        b=kbWdeVEZ9P7scaHbjeWqdcN4zs5HRg9FAMiphT/9p8kpcEAhAN+kOX20fonb53lRLz
+         YCucKg1d4XTG8kYl6XKe3FA07b4uJwHVI7eyN52oH3eoYCoqqtDA+UXLEf52OmcSwPLx
+         rAKA3SKrgMvZRXRy8mMvAMX27eYtVlt632r5+jHftuqoD5bSop0VPfW/f8YLNQCqiU1q
+         Ah8hD05AbH8eluBYw6UGKtce1HqX57dZq/zqHGBpmgbFKCLGcaEjN7dYUwsDKE/5tH4O
+         bdtJ0ACqL+Xp49X0iRB4SmOxOomKdA1Wj8jhMEB9w1ynE7PfXyoAUZG+2fDdMevGywWw
+         n32Q==
+X-Gm-Message-State: AOAM530s6KwaoaHqheNg0R0T20xrebl6A06EMzR/8kG0D6Bdk+Sh9GjI
+	wnrOooohWu1Cj+NNgsbfTUc=
+X-Google-Smtp-Source: ABdhPJwFKM3gy/6Cpe0SzF+P+k3n+KU7EeM7tmAMCtcmrYQX7XtMBHopzbqmIn4FtK1sLFxDRdNQ6g==
+X-Received: by 2002:a05:622a:2d6:: with SMTP id a22mr4824094qtx.220.1636426749863;
+        Mon, 08 Nov 2021 18:59:09 -0800 (PST)
+Received: from [10.4.10.38] (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
+        by smtp.gmail.com with ESMTPSA id g13sm11137437qko.103.2021.11.08.18.59.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Nov 2021 18:59:09 -0800 (PST)
+Message-ID: <7a96b7aa-b7f7-ac9d-89e9-4843104f4254@gmail.com>
+Date: Mon, 8 Nov 2021 21:59:07 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH v2 02/13] dt-bindings: pinctrl: add i.MXRT1050 pinctrl
+ binding doc
+Content-Language: en-US
+To: Linus Walleij <linus.walleij@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Rob Herring <robh@kernel.org>, mturquette@baylibre.com,
+ aisheng.dong@nxp.com, linux@armlinux.org.uk, s.hauer@pengutronix.de,
+ linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ adrian.hunter@intel.com, linux-mmc@vger.kernel.org, kernel@pengutronix.de,
+ shawnguo@kernel.org, linux-serial@vger.kernel.org, jirislaby@kernel.org,
+ robh+dt@kernel.org, abel.vesa@nxp.com, festevam@gmail.com,
+ ulf.hansson@linaro.org, linux-kernel@vger.kernel.org, stefan@agner.ch,
+ olof@lixom.net, sboyd@kernel.org, nobuhiro1.iwamatsu@toshiba.co.jp,
+ linux-clk@vger.kernel.org, arnd@arndb.de, devicetree@vger.kernel.org,
+ linux-imx@nxp.com, soc@kernel.org, gregkh@linuxfoundation.org,
+ giulio.benetti@benettiengineering.com
 References: <20211102225701.98944-1-Mr.Bossman075@gmail.com>
  <20211102225701.98944-3-Mr.Bossman075@gmail.com>
  <1635902437.626178.3880384.nullmailer@robh.at.kernel.org>
  <c97c45ac-d9d6-a21b-9c43-69f58b07f265@gmail.com>
-In-Reply-To: <c97c45ac-d9d6-a21b-9c43-69f58b07f265@gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 9 Nov 2021 02:07:14 +0100
-Message-ID: <CACRpkda9e8FtjR3XB97Lu8X5=yeApk==4+zSqo3Qp6bWxgJAcw@mail.gmail.com>
-Subject: Re: [PATCH v2 02/13] dt-bindings: pinctrl: add i.MXRT1050 pinctrl
- binding doc
-To: Jesse Taube <mr.bossman075@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh@kernel.org>, mturquette@baylibre.com,
- aisheng.dong@nxp.com, 
- linux@armlinux.org.uk, s.hauer@pengutronix.de, linux-gpio@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, adrian.hunter@intel.com, 
- linux-mmc@vger.kernel.org, kernel@pengutronix.de, shawnguo@kernel.org, 
- linux-serial@vger.kernel.org, jirislaby@kernel.org, robh+dt@kernel.org, 
- abel.vesa@nxp.com, festevam@gmail.com, ulf.hansson@linaro.org, 
- linux-kernel@vger.kernel.org, stefan@agner.ch, olof@lixom.net, 
- sboyd@kernel.org, nobuhiro1.iwamatsu@toshiba.co.jp, linux-clk@vger.kernel.org, 
- arnd@arndb.de, devicetree@vger.kernel.org, linux-imx@nxp.com, soc@kernel.org, 
- gregkh@linuxfoundation.org, giulio.benetti@benettiengineering.com
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211108_170726_517187_BD47F454 
-X-CRM114-Status: UNSURE (   8.93  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+ <CACRpkda9e8FtjR3XB97Lu8X5=yeApk==4+zSqo3Qp6bWxgJAcw@mail.gmail.com>
+From: Jesse Taube <mr.bossman075@gmail.com>
+In-Reply-To: <CACRpkda9e8FtjR3XB97Lu8X5=yeApk==4+zSqo3Qp6bWxgJAcw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211109010714.33dkBJgSjaF-da52OEvfAKT2b-Vd4LzzAhHA378n42U@z>
 
-On Wed, Nov 3, 2021 at 2:38 AM Jesse Taube <mr.bossman075@gmail.com> wrote:
 
-> Ah I thought it would stop make at error i see it now, is there a way to
-> do one file.
 
-Yes:
-
-make dt_binding_check DT_SCHEMA_FILES=Documentation/...
-
-Yours,
-Linus Walleij
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+On 11/8/21 20:07, Linus Walleij wrote:
+> On Wed, Nov 3, 2021 at 2:38 AM Jesse Taube <mr.bossman075@gmail.com> wrote:
+> 
+>> Ah I thought it would stop make at error i see it now, is there a way to
+>> do one file.
+> 
+> Yes:
+> 
+> make dt_binding_check DT_SCHEMA_FILES=Documentation/...
+Thank you :). I'm sorry about the lack of activity recently but Giulio 
+has his work and i have school, but don't worry we are making progress. 
+Thanks so much for everyone's help with this, and dealing with my 
+newbieness.
+> Yours,
+> Linus Walleij
+> 
