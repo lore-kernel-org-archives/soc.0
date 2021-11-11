@@ -1,103 +1,106 @@
-Return-Path: <SRS0=2wBR=P5=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <linux-clk-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 790A0C433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Nov 2021 20:11:05 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4092561247
-	for <linux-arm-kernel@archiver.kernel.org>; Wed, 10 Nov 2021 20:11:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4092561247
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:List-Subscribe:List-Help:
-	List-Post:List-Archive:List-Unsubscribe:List-Id:Cc:To:Date:Message-Id:
-	References:In-Reply-To:From:Subject:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=x/GRaxlpCZv9Qc7XQXb+Zkb4BwV/CoHorRaIJ671F7Q=; b=OXHJc8OgAeAy96
-	g26rUcM8XJZwgTnjtUHLnWOi6kcz/GZNPuDNXxndmShml3796OdelUGGOAyxbzf0OMGzqivhT65Mg
-	N6CGCPPDMQLnqVpS/zmQ2am2lUNdA+U+3F5BLzoVxjHo3pybxeqRAWDwQ0qk/5mPrOF/FnfuvI3e9
-	wLP/6/f7MZfCMiP1AqkfKBmXUWdtMhwrolOrhGAz/HirXPb2TJJEj/ts2mPvdQECBlgpGtzJiegU2
-	yNvSFlOL8Wa8J3lyAbhjQ6Dt05wYhk7bmG3KBRBixv2WGSucDAJVU58ZJbLH9jI9jL9gLiQbejTm+
-	08mufNTkeNW6BFMRyYeg==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mktuu-006Ica-PT; Wed, 10 Nov 2021 20:09:57 +0000
-Received: from mail.kernel.org ([198.145.29.99])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mktup-006IbR-UH
- for linux-arm-kernel@lists.infradead.org; Wed, 10 Nov 2021 20:09:53 +0000
-Received: by mail.kernel.org (Postfix) with ESMTPS id 34E1A6109F;
- Wed, 10 Nov 2021 20:09:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1636574991;
- bh=HzQryat/nU6Ul3b5vA4Vbi1qCwWjWbaPsS9BBfi97WY=;
- h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
- b=t4iNoGXl7I/mjiRufs7kt/GpLLC/JdKDj0yGawEtMySPUs/ER2VQ7t77FURXyGkIH
- Xsn1aomyPGuVOU9kNppQDBUDOubRU0K/NZkyI/xn0x8JWgJdHIKbO0tySxgSN5WYaj
- HndYBbQKGbEzcnxtKI7jl/DMOL1nU+MOINqY0ua92WttBEw4SWRiwVrVHb/30GkEmb
- XBjc0xjaN38Dj8+HpqejvEcqLwe7bisS0XtX9yqch1I9fJIGLDuS41L1FuWLHGYdpw
- 3MIO9LjFJhdbABfXPbQVXJeV+7078fGeTdZbLwxSTVAxOXA3COGNFVhHgXNgyntiC3
- H5gxDwXq9GLeg==
-Subject: Re: [GIT PULL] ARM: SoC fixes for v5.16
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAK8P3a29J4j=PDZfdgKO6bJ05ZCTcqbVJx+8c=RmrU4dXmS8QA@mail.gmail.com>
-References: <CAK8P3a29J4j=PDZfdgKO6bJ05ZCTcqbVJx+8c=RmrU4dXmS8QA@mail.gmail.com>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <CAK8P3a29J4j=PDZfdgKO6bJ05ZCTcqbVJx+8c=RmrU4dXmS8QA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-5.16
-X-PR-Tracked-Commit-Id: 76f79231666a7a3c9a1db82c002e083125de5861
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3f55f177edb88293bad08ebe217d3ce20cda427b
-Message-ID: <163657499107.19350.16919065852604641580.pr-tracker-bot@kernel.org>
-Date: Wed, 10 Nov 2021 20:09:51 +0000
-To: Arnd Bergmann <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Li Yang <leoyang.li@nxp.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211110_120952_010201_B2E9F4BF 
-X-CRM114-Status: UNSURE (   4.75  )
-X-CRM114-Notice: Please train this message.
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E964C433EF
+	for <linux-clk@archiver.kernel.org>; Thu, 11 Nov 2021 23:04:24 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 84B7B61264
+	for <linux-clk@archiver.kernel.org>; Thu, 11 Nov 2021 23:04:24 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S230348AbhKKXHN (ORCPT <rfc822;linux-clk@archiver.kernel.org>);
+        Thu, 11 Nov 2021 18:07:13 -0500
+Received: from mail-pl1-f180.google.com ([209.85.214.180]:37813 "EHLO
+        mail-pl1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229839AbhKKXHM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 11 Nov 2021 18:07:12 -0500
+Received: by mail-pl1-f180.google.com with SMTP id n8so6959576plf.4;
+        Thu, 11 Nov 2021 15:04:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CErV24ALLmtWHDv6Dg2Qhb0FOh3xq1Wa3w1/GJ4lZbo=;
+        b=4e0UX9Qsm72C1ZBGXy0GCqbhzDdMiCMxOKCSgaebGWLoRvDHXdx1NQDxLUtu5gOB49
+         JrQb3Fn3YuYICba4SGdiDB2YnIfB7MqQoFBzV8BRBox+2C59Gas/zM7bfkV2yL3jIdpz
+         dHhSBf4fxsLWtNdckXQsAuqVgEL8LGMtEpkXTWK/DU0flrRR/El1ZzxmmyJJ4FqcszvK
+         9Fbmy0VCOnZxVfrEETwbDEXm9KRenZDDoGhpgtHUAeuZdfXJtj1+DFionx3gT8lzrIvV
+         7Y3Vrb3dWr39m5s1B9q9U6htPw+PIHdbj7aHHYSTuMvFbe1KoY3djd9AvRU8Bf+CQKQR
+         GpKg==
+X-Gm-Message-State: AOAM5338rLX4hI/kKRXnJf8IijQiEPR00RUw9Ebfil579szaG2dVwjrh
+        aXC7HBIbctMD0sVXiAB1c+YEOpZlT2ONqCB2HAA=
+X-Google-Smtp-Source: ABdhPJwDbzrsxKzE9i1z6gPeh3fpqAXyMhqZWJsKWQps8Fb82bOoN9fZpAP7ITZ8MQCrDHMRtOBbF32CeFI5d3+zvz0=
+X-Received: by 2002:a17:902:728e:b0:143:a388:868b with SMTP id
+ d14-20020a170902728e00b00143a388868bmr2600284pll.33.1636671862963; Thu, 11
+ Nov 2021 15:04:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211110200951.d7HXhPaZJxqKLmJD69ywNnp0_BqjUcDbb4vY827s-3o@z>
+References: <20211102161125.1144023-1-kernel@esmil.dk> <20211102161125.1144023-12-kernel@esmil.dk>
+ <CACRpkdb0CrJ_uTbtfg-xGq8uu0AKoqfAB03mF2CA_G8ys_8Lzg@mail.gmail.com>
+In-Reply-To: <CACRpkdb0CrJ_uTbtfg-xGq8uu0AKoqfAB03mF2CA_G8ys_8Lzg@mail.gmail.com>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+Date:   Fri, 12 Nov 2021 00:04:11 +0100
+Message-ID: <CANBLGcwvGptHxP5+JQEQV1Y7G=dNTt86QuVgfUuvQDDBfNrzOA@mail.gmail.com>
+Subject: Re: [PATCH v3 11/16] dt-bindings: pinctrl: Add StarFive JH7100 bindings
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+List-Id: <soc.lore.kernel.org>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michael Zhu <michael.zhu@starfivetech.com>,
+        Fu Wei <tekkamanninja@gmail.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        soc@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Precedence: bulk
+List-ID: <linux-clk.vger.kernel.org>
+X-Mailing-List: linux-clk@vger.kernel.org
 
-The pull request you sent on Tue, 9 Nov 2021 23:49:23 +0100:
+On Tue, 9 Nov 2021 at 01:46, Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Tue, Nov 2, 2021 at 5:12 PM Emil Renner Berthing <kernel@esmil.dk> wrote:
+> > Add bindings for the GPIO/pin controller on the JH7100 RISC-V SoC by
+> > StarFive Ltd. This is a test chip for their upcoming JH7110 SoC.
+> >
+> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > ---
+> >
+> > @Linus: I'm really struggling to find a good way to describe how pin
+> > muxing works on the JH7100. As you can see I've now resorted to
+> > ascii-art to try to explain it, but please let me know if it's still
+> > unclear.
+>
+> This looks perfectly acceptable to me:
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-5.16
+Thank you.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3f55f177edb88293bad08ebe217d3ce20cda427b
+> As it appears to have some cross dependencies I assume
+> it will be merged through the SoC tree?
 
-Thank you!
+I don't know. I've never tried this before, so whatever is easiest I
+guess. Do I do anything special other than cc'ing soc@kernel.org for
+v4 to make that happen?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+/Emil
