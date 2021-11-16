@@ -1,191 +1,164 @@
-Return-Path: <SRS0=vwZw=QD=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
+Return-Path: <SRS0=sQYv=QD=gmail.com=joel.stan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11E8EC433EF
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 16 Nov 2021 03:09:15 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4FCDC433F5
+	for <soc@archiver.kernel.org>; Tue, 16 Nov 2021 06:08:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix)
+	id BB1B663219; Tue, 16 Nov 2021 06:08:08 +0000 (UTC)
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C3DFF60E78
-	for <linux-arm-kernel@archiver.kernel.org>; Tue, 16 Nov 2021 03:09:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C3DFF60E78
+	by mail.kernel.org (Postfix) with ESMTPS id 7DC5761C14;
+	Tue, 16 Nov 2021 06:08:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7DC5761C14
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:Cc:To:Subject:Message-ID:Date:From:
-	In-Reply-To:References:MIME-Version:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=xwAru/NWEzmpPJPHLBbz7T49g4lQg5lMNopwCkI1Gis=; b=ufO+a6LEvwKKOI
-	IQP78d6zesdo8bkvCrGViUsNLO7yD6sKsuNmVYfpkuFrs9gc+fPnJVxeiY+U0x8ACOcLE9fKpFmgM
-	doaL58JCFUIfBUXYv/wLyEXsko5CSFGtzls17htKmLJEMq1amA0erfSbdWNgFjgTytwDMhGpDthjx
-	HDem2gje/ZSwtOR7PEXu85jDFZ44SFJlCiz5Slu7uEP+Rz50uy7xw5XgGKr4Jjzj6eYqgC8ESpUMM
-	PJql78YXv1ft2CTftKrO8oAjOa8kdj5hFZipDLGNRByHPFPlfi4CUXN/BJ6vEimRRwr/EYzinUgCD
-	Cb5CHaZ7UwnzC0YweLTw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mmopI-000CSS-VL; Tue, 16 Nov 2021 03:08:05 +0000
-Received: from mail-qv1-xf29.google.com ([2607:f8b0:4864:20::f29])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mmopF-000CS5-4I
- for linux-arm-kernel@lists.infradead.org; Tue, 16 Nov 2021 03:08:02 +0000
-Received: by mail-qv1-xf29.google.com with SMTP id b11so12786004qvm.7
- for <linux-arm-kernel@lists.infradead.org>;
- Mon, 15 Nov 2021 19:08:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=p+3tuhUNj0IibcDWormquB6v06wUV9mYHE56GduUS2M=;
- b=HX+WlerYmiz45dfnhbTRz6BP49luNrI3xPfvXAYTA5J893Cp1bgpgD2R5O7ilpXhW2
- Ztmg7mlqRhJkIkuQm++MMxicg1qvpkbTGvPIau+qkbupjPVIfVYoLwIHU9tvFf/5pFBG
- WgEPgLF0Bhivdt+M0+t9VJ0AkIctplBmfJFqs=
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f171.google.com with SMTP id j63so15172427qkd.2;
+        Mon, 15 Nov 2021 22:08:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I3oQyh1i67EI9sCW3pQlUFVmFFrrPdE1dpx1lb+xR2U=;
+        b=E9OjszSmwpNQ1taXDWq1P1iNQZBuIsSmoMRgF0L3fgDwV+ydKR63vsHfTocvsPlpHU
+         DYTeHToo4XaVlAnMH9jqGnJNBI6qDg9pxEbGd8Z7noiXjXn3jsqqBNKljPRI1Y1YkaXE
+         t0+1CZ0sZ42qgvHtea/vCOFqvA+ArkYy9zFPc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=p+3tuhUNj0IibcDWormquB6v06wUV9mYHE56GduUS2M=;
- b=AwQaYRAZV/zBAk36X1oHvbZcaUt4k+WQqMoELSaofQQJvFxnFZfB1BUf7cQLe3rBpx
- IafnGexwuUouSd2PUB9A2lzP6Ll8Jq6pAs/BKgsXyq7ixhEdjI1KiLMJJvw4QtkyDdIY
- smqZdTCrYo0/kWA9ElX2+5I5j/M+xFMaUnLV4hR5JBRETdTRj0E/Q5XZMvnvznTlOZjL
- O4ibW5W7igNfKtOlD4ANCk2Hmi46icGyOzYFW5BWhqIEr+Pe/Zqjou2IMhqffg5m962q
- dThH8fu2kWQdMG4fmOAYKZ3RoelKJRQQLLoPI3eP3agIat3FeD/SNPXm0jiYi/GhWprK
- pJSw==
-X-Gm-Message-State: AOAM530y9OHVyAKysuMrc6SiDnMUAsZIT203yM9FJntUTyj8MSAYPs4/
- V6IEX1b2irBaNZM+5Q15ZLtttO1MBxnBfK8W5+M=
-X-Google-Smtp-Source: ABdhPJxVHar3OL/4LwNLEgzkuKc1H5RS71UlqygRtUVrY8OEkV+Kz3DE/kgpDDzrS8wn8JXdXAJ7KIukSIeqLNgOs0g=
-X-Received: by 2002:a05:6214:e41:: with SMTP id
- o1mr42634802qvc.43.1637032080033; 
- Mon, 15 Nov 2021 19:08:00 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I3oQyh1i67EI9sCW3pQlUFVmFFrrPdE1dpx1lb+xR2U=;
+        b=MDn6m9qgmXUUi0ql9YEfo+U/0XSuhnI8Q4tI/SDNy3lJco2Z/GdkgCX6V74CIJbtky
+         JXa3JFWJIuPNY9CwtxPo7+H7NmGRIK6g6yj9Rtwmd8D5CM/gpMFNKxhBDmO0b/N59RDv
+         ucBhsRUIHc3aCTjZkoZGKWzzysvKQB3IghkeVAezVyFDt/5dQR9tmcPT3hzFuo96BZIz
+         U+1LRcCp61gKTkokGd5nSBYWt28Z6cHP/hwtxTaKuvXeUTTHc0+Al2RC07pMj9gUXmET
+         VCFg8ErVkvnT0XcBZET23CSExCmGtVDqvDMlQ0VF/Ihev3Jz966GWoz39PZLA3xeTdd0
+         TT4w==
+X-Gm-Message-State: AOAM533/sVgquD8r+RQRXjQU3PPT8rVK9s9A56i8a4VZz6d6dfOUvCDQ
+	CKNXXt+vc7VVP/efm71vg9xk3qHyAqASJSqfgHY=
+X-Google-Smtp-Source: ABdhPJxg2WkPIsuOSay/GYggygOyktUFgy0Tfd4Ccq6kw0J8FhevHPTHEN5D5sp3cEHRxaqlDRsubd6rTcg2+5hU1BQ=
+X-Received: by 2002:a37:a8e:: with SMTP id 136mr4211384qkk.395.1637042887509;
+ Mon, 15 Nov 2021 22:08:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20211110062656.3041994-1-howard.chiu@quantatw.com>
-In-Reply-To: <20211110062656.3041994-1-howard.chiu@quantatw.com>
+References: <20211026200058.2183-1-aladyshev22@gmail.com> <CACPK8Xd5eYpsFNw1jEjv3NaShgzE3zC_Ct29pJM34TfrqRTNtQ@mail.gmail.com>
+ <CACSj6VVTFa0t9WK=R2TucG7eFqUzBsWYFzvsaRt6eXOiFuQORA@mail.gmail.com>
+In-Reply-To: <CACSj6VVTFa0t9WK=R2TucG7eFqUzBsWYFzvsaRt6eXOiFuQORA@mail.gmail.com>
 From: Joel Stanley <joel@jms.id.au>
-Date: Tue, 16 Nov 2021 03:07:48 +0000
-Message-ID: <CACPK8Xc6wV4KbMAT_ekyMTTbfNqx2ox_d7mEFGVT4OvBDDadBQ@mail.gmail.com>
-Subject: Re: [PATCH v2] ARM: dts: aspeed: Adding Facebook Bletchley BMC
-To: Howard Chiu <howard10703049@gmail.com>
+Date: Tue, 16 Nov 2021 06:07:55 +0000
+Message-ID: <CACPK8Xcc6Nem00zZdGmHF=U4T2O90aL+_vKO4YmAqSW9wKeegA@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dts: aspeed: Add AMD DaytonaX BMC
+To: Konstantin Aladyshev <aladyshev22@gmail.com>, Patrick Williams <patrick@stwcx.xyz>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- SoC Team <soc@kernel.org>, 
- Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>, 
- Linux ARM <linux-arm-kernel@lists.infradead.org>, 
- devicetree <devicetree@vger.kernel.org>, 
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-aspeed <linux-aspeed@lists.ozlabs.org>, 
- Howard Chiu <howard.chiu@quantatw.com>
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211115_190801_194835_040B1A0D 
-X-CRM114-Status: GOOD (  14.78  )
-X-BeenThere: linux-arm-kernel@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-arm-kernel.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
-List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
-List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
- <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
-Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
-Message-ID: <20211116030748.jRbmm_LRUTFVWMdBy-WUBGuo0BWo0sxTUyzGZIRIX4M@z>
+Cc: Supreeth Venkatesh <supreeth.venkatesh@amd.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Andrew Jeffery <andrew@aj.id.au>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	devicetree <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-aspeed <linux-aspeed@lists.ozlabs.org>, 
+	Andrew Geissler <geissonator@yahoo.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Howard,
-
-On Wed, 10 Nov 2021 at 06:29, Howard Chiu <howard10703049@gmail.com> wrote:
+On Wed, 27 Oct 2021 at 10:59, Konstantin Aladyshev
+<aladyshev22@gmail.com> wrote:
 >
-> Initial introduction of Facebook Bletchley equipped with
-> Aspeed 2600 BMC SoC.
+> Thanks for the comments. Can I ask you some questions about this
+> `device-tree-gpio-naming.md`?
 >
-> Signed-off-by: Howard Chiu <howard.chiu@quantatw.com>
-> ---
+> 1) First of all in my naming I've tried to use naming scheme the same
+> as the EthanolX CRB DTS currently has
+> (https://github.com/torvalds/linux/blob/d25f27432f80a800a3592db128254c8140bd71bf/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts#L102).
+> Do you want me to change GPIO naming in the EthanolX CRB as well?
 
-Please use this area to document the differences between versions of
-your patch. Let us know what you've fixed, and what you've decided not
-to change based on review.
+Yeah, that would make sense.
 
-> +&uart5 {
-> +       // Workaround for A0
-> +       compatible = "snps,dw-apb-uart";
-> +};
+> 2) Also this naming comes from the signal names in the board
+> schematics. This way it is clear to check schematics vs DTS. If we use
+> this OpenBMC naming style, we will lose that correspondence. Is it
+> really good?
 
-Are you still using a0 boards?
+This is a good point. The preference is to use human readable names
+over the schematic net. I can see cases where this would be worse, but
+hopefully on balance it results in consistent naming between machines.
 
-> +
-> +&i2c0 {
-> +       status = "okay";
-> +       /* TODO: Add HSC MP5023 */
-> +       /* TODO: Add ADC INA230 */
-> +
-> +       tmp421@4f {
-> +               compatible = "ti,tmp421";
-> +               reg = <0x4f>;
-> +       };
-> +
-> +       sled0_ioexp: pca9539@76 {
-> +               compatible = "nxp,pca9539";
-> +               reg = <0x76>;
-> +               #address-cells = <1>;
-> +               #size-cells = <0>;
-> +               gpio-controller;
-> +               #gpio-cells = <2>;
-> +
-> +               gpio-line-names =
-> +               "","SLED0_BMC_CCG5_INT","SLED0_INA230_ALERT","SLED0_P12V_STBY_ALERT",
-> +               "SLED0_SSD_ALERT","SLED0_MS_DETECT","SLED0_MD_REF_PWM","",
-> +               "SLED0_MD_STBY_RESET","SLED0_MD_IOEXP_EN_FAULT","SLED0_MD_DIR","SLED0_MD_DECAY",
-> +               "SLED0_MD_MODE1","SLED0_MD_MODE2","SLED0_MD_MODE3","SLED0_AC_PWR_EN";
+> 3) In the initial version of the DTS file I've supplied only a minimal
+> set of GPIO, that are used by OpenBMC. GPIOs for x86-power-control app
+> and led id/fault gpios. With renaming these GPIOs I'm only sure about
+> these GPIOs:
+>
+> FAULT_LED                  - led-fault
+> CHASSIS_ID_BTN        - led-identify
+>
+> What about the rest? For example the document doesn't really state
+> what the *-button postfix states? Is it for asserting or monitoring
+> buttons? How should I name these signals?
+>
+> ASSERT_BMC_READY
+> ASSERT_RST_BTN
+> ASSERT_PWR_BTN
+>
+> MON_P0_RST_BTN
+> MON_P0_PWR_BTN
+> MON_P0_PWR_GOOD
+> MON_PWROK
+>
+> Can you help me with those?
 
-I'll wait for Patrick's review on these. I would prefer you follow the
-openbmc naming scheme that he mentioned in v1 of your patch.
+Patrick, do you have thoughts here?
 
-> +
-> +               gpio@0 {
-> +                       reg = <0>;
-> +               };
+>
+> 4) And what should I do to the board GPIO signals that OpenBMC doesn't
+> use? If you look at the EthanolX CRB DTS
+> (https://github.com/torvalds/linux/blob/d25f27432f80a800a3592db128254c8140bd71bf/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts#L102)
+> it has a ton of GPIOs. Should they be renamed to this OpenBMC style as
+> well? Or can they be named exactly like in the schematics?
 
-I think this is incorrect, you would need to specify:
+That's up to you.
 
-type = <PCA955X_TYPE_GPIO>
+>
+> I've also CCed original author of the `device-tree-gpio-naming.md`
+> document Andrew Geissler. Andrew, can you please provide your opinion
+> on the subject?
 
-However with this change, there's no need to specify the individual gpio nodes:
+I've also added Patrick, who is helping review this document.
 
-https://lore.kernel.org/all/20210921043936.468001-2-andrew@aj.id.au/
+Cheers,
 
+Joel
 
-> +
-> +&i2c4 {
-> +       status = "okay";
-> +       /* TODO: Add HSC MP5023 */
-> +       /* TODO: Add ADC INA230 */
-> +
-> +       tmp421@4f {
-> +               compatible = "ti,tmp421";
-> +               reg = <0x4f>;
-> +       };
-> +
-> +       sled4_ioexp: pca9539@76 {
-> +               compatible = "nxp,pca9539";
-> +               reg = <0x76>;
-> +               #address-cells = <1>;
-> +               #size-cells = <0>;
-> +               gpio-controller;
-> +               #gpio-cells = <2>;
-> +
-> +               gpio-line-names =
-> +               "","SLED4_BMC_CCG5_INT","SLED4_INA230_ALERT","SLED4_P12V_STBY_ALERT",
-> +               "SLED4_SSD_ALERT","SLED4_MS_DETECT","SLED4_MD_REF_PWM","",
-> +               "SLED4_MD_STBY_RESET","SLED4_MD_IOEXP_EN_FAULT","SLED4_MD_DIR","SLED4_MD_DECAY",
-> +               "SLED4_MD_MODE1","SLED4_MD_MODE2","SLED4_MD_MODE3","SLED4_AC_PWR_EN";
-
-As Patrick mentioned, I think we want to have a convention for
-multi-node machines in the GPIO naming.
-
-_______________________________________________
-linux-arm-kernel mailing list
-linux-arm-kernel@lists.infradead.org
-http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>
+> Best regards,
+> Konstantin Aladyshev
+>
+> On Wed, Oct 27, 2021 at 12:03 AM Joel Stanley <joel@jms.id.au> wrote:
+> >
+> > Hello Konstantin,
+> >
+> > On Tue, 26 Oct 2021 at 20:01, Konstantin Aladyshev
+> > <aladyshev22@gmail.com> wrote:
+> > >
+> > > Add initial version of device tree for the BMC in the AMD DaytonaX
+> > > platform.
+> > >
+> > > AMD DaytonaX platform is a customer reference board (CRB) with an
+> > > Aspeed ast2500 BMC manufactured by AMD.
+> > >
+> > > Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+> >
+> > This looks good. I have one comment about the GPIOs below.
+> >
+> > > +&gpio {
+> > > +       status = "okay";
+> > > +       gpio-line-names =
+> > > +       /*A0-A7*/       "","","FAULT_LED","","","","","",
+> > > +       /*B0-B7*/       "","","","","","","","",
+> > > +       /*C0-C7*/       "CHASSIS_ID_BTN","","","","","","","",
+> > > +       /*D0-D7*/       "","","ASSERT_BMC_READY","","","","","",
+> > > +       /*E0-E7*/       "MON_P0_RST_BTN","ASSERT_RST_BTN","MON_P0_PWR_BTN","ASSERT_PWR_BTN","",
+> > > +                       "MON_P0_PWR_GOOD","MON_PWROK","",
+> >
+> > For systems that will run openbmc, we try to use naming conventions
+> > from this document:
+> >
+> > https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md
+> >
+> > If a GPIO is missing from that doc I encourage you to add it.
