@@ -1,73 +1,103 @@
-Return-Path: <SRS0=rTGs=QE=gmail.com=howard10703049@kernel.org>
+Return-Path: <SRS0=lSZn=QE=lists.infradead.org=linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE4E8C433EF
-	for <soc@archiver.kernel.org>; Wed, 17 Nov 2021 07:23:32 +0000 (UTC)
-Received: by mail.kernel.org (Postfix)
-	id A94116321A; Wed, 17 Nov 2021 07:23:32 +0000 (UTC)
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05627C433F5
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 17 Nov 2021 07:25:41 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7E7A461BFB;
-	Wed, 17 Nov 2021 07:23:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7E7A461BFB
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id m24so1349193pls.10;
-        Tue, 16 Nov 2021 23:23:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l7YHadk72FI1EefOo8VuzfABwIUlhboZ4q5/LorZ5Bc=;
-        b=OtrOejtGknJ5hkFMakFGiRNaluL1whQHyhqkOEbuuLb0WTrAwY9e5RAzpzcWZv/5jO
-         hS01UeWik7YaZdmwxlg6ApFCVdHaK18fWlk02wVFYj3U1YAOni6uR6aE0MkvVv/BmfOt
-         rC7lxNuhCjo6ASAwYqi0/0pHskp/Q1kTyx81I8/LdKrO2Grfml1JC4puqjhO8QbveIIV
-         OAZauKn6BzaBUJ2jlkUNoCrhWQ6Cq1n1ylXCOcdt5nIvgNPkyqNV6Tr+CMv8oO23FHQq
-         Ij1s4uZ/iufUJf6LSoZb+zoj7f1FzZQ7xO2d5edR8p0Q9jxPRnby426MINdl6v7/N7aW
-         ZhEw==
+	by mail.kernel.org (Postfix) with ESMTPS id C2F5461544
+	for <linux-arm-kernel@archiver.kernel.org>; Wed, 17 Nov 2021 07:25:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C2F5461544
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=2eJwEx/g941iBf1k0OcPswYEIKwBhUhUfxo8jw3XH18=; b=3eY97IYu2bzUkA
+	DUNnsvN0pi+Bkp28eswbN2gQz5Na3UBOuAK6ldGTIq8/ClbW82zsC3Vt40l6vaVaNYxlQPrcNNISV
+	nNkv4zwS/INQBkCrr1NtRFdVGAgOUhT0I/X1xAZLENWTaO3dQBvS0siih/9paMd92kfG4afyhDHtt
+	Zvl/qQ1g4N72XWFumo/ZrE7+tm/KKkHu7c0OvpogDfyvcdugAzcQDVE8x4bl0I4eLh6y5CLnkUWLz
+	yu5My53YcItLAhBwKzW6OxrkxKR/Btv5Oos0M0h2NW5OTXtFo+oxK5l7ml47XYnt547wqiGnf1bS1
+	DFfedPMF/qj4iKW4W6HA==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mnFIQ-003lKx-Q3; Wed, 17 Nov 2021 07:23:55 +0000
+Received: from mail-pl1-x629.google.com ([2607:f8b0:4864:20::629])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mnFI6-003lAw-6m
+ for linux-arm-kernel@lists.infradead.org; Wed, 17 Nov 2021 07:23:36 +0000
+Received: by mail-pl1-x629.google.com with SMTP id u17so1359837plg.9
+ for <linux-arm-kernel@lists.infradead.org>;
+ Tue, 16 Nov 2021 23:23:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=l7YHadk72FI1EefOo8VuzfABwIUlhboZ4q5/LorZ5Bc=;
+ b=OtrOejtGknJ5hkFMakFGiRNaluL1whQHyhqkOEbuuLb0WTrAwY9e5RAzpzcWZv/5jO
+ hS01UeWik7YaZdmwxlg6ApFCVdHaK18fWlk02wVFYj3U1YAOni6uR6aE0MkvVv/BmfOt
+ rC7lxNuhCjo6ASAwYqi0/0pHskp/Q1kTyx81I8/LdKrO2Grfml1JC4puqjhO8QbveIIV
+ OAZauKn6BzaBUJ2jlkUNoCrhWQ6Cq1n1ylXCOcdt5nIvgNPkyqNV6Tr+CMv8oO23FHQq
+ Ij1s4uZ/iufUJf6LSoZb+zoj7f1FzZQ7xO2d5edR8p0Q9jxPRnby426MINdl6v7/N7aW
+ ZhEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l7YHadk72FI1EefOo8VuzfABwIUlhboZ4q5/LorZ5Bc=;
-        b=Od0F16hpyj4iN3sgNzq6rW9PJHO14loKYMaFGOfLbeGPRVwoGTedBCWgAKhQQgJXup
-         AWyTQ3LES9UKGlkj4HxM2zxEZdH87TIRbBySp/LoaWIkDTp7q78m0J4ufHJM/92sr6EN
-         iyP/bf18FW3kmlj+DhRZoRPgAsALqrCz40i2mL5fz8VtHHiewTZ7/PmL0NuBOmmAo2UR
-         pvFnIvvS5xShYsmGBw+2O5xsqvQhSQJUYhWkP0qCCCNb080W3EshZDfZbbSM0DQoNrPA
-         LnqQDP8bx0rz+jx7Y2jsr0QlO7oOb8KpDoXmtV/jF4X0T0J5B6RzsVItm9jWGutqf3av
-         q0VQ==
-X-Gm-Message-State: AOAM530AeRm60U3ZUicive/6t0GFwcwMr473uwdAFPY7r0xsjrz2ds23
-	BpZmAG1QPDlOlQfX+8C4FMM=
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=l7YHadk72FI1EefOo8VuzfABwIUlhboZ4q5/LorZ5Bc=;
+ b=46RBvfotf9JSQYczIbN4QPfs/TAYtEzt3vEY6XlKqJM5M51RSWdmwwF5MigxzJ9Oz3
+ UIFEpwuScwB7WdFCXvsrXtUCwwzXzQvXj4JL42zCwQhK4ShpA1pw4n/G4tM+O0Wunmvn
+ 1mIcyTn7EREoK6k7u9QKWp3C+O8jyKUlncFCGZ3Gowb7RAbLqin+sAqKwjQsnpUG09VX
+ h3fet3rRAuGGEStwYwU5Ia3urGqFdPfIvKXGZ+riRS0rgm5rjBn0q6ehvELTJ7Wqr6rC
+ vv1f1TwQVVAwNq5v8XMS4ScsqTwA4a0oMgAbYjdzb9mpHSeUxfqm40SyEM6frzVg9j50
+ bMRQ==
+X-Gm-Message-State: AOAM53087GRk0CtY4dsTVCC7nwxRbBf9IEn3MwwZ8LAFSynzJyccFhQQ
+ MhlWi/AwkuMG/2VFuxiFnyY=
 X-Google-Smtp-Source: ABdhPJzvopNlH/eESHHUJQamBclULY9F8e3xQTzJcMVlYHNkoPQAvZbqf/zj1bw1JQn65WENu1Mm5w==
-X-Received: by 2002:a17:90a:7ac8:: with SMTP id b8mr7140841pjl.206.1637133811990;
-        Tue, 16 Nov 2021 23:23:31 -0800 (PST)
-Received: from howard-System-Product-Name.dhcpserver.bu9bmc.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id q13sm22659047pfk.22.2021.11.16.23.23.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Nov 2021 23:23:31 -0800 (PST)
+X-Received: by 2002:a17:90a:7ac8:: with SMTP id
+ b8mr7140841pjl.206.1637133811990; 
+ Tue, 16 Nov 2021 23:23:31 -0800 (PST)
+Received: from howard-System-Product-Name.dhcpserver.bu9bmc.local
+ (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
+ by smtp.gmail.com with ESMTPSA id q13sm22659047pfk.22.2021.11.16.23.23.29
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 16 Nov 2021 23:23:31 -0800 (PST)
 From: Howard Chiu <howard10703049@gmail.com>
 X-Google-Original-From: Howard Chiu <howard.chiu@quantatw.com>
 List-Id: <soc.lore.kernel.org>
-To: arnd@arndb.de,
-	olof@lixom.net,
-	soc@kernel.org,
-	robh+dt@kernel.org,
-	joel@jms.id.au,
-	andrew@aj.id.au,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-aspeed@lists.ozlabs.org,
-	patrick@stwcx.xyz
+To: arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org,
+ joel@jms.id.au, andrew@aj.id.au, linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-aspeed@lists.ozlabs.org, patrick@stwcx.xyz
 Cc: Howard Chiu <howard.chiu@quantatw.com>
 Subject: [PATCH v3] ARM: dts: aspeed: Adding Facebook Bletchley BMC
 Date: Wed, 17 Nov 2021 15:20:06 +0800
-Message-Id: <20211117072005.3512407-1-howard.chiu@quantatw.com>
+Message-ID: <20211117072005.3512407-1-howard.chiu@quantatw.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211116_232334_308331_B9C0CBEB 
+X-CRM114-Status: GOOD (  15.02  )
+X-BeenThere: linux-arm-kernel@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-arm-kernel.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>, 
+ <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+Message-ID: <20211117072006._HIntFHtFezcp2LQNn60iivvghfIWmywZijZRWy3WOQ@z>
 
 Initial introduction of Facebook Bletchley equipped with
 Aspeed 2600 BMC SoC.
@@ -843,3 +873,8 @@ index 000000000000..80567b49dc5a
 -- 
 2.25.1
 
+
+_______________________________________________
+linux-arm-kernel mailing list
+linux-arm-kernel@lists.infradead.org
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
