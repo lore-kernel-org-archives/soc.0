@@ -1,93 +1,133 @@
-Return-Path: <SRS0=LHDJ=QI=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=ND8I=QJ=hey.com=ekfh.fjhek@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAEABC433EF
-	for <soc@archiver.kernel.org>; Sun, 21 Nov 2021 23:19:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52CFFC433EF
+	for <soc@archiver.kernel.org>; Mon, 22 Nov 2021 02:30:23 +0000 (UTC)
 Received: by mail.kernel.org (Postfix)
-	id 8033260F5D; Sun, 21 Nov 2021 23:19:34 +0000 (UTC)
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id EC89760462; Mon, 22 Nov 2021 02:30:22 +0000 (UTC)
+X-Greylist: delayed 470 seconds by postgrey-1.37 at mail.kernel.org; Mon, 22 Nov 2021 02:30:22 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF866606A5
+Authentication-Results: mail.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hey.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=hey.com
+Received: from 01a.trial.hey.com (01a.trial.hey.com [204.62.114.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5E7E960F48
-	for <soc@kernel.org>; Sun, 21 Nov 2021 23:19:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5E7E960F48
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=linaro.org
-Received: by mail-ot1-f45.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso26193212otj.1
-        for <soc@kernel.org>; Sun, 21 Nov 2021 15:19:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=niG4LhykdMe2sCgAWkzlpTzAknhhfhfFKN7/kHVLdb8=;
-        b=wcakSBzJXl9BZALRNXqLiyhsCB+m6PdHwbi8HzqWYQSDqzOUzvEqpnvo21ThgDfiUG
-         YeyUYuOqKliWaPSXP/3LV4nTzhJ67sErjZ9XmD8vEyQ0pDW321Hx2roOzp9DvJ0BEA7J
-         2IWUMeWBcGigOgZN2CdXyeomJHmgrZ/hwlM+gUea3h48Ioa5ZpPo0L3VUny+fxgUQ0ks
-         /ZLvb22GhtsiEvG5gQXnXcMFBm5AfOhDm+50f7dWkr6nQIM/zeugbt4FCtIx6kcdwEIS
-         IWPVkQyjCfhxRQIYm1R2CrQsPeeRMtMsD9QvTBmJ8X3sG9ojs8/p/EM1lQ+VBLpDkc4q
-         TKDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=niG4LhykdMe2sCgAWkzlpTzAknhhfhfFKN7/kHVLdb8=;
-        b=qRJEPU6ZQ9snQb/sFbFueitklkp8NUixeJLp75RTI+QyAMsbJDlnyg/k+5syg2dDYE
-         mYI1BbKiy4WObJVK6VBmZqCSvsSjmInNoF01aT4QwTYuxHlKDy47N6klCFqTf78gMQvK
-         ybTmu7unrA8pm7a8mObbw2mXDtwLC7g1gfd8h0xmgl+6v3HSMYJlPl9bgcHBGQBfwrT3
-         qakRW5LNaXeVn6Ow0f+FC22sZ7M4KlaXPpR80gRwngzgHX8LlNMcBfvOsw4rT4XeXMoD
-         QCp+PNXpO0KvSgUIpsRFks3iISerfoFJddZdqLcjt7FuRiJgdAshUxBpE2GnnjneScDN
-         61xQ==
-X-Gm-Message-State: AOAM531ZnYkzWfdLRnOlEA5y0qz94RqvE6OgCmzbC4nDV1Y0Vh87sHjI
-	3ctRFll7KvmQUExdvvESoG6na3jeQGy4VAO3HYZiug==
-X-Google-Smtp-Source: ABdhPJyVdtjQUoLHr9GMlVhAVr/1N/sztecCcTj39EJlBe5nSjbyIi50Oo/ofoA+ROJrbzFktx9bDGshBDQgVsRlEgw=
-X-Received: by 2002:a9d:ed6:: with SMTP id 80mr20546619otj.35.1637536773648;
- Sun, 21 Nov 2021 15:19:33 -0800 (PST)
-MIME-Version: 1.0
-References: <20211102161125.1144023-1-kernel@esmil.dk> <20211102161125.1144023-12-kernel@esmil.dk>
- <CACRpkdb0CrJ_uTbtfg-xGq8uu0AKoqfAB03mF2CA_G8ys_8Lzg@mail.gmail.com> <CANBLGcwvGptHxP5+JQEQV1Y7G=dNTt86QuVgfUuvQDDBfNrzOA@mail.gmail.com>
-In-Reply-To: <CANBLGcwvGptHxP5+JQEQV1Y7G=dNTt86QuVgfUuvQDDBfNrzOA@mail.gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 22 Nov 2021 00:19:22 +0100
-Message-ID: <CACRpkdbsP1zibFvg2yL67ndQJ1MxBRmH5j+cZ-giZkmrnGROdw@mail.gmail.com>
-Subject: Re: [PATCH v3 11/16] dt-bindings: pinctrl: Add StarFive JH7100 bindings
-To: Emil Renner Berthing <kernel@esmil.dk>
+	by mail.kernel.org (Postfix) with ESMTPS id AF866606A5
+	for <soc@kernel.org>; Mon, 22 Nov 2021 02:30:22 +0000 (UTC)
+Received: from hey.com (bigip-vip-new.rw-ash-int.37signals.com [10.20.0.24])
+	by 01.trial.hey.com (Postfix) with ESMTPS id 4CE412012BA;
+	Mon, 22 Nov 2021 02:22:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hey.com; s=heymail;
+	t=1637547752;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FviPI7sUdIfs1kd8a46mHvdB4hwIPXP+iTfn5bH/Uuk=;
+	b=lm9KbbaOkCfEF6GzO0d6bjBhFV2o/aIO4IW+EFIXrmFQPKyTyU3P6EME3YbaQnTnKlUPND
+	1ekLHOonfRo/RFX6MiQUaIAXCQa+lpDP27neU2NUMYopioy8aR80xiHsw/mYFMp27wGOMC
+	VorIaC1IdYvHFvOm68YDTn1/0jDheGNW3teWB4KK2bXr+6ouSBtZPJzsn9Bh1O3n3RYaX8
+	cjBn5gvuMF5jOgV61NE/O1desCXeji3UZd8TDblUyrpJq6UZ7DAL6aMGzdXBsM9P9NWqUO
+	YNyXlNI4hGk9Lfw8YrcT0JW/I4LPverAExUWkvHH8JxsmB2D8jFrLbg9Vm/GVA==
+Date: Mon, 22 Nov 2021 10:22:29 +0800
+From: EKFH FJHEK <ekfh.fjhek@hey.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	"open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Rob Herring <robh+dt@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Jiri Slaby <jirislaby@kernel.org>, 
-	Maximilian Luz <luzmaximilian@gmail.com>, Sagar Kadam <sagar.kadam@sifive.com>, 
-	Drew Fustini <drew@beagleboard.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Michael Zhu <michael.zhu@starfivetech.com>, Fu Wei <tekkamanninja@gmail.com>, 
-	Anup Patel <anup.patel@wdc.com>, Atish Patra <atish.patra@wdc.com>, 
-	Matteo Croce <mcroce@microsoft.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, soc@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+To: andrew@andrewnetworks.com, 
+ andrewfisherco@gmail.com, 
+ benedict@thepracticalbeekeeper.com.au, 
+ asistsafetalk@gmail.com, 
+ ohnarva@gmail.com, 
+ waterfordex@gmail.com, 
+ news@spring-ford.net, 
+ mercermotorsports@gmail.com, 
+ kikinote123@gmail.com, 
+ bwocontact@gmail.com, 
+ andrew.pickersgill1@talktalk.net, 
+ andrew.soper.snooker@gmail.com, 
+ theringwraiths43@gmail.com, 
+ skelmersdaleheritage@gmail.com, 
+ jisho.org@gmail.com, 
+ howard10703049@gmail.com, 
+ arnd@arndb.de, 
+ olof@lixom.net, 
+ soc@kernel.org, 
+ dt@kernel.org
+Message-ID: <631be5baec7e81e38fa598292d0a85a98d404b0e@hey.com>
+Subject: GZ Hello
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="--==_mimepart_619afee6f0442_23261d601774b";
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 12, 2021 at 12:04 AM Emil Renner Berthing <kernel@esmil.dk> wrote:
-> On Tue, 9 Nov 2021 at 01:46, Linus Walleij <linus.walleij@linaro.org> wrote:
 
-> > As it appears to have some cross dependencies I assume
-> > it will be merged through the SoC tree?
->
-> I don't know. I've never tried this before, so whatever is easiest I
-> guess. Do I do anything special other than cc'ing soc@kernel.org for
-> v4 to make that happen?
+----==_mimepart_619afee6f0442_23261d601774b
+Content-Type: text/plain;
+ charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-You create a pull request with git request-pull and sent it to
-soc@vger.kernel.org and linux-arm-kernel on Cc that should
-work fine and it appears here:
-https://patchwork.kernel.org/project/linux-soc/list/
+VHF- I have a financial proposal for you. reply me to
+matthewadetg@gmail.com for details=C2=A0
 
-Yours,
-Linus Walleij
+----==_mimepart_619afee6f0442_23261d601774b
+Content-Type: text/html;
+ charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf=
+-8" />
+    <meta name=3D"viewport" id=3D"viewport" content=3D"width=3Ddevice-wid=
+th,minimum-scale=3D1.0,maximum-scale=3D10.0,initial-scale=3D1.0" />
+
+    <style>
+      html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}h1{fon=
+t-size:1.3em;line-height:1.2;margin:0}ul,ol{margin:0;padding:0}ul li,ol l=
+i,li li{margin:0 0 0 36px}[dir=3Drtl] li{margin:0 18px 0 0}blockquote{bor=
+der-color:#dfdee1;border-style:solid;border-width:0 0 0 1px;margin:0;padd=
+ing:0 0 0 1em}[dir=3Drtl] blockquote,blockquote[dir=3Drtl]{border-width:0=
+ 1px 0 0;padding:0 1em 0 0}pre{font-family:"SFMono-Regular", Consolas, "L=
+iberation Mono", Menlo, Courier, monospace;font-size:0.9em;margin:0;paddi=
+ng:1rem;background-color:#f6f5f3;white-space:pre-wrap;word-wrap:break-wor=
+d;overflow:visible}.message-content{font-family:-apple-system, BlinkMacSy=
+stemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color =
+Emoji", "Segoe UI Emoji", "Segoe UI Symbol";line-height:1.4}.attachment{d=
+isplay:inline-block;margin:0;padding:0}.attachment__caption{padding:0;tex=
+t-align:center}.attachment__caption a[href]{text-decoration:none;color:#3=
+33333}.attachment--preview{width:100%;text-align:center;margin:0.625em 0}=
+.attachment--preview img{border:1px solid #dfdee1;vertical-align:middle;w=
+idth:auto;max-width:100%;max-height:640px}.attachment--preview .attachmen=
+t__caption{color:#716d7b;font-size:0.85em;margin-top:0.625em}.attachment-=
+-file{color:#282138;line-height:1;margin:0 2px 2px 0;padding:0.4em 1em;bo=
+rder:1px solid #dfdee1;border-radius:5px}.permalink{color:inherit}.txt--x=
+x-small{font-size:14px}.flush{margin:0;padding:0}.push--bottom{margin-bot=
+tom:8px}.border--top{border-top:1px solid #ECE9E6}.btn{padding:0.2em 0.4e=
+m;font-weight:500;text-decoration:none;border-radius:3rem;white-space:now=
+rap;background:#5522FA;border-color:#5522FA;color:#ffffff}.btn--email{dis=
+play:inline-block;text-align:center;font-weight:500;font-size:1em;text-de=
+coration:none;border-radius:2em;white-space:nowrap;background:#5522FA;bor=
+der-color:#5522FA;color:#ffffff;border-top:0.3em solid #5522FA;border-lef=
+t:1em solid #5522FA;border-bottom:0.3em solid #5522FA;border-right:1em so=
+lid #5522FA}.shaded{padding:1em;border-radius:4px;background-color:#f6f5f=
+3;border:1px solid #dfdee1}
+
+    </style>
+  </head>
+
+  <body>
+    <div class=3D"message-content">
+      <div class=3D"trix-content">
+  <div>VHF- I have a financial proposal for you. reply me to matthewadetg=
+@gmail.com for details=C2=A0</div>
+</div>
+
+
+    </div>
+  </body>
+</html>
+
+----==_mimepart_619afee6f0442_23261d601774b--
