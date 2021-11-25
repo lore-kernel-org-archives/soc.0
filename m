@@ -1,152 +1,235 @@
-Return-Path: <SRS0=/X4i=QM=gmail.com=mr.bossman075@kernel.org>
+Return-Path: <SRS0=Wl0B=QM=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D490C433EF
-	for <soc@archiver.kernel.org>; Thu, 25 Nov 2021 21:44:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 645E8C433F5
+	for <soc@archiver.kernel.org>; Thu, 25 Nov 2021 21:48:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2E68AC9305E; Thu, 25 Nov 2021 21:44:43 +0000 (UTC)
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 4E011C9305D; Thu, 25 Nov 2021 21:48:32 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 90C3AC9305A;
-	Thu, 25 Nov 2021 21:44:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 90C3AC9305A
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f54.google.com with SMTP id r15so14942977uao.3;
-        Thu, 25 Nov 2021 13:44:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0JRLJYcXhrRDBJKcmXD2oBmy6Smq5NLEEE+jpKeaTQI=;
-        b=ayiajLyqzIPTbCHpYFE1SobpZRGlIBCDMQZ6RoHtdG5Pd37d8/IekvcM7HUxV7bHn1
-         23kogyCN9TYxZRAHGs1OE+0jKmUjrOLcUYCTTjRHhRmanvW5v3ucCjr6aegauJmInzV8
-         qlockAnccpJdiziY/WBnvjlI4vK2SZV7+3o5oCGstD5L6orPrD8ewS2srHYNi/nKwyVn
-         5rPQBKSwvginPTpL6GdyJfjOYi9+q8sIjMwIjPZOwTF1/22IKg0S0SVuVpK2rc645775
-         DTNzNgj4TRJTr5RhKK1W0gPaRY2Nldix/TWKGdVpMXH+BUzVTSmrBYzAi6X8/2dLLgNj
-         sBBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0JRLJYcXhrRDBJKcmXD2oBmy6Smq5NLEEE+jpKeaTQI=;
-        b=bdZZeYuC53KoLK4Cul+Ye9D4/gc0UGdonVCfr6DUJxaXrhoz2FxElwBvb1QMePBnAG
-         MG71fjCCS5iVdykBUm/RgzixB3Yktc3oKhH09AG1n7c/CpVx60tGYis4KtWjVjM3HXkQ
-         /Bj9/o3Ft5BZsGBNoHvxrb7MvSZdK3xZnba5t0//roGhX+O7pZ2s5E+LM1mkUHnOEacK
-         ExoANlu9r9QzRZ0HLyu4X5bPpurgzlv4BVgcO7VDMnypugXVNw5KJx8fOPfjFjqS+Wk7
-         9YA+cNAZ5GJxYLF9Kfhn/7uig1KAx/Fqm4o1plUyw0KlK7cXclqVRk1OHem/LnkUvfiB
-         13fQ==
-X-Gm-Message-State: AOAM531gVLD7dt+v/kSlUIbai/RpPeXXz27rP0FxpgnuUNwq3cASPeME
-	D5QkTsYCdbE3aKHnF5zzwKeewVrXaZgw4Q==
-X-Google-Smtp-Source: ABdhPJymL+1A7frhrmMGWXzMvIs4AYDhLZD6/fPrF5GhvkDZOAMnhWK/bEqQTwFmsCUrgBjVxw1cjg==
-X-Received: by 2002:a05:6214:27c6:: with SMTP id ge6mr9473113qvb.103.1637874902745;
-        Thu, 25 Nov 2021 13:15:02 -0800 (PST)
-Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id j22sm2068175qko.68.2021.11.25.13.15.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Nov 2021 13:15:01 -0800 (PST)
-From: Jesse Taube <mr.bossman075@gmail.com>
-X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
-To: linux-imx@nxp.com
-List-Id: <soc.lore.kernel.org>
-Cc: mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh+dt@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	ulf.hansson@linaro.org,
-	aisheng.dong@nxp.com,
-	stefan@agner.ch,
-	linus.walleij@linaro.org,
-	gregkh@linuxfoundation.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	soc@kernel.org,
-	linux@armlinux.org.uk,
-	abel.vesa@nxp.com,
-	adrian.hunter@intel.com,
-	jirislaby@kernel.org,
-	giulio.benetti@benettiengineering.com,
-	nobuhiro1.iwamatsu@toshiba.co.jp,
-	Mr.Bossman075@gmail.com,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	Jesse Taube <mr.bossman075@gmail.com>
-Subject: [PATCH v3 09/13] tty: serial: fsl_lpuart: add i.MXRT support
-Date: Thu, 25 Nov 2021 16:14:39 -0500
-Message-Id: <20211125211443.1150135-10-Mr.Bossman075@gmail.com>
-X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211125211443.1150135-1-Mr.Bossman075@gmail.com>
-References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 0F718C9305A;
+	Thu, 25 Nov 2021 21:48:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0F718C9305A
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MbRbr-1mJmjD47Ef-00bobB; Thu, 25 Nov 2021 22:43:15 +0100
+Received: by mail-wr1-f52.google.com with SMTP id a9so14349897wrr.8;
+        Thu, 25 Nov 2021 13:43:14 -0800 (PST)
+X-Gm-Message-State: AOAM532zr+S/5LVjBpP5kvNNtgN+V2zV1Mb5OmDLK4uaIOPGjGESotub
+	E5OseMCmRRCkuSg4G4p99sZibn48zu2sKXnRoG8=
+X-Google-Smtp-Source: ABdhPJwjKapht7W/sukRuCfcX+lckyEPy1NdAnaERzdim0N17M/wef+Nllp0lT2Vmf332KaJEcKdDsO7PSXmL6JXu0w=
+X-Received: by 2002:a5d:64ea:: with SMTP id g10mr10262560wri.137.1637876594530;
+ Thu, 25 Nov 2021 13:43:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com> <20211125211443.1150135-14-Mr.Bossman075@gmail.com>
+In-Reply-To: <20211125211443.1150135-14-Mr.Bossman075@gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 25 Nov 2021 22:42:58 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3dwwBt21o7LDY-CLDdVmOknxDF7sgO_dfiTj8_u4Tx=A@mail.gmail.com>
+Message-ID: <CAK8P3a3dwwBt21o7LDY-CLDdVmOknxDF7sgO_dfiTj8_u4Tx=A@mail.gmail.com>
+Subject: Re: [PATCH v3 13/13] ARM: imxrt_defconfig: add i.MXRT family defconfig
+To: Jesse Taube <mr.bossman075@gmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Sascha Hauer <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Dong Aisheng <aisheng.dong@nxp.com>, Stefan Agner <stefan@agner.ch>, 
+	Linus Walleij <linus.walleij@linaro.org>, gregkh <gregkh@linuxfoundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
+	Russell King - ARM Linux <linux@armlinux.org.uk>, Abel Vesa <abel.vesa@nxp.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Jiri Slaby <jirislaby@kernel.org>, 
+	giulio.benetti@benettiengineering.com, 
+	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, linux-clk <linux-clk@vger.kernel.org>, 
+	DTML <devicetree@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-mmc <linux-mmc@vger.kernel.org>, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
+	"open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:MMpsfNiKJ0lWITwKtd0SE7MdnBGm+soFcZht3GgSYba9J9479NN
+ HQLkj3pYmJJerwRsI5oDyFk/dMJIwifjWAN7FJ8nMsa0Vz+3J3GJsFwFvB325i62QN/N65N
+ x38eve9uKXPpLxiJVPinuWxXcQ43RVZ5KLn3KTaVsEQwvWKywfqrNtJih05uRo80xWtxyBG
+ uLtN62yB8KeBqU8E4GrQQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fm1A0aqRHNQ=:4mM5QYxxJ2iMwC/9DZvxXy
+ 28h1zYPxxG9ITOa0U9dgv9JVq34iiPkjf2CYSTsgcZ9fYFRTKhR7URksTiEqNGzk4tqNUkNGA
+ IlNMa/ap3krSrJvPvUEd3tJ293mReQZzHlfKU3ILwh3GgVd24a6pM3mjfu17sXoWqSN7Rz03P
+ KJ8CNurFrO+Jygsh+otF12MHvn96m9hemPsA0+DTs63lku6M1VLin+Twt21TJ1xClb9L9Qb3y
+ zYZ2ILUtrx1tIpKQw6A9aAzpygUCy2mFPvs/7gNtCa3I7sVc8Spuaj/upJJmdoHVRfBv6MtWP
+ +L89ER2/QxuekhVnFNdylUfBZqhCI3i/kCenw8q8h0Byu+Qs57OHSzeTCb0gjdHsSXBHL0Sh9
+ br+uVYCtpac7fG6H86/iikF8pK0P/dQ/MYqEjBjVpSKRrReg/nIXU2MGSgK5FQ4hZeTzHvXG0
+ O9WsqVBlCpnaAQnJk1MtjPlaNQWHJ6wiK6yWMI9Fa/Ti3b6Rd06FDMrv9UoHmvC4aprFAYCOp
+ IbWKo0dAEawwnIayKr68+jIe6tAuF/A+GBG4wy6pu67T/kRxi1qQDiAcpNMM0DfX46jw4DcbH
+ WlVkhb1ZJ/pSMU2L6VLTpLVb/sOyY7wKoNlGXziv2q9eOaUR2D1QLVx05KB6X4WurWZYa1TdS
+ moZE7OmE/d7YCKVUfjsIilpG17IeJY8kYmkG3Tuo0VbUN0nQXuJ+Gs61r3tPwiCTNZcY=
 
-From: Jesse Taube <mr.bossman075@gmail.com>
+On Thu, Nov 25, 2021 at 10:14 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
+>
+> From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>
+> Add generic i.MXRT family defconfig.
+>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 
-Add support for i.MXRT1050's uart.
+I see a lot of things in here that probably should not be part of the kernel,
+either because they are rather obscure, or they take valuable memory:
 
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
----
-V1->V2:
-* Nothing done
-V2->V3:
-* Rename imxrt to imxrt1050
----
- drivers/tty/serial/fsl_lpuart.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> ---
+>  arch/arm/configs/imxrt_defconfig | 157 +++++++++++++++++++++++++++++++
+>  1 file changed, 157 insertions(+)
+>  create mode 100644 arch/arm/configs/imxrt_defconfig
+>
+> diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
+> new file mode 100644
+> index 000000000000..d673745a5462
+> --- /dev/null
+> +++ b/arch/arm/configs/imxrt_defconfig
+> @@ -0,0 +1,157 @@
+> +# CONFIG_LOCALVERSION_AUTO is not set
+> +CONFIG_SYSVIPC=y
+> +CONFIG_USELIB=y
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index b1e7190ae483..884bc4e70d70 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -247,6 +247,7 @@ enum lpuart_type {
- 	LS1028A_LPUART,
- 	IMX7ULP_LPUART,
- 	IMX8QXP_LPUART,
-+	IMXRT1050_LPUART,
- };
- 
- struct lpuart_port {
-@@ -310,6 +311,11 @@ static struct lpuart_soc_data imx8qxp_data = {
- 	.iotype = UPIO_MEM32,
- 	.reg_off = IMX_REG_OFF,
- };
-+static struct lpuart_soc_data imxrt1050_data = {
-+	.devtype = IMXRT1050_LPUART,
-+	.iotype = UPIO_MEM32,
-+	.reg_off = IMX_REG_OFF,
-+};
- 
- static const struct of_device_id lpuart_dt_ids[] = {
- 	{ .compatible = "fsl,vf610-lpuart",	.data = &vf_data, },
-@@ -317,6 +323,7 @@ static const struct of_device_id lpuart_dt_ids[] = {
- 	{ .compatible = "fsl,ls1028a-lpuart",	.data = &ls1028a_data, },
- 	{ .compatible = "fsl,imx7ulp-lpuart",	.data = &imx7ulp_data, },
- 	{ .compatible = "fsl,imx8qxp-lpuart",	.data = &imx8qxp_data, },
-+	{ .compatible = "fsl,imxrt1050-lpuart",	.data = &imxrt1050_data},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, lpuart_dt_ids);
-@@ -2625,6 +2632,7 @@ OF_EARLYCON_DECLARE(lpuart, "fsl,vf610-lpuart", lpuart_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1021a-lpuart", lpuart32_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1028a-lpuart", ls1028a_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,imx7ulp-lpuart", lpuart32_imx_early_console_setup);
-+OF_EARLYCON_DECLARE(lpuart32, "fsl,imxrt1050-lpuart", lpuart32_imx_early_console_setup);
- EARLYCON_DECLARE(lpuart, lpuart_early_console_setup);
- EARLYCON_DECLARE(lpuart32, lpuart32_early_console_setup);
- 
--- 
-2.34.0
+You almost certainly won't want USELIB, and SYSVIPC support
+would only be useful for certain applications that you probably
+won't run.
 
+> +CONFIG_BSD_PROCESS_ACCT=y
+> +CONFIG_BSD_PROCESS_ACCT_V3=y
+> +CONFIG_PSI=y
+> +CONFIG_IKCONFIG=y
+> +CONFIG_IKCONFIG_PROC=y
+
+Probably nonen of these are helpful here.
+
+> +CONFIG_MEMCG=y
+> +CONFIG_BLK_CGROUP=y
+> +CONFIG_CFS_BANDWIDTH=y
+> +CONFIG_CGROUP_PIDS=y
+> +CONFIG_CGROUP_RDMA=y
+> +CONFIG_CGROUP_FREEZER=y
+> +CONFIG_CGROUP_DEVICE=y
+> +CONFIG_CGROUP_CPUACCT=y
+> +CONFIG_CGROUP_PERF=y
+> +CONFIG_CGROUP_BPF=y
+> +CONFIG_NAMESPACES=y
+> +CONFIG_USER_NS=y
+> +CONFIG_CHECKPOINT_RESTORE=y
+
+Same for control groups overall as well as checkpoint_restore
+
+> +CONFIG_RELAY=y
+
+There are a few drivers using CONFIG_RELAY, but I don't see you enable
+any of them,
+so this is not actually used.
+
+> +CONFIG_EXPERT=y
+
+Are you losing anything without EXPERT? If not, remove that
+
+> +CONFIG_SGETMASK_SYSCALL=y
+> +# CONFIG_FUTEX is not set
+
+Futex is probably one of the things you /do/ want.
+
+> +CONFIG_KALLSYMS_ALL=y
+> +CONFIG_PC104=y
+
+Turning off KALLSYMS_ALL may save a noticeable amount of RAM.
+
+PC104 isn't actually that big, but it seems unlikely that you have
+that hardware.
+
+> +CONFIG_PARAVIRT=y
+
+You don't seem to enable XEN, so I don't think PARAVIRT is useful by itself.
+
+> +# CONFIG_ATAGS is not set
+> +CONFIG_CMDLINE="console=ttyS0 root=/dev/mmcblk0p2 rw earlycon rootwait"
+
+The command line should come from the boot loader, users probably have
+a different root device.
+
+> +CONFIG_BLK_DEV_BSGLIB=y
+> +CONFIG_BLK_DEV_INTEGRITY=y
+> +CONFIG_BLK_DEV_ZONED=y
+> +CONFIG_BLK_DEV_THROTTLING=y
+> +CONFIG_BLK_WBT=y
+> +CONFIG_BLK_SED_OPAL=y
+> +CONFIG_PARTITION_ADVANCED=y
+> +CONFIG_BSD_DISKLABEL=y
+> +CONFIG_MINIX_SUBPARTITION=y
+> +CONFIG_SOLARIS_X86_PARTITION=y
+> +CONFIG_UNIXWARE_DISKLABEL=y
+> +CONFIG_LDM_PARTITION=y
+
+I don't see you using OPAL or any of the 1990's partition formats.
+ot set
+
+> +CONFIG_BINFMT_FLAT=y
+
+For the defconfig, you should probably have ELF_FDPIC enabled,
+not just FLAT.
+
+> +CONFIG_CLEANCACHE=y
+> +CONFIG_ZPOOL=y
+> +CONFIG_ZBUD=y
+> +CONFIG_Z3FOLD=y
+
+Do these work as expected on NOMMU?
+
+> +CONFIG_BLK_DEV_LOOP=y
+> +CONFIG_BLK_DEV_RAM=y
+> +CONFIG_BLK_DEV_RAM_COUNT=1
+> +CONFIG_BLK_DEV_RAM_SIZE=65536
+
+I don't think you can have a ramdisk larger than RAM ;-)
+
+> +CONFIG_MEMORY=y
+
+No need to enable the subsystem when you don't enable any
+of its drivers.
+
+> +CONFIG_EXT2_FS=y
+> +CONFIG_EXT2_FS_XATTR=y
+> +CONFIG_EXT2_FS_POSIX_ACL=y
+> +CONFIG_EXT2_FS_SECURITY=y
+> +CONFIG_EXT3_FS=y
+> +CONFIG_EXT3_FS_POSIX_ACL=y
+> +CONFIG_EXT3_FS_SECURITY=y
+
+Never use EXT3 on eMMC, just use EXT4 instead to make
+the device actually live longer. You probably don't need to enable
+EXT2 support separately.
+
+> +# CONFIG_FILE_LOCKING is not set
+> +# CONFIG_DNOTIFY is not set
+> +CONFIG_QUOTA=y
+
+dnotify and locking seem more useful than quota here
+
+> +# CONFIG_PRINT_QUOTA_WARNING is not set
+> +CONFIG_AUTOFS4_FS=y
+
+> +CONFIG_CONFIGFS_FS=y
+
+I don't see anything using configfs
+
+> +CONFIG_LSM="yama,loadpin,integrity,apparmor"
+
+None of these are actually enabled as far as I can tell.
+
+> +CONFIG_DEBUG_INFO=y
+> +CONFIG_DEBUG_INFO_DWARF4=y
+
+If you use DWARF4, you probably want DEBUG_INFO_SPLIT as well,
+to reduce the vmlinux size.
+
+       Arnd
