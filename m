@@ -4,493 +4,265 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE9EBC433EF
-	for <soc@archiver.kernel.org>; Thu, 25 Nov 2021 22:17:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98AD7C433F5
+	for <soc@archiver.kernel.org>; Thu, 25 Nov 2021 22:19:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 80518C9305E; Thu, 25 Nov 2021 22:17:42 +0000 (UTC)
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	id 4E2D1C9305E; Thu, 25 Nov 2021 22:19:27 +0000 (UTC)
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 44F48C9305A;
-	Thu, 25 Nov 2021 22:17:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 44F48C9305A
+	by smtp.kernel.org (Postfix) with ESMTPS id 65ABCC9305B;
+	Thu, 25 Nov 2021 22:19:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 65ABCC9305B
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f175.google.com with SMTP id d2so12988804qki.12;
-        Thu, 25 Nov 2021 14:17:41 -0800 (PST)
+Received: by mail-qk1-f173.google.com with SMTP id 132so12998494qkj.11;
+        Thu, 25 Nov 2021 14:19:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GI5h8971gKmZ0xXYAzub5TGNeeE8df7IQLcHtAM+BKI=;
-        b=E0VJOzj+nHYWXrI4r+ntp9g0U4rNG2FS/WOnGHmy1+BEKUSRR2hqqSVd+Xtum43kas
-         ToRWy22I7jpb5wxLTQ8Qz70sxCEBF0uD26qDJgVudPxlabjZSW/7XPE9neV0DtTfkfS/
-         3S3r58fezELKuJ5IM7AZx2DJxIQIQUr4v4FSf7W02sqgr9n82db/69c+62eDxA0E47nr
-         5s2L2R7QMCszLEVpJkGDAHduoto7Sgqi4NRoN/gehZrkDOAb3zu7h+iLZNHA2d7BWD6e
-         HHf3k0k773RzF+CFyrFyWAr1fqBNLgb9E/Lj7cbP8CFBI0zGTS7h56OQD44rIrDUeMj6
-         B+zg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Jzu3IGp/+NtN4KbWEJ7SKM9mTl27O4zRYj7bMTCcrDE=;
+        b=OjE3fyUCfvqLCfwTy5oIDirKOGtUiPlm61xh/sjmS8fkEGNT33LdV81wdUB26kbtD+
+         o8zIRbchPNkvhSf82WqVy5cR98VkXUL3DUtCs351sPiQsuLzkzpFRBuV+3yPC9MuKi6w
+         ztjTUmlFr7zgqMeQbvXhCFSvV9tUHahyGpaVEuposSRCXhJL1BEIHoZfJ9nq99Xa5mL0
+         iqlDbGv8MrD6mEQYXgnWOIO7h++bdHD9ETNLZDJhtjpgdzXfMdDeIER6ssS7mJIZveQT
+         OHfPxHMFSGuDUT9msVDJ0QMAOhe4RPz9NmE+MFV0Qbx0CrnoTfZL2xlHs1nyTwC7ZpKn
+         AOLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GI5h8971gKmZ0xXYAzub5TGNeeE8df7IQLcHtAM+BKI=;
-        b=OhfC4vuR7vuCdW69bVYfu5G4MKKCMw4kvM6z6LH9/NLvgrqsgfcjZtJpibCcmAkpjH
-         NV9mrwzlDDGpIMPAN/I44erQ7FSMSNtV2R5S70acxCq1UbMOMVzcLhHjRAkBJh/7U3Rt
-         E73kUk0Gr1s0UfhmDSOyt12mWVteu+T6Y0bRiqnIL6hYgz/2W/zrnKOEHJTaoomAL+rg
-         U3c5ESRX3Eve8JQSPc7DKmFJ/ij02ODGWyz6i4BuVOpCcfb3jzhQhqwUSVvpwrOzbhd4
-         z9kawUkktQrhD3VGZFsyAVPFnC5I4rOGynHYx/uRFGeE/Ri+QufKqf2t5W/a2/Pc4Qp0
-         9IzQ==
-X-Gm-Message-State: AOAM531M9dDtMdfaiJd5e81iLh/gvn95zMb7TJQ2TnHOIlLSUg6Ky590
-	NAKxcN4KIZZgIsxRoRyF+tqWfdjFcUf1Ag==
-X-Google-Smtp-Source: ABdhPJxhUD4dKu7KvSW2avsVfR8/qCgsR+7tRERxduDDnfeekn2xlt+G9W3F5t19xxmhDkQuwgfcaw==
-X-Received: by 2002:ac8:5a0d:: with SMTP id n13mr11901259qta.555.1637874893481;
-        Thu, 25 Nov 2021 13:14:53 -0800 (PST)
-Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id j22sm2068175qko.68.2021.11.25.13.14.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Nov 2021 13:14:53 -0800 (PST)
-From: Jesse Taube <mr.bossman075@gmail.com>
-X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
-To: linux-imx@nxp.com
-List-Id: <soc.lore.kernel.org>
-Cc: mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh+dt@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	ulf.hansson@linaro.org,
-	aisheng.dong@nxp.com,
-	stefan@agner.ch,
-	linus.walleij@linaro.org,
-	gregkh@linuxfoundation.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	soc@kernel.org,
-	linux@armlinux.org.uk,
-	abel.vesa@nxp.com,
-	adrian.hunter@intel.com,
-	jirislaby@kernel.org,
-	giulio.benetti@benettiengineering.com,
-	nobuhiro1.iwamatsu@toshiba.co.jp,
-	Mr.Bossman075@gmail.com,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Subject: [PATCH v3 04/13] pinctrl: freescale: Add i.MXRT1050 pinctrl driver support
-Date: Thu, 25 Nov 2021 16:14:34 -0500
-Message-Id: <20211125211443.1150135-5-Mr.Bossman075@gmail.com>
-X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211125211443.1150135-1-Mr.Bossman075@gmail.com>
-References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Jzu3IGp/+NtN4KbWEJ7SKM9mTl27O4zRYj7bMTCcrDE=;
+        b=kmSWAUPYkYvfbCkT9iohDNQFq5HPOZ2+VhV+H8iz2VhrFYqitLnLXvjsMOsTKPpwiY
+         DXni487P7Rw7rCzuFde9nViNahVeLJtRWfE7tQFQd/hDBy7V3ia4zym40kV/zk0zz2AR
+         r3SYc5FmHguHJ74gIB7roQQ5bmJszAUobneBkyEGvdyfmVxrQKppTNRmsBWakZsxc7Zw
+         s2yHvYguY1tWddOv+rzoRMDtAxxedgFkLY0uBKj7J4/B9NZ2XoNy0uGGh34e3ZFxKqem
+         EnSkdPkGprGpGKwNdx5qhEeXXxKuIMH2WPRMBe/cNvVklL86rhqv3vJbrTMlidL12HU5
+         IdCA==
+X-Gm-Message-State: AOAM530SPfOdwky/cDtUZWfRCQYk2n7jQaoTTSY28/uaWkN8zqdgnT7F
+	3wQVSNAPYB9Dn/wBQ0h9zys=
+X-Google-Smtp-Source: ABdhPJxTOSRJIXYg48NDzBO2Igr258AXSKndwwjJmfQt6W5u0VUgTJ2R8cUwxHqE9Pp/9WV8nyLzhQ==
+X-Received: by 2002:a05:620a:2955:: with SMTP id n21mr11102232qkp.586.1637878765420;
+        Thu, 25 Nov 2021 14:19:25 -0800 (PST)
+Received: from [10.4.10.38] (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
+        by smtp.gmail.com with ESMTPSA id d5sm2347779qte.27.2021.11.25.14.19.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Nov 2021 14:19:25 -0800 (PST)
+Message-ID: <2801d9c2-f922-5cc7-4e43-c9a8db3004ba@gmail.com>
+Date: Thu, 25 Nov 2021 17:19:23 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3 13/13] ARM: imxrt_defconfig: add i.MXRT family
+ defconfig
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Sascha Hauer <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+ Stefan Agner <stefan@agner.ch>, Linus Walleij <linus.walleij@linaro.org>,
+ gregkh <gregkh@linuxfoundation.org>, Olof Johansson <olof@lixom.net>,
+ SoC Team <soc@kernel.org>, Russell King - ARM Linux <linux@armlinux.org.uk>,
+ Abel Vesa <abel.vesa@nxp.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ Jiri Slaby <jirislaby@kernel.org>, giulio.benetti@benettiengineering.com,
+ Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+ linux-clk <linux-clk@vger.kernel.org>, DTML <devicetree@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-mmc <linux-mmc@vger.kernel.org>,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com>
+ <20211125211443.1150135-14-Mr.Bossman075@gmail.com>
+ <CAK8P3a3dwwBt21o7LDY-CLDdVmOknxDF7sgO_dfiTj8_u4Tx=A@mail.gmail.com>
+From: Jesse Taube <mr.bossman075@gmail.com>
+In-Reply-To: <CAK8P3a3dwwBt21o7LDY-CLDdVmOknxDF7sgO_dfiTj8_u4Tx=A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Add the pinctrl driver support for i.MXRT1050.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
----
-V1->V2:
-* Nothing done
-V2->V3:
-* Nothing done
----
- drivers/pinctrl/freescale/Kconfig             |   7 +
- drivers/pinctrl/freescale/Makefile            |   1 +
- drivers/pinctrl/freescale/pinctrl-imxrt1050.c | 349 ++++++++++++++++++
- 3 files changed, 357 insertions(+)
- create mode 100644 drivers/pinctrl/freescale/pinctrl-imxrt1050.c
+On 11/25/21 16:42, Arnd Bergmann wrote:
+> On Thu, Nov 25, 2021 at 10:14 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
+>>
+>> From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>
+>> Add generic i.MXRT family defconfig.
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> 
+> I see a lot of things in here that probably should not be part of the kernel,
+> either because they are rather obscure, or they take valuable memory:
+> 
+>> ---
+>>   arch/arm/configs/imxrt_defconfig | 157 +++++++++++++++++++++++++++++++
+>>   1 file changed, 157 insertions(+)
+>>   create mode 100644 arch/arm/configs/imxrt_defconfig
+>>
+>> diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
+>> new file mode 100644
+>> index 000000000000..d673745a5462
+>> --- /dev/null
+>> +++ b/arch/arm/configs/imxrt_defconfig
+>> @@ -0,0 +1,157 @@
+>> +# CONFIG_LOCALVERSION_AUTO is not set
+>> +CONFIG_SYSVIPC=y
+>> +CONFIG_USELIB=y
+> 
+> You almost certainly won't want USELIB, and SYSVIPC support
+> would only be useful for certain applications that you probably
+> won't run.
+> 
+>> +CONFIG_BSD_PROCESS_ACCT=y
+>> +CONFIG_BSD_PROCESS_ACCT_V3=y
+>> +CONFIG_PSI=y
+>> +CONFIG_IKCONFIG=y
+>> +CONFIG_IKCONFIG_PROC=y
+> 
+> Probably nonen of these are helpful here.
+> 
+>> +CONFIG_MEMCG=y
+>> +CONFIG_BLK_CGROUP=y
+>> +CONFIG_CFS_BANDWIDTH=y
+>> +CONFIG_CGROUP_PIDS=y
+>> +CONFIG_CGROUP_RDMA=y
+>> +CONFIG_CGROUP_FREEZER=y
+>> +CONFIG_CGROUP_DEVICE=y
+>> +CONFIG_CGROUP_CPUACCT=y
+>> +CONFIG_CGROUP_PERF=y
+>> +CONFIG_CGROUP_BPF=y
+>> +CONFIG_NAMESPACES=y
+>> +CONFIG_USER_NS=y
+>> +CONFIG_CHECKPOINT_RESTORE=y
+> 
+> Same for control groups overall as well as checkpoint_restore
+> 
+>> +CONFIG_RELAY=y
+> 
+> There are a few drivers using CONFIG_RELAY, but I don't see you enable
+> any of them,
+> so this is not actually used.
+> 
+this makes scene will change
+>> +CONFIG_EXPERT=y
+> 
+> Are you losing anything without EXPERT? If not, remove that
+> 
+>> +CONFIG_SGETMASK_SYSCALL=y
+>> +# CONFIG_FUTEX is not set
+> 
+> Futex is probably one of the things you /do/ want.
+> 
+There is a weird bug in futexs that reads from null_ptr, otherwise if 
+you hard code that access isn't allowed it works. This seems to be a 
+problem on other no-MMU platforms. I changed it to not have futexs like 
+the stm32s, CONFIG_EXPERT is required for this option. If you want I can 
+explain more about this but, i was going to do that as a separate patch.
 
-diff --git a/drivers/pinctrl/freescale/Kconfig b/drivers/pinctrl/freescale/Kconfig
-index 21fa21c6547b..8bdafaf40b29 100644
---- a/drivers/pinctrl/freescale/Kconfig
-+++ b/drivers/pinctrl/freescale/Kconfig
-@@ -173,6 +173,13 @@ config PINCTRL_IMX8ULP
- 	help
- 	  Say Y here to enable the imx8ulp pinctrl driver
- 
-+config PINCTRL_IMXRT1050
-+	bool "IMXRT1050 pinctrl driver"
-+	depends on ARCH_MXC
-+	select PINCTRL_IMX
-+	help
-+	  Say Y here to enable the imxrt1050 pinctrl driver
-+
- config PINCTRL_VF610
- 	bool "Freescale Vybrid VF610 pinctrl driver"
- 	depends on SOC_VF610
-diff --git a/drivers/pinctrl/freescale/Makefile b/drivers/pinctrl/freescale/Makefile
-index c44930b1b362..565a0350bf09 100644
---- a/drivers/pinctrl/freescale/Makefile
-+++ b/drivers/pinctrl/freescale/Makefile
-@@ -30,3 +30,4 @@ obj-$(CONFIG_PINCTRL_MXS)	+= pinctrl-mxs.o
- obj-$(CONFIG_PINCTRL_IMX23)	+= pinctrl-imx23.o
- obj-$(CONFIG_PINCTRL_IMX25)	+= pinctrl-imx25.o
- obj-$(CONFIG_PINCTRL_IMX28)	+= pinctrl-imx28.o
-+obj-$(CONFIG_PINCTRL_IMXRT1050)	+= pinctrl-imxrt1050.o
-diff --git a/drivers/pinctrl/freescale/pinctrl-imxrt1050.c b/drivers/pinctrl/freescale/pinctrl-imxrt1050.c
-new file mode 100644
-index 000000000000..11f31c90ad30
---- /dev/null
-+++ b/drivers/pinctrl/freescale/pinctrl-imxrt1050.c
-@@ -0,0 +1,349 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2020
-+ * Author(s): Giulio Benetti <giulio.benetti@benettiengineering.com>
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/of_device.h>
-+#include <linux/pinctrl/pinctrl.h>
-+#include <linux/platform_device.h>
-+
-+#include "pinctrl-imx.h"
-+
-+enum imxrt1050_pads {
-+	IMXRT1050_PAD_RESERVE0 = 0,
-+	IMXRT1050_PAD_RESERVE1 = 1,
-+	IMXRT1050_PAD_RESERVE2 = 2,
-+	IMXRT1050_PAD_RESERVE3 = 3,
-+	IMXRT1050_PAD_RESERVE4 = 4,
-+	IMXRT1050_PAD_RESERVE5 = 5,
-+	IMXRT1050_PAD_RESERVE6 = 6,
-+	IMXRT1050_PAD_RESERVE7 = 7,
-+	IMXRT1050_PAD_RESERVE8 = 8,
-+	IMXRT1050_PAD_RESERVE9 = 9,
-+	IMXRT1050_IOMUXC_GPIO1_IO00 = 10,
-+	IMXRT1050_IOMUXC_GPIO1_IO01 = 11,
-+	IMXRT1050_IOMUXC_GPIO1_IO02 = 12,
-+	IMXRT1050_IOMUXC_GPIO1_IO03 = 13,
-+	IMXRT1050_IOMUXC_GPIO1_IO04 = 14,
-+	IMXRT1050_IOMUXC_GPIO1_IO05 = 15,
-+	IMXRT1050_IOMUXC_GPIO1_IO06 = 16,
-+	IMXRT1050_IOMUXC_GPIO1_IO07 = 17,
-+	IMXRT1050_IOMUXC_GPIO1_IO08 = 18,
-+	IMXRT1050_IOMUXC_GPIO1_IO09 = 19,
-+	IMXRT1050_IOMUXC_GPIO1_IO10 = 20,
-+	IMXRT1050_IOMUXC_GPIO1_IO11 = 21,
-+	IMXRT1050_IOMUXC_GPIO1_IO12 = 22,
-+	IMXRT1050_IOMUXC_GPIO1_IO13 = 23,
-+	IMXRT1050_IOMUXC_GPIO1_IO14 = 24,
-+	IMXRT1050_IOMUXC_GPIO1_IO15 = 25,
-+	IMXRT1050_IOMUXC_ENET_MDC = 26,
-+	IMXRT1050_IOMUXC_ENET_MDIO = 27,
-+	IMXRT1050_IOMUXC_ENET_TD3 = 28,
-+	IMXRT1050_IOMUXC_ENET_TD2 = 29,
-+	IMXRT1050_IOMUXC_ENET_TD1 = 30,
-+	IMXRT1050_IOMUXC_ENET_TD0 = 31,
-+	IMXRT1050_IOMUXC_ENET_TX_CTL = 32,
-+	IMXRT1050_IOMUXC_ENET_TXC = 33,
-+	IMXRT1050_IOMUXC_ENET_RX_CTL = 34,
-+	IMXRT1050_IOMUXC_ENET_RXC = 35,
-+	IMXRT1050_IOMUXC_ENET_RD0 = 36,
-+	IMXRT1050_IOMUXC_ENET_RD1 = 37,
-+	IMXRT1050_IOMUXC_ENET_RD2 = 38,
-+	IMXRT1050_IOMUXC_ENET_RD3 = 39,
-+	IMXRT1050_IOMUXC_SD1_CLK = 40,
-+	IMXRT1050_IOMUXC_SD1_CMD = 41,
-+	IMXRT1050_IOMUXC_SD1_DATA0 = 42,
-+	IMXRT1050_IOMUXC_SD1_DATA1 = 43,
-+	IMXRT1050_IOMUXC_SD1_DATA2 = 44,
-+	IMXRT1050_IOMUXC_SD1_DATA3 = 45,
-+	IMXRT1050_IOMUXC_SD1_DATA4 = 46,
-+	IMXRT1050_IOMUXC_SD1_DATA5 = 47,
-+	IMXRT1050_IOMUXC_SD1_DATA6 = 48,
-+	IMXRT1050_IOMUXC_SD1_DATA7 = 49,
-+	IMXRT1050_IOMUXC_SD1_RESET_B = 50,
-+	IMXRT1050_IOMUXC_SD1_STROBE = 51,
-+	IMXRT1050_IOMUXC_SD2_CD_B = 52,
-+	IMXRT1050_IOMUXC_SD2_CLK = 53,
-+	IMXRT1050_IOMUXC_SD2_CMD = 54,
-+	IMXRT1050_IOMUXC_SD2_DATA0 = 55,
-+	IMXRT1050_IOMUXC_SD2_DATA1 = 56,
-+	IMXRT1050_IOMUXC_SD2_DATA2 = 57,
-+	IMXRT1050_IOMUXC_SD2_DATA3 = 58,
-+	IMXRT1050_IOMUXC_SD2_RESET_B = 59,
-+	IMXRT1050_IOMUXC_SD2_WP = 60,
-+	IMXRT1050_IOMUXC_NAND_ALE = 61,
-+	IMXRT1050_IOMUXC_NAND_CE0 = 62,
-+	IMXRT1050_IOMUXC_NAND_CE1 = 63,
-+	IMXRT1050_IOMUXC_NAND_CE2 = 64,
-+	IMXRT1050_IOMUXC_NAND_CE3 = 65,
-+	IMXRT1050_IOMUXC_NAND_CLE = 66,
-+	IMXRT1050_IOMUXC_NAND_DATA00 = 67,
-+	IMXRT1050_IOMUXC_NAND_DATA01 = 68,
-+	IMXRT1050_IOMUXC_NAND_DATA02 = 69,
-+	IMXRT1050_IOMUXC_NAND_DATA03 = 70,
-+	IMXRT1050_IOMUXC_NAND_DATA04 = 71,
-+	IMXRT1050_IOMUXC_NAND_DATA05 = 72,
-+	IMXRT1050_IOMUXC_NAND_DATA06 = 73,
-+	IMXRT1050_IOMUXC_NAND_DATA07 = 74,
-+	IMXRT1050_IOMUXC_NAND_DQS = 75,
-+	IMXRT1050_IOMUXC_NAND_RE_B = 76,
-+	IMXRT1050_IOMUXC_NAND_READY_B = 77,
-+	IMXRT1050_IOMUXC_NAND_WE_B = 78,
-+	IMXRT1050_IOMUXC_NAND_WP_B = 79,
-+	IMXRT1050_IOMUXC_SAI5_RXFS = 80,
-+	IMXRT1050_IOMUXC_SAI5_RXC = 81,
-+	IMXRT1050_IOMUXC_SAI5_RXD0 = 82,
-+	IMXRT1050_IOMUXC_SAI5_RXD1 = 83,
-+	IMXRT1050_IOMUXC_SAI5_RXD2 = 84,
-+	IMXRT1050_IOMUXC_SAI5_RXD3 = 85,
-+	IMXRT1050_IOMUXC_SAI5_MCLK = 86,
-+	IMXRT1050_IOMUXC_SAI1_RXFS = 87,
-+	IMXRT1050_IOMUXC_SAI1_RXC = 88,
-+	IMXRT1050_IOMUXC_SAI1_RXD0 = 89,
-+	IMXRT1050_IOMUXC_SAI1_RXD1 = 90,
-+	IMXRT1050_IOMUXC_SAI1_RXD2 = 91,
-+	IMXRT1050_IOMUXC_SAI1_RXD3 = 92,
-+	IMXRT1050_IOMUXC_SAI1_RXD4 = 93,
-+	IMXRT1050_IOMUXC_SAI1_RXD5 = 94,
-+	IMXRT1050_IOMUXC_SAI1_RXD6 = 95,
-+	IMXRT1050_IOMUXC_SAI1_RXD7 = 96,
-+	IMXRT1050_IOMUXC_SAI1_TXFS = 97,
-+	IMXRT1050_IOMUXC_SAI1_TXC = 98,
-+	IMXRT1050_IOMUXC_SAI1_TXD0 = 99,
-+	IMXRT1050_IOMUXC_SAI1_TXD1 = 100,
-+	IMXRT1050_IOMUXC_SAI1_TXD2 = 101,
-+	IMXRT1050_IOMUXC_SAI1_TXD3 = 102,
-+	IMXRT1050_IOMUXC_SAI1_TXD4 = 103,
-+	IMXRT1050_IOMUXC_SAI1_TXD5 = 104,
-+	IMXRT1050_IOMUXC_SAI1_TXD6 = 105,
-+	IMXRT1050_IOMUXC_SAI1_TXD7 = 106,
-+	IMXRT1050_IOMUXC_SAI1_MCLK = 107,
-+	IMXRT1050_IOMUXC_SAI2_RXFS = 108,
-+	IMXRT1050_IOMUXC_SAI2_RXC = 109,
-+	IMXRT1050_IOMUXC_SAI2_RXD0 = 110,
-+	IMXRT1050_IOMUXC_SAI2_TXFS = 111,
-+	IMXRT1050_IOMUXC_SAI2_TXC = 112,
-+	IMXRT1050_IOMUXC_SAI2_TXD0 = 113,
-+	IMXRT1050_IOMUXC_SAI2_MCLK = 114,
-+	IMXRT1050_IOMUXC_SAI3_RXFS = 115,
-+	IMXRT1050_IOMUXC_SAI3_RXC = 116,
-+	IMXRT1050_IOMUXC_SAI3_RXD = 117,
-+	IMXRT1050_IOMUXC_SAI3_TXFS = 118,
-+	IMXRT1050_IOMUXC_SAI3_TXC = 119,
-+	IMXRT1050_IOMUXC_SAI3_TXD = 120,
-+	IMXRT1050_IOMUXC_SAI3_MCLK = 121,
-+	IMXRT1050_IOMUXC_SPDIF_TX = 122,
-+	IMXRT1050_IOMUXC_SPDIF_RX = 123,
-+	IMXRT1050_IOMUXC_SPDIF_EXT_CLK = 124,
-+	IMXRT1050_IOMUXC_ECSPI1_SCLK = 125,
-+	IMXRT1050_IOMUXC_ECSPI1_MOSI = 126,
-+	IMXRT1050_IOMUXC_ECSPI1_MISO = 127,
-+	IMXRT1050_IOMUXC_ECSPI1_SS0 = 128,
-+	IMXRT1050_IOMUXC_ECSPI2_SCLK = 129,
-+	IMXRT1050_IOMUXC_ECSPI2_MOSI = 130,
-+	IMXRT1050_IOMUXC_ECSPI2_MISO = 131,
-+	IMXRT1050_IOMUXC_ECSPI2_SS0 = 132,
-+	IMXRT1050_IOMUXC_I2C1_SCL = 133,
-+	IMXRT1050_IOMUXC_I2C1_SDA = 134,
-+	IMXRT1050_IOMUXC_I2C2_SCL = 135,
-+	IMXRT1050_IOMUXC_I2C2_SDA = 136,
-+	IMXRT1050_IOMUXC_I2C3_SCL = 137,
-+	IMXRT1050_IOMUXC_I2C3_SDA = 138,
-+	IMXRT1050_IOMUXC_I2C4_SCL = 139,
-+	IMXRT1050_IOMUXC_I2C4_SDA = 140,
-+	IMXRT1050_IOMUXC_UART1_RXD = 141,
-+	IMXRT1050_IOMUXC_UART1_TXD = 142,
-+	IMXRT1050_IOMUXC_UART2_RXD = 143,
-+	IMXRT1050_IOMUXC_UART2_TXD = 144,
-+	IMXRT1050_IOMUXC_UART3_RXD = 145,
-+	IMXRT1050_IOMUXC_UART3_TXD = 146,
-+	IMXRT1050_IOMUXC_UART4_RXD = 147,
-+	IMXRT1050_IOMUXC_UART4_TXD = 148,
-+};
-+
-+/* Pad names for the pinmux subsystem */
-+static const struct pinctrl_pin_desc imxrt1050_pinctrl_pads[] = {
-+	IMX_PINCTRL_PIN(IMXRT1050_PAD_RESERVE0),
-+	IMX_PINCTRL_PIN(IMXRT1050_PAD_RESERVE1),
-+	IMX_PINCTRL_PIN(IMXRT1050_PAD_RESERVE2),
-+	IMX_PINCTRL_PIN(IMXRT1050_PAD_RESERVE3),
-+	IMX_PINCTRL_PIN(IMXRT1050_PAD_RESERVE4),
-+	IMX_PINCTRL_PIN(IMXRT1050_PAD_RESERVE5),
-+	IMX_PINCTRL_PIN(IMXRT1050_PAD_RESERVE6),
-+	IMX_PINCTRL_PIN(IMXRT1050_PAD_RESERVE7),
-+	IMX_PINCTRL_PIN(IMXRT1050_PAD_RESERVE8),
-+	IMX_PINCTRL_PIN(IMXRT1050_PAD_RESERVE9),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO00),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO01),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO02),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO03),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO04),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO05),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO06),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO07),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO08),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO09),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO10),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO11),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO12),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO13),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO14),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_GPIO1_IO15),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_MDC),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_MDIO),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_TD3),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_TD2),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_TD1),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_TD0),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_TX_CTL),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_TXC),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_RX_CTL),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_RXC),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_RD0),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_RD1),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_RD2),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ENET_RD3),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD1_CLK),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD1_CMD),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD1_DATA0),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD1_DATA1),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD1_DATA2),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD1_DATA3),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD1_DATA4),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD1_DATA5),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD1_DATA6),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD1_DATA7),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD1_RESET_B),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD1_STROBE),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD2_CD_B),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD2_CLK),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD2_CMD),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD2_DATA0),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD2_DATA1),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD2_DATA2),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD2_DATA3),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD2_RESET_B),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SD2_WP),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_ALE),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_CE0),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_CE1),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_CE2),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_CE3),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_CLE),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_DATA00),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_DATA01),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_DATA02),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_DATA03),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_DATA04),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_DATA05),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_DATA06),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_DATA07),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_DQS),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_RE_B),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_READY_B),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_WE_B),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_NAND_WP_B),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI5_RXFS),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI5_RXC),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI5_RXD0),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI5_RXD1),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI5_RXD2),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI5_RXD3),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI5_MCLK),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_RXFS),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_RXC),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_RXD0),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_RXD1),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_RXD2),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_RXD3),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_RXD4),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_RXD5),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_RXD6),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_RXD7),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_TXFS),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_TXC),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_TXD0),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_TXD1),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_TXD2),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_TXD3),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_TXD4),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_TXD5),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_TXD6),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_TXD7),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI1_MCLK),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI2_RXFS),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI2_RXC),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI2_RXD0),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI2_TXFS),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI2_TXC),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI2_TXD0),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI2_MCLK),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI3_RXFS),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI3_RXC),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI3_RXD),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI3_TXFS),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI3_TXC),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI3_TXD),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SAI3_MCLK),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SPDIF_TX),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SPDIF_RX),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_SPDIF_EXT_CLK),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ECSPI1_SCLK),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ECSPI1_MOSI),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ECSPI1_MISO),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ECSPI1_SS0),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ECSPI2_SCLK),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ECSPI2_MOSI),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ECSPI2_MISO),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_ECSPI2_SS0),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_I2C1_SCL),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_I2C1_SDA),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_I2C2_SCL),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_I2C2_SDA),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_I2C3_SCL),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_I2C3_SDA),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_I2C4_SCL),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_I2C4_SDA),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_UART1_RXD),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_UART1_TXD),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_UART2_RXD),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_UART2_TXD),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_UART3_RXD),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_UART3_TXD),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_UART4_RXD),
-+	IMX_PINCTRL_PIN(IMXRT1050_IOMUXC_UART4_TXD),
-+};
-+
-+static const struct imx_pinctrl_soc_info imxrt1050_pinctrl_info = {
-+	.pins = imxrt1050_pinctrl_pads,
-+	.npins = ARRAY_SIZE(imxrt1050_pinctrl_pads),
-+	.gpr_compatible = "fsl,imxrt1050-iomuxc-gpr",
-+};
-+
-+static const struct of_device_id imxrt1050_pinctrl_of_match[] = {
-+	{ .compatible = "fsl,imxrt1050-iomuxc", .data = &imxrt1050_pinctrl_info, },
-+	{ /* sentinel */ }
-+};
-+
-+static int imxrt1050_pinctrl_probe(struct platform_device *pdev)
-+{
-+	return imx_pinctrl_probe(pdev, &imxrt1050_pinctrl_info);
-+}
-+
-+static struct platform_driver imxrt1050_pinctrl_driver = {
-+	.driver = {
-+		.name = "imxrt1050-pinctrl",
-+		.of_match_table = of_match_ptr(imxrt1050_pinctrl_of_match),
-+		.suppress_bind_attrs = true,
-+	},
-+	.probe = imxrt1050_pinctrl_probe,
-+};
-+
-+static int __init imxrt1050_pinctrl_init(void)
-+{
-+	return platform_driver_register(&imxrt1050_pinctrl_driver);
-+}
-+arch_initcall(imxrt1050_pinctrl_init);
--- 
-2.34.0
-
+>> +CONFIG_KALLSYMS_ALL=y
+>> +CONFIG_PC104=y
+> 
+> Turning off KALLSYMS_ALL may save a noticeable amount of RAM.
+Intresting
+> 
+> PC104 isn't actually that big, but it seems unlikely that you have
+> that hardware.
+> 
+>> +CONFIG_PARAVIRT=y
+> 
+> You don't seem to enable XEN, so I don't think PARAVIRT is useful by itself.
+> 
+>> +# CONFIG_ATAGS is not set
+>> +CONFIG_CMDLINE="console=ttyS0 root=/dev/mmcblk0p2 rw earlycon rootwait"
+> 
+> The command line should come from the boot loader, users probably have
+> a different root device.
+Presumably this will never be used but I have it there as an example for 
+others, I can remove it if necessary.
+> 
+>> +CONFIG_BLK_DEV_BSGLIB=y
+>> +CONFIG_BLK_DEV_INTEGRITY=y
+>> +CONFIG_BLK_DEV_ZONED=y
+>> +CONFIG_BLK_DEV_THROTTLING=y
+>> +CONFIG_BLK_WBT=y
+>> +CONFIG_BLK_SED_OPAL=y
+>> +CONFIG_PARTITION_ADVANCED=y
+>> +CONFIG_BSD_DISKLABEL=y
+>> +CONFIG_MINIX_SUBPARTITION=y
+>> +CONFIG_SOLARIS_X86_PARTITION=y
+>> +CONFIG_UNIXWARE_DISKLABEL=y
+>> +CONFIG_LDM_PARTITION=y
+> 
+> I don't see you using OPAL or any of the 1990's partition formats.
+> ot set
+> 
+>> +CONFIG_BINFMT_FLAT=y
+> 
+> For the defconfig, you should probably have ELF_FDPIC enabled,
+> not just FLAT.
+> 
+>> +CONFIG_CLEANCACHE=y
+>> +CONFIG_ZPOOL=y
+>> +CONFIG_ZBUD=y
+>> +CONFIG_Z3FOLD=y
+> 
+> Do these work as expected on NOMMU?
+> 
+>> +CONFIG_BLK_DEV_LOOP=y
+>> +CONFIG_BLK_DEV_RAM=y
+>> +CONFIG_BLK_DEV_RAM_COUNT=1
+>> +CONFIG_BLK_DEV_RAM_SIZE=65536
+> 
+> I don't think you can have a ramdisk larger than RAM ;-)
+> 
+Oh that's funny I left that from testing something I will remove it.
+>> +CONFIG_MEMORY=y
+> 
+> No need to enable the subsystem when you don't enable any
+> of its drivers.
+> 
+>> +CONFIG_EXT2_FS=y
+>> +CONFIG_EXT2_FS_XATTR=y
+>> +CONFIG_EXT2_FS_POSIX_ACL=y
+>> +CONFIG_EXT2_FS_SECURITY=y
+>> +CONFIG_EXT3_FS=y
+>> +CONFIG_EXT3_FS_POSIX_ACL=y
+>> +CONFIG_EXT3_FS_SECURITY=y
+> 
+> Never use EXT3 on eMMC, just use EXT4 instead to make
+> the device actually live longer. You probably don't need to enable
+> EXT2 support separately.
+> 
+>> +# CONFIG_FILE_LOCKING is not set
+>> +# CONFIG_DNOTIFY is not set
+>> +CONFIG_QUOTA=y
+> 
+> dnotify and locking seem more useful than quota here
+> 
+>> +# CONFIG_PRINT_QUOTA_WARNING is not set
+>> +CONFIG_AUTOFS4_FS=y
+> 
+>> +CONFIG_CONFIGFS_FS=y
+> 
+> I don't see anything using configfs
+> 
+>> +CONFIG_LSM="yama,loadpin,integrity,apparmor"
+> 
+> None of these are actually enabled as far as I can tell.
+> 
+>> +CONFIG_DEBUG_INFO=y
+>> +CONFIG_DEBUG_INFO_DWARF4=y
+> 
+> If you use DWARF4, you probably want DEBUG_INFO_SPLIT as well,
+> to reduce the vmlinux size.
+> 
+>         Arnd
+> 
+Thx for telling me about this i will try to use only the necessary ones.
