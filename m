@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5039EC433EF
-	for <soc@archiver.kernel.org>; Thu, 25 Nov 2021 21:21:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC1F4C433F5
+	for <soc@archiver.kernel.org>; Thu, 25 Nov 2021 21:21:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 14476C93057; Thu, 25 Nov 2021 21:21:10 +0000 (UTC)
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	id A77E3C9304D; Thu, 25 Nov 2021 21:21:23 +0000 (UTC)
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6D4F9C9304D;
-	Thu, 25 Nov 2021 21:21:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6D4F9C9304D
+	by smtp.kernel.org (Postfix) with ESMTPS id 61EF8C93057;
+	Thu, 25 Nov 2021 21:21:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 61EF8C93057
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f174.google.com with SMTP id 132so12888940qkj.11;
-        Thu, 25 Nov 2021 13:21:09 -0800 (PST)
+Received: by mail-qk1-f179.google.com with SMTP id de30so13001182qkb.0;
+        Thu, 25 Nov 2021 13:21:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+/OW3wrVevZ7BrAo2Iv8SBFUTqErMKF99iq98AyaJuQ=;
-        b=BYGFEn2AipI3XVGkSfRNlgsYFHNHjS0mZFBTrUs7463BtbbFurE1MOfE8Lm4KKwbZp
-         WbWqqoqvjnc+KUsj0ZIFA7GEbCmzACammWNPjnDCHmYSEP+nS2OUSdmrpxtUQkFFYX1C
-         wftpnhyR2/xopVMxUb5ZlyuoQEomsPZmyBGuho3LcpECiU+BUwUy1vcVtmTO6/tZsiDM
-         l82Gi+BBsoFWmcHBJ1xocFqaG3QZ/3UHl5n8GiE/44GRhNrbG4OIpy42s+SDgKwWpntS
-         Ik1dnppRuYNbPxEgf0TzXTukZdqkcFlsxzMHkMp66G4mK/ycmP3tLr3Dn4Cl59dFyeUV
-         4eCg==
+        bh=HtNinLAItTpqOmfX6cGEGPtlwFee7IwUtpjMSp+jDAI=;
+        b=CPikTvtrnwMUnG/ZCQg90u4JfpQENNeaB6KypVhOS/jLPr+P7ihAE5iqTxqLDxE//c
+         kuYOudfSFoTwkwRK0fRX5+hZtO2Rd0vWF7iDYHky8taqcEnszdx6dBtuSfPofip5nZ3E
+         eQMddV9oZ9cAj+inkgB5kIOmuzb3zDWBL6n7/oHsWp3sX673sC/7klO2TZTnf4vBKw9V
+         zvuCUJ1Z+xVG6OpKU6/RUoFZ5RLZgbUvQWODVAksGYFe6wxTH6HOR89GIhilRkOgbvOf
+         xlBs1strAEfrzqljRAf+d7mm/yGJRiyN3FKy6G1CvrG/fssHDYVGtXs9CMo0qgmaBSQV
+         FCCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+/OW3wrVevZ7BrAo2Iv8SBFUTqErMKF99iq98AyaJuQ=;
-        b=ukcmp2Z1ETaWxjAP8jrx1m0QB0ngGedYQI1y63Yd2WJuj6isUNyZwAT3ph+VFhI7ZG
-         QbiLbXyTIYXACEXM7p/0938B+p7o9hqdVSXufL6r/Mg/NN3rYxxUcciQSKdMm9g7H6Iz
-         9W4+ZlzREIy278HgGf1FbRIStMhphU7RVXg4+oDjSKSD2AJzvqjvuHfuu6d/XBtatx/R
-         rfEH00+FRD3jw2ZzmjR1Yi6ccEYvKeoCK9laKtwU5PESdgznYJKiqkP7ggN4Ty48SRw2
-         Rd/J6Plte+5pl96QuxwH6wiS4pcoHMK8heJHrdBmZlFLj4QQTUY4L22cipN7ACnvCtNV
-         1Aaw==
-X-Gm-Message-State: AOAM530wwYcvh3l2/LVnBPu39hLM83tz5G+p5AlIhgi5IDvz0KgdmZA6
-	FyrsWQtVj80JwTrEXwppmHKOknOHyA5tKA==
-X-Google-Smtp-Source: ABdhPJxJqedCq5mAxFvnEbbvX7ZL4WWJh5ADKidIhXX1idV0DDal8O3tIM6z0UJH1W+kfX2LLKtklw==
-X-Received: by 2002:ac8:5894:: with SMTP id t20mr11743905qta.450.1637874894924;
-        Thu, 25 Nov 2021 13:14:54 -0800 (PST)
+        bh=HtNinLAItTpqOmfX6cGEGPtlwFee7IwUtpjMSp+jDAI=;
+        b=7FI1pw8peCRM/PuXzrou+yNh1Tsd+YyhwPCHY7VQ5TDOq23QfdY4SlbLBuQKBMgiGg
+         katxwuSjj0TZ5Ud1haid95AVYJW+un5nET0FvAmKoVgmsU3D0MBrIuNJy0soLqlx5CJ6
+         jtmCjofWsayRLWnbGsjm6ClQN1drvxKsSMWdzurbZYhZ335h+GBQV8TpBe56V5PaLhuY
+         xVgtkSzAB9uxfpxu053U4Cqwr6tGATVJGkeelGFxoIFjVnPzs7lZm4WkWXQ9B1JvMOtC
+         Z10BgQgnmlAUThgozFFUsQ32QkNyRquu8wrrNVzMSGVNi5wU7wmgz1CGCkksuiRG6onI
+         FyMg==
+X-Gm-Message-State: AOAM532E6Ol8Vb5Jal3LfK4jS5+eOALwdhzvCX2bTACMC9TO2BTDQ3Yd
+	yNBl5ZMm9OfCnToWgDx89/OlHFsAsWYzHg==
+X-Google-Smtp-Source: ABdhPJx7zuDAIzIRmY+ox4s54iym+Xd+CXzuhIrDjVxtrser9k98V0OEZeYbwfkK1qeiXddv5jKcOw==
+X-Received: by 2002:a05:622a:189:: with SMTP id s9mr20542987qtw.352.1637874898731;
+        Thu, 25 Nov 2021 13:14:58 -0800 (PST)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id j22sm2068175qko.68.2021.11.25.13.14.53
+        by smtp.gmail.com with ESMTPSA id j22sm2068175qko.68.2021.11.25.13.14.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Nov 2021 13:14:54 -0800 (PST)
+        Thu, 25 Nov 2021 13:14:57 -0800 (PST)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -81,114 +81,224 @@ Cc: mturquette@baylibre.com,
 	linux-kernel@vger.kernel.org,
 	linux-mmc@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Subject: [PATCH v3 05/13] dt-bindings: imx: Add clock binding for i.MXRT1050
-Date: Thu, 25 Nov 2021 16:14:35 -0500
-Message-Id: <20211125211443.1150135-6-Mr.Bossman075@gmail.com>
+	linux-serial@vger.kernel.org,
+	Jesse Taube <mr.bossman075@gmail.com>
+Subject: [PATCH v3 07/13] clk: imx: Add initial support for i.MXRT clock driver
+Date: Thu, 25 Nov 2021 16:14:37 -0500
+Message-Id: <20211125211443.1150135-8-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20211125211443.1150135-1-Mr.Bossman075@gmail.com>
 References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Jesse Taube <mr.bossman075@gmail.com>
 
-Add the clock binding doc for i.MXRT1050.
+This patch adds initial clock driver support for the i.MXRT series.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Giulio: added all clocks up to IMXRT1050_CLK_USBOH3]
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-[Jesse: added clocks from IMXRT1050_CLK_IPG_PDOF to
-IMXRT1050_CLK_DMA_MUX and moved IMXRT1050_CLK_END on]
+Suggested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
 V1->V2:
-* Nothing done
+* Kconfig: Add new line
+* clk-imxrt.c: Remove unused const
+* clk-imxrt.c: Remove set parents
+* clk-imxrt.c: Use fsl,imxrt-anatop for anatop base address
 V2->V3:
-* Added GPT binding
+* Remove unused ANATOP_BASE_ADDR
+* Move to hw API
+* Add GPT's own clock
+* Add SEMC clocks to set muxing to CRITICAL
 ---
- include/dt-bindings/clock/imxrt1050-clock.h | 73 +++++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 include/dt-bindings/clock/imxrt1050-clock.h
+ drivers/clk/imx/Kconfig     |   4 +
+ drivers/clk/imx/Makefile    |   1 +
+ drivers/clk/imx/clk-imxrt.c | 156 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 161 insertions(+)
+ create mode 100644 drivers/clk/imx/clk-imxrt.c
 
-diff --git a/include/dt-bindings/clock/imxrt1050-clock.h b/include/dt-bindings/clock/imxrt1050-clock.h
+diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
+index c08edbd04d22..9a870491c9d2 100644
+--- a/drivers/clk/imx/Kconfig
++++ b/drivers/clk/imx/Kconfig
+@@ -105,3 +105,7 @@ config CLK_IMX8ULP
+ 	select MXC_CLK
+ 	help
+ 	    Build the driver for i.MX8ULP CCM Clock Driver
++
++config CLK_IMXRT
++	def_bool SOC_IMXRT
++	select MXC_CLK
+diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
+index b5e040026dfb..baeef107bb0f 100644
+--- a/drivers/clk/imx/Makefile
++++ b/drivers/clk/imx/Makefile
+@@ -47,3 +47,4 @@ obj-$(CONFIG_CLK_IMX6UL) += clk-imx6ul.o
+ obj-$(CONFIG_CLK_IMX7D)  += clk-imx7d.o
+ obj-$(CONFIG_CLK_IMX7ULP) += clk-imx7ulp.o
+ obj-$(CONFIG_CLK_VF610)  += clk-vf610.o
++obj-$(CONFIG_CLK_IMXRT)  += clk-imxrt.o
+diff --git a/drivers/clk/imx/clk-imxrt.c b/drivers/clk/imx/clk-imxrt.c
 new file mode 100644
-index 000000000000..9811676d100b
+index 000000000000..85ba1a240335
 --- /dev/null
-+++ b/include/dt-bindings/clock/imxrt1050-clock.h
-@@ -0,0 +1,73 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
++++ b/drivers/clk/imx/clk-imxrt.c
+@@ -0,0 +1,156 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
-+ * Copyright(C) 2019
-+ * Author(s): Giulio Benetti <giulio.benetti@benettiengineering.com>
++ * Copyright (C) 2021
++ * Author(s):
++ * Jesse Taube <Mr.Bossman075@gmail.com>
++ * Giulio Benetti <giulio.benetti@benettiengineering.com>
 + */
++#include <linux/mm.h>
++#include <linux/delay.h>
++#include <linux/clk.h>
++#include <linux/io.h>
++#include <linux/clkdev.h>
++#include <linux/clk-provider.h>
++#include <linux/err.h>
++#include <linux/of.h>
++#include <linux/of_address.h>
++#include <linux/of_irq.h>
++#include <linux/sizes.h>
++#include <soc/imx/revision.h>
++#include <dt-bindings/clock/imxrt1050-clock.h>
 +
-+#ifndef __DT_BINDINGS_CLOCK_IMXRT1050_H
-+#define __DT_BINDINGS_CLOCK_IMXRT1050_H
++#include "clk.h"
 +
-+#define IMXRT1050_CLK_DUMMY			0
-+#define IMXRT1050_CLK_CKIL			1
-+#define IMXRT1050_CLK_CKIH			2
-+#define IMXRT1050_CLK_OSC			3
-+#define IMXRT1050_CLK_PLL2_PFD0_352M		4
-+#define IMXRT1050_CLK_PLL2_PFD1_594M		5
-+#define IMXRT1050_CLK_PLL2_PFD2_396M		6
-+#define IMXRT1050_CLK_PLL3_PFD0_720M		7
-+#define IMXRT1050_CLK_PLL3_PFD1_664_62M		8
-+#define IMXRT1050_CLK_PLL3_PFD2_508_24M		9
-+#define IMXRT1050_CLK_PLL3_PFD3_454_74M		10
-+#define IMXRT1050_CLK_PLL2_198M			11
-+#define IMXRT1050_CLK_PLL3_120M			12
-+#define IMXRT1050_CLK_PLL3_80M			13
-+#define IMXRT1050_CLK_PLL3_60M			14
-+#define IMXRT1050_CLK_PLL1_BYPASS		15
-+#define IMXRT1050_CLK_PLL2_BYPASS		16
-+#define IMXRT1050_CLK_PLL3_BYPASS		17
-+#define IMXRT1050_CLK_PLL5_BYPASS		19
-+#define IMXRT1050_CLK_PLL1_REF_SEL		20
-+#define IMXRT1050_CLK_PLL2_REF_SEL		21
-+#define IMXRT1050_CLK_PLL3_REF_SEL		22
-+#define IMXRT1050_CLK_PLL5_REF_SEL		23
-+#define IMXRT1050_CLK_PRE_PERIPH_SEL		24
-+#define IMXRT1050_CLK_PERIPH_SEL		25
-+#define IMXRT1050_CLK_SEMC_ALT_SEL		26
-+#define IMXRT1050_CLK_SEMC_SEL			27
-+#define IMXRT1050_CLK_USDHC1_SEL		28
-+#define IMXRT1050_CLK_USDHC2_SEL		29
-+#define IMXRT1050_CLK_LPUART_SEL		30
-+#define IMXRT1050_CLK_LCDIF_SEL			31
-+#define IMXRT1050_CLK_VIDEO_POST_DIV_SEL	32
-+#define IMXRT1050_CLK_VIDEO_DIV			33
-+#define IMXRT1050_CLK_ARM_PODF			34
-+#define IMXRT1050_CLK_LPUART_PODF		35
-+#define IMXRT1050_CLK_USDHC1_PODF		36
-+#define IMXRT1050_CLK_USDHC2_PODF		37
-+#define IMXRT1050_CLK_SEMC_PODF			38
-+#define IMXRT1050_CLK_AHB_PODF			39
-+#define IMXRT1050_CLK_LCDIF_PRED		40
-+#define IMXRT1050_CLK_LCDIF_PODF		41
-+#define IMXRT1050_CLK_USDHC1			42
-+#define IMXRT1050_CLK_USDHC2			43
-+#define IMXRT1050_CLK_LPUART1			44
-+#define IMXRT1050_CLK_SEMC			45
-+#define IMXRT1050_CLK_LCDIF_APB			46
-+#define IMXRT1050_CLK_PLL1_ARM			47
-+#define IMXRT1050_CLK_PLL2_SYS			48
-+#define IMXRT1050_CLK_PLL3_USB_OTG		49
-+#define IMXRT1050_CLK_PLL4_AUDIO		50
-+#define IMXRT1050_CLK_PLL5_VIDEO		51
-+#define IMXRT1050_CLK_PLL6_ENET			52
-+#define IMXRT1050_CLK_PLL7_USB_HOST		53
-+#define IMXRT1050_CLK_LCDIF_PIX			54
-+#define IMXRT1050_CLK_USBOH3			55
-+#define IMXRT1050_CLK_IPG_PDOF			56
-+#define IMXRT1050_CLK_PER_CLK_SEL		57
-+#define IMXRT1050_CLK_PER_PDOF			58
-+#define IMXRT1050_CLK_DMA			59
-+#define IMXRT1050_CLK_DMA_MUX			60
-+#define IMXRT1050_CLK_GPT			70
-+#define IMXRT1050_CLK_END			71
++static const char * const pll_ref_sels[] = {"osc", "dummy", };
++static const char * const per_sels[] = {"ipg_pdof", "osc", };
++static const char * const pll1_bypass_sels[] = {"pll1_arm", "pll1_arm_ref_sel", };
++static const char * const pll2_bypass_sels[] = {"pll2_sys", "pll2_sys_ref_sel", };
++static const char * const pll3_bypass_sels[] = {"pll3_usb_otg", "pll3_usb_otg_ref_sel", };
++static const char * const pll5_bypass_sels[] = {"pll5_video", "pll5_video_ref_sel", };
++static const char *const pre_periph_sels[] = {
++	"pll2_sys", "pll2_pfd2_396m", "pll2_pfd0_352m", "arm_podf", };
++static const char *const periph_sels[] = { "pre_periph_sel", "todo", };
++static const char *const usdhc_sels[] = { "pll2_pfd2_396m", "pll2_pfd0_352m", };
++static const char *const lpuart_sels[] = { "pll3_80m", "osc", };
++static const char *const lcdif_sels[] = {
++	"pll2_sys", "pll3_pfd3_454_74m", "pll5_video", "pll2_pfd0_352m",
++	"pll2_pfd1_594m", "pll3_pfd1_664_62m", };
++static const char *const semc_alt_sels[] = { "pll2_pfd2_396m", "pll3_pfd1_664_62m", };
++static const char *const semc_sels[] = { "periph_sel", "semc_alt_sel", };
 +
-+#endif /* __DT_BINDINGS_CLOCK_IMXRT1050_H */
++static struct clk_hw **hws;
++static struct clk_hw_onecell_data *clk_hw_data;
++
++static void __init imxrt_clocks_common_init(void __iomem *base)
++{
++	/* Anatop clocks */
++	hws[IMXRT1050_CLK_DUMMY] = imx_clk_hw_fixed("dummy", 0UL);
++
++	hws[IMXRT1050_CLK_PLL1_REF_SEL] = imx_clk_hw_mux("pll1_arm_ref_sel",
++		base + 0x0, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
++	hws[IMXRT1050_CLK_PLL2_REF_SEL] = imx_clk_hw_mux("pll2_sys_ref_sel",
++		base + 0x30, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
++	hws[IMXRT1050_CLK_PLL3_REF_SEL] = imx_clk_hw_mux("pll3_usb_otg_ref_sel",
++		base + 0x10, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
++	hws[IMXRT1050_CLK_PLL5_REF_SEL] = imx_clk_hw_mux("pll5_video_ref_sel",
++		base + 0xa0, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
++
++	hws[IMXRT1050_CLK_PLL1_ARM] = imx_clk_hw_pllv3(IMX_PLLV3_SYS, "pll1_arm",
++		"pll1_arm_ref_sel", base + 0x0, 0x7f);
++	hws[IMXRT1050_CLK_PLL2_SYS] = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll2_sys",
++		"pll2_sys_ref_sel", base + 0x30, 0x1);
++	hws[IMXRT1050_CLK_PLL3_USB_OTG] = imx_clk_hw_pllv3(IMX_PLLV3_USB, "pll3_usb_otg",
++		"pll3_usb_otg_ref_sel", base + 0x10, 0x1);
++	hws[IMXRT1050_CLK_PLL5_VIDEO] = imx_clk_hw_pllv3(IMX_PLLV3_AV, "pll5_video",
++		"pll5_video_ref_sel", base + 0xa0, 0x7f);
++
++	/* PLL bypass out */
++	hws[IMXRT1050_CLK_PLL1_BYPASS] = imx_clk_hw_mux_flags("pll1_bypass", base + 0x0, 16, 1,
++		pll1_bypass_sels, ARRAY_SIZE(pll1_bypass_sels), CLK_SET_RATE_PARENT);
++	hws[IMXRT1050_CLK_PLL2_BYPASS] = imx_clk_hw_mux_flags("pll2_bypass", base + 0x30, 16, 1,
++		pll2_bypass_sels, ARRAY_SIZE(pll2_bypass_sels), CLK_SET_RATE_PARENT);
++	hws[IMXRT1050_CLK_PLL3_BYPASS] = imx_clk_hw_mux_flags("pll3_bypass", base + 0x10, 16, 1,
++		pll3_bypass_sels, ARRAY_SIZE(pll3_bypass_sels), CLK_SET_RATE_PARENT);
++	hws[IMXRT1050_CLK_PLL5_BYPASS] = imx_clk_hw_mux_flags("pll5_bypass", base + 0xa0, 16, 1,
++		pll5_bypass_sels, ARRAY_SIZE(pll5_bypass_sels), CLK_SET_RATE_PARENT);
++
++	hws[IMXRT1050_CLK_VIDEO_POST_DIV_SEL] = imx_clk_hw_divider("video_post_div_sel",
++		"pll5_video", base + 0xa0, 19, 2);
++	hws[IMXRT1050_CLK_VIDEO_DIV] = imx_clk_hw_divider("video_div",
++		"video_post_div_sel", base + 0x170, 30, 2);
++
++	hws[IMXRT1050_CLK_PLL3_80M] = imx_clk_hw_fixed_factor("pll3_80m",  "pll3_usb_otg", 1, 6);
++
++	hws[IMXRT1050_CLK_PLL2_PFD0_352M] = imx_clk_hw_pfd("pll2_pfd0_352m", "pll2_sys", base + 0x100, 0);
++	hws[IMXRT1050_CLK_PLL2_PFD1_594M] = imx_clk_hw_pfd("pll2_pfd1_594m", "pll2_sys", base + 0x100, 1);
++	hws[IMXRT1050_CLK_PLL2_PFD2_396M] = imx_clk_hw_pfd("pll2_pfd2_396m", "pll2_sys", base + 0x100, 2);
++	hws[IMXRT1050_CLK_PLL3_PFD1_664_62M] = imx_clk_hw_pfd("pll3_pfd1_664_62m", "pll3_usb_otg", base + 0xf0, 1);
++	hws[IMXRT1050_CLK_PLL3_PFD3_454_74M] = imx_clk_hw_pfd("pll3_pfd3_454_74m", "pll3_usb_otg", base + 0xf0, 3);
++}
++
++static void __init imxrt1050_clocks_init(struct device_node *np)
++{
++	void __iomem *ccm_base;
++	void __iomem *pll_base;
++	struct device_node *anp;
++
++	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
++					  IMXRT1050_CLK_END), GFP_KERNEL);
++	if (WARN_ON(!clk_hw_data))
++		return;
++
++	clk_hw_data->num = IMXRT1050_CLK_END;
++	hws = clk_hw_data->hws;
++
++	hws[IMXRT1050_CLK_OSC] = __clk_get_hw(of_clk_get_by_name(np, "osc"));
++
++	anp = of_find_compatible_node(NULL, NULL, "fsl,imxrt-anatop");
++	pll_base = of_iomap(anp, 0);
++	WARN_ON(!pll_base);
++	imxrt_clocks_common_init(pll_base);
++	/* CCM clocks */
++	ccm_base = of_iomap(np, 0);
++	WARN_ON(!ccm_base);
++
++	hws[IMXRT1050_CLK_ARM_PODF] = imx_clk_hw_divider("arm_podf", "pll1_arm", ccm_base + 0x10, 0, 3);
++	hws[IMXRT1050_CLK_PRE_PERIPH_SEL] = imx_clk_hw_mux("pre_periph_sel", ccm_base + 0x18, 18, 2,
++		pre_periph_sels, ARRAY_SIZE(pre_periph_sels));
++	hws[IMXRT1050_CLK_PERIPH_SEL] = imx_clk_hw_mux("periph_sel", ccm_base + 0x14, 25, 1,
++		periph_sels, ARRAY_SIZE(periph_sels));
++	hws[IMXRT1050_CLK_USDHC1_SEL] = imx_clk_hw_mux("usdhc1_sel", ccm_base + 0x1c, 16, 1,
++		usdhc_sels, ARRAY_SIZE(usdhc_sels));
++	hws[IMXRT1050_CLK_USDHC2_SEL] = imx_clk_hw_mux("usdhc2_sel", ccm_base + 0x1c, 17, 1,
++		usdhc_sels, ARRAY_SIZE(usdhc_sels));
++	hws[IMXRT1050_CLK_LPUART_SEL] = imx_clk_hw_mux("lpuart_sel", ccm_base + 0x24, 6, 1,
++		lpuart_sels, ARRAY_SIZE(lpuart_sels));
++	hws[IMXRT1050_CLK_LCDIF_SEL] = imx_clk_hw_mux("lcdif_sel", ccm_base + 0x38, 15, 3,
++		lcdif_sels, ARRAY_SIZE(lcdif_sels));
++	hws[IMXRT1050_CLK_PER_CLK_SEL] = imx_clk_hw_mux("per_sel", ccm_base + 0x1C, 6, 1,
++		per_sels, ARRAY_SIZE(per_sels));
++	hws[IMXRT1050_CLK_SEMC_ALT_SEL] = imx_clk_hw_mux("semc_alt_sel", ccm_base + 0x14, 7, 1,
++		semc_alt_sels, ARRAY_SIZE(semc_alt_sels));
++	hws[IMXRT1050_CLK_SEMC_SEL] = imx_clk_hw_mux_flags("semc_sel", ccm_base + 0x14, 6, 1,
++		semc_sels, ARRAY_SIZE(semc_sels), CLK_IS_CRITICAL);
++
++	hws[IMXRT1050_CLK_AHB_PODF] = imx_clk_hw_divider("ahb", "periph_sel", ccm_base + 0x14, 10, 3);
++	hws[IMXRT1050_CLK_IPG_PDOF] = imx_clk_hw_divider("ipg", "ahb", ccm_base + 0x14, 8, 2);
++	hws[IMXRT1050_CLK_PER_PDOF] = imx_clk_hw_divider("per", "per_sel", ccm_base + 0x1C, 0, 5);
++
++	hws[IMXRT1050_CLK_USDHC1_PODF] = imx_clk_hw_divider("usdhc1_podf", "usdhc1_sel", ccm_base + 0x24, 11, 3);
++	hws[IMXRT1050_CLK_USDHC2_PODF] = imx_clk_hw_divider("usdhc2_podf", "usdhc2_sel", ccm_base + 0x24, 16, 3);
++	hws[IMXRT1050_CLK_LPUART_PODF] = imx_clk_hw_divider("lpuart_podf", "lpuart_sel", ccm_base + 0x24, 0, 6);
++	hws[IMXRT1050_CLK_LCDIF_PRED] = imx_clk_hw_divider("lcdif_pred", "lcdif_sel", ccm_base + 0x38, 12, 3);
++	hws[IMXRT1050_CLK_LCDIF_PODF] = imx_clk_hw_divider("lcdif_podf", "lcdif_pred", ccm_base + 0x18, 23, 3);
++
++	hws[IMXRT1050_CLK_USDHC1] = imx_clk_hw_gate2("usdhc1", "usdhc1_podf", ccm_base + 0x80, 2);
++	hws[IMXRT1050_CLK_USDHC2] = imx_clk_hw_gate2("usdhc2", "usdhc2_podf", ccm_base + 0x80, 4);
++	hws[IMXRT1050_CLK_LPUART1] = imx_clk_hw_gate2("lpuart1", "lpuart_podf", ccm_base + 0x7c, 24);
++	hws[IMXRT1050_CLK_LCDIF_APB] = imx_clk_hw_gate2("lcdif", "lcdif_podf", ccm_base + 0x74, 10);
++	hws[IMXRT1050_CLK_DMA] = imx_clk_hw_gate("dma", "ipg", ccm_base + 0x7C, 6);
++	hws[IMXRT1050_CLK_DMA_MUX] = imx_clk_hw_gate("dmamux0", "ipg", ccm_base + 0x7C, 7);
++	hws[IMXRT1050_CLK_GPT] = imx_clk_hw_fixed_factor("gpt", "osc", 1, 8);
++	imx_check_clk_hws(hws, IMXRT1050_CLK_END);
++
++	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
++}
++CLK_OF_DECLARE(imxrt_ccm, "fsl,imxrt1050-ccm", imxrt1050_clocks_init);
 -- 
 2.34.0
 
