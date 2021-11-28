@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FFABC433F5
-	for <soc@archiver.kernel.org>; Sun, 28 Nov 2021 20:50:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57934C433FE
+	for <soc@archiver.kernel.org>; Sun, 28 Nov 2021 20:51:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1471CC53FC1; Sun, 28 Nov 2021 20:50:29 +0000 (UTC)
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+	id 442F1C53FCB; Sun, 28 Nov 2021 20:51:54 +0000 (UTC)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4B2A8C004E1;
-	Sun, 28 Nov 2021 20:50:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4B2A8C004E1
+	by smtp.kernel.org (Postfix) with ESMTPS id C0243C004E1;
+	Sun, 28 Nov 2021 20:51:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C0243C004E1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f171.google.com with SMTP id 188so9590800vku.8;
-        Sun, 28 Nov 2021 12:50:28 -0800 (PST)
+Received: by mail-ua1-f44.google.com with SMTP id o1so29754668uap.4;
+        Sun, 28 Nov 2021 12:51:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ozjJ3S5Udm4B/OHBZ5P2O9zki+yUp9fd6WJGfyI7sV4=;
-        b=jL6xsvpd7T1ANE1JqP6l3iIR2W4N08COgcswxreba+5PfVGwvMc9GxbJ5vZtkb4rdR
-         mcP70bSrCUnrbWduLH+5RKI5NI8TQNZ8lgsoj1Wzgmm0UcA2ipZIUS1OKKDD+SPz5K9K
-         fIYaYX/JPFDrIVE6kGBYpANehgUJwE0pdIGWSt13EKtjpnllqQLfhAGMMbwVJFDMbc55
-         0clotCrmP8TpwQTnG/UygBsPcHczlGUHStQz7yQEgcIcjQO4uWxgvvR9t9pMY0rpLxwK
-         b++kUHcQQMtIExbSnYMfWvSZOljhDSSoK1f2GkcgGdHreihszyT/Kuh+9cEd2g2uyXlR
-         XwBw==
+        bh=mJdw8+B+469lEUinr7Yxatle2qjN+p5Ob+KVnBKytm4=;
+        b=dsu13FhAcDiygfmSbxULHp4GEXJHqRU/YAenvG+Tf7Hz2aiMpp/AE+rnWDXLY1NAJW
+         wgyfTW89QOPU3zdLqhiVSP/Sv+svFMu2mBPy6aYXpcCuGC5wXvpXejTKbvEidiYvFch6
+         IGDdl/Nmp6Skz6Zq0rCuNxd8RGBWWKscG5C3sMmi0UCiPy8u3oGMD8kdz2SkvXQvoT4G
+         Yni7dznjeI2jiVZ7ps7NBDG5KCwt7tlunIqH4dBqDofe2FRCazrz2W+7KpnKXQHUccoh
+         ftuu9mf2t7a57InoQ3uDY9qPBPVIqK9kleBEVlOtqNyLMPX3rDzsRMWpXq/yYR+nEt+v
+         QMjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ozjJ3S5Udm4B/OHBZ5P2O9zki+yUp9fd6WJGfyI7sV4=;
-        b=szYXvhLSyuRbq5pKeT3ZO/+lXkdzxEzdNwYpzfKio1xLnoI9oC1hC82S/q3/ZEYbqB
-         LWQUpWUQLG357ODO5ZtuvlSQFSbph2/ygykx1L/XJuznlwj2J7oGuk4JowQAlH7Kgbbi
-         yJVSq3qQr1ga1KQcTfLXuhzkayh7wYnbslvGKUanDBJDvzPX/Ap4LMOMss4j/RmDLysC
-         S0adN8EhQPvAMiwjA/yrsAyLEaM7drVvuc8gBI8BGlQGQdYkDCqVeNy7bV/nCEO/2Dwx
-         jQd5lu0qtArymOANLezprVxkxCWhdswEtiUlWLLlPjqpJSD4Jme9xMcwI0Q1XUzNBVq0
-         I//A==
-X-Gm-Message-State: AOAM533+lQKG67htr3XIsaLaoqk3UD3vQf0qohY1GMz4b6/dP53kb0pg
-	LhLhAp9riBpt+on2WwKd9UUhBsvsH7ew+4VsFNU=
-X-Google-Smtp-Source: ABdhPJwqKT0SJSealzpAeOuiuzBx+Ouri6WOg7q88zgMzKFcvEBeTGHbTYv3Au3CQjhcuPQWX3A/YVR/KzwFODrXPbA=
-X-Received: by 2002:a05:6122:629:: with SMTP id g9mr27480004vkp.36.1638132627271;
- Sun, 28 Nov 2021 12:50:27 -0800 (PST)
+        bh=mJdw8+B+469lEUinr7Yxatle2qjN+p5Ob+KVnBKytm4=;
+        b=b3jez2rdiRvPk5dIRn8/TAjD4GlvUpzce6GGsx3Cb3ipbC46osKtAKcT282VJ+7x8c
+         aS/eaZbCgy4woYsjCLnZhi+CzpZWvbxtHsgIo6qoRVh/DpxV7mFnk4oLquyVaFJAdHeC
+         XsV5B13K5lRr7r4LCkK3+0qxi8VqjzLRm7A8j+wrQjRWE0ZNyp0opHD3o8ja+uYoNPHe
+         XO1kbu1T+2q1mNw3Mesk4XbsPyD73rBlh+wJRMiWozH/Yuo3CvgBhmU7npHiXiHFyZWN
+         mD8g7PYv40xmZXYKHmqe9u64pUCGYxT01/hcJsRWyTMMPBQ35ygl9na2hqBo9U6eH8Gz
+         yJbQ==
+X-Gm-Message-State: AOAM533Fa6bARxNlz3fIKKJqRNANnQbjzHgzIBY41S+f9ipxxAR5DZ+z
+	keYyqFPl8e6Vt39QbZDyMa5oVL78Wf6sMiLvmkIPxBbfOFk=
+X-Google-Smtp-Source: ABdhPJynMWaOJnX0hrkBHJUH9VWS97JL7n8UsFCkiw/NzxJUQXKpFjsZQm64YrPy9ZIE5Gxp2tLJ3pplY9uaDBQFqlQ=
+X-Received: by 2002:a67:e003:: with SMTP id c3mr28621655vsl.51.1638132712814;
+ Sun, 28 Nov 2021 12:51:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com> <20211125211443.1150135-8-Mr.Bossman075@gmail.com>
-In-Reply-To: <20211125211443.1150135-8-Mr.Bossman075@gmail.com>
+References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com> <20211125211443.1150135-12-Mr.Bossman075@gmail.com>
+In-Reply-To: <20211125211443.1150135-12-Mr.Bossman075@gmail.com>
 From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 28 Nov 2021 17:50:16 -0300
-Message-ID: <CAOMZO5Dqo6c=4nGCOakMKG8fn=V1HA7-O26t3GmwWtD-FbZiPg@mail.gmail.com>
-Subject: Re: [PATCH v3 07/13] clk: imx: Add initial support for i.MXRT clock driver
+Date: Sun, 28 Nov 2021 17:51:42 -0300
+Message-ID: <CAOMZO5A8sOJLmYWLU4BZzL=C-PnXvgDOYEodtg6sHcP7tetJkg@mail.gmail.com>
+Subject: Re: [PATCH v3 11/13] mmc: sdhci-esdhc-imx: Add sdhc support for
+ i.MXRT series
 To: Jesse Taube <mr.bossman075@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: NXP Linux Team <linux-imx@nxp.com>, Michael Turquette <mturquette@baylibre.com>, 
@@ -71,28 +72,13 @@ Cc: NXP Linux Team <linux-imx@nxp.com>, Michael Turquette <mturquette@baylibre.c
 	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 25, 2021 at 6:14 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
+On Thu, Nov 25, 2021 at 6:15 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
 >
 > From: Jesse Taube <mr.bossman075@gmail.com>
 >
-> This patch adds initial clock driver support for the i.MXRT series.
+> Add support for i.MXRT1050's sdhc.
 >
+> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> Suggested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
-> V1->V2:
-> * Kconfig: Add new line
-> * clk-imxrt.c: Remove unused const
-> * clk-imxrt.c: Remove set parents
-> * clk-imxrt.c: Use fsl,imxrt-anatop for anatop base address
-> V2->V3:
-> * Remove unused ANATOP_BASE_ADDR
-> * Move to hw API
-> * Add GPT's own clock
-> * Add SEMC clocks to set muxing to CRITICAL
-> ---
->  drivers/clk/imx/Kconfig     |   4 +
->  drivers/clk/imx/Makefile    |   1 +
->  drivers/clk/imx/clk-imxrt.c | 156 ++++++++++++++++++++++++++++++++++++
 
-Wouldn't it be better to name it clk-imxrt1050.c instead?
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
