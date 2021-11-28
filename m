@@ -1,417 +1,194 @@
-Return-Path: <SRS0=trny=QP=gmail.com=mr.bossman075@kernel.org>
+Return-Path: <SRS0=bizF=QP=gmail.com=emil.renner.berthing@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B70E5C433F5
-	for <soc@archiver.kernel.org>; Sun, 28 Nov 2021 17:00:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB76C433F5
+	for <soc@archiver.kernel.org>; Sun, 28 Nov 2021 20:07:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 75C5EC53FCE; Sun, 28 Nov 2021 17:00:16 +0000 (UTC)
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	id C608CC53FC1; Sun, 28 Nov 2021 20:07:47 +0000 (UTC)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 656B9C004E1;
-	Sun, 28 Nov 2021 17:00:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 656B9C004E1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.kernel.org (Postfix) with ESMTPS id CA73AC004E1
+	for <soc@kernel.org>; Sun, 28 Nov 2021 20:07:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CA73AC004E1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=esmil.dk
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f179.google.com with SMTP id m192so20271176qke.2;
-        Sun, 28 Nov 2021 09:00:15 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id y12so62843911eda.12
+        for <soc@kernel.org>; Sun, 28 Nov 2021 12:07:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Ei6OEGcaADQ0WqS+Y/rE3HJLyaa8ot++ONho7WXDJ/E=;
-        b=RmNuby9Bn8Em+aPXg0LYzdpUritYNfN+NPv4x9SyXOLRdUM8C4Fg88tQN7DUO859ov
-         vvehyDiZiBc0evlr1ge0lAuR5higog/BTmlVpMgGis46eOJDLnKAEV8XNj+YTNkZn2x9
-         Fy9lN7G8ZVoYtyfC986I6OYb5SYdYguFwLFLiI/hZUWcAQCMV1VAaYVridkM0EGWhZRx
-         PjgejuoSZch9/p4lPMIoI6Z/JIRB15mZykAxp3Dc1oVypisZ9WpaWiqkFQQeVUxr6mLZ
-         MUJDPCUbQqKCfhNLAt8645ukFYBHJaPlLe08syj/niCZJccE9PvCwKQQd9GH7Pd+wdSk
-         CuNw==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fjRrTFzKlcV68ouLNyGIWvuxj/K9mKGKp9Bg5eLzYB0=;
+        b=BejSQwGWOtK9gOac3oYMYTmEbQtm7nMBCCLlfhZju6MuaiIa+KwJG0YSWHIN8iQyHo
+         mJ4qUWpaniG9tmVJy35+3b8OCfBVj47GnLe08WTqqaYLzMDPqhChX0HBexfaDUbtV0Tu
+         ujeR6imJC60sdx0u0Gai2kfaR528cZ9A4uuDInfQpMDzkXUPLrzmGQ3NQu0k/1kJ642T
+         MuSCoCCeDpFAwPpUlOyS/y+g1gtnuwPcQ4PjkTn2rl/hO48ypcC7s51pV808quYBt/4X
+         7auh8hdlABddJyw3XtkLX28fnvqENmtdVwlqjW+Nri/CClj9y0ADrFpCD3CYXlmzq8ST
+         Utvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ei6OEGcaADQ0WqS+Y/rE3HJLyaa8ot++ONho7WXDJ/E=;
-        b=c5eexvF9TSNHu21tFLPsJszyG9nKWIucI/8mnxOmoLYYjLpvBX4tL9XNsM7GXEGmMY
-         sL67YOwoWgRA+Dm42YUkn9VmB4vty+ve/ezaaZaNpIHoDQqKGTaoDfIQp6oG51wDowPw
-         PkO7D2X46tJeWPL3eNDqyiblU8Tl1Vtwl61l5jebB5IzNOW2h3d4Q8dr8OqNVR+/dHBK
-         gVMFr851WpRFs8XgyNCFWya4E4Ek6w+TejGpWom0ZV7NopYYr/WIsPs1V0G2bjJ6xpuu
-         gD5I+PMk1D6bs/ISX73BEPPfOhSqsXpWU+9MKRW9iIWZgirogr43TaeqoagaP7KCU2X/
-         aTsQ==
-X-Gm-Message-State: AOAM533vq68dVe6DgO8w2DOxTkPnaKkQ0DxnxEJ97erUXrIf8rbiauep
-	PclTLrI/HW5jUSC3lMOrSTfFsAwsXF3aIQ==
-X-Google-Smtp-Source: ABdhPJyzQwaMTl8kqX2nXvZADozBuCx+7eMnbZicqUCL0N1MrJNufZgo8zhgKGYDxAaudvSXtMY6XQ==
-X-Received: by 2002:ae9:e502:: with SMTP id w2mr34315943qkf.315.1638118814021;
-        Sun, 28 Nov 2021 09:00:14 -0800 (PST)
-Received: from [10.4.10.5] (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id 22sm7180098qtw.12.2021.11.28.09.00.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Nov 2021 09:00:13 -0800 (PST)
-Message-ID: <b6b33f15-ead3-d703-47bb-44a1350c0936@gmail.com>
-Date: Sun, 28 Nov 2021 12:00:11 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3 12/13] ARM: dts: imx: add i.MXRT1050-EVK support
-Content-Language: en-US
-To: Rob Herring <robh@kernel.org>
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=fjRrTFzKlcV68ouLNyGIWvuxj/K9mKGKp9Bg5eLzYB0=;
+        b=mFmV7GtSBzCzd6Tt3WBXghLXXGyB2v2Fl9DJ1GzYHlS7FOFfY5gW5+Mt1mLaUkhF4J
+         d3Ojg8DBadcIW8Wx0g08ydwY2G2LairtH081blJqfnDF1VDKwNB/071pSMtJIylNWtvZ
+         J/m/RfMeIjHiUovnZxmkGyqNUOxcr78o38g7peX3ctkW8fIQRzHg6zCukcMjUoD/bdxA
+         yo0J1i8RwUikQNeC9tzB/E36RsUdBq+6h9weF/0um8op27JRfEu6HS6V3FfJbn1PxcHo
+         N3FC0XfTXCsajkW1WCAZJ13duGpGaRRWBWnxOoXdWayMcMdhCK+6XXbyLcBIR8Q4S0d9
+         5DyQ==
+X-Gm-Message-State: AOAM5321zwfaOIyrhRJ7BfJXwJ03jLi/EhmeFbDdQ5Ky4hW5Y1Ds1yvX
+	/k7S3Gtbkv3Z87KDa3WWc8BbY70QnTONKA==
+X-Google-Smtp-Source: ABdhPJy3zfX9hYwiSQ3lAsd9+vYfrkuX5dpJBriRc5e3zBw2AVEqmKUlIakYKC9VJ2uSdaPQEjuC+Q==
+X-Received: by 2002:a50:d543:: with SMTP id f3mr66823588edj.56.1638130064179;
+        Sun, 28 Nov 2021 12:07:44 -0800 (PST)
+Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
+        by smtp.gmail.com with ESMTPSA id c8sm7506173edu.60.2021.11.28.12.07.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Nov 2021 12:07:43 -0800 (PST)
+Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
+From: Emil Renner Berthing <kernel@esmil.dk>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
- shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
- festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com,
- stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org,
- arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk,
- abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org,
- giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-serial@vger.kernel.org
-References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com>
- <20211125211443.1150135-13-Mr.Bossman075@gmail.com>
- <YaOxu441l41qPvTj@robh.at.kernel.org>
-From: Jesse Taube <mr.bossman075@gmail.com>
-In-Reply-To: <YaOxu441l41qPvTj@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: soc@kernel.org
+Cc: Emil Renner Berthing <kernel@esmil.dk>,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michael Zhu <michael.zhu@starfivetech.com>,
+	Fu Wei <tekkamanninja@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [GIT PULL] Basic StarFive JH7100 RISC-V SoC support for 5.17
+Date: Sun, 28 Nov 2021 21:06:47 +0100
+Message-Id: <20211128200647.147058-1-kernel@esmil.dk>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-On 11/28/21 11:43, Rob Herring wrote:
-> On Thu, Nov 25, 2021 at 04:14:42PM -0500, Jesse Taube wrote:
->> From: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>
->> The NXP i.MXRT1050 Evaluation Kit (EVK) provides a platform for rapid
->> evaluation of the i.MXRT, which features NXP's implementation of the Arm
->> Cortex-M7 core.
->>
->> The EVK provides 32 MB SDRAM, 64 MB Quad SPI flash, Micro SD card socket,
->> USB 2.0 OTG.
->>
->> This patch aims to support the preliminary booting up features
->> as follows:
->> GPIO
->> LPUART
->> SD/MMC
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
->> [Jesse: Add clock-parents, edma, usdhc, anatop, remove old pinctl]
->> ---
->> V1->V2:
->> * dtsi: Add clock parent definitions
->> * dtsi: Change hex values to lowercase
->> * dtsi: Move anatop definition from driver
->> * dts: Remove unused pin controll (semc)
->> * dts: Use moved pin controll header
->> * Move aliases from dtsi to dts
->> * Change commit description
->> * Change licence to "GPL-2.0+ OR MIT"
->> V2->V3:
->> * Remove bootargs, comments, unused container
->> * Remove unnecessary new lines
->> * Rename imxrt to imxrt1050 for seiral and mmc
->> * GPT uses own clock
->> * fix memory@0
->> * Change GPT compatible handles
->> ---
->>   arch/arm/boot/dts/Makefile          |   2 +
->>   arch/arm/boot/dts/imxrt1050-evk.dts |  72 ++++++++++++
->>   arch/arm/boot/dts/imxrt1050.dtsi    | 165 ++++++++++++++++++++++++++++
->>   3 files changed, 239 insertions(+)
->>   create mode 100644 arch/arm/boot/dts/imxrt1050-evk.dts
->>   create mode 100644 arch/arm/boot/dts/imxrt1050.dtsi
->>
->> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
->> index 8a2dfdf01ce3..d539bf7daa86 100644
->> --- a/arch/arm/boot/dts/Makefile
->> +++ b/arch/arm/boot/dts/Makefile
->> @@ -723,6 +723,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
->>   dtb-$(CONFIG_SOC_IMX7ULP) += \
->>   	imx7ulp-com.dtb \
->>   	imx7ulp-evk.dtb
->> +dtb-$(CONFIG_SOC_IMXRT) += \
->> +	imxrt1050-evk.dtb
->>   dtb-$(CONFIG_SOC_LS1021A) += \
->>   	ls1021a-moxa-uc-8410a.dtb \
->>   	ls1021a-qds.dtb \
->> diff --git a/arch/arm/boot/dts/imxrt1050-evk.dts b/arch/arm/boot/dts/imxrt1050-evk.dts
->> new file mode 100644
->> index 000000000000..6a9c10decf52
->> --- /dev/null
->> +++ b/arch/arm/boot/dts/imxrt1050-evk.dts
->> @@ -0,0 +1,72 @@
->> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->> +/*
->> + * Copyright (C) 2019
->> + * Author(s): Giulio Benetti <giulio.benetti@benettiengineering.com>
->> + */
->> +
->> +/dts-v1/;
->> +#include "imxrt1050.dtsi"
->> +#include "imxrt1050-pinfunc.h"
->> +
->> +/ {
->> +	model = "NXP IMXRT1050-evk board";
->> +	compatible = "fsl,imxrt1050-evk", "fsl,imxrt1050";
->> +
->> +	chosen {
->> +		stdout-path = &lpuart1;
->> +	};
->> +
->> +	aliases {
->> +		gpio0 = &gpio1;
->> +		gpio1 = &gpio2;
->> +		gpio2 = &gpio3;
->> +		gpio3 = &gpio4;
->> +		gpio4 = &gpio5;
->> +		mmc0 = &usdhc1;
->> +		serial0 = &lpuart1;
->> +	};
->> +
->> +	memory@80000000 {
->> +		device_type = "memory";
->> +		reg = <0x80000000 0x2000000>;
->> +	};
->> +};
->> +
->> +&lpuart1 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_lpuart1>;
->> +	status = "okay";
->> +};
->> +
->> +&iomuxc {
->> +	pinctrl-names = "default";
->> +	pinctrl_lpuart1: lpuart1grp {
->> +		fsl,pins = <
->> +			MXRT1050_IOMUXC_GPIO_AD_B0_12_LPUART1_TXD	0xf1
->> +			MXRT1050_IOMUXC_GPIO_AD_B0_13_LPUART1_RXD	0xf1
->> +		>;
->> +	};
->> +
->> +	pinctrl_usdhc0: usdhc0grp {
->> +		fsl,pins = <
->> +			MXRT1050_IOMUXC_GPIO_B1_12_USDHC1_CD_B		0x1B000
->> +			MXRT1050_IOMUXC_GPIO_B1_14_USDHC1_VSELECT	0xB069
->> +			MXRT1050_IOMUXC_GPIO_SD_B0_00_USDHC1_CMD	0x17061
->> +			MXRT1050_IOMUXC_GPIO_SD_B0_01_USDHC1_CLK	0x17061
->> +			MXRT1050_IOMUXC_GPIO_SD_B0_05_USDHC1_DATA3	0x17061
->> +			MXRT1050_IOMUXC_GPIO_SD_B0_04_USDHC1_DATA2	0x17061
->> +			MXRT1050_IOMUXC_GPIO_SD_B0_03_USDHC1_DATA1	0x17061
->> +			MXRT1050_IOMUXC_GPIO_SD_B0_02_USDHC1_DATA0	0x17061
->> +		>;
->> +	};
->> +};
->> +
->> +&usdhc1 {
->> +	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
->> +	pinctrl-0 = <&pinctrl_usdhc0>;
->> +	pinctrl-1 = <&pinctrl_usdhc0>;
->> +	pinctrl-2 = <&pinctrl_usdhc0>;
->> +	pinctrl-3 = <&pinctrl_usdhc0>;
->> +	cd-gpios = <&gpio2 28 GPIO_ACTIVE_LOW>;
->> +	status = "okay";
->> +};
->> diff --git a/arch/arm/boot/dts/imxrt1050.dtsi b/arch/arm/boot/dts/imxrt1050.dtsi
->> new file mode 100644
->> index 000000000000..35943a6896fa
->> --- /dev/null
->> +++ b/arch/arm/boot/dts/imxrt1050.dtsi
->> @@ -0,0 +1,165 @@
->> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->> +/*
->> + * Copyright (C) 2019
->> + * Author(s): Giulio Benetti <giulio.benetti@benettiengineering.com>
->> + */
->> +
->> +#include "armv7-m.dtsi"
->> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->> +#include <dt-bindings/clock/imxrt1050-clock.h>
->> +#include <dt-bindings/gpio/gpio.h>
->> +
->> +/ {
->> +	#address-cells = <1>;
->> +	#size-cells = <1>;
->> +
->> +	clocks {
->> +		osc: osc {
->> +			compatible = "fsl,imx-osc", "fixed-clock";
-> 
-> fsl,imx-osc is not documented. IMO, just drop it.
-Other imx device trees have it, should i still?
-> 
->> +			#clock-cells = <0>;
->> +			clock-frequency = <24000000>;
->> +		};
->> +	};
->> +
->> +	cpus {
->> +		#address-cells = <0x01>;
->> +		#size-cells = <0x00>;
->> +
->> +		cpu@0 {
->> +			compatible = "arm,cortex-m7";
-> 
-> Not documented.
-> 
-> Please run schema validation checks and don't add any new warnings not
-> already present for i.MX.
-Ah sorry was from u-boot.
-> 
->> +			device_type = "cpu";
->> +			reg = <0x00>;
->> +		};
->> +	};
->> +
->> +	soc {
->> +		lpuart1: serial@40184000 {
->> +			compatible = "fsl,imxrt1050-lpuart","fsl,imx8mm-uart", "fsl,imx6q-uart";
-> 
-> space                                                       ^
-> 
->> +			reg = <0x40184000 0x4000>;
->> +			interrupts = <20>;
->> +			clocks = <&clks IMXRT1050_CLK_LPUART1>;
->> +			clock-names = "ipg";
->> +			status = "disabled";
->> +		};
->> +
->> +		iomuxc: iomuxc@401f8000 {
-> 
-> pinctrl@...
-> 
->> +			compatible = "fsl,imxrt1050-iomuxc";
->> +			reg = <0x401f8000 0x4000>;
->> +			fsl,mux_mask = <0x7>;
->> +		};
->> +
->> +		anatop: anatop@400d8000 {
->> +			compatible = "fsl,imxrt-anatop";
->> +			reg = <0x400d8000 0x4000>;
->> +		};
->> +
->> +		clks: ccm@400fc000 {
-> 
-> clock-controller@...
-> 
->> +			compatible = "fsl,imxrt1050-ccm";
->> +			reg = <0x400fc000 0x4000>;
->> +			interrupts = <95>, <96>;
->> +			clocks = <&osc>;
->> +			clock-names = "osc";
->> +			#clock-cells = <1>;
->> +			assigned-clocks = <&clks IMXRT1050_CLK_PLL1_BYPASS>,
->> +				<&clks IMXRT1050_CLK_PLL1_BYPASS>,
->> +				<&clks IMXRT1050_CLK_PLL2_BYPASS>,
->> +				<&clks IMXRT1050_CLK_PLL3_BYPASS>,
->> +				<&clks IMXRT1050_CLK_PLL3_PFD1_664_62M>,
->> +				<&clks IMXRT1050_CLK_PLL2_PFD2_396M>;
->> +			assigned-clock-parents = <&clks IMXRT1050_CLK_PLL1_REF_SEL>,
->> +				<&clks IMXRT1050_CLK_PLL1_ARM>,
->> +				<&clks IMXRT1050_CLK_PLL2_SYS>,
->> +				<&clks IMXRT1050_CLK_PLL3_USB_OTG>,
->> +				<&clks IMXRT1050_CLK_PLL3_USB_OTG>,
->> +				<&clks IMXRT1050_CLK_PLL2_SYS>;
->> +		};
->> +
->> +		edma1: dma-controller@400e8000 {
->> +			#dma-cells = <2>;
->> +			compatible = "fsl,imx7ulp-edma";
->> +			reg = <0x400e8000 0x4000>,
->> +				<0x400ec000 0x4000>;
->> +			dma-channels = <32>;
->> +			interrupts = <0>, <1>, <2>, <3>, <4>, <5>, <6>, <7>, <8>,
->> +				<9>, <10>, <11>, <12>, <13>, <14>, <15>, <16>;
->> +			clock-names = "dma", "dmamux0";
->> +			clocks = <&clks IMXRT1050_CLK_DMA>,
->> +				 <&clks IMXRT1050_CLK_DMA_MUX>;
->> +		};
->> +
->> +		usdhc1: mmc@402c0000 {
->> +			compatible ="fsl,imxrt1050-usdhc";
->> +			reg = <0x402c0000 0x4000>;
->> +			interrupts = <110>;
->> +			clocks = <&clks IMXRT1050_CLK_IPG_PDOF>,
->> +				<&clks IMXRT1050_CLK_OSC>,
->> +				<&clks IMXRT1050_CLK_USDHC1>;
->> +			clock-names = "ipg", "ahb", "per";
->> +			bus-width = <4>;
->> +			fsl,wp-controller;
->> +			no-1-8-v;
->> +			max-frequency = <4000000>;
->> +			fsl,tuning-start-tap = <20>;
->> +			fsl,tuning-step= <2>;
->> +			status = "disabled";
->> +		};
->> +
->> +		gpio1: gpio@401b8000 {
->> +			compatible = "fsl,imxrt-gpio", "fsl,imx35-gpio";
-> 
-> Not SoC specific?
-fsl,imxrt-gpio is a placeholder, it is compatible with imx35.
-> 
->> +			reg = <0x401b8000 0x4000>;
->> +			interrupts = <80>, <81>;
->> +			gpio-controller;
->> +			#gpio-cells = <2>;
->> +			interrupt-controller;
->> +			#interrupt-cells = <2>;
->> +		};
->> +
->> +		gpio2: gpio@401bc000 {
->> +			compatible = "fsl,imxrt-gpio", "fsl,imx35-gpio";
->> +			reg = <0x401bc000 0x4000>;
->> +			interrupts = <82>, <83>;
->> +			gpio-controller;
->> +			#gpio-cells = <2>;
->> +			interrupt-controller;
->> +			#interrupt-cells = <2>;
->> +		};
->> +
->> +		gpio3: gpio@401c0000 {
->> +			compatible = "fsl,imxrt-gpio", "fsl,imx35-gpio";
->> +			reg = <0x401c0000 0x4000>;
->> +			interrupts = <84>, <85>;
->> +			gpio-controller;
->> +			#gpio-cells = <2>;
->> +			interrupt-controller;
->> +			#interrupt-cells = <2>;
->> +		};
->> +
->> +		gpio4: gpio@401c4000 {
->> +			compatible = "fsl,imxrt-gpio", "fsl,imx35-gpio";
->> +			reg = <0x401c4000 0x4000>;
->> +			interrupts = <86>, <87>;
->> +			gpio-controller;
->> +			#gpio-cells = <2>;
->> +			interrupt-controller;
->> +			#interrupt-cells = <2>;
->> +		};
->> +
->> +		gpio5: gpio@400c0000 {
->> +			compatible = "fsl,imxrt-gpio", "fsl,imx35-gpio";
->> +			reg = <0x400c0000 0x4000>;
->> +			interrupts = <88>, <89>;
->> +			gpio-controller;
->> +			#gpio-cells = <2>;
->> +			interrupt-controller;
->> +			#interrupt-cells = <2>;
->> +		};
->> +
->> +		gpt: timer@401ec000 {
->> +			compatible = "fsl,imxrt1050-gpt", "fsl,imx6dl-gpt", "fsl,imx6sl-gpt";
->> +			reg = <0x401ec000 0x4000>;
->> +			interrupts = <100>;
->> +			clocks = <&clks IMXRT1050_CLK_GPT>;
->> +			clock-names = "per";
->> +		};
->> +	};
->> +};
->> -- 
->> 2.34.0
->>
->>
+are available in the Git repository at:
+
+  https://github.com/esmil/linux.git tags/for-soc
+
+for you to fetch changes up to 398d6e139782d1ce2c9822beb8effba0c9c51cc4:
+
+  RISC-V: Add BeagleV Starlight Beta device tree (2021-11-28 20:07:09 +0100)
+
+----------------------------------------------------------------
+Changes since v4:
+- The reset driver now always uses 64bit read/write on registers even on
+  32bit architectures as requested by Andy.
+
+Changes since v3:
+- The reset driver now uses 64bit read/write on the registers so we can
+  use the regular bitmap macros. Requested by Andy.
+- The pinctrl driver no longer resets the GPIO irq handler to
+  handle_bad_irq on errors, uses reverse xmas tree order where possible
+  and other nits by Andy.
+
+Changes since v2:
+- Ahmad and Geert agreed to switch the license of the clock and reset dt
+  headers to GPL-2.0 OR MIT, so that both headers and device tree files
+  can all use the same license.
+  Bindings are still GPL-2.0-only OR BSD-2-Clause as recommended.
+- Clock and reset drivers now set .suppress_bind_attrs = true and use
+  builtin_platform_driver_probe to make sure the probe function is only
+  called at init time so we can use __init and __initconst.
+- The clock driver now uses devm_clk_hw_register and .parent_data when
+  registering clocks. This way we can use the dt clock indexes rather
+  than strings for parent lists and decrease the amount of static data
+  needed considerably.
+- Various dt binding cleanups from Rob
+- Reworked description in the pinctrl dt binding.
+- Pinctrl driver now depends on CONFIG_OF again since it uses
+  pinconf_generic_parse_dt_config which is otherwise not defined.
+- Pinctrl no longer devm_kfree's data that won't be referenced
+  if dt pinconf parsing fails before registering groups and function,
+  and other nits by Andy.
+- The dw8250 quirk no longer needs a skip_clk_set_rate bit, but sets
+  port->set_termios to the function called after clk_set_rate.
+
+Changes since v1:
+- Let SOC_STARFIVE select RESET_CONTROLLER but drop SERIAL_8250_DW
+- Add missing Signed-of-by to clock dt-binding header
+- Use builtin_platform_driver macro for the clock driver, add explicit
+  comment to the determine_rate callback and other small nits from Andy
+- Use reset-controller for node names in documentation and device tree
+- Use readl_poll_timeout in reset driver to avoid hanging forever if a
+  driver leaves the associated clock gated and sort Kconfig and Makefile
+  entries properly.
+- In the pinctrl driver align register names with documentation, remove
+  invalid __init tag from probe function, use of_property_* functions to
+  parse device tree, hoist pinmux unpacking into helper function to
+  better document what's going on, bail on invalid signal group in
+  device tree and fix many other nits from Andy.
+- Refactor and rebase 8250_dw quirk on tty-next
+
+----------------------------------------------------------------
+Emil Renner Berthing (12):
+      RISC-V: Add StarFive SoC Kconfig option
+      dt-bindings: timer: Add StarFive JH7100 clint
+      dt-bindings: interrupt-controller: Add StarFive JH7100 plic
+      dt-bindings: reset: Add Starfive JH7100 reset bindings
+      reset: starfive-jh7100: Add StarFive JH7100 reset driver
+      dt-bindings: pinctrl: Add StarFive pinctrl definitions
+      dt-bindings: pinctrl: Add StarFive JH7100 bindings
+      pinctrl: starfive: Add pinctrl driver for StarFive SoCs
+      dt-bindings: serial: snps-dw-apb-uart: Add JH7100 uarts
+      serial: 8250_dw: Add StarFive JH7100 quirk
+      RISC-V: Add initial StarFive JH7100 device tree
+      RISC-V: Add BeagleV Starlight Beta device tree
+
+Geert Uytterhoeven (4):
+      dt-bindings: clock: starfive: Add JH7100 clock definitions
+      dt-bindings: clock: starfive: Add JH7100 bindings
+      clk: starfive: Add JH7100 clock generator driver
+      dt-bindings: reset: Add StarFive JH7100 reset definitions
+
+ .../bindings/clock/starfive,jh7100-clkgen.yaml     |   56 +
+ .../interrupt-controller/sifive,plic-1.0.0.yaml    |    1 +
+ .../bindings/pinctrl/starfive,jh7100-pinctrl.yaml  |  307 +++++
+ .../bindings/reset/starfive,jh7100-reset.yaml      |   38 +
+ .../bindings/serial/snps-dw-apb-uart.yaml          |    5 +
+ .../devicetree/bindings/timer/sifive,clint.yaml    |    1 +
+ MAINTAINERS                                        |   22 +
+ arch/riscv/Kconfig.socs                            |    8 +
+ arch/riscv/boot/dts/Makefile                       |    1 +
+ arch/riscv/boot/dts/starfive/Makefile              |    2 +
+ .../boot/dts/starfive/jh7100-beaglev-starlight.dts |  164 +++
+ arch/riscv/boot/dts/starfive/jh7100.dtsi           |  230 ++++
+ drivers/clk/Kconfig                                |    1 +
+ drivers/clk/Makefile                               |    1 +
+ drivers/clk/starfive/Kconfig                       |    9 +
+ drivers/clk/starfive/Makefile                      |    3 +
+ drivers/clk/starfive/clk-starfive-jh7100.c         |  689 ++++++++++
+ drivers/pinctrl/Kconfig                            |   17 +
+ drivers/pinctrl/Makefile                           |    1 +
+ drivers/pinctrl/pinctrl-starfive.c                 | 1354 ++++++++++++++++++++
+ drivers/reset/Kconfig                              |    7 +
+ drivers/reset/Makefile                             |    1 +
+ drivers/reset/reset-starfive-jh7100.c              |  172 +++
+ drivers/tty/serial/8250/8250_dw.c                  |    3 +
+ include/dt-bindings/clock/starfive-jh7100.h        |  202 +++
+ include/dt-bindings/pinctrl/pinctrl-starfive.h     |  275 ++++
+ include/dt-bindings/reset/starfive-jh7100.h        |  126 ++
+ 27 files changed, 3696 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7100-clkgen.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
+ create mode 100644 arch/riscv/boot/dts/starfive/Makefile
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7100.dtsi
+ create mode 100644 drivers/clk/starfive/Kconfig
+ create mode 100644 drivers/clk/starfive/Makefile
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7100.c
+ create mode 100644 drivers/pinctrl/pinctrl-starfive.c
+ create mode 100644 drivers/reset/reset-starfive-jh7100.c
+ create mode 100644 include/dt-bindings/clock/starfive-jh7100.h
+ create mode 100644 include/dt-bindings/pinctrl/pinctrl-starfive.h
+ create mode 100644 include/dt-bindings/reset/starfive-jh7100.h
