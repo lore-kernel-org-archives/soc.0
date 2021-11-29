@@ -1,34 +1,64 @@
-Return-Path: <SRS0=Vu+k=QQ=benettiengineering.com=giulio.benetti@kernel.org>
+Return-Path: <SRS0=BxA4=QQ=gmail.com=mr.bossman075@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58B42C433F5
-	for <soc@archiver.kernel.org>; Mon, 29 Nov 2021 01:24:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AA17C433EF
+	for <soc@archiver.kernel.org>; Mon, 29 Nov 2021 01:54:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1A1E6C53FCE; Mon, 29 Nov 2021 01:24:42 +0000 (UTC)
-Received: from smtpcmd14162.aruba.it (smtpcmd14162.aruba.it [62.149.156.162])
-	by smtp.kernel.org (Postfix) with ESMTP id 12016C53FC1
-	for <soc@kernel.org>; Mon, 29 Nov 2021 01:24:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 12016C53FC1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=benettiengineering.com
-Received: from [192.168.50.18] ([146.241.138.59])
-	by Aruba Outgoing Smtp  with ESMTPSA
-	id rVMImypYirIRlrVMImljzA; Mon, 29 Nov 2021 02:21:32 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-	t=1638148892; bh=p9N0KEaC98MNX0tTtE6i72fSLBavSW2334B/WojIonE=;
-	h=Subject:To:From:Date:MIME-Version:Content-Type;
-	b=Ll3xlv7PgZMBpGNsBydxMaTJfqhwDpqTw1r16ZmCbRMMMnTz84xAEzcxCTtADHWTo
-	 s/EVOc6eDxVJi0W+iI2BWqf7DxieyUQu+Q/6eb+pvOuLPeTe7ARC07j7+Dac55dAwy
-	 bMtjs52iBKTWFqiuzDi94lRQD8Wt7Wtw6FklrNpUhx88oBKqTKezfdKJrqGjr/5asK
-	 mDpkT9/isAkvrAI0lCkaiKNYYd9bU36kF0vK0ytpuLUwZ1XYYhaQZ52R1LL73SPaXx
-	 vgEro8OTy43eKROCw0QqsueFjDO1s5QSYq1YM4db4j11cdqW3Iww+q4yasm7znvD9a
-	 auoH0Th/o7ecg==
+	id DF008C53FC1; Mon, 29 Nov 2021 01:54:45 +0000 (UTC)
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 3FEA5C004E1;
+	Mon, 29 Nov 2021 01:54:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3FEA5C004E1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f46.google.com with SMTP id i13so13013462qvm.1;
+        Sun, 28 Nov 2021 17:54:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7MaKgHWKheFJxrj1uWy9VXOHQvwGLYHTJJDUwnT5qBg=;
+        b=Nw8U4Nh1acnHpjcd3TP0eUKlOTKgUcZahWOSyhCAb3yHOlEdJ17O2gO6qgdEKwTa6Q
+         gSsLL1gEzdyFYBknHxFyuzLyDvRMao53dpLtZuhVNSTzHr/aZRJpNNcEkRU4B/TI4IB1
+         JXVCvtR5DEXpm90y13qPNGMZdDQdyhF3Pbmq495t+xRBOsk7TwUfC9tvV6xL1IUVrsxB
+         D5ExKlsAsKUPMlx5PdLDg3vzEJC6M6pPdPA4HRp33AQM2ZiXHE9/WW9WKbxLs5cgrFsP
+         2uwQ5CMiRz4jHw3LuGRXLXqwvn8S6JQESz2pVvtGz+BV4bGsvo8l76tXEUq2LcNJ5bfo
+         bYHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7MaKgHWKheFJxrj1uWy9VXOHQvwGLYHTJJDUwnT5qBg=;
+        b=2noDXVJMy3vhy9qHY1z4OPtRTY7p9s9lfkVf9YoSc79T7kNIf9CYLu0Gaxe+d/tkBz
+         a7dYqpKg5txX0RKjc5SxTWHEAjJIxhMITAtSUUO7xLrVuNlWN4qJEp+ds+ofLqU2+G8x
+         pLVN5jmMgw6HIsixd/vzKitilM6VAEqgb3WE0xTt5APJBPzHIZPaVe1XgsK26A0KTFPI
+         jEZkYocXrGk9UgpI4syByRDmz5CfdjNRtXC5ld66maxXv2ExPjY1DUuGN4YNeX/lLTMi
+         EusfyJ5LlB9GLX5IeX+GALU4zjRFQJp+aDyJEGuHOtZSp+A90Ks1nktDUIYYL3ifxFI5
+         Q4Dw==
+X-Gm-Message-State: AOAM533VWwiIsgegGB7p8jKTrL0hKS9yTcT29WpFPrudQciKZ2ZINGh6
+	5kjdpMmEmxQnKRodRPJqgrc=
+X-Google-Smtp-Source: ABdhPJy8P5wGLR5qlwlUnmOoPab1PnL6Y6pKQU9VYozKNDseX9QhhAKbzXifVxoKlDW/T2V8qG2A8g==
+X-Received: by 2002:ad4:5ba7:: with SMTP id 7mr28358496qvq.109.1638150884300;
+        Sun, 28 Nov 2021 17:54:44 -0800 (PST)
+Received: from [10.4.10.5] (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
+        by smtp.gmail.com with ESMTPSA id j19sm7580997qkp.28.2021.11.28.17.54.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Nov 2021 17:54:44 -0800 (PST)
+Message-ID: <f65ac2c7-3f37-3740-fd7a-4d11cabb9892@gmail.com>
+Date: Sun, 28 Nov 2021 20:54:42 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
 Subject: Re: [PATCH v3 13/13] ARM: imxrt_defconfig: add i.MXRT family
  defconfig
-To: Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
+Content-Language: en-US
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>, linux-imx@nxp.com
 List-Id: <soc.lore.kernel.org>
 Cc: mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
  shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
@@ -42,220 +72,94 @@ Cc: mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
  linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
 References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com>
  <20211125211443.1150135-14-Mr.Bossman075@gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <95252a9e-76fc-0770-8e7b-90d8755298eb@benettiengineering.com>
-Date: Mon, 29 Nov 2021 02:21:30 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20211125211443.1150135-14-Mr.Bossman075@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+ <95252a9e-76fc-0770-8e7b-90d8755298eb@benettiengineering.com>
+From: Jesse Taube <mr.bossman075@gmail.com>
+In-Reply-To: <95252a9e-76fc-0770-8e7b-90d8755298eb@benettiengineering.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfAi2BdKBzFvER8CXLKHgC2XM6/6VRHoxAR/tBiswqmYW0mQhqCtmjQKNqWRuD4mui8piEn5I/2jjKZ/D9Vnci3tvhWQYSyX7GH24EdJVibRckuNGnVN2
- /yKmPltwnGp2dZhkleurTFmqo5YxuwBxxNzFnOKWv1crVfmgoPK1a9tumdbaW9HHAkKQkd83Rx/s51RQ6D5P2uIUvg4ZsZApygMCOFbcnFJNQ28jwDWveSUS
- kQBThNeBUEAd+UmKFo3/JUrx8KPd7ZagebNy/1OHZVLbTDfON8SzxlnBPdgsF/WSF1zcwGm3laRSN+cq6yhbKJ8FDCQYyfWNcHxAqECGjNt+kEXuL1mRfI/B
- tz7JNO34M5oAs1qAoYPsPY4TvPPn3wYgofZHc8niQyshrn8DdMdOW0zjOtMYtLv2cm9w3kG+ZOn8DglreauFFyvgTB5pWzWHF8E/sSFlUrMJu1vfjLB2pv0J
- Erbm3Ew49tTjIlUmgzdQ57+floRrqwaseXO9Tqz4dRwSfRZ40Pnt+vOHLyQjzO4PD4anR5RgL5dQ4TH0fVI4caeLXwmw3fOVdofQg5ZqvQuGifDvPVMbo8Uv
- RTThjMtjZw8bLrS9S1tDIK8NA26awxnIzSmRBPBgcF6QsqrfqIyi2ASRf31VEdCec1EOfto7sdg0pL8FJWN0ZhyTTtAGkXx6HtFlZdlKmz1UYAtjoUZsnOkE
- CCTWOjAwOJgDzLOCBSo19vYJkf2sr+ItQ0YVbISftoanrLmHvt7DMbQTztuhzSll03RbXrGNOYHx3AfX6gjF5gqUT366DHhL+nszoUIwsd+QSaNn1ylve8fO
- Wj+UzUuQGpJZ//qVMT0UVn/fBGRP1FH+E6wys/cpUwg7f3jMnT0vciBbVURX7WP4jLTBg1MUNoQZ8Pruenhjrby+/Rd3mLtt8mCSREbsZkmT2nj6X54l4ob7
- 3T7c1kIuMwcAurVZwpzjLXEreSSAFXKNLoPlv9F6qfwRiOnSAi9s4W0Ga5uMz5SE+DgKWmSasskzfPhpUrFn0qaMJtN7LVPwlMoz0gsVHl6vrcBBMMnhVojy
- jWPBXsPPUk4+5OZb5VuVlsAL3BcKwKmXGvJwqMf4KckAitPNHz2ozGIxjX+42UgMTPD/0Q+npbsaoLqqfuR4cmmHi6leJEUFLos=
 
-Hi Jesse,
 
-On 25/11/21 22:14, Jesse Taube wrote:
-> From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+On 11/28/21 20:21, Giulio Benetti wrote:
+> Hi Jesse,
 > 
-> Add generic i.MXRT family defconfig.
+> On 25/11/21 22:14, Jesse Taube wrote:
+>> From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>
+>> Add generic i.MXRT family defconfig.
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+>> ---
+>> V1->V2:
+>> * Nothing done
+>> V2->V3:
+>> * Nothing done
+>> ---
+>>    arch/arm/configs/imxrt_defconfig | 157 +++++++++++++++++++++++++++++++
+>>    1 file changed, 157 insertions(+)
+>>    create mode 100644 arch/arm/configs/imxrt_defconfig
+>>
+>> diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
+>> new file mode 100644
+>> index 000000000000..d673745a5462
+>> --- /dev/null
+>> +++ b/arch/arm/configs/imxrt_defconfig
+>> @@ -0,0 +1,157 @@
+>> +# CONFIG_LOCALVERSION_AUTO is not set
+>> +CONFIG_SYSVIPC=y
+>> +CONFIG_USELIB=y
+>> +CONFIG_NO_HZ=y
+>> +CONFIG_HIGH_RES_TIMERS=y
+>> +CONFIG_BPF_SYSCALL=y
+>> +CONFIG_PREEMPT_VOLUNTARY=y
+>> +CONFIG_BSD_PROCESS_ACCT=y
+>> +CONFIG_BSD_PROCESS_ACCT_V3=y
+>> +CONFIG_PSI=y
+>> +CONFIG_IKCONFIG=y
+>> +CONFIG_IKCONFIG_PROC=y
+>> +CONFIG_LOG_BUF_SHIFT=18
+>> +CONFIG_MEMCG=y
+>> +CONFIG_BLK_CGROUP=y
+>> +CONFIG_CFS_BANDWIDTH=y
+>> +CONFIG_CGROUP_PIDS=y
+>> +CONFIG_CGROUP_RDMA=y
+>> +CONFIG_CGROUP_FREEZER=y
+>> +CONFIG_CGROUP_DEVICE=y
+>> +CONFIG_CGROUP_CPUACCT=y
+>> +CONFIG_CGROUP_PERF=y
+>> +CONFIG_CGROUP_BPF=y
+>> +CONFIG_NAMESPACES=y
+>> +CONFIG_USER_NS=y
+>> +CONFIG_CHECKPOINT_RESTORE=y
+>> +CONFIG_SCHED_AUTOGROUP=y
+>> +CONFIG_RELAY=y
+>> +CONFIG_BLK_DEV_INITRD=y
+>> +CONFIG_EXPERT=y
+>> +CONFIG_SGETMASK_SYSCALL=y
+>> +# CONFIG_FUTEX is not set
+>> +CONFIG_KALLSYMS_ALL=y
+>> +CONFIG_PC104=y
+>> +# CONFIG_SLUB_DEBUG is not set
+>> +# CONFIG_COMPAT_BRK is not set
+>> +CONFIG_SLAB_FREELIST_RANDOM=y
+>> +CONFIG_SLAB_FREELIST_HARDENED=y
+>> +CONFIG_PROFILING=y
+>> +# CONFIG_MMU is not set
+>> +CONFIG_ARCH_MXC=y
+>> +CONFIG_SOC_IMXRT=y
+>> +# CONFIG_ARM_DMA_MEM_BUFFERABLE is not set
+>> +CONFIG_SET_MEM_PARAM=y
+>> +CONFIG_DRAM_BASE=0x80000000
+>> +CONFIG_DRAM_SIZE=0x02000000
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> ---
-> V1->V2:
-> * Nothing done
-> V2->V3:
-> * Nothing done
-> ---
->   arch/arm/configs/imxrt_defconfig | 157 +++++++++++++++++++++++++++++++
->   1 file changed, 157 insertions(+)
->   create mode 100644 arch/arm/configs/imxrt_defconfig
+> While debugging I've found that both CONFIG_DRAM_* get their default
+> value because CONFIG_SET_MEM_PARAM is not enabled. This can work but
+> leads problems while debugging and in any case those 2 options are
+> ignored. So please add on top of them:
+> CONFIG_SET_MEM_PARAM=y
 > 
-> diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
-> new file mode 100644
-> index 000000000000..d673745a5462
-> --- /dev/null
-> +++ b/arch/arm/configs/imxrt_defconfig
-> @@ -0,0 +1,157 @@
-> +# CONFIG_LOCALVERSION_AUTO is not set
-> +CONFIG_SYSVIPC=y
-> +CONFIG_USELIB=y
-> +CONFIG_NO_HZ=y
-> +CONFIG_HIGH_RES_TIMERS=y
-> +CONFIG_BPF_SYSCALL=y
-> +CONFIG_PREEMPT_VOLUNTARY=y
-> +CONFIG_BSD_PROCESS_ACCT=y
-> +CONFIG_BSD_PROCESS_ACCT_V3=y
-> +CONFIG_PSI=y
-> +CONFIG_IKCONFIG=y
-> +CONFIG_IKCONFIG_PROC=y
-> +CONFIG_LOG_BUF_SHIFT=18
-> +CONFIG_MEMCG=y
-> +CONFIG_BLK_CGROUP=y
-> +CONFIG_CFS_BANDWIDTH=y
-> +CONFIG_CGROUP_PIDS=y
-> +CONFIG_CGROUP_RDMA=y
-> +CONFIG_CGROUP_FREEZER=y
-> +CONFIG_CGROUP_DEVICE=y
-> +CONFIG_CGROUP_CPUACCT=y
-> +CONFIG_CGROUP_PERF=y
-> +CONFIG_CGROUP_BPF=y
-> +CONFIG_NAMESPACES=y
-> +CONFIG_USER_NS=y
-> +CONFIG_CHECKPOINT_RESTORE=y
-> +CONFIG_SCHED_AUTOGROUP=y
-> +CONFIG_RELAY=y
-> +CONFIG_BLK_DEV_INITRD=y
-> +CONFIG_EXPERT=y
-> +CONFIG_SGETMASK_SYSCALL=y
-> +# CONFIG_FUTEX is not set
-> +CONFIG_KALLSYMS_ALL=y
-> +CONFIG_PC104=y
-> +# CONFIG_SLUB_DEBUG is not set
-> +# CONFIG_COMPAT_BRK is not set
-> +CONFIG_SLAB_FREELIST_RANDOM=y
-> +CONFIG_SLAB_FREELIST_HARDENED=y
-> +CONFIG_PROFILING=y
-> +# CONFIG_MMU is not set
-> +CONFIG_ARCH_MXC=y
-> +CONFIG_SOC_IMXRT=y
-> +# CONFIG_ARM_DMA_MEM_BUFFERABLE is not set
-> +CONFIG_SET_MEM_PARAM=y
-> +CONFIG_DRAM_BASE=0x80000000
-> +CONFIG_DRAM_SIZE=0x02000000
-
-While debugging I've found that both CONFIG_DRAM_* get their default 
-value because CONFIG_SET_MEM_PARAM is not enabled. This can work but 
-leads problems while debugging and in any case those 2 options are 
-ignored. So please add on top of them:
-CONFIG_SET_MEM_PARAM=y
-
-Thank you
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-> +CONFIG_HZ_250=y
-> +CONFIG_FORCE_MAX_ZONEORDER=14
-> +CONFIG_PARAVIRT=y
-> +# CONFIG_ATAGS is not set
-> +CONFIG_CMDLINE="console=ttyS0 root=/dev/mmcblk0p2 rw earlycon rootwait"
-> +CONFIG_BLK_DEV_BSGLIB=y
-> +CONFIG_BLK_DEV_INTEGRITY=y
-> +CONFIG_BLK_DEV_ZONED=y
-> +CONFIG_BLK_DEV_THROTTLING=y
-> +CONFIG_BLK_WBT=y
-> +CONFIG_BLK_SED_OPAL=y
-> +CONFIG_PARTITION_ADVANCED=y
-> +CONFIG_BSD_DISKLABEL=y
-> +CONFIG_MINIX_SUBPARTITION=y
-> +CONFIG_SOLARIS_X86_PARTITION=y
-> +CONFIG_UNIXWARE_DISKLABEL=y
-> +CONFIG_LDM_PARTITION=y
-> +CONFIG_CMDLINE_PARTITION=y
-> +# CONFIG_MQ_IOSCHED_KYBER is not set
-> +CONFIG_BINFMT_FLAT=y
-> +CONFIG_CLEANCACHE=y
-> +CONFIG_ZPOOL=y
-> +CONFIG_ZBUD=y
-> +CONFIG_Z3FOLD=y
-> +CONFIG_UEVENT_HELPER=y
-> +CONFIG_DEVTMPFS=y
-> +CONFIG_DEVTMPFS_MOUNT=y
-> +# CONFIG_STANDALONE is not set
-> +CONFIG_FW_LOADER_USER_HELPER=y
-> +CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y
-> +CONFIG_IMX_WEIM=y
-> +CONFIG_BLK_DEV_LOOP=y
-> +CONFIG_BLK_DEV_RAM=y
-> +CONFIG_BLK_DEV_RAM_COUNT=1
-> +CONFIG_BLK_DEV_RAM_SIZE=65536
-> +# CONFIG_INPUT_KEYBOARD is not set
-> +# CONFIG_INPUT_MOUSE is not set
-> +# CONFIG_SERIO is not set
-> +CONFIG_LEGACY_PTY_COUNT=2
-> +CONFIG_SERIAL_FSL_LPUART=y
-> +CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
-> +CONFIG_SERIAL_NONSTANDARD=y
-> +CONFIG_SERIAL_DEV_BUS=y
-> +CONFIG_TTY_PRINTK=y
-> +CONFIG_TTY_PRINTK_LEVEL=7
-> +CONFIG_PINCTRL_IMXRT1050=y
-> +CONFIG_GPIO_SYSFS=y
-> +CONFIG_GPIO_MXC=y
-> +# CONFIG_HWMON is not set
-> +# CONFIG_HID is not set
-> +# CONFIG_USB_SUPPORT is not set
-> +CONFIG_MMC=y
-> +CONFIG_MMC_SDHCI=y
-> +CONFIG_MMC_SDHCI_PLTFM=y
-> +CONFIG_MMC_SDHCI_ESDHC_IMX=y
-> +CONFIG_DMADEVICES=y
-> +CONFIG_FSL_EDMA=y
-> +# CONFIG_MX3_IPU is not set
-> +# CONFIG_VIRTIO_MENU is not set
-> +# CONFIG_VHOST_MENU is not set
-> +CONFIG_MEMORY=y
-> +CONFIG_EXT2_FS=y
-> +CONFIG_EXT2_FS_XATTR=y
-> +CONFIG_EXT2_FS_POSIX_ACL=y
-> +CONFIG_EXT2_FS_SECURITY=y
-> +CONFIG_EXT3_FS=y
-> +CONFIG_EXT3_FS_POSIX_ACL=y
-> +CONFIG_EXT3_FS_SECURITY=y
-> +# CONFIG_FILE_LOCKING is not set
-> +# CONFIG_DNOTIFY is not set
-> +CONFIG_QUOTA=y
-> +# CONFIG_PRINT_QUOTA_WARNING is not set
-> +CONFIG_AUTOFS4_FS=y
-> +CONFIG_VFAT_FS=y
-> +CONFIG_FAT_DEFAULT_UTF8=y
-> +CONFIG_EXFAT_FS=y
-> +CONFIG_CONFIGFS_FS=y
-> +# CONFIG_MISC_FILESYSTEMS is not set
-> +CONFIG_NLS_DEFAULT="cp437"
-> +CONFIG_NLS_CODEPAGE_437=y
-> +CONFIG_NLS_ASCII=y
-> +CONFIG_NLS_ISO8859_1=y
-> +CONFIG_NLS_UTF8=y
-> +CONFIG_LSM="yama,loadpin,integrity,apparmor"
-> +# CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
-> +# CONFIG_CRYPTO_HW is not set
-> +CONFIG_PRINTK_TIME=y
-> +CONFIG_CONSOLE_LOGLEVEL_DEFAULT=15
-> +CONFIG_CONSOLE_LOGLEVEL_QUIET=15
-> +CONFIG_MESSAGE_LOGLEVEL_DEFAULT=7
-> +CONFIG_DYNAMIC_DEBUG=y
-> +# CONFIG_DEBUG_BUGVERBOSE is not set
-> +CONFIG_DEBUG_INFO=y
-> +CONFIG_DEBUG_INFO_DWARF4=y
-> +CONFIG_GDB_SCRIPTS=y
-> +CONFIG_MAGIC_SYSRQ=y
-> +CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=0x01b6
-> +CONFIG_DEBUG_FS=y
-> +CONFIG_PAGE_POISONING=y
-> +CONFIG_SCHED_STACK_END_CHECK=y
-> +CONFIG_SOFTLOCKUP_DETECTOR=y
-> +CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=1
-> +# CONFIG_SCHED_DEBUG is not set
-> +CONFIG_SCHEDSTATS=y
-> +CONFIG_STACKTRACE=y
-> +CONFIG_DEBUG_USER=y
-> +CONFIG_DEBUG_LL=y
-> +CONFIG_DEBUG_UNCOMPRESS=y
-> +CONFIG_EARLY_PRINTK=y
-> +# CONFIG_RUNTIME_TESTING_MENU is not set
-> +CONFIG_MEMTEST=y
+oops i accidentally deleted that thx, im confused as to how it still 
+worked...
+> Thank you
 > 
-
