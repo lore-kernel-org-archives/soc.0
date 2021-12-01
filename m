@@ -1,120 +1,888 @@
-Return-Path: <SRS0=S0VK=QR=linaro.org=ulf.hansson@kernel.org>
+Return-Path: <SRS0=KfXh=QS=gmail.com=howard10703049@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4B43C433F5
-	for <soc@archiver.kernel.org>; Tue, 30 Nov 2021 15:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 225C7C433EF
+	for <soc@archiver.kernel.org>; Wed,  1 Dec 2021 03:39:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 69F15C53FC1; Tue, 30 Nov 2021 15:42:32 +0000 (UTC)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	id D9EB9C53FCC; Wed,  1 Dec 2021 03:39:46 +0000 (UTC)
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6CDBFC53FCD
-	for <soc@kernel.org>; Tue, 30 Nov 2021 15:42:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6CDBFC53FCD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f54.google.com with SMTP id b40so54866663lfv.10
-        for <soc@kernel.org>; Tue, 30 Nov 2021 07:42:31 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 93C33C53FCB;
+	Wed,  1 Dec 2021 03:39:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 93C33C53FCB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 200so22133033pga.1;
+        Tue, 30 Nov 2021 19:39:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3BR7hOfrZU5BLrILn7SjH/zgKfBPjj6UDPHMgMpgom8=;
-        b=DUc0FOzRm7dRuC+cBWtQBMgfNccTuyOlgJIqfMMbxXXplx1F7UCPr9b3UsEK+HAlQ/
-         JkLZRCjIqOWfztTcXX7hzZ3G25gsx2Kvptl7oKXvrfywJzlURRqLg7a3Rw1wPnjB52lu
-         x69YeunIj95F13hsHjMlJoB6LE5H/46MrWRcukUMwn9Zq3HhrDG32SKQ55KK9GJ1cIaf
-         X88TKNsTSwCPqohes+XxWyCgFGfC5SWzd4BPDIVxMMWhSnVWD4JYCI6M+eTOx+q2NeDJ
-         BtEpxIOksIK79Ls6ThbOWsQ7LGGv13XjcxlI6JNzyo/fKPm6Cdz9g/mmjPX6owYkyBPq
-         +ivQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kWIpySF1d/Zr8IMCAyrZ2vbt1slTq5eegO5DTaOjHWg=;
+        b=DuikULykV/vrW/nqtehNTXEhaTKypwk0ZY8V096ivzMbZM99GgJRnRj7dpZRFpjkVT
+         bYFAxLgmLbCF7lpJFBEPtrJwvfrqzd5BSZQXiD4QfBtF1Whhi/EatWXrp/u1p6Dx34nK
+         8HqqMzhlKGLkF5Vmt8LA9ijGyyv0+IK2mBJ0sClHQkysg//iTE9I0xge5XCQGyRt/Qu5
+         jP1++FfKFSZGuFiFHwOz8oAIfzXNSTzbELaWMtxTVyH63vpbXNsrQy4SnjhuuRRTSdeM
+         1GGMwmlcW991B02VlGYQAaOM9fLAq82gQrXRi0fRdiVTXWrf2AVEKOE9wvCEh5Wq6AE2
+         qfxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3BR7hOfrZU5BLrILn7SjH/zgKfBPjj6UDPHMgMpgom8=;
-        b=f6HR0Tf4IjypaJaNAEUo0qL1uuBaWkqLZJsbtsZiRnxMS1PZjV0a7LMGjsKXC/vwWv
-         p9yFs3nzlHuQu4wP0dZYOXbDCyLPpGwTLF2GeTnNVb0bFh6mNCfHeY22nr5lCeVQf9Nz
-         K0kMvAvaP7zOpVRuHrME1VuYnDA/8O+GlJrnFn+Zny+cb1gXlwswnljTufOJB3PegIkd
-         eyHnrwdp0BdZ1MlU1vkg/QdHkqtMQoR91JtQFUYo60zaLKaBl+0Ui0EMtZ531M7X6Ovj
-         LcGBfOzuEJRas7y810kf6Io8oDyfoq4Cr2964hwYToepUJ+AMSDI9LgZLzfNfvvl9cjf
-         r0UA==
-X-Gm-Message-State: AOAM533zNl1LXKv9uxEughr0RhODg4wk7aHzAVxOIYnQohBu7vQwQenD
-	MyXiT6ZvWvENSbkoTPwPJlphTjL0krpATZp3IaODAw==
-X-Google-Smtp-Source: ABdhPJxC4zWXmedOcmpEm0bfpRKItjopzS1RjY1QxCV3VEacaM6KDFcN4qGG64b0icX1eQf5MVEa6XMx1dC4FSgRIL0=
-X-Received: by 2002:a05:6512:10c4:: with SMTP id k4mr55168022lfg.373.1638286949602;
- Tue, 30 Nov 2021 07:42:29 -0800 (PST)
-MIME-Version: 1.0
-References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com> <20211125211443.1150135-12-Mr.Bossman075@gmail.com>
-In-Reply-To: <20211125211443.1150135-12-Mr.Bossman075@gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 30 Nov 2021 16:41:53 +0100
-Message-ID: <CAPDyKFqNghVZYdtR8dACGvqAyy9xC8LWnbg6Sq+EGRmv2g5P+A@mail.gmail.com>
-Subject: Re: [PATCH v3 11/13] mmc: sdhci-esdhc-imx: Add sdhc support for
- i.MXRT series
-To: Jesse Taube <mr.bossman075@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kWIpySF1d/Zr8IMCAyrZ2vbt1slTq5eegO5DTaOjHWg=;
+        b=6EecF/2C+HbJGmb5K+rVn2vjfSGMoeTuSS8OwiMbvSAzPpWZqZX9FIwg3WAvW6aqrv
+         h00F+KYZIKGCioYUu6imRECN8JxyjZCCH+z5mqsaLItgvWHKC1OPEVMssdmTDZrY4LTq
+         wSPc8yT9qH7PEyLe11sio6N6bhgLI1oS4rn3fIKrWQHqWqjekl8IKuDDui/+u+4XjSC6
+         OUXV1Pr04qI7iKYIAveaYAQ4D9V19eK9QIcMd9HSeqCUUQpqlRWsoA/uFf9rQifEAvrW
+         BbjkWG8eIr+1yMi/Hg2/vnEKGl9Lu0BDgsqaV2hUiu2m5LbhtobbMXgKhQM7m6M8YJET
+         x3kg==
+X-Gm-Message-State: AOAM530PZG1T/+9Fs2UPN9+Ucx0A3TWH26EDmKKBwJFoluQrsa4pjNZj
+	y9jGX+0n4DVu+XowtF8TUa0=
+X-Google-Smtp-Source: ABdhPJwyP4ISD99M43VmamWFXL0MAi/rZzgbyLUJbpWpl3+MnH/K6AZprlX5KBgaeZoAfLAduOQcTQ==
+X-Received: by 2002:a63:6849:: with SMTP id d70mr2674853pgc.269.1638329984855;
+        Tue, 30 Nov 2021 19:39:44 -0800 (PST)
+Received: from howard-System-Product-Name.dhcpserver.bu9bmc.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
+        by smtp.gmail.com with ESMTPSA id bf19sm3989591pjb.6.2021.11.30.19.39.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 19:39:44 -0800 (PST)
+From: Howard Chiu <howard10703049@gmail.com>
+X-Google-Original-From: Howard Chiu <howard.chiu@quantatw.com>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org, 
-	robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, 
-	Kernel@pengutronix.de, festevam@gmail.com, aisheng.dong@nxp.com, 
-	stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org, 
-	arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, 
-	abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org, 
-	giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+To: arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org,
+	robh+dt@kernel.org,
+	joel@jms.id.au,
+	andrew@aj.id.au,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org,
+	patrick@stwcx.xyz
+Cc: Howard Chiu <howard.chiu@quantatw.com>
+Subject: [PATCH v6] ARM: dts: aspeed: Adding Facebook Bletchley BMC
+Date: Wed,  1 Dec 2021 11:37:38 +0800
+Message-Id: <20211201033738.121846-1-howard.chiu@quantatw.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, 25 Nov 2021 at 22:15, Jesse Taube <mr.bossman075@gmail.com> wrote:
->
-> From: Jesse Taube <mr.bossman075@gmail.com>
->
-> Add support for i.MXRT1050's sdhc.
->
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Initial introduction of Facebook Bletchley equipped with
+Aspeed 2600 BMC SoC.
 
-Applied for next, thanks!
+Signed-off-by: Howard Chiu <howard.chiu@quantatw.com>
 
-Kind regards
-Uffe
+Change since v5:
+- Add an EEPROM on i2c-7
+- Change address of FUSB302 to 0x22
+- Assign interrupt pin to FUSB302
+- Rework pin assignment of pca9539
 
+Change since v4:
+- Change address of TMP421 on i2c-12 to 0x4d
 
-> ---
-> V1->V2:
-> * Nothing done
-> V2->V3:
-> * Rename imxrt to imxrt1050
-> * Remove BROKEN_AUTO_CMD23 and MAN_TUNING flags
-> ---
->  drivers/mmc/host/sdhci-esdhc-imx.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
-> index 764ee1b761d9..55981b0f0b10 100644
-> --- a/drivers/mmc/host/sdhci-esdhc-imx.c
-> +++ b/drivers/mmc/host/sdhci-esdhc-imx.c
-> @@ -305,6 +305,9 @@ static struct esdhc_soc_data usdhc_imx7ulp_data = {
->                         | ESDHC_FLAG_PMQOS | ESDHC_FLAG_HS400
->                         | ESDHC_FLAG_STATE_LOST_IN_LPMODE,
->  };
-> +static struct esdhc_soc_data usdhc_imxrt1050_data = {
-> +       .flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_HS200 | ESDHC_FLAG_ERR004536,
-> +};
->
->  static struct esdhc_soc_data usdhc_imx8qxp_data = {
->         .flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_STD_TUNING
-> @@ -355,6 +358,7 @@ static const struct of_device_id imx_esdhc_dt_ids[] = {
->         { .compatible = "fsl,imx7ulp-usdhc", .data = &usdhc_imx7ulp_data, },
->         { .compatible = "fsl,imx8qxp-usdhc", .data = &usdhc_imx8qxp_data, },
->         { .compatible = "fsl,imx8mm-usdhc", .data = &usdhc_imx8mm_data, },
-> +       { .compatible = "fsl,imxrt1050-usdhc", .data = &usdhc_imxrt1050_data, },
->         { .compatible = "nxp,s32g2-usdhc", .data = &usdhc_s32g2_data, },
->         { /* sentinel */ }
->  };
-> --
-> 2.34.0
->
+Change since v3:
+- Add a TMP421 on i2c-10
+
+Change since v2:
+- Remove uart5 workaround
+- Remove gpio nodes of pca9552/pca9539
+- Modify gpio-line-name of led/power/presence pins with openbmc pattern
+- Add MP5023 devices
+
+Change since v1:
+- Keep sorted in Makefile
+- Change baudrate to 57600 from 115200
+- Rename node *-ember to *-amber
+- Use openbmc-flash-layout-128.dtsi
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../dts/aspeed-bmc-facebook-bletchley.dts     | 760 ++++++++++++++++++
+ 2 files changed, 761 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 0de64f237cd8..b804b577010a 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1482,6 +1482,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+ 	aspeed-bmc-arm-stardragon4800-rep2.dtb \
+ 	aspeed-bmc-asrock-e3c246d4i.dtb \
+ 	aspeed-bmc-bytedance-g220a.dtb \
++	aspeed-bmc-facebook-bletchley.dtb \
+ 	aspeed-bmc-facebook-cloudripper.dtb \
+ 	aspeed-bmc-facebook-cmm.dtb \
+ 	aspeed-bmc-facebook-elbert.dtb \
+diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+new file mode 100644
+index 000000000000..c013ebe1704a
+--- /dev/null
++++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+@@ -0,0 +1,760 @@
++// SPDX-License-Identifier: GPL-2.0+
++// Copyright (c) 2021 Facebook Inc.
++/dts-v1/;
++
++#include "aspeed-g6.dtsi"
++#include <dt-bindings/gpio/aspeed-gpio.h>
++#include <dt-bindings/usb/pd.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++
++/ {
++	model = "Facebook Bletchley BMC";
++	compatible = "facebook,bletchley-bmc", "aspeed,ast2600";
++
++	aliases {
++		serial4 = &uart5;
++	};
++
++	chosen {
++		bootargs = "console=ttyS4,57600n8";
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x80000000>;
++	};
++
++	iio-hwmon {
++		compatible = "iio-hwmon";
++		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
++			<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
++			<&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
++			<&adc1 4>, <&adc1 5>, <&adc1 6>, <&adc1 7>;
++	};
++
++	spi_gpio: spi-gpio {
++		status = "okay";
++		compatible = "spi-gpio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		gpio-sck = <&gpio0 ASPEED_GPIO(Z, 3) GPIO_ACTIVE_HIGH>;
++		gpio-mosi = <&gpio0 ASPEED_GPIO(Z, 4) GPIO_ACTIVE_HIGH>;
++		gpio-miso = <&gpio0 ASPEED_GPIO(Z, 5) GPIO_ACTIVE_HIGH>;
++		num-chipselects = <1>;
++		cs-gpios = <&gpio0 ASPEED_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
++
++		tpmdev@0 {
++			compatible = "tcg,tpm_tis-spi";
++			spi-max-frequency = <33000000>;
++			reg = <0>;
++		};
++	};
++
++	switchphy: ethernet-phy@0 {
++		// Fixed-link
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		sys_log_id {
++			retain-state-shutdown;
++			default-state = "keep";
++			gpios = <&front_leds 0 GPIO_ACTIVE_HIGH>;
++		};
++		fan0_blue {
++			retain-state-shutdown;
++			default-state = "on";
++			gpios = <&fan_ioexp 8 GPIO_ACTIVE_HIGH>;
++		};
++		fan1_blue {
++			retain-state-shutdown;
++			default-state = "on";
++			gpios = <&fan_ioexp 9 GPIO_ACTIVE_HIGH>;
++		};
++		fan2_blue {
++			retain-state-shutdown;
++			default-state = "on";
++			gpios = <&fan_ioexp 10 GPIO_ACTIVE_HIGH>;
++		};
++		fan3_blue {
++			retain-state-shutdown;
++			default-state = "on";
++			gpios = <&fan_ioexp 11 GPIO_ACTIVE_HIGH>;
++		};
++		fan0_amber {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&fan_ioexp 12 GPIO_ACTIVE_HIGH>;
++		};
++		fan1_amber {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&fan_ioexp 13 GPIO_ACTIVE_HIGH>;
++		};
++		fan2_amber {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&fan_ioexp 14 GPIO_ACTIVE_HIGH>;
++		};
++		fan3_amber {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&fan_ioexp 15 GPIO_ACTIVE_HIGH>;
++		};
++		sled0_amber {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled0_leds 0 GPIO_ACTIVE_LOW>;
++		};
++		sled0_blue {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled0_leds 1 GPIO_ACTIVE_LOW>;
++		};
++		sled1_amber {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled1_leds 0 GPIO_ACTIVE_LOW>;
++		};
++		sled1_blue {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled1_leds 1 GPIO_ACTIVE_LOW>;
++		};
++		sled2_amber {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled2_leds 0 GPIO_ACTIVE_LOW>;
++		};
++		sled2_blue {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled2_leds 1 GPIO_ACTIVE_LOW>;
++		};
++		sled3_amber {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled3_leds 0 GPIO_ACTIVE_LOW>;
++		};
++		sled3_blue {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled3_leds 1 GPIO_ACTIVE_LOW>;
++		};
++		sled4_amber {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled4_leds 0 GPIO_ACTIVE_LOW>;
++		};
++		sled4_blue {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled4_leds 1 GPIO_ACTIVE_LOW>;
++		};
++		sled5_amber {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled5_leds 0 GPIO_ACTIVE_LOW>;
++		};
++		sled5_blue {
++			retain-state-shutdown;
++			default-state = "off";
++			gpios = <&sled5_leds 1 GPIO_ACTIVE_LOW>;
++		};
++	};
++};
++
++&mac2 {
++	status = "okay";
++	phy-mode = "rgmii";
++	phy-handle = <&switchphy>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rgmii3_default>;
++
++	fixed-link {
++		speed = <1000>;
++		full-duplex;
++	};
++};
++
++&rtc {
++	status = "okay";
++};
++
++&fmc {
++	status = "okay";
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "bmc";
++		spi-max-frequency = <50000000>;
++#include "openbmc-flash-layout-128.dtsi"
++	};
++};
++
++&spi2 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_spi2_default>;
++
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "pnor";
++		spi-max-frequency = <100000000>;
++	};
++};
++
++&i2c0 {
++	status = "okay";
++	/* TODO: Add ADC INA230 */
++
++	mp5023@40 {
++		compatible = "pmbus";
++		reg = <0x40>;
++	};
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	sled0_ioexp: pca9539@76 {
++		compatible = "nxp,pca9539";
++		reg = <0x76>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SLED0_MS_DETECT1","SLED0_VBUS_BMC_EN","SLED0_INA230_ALERT","SLED0_P12V_STBY_ALERT",
++		"SLED0_SSD_ALERT","SLED0_MS_DETECT0","SLED0_RST_CCG5","SLED0_FUSB302_INT",
++		"SLED0_MD_STBY_RESET","SLED0_MD_IOEXP_EN_FAULT","SLED0_MD_DIR","SLED0_MD_DECAY",
++		"SLED0_MD_MODE1","SLED0_MD_MODE2","SLED0_MD_MODE3","power-host0";
++	};
++
++	sled0_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"led-sled0-amber","led-sled0-blue","SLED0_RST_IOEXP","",
++		"","","","",
++		"","","","",
++		"","","","";
++	};
++
++	sled0_fusb302: typec-portc@54 {
++		compatible = "fcs,fusb302";
++		reg = <0x22>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <ASPEED_GPIO(M, 0) IRQ_TYPE_LEVEL_LOW>;
++
++		connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			try-power-role = "sink";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++					PDO_VAR(3000, 12000, 3000)
++					PDO_PPS_APDO(3000, 11000, 3000)>;
++			op-sink-microwatt = <10000000>;
++		};
++	};
++};
++
++&i2c1 {
++	status = "okay";
++	/* TODO: Add ADC INA230 */
++
++	mp5023@40 {
++		compatible = "pmbus";
++		reg = <0x40>;
++	};
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	sled1_ioexp: pca9539@76 {
++		compatible = "nxp,pca9539";
++		reg = <0x76>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SLED1_MS_DETECT1","SLED1_VBUS_BMC_EN","SLED1_INA230_ALERT","SLED1_P12V_STBY_ALERT",
++		"SLED1_SSD_ALERT","SLED1_MS_DETECT0","SLED1_RST_CCG5","SLED1_FUSB302_INT",
++		"SLED1_MD_STBY_RESET","SLED1_MD_IOEXP_EN_FAULT","SLED1_MD_DIR","SLED1_MD_DECAY",
++		"SLED1_MD_MODE1","SLED1_MD_MODE2","SLED1_MD_MODE3","power-host1";
++	};
++
++	sled1_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"led-sled1-amber","led-sled1-blue","SLED1_RST_IOEXP","",
++		"","","","",
++		"","","","",
++		"","","","";
++	};
++
++	sled1_fusb302: typec-portc@54 {
++		compatible = "fcs,fusb302";
++		reg = <0x22>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <ASPEED_GPIO(M, 1) IRQ_TYPE_LEVEL_LOW>;
++
++		connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			try-power-role = "sink";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++					PDO_VAR(3000, 12000, 3000)
++					PDO_PPS_APDO(3000, 11000, 3000)>;
++			op-sink-microwatt = <10000000>;
++		};
++	};
++};
++
++&i2c1 {
++	status = "okay";
++};
++
++&i2c2 {
++	status = "okay";
++	/* TODO: Add ADC INA230 */
++
++	mp5023@40 {
++		compatible = "pmbus";
++		reg = <0x40>;
++	};
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	sled2_ioexp: pca9539@76 {
++		compatible = "nxp,pca9539";
++		reg = <0x76>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SLED2_MS_DETECT1","SLED2_VBUS_BMC_EN","SLED2_INA230_ALERT","SLED2_P12V_STBY_ALERT",
++		"SLED2_SSD_ALERT","SLED2_MS_DETECT0","SLED2_RST_CCG5","SLED2_FUSB302_INT",
++		"SLED2_MD_STBY_RESET","SLED2_MD_IOEXP_EN_FAULT","SLED2_MD_DIR","SLED2_MD_DECAY",
++		"SLED2_MD_MODE1","SLED2_MD_MODE2","SLED2_MD_MODE3","power-host2";
++	};
++
++	sled2_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"led-sled2-amber","led-sled2-blue","SLED2_RST_IOEXP","",
++		"","","","",
++		"","","","",
++		"","","","";
++	};
++
++	sled2_fusb302: typec-portc@54 {
++		compatible = "fcs,fusb302";
++		reg = <0x22>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <ASPEED_GPIO(M, 2) IRQ_TYPE_LEVEL_LOW>;
++
++		connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			try-power-role = "sink";
++			data-role = "dual";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++					PDO_VAR(3000, 12000, 3000)
++					PDO_PPS_APDO(3000, 11000, 3000)>;
++			op-sink-microwatt = <10000000>;
++		};
++	};
++};
++
++&i2c3 {
++	status = "okay";
++	/* TODO: Add ADC INA230 */
++
++	mp5023@40 {
++		compatible = "pmbus";
++		reg = <0x40>;
++	};
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	sled3_ioexp: pca9539@76 {
++		compatible = "nxp,pca9539";
++		reg = <0x76>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SLED3_MS_DETECT1","SLED3_VBUS_BMC_EN","SLED3_INA230_ALERT","SLED3_P12V_STBY_ALERT",
++		"SLED3_SSD_ALERT","SLED3_MS_DETECT0","SLED3_RST_CCG5","SLED3_FUSB302_INT",
++		"SLED3_MD_STBY_RESET","SLED3_MD_IOEXP_EN_FAULT","SLED3_MD_DIR","SLED3_MD_DECAY",
++		"SLED3_MD_MODE1","SLED3_MD_MODE2","SLED3_MD_MODE3","power-host3";
++	};
++
++	sled3_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"led-sled3-amber","led-sled3-blue","SLED3_RST_IOEXP","",
++		"","","","",
++		"","","","",
++		"","","","";
++	};
++
++	sled3_fusb302: typec-portc@54 {
++		compatible = "fcs,fusb302";
++		reg = <0x22>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <ASPEED_GPIO(M, 3) IRQ_TYPE_LEVEL_LOW>;
++
++		connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			try-power-role = "sink";
++			data-role = "dual";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++					PDO_VAR(3000, 12000, 3000)
++					PDO_PPS_APDO(3000, 11000, 3000)>;
++			op-sink-microwatt = <10000000>;
++		};
++	};
++};
++
++&i2c4 {
++	status = "okay";
++	/* TODO: Add ADC INA230 */
++
++	mp5023@40 {
++		compatible = "pmbus";
++		reg = <0x40>;
++	};
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	sled4_ioexp: pca9539@76 {
++		compatible = "nxp,pca9539";
++		reg = <0x76>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SLED4_MS_DETECT1","SLED4_VBUS_BMC_EN","SLED4_INA230_ALERT","SLED4_P12V_STBY_ALERT",
++		"SLED4_SSD_ALERT","SLED4_MS_DETECT0","SLED4_RST_CCG5","SLED4_FUSB302_INT",
++		"SLED4_MD_STBY_RESET","SLED4_MD_IOEXP_EN_FAULT","SLED4_MD_DIR","SLED4_MD_DECAY",
++		"SLED4_MD_MODE1","SLED4_MD_MODE2","SLED4_MD_MODE3","power-host4";
++	};
++
++	sled4_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"led-sled4-amber","led-sled4-blue","SLED4_RST_IOEXP","",
++		"","","","",
++		"","","","",
++		"","","","";
++	};
++
++	sled4_fusb302: typec-portc@54 {
++		compatible = "fcs,fusb302";
++		reg = <0x22>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <ASPEED_GPIO(M, 4) IRQ_TYPE_LEVEL_LOW>;
++
++		connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			try-power-role = "sink";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++					PDO_VAR(3000, 12000, 3000)
++					PDO_PPS_APDO(3000, 11000, 3000)>;
++			op-sink-microwatt = <10000000>;
++		};
++	};
++};
++
++&i2c5 {
++	status = "okay";
++	/* TODO: Add ADC INA230 */
++
++	mp5023@40 {
++		compatible = "pmbus";
++		reg = <0x40>;
++	};
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	sled5_ioexp: pca9539@76 {
++		compatible = "nxp,pca9539";
++		reg = <0x76>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"SLED5_MS_DETECT1","SLED5_VBUS_BMC_EN","SLED5_INA230_ALERT","SLED5_P12V_STBY_ALERT",
++		"SLED5_SSD_ALERT","SLED5_MS_DETECT0","SLED5_RST_CCG5","SLED5_FUSB302_INT",
++		"SLED5_MD_STBY_RESET","SLED5_MD_IOEXP_EN_FAULT","SLED5_MD_DIR","SLED5_MD_DECAY",
++		"SLED5_MD_MODE1","SLED5_MD_MODE2","SLED5_MD_MODE3","power-host5";
++	};
++
++	sled5_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"led-sled5-amber","led-sled5-blue","SLED5_RST_IOEXP","",
++		"","","","",
++		"","","","",
++		"","","","";
++	};
++
++	sled5_fusb302: typec-portc@54 {
++		compatible = "fcs,fusb302";
++		reg = <0x22>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <ASPEED_GPIO(M, 5) IRQ_TYPE_LEVEL_LOW>;
++
++		connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			try-power-role = "sink";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++					PDO_VAR(3000, 12000, 3000)
++					PDO_PPS_APDO(3000, 11000, 3000)>;
++			op-sink-microwatt = <10000000>;
++		};
++	};
++};
++
++&i2c6 {
++	status = "okay";
++
++	eeprom@56 {
++		compatible = "atmel,24c64";
++		reg = <0x56>;
++	};
++
++	rtc@51 {
++		compatible = "nxp,pcf85263";
++		reg = <0x51>;
++	};
++};
++
++&i2c7 {
++	status = "okay";
++
++	eeprom@54 {
++		compatible = "atmel,24c64";
++		reg = <0x54>;
++	};
++};
++
++&i2c9 {
++	status = "okay";
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++};
++
++&i2c10 {
++	status = "okay";
++
++	tmp421@4f {
++		compatible = "ti,tmp421";
++		reg = <0x4f>;
++	};
++
++	hdc1080@40 {
++		compatible = "ti,hdc1080";
++		reg = <0x40>;
++	};
++
++	front_leds: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"led-fault-identify","power-p5v-stby-good",
++		"power-p1v0-dvdd-good","power-p1v0-avdd-good",
++		"","","","",
++		"","","","",
++		"","","","";
++	};
++};
++
++&i2c12 {
++	status = "okay";
++
++	adm1278@11 {
++		compatible = "adi,adm1278";
++		reg = <0x11>;
++	};
++
++	tmp421@4c {
++		compatible = "ti,tmp421";
++		reg = <0x4c>;
++	};
++
++	tmp421@4d {
++		compatible = "ti,tmp421";
++		reg = <0x4d>;
++	};
++
++	fan_ioexp: pca9552@67 {
++		compatible = "nxp,pca9552";
++		reg = <0x67>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		gpio-line-names =
++		"presence-fan0","presence-fan1",
++		"presence-fan2","presence-fan3",
++		"power-fan0-good","power-fan1-good",
++		"power-fan2-good","power-fan3-good",
++		"","","","",
++		"","","","";
++	};
++};
++
++&i2c13 {
++	multi-master;
++	aspeed,hw-timeout-ms = <1000>;
++	status = "okay";
++};
++
++&gpio0 {
++	gpio-line-names =
++	/*A0-A7*/	"","","","","","","","",
++	/*B0-B7*/	"","","","","","","","",
++	/*C0-C7*/	"","","","","","","","",
++	/*D0-D7*/	"","","","","","","","",
++	/*E0-E7*/	"","","","","","","","",
++	/*F0-F7*/	"","","","","","","","",
++	/*G0-G7*/	"","","","","","","","",
++	/*H0-H7*/	"presence-riser1","presence-riser2",
++			"presence-sled0","presence-sled1",
++			"presence-sled2","presence-sled3",
++			"presence-sled4","presence-sled5",
++	/*I0-I7*/	"","","","","","","","",
++	/*J0-J7*/	"","","","","","","","",
++	/*K0-K7*/	"","","","","","","","",
++	/*L0-L7*/	"","","","","","","","",
++	/*M0-M7*/	"alert_sled0","alert_sled1",
++			"alert_sled2","alert_sled3",
++			"alert_sled4","alert_sled5",
++			"p12v_aux_alert1","",
++	/*N0-N7*/	"","","","","","","","",
++	/*O0-O7*/	"","","","","","","","",
++	/*P0-P7*/	"","","","","","","","",
++	/*Q0-Q7*/	"","","","","","","","",
++	/*R0-R7*/	"","","","","","","","",
++	/*S0-S7*/	"","","","","","","","",
++	/*T0-T7*/	"","","","","","","","",
++	/*U0-U7*/	"","","","","","","","",
++	/*V0-V7*/	"","","","","","","","",
++	/*W0-W7*/	"","","","","","","","",
++	/*X0-X7*/	"","","","","","","","",
++	/*Y0-Y7*/	"","","","","","","","",
++	/*Z0-Z7*/	"","","","","","","","";
++};
++
++&adc0 {
++	vref = <1800>;
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
++		&pinctrl_adc2_default &pinctrl_adc3_default
++		&pinctrl_adc4_default &pinctrl_adc5_default
++		&pinctrl_adc6_default &pinctrl_adc7_default>;
++};
++
++&adc1 {
++	vref = <2500>;
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
++		&pinctrl_adc10_default &pinctrl_adc11_default
++		&pinctrl_adc12_default &pinctrl_adc13_default
++		&pinctrl_adc14_default &pinctrl_adc15_default>;
++};
+-- 
+2.25.1
+
