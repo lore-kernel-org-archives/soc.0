@@ -4,16 +4,16 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEADDC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BAE6C433EF
 	for <soc@archiver.kernel.org>; Wed,  1 Dec 2021 12:53:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9E2A5C53FAD; Wed,  1 Dec 2021 12:53:40 +0000 (UTC)
+	id E0266C53FAD; Wed,  1 Dec 2021 12:53:39 +0000 (UTC)
 Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6B8DCC53FCC;
+	by smtp.kernel.org (Postfix) with ESMTPS id 77169C53FD4;
 	Wed,  1 Dec 2021 12:53:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6B8DCC53FCC
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 77169C53FD4
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=norik.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=norik.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
@@ -22,17 +22,17 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=Q19agPjurI9/MfcQyw+8pqK2teR2OmX4WpJQds26Zes=; b=hHvKepOk5L1GgZt41+S7zF7Wh/
-	a5LSfr7y9f0k/rraCON/Qi5yNWfTYE0fEJVj/qfs96p51EVa9Oq9bj+pRK35C1WDk7QP8F1TDo3nl
-	N7V0CEsB5Eux7BradVmXPBlTOsfnjKndofaBUKPmxWmteSK08+m2nmRpbLwR0fCIfxrf8ToAM8D+Z
-	hdMjcbYAz9zblW2N2av0DpSWaq/tKhahNPHu/DGt/f0zErQTwYvU73odKZyLf2gw7zJUpUHeeRw0B
-	wxbVv26XrbKsyviUomQHNIc6+6qHzs0rvJ/Fz13vsLDm7rObB6x0afUZiH1G6B0r1VPFAtZQXDtm2
-	H0PHf/Kg==;
+	bh=U0T9NbNc+w7h8+N7scNAD/L+ZyEAGfspWZxqifa1x5s=; b=H5gM8bkoYowX+zLAo6nhdpcJwI
+	pk1pjIh/oUVWQ7gUaXkJP9hGzxPpjXWvm+O90GxxYGmT+h6roNu/GrTpnigRU9TB1hxBAAiQ9wfSA
+	cZbR5oaLB/sQmy2eKtpIw2Nr/z1bslUeCyF9Fa6cORXyAxrlJAtgzU1Od+sCrDYXR0i7D18bA5N9H
+	rQCvhSBFY4xr+PUVKnmuhinVJbS++D8rKTwiZjjDxMC+bKsCU/iUd3EvRco4GUhhfoTBpBpB9m/6B
+	ljnCWFcNZeVVsNokWPJhCFdKyCAjAv74vUhJ9VO4z9fqK5CzBBXAsSxHlUK00Fvx82GwkkToBu2Vy
+	/b/Bx09g==;
 Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:37890 helo=localhost.localdomain)
 	by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.94.2)
 	(envelope-from <andrej.picej@norik.com>)
-	id 1msP76-008Rde-6l; Wed, 01 Dec 2021 13:53:32 +0100
+	id 1msP76-008Rde-Hs; Wed, 01 Dec 2021 13:53:32 +0100
 From: Andrej Picej <andrej.picej@norik.com>
 List-Id: <soc.lore.kernel.org>
 To: devicetree@vger.kernel.org,
@@ -49,9 +49,9 @@ Cc: robh+dt@kernel.org,
 	linux-imx@nxp.com,
 	andrej.picej@norik.com,
 	y.bas@phytec.de
-Subject: [PATCH 1/4] dt-bindings: arm: fsl: add PHYTEC phyGATE Tauri i.MX6 ULL
-Date: Wed,  1 Dec 2021 13:53:24 +0100
-Message-Id: <20211201125327.3704500-2-andrej.picej@norik.com>
+Subject: [PATCH 3/4] ARM: dts: imx6ul: phycore: Change USB LDO voltage for usb compliance
+Date: Wed,  1 Dec 2021 13:53:26 +0100
+Message-Id: <20211201125327.3704500-4-andrej.picej@norik.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211201125327.3704500-1-andrej.picej@norik.com>
 References: <20211201125327.3704500-1-andrej.picej@norik.com>
@@ -68,33 +68,38 @@ X-Source:
 X-Source-Args: 
 X-Source-Dir: 
 
-Add devicetree bindings for phyGATE Tauri board with phyCORE-i.MX6 ULL.
+From: Yunus Bas <y.bas@phytec.de>
 
+According to the NXP usb compliance reference, the USB data lines for
+Full/Low speed are connected to the ARM USB LDO, which is set to
+minimum-voltage = 2.6V and maximum-voltage = 3.4 V. When the regulator
+is deactivated, the data lines are defaulty driven with 2.6V, which is
+not USB Full-Speed compliant. To be compliant, we need to activate the
+USB LDO regulator and set it to the value of 3V, which is the specified
+value in the USB specification.
+
+Signed-off-by: Yunus Bas <y.bas@phytec.de>
 Signed-off-by: Andrej Picej <andrej.picej@norik.com>
 ---
- Documentation/devicetree/bindings/arm/fsl.yaml | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-index 0b595b26061f..9c37f22b6c61 100644
---- a/Documentation/devicetree/bindings/arm/fsl.yaml
-+++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-@@ -602,6 +602,15 @@ properties:
-           - const: phytec,imx6ull-pcl063  # PHYTEC phyCORE-i.MX 6ULL
-           - const: fsl,imx6ull
+diff --git a/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi b/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
+index 3cddc68917a0..2e03be3d43ec 100644
+--- a/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
++++ b/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
+@@ -83,6 +83,11 @@ eeprom@52 {
+ 	};
+ };
  
-+      - description: i.MX6ULL PHYTEC phyGATE-Tauri
-+        items:
-+          - enum:
-+              - phytec,imx6ull-phygate-tauri-emmc
-+              - phytec,imx6ull-phygate-tauri-nand
-+          - const: phytec,imx6ull-phygate-tauri # PHYTEC phyGATE-Tauri with i.MX6 ULL
-+          - const: phytec,imx6ull-pcl063        # PHYTEC phyCORE-i.MX 6ULL
-+          - const: fsl,imx6ull
++&reg_3p0 {
++	regulator-min-microvolt = <3000000>;
++	regulator-always-on;
++};
 +
-       - description: i.MX6ULL Boards with Toradex Colibri iMX6ULL Modules
-         items:
-           - enum:
+ &snvs_poweroff {
+ 	status = "okay";
+ };
 -- 
 2.25.1
 
