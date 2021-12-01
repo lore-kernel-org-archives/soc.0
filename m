@@ -1,93 +1,111 @@
-Return-Path: <SRS0=7nXX=QS=baylibre.com=narmstrong@kernel.org>
+Return-Path: <SRS0=jpUF=QS=norik.com=andrej.picej@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23A10C433F5
-	for <soc@archiver.kernel.org>; Wed,  1 Dec 2021 10:40:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3395C433F5
+	for <soc@archiver.kernel.org>; Wed,  1 Dec 2021 12:53:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EEB2BC53FCC; Wed,  1 Dec 2021 10:40:44 +0000 (UTC)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 6A721C53FD5; Wed,  1 Dec 2021 12:53:39 +0000 (UTC)
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7B5E1C53FAD
-	for <soc@kernel.org>; Wed,  1 Dec 2021 10:40:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7B5E1C53FAD
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f48.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso21858643wms.3
-        for <soc@kernel.org>; Wed, 01 Dec 2021 02:40:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:subject:to:cc:organization:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=GryEuUZgiwqNPWZVOVqstgCbzW0+pZjjdZ33gd6/PgA=;
-        b=xtZT2LnZd4/ll2NLack8wsnhqQ8T3uJEjWri0PFJsKIhZu3+3X0AzaZfq+A4oWoUAW
-         wsovzfgDz93CvUdhqKc7CF64oxJaQ7dLKuDqJcAkMNi0DEoQbCOYZNPY3qDNpOepI4pt
-         jfjdOmqggXH5znYs/p6HOSpZarkTk16X5MjVvUPKYJb4HGN8isfQc4of3F9rFhOOKgsz
-         AZum2cDGhPMBPRJspyXtCrGkJUkAWTMiarjh+roCgugYyx9g6JsXGv/EBeXREABcCOfU
-         Bs+N7i5aXA7TAWKH9mFlLcEPnUG9qeVnz7pm/nxATMzP8hvuv+W5Fqta36Hiww1iKcOj
-         InPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:organization:message-id:date
-         :user-agent:mime-version:content-language:content-transfer-encoding;
-        bh=GryEuUZgiwqNPWZVOVqstgCbzW0+pZjjdZ33gd6/PgA=;
-        b=yTsJtZGRCv7EqS8paQxbIz7KGO28lGL8uUhYbXqvShw9fT9VTdATOSxntnwxWIQtVn
-         23ZM+A0H3/sr9M4o6Fkjsm/BqBgzaUDq2T0eFVOdwZ7IKQx09BBet+dTq9wi/dIcAuPm
-         ELMhDkfzbHZPBvBn8eFRjcRQ93J1mltqVLphTg9DlFSkAxMfx+Xh3ECYofIYmt7xiPx/
-         3PPpvYynjccDfgEGr9/Jf5JG2/9Z2XjzFLjtiC7q8vjPDuXIRxutUzRtq73lnCC6jtmZ
-         l1lUEReEm35nCN4dzvdBrRyCRULOPjcFHnPQ5LbPhxAnGfgShsFtkT4J6xAVl40y8nY+
-         BuMQ==
-X-Gm-Message-State: AOAM532uJqz6RTPAtHjlH0+gDQhAZGePofsoUgYA/FXBqmztvHFz31eh
-	W03gNULExcracpBBiECxOgTjMl51HaB5BZlw
-X-Google-Smtp-Source: ABdhPJzxnrcP4L5CRE1ziVrMBv92OiiMDBEhdjbM9BkQG4tkIwD7pHLv0iZj30rf6kAfHu7gnO+zLg==
-X-Received: by 2002:a05:600c:b46:: with SMTP id k6mr5969187wmr.45.1638355241590;
-        Wed, 01 Dec 2021 02:40:41 -0800 (PST)
-Received: from [10.1.3.24] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id 10sm24641423wrb.75.2021.12.01.02.40.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 02:40:40 -0800 (PST)
-From: Neil Armstrong <narmstrong@baylibre.com>
-Subject: [GIT PULL] amlogic fixes for v5.16-rc
+	by smtp.kernel.org (Postfix) with ESMTPS id 6B897C53FAD;
+	Wed,  1 Dec 2021 12:53:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6B897C53FAD
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=norik.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=norik.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+	s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=wgaJIdZ4ppAVRuisvsatmk3QWXLdGiuz9pe0bVqnGEA=; b=KS8J+v2VZoGdQEAxZmykdEFuNv
+	Or3xP75la6H6+ClRGaWnH7idsDSmGKjhlIekMop0ZAG4jZQnJ/Bi58BKJarqasfFo3LaLFBYGVd3g
+	NyGU5inpkhweuEr2QAaDvNvoaaeeEs4hUmb4ZpUjTjPzHoqGxmbnT6WZegm94VITQHKFjJ+0MxBGA
+	NcGnsZFW3+4NZDQOVw8Djj9L8K06eLVFaDJt/xEIT6fWwa1N7cD5Zjzge3xJYOZDy6F5GUgnl1Zxa
+	+XD5/k6dbkf9YKp0rKvCpC7orVkXCVmOiTcr81W5a+1F6zkkUI6hHUZb3qUU53OuhV35YkJHw8Ex3
+	17E0kFuw==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:37890 helo=localhost.localdomain)
+	by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.94.2)
+	(envelope-from <andrej.picej@norik.com>)
+	id 1msP76-008Rde-1o; Wed, 01 Dec 2021 13:53:32 +0100
+From: Andrej Picej <andrej.picej@norik.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Organization: Baylibre
-Message-ID: <ab9f066f-480b-84b2-248e-953f2f2b5f59@baylibre.com>
-Date: Wed, 1 Dec 2021 11:40:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+To: devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	soc@kernel.org
+Cc: robh+dt@kernel.org,
+	kernel@pengutronix.de,
+	shawnguo@kernel.org,
+	leoyang.li@nxp.com,
+	krzysztof.kozlowski@canonical.com,
+	linux@rempel-privat.de,
+	festevam@gmail.com,
+	arnd@arndb.de,
+	linux-imx@nxp.com,
+	andrej.picej@norik.com,
+	y.bas@phytec.de
+Subject: [PATCH 0/4] PHYTEC i.MX 6UL/ULL devicetree patches
+Date: Wed,  1 Dec 2021 13:53:23 +0100
+Message-Id: <20211201125327.3704500-1-andrej.picej@norik.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-Hi,
+Hi all,
 
-Here's a couple of fixes for v5.16-rc1, one for the amlogic Kconfig and another for the JetHub D1 DT.
+this patch series contains PHYTEC i.MX 6UL/ULL devicetree patches not
+yet upstreamed.
 
-Neil
+First and second patch add devicetree for relatively new phyGATE
+Tauri-S, which is based on i.MX 6ULL.
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+Third patch changes USB LDO voltage for i.MX 6UL/ULL phyCORE devices so
+they match USB Full-speed compliance.
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+The fourth patch moves from using 2 pwm-cell to default 3 cell pwm
+property.
 
-are available in the Git repository at:
+Best regards,
+Andrej
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git v5.16/fixes
+Alexander Bauer (1):
+  ARM: dts: imx6ull: Add support for PHYTEC phyGATE-Tauri-S with i.MX
+    6ULL
 
-for you to fetch changes up to 5ad77b1272fce36604779efe6e2036c500e6fe7a:
+Andrej Picej (2):
+  dt-bindings: arm: fsl: add PHYTEC phyGATE Tauri i.MX6 ULL
+  ARM: dts: imx6ul: peb-av-02: move to 3 cell pwm
 
-  arm64: meson: remove COMMON_CLK (2021-12-01 10:29:12 +0100)
+Yunus Bas (1):
+  ARM: dts: imx6ul: phycore: Change USB LDO voltage for usb compliance
 
-----------------------------------------------------------------
-Jerome Brunet (1):
-      arm64: meson: remove COMMON_CLK
+ .../devicetree/bindings/arm/fsl.yaml          |   9 +
+ arch/arm/boot/dts/Makefile                    |   2 +
+ .../boot/dts/imx6ul-phytec-phycore-som.dtsi   |   5 +
+ .../dts/imx6ul-phytec-segin-peb-av-02.dtsi    |   3 +-
+ .../boot/dts/imx6ull-phytec-tauri-emmc.dts    |  20 +
+ .../boot/dts/imx6ull-phytec-tauri-nand.dts    |  20 +
+ arch/arm/boot/dts/imx6ull-phytec-tauri.dtsi   | 605 ++++++++++++++++++
+ 7 files changed, 662 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx6ull-phytec-tauri-emmc.dts
+ create mode 100644 arch/arm/boot/dts/imx6ull-phytec-tauri-nand.dts
+ create mode 100644 arch/arm/boot/dts/imx6ull-phytec-tauri.dtsi
 
-Vyacheslav Bocharov (1):
-      arm64: meson: fix dts for JetHub D1
+-- 
+2.25.1
 
- arch/arm64/Kconfig.platforms                       |  1 -
- .../dts/amlogic/meson-axg-jethome-jethub-j100.dts  | 30 +++++++++++-----------
