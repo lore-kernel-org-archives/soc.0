@@ -4,21 +4,21 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C72EC4332F
-	for <soc@archiver.kernel.org>; Thu,  2 Dec 2021 09:53:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DC47C433F5
+	for <soc@archiver.kernel.org>; Thu,  2 Dec 2021 09:53:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 56581C53FD1; Thu,  2 Dec 2021 09:53:23 +0000 (UTC)
+	id 38C47C00446; Thu,  2 Dec 2021 09:53:26 +0000 (UTC)
 Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2B15FC53FCB;
-	Thu,  2 Dec 2021 09:53:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2B15FC53FCB
+	by smtp.kernel.org (Postfix) with ESMTPS id 1D062C53FCD;
+	Thu,  2 Dec 2021 09:53:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1D062C53FCD
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: (Authenticated sender: herve.codina@bootlin.com)
-	by relay10.mail.gandi.net (Postfix) with ESMTPA id D0C41240021;
-	Thu,  2 Dec 2021 09:53:18 +0000 (UTC)
+	by relay10.mail.gandi.net (Postfix) with ESMTPA id DCB29240012;
+	Thu,  2 Dec 2021 09:53:21 +0000 (UTC)
 From: Herve Codina <herve.codina@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 To: Viresh Kumar <vireshk@kernel.org>,
@@ -34,49 +34,58 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	linux-gpio@vger.kernel.org,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Herve Codina <herve.codina@bootlin.com>
-Subject: [PATCH 5/6] irq: spear-shirq: Add support for IRQ 0..6
-Date: Thu,  2 Dec 2021 10:52:54 +0100
-Message-Id: <20211202095255.165797-6-herve.codina@bootlin.com>
+Subject: [PATCH 6/6] ARM: dts: spear3xx: Add spear320s dtsi
+Date: Thu,  2 Dec 2021 10:52:55 +0100
+Message-Id: <20211202095255.165797-7-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211202095255.165797-1-herve.codina@bootlin.com>
 References: <20211202095255.165797-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-IRQ 0..7 are not supported by the driver for SPEAr320 SOC family.
+The SPEAr320s SOC is a SPEAr320 SOC variant.
 
-IRQ 0 is not reserved in SPEAr320 SOC (assigned to GPIOINT).
-Furthermore, in SPEAr320s SOC variant, IRQ 0..6 are assigned
-as follow:
-  IRQ 6 - NGPIO_INTR: Combined status of edge programmable
-                      interrupts from GPIO ports
-  IRQ 5 - TX_OR_INTR: I2S interrupt on Transmit FIFO overrun
-  IRQ 4 - TX_EMP_INTR: I2S interrupt on Transmit FIFO empty
-  IRQ 3 - RX_OR_INTR: I2S interrupt on Receive FIFO overrun
-  IRQ 2 - RX_DA_INTR: I2S interrupt on data available in Receive FIFO
-  IRQ 1 - Reserved
-  IRQ 0 - GPIO_INTR: Legacy interrupt from GPIO ports
+Mostly identical to the SPEAr320 SOC variant, it has a
+new interrupt routing for PL_PGIOs.
 
-Add support for these IRQs in SPEAr320 SOC family.
+Add spear320s.dtsi to handle SPEAr320s SOC
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- drivers/irqchip/spear-shirq.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/boot/dts/spear320s.dtsi | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 arch/arm/boot/dts/spear320s.dtsi
 
-diff --git a/drivers/irqchip/spear-shirq.c b/drivers/irqchip/spear-shirq.c
-index 1518ba31a80c..7c17a6f643ef 100644
---- a/drivers/irqchip/spear-shirq.c
-+++ b/drivers/irqchip/spear-shirq.c
-@@ -149,6 +149,8 @@ static struct spear_shirq spear320_shirq_ras3 = {
- 	.offset		= 0,
- 	.nr_irqs	= 7,
- 	.mask		= ((0x1 << 7) - 1) << 0,
-+	.irq_chip	= &dummy_irq_chip,
-+	.status_reg	= SPEAR320_INT_STS_MASK_REG,
- };
- 
- static struct spear_shirq spear320_shirq_ras1 = {
+diff --git a/arch/arm/boot/dts/spear320s.dtsi b/arch/arm/boot/dts/spear320s.dtsi
+new file mode 100644
+index 000000000000..133236dc190d
+--- /dev/null
++++ b/arch/arm/boot/dts/spear320s.dtsi
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * DTS file for SPEAr320s SoC
++ *
++ * Copyright 2021 Herve Codina <herve.codina@bootlin.com>
++ */
++
++/include/ "spear320.dtsi"
++
++/ {
++	ahb {
++		apb {
++			gpiopinctrl: gpio@b3000000 {
++				/*
++				 * The "RM0321 SPEAr320s address and map
++				 * registers" document mentions interrupt 6
++				 * (NPGIO_INTR) for the PL_GPIO interrupt.
++				 */
++				interrupts = <6>;
++				interrupt-parent = <&shirq>;
++			};
++		};
++	};
++};
 -- 
 2.31.1
 
