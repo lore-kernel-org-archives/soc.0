@@ -1,85 +1,279 @@
-Return-Path: <SRS0=IIZF=QT=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=pZuj=QT=gmail.com=joel.stan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10DA4C433EF
-	for <soc@archiver.kernel.org>; Thu,  2 Dec 2021 01:32:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECC5CC433F5
+	for <soc@archiver.kernel.org>; Thu,  2 Dec 2021 06:07:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E930CC53FCF; Thu,  2 Dec 2021 01:32:02 +0000 (UTC)
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	id BFA07C53FCC; Thu,  2 Dec 2021 06:07:10 +0000 (UTC)
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C93A7C53FD0
-	for <soc@kernel.org>; Thu,  2 Dec 2021 01:32:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C93A7C53FD0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f43.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso37865297otj.1
-        for <soc@kernel.org>; Wed, 01 Dec 2021 17:32:01 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7DF70C00446;
+	Thu,  2 Dec 2021 06:07:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7DF70C00446
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f52.google.com with SMTP id b11so24045076qvm.7;
+        Wed, 01 Dec 2021 22:07:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=jms.id.au; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=eVbRuKvcYz8AuHjLMnmwWWcthb2yF6TQ0KJocuhiso8=;
-        b=GrJrq18VwUkgj1pL7epo3ZZ6SnuAd05gDtoKKnKYDh+F6AbvfjS0qATlGPqZ6/ZVRc
-         mAzJyJuFMgLLlAUyw/zGeGHyDcWBU4ILxwB1Go1Q1vsKXp1b7nXAUSqgKw1tvhGAt9f3
-         skzgj4QTppkSffVCxJ814cm7m0sWH/4PP9Ek4cHZrE9lfj1Vpt0QZVyh2KMZrkToCSEu
-         4wPfF6esot0G+kNWfZN87L9205PfEjJ8617b0KRuMWmwuqifVPxJzY4LBCUEDMG3Qyin
-         /ZHjiuaRnhsfGm2nITYQc0A0R+OqJdOe/vhE7bB/fnjPgIl/8QV6/oJMM9xwl27adyAA
-         OfFw==
+        bh=pO6cSPpB1t4D4Pt6yGxXTPztMRKSF+ZBfosbEur348s=;
+        b=WQqwlmvRc7h3U/hML3l03I0t4e3qisI1b4V2HjA0xVFEbfBVU9XayDyazQKhYOBvI6
+         CIINAJdh0ETNh44u9uNGs9wuWpfXeaxJ+FC9dNQHToDBfj46zVL3XkcZjj3R4adqZnSE
+         gcuZ5D8CClz+f/9Ab3WdItQj0IdlpHCT+Jvsw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=eVbRuKvcYz8AuHjLMnmwWWcthb2yF6TQ0KJocuhiso8=;
-        b=CiUTWVY17lEg+iZcuKuyCZ3TE3o5XkDMfzP5DJxAdvrWgcqA/6KMcy6fEWW65OgpbE
-         Kchb47t0lDSOai9OFDctHURthQDLBy2i1J1xQet50k8gPdZOZ1MfpljoCkekGfUHuRDI
-         r4Q0p6UxsyHw5SYrkmbLfdNUNhrqrMl8DqgSMxUwL6zccDdYF2QM/R12L8Y6rD2bkIs+
-         QeND3h2XJ5V4X6HKQ8UGCMccxgQ2mYn0xOOMuodKIrY/WciKt6s7SVJz/gCnOp6DvcO4
-         ZcML0LR66sVfKh27O3QqDWNBXGKpiCJYorBGKe81B8liOVLzZoPVCVde7uhdRFqXikUs
-         cS/Q==
-X-Gm-Message-State: AOAM532RaaTmrbpXD5Dq5ALpqScZ6SDUvnj75UU/SZMValOmmMf1gH6X
-	CDi1kVAKDysemwiVV5btCrnNkp9WEZPX1UEIz2SObA==
-X-Google-Smtp-Source: ABdhPJwyLdZ/F6szrsoT0MsoHuDbALu4MPwuISdCMt7O2AkJiofhGn6t9NOXmZkAcyUEGrTCiSAE7G6YB4B+QiEYdGA=
-X-Received: by 2002:a9d:ed6:: with SMTP id 80mr9048514otj.35.1638408720916;
- Wed, 01 Dec 2021 17:32:00 -0800 (PST)
+        bh=pO6cSPpB1t4D4Pt6yGxXTPztMRKSF+ZBfosbEur348s=;
+        b=2Rpp2Lpo5goDzGEuJI/y4O+Uaj/ROeEFjy0y0mfzSC/2CBftahfdB0ZifsAk8OBtWy
+         l8b02KkpMlAZaYPUw95TQosFv2OtYSImXula0KHScnIuUXcCPz9CZ1u+wD9cL16DR//Y
+         K8fK63PVfqTl4o2ZLpE4GpB2YJNGLAph6w2AewjvF0GRTp6dpm0PWu0Z8ksNqIOiwkMB
+         IQ+XqVvF/DeHuiSvlAhrr1DzxwGCIfogus9Ta2Uy0D+mXBJEQUiWV9uRgLfZ2R4f3Ghn
+         iAmFEJYr0HVunvsEzBO1wMz3LypPNgRqvb25CGbkhrkaAR2XgNA5oo7dfFwPggOR7c+/
+         yPQA==
+X-Gm-Message-State: AOAM532D341TI+2srmgvJBtV+mXAu3T6yhkaKCXFsDmsswp5hNKl+gI4
+	NY7ZmrQ8Aum90zAzN3T1fJl+KpahdXQFl1JPa14=
+X-Google-Smtp-Source: ABdhPJycPsKdS5BQs2tO3HKSSx2b+qrhYgKgRswIukwPM6sYv5nM1bdN8ivu0gqB9MjmtRlGZpxLH0CFcI0ixtmedrg=
+X-Received: by 2002:ad4:5ce8:: with SMTP id iv8mr11447207qvb.21.1638425228334;
+ Wed, 01 Dec 2021 22:07:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com> <20211125211443.1150135-4-Mr.Bossman075@gmail.com>
-In-Reply-To: <20211125211443.1150135-4-Mr.Bossman075@gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 2 Dec 2021 02:31:49 +0100
-Message-ID: <CACRpkdab25qv+NQj9oSxHX2W+dWNWMzWXJjg97Qmci23CM0RMw@mail.gmail.com>
-Subject: Re: [PATCH v3 03/13] ARM: dts: imxrt1050-pinfunc: Add pinctrl binding header
-To: Jesse Taube <mr.bossman075@gmail.com>
+References: <20211201033738.121846-1-howard.chiu@quantatw.com>
+In-Reply-To: <20211201033738.121846-1-howard.chiu@quantatw.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Thu, 2 Dec 2021 06:06:56 +0000
+Message-ID: <CACPK8Xd9i_8LcnKXwA7myots9N=fH0FnpnPdzXAkiRW9=LSVTA@mail.gmail.com>
+Subject: Re: [PATCH v6] ARM: dts: aspeed: Adding Facebook Bletchley BMC
+To: Howard Chiu <howard10703049@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org, 
-	robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, 
-	kernel@pengutronix.de, festevam@gmail.com, ulf.hansson@linaro.org, 
-	aisheng.dong@nxp.com, stefan@agner.ch, gregkh@linuxfoundation.org, 
-	arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, 
-	abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org, 
-	giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-serial@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	devicetree <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-aspeed <linux-aspeed@lists.ozlabs.org>, 
+	Patrick Williams <patrick@stwcx.xyz>, Howard Chiu <howard.chiu@quantatw.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 25, 2021 at 10:14 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
+Hello Howard,
 
-> From: Jesse Taube <mr.bossman075@gmail.com>
+Please just cc the people that get_maintainers.pl spits out. You don't
+want to cc soc@kenrel.org (that's for when patches are ready to apply,
+and something that the maintainer for the platform will handle).
+
+$ ./scripts/get_maintainer.pl -f
+arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND
+FLATTENED DEVICE TREE BINDINGS)
+Joel Stanley <joel@jms.id.au> (supporter:ARM/ASPEED MACHINE SUPPORT)
+Andrew Jeffery <andrew@aj.id.au> (reviewer:ARM/ASPEED MACHINE SUPPORT)
+devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+DEVICE TREE BINDINGS)
+linux-arm-kernel@lists.infradead.org (moderated list:ARM/ASPEED MACHINE SUPPORT)
+linux-aspeed@lists.ozlabs.org (moderated list:ARM/ASPEED MACHINE SUPPORT)
+linux-kernel@vger.kernel.org (open list)
+
+
+On Wed, 1 Dec 2021 at 03:39, Howard Chiu <howard10703049@gmail.com> wrote:
 >
-> Add binding header for i.MXRT1050 pinctrl device tree.
+> Initial introduction of Facebook Bletchley equipped with
+> Aspeed 2600 BMC SoC.
+
+I like to have some background on the machine, as it provides context
+for the review. Is it a x86 server? A x86 switch? Of course if this
+information is confidential then that's fine to omit it, only provide
+what you can.
+
 >
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> [Jesse: move pinfunc from dt-bindings to dts folder]
+> Signed-off-by: Howard Chiu <howard.chiu@quantatw.com>
+>
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Please apply this to the ARM SoC tree.
+Put the changes below under ---. This is so they are not included in
+the commit message when added to the kernel.
 
-Yours,
-Linus Walleij
+If the information is relevant, then put it in the commit message
+above your s-o-b.
+
+> Change since v5:
+> - Add an EEPROM on i2c-7
+> - Change address of FUSB302 to 0x22
+> - Assign interrupt pin to FUSB302
+> - Rework pin assignment of pca9539
+>
+> Change since v4:
+> - Change address of TMP421 on i2c-12 to 0x4d
+>
+> Change since v3:
+> - Add a TMP421 on i2c-10
+>
+> Change since v2:
+> - Remove uart5 workaround
+> - Remove gpio nodes of pca9552/pca9539
+> - Modify gpio-line-name of led/power/presence pins with openbmc pattern
+> - Add MP5023 devices
+>
+> Change since v1:
+> - Keep sorted in Makefile
+> - Change baudrate to 57600 from 115200
+> - Rename node *-ember to *-amber
+> - Use openbmc-flash-layout-128.dtsi
+> ---
+>  arch/arm/boot/dts/Makefile                    |   1 +
+>  .../dts/aspeed-bmc-facebook-bletchley.dts     | 760 ++++++++++++++++++
+>  2 files changed, 761 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+>
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 0de64f237cd8..b804b577010a 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1482,6 +1482,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+>         aspeed-bmc-arm-stardragon4800-rep2.dtb \
+>         aspeed-bmc-asrock-e3c246d4i.dtb \
+>         aspeed-bmc-bytedance-g220a.dtb \
+> +       aspeed-bmc-facebook-bletchley.dtb \
+>         aspeed-bmc-facebook-cloudripper.dtb \
+>         aspeed-bmc-facebook-cmm.dtb \
+>         aspeed-bmc-facebook-elbert.dtb \
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+> new file mode 100644
+> index 000000000000..c013ebe1704a
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+> @@ -0,0 +1,760 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +// Copyright (c) 2021 Facebook Inc.
+> +/dts-v1/;
+> +
+> +#include "aspeed-g6.dtsi"
+> +#include <dt-bindings/gpio/aspeed-gpio.h>
+> +#include <dt-bindings/usb/pd.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +/ {
+> +       model = "Facebook Bletchley BMC";
+> +       compatible = "facebook,bletchley-bmc", "aspeed,ast2600";
+> +
+> +       aliases {
+> +               serial4 = &uart5;
+> +       };
+> +
+> +       chosen {
+> +               bootargs = "console=ttyS4,57600n8";
+> +       };
+> +
+> +       memory@80000000 {
+> +               device_type = "memory";
+> +               reg = <0x80000000 0x80000000>;
+> +       };
+> +
+> +       iio-hwmon {
+> +               compatible = "iio-hwmon";
+> +               io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
+> +                       <&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
+> +                       <&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
+> +                       <&adc1 4>, <&adc1 5>, <&adc1 6>, <&adc1 7>;
+> +       };
+> +
+> +       spi_gpio: spi-gpio {
+> +               status = "okay";
+
+The okay is redundant.
+
+> +               compatible = "spi-gpio";
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +
+> +               gpio-sck = <&gpio0 ASPEED_GPIO(Z, 3) GPIO_ACTIVE_HIGH>;
+> +               gpio-mosi = <&gpio0 ASPEED_GPIO(Z, 4) GPIO_ACTIVE_HIGH>;
+> +               gpio-miso = <&gpio0 ASPEED_GPIO(Z, 5) GPIO_ACTIVE_HIGH>;
+> +               num-chipselects = <1>;
+> +               cs-gpios = <&gpio0 ASPEED_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
+> +
+> +               tpmdev@0 {
+> +                       compatible = "tcg,tpm_tis-spi";
+> +                       spi-max-frequency = <33000000>;
+> +                       reg = <0>;
+> +               };
+> +       };
+> +
+> +       switchphy: ethernet-phy@0 {
+> +               // Fixed-link
+
+Are there any properties we should be adding here? Other examples
+mention the speed and duplex setting.
+
+> +       };
+> +
+
+> +
+> +&i2c0 {
+
+> +
+> +       sled0_fusb302: typec-portc@54 {
+> +               compatible = "fcs,fusb302";
+> +               reg = <0x22>;
+
+Your reg property is 22, but the unit address is 54. These need to
+math or you will get a warning from the device tree compiler:
+
+arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts:254.32-271.4:
+Warning (i2c_bus_reg):
+/ahb/apb/bus@1e78a000/i2c-bus@80/typec-portc@54: I2C bus unit address
+format error, expected "22"
+
+Please fix this for all the fusb302 nodes, and make sure you build
+test with this patch applied to v5.16-rc1, or newer.
+
+../arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts:254.32-271.4:
+Warning (i2c_bus_reg):
+/ahb/apb/bus@1e78a000/i2c-bus@80/typec-portc@54: I2C bus unit address
+format error, expected "22"
+../arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts:318.32-335.4:
+Warning (i2c_bus_reg):
+/ahb/apb/bus@1e78a000/i2c-bus@100/typec-portc@54: I2C bus unit address
+format error, expected "22"
+../arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts:386.32-404.4:
+Warning (i2c_bus_reg):
+/ahb/apb/bus@1e78a000/i2c-bus@180/typec-portc@54: I2C bus unit address
+format error, expected "22"
+../arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts:451.32-469.4:
+Warning (i2c_bus_reg):
+/ahb/apb/bus@1e78a000/i2c-bus@200/typec-portc@54: I2C bus unit address
+format error, expected "22"
+../arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts:516.32-533.4:
+Warning (i2c_bus_reg):
+/ahb/apb/bus@1e78a000/i2c-bus@280/typec-portc@54: I2C bus unit address
+format error, expected "22"
+../arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts:580.32-597.4:
+Warning (i2c_bus_reg):
+/ahb/apb/bus@1e78a000/i2c-bus@300/typec-portc@54: I2C bus unit address
+format error, expected "22"
+
+
+> +               interrupt-parent = <&gpio0>;
+> +               interrupts = <ASPEED_GPIO(M, 0) IRQ_TYPE_LEVEL_LOW>;
+> +
+> +               connector {
+> +                       compatible = "usb-c-connector";
+> +                       label = "USB-C";
+> +                       power-role = "dual";
+> +                       try-power-role = "sink";
+> +                       source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+> +                       sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+> +                                       PDO_VAR(3000, 12000, 3000)
+> +                                       PDO_PPS_APDO(3000, 11000, 3000)>;
+> +                       op-sink-microwatt = <10000000>;
+> +               };
+> +       };
+> +};
+> +
+
+Cheers,
+
+Joel
