@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E21D6C43217
-	for <soc@archiver.kernel.org>; Sat,  4 Dec 2021 06:10:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A303C433EF
+	for <soc@archiver.kernel.org>; Sat,  4 Dec 2021 06:11:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CDF93C341C5; Sat,  4 Dec 2021 06:10:59 +0000 (UTC)
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	id 4430CC341C9; Sat,  4 Dec 2021 06:11:01 +0000 (UTC)
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5E44FC341C3;
-	Sat,  4 Dec 2021 06:10:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5E44FC341C3
+	by smtp.kernel.org (Postfix) with ESMTPS id C2EC4C341C3;
+	Sat,  4 Dec 2021 06:11:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C2EC4C341C3
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f42.google.com with SMTP id p3so4919744qvj.9;
-        Fri, 03 Dec 2021 22:10:59 -0800 (PST)
+Received: by mail-qk1-f171.google.com with SMTP id q64so5841113qkd.5;
+        Fri, 03 Dec 2021 22:11:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=QwRfYjASEKPn0rq5hMtwE+U5/hpOlafLmLBHxtSVut8=;
-        b=iAjEND/Mh7t5gE3MiutOA5kD4GuT4VcfXfE/01XZX8Lvz6UPEeqzU2qnC0mop7JBzZ
-         ul7thdgrRklDjioFARJitkMUFgI79Qq9V+IVCMDOWgmfTC9Px0xFX3h4avsG55sXaFbd
-         jRka5odj2+i5joX44uUfe4M2l4/Lbq8OdyaLX65NKbhbOCnsAPBacSg1Y3EFPywLFngz
-         Ma817eTkKrKPunb6uOTyFOSkfAa0YkjV6DLmfzjjYy3z8sp9Nk+yhTYKek9xcdAYnc3T
-         KvnCbRzvcwu5Y0/hTjMr2oPA99T5SwAL/yMo7fmTxVGburZatwNb7NlqtAwqcBBO5j9P
-         1ZKw==
+        bh=RFI6Hwm2cozY9KFaKPS+db9qh1JW0JzTLHG991yW9HU=;
+        b=V5OvZw01aDhPy1jgV9zz53pKIqUCsjS+d6hEXLI/ENaqvVY1BUFrlnSIAySJDTqWrs
+         WkTJJ9ptXPaZ/ULjTU7PoCrav7gWzQPBiD48YKaIT1aCHaO2/Dn6bmWL9ZqNB7jJASnX
+         1LLN4qoFNSQEiYqNh7eFWDoBM3YQ7P2JDR21s3FMQ3ecu6rPePa2Qd8mrlWhn79Fz9Rg
+         994QMLdkunNviLRdnJ4CcJ7Wkwja0VxO1KppZIfvyVccmfTeCBKIDYMPUiwYZC5eDAvC
+         kONul944oVl+Mq23z2HWie78MId+gv32ueQBAIM2R0x33ayLqWQyvRPATbBTam/HTauD
+         fK9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QwRfYjASEKPn0rq5hMtwE+U5/hpOlafLmLBHxtSVut8=;
-        b=HQMb/B7TnwodRC0EkawN3rMAZEqH1bfYl1ebJX6JzJO0RssKP+82jlQmpKv1uuLcN4
-         eDuct9Oe5Cu+2Q+jt//x1COWS/LHx6D8xvDJN1/xvZRyYwgAr0WuV1ZrSA8sKJtLtj7H
-         lhARaOXeqg+BBFQNQqm7+miJbVChytxn+UWmjoy/VyXaCl2qr3J2ZWjHxJl4LqABCKvm
-         0TzzouVnUlQHmq6jYh+lz8PZXDSfMsxT1HekVNkXSHJB7OTE9Buw4x6gbWxrfhvsuTwX
-         WUJ00FpJ6Ig88XKCLhz2T3qvzn64Ri9SGBdWwNjNaAxMi4LBksnGdCXoRz1vPw3FyUjo
-         2yMQ==
-X-Gm-Message-State: AOAM533yOHq7ovSis/ioIw8RKt6sHxgNqy16g6QYUnKCOcpmuj7s7SnX
-	G+iqwJf09vtd2DeITBifFFk=
-X-Google-Smtp-Source: ABdhPJxYfVzxgKC+nPGJXmboncoTRe3DyMT1qjF1zeWOAGV9Y6uPFtdTjRxy4mG0Nzxh+iwoC1TESQ==
-X-Received: by 2002:a0c:df0c:: with SMTP id g12mr23373490qvl.24.1638598258442;
-        Fri, 03 Dec 2021 22:10:58 -0800 (PST)
+        bh=RFI6Hwm2cozY9KFaKPS+db9qh1JW0JzTLHG991yW9HU=;
+        b=Egj+2dd+ZygcaE1KXKTXXkdh/0c5mU9m+2UyX8sAlDtT7NZZPYq11N8zKy5etdPBs9
+         AstNJoFFuhn2HKd3Ek0C8SlmQVXCLBXJ8myfeLe1Q4INBHnRDC1E9Qu8TKFnE3tioB1t
+         i20Jbybb0JfIarGbipuolyw2P2ix5CM18FMexoYIbxDhScQOd1+oT6Cl0t0xtwHxLOJi
+         25N914aMzWyZLezaWE0gLB0Pjz9CsDZmwjGWZt92+mQ/YGMJx5ESV4Q9rBMZd67TWXe2
+         8FED0fwJwQH7diXSqhvcBgRDxXS1p8N1+JD4L8GAIoawr/wZJtIS2cEj7McOTrzsm7tw
+         MWLg==
+X-Gm-Message-State: AOAM530SZstO5KGYYCcSA0pua0aR3TSBDuzI9BA2yCHsSVRo3yrJuqfE
+	a7VNIokAqI4VKcMR/0v+fu7DG3/QISq3/w==
+X-Google-Smtp-Source: ABdhPJzJHYPgvoPkYu9fKpWodxkkzl7c4qjcH+7Y1XMpysETBsdh8oqWhPRMbd9uWE35BXXdZKmvYg==
+X-Received: by 2002:a05:620a:2886:: with SMTP id j6mr21563682qkp.316.1638598259809;
+        Fri, 03 Dec 2021 22:10:59 -0800 (PST)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id l1sm3500913qkp.125.2021.12.03.22.10.57
+        by smtp.gmail.com with ESMTPSA id l1sm3500913qkp.125.2021.12.03.22.10.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 22:10:58 -0800 (PST)
+        Fri, 03 Dec 2021 22:10:59 -0800 (PST)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -82,10 +82,11 @@ Cc: mturquette@baylibre.com,
 	linux-mmc@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
 	linux-serial@vger.kernel.org,
-	Jesse Taube <mr.bossman075@gmail.com>
-Subject: [PATCH v4 09/13] tty: serial: fsl_lpuart: add i.MXRT support
-Date: Sat,  4 Dec 2021 01:10:38 -0500
-Message-Id: <20211204061042.1248028-10-Mr.Bossman075@gmail.com>
+	Jesse Taube <mr.bossman075@gmail.com>,
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH v4 10/13] dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT compatible string
+Date: Sat,  4 Dec 2021 01:10:39 -0500
+Message-Id: <20211204061042.1248028-11-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
 References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
@@ -94,11 +95,11 @@ Content-Transfer-Encoding: 8bit
 
 From: Jesse Taube <mr.bossman075@gmail.com>
 
-Add support for i.MXRT1050's uart.
+Add i.MXRT documentation for compatible string.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 V1->V2:
 * Nothing done
@@ -107,49 +108,21 @@ V2->V3:
 V3->V4:
 * Nothing done
 ---
- drivers/tty/serial/fsl_lpuart.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index b1e7190ae483..884bc4e70d70 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -247,6 +247,7 @@ enum lpuart_type {
- 	LS1028A_LPUART,
- 	IMX7ULP_LPUART,
- 	IMX8QXP_LPUART,
-+	IMXRT1050_LPUART,
- };
- 
- struct lpuart_port {
-@@ -310,6 +311,11 @@ static struct lpuart_soc_data imx8qxp_data = {
- 	.iotype = UPIO_MEM32,
- 	.reg_off = IMX_REG_OFF,
- };
-+static struct lpuart_soc_data imxrt1050_data = {
-+	.devtype = IMXRT1050_LPUART,
-+	.iotype = UPIO_MEM32,
-+	.reg_off = IMX_REG_OFF,
-+};
- 
- static const struct of_device_id lpuart_dt_ids[] = {
- 	{ .compatible = "fsl,vf610-lpuart",	.data = &vf_data, },
-@@ -317,6 +323,7 @@ static const struct of_device_id lpuart_dt_ids[] = {
- 	{ .compatible = "fsl,ls1028a-lpuart",	.data = &ls1028a_data, },
- 	{ .compatible = "fsl,imx7ulp-lpuart",	.data = &imx7ulp_data, },
- 	{ .compatible = "fsl,imx8qxp-lpuart",	.data = &imx8qxp_data, },
-+	{ .compatible = "fsl,imxrt1050-lpuart",	.data = &imxrt1050_data},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, lpuart_dt_ids);
-@@ -2625,6 +2632,7 @@ OF_EARLYCON_DECLARE(lpuart, "fsl,vf610-lpuart", lpuart_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1021a-lpuart", lpuart32_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1028a-lpuart", ls1028a_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,imx7ulp-lpuart", lpuart32_imx_early_console_setup);
-+OF_EARLYCON_DECLARE(lpuart32, "fsl,imxrt1050-lpuart", lpuart32_imx_early_console_setup);
- EARLYCON_DECLARE(lpuart, lpuart_early_console_setup);
- EARLYCON_DECLARE(lpuart32, lpuart32_early_console_setup);
- 
+diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+index 19621a2f8beb..0912055b4089 100644
+--- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
++++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+@@ -34,6 +34,7 @@ properties:
+           - fsl,imx6ull-usdhc
+           - fsl,imx7d-usdhc
+           - fsl,imx7ulp-usdhc
++          - fsl,imxrt1050-usdhc
+           - nxp,s32g2-usdhc
+       - items:
+           - enum:
 -- 
 2.34.0
 
