@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A303C433EF
-	for <soc@archiver.kernel.org>; Sat,  4 Dec 2021 06:11:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF574C28CA7
+	for <soc@archiver.kernel.org>; Sat,  4 Dec 2021 06:11:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4430CC341C9; Sat,  4 Dec 2021 06:11:01 +0000 (UTC)
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	id CE892C341C6; Sat,  4 Dec 2021 06:11:02 +0000 (UTC)
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C2EC4C341C3;
-	Sat,  4 Dec 2021 06:11:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C2EC4C341C3
+	by smtp.kernel.org (Postfix) with ESMTPS id 44ECBC341CC;
+	Sat,  4 Dec 2021 06:11:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 44ECBC341CC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f171.google.com with SMTP id q64so5841113qkd.5;
-        Fri, 03 Dec 2021 22:11:00 -0800 (PST)
+Received: by mail-qk1-f174.google.com with SMTP id d2so5796996qki.12;
+        Fri, 03 Dec 2021 22:11:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RFI6Hwm2cozY9KFaKPS+db9qh1JW0JzTLHG991yW9HU=;
-        b=V5OvZw01aDhPy1jgV9zz53pKIqUCsjS+d6hEXLI/ENaqvVY1BUFrlnSIAySJDTqWrs
-         WkTJJ9ptXPaZ/ULjTU7PoCrav7gWzQPBiD48YKaIT1aCHaO2/Dn6bmWL9ZqNB7jJASnX
-         1LLN4qoFNSQEiYqNh7eFWDoBM3YQ7P2JDR21s3FMQ3ecu6rPePa2Qd8mrlWhn79Fz9Rg
-         994QMLdkunNviLRdnJ4CcJ7Wkwja0VxO1KppZIfvyVccmfTeCBKIDYMPUiwYZC5eDAvC
-         kONul944oVl+Mq23z2HWie78MId+gv32ueQBAIM2R0x33ayLqWQyvRPATbBTam/HTauD
-         fK9A==
+        bh=NBahFhBm5LsBgIuxKHo9TSxzk1RWdMM4sXQUjJWhdQY=;
+        b=lS1x+TbFHPqfVR5fTPKMIrA0xnvBoSS5Axu6fsY58xjLWNUByEqxswtDr1vCmjj2bR
+         AAVR3TeRE69as8YfoMhmUh+Z6+57YRIJt+l1NJE0+ICOrjpNoespyUUUVLU+Znon0Gyx
+         9Cxz72RWSqQOmT68uv0lADGuJ2b653UX6MC1lNwIw4PCbGVuv15RNT/y5yE/TNlv2B7s
+         A0vvtBAZx3bialTSaXGdBDGEh0m4q5GTSEp7I14TGz1HxWvqjHyN169HsKUfghoagiWw
+         9arDdfLzzAYBbrDFGV9KIrf75ttuKIKnsqNxEuRZpgIPwVplMI5v5S3KSvna3A0Xn6Hy
+         Hp6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RFI6Hwm2cozY9KFaKPS+db9qh1JW0JzTLHG991yW9HU=;
-        b=Egj+2dd+ZygcaE1KXKTXXkdh/0c5mU9m+2UyX8sAlDtT7NZZPYq11N8zKy5etdPBs9
-         AstNJoFFuhn2HKd3Ek0C8SlmQVXCLBXJ8myfeLe1Q4INBHnRDC1E9Qu8TKFnE3tioB1t
-         i20Jbybb0JfIarGbipuolyw2P2ix5CM18FMexoYIbxDhScQOd1+oT6Cl0t0xtwHxLOJi
-         25N914aMzWyZLezaWE0gLB0Pjz9CsDZmwjGWZt92+mQ/YGMJx5ESV4Q9rBMZd67TWXe2
-         8FED0fwJwQH7diXSqhvcBgRDxXS1p8N1+JD4L8GAIoawr/wZJtIS2cEj7McOTrzsm7tw
-         MWLg==
-X-Gm-Message-State: AOAM530SZstO5KGYYCcSA0pua0aR3TSBDuzI9BA2yCHsSVRo3yrJuqfE
-	a7VNIokAqI4VKcMR/0v+fu7DG3/QISq3/w==
-X-Google-Smtp-Source: ABdhPJzJHYPgvoPkYu9fKpWodxkkzl7c4qjcH+7Y1XMpysETBsdh8oqWhPRMbd9uWE35BXXdZKmvYg==
-X-Received: by 2002:a05:620a:2886:: with SMTP id j6mr21563682qkp.316.1638598259809;
-        Fri, 03 Dec 2021 22:10:59 -0800 (PST)
+        bh=NBahFhBm5LsBgIuxKHo9TSxzk1RWdMM4sXQUjJWhdQY=;
+        b=Mi5z5EjR8gwCGqbvvI55foZWvcLeq+3qFrCaomJ7pSoExBn7t4RgxhrRoGcPY6YFPE
+         xKX7/8P0O+Q8TxcLkbDfAV4yqIL2fUNdvzZ57VcMZRqFTw6fnelJvHD0aMIpr4AcOdSL
+         L/4IahCJ1YMln+/7MDUH6ARVMz2KIiY1becFfpeO2pbbXpG0bshtx2oXuZONddBvc7ar
+         DR+1Kl3irkU2CW4W+rApMyGfaR+oGaAfoZQ47D8NKF2zSob26C34/9ZB5SlcNdy5uWOC
+         kI/JOihyIk4Hbf16RgWe1XjF7VnByCrOJ5fbp9Si0l97M3hweYFFAWaaARFpJ4Cvlg2s
+         PBLA==
+X-Gm-Message-State: AOAM530y1nfqNxS65sFHE3YMFyU3LXgg301NcUoi6rQ78Kdw/CoP2TRA
+	8kh29EzEqXW/FUlsy5qRGsw=
+X-Google-Smtp-Source: ABdhPJwoQ6RlQrgedA3GGnU1amHGW3NPIWiJNeYr+UuEx5dqtJ9NbYQpWY+Y2UQqJtdqmCrs2ZVJLg==
+X-Received: by 2002:a37:4015:: with SMTP id n21mr21207390qka.524.1638598261170;
+        Fri, 03 Dec 2021 22:11:01 -0800 (PST)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id l1sm3500913qkp.125.2021.12.03.22.10.58
+        by smtp.gmail.com with ESMTPSA id l1sm3500913qkp.125.2021.12.03.22.10.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 22:10:59 -0800 (PST)
+        Fri, 03 Dec 2021 22:11:00 -0800 (PST)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -82,11 +82,10 @@ Cc: mturquette@baylibre.com,
 	linux-mmc@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
 	linux-serial@vger.kernel.org,
-	Jesse Taube <mr.bossman075@gmail.com>,
-	Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 10/13] dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT compatible string
-Date: Sat,  4 Dec 2021 01:10:39 -0500
-Message-Id: <20211204061042.1248028-11-Mr.Bossman075@gmail.com>
+	Jesse Taube <mr.bossman075@gmail.com>
+Subject: [PATCH v4 11/13] mmc: sdhci-esdhc-imx: Add sdhc support for i.MXRT series
+Date: Sat,  4 Dec 2021 01:10:40 -0500
+Message-Id: <20211204061042.1248028-12-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
 References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
@@ -95,34 +94,45 @@ Content-Transfer-Encoding: 8bit
 
 From: Jesse Taube <mr.bossman075@gmail.com>
 
-Add i.MXRT documentation for compatible string.
+Add support for i.MXRT1050's sdhc.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
 ---
 V1->V2:
 * Nothing done
 V2->V3:
 * Rename imxrt to imxrt1050
+* Remove BROKEN_AUTO_CMD23 and MAN_TUNING flags
 V3->V4:
 * Nothing done
 ---
- Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mmc/host/sdhci-esdhc-imx.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-index 19621a2f8beb..0912055b4089 100644
---- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-+++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-@@ -34,6 +34,7 @@ properties:
-           - fsl,imx6ull-usdhc
-           - fsl,imx7d-usdhc
-           - fsl,imx7ulp-usdhc
-+          - fsl,imxrt1050-usdhc
-           - nxp,s32g2-usdhc
-       - items:
-           - enum:
+diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
+index 764ee1b761d9..55981b0f0b10 100644
+--- a/drivers/mmc/host/sdhci-esdhc-imx.c
++++ b/drivers/mmc/host/sdhci-esdhc-imx.c
+@@ -305,6 +305,9 @@ static struct esdhc_soc_data usdhc_imx7ulp_data = {
+ 			| ESDHC_FLAG_PMQOS | ESDHC_FLAG_HS400
+ 			| ESDHC_FLAG_STATE_LOST_IN_LPMODE,
+ };
++static struct esdhc_soc_data usdhc_imxrt1050_data = {
++	.flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_HS200 | ESDHC_FLAG_ERR004536,
++};
+ 
+ static struct esdhc_soc_data usdhc_imx8qxp_data = {
+ 	.flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_STD_TUNING
+@@ -355,6 +358,7 @@ static const struct of_device_id imx_esdhc_dt_ids[] = {
+ 	{ .compatible = "fsl,imx7ulp-usdhc", .data = &usdhc_imx7ulp_data, },
+ 	{ .compatible = "fsl,imx8qxp-usdhc", .data = &usdhc_imx8qxp_data, },
+ 	{ .compatible = "fsl,imx8mm-usdhc", .data = &usdhc_imx8mm_data, },
++	{ .compatible = "fsl,imxrt1050-usdhc", .data = &usdhc_imxrt1050_data, },
+ 	{ .compatible = "nxp,s32g2-usdhc", .data = &usdhc_s32g2_data, },
+ 	{ /* sentinel */ }
+ };
 -- 
 2.34.0
 
