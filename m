@@ -1,97 +1,86 @@
-Return-Path: <SRS0=nY14=QV=gmail.com=festevam@kernel.org>
+Return-Path: <SRS0=yfNB=QV=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B745C433F5
-	for <soc@archiver.kernel.org>; Sat,  4 Dec 2021 10:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28B21C433EF
+	for <soc@archiver.kernel.org>; Sat,  4 Dec 2021 23:36:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 25DCEC341C9; Sat,  4 Dec 2021 10:47:16 +0000 (UTC)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	id CC348C341C8; Sat,  4 Dec 2021 23:36:53 +0000 (UTC)
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 89C8DC341C2;
-	Sat,  4 Dec 2021 10:47:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 89C8DC341C2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id w1so21911148edc.6;
-        Sat, 04 Dec 2021 02:47:15 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 368E2C341C0
+	for <soc@kernel.org>; Sat,  4 Dec 2021 23:36:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 368E2C341C0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ot1-f46.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso8587443otj.1
+        for <soc@kernel.org>; Sat, 04 Dec 2021 15:36:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=d77EM0tE3JUwSxHiDu+PhK1bKg9re3Pgc3NQ6IiDdU0=;
-        b=QREKril2aVYAeeErWGoUn7QGA7lzEfM8Bnfjg66RWZUwJmgfoNOH3BG8L9AxQPF6pJ
-         AvGgyjTeu8vqYR6+vSr3AwNS+BmJOjGSfLEf/EUDWeIKUQ7erkhAavWUsQJ3ZWn7mGys
-         mh7cNCCvpWRMx5iloQoly5kzF2tFucLZ7tiQyq3EUDIz4R1LFIynn2G3YFR9NiAUa8fb
-         iIdiX3mEsvJUXmWlt5RNrVvaHlM6yBG5Ej6fVjyU8OoqWTkaU94YMCe3yX3iVjtVIorW
-         pm8esUmh7dKNsphuRyVrmuozykq2O3iJyIL5YQ2CHLpY4Vdg3Nc/50LS+bRVVvYnVsci
-         XwaA==
+        bh=NuW/fbIz0j4mSyCSfNd6qMqzZTl35SAyBw4Kyu5HiPA=;
+        b=iFbmdA1TsAivA5FbFGUBriHLHlUT75w9xDbOkgIWR5o158RgJ70WSafgXYLVZVCtYh
+         JbW+i/OT9oGX6cLrJjAurb4KM4XI0qhxiDyyGXjSkJsmioqwUyRLRbvbYenRvTbTwXpB
+         Gi7ifeCLnLESst4k1++JcqYERHLsr7rnPGXORK/0lbRodkCHjQW3QLDob1VGDc4DquBy
+         O5PhoQd37dN8UCwebSIoifubCOm4CPIYiM6iQDWrH6vZW93Z/SLd6B9FoDubK07nv38z
+         tMUWwt0UntbeEPHP/RcRXrqrmd4I+DBrvxqdxeshQJyRwlsVJAV8qczxssO/yiy+u3VW
+         cVug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=d77EM0tE3JUwSxHiDu+PhK1bKg9re3Pgc3NQ6IiDdU0=;
-        b=D2uLfAGyKBrmssT0IYU5DuQq9u4BtqhvXIF5pmB/ufIq3kEvNvP233KVl0B3peG0VR
-         jFY4XbXzzZgv9RqkvqtSDOdcIpnbQf/zf+HERDAzvmAWdoH7x6Zr32KAkb23xe1Gos6i
-         g3hgdmU549WaTdro6LwQ347miGbjBm3LH7FDbyKTPVcmmTH8IfTD8hrDNEpoc8mo0S6b
-         DRJcQ5Y5+2l0IRSxO01fXh7gcqEqI+wc2XeFmswGH55xXyOGwKSNJGWiHzD8aex2kM5g
-         iEJ/ZGNJH3meocg0C96zMbVPuNhrYL88iZLNGw/ch2z5eptFgbsJjm4dp6R6n6jYUAX5
-         mTzQ==
-X-Gm-Message-State: AOAM533e2FJXiIbvE7mpThsNvSvRwkVOS1dG+/AOZMwpQlyERtVKT/ic
-	9MtfrKKDpDWeI1Tuob626onc+Ru+lg1010Idrf4=
-X-Google-Smtp-Source: ABdhPJzjNMGKt1kskPkry21udVYUmkbii2mprzGh/hM7XWBm/ujHf1wyM5vRF8TshW0guQMFwG8dkpaCrs1muwTCrMk=
-X-Received: by 2002:a17:907:1689:: with SMTP id hc9mr29466609ejc.445.1638614833775;
- Sat, 04 Dec 2021 02:47:13 -0800 (PST)
+        bh=NuW/fbIz0j4mSyCSfNd6qMqzZTl35SAyBw4Kyu5HiPA=;
+        b=yveDbN13gSju2m4JWdqP+An4MFLTI766y+ozhKjUASSsNa4f7KJZe5OaV5b1IpTDWM
+         KWBPw6oG+I3j+RNM0/K3srSX8/qnHVK6i9Ob4WM3QulLCHnO80aSRMmAh9z+XJqjJHTX
+         4B2yRiR024drfDem5XefPaQZqCPgt+/HYOxikgFflnWpdm51AVkMwkOrdPM83lxCP7ba
+         DZMSVewMx0OCjzw5NJLXvst0gQx6PH6rmEUwJqznX4+sZ6Bbpwps9N403TKmkgc8jzxk
+         yiSWJUzHFjcRR4tQnDiI0nMCs0jC5fPl3yQywMDu7B918SgMRfaOQRMi5FcUH1u6/NOZ
+         X5jg==
+X-Gm-Message-State: AOAM531rkBdgcfJ6GM8CZAYXxdA36jutfBTu//jsg+qwdiB25eP1rP3R
+	/spjOXggFXSgaXlSbKiFk8jRpVJdL0LcA+WO3hLjmg==
+X-Google-Smtp-Source: ABdhPJy/YkD5Lpp/kh/+b64tVyaKjWYz3dLa+2TfJuzuzRee3iC2k5N/5GhHPgwu4UeTgAhYUNIO+l5Lt4i9ercDe74=
+X-Received: by 2002:a9d:a42:: with SMTP id 60mr23684363otg.179.1638661012313;
+ Sat, 04 Dec 2021 15:36:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
-In-Reply-To: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 4 Dec 2021 07:47:02 -0300
-Message-ID: <CAOMZO5B15PqGZcGi6zneiqAmaA7y9-tELpeV7xRFYJm0SPLYqA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/13] Add initial support for the i.MXRTxxxx SoC
- family starting from i.IMXRT1050 SoC.
-To: Jesse Taube <mr.bossman075@gmail.com>
+References: <20211202095255.165797-1-herve.codina@bootlin.com>
+In-Reply-To: <20211202095255.165797-1-herve.codina@bootlin.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Sun, 5 Dec 2021 00:36:41 +0100
+Message-ID: <CACRpkdZPO7HOAGwV1iU+z047EFWCRbsrOjNV5o9s4dzPsT1H5w@mail.gmail.com>
+Subject: Re: [PATCH 0/6] spear: Fix SPEAr3XX plgpio support
+To: Herve Codina <herve.codina@bootlin.com>
 List-Id: <soc.lore.kernel.org>
-Cc: NXP Linux Team <linux-imx@nxp.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Sascha Hauer <kernel@pengutronix.de>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>, 
-	Stefan Agner <stefan@agner.ch>, Linus Walleij <linus.walleij@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Olof Johansson <olof@lixom.net>, soc@kernel.org, 
-	Russell King - ARM Linux <linux@armlinux.org.uk>, Abel Vesa <abel.vesa@nxp.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Jiri Slaby <jirislaby@kernel.org>, 
-	Giulio Benetti <giulio.benetti@benettiengineering.com>, 
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, linux-clk <linux-clk@vger.kernel.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
-	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, linux-mmc <linux-mmc@vger.kernel.org>, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, linux-serial@vger.kernel.org
+Cc: Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org, 
+	Rob Herring <robh+dt@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Jesse,
+On Thu, Dec 2, 2021 at 10:53 AM Herve Codina <herve.codina@bootlin.com> wrote:
 
-On Sat, Dec 4, 2021 at 3:10 AM Jesse Taube <mr.bossman075@gmail.com> wrote:
+> Herve Codina (6):
+>   pinctrl: spear: spear: Convert to regmap
+>   pinctrl: spear: plgpio: Convert to regmap
+>   pinctrl: spear: plgpio: Introduce regmap phandle
 
-> Giulio Benetti (5):
->   ARM: imx: add initial support for i.MXRT10xx family
->   pinctrl: freescale: Add i.MXRT1050 pinctrl driver support
->   dt-bindings: imx: Add clock binding for i.MXRT1050
->   ARM: dts: imx: add i.MXRT1050-EVK support
->   ARM: imxrt1050_defconfig: add i.MXRT1050 defconfig
->
-> Jesse Taube (8):
->   dt-bindings: pinctrl: add i.MXRT1050 pinctrl binding doc
->   ARM: dts: imxrt1050-pinfunc: Add pinctrl binding header
->   dt-bindings: clock: imx: Add documentation for i.MXRT clock
->   clk: imx: Add initial support for i.MXRT clock driver
->   dt-bindings: serial: fsl-lpuart: add i.MXRT compatible
->   tty: serial: fsl_lpuart: add i.MXRT support
->   dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT compatible string
->   mmc: sdhci-esdhc-imx: Add sdhc support for i.MXRT series
+These three applied to the pinctrl tree.
 
-The emmc and pinctrl patches have already been applied and they are available
-in linux-next. No need to resend them.
+>   ARM: dts: spear3xx: Use plgpio regmap in SPEAr310 and SPEAr320
+
+Please apply this to the SoC tree.
+
+>   irq: spear-shirq: Add support for IRQ 0..6
+
+Please ask Marc Zyngier to apply this to the irqchip tree.
+
+>   ARM: dts: spear3xx: Add spear320s dtsi
+
+Please apply this to the SoC tree.
+
+Yours,
+Linus Walleij
