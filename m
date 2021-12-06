@@ -1,124 +1,108 @@
-Return-Path: <sboyd@kernel.org>
+Return-Path: <SRS0=MQkR=QX=gmail.com=joel.stan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBCBFC433F5
-	for <soc@archiver.kernel.org>; Mon,  6 Dec 2021 22:38:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B41F1C433F5
+	for <soc@archiver.kernel.org>; Mon,  6 Dec 2021 22:52:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7CB1DC341C1; Mon,  6 Dec 2021 22:38:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554F6C341C6;
-	Mon,  6 Dec 2021 22:38:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638830329;
-	bh=7SMczd1Ms9KPq4pJzopcSwHuEKGdzVZQ+Na/nRyxS7Y=;
-	h=In-Reply-To:References:Subject:From:List-Id:Cc:To:Date:From;
-	b=b8berxhO3KkZKnh5IexHD2okQoHhzwaKr9iMhSGZDwmgJmfZiJDjCW90RWZoy9hL1
-	 nC7mLgwgbxuGXFhXUajKr0vbQJ0WkdRdMy7G3z5sjJqiRyBQ1vy80v0UXJ56AtiVLU
-	 UQU3CN66VgPuDkiRbsYStFbKpLi7LYbUeyyTg/Dac3ai72wIf7Rh/qvifl+QuPebE5
-	 yeiDn0A1kRaqdSmzCL1npP8kYQjrgL+7UgAIb6L1P6gLdes7ywWoaOv5JaRO1h3VXc
-	 J6JINQHlMbqFQ/+G5ojCywdKCROpyAKr6FmPmnFl3PSHL8BlEyY2APuPSP8Cl0tWuD
-	 FFvqLi7PvcX4Q==
-Content-Type: text/plain; charset="utf-8"
+	id 75DDFC341C6; Mon,  6 Dec 2021 22:52:01 +0000 (UTC)
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 584C2C341C8;
+	Mon,  6 Dec 2021 22:52:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 584C2C341C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f54.google.com with SMTP id i13so11362774qvm.1;
+        Mon, 06 Dec 2021 14:52:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oimzPdENQiMl9fABHsD/hSKDeXpkMF2Ol/l4UxA1adI=;
+        b=ZnSxnSOOzGKmCxXJJe+326847cQ2mOdjA54lgbnFe98LNn5NicUQjkv/gZmURoJlLp
+         NTYXr+qtC9a0jRTDr6v8tYFex1tb/wyF/IffF4P0TmFnTK1YUUCkwDVU01sQ43ocW4Xu
+         HaVXB7kET0l73RbDo/EdNjcEqKRR41U9iT1ps=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oimzPdENQiMl9fABHsD/hSKDeXpkMF2Ol/l4UxA1adI=;
+        b=pl5AjDKljtxqFZqq0IR8FqM97rZ1SdA8ImrXk21QAM3/d2ebLDoSJKGT0Agtn/McE9
+         CkN7d5iWDlEapPjiQJb46KdD9ALicC4/PTGOlyb+kEziMzkn5RSjxC23PDxiMTv8GmQn
+         VeuNK47q5NliefCJRjWGuxvoNRTtuFhFWsjD3nnFvuwl3Kpohxapz25XyB2NiEfT798V
+         DQIivla56lkkYE2OWbdl6qmA8cD6OnF3VdCYme63O2FRgMW8nolAgJWHNti8SSBybYYK
+         FeIFg0dSHIYHzyZFgYcLn/WCZ73cE2HQs/fm2FIiCyrBvenZ1sfUrNqvBX/ZFwXOExQm
+         ryHQ==
+X-Gm-Message-State: AOAM5321GJyOVLFpNrGc538Reb7F5qdY5QudLw+3XmrHB9VGXjymVhyu
+	l3ozZXiWXiOKMGtgydx5wnaTrFDZKK5IcJ34rQc=
+X-Google-Smtp-Source: ABdhPJwsWtljRtloMBy/nfiuFRYja1NNoa0XZcTHeRYj8LCekz6T0FBQdBLEpUwA+gpdZZ+w0JiXyKR92W4AskOR8as=
+X-Received: by 2002:a05:6214:c6f:: with SMTP id t15mr41090372qvj.49.1638831119274;
+ Mon, 06 Dec 2021 14:51:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211204061042.1248028-7-Mr.Bossman075@gmail.com>
-References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com> <20211204061042.1248028-7-Mr.Bossman075@gmail.com>
-Subject: Re: [PATCH v4 06/13] dt-bindings: clock: imx: Add documentation for i.MXRT clock
-From: Stephen Boyd <sboyd@kernel.org>
+References: <20211201033738.121846-1-howard.chiu@quantatw.com> <Ya5/v+VhOM9o9BtQ@heinlein>
+In-Reply-To: <Ya5/v+VhOM9o9BtQ@heinlein>
+From: Joel Stanley <joel@jms.id.au>
+Date: Mon, 6 Dec 2021 22:51:46 +0000
+Message-ID: <CACPK8XdCjqB+HZ_g9O=gjnSne3=iV44i6jKP5M8yWcsjnttaog@mail.gmail.com>
+Subject: Re: [PATCH v6] ARM: dts: aspeed: Adding Facebook Bletchley BMC
+To: Patrick Williams <patrick@stwcx.xyz>
 List-Id: <soc.lore.kernel.org>
-Cc: mturquette@baylibre.com, robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com, stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org, giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp, Mr.Bossman075@gmail.com, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, Jesse Taube <mr.bossman075@gmail.com>, Rob Herring <robh@kernel.org>
-To: Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
-Date: Mon, 06 Dec 2021 14:38:48 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20211206223849.554F6C341C6@smtp.kernel.org>
+Cc: Howard Chiu <howard10703049@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Andrew Jeffery <andrew@aj.id.au>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	devicetree <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-aspeed <linux-aspeed@lists.ozlabs.org>, 
+	Howard Chiu <howard.chiu@quantatw.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Quoting Jesse Taube (2021-12-03 22:10:35)
-> diff --git a/Documentation/devicetree/bindings/clock/imxrt-clock.yaml b/D=
-ocumentation/devicetree/bindings/clock/imxrt-clock.yaml
-> new file mode 100644
-> index 000000000000..8af48c59ff99
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/imxrt-clock.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/imxrt-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Clock bindings for Freescale i.MXRT
-> +
-> +maintainers:
-> +  - Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +  - Jesse Taube <Mr.Bossman075@gmail.com>
-> +
-> +description: |
-> +  The clock consumer should specify the desired clock by having the clock
-> +  ID in its "clocks" phandle cell. See include/dt-bindings/clock/imxrt*-=
-clock.h
-> +  for the full list of i.MXRT clock IDs.
-> +
-> +properties:
-> +  compatible:
-> +    const: fsl,imxrt1050-ccm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 2
-> +
-> +  clocks:
-> +    minItems: 1
-> +
-> +  clock-names:
-> +    minItems: 1
-
-Why minitems vs. exactly 1 for osc?
-
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - '#clock-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/imxrt1050-clock.h>
-> +
-> +    ccm@400fc000 {
-
-s/ccm/clock-controller/
-
-> +        compatible =3D "fsl,imxrt1050-ccm";
-> +        reg =3D <0x400fc000 0x4000>;
-> +        interrupts =3D <95>, <96>;
-> +        clocks =3D <&osc>;
-> +        clock-names =3D "osc";
-> +        #clock-cells =3D <1>;
-> +    };
-> +
-> +
-
-Nitpick: Drop extra newline
-
-> +    lpuart1: serial@40184000 {
-> +        compatible =3D "fsl,imxrt1050-lpuart";
-> +        reg =3D <0x40184000 0x4000>;
-> +        interrupts =3D <20>;
-> +        clocks =3D <&clks IMXRT1050_CLK_LPUART1>;
-> +        clock-names =3D "ipg";
-> +    };
-> --=20
-> 2.34.0
+On Mon, 6 Dec 2021 at 21:25, Patrick Williams <patrick@stwcx.xyz> wrote:
 >
+> On Wed, Dec 01, 2021 at 11:37:38AM +0800, Howard Chiu wrote:
+> > Initial introduction of Facebook Bletchley equipped with
+> > Aspeed 2600 BMC SoC.
+> >
+> > Signed-off-by: Howard Chiu <howard.chiu@quantatw.com>
+> >
+>
+> ...
+>
+> > Change since v2:
+> > - Remove uart5 workaround
+> > - Remove gpio nodes of pca9552/pca9539
+> > - Modify gpio-line-name of led/power/presence pins with openbmc pattern
+>
+> A number of the GPIOs do not have defined openbmc patterns for them yet.  The
+> names you have chosen are ok for now, but we will be changing them as we refine
+> development of this machine further.
+>
+> > +             gpio-line-names =
+> > +             "SLED0_MS_DETECT1","SLED0_VBUS_BMC_EN","SLED0_INA230_ALERT","SLED0_P12V_STBY_ALERT",
+> > +             "SLED0_SSD_ALERT","SLED0_MS_DETECT0","SLED0_RST_CCG5","SLED0_FUSB302_INT",
+> > +             "SLED0_MD_STBY_RESET","SLED0_MD_IOEXP_EN_FAULT","SLED0_MD_DIR","SLED0_MD_DECAY",
+> > +             "SLED0_MD_MODE1","SLED0_MD_MODE2","SLED0_MD_MODE3","power-host0";
+>
+> Such as these...
+>
+> > --
+> > 2.25.1
+> >
+>
+> Otherwise,
+>
+> Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
+
+Thanks for reviewing.
+
+Howard, I'm merging patches for v5.17 but I can't apply this until you
+fix the warnings I mentioned.
+
+Cheers,
+
+Jeol
+>
+> --
+> Patrick Williams
