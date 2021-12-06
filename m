@@ -1,148 +1,124 @@
-Return-Path: <SRS0=xeZo=QX=stwcx.xyz=patrick@kernel.org>
+Return-Path: <sboyd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F33A0C433F5
-	for <soc@archiver.kernel.org>; Mon,  6 Dec 2021 21:25:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBCBFC433F5
+	for <soc@archiver.kernel.org>; Mon,  6 Dec 2021 22:38:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BD45BC341C7; Mon,  6 Dec 2021 21:25:24 +0000 (UTC)
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7E5E3C341C1;
-	Mon,  6 Dec 2021 21:25:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7E5E3C341C1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=stwcx.xyz
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=stwcx.xyz
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 473E35803A3;
-	Mon,  6 Dec 2021 16:25:22 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 06 Dec 2021 16:25:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=fm3; bh=NfXU9pTezFHc8ebqpddROUBifoe
-	F1csYPG0ILJTnS04=; b=YAYjPDpiwhpN630k1LvlVrbXMi5y0NynQbhnIpe+ao2
-	zMR8hxIcDgkAUKDuPMeLYd7eNZ4FJzERBvqffGipi8f+EMdAthx0vB6lKFzyhtKF
-	F4ZBGKECm0LzKHk+5wZmKXx9uFGfp48/+rcC7gdwDHqOGWABPDyxELaLzhIqqDBV
-	ZPV7Bcn4LpnWfS1Vghtrhx5f3WW/4MEdyPCSRzwP9dieYky2At86Jdyrk/gf4Tm6
-	D3LY9nEiEmntSCcWabRF1Qxykhpoopn9KYPHABjYRM8rL+Mgol3GHpGgN29Kuumc
-	alw3DDakhx5H+Mb9hpTx3riJbKQTVuf01AYIkukzocQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=NfXU9p
-	TezFHc8ebqpddROUBifoeF1csYPG0ILJTnS04=; b=GkNBGz5ynQ6XLpBI5Lx421
-	XmZnT0kJzmGlFoO289+63Mr0O43IBpJjnwxmrdD3sGZwvpuJLu30zGmBJ+uff3x5
-	mgjzRHb9ji+6mRwnzXlBj7hPn9nIdzmuD+J6T81WqgX4oZqLT+pOrjm//Y7Gf9sz
-	IwVLX9j/rjs7xGaMmHJul6NGsiKEkQtZ0i7lEWKMX3R2+MUDUyPJZoKVvSMmhzuc
-	YwYdl/Xlqv9BwA16p4ruz7NXOWNdv+d/tgDVY64ngWOVKwTIH6biN1Qlm75lHBtG
-	WFKN0HDBo85mUHiCiixZwCdkniv4BGFfyj7GdnwUisTqP0EBVto7f3wRQ8a39Vjw
-	==
-X-ME-Sender: <xms:wX-uYQu1jqy7wFWiI3IK7KJQ54hO1Xy2wCkvbm9f0p7NiVn2l1FaGA>
-    <xme:wX-uYdcThWfOmhckBmicqd45ygwTRUzvIRzNf3931Zn-P4HHmZKX4hZt9lonjIH6v
-    DjY6qVqTyVIBbDyGvo>
-X-ME-Received: <xmr:wX-uYbz0EFedyquTMT6PGVnhK3ZNcS1U0rkqpHHyRGwXjpTONlCU48SOpagl7fRZJBVlBwSi1zIJS2uMr-AGjUnT6mIbCoLIdoo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeefgddugeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlfeehmdenucfjughrpeffhffvuffkfhggtggujgesghdtreertddt
-    vdenucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkhessh
-    htfigtgidrgiihiieqnecuggftrfgrthhtvghrnhepgeehheefffegkeevhedthffgudfh
-    geefgfdthefhkedtleffveekgfeuffehtdeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
-X-ME-Proxy: <xmx:wX-uYTOITDgdzy04Bx8B0b2WFKVY6dcoEmhKnQQQ9FSf9UT8nbbkMA>
-    <xmx:wX-uYQ-UO8B-BWHGCso7V0LNiiuUuAOFHfQ7b_9w5IaFKW2wSxuNPA>
-    <xmx:wX-uYbUgHmFuQLZMPTdZVeB0jR50c0ONvPWxoe_EwV0morZY0mBF8A>
-    <xmx:wn-uYR1Ie42QNp1HuX0wrGiv6yoTADqdhZc2K_nATIXXd2oPGGfw7w>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Dec 2021 16:25:21 -0500 (EST)
-Date: Mon, 6 Dec 2021 15:25:19 -0600
-From: Patrick Williams <patrick@stwcx.xyz>
-To: Howard Chiu <howard10703049@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org,
-	joel@jms.id.au, andrew@aj.id.au,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	Howard Chiu <howard.chiu@quantatw.com>
-Subject: Re: [PATCH v6] ARM: dts: aspeed: Adding Facebook Bletchley BMC
-Message-ID: <Ya5/v+VhOM9o9BtQ@heinlein>
-References: <20211201033738.121846-1-howard.chiu@quantatw.com>
+	id 7CB1DC341C1; Mon,  6 Dec 2021 22:38:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554F6C341C6;
+	Mon,  6 Dec 2021 22:38:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1638830329;
+	bh=7SMczd1Ms9KPq4pJzopcSwHuEKGdzVZQ+Na/nRyxS7Y=;
+	h=In-Reply-To:References:Subject:From:List-Id:Cc:To:Date:From;
+	b=b8berxhO3KkZKnh5IexHD2okQoHhzwaKr9iMhSGZDwmgJmfZiJDjCW90RWZoy9hL1
+	 nC7mLgwgbxuGXFhXUajKr0vbQJ0WkdRdMy7G3z5sjJqiRyBQ1vy80v0UXJ56AtiVLU
+	 UQU3CN66VgPuDkiRbsYStFbKpLi7LYbUeyyTg/Dac3ai72wIf7Rh/qvifl+QuPebE5
+	 yeiDn0A1kRaqdSmzCL1npP8kYQjrgL+7UgAIb6L1P6gLdes7ywWoaOv5JaRO1h3VXc
+	 J6JINQHlMbqFQ/+G5ojCywdKCROpyAKr6FmPmnFl3PSHL8BlEyY2APuPSP8Cl0tWuD
+	 FFvqLi7PvcX4Q==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="3yGt1ASd+zxP8cbq"
-Content-Disposition: inline
-In-Reply-To: <20211201033738.121846-1-howard.chiu@quantatw.com>
-
-
---3yGt1ASd+zxP8cbq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211204061042.1248028-7-Mr.Bossman075@gmail.com>
+References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com> <20211204061042.1248028-7-Mr.Bossman075@gmail.com>
+Subject: Re: [PATCH v4 06/13] dt-bindings: clock: imx: Add documentation for i.MXRT clock
+From: Stephen Boyd <sboyd@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: mturquette@baylibre.com, robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com, stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org, giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp, Mr.Bossman075@gmail.com, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, Jesse Taube <mr.bossman075@gmail.com>, Rob Herring <robh@kernel.org>
+To: Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
+Date: Mon, 06 Dec 2021 14:38:48 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211206223849.554F6C341C6@smtp.kernel.org>
 
-On Wed, Dec 01, 2021 at 11:37:38AM +0800, Howard Chiu wrote:
-> Initial introduction of Facebook Bletchley equipped with
-> Aspeed 2600 BMC SoC.
->=20
-> Signed-off-by: Howard Chiu <howard.chiu@quantatw.com>
->=20
+Quoting Jesse Taube (2021-12-03 22:10:35)
+> diff --git a/Documentation/devicetree/bindings/clock/imxrt-clock.yaml b/D=
+ocumentation/devicetree/bindings/clock/imxrt-clock.yaml
+> new file mode 100644
+> index 000000000000..8af48c59ff99
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/imxrt-clock.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/imxrt-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Clock bindings for Freescale i.MXRT
+> +
+> +maintainers:
+> +  - Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +  - Jesse Taube <Mr.Bossman075@gmail.com>
+> +
+> +description: |
+> +  The clock consumer should specify the desired clock by having the clock
+> +  ID in its "clocks" phandle cell. See include/dt-bindings/clock/imxrt*-=
+clock.h
+> +  for the full list of i.MXRT clock IDs.
+> +
+> +properties:
+> +  compatible:
+> +    const: fsl,imxrt1050-ccm
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 2
+> +
+> +  clocks:
+> +    minItems: 1
+> +
+> +  clock-names:
+> +    minItems: 1
 
-=2E..
+Why minitems vs. exactly 1 for osc?
 
-> Change since v2:
-> - Remove uart5 workaround
-> - Remove gpio nodes of pca9552/pca9539
-> - Modify gpio-line-name of led/power/presence pins with openbmc pattern
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imxrt1050-clock.h>
+> +
+> +    ccm@400fc000 {
 
-A number of the GPIOs do not have defined openbmc patterns for them yet.  T=
-he
-names you have chosen are ok for now, but we will be changing them as we re=
-fine
-development of this machine further.
+s/ccm/clock-controller/
 
-> +		gpio-line-names =3D
-> +		"SLED0_MS_DETECT1","SLED0_VBUS_BMC_EN","SLED0_INA230_ALERT","SLED0_P12=
-V_STBY_ALERT",
-> +		"SLED0_SSD_ALERT","SLED0_MS_DETECT0","SLED0_RST_CCG5","SLED0_FUSB302_I=
-NT",
-> +		"SLED0_MD_STBY_RESET","SLED0_MD_IOEXP_EN_FAULT","SLED0_MD_DIR","SLED0_=
-MD_DECAY",
-> +		"SLED0_MD_MODE1","SLED0_MD_MODE2","SLED0_MD_MODE3","power-host0";
+> +        compatible =3D "fsl,imxrt1050-ccm";
+> +        reg =3D <0x400fc000 0x4000>;
+> +        interrupts =3D <95>, <96>;
+> +        clocks =3D <&osc>;
+> +        clock-names =3D "osc";
+> +        #clock-cells =3D <1>;
+> +    };
+> +
+> +
 
-Such as these...
+Nitpick: Drop extra newline
 
+> +    lpuart1: serial@40184000 {
+> +        compatible =3D "fsl,imxrt1050-lpuart";
+> +        reg =3D <0x40184000 0x4000>;
+> +        interrupts =3D <20>;
+> +        clocks =3D <&clks IMXRT1050_CLK_LPUART1>;
+> +        clock-names =3D "ipg";
+> +    };
 > --=20
-> 2.25.1
->=20
-
-Otherwise,
-
-Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
-
---=20
-Patrick Williams
-
---3yGt1ASd+zxP8cbq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmGuf70ACgkQqwNHzC0A
-wRnbFQ/7B4R+LFeP1OPALJwb2dWd0yqhi378WMujEkcu9TTjG3kMQB3HyXfyckia
-fwlXHtGSb+xNpxzSPlusBW+JRm5VYPcjUH5+rtrzC6UdUpb2pJguFlVJ4wNY3FeR
-W7vmmsmw16AtK0qiQq1TXrErXKhw6Ot6QK1Yos82eecEqhvniznZGdYeNcf3HT40
-wNQkNSsCNUps6LH+lzWW5Rh/6K+DGyhzZHu/gHyJk/UHcT8BQKI/TmMSmLL1Ncvv
-piaCVsQuFOv6kSOasoiCjae7m4f0vsUsu8E0lfgFn3+qUmO3KV4Fv52eFnmKOheD
-R4JcnZJGqhAi9Xf0JDWgUaJFhEtsWXicPD/d2F+kMIh947QcKxTfGua0oTC8pX61
-OeCzzaVz0InxGIj63LgulKZZz15BoSPRHW3DQBTFqm9Ju4JfrqIK2WgQs9r6h+PG
-kFjmqiEgmaBtqepT+uzT8kDOeLNGzzy6EcwxAnyZK49IIXHhjueFhE/3sJ2Ammt8
-z0XCFx9zxwuVJz8PsKmQ04QeRy8/yST0HtwkaBrsCCJx+gdrADcBbUbOjt9oMFOH
-lbejpDXRBPLTd5UQ3nQtQklfUgcaE4FAnDizRIxPv91rPhZIsjNHMtWPn6nP1Khe
-pcWtecl2tSSaR4UOcWlBcG2ZsT02KoZffYQY3qxZ4uDpLLsiq4U=
-=pGUy
------END PGP SIGNATURE-----
-
---3yGt1ASd+zxP8cbq--
+> 2.34.0
+>
