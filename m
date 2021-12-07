@@ -4,16 +4,16 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B984C433EF
-	for <soc@archiver.kernel.org>; Tue,  7 Dec 2021 05:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FF5CC433F5
+	for <soc@archiver.kernel.org>; Tue,  7 Dec 2021 06:08:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0B9CBC341C5; Tue,  7 Dec 2021 05:57:28 +0000 (UTC)
+	id 22761C341C1; Tue,  7 Dec 2021 06:08:11 +0000 (UTC)
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2E68BC341C1
-	for <soc@kernel.org>; Tue,  7 Dec 2021 05:57:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2E68BC341C1
+	by smtp.kernel.org (Postfix) with ESMTPS id B1653C341C5
+	for <soc@kernel.org>; Tue,  7 Dec 2021 06:08:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B1653C341C5
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=marcan.st
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=marcan.st
 Received: from [127.0.0.1] (localhost [127.0.0.1])
@@ -21,120 +21,66 @@ Received: from [127.0.0.1] (localhost [127.0.0.1])
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: marcan@marcan.st)
-	by mail.marcansoft.com (Postfix) with ESMTPSA id 5BDA241EF0;
-	Tue,  7 Dec 2021 05:57:24 +0000 (UTC)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id A79DF41E96;
+	Tue,  7 Dec 2021 06:08:06 +0000 (UTC)
 From: Hector Martin <marcan@marcan.st>
-Subject: [GIT PULL] Apple SoC DT updates for 5.17
 List-Id: <soc.lore.kernel.org>
 To: SoC Team <soc@kernel.org>
 Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>,
  LKML <linux-kernel@vger.kernel.org>
-Message-ID: <e18b476c-7b1f-de73-53a2-0e21fb5cd283@marcan.st>
-Date: Tue, 7 Dec 2021 14:57:22 +0900
+Subject: [GIT PULL] Apple SoC PMGR driver for 5.17
+Message-ID: <049f4de9-51be-7be4-1f9a-a59756af88d7@marcan.st>
+Date: Tue, 7 Dec 2021 15:08:04 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 Hi SoC folks,
 
-Please merge these Apple SoC DT updates for 5.17.
+Please merge the new PMGR driver for 5.17.
 
-This brings in proper separate DTs for all t8103 platforms, as well as 
-the PMGR nodes and some miscellanea. The PMGR driver itself will be a 
-separate pull.
-
-This is based on the fixups pull I just sent, so please merge them in 
-that order.
+This should not have any hard deps with the previous pulls. The 
+MAINTAINERS change already rode along the DT pull, for simplicity.
 
 -Hector
 
-The following changes since commit 0668639eaf14813a39a8d3e0e6597d568581d4ea:
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-   arm64: dts: apple: add #interrupt-cells property to pinctrl nodes 
-(2021-12-01 23:11:45 +0900)
+   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
 are available in the Git repository at:
 
-   https://github.com/AsahiLinux/linux.git tags/asahi-soc-dt-5.17
+   https://github.com/AsahiLinux/linux.git tags/asahi-soc-pmgr-5.17
 
-for you to fetch changes up to bf2c05b619ffc0bccf60d2108bfadc880ee7f5c7:
+for you to fetch changes up to 6df9d38f9146e83b473f0c9e57fb5fdf3fcc93e2:
 
-   arm64: dts: apple: t8103: Expose PCI node for the WiFi MAC address 
-(2021-12-07 13:41:32 +0900)
-
-----------------------------------------------------------------
-Apple SoC DT updates for 5.17:
-
-- Separate DTs for all t8103 platforms
-- Add i2c and cd321x nodes
-- Bindings for apple,wdt
-- PMGR bindings and DT updates to instantiate it
-- WiFi MAC address DT handling
-
-This also includes the MAINTAINERS change for the PMGR driver itself, to
-avoid merge issues; the driver will be sent in a different pull.
-
-Manual fixups: Added i2c power domain references to the PMGR DT commit,
-since a prior commit added the i2c nodes.
+   soc: apple: Add driver for Apple PMGR power state controls 
+(2021-12-07 13:13:13 +0900)
 
 ----------------------------------------------------------------
-Hector Martin (9):
-       dt-bindings: i2c: apple,i2c: Add power-domains property
-       dt-bindings: iommu: apple,dart: Add power-domains property
-       dt-bindings: pinctrl: apple,pinctrl: Add power-domains property
-       dt-bindings: interrupt-controller: apple,aic: Add power-domains 
-property
-       MAINTAINERS: Add PMGR power state files to ARM/APPLE MACHINE
-       dt-bindings: power: Add apple,pmgr-pwrstate binding
-       dt-bindings: arm: apple: Add apple,pmgr binding
-       arm64: dts: apple: t8103: Add PMGR nodes
-       arm64: dts: apple: t8103: Add UART2
+Apple SoC PMGR driver for 5.17
 
-Janne Grunau (4):
-       dt-bindings: arm: apple: Add iMac (24-inch 2021) to Apple bindings
-       arm64: dts: apple: Add missing M1 (t8103) devices
-       arm64: dts: apple: t8103: Add i2c nodes
-       arm64: dts: apple: t8103: Add cd321x nodes
+Adds the new PMGR driver. This includes the driver only; DT and
+MAINTAINERS changes are part of the DT pull.
 
-Mark Kettenis (1):
-       arm64: dts: apple: t8103: Expose PCI node for the WiFi MAC address
+Minor change from v3: added `depends on PM` to the Kconfig to
+fix COMPILE_TEST randconfig failures.
 
-Sven Peter (1):
-       dt-bindings: watchdog: Add Apple Watchdog
+----------------------------------------------------------------
+Hector Martin (1):
+       soc: apple: Add driver for Apple PMGR power state controls
 
-  Documentation/devicetree/bindings/arm/apple.yaml   |    6 +-
-  .../devicetree/bindings/arm/apple/apple,pmgr.yaml  |  134 +++
-  .../devicetree/bindings/i2c/apple,i2c.yaml         |    3 +
-  .../bindings/interrupt-controller/apple,aic.yaml   |    3 +
-  .../devicetree/bindings/iommu/apple,dart.yaml      |    3 +
-  .../devicetree/bindings/pinctrl/apple,pinctrl.yaml |    3 +
-  .../bindings/power/apple,pmgr-pwrstate.yaml        |   71 ++
-  .../devicetree/bindings/watchdog/apple,wdt.yaml    |   52 +
-  MAINTAINERS                                        |    4 +
-  arch/arm64/boot/dts/apple/Makefile                 |    4 +
-  arch/arm64/boot/dts/apple/t8103-j274.dts           |   33 +-
-  arch/arm64/boot/dts/apple/t8103-j293.dts           |   41 +
-  arch/arm64/boot/dts/apple/t8103-j313.dts           |   33 +
-  arch/arm64/boot/dts/apple/t8103-j456.dts           |   59 +
-  arch/arm64/boot/dts/apple/t8103-j457.dts           |   47 +
-  arch/arm64/boot/dts/apple/t8103-jxxx.dtsi          |   78 ++
-  arch/arm64/boot/dts/apple/t8103-pmgr.dtsi          | 1136 
-++++++++++++++++++++
-  arch/arm64/boot/dts/apple/t8103.dtsi               |  128 +++
-  18 files changed, 1808 insertions(+), 30 deletions(-)
-  create mode 100644 
-Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
-  create mode 100644 
-Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
-  create mode 100644 
-Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
-  create mode 100644 arch/arm64/boot/dts/apple/t8103-j293.dts
-  create mode 100644 arch/arm64/boot/dts/apple/t8103-j313.dts
-  create mode 100644 arch/arm64/boot/dts/apple/t8103-j456.dts
-  create mode 100644 arch/arm64/boot/dts/apple/t8103-j457.dts
-  create mode 100644 arch/arm64/boot/dts/apple/t8103-jxxx.dtsi
-  create mode 100644 arch/arm64/boot/dts/apple/t8103-pmgr.dtsi
+  drivers/soc/Kconfig                     |   1 +
+  drivers/soc/Makefile                    |   1 +
+  drivers/soc/apple/Kconfig               |  22 +++
+  drivers/soc/apple/Makefile              |   2 +
+  drivers/soc/apple/apple-pmgr-pwrstate.c | 317 
+++++++++++++++++++++++++++++++++
+  5 files changed, 343 insertions(+)
+  create mode 100644 drivers/soc/apple/Kconfig
+  create mode 100644 drivers/soc/apple/Makefile
+  create mode 100644 drivers/soc/apple/apple-pmgr-pwrstate.c
 
