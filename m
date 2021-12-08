@@ -1,94 +1,113 @@
-Return-Path: <SRS0=jFfF=QY=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=H+9z=QZ=linaro.org=ulf.hansson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E897C433EF
-	for <soc@archiver.kernel.org>; Tue,  7 Dec 2021 16:21:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FC7AC4332F
+	for <soc@archiver.kernel.org>; Wed,  8 Dec 2021 10:48:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DE326C341C8; Tue,  7 Dec 2021 16:21:23 +0000 (UTC)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	id 1FC24C341C3; Wed,  8 Dec 2021 10:48:20 +0000 (UTC)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 446D2C341C1;
-	Tue,  7 Dec 2021 16:21:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 446D2C341C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id p18so11189332wmq.5;
-        Tue, 07 Dec 2021 08:21:23 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id C964FC341CD
+	for <soc@kernel.org>; Wed,  8 Dec 2021 10:48:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C964FC341CD
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f174.google.com with SMTP id u22so3205023lju.7
+        for <soc@kernel.org>; Wed, 08 Dec 2021 02:48:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=j7ii81gvEv/XyGJMLeUrAHqpo7gd4t4eLbDbmhNoqw8=;
-        b=eZ9sikbZ8a8IcF8BB6Y85oYexf8cgSR77yULf72M2chIjZwK9VQsEVjcCDCI0vGGjm
-         wrruDYpOQNAxgBayL+f1V66yotjzPiTc5UF9D6eNjjbJOjQdBOoAJyrnSM/E2Bn9sYJO
-         ptxmrVu7EtCojp9uadhoEzPhih2A0fz3c36a6GjwCD60gyinK0ArvYcjmItIJnybyF7R
-         OsQuSoNjNl2zOjEwT+NSj/+fQSDaOjAjh8NuQ6knQWjth6LmrEF2owmW/ARwYQQYRg4N
-         fL+cFyOBVuTYj5X/xZKmf1hqzvHO8eB8wjz/4ZkUwrPm5L184CfK9B1Qnwj13WnQ+bfH
-         M1ig==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E62B7WGzX8nf4wabBN3Nuyo8QyNx1GyQDY+Jwu7/Il0=;
+        b=KIQR0nZenE6WiBwGcCP6vJ0l75O11bgeJJNpP3vZMnAUqwhO8tlOLDS1lu4f04muiu
+         LB8koX9b1hTnsC/rPf08wfBN6J8H4T2YBlb834pNCZFRULw+q08j4hk1RInoX36kQO5S
+         rb9fmIROHpiJWsLVFwCfCZfJszXYxHNHw+0Oq0Fo5+nWgAztO7VcXfcD35XLOd8jinSx
+         FOgAeyW9y+5LWhdatDM/JhSGvqzAyjIWPUs6CzeJYHrCoC0Tjcy/GJ0fngcs9EVwtT/B
+         6Q8g8UhNDxe0N7WcQvfVUzdEyXOTS94E7gMkyO8gZ8S9rRXBrT1UgkqyfenpDmNIiUey
+         avMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=j7ii81gvEv/XyGJMLeUrAHqpo7gd4t4eLbDbmhNoqw8=;
-        b=r32X4ukgqz+k0qwDjSxY6ejDap8KpLfnLHUbBhasYeFwxwbeEd2Fz7Poqfz4EidCSV
-         IwyAgKqpf2l3E1cvI4PjDyqyosGBe3QDdLQ2ycKpURQ9bi5a48QOynrLv38HaBKrsCTx
-         aSymqb2BJXZCtRenG1nqC+068V3+dJoRHHYQHTMm6Mx66e4K/+ChSrwxVXfAIBWpOD7w
-         rYHDBzywjv9zDVnvIpmluc12s38fykKAK3lyGJ+EuCw/qsQibLU8Jk0kgQMGxyt8/f6W
-         yjFJNxRcaPWUkg6rT0vPW2ym64b/UJE6oIT0vmABlYNXO0SO2MUR1Kr2el63oglquGzC
-         8gYg==
-X-Gm-Message-State: AOAM532QEN+2XAwEOMwVgsKcI83HgWGGaN2+RKoK38Q6mKvW1y/5eEkF
-	MvlDx/zE82JUjJr0+m8hm7FWQe4QSTNe0w==
-X-Google-Smtp-Source: ABdhPJxKuXY92SDEEEZ3VxfFZcnbW7srW3w3hMbi7cTpybyEpqIy+Qpnecupjtt1kiP++ZF2eHpGIQ==
-X-Received: by 2002:a7b:ce01:: with SMTP id m1mr8360269wmc.187.1638894081015;
-        Tue, 07 Dec 2021 08:21:21 -0800 (PST)
-Received: from localhost ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id f7sm184210wri.74.2021.12.07.08.21.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 08:21:20 -0800 (PST)
-From: Thierry Reding <thierry.reding@gmail.com>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] firmware: tegra: Fixes for v5.16-rc5
-Date: Tue,  7 Dec 2021 17:21:15 +0100
-Message-Id: <20211207162115.450554-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E62B7WGzX8nf4wabBN3Nuyo8QyNx1GyQDY+Jwu7/Il0=;
+        b=WQ0huJNwOS9YCuNvtj3MPlB8o1/moTwlzpsnWdNl+jnzGLquF6+I1Dl1me+1joBbCE
+         ChJNQr9yjYBMQm4xZdsrXsokk2oAPyXE8oKpw9zRnaLDckv8KLr+thvCKqVhoiBQs9UU
+         JvCoxSGlo5jiVm6q0j73CLSFDZhOE7m0Hc13RbV2/mymvzmhz+5m+tZiOlZyignVsyJG
+         YrinnsAsERCz6xXn8UDBBucYYXVHpdQNOJzAzA2H0wIyyRuPRfTuPv7tPjIIJCXFxbOg
+         Bv9o9FqsjGOL7qpSuhhRYPBdoKRgWpQE11DqiafaZhm2bK8ldipN4ETMyGJ9MVFyRV1F
+         +8dQ==
+X-Gm-Message-State: AOAM533XYaq8rr24dmIABbZKZyzhFbbaH8iDkLnaAaefCCqZIsaCk6fW
+	QNqFREX4RBXd1rEwRcvrMG2bGsTVfyjnMGC249LGUA==
+X-Google-Smtp-Source: ABdhPJzXfR8qOAF/m2qhhgl5Acc3CRElQWGZIWAeKDmrdGuMwdUITXnr9Tae73rE3jghR+UE+v0pecgM4kb5GiRKDcI=
+X-Received: by 2002:a2e:80c3:: with SMTP id r3mr49750019ljg.4.1638960496893;
+ Wed, 08 Dec 2021 02:48:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com> <20211204061042.1248028-11-Mr.Bossman075@gmail.com>
+In-Reply-To: <20211204061042.1248028-11-Mr.Bossman075@gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 8 Dec 2021 11:47:40 +0100
+Message-ID: <CAPDyKFrgfqCbWh6BjSn-dM=pVf+eCGwWfQ9r0Y32hXahd=GnWw@mail.gmail.com>
+Subject: Re: [PATCH v4 10/13] dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT
+ compatible string
+To: Jesse Taube <mr.bossman075@gmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc: linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org, 
+	robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, 
+	Kernel@pengutronix.de, festevam@gmail.com, aisheng.dong@nxp.com, 
+	stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org, 
+	arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, 
+	abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org, 
+	giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-serial@vger.kernel.org, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi ARM SoC maintainers,
+On Sat, 4 Dec 2021 at 07:11, Jesse Taube <mr.bossman075@gmail.com> wrote:
+>
+> From: Jesse Taube <mr.bossman075@gmail.com>
+>
+> Add i.MXRT documentation for compatible string.
+>
+> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-The following changes since commit f11c34bddf8cd2a3107a7d11b6446c66deda9590:
+No need to resend this, it's already been applied.
 
-  firmware: tegra: bpmp: Use devm_platform_ioremap_resource() (2021-10-07 20:52:24 +0200)
+Kind regards
+Uffe
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.16-firmware-fixes
 
-for you to fetch changes up to 711e26c00e4c7b7cef0420c76a61e6d818e12687:
-
-  firmware: tegra: Fix error application of sizeof() to pointer (2021-10-18 16:04:01 +0200)
-
-Thanks,
-Thierry
-
-----------------------------------------------------------------
-firmware: Fixes for v5.16-rc5
-
-This contains a single fix for an incorrect usage of sizeof().
-
-----------------------------------------------------------------
-Lv Ruyi (1):
-      firmware: tegra: Fix error application of sizeof() to pointer
-
- drivers/firmware/tegra/bpmp-debugfs.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+> ---
+> V1->V2:
+> * Nothing done
+> V2->V3:
+> * Rename imxrt to imxrt1050
+> V3->V4:
+> * Nothing done
+> ---
+>  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> index 19621a2f8beb..0912055b4089 100644
+> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> @@ -34,6 +34,7 @@ properties:
+>            - fsl,imx6ull-usdhc
+>            - fsl,imx7d-usdhc
+>            - fsl,imx7ulp-usdhc
+> +          - fsl,imxrt1050-usdhc
+>            - nxp,s32g2-usdhc
+>        - items:
+>            - enum:
+> --
+> 2.34.0
+>
