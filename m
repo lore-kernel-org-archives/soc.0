@@ -1,121 +1,100 @@
-Return-Path: <SRS0=IjFi=QZ=monstr.eu=monstr@kernel.org>
+Return-Path: <SRS0=JYHf=Q2=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7A3CC433F5
-	for <soc@archiver.kernel.org>; Wed,  8 Dec 2021 11:58:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF2EAC433F5
+	for <soc@archiver.kernel.org>; Thu,  9 Dec 2021 12:05:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ADE2DC341CA; Wed,  8 Dec 2021 11:58:53 +0000 (UTC)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B97F3C341C7
-	for <soc@kernel.org>; Wed,  8 Dec 2021 11:58:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B97F3C341C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
-Received: by mail-ed1-f43.google.com with SMTP id w1so7550314edc.6
-        for <soc@kernel.org>; Wed, 08 Dec 2021 03:58:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=76QFPJ9zgkaT5eYSqUyHe14SSPvuCULq0d5f0tEfH0A=;
-        b=7saCuOxkMR/A86vtrV3kthq75GlsSGhJdXRSZjcy77IlsBG0XoGmU125eHMbYtKnVX
-         w57w5YJRGEYfGmUk5XJS9IY6l5GgYlI1OyACRZ4uun5miDvrJG0Dpjx9oqvdOfXdc7UQ
-         BcTm34qhwmYfnQMH2MXKrhr+wamBEK4IG0hveqSNEBcW7VD/I1y68wX6AtMY63BJI7VM
-         PHrbOqZrxLIY+MY+nWKH9uy96hnQ1pyYac7dX4n39nyzDCHb27yFW7d4T35mjWMg8w64
-         CaM5QscfJ7aMu0MH5TVuRtQj4/WciaIdDHG6n6D82n75q1xqkRlFNS3rfV75Nh/Y7Zrc
-         RJYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=76QFPJ9zgkaT5eYSqUyHe14SSPvuCULq0d5f0tEfH0A=;
-        b=UVjEQ28+8mnBsnKA4gFl0LhmeZVmhcmygL9kq4apJNA+dNHxUCm7nNLQ7QC/A7VKQo
-         O3oc1BtjCsD3PCz321wSAn5M30a2mfiWTEEDuMmzrXFhLDgJaTxawEWSE5RQsmLyVKN6
-         ehrq/3fNWY5+FvtzSx0ifN5HG1lbMKuXfXcKIChjXudjnWgZ3XvXfDz4g9WeTkq/cNfL
-         xrA8pTNBSzmOcWw8QkbFrRkF4aSG1HtHBgf9d2VJVGqaydXlhrtRmNu29brD3e1NM2CT
-         x45JsVQnUI5iC/xo9TL5auMy/Z1FytmcJf2BHQVMGraPe0uuQDDoV9W89KJ22bnVa/9+
-         1wqA==
-X-Gm-Message-State: AOAM532GWd1lo9ufN6Kk1safTweO5tMTpXk4vBR/pGJ+m+lUFTLU5r7+
-	fer/B+VoRKhbqszXVSVjuN6XVHqQSGWIRQ==
-X-Google-Smtp-Source: ABdhPJxPg79rm7J2GByvKrD69adV1dSVNCWWtn8EDduBNouUq9iJygEol47IZJunZD3+07Jeew2Myg==
-X-Received: by 2002:a05:6402:147:: with SMTP id s7mr18542148edu.8.1638964729713;
-        Wed, 08 Dec 2021 03:58:49 -0800 (PST)
-Received: from ?IPV6:2a02:768:2307:40d6::e05? ([2a02:768:2307:40d6::e05])
-        by smtp.gmail.com with ESMTPSA id gn16sm1394229ejc.67.2021.12.08.03.58.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 03:58:49 -0800 (PST)
-Message-ID: <48dec441-2c1f-73a0-3e6c-aa0d7be5ba26@monstr.eu>
-Date: Wed, 8 Dec 2021 12:58:48 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Content-Language: en-US
+	id 89809C341CE; Thu,  9 Dec 2021 12:05:08 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id AB781C341C3;
+	Thu,  9 Dec 2021 12:05:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AB781C341C3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BDC872B;
+	Thu,  9 Dec 2021 04:05:05 -0800 (PST)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9AB583F5A1;
+	Thu,  9 Dec 2021 04:05:04 -0800 (PST)
+From: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Cc: arm-soc <arm@kernel.org>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-From: Michal Simek <monstr@monstr.eu>
-Subject: [GIT PULL] arm64: zynqmp: Xilinx SoC changes for v5.17
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: linux-kernel@vger.kernel.org,
+	soc@kernel.org,
+	arm@kernel.org
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	stable@vger.kernel.org,
+	Pedro Batista <pedbap.g@gmail.com>,
+	Cristian Marussi <cristian.marussi@arm.com>
+Subject: [PATCH v2] firmware: arm_scpi: Fix string overflow in SCPI genpd driver
+Date: Thu,  9 Dec 2021 12:04:56 +0000
+Message-Id: <20211209120456.696879-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Without the bound checks for scpi_pd->name, it could result in the buffer
+overflow when copying the SCPI device name from the corresponding device
+tree node as the name string is set at maximum size of 30.
 
-please pull these patches to your tree. They are doing small cleanup and
-fix handling in power domain driver with also checking firmware api call.
+Let us fix it by using devm_kasprintf so that the string buffer is
+allocated dynamically.
 
-Request for 5.16 came late that's why sending it again rebased on the 
-top of v5.16-rc1 but with the same content.
-Previous PR:
-https://lore.kernel.org/r/0ea5d885-c770-af56-7de0-bcf6adc61bcd@xilinx.com
+Cc: stable@vger.kernel.org
+Fixes: 8bec4337ad40 ("firmware: scpi: add device power domain support using genpd")
+Reported-by: Pedro Batista <pedbap.g@gmail.com>
+Cc: Cristian Marussi <cristian.marussi@arm.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ drivers/firmware/scpi_pm_domain.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-Thanks,
-Michal
+Hi ARM SoC team,
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+Can you apply this directly as I don't have any other fix at the moment.
 
-   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+Regards,
+Sudeep
 
-are available in the Git repository at:
+v1->v2:
+	- Fixed accidentally dropped '.' in the name
+	- Used devm_kasprintf instead of combination of kasprintf and
+	  devm_kstrdup
 
-   https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-soc-for-v5.17
+v1: https://lore.kernel.org/r/20211206153150.565685-1-sudeep.holla@arm.com/
 
-for you to fetch changes up to 168e05c131cd15932f95364b103b8cb7dbf19546:
+diff --git a/drivers/firmware/scpi_pm_domain.c b/drivers/firmware/scpi_pm_domain.c
+index 51201600d789..800673910b51 100644
+--- a/drivers/firmware/scpi_pm_domain.c
++++ b/drivers/firmware/scpi_pm_domain.c
+@@ -16,7 +16,6 @@ struct scpi_pm_domain {
+ 	struct generic_pm_domain genpd;
+ 	struct scpi_ops *ops;
+ 	u32 domain;
+-	char name[30];
+ };
 
-   firmware: xilinx: check return value of zynqmp_pm_get_api_version() 
-(2021-12-08 12:53:36 +0100)
+ /*
+@@ -110,8 +109,13 @@ static int scpi_pm_domain_probe(struct platform_device *pdev)
 
-----------------------------------------------------------------
-arm64: dts: ZynqMP SoC changes for v5.17
+ 		scpi_pd->domain = i;
+ 		scpi_pd->ops = scpi_ops;
+-		sprintf(scpi_pd->name, "%pOFn.%d", np, i);
+-		scpi_pd->genpd.name = scpi_pd->name;
++		scpi_pd->genpd.name = devm_kasprintf(dev, GFP_KERNEL,
++						     "%pOFn.%d", np, i);
++		if (!scpi_pd->genpd.name) {
++			dev_err(dev, "Failed to allocate genpd name:%pOFn.%d\n",
++				np, i);
++			continue;
++		}
+ 		scpi_pd->genpd.power_off = scpi_pd_power_off;
+ 		scpi_pd->genpd.power_on = scpi_pd_power_on;
 
-- cleanup and fix PM_INIT_FINALIZE
-- check return value of zynqmp_pm_get_api_version()
-
-----------------------------------------------------------------
-Michael Tretter (4):
-       soc: xilinx: move PM_INIT_FINALIZE to zynqmp_pm_domains driver
-       soc: xilinx: cleanup debug and error messages
-       soc: xilinx: use a properly named field instead of flags
-       soc: xilinx: add a to_zynqmp_pm_domain macro
-
-Rajan Vaja (1):
-       firmware: xilinx: check return value of zynqmp_pm_get_api_version()
-
-  drivers/firmware/xilinx/zynqmp.c       |  5 ++++-
-  drivers/soc/xilinx/zynqmp_pm_domains.c | 91 
-+++++++++++++++++++++++++++++++++++++++++++++++++++----------------------------------------
-  drivers/soc/xilinx/zynqmp_power.c      |  1 -
-  3 files changed, 55 insertions(+), 42 deletions(-)
-
--- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+--
+2.25.1
 
