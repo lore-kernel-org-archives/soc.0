@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C51AC4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66053C4167D
 	for <soc@archiver.kernel.org>; Mon, 13 Dec 2021 14:20:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 13FB4C34606; Mon, 13 Dec 2021 14:20:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F094CC34608;
-	Mon, 13 Dec 2021 14:20:28 +0000 (UTC)
+	id 47B26C34604; Mon, 13 Dec 2021 14:20:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3227EC3461D;
+	Mon, 13 Dec 2021 14:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1639405229;
-	bh=q8izwmBt9FVkOaNjaNju5TuIzvJJy2PgWw/EbvxXedU=;
+	bh=pMRy/jXKa0b5hQu7Sqf28uYw7CDa36+fjpfaSA1dxPg=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=MEl0Y4/o0a9uV9MhoApoPdmVpmDtO+gcZclLYSAHTB+sd8Qpi/PiWwKD2q9kcgGfD
-	 WegvyL6NDv8KhOaZv431XJrmwBIwCojyJnJEpPaa2nhs0IhcW60JSCMRmXCmOfNlq4
-	 ISmNYsUU+1obwbLt8HVZXQOjjWYdfuFu2zYqDffLICLiP9E2Revb+FYclI+cVY8TpT
-	 NsrcCjrSHdQiCiP6qSWej7YSQcQO56Bj2bjWx0sucgOgagHgL1jPHXpaEvkaM9k1np
-	 Gi1mHp5C/Zhs0vFmZYF0X2J4bKm8I/NLBdPrvFMQerpLvnjSTFPr+UH1b7RKcKD3M4
-	 7sA6N3a8xLI6g==
+	b=YMHvSHJwlRDZdoCQWGZZvqimKKyLFW0PitUJhCn0JTEsZ309bunOsJJ0C4EN87n/9
+	 k5Vs0LUHmrgpeDyYSxwZd9uQ2Yk6lvHBWKkyRT6xWRBN/M3WkIY4NFSaxd8gGEyZ5Y
+	 PUEUpr/S/47zYgEsovrPDXpQTnAW+raKmdHmvf5V06GiW7B3sSX+4WrcXI1TTko4Km
+	 gYjOIviuRKunm2nJ2zqvFlU+ySqHzthxWg0JqeQdC9HAblckFzP/mk1MTYU7vsHKUB
+	 QMvaMLNJO93UNJWIgCeGiwHBffYCMS9DBRLEfuqGxFIjlzx3ek6uUr/R1nxknlrS6a
+	 ieY4HB3aHq6eA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DC0AD609CD;
-	Mon, 13 Dec 2021 14:20:28 +0000 (UTC)
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 160EE609CD;
+	Mon, 13 Dec 2021 14:20:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: socfpga: fix for v5.16, part 2
+Subject: Re: [GIT PULL] i.MX fixes for 5.16
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <163940522889.6863.18058594772028264127.git-patchwork-notify@kernel.org>
-Date: Mon, 13 Dec 2021 14:20:28 +0000
-References: <20211203181007.3138381-1-dinguyen@kernel.org>
-In-Reply-To: <20211203181007.3138381-1-dinguyen@kernel.org>
-To: Dinh Nguyen <dinguyen@kernel.org>
+ <163940522908.6863.10439458403350236222.git-patchwork-notify@kernel.org>
+Date: Mon, 13 Dec 2021 14:20:29 +0000
+References: <20211126100716.GF4216@dragon>
+In-Reply-To: <20211126100716.GF4216@dragon>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri,  3 Dec 2021 12:10:07 -0600 you wrote:
-> Hi Arnd/Olof,
+On Fri, 26 Nov 2021 18:07:17 +0800 you wrote:
+> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 > 
-> please pull in this DTS QSPI fix for v5.16.
+>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 > 
-> Thanks,
-> Dinh
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.16
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: socfpga: fix for v5.16, part 2
-    https://git.kernel.org/soc/soc/c/ddae25ed97f5
+  - [GIT,PULL] i.MX fixes for 5.16
+    https://git.kernel.org/soc/soc/c/708038dc3715
 
 You are awesome, thank you!
 -- 
