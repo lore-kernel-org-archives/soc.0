@@ -1,90 +1,222 @@
-Return-Path: <SRS0=t/un=Q6=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=5swK=Q6=linux.intel.com=andriy.shevchenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0311DC433FE
-	for <soc@archiver.kernel.org>; Mon, 13 Dec 2021 16:29:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D95A7C43217
+	for <soc@archiver.kernel.org>; Mon, 13 Dec 2021 16:39:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9BF0AC34603; Mon, 13 Dec 2021 16:29:30 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+	id AECDEC34604; Mon, 13 Dec 2021 16:39:54 +0000 (UTC)
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3C46FC34604;
-	Mon, 13 Dec 2021 16:29:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3C46FC34604
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MQuPJ-1n7znc14x5-00NztV; Mon, 13 Dec 2021 17:29:27 +0100
-Received: by mail-wr1-f53.google.com with SMTP id o13so27958698wrs.12;
-        Mon, 13 Dec 2021 08:29:27 -0800 (PST)
-X-Gm-Message-State: AOAM531va1Wdz14ynQJ7EzDqHXt4R7GiICZMZ7eCb7nTuc2pDBYbajkE
-	j6EaYPk3ZW0EhDnzTmhbU33ZC5Jwfdxl7A3HEBU=
-X-Google-Smtp-Source: ABdhPJwG1WZRcYp8Ayblot4FmiUPU2o8ulqLJOd1oO3UWNGAmNWkt5SFVqDLLkyRFkJ8yFRh7CcmrgtDmB9Gegd1GTQ=
-X-Received: by 2002:a5d:6902:: with SMTP id t2mr32606385wru.317.1639412966819;
- Mon, 13 Dec 2021 08:29:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20211202095255.165797-1-herve.codina@bootlin.com> <20211202095255.165797-6-herve.codina@bootlin.com>
-In-Reply-To: <20211202095255.165797-6-herve.codina@bootlin.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 13 Dec 2021 17:29:10 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3YGOS5Bp+vFCfsGOUsEfwgJoNxJAGVXZv=QQ73k6Eoqg@mail.gmail.com>
-Message-ID: <CAK8P3a3YGOS5Bp+vFCfsGOUsEfwgJoNxJAGVXZv=QQ73k6Eoqg@mail.gmail.com>
-Subject: Re: [PATCH 5/6] irq: spear-shirq: Add support for IRQ 0..6
-To: Herve Codina <herve.codina@bootlin.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id D779CC34609;
+	Mon, 13 Dec 2021 16:39:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D779CC34609
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="238717356"
+X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
+   d="scan'208";a="238717356"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 08:39:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
+   d="scan'208";a="609150188"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 13 Dec 2021 08:39:40 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id E553114F; Mon, 13 Dec 2021 18:39:47 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Sam Shih <sam.shih@mediatek.com>,
+	Zhiyong Tao <zhiyong.tao@mediatek.com>,
+	Ludovic Desroches <ludovic.desroches@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
+	Radim Pavlik <radim.pavlik@tbs-biometrics.com>,
+	Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+	Colin Foster <colin.foster@in-advantage.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Herve Codina <herve.codina@bootlin.com>,
+	linux-gpio@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-actions@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	bcm-kernel-feedback-list@broadcom.com,
+	linux-rpi-kernel@lists.infradead.org,
+	patches@opensource.cirrus.com,
+	alsa-devel@alsa-project.org,
+	linux-mediatek@lists.infradead.org,
+	linux-oxnas@groups.io,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-msm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, 
-	SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	DTML <devicetree@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:FRPJBLoecxhWGN3iMQtlPIgePp5eGHHvdx7aAJ3vjmCJoiWIvVS
- 70eS2vzESk3U/rbwAjyiarHgmEd/Yuk+rftBXcmlo3rKDLY8XR6yaXr/lQrT+0KU5Gw4Xk6
- V43pbFM0vyqiy8UraYf6itF4p1aNmzVMBHO5n7+Cm9Z4pxuo2UNEI9i1uIeJQS5eVA+yaG/
- hlnWZcXv/evvUVvJ9Awzw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gmBW95zFosU=:f01jL9eZkOFHkcTA1JfA98
- e22/UwPxeZPvEXiOAcbBPbukmHvX0QPVSJq7wVVCbHqkLEsEduFRTU9qqXL8HVuPUyQRwfAOg
- WjjYLhzmFVIqq2IP5p299pVgRy0wTROwArkksinZzSFUxnRoSGNXAiURRisoAzw+QtR2ymAuy
- YfncCTKRw1wR/BpiUoEZXPpLMZn02DNJMV90KSxcq3w9E08DOGhbyYusSNlRESoOqeJLMr89p
- qy7/aTfLpCHElVxAhmrp4nSGal4WVz7Sh6glkBzcNCuhA7bT9MsC+xbJw+tztnyHjrusOXuhL
- 3IMP7apGy3tCm2/ilbrXfqj59M4eafOSjPWATcvoAEYqfaaacQmLhimHcFlj3v13ZGeCYEbc/
- Y3812fkADl87/0QwhlPB1gwcQQwUpq6FWMUtS8MXotZQaZLC6vtSqVyW83Gw0/lDuBpAKRYGn
- Gp4e2AqEBrxW21XHBYER6FbeQwlPuZIdXXKaBC8Tmoo3pOBAHrja+Oum1sHA1DZLm+d5PvV/s
- 8GVhm4cRxFMyOUgHV6Re3wJcTWRsKTOTRwhBVLespXxG7NNaXSXUks2GzYqj4tCHcAiQsfyqD
- WCv6mPF3JsPCtCsm/ZL73ZrpaWmWpCwKTUCqe634hSBMBLsRk+eG8ygWNKl7JDsCkjYZ/razE
- Jfvtlb1PxbcRhfJ830BxGMc2IU5lCy+vfmsO6O8OJQIdcjyHfPLcPA0ckjKUoEALeuwxjqlQh
- XeV472aVwSySr6jbZg0Aqjpzyg1ORZgxmL8OJJZ3jDnwSfdnSA0j5cTzGNCidUncNIY63fak3
- 8Fj1hIRLd6djnIABRwK0R6naMbNFq7WKJdw4Oio7uZqKC20fas=
+Cc: =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Nicolas Saenz Julienne <nsaenz@kernel.org>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	Sean Wang <sean.wang@kernel.org>,
+	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Baruch Siach <baruch@tkos.co.il>,
+	Neil Armstrong <narmstrong@baylibre.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Andy Gross <agross@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	soc@kernel.org
+Subject: [PATCH v1 2/2] pinctrl: Propagate firmware node from a parent device
+Date: Mon, 13 Dec 2021 18:39:29 +0200
+Message-Id: <20211213163929.7509-2-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211213163929.7509-1-andriy.shevchenko@linux.intel.com>
+References: <20211213163929.7509-1-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 2, 2021 at 10:52 AM Herve Codina <herve.codina@bootlin.com> wrote:
->
-> IRQ 0..7 are not supported by the driver for SPEAr320 SOC family.
->
-> IRQ 0 is not reserved in SPEAr320 SOC (assigned to GPIOINT).
-> Furthermore, in SPEAr320s SOC variant, IRQ 0..6 are assigned
-> as follow:
->   IRQ 6 - NGPIO_INTR: Combined status of edge programmable
->                       interrupts from GPIO ports
->   IRQ 5 - TX_OR_INTR: I2S interrupt on Transmit FIFO overrun
->   IRQ 4 - TX_EMP_INTR: I2S interrupt on Transmit FIFO empty
->   IRQ 3 - RX_OR_INTR: I2S interrupt on Receive FIFO overrun
->   IRQ 2 - RX_DA_INTR: I2S interrupt on data available in Receive FIFO
->   IRQ 1 - Reserved
->   IRQ 0 - GPIO_INTR: Legacy interrupt from GPIO ports
->
-> Add support for these IRQs in SPEAr320 SOC family.
->
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+When creating MFD platform devices the firmware node is left unset.
+This, in particular, prevents GPIO library to use it for different
+purposes. Propagate firmware node from the parent device and let
+GPIO library do the right thing.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pinctrl/cirrus/pinctrl-madera-core.c | 3 ++-
+ drivers/pinctrl/pinctrl-as3722.c             | 4 ++--
+ drivers/pinctrl/pinctrl-da9062.c             | 5 ++---
+ drivers/pinctrl/pinctrl-max77620.c           | 3 ++-
+ drivers/pinctrl/pinctrl-rk805.c              | 4 ++--
+ 5 files changed, 10 insertions(+), 9 deletions(-)
 
-I took patches 4 and 6 into the soc tree now.
+diff --git a/drivers/pinctrl/cirrus/pinctrl-madera-core.c b/drivers/pinctrl/cirrus/pinctrl-madera-core.c
+index dce2626384a9..b48646bd3f55 100644
+--- a/drivers/pinctrl/cirrus/pinctrl-madera-core.c
++++ b/drivers/pinctrl/cirrus/pinctrl-madera-core.c
+@@ -1004,13 +1004,14 @@ static int madera_pin_probe(struct platform_device *pdev)
+ 
+ 	dev_dbg(&pdev->dev, "%s\n", __func__);
+ 
++	device_set_node(&pdev->dev, dev_fwnode(pdev->dev.parent));
++
+ 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
+ 	priv->dev = &pdev->dev;
+ 	priv->madera = madera;
+-	pdev->dev.of_node = madera->dev->of_node;
+ 
+ 	switch (madera->type) {
+ 	case CS47L15:
+diff --git a/drivers/pinctrl/pinctrl-as3722.c b/drivers/pinctrl/pinctrl-as3722.c
+index 13c193156363..d5d0f62fa55b 100644
+--- a/drivers/pinctrl/pinctrl-as3722.c
++++ b/drivers/pinctrl/pinctrl-as3722.c
+@@ -551,12 +551,13 @@ static int as3722_pinctrl_probe(struct platform_device *pdev)
+ 	struct as3722_pctrl_info *as_pci;
+ 	int ret;
+ 
++	device_set_node(&pdev->dev, dev_fwnode(pdev->dev.parent));
++
+ 	as_pci = devm_kzalloc(&pdev->dev, sizeof(*as_pci), GFP_KERNEL);
+ 	if (!as_pci)
+ 		return -ENOMEM;
+ 
+ 	as_pci->dev = &pdev->dev;
+-	as_pci->dev->of_node = pdev->dev.parent->of_node;
+ 	as_pci->as3722 = dev_get_drvdata(pdev->dev.parent);
+ 	platform_set_drvdata(pdev, as_pci);
+ 
+@@ -578,7 +579,6 @@ static int as3722_pinctrl_probe(struct platform_device *pdev)
+ 
+ 	as_pci->gpio_chip = as3722_gpio_chip;
+ 	as_pci->gpio_chip.parent = &pdev->dev;
+-	as_pci->gpio_chip.of_node = pdev->dev.parent->of_node;
+ 	ret = gpiochip_add_data(&as_pci->gpio_chip, as_pci);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "Couldn't register gpiochip, %d\n", ret);
+diff --git a/drivers/pinctrl/pinctrl-da9062.c b/drivers/pinctrl/pinctrl-da9062.c
+index 1c08579f0198..678e33d81856 100644
+--- a/drivers/pinctrl/pinctrl-da9062.c
++++ b/drivers/pinctrl/pinctrl-da9062.c
+@@ -256,6 +256,8 @@ static int da9062_pctl_probe(struct platform_device *pdev)
+ 	struct da9062_pctl *pctl;
+ 	int i;
+ 
++	device_set_node(&pdev->dev, dev_fwnode(pdev->dev.parent));
++
+ 	pctl = devm_kzalloc(&pdev->dev, sizeof(*pctl), GFP_KERNEL);
+ 	if (!pctl)
+ 		return -ENOMEM;
+@@ -277,9 +279,6 @@ static int da9062_pctl_probe(struct platform_device *pdev)
+ 	pctl->gc = reference_gc;
+ 	pctl->gc.label = dev_name(&pdev->dev);
+ 	pctl->gc.parent = &pdev->dev;
+-#ifdef CONFIG_OF_GPIO
+-	pctl->gc.of_node = parent->of_node;
+-#endif
+ 
+ 	platform_set_drvdata(pdev, pctl);
+ 
+diff --git a/drivers/pinctrl/pinctrl-max77620.c b/drivers/pinctrl/pinctrl-max77620.c
+index c643ed43ebbf..4b60ff20e9f7 100644
+--- a/drivers/pinctrl/pinctrl-max77620.c
++++ b/drivers/pinctrl/pinctrl-max77620.c
+@@ -551,12 +551,13 @@ static int max77620_pinctrl_probe(struct platform_device *pdev)
+ 	struct max77620_pctrl_info *mpci;
+ 	int i;
+ 
++	device_set_node(&pdev->dev, dev_fwnode(pdev->dev.parent));
++
+ 	mpci = devm_kzalloc(&pdev->dev, sizeof(*mpci), GFP_KERNEL);
+ 	if (!mpci)
+ 		return -ENOMEM;
+ 
+ 	mpci->dev = &pdev->dev;
+-	mpci->dev->of_node = pdev->dev.parent->of_node;
+ 	mpci->rmap = max77620->rmap;
+ 
+ 	mpci->pins = max77620_pins_desc;
+diff --git a/drivers/pinctrl/pinctrl-rk805.c b/drivers/pinctrl/pinctrl-rk805.c
+index c6f4229eb106..528832b54b29 100644
+--- a/drivers/pinctrl/pinctrl-rk805.c
++++ b/drivers/pinctrl/pinctrl-rk805.c
+@@ -420,18 +420,18 @@ static int rk805_pinctrl_probe(struct platform_device *pdev)
+ 	struct rk805_pctrl_info *pci;
+ 	int ret;
+ 
++	device_set_node(&pdev->dev, dev_fwnode(pdev->dev.parent));
++
+ 	pci = devm_kzalloc(&pdev->dev, sizeof(*pci), GFP_KERNEL);
+ 	if (!pci)
+ 		return -ENOMEM;
+ 
+ 	pci->dev = &pdev->dev;
+-	pci->dev->of_node = pdev->dev.parent->of_node;
+ 	pci->rk808 = dev_get_drvdata(pdev->dev.parent);
+ 
+ 	pci->pinctrl_desc = rk805_pinctrl_desc;
+ 	pci->gpio_chip = rk805_gpio_chip;
+ 	pci->gpio_chip.parent = &pdev->dev;
+-	pci->gpio_chip.of_node = pdev->dev.parent->of_node;
+ 
+ 	platform_set_drvdata(pdev, pci);
+ 
+-- 
+2.33.0
 
-       Arnd
