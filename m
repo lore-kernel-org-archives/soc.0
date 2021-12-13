@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69DA3C41535
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A4B5C433EF
 	for <soc@archiver.kernel.org>; Mon, 13 Dec 2021 14:20:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 39101C3460F; Mon, 13 Dec 2021 14:20:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1FD26C34610;
+	id 45713C34603; Mon, 13 Dec 2021 14:20:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 302FFC3460C;
 	Mon, 13 Dec 2021 14:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1639405229;
-	bh=KP43nJQd9VFXpcil1R7dPybn0nfZJ78uA1tdyYKxvCc=;
+	bh=bRC+j2pA0gsOFhCv7YFltqYvbWY8xOTEonTonVjKCAI=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=GL02bnTUqvtMw9WWiyj7z4xoY6kEi11fV4sALTsYMfzMcb85XbR0MqCBmWFJdVLS4
-	 gHn5N13mgNln44nZv7JIuP+OguJSWPsfxqg/VRU7AVL67dEWR+WfXYmBEDM/NEVnbH
-	 ya7PzLftAnDadg+RoXtemEDtLez2ki/2Q/4BN0iUWtCal12349cLi0YNFYPq0J9RS0
-	 TZhYwOnFeD68TELWZ+aYlzi5lXlWqsyN7MNpvl1SIFNdDHyE6Od1CMfrT8Tn1Ibkd8
-	 IgpSxNT8aJlqeALQpNC/0w6Z85WdRD3fYSVvgFESBFAk/j6DDQ6p0SJfheWi0Rbxou
-	 0MG5n/CJ9+oyg==
+	b=kcDYkL1RP8rbMNpIIHVp50w1zOwrB2fDEbv5qjj2GMoJpOvIaYtZMBka7mcjUnNAp
+	 5j8OFMPzP3SRBNeuqpgJEgL/w8YTpvLQwjZ7Nekz+UgowOOTYKbJNcFTzUcnxgBfps
+	 wCJADglx7y/9rDR0acQq+9Qx0XQseSCIzBxQX+H3gfJ6TGaOlnR2BY5xQ1mT/Nq8L7
+	 TwvOjIRxjxp97GjwK9t62TAX/qG6yhjH7KUJ0DLb3cKKiz6BRfqFZ3pB1wvbOU0HB2
+	 /lNi9BuRVYWvq8ziJcEgupxtvPDEbVhdSFnjI1BnNrn2+ynnTq5jmu4O5pYL/HCWi5
+	 rVbw0hjWHN2/g==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0C91A6098C;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 1FBE3609F5;
 	Mon, 13 Dec 2021 14:20:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip soc fix for 5.16
+Subject: Re: [GIT PULL] Apple SoC fixes for 5.16
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <163940522904.6863.10859242560557867593.git-patchwork-notify@kernel.org>
+ <163940522912.6863.6964086053125565190.git-patchwork-notify@kernel.org>
 Date: Mon, 13 Dec 2021 14:20:29 +0000
-References: <1827929.9bfCS3lLB7@phil>
-In-Reply-To: <1827929.9bfCS3lLB7@phil>
-To: Heiko Stuebner <heiko@sntech.de>
+References: <cc9a1a67-3b2d-ae9f-5733-859111eb78c1@marcan.st>
+In-Reply-To: <cc9a1a67-3b2d-ae9f-5733-859111eb78c1@marcan.st>
+To: Hector Martin <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 13 Dec 2021 11:05:51 +0100 you wrote:
-> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+On Tue, 7 Dec 2021 14:52:22 +0900 you wrote:
+> Hi SoC folks,
 > 
->   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+> Please merge these Apple SoC fixes for 5.16.
 > 
-> are available in the Git repository at:
+> These fix some minor post-merge DT issues we found.
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v5.16-rockchip-socfixes1
+> -Hector
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Rockchip soc fix for 5.16
-    https://git.kernel.org/soc/soc/c/38d5b296d39e
+  - [GIT,PULL] Apple SoC fixes for 5.16
+    https://git.kernel.org/soc/soc/c/f6bdc6106727
 
 You are awesome, thank you!
 -- 
