@@ -1,122 +1,99 @@
-Return-Path: <SRS0=Zi3l=Q6=baylibre.com=narmstrong@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3BFBC433F5
-	for <soc@archiver.kernel.org>; Mon, 13 Dec 2021 13:28:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 393ACC43217
+	for <soc@archiver.kernel.org>; Mon, 13 Dec 2021 14:20:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D67D7C34604; Mon, 13 Dec 2021 13:28:44 +0000 (UTC)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E9225C34603
-	for <soc@kernel.org>; Mon, 13 Dec 2021 13:28:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E9225C34603
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f51.google.com with SMTP id y196so11891619wmc.3
-        for <soc@kernel.org>; Mon, 13 Dec 2021 05:28:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:subject:to:cc:organization:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=23RiMUONgxSu+hkWm+3dwrf+Dsp2HM7Sz/XZAGIt32k=;
-        b=Mz061YGBwILW/EknAdMN9Q0Bd8GfMCdJaLVUfzm8Ozk/K2O79v+pTnj40XcvWnRM2Z
-         DpF7uzprvcKTJEWgtP0LkKLUJByB6crM5gvWaC7R56cHJgJ/0hD0VS8U52RwbBENrO+n
-         o4Hkdg1Mc8QlDA5FwlDmulkQ8fvDjwghzCyObPpU6R6IbEXMq8IAg2M4JmA2nrPqCKZJ
-         7H2j82O+PZ1Vk7Ya2jLupKEZtPrqUu5vND/F3t3gc8R7RLfuQQROGTsEvW8d3oYs8q06
-         hSzuAoP81D/HIDQjFadHZHYTU9zp/qJnYIc+6csbx8Wf2tLymApV7y8UZMV+MQLrOIIL
-         1maA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:organization:message-id:date
-         :user-agent:mime-version:content-language:content-transfer-encoding;
-        bh=23RiMUONgxSu+hkWm+3dwrf+Dsp2HM7Sz/XZAGIt32k=;
-        b=aPCg/9axvVbfOJ1eSpt5psbDfc7TmX3lKdDYgKo+BXIhlao2EA3OLXdr5z+ubikf3I
-         mmtX5rQ5c2WfTMOCL5KuAGMXfSIXXBnxDCPHDUWTi656ttaR6KMsx4QulV9G7N9WzH0o
-         /y5jdFnPky6QFptUzTgPUFAt56mB54gzDF1dYvSL4rPcdFrjFqk4XzkCR4tu4+UVhB3K
-         +tQqKy/T9LSxHU+LOSZtAVn0EJD162iB5CT220qUYB6o9msqjD0D0JI0ImMb3kBCGWdK
-         OLYxgUicXtCcyga94vIuAcfj4Mat4c5IWg7PqFBtGWbQzL4RQ0MZbLfnufgi98TLyc6A
-         ZH4Q==
-X-Gm-Message-State: AOAM531YhkQEphH33EOG2Cp/PJ8vFRiZXJ2xIGsKX3oaaFLVU/f8fW+n
-	k/hPQ6dy10N2RN+A+VMdoraDIg==
-X-Google-Smtp-Source: ABdhPJzIBUb6/PVRo+jPBPQcxeKDX3aJlABs5tPk/R0darWP3ToaP2ZpcDX1G931Y4UAqLc2BRQRFA==
-X-Received: by 2002:a05:600c:1f08:: with SMTP id bd8mr13796805wmb.77.1639402122128;
-        Mon, 13 Dec 2021 05:28:42 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:3328:f8ef:d20f:532a? ([2001:861:44c0:66c0:3328:f8ef:d20f:532a])
-        by smtp.gmail.com with ESMTPSA id n33sm7359713wms.46.2021.12.13.05.28.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 05:28:41 -0800 (PST)
-From: Neil Armstrong <narmstrong@baylibre.com>
-Subject: [GIT PULL] arm64: dts: amlogic updates for v5.17
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org
-Organization: Baylibre
-Message-ID: <f47b9b95-6cde-d2f8-eb36-78777d449920@baylibre.com>
-Date: Mon, 13 Dec 2021 14:28:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+	id 0BB1EC3460B; Mon, 13 Dec 2021 14:20:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E9E85C34607
+	for <soc@kernel.org>; Mon, 13 Dec 2021 14:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639405228;
+	bh=4mAtnxJeyq58X06MHCOWEYK4w5+ETt1Rmgmpt5hogzI=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=p/QrN86i37C+Tc6wCv33C8OT1JrtQ7eTvQBYkWW7ZJ6hr0Nzd/ixoll56YlRlew++
+	 JbQdZ69YgG9kkuPhXrUIBfivaVi7wCqAmgSH15r1dpm/t6grx6vtcry9GBiucnTXw0
+	 X3E3/JOrx1ieYVe6mKOnejT1+eGN8letFYdh/C+HFnkvbpZtN/FobI6OdVP3pEZOxS
+	 nfXPZAPPqYA02Bk+M6BM6VPx66HRNPjg2eXHoTMQAL2vL0uwsMF83vCGVKzbXJBhH7
+	 LoKGKjL+FEBF6cUL+mBHjBjwHuIu5RXVCmtN5stUKn+fP+fHYnx+XaPuQlxIJfbXVS
+	 hW7Kx6NRB/QWQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C702D6098C;
+	Mon, 13 Dec 2021 14:20:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <163940522876.6863.14879477184827545080.git-patchwork-summary@kernel.org>
+Date: Mon, 13 Dec 2021 14:20:28 +0000
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-Hi,
+Hello:
 
-Here's a set of Amlogic ARM64 DT changes for v5.17, with minor fixes and additions.
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-Neil
+Patch: [GIT,PULL] AMD-TEE fix for v5.16
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=587567
+  Lore link: https://lore.kernel.org/r/20211130070351.GA2308099@jade
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+Patch: [GIT,PULL] ARM: socfpga: fix for v5.16, part 2
+  Submitter: Dinh Nguyen <dinguyen@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=590059
+  Lore link: https://lore.kernel.org/r/20211203181007.3138381-1-dinguyen@kernel.org
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+Patch: [GIT,PULL] Rockchip dts fixes for 5.16
+  Submitter: Heiko Stuebner <heiko@sntech.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=594667
+  Lore link: https://lore.kernel.org/r/3072346.MIvVl8DfR5@phil
 
-are available in the Git repository at:
+Patch: [GIT,PULL] firmware: tegra: Fixes for v5.16-rc5
+  Submitter: Thierry Reding <thierry.reding@gmail.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=591721
+  Lore link: https://lore.kernel.org/r/20211207162115.450554-1-thierry.reding@gmail.com
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v5.17
+Patch: [GIT,PULL] i.MX fixes for 5.16, round 2
+  Submitter: Shawn Guo <shawnguo@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=594025
+  Lore link: https://lore.kernel.org/r/20211211015625.GK4216@dragon
 
-for you to fetch changes up to 0a62b3cc0af9322e650fe89bea0bacdedf01960a:
+Patch: [GIT,PULL] Rockchip soc fix for 5.16
+  Submitter: Heiko Stuebner <heiko@sntech.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=594669
+  Lore link: https://lore.kernel.org/r/1827929.9bfCS3lLB7@phil
 
-  arm64: dts: meson: p241: add sound support (2021-12-01 10:27:13 +0100)
+Patch: [GIT,PULL] i.MX fixes for 5.16
+  Submitter: Shawn Guo <shawnguo@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=586295
+  Lore link: https://lore.kernel.org/r/20211126100716.GF4216@dragon
 
-----------------------------------------------------------------
-Amlogic ARM64 DT changes for v5.17:
-- Add missing cec nodes for Odroid-C4 & HC4
-- Fix thermal-zones indent for G12/SM1 SoCs dtsi
-- Fix GPU OPP table node name for G12/SM1 SoCs dtsi
-- Fix SPI NOR Flash node name for Odroid-N2/N2+
-- Fixes for GXBB Wetek boards:
- - Fix HDMI supply
- - Add missing gpio bindings include
- - Switch to new LED bindings
-- P241 additions:
- - Add VCC 5v regulator
- - Add sound nodes
+Patch: [GIT,PULL] Apple SoC fixes for 5.16
+  Submitter: Hector Martin <marcan@marcan.st>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=591333
+  Lore link: https://lore.kernel.org/r/cc9a1a67-3b2d-ae9f-5733-859111eb78c1@marcan.st
 
-----------------------------------------------------------------
-Alexander Stein (3):
-      arm64: dts: amlogic: meson-g12: Fix thermal-zones indent
-      arm64: dts: amlogic: meson-g12: Fix GPU operating point table node name
-      arm64: dts: amlogic: Fix SPI NOR flash node name for ODROID N2/N2+
 
-Christian Hewitt (3):
-      arm64: dts: meson-gxbb-wetek: fix HDMI in early boot
-      arm64: dts: meson-gxbb-wetek: fix missing GPIO binding
-      arm64: dts: meson-gxbb-wetek: use updated LED bindings
+Total patches: 8
 
-Dmitry Shmidt (1):
-      arm64: dts: meson-sm1-odroid: add cec nodes
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Jerome Brunet (2):
-      arm64: dts: meson: p241: add vcc_5v regulator
-      arm64: dts: meson: p241: add sound support
 
- arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  | 112 ++++++++++-----------
- .../boot/dts/amlogic/meson-g12b-odroid-n2.dtsi     |   2 +-
- arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi  |  10 +-
- .../boot/dts/amlogic/meson-gxl-s805x-p241.dts      |  83 +++++++++++++++
- arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi  |  14 +++
- 5 files changed, 162 insertions(+), 59 deletions(-)
