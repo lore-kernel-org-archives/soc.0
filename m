@@ -1,169 +1,111 @@
-Return-Path: <SRS0=Mrsx=Q7=in-advantage.com=colin.Foster@kernel.org>
+Return-Path: <SRS0=TuKk=Q7=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4054FC433EF
-	for <soc@archiver.kernel.org>; Tue, 14 Dec 2021 16:38:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9174DC433EF
+	for <soc@archiver.kernel.org>; Tue, 14 Dec 2021 17:13:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 052ADC34607; Tue, 14 Dec 2021 16:38:32 +0000 (UTC)
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2113.outbound.protection.outlook.com [40.107.236.113])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 5D8B1C34604; Tue, 14 Dec 2021 17:13:59 +0000 (UTC)
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2BD27C34601;
-	Tue, 14 Dec 2021 16:38:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2BD27C34601
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=in-advantage.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=in-advantage.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l2g1Zid6GgXRUGiiBmmQSdIOAgd3aeVV5XQacb5f4o9cZEG2tBYTuqBrDtHUdqTXi07wUDPocZf+ktrxhr2FJeeA2J4ODF9wM+XNfavHX/ReB6lqwnvihoVYQZ4PbdPg708CY1Ddkux5SRVZvknPGQUf+4hnpT4sY3OACKG77hZvol/w6eGOygPTMeJjTugi2pcEyM0UYJMqRKjwOwzPd35VSJR49odvSmvk2bCplFTVpJ8HzLPCQGjK/TbHibmkcsIVXyickzAbptaN2HKmW/EFrWwL4J35rUEZc/5N9udpOQqC2rd4bFyJyXArdg5X1VlOGgK6DhVp3vClTofhxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XjNrnASnMtQvlpU1gLDTsFBKvI9qETcCLvEslZ8qlzM=;
- b=c8c9rk1qRdGubGsIqXrthJ1lEkdNGyijgz/aziAkpM/x20GggkYmhbD78wGREc37Y+V2i3L1X9wsXBJCMtmCxW6JkPMBJukGcUyKhxDpebiHaxds+j4LEO6lc+3KPsHFQ5y/JD2PWe28/1NW9+CLH+1Uuvyc5dX1Am9xaf49AK0+WZ9ELQiVswg/hSAqNQHTnfcX4E6VHjiIMwsvhOVk0++EhaUDuYsMWBTlOPAnImUckrhSqUEfPhcENMT4bxA6XZ2Fv+P6IyrRyzNOQYL+l4bYZ/+9XJod4oZHwM2yeVYVVAZDfmNiKUvgwSrAmJEGrLIBP98y+WmgGs4APm0UQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+	by smtp.kernel.org (Postfix) with ESMTPS id C4937C34601;
+	Tue, 14 Dec 2021 17:13:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C4937C34601
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f42.google.com with SMTP id n15-20020a17090a394f00b001b0f6d6468eso1275331pjf.3;
+        Tue, 14 Dec 2021 09:13:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XjNrnASnMtQvlpU1gLDTsFBKvI9qETcCLvEslZ8qlzM=;
- b=XBwNzDml//t28qy+iNDKmhJt/zku/8/vrgKXjkEshChw0P0mOMcg2tV1WpADWIrGIKExiTUBOu+g8tttVYELZFQgM4stPfj9HMsDmVM0Rs31BZKjRpqlhOWDoe2+YsHQgCVfWQOCvM6ZxnEu4xuOvcLCp2cPp1t808K6M/QVAbo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by CO1PR10MB4804.namprd10.prod.outlook.com
- (2603:10b6:303:94::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Tue, 14 Dec
- 2021 16:38:27 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4755.028; Tue, 14 Dec 2021
- 16:38:26 +0000
-Date: Tue, 14 Dec 2021 08:38:18 -0800
-From: Colin Foster <colin.foster@in-advantage.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tugJp5D5IpQgFg8l5QRIhJX6Y9Z0ioa0/7+gIlEz3qE=;
+        b=pxsuNCJM+lU38EQM20+x9Zy1a4i80lkFsY5CK7WVgP5pX7QfaK/i6hoh62qCmZhUpt
+         aQqlRTyUAuznwkwTMNd19JtdjUdmVC/uvr5cMY6tK06vfTQmNl22wBQdo9KNrEa7jHrY
+         H3onaMNOuYtVNjDOKmnAqeO/G3LPQEuQaKzhe1baulW0D9n0pEaE1bYvjyjOPYc+4owY
+         Ztk++SNpuRUhta7tnml+yIT52R1zHbyFLiClAiqm3oygZxCQB713/Q3Tt2RBpzotSkOe
+         281nwvNxYIafT0ZqI3PqUWbXsaVXQ/KNituaHvOpNTwdKuHqEWUBMdB5JtS7YF62CBD/
+         5kmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tugJp5D5IpQgFg8l5QRIhJX6Y9Z0ioa0/7+gIlEz3qE=;
+        b=uIj+nSiWNsyR/IyWUP6LJ5WiZybOP8Asl1EbjRwWfMqpKITaSJ0QvPH/iiDvFHPZoI
+         U8+i+5Lmz8QUpb+4Bw4CGTw8c9tua1aSlbd3bH2rPj+5z/5ilyZW5ZxYGr/q9Egjn6Bc
+         XymBzGKaDR4qe2t3WJJf970tDvHxriXEoRef9/31QNLEiYmJ4hrY//jRIWmxr2zR5JG4
+         /aijeFCBcqw8H1O35877iaHQ2kSFj/UzHiUc/S2EKR/nBRKKcrl6U5/QxGIP8I24e2Xe
+         bGSUZzydMTuyaECOHR8GTKmanwgnxD3RsbXH4EiVtGJJDDjas1zVSfThZOEVem+K5Qwa
+         zYJw==
+X-Gm-Message-State: AOAM531yDte/z12a0fnl/LUdhCSx1m/dKBax7IlqgMpTKqM3dqQq5JOl
+	JdDIJKRbPOjIa+NG2sJw3AU=
+X-Google-Smtp-Source: ABdhPJxpijNDMpsc1+N/NsvL3PaDQe4IvY9BU0G6YCxmaYtRdliXsYybikPTzbxuDaS5A0EHEsEdWQ==
+X-Received: by 2002:a17:90a:e7d0:: with SMTP id kb16mr6963484pjb.22.1639502038302;
+        Tue, 14 Dec 2021 09:13:58 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id h15sm382938pfc.134.2021.12.14.09.13.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Dec 2021 09:13:57 -0800 (PST)
+Subject: Re: [GIT PULL 1/1] Broadcom devicetree fixes for 5.16
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Marc Zyngier <maz@kernel.org>,
-	Sam Shih <sam.shih@mediatek.com>,
-	Zhiyong Tao <zhiyong.tao@mediatek.com>,
-	Ludovic Desroches <ludovic.desroches@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Radim Pavlik <radim.pavlik@tbs-biometrics.com>,
-	Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-	Douglas Anderson <dianders@chromium.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Herve Codina <herve.codina@bootlin.com>, linux-gpio@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-	bcm-kernel-feedback-list@broadcom.com,
-	linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-	patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
-	linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	Sean Wang <sean.wang@kernel.org>,
-	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Support Opensource <support.opensource@diasemi.com>,
-	Baruch Siach <baruch@tkos.co.il>,
-	Neil Armstrong <narmstrong@baylibre.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Andy Gross <agross@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org
-Subject: Re: [PATCH v2 2/2] pinctrl: Propagate firmware node from a parent
- device
-Message-ID: <20211214163818.GA2429@DESKTOP-LAINLKC.localdomain>
-References: <20211214125855.33207-1-andriy.shevchenko@linux.intel.com>
- <20211214125855.33207-2-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214125855.33207-2-andriy.shevchenko@linux.intel.com>
-X-ClientProxiedBy: MWHPR1201CA0017.namprd12.prod.outlook.com
- (2603:10b6:301:4a::27) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+To: Florian Fainelli <f.fainelli@gmail.com>, soc@kernel.org
+Cc: Phil Elwell <phil@raspberrypi.com>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Nicolas Saenz Julienne <nsaenz@kernel.org>,
+ Stefan Wahren <stefan.wahren@i2se.com>,
+ linux-arm-kernel@lists.infradead.org, arnd@arndb.de, olof@lixom.net,
+ khilman@kernel.org, bcm-kernel-feedback-list@broadcom.com
+References: <20211214033617.2979148-1-f.fainelli@gmail.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <e7f3edb9-4691-2136-7884-b7bea2ac892c@gmail.com>
+Date: Tue, 14 Dec 2021 09:13:55 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Received: from DESKTOP-LAINLKC.localdomain (96.93.101.165) by MWHPR1201CA0017.namprd12.prod.outlook.com (2603:10b6:301:4a::27) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Tue, 14 Dec 2021 16:38:18 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b61018ad-ff09-4a5d-4f11-08d9bf2026d6
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4804:EE_
-X-Microsoft-Antispam-PRVS:
-	<CO1PR10MB48048BC2F31CC20029B25C22A4759@CO1PR10MB4804.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	9DVWcaoJwmrbfuGxIJmxqYpoEkU4195QXxDInDOyNXTW7iH4U5G1+DZAdmTGD6r7zLC8ex7ucqHppfJGjjPhiPgPX5Oy5wrv8FO3/zkxYo6uqdJRKvhkE8Jbq+NmTricNzpYNGlGsTRJn0O8ge6LrffXKXe0JabGBlp9SAkKPrcC5L0/ouSdJ8QXYclTWv0Q87nnabt8s2YsevWX/NnYa8Lns5O0THPVPogy+5CxbSnMBerW6LVJTWar+QGDHCWOetZjoBNoOkwpxI0gyAdUBdIBkXGcmvWdZ1lcvatpI8Xxmpm8eMvs13q7LSXMn5eKZsotmgEjPDtTepJAc6dqAjR8RPHKEqn4eVWqKlD3AeR0jEatlB0a3+eyopDp57Cfj6bU+ritNt+rdmqFzVbTZPg07x2MUxThvaz28s5iEL5enKEIYDMVioVfGAZUHee5BLinf6e2E+hVobuEEcmK1SOrxKL2LuCJbqRXx1ch7ponOZhUSsZ4QbwUUIsnmca0HTWU4k+V5B8NgmVOysMHOXTmBnz721yXsFa/X+ge+mXwGRVuvNVwzpVzHEjtNWHySR4cZscYGgBzkRNLMqgZyfEa1apkqD6a+6jFVbh9h4EgJbOm0fJKPXVkIxg3P3vSKGSzFEinmAcSa3V+FNpNeyQ7qxqiXHtvEC8Uu3sds+w9W8pmM8FgEVuxvfoMzsjUE6qvznhA/wZa/OzUwsmGBw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(136003)(396003)(39830400003)(346002)(366004)(186003)(38100700002)(66556008)(66476007)(66946007)(6916009)(38350700002)(8676002)(6506007)(4744005)(54906003)(33656002)(8936002)(52116002)(7696005)(7416002)(26005)(55016003)(956004)(1076003)(5660300002)(316002)(44832011)(7406005)(4326008)(9686003)(508600001)(86362001)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?yFz/c0kvXMW9FuDIb72FSPcsUheUAxhwNc4S8qlcryCgoWO6kIZKW7ypbr+8?=
- =?us-ascii?Q?E+pZD5Aj3IRTAeWUcAVJs2dHO9CLVMO031M6CHU0J5JHMVk2G6y38AKurSYP?=
- =?us-ascii?Q?YodrVz+nuWgn9lNsaqz6SyQD45bet/2kNQ1cMH2xtL+hqWu6N+4gupTMCcF3?=
- =?us-ascii?Q?eONFwtZcC6kB8u3KocmBcJzj5J/Z2Ej9l4I3n+WHYeG00qdZuPr+t0WpytUc?=
- =?us-ascii?Q?wGhlutB0KzUlIsLb2u15A3PygM9y2rFK50Unke/2cgmQZh1YEjMYN7iamHkA?=
- =?us-ascii?Q?x0wQCQh+9Oo7/PqbdXbSLoOLQRHF/GiLL6K+8ijTtU09E7iCwsaAE12DJ2Mg?=
- =?us-ascii?Q?i6S4kHs+mQDxt5GV8+POOdEMS5f932yYamnuy2j2tATmTwbPaP0EFMbdDxBU?=
- =?us-ascii?Q?nfd+Yn5cKZotpQQvw5SPCYdkhzGl445xmulsubPVTM/J3MjXR7RyQmA7Bjl1?=
- =?us-ascii?Q?ZGmFzXWK6xeNVaAeSY7fSe17a7Xomz6kxyHlayFEdE7CNoSk09UgmA6NkfvW?=
- =?us-ascii?Q?+dylVuB5lRr/YQPnlskBt3xFkgflqybb3p43DZovM46m81Q448Ai4R6ryW+v?=
- =?us-ascii?Q?5zO5+w/xoNqdmWUpDvRCzsgKn4crD7ARojod9MrXTcUwszLGpZ8Gxp9xk6AP?=
- =?us-ascii?Q?SoyQZBLOtF5GbbPBGIYt9NHyaRoZBFFJrYo3cTMWRrqgg0fHyF8ej10Y90P4?=
- =?us-ascii?Q?YKUIdjc0Zn72bLb9QcAvZGuAkw52ax5dz3u07RHhGsgRSv4I9/j2Uz/o2iX4?=
- =?us-ascii?Q?kkuYdWhAmixLFdP3E4kZjUQpMZ9vZIDc71fhUGM6CxUWFfYtQ2PX9WNXwmnl?=
- =?us-ascii?Q?4eYKGlOjpfzB8ObEINH2CoTwi/wtKKYS94duvwzSVeE+bX/hYojpbvXcBxzV?=
- =?us-ascii?Q?maXAuUypG4zBT9vhxcpDI1rtto6T7TcCCS3ztthVmRyXHAxt6NNargtZ5L6E?=
- =?us-ascii?Q?jAhti48l7Y4OEgt3SnJ6dIDsyQz+xSKMmjOFgIapz33eDxhmQVZgXhEBy1K6?=
- =?us-ascii?Q?Fwj8u6wkUShnU6J1K8Xf8A92wl7HFPRxMUUo5QH3Rb1XhaQ5bRBWk0a6r7+W?=
- =?us-ascii?Q?987lg646Z5nNnWkDov05osZe5HVmJn965cIeKd8sNUpuNjt00XZaEYf/BNha?=
- =?us-ascii?Q?wTb9hPz6pBixx5PerRncqHfcVszskh2xs14KWbIdcfAOLTDIBzoWg/ku45sJ?=
- =?us-ascii?Q?/UDoaL/zmk5O/AYuCCwYplLftkp4NWSUpSqZVusx7UbxnMl2A9CR2qMjzQCf?=
- =?us-ascii?Q?53GA6F2XxVSd+g+/3p2sLYbRCixYEtlLK7/3+YxYIe2LikWXZN1rVcbnUFGb?=
- =?us-ascii?Q?5OCKN4UBEDjzyBgf56b5K/WJ1Sy8OJ/pS09Fwczbe5QEVtKO34etKSJQ05d7?=
- =?us-ascii?Q?Mjt2KWn9s3k46zX9fFhA9YDNsjeeCbb5bQcWHCtUBLJXGGmDHVm1NhZUG76z?=
- =?us-ascii?Q?iMFf6dq+N7v0BkJlWoaYbga0xKx4a0K+XEtAaWGQSEh7SmtDvOrdl4ZO8kI4?=
- =?us-ascii?Q?V0tGRsfGAv+/TVQ7WaJMXPDD+/KLr6rO+G2UBpwGhSZ881oBgRCEAnFXKcn6?=
- =?us-ascii?Q?BgGFe7CIiUVFjQyTKILnFK8g/FV+5+cos2H635XSUp0KHzQOPtp09OK2T7qg?=
- =?us-ascii?Q?BR6V7I8nvMm03l0Q3UEN+pp05tWu2wpjGeK4mVbMYzVafwW+9pQ5LDBq2vk2?=
- =?us-ascii?Q?pXuI3w=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b61018ad-ff09-4a5d-4f11-08d9bf2026d6
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 16:38:26.3573
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5IvMb42RJzlphk+bAr135bBrAbt1TUaj6E/XPPI676cdL31JmlXRjSF41e/SWndEba5qvTdUN8gwvifoQiIMFKPZI5A0TmPRnCKUoMsRROQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4804
+In-Reply-To: <20211214033617.2979148-1-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-On Tue, Dec 14, 2021 at 02:58:55PM +0200, Andy Shevchenko wrote:
-> When creating MFD platform devices the firmware node is left unset.
-> This, in particular, prevents GPIO library to use it for different
-> purposes. Propagate firmware node from the parent device and let
-> GPIO library do the right thing.
+On 12/13/21 7:36 PM, Florian Fainelli wrote:
+> The following changes since commit 98481f3d72fb88cb5b973153434061015f094925:
 > 
+>   ARM: dts: bcm2711: Fix PCIe interrupts (2021-11-15 19:09:47 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.16/devicetree-fixes-part2
+> 
+> for you to fetch changes up to f1d8b8561e84c9caf3e01d726b874d80475b0ffe:
+> 
+>   Merge tag 'tags/bcm2835-dt-fixes-2021-12-13' into devicetree/fixes (2021-12-13 12:20:59 -0800)
+> 
+> ----------------------------------------------------------------
+> This pull request contains Broadcom ARM-based SoCs Device Tree fixes for
+> 5.16, please pull the following:
+> 
+> - Stefan removes a fallback compatible string for the VCIHCQ node in
+>   preparation for allowing the VCIHCQ binding to be converted to YAML
+> 
+> - Phil fixes the GPIO expander labels for the Raspberry Pi 400 GPIO
+>   expander and adds the missing 'gpio-ranges' property for the BCM283x and
+>   BCM2711 Device Tree include files
+> 
+> ----------------------------------------------------------------
+> Florian Fainelli (1):
+>       Merge tag 'tags/bcm2835-dt-fixes-2021-12-13' into devicetree/fixes
+> 
+> Phil Elwell (2):
+>       ARM: dts: bcm2711-rpi-400: Fix GPIO expander labels
+>       ARM: dts: gpio-ranges property is now required
 
-I came across the same thing this week. By populating the of_compatible
-field of the mfd_cell, the child device will have the appropriate
-firmware node populated. Unfortunately that currently means that I'll
-have to put every device type in the MFD instead of in an of_match_table
-in the child driver itself. Figuring that out is one of the next things
-on my list. 
+It looks like the change above needs to be accompanied by
+pinctlr-bcm2835.c changes which have been applied into Linus W's tree.
+Arnd, are you able to back out this pull request for the time being? I
+don't believe any of those fixes are critical for v5.16.
+-- 
+Florian
