@@ -1,111 +1,79 @@
-Return-Path: <SRS0=TuKk=Q7=gmail.com=f.fainelli@kernel.org>
+Return-Path: <SRS0=nEOA=Q7=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9174DC433EF
-	for <soc@archiver.kernel.org>; Tue, 14 Dec 2021 17:13:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFBEEC433F5
+	for <soc@archiver.kernel.org>; Tue, 14 Dec 2021 18:59:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5D8B1C34604; Tue, 14 Dec 2021 17:13:59 +0000 (UTC)
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id B63B0C34606; Tue, 14 Dec 2021 18:59:43 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C4937C34601;
-	Tue, 14 Dec 2021 17:13:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C4937C34601
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id n15-20020a17090a394f00b001b0f6d6468eso1275331pjf.3;
-        Tue, 14 Dec 2021 09:13:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tugJp5D5IpQgFg8l5QRIhJX6Y9Z0ioa0/7+gIlEz3qE=;
-        b=pxsuNCJM+lU38EQM20+x9Zy1a4i80lkFsY5CK7WVgP5pX7QfaK/i6hoh62qCmZhUpt
-         aQqlRTyUAuznwkwTMNd19JtdjUdmVC/uvr5cMY6tK06vfTQmNl22wBQdo9KNrEa7jHrY
-         H3onaMNOuYtVNjDOKmnAqeO/G3LPQEuQaKzhe1baulW0D9n0pEaE1bYvjyjOPYc+4owY
-         Ztk++SNpuRUhta7tnml+yIT52R1zHbyFLiClAiqm3oygZxCQB713/Q3Tt2RBpzotSkOe
-         281nwvNxYIafT0ZqI3PqUWbXsaVXQ/KNituaHvOpNTwdKuHqEWUBMdB5JtS7YF62CBD/
-         5kmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tugJp5D5IpQgFg8l5QRIhJX6Y9Z0ioa0/7+gIlEz3qE=;
-        b=uIj+nSiWNsyR/IyWUP6LJ5WiZybOP8Asl1EbjRwWfMqpKITaSJ0QvPH/iiDvFHPZoI
-         U8+i+5Lmz8QUpb+4Bw4CGTw8c9tua1aSlbd3bH2rPj+5z/5ilyZW5ZxYGr/q9Egjn6Bc
-         XymBzGKaDR4qe2t3WJJf970tDvHxriXEoRef9/31QNLEiYmJ4hrY//jRIWmxr2zR5JG4
-         /aijeFCBcqw8H1O35877iaHQ2kSFj/UzHiUc/S2EKR/nBRKKcrl6U5/QxGIP8I24e2Xe
-         bGSUZzydMTuyaECOHR8GTKmanwgnxD3RsbXH4EiVtGJJDDjas1zVSfThZOEVem+K5Qwa
-         zYJw==
-X-Gm-Message-State: AOAM531yDte/z12a0fnl/LUdhCSx1m/dKBax7IlqgMpTKqM3dqQq5JOl
-	JdDIJKRbPOjIa+NG2sJw3AU=
-X-Google-Smtp-Source: ABdhPJxpijNDMpsc1+N/NsvL3PaDQe4IvY9BU0G6YCxmaYtRdliXsYybikPTzbxuDaS5A0EHEsEdWQ==
-X-Received: by 2002:a17:90a:e7d0:: with SMTP id kb16mr6963484pjb.22.1639502038302;
-        Tue, 14 Dec 2021 09:13:58 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id h15sm382938pfc.134.2021.12.14.09.13.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 09:13:57 -0800 (PST)
-Subject: Re: [GIT PULL 1/1] Broadcom devicetree fixes for 5.16
-List-Id: <soc.lore.kernel.org>
-To: Florian Fainelli <f.fainelli@gmail.com>, soc@kernel.org
-Cc: Phil Elwell <phil@raspberrypi.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Nicolas Saenz Julienne <nsaenz@kernel.org>,
- Stefan Wahren <stefan.wahren@i2se.com>,
- linux-arm-kernel@lists.infradead.org, arnd@arndb.de, olof@lixom.net,
- khilman@kernel.org, bcm-kernel-feedback-list@broadcom.com
-References: <20211214033617.2979148-1-f.fainelli@gmail.com>
-From: Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <e7f3edb9-4691-2136-7884-b7bea2ac892c@gmail.com>
-Date: Tue, 14 Dec 2021 09:13:55 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+	by smtp.kernel.org (Postfix) with ESMTPS id 7028BC34600;
+	Tue, 14 Dec 2021 18:59:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7028BC34600
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MKsf5-1nDuQT1juH-00LG14; Tue, 14 Dec 2021 19:59:40 +0100
+Received: by mail-wm1-f46.google.com with SMTP id z206so744977wmc.1;
+        Tue, 14 Dec 2021 10:59:40 -0800 (PST)
+X-Gm-Message-State: AOAM532f+UICtsV6rd4aI/ki1WNl1VXnSxriG06sGffZF2acYI0QY3XB
+	bzA3xsXK+MiTw3gaMPAAvw/AXhYgyjL5Lf67aZM=
+X-Google-Smtp-Source: ABdhPJyCPlaPGB/J/sliqo7G9+UCEV+mnAvA0IHx/6Q8DbhASxPzlH7VspUW3pThYNMP7OqSNWLQ68yB/2tzJEvZVvU=
+X-Received: by 2002:a05:600c:6d2:: with SMTP id b18mr976745wmn.98.1639508380021;
+ Tue, 14 Dec 2021 10:59:40 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211214033617.2979148-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211214033617.2979148-1-f.fainelli@gmail.com> <e7f3edb9-4691-2136-7884-b7bea2ac892c@gmail.com>
+In-Reply-To: <e7f3edb9-4691-2136-7884-b7bea2ac892c@gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Tue, 14 Dec 2021 19:59:24 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3TkCRSfy=0ogn-+cXB-o0YoJKmYNwnmXeGdZoxjGCOYA@mail.gmail.com>
+Message-ID: <CAK8P3a3TkCRSfy=0ogn-+cXB-o0YoJKmYNwnmXeGdZoxjGCOYA@mail.gmail.com>
+Subject: Re: [GIT PULL 1/1] Broadcom devicetree fixes for 5.16
+To: Florian Fainelli <f.fainelli@gmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>, Phil Elwell <phil@raspberrypi.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Nicolas Saenz Julienne <nsaenz@kernel.org>, 
+	Stefan Wahren <stefan.wahren@i2se.com>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@kernel.org>, 
+	bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:WG9uhT8RogYweVbybbfXGsie1RRWPJysBCr807fLx5E931C2LEX
+ vHO8Qn0H/GTr0VD49Wfg4830hSwgdRyNtJSyKJq9hDhKH+tEHueduwXYuLZIUfLkDf59hUq
+ s8eepFilW7NYFFtL64MVgxRMqGa3auEs7VbDNHPekfTviApt6OMugr1Fe4BVDrDXFZmRYIP
+ QE6+Pr543Tu5aNnXVRQKg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:70L/67eseD0=:FdcRb46L45jpZaukAsgx5/
+ J67ETPM97EcqZV+lgoBZLTF2KCb+5XdjeS9hWYnLqZFNHzgBTGXByD6hTYY75Bp9hVufY0RSV
+ eekjbjtcx5sAIKqvc7TRo8lDau1x1gJTTA7qLETuJ5TPfrrnbLVNYw8tPsgVyhFY4KSuXBTWc
+ 0mEQcE/bGz44f+6/i+PNIKzJs409KD1f0iKOVV572k8V/v6Afkv+Wit2nylS4+VTgRQRu6p9S
+ 9RuEU73Wp0jDUQhRPXN5Yrdmp046NkHkCOP5IFwKvIOAa+zycA06gqsKhC9beNi0ZswGPq3nB
+ G/4xSaQyfv0w75sisQ9YtyEN4xYRjprNh0ixY9zDeEdyMez6EeW7iG+HKoz7d/BzD5yi0D8q3
+ 2MscIhICp6c1Y153zmdJX7gnQ59iyU50Ysdcwvo34XydaLrSYq1Dgsrxgd0VdeU9cEWT+ZNro
+ V1LapTHC0HGJDyV30Z4QOXnTZUUaE+xfLXqvC0xscFiPgckTyX6He+OLV9p8Lx5ngvKLJK432
+ EFeSAA7/QqxBOSSAB4wswVNAE3ezz6glZmhyZmAdZ9do2tmj0FWI1dYfq7QxYzGB5Ho4tipel
+ eGeFwIhBEwQJPhZwRIvd5Iaz2tpLUs6+8KVPDBa5tuwROdvcqQdsyPkQr5s1h17iKwZ0/cTgi
+ Ca7875A66Vt8LZKId+U8PGoAW+Ffs2kuIIj67zxxRNzoYsn3xF00nAHlURlWnd3DXdkc=
 
-On 12/13/21 7:36 PM, Florian Fainelli wrote:
-> The following changes since commit 98481f3d72fb88cb5b973153434061015f094925:
-> 
->   ARM: dts: bcm2711: Fix PCIe interrupts (2021-11-15 19:09:47 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.16/devicetree-fixes-part2
-> 
-> for you to fetch changes up to f1d8b8561e84c9caf3e01d726b874d80475b0ffe:
-> 
->   Merge tag 'tags/bcm2835-dt-fixes-2021-12-13' into devicetree/fixes (2021-12-13 12:20:59 -0800)
-> 
-> ----------------------------------------------------------------
-> This pull request contains Broadcom ARM-based SoCs Device Tree fixes for
-> 5.16, please pull the following:
-> 
-> - Stefan removes a fallback compatible string for the VCIHCQ node in
->   preparation for allowing the VCIHCQ binding to be converted to YAML
-> 
-> - Phil fixes the GPIO expander labels for the Raspberry Pi 400 GPIO
->   expander and adds the missing 'gpio-ranges' property for the BCM283x and
->   BCM2711 Device Tree include files
-> 
-> ----------------------------------------------------------------
-> Florian Fainelli (1):
->       Merge tag 'tags/bcm2835-dt-fixes-2021-12-13' into devicetree/fixes
-> 
-> Phil Elwell (2):
->       ARM: dts: bcm2711-rpi-400: Fix GPIO expander labels
->       ARM: dts: gpio-ranges property is now required
+On Tue, Dec 14, 2021 at 6:13 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> On 12/13/21 7:36 PM, Florian Fainelli wrote:
+> > Florian Fainelli (1):
+> >       Merge tag 'tags/bcm2835-dt-fixes-2021-12-13' into devicetree/fixes
+> >
+> > Phil Elwell (2):
+> >       ARM: dts: bcm2711-rpi-400: Fix GPIO expander labels
+> >       ARM: dts: gpio-ranges property is now required
+>
+> It looks like the change above needs to be accompanied by
+> pinctlr-bcm2835.c changes which have been applied into Linus W's tree.
+> Arnd, are you able to back out this pull request for the time being? I
+> don't believe any of those fixes are critical for v5.16.
 
-It looks like the change above needs to be accompanied by
-pinctlr-bcm2835.c changes which have been applied into Linus W's tree.
-Arnd, are you able to back out this pull request for the time being? I
-don't believe any of those fixes are critical for v5.16.
--- 
-Florian
+I was already holding off because of a comment I had on the vchiq patch,
+as discussed on IRC. I assumed you had already seen the discussion there,
+so I did not reply here.
+
+        Arnd
