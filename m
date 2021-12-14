@@ -4,59 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92B30C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3CABC43217
 	for <soc@archiver.kernel.org>; Tue, 14 Dec 2021 21:40:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6C9FAC3460D; Tue, 14 Dec 2021 21:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 56E6AC3460B;
-	Tue, 14 Dec 2021 21:40:11 +0000 (UTC)
+	id 566CEC3460A; Tue, 14 Dec 2021 21:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 401DBC34606
+	for <soc@kernel.org>; Tue, 14 Dec 2021 21:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1639518011;
-	bh=VV15lHl8o0SzKo1WE+S7dVXbnk6SR1TYsN9twy5q934=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=C2TVOyywDFWzAmupnbF4lF/vM6gbmh3lnrTk6PugAfplVAHEwIWTIHpK0UPiIWvOn
-	 RNvjTDT3ukof5HuYeA9J5L+YwzbLHA8vkd3WIDhDLjLda33WzO+jSgRzKY128ozx0g
-	 jqiKcVjzvV2FKsHQTg917PqkxS4zEX3xk00bERGg/NQs+wU88B8ot2hBS1rx8NYsIv
-	 69h4Z4eR2wKUfIO+tvSeZymk4azeb05TqqB27LeWOwAHlFDWCmVWvmkpUMzODHjXCP
-	 NvYtz1NdxF1w7nh7k6bPBbZDEifwH3zR8Xjp1mOGQnxyoDcsv+J0LAaoE+TVLeBsr5
-	 h5omry4lflszw==
+	bh=kZvc39TBmvBUZIpTGuflMQe0LFygPY66Sg5nHBvxdfI=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=ErZ7tF3ZBA1gjXrZUthrYkOybxCB6Q2tqvfLhbPeOZBuI8i+knEnmY3X46xq1j3At
+	 kCPOOR/qJbeeF/xOhyDuw/XcdPQlPNWVTaMeN8TvW7xY8PA9Init6szvCXTy7/cO6G
+	 yLQNXis0VBLZl8Mn29e/U1ZvxoPOW4gn9D+NtMtTm89fYGyKfVnmGllxkd/XiOgTTc
+	 sPyHb7PV7MDLjeaJGrTEFWJGp6ncXS+cZunkjiXUNlUPZfa3AvDoMRrVT48PUjEG8V
+	 bMyparcopMiHkhuXo8KV7Clre8xAycEcb3VdKid0QYAkwMPI+tanZHo3U2P3P//HJy
+	 i2NpW2WlCE98Q==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3B70A60A9C;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 13EA1609CD;
 	Tue, 14 Dec 2021 21:40:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] OP-TEE add async notifications for v5.17
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <163951801123.19193.10989335799757326459.git-patchwork-notify@kernel.org>
+ <163951801102.19193.11860400074620514598.git-patchwork-summary@kernel.org>
 Date: Tue, 14 Dec 2021 21:40:11 +0000
-References: <20211213102359.GA1638682@jade>
-In-Reply-To: <20211213102359.GA1638682@jade>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Mon, 13 Dec 2021 11:23:59 +0100 you wrote:
-> Hello arm-soc maintainers,
-> 
-> Please pull these patches which adds support for asynchronous notifications
-> from OP-TEE in secure world to the OP-TEE driver.
-> 
-> An edge-triggered interrupt is used to notify the the driver.
-> 
-> [...]
+Patch: [GIT,PULL] Apple SoC PMGR driver for 5.17
+  Submitter: Hector Martin <marcan@marcan.st>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=591345
+  Lore link: https://lore.kernel.org/r/049f4de9-51be-7be4-1f9a-a59756af88d7@marcan.st
 
-Here is the summary with links:
-  - [GIT,PULL] OP-TEE add async notifications for v5.17
-    https://git.kernel.org/soc/soc/c/c6e5bdae04a3
+Patch: [GIT,PULL] IXP4xx DTS changes for v5.17
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=595101
+  Lore link: https://lore.kernel.org/r/CACRpkdYiWK7TEbZrh4_0WT5obMk=ZSc7AQVUSPXL+-uZ_hsUEA@mail.gmail.com
 
-You are awesome, thank you!
+Patch: ARM: configs: gemini: Activate crypto driver
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=590571
+  Lore link: https://lore.kernel.org/r/20211206011158.4180141-1-linus.walleij@linaro.org
+
+Patch: [GIT,PULL] OP-TEE add async notifications for v5.17
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=594695
+  Lore link: https://lore.kernel.org/r/20211213102359.GA1638682@jade
+
+Patch: [GIT,PULL] arm64: zynqmp: Xilinx SoC changes for v5.17
+  Submitter: Michal Simek <monstr@monstr.eu>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=592269
+  Lore link: https://lore.kernel.org/r/48dec441-2c1f-73a0-3e6c-aa0d7be5ba26@monstr.eu
+
+
+Total patches: 5
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
