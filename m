@@ -1,110 +1,381 @@
-Return-Path: <SRS0=TuKk=Q7=gmail.com=f.fainelli@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0438BC433EF
-	for <soc@archiver.kernel.org>; Tue, 14 Dec 2021 03:36:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE647C433EF
+	for <soc@archiver.kernel.org>; Tue, 14 Dec 2021 04:02:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C9814C34604; Tue, 14 Dec 2021 03:36:22 +0000 (UTC)
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 27B8AC34605;
-	Tue, 14 Dec 2021 03:36:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 27B8AC34605
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f45.google.com with SMTP id x7so13361123pjn.0;
-        Mon, 13 Dec 2021 19:36:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=plrzF7/Re5iSOy9jPcdK2BdXAHf+KzdftstClz3zPnI=;
-        b=iIE/NDjVVwwkF7s1BTLw16OB88FLU4agz4UX8VCTH3vkUKvKQVo4Z+rKTCTn7wB8DJ
-         C7+7s/wdZsIzGhqDEzDAgKBkCVTvM7qvLgAqzzUZHRha5d3j3ZaaMK9Tg1UQAZm6+CA+
-         FGPbKfDbZyC+5FMbwcSTS76Jl6Fs8mRsTbMREXjUDpvnSzatzLiodezZl/GHyXljNjAS
-         J0VCMxB3PVksZzxVM60PULyHvidz4/EwaQhXeJ81x8W+nLII8u+qArty3jdE0NAt99ze
-         30m5ImRF3XnhTmA+AJ1gbLB6Q2efu7Z/EWEDLJYdcERviW54M8LC5smRu7c9dRmDkZcr
-         Kx1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=plrzF7/Re5iSOy9jPcdK2BdXAHf+KzdftstClz3zPnI=;
-        b=sq/8IHjSNrFFurlQiRyaTVrki7lICOmbpTgphhI+HLSDsef/SlRmVD182hX8N5Q8Pj
-         X28NUXgpRu6IOx/pKKV1KEQuusu7cNIkcLVjLKpvmZixmffiKNMTNh3M83xTBLyZE2mK
-         ncCFO8J3zq6qdZXzHxGR24sx+EqR2XBcCziOB58mgKmx/Rswty+B2sxOLyyxEtBn2fnR
-         MG0IJVjcw31UuEUCLIc9GK2C5IKx0O7mYCy4fpBx/PX5JbIJgpc2k9aD9ok/QoigfTYF
-         ewr/IrZB+ERloeOunZs3KFLK+hQAHSbh8A2MfaPFgWPSSU+RbJ2nAVPtEnucjPLEFCzO
-         xxww==
-X-Gm-Message-State: AOAM531RY/HwshO/QUKZbavH+3EaxaBLGgUB2zDm/JJ7n0beVg32AnyN
-	pgBeFFtziKClOL6Zuok2kYC3g+zbuw0=
-X-Google-Smtp-Source: ABdhPJy6YeExsqW4UiNv3Yo4/SqFymtk9OvwuLtNZY4mab3EWD9jor+9G+s6p/RzoAtqkux49nRtRA==
-X-Received: by 2002:a17:902:e5ce:b0:142:780:78db with SMTP id u14-20020a170902e5ce00b00142078078dbmr3085867plf.12.1639452981303;
-        Mon, 13 Dec 2021 19:36:21 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id u3sm15289267pfk.32.2021.12.13.19.36.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 19:36:20 -0800 (PST)
-From: Florian Fainelli <f.fainelli@gmail.com>
+	id 7E0CFC34606; Tue, 14 Dec 2021 04:02:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECDD0C34604;
+	Tue, 14 Dec 2021 04:02:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639454557;
+	bh=txV48AzR/EMVhd7F+bhfry46IsLFFaCOMwSidG0PURo=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=Cn5oymGPTQ1MvgPntFdOwRMb1/jD45OQ+JaaBQjdMsK+etKco/qE9laCHkyn+wNvV
+	 rNFG8/Tp6tZg+0RW2wbgTYHswPXC7q3pwiQaKrGaBl29QkFnFYDtEW3iVdJaGbKB+Q
+	 aB3XdJDZGFWXlHzGtBkIxGC01Rel19aDiXjcBE+Zd0FPsXgru3ZS83N4OsBj4CGSli
+	 9rJglnDov0Uw5fa7bf1REqc4gZo8xHIemo+fIt7uhZMgck796fKAaOCTRdQz2P/f5p
+	 ngr2LsX5ru6+DxNfpff5rhI03m8/OMZAYCFg19T62NMTraA79imN2xIq14gMQQXXGR
+	 slcfe6HNjhVXA==
+Date: Tue, 14 Dec 2021 12:02:29 +0800
+From: Shawn Guo <shawnguo@kernel.org>
+To: Changming Huang <jerry.huang@nxp.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
-	Phil Elwell <phil@raspberrypi.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	Stefan Wahren <stefan.wahren@i2se.com>,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 1/1] Broadcom devicetree fixes for 5.16
-Date: Mon, 13 Dec 2021 19:36:17 -0800
-Message-Id: <20211214033617.2979148-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, robh+dt@kernel.org, arnd@arndb.de,
+	olof@lixom.net, soc@kernel.org, leoyang.li@nxp.com,
+	krzysztof.kozlowski@canonical.com, linux@rempel-privat.de,
+	festevam@gmail.com, tharvey@gateworks.com,
+	marcel.ziswiler@toradex.com, jagan@amarulasolutions.com,
+	dev@lynxeye.de, cniedermaier@dh-electronics.com,
+	sebastian.reichel@collabora.com, Alison Wang <alison.wang@nxp.com>
+Subject: Re: [PATCH 2/2] ARM: dts: Add initial LS1021A IoT board dts support
+Message-ID: <20211214040228.GD10916@dragon>
+References: <20211203031332.902485-1-jerry.huang@nxp.com>
+ <20211203031332.902485-2-jerry.huang@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203031332.902485-2-jerry.huang@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 
-The following changes since commit 98481f3d72fb88cb5b973153434061015f094925:
+On Fri, Dec 03, 2021 at 11:13:32AM +0800, Changming Huang wrote:
+> The LS1021A-IoT gateway reference design is a purpose-built,
+> small footprint hardware platform equipped with a wide array
+> of both high-speed connectivity and low speed serial interfaces.
+> 
+> CC: Li Yang <leoyang.li@nxp.com>
+> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+> Signed-off-by: Alison Wang <alison.wang@nxp.com>
+> ---
+>  arch/arm/boot/dts/Makefile        |   3 +-
+>  arch/arm/boot/dts/ls1021a-iot.dts | 248 ++++++++++++++++++++++++++++++
+>  2 files changed, 250 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/arm/boot/dts/ls1021a-iot.dts
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 0de64f237cd8..8534f6f94bc3 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -727,7 +727,8 @@ dtb-$(CONFIG_SOC_LS1021A) += \
+>  	ls1021a-moxa-uc-8410a.dtb \
+>  	ls1021a-qds.dtb \
+>  	ls1021a-tsn.dtb \
+> -	ls1021a-twr.dtb
+> +	ls1021a-twr.dtb \
+> +	ls1021a-iot.dtb
 
-  ARM: dts: bcm2711: Fix PCIe interrupts (2021-11-15 19:09:47 -0800)
+Keep the list alphabetically sorted.
 
-are available in the Git repository at:
+>  dtb-$(CONFIG_SOC_VF610) += \
+>  	vf500-colibri-eval-v3.dtb \
+>  	vf610-bk4.dtb \
+> diff --git a/arch/arm/boot/dts/ls1021a-iot.dts b/arch/arm/boot/dts/ls1021a-iot.dts
+> new file mode 100644
+> index 000000000000..47ad718dc542
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/ls1021a-iot.dts
+> @@ -0,0 +1,248 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2021 NXP
+> + *
+> + */
+> +
+> +/dts-v1/;
+> +#include "ls1021a.dtsi"
+> +
+> +/ {
+> +	model = "LS1021A-IOT Board";
+> +	compatible = "fsl,ls1021a-iot", "fsl,ls1021a";
+> +
+> +	sys_mclk: clock-mclk {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <24576000>;
+> +	};
+> +
+> +	regulators {
+> +		compatible = "simple-bus";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.16/devicetree-fixes-part2
+Drop the container node and put fixed regulators directly under root.
 
-for you to fetch changes up to f1d8b8561e84c9caf3e01d726b874d80475b0ffe:
+> +
+> +		reg_3p3v: regulator@0 {
+> +			compatible = "regulator-fixed";
+> +			reg = <0>;
+> +			regulator-name = "3P3V";
+> +			regulator-min-microvolt = <3300000>;
+> +			regulator-max-microvolt = <3300000>;
+> +			regulator-always-on;
+> +		};
+> +
+> +		reg_2p5v: regulator@1 {
+> +			compatible = "regulator-fixed";
+> +			reg = <1>;
+> +			regulator-name = "2P5V";
+> +			regulator-min-microvolt = <2500000>;
+> +			regulator-max-microvolt = <2500000>;
+> +			regulator-always-on;
+> +		};
+> +	};
+> +
+> +	sound {
+> +		compatible = "simple-audio-card";
+> +		simple-audio-card,format = "i2s";
+> +		simple-audio-card,widgets =
+> +			"Microphone", "Microphone Jack",
+> +			"Headphone", "Headphone Jack",
+> +			"Speaker", "Speaker Ext",
+> +			"Line", "Line In Jack";
+> +		simple-audio-card,routing =
+> +			"MIC_IN", "Microphone Jack",
+> +			"Microphone Jack", "Mic Bias",
+> +			"LINE_IN", "Line In Jack",
+> +			"Headphone Jack", "HP_OUT",
+> +			"Speaker Ext", "LINE_OUT";
+> +
+> +		simple-audio-card,cpu {
+> +			sound-dai = <&sai2>;
+> +			frame-master;
+> +			bitclock-master;
+> +		};
+> +
+> +		simple-audio-card,codec {
+> +			sound-dai = <&codec>;
+> +			frame-master;
+> +			bitclock-master;
+> +		};
+> +	};
+> +};
+> +
+> +&enet0 {
+> +	tbi-handle = <&tbi1>;
+> +	phy-handle = <&phy1>;
+> +	phy-connection-type = "sgmii";
+> +	status = "okay";
+> +};
+> +
+> +&enet1 {
+> +	tbi-handle = <&tbi1>;
+> +	phy-handle = <&phy3>;
+> +	phy-connection-type = "sgmii";
+> +	status = "okay";
+> +};
+> +
+> +&enet2 {
+> +	fixed-link = <0 1 1000 0 0>;
+> +	phy-connection-type = "rgmii-id";
+> +	status = "okay";
+> +};
+> +
+> +&can0{
 
-  Merge tag 'tags/bcm2835-dt-fixes-2021-12-13' into devicetree/fixes (2021-12-13 12:20:59 -0800)
+Keep label nodes sort alphabetically.
 
-----------------------------------------------------------------
-This pull request contains Broadcom ARM-based SoCs Device Tree fixes for
-5.16, please pull the following:
+> +	status = "disabled";
+> +};
 
-- Stefan removes a fallback compatible string for the VCIHCQ node in
-  preparation for allowing the VCIHCQ binding to be converted to YAML
+Maybe we should have can0 ~ can4 disabled by default in ls1021a.dtsi,
+and flip status for enabled ones in board dts.
 
-- Phil fixes the GPIO expander labels for the Raspberry Pi 400 GPIO
-  expander and adds the missing 'gpio-ranges' property for the BCM283x and
-  BCM2711 Device Tree include files
+> +
+> +&can1{
+> +	status = "disabled";
+> +};
+> +
+> +&can2{
+> +	status = "disabled";
+> +};
+> +
+> +&can3{
+> +	status = "okay";
+> +};
+> +
+> +&esdhc{
+> +	status = "okay";
+> +};
+> +
+> +&i2c0 {
+> +	status = "okay";
+> +
+> +	max1239@35 {
 
-----------------------------------------------------------------
-Florian Fainelli (1):
-      Merge tag 'tags/bcm2835-dt-fixes-2021-12-13' into devicetree/fixes
+Use a generic node name.
 
-Phil Elwell (2):
-      ARM: dts: bcm2711-rpi-400: Fix GPIO expander labels
-      ARM: dts: gpio-ranges property is now required
+> +		compatible = "maxim,max1239";
+> +		reg = <0x35>;
+> +		#io-channel-cells = <1>;
+> +	};
+> +
+> +	codec: sgtl5000@2a {
 
-Stefan Wahren (1):
-      ARM: dts: bcm283x: Drop fallback compatible for vchiq
+Node name should be generic while label can be specific, so:
 
- arch/arm/boot/dts/bcm2711-rpi-400.dts | 4 ++--
- arch/arm/boot/dts/bcm2711.dtsi        | 2 ++
- arch/arm/boot/dts/bcm2836-rpi.dtsi    | 2 +-
- arch/arm/boot/dts/bcm283x.dtsi        | 2 ++
- 4 files changed, 7 insertions(+), 3 deletions(-)
+	sgtl5000: audio-codec@2a
+
+Also, please sort node with unit-address in the address.
+
+> +		#sound-dai-cells=<0x0>;
+
+Missing space before and after =.
+
+> +		compatible = "fsl,sgtl5000";
+> +		reg = <0x2a>;
+> +		VDDA-supply = <&reg_3p3v>;
+> +		VDDIO-supply = <&reg_2p5v>;
+> +		clocks = <&sys_mclk 1>;
+> +	};
+> +
+> +	pca9555: pca9555@23 {
+
+Use a generic node name.
+
+> +		compatible = "nxp,pca9555";
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +		reg = <0x23>;
+> +	};
+> +
+> +	ina220@44 {
+
+Ditto
+
+> +		compatible = "ti,ina220";
+> +		reg = <0x44>;
+> +		shunt-resistor = <1000>;
+> +	};
+> +
+> +	ina220@45 {
+> +		compatible = "ti,ina220";
+> +		reg = <0x45>;
+> +		shunt-resistor = <1000>;
+> +	};
+> +
+> +	lm75b@48 {
+
+Ditto
+
+> +		compatible = "national,lm75b";
+> +		reg = <0x48>;
+> +	};
+> +
+> +	adt7461a@4c {
+
+Ditto
+
+> +		compatible = "adt7461a";
+> +		reg = <0x4c>;
+> +	};
+> +};
+> +
+> +&i2c1 {
+> +	status = "disabled";
+
+Isn't it already disabled ls1021a.dtsi?
+
+> +};
+> +
+> +&ifc {
+> +	status = "disabled";
+> +};
+
+Ditto
+
+> +
+> +&lpuart0 {
+> +	status = "okay";
+> +};
+> +
+> +&mdio0 {
+> +	phy0: ethernet-phy@0 {
+> +		reg = <0x0>;
+> +	};
+> +
+> +	phy1: ethernet-phy@1 {
+> +		reg = <0x1>;
+> +	};
+> +
+> +	phy2: ethernet-phy@2 {
+> +		reg = <0x2>;
+> +	};
+> +
+> +	phy3: ethernet-phy@3 {
+> +		reg = <0x3>;
+> +	};
+> +
+> +	tbi1: tbi-phy@1f {
+> +		reg = <0x1f>;
+> +		device_type = "tbi-phy";
+> +	};
+> +};
+> +
+> +&qspi {
+> +	num-cs = <2>;
+> +	status = "okay";
+> +
+> +	qflash0: s25fl128s@0 {
+
+Use generic node name and specific label name.
+
+> +		compatible = "jedec,spi-nor";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		spi-max-frequency = <20000000>;
+> +		reg = <0>;
+> +	};
+> +};
+> +
+> +&sai2 {
+> +	status = "okay";
+> +};
+> +
+> +&uart0 {
+> +	status = "okay";
+> +};
+> +
+> +&uart1 {
+> +	status = "okay";
+> +};
+> +
+> +&dcu {
+> +	display = <&display>;
+> +	status = "okay";
+> +
+> +	display: display@0 {
+
+Did you run dtbs_check?
+
+Shawn
+
+> +		bits-per-pixel = <24>;
+> +
+> +		display-timings {
+> +			native-mode = <&timing0>;
+> +
+> +			timing0: mode0 {
+> +				clock-frequency = <25000000>;
+> +				hactive = <640>;
+> +				vactive = <480>;
+> +				hback-porch = <80>;
+> +				hfront-porch = <80>;
+> +				vback-porch = <16>;
+> +				vfront-porch = <16>;
+> +				hsync-len = <12>;
+> +				vsync-len = <2>;
+> +				hsync-active = <1>;
+> +				vsync-active = <1>;
+> +			};
+> +		};
+> +	};
+> +};
+> -- 
+> 2.25.1
+> 
