@@ -1,159 +1,97 @@
-Return-Path: <SRS0=KNgb=RA=gmail.com=mr.bossman075@kernel.org>
+Return-Path: <SRS0=6dNP=RA=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A686C433F5
-	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 22:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B15DC4332F
+	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 22:28:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7D784C36AE3; Wed, 15 Dec 2021 22:05:58 +0000 (UTC)
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+	id C94E0C36AE7; Wed, 15 Dec 2021 22:28:01 +0000 (UTC)
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 082E9C36AE2;
-	Wed, 15 Dec 2021 22:05:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 082E9C36AE2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f180.google.com with SMTP id 132so21519804qkj.11;
-        Wed, 15 Dec 2021 14:05:57 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0B0DCC36AE2
+	for <soc@kernel.org>; Wed, 15 Dec 2021 22:28:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0B0DCC36AE2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oi1-f175.google.com with SMTP id bk14so33721408oib.7
+        for <soc@kernel.org>; Wed, 15 Dec 2021 14:28:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TitC2dO0wkJLqs3RK/Mubu0CIrjVhTLfeZ4/lpetFHg=;
-        b=eakHrVjduzGabRW3rtq25pnGCL9y5N8+eoHz/VVlCoIe5YHmKiSsAzeOnubV40DS87
-         G+Ub5W98G7Gqn9aYvrnpmjyYOVTdu12wY630FCgz/i6pa6m32adVwg3uuohZ6ehso01j
-         NaTFEhgOXmIkraCqyPtJk/HgkaSuoQlqhQFSD4rMlkzMI00epCvqG4X8TKALKmw4nw4C
-         VMyCFuuW7X2Ue/QyHQdQq8bsPOBo01uxvrsqlF8K7eS1k1pSyG+x87XAQcB4aIcvE8FM
-         wq/xIqKestZSrDINVdHEEPtxRt3lQh8dukisguX/sj/amcPR4zAy1caT5IMWfnEs2Mgb
-         zBCQ==
+        bh=vIVXiGfUpcNHajlVwayi7ZXVOYdjzHmlLf5e1SFw0vM=;
+        b=ghDFVvgDJuVmeCVQaVAh45H1K8RdDeKJKREPK4B/ysZAGmKJdmRWq8tZaXfkNwdbYe
+         ALWb9ezC6unB+Z9uMU3wlo8HWSNvepUvsCNh50tl2gImnBeR8msA4ondq2aiYcYu3e2L
+         4OL1NPdBui+Qdd68zGLr2HYHkfuvBSipPwEyd1rEQxojTrlOGilPjSGD66eBkhb7RUvf
+         doO5gN9uQGpaGyBihnAMW7EjOtyCO35WyZZm05WnVNdCV0rJpjFSuPa7Tn4ZXpT0LP7t
+         iB94QX9SJ+aeA03lFThCZGB9UY9u1kDCb/vPHDF1RLwxF2WV4nk4rNFfm+Vs4jkP++j3
+         YpUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TitC2dO0wkJLqs3RK/Mubu0CIrjVhTLfeZ4/lpetFHg=;
-        b=VEtSN+bgQ/w0mWTHUbbZE1h8yenjWoD+10qaq+1Na8EJiaJNHVHQ9+JjL97uNgBBcn
-         +sfWf0dKAhiwnwt0rTqo0K+Q++VRsn5/XC5nNpHc3W9AovPgCflr9aiJsbvXSYQ7bFBe
-         vJ7uDwf64FW7SdJWmWajoOnnjTOD9VZUDoc7EYL8NuTqmE3MFFoPYJHEoUzxaqoks0PY
-         d58GvLtIPQlcvfdJcbgL+uurHnospCdDW0APRVKaSH9n8/SYge4hhriYGPROYyvLhqMR
-         hmWwiKo5j4KPnWNUqnpXAogNEYYXO5Q36tots3kgW7OshapBCXbNvRVDRJNmyNxvivTC
-         7BGA==
-X-Gm-Message-State: AOAM533GWDroqZbVLIWYSXFoIuQC0/PQkoiBntJCnU3vplFOHbSGQLSQ
-	H4ogOmUJNRSAOU7hvKLaRps=
-X-Google-Smtp-Source: ABdhPJzRXboEiigLc5/HpDt4yqwG5O6jjwuy0h6MgYRO+8pT2GhcG3iZQQ59psJfOLycw+DGYkMrqA==
-X-Received: by 2002:a05:620a:4712:: with SMTP id bs18mr10306929qkb.246.1639605957098;
-        Wed, 15 Dec 2021 14:05:57 -0800 (PST)
-Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id s20sm2471592qtc.75.2021.12.15.14.05.55
+        bh=vIVXiGfUpcNHajlVwayi7ZXVOYdjzHmlLf5e1SFw0vM=;
+        b=rLE1W/aRwRcjUe5J5DE5fwhTm3TUIk/3DrksEbvFyfunrAriLAdIBhNn5qejvdSFrQ
+         /j6ZFUF0x3aEsfbP/ljopels61BwwNjFKH7Uznlgk5YeETFPawtEc0DciSbe9FNhbez6
+         N7ND4gWI/OFgk8tNJzePKbCA3OnWYKHbV7NmdvU9Ky9MUs7a0g2rLfM9zFz2znqxRj9c
+         QceoDygFhrjKuLr1cA4CB/l/9dabs1r6KvuaL/An0OsKPlqbmXKiGAjpM4uwSiRmMH0/
+         sxMyvU0VEYVNpoNdHcDbK9y1o6WsCMdFNlKvILS5tqk8jMgPe9Faj4CR0S1LIGgXXMtX
+         vPoA==
+X-Gm-Message-State: AOAM533q3C9jfHVflhnsBJkS0dfTm2byj2o8wbqqayAJvlRZxS/8d8tq
+	ho1CQyip30vrSZ2KUqspRQC6P8Bq49aoWg==
+X-Google-Smtp-Source: ABdhPJwyLbS2ZG5HTaex00cPe5QptBuaGUGdhn0FouyMrvpYmlKxeV39hiWGUNz4eB+RvIvOBk26kg==
+X-Received: by 2002:a05:6808:1283:: with SMTP id a3mr1839688oiw.110.1639607280198;
+        Wed, 15 Dec 2021 14:28:00 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id t14sm700500oth.81.2021.12.15.14.27.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 14:05:56 -0800 (PST)
-From: Jesse Taube <mr.bossman075@gmail.com>
-X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
-To: linux-imx@nxp.com
+        Wed, 15 Dec 2021 14:27:59 -0800 (PST)
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh+dt@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	ulf.hansson@linaro.org,
-	aisheng.dong@nxp.com,
-	stefan@agner.ch,
-	linus.walleij@linaro.org,
-	gregkh@linuxfoundation.org,
-	arnd@arndb.de,
-	olof@lixom.net,
+To: quic_vamslank@quicinc.com,
+	agross@kernel.org,
 	soc@kernel.org,
-	linux@armlinux.org.uk,
-	abel.vesa@nxp.com,
-	adrian.hunter@intel.com,
-	jirislaby@kernel.org,
-	giulio.benetti@benettiengineering.com,
-	nobuhiro1.iwamatsu@toshiba.co.jp,
-	Mr.Bossman075@gmail.com,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	olof@lixom.net,
+	robh+dt@kernel.org,
+	linus.walleij@linaro.org,
+	sboyd@codeaurora.org
+Cc: manivannan.sadhasivam@linaro.org,
 	linux-kernel@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Subject: [PATCH v5 9/9] ARM: imxrt_defconfig: Add i.MXRT family defconfig
-Date: Wed, 15 Dec 2021 17:05:38 -0500
-Message-Id: <20211215220538.4180616-10-Mr.Bossman075@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211215220538.4180616-1-Mr.Bossman075@gmail.com>
-References: <20211215220538.4180616-1-Mr.Bossman075@gmail.com>
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] Add devicetree support for SDX65 Modem and MTP
+Date: Wed, 15 Dec 2021 16:27:32 -0600
+Message-Id: <163960723735.3062250.7838330411965052999.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <1635552125-16407-1-git-send-email-quic_vamslank@quicinc.com>
+References: <1635552125-16407-1-git-send-email-quic_vamslank@quicinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+On Fri, 29 Oct 2021 17:02:02 -0700, quic_vamslank@quicinc.com wrote:
+> From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+> 
+> Hello,
+> 
+> Changes from v2:
+>  - Added cmd-db node to the sdx65 dtsi file
+> 
+> [...]
 
-Add generic i.MXRT family defconfig.
+Applied, thanks!
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
----
-V1->V2:
-* Nothing done
-V2->V3:
-* Nothing done
-V3->V4:
-* Remove unnecessary CONFIGs
-* Add futex suport after "ARM: 9122/1: select HAVE_FUTEX_CMPXCHG"
-9d417cbe36eee7afdd85c2e871685f8dab7c2dba
-V4->V5:
-* Change commit description
----
- arch/arm/configs/imxrt_defconfig | 35 ++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 arch/arm/configs/imxrt_defconfig
+[1/3] dt-bindings: arm: qcom: Document SDX65 platform and boards
+      commit: 3b338c9a6a2afd6db46d5d8e39ae4f5eef420bf8
+[2/3] ARM: dts: qcom: Add SDX65 platform and MTP board support
+      commit: bae2f5979c6e537334c9099013b5407019e88c44
+[3/3] ARM: dts: qcom: sdx65: Add pincontrol node
+      commit: ff8b573a6ccf4deba10285abef072c577099e038
 
-diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
-new file mode 100644
-index 000000000000..52dba3762996
---- /dev/null
-+++ b/arch/arm/configs/imxrt_defconfig
-@@ -0,0 +1,35 @@
-+# CONFIG_LOCALVERSION_AUTO is not set
-+CONFIG_BPF_SYSCALL=y
-+CONFIG_SCHED_AUTOGROUP=y
-+# CONFIG_MMU is not set
-+CONFIG_ARCH_MXC=y
-+CONFIG_SOC_IMXRT=y
-+CONFIG_SET_MEM_PARAM=y
-+CONFIG_DRAM_BASE=0x80000000
-+CONFIG_DRAM_SIZE=0x02000000
-+CONFIG_BINFMT_FLAT=y
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_IMX_WEIM=y
-+CONFIG_LEGACY_PTY_COUNT=2
-+CONFIG_SERIAL_FSL_LPUART=y
-+CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
-+CONFIG_SERIAL_DEV_BUS=y
-+CONFIG_PINCTRL_IMXRT1050=y
-+CONFIG_GPIO_MXC=y
-+CONFIG_MMC=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
-+CONFIG_MMC_SDHCI_ESDHC_IMX=y
-+CONFIG_DMADEVICES=y
-+CONFIG_FSL_EDMA=y
-+CONFIG_CLK_IMXRT1050=y
-+CONFIG_EXT4_FS=y
-+CONFIG_EXT4_FS_POSIX_ACL=y
-+CONFIG_EXT4_FS_SECURITY=y
-+CONFIG_VFAT_FS=y
-+CONFIG_FAT_DEFAULT_UTF8=y
-+CONFIG_EXFAT_FS=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_UTF8=y
+Best regards,
 -- 
-2.34.1
-
+Bjorn Andersson <bjorn.andersson@linaro.org>
