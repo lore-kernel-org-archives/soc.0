@@ -4,54 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D563C433F5
-	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 09:50:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79F85C433F5
+	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 09:51:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 53BE1C34607; Wed, 15 Dec 2021 09:50:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA9AC34600;
-	Wed, 15 Dec 2021 09:50:48 +0000 (UTC)
+	id 61365C34608; Wed, 15 Dec 2021 09:51:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98314C34600;
+	Wed, 15 Dec 2021 09:51:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639561850;
-	bh=j8xubI0NHe2KArjED9rp7yaH5SYjH1z7xZ8yU7GvCNs=;
+	s=k20201202; t=1639561896;
+	bh=oYwn3Bv2KBZPQ16L1QILcdHoBXp4zgaioDMmKp3I+qQ=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZPN/l4miLnZjML5SmxHfCnDeoF9N0gm+uCbuVz7uKNHVbF1Soqg9TiWRzLUyBfT2m
-	 DARc4m3ywsrFtkUYFGTGDyazYMQuuEnDBFh+5cCN1LjZlmoJT/IHFFyy3O47FApTty
-	 3LO2q5seHuQuTij1pUIVwzxnW3RhIW7f7yNPfSB4zv2NQFbrX4WjZGo4Et3vUcMXtO
-	 qtDn0KH+QNk4Rj8akp/mvyUTGUybx/7ndkUpSm4jpcTfc9NOaq4BmDlixeppFDWafO
-	 WnCF6WGgVO6F5lgg/pZ4dMZAsoofOrW6OXuiLN2v69L/v8l/epMvdUtQNOnNuXvRUU
-	 +YE0XC+SxhVgQ==
+	b=II2Ji7t6PXUJPW6BOYD6EHHPuvCWy8gnOl0YjrOxLnjmOI65mQxbrrfvDtMB85pfg
+	 QOG6MW0ULVqQMYqg1epyl9tJa9N/YjJQ743qnCu01Pe7/7DFhORBM3Ei4QT7Xie52k
+	 GkgtnMoHd70of3CCHdEs3j75XEsTdfrxEz3BPDu+wjYFHl2ilzKhC43/FYMqm7Thgm
+	 WueoFgLLioqUkdluYJqQzG8+BMVC+vJtPcoxWJVkkEzAB+TE/kQDlYc3OYloxdxu+I
+	 ULgGl0nQH4frEH0ToA5n4eMC8QWNZiZQyDJUk5ywb1hVWurXxRLf/qWQefLNho3d7Z
+	 VCTibOq/RGI3A==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>,
-	SoC Team <soc@kernel.org>,
-	arm-soc <arm@kernel.org>
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [GIT PULL] IXP4xx changes for v5.17
-Date: Wed, 15 Dec 2021 10:50:43 +0100
-Message-Id: <163956181254.1227602.10508435320958907587.b4-ty@arndb.de>
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Magnus Damm <magnus.damm@gmail.com>
+Subject: Re: [GIT PULL 3/4] Renesas driver updates for v5.17
+Date: Wed, 15 Dec 2021 10:51:32 +0100
+Message-Id: <163956188210.1228007.9043186214626094436.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <CACRpkdZXZBpexMUuwTV-RB7_QAjBQkSbRsaBtgFShcqxuNTUgw@mail.gmail.com>
-References: <CACRpkdZXZBpexMUuwTV-RB7_QAjBQkSbRsaBtgFShcqxuNTUgw@mail.gmail.com>
+In-Reply-To: <cover.1638530612.git.geert+renesas@glider.be>
+References: <cover.1638530605.git.geert+renesas@glider.be> <cover.1638530612.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 6 Dec 2021 02:23:25 +0100, Linus Walleij wrote:
-> these are some two IXP4xx patches cleaning up a little bit in
-> KConfig & such which should go into v5.17.
+On Fri, 3 Dec 2021 12:31:20 +0100, Geert Uytterhoeven wrote:
+> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 > 
-> Please pull it in! Details in signed tag.
+>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 > 
-> Yours,
-> Linus Walleij
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-drivers-for-v5.17-tag1
 > 
 > [...]
 
-Merged into arm/soc, thanks!
+Merged into arm/drivers, thanks!
 
-merge commit: 4d4872fef9d1788da10efc07a4f4c91799f77a94
+merge commit: 0491871b63da81a42841218d951f98ad5c2a35e2
 
        Arnd
