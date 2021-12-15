@@ -1,99 +1,180 @@
-Return-Path: <SRS0=c+if=RA=gmail.com=f.fainelli@kernel.org>
+Return-Path: <SRS0=KNgb=RA=gmail.com=mr.bossman075@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F566C433EF
-	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 17:20:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DA30C433F5
+	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 22:05:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C9C7DC36AE4; Wed, 15 Dec 2021 17:20:17 +0000 (UTC)
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	id 4882DC36AE4; Wed, 15 Dec 2021 22:05:43 +0000 (UTC)
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 52C7AC36AE2;
-	Wed, 15 Dec 2021 17:20:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 52C7AC36AE2
+	by smtp.kernel.org (Postfix) with ESMTPS id 7757FC36AE3;
+	Wed, 15 Dec 2021 22:05:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7757FC36AE3
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id p13so21297598pfw.2;
-        Wed, 15 Dec 2021 09:20:17 -0800 (PST)
+Received: by mail-qk1-f181.google.com with SMTP id t6so21584198qkg.1;
+        Wed, 15 Dec 2021 14:05:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GleY9ZpmMktJjEGF86wutMfqGzM2DTjPwIbySqApyu8=;
-        b=nmAsWIOgXqk02SYJQaTEg73biPz2sZ/DoXGxWtrrXhAmeKTfJTzV6A9e9QeTIW8+c9
-         wFS4lkmha6eLxpuYIqdBc4WOt6rzlBEleMaF8KlRMG4V0Itdqg6j3OJyZ1IlEzD8v6/z
-         vUe2Sgtk3ZIezkm9j6m0Uj2qIACDGAD1Vne56X9B+zF1tr/LAAMlY4et4vwzv6e224ZM
-         bTRMrmBcbKpnk+c2tqxbgNa771pRrA7KAXK59ndzPvOJGJnpkVZqhYzvBXR7KRHiT0z5
-         KDWCWWFqXVYKliiy7cDzMTdISDqwBjAFdKsIVJEVWtFpyfGenu3+e37vIe2rp8VVkiUv
-         C5nQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=82TjwUfk9T2/ds3Ciyj/zGT4kaKZHzrrPS0KAqF4ALY=;
+        b=Vw4Ln5z5bJ1z4j37TQH8Minz9tGBBCeVuWNd1Zp92mp05MfCGPJyyfL9T2gzSFrVuA
+         L5I/AE2EXSJ7/+1dwo2uE/6OeXAfmOlCKXAQUoaw3GGQXJHgE9trosGjCuj0XIhYVgDM
+         vVdmAsbqu+MYJkM1Nn3Nof6BeNvrOfLUPUDxYY83n+YeJyJXukMZPPivAnsSQDGwWYH2
+         k3cDEkw6XaLun4Oa+uCzy/U8TxzJYd8pVqi3Xzz35P/kNXrXFbC85WWeShHcHorfrgqo
+         zgBWO+yUUyBLJ6uV2MV2XzIVwZAXev3QfxK4zlMIz0Cx9ktR3kHUM1VOjI9hhcgfBNfz
+         16Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=GleY9ZpmMktJjEGF86wutMfqGzM2DTjPwIbySqApyu8=;
-        b=HioqMTANFaPaeYVFEA1cYCmjIsQTrXdTAZLrjGi5u6Rb7mWO3RSSYVBCUsoOY1O5dV
-         aisxZXuiaFFfwCAl1BOvJZ3Z6bLqbP/fbo7idxmIspZV2EqNT+OacJzx0IraTUgO76QO
-         tK8fyh0I3lo0LU687ZOoyBUHr2thnRxWkImrLmxL+qD1qYksBQGUmWVJtKOqBjL4P/jM
-         cVhX63RoD1dChqhfi8T0iiSCAEO9TqUc3s0lxRqiMIltOqyrvYHOqVa6SIfIxoCPnwwc
-         iWTpdoRW3Yes5mdKn56nQXdi+ZWCBWdlnUWh1Tsp+XWU9tHOL24QW7z7xezNnSvBYK60
-         JX9w==
-X-Gm-Message-State: AOAM533AJv3Li7d1gLM3ih19VCeJC8zx6bOM9rSD2rjs1vNFYirAxlOI
-	1SaCxvunfw6DZH4/1JD9oJo=
-X-Google-Smtp-Source: ABdhPJzlE9Cx5+3+M7ivMSO/iDS3pnS6K6lxSYyXEjZPoDIbEdG8/4VPtzoiN5y5GEzFLTMJVRT2og==
-X-Received: by 2002:a63:e56:: with SMTP id 22mr8365075pgo.581.1639588816858;
-        Wed, 15 Dec 2021 09:20:16 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-148bb55d3adsm452145ad.221.2021.12.15.09.20.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 09:20:15 -0800 (PST)
-Subject: Re: [GIT PULL 1/1] Broadcom devicetree fixes for 5.16
-To: Arnd Bergmann <arnd@arndb.de>, Florian Fainelli <f.fainelli@gmail.com>
+        bh=82TjwUfk9T2/ds3Ciyj/zGT4kaKZHzrrPS0KAqF4ALY=;
+        b=bj3pFLH5SPk5XScfr6CIvdZsAD06oGGVDE/RINlA9UWJzQDc0EN6SJGuz+WxLQc7+S
+         pWlJDQRe+KtZDDCj0mP/w6WiBPDQv1Ai17d/Dvh3/Yo9dVcb2hJvPv6Jb5DA8rXdwgOX
+         EFVUiP35P2uZcUHCOgLggLszcpUCFAcTuaDJA+UoYNINXTfjk+A2Pe8TM8CE1roC1kVn
+         QNFE7ka/eF06oW5mjuNa7l8Wa8s5loMYKOr7m03p6my5s68FYTo9Rmq6wNjqp6WzXdaT
+         pjlzfky/iJu6mlElpdmlUcwBOyuXtlEyPnNGkgsdmgmzb/vc3R5Nqd2v6xROMi+Y5M6B
+         yveA==
+X-Gm-Message-State: AOAM530/MgIqRKctvmcYQeOL6i6vFxQeQ32zG6g+3Go50IDHbVG9cADg
+	OGN7bZ8qpWoTqJEmW6gy9Xk=
+X-Google-Smtp-Source: ABdhPJy6zw4A2uEDI0uCUlM5KpQmgZDOHGlxjcoHCdvjCKDQYGLWVUUcTm5W6ciyxP6apXSAQr1dJQ==
+X-Received: by 2002:a37:9ed5:: with SMTP id h204mr10494788qke.35.1639605941389;
+        Wed, 15 Dec 2021 14:05:41 -0800 (PST)
+Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
+        by smtp.gmail.com with ESMTPSA id s20sm2471592qtc.75.2021.12.15.14.05.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 14:05:40 -0800 (PST)
+From: Jesse Taube <mr.bossman075@gmail.com>
+X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
+To: linux-imx@nxp.com
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Phil Elwell <phil@raspberrypi.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Nicolas Saenz Julienne <nsaenz@kernel.org>,
- Stefan Wahren <stefan.wahren@i2se.com>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@kernel.org>,
- bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>
-References: <20211214033617.2979148-1-f.fainelli@gmail.com>
- <e7f3edb9-4691-2136-7884-b7bea2ac892c@gmail.com>
- <CAK8P3a3TkCRSfy=0ogn-+cXB-o0YoJKmYNwnmXeGdZoxjGCOYA@mail.gmail.com>
-From: Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <fbc65d98-416f-71d4-d7ce-958c3ee99f6b@gmail.com>
-Date: Wed, 15 Dec 2021 09:20:12 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Cc: mturquette@baylibre.com,
+	sboyd@kernel.org,
+	robh+dt@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	ulf.hansson@linaro.org,
+	aisheng.dong@nxp.com,
+	stefan@agner.ch,
+	linus.walleij@linaro.org,
+	gregkh@linuxfoundation.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org,
+	linux@armlinux.org.uk,
+	abel.vesa@nxp.com,
+	adrian.hunter@intel.com,
+	jirislaby@kernel.org,
+	giulio.benetti@benettiengineering.com,
+	nobuhiro1.iwamatsu@toshiba.co.jp,
+	Mr.Bossman075@gmail.com,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mmc@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Subject: [PATCH v5 0/9]  Add initial support for the i.MXRTxxxx SoC family starting from i.IMXRT1050 SoC.
+Date: Wed, 15 Dec 2021 17:05:29 -0500
+Message-Id: <20211215220538.4180616-1-Mr.Bossman075@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a3TkCRSfy=0ogn-+cXB-o0YoJKmYNwnmXeGdZoxjGCOYA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 12/14/21 10:59 AM, Arnd Bergmann wrote:
-> On Tue, Dec 14, 2021 at 6:13 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->> On 12/13/21 7:36 PM, Florian Fainelli wrote:
->>> Florian Fainelli (1):
->>>       Merge tag 'tags/bcm2835-dt-fixes-2021-12-13' into devicetree/fixes
->>>
->>> Phil Elwell (2):
->>>       ARM: dts: bcm2711-rpi-400: Fix GPIO expander labels
->>>       ARM: dts: gpio-ranges property is now required
->>
->> It looks like the change above needs to be accompanied by
->> pinctlr-bcm2835.c changes which have been applied into Linus W's tree.
->> Arnd, are you able to back out this pull request for the time being? I
->> don't believe any of those fixes are critical for v5.16.
-> 
-> I was already holding off because of a comment I had on the vchiq patch,
-> as discussed on IRC. I assumed you had already seen the discussion there,
-> so I did not reply here.
+This patchset contains:
+- i.MXRT10xx family infrastructure
+- i.MXRT1050 pinctrl driver adaption
+- i.MXRT1050 clock driver adaption
+- i.MXRT1050 sd-card driver adaption
+- i.MXRT1050 uart driver adaption
+- i.MXRT1050-evk basic support
 
-Thanks, I dropped this from my tree as well now. We will get those fixes
-merged in a slightly different way to avoid breakage in linux-next. Thanks!
+The i.MXRTxxxx family that could have support by Linux actually spreads
+from i.MXRT1020 to i.MXRT1170 with the first one supporting 1 USB OTG &
+100M ethernet with a cortex-M7@500Mhz up to the latter with i.MXRT1170
+with cortex-M7@1Ghz and cortex-M4@400Mhz, 2MB of internal SRAM, 2D GPU,
+2x 1Gb and 1x 100Mb ENET. The i.MXRT family is NXP's answer to
+STM32F7XX, as it uses only simple SDRAM, it gives the chance of a 4 or
+less layer PCBs. Seeing that these chips are comparable to the
+STM32F7XXs which have linux ported to them it seems reasonable to add
+support for them.
+
+Giving Linux support to this family should ease the development process,
+instead of using a RTOS they could use Embedded Linux allowing for more
+portability, ease of design and will broaden the scope of people using
+embedded linux.
+
+The EVK has very little SDRAM, generally 32MB starting from
+i.MXRT1020(the lowest P/N), although the i.MXRT1160/70 provide instead
+64MB of SDRAM for more functionality.
+
+At the moment we do not support XIP for either u-boot or Linux but it
+should be done in the future. XIP will also save SDRAM.
+
+Another interesting fact is the amount of internal SRAM, as the P/N
+increases the SRAM will reach up to 2MB(some could be for cache and
+some would be for video).
+
+Also, some parts have embed flash of 4MB that can be used for
+u-boot/Linux, if both correctly sized it will leave the SDRAM free.
+
+External flash can be Quad SPI and HyperFlash, so throughput would be
+decent.
+
+The i.MXRT11xx series supports MIPI interface too.
+
+The family in general provide CAN bus, audio I/O, 1 or more
+USB(otg/host), 1 or more 100Mb/1Gb ethernet, camera interface, sd-card.
+
+All this can be used for simple GUIs, web-servers, point-of-sale
+stations, etc.
+
+Giulio Benetti (4):
+  ARM: imx: Add initial support for i.MXRT10xx family
+  dt-bindings: imx: Add clock binding for i.MXRT1050
+  ARM: dts: imx: Add i.MXRT1050-EVK support
+  ARM: imxrt_defconfig: Add i.MXRT family defconfig
+
+Jesse Taube (5):
+  ARM: dts: imxrt1050-pinfunc: Add pinctrl binding header
+  dt-bindings: clock: imx: Add documentation for i.MXRT1050 clock
+  clk: imx: Add initial support for i.MXRT1050 clock driver
+  dt-bindings: serial: fsl-lpuart: add i.MXRT1050 compatible
+  tty: serial: fsl_lpuart: Add i.MXRT1050 support
+
+ .../bindings/clock/imxrt1050-clock.yaml       |  66 ++
+ .../bindings/serial/fsl-lpuart.yaml           |   1 +
+ arch/arm/boot/dts/Makefile                    |   2 +
+ arch/arm/boot/dts/imxrt1050-evk.dts           |  72 ++
+ arch/arm/boot/dts/imxrt1050-pinfunc.h         | 993 ++++++++++++++++++
+ arch/arm/boot/dts/imxrt1050.dtsi              | 154 +++
+ arch/arm/configs/imxrt_defconfig              |  35 +
+ arch/arm/mach-imx/Kconfig                     |   7 +
+ arch/arm/mach-imx/Makefile                    |   2 +
+ arch/arm/mach-imx/mach-imxrt.c                |  19 +
+ drivers/clk/imx/Kconfig                       |   5 +
+ drivers/clk/imx/Makefile                      |   1 +
+ drivers/clk/imx/clk-imxrt1050.c               | 181 ++++
+ drivers/tty/serial/fsl_lpuart.c               |   8 +
+ include/dt-bindings/clock/imxrt1050-clock.h   |  73 ++
+ 15 files changed, 1619 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml
+ create mode 100644 arch/arm/boot/dts/imxrt1050-evk.dts
+ create mode 100644 arch/arm/boot/dts/imxrt1050-pinfunc.h
+ create mode 100644 arch/arm/boot/dts/imxrt1050.dtsi
+ create mode 100644 arch/arm/configs/imxrt_defconfig
+ create mode 100644 arch/arm/mach-imx/mach-imxrt.c
+ create mode 100644 drivers/clk/imx/clk-imxrt1050.c
+ create mode 100644 include/dt-bindings/clock/imxrt1050-clock.h
+
 -- 
-Florian
+2.34.1
+
