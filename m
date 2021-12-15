@@ -4,56 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79F85C433F5
-	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 09:51:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2941C433F5
+	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 09:52:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 61365C34608; Wed, 15 Dec 2021 09:51:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98314C34600;
-	Wed, 15 Dec 2021 09:51:34 +0000 (UTC)
+	id CD9ABC34606; Wed, 15 Dec 2021 09:52:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A437BC34605;
+	Wed, 15 Dec 2021 09:52:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639561896;
-	bh=oYwn3Bv2KBZPQ16L1QILcdHoBXp4zgaioDMmKp3I+qQ=;
+	s=k20201202; t=1639561943;
+	bh=Cbr39zEd6gS4eYrAtweqR55i+TW8z6qPfNltkG8eUvE=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=II2Ji7t6PXUJPW6BOYD6EHHPuvCWy8gnOl0YjrOxLnjmOI65mQxbrrfvDtMB85pfg
-	 QOG6MW0ULVqQMYqg1epyl9tJa9N/YjJQ743qnCu01Pe7/7DFhORBM3Ei4QT7Xie52k
-	 GkgtnMoHd70of3CCHdEs3j75XEsTdfrxEz3BPDu+wjYFHl2ilzKhC43/FYMqm7Thgm
-	 WueoFgLLioqUkdluYJqQzG8+BMVC+vJtPcoxWJVkkEzAB+TE/kQDlYc3OYloxdxu+I
-	 ULgGl0nQH4frEH0ToA5n4eMC8QWNZiZQyDJUk5ywb1hVWurXxRLf/qWQefLNho3d7Z
-	 VCTibOq/RGI3A==
+	b=t1KBs1aKd+1LtfkktU4ks2CBKJ5t9GKpJ+JHBaStsB0hrwIDQB5PeUENgXvruDwfh
+	 8xmu8GJegPDxElc46iakmZNvGDV+F09U3uCkQxELNLkPf3U+R8u7Kq19C2EIEg+9Oi
+	 3BDCx4FMqWcx1SK+hZONuuQGXHn5y09b6D9RlDAXKHKE4k/XhRY53UTy4oMB8xivE2
+	 bywAmFrgFcX5GZNOdqKY3tSv7YW0KnMVPvFqzKA7jBNFwYPrCYmLDI1LA2m2D6MLOn
+	 cS7jieyAfJb5tbuG8VbSEsf+ge5LV6WCFEBc6cI9wYH85WSEkXgGKoWnOqdrHeLfBl
+	 FhixSHfoUHhQQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>
+To: soc@kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	Olof Johansson <olof@lixom.net>,
+	arm@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Magnus Damm <magnus.damm@gmail.com>
-Subject: Re: [GIT PULL 3/4] Renesas driver updates for v5.17
-Date: Wed, 15 Dec 2021 10:51:32 +0100
-Message-Id: <163956188210.1228007.9043186214626094436.b4-ty@arndb.de>
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [GIT PULL] memory: renesas drivers for v5.17
+Date: Wed, 15 Dec 2021 10:52:19 +0100
+Message-Id: <163956193535.1228119.8827834668914996607.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <cover.1638530612.git.geert+renesas@glider.be>
-References: <cover.1638530605.git.geert+renesas@glider.be> <cover.1638530612.git.geert+renesas@glider.be>
+In-Reply-To: <20211213105618.5686-1-krzysztof.kozlowski@canonical.com>
+References: <20211213105618.5686-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Fri, 3 Dec 2021 12:31:20 +0100, Geert Uytterhoeven wrote:
+On Mon, 13 Dec 2021 11:56:18 +0100, Krzysztof Kozlowski wrote:
+> Topic branch with Renesas related memory controller driver changes.
+> 
+> Best regards,
+> Krzysztof
+> 
+> 
 > The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-> 
->   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-drivers-for-v5.17-tag1
 > 
 > [...]
 
 Merged into arm/drivers, thanks!
 
-merge commit: 0491871b63da81a42841218d951f98ad5c2a35e2
+merge commit: e8f7875680aeddb717248e0467bd533243d326ef
 
        Arnd
