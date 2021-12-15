@@ -1,112 +1,149 @@
-Return-Path: <SRS0=7IKC=RA=gmail.com=geert.uytterhoeven@kernel.org>
+Return-Path: <SRS0=v5FV=RA=foss.st.com=prvs=69831366d0=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E318EC433EF
-	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 10:28:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E845C4332F
+	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 10:56:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A7EB7C34606; Wed, 15 Dec 2021 10:28:48 +0000 (UTC)
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 3E0D5C34605; Wed, 15 Dec 2021 10:56:39 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 24421C34600;
-	Wed, 15 Dec 2021 10:28:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 24421C34600
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f170.google.com with SMTP id e27so14342258vkd.4;
-        Wed, 15 Dec 2021 02:28:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6KatagByVh+i+7U2cQTugmti3xcd82C2QfCSX1Fy8Jo=;
-        b=Lw7g2cPJtY30uvUebrkKpkIJWQR0Y/BHRyS+FEzPaWPozsYFVqFcQtwVQOWp8v70y1
-         jlbzVagHTKN3IYbfevzWLSBc0VQHIdZp8YHhzNmktuSNrZe9ph8Y6eTyC9lXn9pkDGgj
-         XRHiYA8Y0+roZeSfBgu2dptAbESC01e92cSXI9gksqitw58xLRFanmACHk3Z0CYFu47U
-         54H9GUQ0n5uYAVObjrptKw/wkWVqV6Y9aK7ZgG6gokIvEN4udFccj427y7yNqyZGD9yk
-         8RfltUOt51uY8jR73Vd/xlgvzKgyLtlVp1yQzqqj4ugN5BvtAiu/CNC8sJguwxdc3msZ
-         Rp5Q==
-X-Gm-Message-State: AOAM533algkJRa/XwJPmh8sordvNYnjK9Odvycdwkexx71rDtfQhO3+s
-	H8YyIaE7ahCralQN3Pkt6L0fOKwvQ0dEOQ==
-X-Google-Smtp-Source: ABdhPJw4pmCw+zOcQLQf3Jp4chTkh1qAKt3AMlR9MGBiJ41qdqPe7X15lu5ToiMcyYzcbLsMQPyRvg==
-X-Received: by 2002:ac5:cdad:: with SMTP id l13mr2754452vka.39.1639564127098;
-        Wed, 15 Dec 2021 02:28:47 -0800 (PST)
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com. [209.85.221.173])
-        by smtp.gmail.com with ESMTPSA id b129sm312866vsc.5.2021.12.15.02.28.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 02:28:46 -0800 (PST)
-Received: by mail-vk1-f173.google.com with SMTP id e27so14342218vkd.4;
-        Wed, 15 Dec 2021 02:28:45 -0800 (PST)
-X-Received: by 2002:a05:6122:920:: with SMTP id j32mr2889520vka.20.1639564125403;
- Wed, 15 Dec 2021 02:28:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20211213163929.7509-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20211213163929.7509-1-andriy.shevchenko@linux.intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 15 Dec 2021 11:28:34 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW_CKcXwOSUAbCreHVM62E35yjiCfpXC_wM0zK-V43CnA@mail.gmail.com>
-Message-ID: <CAMuHMdW_CKcXwOSUAbCreHVM62E35yjiCfpXC_wM0zK-V43CnA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] pinctrl: Get rid of duplicate of_node assignment
- in the drivers
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id C35FBC34603;
+	Wed, 15 Dec 2021 10:56:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C35FBC34603
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BF9KU8m011417;
+	Wed, 15 Dec 2021 11:56:34 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=to : cc : from :
+ subject : message-id : date : mime-version : content-type :
+ content-transfer-encoding; s=selector1;
+ bh=aMhAYRQEwPa+LO1VPGFEvP3hcutpAOtxndPpd2jAOSc=;
+ b=Dh9yftgbbOlZcwkq19CSIFyLoB2uZW7zzKq6UvIBwMfVF77rBRSarSs9SF8TyRUiyKnU
+ pw5k7BFwdn9b+V0CFu2vu+JvJQ/hIFkQcEib3OMWaa5+eatnK1kSJ2DMJhj+OdfRCLYc
+ cUOMz7HIwwXtqTsk0uj/rDshFWn6w646lCGoVnRTBDEksK7xwOpSiye5tBRE0lNguSWR
+ py6U+Rj9P2oVx/PXKYDv6qBpr8HtOfZL0xJi0GRYzITVuFehp8ys7QAnql1n3Gwqbiae
+ 3dV4If0VXvTGARBZ0N3fxSK8/yOZ44ZSgHH03qqN1qmWpAPazDqoNKVfHl1UWHcTJhoi dA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cy79j3018-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 Dec 2021 11:56:33 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id AB9FF10002A;
+	Wed, 15 Dec 2021 11:56:30 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8B6832354DF;
+	Wed, 15 Dec 2021 11:56:30 +0100 (CET)
+Received: from lmecxl0912.lme.st.com (10.75.127.46) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 15 Dec
+ 2021 11:56:29 +0100
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Marc Zyngier <maz@kernel.org>, 
-	Sam Shih <sam.shih@mediatek.com>, Zhiyong Tao <zhiyong.tao@mediatek.com>, 
-	Ludovic Desroches <ludovic.desroches@microchip.com>, 
-	Claudiu Beznea <claudiu.beznea@microchip.com>, 
-	Radim Pavlik <radim.pavlik@tbs-biometrics.com>, 
-	Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>, 
-	Colin Foster <colin.foster@in-advantage.com>, Douglas Anderson <dianders@chromium.org>, 
-	Bjorn Andersson <bjorn.andersson@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Herve Codina <herve.codina@bootlin.com>, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, linux-actions@lists.infradead.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>, 
-	linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>, - <patches@opensource.cirrus.com>, 
-	ALSA Development Mailing List <alsa-devel@alsa-project.org>, linux-mediatek@lists.infradead.org, 
-	linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-msm <linux-arm-msm@vger.kernel.org>, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>, =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Nicolas Saenz Julienne <nsaenz@kernel.org>, 
-	Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, Charles Keepax <ckeepax@opensource.cirrus.com>, 
-	Richard Fitzgerald <rf@opensource.cirrus.com>, Sean Wang <sean.wang@kernel.org>, 
-	Basavaraj Natikar <Basavaraj.Natikar@amd.com>, Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Support Opensource <support.opensource@diasemi.com>, Baruch Siach <baruch@tkos.co.il>, 
-	Neil Armstrong <narmstrong@baylibre.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Andy Gross <agross@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Viresh Kumar <vireshk@kernel.org>, 
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, arm-soc <soc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        "Kevin
+ Hilman" <khilman@baylibre.com>, SoC Team <soc@kernel.org>,
+        arm-soc
+	<arm@kernel.org>
+CC: Alexandre TORGUE <alexandre.torgue@st.com>,
+        "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+        "linux-stm32@st-md-mailman.stormreply.com"
+	<linux-stm32@st-md-mailman.stormreply.com>,
+        Jagan Teki
+	<jagan@amarulasolutions.com>
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Subject: [GIT PULL] STM32 DT changes for v5.17 #1
+Message-ID: <dfe942db-5af7-bb82-22b6-3bd866c9017d@foss.st.com>
+Date: Wed, 15 Dec 2021 11:56:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-15_08,2021-12-14_01,2021-12-02_01
 
-On Mon, Dec 13, 2021 at 5:40 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> GPIO library does copy the of_node from the parent device of
-> the GPIO chip, there is no need to repeat this in the individual
-> drivers. Remove these assignment all at once.
->
-> For the details one may look into the of_gpio_dev_init() implementation.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
->  drivers/pinctrl/renesas/pinctrl-rza2.c     | 1 -
+Dear ARM SoC maintainers,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Please consider this first round of STM32 DT updates for v5.17.
 
-Gr{oetje,eeting}s,
+Regards
+Alex
 
-                        Geert
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
+tags/stm32-dt-for-v5.17-1
+
+for you to fetch changes up to 3ff0810ffc4793bfde454a452837484d0815aa14:
+
+   ARM: dts: stm32: Add Engicam i.Core STM32MP1 C.TOUCH 2.0 10.1" OF 
+(2021-12-06 09:31:05 +0100)
+
+----------------------------------------------------------------
+STM32 DT for v5.17, round 1
+
+Highlights:
+----------
+
+-MCU:
+  - fix ili9341 for dtbs_check warnings on stm32f429 disco.
+
+- MPU:
+  - ST boards:
+   - tune HS USB phys on stm32mp15 EV1 and DKx boards.
+   - add pull-up on USART3/UART7 RX pins on STM32MP15 DKx boards.
+   - use correct pinctrl setting for STUSB1600 on STM32MP15 DK boards.
+
+  - ENGICAM:
+   - enable LVDS pannel on i.Core STM32MP1 EDIMM2.2.
+   - add "i.Core STM32MP1 C.TOUCH 2.0 10.1" OF" support:
+     EDIMM compliant general purpose carrier board with ETH 10/100,
+     WIFI/BT, CAN, ...
+
+----------------------------------------------------------------
+Dillon Min (1):
+       ARM: dts: stm32: fix dtbs_check warning on ili9341 dts binding on 
+stm32f429 disco
+
+Erwan Le Ray (2):
+       ARM: dts: stm32: add pull-up to USART3 and UART7 RX pins on 
+STM32MP15 DKx boards
+       ARM: dts: stm32: clean uart4_idle_pins_a node for stm32mp15
+
+Fabrice Gasnier (3):
+       ARM: dts: stm32: tune the HS USB PHYs on stm32mp15xx-dkx
+       ARM: dts: stm32: tune the HS USB PHYs on stm32mp157c-ev1
+       ARM: dts: stm32: fix stusb1600 pinctrl used on stm32mp157c-dk
+
+Jagan Teki (3):
+       ARM: dts: stm32: Enable LVDS panel on i.Core STM32MP1 EDIMM2.2
+       dt-bindings: arm: stm32: Add Engicam i.Core STM32MP1 C.TOUCH 2.0 
+10.1" OF
+       ARM: dts: stm32: Add Engicam i.Core STM32MP1 C.TOUCH 2.0 10.1" OF
+
+  .../devicetree/bindings/arm/stm32/stm32.yaml       |   1 +
+  arch/arm/boot/dts/Makefile                         |   1 +
+  arch/arm/boot/dts/stm32f429-disco.dts              |   2 +-
+  arch/arm/boot/dts/stm32mp15-pinctrl.dtsi           |  32 ++---
+  .../stm32mp157a-icore-stm32mp1-ctouch2-of10.dts    | 132 
++++++++++++++++++++++
+  .../dts/stm32mp157a-icore-stm32mp1-edimm2.2.dts    |  85 +++++++++++++
+  arch/arm/boot/dts/stm32mp157c-ev1.dts              |  22 ++++
+  arch/arm/boot/dts/stm32mp15xx-dkx.dtsi             |  16 +++
+  8 files changed, 274 insertions(+), 17 deletions(-)
+  create mode 100644 
+arch/arm/boot/dts/stm32mp157a-icore-stm32mp1-ctouch2-of10.dts
