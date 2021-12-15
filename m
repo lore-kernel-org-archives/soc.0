@@ -1,88 +1,115 @@
-Return-Path: <SRS0=Tbsy=RA=gmail.com=emil.renner.berthing@kernel.org>
+Return-Path: <SRS0=HwII=RA=linux.intel.com=andriy.shevchenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 291A0C433F5
-	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 12:27:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D669C433EF
+	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 14:17:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DF23DC34603; Wed, 15 Dec 2021 12:27:16 +0000 (UTC)
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id DC673C34607; Wed, 15 Dec 2021 14:17:10 +0000 (UTC)
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B2451C34605
-	for <soc@kernel.org>; Wed, 15 Dec 2021 12:27:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B2451C34605
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=esmil.dk
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id o14so16270357plg.5
-        for <soc@kernel.org>; Wed, 15 Dec 2021 04:27:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cdrzgxxaZww/l2rcuws83urbBn8Do58NhJhBwCmMimg=;
-        b=p0t/pDh5MUWWjWqJmi3N3f23i7I6qDJKFPB+hXc1DbixPnm6Q4m4BP822EELSZ6MNg
-         04R2kLYoBDWUIq8LUGqCzzaVXM/6kngfCl1yPW/ciC2qZMAlkPB5IArwEVh6xctiVXJB
-         TjQAtKE0fjIWzd213V0XGFQiLNx8lwC+BPYleB6EZFoLZCvXIOeePjLqHdlwid508OT/
-         Bvde4bmLVURMzfSPbMzDmUlHwutJoyHih50KDuIQzbBGHTnFmkB0BGJrEXdkZ1tSeFU4
-         drdMMSzbp7R3nfd0q4moE1A8UHPn4a/FGG50SxGZ4wyNyAe+iuuU7UWBzbh+s6blhYqc
-         SOqg==
-X-Gm-Message-State: AOAM532YiebkTbuDmijjjiPoMG44TURvt8mbLe3nG//rNP4Rr8uXwWau
-	VtlSjb/u04DZ/5kf4b7F8JMkIvlUMDCTLdnDDIU=
-X-Google-Smtp-Source: ABdhPJzWiB8wF41D06DYo6PG+1QNnBepipzq/MOuOKTyB4bOog9Jp145EzqkGXttyXYbnSXsvMrFXkPJGZtAX6aYHO0=
-X-Received: by 2002:a17:90b:4b0e:: with SMTP id lx14mr11591436pjb.160.1639571235268;
- Wed, 15 Dec 2021 04:27:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20211128200647.147058-1-kernel@esmil.dk> <CAK8P3a1NvT=f2vOvgk4HdBc48A+63B_0SBQ5AVOO6cu0MiMFiQ@mail.gmail.com>
- <CANBLGczcO298ADMjVpuB8p-yYfD7aO11A=BUYU7Ws94yksbGxw@mail.gmail.com> <CAK8P3a3-ZSHsJJ=kS_tRWqkv013DR24_20Uqsm1U3vs60NkPbg@mail.gmail.com>
-In-Reply-To: <CAK8P3a3-ZSHsJJ=kS_tRWqkv013DR24_20Uqsm1U3vs60NkPbg@mail.gmail.com>
-From: Emil Renner Berthing <kernel@esmil.dk>
-Date: Wed, 15 Dec 2021 13:27:03 +0100
-Message-ID: <CANBLGcxzdx=Rr1J=UnOTVpYybCpZPFYfPLWtd7QP8k9E-G=CQw@mail.gmail.com>
-Subject: Re: [GIT PULL] Basic StarFive JH7100 RISC-V SoC support for 5.17
-To: Arnd Bergmann <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id CA03AC34605;
+	Wed, 15 Dec 2021 14:17:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CA03AC34605
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="300012018"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="300012018"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 06:17:08 -0800
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="567937520"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 06:16:57 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1mxV4Z-006d5b-Tn;
+	Wed, 15 Dec 2021 16:15:59 +0200
+Date: Wed, 15 Dec 2021 16:15:59 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, linux-riscv <linux-riscv@lists.infradead.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Michael Zhu <michael.zhu@starfivetech.com>, 
-	Fu Wei <tekkamanninja@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc: Linus Walleij <linus.walleij@linaro.org>, Marc Zyngier <maz@kernel.org>,
+	Sam Shih <sam.shih@mediatek.com>,
+	Zhiyong Tao <zhiyong.tao@mediatek.com>,
+	Ludovic Desroches <ludovic.desroches@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
+	Radim Pavlik <radim.pavlik@tbs-biometrics.com>,
+	Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+	Colin Foster <colin.foster@in-advantage.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Herve Codina <herve.codina@bootlin.com>,
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	linux-actions@lists.infradead.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+	linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+	- <patches@opensource.cirrus.com>,
+	ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+	linux-mediatek@lists.infradead.org, linux-oxnas@groups.io,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+	Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Nicolas Saenz Julienne <nsaenz@kernel.org>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	Sean Wang <sean.wang@kernel.org>,
+	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Baruch Siach <baruch@tkos.co.il>,
+	Neil Armstrong <narmstrong@baylibre.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Andy Gross <agross@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	arm-soc <soc@kernel.org>
+Subject: Re: [PATCH v1 1/2] pinctrl: Get rid of duplicate of_node assignment
+ in the drivers
+Message-ID: <Ybn4ny0YY/Sbld+Q@smile.fi.intel.com>
+References: <20211213163929.7509-1-andriy.shevchenko@linux.intel.com>
+ <CAMuHMdW_CKcXwOSUAbCreHVM62E35yjiCfpXC_wM0zK-V43CnA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdW_CKcXwOSUAbCreHVM62E35yjiCfpXC_wM0zK-V43CnA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, 15 Dec 2021 at 13:17, Arnd Bergmann <arnd@arndb.de> wrote:
-> On Wed, Dec 15, 2021 at 12:25 PM Emil Renner Berthing <kernel@esmil.dk> wrote:
-> > On Tue, 14 Dec 2021 at 22:30, Arnd Bergmann <arnd@arndb.de> wrote:
-> > > On Sun, Nov 28, 2021 at 9:06 PM Emil Renner Berthing <kernel@esmil.dk> wrote:
-> > > I just got through my backlog of pull request and got to yours. All of
-> > > the contents look
-> > > fine but I noticed that there is no tag description. Please sign the
-> > > tag with a gpg
-> > > key and add a description that explains the contents of the branch in your own
-> > > words, the same way you write the introductory mail of a patch series. This will
-> > > become the description of the merge commit.
+On Wed, Dec 15, 2021 at 11:28:34AM +0100, Geert Uytterhoeven wrote:
+> On Mon, Dec 13, 2021 at 5:40 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > GPIO library does copy the of_node from the parent device of
+> > the GPIO chip, there is no need to repeat this in the individual
+> > drivers. Remove these assignment all at once.
 > >
-> > Ah, gotcha. The thing is that I don't actually have a gpg key at the
-> > moment. I can generate one and use that to sign it, but then it won't
-> > be part of the web of trust.
-> > Alternatively I can just send it as a series of patches with a cover
-> > letter like I did before. That would be a little easier for me, but
-> > what do you prefer?
->
-> I'd prefer a pull request. The most important bit to me is actually the
-> tag description, not the signature. I'll go through the contents once
-> more anyway, which should be enough for me to merge it.
->
-> A signed tag is still better than one without a signature, that way at
-> least your key is part of the git history and we can confirm that another
-> pull request came was signed with the same key, even if we don't know
-> who you are ;-)
->
-> When you create a new key, please follow the directions from
-> https://www.kernel.org/doc/Documentation/process/maintainer-pgp-guide.rst
-> andyway, so you can add it to the keyring after you have collected the
-> signatures.
+> > For the details one may look into the of_gpio_dev_init() implementation.
 
-Nice, I'll try to follow that then. Thanks!
+> >  drivers/pinctrl/renesas/pinctrl-rza2.c     | 1 -
+> 
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-/Emil
+Thanks, there is v2 with this patch w/o changes. I take a liberty to
+extrapolate the tags to it. I need to send a v3 in case Linus hasn't
+taken the first patch before it happens.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
