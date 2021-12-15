@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9276CC43219
-	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 22:05:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38A7EC4332F
+	for <soc@archiver.kernel.org>; Wed, 15 Dec 2021 22:05:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7DA4AC36AE4; Wed, 15 Dec 2021 22:05:53 +0000 (UTC)
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	id 23C92C36AE7; Wed, 15 Dec 2021 22:05:55 +0000 (UTC)
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F2D22C36AE9;
-	Wed, 15 Dec 2021 22:05:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F2D22C36AE9
+	by smtp.kernel.org (Postfix) with ESMTPS id A801EC36AE3;
+	Wed, 15 Dec 2021 22:05:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A801EC36AE3
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f173.google.com with SMTP id p4so21544159qkm.7;
-        Wed, 15 Dec 2021 14:05:52 -0800 (PST)
+Received: by mail-qk1-f174.google.com with SMTP id a11so21524038qkh.13;
+        Wed, 15 Dec 2021 14:05:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=uZXcXH3L1t8Ypj76VyGOg3cu76ENgNQ926hUe44X4rE=;
-        b=jbwaghfmwhvJZaalL3dMgv0OxzIpgcprLqPnKQombDpfLlgkJ6m0jV/4sZuZhS1lk1
-         u/utp0zAx7SDBRwBMmk5+EHPtfFo0tQ6QwAVyB92Jl6KngdET1fVFGAUMzsG65vUSx7y
-         0wj7V8BfwnnE3H6J365vCmTI9t4ot/Qkw86QH6G9t61dAaSLmZR0K1xG20D3k7Qdi8My
-         A+cWw8vSHV0MjS1/nGVer9yY11qFMd2aEKpenlCM71aYQooix+sQX/bK4rmQhoIiIDSo
-         NNOxyyxe3RYTZ1KlCuEYWo/8UxAkC5Y0eX6btTloPfgDNe1m9h13cYw44Y1CwcGoZKBt
-         NW4A==
+        bh=Nfw84skwDiWF0hVkBaCmIEgDDYUu9HQAVCA9TAQoLGM=;
+        b=HEgHrqcsFZ9SyjVnl/2KVYnV6dY+aDoDk2TnanqmRScBi8vs+gzIVf5lPF70JznrWD
+         8xror+R84Stijbs7TboPzeP7aeGYAwlCQTC/y2TEwLfXpvffNSD3FhY6WY83hV6YbD79
+         gebmbnvF7PZivHPKms+81IEdrN+aFx9I9OTvMpf8J97kbV6iUqg4Hzk6na79oMCq4hI1
+         rfIJ4VHRP8iN05/Fblc3yiNpCsYre7XKdB5ud4oSqNVjRzWCUO9k3ovWecuBFQYNL4US
+         mQ3nWHpO608quueK7Nqp3b9JUCY2C5o0tgdNsZ981rl+khoW/y00uBonxkzJGoWisb3V
+         Beeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uZXcXH3L1t8Ypj76VyGOg3cu76ENgNQ926hUe44X4rE=;
-        b=gdMzBWvnOby7veNGqH4zhDbdq6jij+jsFr9+OJktfApsUs10W9ioz+3rI8K6g4AUuJ
-         18dTKYj9uwtj2cAyNJEIjoea2AMf3w+V4om4FZ8r/cYdRQ77L6SKRr5XZlvLQbRopG4x
-         cfDFRx1esXzjGz/jmlgh17HyzWVFQCjIdjHjx3DVPXNPO1/eNpPBwTXgVMD3EL5YBfDR
-         qsy7+IUVeO58LCCI/or049IO6IJDtMDLRoRuCaANizRoUOibSvPaBORxkLbTMPheg2M0
-         AT6xZxMRhsXZb5x2QsFEFrj0gsAS/nc9ysAeVErhGwli4U0fk6cIjORFTvZO2RXWYGM6
-         0DNw==
-X-Gm-Message-State: AOAM531sKrV8rxA/qhIwkNOFdG8jE/Th+PlnMMVMjZoEINn3AO3tLH5n
-	OAfrhKVRkOmW7oLbjYwVlXM=
-X-Google-Smtp-Source: ABdhPJyBLieCF65zaagWkywbISEzmE4MuaG2BxRWuOkkXAY43ofgv3z/FQplYjGKDPbQKtsLx/SeiQ==
-X-Received: by 2002:a05:620a:ce5:: with SMTP id c5mr10185462qkj.285.1639605951999;
-        Wed, 15 Dec 2021 14:05:51 -0800 (PST)
+        bh=Nfw84skwDiWF0hVkBaCmIEgDDYUu9HQAVCA9TAQoLGM=;
+        b=ZKsZxHEOseuTB+nh6h5rsnrdW0ZGkq/h9IU+kPq0CGAK5HH2q+gHuOglmCfZZ5nK8j
+         eC3WYnrQk1Uc0qYo0aGkXp3jgYezyWczRft6vbEqnGGLIsV/lXy+6+ELnp3eWdtseMxR
+         Jv52IcOcVlJ+WP/4aSMUCWbkNGDaoBeNcpKNrgFf1WrhKK2hEiyXEbMSG9Ad/L4ErmhV
+         P7VX0MKFCv16z2DR/C9dSiNwUtjK1l1wl/2JTbzmXbOPRTvg2Xsd812a5r7i9hZGNbtm
+         WOduWhSNvPfm+xrIwDPiUJCuzMbJt6zDhKVgh0eFiYrEDI8HLzkhhV5fqIiXHlJ+8Xf1
+         Bc/g==
+X-Gm-Message-State: AOAM5300XAFtkj+f6YDvp79iGXWNMNvnq2wHKxszB40HHR9m14G4bu+y
+	79jcUKRhEl8B05yN4358AXs=
+X-Google-Smtp-Source: ABdhPJzA29KNN3tMeFW5WKmK5xkxdIu1YzBmNCfWdBVgQH2bUSqHaXTXn0/E2gHJsWlxZB7I34BWJg==
+X-Received: by 2002:a05:620a:c11:: with SMTP id l17mr10361187qki.493.1639605953742;
+        Wed, 15 Dec 2021 14:05:53 -0800 (PST)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id s20sm2471592qtc.75.2021.12.15.14.05.50
+        by smtp.gmail.com with ESMTPSA id s20sm2471592qtc.75.2021.12.15.14.05.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 14:05:51 -0800 (PST)
+        Wed, 15 Dec 2021 14:05:53 -0800 (PST)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -83,9 +83,9 @@ Cc: mturquette@baylibre.com,
 	linux-gpio@vger.kernel.org,
 	linux-serial@vger.kernel.org,
 	Jesse Taube <mr.bossman075@gmail.com>
-Subject: [PATCH v5 6/9] dt-bindings: serial: fsl-lpuart: add i.MXRT1050 compatible
-Date: Wed, 15 Dec 2021 17:05:35 -0500
-Message-Id: <20211215220538.4180616-7-Mr.Bossman075@gmail.com>
+Subject: [PATCH v5 7/9] tty: serial: fsl_lpuart: Add i.MXRT1050 support
+Date: Wed, 15 Dec 2021 17:05:36 -0500
+Message-Id: <20211215220538.4180616-8-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211215220538.4180616-1-Mr.Bossman075@gmail.com>
 References: <20211215220538.4180616-1-Mr.Bossman075@gmail.com>
@@ -94,7 +94,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Jesse Taube <mr.bossman075@gmail.com>
 
-Add i.MXRT1050 documentation for compatible string.
+Add support for i.MXRT1050's uart.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
@@ -108,21 +108,49 @@ V3->V4:
 V4->V5:
 * Change commit description to just 1050
 ---
- Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/fsl_lpuart.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-index e7ac63dd1469..5b066afda24b 100644
---- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-+++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-@@ -21,6 +21,7 @@ properties:
-           - fsl,ls1028a-lpuart
-           - fsl,imx7ulp-lpuart
-           - fsl,imx8qm-lpuart
-+          - fsl,imxrt1050-lpuart
-       - items:
-           - enum:
-               - fsl,imx8qxp-lpuart
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index 3affe52a364d..ce3e26144689 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -247,6 +247,7 @@ enum lpuart_type {
+ 	LS1028A_LPUART,
+ 	IMX7ULP_LPUART,
+ 	IMX8QXP_LPUART,
++	IMXRT1050_LPUART,
+ };
+ 
+ struct lpuart_port {
+@@ -310,6 +311,11 @@ static struct lpuart_soc_data imx8qxp_data = {
+ 	.iotype = UPIO_MEM32,
+ 	.reg_off = IMX_REG_OFF,
+ };
++static struct lpuart_soc_data imxrt1050_data = {
++	.devtype = IMXRT1050_LPUART,
++	.iotype = UPIO_MEM32,
++	.reg_off = IMX_REG_OFF,
++};
+ 
+ static const struct of_device_id lpuart_dt_ids[] = {
+ 	{ .compatible = "fsl,vf610-lpuart",	.data = &vf_data, },
+@@ -317,6 +323,7 @@ static const struct of_device_id lpuart_dt_ids[] = {
+ 	{ .compatible = "fsl,ls1028a-lpuart",	.data = &ls1028a_data, },
+ 	{ .compatible = "fsl,imx7ulp-lpuart",	.data = &imx7ulp_data, },
+ 	{ .compatible = "fsl,imx8qxp-lpuart",	.data = &imx8qxp_data, },
++	{ .compatible = "fsl,imxrt1050-lpuart",	.data = &imxrt1050_data},
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, lpuart_dt_ids);
+@@ -2626,6 +2633,7 @@ OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1021a-lpuart", lpuart32_early_console_setup
+ OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1028a-lpuart", ls1028a_early_console_setup);
+ OF_EARLYCON_DECLARE(lpuart32, "fsl,imx7ulp-lpuart", lpuart32_imx_early_console_setup);
+ OF_EARLYCON_DECLARE(lpuart32, "fsl,imx8qxp-lpuart", lpuart32_imx_early_console_setup);
++OF_EARLYCON_DECLARE(lpuart32, "fsl,imxrt1050-lpuart", lpuart32_imx_early_console_setup);
+ EARLYCON_DECLARE(lpuart, lpuart_early_console_setup);
+ EARLYCON_DECLARE(lpuart32, lpuart32_early_console_setup);
+ 
 -- 
 2.34.1
 
