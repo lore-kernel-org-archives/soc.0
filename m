@@ -4,64 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 940ABC4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87D59C433FE
 	for <soc@archiver.kernel.org>; Thu, 16 Dec 2021 14:20:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5E857C36AE8; Thu, 16 Dec 2021 14:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 475F8C36AE5
-	for <soc@kernel.org>; Thu, 16 Dec 2021 14:20:10 +0000 (UTC)
+	id 691B4C36AE4; Thu, 16 Dec 2021 14:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 53284C36AE6;
+	Thu, 16 Dec 2021 14:20:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1639664410;
-	bh=rPC+dtrG4v61PxP+zO+218IZVOqqUWmJlRBMMnwlgPA=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=IH8/gaprYtlec3Xw9NKkIVrZLeoiJXcCfHk6wD+1tq4WSYbB83KNezjSbsodqKoyp
-	 f/78BDZP9BE2ViqWvWH8zM2GbPYiPI6lmk+9RFLq96/LHQxGJ5GEUel0Ya3pEYkJAz
-	 /4gQ5VMI4JIJVKNMKFxnBcJZkSaoG/SUbPf5jbkBJK2kYTfckLo40Gvuqdo3EDATIV
-	 UBEG8wK2UBdMz4snVC2cdDLq/IbQnmowvoy2MZjyAB5SkNQ/rEBWsXRmDj/KrObZio
-	 upULIFggPaWjcSSxM5lbthSQyg01eAcM6RsjtoKg+ZMwp5XZvKFGU/Ssu7lxhuqX1P
-	 WwuzzkNC0OAVw==
+	bh=Wb6gdJO06s5M7hVn0OwcIF18rushGn6axUZiorKLaqw=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=EPUCcrqsz9BTLOQzmH4UsKFpCA8E7DNrb38snCXOvxxGtmJMkjGJ5OdGQDybCIeGE
+	 F2jFGKfOYahzwt7KD/65ZsowY3/2ZGshZK9czKl9QyIh5UDuAt1LU7S7A5HGQZ3lCw
+	 6xucJg5fYnSIHaxChc2cRsYEIQ1IoS7W2dzds10TJFU4uKBZslVmSg0IDF6E8apB09
+	 TCiyBFNygp6LAMspIFFv9wGJTFhlMllAXP8iP8xB5qsARcrfWZRfXF8zVpdVGlNt1r
+	 lM7svGtHucdxSWBhLrHnMfig/F2H8Pu/KFwVjwgRgCMc5uu1dBG+8Qcnc5scdKFl4h
+	 mRzQAVL0IziHA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 36FAA609FE;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 403FF60A49;
 	Thu, 16 Dec 2021 14:20:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] arm64: dts: socfpga: dts updates for v5.17
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <163966441022.28413.17413932118044697532.git-patchwork-summary@kernel.org>
+ <163966441025.28413.11732961222838182881.git-patchwork-notify@kernel.org>
 Date: Thu, 16 Dec 2021 14:20:10 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20211215164545.300273-1-dinguyen@kernel.org>
+In-Reply-To: <20211215164545.300273-1-dinguyen@kernel.org>
+To: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] arm64: dts: socfpga: dts updates for v5.17
-  Submitter: Dinh Nguyen <dinguyen@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=596103
-  Lore link: https://lore.kernel.org/r/20211215164545.300273-1-dinguyen@kernel.org
+On Wed, 15 Dec 2021 10:45:45 -0600 you wrote:
+> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+> 
+>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_update_for_v5.17
+> 
+> [...]
 
-Patch: [GIT,PULL] Devicetree changes for omaps for v5.17
-  Submitter: Tony Lindgren <tony@atomide.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=596653
-  Lore link: https://lore.kernel.org/r/pull-1639659798-679261@atomide.com
+Here is the summary with links:
+  - [GIT,PULL] arm64: dts: socfpga: dts updates for v5.17
+    https://git.kernel.org/soc/soc/c/4a097f29fb52
 
-Patch: [GIT,PULL] soc/tegra: Fixes for v5.16-rc6
-  Submitter: Thierry Reding <thierry.reding@gmail.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=596091
-  Lore link: https://lore.kernel.org/r/20211215162618.3568474-1-thierry.reding@gmail.com
-
-
-Total patches: 3
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
