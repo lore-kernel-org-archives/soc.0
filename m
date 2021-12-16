@@ -1,155 +1,219 @@
-Return-Path: <SRS0=X6Md=RB=arndb.de=arnd@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76AB2C433EF
-	for <soc@archiver.kernel.org>; Thu, 16 Dec 2021 21:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27281C433EF
+	for <soc@archiver.kernel.org>; Thu, 16 Dec 2021 21:23:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 28C01C36AE8; Thu, 16 Dec 2021 21:14:18 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 77BA3C36AE2;
-	Thu, 16 Dec 2021 21:14:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 77BA3C36AE2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MHX3R-1mkTg71G41-00DUXd; Thu, 16 Dec 2021 22:14:14 +0100
-Received: by mail-wr1-f44.google.com with SMTP id s1so389445wrg.1;
-        Thu, 16 Dec 2021 13:14:14 -0800 (PST)
-X-Gm-Message-State: AOAM5319Z0ikAQ2vjrGp+RktNPf+zaqLgyA/WeKmbMpOz+DxwkHFkOB9
-	3MFsp4h+KxJLdSdRakikF6p95MTdBOlB1lndN+s=
-X-Google-Smtp-Source: ABdhPJx5ftEfPH4qvIzikYkTAI2QfNEBmismxp18qt3xtWOd9p6RwUc2SZYuv+4lj5MKuQ7wJcPfZffT71zk71LPRZ8=
-X-Received: by 2002:a05:6000:1aca:: with SMTP id i10mr10867640wry.407.1639689253768;
- Thu, 16 Dec 2021 13:14:13 -0800 (PST)
+	id 0CA45C36AEA; Thu, 16 Dec 2021 21:23:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB38C36AE9
+	for <soc@kernel.org>; Thu, 16 Dec 2021 21:23:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639689821;
+	bh=kQEe/9F97cQuoBhsW/RYNf5vjhRItzfA89nH9Zjgc1I=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=CaY06NNWGfiUW4HkeIad1eTN8SxL8O0EAPKBAB78XtLq62iJ0/gbCa+3noh6q4A+4
+	 YtiphIIVwZFGuoT67pIjJSCiM9qfMLcfXfNjX2eP2JioHKVVp5S/0NhUojmwnSJnqh
+	 2trDujfyiR1p3uVz7PWmyB5eLBZsecmifcU2iA9EET3yHWaWQpjeTbG+1XORFxzvvN
+	 pXSGZc31gqeYbAkJ1z3lQ3Op/n3Ve0R4YSPFjyo1NuTVj/YzhXy8+4w6NsFmUvXZt9
+	 ldIWVbunwk8Uaf+wOEA9MgmfD3yC5RBz/WuYtVJSA5lMg2XALi56p4SdRBvshM8Kpl
+	 13DDveVtK7+ag==
+Received: by mail-wr1-f51.google.com with SMTP id j18so412634wrd.2
+        for <soc@kernel.org>; Thu, 16 Dec 2021 13:23:40 -0800 (PST)
+X-Gm-Message-State: AOAM530rIWS0XhN0GIJoO5DU47y63XhiRHZvvkj+NIKA8gnArqRGNrZQ
+	AX0rqZ/TaM5bSDs2NbAiyR7FSUZoG/YV+AnWjes=
+X-Google-Smtp-Source: ABdhPJxTKDqsdPyxr0x9aLcBOFr6XyLV3INpoLbwNnYEd8ExF0RPPjW8L1w6aq2j6uowWCeA4pgOdFilrp2NQqZEV6I=
+X-Received: by 2002:adf:f051:: with SMTP id t17mr230776wro.192.1639689819275;
+ Thu, 16 Dec 2021 13:23:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20211215220538.4180616-1-Mr.Bossman075@gmail.com>
- <CAK8P3a29tzgd_4WncippZBEJra9n0bQTysBkPBp_WA0sb28gTg@mail.gmail.com> <1360c4fe-4a09-a8a1-3224-7f1d4af59f6f@benettiengineering.com>
-In-Reply-To: <1360c4fe-4a09-a8a1-3224-7f1d4af59f6f@benettiengineering.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Thu, 16 Dec 2021 22:13:57 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1oZK1qMRBE3D8otCTY6Lg4jMXxVpAZHQzLTA8woA3_UQ@mail.gmail.com>
-Message-ID: <CAK8P3a1oZK1qMRBE3D8otCTY6Lg4jMXxVpAZHQzLTA8woA3_UQ@mail.gmail.com>
-Subject: Re: [RESEND in plain-test] Re: [PATCH v5 0/9] Add initial support for
- the i.MXRTxxxx SoC family starting from i.IMXRT1050 SoC.
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Thu, 16 Dec 2021 22:23:22 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0L+x_rxG+xO5KFG53VtxDb_ycB5+4axWR6yRpG_YLzqA@mail.gmail.com>
+Message-ID: <CAK8P3a0L+x_rxG+xO5KFG53VtxDb_ycB5+4axWR6yRpG_YLzqA@mail.gmail.com>
+Subject: [GIT PULL] ARM: SoC fixes for v5.16, part 3
+To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Jesse Taube <mr.bossman075@gmail.com>, 
-	NXP Linux Team <linux-imx@nxp.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Sascha Hauer <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Dong Aisheng <aisheng.dong@nxp.com>, Stefan Agner <stefan@agner.ch>, 
-	Linus Walleij <linus.walleij@linaro.org>, gregkh <gregkh@linuxfoundation.org>, 
-	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
-	Russell King - ARM Linux <linux@armlinux.org.uk>, Abel Vesa <abel.vesa@nxp.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Jiri Slaby <jirislaby@kernel.org>, 
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, linux-clk <linux-clk@vger.kernel.org>, 
-	DTML <devicetree@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-mmc <linux-mmc@vger.kernel.org>, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
-	"open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>, Vladimir Murzin <vladimir.murzin@arm.com>
+Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:K/E8F6vNDTtQkdQw8ZH4ZQrBwA+b2qQyLQd6R852vCzaCs9bqco
- yanTu1g6VP1UvNXjJWnz/rTzP5d0KC+xFdU+6gNVlCgoActLceZ5nLOgdIaMMglHDXFAcqh
- OKwtT15kPWX9mDM8bdKA6rN0JqNxZJfLVK1DrhNk2IVQ7lO/SIE5bXoZlRiIWW+P8K3mqkG
- itolQqggWkmwhog1flqrQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dM2Tl1SzARo=:GJ7cPmmOt5AplS9M2DPUmN
- IEW7jm4mjDkMuH2Tb7qJe7xeQ1i/sSAlNJILV8PDPSFuA4ub5HVTaiBd4x7QBaFUC/q1+u+CI
- kE0tsWlVTZffDqulL2K5Dx631Pd6fmvTDmqB2aW7cYu++XFbNB4YcvbZw8dxwHOyiYV1alO5W
- OvyPdT3hPvwUVNu1fPPCs/5FavD+aUJJQyGeOp6CMqwgRAN7z47HS+5tijOq0XZfbTes3zJ1I
- ofpyf6SfPMhNqw4q3vG8dni9TygWGvMWfl7Q7KjmwntmJGLOqchZ7fvWeoj3aORIMWR0vz+tb
- ah3nMiOfQOAfMY7cMTBB4FXAG9DPS2x6kahUqEzdsAyzINEs1gcLYBc4rGgLwfPZUvQAB0x4U
- 8DDfg9ej98kZxd/xCA5ZEXp6ZEH3U4aqgEn1EOv2zHFv8YVy+gixnPV0n5vDZ4zcAER6GmL/+
- OTWMNJotDjmmn1vp0H8HAkeQozDkotPOdcTX5T5BBJNFkWcysgPFfr0Gcg3BpyH3IzcEtzKq1
- dqISPOToBoZlITho1SSw9vUEjlVaJnuq8oPC6RTvfg8v9EDJ/8NDSHo19+/Kd3RiC5ssX82+Q
- e/onPI8+Fng/uVo6rA0XNx4/xEAuihiHf1xc1BwdGapAdqbHjQ+CJoBCg3/bgSPjqUm7baRKE
- SrCFnvpQ2Qsni31OgdIYDt9GsUPQssckdoynOTLksZvs4zhDqUcPsXyFb9TNaJJ6qGMloVgYh
- qKgj7KqsUBX0VFpuYofOQ+7MCT1fHmm2A23MwRrpb1kPVOEIos1YUDu2Bs47RLkxHpOUsbL/p
- v4W5zWdUc6qFMadekKtqGp2HemPTJ5o0UY/Rvy1L0d3lUc8olQ=
 
-On Thu, Dec 16, 2021 at 6:33 PM Giulio Benetti
-<giulio.benetti@benettiengineering.com> wrote:
-> On 16/12/21 09:26, Arnd Bergmann wrote:
-> > On Wed, Dec 15, 2021 at 11:05 PM Jesse Taube <mr.bossman075@gmail.com> =
-wrote:
+The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
 
-> > As a more general comment, it's always nice to see newly added SoC
-> > platforms, especially when they are this well implemented and done
-> > by hobbyists. However, I do think you are being overly optimistic
-> > as to how useful this is going to be to other people: interest in NOMMU
-> > ARM platforms has dropped a lot over the past 5 years, and as far as I
-> > can tell, it is only being kept alive for existing stm32 customers
-> > as the economics do not favor Linux on Cortex-M for new products
-> > compare to Linux on Cortex-A or some RTOS on Cortex-M.
-> >
-> > The existing users will inevitably stop updating their kernels at some
-> > point, and then it's most likely just you and Vladimir Murzin that care=
-.
->
->
-> About this will you accept support for the other SoCs in the family?
-> We would like to add in the near future:
-> - i.MXRT1020(uboot support is already upstreamed)
-> - i.MXRT1024(almost equal to 1020)
-> - i.MXRT1060(almost equal to 1050)
-> - i.MXRT1064(almost equal to 1060)
-> And
-> - i.MXRT1160/70 new family with faster core clock(1Ghz) and a cortex M4
->
-> We need to add missing lcd(uboot upstreamed), usb(uboot upstreamed),
-> ethernet(wip) supports for i.MXRT10xx family.
+  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
 
-Sure, anything you want to work on supporting can be added to the kernel,
-the important bit is that it's well written and can be maintained going for=
-ward.
+are available in the Git repository at:
 
-My best guess is that we'll end up ripping out all NOMMU support in
-a few years, when we get to a point when both of these things happen:
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+tags/soc-fixes-5.16-3
 
-- the number of actual users that still update their kernels becomes
-  really low
+for you to fetch changes up to 4bc73b7d4880a304e1ef1f2a82415292d31b70de:
 
-- There is some treewide refactoring that isn't easily supportable without =
-an
-   MMU unless someone puts extra work into it.
+  Merge tag 'tegra-for-5.16-soc-fixes' of
+git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into
+arm/fixes (2021-12-16 15:02:26 +0100)
 
-At the moment, we still support NOMMU kernels on a bunch of architectures
-(Arm, riscv/k210, sh/j2, m68k/coldfire, xtensa and h8300). Out of these,
-Arm is by far the most active, and if Arm NOMMU support was to go away
-for some reason, the others would likely follow.
+----------------------------------------------------------------
+ARM: SoC fixes for v5.16, part 3
 
-> This is to organize with Jesse also about buying evaluation boards and
-> timing.
->
-> We=E2=80=99ve meant this porting also as an exercise to deal with Linux d=
-eeper
-> for us and for the other newbies.
->
-> We=E2=80=99ve been also asked about a possible support for s32s(quad cort=
-ex-R52)
-> on initial emails but it has no mmu too.
-> While I=E2=80=99m seeing that some cortex-R is landing inside Linux.
-> Would it be interesting anyway?
+There are a number of DT fixes, mostly for mistakes found through
+static checking of the dts files again, as well as a couple of
+minor changes to address incorrect DT settings.
 
-I brought that up during the initial review, but I think this is even
-less interesting
-than Cortex-M support from the perspective of potential use cases. While
-Cortex-M MCUs have some advantages over larger SoCs in terms of
-power consumption and cost, this is generally not true for running Linux
-on Cortex-R. The Cortex-R and Cortex-A cores are closely related, so
-they tend have similar power/performance/area characteristics, but
-the lack of an MMU makes the Cortex-R much less useful. If there was
-an advantage to running with the MMU disabled, you could actually do that
-on a Cortex-A as well, but clearly nobody does that either.
+For i.MX, there is yet another series of devitree changes to update
+RGMII delay settings for ethernet, which is an ongoing problem after
+some driver changes.
 
-Vladimir has put some work into making Cortex-R work in the kernel, and
-he may have some other thoughts on this question.
+For SoC specific device drivers, a number of smaller fixes came up:
 
-          Arnd
+ - i.MX SoC identification was incorrectly registered non-i.MX
+   machines when the driver is built-in
+
+ - One fix on imx8m-blk-ctrl driver to get i.MX8MM MIPI reset work
+   properly
+
+ - a few compile fixes for warnings that get in the way of -Werror
+
+ - a string overflow in the scpi firmware driver
+
+ - a boot failure with FORTIFY_SOURCE on Rockchips machines
+
+ - broken error handling in the AMD TEE driver
+
+ - a revert for a tegra reset driver commit that broke HDA
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+----------------------------------------------------------------
+Adam Ford (1):
+      soc: imx: imx8m-blk-ctrl: Fix imx8mm mipi reset
+
+Alex Bee (1):
+      arm64: dts: rockchip: fix audio-supply for Rock Pi 4
+
+Arnd Bergmann (11):
+      Merge tag 'reset-fixes-for-v5.16' of
+git://git.pengutronix.de/pza/linux into arm/fixes
+      Merge tag 'imx-fixes-5.16' of
+git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
+arm/fixes
+      Merge tag 'amdtee-fix-for-v5.16' of
+git://git.linaro.org/people/jens.wiklander/linux-tee into arm/fixes
+      Merge branch 'v5.16/fixes' of
+git://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux into
+arm/fixes
+      Merge tag 'socfpga_fix_for_v5.16_part_2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux into
+arm/fixes
+      Merge tag 'asahi-soc-fixes-5.16' of
+https://github.com/AsahiLinux/linux into arm/fixes
+      Merge tag 'tegra-for-5.16-firmware-fixes' of
+git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into
+arm/fixes
+      Merge tag 'imx-fixes-5.16-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
+arm/fixes
+      Merge tag 'v5.16-rockchip-dtsfixes1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
+into arm/fixes
+      Merge tag 'v5.16-rockchip-socfixes1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
+into arm/fixes
+      Merge tag 'tegra-for-5.16-soc-fixes' of
+git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into
+arm/fixes
+
+Artem Lapkin (1):
+      arm64: dts: rockchip: remove mmc-hs400-enhanced-strobe from
+rk3399-khadas-edge
+
+Dan Carpenter (1):
+      tee: amdtee: fix an IS_ERR() vs NULL bug
+
+Dinh Nguyen (1):
+      ARM: socfpga: dts: fix qspi node compatible
+
+Fabio Estevam (1):
+      ARM: dts: imx6ull-pinfunc: Fix CSI_DATA07__ESAI_TX0 pad name
+
+Florian Klink (1):
+      arm64: dts: rockchip: fix poweroff on helios64
+
+Ivan T. Ivanov (1):
+      ARM: rockchip: Use memcpy_toio instead of memcpy on smp bring-up
+
+Janne Grunau (3):
+      arm64: dts: apple: change ethernet0 device type to ethernet
+      dt-bindings: i2c: apple,i2c: allow multiple compatibles
+      arm64: dts: apple: add #interrupt-cells property to pinctrl nodes
+
+Jerome Brunet (1):
+      arm64: meson: remove COMMON_CLK
+
+John Keeping (2):
+      arm64: dts: rockchip: fix rk3308-roc-cc vcc-sd supply
+      arm64: dts: rockchip: fix rk3399-leez-p710 vcc3v3-lan supply
+
+Jon Hunter (1):
+      reset: tegra-bpmp: Revert Handle errors in BPMP response
+
+Lv Ruyi (1):
+      firmware: tegra: Fix error application of sizeof() to pointer
+
+Martin Kepplinger (1):
+      arm64: dts: imx8mq: remove interconnect property from lcdif
+
+Mathew McBride (1):
+      arm64: dts: ten64: remove redundant interrupt declaration for gpio-keys
+
+Nathan Chancellor (1):
+      soc/tegra: fuse: Fix bitwise vs. logical OR warning
+
+Stephan Gerhold (1):
+      soc: imx: Register SoC device only on i.MX boards
+
+Sudeep Holla (1):
+      firmware: arm_scpi: Fix string overflow in SCPI genpd driver
+
+Vladimir Oltean (3):
+      ARM: dts: imx6qp-prtwd3: update RGMII delays for sja1105 switch
+      ARM: dts: ls1021a-tsn: update RGMII delays for sja1105 switch
+      arm64: dts: lx2160abluebox3: update RGMII delays for sja1105 switch
+
+Vyacheslav Bocharov (1):
+      arm64: meson: fix dts for JetHub D1
+
+ .../devicetree/bindings/i2c/apple,i2c.yaml         |  8 +++---
+ arch/arm/boot/dts/imx6qp-prtwd3.dts                |  2 ++
+ arch/arm/boot/dts/imx6ull-pinfunc.h                |  2 +-
+ arch/arm/boot/dts/ls1021a-tsn.dts                  |  2 ++
+ arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts   |  2 +-
+ arch/arm/boot/dts/socfpga_arria5_socdk.dts         |  2 +-
+ arch/arm/boot/dts/socfpga_cyclone5_socdk.dts       |  2 +-
+ arch/arm/boot/dts/socfpga_cyclone5_sockit.dts      |  2 +-
+ arch/arm/boot/dts/socfpga_cyclone5_socrates.dts    |  2 +-
+ arch/arm/boot/dts/socfpga_cyclone5_sodia.dts       |  2 +-
+ arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts |  4 +--
+ arch/arm/mach-rockchip/platsmp.c                   |  2 +-
+ arch/arm64/Kconfig.platforms                       |  1 -
+ .../dts/amlogic/meson-axg-jethome-jethub-j100.dts  | 30 +++++++++++-----------
+ arch/arm64/boot/dts/apple/t8103-j274.dts           |  2 +-
+ arch/arm64/boot/dts/apple/t8103.dtsi               |  4 +++
+ .../arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts |  2 --
+ .../boot/dts/freescale/fsl-lx2160a-bluebox3.dts    |  4 +++
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi          |  2 --
+ arch/arm64/boot/dts/rockchip/rk3308-roc-cc.dts     |  2 +-
+ .../boot/dts/rockchip/rk3399-khadas-edge.dtsi      |  1 -
+ .../boot/dts/rockchip/rk3399-kobol-helios64.dts    |  1 +
+ arch/arm64/boot/dts/rockchip/rk3399-leez-p710.dts  |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi |  2 +-
+ drivers/firmware/scpi_pm_domain.c                  | 10 +++++---
+ drivers/firmware/tegra/bpmp-debugfs.c              |  5 ++--
+ drivers/reset/tegra/reset-bpmp.c                   |  9 +------
+ drivers/soc/imx/imx8m-blk-ctrl.c                   | 19 ++++++++++++++
+ drivers/soc/imx/soc-imx.c                          |  4 +++
+ drivers/soc/tegra/fuse/fuse-tegra.c                |  2 +-
+ drivers/soc/tegra/fuse/fuse.h                      |  2 +-
+ drivers/tee/amdtee/core.c                          |  5 ++--
+ 32 files changed, 84 insertions(+), 57 deletions(-)
