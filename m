@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCF6DC433F5
-	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 15:49:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D371C433EF
+	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 16:00:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 81FA5C36AE9; Fri, 17 Dec 2021 15:49:27 +0000 (UTC)
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+	id 08B0CC36AE9; Fri, 17 Dec 2021 16:00:32 +0000 (UTC)
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AA16FC36AE7;
-	Fri, 17 Dec 2021 15:49:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AA16FC36AE7
+	by smtp.kernel.org (Postfix) with ESMTPS id 39D41C36AE7;
+	Fri, 17 Dec 2021 16:00:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 39D41C36AE7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BHFnM6s029708;
-	Fri, 17 Dec 2021 09:49:22 -0600
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BHG07fH050996;
+	Fri, 17 Dec 2021 10:00:07 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1639756162;
-	bh=4pYxJxhBHMq/73kWjs9EjhmqLVPAy3cyIv6wEjlp744=;
-	h=Date:From:To:CC:Subject;
-	b=Sv5NrtQb4FX5qBsZa0K2D3VS4o8TGOOg1iFOZEhqrKHN75IpDnWzvpLf3yq64zkba
-	 xgUdH70C+qNgR+oyPW3rmNLkaXCXazPgNf/gCmGlPhKejZ8z/N4ijQz8Aq3hXtUOof
-	 HmwLfUvWf54baKk2ctDJA+AwUPL8eavObuyAmn4U=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BHFnMqv104578
+	s=ti-com-17Q1; t=1639756807;
+	bh=o5FZZyggvdui1CUzq3pJk4FxP/aLklXa6J5Z54yqBDI=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=cxGjYcsyyWWl8cRp4hi4RvvI9IPyl9TiOu2hgpw99b6K+y69rnesv6KglLhz3hKem
+	 vii1YKQzR0PPoAG0HtiwfvegB+pMYkfWNZ3T8CYJbB/8kvRX7gv/zbhtGNdyh7WT/2
+	 TezQp/ztI7ivfqKL+utM0uOSUI5pMVaWz543B2OY=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BHG07BB034596
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 17 Dec 2021 09:49:22 -0600
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+	Fri, 17 Dec 2021 10:00:07 -0600
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Dec 2021 09:49:21 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ Dec 2021 10:00:07 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Dec 2021 09:49:21 -0600
+ Frontend Transport; Fri, 17 Dec 2021 10:00:07 -0600
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BHFnLjX056068;
-	Fri, 17 Dec 2021 09:49:21 -0600
-Date: Fri, 17 Dec 2021 09:49:21 -0600
+	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BHG07BW075506;
+	Fri, 17 Dec 2021 10:00:07 -0600
+Date: Fri, 17 Dec 2021 10:00:07 -0600
 From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
@@ -50,83 +50,34 @@ CC: <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         Santosh Shilimkar <ssantosh@kernel.org>,
         Tony
  Lindgren <tony@atomide.com>
-Subject: [GIT PULL] soc: Keystone driver update for v5.17
-Message-ID: <20211217154921.cagzppcensxx6wm4@pension>
+Subject: Re: [GIT PULL] soc: Keystone driver update for v5.17
+Message-ID: <20211217160007.etfr5urg76j2n5sf@reissue>
+References: <20211217154921.cagzppcensxx6wm4@pension>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="z3i67kzdfkksd6bv"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
+In-Reply-To: <20211217154921.cagzppcensxx6wm4@pension>
 User-Agent: NeoMutt/20171215
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
---z3i67kzdfkksd6bv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 09:49-20211217, Nishanth Menon wrote:
+> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+> 
+>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver-soc-fixes-for-v5.17
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+uggh.. Could have been tags/ti-driver-soc-for-v5.17 mostly fixes threw
+my thought off a bit there.. - Do let me know if you folks prefer it
+as ti-driver-soc-for-v5.17 instead of ti-driver-soc-fixes-for-v5.17
+and I can retag and respin the PR..
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver=
--soc-fixes-for-v5.17
 
-for you to fetch changes up to 1bb0b8b195d821d009bae61248da14f2b17bd44a:
-
-  soc: ti: knav_dma: Fix NULL vs IS_ERR() checking in dma_init (2021-12-16 =
-06:34:07 -0600)
-
-----------------------------------------------------------------
-SoC: Keystone driver update for v5.17
-
-* k3-socinfo: Add entry for J721S2 SoC family
-* Misc fixups for tisci, pruss, knav_dma
-
-----------------------------------------------------------------
-Aswath Govindraju (1):
-      soc: ti: k3-socinfo: Add entry for J721S2 SoC family
-
-Jan Kiszka (1):
-      soc: ti: pruss: fix referenced node in error message
-
-Jason Wang (1):
-      firmware: ti_sci: rm: remove unneeded semicolon
-
-Miaoqian Lin (1):
-      soc: ti: knav_dma: Fix NULL vs IS_ERR() checking in dma_init
-
- drivers/firmware/ti_sci.c   |  2 +-
- drivers/soc/ti/k3-socinfo.c |  3 ++-
- drivers/soc/ti/knav_dma.c   | 20 ++++++++++----------
- drivers/soc/ti/pruss.c      |  2 +-
- 4 files changed, 14 insertions(+), 13 deletions(-)
-
---=20
+-- 
 Regards,
 Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 8=
-49D 1736 249D
-
---z3i67kzdfkksd6bv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmG8sXkACgkQ3bWEnRc2
-JJ2WIA//aPoshbTaIgUcszTmDDShJVZeJRWRQFPPdDPM/KoHCXlvm+ZvMpvyVQVN
-Lf6fM3r4AwJlp35VXTLCPoJdgfGO3MFhD5HcVgXQRzFZt6YSJF5Bg/9PSyK5pUEG
-r/V4T6xRSbbOgpxrLXtxKPfevPiM0lV36XEO/ay/a1OveCiCT6G0oXnkeKWfI+VT
-85hBOi7YKTsKHzH79Rm7MIfNknAuRpfroZH0qwOXiWpgeQejOB+gjD8li64le1ZG
-4hFpuKdZlzRRk6wzCv9rb+uAX+0LcSSFmhw1eNIvIG1Xz0TVIqsDcKUy4ALtsTwO
-cNabW5YWrdvS8vFRmc0beb5PQqYxyhUAsCxeR7bl0HIqrMlmvWL4JKedf2wSj7rY
-pWTBuOUPaldxyuMfEcIGWrYaO3RvQwkWBkOnakQ428nGjllP5vQWr1GvrCHlnNrO
-ayxBn97KYvIgZZJ9PcNh+yw/LHBVfSX9ycrxGY45Af501RHSbNs4qPPQ847Z2qF/
-C95bOeyP+R6NjDHxcQ1rg8hRpjXhO2zzg5fAQQZKXJqjzHnQHtOJtbPcLxFqzLIz
-ATpJ6ZCGGQ5X+KYfHmGtl68N1jJoPU/j4FP/IuOnUlkhGSOpV0QramRQ0AizFFOJ
-oJG7pVmvNBNBftZFW0k83PoqIBhBn35s9MJoqDKbutzzMfoOoZo=
-=V2TL
------END PGP SIGNATURE-----
-
---z3i67kzdfkksd6bv--
+Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
