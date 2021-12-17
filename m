@@ -1,73 +1,77 @@
-Return-Path: <SRS0=mL40=RC=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=Mh7t=RC=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BB53C433F5
-	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 16:23:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36271C433EF
+	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 16:41:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 57665C36AEA; Fri, 17 Dec 2021 16:23:10 +0000 (UTC)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 199D9C36AE7; Fri, 17 Dec 2021 16:41:47 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D069DC36AE1;
-	Fri, 17 Dec 2021 16:23:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D069DC36AE1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id e5so5075064wrc.5;
-        Fri, 17 Dec 2021 08:23:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WGEgqKeQ8cbqSnn0DjBjL7FshAIe0mQv76dnJcpHdI4=;
-        b=OyYiXOO2s3kCAP0LhoeRLbGSY3/mzV7j0I+UdQ2Z7AuheHgdet7Z+q7N+ufg05hU11
-         VN5/deDybqRc4z0qmatMJbZDAKB4CDckmXAFjgAfr+KMlTMoBzxr/m67qamqlF/5l6oc
-         LGsc14oJGSZv1IWMl8n8sWtU5npFS7W91PXZhnByx2sgC9aVN1gfVMu40GqICA76k52W
-         wcd0izPOlj3njW/mzjQRS/A7r1xpTJw6VqjqnPVNhpKZsBsgJ8/8plpitDJtHPfD//Ba
-         G2GZ1VELqLHo2pKK88k/WUHxnOSKZqgazd043wzgGvE0XedkIWlOSdpxaowroiYihrSI
-         QLEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WGEgqKeQ8cbqSnn0DjBjL7FshAIe0mQv76dnJcpHdI4=;
-        b=HOZfqpWIMQSQopfHF5hZSSGNp4i9t5qMk4RGC+q1IaZpt7T4n2QN1o/6hnnNPqcuu+
-         EOQgYOzkZSnDevDgxIQEdfz0fu9UQPpXdEjeQJsirYWdSsPgbrANsADHOq5W8Jek2VQo
-         WLolJXfJGIfz/2tAKNX1O9SfkpdjBCB1xFYw6K/xVJtlEJkhmLtlBhVeV35jLKSHATqn
-         Tam/oUaU59+UOADvckmaVw8XLAJ7MBbY/bfnFc1f/upJ1jnBJeN0saO7/RSv+GfyjaU6
-         QnvabqnJy0ZV1U1o/b/xHf+3tdoDhT/AuWK/4xGHWJ6I+uWQ2889C4owmD99bGZDSrd9
-         iRQw==
-X-Gm-Message-State: AOAM5338BWmpgTqsIu84PSC/b96XxvFa/m0E4jfy9rihxpqKJqeLL2al
-	0W+Rbj5MYw5TO59WEh6JYMLaDfBm3X3gig==
-X-Google-Smtp-Source: ABdhPJzUKFqMKerARbdeozSVPlNcrSwBYqllzI6iiAxtsYmgl6N92DBgcw9iyU0dghLUf1JzNZZOTA==
-X-Received: by 2002:adf:d0c7:: with SMTP id z7mr3158709wrh.236.1639758187785;
-        Fri, 17 Dec 2021 08:23:07 -0800 (PST)
-Received: from localhost ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id j2sm2016322wms.3.2021.12.17.08.23.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 08:23:06 -0800 (PST)
-From: Thierry Reding <thierry.reding@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 25D8EC36AE1;
+	Fri, 17 Dec 2021 16:41:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 25D8EC36AE1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639759306; x=1671295306;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=D2h8E/Ug1gRKBcu/bGtG10Pcx4s2TUetykAr0Pgo++w=;
+  b=CCryZ1LPQA6d5ZGx7XWWkF/cA2UY3yVTDeuwcH8Mhavs9D0wxyutoIDc
+   Zo2RFYZ2gGFN6CYY8qYBjEpC0KS4dDeJtkVz03CC3vEXYdl/L5gQH3Bn0
+   xNUtJO4eq/aq06kVfCM1uCAiYfh4ynQVNw88X6vFsjmRgyHB1oiuJEdLy
+   eQH1PQ28JU2Q+h0rK0GgIOh37udeEfu2CNKo9nyCrQBF/X6890H4MpKpy
+   7x9lNVVj5BV68R6vdenH1iITY0hBNF2oDuhW3sOHyba2Pbrx/vwR82jGw
+   c2T7IhiEasG/i84cym659C4QKsBhstlEGyyFekNmIJL4ZAnzWedMcPAX9
+   w==;
+IronPort-SDR: cIn372YCiFTEjINntpTiI0AT9FNkrHZPoaswS1n8+XBkH7Ck3X9/W39bkHU2gNOsNaAKWpgOIb
+ HPqWk7tZeAfohlmI2tTV56pL4uIG8cISgKykBaFT7zFz2ExQn7t5MS5vpLiFSXkMi5ERWTudv8
+ YMgt6aveBkG6BI5xAC1cElQXgaG2Ldb7J+UmaOHalCcbHyF1GFgVP5O/3zLYZ1IgDh+kZKFZMf
+ n3kbHfdsWPhEK/cKukYIXqk+GCC6tFmOO5bpu14DDrPcNcu8/AnZ7hP/m5lNJTFRBIgal1Ua3q
+ JdCo2vwct0gWTx0uW7sD22by
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="155902638"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 09:41:44 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 17 Dec 2021 09:41:44 -0700
+Received: from ness.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 17 Dec 2021 09:41:42 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 6/6] ARM: tegra: Default configuration changes for v5.17-rc1
-Date: Fri, 17 Dec 2021 17:22:53 +0100
-Message-Id: <20211217162253.1801077-6-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211217162253.1801077-1-thierry.reding@gmail.com>
-References: <20211217162253.1801077-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Ludovic Desroches
+	<ludovic.desroches@microchip.com>, Claudiu Beznea
+	<claudiu.beznea@microchip.com>
+Subject: [GIT PULL] ARM: at91: soc for 5.17
+Date: Fri, 17 Dec 2021 17:41:34 +0100
+Message-ID: <20211217164134.28566-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
+Organization: microchip
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi ARM SoC maintainers,
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+
+Arnd, Olof,
+
+Here is one soc change for 5.17.
+
+Thanks, best regards,
+  Nicolas
 
 The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
@@ -75,29 +79,23 @@ The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.17-arm-defconfig
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-soc-5.17
 
-for you to fetch changes up to 8ed567fbea94ad05298d060974d5fa59946cf689:
+for you to fetch changes up to bb29e4091079dd7ef5bd488bd7625965cdfd2c12:
 
-  ARM: config: multi v7: Enable NVIDIA Tegra20 APB DMA driver (2021-12-16 15:03:33 +0100)
-
-Thanks,
-Thierry
+  ARM: at91: pm: Add of_node_put() before goto (2021-12-08 14:01:16 +0100)
 
 ----------------------------------------------------------------
-ARM: tegra: Default configuration changes for v5.17-rc1
+AT91 SoC #1 for 5.17:
 
-These patches enable various drivers used by new and existing boards in
-both the Tegra default configuration and the multi-v7 configuration.
+- one low priority fix about of_node_put() missing in PM code
 
 ----------------------------------------------------------------
-Dmitry Osipenko (5):
-      ARM: tegra_defconfig: Enable drivers wanted by Acer Chromebooks and ASUS tablets
-      ARM: config: multi v7: Enable display drivers used by Tegra devices
-      ARM: tegra_defconfig: Enable S/PDIF driver
-      ARM: config: multi v7: Enable NVIDIA Tegra20 S/PDIF driver
-      ARM: config: multi v7: Enable NVIDIA Tegra20 APB DMA driver
+Wan Jiabing (1):
+      ARM: at91: pm: Add of_node_put() before goto
 
- arch/arm/configs/multi_v7_defconfig |  7 +++++++
- arch/arm/configs/tegra_defconfig    | 13 +++++++++++++
- 2 files changed, 20 insertions(+)
+ arch/arm/mach-at91/pm.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+-- 
+Nicolas Ferre
