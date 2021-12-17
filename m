@@ -1,70 +1,427 @@
-Return-Path: <SRS0=D1Ep=RC=bootlin.com=gregory.clement@kernel.org>
+Return-Path: <SRS0=8PVn=RC=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49814C433EF
-	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 17:36:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE671C43219
+	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 22:13:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2A0A3C36AE9; Fri, 17 Dec 2021 17:36:49 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 9BD1BC36AEA; Fri, 17 Dec 2021 22:13:46 +0000 (UTC)
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EEEDCC36AE1;
-	Fri, 17 Dec 2021 17:36:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EEEDCC36AE1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-	by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 8640924000A;
-	Fri, 17 Dec 2021 17:36:45 +0000 (UTC)
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id C75EBC36AE5;
+	Fri, 17 Dec 2021 22:13:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C75EBC36AE5
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f46.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so4597241otl.3;
+        Fri, 17 Dec 2021 14:13:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CMrqK/IlPB+iUu0Ygp/wwMOeNRUFbhIC/CWr2Oha75Y=;
+        b=6CKj8o0Rh+cm3QVRlDzpOedYTnuYo5lBs9QrXxlnsMKnqr1FJxoPLvXa0vpXScRSYZ
+         w4Xj8qgW6KR1O9cw4wahw21yxvkc2EGL5qiL/XVS4cud+Np+245j1sRc4Ik/LYWwiCD6
+         LdybC5lxorTP2JDiegOmWROi6e33a4JQMTpQZTlPzxfTrxa5YkLjvA32j99y72HhomTe
+         100F6+rxhVFNTjY4Tbjxc79p36KIse76ah3eOhMNEjc7fNOqz6lVinLVtfbcK+739lra
+         h6nbbSYVFxmoHTv5e18A9jdnP3S/zsB6K5MFIOwm7mgJgWLOMEv+7Mc7zsTB+gVVgY67
+         +9Tg==
+X-Gm-Message-State: AOAM533Ib316Eqx+KdKJIHRzpQl3zXx4VgbaKPIjheqvYBBSr6+sF8yF
+	1Fy4Q1GSVvZVM0Lp2sO4rY9qR3ZtaQ==
+X-Google-Smtp-Source: ABdhPJx1g0ij25OB5JYaf+W+qP1xBG5CXQi6+5TSDia8WKRC2Z8HezJJq63adSWNuD7SoHd61+UgWg==
+X-Received: by 2002:a9d:6107:: with SMTP id i7mr3604833otj.165.1639779224352;
+        Fri, 17 Dec 2021 14:13:44 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id n23sm1848481oig.4.2021.12.17.14.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 14:13:43 -0800 (PST)
+From: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, soc@kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt for v5.17 (#1)
-Date: Fri, 17 Dec 2021 18:36:45 +0100
-Message-ID: <875yrnm8uq.fsf@BL-laptop>
+To: soc@kernel.org,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Ludovic Desroches <ludovic.desroches@microchip.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	=?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: [PATCH] ARM: dts: Remove "spidev" nodes
+Date: Fri, 17 Dec 2021 16:12:32 -0600
+Message-Id: <20211217221232.3664417-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi,
+"spidev" is not a real device, but a Linux implementation detail. It has
+never been documented either. The kernel has WARNed on the use of it for
+over 6 years. Time to remove its usage from the tree.
 
-Here is the first pull request for dt for mvebu for v5.17.
+Cc: Mark Brown <broonie@kernel.org>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+Arnd, Olof, Can you please apply this directly.
 
-Gregory
+ arch/arm/boot/dts/at91-q5xr5.dts              | 18 ----------
+ arch/arm/boot/dts/at91-wb50n.dts              |  6 ----
+ arch/arm/boot/dts/imx28-tx28.dts              | 36 -------------------
+ arch/arm/boot/dts/imx53-tx53.dtsi             | 11 ------
+ arch/arm/boot/dts/imx6qdl-tx6.dtsi            | 12 -------
+ .../boot/dts/imx6ul-imx6ull-opos6uldev.dtsi   | 12 -------
+ arch/arm/boot/dts/imx6ul-prti6g.dts           |  6 ----
+ arch/arm/boot/dts/imx6ul-tx6ul.dtsi           | 24 -------------
+ arch/arm/boot/dts/omap3-tao3530.dtsi          | 14 --------
+ .../dts/qcom-mdm9615-wp8548-mangoh-green.dts  |  2 +-
+ arch/arm/boot/dts/spear1310-evb.dts           | 16 ---------
+ arch/arm/boot/dts/spear1340-evb.dts           | 16 ---------
+ 12 files changed, 1 insertion(+), 172 deletions(-)
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+diff --git a/arch/arm/boot/dts/at91-q5xr5.dts b/arch/arm/boot/dts/at91-q5xr5.dts
+index 5827383b181b..47a00062f01f 100644
+--- a/arch/arm/boot/dts/at91-q5xr5.dts
++++ b/arch/arm/boot/dts/at91-q5xr5.dts
+@@ -147,12 +147,6 @@ uboot@8000 {
+ 			reg = <0x8000 0x3E000>;
+ 		};
+ 	};
+-
+-	spidev@1 {
+-		compatible = "spidev";
+-		spi-max-frequency = <2000000>;
+-		reg = <1>;
+-	};
+ };
+ 
+ &spi1 {
+@@ -160,18 +154,6 @@ &spi1 {
+ 	pinctrl-0 = <&pinctrl_spi1 &pinctrl_spi1_npcs0 &pinctrl_spi1_npcs1>;
+ 	cs-gpios = <&pioB 3 GPIO_ACTIVE_HIGH>, <&pioC 5 GPIO_ACTIVE_LOW>, <0>, <0>;
+ 	status = "okay";
+-
+-	spidev@0 {
+-		compatible = "spidev";
+-		spi-max-frequency = <2000000>;
+-		reg = <0>;
+-	};
+-
+-	spidev@1 {
+-		compatible = "spidev";
+-		spi-max-frequency = <2000000>;
+-		reg = <1>;
+-	};
+ };
+ 
+ &usart0 {
+diff --git a/arch/arm/boot/dts/at91-wb50n.dts b/arch/arm/boot/dts/at91-wb50n.dts
+index a5e45bb95c04..89f0f717f7ed 100644
+--- a/arch/arm/boot/dts/at91-wb50n.dts
++++ b/arch/arm/boot/dts/at91-wb50n.dts
+@@ -90,12 +90,6 @@ &i2c0 {
+ 
+ &spi1 {
+ 	status = "okay";
+-
+-	spidev@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <8000000>;
+-	};
+ };
+ 
+ &usb0 {
+diff --git a/arch/arm/boot/dts/imx28-tx28.dts b/arch/arm/boot/dts/imx28-tx28.dts
+index 164254c28f8e..9e5651c7ea6b 100644
+--- a/arch/arm/boot/dts/imx28-tx28.dts
++++ b/arch/arm/boot/dts/imx28-tx28.dts
+@@ -239,24 +239,6 @@ &gpio3 9 GPIO_ACTIVE_LOW
+ 		>;
+ 		/* enable this and disable ssp3 below, if you need full duplex SPI transfer */
+ 		status = "disabled";
+-
+-		spi@0 {
+-			compatible = "spidev";
+-			reg = <0>;
+-			spi-max-frequency = <57600000>;
+-		};
+-
+-		spi@1 {
+-			compatible = "spidev";
+-			reg = <1>;
+-			spi-max-frequency = <57600000>;
+-		};
+-
+-		spi@2 {
+-			compatible = "spidev";
+-			reg = <2>;
+-			spi-max-frequency = <57600000>;
+-		};
+ 	};
+ };
+ 
+@@ -700,24 +682,6 @@ &ssp3 {
+ 	pinctrl-0 = <&spi3_pins_a>;
+ 	clock-frequency = <57600000>;
+ 	status = "okay";
+-
+-	spi@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <57600000>;
+-	};
+-
+-	spi@1 {
+-		compatible = "spidev";
+-		reg = <1>;
+-		spi-max-frequency = <57600000>;
+-	};
+-
+-	spi@2 {
+-		compatible = "spidev";
+-		reg = <2>;
+-		spi-max-frequency = <57600000>;
+-	};
+ };
+ 
+ &usb0 {
+diff --git a/arch/arm/boot/dts/imx53-tx53.dtsi b/arch/arm/boot/dts/imx53-tx53.dtsi
+index 7c9730f3f820..81c2726a328a 100644
+--- a/arch/arm/boot/dts/imx53-tx53.dtsi
++++ b/arch/arm/boot/dts/imx53-tx53.dtsi
+@@ -192,17 +192,6 @@ &gpio2 30 GPIO_ACTIVE_HIGH
+ 		&gpio3 19 GPIO_ACTIVE_HIGH
+ 	>;
+ 
+-	spidev0: spi@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <54000000>;
+-	};
+-
+-	spidev1: spi@1 {
+-		compatible = "spidev";
+-		reg = <1>;
+-		spi-max-frequency = <54000000>;
+-	};
+ };
+ 
+ &esdhc1 {
+diff --git a/arch/arm/boot/dts/imx6qdl-tx6.dtsi b/arch/arm/boot/dts/imx6qdl-tx6.dtsi
+index 362e65ccaa78..bcc5bbcce769 100644
+--- a/arch/arm/boot/dts/imx6qdl-tx6.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-tx6.dtsi
+@@ -259,18 +259,6 @@ &gpio2 30 GPIO_ACTIVE_HIGH
+ 		&gpio3 19 GPIO_ACTIVE_HIGH
+ 	>;
+ 	status = "disabled";
+-
+-	spidev0: spi@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <54000000>;
+-	};
+-
+-	spidev1: spi@1 {
+-		compatible = "spidev";
+-		reg = <1>;
+-		spi-max-frequency = <54000000>;
+-	};
+ };
+ 
+ &fec {
+diff --git a/arch/arm/boot/dts/imx6ul-imx6ull-opos6uldev.dtsi b/arch/arm/boot/dts/imx6ul-imx6ull-opos6uldev.dtsi
+index 935a77d717a6..18cac19aa9b0 100644
+--- a/arch/arm/boot/dts/imx6ul-imx6ull-opos6uldev.dtsi
++++ b/arch/arm/boot/dts/imx6ul-imx6ull-opos6uldev.dtsi
+@@ -114,18 +114,6 @@ &ecspi4 {
+ 	pinctrl-0 = <&pinctrl_ecspi4>;
+ 	cs-gpios = <&gpio4 9 GPIO_ACTIVE_LOW>, <&gpio4 3 GPIO_ACTIVE_LOW>;
+ 	status = "okay";
+-
+-	spidev0: spi@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <5000000>;
+-	};
+-
+-	spidev1: spi@1 {
+-		compatible = "spidev";
+-		reg = <1>;
+-		spi-max-frequency = <5000000>;
+-	};
+ };
+ 
+ &i2c1 {
+diff --git a/arch/arm/boot/dts/imx6ul-prti6g.dts b/arch/arm/boot/dts/imx6ul-prti6g.dts
+index d62015701d0a..c18390f238e1 100644
+--- a/arch/arm/boot/dts/imx6ul-prti6g.dts
++++ b/arch/arm/boot/dts/imx6ul-prti6g.dts
+@@ -78,12 +78,6 @@ &ecspi2 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_ecspi2>;
+ 	status = "okay";
+-
+-	spi@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <1000000>;
+-	};
+ };
+ 
+ &fec1 {
+diff --git a/arch/arm/boot/dts/imx6ul-tx6ul.dtsi b/arch/arm/boot/dts/imx6ul-tx6ul.dtsi
+index 938a32ced88d..c485d058e079 100644
+--- a/arch/arm/boot/dts/imx6ul-tx6ul.dtsi
++++ b/arch/arm/boot/dts/imx6ul-tx6ul.dtsi
+@@ -227,18 +227,6 @@ &gpio1 29 GPIO_ACTIVE_HIGH
+ 			&gpio1 10 GPIO_ACTIVE_HIGH
+ 		>;
+ 		status = "disabled";
+-
+-		spi@0 {
+-			compatible = "spidev";
+-			reg = <0>;
+-			spi-max-frequency = <660000>;
+-		};
+-
+-		spi@1 {
+-			compatible = "spidev";
+-			reg = <1>;
+-			spi-max-frequency = <660000>;
+-		};
+ 	};
+ 
+ 	sound {
+@@ -290,18 +278,6 @@ &gpio1 29 GPIO_ACTIVE_HIGH
+ 		&gpio1 10 GPIO_ACTIVE_HIGH
+ 	>;
+ 	status = "disabled";
+-
+-	spidev0: spi@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <60000000>;
+-	};
+-
+-	spidev1: spi@1 {
+-		compatible = "spidev";
+-		reg = <1>;
+-		spi-max-frequency = <60000000>;
+-	};
+ };
+ 
+ &fec1 {
+diff --git a/arch/arm/boot/dts/omap3-tao3530.dtsi b/arch/arm/boot/dts/omap3-tao3530.dtsi
+index 580bfa1931c8..7f440d11f7e7 100644
+--- a/arch/arm/boot/dts/omap3-tao3530.dtsi
++++ b/arch/arm/boot/dts/omap3-tao3530.dtsi
+@@ -197,25 +197,11 @@ &i2c3 {
+ &mcspi1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mcspi1_pins>;
+-
+-	spidev@0 {
+-		compatible = "spidev";
+-		spi-max-frequency = <48000000>;
+-		reg = <0>;
+-		spi-cpha;
+-	};
+ };
+ 
+ &mcspi3 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mcspi3_pins>;
+-
+-	spidev@0 {
+-		compatible = "spidev";
+-		spi-max-frequency = <48000000>;
+-		reg = <0>;
+-		spi-cpha;
+-	};
+ };
+ 
+ #include "twl4030.dtsi"
+diff --git a/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts b/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
+index 942e3a2cac35..0827de5426c1 100644
+--- a/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
++++ b/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
+@@ -103,7 +103,7 @@ pins {
+ 
+ &gsbi3_spi {
+ 	spi@0 {
+-		compatible = "swir,mangoh-iotport-spi", "spidev";
++		compatible = "swir,mangoh-iotport-spi";
+ 		spi-max-frequency = <24000000>;
+ 		reg = <0>;
+ 	};
+diff --git a/arch/arm/boot/dts/spear1310-evb.dts b/arch/arm/boot/dts/spear1310-evb.dts
+index 8fcb6be6e7c7..4cbadcb41084 100644
+--- a/arch/arm/boot/dts/spear1310-evb.dts
++++ b/arch/arm/boot/dts/spear1310-evb.dts
+@@ -395,22 +395,6 @@ m25p80@1 {
+ 					pl022,wait-state = <0>;
+ 					pl022,duplex = <0>;
+ 				};
+-
+-				spidev@2 {
+-					compatible = "spidev";
+-					reg = <2>;
+-					spi-max-frequency = <25000000>;
+-					spi-cpha;
+-					pl022,hierarchy = <0>;
+-					pl022,interface = <0>;
+-					pl022,slave-tx-disable;
+-					pl022,com-mode = <0x2>;
+-					pl022,rx-level-trig = <0>;
+-					pl022,tx-level-trig = <0>;
+-					pl022,ctrl-len = <0x11>;
+-					pl022,wait-state = <0>;
+-					pl022,duplex = <0>;
+-				};
+ 			};
+ 
+ 			wdt@ec800620 {
+diff --git a/arch/arm/boot/dts/spear1340-evb.dts b/arch/arm/boot/dts/spear1340-evb.dts
+index f70ff56d4542..fd194ebeedc9 100644
+--- a/arch/arm/boot/dts/spear1340-evb.dts
++++ b/arch/arm/boot/dts/spear1340-evb.dts
+@@ -489,22 +489,6 @@ stmpe_touchscreen {
+ 						ts,i-drive = <1>;
+ 					};
+ 				};
+-
+-				spidev@2 {
+-					compatible = "spidev";
+-					reg = <2>;
+-					spi-max-frequency = <25000000>;
+-					spi-cpha;
+-					pl022,hierarchy = <0>;
+-					pl022,interface = <0>;
+-					pl022,slave-tx-disable;
+-					pl022,com-mode = <0x2>;
+-					pl022,rx-level-trig = <0>;
+-					pl022,tx-level-trig = <0>;
+-					pl022,ctrl-len = <0x11>;
+-					pl022,wait-state = <0>;
+-					pl022,duplex = <0>;
+-				};
+ 			};
+ 
+ 			timer@ec800600 {
+-- 
+2.32.0
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
-bu-dt-5.17-1
-
-for you to fetch changes up to 62480772263ab6b52e758f2346c70a526abd1d28:
-
-  ARM: dts: armada-38x: Add generic compatible to UART nodes (2021-12-17 18=
-:11:53 +0100)
-
-----------------------------------------------------------------
-mvebu dt for 5.17 (part 1)
-
-Add generic compatible to UART nodes on Armada 38x
-
-----------------------------------------------------------------
-Marek Beh=C3=BAn (1):
-      ARM: dts: armada-38x: Add generic compatible to UART nodes
-
- arch/arm/boot/dts/armada-38x.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
