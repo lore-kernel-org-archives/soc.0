@@ -1,69 +1,237 @@
-Return-Path: <SRS0=eG8q=RC=linux-m68k.org=geert@kernel.org>
+Return-Path: <SRS0=ja7B=RC=nbd.name=nbd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D627DC4167B
-	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 11:07:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 069FCC4332F
+	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 11:24:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C3A87C36AE5; Fri, 17 Dec 2021 11:07:22 +0000 (UTC)
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id B9EBAC36AEA; Fri, 17 Dec 2021 11:24:09 +0000 (UTC)
+Received: from nbd.name (nbd.name [46.4.11.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9A05FC36AEC
-	for <soc@kernel.org>; Fri, 17 Dec 2021 11:07:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9A05FC36AEC
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:d13f:527c:5504:a743])
-	by xavier.telenet-ops.be with bizsmtp
-	id XP7H2600E250X3001P7HcS; Fri, 17 Dec 2021 12:07:17 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1myB53-005Y8V-69; Fri, 17 Dec 2021 12:07:17 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1myB52-00AQSi-JK; Fri, 17 Dec 2021 12:07:16 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+	by smtp.kernel.org (Postfix) with ESMTPS id 02072C36AE9;
+	Fri, 17 Dec 2021 11:24:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 02072C36AE9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nbd.name
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=nbd.name
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+	 s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=/JIY3yHyO9Ic+FTSLbwpiGjIl+cA4Gwf8BAl8I7yFs0=; b=TL0dIe5JJpTSW5P7ArWHoEqWPD
+	ToN2ItX1d1JFliMyCNYWotAvd0NQTytZoj61FG++T3/BZbMq8CyiKd4tT1t7PIRafI+3n9oIHYP+P
+	zQxVlqwWoB8v4ug/rRoGT4l8uldYfkEx7OzDEx7fUGCbdPr8UzXQ/t19hRagrXbXUJ9k=;
+Received: from p54ae911a.dip0.t-ipconnect.de ([84.174.145.26] helo=localhost.localdomain)
+	by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	(Exim 4.89)
+	(envelope-from <nbd@nbd.name>)
+	id 1myBLB-000742-Vw; Fri, 17 Dec 2021 12:23:58 +0100
+From: Felix Fietkau <nbd@nbd.name>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
+To: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>
+Cc: john@phrozen.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 4/4] Renesas DT binding updates for v5.17 (take two)
-Date: Fri, 17 Dec 2021 12:07:15 +0100
-Message-Id: <cover.1639736725.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1639736716.git.geert+renesas@glider.be>
-References: <cover.1639736716.git.geert+renesas@glider.be>
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v7 03/14] ARM: dts: Add basic support for Airoha EN7523
+Date: Fri, 17 Dec 2021 12:23:33 +0100
+Message-Id: <20211217112345.14029-4-nbd@nbd.name>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211217112345.14029-1-nbd@nbd.name>
+References: <20211217112345.14029-1-nbd@nbd.name>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 217c7d1840b5377543eff84fe28409d0bd4d3433:
+From: John Crispin <john@phrozen.org>
 
-  dt-bindings: mmc: renesas,sdhi: Rename RZ/G2L clocks (2021-11-26 13:53:02 +0100)
+Add basic support for Airoha EN7523, enough for booting to console.
 
-are available in the Git repository at:
+The UART is basically 8250-compatible, except for the clock selection.
+A clock-frequency value is synthesized to get this to run at 115200 bps.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v5.17-tag2
+Signed-off-by: John Crispin <john@phrozen.org>
+Signed-off-by: Bert Vermeulen <bert@biot.com>
+---
+ arch/arm/boot/dts/Makefile       |   2 +
+ arch/arm/boot/dts/en7523-evb.dts |  27 ++++++++
+ arch/arm/boot/dts/en7523.dtsi    | 114 +++++++++++++++++++++++++++++++
+ 3 files changed, 143 insertions(+)
+ create mode 100644 arch/arm/boot/dts/en7523-evb.dts
+ create mode 100644 arch/arm/boot/dts/en7523.dtsi
 
-for you to fetch changes up to d01986bec3887a3dbf61cbd821979f91cf0bb2dc:
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 0de64f237cd8..81cb49f8d6fd 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -186,6 +186,8 @@ dtb-$(CONFIG_ARCH_DAVINCI) += \
+ 	da850-lego-ev3.dtb
+ dtb-$(CONFIG_ARCH_DIGICOLOR) += \
+ 	cx92755_equinox.dtb
++dtb-$(CONFIG_ARCH_AIROHA) += \
++	en7523-evb.dtb
+ dtb-$(CONFIG_ARCH_EXYNOS3) += \
+ 	exynos3250-artik5-eval.dtb \
+ 	exynos3250-monk.dtb \
+diff --git a/arch/arm/boot/dts/en7523-evb.dts b/arch/arm/boot/dts/en7523-evb.dts
+new file mode 100644
+index 000000000000..69754ef9a628
+--- /dev/null
++++ b/arch/arm/boot/dts/en7523-evb.dts
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++/dts-v1/;
++
++/* Bootloader installs ATF here */
++/memreserve/ 0x80000000 0x200000;
++
++#include "en7523.dtsi"
++
++/ {
++	model = "Airoha EN7523 Evaluation Board";
++	compatible = "airoha,en7523-evb", "airoha,en7523";
++
++	aliases {
++		serial0 = &uart1;
++	};
++
++	chosen {
++		bootargs = "console=ttyS0,115200 earlycon";
++		stdout-path = "serial0:115200n8";
++		linux,usable-memory-range = <0x80200000 0x1fe00000>;
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x20000000>;
++	};
++};
+diff --git a/arch/arm/boot/dts/en7523.dtsi b/arch/arm/boot/dts/en7523.dtsi
+new file mode 100644
+index 000000000000..7e17311a3f90
+--- /dev/null
++++ b/arch/arm/boot/dts/en7523.dtsi
+@@ -0,0 +1,114 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++
++/ {
++	interrupt-parent = <&gic>;
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		npu_binary@84000000 {
++			no-map;
++			reg = <0x84000000 0xA00000>;
++		};
++
++		npu_flag@84B0000 {
++			no-map;
++			reg = <0x84B00000 0x100000>;
++		};
++
++		npu_pkt@85000000 {
++			no-map;
++			reg = <0x85000000 0x1A00000>;
++		};
++
++		npu_phyaddr@86B00000 {
++			no-map;
++			reg = <0x86B00000 0x100000>;
++		};
++
++		npu_rxdesc@86D00000 {
++			no-map;
++			reg = <0x86D00000 0x100000>;
++		};
++	};
++
++	psci {
++		compatible = "arm,psci-0.2";
++		method = "smc";
++	};
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu-map {
++			cluster0 {
++				core0 {
++					cpu = <&cpu0>;
++				};
++				core1 {
++					cpu = <&cpu1>;
++				};
++			};
++		};
++
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x0>;
++			enable-method = "psci";
++			clock-frequency = <80000000>;
++			next-level-cache = <&L2_0>;
++		};
++
++		cpu1: cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x1>;
++			enable-method = "psci";
++			clock-frequency = <80000000>;
++			next-level-cache = <&L2_0>;
++		};
++
++		L2_0: l2-cache0 {
++			compatible = "cache";
++		};
++	};
++
++	gic: interrupt-controller@9000000 {
++		compatible = "arm,gic-v3";
++		interrupt-controller;
++		#interrupt-cells = <3>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		reg = <0x09000000 0x20000>, <0x09080000 0x80000>;
++		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	timer {
++		compatible = "arm,armv7-timer";
++		interrupt-parent = <&gic>;
++		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
++			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
++			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
++			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
++		clock-frequency = <25000000>;
++	};
++
++	uart1: serial@1fbf0000 {
++		compatible = "ns16550";
++		reg = <0x1fbf0000 0x30>;
++		reg-io-width = <4>;
++		reg-shift = <2>;
++		interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
++		clock-frequency = <1843200>;
++		status = "okay";
++	};
++};
+-- 
+2.34.1
 
-  dt-bindings: arm: renesas: Document Renesas Spider boards (2021-12-07 16:27:13 +0100)
-
-----------------------------------------------------------------
-Renesas DT binding updates for v5.17 (take two)
-
-  - Document support for the R-Car S4-8 Spider CPU and BreakOut boards.
-
-----------------------------------------------------------------
-Yoshihiro Shimoda (1):
-      dt-bindings: arm: renesas: Document Renesas Spider boards
-
- Documentation/devicetree/bindings/arm/renesas.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
