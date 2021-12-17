@@ -4,62 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A79E8C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B76A5C433EF
 	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 15:20:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 923D9C36AEA; Fri, 17 Dec 2021 15:20:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D021C36AE7
-	for <soc@kernel.org>; Fri, 17 Dec 2021 15:20:32 +0000 (UTC)
+	id A191CC36AEB; Fri, 17 Dec 2021 15:20:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B849C36AE1;
+	Fri, 17 Dec 2021 15:20:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1639754432;
-	bh=cWEUcBLuoP0ebwQAlcefGJ6J92Gj5KTHyGg6Drvhg8M=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=m+xEnB3epUp6dXcU+4PXPD62c6ZPMHxH0XK6bi5hC2REBMDFo68L+UaJj3hscyntn
-	 DIUN3YbvLMwcbQTGz18e9NDC4iR7s9DYg7+BmS/lnv2++1e4EhJrz4HAatIy75DF2Q
-	 nm9VrzcjkM+bZOr+GOD943OdYpyfLqNBnJCNGG6N/SVOAOvG5DOeMKCROmGvqAocWn
-	 6ednMPePMDRHwcKpGw16VG12kppN4YIo89iDuD8n1dq+vlIqVgSnHCTbksG2fL14Bl
-	 IAg+ka12veH02r+PNxj8EnDSJFxloS6jqsx7G578lR0KS8UYX2NDeovMdyjDRyFDoA
-	 J8yrUk3y058hg==
+	bh=FEgfYxSbJIvH69KcS5JZ11FQTU/vIRjC6v/MsHbUYx4=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=QUzf64bQmb2No/479IDUD+jX/tFFG/CHruOd6VpPc1HzfggJ2BF32lB8NwPR74ouh
+	 dN2DW8fleqTspRa6BGfhoW25cqVaSgd7WUJe7oNrV89qSyQg5ZICrFIrGGpv6b1ub5
+	 8aDS2Gim1EaOWmhtYAB69juyxgGEKLW8QSQHeRXFMGPrY08EURZG3PST4rEvChzMOr
+	 +irlFz1EfTVgneDLPQYaPQ9UV6CT7GchLWEhb3IC6CMRON1VnqYStaRPXv9lCIZ1Xs
+	 lSaW187fjt0zIVasAFB5F/yd3qtTRU49SiU71r0xxPB0J25E6BfzHRPMkY67J/JCjh
+	 7q2GDgOJZoaVw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6064C60A2F;
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 739C160A39;
 	Fri, 17 Dec 2021 15:20:32 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] TEE and OP-TEE fixes for v5.16
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <163975443238.14717.552220581336637094.git-patchwork-summary@kernel.org>
+ <163975443246.14717.9030025966655880045.git-patchwork-notify@kernel.org>
 Date: Fri, 17 Dec 2021 15:20:32 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20211216150745.GA3347954@jade>
+In-Reply-To: <20211216150745.GA3347954@jade>
+To: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Series: Renesas SoC updates for v5.17 (take two)
-  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=597291
-  Lore link: https://lore.kernel.org/r/cover.1639736716.git.geert+renesas@glider.be
-    Patches: [GIT,PULL,1/4] Renesas ARM defconfig updates for v5.17
-             [GIT,PULL,2/4] Renesas ARM DT updates for v5.17 (take two)
-             [GIT,PULL,3/4] Renesas driver updates for v5.17 (take two)
-             [GIT,PULL,4/4] Renesas DT binding updates for v5.17 (take two)
+On Thu, 16 Dec 2021 16:07:45 +0100 you wrote:
+> Hello arm-soc maintainers,
+> 
+> Please pull these TEE subsystem and OP-TEE driver fixes which by coincident
+> all are concerning memory shared with secure world.
+> 
+> There's one in particular nasty race fixed when a tee_shm is about to be
+> teared down.
+> 
+> [...]
 
-Patch: [GIT,PULL] TEE and OP-TEE fixes for v5.16
-  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=596729
-  Lore link: https://lore.kernel.org/r/20211216150745.GA3347954@jade
+Here is the summary with links:
+  - [GIT,PULL] TEE and OP-TEE fixes for v5.16
+    https://git.kernel.org/soc/soc/c/a6a476878ea9
 
-
-Total patches: 5
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
