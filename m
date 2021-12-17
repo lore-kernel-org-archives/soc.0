@@ -1,65 +1,132 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=AlPT=RC=ti.com=nm@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B76A5C433EF
-	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 15:20:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCF6DC433F5
+	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 15:49:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A191CC36AEB; Fri, 17 Dec 2021 15:20:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B849C36AE1;
-	Fri, 17 Dec 2021 15:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639754432;
-	bh=FEgfYxSbJIvH69KcS5JZ11FQTU/vIRjC6v/MsHbUYx4=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=QUzf64bQmb2No/479IDUD+jX/tFFG/CHruOd6VpPc1HzfggJ2BF32lB8NwPR74ouh
-	 dN2DW8fleqTspRa6BGfhoW25cqVaSgd7WUJe7oNrV89qSyQg5ZICrFIrGGpv6b1ub5
-	 8aDS2Gim1EaOWmhtYAB69juyxgGEKLW8QSQHeRXFMGPrY08EURZG3PST4rEvChzMOr
-	 +irlFz1EfTVgneDLPQYaPQ9UV6CT7GchLWEhb3IC6CMRON1VnqYStaRPXv9lCIZ1Xs
-	 lSaW187fjt0zIVasAFB5F/yd3qtTRU49SiU71r0xxPB0J25E6BfzHRPMkY67J/JCjh
-	 7q2GDgOJZoaVw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 739C160A39;
-	Fri, 17 Dec 2021 15:20:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] TEE and OP-TEE fixes for v5.16
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <163975443246.14717.9030025966655880045.git-patchwork-notify@kernel.org>
-Date: Fri, 17 Dec 2021 15:20:32 +0000
-References: <20211216150745.GA3347954@jade>
-In-Reply-To: <20211216150745.GA3347954@jade>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+	id 81FA5C36AE9; Fri, 17 Dec 2021 15:49:27 +0000 (UTC)
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id AA16FC36AE7;
+	Fri, 17 Dec 2021 15:49:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AA16FC36AE7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BHFnM6s029708;
+	Fri, 17 Dec 2021 09:49:22 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1639756162;
+	bh=4pYxJxhBHMq/73kWjs9EjhmqLVPAy3cyIv6wEjlp744=;
+	h=Date:From:To:CC:Subject;
+	b=Sv5NrtQb4FX5qBsZa0K2D3VS4o8TGOOg1iFOZEhqrKHN75IpDnWzvpLf3yq64zkba
+	 xgUdH70C+qNgR+oyPW3rmNLkaXCXazPgNf/gCmGlPhKejZ8z/N4ijQz8Aq3hXtUOof
+	 HmwLfUvWf54baKk2ctDJA+AwUPL8eavObuyAmn4U=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BHFnMqv104578
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 17 Dec 2021 09:49:22 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
+ Dec 2021 09:49:21 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 17 Dec 2021 09:49:21 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BHFnLjX056068;
+	Fri, 17 Dec 2021 09:49:21 -0600
+Date: Fri, 17 Dec 2021 09:49:21 -0600
+From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+To: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
+CC: <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tony
+ Lindgren <tony@atomide.com>
+Subject: [GIT PULL] soc: Keystone driver update for v5.17
+Message-ID: <20211217154921.cagzppcensxx6wm4@pension>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="z3i67kzdfkksd6bv"
+Content-Disposition: inline
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hello:
+--z3i67kzdfkksd6bv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-On Thu, 16 Dec 2021 16:07:45 +0100 you wrote:
-> Hello arm-soc maintainers,
-> 
-> Please pull these TEE subsystem and OP-TEE driver fixes which by coincident
-> all are concerning memory shared with secure world.
-> 
-> There's one in particular nasty race fixed when a tee_shm is about to be
-> teared down.
-> 
-> [...]
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-Here is the summary with links:
-  - [GIT,PULL] TEE and OP-TEE fixes for v5.16
-    https://git.kernel.org/soc/soc/c/a6a476878ea9
+are available in the Git repository at:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver=
+-soc-fixes-for-v5.17
 
+for you to fetch changes up to 1bb0b8b195d821d009bae61248da14f2b17bd44a:
 
+  soc: ti: knav_dma: Fix NULL vs IS_ERR() checking in dma_init (2021-12-16 =
+06:34:07 -0600)
+
+----------------------------------------------------------------
+SoC: Keystone driver update for v5.17
+
+* k3-socinfo: Add entry for J721S2 SoC family
+* Misc fixups for tisci, pruss, knav_dma
+
+----------------------------------------------------------------
+Aswath Govindraju (1):
+      soc: ti: k3-socinfo: Add entry for J721S2 SoC family
+
+Jan Kiszka (1):
+      soc: ti: pruss: fix referenced node in error message
+
+Jason Wang (1):
+      firmware: ti_sci: rm: remove unneeded semicolon
+
+Miaoqian Lin (1):
+      soc: ti: knav_dma: Fix NULL vs IS_ERR() checking in dma_init
+
+ drivers/firmware/ti_sci.c   |  2 +-
+ drivers/soc/ti/k3-socinfo.c |  3 ++-
+ drivers/soc/ti/knav_dma.c   | 20 ++++++++++----------
+ drivers/soc/ti/pruss.c      |  2 +-
+ 4 files changed, 14 insertions(+), 13 deletions(-)
+
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 8=
+49D 1736 249D
+
+--z3i67kzdfkksd6bv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmG8sXkACgkQ3bWEnRc2
+JJ2WIA//aPoshbTaIgUcszTmDDShJVZeJRWRQFPPdDPM/KoHCXlvm+ZvMpvyVQVN
+Lf6fM3r4AwJlp35VXTLCPoJdgfGO3MFhD5HcVgXQRzFZt6YSJF5Bg/9PSyK5pUEG
+r/V4T6xRSbbOgpxrLXtxKPfevPiM0lV36XEO/ay/a1OveCiCT6G0oXnkeKWfI+VT
+85hBOi7YKTsKHzH79Rm7MIfNknAuRpfroZH0qwOXiWpgeQejOB+gjD8li64le1ZG
+4hFpuKdZlzRRk6wzCv9rb+uAX+0LcSSFmhw1eNIvIG1Xz0TVIqsDcKUy4ALtsTwO
+cNabW5YWrdvS8vFRmc0beb5PQqYxyhUAsCxeR7bl0HIqrMlmvWL4JKedf2wSj7rY
+pWTBuOUPaldxyuMfEcIGWrYaO3RvQwkWBkOnakQ428nGjllP5vQWr1GvrCHlnNrO
+ayxBn97KYvIgZZJ9PcNh+yw/LHBVfSX9ycrxGY45Af501RHSbNs4qPPQ847Z2qF/
+C95bOeyP+R6NjDHxcQ1rg8hRpjXhO2zzg5fAQQZKXJqjzHnQHtOJtbPcLxFqzLIz
+ATpJ6ZCGGQ5X+KYfHmGtl68N1jJoPU/j4FP/IuOnUlkhGSOpV0QramRQ0AizFFOJ
+oJG7pVmvNBNBftZFW0k83PoqIBhBn35s9MJoqDKbutzzMfoOoZo=
+=V2TL
+-----END PGP SIGNATURE-----
+
+--z3i67kzdfkksd6bv--
