@@ -1,237 +1,106 @@
-Return-Path: <SRS0=ja7B=RC=nbd.name=nbd@kernel.org>
+Return-Path: <SRS0=FoO/=RC=benettiengineering.com=giulio.benetti@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 069FCC4332F
-	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 11:24:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1EF6C43219
+	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 11:54:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B9EBAC36AEA; Fri, 17 Dec 2021 11:24:09 +0000 (UTC)
-Received: from nbd.name (nbd.name [46.4.11.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 02072C36AE9;
-	Fri, 17 Dec 2021 11:24:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 02072C36AE9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nbd.name
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=nbd.name
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-	 s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=/JIY3yHyO9Ic+FTSLbwpiGjIl+cA4Gwf8BAl8I7yFs0=; b=TL0dIe5JJpTSW5P7ArWHoEqWPD
-	ToN2ItX1d1JFliMyCNYWotAvd0NQTytZoj61FG++T3/BZbMq8CyiKd4tT1t7PIRafI+3n9oIHYP+P
-	zQxVlqwWoB8v4ug/rRoGT4l8uldYfkEx7OzDEx7fUGCbdPr8UzXQ/t19hRagrXbXUJ9k=;
-Received: from p54ae911a.dip0.t-ipconnect.de ([84.174.145.26] helo=localhost.localdomain)
-	by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	(Exim 4.89)
-	(envelope-from <nbd@nbd.name>)
-	id 1myBLB-000742-Vw; Fri, 17 Dec 2021 12:23:58 +0100
-From: Felix Fietkau <nbd@nbd.name>
+	id 71281C36AE8; Fri, 17 Dec 2021 11:54:13 +0000 (UTC)
+Received: from smtpcmd0871.aruba.it (smtpcmd0871.aruba.it [62.149.156.71])
+	by smtp.kernel.org (Postfix) with ESMTP id 22638C36AE9
+	for <soc@kernel.org>; Fri, 17 Dec 2021 11:54:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 22638C36AE9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=benettiengineering.com
+Received: from [192.168.50.18] ([146.241.138.59])
+	by Aruba Outgoing Smtp  with ESMTPSA
+	id yBoMmGIqJAiELyBoMmk6vi; Fri, 17 Dec 2021 12:54:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+	t=1639742048; bh=Cg6MxKPvLr6Syz/mZJuzyddObRpzBUMOq66KSTVgZcY=;
+	h=Subject:To:From:Date:MIME-Version:Content-Type;
+	b=YsK1gOTHau77ToD4V3DSSMyI7USDTkBZwjl/woPrapr/aTfPHPS0/GTxklvDY8ec4
+	 Jm1+a2tF0knFjA8/Jx/yNjAIk3WpE4DeAkr58+XhjYn4nxMmBUHj2fWzUWwVI6052I
+	 e+xTjt7/WaN21gWO7T7lCwQoi0OlwHjZFRcvo+ByNiUL6UlLOklSFoPPgSbZQzxXMc
+	 dLgBd92UMup1b6Bc9e4CF6dWRCfohLkugosh37uTaJmvkvden7X9le4bd1G1Bf4VbO
+	 L7LXWJTT1QrasjtS7fa/uj3C16xs4UMTvGYkliZYnToAYR7sKcd+jBlDoOPQz5E1mR
+	 QorLYS3xfKQrw==
+Subject: Re: [RESEND in plain-test] Re: [PATCH v5 0/9] Add initial support for
+ the i.MXRTxxxx SoC family starting from i.IMXRT1050 SoC.
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>
-Cc: john@phrozen.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v7 03/14] ARM: dts: Add basic support for Airoha EN7523
-Date: Fri, 17 Dec 2021 12:23:33 +0100
-Message-Id: <20211217112345.14029-4-nbd@nbd.name>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211217112345.14029-1-nbd@nbd.name>
-References: <20211217112345.14029-1-nbd@nbd.name>
+Cc: Jesse Taube <mr.bossman075@gmail.com>, NXP Linux Team
+ <linux-imx@nxp.com>, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Sascha Hauer <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+ Stefan Agner <stefan@agner.ch>, Linus Walleij <linus.walleij@linaro.org>,
+ gregkh <gregkh@linuxfoundation.org>, Olof Johansson <olof@lixom.net>,
+ SoC Team <soc@kernel.org>, Russell King - ARM Linux <linux@armlinux.org.uk>,
+ Abel Vesa <abel.vesa@nxp.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ Jiri Slaby <jirislaby@kernel.org>,
+ Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+ linux-clk <linux-clk@vger.kernel.org>, DTML <devicetree@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-mmc <linux-mmc@vger.kernel.org>,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+ Vladimir Murzin <vladimir.murzin@arm.com>
+References: <20211215220538.4180616-1-Mr.Bossman075@gmail.com>
+ <CAK8P3a29tzgd_4WncippZBEJra9n0bQTysBkPBp_WA0sb28gTg@mail.gmail.com>
+ <1360c4fe-4a09-a8a1-3224-7f1d4af59f6f@benettiengineering.com>
+ <CAK8P3a1oZK1qMRBE3D8otCTY6Lg4jMXxVpAZHQzLTA8woA3_UQ@mail.gmail.com>
+ <634e9304-2eba-4ea9-65ac-5d4f5d011b70@benettiengineering.com>
+ <CAK8P3a3kpzi6ozLkTH9GtWqvs=JHkm6mp=dLs2vOHjrW=FoYdw@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <88f5ec3a-8765-48b2-0429-d182402826be@benettiengineering.com>
+Date: Fri, 17 Dec 2021 12:54:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK8P3a3kpzi6ozLkTH9GtWqvs=JHkm6mp=dLs2vOHjrW=FoYdw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfJkrPNgY2+yCcbV01jLFZAj1mqsZnNe8M/nRv60DgHLOmija7PShQ+EryWAp90sIzvVBOOmU9lzp3hN/5wtsXuLUTv/PpOoR3jJE3ByA5PuCx+8ImBF6
+ bNNvhhw1qf58KbFLdL+BjpDhoXoFBJlwBgcSb8c2H2lpAUuufgHAfRiAHrka1/R/SampTSjjHwiQlgKjj71a7MoVRj4IPbd4M53DKvluKfROlfQTFJv7UqHM
+ ROMGiZEO/UrWyowI8X8RUja+FsHyXMqgFhvmnc2mf5fPJfXjgAABfTU/Tae437yyToK/lMzhSoc8fw7ZWn09WfT7+5vjVeGLsQGPhN29R63yQgC5lh9jSckL
+ eNm4oWEFDxh5xbihmqI1SOXV4xLya5KmgiehLCj8U9LPteR1kMPjALtPShU/YgZIewwT0jt92y6tnAtCsgkqwjdkZxA1L1c6MyHhmPYxFW80h6cWExblQhMg
+ /aPT/EURA/fgwS4/JgDj/RPiWdIsB3zD857uNDnMzlP9Auq6yr/t0ZnylZ+I7NYjfvAwOZeiNeUxRz5+hhpjW5CBrP/eLegkCl3tTXgwezY6HkM5ikYJE+OS
+ v9XT6jlGaKNj0ZJybeUWzGQ9zq32CPNoJPMlTFtxpK2FAEfxXOofQHbTp9umQ367/Ib5L+hZP3SHszgNze0QRSghRq+UZ0VCFQwlm6y9BKOGSYrV1FF2azBD
+ UZxPArzt+mvZEja2/thGmIHLhDn3kKsgCsmBzbIpOadwU986xSOaVWqBj9a7s3TG3RMY3OtBPrdvD17mkvOK599Z0P2x18yGxpBXT9WvEMmy+EoGU3Jj1iCR
+ 0PZNREN2Ia4Xtm9FpftLzuhgeUR1OtuDIqIn+SmjZMbsm8ImNXlfAe2EB0Tu8+RqOMGH831DwHK8CJCdq/06uOaG0bMQB5Pw4xaWZZGThJ5bRLPROHxj7Vuu
+ xXm5iaGAzsiwptM6t16hU/4vS0xgpnZmLPGKaPlbXsCiZHI9kpVYoMh4rBbs7MtRjsM3Opiir7z/ZH4fZ5xIB9Skwr5lgVTo/4MPheKkXtLSI6d0Y3rlkowo
+ VK6P7nIbxg/7rPJLqPaRtZhw4NoTzOECAWzFqxsCepa0W+o0ZbkkiOJqJJ5Wz/lAStg8Ypm/VM00P4QpuH+qAa/uw2ZANULR0KTElLNKAPibBwRv8rKqpzdJ
+ ReshPf2u4Q5p1FV2JBFzWQ==
 
-From: John Crispin <john@phrozen.org>
+On 17/12/21 11:28, Arnd Bergmann wrote:
+> On Fri, Dec 17, 2021 at 10:54 AM Giulio Benetti
+> <giulio.benetti@benettiengineering.com> wrote:
+>> On 16/12/21 22:13, Arnd Bergmann wrote:
+>>
+>>> Vladimir has put some work into making Cortex-R work in the kernel, and
+>>> he may have some other thoughts on this question.
+>>
+>> I'm curious if he has something specific to Cortex-R to tell.
+>>
+>> I've found that Cortex-R82 has a MMU:
+>> https://www.arm.com/products/silicon-ip-cpu/cortex-r/cortex-r82
+>> but I can't find any SoC that uses it. Also, I don't know how many
+>> people could use it honestly.
+> 
+> R82 is fairly new, but I expect that we will see support in Linux in the
+> future. Aside from having an MMU, it also 64-bit-only, so we'd treat
+> it like a normal ARMv8-A core in arch/arm64.
 
-Add basic support for Airoha EN7523, enough for booting to console.
+Ah yes, that's fine. So let's wait for the future, in the meanwhile we 
+focus con i.MXRT :-)
 
-The UART is basically 8250-compatible, except for the clock selection.
-A clock-frequency value is synthesized to get this to run at 115200 bps.
-
-Signed-off-by: John Crispin <john@phrozen.org>
-Signed-off-by: Bert Vermeulen <bert@biot.com>
----
- arch/arm/boot/dts/Makefile       |   2 +
- arch/arm/boot/dts/en7523-evb.dts |  27 ++++++++
- arch/arm/boot/dts/en7523.dtsi    | 114 +++++++++++++++++++++++++++++++
- 3 files changed, 143 insertions(+)
- create mode 100644 arch/arm/boot/dts/en7523-evb.dts
- create mode 100644 arch/arm/boot/dts/en7523.dtsi
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 0de64f237cd8..81cb49f8d6fd 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -186,6 +186,8 @@ dtb-$(CONFIG_ARCH_DAVINCI) += \
- 	da850-lego-ev3.dtb
- dtb-$(CONFIG_ARCH_DIGICOLOR) += \
- 	cx92755_equinox.dtb
-+dtb-$(CONFIG_ARCH_AIROHA) += \
-+	en7523-evb.dtb
- dtb-$(CONFIG_ARCH_EXYNOS3) += \
- 	exynos3250-artik5-eval.dtb \
- 	exynos3250-monk.dtb \
-diff --git a/arch/arm/boot/dts/en7523-evb.dts b/arch/arm/boot/dts/en7523-evb.dts
-new file mode 100644
-index 000000000000..69754ef9a628
---- /dev/null
-+++ b/arch/arm/boot/dts/en7523-evb.dts
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/dts-v1/;
-+
-+/* Bootloader installs ATF here */
-+/memreserve/ 0x80000000 0x200000;
-+
-+#include "en7523.dtsi"
-+
-+/ {
-+	model = "Airoha EN7523 Evaluation Board";
-+	compatible = "airoha,en7523-evb", "airoha,en7523";
-+
-+	aliases {
-+		serial0 = &uart1;
-+	};
-+
-+	chosen {
-+		bootargs = "console=ttyS0,115200 earlycon";
-+		stdout-path = "serial0:115200n8";
-+		linux,usable-memory-range = <0x80200000 0x1fe00000>;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x20000000>;
-+	};
-+};
-diff --git a/arch/arm/boot/dts/en7523.dtsi b/arch/arm/boot/dts/en7523.dtsi
-new file mode 100644
-index 000000000000..7e17311a3f90
---- /dev/null
-+++ b/arch/arm/boot/dts/en7523.dtsi
-@@ -0,0 +1,114 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+/ {
-+	interrupt-parent = <&gic>;
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		npu_binary@84000000 {
-+			no-map;
-+			reg = <0x84000000 0xA00000>;
-+		};
-+
-+		npu_flag@84B0000 {
-+			no-map;
-+			reg = <0x84B00000 0x100000>;
-+		};
-+
-+		npu_pkt@85000000 {
-+			no-map;
-+			reg = <0x85000000 0x1A00000>;
-+		};
-+
-+		npu_phyaddr@86B00000 {
-+			no-map;
-+			reg = <0x86B00000 0x100000>;
-+		};
-+
-+		npu_rxdesc@86D00000 {
-+			no-map;
-+			reg = <0x86D00000 0x100000>;
-+		};
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-0.2";
-+		method = "smc";
-+	};
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+			};
-+		};
-+
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x0>;
-+			enable-method = "psci";
-+			clock-frequency = <80000000>;
-+			next-level-cache = <&L2_0>;
-+		};
-+
-+		cpu1: cpu@1 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x1>;
-+			enable-method = "psci";
-+			clock-frequency = <80000000>;
-+			next-level-cache = <&L2_0>;
-+		};
-+
-+		L2_0: l2-cache0 {
-+			compatible = "cache";
-+		};
-+	};
-+
-+	gic: interrupt-controller@9000000 {
-+		compatible = "arm,gic-v3";
-+		interrupt-controller;
-+		#interrupt-cells = <3>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		reg = <0x09000000 0x20000>, <0x09080000 0x80000>;
-+		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+
-+	timer {
-+		compatible = "arm,armv7-timer";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
-+		clock-frequency = <25000000>;
-+	};
-+
-+	uart1: serial@1fbf0000 {
-+		compatible = "ns16550";
-+		reg = <0x1fbf0000 0x30>;
-+		reg-io-width = <4>;
-+		reg-shift = <2>;
-+		interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
-+		clock-frequency = <1843200>;
-+		status = "okay";
-+	};
-+};
+Thank you
+Best regards
 -- 
-2.34.1
-
+Giulio Benetti
+Benetti Engineering sas
