@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D7E2C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48497C43219
 	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 11:07:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 20DE4C36AEF; Fri, 17 Dec 2021 11:07:22 +0000 (UTC)
+	id 33FA7C36AE1; Fri, 17 Dec 2021 11:07:22 +0000 (UTC)
 Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 99FC4C36AE9
+	by smtp.kernel.org (Postfix) with ESMTPS id 9BBACC36AED
 	for <soc@kernel.org>; Fri, 17 Dec 2021 11:07:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 99FC4C36AE9
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9BBACC36AED
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:d13f:527c:5504:a743])
 	by xavier.telenet-ops.be with bizsmtp
-	id XP7H26008250X3001P7HcP; Fri, 17 Dec 2021 12:07:17 +0100
+	id XP7H2600X250X3001P7Hcd; Fri, 17 Dec 2021 12:07:17 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1myB52-005Y8S-VH; Fri, 17 Dec 2021 12:07:16 +0100
+	id 1myB53-005Y8U-Am; Fri, 17 Dec 2021 12:07:17 +0100
 Received: from geert by rox.of.borg with local (Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1myB52-00AQSN-FV; Fri, 17 Dec 2021 12:07:16 +0100
+	id 1myB52-00AQSb-Hk; Fri, 17 Dec 2021 12:07:16 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>,
@@ -35,35 +35,58 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 1/4] Renesas ARM defconfig updates for v5.17
-Date: Fri, 17 Dec 2021 12:07:12 +0100
-Message-Id: <cover.1639736717.git.geert+renesas@glider.be>
+Subject: [GIT PULL 3/4] Renesas driver updates for v5.17 (take two)
+Date: Fri, 17 Dec 2021 12:07:14 +0100
+Message-Id: <cover.1639736722.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1639736716.git.geert+renesas@glider.be>
 References: <cover.1639736716.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+The following changes since commit 05b22caa7490e4f4c94bbde33c61cf72d187b8f7:
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+  soc: renesas: Consolidate product register handling (2021-11-30 09:42:00 +0100)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-defconfig-for-v5.17-tag1
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-drivers-for-v5.17-tag2
 
-for you to fetch changes up to 44e009607444f64d173f0c884e815edabc093024:
+for you to fetch changes up to 363b41dd25397f553bebf87594eca9b2d6445b55:
 
-  arm64: defconfig: Enable R-Car S4-8 (2021-12-07 16:56:12 +0100)
-
-----------------------------------------------------------------
-Renesas ARM defconfig updates for v5.17
-
-  - Enable support for the new R-Car S4-8 SoC in the arm64 defconfig.
+  soc: renesas: rcar-rst: Add support for R-Car S4-8 (2021-12-07 16:50:57 +0100)
 
 ----------------------------------------------------------------
-Yoshihiro Shimoda (1):
-      arm64: defconfig: Enable R-Car S4-8
+Renesas driver updates for v5.17 (take two)
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+  - Core support for the R-Car S4-8 (R8A779F0) SoC, including System
+    Controller (SYSC) and Reset (RST) support.
+
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      Merge tag 'renesas-r8a779f0-dt-binding-defs-tag' into renesas-drivers-for-v5.17
+
+Yoshihiro Shimoda (6):
+      dt-bindings: power: Add r8a779f0 SYSC power domain definitions
+      dt-bindings: clock: Add r8a779f0 CPG Core Clock Definitions
+      soc: renesas: rcar-gen4-sysc: Introduce R-Car Gen4 SYSC driver
+      soc: renesas: r8a779f0-sysc: Add r8a779f0 support
+      soc: renesas: Identify R-Car S4-8
+      soc: renesas: rcar-rst: Add support for R-Car S4-8
+
+ drivers/soc/renesas/Kconfig                   |  15 +
+ drivers/soc/renesas/Makefile                  |   2 +
+ drivers/soc/renesas/r8a779a0-sysc.c           | 380 +-------------------------
+ drivers/soc/renesas/r8a779f0-sysc.c           |  47 ++++
+ drivers/soc/renesas/rcar-gen4-sysc.c          | 376 +++++++++++++++++++++++++
+ drivers/soc/renesas/rcar-gen4-sysc.h          |  43 +++
+ drivers/soc/renesas/rcar-rst.c                |   7 +-
+ drivers/soc/renesas/renesas-soc.c             |  12 +
+ include/dt-bindings/clock/r8a779f0-cpg-mssr.h |  64 +++++
+ include/dt-bindings/power/r8a779f0-sysc.h     |  30 ++
+ 10 files changed, 596 insertions(+), 380 deletions(-)
+ create mode 100644 drivers/soc/renesas/r8a779f0-sysc.c
+ create mode 100644 drivers/soc/renesas/rcar-gen4-sysc.c
+ create mode 100644 drivers/soc/renesas/rcar-gen4-sysc.h
+ create mode 100644 include/dt-bindings/clock/r8a779f0-cpg-mssr.h
+ create mode 100644 include/dt-bindings/power/r8a779f0-sysc.h
