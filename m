@@ -1,83 +1,83 @@
-Return-Path: <SRS0=AlPT=RC=ti.com=nm@kernel.org>
+Return-Path: <SRS0=XNqx=RC=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D371C433EF
-	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 16:00:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D48C7C433F5
+	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 16:11:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 08B0CC36AE9; Fri, 17 Dec 2021 16:00:32 +0000 (UTC)
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	id BAB0DC36AE7; Fri, 17 Dec 2021 16:11:05 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 39D41C36AE7;
-	Fri, 17 Dec 2021 16:00:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 39D41C36AE7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BHG07fH050996;
-	Fri, 17 Dec 2021 10:00:07 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1639756807;
-	bh=o5FZZyggvdui1CUzq3pJk4FxP/aLklXa6J5Z54yqBDI=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=cxGjYcsyyWWl8cRp4hi4RvvI9IPyl9TiOu2hgpw99b6K+y69rnesv6KglLhz3hKem
-	 vii1YKQzR0PPoAG0HtiwfvegB+pMYkfWNZ3T8CYJbB/8kvRX7gv/zbhtGNdyh7WT/2
-	 TezQp/ztI7ivfqKL+utM0uOSUI5pMVaWz543B2OY=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BHG07BB034596
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 17 Dec 2021 10:00:07 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Dec 2021 10:00:07 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Dec 2021 10:00:07 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BHG07BW075506;
-	Fri, 17 Dec 2021 10:00:07 -0600
-Date: Fri, 17 Dec 2021 10:00:07 -0600
-From: Nishanth Menon <nm@ti.com>
-List-Id: <soc.lore.kernel.org>
-To: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
-CC: <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tony
- Lindgren <tony@atomide.com>
-Subject: Re: [GIT PULL] soc: Keystone driver update for v5.17
-Message-ID: <20211217160007.etfr5urg76j2n5sf@reissue>
-References: <20211217154921.cagzppcensxx6wm4@pension>
+	by smtp.kernel.org (Postfix) with ESMTPS id 81A52C36AE1;
+	Fri, 17 Dec 2021 16:11:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 81A52C36AE1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mati7-1mNYEB1nqt-00cMdQ; Fri, 17 Dec 2021 17:11:00 +0100
+Received: by mail-wr1-f45.google.com with SMTP id i22so4926782wrb.13;
+        Fri, 17 Dec 2021 08:11:00 -0800 (PST)
+X-Gm-Message-State: AOAM530jegvsQFwOMLjCnUYnnl1BaF48rbNeopYDTVPSRrJxRqIQn/1S
+	zSTBynVdbnSAA5U5PYyRujn8CZm/KRlJResuMLo=
+X-Google-Smtp-Source: ABdhPJyRMqlCm9oM4/6HkLIIRw91n15vAuP9POgQRnbi3DunXAWqw7Gf6RA2oyTa80FOiPp7vdpBNgSC57+ieFUaBHk=
+X-Received: by 2002:a5d:6989:: with SMTP id g9mr3049267wru.12.1639757460078;
+ Fri, 17 Dec 2021 08:11:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20211217154921.cagzppcensxx6wm4@pension>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20211217154921.cagzppcensxx6wm4@pension> <20211217160007.etfr5urg76j2n5sf@reissue>
+In-Reply-To: <20211217160007.etfr5urg76j2n5sf@reissue>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Fri, 17 Dec 2021 17:10:44 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0nPN=e1QaLPaf5TLJgj19SE5OQ2D3YWM2KepM6r+oh7Q@mail.gmail.com>
+Message-ID: <CAK8P3a0nPN=e1QaLPaf5TLJgj19SE5OQ2D3YWM2KepM6r+oh7Q@mail.gmail.com>
+Subject: Re: [GIT PULL] soc: Keystone driver update for v5.17
+To: Nishanth Menon <nm@ti.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>, 
+	arm-soc <arm@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>, 
+	Tony Lindgren <tony@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:kqNwRq2iEMO/L3TOM2UkRKW7kvcTqcv+Yysb2+6uSZNvwZGu8RY
+ qZW9XAL4DWtehLyvV5T3d1Ud1F3S3U5RS/qwpHsJd4TGxYNQsKG6XlsmZeO7EHCZxHwo292
+ ouytsb0KJNM6I7+gok9l1TgpnY6c8y1OzSKkZnOMi+vWJb7rSWtYLotwMuCtvLRe12MLn6G
+ hEVbP+zaBU69yWE6aGPGA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:uUXLDTzpJuk=:XPrE69+HUtk8at0Mg2m4WP
+ zYDIfawlXff1wCUrACvsOViUbDM7QS8+9oMK02WnCo3EmvNE1jwyJ8oLcbijrGiERDIcyXmjx
+ s60gtc/dVlPZ6LqUtreXpwCYbWRbHxq4AUxDIdcCm6/G2mdVy0IAcVgme6ESivn6bT2Ka2pBB
+ xVeeHKPhYfyAnzaRAgx3cqofN1fd8mTzigT+lCDTB0Usi9XhxZgzkrMrlhaop0kPXq/g0cvun
+ TOUMMP4FROs137um3vjkAVMTmBy+azfe8QPOhwcA5rT70awkSC7NA96yAqcNl392ErltxnegR
+ yEtXth6xrfW7eopAiwPSHn5XYwfewBbHYz3VtU5kPuV1gfQw2fXCWT82WUlhrYw1ov4CnDKEO
+ fVggx0opDtbIWrQOZID5RZA068SSCjQ/VC5wH5vqs1wXZIJSQJ1k9d9SbUEcY9fMNHA7YDpYt
+ 6IUTcKLj/BwlQS/V9GtjVmOU0voy8jnyIlmaI26WezM3PYfhTuWjSl8kfKME8tp2p4V37QiDp
+ /7kdrrJH/sLJ2h/DGUZDxPMp1sCUvx3NszGWMeuVD0oYx/gulbmp8mfs/IRXlK7R4v0rmcy6P
+ 9nUYcUBL7drelP9r1SWF4ccAMcHT/HxF+26nGOg/tvPypLB8hsZXjFOQyprqdviPJUJO/CkmE
+ qVdWOYZKvU1HL1gur5278TTThz28pnl+zTHFq96wQOMEjV5hFN+l73654MmNJ1F7zhlLd6gyH
+ VyCJ0ONpMdIAucWJLvYELznnpsIS2SOSHrwmRkYT/H/E+v03QHwjJmEzHQVPgF9sxuRSABOEh
+ xtGhVxDSK7mHzljqTFGftGsdJByCUEdMYMvtwn+bSlOI0IyW0Q=
 
-On 09:49-20211217, Nishanth Menon wrote:
-> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-> 
->   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver-soc-fixes-for-v5.17
+On Fri, Dec 17, 2021 at 5:00 PM Nishanth Menon <nm@ti.com> wrote:
+>
+> On 09:49-20211217, Nishanth Menon wrote:
+> > The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+> >
+> >   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+> >
+> > are available in the Git repository at:
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver-soc-fixes-for-v5.17
+>
+>
+> uggh.. Could have been tags/ti-driver-soc-for-v5.17 mostly fixes threw
+> my thought off a bit there.. - Do let me know if you folks prefer it
+> as ti-driver-soc-for-v5.17 instead of ti-driver-soc-fixes-for-v5.17
+> and I can retag and respin the PR..
 
+I don't care about the tag name. However, if any of the patches qualify
+as bugfixes that make sense in 5.16, please split up the branch into fixes
+and new work and send them separately.
 
-uggh.. Could have been tags/ti-driver-soc-for-v5.17 mostly fixes threw
-my thought off a bit there.. - Do let me know if you folks prefer it
-as ti-driver-soc-for-v5.17 instead of ti-driver-soc-fixes-for-v5.17
-and I can retag and respin the PR..
-
-
-
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+       Arnd
