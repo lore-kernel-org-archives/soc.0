@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD2B6C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD22DC4332F
 	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 11:07:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6A1CFC36AF3; Fri, 17 Dec 2021 11:07:21 +0000 (UTC)
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
+	id 9BE00C36AEA; Fri, 17 Dec 2021 11:07:21 +0000 (UTC)
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 96C62C36AE1
+	by smtp.kernel.org (Postfix) with ESMTPS id DEC54C36AEE
 	for <soc@kernel.org>; Fri, 17 Dec 2021 11:07:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 96C62C36AE1
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DEC54C36AEE
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:d13f:527c:5504:a743])
-	by xavier.telenet-ops.be with bizsmtp
-	id XP7H2600D250X3001P7HcR; Fri, 17 Dec 2021 12:07:17 +0100
+	by baptiste.telenet-ops.be with bizsmtp
+	id XP7H2600H250X3001P7HaP; Fri, 17 Dec 2021 12:07:17 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1myB53-005Y8T-6M; Fri, 17 Dec 2021 12:07:17 +0100
+	id 1myB53-005Y8R-1j; Fri, 17 Dec 2021 12:07:17 +0100
 Received: from geert by rox.of.borg with local (Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1myB52-00AQST-GF; Fri, 17 Dec 2021 12:07:16 +0100
+	id 1myB52-00AQSJ-Ej; Fri, 17 Dec 2021 12:07:16 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>,
@@ -35,81 +35,58 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 2/4] Renesas ARM DT updates for v5.17 (take two)
-Date: Fri, 17 Dec 2021 12:07:13 +0100
-Message-Id: <cover.1639736718.git.geert+renesas@glider.be>
+Subject: [GIT PULL 0/4] Renesas SoC updates for v5.17 (take two)
+Date: Fri, 17 Dec 2021 12:07:11 +0100
+Message-Id: <cover.1639736716.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1639736716.git.geert+renesas@glider.be>
-References: <cover.1639736716.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit cdda01947bbae8f1b1d19f8aac1f81ae5ce6f37e:
+	Hi SoC folks,
 
-  arm64: dts: renesas: r8a779a0: Add DU support (2021-11-26 14:08:20 +0100)
+This is my second pull request for the inclusion of Renesas SoC updates
+for v5.17.
 
-are available in the Git repository at:
+It consists of 4 parts:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.17-tag2
+  [GIT PULL 1/4] Renesas ARM defconfig updates for v5.17
 
-for you to fetch changes up to c9b7011768b5dbb68792b4bacad5ae913059ed74:
+    - Enable support for the new R-Car S4-8 SoC in the arm64 defconfig.
 
-  arm64: dts: renesas: Fix pin controller node names (2021-12-17 10:34:18 +0100)
+  [GIT PULL 2/4] Renesas ARM DT updates for v5.17 (take two)
 
-----------------------------------------------------------------
-Renesas ARM DT updates for v5.17 (take two)
+    - Initial support for the R-Car S4-8 SoC on the Spider CPU and
+      BreakOut boards,
+    - MIPI DSI display support for the R-Car V3u SoC and the Falcon board
+      stack,
+    - Thermal and GPU support for the RZ/G2L SoC and the RZ/G2L SMARC EVK
+      development board,
+    - Miscellaneous fixes and improvements.
 
-  - Initial support for the R-Car S4-8 SoC on the Spider CPU and
-    BreakOut boards,
-  - MIPI DSI display support for the R-Car V3u SoC and the Falcon board
-    stack,
-  - Thermal and GPU support for the RZ/G2L SoC and the RZ/G2L SMARC EVK
-    development board,
-  - Miscellaneous fixes and improvements.
+  [GIT PULL 3/4] Renesas driver updates for v5.17 (take two)
 
-----------------------------------------------------------------
-Biju Das (4):
-      arm64: dts: renesas: r9a07g044: Add TSU node
-      arm64: dts: renesas: r9a07g044: Create thermal zone to support IPA
-      arm64: dts: renesas: r9a07g044: Add Mali-G31 GPU node
-      arm64: dts: renesas: rzg2l-smarc-som: Add vdd core regulator
+    - Core support for the R-Car S4-8 (R8A779F0) SoC, including System
+      Controller (SYSC) and Reset (RST) support.
 
-Geert Uytterhoeven (2):
-      Merge tag 'renesas-r8a779f0-dt-binding-defs-tag' into renesas-arm-dt-for-v5.17
-      arm64: dts: renesas: Fix pin controller node names
+  [GIT PULL 4/4] Renesas DT binding updates for v5.17 (take two)
 
-Kieran Bingham (3):
-      arm64: dts: renesas: Fix thermal bindings
-      arm64: dts: renesas: r8a779a0: Add DSI encoders
-      arm64: dts: renesas: falcon-cpu: Add DSI display output
+    - Document support for the R-Car S4-8 Spider CPU and BreakOut boards.
 
-Yoshihiro Shimoda (4):
-      dt-bindings: power: Add r8a779f0 SYSC power domain definitions
-      dt-bindings: clock: Add r8a779f0 CPG Core Clock Definitions
-      arm64: dts: renesas: Add Renesas R8A779F0 SoC support
-      arm64: dts: renesas: Add Renesas Spider boards support
+Note that the new Renesas R-Car S4-8 DT Binding Definitions are shared by
+driver and DT source files, and thus included in multiple pull requests:
+  - "[GIT PULL] clk: renesas: Updates for v5.17 (take two)" (for clk),
+  - "[GIT PULL 2/4] Renesas ARM DT updates for v5.17 (take two)" (for soc),
+  - "[GIT PULL 3/4] Renesas driver updates for v5.17 (take two)" (for soc).
 
- arch/arm64/boot/dts/renesas/Makefile               |   2 +
- arch/arm64/boot/dts/renesas/r8a774a1.dtsi          |   6 +-
- arch/arm64/boot/dts/renesas/r8a774b1.dtsi          |   6 +-
- arch/arm64/boot/dts/renesas/r8a774e1.dtsi          |   6 +-
- arch/arm64/boot/dts/renesas/r8a77951.dtsi          |   6 +-
- arch/arm64/boot/dts/renesas/r8a77960.dtsi          |   6 +-
- arch/arm64/boot/dts/renesas/r8a77961.dtsi          |   6 +-
- arch/arm64/boot/dts/renesas/r8a77965.dtsi          |   6 +-
- arch/arm64/boot/dts/renesas/r8a77980.dtsi          |   4 +-
- .../boot/dts/renesas/r8a779a0-falcon-cpu.dtsi      |  79 ++++++++++++++
- arch/arm64/boot/dts/renesas/r8a779a0.dtsi          |  70 +++++++++++-
- .../boot/dts/renesas/r8a779f0-spider-cpu.dtsi      |  36 ++++++
- arch/arm64/boot/dts/renesas/r8a779f0-spider.dts    |  22 ++++
- arch/arm64/boot/dts/renesas/r8a779f0.dtsi          | 121 +++++++++++++++++++++
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi         | 109 ++++++++++++++++++-
- arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi   |  13 +++
- include/dt-bindings/clock/r8a779f0-cpg-mssr.h      |  64 +++++++++++
- include/dt-bindings/power/r8a779f0-sysc.h          |  30 +++++
- 18 files changed, 562 insertions(+), 30 deletions(-)
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779f0-spider.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779f0.dtsi
- create mode 100644 include/dt-bindings/clock/r8a779f0-cpg-mssr.h
- create mode 100644 include/dt-bindings/power/r8a779f0-sysc.h
+Thanks for pulling!
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
