@@ -1,106 +1,65 @@
-Return-Path: <SRS0=FoO/=RC=benettiengineering.com=giulio.benetti@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1EF6C43219
-	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 11:54:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAA0FC433F5
+	for <soc@archiver.kernel.org>; Fri, 17 Dec 2021 15:20:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 71281C36AE8; Fri, 17 Dec 2021 11:54:13 +0000 (UTC)
-Received: from smtpcmd0871.aruba.it (smtpcmd0871.aruba.it [62.149.156.71])
-	by smtp.kernel.org (Postfix) with ESMTP id 22638C36AE9
-	for <soc@kernel.org>; Fri, 17 Dec 2021 11:54:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 22638C36AE9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=benettiengineering.com
-Received: from [192.168.50.18] ([146.241.138.59])
-	by Aruba Outgoing Smtp  with ESMTPSA
-	id yBoMmGIqJAiELyBoMmk6vi; Fri, 17 Dec 2021 12:54:08 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-	t=1639742048; bh=Cg6MxKPvLr6Syz/mZJuzyddObRpzBUMOq66KSTVgZcY=;
-	h=Subject:To:From:Date:MIME-Version:Content-Type;
-	b=YsK1gOTHau77ToD4V3DSSMyI7USDTkBZwjl/woPrapr/aTfPHPS0/GTxklvDY8ec4
-	 Jm1+a2tF0knFjA8/Jx/yNjAIk3WpE4DeAkr58+XhjYn4nxMmBUHj2fWzUWwVI6052I
-	 e+xTjt7/WaN21gWO7T7lCwQoi0OlwHjZFRcvo+ByNiUL6UlLOklSFoPPgSbZQzxXMc
-	 dLgBd92UMup1b6Bc9e4CF6dWRCfohLkugosh37uTaJmvkvden7X9le4bd1G1Bf4VbO
-	 L7LXWJTT1QrasjtS7fa/uj3C16xs4UMTvGYkliZYnToAYR7sKcd+jBlDoOPQz5E1mR
-	 QorLYS3xfKQrw==
-Subject: Re: [RESEND in plain-test] Re: [PATCH v5 0/9] Add initial support for
- the i.MXRTxxxx SoC family starting from i.IMXRT1050 SoC.
-To: Arnd Bergmann <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-Cc: Jesse Taube <mr.bossman075@gmail.com>, NXP Linux Team
- <linux-imx@nxp.com>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Sascha Hauer <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>,
- Stefan Agner <stefan@agner.ch>, Linus Walleij <linus.walleij@linaro.org>,
- gregkh <gregkh@linuxfoundation.org>, Olof Johansson <olof@lixom.net>,
- SoC Team <soc@kernel.org>, Russell King - ARM Linux <linux@armlinux.org.uk>,
- Abel Vesa <abel.vesa@nxp.com>, Adrian Hunter <adrian.hunter@intel.com>,
- Jiri Slaby <jirislaby@kernel.org>,
- Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
- linux-clk <linux-clk@vger.kernel.org>, DTML <devicetree@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-mmc <linux-mmc@vger.kernel.org>,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
- Vladimir Murzin <vladimir.murzin@arm.com>
-References: <20211215220538.4180616-1-Mr.Bossman075@gmail.com>
- <CAK8P3a29tzgd_4WncippZBEJra9n0bQTysBkPBp_WA0sb28gTg@mail.gmail.com>
- <1360c4fe-4a09-a8a1-3224-7f1d4af59f6f@benettiengineering.com>
- <CAK8P3a1oZK1qMRBE3D8otCTY6Lg4jMXxVpAZHQzLTA8woA3_UQ@mail.gmail.com>
- <634e9304-2eba-4ea9-65ac-5d4f5d011b70@benettiengineering.com>
- <CAK8P3a3kpzi6ozLkTH9GtWqvs=JHkm6mp=dLs2vOHjrW=FoYdw@mail.gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <88f5ec3a-8765-48b2-0429-d182402826be@benettiengineering.com>
-Date: Fri, 17 Dec 2021 12:54:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+	id 91FCCC36AE1; Fri, 17 Dec 2021 15:20:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 797B1C36AE7;
+	Fri, 17 Dec 2021 15:20:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1639754430;
+	bh=mJ/9RNA3dfJOHD9kFCtk70c9Iq1Resq0K0AIh8G0Dmk=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=Kzz+Q2kpJ11GmLBMXXcqeLzrXIhr7y2R/fHueM3fw8TdRPmmx3dtMufko+YB3eOZR
+	 FSVIPTeaTkPsW+Km6iKe4N+BYGp3rDuJrpJAGUzmA1ml5W90cU2eYZoMf/+7HX6fv9
+	 s+zSbgYea6aPk/1fKuKhtGO9r+YJWd75tuVecN1ofLj26zM2G4qGRnEO6pXtGNOuZc
+	 2W0jzva5HlfOiEsznttVAv0nsRZ3VeQEJHXSJ5UKPHPmkynm/XVJeE0fSPCYI5igBm
+	 6l396usqL0mqAuiJgAGSYuOdIxDYILRyz93LAzXmk7AbE4SJbqnhaRY3lF8WtJzoKX
+	 cJSi0qV/uDMGA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6124860A3C;
+	Fri, 17 Dec 2021 15:20:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a3kpzi6ozLkTH9GtWqvs=JHkm6mp=dLs2vOHjrW=FoYdw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfJkrPNgY2+yCcbV01jLFZAj1mqsZnNe8M/nRv60DgHLOmija7PShQ+EryWAp90sIzvVBOOmU9lzp3hN/5wtsXuLUTv/PpOoR3jJE3ByA5PuCx+8ImBF6
- bNNvhhw1qf58KbFLdL+BjpDhoXoFBJlwBgcSb8c2H2lpAUuufgHAfRiAHrka1/R/SampTSjjHwiQlgKjj71a7MoVRj4IPbd4M53DKvluKfROlfQTFJv7UqHM
- ROMGiZEO/UrWyowI8X8RUja+FsHyXMqgFhvmnc2mf5fPJfXjgAABfTU/Tae437yyToK/lMzhSoc8fw7ZWn09WfT7+5vjVeGLsQGPhN29R63yQgC5lh9jSckL
- eNm4oWEFDxh5xbihmqI1SOXV4xLya5KmgiehLCj8U9LPteR1kMPjALtPShU/YgZIewwT0jt92y6tnAtCsgkqwjdkZxA1L1c6MyHhmPYxFW80h6cWExblQhMg
- /aPT/EURA/fgwS4/JgDj/RPiWdIsB3zD857uNDnMzlP9Auq6yr/t0ZnylZ+I7NYjfvAwOZeiNeUxRz5+hhpjW5CBrP/eLegkCl3tTXgwezY6HkM5ikYJE+OS
- v9XT6jlGaKNj0ZJybeUWzGQ9zq32CPNoJPMlTFtxpK2FAEfxXOofQHbTp9umQ367/Ib5L+hZP3SHszgNze0QRSghRq+UZ0VCFQwlm6y9BKOGSYrV1FF2azBD
- UZxPArzt+mvZEja2/thGmIHLhDn3kKsgCsmBzbIpOadwU986xSOaVWqBj9a7s3TG3RMY3OtBPrdvD17mkvOK599Z0P2x18yGxpBXT9WvEMmy+EoGU3Jj1iCR
- 0PZNREN2Ia4Xtm9FpftLzuhgeUR1OtuDIqIn+SmjZMbsm8ImNXlfAe2EB0Tu8+RqOMGH831DwHK8CJCdq/06uOaG0bMQB5Pw4xaWZZGThJ5bRLPROHxj7Vuu
- xXm5iaGAzsiwptM6t16hU/4vS0xgpnZmLPGKaPlbXsCiZHI9kpVYoMh4rBbs7MtRjsM3Opiir7z/ZH4fZ5xIB9Skwr5lgVTo/4MPheKkXtLSI6d0Y3rlkowo
- VK6P7nIbxg/7rPJLqPaRtZhw4NoTzOECAWzFqxsCepa0W+o0ZbkkiOJqJJ5Wz/lAStg8Ypm/VM00P4QpuH+qAa/uw2ZANULR0KTElLNKAPibBwRv8rKqpzdJ
- ReshPf2u4Q5p1FV2JBFzWQ==
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] TEE and OP-TEE fixes for v5.16
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <163975443039.14717.6371065035353968268.git-patchwork-notify@kernel.org>
+Date: Fri, 17 Dec 2021 15:20:30 +0000
+References: <20211216150745.GA3347954@jade>
+In-Reply-To: <20211216150745.GA3347954@jade>
+To: Jens Wiklander <jens.wiklander@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-On 17/12/21 11:28, Arnd Bergmann wrote:
-> On Fri, Dec 17, 2021 at 10:54 AM Giulio Benetti
-> <giulio.benetti@benettiengineering.com> wrote:
->> On 16/12/21 22:13, Arnd Bergmann wrote:
->>
->>> Vladimir has put some work into making Cortex-R work in the kernel, and
->>> he may have some other thoughts on this question.
->>
->> I'm curious if he has something specific to Cortex-R to tell.
->>
->> I've found that Cortex-R82 has a MMU:
->> https://www.arm.com/products/silicon-ip-cpu/cortex-r/cortex-r82
->> but I can't find any SoC that uses it. Also, I don't know how many
->> people could use it honestly.
+Hello:
+
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
+
+On Thu, 16 Dec 2021 16:07:45 +0100 you wrote:
+> Hello arm-soc maintainers,
 > 
-> R82 is fairly new, but I expect that we will see support in Linux in the
-> future. Aside from having an MMU, it also 64-bit-only, so we'd treat
-> it like a normal ARMv8-A core in arch/arm64.
+> Please pull these TEE subsystem and OP-TEE driver fixes which by coincident
+> all are concerning memory shared with secure world.
+> 
+> There's one in particular nasty race fixed when a tee_shm is about to be
+> teared down.
+> 
+> [...]
 
-Ah yes, that's fine. So let's wait for the future, in the meanwhile we 
-focus con i.MXRT :-)
+Here is the summary with links:
+  - [GIT,PULL] TEE and OP-TEE fixes for v5.16
+    https://git.kernel.org/soc/soc/c/a6a476878ea9
 
-Thank you
-Best regards
+You are awesome, thank you!
 -- 
-Giulio Benetti
-Benetti Engineering sas
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
