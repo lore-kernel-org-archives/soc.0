@@ -4,21 +4,21 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5239C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1C04C433EF
 	for <soc@archiver.kernel.org>; Sat, 18 Dec 2021 08:57:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AEC28C36AEB; Sat, 18 Dec 2021 08:57:54 +0000 (UTC)
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	id 8D87DC36AEC; Sat, 18 Dec 2021 08:57:54 +0000 (UTC)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CBDB3C36AE1;
+	by smtp.kernel.org (Postfix) with ESMTPS id CCE1BC36AEA;
 	Sat, 18 Dec 2021 08:57:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CBDB3C36AE1
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CCE1BC36AEA
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from dggeme762-chm.china.huawei.com (unknown [172.30.72.57])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JGKRP3lzxz1DK67;
-	Sat, 18 Dec 2021 16:54:41 +0800 (CST)
+Received: from dggeme762-chm.china.huawei.com (unknown [172.30.72.54])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JGKVX3K2JzbjGm;
+	Sat, 18 Dec 2021 16:57:24 +0800 (CST)
 Received: from ubuntu1804.huawei.com (10.67.174.44) by
  dggeme762-chm.china.huawei.com (10.3.19.108) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
@@ -33,9 +33,9 @@ To: <linux@armlinux.org.uk>, <krzysztof.kozlowski@canonical.com>,
 CC: <linux-arm-kernel@lists.infradead.org>,
 	<linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<gongruiqi1@huawei.com>, <wangweiyang2@huawei.com>
-Subject: [PATCH -next 3/3] arm-soc: various: replace open coded VA->PA calculation
-Date: Sat, 18 Dec 2021 16:58:43 +0800
-Message-ID: <20211218085843.212497-4-cuigaosheng1@huawei.com>
+Subject: [PATCH -next 2/3] arm-soc: mvebu: replace open coded VA->PA conversion
+Date: Sat, 18 Dec 2021 16:58:42 +0800
+Message-ID: <20211218085843.212497-3-cuigaosheng1@huawei.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20211218085843.212497-1-cuigaosheng1@huawei.com>
 References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
@@ -49,78 +49,38 @@ X-CFilter-Loop: Reflected
 
 From: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 
-This replaces a few copies of the open coded calculations of the
-physical address in the secondary startup code of a couple of
-platforms. This ensures these quantities are invariant under
-runtime relocation.
+This replaces an open coded calculation to obtain the physical
+address of a far symbol with a call to the new ldr_l etc macro.
 
-Cc: Russell King <linux@armlinux.org.uk>
 Signed-off-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 ---
- arch/arm/mach-spear/headsmp.S     | 11 +++--------
- arch/arm/plat-versatile/headsmp.S |  9 +--------
- 2 files changed, 4 insertions(+), 16 deletions(-)
+ arch/arm/mach-mvebu/coherency_ll.S | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/arch/arm/mach-spear/headsmp.S b/arch/arm/mach-spear/headsmp.S
-index 96f89436ccf6..32ffc75ff332 100644
---- a/arch/arm/mach-spear/headsmp.S
-+++ b/arch/arm/mach-spear/headsmp.S
-@@ -10,6 +10,8 @@
- #include <linux/linkage.h>
- #include <linux/init.h>
- 
-+#include <asm/assembler.h>
-+
- 	__INIT
- 
- /*
-@@ -20,10 +22,7 @@
- ENTRY(spear13xx_secondary_startup)
- 	mrc	p15, 0, r0, c0, c0, 5
- 	and	r0, r0, #15
--	adr	r4, 1f
--	ldmia	r4, {r5, r6}
--	sub	r4, r4, r5
--	add	r6, r6, r4
-+	adr_l	r6, spear_pen_release
- pen:	ldr	r7, [r6]
- 	cmp	r7, r0
- 	bne	pen
-@@ -37,8 +36,4 @@ pen:	ldr	r7, [r6]
- 	 * should now contain the SVC stack for this core
+diff --git a/arch/arm/mach-mvebu/coherency_ll.S b/arch/arm/mach-mvebu/coherency_ll.S
+index a3a64bf97250..9ae65b1e9745 100644
+--- a/arch/arm/mach-mvebu/coherency_ll.S
++++ b/arch/arm/mach-mvebu/coherency_ll.S
+@@ -37,9 +37,7 @@ ENTRY(ll_get_coherency_base)
+ 	 * MMU is disabled, use the physical address of the coherency
+ 	 * base address, (or 0x0 if the coherency fabric is not mapped)
  	 */
- 	b	secondary_startup
+-	adr	r1, 3f
+-	ldr	r3, [r1]
+-	ldr	r1, [r1, r3]
++	ldr_l	r1, coherency_phys_base
+ 	b	2f
+ 1:
+ 	/*
+@@ -155,7 +153,3 @@ ENTRY(ll_disable_coherency)
+ 	dsb
+ 	ret	lr
+ ENDPROC(ll_disable_coherency)
 -
--	.align
--1:	.long	.
--	.long	spear_pen_release
- ENDPROC(spear13xx_secondary_startup)
-diff --git a/arch/arm/plat-versatile/headsmp.S b/arch/arm/plat-versatile/headsmp.S
-index 09d9fc30c8ca..cec71853b0b3 100644
---- a/arch/arm/plat-versatile/headsmp.S
-+++ b/arch/arm/plat-versatile/headsmp.S
-@@ -18,10 +18,7 @@ ENTRY(versatile_secondary_startup)
-  ARM_BE8(setend	be)
- 	mrc	p15, 0, r0, c0, c0, 5
- 	bic	r0, #0xff000000
--	adr	r4, 1f
--	ldmia	r4, {r5, r6}
--	sub	r4, r4, r5
--	add	r6, r6, r4
-+	adr_l	r6, versatile_cpu_release
- pen:	ldr	r7, [r6]
- 	cmp	r7, r0
- 	bne	pen
-@@ -31,8 +28,4 @@ pen:	ldr	r7, [r6]
- 	 * should now contain the SVC stack for this core
- 	 */
- 	b	secondary_startup
--
--	.align
--1:	.long	.
--	.long	versatile_cpu_release
- ENDPROC(versatile_secondary_startup)
+-	.align 2
+-3:
+-	.long	coherency_phys_base - .
 -- 
 2.30.0
 
