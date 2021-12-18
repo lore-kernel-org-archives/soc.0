@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96F4AC433F5
-	for <soc@archiver.kernel.org>; Sat, 18 Dec 2021 07:15:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8417DC433F5
+	for <soc@archiver.kernel.org>; Sat, 18 Dec 2021 07:15:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3967BC36AEA; Sat, 18 Dec 2021 07:15:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60EE8C36AE0;
-	Sat, 18 Dec 2021 07:14:59 +0000 (UTC)
+	id 4C4D4C36AE1; Sat, 18 Dec 2021 07:15:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82795C36AE9;
+	Sat, 18 Dec 2021 07:15:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1639811701;
-	bh=EKtcayWTBp7wc65WZ5IaYesM4boha/I5po/b1IHr/P8=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=NI9AiReVSvw7+aVYoBnyQJZB9Q5qpN5UWpBeNsb5AvBeKtIarUybwxpXzvqWneeJF
-	 TBZrJr+xsgXSkWzkfwG0r2iSYHBxaWhuViFsjOmx1E7j6BlUMvyPfoyr4vfWyLvp62
-	 g78mKrTSgDTklF/PkBb7bdLMbd/vyw++txFZObnQyvDhisy6cmbKF3AiM3qeSvT7x2
-	 fxkyRqNHhaaoZ9z5YEI9Lcsp0KMrr1ddU5cvu6P1OZ4T4OjPQsIro1Uy0Uokl+1JzF
-	 DeQY1mxxzInPUx/nrcK0S1mZogUWFG0lFhmkrl7NPIlFJe2H8WSJn26SJpQjCv17rO
-	 gHvJpBVsNPNJw==
+	s=k20201202; t=1639811703;
+	bh=6N78ZtztZy2kuwi6cn3yd73yImKWCePSoI0jWLQaSbA=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=eOWjqsyaNyB7adM4WR0ZNY7LUK9nMRUnEVJB0kh77iMq22MFhZVz4asDhO4etNsGc
+	 WNuAjnVXdg1OcmvZJ/4k3IPEiln8NmcuYgIYfDKJTL5zcAWDd0qtyPbgwT4A05yClG
+	 zfqBvSujC0gJSJFNn8BnXlycDKamWtz8bvo5+2IpyK7va9BGOLXftRwNLhfr0P0Uhc
+	 BBsABacf7YyOc8VpXkXXnmyEusIfvOCiVNFxyLt4p/kMDBRKXs8+RZ6lrZZqZMajqK
+	 ySCHDEc5QlFl8D5WEG9DrBCcnF69/TnrKiurUVVNUq2mCwNKyW9i9uwT68YBdK0/KW
+	 sGKu2IzwVDqTQ==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -31,10 +31,12 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/6] i.MX drivers update for 5.17
-Date: Sat, 18 Dec 2021 15:14:22 +0800
-Message-Id: <20211218071427.26745-1-shawnguo@kernel.org>
+Subject: [GIT PULL 2/6] i.MX SoC update for 5.17
+Date: Sat, 18 Dec 2021 15:14:23 +0800
+Message-Id: <20211218071427.26745-2-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211218071427.26745-1-shawnguo@kernel.org>
+References: <20211218071427.26745-1-shawnguo@kernel.org>
 
 The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
@@ -42,39 +44,26 @@ The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-5.17
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-5.17
 
-for you to fetch changes up to 7f511d514e8c34b6dd0c17b5496e48b2a6a2626c:
+for you to fetch changes up to b0100bce4ff82ec1ccd3c1f3d339fd2df6a81784:
 
-  soc: imx: imx8m-blk-ctrl: add i.MX8MN DISP blk-ctrl (2021-12-17 10:53:20 +0800)
-
-----------------------------------------------------------------
-i.MX drivers update for 5.17:
-
-- A number of patches from Adam Ford to update gpcv2 and blk-ctrl driver
-  to keep i.MX8MM VPU-H1 and i.MX8MN GPUMIX bus clocks active, and add
-  i.MX8MN display related domain support.
-- Add optional continuous burst clock support for imx-weim bus driver.
-- Call pm_runtime_put_sync_suspend() instead of pm_runtime_put() in
-  gpcv2 driver to prevent a sequence issue seen with i.MX8MM GPU and
-  MIX domain.
+  ARM: imx: rename DEBUG_IMX21_IMX27_UART to DEBUG_IMX27_UART (2021-11-21 16:45:16 +0800)
 
 ----------------------------------------------------------------
-Adam Ford (5):
-      soc: imx: gpcv2: keep i.MX8MM VPU-H1 bus clock active
-      soc: imx: gpcv2: keep i.MX8MN gpumix bus clock enabled
-      soc: imx: gpcv2: Add dispmix and mipi domains to imx8mn
-      dt-bindings: power: imx8mn: add defines for DISP blk-ctrl domains
-      soc: imx: imx8m-blk-ctrl: add i.MX8MN DISP blk-ctrl
+i.MX SoC update for 5.17:
 
-Ivan Bornyakov (1):
-      bus: imx-weim: optionally enable continuous burst clock
+- A couple of cleanups from Lukas Bulwahn to remove left-over from
+  i.MX{27,31,35} board file removal, and rename DEBUG_IMX21_IMX27_UART
+  to DEBUG_IMX27_UART.
 
-Marek Vasut (1):
-      soc: imx: gpcv2: Synchronously suspend MIX domains
+----------------------------------------------------------------
+Lukas Bulwahn (2):
+      ARM: imx: remove dead left-over from i.MX{27,31,35} removal
+      ARM: imx: rename DEBUG_IMX21_IMX27_UART to DEBUG_IMX27_UART
 
- drivers/bus/imx-weim.c                   | 18 +++++++-
- drivers/soc/imx/gpcv2.c                  | 29 +++++++++++-
- drivers/soc/imx/imx8m-blk-ctrl.c         | 77 +++++++++++++++++++++++++++++++-
- include/dt-bindings/power/imx8mn-power.h |  5 +++
- 4 files changed, 125 insertions(+), 4 deletions(-)
+ arch/arm/Kconfig.debug            | 14 +++++++-------
+ arch/arm/include/debug/imx-uart.h | 18 +++++++++---------
+ arch/arm/mach-imx/Kconfig         | 12 ------------
+ arch/arm/mach-imx/Makefile        |  2 --
+ 4 files changed, 16 insertions(+), 30 deletions(-)
