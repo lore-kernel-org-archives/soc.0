@@ -4,35 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 612E1C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FC98C433EF
 	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 15:40:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2E5C8C36AEB; Mon, 20 Dec 2021 15:40:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0FFFCC36AE8;
+	id 40C3FC36AE5; Mon, 20 Dec 2021 15:40:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 27897C36AEC;
 	Mon, 20 Dec 2021 15:40:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1640014826;
-	bh=KhC+Q5SoF40RNX/QXSpjDYRzHaqHV9EL7vfz12Xeirs=;
+	bh=tjuTuSSuVJehumam3uzzblu+6doNtXY3xaiJ962m524=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=sdz9RQUlJbg/QG+h4UHJFPWtFKPRKw8DqgAVa2ohH26xCLgIRuwqyEerPUH9aPKh+
-	 w8Zg4IF+RHhclks0E+9TlA7LN0QjBWNFKQlM03FYk9KWUZoA6wfCRSqeNRmeGO4MqK
-	 cDpcpSqXSWrxdbRNi+WRdxqVi9c2NNgXWuoPXLhwQ9LLtmNFAMmPDNcAc78Ma+ExHJ
-	 UUGxZEbvlR5VIZgW1EH0pJ1EmRX9YYDDFvV5hP1mkr7xeEPjHZfQtU5yXlV+N1tCCR
-	 RkzEZEWX8pt49Z/gL92T+O0rDq4YwpjCCE7zegNAwWEQpofLhh8irXrSGsIZ2WWKFq
-	 91Mb+Yyw4hXcQ==
+	b=cG0HttIRA7byyEoS9JCRBAZSycaHNCWwHWbvNNeaXakmVdBft9grPAabwCHPcoOL0
+	 u2xC2B5/YOcTT0h2kmXlJlmR80S6d6N/X6mPqcAk4j0/qWdRV6im41n2YtqnI7Dp49
+	 y76uTZXqnaATzP8eASHll9HXpUVOk1nU2Fn+FJ4mNKfEwYGi9j/RPEPAlaA5FntsSU
+	 gyosMqP7lltFC2y/aiGDbEKDZrigbMbMbD3pebOoMJ8AJDAI4TZCpP9tntWXrNUogr
+	 BgNz6VX9ZcqwGLWdNblZVExnX/nX0HwBNaY3Uc2MNuq8AXabrUBwBMTB8P+ORq5Lh9
+	 25OBKImy2lKuA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E111060952;
-	Mon, 20 Dec 2021 15:40:25 +0000 (UTC)
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 02A8C609B3;
+	Mon, 20 Dec 2021 15:40:26 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: mvebu: dt64 for v5.17 (#1)
+Subject: Re: [GIT PULL] ARM: mvebu: dt for v5.17 (#1)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164001482591.10364.14412415053591048732.git-patchwork-notify@kernel.org>
-Date: Mon, 20 Dec 2021 15:40:25 +0000
-References: <878rwjm8vj.fsf@BL-laptop>
-In-Reply-To: <878rwjm8vj.fsf@BL-laptop>
+ <164001482600.10364.6956762190366597955.git-patchwork-notify@kernel.org>
+Date: Mon, 20 Dec 2021 15:40:26 +0000
+References: <875yrnm8uq.fsf@BL-laptop>
+In-Reply-To: <875yrnm8uq.fsf@BL-laptop>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
@@ -42,10 +42,10 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 17 Dec 2021 18:36:16 +0100 you wrote:
+On Fri, 17 Dec 2021 18:36:45 +0100 you wrote:
 > Hi,
 > 
-> Here is the first pull request for dt64 for mvebu for v5.17.
+> Here is the first pull request for dt for mvebu for v5.17.
 > 
 > Gregory
 > 
@@ -54,8 +54,8 @@ On Fri, 17 Dec 2021 18:36:16 +0100 you wrote:
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: mvebu: dt64 for v5.17 (#1)
-    https://git.kernel.org/soc/soc/c/0724f8a14726
+  - [GIT,PULL] ARM: mvebu: dt for v5.17 (#1)
+    https://git.kernel.org/soc/soc/c/8d5c175fe19a
 
 You are awesome, thank you!
 -- 
