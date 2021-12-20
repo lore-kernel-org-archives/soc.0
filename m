@@ -1,97 +1,88 @@
-Return-Path: <SRS0=XIvY=RF=linaro.org=viresh.kumar@kernel.org>
+Return-Path: <SRS0=vNIe=RF=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D64EC433EF
-	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 04:20:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC161C433FE
+	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 11:54:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E8B60C36AE9; Mon, 20 Dec 2021 04:20:20 +0000 (UTC)
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 9EFD4C36AEB; Mon, 20 Dec 2021 11:54:24 +0000 (UTC)
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 01228C36AE5
-	for <soc@kernel.org>; Mon, 20 Dec 2021 04:20:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01228C36AE5
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f174.google.com with SMTP id n16so6308554plc.2
-        for <soc@kernel.org>; Sun, 19 Dec 2021 20:20:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=idRrPNY8lT9qvJ1RX4lP6sDX0kRhviqifoOXKRGv1rY=;
-        b=HI/6YkCt3ky43jRDNEN2lf6M22JE6+kU4T+uMtFrbfWX8vNs6ZusoVEID1nBzvAShn
-         S5ZTX7Ta1P9uRa9kd/zrtJZhAtjeuHfoK85oJ1GeE2Dmh+H8ThxhaXpqrOXewiNLqOSQ
-         o5L6XC7ifvxgGIy6Rq0q29P9z//gZq4zSt2X6nIn1ewKEtKWFLpzMiRl3XaW+2KCsW1H
-         pPvGUDfqd1gxPY4X2f+ExStB3eDWtWpgRF3Gwdq/IRh/vjDpkLIdJ3PHlddVT2e1m4bx
-         FfoHQpIUHyIZn/2ipJ3kPNh1POZNSW/ZlOciYn3QWbrNNhMav5W8xhcr1PHVOQgsXOqL
-         pRsQ==
+	by smtp.kernel.org (Postfix) with ESMTPS id C25DAC36AE9
+	for <soc@kernel.org>; Mon, 20 Dec 2021 11:54:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C25DAC36AE9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id F16ED3FDC3
+	for <soc@kernel.org>; Mon, 20 Dec 2021 11:54:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1640001255;
+	bh=5eM8zfWkW/pWK8AnysGnJolct8dbP/FVpa+LnPDHIiQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=hpqZXvQpsNkUr5FeeYuCdTeM7uCRqBbMGqvIflj5IrcDemIRNHBi8SvMpwa54n59E
+	 jOvWHeyGEaSw8rFRdaFKYXyl9AgeODJw20YvEIyLGifMMFdpLuN1XdgimJF9OqTdQ4
+	 UrgSbW0m5Sd8RE4u05uqSha2haO3qvRqyRQePvnm6et3mYWAPY5bFCUGpVVpVnPzle
+	 l3aaM0qdDRZa5awrW+KIS7NItTKwWjCF6KHMABeN48DmbUHUMKAG3K7jh+Jb9rzC/t
+	 /Iv1wr5ISTbu1egOm69g9n9m7iExPWrSTctRk8H7giA6qso5txYeVrSx5dG+ja2mYU
+	 2hlB2pGIGI/8g==
+Received: by mail-lf1-f71.google.com with SMTP id g18-20020a05651222d200b0042612bda352so123820lfu.11
+        for <soc@kernel.org>; Mon, 20 Dec 2021 03:54:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=idRrPNY8lT9qvJ1RX4lP6sDX0kRhviqifoOXKRGv1rY=;
-        b=PX4qJZGoGH7qq3HZh8m9Ldn4YGKpkQgE2ghs7TQlRAH187FC3Hnxa4bfFPNMsI/bwz
-         c0MReUY9b5uIC9eL6AJJEHKrAYbsO7VMejVE0ZDlFchfiypFoPA5JjBC/OrMz+2AOfuW
-         87a5vwU7jvqRn6UBVpwJtZwftctF4D/aZXDdTBKgbbHs54k4bslExPJ0mWgZi2qjTUuk
-         ztu5OHiGoT7uXlYGVdtRcLFNkTNj2KPFPtdW/rVDxLsMs1epGGkeVXBMh69A87BLAEBD
-         cz2KHIFbcPdbHg9qJwRMwBGxeg0z97cMFkpxjnhRFVtPimkfTmOuElX/9MopZ33noBV3
-         z9QA==
-X-Gm-Message-State: AOAM532dEu/SkzaXRFb8okVbacuwJ52a4uVSTv1INqC1VQdp2mtjZKdo
-	n4aXhPUoAkfUKD864SLp6iQERA==
-X-Google-Smtp-Source: ABdhPJzGZHTTmdWj0H2HUPNmPUFshIz7BAck3SWavB9iLe038KjqDHtpEYTn5mz3kFKV/RLuZgwPPw==
-X-Received: by 2002:a17:90b:164c:: with SMTP id il12mr17891712pjb.241.1639974019397;
-        Sun, 19 Dec 2021 20:20:19 -0800 (PST)
-Received: from localhost ([106.201.42.111])
-        by smtp.gmail.com with ESMTPSA id n14sm6000281pgd.80.2021.12.19.20.20.18
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5eM8zfWkW/pWK8AnysGnJolct8dbP/FVpa+LnPDHIiQ=;
+        b=1CGvx6wKBAm4uAbZI1h2kfd7myO8GoWTC5+iRu5ZKdLqDRWmAlmUyls+Bgd2LJPDOh
+         8Z7Y2tGXfmd0Vfg2CgLpGkW+qGVg6THaI4zUNP8Cuem5Wa03T5ZJ19vMCsvwl4hhGXw5
+         QfWu9ZsFxerJjC85FiQBZOOCHNBsv1tSctIE+6sEbF1l4V6UpE9L9BsY7+AhcQAXlkik
+         b+yIWg7s36q2cbmSsxdCIud0pl8qmpLCEWFP8cwVOQCPQVChzvmR7jFjKCiVLO6L8Fj6
+         EJnubt+sD/FwqIIZiptiivV9Q4JO59uiSqOsn4OCtpZx/iXbYesWCTbuicxDVp1zScqh
+         H3hg==
+X-Gm-Message-State: AOAM5310AoopZiMcAS32syfyVEmJhmI9BRExjloI1TmhNmcDjFqkIREX
+	vJQtbwBi/bMzLj+9MM1UkPqdIr6aF25U4ZWpCs5dHbNJ+1GzNSZeYYFHAhXuYOMgfTT7/IhVQmg
+	TW0mS2YI3xgcq6f419K2p+l0=
+X-Received: by 2002:a2e:8848:: with SMTP id z8mr14290846ljj.429.1640001254382;
+        Mon, 20 Dec 2021 03:54:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyncoh05JrY8CfHDFYfJ23eACvQDvVEoyPx5BQRDX8S1cvSRccYHmnJfLGek7iKuSmCNJeorw==
+X-Received: by 2002:a2e:8848:: with SMTP id z8mr14290820ljj.429.1640001253937;
+        Mon, 20 Dec 2021 03:54:13 -0800 (PST)
+Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id a4sm2339486lfo.96.2021.12.20.03.54.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Dec 2021 20:20:18 -0800 (PST)
-Date: Mon, 20 Dec 2021 09:50:16 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Rob Herring <robh@kernel.org>
+        Mon, 20 Dec 2021 03:54:13 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Ludovic Desroches <ludovic.desroches@microchip.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	=?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-	Tony Lindgren <tony@atomide.com>, Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: Remove "spidev" nodes
-Message-ID: <20211220042016.cnk332uthdxziv5a@vireshk-i7>
-References: <20211217221232.3664417-1-robh@kernel.org>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Sam Protsenko <semen.protsenko@linaro.org>,
+	Chanho Park <chanho61.park@samsung.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 0/6] Samsung for v5.17
+Date: Mon, 20 Dec 2021 12:53:59 +0100
+Message-Id: <20211220115405.30434-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217221232.3664417-1-robh@kernel.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 
-On 17-12-21, 16:12, Rob Herring wrote:
-> "spidev" is not a real device, but a Linux implementation detail. It has
-> never been documented either. The kernel has WARNed on the use of it for
-> over 6 years. Time to remove its usage from the tree.
-> 
-> Cc: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Arnd, Olof, Can you please apply this directly.
-> 
->  arch/arm/boot/dts/spear1310-evb.dts           | 16 ---------
->  arch/arm/boot/dts/spear1340-evb.dts           | 16 ---------
+Hi Arnd, Olof,
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Four pull requests and two separate, trailing patches (arm64 and defconfig).
 
--- 
-viresh
+Please see the "[GIT PULL 1/6] samsung: soc: drivers: for v5.17" for future ABI
+break explanation.
+
+Best regards,
+Krzysztof
