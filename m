@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48061C4332F
-	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 11:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05278C43217
+	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 11:55:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 33BC1C36AEC; Mon, 20 Dec 2021 11:55:38 +0000 (UTC)
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	id E8CDCC36AE7; Mon, 20 Dec 2021 11:55:38 +0000 (UTC)
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E5CA3C36AE8
-	for <soc@kernel.org>; Mon, 20 Dec 2021 11:55:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E5CA3C36AE8
+	by smtp.kernel.org (Postfix) with ESMTPS id 3EBDBC36AE8
+	for <soc@kernel.org>; Mon, 20 Dec 2021 11:55:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3EBDBC36AE8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B27464000E
-	for <soc@kernel.org>; Mon, 20 Dec 2021 11:55:35 +0000 (UTC)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E99D7405F6
+	for <soc@kernel.org>; Mon, 20 Dec 2021 11:55:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1640001335;
-	bh=Cu4+11DOXZRrdhilEoPCVYJODFzNISiCGs5MUOme0+k=;
+	s=20210705; t=1640001336;
+	bh=toOeqdy9uQSYnwOmuCCMP7VCCN8CJiS3LeSVrO9Suis=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
 	 MIME-Version;
-	b=gWbccULEuHjPvE0f3+Ss/T97vrALZs+Aj3U08m9RRdVT1MtLsWX6ZpqrqIoyLtf3V
-	 c1uYVR7iSX4jPV8c2lFnAmj0bpYw6H0rnw8liRkyxkN+z+xLLz6I+9Bfsg8VWNd7aJ
-	 TEHI7RZYw5nu5wB7PZMbOo9bsgyo6VdqD5BkLtw7t9fxvVRHRluW1ZcYj8AAZ4m661
-	 0kFglbx9AwBDk7v9NM+oKzBI+kkQcTLJImzvBDj5o5QpKW2byE5pLDxQkYtb4OlqGM
-	 z9lDwsq+Ji5F0v5diDP3GCxByDCaJk4o8uftm79COg1W9c++sWFxi0ZE1mDbXBcqEC
-	 v5vD/CP3i+TNA==
-Received: by mail-lf1-f72.google.com with SMTP id r21-20020ac25f95000000b004259e6ab262so2515543lfe.6
-        for <soc@kernel.org>; Mon, 20 Dec 2021 03:55:35 -0800 (PST)
+	b=wER4aBeAydVTJdAGk4emSBf1/bVeu7jBKe3n7J9o3IemU4y4x5b2B266Llp8faxn7
+	 VBnX4BsGBQUmwbQx8DlvSHwevks5i4s+DMGUdNbqzYXetL7VrvEA27PUFJYX3De3AU
+	 4Dzx+boGeo8eTQ0R3YPQ0m1r3CWEuyALuTZBgDzlJhrYLClp2Y4GUbpqzAXYoiq553
+	 AVuPlgP20PuG5eaEHfRqCdjeoVcE281LNxxLAaP3VCRQoKOT1sNE+GLFSY309yrfG0
+	 P9TJdaJOQIzo2FSRXCEK6LV0ASehOoE1CXDNn90WeA6YcyTIkQEtqI11/wO3BcJCo0
+	 XNHxmlh30i33w==
+Received: by mail-lf1-f69.google.com with SMTP id j9-20020a05651231c900b004037efe9fddso4413164lfe.18
+        for <soc@kernel.org>; Mon, 20 Dec 2021 03:55:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Cu4+11DOXZRrdhilEoPCVYJODFzNISiCGs5MUOme0+k=;
-        b=a0uTmhAjJJhTD1eCIIt2/ef+6Z3lReJZbTBEXlEqtTag6h/MTD6nzpgg2IiXwH323I
-         krbxYUznZLOZagMQL37tQZiBzKKxDttecKWmY4fmNBz9h5UvegDCNwgXWH6sSdFndVaO
-         cliZHYyg6sXoCTWsQ5tsk9WxPDd1/qQkTVrFQ+Fh7622eiZWJmnWXKuwgfilzt+YSPtV
-         HcHiK4f4aYtFUpakenHCSAMctSOJmLGTPMS+kGakaoflGL2+S5bwK9WfHxOQtgp++cbn
-         JBodUB9uIvYd5yavgAvfOmm9Pxv0D5/aMQf59f9AcFjJ9uoYbBY3QFahEq9H83OGbSVx
-         UXmw==
-X-Gm-Message-State: AOAM530870bqh43K+ZO67gB6VwYGswlcMbtYIidqkdakmU9fQ/ma2M+z
-	5hetpIrq+mqZ8DkraJLGm1Cqt8dqoc22clh6WnYH1FChYRbUQMiJIY4+PFlaC/MK6mF7sx74V3d
-	bey3GR6ENzh8TEraETTjxFAk=
-X-Received: by 2002:a2e:97cb:: with SMTP id m11mr14450444ljj.324.1640001335171;
-        Mon, 20 Dec 2021 03:55:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyGhcJV5zeGlTyPSC5Du9hpwQvZ9l7m0zQ8PCOvgtcgSgSX7pPLOaZ60p72RxVXeQ9BYz4bew==
-X-Received: by 2002:a2e:97cb:: with SMTP id m11mr14450429ljj.324.1640001334960;
-        Mon, 20 Dec 2021 03:55:34 -0800 (PST)
+        bh=toOeqdy9uQSYnwOmuCCMP7VCCN8CJiS3LeSVrO9Suis=;
+        b=sSYYLOxH0aBeJMiGmWdJ+firJPgg3bQkUXfVnQ7Hg+id74z97ILrWaLMoL9TKBWydk
+         Dc/EJhMgD62iBRYB/SxoAGn7TGtRAyYKpX3EKvP785dpqHS4b+5SSRUItZuNXBR3RHV9
+         G5NBisJPSY7qIubgOlh/apUdqAHqx27mOCoxYVoZ62TY4rRqTRmcZHQPb826ErzG/MvZ
+         6BO60+P+uSx1U7u/vHOlZetBMDVe1Y8STyoBTT6/Pabtnw/MhDwIgQNEO78ncg/P/U2u
+         wgsV7Q7dAAAbq4im+5qfeUbEqQINso6l7vxA84J4HK2x/7cvLkP3uaCJmTg6vLNl1Zws
+         pBGQ==
+X-Gm-Message-State: AOAM533lPVw3BWHZAd0X5EJZrCdLGKyjADZLYDo9FMXgmW/PkyIU2hXZ
+	NKXgUHqsbxICbxFm5eC1zqUMKCgQ//21Tjd/6w7JajXt7b/OIjIjZuCxvGozNkgDrrBWBIx5DUE
+	9uDaWeuRS1/r3NHpppHMjqmc=
+X-Received: by 2002:a2e:860e:: with SMTP id a14mr14714113lji.67.1640001336427;
+        Mon, 20 Dec 2021 03:55:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzqcyC9yQY5wCTjgw0YN2+mTfZbYV2uSnGv31jQVsI4zyIsitWLPMpFJTQFiX7+xP/fh9EnqQ==
+X-Received: by 2002:a2e:860e:: with SMTP id a14mr14714102lji.67.1640001336271;
+        Mon, 20 Dec 2021 03:55:36 -0800 (PST)
 Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id n2sm2523746ljq.30.2021.12.20.03.55.33
+        by smtp.gmail.com with ESMTPSA id n2sm2523746ljq.30.2021.12.20.03.55.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 03:55:34 -0800 (PST)
+        Mon, 20 Dec 2021 03:55:35 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -71,9 +71,9 @@ Cc: Sam Protsenko <semen.protsenko@linaro.org>,
 	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 3/6] arm64: dts: samsung: for v5.17
-Date: Mon, 20 Dec 2021 12:55:27 +0100
-Message-Id: <20211220115530.30961-2-krzysztof.kozlowski@canonical.com>
+Subject: [GIT PULL 4/6] ARM: samsung: for v5.17
+Date: Mon, 20 Dec 2021 12:55:28 +0100
+Message-Id: <20211220115530.30961-3-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211220115405.30434-1-krzysztof.kozlowski@canonical.com>
 References: <20211220115405.30434-1-krzysztof.kozlowski@canonical.com>
@@ -86,49 +86,33 @@ The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.17
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-soc-5.17
 
-for you to fetch changes up to 51b1a5729469cef57a3c97aa014aa6e1d2b8d864:
+for you to fetch changes up to 3ac5f9db26bb7a227ccbf160c36a5567b5394299:
 
-  dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850 (2021-12-20 10:35:32 +0100)
-
-----------------------------------------------------------------
-Samsung DTS ARM64 changes for v5.17
-
-1. Add bindings for: Exynos USI, Samsung Galaxy A8 (2018) board, WinLink
-   E850-96 board and WinLink vendor prefix.
-2. Add pinctrl definitions used for Exynos850.
-3. Minor fixes and improvements.
-4. Convert serial on ExynosAutov9 to new hierarchy where serial is part
-   of USI node.
+  ARM: samsung: Remove HAVE_S3C2410_I2C and use direct dependencies (2021-11-21 17:46:18 +0100)
 
 ----------------------------------------------------------------
-Chanho Park (1):
-      arm64: dts: exynos: convert serial_0 to USI on ExynosAutov9
+Samsung mach/soc changes for v5.17
 
-David Virag (1):
-      dt-bindings: arm: samsung: document jackpotlte board binding
+1. Minor fixes for S3C platforms.
+2. Remove HAVE_S3C2410_I2C Kconfig symbol - not really useful.
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      ARM: s3c: add one more "fallthrough" statement in Jive
 
 Krzysztof Kozlowski (1):
-      Merge branch 'for-v5.17/dt-usi' into next/dt64
+      ARM: s3c: include header for prototype of s3c2410_modify_misccr
 
-Sam Protsenko (6):
-      arm64: dts: exynos: Rename hsi2c nodes to i2c for Exynos5433 and Exynos7
-      dt-bindings: soc: samsung: Add Exynos USI bindings
-      dt-bindings: soc: samsung: Fix I2C clocks order in USI binding example
-      dt-bindings: Add vendor prefix for WinLink
-      dt-bindings: arm: samsung: Document E850-96 board binding
-      dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850
+Sam Protsenko (1):
+      ARM: samsung: Remove HAVE_S3C2410_I2C and use direct dependencies
 
- .../bindings/arm/samsung/samsung-boards.yaml       |  12 ++
- .../bindings/soc/samsung/exynos-usi.yaml           | 159 +++++++++++++++++++++
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- arch/arm64/boot/dts/exynos/exynos5433.dtsi         |  24 ++--
- arch/arm64/boot/dts/exynos/exynos7.dtsi            |  24 ++--
- arch/arm64/boot/dts/exynos/exynosautov9-sadk.dts   |   4 +
- arch/arm64/boot/dts/exynos/exynosautov9.dtsi       |  36 +++--
- include/dt-bindings/pinctrl/samsung.h              |  13 +-
- include/dt-bindings/soc/samsung,exynos-usi.h       |  17 +++
- 9 files changed, 258 insertions(+), 33 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
- create mode 100644 include/dt-bindings/soc/samsung,exynos-usi.h
+ arch/arm/Kconfig                  |  1 -
+ arch/arm/mach-exynos/Kconfig      |  1 -
+ arch/arm/mach-s3c/Kconfig.s3c64xx |  1 -
+ arch/arm/mach-s3c/gpio-samsung.c  |  1 +
+ arch/arm/mach-s3c/mach-jive.c     |  1 +
+ arch/arm/mach-s5pv210/Kconfig     |  1 -
+ drivers/i2c/busses/Kconfig        | 10 ++--------
+ 7 files changed, 4 insertions(+), 12 deletions(-)
