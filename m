@@ -1,132 +1,145 @@
-Return-Path: <SRS0=vNIe=RF=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=sy7d=RF=ti.com=vigneshr@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F75FC433F5
-	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 17:21:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 287EFC433EF
+	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 17:40:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F0930C36AEA; Mon, 20 Dec 2021 17:21:38 +0000 (UTC)
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	id EB969C36AE8; Mon, 20 Dec 2021 17:40:40 +0000 (UTC)
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4AB5DC36AE7
-	for <soc@kernel.org>; Mon, 20 Dec 2021 17:21:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4AB5DC36AE7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A0E194005A
-	for <soc@kernel.org>; Mon, 20 Dec 2021 17:21:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1640020889;
-	bh=9uepcdD/+xGrreEt0EvBxw805TxTK4a1Lcw9AZ0HvjU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=vW3WziXRD0NbDKDIc0uEmapoWe6K9v9+CG0EluJhE+AIDM7zUS3RYZ98YkxP1h6eb
-	 kczHedPoEqhAsUncW5pOFI6xVHO63NrkO25oub56Ryi3OKRyjYhErRO+Oyt9R575CM
-	 W+ozbdj1G6dX1WoSPq6PanHMmW5fF6CkbqhWtHUlI21zvnBCEJLKJBAlzp0uAW0rGC
-	 tarAvssI3y6kSASQKdiznNUZZ+JSSYqsW2ivzNk0nAguNTgIvfd6Fx22gFkot/0e57
-	 SJ2r928qQbbj79Yn9nv2gxYpHqECOuW7nd3w9W8nafJNxspvc3AYwVrA36hXCsjgKH
-	 B4NHg8FrkXQSQ==
-Received: by mail-lf1-f71.google.com with SMTP id o2-20020a198c02000000b00425d146a32bso1431550lfd.15
-        for <soc@kernel.org>; Mon, 20 Dec 2021 09:21:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9uepcdD/+xGrreEt0EvBxw805TxTK4a1Lcw9AZ0HvjU=;
-        b=3VS1AW1neSjdVa+jxu7UJJd0bDK+lgo2Agc7xK28g4RGnQQcdDv8jQ/wKTqNCZYLiM
-         +boQPeHyiAGIvVVJ8+uILCfippx9W4cdh/zpv0EdNOm2DQR5o5Tai65o5aAeBDaAhwE9
-         BkeMcO7wy+gLFCVoh/UoPqSxn6XMd/1D9OAnjb3L+9a5c8hKPrzsqsrarvHORUF2HQbh
-         dSRCmNcTAzs+77uOeDzkZMz6SSgUQQg/3Sq3c6YaJXxwIpMuHKNSG7mnbxrMGxKLaHyk
-         xELSsWuL8WrCALpZoAK099GseD7MFt68aGyHDsp6Ni06rH0FOGyIbBjt+9TRo90S3L6J
-         SVOA==
-X-Gm-Message-State: AOAM530z1HpEeb/DyISS91u0run21UUT1gQsoLNJ9/QvWOD79h5vLBer
-	PdmFCKH0uM64g9Ikd4d4KypNIq9WRj6eJCmnBuIcgWpSm4qlGgMQNFqyElYXoQpA1e45dA7wmzp
-	t4xjnUkW1ArUOaBv49pPeiX0=
-X-Received: by 2002:a2e:a176:: with SMTP id u22mr15640210ljl.116.1640020889116;
-        Mon, 20 Dec 2021 09:21:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw12jXDaIaPutKBaiiF5L53Z9AtdC+YiU2FcIO9qaPe7iaLjXk+j/FyWgm2N7as2oT8PjAU/A==
-X-Received: by 2002:a2e:a176:: with SMTP id u22mr15640183ljl.116.1640020888803;
-        Mon, 20 Dec 2021 09:21:28 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id y4sm2568279ljp.16.2021.12.20.09.21.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 09:21:27 -0800 (PST)
-Message-ID: <09d4e9d8-6bfa-5676-50cc-49bfc947b444@canonical.com>
-Date: Mon, 20 Dec 2021 18:21:24 +0100
+	by smtp.kernel.org (Postfix) with ESMTPS id 57F41C36AEA;
+	Mon, 20 Dec 2021 17:40:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 57F41C36AEA
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BKHeTTs113080;
+	Mon, 20 Dec 2021 11:40:29 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1640022029;
+	bh=yjMSPgS+YdxF6qi9e0afpWmUOzHLHzIDBDUpU3x/N3s=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=sTOL7PffNydu5v3HWs59GQ4Z28e2HBnINFdXotfzKZO8OjJBJxT4crGltAkcybEFW
+	 SCHJpta0n6010UcUu9r+siN19WMXNpKZZ2ij2IxtkFOLiJSDGYDvK8OPMA8Obu1BZI
+	 huCKfCbUzmZf85Lv4urOys15d/CzYjdL4D/XcwU8=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BKHeTNi023384
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 20 Dec 2021 11:40:29 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
+ Dec 2021 11:40:28 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 20 Dec 2021 11:40:28 -0600
+Received: from [10.250.235.203] (ileax41-snat.itg.ti.com [10.172.224.153])
+	by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BKHePwc021368;
+	Mon, 20 Dec 2021 11:40:26 -0600
+Message-ID: <06e60038-1365-fc35-801e-448c9025fb2a@ti.com>
+Date: Mon, 20 Dec 2021 23:10:25 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [GIT PULL 4/6] ARM: samsung: for v5.17
+ Thunderbird/91.4.0
+Subject: Re: [GIT PULL 1/2] arm64: TI K3 SoC configs changes for v5.17
 Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- arm@kernel.org, soc@kernel.org
-Cc: Sam Protsenko <semen.protsenko@linaro.org>,
- Chanho Park <chanho61.park@samsung.com>,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-References: <20211220115405.30434-1-krzysztof.kozlowski@canonical.com>
- <20211220115530.30961-3-krzysztof.kozlowski@canonical.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211220115530.30961-3-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=UTF-8
+CC: Nishanth Menon <nm@ti.com>, Olof Johansson <olof@lixom.net>,
+        SoC
+	<soc@kernel.org>, arm-soc <arm@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>
+References: <20211217172806.10023-1-vigneshr@ti.com>
+ <CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com>
+From: Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On 20/12/2021 12:55, Krzysztof Kozlowski wrote:
-> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+Hi Arnd,
+
+On 20/12/21 8:57 pm, Arnd Bergmann wrote:
+> On Fri, Dec 17, 2021 at 6:28 PM Vignesh Raghavendra <vigneshr@ti.com> wrote:
+>>
+>> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+>>
+>>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+>>
+>> are available in the Git repository at:
+>>
+>>   https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-config-for-v5.17
+>>
+>> for you to fetch changes up to 8d73aedca28cbed8030067b0d9423a0694139b9c:
+>>
+>>   arm64: defconfig: Enable USB, PCIe and SERDES drivers for TI K3 SoC (2021-12-14 16:22:25 +0530)
+>>
+>> ----------------------------------------------------------------
+>> ARM64 defconfig changes for TI K3 platforms for v5.17 merge window:
+>>
+>> - Increase No. of 8250 UARTs supported in System to 16 for J721s2
 > 
->   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+> This looks a little excessive, I'm holding off on this pull request
+> for now, as I'm
+> not sure exactly what the downsides are.
 > 
-> are available in the Git repository at:
+> I see that your dtsi file has
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-soc-5.17
+> +       aliases {
+> +               serial0 = &wkup_uart0;
+> +               serial1 = &mcu_uart0;
+> +               serial2 = &main_uart0;
+> +               serial3 = &main_uart1;
+> +               serial4 = &main_uart2;
+> +               serial5 = &main_uart3;
+> +               serial6 = &main_uart4;
+> +               serial7 = &main_uart5;
+> +               serial8 = &main_uart6;
+> +               serial9 = &main_uart7;
+> +               serial10 = &main_uart8;
+> +               serial11 = &main_uart9;
+> +               mmc0 = &main_sdhci0;
+> +               mmc1 = &main_sdhci1;
+> +               can0 = &main_mcan16;
+> +               can1 = &mcu_mcan0;
+> +               can2 = &mcu_mcan1;
+> +               can3 = &main_mcan3;
+> +               can4 = &main_mcan5;
+> +       };
 > 
-> for you to fetch changes up to 3ac5f9db26bb7a227ccbf160c36a5567b5394299:
+> which I think is the underlying problem here. The aliases are really meant to
+> be board specific, and I would assume that none of the boards actually
+> uses all the
+> uart and can bus devices, usually this isn't even possible due to pinctrl
+> constraints, so please follow up by moving these to the .dts files listing only
+> the actually used devices instead of working around it in the defconfig.
+
+Yes indeed, aliases can be trimmed and moved to board dts. With that,
+defconfig patch in question can be dropped. Thanks for the hint.
+
 > 
->   ARM: samsung: Remove HAVE_S3C2410_I2C and use direct dependencies (2021-11-21 17:46:18 +0100)
+>> - Enable USB, PCIe and SERDES drivers on TI K3 SoC
 > 
-> ----------------------------------------------------------------
-> Samsung mach/soc changes for v5.17
-> 
-> 1. Minor fixes for S3C platforms.
-> 2. Remove HAVE_S3C2410_I2C Kconfig symbol - not really useful.
-> 
-> ----------------------------------------------------------------
-> Arnd Bergmann (1):
->       ARM: s3c: add one more "fallthrough" statement in Jive
-> 
-> Krzysztof Kozlowski (1):
->       ARM: s3c: include header for prototype of s3c2410_modify_misccr
-> 
-> Sam Protsenko (1):
->       ARM: samsung: Remove HAVE_S3C2410_I2C and use direct dependencies
+> I see the PCIe driver is built-in here. Is that necessary for booting?
+> If not, please
+> make it a loadable module.
 > 
 
-Hi Arnd and Olof,
+Currently its not possible to build PCIE_CADENCE_PLAT_HOST/EP drivers as
+modules (symbols are bool only).
+PCIe is not necessary for basic boot either. So, I can drop these
+configs until these drivers are build able as modules, if you prefer.
 
-I forgot to mention possible conflict here with arm tree. Conflict is
-easy to resolve - just remove lines in all cases like:
+Will respin the PRs with comments addressed. Sorry for the trouble.
 
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@@ -471,7 -478,7 +471,6 @@@ config ARCH_S3C24X
-  	select CLKSRC_SAMSUNG_PWM
-  	select GPIO_SAMSUNG
-  	select GPIOLIB
-- 	select HAVE_S3C2410_I2C if I2C
- -	select GENERIC_IRQ_MULTI_HANDLER
-  	select NEED_MACH_IO_H
-  	select S3C2410_WATCHDOG
-  	select SAMSUNG_ATAGS
+Regards
+Vignesh
 
-
-Best regards,
-Krzysztof
