@@ -4,60 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FC98C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63C52C43217
 	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 15:40:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 40C3FC36AE5; Mon, 20 Dec 2021 15:40:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 27897C36AEC;
-	Mon, 20 Dec 2021 15:40:26 +0000 (UTC)
+	id 2E609C36AEF; Mon, 20 Dec 2021 15:40:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 16A9FC36AE7
+	for <soc@kernel.org>; Mon, 20 Dec 2021 15:40:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1640014826;
-	bh=tjuTuSSuVJehumam3uzzblu+6doNtXY3xaiJ962m524=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=cG0HttIRA7byyEoS9JCRBAZSycaHNCWwHWbvNNeaXakmVdBft9grPAabwCHPcoOL0
-	 u2xC2B5/YOcTT0h2kmXlJlmR80S6d6N/X6mPqcAk4j0/qWdRV6im41n2YtqnI7Dp49
-	 y76uTZXqnaATzP8eASHll9HXpUVOk1nU2Fn+FJ4mNKfEwYGi9j/RPEPAlaA5FntsSU
-	 gyosMqP7lltFC2y/aiGDbEKDZrigbMbMbD3pebOoMJ8AJDAI4TZCpP9tntWXrNUogr
-	 BgNz6VX9ZcqwGLWdNblZVExnX/nX0HwBNaY3Uc2MNuq8AXabrUBwBMTB8P+ORq5Lh9
-	 25OBKImy2lKuA==
+	bh=d5nHSNmp+/8rSPFuTcntOZcMLEILtYlR2pyu1WfBb1A=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=UBRwiR1ShNOiA0W/tkU3Bg4bC/+xdVdSB8vFJ75d2x5h9BSDBKRQ1BhuVygSLbsdM
+	 VjAHLzA31r+pg87ClRjPT3zvKgfCYd6kaMrBAVbovGMYNwjmjmlcy7S6gikGioX94z
+	 ZoQ3P/aXrOy2SFSg4VVP81lrVDnkKITnCJ+84p8u31IOKpSC55aiD4b23kKBG2GgDh
+	 TFEA8yZcEaJ6Z1y6Vvi6zEdvtyrrt/hxtydaUxXQ5P4hWZWkD6WQ1+inBN7IzDwiH9
+	 1TtGenAAdDyhvot4nRe5ghFAqHlqC2yww55jQBmrWEFfqbPbzwaAfznMqS3YWjjDqB
+	 jpTU+6jYXrqFg==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 02A8C609B3;
-	Mon, 20 Dec 2021 15:40:26 +0000 (UTC)
+	by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D5133600E8;
+	Mon, 20 Dec 2021 15:40:25 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: mvebu: dt for v5.17 (#1)
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164001482600.10364.6956762190366597955.git-patchwork-notify@kernel.org>
-Date: Mon, 20 Dec 2021 15:40:26 +0000
-References: <875yrnm8uq.fsf@BL-laptop>
-In-Reply-To: <875yrnm8uq.fsf@BL-laptop>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
+ <164001482581.10364.1613827153512200014.git-patchwork-summary@kernel.org>
+Date: Mon, 20 Dec 2021 15:40:25 +0000
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Fri, 17 Dec 2021 18:36:45 +0100 you wrote:
-> Hi,
-> 
-> Here is the first pull request for dt for mvebu for v5.17.
-> 
-> Gregory
-> 
-> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-> 
-> [...]
+Patch: [GIT,PULL] ARM: mvebu: dt64 for v5.17 (#1)
+  Submitter: Gregory CLEMENT <gregory.clement@bootlin.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=597579
+  Lore link: https://lore.kernel.org/r/878rwjm8vj.fsf@BL-laptop
 
-Here is the summary with links:
-  - [GIT,PULL] ARM: mvebu: dt for v5.17 (#1)
-    https://git.kernel.org/soc/soc/c/8d5c175fe19a
+Patch: ARM: dts: Remove "spidev" nodes
+  Submitter: Rob Herring <robh@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=597693
+  Lore link: https://lore.kernel.org/r/20211217221232.3664417-1-robh@kernel.org
 
-You are awesome, thank you!
+Patch: [GIT,PULL] ARM: mvebu: dt for v5.17 (#1)
+  Submitter: Gregory CLEMENT <gregory.clement@bootlin.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=597581
+  Lore link: https://lore.kernel.org/r/875yrnm8uq.fsf@BL-laptop
+
+Patch: [GIT,PULL] ARM: at91: defconfig for 5.17
+  Submitter: Nicolas Ferre <nicolas.ferre@microchip.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=597551
+  Lore link: https://lore.kernel.org/r/20211217165850.29694-1-nicolas.ferre@microchip.com
+
+
+Total patches: 4
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
