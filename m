@@ -4,107 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98D83C433F5
-	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 16:26:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17E29C433F5
+	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 16:28:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 55A76C36AEA; Mon, 20 Dec 2021 16:26:37 +0000 (UTC)
+	id E9068C36AE8; Mon, 20 Dec 2021 16:28:23 +0000 (UTC)
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E7517C36AE2;
-	Mon, 20 Dec 2021 16:26:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E7517C36AE2
+	by smtp.kernel.org (Postfix) with ESMTPS id C221CC36AE2;
+	Mon, 20 Dec 2021 16:28:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C221CC36AE2
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wm1-f43.google.com ([209.85.128.43]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mf3yk-1mXALD3v7S-00gUUr; Mon, 20 Dec 2021 17:26:33 +0100
-Received: by mail-wm1-f43.google.com with SMTP id c66so3523233wma.5;
-        Mon, 20 Dec 2021 08:26:33 -0800 (PST)
-X-Gm-Message-State: AOAM533/l+JEdxnFOaGAoyx+oraSOuEy8M9zyRtm1/Nls5grFSS2IAe+
-	BWo7Ic7LuoqbT1otlW0BYvWZxhTB9nU9uVi5TpU=
-X-Google-Smtp-Source: ABdhPJzwLrcEdHroPABlE7IJDleIxx8hF8kMeanu6+6idToBCIFPiLRY1JmE/9PmnlEOMB7YuxOroFdtYAkUkDWN3xs=
-X-Received: by 2002:a7b:cc90:: with SMTP id p16mr4058397wma.98.1640017593504;
- Mon, 20 Dec 2021 08:26:33 -0800 (PST)
+Received: from mail-wm1-f47.google.com ([209.85.128.47]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M1HuU-1n25La3VVa-002kwV; Mon, 20 Dec 2021 17:28:20 +0100
+Received: by mail-wm1-f47.google.com with SMTP id z4-20020a1c7e04000000b0032fb900951eso9996970wmc.4;
+        Mon, 20 Dec 2021 08:28:20 -0800 (PST)
+X-Gm-Message-State: AOAM531RR2SE0HOxKvp8fDJ92JXuqS7zmH8LpyESDpPAuZ4wJokp1kIp
+	Yfdjuuwrszwaar128TtwanTs0dORpQ9MlK4MBS8=
+X-Google-Smtp-Source: ABdhPJzUkj3i6PMuViKF1nX3C6bpcHTsNDurVwz/3TCnS0YI1CO6abZYHqYubf4bq0K4erlSr2QhZ7hBeF5vvUS0BW0=
+X-Received: by 2002:a7b:c007:: with SMTP id c7mr21879495wmb.82.1640017700357;
+ Mon, 20 Dec 2021 08:28:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20211220115405.30434-1-krzysztof.kozlowski@canonical.com> <20211220115405.30434-2-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211220115405.30434-2-krzysztof.kozlowski@canonical.com>
+References: <20211218071427.26745-1-shawnguo@kernel.org>
+In-Reply-To: <20211218071427.26745-1-shawnguo@kernel.org>
 From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 20 Dec 2021 17:26:17 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1A+6f1OsJ-8-8kbmXXbbsrQZTQywOAy59tJoUmdDN49g@mail.gmail.com>
-Message-ID: <CAK8P3a1A+6f1OsJ-8-8kbmXXbbsrQZTQywOAy59tJoUmdDN49g@mail.gmail.com>
-Subject: Re: [GIT PULL 1/6] samsung: soc: drivers: for v5.17
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Date: Mon, 20 Dec 2021 17:28:04 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0Pi+9tNTfaNjKCLH1f3Ge4YLW9_7o1ci1RLeuTOVEbkQ@mail.gmail.com>
+Message-ID: <CAK8P3a0Pi+9tNTfaNjKCLH1f3Ge4YLW9_7o1ci1RLeuTOVEbkQ@mail.gmail.com>
+Subject: Re: [GIT PULL 1/6] i.MX drivers update for 5.17
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, arm-soc <arm@kernel.org>, 
-	SoC Team <soc@kernel.org>, Sam Protsenko <semen.protsenko@linaro.org>, 
-	Chanho Park <chanho61.park@samsung.com>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>
+Cc: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
+	Stefan Agner <stefan@agner.ch>, Li Yang <leoyang.li@nxp.com>, 
+	Sascha Hauer <kernel@pengutronix.de>, NXP Linux Team <linux-imx@nxp.com>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Pi5v/GETGJQHdGKMmhqrLVikNTOvaJoruwPk78MOGjR4L6GolSM
- I2A6AI7pYAMBwoIDzzGsdbsIAgqoYvDoideP1RnsMcExWAmX11ZULxcbeLV5SETJmixNiDg
- dLnPGebynJwkH2+tLVkkgS3R3ly4gOa+OXS2KOg8/vL/EKqFy8WR92peSUFdNsIeQRJwZse
- BY+Ko9tinRpDHyUQn3znw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:OpY+khYYS2c=:YOf8zgRbEl3QG4yZBO4OQi
- wZdTu/mcikDO0WdYAomqApCtabURTrZi7v4thLKT2qKmtk9YDRDSu3k6LdyqKQ+VN8+/toMnB
- NF3/5BIdrkxoWsFYj4ge7zKr+dLn17bevGYrmmYydAxOydFnH1U1BrN/hYOPdlBSvfeiGxLuI
- eQhjN3nz5HcrW3xF6+16xtezyOKASHkBbppzpBeHQy96RFYKCFxC52iwkO4YTmIMVEDawNciB
- yUZeUisHjNLc6y1K0b84qq1G4Snmprb7QOK1qojy4/sEWzyNqUINakpYAaSKTBS0140Hwrz4c
- dQZ9WZWoGC+veJQevYWEaABw35PoWcCBgIBVlnGYGKsqJGlM9YYyWkFe4lkZg1BdzKtqgEyJV
- IrM5AB8eCo5Wg67q6AaOVG+lFxVM89mnHydim8fNmuT0IWyfgAyF8e66T5uAFOkDI327JnFvj
- JvxuECIcmgl4x3H+67C+HERqSkTYQUBkAP/UJxia8YbzWWsMbIqcOgBLQsaWQzNVI6HUR+TMh
- U1FrPu0Jm6rZqdK016hjsTrTjoMH1jofyJYQtPduQLU49P3yfHaXV0+ySOp5Umvg199XFpJfZ
- Q56/+bdKC0MNwLcvLHhlAcOw4KchiCJ0BGxC+pkNWF5LYUhoEQUaboz4Ef/p04kIRnleavq/0
- OIwbP3B07/QI/GLzYnJekYwxxzinRHI3M6S2IttqOiB1jqx3dDDNTDzJGkJYLiQZLJBSSmBmf
- w5Srmludp9qDXczGx2girhKdDxmKUSthTMj4VrDFqzaMzmUZ2MtYYsYCc7obfh7cevuQBGGa6
- Wyo5Rv92EyAK8atluNpGNlS1MQ7j0Tn7c5vEsKsXL/i5CLwtKw=
+X-Provags-ID: V03:K1:bFuGpe0BIqZJE7y/sbc4BXLS80DL5xeE/RYFBTuJK++vHV+h+fR
+ FpGCDv02ThierqjBoiBhTqYMJCiUtxZozrjDYjHm6pXZCvBgc6lPzRHZCqP3RMP4S/KvWMC
+ 4dbaQt9TmZ0kzy1oesV34pItv1V645ovO+fzxScoqytpMIrldUPSDyIOJAAJgQ8VFS4fZKj
+ 7otefsoWURyN4d8TO58vA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0hsZAsNlDhM=:W2+YIY9rjicunw5F/8lLiP
+ YQVByTpa+ePukKIHx9ruDF98tDyYwkh6OHEMSXZLrHOtgddyR+Ur40mzLYiSOzQT5T3jnquRL
+ yfQSY4y3iZgYbUzU7NBcckPe9uVnQXb+f7i5TSlXv8jIXJ8u8/yyIE2Whfc0XlO/pISW/YAT9
+ CG4x4Z1idMjI/cmvkprNcAXBaOELJd4vZoyQ+XLcBF15yPD3aeeWdUPv1dk4XTQslW01ljJgg
+ OqNrYvAGdEdtr/SfqxC6IIMoRw9fJFqDEkC0zHyNsi0Tv54Gkf8Ew/kw8exiZDnTJN1iiOL0U
+ N+9Vr6DsYzuVWVfhyn1xCDuf7cDVichYAEGp1D72bukvZI/+d4wdcg4oEiLb6+F4I03OqehYG
+ uM5pu/uYyfJJzUWUcMQjjIYjqrEw3GGI/1Is5ZzjgCLZva7MPIUo7Whq7L2wqc98yBpMQQmCz
+ TQ8BM+h9wCW2Aj1TkZAJ5Ily0pju+gLgeiNo+zCRz9WPLZUyljpZHA0IZBWO1AA7+jsMCronl
+ CNoKvQEztWQrnnVHzi6WksQeneAv8npSvqWKOf8dUwOKVKQkInWp6lw8jU+XKMQGMmO8WAOis
+ j8AAifjxlis7eQGJ6db4DqBpJPGd0DkqLDZFV+Fhx8mtJhSzm6gSMH0c5yN057IWk4vrg9vz9
+ ukpEFkE+ZcPC52zfPxJi+CJ9Xd5m1zKhIw+WyyEwljLEj6NFQ94zeMifYdIlNLuohMTDyYCqU
+ 7BDnwmKT444B3qEzLmmuhYM9O7SFHBdq7g76LfuPazKroBhMmEwbQ18knRG4yRhCqJAgu9qtY
+ 6rfM/Gqbj8LvWjQyVhkoqKdiixw1mGEhovwbThmsyjyPbTFTRY=
 
-On Mon, Dec 20, 2021 at 12:54 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
+On Sat, Dec 18, 2021 at 8:14 AM Shawn Guo <shawnguo@kernel.org> wrote:
+>
+> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+>
+>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-5.17
+>
+> for you to fetch changes up to 7f511d514e8c34b6dd0c17b5496e48b2a6a2626c:
+>
+>   soc: imx: imx8m-blk-ctrl: add i.MX8MN DISP blk-ctrl (2021-12-17 10:53:20 +0800)
+>
 > ----------------------------------------------------------------
-> Samsung SoC drivers changes for v5.17
+> i.MX drivers update for 5.17:
 >
-> 1. Exynos ChipID: add Exynos7885 support.
-> 2. Exynos PMU: add Exynos850 support.
-> 3. Minor bindings cleanup.
-> 4. Add Exynos USIv2 (Universal Serial Interface) driver. The USI block is
->    a shared IP block between I2C, UART/serial and SPI. Basically one has
->    to choose which feature the USI block will support and later the
->    regular I2C/serial/SPI driver will bind and work.
->    This merges also one commit with dt-binding headers from my dts64
->    pull request.
->
->    Together with a future serial driver change, this will break the ABI.
->
->    Affected: Serial on ExynosAutov9 SADK and out-of-tree ExynosAutov9 boards
->
->    Why: To properly and efficiently support the USI with new hierarchy
->    of USI-{serial,SPI,I2C} devicetree nodes.
->
->    Rationale:
->    Recently added serial and USI support was short-sighted and did not
->    allow to smooth support of other features (SPI and I2C). Adding
->    support for USI-SPI and USI-I2C would effect in code duplication.
->    Adding support for different USI versions (currently supported is
->    USIv2 but support for v1 is planned) would cause even more code
->    duplication and create a solution difficult to maintain.
->    Since USI-serial and ExynosAutov9 have been added recently, are
->    considered fresh development features and there are no supported
->    products using them, the code/solution is being refactored in
->    non-backwards compatible way.  The compatibility is not broken yet.
->    It will be when serial driver changes are accepted.
->    The ABI break was discussed with only known users of ExynosAutov9 and
->    received their permission.
+> - A number of patches from Adam Ford to update gpcv2 and blk-ctrl driver
+>   to keep i.MX8MM VPU-H1 and i.MX8MN GPUMIX bus clocks active, and add
+>   i.MX8MN display related domain support.
+> - Add optional continuous burst clock support for imx-weim bus driver.
+> - Call pm_runtime_put_sync_suspend() instead of pm_runtime_put() in
+>   gpcv2 driver to prevent a sequence issue seen with i.MX8MM GPU and
+>   MIX domain.
 
-Thanks a lot for the detailed description, very helpful!
-
-I've applied pull requests 1 through 4, though it seems that once more
-the automated emails did not go out.
-
-I can't find the two defconfig patches you mentioned in the introductory
-mail, neither in patchwork nor in my inbox, I assume these were
-numbered 5/6 and 6/6?
+Thanks, I've pulled all six tags now, but I don't know why there are no
+automated emails about them, this seems to happen for some senders
+but not others.
 
         Arnd
