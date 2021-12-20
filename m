@@ -4,137 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59C9EC433FE
-	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 16:48:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB662C433F5
+	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 16:50:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3F040C36AE2; Mon, 20 Dec 2021 16:48:59 +0000 (UTC)
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	id 8C148C36AE2; Mon, 20 Dec 2021 16:50:12 +0000 (UTC)
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B7032C36AEA
-	for <soc@kernel.org>; Mon, 20 Dec 2021 16:48:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B7032C36AEA
+	by smtp.kernel.org (Postfix) with ESMTPS id 9C333C36AE8
+	for <soc@kernel.org>; Mon, 20 Dec 2021 16:50:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9C333C36AE8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0EC9F3FDC3
-	for <soc@kernel.org>; Mon, 20 Dec 2021 16:48:55 +0000 (UTC)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 110203F1A9
+	for <soc@kernel.org>; Mon, 20 Dec 2021 16:50:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1640018935;
-	bh=DYfa/5ectGQzZ8y3l+jSOjS0qhsMHbXVqnPyDEeUiM4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=CVb89qtzXNMni1xhBNFe7EUmjZFPa+UEPKzkJd4f8Q0omm0BALqcuUaJcjv2qOxnK
-	 LQiWAgsMJIn7lmO6AlhYduCsDgyAcseJmV/UxN+M0YnqtOOvOxqBcEQLuuw2bAYFlH
-	 zh/Ed+PAEBuL73YTc2Y7qu32O6CtOZoHAlJt2uFxklOMnY0uaZRf8UcCQ4ir++wAKg
-	 o/lmH9g/LooSGePH12JFZyLh2bB2+gB6He3j4c0/sSmhsVCxuZo+6IpEZvLMnqF+EV
-	 lncBNfYJGRBVDPFN72/dbGqyzW92dioQncqqwDuc+mjNeBFY/tMhG2RWhumwQCbSW4
-	 1jmI8vZfEJbiA==
-Received: by mail-lf1-f70.google.com with SMTP id d2-20020a0565123d0200b0040370d0d2fbso4775226lfv.23
-        for <soc@kernel.org>; Mon, 20 Dec 2021 08:48:55 -0800 (PST)
+	s=20210705; t=1640019010;
+	bh=68468VFMqA34xN4uCVed2chkdwzfvBRVkSLi1lQZCoM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=IMnZzu35xFOQacEW0sDZjnjJsuQpBvDBg2uc5Cjpr2UhHj8DAWO/G3sSrt+ALS9nN
+	 JqHeCMZSfDdDwFQcH28Kf4NpOVbFtW+350fCNNLks4rXiuPG3xFZeLtzcMDpeaJk1R
+	 evBW0faH7JUph7AJCyAGrzjeiic1BYRATaje2OZz0wb9whDLjlPne0CQUoSEV55LIC
+	 o6wEB7Fem3PZTxF2XRUQgzfoFWvnEVrEs5oaGX1kszUFD04v6ymepCnn5mZZ6R+zG4
+	 ph6u6/1Xw8Bsya0lvsAjSVXLeK1hAh+MNeHs/r2r1n4qFhVmVmOWv9Wv44nCLyhulz
+	 Na3O5xnSgg/iQ==
+Received: by mail-lf1-f69.google.com with SMTP id b4-20020a056512304400b00425cf422539so1674401lfb.2
+        for <soc@kernel.org>; Mon, 20 Dec 2021 08:50:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=DYfa/5ectGQzZ8y3l+jSOjS0qhsMHbXVqnPyDEeUiM4=;
-        b=yFsTn0NaiKEOsMTJhgQPKaZsNN9zSt9dVdiscHiKD++zXeCBzcOdOodleaw2IBmWNM
-         JzPswx6Nzf3VE4eHdHXVRsT64YiM/U2CBYgZUb4w5Fk/CmC87Z1YuI7ct0iN8T3H3SO2
-         BFGlFVmHTdNGZ40uIViuVhWbGH4u6x/YGItiTWinUqeQJ6rqeDnJZYCtxdmJuHUsmA7A
-         ftZVYgRN8HgyNp2XQhF/141lo+fDWWSjdQgQyhg0KwalcZ8P+LodOAOiT/ise3i0sDv7
-         UZvm5K1upZSMH5MMjoaPrDO5trxrvi51VKXGr80RZak1eouaTUYbxjj9UwxwFQOtdotT
-         y/1g==
-X-Gm-Message-State: AOAM530cG8FDLEbrbbuCN14XsB3opyxlFmTn4egFiqAGCnYOaO4zA8/v
-	hIjnhSPhep62iQO20CHbSaYcGQR+PbwcorWaoKhyIGTEznJ92vyC7c9BtStrQUaxCS4RQKCHOeV
-	pPkErnkTMKPSB9Fr6hkhtabk=
-X-Received: by 2002:ac2:48ae:: with SMTP id u14mr17041124lfg.610.1640018934459;
-        Mon, 20 Dec 2021 08:48:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy8yqg4GqMCAMMT7Glf5y+TjFZrXMjASbZ479SQVeZWWxSO+eS7MRPqHEL0i+Cg7sbAuuZLPQ==
-X-Received: by 2002:ac2:48ae:: with SMTP id u14mr17041093lfg.610.1640018934138;
-        Mon, 20 Dec 2021 08:48:54 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id j10sm548950lfp.286.2021.12.20.08.48.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 08:48:53 -0800 (PST)
-Message-ID: <81b39068-a06f-a4c9-bca7-6fb296d4b05d@canonical.com>
-Date: Mon, 20 Dec 2021 17:48:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [GIT PULL 1/6] samsung: soc: drivers: for v5.17
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-Cc: Olof Johansson <olof@lixom.net>, arm-soc <arm@kernel.org>,
- SoC Team <soc@kernel.org>, Sam Protsenko <semen.protsenko@linaro.org>,
- Chanho Park <chanho61.park@samsung.com>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES"
- <linux-samsung-soc@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>
-References: <20211220115405.30434-1-krzysztof.kozlowski@canonical.com>
- <20211220115405.30434-2-krzysztof.kozlowski@canonical.com>
- <CAK8P3a1A+6f1OsJ-8-8kbmXXbbsrQZTQywOAy59tJoUmdDN49g@mail.gmail.com>
+        bh=68468VFMqA34xN4uCVed2chkdwzfvBRVkSLi1lQZCoM=;
+        b=ZhVPXy7D9KHoF4fdwm5Sv1IRFmVSH52mE4qBUcSkC7EnH8HPif275YFPOBNHs9iU2Y
+         En65mWXTyD4wkQpn9c2URLmNrhlE8tpsTUjSphiH19n56rkWcyW0RvfEh3smLMdDIUvb
+         +WJ/zfFBk3p4DeVBAXfLiDsrbT46rNgKr1s9G23E2J0qGpHEXXWhZUyxSzjOaoMPJKSk
+         p/ygS2IY3dzCFHe/TqfoR2Qf7Cagq/x5kWrDg2n5wisjSGvcateF2S8aq7ZZopQ1PhcD
+         /P+UpZmXd9b64ySEepl2xohAozuKhmTwdAh+6LkDmuzZt2Q5BCEzR0KS6eIpYACn3Ues
+         lp0g==
+X-Gm-Message-State: AOAM533qNwfC7LzZurzJ6ip/52dviErRG9Pi+IcgRK/9HmznjlYs+Ijk
+	unjRN0FF9M4eLipmM9ilVEn0RTkCpGFSqngRGQ0KsMkWXs8sjyyv0qcF9RgddDDo2zubi1x7puG
+	rOhgbukD5FLd0jvH+0C0BRVY=
+X-Received: by 2002:a05:6512:114a:: with SMTP id m10mr16493440lfg.54.1640019009465;
+        Mon, 20 Dec 2021 08:50:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwMTuR7kl0lz1gyI7tTGwM3yaCK26OX0fh0m3K/eu93O2yx8zbRW3oaRa1jh7oao8ITWsoj6w==
+X-Received: by 2002:a05:6512:114a:: with SMTP id m10mr16493423lfg.54.1640019009283;
+        Mon, 20 Dec 2021 08:50:09 -0800 (PST)
+Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id y8sm237152lfe.108.2021.12.20.08.50.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 08:50:08 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CAK8P3a1A+6f1OsJ-8-8kbmXXbbsrQZTQywOAy59tJoUmdDN49g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+List-Id: <soc.lore.kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>
+Cc: Sam Protsenko <semen.protsenko@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [RESEND PATCH 5/6] arm64: defconfig: Enable Samsung I2C driver
+Date: Mon, 20 Dec 2021 17:50:03 +0100
+Message-Id: <20211220165004.17005-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 20/12/2021 17:26, Arnd Bergmann wrote:
-> On Mon, Dec 20, 2021 at 12:54 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->> ----------------------------------------------------------------
->> Samsung SoC drivers changes for v5.17
->>
->> 1. Exynos ChipID: add Exynos7885 support.
->> 2. Exynos PMU: add Exynos850 support.
->> 3. Minor bindings cleanup.
->> 4. Add Exynos USIv2 (Universal Serial Interface) driver. The USI block is
->>    a shared IP block between I2C, UART/serial and SPI. Basically one has
->>    to choose which feature the USI block will support and later the
->>    regular I2C/serial/SPI driver will bind and work.
->>    This merges also one commit with dt-binding headers from my dts64
->>    pull request.
->>
->>    Together with a future serial driver change, this will break the ABI.
->>
->>    Affected: Serial on ExynosAutov9 SADK and out-of-tree ExynosAutov9 boards
->>
->>    Why: To properly and efficiently support the USI with new hierarchy
->>    of USI-{serial,SPI,I2C} devicetree nodes.
->>
->>    Rationale:
->>    Recently added serial and USI support was short-sighted and did not
->>    allow to smooth support of other features (SPI and I2C). Adding
->>    support for USI-SPI and USI-I2C would effect in code duplication.
->>    Adding support for different USI versions (currently supported is
->>    USIv2 but support for v1 is planned) would cause even more code
->>    duplication and create a solution difficult to maintain.
->>    Since USI-serial and ExynosAutov9 have been added recently, are
->>    considered fresh development features and there are no supported
->>    products using them, the code/solution is being refactored in
->>    non-backwards compatible way.  The compatibility is not broken yet.
->>    It will be when serial driver changes are accepted.
->>    The ABI break was discussed with only known users of ExynosAutov9 and
->>    received their permission.
-> 
-> Thanks a lot for the detailed description, very helpful!
-> 
-> I've applied pull requests 1 through 4, though it seems that once more
-> the automated emails did not go out.
-> 
-> I can't find the two defconfig patches you mentioned in the introductory
-> mail, neither in patchwork nor in my inbox, I assume these were
-> numbered 5/6 and 6/6?
-> 
+From: Sam Protsenko <semen.protsenko@linaro.org>
 
-Yes, these were patches 5/6 and 6/6 but maybe I made mistakes in address
-list. Let me resend them now.
+i2c-s3c2410 driver is needed for some arm64 Exynos SoCs, e.g. Exynos850.
 
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+Link: https://lore.kernel.org/r/20211121150558.21801-1-semen.protsenko@linaro.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best regards,
-Krzysztof
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index f2e2b9bdd702..0da6a944d5cd 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -461,6 +461,7 @@ CONFIG_I2C_QCOM_GENI=m
+ CONFIG_I2C_QUP=y
+ CONFIG_I2C_RIIC=y
+ CONFIG_I2C_RK3X=y
++CONFIG_I2C_S3C2410=y
+ CONFIG_I2C_SH_MOBILE=y
+ CONFIG_I2C_TEGRA=y
+ CONFIG_I2C_UNIPHIER_F=y
+-- 
+2.32.0
+
