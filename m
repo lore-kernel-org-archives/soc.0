@@ -1,86 +1,97 @@
-Return-Path: <SRS0=5bhV=RE=ucw.cz=pavel@kernel.org>
+Return-Path: <SRS0=XIvY=RF=linaro.org=viresh.kumar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71F67C433F5
-	for <soc@archiver.kernel.org>; Sun, 19 Dec 2021 13:17:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D64EC433EF
+	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 04:20:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 272DFC36AE5; Sun, 19 Dec 2021 13:17:45 +0000 (UTC)
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id E8B60C36AE9; Mon, 20 Dec 2021 04:20:20 +0000 (UTC)
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 22F8AC36AE0;
-	Sun, 19 Dec 2021 13:17:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 22F8AC36AE0
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ucw.cz
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=ucw.cz
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id C46E41C0B76; Sun, 19 Dec 2021 14:17:34 +0100 (CET)
-Date: Sun, 19 Dec 2021 14:17:34 +0100
-From: Pavel Machek <pavel@ucw.cz>
-To: Merlijn Wajer <merlijn@wizzup.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 01228C36AE5
+	for <soc@kernel.org>; Mon, 20 Dec 2021 04:20:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01228C36AE5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f174.google.com with SMTP id n16so6308554plc.2
+        for <soc@kernel.org>; Sun, 19 Dec 2021 20:20:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=idRrPNY8lT9qvJ1RX4lP6sDX0kRhviqifoOXKRGv1rY=;
+        b=HI/6YkCt3ky43jRDNEN2lf6M22JE6+kU4T+uMtFrbfWX8vNs6ZusoVEID1nBzvAShn
+         S5ZTX7Ta1P9uRa9kd/zrtJZhAtjeuHfoK85oJ1GeE2Dmh+H8ThxhaXpqrOXewiNLqOSQ
+         o5L6XC7ifvxgGIy6Rq0q29P9z//gZq4zSt2X6nIn1ewKEtKWFLpzMiRl3XaW+2KCsW1H
+         pPvGUDfqd1gxPY4X2f+ExStB3eDWtWpgRF3Gwdq/IRh/vjDpkLIdJ3PHlddVT2e1m4bx
+         FfoHQpIUHyIZn/2ipJ3kPNh1POZNSW/ZlOciYn3QWbrNNhMav5W8xhcr1PHVOQgsXOqL
+         pRsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=idRrPNY8lT9qvJ1RX4lP6sDX0kRhviqifoOXKRGv1rY=;
+        b=PX4qJZGoGH7qq3HZh8m9Ldn4YGKpkQgE2ghs7TQlRAH187FC3Hnxa4bfFPNMsI/bwz
+         c0MReUY9b5uIC9eL6AJJEHKrAYbsO7VMejVE0ZDlFchfiypFoPA5JjBC/OrMz+2AOfuW
+         87a5vwU7jvqRn6UBVpwJtZwftctF4D/aZXDdTBKgbbHs54k4bslExPJ0mWgZi2qjTUuk
+         ztu5OHiGoT7uXlYGVdtRcLFNkTNj2KPFPtdW/rVDxLsMs1epGGkeVXBMh69A87BLAEBD
+         cz2KHIFbcPdbHg9qJwRMwBGxeg0z97cMFkpxjnhRFVtPimkfTmOuElX/9MopZ33noBV3
+         z9QA==
+X-Gm-Message-State: AOAM532dEu/SkzaXRFb8okVbacuwJ52a4uVSTv1INqC1VQdp2mtjZKdo
+	n4aXhPUoAkfUKD864SLp6iQERA==
+X-Google-Smtp-Source: ABdhPJzGZHTTmdWj0H2HUPNmPUFshIz7BAck3SWavB9iLe038KjqDHtpEYTn5mz3kFKV/RLuZgwPPw==
+X-Received: by 2002:a17:90b:164c:: with SMTP id il12mr17891712pjb.241.1639974019397;
+        Sun, 19 Dec 2021 20:20:19 -0800 (PST)
+Received: from localhost ([106.201.42.111])
+        by smtp.gmail.com with ESMTPSA id n14sm6000281pgd.80.2021.12.19.20.20.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Dec 2021 20:20:18 -0800 (PST)
+Date: Mon, 20 Dec 2021 09:50:16 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-	Dev Null <devnull@uvos.xyz>, Tony Lindgren <tony@atomide.com>,
-	Sebastian Reichel <sre@kernel.org>, linux-omap@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-	=?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
-	Kees Cook <keescook@chromium.org>,
-	Anton Vorontsov <anton@enomsg.org>,
-	Colin Cross <ccross@android.com>, Tony Luck <tony.luck@intel.com>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] Droid3: add initial DTS
-Message-ID: <20211219131734.GA28481@duo.ucw.cz>
-References: <20211212230459.13579-1-merlijn@wizzup.org>
- <20211212230459.13579-3-merlijn@wizzup.org>
+Cc: soc@kernel.org, Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Ludovic Desroches <ludovic.desroches@microchip.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	=?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+	Tony Lindgren <tony@atomide.com>, Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: Remove "spidev" nodes
+Message-ID: <20211220042016.cnk332uthdxziv5a@vireshk-i7>
+References: <20211217221232.3664417-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="tKW2IUtsqtDRztdT"
-Content-Disposition: inline
-In-Reply-To: <20211212230459.13579-3-merlijn@wizzup.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-
-
---tKW2IUtsqtDRztdT
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211217221232.3664417-1-robh@kernel.org>
+User-Agent: NeoMutt/20180716-391-311a52
 
-Hi!
+On 17-12-21, 16:12, Rob Herring wrote:
+> "spidev" is not a real device, but a Linux implementation detail. It has
+> never been documented either. The kernel has WARNed on the use of it for
+> over 6 years. Time to remove its usage from the tree.
+> 
+> Cc: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Arnd, Olof, Can you please apply this directly.
+> 
+>  arch/arm/boot/dts/spear1310-evb.dts           | 16 ---------
+>  arch/arm/boot/dts/spear1340-evb.dts           | 16 ---------
 
-> +		backlight_led: led@0 {
-=2E..
-> +			label =3D ":backlight";
-> +		};
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-This is same as Droid 4, good.
-
-> +		led@1 {
-=2E..
-> +			label =3D ":kbd_backlight";
-> +		};
-> +	};
-
-This one is new. We should make sure it is same label as on PCs, and
-then document it in Documentation/leds/well-known-leds.txt .
-
-Best regards,
-								Pavel
---=20
-http://www.livejournal.com/~pavelmachek
-
---tKW2IUtsqtDRztdT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYb8w7gAKCRAw5/Bqldv6
-8qhvAJ4j98N12qs8ggWsOf8fa3uQocG3QQCgkKqMgZBqF8OhavVUJ8iZ6MyJiJg=
-=Ovad
------END PGP SIGNATURE-----
-
---tKW2IUtsqtDRztdT--
+-- 
+viresh
