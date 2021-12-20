@@ -1,145 +1,83 @@
-Return-Path: <SRS0=sy7d=RF=ti.com=vigneshr@kernel.org>
+Return-Path: <SRS0=KzQi=RF=lunn.ch=andrew@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 287EFC433EF
-	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 17:40:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82EFBC433FE
+	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 18:06:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EB969C36AE8; Mon, 20 Dec 2021 17:40:40 +0000 (UTC)
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+	id 50950C36AEC; Mon, 20 Dec 2021 18:06:22 +0000 (UTC)
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 57F41C36AEA;
-	Mon, 20 Dec 2021 17:40:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 57F41C36AEA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BKHeTTs113080;
-	Mon, 20 Dec 2021 11:40:29 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1640022029;
-	bh=yjMSPgS+YdxF6qi9e0afpWmUOzHLHzIDBDUpU3x/N3s=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=sTOL7PffNydu5v3HWs59GQ4Z28e2HBnINFdXotfzKZO8OjJBJxT4crGltAkcybEFW
-	 SCHJpta0n6010UcUu9r+siN19WMXNpKZZ2ij2IxtkFOLiJSDGYDvK8OPMA8Obu1BZI
-	 huCKfCbUzmZf85Lv4urOys15d/CzYjdL4D/XcwU8=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BKHeTNi023384
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 20 Dec 2021 11:40:29 -0600
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
- Dec 2021 11:40:28 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 20 Dec 2021 11:40:28 -0600
-Received: from [10.250.235.203] (ileax41-snat.itg.ti.com [10.172.224.153])
-	by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BKHePwc021368;
-	Mon, 20 Dec 2021 11:40:26 -0600
-Message-ID: <06e60038-1365-fc35-801e-448c9025fb2a@ti.com>
-Date: Mon, 20 Dec 2021 23:10:25 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [GIT PULL 1/2] arm64: TI K3 SoC configs changes for v5.17
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id 104CDC36AEB;
+	Mon, 20 Dec 2021 18:06:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 104CDC36AEB
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=F2yXVlUie46ploGVEKTVoENJ3NUWMLnJ1b5tqhVQaJ8=; b=sRKEgiDutdKLfiIWGcZwR6DJjY
+	tkJpVp4UrKYNEvC1+bCY38BOs5h9PuBYHQIs5nK4hYza8WEvPxf4TlqPKv5F2ByyB5LXEFYQ9hnez
+	yU4Az32dJqGLoCM3dhIg3hPraYOUfTArs1JHlPSERJk8eIUXqdsh+rY4mu3ThMuQEIeY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1mzN2y-00H47W-Bl; Mon, 20 Dec 2021 19:06:04 +0100
+Date: Mon, 20 Dec 2021 19:06:04 +0100
+From: Andrew Lunn <andrew@lunn.ch>
 To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-CC: Nishanth Menon <nm@ti.com>, Olof Johansson <olof@lixom.net>,
-        SoC
-	<soc@kernel.org>, arm-soc <arm@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>
-References: <20211217172806.10023-1-vigneshr@ti.com>
- <CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com>
-From: Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Cc: Gaosheng Cui <cuigaosheng1@huawei.com>,
+	Russell King - ARM Linux <linux@armlinux.org.uk>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	SoC Team <soc@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	gongruiqi1@huawei.com, wangweiyang2@huawei.com
+Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
+Message-ID: <YcDGDLScE+3ZlU8/@lunn.ch>
+References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
+ <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
 
-Hi Arnd,
-
-On 20/12/21 8:57 pm, Arnd Bergmann wrote:
-> On Fri, Dec 17, 2021 at 6:28 PM Vignesh Raghavendra <vigneshr@ti.com> wrote:
->>
->> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
->>
->>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
->>
->> are available in the Git repository at:
->>
->>   https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-config-for-v5.17
->>
->> for you to fetch changes up to 8d73aedca28cbed8030067b0d9423a0694139b9c:
->>
->>   arm64: defconfig: Enable USB, PCIe and SERDES drivers for TI K3 SoC (2021-12-14 16:22:25 +0530)
->>
->> ----------------------------------------------------------------
->> ARM64 defconfig changes for TI K3 platforms for v5.17 merge window:
->>
->> - Increase No. of 8250 UARTs supported in System to 16 for J721s2
+On Mon, Dec 20, 2021 at 04:39:43PM +0100, Arnd Bergmann wrote:
+> On Sat, Dec 18, 2021 at 9:58 AM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
+> >
+> > These patches replace an open coded calculation to obtain the physical
+> > address of a far symbol with a call to the new ldr_l etc macro, and they
+> > belong to the kaslr patch set of arm32.
+> >
+> > Reference: https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=arm-kaslr-latest
+> >
+> > Ard Biesheuvel (3):
+> >   arm-soc: exynos: replace open coded VA->PA conversions
+> >   arm-soc: mvebu: replace open coded VA->PA conversion
+> >   arm-soc: various: replace open coded VA->PA calculation
 > 
-> This looks a little excessive, I'm holding off on this pull request
-> for now, as I'm
-> not sure exactly what the downsides are.
+> Usually these patches should go through the respective platform
+> maintainer trees,
+> and from there into the soc tree, but time is a little short here.
 > 
-> I see that your dtsi file has
-> 
-> +       aliases {
-> +               serial0 = &wkup_uart0;
-> +               serial1 = &mcu_uart0;
-> +               serial2 = &main_uart0;
-> +               serial3 = &main_uart1;
-> +               serial4 = &main_uart2;
-> +               serial5 = &main_uart3;
-> +               serial6 = &main_uart4;
-> +               serial7 = &main_uart5;
-> +               serial8 = &main_uart6;
-> +               serial9 = &main_uart7;
-> +               serial10 = &main_uart8;
-> +               serial11 = &main_uart9;
-> +               mmc0 = &main_sdhci0;
-> +               mmc1 = &main_sdhci1;
-> +               can0 = &main_mcan16;
-> +               can1 = &mcu_mcan0;
-> +               can2 = &mcu_mcan1;
-> +               can3 = &main_mcan3;
-> +               can4 = &main_mcan5;
-> +       };
-> 
-> which I think is the underlying problem here. The aliases are really meant to
-> be board specific, and I would assume that none of the boards actually
-> uses all the
-> uart and can bus devices, usually this isn't even possible due to pinctrl
-> constraints, so please follow up by moving these to the .dts files listing only
-> the actually used devices instead of working around it in the defconfig.
+> I could apply them directly with the maintainer Acks
 
-Yes indeed, aliases can be trimmed and moved to board dts. With that,
-defconfig patch in question can be dropped. Thanks for the hint.
+Sorry, but this is too low level for me to understand what is going
+on, and so feel confident actually giving an ACK for the mvebu change.
 
-> 
->> - Enable USB, PCIe and SERDES drivers on TI K3 SoC
-> 
-> I see the PCIe driver is built-in here. Is that necessary for booting?
-> If not, please
-> make it a loadable module.
-> 
+Should the resulting assembly be exactly the same? Has the submitter
+disassembled the object code and shown there is no actual difference
+in the assembler output?
 
-Currently its not possible to build PCIE_CADENCE_PLAT_HOST/EP drivers as
-modules (symbols are bool only).
-PCIe is not necessary for basic boot either. So, I can drop these
-configs until these drivers are build able as modules, if you prefer.
-
-Will respin the PRs with comments addressed. Sorry for the trouble.
-
-Regards
-Vignesh
-
+   Andrew
