@@ -4,68 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAEE7C433FE
-	for <soc@archiver.kernel.org>; Tue, 21 Dec 2021 22:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DED1C433F5
+	for <soc@archiver.kernel.org>; Tue, 21 Dec 2021 22:06:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D3529C36AE8; Tue, 21 Dec 2021 22:06:52 +0000 (UTC)
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	id EF49BC36AED; Tue, 21 Dec 2021 22:06:53 +0000 (UTC)
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2C12EC36AE9;
-	Tue, 21 Dec 2021 22:06:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2C12EC36AE9
+	by smtp.kernel.org (Postfix) with ESMTPS id 80B1BC36AEB;
+	Tue, 21 Dec 2021 22:06:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 80B1BC36AEB
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id 8so238721pgc.10;
-        Tue, 21 Dec 2021 14:06:52 -0800 (PST)
+Received: by mail-pl1-f172.google.com with SMTP id q17so291834plr.11;
+        Tue, 21 Dec 2021 14:06:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tuCdA6njNi3qm1oY35zPkXvaVCOXXsOrzk7lZ6f1QHQ=;
-        b=TNK3qj7N1OmAaiNxBPyqoU1JgecaXCaB6ljFJoH2pIaNjMVxuCo9cqoaMtbA1vg4Q1
-         fSQrxf6Ta9DZ2ynjSQNm1clZKIpRcP1I2eJraTQBNVabT/QSqAMhErzNJAJhp2VEdJbO
-         9b/fvwa9MkL7qkad1iZRXEt5p/onMWQVrIre00yCenzmc/ZtXjORx31YXXdEoJX7DT+Y
-         3ICXSRfcaEOaixUIdVvFIkGofnrLSK5ff1MrURZMzdsCsO8mZdBjkwdr7dzZtKfM//bm
-         PQOQ6XNASbGNPvhVyl4tsvjco6nUKnNLE1gzJ5IFCF5m/HvjE9rp0FvFmXu1C0X1CP7Q
-         FCJQ==
+        bh=qlN5sFxeGh9vwgbyLCZ7qtiG4JXBNwGvk7KKHHb3a8M=;
+        b=akqok5Y9zX9+UpV4P1mWcCdcaz8/mBmd+9X4wolXiKPq/CggblVDkfRkwTYLFkox+T
+         f36Jv9hG+NfUEcThw0Qz55vRG6l5DnvtbuILL2TFpt3Z2/W8VLbbCYaBSHL65rBaENfV
+         rYwKmKQTen0eKtqxrLKFMHhMlZr90e2CreEbck7Wzl29XYJjtdoUUppeum7pks2Np+nl
+         fsLr4XBPTUy3yrG4gLdy5xb2UVIc5ShpQUWBAxYCAYAmDaBdzcJyY7nv2OVh/oEbhc2W
+         yKy6FaI6pTuGjRSKYcOXR/d3+v0HueXl1pxOqZ4Wcq/Jc1JJSG2p5HAu9bYLypqlkW5U
+         cNhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tuCdA6njNi3qm1oY35zPkXvaVCOXXsOrzk7lZ6f1QHQ=;
-        b=wFljGWHhhrj5m76nJLJBhXCddPYFlZKMZBk8BjVLaLkd+/sver2w6Z6p2ruadBFTRq
-         S0nGg06PIi2v7tCXkraCJ7ai57hIbW/xr/152MfZxECzXYYihosbQiOFEKGK6nOcsHjJ
-         rmvEW9SH+vUBorlfASSph0CV/1QVmeSVVdQMDahjTyvzu6emULeg3QdU9u4HWDt1rxqQ
-         im7pzYt7DG+UJkIlG+CDu8Q87rN6bsp3ztuHytNSV+32HbPdGskZIOuvQ2uUV8cULRfo
-         Wzh3Ng54jKEbdftYrCFxVPtQw6JXV8J4VJn/PZp4VQUY5Lt8iEoP+JqI+S7eYTk9TCvk
-         Vuhw==
-X-Gm-Message-State: AOAM531JjW5inmTExCvJZLLOQrNe1FADhxfi2/Wb594gGrCwxCr+u5Tq
-	rkDz5gEt/Fu45sIECn9lcc9IBJxwYJY=
-X-Google-Smtp-Source: ABdhPJxo7HP6FERjJzFO9nFXFJ2d08spfHZbdufb/JrC1C3QQvHz/35PI9gvugcrgB0xtz9fHOWaGg==
-X-Received: by 2002:aa7:8b07:0:b0:4a4:d003:92a9 with SMTP id f7-20020aa78b07000000b004a4d00392a9mr47529pfd.61.1640124411320;
-        Tue, 21 Dec 2021 14:06:51 -0800 (PST)
+        bh=qlN5sFxeGh9vwgbyLCZ7qtiG4JXBNwGvk7KKHHb3a8M=;
+        b=LdAoeeSpI3b6n6aQJfQiuvgLBLpNryvlpbRjm22BfCj1h/uIgxXNkMkjq9zjz3odiG
+         56bKzVGDOs5xpJ7fH4xVfsYTkFOO7qe0poa0E0EcAzx4JHt5LyhSRsCPssGmjRbbcH7+
+         KBB41Gmb5p4g4943eAkgEpVj1bU2rN4TLvkMPPfqY1gFqfHdBb5hSMmYz4P74vS6gj6z
+         bXt+S9NU7DDH4TCdkoWLH2vzLoYt+t/kZv2HlVec7GkVSMlDc/Q+TbIJM73XKlpKOk+8
+         2W53djKv9zsk+oqibGzLK+ksrfshBVcIP1ImyWt27F9isHhPPKJtjXtAigY9cft0rABk
+         Fv8Q==
+X-Gm-Message-State: AOAM531MdTXpfwAcl+7iiSEKRatrhyQESEp2NOhmIln0g0SzqOoJlO70
+	I3WOSeNp4g/OkHaPR2Rry8enJJ6o1VM=
+X-Google-Smtp-Source: ABdhPJzClRPjEgn+VnsUL8Li+2Vh0mU8xMinemv/f7tXl4UCv/0L9vlONQXIQfqKyfdQQtbBui5JaA==
+X-Received: by 2002:a17:902:8214:b0:148:e748:84c3 with SMTP id x20-20020a170902821400b00148e74884c3mr48888pln.77.1640124412687;
+        Tue, 21 Dec 2021 14:06:52 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id q190sm70342pgq.38.2021.12.21.14.06.50
+        by smtp.gmail.com with ESMTPSA id q190sm70342pgq.38.2021.12.21.14.06.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 14:06:50 -0800 (PST)
+        Tue, 21 Dec 2021 14:06:52 -0800 (PST)
 From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: Wan Jiabing <wanjiabing@vivo.com>,
+Cc: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
 	Florian Fainelli <f.fainelli@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 5/6] Broadcom drivers changes for 5.17
-Date: Tue, 21 Dec 2021 14:06:41 -0800
-Message-Id: <20211221220642.2862218-5-f.fainelli@gmail.com>
+Subject: [GIT PULL 6/6] Broadcom maintainers changes for 5.17
+Date: Tue, 21 Dec 2021 14:06:42 -0800
+Message-Id: <20211221220642.2862218-6-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211221220642.2862218-1-f.fainelli@gmail.com>
 References: <20211221220642.2862218-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
@@ -74,22 +75,22 @@ The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.17/drivers
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.17/maintainers
 
-for you to fetch changes up to f5029f62d9ba9b99fd712514784f91f920a63d21:
+for you to fetch changes up to bfc3a3f93ef7d48879c4b070bdbb6b6a80c06365:
 
-  soc: bcm: brcmstb: Add of_node_put() in pm-mips (2021-11-15 09:57:14 -0800)
-
-----------------------------------------------------------------
-This pull request contains Broadcom SoCs drivers changes for v5.17,
-please pull the following changes:
-
-- Wan adds a missing of_node_put() in the power management driver for
-MIPS SoCs.
+  MAINTAINERS: Add Florian as BCM5301X and BCM53573 maintainer (2021-12-01 14:17:58 -0800)
 
 ----------------------------------------------------------------
-Wan Jiabing (1):
-      soc: bcm: brcmstb: Add of_node_put() in pm-mips
+This pull request contains MAINTAINERS file sections updates for
+Broadcom SoCs for v5.17, please pull the following:
 
- drivers/soc/bcm/brcmstb/pm/pm-mips.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+- Rafal updates the BCM5301X and BCM53573 SoCs sections to list Florian
+as second mainainer
+
+----------------------------------------------------------------
+Rafał Miłecki (1):
+      MAINTAINERS: Add Florian as BCM5301X and BCM53573 maintainer
+
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
