@@ -1,76 +1,105 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=tOqj=RG=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D34D7C433F5
-	for <soc@archiver.kernel.org>; Tue, 21 Dec 2021 06:57:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4838C433F5
+	for <soc@archiver.kernel.org>; Tue, 21 Dec 2021 09:21:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8E26BC36AEC; Tue, 21 Dec 2021 06:57:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6903C36AE2;
-	Tue, 21 Dec 2021 06:57:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1640069834;
-	bh=i5HZXm9KnQqtVU9WtekwIxGw4tIom1ZJSLEA7aZ+OOw=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=Cg0RS9PBlwIwtLxR9qDHjHYxPp1soJnL1NX0erLBPNU4UJ4/XJ/k/lNKWBUlxPEBf
-	 zKteiOzviBtCvC6alfiPUzHpLRNsBGPyS+ddR9VG9dl5d/cdOMyq5dd4ClHXgTF0cI
-	 l/oZoHXt9zUC0o8YDLFuyF17gJMR7vD/gkjyFmjujsT8b8A0FQ0qBO6D1Wm5Utn2ux
-	 AMKMF0THUIR8sDwpTCTpl/Nq+WsuzAsvDLJQp8xbKWckZcb7e244a8JZOJAgH42hWa
-	 fVju6jTT9lL70rBUEsnrkyDAAsJXPoJy8maAX3PS5SE96jiThw0p+D55fI0VlPAKTC
-	 dFFoE18PWFFTw==
-Date: Tue, 21 Dec 2021 14:57:08 +0800
-From: Shawn Guo <shawnguo@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
-	Li Yang <leoyang.li@nxp.com>, Sascha Hauer <kernel@pengutronix.de>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [GIT PULL 1/6] i.MX drivers update for 5.17
-Message-ID: <20211221065708.GB14131@dragon>
-References: <20211218071427.26745-1-shawnguo@kernel.org>
- <CAK8P3a0Pi+9tNTfaNjKCLH1f3Ge4YLW9_7o1ci1RLeuTOVEbkQ@mail.gmail.com>
+	id A15B6C36AEA; Tue, 21 Dec 2021 09:21:32 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7A366C36AE7;
+	Tue, 21 Dec 2021 09:21:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7A366C36AE7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f46.google.com ([209.85.221.46]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mt7st-1mAeMb2Bdx-00tRP9; Tue, 21 Dec 2021 10:16:16 +0100
+Received: by mail-wr1-f46.google.com with SMTP id t18so25457153wrg.11;
+        Tue, 21 Dec 2021 01:16:16 -0800 (PST)
+X-Gm-Message-State: AOAM531YmJpHxGaOGCtThdQA1kaDCZ0WstR6URllYZF6QFj+KgmxiJ3N
+	oiu2Oo8w0QFBmaIzI5IY2C61A2wxCWbsdAtKzV4=
+X-Google-Smtp-Source: ABdhPJx9Io4wbdq+1IzDizMc/1NQgxlt0NBkcspgb9PgBIVFPO0KlDZf3O7JLbMTa4+qFamZN9MU3ZDjBxCGAtpSd58=
+X-Received: by 2002:a5d:6989:: with SMTP id g9mr1797985wru.12.1640078175904;
+ Tue, 21 Dec 2021 01:16:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0Pi+9tNTfaNjKCLH1f3Ge4YLW9_7o1ci1RLeuTOVEbkQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
+ <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com> <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com>
+In-Reply-To: <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Tue, 21 Dec 2021 10:15:59 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
+Message-ID: <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
+Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
+To: cuigaosheng <cuigaosheng1@huawei.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Russell King - ARM Linux <linux@armlinux.org.uk>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Viresh Kumar <vireshk@kernel.org>, 
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, SoC Team <soc@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Ard Biesheuvel <ardb@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, gongruiqi1@huawei.com, 
+	wangweiyang2@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:DjIqWCPQcBD9nsfgzxg5kqNx2bAZH0AisHnQxBWtiDR8UT1L0fF
+ c//KyNQSwT+l4XYwJGRoPB3f74oPGjAmeU6+eZuURfOsug4pPiXiCwWO+4YIIBTmJSDxbXp
+ neTmegWJoN0Pkf+nP1gfl+sBDirP7p5Eongt3j2a9Zc2GfUHWq6TEDOqhcjJdCorIXz/qok
+ athyMFRiD3JL4WDSzPWIw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bGbK5CEWBCg=:q/0gBhxkrxIgTX8XZO7g9y
+ +rmGOZTZwItdYCflzSZrEuE4Jo77Sjd9opfbTazCERiBTcyqLpD9OtssBAuoVbbkGg4S9kROR
+ X3hHLkEtFM1mR73AeOV4uofuyTv7Pdv+wg+92I8jhNujhjjmo95jkRVUn+ccJgZDnl7nia6g0
+ NpfNJTHU4+ef/5yfNpAZf6AoEnKBjhcnMYF8cKEAKF5GYnO9l1jaiK+Nzl7ZnrKNO5kUZ47SM
+ XywD/TY1LEpcWn8FtUykSSLC+A/qyuk0YxdY5RY9+dlDFw/bSov5hS6cZgcmurb8A1Lf4tH4e
+ GR1N881LycLW/USHld7ko4QLtTiH0nhpqiMg7gHh6PEWkgBxRzNRsvH0e49cWR/zxEvV1wDNV
+ jn29yeRvgKaWE8fQyB0vQKGa31/aiPzaLWWmvshsljhh0NCclVsbqCkYdfsXS8fvNfRfAmtcp
+ Uk+9EgkqBuhtPebGXQqGL6HWMjgmHucsUg2zbMktQP+uMgZoVxdUlgaLPLK47JVoZZW+mxSkn
+ gth5HBW7Gyex6RU/Jz6+XbG1/PvBZu0PveydCCC4cq7UG1G5OpF8Lfz4gFKRdaRYBfllVanxv
+ XjlGItfYLIwYcBwSfT55kAaSruNj8uOMmXh1Mzz5GKdEM5igOWas5kCVLmk1hwkrnA7VKH11T
+ tARcTte2Ay6kU8scBloLItDsu1iiFf26PC4aclfLqzpzji4khsmqNUPqSg8175gVIv/KaC/Ai
+ Qq0nJGF+5XWllLoLZ2IuSMqRuWJzCpkgvbpiwcZ/ify2S3LPtdcsCC3qnBVYpZmvGKHWEfWE6
+ 26TmemfGVdXSfBTP0gRhWPIisX/oIhja/PDh72zBerQLPGSXR0=
 
-On Mon, Dec 20, 2021 at 05:28:04PM +0100, Arnd Bergmann wrote:
-> On Sat, Dec 18, 2021 at 8:14 AM Shawn Guo <shawnguo@kernel.org> wrote:
-> >
-> > The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-> >
-> >   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-> >
-> > are available in the Git repository at:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-5.17
-> >
-> > for you to fetch changes up to 7f511d514e8c34b6dd0c17b5496e48b2a6a2626c:
-> >
-> >   soc: imx: imx8m-blk-ctrl: add i.MX8MN DISP blk-ctrl (2021-12-17 10:53:20 +0800)
-> >
-> > ----------------------------------------------------------------
-> > i.MX drivers update for 5.17:
-> >
-> > - A number of patches from Adam Ford to update gpcv2 and blk-ctrl driver
-> >   to keep i.MX8MM VPU-H1 and i.MX8MN GPUMIX bus clocks active, and add
-> >   i.MX8MN display related domain support.
-> > - Add optional continuous burst clock support for imx-weim bus driver.
-> > - Call pm_runtime_put_sync_suspend() instead of pm_runtime_put() in
-> >   gpcv2 driver to prevent a sequence issue seen with i.MX8MM GPU and
-> >   MIX domain.
-> 
-> Thanks, I've pulled all six tags now, but I don't know why there are no
-> automated emails about them, this seems to happen for some senders
-> but not others.
+On Tue, Dec 21, 2021 at 2:41 AM cuigaosheng <cuigaosheng1@huawei.com> wrote:
+>
+> > I could apply them directly with the maintainer Acks, but I don't understand
+> > the significance of you sending them now. Is something broken without the
+> > three patches? Are these the only ones missing from Ard's original series,
+> > or is this preparation? Would you expect the patches to get backported to
+> > stable kernels?
+>
+> Thanks for your reply.
+>
+> This is preparation work for arm32 kaslr,and I want to continue to improve
+> the solution based on the work of Ard. These patches are relatively
+> independent, so I submit these patches first.
 
-I sent the PRs in form of patches (manually editing) with 'git
-send-email'.  I have been doing this for years, and I used to get
-automated emails about merging.  Not sure what's changed recently.
+The approach of merging support incrementally is good in principle, but in this
+case I think we first need to agree on the overall direction first.
+How far have you
+come rebasing Ard's patches, do you have KASLR working yet? This is information
+that should go into the [PATCH 0/3] cover letter.
 
-Shawn
+Do you have a particular target platform in mind?
+
+I think for CPUs that can use LPAE, we want to eventually move to the 4G:4G
+memory model, which in turn depends on having the kernel in vmalloc space, as
+implemented by Linus Walleij in
+https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/log/?h=kernel-in-vmalloc-v5.14-rc1
+
+With this work, the randomization will look quite different, on the one hand it
+leaves less room for relocating the kernel within the smaller 256MB vmalloc
+space, while on the other hand it does open the possibility of complete
+randomization by scrambling the virt-to-phys mapping in vmalloc space,
+using linear virtual addresses to refer to a randomized set of
+physical addresses.
+(this is just a wild idea that one could implement, nobody has actual plans for
+it at the moment, and it comes with additional runtime overhead).
+
+        Arnd
