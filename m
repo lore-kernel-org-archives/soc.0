@@ -4,102 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4838C433F5
-	for <soc@archiver.kernel.org>; Tue, 21 Dec 2021 09:21:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6675C433F5
+	for <soc@archiver.kernel.org>; Tue, 21 Dec 2021 12:30:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A15B6C36AEA; Tue, 21 Dec 2021 09:21:32 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+	id 86871C36AEA; Tue, 21 Dec 2021 12:30:38 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7A366C36AE7;
-	Tue, 21 Dec 2021 09:21:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7A366C36AE7
+	by smtp.kernel.org (Postfix) with ESMTPS id 2E16DC36AE8;
+	Tue, 21 Dec 2021 12:30:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2E16DC36AE8
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f46.google.com ([209.85.221.46]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mt7st-1mAeMb2Bdx-00tRP9; Tue, 21 Dec 2021 10:16:16 +0100
-Received: by mail-wr1-f46.google.com with SMTP id t18so25457153wrg.11;
-        Tue, 21 Dec 2021 01:16:16 -0800 (PST)
-X-Gm-Message-State: AOAM531YmJpHxGaOGCtThdQA1kaDCZ0WstR6URllYZF6QFj+KgmxiJ3N
-	oiu2Oo8w0QFBmaIzI5IY2C61A2wxCWbsdAtKzV4=
-X-Google-Smtp-Source: ABdhPJx9Io4wbdq+1IzDizMc/1NQgxlt0NBkcspgb9PgBIVFPO0KlDZf3O7JLbMTa4+qFamZN9MU3ZDjBxCGAtpSd58=
-X-Received: by 2002:a5d:6989:: with SMTP id g9mr1797985wru.12.1640078175904;
- Tue, 21 Dec 2021 01:16:15 -0800 (PST)
+Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MPGNn-1mpQ4H1pEr-00PfSw; Tue, 21 Dec 2021 13:30:28 +0100
+Received: by mail-wm1-f49.google.com with SMTP id bg2-20020a05600c3c8200b0034565c2be15so1599962wmb.0;
+        Tue, 21 Dec 2021 04:30:28 -0800 (PST)
+X-Gm-Message-State: AOAM532xRSUX5O0UELBR976VWDTw2U2S2D1w/JpEk01xOptZNEzuO6/e
+	0bcexdCZboBXr8RhqzJ09Mv05HpTC0fz8l+HysA=
+X-Google-Smtp-Source: ABdhPJz5I5V9tkkz/xNeJ2SBTmCr8b1TLLSAA2/foopZ/Cq28p7udPHLd/q+bVkZqxA+WUBIwycTD2bGxSFtmwpgeH0=
+X-Received: by 2002:a7b:cc90:: with SMTP id p16mr2539746wma.98.1640089828060;
+ Tue, 21 Dec 2021 04:30:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
- <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com> <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com>
-In-Reply-To: <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com>
+References: <20211220165004.17005-1-krzysztof.kozlowski@canonical.com> <20211220165004.17005-2-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211220165004.17005-2-krzysztof.kozlowski@canonical.com>
 From: Arnd Bergmann <arnd@arndb.de>
-Date: Tue, 21 Dec 2021 10:15:59 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
-Message-ID: <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
-Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
-To: cuigaosheng <cuigaosheng1@huawei.com>
+Date: Tue, 21 Dec 2021 13:30:11 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0AAMh4FhRbZ_iZCoMP8F7+Fn4+naB-PZWTV9RSMO4bwQ@mail.gmail.com>
+Message-ID: <CAK8P3a0AAMh4FhRbZ_iZCoMP8F7+Fn4+naB-PZWTV9RSMO4bwQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH 6/6] arm64: exynos: Enable Exynos Multi-Core Timer driver
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Russell King - ARM Linux <linux@armlinux.org.uk>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Viresh Kumar <vireshk@kernel.org>, 
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, SoC Team <soc@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Ard Biesheuvel <ardb@kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, gongruiqi1@huawei.com, 
-	wangweiyang2@huawei.com
+Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Olof Johansson <olof@lixom.net>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Sam Protsenko <semen.protsenko@linaro.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Thomas Gleixner <tglx@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:DjIqWCPQcBD9nsfgzxg5kqNx2bAZH0AisHnQxBWtiDR8UT1L0fF
- c//KyNQSwT+l4XYwJGRoPB3f74oPGjAmeU6+eZuURfOsug4pPiXiCwWO+4YIIBTmJSDxbXp
- neTmegWJoN0Pkf+nP1gfl+sBDirP7p5Eongt3j2a9Zc2GfUHWq6TEDOqhcjJdCorIXz/qok
- athyMFRiD3JL4WDSzPWIw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bGbK5CEWBCg=:q/0gBhxkrxIgTX8XZO7g9y
- +rmGOZTZwItdYCflzSZrEuE4Jo77Sjd9opfbTazCERiBTcyqLpD9OtssBAuoVbbkGg4S9kROR
- X3hHLkEtFM1mR73AeOV4uofuyTv7Pdv+wg+92I8jhNujhjjmo95jkRVUn+ccJgZDnl7nia6g0
- NpfNJTHU4+ef/5yfNpAZf6AoEnKBjhcnMYF8cKEAKF5GYnO9l1jaiK+Nzl7ZnrKNO5kUZ47SM
- XywD/TY1LEpcWn8FtUykSSLC+A/qyuk0YxdY5RY9+dlDFw/bSov5hS6cZgcmurb8A1Lf4tH4e
- GR1N881LycLW/USHld7ko4QLtTiH0nhpqiMg7gHh6PEWkgBxRzNRsvH0e49cWR/zxEvV1wDNV
- jn29yeRvgKaWE8fQyB0vQKGa31/aiPzaLWWmvshsljhh0NCclVsbqCkYdfsXS8fvNfRfAmtcp
- Uk+9EgkqBuhtPebGXQqGL6HWMjgmHucsUg2zbMktQP+uMgZoVxdUlgaLPLK47JVoZZW+mxSkn
- gth5HBW7Gyex6RU/Jz6+XbG1/PvBZu0PveydCCC4cq7UG1G5OpF8Lfz4gFKRdaRYBfllVanxv
- XjlGItfYLIwYcBwSfT55kAaSruNj8uOMmXh1Mzz5GKdEM5igOWas5kCVLmk1hwkrnA7VKH11T
- tARcTte2Ay6kU8scBloLItDsu1iiFf26PC4aclfLqzpzji4khsmqNUPqSg8175gVIv/KaC/Ai
- Qq0nJGF+5XWllLoLZ2IuSMqRuWJzCpkgvbpiwcZ/ify2S3LPtdcsCC3qnBVYpZmvGKHWEfWE6
- 26TmemfGVdXSfBTP0gRhWPIisX/oIhja/PDh72zBerQLPGSXR0=
+X-Provags-ID: V03:K1:okj02PdMpvUVUcyvGH1dytlK5/DEbTCcHjlIokeemhMiXUkuj7H
+ c3SHw1QUN5VdbF2vlSAxF+DgEDcFAA1bG3yWKVG96HGSUV6j1pAwZ6qPvRArrHSr8hVo+g2
+ eiUT0cHuvs4534gdY2Wqkzbx03BbT1jloy8994v0Xabtjka1I2pq77OHt0jYAKS7s8w7OB5
+ Kvyk6nCiy1HUtaScGpj7A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hxiakHoezrc=:T/VIWkGYVW2PP4kg6IlyzB
+ 2/i9BKDR7S4iSQdjte06gNK3+5cCisAGtZxRfNR5tWVjNm3n8x58utz05j6f7RPYMeIYHlWO+
+ 0U/vuL/LGplzR2AN0wPjdkIapjOtSg8DxXEl++oyHNAQscDBmR9JRAKoTZJntS4gn1iHgfaTb
+ ShOCR/Xqi1WhyXe3EHJ+0jDjOx9RyKVUVR2IZoEjr5pkF+1mUG4X63q7Xc0id5XOTTmxOu1/g
+ hWFYHdXLt8JmuttnqEwRXosY/op8BCyXOjIU0JMA078Knuts3sdbPyucB3Do1yTGbRZ6kp9BW
+ PFmM9IJipnGhj7UwG4uYy6BsnquEzDZnmXY+iU+IDrXC/frw8eE0JJZR9jK4S9+/JYU70Sxwx
+ uKdhDrFE8jHVhsqmE50nxShN6iYOqr6uDo/3xVcezPTF+BHItE7FQOcghBnxqiwO5PAbWf7ch
+ zU6w88dVE9F9zwLnrVAXientDzqEGnOysxY9tOVWHAWAyvn1MGBGf8Wuhw65w+rhAx/kHsvSb
+ u6TmzVMNXLMwnt5Ad47/7rHsZR+XJ/UaMBOvYwymXN4b6fU6pRUQ1CPLqrQU5nkZU3PfEIpuk
+ N9rja8Ye8Lz3uTdy/oStgLjxSbaMLb1sAsgvO9bVo+Qz1c9wexlhPCn2g5y3wWaqbo+bB9aeW
+ hGw1Km4gSkvTj+xQfhDU8im/JmmBBHdJWJHhQ/05PxkQ6xN24+Z3U1mg6Tu8a/KZU1ng=
 
-On Tue, Dec 21, 2021 at 2:41 AM cuigaosheng <cuigaosheng1@huawei.com> wrote:
+On Mon, Dec 20, 2021 at 5:50 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+> From: Marek Szyprowski <m.szyprowski@samsung.com>
 >
-> > I could apply them directly with the maintainer Acks, but I don't understand
-> > the significance of you sending them now. Is something broken without the
-> > three patches? Are these the only ones missing from Ard's original series,
-> > or is this preparation? Would you expect the patches to get backported to
-> > stable kernels?
->
-> Thanks for your reply.
->
-> This is preparation work for arm32 kaslr,and I want to continue to improve
-> the solution based on the work of Ard. These patches are relatively
-> independent, so I submit these patches first.
+> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> index 1aa8b7073218..91f5e9568122 100644
+> --- a/arch/arm64/Kconfig.platforms
+> +++ b/arch/arm64/Kconfig.platforms
+> @@ -89,6 +89,7 @@ config ARCH_BRCMSTB
+>  config ARCH_EXYNOS
+>         bool "ARMv8 based Samsung Exynos SoC family"
+>         select COMMON_CLK_SAMSUNG
+> +       select CLKSRC_EXYNOS_MCT
+>         select EXYNOS_PM_DOMAINS if PM_GENERIC_DOMAINS
+>         select EXYNOS_PMU
+>         select PINCTRL
 
-The approach of merging support incrementally is good in principle, but in this
-case I think we first need to agree on the overall direction first.
-How far have you
-come rebasing Ard's patches, do you have KASLR working yet? This is information
-that should go into the [PATCH 0/3] cover letter.
 
-Do you have a particular target platform in mind?
+I applied this, but I don't think this is the best way to do it. As
+you describe, the
+driver is optional, and we probably shouldn't force-enable it here just because
+we build a kernel that may run on a platform that may want to use this.
 
-I think for CPUs that can use LPAE, we want to eventually move to the 4G:4G
-memory model, which in turn depends on having the kernel in vmalloc space, as
-implemented by Linus Walleij in
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/log/?h=kernel-in-vmalloc-v5.14-rc1
-
-With this work, the randomization will look quite different, on the one hand it
-leaves less room for relocating the kernel within the smaller 256MB vmalloc
-space, while on the other hand it does open the possibility of complete
-randomization by scrambling the virt-to-phys mapping in vmalloc space,
-using linear virtual addresses to refer to a randomized set of
-physical addresses.
-(this is just a wild idea that one could implement, nobody has actual plans for
-it at the moment, and it comes with additional runtime overhead).
+I understand the clocksource maintainers prefer the 'select' method, but I think
+this one shows why that doesn't always work well. This is probably even an
+example of a clocksource driver that could be a loadable module if someone
+did the work to make this possible.
 
         Arnd
