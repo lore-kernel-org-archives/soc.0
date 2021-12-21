@@ -1,238 +1,92 @@
-Return-Path: <SRS0=KDBc=RF=nbd.name=nbd@kernel.org>
+Return-Path: <SRS0=EaaM=RG=huawei.com=cuigaosheng1@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CDFFC433F5
-	for <soc@archiver.kernel.org>; Mon, 20 Dec 2021 21:19:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96A5CC433FE
+	for <soc@archiver.kernel.org>; Tue, 21 Dec 2021 01:41:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2CEC2C36AE2; Mon, 20 Dec 2021 21:19:15 +0000 (UTC)
-Received: from nbd.name (nbd.name [46.4.11.11])
+	id 54C82C36AEC; Tue, 21 Dec 2021 01:41:36 +0000 (UTC)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E5893C36AEA;
-	Mon, 20 Dec 2021 21:19:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E5893C36AEA
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nbd.name
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=nbd.name
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-	 s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=tD9CI1ljC0qMo1T3+YTMsqBhl1KKMLYFM/R3UrQakEM=; b=TcGe6Wr8MEP+NoroslKhfqKR1B
-	zXfg+nUtneCKO3ZgYmEbGIf4jQ34BD1YvyKNK35+xDjB3co+w95KzUf+RZ43plwRtpkA6kFOAAFao
-	UbIHudR7a8OjSIzG/Svuki7eJDu/P/bLXth4H+rNv+DCVW5C1JtrFbDzxuFaTgz+ysNo=;
-Received: from p54ae911a.dip0.t-ipconnect.de ([84.174.145.26] helo=localhost.localdomain)
-	by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	(Exim 4.89)
-	(envelope-from <nbd@nbd.name>)
-	id 1mzQ3k-0000zo-Co; Mon, 20 Dec 2021 22:19:04 +0100
-From: Felix Fietkau <nbd@nbd.name>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4EC13C36AE8;
+	Tue, 21 Dec 2021 01:41:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4EC13C36AE8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from dggeme762-chm.china.huawei.com (unknown [172.30.72.56])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JHzgH5X0Vz91rV;
+	Tue, 21 Dec 2021 09:40:43 +0800 (CST)
+Received: from [10.67.110.176] (10.67.110.176) by
+ dggeme762-chm.china.huawei.com (10.3.19.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 09:41:32 +0800
+Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>
-Cc: john@phrozen.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v8 03/14] ARM: dts: Add basic support for Airoha EN7523
-Date: Mon, 20 Dec 2021 22:18:43 +0100
-Message-Id: <20211220211854.89452-4-nbd@nbd.name>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220211854.89452-1-nbd@nbd.name>
-References: <20211220211854.89452-1-nbd@nbd.name>
+CC: Russell King - ARM Linux <linux@armlinux.org.uk>, Krzysztof Kozlowski
+	<krzysztof.kozlowski@canonical.com>, Andrew Lunn <andrew@lunn.ch>, Gregory
+ CLEMENT <gregory.clement@bootlin.com>, Sebastian Hesselbarth
+	<sebastian.hesselbarth@gmail.com>, Viresh Kumar <vireshk@kernel.org>, Shiraz
+ Hashim <shiraz.linux.kernel@gmail.com>, SoC Team <soc@kernel.org>, Linus
+ Walleij <linus.walleij@linaro.org>, Ard Biesheuvel <ardb@kernel.org>, Linux
+ ARM <linux-arm-kernel@lists.infradead.org>, "moderated list:ARM/SAMSUNG
+ EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, <gongruiqi1@huawei.com>,
+	<wangweiyang2@huawei.com>
+References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
+ <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
+From: cuigaosheng <cuigaosheng1@huawei.com>
+Message-ID: <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com>
+Date: Tue, 21 Dec 2021 09:41:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
+In-Reply-To: <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.176]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggeme762-chm.china.huawei.com (10.3.19.108)
+X-CFilter-Loop: Reflected
 
-From: John Crispin <john@phrozen.org>
+> I could apply them directly with the maintainer Acks, but I don't understand
+> the significance of you sending them now. Is something broken without the
+> three patches? Are these the only ones missing from Ard's original series,
+> or is this preparation? Would you expect the patches to get backported to
+> stable kernels?
 
-Add basic support for Airoha EN7523, enough for booting to console.
+Thanks for your reply.
 
-The UART is basically 8250-compatible, except for the clock selection.
-A clock-frequency value is synthesized to get this to run at 115200 bps.
+This is preparation work for arm32 kaslr,and I want to continue to improve
+the solution based on the work of Ard. These patches are relatively
+independent, so I submit these patches first.
 
-Signed-off-by: John Crispin <john@phrozen.org>
-Signed-off-by: Bert Vermeulen <bert@biot.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
----
- arch/arm/boot/dts/Makefile       |   2 +
- arch/arm/boot/dts/en7523-evb.dts |  27 ++++++++
- arch/arm/boot/dts/en7523.dtsi    | 114 +++++++++++++++++++++++++++++++
- 3 files changed, 143 insertions(+)
- create mode 100644 arch/arm/boot/dts/en7523-evb.dts
- create mode 100644 arch/arm/boot/dts/en7523.dtsi
+Gaosheng.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 0de64f237cd8..81cb49f8d6fd 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -186,6 +186,8 @@ dtb-$(CONFIG_ARCH_DAVINCI) += \
- 	da850-lego-ev3.dtb
- dtb-$(CONFIG_ARCH_DIGICOLOR) += \
- 	cx92755_equinox.dtb
-+dtb-$(CONFIG_ARCH_AIROHA) += \
-+	en7523-evb.dtb
- dtb-$(CONFIG_ARCH_EXYNOS3) += \
- 	exynos3250-artik5-eval.dtb \
- 	exynos3250-monk.dtb \
-diff --git a/arch/arm/boot/dts/en7523-evb.dts b/arch/arm/boot/dts/en7523-evb.dts
-new file mode 100644
-index 000000000000..69754ef9a628
---- /dev/null
-+++ b/arch/arm/boot/dts/en7523-evb.dts
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/dts-v1/;
-+
-+/* Bootloader installs ATF here */
-+/memreserve/ 0x80000000 0x200000;
-+
-+#include "en7523.dtsi"
-+
-+/ {
-+	model = "Airoha EN7523 Evaluation Board";
-+	compatible = "airoha,en7523-evb", "airoha,en7523";
-+
-+	aliases {
-+		serial0 = &uart1;
-+	};
-+
-+	chosen {
-+		bootargs = "console=ttyS0,115200 earlycon";
-+		stdout-path = "serial0:115200n8";
-+		linux,usable-memory-range = <0x80200000 0x1fe00000>;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x20000000>;
-+	};
-+};
-diff --git a/arch/arm/boot/dts/en7523.dtsi b/arch/arm/boot/dts/en7523.dtsi
-new file mode 100644
-index 000000000000..7e17311a3f90
---- /dev/null
-+++ b/arch/arm/boot/dts/en7523.dtsi
-@@ -0,0 +1,114 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+/ {
-+	interrupt-parent = <&gic>;
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		npu_binary@84000000 {
-+			no-map;
-+			reg = <0x84000000 0xA00000>;
-+		};
-+
-+		npu_flag@84B0000 {
-+			no-map;
-+			reg = <0x84B00000 0x100000>;
-+		};
-+
-+		npu_pkt@85000000 {
-+			no-map;
-+			reg = <0x85000000 0x1A00000>;
-+		};
-+
-+		npu_phyaddr@86B00000 {
-+			no-map;
-+			reg = <0x86B00000 0x100000>;
-+		};
-+
-+		npu_rxdesc@86D00000 {
-+			no-map;
-+			reg = <0x86D00000 0x100000>;
-+		};
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-0.2";
-+		method = "smc";
-+	};
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+			};
-+		};
-+
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x0>;
-+			enable-method = "psci";
-+			clock-frequency = <80000000>;
-+			next-level-cache = <&L2_0>;
-+		};
-+
-+		cpu1: cpu@1 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x1>;
-+			enable-method = "psci";
-+			clock-frequency = <80000000>;
-+			next-level-cache = <&L2_0>;
-+		};
-+
-+		L2_0: l2-cache0 {
-+			compatible = "cache";
-+		};
-+	};
-+
-+	gic: interrupt-controller@9000000 {
-+		compatible = "arm,gic-v3";
-+		interrupt-controller;
-+		#interrupt-cells = <3>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		reg = <0x09000000 0x20000>, <0x09080000 0x80000>;
-+		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+
-+	timer {
-+		compatible = "arm,armv7-timer";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
-+		clock-frequency = <25000000>;
-+	};
-+
-+	uart1: serial@1fbf0000 {
-+		compatible = "ns16550";
-+		reg = <0x1fbf0000 0x30>;
-+		reg-io-width = <4>;
-+		reg-shift = <2>;
-+		interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
-+		clock-frequency = <1843200>;
-+		status = "okay";
-+	};
-+};
--- 
-2.34.1
-
+在 2021/12/20 23:39, Arnd Bergmann 写道:
+> On Sat, Dec 18, 2021 at 9:58 AM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
+>> These patches replace an open coded calculation to obtain the physical
+>> address of a far symbol with a call to the new ldr_l etc macro, and they
+>> belong to the kaslr patch set of arm32.
+>>
+>> Reference: https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=arm-kaslr-latest
+>>
+>> Ard Biesheuvel (3):
+>>    arm-soc: exynos: replace open coded VA->PA conversions
+>>    arm-soc: mvebu: replace open coded VA->PA conversion
+>>    arm-soc: various: replace open coded VA->PA calculation
+> Usually these patches should go through the respective platform
+> maintainer trees,
+> and from there into the soc tree, but time is a little short here.
+>
+> I could apply them directly with the maintainer Acks, but I don't understand
+> the significance of you sending them now. Is something broken without the
+> three patches? Are these the only ones missing from Ard's original series,
+> or is this preparation? Would you expect the patches to get backported to
+> stable kernels?
+>
+>         Arnd
+> .
