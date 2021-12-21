@@ -1,104 +1,179 @@
-Return-Path: <SRS0=aUsy=RG=infradead.org=rdunlap@kernel.org>
+Return-Path: <SRS0=b6vg=RG=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDF10C433FE
-	for <soc@archiver.kernel.org>; Tue, 21 Dec 2021 01:56:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31790C433F5
+	for <soc@archiver.kernel.org>; Tue, 21 Dec 2021 04:04:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A2EE5C36AEA; Tue, 21 Dec 2021 01:56:22 +0000 (UTC)
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id BFAFBC36AE8; Tue, 21 Dec 2021 04:04:57 +0000 (UTC)
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 501D7C36AE5
-	for <soc@kernel.org>; Tue, 21 Dec 2021 01:56:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 501D7C36AE5
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=bHLeXu+YMuW4qKMNGcZRf53kShKHZ66lrQQNLJlHeOU=; b=Sd0IVJrnBLyxGYK77jnqtIcNFl
-	jY+oRGxJyg0l0Ov7DVxFPs919H48yOJ8rXWVFTLkI+QIN4J916pkwnB4u787lQGQ8zc0xbBzkWfvU
-	8xTe7EsL1P47eIRXnhCdyo5dKUx60bVGXTXH7U1DVYyuYMqoujTmQvtGd7+HCog4JHvaYc/INLJxl
-	cSji4/9B7v73iaHb1j5//sxuvf7yMzBTmq8fFUEs9lcNpux01OyIKrpxzNslCx9EDI7zql/E4t1rU
-	Ascjo+h+knVWDK8scDgZjlc9XkwfPitizGMF1Gaykb48zosiNPd2hCaGc0VXcOVaqccU+E4rZ2Dz3
-	ngIvGNPg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mzUNx-002dI0-45; Tue, 21 Dec 2021 01:56:13 +0000
-Message-ID: <00384bd8-f51a-7c7f-9319-c40c33ca14cc@infradead.org>
-Date: Mon, 20 Dec 2021 17:56:08 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH -next] reset: starfive-jh7100: Fix 32bit compilation
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id C857CC36AE0
+	for <soc@kernel.org>; Tue, 21 Dec 2021 04:04:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C857CC36AE0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oi1-f173.google.com with SMTP id be32so18942936oib.11
+        for <soc@kernel.org>; Mon, 20 Dec 2021 20:04:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Pw+dsyR/ln3/Tota3UpNDXsAPYMWq0lSizy4sn93ewU=;
+        b=XcrkJEb2jvdXEZy61lIUUgsMTqTIEUw+gYRuWkdToIpfDiHYcFBudbBIoCDue0xZAW
+         NyctgEbMS7LJJvdmNja8O3QmYbKGfIsSA8Xke4srwsgQkVUGs5a0tTr/cmIg6GiE5Z7v
+         ntvovGEyCAzIGWxzLVlHcia41/wlSdVdu+ceH/JUJ4NXBLRIT5LFlYPa2WuxHLOzv3nn
+         MA7qTcrqHoOYiJ/L9W0G0xP1UfkddnAKZh2ogjOE3zcC2Nvax9iIXOE5x811r3B2xdgL
+         77/uhU+g/gIs5rCq1vTSQV5FANC6iFwc/jEsSCFcA/KC61cXMrl/z7FXVzVKo/jMXNQ9
+         /0xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Pw+dsyR/ln3/Tota3UpNDXsAPYMWq0lSizy4sn93ewU=;
+        b=PJuyhPbSGhXSN4Hj4YeK5sybFeMxBrxqpLvZRic9LABdseyF9HLnEQKns9Su9gETyO
+         JImJXqyrcouoN1r2CivoJXnv5CppEEFSsLeY+RScZ7M0SZfOXEDl8faNkJnIG9jcGTAj
+         BbdNfOzqSl8TPqW+hLlpYIg2D1v1Po11dfp2gTsqu7N7rxRnpDO3a1N7bHr/sM25jsWL
+         oEnMkd8NNOXWCeRnZlJIX3n7pmXcq60wsXfFyBPu/QAjQ9xAkwn293pAFFSljgkYQudk
+         vSSR1nWf7UMoGmTxKiZ1/djw58YjrOClHOTexjW1pspGAAk1U2Hj/cXuJUo2GqJ9yFqM
+         RNOw==
+X-Gm-Message-State: AOAM530Gpc9PewWHwsAfIZ4US2OMTvnhwVog0a+Gb4RHSYBnnOZFiond
+	OFnbQk2AyIPUFqIC5/ZdymIazY0qX2zSRg==
+X-Google-Smtp-Source: ABdhPJzCFD7IX9B+uUNj//iAFBO6MOzY73Lkb5BXbhx6ngBQ5kWgRFSS5uwylH/yRDKbj627tMCRaA==
+X-Received: by 2002:a54:4506:: with SMTP id l6mr1153726oil.32.1640059495814;
+        Mon, 20 Dec 2021 20:04:55 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id s2sm3523515otr.69.2021.12.20.20.04.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 20:04:55 -0800 (PST)
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Emil Renner Berthing <kernel@esmil.dk>, soc@kernel.org
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Geert Uytterhoeven <geert@linux-m68k.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>,
- Philipp Zabel <p.zabel@pengutronix.de>
-References: <20211220121800.760846-1-kernel@esmil.dk>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20211220121800.760846-1-kernel@esmil.dk>
-Content-Type: text/plain; charset=UTF-8
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Luca Weiss <luca.weiss@fairphone.com>,
+	Shawn Guo <shawn.guo@linaro.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Jason Wang <wangborong@cdjrlc.com>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	Martin Botka <martin.botka@somainline.org>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	Changcheng Deng <deng.changcheng@zte.com.cn>,
+	Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [GIT PULL] Qualcomm driver updates for v5.17
+Date: Mon, 20 Dec 2021 22:04:52 -0600
+Message-Id: <20211221040452.3620633-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-On 12/20/21 04:17, Emil Renner Berthing wrote:
-> We need to include linux/io-64-nonatomic-lo-hi.h or readq/writeq won't
-> be defined when compiling on 32bit architectures:
-> 
-> On i386:
-> 
-> ../drivers/reset/reset-starfive-jh7100.c: In function ‘jh7100_reset_update’:
-> ../drivers/reset/reset-starfive-jh7100.c:81:10: error: implicit declaration of function ‘readq’; did you mean ‘readl’? [-Werror=implicit-function-declaration]
->   value = readq(reg_assert);
->            ^~~~~
-> ../drivers/reset/reset-starfive-jh7100.c:86:2: error: implicit declaration of function ‘writeq’; did you mean ‘writel’? [-Werror=implicit-function-declaration]
->   writeq(value, reg_assert);
->   ^~~~~~
-> 
-> On m68k:
-> 
-> drivers/reset/reset-starfive-jh7100.c:81:17: error: implicit declaration of function 'readq'; did you mean 'readb'? [-Werror=implicit-function-declaration]
-> drivers/reset/reset-starfive-jh7100.c:86:9: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
-> cc1: all warnings being treated as errors
-> make[3]: *** [scripts/Makefile.build:289: drivers/reset/reset-starfive-jh7100.o] Error 1
-> make[2]: *** [scripts/Makefile.build:572: drivers/reset] Error 2
-> make[1]: *** [Makefile:1969: drivers] Error 2
-> make: *** [Makefile:226: __sub-make] Error 2
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Fixes: 0be3a1595bf8 ("reset: starfive-jh7100: Add StarFive JH7100 reset driver")
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+are available in the Git repository at:
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-5.17
 
-Thanks.
+for you to fetch changes up to e395f021ccebc239e4fec02fec47f5f0eef44ebd:
 
-> ---
->  drivers/reset/reset-starfive-jh7100.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/reset/reset-starfive-jh7100.c b/drivers/reset/reset-starfive-jh7100.c
-> index e28a19d271cb..fc44b2fb3e03 100644
-> --- a/drivers/reset/reset-starfive-jh7100.c
-> +++ b/drivers/reset/reset-starfive-jh7100.c
-> @@ -7,6 +7,7 @@
->  
->  #include <linux/bitmap.h>
->  #include <linux/io.h>
-> +#include <linux/io-64-nonatomic-lo-hi.h>
->  #include <linux/iopoll.h>
->  #include <linux/mod_devicetable.h>
->  #include <linux/platform_device.h>
+  soc: qcom: rpmh-rsc: Fix typo in a comment (2021-12-20 19:10:11 -0600)
 
--- 
-~Randy
+----------------------------------------------------------------
+Qualcomm driver updates for v5.17
+
+This introduces RPM power-domain support for the SM8450, SM6125 and
+QCM2290 platforms. It them clean up the platform-based naming of the
+resources definitions throughout the RPMh PD driver.
+
+The last-level cache controller driver gains SM8350 support.
+
+The RPM sleep stats driver gains support for several older systems that
+had a slightly different memory layout for this information.
+
+The socinfo gains SM8450, SM6350 and SM7227 definitions.
+
+In addition to the DeviceTree binding updates related to these changes
+new compatibles was added to describe the SM8450 and the Kryo 780 CPU.
+
+Lastly a few typo and style fixes are introduced.
+
+----------------------------------------------------------------
+Changcheng Deng (1):
+      PM: AVS: qcom-cpr: Use div64_ul instead of do_div
+
+Dmitry Baryshkov (4):
+      soc: qcom: smem: Update max processor count
+      dt-bindings: power: rpmpd: Add SM8450 to rpmpd binding
+      soc: qcom: rpmhpd: Add SM8450 power domains
+      soc: qcom: socinfo: add SM8450 ID
+
+Jason Wang (2):
+      soc: qcom: qmi: Fix a typo in a comment
+      soc: qcom: rpmh-rsc: Fix typo in a comment
+
+Konrad Dybcio (2):
+      soc: qcom: llcc: Add configuration data for SM8350
+      dt-bindings: arm: msm: Add LLCC for SM6350
+
+Luca Weiss (3):
+      dt-bindings: firmware: scm: Add SM6350 compatible
+      dt-bindings: arm: msm: Don't mark LLCC interrupt as required
+      soc: qcom: socinfo: Add SM6350 and SM7225
+
+Martin Botka (2):
+      dt-bindings: qcom-rpmpd: Add sm6125 power domains
+      soc: qcom: rpmpd: Add support for sm6125
+
+Rajendra Nayak (4):
+      soc: qcom: rpmhpd: sm8450: Add the missing .peer for sm8450_cx_ao
+      soc: qcom: rpmhpd: Rename rpmhpd struct names
+      soc: qcom: rpmhpd: Remove mx/cx relationship on sc7280
+      soc: qcom: rpmhpd: Sort power-domain definitions and lists
+
+Rikard Falkeborn (1):
+      soc: qcom: aoss: constify static struct thermal_cooling_device_ops
+
+Shawn Guo (3):
+      soc: qcom: rpmpd: Drop unused res_name from struct rpmpd
+      dt-bindings: power: rpmpd: Add QCM2290 support
+      soc: qcom: rpmpd: Add QCM2290 support
+
+Stephan Gerhold (2):
+      dt-bindings: soc: qcom: stats: Document compatibles with fixed offset
+      soc: qcom: stats: Add fixed sleep stats offset for older RPM firmwares
+
+Vinod Koul (3):
+      dt-bindings: arm: cpus: Add kryo780 compatible
+      dt-bindings: firmware: scm: Add SM8450 compatible
+      dt-bindings: arm: qcom: Document SM8450 SoC and boards
+
+ Documentation/devicetree/bindings/arm/cpus.yaml    |   1 +
+ .../devicetree/bindings/arm/msm/qcom,llcc.yaml     |   2 +-
+ Documentation/devicetree/bindings/arm/qcom.yaml    |   6 +
+ .../devicetree/bindings/firmware/qcom,scm.txt      |   2 +
+ .../devicetree/bindings/power/qcom,rpmpd.yaml      |   3 +
+ .../devicetree/bindings/soc/qcom/qcom-stats.yaml   |   5 +
+ drivers/soc/qcom/cpr.c                             |   2 +-
+ drivers/soc/qcom/llcc-qcom.c                       |  28 ++
+ drivers/soc/qcom/qcom_aoss.c                       |   2 +-
+ drivers/soc/qcom/qcom_stats.c                      |  13 +
+ drivers/soc/qcom/qmi_interface.c                   |   2 +-
+ drivers/soc/qcom/rpmh-rsc.c                        |   2 +-
+ drivers/soc/qcom/rpmhpd.c                          | 326 ++++++++++++---------
+ drivers/soc/qcom/rpmpd.c                           |  42 ++-
+ drivers/soc/qcom/smem.c                            |   2 +-
+ drivers/soc/qcom/socinfo.c                         |   3 +
+ include/dt-bindings/power/qcom-rpmpd.h             |  33 +++
+ include/linux/soc/qcom/llcc-qcom.h                 |   3 +
+ 18 files changed, 335 insertions(+), 142 deletions(-)
