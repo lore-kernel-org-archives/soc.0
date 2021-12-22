@@ -1,96 +1,130 @@
-Return-Path: <SRS0=MANq=RG=gmail.com=f.fainelli@kernel.org>
+Return-Path: <SRS0=nqVE=RH=gmail.com=joel.stan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DED1C433F5
-	for <soc@archiver.kernel.org>; Tue, 21 Dec 2021 22:06:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CB54C433F5
+	for <soc@archiver.kernel.org>; Wed, 22 Dec 2021 00:24:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EF49BC36AED; Tue, 21 Dec 2021 22:06:53 +0000 (UTC)
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	id 47045C36AEA; Wed, 22 Dec 2021 00:24:29 +0000 (UTC)
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 80B1BC36AEB;
-	Tue, 21 Dec 2021 22:06:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 80B1BC36AEB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.kernel.org (Postfix) with ESMTPS id D6DB2C36AE8
+	for <soc@kernel.org>; Wed, 22 Dec 2021 00:24:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D6DB2C36AE8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id q17so291834plr.11;
-        Tue, 21 Dec 2021 14:06:53 -0800 (PST)
+Received: by mail-pf1-f171.google.com with SMTP id v13so745499pfi.3
+        for <soc@kernel.org>; Tue, 21 Dec 2021 16:24:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qlN5sFxeGh9vwgbyLCZ7qtiG4JXBNwGvk7KKHHb3a8M=;
-        b=akqok5Y9zX9+UpV4P1mWcCdcaz8/mBmd+9X4wolXiKPq/CggblVDkfRkwTYLFkox+T
-         f36Jv9hG+NfUEcThw0Qz55vRG6l5DnvtbuILL2TFpt3Z2/W8VLbbCYaBSHL65rBaENfV
-         rYwKmKQTen0eKtqxrLKFMHhMlZr90e2CreEbck7Wzl29XYJjtdoUUppeum7pks2Np+nl
-         fsLr4XBPTUy3yrG4gLdy5xb2UVIc5ShpQUWBAxYCAYAmDaBdzcJyY7nv2OVh/oEbhc2W
-         yKy6FaI6pTuGjRSKYcOXR/d3+v0HueXl1pxOqZ4Wcq/Jc1JJSG2p5HAu9bYLypqlkW5U
-         cNhQ==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZnZGwQ79/gV8f3OVEeae75w1s1OLSKvPzKDOMuijlYM=;
+        b=btlbKcMYwRni+VRV3An00P0Pg8eTr4udetMGHWkp+TIFOIxG7vuzCGDbnGpPHaQYG6
+         4E5vW8oq4oIaSXw76/mKkyhWsAG3i4L8tCakvlybGCI2J5dKolbuGlHZxxGTeYAGktvM
+         M5AEa3WOYh1Bf2/73lNLnzbqIjM+baPTOCjRTUE+wTfiyxdLDJDOjunPgFuzcpWoqUh5
+         relfzkCH1W6yLPZhcUnhqRtfvow7mb1c026ZWBDEkgnXhubwm1kq2je0qjbyaZdVBmXJ
+         YapVSfkEzTwm8ygye/qgYEJJpsM1rezyRozU8sNTEqq8ZuP8CQ6KvAsH8xjwykg1e9sf
+         ZuyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qlN5sFxeGh9vwgbyLCZ7qtiG4JXBNwGvk7KKHHb3a8M=;
-        b=LdAoeeSpI3b6n6aQJfQiuvgLBLpNryvlpbRjm22BfCj1h/uIgxXNkMkjq9zjz3odiG
-         56bKzVGDOs5xpJ7fH4xVfsYTkFOO7qe0poa0E0EcAzx4JHt5LyhSRsCPssGmjRbbcH7+
-         KBB41Gmb5p4g4943eAkgEpVj1bU2rN4TLvkMPPfqY1gFqfHdBb5hSMmYz4P74vS6gj6z
-         bXt+S9NU7DDH4TCdkoWLH2vzLoYt+t/kZv2HlVec7GkVSMlDc/Q+TbIJM73XKlpKOk+8
-         2W53djKv9zsk+oqibGzLK+ksrfshBVcIP1ImyWt27F9isHhPPKJtjXtAigY9cft0rABk
-         Fv8Q==
-X-Gm-Message-State: AOAM531MdTXpfwAcl+7iiSEKRatrhyQESEp2NOhmIln0g0SzqOoJlO70
-	I3WOSeNp4g/OkHaPR2Rry8enJJ6o1VM=
-X-Google-Smtp-Source: ABdhPJzClRPjEgn+VnsUL8Li+2Vh0mU8xMinemv/f7tXl4UCv/0L9vlONQXIQfqKyfdQQtbBui5JaA==
-X-Received: by 2002:a17:902:8214:b0:148:e748:84c3 with SMTP id x20-20020a170902821400b00148e74884c3mr48888pln.77.1640124412687;
-        Tue, 21 Dec 2021 14:06:52 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id q190sm70342pgq.38.2021.12.21.14.06.51
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=ZnZGwQ79/gV8f3OVEeae75w1s1OLSKvPzKDOMuijlYM=;
+        b=ZTEUHfoy2DdwPhOYD0hRsqB9e1HW3u5vej+OpSbhTRNfhT0VXSh3V/Z/mx4NJieFkv
+         5rOFvhexQYIBS0YHvQeqLFiduxm/eTkYDMK9ChuwuOBP32i0JN+NS29zyU1ydrP36FWw
+         OKZOTUP1tpACYyceaapN16jVNTf6qngJXXSjg8dtBoqotAjvOqgp5kb15MlKInX/YHuV
+         Q1HzruS/jxT6K9WzSGzezWv23nPJ/MoxlPhTf4KSvvkB5IbyMKLviqF1DJWf8ML5N1gl
+         5KCHb0IxQQQL2qZunI8PI4XNt7RtxdOY5/6vPQa9VtZ/EcHtAkQ7qkKQRLy6NlKoDImv
+         kSNA==
+X-Gm-Message-State: AOAM531mYXXCzEg3J6GHnZRxUZuknN77Pqo7/KFeBgfOW/OTu8OpN40O
+	7USN+xDj3sOFKR1/7ny8fjZ6BZPcAlI=
+X-Google-Smtp-Source: ABdhPJwE8j5vSseszbdJK6KoSfpfWlmTtMNGUN2v16rDFn+5EQAW3NyhqOrCfdk5qXR39i6P1lSrzg==
+X-Received: by 2002:a05:6a00:2134:b0:4b0:bf74:a64d with SMTP id n20-20020a056a00213400b004b0bf74a64dmr523043pfj.56.1640132666792;
+        Tue, 21 Dec 2021 16:24:26 -0800 (PST)
+Received: from voyager.lan ([45.124.203.19])
+        by smtp.gmail.com with ESMTPSA id a11sm186329pgd.87.2021.12.21.16.24.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 14:06:52 -0800 (PST)
-From: Florian Fainelli <f.fainelli@gmail.com>
+        Tue, 21 Dec 2021 16:24:25 -0800 (PST)
+Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
+From: Joel Stanley <joel@jms.id.au>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 6/6] Broadcom maintainers changes for 5.17
-Date: Tue, 21 Dec 2021 14:06:42 -0800
-Message-Id: <20211221220642.2862218-6-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211221220642.2862218-1-f.fainelli@gmail.com>
-References: <20211221220642.2862218-1-f.fainelli@gmail.com>
+Cc: Adriana Kobylak <anoo@us.ibm.com>
+Subject: [PATCH] ARM: configs: aspeed: Add support for USB flash drives
+Date: Wed, 22 Dec 2021 10:54:06 +1030
+Message-Id: <20211222002406.119082-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+From: Adriana Kobylak <anoo@us.ibm.com>
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+Add support to detect USB flash drives and create the /dev/sd* devices.
+Also add support for vfat to support USB drives formatted as FAT32.
+This support will be used to enable firmware updates via USB flash
+drives where the firmware image is stored in the USB drive and it's
+plugged into the BMC USB port.
 
-are available in the Git repository at:
+Signed-off-by: Adriana Kobylak <anoo@us.ibm.com>
+Tested-by: Adriana Kobylak <anoo@us.ibm.com>
+Link: https://lore.kernel.org/r/20211112202931.2379145-1-anoo@linux.ibm.com
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+Please apply for v5.17
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.17/maintainers
+ arch/arm/configs/aspeed_g5_defconfig | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-for you to fetch changes up to bfc3a3f93ef7d48879c4b070bdbb6b6a80c06365:
+diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspeed_g5_defconfig
+index ae4f3c56ae6b..9328145dc0c4 100644
+--- a/arch/arm/configs/aspeed_g5_defconfig
++++ b/arch/arm/configs/aspeed_g5_defconfig
+@@ -70,6 +70,7 @@ CONFIG_NET_NCSI=y
+ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
+ # CONFIG_PREVENT_FIRMWARE_BUILD is not set
++CONFIG_FIRMWARE_MEMMAP=y
+ CONFIG_MTD=y
+ CONFIG_MTD_BLOCK=y
+ CONFIG_MTD_PARTITIONED_MASTER=y
+@@ -83,6 +84,8 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_NBD=y
+ CONFIG_EEPROM_AT24=y
+ CONFIG_EEPROM_AT25=y
++CONFIG_SCSI=y
++CONFIG_BLK_DEV_SD=y
+ CONFIG_NETDEVICES=y
+ CONFIG_NETCONSOLE=y
+ # CONFIG_NET_VENDOR_ALACRITECH is not set
+@@ -200,6 +203,7 @@ CONFIG_USB_DYNAMIC_MINORS=y
+ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_EHCI_ROOT_HUB_TT=y
+ CONFIG_USB_EHCI_HCD_PLATFORM=y
++CONFIG_USB_STORAGE=y
+ CONFIG_USB_GADGET=y
+ CONFIG_USB_ASPEED_VHUB=y
+ CONFIG_USB_CONFIGFS=y
+@@ -246,6 +250,7 @@ CONFIG_FSI_OCC=y
+ CONFIG_EXT4_FS=y
+ CONFIG_FANOTIFY=y
+ CONFIG_OVERLAY_FS=y
++CONFIG_VFAT_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_JFFS2_FS=y
+ # CONFIG_JFFS2_FS_WRITEBUFFER is not set
+@@ -261,6 +266,8 @@ CONFIG_PSTORE_PMSG=y
+ CONFIG_PSTORE_FTRACE=y
+ CONFIG_PSTORE_RAM=y
+ # CONFIG_NETWORK_FILESYSTEMS is not set
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ISO8859_1=y
+ CONFIG_HARDENED_USERCOPY=y
+ CONFIG_FORTIFY_SOURCE=y
+ CONFIG_CRYPTO_HMAC=y
+-- 
+2.34.1
 
-  MAINTAINERS: Add Florian as BCM5301X and BCM53573 maintainer (2021-12-01 14:17:58 -0800)
-
-----------------------------------------------------------------
-This pull request contains MAINTAINERS file sections updates for
-Broadcom SoCs for v5.17, please pull the following:
-
-- Rafal updates the BCM5301X and BCM53573 SoCs sections to list Florian
-as second mainainer
-
-----------------------------------------------------------------
-Rafał Miłecki (1):
-      MAINTAINERS: Add Florian as BCM5301X and BCM53573 maintainer
-
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
