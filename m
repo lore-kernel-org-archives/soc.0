@@ -1,126 +1,129 @@
-Return-Path: <SRS0=9vwi=RH=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=fNXJ=RH=konsulko.com=trini@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 026A5C433F5
-	for <soc@archiver.kernel.org>; Wed, 22 Dec 2021 16:04:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB627C433F5
+	for <soc@archiver.kernel.org>; Wed, 22 Dec 2021 16:41:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B4EC7C36AE8; Wed, 22 Dec 2021 16:04:28 +0000 (UTC)
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id B6ED8C36AEC; Wed, 22 Dec 2021 16:41:01 +0000 (UTC)
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7A574C36AEA
-	for <soc@kernel.org>; Wed, 22 Dec 2021 16:04:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7A574C36AEA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C52033F207
-	for <soc@kernel.org>; Wed, 22 Dec 2021 16:04:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1640189064;
-	bh=Kr3xTjPFLs3f5u3ZNr8gHHIoOOxa7BGdyP1ViBacnAk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=pt0Anlc2/7qoUHCsJTrlKbik6cqye47VVZjE+ltPftC3hbEfckWkk+HJamBgGR4kH
-	 WL80dgDc86Un/hSMFSJTzvoDTQF2MRUwy/beLSs6aYe+ifbDua10PflW7Puk25dMwu
-	 7pMr07iY2yzJ9UUJgVQcINSqNKRhjQMnGd3+SKDVVh+i7b9a/FKDbSI+8Ou9eVsqFT
-	 dpnetZb1Hhdobw63XIpSQFp1kzROmhAUB8ZZzCkAXuaeYc7uUcgaDD0wxwcRgHAPp0
-	 HI05F5iVvFmOj0ZXFDywdz/BOXhk/aGqRqavbOWdB9rBofDyf+YvdFjNfNL98ArsFh
-	 sMNvvqvduMX0g==
-Received: by mail-lj1-f198.google.com with SMTP id i123-20020a2e2281000000b0021cfde1fa8eso370121lji.7
-        for <soc@kernel.org>; Wed, 22 Dec 2021 08:04:24 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id E3CDFC36AEA
+	for <soc@kernel.org>; Wed, 22 Dec 2021 16:41:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E3CDFC36AEA
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=konsulko.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=konsulko.com
+Received: by mail-qt1-f180.google.com with SMTP id v22so2433343qtx.8
+        for <soc@kernel.org>; Wed, 22 Dec 2021 08:41:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zdnOtqH49FH1fYSxifA1900Fs7Gze7wTJmeR7vfENR8=;
+        b=nPyWZp9kN4YMVBYp2L51x8LeEuE5RmMKfdr9ToP4mwLI5eWu4HcHT/duQVXnKzNKZ7
+         AXiQ+FTmo+w6iMgwAQkimWPa6MBafVDQU+X1eu/13sLNcp9AixdFjFSrG3mRpxhudzdw
+         L370rgVD867T1JWTjsg02nBiwx0Tsnv/gym0E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Kr3xTjPFLs3f5u3ZNr8gHHIoOOxa7BGdyP1ViBacnAk=;
-        b=b+vSqt5UYwQJ/0TcMfH5DzLcHiuqvXNYYjdh8/eZEWdz9ex42Rk1+Na6pg43WhXMr3
-         Hq++g7VYn/ZjK/UuLfzkEf+rzKlgRc3xe3JNJ9BoZaKarJPfb4IEIZGy8wre9Dhnn0t+
-         Npj9T9TYRjm6iSqayHxqGUONi8QDBzjIITfmDggwvWIdERTmvPRXOXAatl+42B9F9oeV
-         Ccq/Ki6ODCl4SlVoh+SwP2EpLbDV8IF/NYsMn5+ObTcPVZwvIz/fJ5JCY2t3GrPfxLSe
-         Zk6KtJ2F7EGdRi1YLqv3tduV0SMi8OC4aiR0YC7mVRrrz3664uaXGTtDVkNwmhK9vfuS
-         q1Wg==
-X-Gm-Message-State: AOAM531nGyldfYOKkW6TTkMXcp4MYBRTwi5yo6xrmWrF9cNibmbbWkq3
-	MuNpreY1XRTUiD1HC57eo+huF5a02MlOq+sL6kq2D5jgD4JzTcIddLGasZN/m2MxGFp5u7r1cna
-	bZpz5sO1v2RJkaEPQh/mR4Vw=
-X-Received: by 2002:ac2:52b1:: with SMTP id r17mr2723880lfm.425.1640189064235;
-        Wed, 22 Dec 2021 08:04:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwKuE+x1iebdt+L6NZyNYw3PBMf+KKJ29B2EKyahlgDCye9BxTDu8Gjce4PBEUfZkB4jNHiew==
-X-Received: by 2002:ac2:52b1:: with SMTP id r17mr2723859lfm.425.1640189063803;
-        Wed, 22 Dec 2021 08:04:23 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id k5sm251866lfj.112.2021.12.22.08.04.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 08:04:22 -0800 (PST)
-Message-ID: <789fb6d3-f017-a263-209c-35e0ee82f4a1@canonical.com>
-Date: Wed, 22 Dec 2021 17:04:21 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [RESEND PATCH 6/6] arm64: exynos: Enable Exynos Multi-Core Timer
- driver
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zdnOtqH49FH1fYSxifA1900Fs7Gze7wTJmeR7vfENR8=;
+        b=SxHOuPUfYrOYKmwDmOVAa9yEvYNTKFryPpAUs1guS6cDRwhtTJWsrGRKwF0VFNuWf6
+         o3TtKeSZO58z0hKpZF8VIzmv3a375y7wRiVIsKx+w6GOy+s4qoMKy+qsejm/gty3LI6C
+         6GpGrQp5sLEQu6jOG6thY60POLuRFIvgEZIi/3YchhLzIobsdLhgcD9VrIx+vkCkSMei
+         9Gk4Dqes26RfVxmHirtlIcz2chzLWyEDU3Rab3fIUm50i5XfJZv2ltOMtzo7La4kvzn+
+         PkmroQ2X3MRFeSnZfNJTfB1sDsH+jr5KH9R5jG6oZH5Mxvz3c7a2OOWl99bcwj+Lb7O/
+         wvAw==
+X-Gm-Message-State: AOAM532YEcag1k+gZyhNrL/Nbl6fwMBOJmkXqpHSFhJxRPuVmYJgZ5wC
+	3ReS4jjZdqnFu3CyBHiiOo+ybQ==
+X-Google-Smtp-Source: ABdhPJyXqqeFwTthMvo3+JnH55PTWd1DXt2aOuMGGTCA2lQhyF8hEjLaiuai/kcU7kuEQ6sx29auuQ==
+X-Received: by 2002:ac8:5d89:: with SMTP id d9mr2748336qtx.49.1640191259808;
+        Wed, 22 Dec 2021 08:40:59 -0800 (PST)
+Received: from bill-the-cat (2603-6081-7b01-cbda-d9c0-d76f-ebfe-a14d.res6.spectrum.com. [2603:6081:7b01:cbda:d9c0:d76f:ebfe:a14d])
+        by smtp.gmail.com with ESMTPSA id l15sm2177207qtx.77.2021.12.22.08.40.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 08:40:59 -0800 (PST)
+Date: Wed, 22 Dec 2021 11:40:57 -0500
+From: Tom Rini <trini@konsulko.com>
+To: Vignesh Raghavendra <vigneshr@ti.com>
 List-Id: <soc.lore.kernel.org>
-Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
- Olof Johansson <olof@lixom.net>, Marek Szyprowski
- <m.szyprowski@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Sam Protsenko <semen.protsenko@linaro.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Thomas Gleixner <tglx@linutronix.de>
-References: <20211220165004.17005-1-krzysztof.kozlowski@canonical.com>
- <20211220165004.17005-2-krzysztof.kozlowski@canonical.com>
- <CAK8P3a0AAMh4FhRbZ_iZCoMP8F7+Fn4+naB-PZWTV9RSMO4bwQ@mail.gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CAK8P3a0AAMh4FhRbZ_iZCoMP8F7+Fn4+naB-PZWTV9RSMO4bwQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Arnd Bergmann <arnd@arndb.de>, Nishanth Menon <nm@ti.com>,
+	Olof Johansson <olof@lixom.net>, SoC <soc@kernel.org>,
+	arm-soc <arm@kernel.org>, Tero Kristo <kristo@kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	KISHON VIJAY ABRAHAM <kishon@ti.com>
+Subject: Re: [GIT PULL 1/2] arm64: TI K3 SoC configs changes for v5.17
+Message-ID: <20211222164057.GN2773246@bill-the-cat>
+References: <20211217172806.10023-1-vigneshr@ti.com>
+ <CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com>
+ <06e60038-1365-fc35-801e-448c9025fb2a@ti.com>
+ <20211221153250.GA2081238@bill-the-cat>
+ <CAK8P3a2wNNSQkN_m3DzEF5RLmq1aED1JpOkXW9Yq13+ypiAaGQ@mail.gmail.com>
+ <20211221160933.GM2773246@bill-the-cat>
+ <9a5d6b32-7e2a-0eae-aed4-97291e4c3f97@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a5d6b32-7e2a-0eae-aed4-97291e4c3f97@ti.com>
+X-Clacks-Overhead: GNU Terry Pratchett
 
-On 21/12/2021 13:30, Arnd Bergmann wrote:
-> On Mon, Dec 20, 2021 at 5:50 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->> From: Marek Szyprowski <m.szyprowski@samsung.com>
->>
->> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
->> index 1aa8b7073218..91f5e9568122 100644
->> --- a/arch/arm64/Kconfig.platforms
->> +++ b/arch/arm64/Kconfig.platforms
->> @@ -89,6 +89,7 @@ config ARCH_BRCMSTB
->>  config ARCH_EXYNOS
->>         bool "ARMv8 based Samsung Exynos SoC family"
->>         select COMMON_CLK_SAMSUNG
->> +       select CLKSRC_EXYNOS_MCT
->>         select EXYNOS_PM_DOMAINS if PM_GENERIC_DOMAINS
->>         select EXYNOS_PMU
->>         select PINCTRL
+On Wed, Dec 22, 2021 at 12:56:06PM +0530, Vignesh Raghavendra wrote:
 > 
 > 
-> I applied this, but I don't think this is the best way to do it. As
-> you describe, the
-> driver is optional, and we probably shouldn't force-enable it here just because
-> we build a kernel that may run on a platform that may want to use this.
-
-All older ARMv8 designs actually require this because Architected timer
-is sharing block with MCT. The newer designs (not supported yet) could
-indeed skip it and rely on Architected entirely.
-
+> On 21/12/21 9:39 pm, Tom Rini wrote:
+> > On Tue, Dec 21, 2021 at 04:55:48PM +0100, Arnd Bergmann wrote:
+> >> On Tue, Dec 21, 2021 at 4:32 PM Tom Rini <trini@konsulko.com> wrote:
+> >>> On Mon, Dec 20, 2021 at 11:10:25PM +0530, Vignesh Raghavendra wrote:
+> >>>>
+> >>>> Currently its not possible to build PCIE_CADENCE_PLAT_HOST/EP drivers as
+> >>>> modules (symbols are bool only).
+> >>>> PCIe is not necessary for basic boot either. So, I can drop these
+> >>>> configs until these drivers are build able as modules, if you prefer.
+> >>>
+> >>> Is PCIe required for basic boot for the other platforms in the defconfig
+> >>> which do enable it in the defconfig today?  It is required for non-basic
+> >>> boot (whatever storage one puts in a PCIe slot).  If someone is going to
+> >>> be fixing the PCIe driver to be able to be modular, that's fine too but
+> >>> I ran in to this trying to see what works out of the box in the
+> >>> defconfig, on this platform and hit both of these rather large
+> >>> omissions.
+> >>
+> >> If PCI is often used for storage, then that's ok. There are a number of
+> >> other platforms where PCIe is only used for wireless networking or
+> >> other secondary devices, but they are still built-in because they got
+> >> added before it became possible for PCIe host drivers to be loadable
+> >> modules. I would like to eventually go through and turn those into
+> >> loadable modules, but for the moment it would be good to only add
+> >> built-in drivers where this is actually useful.
+> > 
+> > That's good to know.  My question tho is, what's actually useful?  The
+> > EVM is 2 PCIe x8 type slots.  I honestly don't know if that means "super
+> > useful, arbitrary devices are expected to work" or "not useful,
+> > arbitrary devices are not expected to work".  Is the functional
+> > definition of what's in the defconfig vs left up to users,
+> > distributions, etc, to find and enabled defined, or at least well known
+> > / explained somewhere?  Where I'm coming from on this is that these
+> > platforms practically are, and can be SystemReady IR certified.  So
+> > what's needed here to ensure there's a good experience distros to enable
+> > what needs enabling for full functionality?  What we hit was "lets throw
+> > some stuff at this board to test it out and.. wait, PCIe isn't enabled
+> > at all? USB host isn't enabled at all?"
+> > 
+> > And all that said, if someone is going to be fixing the PCIe drivers to
+> > be enabled as modules soon, and just getting it handled that way in the
+> > next appropriately timed merge window, OK, fine, good enough.
+> > 
 > 
-> I understand the clocksource maintainers prefer the 'select' method, but I think
-> this one shows why that doesn't always work well. This is probably even an
-> example of a clocksource driver that could be a loadable module if someone
-> did the work to make this possible.
+> Looks like its not a big effort to convert J7 PCIe driver to build as
+> module and can be done for v5.18 Merge Window. So how about we enable
+> only USB controller drivers now and then enable PCIe after its
+> build-able as module?
 
-I understand. Maybe it is the time to make the timer user-visible option
-with default value. Probably several other timers could be converted to
-such approach as well.
+Works for me, thanks!
 
-Best regards,
-Krzysztof
+-- 
+Tom
