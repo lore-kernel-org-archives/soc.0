@@ -1,134 +1,78 @@
-Return-Path: <MAILER-DAEMON>
+Return-Path: <ardb@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A9E6C433F5
-	for <soc@archiver.kernel.org>; Wed, 22 Dec 2021 08:15:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5491CC433EF
+	for <soc@archiver.kernel.org>; Wed, 22 Dec 2021 09:30:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2E51DC36AEA; Wed, 22 Dec 2021 08:15:55 +0000 (UTC)
-Received: from natalya.videolan.org (natalya.videolan.org [213.36.253.119])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E78BFC36AE8
-	for <soc@kernel.org>; Wed, 22 Dec 2021 08:15:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E78BFC36AE8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=natalya.videolan.org
-Authentication-Results: smtp.kernel.org; spf=none smtp.helo=natalya.videolan.org
-Received: from localhost (localhost [127.0.0.1])
-	by natalya.videolan.org (Postfix) with ESMTP id 0D5FB410CEF
-	for <soc@kernel.org>; Wed, 22 Dec 2021 05:48:44 +0000 (UTC)
-Content-Type: multipart/report; report-type=delivery-status;
- boundary="----------=_1640152124-758-1"
-Content-Transfer-Encoding: 8bit
+	id 1A3ADC36AF1; Wed, 22 Dec 2021 09:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0408BC36AF3;
+	Wed, 22 Dec 2021 09:30:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1640165404;
+	bh=18Hp4ExwA1vlFrYaDovAK1d/B/IE/iE/hXlVIPGe0Sg=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=lXEGz4zEwY1FC97jpGyPwu78F3rTNXj5IdADfU0Hvfl0PJaMR8vCBDlSpqiQTrRPH
+	 Xj8UBQzn+y5S3+zTU0cVp6aP/xmREiTzo9tL3gmclTFBjYXy96UDjrT5yX2D8uPVrs
+	 XqRfHkJLbFAwfodxC+b8wLIyHhibKSL0WPEiumNuIeK0MLTweM2y2i51btjLYpIuq6
+	 Pma/gLjbpPUu7QpZsGjJaXeSfsSTgKfuAciWCdjkqvHrCw0xvGk8BOcBK3raoI4yw9
+	 UkR+80E3wzeQcZYHeIRe+ZtTd7EPeE+ej3DeKPPj17yCvcizneJRa+i1VvSTOxIL0d
+	 SkvAm1RD5PePg==
+Received: by mail-wr1-f50.google.com with SMTP id j18so3633310wrd.2;
+        Wed, 22 Dec 2021 01:30:03 -0800 (PST)
+X-Gm-Message-State: AOAM531qpcdmpt4WWo6Iyc6IRrWMl05zivxsJQEbCzBio0Sh7C5cqh9K
+	JulE1cPdO/ISaV8evxoaemT9WOq7Bggx2SI74K0=
+X-Google-Smtp-Source: ABdhPJyBP2vG/SUywNl/rFxI+D1j3RlcIYqKGkHbSd5rLc+rB2eorULfLkJn6sNS7oHTPZ7foGt0li5UePf6XlvadgA=
+X-Received: by 2002:a05:6000:154c:: with SMTP id 12mr1485916wry.447.1640165402031;
+ Wed, 22 Dec 2021 01:30:02 -0800 (PST)
 MIME-Version: 1.0
-Subject: BANNED contents from you (.exe,.exe-ms,attachment.htm ... .pif)
-Message-ID: <VSsyinIoIY9ogE@natalya.videolan.org>
-From: "Content-filter at natalya.videolan.org" <postmaster@natalya.videolan.org>
+References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
+ <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
+ <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com> <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
+ <CACRpkdaNv7850mOyXRMgmPf8TQxiM-C5VEkGnLfd+wvffW8FAg@mail.gmail.com>
+In-Reply-To: <CACRpkdaNv7850mOyXRMgmPf8TQxiM-C5VEkGnLfd+wvffW8FAg@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 22 Dec 2021 10:29:49 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHgptq47g3mSPTKW9KMnqTH4K2Q7riBVwX4iA1V9YWYiA@mail.gmail.com>
+Message-ID: <CAMj1kXHgptq47g3mSPTKW9KMnqTH4K2Q7riBVwX4iA1V9YWYiA@mail.gmail.com>
+Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: <soc@kernel.org>
-Date: Wed, 22 Dec 2021 05:48:43 +0000 (UTC)
+Cc: Arnd Bergmann <arnd@arndb.de>, cuigaosheng <cuigaosheng1@huawei.com>, 
+	Russell King - ARM Linux <linux@armlinux.org.uk>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Viresh Kumar <vireshk@kernel.org>, 
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, SoC Team <soc@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, gongruiqi1@huawei.com, 
+	wangweiyang2@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 
-This is a multi-part message in MIME format...
+On Wed, 22 Dec 2021 at 03:31, Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Tue, Dec 21, 2021 at 10:16 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> > I think for CPUs that can use LPAE, we want to eventually move to the 4G:4G
+> > memory model, which in turn depends on having the kernel in vmalloc space, as
+> > implemented by Linus Walleij in
+> > https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/log/?h=kernel-in-vmalloc-v5.14-rc1
+>
+> Yeah I'm still working on this series. The 4/4 split works pretty well,
+> but it breaks KASan and I was in the process of fixing that when I left
+> for parental leave.
+>
+> The reason it breaks would be related to KASan not expecting
+> executable code in the vmalloc area, and since the shadowing
+> algorithm is a simple pointer offset, and since we go to lengths
+> to chisel shadow memory out of lowmem at a fixed offset from
+> TEXT_OFFSET, we have a problem.
+>
 
-------------=_1640152124-758-1
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-BANNED CONTENTS ALERT
-
-Our content checker found
-    banned name: .exe,.exe-ms,attachment.htm ... .pif
-
-in email presumably from you <soc@kernel.org>
-to the following recipient:
--> libdvbpsi-devel@videolan.org
-
-Our internal reference code for your message is 00758-19/syinIoIY9ogE
-
-First upstream SMTP client IP address: [123.118.73.138] 
-According to a 'Received:' trace, the message apparently originated at:
-  [123.118.73.138], kernel.org unknown [123.118.73.138]
-
-Return-Path: <soc@kernel.org>
-From: soc@kernel.org
-Subject: Message could not be delivered
-
-Delivery of the email was stopped!
-
-The message has been blocked because it contains a component
-(as a MIME part or nested within) with declared name
-or MIME type or contents type violating our access policy.
-
-To transfer contents that may be considered risky or unwanted
-by site policies, or simply too large for mailing, please consider
-publishing your content on the web, and only sending an URL of the
-document to the recipient.
-
-Depending on the recipient and sender site policies, with a little
-effort it might still be possible to send any contents (including
-viruses) using one of the following methods:
-
-- encrypted using pgp, gpg or other encryption methods;
-
-- wrapped in a password-protected or scrambled container or archive
-  (e.g.: zip -e, arj -g, arc g, rar -p, or other methods)
-
-Note that if the contents is not intended to be secret, the
-encryption key or password may be included in the same message
-for recipient's convenience.
-
-We are sorry for inconvenience if the contents was not malicious.
-
-The purpose of these restrictions is to cut the most common propagation
-methods used by viruses and other malware. These often exploit automatic
-mechanisms and security holes in more popular mail readers (Microsoft
-mail readers and browsers are a common target). By requiring an explicit
-and decisive action from the recipient to decode mail, the danger of
-automatic malware propagation is largely reduced.
-
-
-------------=_1640152124-758-1
-Content-Type: message/delivery-status; name="dsn_status.dsn"
-Content-Disposition: inline; filename="dsn_status.dsn"
-Content-Transfer-Encoding: 7bit
-Content-Description: Delivery error report
-
-Reporting-MTA: dns; natalya.videolan.org
-Received-From-MTA: dns; natalya.videolan.org ([127.0.0.1])
-Arrival-Date: Wed, 22 Dec 2021 05:48:43 +0000 (UTC)
-
-Original-Recipient: rfc822;libdvbpsi-devel@videolan.org
-Final-Recipient: rfc822;libdvbpsi-devel@videolan.org
-Action: failed
-Status: 5.7.0
-Diagnostic-Code: smtp; 554-5.7.0 Bounce, id=00758-19 - BANNED:
- 554 5.7.0 .exe,.exe-ms,attachment.htm ... .pif
-Last-Attempt-Date: Wed, 22 Dec 2021 05:48:43 +0000 (UTC)
-Final-Log-ID: 00758-19/syinIoIY9ogE
-
-------------=_1640152124-758-1
-Content-Type: text/rfc822-headers; name="header.hdr"
-Content-Disposition: inline; filename="header.hdr"
-Content-Transfer-Encoding: 7bit
-Content-Description: Message header section
-
-Return-Path: <soc@kernel.org>
-Received: from kernel.org (unknown [123.118.73.138])
-	by natalya.videolan.org (Postfix) with ESMTP id 974C3410CFD
-	for <libdvbpsi-devel@videolan.org>; Wed, 22 Dec 2021 05:48:42 +0000 (UTC)
-From: soc@kernel.org
-To: libdvbpsi-devel@videolan.org
-Subject: Message could not be delivered
-Date: Wed, 22 Dec 2021 13:48:35 +0800
-MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0014_64BCF2E3.C7666268"
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MIMEOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-
-------------=_1640152124-758-1--
+Vmap'ed stacks actually has a similar problem, which is why it is
+disabled when KAsan is enabled. But this can be fixed by enabling arch
+support for KASAN_VMALLOC, and I suspect it may address the vmap'ed
+kernel as well.
