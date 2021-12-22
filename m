@@ -1,92 +1,125 @@
-Return-Path: <SRS0=JomN=RH=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=hwu8=RH=ti.com=vigneshr@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF514C433F5
-	for <soc@archiver.kernel.org>; Wed, 22 Dec 2021 02:31:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20B99C433EF
+	for <soc@archiver.kernel.org>; Wed, 22 Dec 2021 07:26:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 99C1DC36AEB; Wed, 22 Dec 2021 02:31:24 +0000 (UTC)
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id D69FEC36AEB; Wed, 22 Dec 2021 07:26:15 +0000 (UTC)
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 17CFCC36AEA
-	for <soc@kernel.org>; Wed, 22 Dec 2021 02:31:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 17CFCC36AEA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f172.google.com with SMTP id v6so1654256oib.13
-        for <soc@kernel.org>; Tue, 21 Dec 2021 18:31:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WVVTT3vmCo0q+zp9wFYRPgJeYzCdgYYZVxCTfsBXpCo=;
-        b=mKsAMnpFxty/J3lsRPATdg9Gs0N+0Z+X2GBXtJSBuv5AtGMYxzkOAILiIvTERYbCez
-         pR66vqnBgCquTFG1zBdeZTNQrJjVAlqtkBYUOlLsXnmuyBJCfirNpdTy92WUoJBD5pwZ
-         OAUp1QhNYTo2E81BaaQoSagyvrf50+EhZawqS9QylSDjPy+3tMpH2nOKqN8MXOBHAlHe
-         2s2RzTamSMr/f51jBQh1gq6V7D/3JOGYJD4b7Gh4zgqqO11mO+a22GJEDNG+NyZZLhBO
-         9anAtrucLwlGE5/9E4rUVk5l0lgrIfMJN+hqeBRIJnYCogm4uY5D2faHxEWOaEv5M9kp
-         AiBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WVVTT3vmCo0q+zp9wFYRPgJeYzCdgYYZVxCTfsBXpCo=;
-        b=4Rckbz+kfm2T2NESDfxdlSVgGHbY1KgcFBGNHImy7CIptQ+O4tPWM+Omrsiu2ycO2+
-         mUOU93vCPClj0vUYWEmZnvDNohTboVsPMtB6Jt1nNkLspOA3sBdJ/tGLkM9blW0dSo11
-         w35+1FisrNXgxhtl8MWHfEUQ3sJ9Ew37euBDerZitz/G+3R00GuVh18XnJ6DzBfpCoFb
-         LItePeEsWY60A+WASYL1S3K04aZHp6AkXCWI41DSA4cUXnNgFK6gCAhCTP1c6UvGz4Vb
-         5y5loMzezYfMFmZz3se7/KqKHrngMY2IZvaJxTrkJqwCktJVN0VxBZIp0rUCSyzJ2pKG
-         4pPA==
-X-Gm-Message-State: AOAM5326EG/cl8d22w+uLwRUB2zxvvp32r3hvH62Yo2q7JpJ6YiFNktP
-	wbaBWJ3p8w3chZtjmKyIGnvaoFQBU+yJqoRpxoFSrw==
-X-Google-Smtp-Source: ABdhPJyQw6pAlcKRGCxrInfNKU8CpUScnbM1HMPt/NrRC5sZMLlmMoxRq9pY61m6usNkXlYoPEcqNzn8/ggSyYEYD0U=
-X-Received: by 2002:aca:5a87:: with SMTP id o129mr754536oib.114.1640140281901;
- Tue, 21 Dec 2021 18:31:21 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 87A5FC36AE5;
+	Wed, 22 Dec 2021 07:26:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 87A5FC36AE5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BM7QBuE065933;
+	Wed, 22 Dec 2021 01:26:11 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1640157971;
+	bh=njV403yu82V9mkGKIO0guJ2JCXwS2FplGRPA6nda75Y=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=vfTCUXqSfqiyqGCVXhmKqvs4Ut3lL4NPXXCrv81R1rBd+yCNLDDZJST7PF0ogqmZr
+	 sGfHHrKGfUBKrYw2s5eLtDVooH/2KYDuy3hl9Hjw4K61YteeFYjicJRh7nvCQKby6p
+	 nDgVGDMA2dPDY2GAk5lY2NYtzcE3PCmgk4GaoxxI=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BM7QBX2046939
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 22 Dec 2021 01:26:11 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 22
+ Dec 2021 01:26:10 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 22 Dec 2021 01:26:11 -0600
+Received: from [10.250.235.203] (ileax41-snat.itg.ti.com [10.172.224.153])
+	by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BM7Q7uK015944;
+	Wed, 22 Dec 2021 01:26:07 -0600
+Message-ID: <9a5d6b32-7e2a-0eae-aed4-97291e4c3f97@ti.com>
+Date: Wed, 22 Dec 2021 12:56:06 +0530
 MIME-Version: 1.0
-References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
- <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
- <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com> <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 22 Dec 2021 03:31:10 +0100
-Message-ID: <CACRpkdaNv7850mOyXRMgmPf8TQxiM-C5VEkGnLfd+wvffW8FAg@mail.gmail.com>
-Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
-To: Arnd Bergmann <arnd@arndb.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [GIT PULL 1/2] arm64: TI K3 SoC configs changes for v5.17
+Content-Language: en-US
+To: Tom Rini <trini@konsulko.com>, Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: cuigaosheng <cuigaosheng1@huawei.com>, 
-	Russell King - ARM Linux <linux@armlinux.org.uk>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Viresh Kumar <vireshk@kernel.org>, 
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, SoC Team <soc@kernel.org>, 
-	Ard Biesheuvel <ardb@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, gongruiqi1@huawei.com, 
-	wangweiyang2@huawei.com
+CC: Nishanth Menon <nm@ti.com>, Olof Johansson <olof@lixom.net>,
+        SoC
+	<soc@kernel.org>, arm-soc <arm@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>,
+        KISHON VIJAY ABRAHAM <kishon@ti.com>
+References: <20211217172806.10023-1-vigneshr@ti.com>
+ <CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com>
+ <06e60038-1365-fc35-801e-448c9025fb2a@ti.com>
+ <20211221153250.GA2081238@bill-the-cat>
+ <CAK8P3a2wNNSQkN_m3DzEF5RLmq1aED1JpOkXW9Yq13+ypiAaGQ@mail.gmail.com>
+ <20211221160933.GM2773246@bill-the-cat>
+From: Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20211221160933.GM2773246@bill-the-cat>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Tue, Dec 21, 2021 at 10:16 AM Arnd Bergmann <arnd@arndb.de> wrote:
 
-> I think for CPUs that can use LPAE, we want to eventually move to the 4G:4G
-> memory model, which in turn depends on having the kernel in vmalloc space, as
-> implemented by Linus Walleij in
-> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/log/?h=kernel-in-vmalloc-v5.14-rc1
 
-Yeah I'm still working on this series. The 4/4 split works pretty well,
-but it breaks KASan and I was in the process of fixing that when I left
-for parental leave.
+On 21/12/21 9:39 pm, Tom Rini wrote:
+> On Tue, Dec 21, 2021 at 04:55:48PM +0100, Arnd Bergmann wrote:
+>> On Tue, Dec 21, 2021 at 4:32 PM Tom Rini <trini@konsulko.com> wrote:
+>>> On Mon, Dec 20, 2021 at 11:10:25PM +0530, Vignesh Raghavendra wrote:
+>>>>
+>>>> Currently its not possible to build PCIE_CADENCE_PLAT_HOST/EP drivers as
+>>>> modules (symbols are bool only).
+>>>> PCIe is not necessary for basic boot either. So, I can drop these
+>>>> configs until these drivers are build able as modules, if you prefer.
+>>>
+>>> Is PCIe required for basic boot for the other platforms in the defconfig
+>>> which do enable it in the defconfig today?  It is required for non-basic
+>>> boot (whatever storage one puts in a PCIe slot).  If someone is going to
+>>> be fixing the PCIe driver to be able to be modular, that's fine too but
+>>> I ran in to this trying to see what works out of the box in the
+>>> defconfig, on this platform and hit both of these rather large
+>>> omissions.
+>>
+>> If PCI is often used for storage, then that's ok. There are a number of
+>> other platforms where PCIe is only used for wireless networking or
+>> other secondary devices, but they are still built-in because they got
+>> added before it became possible for PCIe host drivers to be loadable
+>> modules. I would like to eventually go through and turn those into
+>> loadable modules, but for the moment it would be good to only add
+>> built-in drivers where this is actually useful.
+> 
+> That's good to know.  My question tho is, what's actually useful?  The
+> EVM is 2 PCIe x8 type slots.  I honestly don't know if that means "super
+> useful, arbitrary devices are expected to work" or "not useful,
+> arbitrary devices are not expected to work".  Is the functional
+> definition of what's in the defconfig vs left up to users,
+> distributions, etc, to find and enabled defined, or at least well known
+> / explained somewhere?  Where I'm coming from on this is that these
+> platforms practically are, and can be SystemReady IR certified.  So
+> what's needed here to ensure there's a good experience distros to enable
+> what needs enabling for full functionality?  What we hit was "lets throw
+> some stuff at this board to test it out and.. wait, PCIe isn't enabled
+> at all? USB host isn't enabled at all?"
+> 
+> And all that said, if someone is going to be fixing the PCIe drivers to
+> be enabled as modules soon, and just getting it handled that way in the
+> next appropriately timed merge window, OK, fine, good enough.
+> 
 
-The reason it breaks would be related to KASan not expecting
-executable code in the vmalloc area, and since the shadowing
-algorithm is a simple pointer offset, and since we go to lengths
-to chisel shadow memory out of lowmem at a fixed offset from
-TEXT_OFFSET, we have a problem.
+Looks like its not a big effort to convert J7 PCIe driver to build as
+module and can be done for v5.18 Merge Window. So how about we enable
+only USB controller drivers now and then enable PCIe after its
+build-able as module?
 
-The patch "KASAN horror" shows what I am trying to do to fix it,
-it's "just" some hard work missing.
-
-Yours,
-Linus Walleij
+Regards
+Vignesh
