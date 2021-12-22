@@ -1,87 +1,83 @@
-Return-Path: <SRS0=nqVE=RH=gmail.com=joel.stan@kernel.org>
+Return-Path: <SRS0=2HeH=RH=gmail.com=festevam@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D28FC433F5
-	for <soc@archiver.kernel.org>; Wed, 22 Dec 2021 01:55:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CA1FC433F5
+	for <soc@archiver.kernel.org>; Wed, 22 Dec 2021 02:02:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E49A6C36AE9; Wed, 22 Dec 2021 01:55:52 +0000 (UTC)
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	id D748AC36AEC; Wed, 22 Dec 2021 02:02:34 +0000 (UTC)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 349B3C36AE8
-	for <soc@kernel.org>; Wed, 22 Dec 2021 01:55:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 349B3C36AE8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+	by smtp.kernel.org (Postfix) with ESMTPS id 507FCC36AE9;
+	Wed, 22 Dec 2021 02:02:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 507FCC36AE9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f182.google.com with SMTP id bp39so322277qtb.6
-        for <soc@kernel.org>; Tue, 21 Dec 2021 17:55:52 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id w16so2286637edc.11;
+        Tue, 21 Dec 2021 18:02:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=KmpwSeOQl/QXGSnivi72HaYeJIGlBFlV9jlga5Atti8=;
-        b=XTjBGn0w756fQPrPI26L5to+oyhssIy2zdDvxoDGjoJrW8qnEz+oyLd4APhv/T/447
-         lLmYjGD4p6NGNEZgtqhXAmYD/upSrvTX59E00hbjiNyN8lggW7BqKbtk3Sf/tr8PCpku
-         eXORwRYHsgGFKBewyivNB9iKqrHqPA85Au7kM=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0pvJ0VJBvj9qiKz1E6D8UeM5hFtVE1+1j1opSDSflxo=;
+        b=hso3Yd7IWueqzl2mIgrOpP66XETFw/Qq6TD71x/nVKTezClSMd/aVDBCarWi1F3D3i
+         nEwOP1sxgBDEslD6aKDTAFIN/JhQpIdVH2xWXv8G0WxGtpGnQGIGwrEhQDUExRVE6pOm
+         7vQPP7Mry2+W5V2toB26R8UJyxWHJS5EKR/F8jiNQv3D0VzsjLQ/DYikkdfEwhC8oeiV
+         hBHZdkKcZJXCo7o4bQZ/5I3rhrbCZ/J/hDqbFn0jiD/ukhw9tTS8VrVtRqwqH0NixuYr
+         NZbvBwT3kPOxYXnF6YYJlfe7shMMAhQI87TWQC41zrPRxXMyCblQgvhC2Cz5yuUH3MDO
+         uBsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=KmpwSeOQl/QXGSnivi72HaYeJIGlBFlV9jlga5Atti8=;
-        b=IoDOe3XIeYWR1ar0Bs09cCFeb4xZL8SeniXuz2zWWygl9lwb5lAlnvNa9icd9voik7
-         buldkiLcp4X0eZJblAAA2dwH66qm8PRIRuoHuLAxfRJhXFEoI4O6d06fEaDFyxo8ZDII
-         R7r7EpGJnUsc90epjzfk8tLAxFv6umK6jCPILY7wOm2h6tzTb0pLfWuLpdVWs2t7iszG
-         FDId0QTjFvpBGONh2ZunlWguCWmyXmflRhisxZh7egtXGGrgLRL5IS9jz78icM4fWiCd
-         4sqzvea8KKbqyd2y+yOyqnyNK+5A9bwnggu63PrGrh25sj3dkWyAP9ZyWALz7zEExMMH
-         l7Rg==
-X-Gm-Message-State: AOAM531SOfyKlILmcwQdS6BDHLc8peCxoIQ4bE6c3hpwjYPtrUXUeeMi
-	dsW8FZj86NPJpsYgLzqIDKc2Lfi9krOLvBweleZTs6IOaYs=
-X-Google-Smtp-Source: ABdhPJyF7ZbgfJsQdSxtdlu7B7xBtMb507XLSR6NmqaZmoheT4ZN5mE79OYaqyVfY+EyNgs+lTNxfCA7quoz9F4+CC4=
-X-Received: by 2002:a05:622a:38d:: with SMTP id j13mr740008qtx.159.1640138150024;
- Tue, 21 Dec 2021 17:55:50 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0pvJ0VJBvj9qiKz1E6D8UeM5hFtVE1+1j1opSDSflxo=;
+        b=wok+EwapX5V4ZkHR8Ixo2BXZTHw21ABkrECXs3z8UAQXGW7NZQR1VDhkFNXciPEi9H
+         dZUd9Ja33YiXeOYAjDlX/4BAA9sIp1K3Trm5eQ/S5n9A0U2LR6uayXwRU19qVV9QUz8B
+         67njhjbpnTJPWooAp4+x7x/NI42PZK0RcLEVUFKRVwy+LxnJEj4fhGpTXbYvyc8uKyyR
+         FDCvA9ffi0NCHdqRA3745DSqCqMwnsu4io+uDuQZxYGLiEaF/xT477WNHCNIGJUQohVm
+         +iZwz8adCe+JqkGBNkohPPAgCBkVlVFmfOIfArOppqdB2eecXjQIbhIKtTKYs+mx5Tgo
+         nYaA==
+X-Gm-Message-State: AOAM532qzz8CWcmCrPSN3kcHF3rmXeuEs8QEzSNuogbSWP7SgbmwnDDF
+	CY/FIvifV167ZJsaxaRMRVnVa/figWmbFSCHNk8=
+X-Google-Smtp-Source: ABdhPJzLpnG/UsK725GwrFFKPbmxb8uA6enGbrXJVIDRT1VOpS7WXzeYwddNf5loslL9Xzc0bUG2deH5QOcNKv1rmo8=
+X-Received: by 2002:a17:907:7205:: with SMTP id dr5mr791523ejc.696.1640138552651;
+ Tue, 21 Dec 2021 18:02:32 -0800 (PST)
 MIME-Version: 1.0
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 22 Dec 2021 01:55:38 +0000
-Message-ID: <CACPK8Xc6q=N6iFLnHt8RHhxvBhqu73WN9jBvitbwU3L6SJv85Q@mail.gmail.com>
-Subject: [GIT PULL] ARM: aspeed: soc changes for 5.17
+References: <20211222015244.2464671-1-Mr.Bossman075@gmail.com> <20211222015244.2464671-6-Mr.Bossman075@gmail.com>
+In-Reply-To: <20211222015244.2464671-6-Mr.Bossman075@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 21 Dec 2021 23:02:21 -0300
+Message-ID: <CAOMZO5DV7WKU_dO3KRERpcoManFZs1MbdL54BtSmtMnVY5ujrg@mail.gmail.com>
+Subject: Re: [PATCH v6 5/7] clk: imx: Add initial support for i.MXRT1050 clock driver
+To: Jesse Taube <mr.bossman075@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	linux-aspeed <linux-aspeed@lists.ozlabs.org>, Andrew Jeffery <andrew@aj.id.au>
+Cc: NXP Linux Team <linux-imx@nxp.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Sascha Hauer <kernel@pengutronix.de>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>, 
+	Stefan Agner <stefan@agner.ch>, Linus Walleij <linus.walleij@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Olof Johansson <olof@lixom.net>, soc@kernel.org, 
+	Russell King - ARM Linux <linux@armlinux.org.uk>, Abel Vesa <abel.vesa@nxp.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Jiri Slaby <jirislaby@kernel.org>, 
+	Giulio Benetti <giulio.benetti@benettiengineering.com>, 
+	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, linux-clk <linux-clk@vger.kernel.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
+	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, linux-mmc <linux-mmc@vger.kernel.org>, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hello Soc maintainers,
+On Tue, Dec 21, 2021 at 10:52 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
 
-Here are the aspeed soc changes for v5.17.
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+> +static struct platform_driver imxrt1050_clk_driver = {
+> +       .probe = imxrt1050_clocks_probe,
+> +       .driver = {
+> +               .name = "imxrt1050-ccm",
+> +               .of_match_table = of_match_ptr(imxrt1050_clk_of_match),
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
-tags/aspeed-5.17-soc
-
-for you to fetch changes up to 79ee56da2e4f49adf174dd7a2e10ce488506c865:
-
-  ARM: aspeed: Add secure boot controller support (2021-12-21 15:56:30 +1030)
-
-----------------------------------------------------------------
-ASPEED soc updates for 5.17
-
- * Fix for deferred probing of LPC clock
-
- * Display secure boot status when on AST2600
-
-----------------------------------------------------------------
-Jae Hyun Yoo (1):
-      soc: aspeed: lpc-ctrl: Block error printing on probe defer cases
-
-Joel Stanley (1):
-      ARM: aspeed: Add secure boot controller support
-
- drivers/soc/aspeed/aspeed-lpc-ctrl.c |  7 ++--
- drivers/soc/aspeed/aspeed-socinfo.c  | 73 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 76 insertions(+), 4 deletions(-)
+No need for of_match_ptr() here.
