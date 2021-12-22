@@ -1,126 +1,176 @@
-Return-Path: <SRS0=nqVE=RH=gmail.com=joel.stan@kernel.org>
+Return-Path: <SRS0=nR9Q=RH=gmail.com=mr.bossman075@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 249ACC433EF
-	for <soc@archiver.kernel.org>; Wed, 22 Dec 2021 00:41:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F97DC433F5
+	for <soc@archiver.kernel.org>; Wed, 22 Dec 2021 01:52:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C9D9EC36AEA; Wed, 22 Dec 2021 00:41:34 +0000 (UTC)
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	id E0F27C36AEA; Wed, 22 Dec 2021 01:52:48 +0000 (UTC)
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BCC40C36AE8
-	for <soc@kernel.org>; Wed, 22 Dec 2021 00:41:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BCC40C36AE8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+	by smtp.kernel.org (Postfix) with ESMTPS id 0B7DBC36AE9;
+	Wed, 22 Dec 2021 01:52:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0B7DBC36AE9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id z3so552012plg.8
-        for <soc@kernel.org>; Tue, 21 Dec 2021 16:41:33 -0800 (PST)
+Received: by mail-qt1-f180.google.com with SMTP id f9so621893qtk.4;
+        Tue, 21 Dec 2021 17:52:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=xSiLCRfyYn9JlF/9t78eQuwkxdgaMPJvTaQ0fCfgGg8=;
-        b=NrBXSGCtg0njWjIEvfNL3LxU8yxaM7HX2AWVeya/8nnf0H5T11XuWgYE/YiaQ6DSJe
-         pWgXDZ4f9hNsk2J3ohIYBvnMyxyc2Lr9ryT8FOgkP9doq00KK6w1OdTveMggtJSRRyBK
-         +1qFSLQkOVGiMmpnwGeLciOozIroWn03b3jp6QU3oiRYBPlYfxrOo61djWWnObzCzHd0
-         sGb2A5N9PT5eWTGh20woYTJSR6zyiNcFbdVe4nevWPTB0q2TADO/XaGhii8P6jbAZI5v
-         BKxfv6iAnYSDblCB0FF8dxK1SuRN9JTygoJDGivrsGnpxdH2tb8nPGX1gmmo+v2rJnuz
-         wN7Q==
+        bh=Lc/MTdHw8w2hgosWEnakgoAuLPp1GXkSGiA0tQorVkU=;
+        b=R7ellObNYoZZhvSi6Mj5U2BzNlr1It4Z0+HoNASJv0BPyN4haouDVv7tXJwYPeQtGq
+         EuWGiiWognusoqwStq9drFuQWE2J1h7QlW2YncGZsiNnGGwultWA0aq6vGIoSBnGCAjm
+         2kSNtbKnepWHq0lBEY+MQMOziDJMOhmSFkHO1dgE0aOzc/YmMKgZUmD1hakUHizfILMQ
+         IqJRefyOEtdpv58OcdjC0mSn1Ja4Y01ANYuHvYbVyW4eHbujzPIyK/hpkbtPHKKfwBjn
+         mMdy5GvMXJR7I54vNfPIzhngDVUDWHKCgjUIwqKNKUN4yRopyY3PY1XHExYTznO7KgZp
+         m+kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=xSiLCRfyYn9JlF/9t78eQuwkxdgaMPJvTaQ0fCfgGg8=;
-        b=RSs1GbqKpavfV+hwdvbyytS3KACupilk9raPhajXsA5tn+oP55yGI0mOg7qr2ZmIHG
-         LLlyiKvnH1QkbOb7zL631QQx3D1tdAUjCIxjUhvjFwIlPNrLFZO7/aUnJxJtiab9s0TM
-         9PdBF9NHvJsiWgoFyLy3aTA1nLawaXlb3sVDAMI0zD0iz4dtSk/J8/C814QB7sU1daro
-         /SFqUhbS6RX2gX+KaA0/bNSkZPyfkENGkKk0TGTqHlgFopwRRN36iXwpuEXKs6aA67YD
-         Dpt6NKu/VoHEKNNUx3HmrPjB17hV34ythX9wHQlMmexqcUnHEDaGGWdbDgteaJ+SFXiw
-         rDhw==
-X-Gm-Message-State: AOAM530aSs2LnnYY1jeNeigVPtYB1WjUBei6acD3KnIlTiHFsjIMpmy6
-	RKz0LPm9htRaTW3SdHWNai+u56h7fHg=
-X-Google-Smtp-Source: ABdhPJzUVmF/tXMhjp1moSnNK9YghU3usdelvQvzZamCO3WNVmc0Z8OrVmBPJpncJPPDqO7Is1JQgg==
-X-Received: by 2002:a17:90a:6045:: with SMTP id h5mr1019705pjm.147.1640133692551;
-        Tue, 21 Dec 2021 16:41:32 -0800 (PST)
-Received: from voyager.lan ([45.124.203.19])
-        by smtp.gmail.com with ESMTPSA id ls7sm182261pjb.11.2021.12.21.16.41.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Lc/MTdHw8w2hgosWEnakgoAuLPp1GXkSGiA0tQorVkU=;
+        b=jr3Q7mg99NCqcMA0+xb6cdQOc69Mw5UCDemz+wwquknfvrpX83IxJ+ZUja3VQlnPqZ
+         X5JxzvzB5M1aEVYey11/SXEUYk0+Wc1U19X9Ri9HYqloWa4/HshrWCNF7mB5l/Nn9lbO
+         Z/eTZURnMNWWTUls3VrHIMb7Y8XVNW0QY2RN/6iaf8SCzninR/b19LuB4RWiN/ynj7S0
+         az8wj57pgfpDnxeuafBggqOmiQvBdZxqkJfontcsYZMOm5PNSAfeM9IvwcCV6XX9DgOo
+         lMl8/KXExI7KnwtbCIGMgd78eEQ/CpZC/A9iWCnyCdYjqrtk+/CWKfXB/EXsdterSc4q
+         MIwA==
+X-Gm-Message-State: AOAM533uox7Pua3iv1p2ta9FOqbK77R18Eqyu/4nwtGOQ1ft8aeA93WH
+	UEpbpk6TAf12riW9YmfoH7w=
+X-Google-Smtp-Source: ABdhPJw30wTn59z1W6Nzm0yuguVm/dcUmBERaT67Mf7UsZAWyRvBWggsNidAzER7qvfjCZIsAz/Gig==
+X-Received: by 2002:a05:622a:590:: with SMTP id c16mr741519qtb.289.1640137966915;
+        Tue, 21 Dec 2021 17:52:46 -0800 (PST)
+Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
+        by smtp.gmail.com with ESMTPSA id d4sm658161qkn.79.2021.12.21.17.52.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 16:41:31 -0800 (PST)
-Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
-From: Joel Stanley <joel@jms.id.au>
+        Tue, 21 Dec 2021 17:52:46 -0800 (PST)
+From: Jesse Taube <mr.bossman075@gmail.com>
+X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
+To: linux-imx@nxp.com
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Adriana Kobylak <anoo@us.ibm.com>
-Subject: [PATCH v2] ARM: configs: aspeed: Add support for USB flash drives
-Date: Wed, 22 Dec 2021 11:11:23 +1030
-Message-Id: <20211222004123.128157-1-joel@jms.id.au>
+Cc: mturquette@baylibre.com,
+	sboyd@kernel.org,
+	robh+dt@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	ulf.hansson@linaro.org,
+	aisheng.dong@nxp.com,
+	stefan@agner.ch,
+	linus.walleij@linaro.org,
+	gregkh@linuxfoundation.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org,
+	linux@armlinux.org.uk,
+	abel.vesa@nxp.com,
+	adrian.hunter@intel.com,
+	jirislaby@kernel.org,
+	giulio.benetti@benettiengineering.com,
+	nobuhiro1.iwamatsu@toshiba.co.jp,
+	Mr.Bossman075@gmail.com,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mmc@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Subject: [PATCH v6 0/7] dd initial support for the i.MXRTxxxx SoC family starting from i.IMXRT1050 SoC.
+Date: Tue, 21 Dec 2021 20:52:37 -0500
+Message-Id: <20211222015244.2464671-1-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Adriana Kobylak <anoo@us.ibm.com>
+This patchset contains:
+- i.MXRT10xx family infrastructure
+- i.MXRT1050 pinctrl driver adaption
+- i.MXRT1050 clock driver adaption
+- i.MXRT1050 sd-card driver adaption
+- i.MXRT1050 uart driver adaption
+- i.MXRT1050-evk basic support
 
-Add support to detect USB flash drives and create the /dev/sd* devices.
-Also add support for vfat to support USB drives formatted as FAT32.
-This support will be used to enable firmware updates via USB flash
-drives where the firmware image is stored in the USB drive and it's
-plugged into the BMC USB port.
+The i.MXRTxxxx family that could have support by Linux actually spreads
+from i.MXRT1020 to i.MXRT1170 with the first one supporting 1 USB OTG &
+100M ethernet with a cortex-M7@500Mhz up to the latter with i.MXRT1170
+with cortex-M7@1Ghz and cortex-M4@400Mhz, 2MB of internal SRAM, 2D GPU,
+2x 1Gb and 1x 100Mb ENET. The i.MXRT family is NXP's answer to
+STM32F7XX, as it uses only simple SDRAM, it gives the chance of a 4 or
+less layer PCBs. Seeing that these chips are comparable to the
+STM32F7XXs which have linux ported to them it seems reasonable to add
+support for them.
 
-Signed-off-by: Adriana Kobylak <anoo@us.ibm.com>
-Tested-by: Adriana Kobylak <anoo@us.ibm.com>
-Link: https://lore.kernel.org/r/20211112202931.2379145-1-anoo@linux.ibm.com
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
-v2: Remove stray (and duplicate) FIRMWARE_MEMMAP=y to avoid warning:
+Giving Linux support to this family should ease the development process,
+instead of using a RTOS they could use Embedded Linux allowing for more
+portability, ease of design and will broaden the scope of people using
+embedded linux.
 
- arch/arm/configs/aspeed_g5_defconfig:101:warning: override: reassigning to symbol FIRMWARE_MEMMAP
+The EVK has very little SDRAM, generally 32MB starting from
+i.MXRT1020(the lowest P/N), although the i.MXRT1160/70 provide instead
+64MB of SDRAM for more functionality.
 
-Please apply this one for v5.17
+At the moment we do not support XIP for either u-boot or Linux but it
+should be done in the future. XIP will also save SDRAM.
 
- arch/arm/configs/aspeed_g5_defconfig | 6 ++++++
- 1 file changed, 6 insertions(+)
+Another interesting fact is the amount of internal SRAM, as the P/N
+increases the SRAM will reach up to 2MB(some could be for cache and
+some would be for video).
 
-diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspeed_g5_defconfig
-index ae4f3c56ae6b..591b65695725 100644
---- a/arch/arm/configs/aspeed_g5_defconfig
-+++ b/arch/arm/configs/aspeed_g5_defconfig
-@@ -83,6 +83,8 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_NBD=y
- CONFIG_EEPROM_AT24=y
- CONFIG_EEPROM_AT25=y
-+CONFIG_SCSI=y
-+CONFIG_BLK_DEV_SD=y
- CONFIG_NETDEVICES=y
- CONFIG_NETCONSOLE=y
- # CONFIG_NET_VENDOR_ALACRITECH is not set
-@@ -200,6 +202,7 @@ CONFIG_USB_DYNAMIC_MINORS=y
- CONFIG_USB_EHCI_HCD=y
- CONFIG_USB_EHCI_ROOT_HUB_TT=y
- CONFIG_USB_EHCI_HCD_PLATFORM=y
-+CONFIG_USB_STORAGE=y
- CONFIG_USB_GADGET=y
- CONFIG_USB_ASPEED_VHUB=y
- CONFIG_USB_CONFIGFS=y
-@@ -246,6 +249,7 @@ CONFIG_FSI_OCC=y
- CONFIG_EXT4_FS=y
- CONFIG_FANOTIFY=y
- CONFIG_OVERLAY_FS=y
-+CONFIG_VFAT_FS=y
- CONFIG_TMPFS=y
- CONFIG_JFFS2_FS=y
- # CONFIG_JFFS2_FS_WRITEBUFFER is not set
-@@ -261,6 +265,8 @@ CONFIG_PSTORE_PMSG=y
- CONFIG_PSTORE_FTRACE=y
- CONFIG_PSTORE_RAM=y
- # CONFIG_NETWORK_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ISO8859_1=y
- CONFIG_HARDENED_USERCOPY=y
- CONFIG_FORTIFY_SOURCE=y
- CONFIG_CRYPTO_HMAC=y
+Also, some parts have embed flash of 4MB that can be used for
+u-boot/Linux, if both correctly sized it will leave the SDRAM free.
+
+External flash can be Quad SPI and HyperFlash, so throughput would be
+decent.
+
+The i.MXRT11xx series supports MIPI interface too.
+
+The family in general provide CAN bus, audio I/O, 1 or more
+USB(otg/host), 1 or more 100Mb/1Gb ethernet, camera interface, sd-card.
+
+All this can be used for simple GUIs, web-servers, point-of-sale
+stations, etc.
+
+Giulio Benetti (4):
+  ARM: imx: Add initial support for i.MXRT10xx family
+  dt-bindings: imx: Add clock binding for i.MXRT1050
+  ARM: dts: imx: Add i.MXRT1050-EVK support
+  ARM: imxrt_defconfig: Add i.MXRT family defconfig
+
+Jesse Taube (3):
+  ARM: dts: imxrt1050-pinfunc: Add pinctrl binding header
+  dt-bindings: clock: imx: Add documentation for i.MXRT1050 clock
+  clk: imx: Add initial support for i.MXRT1050 clock driver
+
+ .../bindings/clock/imxrt1050-clock.yaml       |  67 ++
+ arch/arm/boot/dts/Makefile                    |   2 +
+ arch/arm/boot/dts/imxrt1050-evk.dts           |  72 ++
+ arch/arm/boot/dts/imxrt1050-pinfunc.h         | 993 ++++++++++++++++++
+ arch/arm/boot/dts/imxrt1050.dtsi              | 154 +++
+ arch/arm/configs/imxrt_defconfig              |  35 +
+ arch/arm/mach-imx/Kconfig                     |   7 +
+ arch/arm/mach-imx/Makefile                    |   2 +
+ arch/arm/mach-imx/mach-imxrt.c                |  19 +
+ drivers/clk/imx/Kconfig                       |   5 +
+ drivers/clk/imx/Makefile                      |   1 +
+ drivers/clk/imx/clk-imxrt1050.c               | 181 ++++
+ include/dt-bindings/clock/imxrt1050-clock.h   |  73 ++
+ 13 files changed, 1611 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml
+ create mode 100644 arch/arm/boot/dts/imxrt1050-evk.dts
+ create mode 100644 arch/arm/boot/dts/imxrt1050-pinfunc.h
+ create mode 100644 arch/arm/boot/dts/imxrt1050.dtsi
+ create mode 100644 arch/arm/configs/imxrt_defconfig
+ create mode 100644 arch/arm/mach-imx/mach-imxrt.c
+ create mode 100644 drivers/clk/imx/clk-imxrt1050.c
+ create mode 100644 include/dt-bindings/clock/imxrt1050-clock.h
+
 -- 
 2.34.1
 
