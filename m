@@ -1,78 +1,85 @@
-Return-Path: <SRS0=Cg0n=RI=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=hZ9M=RI=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3524DC433F5
-	for <soc@archiver.kernel.org>; Thu, 23 Dec 2021 15:04:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 392C4C433F5
+	for <soc@archiver.kernel.org>; Thu, 23 Dec 2021 15:44:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0D8D4C36AE9; Thu, 23 Dec 2021 15:04:54 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id E3459C36AE9; Thu, 23 Dec 2021 15:44:05 +0000 (UTC)
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B206FC36AE5;
-	Thu, 23 Dec 2021 15:04:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B206FC36AE5
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wm1-f44.google.com ([209.85.128.44]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MLQl3-1mji8v2y5j-00IVpy; Thu, 23 Dec 2021 16:04:50 +0100
-Received: by mail-wm1-f44.google.com with SMTP id g7-20020a7bc4c7000000b00345c4bb365aso3077054wmk.4;
-        Thu, 23 Dec 2021 07:04:50 -0800 (PST)
-X-Gm-Message-State: AOAM532vBwTSn7hyGWYk8OU8PXq2Bde9uCa3JoGDO2rwARfISTopIVqK
-	RAfu2dWwVsumzOuvWE2rA1VMP2dSWYkN3zX4b5M=
-X-Google-Smtp-Source: ABdhPJx87dLChts32MU9qDJmShuS/kjiyDdfWirbg/wFCSB6VkfGq1DBp9QIWOBiwEedNiMXPqADSuAryrrpbAO0JsY=
-X-Received: by 2002:a1c:7418:: with SMTP id p24mr2136565wmc.82.1640271890246;
- Thu, 23 Dec 2021 07:04:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20211218071427.26745-1-shawnguo@kernel.org> <CAK8P3a0Pi+9tNTfaNjKCLH1f3Ge4YLW9_7o1ci1RLeuTOVEbkQ@mail.gmail.com>
- <20211221065708.GB14131@dragon>
-In-Reply-To: <20211221065708.GB14131@dragon>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Thu, 23 Dec 2021 16:04:34 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3XTkHY0j+h91C_Vx00YXX82y_XO7+CU+QW8=6fzY43+w@mail.gmail.com>
-Message-ID: <CAK8P3a3XTkHY0j+h91C_Vx00YXX82y_XO7+CU+QW8=6fzY43+w@mail.gmail.com>
-Subject: Re: [GIT PULL 1/6] i.MX drivers update for 5.17
-To: Shawn Guo <shawnguo@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 3F298C36AE5
+	for <soc@kernel.org>; Thu, 23 Dec 2021 15:44:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3F298C36AE5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oi1-f178.google.com with SMTP id j124so9442126oih.12
+        for <soc@kernel.org>; Thu, 23 Dec 2021 07:44:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1fwwSdyPDmJrjBqvgfhWwK5/B7Z6WVD41tKc+tzuI9Y=;
+        b=dfU8NCEFlprLJHJEnCF6GvLWjBULr43g9OU81r0AUa9LnF5soLHnnoLtxdr8XONYSH
+         C/RYV2mnCnBOKX8CGIb8QuE7kZx6jLyD1YV1fLS2L7aFzCwbD69oB0U7aIgcbXNpP46I
+         +ReOE0AdcG8IMWnbJoVE0QUaHbaG65dY5qafFidaGCrazhXNSQXMYzbkBeDevFlbxlMV
+         I6Vg4tviMMWeEtxI36zdQYyr3mRxOOLd8Pvjzq+DJojdMdV6ZRxczrDmxcP4gA2TtvFF
+         RwfstC2ObrYklB59q0m2SSrlZsecOtXx93uleV3cIvJJBeosm+c2kG3epevi6hfc69SJ
+         US8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1fwwSdyPDmJrjBqvgfhWwK5/B7Z6WVD41tKc+tzuI9Y=;
+        b=Yj0NDuxP50vwzzQJl47O71f8Qxt1/y0cfgGk3fuHboGI95wfC7xrFNtPJ4baPr2YUS
+         saA8RkeGXl7whs1is+YAcBG25Ldi3myLbUr/d0CXq+ucFiNzrDGuH/B+AVDGbjJBgiHG
+         OAgj3S+3vxsq7mj8MmT7nHerqwmbz6UQb9UoiBlKiNJU18IbIGmNCe6HoEHEsIx+/KOW
+         despPt9rbm/LzZnUF34q37nPgmL4SpGLX1MbOuVGqyeC+RfwtEl42ZtP+Hc/VKVDk8UF
+         NSSOQAViKDwQmLHAvKYytmUxh2Zb+AAE7NBMFhcPmyxpxOqlpwNIBPcct3COzlfH8jBp
+         3lwg==
+X-Gm-Message-State: AOAM532y6G+SwWDoRTp4uubblIegvsvw5P9hEf8cJ/U5xQ14DTVcNVb4
+	IKHaA8X0RdIaflkASwzWZ6gdUQ==
+X-Google-Smtp-Source: ABdhPJxpfqDKnPz1DYcgUZ1ElZ07nh0if0gtDDDecukFbgK146Ktyx9xjHphpVLEvAsxxRcKVDyH5w==
+X-Received: by 2002:a05:6808:aa5:: with SMTP id r5mr2081321oij.119.1640274244080;
+        Thu, 23 Dec 2021 07:44:04 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id a6sm1055762oil.6.2021.12.23.07.44.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 07:44:03 -0800 (PST)
+Date: Thu, 23 Dec 2021 07:45:11 -0800
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
+To: Stanislav Jakubek <stano.jakubek@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
-	Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>, Li Yang <leoyang.li@nxp.com>, 
-	Sascha Hauer <kernel@pengutronix.de>, NXP Linux Team <linux-imx@nxp.com>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:flQmrHXvyoU5LdSCFvLOuaB78bCnPs3Wyj3SPPwuAr1agBX3RHi
- TzOLoergkgfD0S5QdqNKttj3hzh8c+rGBOVWG9/zc5y5IpaAt7iJy093nhlL3Cs3GVZmSoX
- zMrSBG2LkhOOWiju2bIgcR3f5RdrffxvXN1bdvdpCGuZuXWy9i1A2NXoD/J7AppD+UO7fLg
- IJGvTXVf0Jc8LDDttrwew==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:EyEcFXbHegU=:zOJO7OAdA4vuhSEuxPJmSF
- /p+koMATXHq7mUCbsICV4aHiKhFh8sFrOuKCE4ncK5yDleDh3PbuEUV5KrP2UlMz1QaRxhZY3
- l7aUYVsmkxRc/Hi5B8mwKu+0xRhmxI5d9VDjuUl2Y0rb/Re/tLMgYsP2O1RCun4FZ+ot7YUwX
- 16ZuvJGR/KDYBSld35K/LcM32z3rJkTBphY6E4lk3dTrMJKvvW9gM2zI6kA78pT4fsnPsk7kU
- 9rOo6Oo1wlVTf6jzvKC4elNMrq1HOxnXxgnwtQJll0IepiP3SU0cIG8FCT/AzzkLEhvkxcuPe
- 4Emm864MFj9aO+4wIiCDoXdxb9ZqwC9Bay8lbUg/l9JAr6FjXzJKxmAKrz+PYye0cqhgtpuV0
- CCbNho0SQk7Wc0EuHCm+4GCSXj0/6sWB9kpflveafHbs8RMR6Cb3Gyb1rvOEnb7+B252iW0MF
- 53Z+IY3t7bJ76bnX2NnmlGzoVAHUx3K/+64MYiMaYMyVsIAgRk52eDp2uOM/u2aoRJDEOPJDC
- In1eb7wCZ+2Y3bRNNb05qeogwPsvdwswYVP+9obJWroPAiosjg7Hx7xqgDkGCNMTugFOHIzHJ
- DfV/R/fYULp7KRAv6Q4X8YgJNiC7Mg8CCCJsrhCTURD9vb9AtiiQ5P89XfinEXad/gbbj3Tj9
- D/cqeY1mgbtFM7LdDxSqCMFn07EfUPXdDtjAuwdLLtzh+5vxSa2olCD8/lCKiZ25kNMI8TYBL
- +8+w1DVL94TK+NPMMVfWanK0XV/kViHqtqjEutd6r26F6QQGzDdNIdlIeXOdvtWi+70omM3dO
- d7wsSxOGPCyFPzcVTm6A0gwAeupKxvKHrmgyp/DFTpasbtA9ZI=
+Cc: agross@kernel.org, devicetree@vger.kernel.org, linus.walleij@linaro.org,
+	linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, manivannan.sadhasivam@linaro.org,
+	olof@lixom.net, quic_vamslank@quicinc.com, robh+dt@kernel.org,
+	sboyd@codeaurora.org, soc@kernel.org
+Subject: Re: [PATCH v3 0/3] Add devicetree support for SDX65 Modem and MTP
+Message-ID: <YcSZh8racQsDiF5O@ripper>
+References: <163960723735.3062250.7838330411965052999.b4-ty@linaro.org>
+ <20211223144407.GA6503@standask-GA-A55M-S2HP>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211223144407.GA6503@standask-GA-A55M-S2HP>
 
-On Tue, Dec 21, 2021 at 7:57 AM Shawn Guo <shawnguo@kernel.org> wrote:
-> On Mon, Dec 20, 2021 at 05:28:04PM +0100, Arnd Bergmann wrote:
-> >
-> > Thanks, I've pulled all six tags now, but I don't know why there are no
-> > automated emails about them, this seems to happen for some senders
-> > but not others.
->
-> I sent the PRs in form of patches (manually editing) with 'git
-> send-email'.  I have been doing this for years, and I used to get
-> automated emails about merging.  Not sure what's changed recently.
+On Thu 23 Dec 06:44 PST 2021, Stanislav Jakubek wrote:
 
-I don't think anything changed, there are always a few that fail to get updated
-by patchwork, and I've never quite figured out the difference to those that
-work.
+> Hi Bjorn, it seems to me like a patch similar to Patch 1/3 was applied
+> some time ago, see 61339f368d59d25e22401731f89de44e3215508b, and applying
+> this patch has caused the compatible to be documented twice.
+> 
 
-        Arnd
+I'm confused to why git allowed me to merge patch 1 without complaining,
+but that obviously shouldn't have been merged twice. Thanks for
+reporting this!
+
+Let's clean that up, would you be interested in submitting a patch for
+it?
+
+Regards,
+Bjorn
