@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A5C0C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5B5EC433EF
 	for <soc@archiver.kernel.org>; Thu, 23 Dec 2021 09:40:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4CC9BC36AED; Thu, 23 Dec 2021 09:40:54 +0000 (UTC)
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	id C66DEC36AEC; Thu, 23 Dec 2021 09:40:54 +0000 (UTC)
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5D9E2C36AEA;
+	by smtp.kernel.org (Postfix) with ESMTPS id 676AEC36AEB;
 	Thu, 23 Dec 2021 09:40:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5D9E2C36AEA
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 676AEC36AEB
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BN9elLJ018543;
-	Thu, 23 Dec 2021 03:40:47 -0600
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BN9eotH107678;
+	Thu, 23 Dec 2021 03:40:50 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1640252447;
-	bh=k2J4pHrADTRM46UX00geaOvMmN7yPdJDltRf2UYr9rQ=;
-	h=From:To:CC:Subject:Date;
-	b=dWJW6ABiZSPlOrFnm4W7Yk+mdrrhrodrVDqQTuEiZzMwCVfRXv9SjgXwVZPXLRaDJ
-	 ujoFvsY5AUtqEWfEo2mvA133T9aRTdG5sFMvpB1zhX224fbLvfVqFhOF3/ISpYGp9V
-	 o3bebRWso45K/9eisbfGoD4TyuaxSiYagesMMGl0=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BN9elRD004039
+	s=ti-com-17Q1; t=1640252450;
+	bh=Hkq6c/x1tibpeLn8TqV2Fp1I9jwQAZ2OdGkxPY4tKBM=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=i8MiMxQQwb4UGRJnt1/81j37wplUoYDZ8mZCFsF4JtKpzEmoShNl20sVP+zTVtON9
+	 QletSyJCpw01PePuk3JhRqcyGzrsWV84DSlq3Jw9oQr+J6Qgi2C5zQYmfEyzA6SzRk
+	 PruQ5DUxnSBiEO7GE5wKVVXRpnMYSSJSZ+PuJWcc=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BN9eo6k124332
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 23 Dec 2021 03:40:47 -0600
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+	Thu, 23 Dec 2021 03:40:50 -0600
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
- Dec 2021 03:40:47 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ Dec 2021 03:40:49 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 23 Dec 2021 03:40:47 -0600
+ Frontend Transport; Thu, 23 Dec 2021 03:40:50 -0600
 Received: from uda0132425.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BN9eiJD088529;
-	Thu, 23 Dec 2021 03:40:44 -0600
+	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BN9eiJE088529;
+	Thu, 23 Dec 2021 03:40:47 -0600
 From: Vignesh Raghavendra <vigneshr@ti.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
@@ -49,22 +49,32 @@ To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
 CC: Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, Tero Kristo <kristo@kernel.org>,
         <arm@kernel.org>
-Subject: [GIT PULL v2 1/2] arm64: TI K3 SoC configs changes for v5.17
-Date: Thu, 23 Dec 2021 15:10:39 +0530
-Message-ID: <20211223094040.15349-1-vigneshr@ti.com>
+Subject: [GIT PULL v2 2/2] arm64: dts: TI K3 updates for v5.17
+Date: Thu, 23 Dec 2021 15:10:40 +0530
+Message-ID: <20211223094040.15349-2-vigneshr@ti.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211223094040.15349-1-vigneshr@ti.com>
+References: <20211223094040.15349-1-vigneshr@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi ARM SoC maintainers,
+Hi,
 
-Reroll of defconfig changes for TI K3 SoCs due for v5.17. Addressed
-Arnd's comments on v1 by dropping commit touching CONFIG_SERIAL_8250_NR_UARTS
-and removing PCIe related configs which cannot be built as modules.
+Please pull the device tree changes for TI K3 platforms for v5.17.
 
-v1: https://lore.kernel.org/linux-arm-kernel/20211217172806.10023-1-vigneshr@ti.com/
+Please note:
+This adds a dtbs_check warning due to missing YAML binding for pinctrl-single compatible.
+There also a checkpatch error for complex macro usage in dt-bindings
+header defining pinmux marco which is harmless.
+
+v2:
+Moved aliases from k3-j721s2.dtsi file and trimmed the list
+as per Arnd's suggestion
+
+v1:
+https://lore.kernel.org/linux-arm-kernel/20211217172806.10023-2-vigneshr@ti.com/
 
 The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
@@ -72,20 +82,85 @@ The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-config-for-v5.17-v2
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-dt-for-v5.17-v2
 
-for you to fetch changes up to 414174b6bb6569c07d8557c4475e43b1e18b4fea:
+for you to fetch changes up to e66d1865c059c2cfc17070db0dd820ff5d44ef85:
 
-  arm64: defconfig: Enable USB controller drivers for TI K3 SoC (2021-12-22 13:13:26 +0530)
-
-----------------------------------------------------------------
-ARM64 defconfig changes for TI K3 platforms for v5.17 merge window:
-
-- Enable drivers for USB and SERDES IPs on TI K3 SoC
+  arm64: dts: ti: Add support J721S2 Common Processor Board (2021-12-22 12:30:58 +0530)
 
 ----------------------------------------------------------------
-Vignesh Raghavendra (1):
-      arm64: defconfig: Enable USB controller drivers for TI K3 SoC
+Devicetree changes for TI K3 platforms for v5.17 merge window:
 
- arch/arm64/configs/defconfig | 7 +++++++
- 1 file changed, 7 insertions(+)
+* New Platforms:
+  - J721s2 SoC, SoM and Common Processor Board support
+* New features:
+  - CAN support on AM64 EVM and SK
+  - TimeSync Router on AM64
+* Fixes:
+  - Correct d-cache-sets info on J7200
+  - Fix L2 cache-sets value for J721e/J7200/AM64
+  - Fixes for dtbs_check warnings wrt serdes_ln_ctrl node on J721e/J7200
+  - Disable McASP on IoT2050 board to fix dtbs_check warnings
+
+----------------------------------------------------------------
+Aswath Govindraju (8):
+      arm64: dts: ti: am654-base-board/am65-iot2050-common: Disable mcan nodes
+      arm64: dts: ti: k3-am64-main: Add support for MCAN
+      arm64: dts: ti: k3-am642-evm/sk: Add support for main domain mcan nodes in EVM and disable them on SK
+      dt-bindings: arm: ti: Add bindings for J721s2 SoC
+      dt-bindings: pinctrl: k3: Introduce pinmux definitions for J721S2
+      arm64: dts: ti: Add initial support for J721S2 SoC
+      arm64: dts: ti: Add initial support for J721S2 System on Module
+      arm64: dts: ti: Add support J721S2 Common Processor Board
+
+Christian Gmeiner (1):
+      arm64: dts: ti: k3-am64-main: add timesync router node
+
+Faiz Abbas (3):
+      arm64: dts: ti: k3-am65-mcu: Add Support for MCAN
+      arm64: dts: ti: k3-j721e: Add support for MCAN nodes
+      arm64: dts: ti: k3-j721e-common-proc-board: Add support for mcu and main mcan nodes
+
+Jayesh Choudhary (1):
+      arm64: dts: ti: iot2050: Disable mcasp nodes at dtsi level
+
+Kishon Vijay Abraham I (2):
+      arm64: dts: ti: j7200-main: Fix 'dtbs_check' serdes_ln_ctrl node
+      arm64: dts: ti: j721e-main: Fix 'dtbs_check' in serdes_ln_ctrl node
+
+Nishanth Menon (4):
+      arm64: dts: ti: k3-am642: Fix the L2 cache sets
+      arm64: dts: ti: k3-j7200: Fix the L2 cache sets
+      arm64: dts: ti: k3-j721e: Fix the L2 cache sets
+      arm64: dts: ti: k3-j7200: Correct the d-cache-sets info
+
+Peng Fan (1):
+      arm64: dts: ti: k3-j721e: correct cache-sets info
+
+ Documentation/devicetree/bindings/arm/ti/k3.yaml       |   6 +
+ arch/arm64/boot/dts/ti/Makefile                        |   2 +
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi               |  36 +
+ arch/arm64/boot/dts/ti/k3-am642-evm.dts                |  40 +
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts                 |   8 +
+ arch/arm64/boot/dts/ti/k3-am642.dtsi                   |   2 +-
+ arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi     |  20 +
+ arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi                |  30 +
+ arch/arm64/boot/dts/ti/k3-am654-base-board.dts         |   8 +
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi              |   2 +-
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi                   |   6 +-
+ arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts  | 155 ++
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi              | 198 +-
+ arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi        |  28 +
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi                   |   6 +-
+ arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts | 430 +++++
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi             | 937 ++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi       | 302 +++
+ arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi           | 174 ++
+ arch/arm64/boot/dts/ti/k3-j721s2.dtsi                  | 167 ++
+ include/dt-bindings/pinctrl/k3.h                       |   3 +
+ 21 files changed, 2551 insertions(+), 9 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2.dtsi
