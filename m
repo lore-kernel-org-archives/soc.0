@@ -1,144 +1,118 @@
-Return-Path: <SRS0=cSeM=RJ=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=wYdx=RJ=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F8E0C433F5
-	for <soc@archiver.kernel.org>; Fri, 24 Dec 2021 11:11:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B292FC433F5
+	for <soc@archiver.kernel.org>; Fri, 24 Dec 2021 17:11:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4AC47C36AEA; Fri, 24 Dec 2021 11:11:37 +0000 (UTC)
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 678DBC36AEA; Fri, 24 Dec 2021 17:11:43 +0000 (UTC)
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8EAF2C36AEC
-	for <soc@kernel.org>; Fri, 24 Dec 2021 11:11:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8EAF2C36AEC
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 79BA6402D7
-	for <soc@kernel.org>; Fri, 24 Dec 2021 11:11:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1640344289;
-	bh=kD4Oxt4jcQYvgn3l02cM0PdutVIC1JUiDrLy60gpB1w=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version;
-	b=vAGhcAr9E3OuoJoGYw0bJN7AnWNb/8Rn0mImK697imUlb4rFfaNwpp1QZWdrvViOr
-	 8+QpUSU0sIhpgs3G4xDqR9dxQZJezbeHdB94l1DIjFbIi1M1JZXyVFcY3zqD2XmIp0
-	 N7K0qnY2V0lRcemogRBFqIoRDIz/60/u0ch5RTHtdtTnneEydMuXiSeth2KMer9fmY
-	 94t5Xy7s9GCEyyBbWEtjtHt4ISzQklyiCml0HA/EL6MVW0/tTVx8pbkxqF3+X5x1Rg
-	 HFURGfwB8cW1u7wRrq/Lm8YMl5YR2jfHVunpkn5Q/YN8uD/0mkFbr/MQ3Dw4YmSai0
-	 1oEKxqW35+tTA==
-Received: by mail-lf1-f71.google.com with SMTP id bq6-20020a056512150600b0041bf41f5437so2776628lfb.17
-        for <soc@kernel.org>; Fri, 24 Dec 2021 03:11:29 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id B027BC36AE5;
+	Fri, 24 Dec 2021 17:11:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B027BC36AE5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f178.google.com with SMTP id 196so8167372pfw.10;
+        Fri, 24 Dec 2021 09:11:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1AGcBsnzvy5lyVMqgyfzAtPvXS7sOctvHHP5fe6m0Vk=;
+        b=gvGi9kDjBlHdfCwbY2/Ul+0imv8s6dTjZpjxEobKK61pD27Xp5W40n8Jg9IeNjzjxR
+         8v24Nbq7MF17PpPtu2lXhu3x9sXZ7Vg67L1MjDferOmju9qWwg1tc5Evft++FtrAH1mt
+         KUUj/zzoR4GtuF8OHR8W+GtQlYZedvq2ZapZEBtnWF7Vz8txDmVPpvGkVPifDvigHuMJ
+         r8NKIUMV7LDzY5bhelLQGKFZ//1QC6Li00hOXmitWDpRtra0vJHUZEYh9N1w1fGU/TJT
+         xP1IjIJ3hVE5GCaSBdichn4B+Jn+371z0ffLg0Y09dbT24HPvXh2QuJvw6KtKyfK+sFw
+         ICWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kD4Oxt4jcQYvgn3l02cM0PdutVIC1JUiDrLy60gpB1w=;
-        b=yd+Ygu7U7feOzdzyDczstT57uMpbDefinOqPjo5x9GeOpYFcU2c8+4AePH8D9Xcsv6
-         u5e7XvxYGeoutkMeOu+Pj73nZ+DSgW+li71TLhHF5dhLKAuZfRpYPCiv81irCn2jqws5
-         WHDD3rnF5QmtX/GEt4v6IITMzW9mlcHPSy6FWIZVCLAvgKPGzGhM//yCx0vDqgMVvXcq
-         OSf3ptKTxuQnBsFrNUzGvyVoDCMf9IM6GFnn0dBI0gL5eCP/U3DoXIA+eHbq6KnlmGlt
-         5ZCEXeM/qyGvn2KzCH8MBiV2dDQrm06dj/ZrvSWfajdnUdivHOPUoZM86T/4w9EQaWVh
-         lrEg==
-X-Gm-Message-State: AOAM531fKsquta8W79JSWNprqxjn7ICYpeZ6FqxfXdsl/DDlDmGlMGkc
-	RbopDn7eRfZIphvHvH4NSg5amN05m+U7INYbdrTcDeE4011QaAd4a9zjH05CReiCtZBRkGGx/+V
-	mpFlHA0mnpdbZ3JzS7ePi5NM=
-X-Received: by 2002:a2e:9253:: with SMTP id v19mr4468029ljg.74.1640344288832;
-        Fri, 24 Dec 2021 03:11:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxTfs7N22KGq3U7wkuIP6XzvggWdsbNzZIU0QA+V5Zqphz+iG9QPpXvadTM+EjZ9GS+e1xNVg==
-X-Received: by 2002:a2e:9253:: with SMTP id v19mr4468014ljg.74.1640344288550;
-        Fri, 24 Dec 2021 03:11:28 -0800 (PST)
-Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id y36sm773870lfa.75.2021.12.24.03.11.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 03:11:27 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [GIT PULL 2/2] memory: omap: drivers for v5.17
-Date: Fri, 24 Dec 2021 12:11:24 +0100
-Message-Id: <20211224111124.6097-2-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211224111124.6097-1-krzysztof.kozlowski@canonical.com>
-References: <20211224111124.6097-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1AGcBsnzvy5lyVMqgyfzAtPvXS7sOctvHHP5fe6m0Vk=;
+        b=zIQAh3wlw9xROoZuujFqU7VuOAs7mQS02uxPG2hIlUuZ+3f1ZxxpmHAfMVkju/cd2E
+         Dv0C9+5sg+jj14oydWbMj+yKLxAxibSxoBoFHwvzZIFSO7Nr+504Wozsd4pKImP6lTZm
+         5boOZOmT2eLGbUd7NaoqKmql8cioN6RGfrNATV1bb2l246f2X0OmpyTSu2IT+KKXtk9Y
+         1tA7ebvSoDgBYvC8zoSRXeF8fNgB/4n/R8TeSuGPeaK/XMu/tVR8TF0bXPr6UajkbEyr
+         8ULeXjfzR4w807McRWAqjFEr6qHtGzry9ZH0dZi0ZztVTGezN4Tl0MG5PGzFJe1F9YBY
+         qH4Q==
+X-Gm-Message-State: AOAM532JHx2hg3iDOEq+FJ/TYRE6QM6rGXx3PmFr22176I/udiDTGnAV
+	21RPxjU+MGuASvPVtWbfDLCJ3LeKQ0o=
+X-Google-Smtp-Source: ABdhPJzZ1vyB3OCSJEQ/BQzyEkEkQF25dIlgc8xh3ERnuBsBfZMeJ91Qw3UGMMuEse41Lf4HEj+V6w==
+X-Received: by 2002:a62:6dc2:0:b0:4af:98e:1d3b with SMTP id i185-20020a626dc2000000b004af098e1d3bmr7691497pfc.52.1640365901764;
+        Fri, 24 Dec 2021 09:11:41 -0800 (PST)
+Received: from ?IPV6:2600:8802:b00:4a48:81cd:f5a9:7f89:a39c? ([2600:8802:b00:4a48:81cd:f5a9:7f89:a39c])
+        by smtp.gmail.com with ESMTPSA id p13sm1685987pgl.23.2021.12.24.09.11.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Dec 2021 09:11:41 -0800 (PST)
+Message-ID: <7e480da8-0d54-2d62-0a8e-184901c974b6@gmail.com>
+Date: Fri, 24 Dec 2021 09:11:39 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [GIT PULL 0/5] SoC changes for 5.17
+Content-Language: en-US
+To: Arnd Bergmann <arnd@kernel.org>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Olof Johansson <olof@lixom.net>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <CAK8P3a0RDZpLtWjMEU1QVWSjOoqRAH6QxQ+ZQnJc8LwaV7m+JQ@mail.gmail.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAK8P3a0RDZpLtWjMEU1QVWSjOoqRAH6QxQ+ZQnJc8LwaV7m+JQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Arnd and Olof,
+Hi Arnd, Olof,
 
-Separate topic branch for omap-gpmc driver. This includes changes to
-mtd-nand-omap2 driver (acked by Miquel) *which will conflict NAND tree*:
+On 12/23/2021 13:31, Arnd Bergmann wrote:
+> I'm sending out the pull requests for 5.17 early, as I won't have access to
+> my workstation for the next two weeks. With only 760 non-merge commits,
+> this again feels quieter than the massive previous merge window, but the
+> number of changed lines was actually slightly higher.
+> 
+> There are very few changes aside from devicetree patches, most of
+> which are for the i.MX, Tegra, Qualcomm, Apple, K3 and Aspeed
+> platforms.
+> 
+> We have a couple of new SoCs in existing families:
+> 
+>   - Qualcomm Snapdragon 8 Gen1
+>   - Qualcomm Snapdragon SDX65
+>   - NXP i.MX8ULP
+>   - Texas Instruments j721s2
+>   - Renesas R-Car S4-8
+> 
+> The time between product announcement and kernel support is fairly short
+> for all of these, which is nice. In particular the two Snapdragons were only
+> announced this month and are the current high end of Qualcomm's products.
+> On the other end of the spectrum, we also add support for ST SPEAr320s,
+> which was launched 10 years ago.
+> 
+> Aside from the Arm chips, there is also a pull request for a new RISC-V SoC,
+> the Starfive JH7100, including some of the basic drivers to make it boot.
 
-1. The "of_device_id omap_nand_ids" is moved to header
-   ../platform_data/mtd-nand-omap2.h.
-2. New compatible is added to above "of_device_id omap_nand_ids".
+There seems to half of the submitted Broadcom SoCs pull request missing 
+in this one, was there issues with those below:
 
-One way to avoid pushing this conflict to Linus, would be if Miquel would
-actually pull this request instead of soc tree.
+defconfigs:
 
-Proper resolution looks like:
-----------------------------------------------------------------
-diff --git a/include/linux/platform_data/mtd-nand-omap2.h b/include/linux/platform_data/mtd-nand-omap2.h
-index 92f011805ad4..8c2f1f185353 100644
---- a/include/linux/platform_data/mtd-nand-omap2.h
-+++ b/include/linux/platform_data/mtd-nand-omap2.h
-@@ -65,6 +65,7 @@ struct gpmc_nand_regs {
- 
- static const struct of_device_id omap_nand_ids[] = {
- 	{ .compatible = "ti,omap2-nand", },
-+	{ .compatible = "ti,am64-nand", },
- 	{},
- };
-----------------------------------------------------------------
+https://lore.kernel.org/linux-arm-kernel/20211221220642.2862218-1-f.fainelli@gmail.com/
+https://lore.kernel.org/linux-arm-kernel/20211221220642.2862218-2-f.fainelli@gmail.com/
 
-Best regards,
-Krzysztof
+drivers:
 
+https://lore.kernel.org/linux-arm-kernel/20211221220642.2862218-5-f.fainelli@gmail.com/
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+Should I resend or fix something in those? Thanks!
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-omap-5.17
-
-for you to fetch changes up to dbcb124acebd8148e9e858a231f1798956dd3ca6:
-
-  mtd: rawnand: omap2: Select GPMC device driver for ARCH_K3 (2021-12-22 16:51:43 +0100)
-
-----------------------------------------------------------------
-Memory controller drivers for v5.14 - OMAP GPMC
-
-1. Add support for AM64 SoC.
-2. Minor improvement: use platform_get_irq().
-
-----------------------------------------------------------------
-Lad Prabhakar (1):
-      memory: omap-gpmc: Use platform_get_irq() to get the interrupt
-
-Roger Quadros (4):
-      dt-bindings: memory-controllers: ti,gpmc: Add compatible for AM64
-      memory: omap-gpmc: Add support for GPMC on AM64 SoC
-      memory: omap-gpmc: Use a compatible match table when checking for NAND controller
-      mtd: rawnand: omap2: Select GPMC device driver for ARCH_K3
-
- .../bindings/memory-controllers/ti,gpmc.yaml       | 23 +++++++++-
- drivers/memory/omap-gpmc.c                         | 50 ++++++++++++++--------
- drivers/mtd/nand/raw/Kconfig                       |  1 +
- drivers/mtd/nand/raw/omap2.c                       |  5 +--
- include/linux/platform_data/mtd-nand-omap2.h       |  9 +++-
- 5 files changed, 65 insertions(+), 23 deletions(-)
+Happy holidays!
+-- 
+Florian
