@@ -1,109 +1,127 @@
-Return-Path: <SRS0=4T9+=RJ=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=cSeM=RJ=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7878DC433F5
-	for <soc@archiver.kernel.org>; Fri, 24 Dec 2021 04:06:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3777EC433FE
+	for <soc@archiver.kernel.org>; Fri, 24 Dec 2021 11:11:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 30799C36AEA; Fri, 24 Dec 2021 04:06:01 +0000 (UTC)
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id CD820C36AEB; Fri, 24 Dec 2021 11:11:32 +0000 (UTC)
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5E9DDC36AE8
-	for <soc@kernel.org>; Fri, 24 Dec 2021 04:05:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5E9DDC36AE8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f176.google.com with SMTP id t204so5958755oie.7
-        for <soc@kernel.org>; Thu, 23 Dec 2021 20:05:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AK/GoBD4NSOHwSVqZthu2O08Jw7u+mwsxqJi3Ry3nKc=;
-        b=gq2yQoCaJnKxdj0aHEXvs8IGPBaDHeTzTaYt/ryWsKz+mIDvAu9iIBhc2ZkzWM1dOD
-         tEu2K97Is8ypqo+4uHCIyWDHFikuEd0awybqFuyTHjZE7wnwRhO2UE9ryQXiKxIKfuna
-         cqjppHyaaZXsq3bFvQROZpaikTDEru/hXH3SUQgRMUbQ1JXiw5+qJGPvOxtocEarf1Ty
-         Ie66oOBvLSZ9QlTXAcC1gqlUQ+xQGNm/iYsoWS5WzMaqaHJ0BptL1180107BLwHzx7Ad
-         uZBNx6khDhyGorIvjqLJTFeFxkGm4BVRqnw2F6ut+jL0OP4JXOozlmYqtzsB5HLe6GRL
-         RNjw==
+	by smtp.kernel.org (Postfix) with ESMTPS id 46720C36AE8
+	for <soc@kernel.org>; Fri, 24 Dec 2021 11:11:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 46720C36AE8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 333AC3F175
+	for <soc@kernel.org>; Fri, 24 Dec 2021 11:11:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1640344289;
+	bh=tffzkkxKa4YIdNV590tAX3Y9552dAe4ASNyCk+JJADI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=JM+D9E6omlwqsxYAmsVikjVG5t/POxPurWfcpfMO8WxFcMMN9cii2c6IpK9cSES1h
+	 daMLDZndBAksx1aO5EuDkx0AN79uoazvv1xVEuiL4suLbTYJb8ar2iS6sL56s9rJcL
+	 G/QIstaDMmmEFmVwYKFhAlr5PW16shjH4uDn3UqX7JZDnw0o+2TLBJqkEhbhcWZ0DH
+	 pdr1TaNvT+1CQ3/FC42i2mj3CAMoGHWWdYe7mKFs6pyJHsHKjvOhx6SDCB9s69RkB+
+	 5gtw4Ja32tViMDiOta5K6KFCllYyL80/JvW6epF+SlM5wIZWkFY4B8bm1sV1mYmczs
+	 57ITON97my3QA==
+Received: by mail-lf1-f69.google.com with SMTP id b35-20020a0565120ba300b0042604bb4857so2761107lfv.19
+        for <soc@kernel.org>; Fri, 24 Dec 2021 03:11:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AK/GoBD4NSOHwSVqZthu2O08Jw7u+mwsxqJi3Ry3nKc=;
-        b=HNDN6frbmYiavuVMTGGoAHXREdNLf8NjwAa3j4GSPvVgHrw7yFcV6cXs5ZN4aWh8m8
-         ONottSD0GAEIkr2RxQwhVfitFBMrVy2JuTz6ZvuSlIiDvJ+Ar8ozPUPJbBeoto4obmjA
-         NhMw8XwzxGfOs/JykyBo5OFaWzTYcjDG9+TIQ7wCG9tFr0eU0xYeY2Pf9oSWIOLhJpOV
-         Dwk54oYmyh6h2S1YmnFToEsPG1r0UYTBD6tmoNYOu431fAOzxg+5Sc91JO4AIf2zYdc5
-         TwRfiFXoIG3bzD8JoQM/Z0O4nG5WSTnNFvJWRM0jTiHXgk2Bmkdnn9Ryh7z+kbAdZqJj
-         Y51A==
-X-Gm-Message-State: AOAM530ZsUGK0rUK/lDyvuHu24RISjwP8sWr9KiWWnI2c2OuD1RQembm
-	F/+k28tzlFuXdWndamrlFjgy7lbHCrsg51jRak+KPg==
-X-Google-Smtp-Source: ABdhPJxQOSzC8McVfBe3KmWsuME/BKDeKWRpaj/52MKdPsPCfZWTUeKA3YUfD7+a3GmNhmxsLircXMO8+Vb1K/pQrgM=
-X-Received: by 2002:a54:4613:: with SMTP id p19mr3662521oip.162.1640318758486;
- Thu, 23 Dec 2021 20:05:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
- <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
- <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com> <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
- <CACRpkdaNv7850mOyXRMgmPf8TQxiM-C5VEkGnLfd+wvffW8FAg@mail.gmail.com> <CAMj1kXHgptq47g3mSPTKW9KMnqTH4K2Q7riBVwX4iA1V9YWYiA@mail.gmail.com>
-In-Reply-To: <CAMj1kXHgptq47g3mSPTKW9KMnqTH4K2Q7riBVwX4iA1V9YWYiA@mail.gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 24 Dec 2021 05:05:46 +0100
-Message-ID: <CACRpkdafoc_erHyfkby9X1LhkYgkBQsad=qNyXh+Tq_32zr_yg@mail.gmail.com>
-Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
-To: Ard Biesheuvel <ardb@kernel.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tffzkkxKa4YIdNV590tAX3Y9552dAe4ASNyCk+JJADI=;
+        b=dVwo9d0ouQxaSqXYGfYujWTFjnJWhLT+WekD4y4RHMKpRstpaQ8bHcs2AbsEAmHR+8
+         Egks2SHxlAWdYOD0eGHzuyY3PDKNNdcq8IeFzDxpupze5YS/abVTI6ErlAKMtAAkq6hR
+         JjdB2U1RhHnaY5uk8C56d5lCeSw44IEZo0ROVXFCrJtbodPYtj/7XbiSxR0P4r3y4RNr
+         Oesdmzws9OYQ0ke60sNsrKEwYnBPPcgIaEx8MtDmAWvUq0F+Cf1oJ1gEoTW3JJCDPG0f
+         bJUD1tRL6zztFrt1uwP5Ru5YUthJssdl8Lq20QMva6XlzxlGUigZl3Lnf7mkBCNXflBM
+         k4+Q==
+X-Gm-Message-State: AOAM532oyOgOHpkGsOM6HQODrJfOhJGuvdeeStwTOlsIC0bn78fCk11p
+	UQwqlsByriVnUZPZP5rONyVF66c9xyi2H+0Kw1fAWel+xTZ3hn1XcN5dXX+ElpeZmiQWcpKpqOX
+	ev3HT/IBNr2+joAgaX9bK11c=
+X-Received: by 2002:ac2:46d1:: with SMTP id p17mr5126111lfo.578.1640344287597;
+        Fri, 24 Dec 2021 03:11:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwlyHdSEopC8h5txg13zP15CN+pLoXyUsLHjPcX8vB6NbjpuzCeCZs1rIgCHJp1thoyKJd4tA==
+X-Received: by 2002:ac2:46d1:: with SMTP id p17mr5126102lfo.578.1640344287341;
+        Fri, 24 Dec 2021 03:11:27 -0800 (PST)
+Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id y36sm773870lfa.75.2021.12.24.03.11.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Dec 2021 03:11:26 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, cuigaosheng <cuigaosheng1@huawei.com>, 
-	Russell King - ARM Linux <linux@armlinux.org.uk>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Viresh Kumar <vireshk@kernel.org>, 
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, SoC Team <soc@kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, gongruiqi1@huawei.com, 
-	wangweiyang2@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/2] memory: drivers for v5.17
+Date: Fri, 24 Dec 2021 12:11:23 +0100
+Message-Id: <20211224111124.6097-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, Dec 22, 2021 at 10:30 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> On Wed, 22 Dec 2021 at 03:31, Linus Walleij <linus.walleij@linaro.org> wrote:
-> > On Tue, Dec 21, 2021 at 10:16 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > > I think for CPUs that can use LPAE, we want to eventually move to the 4G:4G
-> > > memory model, which in turn depends on having the kernel in vmalloc space, as
-> > > implemented by Linus Walleij in
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/log/?h=kernel-in-vmalloc-v5.14-rc1
-> >
-> > Yeah I'm still working on this series. The 4/4 split works pretty well,
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-Actually it's just kernel-in-vmalloc, 4/4 comes after that.
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-> > but it breaks KASan and I was in the process of fixing that when I left
-> > for parental leave.
-> >
-> > The reason it breaks would be related to KASan not expecting
-> > executable code in the vmalloc area, and since the shadowing
-> > algorithm is a simple pointer offset, and since we go to lengths
-> > to chisel shadow memory out of lowmem at a fixed offset from
-> > TEXT_OFFSET, we have a problem.
-> >
->
-> Vmap'ed stacks actually has a similar problem, which is why it is
-> disabled when KAsan is enabled. But this can be fixed by enabling arch
-> support for KASAN_VMALLOC, and I suspect it may address the vmap'ed
-> kernel as well.
+are available in the Git repository at:
 
-Yep after seeing the other convo on the topic I realized that this
-is indeed the same as I'm seeing. I can't disable KASAN just
-because the kernel is in VMALLOC though, so I suppose when
-I finally get back to this I have to fix KASAN_VMALLOC too
-if noone beats me to it.
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.17
 
-(It'd be great if someone could beat me to it...)
+for you to fetch changes up to de369801658a9a54759ac011af770e8c01d9db7f:
 
-Yours,
-Linus Walleij
+  Merge branch 'for-v5.17/tegra-mc' into mem-ctrl-next (2021-12-22 12:59:03 +0100)
+
+----------------------------------------------------------------
+Memory controller drivers for v5.17
+
+1. Minor improvements: Mediatek SMI, Freescale/NXP IFC, Tegra20 and
+   Tegra30.
+2. Convert Freescale/NXP IFC bindings to dtschema.
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (1):
+      memory: mtk-smi: Use ARRAY_SIZE to define MTK_SMI_CLK_NR_MAX
+
+Dmitry Osipenko (2):
+      memory: tegra30-emc: Print additional memory info
+      memory: tegra20-emc: Correct memory device mask
+
+Jason Wang (1):
+      memory: brcmstb_dpfe: fix typo in a comment
+
+Krzysztof Kozlowski (1):
+      Merge branch 'for-v5.17/tegra-mc' into mem-ctrl-next
+
+Li Yang (2):
+      dt-bindings: memory: fsl: convert ifc binding to yaml schema
+      memory: fsl_ifc: populate child devices without relying on simple-bus
+
+Rikard Falkeborn (1):
+      memory: tegra: Constify struct thermal_cooling_device_ops
+
+ .../bindings/memory-controllers/fsl/fsl,ifc.yaml   | 113 ++++++++++++++++++
+ .../bindings/memory-controllers/fsl/ifc.txt        |  82 -------------
+ drivers/memory/brcmstb_dpfe.c                      |   2 +-
+ drivers/memory/fsl_ifc.c                           |   9 ++
+ drivers/memory/mtk-smi.c                           |   3 +-
+ drivers/memory/tegra/Kconfig                       |   1 +
+ drivers/memory/tegra/tegra20-emc.c                 |   2 +-
+ drivers/memory/tegra/tegra210-emc-core.c           |   2 +-
+ drivers/memory/tegra/tegra30-emc.c                 | 131 +++++++++++++++++++--
+ 9 files changed, 248 insertions(+), 97 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/fsl/fsl,ifc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/memory-controllers/fsl/ifc.txt
