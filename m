@@ -1,139 +1,109 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=4T9+=RJ=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39E82C433EF
-	for <soc@archiver.kernel.org>; Thu, 23 Dec 2021 21:38:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7878DC433F5
+	for <soc@archiver.kernel.org>; Fri, 24 Dec 2021 04:06:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1BB0AC36AEB; Thu, 23 Dec 2021 21:38:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06149C36AE5
-	for <soc@kernel.org>; Thu, 23 Dec 2021 21:38:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1640295483;
-	bh=k6OLLpc4v5oMPKERGWUmMVAsuzVd/aL77C6y7AmNPlY=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=fkgFWiCzsLFZ+bGLNEaRcq9H0uGUAXLSLkNRUv6YS7Nbo3ggSn60LDOlPYRctj1w9
-	 9Fd8YgQK2Pf0adv7fe5qtRrDYFESYVR+uxgHMncPKGFEH9U7txzhoCM2hzoz0t7vHN
-	 BgZjwiJV3g/Q006pZ5SrLHzNFHX7tczAunmMwtvuNnSvfpUxbqJnoFCkQR8c/czuMY
-	 vqTsvQI4KAnc+bsD3Y7Opci8upCwGsngurOe0yLRuSc29oELbLm3cZUGRxcNWlsHM8
-	 8PiihL1Xgmfq2Q00V+hjPqp313giSrrEHaoU/rfjRGgKhtkDhMsBvhpYAcbBkii3OB
-	 mD07pwrZpIFcQ==
-Received: by mail-wm1-f51.google.com with SMTP id o30so1978290wms.4
-        for <soc@kernel.org>; Thu, 23 Dec 2021 13:38:02 -0800 (PST)
-X-Gm-Message-State: AOAM532vHcRqNTW75VQG0+d/TRalCMzZZP81egm0i+is/ml0fc+aQfMb
-	+DprWQ0xeAHqeEuuArmxoD1ATECTLIsbgKbL9GI=
-X-Google-Smtp-Source: ABdhPJxPFZPrr/oakrlEx7N9JQbz5u2vu6XKr4y8MJq5BeiV8EsIoS4jXpLKPzl94TvPO12nebYzBly1vbvaLt6BpnM=
-X-Received: by 2002:a1c:8013:: with SMTP id b19mr2815249wmd.35.1640295481270;
- Thu, 23 Dec 2021 13:38:01 -0800 (PST)
+	id 30799C36AEA; Fri, 24 Dec 2021 04:06:01 +0000 (UTC)
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5E9DDC36AE8
+	for <soc@kernel.org>; Fri, 24 Dec 2021 04:05:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5E9DDC36AE8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oi1-f176.google.com with SMTP id t204so5958755oie.7
+        for <soc@kernel.org>; Thu, 23 Dec 2021 20:05:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AK/GoBD4NSOHwSVqZthu2O08Jw7u+mwsxqJi3Ry3nKc=;
+        b=gq2yQoCaJnKxdj0aHEXvs8IGPBaDHeTzTaYt/ryWsKz+mIDvAu9iIBhc2ZkzWM1dOD
+         tEu2K97Is8ypqo+4uHCIyWDHFikuEd0awybqFuyTHjZE7wnwRhO2UE9ryQXiKxIKfuna
+         cqjppHyaaZXsq3bFvQROZpaikTDEru/hXH3SUQgRMUbQ1JXiw5+qJGPvOxtocEarf1Ty
+         Ie66oOBvLSZ9QlTXAcC1gqlUQ+xQGNm/iYsoWS5WzMaqaHJ0BptL1180107BLwHzx7Ad
+         uZBNx6khDhyGorIvjqLJTFeFxkGm4BVRqnw2F6ut+jL0OP4JXOozlmYqtzsB5HLe6GRL
+         RNjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AK/GoBD4NSOHwSVqZthu2O08Jw7u+mwsxqJi3Ry3nKc=;
+        b=HNDN6frbmYiavuVMTGGoAHXREdNLf8NjwAa3j4GSPvVgHrw7yFcV6cXs5ZN4aWh8m8
+         ONottSD0GAEIkr2RxQwhVfitFBMrVy2JuTz6ZvuSlIiDvJ+Ar8ozPUPJbBeoto4obmjA
+         NhMw8XwzxGfOs/JykyBo5OFaWzTYcjDG9+TIQ7wCG9tFr0eU0xYeY2Pf9oSWIOLhJpOV
+         Dwk54oYmyh6h2S1YmnFToEsPG1r0UYTBD6tmoNYOu431fAOzxg+5Sc91JO4AIf2zYdc5
+         TwRfiFXoIG3bzD8JoQM/Z0O4nG5WSTnNFvJWRM0jTiHXgk2Bmkdnn9Ryh7z+kbAdZqJj
+         Y51A==
+X-Gm-Message-State: AOAM530ZsUGK0rUK/lDyvuHu24RISjwP8sWr9KiWWnI2c2OuD1RQembm
+	F/+k28tzlFuXdWndamrlFjgy7lbHCrsg51jRak+KPg==
+X-Google-Smtp-Source: ABdhPJxQOSzC8McVfBe3KmWsuME/BKDeKWRpaj/52MKdPsPCfZWTUeKA3YUfD7+a3GmNhmxsLircXMO8+Vb1K/pQrgM=
+X-Received: by 2002:a54:4613:: with SMTP id p19mr3662521oip.162.1640318758486;
+ Thu, 23 Dec 2021 20:05:58 -0800 (PST)
 MIME-Version: 1.0
-References: <CAK8P3a0RDZpLtWjMEU1QVWSjOoqRAH6QxQ+ZQnJc8LwaV7m+JQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0RDZpLtWjMEU1QVWSjOoqRAH6QxQ+ZQnJc8LwaV7m+JQ@mail.gmail.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Thu, 23 Dec 2021 22:37:45 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1DkNq+SxXdvFnQMkH7BaNQ-=ug_XjAAD8_jw3-eX-wnQ@mail.gmail.com>
-Message-ID: <CAK8P3a1DkNq+SxXdvFnQMkH7BaNQ-=ug_XjAAD8_jw3-eX-wnQ@mail.gmail.com>
-Subject: [GIT PULL 5/5] SoC: Add support for StarFive JH7100 RISC-V SoC
-To: Linus Torvalds <torvalds@linux-foundation.org>
+References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
+ <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
+ <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com> <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
+ <CACRpkdaNv7850mOyXRMgmPf8TQxiM-C5VEkGnLfd+wvffW8FAg@mail.gmail.com> <CAMj1kXHgptq47g3mSPTKW9KMnqTH4K2Q7riBVwX4iA1V9YWYiA@mail.gmail.com>
+In-Reply-To: <CAMj1kXHgptq47g3mSPTKW9KMnqTH4K2Q7riBVwX4iA1V9YWYiA@mail.gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 24 Dec 2021 05:05:46 +0100
+Message-ID: <CACRpkdafoc_erHyfkby9X1LhkYgkBQsad=qNyXh+Tq_32zr_yg@mail.gmail.com>
+Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
+To: Ard Biesheuvel <ardb@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, cuigaosheng <cuigaosheng1@huawei.com>, 
+	Russell King - ARM Linux <linux@armlinux.org.uk>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Viresh Kumar <vireshk@kernel.org>, 
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, SoC Team <soc@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, gongruiqi1@huawei.com, 
+	wangweiyang2@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 
-The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6:
+On Wed, Dec 22, 2021 at 10:30 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+> On Wed, 22 Dec 2021 at 03:31, Linus Walleij <linus.walleij@linaro.org> wrote:
+> > On Tue, Dec 21, 2021 at 10:16 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > > I think for CPUs that can use LPAE, we want to eventually move to the 4G:4G
+> > > memory model, which in turn depends on having the kernel in vmalloc space, as
+> > > implemented by Linus Walleij in
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/log/?h=kernel-in-vmalloc-v5.14-rc1
+> >
+> > Yeah I'm still working on this series. The 4/4 split works pretty well,
 
-  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
+Actually it's just kernel-in-vmalloc, 4/4 comes after that.
 
-are available in the Git repository at:
+> > but it breaks KASan and I was in the process of fixing that when I left
+> > for parental leave.
+> >
+> > The reason it breaks would be related to KASan not expecting
+> > executable code in the vmalloc area, and since the shadowing
+> > algorithm is a simple pointer offset, and since we go to lengths
+> > to chisel shadow memory out of lowmem at a fixed offset from
+> > TEXT_OFFSET, we have a problem.
+> >
+>
+> Vmap'ed stacks actually has a similar problem, which is why it is
+> disabled when KAsan is enabled. But this can be fixed by enabling arch
+> support for KASAN_VMALLOC, and I suspect it may address the vmap'ed
+> kernel as well.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/newsoc-5.17
+Yep after seeing the other convo on the topic I realized that this
+is indeed the same as I'm seeing. I can't disable KASAN just
+because the kernel is in VMALLOC though, so I suppose when
+I finally get back to this I have to fix KASAN_VMALLOC too
+if noone beats me to it.
 
-for you to fetch changes up to 299e6f788eab0b0aef97efb29ddc6971e7d0daf3:
+(It'd be great if someone could beat me to it...)
 
-  reset: starfive-jh7100: Fix 32bit compilation (2021-12-20 13:34:00 +0100)
-
-----------------------------------------------------------------
-SoC: Add support for StarFive JH7100 RISC-V SoC
-
-This adds support for the StarFive JH7100, including the necessary
-device drivers and DT files for the BeagleV Starlight prototype
-board, with additional boards to be added later. This SoC promises
-to be the first usable low-cost platform for RISC-V.
-
-I've taken this through the SoC tree in the anticipation of adding
-a few other Arm based SoCs as well, but those did not pass the
-review in time, so it's only this one.
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      Merge tag 'jh7100-for-5.17' of https://github.com/esmil/linux
-into arm/newsoc
-
-Emil Renner Berthing (13):
-      RISC-V: Add StarFive SoC Kconfig option
-      dt-bindings: timer: Add StarFive JH7100 clint
-      dt-bindings: interrupt-controller: Add StarFive JH7100 plic
-      dt-bindings: reset: Add Starfive JH7100 reset bindings
-      reset: starfive-jh7100: Add StarFive JH7100 reset driver
-      dt-bindings: pinctrl: Add StarFive pinctrl definitions
-      dt-bindings: pinctrl: Add StarFive JH7100 bindings
-      pinctrl: starfive: Add pinctrl driver for StarFive SoCs
-      dt-bindings: serial: snps-dw-apb-uart: Add JH7100 uarts
-      serial: 8250_dw: Add StarFive JH7100 quirk
-      RISC-V: Add initial StarFive JH7100 device tree
-      RISC-V: Add BeagleV Starlight Beta device tree
-      reset: starfive-jh7100: Fix 32bit compilation
-
-Geert Uytterhoeven (4):
-      dt-bindings: clock: starfive: Add JH7100 clock definitions
-      dt-bindings: clock: starfive: Add JH7100 bindings
-      clk: starfive: Add JH7100 clock generator driver
-      dt-bindings: reset: Add StarFive JH7100 reset definitions
-
- .../bindings/clock/starfive,jh7100-clkgen.yaml     |   56 +
- .../interrupt-controller/sifive,plic-1.0.0.yaml    |    1 +
- .../bindings/pinctrl/starfive,jh7100-pinctrl.yaml  |  307 +++++
- .../bindings/reset/starfive,jh7100-reset.yaml      |   38 +
- .../bindings/serial/snps-dw-apb-uart.yaml          |    5 +
- .../devicetree/bindings/timer/sifive,clint.yaml    |    1 +
- MAINTAINERS                                        |   22 +
- arch/riscv/Kconfig.socs                            |    8 +
- arch/riscv/boot/dts/Makefile                       |    1 +
- arch/riscv/boot/dts/starfive/Makefile              |    2 +
- .../boot/dts/starfive/jh7100-beaglev-starlight.dts |  164 +++
- arch/riscv/boot/dts/starfive/jh7100.dtsi           |  230 ++++
- drivers/clk/Kconfig                                |    1 +
- drivers/clk/Makefile                               |    1 +
- drivers/clk/starfive/Kconfig                       |    9 +
- drivers/clk/starfive/Makefile                      |    3 +
- drivers/clk/starfive/clk-starfive-jh7100.c         |  689 ++++++++++
- drivers/pinctrl/Kconfig                            |   17 +
- drivers/pinctrl/Makefile                           |    1 +
- drivers/pinctrl/pinctrl-starfive.c                 | 1354 ++++++++++++++++++++
- drivers/reset/Kconfig                              |    7 +
- drivers/reset/Makefile                             |    1 +
- drivers/reset/reset-starfive-jh7100.c              |  173 +++
- drivers/tty/serial/8250/8250_dw.c                  |    3 +
- include/dt-bindings/clock/starfive-jh7100.h        |  202 +++
- include/dt-bindings/pinctrl/pinctrl-starfive.h     |  275 ++++
- include/dt-bindings/reset/starfive-jh7100.h        |  126 ++
- 27 files changed, 3697 insertions(+)
- create mode 100644
-Documentation/devicetree/bindings/clock/starfive,jh7100-clkgen.yaml
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
- create mode 100644
-Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
- create mode 100644 arch/riscv/boot/dts/starfive/Makefile
- create mode 100644 arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts
- create mode 100644 arch/riscv/boot/dts/starfive/jh7100.dtsi
- create mode 100644 drivers/clk/starfive/Kconfig
- create mode 100644 drivers/clk/starfive/Makefile
- create mode 100644 drivers/clk/starfive/clk-starfive-jh7100.c
- create mode 100644 drivers/pinctrl/pinctrl-starfive.c
- create mode 100644 drivers/reset/reset-starfive-jh7100.c
- create mode 100644 include/dt-bindings/clock/starfive-jh7100.h
- create mode 100644 include/dt-bindings/pinctrl/pinctrl-starfive.h
- create mode 100644 include/dt-bindings/reset/starfive-jh7100.h
+Yours,
+Linus Walleij
