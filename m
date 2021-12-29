@@ -1,115 +1,115 @@
-Return-Path: <SRS0=TAJ8=RM=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=DVzh=RO=gmail.com=matthias.bgg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F7FCC433EF
-	for <soc@archiver.kernel.org>; Mon, 27 Dec 2021 11:30:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA1DFC433EF
+	for <soc@archiver.kernel.org>; Wed, 29 Dec 2021 15:34:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 429CEC36AE7; Mon, 27 Dec 2021 11:30:21 +0000 (UTC)
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id A794EC36AEC; Wed, 29 Dec 2021 15:34:50 +0000 (UTC)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E3993C36AEA
-	for <soc@kernel.org>; Mon, 27 Dec 2021 11:30:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E3993C36AEA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com [209.85.208.200])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 715963F1F2
-	for <soc@kernel.org>; Mon, 27 Dec 2021 11:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1640604612;
-	bh=aWHjr9hGiX3Xkq17ZpqoeHCadE3NVT5LQHwejDb2nGg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-	b=XeRhOYM4+t0pxs2rOT4djeQD0GiEZJFp9Yv/pf/6T8lBHafJAch9Jz/eaMS8R3Z3o
-	 3jkAqP39xmGYLkQN7MXPyjdyhTycgXNebr1omCXR2om6jsL2ExtmcSbgy3KxfgFVhj
-	 hfMZ/zoK5CRuyko8nfJ+MFQvBRaXK/99CkfJabOXCyBuT8IBrh9oMPqRWsnC9kj31K
-	 384+xZVgbXyHPHYiTFv/rbTRATCkJb1l7PeTg3ZgDf3m5cv2njXnMIhc066vnCSQoW
-	 hF2GQXH3ehJkXBs6dyW3NgvPNgJDEvxAnGfUQsUDbb6/auEJjr86m8VjudZOtIyFls
-	 P/DjnKj4ygAkQ==
-Received: by mail-lj1-f200.google.com with SMTP id d12-20020a05651c088c00b0022d989d91caso3905471ljq.20
-        for <soc@kernel.org>; Mon, 27 Dec 2021 03:30:12 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id C91BBC36AE7;
+	Wed, 29 Dec 2021 15:34:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C91BBC36AE7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f43.google.com with SMTP id a9so45066341wrr.8;
+        Wed, 29 Dec 2021 07:34:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WYr35naI3hcDek70Q9WmEYk39oeQb3bTtyy8jRSZRMg=;
+        b=CsUCt033ScNlqI8qnWMAo032e43J/hYsrt5/Dr5cMalmTKyaaVzE9RdxURfnmH9Xwl
+         0FAZ4KPXBbbwtG2hkNvXZGqa2GncCNOfRd6e4u8u2j2JDpuCpQ2z1HCLhQdD/+RIKRcK
+         5fuEGlR8BIPNtwg2IgxHrPTUVVTUpPdKWzMkYQoPduuSBKTeFPKK28Y5sPHSUYlTGBCi
+         MggLztuJviQnYGVUd2BPgIOQzzDvwHXjukmOvUUBwQ7tE8wxomXHtIz1UhIUYH+/8Ds5
+         unJ886dvqKNEncURnoxGO1P/qfxNW294uheELPlvMOzfjvIpOlvBJbVUVmLA4s3aMlIF
+         Faiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=aWHjr9hGiX3Xkq17ZpqoeHCadE3NVT5LQHwejDb2nGg=;
-        b=CfP6vRbiHVQ0ZcW9c2o8C73kAepEXDjfdW7OH4/02V4hj+kIpn7CALcjmILOnOuMQZ
-         UKXSx7a1v+aN+Z25yn/vPpIvenriaYWm0ZC1L3m681ojj+Gpzf6zp+fPqPZ9AWaXxLWb
-         2lrHFf0pY5wqHJuy6WlPuX6t5XHKtaZ+BQmui4wiJT5pYkkjDYEoyr8HIUtcN/jU9FYh
-         TmnJqKGaCCEr3q7bxiGCVa70Prv5wgFlYKGJAZ+YXkKmiA+9ET41YoPUMv1xy1cB/omR
-         28glzgAyu2UAE3fi5dBXEvQ+6sPcnXSnEIdGzQDTHYXo6QYuZiVlHgEon15nIVSoDkdV
-         G9WA==
-X-Gm-Message-State: AOAM531PbzIJObHyx2PQk/4qg+SSe8dsGc31txtW6NU8QyLdYKcfnYC1
-	OM1VhJR95OxtFkeKucebmU9QCeQUPaQYLYJ7jRleCdU3AxTroFQtXWOzfRCINebGF36Erx/+7Kt
-	kMTkfMT1gdbEYSLFgw/TWg/Y=
-X-Received: by 2002:a05:6512:b1f:: with SMTP id w31mr15148511lfu.240.1640604609992;
-        Mon, 27 Dec 2021 03:30:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzqmovMOAurIAVtXtVAkod909IMEuDYkOk35Wo6mVXh3Ui2RjRndjpYwT1yH9TfhijrlWPqnA==
-X-Received: by 2002:a05:6512:b1f:: with SMTP id w31mr15148503lfu.240.1640604609760;
-        Mon, 27 Dec 2021 03:30:09 -0800 (PST)
-Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id s10sm1623075lfr.45.2021.12.27.03.30.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Dec 2021 03:30:09 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
-Date: Mon, 27 Dec 2021 12:29:59 +0100
-Message-Id: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        bh=WYr35naI3hcDek70Q9WmEYk39oeQb3bTtyy8jRSZRMg=;
+        b=o+zFETDHvtbL4fOANRyWhrEDITwwuV2Nd8nmiVsman9HGWdtvOPKqTafe0sU/PVW9n
+         uSAhqlP7qlNVb9fh6Co+azopvzthexMbyISuG4k8hTOvaohoZFbW0E5f4NPEITFuKIBC
+         FUJffKtZkgmcoBNRiBTTYmnzEbe6461cKn07NCYXevslrldT3Qu+yPR53bNOP3HxuXMS
+         HyAR8xqh/hER6QO91JYOKrpR7D3IoXCdCIgNr0fvifstSTsC4ZhTStK0fjYo+KbqXDpi
+         B04fxpJLUYGSZ9zMCguOL1JEBIDe9bGm4XqRPPw0zox7qDURy4To6f5Q9/GAAC/rySVc
+         FNvg==
+X-Gm-Message-State: AOAM530W0uRG3wYHiDo2KBsrFGmqfVKm1TPwVzlSwGZIhMf2GqeuvTcZ
+	a466eaMktM40eXcdt3ZetLs=
+X-Google-Smtp-Source: ABdhPJzR7W1Kcy+/Au2+qJS9Ipa/1Z1BmQh+8UXdbyDF0Tq8MQhNpDDVMosskN43on2rB0JNm0gQ6Q==
+X-Received: by 2002:a05:6000:18ae:: with SMTP id b14mr20303107wri.358.1640792088063;
+        Wed, 29 Dec 2021 07:34:48 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.161.251])
+        by smtp.gmail.com with ESMTPSA id s10sm22047103wmr.30.2021.12.29.07.34.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Dec 2021 07:34:47 -0800 (PST)
+Message-ID: <9b16c1c9-7fcb-b717-7dcb-b911dd39a5a2@gmail.com>
+Date: Wed, 29 Dec 2021 16:29:43 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [GIT PULL] arm64: dts: updates for v5.17
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>, Matthias Brugger <mbrugger@suse.com>
+List-Id: <soc.lore.kernel.org>
+Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+ "moderated list:ARM/Mediatek SoC support"
+ <linux-mediatek@lists.infradead.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Ben Tseng <ben.tseng@mediatek.com>, Fabien Parent <fparent@baylibre.com>,
+ Hsin-Yi Wang <hsinyi@chromium.org>, Prashant Malani <pmalani@chromium.org>,
+ Sam Shih <sam.shih@mediatek.com>, Seiya Wang <seiya.wang@mediatek.com>,
+ Tinghan Shen <tinghan.shen@mediatek.com>
+References: <0d05e8b6-c56f-bad7-00c1-44682cedb38f@suse.com>
+ <CAK8P3a1DaHnf0QOMjuvTYGeUttUNkBLhFu0b-43jBAa0bHtLFw@mail.gmail.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <CAK8P3a1DaHnf0QOMjuvTYGeUttUNkBLhFu0b-43jBAa0bHtLFw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+Hi Arnd,
 
-Second pull with DTS for ARM64, on top of previous pull.
+On 20/12/2021 17:18, Arnd Bergmann wrote:
+> On Sat, Dec 18, 2021 at 9:42 AM Matthias Brugger <mbrugger@suse.com> wrote:
+>>
+>> Hi Arnd and Olof,
+>>
+>> Please take a look on the below patches for aarch64 based MediaTek boards.
+>> In this round we add support for the mt8183 based Acer Crhomebook 314, as well
+>> as we add support to several SKUs for mt8183 based Chromebooks.
+>> Apart from that we add basic support to the mt7986 in both variants (mt7986a,
+>> mt7986b). The difference between the both SoCs are the pin-controller capabilities.
+>>
+>> Hope you are fine with this pull request.
+> 
+> I've pulled both tags, but I have two minor comments:
+> 
+> - please put "mediatek" into the subject, that helps when looking at
+> the pull requests
+>    with pwclient, which does not show the author by default
+> 
 
-Best regards,
-Krzysztof
+I did this pull request with a lot of time pressure and forgot about it. My 
+apologies, I'll try to not forget next time.
 
+> - I was expecting you to send a branch for the new EN7523 SoC as well. Did that
+>    end up not making it in time?
+> 
 
-The following changes since commit 51b1a5729469cef57a3c97aa014aa6e1d2b8d864:
+As I have seen, in the meantime you reviewed some parts yourself. I took the 
+first two patches in my tree, but we should coordinate for the rest. If  you 
+want to take it through the SOC tree or if I should take it through the mediatek 
+tree. As Airoha is a subsidiary of MediaTek, I suppose in the long run, you want 
+it do be part of the Mediatek tree, correct?
 
-  dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850 (2021-12-20 10:35:32 +0100)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.17-2
-
-for you to fetch changes up to a1828d772e0738c30a383a7d335aded2f2baf908:
-
-  arm64: dts: exynos: Add initial E850-96 board support (2021-12-22 12:31:13 +0100)
-
-----------------------------------------------------------------
-Samsung DTS ARM64 changes for v5.17, part two
-
-Add initial Exynos850 support and WinLink E850-96 board using it.
-
-----------------------------------------------------------------
-Sam Protsenko (2):
-      arm64: dts: exynos: Add initial Exynos850 SoC support
-      arm64: dts: exynos: Add initial E850-96 board support
-
- arch/arm64/boot/dts/exynos/Makefile               |   1 +
- arch/arm64/boot/dts/exynos/exynos850-e850-96.dts  | 195 ++++++
- arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi | 643 ++++++++++++++++++
- arch/arm64/boot/dts/exynos/exynos850.dtsi         | 759 ++++++++++++++++++++++
- 4 files changed, 1598 insertions(+)
- create mode 100644 arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
- create mode 100644 arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/exynos/exynos850.dtsi
+Regards,
+Matthias
