@@ -4,21 +4,21 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66455C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93296C4332F
 	for <soc@archiver.kernel.org>; Sat,  1 Jan 2022 20:27:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2B24BC36AF4; Sat,  1 Jan 2022 20:27:31 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+	id 56CB7C36AED; Sat,  1 Jan 2022 20:27:31 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CF828C36AED;
+	by smtp.kernel.org (Postfix) with ESMTPS id EEC9BC36AE9;
 	Sat,  1 Jan 2022 20:27:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CF828C36AED
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EEC9BC36AE9
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
 Received: from localhost.localdomain ([37.4.249.169]) by
  mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MGA0o-1nBOsJ3wMO-00GbrR; Sat, 01 Jan 2022 21:27:16 +0100
+ id 1MfZDK-1mSCEf2Wfw-00g13p; Sat, 01 Jan 2022 21:27:17 +0100
 From: Stefan Wahren <stefan.wahren@i2se.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	Florian Fainelli <f.fainelli@gmail.com>,
@@ -44,45 +44,48 @@ Cc: Ray Jui <rjui@broadcom.com>,
 	brcm80211-dev-list.pdl@broadcom.com,
 	linux-rpi-kernel@lists.infradead.org,
 	Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH RFC 0/4] ARM: dts: Add Raspberry Pi Zero 2 W support
-Date: Sat,  1 Jan 2022 21:26:48 +0100
-Message-Id: <1641068812-5851-1-git-send-email-stefan.wahren@i2se.com>
+Subject: [PATCH RFC 2/4] dt-bindings: arm: bcm2835: Add Raspberry Pi Zero 2 W
+Date: Sat,  1 Jan 2022 21:26:50 +0100
+Message-Id: <1641068812-5851-3-git-send-email-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.7.4
-X-Provags-ID: V03:K1:IFSO4SUR/GIS5KxCX2rqPx8bY+J5e6YDOUTd/t3oeHG3mWoStUS
- AX9YcJnrfYrz4qtPGFGKHCv+7TU0r7i+BCJ0vHJR4hO8aCnWTQM+7lQ54tAHw/PDBw6eOUb
- G5giL64OquBD3UCz0yfE3ba43et33AA4GJaVYkId52sxzvofn4udgAMoRbOyzciF+0nZeo3
- f5i6sNZOpDTXNG1N2EQjA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:RMBwnFZyx5g=:PTRizSkKrKbmSWzLVZGc6P
- ZcSXAb1FX2HHMdsC8kWz4h6/l1iypMbdizOj6zbg1IpaPhMQEpXai+9g6DqObTG4EkZJxqkMr
- UuDC88WT7yma8TzB6nB67trJXLk+E/mn/n+74NaZTTSMHzUIxS7Lx4+ZDFjr0Ju4wYig1vDnU
- U57qD0hz7bMqPoobFfJF21ROv/w2v8LiQ7a/VcNiy+rolUHXxYuGSHh/Q0WK6yVeLt8mLc5TG
- EId8GyC6kX3K80nFI5cmQkMrz2W/dI88sd+wUTmw30nVqIS/mDiNa2z60mdaucaXJ+uzx8EYk
- iH1Jxv69x7iwISlvH1LH51No8D1oagBhr1J7AeQDGa5viPV5PtmdLSbWNhMy7qAHMUQmwFn0V
- a5HTNwnZmaFtPwLQDIiUiY529izbN1O7B9AxnZlEw+dsLOgg3fbYfXR92TnzxoiAZCoD6TFcU
- 0pwbvEI3XSwMECn3JTB22MdcPkubVlbhOSOJRWt4HoFCqC19eVXjaozI1VHgyEM2KFnPWy1sz
- KwhLyuIfxWsiWcfSMkLKZ3e81v9784HCvAU6u6Kkagct0wc9ewjfjEGyquxzlWdrrBFRNi3c2
- girp8TbUczpJxHZGvogr7aoiSPoRXLusoiICbhamxU6zMztUy/70MA69HKdxKh6H/Y4k2PN5l
- 3fRo5ra8jSiwpZAH90Ke2WBkGMwyEp405iWhohDw51vG+camf5f9o2UokUq41AqqQ7H6w6jTY
- EF2f0mI6k6GsMKWl
+In-Reply-To: <1641068812-5851-1-git-send-email-stefan.wahren@i2se.com>
+References: <1641068812-5851-1-git-send-email-stefan.wahren@i2se.com>
+X-Provags-ID: V03:K1:/F4aUJqeYItmMr5Xkbt5w/NV6TF/mg6jj6khyL26kHagOjvPDzP
+ 67MAt3RXnAhWGKDz2F5r+Mumr6w6YWmsjPENlkHL0oZeaJ4/vLM46hrTuhGs/FlkavSH9RS
+ VypmT7/GMis7HiXHC8JpNcpevy0NY+Sc2460HfzvH7axSkTfQIBI6PzDEubck6CQMBFlFWr
+ YNrM7uqzvnfIUTyiJ1U7w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:sENR6rDv6vs=:KM0QArLvRm8xCG/YV5DJ+j
+ WKvsTzR1GhriCC9RkdoecD9EiPduo/yLxOuQ6WxZhBWiybf5QJmrsIKzJ4RIRq47lWHKJ6q9p
+ 24sblnP9bAnruQHYhx+QzBw9e7MEZ7VbCR6gG0DH5rAXU6OXoQOjqlxjptk68KS0eDPjlkV4w
+ /XsHd6anhRI5q17homEATDxgAwMgoY2Xmav5l7c62/Tn16TVrtzEM9Aiavp1zw62OLQCvcR5q
+ dfKrGQcYF6rBMzPU2glQPuhyCN0ZK2cZih4pD1Tnsoq63CfVwAHTyIDO8/bsJYGtE+sqdxDG+
+ 6zLS1fvqb5q/Xs1Trqt9mdc1T0xMh425g2CaRQR3AhHioVhXc2fhaEeQVqq0iNMjUs1m2PMmZ
+ rnkW42j8nGjgXVJAU2hGI9LU32Ifnxzh1W2CrGDTKow+4VZ2kiHZ1xQIEgfiTS7r1oK99FakH
+ zDoCu1R4hctbpmNstz8sCmUvOMmgjoTZIqoFv9Nj7jGuNIf2nY1c9HCrVEHcYsEXJQEb5dNQG
+ /Gq3vav6vapnii76U83wr5cfJf/teStStkLN69dgzyu5REL1BqiREIQX8+56gPcPKcUM9gj3w
+ 9Lix466O+nOLnCIkMvuP7O82LL+oR05Z7e5+loJcBveMRbqyKh1c7FBFGI7HWjeW7yg0AqbrJ
+ AdtamXem5DsSButYJs8zksLnqfysPgkzfCp8z2/qHnaIm8SMZaJGMLu2a672hGax11UeWcNcl
+ 6TaFHZQgiVnLg47d
 
-This small series tries to add support for the Raspberry Pi Zero 2 W.
+Add the Raspberry Pi Zero 2 W to DT schema.
 
-Stefan Wahren (4):
-  brcmfmac: use separate firmware for 43430 revision 4
-  dt-bindings: arm: bcm2835: Add Raspberry Pi Zero 2 W
-  ARM: dts: Add Raspberry Pi Zero 2 W
-  arm64: dts: broadcom: Add reference to RPi Zero 2 W
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../devicetree/bindings/arm/bcm/bcm2835.yaml       |   1 +
- arch/arm/boot/dts/Makefile                         |   1 +
- arch/arm/boot/dts/bcm2837-rpi-zero-2-w.dts         | 136 +++++++++++++++++++++
- arch/arm64/boot/dts/broadcom/Makefile              |   3 +-
- .../boot/dts/broadcom/bcm2837-rpi-zero-2-w.dts     |   2 +
- .../wireless/broadcom/brcm80211/brcmfmac/sdio.c    |   4 +-
- 6 files changed, 145 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm/boot/dts/bcm2837-rpi-zero-2-w.dts
- create mode 100644 arch/arm64/boot/dts/broadcom/bcm2837-rpi-zero-2-w.dts
-
+diff --git a/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml b/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml
+index 5dc4824..8051a75 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml
+@@ -51,6 +51,7 @@ properties:
+               - raspberrypi,3-model-b-plus
+               - raspberrypi,3-compute-module
+               - raspberrypi,3-compute-module-lite
++              - raspberrypi,model-zero-2-w
+           - const: brcm,bcm2837
+ 
+ additionalProperties: true
 -- 
 2.7.4
 
