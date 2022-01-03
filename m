@@ -1,104 +1,392 @@
-Return-Path: <SRS0=LxC5=RR=i2se.com=stefan.wahren@kernel.org>
+Return-Path: <SRS0=Esmq=RT=microchip.com=Kavyasree.Kotagiri@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7D49C4321E
-	for <soc@archiver.kernel.org>; Sat,  1 Jan 2022 20:27:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99A95C433F5
+	for <soc@archiver.kernel.org>; Mon,  3 Jan 2022 12:50:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C1D57C36AE9; Sat,  1 Jan 2022 20:27:36 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+	id 54425C36AF0; Mon,  3 Jan 2022 12:50:28 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D3404C36AED;
-	Sat,  1 Jan 2022 20:27:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D3404C36AED
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
-Received: from localhost.localdomain ([37.4.249.169]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1Mhl4Q-1mQ0NL0gWe-00do8f; Sat, 01 Jan 2022 21:27:19 +0100
-From: Stefan Wahren <stefan.wahren@i2se.com>
-To: Rob Herring <robh+dt@kernel.org>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	Arend van Spriel <aspriel@gmail.com>,
-	Franky Lin <franky.lin@broadcom.com>,
-	Hante Meuleman <hante.meuleman@broadcom.com>,
-	Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-	Wright Feng <wright.feng@infineon.com>,
-	Chung-hsien Hsu <chung-hsien.hsu@infineon.com>,
-	Kalle Valo <kvalo@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id AF600C36AEF;
+	Mon,  3 Jan 2022 12:50:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AF600C36AEF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1641214226; x=1672750226;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=MlKEO7xaK9GBovwsJYv/St1/zu1UD2MCJ8JxZRficp0=;
+  b=TruVDsvEKWRAil6BlnLqq4t+wM9CNVMQK7rbMCVvQI7J/n7TBPTnIe0D
+   mdGsF5sQGr9TUL41oIDXd4NK1PeNHbPXophcPfdfVMeSvkQTeWAQ+wOqR
+   ORPqqAYKs6rizaZ/kaCvvzus3DR18HJn30xj2p3yTPsjvinxFOeALIWVy
+   WNs4GWonzkf+qPcyysTY4WPuun9ABBuCi6RuWiZ4Fsrf2ekXL472uMINP
+   bFxmZkPLDaPC+sSYsHlBH+EJwVsuJdPv4A552aaMHUlGzg9BStO3Fc+je
+   rfOll19Y6JBk/ubsRx2gPIMAXNVt6F0l+clGjWn/8C6cncCbr4drPU/TI
+   w==;
+IronPort-SDR: 404Hxl+S8gpuNlS2Nt6thyRtjZdmS7u9CTS/T61gUnbEax1XU1C9N8JEIZb0cAImv1KU2hcQoK
+ nGeXPbFWUk4myOVtxNj0yVMKWKkUnM62OM8mj/XkebdYW5L447DPZ26+waJn+vWAx70akFR6X4
+ JEX00pfA5EKDodlcl0kat/fg2evcXI2sAXIisDP2RZDN7B/884yHP2eBO1jALmo66dhICwpH72
+ /g4k7Gt/sDqvne05eQ9jALdI8tSRhBYrXmzmGlbYNQpfsliFXabE+htHIFF6eTcUNRdP+RXeKZ
+ i7bRjBbnTAkhK0sOAcwrFrMd
+X-IronPort-AV: E=Sophos;i="5.88,257,1635231600"; 
+   d="scan'208";a="148374825"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jan 2022 05:49:16 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 3 Jan 2022 05:49:16 -0700
+Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 3 Jan 2022 05:49:13 -0700
+From: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+To: <arnd@arndb.de>, <olof@lixom.net>, <robh+dt@kernel.org>,
+	<nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	bcm-kernel-feedback-list@broadcom.com,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Phil Elwell <phil@raspberrypi.com>,
-	devicetree@vger.kernel.org,
-	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-wireless@vger.kernel.org,
-	brcm80211-dev-list.pdl@broadcom.com,
-	linux-rpi-kernel@lists.infradead.org,
-	Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH RFC 4/4] arm64: dts: broadcom: Add reference to RPi Zero 2 W
-Date: Sat,  1 Jan 2022 21:26:52 +0100
-Message-Id: <1641068812-5851-5-git-send-email-stefan.wahren@i2se.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1641068812-5851-1-git-send-email-stefan.wahren@i2se.com>
-References: <1641068812-5851-1-git-send-email-stefan.wahren@i2se.com>
-X-Provags-ID: V03:K1:VUyfbNXMUTZ28FWicxIVh7Ab5XomgIvGNewGUykBBN+BdaVpTKF
- fd7K7/AnwSw54Q0jUcXxTbOIfhv8T8RjrbjfKAia1quN1RBqi/XZmgrjgFjAv75LD9yX+JF
- INqg6VlqwzPXQ6PdGlSM+QDKzN469ASPClUj3ix89M+Tj3J+wz4Pe6y206R7USzYomvTcYp
- g2ArOhhnuZE0AWPDLKlPg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:RTIGgM0LfcE=:DCJ33IC5XicleX2NVL6AhH
- kNbu+Pd9g618cFxUyXyMLcHmaZIwOq7pmcDK+evfa+u7n+xIl98nIu0pISkkoU3pG/mo6GkW+
- UGotZI8fuaYN293E3gEBovMt6Lldi/FTEW/dLJ+kZTbEJnuCIzPplORrkc7XUjCp5j83A4L3X
- kcPIfuDPP7D3s6Rsex2UpbZAl9X+p3xrqdmDwrk+aGTXUtg9ZPGWGt0NNN3Dk+p7R3zga5jmz
- 0joFRiWdgGOOAQmczHkayjlOc1xzK3j/3sCNjW+6MczECngs7dc9A4vSLJNCkTE/XDdgLvXrN
- v0Vdo+Iyn3x3XtyPFDm1J4dGB1zZhTFV3UZfcfgFgF8cBGLH4fW0WulSQCECO0pvMVG4Q3Z8J
- 67XC11Vz6hQd/fiFIfBOQEgPWSzQV16f2EU7zAQ7DZkC+hYLDk1hJuy92es+9c1DoVGt4nRse
- zwUHN2WY3McuxFRzkR+YuyjhJ7+y5Ys7QM1zLZ8g+URkrFCMEHDcJUTzl2sOB5QzMccLO/rju
- cOsOjy0WIf0J3mLe5tCWZtDUA4pwbJnFlKeh3MJi1bJKJsybK7NuScwDWMKKL2SOiNlhTmkZl
- vSN437/oVlR/GmxiqXmlvQMEd94JzHalBaAUkQZ4V0EFnceV0cV9p4zET4JdmqGtPAQ8lGBV1
- vZ6nGNlFEdLsg5Vgl1vyVHHHy7sUhmjlqBPnNfIY3kN5aE4RsYV9KE5lluqkwPuID32XktJ0B
- sWa0rSu5ctgsjFpn
+CC: <soc@kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<Manohar.Puri@microchip.com>, <Kavyasree.Kotagiri@microchip.com>
+Subject: [PATCH] ARM: dts: add DT for lan966x SoC and 2-port board pcb8291
+Date: Mon, 3 Jan 2022 18:18:57 +0530
+Message-ID: <20220103124857.24351-1-kavyasree.kotagiri@microchip.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
 
-This adds a reference to the dts of the Raspberry Pi Zero 2 W,
-so we don't need to maintain the content in arm64.
+This patch adds basic DT for Microchip lan966x SoC and associated board
+pcb8291(2-port EVB). Adds peripherals required to allow booting: IRQs,
+clocks, timers, memory, flexcoms, GPIOs. Also adds other peripherals like
+crypto(AES,SHA), DMA and watchdog.
 
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
 ---
- arch/arm64/boot/dts/broadcom/Makefile                 | 3 ++-
- arch/arm64/boot/dts/broadcom/bcm2837-rpi-zero-2-w.dts | 2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/boot/dts/broadcom/bcm2837-rpi-zero-2-w.dts
+ arch/arm/boot/dts/Makefile            |   2 +
+ arch/arm/boot/dts/lan966x.dtsi        | 235 ++++++++++++++++++++++++++
+ arch/arm/boot/dts/lan966x_pcb8291.dts |  55 ++++++
+ 3 files changed, 292 insertions(+)
+ create mode 100644 arch/arm/boot/dts/lan966x.dtsi
+ create mode 100644 arch/arm/boot/dts/lan966x_pcb8291.dts
 
-diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
-index c688203..5082fcd 100644
---- a/arch/arm64/boot/dts/broadcom/Makefile
-+++ b/arch/arm64/boot/dts/broadcom/Makefile
-@@ -5,7 +5,8 @@ dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
- 			      bcm2837-rpi-3-a-plus.dtb \
- 			      bcm2837-rpi-3-b.dtb \
- 			      bcm2837-rpi-3-b-plus.dtb \
--			      bcm2837-rpi-cm3-io3.dtb
-+			      bcm2837-rpi-cm3-io3.dtb \
-+			      bcm2837-rpi-zero-2-w.dtb
- 
- subdir-y	+= bcm4908
- subdir-y	+= northstar2
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2837-rpi-zero-2-w.dts b/arch/arm64/boot/dts/broadcom/bcm2837-rpi-zero-2-w.dts
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 0de64f237cd8..dc1bd216ed58 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -723,6 +723,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
+ dtb-$(CONFIG_SOC_IMX7ULP) += \
+ 	imx7ulp-com.dtb \
+ 	imx7ulp-evk.dtb
++dtb-$(CONFIG_SOC_LAN966) += \
++	lan966x_pcb8291.dtb
+ dtb-$(CONFIG_SOC_LS1021A) += \
+ 	ls1021a-moxa-uc-8410a.dtb \
+ 	ls1021a-qds.dtb \
+diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
 new file mode 100644
-index 0000000..307ae69
+index 000000000000..7e56394b036f
 --- /dev/null
-+++ b/arch/arm64/boot/dts/broadcom/bcm2837-rpi-zero-2-w.dts
-@@ -0,0 +1,2 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "arm/bcm2837-rpi-zero-2-w.dts"
++++ b/arch/arm/boot/dts/lan966x.dtsi
+@@ -0,0 +1,235 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * lan966x.dtsi - Device Tree Include file for Microchip LAN966x family SoC
++ *
++ * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
++ *
++ * Author: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
++ *
++ */
++
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/mfd/atmel-flexcom.h>
++#include <dt-bindings/dma/at91.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/clock/microchip,lan966x.h>
++
++/ {
++	model = "Microchip LAN966x family SoC";
++	compatible = "microchip,lan966x";
++	interrupt-parent = <&gic>;
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a7";
++			clock-frequency = <600000000>;
++			reg = <0x0>;
++		};
++	};
++
++	memory@60000000 {
++		device_type = "memory";
++		reg = <0x60000000 0x40000000>;  /* 1GB */
++	};
++
++	clocks {
++		sys_clk: sys_clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <162500000>;
++		};
++
++		cpu_clk: cpu_clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <600000000>;
++		};
++
++		ddr_clk: ddr_clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <300000000>;
++		};
++
++		nic_clk: nic_clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <200000000>;
++		};
++	};
++
++	clks: clock-controller@e00c00a8 {
++		compatible = "microchip,lan966x-gck";
++		#clock-cells = <1>;
++		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
++		clock-names = "cpu", "ddr", "sys";
++		reg = <0xe00c00a8 0x38>;
++	};
++
++	timer {
++		compatible = "arm,armv7-timer";
++		interrupt-parent = <&gic>;
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
++		clock-frequency = <37500000>;
++		arm,cpu-registers-not-fw-configured;
++	};
++
++	soc {
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		flx0: flexcom@e0040000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0040000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM0>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0040000 0x800>;
++			status = "disabled";
++		};
++
++		flx1: flexcom@e0044000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0044000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM1>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0044000 0x800>;
++			status = "disabled";
++		};
++
++		trng: trng@e0048000 {
++			compatible = "atmel,at91sam9g45-trng";
++			reg = <0xe0048000 0x100>;
++			clocks = <&nic_clk>;
++			status = "disabled";
++		};
++
++		aes: aes@e004c000 {
++			compatible = "atmel,at91sam9g46-aes";
++			reg = <0xe004c000 0x100>;
++			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
++			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
++			dma-names = "rx", "tx";
++			clocks = <&nic_clk>;
++			clock-names = "aes_clk";
++		};
++
++		flx2: flexcom@e0060000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0060000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM2>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0060000 0x800>;
++			status = "disabled";
++		};
++
++		flx3: flexcom@e0064000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0064000 0x100>,
++			      <0xe2004180 0x8>;
++			clocks = <&clks GCK_ID_FLEXCOM3>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0064000 0x800>;
++			status = "disabled";
++		      };
++
++		dma0: dma-controller@e0068000 {
++			compatible = "microchip,sama7g5-dma";
++			reg = <0xe0068000 0x1000>;
++			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
++			#dma-cells = <1>;
++			clocks = <&nic_clk>;
++			clock-names = "dma_clk";
++			status = "okay";
++		};
++
++		sha: sha@e006c000 {
++			compatible = "atmel,at91sam9g46-sha";
++			reg = <0xe006c000 0xec>;
++			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dma0 AT91_XDMAC_DT_PERID(14)>;
++			dma-names = "tx";
++			clocks = <&nic_clk>;
++			clock-names = "sha_clk";
++		};
++
++		flx4: flexcom@e0070000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0070000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM4>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0070000 0x800>;
++			status = "disabled";
++		};
++
++		timer0: timer@e008c000 {
++			compatible = "snps,dw-apb-timer";
++			reg = <0xe008c000 0x400>;
++			clocks = <&nic_clk>;
++			clock-names = "timer";
++			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
++		};
++
++		watchdog: watchdog@e0090000 {
++			compatible = "snps,dw-wdt";
++			reg = <0xe0090000 0x1000>;
++			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&nic_clk>;
++		};
++
++		can0: can@e081c000 {
++			compatible = "bosch,m_can";
++			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
++			reg-names = "m_can", "message_ram";
++			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "int0", "int1";
++			clocks = <&clks GCK_ID_MCAN0>, <&clks GCK_ID_MCAN0>;
++			clock-names = "hclk", "cclk";
++			assigned-clocks = <&clks GCK_ID_MCAN0>;
++			assigned-clock-rates = <40000000>;
++			bosch,mram-cfg = <0x0 0 0 64 0 0 32 32>;
++			status = "disabled";
++		};
++
++		gpio: pinctrl@e2004064 {
++			compatible = "microchip,lan966x-pinctrl";
++			reg = <0xe2004064 0xb4>,
++			    <0xe2010024 0x138>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-ranges = <&gpio 0 0 78>;
++			interrupt-controller;
++			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
++			#interrupt-cells = <2>;
++		};
++
++		gic: interrupt-controller@e8c11000 {
++			compatible = "arm,gic-400", "arm,cortex-a7-gic";
++			#interrupt-cells = <3>;
++			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-controller;
++			reg = <0xe8c11000 0x1000>,
++			      <0xe8c12000 0x2000>,
++			      <0xe8c14000 0x2000>,
++			      <0xe8c16000 0x2000>;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/lan966x_pcb8291.dts b/arch/arm/boot/dts/lan966x_pcb8291.dts
+new file mode 100644
+index 000000000000..cd0454a795e7
+--- /dev/null
++++ b/arch/arm/boot/dts/lan966x_pcb8291.dts
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * lan966x_pcb8291.dts - Device Tree file for PCB8291
++ */
++/dts-v1/;
++#include "lan966x.dtsi"
++
++/ {
++	model = "Microchip EVB - LAN9662";
++	compatible = "microchip,lan9662-pcb8291", "microchip,lan9662", "microchip,lan966";
++};
++
++&gpio {
++	fc_shrd7_pins: fc_shrd7-pins {
++		pins = "GPIO_49";
++		function = "fc_shrd7";
++	};
++
++	fc_shrd8_pins: fc_shrd8-pins {
++		pins = "GPIO_54";
++		function = "fc_shrd8";
++	};
++
++	fc3_b_pins: fcb3-spi-pins {
++		/* SCK, RXD, TXD */
++		pins = "GPIO_51", "GPIO_52", "GPIO_53";
++		function = "fc3_b";
++	};
++};
++
++&can0 {
++	status = "okay";
++};
++
++&flx3 {
++	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
++	status = "okay";
++
++	usart0: serial@200 {
++		compatible = "atmel,at91sam9260-usart";
++		reg = <0x200 0x200>;
++		interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&nic_clk>;
++		clock-names = "usart";
++		pinctrl-0 = <&fc3_b_pins>, <&fc_shrd7_pins>, <&fc_shrd8_pins>;
++		pinctrl-names = "default";
++		atmel,fifo-size = <32>;
++		status = "okay";
++	};
++};
++
++&trng {
++	status = "okay";
++};
++
 -- 
-2.7.4
+2.17.1
 
