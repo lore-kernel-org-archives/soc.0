@@ -1,392 +1,173 @@
-Return-Path: <SRS0=Esmq=RT=microchip.com=Kavyasree.Kotagiri@kernel.org>
+Return-Path: <SRS0=oBwP=RT=microchip.com=Tudor.Ambarus@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99A95C433F5
-	for <soc@archiver.kernel.org>; Mon,  3 Jan 2022 12:50:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD0CEC433F5
+	for <soc@archiver.kernel.org>; Mon,  3 Jan 2022 13:42:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 54425C36AF0; Mon,  3 Jan 2022 12:50:28 +0000 (UTC)
+	id 7A686C36AF3; Mon,  3 Jan 2022 13:42:43 +0000 (UTC)
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AF600C36AEF;
-	Mon,  3 Jan 2022 12:50:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AF600C36AEF
+	by smtp.kernel.org (Postfix) with ESMTPS id 951D2C36AEB;
+	Mon,  3 Jan 2022 13:42:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 951D2C36AEB
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1641214226; x=1672750226;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=MlKEO7xaK9GBovwsJYv/St1/zu1UD2MCJ8JxZRficp0=;
-  b=TruVDsvEKWRAil6BlnLqq4t+wM9CNVMQK7rbMCVvQI7J/n7TBPTnIe0D
-   mdGsF5sQGr9TUL41oIDXd4NK1PeNHbPXophcPfdfVMeSvkQTeWAQ+wOqR
-   ORPqqAYKs6rizaZ/kaCvvzus3DR18HJn30xj2p3yTPsjvinxFOeALIWVy
-   WNs4GWonzkf+qPcyysTY4WPuun9ABBuCi6RuWiZ4Fsrf2ekXL472uMINP
-   bFxmZkPLDaPC+sSYsHlBH+EJwVsuJdPv4A552aaMHUlGzg9BStO3Fc+je
-   rfOll19Y6JBk/ubsRx2gPIMAXNVt6F0l+clGjWn/8C6cncCbr4drPU/TI
-   w==;
-IronPort-SDR: 404Hxl+S8gpuNlS2Nt6thyRtjZdmS7u9CTS/T61gUnbEax1XU1C9N8JEIZb0cAImv1KU2hcQoK
- nGeXPbFWUk4myOVtxNj0yVMKWKkUnM62OM8mj/XkebdYW5L447DPZ26+waJn+vWAx70akFR6X4
- JEX00pfA5EKDodlcl0kat/fg2evcXI2sAXIisDP2RZDN7B/884yHP2eBO1jALmo66dhICwpH72
- /g4k7Gt/sDqvne05eQ9jALdI8tSRhBYrXmzmGlbYNQpfsliFXabE+htHIFF6eTcUNRdP+RXeKZ
- i7bRjBbnTAkhK0sOAcwrFrMd
-X-IronPort-AV: E=Sophos;i="5.88,257,1635231600"; 
-   d="scan'208";a="148374825"
+  t=1641217362; x=1672753362;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=oLB3D2NU9ELHHRvc602tyU70abtXts+eFsaPpj3xsvg=;
+  b=18wVV0napQfNE/02cWTIY/Be+d1coIH7cRsl5Cd8dwN0JFmmiqNgmWXO
+   GaZclGVxq8r7WjtQ9xrcWArrP6/i7xm751rdrXcTJN9RqBjR39Gqez6Su
+   YdDX1jtytGWAZRQVn5SQeP4S/bIi9Df/nmWQgtsyeJ9S9ifYDAYpf03lS
+   O80rXcmZDsTmgFOrTh3byOiLUyX21UNDCsdHGl6mF+UVMOIURPg2uO9r+
+   eft70Bonpqj6YShRheO7MT2XySyOAtUuD1DV8+Bz8xJRhFSYmdW5dZulz
+   CwMTwD8QtraUteXDfq7myIRagTNw/56rBl+XRS+mJwhJBR58tJqyvJcgE
+   Q==;
+IronPort-SDR: N7YUaroiF2ElXAwlrijpHm+MWmzfam5no9Ly+ReBZl8hEz3+K11lgoalQw2AkISGOR8IHU2IBl
+ QYH1dIAZJyrdSQEH+0GpDuIKFqTzY3nGPUgyYI/F3OIvzAhTVzHo6vKLBQgRPD7R6+37b6tu0k
+ UGAUcr68SWp/oX9LK7B4w6c0j4eeWzLbozGTBA6p2sIc9HHsmvMdpALg3h3l7OJDuhb4LMmDDz
+ PmAnawNSZolZsX3XrUoovB5B2JEhIiwZTYr8zBminyuKi1YWw9tTBZ0lSTcPT5OVoH7GUSRNiD
+ UaySdEodriKyxSdDoNxf7jSq
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="157330065"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jan 2022 05:49:16 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jan 2022 06:42:41 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 3 Jan 2022 05:49:16 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 3 Jan 2022 05:49:13 -0700
-From: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-To: <arnd@arndb.de>, <olof@lixom.net>, <robh+dt@kernel.org>,
-	<nicolas.ferre@microchip.com>
+ 15.1.2375.17; Mon, 3 Jan 2022 06:42:41 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Mon, 3 Jan 2022 06:42:41 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HKYpsVnntvG6lvOGXa3MAjYrqPv3J1A7bXo7/Wgy/V0GeLIixKsHBABhzUzhkveKMPZcUQMEJkpGJBepGadItWrXzikly8OrmMxZtKuzXRPDUdxbeELCGJkKCWPtAS98I0a6T+ezmvFWqocAEOHqkz+YUTZMsM91FvjOkheS2fv5pNxyEhJ9+4Ut+lUai8LR/SBrlMvF6HTS/PBF4Azm7ci1HB64XvQ9vQVGekrLqZh3avqWZY9uoDB1O/yNluvL5URgpTieoM9g7qC8YUbpO+RcGKRCI7l9bZLmgrQxeANcwphc5VGOra+4yHNacRSL8aKX9G6kCrE4KDH/yKcEOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oLB3D2NU9ELHHRvc602tyU70abtXts+eFsaPpj3xsvg=;
+ b=FnC5Tc5rRBudwmTdSvQAr8T64wecFIy7mDblY6BkK8vCr9EdSuf2wxE1bvBMsZqh/Cb+hR9S7AqD5hRRqqz5eNO8iP1wVed6wUr96QP5O8GAvqyQy15+7Y0D6U6bt9cuYOv/mjVcZPfEZcIOKX0ihfIEdwJztAxW68T7056Hs64OhGQhMBx7bHFxCKnm31H7WbeYrXo/xmUj34T3392YnrV3PoVXkR0T3MOvM9vnQY1On+lDIXUZdvhzaQk0thcScX0c+o86chX9VcSkoBW+s/nDkAwHIFCSofEZCrAKYS+QaUt/srbaTKov8l9mN8uAWjzopX8V2BN4lPRmoCpFwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oLB3D2NU9ELHHRvc602tyU70abtXts+eFsaPpj3xsvg=;
+ b=efFxmgvnbqNTDdoDevc85Q1PASimQu0rrVaFtxZ1zVRgumiS4yEdQ0nkkh2DgJPj5o3XeY165R6v5AYJE6s2XcVcJzHkjmSIRCuBZvcFmjOnxp1UCErGIbNXTev0W6pLiQ8VLpGgdt0ytSpKtOxXi1nXN7itgHPl1WfzvAN5RoA=
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
+ by SN6PR11MB2944.namprd11.prod.outlook.com (2603:10b6:805:cd::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Mon, 3 Jan
+ 2022 13:42:31 +0000
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::5c96:23c3:4407:d3b1]) by SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::5c96:23c3:4407:d3b1%9]) with mapi id 15.20.4844.016; Mon, 3 Jan 2022
+ 13:42:31 +0000
+From: <Tudor.Ambarus@microchip.com>
+To: <Kavyasree.Kotagiri@microchip.com>, <arnd@arndb.de>, <olof@lixom.net>,
+	<robh+dt@kernel.org>, <Nicolas.Ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
 CC: <soc@kernel.org>, <devicetree@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<Manohar.Puri@microchip.com>, <Kavyasree.Kotagiri@microchip.com>
-Subject: [PATCH] ARM: dts: add DT for lan966x SoC and 2-port board pcb8291
-Date: Mon, 3 Jan 2022 18:18:57 +0530
-Message-ID: <20220103124857.24351-1-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.17.1
+	<Manohar.Puri@microchip.com>
+Subject: Re: [PATCH] ARM: dts: add DT for lan966x SoC and 2-port board pcb8291
+Thread-Topic: [PATCH] ARM: dts: add DT for lan966x SoC and 2-port board
+ pcb8291
+Thread-Index: AQHYAKfBxAy1YVWf3k2O2unIgNc+5A==
+Date: Mon, 3 Jan 2022 13:42:30 +0000
+Message-ID: <76804bd6-00e5-02ab-59df-d32586a55422@microchip.com>
+References: <20220103124857.24351-1-kavyasree.kotagiri@microchip.com>
+In-Reply-To: <20220103124857.24351-1-kavyasree.kotagiri@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9b55664c-ccdc-4588-7a42-08d9cebee3d3
+x-ms-traffictypediagnostic: SN6PR11MB2944:EE_
+x-microsoft-antispam-prvs: <SN6PR11MB29445AD8F69B9BDB029C3AB5F0499@SN6PR11MB2944.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4125;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: J4Cji4Xs/7HL+esj2F5tW9x4WhO9CB6zEfGlwCbqg31sF6EV7UityXTOTkFpZ9z8aDBWVzYXJ9FYjvzkNqpDVPN0F/0+BHCknxt3mIwym4Bd0JiKfDibjRtRa/aFa4w4pjAn95lcO6Nc+9mTjtEHCKJoG/x+iE3f+eTXHAsk3AzaqoOoBf8jymtMbLtjjSvsTw6jtF3rahSIRD3ChvmXnenRtlDDgqBS4YV2s2vOj987XuzlJmod2KC8dkxBGCSssIjBdMykZIBG8oUpGammnWv628yIv4k3ROoInKuC4adrCno7hr9Yds07EmEWK75aWEPuZ+aUXiXJie3hLGjviva46N8DARwxa1J0uBZOGXOPZwzzTPhnwwQrdvK/Mogm3vZyj5hoXVtYTnmw59DWm1R6JcXI3FK0t46z8Ao94zKHFPmC+vf3oDtTW5X5XdJcVXZU4DBnkxok2n8LQFoICMM8VP8eopIXhcAmlXYL/jMA55Be5pwYNuA2a0/E1mtX5jOrVjTItmhWDFwUBEKis8vJp3moNJ1ZnnCXnyrkeF5R+C96LuHDSuERDNTshCagnhzkryTpHibSAuFzi9VWgyBF65kOBa2Hw8Xnlrwyj967OkcGmuaP0SlOdWKDERH8FFVu8Ey2Xkcp4sg4zhSzwBWBMEca1F+/IrzrptGHuIYcQZSfGWxlZX1fua+BB2aL+E4CI3VQiZN+qef8P6mqkoasX9GhCRk0nshF7osUvMu0sD2VpSHb4Au8U8Cs3lOtN/Dcv7codHnpdUUsFTQLtw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(31696002)(4326008)(186003)(6486002)(38070700005)(71200400001)(36756003)(316002)(8676002)(86362001)(2616005)(31686004)(26005)(6636002)(107886003)(53546011)(91956017)(64756008)(6512007)(508600001)(6506007)(76116006)(66946007)(66476007)(38100700002)(5660300002)(122000001)(110136005)(54906003)(66446008)(66556008)(2906002)(8936002)(4744005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?akU2Z3FuQzY0RGhFc1VSUitnc3huNGhDVXlpZis4a21RMUliUDVqcEJ6aGsw?=
+ =?utf-8?B?ZFRabGN2anZRZ0ZoZWw1YjFpUG0vck56VUZZdzJlTXBLVmtoSEZGWFcxUjlX?=
+ =?utf-8?B?YjkxdXJNNlJicmg1STZzSXBtblBGWHkwZmdMT1E1ejVDd1BKQ0R1UFNHcURS?=
+ =?utf-8?B?QkUxZUQyb21NelpBMzFBejYzS05Kd3NxNW1RYmZTSllDa2hvWE8wUWhJZmR0?=
+ =?utf-8?B?ZVNXdFhmVk9kYm82ZkVXejNIOHoxN1Fqem1OaHkxaGFyVjdwdFNJd0U2VTBS?=
+ =?utf-8?B?T3RwNmZQelVUTndDTCtzQWlZUlVaWlplZ2JsaUplbGg2Ui9oNldrNTdMWFk1?=
+ =?utf-8?B?Ui9aVXVhNDFLZDZCVGY3eHM0T1B4clZucWlMMjBFZlN5U3g2cEVQYkc3S0I3?=
+ =?utf-8?B?ZGZnaU80TTYzd3VaQlZTYTZadFlkWG9lZHhmZzVqdDl5bUhveEx4NE5NZGNH?=
+ =?utf-8?B?OU9OakpLTmZoSWIwUVJoNTZxVGtyT3JMb3J3QVhkTDgyaHZUVmVOOXprS1d0?=
+ =?utf-8?B?RkdxVUhGOGk5bWtSUCt5M1EwM1dEQ3ZJMzVRTjdxRjFONUVnNHM3aUlXcDdT?=
+ =?utf-8?B?N0FEV2VXSUgxaURQQlJ2WlpwenNZT2xPZW9UU0RBWTdFOUlZOVJMQnhDMW4z?=
+ =?utf-8?B?UEZ6SWdKMVhXOVFUUTBWdXJsZCtQcGpoSXZFTVRmTms5R3FmVHNaQk53RjMx?=
+ =?utf-8?B?K3JuUnl2U3VJTXkzN1gxK2JvY25oRlRoOVAyOVZZclJ0ODMvQ05keHNyT0ZB?=
+ =?utf-8?B?enRGSHpSUFVZRWxVVE0zV3ZUK0lvTDhtQldRVUpDcGFmQjdEVkxqcWNVcHBj?=
+ =?utf-8?B?SXFBcVNiMVhIVzFiYndYWU40cnhWV3htNG5WbVJoNTN4aDBkUEJ4SjBNVXRU?=
+ =?utf-8?B?T1hrcUI0OGVsUnpadWhvLzhUa3BQbGpsVks5eXFVd2FvdWtaZmhiYmNoUDRv?=
+ =?utf-8?B?T05XUUQrQkxhUmN3Um5BTlZiN3pWKzVFOFZoM0x0bzYwVnQxWThmSFgrbzU2?=
+ =?utf-8?B?bkZXSU9ORHJRdVZuWTRtekFiMkxTZGpqY3l1QW1WT2ZWVjVrVjZaSDkrcGRV?=
+ =?utf-8?B?Tm9QbkZLNGJZUitSbGVuWldmQjI5OFJwaGFiazJpSGl0eUxtcnRSenZISDhH?=
+ =?utf-8?B?WjBBZUhSUmg5Y0F1QWc2VWY3b2J2RzVlbm1zVXZUWFFhNU1KSHNGRDZKVnhN?=
+ =?utf-8?B?MWVPVFg2V3dVTGVBMUVlbnNFcXowVUZJcFJKSFdrdkxUbk8yTDJBd1hwU2hT?=
+ =?utf-8?B?WGJHdERDa280Tk90dW0wK1FTQzRyKzUwYTc2VVpoK3pxWmJ0SlFhK1hXTVE1?=
+ =?utf-8?B?RDBxdVlwbnZkNDJreC9Gdko2RjJVcFRiZ0lwaUlDcEdIb2NsQlk5S3J0d2hN?=
+ =?utf-8?B?Ty81MEYwNXVSck5Id2oxVEkxWUxEY3diYlk2N3JnLzZuZG1RQVB1RnNNMFM0?=
+ =?utf-8?B?dWRaRFNSVCtuUUVHdzRKQ1lxZ1R5Q2U5cVRwd0pJR1ZVVlpjWWxTMThPTG8v?=
+ =?utf-8?B?aEtKWHBHa2RZRFlBZGlFcXJneW5sMEN2ZzNZd3NpVk9zbnFmNGQxUWxvZHA5?=
+ =?utf-8?B?ZVcvWXlpazk4bDdxQStTaW5MRmpnMEQwTmE4ZUZSSXJFNUc2WFFTTzlSUElD?=
+ =?utf-8?B?MnJCWnlBL0pQUnBIcmVJMWR6cHhZRVpRMGhqRklvSUVJSisvekdmd1hJcGFh?=
+ =?utf-8?B?aFdLWk1ROE9jSVBGVGc1UlVLcGhjSXA0U0tqbjV1S3AwT0dJTXBxZzhkT1ZD?=
+ =?utf-8?B?dWdSOWFWTWVKZHdiSFJieTdLbWNqVTdIVmUyeHlTNmNKaTRuMnliRzFPYlN5?=
+ =?utf-8?B?VXFPTkg5dXZodGNJeUowV3I2aXdQVFoxZkNrZ0JkSWpPT1hHOVNuSEdvRmRo?=
+ =?utf-8?B?QXg1YytmaENLdVdhZUp3ekJLMW1KQ3hTU0lYaFY1ZVZjMm9TczBVTXk0OVlU?=
+ =?utf-8?B?MHFyYzlsdmxFRWpUMTdSWlRRZmZGZGE0N0JLRzV6WHNvMWhOOUlZRTR6NldX?=
+ =?utf-8?B?Z1ZpeThEYzV3M2syVVh3SFZxb2wwNDYwWm54dE9pZ2FKcjRvanNUdmo0L3E1?=
+ =?utf-8?B?ZEFWcXNRdE9rUGxyaDR0WjNlLzV3NDVGQ2dYQjBEeXVVZDdxUjJWN3RIaEtK?=
+ =?utf-8?B?NGxPMkxJTlRmdFdjTzlFTGpVUldjRXVEL2VmOVpaSFUvTU9HR25HZHRWSDFu?=
+ =?utf-8?B?d0JrMkxqMmhkZmNZWjYvWG45a3hIS2ZBY3Jvd0U0VmhyVWVZZ054YkYrUGY4?=
+ =?utf-8?B?ekltVkp0M3lMOVpQNUFVK1pTRWRRPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D39107EAB28E054F89650A803275859A@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b55664c-ccdc-4588-7a42-08d9cebee3d3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jan 2022 13:42:30.9846
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vys8zmyBwmO/6VpBFXtgJks7CBkfPNYyz3Zgb7pTW5IJOMd4O1Atg+8GlhaX4c7XesZFwjBXTxjEUF9UVnibI57+GFATdwxsiHuoJNJnZFY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2944
 
-This patch adds basic DT for Microchip lan966x SoC and associated board
-pcb8291(2-port EVB). Adds peripherals required to allow booting: IRQs,
-clocks, timers, memory, flexcoms, GPIOs. Also adds other peripherals like
-crypto(AES,SHA), DMA and watchdog.
-
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
----
- arch/arm/boot/dts/Makefile            |   2 +
- arch/arm/boot/dts/lan966x.dtsi        | 235 ++++++++++++++++++++++++++
- arch/arm/boot/dts/lan966x_pcb8291.dts |  55 ++++++
- 3 files changed, 292 insertions(+)
- create mode 100644 arch/arm/boot/dts/lan966x.dtsi
- create mode 100644 arch/arm/boot/dts/lan966x_pcb8291.dts
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 0de64f237cd8..dc1bd216ed58 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -723,6 +723,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
- dtb-$(CONFIG_SOC_IMX7ULP) += \
- 	imx7ulp-com.dtb \
- 	imx7ulp-evk.dtb
-+dtb-$(CONFIG_SOC_LAN966) += \
-+	lan966x_pcb8291.dtb
- dtb-$(CONFIG_SOC_LS1021A) += \
- 	ls1021a-moxa-uc-8410a.dtb \
- 	ls1021a-qds.dtb \
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-new file mode 100644
-index 000000000000..7e56394b036f
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -0,0 +1,235 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * lan966x.dtsi - Device Tree Include file for Microchip LAN966x family SoC
-+ *
-+ * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
-+ *
-+ * Author: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-+ *
-+ */
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/mfd/atmel-flexcom.h>
-+#include <dt-bindings/dma/at91.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/clock/microchip,lan966x.h>
-+
-+/ {
-+	model = "Microchip LAN966x family SoC";
-+	compatible = "microchip,lan966x";
-+	interrupt-parent = <&gic>;
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a7";
-+			clock-frequency = <600000000>;
-+			reg = <0x0>;
-+		};
-+	};
-+
-+	memory@60000000 {
-+		device_type = "memory";
-+		reg = <0x60000000 0x40000000>;  /* 1GB */
-+	};
-+
-+	clocks {
-+		sys_clk: sys_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <162500000>;
-+		};
-+
-+		cpu_clk: cpu_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <600000000>;
-+		};
-+
-+		ddr_clk: ddr_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <300000000>;
-+		};
-+
-+		nic_clk: nic_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <200000000>;
-+		};
-+	};
-+
-+	clks: clock-controller@e00c00a8 {
-+		compatible = "microchip,lan966x-gck";
-+		#clock-cells = <1>;
-+		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
-+		clock-names = "cpu", "ddr", "sys";
-+		reg = <0xe00c00a8 0x38>;
-+	};
-+
-+	timer {
-+		compatible = "arm,armv7-timer";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
-+		clock-frequency = <37500000>;
-+		arm,cpu-registers-not-fw-configured;
-+	};
-+
-+	soc {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		flx0: flexcom@e0040000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0040000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM0>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0040000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		flx1: flexcom@e0044000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0044000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM1>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0044000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		trng: trng@e0048000 {
-+			compatible = "atmel,at91sam9g45-trng";
-+			reg = <0xe0048000 0x100>;
-+			clocks = <&nic_clk>;
-+			status = "disabled";
-+		};
-+
-+		aes: aes@e004c000 {
-+			compatible = "atmel,at91sam9g46-aes";
-+			reg = <0xe004c000 0x100>;
-+			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
-+			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
-+			dma-names = "rx", "tx";
-+			clocks = <&nic_clk>;
-+			clock-names = "aes_clk";
-+		};
-+
-+		flx2: flexcom@e0060000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0060000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM2>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0060000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		flx3: flexcom@e0064000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0064000 0x100>,
-+			      <0xe2004180 0x8>;
-+			clocks = <&clks GCK_ID_FLEXCOM3>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0064000 0x800>;
-+			status = "disabled";
-+		      };
-+
-+		dma0: dma-controller@e0068000 {
-+			compatible = "microchip,sama7g5-dma";
-+			reg = <0xe0068000 0x1000>;
-+			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			clocks = <&nic_clk>;
-+			clock-names = "dma_clk";
-+			status = "okay";
-+		};
-+
-+		sha: sha@e006c000 {
-+			compatible = "atmel,at91sam9g46-sha";
-+			reg = <0xe006c000 0xec>;
-+			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(14)>;
-+			dma-names = "tx";
-+			clocks = <&nic_clk>;
-+			clock-names = "sha_clk";
-+		};
-+
-+		flx4: flexcom@e0070000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0070000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM4>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0070000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		timer0: timer@e008c000 {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xe008c000 0x400>;
-+			clocks = <&nic_clk>;
-+			clock-names = "timer";
-+			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+
-+		watchdog: watchdog@e0090000 {
-+			compatible = "snps,dw-wdt";
-+			reg = <0xe0090000 0x1000>;
-+			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&nic_clk>;
-+		};
-+
-+		can0: can@e081c000 {
-+			compatible = "bosch,m_can";
-+			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
-+			reg-names = "m_can", "message_ram";
-+			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "int0", "int1";
-+			clocks = <&clks GCK_ID_MCAN0>, <&clks GCK_ID_MCAN0>;
-+			clock-names = "hclk", "cclk";
-+			assigned-clocks = <&clks GCK_ID_MCAN0>;
-+			assigned-clock-rates = <40000000>;
-+			bosch,mram-cfg = <0x0 0 0 64 0 0 32 32>;
-+			status = "disabled";
-+		};
-+
-+		gpio: pinctrl@e2004064 {
-+			compatible = "microchip,lan966x-pinctrl";
-+			reg = <0xe2004064 0xb4>,
-+			    <0xe2010024 0x138>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&gpio 0 0 78>;
-+			interrupt-controller;
-+			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gic: interrupt-controller@e8c11000 {
-+			compatible = "arm,gic-400", "arm,cortex-a7-gic";
-+			#interrupt-cells = <3>;
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-controller;
-+			reg = <0xe8c11000 0x1000>,
-+			      <0xe8c12000 0x2000>,
-+			      <0xe8c14000 0x2000>,
-+			      <0xe8c16000 0x2000>;
-+		};
-+	};
-+};
-diff --git a/arch/arm/boot/dts/lan966x_pcb8291.dts b/arch/arm/boot/dts/lan966x_pcb8291.dts
-new file mode 100644
-index 000000000000..cd0454a795e7
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x_pcb8291.dts
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * lan966x_pcb8291.dts - Device Tree file for PCB8291
-+ */
-+/dts-v1/;
-+#include "lan966x.dtsi"
-+
-+/ {
-+	model = "Microchip EVB - LAN9662";
-+	compatible = "microchip,lan9662-pcb8291", "microchip,lan9662", "microchip,lan966";
-+};
-+
-+&gpio {
-+	fc_shrd7_pins: fc_shrd7-pins {
-+		pins = "GPIO_49";
-+		function = "fc_shrd7";
-+	};
-+
-+	fc_shrd8_pins: fc_shrd8-pins {
-+		pins = "GPIO_54";
-+		function = "fc_shrd8";
-+	};
-+
-+	fc3_b_pins: fcb3-spi-pins {
-+		/* SCK, RXD, TXD */
-+		pins = "GPIO_51", "GPIO_52", "GPIO_53";
-+		function = "fc3_b";
-+	};
-+};
-+
-+&can0 {
-+	status = "okay";
-+};
-+
-+&flx3 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
-+	status = "okay";
-+
-+	usart0: serial@200 {
-+		compatible = "atmel,at91sam9260-usart";
-+		reg = <0x200 0x200>;
-+		interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&nic_clk>;
-+		clock-names = "usart";
-+		pinctrl-0 = <&fc3_b_pins>, <&fc_shrd7_pins>, <&fc_shrd8_pins>;
-+		pinctrl-names = "default";
-+		atmel,fifo-size = <32>;
-+		status = "okay";
-+	};
-+};
-+
-+&trng {
-+	status = "okay";
-+};
-+
--- 
-2.17.1
-
+SGksDQoNCk9uIDEvMy8yMiAyOjQ4IFBNLCBLYXZ5YXNyZWUgS290YWdpcmkgd3JvdGU6DQo+IGRp
+ZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9sYW45NjZ4X3BjYjgyOTEuZHRzIGIvYXJjaC9h
+cm0vYm9vdC9kdHMvbGFuOTY2eF9wY2I4MjkxLmR0cw0KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0K
+PiBpbmRleCAwMDAwMDAwMDAwMDAuLmNkMDQ1NGE3OTVlNw0KPiAtLS0gL2Rldi9udWxsDQo+ICsr
+KyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2xhbjk2NnhfcGNiODI5MS5kdHMNCj4gQEAgLTAsMCArMSw1
+NSBAQA0KDQo+ICsmZmx4MyB7DQo+ICsgICAgICAgYXRtZWwsZmxleGNvbS1tb2RlID0gPEFUTUVM
+X0ZMRVhDT01fTU9ERV9VU0FSVD47DQo+ICsgICAgICAgc3RhdHVzID0gIm9rYXkiOw0KPiArDQo+
+ICsgICAgICAgdXNhcnQwOiBzZXJpYWxAMjAwIHsNCj4gKyAgICAgICAgICAgICAgIGNvbXBhdGli
+bGUgPSAiYXRtZWwsYXQ5MXNhbTkyNjAtdXNhcnQiOw0KDQpUaGUgZmxleGNvbSB1c2FydCBtb2Rl
+IHNob3VsZCBiZSBkZWZpbmVkIGluIHRoZSBkdHNpIGZpbGUsIHNvIHRoYXQgeW91DQp3b24ndCBk
+dXBsaWNhdGUgdGhlIGRlZmluaXRpb24gaW4gZWFjaCBkdHMgdGhhdCBpbmNsdWRlcyB0aGUgZHRz
+aSBmaWxlLg0KDQpDaGVlcnMsDQp0YQ0K
