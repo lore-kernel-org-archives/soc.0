@@ -1,173 +1,107 @@
-Return-Path: <SRS0=oBwP=RT=microchip.com=Tudor.Ambarus@kernel.org>
+Return-Path: <SRS0=o92n=RT=baylibre.com=narmstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD0CEC433F5
-	for <soc@archiver.kernel.org>; Mon,  3 Jan 2022 13:42:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24DE1C433F5
+	for <soc@archiver.kernel.org>; Mon,  3 Jan 2022 15:13:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7A686C36AF3; Mon,  3 Jan 2022 13:42:43 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id DB91BC36AEF; Mon,  3 Jan 2022 15:13:48 +0000 (UTC)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 951D2C36AEB;
-	Mon,  3 Jan 2022 13:42:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 951D2C36AEB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1641217362; x=1672753362;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=oLB3D2NU9ELHHRvc602tyU70abtXts+eFsaPpj3xsvg=;
-  b=18wVV0napQfNE/02cWTIY/Be+d1coIH7cRsl5Cd8dwN0JFmmiqNgmWXO
-   GaZclGVxq8r7WjtQ9xrcWArrP6/i7xm751rdrXcTJN9RqBjR39Gqez6Su
-   YdDX1jtytGWAZRQVn5SQeP4S/bIi9Df/nmWQgtsyeJ9S9ifYDAYpf03lS
-   O80rXcmZDsTmgFOrTh3byOiLUyX21UNDCsdHGl6mF+UVMOIURPg2uO9r+
-   eft70Bonpqj6YShRheO7MT2XySyOAtUuD1DV8+Bz8xJRhFSYmdW5dZulz
-   CwMTwD8QtraUteXDfq7myIRagTNw/56rBl+XRS+mJwhJBR58tJqyvJcgE
-   Q==;
-IronPort-SDR: N7YUaroiF2ElXAwlrijpHm+MWmzfam5no9Ly+ReBZl8hEz3+K11lgoalQw2AkISGOR8IHU2IBl
- QYH1dIAZJyrdSQEH+0GpDuIKFqTzY3nGPUgyYI/F3OIvzAhTVzHo6vKLBQgRPD7R6+37b6tu0k
- UGAUcr68SWp/oX9LK7B4w6c0j4eeWzLbozGTBA6p2sIc9HHsmvMdpALg3h3l7OJDuhb4LMmDDz
- PmAnawNSZolZsX3XrUoovB5B2JEhIiwZTYr8zBminyuKi1YWw9tTBZ0lSTcPT5OVoH7GUSRNiD
- UaySdEodriKyxSdDoNxf7jSq
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="157330065"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jan 2022 06:42:41 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 3 Jan 2022 06:42:41 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Mon, 3 Jan 2022 06:42:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HKYpsVnntvG6lvOGXa3MAjYrqPv3J1A7bXo7/Wgy/V0GeLIixKsHBABhzUzhkveKMPZcUQMEJkpGJBepGadItWrXzikly8OrmMxZtKuzXRPDUdxbeELCGJkKCWPtAS98I0a6T+ezmvFWqocAEOHqkz+YUTZMsM91FvjOkheS2fv5pNxyEhJ9+4Ut+lUai8LR/SBrlMvF6HTS/PBF4Azm7ci1HB64XvQ9vQVGekrLqZh3avqWZY9uoDB1O/yNluvL5URgpTieoM9g7qC8YUbpO+RcGKRCI7l9bZLmgrQxeANcwphc5VGOra+4yHNacRSL8aKX9G6kCrE4KDH/yKcEOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oLB3D2NU9ELHHRvc602tyU70abtXts+eFsaPpj3xsvg=;
- b=FnC5Tc5rRBudwmTdSvQAr8T64wecFIy7mDblY6BkK8vCr9EdSuf2wxE1bvBMsZqh/Cb+hR9S7AqD5hRRqqz5eNO8iP1wVed6wUr96QP5O8GAvqyQy15+7Y0D6U6bt9cuYOv/mjVcZPfEZcIOKX0ihfIEdwJztAxW68T7056Hs64OhGQhMBx7bHFxCKnm31H7WbeYrXo/xmUj34T3392YnrV3PoVXkR0T3MOvM9vnQY1On+lDIXUZdvhzaQk0thcScX0c+o86chX9VcSkoBW+s/nDkAwHIFCSofEZCrAKYS+QaUt/srbaTKov8l9mN8uAWjzopX8V2BN4lPRmoCpFwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+	by smtp.kernel.org (Postfix) with ESMTPS id B5FF2C36AEB
+	for <soc@kernel.org>; Mon,  3 Jan 2022 15:13:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B5FF2C36AEB
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f54.google.com with SMTP id s1so70492508wra.6
+        for <soc@kernel.org>; Mon, 03 Jan 2022 07:13:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oLB3D2NU9ELHHRvc602tyU70abtXts+eFsaPpj3xsvg=;
- b=efFxmgvnbqNTDdoDevc85Q1PASimQu0rrVaFtxZ1zVRgumiS4yEdQ0nkkh2DgJPj5o3XeY165R6v5AYJE6s2XcVcJzHkjmSIRCuBZvcFmjOnxp1UCErGIbNXTev0W6pLiQ8VLpGgdt0ytSpKtOxXi1nXN7itgHPl1WfzvAN5RoA=
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
- by SN6PR11MB2944.namprd11.prod.outlook.com (2603:10b6:805:cd::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Mon, 3 Jan
- 2022 13:42:31 +0000
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::5c96:23c3:4407:d3b1]) by SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::5c96:23c3:4407:d3b1%9]) with mapi id 15.20.4844.016; Mon, 3 Jan 2022
- 13:42:31 +0000
-From: <Tudor.Ambarus@microchip.com>
-To: <Kavyasree.Kotagiri@microchip.com>, <arnd@arndb.de>, <olof@lixom.net>,
-	<robh+dt@kernel.org>, <Nicolas.Ferre@microchip.com>
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:subject:to:cc:organization:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=89lR+zDjRzcCkSkX1JPsdOu1K3piTipFhOC7dPxe4NU=;
+        b=MiNyYMWW3GcSKNgz3fQmmCssLainwBBZHCJ3YU39PhwZwtQfmyuPE91qZLgVF9n70k
+         2gsgJSdiHIc+rcKrtq3WNBQTwpzwinlISe7uEZtxzdzQrMZzenlb/ow0IHoiRgtH/Icp
+         wjVyZB6m3Fo6EKKUTvZ/bgI330NMBWW+8/+QZnYit4pEh8/Xk1sqfEAHDpsXwrG5+LI9
+         7jXbDvBfJpeyoYzbm/soUAk2qmjqtep220a9OlczV7fD2nXQgW2rzVnLrV2O2xiDmWwn
+         cqGR8G/i3gbW9XO2AWKttEhP+tlLx96xzznRnKOzv7wlmOc09sshkqjcw+0tx4BukO3N
+         TVfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:organization:message-id:date
+         :user-agent:mime-version:content-language:content-transfer-encoding;
+        bh=89lR+zDjRzcCkSkX1JPsdOu1K3piTipFhOC7dPxe4NU=;
+        b=rrqNgmD5NHHPF2+K2RHref9HXB4PXQDoirxq5Id4cJzKNIp9nexiDnMTZOa23+/hMa
+         J/QQZ3gH8xIIeKpB4AuvH5/WEyb5RdqTuQFYhhiDTc1sUJMMXlH5P/O/khP+f9rlId2O
+         g3EQ5sDfe6u1ektZxIBdPsjjyD6j7BJdEV7X73gi3xhjiB9SNbbg4F6JG7DeqhQutUSm
+         Zx/y1pEkU6MW3Pe4nzDfpxv9+J7rDf7pw6R/BWnKT5Yr8RXF0taWkSY3S7M/KrsQ7cds
+         sJxv5RF21l1CP67ytB0mCS2w43BMSWSK3bl4wsweiMxRW11hi1QDF9U/gIVbfCbMYGA0
+         QLwg==
+X-Gm-Message-State: AOAM533m9KP1ksw42DTzKSm2LBLEl5xBtjNhOfR2wfsD7AA5feok58Cr
+	FfPE9hz5ru2/Cs+l1Y6nCXNe1Q==
+X-Google-Smtp-Source: ABdhPJyYYTVZc/KWM1oNKQXkmdI6QONhDN1vhFHfjzjzyoFH47Tp/AQ+SoEvN8MixV+xRd+zij0iuw==
+X-Received: by 2002:a5d:68ce:: with SMTP id p14mr39331141wrw.116.1641222825999;
+        Mon, 03 Jan 2022 07:13:45 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:7c9d:a967:38e2:5220? ([2001:861:44c0:66c0:7c9d:a967:38e2:5220])
+        by smtp.gmail.com with ESMTPSA id d143sm33347662wmd.6.2022.01.03.07.13.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jan 2022 07:13:45 -0800 (PST)
+From: Neil Armstrong <narmstrong@baylibre.com>
+Subject: [GIT PULL] amlogic fixes for v5.17-rc
 List-Id: <soc.lore.kernel.org>
-CC: <soc@kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<Manohar.Puri@microchip.com>
-Subject: Re: [PATCH] ARM: dts: add DT for lan966x SoC and 2-port board pcb8291
-Thread-Topic: [PATCH] ARM: dts: add DT for lan966x SoC and 2-port board
- pcb8291
-Thread-Index: AQHYAKfBxAy1YVWf3k2O2unIgNc+5A==
-Date: Mon, 3 Jan 2022 13:42:30 +0000
-Message-ID: <76804bd6-00e5-02ab-59df-d32586a55422@microchip.com>
-References: <20220103124857.24351-1-kavyasree.kotagiri@microchip.com>
-In-Reply-To: <20220103124857.24351-1-kavyasree.kotagiri@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Organization: Baylibre
+Message-ID: <7e40328b-6645-4343-3050-73dcfb2cefcb@baylibre.com>
+Date: Mon, 3 Jan 2022 16:13:44 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9b55664c-ccdc-4588-7a42-08d9cebee3d3
-x-ms-traffictypediagnostic: SN6PR11MB2944:EE_
-x-microsoft-antispam-prvs: <SN6PR11MB29445AD8F69B9BDB029C3AB5F0499@SN6PR11MB2944.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4125;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: J4Cji4Xs/7HL+esj2F5tW9x4WhO9CB6zEfGlwCbqg31sF6EV7UityXTOTkFpZ9z8aDBWVzYXJ9FYjvzkNqpDVPN0F/0+BHCknxt3mIwym4Bd0JiKfDibjRtRa/aFa4w4pjAn95lcO6Nc+9mTjtEHCKJoG/x+iE3f+eTXHAsk3AzaqoOoBf8jymtMbLtjjSvsTw6jtF3rahSIRD3ChvmXnenRtlDDgqBS4YV2s2vOj987XuzlJmod2KC8dkxBGCSssIjBdMykZIBG8oUpGammnWv628yIv4k3ROoInKuC4adrCno7hr9Yds07EmEWK75aWEPuZ+aUXiXJie3hLGjviva46N8DARwxa1J0uBZOGXOPZwzzTPhnwwQrdvK/Mogm3vZyj5hoXVtYTnmw59DWm1R6JcXI3FK0t46z8Ao94zKHFPmC+vf3oDtTW5X5XdJcVXZU4DBnkxok2n8LQFoICMM8VP8eopIXhcAmlXYL/jMA55Be5pwYNuA2a0/E1mtX5jOrVjTItmhWDFwUBEKis8vJp3moNJ1ZnnCXnyrkeF5R+C96LuHDSuERDNTshCagnhzkryTpHibSAuFzi9VWgyBF65kOBa2Hw8Xnlrwyj967OkcGmuaP0SlOdWKDERH8FFVu8Ey2Xkcp4sg4zhSzwBWBMEca1F+/IrzrptGHuIYcQZSfGWxlZX1fua+BB2aL+E4CI3VQiZN+qef8P6mqkoasX9GhCRk0nshF7osUvMu0sD2VpSHb4Au8U8Cs3lOtN/Dcv7codHnpdUUsFTQLtw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(31696002)(4326008)(186003)(6486002)(38070700005)(71200400001)(36756003)(316002)(8676002)(86362001)(2616005)(31686004)(26005)(6636002)(107886003)(53546011)(91956017)(64756008)(6512007)(508600001)(6506007)(76116006)(66946007)(66476007)(38100700002)(5660300002)(122000001)(110136005)(54906003)(66446008)(66556008)(2906002)(8936002)(4744005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?akU2Z3FuQzY0RGhFc1VSUitnc3huNGhDVXlpZis4a21RMUliUDVqcEJ6aGsw?=
- =?utf-8?B?ZFRabGN2anZRZ0ZoZWw1YjFpUG0vck56VUZZdzJlTXBLVmtoSEZGWFcxUjlX?=
- =?utf-8?B?YjkxdXJNNlJicmg1STZzSXBtblBGWHkwZmdMT1E1ejVDd1BKQ0R1UFNHcURS?=
- =?utf-8?B?QkUxZUQyb21NelpBMzFBejYzS05Kd3NxNW1RYmZTSllDa2hvWE8wUWhJZmR0?=
- =?utf-8?B?ZVNXdFhmVk9kYm82ZkVXejNIOHoxN1Fqem1OaHkxaGFyVjdwdFNJd0U2VTBS?=
- =?utf-8?B?T3RwNmZQelVUTndDTCtzQWlZUlVaWlplZ2JsaUplbGg2Ui9oNldrNTdMWFk1?=
- =?utf-8?B?Ui9aVXVhNDFLZDZCVGY3eHM0T1B4clZucWlMMjBFZlN5U3g2cEVQYkc3S0I3?=
- =?utf-8?B?ZGZnaU80TTYzd3VaQlZTYTZadFlkWG9lZHhmZzVqdDl5bUhveEx4NE5NZGNH?=
- =?utf-8?B?OU9OakpLTmZoSWIwUVJoNTZxVGtyT3JMb3J3QVhkTDgyaHZUVmVOOXprS1d0?=
- =?utf-8?B?RkdxVUhGOGk5bWtSUCt5M1EwM1dEQ3ZJMzVRTjdxRjFONUVnNHM3aUlXcDdT?=
- =?utf-8?B?N0FEV2VXSUgxaURQQlJ2WlpwenNZT2xPZW9UU0RBWTdFOUlZOVJMQnhDMW4z?=
- =?utf-8?B?UEZ6SWdKMVhXOVFUUTBWdXJsZCtQcGpoSXZFTVRmTms5R3FmVHNaQk53RjMx?=
- =?utf-8?B?K3JuUnl2U3VJTXkzN1gxK2JvY25oRlRoOVAyOVZZclJ0ODMvQ05keHNyT0ZB?=
- =?utf-8?B?enRGSHpSUFVZRWxVVE0zV3ZUK0lvTDhtQldRVUpDcGFmQjdEVkxqcWNVcHBj?=
- =?utf-8?B?SXFBcVNiMVhIVzFiYndYWU40cnhWV3htNG5WbVJoNTN4aDBkUEJ4SjBNVXRU?=
- =?utf-8?B?T1hrcUI0OGVsUnpadWhvLzhUa3BQbGpsVks5eXFVd2FvdWtaZmhiYmNoUDRv?=
- =?utf-8?B?T05XUUQrQkxhUmN3Um5BTlZiN3pWKzVFOFZoM0x0bzYwVnQxWThmSFgrbzU2?=
- =?utf-8?B?bkZXSU9ORHJRdVZuWTRtekFiMkxTZGpqY3l1QW1WT2ZWVjVrVjZaSDkrcGRV?=
- =?utf-8?B?Tm9QbkZLNGJZUitSbGVuWldmQjI5OFJwaGFiazJpSGl0eUxtcnRSenZISDhH?=
- =?utf-8?B?WjBBZUhSUmg5Y0F1QWc2VWY3b2J2RzVlbm1zVXZUWFFhNU1KSHNGRDZKVnhN?=
- =?utf-8?B?MWVPVFg2V3dVTGVBMUVlbnNFcXowVUZJcFJKSFdrdkxUbk8yTDJBd1hwU2hT?=
- =?utf-8?B?WGJHdERDa280Tk90dW0wK1FTQzRyKzUwYTc2VVpoK3pxWmJ0SlFhK1hXTVE1?=
- =?utf-8?B?RDBxdVlwbnZkNDJreC9Gdko2RjJVcFRiZ0lwaUlDcEdIb2NsQlk5S3J0d2hN?=
- =?utf-8?B?Ty81MEYwNXVSck5Id2oxVEkxWUxEY3diYlk2N3JnLzZuZG1RQVB1RnNNMFM0?=
- =?utf-8?B?dWRaRFNSVCtuUUVHdzRKQ1lxZ1R5Q2U5cVRwd0pJR1ZVVlpjWWxTMThPTG8v?=
- =?utf-8?B?aEtKWHBHa2RZRFlBZGlFcXJneW5sMEN2ZzNZd3NpVk9zbnFmNGQxUWxvZHA5?=
- =?utf-8?B?ZVcvWXlpazk4bDdxQStTaW5MRmpnMEQwTmE4ZUZSSXJFNUc2WFFTTzlSUElD?=
- =?utf-8?B?MnJCWnlBL0pQUnBIcmVJMWR6cHhZRVpRMGhqRklvSUVJSisvekdmd1hJcGFh?=
- =?utf-8?B?aFdLWk1ROE9jSVBGVGc1UlVLcGhjSXA0U0tqbjV1S3AwT0dJTXBxZzhkT1ZD?=
- =?utf-8?B?dWdSOWFWTWVKZHdiSFJieTdLbWNqVTdIVmUyeHlTNmNKaTRuMnliRzFPYlN5?=
- =?utf-8?B?VXFPTkg5dXZodGNJeUowV3I2aXdQVFoxZkNrZ0JkSWpPT1hHOVNuSEdvRmRo?=
- =?utf-8?B?QXg1YytmaENLdVdhZUp3ekJLMW1KQ3hTU0lYaFY1ZVZjMm9TczBVTXk0OVlU?=
- =?utf-8?B?MHFyYzlsdmxFRWpUMTdSWlRRZmZGZGE0N0JLRzV6WHNvMWhOOUlZRTR6NldX?=
- =?utf-8?B?Z1ZpeThEYzV3M2syVVh3SFZxb2wwNDYwWm54dE9pZ2FKcjRvanNUdmo0L3E1?=
- =?utf-8?B?ZEFWcXNRdE9rUGxyaDR0WjNlLzV3NDVGQ2dYQjBEeXVVZDdxUjJWN3RIaEtK?=
- =?utf-8?B?NGxPMkxJTlRmdFdjTzlFTGpVUldjRXVEL2VmOVpaSFUvTU9HR25HZHRWSDFu?=
- =?utf-8?B?d0JrMkxqMmhkZmNZWjYvWG45a3hIS2ZBY3Jvd0U0VmhyVWVZZ054YkYrUGY4?=
- =?utf-8?B?ekltVkp0M3lMOVpQNUFVK1pTRWRRPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D39107EAB28E054F89650A803275859A@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b55664c-ccdc-4588-7a42-08d9cebee3d3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jan 2022 13:42:30.9846
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vys8zmyBwmO/6VpBFXtgJks7CBkfPNYyz3Zgb7pTW5IJOMd4O1Atg+8GlhaX4c7XesZFwjBXTxjEUF9UVnibI57+GFATdwxsiHuoJNJnZFY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2944
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-SGksDQoNCk9uIDEvMy8yMiAyOjQ4IFBNLCBLYXZ5YXNyZWUgS290YWdpcmkgd3JvdGU6DQo+IGRp
-ZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9sYW45NjZ4X3BjYjgyOTEuZHRzIGIvYXJjaC9h
-cm0vYm9vdC9kdHMvbGFuOTY2eF9wY2I4MjkxLmR0cw0KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0K
-PiBpbmRleCAwMDAwMDAwMDAwMDAuLmNkMDQ1NGE3OTVlNw0KPiAtLS0gL2Rldi9udWxsDQo+ICsr
-KyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2xhbjk2NnhfcGNiODI5MS5kdHMNCj4gQEAgLTAsMCArMSw1
-NSBAQA0KDQo+ICsmZmx4MyB7DQo+ICsgICAgICAgYXRtZWwsZmxleGNvbS1tb2RlID0gPEFUTUVM
-X0ZMRVhDT01fTU9ERV9VU0FSVD47DQo+ICsgICAgICAgc3RhdHVzID0gIm9rYXkiOw0KPiArDQo+
-ICsgICAgICAgdXNhcnQwOiBzZXJpYWxAMjAwIHsNCj4gKyAgICAgICAgICAgICAgIGNvbXBhdGli
-bGUgPSAiYXRtZWwsYXQ5MXNhbTkyNjAtdXNhcnQiOw0KDQpUaGUgZmxleGNvbSB1c2FydCBtb2Rl
-IHNob3VsZCBiZSBkZWZpbmVkIGluIHRoZSBkdHNpIGZpbGUsIHNvIHRoYXQgeW91DQp3b24ndCBk
-dXBsaWNhdGUgdGhlIGRlZmluaXRpb24gaW4gZWFjaCBkdHMgdGhhdCBpbmNsdWRlcyB0aGUgZHRz
-aSBmaWxlLg0KDQpDaGVlcnMsDQp0YQ0K
+Hi,
+
+Here's a couple of DT fixes for v5.17-rc1, they fix the UART compatibles of
+the ARMv7 Amlogic SoCs and by the way keep earlycon working after [1] has been
+applied by greg in the tty branch for 5.17.
+
+I know it's early for 5.17-rc1, but at least it's in the pipe.
+
+I based the changes on your dt-5.17 tag pushed to linus for 5.17-rc1,
+if necessary I can rebase on v5.16-rcX.
+
+Neil
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/commit/?h=tty-next&id=ad234e2bac274a43c9fa540bde8cd9f0c627b71f
+
+The following changes since commit 8b0c59c622dc4dab970ec63264fb5b152944ac80:
+
+  Revert "ARM: dts: BCM5301X: define RTL8365MB switch on Asus RT-AC88U" (2021-12-23 00:18:45 +0100)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-fixes-v5.17-rc
+
+for you to fetch changes up to 7a31a29b35386b6d6aa622d68acd31739a3a8ac5:
+
+  ARM: dts: meson8b: Fix the UART device-tree schema validation (2022-01-03 15:49:56 +0100)
+
+----------------------------------------------------------------
+Amlogic fixes for v5.17-rc
+- meson6/meson8/meson8b UART compatible fixup to fix earlycon
+
+----------------------------------------------------------------
+Martin Blumenstingl (3):
+      ARM: dts: meson: Fix the UART compatible strings
+      ARM: dts: meson8: Fix the UART device-tree schema validation
+      ARM: dts: meson8b: Fix the UART device-tree schema validation
+
+ arch/arm/boot/dts/meson.dtsi   |  8 ++++----
+ arch/arm/boot/dts/meson8.dtsi  | 24 ++++++++++++------------
+ arch/arm/boot/dts/meson8b.dtsi | 24 ++++++++++++------------
+ 3 files changed, 28 insertions(+), 28 deletions(-)
