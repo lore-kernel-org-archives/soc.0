@@ -1,100 +1,100 @@
-Return-Path: <SRS0=+ssV=RU=gmail.com=robherring2@kernel.org>
+Return-Path: <SRS0=72Bi=RU=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36422C433F5
-	for <soc@archiver.kernel.org>; Tue,  4 Jan 2022 19:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DD37C433F5
+	for <soc@archiver.kernel.org>; Tue,  4 Jan 2022 21:57:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 21468C36AE9; Tue,  4 Jan 2022 19:08:01 +0000 (UTC)
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+	id 6D9A4C36AEB; Tue,  4 Jan 2022 21:57:33 +0000 (UTC)
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A0C47C36AED;
-	Tue,  4 Jan 2022 19:08:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A0C47C36AED
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id 94B13C36AE0;
+	Tue,  4 Jan 2022 21:57:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 94B13C36AE0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f49.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so48472626otj.7;
-        Tue, 04 Jan 2022 11:08:00 -0800 (PST)
+Received: by mail-pj1-f50.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so1115290pjd.1;
+        Tue, 04 Jan 2022 13:57:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+m8XHy9GLWxGLvp8PnRUnsnL00CiCJ1paOrfejaQ6Wk=;
+        b=UsFyD6JzmErDVpwH2jhEW0jKQYnviPyZj2wtM0Zy1ryUv3BKM+jt8ln1uTqxy17s+2
+         j8jWYY/Snq94uexghYoUA82QE4cHCfjTsLjNikT/tj39SG1pkz3WGS9Ya/6GZEdp0/OS
+         E0sWzSrJcw1+btjvTYHfetZf/PWuUysgj1h3HjcaLmAFsy613HF86ByhUOeJZ7yiVTC9
+         HbY0VR3KiKCR4S0P4NpDEM0Gw1vPu5cUzo2DFssXIrUBnAQurUufYnZ/hiXEl3IraOjz
+         82Fq7SKjT82eQhYUBCMAs2gAR8lHukJgKBbv5tCqPWD9dK8rnedWLlBQGo9M03d8DVJR
+         c4Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Zol8RqhcqrOeExkKxHD6i/0eMcZgg4YGQ9xIXDGBZL0=;
-        b=7uedhsehCHbLHm01tJEIjdz5wcZoqdk1JdJ64ymHAeXkKymouVCYml8efxmW/LBBVb
-         A5MFO4tFPwgbxPJ2o5GcL9EjuvRQMVNxMYI/LB055hYIU9r5Wr6ZanTJwb5YuODs7Qt3
-         EdQPNrJXUkKsWTcdn/omlBJMDi6qZT8AcghYVd26/slwZR0x7HjO2dTqD4RdWxz0yEsh
-         SaVx05lJZUtnshpTbaM5UUNlfn0X6a3siCrRkUlSV+rxYlgK6AxzJ0cNGo4I4HZj2woI
-         oXdN29JlAu9yIn5/upFXkkNYccBHLGre9iXojUf/ASOl408ljFQEgMAXRKrdcniGw4aJ
-         2Jvg==
-X-Gm-Message-State: AOAM5312zxvhYnQ+lOeucypBp2EthMpnP40zrJQEtiDwaRQABqg3RrNL
-	RJ9il/r6TEAY4MT4FNTemA==
-X-Google-Smtp-Source: ABdhPJwD6As9c1PJJ5b5sN3V+8tRevP6v+G+WluIcZqLUbDDpYLuCj4xh6m/A3masXZmj4ALYIcjWg==
-X-Received: by 2002:a9d:a55:: with SMTP id 79mr37401880otg.275.1641323279784;
-        Tue, 04 Jan 2022 11:07:59 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id x4sm10005968oiv.35.2022.01.04.11.07.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 11:07:59 -0800 (PST)
-Received: (nullmailer pid 1229576 invoked by uid 1000);
-	Tue, 04 Jan 2022 19:07:57 -0000
-Date: Tue, 4 Jan 2022 13:07:57 -0600
-From: Rob Herring <robh@kernel.org>
-To: Jesse Taube <mr.bossman075@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+m8XHy9GLWxGLvp8PnRUnsnL00CiCJ1paOrfejaQ6Wk=;
+        b=WLa4ArXbdtnP71SPfhq5WtCM14UwPE3JBMGn7aLwTZ+FHUHVSeT1K+Pr9EcRPNRTmX
+         wnopj3QOv7W1M4sRc6+ECl57sV+6oO9XnmM2pjwsNCYG5r0fVAli+RZma9zt4LfYP/7P
+         weRqvWj/dzH5Ruw4ukBRtRecIwcBXuP5j9BkiJ26Ecbw/xqiIkCypLTw9QdZGCdtiJPe
+         My8JHzSi8saSH9LI1AKbDk5NfsyD3/pcWIvObutJDSjfh+2HduckUkOThpeLasnUCxDZ
+         TZTenUpMR7/krQvMRbb2KliRaYHLIORmixrFSfTpg8lWYo6v2d+lv8PsHyJ6aO6wgshP
+         dQPA==
+X-Gm-Message-State: AOAM531hnJrlBJQXzLVRVUWRNcqshn+o/bqJ7CEI2pA/9I6bT8vBi55n
+	FDLwkuxNZSPS3THmv7UtUjU=
+X-Google-Smtp-Source: ABdhPJzIt3U1Vxn8LL43nXl0QNivPazdOuBn/xIPyLgpgotXxF5e90iXQu74s9mqVKf4eszMoRmjcw==
+X-Received: by 2002:a17:902:c745:b0:143:d220:9196 with SMTP id q5-20020a170902c74500b00143d2209196mr50344497plq.74.1641333452051;
+        Tue, 04 Jan 2022 13:57:32 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id k2sm44953696pfc.53.2022.01.04.13.57.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 13:57:31 -0800 (PST)
+Subject: Re: [PATCH] ARM: dts: gpio-ranges property is now required
 List-Id: <soc.lore.kernel.org>
-Cc: linux@armlinux.org.uk, jirislaby@kernel.org, linux-kernel@vger.kernel.org, festevam@gmail.com, abel.vesa@nxp.com, olof@lixom.net, kernel@pengutronix.de, stefan@agner.ch, ulf.hansson@linaro.org, linux-gpio@vger.kernel.org, linux-imx@nxp.com, Mr.Bossman075@gmail.com, linux-mmc@vger.kernel.org, shawnguo@kernel.org, mturquette@baylibre.com, nobuhiro1.iwamatsu@toshiba.co.jp, linux-arm-kernel@lists.infradead.org, arnd@arndb.de, soc@kernel.org, gregkh@linuxfoundation.org, sboyd@kernel.org, devicetree@vger.kernel.org, s.hauer@pengutronix.de, adrian.hunter@intel.com, linus.walleij@linaro.org, linux-serial@vger.kernel.org, robh+dt@kernel.org, giulio.benetti@benettiengineering.com, linux-clk@vger.kernel.org, aisheng.dong@nxp.com
-Subject: Re: [PATCH v7 4/7] dt-bindings: clock: imx: Add documentation for
- i.MXRT1050 clock
-Message-ID: <YdSbDTcA6qyZdJJv@robh.at.kernel.org>
-References: <20220103233948.198119-1-Mr.Bossman075@gmail.com>
- <20220103233948.198119-5-Mr.Bossman075@gmail.com>
+To: Linus Walleij <linus.walleij@linaro.org>, arm@kernel.org, soc@kernel.org,
+ Nicolas Saenz Julienne <nsaenz@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, Phil Elwell <phil@raspberrypi.com>,
+ Stefan Wahren <stefan.wahren@i2se.com>, Jan Kiszka <jan.kiszka@web.de>
+References: <20220104170247.956760-1-linus.walleij@linaro.org>
+From: Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <6f42ceda-c000-7506-65ec-53534b5aef7d@gmail.com>
+Date: Tue, 4 Jan 2022 13:57:30 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103233948.198119-5-Mr.Bossman075@gmail.com>
+In-Reply-To: <20220104170247.956760-1-linus.walleij@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-On Mon, 03 Jan 2022 18:39:45 -0500, Jesse Taube wrote:
-> From: Jesse Taube <mr.bossman075@gmail.com>
+On 1/4/22 9:02 AM, Linus Walleij wrote:
+> From: Phil Elwell <phil@raspberrypi.com>
 > 
-> Add DT binding documentation for i.MXRT1050 clock driver.
+> Since [1], added in 5.7, the absence of a gpio-ranges property has
+> prevented GPIOs from being restored to inputs when released.
+> Add those properties for BCM283x and BCM2711 devices.
 > 
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> [1] commit 2ab73c6d8323 ("gpio: Support GPIO controllers without
+>     pin-ranges")
+> 
+> Fixes: 2ab73c6d8323 ("gpio: Support GPIO controllers without pin-ranges")
+> Fixes: 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio hogs")
+> Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
+> Reported-by: Jan Kiszka <jan.kiszka@web.de>
+> Signed-off-by: Phil Elwell <phil@raspberrypi.com>
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Link: https://lore.kernel.org/r/20211206092237.4105895-3-phil@raspberrypi.com
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
-> V1->V2:
-> * Replace macros with values
-> V2->V3:
-> * Remove anatop
-> * Use lpuart not gpt
-> * include imxrt1050-clock.h
-> * 2 space tabs to 4
-> * Remove oneOf enum
-> * Change maxItems to 2
-> V3->V4:
-> * Nothing done
-> V4->V5:
-> * Remove extra newline
-> * Rename ccm to clock-controller
-> * Change minItems to const
-> * Change minItems to description
-> * Rename file to add 1050
-> * Change commit description to just 1050
-> V5->V6:
-> * Add maxItems for clocks description
-> V6->V7:
-> * Nothing done
-> ---
->  .../bindings/clock/imxrt1050-clock.yaml       | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml
-> 
+> Hi SoC maintainers, please apply this directly for fixes, the
+> missing patch is wreacking havoc in the RPi world.
 
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-If a tag was not added on purpose, please state why and what changed.
-
+Now that "pinctrl: bcm2835: Change init order for gpio hogs" is in
+Linus' master this patch can go in... what a mess, let's not do this again.
+-- 
+Florian
