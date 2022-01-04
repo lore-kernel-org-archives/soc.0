@@ -4,97 +4,125 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DD37C433F5
-	for <soc@archiver.kernel.org>; Tue,  4 Jan 2022 21:57:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04126C433EF
+	for <soc@archiver.kernel.org>; Tue,  4 Jan 2022 21:58:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6D9A4C36AEB; Tue,  4 Jan 2022 21:57:33 +0000 (UTC)
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	id C66CBC36AED; Tue,  4 Jan 2022 21:58:12 +0000 (UTC)
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 94B13C36AE0;
-	Tue,  4 Jan 2022 21:57:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 94B13C36AE0
+	by smtp.kernel.org (Postfix) with ESMTPS id 2646DC36AEB;
+	Tue,  4 Jan 2022 21:58:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2646DC36AEB
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so1115290pjd.1;
-        Tue, 04 Jan 2022 13:57:32 -0800 (PST)
+Received: by mail-pf1-f181.google.com with SMTP id v11so33404665pfu.2;
+        Tue, 04 Jan 2022 13:58:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
+        h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+m8XHy9GLWxGLvp8PnRUnsnL00CiCJ1paOrfejaQ6Wk=;
-        b=UsFyD6JzmErDVpwH2jhEW0jKQYnviPyZj2wtM0Zy1ryUv3BKM+jt8ln1uTqxy17s+2
-         j8jWYY/Snq94uexghYoUA82QE4cHCfjTsLjNikT/tj39SG1pkz3WGS9Ya/6GZEdp0/OS
-         E0sWzSrJcw1+btjvTYHfetZf/PWuUysgj1h3HjcaLmAFsy613HF86ByhUOeJZ7yiVTC9
-         HbY0VR3KiKCR4S0P4NpDEM0Gw1vPu5cUzo2DFssXIrUBnAQurUufYnZ/hiXEl3IraOjz
-         82Fq7SKjT82eQhYUBCMAs2gAR8lHukJgKBbv5tCqPWD9dK8rnedWLlBQGo9M03d8DVJR
-         c4Ug==
+        bh=SvvGIAAMMC9ckU70W4Ce20Dg5mENqSpztq6aOwwnONM=;
+        b=gN0wx9+UQnTGVEWTwATlyJVK6Lc7qD92T4t4H+mqku28DmIVnCUkH2NlqpKU/F0PlX
+         8PKuqMtvd4andGx78Dq1ydyp3ocGf6avE+kclTRIKYQCntC38iCUkXR+GD2jI1HjJapP
+         unmcv0vpWbq06NqVE+2ZJqP9TWJKOhnEDCtHlkzvior2oOQXyiFAqMYWIqEer92R6uEG
+         dOn9Hzz6wZzmaCMYAKKUpNRu68w5vD2uhRHPZLt4J2EvBvBDeoKuBsRE2CbZd6jKYLCd
+         hjkb+Kula+RV5rlNApNNC9jzB3v1zZvByV2DSEZj+9+gxCNEK/7LE4O1eECZ4Brnyl5S
+         AAdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=+m8XHy9GLWxGLvp8PnRUnsnL00CiCJ1paOrfejaQ6Wk=;
-        b=WLa4ArXbdtnP71SPfhq5WtCM14UwPE3JBMGn7aLwTZ+FHUHVSeT1K+Pr9EcRPNRTmX
-         wnopj3QOv7W1M4sRc6+ECl57sV+6oO9XnmM2pjwsNCYG5r0fVAli+RZma9zt4LfYP/7P
-         weRqvWj/dzH5Ruw4ukBRtRecIwcBXuP5j9BkiJ26Ecbw/xqiIkCypLTw9QdZGCdtiJPe
-         My8JHzSi8saSH9LI1AKbDk5NfsyD3/pcWIvObutJDSjfh+2HduckUkOThpeLasnUCxDZ
-         TZTenUpMR7/krQvMRbb2KliRaYHLIORmixrFSfTpg8lWYo6v2d+lv8PsHyJ6aO6wgshP
-         dQPA==
-X-Gm-Message-State: AOAM531hnJrlBJQXzLVRVUWRNcqshn+o/bqJ7CEI2pA/9I6bT8vBi55n
-	FDLwkuxNZSPS3THmv7UtUjU=
-X-Google-Smtp-Source: ABdhPJzIt3U1Vxn8LL43nXl0QNivPazdOuBn/xIPyLgpgotXxF5e90iXQu74s9mqVKf4eszMoRmjcw==
-X-Received: by 2002:a17:902:c745:b0:143:d220:9196 with SMTP id q5-20020a170902c74500b00143d2209196mr50344497plq.74.1641333452051;
-        Tue, 04 Jan 2022 13:57:32 -0800 (PST)
+        bh=SvvGIAAMMC9ckU70W4Ce20Dg5mENqSpztq6aOwwnONM=;
+        b=1k13tTaOqnNJrTx7XBwDbt5/m00J17vj5crbxwZlEEZ0UHM6ryjJN54DmKSCfRqVjc
+         MaNKrnTJ9VCvaGFzXNrk15CJKAaIfNau/A9JRdzaSW4QfT6uqQnhFUdwJTnyJrUQK4gm
+         DYCwSEGH+DjBsIBLp+ysFzaCErdoZ/CEcrfm/pCQSu/f4Xr4gC+E2SlSpHE9Dz6XKMhJ
+         hvqyPbVWUyESZPrcrlusH9e6iH9hrL1YcmIOCTmuZpBjBf2byicWc7WET6Rd9pG2eLef
+         10LUQEnRy/Ne0cSM+YjtcwfPi0CJlbTVuQLCJbOSHdlQcTdTP/LcDAL/tzxr+nj/VQKY
+         kagg==
+X-Gm-Message-State: AOAM531l46xfXFnH+hsKpyrZdz/1CXL9XoRqKHtVIroAO8tlt8NFZRxv
+	+B/eA9UFjIgxb/FZNljV+PU=
+X-Google-Smtp-Source: ABdhPJzA2TQlMHUW2exBYZuzPP9QsJTEf6wQU7NQ/BciivIvgsHyfURZFbh5JOwf73cli6UAIq9UoQ==
+X-Received: by 2002:a63:8042:: with SMTP id j63mr46712579pgd.292.1641333491667;
+        Tue, 04 Jan 2022 13:58:11 -0800 (PST)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id k2sm44953696pfc.53.2022.01.04.13.57.30
+        by smtp.googlemail.com with ESMTPSA id h19sm41321798pfh.112.2022.01.04.13.58.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 13:57:31 -0800 (PST)
-Subject: Re: [PATCH] ARM: dts: gpio-ranges property is now required
-List-Id: <soc.lore.kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>, arm@kernel.org, soc@kernel.org,
- Nicolas Saenz Julienne <nsaenz@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, Phil Elwell <phil@raspberrypi.com>,
- Stefan Wahren <stefan.wahren@i2se.com>, Jan Kiszka <jan.kiszka@web.de>
-References: <20220104170247.956760-1-linus.walleij@linaro.org>
+        Tue, 04 Jan 2022 13:58:11 -0800 (PST)
+Subject: Re: [GIT PULL 0/5] SoC changes for 5.17
 From: Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <6f42ceda-c000-7506-65ec-53534b5aef7d@gmail.com>
-Date: Tue, 4 Jan 2022 13:57:30 -0800
+To: Arnd Bergmann <arnd@kernel.org>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Olof Johansson <olof@lixom.net>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <CAK8P3a0RDZpLtWjMEU1QVWSjOoqRAH6QxQ+ZQnJc8LwaV7m+JQ@mail.gmail.com>
+ <7e480da8-0d54-2d62-0a8e-184901c974b6@gmail.com>
+Message-ID: <ee2c92da-030c-b92f-0f41-1fdbbeed47c7@gmail.com>
+Date: Tue, 4 Jan 2022 13:58:09 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20220104170247.956760-1-linus.walleij@linaro.org>
+In-Reply-To: <7e480da8-0d54-2d62-0a8e-184901c974b6@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 1/4/22 9:02 AM, Linus Walleij wrote:
-> From: Phil Elwell <phil@raspberrypi.com>
+On 12/24/21 9:11 AM, Florian Fainelli wrote:
+> Hi Arnd, Olof,
 > 
-> Since [1], added in 5.7, the absence of a gpio-ranges property has
-> prevented GPIOs from being restored to inputs when released.
-> Add those properties for BCM283x and BCM2711 devices.
+> On 12/23/2021 13:31, Arnd Bergmann wrote:
+>> I'm sending out the pull requests for 5.17 early, as I won't have
+>> access to
+>> my workstation for the next two weeks. With only 760 non-merge commits,
+>> this again feels quieter than the massive previous merge window, but the
+>> number of changed lines was actually slightly higher.
+>>
+>> There are very few changes aside from devicetree patches, most of
+>> which are for the i.MX, Tegra, Qualcomm, Apple, K3 and Aspeed
+>> platforms.
+>>
+>> We have a couple of new SoCs in existing families:
+>>
+>>   - Qualcomm Snapdragon 8 Gen1
+>>   - Qualcomm Snapdragon SDX65
+>>   - NXP i.MX8ULP
+>>   - Texas Instruments j721s2
+>>   - Renesas R-Car S4-8
+>>
+>> The time between product announcement and kernel support is fairly short
+>> for all of these, which is nice. In particular the two Snapdragons
+>> were only
+>> announced this month and are the current high end of Qualcomm's products.
+>> On the other end of the spectrum, we also add support for ST SPEAr320s,
+>> which was launched 10 years ago.
+>>
+>> Aside from the Arm chips, there is also a pull request for a new
+>> RISC-V SoC,
+>> the Starfive JH7100, including some of the basic drivers to make it boot.
 > 
-> [1] commit 2ab73c6d8323 ("gpio: Support GPIO controllers without
->     pin-ranges")
+> There seems to half of the submitted Broadcom SoCs pull request missing
+> in this one, was there issues with those below:
 > 
-> Fixes: 2ab73c6d8323 ("gpio: Support GPIO controllers without pin-ranges")
-> Fixes: 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio hogs")
-> Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
-> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
-> Reported-by: Jan Kiszka <jan.kiszka@web.de>
-> Signed-off-by: Phil Elwell <phil@raspberrypi.com>
-> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Link: https://lore.kernel.org/r/20211206092237.4105895-3-phil@raspberrypi.com
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> Hi SoC maintainers, please apply this directly for fixes, the
-> missing patch is wreacking havoc in the RPi world.
+> defconfigs:
+> 
+> https://lore.kernel.org/linux-arm-kernel/20211221220642.2862218-1-f.fainelli@gmail.com/
+> 
+> https://lore.kernel.org/linux-arm-kernel/20211221220642.2862218-2-f.fainelli@gmail.com/
+> 
+> 
+> drivers:
+> 
+> https://lore.kernel.org/linux-arm-kernel/20211221220642.2862218-5-f.fainelli@gmail.com/
+> 
+> 
+> Should I resend or fix something in those? Thanks!
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Now that "pinctrl: bcm2835: Change init order for gpio hogs" is in
-Linus' master this patch can go in... what a mess, let's not do this again.
+Arnd, Olof, do I need to resend the 3 pull requests mentioned above?
+Thanks and happy new year.
 -- 
 Florian
