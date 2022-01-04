@@ -1,124 +1,93 @@
-Return-Path: <SRS0=TDcZ=RU=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=+ssV=RU=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34A8DC433F5
-	for <soc@archiver.kernel.org>; Tue,  4 Jan 2022 17:05:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ED1EC433EF
+	for <soc@archiver.kernel.org>; Tue,  4 Jan 2022 19:07:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C75C6C36B05; Tue,  4 Jan 2022 17:04:59 +0000 (UTC)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	id 27998C36AF4; Tue,  4 Jan 2022 19:07:01 +0000 (UTC)
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2A013C36AED
-	for <soc@kernel.org>; Tue,  4 Jan 2022 17:04:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2A013C36AED
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id u13so82956840lff.12
-        for <soc@kernel.org>; Tue, 04 Jan 2022 09:04:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ziUzwrSrZbAOE3wgxvLgQNaxMFo4GBwpI7qj4Mjw0U0=;
-        b=MtYM8pxOhrgjoBB8bel1gaFOc5dvayHJU1svfIem0xR2pfhzdfHUFk7LPxaSj1At2C
-         q1vNsbE+EgME7ydXOYOW0PI1YMPR+jiWs4Mx+f3qkM5nliLNd7BPkof1o8phw8veZmE9
-         KNY+/0tF7IOvt+aN50MhN7fN/sTwSs7QLBc+3z1cCnOZYvibGb7ewITPNaQZDeF22AJa
-         g2pFuNRZaD+DrUg7R6JKEtvzsZH4kv2966k0Z+TwMY3PA6kYXtoBStVrXAtEhIcxxxU0
-         aa0uxwC1fLgLBL7k0hokstRrRj/11+bKnFtJIIzhjhxWzqkF/f7Y5y7KY2x6pVOCWcRf
-         r5Iw==
+	by smtp.kernel.org (Postfix) with ESMTPS id 7744DC36AEB;
+	Tue,  4 Jan 2022 19:07:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7744DC36AEB
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f180.google.com with SMTP id w7so40095507oiw.0;
+        Tue, 04 Jan 2022 11:07:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ziUzwrSrZbAOE3wgxvLgQNaxMFo4GBwpI7qj4Mjw0U0=;
-        b=hrkNDTy+t1NtEAW0mc625SeR4bdbtka1cugysajkSuyOqzd0bczPH0A9qkVkYyNjjh
-         oYfsF8wBfzYYhWWiyVZw880KEz8lpPX3pw0R2yz1LXi1pJF6/QUBHE04LogRDZGbTaDm
-         0v3FFvgVFD271sDozNn/3UddsZ20KTwUG7DGe/EoX7v5aiAMbLwc+6OhipF9dn3tmZYY
-         DxY8GuZHY2oy/xLkJiWbAvLRWdPpBRt5SdqpI78cA8rWvPAlnSoUdlRR4WcOFLZlatyW
-         D26s0v0qbYtkaFfMdDiScBDOV/4w2KjnT7uHWvQj0QHrOjqKF8TXk3ixpETRlk5nl9es
-         dqWA==
-X-Gm-Message-State: AOAM533BDLe17owwAeN8EXQwSIE/7BpItoE01G6+Y9Lz0AWkbpbfqN8x
-	wJuFnFI6eeQFrMUkXK2LHW4aFg==
-X-Google-Smtp-Source: ABdhPJxtUFMjPkLxRI4XvKKEY0ZxxlROU/qBEsC+7S/lFN4Uh6HHmw2zPcv7AXMjOGkcewuvSWlnVw==
-X-Received: by 2002:ac2:511b:: with SMTP id q27mr44849005lfb.69.1641315895061;
-        Tue, 04 Jan 2022 09:04:55 -0800 (PST)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id p21sm3093400lfg.98.2022.01.04.09.04.51
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8CgkkbPTMgwITurXcyYa8txS8XSAkqNrdvXpQYKmlLs=;
+        b=OZe2qSz442t5Gc2PA94jw4VZQNhQA8yE0BZy5JH1yziQcFiugeCsWk12vVqcGIqd6h
+         zrdmn5fZKm6/Vf2x4a6RuqWgTKM/7i5JSlGMpaHS+RP9F8dbWvXwbh64EqJXDj8LMRA8
+         VZeBgG44OagN9EJGBFlvifZ6bjsfZDleiKSfjvwfduD0qL4Elt+G7KEfNkXBU9DsmafN
+         S1MsjhBfmIosIgtfJFdSiLKAS//kpvGeY8EOdsTT29b7J40vwcRxiBf0wkQr0HX5PS3v
+         wY/1jKe9Mi4D0x7++Bv9azdt/+nUPUyNRl+JKLa80BFt/2BiH3JbfCYSm+vYF6vmRhLj
+         lFgw==
+X-Gm-Message-State: AOAM531KaVzQGjsZTdFB5e1fIMh84Rh5sIzk8u6hlgPowAZnVq99ZQzW
+	W1GmZEwT2ZogqnwM1uyKcg==
+X-Google-Smtp-Source: ABdhPJw0hrSMFia3kzR3oD+Vdenn5ohLpgJhiNYL5ZTwCMdi+PUKKbvtKnFvGJJVRysmx2lanYsxeg==
+X-Received: by 2002:a05:6808:155:: with SMTP id h21mr31124067oie.121.1641323219578;
+        Tue, 04 Jan 2022 11:06:59 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id r17sm8378611otc.65.2022.01.04.11.06.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 09:04:53 -0800 (PST)
-From: Linus Walleij <linus.walleij@linaro.org>
+        Tue, 04 Jan 2022 11:06:59 -0800 (PST)
+Received: (nullmailer pid 1227279 invoked by uid 1000);
+	Tue, 04 Jan 2022 19:06:57 -0000
+Date: Tue, 4 Jan 2022 13:06:57 -0600
+From: Rob Herring <robh@kernel.org>
+To: Jesse Taube <mr.bossman075@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Phil Elwell <phil@raspberrypi.com>,
-	Stefan Wahren <stefan.wahren@i2se.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Jan Kiszka <jan.kiszka@web.de>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] ARM: dts: gpio-ranges property is now required
-Date: Tue,  4 Jan 2022 18:02:47 +0100
-Message-Id: <20220104170247.956760-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.33.1
+Cc: adrian.hunter@intel.com, linux-arm-kernel@lists.infradead.org, abel.vesa@nxp.com, shawnguo@kernel.org, jirislaby@kernel.org, nobuhiro1.iwamatsu@toshiba.co.jp, robh+dt@kernel.org, festevam@gmail.com, linus.walleij@linaro.org, linux-clk@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com, s.hauer@pengutronix.de, devicetree@vger.kernel.org, soc@kernel.org, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, olof@lixom.net, mturquette@baylibre.com, linux-mmc@vger.kernel.org, giulio.benetti@benettiengineering.com, sboyd@kernel.org, linux-gpio@vger.kernel.org, Mr.Bossman075@gmail.com, arnd@arndb.de, gregkh@linuxfoundation.org, linux@armlinux.org.uk, stefan@agner.ch, ulf.hansson@linaro.org, aisheng.dong@nxp.com
+Subject: Re: [PATCH v7 2/7] ARM: dts: imxrt1050-pinfunc: Add pinctrl binding
+ header
+Message-ID: <YdSa0ScOpb/5sMF/@robh.at.kernel.org>
+References: <20220103233948.198119-1-Mr.Bossman075@gmail.com>
+ <20220103233948.198119-3-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220103233948.198119-3-Mr.Bossman075@gmail.com>
 
-From: Phil Elwell <phil@raspberrypi.com>
+On Mon, 03 Jan 2022 18:39:43 -0500, Jesse Taube wrote:
+> From: Jesse Taube <mr.bossman075@gmail.com>
+> 
+> Add binding header for i.MXRT1050 pinctrl device tree.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> [Jesse: move pinfunc from dt-bindings to dts folder]
+> ---
+> V1->V2:
+> * Move pinfunc from dt-binding to dts
+> * Change subject and description
+> * Change licence to "GPL-2.0+ OR MIT"
+> V2->V3:
+> * Change License comment style
+> V3->V4:
+> * Nothing done
+> V4->V5:
+> * Nothing done
+> V5->V6:
+> * Nothing done
+> V6->V7:
+> * Nothing done
+> ---
+>  arch/arm/boot/dts/imxrt1050-pinfunc.h | 993 ++++++++++++++++++++++++++
+>  1 file changed, 993 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/imxrt1050-pinfunc.h
+> 
 
-Since [1], added in 5.7, the absence of a gpio-ranges property has
-prevented GPIOs from being restored to inputs when released.
-Add those properties for BCM283x and BCM2711 devices.
 
-[1] commit 2ab73c6d8323 ("gpio: Support GPIO controllers without
-    pin-ranges")
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-Fixes: 2ab73c6d8323 ("gpio: Support GPIO controllers without pin-ranges")
-Fixes: 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio hogs")
-Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
-Reported-by: Florian Fainelli <f.fainelli@gmail.com>
-Reported-by: Jan Kiszka <jan.kiszka@web.de>
-Signed-off-by: Phil Elwell <phil@raspberrypi.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20211206092237.4105895-3-phil@raspberrypi.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-Hi SoC maintainers, please apply this directly for fixes, the
-missing patch is wreacking havoc in the RPi world.
----
- arch/arm/boot/dts/bcm2711.dtsi | 2 ++
- arch/arm/boot/dts/bcm283x.dtsi | 2 ++
- 2 files changed, 4 insertions(+)
-
-diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
-index 9e01dbca4a01..dff18fc9a906 100644
---- a/arch/arm/boot/dts/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/bcm2711.dtsi
-@@ -582,6 +582,8 @@ &gpio {
- 		     <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
- 		     <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>;
- 
-+	gpio-ranges = <&gpio 0 0 58>;
-+
- 	gpclk0_gpio49: gpclk0_gpio49 {
- 		pin-gpclk {
- 			pins = "gpio49";
-diff --git a/arch/arm/boot/dts/bcm283x.dtsi b/arch/arm/boot/dts/bcm283x.dtsi
-index a3e06b680947..c113661a6668 100644
---- a/arch/arm/boot/dts/bcm283x.dtsi
-+++ b/arch/arm/boot/dts/bcm283x.dtsi
-@@ -126,6 +126,8 @@ gpio: gpio@7e200000 {
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
- 
-+			gpio-ranges = <&gpio 0 0 54>;
-+
- 			/* Defines common pin muxing groups
- 			 *
- 			 * While each pin can have its mux selected
--- 
-2.33.1
+If a tag was not added on purpose, please state why and what changed.
 
