@@ -4,58 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC5F3C43217
-	for <soc@archiver.kernel.org>; Thu,  6 Jan 2022 19:40:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADF7EC433FE
+	for <soc@archiver.kernel.org>; Thu,  6 Jan 2022 19:40:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7DAFEC36AEB; Thu,  6 Jan 2022 19:40:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 67194C36AED;
-	Thu,  6 Jan 2022 19:40:29 +0000 (UTC)
+	id 99385C36AEF; Thu,  6 Jan 2022 19:40:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8380EC36AED;
+	Thu,  6 Jan 2022 19:40:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1641498029;
-	bh=HFji+uZcsEgw6yHgWnWcHfPOVugumdFpf+DOie7uMLA=;
+	s=k20201202; t=1641498038;
+	bh=2aDk9uqMWa4xg01U9Mxf6C8v3wLC4ELza965pO5NTyU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=rKv1K9XEh3kN35xyR6wZOE3Ng5xnWf5LD69R+qIXD6PQfRCAiR2+ULLvGXZlDry6d
-	 WqlUVEasp+oFtLODqmVdkH3J/dBRah/ah/2FZfDsFu6AXHLLdXuNtvQUR9t8U4kMsZ
-	 3tOM3EmKSgY4GAY0RkvGKKOj9mvLAQ2PovaA1Abm4oocOxLXwQ/UFsnkV1Zcq0Fymp
-	 +dJ3cmEx2RmCg8CYJOURA7RRibjlKgSGK85gLGc1E+ty89macvP45cy+wknhFd5nsW
-	 dmg5r8HVZ09dNuuIxewSEURe/Hlmho8A+Ikq45Zm921IGLkZLivPWlwehPXttu0vdR
-	 fgYBgEgGG43iw==
+	b=nRVy8gdb03EUTBD+DYNWSXbyx1iVxq1LSYkZsFKRSu12cLkJBsXTTBajH0LCjq1UG
+	 k7kN0D0dLEondX4c+zzPrJdgzDxB1/F8+iUFYRQ8BaMaSFG8oYxPqtc99Y97CQGu/2
+	 6tfOe81xX9TlYERE6JGiABYHWxZ3gB06KaC2IWtG23gJJx5Z7RbsgSLVFxY7UMtIeg
+	 g2U7lJue3MNS7ho8RfXd8zN1AKUDaLE42E3QzUwHv0VooNPnT3lXyp4lvQyarMW/ky
+	 07Mu0FIy+QzbIKDmG7jOFgPMOwJ1TDP6NoimaDEZmvT6u9OWsitdBCNDyY14ArNSKb
+	 XwVZ+fDrYQlIg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 46EE6F79405;
-	Thu,  6 Jan 2022 19:40:29 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 725EAF79405;
+	Thu,  6 Jan 2022 19:40:38 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Reset controller fixes for v5.16, part 2
+Subject: Re: [GIT PULL] ARM: socfpga: fix for v5.16, part 3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164149802928.26637.191433006998952209.git-patchwork-notify@kernel.org>
-Date: Thu, 06 Jan 2022 19:40:29 +0000
-References: <20220105172515.273947-1-p.zabel@pengutronix.de>
-In-Reply-To: <20220105172515.273947-1-p.zabel@pengutronix.de>
-To: Philipp Zabel <p.zabel@pengutronix.de>
+ <164149803845.26637.9494755273032321058.git-patchwork-notify@kernel.org>
+Date: Thu, 06 Jan 2022 19:40:38 +0000
+References: <20211227103644.566694-1-dinguyen@kernel.org>
+In-Reply-To: <20211227103644.566694-1-dinguyen@kernel.org>
+To: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+This pull request was applied to soc/soc.git (for-next)
+by Olof Johansson <olof@lixom.net>:
 
-On Wed,  5 Jan 2022 18:25:15 +0100 you wrote:
-> Dear arm-soc maintainers,
+On Mon, 27 Dec 2021 04:36:44 -0600 you wrote:
+> Hi Arnd/Olof,
 > 
-> The following changes since commit 69125b4b9440be015783312e1b8753ec96febde0:
-> 
->   reset: tegra-bpmp: Revert Handle errors in BPMP response (2021-11-17 17:22:27 +0100)
-> 
-> are available in the Git repository at:
+> Please pull in these 2 patches for v5.16. The reason for this dts compatible
+> change is that the commit 98d948eb833 ("spi: cadence-quadspi: fix write
+> completion support") is already part of v5.16, thus we need these 2 patches to
+> be in v5.16.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Reset controller fixes for v5.16, part 2
-    https://git.kernel.org/soc/soc/c/1e3dbfbbec52
+  - [GIT,PULL] ARM: socfpga: fix for v5.16, part 3
+    https://git.kernel.org/soc/soc/c/8922bb6526ac
 
 You are awesome, thank you!
 -- 
