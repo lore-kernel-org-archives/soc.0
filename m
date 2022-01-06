@@ -4,59 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADF7EC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4C6EC433EF
 	for <soc@archiver.kernel.org>; Thu,  6 Jan 2022 19:40:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 99385C36AEF; Thu,  6 Jan 2022 19:40:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8380EC36AED;
-	Thu,  6 Jan 2022 19:40:38 +0000 (UTC)
+	id 8E6D7C36AF2; Thu,  6 Jan 2022 19:40:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 789B6C36AE3
+	for <soc@kernel.org>; Thu,  6 Jan 2022 19:40:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1641498038;
-	bh=2aDk9uqMWa4xg01U9Mxf6C8v3wLC4ELza965pO5NTyU=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=nRVy8gdb03EUTBD+DYNWSXbyx1iVxq1LSYkZsFKRSu12cLkJBsXTTBajH0LCjq1UG
-	 k7kN0D0dLEondX4c+zzPrJdgzDxB1/F8+iUFYRQ8BaMaSFG8oYxPqtc99Y97CQGu/2
-	 6tfOe81xX9TlYERE6JGiABYHWxZ3gB06KaC2IWtG23gJJx5Z7RbsgSLVFxY7UMtIeg
-	 g2U7lJue3MNS7ho8RfXd8zN1AKUDaLE42E3QzUwHv0VooNPnT3lXyp4lvQyarMW/ky
-	 07Mu0FIy+QzbIKDmG7jOFgPMOwJ1TDP6NoimaDEZmvT6u9OWsitdBCNDyY14ArNSKb
-	 XwVZ+fDrYQlIg==
+	bh=QvpIpDjdkxwYtVG/ic24k5TuROLeU7qWGdIlbzcEPNA=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=VkBOV3gc761POOR82kLpeHUvWbEAmNusNYQBCH1drU62UQ8SAlIfIoVMaxkPaH0Jw
+	 kd2GV+AAKm+9ioIpeGA31WfER/+ImO9gdggu+KdoBpAaCKHpRR0uReWY1uNcvtqSWR
+	 j1lElRH+qQqYC7M5Li/4BdEo3gqRk09rx8ivWeRZm0Q30L6JWu9xAAUQr3HcDjaCIw
+	 7RPAJbfM2bKMMQIZ47e9E37IGL10PoxlRQPXfrrcwagO7WmRcdbxnV1UvRNH9ghDXn
+	 X+wMK4xGqeeg57xJyJExeC6Zso3vsFE+5IwRMlgL7ubpFLMzHeSv66yA87jqQd1wB+
+	 Cmofhap7DeCTA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 725EAF79405;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 67F2FF79403;
 	Thu,  6 Jan 2022 19:40:38 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: socfpga: fix for v5.16, part 3
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164149803845.26637.9494755273032321058.git-patchwork-notify@kernel.org>
+ <164149803842.26637.14962709554846186201.git-patchwork-summary@kernel.org>
 Date: Thu, 06 Jan 2022 19:40:38 +0000
-References: <20211227103644.566694-1-dinguyen@kernel.org>
-In-Reply-To: <20211227103644.566694-1-dinguyen@kernel.org>
-To: Dinh Nguyen <dinguyen@kernel.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Olof Johansson <olof@lixom.net>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Mon, 27 Dec 2021 04:36:44 -0600 you wrote:
-> Hi Arnd/Olof,
-> 
-> Please pull in these 2 patches for v5.16. The reason for this dts compatible
-> change is that the commit 98d948eb833 ("spi: cadence-quadspi: fix write
-> completion support") is already part of v5.16, thus we need these 2 patches to
-> be in v5.16.
-> 
-> [...]
+Patch: [GIT,PULL] ARM: socfpga: fix for v5.16, part 3
+  Submitter: Dinh Nguyen <dinguyen@kernel.org>
+  Committer: Olof Johansson <olof@lixom.net>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=601469
+  Lore link: https://lore.kernel.org/r/20211227103644.566694-1-dinguyen@kernel.org
 
-Here is the summary with links:
-  - [GIT,PULL] ARM: socfpga: fix for v5.16, part 3
-    https://git.kernel.org/soc/soc/c/8922bb6526ac
+Patch: [GIT,PULL] Reset controller fixes for v5.16, part 2
+  Submitter: Philipp Zabel <p.zabel@pengutronix.de>
+  Committer: Olof Johansson <olof@lixom.net>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=602955
+  Lore link: https://lore.kernel.org/r/20220105172515.273947-1-p.zabel@pengutronix.de
 
-You are awesome, thank you!
+Patch: [GIT,PULL] ARM: SoC fixes for 5.16, part 4
+  Submitter: Arnd Bergmann <arnd@kernel.org>
+  Committer: Linus Torvalds <torvalds@linux-foundation.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=600993
+  Lore link: https://lore.kernel.org/r/CAK8P3a34sd5NOxkwZsoE+qeY1MRCS_zO0tmfutmoKGwyvjR7Lw@mail.gmail.com
+
+
+Total patches: 3
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
