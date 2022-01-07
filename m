@@ -1,102 +1,59 @@
-Return-Path: <SRS0=TFoB=RX=nxp.com=leoyang.li@kernel.org>
+Return-Path: <SRS0=y2Xw=RX=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50869C433F5
-	for <soc@archiver.kernel.org>; Fri,  7 Jan 2022 03:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31B3FC433EF
+	for <soc@archiver.kernel.org>; Fri,  7 Jan 2022 11:37:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 10311C36AE9; Fri,  7 Jan 2022 03:37:40 +0000 (UTC)
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6F94DC36AE5;
-	Fri,  7 Jan 2022 03:37:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6F94DC36AE5
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A1F741A0307;
-	Fri,  7 Jan 2022 04:37:37 +0100 (CET)
-Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6873D1A0246;
-	Fri,  7 Jan 2022 04:37:37 +0100 (CET)
-Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.142])
-	by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id 7426F4030F;
-	Thu,  6 Jan 2022 20:37:36 -0700 (MST)
-From: Li Yang <leoyang.li@nxp.com>
+	id F2E4DC36AE9; Fri,  7 Jan 2022 11:37:57 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id C32D9C36AED;
+	Fri,  7 Jan 2022 11:37:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C32D9C36AED
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3362D13D5;
+	Fri,  7 Jan 2022 03:37:56 -0800 (PST)
+Received: from bogus (unknown [10.57.38.209])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5D0B73F66F;
+	Fri,  7 Jan 2022 03:37:54 -0800 (PST)
+Date: Fri, 7 Jan 2022 11:37:40 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	shawnguo@kernel.org
-Subject: [GIT PULL] soc/fsl drivers changes for next(v5.17)
-Date: Thu,  6 Jan 2022 21:37:36 -0600
-Message-Id: <20220107033736.26762-1-leoyang.li@nxp.com>
-X-Mailer: git-send-email 2.25.1.377.g2d2118b
+To: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Arnd Bergmann <arnd@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Olof Johansson <olof@lixom.net>
+Subject: Re: [GIT PULL] firmware: arm_scmi: Updates for v5.17
+Message-ID: <20220107113740.f4zlz25largdjcfd@bogus>
+References: <20211222141342.56395-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211222141342.56395-1-sudeep.holla@arm.com>
 
-Hi soc maintainers,
 
-Please merge the following new changes for soc/fsl drivers.
+Hi again,
 
+On Wed, Dec 22, 2021 at 02:13:42PM +0000, Sudeep Holla wrote:
+> Hi ARM SoC Team,
+>
+> Please pull !
+>
+
+I am aware I sent this pull request just around the same time Arnd finalised
+the initial set. I have seen emails suggesting that Olof might be planning
+to merge additional PR, so it would be great if this gets included in
+that cut. All the changes are in -next since 21st December, so there should
+be no surprises.
+
+Thanks again and sorry for nagging.
+
+--
 Regards,
-Leo
-
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/leo/linux.git tags/soc-fsl-next-v5.17
-
-for you to fetch changes up to 1ce93cb102e7fcf5d1849044d23ce92b5a71040a:
-
-  soc: fsl: qe: Check of ioremap return value (2022-01-06 20:53:18 -0600)
-
-----------------------------------------------------------------
-NXP/FSL SoC driver updates for v5.17
-
-- Add new SoC compatible in existing binding
-- Replace kernel.h with the necessary inclusions
-- MAINTAINERS file fixes
-- Fix memory allocation failure check in guts driver
-- Various cleanups and minor fixes
-
-----------------------------------------------------------------
-Andy Shevchenko (3):
-      soc: fsl: Replace kernel.h with the necessary inclusions
-      soc: fsl: Correct MAINTAINERS database (QUICC ENGINE LIBRARY)
-      soc: fsl: Correct MAINTAINERS database (SOC)
-
-Christophe JAILLET (2):
-      soc: fsl: guts: Revert commit 3c0d64e867ed
-      soc: fsl: guts: Add a missing memory allocation failure check
-
-Jason Wang (1):
-      soc: fsl: qe: fix typo in a comment
-
-Jiasheng Jiang (1):
-      soc: fsl: qe: Check of ioremap return value
-
-Li Yang (2):
-      dt-bindings: qoriq-clock: add missing compatible for lx2160a
-      dt-bindings: fsl,layerscape-dcfg: add missing compatible for lx2160a
-
- .../bindings/arm/freescale/fsl,layerscape-dcfg.txt         |  2 +-
- Documentation/devicetree/bindings/clock/qoriq-clock.txt    |  1 +
- MAINTAINERS                                                |  4 ++--
- drivers/soc/fsl/guts.c                                     | 14 +++++++++-----
- drivers/soc/fsl/qe/qe.c                                    |  4 ++--
- drivers/soc/fsl/qe/qe_io.c                                 |  2 ++
- include/soc/fsl/dpaa2-fd.h                                 |  3 ++-
- include/soc/fsl/qe/immap_qe.h                              |  3 ++-
- include/soc/fsl/qe/qe_tdm.h                                |  4 +++-
- include/soc/fsl/qe/ucc_fast.h                              |  2 +-
- include/soc/fsl/qe/ucc_slow.h                              |  2 +-
- 11 files changed, 26 insertions(+), 15 deletions(-)
+Sudeep
