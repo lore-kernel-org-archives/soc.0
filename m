@@ -4,100 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14A28C433EF
-	for <soc@archiver.kernel.org>; Sat,  8 Jan 2022 21:18:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CEB6C433EF
+	for <soc@archiver.kernel.org>; Sat,  8 Jan 2022 21:58:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C8F6CC36AED; Sat,  8 Jan 2022 21:18:55 +0000 (UTC)
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	id E7250C36AE5; Sat,  8 Jan 2022 21:58:46 +0000 (UTC)
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 01DA3C36AE5
-	for <soc@kernel.org>; Sat,  8 Jan 2022 21:18:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01DA3C36AE5
+	by smtp.kernel.org (Postfix) with ESMTPS id 211F4C36AED
+	for <soc@kernel.org>; Sat,  8 Jan 2022 21:58:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 211F4C36AED
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=lixom.net
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=lixom.net
-Received: by mail-pl1-f172.google.com with SMTP id h1so8700472pls.11
-        for <soc@kernel.org>; Sat, 08 Jan 2022 13:18:54 -0800 (PST)
+Received: by mail-pj1-f49.google.com with SMTP id hv15so2470476pjb.5
+        for <soc@kernel.org>; Sat, 08 Jan 2022 13:58:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=lixom-net.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KQdHX59zQzGaf+OD8CwAKEthqzbXd85Vf3CrWa5Zq2E=;
-        b=ehLSUCz/PoKCY8UVLuCTp0TOssmBOWuJhidj7WZ9dGV8EDqfPr0pVY44E5TZ75huCz
-         wyWH1niOT1m8Wis1qDnmP2pj+LOR2VXd0IkvA1XZ6eeNBbAI8s9snPCHq6/PYGTZN6Fs
-         TPf8kxA/iV5IXmBkPWMHXSVAYlNSzW5WXER94FlL+VGxEa3+kKnE/0DasR/sWHWNu/rr
-         wCh1atlqeYUjz7SK18GoczdPzsJEzTgGMj/HVEiVj4/2tYx7LJIqzHwUF0XNRdV8Os7D
-         rG4FRTcNEERWGimzCwmT9zld9ZbnnmC49wNC2VwJs93VCfIsSsc9NOxxJaO0m8UtgdSY
-         Rgbg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4Hd1sTJddOAEXNt6EvTLGETq0KW+NvG5jCzX8oMoecI=;
+        b=LLZ0TYsk1sIjI6GUOYOQAq0OhqsK1A4fbANbCa+GWDCOy0mXr/bRDrc691o8vz8maJ
+         b7fZ8a7qd3BmOnIH+boprZCvXmLdpSmTU3cdODLs4ydsWgPAzA4BvsLLE3X0nZACO3Ka
+         KLOnhGrMpeHuKb64g8Ck+hYsCJIRwVRIJXHmb7s7Swqzt9hzKS1XHR/M1qi4sBlK8sTJ
+         9lSLb1gLwGlvgfgAm3KzdpqB0xMgbGfF/ved3YBbIagst4x75D0kQhK1oP3CU5UNuH9Y
+         /T91m9q9oYBNkm/pn6Kj1heTNgaAXrdFvH0Zf4S83jJQDWLE4CYoQrOIApXtzFMwGxln
+         xPDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KQdHX59zQzGaf+OD8CwAKEthqzbXd85Vf3CrWa5Zq2E=;
-        b=d9dv7ecEgfvrDbsQRBDUUIcwe0/8jLJSrmHFw27XOrTfNX6O9iJeoRFx5vokmtNpqx
-         1OkWO6zPZT4rtWGDMiEE3+/4vBLCFhZ8G4QI5P5AmQBblzRif0W9m8S6nWZl8bSc7t+S
-         XqYY7xxQpj/cipqvR2hWAPZs+jpFhV1HxlZXo3+FFWsg+GQZGkuaak/ZdI5N7sx8sLiz
-         Qd3Fq6KfZDwXvBuiceTeG+z7Kod5ykGaf4+YGYuZCry0RRimHnVry0Kr2SjZFxpe+F3H
-         KdUVeJCOdfB0NXw0/T71LfcjAeenZM8F/iANhk4ATSY/NV1Zb2CTGUtRJnjruETzT7jd
-         KLyQ==
-X-Gm-Message-State: AOAM530MmiFfP6vIV0ROLBFBT+KYEeGNydhZVrAd8OXJw3XDoflzFR1Y
-	HtyCHBch0AscAXKEX8m/lAeAX50ukXqkxzX+V8IyRQ==
-X-Google-Smtp-Source: ABdhPJwGySUI2fsTiCx40M78PiFzLhwoLq1bFbm/II9AeUmCOBd2CE39UQgkFOJfOnTXEz2jDWn0SdoSDbY5ON7o/u8=
-X-Received: by 2002:a63:a741:: with SMTP id w1mr7966528pgo.620.1641676734454;
- Sat, 08 Jan 2022 13:18:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20220104170247.956760-1-linus.walleij@linaro.org> <07f6beef-8824-e995-577e-3c705ed7d40f@i2se.com>
-In-Reply-To: <07f6beef-8824-e995-577e-3c705ed7d40f@i2se.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4Hd1sTJddOAEXNt6EvTLGETq0KW+NvG5jCzX8oMoecI=;
+        b=6MmiapImGRTx3kXTgcAzXtbZr0fjPH/BMOVBw94IhlMe9OoHcinBq7KERY0R7IVo/u
+         HIue0UDpurFcH2Wk+B7uB8nlWzLPxPvvt/QxM4F4Lj4tUe+G0Nne0qvlta9S9IQBt7zj
+         1kJLF9sAGmc3V/XQh79nBHhVHTMgsr9s0K3tzGQH2XYWXcnh9MR5aYFlYslYsYscB5Wk
+         i1qqpm42k0QMdUXUQT24IZOGfL6nbjc4FqOJuGgJA2b3hya4ekcNznaSHtSZ+kgx/guD
+         Es5AT00BkmL1K4dtBn1s6ClvUepPqtjLusFc7fpU8m2U5wANuFSz86kUWvWSUjgHbInJ
+         PGdg==
+X-Gm-Message-State: AOAM530GwgiCAWp9uJNtVq7Kt6QDaIzDEM41cOSu9Vj0N9Hoq3lpXEx7
+	HlT7byW83KvLHTi+VApANHsVvA==
+X-Google-Smtp-Source: ABdhPJyMF8b0vtRVaaTcGo+OX6AMhUl4fH8CKTllWfdUoabPmtVG/ESsRLNyLWYzPgfdK/oHzrVH/g==
+X-Received: by 2002:a63:7053:: with SMTP id a19mr2963908pgn.283.1641679125568;
+        Sat, 08 Jan 2022 13:58:45 -0800 (PST)
+Received: from localhost (99-152-116-91.lightspeed.sntcca.sbcglobal.net. [99.152.116.91])
+        by smtp.gmail.com with ESMTPSA id g9sm2781258pfj.123.2022.01.08.13.58.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 13:58:44 -0800 (PST)
+Date: Sat, 8 Jan 2022 13:26:21 -0800
 From: Olof Johansson <olof@lixom.net>
-Date: Sat, 8 Jan 2022 13:18:43 -0800
-Message-ID: <CAOesGMjQavd+2eupBE40BfhBwVq4_K493Kn0uzsCi9DoPHB19A@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dts: gpio-ranges property is now required
-To: Stefan Wahren <stefan.wahren@i2se.com>
+To: Neil Armstrong <narmstrong@baylibre.com>
 List-Id: <soc.lore.kernel.org>
-Cc: ARM-SoC Maintainers <arm@kernel.org>, SoC Team <soc@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, 
-	Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>, Phil Elwell <phil@raspberrypi.com>, 
-	Florian Fainelli <f.fainelli@gmail.com>, Jan Kiszka <jan.kiszka@web.de>, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: soc@kernel.org, arm@kernel.org, linux-amlogic@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] amlogic fixes for v5.17-rc
+Message-ID: <YdoBffKeAvtOeRSe@lx2k>
+References: <7e40328b-6645-4343-3050-73dcfb2cefcb@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7e40328b-6645-4343-3050-73dcfb2cefcb@baylibre.com>
 
-On Sat, Jan 8, 2022 at 1:04 PM Stefan Wahren <stefan.wahren@i2se.com> wrote:
->
-> Hi Olof,
->
-> Am 04.01.22 um 18:02 schrieb Linus Walleij:
-> > From: Phil Elwell <phil@raspberrypi.com>
-> >
-> > Since [1], added in 5.7, the absence of a gpio-ranges property has
-> > prevented GPIOs from being restored to inputs when released.
-> > Add those properties for BCM283x and BCM2711 devices.
-> >
-> > [1] commit 2ab73c6d8323 ("gpio: Support GPIO controllers without
-> >     pin-ranges")
-> >
-> > Fixes: 2ab73c6d8323 ("gpio: Support GPIO controllers without pin-ranges")
-> > Fixes: 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio hogs")
-> > Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
-> > Reported-by: Florian Fainelli <f.fainelli@gmail.com>
-> > Reported-by: Jan Kiszka <jan.kiszka@web.de>
-> > Signed-off-by: Phil Elwell <phil@raspberrypi.com>
-> > Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > Link: https://lore.kernel.org/r/20211206092237.4105895-3-phil@raspberrypi.com
-> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> > ---
-> > Hi SoC maintainers, please apply this directly for fixes, the
-> > missing patch is wreacking havoc in the RPi world.
->
-> this patch has been send to soc@kernel.org in order to fix a regression
-> [1] caused by "pinctrl: bcm2835: Change init order for gpio hog". Would
-> be great to get it into 5.16
->
-> [1] -
-> https://lore.kernel.org/all/ec60b52b-7a59-266d-9608-11c0da9053a6@i2se.com/
+On Mon, Jan 03, 2022 at 04:13:44PM +0100, Neil Armstrong wrote:
+> Hi,
+> 
+> Here's a couple of DT fixes for v5.17-rc1, they fix the UART compatibles of
+> the ARMv7 Amlogic SoCs and by the way keep earlycon working after [1] has been
+> applied by greg in the tty branch for 5.17.
+> 
+> I know it's early for 5.17-rc1, but at least it's in the pipe.
+> 
+> I based the changes on your dt-5.17 tag pushed to linus for 5.17-rc1,
+> if necessary I can rebase on v5.16-rcX.
 
-Yeah, my bad -- I only scanned for pull requests and missed this
-patch. I'll send it up. Linus just merged the pull request I sent so
-I'll do an incremental one.
+Hi Neil,
+
+It looks like this branch is based on our arm/dt branch? Please don't base your
+topics on our branches, it'll be awkward if we ever need to rebuild them (it's
+happened a few times, but we try very hard to avoid it).
+
+In this case, you should have based your contents on top of your latest dt
+branch (if it would have had conflicts), not ours.
+
+Mind rebuilding and send a new pull request?
+
+Thanks,
+
 
 -Olof
+
