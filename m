@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC242C433F5
-	for <soc@archiver.kernel.org>; Sat,  8 Jan 2022 22:00:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F0DDC433EF
+	for <soc@archiver.kernel.org>; Sat,  8 Jan 2022 22:00:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D16DAC36AE5; Sat,  8 Jan 2022 22:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B8F5CC36AEF;
-	Sat,  8 Jan 2022 22:00:10 +0000 (UTC)
+	id 4D9EAC36AF2; Sat,  8 Jan 2022 22:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3643CC36AE3;
+	Sat,  8 Jan 2022 22:00:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1641679210;
-	bh=Rofd4euSQsGx0HRNz5cFDCHUiBFk9LOOMtNuxfi42lY=;
+	s=k20201202; t=1641679214;
+	bh=OcWH/Rd6D8npFjmqmdUfoH02E6oSxIsVRoGJWBU2V5Q=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=dFU+QCUdAgyb6aoP0/hON+Yz/qCVZbBwz7QcWOYthI8DTJBoQaAQhLRiaq2WJzCbZ
-	 N4cso9ViLaykAjWOe3irDGklX7HHoGm9iF+Iq1NxrCro8WeUMzeCVF+qjzT/F2vrOr
-	 XTn17/kHDPDvHJcvJUtVBhYhzZGUAdFbuAtYi2wKhFzCqSv5neZBssxOm5DiW2ZNkz
-	 9WsdQFVtWeuDWVcCfEkbG61gtcKqz1AYO7h15zxXgLdM0IQOD7ScaOlOPf/F05njaB
-	 4D0B6xMtpr8pn9/NGfDdhld7ig5c8Nt0dx9nCFqO+gBJppuNboFfaie3q7gHJu/Fi2
-	 h64GBPDy4pBWQ==
+	b=JMJbZ6VcGfGSz6+XjIrrSLWawcalNrTMYGZwHeSwBFaN7VxEn+tIdp1EogMiPa7LQ
+	 Yo99fcXPGJ5i5dSdmnNVtem3dkdjwaMQGEd2Su34USnfIxiduCAyeS/zo96b3+nl21
+	 sW0ppruzA08uSP03QEnV9rJ0efomSjBHDGLfsYdNO+yXheLfvDtNuWbd76tFwBfoDg
+	 TbOmQr477NZvrqmgPpPtv7oVK0jQEr1dkf+FzAFBrlHbX94iViY6U1PseBlqnkY9xh
+	 hbcioo1W8R6AYGhmXhUhyTM4v/tEce6d6aDD+fizJN046QYg88VSccRC+yAyFUs4B8
+	 u1oA6oZfuVO+w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9B04EF79404;
-	Sat,  8 Jan 2022 22:00:10 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 25132F79404;
+	Sat,  8 Jan 2022 22:00:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: dts: gpio-ranges property is now required
+Subject: Re: [GIT PULL] arm64: dts: socfpga: dts updates for v5.17, part 2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164167921063.24856.5272264509238287957.git-patchwork-notify@kernel.org>
-Date: Sat, 08 Jan 2022 22:00:10 +0000
-References: <20220104170247.956760-1-linus.walleij@linaro.org>
-In-Reply-To: <20220104170247.956760-1-linus.walleij@linaro.org>
-To: Linus Walleij <linus.walleij@linaro.org>
+ <164167921414.24856.13156416079068509715.git-patchwork-notify@kernel.org>
+Date: Sat, 08 Jan 2022 22:00:14 +0000
+References: <20220105213603.804026-1-dinguyen@kernel.org>
+In-Reply-To: <20220105213603.804026-1-dinguyen@kernel.org>
+To: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
+This pull request was applied to soc/soc.git (for-next)
 by Olof Johansson <olof@lixom.net>:
 
-On Tue,  4 Jan 2022 18:02:47 +0100 you wrote:
-> From: Phil Elwell <phil@raspberrypi.com>
+On Wed,  5 Jan 2022 15:36:03 -0600 you wrote:
+> The following changes since commit 8dce88fe80a858f34bb5b46470218fe478d251ee:
 > 
-> Since [1], added in 5.7, the absence of a gpio-ranges property has
-> prevented GPIOs from being restored to inputs when released.
-> Add those properties for BCM283x and BCM2711 devices.
+>   arm64: dts: Update NAND MTD partition for Agilex and Stratix 10 (2021-12-01 08:07:41 -0600)
 > 
-> [1] commit 2ab73c6d8323 ("gpio: Support GPIO controllers without
->     pin-ranges")
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_update_for_v5.17_part2
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: dts: gpio-ranges property is now required
-    https://git.kernel.org/soc/soc/c/c8013355ead6
+  - [GIT,PULL] arm64: dts: socfpga: dts updates for v5.17, part 2
+    https://git.kernel.org/soc/soc/c/0876babeb560
 
 You are awesome, thank you!
 -- 
