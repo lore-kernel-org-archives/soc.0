@@ -1,64 +1,183 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=TA/P=RZ=gmail.com=mr.bossman075@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF65FC4321E
-	for <soc@archiver.kernel.org>; Sat,  8 Jan 2022 22:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 381BAC433F5
+	for <soc@archiver.kernel.org>; Sun,  9 Jan 2022 19:07:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 782A9C36AFC; Sat,  8 Jan 2022 22:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 61ADEC36AE3;
-	Sat,  8 Jan 2022 22:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1641679214;
-	bh=JL72fnKpBSuxCahyUlImftD0jN44pyqIZqgZsHctDbs=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=oT1zjuNmrp66rJUvjLXc51i9flIDqCykpG1+L0+aHwGZZ+48NpIxaUtwe6zQ4bi5J
-	 FcsQWySgt2MRHSfjUir/PSTPS13AMRiHLox5WTRn4faf7W4HRZ1hg3ArYbNUSN/+Bd
-	 4zCKfADo2tgnj4pTnCZRLcqoccyf0VjyAdXkgcRZJ4NXPTc+ocs5WGR2jL9jhrc0vB
-	 9X0HFXpiX6D4MxU1bVxweKeovGOqg4om/3OtoXuFp8ULWPiaXuWWko/FzNz2XHvUZM
-	 zUWOrAgo+rIpVmMs1dn3CJLefJ0T+4MOYlzwF0okEDI+bwY79ltM91gSDnHEXL95Fj
-	 RSVZdW4qxKLpw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4B4E7F7940E;
-	Sat,  8 Jan 2022 22:00:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id EBC0EC36AF2; Sun,  9 Jan 2022 19:07:47 +0000 (UTC)
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 2473EC36AE5;
+	Sun,  9 Jan 2022 19:07:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2473EC36AE5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f169.google.com with SMTP id u23so146577qku.5;
+        Sun, 09 Jan 2022 11:07:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LIuUJEhpYyiWk5SC4KmPzkhX52Ed+ueySMLZ3ZhnSEk=;
+        b=TtMMW6PSKK4lVCx9+fMTxUzSLfQtUAm/w1mkSQDtnL5cWcht9+mxwbS4mTnNTizPpv
+         FXIIxyXErbEf9uPZVS7CjHE0JhHZrWf0XjRWuvPOhx5prJDLMbasZ4gvRu7qJ27DlbSP
+         6GxKPHp7nCNaIR9S9e5kTcFEsp5EcX/jopf51NbotX5kOXt8EZXNYnLTULgFseLO5V/a
+         i2YA4FEiKn6hSrM9+QwQ/X3JE/kewcmYtfFeJn+P4JXLe6YEoLG0pzfLjA1k32dv4umj
+         lEKrgLZz04j0MBEJdGnmC3xz22oAvw4j8aDNkd3zQ8h83uKgV/7moULU09RisQlz3DmM
+         Nibw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LIuUJEhpYyiWk5SC4KmPzkhX52Ed+ueySMLZ3ZhnSEk=;
+        b=09cGVF2F0trJxMtu1XDvZ4rhABF7iwBdkv5DjwCKgaWjIAw9KNK3637bQNLZ3H4gOg
+         KTHoE8NHo+9vcNxmfiw+z9tVYuPtMgFCtRpyPXsxZsykKkPuV4DEIflz7I8/769gmkxi
+         JX5W3rZsfKZ5n+Iu9e9kryesFChWwc7yojvfwgKuNN0V9F/qVWEztEEi3LtFrfJRKDQm
+         uWn55KI8DIIbwsuKwFBNexq+qPbuYPR+CPlkybv7Fqm8ClSPQCrCQ95l/lpRYdFBxxNC
+         8VI4773FyRKHaX8RLs5dcPNyjerr1Qk1iC1Logn8+V6xVjMl0BlJ0EuyfsmtTPwoW7Dr
+         iUgA==
+X-Gm-Message-State: AOAM531GI4tNWtL5W9SIMCvdFwpu+ioipQp3drybctmFpLZYCZMRm0Kc
+	fV9TgS+/q8j4nHh7A5aMMNd7tGXdFA4=
+X-Google-Smtp-Source: ABdhPJz8ma6DoK2QLPKid3Ugn7xuBVtSTf8DbubDXxK/pwWaX/AMeOn71DOoBCeEq/YsBqZlTl8Byg==
+X-Received: by 2002:a05:620a:1452:: with SMTP id i18mr12576732qkl.557.1641755265978;
+        Sun, 09 Jan 2022 11:07:45 -0800 (PST)
+Received: from [10.4.10.38] (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
+        by smtp.gmail.com with ESMTPSA id h18sm280121qkn.62.2022.01.09.11.07.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Jan 2022 11:07:45 -0800 (PST)
+Message-ID: <89046151-e44e-6828-ad76-8574fba4fca8@gmail.com>
+Date: Sun, 9 Jan 2022 14:07:42 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] soc/fsl drivers changes for next(v5.17)
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <164167921430.24856.5117528642270798509.git-patchwork-notify@kernel.org>
-Date: Sat, 08 Jan 2022 22:00:14 +0000
-References: <20220107033736.26762-1-leoyang.li@nxp.com>
-In-Reply-To: <20220107033736.26762-1-leoyang.li@nxp.com>
-To: Li Yang <leoyang.li@nxp.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v7 5/7] clk: imx: Add initial support for i.MXRT1050 clock
+ driver
+Content-Language: en-US
+To: Stephen Boyd <sboyd@kernel.org>, linux-imx@nxp.com
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: mturquette@baylibre.com, robh+dt@kernel.org, shawnguo@kernel.org,
+ s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+ ulf.hansson@linaro.org, aisheng.dong@nxp.com, stefan@agner.ch,
+ linus.walleij@linaro.org, gregkh@linuxfoundation.org, arnd@arndb.de,
+ olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com,
+ adrian.hunter@intel.com, jirislaby@kernel.org,
+ giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-serial@vger.kernel.org
+References: <20220103233948.198119-1-Mr.Bossman075@gmail.com>
+ <20220103233948.198119-6-Mr.Bossman075@gmail.com>
+ <20220105235157.8ED80C36AEB@smtp.kernel.org>
+From: Jesse Taube <mr.bossman075@gmail.com>
+In-Reply-To: <20220105235157.8ED80C36AEB@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Olof Johansson <olof@lixom.net>:
-
-On Thu,  6 Jan 2022 21:37:36 -0600 you wrote:
-> Hi soc maintainers,
+>> +static const char * const pll_ref_sels[] = {"osc", "dummy", };
+>> +static const char * const per_sels[] = {"ipg_pdof", "osc", };
+>> +static const char * const pll1_bypass_sels[] = {"pll1_arm", "pll1_arm_ref_sel", };
+>> +static const char * const pll2_bypass_sels[] = {"pll2_sys", "pll2_sys_ref_sel", };
+>> +static const char * const pll3_bypass_sels[] = {"pll3_usb_otg", "pll3_usb_otg_ref_sel", };
+>> +static const char * const pll5_bypass_sels[] = {"pll5_video", "pll5_video_ref_sel", };
+>> +static const char *const pre_periph_sels[] = {
+>> +       "pll2_sys", "pll2_pfd2_396m", "pll2_pfd0_352m", "arm_podf", };
+>> +static const char *const periph_sels[] = { "pre_periph_sel", "todo", };
+>> +static const char *const usdhc_sels[] = { "pll2_pfd2_396m", "pll2_pfd0_352m", };
+>> +static const char *const lpuart_sels[] = { "pll3_80m", "osc", };
+>> +static const char *const lcdif_sels[] = {
+>> +       "pll2_sys", "pll3_pfd3_454_74m", "pll5_video", "pll2_pfd0_352m",
+>> +       "pll2_pfd1_594m", "pll3_pfd1_664_62m", };
+>> +static const char *const semc_alt_sels[] = { "pll2_pfd2_396m", "pll3_pfd1_664_62m", };
+>> +static const char *const semc_sels[] = { "periph_sel", "semc_alt_sel", };
 > 
-> Please merge the following new changes for soc/fsl drivers.
+> Any chance this can use clk_parent_data instead of string names for
+> parents?
 > 
-> Regards,
-> Leo
+>> +
+>> +static struct clk_hw **hws;
+>> +static struct clk_hw_onecell_data *clk_hw_data;
+>> +
+>> +static void __init imxrt_clocks_common_init(void __iomem *base)
 > 
-> [...]
+> Drop __init and preferably inline this to the callsite.
+> 
+>> +{
+>> +       /* Anatop clocks */
+>> +       hws[IMXRT1050_CLK_DUMMY] = imx_clk_hw_fixed("dummy", 0UL);
+>> +
+>> +       hws[IMXRT1050_CLK_PLL1_REF_SEL] = imx_clk_hw_mux("pll1_arm_ref_sel",
+>> +               base + 0x0, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
+>> +       hws[IMXRT1050_CLK_PLL2_REF_SEL] = imx_clk_hw_mux("pll2_sys_ref_sel",
+>> +               base + 0x30, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
+>> +       hws[IMXRT1050_CLK_PLL3_REF_SEL] = imx_clk_hw_mux("pll3_usb_otg_ref_sel",
+>> +               base + 0x10, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
+>> +       hws[IMXRT1050_CLK_PLL5_REF_SEL] = imx_clk_hw_mux("pll5_video_ref_sel",
+>> +               base + 0xa0, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
+>> +
+>> +       hws[IMXRT1050_CLK_PLL1_ARM] = imx_clk_hw_pllv3(IMX_PLLV3_SYS, "pll1_arm",
+>> +               "pll1_arm_ref_sel", base + 0x0, 0x7f);
+>> +       hws[IMXRT1050_CLK_PLL2_SYS] = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll2_sys",
+>> +               "pll2_sys_ref_sel", base + 0x30, 0x1);
+>> +       hws[IMXRT1050_CLK_PLL3_USB_OTG] = imx_clk_hw_pllv3(IMX_PLLV3_USB, "pll3_usb_otg",
+>> +               "pll3_usb_otg_ref_sel", base + 0x10, 0x1);
+>> +       hws[IMXRT1050_CLK_PLL5_VIDEO] = imx_clk_hw_pllv3(IMX_PLLV3_AV, "pll5_video",
+>> +               "pll5_video_ref_sel", base + 0xa0, 0x7f);
+>> +
+>> +       /* PLL bypass out */
+>> +       hws[IMXRT1050_CLK_PLL1_BYPASS] = imx_clk_hw_mux_flags("pll1_bypass", base + 0x0, 16, 1,
+>> +               pll1_bypass_sels, ARRAY_SIZE(pll1_bypass_sels), CLK_SET_RATE_PARENT);
+>> +       hws[IMXRT1050_CLK_PLL2_BYPASS] = imx_clk_hw_mux_flags("pll2_bypass", base + 0x30, 16, 1,
+>> +               pll2_bypass_sels, ARRAY_SIZE(pll2_bypass_sels), CLK_SET_RATE_PARENT);
+>> +       hws[IMXRT1050_CLK_PLL3_BYPASS] = imx_clk_hw_mux_flags("pll3_bypass", base + 0x10, 16, 1,
+>> +               pll3_bypass_sels, ARRAY_SIZE(pll3_bypass_sels), CLK_SET_RATE_PARENT);
+>> +       hws[IMXRT1050_CLK_PLL5_BYPASS] = imx_clk_hw_mux_flags("pll5_bypass", base + 0xa0, 16, 1,
+>> +               pll5_bypass_sels, ARRAY_SIZE(pll5_bypass_sels), CLK_SET_RATE_PARENT);
+>> +
+>> +       hws[IMXRT1050_CLK_VIDEO_POST_DIV_SEL] = imx_clk_hw_divider("video_post_div_sel",
+>> +               "pll5_video", base + 0xa0, 19, 2);
+>> +       hws[IMXRT1050_CLK_VIDEO_DIV] = imx_clk_hw_divider("video_div",
+>> +               "video_post_div_sel", base + 0x170, 30, 2);
+>> +
+>> +       hws[IMXRT1050_CLK_PLL3_80M] = imx_clk_hw_fixed_factor("pll3_80m",  "pll3_usb_otg", 1, 6);
+>> +
+>> +       hws[IMXRT1050_CLK_PLL2_PFD0_352M] = imx_clk_hw_pfd("pll2_pfd0_352m", "pll2_sys", base + 0x100, 0);
+>> +       hws[IMXRT1050_CLK_PLL2_PFD1_594M] = imx_clk_hw_pfd("pll2_pfd1_594m", "pll2_sys", base + 0x100, 1);
+>> +       hws[IMXRT1050_CLK_PLL2_PFD2_396M] = imx_clk_hw_pfd("pll2_pfd2_396m", "pll2_sys", base + 0x100, 2);
+>> +       hws[IMXRT1050_CLK_PLL3_PFD1_664_62M] = imx_clk_hw_pfd("pll3_pfd1_664_62m", "pll3_usb_otg", base + 0xf0, 1);
+>> +       hws[IMXRT1050_CLK_PLL3_PFD3_454_74M] = imx_clk_hw_pfd("pll3_pfd3_454_74m", "pll3_usb_otg", base + 0xf0, 3);
+>> +}
+>> +
+>> +static int imxrt1050_clocks_probe(struct platform_device *pdev)
+>> +{
+>> +       void __iomem *ccm_base;
+>> +       void __iomem *pll_base;
+>> +       struct device *dev = &pdev->dev;
+>> +       struct device_node *np = dev->of_node;
+>> +       struct device_node *anp;
+>> +       int ret;
+>> +
+>> +       clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
+>> +                                         IMXRT1050_CLK_END), GFP_KERNEL);
+>> +       if (WARN_ON(!clk_hw_data))
+>> +               return -ENOMEM;
+>> +
+>> +       clk_hw_data->num = IMXRT1050_CLK_END;
+>> +       hws = clk_hw_data->hws;
+>> +
+>> +       hws[IMXRT1050_CLK_OSC] = __clk_get_hw(of_clk_get_by_name(np, "osc"));
+> 
+> Use clk_parent_data instead and reference the binding name with .fw_name
 
-Here is the summary with links:
-  - [GIT,PULL] soc/fsl drivers changes for next(v5.17)
-    https://git.kernel.org/soc/soc/c/6b6db66fb373
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Hi Stephen, sorry to bother you again.
+I'm wondering if adding `clk_parent_data` is necessary as it seems like 
+it wold be a big change and the other IMX boards haven't implemented 
+this yet would it be okay if I don't do this, or if it is necessary 
+could you link to a patch set to change it.
 
