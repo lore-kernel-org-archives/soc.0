@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93436C4332F
-	for <soc@archiver.kernel.org>; Tue, 11 Jan 2022 21:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10333C433EF
+	for <soc@archiver.kernel.org>; Tue, 11 Jan 2022 21:26:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6FD51C36AE9; Tue, 11 Jan 2022 21:26:15 +0000 (UTC)
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	id E8227C36AE9; Tue, 11 Jan 2022 21:26:16 +0000 (UTC)
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9DD47C36AE3;
-	Tue, 11 Jan 2022 21:26:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9DD47C36AE3
+	by smtp.kernel.org (Postfix) with ESMTPS id 1DB3CC36AE3;
+	Tue, 11 Jan 2022 21:26:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1DB3CC36AE3
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f175.google.com with SMTP id f17so745916qtf.8;
-        Tue, 11 Jan 2022 13:26:14 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id y10so788538qtw.1;
+        Tue, 11 Jan 2022 13:26:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2DvqFBpuIutEn6jdqjBPtihA+7CFslR8HD0Tr5Yiiwg=;
-        b=fqPC855DyYCHll1gqOiF11f2C+B9Tatn2vke0Jt6NTycTA2QWdQO15b7VoUQfyqfB1
-         HLeg9ANghpRc651rTOksDoF+9Vu6TzukuZejnhvLkcFu8EvreH1oQZZoeKwpPjsbytQd
-         QmbsTSffdKvfAw1Few8StvJwMligNJx2z2o6fzEErM0abyqbdcd5zOzZPp/fg/xnLA3m
-         MfEK/LJ6qUuKP+VLUdMqHpJatIv8plSQc2MhlDzqV+PgTpKLb5M82hQ6YTT+Ih7Wksg4
-         jvz2vygoocv0VrbuGwxea8XhLpDts/rc5P5/62hZoB0VSlF/JU/8yZYHs2nfUJgyL3e4
-         A0vw==
+        bh=rr6jELGvG2LF019fePgIA2z2VD3l6GZzUoZbl9xOC9k=;
+        b=iCUGw1wbx5IeLepIJG/oq6CGXCHBv+lmkrXHLOiCSWPNaeJQ1QNMcCdjf40ScN5OUL
+         Ji52GH4tIiJ4HIamzR/ZfsglLzaqs/+Glie/KyeUoCMsyk/uGGo0BeFGDCg4PP5Vd9Ar
+         KJjX8bqeoG8HuyEAV2vxXyfd/L1rEJFOdBNlKlIBgudxvuLYmCNXJRCSTwBU/57M6RgP
+         PsEQyHpdt9DiGEAqU9j/R8KoxvkhT9W4WnCfNCQ3Rmh5MOeUHA6YfKIqe19jCl+WqLcL
+         vqbHPCpIFM2wik7w19HGPgM9AhVixjg/snL2qGUi3bgGgpH3zH7kJa9/NSZrRzxrBXqQ
+         01/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2DvqFBpuIutEn6jdqjBPtihA+7CFslR8HD0Tr5Yiiwg=;
-        b=unyx22bm8a0zG8of8h4CL7Ub+I6+Oh4ZUe/DTjoP3JcUbIT4AdEqjBLAhoUR/2+8Ny
-         ua4PSTRSS05SAZM9L5H92zY1sfgF7q6YlFcVuTC0ji3XvYZ772S7t7UyDpmrI875i7YT
-         qFIa26oV5OQz/xFsJZylY5iRkqqfAVJNcs/8wmpxAKybHnvqB0+OaaPl/RST8m4VNAQL
-         5CntTCXQ5zGGXSFmpAdUVVqCAs+fuY7Y5tQAnxygLpxQt35DeNrSfasJcXq3TVhtCTsu
-         3TO8+nVsXEf7RKLX+qOseMH+DMfP3RdkMKyTzi29j5okaF3b0pk8PQ9AboncsHjR8cVi
-         rnxw==
-X-Gm-Message-State: AOAM531YrU+i1TjBslvmBaTPMRaP0kGx74tb4QF9+3Eovyh8WMr+X9Em
-	hpB64OOuXDxtuyPAYZNFhkQ=
-X-Google-Smtp-Source: ABdhPJwz/BcfTylmPL/IDFxnKlTu6b2XkgU2EBMcYazvt6241cKH2DEnhG4rx8ggVGK/4LibDzYHcQ==
-X-Received: by 2002:a05:622a:38e:: with SMTP id j14mr3901063qtx.218.1641936373637;
-        Tue, 11 Jan 2022 13:26:13 -0800 (PST)
+        bh=rr6jELGvG2LF019fePgIA2z2VD3l6GZzUoZbl9xOC9k=;
+        b=XzcVKCVdjfu1q8TaFw2Mq96hFRP38QuIETWCQDN5McKoYVT5L94pzSPzurLBnue95J
+         4+XXZUCq203JWTuAz+9u/xyegQ+QO3Pi2I8wnPGauOSljLY/8+m5/wCHVF7Yt52eB88u
+         I/TQAoO734qBENn+XlDeW2lIPCRZSTm5qjm8qBXHYepqCW/+w2XmO1jH6R+OzUWjlvlR
+         SJeWdxA74taRny8Lk7kUkp9KNLzHDYR9c5hFt1BFACssZ/SBA8yC7twhbZnvcaAhMpB/
+         ker2eCeedvsPFWT24MXJWFIg09YJ4UO0H4SQZJbv7NDMDShT7e9WHSWYcfQwvCVcoWNn
+         KUoA==
+X-Gm-Message-State: AOAM533WpB+VxAQJDZmvirqWuYGy8SupFMGrMx2cZXTKCyMn2HIJ2kp6
+	eJGQIQfysnsRiV9JyGAW0Gk=
+X-Google-Smtp-Source: ABdhPJzMj0pkWt2mG5wEzlhEQH+agI7sjkoUccPyZvLkNYargZ32CtuysIOdkkrYjXxQ6FyhgxTgkA==
+X-Received: by 2002:ac8:5ec1:: with SMTP id s1mr5349844qtx.584.1641936375059;
+        Tue, 11 Jan 2022 13:26:15 -0800 (PST)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id l15sm7761990qkp.16.2022.01.11.13.26.12
+        by smtp.gmail.com with ESMTPSA id l15sm7761990qkp.16.2022.01.11.13.26.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 13:26:13 -0800 (PST)
+        Tue, 11 Jan 2022 13:26:14 -0800 (PST)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -81,124 +81,126 @@ Cc: mturquette@baylibre.com,
 	linux-kernel@vger.kernel.org,
 	linux-mmc@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Subject: [PATCH v7 3/7] dt-bindings: imx: Add clock binding for i.MXRT1050
-Date: Tue, 11 Jan 2022 16:26:02 -0500
-Message-Id: <20220111212606.2072669-4-Mr.Bossman075@gmail.com>
+	linux-serial@vger.kernel.org,
+	Jesse Taube <mr.bossman075@gmail.com>
+Subject: [PATCH v7 4/7] dt-bindings: clock: imx: Add documentation for i.MXRT1050 clock
+Date: Tue, 11 Jan 2022 16:26:03 -0500
+Message-Id: <20220111212606.2072669-5-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220111212606.2072669-1-Mr.Bossman075@gmail.com>
 References: <20220111212606.2072669-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Jesse Taube <mr.bossman075@gmail.com>
 
-Add the clock binding doc for i.MXRT1050.
+Add DT binding documentation for i.MXRT1050 clock driver.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Giulio: added all clocks up to IMXRT1050_CLK_USBOH3]
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-[Jesse: added clocks from IMXRT1050_CLK_IPG_PDOF to
-IMXRT1050_CLK_DMA_MUX and moved IMXRT1050_CLK_END on]
 ---
 V1->V2:
-* Nothing done
+* Replace macros with values
 V2->V3:
-* Added GPT binding
+* Remove anatop
+* Use lpuart not gpt
+* include imxrt1050-clock.h
+* 2 space tabs to 4
+* Remove oneOf enum
+* Change maxItems to 2
 V3->V4:
-* Change License to MIT or GPL-2
+* Nothing done
 V4->V5:
-* Nothing done
+* Remove extra newline
+* Rename ccm to clock-controller
+* Change minItems to const
+* Change minItems to description
+* Rename file to add 1050
+* Change commit description to just 1050
 V5->V6:
-* Nothing done
+* Add maxItems for clocks description
 V6->V7:
-* Fix typo in numbering
-* Remove GPT
+* Nothing done
 V7->V8:
 * Nothing done
 ---
- include/dt-bindings/clock/imxrt1050-clock.h | 72 +++++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 include/dt-bindings/clock/imxrt1050-clock.h
+ .../bindings/clock/imxrt1050-clock.yaml       | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml
 
-diff --git a/include/dt-bindings/clock/imxrt1050-clock.h b/include/dt-bindings/clock/imxrt1050-clock.h
+diff --git a/Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml b/Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml
 new file mode 100644
-index 000000000000..93bef0832d16
+index 000000000000..35fd08c143f4
 --- /dev/null
-+++ b/include/dt-bindings/clock/imxrt1050-clock.h
-@@ -0,0 +1,72 @@
-+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-+/*
-+ * Copyright(C) 2019
-+ * Author(s): Giulio Benetti <giulio.benetti@benettiengineering.com>
-+ */
++++ b/Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml
+@@ -0,0 +1,67 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/imxrt1050-clock.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#ifndef __DT_BINDINGS_CLOCK_IMXRT1050_H
-+#define __DT_BINDINGS_CLOCK_IMXRT1050_H
++title: Clock bindings for Freescale i.MXRT
 +
-+#define IMXRT1050_CLK_DUMMY			0
-+#define IMXRT1050_CLK_CKIL			1
-+#define IMXRT1050_CLK_CKIH			2
-+#define IMXRT1050_CLK_OSC			3
-+#define IMXRT1050_CLK_PLL2_PFD0_352M		4
-+#define IMXRT1050_CLK_PLL2_PFD1_594M		5
-+#define IMXRT1050_CLK_PLL2_PFD2_396M		6
-+#define IMXRT1050_CLK_PLL3_PFD0_720M		7
-+#define IMXRT1050_CLK_PLL3_PFD1_664_62M		8
-+#define IMXRT1050_CLK_PLL3_PFD2_508_24M		9
-+#define IMXRT1050_CLK_PLL3_PFD3_454_74M		10
-+#define IMXRT1050_CLK_PLL2_198M			11
-+#define IMXRT1050_CLK_PLL3_120M			12
-+#define IMXRT1050_CLK_PLL3_80M			13
-+#define IMXRT1050_CLK_PLL3_60M			14
-+#define IMXRT1050_CLK_PLL1_BYPASS		15
-+#define IMXRT1050_CLK_PLL2_BYPASS		16
-+#define IMXRT1050_CLK_PLL3_BYPASS		17
-+#define IMXRT1050_CLK_PLL5_BYPASS		19
-+#define IMXRT1050_CLK_PLL1_REF_SEL		20
-+#define IMXRT1050_CLK_PLL2_REF_SEL		21
-+#define IMXRT1050_CLK_PLL3_REF_SEL		22
-+#define IMXRT1050_CLK_PLL5_REF_SEL		23
-+#define IMXRT1050_CLK_PRE_PERIPH_SEL		24
-+#define IMXRT1050_CLK_PERIPH_SEL		25
-+#define IMXRT1050_CLK_SEMC_ALT_SEL		26
-+#define IMXRT1050_CLK_SEMC_SEL			27
-+#define IMXRT1050_CLK_USDHC1_SEL		28
-+#define IMXRT1050_CLK_USDHC2_SEL		29
-+#define IMXRT1050_CLK_LPUART_SEL		30
-+#define IMXRT1050_CLK_LCDIF_SEL			31
-+#define IMXRT1050_CLK_VIDEO_POST_DIV_SEL	32
-+#define IMXRT1050_CLK_VIDEO_DIV			33
-+#define IMXRT1050_CLK_ARM_PODF			34
-+#define IMXRT1050_CLK_LPUART_PODF		35
-+#define IMXRT1050_CLK_USDHC1_PODF		36
-+#define IMXRT1050_CLK_USDHC2_PODF		37
-+#define IMXRT1050_CLK_SEMC_PODF			38
-+#define IMXRT1050_CLK_AHB_PODF			39
-+#define IMXRT1050_CLK_LCDIF_PRED		40
-+#define IMXRT1050_CLK_LCDIF_PODF		41
-+#define IMXRT1050_CLK_USDHC1			42
-+#define IMXRT1050_CLK_USDHC2			43
-+#define IMXRT1050_CLK_LPUART1			44
-+#define IMXRT1050_CLK_SEMC			45
-+#define IMXRT1050_CLK_LCDIF_APB			46
-+#define IMXRT1050_CLK_PLL1_ARM			47
-+#define IMXRT1050_CLK_PLL2_SYS			48
-+#define IMXRT1050_CLK_PLL3_USB_OTG		49
-+#define IMXRT1050_CLK_PLL4_AUDIO		50
-+#define IMXRT1050_CLK_PLL5_VIDEO		51
-+#define IMXRT1050_CLK_PLL6_ENET			52
-+#define IMXRT1050_CLK_PLL7_USB_HOST		53
-+#define IMXRT1050_CLK_LCDIF_PIX			54
-+#define IMXRT1050_CLK_USBOH3			55
-+#define IMXRT1050_CLK_IPG_PDOF			56
-+#define IMXRT1050_CLK_PER_CLK_SEL		57
-+#define IMXRT1050_CLK_PER_PDOF			58
-+#define IMXRT1050_CLK_DMA			59
-+#define IMXRT1050_CLK_DMA_MUX			60
-+#define IMXRT1050_CLK_END			61
++maintainers:
++  - Giulio Benetti <giulio.benetti@benettiengineering.com>
++  - Jesse Taube <Mr.Bossman075@gmail.com>
 +
-+#endif /* __DT_BINDINGS_CLOCK_IMXRT1050_H */
++description: |
++  The clock consumer should specify the desired clock by having the clock
++  ID in its "clocks" phandle cell. See include/dt-bindings/clock/imxrt*-clock.h
++  for the full list of i.MXRT clock IDs.
++
++properties:
++  compatible:
++    const: fsl,imxrt1050-ccm
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 2
++
++  clocks:
++    description: 24m osc
++    maxItems: 1
++
++  clock-names:
++    const: osc
++
++  '#clock-cells':
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - '#clock-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/imxrt1050-clock.h>
++
++    clks: clock-controller@400fc000 {
++        compatible = "fsl,imxrt1050-ccm";
++        reg = <0x400fc000 0x4000>;
++        interrupts = <95>, <96>;
++        clocks = <&osc>;
++        clock-names = "osc";
++        #clock-cells = <1>;
++    };
++
++    lpuart1: serial@40184000 {
++        compatible = "fsl,imxrt1050-lpuart";
++        reg = <0x40184000 0x4000>;
++        interrupts = <20>;
++        clocks = <&clks IMXRT1050_CLK_LPUART1>;
++        clock-names = "ipg";
++    };
 -- 
 2.34.1
 
