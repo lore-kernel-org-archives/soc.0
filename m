@@ -1,44 +1,76 @@
-Return-Path: <sboyd@kernel.org>
+Return-Path: <SRS0=dI0m=R4=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E96CC433EF
-	for <soc@archiver.kernel.org>; Wed, 12 Jan 2022 02:57:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40F8EC433F5
+	for <soc@archiver.kernel.org>; Wed, 12 Jan 2022 14:07:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ED43AC36AF3; Wed, 12 Jan 2022 02:57:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2402C36AE3;
-	Wed, 12 Jan 2022 02:57:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1641956272;
-	bh=+X9kkG1rprTDzyGONdgoFopTcpGiNRGBdPchBikPezE=;
-	h=In-Reply-To:References:Subject:From:List-Id:Cc:To:Date:From;
-	b=aHkMSLDhSU2vUvSwHHkP+5Jj52IJ5mkvz2pCMn3skPKSf4gXc2T5FAhkSMZYQDfYv
-	 aCB6Fg5g6VhTDeOLMRbUvAb4bX1pylzqS4vY81cVJDnWxeW5t+Fg6TWyfSHEsYGpxc
-	 fwKPZER9CMbUz97lFPYEoK0KPTBJ1ZaJuGrfjdwJl+HT1a/wt8sD0LV9gAUL0LN+ix
-	 4dduIiV5unv7D1o1+g2IWzlD3RB6eyBq5lmpwHqMMn2i/kDT7vmZzHYKp+0Mcec0cv
-	 FyMZWrM4HoCt1VacLf1pSYlHvwwKlRvX28XkrSZ1h8OMMzdhCBqcwc6AmGNq+t3Y40
-	 P/Gvp8tCtGt1A==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220111215415.2075257-6-Mr.Bossman075@gmail.com>
-References: <20220111212606.2072669-1-Mr.Bossman075@gmail.com> <20220111215415.2075257-1-Mr.Bossman075@gmail.com> <20220111215415.2075257-6-Mr.Bossman075@gmail.com>
-Subject: Re: [PATCH v8 5/7] clk: imx: Add initial support for i.MXRT1050 clock driver
-From: Stephen Boyd <sboyd@kernel.org>
+	id 076BEC36AEB; Wed, 12 Jan 2022 14:07:55 +0000 (UTC)
+Received: from newton.telenet-ops.be (newton.telenet-ops.be [195.130.132.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id CE9F1C36AEA
+	for <soc@kernel.org>; Wed, 12 Jan 2022 14:07:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CE9F1C36AEA
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+	by newton.telenet-ops.be (Postfix) with ESMTPS id 4JYqC65JsjzMqtfY
+	for <soc@kernel.org>; Wed, 12 Jan 2022 15:07:46 +0100 (CET)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:76d0:2bff:fec8:549])
+	by baptiste.telenet-ops.be with bizsmtp
+	id hq7e2600i0kcUhD01q7e1G; Wed, 12 Jan 2022 15:07:39 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1n7eHq-009GYB-DS; Wed, 12 Jan 2022 15:07:38 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1n7eHp-000W08-Uk; Wed, 12 Jan 2022 15:07:37 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>
 List-Id: <soc.lore.kernel.org>
-Cc: mturquette@baylibre.com, robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com, stefan@agner.ch, linus.walleij@linaro.org, gregkh@linuxfoundation.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com, adrian.hunter@intel.com, jirislaby@kernel.org, giulio.benetti@benettiengineering.com, nobuhiro1.iwamatsu@toshiba.co.jp, Mr.Bossman075@gmail.com, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
-To: Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
-Date: Tue, 11 Jan 2022 18:57:51 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20220112025752.C2402C36AE3@smtp.kernel.org>
+Cc: soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] arm64: Remove ARCH_VULCAN
+Date: Wed, 12 Jan 2022 15:07:37 +0100
+Message-Id: <9e8fef2cf4f2d5648e87076bc96601cff945ce40.1641996361.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Quoting Jesse Taube (2022-01-11 13:54:13)
-> Add clock driver support for i.MXRT1050.
->=20
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> Suggested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
+Commit a314520d82317650 ("arm64: disable Broadcom Vulcan platform")
+did not remove the ARCH_VULCAN configuration symbol, as there were still
+references to this symbol.
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+As of commits 240d3d5b2a7a3263 ("gpio: xlp: update GPIO_XLP dependency") and
+f85a543e5373eeba ("arm64: defconfig: drop ARCH_VULCAN"), the last users
+of ARCH_VULCAN have been removed.
+
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ arch/arm64/Kconfig.platforms | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 7d5d588001708856..21697449d762fa99 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -309,9 +309,6 @@ config ARCH_VISCONTI
+ 	help
+ 	  This enables support for Toshiba Visconti SoCs Family.
+ 
+-config ARCH_VULCAN
+-	def_bool n
+-
+ config ARCH_XGENE
+ 	bool "AppliedMicro X-Gene SOC Family"
+ 	help
+-- 
+2.25.1
+
