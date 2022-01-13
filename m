@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE817C43219
-	for <soc@archiver.kernel.org>; Thu, 13 Jan 2022 13:33:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CE0EC43217
+	for <soc@archiver.kernel.org>; Thu, 13 Jan 2022 13:36:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A1445C36AED; Thu, 13 Jan 2022 13:33:35 +0000 (UTC)
+	id EF2C1C36AF3; Thu, 13 Jan 2022 13:36:34 +0000 (UTC)
 Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3942DC36AE9
-	for <soc@kernel.org>; Thu, 13 Jan 2022 13:33:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3942DC36AE9
+	by smtp.kernel.org (Postfix) with ESMTPS id 2B193C36AE3
+	for <soc@kernel.org>; Thu, 13 Jan 2022 13:36:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2B193C36AE3
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DAD9F3F1E0
-	for <soc@kernel.org>; Thu, 13 Jan 2022 13:33:32 +0000 (UTC)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 950993F198
+	for <soc@kernel.org>; Thu, 13 Jan 2022 13:36:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1642080812;
-	bh=2AZxHTRlLvm3ZGGogebXDNWe5vJdA0bdD7/jvlL6me8=;
+	s=20210705; t=1642080992;
+	bh=LK8TIW5kBMgN60TTr9MsN0Nx6njpiR3Rbad9G3zx4zY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=i1B/S4cEE2kEQPo8sUjndaVgWCZErCjOLOILk8oFmhGTfs5vM14aIBDfhBQ/QwLq7
-	 mdPVeWiwzU6UWZOCde04d0rIbTs4Kj3MqOrGL2gpE/YxzAPyS1e6wMjWLfrA4t1bpB
-	 /UKeKstMtL6TU/YNHZPN0oPaM5Vcaiuo89VS9kBm5BIKUM7pBptkulnm+MJORD5ypy
-	 O7oXXj0lWvim2lOb0Ar5fvhP3rCwaHYei9Bpl/s421TksvX7TKgBk/eiRkPaY7lmkv
-	 kk4WoE/ISFkNtOHC7WVWXegAIBLxpKW/UIjTQFrZdRGZAnkhG7kEp3c3ZR/ffbux0f
-	 qpe0c+G23VdCQ==
-Received: by mail-wm1-f72.google.com with SMTP id 14-20020a05600c024e00b0034a83f7391aso2314809wmj.4
-        for <soc@kernel.org>; Thu, 13 Jan 2022 05:33:32 -0800 (PST)
+	b=Nl/fJpmdl1iwO8i2Nk4M4UUAN5A8HFJvKfhMYIvgUEfiGebw3BzTvzr3rgAwnIMDF
+	 RJtxMh6CHHG+OJN5d5CTb/+/CRD/vXIGojquDg816x8kZHGIyc2012i6jMyiZ4ZHpB
+	 bk9mOFxlo8scwZVgyvDh3z6BeRXj79uPcFC7BApn3yKyf30lUlptfMWsFfv6D66Der
+	 xoYsgQYr2G8Ug4X2rEydT9zh1+47jJVg8CXm9ol45dQyKo6OwNvAZwoMZCZCXjU+K1
+	 +w0Q5lV3nj+4zemH2RMqHRN9KC3BIfp1kntn8alyoSlp5ONUowXJxZdQDgDvoKdJfr
+	 G1ZcYUiwxWYEQ==
+Received: by mail-ed1-f71.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso5312936edt.20
+        for <soc@kernel.org>; Thu, 13 Jan 2022 05:36:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=2AZxHTRlLvm3ZGGogebXDNWe5vJdA0bdD7/jvlL6me8=;
-        b=SIydu5a0pc9vXKdn/ZFA951Uo3tZERYaEMpmkirty3eekl2tMbQ6KJ7H5qIq09PDCu
-         LBIC8OhXQbDNTnQGJc4rNBIJXPapcBOCJUl+XGkgidN3qYUK2zrNNWQ6OVAUAtDMg7MW
-         Rfa+hOWvGatyuPU9esBKnBukGVT3iTsn0MlYJ996oCw59wvMiXsPUwhB/PbkZeonxOuD
-         K5F3Hy+uSEC8fc0mEwilg880JT6U2J54uhMcTxWKnjNqOO62a387tDdDfD0xDy/gBu+G
-         cGfw4qz30sBnDvKpnlHW5GcAIwUO7ruCulnIf0n9xwC63AapEQpkx8zBs2dxrQakbE0I
-         CHmA==
-X-Gm-Message-State: AOAM532x6tmjjbsRnE94ko9OH3nHmIw6PigoZnLftjxouf+1ZbEwuzkN
-	7B4BCHfLGf9mR77UVcdp+T85XDrcI/NyJJijiy9TP3X6au/jYTq2vJQkPZ6KfskMjL/sDcSMZth
-	mjbyITOj4+vYjOKVw+ZKRfHE=
-X-Received: by 2002:adf:fecc:: with SMTP id q12mr3999422wrs.510.1642080812441;
-        Thu, 13 Jan 2022 05:33:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx4dIKRpTtfD07xSz5+2nbmXQZf2eX9cv3ujygsjXdEyYvntQPkXEKJq+e836RN3/ma2EAGLw==
-X-Received: by 2002:adf:fecc:: with SMTP id q12mr3999404wrs.510.1642080812290;
-        Thu, 13 Jan 2022 05:33:32 -0800 (PST)
+        bh=LK8TIW5kBMgN60TTr9MsN0Nx6njpiR3Rbad9G3zx4zY=;
+        b=g14pVLNsuZtjT3mafIVQsaEiGHv1Y7LR/Q8w43qWfxt8al4x79cDh2pbCRnsKmla0v
+         qkdGXrlqJH5SgpQVBZTC8SqoH/Yu/7Lq8SP9oM7iEwP6QpPCOV0dLS/+h0pjBkDejYEI
+         0E3Wsjt6XHi2WJYJULBgzXZIDYto+oc3t0tZy3gKUy2FrT7x6fBDr4KZU+J3SntZz7Yu
+         acn0PSjzSqcqT5+WmBdnwwML8tHqQSpeZwC8WCqSysLhXkV1GF5ydcXW9INP6Hw5d3LZ
+         oR/ohYzukourOr5o7Cn8/4p1KqRvPWxf1MZIbWylDdDpS5ghIzniBBgid5teKJNTEq9c
+         IQug==
+X-Gm-Message-State: AOAM531ykD3LoaDMDeSGrba89zE19tLCToIv+op8VF5vQgx8gNz8yozJ
+	nCyccgCcacrN+C+Bma8uOSzqFqK0+MGzwIT8K29FBxXE62d8MmXyZiEbinDA8RzbHbK7CTTG8ez
+	PTfmVzMSkWClxAiVYNChXElc=
+X-Received: by 2002:a05:6402:26c2:: with SMTP id x2mr4125830edd.6.1642080992284;
+        Thu, 13 Jan 2022 05:36:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyz+FRblvd+YpkczXpBN7hT+oLurYDM4lo3dJdgM0Xz6YialsePTUBoBhaDXrvPv1Q1WUuYrw==
+X-Received: by 2002:a05:6402:26c2:: with SMTP id x2mr4125807edd.6.1642080992132;
+        Thu, 13 Jan 2022 05:36:32 -0800 (PST)
 Received: from [192.168.0.30] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id a2sm3542426wri.17.2022.01.13.05.33.31
+        by smtp.gmail.com with ESMTPSA id k22sm1182368edv.22.2022.01.13.05.36.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 05:33:31 -0800 (PST)
-Message-ID: <7431da93-d3df-9c32-f614-0b6c95ed016a@canonical.com>
-Date: Thu, 13 Jan 2022 14:33:31 +0100
+        Thu, 13 Jan 2022 05:36:31 -0800 (PST)
+Message-ID: <6719ffa5-f765-6ed1-6347-6558471e6bbb@canonical.com>
+Date: Thu, 13 Jan 2022 14:36:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.1
-Subject: Re: [PATCH 22/23] arm64: dts: fsd: Add ADC device tree node
+Subject: Re: [PATCH 23/23] clocksource: exynos_mct: Add support for handling
+ three clusters
 Content-Language: en-US
 To: Alim Akhtar <alim.akhtar@samsung.com>,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
@@ -73,68 +74,47 @@ Cc: soc@kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  olof@lixom.net, linus.walleij@linaro.org, catalin.marinas@arm.com,
  robh+dt@kernel.org, s.nawrocki@samsung.com,
  linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
- linux-fsd@tesla.com, Tamseel Shams <m.shams@samsung.com>
+ Aswani Reddy <aswani.reddy@samsung.com>, linux-fsd@tesla.com
 References: <20220113121143.22280-1-alim.akhtar@samsung.com>
- <CGME20220113122456epcas5p35f6406ab03af58d2e56b0b7304d4d002@epcas5p3.samsung.com>
- <20220113121143.22280-23-alim.akhtar@samsung.com>
+ <CGME20220113122502epcas5p37747b0c5c242c0571d294b9245963a1c@epcas5p3.samsung.com>
+ <20220113121143.22280-24-alim.akhtar@samsung.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220113121143.22280-23-alim.akhtar@samsung.com>
+In-Reply-To: <20220113121143.22280-24-alim.akhtar@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 13/01/2022 13:11, Alim Akhtar wrote:
-> This patch adds ADC device tree node and enables the same
-> on fsd platform.
+> From: Aswani Reddy <aswani.reddy@samsung.com>
+> 
+> This patch adds support for handling thress clusters
+> (upto 12 CPUs)
 > 
 > Cc: linux-fsd@tesla.com
-> Signed-off-by: Tamseel Shams <m.shams@samsung.com>
+> Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
 > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 > ---
->  arch/arm64/boot/dts/tesla/fsd.dts  |  4 ++++
->  arch/arm64/boot/dts/tesla/fsd.dtsi | 11 +++++++++++
->  2 files changed, 15 insertions(+)
+>  drivers/clocksource/exynos_mct.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/boot/dts/tesla/fsd.dts b/arch/arm64/boot/dts/tesla/fsd.dts
-> index 7f3bb6212e50..dd6c75fc3221 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd.dts
-> +++ b/arch/arm64/boot/dts/tesla/fsd.dts
-> @@ -150,3 +150,7 @@
->  &spi_2 {
->  	status = "okay";
->  };
-> +
-> +&adc {
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> index 7e687c6f74f6..058a9d381aed 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> @@ -788,6 +788,17 @@
->  			num-cs = <1>;
->  			status = "disabled";
->  		};
-> +
-> +		adc: adc@141A0000 {
+> diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
+> index 5e3e96d3d1b9..ba3af940a687 100644
+> --- a/drivers/clocksource/exynos_mct.c
+> +++ b/drivers/clocksource/exynos_mct.c
+> @@ -78,6 +78,10 @@ enum {
+>  	MCT_L5_IRQ,
+>  	MCT_L6_IRQ,
+>  	MCT_L7_IRQ,
+> +	MCT_L8_IRQ,
+> +	MCT_L9_IRQ,
+> +	MCT_L10_IRQ,
+> +	MCT_L11_IRQ,
 
-lowercase hex numbers please.
+I think this should be variable, based on SoC compatible. The mistake
+was done already when adding Exynos5420 support by Linaro/Samsung, but
+at least let's correct it now.
 
-> +			compatible = "samsung,exynos-adc-v3";
-> +			reg = <0x0 0x141A0000 0x0 0x100>;
-> +			interrupts = <GIC_SPI 173 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clock_peric PERIC_PCLK_ADCIF>;
-> +			clock-names = "adc";
-> +			#io-channel-cells = <1>;
-> +			io-channel-ranges;
-> +			status = "disabled";
-
-This does not pass dtschema. NAK.
-
-> +		};
->  	};
->  };
->  
-> 
+Older MCTs/SoCs do not support 12 local interrupts, so they do not need
+and should not register so many interrupts.
 
 
 Best regards,
