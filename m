@@ -1,100 +1,76 @@
-Return-Path: <SRS0=+ipK=R5=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <broonie@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17D52C433F5
-	for <soc@archiver.kernel.org>; Thu, 13 Jan 2022 12:58:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 964C0C433F5
+	for <soc@archiver.kernel.org>; Thu, 13 Jan 2022 12:59:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 047ADC36AED; Thu, 13 Jan 2022 12:58:21 +0000 (UTC)
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F3EDEC36AF4
-	for <soc@kernel.org>; Thu, 13 Jan 2022 12:58:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F3EDEC36AF4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CEDAA3F1DD
-	for <soc@kernel.org>; Thu, 13 Jan 2022 12:58:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1642078693;
-	bh=hJY+iTJXxh7N+a9cAeVo6uxkvEx09OIa8izcVhHm85o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=IpiOiteyx37tD2UyrUeK5mNYpNoOsKisp5MwmGQKRd5q6ykDlmeiueHw/f25wzcwS
-	 dRPq/SZ/syX4AAoDuTH/KZTtZuDjZY8vqqnsXWBZQcDyZyO+Su6ElqbZduexksAmwE
-	 wf6QdyWj8bKiLVtgTU7rhMADdx1wimlHMO8CJfSizAhs+YVUnck6LAshzCkOM/yM+V
-	 YiAp795fOuRixIXN+PXSmPtWcZMX3eVJdLUTVpZ8IH7Dt5hAfSqKJ6aqOJiUK/jTrM
-	 IeyLJS+/yyGgeH17+MZgAo8A9MIS4e88AT+FYiyzJa+nQ9EGs9l4TBLPRR7VuuxBre
-	 FElAl+lC6W5bA==
-Received: by mail-ed1-f70.google.com with SMTP id g2-20020a056402424200b003f8ee03207eso5285539edb.7
-        for <soc@kernel.org>; Thu, 13 Jan 2022 04:58:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hJY+iTJXxh7N+a9cAeVo6uxkvEx09OIa8izcVhHm85o=;
-        b=RHT/+IxCqzSQWQvCdWY5e1Jb8Ni85uIsKHtuZj9xNWHpXCxIc8PwI8m8cFlZEo4454
-         PYhztXqsn3y69pm2cXgG3XeQH6mDkCiSNCAskAdVdiqU5d4gX7HLC8H+8xU1YUKQLkdl
-         ZFVZ956jWny8hP2mNg8Rpq9UnGTzeVdkXm7EW7Umg/YqludIvx7fGsQlPMphdTNAavPr
-         ihs/H9Yh5YNKdvm5Gx1UK/CDBFS/LCkmWSQScj2oBSB1bTPl4+4Vj85eo7dsHwaa5r3m
-         m4M7tlVMe7Twf8utu9IMC5VDaB9aSwZO9lGiIeht0u7iJIPxZ9U86kDXvl2gGYRygEKn
-         AShg==
-X-Gm-Message-State: AOAM531ioYzrLmlwUX/wXr0NT+DwE0BID5I1mxQR4bwneXxy6CbI0I8C
-	FlSW8R+Esz776OhuKyM42y4DELGriC9tu/R/AcoWUcWI+AAOsssx6uWNk+KftNpPdvoQnzP0sSz
-	TOBd71W+Adx7qGhpS7ApHP0s=
-X-Received: by 2002:a17:906:2890:: with SMTP id o16mr3429783ejd.99.1642078693392;
-        Thu, 13 Jan 2022 04:58:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzJz/KUtwGDsFrbTAXt/C7unJ3bAy1RqQ2PDpyX9XObENafua0PnOgc/W74tPU9CS4vGKDuoQ==
-X-Received: by 2002:a17:906:2890:: with SMTP id o16mr3429764ejd.99.1642078693221;
-        Thu, 13 Jan 2022 04:58:13 -0800 (PST)
-Received: from [192.168.0.29] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id kx19sm865643ejc.112.2022.01.13.04.58.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 04:58:12 -0800 (PST)
-Message-ID: <176af0b0-a324-da39-2848-1c2e01cfadf5@canonical.com>
-Date: Thu, 13 Jan 2022 13:58:12 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 12/23] dt-bindings: add vendor prefix for Tesla
-Content-Language: en-US
-To: Alim Akhtar <alim.akhtar@samsung.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+	id 5DA38C36AEC; Thu, 13 Jan 2022 12:59:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7576C36AED;
+	Thu, 13 Jan 2022 12:59:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1642078761;
+	bh=9akpPd87QndJXAEIErhwmX7/WXgkPEFFcIviFIgvw2s=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=EsvL3HOGb8ffzyJOlshOu4EgXsM7m473MszsUS60E9P4Xr+AHM803bQdVLoHXxnTR
+	 xUGfISnlk4ZjEUyNRj36y834cvPL8aqnZ79k8JjH1g+IWr6jfBSEq5EO7tbEltb5NL
+	 lXQBL44lZ0xGfGe8nGg3EDhBYbLm+eoOU3l3MFP6eoJLfnLZJ92jPBXqKeQqCNbbI1
+	 ZN01aBox1RA4QnDFduvLcV5RxwxkbpKswo++gAGBPgE6vpsNuV8BT1q4tcTLqg9+1x
+	 FpSyVrnVHTnV6segpjyJYPFuTRqW3NinYtycngmc+3BpZ/5cQpDrfSI8blQAIGfTxo
+	 N849aGiIXZ3wg==
+Date: Thu, 13 Jan 2022 12:59:14 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Alim Akhtar <alim.akhtar@samsung.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- olof@lixom.net, linus.walleij@linaro.org, catalin.marinas@arm.com,
- robh+dt@kernel.org, s.nawrocki@samsung.com,
- linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
- linux-fsd@tesla.com
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	soc@kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, olof@lixom.net,
+	linus.walleij@linaro.org, catalin.marinas@arm.com,
+	robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+	s.nawrocki@samsung.com, linux-samsung-soc@vger.kernel.org,
+	pankaj.dubey@samsung.com, linux-fsd@tesla.com,
+	linux-spi@vger.kernel.org, Aswani Reddy <aswani.reddy@samsung.com>
+Subject: Re: [PATCH 18/23] spi: s3c64xx: Add spi port configuration for Tesla
+ FSD SoC
+Message-ID: <YeAiIhfN216pRWhn@sirena.org.uk>
 References: <20220113121143.22280-1-alim.akhtar@samsung.com>
- <CGME20220113122404epcas5p4aa1c3ac09510eb55cce5fdd0791993a6@epcas5p4.samsung.com>
- <20220113121143.22280-13-alim.akhtar@samsung.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220113121143.22280-13-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 13/01/2022 13:11, Alim Akhtar wrote:
-> Add vendor prefix for the Tesla (https://www.tesla.com)
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(
-
-This should be the first patch in the series.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+ <CGME20220113122435epcas5p18e6a2699f193b9e1287588278a570235@epcas5p1.samsung.com>
+ <20220113121143.22280-19-alim.akhtar@samsung.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="RWRxhWSMr9/Wu0eT"
+Content-Disposition: inline
+In-Reply-To: <20220113121143.22280-19-alim.akhtar@samsung.com>
+X-Cookie: Slow day.  Practice crawling.
 
 
-Best regards,
-Krzysztof
+--RWRxhWSMr9/Wu0eT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Thu, Jan 13, 2022 at 05:41:38PM +0530, Alim Akhtar wrote:
+
+> +	{ .compatible = "tesla,fsd-spi",
+> +			.data = (void *)&fsd_spi_port_config,
+> +	},
+
+This needs a DT bindings update to match.
+
+--RWRxhWSMr9/Wu0eT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHgIiEACgkQJNaLcl1U
+h9BrXQf/XYBFoegVzQjZtaYfLubTV4gYZThsRBGMwdWJA6xdSgMg/tmpsCN9XxJL
+4eHD0+9JkXUhJEuXZUvTLzohAeGxXMWgAWcv9syVyAet+XWz93c4NXac9BG0T6xD
+fyiIo+zQYoO/0BeqK4+YSru4q2YblqX9c1tL2rOndqifrkgQx3XuoyK++trALdfm
+14j4waRS79i69CyP+ZCkaIPND4b7BxfkwtKtEeWpeopxmI6KsHjrL+6UM4Myq7wh
+3+x6uPPaRnMcFTtTbwN+obcz6u+Twhjrg30J47pGqtjEDayJvMHBrnHBdXmB/jp8
+pkRqi52cqdNM7VsGuMqxN0bLsz9nwQ==
+=lkDq
+-----END PGP SIGNATURE-----
+
+--RWRxhWSMr9/Wu0eT--
