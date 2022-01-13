@@ -1,102 +1,92 @@
-Return-Path: <SRS0=0T2f=R5=lixom.net=olof@kernel.org>
+Return-Path: <SRS0=2glY=R5=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10D31C4332F
-	for <soc@archiver.kernel.org>; Thu, 13 Jan 2022 18:54:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8186C4332F
+	for <soc@archiver.kernel.org>; Thu, 13 Jan 2022 23:33:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C6730C36AEF; Thu, 13 Jan 2022 18:54:09 +0000 (UTC)
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	id 9A4F9C36AED; Thu, 13 Jan 2022 23:33:58 +0000 (UTC)
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0037CC36AEB
-	for <soc@kernel.org>; Thu, 13 Jan 2022 18:54:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0037CC36AEB
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=lixom.net
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=lixom.net
-Received: by mail-pf1-f171.google.com with SMTP id p37so688030pfh.4
-        for <soc@kernel.org>; Thu, 13 Jan 2022 10:54:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tb5858QqXIcL5etsmWCS0ZKhHGEgdWFwctSsz78MvDI=;
-        b=UK7Pq02IigfJ4UwrZ8hJfii4Xs3neqjQIZcCnn8iEJ2HaSzAsOFfNWUOvyqHby6xZ3
-         RPlt+Q9ETiZ57YNEA2lks/Dmj+Yk5qVw6hReh/CyXQxkUhA9iluXR8+lFYLBQ6QHkhM/
-         n2ilJTcMm9FfoIvY9Pc/SVqd5ihJfZNoRu56K6O5UOOWWjHBbiczhjlaF92FQkLDeZZm
-         Na/p4eIaTEnhyy5sMOVTJTMbbIUFAHYkfchs8yApFNnFluEjW71UU0DvNSBgg1u1x70O
-         rdrXoDDPa4vNGbC08xoLC6Fkxa2SJR0HokkgcJz1d/qarYXgH+CmInrAtTcqudfn2bNH
-         TnYg==
+	by smtp.kernel.org (Postfix) with ESMTPS id 88AD6C36AE3;
+	Thu, 13 Jan 2022 23:33:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 88AD6C36AE3
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f182.google.com with SMTP id s9so9992456oib.11;
+        Thu, 13 Jan 2022 15:33:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tb5858QqXIcL5etsmWCS0ZKhHGEgdWFwctSsz78MvDI=;
-        b=D6SvqR7fTjZjaeRqJvtkBqgCRLQ4ravQfM1JKI1ccmfI8A/CAjKYYVeiL5S+aLjE/D
-         RMRXO80+laeL1KcfF2EaUhiJWBS3oCjVM3bNCOWzCbZTI/loB3p4xDQ7r54ftl1x5mqX
-         eqfpbUDCaXliXyS5hFOKXxo1IfrHMTI7dIvnmDtfcsU/1PLga/giAwCjwcSqNt88zGzY
-         1xEy8DO6HItzpMrOqny0ftvOZOdQzysZiq70I9loKf1f8zdfDhMVMb9k369r+aH0lRgR
-         B+eymJ9OxFHFieH+9I1J89aj1m6TNeFkvg9rbuQgR28V/Ku3fSx6Uf/i3yzo/wm2ZeUn
-         oZkA==
-X-Gm-Message-State: AOAM533gU7pb3huEP148duDjMcdM2NFOIz9UjniyI7ThFyAhBi4+2xV2
-	vjmhLOUevjseQgTJLUBoA4ujT/+8B3ZfvBwfuuZmzg==
-X-Google-Smtp-Source: ABdhPJzXlahtnsFy6IBae/4XXtwKfp3ieNHsHEWW/ixmJdS+WTYxk6qaqsRZoeKRiQr50fLtEznw6+6eMB/iQsmKuX4=
-X-Received: by 2002:a05:6a00:16c7:b0:4a5:d9c1:89da with SMTP id
- l7-20020a056a0016c700b004a5d9c189damr5491085pfc.34.1642100047311; Thu, 13 Jan
- 2022 10:54:07 -0800 (PST)
-MIME-Version: 1.0
-References: <CGME20220113122302epcas5p1d45c0714fe286f8f91d0f28c3fad86e4@epcas5p1.samsung.com>
- <20220113121143.22280-1-alim.akhtar@samsung.com> <d1a852e1-c4c2-b7c4-ddeb-7fbcfd9b4e58@canonical.com>
-In-Reply-To: <d1a852e1-c4c2-b7c4-ddeb-7fbcfd9b4e58@canonical.com>
-From: Olof Johansson <olof@lixom.net>
-Date: Thu, 13 Jan 2022 10:53:55 -0800
-Message-ID: <CAOesGMjZ8X3r2KvPLWWwJj1ckTruiGOjx9wLyu8YbCxW+OaZgQ@mail.gmail.com>
-Subject: Re: [PATCH 00/23] Add support for Tesla Full Self-Driving (FSD) SoC
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=nnDiZcTRb0Vq5tmUrkIdnau18hy40OrJF8krgzeHM4s=;
+        b=ChnZOS5L6pD6CS5cYvKeU6PNw4/6hJE7fj9AjuZ0Zqq8D8rbnuwMflPcipm2rf2hpW
+         qqoDWU8WXupC2XFRn4HyyOuIWPynS2CqoUKXEUfFTlzROjRlfAOIyyeBdgL2v8MjbKyQ
+         S8O16cXO4QbX7tKs1oE2ySgU6VMjEE4ueVTqllqx4VbEQax7BeYBvIDO+g+v/u2FEmW4
+         Y5RbCh05rEMglohs2NmMvpK7TNGJgoJ7m12Y7qw7c7VnbqJNK47psUFAg219c4Q89vce
+         0CCl5mW6l3GnLa6cX4TS7clGWz/OkXk9ZnM7QfB+8lRWY2PXwiowQ4yD6e//VM6bMlAt
+         kTTg==
+X-Gm-Message-State: AOAM530Mx/v5jNJNV97tzz2ZwbDG4EKntC96Q+aUm9VVwYSPJ/gspNor
+	1+EBuShIMtFjexR6+D74Ag==
+X-Google-Smtp-Source: ABdhPJx0Y77Qvs2DmF3Cj72zTuxyrO8FZtkPJTHmtmi99ENq20DZ3v9GIO8BFW0+Lhurn8Yq7qzA/g==
+X-Received: by 2002:a05:6808:15a0:: with SMTP id t32mr4881818oiw.60.1642116836724;
+        Thu, 13 Jan 2022 15:33:56 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id j77sm1154569oih.35.2022.01.13.15.33.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 15:33:56 -0800 (PST)
+Received: (nullmailer pid 374229 invoked by uid 1000);
+	Thu, 13 Jan 2022 23:33:55 -0000
+From: Rob Herring <robh@kernel.org>
+To: Alim Akhtar <alim.akhtar@samsung.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>, 
-	Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
-	linux-clk <linux-clk@vger.kernel.org>, DTML <devicetree@vger.kernel.org>, 
-	LinusW <linus.walleij@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Rob Herring <robh+dt@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>, 
-	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, Pankaj Dubey <pankaj.dubey@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, s.nawrocki@samsung.com, linus.walleij@linaro.org, soc@kernel.org, olof@lixom.net, pankaj.dubey@samsung.com, linux-fsd@tesla.com, robh+dt@kernel.org, krzysztof.kozlowski@canonical.com, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, catalin.marinas@arm.com
+In-Reply-To: <20220113121143.22280-2-alim.akhtar@samsung.com>
+References: <20220113121143.22280-1-alim.akhtar@samsung.com>        <CGME20220113122311epcas5p4b7c253b49dce3bd3580407fcf312e70e@epcas5p4.samsung.com> <20220113121143.22280-2-alim.akhtar@samsung.com>
+Subject: Re: [PATCH 01/23] dt-bindings: clock: Document FSD CMU bindings
+Date: Thu, 13 Jan 2022 17:33:55 -0600
+Message-Id: <1642116835.548930.374228.nullmailer@robh.at.kernel.org>
 
-On Thu, Jan 13, 2022 at 4:32 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> On 13/01/2022 13:11, Alim Akhtar wrote:
-> > This patch set adds basic support for the Tesla Full Self-Driving (FSD)
-> > SoC. This SoC contains three clusters of four Cortex-A72 CPUs,
-> > as well as several IPs.
-> >
-> > Patches 1 to 8 provide support for the clock controller
-> > (which is designed similarly to Exynos SoCs).
-> >
-> > The remaining changes provide pinmux support, initial device tree support,
-> > and SPI, ADC, and MCT IP functionality.
->
-> Does FSD have some version number? The FDS, especially in compatibles,
-> looks quite generic, so what will happen if a newer SoC comes later? You
-> would have:
->  - tesla,fsd-pinctrl
->  - tesla,fsd-xxxx-pinctrl (where xxxx could be some new version)
->
-> This will be extra confusing, because fsd-pinctrl looks like the generic
-> one, while it is specific...
+On Thu, 13 Jan 2022 17:41:21 +0530, Alim Akhtar wrote:
+> Add dt-schema documentation for Tesla FSD SoC clock controller.
+> 
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+>  .../bindings/clock/tesla,fsd-clock.yaml       | 212 ++++++++++++++++++
+>  1 file changed, 212 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
+> 
 
-The public sources from Tesla on github uses "turbo,trav" here, but
-that's also not a versioned name. The platform itself (hw3/hw31 -- 3.1
-I presume?) has numbering, but that's system and not SoC:
-https://github.com/teslamotors/linux/tree/tesla-4.14-hw3/arch/arm64/boot/dts/turbo
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-It would be easy to do "fsd2" for naming/numbering if needed for
-future versions, for example. I'm not so worried about this,
-especially if there's no corresponding internal version numbering that
-this would map naturally to.
+yamllint warnings/errors:
 
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/clock/tesla,fsd-clock.example.dts:19:18: fatal error: dt-bindings/clock/fsd-clk.h: No such file or directory
+   19 |         #include <dt-bindings/clock/fsd-clk.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/clock/tesla,fsd-clock.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1413: dt_binding_check] Error 2
 
--Olof
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1579595
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
