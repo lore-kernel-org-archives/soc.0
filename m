@@ -1,121 +1,102 @@
-Return-Path: <SRS0=+ipK=R5=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=Bjy1=R5=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CE0EC43217
-	for <soc@archiver.kernel.org>; Thu, 13 Jan 2022 13:36:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9C76C433F5
+	for <soc@archiver.kernel.org>; Thu, 13 Jan 2022 14:24:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EF2C1C36AF3; Thu, 13 Jan 2022 13:36:34 +0000 (UTC)
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	id 9ACE7C36AEC; Thu, 13 Jan 2022 14:24:17 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2B193C36AE3
-	for <soc@kernel.org>; Thu, 13 Jan 2022 13:36:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2B193C36AE3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 950993F198
-	for <soc@kernel.org>; Thu, 13 Jan 2022 13:36:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1642080992;
-	bh=LK8TIW5kBMgN60TTr9MsN0Nx6njpiR3Rbad9G3zx4zY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=Nl/fJpmdl1iwO8i2Nk4M4UUAN5A8HFJvKfhMYIvgUEfiGebw3BzTvzr3rgAwnIMDF
-	 RJtxMh6CHHG+OJN5d5CTb/+/CRD/vXIGojquDg816x8kZHGIyc2012i6jMyiZ4ZHpB
-	 bk9mOFxlo8scwZVgyvDh3z6BeRXj79uPcFC7BApn3yKyf30lUlptfMWsFfv6D66Der
-	 xoYsgQYr2G8Ug4X2rEydT9zh1+47jJVg8CXm9ol45dQyKo6OwNvAZwoMZCZCXjU+K1
-	 +w0Q5lV3nj+4zemH2RMqHRN9KC3BIfp1kntn8alyoSlp5ONUowXJxZdQDgDvoKdJfr
-	 G1ZcYUiwxWYEQ==
-Received: by mail-ed1-f71.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso5312936edt.20
-        for <soc@kernel.org>; Thu, 13 Jan 2022 05:36:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LK8TIW5kBMgN60TTr9MsN0Nx6njpiR3Rbad9G3zx4zY=;
-        b=g14pVLNsuZtjT3mafIVQsaEiGHv1Y7LR/Q8w43qWfxt8al4x79cDh2pbCRnsKmla0v
-         qkdGXrlqJH5SgpQVBZTC8SqoH/Yu/7Lq8SP9oM7iEwP6QpPCOV0dLS/+h0pjBkDejYEI
-         0E3Wsjt6XHi2WJYJULBgzXZIDYto+oc3t0tZy3gKUy2FrT7x6fBDr4KZU+J3SntZz7Yu
-         acn0PSjzSqcqT5+WmBdnwwML8tHqQSpeZwC8WCqSysLhXkV1GF5ydcXW9INP6Hw5d3LZ
-         oR/ohYzukourOr5o7Cn8/4p1KqRvPWxf1MZIbWylDdDpS5ghIzniBBgid5teKJNTEq9c
-         IQug==
-X-Gm-Message-State: AOAM531ykD3LoaDMDeSGrba89zE19tLCToIv+op8VF5vQgx8gNz8yozJ
-	nCyccgCcacrN+C+Bma8uOSzqFqK0+MGzwIT8K29FBxXE62d8MmXyZiEbinDA8RzbHbK7CTTG8ez
-	PTfmVzMSkWClxAiVYNChXElc=
-X-Received: by 2002:a05:6402:26c2:: with SMTP id x2mr4125830edd.6.1642080992284;
-        Thu, 13 Jan 2022 05:36:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyz+FRblvd+YpkczXpBN7hT+oLurYDM4lo3dJdgM0Xz6YialsePTUBoBhaDXrvPv1Q1WUuYrw==
-X-Received: by 2002:a05:6402:26c2:: with SMTP id x2mr4125807edd.6.1642080992132;
-        Thu, 13 Jan 2022 05:36:32 -0800 (PST)
-Received: from [192.168.0.30] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id k22sm1182368edv.22.2022.01.13.05.36.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 05:36:31 -0800 (PST)
-Message-ID: <6719ffa5-f765-6ed1-6347-6558471e6bbb@canonical.com>
-Date: Thu, 13 Jan 2022 14:36:30 +0100
+	by smtp.kernel.org (Postfix) with ESMTPS id 3990EC36AE9;
+	Thu, 13 Jan 2022 14:24:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3990EC36AE9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N5VPe-1mFjO807SM-016tRL; Thu, 13 Jan 2022 15:24:14 +0100
+Received: by mail-wr1-f50.google.com with SMTP id s1so10404682wra.6;
+        Thu, 13 Jan 2022 06:24:13 -0800 (PST)
+X-Gm-Message-State: AOAM53048jUpSQpvqvGFoT8Hmx+4OXEfqBnodH+it4fIGf+GcBtnN1Cg
+	DlO8xc2MFGvCgvrtKcBEX6AlRBJB3apEAi+WfIE=
+X-Google-Smtp-Source: ABdhPJzwdYNeuVL1yYVlSfvEK+FTNzOKpNJueoBQfapcDBGMQlXdww3vJ6mdjQ5Vf5ltdNIbHFcn1y8+QiEEWUP219Q=
+X-Received: by 2002:a5d:6ac7:: with SMTP id u7mr4238291wrw.219.1642083853640;
+ Thu, 13 Jan 2022 06:24:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 23/23] clocksource: exynos_mct: Add support for handling
- three clusters
-Content-Language: en-US
-To: Alim Akhtar <alim.akhtar@samsung.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- olof@lixom.net, linus.walleij@linaro.org, catalin.marinas@arm.com,
- robh+dt@kernel.org, s.nawrocki@samsung.com,
- linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
- Aswani Reddy <aswani.reddy@samsung.com>, linux-fsd@tesla.com
 References: <20220113121143.22280-1-alim.akhtar@samsung.com>
- <CGME20220113122502epcas5p37747b0c5c242c0571d294b9245963a1c@epcas5p3.samsung.com>
- <20220113121143.22280-24-alim.akhtar@samsung.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220113121143.22280-24-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <CGME20220113122413epcas5p46cb2cafb73936c423017240f98f72845@epcas5p4.samsung.com>
+ <20220113121143.22280-15-alim.akhtar@samsung.com> <55c22c3a-57ea-3320-ccb9-f03643563235@canonical.com>
+In-Reply-To: <55c22c3a-57ea-3320-ccb9-f03643563235@canonical.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 13 Jan 2022 15:23:57 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0etf+AybUe5O9uRLAbo4J145t0-ThkEccNtKzue+0-qA@mail.gmail.com>
+Message-ID: <CAK8P3a0etf+AybUe5O9uRLAbo4J145t0-ThkEccNtKzue+0-qA@mail.gmail.com>
+Subject: Re: [PATCH 14/23] arm64: dts: fsd: Add initial device tree support
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
+	linux-clk <linux-clk@vger.kernel.org>, DTML <devicetree@vger.kernel.org>, 
+	Olof Johansson <olof@lixom.net>, Linus Walleij <linus.walleij@linaro.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Rob Herring <robh+dt@kernel.org>, 
+	Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, Pankaj Dubey <pankaj.dubey@samsung.com>, 
+	linux-fsd@tesla.com, Arjun K V <arjun.kv@samsung.com>, 
+	Aswani Reddy <aswani.reddy@samsung.com>, Ajay Kumar <ajaykumar.rs@samsung.com>, 
+	Sriranjani P <sriranjani.p@samsung.com>, Chandrasekar R <rcsekar@samsung.com>, 
+	Shashank Prashar <s.prashar@samsung.com>, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:PAPPMekJJO0CQ8PUAVRyUKM+ilODNyQ9/WnH7dKtzWSr2UuEaWp
+ nJlrEk8gEFZwvVqcPuiyVv4Vv8WIkZhnKZo8Ub8HETB1WhX5HlaCcIJlwimmFpYttj4DR30
+ j4PK67dljDXMPt6pGlYNU+DmkigHDf5ObyaKEr8UdqRmyEf6u+LGcdi3siPXJC9cJtai902
+ xvd8Ggt6QlmTAL0yHEKIw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:803xCSO5KO4=:bxONj2saW1vKPD/acUL2pg
+ eGI5dc9Ho53A7pML7JljY6AwSRxxS71oJQzEPvs20GuzBfmnAqED9AhB1PUegkxtkM0Sb39BY
+ SIVEAgqMFljHpqV+fXQdaD5mx5QEh3qhqvEDvPLZkyakJa8M+PTpJLB3SK4rOnwVHePZ6Wsu4
+ +zDse/vAoTjGDanUe8g9gYIckJsndNvbgfupYnhb3ePOT2hf/w1dVKxGiL50iy/oQ03mclz0q
+ iRW8TloRK0zKbQi2tlXfgRJWamtMklzbd8koWEb/qGfg6H2H6l5391A0KV1iebNtQXc0cCJza
+ 5Zp/JPhT08jK6uGJU948Ea88ji1uSoZidJKqwIXDpyadIW2G+1EIpY6v1Bw1geUTx7pEPsp4B
+ 0k9IoWVXBuW69pEM25lbSxDqjdbrAamVEX6cB0BwlZYb6HC4PPt+JtrfmMxtfRHNPoYvhx6mD
+ CWRKUHtGBgguWiGo9UWb2vuA9ZchFGzR7ORSsoedcrfpPuOLmMsDz/TqEpQt70l9b4p85+Cll
+ /2RVTPNhiQJHLXsLU/CXEvDUQHQWdxcecDC7ahnZXnPzEQD8ws4Js/7s0prlQOUf8dbC6EzlR
+ v3/pEeKlZxrb24CYBv4CBkx1+YW99OGoAJFPR2z68q9++6lJM7hBNqVOo3B0mVxy95iKo/X+A
+ y34g6wobDsTCdBkAnKuSEXMUvrTGhQ5gBH4Jacx6lGNLSdT/pdvgKdGsMmxRMEH08UDU=
 
-On 13/01/2022 13:11, Alim Akhtar wrote:
-> From: Aswani Reddy <aswani.reddy@samsung.com>
-> 
-> This patch adds support for handling thress clusters
-> (upto 12 CPUs)
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  drivers/clocksource/exynos_mct.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
-> index 5e3e96d3d1b9..ba3af940a687 100644
-> --- a/drivers/clocksource/exynos_mct.c
-> +++ b/drivers/clocksource/exynos_mct.c
-> @@ -78,6 +78,10 @@ enum {
->  	MCT_L5_IRQ,
->  	MCT_L6_IRQ,
->  	MCT_L7_IRQ,
-> +	MCT_L8_IRQ,
-> +	MCT_L9_IRQ,
-> +	MCT_L10_IRQ,
-> +	MCT_L11_IRQ,
+On Thu, Jan 13, 2022 at 2:16 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+> >  ARM/TETON BGA MACHINE SUPPORT
+> >  M:   "Mark F. Brown" <mark.brown314@gmail.com>
+> >  L:   linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> > diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> > index 54e3910e8b9b..bb8a047c2359 100644
+> > --- a/arch/arm64/Kconfig.platforms
+> > +++ b/arch/arm64/Kconfig.platforms
+> > @@ -267,6 +267,12 @@ config ARCH_TEGRA
+> >       help
+> >         This enables support for the NVIDIA Tegra SoC family.
+> >
+> > +config ARCH_TESLA_FSD
+> > +     bool "ARMv8 based Tesla platform"
+> > +     select ARCH_EXYNOS
+>
+> How similar it is? I think it is better to duplicate Exynos
+> selections/options here, instead of selecting entire ARCH. If this would
+> require "depends on ARCH_EXYNOS || ARCH_TESLA_FSD" everywhere in the
+> drivers, it's a hint that it is not a separate SoC but it is an Exynos,
+> so it might not need a new sub-architecture.
 
-I think this should be variable, based on SoC compatible. The mistake
-was done already when adding Exynos5420 support by Linaro/Samsung, but
-at least let's correct it now.
+Agreed, the SoC family options mainly exist so we can quickly enable or
+disable drivers based on what a kernel is built for. If most of the drivers
+for this SoC are shared with Exynos, I think having a single option is
+sufficient, but it may be worth pointing out both in the help text.
 
-Older MCTs/SoCs do not support 12 local interrupts, so they do not need
-and should not register so many interrupts.
+If we want to have a separate option (mainly to help users find it), maybe
+a 'depends on ARCH_EXYNOS' would be better. How many uses of
+ARCH_TESLA_FSD are there?
 
-
-Best regards,
-Krzysztof
+        Arnd
