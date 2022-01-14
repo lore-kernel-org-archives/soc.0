@@ -1,92 +1,85 @@
-Return-Path: <SRS0=2glY=R5=gmail.com=robherring2@kernel.org>
+Return-Path: <SRS0=dxDo=R6=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8186C4332F
-	for <soc@archiver.kernel.org>; Thu, 13 Jan 2022 23:33:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA131C433EF
+	for <soc@archiver.kernel.org>; Fri, 14 Jan 2022 00:45:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9A4F9C36AED; Thu, 13 Jan 2022 23:33:58 +0000 (UTC)
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 899FCC36AEA; Fri, 14 Jan 2022 00:45:57 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 88AD6C36AE3;
-	Thu, 13 Jan 2022 23:33:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 88AD6C36AE3
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f182.google.com with SMTP id s9so9992456oib.11;
-        Thu, 13 Jan 2022 15:33:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=nnDiZcTRb0Vq5tmUrkIdnau18hy40OrJF8krgzeHM4s=;
-        b=ChnZOS5L6pD6CS5cYvKeU6PNw4/6hJE7fj9AjuZ0Zqq8D8rbnuwMflPcipm2rf2hpW
-         qqoDWU8WXupC2XFRn4HyyOuIWPynS2CqoUKXEUfFTlzROjRlfAOIyyeBdgL2v8MjbKyQ
-         S8O16cXO4QbX7tKs1oE2ySgU6VMjEE4ueVTqllqx4VbEQax7BeYBvIDO+g+v/u2FEmW4
-         Y5RbCh05rEMglohs2NmMvpK7TNGJgoJ7m12Y7qw7c7VnbqJNK47psUFAg219c4Q89vce
-         0CCl5mW6l3GnLa6cX4TS7clGWz/OkXk9ZnM7QfB+8lRWY2PXwiowQ4yD6e//VM6bMlAt
-         kTTg==
-X-Gm-Message-State: AOAM530Mx/v5jNJNV97tzz2ZwbDG4EKntC96Q+aUm9VVwYSPJ/gspNor
-	1+EBuShIMtFjexR6+D74Ag==
-X-Google-Smtp-Source: ABdhPJx0Y77Qvs2DmF3Cj72zTuxyrO8FZtkPJTHmtmi99ENq20DZ3v9GIO8BFW0+Lhurn8Yq7qzA/g==
-X-Received: by 2002:a05:6808:15a0:: with SMTP id t32mr4881818oiw.60.1642116836724;
-        Thu, 13 Jan 2022 15:33:56 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id j77sm1154569oih.35.2022.01.13.15.33.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 15:33:56 -0800 (PST)
-Received: (nullmailer pid 374229 invoked by uid 1000);
-	Thu, 13 Jan 2022 23:33:55 -0000
-From: Rob Herring <robh@kernel.org>
-To: Alim Akhtar <alim.akhtar@samsung.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 3E131C36AE3;
+	Fri, 14 Jan 2022 00:45:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E131C36AE3
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wm1-f43.google.com ([209.85.128.43]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MnZwp-1mRROZ0CYv-00jVeu; Fri, 14 Jan 2022 01:45:54 +0100
+Received: by mail-wm1-f43.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso6422510wmj.2;
+        Thu, 13 Jan 2022 16:45:53 -0800 (PST)
+X-Gm-Message-State: AOAM531LJGt6Jjhscr6napgmJp054KOv8MMl6QagoZE0Otc5nErqKfGM
+	DkdHuI0KF7958i9vH6nKlVyh2oN536PhNW8cYos=
+X-Google-Smtp-Source: ABdhPJwV4G3A5mpFnAW11HwlY/Tf7y1xRC36rwdQkkqDkkOWfKAxxiuv8Puk8O7tRRiiu1Ah39q+R3OAJUeOa6nnmfM=
+X-Received: by 2002:a05:600c:287:: with SMTP id 7mr6081734wmk.98.1642121153661;
+ Thu, 13 Jan 2022 16:45:53 -0800 (PST)
+MIME-Version: 1.0
+References: <20220113171921.17466-1-philippe.cornu@foss.st.com> <20220113171921.17466-2-philippe.cornu@foss.st.com>
+In-Reply-To: <20220113171921.17466-2-philippe.cornu@foss.st.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Fri, 14 Jan 2022 01:45:37 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0Nn3fwEMtb9f0DZhbyY+mLva5XR332XfXqX=WSmB9a8w@mail.gmail.com>
+Message-ID: <CAK8P3a0Nn3fwEMtb9f0DZhbyY+mLva5XR332XfXqX=WSmB9a8w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] MAINTAINERS: Update Benjamin Gaignard maintainer status
+To: Philippe Cornu <philippe.cornu@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, s.nawrocki@samsung.com, linus.walleij@linaro.org, soc@kernel.org, olof@lixom.net, pankaj.dubey@samsung.com, linux-fsd@tesla.com, robh+dt@kernel.org, krzysztof.kozlowski@canonical.com, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, catalin.marinas@arm.com
-In-Reply-To: <20220113121143.22280-2-alim.akhtar@samsung.com>
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>        <CGME20220113122311epcas5p4b7c253b49dce3bd3580407fcf312e70e@epcas5p4.samsung.com> <20220113121143.22280-2-alim.akhtar@samsung.com>
-Subject: Re: [PATCH 01/23] dt-bindings: clock: Document FSD CMU bindings
-Date: Thu, 13 Jan 2022 17:33:55 -0600
-Message-Id: <1642116835.548930.374228.nullmailer@robh.at.kernel.org>
+Cc: Yannick Fertre <yannick.fertre@foss.st.com>, 
+	Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>, David Airlie <airlied@linux.ie>, 
+	Daniel Vetter <daniel@ffwll.ch>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Alain Volmat <alain.volmat@foss.st.com>, 
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, 
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Liam Mark <lmark@codeaurora.org>, 
+	Laura Abbott <labbott@redhat.com>, Brian Starkey <Brian.Starkey@arm.com>, 
+	John Stultz <john.stultz@linaro.org>, Christian Konig <christian.koenig@amd.com>, 
+	SoC Team <soc@kernel.org>, dri-devel <dri-devel@lists.freedesktop.org>, 
+	linux-stm32@st-md-mailman.stormreply.com, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Media Mailing List <linux-media@vger.kernel.org>, linaro-mm-sig@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:IXMEoRjfaWWXvwHHTukprO2QXR06/6J2rthpcAIF/nMUV+r7gmu
+ LrtEtIt+vJjhKt6dn1sp02Pjuw3pJ02ps02YHdqt7I9vTNqCgcqtBnnmH6u4t/Gr0oDzXun
+ pCYC2kOqejbdzSC7CtT/WZSPcDO9YNEAiY1w/0oA7nVzrjkOips6wow7yO2GkQfDpkZuHIn
+ oE31I9x9BFn1zc0WmhHfw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZWdhXKlrd+c=:kPLl09RFCLlo/SwkML4Kxj
+ Dwk5McdNIB7Qv+vhDrEJyuX4+i+HvmuazUzGHOlFtZMGQpAXm0cYnmy1G5hw5PZ3bw/rywHXV
+ XmPtB2SDXpkF9fomCrVZEjW1eMmBnttJxGdK8RBqt1SNi+WbWdBa3kBA6NAqwq2z7V0U+N9Ce
+ vJ1IAQu0U8SgMXkG2hR9Wie4mIwR3xazfiy86hQffE+BQYUH+6mTE8TbDZnSORrxLe2w6QNPi
+ sLS8QpTWasoTAQYI+fJZiFxspz9uwHruif2emiwTEtJIJCLkfYrrpDpjzOQgky+ZGKsYbjFRP
+ 8zrfKpVgJPSx7rflfeCz7DiZrGbigRFejaStA116QByl0dZc9hR1lTSwKuoQ0ZUE9/TR8I1Mm
+ jeFAtCfQ2xk7PaZWnvPXXcvleLDcK5j3TAI1GJBxtgcA2ipThebijmYniX068aAjHOZBwpmJZ
+ jJ3E/rF2Vs4os50xSstttCpPfA0NJiFYFDWRkuvoj2lqxktU0vTy9M+Eob/ToCnRx87bOnN5B
+ NNt/TKGDKB7jhkqdRO0ykzFeIa/OgB6Eop9n4+bcBuOTT4fu3/oLCtU2DseFRdr9LrLVhXt/v
+ d50bSsIwSD4CJb1aez5IGyJdyHg1F3zYuYNwhuz8ZWPPr8DNRFR4/GRUPAjY89eNGFsk3fTXO
+ syoAcERr0OsQjZCbIBCd31XEjVgcX/E01TnPPxeTqGkC23o80RR5Rkvg9Y9s4uqrN68wIhykh
+ TTTeazT+G2dItMWvKbdtpiutsrudS0fBvaZYZaCOJS22Rrs67VVRfWOI4225AjniNtyE90TQi
+ uSDpw20Q+xltQzOavYPT3LbXCpkZXRcglWE7zX8obIQD9M7/Y8=
 
-On Thu, 13 Jan 2022 17:41:21 +0530, Alim Akhtar wrote:
-> Add dt-schema documentation for Tesla FSD SoC clock controller.
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  .../bindings/clock/tesla,fsd-clock.yaml       | 212 ++++++++++++++++++
->  1 file changed, 212 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
-> 
+On Thu, Jan 13, 2022 at 6:19 PM Philippe Cornu
+<philippe.cornu@foss.st.com> wrote:
+>
+>  DRM DRIVERS FOR STI
+> -M:     Benjamin Gaignard <benjamin.gaignard@linaro.org>
+>  L:     dri-devel@lists.freedesktop.org
+>  S:     Maintained
+>  T:     git git://anongit.freedesktop.org/drm/drm-misc
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+If there is no longer a maintainer, I suppose it should also be marked as
 
-yamllint warnings/errors:
+S: Orphaned
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/clock/tesla,fsd-clock.example.dts:19:18: fatal error: dt-bindings/clock/fsd-clk.h: No such file or directory
-   19 |         #include <dt-bindings/clock/fsd-clk.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/clock/tesla,fsd-clock.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1413: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1579595
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+         Arnd
