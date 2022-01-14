@@ -1,213 +1,149 @@
-Return-Path: <SRS0=dAD0=R6=samsung.com=alim.akhtar@kernel.org>
+Return-Path: <SRS0=iDid=R6=foss.st.com=prvs=7013547036=philippe.cornu@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC042C433F5
-	for <soc@archiver.kernel.org>; Fri, 14 Jan 2022 08:38:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12C8AC433F5
+	for <soc@archiver.kernel.org>; Fri, 14 Jan 2022 08:43:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ADC8BC36AEC; Fri, 14 Jan 2022 08:38:32 +0000 (UTC)
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	id F2F80C36AEA; Fri, 14 Jan 2022 08:43:01 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3514BC36AEA
-	for <soc@kernel.org>; Fri, 14 Jan 2022 08:38:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3514BC36AEA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220114083827epoutp038357e58935267502b40c36348f0d07bf~KFkbrchrw2869428694epoutp03s
-	for <soc@kernel.org>; Fri, 14 Jan 2022 08:38:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220114083827epoutp038357e58935267502b40c36348f0d07bf~KFkbrchrw2869428694epoutp03s
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1642149508;
-	bh=Cur3k3PauERrmtbJjvVcmmykkWyBSqOEzneFlcppSiQ=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=fDIzBD/sL0mG9dUyL1LBxkLW+BVw72tjSljgyCm/xmBA7p6JlbZdzNyOmgNpAGZDv
-	 hmfj4EEMeq/Ymyl/KPj7843TUgszIgd8/ZlAJKeRlxmCKZAGX08vfUhWse9Xr8SH86
-	 U9rQLC6sIfEH61ce/ZosRMxx6cli8xJsopEjGELw=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-	20220114083827epcas5p4d0a7eda942f2c4d90ccec6b5dafaaff7~KFkbT-Z-p1922119221epcas5p4U;
-	Fri, 14 Jan 2022 08:38:27 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.176]) by
-	epsnrtp2.localdomain (Postfix) with ESMTP id 4JZvp73rQmz4x9QJ; Fri, 14 Jan
-	2022 08:38:23 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-	epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	43.9D.06423.F7631E16; Fri, 14 Jan 2022 17:38:23 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20220114083822epcas5p38a563af3d5a7f69c8e9679730ad2afcf~KFkW7-Hky1707817078epcas5p3E;
-	Fri, 14 Jan 2022 08:38:22 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20220114083822epsmtrp2387b14fdd2e60ea5bef119a514cb1a40~KFkW7MsGl0182601826epsmtrp2g;
-	Fri, 14 Jan 2022 08:38:22 +0000 (GMT)
-X-AuditID: b6c32a49-b01ff70000001917-49-61e1367fa364
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	BB.7A.29871.E7631E16; Fri, 14 Jan 2022 17:38:22 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20220114083820epsmtip2e14daa3e6cc08874d42134b1db68b8bf~KFkU3C67R3017630176epsmtip2d;
-	Fri, 14 Jan 2022 08:38:20 +0000 (GMT)
-From: "Alim Akhtar" <alim.akhtar@samsung.com>
-To: "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4C9EAC36AEF;
+	Fri, 14 Jan 2022 08:42:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4C9EAC36AEF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20E6gwlx020402;
+	Fri, 14 Jan 2022 09:42:48 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Ak0hNP0jSZB7Ob9FCieszL0HVXIJr7HhykzjKIYBcpA=;
+ b=BCYU+ktG/tEgOpDpYpI/Hn1da34OqqUZbCrvQNJCOO5xDCayNGfqCEvHLaOWc5++Av1+
+ dLbM0RR9/mOBDkbXboSmZHnyQjliiLWd2zgFZqWGpc71wqeVWpscJI6tYoa9k837uevh
+ vCtVDx00Hwf7uGZOb9iywOESYLqafHwU4ofXQiINEaqPbn73856B0p6tCqTXVV1VY6Vr
+ t/w39n+QpVRGLEWQHt0Y4tpNG2Kin9yhQ581B1U1p/F06jndTO5nZRDsVMvykmBDFGYf
+ xKTaikRYJ42Qvd3cdPUxosl1/pC6hEjYW+kDuLHf1AHm01EvDJ32UrkrMmEmTrY8QvBA jw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dk45armgu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 14 Jan 2022 09:42:48 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1C7E610002A;
+	Fri, 14 Jan 2022 09:42:47 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1011B20ED16;
+	Fri, 14 Jan 2022 09:42:47 +0100 (CET)
+Received: from lmecxl0993.lme.st.com (10.75.127.49) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 14 Jan
+ 2022 09:42:45 +0100
+Subject: Re: [PATCH 1/2] MAINTAINERS: Update Benjamin Gaignard maintainer
+ status
 List-Id: <soc.lore.kernel.org>
-Cc: <soc@kernel.org>, <linux-clk@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <olof@lixom.net>, <linus.walleij@linaro.org>,
-	<catalin.marinas@arm.com>, <robh+dt@kernel.org>, <s.nawrocki@samsung.com>,
-	<linux-samsung-soc@vger.kernel.org>, <pankaj.dubey@samsung.com>,
-	<linux-fsd@tesla.com>
-In-Reply-To: <65e6f034-278a-81fa-844d-10a1865a25a4@canonical.com>
-Subject: RE: [PATCH 10/23] dt-bindings: pinctrl: samsung: Add compatible for
- Tesla FSD SoC
-Date: Fri, 14 Jan 2022 14:08:19 +0530
-Message-ID: <07cf01d80922$16d7f760$4487e620$@samsung.com>
+To: Yannick Fertre <yannick.fertre@foss.st.com>,
+        Raphael Gallais-Pou
+	<raphael.gallais-pou@foss.st.com>,
+        David Airlie <airlied@linux.ie>, Daniel
+ Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat
+	<alain.volmat@foss.st.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro
+ Carvalho Chehab <mchehab@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark
+	<lmark@codeaurora.org>, Laura Abbott <labbott@redhat.com>,
+        Brian Starkey
+	<Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Christian
+ Konig <christian.koenig@amd.com>, <soc@kernel.org>
+CC: <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linaro-mm-sig@lists.linaro.org>
+References: <20220113171921.17466-1-philippe.cornu@foss.st.com>
+ <20220113171921.17466-2-philippe.cornu@foss.st.com>
+From: Philippe CORNU <philippe.cornu@foss.st.com>
+Message-ID: <8c6eb9c2-4e3a-136b-61b4-f3b91b9903aa@foss.st.com>
+Date: Fri, 14 Jan 2022 09:42:30 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKuNmZ/+9PJHbdzezyQqzGEXzr0sgL8ryguAaBfAcEA6PFKowJzFa60ASXzfreqbN6UUA==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHJsWRmVeSWpSXmKPExsWy7bCmlm692cNEgym/xS3eL+thtJh/5Byr
-	xca3P5gspvxZzmSx6fE1VouPPfdYLR6+Cre4vGsOm8WM8/uYLE5d/8xmsWjrF3aL1r1H2C0O
-	v2lntXh8/Q+bA5/HmnlrGD1mNfSyeWxa1cnmcefaHjaPzUvqPa6caGL16NuyitHjX9Ncdo/P
-	m+QCOKOybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOA
-	bldSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFJgU6BUn5haX5qXr5aWWWBkaGBiZ
-	AhUmZGecnHCYsWCLbMXKfdNZGxjfSnYxcnJICJhIrO/sYe9i5OIQEtjNKHFh73w2COcTo8Tt
-	xY2sEM43Ron22SeZYFo2zZ3CApHYyyjR/HseVNVLRonO5leMIFVsAroSOxa3gc0SEehklFj9
-	/ScTiMMssIJJYv6pu0D9HBycAo4SzScdQBqEBWIktn29xw4SZhFQlbjQ7gYS5hWwlHj+bjob
-	hC0ocXLmExYQm1lAW2LZwtfMEBcpSPx8uowVxBYRCJNY+OswO0SNuMTLo0fAnpMQeMEhsW/z
-	CzaQ+RICLhJnDopD9ApLvDq+hR3ClpL4/G4vVEm2RM8uY4hwjcTSecdYIGx7iQNX5oAdzyyg
-	KbF+lz7EJj6J3t9PmCA6eSU62oQgqlUlmt9dheqUlpjY3c0KYXtIHL3RzDaBUXEWkr9mIflr
-	FpL7ZyEsW8DIsopRMrWgODc9tdi0wDAvtRwe3cn5uZsYwQlby3MH490HH/QOMTJxMB5ilOBg
-	VhLh7S+6nyjEm5JYWZValB9fVJqTWnyI0RQY1hOZpUST84E5I68k3tDE0sDEzMzMxNLYzFBJ
-	nPd0+oZEIYH0xJLU7NTUgtQimD4mDk6pBiax3qTZhvzRz3Psc9rSjvfM/ZbFFX/h9VwJqVgx
-	t759+S/Zo7ddvM1R9GmCzHKfE0+7iqyzVKZdV705+c+sPWZlFXzzvpuYnC+c5qq3K3CZ6Ktk
-	xad9bhvsJLed/bRkQQ7r/2u39B7FLX4Ud31bIrf1zLAOj48X9ygpTF395WHQai1R9e/Wwtv/
-	1r1Z2bR4gpvPI2Ge9hstc3ZkOthe+iCy4civuqC5/6fcfCjRKmvrpniqyL3tXKSu41qvpn2b
-	mmYFdm6czq8qfXnm1DK1siQpgyUPl7sskeX/kzx/a2vF/AfrOyauyXGUmLhXaNOEb9VfYzhe
-	Bd9Y8/rc2cVCli1Gm7mKFl/Ou/Wx6HfhhB1vlFiKMxINtZiLihMBIOFSxmEEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJIsWRmVeSWpSXmKPExsWy7bCSvG6d2cNEg/mzdCzeL+thtJh/5Byr
-	xca3P5gspvxZzmSx6fE1VouPPfdYLR6+Cre4vGsOm8WM8/uYLE5d/8xmsWjrF3aL1r1H2C0O
-	v2lntXh8/Q+bA5/HmnlrGD1mNfSyeWxa1cnmcefaHjaPzUvqPa6caGL16NuyitHjX9Ncdo/P
-	m+QCOKO4bFJSczLLUov07RK4Mlomn2YsOCtTcfzVX9YGxhbJLkZODgkBE4lNc6ewdDFycQgJ
-	7GaUWNBykhUiIS1xfeMEdghbWGLlv+fsEEXPGSV+bpvGDJJgE9CV2LG4jQ0kISLQzShxpWcm
-	I4jDLLCFSaLzxRlmiJYbTBING/YxdTFycHAKOEo0n3QA6RYWiJI4/fYWWJhFQFXiQrsbSJhX
-	wFLi+bvpbBC2oMTJmU9YQGxmAW2J3oetjDD2soWvmSGuU5D4+XQZ2NUiAmESC38dZoeoEZd4
-	efQI+wRG4VlIRs1CMmoWklGzkLQsYGRZxSiZWlCcm55bbFhgmJdarlecmFtcmpeul5yfu4kR
-	HLtamjsYt6/6oHeIkYmD8RCjBAezkghvf9H9RCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pO
-	xgsJpCeWpGanphakFsFkmTg4pRqYinb9TN88OeD6ohti7U9mTpkf4Kz7e5VqIJf0/7bwM/JN
-	KWoaJ+8eE7+9I6Q/Jdt5QuwXXZ/tx1f45pc4ZB8xmLBjn5lMgP6JnHTrhS28jTcvbPT42c26
-	+utX97b+tfFpBkKFFS7Py3OaTtc5zV4h3zf/UbOZ4omsdwq8dd+vhiy4eXJXA1+7lHb4Ik31
-	MAHVqC8iGyw/z076/CzD/p7Rrv2d/eKpxwwitq0qXOFQcOJoTaD2p4ObtbWYt8zddYvvx93H
-	DPkGT6+77/URMT3Kp6btn/dKxsftPUNmu4plQZ/prsbV5049Ojul7/jLK+z7P3zwj9HisLH7
-	Htbx0v+zgN2Eq0+EVmtOXpWcz1qnxFKckWioxVxUnAgAv3K7u0wDAAA=
-X-CMS-MailID: 20220114083822epcas5p38a563af3d5a7f69c8e9679730ad2afcf
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220113122354epcas5p19e5cebe9e85e9ba1758fa0b9d7d1ef75
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
-	<CGME20220113122354epcas5p19e5cebe9e85e9ba1758fa0b9d7d1ef75@epcas5p1.samsung.com>
-	<20220113121143.22280-11-alim.akhtar@samsung.com>
-	<849c7772-0f7e-32ff-6ea6-c46aa6837bb4@canonical.com>
-	<076101d80909$d5849060$808db120$@samsung.com>
-	<65e6f034-278a-81fa-844d-10a1865a25a4@canonical.com>
+In-Reply-To: <20220113171921.17466-2-philippe.cornu@foss.st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-14_03,2022-01-13_01,2021-12-02_01
 
 
 
->-----Original Message-----
->From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40canonical.com=5D
->Sent: Friday, January 14, 2022 1:20 PM
->To: Alim Akhtar <alim.akhtar=40samsung.com>; linux-arm-
->kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
->Cc: soc=40kernel.org; linux-clk=40vger.kernel.org; devicetree=40vger.kerne=
-l.org;
->olof=40lixom.net; linus.walleij=40linaro.org; catalin.marinas=40arm.com;
->robh+dt=40kernel.org; s.nawrocki=40samsung.com; linux-samsung-
->soc=40vger.kernel.org; pankaj.dubey=40samsung.com; linux-fsd=40tesla.com
->Subject: Re: =5BPATCH 10/23=5D dt-bindings: pinctrl: samsung: Add compatib=
-le for
->Tesla FSD SoC
->
->On 14/01/2022 06:44, Alim Akhtar wrote:
->>
->>
->>> -----Original Message-----
->>> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40canonical.com=
-=5D
->>> Sent: Thursday, January 13, 2022 5:57 PM
->>> To: Alim Akhtar <alim.akhtar=40samsung.com>; linux-arm-
->>> kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
->>> Cc: soc=40kernel.org; linux-clk=40vger.kernel.org;
->>> devicetree=40vger.kernel.org; olof=40lixom.net; linus.walleij=40linaro.=
-org;
->>> catalin.marinas=40arm.com;
->>> robh+dt=40kernel.org; s.nawrocki=40samsung.com; linux-samsung-
->>> soc=40vger.kernel.org; pankaj.dubey=40samsung.com; linux-fsd=40tesla.co=
-m
->>> Subject: Re: =5BPATCH 10/23=5D dt-bindings: pinctrl: samsung: Add
->>> compatible for Tesla FSD SoC
->>>
->>> On 13/01/2022 13:11, Alim Akhtar wrote:
->>>> Add compatible for Tesla Full Self-Driving SoC. The pinctrl hardware
->>>> IP is similar to what found on most of the exynos series of SoC, so
->>>> this new compatible is added in samsung pinctrl binding.
->>>>
->>>> Cc: linux-fsd=40tesla.com
->>>> Signed-off-by: Alim Akhtar <alim.akhtar=40samsung.com>
->>>> ---
->>>>  Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt =7C 1 +
->>>>  1 file changed, 1 insertion(+)
->>>>
->>>> diff --git
->>>> a/Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt
->>>> b/Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt
->>>> index b8b475967ff9..ba972998a0e4 100644
->>>> --- a/Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt
->>>> +++ b/Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt
->>>> =40=40 -24,6 +24,7 =40=40 Required Properties:
->>>>    - =22samsung,exynos7-pinctrl=22: for Exynos7 compatible pin-control=
-ler.
->>>>    - =22samsung,exynos850-pinctrl=22: for Exynos850 compatible pin-con=
-troller.
->>>>    - =22samsung,exynosautov9-pinctrl=22: for ExynosAutov9 compatible
->>>> pin-
->>> controller.
->>>> +  - =22tesla,fsd-pinctrl=22: for Tesla FSD SoC compatible pin-control=
-ler.
->>>>
->>>
->>> Please rebase this on my latest Samsung pinctrl dtschema patches. You
->>> also need a tesla vendor prefix patch (separate).
->>>
->> Sure will rebase when sending v2, your latest patches are in Linux-next =
-or
->still in your tree?
->
->The SPI (v3) and pinctrl (v2) dtschema patches are on mailing lists.
->They seem to be done, so after merge window they will make to linux-next. =
-If
->you want earlier, grab them from mailing list or from
->branches:
->https://protect2.fireeye.com/v1/url?k=3D78372ba7-27ac12a5-7836a0e8-
->0cc47a31381a-987e4f8740569613&q=3D1&e=3D8e15033d-ca15-4f1f-b463-
->adce6ebe65ef&u=3Dhttps%3A%2F%2Fgithub.com%2Fkrzk%2Flinux%2Ftree%2F
->n%2Fdt-bindings-samsung-spi-schema-v3
->https://protect2.fireeye.com/v1/url?k=3D32fb0ddf-6d6034dd-32fa8690-
->0cc47a31381a-a7fe8cfb89319cf3&q=3D1&e=3D8e15033d-ca15-4f1f-b463-
->adce6ebe65ef&u=3Dhttps%3A%2F%2Fgithub.com%2Fkrzk%2Flinux%2Ftree%2F
->n%2Fdt-bindings-samsung-pinctrl-schema-v2
->
-Thanks Krzysztof, will take them for addressing FSD comments.
+On 1/13/22 6:19 PM, Philippe Cornu wrote:
+> From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> 
+> Update Benjamin Gaignard address and remove it from no more maintained
+> drivers.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ---
+>   MAINTAINERS | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7a2345ce8521..6bea080d0159 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5702,7 +5702,7 @@ F:	tools/testing/selftests/dma/
+>   
+>   DMA-BUF HEAPS FRAMEWORK
+>   M:	Sumit Semwal <sumit.semwal@linaro.org>
+> -R:	Benjamin Gaignard <benjamin.gaignard@linaro.org>
+> +R:	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>   R:	Liam Mark <lmark@codeaurora.org>
+>   R:	Laura Abbott <labbott@redhat.com>
+>   R:	Brian Starkey <Brian.Starkey@arm.com>
+> @@ -6423,7 +6423,6 @@ F:	Documentation/devicetree/bindings/display/rockchip/
+>   F:	drivers/gpu/drm/rockchip/
+>   
+>   DRM DRIVERS FOR STI
+> -M:	Benjamin Gaignard <benjamin.gaignard@linaro.org>
+>   L:	dri-devel@lists.freedesktop.org
+>   S:	Maintained
+>   T:	git git://anongit.freedesktop.org/drm/drm-misc
+> @@ -6433,7 +6432,6 @@ F:	drivers/gpu/drm/sti
+>   DRM DRIVERS FOR STM
+>   M:	Yannick Fertre <yannick.fertre@foss.st.com>
+>   M:	Philippe Cornu <philippe.cornu@foss.st.com>
+> -M:	Benjamin Gaignard <benjamin.gaignard@linaro.org>
+>   L:	dri-devel@lists.freedesktop.org
+>   S:	Maintained
+>   T:	git git://anongit.freedesktop.org/drm/drm-misc
+> @@ -18154,7 +18152,6 @@ F:	Documentation/devicetree/bindings/sound/st,sti-asoc-card.txt
+>   F:	sound/soc/sti/
+>   
+>   STI CEC DRIVER
+> -M:	Benjamin Gaignard <benjamin.gaignard@linaro.org>
+>   S:	Maintained
+>   F:	Documentation/devicetree/bindings/media/stih-cec.txt
+>   F:	drivers/media/cec/platform/sti/
+> 
 
->
->Best regards,
->Krzysztof
+Adding my r-b as already done in the original post from Benjamin (see 
+https://lore.kernel.org/lkml/20210706163033.795805-1-benjamin.gaignard@collabora.com/)
 
+Reviewed-by: Philippe Cornu <philippe.cornu@foss.st.com>
+
+Thank you
+Philippe :-)
