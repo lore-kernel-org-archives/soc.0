@@ -1,93 +1,148 @@
-Return-Path: <SRS0=OeQp=SB=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=vQSM=SB=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 763BEC433FE
-	for <soc@archiver.kernel.org>; Mon, 17 Jan 2022 14:14:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DAA9C43219
+	for <soc@archiver.kernel.org>; Mon, 17 Jan 2022 15:00:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 43D5DC36AE7; Mon, 17 Jan 2022 14:14:31 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+	id 1D177C36AF5; Mon, 17 Jan 2022 15:00:50 +0000 (UTC)
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CEFDBC36AE3;
-	Mon, 17 Jan 2022 14:14:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CEFDBC36AE3
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-ot1-f45.google.com ([209.85.210.45]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N1x6X-1mBoeg2egj-012FCU; Mon, 17 Jan 2022 15:14:27 +0100
-Received: by mail-ot1-f45.google.com with SMTP id g1-20020a9d6481000000b00592d01f2b6eso15839474otl.5;
-        Mon, 17 Jan 2022 06:14:27 -0800 (PST)
-X-Gm-Message-State: AOAM530qB0GvpKgQUnXV4g1x+DiSsDT4ULRqMgdt35xuqpopkmNu7hrm
-	hVVONVYyaCaPiGnybOP0cvPnjgF8EAElAWxDeaM=
-X-Google-Smtp-Source: ABdhPJw1ZgWjaWLjO9h+cg20DOEimvvTBW13bNSm+HZXqb0f0qzN/HOYU/ee29hk5wVbuIP+kAiil5AV4Egwenxh/3Q=
-X-Received: by 2002:a05:6830:2095:: with SMTP id y21mr14368395otq.368.1642428866253;
- Mon, 17 Jan 2022 06:14:26 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id F3F08C36AEF
+	for <soc@kernel.org>; Mon, 17 Jan 2022 15:00:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F3F08C36AEF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 256D14001D
+	for <soc@kernel.org>; Mon, 17 Jan 2022 15:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1642431647;
+	bh=P1t3TusiuWvEJQvj6KQ3UI4zLwE3rcF19O3O8iabinU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=HogFdYwP7bA7+V1ocHKuINi38n51IxnI/QOdMjvOx9jcNScc+7B9qXcxyEnY52ncl
+	 EACdws5mkRJ3FYmrcymxH8bDkpsAVZ1+hVy2/FFBjJeK7s9n/olWgAwPB8BIbuOf86
+	 tfT3PevJEVSK441hEnWmK+EMyAyVp+JKkdK8lbz48Ws9WDV2GG4/0EYyn7VB7uFVT+
+	 keSSUuqnSaR+CtEEO8NA3iObPJbeStaE2SrgsJulKEPYnlwKNxiC9w2DieX+7MwdvI
+	 6e793mHNyx41g6mPX8H0QhxJAa3SZcUl0lDIUzuQ4U+vGjFPgVGdlJ70I461jVAUnS
+	 9XL5ckAPv5b9w==
+Received: by mail-ed1-f70.google.com with SMTP id r14-20020aa7da0e000000b004021fa39843so3753234eds.15
+        for <soc@kernel.org>; Mon, 17 Jan 2022 07:00:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=P1t3TusiuWvEJQvj6KQ3UI4zLwE3rcF19O3O8iabinU=;
+        b=04BXhXajHFZRSD76fyRlBvu3rDGuvvxY2UbQCPzM2Srs14JRPir81daxy1FbG2Y7Ds
+         XleQRhWQBXHy/E5djkuq+uZGC3U0BzswTa3CZAMd6xjaXtgI/WIDU9dzmYE0tKz2hKMh
+         sPvBdoZ0PPv+ECadWGNk47NKNpqTJWVXfQmCEOC4zQrSN3gWksiGf06UdNWVknhIi19Z
+         VQx2fXT8hZKsyr31SoYod9Wnvv+xbc4I4KxXYq5EqBjvdpC9w7PByx2cdxMFUSamBZz9
+         D6v/n6gho7IDuttDpIJEjy2wMFGR5fXQ+U0/MsVWThUzs5a1mt4WaONr+uNa8LBm3I5D
+         baKQ==
+X-Gm-Message-State: AOAM533yQ/mj6/eOm//sXe/ZEeqYlZuW+U/0hTuDCHOyKfIEUS2T11WD
+	xTkoDsDC9ym2VGG2kBu+/LFD893XdYP2gcblWJnsdkU9OE+XdJvYb88jjrmC+QPeOIpHvoUrpKP
+	B6NhkfqKKjUFBCgQdekS2yl8=
+X-Received: by 2002:a17:906:8053:: with SMTP id x19mr11918942ejw.485.1642431646551;
+        Mon, 17 Jan 2022 07:00:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwi5fMBz8oaksx3ekbOg74TUZaXBrRwCj5lzvu6SsBncvDyD0ZOfpPjH3B+rGmVa8PY2miIKA==
+X-Received: by 2002:a17:906:8053:: with SMTP id x19mr11918904ejw.485.1642431646225;
+        Mon, 17 Jan 2022 07:00:46 -0800 (PST)
+Received: from [192.168.0.39] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id bg20sm3958261ejb.59.2022.01.17.07.00.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 07:00:45 -0800 (PST)
+Message-ID: <9b98fd89-87b5-5026-fb0c-16bb956801ea@canonical.com>
+Date: Mon, 17 Jan 2022 16:00:44 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 13/23] dt-bindings: arm: add Tesla FSD ARM SoC
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>, Alim Akhtar <alim.akhtar@samsung.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ SoC Team <soc@kernel.org>, linux-clk <linux-clk@vger.kernel.org>,
+ DTML <devicetree@vger.kernel.org>, Olof Johansson <olof@lixom.net>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Rob Herring <robh+dt@kernel.org>,
+ Sylwester Nawrocki <s.nawrocki@samsung.com>,
+ "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES"
+ <linux-samsung-soc@vger.kernel.org>, Pankaj Dubey
+ <pankaj.dubey@samsung.com>, linux-fsd@tesla.com
 References: <20220113121143.22280-1-alim.akhtar@samsung.com>
  <CGME20220113122408epcas5p45053d1bf0acf2d8233a98b6c1abab6eb@epcas5p4.samsung.com>
- <20220113121143.22280-14-alim.akhtar@samsung.com> <53c17ddc-a049-72ed-7237-de23db7889da@canonical.com>
- <085801d80967$e4b8fe00$ae2afa00$@samsung.com> <5ab62673-8d46-ec1d-1c80-696421ab69ca@canonical.com>
+ <20220113121143.22280-14-alim.akhtar@samsung.com>
+ <53c17ddc-a049-72ed-7237-de23db7889da@canonical.com>
+ <085801d80967$e4b8fe00$ae2afa00$@samsung.com>
+ <5ab62673-8d46-ec1d-1c80-696421ab69ca@canonical.com>
  <00c901d80ba5$c9ae6ab0$5d0b4010$@samsung.com>
-In-Reply-To: <00c901d80ba5$c9ae6ab0$5d0b4010$@samsung.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 17 Jan 2022 15:14:10 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a31bCHNcNWrLX+QW+4RuK=DBpxLA_j5BFKxXxXKCT8PFQ@mail.gmail.com>
-Message-ID: <CAK8P3a31bCHNcNWrLX+QW+4RuK=DBpxLA_j5BFKxXxXKCT8PFQ@mail.gmail.com>
-Subject: Re: [PATCH 13/23] dt-bindings: arm: add Tesla FSD ARM SoC
-To: Alim Akhtar <alim.akhtar@samsung.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
-	linux-clk <linux-clk@vger.kernel.org>, DTML <devicetree@vger.kernel.org>, 
-	Olof Johansson <olof@lixom.net>, Linus Walleij <linus.walleij@linaro.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Rob Herring <robh+dt@kernel.org>, 
-	Sylwester Nawrocki <s.nawrocki@samsung.com>, 
-	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, Pankaj Dubey <pankaj.dubey@samsung.com>, 
-	linux-fsd@tesla.com
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:g+jCPTy3Uqml0SJv++bKfJNN2VXp2+GoyA6SEccAyqKyOCTx60o
- UBWq5xbuF+P2bDwHQZXpZOB2qRzIXrP0agAA3aB2ch0qIYGwgfY1vUyn0GOIVMigDhr/7mN
- C8vBUhIEBOBYyYiUlEDIvTQaRT3AtPmH8542qPJ6YmU/cde4EyuMMWrCSUeChJVivPkChCx
- rxscd0jtszQPkd6fpclOQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yrEN+I+7DYQ=:wJ5jhZF/Tl765eTX8pQikI
- JQV/xsX4FnuBSn15l4rFbeVoI+gZvSJRInSKnnrgQpsO8qCKF+wwssrPU80ijSUw5L1EVSCZX
- 5brCTowKcXPNgsU58KRHojRi3dezdqQ+8pAsPdRYglGHNLkpn8i616oBJjKkB7yxfbcjjI7td
- uCCSK5HgAUISuAP2fOc6Ljn7724bbiMLx3uB8MxNeh13jnQR0H8ufizInvlk4Aa/tSUzY2P5R
- UEmIxTm6OCxPl97dIlc3p00wskwuNVedBtv8I2nzMovA6j174c2yIBD5KywYbx4H+BOJtMt8V
- SIhJ3fspfNfLNR7oi4vrI9h1jM0X7rxjFCtNg/9gd5ElHGvnlTebsc+OwKx1PN2SnDIxNfM7W
- gN1uOkvSjuZ8gbw4WEVjy4y+fjTcbMXGaAoHHqZV50TZ2qyoU+xzg0DcZGr3KfYuy1/zQYHzY
- HGvYUJFsj07K1vvM0LsTtrKUaPYzh9Thl0SWHfwb7ZPdgNaGlejYchOSrjg5NufKcO65Udl+0
- nRUYpAVDyZgN+OYPtqAvuiv1IhKv65lXrJzfqvG29QMYCbxSFoBKrh9NL8guVEI0ZNKrJ/9pz
- tNnmX09FIwSXAlqG7aI1M6dqU7fxjY4IpInBqBSJ1RiErDeUV1gzbN9CVIY7DREYK9mHc780F
- mZp3/adyei84GmGvu93vDHsoVGGNYykgxRFUi+jlkTc5EdRTVRmGGgUgM9Q7OoRHw3H9D/3EJ
- p92wvsrdOV7xu4wlhxx0DSOL3XAz/+Em3vdUWhZLgiHmDOaEf319AIYh12Q/YI2Wwssqe7+Ja
- It7DbEvMe7ifn7F4pSYvW0wvLpROxIMuLW4V3jxYjNYtMYSgAY=
+ <CAK8P3a31bCHNcNWrLX+QW+4RuK=DBpxLA_j5BFKxXxXKCT8PFQ@mail.gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAK8P3a31bCHNcNWrLX+QW+4RuK=DBpxLA_j5BFKxXxXKCT8PFQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jan 17, 2022 at 2:26 PM Alim Akhtar <alim.akhtar@samsung.com> wrote:
->
-> >I cannot judge how different this is from Exynos subarchitecture - looking at
-> >patches it is not different - so I could understand a FSD sub-arch with only one
-> >SoC.
-> >
-> I understand, it is a bit difficult to visualize it with the current patch set.
-> As discuss on the other thread, FSD is different, more over the vendor is different, internal design is different.
+On 17/01/2022 15:14, Arnd Bergmann wrote:
+> On Mon, Jan 17, 2022 at 2:26 PM Alim Akhtar <alim.akhtar@samsung.com> wrote:
+>>
+>>> I cannot judge how different this is from Exynos subarchitecture - looking at
+>>> patches it is not different - so I could understand a FSD sub-arch with only one
+>>> SoC.
+>>>
+>> I understand, it is a bit difficult to visualize it with the current patch set.
+>> As discuss on the other thread, FSD is different, more over the vendor is different, internal design is different.
+> 
+> Is it based on another SoC design then? Most new SoCs are derived from
+> some other
+> one, so it makes sense to put it into the same family. E.g. the Apple
+> M1 takes bits from
+> both Exynos and PA-Semi SoCs but has more newly added components than
+> either one.
 
-Is it based on another SoC design then? Most new SoCs are derived from
-some other
-one, so it makes sense to put it into the same family. E.g. the Apple
-M1 takes bits from
-both Exynos and PA-Semi SoCs but has more newly added components than
-either one.
+It seems Apple M1 shares only few bits with SoC. I am aware of only UART
+driver as directly re-usable.
 
-I would argue that if this SoC shares the pinctrl, clock, spi, adc,
-and timer implementation
-with Exynos, we should consider it part of the Exynos family,
-regardless of what other
-blocks may exist next to those.
+> 
+> I would argue that if this SoC shares the pinctrl, clock, spi, adc,
+> and timer implementation
 
-       Arnd
+Plus: UART, watchdog, PWM, I2C, I2S, USB PHY, DWC3 USB (in Exynos
+flavor), UFS (also in Exynos-looking flavor), MFC (video codec), some
+similarities in DW PCIe, TMU (thermal). Looking at DTS there are
+differences but just few comparing to most of shared blocks.
+
+Additionally SoC BSP (and maybe SoC itself...) was actually developed or
+co-developed by Samsung, judging by copyrights in the BSP code. Even the
+original DTSI has:
+
+	TURBO TRAV SoC device tree source
+	Copyright (c) 2017 Samsung Electronics Co., Ltd.
+
+
+Tesla could still customize it a lot, but it is a strong hint that most
+of it came from Samsung LSI and shares with existing Samsung designs.
+
+Have in mind that recent Exynos chips are significantly different than
+early ARMv7 or ARMv8 designs and we still consider them part of Exynos
+family.
+
+> with Exynos, we should consider it part of the Exynos family,
+> regardless of what other
+> blocks may exist next to those.
+
+Yes. I don't see the benefit of keeping it outside of Exynos. It will
+sprinkle "depends on ARCH_EXYNOS || ARCH_FSD" all over (or depend on
+Exynos like you suggested).
+
+
+Best regards,
+Krzysztof
