@@ -1,135 +1,265 @@
-Return-Path: <SRS0=keMm=SC=samsung.com=alim.akhtar@kernel.org>
+Return-Path: <SRS0=YOi0=SC=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40803C433FE
-	for <soc@archiver.kernel.org>; Tue, 18 Jan 2022 15:01:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E35A6C433EF
+	for <soc@archiver.kernel.org>; Tue, 18 Jan 2022 16:18:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2C1A2C340E2; Tue, 18 Jan 2022 15:01:25 +0000 (UTC)
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+	id B1225C00446; Tue, 18 Jan 2022 16:18:42 +0000 (UTC)
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 82064C00446
-	for <soc@kernel.org>; Tue, 18 Jan 2022 15:01:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 82064C00446
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220118150122epoutp020cc5adcc5d2d0de8d99721a1598f73d8~LZX5yDJjb2351423514epoutp02O
-	for <soc@kernel.org>; Tue, 18 Jan 2022 15:01:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220118150122epoutp020cc5adcc5d2d0de8d99721a1598f73d8~LZX5yDJjb2351423514epoutp02O
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1642518082;
-	bh=cDzU9XPSHyqNaH4M/h3DMF34FfVxlA1olgy2CMDDxG0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gsXTp+wlIawjoVQPlZUZjktcOr4ZxnitROeEUg6x7uLFB5IX6uTjIercAOP6DX4RF
-	 v5ilqqTf5heQYDH0Kipt3/tbwrziBeYTJ+q6buhUrcnfE0LfHkMAh+yHjt/J50Rwtw
-	 MR7Rzwp/87dYZPtT0t3y8prLfLPb2PTj9OB1pcUM=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-	20220118150122epcas5p352b0adde5cc2ab507bf2e15329c92a81~LZX4_5vHW0676106761epcas5p3E;
-	Tue, 18 Jan 2022 15:01:22 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.183]) by
-	epsnrtp3.localdomain (Postfix) with ESMTP id 4JdX646441z4x9Pt; Tue, 18 Jan
-	2022 15:01:16 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-	epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	7D.29.06423.C36D6E16; Wed, 19 Jan 2022 00:01:16 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20220118150116epcas5p415b4b658b3ca3fe5e52e11a33546b926~LZXzfNSlp1276312763epcas5p4M;
-	Tue, 18 Jan 2022 15:01:16 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20220118150116epsmtrp20c26a06e9e08a384894795fafd4e8b86~LZXzeXnTn2220222202epsmtrp2W;
-	Tue, 18 Jan 2022 15:01:16 +0000 (GMT)
-X-AuditID: b6c32a49-b01ff70000001917-75-61e6d63cdda6
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-	BB.F0.08738.B36D6E16; Wed, 19 Jan 2022 00:01:15 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-	[107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20220118150113epsmtip141d860c53dc5dbb6c894d36d8f6808fb~LZXxS7_hk0520405204epsmtip1Z;
-	Tue, 18 Jan 2022 15:01:13 +0000 (GMT)
-From: Alim Akhtar <alim.akhtar@samsung.com>
-To: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id 8F3D6C340E2
+	for <soc@kernel.org>; Tue, 18 Jan 2022 16:18:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8F3D6C340E2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DFA273F31F
+	for <soc@kernel.org>; Tue, 18 Jan 2022 16:18:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1642522710;
+	bh=/saHFgfod+VllDCyIGCao3k0CHQX0T4IuTyB9aTiQuw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=QbF0PpBFlWTBtU/NQd5O5Y7B06dyG/AChQoqvqn2HxWIfKC1aKaXKG0rjxMjKiB5h
+	 B+ZQ5fp8Gb3Q20FJjk2lRu01SyeHWbz3ASF+4sAaQjEf3W9yaQnQGez9Fo5+zaMHz+
+	 KvAYr7zF0uOw+AIWlM+EQDyTdqgu1s6HlKvh4FiPkVm/29xxutZSq5GPjNwJu9U/VM
+	 S2e6LOwBWWXeCQCjmUlUVZwKaEh6GTWvL7Tllp2+7OTRI7J6uMxUF1+CoXxrt0b7rc
+	 hxlavzjQHSoW6Vyi6raBK4+Wi0771fh3UPOkU39odaSKf7AqV0okNmpwAb4Gl8OFjN
+	 4YKj/i+oCltLQ==
+Received: by mail-ed1-f69.google.com with SMTP id cf15-20020a0564020b8f00b0040284b671c6so6358620edb.22
+        for <soc@kernel.org>; Tue, 18 Jan 2022 08:18:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/saHFgfod+VllDCyIGCao3k0CHQX0T4IuTyB9aTiQuw=;
+        b=ggiWgiARHbtqCWxFPpXHnr8CPXeSuC00SPwfm52CXP4OccydPUbnI4Ud0lJb6X/Aoc
+         knAy9/OKfe/TnlZF72cECh22rzGOC9oXv2l8hz3OOZLOifVY/hOqjdtugTvKhpmSUKi/
+         Ok8HG1ZlbLyAsdxmlOPdrnUNAECdDtMTxaKaOTWsXVLhBcE5F0LFoBRvR+zzbTh5uVpZ
+         BFGAbR5AJ1EYTu2MY42i9+0nK/8b5+fWmThJf2NStyv/N2+72/LK6dOVBIJ4fCUND6Dd
+         bpFOPo6FfD0zzp5fKkc7bkTGlYs5+4GjEyOQbsFKe1vlGG3J/NwWntgHwWoo5+ed/vpX
+         u3Bg==
+X-Gm-Message-State: AOAM530x9JOjzc5B4Rz6u+JpRBM1cK/lh8n2YqxF6GL2iwo4mZYeJzDs
+	vuM1Gv3qLZ7zaQnGsPF3p6Ve+eSPAAyzVS7H5SlR1zfNqeSmJx1W4Rw+q32414vor29FJ+g+ZGN
+	kpWGC5POPhXUwxqZ3TfTBiJY=
+X-Received: by 2002:a17:907:9622:: with SMTP id gb34mr20839808ejc.355.1642522710392;
+        Tue, 18 Jan 2022 08:18:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxfIifqQ4AVPmYgf7XBd2Pu5uw++MPB2xe5GXOSCfqiesyMFJpl04gNL7IFKznqIxQO1lmdgg==
+X-Received: by 2002:a17:907:9622:: with SMTP id gb34mr20839776ejc.355.1642522710089;
+        Tue, 18 Jan 2022 08:18:30 -0800 (PST)
+Received: from [192.168.0.42] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id qa35sm5431720ejc.67.2022.01.18.08.18.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 08:18:29 -0800 (PST)
+Message-ID: <a7677638-8108-0bd7-19ca-0cfff5fcf534@canonical.com>
+Date: Tue, 18 Jan 2022 17:18:28 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2 02/16] dt-bindings: clock: Add bindings definitions for
+ FSD CMU blocks
+Content-Language: en-US
+To: Alim Akhtar <alim.akhtar@samsung.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	olof@lixom.net, arnd@arndb.de, linus.walleij@linaro.org,
-	catalin.marinas@arm.com, robh+dt@kernel.org,
-	krzysztof.kozlowski@canonical.com, s.nawrocki@samsung.com,
-	linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com, Alim Akhtar
-	<alim.akhtar@samsung.com>, linux-fsd@tesla.com
-Subject: [PATCH v2 16/16] arm64: defconfig: Enable Tesla FSD SoC
-Date: Tue, 18 Jan 2022 20:18:51 +0530
-Message-Id: <20220118144851.69537-17-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220118144851.69537-1-alim.akhtar@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBJsWRmVeSWpSXmKPExsWy7bCmpq7NtWeJBsvm6Vk8mLeNzeLvpGPs
-	Fu+X9TBazD9yjtVi49sfTBZT/ixnstj0+Bqrxceee6wWD1+FW1zeNYfNYsb5fUwWp65/ZrNY
-	tPULu0Xr3iPsFofftLNaPL7+h81BwGPNvDWMHr9/TWL0mNXQy+axaVUnm8eda3vYPDYvqfe4
-	cqKJ1aNvyypGj39Nc9k9Pm+SC+CKyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQw
-	V1LIS8xNtVVy8QnQdcvMAXpFSaEsMacUKBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgUqBX
-	nJhbXJqXrpeXWmJlaGBgZApUmJCdMfNxH1PBT5aKOd9WsTUwLmbpYuTkkBAwkdj3/zNrFyMX
-	h5DAbkaJc7/bmCCcT4wSi/8vg8p8ZpRY9ayTEaZl8tYTjBCJXYwSHRf+sUA4LUwSu5a8YQep
-	YhPQlrg7fQsTiC0i4CZxo7EDbC6zwFsmien7vrOBJIQFHCQeXJoGNpZFQFViQeNqsAZeAVuJ
-	NXu6mCDWyUus3nCAGcTmBIpPbZjKBjJIQmAth0TrigNQN7lI7F1yhx3CFpZ4dXwLlC0l8fnd
-	XqAGDiA7W6JnlzFEuEZi6bxj0BCwlzhwZQ4LSAmzgKbE+l36IGFmAT6J3t9PmCA6eSU62oQg
-	qlUlmt9dheqUlpjY3c0KYXtIbLn6BBpaExglpk5/wzqBUXYWwtQFjIyrGCVTC4pz01OLTQsM
-	81LL4TGVnJ+7iRGcRLU8dzDeffBB7xAjEwfjIUYJDmYlEV6p+meJQrwpiZVVqUX58UWlOanF
-	hxhNgUE2kVlKNDkfmMbzSuINTSwNTMzMzEwsjc0MlcR5T6dvSBQSSE8sSc1OTS1ILYLpY+Lg
-	lGpgEpGSPKLMa2XHWP7XO03oWv7uC8JbPwlU9P3Lmjhn63LPaH6rB5cc11YeerjRs9pwkqb1
-	7H0+vhmCp2YV3Hwl9s4s7Lr9fpu9r3Ky0necWVvomSZmLRCa5TLbc73vwe/1U9aF8gScs1Pq
-	VIl2ftcYxKq+W132loG5xcuo/ElTuz4vfWn1/LvERcVrqx+VSjKorN+uWrxt+YVJZtGx26Vy
-	bT7faAzarXpil9qZSRMVrmgfPXyMZ+ukye6eJ03Yi4/VvdF8+uE5w/qLW2WNMic9f7GQ/1oL
-	e/c3VgmPxvTpcyu8vY+ssbK3NXO+IpNx7tSn2yprtrEHnE2Pbloepa0/I7vOxuX/nsmv19gd
-	MPhyRYmlOCPRUIu5qDgRAFClocorBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDLMWRmVeSWpSXmKPExsWy7bCSnK7NtWeJBtdPM1o8mLeNzeLvpGPs
-	Fu+X9TBazD9yjtVi49sfTBZT/ixnstj0+Bqrxceee6wWD1+FW1zeNYfNYsb5fUwWp65/ZrNY
-	tPULu0Xr3iPsFofftLNaPL7+h81BwGPNvDWMHr9/TWL0mNXQy+axaVUnm8eda3vYPDYvqfe4
-	cqKJ1aNvyypGj39Nc9k9Pm+SC+CK4rJJSc3JLEst0rdL4MqY+biPqeAnS8Wcb6vYGhgXs3Qx
-	cnJICJhITN56grGLkYtDSGAHo8T31T8YIRLSEtc3TmCHsIUlVv57zg5R1MQk0bVpLTNIgk1A
-	W+Lu9C1MILaIgIdE2797zCBFzAJ/mSS+vn4INklYwEHiwaVpYDaLgKrEgsbVYA28ArYSa/Z0
-	MUFskJdYveEA2FBOoPjUhqlsILaQgI3ExZXTmCcw8i1gZFjFKJlaUJybnltsWGCUl1quV5yY
-	W1yal66XnJ+7iREcAVpaOxj3rPqgd4iRiYPxEKMEB7OSCK9U/bNEId6UxMqq1KL8+KLSnNTi
-	Q4zSHCxK4rwXuk7GCwmkJ5akZqemFqQWwWSZODilGpj6e26EpB27Wvjl4e+Z/zZItUxK3cq1
-	9gfrP5HHeRFpefqRUecm5NnlLvZRY7tkNtfwM6/Ii8hLbKWacze2seyU3Bay8XgWl27kydLV
-	sfkapy6+O7qoQ+Ti3lpz4RW9Wut4V1o7m8TzPl8+wcb9ePHnhaZOm5qnP1S2vRS+mXvX7qjo
-	qov3p/J8r5n1WzhN1GhfqKXjWsbyPXUqP0Pv/xRwT5nd7dzQN/UJx4MLr944JT/7y/AxdE7N
-	USdvtd0G6lv3evkmzrm8L2GF4g1uJ93S6eEOt7yXrGu/M9PyS77fyhtXZmhMvHK56OHTta0i
-	1sG8PNfn/76wQFl263Fux1qvtwon+WJNEjZ1MfkFqk5TYinOSDTUYi4qTgQAAtDPke8CAAA=
-X-CMS-MailID: 20220118150116epcas5p415b4b658b3ca3fe5e52e11a33546b926
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220118150116epcas5p415b4b658b3ca3fe5e52e11a33546b926
+ olof@lixom.net, arnd@arndb.de, linus.walleij@linaro.org,
+ catalin.marinas@arm.com, robh+dt@kernel.org, s.nawrocki@samsung.com,
+ linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+ linux-fsd@tesla.com
 References: <20220118144851.69537-1-alim.akhtar@samsung.com>
-	<CGME20220118150116epcas5p415b4b658b3ca3fe5e52e11a33546b926@epcas5p4.samsung.com>
+ <CGME20220118150018epcas5p32642af7af63869d08a861d00d97e3b68@epcas5p3.samsung.com>
+ <20220118144851.69537-3-alim.akhtar@samsung.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220118144851.69537-3-alim.akhtar@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This patch enables the Tesla FSD SoC in arm64 defconfig.
+On 18/01/2022 15:48, Alim Akhtar wrote:
+> Clock controller driver of FSD platform is designed to have separate
+> instances for each particular CMU. So clock IDs in this bindings header
+> also start from 1 for each CMU block.
+> 
+> Cc: linux-fsd@tesla.com
+> Reported-by: kernel test robot <lkp@intel.com>
+> [robot: reported missing #endif]
+> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+>  include/dt-bindings/clock/fsd-clk.h | 149 ++++++++++++++++++++++++++++
+>  1 file changed, 149 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/fsd-clk.h
+> 
+> diff --git a/include/dt-bindings/clock/fsd-clk.h b/include/dt-bindings/clock/fsd-clk.h
+> new file mode 100644
+> index 000000000000..8cf45d2430b0
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/fsd-clk.h
+> @@ -0,0 +1,149 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2017 - 2022: Samsung Electronics Co., Ltd.
+> + *             https://www.samsung.com
+> + * Copyright (c) 2017-2022 Tesla, Inc.
+> + *             https://www.tesla.com
+> + *
+> + * The constants defined in this header are being used in dts
+> + * and fsd platform driver.
+> + */
+> +
+> +#ifndef _DT_BINDINGS_CLOCK_FSD_H
+> +#define _DT_BINDINGS_CLOCK_FSD_H
+> +
+> +/* CMU */
+> +#define DOUT_CMU_PLL_SHARED0_DIV4		1
+> +#define DOUT_CMU_PERIC_SHARED1DIV36		2
+> +#define DOUT_CMU_PERIC_SHARED0DIV3_TBUCLK	3
+> +#define DOUT_CMU_PERIC_SHARED0DIV20		4
+> +#define DOUT_CMU_PERIC_SHARED1DIV4_DMACLK	5
+> +#define DOUT_CMU_PLL_SHARED0_DIV6		6
+> +#define DOUT_CMU_FSYS0_SHARED1DIV4		7
+> +#define DOUT_CMU_FSYS0_SHARED0DIV4		8
+> +#define DOUT_CMU_FSYS1_SHARED0DIV8		9
+> +#define DOUT_CMU_FSYS1_SHARED0DIV4		10
+> +#define CMU_CPUCL_SWITCH_GATE			11
+> +#define DOUT_CMU_IMEM_TCUCLK			12
+> +#define DOUT_CMU_IMEM_ACLK			13
+> +#define DOUT_CMU_IMEM_DMACLK			14
+> +#define GAT_CMU_FSYS0_SHARED0DIV4		15
+> +#define CMU_NR_CLK				16
+> +
+> +/* PERIC */
+> +#define PERIC_SCLK_UART0			1
+> +#define PERIC_PCLK_UART0			2
+> +#define PERIC_SCLK_UART1			3
+> +#define PERIC_PCLK_UART1			4
+> +#define PERIC_DMA0_IPCLKPORT_ACLK		5
+> +#define PERIC_DMA1_IPCLKPORT_ACLK		6
+> +#define PERIC_PWM0_IPCLKPORT_I_PCLK_S0		7
+> +#define PERIC_PWM1_IPCLKPORT_I_PCLK_S0		8
+> +#define PERIC_PCLK_SPI0                         9
+> +#define PERIC_SCLK_SPI0                         10
+> +#define PERIC_PCLK_SPI1                         11
+> +#define PERIC_SCLK_SPI1                         12
+> +#define PERIC_PCLK_SPI2                         13
+> +#define PERIC_SCLK_SPI2                         14
+> +#define PERIC_PCLK_TDM0                         15
+> +#define PERIC_PCLK_HSI2C0			16
+> +#define PERIC_PCLK_HSI2C1			17
+> +#define PERIC_PCLK_HSI2C2			18
+> +#define PERIC_PCLK_HSI2C3			19
+> +#define PERIC_PCLK_HSI2C4			20
+> +#define PERIC_PCLK_HSI2C5			21
+> +#define PERIC_PCLK_HSI2C6			22
+> +#define PERIC_PCLK_HSI2C7			23
+> +#define PERIC_MCAN0_IPCLKPORT_CCLK		24
+> +#define PERIC_MCAN0_IPCLKPORT_PCLK		25
+> +#define PERIC_MCAN1_IPCLKPORT_CCLK		26
+> +#define PERIC_MCAN1_IPCLKPORT_PCLK		27
+> +#define PERIC_MCAN2_IPCLKPORT_CCLK		28
+> +#define PERIC_MCAN2_IPCLKPORT_PCLK		29
+> +#define PERIC_MCAN3_IPCLKPORT_CCLK		30
+> +#define PERIC_MCAN3_IPCLKPORT_PCLK		31
+> +#define PERIC_PCLK_ADCIF			32
+> +#define PERIC_EQOS_TOP_IPCLKPORT_CLK_PTP_REF_I  33
+> +#define PERIC_EQOS_TOP_IPCLKPORT_ACLK_I		34
+> +#define PERIC_EQOS_TOP_IPCLKPORT_HCLK_I		35
+> +#define PERIC_EQOS_TOP_IPCLKPORT_RGMII_CLK_I	36
+> +#define PERIC_EQOS_TOP_IPCLKPORT_CLK_RX_I	37
+> +#define PERIC_BUS_D_PERIC_IPCLKPORT_EQOSCLK	38
+> +#define PERIC_BUS_P_PERIC_IPCLKPORT_EQOSCLK	39
+> +#define PERIC_HCLK_TDM0				40
+> +#define PERIC_PCLK_TDM1				41
+> +#define PERIC_HCLK_TDM1				42
+> +#define PERIC_EQOS_PHYRXCLK_MUX			43
+> +#define PERIC_EQOS_PHYRXCLK			44
+> +#define PERIC_DOUT_RGMII_CLK			45
+> +#define PERIC_NR_CLK				46
+> +
+> +/* FSYS0 */
+> +#define UFS0_MPHY_REFCLK_IXTAL24		1
+> +#define UFS0_MPHY_REFCLK_IXTAL26		2
+> +#define UFS1_MPHY_REFCLK_IXTAL24		3
+> +#define UFS1_MPHY_REFCLK_IXTAL26		4
+> +#define UFS0_TOP0_HCLK_BUS			5
+> +#define UFS0_TOP0_ACLK				6
+> +#define UFS0_TOP0_CLK_UNIPRO			7
+> +#define UFS0_TOP0_FMP_CLK			8
+> +#define UFS1_TOP1_HCLK_BUS			9
+> +#define UFS1_TOP1_ACLK				10
+> +#define UFS1_TOP1_CLK_UNIPRO			11
+> +#define UFS1_TOP1_FMP_CLK			12
+> +#define PCIE_SUBCTRL_INST0_DBI_ACLK_SOC		13
+> +#define PCIE_SUBCTRL_INST0_AUX_CLK_SOC		14
+> +#define PCIE_SUBCTRL_INST0_MSTR_ACLK_SOC	15
+> +#define PCIE_SUBCTRL_INST0_SLV_ACLK_SOC		16
+> +#define FSYS0_EQOS_TOP0_IPCLKPORT_CLK_PTP_REF_I 17
+> +#define FSYS0_EQOS_TOP0_IPCLKPORT_ACLK_I	18
+> +#define FSYS0_EQOS_TOP0_IPCLKPORT_HCLK_I	19
+> +#define FSYS0_EQOS_TOP0_IPCLKPORT_RGMII_CLK_I	20
+> +#define FSYS0_EQOS_TOP0_IPCLKPORT_CLK_RX_I	21
+> +#define FSYS0_DOUT_FSYS0_PERIBUS_GRP		22
+> +#define FSYS0_NR_CLK				23
+> +
+> +/* FSYS1 */
+> +#define PCIE_LINK0_IPCLKPORT_DBI_ACLK		1
+> +#define PCIE_LINK0_IPCLKPORT_AUX_ACLK		2
+> +#define PCIE_LINK0_IPCLKPORT_MSTR_ACLK		3
+> +#define PCIE_LINK0_IPCLKPORT_SLV_ACLK		4
+> +#define PCIE_LINK1_IPCLKPORT_DBI_ACLK		5
+> +#define PCIE_LINK1_IPCLKPORT_AUX_ACLK		6
+> +#define PCIE_LINK1_IPCLKPORT_MSTR_ACLK		7
+> +#define PCIE_LINK1_IPCLKPORT_SLV_ACLK		8
+> +#define FSYS1_NR_CLK				9
+> +
+> +/* IMEM */
+> +#define IMEM_DMA0_IPCLKPORT_ACLK		1
+> +#define IMEM_DMA1_IPCLKPORT_ACLK		2
+> +#define IMEM_WDT0_IPCLKPORT_PCLK		3
+> +#define IMEM_WDT1_IPCLKPORT_PCLK		4
+> +#define IMEM_WDT2_IPCLKPORT_PCLK		5
+> +#define IMEM_MCT_PCLK				6
+> +#define IMEM_TMU_CPU0_IPCLKPORT_I_CLK_TS	7
+> +#define IMEM_TMU_CPU2_IPCLKPORT_I_CLK_TS	8
+> +#define IMEM_TMU_TOP_IPCLKPORT_I_CLK_TS		9
+> +#define IMEM_TMU_GPU_IPCLKPORT_I_CLK_TS		10
+> +#define IMEM_TMU_GT_IPCLKPORT_I_CLK_TS		11
+> +#define IMEM_NR_CLK				12
+> +
+> +/* MFC */
+> +#define MFC_MFC_IPCLKPORT_ACLK			1
+> +#define MFC_NR_CLK				2
+> +
+> +/* CAM_CSI */
+> +#define CAM_CSI0_0_IPCLKPORT_I_ACLK		1
+> +#define CAM_CSI0_1_IPCLKPORT_I_ACLK		2
+> +#define CAM_CSI0_2_IPCLKPORT_I_ACLK		3
+> +#define CAM_CSI0_3_IPCLKPORT_I_ACLK		4
+> +#define CAM_CSI1_0_IPCLKPORT_I_ACLK		5
+> +#define CAM_CSI1_1_IPCLKPORT_I_ACLK		6
+> +#define CAM_CSI1_2_IPCLKPORT_I_ACLK		7
+> +#define CAM_CSI1_3_IPCLKPORT_I_ACLK		8
+> +#define CAM_CSI2_0_IPCLKPORT_I_ACLK		9
+> +#define CAM_CSI2_1_IPCLKPORT_I_ACLK		10
+> +#define CAM_CSI2_2_IPCLKPORT_I_ACLK		11
+> +#define CAM_CSI2_3_IPCLKPORT_I_ACLK		12
+> +#define CAM_CSI_NR_CLK				13
 
-Cc: linux-fsd@tesla.com
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+One empty line would be nice here.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index ee4bd7710a0d..7dd0693a233e 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -54,6 +54,7 @@ CONFIG_ARCH_SEATTLE=y
- CONFIG_ARCH_INTEL_SOCFPGA=y
- CONFIG_ARCH_SYNQUACER=y
- CONFIG_ARCH_TEGRA=y
-+CONFIG_ARCH_TESLA_FSD=y
- CONFIG_ARCH_SPRD=y
- CONFIG_ARCH_THUNDER=y
- CONFIG_ARCH_THUNDER2=y
--- 
-2.25.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
+> +#endif /*_DT_BINDINGS_CLOCK_FSD_H */
+> 
+
+
+Best regards,
+Krzysztof
