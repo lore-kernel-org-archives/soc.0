@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A17CDC433FE
-	for <soc@archiver.kernel.org>; Tue, 18 Jan 2022 18:45:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EDBEC4332F
+	for <soc@archiver.kernel.org>; Tue, 18 Jan 2022 18:46:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 71988C340E2; Tue, 18 Jan 2022 18:45:16 +0000 (UTC)
+	id 40AB7C340E5; Tue, 18 Jan 2022 18:46:48 +0000 (UTC)
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7EAF7C340E0
-	for <soc@kernel.org>; Tue, 18 Jan 2022 18:45:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7EAF7C340E0
+	by smtp.kernel.org (Postfix) with ESMTPS id 7F7AAC340E0
+	for <soc@kernel.org>; Tue, 18 Jan 2022 18:46:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7F7AAC340E0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C5A0240049
-	for <soc@kernel.org>; Tue, 18 Jan 2022 18:45:13 +0000 (UTC)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0ACEB40051
+	for <soc@kernel.org>; Tue, 18 Jan 2022 18:46:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1642531513;
-	bh=8osQ58FXOlPLsyJtfHmM/yZUY3A/YErqa44d4fjUxZo=;
+	s=20210705; t=1642531606;
+	bh=32Jm3LsNIi8MgZskZsMja/2tuyI7FtQJGucbg9PscFM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=BBOFCz9+SDyR8BQ2W7s9RkXktoZQMFLn/VsJ38oYRl4PZ6DQhRBFwGExiEXGLMEMB
-	 nQJ/6pGTE/k5iImmpwihfPXqdJCxMsrvPLNjcd1UjMSrpbf0gkw4bHXjJkGijTyNrm
-	 0YhyJ+9bnqwrlMOLf8Cp9cmpbyl/MHQoJ8oODLghAD6WO5dMbnxA55SsdsxHl2tNZe
-	 fdfqB0lRVVcuORlZTtcRwvvKyYv2/izveSZx68waHkFdb6JyGYUDTU5uRVnmaIyabf
-	 vI/NmperPO1JbitGM3uDyCfpfyCa8tJYvev7ImVYmekcPJvkcglYp4T4qwTfJpAr+1
-	 gj3ZzcDbJdqhw==
-Received: by mail-ed1-f70.google.com with SMTP id ej6-20020a056402368600b00402b6f12c3fso6439529edb.8
-        for <soc@kernel.org>; Tue, 18 Jan 2022 10:45:13 -0800 (PST)
+	b=U4QAZoh9Gr83+BMa3w0AWG6mn/Ea/MrNso+OHw8PTdtPoM7OHmDyYHtqr7uMHzzT9
+	 q/5FoXiDha1uBc4w2E+xf9rA96fzV4Do6jVvbXLf9+hesYFBf0EwdVHY5aP2Eyufyh
+	 BJnf7QjGq5i+ZhBkWtwCLbCtBPJfTUz9BD7n0rzZ2zmQmdZkKSIiZMFPOzlHNVfJFx
+	 4loSThNL6WYSvqeBi2n4kJLMkLftiNVj6D3wAQdzNw0H+oGxN55SX8u9FtViFFAO1L
+	 uBP4k4reZcs6hesoMsziGgmWbdSsgnpt+5gBaVj4XtB/vaxe/5t3hrsaDFOBAc7jAV
+	 qIQjI/eaSq+Vg==
+Received: by mail-ed1-f70.google.com with SMTP id cf15-20020a0564020b8f00b0040284b671c6so6747348edb.22
+        for <soc@kernel.org>; Tue, 18 Jan 2022 10:46:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=8osQ58FXOlPLsyJtfHmM/yZUY3A/YErqa44d4fjUxZo=;
-        b=ludcD/EWgy0Grapdc70ttS7D4WYjsRt68kN8B+XP8zQrYa0vSRmYHyTiXO+UykkuaZ
-         Ay/TdAiHUzDOTfQMRpz5SvXGKcv8YtljnCDZBrFmuYrCYCcPyVx0fS77lKgoHGLm1iRc
-         K4XpS8UBEpOchS6vqVREGGsGWniYSWQh2XvJvRX31Ws5jh0rJDKmAoh9kE/bCXOP12HU
-         mNXcqfqLEkMO6p5rBPyeW1KzVUD9zxecAuv9k2NhVKI4eH5vfw8Shj8DY8+6aO171czp
-         Dbaj/tl6bh0Qksf+KWMCNJCPLxhtBBNkCU47XjZzUk5U5+rs+6yIDxMXTvgiITOe3+3v
-         uX3Q==
-X-Gm-Message-State: AOAM532i/2io9LAq2VkN4cvp5BAQyuRHznpnexljiSysWIGf4N69VlfC
-	ez3ZGh9YRfESS6QITz3xgMBh2SPHEEKhT7pm0uuP/c6DQNj8KZ5y4FbbRCdfIzfhMqwE61rc5Se
-	Kni+h5rM5cGOn1gXLxg2PcO4=
-X-Received: by 2002:a05:6402:2803:: with SMTP id h3mr27373599ede.241.1642531513207;
-        Tue, 18 Jan 2022 10:45:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx0Sfnsmx7DF4yXoTCVe+Weay6/LhuR9yDgGS2HHh01RVl40jGVz2Nf6Gg8Nhp5upcIJt2wHg==
-X-Received: by 2002:a05:6402:2803:: with SMTP id h3mr27373579ede.241.1642531513056;
-        Tue, 18 Jan 2022 10:45:13 -0800 (PST)
+        bh=32Jm3LsNIi8MgZskZsMja/2tuyI7FtQJGucbg9PscFM=;
+        b=rU4ylhFXFkRcFYVI9ZdDMUGs6jTnU43jHj/CV1lVRBN6EXQQZuKBtmhiam+VKzuNW3
+         UvrOxoQ0o5Ja3z8OjqliUUC4L5QjObix2bd3NdmAE7Gz30cdoU7d5IKhi+vjLV/IANWQ
+         dxfGp6O+UTyo0RKn6onqQWWse9wnWM6RRQ4ZEOZHrw0pkrdy/hk09ifPILAwhr5OBf7T
+         SHGet91QYs6pIXfv0ATX1XDeOuZ1IVjx4RH5L5MCh+rQBJHwggcYMQCj/tVBhmbgBmSO
+         NaN0od2LD70nw5ZYAENxg3sl+52wsQAGHEo5cMQ+NTxLlhRQUSURsaYaspYy5LwXo039
+         L50A==
+X-Gm-Message-State: AOAM532vvXcFU6SmsTokrroutmfmeNpQW3x/ycvMqud8Fk2NYMZ/6hHw
+	cL43B+ijNQx1JP3EHqI2V/ry05Q9IicJ+yNYwlysXs6FAXO+wSj2I5PVBZbhduQQK5gzoG1RhSO
+	CLDCGtnp6KIAwKFlcrW6QQos=
+X-Received: by 2002:a05:6402:2142:: with SMTP id bq2mr26372715edb.5.1642531604951;
+        Tue, 18 Jan 2022 10:46:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyNQP2i4JQE0+D1DYZNiBilWJZE60/kSXWqat/1Nl7NRn1F91gmzNzAqP8SgNb/qGa5xoUbSw==
+X-Received: by 2002:a05:6402:2142:: with SMTP id bq2mr26372704edb.5.1642531604772;
+        Tue, 18 Jan 2022 10:46:44 -0800 (PST)
 Received: from [192.168.0.42] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id k16sm5671861ejk.172.2022.01.18.10.45.11
+        by smtp.gmail.com with ESMTPSA id z24sm973311ejd.3.2022.01.18.10.46.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 10:45:12 -0800 (PST)
-Message-ID: <43e72d34-0e11-9ff6-6924-0cab62b51891@canonical.com>
-Date: Tue, 18 Jan 2022 19:45:11 +0100
+        Tue, 18 Jan 2022 10:46:44 -0800 (PST)
+Message-ID: <581732d1-8d86-f7c6-ebbf-795b48e5e67f@canonical.com>
+Date: Tue, 18 Jan 2022 19:46:43 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.1
-Subject: Re: [PATCH v2 14/16] arm64: dts: fsd: Add initial device tree support
+Subject: Re: [PATCH v2 15/16] arm64: dts: fsd: Add initial pinctrl support
 Content-Language: en-US
 To: Alim Akhtar <alim.akhtar@samsung.com>,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
@@ -73,53 +73,267 @@ Cc: soc@kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  olof@lixom.net, arnd@arndb.de, linus.walleij@linaro.org,
  catalin.marinas@arm.com, robh+dt@kernel.org, s.nawrocki@samsung.com,
  linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
- linux-fsd@tesla.com, Arjun K V <arjun.kv@samsung.com>,
- Aswani Reddy <aswani.reddy@samsung.com>,
- Ajay Kumar <ajaykumar.rs@samsung.com>,
- Sriranjani P <sriranjani.p@samsung.com>, Chandrasekar R
- <rcsekar@samsung.com>, Shashank Prashar <s.prashar@samsung.com>
+ linux-fsd@tesla.com, Shashank Prashar <s.prashar@samsung.com>,
+ Aswani Reddy <aswani.reddy@samsung.com>
 References: <20220118144851.69537-1-alim.akhtar@samsung.com>
- <CGME20220118150108epcas5p2d9cd4db7cb368c2bfbd7d058eba4107c@epcas5p2.samsung.com>
- <20220118144851.69537-15-alim.akhtar@samsung.com>
+ <CGME20220118150112epcas5p4b63030d9bf136b4a91468b0d02e75cae@epcas5p4.samsung.com>
+ <20220118144851.69537-16-alim.akhtar@samsung.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220118144851.69537-15-alim.akhtar@samsung.com>
+In-Reply-To: <20220118144851.69537-16-alim.akhtar@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 18/01/2022 15:48, Alim Akhtar wrote:
-> Add initial device tree support for "Full Self-Driving" (FSD) SoC
-> This SoC contain three clusters of four cortex-a72 CPUs and various
-> peripheral IPs.
+> Add initial pin configuration nodes for FSD SoC.
 > 
 > Cc: linux-fsd@tesla.com
-> Signed-off-by: Arjun K V <arjun.kv@samsung.com>
-> Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
-> Signed-off-by: Ajay Kumar <ajaykumar.rs@samsung.com>
-> Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
-> Signed-off-by: Chandrasekar R <rcsekar@samsung.com>
 > Signed-off-by: Shashank Prashar <s.prashar@samsung.com>
+> Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
 > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 > ---
->  MAINTAINERS                           |   8 +
->  arch/arm64/Kconfig.platforms          |   7 +
->  arch/arm64/boot/dts/Makefile          |   1 +
->  arch/arm64/boot/dts/tesla/Makefile    |   3 +
->  arch/arm64/boot/dts/tesla/fsd-evb.dts |  39 ++
->  arch/arm64/boot/dts/tesla/fsd.dtsi    | 651 ++++++++++++++++++++++++++
->  6 files changed, 709 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/tesla/Makefile
->  create mode 100644 arch/arm64/boot/dts/tesla/fsd-evb.dts
->  create mode 100644 arch/arm64/boot/dts/tesla/fsd.dtsi
+>  arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi | 335 +++++++++++++++++++++
+>  arch/arm64/boot/dts/tesla/fsd.dtsi         |  22 ++
+>  2 files changed, 357 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
 > 
+> diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> new file mode 100644
+> index 000000000000..371344e446f3
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> @@ -0,0 +1,335 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Tesla Full Self-Driving SoC device tree source
+> + *
+> + * Copyright (c) 2017-2021 Samsung Electronics Co., Ltd.
+> + *		https://www.samsung.com
+> + * Copyright (c) 2017-2021 Tesla, Inc.
+> + *		https://www.tesla.com
+> + */
+> +
+> +#include <dt-bindings/pinctrl/samsung.h>
+> +
+> +&pinctrl_fsys0 {
+> +	gpf0: gpf0 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpf1: gpf1 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpf6: gpf6 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpf4: gpf4 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpf5: gpf5 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +};
+> +
+> +&pinctrl_peric {
+> +	gpc8: gpc8 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpf2: gpf2 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpf3: gpf3 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpd0: gpd0 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpb0: gpb0 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpb1: gpb1 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpb4: gpb4 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpb5: gpb5 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpb6: gpb6 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpb7: gpb7 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpd1: gpd1 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpd2: gpd2 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpd3: gpd3 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpg0: gpg0 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpg1: gpg1 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpg2: gpg2 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpg3: gpg3 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpg4: gpg4 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpg5: gpg5 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpg6: gpg6 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	gpg7: gpg7 {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	pwm0_out: pwm0-out {
+> +		samsung,pins = "gpb6-1";
+> +		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> +		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+> +		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV2>;
+> +	};
 
-I saw you dropped the MCT timer from DTSI. I wonder why?
-
-Not very happy with FSD naming (as discussed before), but board
-compatible looks reasonable. Code looks good to me:
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-Similarly to previous vendor-prefix patch, please let me know if it's
-expected me to take it. I assume no. :)
+All pin configuration nodes with "-pins" suffix, even though current
+bindings do not mandate it. Less changes in the future.
 
 
 Best regards,
