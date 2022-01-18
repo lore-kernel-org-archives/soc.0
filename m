@@ -4,234 +4,135 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 134BEC433EF
-	for <soc@archiver.kernel.org>; Tue, 18 Jan 2022 14:58:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE543C433EF
+	for <soc@archiver.kernel.org>; Tue, 18 Jan 2022 15:00:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ED1B9C340E2; Tue, 18 Jan 2022 14:58:55 +0000 (UTC)
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+	id 92506C340E0; Tue, 18 Jan 2022 15:00:23 +0000 (UTC)
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 16886C340E0
-	for <soc@kernel.org>; Tue, 18 Jan 2022 14:58:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 16886C340E0
+	by smtp.kernel.org (Postfix) with ESMTPS id B21AAC00446
+	for <soc@kernel.org>; Tue, 18 Jan 2022 15:00:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B21AAC00446
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220118145846epoutp02d4a06daae2a59b86cf6028af10f34aef~LZVn-Y1Ba1557615576epoutp02I
-	for <soc@kernel.org>; Tue, 18 Jan 2022 14:58:46 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220118145846epoutp02d4a06daae2a59b86cf6028af10f34aef~LZVn-Y1Ba1557615576epoutp02I
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220118150020epoutp01731b6a45b53189d630669303281d03a0~LZXADTx4q2876028760epoutp01y
+	for <soc@kernel.org>; Tue, 18 Jan 2022 15:00:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220118150020epoutp01731b6a45b53189d630669303281d03a0~LZXADTx4q2876028760epoutp01y
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1642517926;
-	bh=Ylg0WEtaGPUko2HnNeH/2l42ssyOWCRP7SXhWjcIBCI=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=vf98O4cVRJu66uDSVgNUVBpwRyci/LpP5XEXpXuXLdtOx9svGEYDK5qp0taQnxVIB
-	 4F9CLht/mwluAZE86C1vcQbExY64JmQOAKsld3JwtN5ZcazYHIq7X5q23D1sqnVN24
-	 zx/fV1vd+lBaX1QfugJB76iQD37966tuaAzd8D0o=
+	s=mail20170921; t=1642518020;
+	bh=6/sht/J3vL6KHT6G7ayiMbwhGBtFe7fMeK4nY3zeflg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=K9ia0grUH0Z/zhbRRS7wKQVNyr0ZjAxz9NkfdmAewmtv9bwMlRo6uPmAJKHWr6cKp
+	 mNVL6vbFDPYNZDf454gPozPEjqLrsYCpSsjljfw038ERvcxH6WZuU/aQ1+ogcoUM7j
+	 3E09UzysdV/VS6hWvTmSyc+LFryyZTF93zWHmc9o=
 Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-	20220118145845epcas5p34a7c1141a3120245ba46d074f0d29f7a~LZVm3AXtM2789827898epcas5p3I;
-	Tue, 18 Jan 2022 14:58:45 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.182]) by
-	epsnrtp3.localdomain (Postfix) with ESMTP id 4JdX360ND1z4x9Pp; Tue, 18 Jan
-	2022 14:58:42 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	6A.58.05590.2A5D6E16; Tue, 18 Jan 2022 23:58:42 +0900 (KST)
+	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+	20220118150020epcas5p492b8def59846813f480ddc20cddab647~LZW-i3Z692208322083epcas5p4F;
+	Tue, 18 Jan 2022 15:00:20 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.178]) by
+	epsnrtp3.localdomain (Postfix) with ESMTP id 4JdX4t5k99z4x9Pt; Tue, 18 Jan
+	2022 15:00:14 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	27.9E.46822.4A5D6E16; Tue, 18 Jan 2022 23:58:44 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
 	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20220118145841epcas5p2fe64a99bc7698802f9cc4fb0bf5d5a32~LZVjPMJ0H3245132451epcas5p25;
-	Tue, 18 Jan 2022 14:58:41 +0000 (GMT)
+	20220118150014epcas5p2ac07759961be616d01de76026e58d4f5~LZW568Mtg2967629676epcas5p2S;
+	Tue, 18 Jan 2022 15:00:14 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
 	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20220118145841epsmtrp161165c22075efbe8cb1f2bb29d64661a~LZVjOL2JZ1656016560epsmtrp1U;
-	Tue, 18 Jan 2022 14:58:41 +0000 (GMT)
-X-AuditID: b6c32a4b-723ff700000015d6-31-61e6d5a2f3c4
+	20220118150014epsmtrp1c7165ec4ac8822556c6e82fc5235e423~LZW55Iqc-2079320793epsmtrp1T;
+	Tue, 18 Jan 2022 15:00:14 +0000 (GMT)
+X-AuditID: b6c32a4a-dfbff7000000b6e6-dc-61e6d5a44078
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
 	epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-	D7.D0.08738.0A5D6E16; Tue, 18 Jan 2022 23:58:41 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20220118145838epsmtip12e7842009f9befb8d78339274dce5a40~LZVg8C29q0468004680epsmtip1G;
-	Tue, 18 Jan 2022 14:58:38 +0000 (GMT)
-From: "Alim Akhtar" <alim.akhtar@samsung.com>
-To: "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+	95.E0.08738.EF5D6E16; Wed, 19 Jan 2022 00:00:14 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+	[107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20220118150011epsmtip1bbee9f2857086e319085dc20cce105e9~LZW3vyY1q1211512115epsmtip1k;
+	Tue, 18 Jan 2022 15:00:11 +0000 (GMT)
+From: Alim Akhtar <alim.akhtar@samsung.com>
+To: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: <soc@kernel.org>, <linux-clk@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <olof@lixom.net>, <linus.walleij@linaro.org>,
-	<catalin.marinas@arm.com>, <robh+dt@kernel.org>, <s.nawrocki@samsung.com>,
-	<linux-samsung-soc@vger.kernel.org>, <pankaj.dubey@samsung.com>,
-	<linux-fsd@tesla.com>, "'Shashank Prashar'" <s.prashar@samsung.com>,
-	"'Aswani	Reddy'" <aswani.reddy@samsung.com>
-In-Reply-To: <b8040d39-cd4d-e5b0-8aec-f03c5257d63e@canonical.com>
-Subject: RE: [PATCH 15/23] arm64: dts: fsd: Add initial pinctrl support
-Date: Tue, 18 Jan 2022 20:28:37 +0530
-Message-ID: <023d01d80c7b$e14d4d40$a3e7e7c0$@samsung.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKuNmZ/+9PJHbdzezyQqzGEXzr0sgJL1gp6AanHgoQCI2LlggH1bO0EAd3QJpGqbSOWAA==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBJsWRmVeSWpSXmKPExsWy7bCmhu6iq88SDXZvZbM4tHkru8X7ZT2M
-	FvOPnGO12Pj2B5PFlD/LmSw2Pb7GavGx5x6rxcNX4RaXd81hs5hxfh+Txanrn9ksFm39wm7R
-	uvcIu8XhN+2sFvN2zGW0eHz9D5uDgMeaeWsYPWY19LJ5bFrVyeZx59oeNo/NS+o9rpxoYvXo
-	27KK0eNf01x2j8+b5AI4o7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJz
-	U22VXHwCdN0yc4C+UFIoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBToFSfmFpfm
-	pevlpZZYGRoYGJkCFSZkZxz7+5q1oEOh4sTRFrYGxhnSXYycHBICJhLtHTtYQWwhgd2MEu93
-	CHQxcgHZnxglLux7zwLhfGaUeNa/lBWm487qn2wQiV2MEk0Tl7FCOC8ZJU5tec8IUsUmoCux
-	Y3EbWJWIQCejxOrvP5lAHGaBVmaJM03TmUGqOAUcJXpeT2bvYuTgEBZwl9i13wMkzCKgKnHs
-	zX12EJtXwFJi2/WpLBC2oMTJmU/AbGYBbYllC18zQ5ykIPHz6TKw80QEwiR23r/BDFEjLvHy
-	6BF2kL0SAj84JDYvXcACsktCwEVi1hIliF5hiVfHt7BD2FISL/vb2CFKsiV6dhlDhGskls47
-	xgJh20scuDIHbAqzgKbE+l36EJv4JHp/P2GC6OSV6GgTgqhWlWh+dxWqU1piYnc3NAw9JO6u
-	vco8gVFxFpK/ZiH5axaS+2chLFvAyLKKUTK1oDg3PbXYtMA4L7UcHt3J+bmbGMFJXMt7B+Oj
-	Bx/0DjEycTAeYpTgYFYS4ZWqf5YoxJuSWFmVWpQfX1Sak1p8iNEUGNgTmaVEk/OBeSSvJN7Q
-	xNLAxMzMzMTS2MxQSZz3VPqGRCGB9MSS1OzU1ILUIpg+Jg5OqQamZUL++mcudPia5N3nZM/h
-	5uvPXPa3+PgLwSi70jUSdyfnZES3VC5kX9Qyr0qwOJRPaaW49SyrIydK1BwPJ2y0SD+9Q+du
-	T/a/vZ/3vRTj82OTXJGY9O3jqw2nJohFR1yPnKdo8OnIvIj6y6oBkSuDw595PAgwfvjtsJue
-	WIPAnrzTATEzV01/5NxZpHZpUcNOt5O6W45Uid/2l7nk2CV4MeV1a/3HTj3XGxrPptyKV+Qr
-	sm2a+/0Lk1Kwvn/JxdvPDj75Zp++60haz58tLlqN/Zvrk67tuX5qx7L2UGdpty7dhzcfTnv/
-	SLo55mvKlN7DpxRWPSx+fHVSm6AG22eZG4Zz33r7f4mZoNPEt1JLiaU4I9FQi7moOBEA72uG
-	X2sEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrMIsWRmVeSWpSXmKPExsWy7bCSnO7Cq88SDU79ZLI4tHkru8X7ZT2M
-	FvOPnGO12Pj2B5PFlD/LmSw2Pb7GavGx5x6rxcNX4RaXd81hs5hxfh+Txanrn9ksFm39wm7R
-	uvcIu8XhN+2sFvN2zGW0eHz9D5uDgMeaeWsYPWY19LJ5bFrVyeZx59oeNo/NS+o9rpxoYvXo
-	27KK0eNf01x2j8+b5AI4o7hsUlJzMstSi/TtErgy2m9cZy1ola84tGsmSwPjbKkuRk4OCQET
-	iTurf7J1MXJxCAnsYJTovtnIBJGQlri+cQI7hC0ssfLfczBbSOA5o8TPlzwgNpuArsSOxW1g
-	zSIC3YwSV3pmMoI4zAKTmSVeXG5kgRh7g0lixc0FbCAtnAKOEj2vJwON4uAQFnCX2LXfAyTM
-	IqAqcezNfbANvAKWEtuuT2WBsAUlTs58AmYzC2hL9D5sZYSxly18zQxxnYLEz6fLWEFsEYEw
-	iZ33bzBD1IhLvDx6hH0Co/AsJKNmIRk1C8moWUhaFjCyrGKUTC0ozk3PLTYsMMpLLdcrTswt
-	Ls1L10vOz93ECI5nLa0djHtWfdA7xMjEwXiIUYKDWUmEV6r+WaIQb0piZVVqUX58UWlOavEh
-	RmkOFiVx3gtdJ+OFBNITS1KzU1MLUotgskwcnFINTNyhrRzzfj2J51Bf8NU2/teszPZ5OvN6
-	N2+dKT2b3/6/rdPLp/OXvjBZaqBqu+Br3lehw6uMvuqKrLn5+u7MG3vc5dZo/5/73LNj5vyG
-	oJ5JxxpDgjna7PgbDVh7Pyxd4La7is94+fGUHf/96/LeXO5lX2kW+Ccl0udH0Clm+Z83N9/u
-	mPGwo3NT/P4JvM/KVm196l5y9caEbhervshfbxwu5Jlq7rcoWf5dS/3+GXat204PnnUKXJaK
-	b3sSz3D61MqLchsOe0jdastb+jFHfW/UXDs+lmdHew//CjRm/rI0O51D5LaNjMKKLSvOtfzo
-	SPPjdWgo2HPKYHfPvlnMtxZKVckpru0T9b9aF8bevkKJpTgj0VCLuag4EQATUZ1GVgMAAA==
-X-CMS-MailID: 20220118145841epcas5p2fe64a99bc7698802f9cc4fb0bf5d5a32
+Cc: soc@kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	olof@lixom.net, arnd@arndb.de, linus.walleij@linaro.org,
+	catalin.marinas@arm.com, robh+dt@kernel.org,
+	krzysztof.kozlowski@canonical.com, s.nawrocki@samsung.com,
+	linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com, Alim Akhtar
+	<alim.akhtar@samsung.com>, linux-fsd@tesla.com
+Subject: [PATCH v2 01/16] dt-bindings: add vendor prefix for Tesla
+Date: Tue, 18 Jan 2022 20:18:36 +0530
+Message-Id: <20220118144851.69537-2-alim.akhtar@samsung.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220118144851.69537-1-alim.akhtar@samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOJsWRmVeSWpSXmKPExsWy7bCmlu6Sq88SDc58FbB4MG8bm8XfScfY
+	Ld4v62G0mH/kHKvFxrc/mCym/FnOZLHp8TVWi48991gtHr4Kt7i8aw6bxYzz+5gsTl3/zGax
+	aOsXdovWvUfYLQ6/aWe1eHz9D5uDgMeaeWsYPX7/msToMauhl81j06pONo871/aweWxeUu9x
+	5UQTq0ffllWMHv+a5rJ7fN4kF8AVlW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlh
+	rqSQl5ibaqvk4hOg65aZA/SKkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafApECv
+	ODG3uDQvXS8vtcTK0MDAyBSoMCE7Y8eyOewFa9krJp49y9rAuIqti5GTQ0LAROLpzC/sXYxc
+	HEICuxkl5j54CuV8YpTY1nePCcL5zCixuOk8O0zLtqO7GSESuxglXlx9wQSSEBJoYZKY3O0A
+	YrMJaEvcnb4FLC4i4CZxo7EDbBKzwFsmien7voMtFxZwkpj9bRmYzSKgKnF2ynQWEJtXwEZi
+	8aw/UAfKS6zecIAZxOYUsJWY2jCVDWSQhMBKDomukyuhilwk1n/rZoSwhSVeHd8CdaqUxMv+
+	NiCbA8jOlujZZQwRrpFYOu8YC4RtL3HgyhwWkBJmAU2J9bv0QcLMAnwSvb+fMEF08kp0tAlB
+	VKtKNL+7CtUpLTGxu5sVwvaQmHpjOzSwJjBKrNt1mHUCo+wshKkLGBlXMUqmFhTnpqcWmxYY
+	5aWWwyMqOT93EyM4hWp57WB8+OCD3iFGJg7GQ4wSHMxKIrxS9c8ShXhTEiurUovy44tKc1KL
+	DzGaAoNsIrOUaHI+MInnlcQbmlgamJiZmZlYGpsZKonznk7fkCgkkJ5YkpqdmlqQWgTTx8TB
+	KdXAxLI1ZPKlfIGwbpYP32f8t/oULvd58v4v+rKnbY9Uv+g+rr3zlYFGhGY6s+OkPJvk2RfK
+	1vh3c7+au/rQWr61nxwkmxJZtpcUz9P98XVJQiuLK1tEzzv7xKPMasxc8hFTFt1yf8VnrMsi
+	7WDzz+kLh8FrFlOehfvVsou/i2q0Cgt9fb9nw5JvAYK/ovWYHk2VP34o6POXqvluL6Sl3pRd
+	+izrIRSlt4bh+Vp/ZfUPW7O9PebJTLkw2/hB95SXMtcLnJZe7jyx8flhjvqf9vJzspauOb99
+	t2ysxEdfxj2aFjJXpqaYim7oW/Sp0taJe0bZpKvZIj1JXFdcL5WW65f3ySWGKwbW59qG7XlU
+	GcCkxFKckWioxVxUnAgA1CpDkCoEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFLMWRmVeSWpSXmKPExsWy7bCSnO6/q88SDb5/5bF4MG8bm8XfScfY
+	Ld4v62G0mH/kHKvFxrc/mCym/FnOZLHp8TVWi48991gtHr4Kt7i8aw6bxYzz+5gsTl3/zGax
+	aOsXdovWvUfYLQ6/aWe1eHz9D5uDgMeaeWsYPX7/msToMauhl81j06pONo871/aweWxeUu9x
+	5UQTq0ffllWMHv+a5rJ7fN4kF8AVxWWTkpqTWZZapG+XwJWxY9kc9oK17BUTz55lbWBcxdbF
+	yMkhIWAise3obkYQW0hgB6PE/2WZEHFpiesbJ7BD2MISK/89Z4eoaWKSeH9NFcRmE9CWuDt9
+	CxOILSLgIdH27x5zFyMXB7PAXyaJr68fgg0VFnCSmP1tGdgyFgFVibNTprOA2LwCNhKLZ/2B
+	OkJeYvWGA8wgNqeArcTUhqlsEMtsJC6unMY8gZFvASPDKkbJ1ILi3PTcYsMCo7zUcr3ixNzi
+	0rx0veT83E2M4ODX0trBuGfVB71DjEwcjIcYJTiYlUR4peqfJQrxpiRWVqUW5ccXleakFh9i
+	lOZgURLnvdB1Ml5IID2xJDU7NbUgtQgmy8TBKdXAFH9sUtn/+kSX7QI6HocfrH+d2bul82nt
+	o8hHt38tF3At3ynzVLJH7hVLGueGN7O8Dp3lfm7yxYjhiUjIsXNhVz/lpjhtd9P9ahW5u+fe
+	q2vL4q6c5+V4mfXY4jMrh3M7z4oVkgtuWYROv55pZD4n/f/i68VyC6R+nen45TJ9yex7Z1qd
+	1/V95khos6/s0fpyrUnx23/Z25pH2RNnbzl8RDkjbFKFXZXoHr0ra/QYmC8XJwcW30k//PRI
+	Sd1LgdCdIbc3/9zVKrJnm+KapK7+W78l/k++4GMj+63s58JVPPeO3JRQr9/gbqZ4hsdeMUYg
+	iz3RSDK+1XDyokVSi/Ud1LR5FJ5o2y0vvXFk1bPVgUosxRmJhlrMRcWJACGYlXrtAgAA
+X-CMS-MailID: 20220118150014epcas5p2ac07759961be616d01de76026e58d4f5
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220113122417epcas5p47398a5190cdf4c574c6f1762918b549f
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
-	<CGME20220113122417epcas5p47398a5190cdf4c574c6f1762918b549f@epcas5p4.samsung.com>
-	<20220113121143.22280-16-alim.akhtar@samsung.com>
-	<2927c34e-3259-4e9a-a657-aeeebf9089d2@canonical.com>
-	<00ca01d80ba8$6b9b9800$42d2c800$@samsung.com>
-	<b8040d39-cd4d-e5b0-8aec-f03c5257d63e@canonical.com>
+X-CMS-RootMailID: 20220118150014epcas5p2ac07759961be616d01de76026e58d4f5
+References: <20220118144851.69537-1-alim.akhtar@samsung.com>
+	<CGME20220118150014epcas5p2ac07759961be616d01de76026e58d4f5@epcas5p2.samsung.com>
 
+Add vendor prefix for the Tesla (https://www.tesla.com)
 
+Cc: linux-fsd@tesla.com
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
->-----Original Message-----
->From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40canonical.com=5D
->Sent: Monday, January 17, 2022 7:20 PM
->To: Alim Akhtar <alim.akhtar=40samsung.com>; linux-arm-
->kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
->Cc: soc=40kernel.org; linux-clk=40vger.kernel.org; devicetree=40vger.kerne=
-l.org;
->olof=40lixom.net; linus.walleij=40linaro.org; catalin.marinas=40arm.com;
->robh+dt=40kernel.org; s.nawrocki=40samsung.com; linux-samsung-
->soc=40vger.kernel.org; pankaj.dubey=40samsung.com; linux-fsd=40tesla.com;
->'Shashank Prashar' <s.prashar=40samsung.com>; 'Aswani Reddy'
-><aswani.reddy=40samsung.com>
->Subject: Re: =5BPATCH 15/23=5D arm64: dts: fsd: Add initial pinctrl suppor=
-t
->
->On 17/01/2022 14:44, Alim Akhtar wrote:
->> Hi Krzysztof
->>
->>> -----Original Message-----
->>> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40canonical.com=
-=5D
->>> Sent: Thursday, January 13, 2022 6:50 PM
->>> To: Alim Akhtar <alim.akhtar=40samsung.com>; linux-arm-
->>> kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
->>> Cc: soc=40kernel.org; linux-clk=40vger.kernel.org;
->>> devicetree=40vger.kernel.org; olof=40lixom.net; linus.walleij=40linaro.=
-org;
->>> catalin.marinas=40arm.com;
->>> robh+dt=40kernel.org; s.nawrocki=40samsung.com; linux-samsung-
->>> soc=40vger.kernel.org; pankaj.dubey=40samsung.com; linux-fsd=40tesla.co=
-m;
->>> Shashank Prashar <s.prashar=40samsung.com>; Aswani Reddy
->>> <aswani.reddy=40samsung.com>
->>> Subject: Re: =5BPATCH 15/23=5D arm64: dts: fsd: Add initial pinctrl
->>> support
->>>
->>> On 13/01/2022 13:11, Alim Akhtar wrote:
->>>> Add initial pin configuration nodes for FSD SoC.
->>>>
->>>> Cc: linux-fsd=40tesla.com
->>>> Signed-off-by: Shashank Prashar <s.prashar=40samsung.com>
->>>> Signed-off-by: Aswani Reddy <aswani.reddy=40samsung.com>
->>>> Signed-off-by: Alim Akhtar <alim.akhtar=40samsung.com>
->>>> ---
->>>>  arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi =7C 338
->>> +++++++++++++++++++++
->>>>  arch/arm64/boot/dts/tesla/fsd.dtsi         =7C  22 ++
->>>>  2 files changed, 360 insertions(+)
->>>>  create mode 100644 arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
->>>>
->>>> diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
->>>> b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
->>>> new file mode 100644
->>>> index 000000000000..ec8d944af636
->>>> --- /dev/null
->>>> +++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
->>>> =40=40 -0,0 +1,338 =40=40
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +/*
->>>> + * Tesla Full Self-Driving SoC device tree source
->>>> + *
->>>> + * Copyright (c) 2017-2021 Samsung Electronics Co., Ltd.
->>>> + *		https://www.samsung.com
->>>> + * Copyright (c) 2017-2021 Tesla, Inc.
->>>> + *		https://www.tesla.com
->>>> + */
->>>> +
->>>> +=23include <dt-bindings/pinctrl/samsung.h>
->>>> +
->>>> +&pinctrl_fsys0 =7B
->>>> +
->>>
->>> No need for empty line.
->>>
->> Noted
->>
->>>> +	gpf0: gpf0 =7B
->>>
->>> FYI:
->>> It's ok now, but the nodes will have to be renamed to =22xxx-gpio-bank=
-=22
->later.
->>>
->> Have rebased my v2 on your pinmux schema update, so these and below
->comments are addressed.
->> Thanks
->>
->
->OK, but have in mind that -gpio-bank suffix is not needed now. This depend=
-s
->on support in the pinctrl driver, which will be applied after the merge wi=
-ndow
->to different tree or branches than DTS is going to.
->Therefore if I apply your DTS with =22-gpio-bank=22 to my next/dt64, the k=
-ernel
->won't find GPIo banks and won't properly boot. The linux-next will be fine=
-,
->just my next/dt64 won't be.
->
-Thanks, got it, for now let me send v2 on linux-next (as of today).
-As required I will rebase to your next/dt64 and send again.
-Which also means that my v2 will not be based on your new pinmux schema.
-Probably we will move to that after the merge window.
-
->If you're fine with it - use =22-gpio-bank=22 suffix. If you prefer my
->next/dt64 to have a fully working Tesla SoC DTS, then stick to old node na=
-ming
->and let's replace it later.
->
->Best regards,
->Krzysztof
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 64c604752052..09fbef521394 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1209,6 +1209,8 @@ patternProperties:
+     description: Shenzhen Techstar Electronics Co., Ltd.
+   "^terasic,.*":
+     description: Terasic Inc.
++  "^tesla,.*":
++    description: Tesla, Inc.
+   "^tfc,.*":
+     description: Three Five Corp
+   "^thead,.*":
+-- 
+2.25.1
 
