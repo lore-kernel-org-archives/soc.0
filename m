@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02429C433F5
-	for <soc@archiver.kernel.org>; Tue, 18 Jan 2022 18:34:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BED3C433EF
+	for <soc@archiver.kernel.org>; Tue, 18 Jan 2022 18:36:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DB4A1C340E0; Tue, 18 Jan 2022 18:34:58 +0000 (UTC)
+	id 6A77CC340E6; Tue, 18 Jan 2022 18:36:05 +0000 (UTC)
 Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AD7F7C340E5
-	for <soc@kernel.org>; Tue, 18 Jan 2022 18:34:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AD7F7C340E5
+	by smtp.kernel.org (Postfix) with ESMTPS id 9AE83C340E0
+	for <soc@kernel.org>; Tue, 18 Jan 2022 18:36:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9AE83C340E0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 29F273F1E2
-	for <soc@kernel.org>; Tue, 18 Jan 2022 18:34:56 +0000 (UTC)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 71B803F1DD
+	for <soc@kernel.org>; Tue, 18 Jan 2022 18:36:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1642530896;
-	bh=el8J3PPct0S+ev5GdXyAPVCnFytQqf1PBg78OHl8Ffc=;
+	s=20210705; t=1642530963;
+	bh=EE0Uqs2gxfZTLiuKZr5yQERb9YnbJAH824xo2Ga77Yc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=qkJpGJOQE2H3w73Q3dtLSxheHguD158HyudbvZxNCGWqzsMX36jHPSiXcaSv8lDB9
-	 yBBr5cjAr2dW23+bFHnSuiRBtbkieeKhRyFL1Y2LuaVv0vukwIGDAtMyGxDre46GyI
-	 1w116ZAmPh994R/rbtHfeaxz5q1WtW0l8ztecM9LnDAmymh3mDaM9KtOLo/YArmWAa
-	 EH9DZqYcJ5NL54sdidySMNb3p2rancTtheu4N/DTmLscR3EMqd6CRjXNBNJyJ6wOJQ
-	 HqNZMbcQwiNsrSN9ItEEUhpnkK21+9YEodqolxcaR0vX0UkMlx0icBOSKoeW5S9Czy
-	 W9Fr5KdGS2GXA==
-Received: by mail-ed1-f70.google.com with SMTP id el8-20020a056402360800b00403bbdcef64so1916703edb.14
-        for <soc@kernel.org>; Tue, 18 Jan 2022 10:34:56 -0800 (PST)
+	b=VWfKvjK7OKJPAj8wXfnlcMno1Ur/yOfoHW2lOoY8f6/+0PexDw8457E+qG32QP2Wo
+	 bEhLJLf18dgHkTSV4Dqq4KYWPbJ+mFaHPqmC+oDJElMVMtZDRklQatjNoOpZDhJKBe
+	 o9btZEtrSiedrXV1ddXgrejC7Z2qfKtv7QN8B+EhSRkiBkdSuzvY2WfRdpIs+Wm48E
+	 fMzB7LPV9yKFkQIWbvBMMJYKjMOkNxpJZ2Znx00w+Bj8Qg0vY6L5/tm4RAhzunSI+T
+	 IlKD3mphx8xZMkY4VvLK2OdgmT4xSw1fXm0zCIIi8Yd79G74uypwLpw/oEiPE3ocLt
+	 DdnvQu8Jc5Z/A==
+Received: by mail-ed1-f69.google.com with SMTP id er7-20020a056402448700b00402bbb8ce8bso6360628edb.1
+        for <soc@kernel.org>; Tue, 18 Jan 2022 10:36:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=el8J3PPct0S+ev5GdXyAPVCnFytQqf1PBg78OHl8Ffc=;
-        b=rH6irR0EMpBlhz8LgwvFl6cbnlfq6eeTiAK9BYF/Qu5TTUqvd0Yd/0ZtOgQ7o9Fxsg
-         VSkypsMcDrEGrN8yZuBU26OaX42mcZQcfCmlnogfu1jEMdQVotBV8E671XfFSuMCadam
-         rviIsUaphw2APL3XLdDOUOUz1vAkPCxqGMoPJIeGwRibb+0v3VqhBOfMkld9WvFMr+kJ
-         ATU8dWRKrJ6/z961jheU96wMBItYvqVWcw81Rckkk03H6ReuiuuYLm14YYz6L7+cw/iO
-         Sfbk22iOQcTIrM3o/bnV7nDPlK6qsQeyMO9H3FdZ5KygYKfrQs24nuUmdIY8xBTZdFL0
-         W4IA==
-X-Gm-Message-State: AOAM530GD6WGxxmUEvrEebg13DWtV5mFq2fDDYWneUNk6Q6D5cHCMhF1
-	QTD2f8RpTGEfB3eZXbUCHwr1vvRbBmTWIaEMHZ7FGQwbAV+Mr05Djpqijd4L51Sz3wi9xga0JUL
-	0Djjso6R1+AlrwYQI26VKo5o=
-X-Received: by 2002:a17:906:26cb:: with SMTP id u11mr22377068ejc.630.1642530895899;
-        Tue, 18 Jan 2022 10:34:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxhvVGjHzZuQ09wopbadcVRPRuqKkPuSKlwacLl86koXiI0x4vNr1HBDnVEXOEfMu4WgODVng==
-X-Received: by 2002:a17:906:26cb:: with SMTP id u11mr22377049ejc.630.1642530895742;
-        Tue, 18 Jan 2022 10:34:55 -0800 (PST)
+        bh=EE0Uqs2gxfZTLiuKZr5yQERb9YnbJAH824xo2Ga77Yc=;
+        b=fSMctN/7hVeEtiaFVudLJy/kxzH679BmHie8SMg+jJceQTIpp3/W5knx6vn2a6Iw/l
+         aMz3OQtfb2TjIJUKvQUBRYdmcxjiYWBMN4gAs+okcQZpfVJcSMc4Nq8HGDZHTPBp312a
+         j5TdiwepiJyaqw1Ay+RxvfZJ/TaXLOnpSicva7Yn6NGe0bRLfcZ9KjDhA/MBDLTU7Jih
+         LV0K7zoZYV4NKt+RTi473/+6I9vCqnX/BmQQ81ycXiHAtRkrE+VYI8e/4NUjgfbLCTyX
+         44tYnlIXHMPTkDi3TLo8rHTr+0jUtqZhLGyFloFa1yBY79KY50RonqgCHOIndwRUZBKV
+         ++oA==
+X-Gm-Message-State: AOAM531X46za6BRgIqFw7jJWkg076aZbzthsgDAYfihYgnwr4BMqULay
+	4bIkeEDVwbVe0cTNmBwE1oErKJdxLf0OV61ESoZkJkRMhM1r1V+cu1FHH5veQcyuKsmuizZtx/t
+	CzLDCo6km426/X5BnI8qeGHc=
+X-Received: by 2002:a17:906:950d:: with SMTP id u13mr2606647ejx.153.1642530963212;
+        Tue, 18 Jan 2022 10:36:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz7fvH2EjM40W+CUN1OS0nmGVd/o0ku+wn5FGo24qFNppsdaH6JzDP3RNs1r7cpe3wn6aNXCg==
+X-Received: by 2002:a17:906:950d:: with SMTP id u13mr2606629ejx.153.1642530963016;
+        Tue, 18 Jan 2022 10:36:03 -0800 (PST)
 Received: from [192.168.0.42] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id h11sm194326eja.119.2022.01.18.10.34.54
+        by smtp.gmail.com with ESMTPSA id d7sm191717edt.74.2022.01.18.10.36.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 10:34:55 -0800 (PST)
-Message-ID: <ea4d5b07-c14c-4558-9ddf-c55e9a6ff657@canonical.com>
-Date: Tue, 18 Jan 2022 19:34:54 +0100
+        Tue, 18 Jan 2022 10:36:02 -0800 (PST)
+Message-ID: <4606bf04-154f-97bb-9b8b-1103c6308004@canonical.com>
+Date: Tue, 18 Jan 2022 19:36:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.1
-Subject: Re: [PATCH v2 07/16] clk: samsung: fsd: Add cmu_fsys1 clock
+Subject: Re: [PATCH v2 08/16] clk: samsung: fsd: Add cmu_imem block clock
  information
 Content-Language: en-US
 To: Alim Akhtar <alim.akhtar@samsung.com>,
@@ -74,26 +74,29 @@ Cc: soc@kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  olof@lixom.net, arnd@arndb.de, linus.walleij@linaro.org,
  catalin.marinas@arm.com, robh+dt@kernel.org, s.nawrocki@samsung.com,
  linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
- linux-fsd@tesla.com, Ajay Kumar <ajaykumar.rs@samsung.com>
+ linux-fsd@tesla.com, Arjun K V <arjun.kv@samsung.com>,
+ Tauseef Nomani <tauseef.n@samsung.com>
 References: <20220118144851.69537-1-alim.akhtar@samsung.com>
- <CGME20220118150041epcas5p2634381919d0e9f60867d6087162fa134@epcas5p2.samsung.com>
- <20220118144851.69537-8-alim.akhtar@samsung.com>
+ <CGME20220118150045epcas5p4e54922758fb7922b1fd8de0995d2127e@epcas5p4.samsung.com>
+ <20220118144851.69537-9-alim.akhtar@samsung.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220118144851.69537-8-alim.akhtar@samsung.com>
+In-Reply-To: <20220118144851.69537-9-alim.akhtar@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 18/01/2022 15:48, Alim Akhtar wrote:
-> Adds cmu_fsys1 block clock information which are needed
-> for PCIe IPs in block FSYS1.
+> Adds cmu_imem clock related code, imem block contains IPs
+> like WDT, DMA, TMU etc, these clocks are required for such
+> IP function.
 > 
 > Cc: linux-fsd@tesla.com
+> Signed-off-by: Arjun K V <arjun.kv@samsung.com>
 > Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
-> Signed-off-by: Ajay Kumar <ajaykumar.rs@samsung.com>
+> Signed-off-by: Tauseef Nomani <tauseef.n@samsung.com>
 > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 > ---
->  drivers/clk/samsung/clk-fsd.c | 175 ++++++++++++++++++++++++++++++++++
->  1 file changed, 175 insertions(+)
+>  drivers/clk/samsung/clk-fsd.c | 283 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 283 insertions(+)
 > 
 
 
