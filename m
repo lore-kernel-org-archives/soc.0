@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E35A6C433EF
-	for <soc@archiver.kernel.org>; Tue, 18 Jan 2022 16:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB9C4C433EF
+	for <soc@archiver.kernel.org>; Tue, 18 Jan 2022 18:24:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B1225C00446; Tue, 18 Jan 2022 16:18:42 +0000 (UTC)
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	id 82673C340E5; Tue, 18 Jan 2022 18:24:25 +0000 (UTC)
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8F3D6C340E2
-	for <soc@kernel.org>; Tue, 18 Jan 2022 16:18:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8F3D6C340E2
+	by smtp.kernel.org (Postfix) with ESMTPS id 38714C340E0
+	for <soc@kernel.org>; Tue, 18 Jan 2022 18:24:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 38714C340E0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DFA273F31F
-	for <soc@kernel.org>; Tue, 18 Jan 2022 16:18:30 +0000 (UTC)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5F77A3FFDE
+	for <soc@kernel.org>; Tue, 18 Jan 2022 18:24:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1642522710;
-	bh=/saHFgfod+VllDCyIGCao3k0CHQX0T4IuTyB9aTiQuw=;
+	s=20210705; t=1642530255;
+	bh=mLcBql6ry0uXjx6vo+gnKoiWq+07y5Vfuzwy6oiJwJQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=QbF0PpBFlWTBtU/NQd5O5Y7B06dyG/AChQoqvqn2HxWIfKC1aKaXKG0rjxMjKiB5h
-	 B+ZQ5fp8Gb3Q20FJjk2lRu01SyeHWbz3ASF+4sAaQjEf3W9yaQnQGez9Fo5+zaMHz+
-	 KvAYr7zF0uOw+AIWlM+EQDyTdqgu1s6HlKvh4FiPkVm/29xxutZSq5GPjNwJu9U/VM
-	 S2e6LOwBWWXeCQCjmUlUVZwKaEh6GTWvL7Tllp2+7OTRI7J6uMxUF1+CoXxrt0b7rc
-	 hxlavzjQHSoW6Vyi6raBK4+Wi0771fh3UPOkU39odaSKf7AqV0okNmpwAb4Gl8OFjN
-	 4YKj/i+oCltLQ==
-Received: by mail-ed1-f69.google.com with SMTP id cf15-20020a0564020b8f00b0040284b671c6so6358620edb.22
-        for <soc@kernel.org>; Tue, 18 Jan 2022 08:18:30 -0800 (PST)
+	b=T1+tO+WzYP/hN3IfHh0xrxU+2xOYeJ8ECvPIHhA3y6uijtmsk7tY2O6AEvKD90q35
+	 7tEYTbmP3NvsQDp+T1LsL9xZWySVty9n95pUYagwn9hcBTsx+5ncw4p0QQ6bt24vd1
+	 W5/NTcyByVE+dHR5b3zTaREinoUZN9KwaAYkBeEJQOnfiFh+ZTzRFMuypcDv1ZrEia
+	 xFF8ipGqPQAGeLiOvfMGYmhWHr/9bFu7wPwLHWqSAsSjXZWUjD5uOEcjfcyKJ02+wD
+	 bA+OyfPRnn6KPrU34hCJghOgFl312wneUS8R0osd803fBB7zGO+1VxrN8kUxdrXk7n
+	 5TwHoVqBjvWcg==
+Received: by mail-ed1-f72.google.com with SMTP id el8-20020a056402360800b00403bbdcef64so1891758edb.14
+        for <soc@kernel.org>; Tue, 18 Jan 2022 10:24:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=/saHFgfod+VllDCyIGCao3k0CHQX0T4IuTyB9aTiQuw=;
-        b=ggiWgiARHbtqCWxFPpXHnr8CPXeSuC00SPwfm52CXP4OccydPUbnI4Ud0lJb6X/Aoc
-         knAy9/OKfe/TnlZF72cECh22rzGOC9oXv2l8hz3OOZLOifVY/hOqjdtugTvKhpmSUKi/
-         Ok8HG1ZlbLyAsdxmlOPdrnUNAECdDtMTxaKaOTWsXVLhBcE5F0LFoBRvR+zzbTh5uVpZ
-         BFGAbR5AJ1EYTu2MY42i9+0nK/8b5+fWmThJf2NStyv/N2+72/LK6dOVBIJ4fCUND6Dd
-         bpFOPo6FfD0zzp5fKkc7bkTGlYs5+4GjEyOQbsFKe1vlGG3J/NwWntgHwWoo5+ed/vpX
-         u3Bg==
-X-Gm-Message-State: AOAM530x9JOjzc5B4Rz6u+JpRBM1cK/lh8n2YqxF6GL2iwo4mZYeJzDs
-	vuM1Gv3qLZ7zaQnGsPF3p6Ve+eSPAAyzVS7H5SlR1zfNqeSmJx1W4Rw+q32414vor29FJ+g+ZGN
-	kpWGC5POPhXUwxqZ3TfTBiJY=
-X-Received: by 2002:a17:907:9622:: with SMTP id gb34mr20839808ejc.355.1642522710392;
-        Tue, 18 Jan 2022 08:18:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxfIifqQ4AVPmYgf7XBd2Pu5uw++MPB2xe5GXOSCfqiesyMFJpl04gNL7IFKznqIxQO1lmdgg==
-X-Received: by 2002:a17:907:9622:: with SMTP id gb34mr20839776ejc.355.1642522710089;
-        Tue, 18 Jan 2022 08:18:30 -0800 (PST)
+        bh=mLcBql6ry0uXjx6vo+gnKoiWq+07y5Vfuzwy6oiJwJQ=;
+        b=mgp8Qt3oMxhDK5xd4PdmeZkSIaQxZ1tnZr8TbzIvFaD8pXRXRrUKGakoZ/pLWBPU1F
+         4TTFGBvf4eu5bde3outbi1Xgss4XWbIfEr8nixknM4EBEJb6cedCoGsE9PYAQKDEgAdD
+         HJSPgGM2nSlY5K1kg4klvy8A+kgMrG/qeb3PPn3Kg0D8Nycy9uHGgyk/W7SbBn6LcyUW
+         FmpalpZ/iFdXGW5/VdU6/ubXNUvUISew+6R8hapQQPqWsMR1tF7qy4Bs4ulEPXjAJi5Z
+         G3S1J/JteWbm79Z+2UHjWSaWl9alxNI2E7tjx4tBgWMR/JOJdh4g0xgJpbCBJ/DtcqBT
+         45vQ==
+X-Gm-Message-State: AOAM532Bcg51w9mN4cbdvSoHDzXs/qcHHXDNBE2kNq0NEQPBLLOiJ63u
+	xn9b/DkJ0NPmok3byTVRGD+9xkMyo242oTeJzEvi7AkCBLGxFoSes5FPKy0VZU4rJ+Q7aYJuX2e
+	HYKHcnwZv01dbaD6JoTj2hYE=
+X-Received: by 2002:a50:fe90:: with SMTP id d16mr26971832edt.361.1642530252979;
+        Tue, 18 Jan 2022 10:24:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJztrE0/iDUvJZuDQ5B9d9jHRgMofzZ3cOcTTHrRpyH4UXtBTQXBgCc7/qL6dnTKZQKwt/9lDg==
+X-Received: by 2002:a50:fe90:: with SMTP id d16mr26971820edt.361.1642530252835;
+        Tue, 18 Jan 2022 10:24:12 -0800 (PST)
 Received: from [192.168.0.42] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id qa35sm5431720ejc.67.2022.01.18.08.18.28
+        by smtp.gmail.com with ESMTPSA id b2sm191457edv.37.2022.01.18.10.24.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 08:18:29 -0800 (PST)
-Message-ID: <a7677638-8108-0bd7-19ca-0cfff5fcf534@canonical.com>
-Date: Tue, 18 Jan 2022 17:18:28 +0100
+        Tue, 18 Jan 2022 10:24:11 -0800 (PST)
+Message-ID: <735d1001-abcb-67d1-75a6-17db11cdec40@canonical.com>
+Date: Tue, 18 Jan 2022 19:24:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.1
-Subject: Re: [PATCH v2 02/16] dt-bindings: clock: Add bindings definitions for
- FSD CMU blocks
+Subject: Re: [PATCH v2 03/16] dt-bindings: clock: Document FSD CMU bindings
 Content-Language: en-US
 To: Alim Akhtar <alim.akhtar@samsung.com>,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
@@ -76,189 +75,66 @@ Cc: soc@kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
  linux-fsd@tesla.com
 References: <20220118144851.69537-1-alim.akhtar@samsung.com>
- <CGME20220118150018epcas5p32642af7af63869d08a861d00d97e3b68@epcas5p3.samsung.com>
- <20220118144851.69537-3-alim.akhtar@samsung.com>
+ <CGME20220118150022epcas5p21912423606220552a78c7e22e4133a05@epcas5p2.samsung.com>
+ <20220118144851.69537-4-alim.akhtar@samsung.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220118144851.69537-3-alim.akhtar@samsung.com>
+In-Reply-To: <20220118144851.69537-4-alim.akhtar@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 18/01/2022 15:48, Alim Akhtar wrote:
-> Clock controller driver of FSD platform is designed to have separate
-> instances for each particular CMU. So clock IDs in this bindings header
-> also start from 1 for each CMU block.
+> Add dt-schema documentation for Tesla FSD SoC clock controller.
 > 
 > Cc: linux-fsd@tesla.com
-> Reported-by: kernel test robot <lkp@intel.com>
-> [robot: reported missing #endif]
-> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
 > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 > ---
->  include/dt-bindings/clock/fsd-clk.h | 149 ++++++++++++++++++++++++++++
->  1 file changed, 149 insertions(+)
->  create mode 100644 include/dt-bindings/clock/fsd-clk.h
+>  .../bindings/clock/tesla,fsd-clock.yaml       | 198 ++++++++++++++++++
+>  1 file changed, 198 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
 > 
-> diff --git a/include/dt-bindings/clock/fsd-clk.h b/include/dt-bindings/clock/fsd-clk.h
+> diff --git a/Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml b/Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
 > new file mode 100644
-> index 000000000000..8cf45d2430b0
+> index 000000000000..dc808e2f8327
 > --- /dev/null
-> +++ b/include/dt-bindings/clock/fsd-clk.h
-> @@ -0,0 +1,149 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2017 - 2022: Samsung Electronics Co., Ltd.
-> + *             https://www.samsung.com
-> + * Copyright (c) 2017-2022 Tesla, Inc.
-> + *             https://www.tesla.com
-> + *
-> + * The constants defined in this header are being used in dts
-> + * and fsd platform driver.
-> + */
+> +++ b/Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
+> @@ -0,0 +1,198 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/tesla,fsd-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#ifndef _DT_BINDINGS_CLOCK_FSD_H
-> +#define _DT_BINDINGS_CLOCK_FSD_H
+> +title: Tesla FSD (Full Self-Driving) SoC clock controller
 > +
-> +/* CMU */
-> +#define DOUT_CMU_PLL_SHARED0_DIV4		1
-> +#define DOUT_CMU_PERIC_SHARED1DIV36		2
-> +#define DOUT_CMU_PERIC_SHARED0DIV3_TBUCLK	3
-> +#define DOUT_CMU_PERIC_SHARED0DIV20		4
-> +#define DOUT_CMU_PERIC_SHARED1DIV4_DMACLK	5
-> +#define DOUT_CMU_PLL_SHARED0_DIV6		6
-> +#define DOUT_CMU_FSYS0_SHARED1DIV4		7
-> +#define DOUT_CMU_FSYS0_SHARED0DIV4		8
-> +#define DOUT_CMU_FSYS1_SHARED0DIV8		9
-> +#define DOUT_CMU_FSYS1_SHARED0DIV4		10
-> +#define CMU_CPUCL_SWITCH_GATE			11
-> +#define DOUT_CMU_IMEM_TCUCLK			12
-> +#define DOUT_CMU_IMEM_ACLK			13
-> +#define DOUT_CMU_IMEM_DMACLK			14
-> +#define GAT_CMU_FSYS0_SHARED0DIV4		15
-> +#define CMU_NR_CLK				16
+> +maintainers:
+> +  - Alim Akhtar <alim.akhtar@samsung.com>
+> +  - linux-fsd@tesla.com
 > +
-> +/* PERIC */
-> +#define PERIC_SCLK_UART0			1
-> +#define PERIC_PCLK_UART0			2
-> +#define PERIC_SCLK_UART1			3
-> +#define PERIC_PCLK_UART1			4
-> +#define PERIC_DMA0_IPCLKPORT_ACLK		5
-> +#define PERIC_DMA1_IPCLKPORT_ACLK		6
-> +#define PERIC_PWM0_IPCLKPORT_I_PCLK_S0		7
-> +#define PERIC_PWM1_IPCLKPORT_I_PCLK_S0		8
-> +#define PERIC_PCLK_SPI0                         9
-> +#define PERIC_SCLK_SPI0                         10
-> +#define PERIC_PCLK_SPI1                         11
-> +#define PERIC_SCLK_SPI1                         12
-> +#define PERIC_PCLK_SPI2                         13
-> +#define PERIC_SCLK_SPI2                         14
-> +#define PERIC_PCLK_TDM0                         15
-> +#define PERIC_PCLK_HSI2C0			16
-> +#define PERIC_PCLK_HSI2C1			17
-> +#define PERIC_PCLK_HSI2C2			18
-> +#define PERIC_PCLK_HSI2C3			19
-> +#define PERIC_PCLK_HSI2C4			20
-> +#define PERIC_PCLK_HSI2C5			21
-> +#define PERIC_PCLK_HSI2C6			22
-> +#define PERIC_PCLK_HSI2C7			23
-> +#define PERIC_MCAN0_IPCLKPORT_CCLK		24
-> +#define PERIC_MCAN0_IPCLKPORT_PCLK		25
-> +#define PERIC_MCAN1_IPCLKPORT_CCLK		26
-> +#define PERIC_MCAN1_IPCLKPORT_PCLK		27
-> +#define PERIC_MCAN2_IPCLKPORT_CCLK		28
-> +#define PERIC_MCAN2_IPCLKPORT_PCLK		29
-> +#define PERIC_MCAN3_IPCLKPORT_CCLK		30
-> +#define PERIC_MCAN3_IPCLKPORT_PCLK		31
-> +#define PERIC_PCLK_ADCIF			32
-> +#define PERIC_EQOS_TOP_IPCLKPORT_CLK_PTP_REF_I  33
-> +#define PERIC_EQOS_TOP_IPCLKPORT_ACLK_I		34
-> +#define PERIC_EQOS_TOP_IPCLKPORT_HCLK_I		35
-> +#define PERIC_EQOS_TOP_IPCLKPORT_RGMII_CLK_I	36
-> +#define PERIC_EQOS_TOP_IPCLKPORT_CLK_RX_I	37
-> +#define PERIC_BUS_D_PERIC_IPCLKPORT_EQOSCLK	38
-> +#define PERIC_BUS_P_PERIC_IPCLKPORT_EQOSCLK	39
-> +#define PERIC_HCLK_TDM0				40
-> +#define PERIC_PCLK_TDM1				41
-> +#define PERIC_HCLK_TDM1				42
-> +#define PERIC_EQOS_PHYRXCLK_MUX			43
-> +#define PERIC_EQOS_PHYRXCLK			44
-> +#define PERIC_DOUT_RGMII_CLK			45
-> +#define PERIC_NR_CLK				46
+> +description: |
+> +  FSD clock controller consist of several clock management unit
+> +  (CMU), which generates clocks for various inteernal SoC blocks.
+> +  The root clock comes from external OSC clock (24 MHz).
 > +
-> +/* FSYS0 */
-> +#define UFS0_MPHY_REFCLK_IXTAL24		1
-> +#define UFS0_MPHY_REFCLK_IXTAL26		2
-> +#define UFS1_MPHY_REFCLK_IXTAL24		3
-> +#define UFS1_MPHY_REFCLK_IXTAL26		4
-> +#define UFS0_TOP0_HCLK_BUS			5
-> +#define UFS0_TOP0_ACLK				6
-> +#define UFS0_TOP0_CLK_UNIPRO			7
-> +#define UFS0_TOP0_FMP_CLK			8
-> +#define UFS1_TOP1_HCLK_BUS			9
-> +#define UFS1_TOP1_ACLK				10
-> +#define UFS1_TOP1_CLK_UNIPRO			11
-> +#define UFS1_TOP1_FMP_CLK			12
-> +#define PCIE_SUBCTRL_INST0_DBI_ACLK_SOC		13
-> +#define PCIE_SUBCTRL_INST0_AUX_CLK_SOC		14
-> +#define PCIE_SUBCTRL_INST0_MSTR_ACLK_SOC	15
-> +#define PCIE_SUBCTRL_INST0_SLV_ACLK_SOC		16
-> +#define FSYS0_EQOS_TOP0_IPCLKPORT_CLK_PTP_REF_I 17
-> +#define FSYS0_EQOS_TOP0_IPCLKPORT_ACLK_I	18
-> +#define FSYS0_EQOS_TOP0_IPCLKPORT_HCLK_I	19
-> +#define FSYS0_EQOS_TOP0_IPCLKPORT_RGMII_CLK_I	20
-> +#define FSYS0_EQOS_TOP0_IPCLKPORT_CLK_RX_I	21
-> +#define FSYS0_DOUT_FSYS0_PERIBUS_GRP		22
-> +#define FSYS0_NR_CLK				23
+> +  All available clocks are defined as preprocessor macros in
+> +  'dt-bindings/clock/fsd-clk.h' header.
 > +
-> +/* FSYS1 */
-> +#define PCIE_LINK0_IPCLKPORT_DBI_ACLK		1
-> +#define PCIE_LINK0_IPCLKPORT_AUX_ACLK		2
-> +#define PCIE_LINK0_IPCLKPORT_MSTR_ACLK		3
-> +#define PCIE_LINK0_IPCLKPORT_SLV_ACLK		4
-> +#define PCIE_LINK1_IPCLKPORT_DBI_ACLK		5
-> +#define PCIE_LINK1_IPCLKPORT_AUX_ACLK		6
-> +#define PCIE_LINK1_IPCLKPORT_MSTR_ACLK		7
-> +#define PCIE_LINK1_IPCLKPORT_SLV_ACLK		8
-> +#define FSYS1_NR_CLK				9
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - tesla,fsd-clock-cmu
+> +      - tesla,fsd-clock-imem
+> +      - tesla,fsd-clock-peric
+> +      - tesla,fsd-clock-fsys0
+> +      - tesla,fsd-clock-fsys1
+> +      - tesla,fsd-clock-mfc
+> +      - tesla,fsd-clock-cam_csi
 > +
-> +/* IMEM */
-> +#define IMEM_DMA0_IPCLKPORT_ACLK		1
-> +#define IMEM_DMA1_IPCLKPORT_ACLK		2
-> +#define IMEM_WDT0_IPCLKPORT_PCLK		3
-> +#define IMEM_WDT1_IPCLKPORT_PCLK		4
-> +#define IMEM_WDT2_IPCLKPORT_PCLK		5
-> +#define IMEM_MCT_PCLK				6
-> +#define IMEM_TMU_CPU0_IPCLKPORT_I_CLK_TS	7
-> +#define IMEM_TMU_CPU2_IPCLKPORT_I_CLK_TS	8
-> +#define IMEM_TMU_TOP_IPCLKPORT_I_CLK_TS		9
-> +#define IMEM_TMU_GPU_IPCLKPORT_I_CLK_TS		10
-> +#define IMEM_TMU_GT_IPCLKPORT_I_CLK_TS		11
-> +#define IMEM_NR_CLK				12
-> +
-> +/* MFC */
-> +#define MFC_MFC_IPCLKPORT_ACLK			1
-> +#define MFC_NR_CLK				2
-> +
-> +/* CAM_CSI */
-> +#define CAM_CSI0_0_IPCLKPORT_I_ACLK		1
-> +#define CAM_CSI0_1_IPCLKPORT_I_ACLK		2
-> +#define CAM_CSI0_2_IPCLKPORT_I_ACLK		3
-> +#define CAM_CSI0_3_IPCLKPORT_I_ACLK		4
-> +#define CAM_CSI1_0_IPCLKPORT_I_ACLK		5
-> +#define CAM_CSI1_1_IPCLKPORT_I_ACLK		6
-> +#define CAM_CSI1_2_IPCLKPORT_I_ACLK		7
-> +#define CAM_CSI1_3_IPCLKPORT_I_ACLK		8
-> +#define CAM_CSI2_0_IPCLKPORT_I_ACLK		9
-> +#define CAM_CSI2_1_IPCLKPORT_I_ACLK		10
-> +#define CAM_CSI2_2_IPCLKPORT_I_ACLK		11
-> +#define CAM_CSI2_3_IPCLKPORT_I_ACLK		12
-> +#define CAM_CSI_NR_CLK				13
 
-One empty line would be nice here.
+I am not particularly happy about FSD naming (so SoC name, sub-arch
+name), but Olof was fine with it, so I won't oppose. Bindings look ok.
+
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-> +#endif /*_DT_BINDINGS_CLOCK_FSD_H */
-> 
 
 
 Best regards,
