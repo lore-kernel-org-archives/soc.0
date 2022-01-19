@@ -1,109 +1,90 @@
-Return-Path: <SRS0=YOi0=SC=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=A/H+=SD=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96019C433F5
-	for <soc@archiver.kernel.org>; Tue, 18 Jan 2022 18:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ABB9C433F5
+	for <soc@archiver.kernel.org>; Wed, 19 Jan 2022 14:05:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7ED58C340E5; Tue, 18 Jan 2022 18:48:51 +0000 (UTC)
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 31C4AC36AE3; Wed, 19 Jan 2022 14:05:34 +0000 (UTC)
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D502DC340E0
-	for <soc@kernel.org>; Tue, 18 Jan 2022 18:48:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D502DC340E0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9879740018
-	for <soc@kernel.org>; Tue, 18 Jan 2022 18:48:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1642531729;
-	bh=osZDE2qGikhWPKRozLWA0fiHv6mtb/zkWnvdgeIXyQ0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=tn708PlEAXS3uC9b/0dBREp55C1djsNVY6cjpTGDfyRhqZ1qBj7erMBxq7AeCmQ6i
-	 xRdG2f/lw7eZydQ0p4PL9B38awbt1cUUppkysn/IAsMQvScmMKyks9/8AKHpSCARoX
-	 Lnw43+1ZPsoJgErVVt4N6ivDlCBHRRfcC/fW5Rj1XcVYcngiX8VRsYPMAswBqUPGBm
-	 MQdT4HbJa+CZnOlkpSux6TGaQ3QwxOvUHryJe3Bzsvif1jhjRgNhoWjJEQ+4FtGt03
-	 nN0aEsMH5JdhjDUmRSJzLBwaV6b45QAcXY3G8cgPtbSIKf9R58+1Buf68xkRhm0Qmw
-	 DmKxbhKq1g4Ig==
-Received: by mail-ed1-f71.google.com with SMTP id i9-20020a05640242c900b003fe97faab62so17760472edc.9
-        for <soc@kernel.org>; Tue, 18 Jan 2022 10:48:49 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 66CACC004E1;
+	Wed, 19 Jan 2022 14:05:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 66CACC004E1
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f50.google.com with SMTP id i7-20020a9d68c7000000b0059396529af8so3219804oto.4;
+        Wed, 19 Jan 2022 06:05:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=osZDE2qGikhWPKRozLWA0fiHv6mtb/zkWnvdgeIXyQ0=;
-        b=ZZlh+zkHLeKKZ5FnKAucyo0gaCpBLGMqlelRFNXQ5PTAzFw98it1BI5KU+WYTv9lp8
-         mwwpngi24cu5x2LE9ThdTOvSoeBjBTUJ8dCQ5umnbz/4CF6hj/VQwmrjzGGJJ/CPHDC8
-         y8sw7mKVNDyLYhhrY13MCN85d3MmQmcYRTTH/v8pjp75b4wqj5vGnZuZic8BuQNmirsD
-         347gL0mphAq07Ayjd5FyRFJ6R5LAGoS48zdqydtZv3v1IVM9nIS1wuZjC2TsdVk9Tthc
-         FYrs8cqPALYZTCIVJo+4CVMh824H+GJ78lwh+x9sdGqSDGY6wmEDIKyXc3vfJa+H4nsF
-         J0VA==
-X-Gm-Message-State: AOAM531csb23YFeDpnCcp1JwtYFkjaU6KaoXWjzoWnB/4C8p7Q0i65rC
-	/vmNc7QBohXhn/0+FhseZiQfBJ4bSB0claFHYwin5cCoKa8qzaZRf1BlANNrAaHVmGimZJIEpQ/
-	G95xqEfUhb+H5JVYUi7KM36E=
-X-Received: by 2002:a17:907:a41e:: with SMTP id sg30mr20960060ejc.249.1642531729176;
-        Tue, 18 Jan 2022 10:48:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxpN3EF5AfOUem/IDvegEXyXvqnsF247GmVHd467UwQ9IoE4dMFmiP2V+P6uDursbIxrwr+/w==
-X-Received: by 2002:a17:907:a41e:: with SMTP id sg30mr20960052ejc.249.1642531729018;
-        Tue, 18 Jan 2022 10:48:49 -0800 (PST)
-Received: from [192.168.0.42] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id ga7sm5590389ejc.50.2022.01.18.10.48.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 10:48:48 -0800 (PST)
-Message-ID: <a1ca1ad2-5e24-0cd4-cbf2-bdf867cccbd7@canonical.com>
-Date: Tue, 18 Jan 2022 19:48:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 12/16] pinctrl: samsung: add FSD SoC specific data
-Content-Language: en-US
-To: Alim Akhtar <alim.akhtar@samsung.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bA4lXk3bs4g992PO5jXPShXJCU4RdXIJFPt9TWuZvi8=;
+        b=VeWgoY3xLK2OR31jyHOqF0RvlAiDMuRExoQ9eIPv9Ciznvmb/7dkiYP6ZVxx+2iAq5
+         TvSWrrAQZuwS4sCQFLH+DvUnJxnCLwwTnDi2lbUvyU0c/XnkOya0b4MPiqDKUlNDP/5+
+         WokuFPjaxHMjqDuG9HVqUs62EYnb/fhlmgHsgvTkIAoOzlAt87rxsgGM/gnhb4BqP9BQ
+         bQE3nJePsd6C5MQKUpiHUuFZfQ/CWO6J6kAwQ/4dyFs2u4zJNk3FLFQ9G1Xhpst9bV/T
+         nePFwiZiDNMoXkL0Cs0vY6wyID+DTg2I/aFpEk982h9fLfoeqj6ETl65W/+dA0PjJMub
+         HeLw==
+X-Gm-Message-State: AOAM5313Xyzjzr/Ci9PzGh4qoLsD42r2E37MYaVUteppS0Sm7LRkiRP9
+	fanfBSh6LDqs67EgkbFwpA==
+X-Google-Smtp-Source: ABdhPJz+nPpKZ1wx/9MZBe3c2PWe70YAUIasbvLv9Mx8j0isWcefeBYdwrdxEdCzSxpX+Pr8JGIYZw==
+X-Received: by 2002:a9d:e88:: with SMTP id 8mr6044843otj.276.1642601132546;
+        Wed, 19 Jan 2022 06:05:32 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 186sm10018818oig.28.2022.01.19.06.05.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 06:05:31 -0800 (PST)
+Received: (nullmailer pid 3480173 invoked by uid 1000);
+	Wed, 19 Jan 2022 14:05:27 -0000
+Date: Wed, 19 Jan 2022 08:05:27 -0600
+From: Rob Herring <robh@kernel.org>
+To: Jesse Taube <mr.bossman075@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- olof@lixom.net, arnd@arndb.de, linus.walleij@linaro.org,
- catalin.marinas@arm.com, robh+dt@kernel.org, s.nawrocki@samsung.com,
- linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
- linux-fsd@tesla.com, Ajay Kumar <ajaykumar.rs@samsung.com>
-References: <20220118144851.69537-1-alim.akhtar@samsung.com>
- <CGME20220118150100epcas5p3b7cf28e13fd177336dc9b06875d94f43@epcas5p3.samsung.com>
- <20220118144851.69537-13-alim.akhtar@samsung.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220118144851.69537-13-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: aisheng.dong@nxp.com, nobuhiro1.iwamatsu@toshiba.co.jp, Mr.Bossman075@gmail.com, linux-kernel@vger.kernel.org, kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org, arnd@arndb.de, gregkh@linuxfoundation.org, adrian.hunter@intel.com, abel.vesa@nxp.com, linux-serial@vger.kernel.org, shawnguo@kernel.org, olof@lixom.net, giulio.benetti@benettiengineering.com, linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org, linus.walleij@linaro.org, festevam@gmail.com, sboyd@kernel.org, linux@armlinux.org.uk, mturquette@baylibre.com, robh+dt@kernel.org, ulf.hansson@linaro.org, stefan@agner.ch, linux-mmc@vger.kernel.org, devicetree@vger.kernel.org, soc@kernel.org, jirislaby@kernel.org, linux-imx@nxp.com, s.hauer@pengutronix.de
+Subject: Re: [PATCH v8 2/7] ARM: dts: imxrt1050-pinfunc: Add pinctrl binding
+ header
+Message-ID: <YegapycPxDdgTlXQ@robh.at.kernel.org>
+References: <20220111212606.2072669-1-Mr.Bossman075@gmail.com>
+ <20220111215415.2075257-1-Mr.Bossman075@gmail.com>
+ <20220111215415.2075257-3-Mr.Bossman075@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220111215415.2075257-3-Mr.Bossman075@gmail.com>
 
-On 18/01/2022 15:48, Alim Akhtar wrote:
-> Adds Tesla FSD SoC specific data to enable pinctrl.
-> FSD SoC has similar pinctrl controller as found in the most
-> samsung/exynos SoCs.
-
-s/samsung/Samsung/
-s/exynos/Exynos/
-
+On Tue, 11 Jan 2022 16:54:10 -0500, Jesse Taube wrote:
+> From: Jesse Taube <mr.bossman075@gmail.com>
 > 
-> Cc: linux-fsd@tesla.com
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Ajay Kumar <ajaykumar.rs@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> Add binding header for i.MXRT1050 pinctrl device tree.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> [Jesse: move pinfunc from dt-bindings to dts folder]
 > ---
->  .../pinctrl/samsung/pinctrl-exynos-arm64.c    | 71 +++++++++++++++++++
->  drivers/pinctrl/samsung/pinctrl-samsung.c     |  2 +
->  drivers/pinctrl/samsung/pinctrl-samsung.h     |  1 +
->  3 files changed, 74 insertions(+)
+> V1->V2:
+> * Move pinfunc from dt-binding to dts
+> * Change subject and description
+> * Change licence to "GPL-2.0+ OR MIT"
+> V2->V3:
+> * Change License comment style
+> V3->V4:
+> * Nothing done
+> V4->V5:
+> * Nothing done
+> V5->V6:
+> * Nothing done
+> V6->V7:
+> * Nothing done
+> V7->V8:
+> * Nothing done
+> ---
+>  arch/arm/boot/dts/imxrt1050-pinfunc.h | 993 ++++++++++++++++++++++++++
+>  1 file changed, 993 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/imxrt1050-pinfunc.h
 > 
 
-Looks good to me. I'll take it via Samsung pinctrl tree after the merge
-window.
-
-Best regards,
-Krzysztof
+Acked-by: Rob Herring <robh@kernel.org>
