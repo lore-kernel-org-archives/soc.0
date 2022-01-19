@@ -1,105 +1,133 @@
-Return-Path: <SRS0=5yRm=SD=linaro.org=semen.protsenko@kernel.org>
+Return-Path: <SRS0=7ACn=SD=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68800C433F5
-	for <soc@archiver.kernel.org>; Wed, 19 Jan 2022 14:35:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54623C433EF
+	for <soc@archiver.kernel.org>; Wed, 19 Jan 2022 14:49:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1AFCBC340E5; Wed, 19 Jan 2022 14:35:14 +0000 (UTC)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 10888C340E1; Wed, 19 Jan 2022 14:49:10 +0000 (UTC)
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 83A0BC004E1
-	for <soc@kernel.org>; Wed, 19 Jan 2022 14:35:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 83A0BC004E1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ua1-f52.google.com with SMTP id r15so4862299uao.3
-        for <soc@kernel.org>; Wed, 19 Jan 2022 06:35:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fLgxgM2afbaDj1scoJJyoJXdiR5WXv+QSndG8neOGUo=;
-        b=g1zH2Kto7io35PJPi5MA+AdWvRs/0eqilwW0xwumESemPMzRmJ4FiG5KL20XG4a9+E
-         ee+c7e0BCEU59SOEeNqGgDnjB8x6U+ECkau1S+4XFUMlWLjcFQr9uxY0xdaArjtHALyP
-         //yLUvFGrW79FCQZNZbEHvWdwYyVsA4x7pMj+ePO6p7ryavNQUweENCuLgUYF8ArNmsP
-         4YRRNO6GUQpsRoqaLYBkyVi7xCj/2FoyuguxApYPuhWpKsRmgyWhHU2iBR26OgQknxPW
-         AmIJH+RDicT11VS5ehBInkko6OnJ/9ggrYuRUeNFJ3bXyeg+4qdx0ffE3xIpdB6pMvtk
-         HUkw==
+	by smtp.kernel.org (Postfix) with ESMTPS id C19AFC340E5
+	for <soc@kernel.org>; Wed, 19 Jan 2022 14:49:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C19AFC340E5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id ADDAB3F1DD
+	for <soc@kernel.org>; Wed, 19 Jan 2022 14:49:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1642603746;
+	bh=8N0tMQvK/ddTr0m3n20Yg1rH+YmkdkWObImqke9HUbc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=nfHL8U2YIPQQtG6kzjBYRr1mbExrnaUmdvgXFdzE65sXDT+PX6UV3v3Qj5LByMkHe
+	 ZVcocF+SMbtmZsrdkfEkJ4hK5jDy9RvEGtKCD3Ig9rAn6nXdRw9I59Vs5rnyH2VZwv
+	 qRqZngRybbh2jGx2b/DtL3GfAQiPAjnfv5zsl1NElhbRzfne6uJvfckpHVfJIeftUh
+	 KVbuy8kMN3mxqyv9nCOCeAcFS4M2fGxhXEwzhTkPP9YO0rat+Q1KIiIdF5mkrsg12A
+	 jUOCBzcLGWUMx+TTwtaQp20/ElT2x7hKh70FwgiriwZbZYt+xX0pOGOREe2Sks7EDY
+	 iOZGEIVT0xsYQ==
+Received: by mail-ed1-f72.google.com with SMTP id i9-20020a05640242c900b003fe97faab62so2712689edc.9
+        for <soc@kernel.org>; Wed, 19 Jan 2022 06:49:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fLgxgM2afbaDj1scoJJyoJXdiR5WXv+QSndG8neOGUo=;
-        b=5CFSZeAMmNuxx/cv/ezf1mkH4EoszdteL10wXrNOig33uTd3yOZKLVlsmFooPhKbV/
-         wuyUCjK8tk5sc/i7x793guCuYGkD3s8ZYmlYN1UwdlTAONzfIxM0CFt07VrbFfMtGzeC
-         /cMJak+fmysnWfVR99v89isBz2tLq2MEop2iiZKLlsmbfp+hvGlTP4Hwgop4VbVFsIEc
-         L2fzuhYd1P+kXqA/eEbjxMw6KlEyoUM8WYbyunj+h7JVdfmGXdpo9kg1ie4j0Viubnrk
-         mSHW/UUBIrKezxSAJpd0vRCmuOYDd73s/3MMy9TEsKDHtAtfp1B2uhe11MICNYJKrigP
-         KsCA==
-X-Gm-Message-State: AOAM530XoTyadQcuqjrChIxdo+2FbMJ70AbF+CQOo03jCUJjjYdpDBee
-	F487qpNDk0qm9fR9QG4X15ZQOYAICfpEsWfJjNAiKQ==
-X-Google-Smtp-Source: ABdhPJxOruJaoz/pWwTVy4wuzkYZkvTsWWKQ2sxSaYu79R6cOGJjr6S5WsMsXxmmNtYFC++JOIanZkWJ/VmgFGUTkfk=
-X-Received: by 2002:a05:6102:108c:: with SMTP id s12mr11738010vsr.20.1642602912348;
- Wed, 19 Jan 2022 06:35:12 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8N0tMQvK/ddTr0m3n20Yg1rH+YmkdkWObImqke9HUbc=;
+        b=LzTmJHIkoOXYStgQNXsWzVn7euA7TS6kDlqbF8064bAyYtS7g1K9CLx0fauAUrcuU9
+         lVgDczEJVQytCzUe9IUJSOAHh+AyqP8zJUGu++Kw5T0xWPMuPKvRiKNYPsSBR5ts6i9U
+         3IRt2+N7nCacjT4TRAGGzK83r8vbfJUMVd0FRDCsQX0+S1jywxfJ3Yt4KDaDQoe+WCM1
+         +q1QkZOzc2IQ09zkhuNxIhBOtn/MBA4AcYjdldxbFLbw1jtCNjEGAGLSyffwYewCc24t
+         bRfKib/CMXzFhSX47YMdCuomfvs51dPBAlMnHlUYYpwMTGb1PUVFZdmllFq64WMrkDv0
+         7gIQ==
+X-Gm-Message-State: AOAM533Bju299R7MJOcwwv4uWLSMkqqmnUjRJdX+ddb7AULv6ZQ4UNJd
+	SMydvkcI70bSyZ/93rtNBpZALOQ3vkhsndyoveCrjwSvk81ErHK8ohEUWODl12wbfz/13Jc9gI9
+	0K4lTF7sbmfIfOf6Yww3JB6Q=
+X-Received: by 2002:a05:6402:1104:: with SMTP id u4mr31400248edv.24.1642603746384;
+        Wed, 19 Jan 2022 06:49:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJywQgiQXDsmm4wHMKZQDucd4VQ0O8UGKnCspPk9GOsHIfBhx/X6dSHuH1QGHo5nePUGxuaCHQ==
+X-Received: by 2002:a05:6402:1104:: with SMTP id u4mr31400233edv.24.1642603746228;
+        Wed, 19 Jan 2022 06:49:06 -0800 (PST)
+Received: from [192.168.0.45] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id d14sm1327637edu.57.2022.01.19.06.49.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 06:49:05 -0800 (PST)
+Message-ID: <495d7eee-ab87-d330-119c-eaafa6c1dee7@canonical.com>
+Date: Wed, 19 Jan 2022 15:49:02 +0100
 MIME-Version: 1.0
-References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Wed, 19 Jan 2022 16:35:01 +0200
-Message-ID: <CAPLW+4=vEYm6dGSCXtmiXUVe7FT6p=6Uk=MCvEsEgcdTz-R0NA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
 Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Content-Language: en-US
+To: Sam Protsenko <semen.protsenko@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+ arm@kernel.org, soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Krzysztof Kozlowski <krzk@kernel.org>
+References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
+ <CAPLW+4=vEYm6dGSCXtmiXUVe7FT6p=6Uk=MCvEsEgcdTz-R0NA@mail.gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAPLW+4=vEYm6dGSCXtmiXUVe7FT6p=6Uk=MCvEsEgcdTz-R0NA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 27 Dec 2021 at 13:30, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> Hi,
->
-> Second pull with DTS for ARM64, on top of previous pull.
->
-> Best regards,
-> Krzysztof
->
->
-> The following changes since commit 51b1a5729469cef57a3c97aa014aa6e1d2b8d864:
->
->   dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850 (2021-12-20 10:35:32 +0100)
->
-> are available in the Git repository at:
->
->   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.17-2
->
-> for you to fetch changes up to a1828d772e0738c30a383a7d335aded2f2baf908:
->
->   arm64: dts: exynos: Add initial E850-96 board support (2021-12-22 12:31:13 +0100)
->
-> ----------------------------------------------------------------
-> Samsung DTS ARM64 changes for v5.17, part two
->
-> Add initial Exynos850 support and WinLink E850-96 board using it.
->
-> ----------------------------------------------------------------
-> Sam Protsenko (2):
->       arm64: dts: exynos: Add initial Exynos850 SoC support
->       arm64: dts: exynos: Add initial E850-96 board support
->
+On 19/01/2022 15:35, Sam Protsenko wrote:
+> On Mon, 27 Dec 2021 at 13:30, Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> Hi,
+>>
+>> Second pull with DTS for ARM64, on top of previous pull.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+>>
+>> The following changes since commit 51b1a5729469cef57a3c97aa014aa6e1d2b8d864:
+>>
+>>   dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850 (2021-12-20 10:35:32 +0100)
+>>
+>> are available in the Git repository at:
+>>
+>>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.17-2
+>>
+>> for you to fetch changes up to a1828d772e0738c30a383a7d335aded2f2baf908:
+>>
+>>   arm64: dts: exynos: Add initial E850-96 board support (2021-12-22 12:31:13 +0100)
+>>
+>> ----------------------------------------------------------------
+>> Samsung DTS ARM64 changes for v5.17, part two
+>>
+>> Add initial Exynos850 support and WinLink E850-96 board using it.
+>>
+>> ----------------------------------------------------------------
+>> Sam Protsenko (2):
+>>       arm64: dts: exynos: Add initial Exynos850 SoC support
+>>       arm64: dts: exynos: Add initial E850-96 board support
+>>
+> 
+> Hi Krzysztof,
+> 
+> Do you know if this series is going to land in v5.17? 
 
-Hi Krzysztof,
+I don't know, did not check.
 
-Do you know if this series is going to land in v5.17? The prediction
-(by phb-crystal-ball) is that MW closes on 23 Jan. I can see those
-patches in soc/for-next [1], but want to be sure those are scheduled
-for v5.17.
+> The prediction
+> (by phb-crystal-ball) is that MW closes on 23 Jan. I can see those
+> patches in soc/for-next [1], but want to be sure those are scheduled
+> for v5.17.
 
-Thanks!
+I don't get how can you be sure that they will be in v5.17. If they are
+not going to be pulled - what can you do?
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log/?h=for-next
+
+Best regards,
+Krzysztof
