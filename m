@@ -1,82 +1,97 @@
-Return-Path: <SRS0=vF0h=SD=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=GX8l=SD=lixom.net=olof@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD437C433EF
-	for <soc@archiver.kernel.org>; Wed, 19 Jan 2022 16:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 784ADC433F5
+	for <soc@archiver.kernel.org>; Wed, 19 Jan 2022 16:53:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7BBEEC340E1; Wed, 19 Jan 2022 16:07:13 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 362D1C004E1; Wed, 19 Jan 2022 16:53:20 +0000 (UTC)
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1E08EC004E1;
-	Wed, 19 Jan 2022 16:07:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1E08EC004E1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-ot1-f45.google.com ([209.85.210.45]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MekrN-1mcWhE3MkX-00anKd; Wed, 19 Jan 2022 17:07:10 +0100
-Received: by mail-ot1-f45.google.com with SMTP id l64-20020a9d1b46000000b005983a0a8aaaso3723344otl.3;
-        Wed, 19 Jan 2022 08:07:09 -0800 (PST)
-X-Gm-Message-State: AOAM533HPzn7QusaKnwTdxgnLTf3OSLOoKkA/SZaiMuLuCBwGxruK96g
-	7Or0DvZvB2WqwOtUnEYZG8eqrsZnH7/raBqsBJg=
-X-Google-Smtp-Source: ABdhPJwYmjzUwr3LqMDlVmKxu2P94HWVRZ2m5aOzrrEpILDroO2fGK4U5w+vgoOvlKMup1bpupuBPszbhpm3gtVSmXc=
-X-Received: by 2002:a05:6830:2095:: with SMTP id y21mr22337764otq.368.1642608428193;
- Wed, 19 Jan 2022 08:07:08 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 08CE8C340E6
+	for <soc@kernel.org>; Wed, 19 Jan 2022 16:53:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 08CE8C340E6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=lixom.net
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=lixom.net
+Received: by mail-pj1-f48.google.com with SMTP id w12-20020a17090a528c00b001b276aa3aabso7091257pjh.0
+        for <soc@kernel.org>; Wed, 19 Jan 2022 08:53:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+RdjTOUEbyGxqpzNJfmpiBGT/Qva80FiHw/y1GbjwPA=;
+        b=VC++GBBKZxSlQK1MeJ8/adrnCrR+HqC5AjgaJ87sV6yQwv6UNd9+EfBLAbQq25/IpZ
+         COIQfU/sNNt8DiuWzMfZMSDjcqZIkReC+MU/rlTDP4usJAxA6JhDmeUbzXDzdSfXj9H/
+         KKuifvveVFlYsPghSlU5vIeChPL16OsbnDGCGwgCDlRLwCleGK+Dfagzr+hT7zi9svy0
+         8sPkUpPh9Y5+CNHRCZ9QtJTaomL2De/w+r2UTO6dqSE+BObGH/sw/N3ZTlA4t1FuIlt3
+         3SFQt0mNQ+QsDQkfXobnZfNBRxHmh+D5wtA6Tgu+UJRasDpCVv/j1N4kGx3W0AQwAnFD
+         +bDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+RdjTOUEbyGxqpzNJfmpiBGT/Qva80FiHw/y1GbjwPA=;
+        b=1MVeQCHqWAudk86PN+0ffHzELPCFz/oBdlmq/WhzQ4dZjQkrhLuyERPg+ikPtDlwRW
+         rIPCfLx9+lsv7Eru6t1+muLKfnKkJmma0pnj6CTvPv0Irqxh2RVcC9dS5KaOZiy70q2b
+         AMS9BaF6pJw0kJ/q+BFCowpo9TQCK0ZWBz5Dh5Vi9az2n7lkZT8E3rXTvtPjcmc6Ijtz
+         gxD3quuiPM4bM/zS4qWrVh+uzb+p28Mb6LYgLgedhwk+ZTX62ZsPAjfDrQibDc30TroD
+         PS/+h6JM54eRU1GXCI8K3bzmfVbzWDCIry6Ltpzzb86YirvoDvtT51LGdtHPuEVGZiBw
+         qCLw==
+X-Gm-Message-State: AOAM533ZwQZmJMbvg53DAGEc6t2q6If7Sf5vS+gsYgTB9HXOS7Sw1TVv
+	BlDDGz3TJybGpotvLjQ1nbOGNpJhOgnap3P+gWwqkw==
+X-Google-Smtp-Source: ABdhPJx+TbATIF4nHmGFZOPmddAbhmsVuTuIxbk1yLpFJzNPz12fXYYOKY+MiX3okodET0I2JmpVeX0B+YvZ5tgCzzU=
+X-Received: by 2002:a17:902:ce8e:b0:14a:6938:c925 with SMTP id
+ f14-20020a170902ce8e00b0014a6938c925mr34346856plg.46.1642611197416; Wed, 19
+ Jan 2022 08:53:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com> <CAPLW+4n-1H5Yu3wQaus-UJ_VW_TjHrNUHaPCGCMURXg8EqxjyA@mail.gmail.com>
-In-Reply-To: <CAPLW+4n-1H5Yu3wQaus-UJ_VW_TjHrNUHaPCGCMURXg8EqxjyA@mail.gmail.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 19 Jan 2022 17:06:51 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1ou-ZdrXN0MHQoJ+gGbvhXT-e2qt96_f9M8VwrdX0pAg@mail.gmail.com>
-Message-ID: <CAK8P3a1ou-ZdrXN0MHQoJ+gGbvhXT-e2qt96_f9M8VwrdX0pAg@mail.gmail.com>
+References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
+ <CAPLW+4n-1H5Yu3wQaus-UJ_VW_TjHrNUHaPCGCMURXg8EqxjyA@mail.gmail.com> <CAK8P3a1ou-ZdrXN0MHQoJ+gGbvhXT-e2qt96_f9M8VwrdX0pAg@mail.gmail.com>
+In-Reply-To: <CAK8P3a1ou-ZdrXN0MHQoJ+gGbvhXT-e2qt96_f9M8VwrdX0pAg@mail.gmail.com>
+From: Olof Johansson <olof@lixom.net>
+Date: Wed, 19 Jan 2022 08:53:05 -0800
+Message-ID: <CAOesGMgF3S5_XsWjEqq=-zfYXwOWFpFNA6afL81wceRUA_0FeQ@mail.gmail.com>
 Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
-To: Sam Protsenko <semen.protsenko@linaro.org>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, arm-soc <arm@kernel.org>, 
+Cc: Sam Protsenko <semen.protsenko@linaro.org>, arm-soc <arm@kernel.org>, 
 	SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
 	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:nF1mO/GhNWX+EFxA0kxOuubamUt+3MoQ+Z5+77ugPocO5+hZh2F
- JhorqTkrAERH4Qv4aJsh+lUi+CJ+NzeNRQNv44nx6RLqDqXdKP5+VI2xZjyD8dwQPSGW6RJ
- B9h50qnqFNFHI5W10ZZ5nEA8aOQy6+gikbQBY96e0TSQxC9sNGnxoDNpBJaDxfKj5oxcPda
- oxX9q0wtXDxA65ntE6obw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:91750aXJRH8=:aU/YbCElTMh1asUkBOIgYa
- 02DFvQr/NSwRidg4AcadoCesOZNj2QY3mlprq7Aj1wxh7U/k2CFS7suKh11+GrT8gNpOUR9vJ
- EeMCH60fGxlUvV5oAwvQGhPqwDt/anb4Sdc/tIeXnKpbI9jNVPjbQy+8nlyWz0XRjBpIW/zzl
- eoyNExIOv02SAQmL2xYVTJSd+zecl5ycXIrEJKuBPsfqDBccYWscQTeFEg6X/UYGvHR05TJMA
- l49Exv48/K/E6k8wHP259mWQrq0rX5I6G33nlLR2R0yIrCasQG0MW+ev2nipHPO+OaPGVKFY7
- cJCX0+wcS4WWbQUOVEXRg1CzFpxRhdoVdTHhCe3awlYrdZnVWj0ErXMXN6967HBbXbCHWNSyU
- 5h4P1VGIM3AFa9IJgrE/duP+83xrRYQXj9lOuYUx+x1+qW0gx0+lq1c0x0HDWl/0XY9r/vb0A
- fJd9ih2EPq7/luOe7FHMx2ULCJEzvyzyqKwuLMFTm2O/R3b2W+6X7rvqsgxTBBFJzznHJ9x4z
- MvGvJtXB1TCAZ5jykXw/OHhB9ZpvbgKUB/8YXc6UDfAxEM3QNv4txeULgoe9HMkgc9HvcQMUP
- hxMULncT6V2p2hfSdQJUZUwYq/SNTKSukzyPpGHl5Eu/HkuAsV4nFvVpG3bUN3mfflisNVXrD
- 7CiEkbmOMTtNn5JJtleFS8ViwZftE4aRvCgQ1it0xW1jFDmTTsQvoIVX+/u0GZ6lr/k0=
 
-On Wed, Jan 19, 2022 at 4:11 PM Sam Protsenko
-<semen.protsenko@linaro.org> wrote:
-> On Mon, 27 Dec 2021 at 13:30, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+On Wed, Jan 19, 2022 at 8:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Hi Olof, Arnd,
+> On Wed, Jan 19, 2022 at 4:11 PM Sam Protsenko
+> <semen.protsenko@linaro.org> wrote:
+> > On Mon, 27 Dec 2021 at 13:30, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+> >
+> > Hi Olof, Arnd,
+> >
+> > Just want to check if it's possible for those patches to be applied in
+> > v5.17? Sorry for the noise, but that's important to me.
 >
-> Just want to check if it's possible for those patches to be applied in
-> v5.17? Sorry for the noise, but that's important to me.
+> I can see that Olof merged merged this into the "arm/late" branch in
+> the soc tree,
+> so I assume he still plans to send it in the next few days.
 
-I can see that Olof merged merged this into the "arm/late" branch in
-the soc tree,
-so I assume he still plans to send it in the next few days.
+Yep, will be sent up today most likely.
 
-With the timing over Christmas, I sent out the large bulk of the
-contents (anything
-I merged before Dec 23) last year, and Linus already merged it, the rest ended
-up in the "late" branch.
+> With the timing over Christmas, I sent out the large bulk of the
+> contents (anything
+> I merged before Dec 23) last year, and Linus already merged it, the rest ended
+> up in the "late" branch.
+>
+> As usual, there is no guarantee that late changes make it in, but I have seen
+> no indication of any problems so far.
 
-As usual, there is no guarantee that late changes make it in, but I have seen
-no indication of any problems so far.
+Correct. Been sitting on it for a while in case there were fixes
+coming in for the first pieces that got merged, but in traditional
+fashion I'm guessing those will start to show up a few days after the
+late branch gets merged. :)
 
-      Arnd
+
+-Olof
