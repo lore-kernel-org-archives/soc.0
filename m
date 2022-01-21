@@ -1,137 +1,146 @@
-Return-Path: <SRS0=PnGo=SF=samsung.com=alim.akhtar@kernel.org>
+Return-Path: <SRS0=Jso2=SF=intel.com=lkp@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22959C433EF
-	for <soc@archiver.kernel.org>; Fri, 21 Jan 2022 17:41:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D3AFC433F5
+	for <soc@archiver.kernel.org>; Fri, 21 Jan 2022 21:14:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0DC08C340E5; Fri, 21 Jan 2022 17:41:41 +0000 (UTC)
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	id EAE69C340E7; Fri, 21 Jan 2022 21:14:10 +0000 (UTC)
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DEE6FC340E7
-	for <soc@kernel.org>; Fri, 21 Jan 2022 17:41:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DEE6FC340E7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220121174138epoutp048dbb9116dc1ca806b99ff5cb669cd628~MWfrk8J5Y3155731557epoutp04E
-	for <soc@kernel.org>; Fri, 21 Jan 2022 17:41:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220121174138epoutp048dbb9116dc1ca806b99ff5cb669cd628~MWfrk8J5Y3155731557epoutp04E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1642786898;
-	bh=4HkzwrHZHTOLVm8bvp/nAaK6ObaRJ0G92SKKDYrFwU8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ssfdm3WjliOWjIRehRMOE9SmqOuE0YjKl+ZPNk03AzNHev3LxnwC9NL8xoyXzxFfo
-	 gHFM4M618Xh54ZSdSWp0cXNDOUD66MFGdgV4GnY5rztECoKaRvjgJJQ4Sy3Ld1NOF7
-	 itjoyo2bbiR0EVdHN2VKQyZkkGTisXR77uIs561c=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-	20220121174136epcas5p17ad3363fd52b2e7e4b25982b3c615580~MWfqRiIDd2780827808epcas5p1H;
-	Fri, 21 Jan 2022 17:41:36 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.178]) by
-	epsnrtp1.localdomain (Postfix) with ESMTP id 4JgRWY3t5Dz4x9Pp; Fri, 21 Jan
-	2022 17:41:29 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	E1.C5.05590.640FAE16; Sat, 22 Jan 2022 02:41:27 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20220121174126epcas5p281335ae041b65918d0e6675f5c6d44ba~MWfgPMdUM0949909499epcas5p2z;
-	Fri, 21 Jan 2022 17:41:26 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20220121174126epsmtrp126cbf4ee1032cf6b671ed3380ad9bbb2~MWfgOWIX12608726087epsmtrp1m;
-	Fri, 21 Jan 2022 17:41:26 +0000 (GMT)
-X-AuditID: b6c32a4b-739ff700000015d6-54-61eaf0462d98
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-	A5.C7.08738.540FAE16; Sat, 22 Jan 2022 02:41:25 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-	[107.108.73.139]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20220121174123epsmtip21d528796f6e18a757f022f8248ee18df~MWfd7CwK91229812298epsmtip2b;
-	Fri, 21 Jan 2022 17:41:23 +0000 (GMT)
-From: Alim Akhtar <alim.akhtar@samsung.com>
-To: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id E165DC340E1;
+	Fri, 21 Jan 2022 21:14:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E165DC340E1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642799649; x=1674335649;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V6H2UckBLCuDWmdCe+Xs89o2UseA1Ut2QW+oJkT+t3Y=;
+  b=CFiazpoCx5sneHvQWQRUDMGnnrNAyee3AR3pYK4CTakysPxqE6VHg84Y
+   pURTLNOr+W9TqrT2NRW1nKZzgUjpob61AlXN6kCzcNQDloRtUgbYMA5lf
+   X00OPOFibh+apTgtOpm21oZ3f7rq4oqszyAmYK3AwRuHGjYyGaajUpX3C
+   B4HRGGXglLfg9K7Weaklc/32rEBdeppn0mIS4MrMBHjrE9sZWKvQXMo/N
+   qaYSOx8HiEp5UROoxUz6TjYlzPM0GrAyZr5Pn+S5hFMWP8fqKy8ojfChu
+   1TBcT/GdM5i8AfqJqsuf8txbB4jOg7GmqCc5qIwwqQyZSpwnvnNIosRCq
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="226421005"
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="226421005"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 13:14:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="626862833"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 21 Jan 2022 13:14:04 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+	(envelope-from <lkp@intel.com>)
+	id 1nB1ER-000Ffd-Sb; Fri, 21 Jan 2022 21:14:03 +0000
+Date: Sat, 22 Jan 2022 05:13:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	olof@lixom.net, arnd@arndb.de, linus.walleij@linaro.org,
-	catalin.marinas@arm.com, robh+dt@kernel.org,
-	krzysztof.kozlowski@canonical.com, s.nawrocki@samsung.com,
-	linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-	sboyd@kernel.org, Alim Akhtar <alim.akhtar@samsung.com>, linux-fsd@tesla.com
-Subject: [PATCH v3 16/16] arm64: defconfig: Enable Tesla FSD SoC
-Date: Fri, 21 Jan 2022 22:58:40 +0530
-Message-Id: <20220121172840.12121-17-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220121172840.12121-1-alim.akhtar@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmlq77h1eJBmsPM1o8mLeNzeLvpGPs
-	Fu+X9TBazD9yjtVi49sfTBZT/ixnstj0+Bqrxceee6wWD1+FW1zeNYfNYsb5fUwWp65/ZrNY
-	tPULu0Xr3iPsFofftLNa/Lu2kcXi8fU/bA6CHmvmrWH0+P1rEqPHrIZeNo9NqzrZPO5c28Pm
-	sXlJvceVE02sHn1bVjF6/Guay+7xeZNcAFdUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmB
-	oa6hpYW5kkJeYm6qrZKLT4CuW2YO0D9KCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKU
-	nAKTAr3ixNzi0rx0vbzUEitDAwMjU6DChOyM31uOMhXsZ604vXEdYwPjE5YuRk4OCQETiV8X
-	TjN1MXJxCAnsZpR4ur+fFcL5xCix83EjO4TzmVFiy6/vzDAtjSdWMkIkdjFKfH5/DqqlhUli
-	7uEzjCBVbALaEnenb2ECsUUE3CRuNHaALWEW+M8ksbFnGRtIQljAQeL17yZWEJtFQFVi7tlL
-	YHFeAVuJFW8WskOsk5dYveEA2GpOoPjrs/OYQQZJCGzhkHi3fRvUTS4Sp5qPsEHYwhKvjm+B
-	apaSeNnfBmRzANnZEj27jCHCNRJL5x2DhoC9xIErc1hASpgFNCXW79IHCTML8En0/n7CBNHJ
-	K9HRJgRRrSrR/O4qVKe0xMTublaIEg+JmduzIcEwgVHiW9NUtgmMsrMQhi5gZFzFKJlaUJyb
-	nlpsWmCcl1oOj6jk/NxNjOBkquW9g/HRgw96hxiZOBgPMUpwMCuJ8Bbkv0oU4k1JrKxKLcqP
-	LyrNSS0+xGgKDLGJzFKiyfnAdJ5XEm9oYmlgYmZmZmJpbGaoJM57Kn1DopBAemJJanZqakFq
-	EUwfEwenVAMTk4rEs1anXWVmrww1/rKFZf5P42++s3SzpXN5m/oNgfkezd2/txje9f++0Fne
-	++o7/cMtMawdKdav65NWPlnXe/+d1rM67SPyXIsmLG/Jc+PawdDwYF2kXMJL5ntHt0rl8icb
-	Mq0VOr7p1OQvaQ2T+7Sv6XRqObXM1uE8cqHIjt3ZYfWt/cWKW2R2Jrc8ZZo2u8O8/gBbTFFO
-	3dSDLd8rmlxYGKxSZxr+O+Sx+hPbpje814unN87bJZJ+9IDzrwk821quT9udfcFmZuvHjOMX
-	TMNivrSveVDYoPVMrWHZjs2KPrp1bA+Vq3gqjji5vfkxQ+20ccbji+7NGzZdODXDVsJGfyaz
-	xJs3MUem5U5UYinOSDTUYi4qTgQADxQjqi8EAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrILMWRmVeSWpSXmKPExsWy7bCSvK7rh1eJBneXWVk8mLeNzeLvpGPs
-	Fu+X9TBazD9yjtVi49sfTBZT/ixnstj0+Bqrxceee6wWD1+FW1zeNYfNYsb5fUwWp65/ZrNY
-	tPULu0Xr3iPsFofftLNa/Lu2kcXi8fU/bA6CHmvmrWH0+P1rEqPHrIZeNo9NqzrZPO5c28Pm
-	sXlJvceVE02sHn1bVjF6/Guay+7xeZNcAFcUl01Kak5mWWqRvl0CV8bvLUeZCvazVpzeuI6x
-	gfEJSxcjJ4eEgIlE44mVjF2MXBxCAjsYJX687mWHSEhLXN84AcoWllj57zk7RFETk8S7R8vA
-	EmwC2hJ3p29hArFFBDwk2v7dYwYpYhaYyCyxce9ZsBXCAg4Sr383sYLYLAKqEnPPXmIDsXkF
-	bCVWvFkItUFeYvWGA8wgNidQ/PXZeWC2kICNRPOsrUwTGPkWMDKsYpRMLSjOTc8tNiwwykst
-	1ytOzC0uzUvXS87P3cQIjgUtrR2Me1Z90DvEyMTBeIhRgoNZSYS3IP9VohBvSmJlVWpRfnxR
-	aU5q8SFGaQ4WJXHeC10n44UE0hNLUrNTUwtSi2CyTBycUg1Mwi3bI8S3dUrb3K14KyTWusZ/
-	I/eRztjHn7McL1VtKY+cZLJY6dkcxX96bFWJs3clNNX1lzlKJFbtzpr/VbUmfNuDfbMZbp0o
-	d6u222jg5X22S8Rpy75y2W0lRkk7kmp29ojcb15068ka2+R/TwpX1dmkl7rIzBXzO/zqWcFB
-	lnYF9fJNDd4Xvi3fxJQa1hazZiXrC2bVxs7ZB3a2pB3nCGdw2t7hWqK3ttf9zqpNN0/E2pt5
-	Jzz6/WLbu+zbj2UE0oqYnjDUPzk+ddLSB6tF7pV9mFZeESjf7XDs8h7GTUZbNS/yeM6eukpS
-	YULVnEtnumfsiTw70X9asfeGy2tf94X2GO3aeCg7UmpV9MpIJZbijERDLeai4kQA1l3oAvQC
-	AAA=
-X-CMS-MailID: 20220121174126epcas5p281335ae041b65918d0e6675f5c6d44ba
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220121174126epcas5p281335ae041b65918d0e6675f5c6d44ba
-References: <20220121172840.12121-1-alim.akhtar@samsung.com>
-	<CGME20220121174126epcas5p281335ae041b65918d0e6675f5c6d44ba@epcas5p2.samsung.com>
+Cc: kbuild-all@lists.01.org, soc@kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
+	linus.walleij@linaro.org, catalin.marinas@arm.com,
+	robh+dt@kernel.org
+Subject: Re: [PATCH v3 04/16] clk: samsung: fsd: Add initial clock support
+Message-ID: <202201220550.FSQ6N02X-lkp@intel.com>
+References: <20220121172840.12121-5-alim.akhtar@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121172840.12121-5-alim.akhtar@samsung.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-This patch enables the Tesla FSD SoC in arm64 defconfig.
+Hi Alim,
 
-Cc: linux-fsd@tesla.com
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on next-20220121]
+[also build test WARNING on v5.16]
+[cannot apply to clk/clk-next robh/for-next pinctrl-samsung/for-next v5.16 v5.16-rc8 v5.16-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Alim-Akhtar/dt-bindings-add-vendor-prefix-for-Tesla/20220122-022924
+base:    c94951012a748a0f8ed77cd8fc25640c6fe198f9
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220122/202201220550.FSQ6N02X-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/69b6b21ebabb149c1c07d83376e9c08a582c6423
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Alim-Akhtar/dt-bindings-add-vendor-prefix-for-Tesla/20220122-022924
+        git checkout 69b6b21ebabb149c1c07d83376e9c08a582c6423
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/clk/samsung/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/samsung/clk-fsd.c:150:9: warning: this decimal constant is unsigned only in ISO C90
+     150 |         PLL_35XX_RATE(24 * MHZ, 2400000000, 200, 2, 0),
+         |         ^~~~~~~~~~~~~
+   In file included from include/linux/bits.h:22,
+                    from include/linux/bitops.h:6,
+                    from include/linux/of.h:15,
+                    from include/linux/clk-provider.h:9,
+                    from drivers/clk/samsung/clk-fsd.c:11:
+>> include/linux/build_bug.h:16:51: warning: this decimal constant is unsigned only in ISO C90
+      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+         |                                                   ^
+   drivers/clk/samsung/clk-pll.h:48:9: note: in expansion of macro 'BUILD_BUG_ON_ZERO'
+      48 |         BUILD_BUG_ON_ZERO(PLL_RATE(_fin, _m, _p, _s, _k, _ks) != (_fout)))
+         |         ^~~~~~~~~~~~~~~~~
+   drivers/clk/samsung/clk-pll.h:52:33: note: in expansion of macro 'PLL_VALID_RATE'
+      52 |                 .rate   =       PLL_VALID_RATE(_fin, _rate,     \
+         |                                 ^~~~~~~~~~~~~~
+   drivers/clk/samsung/clk-fsd.c:150:9: note: in expansion of macro 'PLL_35XX_RATE'
+     150 |         PLL_35XX_RATE(24 * MHZ, 2400000000, 200, 2, 0),
+         |         ^~~~~~~~~~~~~
+   drivers/clk/samsung/clk-fsd.c:154:9: warning: this decimal constant is unsigned only in ISO C90
+     154 |         PLL_35XX_RATE(24 * MHZ, 2400000000, 200, 2, 0),
+         |         ^~~~~~~~~~~~~
+   In file included from include/linux/bits.h:22,
+                    from include/linux/bitops.h:6,
+                    from include/linux/of.h:15,
+                    from include/linux/clk-provider.h:9,
+                    from drivers/clk/samsung/clk-fsd.c:11:
+>> include/linux/build_bug.h:16:51: warning: this decimal constant is unsigned only in ISO C90
+      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+         |                                                   ^
+   drivers/clk/samsung/clk-pll.h:48:9: note: in expansion of macro 'BUILD_BUG_ON_ZERO'
+      48 |         BUILD_BUG_ON_ZERO(PLL_RATE(_fin, _m, _p, _s, _k, _ks) != (_fout)))
+         |         ^~~~~~~~~~~~~~~~~
+   drivers/clk/samsung/clk-pll.h:52:33: note: in expansion of macro 'PLL_VALID_RATE'
+      52 |                 .rate   =       PLL_VALID_RATE(_fin, _rate,     \
+         |                                 ^~~~~~~~~~~~~~
+   drivers/clk/samsung/clk-fsd.c:154:9: note: in expansion of macro 'PLL_35XX_RATE'
+     154 |         PLL_35XX_RATE(24 * MHZ, 2400000000, 200, 2, 0),
+         |         ^~~~~~~~~~~~~
+
+
+vim +150 drivers/clk/samsung/clk-fsd.c
+
+   148	
+   149	static const struct samsung_pll_rate_table pll_shared1_rate_table[] __initconst = {
+ > 150		PLL_35XX_RATE(24 * MHZ, 2400000000, 200, 2, 0),
+   151	};
+   152	
+
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index ee4bd7710a0d..7dd0693a233e 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -54,6 +54,7 @@ CONFIG_ARCH_SEATTLE=y
- CONFIG_ARCH_INTEL_SOCFPGA=y
- CONFIG_ARCH_SYNQUACER=y
- CONFIG_ARCH_TEGRA=y
-+CONFIG_ARCH_TESLA_FSD=y
- CONFIG_ARCH_SPRD=y
- CONFIG_ARCH_THUNDER=y
- CONFIG_ARCH_THUNDER2=y
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
