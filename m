@@ -4,38 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 474FDC433EF
-	for <soc@archiver.kernel.org>; Sat, 22 Jan 2022 01:36:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75292C433EF
+	for <soc@archiver.kernel.org>; Sat, 22 Jan 2022 12:36:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0A4CAC36AE7; Sat, 22 Jan 2022 01:36:33 +0000 (UTC)
+	id 35C6CC340E4; Sat, 22 Jan 2022 12:36:04 +0000 (UTC)
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 87118C340E1;
-	Sat, 22 Jan 2022 01:36:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 87118C340E1
+	by smtp.kernel.org (Postfix) with ESMTPS id 64E6DC004E1;
+	Sat, 22 Jan 2022 12:36:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 64E6DC004E1
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
 Received: from [192.168.1.107] ([37.4.249.169]) by mrelayeu.kundenserver.de
  (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MUY5o-1mkeWP0bmi-00QRYE; Sat, 22 Jan 2022 02:36:09 +0100
-Subject: Re: [PATCH v3 14/16] arm64: dts: fsd: Add initial device tree support
-To: Alim Akhtar <alim.akhtar@samsung.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+ 1M8hph-1nFMMI1dUv-004lq9; Sat, 22 Jan 2022 13:35:51 +0100
+Subject: Re: [PATCH RFC 1/4] brcmfmac: use separate firmware for 43430
+ revision 4
+To: Rob Herring <robh+dt@kernel.org>, Florian Fainelli
+ <f.fainelli@gmail.com>, Nicolas Saenz Julienne <nsaenz@kernel.org>,
+ Arend van Spriel <aspriel@gmail.com>, Franky Lin <franky.lin@broadcom.com>,
+ Hante Meuleman <hante.meuleman@broadcom.com>,
+ Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+ Wright Feng <wright.feng@infineon.com>,
+ Chung-hsien Hsu <chung-hsien.hsu@infineon.com>, Kalle Valo <kvalo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- olof@lixom.net, arnd@arndb.de, linus.walleij@linaro.org,
- catalin.marinas@arm.com, robh+dt@kernel.org,
- krzysztof.kozlowski@canonical.com, s.nawrocki@samsung.com,
- linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
- sboyd@kernel.org, linux-fsd@tesla.com, Arjun K V <arjun.kv@samsung.com>,
- Aswani Reddy <aswani.reddy@samsung.com>,
- Ajay Kumar <ajaykumar.rs@samsung.com>,
- Sriranjani P <sriranjani.p@samsung.com>, Chandrasekar R
- <rcsekar@samsung.com>, Shashank Prashar <s.prashar@samsung.com>
-References: <20220121172840.12121-1-alim.akhtar@samsung.com>
- <CGME20220121174117epcas5p4c1a7afa8b63ce4c55f05b6411d12fc09@epcas5p4.samsung.com>
- <20220121172840.12121-15-alim.akhtar@samsung.com>
+Cc: Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ bcm-kernel-feedback-list@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, Phil Elwell <phil@raspberrypi.com>,
+ devicetree@vger.kernel.org, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-wireless@vger.kernel.org,
+ brcm80211-dev-list.pdl@broadcom.com, linux-rpi-kernel@lists.infradead.org
+References: <1641068812-5851-1-git-send-email-stefan.wahren@i2se.com>
+ <1641068812-5851-2-git-send-email-stefan.wahren@i2se.com>
 From: Stefan Wahren <stefan.wahren@i2se.com>
 Autocrypt: addr=stefan.wahren@i2se.com; keydata=
  LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
@@ -167,203 +168,70 @@ Autocrypt: addr=stefan.wahren@i2se.com; keydata=
  VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
  bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
  LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <df109290-ceaa-97dd-3992-7dd60e515fe2@i2se.com>
-Date: Sat, 22 Jan 2022 02:36:06 +0100
+Message-ID: <8ed4450d-85d9-c69b-761a-7695b3f1bbb3@i2se.com>
+Date: Sat, 22 Jan 2022 13:35:47 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20220121172840.12121-15-alim.akhtar@samsung.com>
+In-Reply-To: <1641068812-5851-2-git-send-email-stefan.wahren@i2se.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-Provags-ID: V03:K1:KmjB/oRF/iRBd8UrFlhNKFvzW6cZNkaNva127xjxQ+L4uK8vdeB
- Jx/00mvaJMzCL71kF8QI1C1JcAhOsPRLC+UvCRQankYFqsYzCLtvi/Ct9wsbY74DJ0Ul9NT
- nHi6vmd+IQd3Ms7ob5Kh6cW2mYAVPbzrLn/CE39I8k/AlL200IPY3GYAYzRvXRN7NogNDb1
- WhubH0PU9zgA5FAl437mw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+KGa/OyrfTg=:ZsLMVOVJ8h0NhAhDeXsGZn
- zpun82vPgNi72+IIUKWbhvJNWyl4I562olObUjruJsQL+9Dzl84hzbq+jK//S5IJcUiwN41B3
- RL8K7fADYJr0MnvlXSBdIEPiC5tEwT7kwlCx05TlUg5CgDPTQCGx6cKhiS8JFYCWbSOuoqYNx
- 3N2XKB0tBZOwKh1mBrMX4IEO213AZ11N+ChX77ZpkeBoF386N36xIED07RE+1S48QPbLE4jdO
- hv2MTmhP33bM3Ygg/gMjDKU4qd/8vOHU7mr162SuSK/7IfEVsa601p3xpTpjbKhu4Uam1GK6a
- Z7TMidNWO7c3c9NWSGa0IKDgDx0y46WFcNeRle1XcCsWQ9otWNNRDWywGggGyvDGaMGX0ljfu
- cdj/EM/34MsAHrTsbHmdl3ZxCBkjmH8QCJiJtCADgX/lm+3vfGR2pZMs93Dji5gkJBwvM6Fgu
- 0HUMO1ZROtHaQvvO2qKA86ABNNcqzngXqxuUXy+Q8P37VVEEYfCcpoRNUn5hSu3+eBmKm4UdP
- C0Y2hYbrc48vqKc4m/vpRPf7I/J602WUilOGutxSC76RwKUPR29qdWKbkn2BR23ROxeYSZTDj
- aGkP5OC9kWzjoSb8CckN6cKXhEac1+q5X/VVAZhqRaEohFGwupsp97d38kmNGbhpXes/GzA3B
- Iu8g8TxQc051v70h8vvFMO2qkD4fnkxab97vOBpGNg/vS92bL0dFnUK7Gb56t9fdzb/e9R1nu
- mdC04lEdivc7JyQ3
+X-Provags-ID: V03:K1:VEnfpI/Uip3aOP15FhhSyrC9QhmR6BF6z7MNPYvvGiRxlqa/CGt
+ StdvuMPzL+i0zzS5KnA8HxVI1iMXAaFlbz/Cz+jt9JaXYUhNVpqPs+5SP/sA6TnTKiD8Z+G
+ pl1m9bqKRFklBBX84MhA9wlTMOVt7goerk9eKnhhaVIlkVV4hPB5aDJwuxa5aJYAAbx/6D9
+ Ts8ttwkxpuExnhExCZHkw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SEr2b8k3Qv8=:K1kT/ngL+3+bDdWAhUXRN3
+ NgMElCjUZH8jSY/9kmQBk9u9AMEcEFBrNshZfzEkBQR9VzV9fgtwoTXjZgpoBlUrIwrFuYo7Z
+ l0SdolBZvK9qbGtYtl1oycudjgPftL2BGqxn3HSADS+VZ0cgi7zI8b1k782oyNjtaDu+gSKRZ
+ iyI5w4YBinkq5Psgx29UTlTXrhGAU2BFE3Gu46ypiieMdHAWcBjaOii8rTye9Z/aODeAYzx1N
+ rAY9xmCTwbF8wvRnzsLLCNYVD2AHzTY6kak68eAoXD6p5xqPaRqq5BiqcyWBl15RUkY48K8ER
+ xNLiC/YjPQgvyhIfNFP+jB+yerTYwEXBw1dPI+5FaJW18Tq+ldnX/wtMRHbBc6evgD0FiCZiz
+ /ZurgMU6UC6FDCWsQ6Du0AmrS5ufVbJaNfpZ8g1/NCIMHhccNK0YSjvA5584TLAAgBOa1kxBg
+ vjXH3ti4OD0Nldql4KLD1uE/4ieAhTSM4EFEJ/fISDUaxTSO7+VCxoZqcqwfSyT7KpcQqB0ZQ
+ fTBaTYXYurgFqs0/0j2H5uzNk/Fkk5W+/Ko/q1nHHrh0kicMe/hBtvItBCUGVFhEmZALE3+bp
+ Q2Db1ZCKaMIQSw7TS09XGE33LjckbhPfNAMfa/gyP+ZSnaieLURfrBJgHHXnS4i08CzctCtEM
+ Fu/GeLWfllJAfyzNQfn8DZIV9HR0omslpiWfRe0cfCbzXkVCSqvbCxU3dRqA/ImabMn7OMDY5
+ gNQyl9zqryCJw8Mx
 
-Hi Alim,
-
-Am 21.01.22 um 18:28 schrieb Alim Akhtar:
-> Add initial device tree support for "Full Self-Driving" (FSD) SoC
-> This SoC contain three clusters of four cortex-a72 CPUs and various
-> peripheral IPs.
+Am 01.01.22 um 21:26 schrieb Stefan Wahren:
+> A separate firmware is needed, for Broadcom 43430 revision 4. This
+> chip can be found on e.g. certain revisions of Raspberry Pi Zero 2 W.
+> Original firmware file from IC vendor is named 'brcmfmac43436-sdio.bin',
+> but brcmfmac and also btbcm drivers report chip id 43430, so requested
+> firmware file name is 'brcmfmac43430c0-sdio.bin' in line with other
+> 43430 revisions.
 >
-> Cc: linux-fsd@tesla.com
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Signed-off-by: Arjun K V <arjun.kv@samsung.com>
-> Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
-> Signed-off-by: Ajay Kumar <ajaykumar.rs@samsung.com>
-> Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
-> Signed-off-by: Chandrasekar R <rcsekar@samsung.com>
-> Signed-off-by: Shashank Prashar <s.prashar@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 > ---
->  MAINTAINERS                           |   8 +
->  arch/arm64/Kconfig.platforms          |   6 +
->  arch/arm64/boot/dts/Makefile          |   1 +
->  arch/arm64/boot/dts/tesla/Makefile    |   3 +
->  arch/arm64/boot/dts/tesla/fsd-evb.dts |  39 ++
->  arch/arm64/boot/dts/tesla/fsd.dtsi    | 651 ++++++++++++++++++++++++++
->  6 files changed, 708 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/tesla/Makefile
->  create mode 100644 arch/arm64/boot/dts/tesla/fsd-evb.dts
->  create mode 100644 arch/arm64/boot/dts/tesla/fsd.dtsi
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 27730a5a6345..ed1c10c26e5b 100644
-
-> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> new file mode 100644
-> index 000000000000..9a2b88f58c13
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> @@ -0,0 +1,651 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Tesla Full Self-Driving SoC device tree source
-> + *
-> + * Copyright (c) 2017-2022 Samsung Electronics Co., Ltd.
-> + *		https://www.samsung.com
-> + * Copyright (c) 2017-2022 Tesla, Inc.
-> + *		https://www.tesla.com
-> + */
-> +
-> +#include <dt-bindings/clock/fsd-clk.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +/ {
-...
-> +		pwm_1: pwm@14110000 {
-> +			compatible = "samsung,exynos4210-pwm";
-> +			reg = <0x0 0x14110000 0x0 0x100>;
-> +			samsung,pwm-outputs = <0>, <1>, <2>, <3>;
-> +			#pwm-cells = <3>;
-> +			clocks = <&clock_peric PERIC_PWM1_IPCLKPORT_I_PCLK_S0>;
-> +			clock-names = "timers";
-> +			status = "disabled";
-> +		};
-> +
-> +		hsi2c_0: hsi2c@14200000 {
-
-since this is a i2c interface the node name should be changed to i2c:
-
-hi2c_0: i2c@...
-
-and the following ones.
-
-> +			compatible = "samsung,exynos7-hsi2c";
-> +			reg = <0x0 0x14200000 0x0 0x1000>;
-> +			interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&hs_i2c0_bus>;
-> +			clocks = <&clock_peric PERIC_PCLK_HSI2C0>;
-> +			clock-names = "hsi2c";
-> +			status = "disabled";
-> +		};
-> +
-> +		hsi2c_1: hsi2c@14210000 {
-> +			compatible = "samsung,exynos7-hsi2c";
-> +			reg = <0x0 0x14210000 0x0 0x1000>;
-> +			interrupts = <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&hs_i2c1_bus>;
-> +			clocks = <&clock_peric PERIC_PCLK_HSI2C1>;
-> +			clock-names = "hsi2c";
-> +			status = "disabled";
-> +		};
-> +
-> +		hsi2c_2: hsi2c@14220000 {
-> +			compatible = "samsung,exynos7-hsi2c";
-> +			reg = <0x0 0x14220000 0x0 0x1000>;
-> +			interrupts = <GIC_SPI 150 IRQ_TYPE_LEVEL_HIGH>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&hs_i2c2_bus>;
-> +			clocks = <&clock_peric PERIC_PCLK_HSI2C2>;
-> +			clock-names = "hsi2c";
-> +			status = "disabled";
-> +		};
-> +
-> +		hsi2c_3: hsi2c@14230000 {
-> +			compatible = "samsung,exynos7-hsi2c";
-> +			reg = <0x0 0x14230000 0x0 0x1000>;
-> +			interrupts = <GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&hs_i2c3_bus>;
-> +			clocks = <&clock_peric PERIC_PCLK_HSI2C3>;
-> +			clock-names = "hsi2c";
-> +			status = "disabled";
-> +		};
-> +
-> +		hsi2c_4: hsi2c@14240000 {
-> +			compatible = "samsung,exynos7-hsi2c";
-> +			reg = <0x0 0x14240000 0x0 0x1000>;
-> +			interrupts = <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&hs_i2c4_bus>;
-> +			clocks = <&clock_peric PERIC_PCLK_HSI2C4>;
-> +			clock-names = "hsi2c";
-> +			status = "disabled";
-> +		};
-> +
-> +		hsi2c_5: hsi2c@14250000 {
-> +			compatible = "samsung,exynos7-hsi2c";
-> +			reg = <0x0 0x14250000 0x0 0x1000>;
-> +			interrupts = <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&hs_i2c5_bus>;
-> +			clocks = <&clock_peric PERIC_PCLK_HSI2C5>;
-> +			clock-names = "hsi2c";
-> +			status = "disabled";
-> +		};
-> +
-> +		hsi2c_6: hsi2c@14260000 {
-> +			compatible = "samsung,exynos7-hsi2c";
-> +			reg = <0x0 0x14260000 0x0 0x1000>;
-> +			interrupts = <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&hs_i2c6_bus>;
-> +			clocks = <&clock_peric PERIC_PCLK_HSI2C6>;
-> +			clock-names = "hsi2c";
-> +			status = "disabled";
-> +		};
-> +
-> +		hsi2c_7: hsi2c@14270000 {
-> +			compatible = "samsung,exynos7-hsi2c";
-> +			reg = <0x0 0x14270000 0x0 0x1000>;
-> +			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&hs_i2c7_bus>;
-> +			clocks = <&clock_peric PERIC_PCLK_HSI2C7>;
-> +			clock-names = "hsi2c";
-> +			status = "disabled";
-> +		};
-> +	};
-> +};
+> Hi,
+> i'm not sure about all these mappings. All i can say is that the wifi
+> interface of the RPi Zero 2 cames up with this patch.
+gentle ping (yes, i'm aware of the merge window)
+>
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+> index 8effeb7..c79bd47 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+> @@ -618,6 +618,7 @@ BRCMF_FW_DEF(43430A0, "brcmfmac43430a0-sdio");
+>  /* Note the names are not postfixed with a1 for backward compatibility */
+>  BRCMF_FW_CLM_DEF(43430A1, "brcmfmac43430-sdio");
+>  BRCMF_FW_DEF(43430B0, "brcmfmac43430b0-sdio");
+> +BRCMF_FW_CLM_DEF(43430C0, "brcmfmac43430c0-sdio");
+>  BRCMF_FW_CLM_DEF(43455, "brcmfmac43455-sdio");
+>  BRCMF_FW_DEF(43456, "brcmfmac43456-sdio");
+>  BRCMF_FW_CLM_DEF(4354, "brcmfmac4354-sdio");
+> @@ -649,7 +650,8 @@ static const struct brcmf_firmware_mapping brcmf_sdio_fwnames[] = {
+>  	BRCMF_FW_ENTRY(BRCM_CC_4339_CHIP_ID, 0xFFFFFFFF, 4339),
+>  	BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0x00000001, 43430A0),
+>  	BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0x00000002, 43430A1),
+> -	BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0xFFFFFFFC, 43430B0),
+> +	BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0x00000004, 43430C0),
+> +	BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0xFFFFFFF8, 43430B0),
+>  	BRCMF_FW_ENTRY(BRCM_CC_4345_CHIP_ID, 0x00000200, 43456),
+>  	BRCMF_FW_ENTRY(BRCM_CC_4345_CHIP_ID, 0xFFFFFDC0, 43455),
+>  	BRCMF_FW_ENTRY(BRCM_CC_4354_CHIP_ID, 0xFFFFFFFF, 4354),
