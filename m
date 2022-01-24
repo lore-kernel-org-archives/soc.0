@@ -1,221 +1,127 @@
-Return-Path: <SRS0=mwoE=SI=broadcom.com=arend.vanspriel@kernel.org>
+Return-Path: <SRS0=iIJr=SI=linaro.org=semen.protsenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C4C2C433F5
-	for <soc@archiver.kernel.org>; Mon, 24 Jan 2022 09:43:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F084C433F5
+	for <soc@archiver.kernel.org>; Mon, 24 Jan 2022 13:50:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 56886C340E4; Mon, 24 Jan 2022 09:43:34 +0000 (UTC)
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	id 1485FC340E7; Mon, 24 Jan 2022 13:50:55 +0000 (UTC)
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 36EC6C340E1
-	for <soc@kernel.org>; Mon, 24 Jan 2022 09:43:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 36EC6C340E1
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pf1-f182.google.com with SMTP id 128so15420734pfe.12
-        for <soc@kernel.org>; Mon, 24 Jan 2022 01:43:33 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 10F0BC340E4
+	for <soc@kernel.org>; Mon, 24 Jan 2022 13:50:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 10F0BC340E4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ua1-f49.google.com with SMTP id b16so31077057uaq.4
+        for <soc@kernel.org>; Mon, 24 Jan 2022 05:50:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=UJVtil4Q/OjWk9aHrC4OKYEyIu1E7zud0+PQPRcx7uY=;
-        b=NxXcvepa+Km4F9+e/HYDcoBv0Uo4XXEErgaRLhrDezztWoFFwEH4ZoEAhSrm1JGWEt
-         Ma+F1XrfvBZXQci+GuJPnakSxovPAgNu4HB9g/EymVoLc3jZU+v5HCtoardRrUmsxZC4
-         dzCv7egnHazwlMp/n1AXNznn695lUPPphZOEA=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=elnpBLQARnRLZNvPKlv8JLeoq3JtZl1fu0Kwxhb6W4Q=;
+        b=pOSKjTusGjLhqw45TfjvAeEDkHrppVglkaZ3biN4z+B1+eDjER6arxBNrUVxd9mTfB
+         UiKon0CaJtb/ljtfx0tbtXe0iCGZyasNfl+l+vP2P+Ug5yMmEpmwF19mvStimWu9gVnS
+         yvi50a5OOvl+pw6PX1wqAhCYu//gzXaz7WB3aOJW12F4aed4ECP1bZPZp5VkU3jJnXsC
+         WtjmgJmLBACrR/Yt3FwA15sBFuxnGhT4/6ceDUBAPfcIaUdTVVYyx+m1bv4eQoJxgjKa
+         aQQr5sBuQQkPnQqqnKkXWxWxj1H9VXJMNOuM7uHdW6AMeW/LyGGy8E82jDLKWqZtm5JI
+         QkxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=UJVtil4Q/OjWk9aHrC4OKYEyIu1E7zud0+PQPRcx7uY=;
-        b=eCXH4hdbeu9EBrkJUJbhmpGKb3KWJiumbSpLyyr5U4858VF3hZaMxSkYq8uyttJD4/
-         SfeDGJVN8OGocCVHjMPjOn77jWs+/fcva/P+FJ9e5J0FZFMC9DtXZh1KkNPdYW0RHn6U
-         RY4MwvGvLX4tUrEnzynMmxE/6vIfEahyh9UorFlFJfjYVioEOSowGmfFBqBLTgke6CR7
-         XjCYRDtmN2FUF1m3OHvtCIxGPYx6lsp7KcRHL92a/miN/yUnVjmmZVpFIgHhmLGEEDiL
-         JNDOSXXhfou/M1Ir5vt/+McB0gRIA28pkhmfTyeVCUrlSofudYarBj2LI6BAgNBK1//f
-         WL9g==
-X-Gm-Message-State: AOAM533b+Yci71T+su1zXhm7JoHLfPiuNt/KapshiT+Zb+2ptRFzSVXM
-	SxhbpgoWCGiYZUmnr/U2SHIr0w==
-X-Google-Smtp-Source: ABdhPJxMW1o7VBY+iU4od2rl8ALuuOTasV5Wcuk0VdYUWI9ftywL0oXd3jusEvOBaxUHKxneeO1FOw==
-X-Received: by 2002:a05:6a00:2444:b0:4a3:239f:d58a with SMTP id d4-20020a056a00244400b004a3239fd58amr13201323pfj.85.1643017412504;
-        Mon, 24 Jan 2022 01:43:32 -0800 (PST)
-Received: from [10.230.42.27] ([192.19.152.250])
-        by smtp.gmail.com with ESMTPSA id f18sm15969093pfj.6.2022.01.24.01.43.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 01:43:31 -0800 (PST)
-Message-ID: <dff5f86f-d6a5-f197-3c90-3b77d06991ce@broadcom.com>
-Date: Mon, 24 Jan 2022 10:43:24 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=elnpBLQARnRLZNvPKlv8JLeoq3JtZl1fu0Kwxhb6W4Q=;
+        b=EYRWU6dt+Edbftl45lJJe/dBihdHqTI6wYCjfEDd6IrsOl1A765JqSlkb7LXXt0CF3
+         y1ji84wPv+l1gfBCwV1IWlgWsgp4Woe87WpziuqJyc9llEzs8rKJdC2zxfqJRKmbb+lS
+         0UQWQYOH+tKoYUbB7uzaUMOfWOqetxPtBDwcTM0gH7h//8tfJH05nhGlKV3dM6IZVYi+
+         W/UgRXZtjpwxehzODhOrl2VQBHu9QYb6yCZui2FITyjZdUXkwo6RCwevFc4fn1snAS19
+         T0q5NOZ7xphcp2uByA1/5C8lLjsE3y5JN4/TxxDZvSfQTD9PluqvqLZRiWo6yovyVWJr
+         EHtg==
+X-Gm-Message-State: AOAM53185XrJdJ7tBmrec8jhYcaBAC5LcHSn1vDttw8VnNiRCY0jfRJu
+	g+vS0FD2fGSRwHVSNeyRUoOPJhQeIPcONbTx6JBsAVf27S6mpw==
+X-Google-Smtp-Source: ABdhPJxvi5cZdB24aTyLiac3wH/da4Ee9sNkiG0jVsHFaPMStmGQ3+FEHBnkb+seTBGiIWnc3xn/pq1JWy1QVANrkXY=
+X-Received: by 2002:a67:c591:: with SMTP id h17mr4539820vsk.86.1643032252928;
+ Mon, 24 Jan 2022 05:50:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH RFC 1/4] brcmfmac: use separate firmware for 43430
- revision 4
-To: Stefan Wahren <stefan.wahren@i2se.com>, Rob Herring <robh+dt@kernel.org>,
- Florian Fainelli <f.fainelli@gmail.com>,
- Nicolas Saenz Julienne <nsaenz@kernel.org>,
- Arend van Spriel <aspriel@gmail.com>, Franky Lin <franky.lin@broadcom.com>,
- Hante Meuleman <hante.meuleman@broadcom.com>,
- Chi-hsien Lin <chi-hsien.lin@infineon.com>,
- Wright Feng <wright.feng@infineon.com>,
- Chung-hsien Hsu <chung-hsien.hsu@infineon.com>, Kalle Valo <kvalo@kernel.org>
+References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
+ <CAPLW+4n-1H5Yu3wQaus-UJ_VW_TjHrNUHaPCGCMURXg8EqxjyA@mail.gmail.com>
+ <CAK8P3a1ou-ZdrXN0MHQoJ+gGbvhXT-e2qt96_f9M8VwrdX0pAg@mail.gmail.com>
+ <CAOesGMgF3S5_XsWjEqq=-zfYXwOWFpFNA6afL81wceRUA_0FeQ@mail.gmail.com>
+ <CAPLW+4k8=ymx56R7bKOt8kMVG_uUgrTsCkVd5wiY_rkYq8dYbQ@mail.gmail.com> <72a50afd-df9f-ceb3-898e-070d70dc0221@canonical.com>
+In-Reply-To: <72a50afd-df9f-ceb3-898e-070d70dc0221@canonical.com>
+From: Sam Protsenko <semen.protsenko@linaro.org>
+Date: Mon, 24 Jan 2022 15:50:41 +0200
+Message-ID: <CAPLW+4=xaHA2a=-F4ikuUPDpoO8Waj7qrrfpgkift1aMi_hU+g@mail.gmail.com>
+Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- bcm-kernel-feedback-list@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, Phil Elwell <phil@raspberrypi.com>,
- devicetree@vger.kernel.org, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-wireless@vger.kernel.org,
- brcm80211-dev-list.pdl@broadcom.com, linux-rpi-kernel@lists.infradead.org
-References: <1641068812-5851-1-git-send-email-stefan.wahren@i2se.com>
- <1641068812-5851-2-git-send-email-stefan.wahren@i2se.com>
- <8ed4450d-85d9-c69b-761a-7695b3f1bbb3@i2se.com>
-From: Arend van Spriel <arend.vanspriel@broadcom.com>
-In-Reply-To: <8ed4450d-85d9-c69b-761a-7695b3f1bbb3@i2se.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000429e8005d650cd25"
+Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, arm-soc <arm@kernel.org>, 
+	SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
---000000000000429e8005d650cd25
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Sun, 23 Jan 2022 at 21:27, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 22/01/2022 13:38, Sam Protsenko wrote:
+> > On Wed, 19 Jan 2022 at 18:53, Olof Johansson <olof@lixom.net> wrote:
+> >>
+> >> On Wed, Jan 19, 2022 at 8:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >>>
+> >>> On Wed, Jan 19, 2022 at 4:11 PM Sam Protsenko
+> >>> <semen.protsenko@linaro.org> wrote:
+> >>>> On Mon, 27 Dec 2021 at 13:30, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+> >>>>
+> >>>> Hi Olof, Arnd,
+> >>>>
+> >>>> Just want to check if it's possible for those patches to be applied in
+> >>>> v5.17? Sorry for the noise, but that's important to me.
+> >>>
+> >>> I can see that Olof merged merged this into the "arm/late" branch in
+> >>> the soc tree,
+> >>> so I assume he still plans to send it in the next few days.
+> >>
+> >> Yep, will be sent up today most likely.
+> >>
+> >
+> > Thanks for detailed answer! Glad to hear it's still a possibility.
+> > Please let me know if you need any actions on my side (like rebasing,
+> > etc).
+> >
+> >>> With the timing over Christmas, I sent out the large bulk of the
+> >>> contents (anything
+> >>> I merged before Dec 23) last year, and Linus already merged it, the rest ended
+> >>> up in the "late" branch.
+> >>>
+> >>> As usual, there is no guarantee that late changes make it in, but I have seen
+> >>> no indication of any problems so far.
+> >>
+> >> Correct. Been sitting on it for a while in case there were fixes
+> >> coming in for the first pieces that got merged, but in traditional
+> >> fashion I'm guessing those will start to show up a few days after the
+> >> late branch gets merged. :)
+>
+> Olof,
+> v5.17-rc1 came earlier, so I see this part did not make into it. Is
+> there a chance for a past-rc1 pull to Linus with it?
+>
+> Sam,
+> Anyway the patches wont' get lost (you mentioned such worry in previous
+> email to me). They might just need to wait. Unfortunately if patch,
+> especially with new feature, is coming in the end of cycle, there is a
+> risk it won't make it. The patches have to wait a few days in my trees
+> before I send them to Arnd/Olof, so if the patch is coming after rc6, I
+> can push it to Arnd/Olof around rc7, you see there is very little time.
+>
 
-On 1/22/2022 1:35 PM, Stefan Wahren wrote:
-> Am 01.01.22 um 21:26 schrieb Stefan Wahren:
->> A separate firmware is needed, for Broadcom 43430 revision 4. This
->> chip can be found on e.g. certain revisions of Raspberry Pi Zero 2 W.
->> Original firmware file from IC vendor is named 'brcmfmac43436-sdio.bin',
->> but brcmfmac and also btbcm drivers report chip id 43430, so requested
->> firmware file name is 'brcmfmac43430c0-sdio.bin' in line with other
->> 43430 revisions.
->>
->> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
->> ---
->>
->> Hi,
->> i'm not sure about all these mappings. All i can say is that the wifi
->> interface of the RPi Zero 2 cames up with this patch.
-> gentle ping (yes, i'm aware of the merge window)
+Should I send the patch fixing hard-coded clock numbers though? I
+remember you said I should send it once -rc1 is out. But now that dts
+patches are not merged in mainline, I'm not sure it can still be
+applied?
 
-Sorry, Stefan
-
-Should have seen this earlier, but here it is....
-
->>
->>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
->> index 8effeb7..c79bd47 100644
->> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
->> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
->> @@ -618,6 +618,7 @@ BRCMF_FW_DEF(43430A0, "brcmfmac43430a0-sdio");
->>   /* Note the names are not postfixed with a1 for backward compatibility */
->>   BRCMF_FW_CLM_DEF(43430A1, "brcmfmac43430-sdio");
->>   BRCMF_FW_DEF(43430B0, "brcmfmac43430b0-sdio");
->> +BRCMF_FW_CLM_DEF(43430C0, "brcmfmac43430c0-sdio");
->>   BRCMF_FW_CLM_DEF(43455, "brcmfmac43455-sdio");
->>   BRCMF_FW_DEF(43456, "brcmfmac43456-sdio");
->>   BRCMF_FW_CLM_DEF(4354, "brcmfmac4354-sdio");
->> @@ -649,7 +650,8 @@ static const struct brcmf_firmware_mapping brcmf_sdio_fwnames[] = {
->>   	BRCMF_FW_ENTRY(BRCM_CC_4339_CHIP_ID, 0xFFFFFFFF, 4339),
->>   	BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0x00000001, 43430A0),
->>   	BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0x00000002, 43430A1),
->> -	BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0xFFFFFFFC, 43430B0),
->> +	BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0x00000004, 43430C0),
-
-According to the revision mask your firmware seems to be for numerical 
-revision 2 of this chip...
-
->> +	BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0xFFFFFFF8, 43430B0),
-
-and for the b0 the chip revision is 3 (or higher). So the alphanumeric 
-revision of your chip would be 'a2' instead of 'c0'.
-
->>   	BRCMF_FW_ENTRY(BRCM_CC_4345_CHIP_ID, 0x00000200, 43456),
->>   	BRCMF_FW_ENTRY(BRCM_CC_4345_CHIP_ID, 0xFFFFFDC0, 43455),
->>   	BRCMF_FW_ENTRY(BRCM_CC_4354_CHIP_ID, 0xFFFFFFFF, 4354),
-
---000000000000429e8005d650cd25
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
-yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
-0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
-NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
-FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
-aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
-OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
-UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
-h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBtnjGxyi4b7JsHR1A/
-ex/8XQQ/u+IAcaSNJTIVyDCdpDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjAxMjQwOTQzMzJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAZJIj0zJ1w3x3OiadE/WxKuoviSOOQVMrimvN
-4XCUhEcAXQLCNLbt/JTIBPGE6K4vQvAXB4ewEpqxXM07fkRfk4t7qcHOnZW553hSn4tYiSlAXXhR
-rrpI0yGYtRaQNC1Xzkt+IWfJLxkW6T3Xor4U8WWsxtEb/uJ+dQozAGumyr/+6uhozWBOoLFEGaZh
-ifJjhXXfpS7+NVCvLt73BAMbrGfy7uExAxIa/AWK6XVkqUNAd3vt/us4fS1CtnYQXMiq8at24gmM
-K3YUwDz3/wdcpfoWFSYDsuZ6/E6jA2rlUa4a7mnHJzT2fopYC0ynjZ3p5RKy5hsuZJCu5N39fzRR
-hA==
---000000000000429e8005d650cd25--
+> Best regards,
+> Krzysztof
