@@ -1,794 +1,157 @@
-Return-Path: <SRS0=RUdi=SJ=gmail.com=benwolsieffer@kernel.org>
+Return-Path: <SRS0=lRQl=SJ=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2151C433F5
-	for <soc@archiver.kernel.org>; Tue, 25 Jan 2022 02:10:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60234C433FE
+	for <soc@archiver.kernel.org>; Tue, 25 Jan 2022 13:22:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ADE83C340E9; Tue, 25 Jan 2022 02:10:48 +0000 (UTC)
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 23235C340ED; Tue, 25 Jan 2022 13:22:00 +0000 (UTC)
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6814EC340E4;
-	Tue, 25 Jan 2022 02:10:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6814EC340E4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f182.google.com with SMTP id z26so6195049qto.13;
-        Mon, 24 Jan 2022 18:10:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gtqOgETo9WpBYGhrwsSAf8wEM8H5JsUH4gMyIhTeIqw=;
-        b=Lna3Lss9eRfNHmRcA0tWTbI6F1yCyZ7LWCIZjTDSM6uxWW0/OLF/FDPsCrI2Aevuio
-         3SE9CpD4649hU6we2Qe1pSnWi0Nv5lJPM5ESJT1Yb4fTsC96Y7KTLeTcN6SvsT+iKa3I
-         HcjWKrmGv2wvqv44oxNYcmuKkfMyAlqUQOyouhYgzijsjdUUIgqA0DO3p0ZnOWtja+CH
-         1vP4pWV3a9pwwkARhkwfPy6R9xa0ja9GFMDD7Rml7sxvsBumq4LKeY8TaBW8pvdHHh8I
-         wdptwa+WZwde53eMEpHn9h7+nKRF9e2tJOiC7tqSMOl5x7+lEvYOgA2uyWrRsjB5T7gc
-         ZsUg==
+	by smtp.kernel.org (Postfix) with ESMTPS id E28E4C340E5
+	for <soc@kernel.org>; Tue, 25 Jan 2022 13:21:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E28E4C340E5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 622173F1CF
+	for <soc@kernel.org>; Tue, 25 Jan 2022 13:21:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1643116916;
+	bh=GqSRGOwqotf00GRrIVq/CrHZH/1UrUmdSDaTt40VOAM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=QkG3WCgxRohfH2+6GrIzN637gMpOwBy5Oi+SmHciXZCrqyqUr1E8vjZ8mgdvMcQ7R
+	 SzvbEUvQmU20idZp6kFulGfs3WAK79MlJiVrnmplKE5vbBoMuNBawuq/mmko3dFXPp
+	 91sllNx+Pnzo6uELhlNJbxMwvKrys6gsrTsMjtppaRPvYqtNISat1T5UarrA4HK5yT
+	 RAF9qS9huANGJPB5ki7YvCjd3eXZN+AG0b3JdYJ8pbvKXYtGpkwvnayCVtTy4jG2Jm
+	 Y1VQ2dNkcV71gtqTwbx8twM4r0qezjG4BvH+wc3W6eTJKFVsqmHasmWetCADPWkX8M
+	 4B3i5/9W1gH/w==
+Received: by mail-wr1-f70.google.com with SMTP id t13-20020adfa2cd000000b001d09443ee4fso3045171wra.3
+        for <soc@kernel.org>; Tue, 25 Jan 2022 05:21:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gtqOgETo9WpBYGhrwsSAf8wEM8H5JsUH4gMyIhTeIqw=;
-        b=U/YtDA7RuaBodnIfytw9DVvf4yUYu6/9IubvFlYj5FRVQwEfvE0QR9PdMCWBNN9DxI
-         l3WxR3m5vycQ1U6oUNriEcgAy3SVob+aukvg76Lolak/3ZrQBFiFH34Q+H8am0F6hrlv
-         83H8rYQot4hg09LyiRdoZUSgAuZuc13p8f0X8fEt3K1U1uuJHOfAesqY8jvqNtImcz75
-         OuSfxImvt50G2HoenPiIb7eyXLq8ShlNcNdZSkw8LRyXTBZE1EL51j2z4VxGt7pi+Rou
-         6e/Kyi1/3dZIX4g35PcLFSethdEnoonpTs9VcChKZnQEwWEQEOr5kxNpmcGsg5gKSoCf
-         EpPQ==
-X-Gm-Message-State: AOAM533Mxvo17Mke5KW7bq9B2OMz1hIM9bvM9ZLHqoyiDjL4gJulsPgC
-	V9Klgqb2rbMq9+apOBKfloU=
-X-Google-Smtp-Source: ABdhPJxiIYX4t2C4CKLZ3hXQS/a9rzWH5NmFpe/yLJ5Dec1izMkrZUZxK/wH58hmBNJdd9pu/2Q4Rg==
-X-Received: by 2002:a05:622a:44e:: with SMTP id o14mr15202415qtx.669.1643076646360;
-        Mon, 24 Jan 2022 18:10:46 -0800 (PST)
-Received: from Dell-Inspiron-15.dartmouth.edu ([129.170.195.217])
-        by smtp.gmail.com with ESMTPSA id m190sm8024845qkf.58.2022.01.24.18.10.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 18:10:45 -0800 (PST)
-From: Ben Wolsieffer <benwolsieffer@gmail.com>
-To: 
-List-Id: <soc.lore.kernel.org>
-Cc: Ben Wolsieffer <benwolsieffer@gmail.com>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Stephen Boyd <sboyd@codeaurora.org>,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 3/3] ARM: dts: qcom: basic HP TouchPad support
-Date: Mon, 24 Jan 2022 21:07:05 -0500
-Message-Id: <9f19df2a0017b71547445ac34df221e827c45bd0.1643075547.git.benwolsieffer@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1643075547.git.benwolsieffer@gmail.com>
-References: <cover.1643075547.git.benwolsieffer@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GqSRGOwqotf00GRrIVq/CrHZH/1UrUmdSDaTt40VOAM=;
+        b=huz22hlRZzdtKdw+lJ6kJBk07x6zRVBqrUZJ1Y/5D0ktRm3iQlgADaQxJlhO+2l8E6
+         VsuHrYWEPzQgIdV00ZfT0dJ7caYjtgAxvGVyF35jr+/222ZnVqLJswWtNvW+C3FObFjh
+         9h6ewDfxZEVtYvc4pgWybvGeWUAKwq1b6t5anu7jH0yegyTRYWSjCXBtpN1ZAF5IzBmP
+         Rf4rWfXX6ceqO9CzxROpkkgfBu6xQQyzMRBDDYSfJIK6RhjxMFMQg3laSrkYwul63i+N
+         OQJqTgtdqyw8h4/6DHc9Rz/2io0VOZF4NDv8ZeLaajVlnl+2uYhsk6AMqlfxfbx52MS1
+         4lHA==
+X-Gm-Message-State: AOAM532HkSszljVUl6Q3rHjtYr2RLpbRpv9RpAD7Apx/5W1arQ/rQlX8
+	wEh7i1ttmRTqtlCN4JEerjq+H2ZL70B4OXT44zkzvbqxrZTMZfl0RJJm6QSJ/KdoDAZaO+qO5Pn
+	kmWfgunMwhqRKHPPigkZDLXo=
+X-Received: by 2002:adf:f14a:: with SMTP id y10mr17659185wro.145.1643116915811;
+        Tue, 25 Jan 2022 05:21:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxQEDd2I8GeJEKiaLo3Ns9QBAcA+Cpew7nwWs/FsWRHpr/3jD2rwboT4OiDAN2ucloeNLoOOg==
+X-Received: by 2002:adf:f14a:: with SMTP id y10mr17659159wro.145.1643116915523;
+        Tue, 25 Jan 2022 05:21:55 -0800 (PST)
+Received: from [192.168.0.59] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id t1sm3607494wre.45.2022.01.25.05.21.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 05:21:54 -0800 (PST)
+Message-ID: <d79e19e8-e15d-fe09-6ebc-c1f8aaacfc00@canonical.com>
+Date: Tue, 25 Jan 2022 14:21:54 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
+Content-Language: en-US
+To: Sam Protsenko <semen.protsenko@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+ arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES"
+ <linux-samsung-soc@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>
+References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
+ <CAPLW+4n-1H5Yu3wQaus-UJ_VW_TjHrNUHaPCGCMURXg8EqxjyA@mail.gmail.com>
+ <CAK8P3a1ou-ZdrXN0MHQoJ+gGbvhXT-e2qt96_f9M8VwrdX0pAg@mail.gmail.com>
+ <CAOesGMgF3S5_XsWjEqq=-zfYXwOWFpFNA6afL81wceRUA_0FeQ@mail.gmail.com>
+ <CAPLW+4k8=ymx56R7bKOt8kMVG_uUgrTsCkVd5wiY_rkYq8dYbQ@mail.gmail.com>
+ <72a50afd-df9f-ceb3-898e-070d70dc0221@canonical.com>
+ <CAPLW+4=xaHA2a=-F4ikuUPDpoO8Waj7qrrfpgkift1aMi_hU+g@mail.gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAPLW+4=xaHA2a=-F4ikuUPDpoO8Waj7qrrfpgkift1aMi_hU+g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Modify the Dragonboard device tree to support the most basic hardware on
-the HP TouchPad. The headphone UART port and eMMC are supported.
+On 24/01/2022 14:50, Sam Protsenko wrote:
+> On Sun, 23 Jan 2022 at 21:27, Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> On 22/01/2022 13:38, Sam Protsenko wrote:
+>>> On Wed, 19 Jan 2022 at 18:53, Olof Johansson <olof@lixom.net> wrote:
+>>>>
+>>>> On Wed, Jan 19, 2022 at 8:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>>>>>
+>>>>> On Wed, Jan 19, 2022 at 4:11 PM Sam Protsenko
+>>>>> <semen.protsenko@linaro.org> wrote:
+>>>>>> On Mon, 27 Dec 2021 at 13:30, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+>>>>>>
+>>>>>> Hi Olof, Arnd,
+>>>>>>
+>>>>>> Just want to check if it's possible for those patches to be applied in
+>>>>>> v5.17? Sorry for the noise, but that's important to me.
+>>>>>
+>>>>> I can see that Olof merged merged this into the "arm/late" branch in
+>>>>> the soc tree,
+>>>>> so I assume he still plans to send it in the next few days.
+>>>>
+>>>> Yep, will be sent up today most likely.
+>>>>
+>>>
+>>> Thanks for detailed answer! Glad to hear it's still a possibility.
+>>> Please let me know if you need any actions on my side (like rebasing,
+>>> etc).
+>>>
+>>>>> With the timing over Christmas, I sent out the large bulk of the
+>>>>> contents (anything
+>>>>> I merged before Dec 23) last year, and Linus already merged it, the rest ended
+>>>>> up in the "late" branch.
+>>>>>
+>>>>> As usual, there is no guarantee that late changes make it in, but I have seen
+>>>>> no indication of any problems so far.
+>>>>
+>>>> Correct. Been sitting on it for a while in case there were fixes
+>>>> coming in for the first pieces that got merged, but in traditional
+>>>> fashion I'm guessing those will start to show up a few days after the
+>>>> late branch gets merged. :)
+>>
+>> Olof,
+>> v5.17-rc1 came earlier, so I see this part did not make into it. Is
+>> there a chance for a past-rc1 pull to Linus with it?
+>>
+>> Sam,
+>> Anyway the patches wont' get lost (you mentioned such worry in previous
+>> email to me). They might just need to wait. Unfortunately if patch,
+>> especially with new feature, is coming in the end of cycle, there is a
+>> risk it won't make it. The patches have to wait a few days in my trees
+>> before I send them to Arnd/Olof, so if the patch is coming after rc6, I
+>> can push it to Arnd/Olof around rc7, you see there is very little time.
+>>
+> 
+> Should I send the patch fixing hard-coded clock numbers though? I
+> remember you said I should send it once -rc1 is out. But now that dts
+> patches are not merged in mainline, I'm not sure it can still be
+> applied?
 
-Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
----
- arch/arm/boot/dts/qcom-apq8060-tenderloin.dts | 549 ++----------------
- 1 file changed, 45 insertions(+), 504 deletions(-)
+Yeah, please wait.
 
-diff --git a/arch/arm/boot/dts/qcom-apq8060-tenderloin.dts b/arch/arm/boot/dts/qcom-apq8060-tenderloin.dts
-index 996e73aa0b0b..e294f3920b9f 100644
---- a/arch/arm/boot/dts/qcom-apq8060-tenderloin.dts
-+++ b/arch/arm/boot/dts/qcom-apq8060-tenderloin.dts
-@@ -14,6 +14,8 @@ aliases {
- 	};
- 
- 	chosen {
-+		/* Bootloader passes console=tty1, which overrides stdout-path */
-+		bootargs = "console=ttyMSM0,115200 earlycon";
- 		stdout-path = "serial0:115200n8";
- 	};
- 
-@@ -30,67 +32,18 @@ vph: regulator-fixed {
- 			regulator-always-on;
- 			regulator-boot-on;
- 		};
--
--		/* GPIO controlled ethernet power regulator */
--		dragon_veth: xc622a331mrg {
--			compatible = "regulator-fixed";
--			regulator-name = "XC6222A331MR-G";
--			regulator-min-microvolt = <3300000>;
--			regulator-max-microvolt = <3300000>;
--			vin-supply = <&vph>;
--			gpio = <&pm8058_gpio 40 GPIO_ACTIVE_HIGH>;
--			enable-active-high;
--			pinctrl-names = "default";
--			pinctrl-0 = <&dragon_veth_gpios>;
--			regulator-always-on;
--		};
--
--		/* VDDvario fixed regulator */
--		dragon_vario: nds332p {
--			compatible = "regulator-fixed";
--			regulator-name = "NDS332P";
--			regulator-min-microvolt = <1800000>;
--			regulator-max-microvolt = <1800000>;
--			vin-supply = <&pm8058_s3>;
--		};
--
--		/* This is a levelshifter for SDCC5 */
--		dragon_vio_txb: txb0104rgyr {
--			compatible = "regulator-fixed";
--			regulator-name = "Dragon SDCC levelshifter";
--			vin-supply = <&pm8058_l14>;
--			regulator-always-on;
--		};
--	};
--
--	/*
--	 * Capella CM3605 light and proximity sensor mounted directly
--	 * on the sensor board.
--	 */
--	cm3605 {
--		compatible = "capella,cm3605";
--		vdd-supply = <&pm8058_l14>; // 2.85V
--		aset-gpios = <&pm8058_gpio 35 GPIO_ACTIVE_LOW>;
--		capella,aset-resistance-ohms = <100000>;
--		/* Trig on both edges - getting close or far away */
--		interrupts-extended = <&pm8058_gpio 34 IRQ_TYPE_EDGE_BOTH>;
--		/* MPP05 analog input to the XOADC */
--		io-channels = <&xoadc 0x00 0x05>;
--		io-channel-names = "aout";
--		pinctrl-names = "default";
--		pinctrl-0 = <&dragon_cm3605_gpios>, <&dragon_cm3605_mpps>;
- 	};
- 
- 	soc {
- 		pinctrl@800000 {
--			/* eMMMC pins, all 8 data lines connected */
--			dragon_sdcc1_pins: sdcc1 {
-+			/* eMMC pins, all 8 data lines connected */
-+			emmc_pins: sdcc1 {
- 				mux {
- 					pins = "gpio159", "gpio160", "gpio161",
- 					     "gpio162", "gpio163", "gpio164",
- 					     "gpio165", "gpio166", "gpio167",
- 					     "gpio168";
--					     function = "sdc1";
-+					function = "sdc1";
- 				};
- 				clk {
- 					pins = "gpio167"; /* SDC1 CLK */
-@@ -111,54 +64,7 @@ data {
- 				};
- 			};
- 
--			/*
--			 * The SDCC3 pins are hardcoded (non-muxable) but need some pin
--			 * configuration.
--			 */
--			dragon_sdcc3_pins: sdcc3 {
--				clk {
--					pins = "sdc3_clk";
--					drive-strength = <8>;
--					bias-disable;
--				};
--				cmd {
--					pins = "sdc3_cmd";
--					drive-strength = <8>;
--					bias-pull-up;
--				};
--				data {
--					pins = "sdc3_data";
--					drive-strength = <8>;
--					bias-pull-up;
--				};
--			};
--
--			/* Second SD card slot pins */
--			dragon_sdcc5_pins: sdcc5 {
--				mux {
--					pins = "gpio95", "gpio96", "gpio97",
--					    "gpio98", "gpio99", "gpio100";
--					function = "sdc5";
--				};
--				clk {
--					pins = "gpio97"; /* SDC5 CLK */
--					drive-strength = <16>;
--					bias-disable;
--				};
--				cmd {
--					pins = "gpio95"; /* SDC5 CMD */
--					drive-strength = <10>;
--					bias-pull-up;
--				};
--				data {
--					/* SDC5 D0 to D3 */
--					pins = "gpio96", "gpio98", "gpio99", "gpio100";
--					drive-strength = <10>;
--					bias-pull-up;
--				};
--			};
--
--			dragon_gsbi8_i2c_pins: gsbi8_i2c {
-+			gsbi8_i2c_pins: gsbi8_i2c {
- 				mux {
- 					pins = "gpio64", "gpio65";
- 					function = "gsbi8";
-@@ -171,205 +77,33 @@ pinconf {
- 				};
- 			};
- 
--			dragon_gsbi12_i2c_pins: gsbi12_i2c {
--				mux {
--					pins = "gpio115", "gpio116";
--					function = "gsbi12";
--				};
--				pinconf {
--					pins = "gpio115", "gpio116";
--					drive-strength = <16>;
--					/* These have external pull-up 4.7kOhm to 1.8V */
--					bias-disable;
--				};
--			};
--
--			/* Primary serial port uart 0 pins */
--			dragon_gsbi12_serial_pins: gsbi12_serial {
-+			/* Headphone UART pins */
-+			headphone_uart_pins: gsbi12_serial {
- 				mux {
- 					pins = "gpio117", "gpio118";
- 					function = "gsbi12";
- 				};
--				tx {
--					pins = "gpio117";
--					drive-strength = <8>;
--					bias-disable;
--				};
- 				rx {
--					pins = "gpio118";
-+					pins = "gpio117";
- 					drive-strength = <2>;
- 					bias-pull-up;
- 				};
--			};
--
--			dragon_ebi2_pins: ebi2 {
--				/*
--				 * Pins used by EBI2 on the Dragonboard, actually only
--				 * CS2 is used by a real peripheral. CS0 is just
--				 * routed to a test point.
--				 */
--				mux0 {
--					pins =
--					    /* "gpio39", CS1A_N this is not good to mux */
--					    "gpio40", /* CS2A_N */
--					    "gpio134"; /* CS0_N testpoint TP29 */
--					function = "ebi2cs";
--				};
--				mux1 {
--					pins =
--					    /* EBI2_ADDR_7 downto EBI2_ADDR_0 address bus */
--					    "gpio123", "gpio124", "gpio125", "gpio126",
--					    "gpio127", "gpio128", "gpio129", "gpio130",
--					    /* EBI2_DATA_15 downto EBI2_DATA_0 data bus */
--					    "gpio135", "gpio136", "gpio137", "gpio138",
--					    "gpio139", "gpio140", "gpio141", "gpio142",
--					    "gpio143", "gpio144", "gpio145", "gpio146",
--					    "gpio147", "gpio148", "gpio149", "gpio150",
--					    "gpio151", /* EBI2_OE_N */
--					    "gpio153", /* EBI2_ADV */
--					    "gpio157"; /* EBI2_WE_N */
--					function = "ebi2";
-+				tx {
-+					pins = "gpio118";
-+					drive-strength = <8>;
-+					bias-disable;
- 				};
--			};
--
--			/* Interrupt line for the KXSD9 accelerometer */
--			dragon_kxsd9_gpios: kxsd9 {
--				irq {
--					pins = "gpio57"; /* IRQ line */
--					bias-pull-up;
-+				/* Connect headphone jack to UART rather than audio */
-+				enable {
-+					pins = "gpio58";
-+					function = "gpio";
-+					output-high;
- 				};
- 			};
- 		};
- 
- 		qcom,ssbi@500000 {
- 			pmic@0 {
--				keypad@148 {
--					linux,keymap = <
--					MATRIX_KEY(0, 0, KEY_MENU)
--					MATRIX_KEY(0, 2, KEY_1)
--					MATRIX_KEY(0, 3, KEY_4)
--					MATRIX_KEY(0, 4, KEY_7)
--					MATRIX_KEY(1, 0, KEY_UP)
--					MATRIX_KEY(1, 1, KEY_LEFT)
--					MATRIX_KEY(1, 2, KEY_DOWN)
--					MATRIX_KEY(1, 3, KEY_5)
--					MATRIX_KEY(1, 3, KEY_8)
--					MATRIX_KEY(2, 0, KEY_HOME)
--					MATRIX_KEY(2, 1, KEY_REPLY)
--					MATRIX_KEY(2, 2, KEY_2)
--					MATRIX_KEY(2, 3, KEY_6)
--					MATRIX_KEY(3, 0, KEY_VOLUMEUP)
--					MATRIX_KEY(3, 1, KEY_RIGHT)
--					MATRIX_KEY(3, 2, KEY_3)
--					MATRIX_KEY(3, 3, KEY_9)
--					MATRIX_KEY(3, 4, KEY_SWITCHVIDEOMODE)
--					MATRIX_KEY(4, 0, KEY_VOLUMEDOWN)
--					MATRIX_KEY(4, 1, KEY_BACK)
--					MATRIX_KEY(4, 2, KEY_CAMERA)
--					MATRIX_KEY(4, 3, KEY_KBDILLUMTOGGLE)
--					>;
--					keypad,num-rows = <6>;
--					keypad,num-columns = <5>;
--				};
--
--				gpio@150 {
--					dragon_ethernet_gpios: ethernet-gpios {
--						pinconf {
--							pins = "gpio7";
--							function = "normal";
--							input-enable;
--							bias-disable;
--							power-source = <PM8058_GPIO_S3>;
--						};
--					};
--					dragon_bmp085_gpios: bmp085-gpios {
--						pinconf {
--							pins = "gpio16";
--							function = "normal";
--							input-enable;
--							bias-disable;
--							power-source = <PM8058_GPIO_S3>;
--						};
--					};
--					dragon_mpu3050_gpios: mpu3050-gpios {
--						pinconf {
--							pins = "gpio17";
--							function = "normal";
--							input-enable;
--							bias-disable;
--							power-source = <PM8058_GPIO_S3>;
--						};
--					};
--					dragon_sdcc3_gpios: sdcc3-gpios {
--						pinconf {
--							pins = "gpio22";
--							function = "normal";
--							input-enable;
--							bias-disable;
--							power-source = <PM8058_GPIO_S3>;
--						};
--					};
--					dragon_sdcc5_gpios: sdcc5-gpios {
--						pinconf {
--							pins = "gpio26";
--							function = "normal";
--							input-enable;
--							bias-pull-up;
--							qcom,pull-up-strength = <PMIC_GPIO_PULL_UP_30>;
--							power-source = <PM8058_GPIO_S3>;
--						};
--					};
--					dragon_ak8975_gpios: ak8975-gpios {
--						pinconf {
--							pins = "gpio33";
--							function = "normal";
--							input-enable;
--							bias-disable;
--							power-source = <PM8058_GPIO_S3>;
--						};
--					};
--					dragon_cm3605_gpios: cm3605-gpios {
--						/* Pin 34 connected to the proxy IRQ */
--						pinconf_gpio34 {
--							pins = "gpio34";
--							function = "normal";
--							input-enable;
--							bias-disable;
--							power-source = <PM8058_GPIO_S3>;
--						};
--						/* Pin 35 connected to ASET */
--						pinconf_gpio35 {
--							pins = "gpio35";
--							function = "normal";
--							output-high;
--							bias-disable;
--							power-source = <PM8058_GPIO_S3>;
--						};
--					};
--					dragon_veth_gpios: veth-gpios {
--						pinconf {
--							pins = "gpio40";
--							function = "normal";
--							bias-disable;
--							drive-push-pull;
--						};
--					};
--				};
--
--				mpps@50 {
--					dragon_cm3605_mpps: cm3605-mpps-state {
--						pinconf {
--							pins = "mpp5";
--							function = "analog";
--							input-enable;
--							bias-high-impedance;
--							/* Let's use channel 5 */
--							qcom,amux-route = <PMIC_MPP_AMUX_ROUTE_CH5>;
--							power-source = <PM8058_GPIO_S3>;
--						};
--					};
--				};
--
- 				xoadc@197 {
- 					/* Reference voltage 2.2 V */
- 					xoadc-ref-supply = <&pm8058_l18>;
-@@ -396,46 +130,6 @@ mpp9@9 {
- 						reg = <0x00 0x09>;
- 					};
- 				};
--
--				led@48 {
--					/*
--					 * The keypad LED @0x48 is routed to
--					 * the sensor board where it is
--					 * connected to an infrared LED
--					 * SFH4650 (60mW, @850nm) next to the
--					 * ambient light and proximity sensor
--					 * Capella Microsystems CM3605.
--					 */
--					compatible = "qcom,pm8058-keypad-led";
--					reg = <0x48>;
--					label = "pm8058:infrared:proximitysensor";
--					default-state = "off";
--					linux,default-trigger = "cm3605";
--				};
--				led@131 {
--					compatible = "qcom,pm8058-led";
--					reg = <0x131>;
--					label = "pm8058:red";
--					default-state = "off";
--				};
--				led@132 {
--					/*
--					 * This is actually green too on my
--					 * board, but documented as yellow.
--					 */
--					compatible = "qcom,pm8058-led";
--					reg = <0x132>;
--					label = "pm8058:yellow";
--					default-state = "off";
--					linux,default-trigger = "mmc0";
--				};
--				led@133 {
--					compatible = "qcom,pm8058-led";
--					reg = <0x133>;
--					label = "pm8058:green";
--					default-state = "on";
--					linux,default-trigger = "heartbeat";
--				};
- 			};
- 		};
- 
-@@ -446,151 +140,18 @@ gsbi@19800000 {
- 			i2c@19880000 {
- 				status = "okay";
- 				pinctrl-names = "default";
--				pinctrl-0 = <&dragon_gsbi8_i2c_pins>;
--
--				eeprom@52 {
--					/* A 16KiB Platform ID EEPROM on the CPU carrier board */
--					compatible = "atmel,24c128";
--					reg = <0x52>;
--					vcc-supply = <&pm8058_s3>;
--					pagesize = <64>;
--				};
--				wm8903: wm8903@1a {
--					/* This Woolfson Micro device has an unrouted interrupt line */
--					compatible = "wlf,wm8903";
--					reg = <0x1a>;
--
--					AVDD-supply = <&pm8058_l16>;
--					CPVDD-supply = <&pm8058_l16>;
--					DBVDD-supply = <&pm8058_s3>;
--					DCVDD-supply = <&pm8058_l0>;
--
--					gpio-controller;
--					#gpio-cells = <2>;
--
--					micdet-cfg = <0>;
--					micdet-delay = <100>;
--					gpio-cfg = <0xffffffff 0xffffffff 0 0xffffffff 0xffffffff>;
--				};
-+				pinctrl-0 = <&gsbi8_i2c_pins>;
- 			};
- 		};
- 
- 		gsbi@19c00000 {
- 			status = "okay";
--			qcom,mode = <GSBI_PROT_I2C_UART>;
-+			qcom,mode = <GSBI_PROT_UART_W_FC>;
- 
- 			serial@19c40000 {
- 				status = "okay";
- 				pinctrl-names = "default";
--				pinctrl-0 = <&dragon_gsbi12_serial_pins>;
--			};
--
--			i2c@19c80000 {
--				status = "okay";
--				pinctrl-names = "default";
--				pinctrl-0 = <&dragon_gsbi12_i2c_pins>;
--
--				ak8975@c {
--					compatible = "asahi-kasei,ak8975";
--					reg = <0x0c>;
--					interrupt-parent = <&pm8058_gpio>;
--					interrupts = <33 IRQ_TYPE_EDGE_RISING>;
--					pinctrl-names = "default";
--					pinctrl-0 = <&dragon_ak8975_gpios>;
--					vid-supply = <&pm8058_lvs0>; // 1.8V
--					vdd-supply = <&pm8058_l14>; // 2.85V
--				};
--				bmp085@77 {
--					compatible = "bosch,bmp085";
--					reg = <0x77>;
--					interrupt-parent = <&pm8058_gpio>;
--					interrupts = <16 IRQ_TYPE_EDGE_RISING>;
--					reset-gpios = <&tlmm 86 GPIO_ACTIVE_LOW>;
--					pinctrl-names = "default";
--					pinctrl-0 = <&dragon_bmp085_gpios>;
--					vddd-supply = <&pm8058_lvs0>; // 1.8V
--					vdda-supply = <&pm8058_l14>; // 2.85V
--				};
--				mpu3050@68 {
--					compatible = "invensense,mpu3050";
--					reg = <0x68>;
--					/*
--					 * GPIO17 is pulled high by a 10k
--					 * resistor to VLOGIC so needs to be
--					 * active low/falling edge.
--					 */
--					interrupts-extended = <&pm8058_gpio 17 IRQ_TYPE_EDGE_FALLING>;
--					pinctrl-names = "default";
--					pinctrl-0 = <&dragon_mpu3050_gpios>;
--					vlogic-supply = <&pm8058_lvs0>; // 1.8V
--					vdd-supply = <&pm8058_l14>; // 2.85V
--
--					/*
--					 * The MPU-3050 acts as a hub for the
--					 * accelerometer.
--					 */
--					i2c-gate {
--						#address-cells = <1>;
--						#size-cells = <0>;
--
--						kxsd9@18 {
--							compatible = "kionix,kxsd9";
--							reg = <0x18>;
--							interrupt-parent = <&tlmm>;
--							interrupts = <57 IRQ_TYPE_EDGE_FALLING>;
--							pinctrl-names = "default";
--							pinctrl-0 = <&dragon_kxsd9_gpios>;
--							iovdd-supply = <&pm8058_lvs0>; // 1.8V
--							vdd-supply = <&pm8058_l14>; // 2.85V
--						};
--					};
--				};
--			};
--		};
--
--		external-bus@1a100000 {
--			/* The EBI2 will instantiate first, then populate its children */
--			status = "okay";
--			pinctrl-names = "default";
--			pinctrl-0 = <&dragon_ebi2_pins>;
--
--			/*
--			 * An on-board SMSC LAN9221 chip for "debug ethernet",
--			 * which is actually just an ordinary ethernet on the
--			 * EBI2. This has a 25MHz chrystal next to it, so no
--			 * clocking is needed.
--			 */
--			ethernet@2,0 {
--				compatible = "smsc,lan9221", "smsc,lan9115";
--				reg = <2 0x0 0x100>;
--				/*
--				 * The second interrupt is the PME interrupt
--				 * for network wakeup, connected to the TLMM.
--				 */
--				interrupts-extended = <&pm8058_gpio 7 IRQ_TYPE_EDGE_FALLING>,
--						    <&tlmm 29 IRQ_TYPE_EDGE_RISING>;
--				reset-gpios = <&tlmm 30 GPIO_ACTIVE_LOW>;
--				vdd33a-supply = <&dragon_veth>;
--				vddvario-supply = <&dragon_vario>;
--				pinctrl-names = "default";
--				pinctrl-0 = <&dragon_ethernet_gpios>;
--				phy-mode = "mii";
--				reg-io-width = <2>;
--				smsc,force-external-phy;
--				smsc,irq-push-pull;
--
--				/*
--				 * SLOW chipselect config
--				 * Delay 9 cycles (140ns@64MHz) between SMSC
--				 * LAN9221 Ethernet controller reads and writes
--				 * on CS2.
--				 */
--				qcom,xmem-recovery-cycles = <0>;
--				qcom,xmem-write-hold-cycles = <3>;
--				qcom,xmem-write-delta-cycles = <31>;
--				qcom,xmem-read-delta-cycles = <28>;
--				qcom,xmem-write-wait-cycles = <9>;
--				qcom,xmem-read-wait-cycles = <9>;
-+				pinctrl-0 = <&headphone_uart_pins>;
- 			};
- 		};
- 
-@@ -758,13 +319,13 @@ l9 {
- 					bias-pull-down;
- 				};
- 				l10 {
--					regulator-min-microvolt = <2600000>;
--					regulator-max-microvolt = <2600000>;
-+					regulator-min-microvolt = <3050000>;
-+					regulator-max-microvolt = <3050000>;
- 					bias-pull-down;
- 				};
- 				l11 {
--					regulator-min-microvolt = <1500000>;
--					regulator-max-microvolt = <1500000>;
-+					regulator-min-microvolt = <2850000>;
-+					regulator-max-microvolt = <2850000>;
- 					bias-pull-down;
- 				};
- 				l12 {
-@@ -790,10 +351,13 @@ l16 {
- 					regulator-min-microvolt = <1800000>;
- 					regulator-max-microvolt = <1800000>;
- 					bias-pull-down;
--					regulator-always-on;
-+					/*
-+					 * RPM driver can't handle always-on regulators that are
-+					 * supplied by regulators initialized after them.
-+					 */
-+					// regulator-always-on;
- 				};
- 				l17 {
--					// 1.5V according to schematic
- 					regulator-min-microvolt = <2600000>;
- 					regulator-max-microvolt = <2600000>;
- 					bias-pull-down;
-@@ -804,8 +368,8 @@ l18 {
- 					bias-pull-down;
- 				};
- 				l19 {
--					regulator-min-microvolt = <2500000>;
--					regulator-max-microvolt = <2500000>;
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
- 					bias-pull-down;
- 				};
- 				l20 {
-@@ -814,14 +378,16 @@ l20 {
- 					bias-pull-down;
- 				};
- 				l21 {
--					// 1.1 V according to schematic
- 					regulator-min-microvolt = <1200000>;
- 					regulator-max-microvolt = <1200000>;
- 					bias-pull-down;
--					regulator-always-on;
-+					/*
-+					 * RPM driver can't handle always-on regulators that are
-+					 * supplied by regulators initialized after them.
-+					 */
-+					// regulator-always-on;
- 				};
- 				l22 {
--					// 1.2 V according to schematic
- 					regulator-min-microvolt = <1150000>;
- 					regulator-max-microvolt = <1150000>;
- 					bias-pull-down;
-@@ -845,7 +411,7 @@ l25 {
- 				};
- 
- 				s0 {
--					// regulator-min-microvolt = <500000>;
-+					// regulator-min-microvolt = <800000>;
- 					// regulator-max-microvolt = <1325000>;
- 					regulator-min-microvolt = <1100000>;
- 					regulator-max-microvolt = <1100000>;
-@@ -853,8 +419,8 @@ s0 {
- 					bias-pull-down;
- 				};
- 				s1 {
--					// regulator-min-microvolt = <500000>;
--					// regulator-max-microvolt = <1250000>;
-+					// regulator-min-microvolt = <800000>;
-+					// regulator-max-microvolt = <1325000>;
- 					regulator-min-microvolt = <1100000>;
- 					regulator-max-microvolt = <1100000>;
- 					qcom,switch-mode-frequency = <1600000>;
-@@ -871,15 +437,15 @@ s3 {
- 					regulator-min-microvolt = <1800000>;
- 					regulator-max-microvolt = <1800000>;
- 					qcom,switch-mode-frequency = <1600000>;
--					regulator-always-on;
- 					bias-pull-down;
-+					regulator-always-on;
- 				};
- 				s4 {
- 					regulator-min-microvolt = <2200000>;
- 					regulator-max-microvolt = <2200000>;
- 					qcom,switch-mode-frequency = <1600000>;
--					regulator-always-on;
- 					bias-pull-down;
-+					regulator-always-on;
- 				};
- 
- 				/* LVS0 and LVS1 are just switches */
-@@ -897,41 +463,16 @@ ncp {
- 				};
- 			};
- 		};
-+
- 		amba {
--			/* Internal 3.69 GiB eMMC */
-+			/* Internal 16/32 GiB eMMC */
- 			mmc@12400000 {
- 				status = "okay";
- 				pinctrl-names = "default";
--				pinctrl-0 = <&dragon_sdcc1_pins>;
-+				pinctrl-0 = <&emmc_pins>;
- 				vmmc-supply = <&pm8901_l5>;
- 				vqmmc-supply = <&pm8901_lvs0>;
- 			};
--
--			/* External micro SD card, directly connected, pulled up to 2.85 V */
--			mmc@12180000 {
--				status = "okay";
--				/* Enable SSBI GPIO 22 as input, use for card detect */
--				pinctrl-names = "default";
--				pinctrl-0 = <&dragon_sdcc3_pins>, <&dragon_sdcc3_gpios>;
--				cd-gpios = <&pm8058_gpio 22 GPIO_ACTIVE_LOW>;
--				wp-gpios = <&tlmm 110 GPIO_ACTIVE_HIGH>;
--				vmmc-supply = <&pm8058_l14>;
--			};
--
--			/*
--			 * Second external micro SD card, using two TXB104RGYR levelshifters
--			 * to lift from 1.8 V to 2.85 V
--			 */
--			mmc@12200000 {
--				status = "okay";
--				/* Enable SSBI GPIO 26 as input, use for card detect */
--				pinctrl-names = "default";
--				pinctrl-0 = <&dragon_sdcc5_pins>, <&dragon_sdcc5_gpios>;
--				cd-gpios = <&pm8058_gpio 26 GPIO_ACTIVE_LOW>;
--				wp-gpios = <&tlmm 106 GPIO_ACTIVE_HIGH>;
--				vmmc-supply = <&pm8058_l14>;
--				vqmmc-supply = <&dragon_vio_txb>;
--			};
- 		};
- 	};
- };
--- 
-2.34.1
+We have few patches following that pull-request, so it will be actually
+easier not to merge it to soc-tree but resend soon with the follow-ups.
 
+
+Best regards,
+Krzysztof
