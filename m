@@ -4,207 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFB3AC28CF5
-	for <soc@archiver.kernel.org>; Wed, 26 Jan 2022 04:13:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBDE5C28CF5
+	for <soc@archiver.kernel.org>; Wed, 26 Jan 2022 04:13:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 74220C340E5; Wed, 26 Jan 2022 04:13:04 +0000 (UTC)
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+	id A0C5EC340E9; Wed, 26 Jan 2022 04:13:30 +0000 (UTC)
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8C623C340E7
-	for <soc@kernel.org>; Wed, 26 Jan 2022 04:13:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8C623C340E7
+	by smtp.kernel.org (Postfix) with ESMTPS id 2B0A3C340E7
+	for <soc@kernel.org>; Wed, 26 Jan 2022 04:13:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2B0A3C340E7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oo1-f42.google.com with SMTP id p4-20020a4a8e84000000b002e598a51d60so4025028ook.2
-        for <soc@kernel.org>; Tue, 25 Jan 2022 20:13:03 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id g205so35237278oif.5
+        for <soc@kernel.org>; Tue, 25 Jan 2022 20:13:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=LLMg77ELraqoTfIAPCtABOfbinmt8w5vNySYMJihYiw=;
-        b=aAsyrAB0/n1oJzzMMLeshHQInjWF8VSIbuKCfDihEA3cwTzBkHvG2cbZyTQVYnbNzX
-         u5q3gX5eErITWuIR3o9fXGn1p41gSSwa/ft6k6uAfZYKyefsh742TuATfm/JvM8cjUaE
-         /ieFSrKzr1u02+TjmLtl7eQpDIQZyf7XrvhQY50BYtU0ANSFRf5JwQU0n9zUXVfqtdeK
-         dRSsUv54Mu+YMY/+yC2NGtqmhuJtBOTdEJycmcEMsHVkv3se7KEBF1ochnbgQZmblJuu
-         D/49v5W+rzKIVFlcrANjSwARr9Hh61IO1xY2zoQMHam5dnKoqwgVTHKYLQXz0Ha0HE7q
-         Ie3g==
+        bh=arlsOb01jlapXGYkUDdz2+HVDdsCdZVHayoQG3dctsA=;
+        b=aRw558Bs+cD7R+EE0gKoDAtx5fJCW/0eUBB3Eb9xqOjGKCurtCz8BNg019D4D2LQEE
+         64sMWUQoYJ2WxspIU/aTCLPh8JisbrmEtJxVDw5GihQR+VTJBuMrwj1Fa7JH08DPLjyj
+         k7RUHgNYf1Uy14xWUQAWAJMbF3TRYtutPsP5L+8vUZBsGp6MRaHckNo7bResbmdUu2ab
+         J/PVjvXQIRUxN8qrRrQm3AxcOvrL+lFhhfR3O3RYXJtbdvdrrAGwMNoFl1utu5X2mhxy
+         hlIfMkMe2rAuRD2PZYhE4D4GFMmSEjZFOyn5uxe1vMk4ritPS5jLhGp31uowjG/DAem1
+         hBRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=LLMg77ELraqoTfIAPCtABOfbinmt8w5vNySYMJihYiw=;
-        b=mslFhAurmdJy8mbXAmccex5sOJy0xYCvTN+zjtBg67iWx41o3K7UvhJtAKi/VInd5S
-         aqM1Yh+WYL9JqPzYIp4CFBlXJWlZiaSB52hMWzF/fMCIKBzd1GKlSY0yqrmg5qDZC6B0
-         xCGuZw5kO3tDcIILtd8qjpiUXCWZXzdPfVHyNaNCgjKmGDtcFWiWt69frDh9tZcJ2eNW
-         1IBAKlHLv1U0+kal+yzOKQkZ3fvXqZdnKWUg4Thk+IEWDIixK36LhErxhxWEZu1v/nCQ
-         Xxy9JSnpitGXjtpkRqCELiqjLd/fGAOMWyag3s6Dd3XH2RkDEZYEE6qx7Vr/T47GDJGL
-         OKUQ==
-X-Gm-Message-State: AOAM533XJsl3pQp+syWAn7yYAJLz1Eitcv9QfAyEGU91MJysItE6Y/F8
-	QR3NJOUTBSc+i87PHlpBWLO1fg==
-X-Google-Smtp-Source: ABdhPJzOWAF0z0FRI4tlJ+AKF//TlxJuLqvWMRNmhifQMBKoJxSU+ZCpshiVsT94nO8+EIAwdra/Uw==
-X-Received: by 2002:a4a:96b0:: with SMTP id s45mr1693025ooi.75.1643170382627;
-        Tue, 25 Jan 2022 20:13:02 -0800 (PST)
+        bh=arlsOb01jlapXGYkUDdz2+HVDdsCdZVHayoQG3dctsA=;
+        b=GDh4/QAqbYa1qhXybqMzzWXFQxGzhjtwcwnOTjuu6Zb8I/pQtLvLARBtJQyDkHRyt1
+         N7De3SKG1qnAKxmIsT2QlaXvj+TRP3Svz1aT74Y+g3zYT3yloeFreRx7l7EsioXdvuA3
+         1VUuKGVWKHFL+Av6WA802JrEav0d4p7oaF2031siy8A9EKG5jrbtfeamjbrYZ0qKTYYm
+         DQyFARAPjKXbZV7atjlxozsMVjter8xLcm6xD7h93ebzGwckZsnvsXo4K51LZo5Z2cka
+         ZbeezFDilUDRQP4B6fpDOroObsyY11btYMBPo9JB/jFp5L8BECjoq0TCOJzYekNpJVUh
+         yHtA==
+X-Gm-Message-State: AOAM530nQgvjEez1W3XyN5TViylAr8/TtNCo/KtbyMhjphf2o73HSLjc
+	53/IroyY00NI2DreDhw6wtuTuA==
+X-Google-Smtp-Source: ABdhPJwIJPX03WhOM4Ospo3ClShjQf2IYkb6IpRHWm2I1wBOP49Jm24472UAfLlXwku/XJXVauXlrw==
+X-Received: by 2002:a05:6808:f11:: with SMTP id m17mr2632520oiw.77.1643170409349;
+        Tue, 25 Jan 2022 20:13:29 -0800 (PST)
 Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id j3sm3397646oig.37.2022.01.25.20.13.01
+        by smtp.gmail.com with ESMTPSA id w62sm1254229oie.4.2022.01.25.20.13.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 20:13:01 -0800 (PST)
-Date: Tue, 25 Jan 2022 22:13:00 -0600
+        Tue, 25 Jan 2022 20:13:28 -0800 (PST)
+Date: Tue, 25 Jan 2022 22:13:27 -0600
 From: Bjorn Andersson <bjorn.andersson@linaro.org>
-To: Ben Wolsieffer <benwolsieffer@gmail.com>, linus.walleij@linaro.org
+To: Ben Wolsieffer <benwolsieffer@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
 	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
 	soc@kernel.org, Stephen Boyd <sboyd@codeaurora.org>,
 	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 3/3] ARM: dts: qcom: basic HP TouchPad support
-Message-ID: <YfDKTGQDh3tDMECz@builder.lan>
+Subject: Re: [PATCH 2/3] dt-bindings: arm: qcom: document HP TouchPad
+Message-ID: <YfDKZxciezuDXL54@builder.lan>
 References: <cover.1643075547.git.benwolsieffer@gmail.com>
- <9f19df2a0017b71547445ac34df221e827c45bd0.1643075547.git.benwolsieffer@gmail.com>
+ <aa59002aeae45a95097300213fc34490aa8db250.1643075547.git.benwolsieffer@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9f19df2a0017b71547445ac34df221e827c45bd0.1643075547.git.benwolsieffer@gmail.com>
+In-Reply-To: <aa59002aeae45a95097300213fc34490aa8db250.1643075547.git.benwolsieffer@gmail.com>
 
 On Mon 24 Jan 20:07 CST 2022, Ben Wolsieffer wrote:
 
-> Modify the Dragonboard device tree to support the most basic hardware on
-> the HP TouchPad. The headphone UART port and eMMC are supported.
+> Add binding documentation for the HP TouchPad.
 > 
 
-We typically don't have one commit for the cloning and then one to
-update the content, in particular since your diffstat became rather
-weird.
-
-That said, got some comments below, things that I wouldn't have spotted
-if you sent this as just a new file.
-
-> Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
-> ---
-
-@Linus, please take a look at the regulator question below.
-
->  arch/arm/boot/dts/qcom-apq8060-tenderloin.dts | 549 ++----------------
->  1 file changed, 45 insertions(+), 504 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-apq8060-tenderloin.dts b/arch/arm/boot/dts/qcom-apq8060-tenderloin.dts
-> index 996e73aa0b0b..e294f3920b9f 100644
-> --- a/arch/arm/boot/dts/qcom-apq8060-tenderloin.dts
-> +++ b/arch/arm/boot/dts/qcom-apq8060-tenderloin.dts
-> @@ -14,6 +14,8 @@ aliases {
->  	};
->  
->  	chosen {
-> +		/* Bootloader passes console=tty1, which overrides stdout-path */
-> +		bootargs = "console=ttyMSM0,115200 earlycon";
->  		stdout-path = "serial0:115200n8";
->  	};
-[..]
->  
->  	soc {
->  		pinctrl@800000 {
-> -			/* eMMMC pins, all 8 data lines connected */
-
-It would be nice if you could throw a separate patch on the list that
-fixes this spelling mistake in the original as well.
-
-> -			dragon_sdcc1_pins: sdcc1 {
-> +			/* eMMC pins, all 8 data lines connected */
-> +			emmc_pins: sdcc1 {
->  				mux {
->  					pins = "gpio159", "gpio160", "gpio161",
->  					     "gpio162", "gpio163", "gpio164",
->  					     "gpio165", "gpio166", "gpio167",
->  					     "gpio168";
-> -					     function = "sdc1";
-> +					function = "sdc1";
->  				};
->  				clk {
->  					pins = "gpio167"; /* SDC1 CLK */
-[..]
-> @@ -171,205 +77,33 @@ pinconf {
->  				};
->  			};
->  
-> -			dragon_gsbi12_i2c_pins: gsbi12_i2c {
-> -				mux {
-> -					pins = "gpio115", "gpio116";
-> -					function = "gsbi12";
-> -				};
-> -				pinconf {
-> -					pins = "gpio115", "gpio116";
-> -					drive-strength = <16>;
-> -					/* These have external pull-up 4.7kOhm to 1.8V */
-> -					bias-disable;
-> -				};
-> -			};
-> -
-> -			/* Primary serial port uart 0 pins */
-> -			dragon_gsbi12_serial_pins: gsbi12_serial {
-> +			/* Headphone UART pins */
-> +			headphone_uart_pins: gsbi12_serial {
->  				mux {
->  					pins = "gpio117", "gpio118";
->  					function = "gsbi12";
->  				};
-> -				tx {
-> -					pins = "gpio117";
-> -					drive-strength = <8>;
-> -					bias-disable;
-> -				};
->  				rx {
-> -					pins = "gpio118";
-> +					pins = "gpio117";
->  					drive-strength = <2>;
->  					bias-pull-up;
->  				};
-> -			};
-
-I find it hard to conclude what the resulting snippet is from this
-chunk, did rx swap place from gpio118 to gpio117?
-
-[..]
-> @@ -814,14 +378,16 @@ l20 {
->  					bias-pull-down;
->  				};
->  				l21 {
-> -					// 1.1 V according to schematic
->  					regulator-min-microvolt = <1200000>;
->  					regulator-max-microvolt = <1200000>;
->  					bias-pull-down;
-> -					regulator-always-on;
-> +					/*
-> +					 * RPM driver can't handle always-on regulators that are
-> +					 * supplied by regulators initialized after them.
-> +					 */
-
-That looks like an oversight that should be corrected, perhaps it needs
-similar attention that was given to the smd-rpm driver recently?
-
-But this makes me wonder, how can this work on the other board? Linus?
-
-> +					// regulator-always-on;
->  				};
->  				l22 {
-> -					// 1.2 V according to schematic
->  					regulator-min-microvolt = <1150000>;
->  					regulator-max-microvolt = <1150000>;
->  					bias-pull-down;
-> @@ -845,7 +411,7 @@ l25 {
->  				};
->  
->  				s0 {
-> -					// regulator-min-microvolt = <500000>;
-> +					// regulator-min-microvolt = <800000>;
->  					// regulator-max-microvolt = <1325000>;
-
-This looks like the full range the regulator could do, do you see a
-reason for documenting that here? Unless there's a good reason I think
-you should leave the commented min/max out.
-
->  					regulator-min-microvolt = <1100000>;
->  					regulator-max-microvolt = <1100000>;
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
 Regards,
 Bjorn
+
+> Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> index 370aab274cd1..f7418a8a49fc 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> @@ -119,6 +119,7 @@ properties:
+>        - items:
+>            - enum:
+>                - qcom,apq8060-dragonboard
+> +              - qcom,apq8060-tenderloin
+>                - qcom,msm8660-surf
+>            - const: qcom,msm8660
+>  
+> -- 
+> 2.34.1
+> 
