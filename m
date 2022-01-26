@@ -1,102 +1,229 @@
-Return-Path: <SRS0=Ze+4=SK=linaro.org=jens.wiklander@kernel.org>
+Return-Path: <SRS0=GvrJ=SK=samsung.com=alim.akhtar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A211C28CF5
-	for <soc@archiver.kernel.org>; Wed, 26 Jan 2022 10:26:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96E74C3526D
+	for <soc@archiver.kernel.org>; Wed, 26 Jan 2022 16:47:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ED5BEC340EB; Wed, 26 Jan 2022 10:26:13 +0000 (UTC)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 5B455C340EE; Wed, 26 Jan 2022 16:47:17 +0000 (UTC)
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4AC55C340E3
-	for <soc@kernel.org>; Wed, 26 Jan 2022 10:26:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4AC55C340E3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id z4so6949947lft.3
-        for <soc@kernel.org>; Wed, 26 Jan 2022 02:26:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=HEgFNH76xYMaSR7A2MkkbqWMIl28k6seEq+TKkML2sM=;
-        b=dxA+Dkm3fOcJkppAUExYCXbixzx+RAlZ4Y2LD+IeBPxNVHLmtMRgUqpWEL4Ol2Wsr2
-         NHYq7LqeUhJXDPbDOaSPyh4zyvZA5Qd0M9SKlH377it32Yt9QGVgOxwTMybwMztvlFs0
-         kQd4FMYgI2GIBVnQSgiKTHOnRHLy4FSH3g3FQ8oVMuHln/+ZeqbgDgxCsthz+vdXwsGW
-         q3tIh9ceODLSnO6rizEJjBp/ukBtZgw+ujtbIl2osJBYJtw3YnPJ7q7Tuv9dkepDJvjk
-         58aeZwvmnRJVPKSFVyl/Q9nY4z8l3DfVQddse4alXZwXE62s0ds6q/GSyfKNE99FJbA/
-         BErg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=HEgFNH76xYMaSR7A2MkkbqWMIl28k6seEq+TKkML2sM=;
-        b=M4OeHiwNhDzvbRZssXNogB4SjFUpo/NwYcHOGPOr2cV4831MJpvXJal5Z8OmE83xCn
-         9L2DS4ERijDLn8Gto+SG4cl18TFCM3htvy2gr4KY7prSn1CNVXXWVi6x1AS/4e7T6Bgx
-         QhLiyHc9qzaUms+sJYWx762TAOVcYLzwTtcMgB5AE04emvLC2Ypp86gjatT3m3SikdVI
-         GV18LD2H8Xtr+VRcXc8K0L6KmPuLGr1fh5vlKioUqLUTI+TOFObcC8IReMH2gw9p1bPQ
-         U0ghjKQdMYoeLNIHDjqxunPh2Hn6m5TzKoAVbQFQ2kUFjBswth9IADVN14QEN4lK/eAm
-         gA5A==
-X-Gm-Message-State: AOAM5329sp/D3zW1jC/JenY+DbeHLtbsFb/e4gm+toyEPv7CjbGy/kz9
-	lwWUYxuas4tccr2wSOQXAQyHtg==
-X-Google-Smtp-Source: ABdhPJyY4ILa/Qs8mLAGnK2T49f1WoeCEw5LbgiiByVoD1jJvbR2HbWoxDajXqLAOKdwqjyeziHGFQ==
-X-Received: by 2002:a05:6512:a84:: with SMTP id m4mr9601532lfu.146.1643192771289;
-        Wed, 26 Jan 2022 02:26:11 -0800 (PST)
-Received: from jade (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
-        by smtp.gmail.com with ESMTPSA id d14sm1782516lfv.253.2022.01.26.02.26.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 02:26:10 -0800 (PST)
-Date: Wed, 26 Jan 2022 11:26:09 +0100
-From: Jens Wiklander <jens.wiklander@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 007FDC340E3
+	for <soc@kernel.org>; Wed, 26 Jan 2022 16:47:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 007FDC340E3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220126164712epoutp0281a1326ea5490c20354de3afe6e53abc~N3_ltj8Xo1075810758epoutp02A
+	for <soc@kernel.org>; Wed, 26 Jan 2022 16:47:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220126164712epoutp0281a1326ea5490c20354de3afe6e53abc~N3_ltj8Xo1075810758epoutp02A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1643215632;
+	bh=ZtgZPXdL+8x4QpMXp+vZXFLyV/9tqK5mOhEfGc4FZjY=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=bWHcJQI2qS+2YcemvekO6Bt81cKnUIWGamic6IBCkNCTCQ4DHJfrye4CCqxClY9b1
+	 g+uebeEiKts1ZkQ5I/QLaf4d/+jhaWLZXG6WVHle5k+/tPdvXY3PBdeNhg0XrGxsTV
+	 3IQ6lGxWCpXZI+BTNWULl1ol+cli58BfSIaiqqWA=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+	20220126164712epcas5p400b35bf4c2a37a677564921d4e7b8e13~N3_lHXZr11109511095epcas5p4R;
+	Wed, 26 Jan 2022 16:47:12 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.177]) by
+	epsnrtp3.localdomain (Postfix) with ESMTP id 4JkV4W0xy6z4x9Pw; Wed, 26 Jan
+	2022 16:47:07 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	A3.61.05590.B0B71F16; Thu, 27 Jan 2022 01:47:07 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20220126164706epcas5p422e2fd79a3054926f2ff123e764ce1e5~N3_gCgtjW1109511095epcas5p4Q;
+	Wed, 26 Jan 2022 16:47:06 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20220126164706epsmtrp1c9e0e9a1c97c963a92d5036f9136c5ad~N3_gBjBc33079530795epsmtrp1O;
+	Wed, 26 Jan 2022 16:47:06 +0000 (GMT)
+X-AuditID: b6c32a4b-739ff700000015d6-89-61f17b0b5358
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+	F5.D5.08738.A0B71F16; Thu, 27 Jan 2022 01:47:06 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20220126164703epsmtip2115a528a41bfdf1db9fd02f53aea60f1~N3_dMsc0b0140201402epsmtip22;
+	Wed, 26 Jan 2022 16:47:03 +0000 (GMT)
+From: "Alim Akhtar" <alim.akhtar@samsung.com>
+To: "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] OP-TEE fixes for v5.17
-Message-ID: <20220126102609.GA1516258@jade>
+Cc: <soc@kernel.org>, <linux-clk@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <olof@lixom.net>, <arnd@arndb.de>,
+	<linus.walleij@linaro.org>, <catalin.marinas@arm.com>, <robh+dt@kernel.org>,
+	<s.nawrocki@samsung.com>, <linux-samsung-soc@vger.kernel.org>,
+	<pankaj.dubey@samsung.com>, <sboyd@kernel.org>
+In-Reply-To: <4c029f92-ece7-78c1-e64b-cbe438b45a5f@canonical.com>
+Subject: RE: [PATCH v5 00/16] Add support for Tesla Full Self-Driving (FSD)
+ SoC
+Date: Wed, 26 Jan 2022 22:17:02 +0530
+Message-ID: <067001d812d4$5a26ab40$0e7401c0$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQH3x/DHpHRz6vxyIYATeg+eWAbDkwGsWw0jAU7CzZABPsnnMgNDCrFWAhwoLwSr6U+vMA==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEJsWRmVeSWpSXmKPExsWy7bCmhi539cdEgzW3WSz+TjrGbvF+WQ+j
+	xfwj51gtNr79wWQx5c9yJotNj6+xWnzsucdqcXnXHDaLGef3MVmcuv6ZzWLR1i/sFq17j7Bb
+	HH7Tzmrx79pGFovH1/+wOfB7rJm3htHj969JjB6zGnrZPDat6mTzuHNtD5vH5iX1HldONLF6
+	9G1ZxejxeZNcAGdUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmBoa6hpYW5kkJeYm6qrZKL
+	T4CuW2YO0AdKCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKUnAKTAr3ixNzi0rx0vbzU
+	EitDAwMjU6DChOyMfztvshaskq84dPcNYwPjWakuRg4OCQETiceTOLoYOTmEBHYzSnz8Kw5h
+	f2KU2PAnuouRC8j+zCjx+kEHO0gCpP7f9V9sEIldjBIN3S0sEM5LRonGDQuZQKrYBHQldixu
+	A6sSEehklFj9/SdYgllgG5PE7onaIDangKNE78xNjCC2sECgxI1Ld1lBbBYBVYllM2ezgdi8
+	ApYSly/MZYawBSVOznzCAjFHW2LZwtfMECcpSPx8ugysV0QgTGLD1eXsEDXiEi+PHmEHOUJC
+	4AOHxJJNs6F+cJHYcGE5VLOwxKvjW6DiUhIv+9vYIeGSLdGzyxgiXCOxdN4xFgjbXuLAlTks
+	ICXMApoS63fpQ6zik+j9/YQJopNXoqNNCKJaVaL53VWoTmmJid3drBAlHhLftrNMYFScheSv
+	WUj+moXk/lkIuxYwsqxilEwtKM5NTy02LTDOSy2HR3Zyfu4mRnDi1vLewfjowQe9Q4xMHIyH
+	GCU4mJVEeIW0PiYK8aYkVlalFuXHF5XmpBYfYjQFBvZEZinR5Hxg7sgriTc0sTQwMTMzM7E0
+	NjNUEuc9lb4hUUggPbEkNTs1tSC1CKaPiYNTqoFJfGKD6F4T66qjDzN2ZCk3hMav0JM99azf
+	Z8mWBwLuVn85dr9+Pyf83nmLm23y1maiCyT7/5yZo53jcUXQgj9VzcuzIuhr98noh3FzGg4F
+	zb26/rbRxWm/9P5Xx3pd7LlnN4PttY5Kc/pXrZoji77EVUWYPohJStiUteB9juxJubmXVvD2
+	NXhfebUwor5+Wk3i4vvtb+TC6u945WqelWNPPtvQoeFQsMDe6ZDorLuVV9fs8Q4+bGuhE/ql
+	Qr210zhYIj/6eFPehlqTi6tC+i4qPZK/aTShc7/S8rs7X5qsMhQ395rwWF194b2dJ8rstuQd
+	tk3h/7ZAbv30upsZHJHszH5lkuZzyrRK1urO9lRiKc5INNRiLipOBABdY6+MZQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAIsWRmVeSWpSXmKPExsWy7bCSvC5X9cdEgw0nZSz+TjrGbvF+WQ+j
+	xfwj51gtNr79wWQx5c9yJotNj6+xWnzsucdqcXnXHDaLGef3MVmcuv6ZzWLR1i/sFq17j7Bb
+	HH7Tzmrx79pGFovH1/+wOfB7rJm3htHj969JjB6zGnrZPDat6mTzuHNtD5vH5iX1HldONLF6
+	9G1ZxejxeZNcAGcUl01Kak5mWWqRvl0CV0bfhCPsBQ/kKpbtmMjUwPhdsouRk0NCwETi3/Vf
+	bF2MXBxCAjsYJVb8XsQEkZCWuL5xAjuELSyx8t9zMFtI4DmjxLXn9iA2m4CuxI7FbWDNIgLd
+	jBJXemYygjjMAkeYJH7u38QMMfY2k8T85ptsIC2cAo4SvTM3MYLYwgL+EmsfvGcBsVkEVCWW
+	zZwNVsMrYClx+cJcZghbUOLkzCdgNcwC2hJPbz6Fs5ctfM0McZ6CxM+ny1hBbBGBMIkNV5ez
+	Q9SIS7w8eoR9AqPwLCSjZiEZNQvJqFlIWhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dL
+	zs/dxAiOZC2tHYx7Vn3QO8TIxMF4iFGCg1lJhFdI62OiEG9KYmVValF+fFFpTmrxIUZpDhYl
+	cd4LXSfjhQTSE0tSs1NTC1KLYLJMHJxSDUzKfc+fbLFJV++ecDTy2/6KpQdnJ0eKVLdsE3/X
+	bSl1RP/Ehq93F9zd3bQ7q86j53b69G+vXqksfBRiVF/cXWZyoqt37ROz+ZxOW222HWh/aNeU
+	seS0wCJdPYlXL9pOioVWa8dJS1zwqH8orayyb3mFVUlJ6JOms2rpYbufiBWLdYS/e2ZUVrni
+	9srvf9gXPz+99Hn22gAH21cb3sTs8Sr1Y3u/9d583qv9vbwWR384rotLWLpTJ5p9n+QK2ffn
+	uEU+Si9OTXNcmfnz/FHZZQ67+r0uFphEbLc/8SpwM+NCrrvhrEVn/B5ZfHPpvM3/8p1xOU8o
+	77f7pvb7l759tzHiV96q2y7JR91dH9xsvS6oxFKckWioxVxUnAgA6cN0GFMDAAA=
+X-CMS-MailID: 20220126164706epcas5p422e2fd79a3054926f2ff123e764ce1e5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220124142850epcas5p2f82243b87386b3d49a9302c87e015d6b
+References: <CGME20220124142850epcas5p2f82243b87386b3d49a9302c87e015d6b@epcas5p2.samsung.com>
+	<20220124141644.71052-1-alim.akhtar@samsung.com>
+	<d9682f16-13b7-b6dc-5afd-b2d319143de5@canonical.com>
+	<4cfcde38-50cb-646a-0d17-c2cb2977a2e4@canonical.com>
+	<063501d81281$10e5b3c0$32b11b40$@samsung.com>
+	<4c029f92-ece7-78c1-e64b-cbe438b45a5f@canonical.com>
 
-Hello arm-soc maintainers,
 
-Please pull these OP-TEE driver fixes all concerning the recent changes
-regarding FF-A and asynchronous notifications.
 
-Thanks,
-Jens
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+>-----Original Message-----
+>From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40canonical.com=5D
+>Sent: Wednesday, January 26, 2022 2:50 PM
+>To: Alim Akhtar <alim.akhtar=40samsung.com>; linux-arm-
+>kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
+>Cc: soc=40kernel.org; linux-clk=40vger.kernel.org; devicetree=40vger.kerne=
+l.org;
+>olof=40lixom.net; arnd=40arndb.de; linus.walleij=40linaro.org;
+>catalin.marinas=40arm.com; robh+dt=40kernel.org; s.nawrocki=40samsung.com;
+>linux-samsung-soc=40vger.kernel.org; pankaj.dubey=40samsung.com;
+>sboyd=40kernel.org
+>Subject: Re: =5BPATCH v5 00/16=5D Add support for Tesla Full Self-Driving =
+(FSD) SoC
+>
+>On 26/01/2022 07:50, Alim Akhtar wrote:
+>> Hi Krzysztof
+>>
+>>> -----Original Message-----
+>>> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40canonical.com=
+=5D
+>>> Sent: Tuesday, January 25, 2022 10:56 PM
+>>> To: Alim Akhtar <alim.akhtar=40samsung.com>; linux-arm-
+>>> kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
+>>> Cc: soc=40kernel.org; linux-clk=40vger.kernel.org;
+>>> devicetree=40vger.kernel.org; olof=40lixom.net; arnd=40arndb.de;
+>>> linus.walleij=40linaro.org; catalin.marinas=40arm.com;
+>>> robh+dt=40kernel.org; s.nawrocki=40samsung.com;
+>>> linux-samsung-soc=40vger.kernel.org; pankaj.dubey=40samsung.com;
+>>> sboyd=40kernel.org
+>>> Subject: Re: =5BPATCH v5 00/16=5D Add support for Tesla Full Self-Drivi=
+ng
+>>> (FSD) SoC
+>>>
+>>> On 25/01/2022 18:12, Krzysztof Kozlowski wrote:
+>>>> On 24/01/2022 15:16, Alim Akhtar wrote:
+>>>>> Adds basic support for the Tesla Full Self-Driving (FSD) SoC. This
+>>>>> SoC contains three clusters of four Cortex-A72 CPUs, as well as
+>>>>> several IPs.
+>>>>>
+>>>>> Patches 1 to 9 provide support for the clock controller (which is
+>>>>> designed similarly to Exynos SoCs).
+>>>>>
+>>>>> The remaining changes provide pinmux support, initial device tree
+>support.
+>>>>>
+>>>>> - Changes since v4
+>>>>> * fixed 'make dtbs_check' warnings on patch 14/16
+>>>>>
+>>>>> - Changes since v3
+>>>>> * Addressed Stefen's review comments on patch 14/16
+>>>>> * Fixed kernel test robot warning on patch 04/16
+>>>>> * rebsaed this series on Krzysztof's pinmux new binding schema work
+>>>>> =5B1=5D
+>>>>>
+>>>>> - Changes since v2
+>>>>> * Addressed Krzysztof's and Stephen's review comments
+>>>>> * Added Reviewed-by and Acked-by tags
+>>>>> * Rebased on next-20220120
+>>>>>
+>>>>> - Changes since v1
+>>>>> * fixed make dt_binding_check error as pointed by Rob
+>>>>> * Addressed Krzysztof's and Rob's review comments
+>>>>> * Added Reviewed-by and Acked-by tags
+>>>>> * Dropped SPI, MCT and ADC from this series (to be posted in small
+>>>>> sets)
+>>>>>
+>>>>> NOTE: These patches are based on Krzysztof's pinmux for-next branch
+>>>>> commit 832ae134ccc1 (=22pinctrl: samsung: add support for Exynos850
+>>>>> and
+>>>>> ExynosAutov9 wake-ups=22) =5B1=5D
+>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/samsung.git
+>>>>> /l
+>>>>> og/?h=3Dfor-next
+>>>>>
+>>>>>
+>>>>
+>>>> Thanks, applied DTS/soc and pinctrl patches.
+>>>>
+>>>> I expect Sylwester will pick up the clock ones. Otherwise please let
+>>>> me know to pick it up as well.
+>>>
+>>> I forgot that clock macros are used in DTS. This does not compile and
+>>> I cannot take drivers into DTS branch.
+>>>
+>>> Alim,
+>>> DTS changes dropped. Please resend with the same trick we did for
+>>> Exynos850 board - hard-coded clock IDs as defines. See:
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/diff/a
+>>> rch/arm6
+>>> 4/boot/dts/exynos/exynos850.dtsi?h=3Dsamsung-dt64-5.17-
+>>> 2&id=3De3493220fd3e474abcdcefbe14fb60485097ce06
+>>>
+>> Ok, I will resend patch 14 and 15 (DTS changes) only as suggested above.
+>
+>I see Sylwester acked clock patches, so I will take them. No need to resen=
+d, I'll
+>organize the patches so they will compile.
+>
+Awesome, thanks Krzysztof and Sylwester
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+>
+>Best regards,
+>Krzysztof
 
-are available in the Git repository at:
-
-  git://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-fixes-for-v5.17
-
-for you to fetch changes up to 4064c461148ab129dfe5eaeea129b4af6cf4b9b7:
-
-  optee: add error checks in optee_ffa_do_call_with_arg() (2022-01-24 13:00:59 +0100)
-
-----------------------------------------------------------------
-OP-TE fixes for v5.17
-
-- Adds error checking in optee_ffa_do_call_with_arg()
-- Reintroduces an accidentally lost fix for a memref size check
-- Uses bitmap_free() to free memory obtained with bitmap_zalloc()
-
-----------------------------------------------------------------
-Christophe JAILLET (1):
-      optee: Use bitmap_free() to free bitmap
-
-Jens Wiklander (1):
-      optee: add error checks in optee_ffa_do_call_with_arg()
-
-Jerome Forissier (1):
-      tee: optee: do not check memref size on return from Secure World
-
- drivers/tee/optee/ffa_abi.c | 15 ++++++++++++---
- drivers/tee/optee/notif.c   |  2 +-
- drivers/tee/optee/smc_abi.c | 10 ----------
- 3 files changed, 13 insertions(+), 14 deletions(-)
