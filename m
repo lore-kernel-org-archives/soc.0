@@ -1,214 +1,132 @@
-Return-Path: <SRS0=HL19=SL=gmail.com=benwolsieffer@kernel.org>
+Return-Path: <SRS0=zQgr=SL=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F8AAC433EF
-	for <soc@archiver.kernel.org>; Thu, 27 Jan 2022 02:33:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5F4FC433FE
+	for <soc@archiver.kernel.org>; Thu, 27 Jan 2022 09:33:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F0FF6C340E9; Thu, 27 Jan 2022 02:33:24 +0000 (UTC)
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 61EFAC340EA; Thu, 27 Jan 2022 09:33:15 +0000 (UTC)
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 36465C340E7;
-	Thu, 27 Jan 2022 02:33:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 36465C340E7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id b22so1379738qkk.12;
-        Wed, 26 Jan 2022 18:33:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8GyXdLlhnsgNAVFJ9za+5cXDmt66YlUHV1TYza3TEgY=;
-        b=OiuOyVWWHTywzF33MqVpuIVLx3MWnw2IEbxayj/a4C8eU5bB71UOltlNY7/B0MZcw4
-         FhIHZXi0ddnycalGF0F//cwAGqCl9/u6tAGyfE5pV43+SfuVhdPq61c7qiaqjN6HO0SH
-         HmHYAfKj+iw7iJdXlPsrddMGyzZ5CbqpBXNbWSabd7OpOD1JdG0um9hQA0qHtPZheptq
-         ElkB2gTdnXZOw0UZ3AvcmH3cXWPxWjdwD4a8wA2nCI1US04lzvkEBbEnYQUj080WDdSv
-         fG90gu5lPy0TDLo4GimpPXzjHTh4FOaa7xpdtPKIdeSWJrh+pav0Gcz9MnVWbW86NK5w
-         bCng==
+	by smtp.kernel.org (Postfix) with ESMTPS id 42BC3C340E4
+	for <soc@kernel.org>; Thu, 27 Jan 2022 09:33:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 42BC3C340E4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 89ADE3F1C6
+	for <soc@kernel.org>; Thu, 27 Jan 2022 09:33:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1643275992;
+	bh=p+i9EFnJNrdVtc4uBwrKoxlD6kOk5KMf1UoN4cwo1S0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=CSuujtj5l4ciHkZDMqCmofg3vFvh7u4GaJH5RDjW9l+qdz9JqH6ENn2vWWhh8jJyS
+	 rEnWOtc3w6pxH0TpihmbHxdFE2CBLJLPaK476sGpUk43tDdST7UtZ1dgN5KJO9uXAj
+	 fLOrXqtsXXVogJlNYKeRUsWZCA7IRuHS0J8Dcd0O0yESlNR9d3Io/EjPQxLZxrbbB2
+	 gauY45QlLvA7OTdyqRtPPiIasxbRpqQ1G+XgS8mZ/qLDgAVTxYE1EfL4k5HCVdx3e0
+	 ofvq3Yfz2s9dJUAwLqr9IDNiVqKdluJKPEqLeTAjneQvg1TWiwEii4atPbJpSz2EAp
+	 yyTG/MjSh/NQw==
+Received: by mail-wr1-f69.google.com with SMTP id c9-20020adfa709000000b001dde29c3202so821649wrd.22
+        for <soc@kernel.org>; Thu, 27 Jan 2022 01:33:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8GyXdLlhnsgNAVFJ9za+5cXDmt66YlUHV1TYza3TEgY=;
-        b=X51sVu0IQrvJS1V0n0bZcLV2LdrlhJ70d0yRpluQfG5qAWXpOKN1D2Vu5HWy+tFkEW
-         vjsY61Ms8pcdDpc0mUSU/Kk0qP5HX/mMeS0kNBCopQvikwF7fOjTVP5UBaiROI9FliT+
-         belEy3DfSykfcQGKak9YfYX97VmZBdCviED5w0fpspXJdeG9JLbeaySghivD504an4Lh
-         2LMRbyqN3D0Daf6rzv9f0BVzAEAaA5lLS4KIACON9jR7wajR/f05WcGj6W+OwPNBSoJO
-         VbZSnDgIVG7W0VC3Ymb72HlU9e4me6VYl5rbB3GbqMh7V5nu9iVIKn4H8WG285w8kn4j
-         milg==
-X-Gm-Message-State: AOAM532Y1ESm+Bp1QC69TjdEaIgjpRaQBdo+5dFjuyua8XmGqga54vpA
-	U6d7JQECODkP7hy3LpVsLjc=
-X-Google-Smtp-Source: ABdhPJwHLCBho7YHFxTCSZTDMKMGTVRgogiyPY7ZU9TCq5x0GSVY896MyQ2D5p+qAztp0Hn8O0t6CA==
-X-Received: by 2002:a05:620a:4594:: with SMTP id bp20mr1212315qkb.381.1643250803205;
-        Wed, 26 Jan 2022 18:33:23 -0800 (PST)
-Received: from Dell-Inspiron-15 (c-73-149-219-1.hsd1.ma.comcast.net. [73.149.219.1])
-        by smtp.gmail.com with ESMTPSA id r7sm562904qti.69.2022.01.26.18.33.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 18:33:22 -0800 (PST)
-Date: Wed, 26 Jan 2022 21:33:19 -0500
-From: Ben Wolsieffer <benwolsieffer@gmail.com>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: linus.walleij@linaro.org, Andy Gross <agross@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>, soc@kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 3/3] ARM: dts: qcom: basic HP TouchPad support
-Message-ID: <YfIEb+BSNI3maH79@Dell-Inspiron-15>
-References: <cover.1643075547.git.benwolsieffer@gmail.com>
- <9f19df2a0017b71547445ac34df221e827c45bd0.1643075547.git.benwolsieffer@gmail.com>
- <YfDKTGQDh3tDMECz@builder.lan>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=p+i9EFnJNrdVtc4uBwrKoxlD6kOk5KMf1UoN4cwo1S0=;
+        b=preVtCKtyGGmx2HFvjZmWzq2G1OP8HX6+1At822KCRFtwCueSAPFgguIDJjiqqmxYV
+         dlzPOFAZ/6JCtJ4UbnPOtzZ16WqWoUi4s+qG8pdmauPvQ5wYQshdb6DeiZDCKA/EmXnO
+         sFTY9utqcjrjzecsKHXz4KnOZuLAhqdJhjWIfCMOk/ROWzaiQe2dbAl1f7UO0Ocie1Qy
+         0hinOm1qNA56qW2hgAF+Or83lc9rD11A9rHP0HoLSHaZLogfEbCcVG/lCK5mM2mUfNt/
+         JcfGpx0JFMRgcQGNLWrRKJqNXJEd5gvebcGtoiGZ7x/QrFG0SRqeNGmO28x0NpVUQ1NP
+         m/9w==
+X-Gm-Message-State: AOAM531jAZgVVPAFiI21sxJsSWxSKVdvSAE4D0wz0MG+FO6/FgwgdjCH
+	vTYyNufI3lP+al9Uu5BSk6iNbIYOp0KHQwsertWvy1jG2fVie5FfwXKtU5rN9UVQNzcT1PVuWw9
+	eyqznEYt2Be5eENGSx51ibn0=
+X-Received: by 2002:a05:600c:4c95:: with SMTP id g21mr10950994wmp.109.1643275992103;
+        Thu, 27 Jan 2022 01:33:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJylkC1THY/nwhhXFgrVxt7l8XIbuf9Roo2kAya94TjPY/GyRJpntPDuMR7MZ7Sr8GNGxVlciw==
+X-Received: by 2002:a05:600c:4c95:: with SMTP id g21mr10950974wmp.109.1643275991855;
+        Thu, 27 Jan 2022 01:33:11 -0800 (PST)
+Received: from [192.168.0.63] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id r16sm1599447wmq.3.2022.01.27.01.33.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 01:33:11 -0800 (PST)
+Message-ID: <1812c271-0a6f-2ebf-e329-4d3c0e34024c@canonical.com>
+Date: Thu, 27 Jan 2022 10:33:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfDKTGQDh3tDMECz@builder.lan>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [GIT PULL 1/2] memory: drivers for v5.17
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+ arm@kernel.org, soc@kernel.org
+Cc: linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+References: <20211224111124.6097-1-krzysztof.kozlowski@canonical.com>
+ <724c16d2-5afc-4d41-8d84-3ba570d14cee@canonical.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <724c16d2-5afc-4d41-8d84-3ba570d14cee@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jan 25, 2022 at 10:13:00PM -0600, Bjorn Andersson wrote:
-> On Mon 24 Jan 20:07 CST 2022, Ben Wolsieffer wrote:
+On 23/01/2022 13:00, Krzysztof Kozlowski wrote:
+> On 24/12/2021 12:11, Krzysztof Kozlowski wrote:
+>> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+>>
+>>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+>>
+>> are available in the Git repository at:
+>>
+>>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.17
+>>
+>> for you to fetch changes up to de369801658a9a54759ac011af770e8c01d9db7f:
+>>
+>>   Merge branch 'for-v5.17/tegra-mc' into mem-ctrl-next (2021-12-22 12:59:03 +0100)
+>>
+>> ----------------------------------------------------------------
+>> Memory controller drivers for v5.17
+>>
+>> 1. Minor improvements: Mediatek SMI, Freescale/NXP IFC, Tegra20 and
+>>    Tegra30.
+>> 2. Convert Freescale/NXP IFC bindings to dtschema.
+>>
+>> ----------------------------------------------------------------
+>> AngeloGioacchino Del Regno (1):
+>>       memory: mtk-smi: Use ARRAY_SIZE to define MTK_SMI_CLK_NR_MAX
+>>
+>> Dmitry Osipenko (2):
+>>       memory: tegra30-emc: Print additional memory info
+>>       memory: tegra20-emc: Correct memory device mask
+>>
+>> Jason Wang (1):
+>>       memory: brcmstb_dpfe: fix typo in a comment
+>>
+>> Krzysztof Kozlowski (1):
+>>       Merge branch 'for-v5.17/tegra-mc' into mem-ctrl-next
+>>
+>> Li Yang (2):
+>>       dt-bindings: memory: fsl: convert ifc binding to yaml schema
+>>       memory: fsl_ifc: populate child devices without relying on simple-bus
+>>
+>> Rikard Falkeborn (1):
+>>       memory: tegra: Constify struct thermal_cooling_device_ops
+>>
 > 
-> > Modify the Dragonboard device tree to support the most basic hardware on
-> > the HP TouchPad. The headphone UART port and eMMC are supported.
-> > 
+> Arnd, Olof,
 > 
-> We typically don't have one commit for the cloning and then one to
-> update the content, in particular since your diffstat became rather
-> weird.
-> 
-> That said, got some comments below, things that I wouldn't have spotted
-> if you sent this as just a new file.
+> I think this one was not pulled by you. Any chances of sending this to
+> Linus past 5.17-rc1? If not, could you pull it as v5.18 material?
 
-Ok, I'll squash those for v2.
+I'll send all this as v5.18 material, so this pull-req can be skipped.
 
-> > -			dragon_sdcc1_pins: sdcc1 {
-> > +			/* eMMC pins, all 8 data lines connected */
-> > +			emmc_pins: sdcc1 {
-> >  				mux {
-> >  					pins = "gpio159", "gpio160", "gpio161",
-> >  					     "gpio162", "gpio163", "gpio164",
-> >  					     "gpio165", "gpio166", "gpio167",
-> >  					     "gpio168";
-> > -					     function = "sdc1";
-> > +					function = "sdc1";
-> >  				};
-> >  				clk {
-> >  					pins = "gpio167"; /* SDC1 CLK */
-> [..]
-> > @@ -171,205 +77,33 @@ pinconf {
-> >  				};
-> >  			};
-> >  
-> > -			dragon_gsbi12_i2c_pins: gsbi12_i2c {
-> > -				mux {
-> > -					pins = "gpio115", "gpio116";
-> > -					function = "gsbi12";
-> > -				};
-> > -				pinconf {
-> > -					pins = "gpio115", "gpio116";
-> > -					drive-strength = <16>;
-> > -					/* These have external pull-up 4.7kOhm to 1.8V */
-> > -					bias-disable;
-> > -				};
-> > -			};
-> > -
-> > -			/* Primary serial port uart 0 pins */
-> > -			dragon_gsbi12_serial_pins: gsbi12_serial {
-> > +			/* Headphone UART pins */
-> > +			headphone_uart_pins: gsbi12_serial {
-> >  				mux {
-> >  					pins = "gpio117", "gpio118";
-> >  					function = "gsbi12";
-> >  				};
-> > -				tx {
-> > -					pins = "gpio117";
-> > -					drive-strength = <8>;
-> > -					bias-disable;
-> > -				};
-> >  				rx {
-> > -					pins = "gpio118";
-> > +					pins = "gpio117";
-> >  					drive-strength = <2>;
-> >  					bias-pull-up;
-> >  				};
-> > -			};
-> 
-> I find it hard to conclude what the resulting snippet is from this
-> chunk, did rx swap place from gpio118 to gpio117?
 
-Yes, I made that swap based on comments in the downstream kernel, but,
-now that I think about it, there's a good chance those comments are
-wrong. The downstream kernel configures both pins as 8 mA drive with no
-bias, so no one would ever notice that they were swapped. I think I'll
-swap them back in v2. In practice I think the pin configuration makes
-little difference, but should I keep the config from the Dragonboard or
-match the downstream kernel?
-
-> [..]
-> > @@ -814,14 +378,16 @@ l20 {
-> >  					bias-pull-down;
-> >  				};
-> >  				l21 {
-> > -					// 1.1 V according to schematic
-> >  					regulator-min-microvolt = <1200000>;
-> >  					regulator-max-microvolt = <1200000>;
-> >  					bias-pull-down;
-> > -					regulator-always-on;
-> > +					/*
-> > +					 * RPM driver can't handle always-on regulators that are
-> > +					 * supplied by regulators initialized after them.
-> > +					 */
-> 
-> That looks like an oversight that should be corrected, perhaps it needs
-> similar attention that was given to the smd-rpm driver recently?
-> 
-> But this makes me wonder, how can this work on the other board? Linus?
-
-It probably doesn't work as intended, but doesn't cause a major
-problem either. I only noticed the failure while looking through dmesg.
-As soon as the RPM driver probe gets to an always on regulator with a not
-yet initialized supply, devm_regulator_register() returns -EAGAIN, it
-breaks out of the loop, and the rest of the regulators don't get
-initialized. The initialization is retried several times during boot
-(because of -EAGAIN), but always fails at the same spot. This doesn't
-actually seem to cause any visible problem, other than errors in dmesg.
-
-I tried making the driver continue to initialize the rest of the
-regulators even if one fails with -EAGAIN, but still return -EAGAIN from
-probe(). My thought was that this would cause probe to be retried later,
-and initialization would succeed now that the supply regulators were
-available, but instead it seems to hang before any console output.
-
-I don't know if the regulator supplies are correct either, because the
-downstream kernel doesn't specify them. I also know next to nothing about
-the RPM, so I would definitely appreciate a review from someone familiar
-with it.
-
-> > +					// regulator-always-on;
-> >  				};
-> >  				l22 {
-> > -					// 1.2 V according to schematic
-> >  					regulator-min-microvolt = <1150000>;
-> >  					regulator-max-microvolt = <1150000>;
-> >  					bias-pull-down;
-> > @@ -845,7 +411,7 @@ l25 {
-> >  				};
-> >  
-> >  				s0 {
-> > -					// regulator-min-microvolt = <500000>;
-> > +					// regulator-min-microvolt = <800000>;
-> >  					// regulator-max-microvolt = <1325000>;
-> 
-> This looks like the full range the regulator could do, do you see a
-> reason for documenting that here? Unless there's a good reason I think
-> you should leave the commented min/max out.
-
-That was just copied from the Dragonboard DTS, with updated values from
-the downstream kernel. I assume some kind of voltage/frequency scaling
-driver is needed to actually support a range of voltages here, so I
-guess the comments could serve as a reference if that was ever
-implemented.
-
+Best regards,
+Krzysztof
