@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45EA1C433EF
-	for <soc@archiver.kernel.org>; Fri, 28 Jan 2022 09:49:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5BDCC433F5
+	for <soc@archiver.kernel.org>; Fri, 28 Jan 2022 11:58:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0E563C340E6; Fri, 28 Jan 2022 09:49:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB302C340E0;
-	Fri, 28 Jan 2022 09:49:21 +0000 (UTC)
+	id 8C99CC36AE2; Fri, 28 Jan 2022 11:58:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5004EC340E0;
+	Fri, 28 Jan 2022 11:58:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643363367;
-	bh=o4qvm7nfAgLDVE9vrxU5dnZstesCl5xbQiXps2m1WY4=;
+	s=k20201202; t=1643371134;
+	bh=5YeLhNvIvcw3SHS3CQLUEuHnE3HeUiIEy88F0hHWHDc=;
 	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=UvVfy0wUmmbQUviXcvp1PJid9WwgRgn3r0eQ9DUpdkWfq8NcuyvKN+f8VeipBxIP1
-	 qjp1RmfWtZXKRpzcBlwpUekgSdBhE56AsPC6uoDbL31s4LBoVlHt75BCphgZkPfnM6
-	 OTugOM3iWS8Lkikr4GpDo/BvQl+YdcnzOgotBE2Tnb3pT7sKKdx6BLTcwzMdg8WBDj
-	 8lsGTSkCDjemL0MV26qKO4nJViOIPxDvxxQa1l2vElCTwk0jHmyKa/mwOZXwt5hWOd
-	 RH618aK0TirhVxVtrHSPbxxOhvhZ7usl1DMg/jfT57wrg9jwwFOAE2biMF0HlptACO
-	 Yz1GcHFWN5Crg==
-Date: Fri, 28 Jan 2022 17:49:18 +0800
+	b=LYqCWYFejSgIuRC0yHjxV+oTcZs34CJFQ3llWFZSttinuVL8+iX9j69cTJpP0ZhCs
+	 lXxtB7SC4m7ney2S9OKIVPLsnvDuYnQGS4dlF9sVdi2fFewNrFWol5/9k1XBXNSus9
+	 gIYB59yvjKPdxP4k87ILVcKsn90LGKoFQ09TsfCBj1hpy3/cE5kaAkva2168r4MO9V
+	 kbfMBFvMPwqXL9IxbyTW3xvkzdBJ7P2rZlIZFhOeEBR19u2G/TDsQ2GKFkCOvDZaPS
+	 Jt8Sggmjf8eqipyM7pQMHUaRffIBzUmSCCi/7TmADRZ8TbphOaJZgbMCzhfUsu3LWa
+	 UlQjt6Whg2vXw==
+Date: Fri, 28 Jan 2022 19:58:44 +0800
 From: Shawn Guo <shawnguo@kernel.org>
 To: Jesse Taube <mr.bossman075@gmail.com>
 List-Id: <soc.lore.kernel.org>
@@ -36,25 +36,340 @@ Cc: linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
 	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
 	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v8 2/7] ARM: dts: imxrt1050-pinfunc: Add pinctrl binding
- header
-Message-ID: <20220128094910.GJ4686@dragon>
+Subject: Re: [PATCH v8 6/7] ARM: dts: imx: Add i.MXRT1050-EVK support
+Message-ID: <20220128115844.GK4686@dragon>
 References: <20220111212606.2072669-1-Mr.Bossman075@gmail.com>
  <20220111215415.2075257-1-Mr.Bossman075@gmail.com>
- <20220111215415.2075257-3-Mr.Bossman075@gmail.com>
+ <20220111215415.2075257-7-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220111215415.2075257-3-Mr.Bossman075@gmail.com>
+In-Reply-To: <20220111215415.2075257-7-Mr.Bossman075@gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 
-On Tue, Jan 11, 2022 at 04:54:10PM -0500, Jesse Taube wrote:
-> From: Jesse Taube <mr.bossman075@gmail.com>
+On Tue, Jan 11, 2022 at 04:54:14PM -0500, Jesse Taube wrote:
+> From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > 
-> Add binding header for i.MXRT1050 pinctrl device tree.
+> The NXP i.MXRT1050 Evaluation Kit (EVK) provides a platform for rapid
+> evaluation of the i.MXRT, which features NXP's implementation of the Arm
+> Cortex-M7 core.
+> 
+> The EVK provides 32 MB SDRAM, 64 MB Quad SPI flash, Micro SD card socket,
+> USB 2.0 OTG.
+> 
+> This patch aims to support the preliminary booting up features
+> as follows:
+> GPIO
+> LPUART
+> SD/MMC
 > 
 > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> [Jesse: move pinfunc from dt-bindings to dts folder]
+> [Jesse: Add clock-parents, edma, usdhc, anatop, remove old pinctl]
+> ---
+> V1->V2:
+> * dtsi: Add clock parent definitions
+> * dtsi: Change hex values to lowercase
+> * dtsi: Move anatop definition from driver
+> * dts: Remove unused pin controll (semc)
+> * dts: Use moved pin controll header
+> * Move aliases from dtsi to dts
+> * Change commit description
+> * Change licence to "GPL-2.0+ OR MIT"
+> V2->V3:
+> * Remove bootargs, comments, unused container
+> * Remove unnecessary new lines
+> * Rename imxrt to imxrt1050 for seiral and mmc
+> * GPT uses own clock
+> * fix memory@0
+> * Change GPT compatible handles
+> V3->V4:
+> * Remove "fsl,imx-osc"
+> * Add space on serial compatible
+> * Change "iomuxc@" to "pinctrl@"
+> * Change "ccm@" to "clock-controller@"
+> * Change "fsl,imxrt-gpio" to "fsl,imxrt1050-gpio"
+> V4->V5:
+> * Nothing done
+> V5->V6:
+> * Nothing done
+> V6->V7:
+> * Add fixed clock for GPT
+> * Fix lpuart compatible
+> * Add usdhc compatible
+> V7->V8:
+> * Nothing done
+> ---
+>  arch/arm/boot/dts/Makefile          |   2 +
+>  arch/arm/boot/dts/imxrt1050-evk.dts |  72 +++++++++++++
+>  arch/arm/boot/dts/imxrt1050.dtsi    | 160 ++++++++++++++++++++++++++++
+>  3 files changed, 234 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/imxrt1050-evk.dts
+>  create mode 100644 arch/arm/boot/dts/imxrt1050.dtsi
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 0de64f237cd8..07acd6189cae 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -723,6 +723,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
+>  dtb-$(CONFIG_SOC_IMX7ULP) += \
+>  	imx7ulp-com.dtb \
+>  	imx7ulp-evk.dtb
+> +dtb-$(CONFIG_SOC_IMXRT) += \
+> +	imxrt1050-evk.dtb
+>  dtb-$(CONFIG_SOC_LS1021A) += \
+>  	ls1021a-moxa-uc-8410a.dtb \
+>  	ls1021a-qds.dtb \
+> diff --git a/arch/arm/boot/dts/imxrt1050-evk.dts b/arch/arm/boot/dts/imxrt1050-evk.dts
+> new file mode 100644
+> index 000000000000..6a9c10decf52
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imxrt1050-evk.dts
+> @@ -0,0 +1,72 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (C) 2019
+> + * Author(s): Giulio Benetti <giulio.benetti@benettiengineering.com>
+> + */
+> +
+> +/dts-v1/;
+> +#include "imxrt1050.dtsi"
+> +#include "imxrt1050-pinfunc.h"
+> +
+> +/ {
+> +	model = "NXP IMXRT1050-evk board";
+> +	compatible = "fsl,imxrt1050-evk", "fsl,imxrt1050";
+> +
+> +	chosen {
+> +		stdout-path = &lpuart1;
+> +	};
+> +
+> +	aliases {
+> +		gpio0 = &gpio1;
+> +		gpio1 = &gpio2;
+> +		gpio2 = &gpio3;
+> +		gpio3 = &gpio4;
+> +		gpio4 = &gpio5;
+> +		mmc0 = &usdhc1;
+> +		serial0 = &lpuart1;
+> +	};
+> +
+> +	memory@80000000 {
+> +		device_type = "memory";
+> +		reg = <0x80000000 0x2000000>;
+> +	};
+> +};
+> +
+> +&lpuart1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_lpuart1>;
+> +	status = "okay";
+> +};
+> +
+> +&iomuxc {
+> +	pinctrl-names = "default";
+> +	pinctrl_lpuart1: lpuart1grp {
+> +		fsl,pins = <
+> +			MXRT1050_IOMUXC_GPIO_AD_B0_12_LPUART1_TXD	0xf1
+> +			MXRT1050_IOMUXC_GPIO_AD_B0_13_LPUART1_RXD	0xf1
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc0: usdhc0grp {
+> +		fsl,pins = <
+> +			MXRT1050_IOMUXC_GPIO_B1_12_USDHC1_CD_B		0x1B000
+> +			MXRT1050_IOMUXC_GPIO_B1_14_USDHC1_VSELECT	0xB069
+> +			MXRT1050_IOMUXC_GPIO_SD_B0_00_USDHC1_CMD	0x17061
+> +			MXRT1050_IOMUXC_GPIO_SD_B0_01_USDHC1_CLK	0x17061
+> +			MXRT1050_IOMUXC_GPIO_SD_B0_05_USDHC1_DATA3	0x17061
+> +			MXRT1050_IOMUXC_GPIO_SD_B0_04_USDHC1_DATA2	0x17061
+> +			MXRT1050_IOMUXC_GPIO_SD_B0_03_USDHC1_DATA1	0x17061
+> +			MXRT1050_IOMUXC_GPIO_SD_B0_02_USDHC1_DATA0	0x17061
+> +		>;
+> +	};
+> +};
+> +
+> +&usdhc1 {
+> +	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
+> +	pinctrl-0 = <&pinctrl_usdhc0>;
+> +	pinctrl-1 = <&pinctrl_usdhc0>;
+> +	pinctrl-2 = <&pinctrl_usdhc0>;
+> +	pinctrl-3 = <&pinctrl_usdhc0>;
+> +	cd-gpios = <&gpio2 28 GPIO_ACTIVE_LOW>;
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm/boot/dts/imxrt1050.dtsi b/arch/arm/boot/dts/imxrt1050.dtsi
+> new file mode 100644
+> index 000000000000..77b911b06041
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imxrt1050.dtsi
+> @@ -0,0 +1,160 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (C) 2019
+> + * Author(s): Giulio Benetti <giulio.benetti@benettiengineering.com>
+> + */
+> +
+> +#include "armv7-m.dtsi"
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/clock/imxrt1050-clock.h>
 
-Applied, thanks!
+As this introduces a cross tree dependency (between clk and imx), we may
+need to wait for clock change land first.
+
+Shawn
+
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +/ {
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +
+> +	clocks {
+> +		osc: osc {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <24000000>;
+> +		};
+> +
+> +		osc3M: osc3M {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <3000000>;
+> +		};
+> +	};
+> +
+> +	soc {
+> +		lpuart1: serial@40184000 {
+> +			compatible = "fsl,imxrt1050-lpuart", "fsl,imx7ulp-lpuart";
+> +			reg = <0x40184000 0x4000>;
+> +			interrupts = <20>;
+> +			clocks = <&clks IMXRT1050_CLK_LPUART1>;
+> +			clock-names = "ipg";
+> +			status = "disabled";
+> +		};
+> +
+> +		iomuxc: pinctrl@401f8000 {
+> +			compatible = "fsl,imxrt1050-iomuxc";
+> +			reg = <0x401f8000 0x4000>;
+> +			fsl,mux_mask = <0x7>;
+> +		};
+> +
+> +		anatop: anatop@400d8000 {
+> +			compatible = "fsl,imxrt-anatop";
+> +			reg = <0x400d8000 0x4000>;
+> +		};
+> +
+> +		clks: clock-controller@400fc000 {
+> +			compatible = "fsl,imxrt1050-ccm";
+> +			reg = <0x400fc000 0x4000>;
+> +			interrupts = <95>, <96>;
+> +			clocks = <&osc>;
+> +			clock-names = "osc";
+> +			#clock-cells = <1>;
+> +			assigned-clocks = <&clks IMXRT1050_CLK_PLL1_BYPASS>,
+> +				<&clks IMXRT1050_CLK_PLL1_BYPASS>,
+> +				<&clks IMXRT1050_CLK_PLL2_BYPASS>,
+> +				<&clks IMXRT1050_CLK_PLL3_BYPASS>,
+> +				<&clks IMXRT1050_CLK_PLL3_PFD1_664_62M>,
+> +				<&clks IMXRT1050_CLK_PLL2_PFD2_396M>;
+> +			assigned-clock-parents = <&clks IMXRT1050_CLK_PLL1_REF_SEL>,
+> +				<&clks IMXRT1050_CLK_PLL1_ARM>,
+> +				<&clks IMXRT1050_CLK_PLL2_SYS>,
+> +				<&clks IMXRT1050_CLK_PLL3_USB_OTG>,
+> +				<&clks IMXRT1050_CLK_PLL3_USB_OTG>,
+> +				<&clks IMXRT1050_CLK_PLL2_SYS>;
+> +		};
+> +
+> +		edma1: dma-controller@400e8000 {
+> +			#dma-cells = <2>;
+> +			compatible = "fsl,imx7ulp-edma";
+> +			reg = <0x400e8000 0x4000>,
+> +				<0x400ec000 0x4000>;
+> +			dma-channels = <32>;
+> +			interrupts = <0>, <1>, <2>, <3>, <4>, <5>, <6>, <7>, <8>,
+> +				<9>, <10>, <11>, <12>, <13>, <14>, <15>, <16>;
+> +			clock-names = "dma", "dmamux0";
+> +			clocks = <&clks IMXRT1050_CLK_DMA>,
+> +				 <&clks IMXRT1050_CLK_DMA_MUX>;
+> +		};
+> +
+> +		usdhc1: mmc@402c0000 {
+> +			compatible ="fsl,imxrt1050-usdhc", "fsl,imx6sl-usdhc";
+> +			reg = <0x402c0000 0x4000>;
+> +			interrupts = <110>;
+> +			clocks = <&clks IMXRT1050_CLK_IPG_PDOF>,
+> +				<&clks IMXRT1050_CLK_OSC>,
+> +				<&clks IMXRT1050_CLK_USDHC1>;
+> +			clock-names = "ipg", "ahb", "per";
+> +			bus-width = <4>;
+> +			fsl,wp-controller;
+> +			no-1-8-v;
+> +			max-frequency = <4000000>;
+> +			fsl,tuning-start-tap = <20>;
+> +			fsl,tuning-step= <2>;
+> +			status = "disabled";
+> +		};
+> +
+> +		gpio1: gpio@401b8000 {
+> +			compatible = "fsl,imxrt1050-gpio", "fsl,imx35-gpio";
+> +			reg = <0x401b8000 0x4000>;
+> +			interrupts = <80>, <81>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +		};
+> +
+> +		gpio2: gpio@401bc000 {
+> +			compatible = "fsl,imxrt1050-gpio", "fsl,imx35-gpio";
+> +			reg = <0x401bc000 0x4000>;
+> +			interrupts = <82>, <83>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +		};
+> +
+> +		gpio3: gpio@401c0000 {
+> +			compatible = "fsl,imxrt1050-gpio", "fsl,imx35-gpio";
+> +			reg = <0x401c0000 0x4000>;
+> +			interrupts = <84>, <85>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +		};
+> +
+> +		gpio4: gpio@401c4000 {
+> +			compatible = "fsl,imxrt1050-gpio", "fsl,imx35-gpio";
+> +			reg = <0x401c4000 0x4000>;
+> +			interrupts = <86>, <87>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +		};
+> +
+> +		gpio5: gpio@400c0000 {
+> +			compatible = "fsl,imxrt1050-gpio", "fsl,imx35-gpio";
+> +			reg = <0x400c0000 0x4000>;
+> +			interrupts = <88>, <89>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +		};
+> +
+> +		gpt: timer@401ec000 {
+> +			compatible = "fsl,imxrt1050-gpt", "fsl,imx6dl-gpt", "fsl,imx6sl-gpt";
+> +			reg = <0x401ec000 0x4000>;
+> +			interrupts = <100>;
+> +			clocks = <&osc3M>;
+> +			clock-names = "per";
+> +		};
+> +	};
+> +};
+> -- 
+> 2.34.1
+> 
