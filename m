@@ -1,38 +1,101 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=KPAp=SN=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F2DBC433F5
-	for <soc@archiver.kernel.org>; Sat, 29 Jan 2022 07:31:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04B2DC433EF
+	for <soc@archiver.kernel.org>; Sat, 29 Jan 2022 11:53:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EC369C340EA; Sat, 29 Jan 2022 07:31:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D74C340E5;
-	Sat, 29 Jan 2022 07:31:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1643441516;
-	bh=J59iH+nY7UbkaBCU5KG1GKFs0EwfRuIjEGgXOw1i00A=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=aS/DZDnYClz5FZD67KfRW1Ox/7gWNXwWTzOP92RNas9Yz766ydOEq+whl505jSZ9Z
-	 r4cLIWJhV1tfzbt6+I9KCeXmdqpZ0eJquB+l7MS7bpfwaso1yetKIQMfN7agrwnOYK
-	 KFIsoELRLFxka1oyvwBU1PGUywX31JKfX6ctUKZsKCWA/RFfimX0AFwb7xSio+fVkp
-	 meVbDulKf/lY8gpTHujW7VwJcN1D8uZU5W+0dRO7+Am6POJ0jvvaSTeyMMEtC/ecgI
-	 xKIxDekC6o0YKeXgOMc0gtzJwIiNA8Z3FcF7QbHnIqEGIoB/pwVE78VubBKge13jkn
-	 7VrkDs1LI3/sQ==
-Date: Sat, 29 Jan 2022 15:31:50 +0800
-From: Shawn Guo <shawnguo@kernel.org>
+	id C776EC340EB; Sat, 29 Jan 2022 11:53:59 +0000 (UTC)
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 976C7C340E8
+	for <soc@kernel.org>; Sat, 29 Jan 2022 11:53:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 976C7C340E8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0F9D33F1D9
+	for <soc@kernel.org>; Sat, 29 Jan 2022 11:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1643457237;
+	bh=f9YarTgrIqis8mFMQrsRDvw79rXZocKvl5NeRJU919w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=P/00EFsq16GZW0NOPIue8nLOJLTEeTxcky/mxuopZXghw9Q4AxRkfPwvjVSRKgRSq
+	 rZeoWWy7/8cDLSiJN1nLoeDEjdMO60S6t6KZEAb1DT4BLW/mgqPtG/9xZ6JB3mn8LQ
+	 fUZSTOcInb1wNip/Mb5Q6B948aPNvDtET+C9EcVsxlg+fgyoq3uEcVT5W7XlP4h8TG
+	 kDNOiEjl80mf4iKbwhxT4Xu+d63lKT+s6TwZtkKPQ7SoBuLWHqb1A2fdAKa8D3NEfZ
+	 YMHy9SPtnowBXA58WwETj7HIsAj2w/uFuMJb053DIUkBcYl0XGuFZpty2r/DVUOBnq
+	 g48rzyrenQmUg==
+Received: by mail-ej1-f69.google.com with SMTP id gb4-20020a170907960400b0069d1ebc4538so3715248ejc.2
+        for <soc@kernel.org>; Sat, 29 Jan 2022 03:53:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f9YarTgrIqis8mFMQrsRDvw79rXZocKvl5NeRJU919w=;
+        b=jlBYRYs+QoqD1EXuEVPXy6N4fhcVf1mWqNmmZEK02OjmPH00wRl/rpWjc6pF4gnXDg
+         dvvJyLSk2F+6CC8SR+AOZab6Xu4WuQrBBg64cqQOWb144+onuhxVMXaYtoyXDAMJP1k4
+         9QZxJ+NYnbsToP5bpbvPZznnOhvOm2lvzlxACffmy7oBT/moRL/VBRBwHLwtTwXuEfAh
+         UUW6y6CewMW8Sk3Bp2yJZj988MKhihHFIye5rAOAEsNwCt9/TXF1+3ifmqLSyTRgjrxQ
+         Ucf8d2HWn8mNz+T2j6K6RrQlb5uknztDyb8k/m7hiS9omV1Qt8kjkZSjgC+9xXFd3HEs
+         IfWA==
+X-Gm-Message-State: AOAM533eX+PmhZiecWqM6WE+56tg5or3HgMEs6AgZ2wSoxa3ZLE06Jc/
+	K9Kwd4sSiNdLIsQlXgxTS+GNteE8JBmfh1AKTo1GniUCobw4FDSmBGKwzbGI3EgnqTirZxOcwMy
+	QOo8Hqp1OJZKTugp3BfoxSos=
+X-Received: by 2002:a05:6402:1c94:: with SMTP id cy20mr12634659edb.150.1643457235368;
+        Sat, 29 Jan 2022 03:53:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxSkcHy2NlSdt2LYxLa/mdgfFxmbPLxCQiTUeVxH3opeeELyEbC7aTr1zrjwluLEcAImc0w/A==
+X-Received: by 2002:a05:6402:1c94:: with SMTP id cy20mr12634634edb.150.1643457235049;
+        Sat, 29 Jan 2022 03:53:55 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id qb30sm10985655ejc.27.2022.01.29.03.53.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Jan 2022 03:53:54 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
-	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
-	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 5.17
-Message-ID: <20220129073150.GZ4686@dragon>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [GIT PULL] ARM: dts/drivers: samsung pinctrl for v5.18
+Date: Sat, 29 Jan 2022 12:53:52 +0100
+Message-Id: <20220129115352.13274-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+
+Hi Arnd and Olof,
+
+There is quite a lot of changes in Samsung these days, so I am sending this one
+very early. It's also a controversial one because it combines pinctrl
+driver+dts into one. I mentioned it before in [1].
+
+The pinctrl driver changes have to go before DTS. The DTS has to go with
+dtschema, so the dtschema checks won't complain with warnings.
+
+The pinctrl driver changes are coming from my Samsung pinctrl repository and I
+will send them later also to Linus Walleij.
+
+Linus,
+I will send the pinctrl driver bits in separate pull to you.
+
+[1] https://lore.kernel.org/all/CAOesGMg2eH1B94h+etPBDW3B1LMeHBytz0v2e0GfVRDv8gU0YA@mail.gmail.com/
+
+Best regards,
+Krzysztof
+
 
 The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
@@ -40,56 +103,131 @@ The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.17
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-pinctrl-5.18
 
-for you to fetch changes up to 91f6d5f181f6629dd74ab71759fe92d3f4eff966:
+for you to fetch changes up to 41bd4354a1513afa4a9dd9940d8cd790fbd00e68:
 
-  arm64: dts: imx8mq: fix lcdif port node (2022-01-29 14:39:05 +0800)
-
-----------------------------------------------------------------
-i.MX fixes for 5.17:
-
-- Fix sound card model for MBa8Mx board.
-- Drop i.MX8MQ LCDIF port node unit-address to fix DTC warning.
-- Add missing SD card detect line for imx6qdl-udoo board.
-- Remove MX23_PAD_SSP1_DETECT from imx23-evk hog group. It fixes the
-  broken SD ard support on the board.
-- A couple of fixes from Martin Kepplinger to fix the MIPI_CSI port
-  number on i.MX8MQ.
-- Re-enable ftm_alarm0 device on ls1028a-kontron-sl28 board which was
-  disabled accidentally.
-- Fix 'assigned-clocks-parents' typo in i.MX7ULP watchdog device node.
-- Disable GPU device on imx8mn-venice-gw7902 board, as it uses
-  MIMX8MN5CVTI SoC which does not integrate a GPU.
+  arm64: dts: exynos: use dedicated wake-up pinctrl compatible in ExynosAutov9 (2022-01-23 17:54:59 +0100)
 
 ----------------------------------------------------------------
-Alexander Stein (2):
-      arm64: dts: freescale: Fix sound card model for MBa8Mx
-      arm64: dts: imx8mq: fix lcdif port node
+Samsung pinctrl DTS and driver changes for v5.18
 
-Fabio Estevam (2):
-      ARM: dts: imx6qdl-udoo: Properly describe the SD card detect
-      ARM: dts: imx23-evk: Remove MX23_PAD_SSP1_DETECT from hog group
+Conversion of Samsung pinctrl bindings to dtschema followed up with
+alignment of DTS files to the dtschema.
 
-Martin Kepplinger (2):
-      arm64: dts: imx8mq: fix mipi_csi bidirectional port numbers
-      arm64: dts: imx8mq-librem5: fix mipi_csi1 port number to sensor
+The entire work consists of three parts but everything should be merged
+at once to avoid dtschema check errors:
+1. Samsung pinctrl driver change necessary to accept new DTS (driver
+   depends on node names and this has to be adjusted because of dtschema).
+2. Conversion to dtschema which brings requirement of different naming
+   of the GPIO nodes.
+3. DTS commits depending on driver (1) above, which convert all GPIO pin
+   bank names to new naming, required by dtschema.
+   This also includes few cleanups around DTS which are here to avoid
+   any merge conflicts.
 
-Michael Walle (1):
-      arm64: dts: ls1028a: sl28: re-enable ftm_alarm0
+The Samsung pinctrl driver changes are backwards compatible.  However
+the DTS changes (renaming nodes) could cause problems in out-of-tree or
+other project implementations of the driver.
 
-Rob Herring (1):
-      ARM: dts: imx7ulp: Fix 'assigned-clocks-parents' typo
+----------------------------------------------------------------
+Krzysztof Kozlowski (28):
+      pinctrl: samsung: drop pin banks references on error paths
+      pinctrl: samsung: accept GPIO bank nodes with a suffix
+      dt-bindings: pinctrl: samsung: convert to dtschema
+      dt-bindings: pinctrl: samsung: describe Exynos850 and ExynosAutov9 wake-ups
+      pinctrl: samsung: add support for Exynos850 and ExynosAutov9 wake-ups
+      Merge tag 'samsung-pinctrl-5.18' of https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/samsung into for-v5.18/dt-pinctrl
+      ARM: dts: exynos: fix UART3 pins configuration in Exynos5250
+      ARM: dts: exynos: drop unused pinctrl defines in Exynos3250
+      ARM: dts: exynos: simplify PMIC DVS pin configuration in Odroid XU
+      ARM: dts: exynos: override pins by label in Peach Pit
+      ARM: dts: exynos: simplify PMIC DVS pin configuration in Peach Pit
+      ARM: dts: exynos: override pins by label in Peach Pi
+      ARM: dts: exynos: simplify PMIC DVS pin configuration in Peach Pi
+      ARM: dts: s3c64xx: drop unneeded pinctrl wake-up interrupt mapping
+      ARM: dts: exynos: align pinctrl with dtschema in Exynos3250
+      ARM: dts: exynos: align pinctrl with dtschema in Exynos4210
+      ARM: dts: exynos: align pinctrl with dtschema in Exynos4412
+      ARM: dts: exynos: align pinctrl with dtschema in Exynos5250
+      ARM: dts: exynos: align pinctrl with dtschema in Exynos5260
+      ARM: dts: exynos: align pinctrl with dtschema in Exynos5410
+      ARM: dts: exynos: align pinctrl with dtschema in Exynos542x/5800
+      arm64: dts: exynos: align pinctrl with dtschema in Exynos5433
+      arm64: dts: exynos: align pinctrl with dtschema in Exynos7
+      arm64: dts: exynos: align pinctrl with dtschema in ExynosAutov9
+      ARM: dts: s3c24xx: align pinctrl with dtschema
+      ARM: dts: s3c64xx: align pinctrl with dtschema
+      ARM: dts: s5pv210: align pinctrl with dtschema
+      arm64: dts: exynos: use dedicated wake-up pinctrl compatible in ExynosAutov9
 
-Tim Harvey (1):
-      arm64: dts: imx8mn-venice-gw7902: disable gpu
+Sam Protsenko (1):
+      pinctrl: samsung: Remove EINT handler for Exynos850 ALIVE and CMGP gpios
 
- arch/arm/boot/dts/imx23-evk.dts                            |  1 -
- arch/arm/boot/dts/imx6qdl-udoo.dtsi                        |  5 ++++-
- arch/arm/boot/dts/imx7ulp.dtsi                             |  2 +-
- arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts |  4 ++++
- arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts     | 12 ++++++++++++
- arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi          |  4 ++--
- arch/arm64/boot/dts/freescale/imx8mq.dtsi                  | 10 +++++-----
- arch/arm64/boot/dts/freescale/mba8mx.dtsi                  |  2 +-
- 8 files changed, 29 insertions(+), 11 deletions(-)
+ .../pinctrl/samsung,pinctrl-gpio-bank.yaml         |  52 +++
+ .../bindings/pinctrl/samsung,pinctrl-pins-cfg.yaml |  81 +++++
+ .../pinctrl/samsung,pinctrl-wakeup-interrupt.yaml  | 106 ++++++
+ .../bindings/pinctrl/samsung,pinctrl.yaml          | 392 +++++++++++++++++++++
+ .../bindings/pinctrl/samsung-pinctrl.txt           | 383 --------------------
+ MAINTAINERS                                        |   2 +-
+ arch/arm/boot/dts/exynos3250-artik5.dtsi           |  10 +-
+ arch/arm/boot/dts/exynos3250-pinctrl.dtsi          | 165 ++++-----
+ arch/arm/boot/dts/exynos4210-i9100.dts             |  30 +-
+ arch/arm/boot/dts/exynos4210-origen.dts            |   2 +-
+ arch/arm/boot/dts/exynos4210-pinctrl.dtsi          | 226 ++++++------
+ arch/arm/boot/dts/exynos4210-smdkv310.dts          |   4 +-
+ arch/arm/boot/dts/exynos4210-trats.dts             |   6 +-
+ arch/arm/boot/dts/exynos4210-universal_c210.dts    |  12 +-
+ arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi        |   4 +-
+ arch/arm/boot/dts/exynos4412-itop-elite.dts        |   2 +-
+ arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi    |   2 +-
+ arch/arm/boot/dts/exynos4412-midas.dtsi            |  30 +-
+ arch/arm/boot/dts/exynos4412-odroid-common.dtsi    |   8 +-
+ arch/arm/boot/dts/exynos4412-odroidx.dts           |   2 +-
+ arch/arm/boot/dts/exynos4412-origen.dts            |   4 +-
+ arch/arm/boot/dts/exynos4412-p4note.dtsi           |  44 +--
+ arch/arm/boot/dts/exynos4412-pinctrl.dtsi          | 252 ++++++-------
+ arch/arm/boot/dts/exynos4412-smdk4412.dts          |   4 +-
+ arch/arm/boot/dts/exynos5250-arndale.dts           |   2 +-
+ arch/arm/boot/dts/exynos5250-pinctrl.dtsi          | 222 ++++++------
+ arch/arm/boot/dts/exynos5250-smdk5250.dts          |   2 +-
+ arch/arm/boot/dts/exynos5250-snow-common.dtsi      |  22 +-
+ arch/arm/boot/dts/exynos5250-snow-rev5.dts         |   2 +-
+ arch/arm/boot/dts/exynos5250-snow.dts              |   2 +-
+ arch/arm/boot/dts/exynos5250-spring.dts            |  20 +-
+ arch/arm/boot/dts/exynos5260-pinctrl.dtsi          | 148 ++++----
+ arch/arm/boot/dts/exynos5260-xyref5260.dts         |   2 +-
+ arch/arm/boot/dts/exynos5410-odroidxu.dts          |  22 +-
+ arch/arm/boot/dts/exynos5410-pinctrl.dtsi          | 170 ++++-----
+ arch/arm/boot/dts/exynos5410-smdk5410.dts          |   4 +-
+ arch/arm/boot/dts/exynos5420-arndale-octa.dts      |   2 +-
+ arch/arm/boot/dts/exynos5420-peach-pit.dts         |  89 +++--
+ arch/arm/boot/dts/exynos5420-pinctrl.dtsi          | 194 +++++-----
+ arch/arm/boot/dts/exynos5420-smdk5420.dts          |   6 +-
+ arch/arm/boot/dts/exynos5422-odroid-core.dtsi      |   2 +-
+ arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi |   6 +-
+ arch/arm/boot/dts/exynos5800-peach-pi.dts          |  89 +++--
+ arch/arm/boot/dts/s3c2416-pinctrl.dtsi             |  60 ++--
+ arch/arm/boot/dts/s3c6410-mini6410.dts             |   4 +-
+ arch/arm/boot/dts/s3c64xx-pinctrl.dtsi             | 210 +++++------
+ arch/arm/boot/dts/s3c64xx.dtsi                     |  16 +-
+ arch/arm/boot/dts/s5pv210-aquila.dts               |   2 +-
+ arch/arm/boot/dts/s5pv210-aries.dtsi               |  40 +--
+ arch/arm/boot/dts/s5pv210-fascinate4g.dts          |  12 +-
+ arch/arm/boot/dts/s5pv210-galaxys.dts              |  16 +-
+ arch/arm/boot/dts/s5pv210-pinctrl.dtsi             | 226 ++++++------
+ arch/arm64/boot/dts/exynos/exynos5433-pinctrl.dtsi | 211 +++++------
+ .../boot/dts/exynos/exynos5433-tm2-common.dtsi     | 259 +++++++-------
+ arch/arm64/boot/dts/exynos/exynos7-espresso.dts    |   6 +-
+ arch/arm64/boot/dts/exynos/exynos7-pinctrl.dtsi    | 176 ++++-----
+ .../boot/dts/exynos/exynosautov9-pinctrl.dtsi      |  50 +--
+ arch/arm64/boot/dts/exynos/exynosautov9.dtsi       |   2 +-
+ drivers/pinctrl/samsung/pinctrl-exynos-arm64.c     |   2 -
+ drivers/pinctrl/samsung/pinctrl-exynos.c           |   4 +
+ drivers/pinctrl/samsung/pinctrl-samsung.c          |  87 ++++-
+ 61 files changed, 2234 insertions(+), 1978 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-gpio-bank.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-pins-cfg.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt
