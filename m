@@ -4,16 +4,16 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9609C3526F
-	for <soc@archiver.kernel.org>; Sun, 30 Jan 2022 14:51:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4910CC41535
+	for <soc@archiver.kernel.org>; Sun, 30 Jan 2022 14:51:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AD42FC340F0; Sun, 30 Jan 2022 14:51:39 +0000 (UTC)
+	id F1F5BC340E8; Sun, 30 Jan 2022 14:51:37 +0000 (UTC)
 Received: from nbd.name (nbd.name [46.4.11.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0A6B3C340EB
-	for <soc@kernel.org>; Sun, 30 Jan 2022 14:51:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0A6B3C340EB
+	by smtp.kernel.org (Postfix) with ESMTPS id 7C489C340F5;
+	Sun, 30 Jan 2022 14:51:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C489C340F5
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nbd.name
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=nbd.name
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
@@ -22,53 +22,60 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=3Vumq25WNP3Df0zlSA9vs0wGYkSiJD1gefdGJvPtB7I=; b=br3frG6Mce++quRfNbb4TTsSn1
-	UOm2Ob/3U53NV36dMUOCBwE4Ux3LvWjVKIVC7xwfTd40wXy3IWjDt6KKyQ7uTR2l8aWfm24wFAuNc
-	KemFDUqswL8rXMpzoFPK/nKTGyltFagwccpCH0z73APiyj+MDB/USjG8a3/yCbG1IQpk=;
+	bh=FiNUXtP+nUVb4JQHij/1yrBKsZja9IqLtczu+wuoOSI=; b=o+G7w0wH7o4EoOkS4552eOzW/m
+	qMdSZApz15A7FKY+UcYnXt6jVsHgVduMXqlQa11A47QopbHAB7cI6whGO4dl+ZMvuBV1eCgYtVxDK
+	eVbkFexPi9Ol3z8SZv78tcBIViP4ZsOv3SXD7U3wTFPaTuujiyKmYa0Rg55CWbFUOgiY=;
 Received: from p200300daa716f900d40f7dfd86c385e0.dip0.t-ipconnect.de ([2003:da:a716:f900:d40f:7dfd:86c3:85e0] helo=Maecks.lan)
 	by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
 	(Exim 4.89)
 	(envelope-from <nbd@nbd.name>)
-	id 1nEBY7-0002if-J6; Sun, 30 Jan 2022 15:51:27 +0100
+	id 1nEBYB-0002if-7M; Sun, 30 Jan 2022 15:51:31 +0100
 From: Felix Fietkau <nbd@nbd.name>
-To: Russell King <linux@armlinux.org.uk>
+To: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org,
 	linux-mediatek@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org,
 	john@phrozen.org,
+	linux-pci@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v9 04/13] ARM: multi_v7_defconfig: Add support for Airoha EN7523 SoC
-Date: Sun, 30 Jan 2022 15:51:07 +0100
-Message-Id: <20220130145116.88406-5-nbd@nbd.name>
+Subject: [PATCH v9 09/13] PCI: mediatek: Allow building for ARCH_AIROHA
+Date: Sun, 30 Jan 2022 15:51:12 +0100
+Message-Id: <20220130145116.88406-10-nbd@nbd.name>
 X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 In-Reply-To: <20220130145116.88406-1-nbd@nbd.name>
 References: <20220130145116.88406-1-nbd@nbd.name>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: John Crispin <john@phrozen.org>
+Allow selecting the pcie-mediatek driver if ARCH_AIROHA is set, because the
+Airoha EN7523 SoC uses the same controller as MT7622.
+The driver itself is not modified. The PCIe controller DT node should use
+mediatek,mt7622-pcie after airoha,en7523-pcie.
 
-This enables basic bootup support for the Airoha EN7523 SoC.
-
-Signed-off-by: John Crispin <john@phrozen.org>
+Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Felix Fietkau <nbd@nbd.name>
 ---
- arch/arm/configs/multi_v7_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pci/controller/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 1c2c3e9f0e05..3b413635f5bd 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -34,6 +34,7 @@ CONFIG_MACH_BERLIN_BG2=y
- CONFIG_MACH_BERLIN_BG2CD=y
- CONFIG_MACH_BERLIN_BG2Q=y
- CONFIG_ARCH_DIGICOLOR=y
-+CONFIG_ARCH_AIROHA=y
- CONFIG_ARCH_EXYNOS=y
- CONFIG_ARCH_HIGHBANK=y
- CONFIG_ARCH_HISI=y
+diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
+index 7fc5135ffbbf..08b0e50dcc12 100644
+--- a/drivers/pci/controller/Kconfig
++++ b/drivers/pci/controller/Kconfig
+@@ -233,7 +233,7 @@ config PCIE_ROCKCHIP_EP
+ 
+ config PCIE_MEDIATEK
+ 	tristate "MediaTek PCIe controller"
+-	depends on ARCH_MEDIATEK || COMPILE_TEST
++	depends on ARCH_AIROHA || ARCH_MEDIATEK || COMPILE_TEST
+ 	depends on OF
+ 	depends on PCI_MSI_IRQ_DOMAIN
+ 	help
 -- 
 2.32.0 (Apple Git-132)
 
