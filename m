@@ -4,108 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91A93C433F5
-	for <soc@archiver.kernel.org>; Tue,  1 Feb 2022 07:00:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2B2BC433F5
+	for <soc@archiver.kernel.org>; Tue,  1 Feb 2022 07:01:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4A1A0C340ED; Tue,  1 Feb 2022 07:00:41 +0000 (UTC)
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	id CC1F0C340EE; Tue,  1 Feb 2022 07:01:26 +0000 (UTC)
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C4B19C340EB
-	for <soc@kernel.org>; Tue,  1 Feb 2022 07:00:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C4B19C340EB
+	by smtp.kernel.org (Postfix) with ESMTPS id 0B2C6C340EB
+	for <soc@kernel.org>; Tue,  1 Feb 2022 07:01:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0B2C6C340EB
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f47.google.com with SMTP id h20-20020a17090adb9400b001b518bf99ffso1741733pjv.1
-        for <soc@kernel.org>; Mon, 31 Jan 2022 23:00:39 -0800 (PST)
+Received: by mail-pf1-f175.google.com with SMTP id c194so2507329pfb.12
+        for <soc@kernel.org>; Mon, 31 Jan 2022 23:01:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=6OpQVC5EzNowhioJtdiEBKNsTQJbWjnwBy9L3ieqIV8=;
-        b=OBg0XpYSBMdi4VmztgWd4Ctg62uoHyQSAVHTSct74x9D5Idt78ofIEAgwKc4VlkVba
-         A1EoPxw2HVysLldkbFLNbSluHVMl+JXFB5MLNWKcDNeghkkP9xNcuTFKktzL1OG7Gr50
-         VBUfIvTQn49Km6Duc2II6rpcfzO8Uib4z8xcCPuaqHnboUuhhSfoV/iMqfNTXLPgDZz1
-         KJqT1byDmWZcb1SQCMc46yRgko+QL0QuW4mG5YgIADy45wHDAT6QsEi6DqfGD6P5JQzc
-         n217whnx65yFTmMFXNVuquDeMAMI6ehr+pcUx0BD5qCcHd/kBG3yjTviPaHWENgiT1Kf
-         3gag==
+        bh=Y22CiBZZBcAvOw1UvX5uHxbkkByWdVmm47+E91Gl0iw=;
+        b=okUpo1vvlrQ7YI/E1pXM1g1uj5VyAIpiw4BnCJsCJm6N8dkr24zUDCawaMoeOuG6m5
+         OPzPF0vvR6VEDxyWhPmR14N74Qh63sdEEcWb2mS1UOAPi2DyfEkH6IrdjHmB0I2pLQQA
+         FopSRIoUIskHuh5VLUSHWpS1RaAFaNdtVRAg5Ttoj4OdG3xB2I4tJCqUUEtJ9JnTgz/C
+         +mLiP9noG9zjiEBSnUrDUeXTv/vCQZUxEygIP5gyiAW7AQjILl7lmDHGcSVflmNFxkeZ
+         U0SoYT9SsUomzV1EbTLj13TB9slDHIVHky70JhXiAk8pYc0LjCIuljudZsKTqQGlrZBS
+         aGmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:subject:date:message-id
          :mime-version:content-transfer-encoding;
-        bh=6OpQVC5EzNowhioJtdiEBKNsTQJbWjnwBy9L3ieqIV8=;
-        b=pUjm+Q/3GvmMSBy8c9TpB7zAsrqsX+xoTiF6ZjTeJxzailiS8BqTUm//GCy6gYQAMo
-         NatPQ8qNir1nW4vE0Zu1sHYm+FAYSxI6vc89nEZ1yXs/7ZsZ6Pa1+M9Lhw3tkEj6iwF+
-         SS8I0aTz2kromNfyRVY3xuh6VPGdx4WjYKDR6y3GqDGCn16ptyJSeoBu56tnm2EJOfZD
-         Q9rY63ee/5q8zX0kawv8dd7VhsBZd4qlSzOoAnpRXKFdyrdivh7Pu/MyhArM38EndBCi
-         63ejPV8dO3mnikdvid1Q5JjApiUSWmvQZ9LnMzwVFp9rWcxXaJxdOhxGbXxKJlSkRDGf
-         yE9g==
-X-Gm-Message-State: AOAM5312zSN6BFVujrkmSrEy0dC0VtXf5V/zRM4McmTMoDp3YK6hpvYZ
-	XvyVdIpyySsfk9BDQIGNzs+97/HuwGM=
-X-Google-Smtp-Source: ABdhPJxG6DbPUcVWPHRDvSI2RX3EPlc31bMxnVeXwOH2WwYWhGr2VYd75YRT+ClllHVzTydVFESxRg==
-X-Received: by 2002:a17:90a:bb92:: with SMTP id v18mr722121pjr.177.1643698838544;
-        Mon, 31 Jan 2022 23:00:38 -0800 (PST)
+        bh=Y22CiBZZBcAvOw1UvX5uHxbkkByWdVmm47+E91Gl0iw=;
+        b=tlv7yw5ICKVK3tFU5d0ZyoXvvJ0qnW2oOmSTtjLGdOCs5VUvxaQivpg+zXSk0fVPuu
+         JzpfxwZlzO7wb/2M/W54SzJPH4QmLfMG2elTwQBpWhUh0jOQrZN5AQSdmmm6cWxA3CJi
+         584HBDbaH9J+weWaGvcc8u5sjUaB33lqupOWlMzhJvNQDHzlTziR1PNE7JKRvCKnELvG
+         wCgNUaJVXBp7HlWfyP0fMgbDId5MvzNyF59GcYq4jJMHO4p7vAwrVOHw7gwJsvghXhLK
+         ArBK+bedhmFgnZVcI4HEsv6Nka+0L9uJkBHnzViVTn7u+25MqXuY0cL6axkiabcsLCln
+         ug1Q==
+X-Gm-Message-State: AOAM533hNorxeidKSnREAWISzzLHq04GtQDdt05YRfwjx38NES148/yz
+	HePSa80E0avkf/85ByV07nQ6kTX22yc=
+X-Google-Smtp-Source: ABdhPJyllQNRnx1BXG4ES6KuySmPLqc4GZ/4ui6ofJUeWb2YD1xy9OI0cdM1nB0l02AWb1Yrg4okkw==
+X-Received: by 2002:a05:6a00:130a:: with SMTP id j10mr22700575pfu.32.1643698884896;
+        Mon, 31 Jan 2022 23:01:24 -0800 (PST)
 Received: from voyager.lan ([45.124.203.14])
-        by smtp.gmail.com with ESMTPSA id h17sm15141654pfv.198.2022.01.31.23.00.36
+        by smtp.gmail.com with ESMTPSA id il18sm1643363pjb.27.2022.01.31.23.01.22
         for <soc@kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 23:00:37 -0800 (PST)
+        Mon, 31 Jan 2022 23:01:23 -0800 (PST)
 Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
 From: Joel Stanley <joel@jms.id.au>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Subject: [PATCH] docs/ABI: testing: aspeed-uart-routing: Escape asterisk
-Date: Tue,  1 Feb 2022 17:30:27 +1030
-Message-Id: <20220201070027.196314-1-joel@jms.id.au>
+Subject: [PATCH] soc: aspeed: lpc-ctrl: Block error printing on probe defer cases
+Date: Tue,  1 Feb 2022 17:31:18 +1030
+Message-Id: <20220201070118.196372-1-joel@jms.id.au>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 
-Escape asterisk symbols to fix the following warning:
+Add a checking code when it gets -EPROBE_DEFER while getting a clock
+resource. In this case, it doesn't need to print out an error message
+because the probing will be re-visited.
 
-"WARNING: Inline emphasis start-string without end-string"
-
-Fixes: c6807970c3bc ("soc: aspeed: Add UART routing support")
-Signed-off-by: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Link: https://lore.kernel.org/r/20220124014351.9121-1-chiawei_wang@aspeedtech.com
+Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+Reviewed-by: Iwona Winiarska <iwona.winiarska@intel.com>
+Link: https://lore.kernel.org/r/20211104173709.222912-1-jae.hyun.yoo@intel.com
 Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
 Please apply this through the soc tree as a fix.
 
- Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/soc/aspeed/aspeed-lpc-ctrl.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing b/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing
-index b363827da437..910df0e5815a 100644
---- a/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing
-+++ b/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing
-@@ -1,4 +1,4 @@
--What:		/sys/bus/platform/drivers/aspeed-uart-routing/*/uart*
-+What:		/sys/bus/platform/drivers/aspeed-uart-routing/\*/uart\*
- Date:		September 2021
- Contact:	Oskar Senft <osk@google.com>
- 		Chia-Wei Wang <chiawei_wang@aspeedtech.com>
-@@ -9,7 +9,7 @@ Description:	Selects the RX source of the UARTx device.
- 		depends on the selected file.
+diff --git a/drivers/soc/aspeed/aspeed-lpc-ctrl.c b/drivers/soc/aspeed/aspeed-lpc-ctrl.c
+index 72771e018c42..258894ed234b 100644
+--- a/drivers/soc/aspeed/aspeed-lpc-ctrl.c
++++ b/drivers/soc/aspeed/aspeed-lpc-ctrl.c
+@@ -306,10 +306,9 @@ static int aspeed_lpc_ctrl_probe(struct platform_device *pdev)
+ 	}
  
- 		e.g.
--		cat /sys/bus/platform/drivers/aspeed-uart-routing/*.uart_routing/uart1
-+		cat /sys/bus/platform/drivers/aspeed-uart-routing/\*.uart_routing/uart1
- 		[io1] io2 io3 io4 uart2 uart3 uart4 io6
- 
- 		In this case, UART1 gets its input from IO1 (physical serial port 1).
-@@ -17,7 +17,7 @@ Description:	Selects the RX source of the UARTx device.
- Users:		OpenBMC.  Proposed changes should be mailed to
- 		openbmc@lists.ozlabs.org
- 
--What:		/sys/bus/platform/drivers/aspeed-uart-routing/*/io*
-+What:		/sys/bus/platform/drivers/aspeed-uart-routing/\*/io\*
- Date:		September 2021
- Contact:	Oskar Senft <osk@google.com>
- 		Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+ 	lpc_ctrl->clk = devm_clk_get(dev, NULL);
+-	if (IS_ERR(lpc_ctrl->clk)) {
+-		dev_err(dev, "couldn't get clock\n");
+-		return PTR_ERR(lpc_ctrl->clk);
+-	}
++	if (IS_ERR(lpc_ctrl->clk))
++		return dev_err_probe(dev, PTR_ERR(lpc_ctrl->clk),
++				     "couldn't get clock\n");
+ 	rc = clk_prepare_enable(lpc_ctrl->clk);
+ 	if (rc) {
+ 		dev_err(dev, "couldn't enable clock\n");
 -- 
 2.34.1
 
