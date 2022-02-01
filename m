@@ -1,383 +1,111 @@
-Return-Path: <SRS0=5M6t=SP=i2se.com=stefan.wahren@kernel.org>
+Return-Path: <SRS0=duQC=SQ=gmail.com=joel.stan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F71DC433F5
-	for <soc@archiver.kernel.org>; Mon, 31 Jan 2022 17:25:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91A93C433F5
+	for <soc@archiver.kernel.org>; Tue,  1 Feb 2022 07:00:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 56FC6C340ED; Mon, 31 Jan 2022 17:25:32 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 4A1A0C340ED; Tue,  1 Feb 2022 07:00:41 +0000 (UTC)
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 118A6C340E8;
-	Mon, 31 Jan 2022 17:25:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 118A6C340E8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
-Received: from [192.168.1.107] ([37.4.249.169]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MbjBo-1meyE31UCs-00dEaD; Mon, 31 Jan 2022 18:25:13 +0100
-Subject: Re: [PATCH RFC 1/4] brcmfmac: use separate firmware for 43430
- revision 4
-To: Arend Van Spriel <arend.vanspriel@broadcom.com>,
- Rob Herring <robh+dt@kernel.org>, Florian Fainelli <f.fainelli@gmail.com>,
- Nicolas Saenz Julienne <nsaenz@kernel.org>,
- Arend van Spriel <aspriel@gmail.com>, Franky Lin <franky.lin@broadcom.com>,
- Hante Meuleman <hante.meuleman@broadcom.com>,
- Chi-hsien Lin <chi-hsien.lin@infineon.com>,
- Wright Feng <wright.feng@infineon.com>,
- Chung-hsien Hsu <chung-hsien.hsu@infineon.com>, Kalle Valo <kvalo@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id C4B19C340EB
+	for <soc@kernel.org>; Tue,  1 Feb 2022 07:00:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C4B19C340EB
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f47.google.com with SMTP id h20-20020a17090adb9400b001b518bf99ffso1741733pjv.1
+        for <soc@kernel.org>; Mon, 31 Jan 2022 23:00:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6OpQVC5EzNowhioJtdiEBKNsTQJbWjnwBy9L3ieqIV8=;
+        b=OBg0XpYSBMdi4VmztgWd4Ctg62uoHyQSAVHTSct74x9D5Idt78ofIEAgwKc4VlkVba
+         A1EoPxw2HVysLldkbFLNbSluHVMl+JXFB5MLNWKcDNeghkkP9xNcuTFKktzL1OG7Gr50
+         VBUfIvTQn49Km6Duc2II6rpcfzO8Uib4z8xcCPuaqHnboUuhhSfoV/iMqfNTXLPgDZz1
+         KJqT1byDmWZcb1SQCMc46yRgko+QL0QuW4mG5YgIADy45wHDAT6QsEi6DqfGD6P5JQzc
+         n217whnx65yFTmMFXNVuquDeMAMI6ehr+pcUx0BD5qCcHd/kBG3yjTviPaHWENgiT1Kf
+         3gag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=6OpQVC5EzNowhioJtdiEBKNsTQJbWjnwBy9L3ieqIV8=;
+        b=pUjm+Q/3GvmMSBy8c9TpB7zAsrqsX+xoTiF6ZjTeJxzailiS8BqTUm//GCy6gYQAMo
+         NatPQ8qNir1nW4vE0Zu1sHYm+FAYSxI6vc89nEZ1yXs/7ZsZ6Pa1+M9Lhw3tkEj6iwF+
+         SS8I0aTz2kromNfyRVY3xuh6VPGdx4WjYKDR6y3GqDGCn16ptyJSeoBu56tnm2EJOfZD
+         Q9rY63ee/5q8zX0kawv8dd7VhsBZd4qlSzOoAnpRXKFdyrdivh7Pu/MyhArM38EndBCi
+         63ejPV8dO3mnikdvid1Q5JjApiUSWmvQZ9LnMzwVFp9rWcxXaJxdOhxGbXxKJlSkRDGf
+         yE9g==
+X-Gm-Message-State: AOAM5312zSN6BFVujrkmSrEy0dC0VtXf5V/zRM4McmTMoDp3YK6hpvYZ
+	XvyVdIpyySsfk9BDQIGNzs+97/HuwGM=
+X-Google-Smtp-Source: ABdhPJxG6DbPUcVWPHRDvSI2RX3EPlc31bMxnVeXwOH2WwYWhGr2VYd75YRT+ClllHVzTydVFESxRg==
+X-Received: by 2002:a17:90a:bb92:: with SMTP id v18mr722121pjr.177.1643698838544;
+        Mon, 31 Jan 2022 23:00:38 -0800 (PST)
+Received: from voyager.lan ([45.124.203.14])
+        by smtp.gmail.com with ESMTPSA id h17sm15141654pfv.198.2022.01.31.23.00.36
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 23:00:37 -0800 (PST)
+Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
+From: Joel Stanley <joel@jms.id.au>
 List-Id: <soc.lore.kernel.org>
-Cc: Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- bcm-kernel-feedback-list@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, Phil Elwell <phil@raspberrypi.com>,
- devicetree@vger.kernel.org, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-wireless@vger.kernel.org,
- brcm80211-dev-list.pdl@broadcom.com, linux-rpi-kernel@lists.infradead.org,
- Mikhail Rudenko <mike.rudenko@gmail.com>
-References: <1641068812-5851-1-git-send-email-stefan.wahren@i2se.com>
- <1641068812-5851-2-git-send-email-stefan.wahren@i2se.com>
- <8ed4450d-85d9-c69b-761a-7695b3f1bbb3@i2se.com>
- <dff5f86f-d6a5-f197-3c90-3b77d06991ce@broadcom.com>
- <aa3c8cfc-39bf-22e4-cb98-c19c14e7d8bc@i2se.com>
- <17eab0f59a8.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-From: Stefan Wahren <stefan.wahren@i2se.com>
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
- CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
- bXlZd21DR0tqRnRMCi9Eb1VNRVZIRHhDSjQ3Qk1YbzM0NGZIVjFDM0FudWRnTjFCZWhMb0J0
- TEh4bW5lQ3pnSDNLY1B0V1c3cHRqNEcKdEp2OUNRRFp5MjdTS29FUHh5YUk4Q0YweWdSeEpj
- NzJNOUk5d21zUFo1YlVIc0x1WVdNcVE3SmNSbVBzNkQ4ZwpCa2srOC95bmdFeU5FeHd4SnBS
- MXlsajVianhXREh5WVF2dUo1THpaS3VPOUxCM2xYVnNjNGJxWEVqYzZWRnVaCkZDQ2svc3lp
- by9ZaHNlOE4rUXN4N01RYWd6NHdLVWtRUWJmWGcxVnFrVG5BaXZYczQyVm5Ja211NWd6SXcv
- MHQKUkp2NTBGUmhIaHhweUtBSThCOG5oTjhRdng3TVZrUGM1dkRmZDN1R1lXNDdKUGhWUUJj
- VXdKd05rLzQ5RjllQQp2ZzJtdE1QRm5GT1JrV1VSdlArRzZGSmZtNitDdk92N1lmUDF1ZXdB
- aTRsbitKTzFnK2dqVklXbC9XSnB5MG5UCmlwZGZlSDlkSGtnU2lmUXVuWWN1Y2lzTXlvUmJG
- OTU1dENna0VZOUVNRWRZMXQ4aUdEaUNnWDZzNTBMSGJpM2sKNDUzdWFjcHhmUVhTYUF3UGtz
- bDhNa0NPc3YyZUVyNElOQ0hZUUR5WmljbEJ1dUNnOEVOYlI2QUdWdFpTUGNRYgplbnpTektS
- Wm9POUNhcUlEK2ZhdkxpQi9kaHptSEErOWJnSWhtWGZ2WFJMRFp6ZThwbzFkeXQzRTFzaFhp
- ZGRaClBBOE51SlZ6RUl0MmxtSTZWOHBaRHBuMjIxcmZLaml2UlFpYW9zNTRUZ1pqak1ZSTdu
- bko3ZTZ4endBUkFRQUIKdENCVGRHVm1ZVzRnVjJGb2NtVnVJRHgzWVdoeVpXNXpkRUJuYlhn
- dWJtVjBQb2tDTndRVEFRZ0FJUVVDWElkYwo0Z0liQXdVTENRZ0hBZ1lWQ0FrS0N3SUVGZ0lE
- QVFJZUFRSVhnQUFLQ1JDVWdld1BFWkR5MjFPVEQvOUdpWkxkCnRSWWNteVJKZ2x0aVFRekFp
- UWRjSUQ3OGxHb1dwL3grci92Y1U2YjZqdVl1ZVR3Z1Iwclc3djdsMklSQnlEN24KSEp4YSt0
- SVNvUVpCZ2hvbE1JZmI5TXRoR09KTENZNzdrL1FoQWhuMzJOR1prZWp3OXR6a3MvNDBtclpT
- VVQ4NApaeWJzUVhyTE0vSFI2VElJL0RlUEIwbktEM0ppcHBzMlVIUUQ5cUQySWpFd1NRUGxI
- akNPckVaaDQ1UFo3bTkrClo5M0x6aVRlc1dabFlRdUxpSndzNHJLcHRIVzFkL3dSZWxzaG1t
- NlFxY0wybDRDL2U0MGVEQjlncTRkU1poOVgKUEVZbGxpeU5RaDdhMkxTZHVtRTFyK2NTd0lq
- RS91ZHRSdmRPOWFLb0psT2JVSzVkTmpTUEg3d0tUYndkWGRZRApHUHdEaFhkNThOQXdyK1BY
- QmxQajB0STFMQ3ErTEJ4ZUt6aFdYK0dWcTlEb2pWanlVREV4Rk5Ga1h1b0M3ZzhtClY5VDB0
- ZUJpdVpSbm91WEt3VjJGcHRaT0hIN0JVRVd0a0t0aGgxZXRmT1dwaWdCemtVN2JQc2ZJWVQr
- cnk5dGIKMW9KK3Y0MVBOYXFaRW1QVXBKeHZmek5UN3Ayd01lRDdaajlmMHJ1YlJQdExBSjJR
- R2pyRkhzdVh3QU9xcHl6ZQoxOEVidHNZazBOMHp1SEVoY2orUEJJQmZoMFlJWWQ1MW9mNkdJ
- aU95UjlxMFhYdHBsVUo3VDIvSDF1UXFrWGxwCitnVzRWa2lmc2NJckl1eWZueFpXMTJlSXZq
- NnlicVdMN2FZS0dZbVQ2aUxDUGJIWXlZY2F5bDRFa0ZjckNGN0UKZTBXVC9zY1ZNaE8vNVgv
- SGFOQTVIQngvcjUycGdMY3Y0aTlNeExRbVUzUmxabUZ1SUZkaGFISmxiaUE4YzNSbApabUZ1
- TG5kaGFISmxia0JwTW5ObExtTnZiVDZKQWpnRUV3RUNBQ0lGQWx0NmdCTUNHd01HQ3drSUJ3
- TUNCaFVJCkFna0tDd1FXQWdNQkFoNEJBaGVBQUFvSkVKU0I3QThSa1BMYmpic1AvamdqYVNz
- NUh0bGtBSXZXUytGcm15N2MKaG5jT0F4TFRWL0Q2UkV3SU95R0poRkt3d29pck55UTJnOXZV
- YTNZQ1lDZjFmSjh3RWhhS09COWQwTHBNUm5MNApkRVQ4ZDgyMzhFL3BLK0hxTktpSXNKaHM2
- SnNLOFpnalZRR3JtbWZua0dyWisxdjBIQnV4ZGljZ0duUC9XdHVBClVsOGw2Mi9BTGJheXlq
- KzYxQ2xyc0V0UklhcU82N0xJWXdQaVBEUkkrWGlNek5pR3pIRi8xUTZHUjAyUkg2YTMKRjg5
- ejhhUHhjSGkxWnZDdDJ5a3o2VUVjaHpQMHI1Z3FGSisvTC9VcHU4ME1YaVk0djVlSWFCNTJn
- VlBnaXlNQQpsTDJkRHMxbUladm5yUkxSWTJ0YjNtQVlOa1Y1QjVJRFQzcGtXeTZrS281T0Nn
- SytZZFlPUjhGTloyb04ydDhPCnJLK1ZudGFLN01NU0tIbG1ZL3NPd3RSbEVoMU9CbXJjQ3dH
- d21wLzA1R2tSNDZmL0lzaFJWZUZPUmF3K0dBcXQKUDIrQ0ZhMkNOQS9JSG5aTm95aWtsRHpQ
- UUhVVUdzck5wcERyaFg5Sm1oQm1nMXYyeXdIMU5YdTFpRGZQMUJBdwpLZ29rdDVmNVVhUkY5
- c0FBNTN2V0V2YlVVTjllZXNGR0x6UFdkSkdRNWhwZC9WSDVJUXk5U0JyaC93SWNla3E1Cm4w
- a042cGJUSHhHRTUyU2kvTVZJa05UdURaM2FwbjJqbERaNHBPdHBCWEkydlAzYlBPK05pcUJa
- anNVM3R4TGkKV2R2MkZqeXp6NlhMUndlV1JZVkw1SGE2TER0eG9yMnZ1NlVQMDdwOXh6MXhS
- WmFPRFczb1lsSEZ6WXBhNFc1ZwpMSGIybEVrSXVVZlNjaWNHYmpqQXRDbFRkR1ZtWVc0Z1Yy
- Rm9jbVZ1SUR4emRHVm1ZVzR1ZDJGb2NtVnVRR2x1CkxYUmxZMmd1WTI5dFBva0NOd1FUQVFn
- QUlRVUNYSWRlaHdJYkF3VUxDUWdIQWdZVkNBa0tDd0lFRmdJREFRSWUKQVFJWGdBQUtDUkNV
- Z2V3UEVaRHkyeUhURC85VUY3UWxEa0d4elE3QWFDSTZOOTVpUWY4LzFvU1VhRE51Mlk2SQpL
- K0R6UXBiMVRiVE9yM1ZKd3dZOGEzT1d6NU5MU09MTVdlVnh0K29zTW1sUUlHdWJEM09EWko4
- aXpQbEcvSnJOCnQ1elNkbU41SUE1ZjNlc1dXUVZLdmdoWkFnVERxZHB2K1pIVzJFbXhuQUox
- dUxGWFhlUWQzVVpjQzVyMy9nL3YKU2FNbzl4ZWszSjVtTnVEbTcxbEVXc0FzL0JBY0ZjK3lu
- TGh4d0JXQld3c3Z3UjhiSHRKNURPTVd2YUt1RHNrcApJR0ZVZS9LYjJCK2pyYXZRM1RuNnMv
- SHFKTTBjZXhTSHo1cGUrMHNHdlArdDlKNzIzNEJGUXdlRkV4cmlleThVCkl4T3I0WEFiYWFi
- U3J5WW5VL3pWSDlVMWkyQUlRWk1XSkFldkN2VmdRL1UrTmVSaFh1ZGU5WVVtRE1EbzJzQjIK
- VkFGRUFxaUYyUVVIUEEybThhN0VPM3lmTDRyTWswaUh6TElLdmg2L3JIOFFDWThpM1h4VE5M
- OWlDTHpCV3UvTgpPbkNBYlMremx2TFphaVNNaDVFZnV4VHR2NFBsVmRFamY2MlArWkhJRDE2
- Z1VEd0VtYXpMQU1yeDY2NmpINWt1ClVDVFZ5bWJMMFR2Qis2TDZBUmw4QU55TTRBRG1rV2tw
- eU0yMmtDdUlTWUFFZlFSM3VXWFo5WWd4YVBNcWJWK3cKQnJoSmc0SGFONkM2eFRxR3YzcjRC
- MmFxYjc3L0NWb1JKMVo5Y3BIQ3dpT3pJYUFtdnl6UFU2TXhDRFhaOEZnWQpsVDR2MjNHNWlt
- SlAyemdYNXMrRjZBQ1VKOVVRUEQwdVRmK0o5RGEycitza2gvc1dPbloreWNvSE5CUXZvY1pF
- Ck5BSFFmN2tDRFFSYmVvQVRBUkFBMkhkMGZzRFZLNzJSTFNESGJ5ME9oZ0RjRGxWQk0yTSto
- WVlwTzNmWDFyKysKc2hpcVBLQ0hWQXNRNWJ4ZTdIbUppbUhhNEtLWXMya3YvbWx0L0NhdUNK
- Ly9wbWN5Y0JNN0d2d25Lem11WHp1QQpHbVZUWkM2V1I1TGtha0ZydEhPelZtc0VHcE52NVJj
- OWw2SFlGcExrYlNrVmk1U1BRWkp5K0VNZ01DRmdqclpmClZGNnlvdHdFMWFmN0hOdE1oTlBh
- TEROMW9VS0Y1aitSeVJnNWl3SnVDRGtuSGp3QlFWNHBndzIvNXZTOEE3WlEKdjJNYlcvVExF
- eXBLWGlmNzhJaGdBelh0RTJYck0xbi9vNlpINzFvUkZGS096NDJsRmR6ZHJTWDBZc3FYZ0hD
- WAo1Z0l0TGZxemoxcHNNYTlvMWVpTlRFbTFkVlFyVHFueXMwbDE4b2FsUk5zd1lsUW1uWUJ3
- cHdDa2FUSExNSHdLCmZHQmJvNWRMUEVzaHRWb3dJNm5zZ3FMVHlRSG1xSFlxVVpZSXBpZ21t
- QzNTd0JXWTFWNmZmVUVta3FwQUFDRW4KTDQvZ1Vnbjd5US81ZDBzZXFuQXEycFNCSE1VVW9D
- Y1R6RVFVV1ZraUR2M1JrN2hURm1oVHNNcTc4eHYyWFJzWApNUjZ5UWhTVFBGWkNZRFVFeEVs
- RXNTbzlGV0hXcjZ6SHlZY2M4cURMRnZHOUZQaG1RdVQyczlCbHg2Z0kzMjNHCm5FcTFsd1dQ
- SlZ6UDRqUWtKS0lBWHdGcHYrVzhDV0xxekRXT3ZkbHJEYVRhVk1zY0ZUZUg1VzZVcHJsNjVq
- cUYKUUdNcGNSR0NzOEdDVVcxM0gwSXlPdFF0d1dYQTRueStTTDgxcHZpQW1hU1hVOGxhS2FS
- dTkxVk9WYUY5ZjRzQQpFUUVBQVlrQ0h3UVlBUUlBQ1FVQ1czcUFFd0liREFBS0NSQ1VnZXdQ
- RVpEeTIrb1hELzljSEhSa0JaT2ZrbVNxCjE0U3Z4MDYyUHRVMEtWNDcwVFNucC9qV29ZSm5L
- SXczRzBtWElSZ3J0SDJkUHdwSWdWanNZeVJTVk1LbVNwdDUKWnJEZjlOdFRiTldnazhWb0xl
- WnpZRW8rSjNvUHFGclRNczNhWVl2N2U0K0pLNjk1WW5tUSttT0Q5bmlhOTE1dApyNUFaajk1
- VWZTVGx5VW15aWMxZDhvdnNmMWZQN1hDVVZSRmNSamZOZkRGMW9ML3BEZ01QNUdaMk93YVRl
- am15CkN1SGpNOElSMUNpYXZCcFlEbUJuVFlrN1B0aHk2YXRXdllsMGZ5L0NxYWpUS3N4Nytw
- OXh6aXU4WmZWWCtpS0IKQ2MrSGUrRURFZEdJRGh2TlovSVFIZk9CMlBVWFdHUytzOUZOVHhy
- L0E2bkxHWG5BOVk2dzkzaVBkWUl3eFM3SwpYTG9LSmVlMTBEamx6c1lzUmZsRk9XMFpPaVNp
- aElDWGlRVjF1cU02dHpGRzlndFJjaXVzNVVBdGhXYU8xT3dVClNDUW1mQ09tNGZ2TUlKSUE5
- cnh0b1M2T3FSUWNpRjNjcm1vMHJKQ3ROMmF3WmZnaThYRWlmN2Q2aGp2MEVLTTkKWFpvaUFa
- WVpEKy9pTG01VGFLV042b0dJdGkwVmpKdjhaWk9aT2ZDYjZ2cUZJa0pXK2FPdTRvclRMRk16
- MjhhbwpVM1F5V3BOQzhGRm1kWXNWdWE4czZnTjFOSWE2eTNxYS9aQjhiQS9pa3k1OUFFejRp
- RElScmdVek1FZzhBazdUCmZtMUtpWWVpVHRCRENvMjVCdlhqYnFzeXhrUUQxbmtSbTZGQVZ6
- RXVPUEllOEp1cVcyeEQ5aXhHWXZqVTVoa1IKZ0pwM2dQNWIrY25HM0xQcXF1UTJFNmdvS1VN
- TEFia0NEUVJiZmw5REFSQUFzRExjYStMbFAydm5mdEVHaHBjQQpCR1ZOUUVGbkdQckNhdVU2
- SGhOODA1V3RQVHRtc1JPdUp6cWdVVDBtcHFXSWZacTZzTXd5dkhLOVRzL0tIM0paClVWYlJD
- M3oyaDNLZmhIL0RhZjk1cGQ2bVBjL2g5dkYvT3kzK2VUV2hnR25QNmNBNWtsUitmTzFXaEc4
- VnJpWHYKck5lUkcyMHN6emplSG9jblNJY1Q1WHVaUjB1REhPaUd4T2l6MXNNUkZUR3h6R095
- MTlSOXJ2dTYzdGlJM2Q3dgpnYzc1T0NBZGtlQi9TZUNFbGFSdzBUZjdMWmJQampzRjI2M0JZ
- bk1mNGtrTkVLdnFXY1UyaWNNcCtxZXpqeW5CCnB2ZXVlMHJDVFFCWUFRbG9GQ1ZUR0hyV1dB
- NkQ0VzVPMkFmSWRJYzF1MUpDWnAyZjVMV1ZvVUZUVklyUW5RUVUKU0hDaWZyOU1aeExUdFBK
- ZFU1Mm9TUHczZGs0aExQOGlKSUx1dnYvYXZhakNzUVlIRXR3WXNiZUZaeGl1TGdscApBN1lj
- Sk5ObXBnQ3BNRDR3VWh2bEN0QUtOQlFXeXIyOTc2OThFUVRuNDZlQmVVNkttMkNpaFhrZ3dD
- eWY4ZXlLCkxFM3NYZXdhcTVrZ1pXdk5xNml1NXFZSVJCOXl3K2NYYzYwZE9aRE9scTkzWDVT
- QVJZemFvZXBrSHo0cmtMa1AKUG8rdENIeUhRUHNHblBYYzlXVDgwREM5Tm5KR2R2VWx5NXJk
- TUk0eHBaeWdlb2tqd293VlFsUFV1Y1M2TXluNwpmOHc4Y2dmQjdDMklBSWNEeDJwUC9IendY
- dmtDT1FOQTdtVjFsTTA4bitnVmtUcnpweGlwNURicTRDSW9ZeDJNCkpaVDhiR1JINlhqY1VE
- S2EwOVFoeVpzQUVRRUFBWWtFUkFRWUFRZ0FEd1VDVzM1ZlF3SWJBZ1VKQThKbkFBSXAKQ1JD
- VWdld1BFWkR5MjhGZElBUVpBUWdBQmdVQ1czNWZRd0FLQ1JCVnhETFBjVk1NamNkc0QvMFJo
- QXN1UVlPeQpyMTNCbDNOaFhrWUFaR3AyWkZER3VrZTdPU2tWOG9qT09UZFR5ei9jT1JHQ2J5
- ZEQrRGd2cUZ5VmRuT1hLZ08wCmxKbUd3ckdlTGRnZ0F2aDBpaHJwNU8wWVVKOWJCU1htR01t
- UVRZSC9BbUxUR2FkYnVqQ1dqNWZGVWtDeXd4aW0KSHV5MFBiMjRwelR2UzUwR1k1WStxSDBG
- SE5haWdka2tpV04zcnVnN0haRXUvQ3lsUFpqT1h6K0QxUVBNckV4dwo3ZC9NS2FiVis5YU5i
- UVlabGRJajk4UXd2VUYxS1N6YThqbFVJdnBoUnEyN0FUOGZER1lHUGZERU1nMmNCT2FlCkty
- N29uUXM0YjdhV082aWZEbHhRVHB6c3pvK0FuODA3Tk1TdFZFRmYrczNBaFZEM2U3bmY4SkJh
- dmJWckFlMGsKb20yNm96elBubnh6K2xxVlZ0dzZVazRYTUl6dGl4L0h3SFl3dUNuY1VYWndL
- MEkzeUFKd2pZd29vck9DaEozUwpFVWJKUVB0R3NneFJERXhWQkZlNk5MUC82MnhQOU82dGFj
- d09kYjBNbVAxYjM5cFJBVEM3YmdkMWxkVUxpNzVaCmxKckowL1NpVkVyb3FOWXk3OXRmbWdB
- WjJVeFptczlTckV5Nm85UVNmc24xYVh2K01QTDlKYUNHbWtQNnpiTFEKTm5kajBKY2FRbmtD
- MHZneWRPMUJtNk11OTZQOXVmbEtaY0FTNndtTE01SWRIT3lqTDg4d0h3anVjakFPQnRjdwpw
- MG9HVG5WT25Sc05ZU084VzhZWi9LZGJ1Nzg1ZGF6TXFKMmlOakFEdUJiZG02TjRqNUVkTW5r
- TG4wQklmUEpwCmRnbTR2bDJVcExqd1JHci9NM3dtbTVwdnMrNnVCN2hrL0ZKaUQvNGxsRU5Q
- NGVNMWg3U200aitWcTZOMSt6VEIKSVhKQWViSXFhc0RwNXlaUzdYcnk0STM2bjg1WEVZZkcw
- MWx0QXlob05WMkRPOFNJUlFwdWkydHErOVJQM1JLMQpKREJ4eEVKWTJFTzVKWjhNeGFQSFEw
- RFQwNWxSRmpLMkFsaGRFSXRqTGpwSjNmVW05c3FMeE1XeHpQNlV6M2lpCjJ1YTR1bnJ0Nk9D
- VHFRd2lqRi8zYlRXaXd2VkFBSG5NRlVpb1hzaEhhb2hWRGNWZm5lSU1mVjBiUUNYWWkzTnAK
- WTB2MFp3Y2lGSCtnU0M3cUQ2WE51aHBWR1NMNElpbGlGeS9TemNhSkV6QUhlTERTaFpQMkNX
- ZG5DNHZnbDM3dApocHg4aDU1WWhKbjZIU3VVelBnaGFLdFZCMmsrajdaZXlaK1NGeHA3SXVi
- SEN3TEhsUWhUNzVSd1EzaUF4S242CjBxajUxY1lUbnF4ZFpYVzZmSDNQa3VNellVNUdwcVIv
- MU9sNWMvd2ZJNmc2QW04eUtXLzBFVUx0K0tuNExGc1MKbTdZM201SDV2MTJVNkpCWXZWK3Ix
- M2paaW9zNEVFREU5M0Q1c05IMk1JeVJ6Q0RxMXpkZHQ0WHV5S0ZqUEtXMQo5aWJaRGZGVjdL
- dUNzdnVMMjNzQmMxc0NNb3ArRTFtVC9ReE9JQTZvRFQxTVFzdHdPVnVReURDdi9PdktTZ2Z6
- CjhGWEdMNkFQY2xqQ3FqOEFKaHhReXN4ZG9pUVA4bS92dStialdHR3Z4dzVzMWxncGlSRFRS
- VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
- bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
- LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <17ecdb9e-9b3e-9308-acd6-b1aa7f953002@i2se.com>
-Date: Mon, 31 Jan 2022 18:25:11 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To: soc@kernel.org
+Subject: [PATCH] docs/ABI: testing: aspeed-uart-routing: Escape asterisk
+Date: Tue,  1 Feb 2022 17:30:27 +1030
+Message-Id: <20220201070027.196314-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <17eab0f59a8.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Provags-ID: V03:K1:J+sWzvQ0tEnbEsYsNEanCFVKohCloP7zU4v8HxkSLpI/7RK5WO9
- FWBGvStQWdsXVGdHf/n0BhUofGu8/aW+YqysI+vmyvHBfb/dBl+ktsZ5L6EZLDIkTGJTX1a
- BUgHcuJ6QE7uaLwROn7zAZwQFpOy6Fef2rnHmC9x9vGVB1GBNEQQW8adjduMxRay+ZueG5A
- 8SUjH92yXjHuWVaLPfKnQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:uhfAs3EL9kY=:z+Ccb10S5u0clT+5dG2ZKG
- uOoQyc6SAe3gBdoRU1pV0JwxmSDbG8IydHcATav2BVYIe/nz/9nLe8b3WSF8o1sOamCsVt0hY
- V8mppRn4cFVHPItOCMUiQfkcHy2Wb2FbcMCiLWj+BZitzzgWtAgObTQ4j1OoYC7DubYpvUR52
- 6+5MBmFc0pCGyszN2focskQFsO78CPX+wbDQUWmSNG3l2mKbSggvG8lIEnNG2rKo1+EXgj4a7
- k/h5FsZnJC620481g18G2zpy00kaRF8/kiDv6SLWW4BbeclijS+JjuROqF6BMU/vF6RdxLWua
- PMDVu2GyuKbzUCZuibkEHZCk0/DSgL2ReodDmVeegTwL1SZe6hzFzfV6hvsC3zJRclWow/p0f
- OKfIeZdf/5si/hFtDqeey0L1jWuyjzr9xWigaFi9M/BshEEMP9UlAWFwYeiNqvo0rhW+/HeiL
- 3P5e6yF/zq6SHp6sscLPelod85xJK3GhDjlZYH7hm2+y5Lh8qi7iXnJkNmLNHWGPVGvqTwhuW
- vDuJM0IQNTbeZsjIUmKHegia+PDW1l6GO3gOVw/d/UQa1qMEPtI16yHOt5bo/RfZXi2iUt5w/
- BxPJt+wDodtpyKfa3QRx1j+Pv17qyJRO3fYorYFgxe8FTgooVTakp3gvG4enddEodphoc6lxe
- R0N9VZQq6Wbmw1LFQ4yzw9QoU/wa+iRIM4V53x2Nw0AULsQrwJC5SdUX3CZUN1fAfLEZNUj9z
- jwl2R59PQKLuw8Gq
+Content-Transfer-Encoding: 8bit
 
-Hi Arend,
+From: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
 
-Am 30.01.22 um 13:56 schrieb Arend Van Spriel:
-> I am also a bit confused. The subject mentions revision 4, but your
-> log shows 43430/2. Took some digging but found that numerical rev 2
-> matches 'b0' and rev 3 matches 'b1'. The BT part is unknown territory
-> for me so can not clarify things there.
+Escape asterisk symbols to fix the following warning:
 
-my patch based on a similar patch [1] by Mikhail Rudenko. I falsely
-assumed that the Ampak AP6212 and Raspberry Pi Zero 2 W are using
-different wifi chips. But now it i think they are identical. If i grep
-the firmware blob for the Raspberry Pi Zero 2 W, i getting this:
+"WARNING: Inline emphasis start-string without end-string"
 
-# strings firmware.bin | grep 4343
-43436b0-roml/sdio-g-pool-p2p-pno-pktfilter-keepalive-aoe-mchan-proptxstat=
-us-ampduhostreorder-lpc-wl11u-fmc-wepso-anqpo-srmem-srfast-11nprop-ob-ndo=
-e-rssiindur-bcol-gtr-mfp-sdiorxenhance-extsae
-Version: 9.88.4.65 (test) (f149b32@shgit)=A0 (r679549) CRC: 3e0bc4b6 Date=
-:
-Fri 2020-10-09 14:45:07 CST Ucode Ver: 1043.20742 FWID: 01-f40f3270
+Fixes: c6807970c3bc ("soc: aspeed: Add UART routing support")
+Signed-off-by: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Link: https://lore.kernel.org/r/20220124014351.9121-1-chiawei_wang@aspeedtech.com
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+Please apply this through the soc tree as a fix.
 
-So i will drop this patch from the series and hope the firmware isn't
-customized.
+ Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Best regards
-
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?h=3Dv5.17-rc2&id=3Df8d6523891cf07468f0bfe21aba8b562a6f75780
-
->
-> Regards,
-> Arend
->
-> On January 30, 2022 12:35:35 PM Stefan Wahren <stefan.wahren@i2se.com>
-> wrote:
->
->> Hi Arend,
->>
->> Am 24.01.22 um 10:43 schrieb Arend van Spriel:
->>> On 1/22/2022 1:35 PM, Stefan Wahren wrote:
->>>> Am 01.01.22 um 21:26 schrieb Stefan Wahren:
->>>>> A separate firmware is needed, for Broadcom 43430 revision 4. This
->>>>> chip can be found on e.g. certain revisions of Raspberry Pi Zero 2 =
-W.
->>>>> Original firmware file from IC vendor is named
->>>>> 'brcmfmac43436-sdio.bin',
->>>>> but brcmfmac and also btbcm drivers report chip id 43430, so
->>>>> requested
->>>>> firmware file name is 'brcmfmac43430c0-sdio.bin' in line with other=
-
->>>>> 43430 revisions.
->>>>>
->>>>> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
->>>>> ---
->>>>>
->>>>> Hi,
->>>>> i'm not sure about all these mappings. All i can say is that the wi=
-fi
->>>>> interface of the RPi Zero 2 cames up with this patch.
->>>> gentle ping (yes, i'm aware of the merge window)
->>>
->>> Sorry, Stefan
->>>
->>> Should have seen this earlier, but here it is....
->>>
->>>>>
->>>>> =A0drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c | 4 +++-=
-
->>>>> =A01 file changed, 3 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.=
-c
->>>>> b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
->>>>> index 8effeb7..c79bd47 100644
->>>>> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
->>>>> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
->>>>> @@ -618,6 +618,7 @@ BRCMF_FW_DEF(43430A0, "brcmfmac43430a0-sdio");
->>>>> =A0/* Note the names are not postfixed with a1 for backward
->>>>> compatibility */
->>>>> =A0BRCMF_FW_CLM_DEF(43430A1, "brcmfmac43430-sdio");
->>>>> =A0BRCMF_FW_DEF(43430B0, "brcmfmac43430b0-sdio");
->>>>> +BRCMF_FW_CLM_DEF(43430C0, "brcmfmac43430c0-sdio");
->>>>> =A0BRCMF_FW_CLM_DEF(43455, "brcmfmac43455-sdio");
->>>>> =A0BRCMF_FW_DEF(43456, "brcmfmac43456-sdio");
->>>>> =A0BRCMF_FW_CLM_DEF(4354, "brcmfmac4354-sdio");
->>>>> @@ -649,7 +650,8 @@ static const struct brcmf_firmware_mapping
->>>>> brcmf_sdio_fwnames[] =3D {
->>>>> =A0=A0=A0=A0 BRCMF_FW_ENTRY(BRCM_CC_4339_CHIP_ID, 0xFFFFFFFF, 4339)=
-,
->>>>> =A0=A0=A0=A0 BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0x00000001, 4343=
-0A0),
->>>>> =A0=A0=A0=A0 BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0x00000002, 4343=
-0A1),
->>>>> -=A0=A0=A0 BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0xFFFFFFFC, 43430B=
-0),
->>>>> +=A0=A0=A0 BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0x00000004, 43430C=
-0),
->>>
->>> According to the revision mask your firmware seems to be for numerica=
-l
->>> revision 2 of this chip...
->>>
->>>>> +=A0=A0=A0 BRCMF_FW_ENTRY(BRCM_CC_43430_CHIP_ID, 0xFFFFFFF8, 43430B=
-0),
->>>
->>> and for the b0 the chip revision is 3 (or higher). So the alphanumeri=
-c
->>> revision of your chip would be 'a2' instead of 'c0'.
->>
->> i changed this to a2 for the next version of this series. But before i=
-
->> send them out, please doublecheck the kernel log 5.17-rc1 of my RPi Ze=
-ro
->> 2 W. I confuses me that the bluetooth part tells about BCM43430B0:
->>
->> [=A0=A0=A0 9.653199] Bluetooth: hci0: BCM: chip id 115
->> [=A0=A0=A0 9.653749] Bluetooth: hci0: BCM: features 0x0e
->> [=A0=A0=A0 9.655466] Bluetooth: hci0: BCM43430B0
->> [=A0=A0=A0 9.655502] Bluetooth: hci0: BCM43430B0 (002.001.012) build 0=
-000
->> [=A0=A0=A0 9.659512] vc4-drm soc:gpu: bound 3f400000.hvs (ops
->> vc4_drm_unregister [vc4])
->> [=A0=A0=A0 9.667047] Bluetooth: hci0: BCM43430B0 'brcm/BCM43430B0.hcd'=
- Patch
->> [=A0=A0=A0 9.668052] brcmfmac: brcmf_fw_alloc_request: using
->> brcm/brcmfmac43430a2-sdio for chip BCM43430/2
->> [=A0=A0=A0 9.668567] brcmfmac mmc1:0001:1: Direct firmware load for
->> brcm/brcmfmac43430a2-sdio.raspberrypi,model-zero-2-w.bin failed with
->> error -2
->> [=A0=A0=A0 9.673724] vc4-drm soc:gpu: bound 3f400000.hvs (ops
->> vc4_drm_unregister [vc4])
->> [=A0=A0=A0 9.697996] brcmfmac mmc1:0001:1: Direct firmware load for
->> brcm/brcmfmac43430a2-sdio.raspberrypi,model-zero-2-w.txt failed with
->> error -2
->> [=A0=A0=A0 9.816030] brcmfmac: brcmf_fw_alloc_request: using
->> brcm/brcmfmac43430a2-sdio for chip BCM43430/2
->> [=A0=A0=A0 9.840128] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM434=
-30/2
->> wl0: Oct=A0 9 2020 14:44:32 version 9.88.4.65 (test) (f149b32@shgit)
->> (r679549) FWID 01-f40f3270
->> [=A0=A0=A0 9.919182] random: crng init done
->> [=A0=A0=A0 9.919200] random: 7 urandom warning(s) missed due to rateli=
-miting
->> [=A0=A0 10.105524] vc4-drm soc:gpu: bound 3f400000.hvs (ops
->> vc4_drm_unregister [vc4])
->> [=A0=A0 10.118011] vc4-drm soc:gpu: bound 3f902000.hdmi (ops
->> vc4_drm_unregister [vc4])
->> [=A0=A0 10.118190] vc4-drm soc:gpu: bound 3f806000.vec (ops
->> vc4_drm_unregister [vc4])
->> [=A0=A0 10.118364] vc4-drm soc:gpu: bound 3f004000.txp (ops
->> vc4_drm_unregister [vc4])
->> [=A0=A0 10.118503] vc4-drm soc:gpu: bound 3f206000.pixelvalve (ops
->> vc4_drm_unregister [vc4])
->> [=A0=A0 10.118625] vc4-drm soc:gpu: bound 3f207000.pixelvalve (ops
->> vc4_drm_unregister [vc4])
->> [=A0=A0 10.118747] vc4-drm soc:gpu: bound 3f807000.pixelvalve (ops
->> vc4_drm_unregister [vc4])
->> [=A0=A0 10.118847] vc4-drm soc:gpu: bound 3fc00000.v3d (ops
->> vc4_drm_unregister [vc4])
->> [=A0=A0 10.119331] checking generic (1e330000 8ca000) vs hw (0 fffffff=
-f)
->> [=A0=A0 10.119339] fb0: switching to vc4 from simple
->> [=A0=A0 10.122443] Console: switching to colour dummy device 80x30
->> [=A0=A0 10.125147] [drm] Initialized vc4 0.0.0 20140616 for soc:gpu on=
-
->> minor 0
->> [=A0=A0 10.203822] Console: switching to colour frame buffer device 24=
-0x75
->> [=A0=A0 10.241067] vc4-drm soc:gpu: [drm] fb0: vc4drmfb frame buffer d=
-evice
->> [=A0=A0 10.414793] Bluetooth: hci0: BCM4343B0 37.4MHz wlbga_iLNA_iTR
->> [Baseline: 0092]
->> [=A0=A0 10.414822] Bluetooth: hci0: BCM43430B0 (002.001.012) build 009=
-2
->>
->> Thanks
->
->
->
+diff --git a/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing b/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing
+index b363827da437..910df0e5815a 100644
+--- a/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing
++++ b/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing
+@@ -1,4 +1,4 @@
+-What:		/sys/bus/platform/drivers/aspeed-uart-routing/*/uart*
++What:		/sys/bus/platform/drivers/aspeed-uart-routing/\*/uart\*
+ Date:		September 2021
+ Contact:	Oskar Senft <osk@google.com>
+ 		Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+@@ -9,7 +9,7 @@ Description:	Selects the RX source of the UARTx device.
+ 		depends on the selected file.
+ 
+ 		e.g.
+-		cat /sys/bus/platform/drivers/aspeed-uart-routing/*.uart_routing/uart1
++		cat /sys/bus/platform/drivers/aspeed-uart-routing/\*.uart_routing/uart1
+ 		[io1] io2 io3 io4 uart2 uart3 uart4 io6
+ 
+ 		In this case, UART1 gets its input from IO1 (physical serial port 1).
+@@ -17,7 +17,7 @@ Description:	Selects the RX source of the UARTx device.
+ Users:		OpenBMC.  Proposed changes should be mailed to
+ 		openbmc@lists.ozlabs.org
+ 
+-What:		/sys/bus/platform/drivers/aspeed-uart-routing/*/io*
++What:		/sys/bus/platform/drivers/aspeed-uart-routing/\*/io\*
+ Date:		September 2021
+ Contact:	Oskar Senft <osk@google.com>
+ 		Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+-- 
+2.34.1
 
