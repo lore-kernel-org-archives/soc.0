@@ -1,1473 +1,2148 @@
-Return-Path: <SRS0=m7F/=SR=bounce.fdc-k.africa=workshops=fdc-k.africa@kernel.org>
+Return-Path: <SRS0=hUR8=SR=hpe.com=prvs=003280ca54=nick.hawkins@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96F0CC433F5
-	for <soc@archiver.kernel.org>; Wed,  2 Feb 2022 11:42:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAD98C433F5
+	for <soc@archiver.kernel.org>; Wed,  2 Feb 2022 16:55:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 63D8EC340E4; Wed,  2 Feb 2022 11:42:00 +0000 (UTC)
-Received: from f105.mxout.mta4.net (f105.mxout.mta4.net [96.45.68.105])
+	id 84BA4C36AE3; Wed,  2 Feb 2022 16:55:46 +0000 (UTC)
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C70F2C004E1
-	for <soc@kernel.org>; Wed,  2 Feb 2022 11:41:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C70F2C004E1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=fdc-k.africa
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bounce.fdc-k.africa
-DKIM-Signature: v=1; a=rsa-sha256; d=fdc-k.africa; s=api; c=relaxed/simple;
-	t=1643802111; h=from:date:subject:reply-to:to:list-unsubscribe:mime-version;
-	bh=17yzg0INH838ecoFHio1KDO2JAxSzQhGi9D5HqsfDe4=;
-	b=mmwmFXKwX+4n8+Qs706E9bcCK73IkTb4KFbaVpx7gmSvHXi1XfEEN+1TOldnl7DxQYeI3tDD5vE
-	kp+byj/p3n12E337+VzbAPJtXgmBYxZJqmQQqRLAvW5A69mhonMmuNjpBduXmWtvgvqwrUGVafWfb
-	t8QvU/KjWAl/OmcRL9k=
-DKIM-Signature: v=1; a=rsa-sha256; d=elasticemail.com; s=api;
-	c=relaxed/simple; t=1643802111;
-	h=from:date:subject:reply-to:to:list-unsubscribe;
-	bh=17yzg0INH838ecoFHio1KDO2JAxSzQhGi9D5HqsfDe4=;
-	b=O34SN+E8L+4/CChOgaugrDMkSfeH92L93vrpE3UdoN3FUNDksgtKLQDInSaUV+cK839iepfmeso
-	Npy/s2uX4F498IBH0rhEzP3K61ob/4YsbrL+Okau6jNR4HY/fE6BTfyPzCdO4B/nP3rRVuRbCzaFW
-	XKLepLKkQahRcYS4GhA=
-From: Foscore Development Center Africa <workshops@fdc-k.africa>
-Date: Wed, 02 Feb 2022 11:41:51 +0000
-Subject: RE: Remote Sensing and GIS in Multi Hazard Early Warning Systems
- March workshop 2022
-Message-Id: <4ufz3lpko7z8.dF3V6MGyA7DHi3rp5aAFxw2@tracking.fdc-k.africa>
-Reply-To: workshops@fdc-k.africa
-Sender: workshops@fdc-k.africa
+	by smtp.kernel.org (Postfix) with ESMTPS id C215BC340ED;
+	Wed,  2 Feb 2022 16:55:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C215BC340ED
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 212F3qWV015167;
+	Wed, 2 Feb 2022 16:54:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references; s=pps0720;
+ bh=FTz6OT6WOyHNxpUzwanoedf6Bw/zPVKiPG+q2GqAiIM=;
+ b=fhrN725VdC3tDs5BjsvVB3C82WBAVlZSZh4S9n24BQiqppAkZWWrP7C9qkSUaPm5gLOB
+ UwAsoujmhMkE3fr4p1/gDbUPNj5vzDrPVEL7ngqud06tp4iViLK0Ru8p97v7aLH9V/b4
+ QVR5yig+HTJbQKn9WpEKlEqwV9FskpQDzkfjEIeLeau4BI3XTVtwpteZt+2DYQCQy+p6
+ Dn2FzW71ibCTJMpn0yov6HDLg8ViCGZZrZIdcCiz+hV11vGvlQ4udcEWxS0hTpdM9Ohc
+ avETfGk3NQ4349SMCLmEN3UC0J/UFSJT7x/4o+D547Z7xolE2bgiqE0LniCKab5fB4Y8 ag== 
+Received: from g4t3427.houston.hpe.com (g4t3427.houston.hpe.com [15.241.140.73])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3dytjp20km-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 02 Feb 2022 16:54:58 +0000
+Received: from hpe.com (unknown [16.100.173.53])
+	by g4t3427.houston.hpe.com (Postfix) with ESMTP id 04CE55E;
+	Wed,  2 Feb 2022 16:54:54 +0000 (UTC)
+From: nick.hawkins@hpe.com
+To: verdun@hpe.com
 List-Id: <soc.lore.kernel.org>
-To: "soc@kernel.org" <soc@kernel.org>
-List-Unsubscribe: 
- =?us-ascii?q?=3Cmailto=3Aunsubscribe+dF3V6MGyA7DHi3rp5aAFxw2=40bounces=2Eelasticem?=
- =?us-ascii?q?ail=2Enet=3Fsubject=3Dunsubscribe=3E=2C?=
- =?us-ascii?q?_=3Chttp=3A=2F=2Ftracking=2Efdc-k=2Eafrica=2Ftracking=2Funsubscribe=3Fmsgid=3DdF3V?=
- =?us-ascii?q?6MGyA7DHi3rp5aAFxw2&c=3D1488840087545523043=3E?=
-X-Msg-EID: dF3V6MGyA7DHi3rp5aAFxw2
-MIME-Version: 1.0
-Content-Type: multipart/alternative;
-	boundary="=-eZCfAESGyHPhAN6/Pe0HYHrTwlFj9Ng923WKzQ=="
+Cc: nick.hawkins@hpe.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, Corey Minyard <minyard@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Hao Fang <fanghao11@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] HPE BMC GXP SUPPORT
+Date: Wed,  2 Feb 2022 10:52:50 -0600
+Message-Id: <20220202165315.18282-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <nick.hawkins@hpe.com>
+References: <nick.hawkins@hpe.com>
+X-Proofpoint-GUID: iXWnoQ1XEdkFDu_4bws0tBfEV33_Bqqx
+X-Proofpoint-ORIG-GUID: iXWnoQ1XEdkFDu_4bws0tBfEV33_Bqqx
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-02_08,2022-02-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 mlxlogscore=999 clxscore=1011 mlxscore=0 suspectscore=0
+ spamscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202020094
 
---=-eZCfAESGyHPhAN6/Pe0HYHrTwlFj9Ng923WKzQ==
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-DQoNCjxodHRwOi8vdHJhY2tpbmcuZmRjLWsuYWZyaWNhL3RyYWNraW5nL2NsaWNrP2Q9T0g0
-Qi1uOTM0TE5pY2lkdWxfaDhXQm1lLUtCcFNwakl6TmVEamVlMkhBVkdWSktYakVodnIxaTNu
-TkpRcTUxOVh0eHQzejItYzBBX0FNTHctUnFRMnoxT1NoRExpUV9KbEVQbHkxaVg0QTc5R0R5
-WWRuRFE3S2YzdURvT3I0QjBzRnF1TDIxMFdmMExvcU9PU191U3BTTHhLLVd2dmRoZURDWVZK
-anVoMTNWZjV3czNsYkZLX2M3YUVqVnR1ZV8xSXNMckFIWV9KekVYSGd0ZUhBaFJ4S3YwclBq
-SFdXRzlLTlJ0NlVTSVBHZE1DMzNaQUpVYU5reDNqY2ctSWwwN2ZBMj4NClJlbW90ZSANClNl
-bnNpbmcgYW5kIEdJUyBpbiBNdWx0aSBIYXphcmQgRWFybHkgV2FybmluZyBTeXN0ZW1zIE1h
-cmNoIHdvcmtzaG9wIA0KMjAyMg0KwqANCg0KPGh0dHA6Ly90cmFja2luZy5mZGMtay5hZnJp
-Y2EvdHJhY2tpbmcvY2xpY2s/ZD1PSDRCLW45MzRMTmljaWR1bF9oOFdCbWUtS0JwU3BqSXpO
-ZURqZWUySEFWR1ZKS1hqRWh2cjFpM25OSlFxNTE5WHR4dDN6Mi1jMEFfQU1Mdy1ScVEyejFP
-U2hETGlRX0psRVBseTFpWDRBNzlHRHlZZG5EUTdLZjN1RG9PcjRCMHNGcXVMMjEwV2YwTG9x
-T09TX3VTcFNMeEstV3Z2ZGhlRENZVkpqdWgxM1dTck1zOTR1U2FDZnNDRTNCai1ra25pcU5i
-QVNEeFVpVk9PcldYR1ZfNTNqajdUems4cTB3TElOcldxNUN4N3lmYU1yNFlKTy05WEpzejNh
-U09Ta09xOUEyPg0KUmVnaXN0ZXIgDQphcyBpbmRpdmlkdWFsLCBHcm91cCBvciBPbmxpbmUN
-CsKgDQoNCjxodHRwOi8vdHJhY2tpbmcuZmRjLWsuYWZyaWNhL3RyYWNraW5nL2NsaWNrP2Q9
-c3JlQndvRHpZZGdqM2JPYUJDUkJzVWpmQmw3SU5zOG02Rzc4ODBGTzkzaVBtNlljaW9NVmlo
-Ykd0NWc5d3ZwN3p5MXNSVFp2OXJ2bnBySUZUWG5EQ3dTaTBRdUhUZXZjQXZKbnUxVE10MFZ5
-ZXlyZGhUSjRzWTg1VlhMMWFpeW10a2Zjclg4RW9aVGVkUk5KMzhkWWw2SVM3QXFodV9BV3cw
-bjY5Q3lYbjdzYTA+DQpEb3dubG9hZCBvdXIgDQpjYWxlbmRlcg0KwqANCg0KPGh0dHA6Ly90
-cmFja2luZy5mZGMtay5hZnJpY2EvdHJhY2tpbmcvY2xpY2s/ZD1wVnQyNG5CQ0lCYVFob1Vr
-X0pvSFhGdnJSZ0ZSNU1QR0xpTWh5WHhndmd5SUR5WFNiaEkxS2JMX2FlcDdTeEtkb3dUMDNM
-OEFNNFJVWW5Wc0xtWVRyMFFyQXVZS3BCQWhGVjdTS2ZfMkw1SHFhMEVMTkV4SjMzSmVleGdP
-V09pZ1VHS0s1RGJHVjRMeEpRU0lFem1rMlRZMT4NCkRvd25sb2FkIG91ciANCmJyb2NodXJl
-DQrCoA0KRGlzY291bnQ6IA0KMjAlIGZvciA1IGFuZCBtb3JlIHBhcnRpY2lwYW50cw0KwqAN
-Cg0KPGh0dHA6Ly90cmFja2luZy5mZGMtay5hZnJpY2EvdHJhY2tpbmcvY2xpY2s/ZD1Fangx
-MGttWFAyOTlNUF91ZTBxc1ZWZ3NtZUN5Q0wyYWE5aGloc1luMXF3TWE4R0l2V1FhbDM2RkY2
-MUlveW0yeUdHa1k1cmM3UmdfOWVlNURiaGt4cFlHZnd1MUtYblFqLU00ajdBUk81MzlreWNx
-b1p4OHRpbTQ5ODZ4Y1FJRG8wbmMzMEVzanV2alhwZkZEa0RPSm1RMT4NCk91ciAyMDIywqAg
-b25zaXRlIA0KUHJvZ3JhbW1lcw0KwqANCg0KPGh0dHA6Ly90cmFja2luZy5mZGMtay5hZnJp
-Y2EvdHJhY2tpbmcvY2xpY2s/ZD01UGtaUHA0OHQtOEh6NXNWYXRCRnBuNWEzZXBtWGhNXzNw
-bmNTXzZBbWx3WUZnUDZ2WmtCMlJhZlI5M1gzX1l5WUVQRHRyWk80eC1YOGFWXzN0aEFyMXBQ
-N0JCWWNkaDYyOHpDTzRZM3VUTnlmc09FUUgxNzlYZTF4LVhYWG05RjNGR2hOZGRmczl5N0Fs
-NFNFZGd5VGpzMT4NCk91ciAyMDIywqAgb25saW5lIA0KUHJvZ3JhbW1lcw0KwqANCkNlbnRl
-cnM6TmFpcm9iaSxrZW55YXxNb21iYXNhLGtlbnlhfFJ3YW5kYSxraWdhbGl8RHViYWkNCsKg
-DQpGb3IgDQphbnkgaW5xdWlyeSB0bzrCoHRyYWluaW5nQGZkYy1rLm9yZ8Kgb3IgKzI1NDcx
-MjI2MDAzMSBvciANCjxodHRwOi8vdHJhY2tpbmcuZmRjLWsuYWZyaWNhL3RyYWNraW5nL2Ns
-aWNrP2Q9RWp4MTBrbVhQMjk5TVBfdWUwcXNWVFRIRjVlZUpzQ01TOGF6SDJfbVRITGhxOFRs
-ZHk5VHNPa1h5dWtZYXNCUGJYUEM2Zks2QjVuZ0FjbURyMDRGaTJZX2xvSzM3eVJkNHlUbnh0
-U1A4ZTRxS0l0al94V0l2Wlo1Z2I4bVdKOUYtcFE4MDVFdXNCTjFEcnRqN21RWDZ4MDE+DQpD
-b250YWN0IHVzDQrCoA0KwqBXZWJzaXRlOg0KPGh0dHA6Ly90cmFja2luZy5mZGMtay5hZnJp
-Y2EvdHJhY2tpbmcvY2xpY2s/ZD1VdWhrX3ZyNGpzMThIbFBUS1NFakpZVFp5aHNES204d3h5
-My03MWdORFdES1E3SHFNbmtMaTdvQVJNZmctcW16SzZ0MjRUM3RWYXV4NE80MGJET1BtRHU0
-MDBEazBZYUN5OF9ZSXlaSVVSTjY1WnNrUmd0UkU3OFp5cnh3NHR0aG1RMj4NCnd3dy5mZGMt
-ay5vcmcNCsKgDQoNCjxodHRwOi8vdHJhY2tpbmcuZmRjLWsuYWZyaWNhL3RyYWNraW5nL2Ns
-aWNrP2Q9SXVEYjVmVDRmYXBHRXBLRGViS1o1dEFVYk15aVFaS243SDVRX1VJSl9DQ2p0bkgw
-ekx4c2o5ZDdLdGhxaVljcmNndDB6MXpZZTI1THFxRU53NkRmRl85c0pVaEJ5MG16NDNzbjFm
-d0FYWk9IVHJIWmplLVlrVVJ2WFNEcDhxRGI2WS1CanJtVzFXTnNBcHY1V0cwbVpXVTE+DQpD
-b25zdWx0YWNpZXMNCsKgDQrCoA0KSW50cm9kdWN0aW9uDQpEZXZlbG9wIA0KdGhlIGNhcGFj
-aXR5IG9mIHByb2Zlc3Npb25hbHMgdG8gZGVzaWduLCBtYW5hZ2UsIGV2YWx1YXRlIGFuZCB1
-bmRlcnRha2UgDQppbXByb3ZlbWVudHMgaW4gcGVvcGxlLWNlbnRlcmVkIGVhcmx5IHdhcm5p
-bmcgc3lzdGVtcyBmb3IgaHlkcm8tbWV0ZW9yb2xvZ2ljYWwgDQomIGdlb2xvZ2ljYWwgaGF6
-YXJkcyBhbmQgZXh0cmVtZSBldmVudHMgYXNzb2NpYXRlZCB3aXRoIGNsaW1hdGUgY2hhbmdl
-IGFuZCANCnZhcmlhYmlsaXR5LiBJdCBidWlsZHMgdXBvbiBleHBlcmllbmNlIGluIGJ1aWxk
-aW5nIGNhcGFjaXRpZXMgb24gdXNlIG9mIEdJUywgDQpSZW1vdGUgU2Vuc2luZyBhbmQgc3Bh
-Y2UgYmFzZWQgdGVjaG5vbG9naWVzIGluIGRpc2FzdGVyIHJpc2sgbWFuYWdlbWVudCBmb3Ig
-DQpkaXNhc3RlciBtYW5hZ2VtZW50IGluc3RpdHV0aW9ucywgZGlzYXN0ZXIgbWFuYWdlbWVu
-dCBwcmFjdGl0aW9uZXJzIGFuZCANCmNvbW11bml0aWVzLiBJdCBhaW1zIHRvIGluc3RpdHV0
-aW9uYWxpemUgd2VhdGhlciBhbmQgY2xpbWF0ZSBpbmZvcm1hdGlvbiANCmFwcGxpY2F0aW9u
-cyBmb3IgZGlzYXN0ZXIgbWl0aWdhdGlvbi4NCk5vIA0Kb2YgRGF5cw0KNSANCmRheXMNCkNv
-dXJzZSANCk9iamVjdGl2ZXMNCkVmZmVjdGl2ZWx5IA0KICBpbnRlZ3JhdGUgc2NpZW50aWZp
-YyBhbmQgdGVjaG5pY2FsIGlucHV0cyBpbnRvIGVhcmx5IHdhcm5pbmcgZGlzc2VtaW5hdGlv
-biBhbmQgDQogIGNvbW11bmljYXRpb24gc3lzdGVtDQpBcHBseSANCiAgZW1lcmdpbmcgZ2Vu
-ZXJhdGlvbiBjbGltYXRlIHByZWRpY3Rpb24gdGVjaG5vbG9naWVzIGZvciBhbnRpY2lwYXRp
-bmcgYW5kIA0KICBtYW5hZ2luZyBkaXNhc3RlciByaXNrcyBhc3NvY2lhdGVkIHdpdGggY2xp
-bWF0ZSBjaGFuZ2UgJiANCiAgdmFyaWFiaWxpdHnCoA0KRGV2ZWxvcCANCiAgc3RyYXRlZ2ll
-cyB0byBpbnN0aXR1dGlvbmFsaXplIGVhcmx5IHdhcm5pbmcgc3lzdGVtcyBpbnRvIHRoZSBw
-cm9jZXNzIGN5Y2xlIG9mIA0KICBkaXNhc3RlciByaXNrIG1hbmFnZW1lbnQgYW5kIGRldmVs
-b3BtZW50IHBsYW5uaW5nLCBlbWVyZ2VuY3kgcmVzcG9uc2UsIGFuZCANCiAgcHJlcGFyZWRu
-ZXNzIGFjdGl2aXRpZXMNCkRldmVsb3AgDQogIHJpc2sgY29tbXVuaWNhdGlvbiAmIGNvbW11
-bmljYXRpb24gdGVjaG5vbG9naWVzDQpJbnRlcnByZXQgDQogIHNjaWVudGlmaWMgaW5mb3Jt
-YXRpb24gcHJvZHVjdHMgaW50byB1c2VyIGZyaWVuZGx5IGZvcm1hdHMgYW5kIHByZXBhcmUg
-JiANCiAgY29tbXVuaWNhdGUgdGFpbG9yIG1hZGUgZWFybHkgd2FybmluZyBpbmZvcm1hdGlv
-biBwcm9kdWN0cw0KRGVzaWduIA0KICBhbmQgaW1wbGVtZW50IGNvbW11bml0eSBiYXNlZCBl
-YXJseSB3YXJuaW5nIHN5c3RlbXMgdGhhdCBhcmUgcGVvcGxlIA0KICBjZW50ZXJlZA0KRXZh
-bHVhdGUgDQogIGFuZCBpbnRyb2R1Y2UgcHVibGljIGVkdWNhdGlvbiBhbmQgdHJhaW5pbmcg
-cHJvZ3JhbSBmb3IgdGhlIGNvbW11bml0eSBiYXNlZCANCiAgZWFybHkgd2FybmluZyBzeXN0
-ZW1zDQpVbmRlcnRha2UgDQogIHJpc2sgYXNzZXNzbWVudCBhbmQgZGVzaWduIG9mIG11bHRp
-LWhhemFyZCBlYXJseSB3YXJuaW5nIHN5c3RlbXMgZm9yIGRpc2FzdGVyIA0KICByaXNrIHJl
-ZHVjdGlvbg0KQXBwbHkgDQogIEdJUyBhbmQgUmVtb3RlIFNlbnNpbmcgZm9yIGRlc2lnbmlu
-ZyBpbXBsZW1lbnRhdGlvbnMgb2YgbGFyZ2Ugc2NhbGUgZWFybHkgDQogIHdhcm5pbmcgc3lz
-dGVtcyBhbmQgUGFydGljaXBhdG9yeSBHSVMgc2tpbGxzIGZvciBjb21tdW5pdHkgRWFybHkg
-V2FybmluZyANCiAgU3lzdGVtcw0KQXBwbHkgDQogIE1vYmlsZSBEYXRhIEdhdGhlcmluZyB0
-ZWNobm9sb2dpZXMgZm9yIHJhcGlkIGFzc2Vzc21lbnQgYW5kIA0KICBzdXJ2ZXlzDQpDb3Vy
-c2UgDQpDb250ZW50DQpNdWx0aSANCkhhemFyZCBFYXJseSBXYXJuaW5nIFN5c3RlbXMgQ29u
-Y2VwdA0KQ29uY2VwdHMgDQogIGFuZCBtYWluIGZyYW1ld29ya3MgaW4gTXVsdGkgSGF6YXJk
-IEVhcmx5IFdhcm5pbmcgU3lzdGVtcw0KV2VhdGhlciwgDQogIENsaW1hdGUgYW5kIEF0bW9z
-cGhlcmljIFByb2Nlc3Nlcw0KT2JzZXJ2ZWQgDQogIENsaW1hdGUgQ2hhbmdlIGFuZCBJbXBh
-Y3RzDQpDbGltYXRlIA0KICBQcmVkaWN0aW9ucyBhbmQgTWFqb3IgU291cmNlcyBvZiBVbmNl
-cnRhaW50eQ0KQmFzaWMgDQpjb25jZXB0cyBvZiBSZW1vdGUgU2Vuc2luZyBhbmQgR0lTDQpC
-YXNpYyANCiAgY29uY2VwdHMgb2YgR0lTIGFuZCBSZW1vdGUgU2Vuc2luZyBpbiB0aGUgY29u
-dGV4dCBvZiBFYXJseSBXYXJuaW5nIA0KICBTeXN0ZW1zDQpIYW5kbGluZyANCiAgc3BhdGlh
-bCBpbmZvcm1hdGlvbiBJOiAoVXNpbmcgUXVhbnR1bSBHSVMpDQpTcGF0aWFsIA0KICBSZWZl
-cmVuY2UgU3lzdGVtcyAmIGRhdGEgaW50ZWdyYXRpb24NCkhhbmRsaW5nIA0KICBzcGF0aWFs
-IGluZm9ybWF0aW9uIElJOiBHUFMtYmFzZWQgZmllbGQgZGF0YSBjb2xsZWN0aW9uDQpJbnRy
-b2R1Y3Rpb24gDQp0byBSaXNrIElkZW50aWZpY2F0aW9uIGFuZCBhc3Nlc3NtZW50DQpJbnRy
-b2R1Y3Rpb24gDQogIHRvIFJpc2sgSWRlbnRpZmljYXRpb24gYW5kIGFzc2Vzc21lbnQgdXNp
-bmcgU3BhdGlhbCBUZWNobm9sb2dpZXMNCk1vYmlsZSANCiAgZGF0YSBnYXRoZXJpbmcgZm9y
-IGZpZWxkIGFzc2Vzc21lbnRzL3N1cnZleXMgdXNpbmcgT3BlbiBEYXRhIA0KICBLaXTCoA0K
-SGFuZGxpbmcgDQogIHNwYXRpYWwgaW5mb3JtYXRpb24gSUlJOiBWaXN1YWxpemF0aW9uIG9m
-IHJpc2sgaW5mb3JtYXRpb27CoA0KSGF6YXJkIA0KICBkZXRlY3Rpb24sIG1vbml0b3Jpbmcs
-IGZvcmVjYXN0aW5nIGFuZCB3YXJuaW5nDQpTcGF0aWFsIA0KaW5mb3JtYXRpb24NCkhhbmRs
-aW5nIA0KICBzcGF0aWFsIGluZm9ybWF0aW9uIElWOiBTYXRlbGxpdGUgaW1hZ2UgcHJvY2Vz
-c2luZyB0ZWNobmlxdWVzIGZvciBjaGFuZ2UgDQogIGRldGVjdGlvbiAoVXNpbmcgSUxXSVMp
-DQpFYXJseSANCiAgd2FybmluZyBkaXNzZW1pbmF0aW9uIGFuZCBjb21tdW5pY2F0aW9uDQpD
-b21tdW5pY2F0aW9uIA0KICBwcm90b2NvbHMNClB1YmxpYyANClBhcnRpY2lwYXRvcnkgR0lT
-DQpQdWJsaWMgDQogIFBhcnRpY2lwYXRvcnkgR0lTDQpHb29nbGUgDQogIEVhcnRoLCBNYXBz
-DQpTb2NpYWwgDQogIE5ldHdvcmtpbmcgSW50ZWdyYXRpb24NCkNvbW11bml0eS1iYXNlZCAN
-CiAgZWFybHkgd2FybmluZyBzeXN0ZW1zDQpCdWlsZGluZyANCiAgaGF6YXJkLWF3YXJlIGFu
-ZCByZWFkeSBjb21tdW5pdGllcw0KTW9uaXRvcmluZyANCiAgYW5kIGV2YWx1YXRpb24gb2Yg
-ZWFybHkgd2FybmluZyBzeXN0ZW0NCsKgDQpHZW5lcmFsIA0KTm90ZXMNCsK3wqDCoMKgwqDC
-oMKgwqDCoMKgQWxsIA0Kb3VyIGNvdXJzZXMgY2FuIGJlIFRhaWxvci1tYWRlIHRvIHBhcnRp
-Y2lwYW50cyBuZWVkcw0KwrfCoMKgwqDCoMKgwqDCoMKgwqBUaGUgDQpwYXJ0aWNpcGFudCBt
-dXN0IGJlIGNvbnZlcnNhbnQgd2l0aCBFbmdsaXNoDQrCt8KgwqDCoMKgwqDCoMKgwqDCoFBy
-ZXNlbnRhdGlvbnMgDQphcmUgd2VsbCBndWlkZWQsIHByYWN0aWNhbCBleGVyY2lzZSwgd2Vi
-IGJhc2VkIHR1dG9yaWFscyBhbmQgZ3JvdXAgd29yay4gT3VyIA0KZmFjaWxpdGF0b3JzIGFy
-ZSBleHBlcnQgd2l0aCBtb3JlIHRoYW4gMTB5ZWFycyBvZiBleHBlcmllbmNlLg0KwrfCoMKg
-wqDCoMKgwqDCoMKgwqBVcG9uIA0KY29tcGxldGlvbiBvZiB0cmFpbmluZyB0aGUgcGFydGlj
-aXBhbnQgd2lsbCBiZSBpc3N1ZWQgd2l0aCBGb3Njb3JlIGRldmVsb3BtZW50IA0KY2VudGVy
-IGNlcnRpZmljYXRlIChGREMtSykNCsK3wqDCoMKgwqDCoMKgwqDCoMKgVHJhaW5pbmcgDQp3
-aWxsIGJlIGRvbmUgYXQgRm9zY29yZSBkZXZlbG9wbWVudCBjZW50ZXIgKEZEQy1LKSBjZW50
-ZXIgaW4gTmFpcm9iaSBLZW55YS4gV2UgDQphbHNvIG9mZmVyIG1vcmUgdGhhbiBmaXZlIHBh
-cnRpY2lwYW50cyB0cmFpbmluZyBhdCByZXF1ZXN0ZWQgbG9jYXRpb24gd2l0aGluIA0KS2Vu
-eWEsIG1vcmUgdGhhbiB0ZW4gcGFydGljaXBhbnQgd2l0aGluIGVhc3QgQWZyaWNhIGFuZCBt
-b3JlIHRoYW4gdHdlbnR5IA0KcGFydGljaXBhbnQgYWxsIG92ZXIgdGhlIHdvcmxkLg0KwrfC
-oMKgwqDCoMKgwqDCoMKgwqBDb3Vyc2UgDQpkdXJhdGlvbiBpcyBmbGV4aWJsZSBhbmQgdGhl
-IGNvbnRlbnRzIGNhbiBiZSBtb2RpZmllZCB0byBmaXQgYW55IG51bWJlciBvZiANCmRheXMu
-DQrCt8KgwqDCoMKgwqDCoMKgwqDCoFRoZSANCmNvdXJzZSBmZWUgaW5jbHVkZXMgZmFjaWxp
-dGF0aW9uIHRyYWluaW5nIG1hdGVyaWFscywgMiBjb2ZmZWUgYnJlYWtzLCBidWZmZXQgDQps
-dW5jaCBhbmQgYSBDZXJ0aWZpY2F0ZSBvZiBzdWNjZXNzZnVsIGNvbXBsZXRpb24gb2YgVHJh
-aW5pbmcuIFBhcnRpY2lwYW50cyB3aWxsIA0KYmUgcmVzcG9uc2libGUgZm9yIHRoZWlyIG93
-biB0cmF2ZWwgZXhwZW5zZXMgYW5kIGFycmFuZ2VtZW50cywgYWlycG9ydCANCnRyYW5zZmVy
-cywgdmlzYSBhcHBsaWNhdGlvbiBkaW5uZXJzLCBoZWFsdGgvYWNjaWRlbnQgaW5zdXJhbmNl
-IGFuZCBvdGhlciANCnBlcnNvbmFsIGV4cGVuc2VzLg0KwrfCoMKgwqDCoMKgwqDCoMKgwqBG
-b3IgDQphbnkgZW5xdWlyeSB0bzrCoHRyYWluaW5nQGZkYy1rLm9yZ8Kgb3IgKzI1NDcxMjI2
-MDAzMQ0KwrfCoMKgwqDCoMKgwqDCoMKgwqBXZWJzaXRlOnd3dy5mZGMtay5vcmcNCsKgDQpP
-dGhlciB1cGNvbWluZyB3b3Jrc2hvcHMgDQpNYXJjaCANCjIwMjIoTmFpcm9iaSxrZW55YXxt
-b21iYXNhLGtlbnlhfHJ3YW5kYSxraWdhbGl8ZHViYWkpDQrCt8KgwqDCoMKgwqDCoMKgwqAg
-DQoNCjxodHRwOi8vdHJhY2tpbmcuZmRjLWsuYWZyaWNhL3RyYWNraW5nL2NsaWNrP2Q9dElN
-aWZ4MEt2YTdFRkh4Tzl4UWtrcGhNOXNzZ3ZGczF1aGdGQlBraEt2Zi1oOGtEYjBVZkd4WEJT
-alJhNUdhSkVsYzAweUVzS25kMXB5WEgza2x6QVhJWkhwWkV5dnh5WUxjbWhGQkhCVklQSnps
-SldhVzFMb2RFbl8xUnBfWlBvX2cyMmpfaUJabjlIdFdobWp0cnBrVFRjV09vYnFDak5IcWVI
-X0xzWTZlUXowbGdGSHFOTUMySHJKNWFKbHVOdmwzOTkyS01rZEFjOXcycFFqWE9vakwxUG1E
-X2szYjE3VDFwSC05dkJUOW9sNWk2QTZXMjJsNXB3NUYyN01OZzNXMmlWNFZ0ZnNHQU1DTmhL
-SUcyNDhRMT4NClF1YWxpdGF0aXZlIA0KRGF0YSBNYW5hZ2VtZW50IGFuZCBBbmFseXNpcyB3
-aXRoIE5WSVZPIFdvcmtzaG9wDQrCt8KgwqDCoMKgwqDCoMKgwqAgDQoNCjxodHRwOi8vdHJh
-Y2tpbmcuZmRjLWsuYWZyaWNhL3RyYWNraW5nL2NsaWNrP2Q9d1BlUXZ3SG1tTG9IQ0RoUkEx
-QWlMclNxY2lubThkdFdqcEZ0bzIycnJxS0hIbFFWZUo1dWlKREhNOEgwOGl1WmE4Ym9xTktM
-czhMS0pHYk5kTVhpQlZ0d19XNmx2bWFIb25Ha1VqcnhtRnZ0amp6Wm5EWjcxb2RmSWlvQmNx
-eXVMNHlmai1URVkwaWFFWUY1M3h4S2tNMk5YT0dya0xaUGNUQWNxSGtfZXRPWW5aU29DUVky
-VVk5UkVjWGcya2d3QUpOZUxGQ2VqUlF5WlVfeTlRYWxGN2FjS3I4SURMYTdSSklrNGRha01F
-c2JlUEJmM2tmMDdFa2dyQVVfcW40b2xRMj4NCkdlbmRlciANCkVxdWl0eSBBY2hpZXZlbWVu
-dCBpbiBEZXZlbG9wbWVudCBQcm9qZWN0cyBXb3Jrc2hvcA0KwrfCoMKgwqDCoMKgwqDCoMKg
-IA0KDQo8aHR0cDovL3RyYWNraW5nLmZkYy1rLmFmcmljYS90cmFja2luZy9jbGljaz9kPW1X
-V2diaTB2WGU2eVBSdkZ6NTFqakg2V2lKNUtmbmJ0M0M4SW1TYk01cHlnQUFkVTdoUlIxWU9l
-M1NDNVRxRngxMVBGS0duT3ZtRzJWMV9YRFB1dkxBb29ubS1yeGtudXFPdlYzQ0hraWJBZndo
-N2tUbGlKeXhsT0wxN2VzZDVGaHRFNE1qN1dkSzdhUW1pVS1RV1NBS29Tb1F4TnNDazB3RkI0
-cVVsZ0FfeC1KcU9KdHBJSkFuRmpWeVBEUzJWRlN5QjJkV2RXZTFVZ1c1NlN1a3htWjFBR3Jz
-OVhnYUI0ZVpxaWltTHlaTlVsQjFEVURKMV9pNFNaYkpiVTBlZ0pSZzI+DQpBZHZhbmNlZCAN
-CkV4Y2VsIEZvcm11bGFzIGFuZCBGdW5jdGlvbnMgV29ya3Nob3ANCsK3wqDCoMKgwqDCoMKg
-wqDCoCANCg0KPGh0dHA6Ly90cmFja2luZy5mZGMtay5hZnJpY2EvdHJhY2tpbmcvY2xpY2s/
-ZD1GWlozYVBpS2ExbXl6MVRNeUN5Y0tEMVlJa2gwUmpaQnprUXNmMmxsNFBWbmZSdzNWeVFM
-dWRLQ29JVXY5bWNRMXJMcFZ0eGtzVkVVU3dUZTU2RGRTbzFBZndkNm1scDd3SmRfTFlQZnJE
-MWE4RDNic2pRR2tEcVhfY2Iwb2hTZGN2X2p3Si1Ucjc5U0h3RjV4QTJyZ3RTZTgtekx6d3ZX
-N2dqazBqSFA5LXZGY2w1cEpWTml1MlhiMklEeUo5aGpKcjZ0UjNjLWVhaEhoOTFldWxBa3FL
-MTZ5V1IydTQ0U0RFUHNBeXlTZ1JCUlo3a3ZMLUhGajd6NUtUbFh4QVBTUHcyPg0KVHJhbnNm
-b3JtYXRpb25hbCANCkxlYWRlcnNoaXAgYW5kIEdvdmVybmFuY2UgV29ya3Nob3AgDQrCt8Kg
-wqDCoMKgwqDCoMKgwqAgDQoNCjxodHRwOi8vdHJhY2tpbmcuZmRjLWsuYWZyaWNhL3RyYWNr
-aW5nL2NsaWNrP2Q9YzNQR3NxaVFiYkVTU2JNc053Y0NsaWdvcnpKMkMzcWpmTmhzXzYyNUVF
-bkJpdHlzVnFsNEpiM0xsejhhY2tmaVY3eXRXUi0zcW5PS1ltZnNOamViVi1MRkRpdktfaGJY
-M1M1UGc4YmpEcnBoakYwVDFnaDN0aE5KRkVzdHFPMG5qeml0Q3J2WmlHX3kxYmtHQ2V5YlNz
-eHp0Q3RUaTR1VzJQdUVDNlRKTUtnR3BFSmdqMmNrVk0wdXhIUjJKMHFONXRTSE43MVVJbXcx
-c0hPZHJOcW9RWlp4Y1BLVFN4bkFrTnJZTm9PX2VvbjdCVVJKa0Ixcml6N09aNHJpRHRrTlVO
-bmp1S0xlWG1hMGpVLTNkMHE2eGZMOHZfaW1FT1M2SXV5d240S2hUUE5jMD4NClByb2plY3Qg
-DQpJbmZvcm1hdGlvbiBNYW5hZ2VtZW50IFN5c3RlbSBmb3IgRGV2ZWxvcG1lbnQgT3JnYW5p
-emF0aW9ucyBhbmQgTkdPcyANCldvcmtzaG9wDQrCt8KgwqDCoMKgwqDCoMKgwqAgDQoNCjxo
-dHRwOi8vdHJhY2tpbmcuZmRjLWsuYWZyaWNhL3RyYWNraW5nL2NsaWNrP2Q9SDBKNG9pX2V2
-NmE5N3hPUTVZLTRtSzRZdTU1WVc0VkxoRmp5enN1WGNsZlIwdVpaQUVKa3JxMmczUW9kb09t
-M2g2cGIxb2tJS3Jya2ZrS05zQUU3Y2wzX2tHQlpGNFcxMi1GZ3lwTEFTcThpNWR4UUtNakFU
-eEoxclozRk9ZV2wtalpRN1RvODNxR1plSWFlT0F5OTg4SkkzZGNzYWFjRFFNZGZGQndEbzlN
-VFg3d3lWakc3bkVqWnI4aHJQbld3NExaXzM0dTVCWWZHSC1wTnJ4ZTBXaWR1dGtCOWgzRFRn
-TmFZM1ZPbDRhaUZsbmVPRUZQbDlSYmRyel9LTVJZc2NBMj4NCkh1bWFuIA0KUmVzb3VyY2Vz
-IE1hbmFnZW1lbnQsIERldmVsb3BtZW50IGFuZCBBdWRpdGluZyBXb3Jrc2hvcA0KwrfCoMKg
-wqDCoMKgwqDCoMKgIA0KDQo8aHR0cDovL3RyYWNraW5nLmZkYy1rLmFmcmljYS90cmFja2lu
-Zy9jbGljaz9kPXQ4YkxCYW8zU0Z3bGx4YWYxQXV2dzM1eGhpZkYzZGY1NGRJRUJQS0NMX2lH
-aUNqalBuWm1fSThnMDB0Y05lRzhTTjB4aWdiRnYxS2hqUHlNblFEZjhELVItNlFEQ1cyNkJQ
-Rkh5TXJXOHVnZHR1ZzNUSHQ1ZGliNDc1M1BkWHcxZDg1cTdtNS05cFFwNmMxQnhWSzFLRnFD
-MzBRRXAzVzdKNjNvLVl6dGRpa05MUzlua2cycVRoZWVhdFFZN0U5a2hlSHViMlJDcmJCVWVV
-MEhHY3ZMbDFOclQ4NGlXR3VXaDRMNkpJa0h1aEpMMD4NCkdJUyANCkFwcGxpY2F0aW9uIGlu
-IERpc2FzdGVyIFJpc2sgUmVkdWN0aW9uIFdvcmtzaG9wDQrCt8KgwqDCoMKgwqDCoMKgwqAg
-DQoNCjxodHRwOi8vdHJhY2tpbmcuZmRjLWsuYWZyaWNhL3RyYWNraW5nL2NsaWNrP2Q9bk9j
-OFE2LUduS1ZVSXBnUlBIdnVDTGpPbk9BNXNZdFBGbDdpOS1GM2JIN2tMdExZZHp3QkEzOXBw
-YTRramhBbFF6aE55Y2lNVzhlQlNSSWE1NFN2MnhuVnlDak5OQ0paSFljUHlNSF9yaVQzTjhx
-cEh5Q2wzS1lycXRFelBIazh2X0VIcVEtdjdEZ2RCQldFUGVSUGNRYVo0MFliRzBTdVB0ejda
-THpacnlrSG5sblNoUEJ5RjIycW4yQ1pBWDJKSXp5Wmo2cDFWQW9xTFc0LWpEc0g4aFNWNHNX
-Qm9GcUJZa0VSaGZhSGNPLTZYQTI4bWZ6Yy1tUktqUjNIUEFDellIbW5aLVVsRTNPalNVODlk
-U2NCb0RvMT4NCkRhdGEgDQpBbmFseXNpcywgTW9kZWxpbmcgYW5kIFNpbXVsYXRpb24gdXNp
-bmcgRXhjZWwgV29ya3Nob3AgDQrCt8KgwqDCoMKgwqDCoMKgwqAgDQoNCjxodHRwOi8vdHJh
-Y2tpbmcuZmRjLWsuYWZyaWNhL3RyYWNraW5nL2NsaWNrP2Q9NXltbWdJTEJpb29oVVd4a21Q
-X1BGMEI5MUl3ZzR0ZGNrcmRqRVZ6ZkJnNFViQUJnSWZCT290ZTNQakVjYU5QV2d1Y0VGblp3
-Wlp3SWV2NTZwanRYcmZadDVWdnJub05kQkNzdndtcXVEcjNMRUpWOWRjMWJ5a1hmZGgtMzBC
-WHl3b21XQ3diZ1R3NTFOQ1VlNHlWQ2RKanRQTDEzNlhqY3FoYUU0R0xWeE44bmh4QlhzMEJa
-VGd6b0ZVbTItdVNDU1o0TUVScXgxM1B6dWdXOW0xMk9KTXlZWjNxbXFRbWVsY1ZpbXpkTjFm
-ZmFpaFhINVJXVFNldmN2el9sY1BoaVpnMj4NClF1YW50aXRhdGl2ZSANCkRhdGEgTWFuYWdl
-bWVudCBhbmQgQW5hbHlzaXMgd2l0aCBTVEFUQSBXb3Jrc2hvcA0KwrfCoMKgwqDCoMKgwqDC
-oMKgIA0KDQo8aHR0cDovL3RyYWNraW5nLmZkYy1rLmFmcmljYS90cmFja2luZy9jbGljaz9k
-PXJXN2t2OWFlM1JJWkdOTEVKUEFtYkdvSXpiYXhXT2dlS29kUTJwcUFVSlRZa2FKc3JseV9Z
-SkQyNTBxaHp4WFRzWEZoTVJVbkVKbDVLSTJhSjJVWTNKQXRuYnpKUzdBdFZONUNyd3dyYTdI
-MnBjalVpYW9wcTlzRlZkaHA4TGtoQk01Z2RBVy1qNVBqOEVvNWlfSXhGQ3Vyb0s0ZVZZY053
-VjNnd0UweXNwdjc3ZS1YUFp0MXZDeEIxX3owQTk0Q19xQVpaUnVYaGJ6dF81a3ZqeVlKdGZx
-NjFab2s5bTV1ZG9fRHRaUUFxQnJFUHl5bF9yT2hjWEstdktfMHlNVVV4UTI+DQpEZXZlbG9w
-aW5nIA0Kb3JnYW5pemF0aW9uIEJhbGFuY2VkIFNjb3JlY2FyZCBXb3Jrc2hvcA0KwrfCoMKg
-wqDCoMKgwqDCoMKgIA0KDQo8aHR0cDovL3RyYWNraW5nLmZkYy1rLmFmcmljYS90cmFja2lu
-Zy9jbGljaz9kPXQ4YkxCYW8zU0Z3bGx4YWYxQXV2dzM1eGhpZkYzZGY1NGRJRUJQS0NMX2lH
-aUNqalBuWm1fSThnMDB0Y05lRzhTTjB4aWdiRnYxS2hqUHlNblFEZjhELVItNlFEQ1cyNkJQ
-Rkh5TXJXOHVnZHR1ZzNUSHQ1ZGliNDc1M1BkWHcxZDg1cTdtNS05cFFwNmMxQnhWSzFLTnpX
-aFhUY0ZjTG8zeE1qbFlETjV1RWYxRG5ZSkd1M2M4UGs5Z0xkN25vV0RrVUxLb2tHQ3I3bWwt
-NmVxdThmUnJDSVRGb1lENXlvWTBUUzRsQjJ5UFZWMD4NClB1YmxpYyANCkhlYWx0aCBpbiBX
-QVNIIGR1cmluZyBFbWVyZ2VuY2llcyBXb3Jrc2hvcA0KwrfCoMKgwqDCoMKgwqDCoMKgIA0K
-DQo8aHR0cDovL3RyYWNraW5nLmZkYy1rLmFmcmljYS90cmFja2luZy9jbGljaz9kPU9INEIt
-bjkzNExOaWNpZHVsX2g4V0JtZS1LQnBTcGpJek5lRGplZTJIQVVsMFNka1hRSjZpUkJSUmRF
-UmFRV25lQ2lycnM3WkYtZTQwcVplNzVmZS1OYkk2UVFvY2NZR0lzaV9QRXRnTGMzZnVDbDZK
-NDJaWmM5cUZfaWtIRkhtbUNGdlRtbE1ubU5NUHhhZmJfdWhKX3FOMGFaMlByU05nRE1jbXEz
-S0pjSXptLWhzb2hITWExNFRRLUFLZGdGWkVORlRuMy03dWp1WW40V1RWcjR4d0NtdXZiRFEx
-UmtUUkhhbXB4SW44OUdCUzJNTWJTdHowS0NwRU5XdmZQRzk1QTI+DQpNb2JpbGUgDQpEYXRh
-IENvbGxlY3Rpb24gdXNpbmcgT0RLICYgS29ib1Rvb2xCb3ggV29ya3Nob3AgDQrCt8KgwqDC
-oMKgwqDCoMKgwqAgDQoNCjxodHRwOi8vdHJhY2tpbmcuZmRjLWsuYWZyaWNhL3RyYWNraW5n
-L2NsaWNrP2Q9bjVRc1BoY1NJVkV1VjZuUFhodTlRLW5XUF9weC1OclFwX0xqdkhaamRiN1Jr
-TngzZzI2ZUZheUI5R29oZk12b1lIZ0ZTOHFnSzI5VUUwQXVQZ2Z2NjIzYk94TFo3NFJYb285
-WWRaUS1SMERqRG5MSmI3bEpYM0hVUEFpLUFvcldOLVQ2RTRBeEo5VmNCcW53UXl3cGFxVXRt
-bGRoWXQwek1XRFUyT2pmV24zSWRiMkNWdl9ROG1zbTh3QXJRMmdSNUJOcy1BMUJXazIzZnV0
-RHk1YVlOeEpoLTN2bmN0ZnBwakV5UkU4T3ZIeDE1dnVHWHY2bUhvX2Q3Z3AyRDF3R3lUbUY4
-a1FyMHIwU203TkZZLXVVRmVZMT4NClRyYW5zZm9ybWluZywgDQphbmFseXppbmcgJiB2aXN1
-YWxpemluZyBkYXRhIHdpdGggTWljcm9zb2Z0IFBvd2VyIEJJIA0KV29ya3Nob3ANCsK3wqDC
-oMKgwqDCoMKgwqDCoCANCg0KPGh0dHA6Ly90cmFja2luZy5mZGMtay5hZnJpY2EvdHJhY2tp
-bmcvY2xpY2s/ZD1IMEo0b2lfZXY2YTk3eE9RNVktNG1LNFl1NTVZVzRWTGhGanl6c3VYY2xk
-ZkpucTFjYXVYaFNBTE54THVmR1JmcVRqUFdHQ3Rfd3NXOHJPZlp6NVBUcEEtZnc1cHJqeDR6
-ejZUSEtSQkctWTBleWRIM1RYZVZ1TkZDUGdFUWE2dXlhdWtNOFpQd2cwQ25SOXpRY1YtWWpI
-Y3R6ZDE0SHAwM19GT2NvbVhXZkM5dU5kVllqTXJkbzhqeUVjUHI5T3Fka2VQM2NnbkZHUWFm
-OVZZZVZJbHlhYm50MXZjZ1VOTEZlWXZ3ZVFUVlRKcDBydWI1ZTZramQwczJUTGw3Y1J1cEEy
-Pg0KUXVhbnRpdGF0aXZlIA0KRGF0YSBNYW5hZ2VtZW50IGFuZCBBbmFseXNpcyB3aXRoIFIg
-V29ya3Nob3ANCsK3wqDCoMKgwqDCoMKgwqDCoCANCg0KPGh0dHA6Ly90cmFja2luZy5mZGMt
-ay5hZnJpY2EvdHJhY2tpbmcvY2xpY2s/ZD1QTEhCSzEzWmlVejR3TUdkdlRRRkFVZnVWRnpP
-ZEQxZzFlbEduSTVkWkloTGY2MTlnU2ZPMW1SV0VyZTFVUFoyVDRHelNFVVpvTkhtTGg2QV9m
-MHRZWHZiMnNETmpGa3R4UE5ucEwyeFhCTl85QWVtc1M5aEpFNFdPd0lVZVl3R3BpdmFLaGVV
-bEdvWDJwUkpsbDNQNW5FUjlOV2h4UmhKTTZSUlJoRUhJVVRDMWJYaVFSQmZjeEdKOXRhbDQw
-MmNUV1JaMzRFcDZkM2E5dHNLUWtwN0JvbFhRbUxWdHVSaFROZF95WmcyaDdtakVGNU5kZFBN
-V3hOUXhRajZMckVVTFctNGxfNzBTd2FKRkVBcEFwNW5yTGsxPg0KUXVhbnRpdGF0aXZlIA0K
-RGF0YSBNYW5hZ2VtZW50IGFuZCBBbmFseXNpcyB3aXRoIFNQU1MgV29ya3Nob3ANCsK3wqDC
-oMKgwqDCoMKgwqDCoCANCg0KPGh0dHA6Ly90cmFja2luZy5mZGMtay5hZnJpY2EvdHJhY2tp
-bmcvY2xpY2s/ZD1DeDJacm5KdDR5VGxqUkYzTGxiUjFILVU4Q3NPRWpoR3pUZ1ZqQTFBenpM
-SDMxOFpYTGtXZXo3Q283TEpwS2Y1MzRjQkI0UEVWR3Bta0VSQzVVQWlFaWJ4ejUyX1VCTEU3
-QmVnQ19YZldpcXFRUWZqLWR1REt4Z2xTTGcwV2tmdGhMaVJrbWJvSmxKN2RkZmdkeXVKV0Rp
-UlFDRzZUcktIMW1EVVlYamllMnJYRVltSUtyV1h4VUpfTlVweUFBZUpTYTNUdXlBU2R5MFZ0
-ZFR0bXNWbEpWS2VoQ2d1ZTVVRDExTEZEeFB3MFljOE5UbVB0dVBKOEdQYzlDSW9PLXhXcDNT
-aFFJUnlZQzJxOWpvOVh1WUE2Q01sNUZobFI3UENRTndrNUtZbk5Nd2swPg0KU3RyYXRlZ2lj
-IA0KQ29tbXVuaWNhdGlvbiBUcmFpbmluZyBGb3IgTWFuYWdlcnMgQW5kIEV4ZWN1dGl2ZXMg
-UHJvZ3JhbSANCldvcmtzaG9wDQrCt8KgwqDCoMKgwqDCoMKgwqAgDQoNCjxodHRwOi8vdHJh
-Y2tpbmcuZmRjLWsuYWZyaWNhL3RyYWNraW5nL2NsaWNrP2Q9cFVVUnl2TmlpcnYyY1c0eVdV
-RXVyRlFNcWJEMV92Q2taemw4MWxDM21zR01oakp0dWUwTWNaeGYySlRtakFaRy1IOTY3YXMy
-bG9DQVgtck9uRE1lMlRtTXdkdnRWNHd4eXlTam15REFXR1N3cmJHck5vQTRaU3FOVnFOb2NN
-bkJFZGlEVnc4RWhCRUNDN3JkaDgyTWlUc1hCREdkdWlSOHJkN2Z2dm1rVkZpSV90WHJKeVJh
-a0VxUlV6a1B0Q1Z1M3Znd0RuckhsbmZmaDRwWkhxLU5oOHpQODdKbzZoNGhtMXZueVdTNE1B
-eFpPYTc2ZExlejNIcjNoWlJXc2Q2T3pRMj4NCkdyYW50IA0KTWFuYWdlbWVudCB1c2luZyBT
-dW4gQWNjb3VudGluZyBTeXN0ZW0gV29ya3Nob3ANCsK3wqDCoMKgwqDCoMKgwqDCoCANCg0K
-PGh0dHA6Ly90cmFja2luZy5mZGMtay5hZnJpY2EvdHJhY2tpbmcvY2xpY2s/ZD1sMkhvSTd2
-NVE0R1VsM3p2Mi0tWktJSWt1M1BEUU5meldkb2xyWXlhZV9xSUs3bGRPMkNpRU1uODljdnhk
-VjhNQUJnbllyanEzOW9yMkxDRFRMMmVwQ1FLSEhlVkdnUDljejlxejh4dU1rQ25ET2pISkZ0
-clRXbHdLVmJmbTQwVDc3WHM5XzNSRFRqTVhsMDkxTzFtcUh3dFVjNTM1MWdsb3h0cFNpSHM1
-ZjVSeDh0N0tBbllRVzUzRW9VSS1mVlFyZHBTOHd2dHlxRkNmYXJNdURmX2xMNXdrd1pLRGxK
-WTNDdS1EZHl2NTdWRlZzSnlQUW1wTzZmZXZxOG5zMjc5U3cyPg0KUmVzZWFyY2ggDQpEZXNp
-Z24sIE9ESyBNb2JpbGUgRGF0YSBDb2xsZWN0aW9uLCBHSVMgTWFwcGluZywgRGF0YSBBbmFs
-eXNpcyB1c2luZyBOVklWTyBhbmQgDQpTUFNTIFdvcmtzaG9wDQrCoA0KUmVnYXJkcw0KRkRD
-IA0KVHJhaW5pbmcgVGVhbQ0KRm9yIA0KYW55IGlucXVpcnkgdG86wqB0cmFpbmluZ0BmZGMt
-ay5vcmfCoG9yICsyNTQ3MTIyNjAwMzEgb3IgDQo8aHR0cDovL3RyYWNraW5nLmZkYy1rLmFm
-cmljYS90cmFja2luZy9jbGljaz9kPUVqeDEwa21YUDI5OU1QX3VlMHFzVlRUSEY1ZWVKc0NN
-UzhhekgyX21USExocThUbGR5OVRzT2tYeXVrWWFzQlBqOGhSTTJWZDFkSTR5Q2lWV2Z3RnZ0
-WDBJdVBHbzY1NWZQQVR6b3oyZ2JjSVV4cXZGMkR6bzA1UkM3NEU0VTFrOHVCYUlnUmxnQUU2
-eFZCNjdRcG4yVGsxPg0KQ29udGFjdCB1cw0KwqANCjxodHRwOi8vdHJhY2tpbmcuZmRjLWsu
-YWZyaWNhL3RyYWNraW5nL3Vuc3Vic2NyaWJlP2Q9Vzd6VXZMLXRCQXF1YTZudWdueThUUy05
-NUlod3IzYk1JdVdISHRWXzRvYUdQUjlMNWtqRWJ4TXRMLXJoR1JMQVFEZ2ZoQjF5MlhJMW5x
-eWR3Y2REUDhjMT4NClVOU1VCU0NSSUJF
+GXP is the name of the HPE SoC.
+This SoC is used to implement BMC features of HPE servers
+(all ProLiant, Synergy, and many Apollo, and Superdome machines)
+It does support many features including:
+	ARMv7 architecture, and it is based on a Cortex A9 core
+	Use an AXI bus to which
+		a memory controller is attached, as well as
+                 multiple SPI interfaces to connect boot flash,
+                 and ROM flash, a 10/100/1000 Mac engine which
+                 supports SGMII (2 ports) and RMII
+		Multiple I2C engines to drive connectivity with a host infrastructure
+		A video engine which support VGA and DP, as well as
+                 an hardware video encoder
+		Multiple PCIe ports
+		A PECI interface, and LPC eSPI
+		Multiple UART for debug purpose, and Virtual UART for host connectivity
+		A GPIO engine
+This Patch Includes:
+	Documentation for device tree bindings
+	Device Tree Bindings
+	GXP Timer Support
+	GXP Architecture Support
 
---=-eZCfAESGyHPhAN6/Pe0HYHrTwlFj9Ng923WKzQ==
-Content-Type: text/html; charset=iso-8859-1
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+---
+ .../bindings/display/hpe,gxp-thumbnail.txt    |  21 +
+ .../devicetree/bindings/gpio/hpe,gxp-gpio.txt |  16 +
+ .../devicetree/bindings/i2c/hpe,gxp-i2c.txt   |  19 +
+ .../bindings/ipmi/hpegxp-kcs-bmc-cfg.txt      |  13 +
+ .../bindings/ipmi/hpegxp-kcs-bmc.txt          |  21 +
+ .../memory-controllers/hpe,gxp-srom.txt       |  13 +
+ .../devicetree/bindings/mtd/hpe,gxp.txt       |  16 +
+ .../bindings/net/hpe,gxp-umac-mdio.txt        |  21 +
+ .../devicetree/bindings/net/hpe,gxp-umac.txt  |  20 +
+ .../devicetree/bindings/pwm/hpe,gxp-fan.txt   |  15 +
+ .../bindings/serial/hpe,gxp-vuart-cfg.txt     |  17 +
+ .../bindings/serial/hpe,gxp-vuart.txt         |  23 +
+ .../bindings/soc/hpe/hpe,gxp-chif.txt         |  16 +
+ .../bindings/soc/hpe/hpe,gxp-csm.txt          |  14 +
+ .../bindings/soc/hpe/hpe,gxp-dbg.txt          |  18 +
+ .../bindings/soc/hpe/hpe,gxp-fn2.txt          |  20 +
+ .../bindings/soc/hpe/hpe,gxp-xreg.txt         |  19 +
+ .../devicetree/bindings/spi/hpe,gxp-spifi.txt |  76 +++
+ .../bindings/thermal/hpe,gxp-coretemp.txt     |  14 +
+ .../bindings/timer/hpe,gxp-timer.txt          |  18 +
+ .../devicetree/bindings/usb/hpe,gxp-udc.txt   |  21 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   4 +-
+ .../bindings/watchdog/hpe,gxp-wdt.txt         |  11 +
+ MAINTAINERS                                   |  14 +
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/boot/dts/Makefile                    |   2 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      | 207 +++++++
+ arch/arm/boot/dts/hpe-gxp.dtsi                | 555 ++++++++++++++++++
+ arch/arm/configs/gxp_defconfig                | 243 ++++++++
+ arch/arm/mach-hpe/Kconfig                     |  21 +
+ arch/arm/mach-hpe/Makefile                    |   1 +
+ arch/arm/mach-hpe/gxp.c                       |  62 ++
+ drivers/clocksource/Kconfig                   |   8 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/gxp_timer.c               | 158 +++++
+ 35 files changed, 1719 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/display/hpe,gxp-thumbnail.txt
+ create mode 100644 Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.txt
+ create mode 100644 Documentation/devicetree/bindings/ipmi/hpegxp-kcs-bmc-cfg.txt
+ create mode 100644 Documentation/devicetree/bindings/ipmi/hpegxp-kcs-bmc.txt
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/hpe,gxp-srom.txt
+ create mode 100644 Documentation/devicetree/bindings/mtd/hpe,gxp.txt
+ create mode 100644 Documentation/devicetree/bindings/net/hpe,gxp-umac-mdio.txt
+ create mode 100644 Documentation/devicetree/bindings/net/hpe,gxp-umac.txt
+ create mode 100644 Documentation/devicetree/bindings/pwm/hpe,gxp-fan.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/hpe,gxp-vuart-cfg.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/hpe,gxp-vuart.txt
+ create mode 100644 Documentation/devicetree/bindings/soc/hpe/hpe,gxp-chif.txt
+ create mode 100644 Documentation/devicetree/bindings/soc/hpe/hpe,gxp-csm.txt
+ create mode 100644 Documentation/devicetree/bindings/soc/hpe/hpe,gxp-dbg.txt
+ create mode 100644 Documentation/devicetree/bindings/soc/hpe/hpe,gxp-fn2.txt
+ create mode 100644 Documentation/devicetree/bindings/soc/hpe/hpe,gxp-xreg.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/hpe,gxp-spifi.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/hpe,gxp-coretemp.txt
+ create mode 100644 Documentation/devicetree/bindings/timer/hpe,gxp-timer.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/hpe,gxp-udc.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.txt
+ create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+ create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
+ create mode 100644 arch/arm/configs/gxp_defconfig
+ create mode 100644 arch/arm/mach-hpe/Kconfig
+ create mode 100644 arch/arm/mach-hpe/Makefile
+ create mode 100644 arch/arm/mach-hpe/gxp.c
+ create mode 100644 drivers/clocksource/gxp_timer.c
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML><HEAD>
-<META content=3D"text/html; charset=3Dunicode" http-equiv=3DContent-Ty=
-pe>
-<META name=3DGENERATOR content=3D"MSHTML 6.00.6000.16546"></HEAD>
-<BODY>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DOH4B-n934LNici=
-dul_h8WBme-KBpSpjIzNeDjee2HAVGVJKXjEhvr1i3nNJQq519Xtxt3z2-c0A_AMLw-RqQ=
-2z1OShDLiQ_JlEPly1iX4A79GDyYdnDQ7Kf3uDoOr4B0sFquL210Wf0LoqOOS_uSpSLxK-=
-WvvdheDCYVJjuh13Vf5ws3lbFK_c7aEjVtue_1IsLrAHY_JzEXHgteHAhRxKv0rPjHWWG9=
-KNRt6USIPGdMC33ZAJUaNkx3jcg-Il07fA2">Remote=20
-Sensing and GIS in Multi Hazard Early Warning Systems March workshop=20
-2022<?xml:namespace prefix =3D "o" ns =3D "urn:schemas-microsoft-com:o=
-ffice:office"=20
-/><o:p></o:p></A></SPAN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><o:p>&nbsp;</o:p><=
-/SPAN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DOH4B-n934LNici=
-dul_h8WBme-KBpSpjIzNeDjee2HAVGVJKXjEhvr1i3nNJQq519Xtxt3z2-c0A_AMLw-RqQ=
-2z1OShDLiQ_JlEPly1iX4A79GDyYdnDQ7Kf3uDoOr4B0sFquL210Wf0LoqOOS_uSpSLxK-=
-WvvdheDCYVJjuh13WSrMs94uSaCfsCE3Bj-kkniqNbASDxUiVOOrWXGV_53jj7Tzk8q0wL=
-INrWq5Cx7yfaMr4YJO-9XJsz3aSOSkOq9A2">Register=20
-as individual, Group or Online<o:p></o:p></A></SPAN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><o:p>&nbsp;</o:p><=
-/SPAN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DsreBwoDzYdgj3b=
-OaBCRBsUjfBl7INs8m6G7880FO93iPm6YcioMVihbGt5g9wvp7zy1sRTZv9rvnprIFTXnD=
-CwSi0QuHTevcAvJnu1TMt0VyeyrdhTJ4sY85VXL1aiymtkfcrX8EoZTedRNJ38dYl6IS7A=
-qhu_AWw0n69CyXn7sa0">Download our=20
-calender<o:p></o:p></A></SPAN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><o:p>&nbsp;</o:p><=
-/SPAN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DpVt24nBCIBaQho=
-Uk_JoHXFvrRgFR5MPGLiMhyXxgvgyIDyXSbhI1KbL_aep7SxKdowT03L8AM4RUYnVsLmYT=
-r0QrAuYKpBAhFV7SKf_2L5Hqa0ELNExJ33JeexgOWOigUGKK5DbGV4LxJQSIEzmk2TY1">=
-Download our=20
-brochure<o:p></o:p></A></SPAN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><o:p>&nbsp;</o:p><=
-/SPAN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Discount:=20
-20% for 5 and more participants</SPAN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'></SPAN></B>&nbsp;<=
-/P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DEjx10kmXP299MP=
-_ue0qsVVgsmeCyCL2aa9hihsYn1qwMa8GIvWQal36FF61Ioym2yGGkY5rc7Rg_9ee5Dbhk=
-xpYGfwu1KXnQj-M4j7ARO539kycqoZx8tim4986xcQIDo0nc30EsjuvjXpfFDkDOJmQ1">=
-Our 2022&nbsp; onsite=20
-Programmes</A></SPAN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'></SPAN></B>&nbsp;<=
-/P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><STRONG><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3D5PkZPp48t-8Hz5=
-sVatBFpn5a3epmXhM_3pncS_6AmlwYFgP6vZkB2RafR93X3_YyYEPDtrZO4x-X8aV_3thA=
-r1pP7BBYcdh628zCO4Y3uTNyfsOEQH179Xe1x-XXXm9F3FGhNddfs9y7Al4SEdgyTjs1">=
-Our 2022&nbsp; online=20
-Programmes</A></STRONG></SPAN></SPAN></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><STRONG></STRONG><=
-/SPAN></SPAN>&nbsp;</P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><STRONG>Centers:</=
-STRONG><STRONG><FONT=20
-face=3DCalibri>Nairobi,kenya|Mombasa,kenya|Rwanda,kigali|Dubai</FONT><=
-/STRONG></SPAN></SPAN></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><o:p>&nbsp;</o:p><=
-/SPAN></B></P>
-<P class=3DMsoNormal=20
-style=3D"MARGIN: 0cm 0cm 0pt 18pt; LINE-HEIGHT: normal; TEXT-INDENT: -=
-18pt"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>For=20
-any inquiry to:&nbsp;training@fdc-k.org&nbsp;or +254712260031 or <A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DEjx10kmXP299MP=
-_ue0qsVTTHF5eeJsCMS8azH2_mTHLhq8Tldy9TsOkXyukYasBPbXPC6fK6B5ngAcmDr04F=
-i2Y_loK37yRd4yTnxtSP8e4qKItj_xWIvZZ5gb8mWJ9F-pQ805EusBN1Drtj7mQX6x01">=
-Contact us</A></SPAN></B></P>
-<P class=3DMsoNormal=20
-style=3D"MARGIN: 0cm 0cm 0pt 18pt; LINE-HEIGHT: normal; TEXT-INDENT: -=
-18pt"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'></SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN>&nbsp;</P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><SPAN=20
-style=3D'FONT-SIZE: 7pt; FONT-FAMILY: "Times New Roman",serif; COLOR: =
-blue; mso-fareast-font-family: "Times New Roman"'>&nbsp;</SPAN><B><SPA=
-N=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Website:<A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DUuhk_vr4js18Hl=
-PTKSEjJYTZyhsDKm8wxy3-71gNDWDKQ7HqMnkLi7oARMfg-qmzK6t24T3tVaux4O40bDOP=
-mDu400Dk0YaCy8_YIyZIURN65ZskRgtRE78Zyrxw4tthmQ2">www.fdc-k.org</A></SP=
-AN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'></SPAN></B>&nbsp;<=
-/P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DIuDb5fT4fapGEp=
-KDebKZ5tAUbMyiQZKn7H5Q_UIJ_CCjtnH0zLxsj9d7KthqiYcrcgt0z1zYe25LqqENw6Df=
-F_9sJUhBy0mz43sn1fwAXZOHTrHZje-YkURvXSDp8qDb6Y-BjrmW1WNsApv5WG0mZWU1">=
-Consultacies</A></SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><o:p>&nbsp;</o:p><=
-/SPAN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><o:p>&nbsp;</o:p><=
-/SPAN></B></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Introduction</SPAN=
-></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"BACKGROUND: white; TEXT-ALIGN: justify; MARGIN: 0cm 0cm 0pt; =
-LINE-HEIGHT: normal"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Develop=20
-the capacity of professionals to design, manage, evaluate and undertak=
-e=20
-improvements in people-centered early warning systems for hydro-meteor=
-ological=20
-&amp; geological hazards and extreme events associated with climate ch=
-ange and=20
-variability. It builds upon experience in building capacities on use o=
-f GIS,=20
-Remote Sensing and space based technologies in disaster risk managemen=
-t for=20
-disaster management institutions, disaster management practitioners an=
-d=20
-communities. It aims to institutionalize weather and climate informati=
-on=20
-applications for disaster mitigation.</SPAN><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"BACKGROUND: white; TEXT-ALIGN: justify; MARGIN: 0cm 0cm 0pt; =
-LINE-HEIGHT: normal"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>No=20
-of Days</SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"BACKGROUND: white; TEXT-ALIGN: justify; MARGIN: 0cm 0cm 0pt; =
-LINE-HEIGHT: normal"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>5=20
-days</SPAN><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"BACKGROUND: white; TEXT-ALIGN: justify; MARGIN: 0cm 0cm 0pt; =
-LINE-HEIGHT: normal"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Course=20
-Objectives</SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<UL type=3Ddisc>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l5 level1 lfo1; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Effectively=20
-  integrate scientific and technical inputs into early warning dissemi=
-nation and=20
-  communication system</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l5 level1 lfo1; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Apply=20
-  emerging generation climate prediction technologies for anticipating=
- and=20
-  managing disaster risks associated with climate change &amp;=20
-  variability&nbsp;</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l5 level1 lfo1; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Develop=20
-  strategies to institutionalize early warning systems into the proces=
-s cycle of=20
-  disaster risk management and development planning, emergency respons=
-e, and=20
-  preparedness activities</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l5 level1 lfo1; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Develop=20
-  risk communication &amp; communication technologies</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l5 level1 lfo1; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Interpret=20
-  scientific information products into user friendly formats and prepa=
-re &amp;=20
-  communicate tailor made early warning information products</SPAN><SP=
-AN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l5 level1 lfo1; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Design=20
-  and implement community based early warning systems that are people=20
-  centered</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l5 level1 lfo1; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Evaluate=20
-  and introduce public education and training program for the communit=
-y based=20
-  early warning systems</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l5 level1 lfo1; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Undertake=20
-  risk assessment and design of multi-hazard early warning systems for=
- disaster=20
-  risk reduction</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l5 level1 lfo1; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Apply=20
-  GIS and Remote Sensing for designing implementations of large scale =
-early=20
-  warning systems and Participatory GIS skills for community Early War=
-ning=20
-  Systems</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l5 level1 lfo1; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Apply=20
-  Mobile Data Gathering technologies for rapid assessment and=20
-  surveys</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI></UL>
-<P class=3DMsoNormal=20
-style=3D"BACKGROUND: white; TEXT-ALIGN: justify; MARGIN: 0cm 0cm 0pt; =
-LINE-HEIGHT: normal"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Course=20
-Content</SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"BACKGROUND: white; MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal">=
-<B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Multi=20
-Hazard Early Warning Systems Concept</SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<UL type=3Ddisc>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l0 level1 lfo2; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Concepts=20
-  and main frameworks in Multi Hazard Early Warning Systems</SPAN><SPA=
-N=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l0 level1 lfo2; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Weather,=20
-  Climate and Atmospheric Processes</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l0 level1 lfo2; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Observed=20
-  Climate Change and Impacts</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l0 level1 lfo2; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Climate=20
-  Predictions and Major Sources of Uncertainty</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI></UL>
-<P class=3DMsoNormal=20
-style=3D"BACKGROUND: white; MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal">=
-<B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Basic=20
-concepts of Remote Sensing and GIS</SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<UL type=3Ddisc>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l1 level1 lfo3; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Basic=20
-  concepts of GIS and Remote Sensing in the context of Early Warning=20
-  Systems</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l1 level1 lfo3; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Handling=20
-  spatial information I: (Using Quantum GIS)</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l1 level1 lfo3; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Spatial=20
-  Reference Systems &amp; data integration</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l1 level1 lfo3; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Handling=20
-  spatial information II: GPS-based field data collection</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI></UL>
-<P class=3DMsoNormal=20
-style=3D"BACKGROUND: white; MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal">=
-<B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Introduction=20
-to Risk Identification and assessment</SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<UL type=3Ddisc>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l4 level1 lfo4; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Introduction=20
-  to Risk Identification and assessment using Spatial Technologies</SP=
-AN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l4 level1 lfo4; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Mobile=20
-  data gathering for field assessments/surveys using Open Data=20
-  Kit&nbsp;</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l4 level1 lfo4; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Handling=20
-  spatial information III: Visualization of risk information&nbsp;</SP=
-AN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l4 level1 lfo4; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Hazard=20
-  detection, monitoring, forecasting and warning</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI></UL>
-<P class=3DMsoNormal=20
-style=3D"BACKGROUND: white; MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal">=
-<B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Spatial=20
-information</SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<UL type=3Ddisc>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l6 level1 lfo5; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Handling=20
-  spatial information IV: Satellite image processing techniques for ch=
-ange=20
-  detection (Using ILWIS)</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l6 level1 lfo5; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Early=20
-  warning dissemination and communication</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l6 level1 lfo5; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Communication=20
-  protocols</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI></UL>
-<P class=3DMsoNormal=20
-style=3D"BACKGROUND: white; MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal">=
-<B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Public=20
-Participatory GIS</SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<UL type=3Ddisc>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l3 level1 lfo6; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Public=20
-  Participatory GIS</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l3 level1 lfo6; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Google=20
-  Earth, Maps</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l3 level1 lfo6; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Social=20
-  Networking Integration</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l3 level1 lfo6; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Community-based=20
-  early warning systems</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l3 level1 lfo6; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Building=20
-  hazard-aware and ready communities</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI>
-  <LI class=3DMsoNormal=20
-  style=3D"BACKGROUND: white; COLOR: black; MARGIN: 0cm 0cm 0pt; LINE-=
-HEIGHT: normal; mso-margin-top-alt: auto; mso-list: l3 level1 lfo6; ta=
-b-stops: list 36.0pt"><SPAN=20
-  style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; mso-=
-fareast-font-family: "Times New Roman"'>Monitoring=20
-  and evaluation of early warning system</SPAN><SPAN=20
-  style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; mso-f=
-areast-font-family: "Times New Roman"; mso-bidi-font-family: "Times Ne=
-w Roman"'><o:p></o:p></SPAN></LI></UL>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: bl=
-ack; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-family:=
- "Times New Roman"'>&nbsp;</SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal=
-"><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>General=20
-Notes</SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"MARGIN: 0cm 0cm 0pt 18pt; LINE-HEIGHT: normal; TEXT-INDENT: -=
-18pt"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: Symbol; COLOR: black; mso-farea=
-st-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Ro=
-man"'>&middot;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 7pt; FONT-FAMILY: "Times New Roman",serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"'>&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>All=20
-our courses can be Tailor-made to participants needs</SPAN><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"MARGIN: 0cm 0cm 0pt 18pt; LINE-HEIGHT: normal; TEXT-INDENT: -=
-18pt"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: Symbol; COLOR: black; mso-farea=
-st-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Ro=
-man"'>&middot;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 7pt; FONT-FAMILY: "Times New Roman",serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"'>&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>The=20
-participant must be conversant with English</SPAN><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"MARGIN: 0cm 0cm 0pt 18pt; LINE-HEIGHT: normal; TEXT-INDENT: -=
-18pt"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: Symbol; COLOR: black; mso-farea=
-st-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Ro=
-man"'>&middot;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 7pt; FONT-FAMILY: "Times New Roman",serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"'>&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Presentations=20
-are well guided, practical exercise, web based tutorials and group wor=
-k. Our=20
-facilitators are expert with more than 10years of experience.</SPAN><S=
-PAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"MARGIN: 0cm 0cm 0pt 18pt; LINE-HEIGHT: normal; TEXT-INDENT: -=
-18pt"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: Symbol; COLOR: black; mso-farea=
-st-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Ro=
-man"'>&middot;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 7pt; FONT-FAMILY: "Times New Roman",serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"'>&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Upon=20
-completion of training the participant will be issued with Foscore dev=
-elopment=20
-center certificate (FDC-K)</SPAN><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"MARGIN: 0cm 0cm 0pt 18pt; LINE-HEIGHT: normal; TEXT-INDENT: -=
-18pt"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: Symbol; COLOR: black; mso-farea=
-st-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Ro=
-man"'>&middot;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 7pt; FONT-FAMILY: "Times New Roman",serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"'>&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Training=20
-will be done at Foscore development center (FDC-K) center in Nairobi K=
-enya. We=20
-also offer more than five participants training at requested location =
-within=20
-Kenya, more than ten participant within east Africa and more than twen=
-ty=20
-participant all over the world.</SPAN><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"MARGIN: 0cm 0cm 0pt 18pt; LINE-HEIGHT: normal; TEXT-INDENT: -=
-18pt"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: Symbol; COLOR: black; mso-farea=
-st-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Ro=
-man"'>&middot;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 7pt; FONT-FAMILY: "Times New Roman",serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"'>&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Course=20
-duration is flexible and the contents can be modified to fit any numbe=
-r of=20
-days.</SPAN><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"MARGIN: 0cm 0cm 0pt 18pt; LINE-HEIGHT: normal; TEXT-INDENT: -=
-18pt"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: Symbol; COLOR: black; mso-farea=
-st-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Ro=
-man"'>&middot;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 7pt; FONT-FAMILY: "Times New Roman",serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"'>&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>The=20
-course fee includes facilitation training materials, 2 coffee breaks, =
-buffet=20
-lunch and a Certificate of successful completion of Training. Particip=
-ants will=20
-be responsible for their own travel expenses and arrangements, airport=
-=20
-transfers, visa application dinners, health/accident insurance and oth=
-er=20
-personal expenses.</SPAN><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"MARGIN: 0cm 0cm 0pt 18pt; LINE-HEIGHT: normal; TEXT-INDENT: -=
-18pt"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: Symbol; COLOR: black; mso-farea=
-st-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Ro=
-man"'>&middot;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 7pt; FONT-FAMILY: "Times New Roman",serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"'>&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>For=20
-any enquiry to:&nbsp;training@fdc-k.org&nbsp;or +254712260031</SPAN></=
-B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal=20
-style=3D"MARGIN: 0cm 0cm 0pt 18pt; LINE-HEIGHT: normal; TEXT-INDENT: -=
-18pt"><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: Symbol; COLOR: blue; mso-fare=
-ast-font-family: "Times New Roman"; mso-bidi-font-family: "Times New R=
-oman"'>&middot;</SPAN><SPAN=20
-style=3D'FONT-SIZE: 7pt; FONT-FAMILY: "Times New Roman",serif; COLOR: =
-blue; mso-fareast-font-family: "Times New Roman"'>&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><B><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'>Website:www.fdc-k.=
-org</SPAN></B><SPAN=20
-style=3D'FONT-SIZE: 11.5pt; FONT-FAMILY: "Verdana",sans-serif; COLOR: =
-black; mso-fareast-font-family: "Times New Roman"; mso-bidi-font-famil=
-y: "Times New Roman"'><o:p></o:p></SPAN></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt"><o:p><FONT=20
-face=3DCalibri>&nbsp;</FONT></o:p></P>
-<P class=3DMsoNormal style=3D"MARGIN: 0cm 0cm 0pt"><B=20
-style=3D"mso-bidi-font-weight: normal"><U><SPAN=20
-style=3D"TEXT-TRANSFORM: uppercase"><FONT face=3DCalibri>Other upcomin=
-g workshops=20
-March=20
-2022(Nairobi,kenya|mombasa,kenya|rwanda,kigali|dubai)</FONT></SPAN></U=
-></B></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DtIMifx0Kva7EFH=
-xO9xQkkphM9ssgvFs1uhgFBPkhKvf-h8kDb0UfGxXBSjRa5GaJElc00yEsKnd1pyXH3klz=
-AXIZHpZEyvxyYLcmhFBHBVIPJzlJWaW1LodEn_1Rp_ZPo_g22j_iBZn9HtWhmjtrpkTTcW=
-OobqCjNHqeH_LsY6eQz0lgFHqNMC2HrJ5aJluNvl3992KMkdAc9w2pQjXOojL1PmD_k3b1=
-7T1pH-9vBT9ol5i6A6W22l5pw5F27MNg3W2iV4VtfsGAMCNhKIG248Q1">Qualitative=20
-Data Management and Analysis with NVIVO Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DwPeQvwHmmLoHCD=
-hRA1AiLrSqcinm8dtWjpFto22rrqKHHlQVeJ5uiJDHM8H08iuZa8boqNKLs8LKJGbNdMXi=
-BVtw_W6lvmaHonGkUjrxmFvtjjzZnDZ71odfIioBcqyuL4yfj-TEY0iaEYF53xxKkM2NXO=
-GrkLZPcTAcqHk_etOYnZSoCQY2UY9REcXg2kgwAJNeLFCejRQyZU_y9QalF7acKr8IDLa7=
-RJIk4dakMEsbePBf3kf07EkgrAU_qn4olQ2">Gender=20
-Equity Achievement in Development Projects Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DmWWgbi0vXe6yPR=
-vFz51jjH6WiJ5Kfnbt3C8ImSbM5pygAAdU7hRR1YOe3SC5TqFx11PFKGnOvmG2V1_XDPuv=
-LAoonm-rxknuqOvV3CHkibAfwh7kTliJyxlOL17esd5FhtE4Mj7WdK7aQmiU-QWSAKoSoQ=
-xNsCk0wFB4qUlgA_x-JqOJtpIJAnFjVyPDS2VFSyB2dWdWe1UgW56SukxmZ1AGrs9XgaB4=
-eZqiimLyZNUlB1DUDJ1_i4SZbJbU0egJRg2">Advanced=20
-Excel Formulas and Functions Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DFZZ3aPiKa1myz1=
-TMyCycKD1YIkh0RjZBzkQsf2ll4PVnfRw3VyQLudKCoIUv9mcQ1rLpVtxksVEUSwTe56Dd=
-So1Afwd6mlp7wJd_LYPfrD1a8D3bsjQGkDqX_cb0ohSdcv_jwJ-Tr79SHwF5xA2rgtSe8-=
-zLzwvW7gjk0jHP9-vFcl5pJVNiu2Xb2IDyJ9hjJr6tR3c-eahHh91eulAkqK16yWR2u44S=
-DEPsAyySgRBRZ7kvL-HFj7z5KTlXxAPSPw2">Transformational=20
-Leadership and Governance Workshop <o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3Dc3PGsqiQbbESSb=
-MsNwcCligorzJ2C3qjfNhs_625EEnBitysVql4Jb3Llz8ackfiV7ytWR-3qnOKYmfsNjeb=
-V-LFDivK_hbX3S5Pg8bjDrphjF0T1gh3thNJFEstqO0njzitCrvZiG_y1bkGCeybSsxztC=
-tTi4uW2PuEC6TJMKgGpEJgj2ckVM0uxHR2J0qN5tSHN71UImw1sHOdrNqoQZZxcPKTSxnA=
-kNrYNoO_eon7BURJkB1riz7OZ4riDtkNUNnjuKLeXma0jU-3d0q6xfL8v_imEOS6Iuywn4=
-KhTPNc0">Project=20
-Information Management System for Development Organizations and NGOs=20
-Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DH0J4oi_ev6a97x=
-OQ5Y-4mK4Yu55YW4VLhFjyzsuXclfR0uZZAEJkrq2g3QodoOm3h6pb1okIKrrkfkKNsAE7=
-cl3_kGBZF4W12-FgypLASq8i5dxQKMjATxJ1rZ3FOYWl-jZQ7To83qGZeIaeOAy988JI3d=
-csaacDQMdfFBwDo9MTX7wyVjG7nEjZr8hrPnWw4LZ_34u5BYfGH-pNrxe0WidutkB9h3DT=
-gNaY3VOl4aiFlneOEFPl9Rbdrz_KMRYscA2">Human=20
-Resources Management, Development and Auditing Workshop<o:p></o:p></A>=
-</P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3Dt8bLBao3SFwllx=
-af1Auvw35xhifF3df54dIEBPKCL_iGiCjjPnZm_I8g00tcNeG8SN0xigbFv1KhjPyMnQDf=
-8D-R-6QDCW26BPFHyMrW8ugdtug3THt5dib4753PdXw1d85q7m5-9pQp6c1BxVK1KFqC30=
-QEp3W7J63o-YztdikNLS9nkg2qTheeatQY7E9kheHub2RCrbBUeU0HGcvLl1NrT84iWGuW=
-h4L6JIkHuhJL0">GIS=20
-Application in Disaster Risk Reduction Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DnOc8Q6-GnKVUIp=
-gRPHvuCLjOnOA5sYtPFl7i9-F3bH7kLtLYdzwBA39ppa4kjhAlQzhNyciMW8eBSRIa54Sv=
-2xnVyCjNNCJZHYcPyMH_riT3N8qpHyCl3KYrqtEzPHk8v_EHqQ-v7DgdBBWEPeRPcQaZ40=
-YbG0SuPtz7ZLzZrykHnlnShPByF22qn2CZAX2JIzyZj6p1VAoqLW4-jDsH8hSV4sWBoFqB=
-YkERhfaHcO-6XA28mfzc-mRKjR3HPACzYHmnZ-UlE3OjSU89dScBoDo1">Data=20
-Analysis, Modeling and Simulation using Excel Workshop <o:p></o:p></A>=
-</P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3D5ymmgILBioohUW=
-xkmP_PF0B91Iwg4tdckrdjEVzfBg4UbABgIfBOote3PjEcaNPWgucEFnZwZZwIev56pjtX=
-rfZt5VvrnoNdBCsvwmquDr3LEJV9dc1bykXfdh-30BXywomWCwbgTw51NCUe4yVCdJjtPL=
-136XjcqhaE4GLVxN8nhxBXs0BZTgzoFUm2-uSCSZ4MERqx13PzugW9m12OJMyYZ3qmqQme=
-lcVimzdN1ffaihXH5RWTSevcvz_lcPhiZg2">Quantitative=20
-Data Management and Analysis with STATA Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DrW7kv9ae3RIZGN=
-LEJPAmbGoIzbaxWOgeKodQ2pqAUJTYkaJsrly_YJD250qhzxXTsXFhMRUnEJl5KI2aJ2UY=
-3JAtnbzJS7AtVN5Crwwra7H2pcjUiaopq9sFVdhp8LkhBM5gdAW-j5Pj8Eo5i_IxFCuroK=
-4eVYcNwV3gwE0yspv77e-XPZt1vCxB1_z0A94C_qAZZRuXhbzt_5kvjyYJtfq61Zok9m5u=
-do_DtZQAqBrEPyyl_rOhcXK-vK_0yMUUxQ2">Developing=20
-organization Balanced Scorecard Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3Dt8bLBao3SFwllx=
-af1Auvw35xhifF3df54dIEBPKCL_iGiCjjPnZm_I8g00tcNeG8SN0xigbFv1KhjPyMnQDf=
-8D-R-6QDCW26BPFHyMrW8ugdtug3THt5dib4753PdXw1d85q7m5-9pQp6c1BxVK1KNzWhX=
-TcFcLo3xMjlYDN5uEf1DnYJGu3c8Pk9gLd7noWDkULKokGCr7ml-6equ8fRrCITFoYD5yo=
-Y0TS4lB2yPVV0">Public=20
-Health in WASH during Emergencies Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DOH4B-n934LNici=
-dul_h8WBme-KBpSpjIzNeDjee2HAUl0SdkXQJ6iRBRRdERaQWneCirrs7ZF-e40qZe75fe=
--NbI6QQoccYGIsi_PEtgLc3fuCl6J42ZZc9qF_ikHFHmmCFvTmlMnmNMPxafb_uhJ_qN0a=
-Z2PrSNgDMcmq3KJcIzm-hsohHMa14TQ-AKdgFZENFTn3-7ujuYn4WTVr4xwCmuvbDQ1RkT=
-RHampxIn89GBS2MMbStz0KCpENWvfPG95A2">Mobile=20
-Data Collection using ODK &amp; KoboToolBox Workshop <o:p></o:p></A></=
-P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3Dn5QsPhcSIVEuV6=
-nPXhu9Q-nWP_px-NrQp_LjvHZjdb7RkNx3g26eFayB9GohfMvoYHgFS8qgK29UE0AuPgfv=
-623bOxLZ74RXoo9YdZQ-R0DjDnLJb7lJX3HUPAi-AorWN-T6E4AxJ9VcBqnwQywpaqUtml=
-dhYt0zMWDU2OjfWn3Idb2CVv_Q8msm8wArQ2gR5BNs-A1BWk23futDy5aYNxJh-3vnctfp=
-pjEyRE8OvHx15vuGXv6mHo_d7gp2D1wGyTmF8kQr0r0Sm7NFY-uUFeY1">Transforming=
-,=20
-analyzing &amp; visualizing data with Microsoft Power BI=20
-Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DH0J4oi_ev6a97x=
-OQ5Y-4mK4Yu55YW4VLhFjyzsuXcldfJnq1cauXhSALNxLufGRfqTjPWGCt_wsW8rOfZz5P=
-TpA-fw5prjx4zz6THKRBG-Y0eydH3TXeVuNFCPgEQa6uyaukM8ZPwg0CnR9zQcV-YjHctz=
-d14Hp03_FOcomXWfC9uNdVYjMrdo8jyEcPr9OqdkeP3cgnFGQaf9VYeVIlyabnt1vcgUNL=
-FeYvweQTVTJp0rub5e6kjd0s2TLl7cRupA2">Quantitative=20
-Data Management and Analysis with R Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DPLHBK13ZiUz4wM=
-GdvTQFAUfuVFzOdD1g1elGnI5dZIhLf619gSfO1mRWEre1UPZ2T4GzSEUZoNHmLh6A_f0t=
-YXvb2sDNjFktxPNnpL2xXBN_9AemsS9hJE4WOwIUeYwGpivaKheUlGoX2pRJll3P5nER9N=
-WhxRhJM6RRRhEHIUTC1bXiQRBfcxGJ9tal402cTWRZ34Ep6d3a9tsKQkp7BolXQmLVtuRh=
-TNd_yZg2h7mjEF5NddPMWxNQxQj6LrEULW-4l_70SwaJFEApAp5nrLk1">Quantitative=
-=20
-Data Management and Analysis with SPSS Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DCx2ZrnJt4yTljR=
-F3LlbR1H-U8CsOEjhGzTgVjA1AzzLH318ZXLkWez7Co7LJpKf534cBB4PEVGpmkERC5UAi=
-Eibxz52_UBLE7BegC_XfWiqqQQfj-duDKxglSLg0WkfthLiRkmboJlJ7ddfgdyuJWDiRQC=
-G6TrKH1mDUYXjie2rXEYmIKrWXxUJ_NUpyAAeJSa3TuyASdy0VtdTtmsVlJVKehCgue5UD=
-11LFDxPw0Yc8NTmPtuPJ8GPc9CIoO-xWp3ShQIRyYC2q9jo9XuYA6CMl5FhlR7PCQNwk5K=
-YnNMwk0">Strategic=20
-Communication Training For Managers And Executives Program=20
-Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DpUURyvNiirv2cW=
-4yWUEurFQMqbD1_vCkZzl81lC3msGMhjJtue0McZxf2JTmjAZG-H967as2loCAX-rOnDMe=
-2TmMwdvtV4wxyySjmyDAWGSwrbGrNoA4ZSqNVqNocMnBEdiDVw8EhBECC7rdh82MiTsXBD=
-GduiR8rd7fvvmkVFiI_tXrJyRakEqRUzkPtCVu3vgwDnrHlnffh4pZHq-Nh8zP87Jo6h4h=
-m1vnyWS4MAxZOa76dLez3Hr3hZRWsd6OzQ2">Grant=20
-Management using Sun Accounting System Workshop<o:p></o:p></A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D"FONT-FAMILY: Symbol; mso-fareast-font-family: Symbol; mso-bid=
-i-font-family: Symbol"><SPAN=20
-style=3D"mso-list: Ignore">&middot;<SPAN=20
-style=3D'FONT: 7pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;=20
-</SPAN></SPAN></SPAN><A=20
- href=3D"http://tracking.fdc-k.africa/tracking/click?d=3Dl2HoI7v5Q4GUl=
-3zv2--ZKIIku3PDQNfzWdolrYyae_qIK7ldO2CiEMn89cvxdV8MABgnYrjq39or2LCDTL2=
-epCQKHHeVGgP9cz9qz8xuMkCnDOjHJFtrTWlwKVbfm40T77Xs9_3RDTjMXl091O1mqHwtU=
-c5351gloxtpSiHs5f5Rx8t7KAnYQW53EoUI-fVQrdpS8wvtyqFCfarMuDf_lL5wkwZKDlJ=
-Y3Cu-Ddyv57VFVsJyPQmpO6fevq8ns279Sw2" >Research=20
-Design, ODK Mobile Data Collection, GIS Mapping, Data Analysis using N=
-VIVO and=20
-SPSS Workshop</A></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7">&nbsp;</P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7">Regards</P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7">FDC=20
-Training Team</P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7"><SPAN=20
-style=3D'FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman",serif; COLOR:=
- black; mso-fareast-font-family: "Times New Roman"'><STRONG>For=20
-any inquiry to:&nbsp;training@fdc-k.org&nbsp;or +254712260031 or </STR=
-ONG><A=20
-href=3D"http://tracking.fdc-k.africa/tracking/click?d=3DEjx10kmXP299MP=
-_ue0qsVTTHF5eeJsCMS8azH2_mTHLhq8Tldy9TsOkXyukYasBPj8hRM2Vd1dI4yCiVWfwF=
-vtX0IuPGo655fPATzoz2gbcIUxqvF2Dzo05RC74E4U1k8uBaIgRlgAE6xVB67Qpn2Tk1">=
-<STRONG>Contact us</STRONG></A></SPAN></P>
-<P class=3DMsoListParagraph=20
-style=3D"MARGIN: auto 0cm auto 36pt; TEXT-INDENT: -18pt; mso-list: l2 =
-level1 lfo7">&nbsp;</P></BODY></HTML>
+diff --git a/Documentation/devicetree/bindings/display/hpe,gxp-thumbnail.txt b/Documentation/devicetree/bindings/display/hpe,gxp-thumbnail.txt
+new file mode 100644
+index 000000000000..e6d37ecce72b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/hpe,gxp-thumbnail.txt
+@@ -0,0 +1,21 @@
++* GXP HPE VIDEO THUMBNAIL DRIVER
++
++Required properties:
++- compatible: Must be "hpe,gxp-thumbnail".
++- reg       : Physical base address and length of the controller's registers.
++- clocks    : phandle + clock specifier pair of the FB reference clock.
++- bits-per-pixel: Bits per pixel, must be 32.
++- width: Width in pixels, must be 800.
++- height: Height in pixels, must be 600.
++
++Optional properties:
++- lcd-supply: Regulator for LCD supply voltage.
++
++Example:
++	thumbnail: thumbnail@c0000500 {
++		compatible = "hpe,gxp-thumbnail";
++		reg = <0xc0000500 0x20>;
++		bits-per-pixel = <32>;
++		width = <800>;
++		height = <600>;
++	};
+diff --git a/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.txt b/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.txt
+new file mode 100644
+index 000000000000..568d26d785d2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.txt
+@@ -0,0 +1,16 @@
++*HPE GXP GPIO INTERFACE
++
++Required properties:
++- compatible: Must be "hpe,gxp-gpio".
++- #gpio-cells: The number of cells to describe a GPIO, this should be 2.
++- csm: Phandle to the GXP PCI CSM Controller.
++- vuch0_handle:	Phandle to the Virtual USB Hub Controller (VUHC).
++
++Example of gpio-controller nodes for a MPC8347 SoC:
++
++	gpio: gpio {
++		compatible = "hpe,gxp-gpio";
++		#gpio-cells = <2>;
++		csm_handle = <&csm>;
++		vuhc0_handle = <&vuhc0>;
++	};
+diff --git a/Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.txt b/Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.txt
+new file mode 100644
+index 000000000000..cdca203f8c3b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.txt
+@@ -0,0 +1,19 @@
++* HPE GXP I2C Interface
++
++Required Properties:
++
++  - compatible: Must be "hpe,gxp-i2c"
++  - reg: The I2C address of the device.
++  - interrupts: The interrupt number.
++  - interrupt-parent: Interrupt controller to which the I2C bus is reporting
++  - i2cg-handle: I2C Global interrupt status register handler
++
++Example:
++
++	i2c0: i2c@c0002000 {
++		compatible = "hpe,gxp-i2c";
++		reg = <0xc0002000 0x70>;
++		interrupts = <9>;
++		interrupt-parent = <&vic0>;
++		i2cg-handle = <&i2cg>;
++	};
+diff --git a/Documentation/devicetree/bindings/ipmi/hpegxp-kcs-bmc-cfg.txt b/Documentation/devicetree/bindings/ipmi/hpegxp-kcs-bmc-cfg.txt
+new file mode 100644
+index 000000000000..20deef7a6be2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/ipmi/hpegxp-kcs-bmc-cfg.txt
+@@ -0,0 +1,13 @@
++* HPE GXP KCS IPMI DRIVER
++
++Required properties:
++- compatible : Must contain "hpe,gxp-kcs-bmc-cfg", "simple-mfd", "syscon".
++- reg : Specifies base physical address and size of the configuration registers.
++
++Example:
++
++	kcs_conf: kcs_conf@80fc0430 {
++			compatible = "hpe,gxp-kcs-bmc-cfg", "simple-mfd", "syscon";
++			reg = <0x80fc0430 0x100>;
++	};
++
+diff --git a/Documentation/devicetree/bindings/ipmi/hpegxp-kcs-bmc.txt b/Documentation/devicetree/bindings/ipmi/hpegxp-kcs-bmc.txt
+new file mode 100644
+index 000000000000..137411243f3f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/ipmi/hpegxp-kcs-bmc.txt
+@@ -0,0 +1,21 @@
++* HPE GXP KCS IPMI DRIVER
++
++Required properties:
++- compatible : Must contain "hpe,gxp-kcs-bmc".
++- interrupts : The interrupt number.
++- reg : Specifies base physical address and size of the control registers.
++- kcs_chan : The KCS channel number in the controller.
++- status: The status signal from the controller.
++- kcs-bmc-cfg = Phandle to the KCS Configuration registers.
++
++Example:
++
++	kcs_reg: kcs_reg@80fd0400 {
++		compatible = "hpe,gxp-kcs-bmc";
++		reg = <0x80fd0400 0x8>;
++		interrupts = <6>;
++		interrupt-parent = <&vic1>;
++		kcs_chan = <1>;
++		status = "okay";
++		kcs-bmc-cfg = <&kcs_conf>;
++	};
+diff --git a/Documentation/devicetree/bindings/memory-controllers/hpe,gxp-srom.txt b/Documentation/devicetree/bindings/memory-controllers/hpe,gxp-srom.txt
+new file mode 100644
+index 000000000000..027cb6fbc93c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/memory-controllers/hpe,gxp-srom.txt
+@@ -0,0 +1,13 @@
++* HPE GXP SROM CONTROLLER
++
++Required properties:
++
++- compatible: Must be one of "hpe,gxp-srom", "simple-mfd", "syscon".
++- reg: Specifies base physical address and size of the control registers.
++
++Example:
++
++	srom@80fc0000 {
++		compatible = "hpe,gxp-srom", "simple-mfd", "syscon";
++		reg = <0x80fc0000 0x100>;
++	};
+diff --git a/Documentation/devicetree/bindings/mtd/hpe,gxp.txt b/Documentation/devicetree/bindings/mtd/hpe,gxp.txt
+new file mode 100644
+index 000000000000..8c6f54af0260
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mtd/hpe,gxp.txt
+@@ -0,0 +1,16 @@
++
++* HPE GXP BMC
++
++HPE GXP SoC definition
++
++Required properties:
++  - compatible : Must contain: "HPE,GXP"
++
++Example:
++/ {
++	model = "Hewlett Packard Enterprise GXP BMC";
++	compatible = "HPE,GXP";
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++}
+diff --git a/Documentation/devicetree/bindings/net/hpe,gxp-umac-mdio.txt b/Documentation/devicetree/bindings/net/hpe,gxp-umac-mdio.txt
+new file mode 100644
+index 000000000000..fa48ecb22c92
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/hpe,gxp-umac-mdio.txt
+@@ -0,0 +1,21 @@
++* HPE GXP UMAC MDIO Interface Controller
++
++Required properties:
++- compatible: Must contain "hpe,gxp-umac-mdio".
++- reg:  Specifies base physical address and size of the registers.
++- interrupts: The interrupt number.
++- Cells which are configuring the external phy interfaces. Numbered through relative addressing each phy is compatible with a standard ethernet-phy-ieee802.3 phy.
++
++Example:
++
++	mdio0: mdio@c0004080 {
++		compatible = "hpe,gxp-umac-mdio";
++		reg = <0xc0004080 0x10>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		ext_phy0: ethernt-phy@0 {
++			compatible = "ethernet-phy-ieee802.3-c22";
++			phy-mode = "sgmii";
++			reg = <0>;
++		};
++	};
+diff --git a/Documentation/devicetree/bindings/net/hpe,gxp-umac.txt b/Documentation/devicetree/bindings/net/hpe,gxp-umac.txt
+new file mode 100644
+index 000000000000..3a620b4ad999
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/hpe,gxp-umac.txt
+@@ -0,0 +1,20 @@
++* HPE GXP UMAC Controller
++
++Required properties:
++- compatible: Must contain "hpe,gxp-umac".
++- reg:  Specifies base physical address and size of the registers.
++- interrupts: The interrupt number.
++- interrupt-parent: specify main interrupt controller handler
++- phy-handle: Phandle to a PHY on the MDIO bus.
++- int-phy-handle: Phandle to PHY interrupt handler.
++
++Example:
++
++	umac0: umac@c0004000 {
++		compatible = "hpe,gxp-umac";
++		reg = <0xc0004000 0x80>;
++		interrupts = <10>;
++		interrupt-parent = <&vic0>;
++		phy-handle = <&ext_phy0>;
++		int-phy-handle = <&int_phy0>;
++	};
+diff --git a/Documentation/devicetree/bindings/pwm/hpe,gxp-fan.txt b/Documentation/devicetree/bindings/pwm/hpe,gxp-fan.txt
+new file mode 100644
+index 000000000000..21446b7cafd9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pwm/hpe,gxp-fan.txt
+@@ -0,0 +1,15 @@
++* HPE GXP Fan Controller
++
++Required properties:
++- compatible: Must contain "hpe,gxp-fan-ctrl".
++- reg: Physical base address and length of the controller's registers.
++- xreg_handle: Phandle to the xregister controller for fan control.
++- fn2_handle: Phandle to the FN2 interface.
++
++Example:
++	fanctrl: fanctrl@c1000c00 {
++			compatible = "hpe,gxp-fan-ctrl";
++			reg = <0xc1000c00 0x200>;
++			xreg_handle = <&xreg>;
++			fn2_handle = <&fn2>;
++	};
+diff --git a/Documentation/devicetree/bindings/serial/hpe,gxp-vuart-cfg.txt b/Documentation/devicetree/bindings/serial/hpe,gxp-vuart-cfg.txt
+new file mode 100644
+index 000000000000..8bad8c39d044
+--- /dev/null
++++ b/Documentation/devicetree/bindings/serial/hpe,gxp-vuart-cfg.txt
+@@ -0,0 +1,17 @@
++*HPE Virtual UART Controller CONFIGURATION
++
++This controller is used to forward host serial to BMC chip
++
++Required properties:
++
++- compatible : Must contain "hpe,gxp-vuarta_cfg", "simple-mfd", "syscon".
++- reg : Specifies base physical address and size of the configuration register.
++- reg-io-width: io register width in bytes, must be 1.
++
++Example:
++
++	vuart_a_cfg: vuarta_cfg@80fc0230 {
++		compatible = "hpe,gxp-vuarta_cfg", "simple-mfd", "syscon";
++		reg = <0x80fc0230 0x100>;
++		reg-io-width = <1>;
++	};
+diff --git a/Documentation/devicetree/bindings/serial/hpe,gxp-vuart.txt b/Documentation/devicetree/bindings/serial/hpe,gxp-vuart.txt
+new file mode 100644
+index 000000000000..9c5cc14d9474
+--- /dev/null
++++ b/Documentation/devicetree/bindings/serial/hpe,gxp-vuart.txt
+@@ -0,0 +1,23 @@
++*HPE VUART Controller port
++
++Required properties:
++
++- compatible :  Must contain "hpe,gxp-vuart".
++- reg        :  Specifies base physical address and size of the registers.
++- interrupts :  The interrupt number.
++- clock-frequency: The frequency of the clock input to the UART in Hz.
++- status: The status signal from the controller.
++
++Example:
++
++	vuart_a: vuart_a@80fd0200 {
++		compatible = "hpe,gxp-vuart";
++		reg = <0x80fd0200 0x100>;
++		interrupts = <2>;
++		interrupt-parent = <&vic1>;
++		clock-frequency = <1846153>;
++		reg-shift = <0>;
++		status = "okay";
++		serial-line = <3>;
++		vuart_cfg = <&vuart_a_cfg>;
++	};
+diff --git a/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-chif.txt b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-chif.txt
+new file mode 100644
+index 000000000000..9d5a8763ca22
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-chif.txt
+@@ -0,0 +1,16 @@
++* HPE GXP CHIF INTERFACE
++
++Define the basic CHannel InterFace (CHIF) communication path between BMC and Host through PCI.
++Interrupts are handled through PCI function 2
++
++Required parent device properties:
++- compatible : Should be "hpe,gxp-chif".
++- interrupts : The interrupt number.
++
++Example:
++
++	chif {
++			compatible = "hpe,gxp-chif";
++			interrupts = <12>;
++		};
++	};
+diff --git a/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-csm.txt b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-csm.txt
+new file mode 100644
+index 000000000000..8d28fd1ec46a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-csm.txt
+@@ -0,0 +1,14 @@
++* HPE GXP PCI CSM INTERFACE
++
++Required parent device properties:
++- compatible : Should be "hpe,gxp-csm", "simple-mfd", "syscon".
++- reg : Specifies base physical address and size of control registers.
++
++Example:
++
++	csm: csm@8000005c {
++		compatible = "hpe,gxp-csm", "simple-mfd", "syscon";
++		reg = <0x8000005c 0x2>, <0x800000de 0x1>, <0x800000e7 0x1>;
++	};
++
++
+diff --git a/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-dbg.txt b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-dbg.txt
+new file mode 100644
+index 000000000000..39e3ed68a34d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-dbg.txt
+@@ -0,0 +1,18 @@
++* HPE GXP DBG INTERFACE
++
++Specify host debug interface. Used presently to report ROM POST code during host initialization phases
++
++Required parent device properties:
++- compatible : Should be "hpe,gxp-dbg".
++- reg : Specifies base physical address and size of the control/data registers.
++- interrupts: The interrupt number.
++- interrupt-parent: The interrupt controller to which the interface is wired to
++
++Example:
++
++	post@800000a0 {
++		compatible = "hpe,gxp-dbg";
++		reg = <0x800000a0 0x20>;
++		interrupts = <10>;
++		interrupt-parent = <&vic1>;
++	};
+diff --git a/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-fn2.txt b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-fn2.txt
+new file mode 100644
+index 000000000000..eb8328f59eda
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-fn2.txt
+@@ -0,0 +1,20 @@
++* HPE GXP PCI FN2 INTERFACE CONTROLLER
++
++Required parent device properties:
++- compatible : Should be "hpe,gxp-fn2", "simple-mfd", "syscon".
++- reg : Specifies base physical address and size of the control/data/memory mapped registers.
++- xreg_handle : Phandle to the xregister controller interface.
++- #gpio-cells : The number of cells to describe a GPIO, this should be 2.
++- interrupts : interrupt number to which PCI FN2 is connected to
++- interrupt-parets : interrupt controller to which PCI FN2 is connected to
++
++Example:
++
++	fn2: fn2@80200000 {
++		compatible = "hpe,gxp-fn2", "simple-mfd", "syscon";
++		reg = <0x80200000 0x100000>;
++		xreg_handle = <&xreg>;
++		interrupts = <0>;
++		interrupt-parent = <&vic1>;
++		#gpio-cells = <2>;
++	};
+diff --git a/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-xreg.txt b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-xreg.txt
+new file mode 100644
+index 000000000000..3ec86a478302
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-xreg.txt
+@@ -0,0 +1,19 @@
++* HPE GXP XREG INTERFACE
++
++Required parent device properties:
++- compatible : Should be "hpe,gxp-fn2", "simple-mfd", "syscon".
++- reg : Specifies base physical address and size of the control registers.
++- interrupts: The interrupt number.
++- interrupt-parent: main interrupt controller to which xreg is connected to
++- #gpio-cells : The number of cells to describe a GPIO, this should be 2.
++
++Example:
++
++	xreg: xreg@d1000300 {
++		compatible = "hpe,gxp-xreg", "simple-mfd", "syscon";
++		reg = <0xd1000300 0xFF>;
++		interrupts = <26>;
++		interrupt-parent = <&vic0>;
++		#gpio-cells = <2>;
++	};
++
+diff --git a/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.txt b/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.txt
+new file mode 100644
+index 000000000000..78eac0ac82f4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.txt
+@@ -0,0 +1,76 @@
++* HPE GXP SPI FLASH INTERFACE
++
++Required properties:
++  - compatible : Must contain: "hpe,gxp-spifi"
++  - reg : the first contains the control register location and length,
++          the second contains the memory window mapping address and length,
++		  the third contains the configuration register location and length
++  - interrupts: The interrupt number.
++  - #address-cells : must be 1 corresponding to chip select child binding
++  - #size-cells : must be 0 corresponding to chip select child binding
++
++The child nodes are the SPI flash modules which must have a compatible
++property as specified in bindings/mtd/jedec,spi-nor.txt
++
++Example:
++	spifi0: spifi@c0000200 {
++		compatible = "hpe,gxp-spifi";
++		reg = <0xc0000200 0x80>, <0xc000c000 0x100>, <0xf8000000 0x8000000>;
++		interrupts = <20>;
++		interrupt-parent = <&vic0>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		flash@0 {
++			compatible = "jedec,spi-nor";
++			reg = <0>;
++			partitions {
++				compatible = "fixed-partitions";
++				#address-cells = <1>;
++				#size-cells = <1>;
++
++				u-boot@0 {
++					label = "u-boot";
++					reg = <0x0 0x60000>;
++				};
++				u-boot-env@60000 {
++					label = "u-boot-env";
++					reg = <0x60000 0x20000>;
++				};
++				kernel@80000 {
++					label = "kernel";
++					reg = <0x80000 0x4c0000>;
++				};
++				rofs@540000 {
++					label = "rofs";
++					reg = <0x540000 0x1740000>;
++				};
++				rwfs@1c80000 {
++					label = "rwfs";
++					reg = <0x1c80000 0x250000>;
++				};
++				section@1edf000{
++					label = "section";
++					reg = <0x1ed0000 0x130000>;
++				};
++			};
++		};
++
++		flash@1 {
++			compatible = "jedec,spi-nor";
++			reg = <1>;
++			partitions {
++				compatible = "fixed-partitions";
++				#address-cells = <1>;
++				#size-cells = <1>;
++				host-prime@0 {
++					label = "host-prime";
++					reg = <0x0 0x02000000>;
++				};
++				host-second@2000000 {
++					label = "host-second";
++					reg = <0x02000000 0x02000000>;
++				};
++			};
++		};
++	};
+diff --git a/Documentation/devicetree/bindings/thermal/hpe,gxp-coretemp.txt b/Documentation/devicetree/bindings/thermal/hpe,gxp-coretemp.txt
+new file mode 100644
+index 000000000000..bc83db03166a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/hpe,gxp-coretemp.txt
+@@ -0,0 +1,14 @@
++* HPE GXP CORETEMP INTERFACE
++
++Required parent device properties:
++- compatible : Should be "hpe,gxp-coretemp".
++- reg : Specifies base physical address and size of the control register.
++
++Example:
++
++	coretemp: coretemp@c0000130 {
++		compatible = "hpe,gxp-coretemp";
++		reg = <0xc0000130 0x8>;
++	};
++
++
+diff --git a/Documentation/devicetree/bindings/timer/hpe,gxp-timer.txt b/Documentation/devicetree/bindings/timer/hpe,gxp-timer.txt
+new file mode 100644
+index 000000000000..3e491b8ea740
+--- /dev/null
++++ b/Documentation/devicetree/bindings/timer/hpe,gxp-timer.txt
+@@ -0,0 +1,18 @@
++*HPE GXP TIMER
++
++Required properties:
++
++- compatible : Must be "hpe,gxp-timer"
++- reg : The GXP Timer Control Registers (Addresses + size) tuples list.
++- interrupts : The interrupt number.
++- clock-frequency : The frequency of the clock that drives the counter, in Hz.
++
++Example:
++
++	timer0: timer@c0000080 {
++		compatible = "hpe,gxp-timer";
++		reg = <0xc0000080 0x1>, <0xc0000094 0x01>, <0xc0000088 0x08>;
++		interrupts = <0>;
++		interrupt-parent = <&vic0>;
++		clock-frequency = <400000000>;
++	};
+diff --git a/Documentation/devicetree/bindings/usb/hpe,gxp-udc.txt b/Documentation/devicetree/bindings/usb/hpe,gxp-udc.txt
+new file mode 100644
+index 000000000000..ed764d64a169
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/hpe,gxp-udc.txt
+@@ -0,0 +1,21 @@
++* HPE USB Device Port Controller
++
++Required properties:
++- compatible: Must be "hpe,gxp-udc".
++- reg: Specifies base physical address and size of the registers.
++- interrupts: The interrupt number.
++- vdevnum: The particular usb device controller port.
++- fepnum: The particular usb device controller options.
++- udcg-handle: The usb device controller hub.
++
++Example:
++
++	udc0: udc@80401000 {
++		compatible = "hpe,gxp-udc";
++		reg = <0x80401000 0x1000>;
++		interrupts = <13>;
++		interrupt-parent = <&vic1>;
++		vdevnum = <0>;
++		fepnum = <7>;
++		udcg-handle = <&udcg>;
++	};
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 294093d45a23..913f722a6b8d 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -514,7 +514,9 @@ patternProperties:
+   "^hoperun,.*":
+     description: Jiangsu HopeRun Software Co., Ltd.
+   "^hp,.*":
+-    description: Hewlett Packard
++    description: Hewlett Packard Inc.
++  "^hpe,.*":
++    description: Hewlett Packard Enterprise
+   "^hsg,.*":
+     description: HannStar Display Co.
+   "^holtek,.*":
+diff --git a/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.txt b/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.txt
+new file mode 100644
+index 000000000000..3f17c1a00a5c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.txt
+@@ -0,0 +1,11 @@
++* HPE GXP Controlled Watchdog
++
++Required Properties:
++- compatible: Should contain "hpe,gxp-wdt".
++- reg: The GXP Watchdog Control Registers (Addresses + size) tuples list.
++
++Example:
++	watchdog: watchdog@c0000090 {
++		compatible = "hpe,gxp-wdt";
++		reg = <0xc0000090 0x02>, <0xc0000096 0x01>;
++	};
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f41088418aae..2a4fcfff0104 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8385,6 +8385,20 @@ L:	linux-efi@vger.kernel.org
+ S:	Maintained
+ F:	block/partitions/efi.*
+ 
++GXP ARCHITECTURE
++M:	Jean-Marie Verdun <verdun@hpe.com>
++M:	Nick Hawkins <nick.hawkins@hpe.com>
++S:	Maintained
++F:	arch/arm/boot/dts/gxp.dts
++F:	arch/arm/configs/gxp_defconfig
++F:	arch/arm/mach-hpe/gxp.c
++
++GXP TIMER
++M:	Jean-Marie Verdun <verdun@hpe.com>
++M:	Nick Hawkins <nick.hawkins@hpe.com>
++S:	Maintained
++F:	drivers/clocksource/gxp_timer.c
++
+ H8/300 ARCHITECTURE
+ M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+ L:	uclinux-h8-devel@lists.sourceforge.jp (moderated for non-subscribers)
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 4c97cb40eebb..6998b5b5f59e 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -618,6 +618,8 @@ source "arch/arm/mach-highbank/Kconfig"
+ 
+ source "arch/arm/mach-hisi/Kconfig"
+ 
++source "arch/arm/mach-hpe/Kconfig"
++
+ source "arch/arm/mach-imx/Kconfig"
+ 
+ source "arch/arm/mach-integrator/Kconfig"
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 235ad559acb2..a96b4d5b7f68 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1549,3 +1549,5 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+ 	aspeed-bmc-vegman-n110.dtb \
+ 	aspeed-bmc-vegman-rx20.dtb \
+ 	aspeed-bmc-vegman-sx20.dtb
++dtb-$(CONFIG_ARCH_HPE_GXP) += \
++	hpe-bmc-dl360gen10.dtb
+diff --git a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+new file mode 100644
+index 000000000000..278bf2bca2c8
+--- /dev/null
++++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+@@ -0,0 +1,207 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Device Tree file for HPE DL360Gen10
++ */
++
++/include/ "hpe-gxp.dtsi"
++
++/ {
++	#address-cells = <1>;
++	#size-cells = <1>;
++	compatible = "hpe,gxp";
++	model = "Hewlett Packard Enterprise ProLiant dl360 Gen10";
++
++	chosen {
++		bootargs = "earlyprintk console=ttyS0,115200 user_debug=31";
++	};
++
++	aliases {
++		ethernet0 = &umac0;
++		ethernet1 = &umac1;
++	};
++
++	memory@40000000 {
++		device_type = "memory";
++		reg = <0x40000000 0x20000000>;
++	};
++
++	ahb {
++		umac0: umac@c0004000 {
++			mac-address = [94 18 82 16 04 d8];
++		};
++
++		umac1: umac@c0005000 {
++			mac-address = [94 18 82 16 04 d9];
++		};
++
++		udc0: udc@80401000 {
++			compatible = "hpe,gxp-udc";
++			reg = <0x80401000 0x1000>;
++			interrupts = <13>;
++			interrupt-parent = <&vic1>;
++			vdevnum = <0>;
++			fepnum = <7>;
++			udcg-handle = <&udcg>;
++		};
++
++		udc1: udc@80402000 {
++			compatible = "hpe,gxp-udc";
++			reg = <0x80402000 0x1000>;
++			interrupts = <13>;
++			interrupt-parent = <&vic1>;
++			vdevnum = <1>;
++			fepnum = <7>;
++			udcg-handle = <&udcg>;
++		};
++
++		udc2: udc@80403000 {
++			compatible = "hpe,gxp-udc";
++			reg = <0x80403000 0x1000>;
++			interrupts = <13>;
++			interrupt-parent = <&vic1>;
++			vdevnum = <2>;
++			fepnum = <4>;
++			udcg-handle = <&udcg>;
++		};
++
++		fn2: fn2@80200000 {
++			gpio-line-names =
++				"POWER_OUT", "PS_PWROK", "PCIERST", "POST_COMPLETE", "", "",
++				"", "", "", "", "", "", "", "", "", "",
++				"", "", "", "", "", "", "", "", "", "",
++				"", "", "", "", "", "", "", "", "", "",
++				"", "", "", "", "", "", "", "", "", "",
++				"", "", "", "", "", "", "", "", "", "",
++				"", "", "", "", "", "", "", "", "", "",
++				"", "", "", "", "", "", "", "", "", "",
++				"", "", "", "", "", "", "", "", "", "",
++				"", "", "", "", "", "", "", "", "", "",
++				"", "", "", "";
++		};
++
++		xreg: xreg@d1000300 {
++			gpio-line-names =
++				"", "", "", "", "", "", "POWER", "HEARTBEAT", "FAN1_INST",
++				"FAN2_INST","FAN3_INST", "FAN4_INST", "FAN5_INST",
++				"FAN6_INST", "FAN7_INST", "FAN8_INST", "FAN9_INST",
++				"FAN10_INST", "FAN11_INST", "FAN12_INST","FAN13_INST",
++				"FAN14_INST", "FAN15_INST", "FAN16_INST", "FAN1_FAIL",
++				"FAN2_FAIL", "FAN3_FAIL", "FAN4_FAIL", "FAN5_FAIL",
++				"FAN6_FAIL", "FAN7_FAIL", "FAN8_FAIL", "FAN9_FAIL",
++				"FAN10_FAIL", "FAN11_FAIL", "FAN12_FAIL", "FAN13_FAIL",
++				"FAN14_FAIL", "FAN15_FAIL", "FAN16_FAIL","", "", "", "",
++				"", "", "", "", "", "", "", "", "", "", "", "", "IDENTIFY",
++				"HEALTH_RED", "HEALTH_AMBER", "POWER_BUTTON", "",
++				"SIO_POWER_GOOD", "NMI_BUTTON", "RESET_BUTTON", "SIO_S5",
++				"SIO_ONCONTROL", "", "", "", "", "", "", "", "", "", "",
++				"", "", "", "", "", "", "", "", "", "", "", "", "", "",
++				"", "", "", "", "", "", "", "", "", "";
++		};
++
++		i2c2: i2c@c0002200 {
++			24c02@50 {
++				compatible = "atmel,24c02";
++				pagesize = <8>;
++				reg = <0x50>;
++			};
++		};
++	};
++
++	vuhc: vuhc {
++		compatible = "gpio-keys-polled";
++		poll-interval = <100>;
++
++		PortOwner0 {
++			label = "Port Owner";
++			linux,code = <200>;
++			gpios = <&gpio 250 1>;
++		};
++
++		PortOwner1 {
++			label = "Port Owner";
++			linux,code = <201>;
++			gpios = <&gpio 251 1>;
++		};
++
++		PortOwner2 {
++			label = "Port Owner";
++			linux,code = <202>;
++			gpios = <&gpio 252 1>;
++		};
++	};
++
++	gpio: gpio {
++		gpio-line-names =
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "RESET_OUT", "NMI_OUT", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "",
++			"", "", "", "", "", "", "", "", "", "";
++	};
++
++	xreg_keys: xreg_keys {
++		compatible = "gpio-keys-polled";
++		poll-interval = <100>;
++
++		IdButton {
++			label = "ID Button";
++			linux,code = <200>;
++			gpios = <&xreg 60 1>;
++		};
++	};
++
++	leds: leds {
++		compatible = "gpio-leds";
++
++		power {
++			gpios = <&xreg 6 0>;
++			default-state = "off";
++		};
++
++		heartbeat {
++			gpios = <&xreg 7 0>;
++			default-state = "off";
++		};
++
++		identify {
++			gpios = <&xreg 56 0>;
++			default-state = "off";
++		};
++
++		health_red {
++			gpios = <&xreg 57 0>;
++			default-state = "off";
++		};
++
++		health_amber {
++			gpios = <&xreg 58 0>;
++			default-state = "off";
++		};
++	};
++
++};
+diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
+new file mode 100644
+index 000000000000..1a16840bb72f
+--- /dev/null
++++ b/arch/arm/boot/dts/hpe-gxp.dtsi
+@@ -0,0 +1,555 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Device Tree file for HPE GXP
++ */
++
++/dts-v1/;
++/ {
++	model = "Hewlett Packard Enterprise GXP BMC";
++	compatible = "hpe,gxp";
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu@0 {
++			compatible = "arm,armv7";
++			device_type = "cpu";
++			reg = <0>;
++		};
++	};
++
++	memory@40000000 {
++		device_type = "memory";
++		reg = <0x40000000 0x20000000>;
++	};
++
++	ahb {
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		device_type = "soc";
++		ranges;
++
++		vic0: interrupt-controller@ceff0000 {
++			compatible = "arm,pl192-vic";
++			#address-cells = <1>;
++			interrupt-controller;
++			reg = <0xceff0000 0x1000>;
++			#interrupt-cells = <1>;
++		};
++
++		vic1: vic@80f00000 {
++			compatible = "arm,pl192-vic";
++			#address-cells = <1>;
++			interrupt-controller;
++			reg = <0x80f00000 0x1000>;
++			#interrupt-cells = <1>;
++		};
++
++		timer0: timer@c0000080 {
++			compatible = "hpe,gxp-timer";
++			reg = <0xc0000080 0x1>, <0xc0000094 0x01>, <0xc0000088 0x08>;
++			interrupts = <0>;
++			interrupt-parent = <&vic0>;
++			clock-frequency = <400000000>;
++		};
++
++		watchdog: watchdog@c0000090 {
++			compatible = "hpe,gxp-wdt";
++			reg = <0xc0000090 0x02>, <0xc0000096 0x01>;
++		};
++
++		uartc: serial@c00000f0 {
++			compatible = "ns16550a";
++			reg = <0xc00000f0 0x8>;
++			interrupts = <19>;
++			interrupt-parent = <&vic0>;
++			clock-frequency = <1846153>;
++			reg-shift = <0>;
++		};
++
++		uarta: serial@c00000e0 {
++			compatible = "ns16550a";
++			reg = <0xc00000e0 0x8>;
++			interrupts = <17>;
++			interrupt-parent = <&vic0>;
++			clock-frequency = <1846153>;
++			reg-shift = <0>;
++		};
++
++		uartb: serial@c00000e8 {
++			compatible = "ns16550a";
++			reg = <0xc00000e8 0x8>;
++			interrupts = <18>;
++			interrupt-parent = <&vic0>;
++			clock-frequency = <1846153>;
++			reg-shift = <0>;
++		};
++
++		vuart_a_cfg: vuarta_cfg@80fc0230 {
++			compatible = "hpe,gxp-vuarta_cfg", "simple-mfd", "syscon";
++			reg = <0x80fc0230 0x100>;
++			reg-io-width = <1>;
++		};
++
++		vuart_a: vuart_a@80fd0200 {
++			compatible = "hpe,gxp-vuart";
++			reg = <0x80fd0200 0x100>;
++			interrupts = <2>;
++			interrupt-parent = <&vic1>;
++			clock-frequency = <1846153>;
++			reg-shift = <0>;
++			status = "okay";
++			serial-line = <3>;
++			vuart_cfg = <&vuart_a_cfg>;
++		};
++
++		usb0: ehci@cefe0000 {
++			compatible = "generic-ehci";
++			reg = <0xcefe0000 0x100>;
++			interrupts = <7>;
++			interrupt-parent = <&vic0>;
++		};
++
++		usb1: ohci@cefe0100 {
++			compatible = "generic-ohci";
++			reg = <0xcefe0100 0x110>;
++			interrupts = <6>;
++			interrupt-parent = <&vic0>;
++		};
++
++		spifi0: spifi@c0000200 {
++			compatible = "hpe,gxp-spifi";
++			reg = <0xc0000200 0x80>, <0xc000c000 0x100>, <0xf8000000 0x8000000>;
++			interrupts = <20>;
++			interrupt-parent = <&vic0>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			flash@0 {
++				compatible = "jedec,spi-nor";
++				reg = <0>;
++				partitions {
++					compatible = "fixed-partitions";
++					#address-cells = <1>;
++					#size-cells = <1>;
++
++					u-boot@0 {
++						label = "u-boot";
++						reg = <0x0 0x60000>;
++					};
++					u-boot-env@60000 {
++						label = "u-boot-env";
++						reg = <0x60000 0x20000>;
++					};
++					kernel@80000 {
++						label = "kernel";
++						reg = <0x80000 0x4c0000>;
++					};
++					rofs@540000 {
++						label = "rofs";
++						reg = <0x540000 0x1740000>;
++					};
++					rwfs@1c80000 {
++						label = "rwfs";
++						reg = <0x1c80000 0x250000>;
++					};
++					section@1edf000{
++						label = "section";
++						reg = <0x1ed0000 0x130000>;
++					};
++				};
++			};
++
++			flash@1 {
++				compatible = "jedec,spi-nor";
++				reg = <1>;
++				partitions {
++					compatible = "fixed-partitions";
++					#address-cells = <1>;
++					#size-cells = <1>;
++					host-prime@0 {
++						label = "host-prime";
++						reg = <0x0 0x02000000>;
++					};
++					host-second@2000000 {
++						label = "host-second";
++						reg = <0x02000000 0x02000000>;
++					};
++				};
++			};
++		};
++
++		sram@d0000000 {
++			compatible = "mtd-ram";
++			reg = <0xd0000000 0x80000>;
++			bank-width = <1>;
++			erase-size =<1>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			partition@0 {
++				label = "host-reserved";
++				reg = <0x0 0x10000>;
++			};
++			partition@10000 {
++				label = "nvram";
++				reg = <0x10000 0x70000>;
++			};
++		};
++
++		srom@80fc0000 {
++			compatible = "hpe,gxp-srom", "simple-mfd", "syscon";
++			reg = <0x80fc0000 0x100>;
++		};
++
++		vrom@58000000 {
++			compatible = "mtd-ram";
++			bank-width = <4>;
++			reg = <0x58000000 0x4000000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			partition@0 {
++				label = "vrom-prime";
++				reg = <0x0 0x2000000>;
++			};
++			partition@2000000 {
++				label = "vrom-second";
++				reg = <0x2000000 0x2000000>;
++			};
++		};
++
++		i2cg: i2cg@c00000f8 {
++			compatible = "syscon";
++			reg = <0xc00000f8 0x08>;
++		};
++
++		i2c0: i2c@c0002000 {
++			compatible = "hpe,gxp-i2c";
++			reg = <0xc0002000 0x70>;
++			interrupts = <9>;
++			interrupt-parent = <&vic0>;
++			i2cg-handle = <&i2cg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		i2c1: i2c@c0002100 {
++			compatible = "hpe,gxp-i2c";
++			reg = <0xc0002100 0x70>;
++			interrupts = <9>;
++			interrupt-parent = <&vic0>;
++			i2cg-handle = <&i2cg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		i2c2: i2c@c0002200 {
++			compatible = "hpe,gxp-i2c";
++			reg = <0xc0002200 0x70>;
++			interrupts = <9>;
++			interrupt-parent = <&vic0>;
++			i2cg-handle = <&i2cg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		i2c3: i2c@c0002300 {
++			compatible = "hpe,gxp-i2c";
++			reg = <0xc0002300 0x70>;
++			interrupts = <9>;
++			interrupt-parent = <&vic0>;
++			i2cg-handle = <&i2cg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		i2c4: i2c@c0002400 {
++			compatible = "hpe,gxp-i2c";
++			reg = <0xc0002400 0x70>;
++			interrupts = <9>;
++			interrupt-parent = <&vic0>;
++			i2cg-handle = <&i2cg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		i2c5: i2c@c0002500 {
++			compatible = "hpe,gxp-i2c";
++			reg = <0xc0002500 0x70>;
++			interrupts = <9>;
++			interrupt-parent = <&vic0>;
++			i2cg-handle = <&i2cg>;
++		};
++
++		i2c6: i2c@c0002600 {
++			compatible = "hpe,gxp-i2c";
++			reg = <0xc0002600 0x70>;
++			interrupts = <9>;
++			interrupt-parent = <&vic0>;
++			i2cg-handle = <&i2cg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		i2c7: i2c@c0002700 {
++			compatible = "hpe,gxp-i2c";
++			reg = <0xc0002700 0x70>;
++			interrupts = <9>;
++			interrupt-parent = <&vic0>;
++			i2cg-handle = <&i2cg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		i2c8: i2c@c0002800 {
++			compatible = "hpe,gxp-i2c";
++			reg = <0xc0002800 0x70>;
++			interrupts = <9>;
++			interrupt-parent = <&vic0>;
++			i2cg-handle = <&i2cg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		i2c9: i2c@c0002900 {
++			compatible = "hpe,gxp-i2c";
++			reg = <0xc0002900 0x70>;
++			interrupts = <9>;
++			interrupt-parent = <&vic0>;
++			i2cg-handle = <&i2cg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		i2cmux@d1000074 {
++			compatible = "i2c-mux-reg";
++			i2c-parent = <&i2c4>;
++			reg = <0xd1000074 1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			i2c4@1 {
++				reg = <1>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++
++			i2c4@2 {
++				reg = <2>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++
++			i2c4@3 {
++				reg = <3>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++
++			i2c4@4 {
++				reg = <4>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++		};
++
++		i2cmux@d1000076 {
++			compatible = "i2c-mux-reg";
++			i2c-parent = <&i2c6>;
++			reg = <0xd1000076 1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			i2c6@1 {
++				reg = <1>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++
++			i2c6@2 {
++				reg = <2>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++
++			i2c6@3 {
++				reg = <3>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++
++			i2c6@4 {
++				reg = <4>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++
++			i2c6@5 {
++				reg = <5>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++		};
++
++		mdio0: mdio@c0004080 {
++			compatible = "hpe,gxp-umac-mdio";
++			reg = <0xc0004080 0x10>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			ext_phy0: ethernt-phy@0 {
++				compatible = "ethernet-phy-ieee802.3-c22";
++				phy-mode = "sgmii";
++				reg = <0>;
++			};
++		};
++
++		mdio1: mdio@c0005080 {
++			compatible = "hpe,gxp-umac-mdio";
++			reg = <0xc0005080 0x10>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			int_phy0: ethernt-phy@0 {
++				compatible = "ethernet-phy-ieee802.3-c22";
++				phy-mode = "gmii";
++				reg = <0>;
++			};
++
++			int_phy1: ethernt-phy@1 {
++				compatible = "ethernet-phy-ieee802.3-c22";
++				phy-mode = "gmii";
++				reg = <1>;
++			};
++		};
++
++		umac0: umac@c0004000 {
++			compatible = "hpe,gxp-umac";
++			reg = <0xc0004000 0x80>;
++			interrupts = <10>;
++			interrupt-parent = <&vic0>;
++			phy-handle = <&ext_phy0>;
++			int-phy-handle = <&int_phy0>;
++		};
++
++		umac1: umac@c0005000 {
++			compatible = "hpe,gxp-umac";
++			use-ncsi;
++			reg = <0xc0005000 0x80>;
++			interrupts = <11>;
++			interrupt-parent = <&vic0>;
++			phy-handle = <&int_phy1>;
++		};
++
++		kcs_conf: kcs_conf@80fc0430 {
++			compatible = "hpe,gxp-kcs-bmc-cfg", "simple-mfd", "syscon";
++			reg = <0x80fc0430 0x100>;
++		};
++
++		kcs_reg: kcs_reg@80fd0400 {
++			compatible = "hpe,gxp-kcs-bmc";
++			reg = <0x80fd0400 0x8>;
++			interrupts = <6>;
++			interrupt-parent = <&vic1>;
++			kcs_chan = <1>;
++			status = "okay";
++			kcs-bmc-cfg = <&kcs_conf>;
++		};
++
++		thumbnail: thumbnail@c0000500 {
++			compatible = "hpe,gxp-thumbnail";
++			reg = <0xc0000500 0x20>;
++			bits-per-pixel = <32>;
++			width = <800>;
++			height = <600>;
++		};
++
++		fanctrl: fanctrl@c1000c00 {
++			compatible = "hpe,gxp-fan-ctrl";
++			reg = <0xc1000c00 0x200>;
++			xreg_handle = <&xreg>;
++			fn2_handle = <&fn2>;
++		};
++
++		fn2: fn2@80200000 {
++			compatible = "hpe,gxp-fn2", "simple-mfd", "syscon";
++			reg = <0x80200000 0x100000>;
++			xreg_handle = <&xreg>;
++			interrupts = <0>;
++			interrupt-parent = <&vic1>;
++			#gpio-cells = <2>;
++			chif {
++				compatible = "hpe,gxp-chif";
++				interrupts = <12>;
++			};
++		};
++
++		xreg: xreg@d1000300 {
++			compatible = "hpe,gxp-xreg", "simple-mfd", "syscon";
++			reg = <0xd1000300 0xFF>;
++			interrupts = <26>;
++			interrupt-parent = <&vic0>;
++			#gpio-cells = <2>;
++		};
++
++		csm: csm@8000005c {
++			compatible = "hpe,gxp-csm", "simple-mfd", "syscon";
++			reg = <0x8000005c 0x2>, <0x800000de 0x1>, <0x800000e7 0x1>;
++		};
++
++		vuhc0: vuhc@80400000 {
++			compatible = "syscon";
++			reg = <0x80400000 0x80>;
++		};
++
++		udcg: udcg@80400800 {
++			compatible = "syscon";
++			reg = <0x80400800 0x200>;
++		};
++
++		post@800000a0 {
++			compatible = "hpe,gxp-dbg";
++			reg = <0x800000a0 0x20>;
++			interrupts = <10>;
++			interrupt-parent = <&vic1>;
++		};
++
++		coretemp: coretemp@c0000130 {
++			compatible = "hpe,gxp-coretemp";
++			reg = <0xc0000130 0x8>;
++		};
++	};
++
++	gpio: gpio {
++		compatible = "hpe,gxp-gpio";
++		#gpio-cells = <2>;
++		csm_handle = <&csm>;
++		vuhc0_handle = <&vuhc0>;
++	};
++
++	clocks {
++		osc: osc {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-output-names = "osc";
++			clock-frequency = <33333333>;
++		};
++
++		iopclk: iopclk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clocks = <&osc>;
++			clock-out-put-names = "iopclk";
++			clock-frequency = <400000000>;
++		};
++
++		memclk: memclk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clocks = <&osc>;
++			clock-out-put-names = "memclk";
++			clock-frequency = <800000000>;
++		};
++	};
++};
+diff --git a/arch/arm/configs/gxp_defconfig b/arch/arm/configs/gxp_defconfig
+new file mode 100644
+index 000000000000..f37c6630e06d
+--- /dev/null
++++ b/arch/arm/configs/gxp_defconfig
+@@ -0,0 +1,243 @@
++CONFIG_KERNEL_XZ=y
++CONFIG_DEFAULT_HOSTNAME="gxp"
++CONFIG_SYSVIPC=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_BSD_PROCESS_ACCT_V3=y
++CONFIG_LOG_BUF_SHIFT=18
++CONFIG_CFS_BANDWIDTH=y
++CONFIG_RT_GROUP_SCHED=y
++CONFIG_CGROUP_FREEZER=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_NAMESPACES=y
++CONFIG_SCHED_AUTOGROUP=y
++CONFIG_RELAY=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_CC_OPTIMIZE_FOR_SIZE=y
++CONFIG_KALLSYMS_ALL=y
++CONFIG_EMBEDDED=y
++# CONFIG_COMPAT_BRK is not set
++CONFIG_SLAB=y
++CONFIG_ARCH_MULTI_V6=y
++CONFIG_ARCH_HPE=y
++CONFIG_ARCH_HPE_GXP=y
++CONFIG_SECCOMP=y
++# CONFIG_ATAGS is not set
++CONFIG_ZBOOT_ROM_TEXT=0x0
++CONFIG_ZBOOT_ROM_BSS=0x0
++# CONFIG_SUSPEND is not set
++CONFIG_JUMP_LABEL=y
++# CONFIG_STRICT_KERNEL_RWX is not set
++# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
++CONFIG_KSM=y
++CONFIG_CLEANCACHE=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_PACKET_DIAG=y
++CONFIG_UNIX=y
++CONFIG_UNIX_DIAG=y
++CONFIG_XFRM_USER=y
++CONFIG_XFRM_STATISTICS=y
++CONFIG_INET=y
++CONFIG_VLAN_8021Q=y
++CONFIG_NETLINK_DIAG=y
++CONFIG_NET_NCSI=y
++# CONFIG_WIRELESS is not set
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++# CONFIG_STANDALONE is not set
++CONFIG_MTD=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_PHYSMAP=y
++CONFIG_MTD_PHYSMAP_OF=y
++CONFIG_MTD_PLATRAM=y
++CONFIG_MTD_SPI_NOR=y
++CONFIG_SPI_GXP_SPIFI=y
++CONFIG_BLK_DEV_NULL_BLK=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_NBD=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_EEPROM_AT24=y
++CONFIG_SCSI=y
++CONFIG_BLK_DEV_SD=y
++# CONFIG_SCSI_LOWLEVEL is not set
++CONFIG_NETDEVICES=y
++# CONFIG_NET_VENDOR_ALACRITECH is not set
++# CONFIG_NET_VENDOR_AMAZON is not set
++# CONFIG_NET_VENDOR_AQUANTIA is not set
++# CONFIG_NET_VENDOR_ARC is not set
++# CONFIG_NET_VENDOR_AURORA is not set
++# CONFIG_NET_VENDOR_BROADCOM is not set
++# CONFIG_NET_VENDOR_CADENCE is not set
++# CONFIG_NET_VENDOR_CAVIUM is not set
++# CONFIG_NET_VENDOR_CIRRUS is not set
++# CONFIG_NET_VENDOR_CORTINA is not set
++# CONFIG_NET_VENDOR_EZCHIP is not set
++# CONFIG_NET_VENDOR_FARADAY is not set
++# CONFIG_NET_VENDOR_GOOGLE is not set
++# CONFIG_NET_VENDOR_HISILICON is not set
++# CONFIG_NET_VENDOR_HUAWEI is not set
++# CONFIG_NET_VENDOR_INTEL is not set
++# CONFIG_NET_VENDOR_MARVELL is not set
++# CONFIG_NET_VENDOR_MELLANOX is not set
++# CONFIG_NET_VENDOR_MICREL is not set
++# CONFIG_NET_VENDOR_MICROCHIP is not set
++# CONFIG_NET_VENDOR_MICROSEMI is not set
++# CONFIG_NET_VENDOR_NATSEMI is not set
++# CONFIG_NET_VENDOR_NETRONOME is not set
++# CONFIG_NET_VENDOR_NI is not set
++# CONFIG_NET_VENDOR_QUALCOMM is not set
++# CONFIG_NET_VENDOR_RENESAS is not set
++# CONFIG_NET_VENDOR_ROCKER is not set
++# CONFIG_NET_VENDOR_SAMSUNG is not set
++# CONFIG_NET_VENDOR_SEEQ is not set
++# CONFIG_NET_VENDOR_SOLARFLARE is not set
++# CONFIG_NET_VENDOR_SMSC is not set
++# CONFIG_NET_VENDOR_SOCIONEXT is not set
++# CONFIG_NET_VENDOR_STMICRO is not set
++# CONFIG_NET_VENDOR_SYNOPSYS is not set
++# CONFIG_NET_VENDOR_VIA is not set
++# CONFIG_NET_VENDOR_WIZNET is not set
++# CONFIG_NET_VENDOR_XILINX is not set
++CONFIG_UMAC=y
++# CONFIG_USB_NET_DRIVERS is not set
++# CONFIG_WLAN is not set
++# CONFIG_INPUT_LEDS is not set
++CONFIG_INPUT_EVDEV=y
++# CONFIG_KEYBOARD_ATKBD is not set
++CONFIG_KEYBOARD_GPIO=y
++CONFIG_KEYBOARD_GPIO_POLLED=y
++# CONFIG_INPUT_MOUSE is not set
++CONFIG_SERIO_LIBPS2=y
++CONFIG_VT_HW_CONSOLE_BINDING=y
++# CONFIG_LEGACY_PTYS is not set
++CONFIG_SERIAL_8250=y
++# CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_8250_NR_UARTS=6
++CONFIG_SERIAL_8250_RUNTIME_UARTS=6
++CONFIG_SERIAL_8250_EXTENDED=y
++CONFIG_SERIAL_8250_SHARE_IRQ=y
++CONFIG_SERIAL_8250_GXP_VUART=y
++CONFIG_SERIAL_OF_PLATFORM=y
++CONFIG_TTY_PRINTK=y
++CONFIG_IPMI_HANDLER=y
++CONFIG_IPMI_DEVICE_INTERFACE=y
++CONFIG_IPMI_SI=y
++CONFIG_IPMI_SSIF=y
++CONFIG_HPE_KCS_IPMI_BMC=y
++CONFIG_HW_RANDOM_TIMERIOMEM=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_GXP=y
++CONFIG_I2C_SLAVE=y
++CONFIG_I2C_SLAVE_EEPROM=y
++CONFIG_SPI=y
++CONFIG_GPIOLIB=y
++CONFIG_GPIO_SYSFS=y
++CONFIG_GPIO_GXP=y
++CONFIG_SENSORS_EMC1403=y
++CONFIG_SENSORS_GXP_FAN_CTRL=y
++CONFIG_SENSORS_GXP_CORETEMP=y
++CONFIG_SENSORS_GXP_PSU=y
++CONFIG_SENSORS_GXP_POWER=y
++CONFIG_WATCHDOG=y
++CONFIG_GXP_WATCHDOG=y
++CONFIG_MFD_SYSCON=y
++CONFIG_FB=y
++CONFIG_FB_THUMBNAIL=y
++CONFIG_FB_SIMPLE=y
++CONFIG_USB=y
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_ROOT_HUB_TT=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_OHCI_HCD_PLATFORM=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_GXP_UDC=y
++CONFIG_USB_CONFIGFS=y
++CONFIG_USB_CONFIGFS_SERIAL=y
++CONFIG_USB_CONFIGFS_ACM=y
++CONFIG_USB_CONFIGFS_OBEX=y
++CONFIG_USB_CONFIGFS_NCM=y
++CONFIG_USB_CONFIGFS_ECM=y
++CONFIG_USB_CONFIGFS_ECM_SUBSET=y
++CONFIG_USB_CONFIGFS_RNDIS=y
++CONFIG_USB_CONFIGFS_EEM=y
++CONFIG_USB_CONFIGFS_MASS_STORAGE=y
++CONFIG_USB_CONFIGFS_F_LB_SS=y
++CONFIG_USB_CONFIGFS_F_FS=y
++CONFIG_USB_CONFIGFS_F_HID=y
++CONFIG_USB_CONFIGFS_F_PRINTER=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_ONESHOT=y
++CONFIG_LEDS_TRIGGER_MTD=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_LEDS_TRIGGER_CPU=y
++CONFIG_LEDS_TRIGGER_GPIO=y
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
++CONFIG_LEDS_TRIGGER_TRANSIENT=y
++CONFIG_LEDS_TRIGGER_PANIC=y
++# CONFIG_VIRTIO_MENU is not set
++# CONFIG_IOMMU_SUPPORT is not set
++CONFIG_HPE_GXP_XREG=y
++CONFIG_HPE_GXP_FN2=y
++CONFIG_HPE_GXP_CSM=y
++CONFIG_HPE_GXP_SROM=y
++CONFIG_FANOTIFY=y
++CONFIG_OVERLAY_FS=y
++CONFIG_OVERLAY_FS_REDIRECT_DIR=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_JFFS2_FS=y
++# CONFIG_JFFS2_FS_WRITEBUFFER is not set
++CONFIG_JFFS2_SUMMARY=y
++CONFIG_JFFS2_FS_XATTR=y
++# CONFIG_JFFS2_FS_POSIX_ACL is not set
++# CONFIG_JFFS2_FS_SECURITY is not set
++CONFIG_SQUASHFS=y
++CONFIG_SQUASHFS_XZ=y
++CONFIG_SQUASHFS_4K_DEVBLK_SIZE=y
++# CONFIG_NETWORK_FILESYSTEMS is not set
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ASCII=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_NLS_UTF8=y
++CONFIG_CRYPTO_CCM=y
++CONFIG_CRYPTO_GCM=y
++CONFIG_CRYPTO_CRC32C=y
++CONFIG_CRYPTO_ARC4=y
++CONFIG_CRYPTO_DEFLATE=y
++CONFIG_CRYPTO_LZO=y
++CONFIG_CRYPTO_ZSTD=y
++CONFIG_CRYPTO_USER_API_HASH=y
++# CONFIG_CRYPTO_HW is not set
++CONFIG_CRC16=y
++# CONFIG_XZ_DEC_ARM is not set
++# CONFIG_XZ_DEC_ARMTHUMB is not set
++CONFIG_DMA_API_DEBUG=y
++CONFIG_PRINTK_TIME=y
++CONFIG_BOOT_PRINTK_DELAY=y
++CONFIG_DYNAMIC_DEBUG=y
++CONFIG_DEBUG_INFO=y
++# CONFIG_ENABLE_MUST_CHECK is not set
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_PANIC_ON_OOPS=y
++CONFIG_FUNCTION_PROFILER=y
++CONFIG_STACK_TRACER=y
++CONFIG_SCHED_TRACER=y
++CONFIG_STRICT_DEVMEM=y
++CONFIG_DEBUG_USER=y
++CONFIG_DEBUG_LL=y
++CONFIG_DEBUG_LL_UART_8250=y
++CONFIG_DEBUG_UART_PHYS=0xC00000F0
++CONFIG_DEBUG_UART_VIRT=0xF00000F0
++CONFIG_DEBUG_UART_8250_SHIFT=0
++CONFIG_EARLY_PRINTK=y
++CONFIG_TEST_KSTRTOX=y
+diff --git a/arch/arm/mach-hpe/Kconfig b/arch/arm/mach-hpe/Kconfig
+new file mode 100644
+index 000000000000..cc63f2be6c9c
+--- /dev/null
++++ b/arch/arm/mach-hpe/Kconfig
+@@ -0,0 +1,21 @@
++# SPDX-License-Identifier: GPL-2.0-only
++menuconfig ARCH_HPE
++	bool "HPE SoC support"
++	help
++	  This enables support for HPE ARM based SoC chips
++if ARCH_HPE
++
++config ARCH_HPE_GXP
++	bool "HPE GXP SoC"
++	select ARM_VIC
++	select PINCTRL
++	select IRQ_DOMAIN
++	select GENERIC_IRQ_CHIP
++	select MULTI_IRQ_HANDLER
++	select SPARSE_IRQ
++	select CLKSRC_MMIO
++	depends on ARCH_MULTI_V7
++	help
++	  Support for GXP SoCs
++
++endif
+diff --git a/arch/arm/mach-hpe/Makefile b/arch/arm/mach-hpe/Makefile
+new file mode 100644
+index 000000000000..8b0a91234df4
+--- /dev/null
++++ b/arch/arm/mach-hpe/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_ARCH_HPE_GXP) += gxp.o
+diff --git a/arch/arm/mach-hpe/gxp.c b/arch/arm/mach-hpe/gxp.c
+new file mode 100644
+index 000000000000..a37838247948
+--- /dev/null
++++ b/arch/arm/mach-hpe/gxp.c
+@@ -0,0 +1,62 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P.
++ *
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++
++#include <linux/init.h>
++#include <asm/mach/arch.h>
++#include <asm/mach/map.h>
++#include <linux/of.h>
++#include <linux/of_platform.h>
++#include <linux/clk-provider.h>
++#include <linux/clocksource.h>
++
++#define IOP_REGS_PHYS_BASE 0xc0000000
++#define IOP_REGS_VIRT_BASE 0xf0000000
++#define IOP_REGS_SIZE (240*SZ_1M)
++
++#define IOP_EHCI_USBCMD 0x0efe0010
++
++static struct map_desc gxp_io_desc[] __initdata = {
++	{
++	.virtual	= (unsigned long)IOP_REGS_VIRT_BASE,
++	.pfn		= __phys_to_pfn(IOP_REGS_PHYS_BASE),
++	.length		= IOP_REGS_SIZE,
++	.type		= MT_DEVICE,
++	},
++};
++
++void __init gxp_map_io(void)
++{
++	iotable_init(gxp_io_desc, ARRAY_SIZE(gxp_io_desc));
++}
++
++static void __init gxp_dt_init(void)
++{
++	/*reset EHCI host controller for clear start*/
++	__raw_writel(0x00080002,
++		(void __iomem *)(IOP_REGS_VIRT_BASE + IOP_EHCI_USBCMD));
++	of_platform_populate(NULL, of_default_bus_match_table, NULL, NULL);
++}
++
++static void gxp_restart(enum reboot_mode mode, const char *cmd)
++{
++	__raw_writel(1, (void __iomem *) IOP_REGS_VIRT_BASE);
++}
++
++static const char * const gxp_board_dt_compat[] = {
++	"HPE,GXP",
++	NULL,
++};
++
++DT_MACHINE_START(GXP_DT, "HPE GXP")
++	.init_machine	= gxp_dt_init,
++	.map_io		= gxp_map_io,
++	.restart	= gxp_restart,
++	.dt_compat	= gxp_board_dt_compat,
++MACHINE_END
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index cfb8ea0df3b1..5916dade7608 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -617,6 +617,14 @@ config CLKSRC_ST_LPC
+ 	  Enable this option to use the Low Power controller timer
+ 	  as clocksource.
+ 
++config GXP_TIMER
++	bool "GXP timer driver"
++	depends on ARCH_HPE
++	default y
++	help
++	  Provides a driver for the timer control found on HPE
++	  GXP SOCs. This is required for all GXP SOCs.
++
+ config ATCPIT100_TIMER
+ 	bool "ATCPIT100 timer driver"
+ 	depends on NDS32 || COMPILE_TEST
+diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+index fa5f624eadb6..ffca09ec34de 100644
+--- a/drivers/clocksource/Makefile
++++ b/drivers/clocksource/Makefile
+@@ -89,3 +89,4 @@ obj-$(CONFIG_GX6605S_TIMER)		+= timer-gx6605s.o
+ obj-$(CONFIG_HYPERV_TIMER)		+= hyperv_timer.o
+ obj-$(CONFIG_MICROCHIP_PIT64B)		+= timer-microchip-pit64b.o
+ obj-$(CONFIG_MSC313E_TIMER)		+= timer-msc313e.o
++obj-$(CONFIG_GXP_TIMER)			+= gxp_timer.o
+diff --git a/drivers/clocksource/gxp_timer.c b/drivers/clocksource/gxp_timer.c
+new file mode 100644
+index 000000000000..e3c617036e0d
+--- /dev/null
++++ b/drivers/clocksource/gxp_timer.c
+@@ -0,0 +1,158 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P.
++ *
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++#include <linux/bitops.h>
++#include <linux/clockchips.h>
++#include <linux/clocksource.h>
++#include <linux/interrupt.h>
++#include <linux/irqreturn.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of_address.h>
++#include <linux/of_irq.h>
++#include <linux/of_platform.h>
++#include <linux/slab.h>
++#include <linux/string.h>
++#include <linux/sched_clock.h>
++
++#include <asm/irq.h>
++
++#define TIMER0_FREQ 1000000
++#define TIMER1_FREQ 1000000
++
++#define MASK_TCS_ENABLE		0x01
++#define MASK_TCS_PERIOD		0x02
++#define MASK_TCS_RELOAD		0x04
++#define MASK_TCS_TC		0x80
++
++struct gxp_timer {
++	void __iomem *counter;
++	void __iomem *control;
++	struct clock_event_device evt;
++};
++
++static void __iomem *system_clock __read_mostly;
++
++static u64 notrace gxp_sched_read(void)
++{
++	return readl_relaxed(system_clock);
++}
++
++static int gxp_time_set_next_event(unsigned long event,
++					struct clock_event_device *evt_dev)
++{
++	struct gxp_timer *timer = container_of(evt_dev, struct gxp_timer, evt);
++	/*clear TC by write 1 and disable timer int and counting*/
++	writeb_relaxed(MASK_TCS_TC, timer->control);
++	/*update counter value*/
++	writel_relaxed(event, timer->counter);
++	/*enable timer counting and int*/
++	writeb_relaxed(MASK_TCS_TC|MASK_TCS_ENABLE, timer->control);
++
++	return 0;
++}
++
++static irqreturn_t gxp_time_interrupt(int irq, void *dev_id)
++{
++	struct gxp_timer *timer = dev_id;
++	void (*event_handler)(struct clock_event_device *timer);
++
++
++	if (readb_relaxed(timer->control) & MASK_TCS_TC) {
++		writeb_relaxed(MASK_TCS_TC, timer->control);
++
++		event_handler = READ_ONCE(timer->evt.event_handler);
++		if (event_handler)
++			event_handler(&timer->evt);
++		return IRQ_HANDLED;
++	} else {
++		return IRQ_NONE;
++	}
++}
++
++static int __init gxp_timer_init(struct device_node *node)
++{
++	void __iomem *base_counter;
++	void __iomem *base_control;
++	u32 freq;
++	int ret, irq;
++	struct gxp_timer *gxp_timer;
++
++	base_counter = of_iomap(node, 0);
++	if (!base_counter) {
++		pr_err("Can't remap counter registers");
++		return -ENXIO;
++	}
++
++	base_control = of_iomap(node, 1);
++	if (!base_control) {
++		pr_err("Can't remap control registers");
++		return -ENXIO;
++	}
++
++	system_clock = of_iomap(node, 2);
++	if (!system_clock) {
++		pr_err("Can't remap control registers");
++		return -ENXIO;
++	}
++
++	if (of_property_read_u32(node, "clock-frequency", &freq)) {
++		pr_err("Can't read clock-frequency\n");
++		goto err_iounmap;
++	}
++
++	sched_clock_register(gxp_sched_read, 32, freq);
++	clocksource_mmio_init(system_clock, node->name, freq,
++				300, 32, clocksource_mmio_readl_up);
++
++	irq = irq_of_parse_and_map(node, 0);
++	if (irq <= 0) {
++		ret = -EINVAL;
++		pr_err("GXP Timer Can't parse IRQ %d", irq);
++		goto err_iounmap;
++	}
++
++	gxp_timer = kzalloc(sizeof(*gxp_timer), GFP_KERNEL);
++	if (!gxp_timer) {
++		ret = -ENOMEM;
++		goto err_iounmap;
++	}
++
++	gxp_timer->counter = base_counter;
++	gxp_timer->control = base_control;
++	gxp_timer->evt.name = node->name;
++	gxp_timer->evt.rating = 300;
++	gxp_timer->evt.features = CLOCK_EVT_FEAT_ONESHOT;
++	gxp_timer->evt.set_next_event = gxp_time_set_next_event;
++	gxp_timer->evt.cpumask = cpumask_of(0);
++
++	if (request_irq(irq, gxp_time_interrupt, IRQF_TIMER | IRQF_SHARED,
++		node->name, gxp_timer)) {
++		pr_err("%s: request_irq() failed\n", "GXP Timer Tick");
++		goto err_timer_free;
++	}
++
++	clockevents_config_and_register(&gxp_timer->evt, TIMER0_FREQ,
++					0xf, 0xffffffff);
++
++	pr_info("gxp: system timer (irq = %d)\n", irq);
++	return 0;
++
++
++err_timer_free:
++	kfree(gxp_timer);
++
++err_iounmap:
++	iounmap(system_clock);
++	iounmap(base_control);
++	iounmap(base_counter);
++	return ret;
++}
++
++TIMER_OF_DECLARE(gxp, "hpe,gxp-timer", gxp_timer_init);
+-- 
+2.17.1
 
-<img src=3D"http://tracking.fdc-k.africa/tracking/open?msgid=3DdF3V6MG=
-yA7DHi3rp5aAFxw2&c=3D1488840087545523043" style=3D"width:1px;height:1p=
-x" alt=3D"" /><div style=3D"text-align:center; background-color:#fff;p=
-adding-top:10px;padding-bottom:10px;font-size:8pt;font-family:sans-ser=
-if;"><a href=3D"http://tracking.fdc-k.africa/tracking/unsubscribe?d=3D=
-W7zUvL-tBAqua6nugny8TS-95Ihwr3bMIuWHHtV_4oaGPR9L5kjEbxMtL-rhGRLAQDgfhB=
-1y2XI1nqydwcdDP8c1" style=3D"text-align:center;text-decoration:none;co=
-lor:#666;">UNSUBSCRIBE</a></div>
---=-eZCfAESGyHPhAN6/Pe0HYHrTwlFj9Ng923WKzQ==--
