@@ -1,176 +1,98 @@
-Return-Path: <SRS0=f7WM=SR=gmail.com=tcminyard@kernel.org>
+Return-Path: <SRS0=Z9Fy=SS=lunn.ch=andrew@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D528C433EF
-	for <soc@archiver.kernel.org>; Wed,  2 Feb 2022 22:10:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AD8BC433EF
+	for <soc@archiver.kernel.org>; Thu,  3 Feb 2022 01:11:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 409C2C36AE7; Wed,  2 Feb 2022 22:10:10 +0000 (UTC)
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id E6F80C36AEA; Thu,  3 Feb 2022 01:10:59 +0000 (UTC)
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7E328C004E1;
-	Wed,  2 Feb 2022 22:10:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7E328C004E1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=acm.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id 71so974056qkf.4;
-        Wed, 02 Feb 2022 14:10:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Rr5xR3phcMmOtciTLGMao2x+J3LzUpf33KP5PgsG6mw=;
-        b=fcP42zsjJKBRLsCCLNxeBAvGoAUH+RgY1jYrpOhhT8bMHr7+15EWYSucDQfP1oORdR
-         v8va2D+TIvGEUfFpYyk+KAAnpvrPj2Do2UURxQqDM2NZ0yrVKHV/Tmvmi8VnHPqEl5Sj
-         FzsjYO1CSUmsISBtPa5x3zIEsUBOu9RZDDuPyg2QqPpe+3i2ouYdl1b7XJc+7Yz287oe
-         n4Ll3sdxxGbRuNPqe8Va40e5cgmVlDZI5fIN6fBWjGY94knmRKOKljCldyrgDLu4eqFI
-         61yZGnSZcmCnvpc5Ppek75k/hWgHufZ8NwnxWp4bgKiaLrzdRDurexHwqhp4Nqyni8AG
-         h/rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=Rr5xR3phcMmOtciTLGMao2x+J3LzUpf33KP5PgsG6mw=;
-        b=u0RZwPHLRxHzoc3nTI75d6e+znvcNkq0LGEU150J3gyqv9kM5rU9l5IoKwDr+0TMv1
-         Lg5aL8A0AgQGB3CyBbqCA5zCRsO5iviAMuplHMiXnkM0e4mcyx0tCY9WeW2JY5OC1xCk
-         n8j6UhA4UzkUS1cVxrMaXBnEpgbXzh+/KxKbn1IrkFhLMbbCFlqVVrhXziDcr5a68eP9
-         nSkftfdi6MmsE0V5yAoZ5+bkShzaz3JT0dLbrU/MAmFzttwEwQeH4XsSjdLBMITU+TYL
-         uSq8EdX9H3DG8ianyOWaV5S3LqDhLkmRjZhUETkVpyTx2zEf8TRdnquwRFZhpOEWcWgX
-         etOQ==
-X-Gm-Message-State: AOAM531goIV/FelaLT5cB8h729ulvFQ4XLVs01fHOtVyNsdbVnRtQNJu
-	62usTeqYY+FDwqqsqZQ+sg==
-X-Google-Smtp-Source: ABdhPJwRpKyRhMilcGtomGensbv6thBpUXpxVK7cAkdNeBk0lqsREJF6QVbIyABhwvxgVYCy4DCMsQ==
-X-Received: by 2002:a37:4648:: with SMTP id t69mr21000172qka.702.1643839808031;
-        Wed, 02 Feb 2022 14:10:08 -0800 (PST)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id o13sm7298868qtv.36.2022.02.02.14.10.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 14:10:07 -0800 (PST)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:c4e6:e49c:6958:ac58])
-	by serve.minyard.net (Postfix) with ESMTPSA id 68539181297;
-	Wed,  2 Feb 2022 22:10:06 +0000 (UTC)
-Date: Wed, 2 Feb 2022 16:10:05 -0600
-From: Corey Minyard <minyard@acm.org>
-To: "Verdun, Jean-Marie" <verdun@hpe.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 6D05FC004E1;
+	Thu,  3 Feb 2022 01:10:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6D05FC004E1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=5hB4xZfLGfPF68sFnaphimiyN3Dvoyj649Ifdg6NzMk=; b=2650jDKWUISCHWTrw+2qSb29hf
+	Eg0kIWNamRCUEsMC3LfeWZNitulODz/nCXrDMPmXFPMUE72VH61hPSx5uwNVoOZnrOvRJe9UHfori
+	IRhH/NKpS6Y8uLmfet+KJgbH4rzTYuyCthmjEIni6imLGrzK8nnQnLlUntVfmlaQkEJ0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1nFQdR-0042dQ-Py; Thu, 03 Feb 2022 02:10:05 +0100
+Date: Thu, 3 Feb 2022 02:10:05 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: nick.hawkins@hpe.com
 List-Id: <soc.lore.kernel.org>
-Cc: "Hawkins, Nick" <nick.hawkins@hpe.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Wang Kefeng <wangkefeng.wang@huawei.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	David Airlie <airlied@linux.ie>,
+Cc: verdun@hpe.com, David Airlie <airlied@linux.ie>,
+	Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>,
 	Linus Walleij <linus.walleij@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	"linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	Lee Jones <lee.jones@linaro.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Stanislav Jakubek <stano.jakubek@gmail.com>,
-	Hao Fang <fanghao11@huawei.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	Richard Weinberger <richard@nod.at>,
 	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Corey Minyard <minyard@acm.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Lee Jones <lee.jones@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Russell King <linux@armlinux.org.uk>,
-	"linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	"openipmi-developer@lists.sourceforge.net" <openipmi-developer@lists.sourceforge.net>,
-	Jakub Kicinski <kuba@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-	"soc@kernel.org" <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>, soc@kernel.org,
+	Shawn Guo <shawnguo@kernel.org>,
+	Stanislav Jakubek <stano.jakubek@gmail.com>,
+	Sam Ravnborg <sam@ravnborg.org>, Hao Fang <fanghao11@huawei.com>,
 	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	Mark Brown <broonie@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-	Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>
-Subject: Re: [Openipmi-developer] [PATCH] HPE BMC GXP SUPPORT
-Message-ID: <20220202221005.GD2091156@minyard.net>
-Reply-To: minyard@acm.org
+	Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Wang Kefeng <wangkefeng.wang@huawei.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+	linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+	linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+Message-ID: <YfsrbcgPb5de3Bvw@lunn.ch>
 References: <nick.hawkins@hpe.com>
  <20220202165315.18282-1-nick.hawkins@hpe.com>
- <20220202175635.GC2091156@minyard.net>
- <3E9905F2-1576-4826-ADC2-85796DE0F4DB@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3E9905F2-1576-4826-ADC2-85796DE0F4DB@hpe.com>
+In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
 
-On Wed, Feb 02, 2022 at 06:14:57PM +0000, Verdun, Jean-Marie wrote:
-> > This is far too big for a single patch.  It needs to be broken into
-> > functional chunks that can be reviewed individually.  Each driver and
-> > each device tree change along with it's accompanying code need to be
-> > done in individual patches.  The way it is it can't be reviewed in any
-> > sane manner.
-> 
-> > -corey
-> 
-> Thanks for your feedback. We are getting a little bit lost here, as our plan was to submit initial
-> 
-> - bindings
-> - dts for SoC and 1 board
-> - initial platform init code
-> 
-> Then drivers code avoiding to send many dts updates which might complexify the review. We wanted to send all drivers code to relevant reviewers by tomorrow.
-> 
-> So, what you are asking ( do not worry I am not trying to negotiate, I just want to avoid English misunderstandings as I am French) is to send per driver
-> 
-> - binding
-> - dts update
-> - driver code
-> 
-> For each driver through different submission (with each of them containing the 3 associated parts) ?
+>  .../bindings/display/hpe,gxp-thumbnail.txt    |  21 +
+>  .../devicetree/bindings/gpio/hpe,gxp-gpio.txt |  16 +
+>  .../devicetree/bindings/i2c/hpe,gxp-i2c.txt   |  19 +
+>  .../bindings/ipmi/hpegxp-kcs-bmc-cfg.txt      |  13 +
+>  .../bindings/ipmi/hpegxp-kcs-bmc.txt          |  21 +
 
-Arnd gave an excellent explaination for this.
+Hi Nick
 
-To be clear, you need to split out changes to individual subsystems and
-submit those to the maintainers for that subsystem and not send them to
-everyone.  That way you reduce sending emails to people who don't need
-to see them.
+In addiiton to the other feedback also given, for new bindings you
+should be using yaml, not txt. You then gain validation of the
+bindings.
 
-Once you have a set of patches for a subsystem, you can submit them as one
-set.  That is generally preferred.  The "git send-email" or "git
-format-patch" tools are generally what we use, they let you compose a
-header message where you can give an overall explaination, then it sends
-the individual changes as followup messages to the header message.
+	Andrew
 
--corey
-
-> 
-> What shall be the initial one in our case as we are introducing a platform ? An empty dts infrastructure and then we make it grow one step at a time ?
-> 
-> vejmarie
-> 
-> ﻿
->  
-> 
-> 
-> _______________________________________________
-> Openipmi-developer mailing list
-> Openipmi-developer@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/openipmi-developer
