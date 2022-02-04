@@ -1,113 +1,103 @@
-Return-Path: <SRS0=f6tQ=ST=lunn.ch=andrew@kernel.org>
+Return-Path: <SRS0=iKIE=ST=perches.com=joe@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F60C433F5
-	for <soc@archiver.kernel.org>; Fri,  4 Feb 2022 13:33:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64504C433F5
+	for <soc@archiver.kernel.org>; Fri,  4 Feb 2022 14:02:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7BFBCC36AEB; Fri,  4 Feb 2022 13:33:34 +0000 (UTC)
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+	id 3A3EDC340F2; Fri,  4 Feb 2022 14:02:22 +0000 (UTC)
+Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7FD83C004E1;
-	Fri,  4 Feb 2022 13:33:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7FD83C004E1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=4Ca9I/sAMzQIMCAYXBkIkytKRwdb7KuHMc9w1XGE+7A=; b=0N30fHOeJKKiEmBzHSSAjOwTCo
-	NpvFMTne+ReR7L/rMoQIq2d5/1hRKjsDPqIORGjajQW+UTS2E2q3Z/w61nDp6gVZ6OVzpiYsw2EyW
-	pLoL11FZdneTXfJN6pJjgvs7Ay984ejA0+yx0g4+Hjhydr9jhY9l2gbt/i994/BsW7lk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1nFyhL-004Gxv-Fm; Fri, 04 Feb 2022 14:32:23 +0100
-Date: Fri, 4 Feb 2022 14:32:23 +0100
-From: Andrew Lunn <andrew@lunn.ch>
+	by smtp.kernel.org (Postfix) with ESMTPS id 8AD83C340EF;
+	Fri,  4 Feb 2022 14:02:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8AD83C340EF
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=perches.com
+Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id CEA06614A8;
+	Fri,  4 Feb 2022 14:02:07 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id A72A11B;
+	Fri,  4 Feb 2022 14:01:08 +0000 (UTC)
+Message-ID: <7cb1ce88cbf977801f2519178c270c1271100ac6.camel@perches.com>
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+From: Joe Perches <joe@perches.com>
 To: "Russell King (Oracle)" <linux@armlinux.org.uk>
 List-Id: <soc.lore.kernel.org>
-Cc: nick.hawkins@hpe.com, verdun@hpe.com, David Airlie <airlied@linux.ie>,
-	Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Corey Minyard <minyard@acm.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Lee Jones <lee.jones@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mark Brown <broonie@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>, soc@kernel.org,
-	Shawn Guo <shawnguo@kernel.org>,
-	Stanislav Jakubek <stano.jakubek@gmail.com>,
-	Sam Ravnborg <sam@ravnborg.org>, Hao Fang <fanghao11@huawei.com>,
-	Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Wang Kefeng <wangkefeng.wang@huawei.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-	linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-Message-ID: <Yf0q5/Jus+mz0B2E@lunn.ch>
+Cc: nick.hawkins@hpe.com, verdun@hpe.com, David Airlie <airlied@linux.ie>, 
+ Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>, Linus
+ Walleij <linus.walleij@linaro.org>,  Bartosz Golaszewski <brgl@bgdev.pl>,
+ Corey Minyard <minyard@acm.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@canonical.com>, Miquel Raynal
+ <miquel.raynal@bootlin.com>,  Richard Weinberger <richard@nod.at>, Vignesh
+ Raghavendra <vigneshr@ti.com>, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Thierry Reding
+ <thierry.reding@gmail.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
+ <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Mark Brown
+ <broonie@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel
+ Lezcano <daniel.lezcano@linaro.org>, Amit Kucheria <amitk@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>, Thomas Gleixner <tglx@linutronix.de>, Wim
+ Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, Shawn Guo <shawnguo@kernel.org>, Stanislav Jakubek
+ <stano.jakubek@gmail.com>, Sam Ravnborg <sam@ravnborg.org>, Hao Fang
+ <fanghao11@huawei.com>,  Mark Rutland <mark.rutland@arm.com>, Marc Zyngier
+ <maz@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,  Anshuman Khandual
+ <anshuman.khandual@arm.com>, Wang Kefeng <wangkefeng.wang@huawei.com>,
+ Lukas Bulwahn <lukas.bulwahn@gmail.com>, Masahiro Yamada
+ <masahiroy@kernel.org>,  dri-devel@lists.freedesktop.org,
+ devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org,  linux-i2c@vger.kernel.org,
+ openipmi-developer@lists.sourceforge.net,  linux-mtd@lists.infradead.org,
+ netdev@vger.kernel.org, linux-pwm@vger.kernel.org, 
+ linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date: Fri, 04 Feb 2022 06:01:44 -0800
+In-Reply-To: <Yf0cihUQ1byjnh3d@shell.armlinux.org.uk>
 References: <nick.hawkins@hpe.com>
- <20220202165315.18282-1-nick.hawkins@hpe.com>
- <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
+	 <20220202165315.18282-1-nick.hawkins@hpe.com>
+	 <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
+	 <ad56e88206a8d66b715035362abe16ece0bde7d3.camel@perches.com>
+	 <Yf0cihUQ1byjnh3d@shell.armlinux.org.uk>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: A72A11B
+X-Stat-Signature: c3yzg6zcu4cpdcebaczubogb94ck3gqq
+X-Rspamd-Server: rspamout07
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+KwoOMBfXWPFnO9qh3WITIVuG9hjhnLgA=
+X-HE-Tag: 1643983268-605794
 
-> > +#include <linux/init.h>
-> > +#include <asm/mach/arch.h>
-> > +#include <asm/mach/map.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_platform.h>
-> > +#include <linux/clk-provider.h>
-> > +#include <linux/clocksource.h>
+On Fri, 2022-02-04 at 12:31 +0000, Russell King (Oracle) wrote:
+> On Fri, Feb 04, 2022 at 04:18:24AM -0800, Joe Perches wrote:
+> > On Fri, 2022-02-04 at 12:05 +0000, Russell King (Oracle) wrote:
+> > > On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
+> > > > +	if (readb_relaxed(timer->control) & MASK_TCS_TC) {
+> > > > +		writeb_relaxed(MASK_TCS_TC, timer->control);
+> > > > +
+> > > > +		event_handler = READ_ONCE(timer->evt.event_handler);
+> > > > +		if (event_handler)
+> > > > +			event_handler(&timer->evt);
+> > > > +		return IRQ_HANDLED;
+> > > > +	} else {
+> > > > +		return IRQ_NONE;
+> > > > +	}
+> > > > +}
+> > 
+> > It's also less indented code and perhaps clearer to reverse the test
+> > 
+> > 	if (!readb_relaxed(timer->control) & MASK_TCS_TC)
 > 
-> It's normal to list all linux/ includes before asm/ includes. Please
-> rearrange.
+> This will need to be:
+> 
+>  	if (!(readb_relaxed(timer->control) & MASK_TCS_TC))
 
-Hi Nick
+right, thanks.
 
-Since you are new to the kernel, please let me point out, you should
-consider Russell comments for all your code, not just this one file.
-Many of the comments are generic to code anywhere in the kernel. So it
-would be good to fix the same issues in the rest of your code base
-before submitting them.
 
-I would also suggest that when you start submitting drivers, submit
-just one or two to start with. You will learn a lot from the feedback
-you get, and you can apply what you have learnt to the rest of your
-code before you post them for review.
-
-I would also suggest you spend 30 minutes a day just reading comments
-other patches receive. You can also learn a lot that way, see if the
-comments apply to your own code. You will also learn about processes
-this way, which can be just as challenging to get right as code.
-
-     Andrew
