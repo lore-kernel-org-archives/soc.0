@@ -1,173 +1,133 @@
-Return-Path: <SRS0=dJbK=ST=ti.com=nm@kernel.org>
+Return-Path: <SRS0=rxEr=ST=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E8BAC433EF
-	for <soc@archiver.kernel.org>; Fri,  4 Feb 2022 14:31:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB85CC433EF
+	for <soc@archiver.kernel.org>; Fri,  4 Feb 2022 15:41:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 31C24C340E9; Fri,  4 Feb 2022 14:31:19 +0000 (UTC)
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	id B67FEC340EF; Fri,  4 Feb 2022 15:41:19 +0000 (UTC)
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0A7D2C004E1;
-	Fri,  4 Feb 2022 14:31:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0A7D2C004E1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 214EV9Zp051915;
-	Fri, 4 Feb 2022 08:31:09 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1643985069;
-	bh=EVPxkx563eY9pKGLzAMKeoMwB4VmQ09hAOPqEf69704=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=RNvvrMeVPAQLEsExh+9uc8yQorORMcDdiCIiVVFiEBCuIy3V2hAQyg6sOa/lScykO
-	 K+m0MxQYJxp75/YT1TX986ICjIbgAMwwOsxG5TXH+z8CzD1XN9T1MlrYSkplhUN6aY
-	 TIegW2hLJsTkI9vZMqxaEpfi9yrFQSu5UQWid8wo=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 214EV9jf120799
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 4 Feb 2022 08:31:09 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 4
- Feb 2022 08:31:08 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 4 Feb 2022 08:31:08 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-	by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 214EV8mC016025;
-	Fri, 4 Feb 2022 08:31:08 -0600
-Date: Fri, 4 Feb 2022 08:31:08 -0600
-From: Nishanth Menon <nm@ti.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 92F18C340EB
+	for <soc@kernel.org>; Fri,  4 Feb 2022 15:41:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 92F18C340EB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E09BA3F1F0
+	for <soc@kernel.org>; Fri,  4 Feb 2022 15:41:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1643989276;
+	bh=wZglkyjtNPMuirlfKz4+2S7FR+L5T3ePXu8KGwauAX0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=NZe5Yt6Y6ovESa4OWyDTpAV6UA2zD77bXdyIV1NinY7tJy5aEvlvmqVWEodEOESRP
+	 EldfTMMgt0+XMPJgncWlCTa5vvTAGjwKmGsmpbej1lBImJj0N39G448tuJF8727dp9
+	 7QsXWoigANE+0c6oXfUIZuIO902342mJIZ3zK5EM5ktXz/u7hD87Fc1+gANuL+bHKy
+	 hcyC1rJxCa4zcXezgV7q5xOk1ROTnAtAYQiRUSZON5wtcbAf2LggGbwZy9864dBHo8
+	 1QLBi9Z8SlhF0wboyeywoDsiAYdbiGLfSjZkNfA+8nZxC9je3KteZQyGxYLwgb8HMF
+	 Q7ip9MG49atyQ==
+Received: by mail-ed1-f72.google.com with SMTP id c23-20020a056402159700b00406aa42973eso3471738edv.2
+        for <soc@kernel.org>; Fri, 04 Feb 2022 07:41:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wZglkyjtNPMuirlfKz4+2S7FR+L5T3ePXu8KGwauAX0=;
+        b=rogHpx+F3MRbYHk3RvFg71DCu3bTA9sUuv1Xd7+FST8AAlS+oFjTE9iiuiKd0s7qfi
+         DrDHAomAu2yNcr7YT8YEoDoTZ2uaozrzqaYTwFIyuYr7vfSSr/kIV5a9oyf7B7E4azFi
+         coN4owL5xCSzw6JBhq5qzkObL7S3Cwlg43ZbvTVC+Oo7eyHSWYQRMcuFNkMG9b1T5RxG
+         h+f7rcex3SOusiDU7dcFkrE1X/EYtfPtLIi3t3S0i5Rxg2Qy9pnsyS8VK21PjQClRdZz
+         1nrkAQK5l5XxilezzlNL3JiXXOMWsMdEmKJM6U2kj7ouU8rVWKhs9DeBHTG/3Um6ejGt
+         Y6dA==
+X-Gm-Message-State: AOAM530kGze1dNUXfVq7z3M5fdCj56t3CvYgspZuuOqQOfPe0MukLQOQ
+	m+JFMbHm/mAYYd5s606yBHdn+iKGdNnsCt7eN0LveQ0t596zSnpYcT2v90u5yXD4xKaqW4Qvvc4
+	fobiyBxmLzug9Iae3/dxWgKA=
+X-Received: by 2002:aa7:cb58:: with SMTP id w24mr3572669edt.425.1643989276598;
+        Fri, 04 Feb 2022 07:41:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzIHtmwRhhbCAkf12pMJG1LNwuiJTM+g7YJu4r1672xFdn7Pt3ou2gK4nQ5FcODLQfJZP6z3g==
+X-Received: by 2002:aa7:cb58:: with SMTP id w24mr3572655edt.425.1643989276429;
+        Fri, 04 Feb 2022 07:41:16 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id rn16sm770753ejb.61.2022.02.04.07.41.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 07:41:15 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Rob Herring
-	<robh+dt@kernel.org>, <tony@atomide.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof
- Johansson <olof@lixom.net>,
-        <soc@kernel.org>
-CC: Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, <jan.kiszka@siemens.com>,
-        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] arm64: dts: ti: k3-am65: disable optional
- peripherals by default
-Message-ID: <20220204143108.653qk2ihnlhsr5aa@prior>
-References: <20220203140240.973690-1-matthias.schiffer@ew.tq-group.com>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: [GIT PULL 1/2] clk: samsung: Tesla FSD for v5.18
+Date: Fri,  4 Feb 2022 16:41:11 +0100
+Message-Id: <20220204154112.133723-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220203140240.973690-1-matthias.schiffer@ew.tq-group.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 
-Rob, Tony, Arnd, SoC maintainers,
+Hi Arnd and Olof,
 
-On 15:02-20220203, Matthias Schiffer wrote:
-> All peripherals that require pinmuxing or other configuration to work
-> should be disabled by default. Dependent DTS are adjusted accordingly.
+The driver changes for Tesla FSD clock controller. I got ack for these from
+Sylwester.
 
-https://lore.kernel.org/linux-arm-kernel/20201112183538.6805-1-nm@ti.com/
-reversal all over again.
-
-Is there a specific pattern we are intending to use here? Because, if we
-are going down this path (which would be a major churn across multiple
-downstream trees as well) - I'd rather have this as a documented
-standard and not just a TI approach and will need to be done across all
-K3 devices.
-
-Are you aware of such a documented guideline, rather than "word of
-mouth"? Maybe I have'nt looked deep enough, but checking..
-
-> 
-> The following nodes are now "disabled" according to dtx_diff and were not
-> overridden to "okay", as they define no pinctrl:
+Best regards,
+Krzysztof
 
 
-> k3-am654-base-board:
-> - mcu_i2c0
-> - mcu_spi0..2
-> - mcu_uart0
-> - cal
-> - main_i2c3
-> - ehrpwm0..5
-> - main_uart1..2
-> - main_spi1..4
-> 
-> k3-am65-iot2050*:
-> - mci_spi1..2
-> - cal
-> - ehrpwm0..5
-> - main_spi0..4
-> 
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> ---
-[...]
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> index ce8bb4a61011e..5aa425d1ba802 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> @@ -64,6 +64,7 @@ serdes0: serdes@900000 {
->  		ti,serdes-clk = <&serdes0_clk>;
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-[...]
+are available in the Git repository at:
 
-> @@ -1337,6 +1388,7 @@ icssg2_mdio: mdio@32400 {
->  			#address-cells = <1>;
->  			#size-cells = <0>;
->  			bus_freq = <1000000>;
-> +			status = "disabled";
->  		};
->  	};
->  };
-> diff --git a/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
-> index 8d592bf41d6f1..57ac3a493adbe 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
-> @@ -22,11 +22,12 @@ phy_gmii_sel: phy@4040 {
->  
->  	mcu_uart0: serial@40a00000 {
->  		compatible = "ti,am654-uart";
-> -			reg = <0x00 0x40a00000 0x00 0x100>;
-> -			interrupts = <GIC_SPI 565 IRQ_TYPE_LEVEL_HIGH>;
-> -			clock-frequency = <96000000>;
-> -			current-speed = <115200>;
-> -			power-domains = <&k3_pds 149 TI_SCI_PD_EXCLUSIVE>;
-> +		reg = <0x00 0x40a00000 0x00 0x100>;
-> +		interrupts = <GIC_SPI 565 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <96000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 149 TI_SCI_PD_EXCLUSIVE>;
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-clk-fsd-5.18
 
-When doing these kind of changes, do not include ancillary tab cleanups.
-keep such cleanups separate patch.
+for you to fetch changes up to 0b59bc00a6936e8670b58d4307a2cfba341d40d0:
 
-> +		status = "disabled";
+  clk: samsung: fix missing Tesla FSD dependency on Exynos (2022-02-01 09:14:53 +0100)
 
->  	};
->  
->  	mcu_ram: sram@41c00000 {
-> @@ -46,6 +47,7 @@ mcu_i2c0: i2c@40b00000 {
->  		clock-names = "fck";
->  		clocks = <&k3_clks 114 1>;
->  		power-domains = <&k3_pds 114 TI_SCI_PD_EXCLUSIVE>;
-> +		status = "disabled";
->  	};
->  
->  	mcu_spi0: spi@40300000 {
-> @@ -56,6 +58,7 @@ mcu_spi0: spi@40300000 {
->  		power-domains = <&k3_pds 142 TI_SCI_PD_EXCLUSIVE>;
->  		#address-cells = <1>;
->  		#size-cells = <0>;
-> +		status = "disabled";
->  	};
->  
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+----------------------------------------------------------------
+Samsung clock controller changes for v5.18
+
+Add support for Tesla FSD SoC clock controller within Samsung Exynos SoC
+clock controller drivers.  The Tesla FSD's clock controller is similar
+to Samsung Exynos one, so entire driver structure can be re-used.
+
+----------------------------------------------------------------
+Alim Akhtar (9):
+      dt-bindings: clock: Add bindings definitions for FSD CMU blocks
+      dt-bindings: clock: Document FSD CMU bindings
+      clk: samsung: fsd: Add initial clock support
+      clk: samsung: fsd: Add cmu_peric block clock information
+      clk: samsung: fsd: Add cmu_fsys0 clock information
+      clk: samsung: fsd: Add cmu_fsys1 clock information
+      clk: samsung: fsd: Add cmu_imem block clock information
+      clk: samsung: fsd: Add cmu_mfc block clock information
+      clk: samsung: fsd: Add cam_csi block clock information
+
+Krzysztof Kozlowski (1):
+      clk: samsung: fix missing Tesla FSD dependency on Exynos
+
+ .../devicetree/bindings/clock/tesla,fsd-clock.yaml |  198 +++
+ drivers/clk/samsung/Kconfig                        |    9 +
+ drivers/clk/samsung/Makefile                       |    1 +
+ drivers/clk/samsung/clk-fsd.c                      | 1803 ++++++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                      |    1 +
+ drivers/clk/samsung/clk-pll.h                      |    1 +
+ include/dt-bindings/clock/fsd-clk.h                |  150 ++
+ 7 files changed, 2163 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
+ create mode 100644 drivers/clk/samsung/clk-fsd.c
+ create mode 100644 include/dt-bindings/clock/fsd-clk.h
