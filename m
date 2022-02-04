@@ -1,109 +1,172 @@
-Return-Path: <SRS0=hErb=ST=baylibre.com=narmstrong@kernel.org>
+Return-Path: <SRS0=rxEr=ST=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C8BAC433EF
-	for <soc@archiver.kernel.org>; Fri,  4 Feb 2022 08:30:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 935B2C433F5
+	for <soc@archiver.kernel.org>; Fri,  4 Feb 2022 08:52:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1B66BC004E1; Fri,  4 Feb 2022 08:30:32 +0000 (UTC)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 415F0C340F5; Fri,  4 Feb 2022 08:52:32 +0000 (UTC)
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 80073C340F3
-	for <soc@kernel.org>; Fri,  4 Feb 2022 08:30:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 80073C340F3
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f53.google.com with SMTP id l67-20020a1c2546000000b00353951c3f62so2780463wml.5
-        for <soc@kernel.org>; Fri, 04 Feb 2022 00:30:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:organization:content-transfer-encoding;
-        bh=n3eiY4UY+ypB+x0APz9a4v6wlKAJG1IUhoWJAuUwkZ8=;
-        b=a5jOP3KlT4ruvckUxtmgxMVm57m8VSbnvFBiPb1KUMjLTwLzKRQW0bREWTJpwcAuHU
-         aspOIjZTsC+X9RWhCmZFjDwDkBKCdjQQ2u8yLD+ewYOeVFcak96FvAIbtm8qjZsB1SqT
-         zXO6VaD5GxcBllVmYKfW7d1k7S6ONC2tyK490KC06w28XWW7psf1GUdKj40IOlq8IzD7
-         5BHRgzn20mFRsRCaoL4XmzP8UmaiY3kOJdaV8GiklxrA4oNdL87jTTlN9sRQP3ZyLKas
-         n61xkGHHrw2cXJt4zGARy1kLU+cdNo3aXTC9vTU7L7/lt4G1S9ta3HwxwwdzEsTk3tiG
-         83jw==
+	by smtp.kernel.org (Postfix) with ESMTPS id 54518C340FA
+	for <soc@kernel.org>; Fri,  4 Feb 2022 08:52:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 54518C340FA
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1EDAD3F1BE
+	for <soc@kernel.org>; Fri,  4 Feb 2022 08:52:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1643964744;
+	bh=iqZrLHxxMKYXcwDk+JH/xBRKoG0uPSeGw2pYz3/v6kY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=qnPp9d4xFaxTg3mjbDdwampcBXqqfo8DgkBf3yT/Edg/I4LN6PG/4BlRLSTKOk+yL
+	 iMlPX/FYl0tcjL790Q2ZD8tAn8JF4m4GJo2fMB4GVQg4DDH0dFtu0Le3/tE3FBel/5
+	 AKBrh1u8NG9PLNOvZOWPZHfsb8YJtRl7G4w3fDgf+gFCAntwq26Ef43atxjovTutxJ
+	 wEc7NH1a5pVVQ59uIG1n7f840Ywhyr6HeOuQ68NyCo+ziLdt8raXl9UVhQmAC+jrSF
+	 TXTsfNhWA28SR38YNHj26zj03cekT0C9/iwbiBx4c+qcvQXtWF85t/v+dt5swWFz5G
+	 CY8qwSYtILxkw==
+Received: by mail-lf1-f72.google.com with SMTP id z13-20020a056512376d00b0043793efa5f6so2799216lft.18
+        for <soc@kernel.org>; Fri, 04 Feb 2022 00:52:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:organization
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=n3eiY4UY+ypB+x0APz9a4v6wlKAJG1IUhoWJAuUwkZ8=;
-        b=52XAvtGZNFCq9tqlysp4geExUWZ7cfanN2gRxaoCSdpLOo65sVCLYneJfw1tVoyHp9
-         bAvE7qUdc2PrVgG1KnTIeQ240CWxIL++ITG2g2p3KccjDdvUmb5ZY7tQ7CJgJB4t15Yl
-         Q/tWmnBHNvyEU/TD9lRWyzUgFDNar2DQGcI8p7csBlKYrJomrKN3pwYQ9wFDRCb9kM3O
-         baLbmglFr7+H6vAW3nHYffUQTrx4Rcm9RxZHvb1A3e9OFyy8gcfVofiFZ+smqiFtFYeS
-         qThkl+QZbdFp1XCTAFTpWCfN9LsNJtngqf2bS5iV9wd+y51FvI9JN0g51IIVumxTBIpR
-         Peuw==
-X-Gm-Message-State: AOAM5315UyRYwtA2NeWFXqtHFKcAqJzm6bpuvE0Q7NfuwXYnw1CW+zDI
-	1ThZ2IKy7QjcPvzgmW3u/ejUYKSwB2PzNG0n
-X-Google-Smtp-Source: ABdhPJwonSn2Lz6t7fGCm6dJtEjTJNAFwO2Sj1qk2OeVLsQMpF6FKIXNYWwPnLhzkVqhNh2ou5iJQA==
-X-Received: by 2002:a7b:c744:: with SMTP id w4mr1276112wmk.113.1643963428449;
-        Fri, 04 Feb 2022 00:30:28 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:3fbe:ff10:110:739? ([2001:861:44c0:66c0:3fbe:ff10:110:739])
-        by smtp.gmail.com with ESMTPSA id m64sm960125wmm.31.2022.02.04.00.30.27
+        bh=iqZrLHxxMKYXcwDk+JH/xBRKoG0uPSeGw2pYz3/v6kY=;
+        b=Ko9MHqoMgLaymUfdWSvCHFMWXcGNfoheXFqI00qSdeR4KhR/3TTsfB/B3ov1YykwFe
+         fOaoFioWaug83BCJwcg3ZlKAWuxU0JnqbMFD4u8lUXZiwahTW8A1rKJVWX5HgE/s8OUW
+         w0r7cs1e1i4bGEkBFdbU0fTBnMAAuc57BQnZYRkcyHQyHwwm1YYhq5he1dtfIqtFpM7F
+         FkMlam2j6opVVeTzQ7MD5mN/7OGIPL+d0tyQNHDo7dCucy3eUuFnze9VbR3qxARsdJAS
+         Z6toorDv7NC+0sGxgJyEqSIexgDbCBCPnClzM+fV8jB28bH1RQYgqk43kXImQ3v2ruF2
+         /5Nw==
+X-Gm-Message-State: AOAM532+JbYN0hcHqJLQqXLSuYYM8zv2iwiFNDt1v/0cePFwfxwPc5bC
+	6xiAQVDQwtcsvQ6iHgD6m0Wrzxu3P7kW7LLJcMymOr2f5SuL07riUdLYkw2Ain/eGyHcMOQ/aHj
+	axED/sWgxbdKmkctc7PfGBfo=
+X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr1976626edc.345.1643964732801;
+        Fri, 04 Feb 2022 00:52:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwVcZDvspQCzKUyW5YG8zjDVQmYqY/DEAG3sfjKSfnQIzLHqmc3NlVf9LlkkFskfuUgLPJavA==
+X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr1976597edc.345.1643964732578;
+        Fri, 04 Feb 2022 00:52:12 -0800 (PST)
+Received: from [192.168.0.81] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id z8sm418238ejc.197.2022.02.04.00.52.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 00:30:27 -0800 (PST)
-Message-ID: <67888f6a-f4ff-9569-131a-0c7baba6ddaf@baylibre.com>
-Date: Fri, 4 Feb 2022 09:30:27 +0100
+        Fri, 04 Feb 2022 00:52:11 -0800 (PST)
+Message-ID: <ed615fdb-5c30-697e-f197-a3a93c5336b9@canonical.com>
+Date: Fri, 4 Feb 2022 09:52:10 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-From: Neil Armstrong <narmstrong@baylibre.com>
-Subject: [GIT PULL] amlogic fixes for v5.17-rc round 2
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
 Content-Language: en-US
-Organization: Baylibre
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: "Verdun, Jean-Marie" <verdun@hpe.com>, Rob Herring <robh+dt@kernel.org>,
+ "Hawkins, Nick" <nick.hawkins@hpe.com>
+List-Id: <soc.lore.kernel.org>
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, Corey Minyard <minyard@acm.org>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+ Lee Jones <lee.jones@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mark Brown <broonie@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Amit Kucheria
+ <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Russell King <linux@armlinux.org.uk>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ SoC Team <soc@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Stanislav Jakubek <stano.jakubek@gmail.com>, Sam Ravnborg
+ <sam@ravnborg.org>, Hao Fang <fanghao11@huawei.com>,
+ "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+ Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+ Ard Biesheuvel <ardb@kernel.org>,
+ Anshuman Khandual <anshuman.khandual@arm.com>,
+ Wang Kefeng <wangkefeng.wang@huawei.com>,
+ Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+ Masahiro Yamada <masahiroy@kernel.org>,
+ dri-devel <dri-devel@lists.freedesktop.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ Linux I2C <linux-i2c@vger.kernel.org>,
+ "openipmi-developer@lists.sourceforge.net"
+ <openipmi-developer@lists.sourceforge.net>,
+ MTD Maling List <linux-mtd@lists.infradead.org>,
+ netdev <netdev@vger.kernel.org>, Linux PWM List <linux-pwm@vger.kernel.org>,
+ "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+ linux-spi <linux-spi@vger.kernel.org>,
+ "open list:THERMAL" <linux-pm@vger.kernel.org>,
+ Linux USB List <linux-usb@vger.kernel.org>,
+ LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+References: <nick.hawkins@hpe.com>
+ <20220202165315.18282-1-nick.hawkins@hpe.com>
+ <CAL_Jsq+K2t5WYE056so1iZgZr7CBKvDEjAwnJVTyUFQcK-VFSA@mail.gmail.com>
+ <e79133f2-f872-3ed6-4038-526e94e84909@canonical.com>
+ <1FEAAC19-1DD7-40D7-98FD-30C2659E7C0F@hpe.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1FEAAC19-1DD7-40D7-98FD-30C2659E7C0F@hpe.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi,
+On 03/02/2022 18:07, Verdun, Jean-Marie wrote:
+> 
+>    > Maybe it does not look like, but this is actually a v2. Nick was asked
+>    > to change the naming for the nodes already in v1. Unfortunately it did
+>    > not happen, so we have vuart, spifi, vic and more.
+> 
+>    > It is a waste of reviewers' time to ask them to perform the same review
+>    > twice or to ignore their comments.
+> 
+>     Hi Krysztof,
+> 
+>     Accept our apologies if you think you lose your time, it is clearly not our
+>     intent. 
+> 
+>     This is the first time that we (I mean the team) introduce a new arch into
+>     the linux kernel and I must admit that we had hard time to understand
+>     from which angle we needed to start.
+> 
+>     I will probably write a Documentation afterward, as it is easy to find doc
+>     on how to introduce a patch or a driver, but not when you want to 
+>     introduce a new chip. 
+> 
+>     We are trying to do our best, and clearly want to follow all of your inputs.
+>     Mistakes happen and they are clearly not intentional and not driven in 
+>     a way to make you lose your time.
+> 
+>     Helping others, and teaching something new is definitely a way to 
+>     optimize your time and this is what you are currently doing with us.
+> 
+>     We appreciate it and hope you will too.
 
-Here's a couple of ARM64 DT fixes for v5.17-rc1, they fix reserved memory zones
-for the whole Amlogic SoC families, some typos for the Odroid & BananaPi board
-and a reboot issue on the Odroid-C4.
+I understand, I also maybe over-reacted on this. Just please go through
+the comments you got for first submission and either apply them or
+respond why you disagree.
 
-Neil
+The next submissions (patchset split into several commits) should be a
+v3, preferably with cover letter (git format-patch --cover-letter -v3
+...) where you can document also changes you did to the patchset.
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+It looks for example like this:
+https://lore.kernel.org/linux-samsung-soc/31da451b-a36c-74fb-5667-d4193284c6cd@canonical.com/T/#mf98d2ac27a8481dc69dd110f9861c8318cade252
 
-   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+or like this (where changelogs are in each patch, although ordering is
+not correct because dt-bindings should be the first in the series):
+https://lore.kernel.org/all/20220103233948.198119-1-Mr.Bossman075@gmail.com/
 
-are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git v5.17/fixes
-
-for you to fetch changes up to e6b03375132fefddc55cf700418cf794b3884e0c:
-
-   arm64: dts: meson-sm1-odroid: fix boot loop after reboot (2022-02-04 09:20:41 +0100)
-
-----------------------------------------------------------------
-Christian Hewitt (3):
-       arm64: dts: meson-gx: add ATF BL32 reserved-memory region
-       arm64: dts: meson-g12: add ATF BL32 reserved-memory region
-       arm64: dts: meson-g12: drop BL32 region from SEI510/SEI610
-
-Dongjin Kim (2):
-       arm64: dts: meson-g12b-odroid-n2: fix typo 'dio2133'
-       arm64: dts: meson-sm1-bananapi-m5: fix wrong GPIO domain for GPIOE_2
-
-Lutz Koschorreck (2):
-       arm64: dts: meson-sm1-odroid: use correct enable-gpio pin for tf-io regulator
-       arm64: dts: meson-sm1-odroid: fix boot loop after reboot
-
-  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi     | 6 ++++++
-  arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts     | 8 --------
-  arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi | 4 ++--
-  arch/arm64/boot/dts/amlogic/meson-gx.dtsi             | 6 ++++++
-  arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 2 +-
-  arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi     | 2 +-
-  arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts      | 8 --------
-  7 files changed, 16 insertions(+), 20 deletions(-)
+Best regards,
+Krzysztof
