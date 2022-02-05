@@ -1,150 +1,96 @@
-Return-Path: <SRS0=rxEr=ST=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=HPtB=SU=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57EA5C4332F
-	for <soc@archiver.kernel.org>; Fri,  4 Feb 2022 15:41:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00743C433EF
+	for <soc@archiver.kernel.org>; Sat,  5 Feb 2022 23:55:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1D1C6C004E1; Fri,  4 Feb 2022 15:41:26 +0000 (UTC)
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id C55AFC340EF; Sat,  5 Feb 2022 23:55:21 +0000 (UTC)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2EDA0C340EF
-	for <soc@kernel.org>; Fri,  4 Feb 2022 15:41:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2EDA0C340EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8CE3D3F4B6
-	for <soc@kernel.org>; Fri,  4 Feb 2022 15:41:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1643989278;
-	bh=HhMWPtfkpkPYK76tVGoLvZIgiOxfmrxT8MjHu4n/xKU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version;
-	b=Yg/ktSVcmQEcyXpYfCx9+cMjsgU9L/tW5L8zuirnJNJ8/VrqWAQMwfWGaHsMv1MUM
-	 6Ok671JGT/CszjALJmkeih+tUb1wagVhWAqfhuhhz7ueZquNYNW69brHHByoRNMX8W
-	 y6RBO8xx9OyRFmfyvZ0fnb/3SOicNdj1mQn40d9pRte6apUra/ZGihstXQdl1Rgwo4
-	 prRj6o04lt7vf/x9bHghoB14UM5VdAWDCvjkCSseuU80BzA1V6LSYsDZ81rjsh6QST
-	 UcGWkGCoAHHxxdfWOBxwDhMYRKinDZmR9SZ7I5gIo+IwIpFfubNtW5vaQeedr89ZnA
-	 Zu+epfrQwky2Q==
-Received: by mail-ej1-f72.google.com with SMTP id r18-20020a17090609d200b006a6e943d09eso2731758eje.20
-        for <soc@kernel.org>; Fri, 04 Feb 2022 07:41:18 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id F2751C340E8
+	for <soc@kernel.org>; Sat,  5 Feb 2022 23:55:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F2751C340E8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f174.google.com with SMTP id q22so14166296ljh.7
+        for <soc@kernel.org>; Sat, 05 Feb 2022 15:55:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5JpO8nSCWJ5pgptNli9YTAFT4dwCDnKUHXT3U/sWX34=;
+        b=jeH1FymdtDrFt4JFK2U8rZPl/qhXcuT4lIIWA1/Q8bbL8go6L/+z4LwPC12T9mD7WZ
+         Vs2unmWHAxo7ah4tkQFHWOpdZ0+Pqa4KbTOBsb10Zq4kkpsZRpUmXMW9eT/jjPCAGKHa
+         Dif+MELfHTijFnd5qqZAkWMqnP3j/u7G7Nv//eCFKbHKhVOS5beoMDUjpPk1cez+Bz3U
+         ePPtNUNg2b20GxRRIU4yVlGDs0dM9+I9IccZaTU6E6r+rrH4mfK9SMTStdgmgbsEMYR/
+         cpmyHlD20cK3z0Z+jqF9hnMPwmtB9u2KTtQCqbgHkZKNw3BpZeYCfo+XduTKnKQB4rfo
+         R1Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HhMWPtfkpkPYK76tVGoLvZIgiOxfmrxT8MjHu4n/xKU=;
-        b=kLZaldTHx56QQPpZptZSruIubrup2fEd5DHcljErGJuTXZZPeHB1NsWEhQvdBsbeCa
-         cVlcvHBHi8Aa6SGOKHUoSxir5EMOeNx4cQ5fjWNsyGrX4j1VLR4Dh5hGU+VnQk8iiYgC
-         MOeILCUwSN13tPzSmJNAKC15w2tStXVqZEKwMcp1xr+j9gDfy2Xv0zrtpziZe8Q0yflu
-         vhRd8Yny2xq2xX2jxmdzU1XMdddaka8n07MNET2qpCegIopi5d5UnxvN0cJWqtEk+gT9
-         Qj1PzYTfkV4CYGm9MlTrgNftiQtjwxj9h31JU+qxXAamAiVEN3YfGwhWEVPw2ZHO/6QB
-         /q7Q==
-X-Gm-Message-State: AOAM531PrvcR+g4IHl/oKLu7jlfZAXQnvR7EkVHxcCQZrVCqdXdjIVwI
-	2wqn8yutuxw47gNEqdYO/lFOuRstBo9nCjmV56fB1j0ktObjRu6tHpwGDAlBY0RiKIY47P1xoqZ
-	gyUNaEc2u6jImgA7y4i7LL6M=
-X-Received: by 2002:a17:906:478c:: with SMTP id cw12mr2970522ejc.214.1643989278066;
-        Fri, 04 Feb 2022 07:41:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw27rzlsVhz2k63QiDYhx2I/GqUBW5UCh9ihXw6hsKmtBpPQSfcx9JVgv0MXBr0AQWQD0C0rg==
-X-Received: by 2002:a17:906:478c:: with SMTP id cw12mr2970501ejc.214.1643989277887;
-        Fri, 04 Feb 2022 07:41:17 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id rn16sm770753ejb.61.2022.02.04.07.41.16
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5JpO8nSCWJ5pgptNli9YTAFT4dwCDnKUHXT3U/sWX34=;
+        b=UaIi+uXVz1nO7PPSNCICrFuUA9lKmZS22HkzPjwEdSlyKNB3tOeEIJ5y7AWPfPt4/g
+         601Lesv63+79TqGm0cbV4lKey+byp6KEGrnYkSTb1/lvl6+iXhD7WAG1T2C3rR/zOIrM
+         Yvm5l3JodaKrWlv28wyQM+dDUz6JvbAPoMyyF7qeno0AHyaw4YHnmBocefdyIvLKRmMH
+         pCWYCGaYJlH8A7hHzBljCeLKOfRVxnrWRdFIUg8JDN53c/nO2zfiSiPDv7LagQGzMlZL
+         ds7vCBzIB9RY093b0pEUQP9+funAPl8fe7gJbEBma9PQzaCG8GZbZNSoN8FL3XQPiRXH
+         wReA==
+X-Gm-Message-State: AOAM532QSgBSmxgb2/XZEvs9rv+Fh7cdQtd6kj1ac15g4rRx3TO3yZt3
+	EGRVvX6jt9g45pFCEl5aTlNY6A==
+X-Google-Smtp-Source: ABdhPJyOsBz2Y4FU0mvX5RK+wfUe32KmfN65duRJAv+4ri3J7IvpqWW/+gG2JqOLCtvIoyPWnzUOgw==
+X-Received: by 2002:a05:651c:a12:: with SMTP id k18mr4206115ljq.156.1644105319159;
+        Sat, 05 Feb 2022 15:55:19 -0800 (PST)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id m12sm893906lfj.90.2022.02.05.15.55.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 07:41:17 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+        Sat, 05 Feb 2022 15:55:18 -0800 (PST)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
+To: arm@kernel.org,
 	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: [GIT PULL 2/2] arm64: dts: fsd: tesla for v5.18
-Date: Fri,  4 Feb 2022 16:41:12 +0100
-Message-Id: <20220204154112.133723-2-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220204154112.133723-1-krzysztof.kozlowski@canonical.com>
-References: <20220204154112.133723-1-krzysztof.kozlowski@canonical.com>
+Cc: linux-arm-kernel@lists.infradead.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	stable@vger.kernel.org,
+	Stefan Hansson <newbyte@disroot.org>
+Subject: [PATCH] ARM: dts: Fix boot regression on Skomer
+Date: Sun,  6 Feb 2022 00:53:12 +0100
+Message-Id: <20220205235312.446730-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+The signal routing on the Skomer board was incorrect making
+it impossible to mount root from the SD card. Fix this up.
 
-The dedicated branch for Tesla FSD: bindings, DTS plus platform enablement.
-This merges dt-bindings headers from PULL 1/2 (only headers!), so everything
-can be applied cleanly within one set.  There is no mixing of driver code, only
-dt-bindings.
+Cc: stable@vger.kernel.org
+Cc: Stefan Hansson <newbyte@disroot.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ARM SoC folks: please apply this directly for fixes.
+---
+ arch/arm/boot/dts/ste-ux500-samsung-skomer.dts | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/arch/arm/boot/dts/ste-ux500-samsung-skomer.dts b/arch/arm/boot/dts/ste-ux500-samsung-skomer.dts
+index 9d09dffc1aa5..1129b5049805 100644
+--- a/arch/arm/boot/dts/ste-ux500-samsung-skomer.dts
++++ b/arch/arm/boot/dts/ste-ux500-samsung-skomer.dts
+@@ -207,10 +207,6 @@ mmc@80126000 {
+ 			cap-sd-highspeed;
+ 			cap-mmc-highspeed;
+ 			/* All direction control is used */
+-			st,sig-dir-cmd;
+-			st,sig-dir-dat0;
+-			st,sig-dir-dat2;
+-			st,sig-dir-dat31;
+ 			st,sig-pin-fbclk;
+ 			full-pwr-cycle;
+ 			vmmc-supply = <&ab8500_ldo_aux3_reg>;
+-- 
+2.34.1
 
-
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/tesla-dt64-5.18
-
-for you to fetch changes up to bd1e3696a052b9b2bd3c1c72ef4bf800a3a1e286:
-
-  arm64: dts: fsd: Add SPI device nodes (2022-01-29 12:28:09 +0100)
-
-----------------------------------------------------------------
-Tesla FSD ARM64 changes for v5.18
-
-Add Tesla FSD SoC ARM64 platform: bindings, DTSI+DTS, maintainer's entry
-and defconfig change.  This brings and enables this new platform.
-
-This includes clock controller bindings (header files with clock IDs)
-which are shared also with Tesla FSD SoC clock controller pull request.
-
-----------------------------------------------------------------
-Alim Akhtar (7):
-      dt-bindings: add vendor prefix for Tesla
-      dt-bindings: arm: add Tesla FSD ARM SoC
-      dt-bindings: clock: Add bindings definitions for FSD CMU blocks
-      dt-bindings: clock: Document FSD CMU bindings
-      arm64: dts: fsd: Add initial device tree support
-      arm64: dts: fsd: Add initial pinctrl support
-      arm64: defconfig: Enable Tesla FSD SoC
-
-Aswani Reddy (1):
-      arm64: dts: fsd: Add SPI device nodes
-
-Krzysztof Kozlowski (1):
-      Merge tag 'samsung-dt-bindings-clk-fsd-5.18' into for-v5.18/tesla-fsd
-
- Documentation/devicetree/bindings/arm/tesla.yaml   |  27 +
- .../devicetree/bindings/clock/tesla,fsd-clock.yaml | 198 ++++++
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- MAINTAINERS                                        |   8 +
- arch/arm64/Kconfig.platforms                       |   6 +
- arch/arm64/boot/dts/Makefile                       |   1 +
- arch/arm64/boot/dts/tesla/Makefile                 |   3 +
- arch/arm64/boot/dts/tesla/fsd-evb.dts              |  39 ++
- arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi         | 335 ++++++++++
- arch/arm64/boot/dts/tesla/fsd.dtsi                 | 731 +++++++++++++++++++++
- arch/arm64/configs/defconfig                       |   1 +
- include/dt-bindings/clock/fsd-clk.h                | 150 +++++
- 12 files changed, 1501 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/tesla.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
- create mode 100644 arch/arm64/boot/dts/tesla/Makefile
- create mode 100644 arch/arm64/boot/dts/tesla/fsd-evb.dts
- create mode 100644 arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/tesla/fsd.dtsi
- create mode 100644 include/dt-bindings/clock/fsd-clk.h
