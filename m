@@ -1,78 +1,64 @@
-Return-Path: <SRS0=FMNg=SX=arndb.de=arnd@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 837CCC433EF
-	for <soc@archiver.kernel.org>; Tue,  8 Feb 2022 07:41:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05A11C433F5
+	for <soc@archiver.kernel.org>; Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 46117C340EE; Tue,  8 Feb 2022 07:41:48 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 05E8BC004E1;
-	Tue,  8 Feb 2022 07:41:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 05E8BC004E1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MC3H1-1nTjin1Zi1-00CO0v; Tue, 08 Feb 2022 08:41:44 +0100
-Received: by mail-wr1-f50.google.com with SMTP id k18so29047416wrg.11;
-        Mon, 07 Feb 2022 23:41:44 -0800 (PST)
-X-Gm-Message-State: AOAM533+HqP4lIK+Kmm6uY/jMtSQCSopYFyncdqEloijpiH+oRCUF5+d
-	k17wkwl4NFTZvdvEh1SHUKfReu16cIgVHhwO6n0=
-X-Google-Smtp-Source: ABdhPJwSN/RUlrPrmkpZbmWEmlsZtj8WZCi5YXxWOOSj9Q39433eqrfugxQNfyVR5WUl9iWtCZ9J5roLsYcDSDBre7Q=
-X-Received: by 2002:a05:6000:178d:: with SMTP id e13mr2313626wrg.317.1644306103969;
- Mon, 07 Feb 2022 23:41:43 -0800 (PST)
+	id CCAC4C36AE2; Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B0673C340F3;
+	Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1644311578;
+	bh=/16CummVlHpR211Bi3gScwnBcRgdQr1udUjB79bJZlg=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=SUCQP1X7wsrLtCkTilMBLZqUAYr335MOyxGXvZPrTGYpyKjrU4Icwz/A1Pq7iYA8v
+	 m9m+6rEmg/s3+8xlJhB5ctFte1eHoGwmV54KXL/0C7pq0YtyJdDF3eQNfuqMsrd1jX
+	 EihR9kBtRmsouSoDuWuLbB9h5FxumYIkxQoEkfvIoSMQiqLQq1RIS2iWNJiqzdWdEA
+	 lug0M7PMLM1x5ciL/UWTKN/h3oPI1hODhqyKzFZd2jKkqxkZrk7M+4woKibKevO7TV
+	 Hp5+0MjZpzu9PoxxuM/SQ+KFB/savG2pJooXpcg4BV1pstavNMq9jpJptds485Mnyf
+	 qTWKLzO7eDTdA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8DFD7E6BB38;
+	Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211203031332.902485-1-jerry.huang@nxp.com> <20211203031332.902485-2-jerry.huang@nxp.com>
- <VE1PR04MB6477BB08C1AF9F1E5A0B0C1BFE2D9@VE1PR04MB6477.eurprd04.prod.outlook.com>
-In-Reply-To: <VE1PR04MB6477BB08C1AF9F1E5A0B0C1BFE2D9@VE1PR04MB6477.eurprd04.prod.outlook.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Tue, 8 Feb 2022 08:41:28 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0dr_Qe47MnuAJSuEPiuzBMfnC_7gDZN0MsUiYE2bqrOg@mail.gmail.com>
-Message-ID: <CAK8P3a0dr_Qe47MnuAJSuEPiuzBMfnC_7gDZN0MsUiYE2bqrOg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ARM: dts: Add initial LS1021A IoT board dts support
-To: Jerry Huang <jerry.huang@nxp.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] ARM: socfpga: fix for v5.17
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <164431157857.18327.8833439476497284366.git-patchwork-notify@kernel.org>
+Date: Tue, 08 Feb 2022 09:12:58 +0000
+References: <20220207101002.7566-1-dinguyen@kernel.org>
+In-Reply-To: <20220207101002.7566-1-dinguyen@kernel.org>
+To: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, "robh+dt@kernel.org" <robh+dt@kernel.org>, 
-	"arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>, "soc@kernel.org" <soc@kernel.org>, 
-	"shawnguo@kernel.org" <shawnguo@kernel.org>, Leo Li <leoyang.li@nxp.com>, 
-	"krzysztof.kozlowski@canonical.com" <krzysztof.kozlowski@canonical.com>, 
-	"linux@rempel-privat.de" <linux@rempel-privat.de>, "festevam@gmail.com" <festevam@gmail.com>, 
-	"tharvey@gateworks.com" <tharvey@gateworks.com>, Marcel Ziswiler <marcel.ziswiler@toradex.com>, 
-	"jagan@amarulasolutions.com" <jagan@amarulasolutions.com>, "dev@lynxeye.de" <dev@lynxeye.de>, 
-	"cniedermaier@dh-electronics.com" <cniedermaier@dh-electronics.com>, 
-	"sebastian.reichel@collabora.com" <sebastian.reichel@collabora.com>, Alison Wang <alison.wang@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Hqem1Ogya627wNucdp+wyK2gN66G05TCVOb34assf4C+tvLSqz+
- tDQfhEvyul/zctiRKcrqspe7AFTf/X5bsthhSbUA7gYoiU1zYo/iV70a+pLYnqShIYqHAnM
- PCw2xrJntMoB7p1FJQgIao944fR9OsHHkva+3/twiqTu4LDPNPwX9VMShOBfdd6DvbXJrwq
- SeQeMYecc7h5tRMD6ZVIQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:OWeiqx+EZYU=:hfRzMxAtv/eGRS3l4bJOG2
- FJ9fmWdGbE2QYEfIRoqBHyAPObrI64h6iqL5GTKsKaq/7txsPnGvQVWQk4s3/AxAlIcAd2+1K
- 7Dim5g0sV9HsQ7avGsrqt8ZevdEiGhLMTyBhmXe7Pl0ecmQNN+TZCkHhyygQLJ4YYNs0tBWTA
- 9uFJnyEACE+GY39wKlM0rNxOPhGfSPuRjY05RbxZfkcI60VOnGYbXm3yaILoxsfzrOiST33wh
- iQhjecIC5JqkkwfUVdspJbCDU36j1Sdh14SQLIV2o0u4hdty8H71OQb2fKSmyHmkrKNFC9+Q2
- PTZ+bi8iOcbuM+oZz7Kj8x/BD6ZdQANvVxnTROrZgWevpvyMN4DcGVk5x0EH3q6ibJpNiTIJo
- PoPBGckW4OIEPbKgSW5yhY2ALRNoVnBh5bo/Afk5eEFSvzuFqomr0dDOsL71u0ywUNEAwXZQO
- eoW9SZRiJSiqlU/pvguZ+NnRFuM2Hqn5CDDumcc5IV4qpXv0maamWJzbMXQM2sCYha8sad5ov
- XUf4Z5whkAMRLrG6iJuIHcuw6ZkDVLXBtei8j9rhQcmxy8arppQZpPGmzUTbaNPugnzFGv5Zg
- HIYr4GuWnrc/xh2unbXGjN3wXlH+8JDRVmMMGualwPgoc5VSvygtirHRp+PwXFgE2P1/ScPXb
- Z0YFFnu7TaV/7DhCdI83EbdOi0mu2Axx/wT87cgw+C6m2TLEQB8+IcGH0pYdcwHRN2B4Xrp42
- iBj2LcWgAaz4N1p9dNlu16CQH1IDhOjHVKQe+fhNAbUhKj3somft7eI1lYhlB4u545BhTKHbb
- 8vttuIUEfHlAHmXhnJsYaREXgp5ktxvW5qmE3g9oh4ZC6nfnGI=
+Cc: soc@kernel.org
 
-On Tue, Feb 8, 2022 at 2:49 AM Jerry Huang <jerry.huang@nxp.com> wrote:
->
-> Any comment for this patch?
+Hello:
 
-Shawn gave a detailed review in December, maybe you missed it:
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-https://lore.kernel.org/linux-arm-kernel/20211214040228.GD10916@dragon/
+On Mon,  7 Feb 2022 04:10:02 -0600 you wrote:
+> Hi Arnd/Olof,
+> 
+> please pull in this fix for v5.17.
+> 
+> Thanks,
+> Dinh
+> 
+> [...]
 
-         Arnd
+Here is the summary with links:
+  - [GIT,PULL] ARM: socfpga: fix for v5.17
+    https://git.kernel.org/soc/soc/c/6efb9f739d41
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
