@@ -4,58 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EFE7C3525C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 407EFC4707A
 	for <soc@archiver.kernel.org>; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0ECE8C34101; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E65C7C340F2;
-	Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
+	id 38595C340EE; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 22AC4C340F9;
+	Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644311578;
-	bh=5umhoQqRaieBQQHnJ+bsS/r0CwQ+CJT4+S7Ut6ADC6I=;
+	s=k20201202; t=1644311579;
+	bh=qHh+TWPbQECT0U+Cj6FU4/fhfM076m9/O4KhUS/XqIQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=gkvFGMk2MAGIYmaoAQs8Ik+ItZ/RUjt8UrWSh8QviykQXnCaHBl3YCBEJgBf/53yL
-	 ZuzszWrY/Y4Agx8CUWdz2OuQgbb8J9F+6okHmxoBYwrQdXhZvrbS31oXhibpReljy/
-	 70MQfB7V/NOt59lgDFTF6d6AgQsn1S/CBd67MhUg+nfkUrSX3fNVq4yS0FeYt90FoY
-	 9u/WEyeER6P82nz/vaCgqgtLPUwHLJNkG4Wf/4RDWTmcKoC2k01Gugp+DYWFDJHAq/
-	 5HlDv8DtO5rviflM4xc+nyRzPcxcQbJ5mHBPRrP1K+zAW/X6e4RubMySaR98xki0ig
-	 otobm2mPTHE0Q==
+	b=PEnMZQXqaqexVDwbVddFEcbGxWy4FJcv+M+kQrHQOFpC1MysAy9EdmemyR5PyTVBj
+	 wyNQdVzJRlCZ9P31tB33J4TtsgR9yFqaWZnKxDLZ/Uz3c+BgwTG4KGgVbVuyW3v34W
+	 OEXOPoS3Qy4jFH5Xo1IwNr3NghkUN+jIpSw28rDUHalMre+uuoNXPgtrE18iTGn1AT
+	 Gj3ngo4/0JsohyNrC++lMHsreGSXskQXL9zZGefATWS9NIU8DxnBTTdBnp+2UkEMCA
+	 EtGUzxgcXkHCjb6H23T1Way51bQSYqHqF9dNo2dc43bcuAacXB2ZYxUnYJ1PyLbfmd
+	 3kaDlS7wLRbYg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BFD8AE6D4A1;
-	Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0E688E6BB38;
+	Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: dts: spear320: Drop unused and undocumented
- 'irq-over-gpio' property
+Subject: Re: [PATCH 1/2] MAINTAINERS: arm: samsung: add Git tree and IRC
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164431157878.18327.1636824832609665371.git-patchwork-notify@kernel.org>
-Date: Tue, 08 Feb 2022 09:12:58 +0000
-References: <20220204004117.1232902-1-robh@kernel.org>
-In-Reply-To: <20220204004117.1232902-1-robh@kernel.org>
-To: Rob Herring <robh@kernel.org>
+ <164431157905.18327.13820695782504476358.git-patchwork-notify@kernel.org>
+Date: Tue, 08 Feb 2022 09:12:59 +0000
+References: <20220207175503.425200-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220207175503.425200-1-krzysztof.kozlowski@canonical.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
+This series was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu,  3 Feb 2022 18:41:17 -0600 you wrote:
-> The property 'irq-over-gpio' is both unused and undocumented. It also
-> happens to collide with standard *-gpio properties. As it is not needed,
-> drop it.
+On Mon,  7 Feb 2022 18:55:02 +0100 you wrote:
+> Add already used Krzysztof Kozlowski's Git tree for Samsung
+> S3C/S5P/Exynos ARM sub-architecture and IRC channel (#linux-exynos at
+> Libera).  This documents purely existing state.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  arch/arm/boot/dts/spear320-hmi.dts | 1 -
->  1 file changed, 1 deletion(-)
+>  MAINTAINERS | 3 +++
+>  1 file changed, 3 insertions(+)
 
 Here is the summary with links:
-  - ARM: dts: spear320: Drop unused and undocumented 'irq-over-gpio' property
-    https://git.kernel.org/soc/soc/c/724004a11a84
+  - [1/2] MAINTAINERS: arm: samsung: add Git tree and IRC
+    (no matching commit)
+  - [2/2] MAINTAINERS: add IRC to ARM sub-architectures and Devicetree
+    https://git.kernel.org/soc/soc/c/5b52ada7141f
 
 You are awesome, thank you!
 -- 
