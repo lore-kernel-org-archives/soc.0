@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04A69C433F5
-	for <soc@archiver.kernel.org>; Tue,  8 Feb 2022 10:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AA22C433EF
+	for <soc@archiver.kernel.org>; Tue,  8 Feb 2022 10:15:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DF48EC340ED; Tue,  8 Feb 2022 10:10:48 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+	id 0BAF6C340ED; Tue,  8 Feb 2022 10:15:20 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B2EBBC004E1;
-	Tue,  8 Feb 2022 10:10:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B2EBBC004E1
+	by smtp.kernel.org (Postfix) with ESMTPS id E112DC004E1;
+	Tue,  8 Feb 2022 10:15:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E112DC004E1
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wm1-f47.google.com ([209.85.128.47]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MAwPf-1nSh423Y77-00BJtZ; Tue, 08 Feb 2022 11:10:39 +0100
-Received: by mail-wm1-f47.google.com with SMTP id r7so11752230wmq.5;
-        Tue, 08 Feb 2022 02:10:39 -0800 (PST)
-X-Gm-Message-State: AOAM530CdaPsvLomnOGRm1SjnSy/TRQMPABlDlbEw19lsAxY+6/1jF3H
-	g2lkeb0A3VfDr6nExsZSh/0T7HDvaYBiCcjpw9Y=
-X-Google-Smtp-Source: ABdhPJyOxTF8A1YA6jDmIdIk99ulH6BRKsAlaMSNbXcJTtDT/l8Rb+MtroSVSLXPuDD8bb6T8hIYbFrFUtprUhfJcBY=
-X-Received: by 2002:a05:600c:1f0b:: with SMTP id bd11mr487054wmb.82.1644315039236;
- Tue, 08 Feb 2022 02:10:39 -0800 (PST)
+Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MBDva-1nSyN84AoA-00CgXV; Tue, 08 Feb 2022 11:15:17 +0100
+Received: by mail-wr1-f49.google.com with SMTP id i14so120309wrc.10;
+        Tue, 08 Feb 2022 02:15:16 -0800 (PST)
+X-Gm-Message-State: AOAM532RdRVNo5mo/klEXHL35wH3TDD4pVYe+WgMd3MNUtrcueUucQhD
+	n7IOBfhY+NJ8s8mo5oSRB5/EX5Q/odx6EHuSoIw=
+X-Google-Smtp-Source: ABdhPJz8d1epjp/OItbhOLl98efZqJWCf8hF6YG8ZUN43ZGmwGB36NWVDbTrT/bqPxNxa4LfyomzITK0xNR95kKkl1g=
+X-Received: by 2002:a5d:500c:: with SMTP id e12mr2895743wrt.219.1644315316526;
+ Tue, 08 Feb 2022 02:15:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20220107033736.26762-1-leoyang.li@nxp.com> <164167921430.24856.5117528642270798509.git-patchwork-notify@kernel.org>
-In-Reply-To: <164167921430.24856.5117528642270798509.git-patchwork-notify@kernel.org>
+References: <20220105213603.804026-1-dinguyen@kernel.org>
+In-Reply-To: <20220105213603.804026-1-dinguyen@kernel.org>
 From: Arnd Bergmann <arnd@arndb.de>
-Date: Tue, 8 Feb 2022 11:10:23 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0w7S6B3SVw+esH2H=sg9jOTGK3yC3hQSwRRM6GhosdkA@mail.gmail.com>
-Message-ID: <CAK8P3a0w7S6B3SVw+esH2H=sg9jOTGK3yC3hQSwRRM6GhosdkA@mail.gmail.com>
-Subject: Re: [GIT PULL] soc/fsl drivers changes for next(v5.17)
-List-Id: <linux-soc.lore.kernel.org>
-To: patchwork-bot+linux-soc@kernel.org
+Date: Tue, 8 Feb 2022 11:15:00 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0A5tDUKpFaRUJku97ui+EpYO8NoomyrAXg==GugBxQbQ@mail.gmail.com>
+Message-ID: <CAK8P3a0A5tDUKpFaRUJku97ui+EpYO8NoomyrAXg==GugBxQbQ@mail.gmail.com>
+Subject: Re: [GIT PULL] arm64: dts: socfpga: dts updates for v5.17, part 2
+To: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Li Yang <leoyang.li@nxp.com>, SoC Team <soc@kernel.org>
+Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:VqusHpmH2e5Uq6YwIJNAAiinkaecEUeNM1ioIlnJzWforkQCImC
- F3dH2m1bvsIDbKBoGmgIBC+fC/p9NcJZvHHo8v40/E9q/VKlgfEzEuFsBLpqdERlg5ZrKZ7
- gua/tY4pSHBoq84JXB3Rpm/sxT1abM5XNlhy6Lb4celjdg7GC2NdIl8gXKk+G5aEC+EAQ5F
- m24RZfoMA9o/fiTsvehEA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ukEfmJHBuz8=:ELqm5pv6yOqsdLWmV18cni
- e5twK/Agu7G2OeY3m06ZM/jWPIYBXN0qRRJ6RR7Bp1sy3qyf51M8xrasOx92IIHzhFb6hHa6o
- TDEcOIfxlu//+kVWeNv/cmAxm64Lcp57OTAsPq1q5mgy8RwFVLZ2qd3O5rwOnAfntOcMa6SHm
- H9ZrW6lXdx5c78EnpcEqvnArwayr4C/VYQIfCc7YLlPWDRk+XMF5HjZF+p9d8Pso8rJn02yit
- KtPWh1vLVlxCnFvrm8DeAnfH8vSaDUAXh0Hl7s36GWQx0656Z772K4PjhHd4t+A0LXyEchpPl
- 5YSOD6CGyMS6IPTbFuFQwmSPXVEgRxDl+ObQAxzzb0YLOZwEXfLeL4/7qiOjEcpgklJ2Nyrsw
- kwDI/nVphB3BA9KKtyfr18slrl/5BdAimy18ZfeaISAx5jQPg6V2IemQIijEDjk3wSVFkOJyC
- gwRo/qmpDecVp+aRcxqwuagEyKo2UItCDWGXonZgjow3XO97DGpnnzUWCoQudYAUG0Z0Yq0fT
- wDUVTZ5oI85Xq2UFVFx1SIC5C91JmdRb0R/o4kC6LVV06C9x9A0pX1FMAIeMF2w7lm7fEx4Cv
- XXuhxuGr6k/Luk1lgNzj1JQshnXmSGMtUxxFBIo3W/V9oGcPucYHcbJZ1ayEFS/diiKsDkvvl
- 4Ks0bZlp/K9Jb3ZNRb1fwDRptw/m7qbAfHpVd0Bgkx4RJhYazIxrIWeMm13FuhVq5YzI=
+X-Provags-ID: V03:K1:hIgBO43IN5GV+ReZ1cFTV4QnqMqyz+QBTBiaqZ4oBTd21LY0cTH
+ nS4d3ia85U5tfg0AwaHEr/7lRjG/DoQNvILRqamtCRPaNDFAmZvWgWHSvvRFBjEvaQA0GaO
+ XbtmenNQjVcjhib+A/vg1Mw3xBukvqBHNVBlNEUaxbwBRjw8Bfguj0p1Td9Ehu7fIdag+ov
+ FFNjCsroTAf1Oe/RTxNAA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AoUgsOLNlYE=:OlAuidl4luY8zQi5hfvHzu
+ mjwui9qqebYGgN5t4r6Tw3QIQSdZfblT3VioMQB+zyFWOpFDOxguDPkLpc7lCoxo6wZwrnLys
+ FsCzJ3W0DdtH61BcW4O3oHr3S4KBaApdNah9RhUOpUUiuKi5rY2F5Rn1Wj5+6y+bREhbZix8B
+ v34hLOHIpeKThUoBP4t26vEcjNlwKCplAMDHhaCfFuIvnYYW31eCDEXVKfR3s6YkQ/JASwiTL
+ ukNxMhizZh87puFo9/FkxqjyecK4R22kBIeQIqDpbYz4S2YhTnz07XXugNdn/Z/nmJXBNyxHI
+ UsZHut+cmtDbQLsN7zZCW4GVjq15iaQZigWtCAj9DZa8qFkL+pO+Am4WCXgLTtM1lanlCiZMj
+ EepTB2wcQX3KJprvPZhi7TLDXNN6Y4zkCbXltz6IbxZu9xdyzyKcWn7tBA4izMNOVGWSMLn6/
+ qZapNjzTunZIbd93Wc0Vw3c0Bi3Bc3g6iFCe47wzJZ/Q8LS4XEGyCGtMr6I4y3FyHBndwYtBm
+ 3M6n8ON4wwuN1XlkznKW7APszTCXl+8p0xF/3lGXLa8j9aGuWDQ3uMPvkTiLAWBsrG/dh2d0j
+ 9Y9EiT+7QWwm1NyFxovrejAo2hQA4YjaCog5oEpfm2XOc/fuou2oSOYRYcIIsOen+Jzn2U7Pk
+ V3K9skKGBbbcdWgAB7VJ5Rq91QYTabB2wZXAaideIV874MeJR71JZ2WoI/0O+o5DONFBq92WD
+ XzhyfINWChWkaRihknWIFxh9fvvtEgNI2sYz3d8OPbt1cwEoJmhpx9WqHpoqSprJf5fR5vS7B
+ otGb+mPO0PJP4guK+J1KkwNPI9zoCF18ecHC7ZDtSQhW9/JJ0k=
 
-On Sat, Jan 8, 2022 at 11:00 PM <patchwork-bot+linux-soc@kernel.org> wrote:
+On Wed, Jan 5, 2022 at 10:36 PM Dinh Nguyen <dinguyen@kernel.org> wrote:
 >
-> Hello:
+> The following changes since commit 8dce88fe80a858f34bb5b46470218fe478d251ee:
 >
-> This pull request was applied to soc/soc.git (for-next)
-> by Olof Johansson <olof@lixom.net>:
+>   arm64: dts: Update NAND MTD partition for Agilex and Stratix 10 (2021-12-01 08:07:41 -0600)
 >
-> On Thu,  6 Jan 2022 21:37:36 -0600 you wrote:
-> > Hi soc maintainers,
-> >
-> > Please merge the following new changes for soc/fsl drivers.
-> >
-> > Regards,
-> > Leo
-> >
-> > [...]
+> are available in the Git repository at:
 >
-> Here is the summary with links:
->   - [GIT,PULL] soc/fsl drivers changes for next(v5.17)
->     https://git.kernel.org/soc/soc/c/6b6db66fb373
+>   git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_update_for_v5.17_part2
+>
+> for you to fetch changes up to 0020e9e1f8d3348dd5c9a37612b1089c1a47553d:
+>
+>   arm64: dts: agilex: align mmc node names with dtschema (2021-12-29 04:57:47 -0600)
+>
+> ----------------------------------------------------------------
+> SoCFPGA dts updates for v5.17, part 2
+> - Cleanup of Altera/Intel ARMv7 and ARMv8 DTS and bindings
+>
 
-Hi Leo,
+Hi Dinh and Krzysztof,
 
-As you probably noticed, this branch did not make it into v5.17-rc1
-because of a mistake on our end, and I have now dropped it from the
-for-next branch.
+This branch was one of the things that ended up not making it into
+the merge window, and I have now dropped it from our for-next branch
+as I'm adding 5.18 contents, sorry about the mistake on our end.
 
-Most of the commits here are bugfixes, but I'm not sure if you
-still want all of them in 5.17. If you can send me an updated
-pull request for the important fixes, I'll put that into our fixes
-branch, and wait for the rest to come with your 5.18 updates.
+I think everything still applies cleanly and nothing in here is urgently
+needed in 5.17, so I can just merge the pull request again for the
+next merge window if you prefer. If you have additional socfpga
+material for 5.18 or some of the patches should go into the fixes
+branch after all, please send an updated pull request instead.
 
         Arnd
