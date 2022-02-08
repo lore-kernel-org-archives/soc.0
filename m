@@ -1,66 +1,131 @@
-Return-Path: <SRS0=iHFn=SX=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=47Nx=SX=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60D2EC433F5
-	for <soc@archiver.kernel.org>; Tue,  8 Feb 2022 11:35:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A09AC433EF
+	for <soc@archiver.kernel.org>; Tue,  8 Feb 2022 11:52:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2CD29C36AE2; Tue,  8 Feb 2022 11:35:49 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id A2301C340E9;
-	Tue,  8 Feb 2022 11:35:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A2301C340E9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A7BFED1;
-	Tue,  8 Feb 2022 03:35:46 -0800 (PST)
-Received: from bogus (unknown [10.57.41.150])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9ED873F73B;
-	Tue,  8 Feb 2022 03:35:44 -0800 (PST)
-Date: Tue, 8 Feb 2022 11:34:57 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Arnd Bergmann <arnd@kernel.org>
+	id E549CC340EE; Tue,  8 Feb 2022 11:52:22 +0000 (UTC)
+Received: from muru.com (muru.com [72.249.23.125])
+	by smtp.kernel.org (Postfix) with ESMTP id 994F0C004E1;
+	Tue,  8 Feb 2022 11:52:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 994F0C004E1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
+Received: from localhost (localhost [127.0.0.1])
+	by muru.com (Postfix) with ESMTPS id B60908106;
+	Tue,  8 Feb 2022 11:51:49 +0000 (UTC)
+Date: Tue, 8 Feb 2022 13:52:13 +0200
+From: Tony Lindgren <tony@atomide.com>
+To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Olof Johansson <olof@lixom.net>, ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
-	ALKML <linux-arm-kernel@lists.infradead.org>,
-	Cristian Marussi <cristian.marussi@arm.com>
-Subject: Re: [GIT PULL] firmware: arm_scmi: Updates for v5.17
-Message-ID: <20220208113457.waf4fdujnbtvneka@bogus>
-References: <20211222141342.56395-1-sudeep.holla@arm.com>
- <20220107113740.f4zlz25largdjcfd@bogus>
- <20220108202410.GA1057@lx2k>
- <CAK8P3a1qcZHFpxdqF1AFSCGR+AyDrYmucdBQGz5G1PvnEMbp8Q@mail.gmail.com>
- <20220208103327.hjld33z3lkfrpu6k@bogus>
- <CAK8P3a1Xq0O83PF1U-CcQTzAdaLuuxoLN=p+nC-ZjEbzAjPwSA@mail.gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>, soc@kernel.org,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>, jan.kiszka@siemens.com,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
+Subject: Re: [PATCH v2 1/2] arm64: dts: ti: k3-am65: disable optional
+ peripherals by default
+Message-ID: <YgJZbdOlazrde7O/@atomide.com>
+References: <20220203140240.973690-1-matthias.schiffer@ew.tq-group.com>
+ <20220204143108.653qk2ihnlhsr5aa@prior>
+ <YgDCLaBHA3DDQAUd@atomide.com>
+ <5944ba0ce568eaf507917799b1dfd89a3d0ca492.camel@ew.tq-group.com>
+ <YgEBml9HvFzSl289@atomide.com>
+ <9923df6525212389b86cb635624bcfb5c27a8bc5.camel@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a1Xq0O83PF1U-CcQTzAdaLuuxoLN=p+nC-ZjEbzAjPwSA@mail.gmail.com>
+In-Reply-To: <9923df6525212389b86cb635624bcfb5c27a8bc5.camel@ew.tq-group.com>
 
-On Tue, Feb 08, 2022 at 12:14:25PM +0100, Arnd Bergmann wrote:
-> On Tue, Feb 8, 2022 at 11:33 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > On Tue, Feb 08, 2022 at 11:00:43AM +0100, Arnd Bergmann wrote:
-> > > As the contents are still fine, I could offer to either merge the branch again
-> > > for v5.18, or I can drop it and wait for a new pull request from you, please
-> > > let me know your preference.
-> > >
-> >
-> > Is it OK if I merge this tag with v5.17-rc1 as base and load it with any
-> > new v5.18 material on the top ? I just want to avoid rebasing as the same time
-> > some of the new material depend on these changes. Let me know if that
-> > is fine. I am open to any other suggestions too.
+* Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220208 10:53]:
+> On Mon, 2022-02-07 at 13:25 +0200, Tony Lindgren wrote:
+> > * Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220207
+> > 08:45]:
+> > > Generally I think that it's a bootloader's responsiblity to disable
+> > > unneeded devices - the kernel may not even have a driver for some
+> > > peripherals, leading to the same behaviour as a "disabled" status.
+> > > For
+> > > this reason I believe that it should always be okay to set unneeded
+> > > devices to "disabled", and it should be considered a safe default.
+> > 
+> > Not possible, think kexec for example :) How would the previous
+> > kernel
+> > even know what to disable if Linux has no idea about the devices?
 > 
-> Yes, I think that is ok, as long as you start a branch from v5.17-rc1 and merge
-> the old contents into the new branch, rather than back-merging the -rc1 tag
-> into your existing branch. This way, the git history still makes sense
-> across the merges.
+> Well, optimally, bootloader and all kernels would agree on the devices
+> that are actually available, but I get your point.
+> 
+> > 
+> > If there are issues you're seeing, it's likely a bug in some of the
+> > device drivers for not checking for the necessary resources like
+> > pinctrl for i2c lines.
+> 
+> I don't think it's common for individual drivers to care about pinctrl
+> unless switching between different pin settings is required at runtime.
+> Many drivers can be used on different hardware, some of which may
+> require pinmuxing, while others don't.
 
-Thanks for confirming my understanding.
+Yeah that's true, some configurations only do pin muxing in the
+bootloader. So pins are not a good criteria for devicetree status enabled
+for when the device is operational.
 
--- 
+Probably a better criteria for devicetree "operational" status is the
+device can be clocked and configured or idled. Some devices like GPUs
+can render to memory with no external pin configuration for example.
+
+Following Linux running on a PC analogy.. If ACPI has some device that
+causes driver warnings on Linux boot, do we patch the ACPI table and
+pretend the device does not exist? Or do we patch the device driver to
+deal with the random buggy bootloader state for the device? :)
+
+> Also, what is the expected behavior of a driver that is probed for an
+> unusable device? Wouldn't this require some as-of-yet nonexisting
+> status between "okay" and "disabled" that conveys something like "probe
+> this device, initialize (and disable) PM, but don't register anything",
+> so no unusable devices become visible to userspace (and possibly other
+> kernel drivers)?
+
+I did some experimental patches several years ago to add devicetree
+status for incomplete, but eventually came to the conclusion that it
+was not really needed. Feel free to revisit that if you have the
+spare cycles :)
+
+Having the drivers check for the resources like clocks and then just
+idle the device after probe solved the issues I was seeing for warnings
+and kexec. In some cases the device may need to be reset or at least
+properly reconfigured in the probe as the state can be unknown from the
+bootloader. That's about all there is to it. Sure you could save some
+memory with less instances for some devices, so maybe the status =
+"incomplete" could be used to do the trick for that.
+
+> > > I'm not sure what the consensus on these issues is. I'm more
+> > > familiar
+> > > with NXP's i.MX and Layerscape SoCs, where it's common to have all
+> > > muxable peripherals set to "disabled" in the base DTSI, and a quick
+> > > grep through a few dts directories gives me the impression that
+> > > this is
+> > > the case for most other vendors as well.
+> > 
+> > This approach only works for SoCs that don't need the kernel to idle
+> > devices for runtime PM.
+> 
+> I'm pretty sure that most modern SoCs I looked at have runtime PM, and
+> it is simply expected that unusable devices are never enabled in the
+> first place, so there is no need for the kernel to know about them.
+
+Yeah well that assumption is the difference in getting runtime PM to
+work in a sane way across multiple SoCs and devices :)
+
+Devices tagged with status = "disabled" are completely ignored by the
+kernel. Interconnect and bus related code may not know the details on
+how to reset and idle the child devices. Relying on firmware to do the
+reset and idle of unused devices may be too generic, can be buggy, and
+probably depends on the firmware revision.
+
 Regards,
-Sudeep
+
+Tony
