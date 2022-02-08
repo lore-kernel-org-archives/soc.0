@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F073C46467
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EFE7C3525C
 	for <soc@archiver.kernel.org>; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 15646C340F2; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F1FBEC36AE5;
+	id 0ECE8C34101; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E65C7C340F2;
 	Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644311579;
-	bh=W5MBh43L4PKoCSVUw2OUKE5wbpIZGl9N/SPRNMXS6PY=;
+	s=k20201202; t=1644311578;
+	bh=5umhoQqRaieBQQHnJ+bsS/r0CwQ+CJT4+S7Ut6ADC6I=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=rlG+t0GayIiCnmJsnxmh5B8/9T6mtBRoNxSdvJ5FtEv/y7iBg4HYB//lJe9aCAsBw
-	 NvDJ8IO2freKnladN60bS2JjXs2x2FmXnpmYxdkQB98wGjA8p29nG3kpqylpPQzAt3
-	 jvw3tY9/GPDkOCqKDeZDoGCph18F3zIRvZ73W4hQl7nVSGAE4545C0mQd1Ib64SjEX
-	 dXBNVq8TN4yuwbLNHGvjCQv8Fw+Dbo3AjwYkGDTv/HgRUtlf2CQaIt2bTAojT+ori+
-	 xk39eXQ2sX23ZtAGMdY7CSB6ERSLJdYhNkSIseAI14QuTOErvjeIGzucikDaS+2Rvt
-	 ski00SpNruoFQ==
+	b=gkvFGMk2MAGIYmaoAQs8Ik+ItZ/RUjt8UrWSh8QviykQXnCaHBl3YCBEJgBf/53yL
+	 ZuzszWrY/Y4Agx8CUWdz2OuQgbb8J9F+6okHmxoBYwrQdXhZvrbS31oXhibpReljy/
+	 70MQfB7V/NOt59lgDFTF6d6AgQsn1S/CBd67MhUg+nfkUrSX3fNVq4yS0FeYt90FoY
+	 9u/WEyeER6P82nz/vaCgqgtLPUwHLJNkG4Wf/4RDWTmcKoC2k01Gugp+DYWFDJHAq/
+	 5HlDv8DtO5rviflM4xc+nyRzPcxcQbJ5mHBPRrP1K+zAW/X6e4RubMySaR98xki0ig
+	 otobm2mPTHE0Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DDD42E5CF96;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BFD8AE6D4A1;
 	Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/2] MAINTAINERS: update various stm & sti maintainer names
+Subject: Re: [PATCH] ARM: dts: spear320: Drop unused and undocumented
+ 'irq-over-gpio' property
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164431157889.18327.10086136061531044985.git-patchwork-notify@kernel.org>
+ <164431157878.18327.1636824832609665371.git-patchwork-notify@kernel.org>
 Date: Tue, 08 Feb 2022 09:12:58 +0000
-References: <20220113171921.17466-1-philippe.cornu@foss.st.com>
-In-Reply-To: <20220113171921.17466-1-philippe.cornu@foss.st.com>
-To: Philippe CORNU <philippe.cornu@foss.st.com>
+References: <20220204004117.1232902-1-robh@kernel.org>
+In-Reply-To: <20220204004117.1232902-1-robh@kernel.org>
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (arm/fixes)
+This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 13 Jan 2022 18:19:19 +0100 you wrote:
-> This short serie contains the maintainer status update sent recently by
-> Benjamin Gaignard (see [1] for details) and add new maintainers for
-> various stm & sti files.
+On Thu,  3 Feb 2022 18:41:17 -0600 you wrote:
+> The property 'irq-over-gpio' is both unused and undocumented. It also
+> happens to collide with standard *-gpio properties. As it is not needed,
+> drop it.
 > 
-> [1] https://lore.kernel.org/lkml/20210706163033.795805-1-benjamin.gaignard@collabora.com/
-> 
-> 
-> [...]
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  arch/arm/boot/dts/spear320-hmi.dts | 1 -
+>  1 file changed, 1 deletion(-)
 
 Here is the summary with links:
-  - [1/2] MAINTAINERS: Update Benjamin Gaignard maintainer status
-    https://git.kernel.org/soc/soc/c/bf5bdcc9f262
-  - [2/2] MAINTAINERS: update drm/stm drm/sti and cec/sti maintainers
-    https://git.kernel.org/soc/soc/c/60f40305529b
+  - ARM: dts: spear320: Drop unused and undocumented 'irq-over-gpio' property
+    https://git.kernel.org/soc/soc/c/724004a11a84
 
 You are awesome, thank you!
 -- 
