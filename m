@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 234A6C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31819C4167D
 	for <soc@archiver.kernel.org>; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1AF75C34100; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 01E62C340F9;
-	Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
+	id 236C3C34104; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0AFE5C340FE;
+	Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1644311579;
-	bh=av96/8w983Vtdm5v838P2cj0Shx9LGQnZJk1VB9exM4=;
+	bh=poKEqjFRJRLFQFphcEeDjnvP5LjWfogIAD7Q2ZSJQF0=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=G/W5xkcP7XICUp2a29ZLB9nvWY6FF4ksGyiptX0w/zYCzBrUATmvb/0oZrhElB49Z
-	 60GS95xd7EQ6VU6AE9XGQv9iCbw5CC3u2lzP1XbmbvkFx09d8BQ85zCegp9lAb69Du
-	 +VvLlwLGz4WZjRTimvWID+psY4sKcGJMnlxFtV9gUfD+zmuL6D+uk8IuKqfqtRomcG
-	 EHzSbIT+tU27vGTKAg+nXA2ud4IULZ3bhnUobt484F8eXXmOC8vNDIdQ9G655FyAIu
-	 k7uZHtu4ho5USiXrQt/+uBTngoYJsAQbCI/vKry5RNuNiNbOmt893oNCtYDmyzW4N6
-	 h1aFKIlE1T1kw==
+	b=pETc8EE1kAjQfdNlgVVs9ekT0Lk1DI6Ke989BN8rxUARK/7t2VyG7gJgAXbHfhF36
+	 8BiU/WifUwB7BZREMQzOsyxPel9mcv75KsTyqD2Byi40Qoes0q8SrK8jydtjiMXZfO
+	 CB0dqcIJm+BcWVLPlzp/CiigLL84d98DCjbm6jTlI/F+j8M0jgvuTCJOs16gmlDsUA
+	 aug01cQbJgxl9rT76eDgf2mqucagDFJ4+1ynFc2/x7mS8Wx3G7TZ/XN3mwd2dpBdYK
+	 6uzApB49RQrE5EYyX+toMOW2aNFOjg8iU7pQxi1u7+U7QUJjFSDwTeN0i7LZFvS8Vk
+	 dZwi4hFRD5jvg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D3F76E6D4A6;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E8921E6D45A;
 	Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 5.17
+Subject: Re: [GIT PULL] Apple SoC MAINTAINERS updates for 5.17
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164431157885.18327.16015600347288474336.git-patchwork-notify@kernel.org>
+ <164431157894.18327.5223929631783086541.git-patchwork-notify@kernel.org>
 Date: Tue, 08 Feb 2022 09:12:58 +0000
-References: <20220129073150.GZ4686@dragon>
-In-Reply-To: <20220129073150.GZ4686@dragon>
-To: Shawn Guo <shawnguo@kernel.org>
+References: <24ae6871-3e67-5c7f-2060-28048db439a2@marcan.st>
+In-Reply-To: <24ae6871-3e67-5c7f-2060-28048db439a2@marcan.st>
+To: Hector Martin <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,21 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sat, 29 Jan 2022 15:31:50 +0800 you wrote:
-> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+On Sat, 8 Jan 2022 14:13:49 +0900 you wrote:
+> Hi SoC folks,
 > 
->   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+> Please merge this trivial MAINTAINERS change for 5.17.
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.17
+> This commit was waiting on the watchdog driver to be merged, but I only
+> just now realized that it silently did. Sorry for the last-minute pull.
+> If this can't make it into the 5.17 merge window, it can be added as a
+> fix later instead.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 5.17
-    https://git.kernel.org/soc/soc/c/f8d1fc05e288
+  - [GIT,PULL] Apple SoC MAINTAINERS updates for 5.17
+    https://git.kernel.org/soc/soc/c/78b390bd5657
 
 You are awesome, thank you!
 -- 
