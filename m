@@ -4,59 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 407EFC4707A
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3618AC4167E
 	for <soc@archiver.kernel.org>; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 38595C340EE; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 22AC4C340F9;
+	id 2E1B7C34107; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 17D2CC34102;
 	Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1644311579;
-	bh=qHh+TWPbQECT0U+Cj6FU4/fhfM076m9/O4KhUS/XqIQ=;
+	bh=QbAikODIMOWlHICRx+4S5tdC58VrLpvCiBajnvV34Qg=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=PEnMZQXqaqexVDwbVddFEcbGxWy4FJcv+M+kQrHQOFpC1MysAy9EdmemyR5PyTVBj
-	 wyNQdVzJRlCZ9P31tB33J4TtsgR9yFqaWZnKxDLZ/Uz3c+BgwTG4KGgVbVuyW3v34W
-	 OEXOPoS3Qy4jFH5Xo1IwNr3NghkUN+jIpSw28rDUHalMre+uuoNXPgtrE18iTGn1AT
-	 Gj3ngo4/0JsohyNrC++lMHsreGSXskQXL9zZGefATWS9NIU8DxnBTTdBnp+2UkEMCA
-	 EtGUzxgcXkHCjb6H23T1Way51bQSYqHqF9dNo2dc43bcuAacXB2ZYxUnYJ1PyLbfmd
-	 3kaDlS7wLRbYg==
+	b=nyasvTquHSmXmavQLi8/c8bm9ISStNkF0rZV86jLqJafbwtVA4AUjNowp9ZZPjMZc
+	 iZz2K3SF5vPyOB/VMGnkKWsbrSnrw3tEWodOdHzyZ2Mge8hfvHI/wAzgfG/dekPzVI
+	 Ai9fdNQ4CkSyQemVh6nCCj0VC5vjnU4lpnsbkKOYHLiguWQl/MqDkvkFj75P++JPUM
+	 seW8EoUnW3hZ8mO1ulCeZFemMMTyIVS+xwSHCWS19RZ/cbrO/gLHUNw2RsfvjC6S9H
+	 uOYFZtQDEoyGXlKSJHIEDhpBZi1JDJtn6253l0AhlN8v4Ks1XFkyDRVJR0kzYxtr55
+	 4wAZAuoAS9G9Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0E688E6BB38;
-	Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F122AE5D084;
+	Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/2] MAINTAINERS: arm: samsung: add Git tree and IRC
+Subject: Re: [PATCH] ARM: dts: Fix boot regression on Skomer
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164431157905.18327.13820695782504476358.git-patchwork-notify@kernel.org>
-Date: Tue, 08 Feb 2022 09:12:59 +0000
-References: <20220207175503.425200-1-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220207175503.425200-1-krzysztof.kozlowski@canonical.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+ <164431157898.18327.3616544706630689074.git-patchwork-notify@kernel.org>
+Date: Tue, 08 Feb 2022 09:12:58 +0000
+References: <20220205235312.446730-1-linus.walleij@linaro.org>
+In-Reply-To: <20220205235312.446730-1-linus.walleij@linaro.org>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (arm/fixes)
+This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon,  7 Feb 2022 18:55:02 +0100 you wrote:
-> Add already used Krzysztof Kozlowski's Git tree for Samsung
-> S3C/S5P/Exynos ARM sub-architecture and IRC channel (#linux-exynos at
-> Libera).  This documents purely existing state.
+On Sun,  6 Feb 2022 00:53:12 +0100 you wrote:
+> The signal routing on the Skomer board was incorrect making
+> it impossible to mount root from the SD card. Fix this up.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  MAINTAINERS | 3 +++
->  1 file changed, 3 insertions(+)
+> Cc: stable@vger.kernel.org
+> Cc: Stefan Hansson <newbyte@disroot.org>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> 
+> [...]
 
 Here is the summary with links:
-  - [1/2] MAINTAINERS: arm: samsung: add Git tree and IRC
-    (no matching commit)
-  - [2/2] MAINTAINERS: add IRC to ARM sub-architectures and Devicetree
-    https://git.kernel.org/soc/soc/c/5b52ada7141f
+  - ARM: dts: Fix boot regression on Skomer
+    https://git.kernel.org/soc/soc/c/d9058d6a0e92
 
 You are awesome, thank you!
 -- 
