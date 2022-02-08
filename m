@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C53EC43217
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C56EC43219
 	for <soc@archiver.kernel.org>; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 06D23C004E1; Tue,  8 Feb 2022 09:12:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DE70DC340F8;
+	id F06A3C340FC; Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D6BDDC340F3;
 	Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1644311578;
-	bh=GUz1PJHyv/r8FtyfW4189gEjkm1yYaIt0HyWiCBhBiE=;
+	bh=QlEZlGav3ARzYHN7Ne+xVk014kK4n0jObcIYMBxFnjk=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=CPfmWDEiIDimAMw3M/e098rKv/USL3X27ijzAca09C4AU34l8j8s79/3+yux8bEIK
-	 zVabCIOhTfr7ZzVYsoUt4dQVwfqXZOMx6h2ERoJGeRjJyGj+ypM5JHhbPD2IHqTsGP
-	 Ut0fkP6svrSSfPMCtrKkpN0ymXrYgVwW0bXRxtU8VAf3epsTvAr6O/ul1PPqOAzjlG
-	 Np9t6W73utI2LvqhCj/MzdvRyuLmNjrf8iS0jsIrHQFS7r/t8A0ZA3NZ1P4UKuST0w
-	 DooTHzHDAoMdwe9AVyCs9LTISGs+pNvT2GtWt5Ewk8CrCcl60MRB95f1dcQ7onbEhl
-	 7WRcFF3ADvp+A==
+	b=kFJDuaawZRflCxiht0vKIc4Sipd66zYXDbT23nEEV4ztAngfE2TR9vNJevTfGrNZ1
+	 RUV3r1sfqaBUW+H/nlPPNbKXzZFaDMMZzzj6PJ+ovq2HxJlvxyiX2U9RGVelZ7ltit
+	 RkBn7xsU39FI2/2nuIVRYAT7ITW8zur23VTQD5lhk/sx/v4sq+NBrfSxbO7Z9tps2Z
+	 LplhkAlaw47V7XehwFzhR/RwTVXwiSdn1ubu3I8gXFju+rW4gXCAnGHUgWhZT8+jUs
+	 DT7vehJtKeRzMJoUjTlFjVKJuIySJeUs5vxDliU1csg8ymxoN3imhL2VYjBvkgT7tn
+	 u6UtesZM4CReA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7005E6D4A2;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AB8D4E6BBD2;
 	Tue,  8 Feb 2022 09:12:58 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] OP-TEE fix for v5.17
+Subject: Re: [PATCH] MAINTAINERS: add myself as a maintainer for the sl28cpld
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164431157873.18327.12003279951405344661.git-patchwork-notify@kernel.org>
+ <164431157869.18327.6272923658249335736.git-patchwork-notify@kernel.org>
 Date: Tue, 08 Feb 2022 09:12:58 +0000
-References: <20220203132323.GA4132001@jade>
-In-Reply-To: <20220203132323.GA4132001@jade>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+References: <20220207184652.1218447-1-michael@walle.cc>
+In-Reply-To: <20220207184652.1218447-1-michael@walle.cc>
+To: Michael Walle <michael@walle.cc>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
+This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 3 Feb 2022 14:23:23 +0100 you wrote:
-> Hello arm-soc maintainers,
+On Mon,  7 Feb 2022 19:46:52 +0100 you wrote:
+> The sl28cpld is a management controller found on the Kontron SMARC-sAL28
+> board for now. Support for it was added by me quite a while ago, but I
+> didn't add a MAINTAINERS entry. Add it now.
 > 
-> Please pull this OP-TEE driver fix which decouples driver private shared
-> memory objects from the original tee_context. This fixes the root cause of
-> a shutdown problem where the driver would dead-lock waiting for tee-supplicant.
-> 
-> Thanks,
-> Jens
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> Hi,
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] OP-TEE fix for v5.17
-    https://git.kernel.org/soc/soc/c/63a8728579a8
+  - MAINTAINERS: add myself as a maintainer for the sl28cpld
+    https://git.kernel.org/soc/soc/c/4a64f2d3527a
 
 You are awesome, thank you!
 -- 
