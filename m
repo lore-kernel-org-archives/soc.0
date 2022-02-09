@@ -1,154 +1,214 @@
-Return-Path: <SRS0=NysD=SY=walle.cc=michael@kernel.org>
+Return-Path: <SRS0=8ePV=SY=collabora.com=detlev.casanova@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2A3EC433F5
-	for <soc@archiver.kernel.org>; Wed,  9 Feb 2022 18:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4E5EC433F5
+	for <soc@archiver.kernel.org>; Wed,  9 Feb 2022 19:25:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ADED2C340E9; Wed,  9 Feb 2022 18:46:19 +0000 (UTC)
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+	id A36C6C340E9; Wed,  9 Feb 2022 19:25:22 +0000 (UTC)
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B5369C340E7;
-	Wed,  9 Feb 2022 18:46:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B5369C340E7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from apollo.. (unknown [IPv6:2a02:810b:4340:43bf:4685:ff:fe12:5967])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id ED23F223E9;
-	Wed,  9 Feb 2022 19:46:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1644432371;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z3kgxFS1ym2jMG+9772IZvkBEpGz3sFlMVSHxffUrWM=;
-	b=bJT1JRSM2O9qHpztX4cECW3hufKFDmYDWAKTl3bYHw5U2ms5EDJuWTPy3RGOnlfiC+anaT
-	vKS8NNFLNbIUYKnfSEdo3eCTOWv26E8r5rlCRfubzZFuVw4k7dzqRTc8oLhgpCQHVvf4xS
-	YkE90e82Qx7jjxuOQXjx558m49hAlgk=
-From: Michael Walle <michael@walle.cc>
-To: kavyasree.kotagiri@microchip.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 70293C340E7;
+	Wed,  9 Feb 2022 19:25:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 70293C340E7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(Authenticated sender: detlev)
+	with ESMTPSA id B8A881F45830
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1644434718;
+	bh=7+kNVuhRDRn8ZWd50WG2gPmkpwkCawcOM90JKeUKmKU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=MV0BmwPzZNSBUeCHXgm842NsKPpUaxWQIj0kCG8a0hLp3xOW3k9kykpnwJnsQ+2PT
+	 c0Su8GZH9uR8fzUnohebLBH5zeUPbglzcuRFuNDzaWA2iepkfUQZek/TzO7wb4ypK8
+	 tPKOJjTj0VLKQOZU7/rvgZBrShffbP67x5MsyelHPP6mPMpC7ULshIFE8Jqb3wULt8
+	 BLoZ7ix1bLLF7yXKCp3cWOqEg5FDQWHZLLAUUdOfQTd5QnagV0EbPmZdRL1Y3XSX01
+	 ok0ZfmkncihMlW3BRjnTC+BpGPXDTcfCXVYmsCgLPs1dxc4pXjDgOzLl2FSFlSMYl9
+	 JQgnnk5aZZ1Nw==
+From: Detlev Casanova <detlev.casanova@collabora.com>
+To: linux-kernel@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Manohar.Puri@microchip.com,
-	UNGLinuxDriver@microchip.com,
-	alexandre.belloni@bootlin.com,
-	arnd@arndb.de,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	nicolas.ferre@microchip.com,
-	olof@lixom.net,
-	robh+dt@kernel.org,
-	soc@kernel.org,
-	Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH v4] ARM: dts: add DT for lan966 SoC and 2-port board pcb8291
-Date: Wed,  9 Feb 2022 19:46:00 +0100
-Message-Id: <20220209184600.1230365-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220209111318.21112-1-kavyasree.kotagiri@microchip.com>
-References: <20220209111318.21112-1-kavyasree.kotagiri@microchip.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, "maintainer:ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)" <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, Nicolas Saenz Julienne <nsaenz@kernel.org>, Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." <bcm-kernel-feedback-list@broadcom.com>, "moderated list:ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)" <linux-arm-kernel@lists.infradead.org>, "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" <linux-rpi-kernel@lists.infradead.org>, Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= <uwe@kleine-koenig.org>
+Subject: Re: [PATCH 1/2] ARM: dts: bcm2*: Demux i2c0 with a pinctrl
+Date: Wed, 09 Feb 2022 14:25:12 -0500
+Message-ID: <11962907.O9o76ZdvQC@falcon9>
+In-Reply-To: <1335ae03-705a-7a4a-a9ce-c6c55a2dcf34@i2se.com>
+References: <20220209162515.706729-1-detlev.casanova@collabora.com> <20220209162515.706729-2-detlev.casanova@collabora.com> <1335ae03-705a-7a4a-a9ce-c6c55a2dcf34@i2se.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-Hi,
-
-> +	clocks {
-[..]
-> +
-> +		nic_clk: nic_clk {
-
-What does nic_clk stand for? If I had to guess, it
-has something to do with network. But..
-
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <200000000>;
-> +		};
-> +	};
-> +
-> +	clks: clock-controller@e00c00a8 {
-> +		compatible = "microchip,lan966x-gck";
-> +		#clock-cells = <1>;
-> +		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
-> +		clock-names = "cpu", "ddr", "sys";
-> +		reg = <0xe00c00a8 0x38>;
-> +	};
-> +
-> +	timer {
-> +		compatible = "arm,armv7-timer";
-> +		interrupt-parent = <&gic>;
-> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
-> +		clock-frequency = <37500000>;
-> +		arm,cpu-registers-not-fw-configured;
-> +	};
-> +
-> +	soc {
-> +		compatible = "simple-bus";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		flx0: flexcom@e0040000 {
-> +			compatible = "atmel,sama5d2-flexcom";
-> +			reg = <0xe0040000 0x100>;
-> +			clocks = <&clks GCK_ID_FLEXCOM0>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0xe0040000 0x800>;
-> +			status = "disabled";
-> +		};
-> +
-> +		flx1: flexcom@e0044000 {
-> +			compatible = "atmel,sama5d2-flexcom";
-> +			reg = <0xe0044000 0x100>;
-> +			clocks = <&clks GCK_ID_FLEXCOM1>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0xe0044000 0x800>;
-> +			status = "disabled";
-> +		};
-> +
-> +		trng: trng@e0048000 {
-> +			compatible = "atmel,at91sam9g45-trng";
-> +			reg = <0xe0048000 0x100>;
-> +			clocks = <&nic_clk>;
-
-.. it is used here..
+On Wednesday, February 9, 2022 12:26:15 P.M. EST Stefan Wahren wrote:
+> Hi Detlev,
+> 
+> Am 09.02.22 um 17:25 schrieb Detlev Casanova:
+> > The i2c0 device has 2 different busses controlled by a pinctrl.
+> > 
+> > This commit separates the device node into 2 i2c devices:
+> >  * pin 0: Base i2c bus
+> >  * pin 44: DSI i2c bus
+> > 
+> > i2c0 is renamed to i2c0if so that device-trees referencing i2c0 don't
+> > break and use the i2c0 node defined in i2c0mux node.
+> > 
+> > i2c_csi_dsi can be used to control devices via the DSI i2c bus, used for
+> > DSI displays.
+> > 
+> > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> 
+> just a note: Uwe sends a similiar approach for the RTC on CM4 [1] which
+> hasn't applied yet.
+> 
+> [1] - https://www.spinics.net/lists/arm-kernel/msg944330.html
 
 
-> +		};
-> +
-> +		aes: aes@e004c000 {
-> +			compatible = "atmel,at91sam9g46-aes";
-> +			reg = <0xe004c000 0x100>;
-> +			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-> +			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
-> +			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
-> +			dma-names = "rx", "tx";
-> +			clocks = <&nic_clk>;
+Oh, I missed that, I'll just hav to wait for it to be merged and base the next 
+commit on that (Mainly name change)
+ 
+> > ---
+> > 
+> >  arch/arm/boot/dts/bcm2711-rpi-4-b.dts         |  1 +
+> >  arch/arm/boot/dts/bcm2711.dtsi                |  2 +-
+> >  arch/arm/boot/dts/bcm2835-rpi.dtsi            |  9 ++++---
+> >  .../boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi    |  4 +++
+> >  arch/arm/boot/dts/bcm283x.dtsi                | 26 ++++++++++++++++++-
+> >  5 files changed, 37 insertions(+), 5 deletions(-)
+> >  create mode 100644 arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
+> > 
+> > diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+> > b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts index 4432412044de..5dcce58817e6
+> > 100644
+> > --- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+> > +++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+> > @@ -4,6 +4,7 @@
+> > 
+> >  #include "bcm2711-rpi.dtsi"
+> >  #include "bcm283x-rpi-usb-peripheral.dtsi"
+> >  #include "bcm283x-rpi-wifi-bt.dtsi"
+> > 
+> > +#include "bcm283x-rpi-i2c0mux_0_44.dtsi"
+> > 
+> >  / {
+> >  
+> >  	compatible = "raspberrypi,4-model-b", "brcm,bcm2711";
+> > 
+> > diff --git a/arch/arm/boot/dts/bcm2711.dtsi
+> > b/arch/arm/boot/dts/bcm2711.dtsi index 3b60297af7f6..bf6e8251c2c7 100644
+> > --- a/arch/arm/boot/dts/bcm2711.dtsi
+> > +++ b/arch/arm/boot/dts/bcm2711.dtsi
+> > @@ -1037,7 +1037,7 @@ &cma {
+> > 
+> >  	alloc-ranges = <0x0 0x00000000 0x40000000>;
+> >  
+> >  };
+> > 
+> > -&i2c0 {
+> > +&i2c0if {
+> > 
+> >  	compatible = "brcm,bcm2711-i2c", "brcm,bcm2835-i2c";
+> >  	interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
+> >  
+> >  };
+> > 
+> > diff --git a/arch/arm/boot/dts/bcm2835-rpi.dtsi
+> > b/arch/arm/boot/dts/bcm2835-rpi.dtsi index 87ddcad76083..1e38f9f0e80e
+> > 100644
+> > --- a/arch/arm/boot/dts/bcm2835-rpi.dtsi
+> > +++ b/arch/arm/boot/dts/bcm2835-rpi.dtsi
+> > @@ -49,13 +49,16 @@ alt0: alt0 {
+> > 
+> >  	};
+> >  
+> >  };
+> > 
+> > -&i2c0 {
+> > -	pinctrl-names = "default";
+> > -	pinctrl-0 = <&i2c0_gpio0>;
+> > +&i2c0if {
+> > 
+> >  	status = "okay";
+> >  	clock-frequency = <100000>;
+> >  
+> >  };
+> > 
+> > +&i2c0mux {
+> > +	pinctrl-0 = <&i2c0_gpio0>;
+> > +	status = "okay";
+> > +};
+> > +
+> > 
+> >  &i2c1 {
+> >  
+> >  	pinctrl-names = "default";
+> >  	pinctrl-0 = <&i2c1_gpio2>;
+> > 
+> > diff --git a/arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
+> > b/arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi new file mode 100644
+> > index 000000000000..119946d878db
+> > --- /dev/null
+> > +++ b/arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
+> > @@ -0,0 +1,4 @@
+> > +&i2c0mux {
+> > +	pinctrl-0 = <&i2c0_gpio0>;
+> > +	pinctrl-1 = <&i2c0_gpio44>;
+> > +};
+> > diff --git a/arch/arm/boot/dts/bcm283x.dtsi
+> > b/arch/arm/boot/dts/bcm283x.dtsi index a3e06b680947..06d04cde52b9 100644
+> > --- a/arch/arm/boot/dts/bcm283x.dtsi
+> > +++ b/arch/arm/boot/dts/bcm283x.dtsi
+> > @@ -334,7 +334,7 @@ spi: spi@7e204000 {
+> > 
+> >  			status = "disabled";
+> >  		
+> >  		};
+> > 
+> > -		i2c0: i2c@7e205000 {
+> > +		i2c0if: i2c@7e205000 {
+> > 
+> >  			compatible = "brcm,bcm2835-i2c";
+> >  			reg = <0x7e205000 0x200>;
+> >  			interrupts = <2 21>;
+> > 
+> > @@ -344,6 +344,30 @@ i2c0: i2c@7e205000 {
+> > 
+> >  			status = "disabled";
+> >  		
+> >  		};
+> > 
+> > +		i2c0mux: i2c0mux {
+> > +			compatible = "i2c-mux-pinctrl";
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +
+> > +			i2c-parent = <&i2c0if>;
+> > +
+> > +			pinctrl-names = "i2c0", "i2c_csi_dsi";
+> > +
+> > +			status = "disabled";
+> > +
+> > +			i2c0: i2c@0 {
+> > +				reg = <0>;
+> > +				#address-cells = <1>;
+> > +				#size-cells = <0>;
+> > +			};
+> > +
+> > +			i2c_csi_dsi: i2c@1 {
+> > +				reg = <1>;
+> > +				#address-cells = <1>;
+> > +				#size-cells = <0>;
+> > +			};
+> > +		};
+> > +
+> > 
+> >  		dpi: dpi@7e208000 {
+> >  		
+> >  			compatible = "brcm,bcm2835-dpi";
+> >  			reg = <0x7e208000 0x8c>;
 
-.. and here. and so on.
 
-So, is it some kind of internal clock?
 
-> +			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-> +
-> +		watchdog: watchdog@e0090000 {
-> +			compatible = "snps,dw-wdt";
-> +			reg = <0xe0090000 0x1000>;
-> +			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&nic_clk>;
-
-Btw. can we disable all nodes by default and enable them
-in the board dts files?
 
