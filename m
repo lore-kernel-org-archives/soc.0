@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EEDCC433EF
-	for <soc@archiver.kernel.org>; Wed,  9 Feb 2022 17:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17E08C433EF
+	for <soc@archiver.kernel.org>; Wed,  9 Feb 2022 17:26:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D0496C340ED; Wed,  9 Feb 2022 17:10:30 +0000 (UTC)
+	id CE53AC340ED; Wed,  9 Feb 2022 17:26:25 +0000 (UTC)
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8B722C340E7;
-	Wed,  9 Feb 2022 17:10:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8B722C340E7
+	by smtp.kernel.org (Postfix) with ESMTPS id 0FB53C340EF;
+	Wed,  9 Feb 2022 17:26:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0FB53C340EF
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
 Received: from [192.168.1.107] ([37.4.249.169]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N1u2b-1oJ8L10A37-012E0O; Wed, 09 Feb 2022 18:10:14 +0100
-Subject: Re: [PATCH 2/2] ARM: dts: Add bcm2711-rpi-4-b-7inch-ts-dsi.dts
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MuUvS-1o7tQA2dc2-00rZER; Wed, 09 Feb 2022 18:26:16 +0100
+Subject: Re: [PATCH 1/2] ARM: dts: bcm2*: Demux i2c0 with a pinctrl
 To: Detlev Casanova <detlev.casanova@collabora.com>,
  linux-kernel@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
@@ -36,9 +36,10 @@ Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
  <devicetree@vger.kernel.org>,
  "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE"
- <linux-rpi-kernel@lists.infradead.org>
+ <linux-rpi-kernel@lists.infradead.org>,
+ =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>
 References: <20220209162515.706729-1-detlev.casanova@collabora.com>
- <20220209162515.706729-3-detlev.casanova@collabora.com>
+ <20220209162515.706729-2-detlev.casanova@collabora.com>
 From: Stefan Wahren <stefan.wahren@i2se.com>
 Autocrypt: addr=stefan.wahren@i2se.com; keydata=
  LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
@@ -170,239 +171,162 @@ Autocrypt: addr=stefan.wahren@i2se.com; keydata=
  VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
  bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
  LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <d00a934e-a2e0-fd3a-6452-fa88f07e13d4@i2se.com>
-Date: Wed, 9 Feb 2022 18:10:12 +0100
+Message-ID: <1335ae03-705a-7a4a-a9ce-c6c55a2dcf34@i2se.com>
+Date: Wed, 9 Feb 2022 18:26:15 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20220209162515.706729-3-detlev.casanova@collabora.com>
+In-Reply-To: <20220209162515.706729-2-detlev.casanova@collabora.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-Provags-ID: V03:K1:13VMoQWBV5nTOnZ1C8Cb9JRUGJoKHabcWRxWMHAd/6zIn85aI17
- coeKEizePoA7bX4jSOmt5Tk1msNiMTnijxj7S2A65fKZZ7R7V9fg8XASrQqDzcmC5IFuf4H
- zhmLRQYzOFcB59KgeXEmmPCkRmQKVwYPo5AvESUmwJsWcM45Z6Kdx7EkLZEvApb0pt7y0Qd
- J8j2WPyHWR+pO0d/j2tdw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6ISgVrP+dCY=:eS4enUane9e/fC4hQdlKpz
- jEUUS9JvmqHFIuHMdDIssnQGgdulyTG5m2lYLJr8ED1Gp7ARDZw+VsJ3AjnFWeSar9Ig5b25E
- tta/F2p9Jul99l+a8XTT0yrEJSOraLWfQCgJcCjWKs2JJo1em9qEuEu64+tbdNlyK+DwjbfNF
- 6/tmSR+I6PAxv2iIfmAblSXhlgEsJC7ffhr9ap0n0qGoz8qR1CfDOZwXyKQHAFT6Chg1cbJJM
- v0HiJwt8y5RiuO/D3Ngms71WacWc4dpxtxe647oX2zvWBE7iWFk5pnSbhBmY/9I/XA+ekvFSr
- wnnB58AY4QT1dF6Py/ygcvlzyqJ/wPsLaxMq1m6qk/2eFUkJzYjhiOuDU5QSEhMlf1vxAhWnH
- aK/brLwlL/1hgKlWj2WS2hQnLXjJD6LpqsFR4GQZZM5tCFQEf/gyBybKEKC74YkPID8bTGTdO
- Zim03lDCwnc1SrbISnPyxLwJ0jB1QJZfLdIF4mR4EPSKWGoQes7n4/9UGuSvuIwljxisOgse3
- w+Ln5AsWKJj0DZfuqsVsaAcISQgM9ukWB2jZLfDqaufmTeeHxSKgMR3hBHBN8H2i7rz7y6Myu
- 7jvLSsOy2+MKngR+yJRbFHWTgOJxjpWD3NIYp1ZuXXaHcX26ohMs4i0oQYc0hlgG+fplVTqml
- AWQLz6+suE0repYBo2PffvGK6gXfg53cmZ7nT9G8M9AXNCZrwRn7kGM842CydnRWNqwIiXLw5
- AvuDVgD8VXZcezXP
+X-Provags-ID: V03:K1:XIB0IOkaThrznSv6OzsH3ICeM5NP/Rcou6qKQ9W3Vb5o4erh69y
+ ZE0tHBG1gkIqVKYC2RHF4hSpPxQcjVCI3dqIfrbhMgx7JEb0TZTBu4ZXiwY4PjB7ox4OVQu
+ HIwOAU3wWmKTA5Qs/YdirzWhh2REba+5Lp3+94ebQZM+FuiD1VeARjUYLf54AczEPNJxuAO
+ dHMTkqgTv+r5BkVhrngeg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wryg9iTgGDs=:jkjRcD/SO8FmS0/S4wml6x
+ FbCprup8NHwmX8e92IWe5++/j7KHhyQDUK0+AeR1BurNoqeIGy1nKLDBtn5c+iKzgyHMNt3tj
+ 84m8FYKKjvNhvHqnipxtLyg0sNBnZK4aqXswMoZs1C3Xnhj+8XeQJ14iHdjwmHmetCUpsj60c
+ 2VS2LwtZ09/uxo93M37MzMOmC/i+iNjTq23ZrSMjlNv4IogY+QJEz0oowRcoFyC0YMAABHCG4
+ jeHYZgN6nrS55XToQe0Bf5ACGGLslbBEUNMBgGQsugiCSHPPG0mrZat9HRFPpRuV4qvT4KbLZ
+ NyVYlzSQ5o9ar4AWKFwc4iXsfGiZGacMdGxd0i2D1W7FoZHENyx7MahRqfAPU7dT05saOdtiK
+ NM3x07GbeTkmZDwO7DJu+8lEMgsAASTUHcrht0bhMQCmq3brl+jU5r6d6Qq+M9Z45TFBOUZs5
+ 9HERD7jpc4EPT56Fl7L20uYbboCM7u5G8aZOdY1skSS7RHL4HK/caeamleHsDMbAviCKmYhPJ
+ dWwtVfcM88t4XpqyLmKmxPwMqBoPDnOBgivDVA0eACbszE6cRzNuMMeKf1BrB+L3q9hbSQZxu
+ /FIiSEJvfOnUi+TGlineh/yNBcXh5clJUUFgO/qjoKBhi86BGHGGUa9hZ2T+rr3aTM7hb7tAa
+ FPZvpWcINM+V3zIRtj6FvxA+oLFv/kpQpnrREUPIWg/EMR6sAcBh2ThbxEHTq+za9iKFxVSRQ
+ EbE3+YM9UBZrMXJp
 
 Hi Detlev,
 
 Am 09.02.22 um 17:25 schrieb Detlev Casanova:
-> Add a device tree to support the official Raspberrypi 7" touchscreen fo=
-r
-> the Raspberry Pi 4 B
+> The i2c0 device has 2 different busses controlled by a pinctrl.
+> This commit separates the device node into 2 i2c devices:
+>  * pin 0: Base i2c bus
+>  * pin 44: DSI i2c bus
 >
-> The panel is connected on the DSI 1 port and uses the simple-panel
-> driver.
+> i2c0 is renamed to i2c0if so that device-trees referencing i2c0 don't
+> break and use the i2c0 node defined in i2c0mux node.
 >
-> The device tree also makes sure to activate:
->  * dvp: bcm2711 clock driver
->  * hvs: Hardware Video Scaler
->  * pixelvalve[0-4]: CRTC modules
->  * txp: CRTC Writeback
+> i2c_csi_dsi can be used to control devices via the DSI i2c bus, used for
+> DSI displays.
 >
 > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+
+just a note: Uwe sends a similiar approach for the RTC on CM4 [1] which
+hasn't applied yet.
+
+[1] - https://www.spinics.net/lists/arm-kernel/msg944330.html
+
 > ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts | 129 ++++++++++++++++++=
-
->  arch/arm64/boot/dts/broadcom/Makefile         |   1 +
->  .../broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts |   2 +
->  4 files changed, 133 insertions(+)
->  create mode 100644 arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts
->  create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-=
-ts-dsi.dts
+>  arch/arm/boot/dts/bcm2711-rpi-4-b.dts         |  1 +
+>  arch/arm/boot/dts/bcm2711.dtsi                |  2 +-
+>  arch/arm/boot/dts/bcm2835-rpi.dtsi            |  9 ++++---
+>  .../boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi    |  4 +++
+>  arch/arm/boot/dts/bcm283x.dtsi                | 26 ++++++++++++++++++-
+>  5 files changed, 37 insertions(+), 5 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
 >
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 0de64f237cd8..b46daf2df4ce 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -94,6 +94,7 @@ dtb-$(CONFIG_ARCH_BCM2835) +=3D \
->  	bcm2837-rpi-cm3-io3.dtb \
->  	bcm2711-rpi-400.dtb \
->  	bcm2711-rpi-4-b.dtb \
-> +	bcm2711-rpi-4-b-7inch-ts-dsi.dtb \
->  	bcm2711-rpi-cm4-io.dtb \
->  	bcm2835-rpi-zero.dtb \
->  	bcm2835-rpi-zero-w.dtb
-> diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts b/arch/=
-arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts
+> diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+> index 4432412044de..5dcce58817e6 100644
+> --- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+> +++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+> @@ -4,6 +4,7 @@
+>  #include "bcm2711-rpi.dtsi"
+>  #include "bcm283x-rpi-usb-peripheral.dtsi"
+>  #include "bcm283x-rpi-wifi-bt.dtsi"
+> +#include "bcm283x-rpi-i2c0mux_0_44.dtsi"
+>  
+>  / {
+>  	compatible = "raspberrypi,4-model-b", "brcm,bcm2711";
+> diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
+> index 3b60297af7f6..bf6e8251c2c7 100644
+> --- a/arch/arm/boot/dts/bcm2711.dtsi
+> +++ b/arch/arm/boot/dts/bcm2711.dtsi
+> @@ -1037,7 +1037,7 @@ &cma {
+>  	alloc-ranges = <0x0 0x00000000 0x40000000>;
+>  };
+>  
+> -&i2c0 {
+> +&i2c0if {
+>  	compatible = "brcm,bcm2711-i2c", "brcm,bcm2835-i2c";
+>  	interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
+>  };
+> diff --git a/arch/arm/boot/dts/bcm2835-rpi.dtsi b/arch/arm/boot/dts/bcm2835-rpi.dtsi
+> index 87ddcad76083..1e38f9f0e80e 100644
+> --- a/arch/arm/boot/dts/bcm2835-rpi.dtsi
+> +++ b/arch/arm/boot/dts/bcm2835-rpi.dtsi
+> @@ -49,13 +49,16 @@ alt0: alt0 {
+>  	};
+>  };
+>  
+> -&i2c0 {
+> -	pinctrl-names = "default";
+> -	pinctrl-0 = <&i2c0_gpio0>;
+> +&i2c0if {
+>  	status = "okay";
+>  	clock-frequency = <100000>;
+>  };
+>  
+> +&i2c0mux {
+> +	pinctrl-0 = <&i2c0_gpio0>;
+> +	status = "okay";
+> +};
+> +
+>  &i2c1 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&i2c1_gpio2>;
+> diff --git a/arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi b/arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
 > new file mode 100644
-> index 000000000000..62e986358c2a
+> index 000000000000..119946d878db
 > --- /dev/null
-> +++ b/arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts
-i think this should be an overlay because this board can be connected to
-different boards and we want to avoid copy & paste. Unfortunately i
-don't know where this should be stored in the kernel tree.
-> @@ -0,0 +1,129 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include "bcm2711-rpi-4-b.dts"
-> +
-> +/ {
-> +	model =3D "Raspberry Pi 4 Model B + Rpi 7inch touchscreen";
-> +
-> +	panel_disp1: panel_disp1@0 {
-> +		reg =3D <0 0 0>;
-> +		compatible =3D "raspberrypi,7inch-dsi", "simple-panel";
-> +		backlight =3D <&reg_display>;
-> +		power-supply =3D <&reg_display>;
-> +		status =3D "okay";
-> +
-> +		port {
-> +			panel_in: endpoint {
-> +				remote-endpoint =3D <&bridge_out>;
-> +			};
-> +		};
-> +	};
-> +
-> +	reg_bridge: reg_bridge@0 {
-> +		reg =3D <0 0 0>;
-> +		compatible =3D "regulator-fixed";
-> +		regulator-name =3D "bridge_reg";
-> +		gpio =3D <&reg_display 0 0>;
-> +		vin-supply =3D <&reg_display>;
-> +		enable-active-high;
-> +		status =3D "okay";
-> +	};
+> +++ b/arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
+> @@ -0,0 +1,4 @@
+> +&i2c0mux {
+> +	pinctrl-0 = <&i2c0_gpio0>;
+> +	pinctrl-1 = <&i2c0_gpio44>;
 > +};
+> diff --git a/arch/arm/boot/dts/bcm283x.dtsi b/arch/arm/boot/dts/bcm283x.dtsi
+> index a3e06b680947..06d04cde52b9 100644
+> --- a/arch/arm/boot/dts/bcm283x.dtsi
+> +++ b/arch/arm/boot/dts/bcm283x.dtsi
+> @@ -334,7 +334,7 @@ spi: spi@7e204000 {
+>  			status = "disabled";
+>  		};
+>  
+> -		i2c0: i2c@7e205000 {
+> +		i2c0if: i2c@7e205000 {
+>  			compatible = "brcm,bcm2835-i2c";
+>  			reg = <0x7e205000 0x200>;
+>  			interrupts = <2 21>;
+> @@ -344,6 +344,30 @@ i2c0: i2c@7e205000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		i2c0mux: i2c0mux {
+> +			compatible = "i2c-mux-pinctrl";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
 > +
-> +&i2c_csi_dsi {
-> +	ft5406: ts@38 {
-s/ts/touchscreen/
-> +		compatible =3D "edt,edt-ft5506";
-> +		reg =3D <0x38>;
-> +		status =3D "okay";
+> +			i2c-parent = <&i2c0if>;
 > +
-> +		vcc-supply =3D <&reg_display>;
-> +		reset-gpio =3D <&reg_display 1 1>;
+> +			pinctrl-names = "i2c0", "i2c_csi_dsi";
 > +
-> +		touchscreen-size-x =3D < 800 >;
-> +		touchscreen-size-y =3D < 480 >;
+> +			status = "disabled";
 > +
-> +		touchscreen-inverted-x;
-> +		touchscreen-inverted-y;
-> +	};
-> +
-> +	reg_display: reg_display@45 {
-node name should be regulator
-> +		compatible =3D "raspberrypi,7inch-touchscreen-panel-regulator";
-> +		reg =3D <0x45>;
-> +		gpio-controller;
-> +		#gpio-cells =3D <2>;
-> +		status =3D "okay";
-> +	};
-> +
-> +};
-> +
-> +&dsi1 {
-> +	#address-cells =3D <1>;
-> +	#size-cells =3D <0>;
-> +	status =3D "okay";
-> +
-> +	port {
-> +		dsi_out: endpoint {
-> +			remote-endpoint =3D <&bridge_in>;
-> +		};
-> +	};
-> +
-> +	bridge@0 {
-> +		reg =3D <0>;
-> +		compatible =3D "toshiba,tc358762";
-> +		vddc-supply =3D <&reg_bridge>;
-> +		ports {
-> +			#address-cells =3D <1>;
-> +			#size-cells =3D <0>;
-> +
-> +			port@0 {
-> +				reg =3D <0>;
-> +				bridge_in: endpoint {
-> +					remote-endpoint =3D <&dsi_out>;
-> +				};
+> +			i2c0: i2c@0 {
+> +				reg = <0>;
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
 > +			};
 > +
-> +			port@1 {
-> +				reg =3D <1>;
-> +				bridge_out: endpoint {
-> +					remote-endpoint =3D <&panel_in>;
-> +				};
+> +			i2c_csi_dsi: i2c@1 {
+> +				reg = <1>;
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
 > +			};
 > +		};
-> +	};
-> +};
 > +
-> +&aon_intr {
-> +	status =3D "okay";
-> +};
-> +
-> +&dvp {
-> +	status =3D "okay";
-> +};
-> +
-> +&hvs {
-> +	status =3D "okay";
-> +};
-=46rom my understanding these three are not necessary
-> +
-> +&pixelvalve0 {
-> +	status =3D "okay";
-> +};
-> +
-> +&pixelvalve1 {
-> +	status =3D "okay";
-> +};
-> +
-> +&pixelvalve2 {
-> +	status =3D "okay";
-> +};
-> +
-> +&pixelvalve3 {
-> +	status =3D "okay";
-> +};
-> +
-> +&pixelvalve4 {
-> +	status =3D "okay";
-> +};
-> +
-> +&txp {
-> +	status =3D "okay";
-> +};
-
-Also txp doesn't need to be enabled explicit.
-
-Best regards
-
-> diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dt=
-s/broadcom/Makefile
-> index c6882032a428..965361bff829 100644
-> --- a/arch/arm64/boot/dts/broadcom/Makefile
-> +++ b/arch/arm64/boot/dts/broadcom/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  dtb-$(CONFIG_ARCH_BCM2835) +=3D bcm2711-rpi-400.dtb \
->  			      bcm2711-rpi-4-b.dtb \
-> +			      bcm2711-rpi-4-b-7inch-ts-dsi.dtb \
->  			      bcm2711-rpi-cm4-io.dtb \
->  			      bcm2837-rpi-3-a-plus.dtb \
->  			      bcm2837-rpi-3-b.dtb \
-> diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.=
-dts b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts
-> new file mode 100644
-> index 000000000000..c325adc4f874
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts
-> @@ -0,0 +1,2 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "arm/bcm2711-rpi-4-b-7inch-ts-dsi.dts"
-
+>  		dpi: dpi@7e208000 {
+>  			compatible = "brcm,bcm2835-dpi";
+>  			reg = <0x7e208000 0x8c>;
