@@ -1,66 +1,96 @@
-Return-Path: <SRS0=4MXi=SY=gmail.com=robherring2@kernel.org>
+Return-Path: <SRS0=Ya1c=SY=linaro.org=viresh.kumar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 651C5C433F5
-	for <soc@archiver.kernel.org>; Wed,  9 Feb 2022 03:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDD0BC433F5
+	for <soc@archiver.kernel.org>; Wed,  9 Feb 2022 06:45:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 27AF9C340EE; Wed,  9 Feb 2022 03:13:34 +0000 (UTC)
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+	id 7A785C340F0; Wed,  9 Feb 2022 06:45:21 +0000 (UTC)
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B8DB0C004E1;
-	Wed,  9 Feb 2022 03:13:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B8DB0C004E1
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f45.google.com with SMTP id x52-20020a05683040b400b0059ea92202daso633568ott.7;
-        Tue, 08 Feb 2022 19:13:33 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id EFAA5C340ED
+	for <soc@kernel.org>; Wed,  9 Feb 2022 06:45:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EFAA5C340ED
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f170.google.com with SMTP id x3so1417302pll.3
+        for <soc@kernel.org>; Tue, 08 Feb 2022 22:45:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=PVC8kg0m66z8nLsg7hxOAh4ZCaPmayhqQ5QiMYyZWlY=;
+        b=hjkkB+DreNhYS/KptENJnaOeZzsf3zoLA17g1PzKwanvPvmLRz1rw2vIXm7TxU7Wls
+         vmIPPMUYaLfI32C6XPq8PayQJN2jHoZTxlY2sA+WhqLxpB+WrlLJVb8+xuT5u3MeKJLu
+         KT2rsVd5+bTcEY3UkL6L4/cD8Sdl0REnZW61J6IjgpohUtEYNdebpBTsf6tc81kEwJ91
+         5jab9fomYIxnmIO56L7GOmg3B50apOtkutQKT/q/DLSktmso+CzWODSvgSIqnGW0kvgO
+         Wccps8E7E9MnGF0zeqqNIY2gqkba3d3OBIbxyVg68G3xIeBzv0LNvqc8+1NhQcphvsSW
+         +6kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bhPYavz29pyl+ykJUTk2kuFVvwHnpLudfeWM07RV3CY=;
-        b=CSnDwrvW7LI4nSsN8eeHd5g2iKsEdXrdkhkv6xhPl4J/gaAfp2eMBjkEuXfbfS65i8
-         bNhOei8ywmosSIBGhPjhWmYRTNTC+mnS6scedEA8N28ezYNmIjG3E5bMg9ocsSZxzehC
-         PE9EOlH59Ons3A9Ryyvb4QzWUAvg7qq7BbWAW0vnifzsECbpV/zUsFsXXXXPQ3iFwXaH
-         0YXBv+a9ba7ff+Srb6YO3u6ybgnAhAYA/LzTZqupcsKCGQ8Ts7CyJILFlAk2XFaLGLhT
-         ftYAK7VDoWhBbBGWsxOR7QZ5XZp82lCy28yc4DNQk4QXy5aEYJxqs1R5FZiTNqN4m/sI
-         P47A==
-X-Gm-Message-State: AOAM533fRaxewBhSBnFgf+fmd3lX3XCdv163PBpxtk8+K0s63bYQCS9v
-	ZVGGNQlwNNA/nIQgzfmzuA==
-X-Google-Smtp-Source: ABdhPJzRQj0n07HNIyiYaj9jZlxThIk4+DLTmzsAvKXF03QmDAL4Omrrf0mgpRfVvroOQUoPAt4qag==
-X-Received: by 2002:a9d:6b15:: with SMTP id g21mr148782otp.337.1644376412801;
-        Tue, 08 Feb 2022 19:13:32 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n13sm6738710ooj.34.2022.02.08.19.13.31
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PVC8kg0m66z8nLsg7hxOAh4ZCaPmayhqQ5QiMYyZWlY=;
+        b=HOg2e3lyukp9xmIJZtCr/AyzmCJiG44Zfty1P2Xp0nJL5f7ysPHMXaoFFZoxnMGSRX
+         MSLDvme+z4PxtEmCzxzZEHDpHpm32j+2g6pmdZ9ng+UE3CYzBmTGyh/2oFc1lKsFRu0q
+         iYWJOCusmeRsOqSbtW7S5YxUIr9EaM31cOAfmzT8gZchvpXkn46L/f3If4zLilJX3Ar6
+         Wly3dcKMvc/ngF9JwN/CT/OcpnP90NHc2Ws6txpDMOGmqKI1XvbE5dG2y0WZmFHwken/
+         NgGrwKR8iD+YNpXGIl/9nt8DLITGuYM/iNx6eMi5En79dF5egOvpQv9DzIGsfskgaYgN
+         Ra8w==
+X-Gm-Message-State: AOAM533cCbIwPludIibk2MP1zvahJFeCBjEsdsJ7F6jV+OnmWY+LdhDC
+	PuYUgeDBPBOQS9On/0OFY6RZFA==
+X-Google-Smtp-Source: ABdhPJyTnEiwKB7qSkQcVoYjamO3CNRQCXq2vkRCtMNivvsSE2h44qEyShyFtpctl+7fuDFYlQgCrA==
+X-Received: by 2002:a17:902:b90a:: with SMTP id bf10mr847320plb.36.1644389119024;
+        Tue, 08 Feb 2022 22:45:19 -0800 (PST)
+Received: from localhost ([136.185.132.167])
+        by smtp.gmail.com with ESMTPSA id g5sm13345929pgc.51.2022.02.08.22.45.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 19:13:32 -0800 (PST)
-Received: (nullmailer pid 3557642 invoked by uid 1000);
-	Wed, 09 Feb 2022 03:13:31 -0000
-Date: Tue, 8 Feb 2022 21:13:31 -0600
-From: Rob Herring <robh@kernel.org>
-To: Ben Wolsieffer <benwolsieffer@gmail.com>
+        Tue, 08 Feb 2022 22:45:18 -0800 (PST)
+Date: Wed, 9 Feb 2022 12:15:16 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>, Olof Johansson <olof@lixom.net>, linux-arm-kernel@lists.infradead.org, soc@kernel.org, Stephen Boyd <sboyd@codeaurora.org>, linux-kernel@vger.kernel.org, Bjorn Andersson <bjorn.andersson@linaro.org>, devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: arm: qcom: document HP TouchPad
-Message-ID: <YgMxW46u6m5dhn0+@robh.at.kernel.org>
-References: <cover.1643075547.git.benwolsieffer@gmail.com>
- <aa59002aeae45a95097300213fc34490aa8db250.1643075547.git.benwolsieffer@gmail.com>
+Cc: Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: spear320: Drop unused and undocumented
+ 'irq-over-gpio' property
+Message-ID: <20220209064516.qxj7yd7r7dvz5zbz@vireshk-i7>
+References: <20220204004117.1232902-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aa59002aeae45a95097300213fc34490aa8db250.1643075547.git.benwolsieffer@gmail.com>
+In-Reply-To: <20220204004117.1232902-1-robh@kernel.org>
+User-Agent: NeoMutt/20180716-391-311a52
 
-On Mon, 24 Jan 2022 21:07:04 -0500, Ben Wolsieffer wrote:
-> Add binding documentation for the HP TouchPad.
+On 03-02-22, 18:41, Rob Herring wrote:
+> The property 'irq-over-gpio' is both unused and undocumented. It also
+> happens to collide with standard *-gpio properties. As it is not needed,
+> drop it.
 > 
-> Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/arm/boot/dts/spear320-hmi.dts | 1 -
+>  1 file changed, 1 deletion(-)
 > 
+> diff --git a/arch/arm/boot/dts/spear320-hmi.dts b/arch/arm/boot/dts/spear320-hmi.dts
+> index 367ba48aac3e..b587e4ec11e5 100644
+> --- a/arch/arm/boot/dts/spear320-hmi.dts
+> +++ b/arch/arm/boot/dts/spear320-hmi.dts
+> @@ -235,7 +235,6 @@ stmpe811@41 {
+>  					#address-cells = <1>;
+>  					#size-cells = <0>;
+>  					reg = <0x41>;
+> -					irq-over-gpio;
+>  					irq-gpios = <&gpiopinctrl 29 0x4>;
+>  					id = <0>;
+>  					blocks = <0x5>;
 
-Acked-by: Rob Herring <robh@kernel.org>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
+-- 
+viresh
