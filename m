@@ -4,119 +4,338 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CD6FC433F5
-	for <soc@archiver.kernel.org>; Thu, 10 Feb 2022 12:05:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFC0BC433F5
+	for <soc@archiver.kernel.org>; Thu, 10 Feb 2022 12:37:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E15CCC340ED; Thu, 10 Feb 2022 12:05:28 +0000 (UTC)
+	id A6EE5C340EE; Thu, 10 Feb 2022 12:37:13 +0000 (UTC)
 Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CBFF1C340EE;
-	Thu, 10 Feb 2022 12:05:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CBFF1C340EE
+	by smtp.kernel.org (Postfix) with ESMTPS id 7C8C3C004E1;
+	Thu, 10 Feb 2022 12:37:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C8C3C004E1
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id EC8822223A;
-	Thu, 10 Feb 2022 13:05:24 +0100 (CET)
+	by ssl.serverraum.org (Postfix) with ESMTPSA id 4F1152223A;
+	Thu, 10 Feb 2022 13:37:10 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1644494725;
+	t=1644496630;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GokQuS+suI7AFN8u7SGXFvEJz7aki0KJ68Y/NTbDdeA=;
-	b=f25C19yRv3k+t8BbJBx+qqCKdrKwAaHf4qgcgO0Hu2jfGZLbhPEekAgTYLfFmMUrJvcwfA
-	GrcyU0c9LAXQT5KgI+GF/Ja8FypMyb2FL1psBkc6VPEhKWe7iCe+xXxg0rCFiey7HOd2F0
-	KQWd4Q7NPOZJi43WvbA7JimyUL18+W8=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date: Thu, 10 Feb 2022 13:05:24 +0100
+	bh=s542OxdyRq6chzgnpbj408GyTF3ohoqeIM9rJK29+yo=;
+	b=t/Lbe1ojweY5/FAhGcd6LmMAG2KytX3v4ZNvPHnD1xd42d08N7YEy1wFHG2CZDO4olHcTu
+	b9i8H2qmtTi1zCc79skUBKTL0bMGxYXJEybyae0pGXHvRgenuuHvcx/OQp0RpT8KUAeHy8
+	h+7QKtRCWQfpA9VsDRhPQxaq44sl1m4=
 From: Michael Walle <michael@walle.cc>
-To: Kavyasree.Kotagiri@microchip.com
+To: tudor.ambarus@microchip.com
 List-Id: <soc.lore.kernel.org>
-Cc: Manohar.Puri@microchip.com, UNGLinuxDriver@microchip.com,
- alexandre.belloni@bootlin.com, arnd@arndb.de, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Nicolas.Ferre@microchip.com, olof@lixom.net, robh+dt@kernel.org,
- soc@kernel.org
-Subject: Re: [PATCH v4] ARM: dts: add DT for lan966 SoC and 2-port board
- pcb8291
-In-Reply-To: <CO1PR11MB4865E913D083C1D80D4E1F80922F9@CO1PR11MB4865.namprd11.prod.outlook.com>
-References: <20220209111318.21112-1-kavyasree.kotagiri@microchip.com>
- <20220209184600.1230365-1-michael@walle.cc>
- <CO1PR11MB486534A2987684CC7402CE06922F9@CO1PR11MB4865.namprd11.prod.outlook.com>
- <97bcfa4417d5f8c41cc6aa1e411c8747@walle.cc>
- <CO1PR11MB4865E913D083C1D80D4E1F80922F9@CO1PR11MB4865.namprd11.prod.outlook.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <b98f40575f88a0bbf205d628f73cccac@walle.cc>
-X-Sender: michael@walle.cc
+Cc: Kavyasree.Kotagiri@microchip.com,
+	Manohar.Puri@microchip.com,
+	Nicolas.Ferre@microchip.com,
+	UNGLinuxDriver@microchip.com,
+	alexandre.belloni@bootlin.com,
+	arnd@arndb.de,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	olof@lixom.net,
+	robh+dt@kernel.org,
+	soc@kernel.org,
+	Tudor.Ambarus@microchip.com,
+	Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v4] ARM: dts: add DT for lan966 SoC and 2-port board pcb8291
+Date: Thu, 10 Feb 2022 13:37:04 +0100
+Message-Id: <20220210123704.477826-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <42662481-51a4-2a4b-e39b-d3b8401cbb2c@microchip.com>
+References: <42662481-51a4-2a4b-e39b-d3b8401cbb2c@microchip.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Am 2022-02-10 12:52, schrieb Kavyasree.Kotagiri@microchip.com:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
->> the
->> content is safe
->> 
->> Am 2022-02-10 10:40, schrieb Kavyasree.Kotagiri@microchip.com:
->> >> EXTERNAL EMAIL: Do not click links or open attachments unless you know
->> >> the
->> >> content is safe
->> 
->> >> > +     clocks {
->> >> [..]
->> >> > +
->> >> > +             nic_clk: nic_clk {
->> >>
->> >> What does nic_clk stand for? If I had to guess, it
->> >> has something to do with network. But..
->> >>
->> > NIC clock is the clock used by AXI, AHB fabric and APB bridges which
->> > connects all the peripherals.
->> > It is named so because the AXI fabric is based on NIC400 IP from ARM
->> 
->> Ok, thanks for clarification.
->> 
->> 
->> >> > +             watchdog: watchdog@e0090000 {
->> >> > +                     compatible = "snps,dw-wdt";
->> >> > +                     reg = <0xe0090000 0x1000>;
->> >> > +                     interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
->> >> > +                     clocks = <&nic_clk>;
->> >>
->> >> Btw. can we disable all nodes by default and enable them
->> >> in the board dts files?
->> > I would like to have only board specific nodes enabled in dts files
->> > and rest of them in dtsi file
->> 
->> And how do you know which ones are board specific? E.g. I would like
->> to add our board which is also based on the lan9668. Maybe I don't
->> want a watchdog (or whatever node). Of course I could use
->> 
->> &watchdog {
->>    status = "disabled";
->> };
->> 
->> But IMHO opt-in is better. At least thats what we are doing for
->> the layerscape over on arm64.
->> 
-> Basically, I am disabling only the nodes which have pinctrl settings
-> in dtsi file
-> and enable in dts to make sure there are no conflicts on pins on the 
-> board.
+Hi,
 
-Thats not what I'm asking. I would like to see *optional* nodes
-disabled by default. Whether the watchdog is optional might be
-debatable, but what about the usb controller and the qspi
-controller? They don't have shared pins AFAIK, so according
-to your rule, they will be enabled by default and each board
-which doesn't have anything connected on these pins would have
-to disabled it.
+>  arch/arm/boot/dts/Makefile            |   2 +
+>  arch/arm/boot/dts/lan966x.dtsi        | 237 ++++++++++++++++++++++++++
+>  arch/arm/boot/dts/lan966x_pcb8291.dts |  61 +++++++
 
-Please keep in mind that this .dtsi will also be used by boards
-not manufactured by microchip.
+Please rename this to lan966x-pcb8921.dts. All (most?) of the device
+tree files use the dash as a seperator between the SoC and the board.
+
+> diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
+> new file mode 100644
+> index 000000000000..91ee9e0684f4
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/lan966x.dtsi
+> @@ -0,0 +1,237 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * lan966x.dtsi - Device Tree Include file for Microchip LAN966 family SoC
+> + *
+> + * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
+> + *
+> + * Author: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> + *
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/mfd/atmel-flexcom.h>
+> +#include <dt-bindings/dma/at91.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/clock/microchip,lan966x.h>
+> +
+> +/ {
+> +	model = "Microchip LAN966 family SoC";
+> +	compatible = "microchip,lan966";
+
+Undocumented compatible string. I see that the actual board
+is documented in
+  Documentation/devicetree/bindings/arm/atmel-at91.yaml
+
+But as Arnd mentioned, this doesn't really make sense here
+as you have to override it in the actual board dts anyway.
+
+> +	interrupt-parent = <&gic>;
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpu@0 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a7";
+> +			clock-frequency = <600000000>;
+> +			reg = <0x0>;
+> +		};
+> +	};
+> +
+> +	clocks {
+> +		sys_clk: sys_clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <162500000>;
+> +		};
+> +
+> +		cpu_clk: cpu_clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <600000000>;
+> +		};
+> +
+> +		ddr_clk: ddr_clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <300000000>;
+> +		};
+> +
+> +		nic_clk: nic_clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <200000000>;
+> +		};
+> +	};
+> +
+> +	clks: clock-controller@e00c00a8 {
+> +		compatible = "microchip,lan966x-gck";
+> +		#clock-cells = <1>;
+> +		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
+> +		clock-names = "cpu", "ddr", "sys";
+> +		reg = <0xe00c00a8 0x38>;
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv7-timer";
+> +		interrupt-parent = <&gic>;
+> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
+> +		clock-frequency = <37500000>;
+> +		arm,cpu-registers-not-fw-configured;
+> +	};
+> +
+> +	soc {
+> +		compatible = "simple-bus";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges;
+> +
+> +		flx0: flexcom@e0040000 {
+> +			compatible = "atmel,sama5d2-flexcom";
+
+Are these expected to be exactly the same between the lan966x and the
+sama5d2 or do you need something like
+
+compatible = "microchip,lan966x-flexcom", "atmel,sama5d2-flexcom";
+
+for the case when you need to make SoC specific settings/workarounds?
+
+> +			reg = <0xe0040000 0x100>;
+> +			clocks = <&clks GCK_ID_FLEXCOM0>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0x0 0xe0040000 0x800>;
+> +			status = "disabled";
+> +		};
+> +
+> +		flx1: flexcom@e0044000 {
+> +			compatible = "atmel,sama5d2-flexcom";
+> +			reg = <0xe0044000 0x100>;
+> +			clocks = <&clks GCK_ID_FLEXCOM1>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0x0 0xe0044000 0x800>;
+> +			status = "disabled";
+> +		};
+> +
+> +		trng: trng@e0048000 {
+
+Tudor already mentioned this..
+
+> +			compatible = "atmel,at91sam9g45-trng";
+> +			reg = <0xe0048000 0x100>;
+> +			clocks = <&nic_clk>;
+> +		};
+> +
+> +		aes: aes@e004c000 {
+
+.. and this ..
+
+> +			compatible = "atmel,at91sam9g46-aes";
+> +			reg = <0xe004c000 0x100>;
+> +			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
+> +			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
+> +			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
+> +			dma-names = "rx", "tx";
+> +			clocks = <&nic_clk>;
+> +			clock-names = "aes_clk";
+> +		};
+> +
+> +		flx2: flexcom@e0060000 {
+> +			compatible = "atmel,sama5d2-flexcom";
+> +			reg = <0xe0060000 0x100>;
+> +			clocks = <&clks GCK_ID_FLEXCOM2>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0x0 0xe0060000 0x800>;
+> +			status = "disabled";
+> +		};
+> +
+> +		flx3: flexcom@e0064000 {
+> +			compatible = "atmel,sama5d2-flexcom";
+> +			reg = <0xe0064000 0x100>;
+> +			clocks = <&clks GCK_ID_FLEXCOM3>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0x0 0xe0064000 0x800>;
+> +			status = "disabled";
+> +
+> +			usart3: serial@200 {
+> +				compatible = "atmel,at91sam9260-usart";
+> +				reg = <0x200 0x200>;
+> +				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
+> +				clocks = <&nic_clk>;
+> +				clock-names = "usart";
+> +				atmel,fifo-size = <32>;
+> +				status = "disabled";
+> +			};
+> +		};
+> +
+> +		dma0: dma-controller@e0068000 {
+> +			compatible = "microchip,sama7g5-dma";
+> +			reg = <0xe0068000 0x1000>;
+> +			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
+> +			#dma-cells = <1>;
+> +			clocks = <&nic_clk>;
+> +			clock-names = "dma_clk";
+> +		};
+> +
+> +		sha: sha@e006c000 {
+
+.. and this one.
+
+> +			compatible = "atmel,at91sam9g46-sha";
+> +			reg = <0xe006c000 0xec>;
+> +			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
+> +			dmas = <&dma0 AT91_XDMAC_DT_PERID(14)>;
+> +			dma-names = "tx";
+> +			clocks = <&nic_clk>;
+> +			clock-names = "sha_clk";
+> +		};
+> +
+> +		flx4: flexcom@e0070000 {
+> +			compatible = "atmel,sama5d2-flexcom";
+> +			reg = <0xe0070000 0x100>;
+> +			clocks = <&clks GCK_ID_FLEXCOM4>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0x0 0xe0070000 0x800>;
+> +			status = "disabled";
+> +		};
+> +
+> +		timer0: timer@e008c000 {
+> +			compatible = "snps,dw-apb-timer";
+> +			reg = <0xe008c000 0x400>;
+> +			clocks = <&nic_clk>;
+> +			clock-names = "timer";
+> +			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> +		};
+> +
+> +		watchdog: watchdog@e0090000 {
+> +			compatible = "snps,dw-wdt";
+> +			reg = <0xe0090000 0x1000>;
+> +			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&nic_clk>;
+> +		};
+> +
+> +		can0: can@e081c000 {
+> +			compatible = "bosch,m_can";
+> +			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
+> +			reg-names = "m_can", "message_ram";
+> +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "int0", "int1";
+> +			clocks = <&clks GCK_ID_MCAN0>, <&clks GCK_ID_MCAN0>;
+> +			clock-names = "hclk", "cclk";
+> +			assigned-clocks = <&clks GCK_ID_MCAN0>;
+> +			assigned-clock-rates = <40000000>;
+> +			bosch,mram-cfg = <0x0 0 0 64 0 0 32 32>;
+> +			status = "disabled";
+> +		};
+> +
+> +		gpio: pinctrl@e2004064 {
+> +			compatible = "microchip,lan966x-pinctrl";
+> +			reg = <0xe2004064 0xb4>,
+> +			    <0xe2010024 0x138>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +			gpio-ranges = <&gpio 0 0 78>;
+> +			interrupt-controller;
+> +			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
+> +			#interrupt-cells = <2>;
+> +		};
+> +
+> +		gic: interrupt-controller@e8c11000 {
+> +			compatible = "arm,gic-400", "arm,cortex-a7-gic";
+> +			#interrupt-cells = <3>;
+> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-controller;
+> +			reg = <0xe8c11000 0x1000>,
+> +			      <0xe8c12000 0x2000>,
+> +			      <0xe8c14000 0x2000>,
+> +			      <0xe8c16000 0x2000>;
+> +		};
+> +	};
+> +};
+
+Overall most of the referenced bindings lack a proper yaml version :/
 
 -michael
