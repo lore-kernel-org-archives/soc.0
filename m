@@ -1,286 +1,263 @@
-Return-Path: <SRS0=bjUm=SY=i2se.com=stefan.wahren@kernel.org>
+Return-Path: <SRS0=ukYU=SZ=microchip.com=Kavyasree.Kotagiri@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04B13C433EF
-	for <soc@archiver.kernel.org>; Wed,  9 Feb 2022 20:32:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8961C433F5
+	for <soc@archiver.kernel.org>; Thu, 10 Feb 2022 09:40:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BD209C340ED; Wed,  9 Feb 2022 20:32:00 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+	id 7F851C340ED; Thu, 10 Feb 2022 09:40:20 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C5702C340E7;
-	Wed,  9 Feb 2022 20:31:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C5702C340E7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
-Received: from [192.168.1.107] ([37.4.249.169]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1Mg6qO-1nxIv527ZO-00he74; Wed, 09 Feb 2022 21:31:41 +0100
-Subject: Re: [PATCH 2/2] ARM: dts: Add bcm2711-rpi-4-b-7inch-ts-dsi.dts
-To: Detlev Casanova <detlev.casanova@collabora.com>,
- linux-kernel@vger.kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id 3D8AFC004E1;
+	Thu, 10 Feb 2022 09:40:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3D8AFC004E1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1644486019; x=1676022019;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=q3nlBXbKxEqS2YPT2px6oWdIwVgVM9ccW/OwlhuSNGk=;
+  b=h6SyN2D46oNjGRyd1gd6IuFqr7WA9XCjH6t0R3xsGaBYxyugjS3CAdOD
+   llao/RZoBeQb684HFpsN0MTiYfPOVQX3oabUuaYxvUNOQDA7eK4RodT3p
+   +P6roPCT8gqy5xFWxnVr3DI2oghU0bZ7eDxgFEwvqCfF0pBbfnehpHlNV
+   hKz6onNAQ1H7/zD1bsq8SFOwnSU9RDZI7ikvf95IJgveG6kw4B1fha03S
+   gOLdfLFKEu53kg2kf5IgkCqJpeyYaV/Rgl7p8MvEotZqXF+6SjxpTFQpB
+   FEL47wmYY2zvXbQ5fXFgN7jJ+updfeoY3mcbANJ2jdkq3p4fE0feogmyG
+   g==;
+IronPort-SDR: pyfk0XOg/HZiB2IHvVljsBeLCxX0oX4bzDjx+FBTkglAKaP3zHi6szZ6YrZAdKRiZvBd3MQzMA
+ BfVV+qybHSZIyHt4FaccjaikX9vPFFepFcDOt/lAbRMmY0aQEzp4UrzjuXYhf5qh8FtV4LZexX
+ J3DGGdds76cPZiImJj0ucebZUOH6t3MTx0AA/Qoy0PtCqACP4RR4xIwoJ2oj66xZFf6mK+s72o
+ CecRgqoiK290FffoOfTCa/qhyCbXuBBzM1ovQsyV0bP102ikMn5QbAKACeijEbKx5UQpYqCOxi
+ sSI3sfOl7QOb7mZ2PcioFfXS
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="85284371"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Feb 2022 02:40:12 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 10 Feb 2022 02:40:11 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Thu, 10 Feb 2022 02:40:11 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=m7QfbTamH+HjPODucsFz2DbO2QqV+F/N/9bmZTKVL8+MxFnK221ammVv296FcfyZsLN3dAOS8PvdZlbFQkOHvoPUiJvJGxEOKgzcoOFqEO4vazNgHmm4AelHFTTIq3mC+F34Y/LJob1IQ4t5rnzGK7DRixSWQgU6MxMT0K/vLWaUQsupXjkBwdf8CYRpS1qOtCuZwyFTTKOtRmqQQhprv/cx3mtR++GbDwWklqnTdKwxXZE44PztCFPounwHlljkAcuxeXsnz3+yYud9/2fcNnTxYfEsa6ilqwTvIl2IVnRHM0CyMFOh7F9cFnfhGAnOKyOgcaq6WDIocd52jBOf1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IggY/zi+nGgtnAjLfysrP/y+QJbWsgtLhvgk7QzRBLA=;
+ b=jJJZBwj3RbRZozL22GwqF9vUitbSmGavd9xDV+yCIjwDo/z+j24cFTppIkXDjeMBJ5p/TrsbeRokv2MOI4aIwC39iLs8g4agjYSWK4YNJXOw5seKqfU+8cGGQVTQNT4LhulAYOYtgsPT8Owq+RSCXsSOOhk1sRBLYZ3N31gOyAgiB6w4ucW5f/xzWwvcHCe4zHFUcwkhFdF4+QIiGM+DQC8OlMgN/58JZyVh9WmqJ9mTlYV6dom6aXwUUWtzMczKka3KIVNf0oB+XGkzM1rxOG3bqhtmNUQUr+CNE3suxvmO7t7DZba/Ak8ZKkPf3Ln+spXKJIzi++4it7VDiYy+uA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IggY/zi+nGgtnAjLfysrP/y+QJbWsgtLhvgk7QzRBLA=;
+ b=IMWdLZsKJ+jDHir3wPMZ7PTW3xy4CkE94vEhtJMHLhwWOGckdcDjB61NEzJCb1SfuiArjSVYP+745NWWkGXDj4olxftsJJhhxpU7S0G/oz+QijIQZgl4g/pSm94hBaNYXC3GStjG0CbukkggVklRNEvbym6GsxAGQ4rt8AttbMM=
+Received: from CO1PR11MB4865.namprd11.prod.outlook.com (2603:10b6:303:9c::9)
+ by SA2PR11MB4987.namprd11.prod.outlook.com (2603:10b6:806:113::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.14; Thu, 10 Feb
+ 2022 09:40:05 +0000
+Received: from CO1PR11MB4865.namprd11.prod.outlook.com
+ ([fe80::25bd:b3c9:a714:cdce]) by CO1PR11MB4865.namprd11.prod.outlook.com
+ ([fe80::25bd:b3c9:a714:cdce%6]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
+ 09:40:05 +0000
+From: <Kavyasree.Kotagiri@microchip.com>
+To: <michael@walle.cc>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- "maintainer:ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)"
- <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Nicolas Saenz Julienne <nsaenz@kernel.org>,
- Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>,
- "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..."
- <bcm-kernel-feedback-list@broadcom.com>,
- "moderated list:ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)"
- <linux-arm-kernel@lists.infradead.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>,
- "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE"
- <linux-rpi-kernel@lists.infradead.org>
-References: <20220209162515.706729-1-detlev.casanova@collabora.com>
- <20220209162515.706729-3-detlev.casanova@collabora.com>
- <d00a934e-a2e0-fd3a-6452-fa88f07e13d4@i2se.com> <2136213.irdbgypaU6@falcon9>
-From: Stefan Wahren <stefan.wahren@i2se.com>
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
- CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
- bXlZd21DR0tqRnRMCi9Eb1VNRVZIRHhDSjQ3Qk1YbzM0NGZIVjFDM0FudWRnTjFCZWhMb0J0
- TEh4bW5lQ3pnSDNLY1B0V1c3cHRqNEcKdEp2OUNRRFp5MjdTS29FUHh5YUk4Q0YweWdSeEpj
- NzJNOUk5d21zUFo1YlVIc0x1WVdNcVE3SmNSbVBzNkQ4ZwpCa2srOC95bmdFeU5FeHd4SnBS
- MXlsajVianhXREh5WVF2dUo1THpaS3VPOUxCM2xYVnNjNGJxWEVqYzZWRnVaCkZDQ2svc3lp
- by9ZaHNlOE4rUXN4N01RYWd6NHdLVWtRUWJmWGcxVnFrVG5BaXZYczQyVm5Ja211NWd6SXcv
- MHQKUkp2NTBGUmhIaHhweUtBSThCOG5oTjhRdng3TVZrUGM1dkRmZDN1R1lXNDdKUGhWUUJj
- VXdKd05rLzQ5RjllQQp2ZzJtdE1QRm5GT1JrV1VSdlArRzZGSmZtNitDdk92N1lmUDF1ZXdB
- aTRsbitKTzFnK2dqVklXbC9XSnB5MG5UCmlwZGZlSDlkSGtnU2lmUXVuWWN1Y2lzTXlvUmJG
- OTU1dENna0VZOUVNRWRZMXQ4aUdEaUNnWDZzNTBMSGJpM2sKNDUzdWFjcHhmUVhTYUF3UGtz
- bDhNa0NPc3YyZUVyNElOQ0hZUUR5WmljbEJ1dUNnOEVOYlI2QUdWdFpTUGNRYgplbnpTektS
- Wm9POUNhcUlEK2ZhdkxpQi9kaHptSEErOWJnSWhtWGZ2WFJMRFp6ZThwbzFkeXQzRTFzaFhp
- ZGRaClBBOE51SlZ6RUl0MmxtSTZWOHBaRHBuMjIxcmZLaml2UlFpYW9zNTRUZ1pqak1ZSTdu
- bko3ZTZ4endBUkFRQUIKdENCVGRHVm1ZVzRnVjJGb2NtVnVJRHgzWVdoeVpXNXpkRUJuYlhn
- dWJtVjBQb2tDTndRVEFRZ0FJUVVDWElkYwo0Z0liQXdVTENRZ0hBZ1lWQ0FrS0N3SUVGZ0lE
- QVFJZUFRSVhnQUFLQ1JDVWdld1BFWkR5MjFPVEQvOUdpWkxkCnRSWWNteVJKZ2x0aVFRekFp
- UWRjSUQ3OGxHb1dwL3grci92Y1U2YjZqdVl1ZVR3Z1Iwclc3djdsMklSQnlEN24KSEp4YSt0
- SVNvUVpCZ2hvbE1JZmI5TXRoR09KTENZNzdrL1FoQWhuMzJOR1prZWp3OXR6a3MvNDBtclpT
- VVQ4NApaeWJzUVhyTE0vSFI2VElJL0RlUEIwbktEM0ppcHBzMlVIUUQ5cUQySWpFd1NRUGxI
- akNPckVaaDQ1UFo3bTkrClo5M0x6aVRlc1dabFlRdUxpSndzNHJLcHRIVzFkL3dSZWxzaG1t
- NlFxY0wybDRDL2U0MGVEQjlncTRkU1poOVgKUEVZbGxpeU5RaDdhMkxTZHVtRTFyK2NTd0lq
- RS91ZHRSdmRPOWFLb0psT2JVSzVkTmpTUEg3d0tUYndkWGRZRApHUHdEaFhkNThOQXdyK1BY
- QmxQajB0STFMQ3ErTEJ4ZUt6aFdYK0dWcTlEb2pWanlVREV4Rk5Ga1h1b0M3ZzhtClY5VDB0
- ZUJpdVpSbm91WEt3VjJGcHRaT0hIN0JVRVd0a0t0aGgxZXRmT1dwaWdCemtVN2JQc2ZJWVQr
- cnk5dGIKMW9KK3Y0MVBOYXFaRW1QVXBKeHZmek5UN3Ayd01lRDdaajlmMHJ1YlJQdExBSjJR
- R2pyRkhzdVh3QU9xcHl6ZQoxOEVidHNZazBOMHp1SEVoY2orUEJJQmZoMFlJWWQ1MW9mNkdJ
- aU95UjlxMFhYdHBsVUo3VDIvSDF1UXFrWGxwCitnVzRWa2lmc2NJckl1eWZueFpXMTJlSXZq
- NnlicVdMN2FZS0dZbVQ2aUxDUGJIWXlZY2F5bDRFa0ZjckNGN0UKZTBXVC9zY1ZNaE8vNVgv
- SGFOQTVIQngvcjUycGdMY3Y0aTlNeExRbVUzUmxabUZ1SUZkaGFISmxiaUE4YzNSbApabUZ1
- TG5kaGFISmxia0JwTW5ObExtTnZiVDZKQWpnRUV3RUNBQ0lGQWx0NmdCTUNHd01HQ3drSUJ3
- TUNCaFVJCkFna0tDd1FXQWdNQkFoNEJBaGVBQUFvSkVKU0I3QThSa1BMYmpic1AvamdqYVNz
- NUh0bGtBSXZXUytGcm15N2MKaG5jT0F4TFRWL0Q2UkV3SU95R0poRkt3d29pck55UTJnOXZV
- YTNZQ1lDZjFmSjh3RWhhS09COWQwTHBNUm5MNApkRVQ4ZDgyMzhFL3BLK0hxTktpSXNKaHM2
- SnNLOFpnalZRR3JtbWZua0dyWisxdjBIQnV4ZGljZ0duUC9XdHVBClVsOGw2Mi9BTGJheXlq
- KzYxQ2xyc0V0UklhcU82N0xJWXdQaVBEUkkrWGlNek5pR3pIRi8xUTZHUjAyUkg2YTMKRjg5
- ejhhUHhjSGkxWnZDdDJ5a3o2VUVjaHpQMHI1Z3FGSisvTC9VcHU4ME1YaVk0djVlSWFCNTJn
- VlBnaXlNQQpsTDJkRHMxbUladm5yUkxSWTJ0YjNtQVlOa1Y1QjVJRFQzcGtXeTZrS281T0Nn
- SytZZFlPUjhGTloyb04ydDhPCnJLK1ZudGFLN01NU0tIbG1ZL3NPd3RSbEVoMU9CbXJjQ3dH
- d21wLzA1R2tSNDZmL0lzaFJWZUZPUmF3K0dBcXQKUDIrQ0ZhMkNOQS9JSG5aTm95aWtsRHpQ
- UUhVVUdzck5wcERyaFg5Sm1oQm1nMXYyeXdIMU5YdTFpRGZQMUJBdwpLZ29rdDVmNVVhUkY5
- c0FBNTN2V0V2YlVVTjllZXNGR0x6UFdkSkdRNWhwZC9WSDVJUXk5U0JyaC93SWNla3E1Cm4w
- a042cGJUSHhHRTUyU2kvTVZJa05UdURaM2FwbjJqbERaNHBPdHBCWEkydlAzYlBPK05pcUJa
- anNVM3R4TGkKV2R2MkZqeXp6NlhMUndlV1JZVkw1SGE2TER0eG9yMnZ1NlVQMDdwOXh6MXhS
- WmFPRFczb1lsSEZ6WXBhNFc1ZwpMSGIybEVrSXVVZlNjaWNHYmpqQXRDbFRkR1ZtWVc0Z1Yy
- Rm9jbVZ1SUR4emRHVm1ZVzR1ZDJGb2NtVnVRR2x1CkxYUmxZMmd1WTI5dFBva0NOd1FUQVFn
- QUlRVUNYSWRlaHdJYkF3VUxDUWdIQWdZVkNBa0tDd0lFRmdJREFRSWUKQVFJWGdBQUtDUkNV
- Z2V3UEVaRHkyeUhURC85VUY3UWxEa0d4elE3QWFDSTZOOTVpUWY4LzFvU1VhRE51Mlk2SQpL
- K0R6UXBiMVRiVE9yM1ZKd3dZOGEzT1d6NU5MU09MTVdlVnh0K29zTW1sUUlHdWJEM09EWko4
- aXpQbEcvSnJOCnQ1elNkbU41SUE1ZjNlc1dXUVZLdmdoWkFnVERxZHB2K1pIVzJFbXhuQUox
- dUxGWFhlUWQzVVpjQzVyMy9nL3YKU2FNbzl4ZWszSjVtTnVEbTcxbEVXc0FzL0JBY0ZjK3lu
- TGh4d0JXQld3c3Z3UjhiSHRKNURPTVd2YUt1RHNrcApJR0ZVZS9LYjJCK2pyYXZRM1RuNnMv
- SHFKTTBjZXhTSHo1cGUrMHNHdlArdDlKNzIzNEJGUXdlRkV4cmlleThVCkl4T3I0WEFiYWFi
- U3J5WW5VL3pWSDlVMWkyQUlRWk1XSkFldkN2VmdRL1UrTmVSaFh1ZGU5WVVtRE1EbzJzQjIK
- VkFGRUFxaUYyUVVIUEEybThhN0VPM3lmTDRyTWswaUh6TElLdmg2L3JIOFFDWThpM1h4VE5M
- OWlDTHpCV3UvTgpPbkNBYlMremx2TFphaVNNaDVFZnV4VHR2NFBsVmRFamY2MlArWkhJRDE2
- Z1VEd0VtYXpMQU1yeDY2NmpINWt1ClVDVFZ5bWJMMFR2Qis2TDZBUmw4QU55TTRBRG1rV2tw
- eU0yMmtDdUlTWUFFZlFSM3VXWFo5WWd4YVBNcWJWK3cKQnJoSmc0SGFONkM2eFRxR3YzcjRC
- MmFxYjc3L0NWb1JKMVo5Y3BIQ3dpT3pJYUFtdnl6UFU2TXhDRFhaOEZnWQpsVDR2MjNHNWlt
- SlAyemdYNXMrRjZBQ1VKOVVRUEQwdVRmK0o5RGEycitza2gvc1dPbloreWNvSE5CUXZvY1pF
- Ck5BSFFmN2tDRFFSYmVvQVRBUkFBMkhkMGZzRFZLNzJSTFNESGJ5ME9oZ0RjRGxWQk0yTSto
- WVlwTzNmWDFyKysKc2hpcVBLQ0hWQXNRNWJ4ZTdIbUppbUhhNEtLWXMya3YvbWx0L0NhdUNK
- Ly9wbWN5Y0JNN0d2d25Lem11WHp1QQpHbVZUWkM2V1I1TGtha0ZydEhPelZtc0VHcE52NVJj
- OWw2SFlGcExrYlNrVmk1U1BRWkp5K0VNZ01DRmdqclpmClZGNnlvdHdFMWFmN0hOdE1oTlBh
- TEROMW9VS0Y1aitSeVJnNWl3SnVDRGtuSGp3QlFWNHBndzIvNXZTOEE3WlEKdjJNYlcvVExF
- eXBLWGlmNzhJaGdBelh0RTJYck0xbi9vNlpINzFvUkZGS096NDJsRmR6ZHJTWDBZc3FYZ0hD
- WAo1Z0l0TGZxemoxcHNNYTlvMWVpTlRFbTFkVlFyVHFueXMwbDE4b2FsUk5zd1lsUW1uWUJ3
- cHdDa2FUSExNSHdLCmZHQmJvNWRMUEVzaHRWb3dJNm5zZ3FMVHlRSG1xSFlxVVpZSXBpZ21t
- QzNTd0JXWTFWNmZmVUVta3FwQUFDRW4KTDQvZ1Vnbjd5US81ZDBzZXFuQXEycFNCSE1VVW9D
- Y1R6RVFVV1ZraUR2M1JrN2hURm1oVHNNcTc4eHYyWFJzWApNUjZ5UWhTVFBGWkNZRFVFeEVs
- RXNTbzlGV0hXcjZ6SHlZY2M4cURMRnZHOUZQaG1RdVQyczlCbHg2Z0kzMjNHCm5FcTFsd1dQ
- SlZ6UDRqUWtKS0lBWHdGcHYrVzhDV0xxekRXT3ZkbHJEYVRhVk1zY0ZUZUg1VzZVcHJsNjVq
- cUYKUUdNcGNSR0NzOEdDVVcxM0gwSXlPdFF0d1dYQTRueStTTDgxcHZpQW1hU1hVOGxhS2FS
- dTkxVk9WYUY5ZjRzQQpFUUVBQVlrQ0h3UVlBUUlBQ1FVQ1czcUFFd0liREFBS0NSQ1VnZXdQ
- RVpEeTIrb1hELzljSEhSa0JaT2ZrbVNxCjE0U3Z4MDYyUHRVMEtWNDcwVFNucC9qV29ZSm5L
- SXczRzBtWElSZ3J0SDJkUHdwSWdWanNZeVJTVk1LbVNwdDUKWnJEZjlOdFRiTldnazhWb0xl
- WnpZRW8rSjNvUHFGclRNczNhWVl2N2U0K0pLNjk1WW5tUSttT0Q5bmlhOTE1dApyNUFaajk1
- VWZTVGx5VW15aWMxZDhvdnNmMWZQN1hDVVZSRmNSamZOZkRGMW9ML3BEZ01QNUdaMk93YVRl
- am15CkN1SGpNOElSMUNpYXZCcFlEbUJuVFlrN1B0aHk2YXRXdllsMGZ5L0NxYWpUS3N4Nytw
- OXh6aXU4WmZWWCtpS0IKQ2MrSGUrRURFZEdJRGh2TlovSVFIZk9CMlBVWFdHUytzOUZOVHhy
- L0E2bkxHWG5BOVk2dzkzaVBkWUl3eFM3SwpYTG9LSmVlMTBEamx6c1lzUmZsRk9XMFpPaVNp
- aElDWGlRVjF1cU02dHpGRzlndFJjaXVzNVVBdGhXYU8xT3dVClNDUW1mQ09tNGZ2TUlKSUE5
- cnh0b1M2T3FSUWNpRjNjcm1vMHJKQ3ROMmF3WmZnaThYRWlmN2Q2aGp2MEVLTTkKWFpvaUFa
- WVpEKy9pTG01VGFLV042b0dJdGkwVmpKdjhaWk9aT2ZDYjZ2cUZJa0pXK2FPdTRvclRMRk16
- MjhhbwpVM1F5V3BOQzhGRm1kWXNWdWE4czZnTjFOSWE2eTNxYS9aQjhiQS9pa3k1OUFFejRp
- RElScmdVek1FZzhBazdUCmZtMUtpWWVpVHRCRENvMjVCdlhqYnFzeXhrUUQxbmtSbTZGQVZ6
- RXVPUEllOEp1cVcyeEQ5aXhHWXZqVTVoa1IKZ0pwM2dQNWIrY25HM0xQcXF1UTJFNmdvS1VN
- TEFia0NEUVJiZmw5REFSQUFzRExjYStMbFAydm5mdEVHaHBjQQpCR1ZOUUVGbkdQckNhdVU2
- SGhOODA1V3RQVHRtc1JPdUp6cWdVVDBtcHFXSWZacTZzTXd5dkhLOVRzL0tIM0paClVWYlJD
- M3oyaDNLZmhIL0RhZjk1cGQ2bVBjL2g5dkYvT3kzK2VUV2hnR25QNmNBNWtsUitmTzFXaEc4
- VnJpWHYKck5lUkcyMHN6emplSG9jblNJY1Q1WHVaUjB1REhPaUd4T2l6MXNNUkZUR3h6R095
- MTlSOXJ2dTYzdGlJM2Q3dgpnYzc1T0NBZGtlQi9TZUNFbGFSdzBUZjdMWmJQampzRjI2M0JZ
- bk1mNGtrTkVLdnFXY1UyaWNNcCtxZXpqeW5CCnB2ZXVlMHJDVFFCWUFRbG9GQ1ZUR0hyV1dB
- NkQ0VzVPMkFmSWRJYzF1MUpDWnAyZjVMV1ZvVUZUVklyUW5RUVUKU0hDaWZyOU1aeExUdFBK
- ZFU1Mm9TUHczZGs0aExQOGlKSUx1dnYvYXZhakNzUVlIRXR3WXNiZUZaeGl1TGdscApBN1lj
- Sk5ObXBnQ3BNRDR3VWh2bEN0QUtOQlFXeXIyOTc2OThFUVRuNDZlQmVVNkttMkNpaFhrZ3dD
- eWY4ZXlLCkxFM3NYZXdhcTVrZ1pXdk5xNml1NXFZSVJCOXl3K2NYYzYwZE9aRE9scTkzWDVT
- QVJZemFvZXBrSHo0cmtMa1AKUG8rdENIeUhRUHNHblBYYzlXVDgwREM5Tm5KR2R2VWx5NXJk
- TUk0eHBaeWdlb2tqd293VlFsUFV1Y1M2TXluNwpmOHc4Y2dmQjdDMklBSWNEeDJwUC9IendY
- dmtDT1FOQTdtVjFsTTA4bitnVmtUcnpweGlwNURicTRDSW9ZeDJNCkpaVDhiR1JINlhqY1VE
- S2EwOVFoeVpzQUVRRUFBWWtFUkFRWUFRZ0FEd1VDVzM1ZlF3SWJBZ1VKQThKbkFBSXAKQ1JD
- VWdld1BFWkR5MjhGZElBUVpBUWdBQmdVQ1czNWZRd0FLQ1JCVnhETFBjVk1NamNkc0QvMFJo
- QXN1UVlPeQpyMTNCbDNOaFhrWUFaR3AyWkZER3VrZTdPU2tWOG9qT09UZFR5ei9jT1JHQ2J5
- ZEQrRGd2cUZ5VmRuT1hLZ08wCmxKbUd3ckdlTGRnZ0F2aDBpaHJwNU8wWVVKOWJCU1htR01t
- UVRZSC9BbUxUR2FkYnVqQ1dqNWZGVWtDeXd4aW0KSHV5MFBiMjRwelR2UzUwR1k1WStxSDBG
- SE5haWdka2tpV04zcnVnN0haRXUvQ3lsUFpqT1h6K0QxUVBNckV4dwo3ZC9NS2FiVis5YU5i
- UVlabGRJajk4UXd2VUYxS1N6YThqbFVJdnBoUnEyN0FUOGZER1lHUGZERU1nMmNCT2FlCkty
- N29uUXM0YjdhV082aWZEbHhRVHB6c3pvK0FuODA3Tk1TdFZFRmYrczNBaFZEM2U3bmY4SkJh
- dmJWckFlMGsKb20yNm96elBubnh6K2xxVlZ0dzZVazRYTUl6dGl4L0h3SFl3dUNuY1VYWndL
- MEkzeUFKd2pZd29vck9DaEozUwpFVWJKUVB0R3NneFJERXhWQkZlNk5MUC82MnhQOU82dGFj
- d09kYjBNbVAxYjM5cFJBVEM3YmdkMWxkVUxpNzVaCmxKckowL1NpVkVyb3FOWXk3OXRmbWdB
- WjJVeFptczlTckV5Nm85UVNmc24xYVh2K01QTDlKYUNHbWtQNnpiTFEKTm5kajBKY2FRbmtD
- MHZneWRPMUJtNk11OTZQOXVmbEtaY0FTNndtTE01SWRIT3lqTDg4d0h3anVjakFPQnRjdwpw
- MG9HVG5WT25Sc05ZU084VzhZWi9LZGJ1Nzg1ZGF6TXFKMmlOakFEdUJiZG02TjRqNUVkTW5r
- TG4wQklmUEpwCmRnbTR2bDJVcExqd1JHci9NM3dtbTVwdnMrNnVCN2hrL0ZKaUQvNGxsRU5Q
- NGVNMWg3U200aitWcTZOMSt6VEIKSVhKQWViSXFhc0RwNXlaUzdYcnk0STM2bjg1WEVZZkcw
- MWx0QXlob05WMkRPOFNJUlFwdWkydHErOVJQM1JLMQpKREJ4eEVKWTJFTzVKWjhNeGFQSFEw
- RFQwNWxSRmpLMkFsaGRFSXRqTGpwSjNmVW05c3FMeE1XeHpQNlV6M2lpCjJ1YTR1bnJ0Nk9D
- VHFRd2lqRi8zYlRXaXd2VkFBSG5NRlVpb1hzaEhhb2hWRGNWZm5lSU1mVjBiUUNYWWkzTnAK
- WTB2MFp3Y2lGSCtnU0M3cUQ2WE51aHBWR1NMNElpbGlGeS9TemNhSkV6QUhlTERTaFpQMkNX
- ZG5DNHZnbDM3dApocHg4aDU1WWhKbjZIU3VVelBnaGFLdFZCMmsrajdaZXlaK1NGeHA3SXVi
- SEN3TEhsUWhUNzVSd1EzaUF4S242CjBxajUxY1lUbnF4ZFpYVzZmSDNQa3VNellVNUdwcVIv
- MU9sNWMvd2ZJNmc2QW04eUtXLzBFVUx0K0tuNExGc1MKbTdZM201SDV2MTJVNkpCWXZWK3Ix
- M2paaW9zNEVFREU5M0Q1c05IMk1JeVJ6Q0RxMXpkZHQ0WHV5S0ZqUEtXMQo5aWJaRGZGVjdL
- dUNzdnVMMjNzQmMxc0NNb3ArRTFtVC9ReE9JQTZvRFQxTVFzdHdPVnVReURDdi9PdktTZ2Z6
- CjhGWEdMNkFQY2xqQ3FqOEFKaHhReXN4ZG9pUVA4bS92dStialdHR3Z4dzVzMWxncGlSRFRS
- VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
- bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
- LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <c59a1817-02c1-f1f8-14cd-56453edd67fd@i2se.com>
-Date: Wed, 9 Feb 2022 21:31:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <2136213.irdbgypaU6@falcon9>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+CC: <Manohar.Puri@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<alexandre.belloni@bootlin.com>, <arnd@arndb.de>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <Nicolas.Ferre@microchip.com>,
+	<olof@lixom.net>, <robh+dt@kernel.org>, <soc@kernel.org>
+Subject: RE: [PATCH v4] ARM: dts: add DT for lan966 SoC and 2-port board
+ pcb8291
+Thread-Topic: [PATCH v4] ARM: dts: add DT for lan966 SoC and 2-port board
+ pcb8291
+Thread-Index: AQHYHaYU1qtS5sG/10aA2sqGSWL+96yLj0MAgAD4oLA=
+Date: Thu, 10 Feb 2022 09:40:05 +0000
+Message-ID: <CO1PR11MB486534A2987684CC7402CE06922F9@CO1PR11MB4865.namprd11.prod.outlook.com>
+References: <20220209111318.21112-1-kavyasree.kotagiri@microchip.com>
+ <20220209184600.1230365-1-michael@walle.cc>
+In-Reply-To: <20220209184600.1230365-1-michael@walle.cc>
+Accept-Language: en-IN, en-US
 Content-Language: en-US
-X-Provags-ID: V03:K1:h7YvLY2WuQ85Xab7RGnG9UkrjqALbbLMefDPYs1heSNNHzEMLwh
- MYvo0p7bqDTMx/f9cSRqZp4nc7TQjlIxVlhy/xXwschsmjmkl5tMZnJcm5T4sLvSJuFwtAd
- qcxixnnYNA5oJqmCwkJuXZkCF3tRdh+6JSi++UMIeweWtG33lDrARhjf/Mj0FG1Bxyr0dey
- eI1SpUKZDG9COOLkGlckw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:t3hKgULfOqg=:+pVHeAz8sSdIMMRCA1b+p8
- SMHvK2/tUXDoB4NCtMiOEra1a0CkavCXA5DzmONWOZ1fx5HJyDb94XGvqv+iX5tPyXBKbxjPz
- BpARYRNFgHE+OFf9mnZDIcwig2pjwXVw6pdgWYIePsVl/2lakL6qMsnoJZFppM9PfNohnObUX
- +OD83jt+93gpB2dqW1fYqPmsIlIrkNsli0cwOlTC87Mck5pkEflEA2cWXFQZzWCmBanwiW8hB
- Ui/Z8tJomQV9nENNGwsWjm75qwcya/4+ca46n9ng2+P7YHk0dpT5WG2Xs/FZA3r+Zb6zW+DCn
- rlH4I/oZdhhXF03nDLhmFEZvJiW5+6GEtIOAdGkLRxqdzbYqETISayipbkP4bRTip2K35KqBH
- wP06hCgQCX+DangIfoi1WKgLPABIvmb9VGLKS7RvwAIdNBVR40pfSJhrXWbAxqez6M36FMZtS
- iXs/SSJGPsKtnpOvswMFiLKMxrNHBShFqJ+bnjIXvJkzgVGlozkwnnM5i3g19eZHLnjAY/Wh1
- 6c9/3K8StFlFejF/TGT4Q4AQE5L7fljPbXjdVaChPo5n6Ly4mvuA9nWd/Xf2qMRgnr2/WVECc
- aJHEU9sfL6pmOyDH/ve+1xLSczO30AvRYFeiKukbU8U9hluO+8FUgxNyXJSrCF+Sk5uRQMEfV
- blnOHxPvu3l+Stwq2ToAKknDW97R5ujsl6f6vAqFuEaNYR6/tfyRm0leCxbYKPXMOhmvHs8Qu
- ra6XC3zLKjOmwW5U
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4fa00c7d-b342-4bed-f0fd-08d9ec79517f
+x-ms-traffictypediagnostic: SA2PR11MB4987:EE_
+x-microsoft-antispam-prvs: <SA2PR11MB49875AED746D6E093EF0137D922F9@SA2PR11MB4987.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: siXa9Juh1YF+kIFlJ8NhcXBybX+dCCQcf2Z2sZvg8JdgskUSrSnUHvzU/33F1k+NZhpvQYi/iU9Z2ILHLQ2yqp4qq29O4f9tZNXyusdHehWMm0A47957dGS1zuqfmWnWyfsJ6kQvM6MOhJj/BzDIshlkws3F4Bg4P7KNuF30cg2SmRFY2KHALYU2tmjNCr1btUSDLbTy6eUEcy7OK4fr1Ff5mJZIufu+rDxnIdd+jk9HrfeugucsIDWXYsqQ23gsPpgUiNBc4Cyvpo1Huxz5sn1tKqXWi53/YUaiw+IWHOdl+M/Ua9NDjjqTcoFsY9tVf0M38hU29MzMdGogqCY0FLlvjTZglO4HgRAzppIEgxuYIKDOrJaUajyI2Ts4IU7gEAnB6WLuoyIpAPS/yeRcKShD+gwoBmBemXhJNGEl42NxuhTfAu/HG7XfpA6DFvI11PktITFXbIvUVZw8guEWmggQHlqYaMtcqxzZ8MCeuqlH/LzNU/Vl7zkkaDDj6O8BlQyZLBUqZ16Vcdm7RBFU/efitnMvSo8PTfKhOy9qfvPgBjcuy1p/+revTB/BMbYl0niWKun/lXz+NdmUx9j1DuTazB3G3s8PkxVGUlnA4ZHbpascOrUT0hdE9Msjk5DjphnujQxh4HeIfAWHE5Rp2oJBcYlxpdL/T3Hl64uMmd4FCmGq/SX8GslEIfHYPsAc+s4dGTd0nSa29hCDTZE1Qg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4865.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(55016003)(66946007)(54906003)(508600001)(33656002)(66446008)(6916009)(76116006)(71200400001)(7696005)(6506007)(8676002)(5660300002)(9686003)(316002)(64756008)(66556008)(8936002)(66476007)(86362001)(38070700005)(26005)(83380400001)(52536014)(38100700002)(186003)(4326008)(122000001)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8TP9MitqaQdyqPxxQXdMSTZ4lInbKhKejrUekkQJ+OexVDMkXm9rpqHwVxmq?=
+ =?us-ascii?Q?jBSxBayMuSdwjyKqFsWz5Xr4pU3xk9BiuY5lVdbW7of8nWxLoDCze2S2h0yI?=
+ =?us-ascii?Q?ibvI7/4h8Ho5q+9oGy1SAon/OIgFjak61M4FrhUtpnBPMHjP8eA/QXUhLcKO?=
+ =?us-ascii?Q?HHk5IzB/Sh+8O9yA0tWZFjiH+Q+VHyNaqgwEY6dewf/jm+3QQQ/5kgec01vv?=
+ =?us-ascii?Q?mXbqjbdLBpD13iNqvnC+OyRmqeo6JXSoEXIlxiJ297Hl5NgiLK5EUpENtje0?=
+ =?us-ascii?Q?ZKOav7CV/c2+UaAGz+HTU5Jk0zxLK6tp8L6JdsZ2QRSEcGckQ+cZ5+MA6H2z?=
+ =?us-ascii?Q?ritv9/LnpjiiGYyM/YPG87keiPnqBTYywY14hge3odPPDkvWYMGSp/CTWz2H?=
+ =?us-ascii?Q?JHGR10yNuPvGvvRhxOIO29+6Qcsge4WiSNFfghn7Ro/YlMCEzU8poJP+6eIa?=
+ =?us-ascii?Q?v82FQcuEdOUUzlscpGSiJH8rCG1BSypJSudLumYLi0xfXvvyckAMXK1HbsPl?=
+ =?us-ascii?Q?D0hGl/6zkJGQKH3LTJ/JC5UHwvkPHsTIiSI6GyDERZf9C4Hurv98c1yZpXRC?=
+ =?us-ascii?Q?uaTr2CWduRVhL3ea8agiNe53/BK6E83EiK3kLzwJwByMlEGHgiSguR6kKdua?=
+ =?us-ascii?Q?daGAyPQ6wm65TAKhEkGAwohwOrl9XMp4ZVAer+CyIivsHADe+Vj/xiqhMbJ5?=
+ =?us-ascii?Q?bUbKcCJ29Iq6Mxe4bzR5Uy3I5pJjtofOslzJyl0dbUVgZ/MLpVNzqZ5B37v8?=
+ =?us-ascii?Q?Kc7eCZdhCBZDFAYm5MkW1vRbc659YLHdJ8kKazTdRGhk8h0QVp8IeofPBjpr?=
+ =?us-ascii?Q?LGXl/GD8CYStE2LeM2/DIdQC9gvsdeeufpZ/y2d0x6ULSjU1Lxc8a48Brizz?=
+ =?us-ascii?Q?2U+QPHNv274xjbwlTDiArn+BT3s3AAfO4jRtF0vf66cUJ4peFhyioV0s7AHb?=
+ =?us-ascii?Q?cTg9leAOL1N00zdDVpL5Fnu13PCfSygy6Lw7RHpicY73yDKqcDpFzDYPan9Q?=
+ =?us-ascii?Q?KenrlBA3RYCqn0vmBYvuCWExsIJ/awCQa6t02pHtArw2QVvMIVj7bX4vN2cn?=
+ =?us-ascii?Q?D0ZgUAxXi8dYclqUejN5SypplKv2lDXo5A+xevgJUWZEtkZyGS2aAfn08zet?=
+ =?us-ascii?Q?l0O15OkWD2gaXqANjTnE6EpDXvG1fWuklY0htOIrABogpJvJA41jytno2jJ1?=
+ =?us-ascii?Q?oN2jItLEgbR0MLAtbZGZzQofepW/PduDLrfjuMxYgprOLUA8wD/5zHzCBBFW?=
+ =?us-ascii?Q?Q5hIUjEBTrTLiLBUahJbcGqRv7mTufK7GDZQqyr9tQczYRGMekPy+u/o8Nvm?=
+ =?us-ascii?Q?Uwxjiiq0XGmQxqNjiZgV6DjVPszREAg5hjMHcDjLG7LTES9kvK2CtLxcQaNw?=
+ =?us-ascii?Q?PCG5CDaOh+FODiyJlsscAl8kt0bdbqCVC8B1bxqbEwPRbGjFwQCmZyeqYFSC?=
+ =?us-ascii?Q?RAp/K/MoWEOre5Jee8/f+aE+nF9ZBLCRprID5Keiy/FyJ5NnmvUG2iH6sH79?=
+ =?us-ascii?Q?+51E+1W3wR6Sr5dywunIZLkuThqy1u5BkyzucvQafyvnzD070KaB2A/mQBeE?=
+ =?us-ascii?Q?7uun9/9bgZeerQ2CdGQuVv7jCHe3LZp+wEH4TI/gS2SbCr0IL2+4tQD0YBF8?=
+ =?us-ascii?Q?QaXOYCBJpj7hYwH6/M1DzKDnkOlwO/yF7WdC/3fqJWQU+E6FxrE3N7vdped+?=
+ =?us-ascii?Q?68e/YnK1/mYgR3DFcV6VZszwVO++pTWD5O/L17TQYODD61YM?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4865.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4fa00c7d-b342-4bed-f0fd-08d9ec79517f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2022 09:40:05.1222
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: USdYvumijGVqVKBp/F7bN1jq+OUb2uxHQxJk65b4LCS1xET2IRgNB7LeXWQ2RisrAKTxTDX6JxLoQKWkLL+7oiWuDhqbw9Y6ZApZIloY5xksfeVcvnYrPX93B1fXoO49
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4987
 
-Hi Detlev,
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
+e
+> content is safe
+>=20
+> Hi,
+>=20
+> > +     clocks {
+> [..]
+> > +
+> > +             nic_clk: nic_clk {
+>=20
+> What does nic_clk stand for? If I had to guess, it
+> has something to do with network. But..
+>=20
+NIC clock is the clock used by AXI, AHB fabric and APB bridges which connec=
+ts all the peripherals.
+It is named so because the AXI fabric is based on NIC400 IP from ARM
 
-Am 09.02.22 um 20:44 schrieb Detlev Casanova:
-> Hi Stefan,
->
-> On Wednesday, February 9, 2022 12:10:12 P.M. EST Stefan Wahren wrote:
->> Hi Detlev,
->>
->> Am 09.02.22 um 17:25 schrieb Detlev Casanova:
->>> Add a device tree to support the official Raspberrypi 7" touchscreen =
-for
->>> the Raspberry Pi 4 B
->>>
->>> The panel is connected on the DSI 1 port and uses the simple-panel
->>> driver.
->>>
->>> The device tree also makes sure to activate:
->>>  * dvp: bcm2711 clock driver
->>>  * hvs: Hardware Video Scaler
->>>  * pixelvalve[0-4]: CRTC modules
->>>  * txp: CRTC Writeback
->>>
->>> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
->>> ---
->>>
->>>  arch/arm/boot/dts/Makefile                    |   1 +
->>>  .../boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts | 129 ++++++++++++++++=
-++
->>>  arch/arm64/boot/dts/broadcom/Makefile         |   1 +
->>>  .../broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts |   2 +
->>>  4 files changed, 133 insertions(+)
->>>  create mode 100644 arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dt=
-s
->>>  create mode 100644
->>>  arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts>=20
->>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
->>> index 0de64f237cd8..b46daf2df4ce 100644
->>> --- a/arch/arm/boot/dts/Makefile
->>> +++ b/arch/arm/boot/dts/Makefile
->>> @@ -94,6 +94,7 @@ dtb-$(CONFIG_ARCH_BCM2835) +=3D \
->>>
->>>  	bcm2837-rpi-cm3-io3.dtb \
->>>  	bcm2711-rpi-400.dtb \
->>>  	bcm2711-rpi-4-b.dtb \
->>>
->>> +	bcm2711-rpi-4-b-7inch-ts-dsi.dtb \
->>>
->>>  	bcm2711-rpi-cm4-io.dtb \
->>>  	bcm2835-rpi-zero.dtb \
->>>  	bcm2835-rpi-zero-w.dtb
->>>
->>> diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts
->>> b/arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts new file mode 10=
-0644
->>> index 000000000000..62e986358c2a
->>> --- /dev/null
->>> +++ b/arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts
->> i think this should be an overlay because this board can be connected =
-to
->> different boards and we want to avoid copy & paste. Unfortunately i
->> don't know where this should be stored in the kernel tree.
-> Yes, that is how it started but the upstream kernel doesn't use them. W=
-e=20
-> thought that a separate device-tree makes sense as it is the official r=
-aspberry=20
-> pi touchscreen.
+> > +                     compatible =3D "fixed-clock";
+> > +                     #clock-cells =3D <0>;
+> > +                     clock-frequency =3D <200000000>;
+> > +             };
+> > +     };
+> > +
+> > +     clks: clock-controller@e00c00a8 {
+> > +             compatible =3D "microchip,lan966x-gck";
+> > +             #clock-cells =3D <1>;
+> > +             clocks =3D <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
+> > +             clock-names =3D "cpu", "ddr", "sys";
+> > +             reg =3D <0xe00c00a8 0x38>;
+> > +     };
+> > +
+> > +     timer {
+> > +             compatible =3D "arm,armv7-timer";
+> > +             interrupt-parent =3D <&gic>;
+> > +             interrupts =3D <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) |
+> IRQ_TYPE_LEVEL_LOW)>,
+> > +                          <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) |
+> IRQ_TYPE_LEVEL_LOW)>,
+> > +                          <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) |
+> IRQ_TYPE_LEVEL_LOW)>,
+> > +                          <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) |
+> IRQ_TYPE_LEVEL_LOW)>;
+> > +             clock-frequency =3D <37500000>;
+> > +             arm,cpu-registers-not-fw-configured;
+> > +     };
+> > +
+> > +     soc {
+> > +             compatible =3D "simple-bus";
+> > +             #address-cells =3D <1>;
+> > +             #size-cells =3D <1>;
+> > +             ranges;
+> > +
+> > +             flx0: flexcom@e0040000 {
+> > +                     compatible =3D "atmel,sama5d2-flexcom";
+> > +                     reg =3D <0xe0040000 0x100>;
+> > +                     clocks =3D <&clks GCK_ID_FLEXCOM0>;
+> > +                     #address-cells =3D <1>;
+> > +                     #size-cells =3D <1>;
+> > +                     ranges =3D <0x0 0xe0040000 0x800>;
+> > +                     status =3D "disabled";
+> > +             };
+> > +
+> > +             flx1: flexcom@e0044000 {
+> > +                     compatible =3D "atmel,sama5d2-flexcom";
+> > +                     reg =3D <0xe0044000 0x100>;
+> > +                     clocks =3D <&clks GCK_ID_FLEXCOM1>;
+> > +                     #address-cells =3D <1>;
+> > +                     #size-cells =3D <1>;
+> > +                     ranges =3D <0x0 0xe0044000 0x800>;
+> > +                     status =3D "disabled";
+> > +             };
+> > +
+> > +             trng: trng@e0048000 {
+> > +                     compatible =3D "atmel,at91sam9g45-trng";
+> > +                     reg =3D <0xe0048000 0x100>;
+> > +                     clocks =3D <&nic_clk>;
+>=20
+> .. it is used here..
+>=20
+>=20
+> > +             };
+> > +
+> > +             aes: aes@e004c000 {
+> > +                     compatible =3D "atmel,at91sam9g46-aes";
+> > +                     reg =3D <0xe004c000 0x100>;
+> > +                     interrupts =3D <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
+> > +                     dmas =3D <&dma0 AT91_XDMAC_DT_PERID(13)>,
+> > +                            <&dma0 AT91_XDMAC_DT_PERID(12)>;
+> > +                     dma-names =3D "rx", "tx";
+> > +                     clocks =3D <&nic_clk>;
+>=20
+> .. and here. and so on.
+>=20
+> So, is it some kind of internal clock?
+>=20
+> > +                     interrupts =3D <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> > +             };
+> > +
+> > +             watchdog: watchdog@e0090000 {
+> > +                     compatible =3D "snps,dw-wdt";
+> > +                     reg =3D <0xe0090000 0x1000>;
+> > +                     interrupts =3D <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+> > +                     clocks =3D <&nic_clk>;
+>=20
+> Btw. can we disable all nodes by default and enable them
+> in the board dts files?
+I would like to have only board specific nodes enabled in dts files and res=
+t of them in dtsi file
 
-i'm not an expert here, but this seems not quite correct. AFAIK there is
-no full runtime overlay support in the kernel, but the resources that i
-found are promising [1], [2], [3]. Unfortunately i never test it by mysel=
-f.
-
-Please understand that all these possible combination would result in a
-unmaintable mess.
-
-Best regards
-
-[1] - https://u-boot.readthedocs.io/en/latest/usage/fdt_overlays.html
-[2] - https://www.kernel.org/doc/html/latest/devicetree/overlay-notes.htm=
-l
-[3] -
-https://bootlin.com/pub/conferences/2021/lee/maincent-devicetree-overlay-=
-and-uboot-extension-board-management/maincent-devicetree-overlay-and-uboo=
-t-extension-board-management.pdf
-
-
+Thanks,
+Kavya
 
