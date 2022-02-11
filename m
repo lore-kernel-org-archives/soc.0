@@ -1,38 +1,78 @@
-Return-Path: <dinguyen@kernel.org>
+Return-Path: <SRS0=G0oP=S2=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A1C2C433EF
-	for <soc@archiver.kernel.org>; Fri, 11 Feb 2022 11:25:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5419EC433F5
+	for <soc@archiver.kernel.org>; Fri, 11 Feb 2022 13:35:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ED122C340F1; Fri, 11 Feb 2022 11:25:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79463C340E9;
-	Fri, 11 Feb 2022 11:25:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644578758;
-	bh=9md1dgH3u1nEudeCKhOmpmaniNxGfmPJI2IqKnrnxhk=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dZw7A+Hi1lzNj5HbMaX5p15eVuU5zywVrhlmKuO1YC1lZUnnCtejVMWZi5xLWw0bW
-	 +S2ngX/zIA5tbjHIU/y4Kawv9ii3G8Lg5q9qE8FFSgpx9Rj2w+51/d/bnDARf4+jCi
-	 7MSnXZsnRJybF2K9daOuHRsW9Ls1v9SVl2Vl1ZBnf2AnPhaNODPvlVk9x+O4VOJ0DP
-	 OTOhSWgoQjOrQ1p7xFOyND9OkyTni/hTZObaB5lz5KD2h490KUTEN7ELlPVZCexZ9P
-	 8qLt+RAFZIu8ER8ec48G3we9LyXvKNGueAHklnGEjcLrJSmxs8BAAh5LqjvQynyKYc
-	 HBF/bAgJyPRPA==
-From: Dinh Nguyen <dinguyen@kernel.org>
+	id 1284BC340F0; Fri, 11 Feb 2022 13:35:34 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 2176EC340EB;
+	Fri, 11 Feb 2022 13:35:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2176EC340EB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1644586532; x=1676122532;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dcNmaTIDG4XHn1AdLz19Xxg5AO1roEqTMpTVP6Z9qNQ=;
+  b=sN+AOyJXZ4ZrOS9IEoiIOwrhLfXmiJ9o5HU3wPPw6HcYgYsih4bJwEaN
+   5KDYLJ8SbhA0LhkW8fxbGcBEG7N5wCEUqXFj6mVCj/X5jd8QS8hRzP8gy
+   4NVhiBqutuKllNFeKOhxMGLcvbgUU/PsnUl4goHOikcCgzQmmGEqS68ij
+   m9Fglv85K2PnCiydO+SDMICazBpGXlinmGmzMmFlSBeCnopMYecqmKXqp
+   anwhv6R03iDf4gQMALPhjnicdATdcBZeCIyPkgBQrwUi3LGgorcZnBso1
+   h3JIZXPVfV+eX38ikZL1O+rhcltsYEvN7eXqoT6g5WuVNXUbE4rmm3WAW
+   A==;
+IronPort-SDR: uDw/z51m8ayvTGJca7U1d2SJnITPbBLWauSWy1vFwzlG8mCBOEPhkkZAoRU+HcdjzXz8u8ZKC7
+ R65h8v/jgiq0F6xEbpZ3DGlaq0RzdMjQNcZ9mK/NSfIocLNT9pwh4qSSD0poC91h13WL2aDhHH
+ VcfbjN71b2ZNWtoj0MWrIULNpoyEswvnBQrkKmYYlrNDxzlBf4FPVbltDtibCcmh4i6gBYI7aM
+ nKJbdYirDkoXilyyOJE44F0Fkr9mKiQyKgh3H3qNAU4PGqkff3ePafMX+t2GS6U8E6VjSp5KtM
+ zWmMwA5c9L4IpCp/O3tGenkq
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="153283188"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Feb 2022 06:35:31 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 11 Feb 2022 06:35:31 -0700
+Received: from ness.home (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 11 Feb 2022 06:35:29 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL 2/2] arm64: dts: socfpga: dts updates for v5.17, part 2
-Date: Fri, 11 Feb 2022 05:25:56 -0600
-Message-Id: <20220211112556.98940-2-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220211112556.98940-1-dinguyen@kernel.org>
-References: <20220211112556.98940-1-dinguyen@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Ludovic Desroches
+	<ludovic.desroches@microchip.com>, Claudiu Beznea
+	<claudiu.beznea@microchip.com>
+Subject: [GIT PULL] ARM: at91: fixes for 5.17
+Date: Fri, 11 Feb 2022 14:35:15 +0100
+Message-ID: <20220211133515.15314-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
+Organization: microchip
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+
+Arnd, Olof,
+
+Here are 2 patches that just change the MAINTAIERS entry for at91. I think it's
+better to have it sooner than later so this is why I add it to a "fixes" RP.
+
+Thanks, best regards,
+  Nicolas
 
 The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
@@ -40,21 +80,26 @@ The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_update_for_v5.18_part2
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-5.17
 
-for you to fetch changes up to 268a491aebc25e6dc7c618903b09ac3a2e8af530:
+for you to fetch changes up to 26077968f8389a68fdb38af3f2c2289ddc95e8ca:
 
-  arm64: dts: agilex: use the compatible "intel,socfpga-agilex-hsotg" (2022-02-09 13:18:48 -0600)
-
-----------------------------------------------------------------
-SoCFPGA dts updates for v5.18, part 2
-- Add the "intel,socfpga-agilex-hsotg" compatible for Agilex platform
+  dt-bindings: ARM: at91: update maintainers entry (2022-02-09 11:30:01 +0100)
 
 ----------------------------------------------------------------
-Dinh Nguyen (2):
-      dt-bindings: usb: dwc2: add compatible "intel,socfpga-agilex-hsotg"
-      arm64: dts: agilex: use the compatible "intel,socfpga-agilex-hsotg"
+AT91 fixes #1 for 5.17:
 
- Documentation/devicetree/bindings/usb/dwc2.yaml | 1 +
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi   | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+- MAINTAINERS file update.
+
+----------------------------------------------------------------
+Nicolas Ferre (2):
+      MAINTAINERS: replace a Microchip AT91 maintainer
+      dt-bindings: ARM: at91: update maintainers entry
+
+ CREDITS                                               | 6 ++++++
+ Documentation/devicetree/bindings/arm/atmel-at91.yaml | 3 ++-
+ MAINTAINERS                                           | 2 +-
+ 3 files changed, 9 insertions(+), 2 deletions(-)
+
+-- 
+Nicolas Ferre
