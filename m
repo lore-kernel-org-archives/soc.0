@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECC81C433F5
-	for <soc@archiver.kernel.org>; Fri, 11 Feb 2022 22:25:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F02F2C433F5
+	for <soc@archiver.kernel.org>; Fri, 11 Feb 2022 22:25:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B4C2DC340ED; Fri, 11 Feb 2022 22:25:16 +0000 (UTC)
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	id D7F5CC340F0; Fri, 11 Feb 2022 22:25:28 +0000 (UTC)
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1A948C340E9;
-	Fri, 11 Feb 2022 22:25:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1A948C340E9
+	by smtp.kernel.org (Postfix) with ESMTPS id 57A60C340E9;
+	Fri, 11 Feb 2022 22:25:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 57A60C340E9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id v4so9308958pjh.2;
-        Fri, 11 Feb 2022 14:25:16 -0800 (PST)
+Received: by mail-pf1-f182.google.com with SMTP id u16so12930803pfg.3;
+        Fri, 11 Feb 2022 14:25:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TyiRNPXzYuufNzc+eJL9yfq+WQejmY0nq5p2JKgES3U=;
-        b=LFx9jruK9x49CkTy2FO+U+q03Lchcp/iDi5AZdP84lGfOdxLhPIEdC/FVtaMFo3jKk
-         Jg2TI5YQ6vmeOMjMgfRj4liNYXJbdhQ+r1akrYzOCGDMQkfmkghoTWFoHmtSmefCWXFi
-         4K1m+qNQLwFNhqAt3LpfISLKL9y4ekGiHyRO2ms+H4w+ClSEWjTjUdRbpWXqOz3mSQLq
-         uwa9WuCDiNIrZvVS7F4+6hAsY77w6v98gqDPRn7cwYmPgE5gQauoN0roNa5D8s2NBKBI
-         UkiQ+iA/EXBcKAnYd3AHzbIAoDwAqQHSSlIw8iBHbFW9iERHtOj2L4LLypKombiYVhta
-         RRQg==
+        bh=1d+w4SSqS8Y2tOHARM/ajphQrcoSLUxKeD6AXDHhS/0=;
+        b=YsCS8FDt52cOk5ekqGIBfuEfqZPNtw7TI7w8dio7U2tV3o70vw/jXDwCeUAkODLYMg
+         thG5clo3vOPdI0Adv9CnodVEd6x0GM+MIPvyg8Mfq3bCOg2SANkz3R0oNwkuLx1qKLvp
+         gSeuLjO7LOPk4sQqdkLIuabmGXw6CBpDPHaqPFMDDOkzYUk/mokqAFen4AIWK6LPMmuM
+         9XWTF7SKVRolhq39VJX+IcjbvfEFZEarW8nQimZk+9aV6irw2WONIhKy9gbiXtKqh0bE
+         eD9BBrwaBDx5kLZ4X+wiZCFXu1ThWyXi8dwk5J6ydHVTX8WYPAWriivbkNHMaZv3mMPk
+         O+5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TyiRNPXzYuufNzc+eJL9yfq+WQejmY0nq5p2JKgES3U=;
-        b=h7td5gY/AReABtXnqoIWTGHQgmLWOOUG/OqY7GtDRXlFt3xZk7AAUDrR8OLlDtJ2O7
-         akpWCgTY4psoLVFo6JAbP9QaBM1OcAAV6otDI+1AAo3Y9XnCvJsOhXGFUig3cG81xpcS
-         4GV4hm8BOU8TwkNA+mDO7Io0l+OlduNqKNKexVDmb+HeXZDb0oIrKhpPLqAhd/kpp7aD
-         BGaF2TrY0xa6+NKQi8gV755dLv2goWs8XB9iW08vdG83ZeIuBha0vKLW1d9w+Q85fBKI
-         dw9okZV05GGNNW+CCC8SuLQaUL818624887jdBmeTuUiyJi4HpA9B+GfLMdcorJZ0sbg
-         87iw==
-X-Gm-Message-State: AOAM533StXm7/JW4fpbHmIX6G9GaOyORFLzWc25f5KeLI9WHYvIbeUv2
-	h98OuJYmojtyOHZjgMCu34M=
-X-Google-Smtp-Source: ABdhPJx1I7TYhuDCZSSIiQRrjBpcpad2P8E/J+ZRSwaVKzIJa0BhvqVvAEfvl6CZE/mUUbA66R4eYQ==
-X-Received: by 2002:a17:903:186:: with SMTP id z6mr3628161plg.47.1644618315655;
-        Fri, 11 Feb 2022 14:25:15 -0800 (PST)
+        bh=1d+w4SSqS8Y2tOHARM/ajphQrcoSLUxKeD6AXDHhS/0=;
+        b=rjLnuu1JK3zmEOwoo8YXB/cwgNoOMtHXRVPCvQetrQ9tFdSaO+2ZRekL8cejXni8bp
+         aaXhOzeLM9JS3LaYCcAAWVJJvSPq0Qk1TEmshi4oivCd2enTpqOwDZt0EwNqQQ0Pa1ES
+         Ch5kOiLoRB0QbxhO1s5Wf9oxrftJhfo+DRLKHR6KBv28gPH1vd+ydSlDK092b1E2SRu4
+         jWPd4xM0dqQnBWi/tbrfk6drArCXLdYWgjAUoigV1jQRdei6qGsx3Wz6O2H2GVdYYYvt
+         VYOVFsToVx4tRI0ewzARwGhrznBkcym4l4ZAXP99s/8d9PFWf/FHigyNrWOXFp+52fUW
+         tY0w==
+X-Gm-Message-State: AOAM531eiYo4oxXXLIWpQU5f7DyXEIbFDnFSX36uZfzARbWxn/HoUIoH
+	e7znexvtDh32YYMmzy/u0FU=
+X-Google-Smtp-Source: ABdhPJwPmCYa33zfHeZb+o5jytoQKfT+eQDK2CrUyESxvccaxoutkNfDdcvsoE3aEXK+7Xq9ovXrgA==
+X-Received: by 2002:a63:88c3:: with SMTP id l186mr3056432pgd.326.1644618327900;
+        Fri, 11 Feb 2022 14:25:27 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id n13sm6288513pjq.13.2022.02.11.14.25.13
+        by smtp.gmail.com with ESMTPSA id d15sm27521444pfu.127.2022.02.11.14.25.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 14:25:14 -0800 (PST)
+        Fri, 11 Feb 2022 14:25:27 -0800 (PST)
 From: Florian Fainelli <f.fainelli@gmail.com>
 To: bcm-kernel-feedback-list@broadcom.com,
 	Stefan Wahren <stefan.wahren@i2se.com>,
@@ -64,22 +64,18 @@ Cc: Ray Jui <rjui@broadcom.com>,
 	soc@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-rpi-kernel@lists.infradead.org
-Subject: Re: [PATCH V2 2/3] ARM: dts: Add Raspberry Pi Zero 2 W
-Date: Fri, 11 Feb 2022 14:25:13 -0800
-Message-Id: <20220211222513.1145210-1-f.fainelli@gmail.com>
+Subject: Re: [PATCH V2 3/3] arm64: dts: broadcom: Add reference to RPi Zero 2 W
+Date: Fri, 11 Feb 2022 14:25:25 -0800
+Message-Id: <20220211222525.1145344-1-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1643736467-17764-3-git-send-email-stefan.wahren@i2se.com>
-References: <1643736467-17764-1-git-send-email-stefan.wahren@i2se.com> <1643736467-17764-3-git-send-email-stefan.wahren@i2se.com>
+In-Reply-To: <1643736467-17764-4-git-send-email-stefan.wahren@i2se.com>
+References: <1643736467-17764-1-git-send-email-stefan.wahren@i2se.com> <1643736467-17764-4-git-send-email-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Tue,  1 Feb 2022 18:27:46 +0100, Stefan Wahren <stefan.wahren@i2se.com> wrote:
-> The Raspberry Pi Zero 2 W mostly bases on the Raspberry Pi Zero W with
-> the following differences:
-> * Broadcom BCM2710A1, quad-core 64-bit SoC @ 1 GHz
-> * Synaptics BCM43436 (reported as BCM43430B0) IEEE 802.11b/g/n wireless LAN
-> 
-> Contrary to the Raspberry Pi 3 boards there is no GPIO expander.
+On Tue,  1 Feb 2022 18:27:47 +0100, Stefan Wahren <stefan.wahren@i2se.com> wrote:
+> This adds a reference to the dts of the Raspberry Pi Zero 2 W,
+> so we don't need to maintain the content in arm64.
 > 
 > Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 > ---
