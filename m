@@ -1,77 +1,557 @@
-Return-Path: <SRS0=3DD1=SZ=walle.cc=michael@kernel.org>
+Return-Path: <SRS0=D9nQ=S2=d-pavlenko.com.ua=info@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31986C433F5
-	for <soc@archiver.kernel.org>; Thu, 10 Feb 2022 13:34:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5892EC433EF
+	for <soc@archiver.kernel.org>; Fri, 11 Feb 2022 08:40:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EC7ECC340E5; Thu, 10 Feb 2022 13:34:00 +0000 (UTC)
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+	id 18928C340ED; Fri, 11 Feb 2022 08:40:45 +0000 (UTC)
+Received: from mail.d-pavlenko.com.ua (d-pavlenko.com.ua [87.251.84.59])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 06731C004E1;
-	Thu, 10 Feb 2022 13:33:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 06731C004E1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 174772223A;
-	Thu, 10 Feb 2022 14:33:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1644500037;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=h4J9FNtfm4H/Vg71/QaYcfYokCooPLvGFhwoek79uZ4=;
-	b=tBW2U+BezYR7cRv34ugVojO8BVegO4GvsvIVx96sgpfvYpEg7+FhV4za3XE4aUorURukY+
-	zoxMZzMaaDomROmP5OQ1mN2xstEe5d9y7ajPDXVSusFXS6dmhUiqwfNeD7h1ivmip8Y4s4
-	qXduz6AcEor7KH7607j0ios1t0rY5No=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date: Thu, 10 Feb 2022 14:33:57 +0100
-From: Michael Walle <michael@walle.cc>
-To: Kavyasree.Kotagiri@microchip.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 891E6C340EE
+	for <soc@kernel.org>; Fri, 11 Feb 2022 08:40:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 891E6C340EE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=d-pavlenko.com.ua
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=d-pavlenko.com.ua
+Message-ID: <08bef75ee51339a063c9802b66426a72987b31@d-pavlenko.com.ua>
+Reply-To: Antonina <reply@d-pavlenko.com.ua>
+From: Antonina <info@d-pavlenko.com.ua>
 List-Id: <soc.lore.kernel.org>
-Cc: Tudor.Ambarus@microchip.com, Manohar.Puri@microchip.com,
- Nicolas.Ferre@microchip.com, UNGLinuxDriver@microchip.com,
- alexandre.belloni@bootlin.com, arnd@arndb.de, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- olof@lixom.net, robh+dt@kernel.org, soc@kernel.org
-Subject: Re: [PATCH v4] ARM: dts: add DT for lan966 SoC and 2-port board
- pcb8291
-In-Reply-To: <CO1PR11MB4865B76B9B26EE938E3E67CE922F9@CO1PR11MB4865.namprd11.prod.outlook.com>
-References: <42662481-51a4-2a4b-e39b-d3b8401cbb2c@microchip.com>
- <20220210123704.477826-1-michael@walle.cc>
- <CO1PR11MB4865B76B9B26EE938E3E67CE922F9@CO1PR11MB4865.namprd11.prod.outlook.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <51e33e946b096c903b0cacb5681fc6f1@walle.cc>
-X-Sender: michael@walle.cc
+To: soc@kernel.org
+Subject: =?utf-8?B?0J/RgNC+0LTQsNC20ZYg0JIy0JI=?=
+Date: Fri, 11 Feb 2022 10:40:40 +0200
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="aa145df44fb9930ac9632a81cce8c0d8df8668"
+List-Unsubscribe: <http://ukrsales.in.ua/Server-Side/amsweb.php?mD6t6hf9lIY8VT6LEe5x7MPlpYsnpTkFV1cu48in8wEN4jZqacUWf0rGERnD7qiRXes09wjtSBL9aASM0mI3vS%2BEhz7nmMPoyIrhbpEGN9VPy9bSheda9Kx5iGbZDCwRDLW%2BCQy2wZoHI4JHTzPx0A%3D%3D>
+DKIM-Signature: v=1; c=relaxed/relaxed; a=rsa-sha256; s=mail; d=d-pavlenko.com.ua;
+	t=1644568840; h=message-id:from:to:subject:date:mime-version:list-unsubscribe;
+	bh=8SAjM9P6QBxOQ97ig11oNUzNNFch4Yuef0oyhZjwxo4=;
+	b=PscPhiwVluBGcqwqBHi6x394IcCZkWDT32Vf5Y2ixJWrL0sQpH+pqLPYqtrvoDqrjRpwM
+	MwXqjYPmtrGtRtwQwlfdIF30rz4f0XgxaKNNf8RuUWmaz/By7DLMwSRwVIlQ8FyicN1Ccre
+	Rn5gjxrlZPrXM4p45CVuq2otbEslyaQ=
 
-Am 2022-02-10 14:02, schrieb Kavyasree.Kotagiri@microchip.com:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
->> the
->> content is safe
->> 
->> Hi,
->> 
->> >  arch/arm/boot/dts/Makefile            |   2 +
->> >  arch/arm/boot/dts/lan966x.dtsi        | 237 ++++++++++++++++++++++++++
->> >  arch/arm/boot/dts/lan966x_pcb8291.dts |  61 +++++++
->> 
->> Please rename this to lan966x-pcb8921.dts. All (most?) of the device
->> tree files use the dash as a seperator between the SoC and the board.
->> 
-> Ok, I will change in my v6.
-> Please have a look at my v5 patch where I already addressed all the
-> node naming changes.
+--aa145df44fb9930ac9632a81cce8c0d8df8668
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-My comments besides the renaming still apply.
+=D0=9F=D1=80=D0=BE=D1=84=D0=B5=D1=81=D1=96=D0=B9=D0=BD=D1=96 =D0=BF=D1=80=
+=D0=BE=D0=B4=D0=B0=D0=B6=D1=96 =D0=922=D0=92
 
--michael
+=D0=9F=D1=80=D0=BE=D0=B9=D0=B4=D0=B5: 15-16 =D0=BB=D1=8E=D1=82=D0=BE=D0=B3=
+=D0=BE, Online.
+
+=D0=A6=D1=96=D0=BB=D1=8C =D0=BF=D1=80=D0=BE=D0=B3=D1=80=D0=B0=D0=BC=D0=B8=
+: =C2=A0=C2=A0=C2=A0=20
+
+- =D0=B2=D0=B8=D0=B1=D1=83=D0=B4=D1=83=D0=B2=D0=B0=D1=82=D0=B8 =D0=B0=D0=B4=
+=D0=B0=D0=BF=D1=82=D0=BE=D0=B2=D0=B0=D0=BD=D1=83 =D0=BF=D1=96=D0=B4 =D1=81=
+=D0=BF=D0=B5=D1=86=D0=B8=D1=84=D1=96=D0=BA=D1=83 =D0=B1=D1=96=D0=B7=D0=BD=
+=D0=B5=D1=81=D1=83 =D1=81=D1=82=D1=80=D0=B0=D1=82=D0=B5=D0=B3=D1=96=D1=8E=
+ =D0=B7=D0=B0=D0=BB=D1=83=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D1=96 =D1=81=D1=83=
+=D0=BF=D1=80=D0=BE=D0=B2=D0=BE=D0=B4=D1=83 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=
+=D1=82=D0=B0; =C2=A0=C2=A0=C2=A0
+- =D0=B5=D1=84=D0=B5=D0=BA=D1=82=D0=B8=D0=B2=D0=BD=D0=BE =D0=B7=D0=B1=D0=B8=
+=D1=80=D0=B0=D1=82=D0=B8 =D1=96=D0=BD=D1=84=D0=BE=D1=80=D0=BC=D0=B0=D1=86=
+=D1=96=D1=8E =D1=96 =D0=B2=D1=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=BB=D1=8E=
+=D0=B2=D0=B0=D1=82=D0=B8 =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82 =D0=B7=
+ =D0=BF=D0=BE=D1=82=D0=B5=D0=BD=D1=86=D1=96=D0=B9=D0=BD=D0=B8=D0=BC=D0=B8=
+ =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0=D0=BC=D0=B8; =C2=A0=C2=A0=C2=A0
+- =D1=82=D0=BE=D1=87=D0=BD=D0=BE =D0=B2=D0=B8=D1=8F=D0=B2=D0=BB=D1=8F=D1=82=
+=D0=B8 =D1=96=D0=BD=D1=82=D0=B5=D1=80=D0=B5=D1=81=D0=B8, =D0=BF=D0=BE=D1=82=
+=D1=80=D0=B5=D0=B1=D0=B8 =D1=96 =D0=B2=D0=B8=D0=B3=D0=BE=D0=B4=D0=B8 =D1=80=
+=D1=96=D0=B7=D0=BD=D0=B8=D1=85 "=D0=B0=D0=B3=D0=B5=D0=BD=D1=82=D1=96=D0=B2=
+ =D0=B2=D0=BF=D0=BB=D0=B8=D0=B2=D1=83" =D0=B2 =D0=9A=D0=BE=D0=BC=D0=BF=D0=
+=B0=D0=BD=D1=96=D1=97-=D0=97=D0=B0=D0=BC=D0=BE=D0=B2=D0=BD=D0=B8=D0=BA=D0=
+=B0;
+- =D1=84=D0=BE=D1=80=D0=BC=D1=83=D0=B2=D0=B0=D1=82=D0=B8 =D0=BF=D0=B5=D1=80=
+=D1=81=D0=BE=D0=BD=D0=B0=D0=BB=D1=96=D0=B7=D0=BE=D0=B2=D0=B0=D0=BD=D1=96 =
+=D0=BA=D0=BE=D0=BC=D0=B5=D1=80=D1=86=D1=96=D0=B9=D0=BD=D1=96 =D0=BF=D1=80=
+=D0=BE=D0=BF=D0=BE=D0=B7=D0=B8=D1=86=D1=96=D1=97; =C2=A0=C2=A0=C2=A0
+- =D1=83=D1=81=D0=BF=D1=96=D1=88=D0=BD=D0=BE =D0=B2=D0=B5=D1=81=D1=82=D0=B8=
+ =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8 =D0=BF=D0=BE=
+ =D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83 =D1=96 =D0=BF=D1=80=D0=B8=
+ =D0=B7=D1=83=D1=81=D1=82=D1=80=D1=96=D1=87=D1=96; =C2=A0=C2=A0=C2=A0
+- =D0=B2=D0=B8=D0=BA=D0=BE=D1=80=D0=B8=D1=81=D1=82=D0=BE=D0=B2=D1=83=D0=B2=
+=D0=B0=D1=82=D0=B8 =D0=B7=D0=B0=D0=BF=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=
+=D0=BD=D1=8F =D1=96 =D1=81=D1=83=D0=BC=D0=BD=D1=96=D0=B2=D0=B8 =D0=BA=D0=BB=
+=D1=96=D1=94=D0=BD=D1=82=D0=B0, =D1=8F=D0=BA =D0=BC=D0=BE=D0=B6=D0=BB=D0=B8=
+=D0=B2=D1=96=D1=81=D1=82=D1=8C =D0=B4=D0=BB=D1=8F =D0=BF=D1=80=D0=BE=D0=B4=
+=D0=B0=D0=B6=D1=83; =C2=A0=C2=A0=C2=A0
+- =D1=81=D0=BF=D0=BE=D0=BD=D1=83=D0=BA=D0=B0=D1=82=D0=B8 =D0=BA=D0=BB=D1=96=
+=D1=94=D0=BD=D1=82=D0=B0 =D0=B4=D0=BE =D0=B7=D0=B4=D1=96=D0=B9=D1=81=D0=BD=
+=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=D0=BE=D0=BA=D1=83=D0=BF=D0=BA=D0=B8 =D1=96=
+ =D0=B4=D0=BE=D0=B2=D0=BE=D0=B4=D0=B8=D1=82=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=
+=D0=BD=D1=82=D0=B0 =D0=B4=D0=BE =D0=B7=D0=B0=D0=B2=D0=B5=D1=80=D1=88=D0=B5=
+=D0=BD=D0=BD=D1=8F =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=83 / =D1=83=D0=
+=BA=D0=BB=D0=B0=D0=B4=D0=B5=D0=BD=D0=BD=D1=8F =D1=83=D0=B3=D0=BE=D0=B4=D0=
+=B8; =C2=A0=C2=A0=C2=A0
+- =D1=80=D0=BE=D0=B7=D1=83=D0=BC=D1=96=D1=82=D0=B8 =D0=B2=D0=B0=D0=B6=D0=BB=
+=D0=B8=D0=B2=D1=96=D1=81=D1=82=D1=8C =D0=BF=D1=96=D1=81=D0=BB=D1=8F=D0=BF=
+=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D0=BD=D0=BE=D0=B3=D0=BE =D1=81=D0=B5=D1=80=
+=D0=B2=D1=96=D1=81=D1=83 =D1=96 =D0=BF=D0=BE=D0=B2=D1=82=D0=BE=D1=80=D0=BD=
+=D0=BE=D0=B3=D0=BE =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=83. =C2=A0=C2=A0=
+=C2=A0
+
+=D0=9F=D0=BE=D1=80=D1=8F=D0=B4=D0=BE=D0=BA =D0=B4=D0=B5=D0=BD=D0=BD=D0=B8=
+=D0=B9:
+
+=D0=92=D0=A1=D0=A2=D0=A3=D0=9F =D0=92 =D0=9F=D0=A0=D0=9E=D0=94=D0=90=D0=96=
+=D0=86 =D0=922=D0=92 =C2=A0=C2=A0=C2=A0
+- =D0=A2=D0=B0=D0=BA=D1=82=D0=B8=D0=BA=D0=B0 =D1=96 =D1=81=D1=82=D1=80=D0=
+=B0=D1=82=D0=B5=D0=B3=D1=96=D1=8F =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=
+=96=D0=B2 =D0=922=D0=92 =C2=A0=C2=A0=C2=A0
+- =D0=9F=D1=80=D0=B8=D1=87=D0=B8=D0=BD=D0=B8 =D0=B2=D1=82=D1=80=D0=B0=D1=82=
+=D0=B8 =D1=96 =D1=84=D0=B0=D0=BA=D1=82=D0=BE=D1=80=D0=B8 =D1=83=D1=82=D1=80=
+=D0=B8=D0=BC=D0=B0=D0=BD=D0=BD=D1=8F =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=
+=D1=96=D0=B2 =C2=A0=C2=A0=C2=A0
+- =D0=9A=D1=80=D0=B8=D1=82=D0=B5=D1=80=D1=96=D1=97 =D1=82=D0=B0 =D0=BF=D1=
+=96=D0=B4=D1=85=D0=BE=D0=B4=D0=B8 =D0=B4=D0=BE =D1=81=D0=B5=D0=B3=D0=BC=D0=
+=B5=D0=BD=D1=82=D0=B0=D1=86=D1=96=D1=97 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=
+=82=D1=81=D1=8C=D0=BA=D0=BE=D1=97 =D0=B1=D0=B0=D0=B7=D0=B8 =C2=A0=C2=A0=C2=
+=A0
+- =D0=9A=D0=BE=D0=BC=D0=BF=D0=BB=D0=B5=D0=BA=D1=81=D0=BD=D0=B8=D0=B9 =D0=BA=
+=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82 =D0=B7 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=
+=D1=82=D0=BE=D0=BC =C2=A0=C2=A0=C2=A0
+
+=D0=AF=D0=BA =D0=BF=D1=80=D0=B8=D0=B2=D0=B5=D1=80=D0=BD=D1=83=D1=82=D0=B8=
+ =D1=83=D0=B2=D0=B0=D0=B3=D1=83 =D1=96 =D1=83=D1=82=D1=80=D0=B8=D0=BC=D0=B0=
+=D1=82=D0=B8 =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82 =D0=B7 =D0=BA=D0=BB=
+=D1=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=D0=B5=
+=D1=84=D0=BE=D0=BD=D1=83
+- =D0=94=D0=B5=D1=81=D1=8F=D1=82=D1=8C =D0=BF=D0=BE=D0=BC=D0=B8=D0=BB=D0=BE=
+=D0=BA =D0=BF=D1=80=D0=B8 =D1=81=D0=BF=D1=96=D0=BB=D0=BA=D1=83=D0=B2=D0=B0=
+=D0=BD=D0=BD=D1=96 =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=
+=D1=83 =C2=A0=C2=A0=C2=A0
+- =D0=9F=D1=81=D0=B8=D1=85=D0=BE=D0=BB=D0=BE=D0=B3=D1=96=D1=87=D0=BD=D1=96=
+ =D0=B0=D1=81=D0=BF=D0=B5=D0=BA=D1=82=D0=B8 =D1=83=D1=81=D0=BF=D1=96=D1=88=
+=D0=BD=D0=BE=D0=B3=D0=BE =D0=B2=D1=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=BB=
+=D0=B5=D0=BD=D0=BD=D1=8F =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=D1=83=
+ =D0=B7 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC
+- =D0=AF=D0=BA =D0=B2=D0=B5=D1=81=D1=82=D0=B8 "=D0=BA=D0=B5=D1=80=D0=BE=D0=
+=B2=D0=B0=D0=BD=D0=B8=D0=B9 =D0=B4=D1=96=D0=B0=D0=BB=D0=BE=D0=B3" =D0=B7 =
+=D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC: =D0=BF=D0=BE=D0=BA=D1=80=
+=D0=BE=D0=BA=D0=BE=D0=B2=D0=B8=D0=B9 =D0=B0=D0=BB=D0=B3=D0=BE=D1=80=D0=B8=
+=D1=82=D0=BC =C2=A0=C2=A0=C2=A0
+- =D0=9F=D1=80=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D0=B7=
+=D1=83=D1=81=D1=82=D1=80=D1=96=D1=87=D1=96 =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=
+=D0=B5=D1=84=D0=BE=D0=BD=D1=83 =C2=A0=C2=A0=C2=A0
+
+=D0=92=D1=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F =
+=D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=D1=83 =D0=B7 =D0=BA=D0=BB=D1=96=
+=D1=94=D0=BD=D1=82=D0=BE=D0=BC =D0=BF=D1=80=D0=B8 =D0=BF=D1=80=D0=BE=D0=B4=
+=D0=B0=D0=B6=D1=96 "=D0=9E=D0=B1=D0=BB=D0=B8=D1=87=D1=87=D1=8F=D0=BC =D0=B4=
+=D0=BE =D0=BE=D0=B1=D0=BB=D0=B8=D1=87=D1=87=D1=8F"=20
+- =D0=A0=D0=B0=D0=BF=D0=BE=D1=80=D1=82 =D1=96 =D1=82=D0=B5=D1=85=D0=BD=D1=
+=96=D0=BA=D0=B8 =D0=BF=D1=96=D0=B4=D0=BB=D0=B0=D1=88=D1=82=D1=83=D0=B2=D0=
+=B0=D0=BD=D0=BD=D1=8F =C2=A0=C2=A0=C2=A0
+- =D0=9F=D0=BE=D0=B7=D0=B8=D1=82=D0=B8=D0=B2=D0=BD=D0=B0 =D1=96 =D0=BD=D0=
+=B5=D0=B3=D0=B0=D1=82=D0=B8=D0=B2=D0=BD=D0=B0 =D0=BC=D0=BE=D1=82=D0=B8=D0=
+=B2=D0=B0=D1=86=D1=96=D1=8F. =D0=92=D0=BF=D0=BB=D0=B8=D0=B2 =D0=BD=D0=B0 =
+=D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0 =D0=B2 =D0=BF=D1=80=D0=BE=D1=86=
+=D0=B5=D1=81=D1=96 =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=D1=83
+- =D0=9A=D1=80=D0=BE=D0=BA=D0=B8 =D1=96 "=D1=80=D0=B0=D0=BC=D0=BA=D0=B0" =
+=D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2 =C2=A0=
+=C2=A0=C2=A0
+- =D0=AF=D0=BA =D1=81=D0=BF=D0=BE=D0=BD=D1=83=D0=BA=D0=B0=D1=82=D0=B8 =D1=
+=96=D0=BD=D1=82=D0=B5=D1=80=D0=B5=D1=81 =D1=81=D0=BF=D1=96=D0=B2=D1=80=D0=
+=BE=D0=B7=D0=BC=D0=BE=D0=B2=D0=BD=D0=B8=D0=BA=D0=B0 =C2=A0=C2=A0=C2=A0
+
+=D0=A0=D0=BE=D0=B1=D0=BE=D1=82=D0=B0 =D1=96=D0=B7 =D0=B7=D0=B0=D0=BF=D0=B5=
+=D1=80=D0=B5=D1=87=D0=B5=D0=BD=D0=BD=D1=8F=D0=BC=D0=B8 =D1=96 =D1=81=D1=83=
+=D0=BC=D0=BD=D1=96=D0=B2=D0=B0=D0=BC=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=
+=D1=82=D0=B0 =C2=A0=C2=A0=C2=A0
+- =D0=9F=D1=80=D0=B8=D1=87=D0=B8=D0=BD=D0=B8 =D1=96 =D1=82=D0=B8=D0=BF=D0=
+=B8 =D0=B7=D0=B0=D0=BF=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=D1=8C =C2=A0=C2=
+=A0=C2=A0
+- =D0=92=D0=B8=D1=8F=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=D1=80=D0=B8=
+=D1=85=D0=BE=D0=B2=D0=B0=D0=BD=D0=B8=D1=85 =D0=B7=D0=B0=D0=BF=D0=B5=D1=80=
+=D0=B5=D1=87=D0=B5=D0=BD=D1=8C =D1=96 =D0=BF=D1=80=D0=B8=D1=85=D0=BE=D0=B2=
+=D0=B0=D0=BD=D0=B8=D1=85 =D0=BF=D1=80=D0=BE=D0=B3=D1=80=D0=B0=D0=BC =C2=A0=
+=C2=A0=C2=A0
+- =D0=90 =D1=8F=D0=BA=D1=89=D0=BE =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82 =D0=
+=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8=D1=82=D1=8C "=D0=BD=D1=96" =C2=A0=C2=A0=
+=C2=A0
+- =D0=A2=D0=B5=D1=85=D0=BD=D1=96=D0=BA=D0=B8 =D0=BF=D0=B5=D1=80=D0=B5=D0=B4=
+=D0=B1=D0=B0=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D1=96 =D0=B7=D0=BD=D1=8F=D1=82=
+=D1=82=D1=8F =D1=82=D0=B8=D0=BF=D0=BE=D0=B2=D0=B8=D1=85 =D0=B7=D0=B0=D0=BF=
+=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=D1=8C =C2=A0=C2=A0=C2=A0
+
+=D0=A2=D0=B5=D1=85=D0=BD=D1=96=D0=BA=D0=B8 =D0=B7=D0=B0=D0=B2=D0=B5=D1=80=
+=D1=88=D0=B5=D0=BD=D0=BD=D1=8F =D1=83=D0=B3=D0=BE=D0=B4=D0=B8
+- =D0=AF=D0=BA =D0=BF=D0=BE=D0=BB=D0=B5=D0=B3=D1=88=D0=B8=D1=82=D0=B8 =D0=
+=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D1=83 =D0=BF=D1=80=D0=BE=D1=86=D0=B5=D1=
+=81 =D0=BF=D1=80=D0=B8=D0=B9=D0=BD=D1=8F=D1=82=D1=82=D1=8F =D1=80=D1=96=D1=
+=88=D0=B5=D0=BD=D0=BD=D1=8F =C2=A0=C2=A0=C2=A0
+- =D0=A9=D0=BE =D1=80=D0=BE=D0=B1=D0=B8=D1=82=D0=B8 =D0=B2 =D1=81=D1=82=D0=
+=B0=D0=BD=D1=96 =D0=BD=D0=B5=D0=B2=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=B5=D0=
+=BD=D0=BE=D1=81=D1=82=D1=96 =C2=A0=C2=A0=C2=A0
+- =D0=A9=D0=BE =D1=80=D0=BE=D0=B1=D0=B8=D1=82=D0=B8 =D0=B7 =D0=BA=D0=BB=D1=
+=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC, =D1=8F=D0=BA=D0=B8=D0=B9 =D0=BD=D0=B5 =
+=D0=BA=D1=83=D0=BF=D0=B8=D0=B2 =D0=B2=D1=96=D0=B4=D1=80=D0=B0=D0=B7=D1=83=
+ =C2=A0=C2=A0=C2=A0
+
+=D0=9F=D1=96=D1=81=D0=BB=D1=8F=D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D0=BD=D0=
+=B8=D0=B9 =D1=81=D0=B5=D1=80=D0=B2=D1=96=D1=81 =D1=96 =D1=96=D0=B4=D0=B5=D0=
+=BE=D0=BB=D0=BE=D0=B3=D1=96=D1=8F =D1=81=D1=83=D0=BF=D1=80=D0=BE=D0=B2=D0=
+=BE=D0=B4=D1=83=C2=A0=C2=A0=C2=A0=C2=A0
+- =D0=A1=D1=83=D0=BF=D1=80=D0=BE=D0=B2=D1=96=D0=B4 =D1=83=D0=B3=D0=BE=D0=B4=
+=D0=B8 =C2=A0=C2=A0=C2=A0
+- =D0=A0=D0=BE=D0=B1=D0=BE=D1=82=D0=B0 =D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D1=
+=96=D0=B9=D0=BD=D0=B8=D0=BC=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=
+=B0=D0=BC=D0=B8 =C2=A0=C2=A0=C2=A0
+- =D0=9C=D0=B5=D1=82=D0=BE=D0=B4=D0=B8 =D1=83=D1=82=D1=80=D0=B8=D0=BC=D0=B0=
+=D0=BD=D0=BD=D1=8F =C2=A0=C2=A0=C2=A0
+- VIP-=D1=81=D1=83=D0=BF=D1=80=D0=BE=D0=B2=D1=96=D0=B4 =C2=A0=C2=A0=C2=A0
+
+=D0=92=D0=B0=D1=80=D1=82=D1=96=D1=81=D1=82=D1=8C =D1=83=D1=87=D0=B0=D1=81=
+=D1=82=D1=96: =C2=A0=C2=A0=C2=A0
+2,900.00 =D0=B3=D1=80=D0=BD. - =D0=B7=D0=B0 =D0=BE=D0=B4=D0=BD=D0=BE=D0=B3=
+=D0=BE =D1=83=D1=87=D0=B0=D1=81=D0=BD=D0=B8=D0=BA=D0=B0. =C2=A0=C2=A0=C2=A0
+=D0=94=D0=BB=D1=8F=C2=A0=D0=B4=D1=80=D1=83=D0=B3=D0=BE=D0=B3=D0=BE=C2=A0=D1=
+=96 =D1=82=D1=80=D0=B5=D1=82=D1=8C=D0=BE=D0=B3=D0=BE =D1=83=D1=87=D0=B0=D1=
+=81=D0=BD=D0=B8=D0=BA=D0=B0=C2=A0=D0=B7=D0=BD=D0=B8=D0=B6=D0=BA=D0=B8 5%=C2=
+=A0=D1=96 7%=C2=A0=D0=B2=D1=96=D0=B4=D0=BF=D0=BE=D0=B2=D1=96=D0=B4=D0=BD=D0=
+=BE =C2=A0=C2=A0=C2=A0
+
+=D0=94=D0=B5=D1=82=D0=B0=D0=BB=D1=8C=D0=BD=D1=96=D1=88=D0=B5 =D0=BD=D0=B0=
+ =D1=81=D0=B0=D0=B9=D1=82=D1=96 >>> http://ukrsales.in.ua/training/164/pr=
+ofes-yn-prodazh-v2v-v-d-pershogo-kontaktu-do-povtornih-prodazh-v.htm
+
+=D0=91=D1=96=D0=B7=D0=BD=D0=B5=D1=81-=D0=B7=D0=B0=D1=85=D0=BE=D0=B4=D0=B8=
+ =D1=86=D1=8C=D0=BE=D0=B3=D0=BE =D1=82=D0=B8=D0=B6=D0=BD=D1=8F
+
+10-11 =D0=BB=D1=8E=D1=82=D0=BE=D0=B3=D0=BE =D0=9F=D0=BE=D0=B1=D1=83=D0=B4=
+=D0=BE=D0=B2=D0=B0 =D1=81=D0=B8=D1=81=D1=82=D0=B5=D0=BC=D0=B8 =D0=BE=D0=BF=
+=D0=BB=D0=B0=D1=82=D0=B8 =D0=B7=D0=B0 =D1=80=D0=B5=D0=B7=D1=83=D0=BB=D1=8C=
+=D1=82=D0=B0=D1=82=D0=BE=D0=BC =D0=B2 =D0=BA=D0=BE=D0=BC=D0=BF=D0=B0=D0=BD=
+=D1=96=D1=97 =D0=9A=D0=A0=D0=86 =D0=BC=D0=BE=D1=82=D0=B8=D0=B2=D0=B0=D1=86=
+=D1=96=D1=97, =D0=BD=D0=B0=D1=86=D1=96=D0=BB=D0=B5=D0=BD=D0=BE=D1=97 =D0=BD=
+=D0=B0 =D0=BF=D1=80=D0=B8=D0=B1=D1=83=D1=82=D0=BE=D0=BA
+
+21-22 =D0=BB=D1=8E=D1=82=D0=BE=D0=B3=D0=BE =D0=9C=D0=B0=D0=B9=D1=81=D1=82=
+=D0=B5=D1=80 =D0=B7=D0=B0=D0=BA=D1=83=D0=BF=D1=96=D0=B2=D0=B5=D0=BB=D1=8C=
+: =D1=80=D0=B5=D0=B7=D1=83=D0=BB=D1=8C=D1=82=D0=B0=D1=82=D0=B8=D0=B2=D0=BD=
+=D1=96 =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8
+
+1-2 =D1=82=D0=B0 10-11 =D0=B1=D0=B5=D1=80=D0=B5=D0=B7=D0=BD=D1=8F =D0=A2=D1=
+=80=D0=B0=D0=BD=D1=81=D0=BF=D0=BE=D1=80=D1=82=D0=BD=D0=B0 =D0=BB=D0=BE=D0=
+=B3=D1=96=D1=81=D1=82=D0=B8=D0=BA=D0=B0 =D1=82=D0=B0 =D0=BE=D0=BF=D1=82=D0=
+=B8=D0=BC=D1=96=D0=B7=D0=B0=D1=86=D1=96=D1=8F =D0=BB=D0=BE=D0=B3=D1=96=D1=
+=81=D1=82=D0=B8=D1=87=D0=BD=D0=B8=D1=85 =D0=B2=D0=B8=D1=82=D1=80=D0=B0=D1=
+=82 =D0=BA=D0=BE=D0=BC=D0=BF=D0=B0=D0=BD=D1=96=D1=97
+
+=D0=97=D0=B0=D0=BB=D0=B8=D1=88=D0=B8=D0=BB=D0=B8=D1=81=D1=8C =D0=BF=D0=B8=
+=D1=82=D0=B0=D0=BD=D0=BD=D1=8F?
+
+=D0=A2=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83=D0=B9=D1=82=D0=B5: (O63)=
+ 2=D0=977-90-05 =C2=A0=C2=A0=C2=A0
+WEB=C2=A0HTTP://ukrsales.in.ua=20
+
+E-MAIL: bcnua@rambler.ua
+
+-- =C2=A0=C2=A0=C2=A0
+=D0=97 =D0=BF=D0=BE=D0=B2=D0=B0=D0=B3=D0=BE=D1=8E, =C2=A0=C2=A0=C2=A0
+=D0=94=D1=96=D0=B0=D0=BD=D0=B0 =C2=A0=C2=A0=C2=A0
+email-=D0=BC=D0=B0=D1=80=D0=BA=D0=B5=D1=82=D0=BE=D0=BB=D0=BE=D0=B3 =C2=A0=
+=C2=A0=C2=A0
+
+=D0=B1=D1=96=D0=BB=D1=8C=D1=88=D0=B5 =D0=BD=D0=B5 =D0=BE=D1=82=D1=80=D0=B8=
+=D0=BC=D1=83=D0=B2=D0=B0=D1=82=D0=B8
+List-Unsubscribe
+
+--aa145df44fb9930ac9632a81cce8c0d8df8668
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+</head>
+<body bgColor=3D"#ebedf0">
+<table cellSpacing=3D0 cellPadding=3D15 width=3D820 align=3Dcenter border=
+=3D0>
+<tbody>
+<tr>
+<td style=3D"FONT-SIZE: 24px; FONT-FAMILY: Tahoma, Geneva, sans-serif; CO=
+LOR: rgb(255,255,255)" bgColor=3D"#213d65" width=3D774 scope=3Dcol align=3D=
+center><strong>=D0=9F=D1=80=D0=BE=D1=84=D0=B5=D1=81=D1=96=D0=B9=D0=BD=D1=96=
+ =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=96 =D0=922=D0=92</strong></td></=
+tr>
+<tr>
+<td style=3D'FONT-SIZE: 18px; FONT-FAMILY: Georgia, "Times New Roman", Ti=
+mes, serif; COLOR: rgb(0,0,51)' bgColor=3D"#ffffff" align=3Dleft>
+<p align=3Dcenter><font color=3D"#004080"><strong>=D0=9F=D1=80=D0=BE=D0=B9=
+=D0=B4=D0=B5:</strong></font> <font size=3D5>15-16 =D0=BB=D1=8E=D1=82=D0=BE=
+=D0=B3=D0=BE, Online.</font></p>
+<hr>
+
+<p><strong><font color=3D"#004080">=D0=A6=D1=96=D0=BB=D1=8C =D0=BF=D1=80=D0=
+=BE=D0=B3=D1=80=D0=B0=D0=BC=D0=B8: &nbsp;&nbsp;&nbsp;</font></strong>=20
+<div>- =D0=B2=D0=B8=D0=B1=D1=83=D0=B4=D1=83=D0=B2=D0=B0=D1=82=D0=B8 =D0=B0=
+=D0=B4=D0=B0=D0=BF=D1=82=D0=BE=D0=B2=D0=B0=D0=BD=D1=83 =D0=BF=D1=96=D0=B4=
+ =D1=81=D0=BF=D0=B5=D1=86=D0=B8=D1=84=D1=96=D0=BA=D1=83 =D0=B1=D1=96=D0=B7=
+=D0=BD=D0=B5=D1=81=D1=83 =D1=81=D1=82=D1=80=D0=B0=D1=82=D0=B5=D0=B3=D1=96=
+=D1=8E =D0=B7=D0=B0=D0=BB=D1=83=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D1=96 =D1=81=
+=D1=83=D0=BF=D1=80=D0=BE=D0=B2=D0=BE=D0=B4=D1=83 =D0=BA=D0=BB=D1=96=D1=94=
+=D0=BD=D1=82=D0=B0; &nbsp;&nbsp;&nbsp;<br>- =D0=B5=D1=84=D0=B5=D0=BA=D1=82=
+=D0=B8=D0=B2=D0=BD=D0=BE =D0=B7=D0=B1=D0=B8=D1=80=D0=B0=D1=82=D0=B8 =D1=96=
+=D0=BD=D1=84=D0=BE=D1=80=D0=BC=D0=B0=D1=86=D1=96=D1=8E =D1=96 =D0=B2=D1=81=
+=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=BB=D1=8E=D0=B2=D0=B0=D1=82=D0=B8 =D0=BA=
+=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82 =D0=B7 =D0=BF=D0=BE=D1=82=D0=B5=D0=BD=
+=D1=86=D1=96=D0=B9=D0=BD=D0=B8=D0=BC=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=
+=D1=82=D0=B0=D0=BC=D0=B8; &nbsp;&nbsp;&nbsp;<br>- =D1=82=D0=BE=D1=87=D0=BD=
+=D0=BE =D0=B2=D0=B8=D1=8F=D0=B2=D0=BB=D1=8F=D1=82=D0=B8 =D1=96=D0=BD=D1=82=
+=D0=B5=D1=80=D0=B5=D1=81=D0=B8, =D0=BF=D0=BE=D1=82=D1=80=D0=B5=D0=B1=D0=B8=
+ =D1=96 =D0=B2=D0=B8=D0=B3=D0=BE=D0=B4=D0=B8 =D1=80=D1=96=D0=B7=D0=BD=D0=B8=
+=D1=85 &quot;=D0=B0=D0=B3=D0=B5=D0=BD=D1=82=D1=96=D0=B2 =D0=B2=D0=BF=D0=BB=
+=D0=B8=D0=B2=D1=83&quot; =D0=B2 =D0=9A=D0=BE=D0=BC=D0=BF=D0=B0=D0=BD=D1=96=
+=D1=97-=D0=97=D0=B0=D0=BC=D0=BE=D0=B2=D0=BD=D0=B8=D0=BA=D0=B0;<br>- =D1=84=
+=D0=BE=D1=80=D0=BC=D1=83=D0=B2=D0=B0=D1=82=D0=B8 =D0=BF=D0=B5=D1=80=D1=81=
+=D0=BE=D0=BD=D0=B0=D0=BB=D1=96=D0=B7=D0=BE=D0=B2=D0=B0=D0=BD=D1=96 =D0=BA=
+=D0=BE=D0=BC=D0=B5=D1=80=D1=86=D1=96=D0=B9=D0=BD=D1=96 =D0=BF=D1=80=D0=BE=
+=D0=BF=D0=BE=D0=B7=D0=B8=D1=86=D1=96=D1=97; &nbsp;&nbsp;&nbsp;<br>- =D1=83=
+=D1=81=D0=BF=D1=96=D1=88=D0=BD=D0=BE =D0=B2=D0=B5=D1=81=D1=82=D0=B8 =D0=BF=
+=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8 =D0=BF=D0=BE =D1=82=
+=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83 =D1=96 =D0=BF=D1=80=D0=B8 =D0=B7=
+=D1=83=D1=81=D1=82=D1=80=D1=96=D1=87=D1=96; &nbsp;&nbsp;&nbsp;<br>- =D0=B2=
+=D0=B8=D0=BA=D0=BE=D1=80=D0=B8=D1=81=D1=82=D0=BE=D0=B2=D1=83=D0=B2=D0=B0=D1=
+=82=D0=B8 =D0=B7=D0=B0=D0=BF=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=D0=BD=D1=
+=8F =D1=96 =D1=81=D1=83=D0=BC=D0=BD=D1=96=D0=B2=D0=B8 =D0=BA=D0=BB=D1=96=D1=
+=94=D0=BD=D1=82=D0=B0, =D1=8F=D0=BA =D0=BC=D0=BE=D0=B6=D0=BB=D0=B8=D0=B2=D1=
+=96=D1=81=D1=82=D1=8C =D0=B4=D0=BB=D1=8F =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=
+=B6=D1=83; &nbsp;&nbsp;&nbsp;<br>- =D1=81=D0=BF=D0=BE=D0=BD=D1=83=D0=BA=D0=
+=B0=D1=82=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0 =D0=B4=D0=BE =D0=
+=B7=D0=B4=D1=96=D0=B9=D1=81=D0=BD=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=D0=BE=D0=
+=BA=D1=83=D0=BF=D0=BA=D0=B8 =D1=96 =D0=B4=D0=BE=D0=B2=D0=BE=D0=B4=D0=B8=D1=
+=82=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0 =D0=B4=D0=BE =D0=B7=D0=
+=B0=D0=B2=D0=B5=D1=80=D1=88=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=D1=80=D0=BE=D0=
+=B4=D0=B0=D0=B6=D1=83 / =D1=83=D0=BA=D0=BB=D0=B0=D0=B4=D0=B5=D0=BD=D0=BD=D1=
+=8F =D1=83=D0=B3=D0=BE=D0=B4=D0=B8; &nbsp;&nbsp;&nbsp;<br>- =D1=80=D0=BE=D0=
+=B7=D1=83=D0=BC=D1=96=D1=82=D0=B8 =D0=B2=D0=B0=D0=B6=D0=BB=D0=B8=D0=B2=D1=
+=96=D1=81=D1=82=D1=8C =D0=BF=D1=96=D1=81=D0=BB=D1=8F=D0=BF=D1=80=D0=BE=D0=
+=B4=D0=B0=D0=B6=D0=BD=D0=BE=D0=B3=D0=BE =D1=81=D0=B5=D1=80=D0=B2=D1=96=D1=
+=81=D1=83 =D1=96 =D0=BF=D0=BE=D0=B2=D1=82=D0=BE=D1=80=D0=BD=D0=BE=D0=B3=D0=
+=BE =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=83. &nbsp;&nbsp;&nbsp;=20
+<p></p>
+<div><strong><font color=3D"#004080">=D0=9F=D0=BE=D1=80=D1=8F=D0=B4=D0=BE=
+=D0=BA =D0=B4=D0=B5=D0=BD=D0=BD=D0=B8=D0=B9:</font></strong></div>
+<div>&nbsp;</div>
+<div><strong>=D0=92=D0=A1=D0=A2=D0=A3=D0=9F =D0=92 =D0=9F=D0=A0=D0=9E=D0=94=
+=D0=90=D0=96=D0=86 =D0=922=D0=92</strong> &nbsp;&nbsp;&nbsp;<br>- =D0=A2=D0=
+=B0=D0=BA=D1=82=D0=B8=D0=BA=D0=B0 =D1=96 =D1=81=D1=82=D1=80=D0=B0=D1=82=D0=
+=B5=D0=B3=D1=96=D1=8F =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=96=D0=B2 =D0=
+=922=D0=92 &nbsp;&nbsp;&nbsp;<br>- =D0=9F=D1=80=D0=B8=D1=87=D0=B8=D0=BD=D0=
+=B8 =D0=B2=D1=82=D1=80=D0=B0=D1=82=D0=B8 =D1=96 =D1=84=D0=B0=D0=BA=D1=82=D0=
+=BE=D1=80=D0=B8 =D1=83=D1=82=D1=80=D0=B8=D0=BC=D0=B0=D0=BD=D0=BD=D1=8F =D0=
+=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D1=96=D0=B2 &nbsp;&nbsp;&nbsp;<br>- =D0=
+=9A=D1=80=D0=B8=D1=82=D0=B5=D1=80=D1=96=D1=97 =D1=82=D0=B0 =D0=BF=D1=96=D0=
+=B4=D1=85=D0=BE=D0=B4=D0=B8 =D0=B4=D0=BE =D1=81=D0=B5=D0=B3=D0=BC=D0=B5=D0=
+=BD=D1=82=D0=B0=D1=86=D1=96=D1=97 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D1=
+=81=D1=8C=D0=BA=D0=BE=D1=97 =D0=B1=D0=B0=D0=B7=D0=B8 &nbsp;&nbsp;&nbsp;<b=
+r>- =D0=9A=D0=BE=D0=BC=D0=BF=D0=BB=D0=B5=D0=BA=D1=81=D0=BD=D0=B8=D0=B9 =D0=
+=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82 =D0=B7 =D0=BA=D0=BB=D1=96=D1=94=D0=
+=BD=D1=82=D0=BE=D0=BC &nbsp;&nbsp;&nbsp;</div>
+<div>&nbsp;&nbsp;&nbsp;</div>
+<div><strong>=D0=AF=D0=BA =D0=BF=D1=80=D0=B8=D0=B2=D0=B5=D1=80=D0=BD=D1=83=
+=D1=82=D0=B8 =D1=83=D0=B2=D0=B0=D0=B3=D1=83 =D1=96 =D1=83=D1=82=D1=80=D0=B8=
+=D0=BC=D0=B0=D1=82=D0=B8 =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82 =D0=B7=
+ =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC =D0=BF=D0=BE =D1=82=D0=B5=
+=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83</strong><br>- =D0=94=D0=B5=D1=81=D1=8F=
+=D1=82=D1=8C =D0=BF=D0=BE=D0=BC=D0=B8=D0=BB=D0=BE=D0=BA =D0=BF=D1=80=D0=B8=
+ =D1=81=D0=BF=D1=96=D0=BB=D0=BA=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=96 =D0=BF=
+=D0=BE =D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83 &nbsp;&nbsp;&nbsp=
+;<br>- =D0=9F=D1=81=D0=B8=D1=85=D0=BE=D0=BB=D0=BE=D0=B3=D1=96=D1=87=D0=BD=
+=D1=96 =D0=B0=D1=81=D0=BF=D0=B5=D0=BA=D1=82=D0=B8 =D1=83=D1=81=D0=BF=D1=96=
+=D1=88=D0=BD=D0=BE=D0=B3=D0=BE =D0=B2=D1=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=
+=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=
+=D1=83 =D0=B7 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC<br>- =D0=AF=
+=D0=BA =D0=B2=D0=B5=D1=81=D1=82=D0=B8 &quot;=D0=BA=D0=B5=D1=80=D0=BE=D0=B2=
+=D0=B0=D0=BD=D0=B8=D0=B9 =D0=B4=D1=96=D0=B0=D0=BB=D0=BE=D0=B3&quot; =D0=B7=
+ =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC: =D0=BF=D0=BE=D0=BA=D1=80=
+=D0=BE=D0=BA=D0=BE=D0=B2=D0=B8=D0=B9 =D0=B0=D0=BB=D0=B3=D0=BE=D1=80=D0=B8=
+=D1=82=D0=BC &nbsp;&nbsp;&nbsp;<br>- =D0=9F=D1=80=D0=B8=D0=B7=D0=BD=D0=B0=
+=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D0=B7=D1=83=D1=81=D1=82=D1=80=D1=96=D1=87=
+=D1=96 =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83 &nbs=
+p;&nbsp;&nbsp; </div>
+<div>&nbsp;&nbsp;&nbsp;</div>
+<div><strong>=D0=92=D1=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=BB=D0=B5=D0=BD=
+=D0=BD=D1=8F =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=D1=83 =D0=B7 =D0=BA=
+=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC =D0=BF=D1=80=D0=B8 =D0=BF=D1=80=
+=D0=BE=D0=B4=D0=B0=D0=B6=D1=96 &quot;=D0=9E=D0=B1=D0=BB=D0=B8=D1=87=D1=87=
+=D1=8F=D0=BC =D0=B4=D0=BE =D0=BE=D0=B1=D0=BB=D0=B8=D1=87=D1=87=D1=8F&quot=
+;</strong> <br>- =D0=A0=D0=B0=D0=BF=D0=BE=D1=80=D1=82 =D1=96 =D1=82=D0=B5=
+=D1=85=D0=BD=D1=96=D0=BA=D0=B8 =D0=BF=D1=96=D0=B4=D0=BB=D0=B0=D1=88=D1=82=
+=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F &nbsp;&nbsp;&nbsp;<br>- =D0=9F=D0=BE=
+=D0=B7=D0=B8=D1=82=D0=B8=D0=B2=D0=BD=D0=B0 =D1=96 =D0=BD=D0=B5=D0=B3=D0=B0=
+=D1=82=D0=B8=D0=B2=D0=BD=D0=B0 =D0=BC=D0=BE=D1=82=D0=B8=D0=B2=D0=B0=D1=86=
+=D1=96=D1=8F. =D0=92=D0=BF=D0=BB=D0=B8=D0=B2 =D0=BD=D0=B0 =D0=BA=D0=BB=D1=
+=96=D1=94=D0=BD=D1=82=D0=B0 =D0=B2 =D0=BF=D1=80=D0=BE=D1=86=D0=B5=D1=81=D1=
+=96 =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=D1=83<br>- =D0=9A=D1=80=D0=
+=BE=D0=BA=D0=B8 =D1=96 &quot;=D1=80=D0=B0=D0=BC=D0=BA=D0=B0&quot; =D0=BF=D0=
+=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2 &nbsp;&nbsp;&nb=
+sp;<br>- =D0=AF=D0=BA =D1=81=D0=BF=D0=BE=D0=BD=D1=83=D0=BA=D0=B0=D1=82=D0=
+=B8 =D1=96=D0=BD=D1=82=D0=B5=D1=80=D0=B5=D1=81 =D1=81=D0=BF=D1=96=D0=B2=D1=
+=80=D0=BE=D0=B7=D0=BC=D0=BE=D0=B2=D0=BD=D0=B8=D0=BA=D0=B0 &nbsp;&nbsp;&nb=
+sp;</div>
+<div>&nbsp;&nbsp;&nbsp;</div>
+<div><strong>=D0=A0=D0=BE=D0=B1=D0=BE=D1=82=D0=B0 =D1=96=D0=B7 =D0=B7=D0=B0=
+=D0=BF=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=D0=BD=D1=8F=D0=BC=D0=B8 =D1=96=
+ =D1=81=D1=83=D0=BC=D0=BD=D1=96=D0=B2=D0=B0=D0=BC=D0=B8 =D0=BA=D0=BB=D1=96=
+=D1=94=D0=BD=D1=82=D0=B0</strong> &nbsp;&nbsp;&nbsp;<br>- =D0=9F=D1=80=D0=
+=B8=D1=87=D0=B8=D0=BD=D0=B8 =D1=96 =D1=82=D0=B8=D0=BF=D0=B8 =D0=B7=D0=B0=D0=
+=BF=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=D1=8C &nbsp;&nbsp;&nbsp;<br>- =D0=
+=92=D0=B8=D1=8F=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=D1=80=D0=B8=D1=
+=85=D0=BE=D0=B2=D0=B0=D0=BD=D0=B8=D1=85 =D0=B7=D0=B0=D0=BF=D0=B5=D1=80=D0=
+=B5=D1=87=D0=B5=D0=BD=D1=8C =D1=96 =D0=BF=D1=80=D0=B8=D1=85=D0=BE=D0=B2=D0=
+=B0=D0=BD=D0=B8=D1=85 =D0=BF=D1=80=D0=BE=D0=B3=D1=80=D0=B0=D0=BC &nbsp;&n=
+bsp;&nbsp;<br>- =D0=90 =D1=8F=D0=BA=D1=89=D0=BE =D0=BA=D0=BB=D1=96=D1=94=D0=
+=BD=D1=82 =D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8=D1=82=D1=8C &quot;=D0=BD=D1=
+=96&quot; &nbsp;&nbsp;&nbsp;<br>- =D0=A2=D0=B5=D1=85=D0=BD=D1=96=D0=BA=D0=
+=B8 =D0=BF=D0=B5=D1=80=D0=B5=D0=B4=D0=B1=D0=B0=D1=87=D0=B5=D0=BD=D0=BD=D1=
+=8F =D1=96 =D0=B7=D0=BD=D1=8F=D1=82=D1=82=D1=8F =D1=82=D0=B8=D0=BF=D0=BE=D0=
+=B2=D0=B8=D1=85 =D0=B7=D0=B0=D0=BF=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=D1=
+=8C &nbsp;&nbsp;&nbsp;</div>
+<div>&nbsp;&nbsp;&nbsp; </div>
+<div><strong>=D0=A2=D0=B5=D1=85=D0=BD=D1=96=D0=BA=D0=B8 =D0=B7=D0=B0=D0=B2=
+=D0=B5=D1=80=D1=88=D0=B5=D0=BD=D0=BD=D1=8F =D1=83=D0=B3=D0=BE=D0=B4=D0=B8=
+ </strong>&nbsp;&nbsp;&nbsp;<br>- =D0=AF=D0=BA =D0=BF=D0=BE=D0=BB=D0=B5=D0=
+=B3=D1=88=D0=B8=D1=82=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D1=83 =D0=
+=BF=D1=80=D0=BE=D1=86=D0=B5=D1=81 =D0=BF=D1=80=D0=B8=D0=B9=D0=BD=D1=8F=D1=
+=82=D1=82=D1=8F =D1=80=D1=96=D1=88=D0=B5=D0=BD=D0=BD=D1=8F &nbsp;&nbsp;&n=
+bsp;<br>- =D0=A9=D0=BE =D1=80=D0=BE=D0=B1=D0=B8=D1=82=D0=B8 =D0=B2 =D1=81=
+=D1=82=D0=B0=D0=BD=D1=96 =D0=BD=D0=B5=D0=B2=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=
+=D0=B5=D0=BD=D0=BE=D1=81=D1=82=D1=96 &nbsp;&nbsp;&nbsp;<br>- =D0=A9=D0=BE=
+ =D1=80=D0=BE=D0=B1=D0=B8=D1=82=D0=B8 =D0=B7 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=
+=D1=82=D0=BE=D0=BC, =D1=8F=D0=BA=D0=B8=D0=B9 =D0=BD=D0=B5 =D0=BA=D1=83=D0=
+=BF=D0=B8=D0=B2 =D0=B2=D1=96=D0=B4=D1=80=D0=B0=D0=B7=D1=83 &nbsp;&nbsp;&n=
+bsp;</div>
+<div>&nbsp;&nbsp;&nbsp;</div>
+<div><strong>=D0=9F=D1=96=D1=81=D0=BB=D1=8F=D0=BF=D1=80=D0=BE=D0=B4=D0=B0=
+=D0=B6=D0=BD=D0=B8=D0=B9 =D1=81=D0=B5=D1=80=D0=B2=D1=96=D1=81 =D1=96 =D1=96=
+=D0=B4=D0=B5=D0=BE=D0=BB=D0=BE=D0=B3=D1=96=D1=8F =D1=81=D1=83=D0=BF=D1=80=
+=D0=BE=D0=B2=D0=BE=D0=B4=D1=83&nbsp;</strong>&nbsp;&nbsp;&nbsp;<br>- =D0=A1=
+=D1=83=D0=BF=D1=80=D0=BE=D0=B2=D1=96=D0=B4 =D1=83=D0=B3=D0=BE=D0=B4=D0=B8=
+ &nbsp;&nbsp;&nbsp;<br>- =D0=A0=D0=BE=D0=B1=D0=BE=D1=82=D0=B0 =D0=B7 =D0=BF=
+=D0=BE=D1=81=D1=82=D1=96=D0=B9=D0=BD=D0=B8=D0=BC=D0=B8 =D0=BA=D0=BB=D1=96=
+=D1=94=D0=BD=D1=82=D0=B0=D0=BC=D0=B8 &nbsp;&nbsp;&nbsp;<br>- =D0=9C=D0=B5=
+=D1=82=D0=BE=D0=B4=D0=B8 =D1=83=D1=82=D1=80=D0=B8=D0=BC=D0=B0=D0=BD=D0=BD=
+=D1=8F &nbsp;&nbsp;&nbsp;<br>- VIP-=D1=81=D1=83=D0=BF=D1=80=D0=BE=D0=B2=D1=
+=96=D0=B4 &nbsp;&nbsp;&nbsp; </div>
+<div>&nbsp;&nbsp;&nbsp;</div></div></td></tr>
+<tr>
+<td style=3D'FONT-SIZE: 16px; FONT-FAMILY: Georgia, "Times New Roman", Ti=
+mes, serif; COLOR: rgb(0,0,51)' bgColor=3D"#ebedf0" align=3Dleft>
+<div align=3Dcenter><font color=3D"#004080"><strong>=D0=92=D0=B0=D1=80=D1=
+=82=D1=96=D1=81=D1=82=D1=8C =D1=83=D1=87=D0=B0=D1=81=D1=82=D1=96:</strong=
+> &nbsp;&nbsp;&nbsp;<br></font><strong>2,900.00 =D0=B3=D1=80=D0=BD.</stro=
+ng> - =D0=B7=D0=B0 =D0=BE=D0=B4=D0=BD=D0=BE=D0=B3=D0=BE =D1=83=D1=87=D0=B0=
+=D1=81=D0=BD=D0=B8=D0=BA=D0=B0. &nbsp;&nbsp;&nbsp;<br>=D0=94=D0=BB=D1=8F&=
+nbsp;=D0=B4=D1=80=D1=83=D0=B3=D0=BE=D0=B3=D0=BE&nbsp;=D1=96 =D1=82=D1=80=D0=
+=B5=D1=82=D1=8C=D0=BE=D0=B3=D0=BE =D1=83=D1=87=D0=B0=D1=81=D0=BD=D0=B8=D0=
+=BA=D0=B0&nbsp;=D0=B7=D0=BD=D0=B8=D0=B6=D0=BA=D0=B8 5%&nbsp;=D1=96 7%&nbs=
+p;=D0=B2=D1=96=D0=B4=D0=BF=D0=BE=D0=B2=D1=96=D0=B4=D0=BD=D0=BE &nbsp;&nbs=
+p;&nbsp;</div></td></tr>
+<tr>
+<td style=3D'FONT-SIZE: 16px; FONT-FAMILY: Georgia, "Times New Roman", Ti=
+mes, serif; COLOR: rgb(0,0,51)' bgColor=3D"#ebedf0" align=3Dleft><strong>=
+<font color=3D"#004080">=D0=94=D0=B5=D1=82=D0=B0=D0=BB=D1=8C=D0=BD=D1=96=D1=
+=88=D0=B5 =D0=BD=D0=B0 =D1=81=D0=B0=D0=B9=D1=82=D1=96 >>></font></strong>=
+ <a href=3D"http://ukrsales.in.ua/Server-Side/amsweb.php?lCRk6AjgNHkkfma4=
+UdSsqJzfzJ5nMNpoHZiw0k5ix1%2FYs2vEMmRczhZB9MoOSuEeVGSjQjzaQeP64HrJMfoX1Ou=
+05znBEmzoCBZnqkxyd8r09VUEnEVENDxurOO679nfMdlCROhd6MHMnunEqAcDh%2B49eAqnD%=
+2BQZN1eQ1ewGYQL%2FqmIDAWI4uRvMtE7HZy59OE0Nnnsa%2FSM1v04GYUXNGTJNcO9OF0yKq=
+tZC%2BfPptHwnGMeTBDOaITRGnjAQQmr0">http://ukrsales.in.ua/training/164/pro=
+fes-yn-prodazh-v2v-v-d-pershogo-kontaktu-do-povtornih-prodazh-v.htm</a></=
+td></tr>
+<tr>
+<td style=3D'FONT-SIZE: 16px; FONT-FAMILY: Georgia, "Times New Roman", Ti=
+mes, serif; COLOR: rgb(0,0,51)' bgColor=3D"#ebedf0" align=3Dcenter>
+<p><strong>=D0=91=D1=96=D0=B7=D0=BD=D0=B5=D1=81-=D0=B7=D0=B0=D1=85=D0=BE=D0=
+=B4=D0=B8 =D1=86=D1=8C=D0=BE=D0=B3=D0=BE =D1=82=D0=B8=D0=B6=D0=BD=D1=8F</=
+strong></p>
+<table cellSpacing=3D0 cellPadding=3D5 width=3D"100%" border=3D0>
+<tbody>
+<tr>
+<td width=3D"25%" align=3Dcenter><strong>10-11 =D0=BB=D1=8E=D1=82=D0=BE=D0=
+=B3=D0=BE</strong></td>
+<td width=3D"75%"><a href=3D"http://ukrsales.in.ua/Server-Side/amsweb.php=
+?lCRk6AjgNHkkfma4UdSsqJzfzJ5nMNpoHZiw0k5ix1%2FYs2vEMmRczhZB9MoOSuEeVGSjQj=
+zaQeP64HrJMfoX1Ou05znBEmzoCBZnqkxyd8r09VUEnEVENDxurOO679nfMdlCROhd6MHMnun=
+EqAcDhy3TxNhvvrR6uDR%2Bs30mVFNy9vEV8jdGQ5SPqhKO20ZVThfzfvss8EZDatkJiwHXNU=
+V%2FjKo7JVIyOh0TFOjumrUKUoT8Mkfyhbem2T%2BOz%2BUgdWCWgm19O24jGmR4a2VmjQ%3D=
+%3D">=D0=9F=D0=BE=D0=B1=D1=83=D0=B4=D0=BE=D0=B2=D0=B0 =D1=81=D0=B8=D1=81=D1=
+=82=D0=B5=D0=BC=D0=B8 =D0=BE=D0=BF=D0=BB=D0=B0=D1=82=D0=B8 =D0=B7=D0=B0 =D1=
+=80=D0=B5=D0=B7=D1=83=D0=BB=D1=8C=D1=82=D0=B0=D1=82=D0=BE=D0=BC =D0=B2 =D0=
+=BA=D0=BE=D0=BC=D0=BF=D0=B0=D0=BD=D1=96=D1=97 =D0=9A=D0=A0=D0=86 =D0=BC=D0=
+=BE=D1=82=D0=B8=D0=B2=D0=B0=D1=86=D1=96=D1=97, =D0=BD=D0=B0=D1=86=D1=96=D0=
+=BB=D0=B5=D0=BD=D0=BE=D1=97 =D0=BD=D0=B0 =D0=BF=D1=80=D0=B8=D0=B1=D1=83=D1=
+=82=D0=BE=D0=BA</a></td></tr>
+<tr>
+<td align=3Dcenter><strong>21-22 =D0=BB=D1=8E=D1=82=D0=BE=D0=B3=D0=BE</st=
+rong></td>
+<td><a href=3D"http://ukrsales.in.ua/Server-Side/amsweb.php?lCRk6AjgNHkkf=
+ma4UdSsqJzfzJ5nMNpoHZiw0k5ix1%2FYs2vEMmRczhZB9MoOSuEeVGSjQjzaQeP64HrJMfoX=
+1Ou05znBEmzoCBZnqkxyd8r09VUEnEVENDxurOO679nfMdlCROhd6MHMnunEqAcDhyyTnWLF8=
+HHqbfTqTOFtmZF5WJoLkKin8Yb7dZVxfjN241fO8OBn5D0jStRBQrPL%2Fw%3D%3D">=D0=9C=
+=D0=B0=D0=B9=D1=81=D1=82=D0=B5=D1=80 =D0=B7=D0=B0=D0=BA=D1=83=D0=BF=D1=96=
+=D0=B2=D0=B5=D0=BB=D1=8C: =D1=80=D0=B5=D0=B7=D1=83=D0=BB=D1=8C=D1=82=D0=B0=
+=D1=82=D0=B8=D0=B2=D0=BD=D1=96 =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=
+=D0=BE=D1=80=D0=B8</a></td></tr>
+<tr>
+<td align=3Dcenter><strong>1-2 =D1=82=D0=B0 10-11 =D0=B1=D0=B5=D1=80=D0=B5=
+=D0=B7=D0=BD=D1=8F</strong></td>
+<td><a href=3D"http://ukrsales.in.ua/Server-Side/amsweb.php?lCRk6AjgNHkkf=
+ma4UdSsqJzfzJ5nMNpoHZiw0k5ix1%2FYs2vEMmRczhZB9MoOSuEeVGSjQjzaQeP64HrJMfoX=
+1Ou05znBEmzoCBZnqkxyd8r09VUEnEVENDxurOO679nfMdlCROhd6MHMnunEqAcDh%2FGRlmJ=
+8tVLdj6IebBWMSCNVLHE3mnBtPWRQKHcaXO46JMV1XI%2Bn1q6zvZQVnB685JAGaHdGFdhGSC=
+viNRmPnFnMx99OUtWJABD0wN3boc7a">=D0=A2=D1=80=D0=B0=D0=BD=D1=81=D0=BF=D0=BE=
+=D1=80=D1=82=D0=BD=D0=B0 =D0=BB=D0=BE=D0=B3=D1=96=D1=81=D1=82=D0=B8=D0=BA=
+=D0=B0 =D1=82=D0=B0 =D0=BE=D0=BF=D1=82=D0=B8=D0=BC=D1=96=D0=B7=D0=B0=D1=86=
+=D1=96=D1=8F =D0=BB=D0=BE=D0=B3=D1=96=D1=81=D1=82=D0=B8=D1=87=D0=BD=D0=B8=
+=D1=85 =D0=B2=D0=B8=D1=82=D1=80=D0=B0=D1=82 =D0=BA=D0=BE=D0=BC=D0=BF=D0=B0=
+=D0=BD=D1=96=D1=97</a></td></tr></tbody></table></td></tr>
+<tr>
+<td style=3D'FONT-SIZE: 18px; FONT-FAMILY: "Times New Roman", Times, seri=
+f' bgColor=3D"#ffffff" align=3Dleft>
+<p><strong><em>=D0=97=D0=B0=D0=BB=D0=B8=D1=88=D0=B8=D0=BB=D0=B8=D1=81=D1=8C=
+ =D0=BF=D0=B8=D1=82=D0=B0=D0=BD=D0=BD=D1=8F?</em></strong></p>
+<p><strong><em>=D0=A2=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83=D0=B9=D1=82=
+=D0=B5: (O63) 2=D0=977-90-05 &nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;<br>=
+</em>WEB<em>&nbsp;</em></strong><a href=3D"http://ukrsales.in.ua/Server-S=
+ide/amsweb.php?1HtuOsgqIfJmqa7582%2FV5J2V1ga%2BBdrU02mHom38nQlAXkuawC3sZh=
+KRJk82JW%2FfdZ09hfl9DbmK7nGFN%2BputBzGt4LUSHM0Oby0srVDDXtlH8gMlAXzFES%2Bu=
+tHVBmf563GKeBJlkjHNndfpgvvW9A%3D%3D"><strong>HTTP://ukrsales.in.ua</stron=
+g></a>=20
+<div></div>
+<div><strong><em>&nbsp;&nbsp;&nbsp;</em></strong></div>
+<div><strong>E-MAIL:</strong> <a href=3D"mailto:bcnua@rambler.ua"><strong=
+>bcnua@rambler.ua</strong></a></div>
+<div>&nbsp;&nbsp;&nbsp;</div>
+<div></div>
+<div><a href=3D"http://ukrsales.in.ua/Server-Side/amsweb.php?sP6CF77%2BHv=
+cHEX67%2F2k5paKa7CJwIDAF8c2iX7XuRHueyLu3QgUiPDUqf%2Faiw1Lp%2FQBVKHY%2B2M1=
+h8vZyVI16yvhLkysy%2BdE8Yc5ZMmMeg12hCMrNRfYKOQMpso%2B1%2FGQa3sExP9Rl0IBJet=
+KuXGdQ3w%3D%3D"><font color=3D"#004080" size=3D3 face=3D"Comic Sans MS"><=
+em>--</em></font></a><font color=3D"#004080" size=3D3 face=3D"Comic Sans =
+MS"><em> &nbsp;&nbsp;&nbsp;<br>=D0=97 =D0=BF=D0=BE=D0=B2=D0=B0=D0=B3=D0=BE=
+=D1=8E, &nbsp;&nbsp;&nbsp;<br>=D0=94=D1=96=D0=B0=D0=BD=D0=B0 &nbsp;&nbsp;=
+&nbsp;<br>email-=D0=BC=D0=B0=D1=80=D0=BA=D0=B5=D1=82=D0=BE=D0=BB=D0=BE=D0=
+=B3 &nbsp;&nbsp;&nbsp;</em></font></div></td></tr>
+<tr>
+<td style=3D'FONT-SIZE: 13px; FONT-FAMILY: Georgia, "Times New Roman", Ti=
+mes, serif' bgColor=3D"#ebedf0" align=3Dcenter><font face=3DVerdana><font=
+ size=3D2><strong>=D0=B1=D1=96=D0=BB=D1=8C=D1=88=D0=B5 =D0=BD=D0=B5 =D0=BE=
+=D1=82=D1=80=D0=B8=D0=BC=D1=83=D0=B2=D0=B0=D1=82=D0=B8</strong><br></font=
+></font><font size=3D2 face=3DVerdana><a href=3D"http://ukrsales.in.ua/Se=
+rver-Side/amsweb.php?y0WviPtvkz7cgL908H%2FwwunMFjFT3kiOw9Y%2FfAV8Yci2D0TK=
+pFUGQWWsjLnecxnb0BUGiJ83oZW76hNoB0IBXPFgemKez9FLbDLAyJpNonBfz6L67Kf9iQKkL=
+uR5LQXs4AZwvPu507qfPodd5xK9Eg%3D%3D">List-Unsubscribe</a></font></td></tr=
+></tbody></table><div><img width=3D1 height=3D1 alt=3D"" src=3D"http://uk=
+rsales.in.ua/Server-Side/amsweb.php?1HtuOsgqIfJmqa7582%2FV5J2V1ga%2BBdrU0=
+2mHom38nQlAXkuawC3sZhKRJk82JW%2FfdZ09hfl9DbmK7nGFN%2BputBzGt4LUSHM0Oby0sr=
+VDDXvvohEpDkXdX3sfQsaOBJyD"></div></body></html>
+
+--aa145df44fb9930ac9632a81cce8c0d8df8668--
