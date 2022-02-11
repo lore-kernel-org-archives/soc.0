@@ -1,54 +1,104 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <SRS0=RulI=S2=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6544DC433EF
-	for <soc@archiver.kernel.org>; Fri, 11 Feb 2022 21:44:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E39E5C433F5
+	for <soc@archiver.kernel.org>; Fri, 11 Feb 2022 21:56:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 27CCDC340ED; Fri, 11 Feb 2022 21:44:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 10B4CC340E9;
-	Fri, 11 Feb 2022 21:44:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644615866;
-	bh=/dgif6PesOzg2sY0316rn/XGCRUjxdtO4DFyIr2sqYg=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=ts68qVLl2WKx9+Ge+5qqYAHnowtbi8rP4f+JnJMkUUWhhBQSFq41GLbbQ7QmJMDfp
-	 ojk1FGSwnIvAOMEHoYWr3ytPIjviDRSH50lmNmgGMY0M5gIsA4Fw3ZX22XgiXaL5kd
-	 zLReT1KP+ogsFn2n0jMDmwuUaCSlACisSuBPBW98LmsD8oPnpzcFcBnWKIKl5ueUQt
-	 SVRTWc76QxCLO/rgJz2FU+HtRj/+JTAyxP6z4vESmMprYlO8TSX+9KsdW9wXXHEn/D
-	 e5VOJ4CqL8px2POBXCnvsi6qnGnBjPJrjYykwNBSnNx3nZNuu/SeOsELSwJlPYMa0r
-	 yRTy+HcWj6z/Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F1D2CE5CF96;
-	Fri, 11 Feb 2022 21:44:25 +0000 (UTC)
-Subject: Re: [GIT PULL] ARM: SoC fixes for 5.17
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAK8P3a2kFbS_oDP1GLeuSF9zR-DX6wk3YSJGD=2LZyLr3eO65A@mail.gmail.com>
-References: <CAK8P3a2kFbS_oDP1GLeuSF9zR-DX6wk3YSJGD=2LZyLr3eO65A@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
-X-PR-Tracked-Message-Id: <CAK8P3a2kFbS_oDP1GLeuSF9zR-DX6wk3YSJGD=2LZyLr3eO65A@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-5.17-1
-X-PR-Tracked-Commit-Id: 5e5eddd94c8906472e3904cb11b4e3ccbb99d0d4
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 83e396641110663d3c7bb25b9bc0c6a750359ecf
-Message-Id: <164461586598.18198.4263049449395953204.pr-tracker-bot@kernel.org>
-Date: Fri, 11 Feb 2022 21:44:25 +0000
-To: Arnd Bergmann <arnd@kernel.org>
+	id A9971C340F0; Fri, 11 Feb 2022 21:56:10 +0000 (UTC)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E95E4C340EE
+	for <soc@kernel.org>; Fri, 11 Feb 2022 21:56:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E95E4C340EE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f173.google.com with SMTP id p19so28856863ybc.6
+        for <soc@kernel.org>; Fri, 11 Feb 2022 13:56:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=xbC8/7zZWapRlMhxc2uy/RGvYp+XdXMtARtmdnMzDko=;
+        b=UMIPLktwVly4/dKO4qBxwne9yLdX0J7KcY62hWul6m7LNBdubrHEk6frSMBbjOxhLm
+         j6eogfipfceAuMq/sXvkPq4HR/CwVSwCpw2+7DvG04NnHvnQCsMOuIQy+r/EWOCM+V3B
+         St8kkzQNgN/gExUuAgGzvWGTkAKpW0SwznGwyLsIf20fWbBrsqpB2iBujCJYqWvvcoxw
+         +9tGDX0BpvLW2wGXBX988r5r6xbIO5mzZbHv7yPgvq3GDJ27mZQe0a1OdEc6OK+4c0CT
+         Z2kuCK4oa6krGJB8aetAddlo8KnYi8fpbq/UvLeVTmda7+jFJACCOZrUn8FqX6IjYyGw
+         PMQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=xbC8/7zZWapRlMhxc2uy/RGvYp+XdXMtARtmdnMzDko=;
+        b=haIQgkgMrdboez01T5qF8fBLukzC5BUNl/HTxwekS7f3DAsolBwBS4uxjMBwp5/oKf
+         V8y0rmVe89d6GdXhyKqeWCg+rNSVY1Ao+WD5hN3b5s0yQknxq0bMoJ00O/l9oUg/GBnc
+         rY15q90h9N0RCW9ckR0Pze2YQdRZr8Dyx63/4aXq2qZziCFROIt1oyHjk5D7GUr2FAe0
+         85KR07JhEfARf+OdcNSxcXsd6cZvUFw/ZY+HVdI2ZUGiUk/tpd+TlKww7NbAJjm5uYR1
+         9OPj4Rd/PLDRf+pjVyq9vA3i5HfTsM3JXX11rd5IEQ3Yh1/NC+kd01tGm5U4ZLsyhqab
+         2c/A==
+X-Gm-Message-State: AOAM532dONKI+XuSIOIjrZ3Q+3YSsqtD3DfDFagXrYPu8eJ4mLp20AzR
+	HLNpDtCBxMqpyTw9YugoKfcthmUPBdQbX5b1a8Tw/BUdW2zna4MG
+X-Google-Smtp-Source: ABdhPJxFqmAA5cF9bgGVu/y84+bz0XyyWfxPXm61+0goSii5Z9udZ6KNK+0W2BrYds5qH+lGxDkWD+ZTfiHBFpqU52E=
+X-Received: by 2002:a25:30d4:: with SMTP id w203mr3367369ybw.511.1644616568754;
+ Fri, 11 Feb 2022 13:56:08 -0800 (PST)
+MIME-Version: 1.0
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 11 Feb 2022 22:55:57 +0100
+Message-ID: <CACRpkdaDcEqtSnWzRBnBHVweh2n=Dj3meHG9LND+K0Czb9ORGg@mail.gmail.com>
+Subject: [GIT PULL] Ux500 DTS updates for v5.18
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-The pull request you sent on Fri, 11 Feb 2022 22:38:19 +0100:
+Hi SoC team,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-5.17-1
+please pull the following Ux500 DTS-related changes into the
+SoC tree for v5.18! Details in the signed tag.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/83e396641110663d3c7bb25b9bc0c6a750359ecf
+Yours,
+Linus Walleij
 
-Thank you!
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+tags/ux500-dts-v5.18-1
+
+for you to fetch changes up to cbc72c0f2713772766e1a6d5f9c7375ed4506447:
+
+  ARM: dts: ux500: Correct Janice accel mount matrix (2022-02-11 22:49:26 +0100)
+
+----------------------------------------------------------------
+Ux500 DTS updates for the v5.18 kernel cycle:
+
+- Add battery thermal zones so we can monitor the battery temperature
+- Enable charging options on AB8505
+- Fix up all the AB8500 and AB8505 nodes in accordance with the new
+  schema.
+- Fix the mounting matrix for the Janice phone.
+
+----------------------------------------------------------------
+Linus Walleij (4):
+      ARM: dts: ux500: Add battery thermal zones and NTCs
+      ARM: dts: AB8505: Enable charging options
+      ARM: dts: ux500: Update AB850[05] nodes
+      ARM: dts: ux500: Correct Janice accel mount matrix
+
+ arch/arm/boot/dts/ste-ab8500.dtsi              | 39 +++++++++++++-------------
+ arch/arm/boot/dts/ste-ab8505.dtsi              | 34 +++++++++++-----------
+ arch/arm/boot/dts/ste-href-ab8500.dtsi         |  2 +-
+ arch/arm/boot/dts/ste-href.dtsi                | 25 ++++++++++++++---
+ arch/arm/boot/dts/ste-snowball.dts             | 27 ++++++++++++++----
+ arch/arm/boot/dts/ste-ux500-samsung-codina.dts | 22 +++++++++++++--
+ arch/arm/boot/dts/ste-ux500-samsung-gavini.dts | 22 +++++++++++++--
+ arch/arm/boot/dts/ste-ux500-samsung-golden.dts | 22 +++++++++++++--
+ arch/arm/boot/dts/ste-ux500-samsung-janice.dts | 24 ++++++++++++++--
+ arch/arm/boot/dts/ste-ux500-samsung-kyle.dts   | 22 +++++++++++++--
+ arch/arm/boot/dts/ste-ux500-samsung-skomer.dts | 22 +++++++++++++--
+ 11 files changed, 203 insertions(+), 58 deletions(-)
