@@ -1,85 +1,176 @@
-Return-Path: <SRS0=YsOI=S2=gmail.com=f.fainelli@kernel.org>
+Return-Path: <SRS0=ZBDT=S3=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F02F2C433F5
-	for <soc@archiver.kernel.org>; Fri, 11 Feb 2022 22:25:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ABA0C433EF
+	for <soc@archiver.kernel.org>; Sat, 12 Feb 2022 17:27:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D7F5CC340F0; Fri, 11 Feb 2022 22:25:28 +0000 (UTC)
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	id EAE49C340F0; Sat, 12 Feb 2022 17:27:27 +0000 (UTC)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 57A60C340E9;
-	Fri, 11 Feb 2022 22:25:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 57A60C340E9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id u16so12930803pfg.3;
-        Fri, 11 Feb 2022 14:25:28 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 4CAD0C340EE
+	for <soc@kernel.org>; Sat, 12 Feb 2022 17:27:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4CAD0C340EE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f175.google.com with SMTP id p19so34110308ybc.6
+        for <soc@kernel.org>; Sat, 12 Feb 2022 09:27:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1d+w4SSqS8Y2tOHARM/ajphQrcoSLUxKeD6AXDHhS/0=;
-        b=YsCS8FDt52cOk5ekqGIBfuEfqZPNtw7TI7w8dio7U2tV3o70vw/jXDwCeUAkODLYMg
-         thG5clo3vOPdI0Adv9CnodVEd6x0GM+MIPvyg8Mfq3bCOg2SANkz3R0oNwkuLx1qKLvp
-         gSeuLjO7LOPk4sQqdkLIuabmGXw6CBpDPHaqPFMDDOkzYUk/mokqAFen4AIWK6LPMmuM
-         9XWTF7SKVRolhq39VJX+IcjbvfEFZEarW8nQimZk+9aV6irw2WONIhKy9gbiXtKqh0bE
-         eD9BBrwaBDx5kLZ4X+wiZCFXu1ThWyXi8dwk5J6ydHVTX8WYPAWriivbkNHMaZv3mMPk
-         O+5g==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=+tsiIrCYmAr0wKNPAdkeKXURpFf0Li+fzBtDiSSSeio=;
+        b=wHaSybrQlKz5m8ZrXt8RDG8yQorvwD69T5durxAR4rPUSRRuFY0AxtKKYKnjSrWdbL
+         c4hNO2sqfFgLsJypTDmamO7p9fLyA1FyJ6Y/TLKcHv3dzFjd6Ax6FDnpNbcKEOKV05We
+         893TjSC0o7YMsRr2Gotb/3Hv9GLwLjlGoE8sxIXN1gmSAK7QrSZj/k599r1J3xA5KhKn
+         jhf+fHDu5Jnm9NOrljzvhLCE+Fbd0/1+PPZxNQi8cRWeaWLiFOv0F5cwv+I+jyyPIV28
+         /qu3I/kF9PMbnHWgf2MbJYhJaR/sOX6tu7Yf7rGepUE6L4kENzWHKrxcp+a4q1LeUJkG
+         e7DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1d+w4SSqS8Y2tOHARM/ajphQrcoSLUxKeD6AXDHhS/0=;
-        b=rjLnuu1JK3zmEOwoo8YXB/cwgNoOMtHXRVPCvQetrQ9tFdSaO+2ZRekL8cejXni8bp
-         aaXhOzeLM9JS3LaYCcAAWVJJvSPq0Qk1TEmshi4oivCd2enTpqOwDZt0EwNqQQ0Pa1ES
-         Ch5kOiLoRB0QbxhO1s5Wf9oxrftJhfo+DRLKHR6KBv28gPH1vd+ydSlDK092b1E2SRu4
-         jWPd4xM0dqQnBWi/tbrfk6drArCXLdYWgjAUoigV1jQRdei6qGsx3Wz6O2H2GVdYYYvt
-         VYOVFsToVx4tRI0ewzARwGhrznBkcym4l4ZAXP99s/8d9PFWf/FHigyNrWOXFp+52fUW
-         tY0w==
-X-Gm-Message-State: AOAM531eiYo4oxXXLIWpQU5f7DyXEIbFDnFSX36uZfzARbWxn/HoUIoH
-	e7znexvtDh32YYMmzy/u0FU=
-X-Google-Smtp-Source: ABdhPJwPmCYa33zfHeZb+o5jytoQKfT+eQDK2CrUyESxvccaxoutkNfDdcvsoE3aEXK+7Xq9ovXrgA==
-X-Received: by 2002:a63:88c3:: with SMTP id l186mr3056432pgd.326.1644618327900;
-        Fri, 11 Feb 2022 14:25:27 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d15sm27521444pfu.127.2022.02.11.14.25.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 14:25:27 -0800 (PST)
-From: Florian Fainelli <f.fainelli@gmail.com>
-To: bcm-kernel-feedback-list@broadcom.com,
-	Stefan Wahren <stefan.wahren@i2se.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Phil Elwell <phil@raspberrypi.com>,
-	devicetree@vger.kernel.org,
-	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org
-Subject: Re: [PATCH V2 3/3] arm64: dts: broadcom: Add reference to RPi Zero 2 W
-Date: Fri, 11 Feb 2022 14:25:25 -0800
-Message-Id: <20220211222525.1145344-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1643736467-17764-4-git-send-email-stefan.wahren@i2se.com>
-References: <1643736467-17764-1-git-send-email-stefan.wahren@i2se.com> <1643736467-17764-4-git-send-email-stefan.wahren@i2se.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=+tsiIrCYmAr0wKNPAdkeKXURpFf0Li+fzBtDiSSSeio=;
+        b=QxkP260rj6gxZH/AN/GfMepEiu8XEQtdZIAbRGheYZwNLNLFWDQQ+6SNlZI99+w+wR
+         6/VqIvIVpHt/TjPKUaXuk4lTgtYpaPSy3J0ui2qVG7O+V2MecjODMrQodvaBwhqOglgi
+         UIGnSQvZtlsN/ZE1abT+EGYDkioWQGcUZoHPfvZU8UmZGAPhPug+jzuhEcsfow/J1KO0
+         14D+goxNIyOh441cF9ox169xUjiYwtGNmLPoliL9BKi4ku5/E3BaiYvxhNYMFHizq5Y/
+         2P2oGITTT0dzIdOc3igsKkP9/GnOtuVhx7urigNiQJIIwnbEpXhzuiNk6esvneM4cbuo
+         EGLw==
+X-Gm-Message-State: AOAM530O7QcDiRrQ8yjIfXDZyUPUSNZLseDIxOqGVdjaR1FnIptw8u+6
+	XF2QK/H+/TCyuJqynYjOeXoqa0n+dofmDgpE6zVUPN77C9uPjmcy
+X-Google-Smtp-Source: ABdhPJw7m8iM0xpQm2iEAVfWKFP9P1beW3pvHI53Vi3R7dLs7nUVX0I5eiZyBW3Yo5p408lqWOI7nzzvIRAYrVfmXN8=
+X-Received: by 2002:a25:40b:: with SMTP id 11mr2902681ybe.110.1644686845794;
+ Sat, 12 Feb 2022 09:27:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Sat, 12 Feb 2022 18:27:14 +0100
+Message-ID: <CACRpkdahK-jaHFqLCpSqiXwAtkSKbhWQZ9jaSo6rRzHfSiECkA@mail.gmail.com>
+Subject: [GIT PULL] IXP4xx spring cleaning patches
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Corentin Labbe <clabbe@baylibre.com>, Imre Kaloz <kaloz@openwrt.org>, 
+	Krzysztof Halasa <khalasa@piap.pl>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue,  1 Feb 2022 18:27:47 +0100, Stefan Wahren <stefan.wahren@i2se.com> wrote:
-> This adds a reference to the dts of the Raspberry Pi Zero 2 W,
-> so we don't need to maintain the content in arm64.
-> 
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> ---
+Hi SoC folks,
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
---
-Florian
+here is the spring cleaning of IXP4xx, after this we only do
+device tree boots and we dropped a ton of legacy code in
+favor of proper drivers, most notable the PCI driver.
+
+The two network subsystem-touching patches have been
+ACKed by Jakub.
+
+I copied the cover letter from the series into the signed tag,
+we can do multiplatform next but it requires some
+bigendian troubleshooting.
+
+Please pull it in!
+
+Yours,
+Linus Walleij
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+tags/ixp4xx-cleanup-for-v5.18
+
+for you to fetch changes up to 06954b6a9e6a303b4782d543f5299b3b4020fd1f:
+
+  ARM: ixp4xx: Convert to SPARSE_IRQ and P2V (2022-02-12 18:20:04 +0100)
+
+----------------------------------------------------------------
+This cleans out the remaining board files from IXP4xx and
+makes it an exclusive device tree subarchitecture without any
+special weirdness in arch/arm/mach-ixp4xx.
+
+The biggest noticeable change is the removal of the old PCI
+driver and along with that the removal of the special DMA
+coherency code and defines and the DMA bouncing.
+
+I tried to convert the IXP4xx to multiplatform on top of
+this but it didn't work because IXP4xx wants to be big
+endian and multiplatform config creates a problem like
+this:
+
+../arch/arm/kernel/head.S: Assembler messages:
+../arch/arm/kernel/head.S:94: Error: selected processor does not
+support `setend be' in ARM mode
+
+I think this is because MULTI_V5 turns on CPUs that cannot
+do big endian, and IXP4xx turn on big endian. (It crashes if
+I try to boot in little endian mode, sorry. It really wants
+to run big endian.)
+
+But before fixing multiplatform we can fix all of this!
+
+The networking patches are dependencies so I am requesting
+ACKs from the network maintainers on these.
+
+----------------------------------------------------------------
+Linus Walleij (12):
+      ARM: ixp4xx: Delete the Goramo MLR boardfile
+      ARM: ixp4xx: Delete old PCI driver
+      ARM: ixp4xx: Drop stale Kconfig entry
+      ARM: ixp4xx: Drop UDC info setting function
+      soc: ixp4xx: Add features from regmap helper
+      soc: ixp4xx-npe: Access syscon regs using regmap
+      net: ixp4xx_eth: Drop platform data support
+      net: ixp4xx_hss: Check features using syscon
+      ARM: ixp4xx: Remove feature bit accessors
+      ARM: ixp4xx: Drop custom DMA coherency and bouncing
+      ARM: ixp4xx: Drop all common code
+      ARM: ixp4xx: Convert to SPARSE_IRQ and P2V
+
+Zoltan HERPAI (1):
+      ARM: ixp4xx: Delete Gateway 7001 boardfiles
+
+ arch/arm/Kconfig                                |  11 +-
+ arch/arm/mach-ixp4xx/Kconfig                    |  57 ---
+ arch/arm/mach-ixp4xx/Makefile                   |  19 +-
+ arch/arm/mach-ixp4xx/common-pci.c               | 451 --------------------
+ arch/arm/mach-ixp4xx/common.c                   | 448 -------------------
+ arch/arm/mach-ixp4xx/gateway7001-pci.c          |  61 ---
+ arch/arm/mach-ixp4xx/gateway7001-setup.c        | 113 -----
+ arch/arm/mach-ixp4xx/goramo_mlr.c               | 532 -----------------------
+ arch/arm/mach-ixp4xx/include/mach/hardware.h    |  32 --
+ arch/arm/mach-ixp4xx/include/mach/io.h          | 545 ------------------------
+ arch/arm/mach-ixp4xx/include/mach/ixp4xx-regs.h | 303 -------------
+ arch/arm/mach-ixp4xx/include/mach/platform.h    | 102 -----
+ arch/arm/mach-ixp4xx/include/mach/udc.h         |   8 -
+ arch/arm/mach-ixp4xx/include/mach/uncompress.h  |   4 +-
+ arch/arm/mach-ixp4xx/irqs.h                     |  64 ---
+ drivers/crypto/ixp4xx_crypto.c                  |   1 -
+ drivers/net/ethernet/xscale/Kconfig             |   4 +-
+ drivers/net/ethernet/xscale/ixp4xx_eth.c        |  85 +---
+ drivers/net/ethernet/xscale/ptp_ixp46x.c        |   1 -
+ drivers/net/wan/Kconfig                         |   3 +-
+ drivers/net/wan/ixp4xx_hss.c                    |  39 +-
+ drivers/soc/ixp4xx/Kconfig                      |   1 +
+ drivers/soc/ixp4xx/ixp4xx-npe.c                 |  33 +-
+ include/linux/platform_data/eth_ixp4xx.h        |  21 -
+ include/linux/platform_data/wan_ixp4xx_hss.h    |  17 -
+ include/linux/soc/ixp4xx/cpu.h                  |  26 +-
+ include/linux/soc/ixp4xx/npe.h                  |   2 +
+ kernel/dma/mapping.c                            |   2 -
+ 28 files changed, 99 insertions(+), 2886 deletions(-)
+ delete mode 100644 arch/arm/mach-ixp4xx/common-pci.c
+ delete mode 100644 arch/arm/mach-ixp4xx/common.c
+ delete mode 100644 arch/arm/mach-ixp4xx/gateway7001-pci.c
+ delete mode 100644 arch/arm/mach-ixp4xx/gateway7001-setup.c
+ delete mode 100644 arch/arm/mach-ixp4xx/goramo_mlr.c
+ delete mode 100644 arch/arm/mach-ixp4xx/include/mach/hardware.h
+ delete mode 100644 arch/arm/mach-ixp4xx/include/mach/io.h
+ delete mode 100644 arch/arm/mach-ixp4xx/include/mach/ixp4xx-regs.h
+ delete mode 100644 arch/arm/mach-ixp4xx/include/mach/platform.h
+ delete mode 100644 arch/arm/mach-ixp4xx/include/mach/udc.h
+ delete mode 100644 arch/arm/mach-ixp4xx/irqs.h
+ delete mode 100644 include/linux/platform_data/eth_ixp4xx.h
+ delete mode 100644 include/linux/platform_data/wan_ixp4xx_hss.h
