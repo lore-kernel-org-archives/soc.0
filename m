@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11888C433F5
-	for <soc@archiver.kernel.org>; Sun, 13 Feb 2022 05:51:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88598C433EF
+	for <soc@archiver.kernel.org>; Sun, 13 Feb 2022 05:53:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F1B93C340E9; Sun, 13 Feb 2022 05:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD655C004E1;
-	Sun, 13 Feb 2022 05:51:11 +0000 (UTC)
+	id 70448C340E9; Sun, 13 Feb 2022 05:53:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D4A5C004E1;
+	Sun, 13 Feb 2022 05:53:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644731472;
-	bh=FX8819wqLihw4UXIVugvl3Qix9aIA11Kpev+O88CRaY=;
+	s=k20201202; t=1644731629;
+	bh=Fo18nhoKtxPwZhPYjoic2fvv4Z1PGj0JxEtK5Qb92Nc=;
 	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=ifnYnO6038/Hucr4y/fLkrQpL1AsYGvYscltRCTV05vKbhduCNITXqkY5Ns8erPFb
-	 aGIW18bQqBwudkZ2CDF6ceMJHBeL6VkHbxgIBr0ovqKsrTDnXcnpECzX4KjedLCIPn
-	 F182BOUpXaukn9WxH0xVYEbx+8AuOvP3+UKb7mkjqmQF5FZN9m/wgaLGDqtxJaFiIy
-	 OmzQykWDDdg1nfoK+ITSpQAxAS70eSSoazEyE28S8Pvu8b/VLKFwpy5Or4llE6os7l
-	 a6vXWsIbXpCF+ZhScTcMjfuqxfHvrtr3qxGnQZqhGz/ipERQ5xh6zUjYmRO/j2JrKf
-	 E1hnABZ3Ji9sw==
+	b=GAXiPuus70xuM9j2mnxzq1xCeJ7QM2mvQ89fsztlzstwsqNL1LjpabRgwCMXaWuQp
+	 fR0JpMWcwwM756fXEJls/muxCS/4qnz9prGuiyIIu4Cp04+StjQ5sfv/InECng/R/K
+	 Qo1r+/NU43tBqJFWy3bS0no0ZrLGaaEw9kj3+6acLeAzop7+rICeWmFmhuXmFiUmS/
+	 KSbqxKRNjUgQKdNySJXjdtYL8LZfD7JilsikIwU786JYHhl59YNyXS9KVwRttlzcrK
+	 mfzxy6U2eeflPY9m3/+8nwMvpFaWSH/J7T7WAQKHAkRdmVSvrh4EDRIhI6FjB6Fv2I
+	 ZEFGxDNC/ldwA==
 From: Sasha Levin <sashal@kernel.org>
 To: stable-commits@vger.kernel.org,
 	tony@atomide.com
@@ -31,9 +31,9 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	=?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
 	Thomas Gleixner <tglx@linutronix.de>
-Subject: Patch "ARM: dts: Fix timer regression for beagleboard revision c" has been added to the 5.15-stable tree
-Date: Sun, 13 Feb 2022 00:51:09 -0500
-Message-Id: <20220213055110.245919-1-sashal@kernel.org>
+Subject: Patch "ARM: dts: Fix timer regression for beagleboard revision c" has been added to the 5.10-stable tree
+Date: Sun, 13 Feb 2022 00:53:46 -0500
+Message-Id: <20220213055346.248043-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Patchwork-Hint: ignore
@@ -44,19 +44,19 @@ This is a note to let you know that I've just added the patch titled
 
     ARM: dts: Fix timer regression for beagleboard revision c
 
-to the 5.15-stable tree which can be found at:
+to the 5.10-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
      arm-dts-fix-timer-regression-for-beagleboard-revisio.patch
-and it can be found in the queue-5.15 subdirectory.
+and it can be found in the queue-5.10 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
 
 
 
-commit 36010f488466dc54c44c972eeebaca09b42229db
+commit b1e555bb63aa794613b78b8c2510cc5ba7022966
 Author: Tony Lindgren <tony@atomide.com>
 Date:   Thu Nov 25 16:48:34 2021 +0200
 
@@ -103,10 +103,10 @@ index e77635c5422c6..fa8b31660cadd 100644
    compatible = "gumstix,omap3-overo-tobi", "gumstix,omap3-overo", "ti,omap3430", "ti,omap3"
  
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7e0934180724d..27ca1ca6e827c 100644
+index ce66ffd5a1bbc..7e8151681597c 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -779,6 +779,7 @@ dtb-$(CONFIG_ARCH_OMAP3) += \
+@@ -731,6 +731,7 @@ dtb-$(CONFIG_ARCH_OMAP3) += \
  	logicpd-som-lv-37xx-devkit.dtb \
  	omap3430-sdp.dtb \
  	omap3-beagle.dtb \
