@@ -1,226 +1,96 @@
-Return-Path: <sashal@kernel.org>
+Return-Path: <SRS0=2q8B=S5=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88598C433EF
-	for <soc@archiver.kernel.org>; Sun, 13 Feb 2022 05:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 456DCC433EF
+	for <soc@archiver.kernel.org>; Mon, 14 Feb 2022 12:59:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 70448C340E9; Sun, 13 Feb 2022 05:53:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D4A5C004E1;
-	Sun, 13 Feb 2022 05:53:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1644731629;
-	bh=Fo18nhoKtxPwZhPYjoic2fvv4Z1PGj0JxEtK5Qb92Nc=;
-	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=GAXiPuus70xuM9j2mnxzq1xCeJ7QM2mvQ89fsztlzstwsqNL1LjpabRgwCMXaWuQp
-	 fR0JpMWcwwM756fXEJls/muxCS/4qnz9prGuiyIIu4Cp04+StjQ5sfv/InECng/R/K
-	 Qo1r+/NU43tBqJFWy3bS0no0ZrLGaaEw9kj3+6acLeAzop7+rICeWmFmhuXmFiUmS/
-	 KSbqxKRNjUgQKdNySJXjdtYL8LZfD7JilsikIwU786JYHhl59YNyXS9KVwRttlzcrK
-	 mfzxy6U2eeflPY9m3/+8nwMvpFaWSH/J7T7WAQKHAkRdmVSvrh4EDRIhI6FjB6Fv2I
-	 ZEFGxDNC/ldwA==
-From: Sasha Levin <sashal@kernel.org>
-To: stable-commits@vger.kernel.org,
-	tony@atomide.com
+	id 1AF15C340F0; Mon, 14 Feb 2022 12:59:36 +0000 (UTC)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 76F28C340E9
+	for <soc@kernel.org>; Mon, 14 Feb 2022 12:59:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76F28C340E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f176.google.com with SMTP id e17so22120170ljk.5
+        for <soc@kernel.org>; Mon, 14 Feb 2022 04:59:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=xE6oH1l8roCpLAC7Wz9reE1zFtexi58NOcCqLOgqq3I=;
+        b=np/8FqqauGyYXpS75ffKq7DnlBqSgyv6Z+qbrdayhleRze/+Teqynbg4tyfYET+VJ6
+         hN7l57X5dfB1NnF3x3SwVYlHesuy7QfcmSUfARJzpCn5eLv3QLuFI8XdHTeLBOclct69
+         5y7h6gaqmIxp5jKdqklm0zWELoxps8chOU1Zdy4cE2w12Vvx8hJTBfn7/B/wE5kAy+7x
+         xUdgWo651H6Aor614PAn3C1VAIFBOhewXdErz3Yd1t915KyMtcJob9YwiEporQ2rv/+D
+         xRXH/q7U+qFDl8JrRG3MZ/3p1Mg+HI1U32mjHSp6xXdw9Aor2u0pwrIuQpHqvOiCUnPE
+         FlFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=xE6oH1l8roCpLAC7Wz9reE1zFtexi58NOcCqLOgqq3I=;
+        b=rThQ6OjNWa6YEcM0b5QtQ1lBmGDEfKh0fGMPu+QD8Yi9E5rW8geMi37tUbOidiOJkh
+         x2AXXM7KYHPmo8YPHpvqsB7A6x/J51umxdgBQcoZ0lZqqJCMPHa4Ky3sCu8v9cSA1HMd
+         Y5r+zatCyRIZZfUElE9B6pmnTu3+pNRCdsNt1NxSy5kaPDw6Sy+leMmv4GvVb9zY0ZcP
+         yxCfr3PQQwVIJTci8qpWCiqbAHe0pr/SZstUrDFQ5vc2/dvdqZdKqsiqB37/dRvj1sQ1
+         gq6C5Igqb3PfNTvOEQe09YU27nvk+vumIsnbqpgjM0dRuBIqRZQUzMpCZmXOpf/8NwIZ
+         j+Fg==
+X-Gm-Message-State: AOAM532/yBtggLqpiNVgE97OCBrOfP+Wdk3BK/Yncv9ZC62KsXPmYpwd
+	5Ht36uPcpjO8AwxyawpiYiS8Yw==
+X-Google-Smtp-Source: ABdhPJyl8EivjpsERn9JHrhdBXPMO3sde1+2Kx4h1aGZFLECQffjXhIaxa3O6uuBvpj4wUU/spjd2w==
+X-Received: by 2002:a2e:a594:: with SMTP id m20mr8762680ljp.491.1644843573562;
+        Mon, 14 Feb 2022 04:59:33 -0800 (PST)
+Received: from jade (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
+        by smtp.gmail.com with ESMTPSA id v26sm446752lfo.178.2022.02.14.04.59.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 04:59:33 -0800 (PST)
+Date: Mon, 14 Feb 2022 13:59:31 +0100
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	=?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: Patch "ARM: dts: Fix timer regression for beagleboard revision c" has been added to the 5.10-stable tree
-Date: Sun, 13 Feb 2022 00:53:46 -0500
-Message-Id: <20220213055346.248043-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org,
+	Yang Yingliang <yangyingliang@huawei.com>, sumit.garg@linaro.org
+Subject: [GIT PULL] OP-TEE another fix for v5.17
+Message-ID: <20220214125931.GA1332792@jade>
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
-X-stable: review
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-This is a note to let you know that I've just added the patch titled
+Hello arm-soc maintainers,
 
-    ARM: dts: Fix timer regression for beagleboard revision c
+Please pull this small OP-TEE driver fix taking care of a broken return
+code in the error path of the two probe functions in the OP-TEE driver.
 
-to the 5.10-stable tree which can be found at:
-    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+Please note that this pull request is on top of the previously just merged
+patch which introduced the problem fixed here.
 
-The filename of the patch is:
-     arm-dts-fix-timer-regression-for-beagleboard-revisio.patch
-and it can be found in the queue-5.10 subdirectory.
+Thanks,
+Jens
 
-If you, or anyone else, feels it should not be added to the stable tree,
-please let <stable@vger.kernel.org> know about it.
+The following changes since commit aceeafefff736057e8f93f19bbfbef26abd94604:
 
+  optee: use driver internal tee_context for some rpc (2022-02-03 13:36:32 +0100)
 
+are available in the Git repository at:
 
-commit b1e555bb63aa794613b78b8c2510cc5ba7022966
-Author: Tony Lindgren <tony@atomide.com>
-Date:   Thu Nov 25 16:48:34 2021 +0200
+  git://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-fix2-for-v5.17
 
-    ARM: dts: Fix timer regression for beagleboard revision c
-    
-    [ Upstream commit 23885389dbbbbc698986e77a45c1fc44a6e3632e ]
-    
-    Commit e428e250fde6 ("ARM: dts: Configure system timers for omap3")
-    caused a timer regression for beagleboard revision c where the system
-    clockevent stops working if omap3isp module is unloaded.
-    
-    Turns out we still have beagleboard revisions a-b4 capacitor c70 quirks
-    applied that limit the usable timers for no good reason. This also affects
-    the power management as we use the system clock instead of the 32k clock
-    source.
-    
-    Let's fix the issue by adding a new omap3-beagle-ab4.dts for the old timer
-    quirks. This allows us to remove the timer quirks for later beagleboard
-    revisions. We also need to update the related timer quirk check for the
-    correct compatible property.
-    
-    Fixes: e428e250fde6 ("ARM: dts: Configure system timers for omap3")
-    Cc: linux-kernel@vger.kernel.org
-    Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-    Cc: Thomas Gleixner <tglx@linutronix.de>
-    Cc: Rob Herring <robh+dt@kernel.org>
-    Reported-by: Jarkko Nikula <jarkko.nikula@bitmer.com>
-    Tested-by: Jarkko Nikula <jarkko.nikula@bitmer.com>
-    Signed-off-by: Tony Lindgren <tony@atomide.com>
-    Signed-off-by: Sasha Levin <sashal@kernel.org>
+for you to fetch changes up to 40eb0dcf4114cbfff4d207890fa5a19e82da9fdc:
 
-diff --git a/Documentation/devicetree/bindings/arm/omap/omap.txt b/Documentation/devicetree/bindings/arm/omap/omap.txt
-index e77635c5422c6..fa8b31660cadd 100644
---- a/Documentation/devicetree/bindings/arm/omap/omap.txt
-+++ b/Documentation/devicetree/bindings/arm/omap/omap.txt
-@@ -119,6 +119,9 @@ Boards (incomplete list of examples):
- - OMAP3 BeagleBoard : Low cost community board
-   compatible = "ti,omap3-beagle", "ti,omap3430", "ti,omap3"
- 
-+- OMAP3 BeagleBoard A to B4 : Early BeagleBoard revisions A to B4 with a timer quirk
-+  compatible = "ti,omap3-beagle-ab4", "ti,omap3-beagle", "ti,omap3430", "ti,omap3"
-+
- - OMAP3 Tobi with Overo : Commercial expansion board with daughter board
-   compatible = "gumstix,omap3-overo-tobi", "gumstix,omap3-overo", "ti,omap3430", "ti,omap3"
- 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index ce66ffd5a1bbc..7e8151681597c 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -731,6 +731,7 @@ dtb-$(CONFIG_ARCH_OMAP3) += \
- 	logicpd-som-lv-37xx-devkit.dtb \
- 	omap3430-sdp.dtb \
- 	omap3-beagle.dtb \
-+	omap3-beagle-ab4.dtb \
- 	omap3-beagle-xm.dtb \
- 	omap3-beagle-xm-ab.dtb \
- 	omap3-cm-t3517.dtb \
-diff --git a/arch/arm/boot/dts/omap3-beagle-ab4.dts b/arch/arm/boot/dts/omap3-beagle-ab4.dts
-new file mode 100644
-index 0000000000000..990ff2d846868
---- /dev/null
-+++ b/arch/arm/boot/dts/omap3-beagle-ab4.dts
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/dts-v1/;
-+
-+#include "omap3-beagle.dts"
-+
-+/ {
-+	model = "TI OMAP3 BeagleBoard A to B4";
-+	compatible = "ti,omap3-beagle-ab4", "ti,omap3-beagle", "ti,omap3430", "ti,omap3";
-+};
-+
-+/*
-+ * Workaround for capacitor C70 issue, see "Boards revision A and < B5"
-+ * section at https://elinux.org/BeagleBoard_Community
-+ */
-+
-+/* Unusable as clocksource because of unreliable oscillator */
-+&counter32k {
-+	status = "disabled";
-+};
-+
-+/* Unusable as clockevent because of unreliable oscillator, allow to idle */
-+&timer1_target {
-+	/delete-property/ti,no-reset-on-init;
-+	/delete-property/ti,no-idle;
-+	timer@0 {
-+		/delete-property/ti,timer-alwon;
-+	};
-+};
-+
-+/* Preferred always-on timer for clocksource */
-+&timer12_target {
-+	ti,no-reset-on-init;
-+	ti,no-idle;
-+	timer@0 {
-+		/* Always clocked by secure_32k_fck */
-+	};
-+};
-+
-+/* Preferred timer for clockevent */
-+&timer2_target {
-+	ti,no-reset-on-init;
-+	ti,no-idle;
-+	timer@0 {
-+		assigned-clocks = <&gpt2_fck>;
-+		assigned-clock-parents = <&sys_ck>;
-+	};
-+};
-diff --git a/arch/arm/boot/dts/omap3-beagle.dts b/arch/arm/boot/dts/omap3-beagle.dts
-index f9f34b8458e91..0548b391334fd 100644
---- a/arch/arm/boot/dts/omap3-beagle.dts
-+++ b/arch/arm/boot/dts/omap3-beagle.dts
-@@ -304,39 +304,6 @@ &usbhsehci {
- 	phys = <0 &hsusb2_phy>;
- };
- 
--/* Unusable as clocksource because of unreliable oscillator */
--&counter32k {
--	status = "disabled";
--};
--
--/* Unusable as clockevent because if unreliable oscillator, allow to idle */
--&timer1_target {
--	/delete-property/ti,no-reset-on-init;
--	/delete-property/ti,no-idle;
--	timer@0 {
--		/delete-property/ti,timer-alwon;
--	};
--};
--
--/* Preferred always-on timer for clocksource */
--&timer12_target {
--	ti,no-reset-on-init;
--	ti,no-idle;
--	timer@0 {
--		/* Always clocked by secure_32k_fck */
--	};
--};
--
--/* Preferred timer for clockevent */
--&timer2_target {
--	ti,no-reset-on-init;
--	ti,no-idle;
--	timer@0 {
--		assigned-clocks = <&gpt2_fck>;
--		assigned-clock-parents = <&sys_ck>;
--	};
--};
--
- &twl_gpio {
- 	ti,use-leds;
- 	/* pullups: BIT(1) */
-diff --git a/drivers/clocksource/timer-ti-dm-systimer.c b/drivers/clocksource/timer-ti-dm-systimer.c
-index b6f97960d8ee0..5c40ca1d4740e 100644
---- a/drivers/clocksource/timer-ti-dm-systimer.c
-+++ b/drivers/clocksource/timer-ti-dm-systimer.c
-@@ -241,7 +241,7 @@ static void __init dmtimer_systimer_assign_alwon(void)
- 	bool quirk_unreliable_oscillator = false;
- 
- 	/* Quirk unreliable 32 KiHz oscillator with incomplete dts */
--	if (of_machine_is_compatible("ti,omap3-beagle") ||
-+	if (of_machine_is_compatible("ti,omap3-beagle-ab4") ||
- 	    of_machine_is_compatible("timll,omap3-devkit8000")) {
- 		quirk_unreliable_oscillator = true;
- 		counter_32k = -ENODEV;
+  tee: optee: fix error return code in probe function (2022-02-14 12:36:48 +0100)
+
+----------------------------------------------------------------
+OP-TEE fix error return code in probe functions
+
+----------------------------------------------------------------
+Yang Yingliang (1):
+      tee: optee: fix error return code in probe function
+
+ drivers/tee/optee/ffa_abi.c | 4 +++-
+ drivers/tee/optee/smc_abi.c | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
