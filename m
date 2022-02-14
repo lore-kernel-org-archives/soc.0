@@ -1,87 +1,87 @@
-Return-Path: <SRS0=Xwgf=S5=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=K9Br=S5=bootlin.com=gregory.clement@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99C2BC433F5
-	for <soc@archiver.kernel.org>; Mon, 14 Feb 2022 16:23:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D274C433EF
+	for <soc@archiver.kernel.org>; Mon, 14 Feb 2022 16:31:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6A177C340E9; Mon, 14 Feb 2022 16:23:07 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+	id 2F659C340EB; Mon, 14 Feb 2022 16:31:27 +0000 (UTC)
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D1752C340EE
-	for <soc@kernel.org>; Mon, 14 Feb 2022 16:23:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D1752C340EE
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MtO06-1o8jqT3Jq2-00umyt for <soc@kernel.org>; Mon, 14 Feb 2022 17:23:03
- +0100
-Received: by mail-wr1-f43.google.com with SMTP id q7so27645238wrc.13
-        for <soc@kernel.org>; Mon, 14 Feb 2022 08:23:03 -0800 (PST)
-X-Gm-Message-State: AOAM530HH8F9M8+p4UTQzbmz5upYJAAzTz5lf6CPPVBX1xKgp5QcOp7T
-	Z7AUYC9gLI3vZKWNjzLY28Tm/rOsGh6I3GTnGBw=
-X-Google-Smtp-Source: ABdhPJyG+jgpVi3VfDfCUUdvqz8L8f7kQFYsusxm0coFeTiylsS6SErvSFrlMbDk8neM8L62+ULjFBu3y9eBOV0ciJc=
-X-Received: by 2002:adf:e5ce:: with SMTP id a14mr303823wrn.317.1644855783467;
- Mon, 14 Feb 2022 08:23:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20220207184652.1218447-1-michael@walle.cc> <YgpkCyoSMg5RYfkO@google.com>
- <YgpkQMbhWAJG6oCh@google.com>
-In-Reply-To: <YgpkQMbhWAJG6oCh@google.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 14 Feb 2022 17:22:47 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0UWO=h6K4NpzCVC2vbOvThJH28GM5ddm9U1crr1Su7vQ@mail.gmail.com>
-Message-ID: <CAK8P3a0UWO=h6K4NpzCVC2vbOvThJH28GM5ddm9U1crr1Su7vQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: add myself as a maintainer for the sl28cpld
-To: Lee Jones <lee.jones@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id DC6EBC340E9;
+	Mon, 14 Feb 2022 16:31:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DC6EBC340E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+	by mail.gandi.net (Postfix) with ESMTPSA id A9D78240011;
+	Mon, 14 Feb 2022 16:31:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1644856284;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xzLpt9L/hCYOzEf15TVSLTRk7T1nqwclZOX0hy3iaSI=;
+	b=oIFl1RREU7E5A/S9OhzG5KR1umXxNfq0Y0+rSIoinf5PliHn/NErif+6WgV6ZhzSe3D0Yj
+	+nesY9qdeDYVWRQQZ1wJ3Uej9dQNdtvHVzMouO2NC+TGKyfXqBIbv5F2BtwzPP4O5xRgBN
+	B/d9SLoX8Bqbi7laftTW8vDUGtXCoISAVH94teR0K3GDGIlg+3/JoXsNvk8bM4gSieDmx/
+	XLGXU4ySy76P3cdgj+ER10BsMI12IcmJ8TwC+u7qIZP8dM1sDz32CTUR4CpvZKvgDwB45n
+	JCYiTO26EIXCko03y9n3ITgcfwnk9pRZgSvMMfCftml8yxtIGcEw5hfsb8oY/A==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Michael Walle <michael@walle.cc>, SoC Team <soc@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Olof Johansson <olof@lixom.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:vCOL9lSsRHn57mApfY/iBf6D8R6bMyjIHH54Sz0VmKQX/kg2YIa
- rAS1ZB5j7KU94VgXfiQ++ABi20zuDGF67Eg7/i/7w5004DNovCBxdj/rrMLSQoIPgMWZLuw
- pvfZ4cCu7tgOGNqqWqEcdqIhmXmuJvGfBI9+w1GAnjDfTGWzYCwignB0N1TPMcWtmYsZG0E
- ZvWTcUpAUesp2B0U12Blw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xM44i3/Swiw=:Wbh/5e++iVxG3zsg+OurKH
- b8ZxiDKtui8XYfkqMncR6MsM90p7Urx9tqhXSfqBSIVWKI0LXqCOCB2lQgDKQ5Wha49wZbC4R
- njHpB/C3L8zxHwsHcFe4oFMeoe8WFSGkev92WNzrloHj9FZkap8htsPm7sOcACEuq0eT8Kqwz
- FTwrB7Xq+tiErsTBYongkO2JM0vBkyD2Da9oLV+mUvKA6gdA+Enplts5eAOf944+yYcJuIPjv
- 7h7HPPRNxgLLWUseBKeRM4VVmlDhxSmF7e51bm5iGsHtnkzxkRlZAD5xHv9xLSmgcWC5PwpJN
- Pg9J4sJo5StT+EguOToy4K+29Z45oNSkWhUiLY64HHWe9JLU3w9D7ka3xZCfehvBBXYgTo0CN
- Vjwoy97zbOr+lafC2PSByJxgrYiSRodnD7PRWSEQvNBzOkXqxd+tRdLvu+wXZGwgt+v6GKHzv
- y1ztGkyYsK+YNuFCWea43IgsWjnupQMuCeS3b7qUQoKZNhra3WBjN4lt9PhOzH56KidRvNxTr
- LkKGELj/WIgFzCi6dZJAJebuYy/7ibqoidykWc/015ofQ+5+TyWRq02XvsP1KdLayr9p0gkZ8
- qrXPQxmkumnzyFB6I8fZWs+9WGD2rCBRnA4KaiIhI7AAcKbSG141BGHlWQPTWXznXmB1hQn8A
- gfh2H66BkDatLGI3BXIRKSOxV7RLxjalB9X1scATJQH3Uh2snuvmO0erGNApq4XvFtic=
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ <arm@kernel.org>, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: fixes for v5.17 (#1)
+Date: Mon, 14 Feb 2022 17:31:23 +0100
+Message-ID: <87ilthjtpg.fsf@BL-laptop>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 14, 2022 at 3:16 PM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Mon, 14 Feb 2022, Lee Jones wrote:
->
-> > On Mon, 07 Feb 2022, Michael Walle wrote:
-> >
-> > > The sl28cpld is a management controller found on the Kontron SMARC-sAL28
-> > > board for now. Support for it was added by me quite a while ago, but I
-> > > didn't add a MAINTAINERS entry. Add it now.
-> > >
-> > > Signed-off-by: Michael Walle <michael@walle.cc>
-> > > ---
-> > > Hi,
-> > >
-> > > since this affects so many subsystems, I'm not sure through which tree this
-> > > should go. I'm sending this to the arm soc maintainers because it's an
-> > > aarch64 board where this driver is used as well as Lee as the MFD
-> > > maintainer.
-> >
-> > I'm happy to take this, if it pleases everyone.
->
-> Hold on, you're not going to get many Acks if you don't send it to the
-> other subsystem maintainers. :)
+Hi,
 
-I've already applied this one through the soc tree.
+Here is the first pull request for fixes for mvebu for v5.17.
 
-         Arnd
+Gregory
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
+bu-fixes-5.17-1
+
+for you to fetch changes up to 0f89e3d718bc0eea2ac52c3ab3321133fd838d12:
+
+  arm64: dts: armada-3720-turris-mox: Add missing ethernet0 alias (2022-01-=
+27 10:49:02 +0100)
+
+----------------------------------------------------------------
+mvebu fixes for 5.17 (part 1)
+
+ - Add missing ethernet alias on armada-3720-turris-mox to let
+   bootloader setting MAC address.
+
+ - Increase PCIe IO size on Armada 3720
+
+----------------------------------------------------------------
+Pali Roh=C3=A1r (2):
+      arm64: dts: marvell: armada-37xx: Increase PCIe IO size from 64 KiB t=
+o 1 MiB
+      arm64: dts: armada-3720-turris-mox: Add missing ethernet0 alias
+
+ arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts | 3 ++-
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi           | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+--=20
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
