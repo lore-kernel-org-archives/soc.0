@@ -4,63 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88833C43219
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E4C8C43217
 	for <soc@archiver.kernel.org>; Fri, 18 Feb 2022 20:40:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 56D5DC340FB; Fri, 18 Feb 2022 20:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3FB0DC340F6;
-	Fri, 18 Feb 2022 20:40:11 +0000 (UTC)
+	id 3A973C340F4; Fri, 18 Feb 2022 20:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 23579C340EB
+	for <soc@kernel.org>; Fri, 18 Feb 2022 20:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1645216811;
-	bh=TGZxblL4mfSZGV2AEBWZOyJgfhuuB8DILPdfnerTNCY=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=TJXqPg97xC+MPftf5Dx3N3VBBgsQa2vgBjgNUU4vAvFSSc0cSo9RDAolc8IK7JSPZ
-	 Ojk33wBFK2WyEL7s7Wv1L8Rt8PBxACiFjK27CETQAifjXTE3LBnxTA4AovcEtTtB1z
-	 e6+ikEnpa8Xq5du1PSEC4ZVTeAcVWfUhZ8Mg8u518J61OGQ4TYqBNin/jXZgQwxiJI
-	 eJOIkdQ07mp8zxJUCMYHcr2+P8L8SU46xHZDF4lTa2/7uEJZQgz8lcjQIwLUSpITJT
-	 BimsOj41XnrzaH6e9Z3CCAW3oOI66GV/WbCpdoK6+8jlXQq7z/O0bf635MtSQItnob
-	 GC5G0k+0V5zgw==
+	bh=+IytbWgy38AQsOtTGeaSPevrhjV7jz8xWefq12rWKG4=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=jpRnBNT3w3LMDzG+Mdo3SisymiUPYxS+YzdTA+VjNTPWmaZqUNzdMLSgQyRCsw9V6
+	 Kp5JY2o5yloWBfP1vtywkspbI1+Cogi/Oiho4KYRSA8q2o+ELrWdx1Mg/sYEVsjNcc
+	 mrBZrggGtKGXsbU3+Aixvmpk4WasGur4x8E5gg+r39Xz19QMzbZtF/ZfrevhA4IbkM
+	 VxvB9T9yMcBC0WqXsCJQtkzM8yJSCmYkgRyNG+X1EJfjRQqByFz+gq6kuCPGpsU6nq
+	 BCVIYL8MpouwUTPK3XtXe0SlAIXMMzjnKzJYYp0uPLNaozd4k2dBBFIwRKhaDyJs5D
+	 7Z09f2xRxOR+Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 212B5E7BB0C;
-	Fri, 18 Feb 2022 20:40:11 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EE441E5D07D;
+	Fri, 18 Feb 2022 20:40:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/2] ARM: dts: socfpga: dts bindings cleanup for v5.18,
- part 1
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164521681113.10306.8603675438922329159.git-patchwork-notify@kernel.org>
-Date: Fri, 18 Feb 2022 20:40:11 +0000
-References: <20220211112556.98940-1-dinguyen@kernel.org>
-In-Reply-To: <20220211112556.98940-1-dinguyen@kernel.org>
-To: Dinh Nguyen <dinguyen@kernel.org>
+ <164521681092.10306.11499974110452230664.git-patchwork-summary@kernel.org>
+Date: Fri, 18 Feb 2022 20:40:10 +0000
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Fri, 11 Feb 2022 05:25:55 -0600 you wrote:
-> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-> 
->   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_update_for_v5.18_part1
-> 
-> [...]
+Patch: [GIT,PULL] OP-TEE another fix for v5.17
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=614106
+  Lore link: https://lore.kernel.org/r/20220214125931.GA1332792@jade
 
-Here is the summary with links:
-  - [GIT,PULL,1/2] ARM: dts: socfpga: dts bindings cleanup for v5.18, part 1
-    (no matching commit)
-  - [GIT,PULL,2/2] arm64: dts: socfpga: dts updates for v5.17, part 2
-    https://git.kernel.org/soc/soc/c/35f541791175
+Patch: [GIT,PULL] arm64: dts: juno: Fix for v5.17
+  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=614130
+  Lore link: https://lore.kernel.org/r/20220214142615.2375269-1-sudeep.holla@arm.com
 
-You are awesome, thank you!
+Patch: [GIT,PULL] ARM: at91: fixes for 5.17
+  Submitter: Nicolas Ferre <nicolas.ferre@microchip.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=613493
+  Lore link: https://lore.kernel.org/r/20220211133515.15314-1-nicolas.ferre@microchip.com
+
+Series: [GIT,PULL,1/2] ARM: dts: socfpga: dts bindings cleanup for v5.18, part 1
+  Submitter: Dinh Nguyen <dinguyen@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=613462
+  Lore link: https://lore.kernel.org/r/20220211112556.98940-1-dinguyen@kernel.org
+    Patches: [GIT,PULL,1/2] ARM: dts: socfpga: dts bindings cleanup for v5.18, part 1
+             [GIT,PULL,2/2] arm64: dts: socfpga: dts updates for v5.17, part 2
+
+Patch: [GIT,PULL] firmware: arm_scmi: Fix for v5.17
+  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=614136
+  Lore link: https://lore.kernel.org/r/20220214144245.2376150-1-sudeep.holla@arm.com
+
+
+Total patches: 6
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
