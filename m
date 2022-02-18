@@ -1,140 +1,96 @@
-Return-Path: <SRS0=iNcA=TB=walle.cc=michael@kernel.org>
+Return-Path: <SRS0=9k4A=TB=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2448C433F5
-	for <soc@archiver.kernel.org>; Fri, 18 Feb 2022 12:32:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15FD4C433EF
+	for <soc@archiver.kernel.org>; Fri, 18 Feb 2022 17:56:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8ED7EC340E9; Fri, 18 Feb 2022 12:32:22 +0000 (UTC)
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id CD9BEC340EF; Fri, 18 Feb 2022 17:56:37 +0000 (UTC)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 81665C340EF;
-	Fri, 18 Feb 2022 12:32:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 81665C340EF
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 5D78222239;
-	Fri, 18 Feb 2022 13:32:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1645187532;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TxbImxk8xOGdhgUm8Tq3GCwo3t8kghc20G7tsbcjXoY=;
-	b=e1Boq5lKqnigBp5CkGb9xVMqwgNrDl0IK3M9ujPZOurhC+lFVuQC1Tc3TJ3hO17/da0RXs
-	M6c82AakLD/cOo40L/OG+i85rUhlLI8MeBkiEj+Ht98W4a21vL5C4fKw1YvAw7c/V5mAwt
-	sMetS0In3WNN5T3yF3vcj5ZUcls8+ko=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date: Fri, 18 Feb 2022 13:32:11 +0100
-From: Michael Walle <michael@walle.cc>
-To: Kavyasree.Kotagiri@microchip.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 422F3C340E9
+	for <soc@kernel.org>; Fri, 18 Feb 2022 17:56:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 422F3C340E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f173.google.com with SMTP id bx31so5528850ljb.0
+        for <soc@kernel.org>; Fri, 18 Feb 2022 09:56:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=/4HrUgYlNj6NJRogd/KPSeqtVQ6+jaJ4N7YhgxWLksc=;
+        b=Fb8rOUmirBXLpLWlunWMkI3j848IAbT9mkZyCA4v4kAoIn8BNEmJ4MvL2tsWauxvyt
+         l8itxOTUVvOEE77Gy+YvzKbOZiHFPaL/HotivYcbsOHwwOuWkazagUFnNi1NJ3abRFxr
+         08hL+DyjdNkFpKVv8jmndf1AuaJ4lskQmsNgdroRYdPzEnwBtkN3co3FJzFo1Khjvr69
+         VWX5ZfBKS42CaHbGV34VO9FeHzh5fA90JtshQNLgaTGr5KdOkny7bO8EzLvxmtLyxWrR
+         jzE69ftIHyqftRRLLLTAJiVSb5Et+l+qAVuY8WcW+8UNpjJLx1Yk5ee3cxU4LOmR2dkg
+         EOhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=/4HrUgYlNj6NJRogd/KPSeqtVQ6+jaJ4N7YhgxWLksc=;
+        b=iG0GFzeE79W5vlOy3bChUz5hGEYQp0kAQoNuO/EWCDT/SwkC2Gs7wnW1sgAEatn+2N
+         l+T7kChLon2ycL8hWnnBDz6Q46XIa0H+chcnzY0COVzOJ5fvQkXI5NLHyBpvVNv6oWMZ
+         x+iskMmbWeaLen1+kLYBympGKBYIrcEo02FCW5diHJyeeVr1eAKuOg+anh4+vI2W44Zd
+         kQBERcnaM+V8gXfOsNy8wwnLe678EQp62fC19LnYOr9vL2uKFf2oQGjlJFReY15kUWgB
+         mbRprU8Zo+cEeREQqpTvuO3TcPbugFV9rYroDxfSleMj8+f0rsKyPeo4LnkQXKkHgqwX
+         VdaQ==
+X-Gm-Message-State: AOAM532LI02VXCfKR2kXp6LDaDz+WsNJimMKWU7B3NjybMZ8aRuJH64s
+	o8paLeuEhQXC7oEwtp3VQFN9uQ==
+X-Google-Smtp-Source: ABdhPJyLRo+IPJKJK5ltw12JckpLRaqYNiOrh1988ArjU1mdO+2843jJEwaZY3lKoE6FB5oadWg4jQ==
+X-Received: by 2002:a2e:871a:0:b0:246:ee2:1109 with SMTP id m26-20020a2e871a000000b002460ee21109mr6399697lji.165.1645206995032;
+        Fri, 18 Feb 2022 09:56:35 -0800 (PST)
+Received: from jade (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
+        by smtp.gmail.com with ESMTPSA id z26sm386410lja.139.2022.02.18.09.56.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 09:56:34 -0800 (PST)
+Date: Fri, 18 Feb 2022 18:56:32 +0100
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Manohar.Puri@microchip.com, UNGLinuxDriver@microchip.com,
- alexandre.belloni@bootlin.com, arnd@arndb.de, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Nicolas.Ferre@microchip.com, olof@lixom.net, robh+dt@kernel.org,
- soc@kernel.org
-Subject: Re: [PATCH v4] ARM: dts: add DT for lan966 SoC and 2-port board
- pcb8291
-In-Reply-To: <CO1PR11MB4865B205DF4490D37E96524792379@CO1PR11MB4865.namprd11.prod.outlook.com>
-References: <20220209111318.21112-1-kavyasree.kotagiri@microchip.com>
- <20220209184600.1230365-1-michael@walle.cc>
- <CO1PR11MB486534A2987684CC7402CE06922F9@CO1PR11MB4865.namprd11.prod.outlook.com>
- <97bcfa4417d5f8c41cc6aa1e411c8747@walle.cc>
- <CO1PR11MB4865E913D083C1D80D4E1F80922F9@CO1PR11MB4865.namprd11.prod.outlook.com>
- <b98f40575f88a0bbf205d628f73cccac@walle.cc>
- <CO1PR11MB4865B205DF4490D37E96524792379@CO1PR11MB4865.namprd11.prod.outlook.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <426e31325066cfa9f0ab50860289e12a@walle.cc>
-X-Sender: michael@walle.cc
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org,
+	Cai Huoqing <cai.huoqing@linux.dev>,
+	Rijo Thomas <Rijo-john.Thomas@amd.com>
+Subject: [GIT PULL] AMDTEE simplification for v5.18
+Message-ID: <20220218175632.GA926082@jade>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Am 2022-02-18 13:28, schrieb Kavyasree.Kotagiri@microchip.com:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
->> the
->> content is safe
->> 
->> Am 2022-02-10 12:52, schrieb Kavyasree.Kotagiri@microchip.com:
->> >> EXTERNAL EMAIL: Do not click links or open attachments unless you know
->> >> the
->> >> content is safe
->> >>
->> >> Am 2022-02-10 10:40, schrieb Kavyasree.Kotagiri@microchip.com:
->> >> >> EXTERNAL EMAIL: Do not click links or open attachments unless you
->> know
->> >> >> the
->> >> >> content is safe
->> >>
->> >> >> > +     clocks {
->> >> >> [..]
->> >> >> > +
->> >> >> > +             nic_clk: nic_clk {
->> >> >>
->> >> >> What does nic_clk stand for? If I had to guess, it
->> >> >> has something to do with network. But..
->> >> >>
->> >> > NIC clock is the clock used by AXI, AHB fabric and APB bridges which
->> >> > connects all the peripherals.
->> >> > It is named so because the AXI fabric is based on NIC400 IP from ARM
->> >>
->> >> Ok, thanks for clarification.
->> >>
->> >>
->> >> >> > +             watchdog: watchdog@e0090000 {
->> >> >> > +                     compatible = "snps,dw-wdt";
->> >> >> > +                     reg = <0xe0090000 0x1000>;
->> >> >> > +                     interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
->> >> >> > +                     clocks = <&nic_clk>;
->> >> >>
->> >> >> Btw. can we disable all nodes by default and enable them
->> >> >> in the board dts files?
->> >> > I would like to have only board specific nodes enabled in dts files
->> >> > and rest of them in dtsi file
->> >>
->> >> And how do you know which ones are board specific? E.g. I would like
->> >> to add our board which is also based on the lan9668. Maybe I don't
->> >> want a watchdog (or whatever node). Of course I could use
->> >>
->> >> &watchdog {
->> >>    status = "disabled";
->> >> };
->> >>
->> >> But IMHO opt-in is better. At least thats what we are doing for
->> >> the layerscape over on arm64.
->> >>
->> > Basically, I am disabling only the nodes which have pinctrl settings
->> > in dtsi file
->> > and enable in dts to make sure there are no conflicts on pins on the
->> > board.
->> 
->> Thats not what I'm asking. I would like to see *optional* nodes
->> disabled by default. Whether the watchdog is optional might be
->> debatable, but what about the usb controller and the qspi
->> controller? They don't have shared pins AFAIK, so according
->> to your rule, they will be enabled by default and each board
->> which doesn't have anything connected on these pins would have
->> to disabled it.
->> 
->> Please keep in mind that this .dtsi will also be used by boards
->> not manufactured by microchip.
->> 
-> I agree with you - "disabling optional nodes in dtsi"
-> I have gone through all the nodes.
-> Confirmed and moved enabling optional node watchdog
-> to dts file.
+Hello arm-soc maintainers,
 
-Great, I just wanted to get to an agreement how the optional nodes
-should be handled. If it turns out, some are still optional or
-some aren't. It is easy to just mark them disabled and enable them
-in the board dts files in a later patch.
+Please pull this small AMDTEE driver simplification to use the LIST_HEAD()
+macro instead for a global variable.
 
--michael
+Note that this isn't a usual Arm driver update. This targets AMD instead,
+but is part of the TEE subsystem.
+
+Thanks,
+Jens
+
+The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
+
+  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
+
+are available in the Git repository at:
+
+  git://git.linaro.org:/people/jens.wiklander/linux-tee.git tags/amdtee-for-v5.18
+
+for you to fetch changes up to f7b67642dd98617dc569836cdcba041c7ff00cbb:
+
+  tee: amdtee: Make use of the helper macro LIST_HEAD() (2022-02-14 10:57:55 +0100)
+
+----------------------------------------------------------------
+Small simplification in AMDTE driver
+
+----------------------------------------------------------------
+Cai Huoqing (1):
+      tee: amdtee: Make use of the helper macro LIST_HEAD()
+
+ drivers/tee/amdtee/call.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
