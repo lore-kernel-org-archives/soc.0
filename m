@@ -4,420 +4,222 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99A58C433EF
-	for <soc@archiver.kernel.org>; Fri, 18 Feb 2022 12:17:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D3AAC4332F
+	for <soc@archiver.kernel.org>; Fri, 18 Feb 2022 12:28:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 606A4C340F6; Fri, 18 Feb 2022 12:17:02 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	id 41BFBC340EB; Fri, 18 Feb 2022 12:28:21 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CA48CC340E9;
-	Fri, 18 Feb 2022 12:17:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CA48CC340E9
+	by smtp.kernel.org (Postfix) with ESMTPS id 313EAC340E9;
+	Fri, 18 Feb 2022 12:28:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 313EAC340E9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1645186620; x=1676722620;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=jo9RXuWk9+zTcvMEjwT0ZCRUnTvpVEE6zSwU3xjPQ/I=;
-  b=ZX8Jh+OeBKxlSUEzwt1P/r8WwjVXkF1TlIEhP3sWJgAeEMKt5I/3Y35N
-   Oh5cZIQysnLV11H51NT2H7+TbQ0dxh7UPUvPOHwvP+jM5WtSu99dX6c5X
-   3chmv+zB8up+4X4RGFkafxeYx1i7n6fZL3WpxO4Wu7BnygPDY61iYswZi
-   qWuGIcmxZDw9lv/lH2m6sxLs3AuNcyZjfmyCYdqzcYurqHBp2BkgzVgcR
-   wuFtq7po/samHIE+U9YsvIs9kDeGqk26W5s7TvhVMp/TjWZUppo7Pw3Mg
-   MfO1qhpiu49CYkIQWkX5/asz39hV8QeObkxfugaeEgl7sentl+HdY2MOv
-   Q==;
+  t=1645187300; x=1676723300;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=rH8+2i2sqtVp1LhueITK9rAPR4aRVvv1C2qMq82jYNU=;
+  b=MYBeba73Dpti8JPCQ2VfaDcoEx7/1O5IHNA/CmjVA9TjYG0PMMl+VkiW
+   BwkVaurNRHO4U15TKRmJqZ0UEg4DPP3g6I5V9L0PoeLSkasgER0vV7vWn
+   NHOG01AxxUIcfD6LzYINlYNgSgf5CSlAlSSVj20CNzMxe8uPkMQwdZDI9
+   Xjuuj2AOMIbvTa5zjUHmtSqlqRqeLOZ8OS5U8a8YSqJUhVYn1weesU31b
+   5riGH0SI00H6kIOics9suULPP2c/SEbGFmQrvDPDQMa4y5qdnz7RY8W5d
+   9iFyqAgM0A2YEslwcYz5d7QbWYlOqfC14erPjPK+76ZLKxHPE4c4Q2mnp
+   A==;
 X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
-   d="scan'208";a="149211524"
+   d="scan'208";a="162776744"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Feb 2022 05:16:52 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Feb 2022 05:28:13 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 18 Feb 2022 05:16:52 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 18 Feb 2022 05:16:47 -0700
-From: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+ 15.1.2375.17; Fri, 18 Feb 2022 05:28:12 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Fri, 18 Feb 2022 05:28:12 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MMMq3WW/FbZm1wo/qNee36pmvsLtORxgD92CWPwxRHYy9ptb/0WTRsa9ngRqSLG0mXGfpxISAiFyyXcM9gbUpwKTMMNMN8HbEq6OxG9Ulpz01gBdxdWsLmi0NbmhWvqizT/p2ZSqY3HhEOPZjLgGMoyWplDdAV3V7rfGeUFYzRkwXIg5ZPVjqWKbAahVjf3/sbC/EbpnLzL3Jz9D1sDTJi46J/yh0uN8HUWfA0eEYFQF7wBFTPyxT38rR+a14OXL1yaszLPL8/xsPg4UfB4X4RNqnBYwLjRp/YrI1NZw3Xh7qq4nLMiuFDFzM/4lpVp7Zlq1Mr19DKLivqqKCmJ/Jw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qCqomZN606Qvux2Ju5g4p35oZEm65XiXLCAGKjl0b+I=;
+ b=Q8X7+9JQu1tuPUsISf296jhh8OqGqSDqtYOmjRHmKp2M66tM8TFFs/a4P+75GFXd6eUKEaxsHFbXRYra7YeGLHRVHdjer1SoY+77Gt26FCyKXyeAFqdhUBHm+N8UB5BxvfIZOO2yJNU+8p1otLUzwZ0wAnaffRVU/d0AUZ/7oQ7ioqVIYjw0R9zKzmrsEoxEwGVu+4FLD0YnvQ0wD3DlmaJpmTpYVDp6EnP3jCcyyNzMyThtEAO219M/k8RXSebQzq2Ni3vgY01FypIDf/IM1iV0+yr1nMjiz2ZtRG6+6qK8IjjeWQRHmtKr/NClxaM88b51rl4U7Z4naij5tpV2UA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qCqomZN606Qvux2Ju5g4p35oZEm65XiXLCAGKjl0b+I=;
+ b=N5S/GI10jeX2nfhhg81W0fe7LDH5PPRUAaNRfZug0s0zi7xFBtA10VzcEwzc0haELAB+fcfv3mwQy1Mz4nBmjiH85Jn/TDDL0G4nigmUU5lWpCXz9q+KyCoTauj3GEL70R2UljWggkU/zU3YJeufI09hOgnDbRTLa4OGP0/WuSY=
+Received: from CO1PR11MB4865.namprd11.prod.outlook.com (2603:10b6:303:9c::9)
+ by MWHPR11MB1774.namprd11.prod.outlook.com (2603:10b6:300:10a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.22; Fri, 18 Feb
+ 2022 12:28:06 +0000
+Received: from CO1PR11MB4865.namprd11.prod.outlook.com
+ ([fe80::25bd:b3c9:a714:cdce]) by CO1PR11MB4865.namprd11.prod.outlook.com
+ ([fe80::25bd:b3c9:a714:cdce%6]) with mapi id 15.20.4995.016; Fri, 18 Feb 2022
+ 12:28:06 +0000
+From: <Kavyasree.Kotagiri@microchip.com>
+To: <michael@walle.cc>
 List-Id: <soc.lore.kernel.org>
-To: <arnd@arndb.de>, <alexandre.belloni@bootlin.com>, <olof@lixom.net>,
-	<soc@kernel.org>, <robh+dt@kernel.org>, <nicolas.ferre@microchip.com>
-CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
-	<Kavyasree.Kotagiri@microchip.com>, <Manohar.Puri@microchip.com>
-Subject: [PATCH v6] ARM: dts: add DT for lan966 SoC and 2-port board pcb8291
-Date: Fri, 18 Feb 2022 17:46:41 +0530
-Message-ID: <20220218121641.26472-1-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.17.1
+CC: <Manohar.Puri@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<alexandre.belloni@bootlin.com>, <arnd@arndb.de>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <Nicolas.Ferre@microchip.com>,
+	<olof@lixom.net>, <robh+dt@kernel.org>, <soc@kernel.org>
+Subject: RE: [PATCH v4] ARM: dts: add DT for lan966 SoC and 2-port board
+ pcb8291
+Thread-Topic: [PATCH v4] ARM: dts: add DT for lan966 SoC and 2-port board
+ pcb8291
+Thread-Index: AQHYHaYU1qtS5sG/10aA2sqGSWL+96yLj0MAgAD4oLCAAAQRgIAAFAoQgAARrQCADJaDQA==
+Date: Fri, 18 Feb 2022 12:28:06 +0000
+Message-ID: <CO1PR11MB4865B205DF4490D37E96524792379@CO1PR11MB4865.namprd11.prod.outlook.com>
+References: <20220209111318.21112-1-kavyasree.kotagiri@microchip.com>
+ <20220209184600.1230365-1-michael@walle.cc>
+ <CO1PR11MB486534A2987684CC7402CE06922F9@CO1PR11MB4865.namprd11.prod.outlook.com>
+ <97bcfa4417d5f8c41cc6aa1e411c8747@walle.cc>
+ <CO1PR11MB4865E913D083C1D80D4E1F80922F9@CO1PR11MB4865.namprd11.prod.outlook.com>
+ <b98f40575f88a0bbf205d628f73cccac@walle.cc>
+In-Reply-To: <b98f40575f88a0bbf205d628f73cccac@walle.cc>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0d88acbc-0273-40e7-a85b-08d9f2da1da4
+x-ms-traffictypediagnostic: MWHPR11MB1774:EE_
+x-microsoft-antispam-prvs: <MWHPR11MB1774F113F4E00FD2F4F8D2F092379@MWHPR11MB1774.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +gLKep4+XGuBcpmW9RaAaPAxNoyeL8d6aaycmDicoNf+Pfert8dBA8RbnZB+F/cYPOmYFBkqPcf1RCuvG5eu3iT7Z8gCL6+0Nw5D7q6cWluhEbLxjF+5avnbXAEAlBGb1eHMKiY/ju2kaqUSijzRc5hiYyFS0i7osLto8ERPleeqt7jqKzDqTVJ6luXFxixoSpBuH5XiIaGYfOp4OE16QkpsXLxdXEfMNrSLmGkuOxouUaVOfCcWF3yrMC9RPgNAqN+xjSSIEhr5/lKwMQzwCC6mLRuU9vDNOMx2c+xEl3g+ctqunSjxfNDrF+c/mB6c4bY0YHur/cbjMUScxXPNDoEogabu6jvos+s7kMHusHKWQ/tTarMCC5+kg35WeiBw9JIBbAA3C3o7CjTRFjOJ/VdpW2mxD2hmye8PYXg/UJGxOU8w0FmksUMPcm/zlVSWcmeAF0vYAhNz8XiqqSobob7iBs0cm+4cd2v7xMl0YJsJnVuZDcycHHe0QJz2//sc9d007bwTmHPRsTmvvLC5yn873gNT9nxj3jkbXH6efO8c3uGt456aKo5dN6Dvigbx57xYD6Lqwpf6XsmWKcLAJhAWSPlUBDQbyVZDHBz9HBJfjfvuwwAYhwyeqk9/1TQMV9keik/IFip9jJHId16ze6y4+9oRzJYxewl2HHhi1BVy7tRMmza9nYEhnHEb3K6+zMgPWCjfg+fBnA/9aTRFaA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4865.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(508600001)(55016003)(83380400001)(122000001)(26005)(9686003)(6916009)(38100700002)(54906003)(33656002)(316002)(7696005)(38070700005)(6506007)(5660300002)(86362001)(2906002)(52536014)(71200400001)(8936002)(4326008)(8676002)(66556008)(64756008)(66476007)(66446008)(76116006)(66946007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?90xxLg6iNzQpxCTehte42yVhZC0KgCsCBe+JmjnhPAdrrNt6h6fxn7BO1Z50?=
+ =?us-ascii?Q?IL9M5l+HsyHOHBuaqBAfDqzDEy399TeUMJLAhqADA3NP5++KTWR19+5cXWBB?=
+ =?us-ascii?Q?3Au2JjgOds1qUKNQK8gymJ+6zqil43QRJ2VkZ/u+s18WCgsn32GD2ZREGfyB?=
+ =?us-ascii?Q?e8oYTYk4BwFlL8mtF1Udx9toPltOXPzfIUcaEdOPn4s0OXiW4Eu7mee2zKR/?=
+ =?us-ascii?Q?d3CSMVSYRkTzT22KNnadW+CR0ygq0WcDJ8dcVbtrRi+XRz7O7nKVPASjpWg2?=
+ =?us-ascii?Q?IPB2yE8OUmdydoot/j/hIFKPCUUfVwc5ik1nxFzIXKNc+zlrsHBc+pPrdXf2?=
+ =?us-ascii?Q?dIZdVo6vBi4Qj8+shPumQ+5g9yCdYyuIg+UZ3w6sVFPtjlGvNC09S4Mhf7m4?=
+ =?us-ascii?Q?70afHkWi15CuDDRhzrgiACmEB4IR6wfbpwXfgcTg9pQMtl4SdIKaHdHLa3Eb?=
+ =?us-ascii?Q?IFyvPNbc4LPn07NSaM1Ix0gDQ3cEyymgjeA84zc5D4zRtGVgrhyKdtB7BK23?=
+ =?us-ascii?Q?/MIR0N9terrnCxpLU3u+Y1ZONH7G8duzzLIgqeBJ9BbWIhKZp/Is2Y87vFS4?=
+ =?us-ascii?Q?Bk2L0+3MdExPcgEURArmeyEJsZ8UQpWMVvpBSCWhHI1pAFRZVaP/tvddUSoo?=
+ =?us-ascii?Q?5pJ3X0A0cq60Y6F2F4wMC3RSs7yChGdb5/XihR/ZbjG2BSaBBx7rLdtsuwHe?=
+ =?us-ascii?Q?niN5xsbKOYpb8O5W5lubo/0stXZRCE/E27Ax47ej9k/gH9jwFo/SrXyg6/vf?=
+ =?us-ascii?Q?qBRsbKcYq9V+8V26KU0dLclXQC3Z94f4ZluYmGJPMvUEByuxJXP7k8iZaAwu?=
+ =?us-ascii?Q?Acb+UhQX/9iSANYLGiEU3PluQkKoa977AkYqg7jjSO53DkgSV7vFT0H31gh8?=
+ =?us-ascii?Q?MIv6kyd2otmrSo9ARCC5rIYrTTJpkDT3rHwII+HyEHBGDG4LyMcqVayXquF+?=
+ =?us-ascii?Q?N1kXIOLHax0DUYJtGpLkgc6TOkWLWu1MyRDSLdrRQRzIJxVy+0sVhcZCzBk9?=
+ =?us-ascii?Q?aGMzlxGf69zjYcCeyKF7sfKJG8jGdVHr93lmKVKE40beYxKa6qsR8x3j0L01?=
+ =?us-ascii?Q?f9E/QbrBXMVOU0xzzZFvrACJDztPs2T2Lt4flDmoCIcC+4s06vhlXDs2Xfgf?=
+ =?us-ascii?Q?AI7mtZ2yFh7v3wRij/sMOl4g1tKqU8dGnXofaXWxYWscfV+x3ljkCVxoji5T?=
+ =?us-ascii?Q?n6Na4bJzAqb11P3/ptC3WTibs66bd8Vi4ddDEenAnA9XnFZhhd30+4eG4R2F?=
+ =?us-ascii?Q?I7aHRpKg7nOR9aSsypjGbHPMsa6aOcLhuEPBpT+fN20hhzCISvYFlL9Dv7je?=
+ =?us-ascii?Q?cu4OGuXja25NCeH7qGcbYtf5wseJZiIl2s3Y/0rfWpeGWBrw3dv+Vgw8iWvP?=
+ =?us-ascii?Q?yxi3okIpRF03mhSEL/laNe4ZlVxYyQrStV3G17iH9sahPV50wd/8ynqPdVjM?=
+ =?us-ascii?Q?KbKKYB1el30ro/CwO7keoTZ/4+PfmidZ6poIdXCEjhrOx9TMv94PyPfFY01v?=
+ =?us-ascii?Q?nh13Mr9wXD9iMt83mTSUNhUofou/9NnWmcOOB8MKl5pMr/LR+qfFjeAVmxUm?=
+ =?us-ascii?Q?E0Lz5ByWHOe17yRLss2xiMljo8GjSErFvVzw0o0BSCueOQ2xzds6ncrX9YAz?=
+ =?us-ascii?Q?0aYl1j6fGdbRVBbd9lzFBMXDDXAaKBHmPwaJEuGMtudKDnBMMAHKcXYkEli1?=
+ =?us-ascii?Q?HRYnvLslzoNkNshsN0wX2TQ/j7vDsxpyJP+5IMVwVnzqQbBI?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4865.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d88acbc-0273-40e7-a85b-08d9f2da1da4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Feb 2022 12:28:06.2821
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mDlrhxyFumXh4yranC41nIK9MCMRZI41QKqxIjkBp20sQsMkvh/m0RBWmswbb58VyQDfQb9xe5yggHFUh2j3uqYBYiDRIjCPVneElRtx4WEMXBR/6gD+XnHysOAaGnBy
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1774
 
-This patch adds basic DT for Microchip lan966x SoC and associated board
-pcb8291(2-port EVB). Adds peripherals required to allow booting: Interrupt
-Controller, Clock, Generic ARMv7 Timers, Synopsys Timer, Flexcoms, GPIOs.
-Also adds other peripherals like crypto(AES/SHA), DMA, Watchdog Timer, TRNG
-and MCAN0.
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
+e
+> content is safe
+>=20
+> Am 2022-02-10 12:52, schrieb Kavyasree.Kotagiri@microchip.com:
+> >> EXTERNAL EMAIL: Do not click links or open attachments unless you know
+> >> the
+> >> content is safe
+> >>
+> >> Am 2022-02-10 10:40, schrieb Kavyasree.Kotagiri@microchip.com:
+> >> >> EXTERNAL EMAIL: Do not click links or open attachments unless you
+> know
+> >> >> the
+> >> >> content is safe
+> >>
+> >> >> > +     clocks {
+> >> >> [..]
+> >> >> > +
+> >> >> > +             nic_clk: nic_clk {
+> >> >>
+> >> >> What does nic_clk stand for? If I had to guess, it
+> >> >> has something to do with network. But..
+> >> >>
+> >> > NIC clock is the clock used by AXI, AHB fabric and APB bridges which
+> >> > connects all the peripherals.
+> >> > It is named so because the AXI fabric is based on NIC400 IP from ARM
+> >>
+> >> Ok, thanks for clarification.
+> >>
+> >>
+> >> >> > +             watchdog: watchdog@e0090000 {
+> >> >> > +                     compatible =3D "snps,dw-wdt";
+> >> >> > +                     reg =3D <0xe0090000 0x1000>;
+> >> >> > +                     interrupts =3D <GIC_SPI 38 IRQ_TYPE_LEVEL_H=
+IGH>;
+> >> >> > +                     clocks =3D <&nic_clk>;
+> >> >>
+> >> >> Btw. can we disable all nodes by default and enable them
+> >> >> in the board dts files?
+> >> > I would like to have only board specific nodes enabled in dts files
+> >> > and rest of them in dtsi file
+> >>
+> >> And how do you know which ones are board specific? E.g. I would like
+> >> to add our board which is also based on the lan9668. Maybe I don't
+> >> want a watchdog (or whatever node). Of course I could use
+> >>
+> >> &watchdog {
+> >>    status =3D "disabled";
+> >> };
+> >>
+> >> But IMHO opt-in is better. At least thats what we are doing for
+> >> the layerscape over on arm64.
+> >>
+> > Basically, I am disabling only the nodes which have pinctrl settings
+> > in dtsi file
+> > and enable in dts to make sure there are no conflicts on pins on the
+> > board.
+>=20
+> Thats not what I'm asking. I would like to see *optional* nodes
+> disabled by default. Whether the watchdog is optional might be
+> debatable, but what about the usb controller and the qspi
+> controller? They don't have shared pins AFAIK, so according
+> to your rule, they will be enabled by default and each board
+> which doesn't have anything connected on these pins would have
+> to disabled it.
+>=20
+> Please keep in mind that this .dtsi will also be used by boards
+> not manufactured by microchip.
+>=20
+I agree with you - "disabling optional nodes in dtsi"
+I have gone through all the nodes.
+Confirmed and moved enabling optional node watchdog
+to dts file.
 
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
----
-v5 -> v6:
-- Renamed dts file to lan966x-pcb8291.dts file.
-- Disabled optional watchdog in dtsi file and enabled it in dts file.
-
-v4 -> v5:
-- Modified AES, SHA, TRNG node names as per generic names recommended.
-
-v3 -> v4:
-- Removed character 'x' from compatible string.
-- Removed memory node as handled by bootloader.
-- Renamed flexcom3 usart0 to usart3
-- Added /chosen and /aliases nodes in dts file.
-
-v2 -> v3:
-- Enabling trng in dtsi itself.
-- Removed "status=okay" dma0.
-- Add gpio pin settings for can0(missed adding this in previous version)
-
-v1 -> v2:
-- Moved flx3 usart0 node to dtsi file.
-- Removed status="okay" for dma0 to maintain consistency across nodes
-  (which means enabling dma0 by default)
-
- arch/arm/boot/dts/Makefile            |   2 +
- arch/arm/boot/dts/lan966x-pcb8291.dts |  64 +++++++
- arch/arm/boot/dts/lan966x.dtsi        | 238 ++++++++++++++++++++++++++
- 3 files changed, 304 insertions(+)
- create mode 100644 arch/arm/boot/dts/lan966x-pcb8291.dts
- create mode 100644 arch/arm/boot/dts/lan966x.dtsi
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 235ad559acb2..c17a7308ff44 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -735,6 +735,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
- dtb-$(CONFIG_SOC_IMX7ULP) += \
- 	imx7ulp-com.dtb \
- 	imx7ulp-evk.dtb
-+dtb-$(CONFIG_SOC_LAN966) += \
-+	lan966x-pcb8291.dtb
- dtb-$(CONFIG_SOC_LS1021A) += \
- 	ls1021a-moxa-uc-8410a.dtb \
- 	ls1021a-qds.dtb \
-diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
-new file mode 100644
-index 000000000000..3281af90ac6d
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
-@@ -0,0 +1,64 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * lan966x_pcb8291.dts - Device Tree file for PCB8291
-+ */
-+/dts-v1/;
-+#include "lan966x.dtsi"
-+
-+/ {
-+	model = "Microchip EVB - LAN9662";
-+	compatible = "microchip,lan9662-pcb8291", "microchip,lan9662", "microchip,lan966";
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	aliases {
-+		serial0 = &usart3;
-+	};
-+};
-+
-+&gpio {
-+	fc_shrd7_pins: fc_shrd7-pins {
-+		pins = "GPIO_49";
-+		function = "fc_shrd7";
-+	};
-+
-+	fc_shrd8_pins: fc_shrd8-pins {
-+		pins = "GPIO_54";
-+		function = "fc_shrd8";
-+	};
-+
-+	fc3_b_pins: fcb3-spi-pins {
-+		/* SCK, RXD, TXD */
-+		pins = "GPIO_51", "GPIO_52", "GPIO_53";
-+		function = "fc3_b";
-+	};
-+
-+	can0_b_pins:  can0_b_pins {
-+		/* RX, TX */
-+		pins = "GPIO_35", "GPIO_36";
-+		function = "can0_b";
-+	};
-+};
-+
-+&can0 {
-+	pinctrl-0 = <&can0_b_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&flx3 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
-+	status = "okay";
-+
-+	usart3: serial@200 {
-+		pinctrl-0 = <&fc3_b_pins>, <&fc_shrd7_pins>, <&fc_shrd8_pins>;
-+		pinctrl-names = "default";
-+		status = "okay";
-+	};
-+};
-+
-+&watchdog {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-new file mode 100644
-index 000000000000..10ffe78110ff
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -0,0 +1,238 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * lan966x.dtsi - Device Tree Include file for Microchip LAN966 family SoC
-+ *
-+ * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
-+ *
-+ * Author: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-+ *
-+ */
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/mfd/atmel-flexcom.h>
-+#include <dt-bindings/dma/at91.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/clock/microchip,lan966x.h>
-+
-+/ {
-+	model = "Microchip LAN966 family SoC";
-+	compatible = "microchip,lan966";
-+	interrupt-parent = <&gic>;
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a7";
-+			clock-frequency = <600000000>;
-+			reg = <0x0>;
-+		};
-+	};
-+
-+	clocks {
-+		sys_clk: sys_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <162500000>;
-+		};
-+
-+		cpu_clk: cpu_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <600000000>;
-+		};
-+
-+		ddr_clk: ddr_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <300000000>;
-+		};
-+
-+		nic_clk: nic_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <200000000>;
-+		};
-+	};
-+
-+	clks: clock-controller@e00c00a8 {
-+		compatible = "microchip,lan966x-gck";
-+		#clock-cells = <1>;
-+		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
-+		clock-names = "cpu", "ddr", "sys";
-+		reg = <0xe00c00a8 0x38>;
-+	};
-+
-+	timer {
-+		compatible = "arm,armv7-timer";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
-+		clock-frequency = <37500000>;
-+		arm,cpu-registers-not-fw-configured;
-+	};
-+
-+	soc {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		flx0: flexcom@e0040000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0040000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM0>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0040000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		flx1: flexcom@e0044000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0044000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM1>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0044000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		trng: rng@e0048000 {
-+			compatible = "atmel,at91sam9g45-trng";
-+			reg = <0xe0048000 0x100>;
-+			clocks = <&nic_clk>;
-+		};
-+
-+		aes: crypto@e004c000 {
-+			compatible = "atmel,at91sam9g46-aes";
-+			reg = <0xe004c000 0x100>;
-+			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
-+			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
-+			dma-names = "rx", "tx";
-+			clocks = <&nic_clk>;
-+			clock-names = "aes_clk";
-+		};
-+
-+		flx2: flexcom@e0060000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0060000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM2>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0060000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		flx3: flexcom@e0064000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0064000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM3>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0064000 0x800>;
-+			status = "disabled";
-+
-+			usart3: serial@200 {
-+				compatible = "atmel,at91sam9260-usart";
-+				reg = <0x200 0x200>;
-+				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&nic_clk>;
-+				clock-names = "usart";
-+				atmel,fifo-size = <32>;
-+				status = "disabled";
-+			};
-+		};
-+
-+		dma0: dma-controller@e0068000 {
-+			compatible = "microchip,sama7g5-dma";
-+			reg = <0xe0068000 0x1000>;
-+			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			clocks = <&nic_clk>;
-+			clock-names = "dma_clk";
-+		};
-+
-+		sha: crypto@e006c000 {
-+			compatible = "atmel,at91sam9g46-sha";
-+			reg = <0xe006c000 0xec>;
-+			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(14)>;
-+			dma-names = "tx";
-+			clocks = <&nic_clk>;
-+			clock-names = "sha_clk";
-+		};
-+
-+		flx4: flexcom@e0070000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0070000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM4>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0070000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		timer0: timer@e008c000 {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xe008c000 0x400>;
-+			clocks = <&nic_clk>;
-+			clock-names = "timer";
-+			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+
-+		watchdog: watchdog@e0090000 {
-+			compatible = "snps,dw-wdt";
-+			reg = <0xe0090000 0x1000>;
-+			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&nic_clk>;
-+			status = "disabled";
-+		};
-+
-+		can0: can@e081c000 {
-+			compatible = "bosch,m_can";
-+			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
-+			reg-names = "m_can", "message_ram";
-+			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "int0", "int1";
-+			clocks = <&clks GCK_ID_MCAN0>, <&clks GCK_ID_MCAN0>;
-+			clock-names = "hclk", "cclk";
-+			assigned-clocks = <&clks GCK_ID_MCAN0>;
-+			assigned-clock-rates = <40000000>;
-+			bosch,mram-cfg = <0x0 0 0 64 0 0 32 32>;
-+			status = "disabled";
-+		};
-+
-+		gpio: pinctrl@e2004064 {
-+			compatible = "microchip,lan966x-pinctrl";
-+			reg = <0xe2004064 0xb4>,
-+			    <0xe2010024 0x138>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&gpio 0 0 78>;
-+			interrupt-controller;
-+			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gic: interrupt-controller@e8c11000 {
-+			compatible = "arm,gic-400", "arm,cortex-a7-gic";
-+			#interrupt-cells = <3>;
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-controller;
-+			reg = <0xe8c11000 0x1000>,
-+			      <0xe8c12000 0x2000>,
-+			      <0xe8c14000 0x2000>,
-+			      <0xe8c16000 0x2000>;
-+		};
-+	};
-+};
--- 
-2.17.1
-
+> -michael
