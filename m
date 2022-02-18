@@ -1,305 +1,100 @@
-Return-Path: <SRS0=CVnP=TB=fujitsu.com=hasegawa-hitomi@kernel.org>
+Return-Path: <SRS0=C1Vs=TB=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D584C433FE
-	for <soc@archiver.kernel.org>; Fri, 18 Feb 2022 09:21:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 928AFC433F5
+	for <soc@archiver.kernel.org>; Fri, 18 Feb 2022 10:35:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 50EFAC340EB; Fri, 18 Feb 2022 09:21:25 +0000 (UTC)
-Received: from esa3.hc1455-7.c3s2.iphmx.com (esa3.hc1455-7.c3s2.iphmx.com [207.54.90.49])
+	id 4FE00C340EB; Fri, 18 Feb 2022 10:35:49 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 45E40C340E9;
-	Fri, 18 Feb 2022 09:21:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 45E40C340E9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-IronPort-SDR: hM3TtDsYyOmwmiYS3D1d9oa/FQZjSVZdhxytoDg0iInLoWtZ5fQ3nintwb1s+kkpAoXVYKp2VI
- bqXmMHJJ6FGUZtCYIV+3CdJ2hZJlcPxNTwJavFaFETTx8K6wKoR/R76GCk7sTTUjRoknQsnli5
- iy1ewx8NhpW0Q2mZSsxDT1XjCNCOj0tbxWJT+K2p+CX7SQFFSP/VSCwWtYQVEnXJ+uOJzFYa8U
- AAqXnC0K7bkazyCX8LFftFtjG0MaUJqvhoaX5hmJkES118s1b2QL+1KPFTnUta7b6fbdDbIqGI
- AuEI8O9aD7wJNcaFDZB19M/k
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="63467860"
-X-IronPort-AV: E=Sophos;i="5.88,378,1635174000"; 
-   d="scan'208";a="63467860"
-Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
-  by esa3.hc1455-7.c3s2.iphmx.com with ESMTP; 18 Feb 2022 18:21:15 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-	by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 8AA90152EC;
-	Fri, 18 Feb 2022 18:21:13 +0900 (JST)
-Received: from yto-om2.fujitsu.com (yto-om2.o.css.fujitsu.com [10.128.89.163])
-	by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id B65CADCCEE;
-	Fri, 18 Feb 2022 18:21:12 +0900 (JST)
-Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-	by yto-om2.fujitsu.com (Postfix) with ESMTP id 7D8CB403A6E72;
-	Fri, 18 Feb 2022 18:21:12 +0900 (JST)
-From: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-List-Id: <soc.lore.kernel.org>
-To: linux-arm-kernel@lists.infradead.org,
-	soc@kernel.org
-Cc: arnd@arndb.de,
-	olof@lixom.net,
-	catalin.marinas@arm.com,
-	will@kernel.org
-Subject: [PATCH] soc: fujitsu: Add A64FX diagnostic interrupt driver
-Date: Fri, 18 Feb 2022 18:20:10 +0900
-Message-Id: <20220218092010.1327309-1-hasegawa-hitomi@fujitsu.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.kernel.org (Postfix) with ESMTPS id 897A9C340E9;
+	Fri, 18 Feb 2022 10:35:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 897A9C340E9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N63i4-1oMpYX1rg0-016O8D; Fri, 18 Feb 2022 11:35:45 +0100
+Received: by mail-wm1-f49.google.com with SMTP id l67-20020a1c2546000000b00353951c3f62so6052954wml.5;
+        Fri, 18 Feb 2022 02:35:45 -0800 (PST)
+X-Gm-Message-State: AOAM531P6G8g5IiVdiPKeT60SnVXD/oBi63fS6lmyFDXHCqggSkUMarp
+	zhm9BBWOCS6RhfdevQPIkla7yQZrQsdEd3lPMIA=
+X-Google-Smtp-Source: ABdhPJxegF6Lx2MRfZLiyyJbPRuvy1H0vVQp0nSTW6sUo3a4VvdtM0CLnAmCs3mdimm+ojDxtBptmtjSQF23Pl5wm9I=
+X-Received: by 2002:a05:600c:2108:b0:34e:870:966e with SMTP id
+ u8-20020a05600c210800b0034e0870966emr10029708wml.173.1645180545005; Fri, 18
+ Feb 2022 02:35:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
+References: <20220218092010.1327309-1-hasegawa-hitomi@fujitsu.com>
+In-Reply-To: <20220218092010.1327309-1-hasegawa-hitomi@fujitsu.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Fri, 18 Feb 2022 11:35:29 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a027OWYrRDm3r930pYo+He7bqVSEpQKjM9od1W8ciamyw@mail.gmail.com>
+Message-ID: <CAK8P3a027OWYrRDm3r930pYo+He7bqVSEpQKjM9od1W8ciamyw@mail.gmail.com>
+Subject: Re: [PATCH] soc: fujitsu: Add A64FX diagnostic interrupt driver
+To: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:6dSjOHl8iyNouXUIKIh10/l02u2jGcrQq1VHRsUryjTXSjxxUZR
+ dVjZuvXkH7mhT3+QfdXVxm+ISRoeHKjeBj0aGWhnPVrh9KawCge4Hrr9DuLxSB5guU6mI+d
+ w6svrXmxfPUG6O47gFc8OSSgV1go8UN+9zhF10w5hDsXXFe1wjUsKvp234fWdgdlt2DV/Mm
+ oI39s8RtYCGBkxwnD3f3Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mtELuJjWyUc=:MANd7HdvVcPT9Rw2hqoC/j
+ TtAc2AoTmmr6OtBzgo1EACFmPzizqA3sLPhAyNHtrrmVnci6S8SzG7lIg6+K7eWgCCYRL/8fO
+ 8rjgnwBzQ0hDk8MzbMR4khc+Vs7sy4tCwdyvsaw4If9EDkYKgMkT04MMl8k6R1DKOWsRbW91m
+ mMt3VjbtHnmJc5SclYhDTmQXtx5SSljDwGdWjEYrwOmlYrmdaiwHxb47XEBWCIGaZQwkNcpcQ
+ BkOm9y9bB+hkp7F9QolDASMqI9q/JiezluVewNWVT/ZrOfIbxWamkg70jUqrjxggAhwdGfK10
+ 7hs0L7bxWodku+6LKqZ53/LTsziVcBxYjDWCebnyTmtHnBqj0Tjr/yY00Sf4mjNi0PKiIK1Fl
+ 43Fbs74S4Qf2dQWXjPl6hb9M51hfIpYOrA3ypRquI2G//P6ojFybxTKiW+1kXgsSeft8N2ZrK
+ jevF8SF14L9wCPfsMIFDL7HNaLTPD/cPd7C7OEtZtFgqaFtQMrSF6pOy0Dgjtx1R/R2ZWmc95
+ 92/v6wCAYNEDGZ+dTm1o+yoJIgcHjSmumx260auLUdClUz064oB8S5YjqPK4960pvjv8jjJqO
+ hmncl8ZQQMi/sFmRRQAyWaBZLmYmSd0iIA+fURlRpO0aMydVoGZ0s02nLwdumLfLiaYXLFuiA
+ POjTWlUSZVfyJ77XjqSxsmFYCR0NXHRuHVYu/LtpH+JmzKMqKhJ+5RjRhaeXZsn8vhna7r3U1
+ RFndDlaTO+gCRHcWwr17EW4UxmRVdGwF6EZ9YdIOaRIIEysk5IQhz+kp/oQr6RjRZak0W8ZZ6
+ GjxxtjLjYVnh6PkymvHBvQYIpGTHg5XXfm8YFgcIAooW/07OXg=
 
- The interrupt is set using pseudo-NMI if it is available. Arm has a
- diagnostic interrupt feature called "Arm Generic Diagnostic Dump and
- Reset device", but the A64FX does not support this feature and instead
- has its own device definition.
+On Fri, Feb 18, 2022 at 10:20 AM Hitomi Hasegawa
+<hasegawa-hitomi@fujitsu.com> wrote:
+> +
+> +static irqreturn_t a64fx_panic_interrupt_nmi(int irq, void *dev_id)
+> +{
+> +       nmi_panic(NULL, "a64fx_panic_interrupt: interrupt received\n");
+> +
+> +       return IRQ_HANDLED;
+> +}
+> +
+> +static irqreturn_t a64fx_panic_interrupt_irq(int irq, void *dev_id)
+> +{
+> +       panic("a64fx_panic_interrupt: interrupt received\n");
+> +
+> +       return IRQ_HANDLED;
+> +}
 
-Signed-off-by: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
----
- MAINTAINERS                      |   5 +
- drivers/soc/Kconfig              |   1 +
- drivers/soc/Makefile             |   1 +
- drivers/soc/fujitsu/Kconfig      |  13 +++
- drivers/soc/fujitsu/Makefile     |   3 +
- drivers/soc/fujitsu/a64fx-diag.c | 157 +++++++++++++++++++++++++++++++
- 6 files changed, 180 insertions(+)
- create mode 100644 drivers/soc/fujitsu/Kconfig
- create mode 100644 drivers/soc/fujitsu/Makefile
- create mode 100644 drivers/soc/fujitsu/a64fx-diag.c
+Is panic() the best action for this? I'm not familiar with this feature, but
+it sounds like handle_sysrq() might be more appropriate. How does a
+user trigger the event, and is there any sideband data that can be
+sent along with the interrupt?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dd36acc87ce6..e9663fa92a52 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -239,6 +239,11 @@ F:	include/trace/events/9p.h
- F:	include/uapi/linux/virtio_9p.h
- F:	net/9p/
- 
-+A64FX DIAG DRIVER
-+M:	Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-+S:	Supported
-+F:	drivers/soc/fujitsu/a64fx-diag.c
-+
- A8293 MEDIA DRIVER
- M:	Antti Palosaari <crope@iki.fi>
- L:	linux-media@vger.kernel.org
-diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-index e8a30c4c5aec..0405ff0b3be6 100644
---- a/drivers/soc/Kconfig
-+++ b/drivers/soc/Kconfig
-@@ -8,6 +8,7 @@ source "drivers/soc/atmel/Kconfig"
- source "drivers/soc/bcm/Kconfig"
- source "drivers/soc/canaan/Kconfig"
- source "drivers/soc/fsl/Kconfig"
-+source "drivers/soc/fujitsu/Kconfig"
- source "drivers/soc/imx/Kconfig"
- source "drivers/soc/ixp4xx/Kconfig"
- source "drivers/soc/litex/Kconfig"
-diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index a05e9fbcd3e0..86596405a39c 100644
---- a/drivers/soc/Makefile
-+++ b/drivers/soc/Makefile
-@@ -11,6 +11,7 @@ obj-$(CONFIG_SOC_CANAAN)	+= canaan/
- obj-$(CONFIG_ARCH_DOVE)		+= dove/
- obj-$(CONFIG_MACH_DOVE)		+= dove/
- obj-y				+= fsl/
-+obj-y				+= fujitsu/
- obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
- obj-y				+= imx/
- obj-y				+= ixp4xx/
-diff --git a/drivers/soc/fujitsu/Kconfig b/drivers/soc/fujitsu/Kconfig
-new file mode 100644
-index 000000000000..b41cdac67637
---- /dev/null
-+++ b/drivers/soc/fujitsu/Kconfig
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+menu "fujitsu SoC drivers"
-+
-+config A64FX_DIAG
-+	bool "A64FX diag driver"
-+	depends on ARM64
-+	help
-+	  Say Y here if you want to enable diag interrupt on A64FX.
-+	  This driver uses pseudo-NMI if available.
-+
-+	  If unsure, say N.
-+
-+endmenu
-diff --git a/drivers/soc/fujitsu/Makefile b/drivers/soc/fujitsu/Makefile
-new file mode 100644
-index 000000000000..945bc1c14ad0
---- /dev/null
-+++ b/drivers/soc/fujitsu/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_A64FX_DIAG)	+= a64fx-diag.o
-diff --git a/drivers/soc/fujitsu/a64fx-diag.c b/drivers/soc/fujitsu/a64fx-diag.c
-new file mode 100644
-index 000000000000..3e74e391017b
---- /dev/null
-+++ b/drivers/soc/fujitsu/a64fx-diag.c
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * A64FX diag driver.
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+
-+#define A64FX_DIAG_IRQ 1
-+#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044)
-+#define BMC_INTERRUPT_STATUS_MASK ((1U) << 31)
-+#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040)
-+#define BMC_INTERRUPT_ENABLE_MASK ((1U) << 31)
-+
-+struct a64fx_diag_priv {
-+	int irq;
-+	void __iomem *mmsc_reg_base;
-+	bool has_nmi;
-+};
-+
-+static irqreturn_t a64fx_panic_interrupt_nmi(int irq, void *dev_id)
-+{
-+	nmi_panic(NULL, "a64fx_panic_interrupt: interrupt received\n");
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static irqreturn_t a64fx_panic_interrupt_irq(int irq, void *dev_id)
-+{
-+	panic("a64fx_panic_interrupt: interrupt received\n");
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void a64fx_diag_interrupt_clear(struct a64fx_diag_priv *priv)
-+{
-+	u32 mmsc;
-+	const void __iomem *diag_status_reg_addr;
-+
-+	diag_status_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_STATUS_OFFSET;
-+	mmsc = readl_relaxed(diag_status_reg_addr);
-+	if (mmsc & BMC_INTERRUPT_STATUS_MASK)
-+		writel_relaxed(BMC_INTERRUPT_STATUS_MASK, (void *)diag_status_reg_addr);
-+}
-+
-+static void a64fx_diag_interrupt_enable(struct a64fx_diag_priv *priv)
-+{
-+	u32 mmsc;
-+	const void __iomem *diag_enable_reg_addr;
-+
-+	diag_enable_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_ENABLE_OFFSET;
-+	mmsc = readl_relaxed(diag_enable_reg_addr);
-+	if (!(mmsc & BMC_INTERRUPT_ENABLE_MASK)) {
-+		mmsc |= BMC_INTERRUPT_STATUS_MASK;
-+		writel_relaxed(mmsc, (void *)diag_enable_reg_addr);
-+	}
-+}
-+
-+static void a64fx_diag_interrupt_disable(struct a64fx_diag_priv *priv)
-+{
-+	u32 mmsc;
-+	const void __iomem *diag_enable_reg_addr;
-+
-+	diag_enable_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_ENABLE_OFFSET;
-+	mmsc = readl_relaxed(diag_enable_reg_addr);
-+	if (mmsc & BMC_INTERRUPT_ENABLE_MASK) {
-+		mmsc &= ~BMC_INTERRUPT_ENABLE_MASK;
-+		writel_relaxed(mmsc, (void *)diag_enable_reg_addr);
-+	}
-+}
-+
-+static int a64fx_diag_probe(struct platform_device *pdev)
-+{
-+	int ret;
-+	unsigned long irq_flags;
-+	struct device *dev = &pdev->dev;
-+	struct a64fx_diag_priv *priv;
-+
-+	priv = devm_kzalloc(dev, sizeof(struct a64fx_diag_priv), GFP_KERNEL);
-+	if (priv == NULL)
-+		return -ENOMEM;
-+
-+	priv->mmsc_reg_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->mmsc_reg_base))
-+		return PTR_ERR(priv->mmsc_reg_base);
-+
-+	priv->irq = platform_get_irq(pdev, A64FX_DIAG_IRQ);
-+	if (priv->irq < 0)
-+		return priv->irq;
-+
-+	platform_set_drvdata(pdev, priv);
-+
-+	a64fx_diag_interrupt_clear(priv);
-+	a64fx_diag_interrupt_enable(priv);
-+
-+	irq_flags = IRQF_PERCPU | IRQF_NOBALANCING | IRQF_NO_AUTOEN |
-+		   IRQF_NO_THREAD;
-+	ret = request_nmi(priv->irq, &a64fx_panic_interrupt_nmi, irq_flags,
-+			"a64fx_diag_nmi", NULL);
-+	if (ret) {
-+		ret = request_irq(priv->irq, &a64fx_panic_interrupt_irq,
-+				irq_flags, "a64fx_diag_irq", NULL);
-+		if (ret) {
-+			dev_err(dev, "cannot register IRQ %d\n", ret);
-+			return ret;
-+		}
-+		enable_irq(priv->irq);
-+		priv->has_nmi = false;
-+		dev_info(dev, "registered for IRQ %d\n", priv->irq);
-+	} else {
-+		enable_nmi(priv->irq);
-+		priv->has_nmi = true;
-+		dev_info(dev, "registered for NMI %d\n", priv->irq);
-+	}
-+
-+	return 0;
-+}
-+
-+static int __exit a64fx_diag_remove(struct platform_device *pdev)
-+{
-+	struct a64fx_diag_priv *priv = platform_get_drvdata(pdev);
-+
-+	a64fx_diag_interrupt_disable(priv);
-+	a64fx_diag_interrupt_clear(priv);
-+
-+	if (priv->has_nmi)
-+		free_nmi(priv->irq, NULL);
-+	else
-+		free_irq(priv->irq, NULL);
-+
-+	return 0;
-+}
-+
-+static const struct acpi_device_id a64fx_diag_acpi_match[] = {
-+	{ "FUJI2007", 0 },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(acpi, a64fx_diag_acpi_match);
-+
-+
-+static struct platform_driver a64fx_diag_driver = {
-+	.driver = {
-+		.name = "a64fx_diag_driver",
-+		.acpi_match_table = ACPI_PTR(a64fx_diag_acpi_match),
-+	},
-+	.probe = a64fx_diag_probe,
-+	.remove = a64fx_diag_remove,
-+};
-+
-+module_platform_driver(a64fx_diag_driver);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>");
-+MODULE_DESCRIPTION("A64FX diag driver");
--- 
-2.27.0
+> +static void a64fx_diag_interrupt_clear(struct a64fx_diag_priv *priv)
+> +{
+> +       u32 mmsc;
+> +       const void __iomem *diag_status_reg_addr;
+> +
+> +       diag_status_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_STATUS_OFFSET;
+> +       mmsc = readl_relaxed(diag_status_reg_addr);
+> +       if (mmsc & BMC_INTERRUPT_STATUS_MASK)
+> +               writel_relaxed(BMC_INTERRUPT_STATUS_MASK, (void *)diag_status_reg_addr);
+> +}
 
+Normal driver code should use readl()/writel(), not
+readl_relaxed()/writel_relaxed().
+If you do need the relaxed versions, please add a comment explaining why,
+otherwise change the code here and below.
+
+       Arnd
