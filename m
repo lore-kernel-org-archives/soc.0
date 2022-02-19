@@ -1,64 +1,102 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=A01h=TC=nxp.com=leoyang.li@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85F29C4167B
-	for <soc@archiver.kernel.org>; Fri, 18 Feb 2022 20:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41E42C433EF
+	for <soc@archiver.kernel.org>; Sat, 19 Feb 2022 01:22:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4E113C340F9; Fri, 18 Feb 2022 20:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3652AC340F3;
-	Fri, 18 Feb 2022 20:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645216811;
-	bh=3ZckXTJmQkZuU/yqEGNzhb1Imd8BDaCa5dB651+IWdY=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=naqYSFs3SrSIZm9duWYJQvNAszbMuSqn5anXIax3kKWusKdKCS/3zfLFdJ0wJR982
-	 zY7MznmFclXxdeeFArpppJOg0qW9ZWTbfU2ggyDyh8ur2PSc/fKfUNLJ+XdRDn6Fkj
-	 hNifmO9bL7GOcp4auD8wdKkv52x/Dj8q5/ClOCgo0fXCt9vichcpEkBjeQTQ0Li3bM
-	 bTD/iNXDhmZbp7JGXXu/rJkhw16BI+OP+6Z6E6Xhtw/9wBKAHMlif9h25hJdGNv664
-	 vLpxBqZrKL37CMkMPLmbHdapEYeQi3w7Svj4O/09Qyqs+cHv33ibzBqvvheiqJo9WB
-	 3OAPD+8t9JfsA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 17524E7BB18;
-	Fri, 18 Feb 2022 20:40:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 0F143C340EC; Sat, 19 Feb 2022 01:22:18 +0000 (UTC)
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5E3F0C340E9;
+	Sat, 19 Feb 2022 01:22:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5E3F0C340E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nxp.com
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A1B551A0564;
+	Sat, 19 Feb 2022 02:22:09 +0100 (CET)
+Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 65DE61A008E;
+	Sat, 19 Feb 2022 02:22:09 +0100 (CET)
+Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.142])
+	by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id 5881940050;
+	Fri, 18 Feb 2022 18:22:08 -0700 (MST)
+From: Li Yang <leoyang.li@nxp.com>
+List-Id: <soc.lore.kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	shawnguo@kernel.org
+Subject: [GIT PULL] soc/fsl drivers changes for fix (v5.17)
+Date: Fri, 18 Feb 2022 19:22:08 -0600
+Message-Id: <20220219012208.21835-1-leoyang.li@nxp.com>
+X-Mailer: git-send-email 2.25.1.377.g2d2118b
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: at91: fixes for 5.17
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <164521681109.10306.18284059161341281193.git-patchwork-notify@kernel.org>
-Date: Fri, 18 Feb 2022 20:40:11 +0000
-References: <20220211133515.15314-1-nicolas.ferre@microchip.com>
-In-Reply-To: <20220211133515.15314-1-nicolas.ferre@microchip.com>
-To: Nicolas Ferre <nicolas.ferre@microchip.com>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-Hello:
+Hi soc maintainers,
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+Please merge the following changes for soc/fsl drivers.
 
-On Fri, 11 Feb 2022 14:35:15 +0100 you wrote:
-> From: Nicolas Ferre <nicolas.ferre@microchip.com>
-> 
-> Arnd, Olof,
-> 
-> Here are 2 patches that just change the MAINTAIERS entry for at91. I think it's
-> better to have it sooner than later so this is why I add it to a "fixes" RP.
-> 
-> [...]
+Regards,
+Leo
 
-Here is the summary with links:
-  - [GIT,PULL] ARM: at91: fixes for 5.17
-    https://git.kernel.org/soc/soc/c/a8cd28553f0f
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/leo/linux.git tags/soc-fsl-fix-v5.17
+
+for you to fetch changes up to a222fd8541394b36b13c89d1698d9530afd59a9c:
+
+  soc: fsl: qe: Check of ioremap return value (2022-02-18 17:11:23 -0600)
+
+----------------------------------------------------------------
+NXP/FSL SoC driver fixes for v5.17
+
+- Add missing SoC compatible in existing binding
+- Replace kernel.h with the necessary inclusions
+- MAINTAINERS file fixes
+- Fix memory allocation failure check in guts driver
+- Various cleanups and minor fixes
+
+----------------------------------------------------------------
+Andy Shevchenko (3):
+      soc: fsl: Replace kernel.h with the necessary inclusions
+      soc: fsl: Correct MAINTAINERS database (QUICC ENGINE LIBRARY)
+      soc: fsl: Correct MAINTAINERS database (SOC)
+
+Christophe JAILLET (2):
+      soc: fsl: guts: Revert commit 3c0d64e867ed
+      soc: fsl: guts: Add a missing memory allocation failure check
+
+Jason Wang (1):
+      soc: fsl: qe: fix typo in a comment
+
+Jiasheng Jiang (1):
+      soc: fsl: qe: Check of ioremap return value
+
+Li Yang (2):
+      dt-bindings: qoriq-clock: add missing compatible for lx2160a
+      dt-bindings: fsl,layerscape-dcfg: add missing compatible for lx2160a
+
+ .../bindings/arm/freescale/fsl,layerscape-dcfg.txt         |  2 +-
+ Documentation/devicetree/bindings/clock/qoriq-clock.txt    |  1 +
+ MAINTAINERS                                                |  4 ++--
+ drivers/soc/fsl/guts.c                                     | 14 +++++++++-----
+ drivers/soc/fsl/qe/qe.c                                    |  4 ++--
+ drivers/soc/fsl/qe/qe_io.c                                 |  2 ++
+ include/soc/fsl/dpaa2-fd.h                                 |  3 ++-
+ include/soc/fsl/qe/immap_qe.h                              |  3 ++-
+ include/soc/fsl/qe/qe_tdm.h                                |  4 +++-
+ include/soc/fsl/qe/ucc_fast.h                              |  2 +-
+ include/soc/fsl/qe/ucc_slow.h                              |  2 +-
+ 11 files changed, 26 insertions(+), 15 deletions(-)
