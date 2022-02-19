@@ -1,102 +1,91 @@
-Return-Path: <SRS0=A01h=TC=nxp.com=leoyang.li@kernel.org>
+Return-Path: <SRS0=/cV5=TC=i2se.com=stefan.wahren@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41E42C433EF
-	for <soc@archiver.kernel.org>; Sat, 19 Feb 2022 01:22:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CE25C433F5
+	for <soc@archiver.kernel.org>; Sat, 19 Feb 2022 12:08:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0F143C340EC; Sat, 19 Feb 2022 01:22:18 +0000 (UTC)
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+	id C8642C36AE2; Sat, 19 Feb 2022 12:08:46 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5E3F0C340E9;
-	Sat, 19 Feb 2022 01:22:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5E3F0C340E9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A1B551A0564;
-	Sat, 19 Feb 2022 02:22:09 +0100 (CET)
-Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 65DE61A008E;
-	Sat, 19 Feb 2022 02:22:09 +0100 (CET)
-Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.142])
-	by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id 5881940050;
-	Fri, 18 Feb 2022 18:22:08 -0700 (MST)
-From: Li Yang <leoyang.li@nxp.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 0D885C004E1;
+	Sat, 19 Feb 2022 12:08:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0D885C004E1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
+Received: from localhost.localdomain ([37.4.249.169]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MOQu6-1ncLaP2beg-00Prwh; Sat, 19 Feb 2022 13:08:27 +0100
+From: Stefan Wahren <stefan.wahren@i2se.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Nicolas Saenz Julienne <nsaenz@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	shawnguo@kernel.org
-Subject: [GIT PULL] soc/fsl drivers changes for fix (v5.17)
-Date: Fri, 18 Feb 2022 19:22:08 -0600
-Message-Id: <20220219012208.21835-1-leoyang.li@nxp.com>
-X-Mailer: git-send-email 2.25.1.377.g2d2118b
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+Cc: Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	bcm-kernel-feedback-list@broadcom.com,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Phil Elwell <phil@raspberrypi.com>,
+	devicetree@vger.kernel.org,
+	soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org,
+	Maxime Ripard <maxime@cerno.tech>,
+	Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH] ARM: boot: dts: bcm2711: Fix HVS register range
+Date: Sat, 19 Feb 2022 13:07:55 +0100
+Message-Id: <1645272475-4096-1-git-send-email-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.7.4
+X-Provags-ID: V03:K1:CEQXljQlq99kCIS1ovn802odaTpnYacaS+3Ogj8ElXNPPTDkElg
+ cevyNxcrsfhxgAcO3zh9TnJQ8tNG++GeF7m7PnzVThx3U3a4mqSSI1YISSw4Xjo7TJfx4Hj
+ RgkaEzkrOc5oZNEXwZC0bjPMYr6CwIcHIGgDXl9/Ku10S8GuDZGkJqbBKRf43oeNd7qDgWm
+ TYXSJFLGa6v6kyyGVyDoA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:iXlHHJ9AljU=:rI/f2rBnM3wxUNc8i0hOwm
+ YlzY3n5YrYROV2XTtERbPCXy5EpV/AiVbIs//ZBP4gA9yORNJr52S7hrxgM/G3f12D/5WQjR2
+ HNZcA9SB9kFIEyIM8eGJV8mSW9fgerVipepbvPUzJskjIlQu/FeAmebGZ+AexPgtzyCwVolyj
+ XwE045wsjCZrPZ3S8voL2QlgoDQ/VUze1GNxvNYObzjPvMFHU77gSGwo6BJYe/C3uAMtaB+GQ
+ Q1KFqZOU0qNSQ2fC+Qrq6t4KehubaHYa7faZvzzrMWnqEj9DelaJGI4Q7/ktQB+ALk+bh+MJb
+ UYoIa5yKe08T20ZMP6DiS2M0FMqI/4kGtUcOjEsdz7DGCC9KpXSFqOAYqO1GO43NxVNMlpljm
+ cS5UPtysEKqj0V7WvLDL4GVyyT2thy9xFV0YOrWVMhGKQihiZlXzMyiYtflQuJkE8Hqlzt3F8
+ bN+8g3LD/+TpsiXBExCbxcVn2wj2YvGPkDvXLoP0+cxjNGgcYKlCFQ0HBGWSJeg0HzrC8QN62
+ PuzyTGNZFLxl8+bY3HFcsVLiABWp+0VFuoO+lmCQUcdgi3uwyIBtESCibvXtaFfgY/cjHh2cH
+ NYtH9Km0dGxZ+OXEncmXtmknpdiAdNz2zXLCZDFWaAhEXAdyphvPKkq991dEk+dmLzhNMRdKZ
+ 6zKoYgSM+fmqLPgcuvd7mJmUMF18Lncgdo2Xh17VDkNTcpQic98pNA2QKUhZQRnAhm58qAkXV
+ swR2lj39dOdQicEx
 
-Hi soc maintainers,
+From: Maxime Ripard <maxime@cerno.tech>
 
-Please merge the following changes for soc/fsl drivers.
+While the HVS has the same context memory size in the BCM2711 than in
+the previous SoCs, the range allocated to the registers doubled and it
+now takes 16k + 16k, compared to 8k + 16k before.
 
-Regards,
-Leo
+The KMS driver will use the whole context RAM though, eventually
+resulting in a pointer dereference error when we access the higher half
+of the context memory since it hasn't been mapped.
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+Fixes: 4564363351e2 ("ARM: dts: bcm2711: Enable the display pipeline")
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ arch/arm/boot/dts/bcm2711.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
+index dff18fc..21294f7 100644
+--- a/arch/arm/boot/dts/bcm2711.dtsi
++++ b/arch/arm/boot/dts/bcm2711.dtsi
+@@ -290,6 +290,7 @@
+ 
+ 		hvs: hvs@7e400000 {
+ 			compatible = "brcm,bcm2711-hvs";
++			reg = <0x7e400000 0x8000>;
+ 			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
+ 
+-- 
+2.7.4
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/leo/linux.git tags/soc-fsl-fix-v5.17
-
-for you to fetch changes up to a222fd8541394b36b13c89d1698d9530afd59a9c:
-
-  soc: fsl: qe: Check of ioremap return value (2022-02-18 17:11:23 -0600)
-
-----------------------------------------------------------------
-NXP/FSL SoC driver fixes for v5.17
-
-- Add missing SoC compatible in existing binding
-- Replace kernel.h with the necessary inclusions
-- MAINTAINERS file fixes
-- Fix memory allocation failure check in guts driver
-- Various cleanups and minor fixes
-
-----------------------------------------------------------------
-Andy Shevchenko (3):
-      soc: fsl: Replace kernel.h with the necessary inclusions
-      soc: fsl: Correct MAINTAINERS database (QUICC ENGINE LIBRARY)
-      soc: fsl: Correct MAINTAINERS database (SOC)
-
-Christophe JAILLET (2):
-      soc: fsl: guts: Revert commit 3c0d64e867ed
-      soc: fsl: guts: Add a missing memory allocation failure check
-
-Jason Wang (1):
-      soc: fsl: qe: fix typo in a comment
-
-Jiasheng Jiang (1):
-      soc: fsl: qe: Check of ioremap return value
-
-Li Yang (2):
-      dt-bindings: qoriq-clock: add missing compatible for lx2160a
-      dt-bindings: fsl,layerscape-dcfg: add missing compatible for lx2160a
-
- .../bindings/arm/freescale/fsl,layerscape-dcfg.txt         |  2 +-
- Documentation/devicetree/bindings/clock/qoriq-clock.txt    |  1 +
- MAINTAINERS                                                |  4 ++--
- drivers/soc/fsl/guts.c                                     | 14 +++++++++-----
- drivers/soc/fsl/qe/qe.c                                    |  4 ++--
- drivers/soc/fsl/qe/qe_io.c                                 |  2 ++
- include/soc/fsl/dpaa2-fd.h                                 |  3 ++-
- include/soc/fsl/qe/immap_qe.h                              |  3 ++-
- include/soc/fsl/qe/qe_tdm.h                                |  4 +++-
- include/soc/fsl/qe/ucc_fast.h                              |  2 +-
- include/soc/fsl/qe/ucc_slow.h                              |  2 +-
- 11 files changed, 26 insertions(+), 15 deletions(-)
