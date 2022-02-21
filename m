@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F16AC433EF
-	for <soc@archiver.kernel.org>; Mon, 21 Feb 2022 08:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A0D2C433F5
+	for <soc@archiver.kernel.org>; Mon, 21 Feb 2022 09:00:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F315EC340F1; Mon, 21 Feb 2022 08:58:10 +0000 (UTC)
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	id 33425C340F3; Mon, 21 Feb 2022 09:00:50 +0000 (UTC)
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 36667C340F7
-	for <soc@kernel.org>; Mon, 21 Feb 2022 08:58:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 36667C340F7
+	by smtp.kernel.org (Postfix) with ESMTPS id 76609C340E9
+	for <soc@kernel.org>; Mon, 21 Feb 2022 09:00:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76609C340E9
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f43.google.com with SMTP id a19so30397627qvm.4
-        for <soc@kernel.org>; Mon, 21 Feb 2022 00:58:10 -0800 (PST)
+Received: by mail-qv1-f42.google.com with SMTP id d7so30381223qvk.2
+        for <soc@kernel.org>; Mon, 21 Feb 2022 01:00:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=jms.id.au; s=google;
         h=mime-version:from:date:message-id:subject:to:cc
          :content-transfer-encoding;
-        bh=/YkJCPAEzy9lvOQKx0L5i2HCzqQLZCPvdJzlwKqKMEM=;
-        b=fHdjhnCW9k6koHGoL8t0LOjJFnL9DQxPvu/mqvFIyz74CqTTFK5blmbV8pDrWfCJ2p
-         xaGBIItbNHH+AjmvHGPtX0i6hlhwZWjX/48k1q0qQneg7qfoOm/RGvUYPPLLs5jEh+Am
-         +MMMyBPVojm5Pfxvz1rGjef4YjE/7F/x9D29k=
+        bh=0Ahs+cDwQvswkjE1AQJQGIfl7mZccggQRa1W61PiCbY=;
+        b=DVFTr3tsih8k+NVj3Rr+HrVdd9/FNuPe3HCuGogg4no4HktsAguGvBjNezfhPRZfwK
+         Ljaes34V9PTrIdFtnPIZl1HBzdzSeYtUai98AEnudCYqG/CagFT+NIX8yXryCif/yxqQ
+         YCtdK/Rnq8H6w/1iGm+9Ot4Dky2bzOm9CwjoI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
          :content-transfer-encoding;
-        bh=/YkJCPAEzy9lvOQKx0L5i2HCzqQLZCPvdJzlwKqKMEM=;
-        b=Bqe2UQlRCvCTXYAqM6Ho9IUpVa2l4pMOt/qbja0R+jjFXXgx8CbtFcZA/zO3fztEyp
-         ZoPE0+ZveOXdHeEBU+bh/NXoJAJQpEdHqiCs0UQg4CoS+GmdAFLFM2pW9LbsHpMO/hHt
-         jIJs/vvP1NOxPE0G6Ym3/1mwoO97YjV79MOAzfTm/SbXO9I2YBim0ADBvOFjvywrdSap
-         IXSLaScBeL+DvPSKwn456b9aMYhZFqGLZLzjx7lgdPgzBS8P1NZDBG7T5HG9M2jgHE7l
-         qS3kn8dIteBBKaJlbhA+IbcCFGC+98IUYuEI4FbPR8BFrgmjlzYnjrChO5lVvSZjlUip
-         3DtA==
-X-Gm-Message-State: AOAM532AGtHLQ44Y+JnGVaicWg/H6u5fBm3BQ5fKoMAj50sMmN5KdQ1a
-	gjAciBm1qcpQK0v4QwqtmwzhHl/mo0OTzDCSJrSuikm/2TU=
-X-Google-Smtp-Source: ABdhPJyn0WKGnhrzzpq1dvCmFMToH/JR7TwORUjkh/VfxntXGt87JDwSK+2FAU/rsYrtr9hW1TgvTzyVhYeQ6BCfaMI=
-X-Received: by 2002:a05:6214:d6e:b0:42d:7cb3:aa49 with SMTP id
- 14-20020a0562140d6e00b0042d7cb3aa49mr14608483qvs.107.1645433888187; Mon, 21
- Feb 2022 00:58:08 -0800 (PST)
+        bh=0Ahs+cDwQvswkjE1AQJQGIfl7mZccggQRa1W61PiCbY=;
+        b=Rh/A+DL/GLjlUqs9Aw2EDPfW27qT03yIPkosasfbg6ym9pB/pNXkxWykG7pMIqowg6
+         ZYO9AwJ1Eb6jEpMLjWadr3TvMr0d+Z+3r/4t41FUQHf25lazMx+3tF0axk/mKl1VLEO4
+         yrHCuouxTypx+WUxBACP44FBroR92HCql7jhQPAz537en0S6w0yy02zggPjq1wE87ryf
+         7A/vl4MityfvBTNlFzGkN6QuOsggcMvlCdjUGTshp1jccXpZDL1daU0TCa+VGRPBARuA
+         zE79K26ZfjXXGTR0en0RI/uRpwASGBpiyv7JxARrewiX5c9QhEaok/holVRCJi/qFVQ6
+         Ecxg==
+X-Gm-Message-State: AOAM533HtgWFEeN96RpTjyE9+eU3YhiAUqTS9rQ6GcD5Gq5YdveI8d2W
+	WLHw2LGIEWmFnjJfn8YT5lfMwVmVUO0ITZ5SMYHJARqCKro=
+X-Google-Smtp-Source: ABdhPJwU1kvHnWnyffE5WbtQAcJTJtF7koSZweL4/Gfmy3Xv0Fa7uBg5Jqa7h8nY8gH8pt0dN71kkDjjgBr/4h4IX3o=
+X-Received: by 2002:ad4:4b63:0:b0:42d:a3cf:1b55 with SMTP id
+ m3-20020ad44b63000000b0042da3cf1b55mr14392384qvx.130.1645434047528; Mon, 21
+ Feb 2022 01:00:47 -0800 (PST)
 MIME-Version: 1.0
 From: Joel Stanley <joel@jms.id.au>
-Date: Mon, 21 Feb 2022 08:57:57 +0000
-Message-ID: <CACPK8XcLpAA7b_hGea-Wc8H5eu9=YpPZ9b75nYF7rqMzDcMw9w@mail.gmail.com>
-Subject: [GIT PULL] ARM: aspeed: devicetree changes for 5.18
+Date: Mon, 21 Feb 2022 09:00:36 +0000
+Message-ID: <CACPK8XdjF6dG04hR+iMpUP8=LSJi5x-hRivgCGDaY7o_461eJw@mail.gmail.com>
+Subject: [GIT PULL] ARM: nuvoton: devicetree changes for 5.18
 List-Id: <soc.lore.kernel.org>
 To: SoC Team <soc@kernel.org>
 Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	linux-aspeed <linux-aspeed@lists.ozlabs.org>, Andrew Jeffery <andrew@aj.id.au>
+	=?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 Hello Soc maintainers,
 
-A straightforward pull request of aspeed bits for v5.18.
+Something a bit different, some Nuvoton changes for v5.18. These
+changes are from Jonathan, who hacks on the legacy WPCM450 platform.
 
 The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07=
 :
@@ -67,7 +68,7 @@ The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07=
 are available in the Git repository at:
 
   git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
-tags/aspeed-5.18-devicetree
+tags/nuvoton-5.18-devicetree
 
 for you to fetch changes up to 43fd3d4d95cee85e187e5c4ef1d991f77d4d928c:
 
@@ -75,15 +76,12 @@ for you to fetch changes up to 43fd3d4d95cee85e187e5c4ef1d991f77d4d928c:
 030)
 
 ----------------------------------------------------------------
-ASPEED device tree updates for 5.18
+Nuvoton device tree updates for 5.18
 
- - New machines
+ * Additions to wpcm450 following the upstremaing of the pinctrl/gpio
+   driver for this platform
 
-  * Quanta S6Q AST2600 BMC
-  * Facebook's Bletchley is not new, but has a large update
-
- - Small clenaups and additions for Everest, Rainier and Tacoma, and the
-   flash layout
+ * Match more of the platform in MAINTAINERS
 
 ----------------------------------------------------------------
 Jonathan Neusch=C3=A4fer (8):
