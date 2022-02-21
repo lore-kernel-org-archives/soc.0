@@ -1,148 +1,144 @@
-Return-Path: <SRS0=8Eph=TE=baylibre.com=narmstrong@kernel.org>
+Return-Path: <SRS0=1P0Y=TE=pengutronix.de=ukl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 106A4C433F5
-	for <soc@archiver.kernel.org>; Mon, 21 Feb 2022 11:38:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 455F4C433F5
+	for <soc@archiver.kernel.org>; Mon, 21 Feb 2022 12:14:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C4C95C340F0; Mon, 21 Feb 2022 11:38:51 +0000 (UTC)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 04D8EC340EC; Mon, 21 Feb 2022 12:14:30 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8424FC340EB
-	for <soc@kernel.org>; Mon, 21 Feb 2022 11:38:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8424FC340EB
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f49.google.com with SMTP id d3so10892084wrf.1
-        for <soc@kernel.org>; Mon, 21 Feb 2022 03:38:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:organization:content-transfer-encoding;
-        bh=+3Cdr3UnkNe6hBDvjgKna9hDC0LxHXWc7I7ZTNIF3bc=;
-        b=JtwqXnf+s8ap/WJHlzhKn2g2471HfSI+wX45QPGPvjGORdJcZI850z5jYx6z+cIMRJ
-         zXPSFPTK/tJC57bNzuydlALyqHO1/MT259xP+1dfLX5LvKznJvCMhTWiW9+NOF9qFLGI
-         fv5Q1Lyy0fKfM3W15BE0R/wfPEcFaw1NGDMQmIqO4SeDzkNC5VEcljomZGbBj0FVQd6n
-         DSsBvXxGXBo6alTnUljT0jQjRhh5uGhELf6uIf+DVF1qAc0i76Wv0XkrM2X+e3knNCRs
-         +kRF9i/hy61qDXpzFekZa2cIy4I270wit9DUMy/X0z94+3vffX1Mx3+G2RVLyncTUCSQ
-         Gd5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:organization
-         :content-transfer-encoding;
-        bh=+3Cdr3UnkNe6hBDvjgKna9hDC0LxHXWc7I7ZTNIF3bc=;
-        b=1IqtrhHXYc+vsOLN5DzHKSC0U0Bh/AH2ngTwHjUGlZA104R2h5arBCeDoTYk1H8m9p
-         aJHFtyOe7sd7zwiWnQLd/cNRfwhGDa+yQXkWe4ydesg8IKGS8j9lSwI/34mT+R+Fg3Vc
-         TokgtoeASA69/luNgtrQCfcZu/2MAWUWP3N6BVUxJQbxX4oyzFjpR8oFnjKWb8hosXnP
-         g6Bhto1POWwf+R95PmTx6H8gloWZVeW+siWdr3dLezLl+m9FJ+z4WVygbh5120EK/okr
-         3M2yQFmy4GcGUpnggGn+4zKU1z13EkOczYauOiMxrN5piEWwwcvDYRcqw3QW1y8+z8Pu
-         qxIQ==
-X-Gm-Message-State: AOAM532eWeicZHHxb2C4474p6kyN4jdN+BE7KlUUdEgZSnmph3uSwd+T
-	XGq6iY6zA6Seqh64+rBKA0V2sa2m8Uk4Wsb7
-X-Google-Smtp-Source: ABdhPJxKX1byj/LtVfl/YytFP4/8WtXpzyG3GoO/xZal4Tb9lygDy8NgygA864+QsEDQ1r3S64qCsA==
-X-Received: by 2002:adf:e705:0:b0:1e3:14aa:db8d with SMTP id c5-20020adfe705000000b001e314aadb8dmr15025056wrm.398.1645443528416;
-        Mon, 21 Feb 2022 03:38:48 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:77b7:547a:df0c:28d8? ([2001:861:44c0:66c0:77b7:547a:df0c:28d8])
-        by smtp.gmail.com with ESMTPSA id bg20-20020a05600c3c9400b0037fa5c422c8sm793852wmb.48.2022.02.21.03.38.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 03:38:48 -0800 (PST)
-Message-ID: <a7cd9937-d441-3e1f-9709-8e80cc8814f1@baylibre.com>
-Date: Mon, 21 Feb 2022 12:38:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From: Neil Armstrong <narmstrong@baylibre.com>
-Subject: [GIT PULL] arm64: dts: amlogic updates for v5.18
+	by smtp.kernel.org (Postfix) with ESMTPS id 68F18C340E9
+	for <soc@kernel.org>; Mon, 21 Feb 2022 12:14:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 68F18C340E9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1nM7a3-0002rE-62; Mon, 21 Feb 2022 13:14:15 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1nM7a2-000Q35-HD; Mon, 21 Feb 2022 13:14:13 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1nM7a1-004are-49; Mon, 21 Feb 2022 13:14:13 +0100
+Date: Mon, 21 Feb 2022 13:14:12 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Lubomir Rintel <lkundrak@v3.sk>, Russell King <linux@armlinux.org.uk>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org
-Content-Language: en-US
-Organization: Baylibre
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
+	soc@kernel.org
+Subject: Re: [PATCH] ARM: mmp: Fix failure to remove sram device
+Message-ID: <20220221121412.st63puug6tcpjq72@pengutronix.de>
+References: <20210726200158.3442800-1-u.kleine-koenig@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dveipk4cw4ij6cvd"
+Content-Disposition: inline
+In-Reply-To: <20210726200158.3442800-1-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-Hi,
 
-Here's a set of Amlogic ARM64 DT changes for v5.18.
+--dveipk4cw4ij6cvd
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Notably, this adds 5 new board and a new SoC family from Amlogic, and minor additions.
+[adding soc@kernel.org to Cc]
 
-Neil
+On Mon, Jul 26, 2021 at 10:01:58PM +0200, Uwe Kleine-K=F6nig wrote:
+> Make sure in .probe() to set driver data before the function is left to
+> make it possible in .remove() to undo the actions done.
+>=20
+> This fixes a potential memory leak and stops returning an error code in
+> .remove() that is ignored by the driver core anyhow.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-The following changes since commit 0a62b3cc0af9322e650fe89bea0bacdedf01960a:
+This problem is still real and the patch not applied. Who feels
+responsible to pick this up?
 
-   arm64: dts: meson: p241: add sound support (2021-12-01 10:27:13 +0100)
+> ---
+>  arch/arm/mach-mmp/sram.c | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/arch/arm/mach-mmp/sram.c b/arch/arm/mach-mmp/sram.c
+> index 6794e2db1ad5..ecc46c31004f 100644
+> --- a/arch/arm/mach-mmp/sram.c
+> +++ b/arch/arm/mach-mmp/sram.c
+> @@ -72,6 +72,8 @@ static int sram_probe(struct platform_device *pdev)
+>  	if (!info)
+>  		return -ENOMEM;
+> =20
+> +	platform_set_drvdata(pdev, info);
+> +
+>  	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	if (res =3D=3D NULL) {
+>  		dev_err(&pdev->dev, "no memory resource defined\n");
+> @@ -107,8 +109,6 @@ static int sram_probe(struct platform_device *pdev)
+>  	list_add(&info->node, &sram_bank_list);
+>  	mutex_unlock(&sram_lock);
+> =20
+> -	platform_set_drvdata(pdev, info);
+> -
+>  	dev_info(&pdev->dev, "initialized\n");
+>  	return 0;
+> =20
+> @@ -127,17 +127,19 @@ static int sram_remove(struct platform_device *pdev)
+>  	struct sram_bank_info *info;
+> =20
+>  	info =3D platform_get_drvdata(pdev);
+> -	if (info =3D=3D NULL)
+> -		return -ENODEV;
+> =20
+> -	mutex_lock(&sram_lock);
+> -	list_del(&info->node);
+> -	mutex_unlock(&sram_lock);
+> +	if (info->sram_size) {
+> +		mutex_lock(&sram_lock);
+> +		list_del(&info->node);
+> +		mutex_unlock(&sram_lock);
+> +
+> +		gen_pool_destroy(info->gpool);
+> +		iounmap(info->sram_virt);
+> +		kfree(info->pool_name);
+> +	}
+> =20
+> -	gen_pool_destroy(info->gpool);
+> -	iounmap(info->sram_virt);
+> -	kfree(info->pool_name);
+>  	kfree(info);
+> +
+>  	return 0;
+>  }
 
-are available in the Git repository at:
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v5.18
+--dveipk4cw4ij6cvd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-for you to fetch changes up to d926a4fe25338e120ab49547de9707dc6e5e5824:
+-----BEGIN PGP SIGNATURE-----
 
-   arm64: dts: meson: add support for OSMC Vero 4K+ (2022-02-21 09:23:08 +0100)
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmITghAACgkQwfwUeK3K
+7AnXAgf/ZFAtnmEkU5C5Or5RBYGW4UfBP/l47sk14zWR3inoZ0/QLmT1+YsJ+o1N
+hbB80OeSatNVBy4H0tncnjWzhrUKIPGkqjj9PusgQSFQAGEIyp54F0dZZ6jmtZT4
+vJgdc7AjgA81CEw/FyDIbNm1hiO5JIOTSyDk42sHVi0KaB4CYDreYjyL/uFoFAi6
+jDBTYatOwFh2asRDScRfsGCIq18ieYki7YH5KzSlcXGTzQJl47cYDK8wFT3FWVMk
+8bsuAFCLimIsPukgfENW4/1oImx0PwSCvoJYz4R9ebcIuPdkKr+InKiv1Q/rwPNO
+mSaZCqVOaVpI9kizs85sJTZz410/3Q==
+=it05
+-----END PGP SIGNATURE-----
 
-----------------------------------------------------------------
-Amlogic ARM64 DT changes for v5.18:
-- New Boards:
-  - Amediatek X96-AIR (Amlogic S905X3)
-  - CYX A95XF3-AIR (Amlogic S905X3)
-  - Haochuangy H96-Max (Amlogic S905X3)
-  - Amlogic AQ222 (Amlogic S4)
-  - OSMC Vero 4K+ (Amlogic S905D)
-- Initial support for Amlogic S4
-- Support for uart_ao_b & pwm_f on G12 SoCs
-
-----------------------------------------------------------------
-Artem Lapkin (1):
-       arm64: dts: meson-sm1: add spdifin and pdifout nodes
-
-Christian Hewitt (12):
-       arm64: dts: meson: add common SM1 ac2xx dtsi
-       dt-bindings: arm: amlogic: add X96-AIR bindings
-       arm64: dts: meson: add initial device-trees for X96-AIR
-       dt-bindings: vendor-prefixes: add cyx prefix
-       dt-bindings: arm: amlogic: add A95XF3-AIR bindings
-       arm64: dts: meson: add initial device-trees for A95XF3-AIR
-       dt-bindings: vendor-prefixes: add haochuangyi prefix
-       dt-bindings: arm: amlogic: add H96-Max bindings
-       arm64: dts: meson: add initial device-tree for H96-Max
-       dt-bindings: vendor-prefixes: add osmc prefix
-       dt-bindings: arm: amlogic: add Vero 4K+ bindings
-       arm64: dts: meson: add support for OSMC Vero 4K+
-
-Gary Bisson (2):
-       arm64: dts: meson-g12-common: add more pwm_f options
-       arm64: dts: meson-g12-common: add uart_ao_b pins muxing
-
-Xianwei Zhao (2):
-       dt-bindings: arm: amlogic: add S4 based AQ222 bindings
-       arm64: dts: add support for S4 based Amlogic AQ222
-
-  Documentation/devicetree/bindings/arm/amlogic.yaml |  12 +
-  .../devicetree/bindings/vendor-prefixes.yaml       |   6 +
-  arch/arm64/boot/dts/amlogic/Makefile               |   7 +
-  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |  43 +++
-  .../dts/amlogic/meson-gxl-s905d-vero4k-plus.dts    | 117 ++++++++
-  .../boot/dts/amlogic/meson-s4-s805x2-aq222.dts     |  30 +++
-  arch/arm64/boot/dts/amlogic/meson-s4.dtsi          |  99 +++++++
-  .../boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dts | 129 +++++++++
-  .../boot/dts/amlogic/meson-sm1-a95xf3-air.dts      | 108 ++++++++
-  arch/arm64/boot/dts/amlogic/meson-sm1-ac2xx.dtsi   | 300 +++++++++++++++++++++
-  arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dts  | 145 ++++++++++
-  .../boot/dts/amlogic/meson-sm1-x96-air-gbit.dts    | 133 +++++++++
-  arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dts  | 112 ++++++++
-  arch/arm64/boot/dts/amlogic/meson-sm1.dtsi         |  27 ++
-  14 files changed, 1268 insertions(+)
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dts
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-s4.dtsi
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dts
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air.dts
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-ac2xx.dtsi
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dts
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dts
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dts
+--dveipk4cw4ij6cvd--
