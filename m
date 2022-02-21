@@ -1,358 +1,148 @@
-Return-Path: <SRS0=RiwB=TE=walle.cc=michael@kernel.org>
+Return-Path: <SRS0=8Eph=TE=baylibre.com=narmstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7C38C433F5
-	for <soc@archiver.kernel.org>; Mon, 21 Feb 2022 09:10:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 106A4C433F5
+	for <soc@archiver.kernel.org>; Mon, 21 Feb 2022 11:38:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7320CC340F3; Mon, 21 Feb 2022 09:10:54 +0000 (UTC)
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id C4C95C340F0; Mon, 21 Feb 2022 11:38:51 +0000 (UTC)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DCCF8C340E9;
-	Mon, 21 Feb 2022 09:10:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DCCF8C340E9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 0A1BA2223E;
-	Mon, 21 Feb 2022 10:10:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1645434649;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1CVJ3zXsh+NaiVRj46zuadW+OtpATHxdz24V6BgPaWk=;
-	b=C1bzeR8XuiRuGpymeuSp7mS+mXkDyqkYIWJpJgPSmpdXH7Rqc+I2qMStv+w1Quz7M5NgUy
-	94DUn/Wz+YbUIU6N9dM8C0YPDlxxVPbqUEH/bwl07EF58GQ6ki5A9iruKKkzUSAdm930rL
-	yZycOr6YyjqvoEK1pIaGiPpiqNuYFKA=
+	by smtp.kernel.org (Postfix) with ESMTPS id 8424FC340EB
+	for <soc@kernel.org>; Mon, 21 Feb 2022 11:38:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8424FC340EB
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f49.google.com with SMTP id d3so10892084wrf.1
+        for <soc@kernel.org>; Mon, 21 Feb 2022 03:38:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:organization:content-transfer-encoding;
+        bh=+3Cdr3UnkNe6hBDvjgKna9hDC0LxHXWc7I7ZTNIF3bc=;
+        b=JtwqXnf+s8ap/WJHlzhKn2g2471HfSI+wX45QPGPvjGORdJcZI850z5jYx6z+cIMRJ
+         zXPSFPTK/tJC57bNzuydlALyqHO1/MT259xP+1dfLX5LvKznJvCMhTWiW9+NOF9qFLGI
+         fv5Q1Lyy0fKfM3W15BE0R/wfPEcFaw1NGDMQmIqO4SeDzkNC5VEcljomZGbBj0FVQd6n
+         DSsBvXxGXBo6alTnUljT0jQjRhh5uGhELf6uIf+DVF1qAc0i76Wv0XkrM2X+e3knNCRs
+         +kRF9i/hy61qDXpzFekZa2cIy4I270wit9DUMy/X0z94+3vffX1Mx3+G2RVLyncTUCSQ
+         Gd5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:organization
+         :content-transfer-encoding;
+        bh=+3Cdr3UnkNe6hBDvjgKna9hDC0LxHXWc7I7ZTNIF3bc=;
+        b=1IqtrhHXYc+vsOLN5DzHKSC0U0Bh/AH2ngTwHjUGlZA104R2h5arBCeDoTYk1H8m9p
+         aJHFtyOe7sd7zwiWnQLd/cNRfwhGDa+yQXkWe4ydesg8IKGS8j9lSwI/34mT+R+Fg3Vc
+         TokgtoeASA69/luNgtrQCfcZu/2MAWUWP3N6BVUxJQbxX4oyzFjpR8oFnjKWb8hosXnP
+         g6Bhto1POWwf+R95PmTx6H8gloWZVeW+siWdr3dLezLl+m9FJ+z4WVygbh5120EK/okr
+         3M2yQFmy4GcGUpnggGn+4zKU1z13EkOczYauOiMxrN5piEWwwcvDYRcqw3QW1y8+z8Pu
+         qxIQ==
+X-Gm-Message-State: AOAM532eWeicZHHxb2C4474p6kyN4jdN+BE7KlUUdEgZSnmph3uSwd+T
+	XGq6iY6zA6Seqh64+rBKA0V2sa2m8Uk4Wsb7
+X-Google-Smtp-Source: ABdhPJxKX1byj/LtVfl/YytFP4/8WtXpzyG3GoO/xZal4Tb9lygDy8NgygA864+QsEDQ1r3S64qCsA==
+X-Received: by 2002:adf:e705:0:b0:1e3:14aa:db8d with SMTP id c5-20020adfe705000000b001e314aadb8dmr15025056wrm.398.1645443528416;
+        Mon, 21 Feb 2022 03:38:48 -0800 (PST)
+Received: from ?IPV6:2001:861:44c0:66c0:77b7:547a:df0c:28d8? ([2001:861:44c0:66c0:77b7:547a:df0c:28d8])
+        by smtp.gmail.com with ESMTPSA id bg20-20020a05600c3c9400b0037fa5c422c8sm793852wmb.48.2022.02.21.03.38.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 03:38:48 -0800 (PST)
+Message-ID: <a7cd9937-d441-3e1f-9709-8e80cc8814f1@baylibre.com>
+Date: Mon, 21 Feb 2022 12:38:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date: Mon, 21 Feb 2022 10:10:46 +0100
-From: Michael Walle <michael@walle.cc>
-To: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From: Neil Armstrong <narmstrong@baylibre.com>
+Subject: [GIT PULL] arm64: dts: amlogic updates for v5.18
 List-Id: <soc.lore.kernel.org>
-Cc: arnd@arndb.de, alexandre.belloni@bootlin.com, olof@lixom.net,
- soc@kernel.org, robh+dt@kernel.org, nicolas.ferre@microchip.com,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
- Manohar.Puri@microchip.com
-Subject: Re: [PATCH v7] ARM: dts: add DT for lan966 SoC and 2-port board
- pcb8291
-In-Reply-To: <20220221080858.14233-1-kavyasree.kotagiri@microchip.com>
-References: <20220221080858.14233-1-kavyasree.kotagiri@microchip.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <3b4c56201a478876783e69243c901cd8@walle.cc>
-X-Sender: michael@walle.cc
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org
+Content-Language: en-US
+Organization: Baylibre
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Am 2022-02-21 09:08, schrieb Kavyasree Kotagiri:
-> This patch adds basic DT for Microchip lan966x SoC and associated board
-> pcb8291(2-port EVB). Adds peripherals required to allow booting: 
-> Interrupt
-> Controller, Clock, Generic ARMv7 Timers, Synopsys Timer, Flexcoms, 
-> GPIOs.
-> Also adds other peripherals like crypto(AES/SHA), DMA, Watchdog Timer, 
-> TRNG
-> and MCAN0.
-> 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> ---
-> v6 -> v7:
-> - Removed "arm,cpu-registers-not-fw-configured" property, as not 
-> required.
-> - Corrected "PPI interrupt cpu mask" and order of interrupts.
-> 
-> v5 -> v6:
-> - Renamed dts file to lan966x-pcb8291.dts file.
-> - Disabled optional watchdog in dtsi file and enabled it in dts file.
-> 
-> v4 -> v5:
-> - Modified AES, SHA, TRNG node names as per generic names recommended.
-> 
-> v3 -> v4:
-> - Removed character 'x' from compatible string.
-> - Removed memory node as handled by bootloader.
-> - Renamed flexcom3 usart0 to usart3
-> - Added /chosen and /aliases nodes in dts file.
-> 
-> v2 -> v3:
-> - Enabling trng in dtsi itself.
-> - Removed "status=okay" dma0.
-> - Add gpio pin settings for can0(missed adding this in previous 
-> version)
-> 
-> v1 -> v2:
-> - Moved flx3 usart0 node to dtsi file.
-> - Removed status="okay" for dma0 to maintain consistency across nodes
->   (which means enabling dma0 by default)
-> 
->  arch/arm/boot/dts/Makefile            |   2 +
->  arch/arm/boot/dts/lan966x-pcb8291.dts |  64 +++++++
->  arch/arm/boot/dts/lan966x.dtsi        | 237 ++++++++++++++++++++++++++
->  3 files changed, 303 insertions(+)
->  create mode 100644 arch/arm/boot/dts/lan966x-pcb8291.dts
->  create mode 100644 arch/arm/boot/dts/lan966x.dtsi
-> 
+Hi,
 
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/lan966x.dtsi
-> @@ -0,0 +1,237 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * lan966x.dtsi - Device Tree Include file for Microchip LAN966 family 
-> SoC
-> + *
-> + * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
-> + *
-> + * Author: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> + *
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/mfd/atmel-flexcom.h>
-> +#include <dt-bindings/dma/at91.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/clock/microchip,lan966x.h>
-> +
-> +/ {
-> +	model = "Microchip LAN966 family SoC";
-> +	compatible = "microchip,lan966";
+Here's a set of Amlogic ARM64 DT changes for v5.18.
 
-As mentioned earlier, this isn't a documented compatible string. So,
-I guess without overwriting this in the board dts it will throw an
-error with the dt schema validator. OTOH, there are many dtsi files
-in arch/arm/boot/dts/ doing this. I don't know what is correct here.
+Notably, this adds 5 new board and a new SoC family from Amlogic, and minor additions.
 
-Everthing else looks good.
+Neil
 
-Reviewed-by: Michael Walle <michael@walle.cc>
+The following changes since commit 0a62b3cc0af9322e650fe89bea0bacdedf01960a:
 
-> +	interrupt-parent = <&gic>;
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
-> +
-> +	cpus {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		cpu@0 {
-> +			device_type = "cpu";
-> +			compatible = "arm,cortex-a7";
-> +			clock-frequency = <600000000>;
-> +			reg = <0x0>;
-> +		};
-> +	};
-> +
-> +	clocks {
-> +		sys_clk: sys_clk {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <162500000>;
-> +		};
-> +
-> +		cpu_clk: cpu_clk {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <600000000>;
-> +		};
-> +
-> +		ddr_clk: ddr_clk {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <300000000>;
-> +		};
-> +
-> +		nic_clk: nic_clk {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <200000000>;
-> +		};
-> +	};
-> +
-> +	clks: clock-controller@e00c00a8 {
-> +		compatible = "microchip,lan966x-gck";
-> +		#clock-cells = <1>;
-> +		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
-> +		clock-names = "cpu", "ddr", "sys";
-> +		reg = <0xe00c00a8 0x38>;
-> +	};
-> +
-> +	timer {
-> +		compatible = "arm,armv7-timer";
-> +		interrupt-parent = <&gic>;
-> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | 
-> IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
-> +		clock-frequency = <37500000>;
-> +	};
-> +
-> +	soc {
-> +		compatible = "simple-bus";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		flx0: flexcom@e0040000 {
-> +			compatible = "atmel,sama5d2-flexcom";
-> +			reg = <0xe0040000 0x100>;
-> +			clocks = <&clks GCK_ID_FLEXCOM0>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0xe0040000 0x800>;
-> +			status = "disabled";
-> +		};
-> +
-> +		flx1: flexcom@e0044000 {
-> +			compatible = "atmel,sama5d2-flexcom";
-> +			reg = <0xe0044000 0x100>;
-> +			clocks = <&clks GCK_ID_FLEXCOM1>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0xe0044000 0x800>;
-> +			status = "disabled";
-> +		};
-> +
-> +		trng: rng@e0048000 {
-> +			compatible = "atmel,at91sam9g45-trng";
-> +			reg = <0xe0048000 0x100>;
-> +			clocks = <&nic_clk>;
-> +		};
-> +
-> +		aes: crypto@e004c000 {
-> +			compatible = "atmel,at91sam9g46-aes";
-> +			reg = <0xe004c000 0x100>;
-> +			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-> +			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
-> +			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
-> +			dma-names = "rx", "tx";
-> +			clocks = <&nic_clk>;
-> +			clock-names = "aes_clk";
-> +		};
-> +
-> +		flx2: flexcom@e0060000 {
-> +			compatible = "atmel,sama5d2-flexcom";
-> +			reg = <0xe0060000 0x100>;
-> +			clocks = <&clks GCK_ID_FLEXCOM2>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0xe0060000 0x800>;
-> +			status = "disabled";
-> +		};
-> +
-> +		flx3: flexcom@e0064000 {
-> +			compatible = "atmel,sama5d2-flexcom";
-> +			reg = <0xe0064000 0x100>;
-> +			clocks = <&clks GCK_ID_FLEXCOM3>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0xe0064000 0x800>;
-> +			status = "disabled";
-> +
-> +			usart3: serial@200 {
-> +				compatible = "atmel,at91sam9260-usart";
-> +				reg = <0x200 0x200>;
-> +				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-> +				clocks = <&nic_clk>;
-> +				clock-names = "usart";
-> +				atmel,fifo-size = <32>;
-> +				status = "disabled";
-> +			};
-> +		};
-> +
-> +		dma0: dma-controller@e0068000 {
-> +			compatible = "microchip,sama7g5-dma";
-> +			reg = <0xe0068000 0x1000>;
-> +			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
-> +			#dma-cells = <1>;
-> +			clocks = <&nic_clk>;
-> +			clock-names = "dma_clk";
-> +		};
-> +
-> +		sha: crypto@e006c000 {
-> +			compatible = "atmel,at91sam9g46-sha";
-> +			reg = <0xe006c000 0xec>;
-> +			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-> +			dmas = <&dma0 AT91_XDMAC_DT_PERID(14)>;
-> +			dma-names = "tx";
-> +			clocks = <&nic_clk>;
-> +			clock-names = "sha_clk";
-> +		};
-> +
-> +		flx4: flexcom@e0070000 {
-> +			compatible = "atmel,sama5d2-flexcom";
-> +			reg = <0xe0070000 0x100>;
-> +			clocks = <&clks GCK_ID_FLEXCOM4>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0xe0070000 0x800>;
-> +			status = "disabled";
-> +		};
-> +
-> +		timer0: timer@e008c000 {
-> +			compatible = "snps,dw-apb-timer";
-> +			reg = <0xe008c000 0x400>;
-> +			clocks = <&nic_clk>;
-> +			clock-names = "timer";
-> +			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-> +
-> +		watchdog: watchdog@e0090000 {
-> +			compatible = "snps,dw-wdt";
-> +			reg = <0xe0090000 0x1000>;
-> +			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&nic_clk>;
-> +			status = "disabled";
-> +		};
-> +
-> +		can0: can@e081c000 {
-> +			compatible = "bosch,m_can";
-> +			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
-> +			reg-names = "m_can", "message_ram";
-> +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "int0", "int1";
-> +			clocks = <&clks GCK_ID_MCAN0>, <&clks GCK_ID_MCAN0>;
-> +			clock-names = "hclk", "cclk";
-> +			assigned-clocks = <&clks GCK_ID_MCAN0>;
-> +			assigned-clock-rates = <40000000>;
-> +			bosch,mram-cfg = <0x0 0 0 64 0 0 32 32>;
-> +			status = "disabled";
-> +		};
-> +
-> +		gpio: pinctrl@e2004064 {
-> +			compatible = "microchip,lan966x-pinctrl";
-> +			reg = <0xe2004064 0xb4>,
-> +			    <0xe2010024 0x138>;
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			gpio-ranges = <&gpio 0 0 78>;
-> +			interrupt-controller;
-> +			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
-> +			#interrupt-cells = <2>;
-> +		};
-> +
-> +		gic: interrupt-controller@e8c11000 {
-> +			compatible = "arm,gic-400", "arm,cortex-a7-gic";
-> +			#interrupt-cells = <3>;
-> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-controller;
-> +			reg = <0xe8c11000 0x1000>,
-> +			      <0xe8c12000 0x2000>,
-> +			      <0xe8c14000 0x2000>,
-> +			      <0xe8c16000 0x2000>;
-> +		};
-> +	};
-> +};
+   arm64: dts: meson: p241: add sound support (2021-12-01 10:27:13 +0100)
 
--- 
--michael
+are available in the Git repository at:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v5.18
+
+for you to fetch changes up to d926a4fe25338e120ab49547de9707dc6e5e5824:
+
+   arm64: dts: meson: add support for OSMC Vero 4K+ (2022-02-21 09:23:08 +0100)
+
+----------------------------------------------------------------
+Amlogic ARM64 DT changes for v5.18:
+- New Boards:
+  - Amediatek X96-AIR (Amlogic S905X3)
+  - CYX A95XF3-AIR (Amlogic S905X3)
+  - Haochuangy H96-Max (Amlogic S905X3)
+  - Amlogic AQ222 (Amlogic S4)
+  - OSMC Vero 4K+ (Amlogic S905D)
+- Initial support for Amlogic S4
+- Support for uart_ao_b & pwm_f on G12 SoCs
+
+----------------------------------------------------------------
+Artem Lapkin (1):
+       arm64: dts: meson-sm1: add spdifin and pdifout nodes
+
+Christian Hewitt (12):
+       arm64: dts: meson: add common SM1 ac2xx dtsi
+       dt-bindings: arm: amlogic: add X96-AIR bindings
+       arm64: dts: meson: add initial device-trees for X96-AIR
+       dt-bindings: vendor-prefixes: add cyx prefix
+       dt-bindings: arm: amlogic: add A95XF3-AIR bindings
+       arm64: dts: meson: add initial device-trees for A95XF3-AIR
+       dt-bindings: vendor-prefixes: add haochuangyi prefix
+       dt-bindings: arm: amlogic: add H96-Max bindings
+       arm64: dts: meson: add initial device-tree for H96-Max
+       dt-bindings: vendor-prefixes: add osmc prefix
+       dt-bindings: arm: amlogic: add Vero 4K+ bindings
+       arm64: dts: meson: add support for OSMC Vero 4K+
+
+Gary Bisson (2):
+       arm64: dts: meson-g12-common: add more pwm_f options
+       arm64: dts: meson-g12-common: add uart_ao_b pins muxing
+
+Xianwei Zhao (2):
+       dt-bindings: arm: amlogic: add S4 based AQ222 bindings
+       arm64: dts: add support for S4 based Amlogic AQ222
+
+  Documentation/devicetree/bindings/arm/amlogic.yaml |  12 +
+  .../devicetree/bindings/vendor-prefixes.yaml       |   6 +
+  arch/arm64/boot/dts/amlogic/Makefile               |   7 +
+  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |  43 +++
+  .../dts/amlogic/meson-gxl-s905d-vero4k-plus.dts    | 117 ++++++++
+  .../boot/dts/amlogic/meson-s4-s805x2-aq222.dts     |  30 +++
+  arch/arm64/boot/dts/amlogic/meson-s4.dtsi          |  99 +++++++
+  .../boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dts | 129 +++++++++
+  .../boot/dts/amlogic/meson-sm1-a95xf3-air.dts      | 108 ++++++++
+  arch/arm64/boot/dts/amlogic/meson-sm1-ac2xx.dtsi   | 300 +++++++++++++++++++++
+  arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dts  | 145 ++++++++++
+  .../boot/dts/amlogic/meson-sm1-x96-air-gbit.dts    | 133 +++++++++
+  arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dts  | 112 ++++++++
+  arch/arm64/boot/dts/amlogic/meson-sm1.dtsi         |  27 ++
+  14 files changed, 1268 insertions(+)
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dts
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dts
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air.dts
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-ac2xx.dtsi
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dts
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dts
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dts
