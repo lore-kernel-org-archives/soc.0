@@ -4,100 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB0D8C433F5
-	for <soc@archiver.kernel.org>; Mon, 21 Feb 2022 08:32:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F16AC433EF
+	for <soc@archiver.kernel.org>; Mon, 21 Feb 2022 08:58:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9BBA0C340E9; Mon, 21 Feb 2022 08:32:03 +0000 (UTC)
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	id F315EC340F1; Mon, 21 Feb 2022 08:58:10 +0000 (UTC)
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CF866C340F1;
-	Mon, 21 Feb 2022 08:32:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CF866C340F1
+	by smtp.kernel.org (Postfix) with ESMTPS id 36667C340F7
+	for <soc@kernel.org>; Mon, 21 Feb 2022 08:58:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 36667C340F7
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f176.google.com with SMTP id 185so8079685qkh.1;
-        Mon, 21 Feb 2022 00:32:02 -0800 (PST)
+Received: by mail-qv1-f43.google.com with SMTP id a19so30397627qvm.4
+        for <soc@kernel.org>; Mon, 21 Feb 2022 00:58:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Fe2hsCdbxN1ij2HP4oggs60CZPKRq8in1lb+QkY/nqo=;
-        b=nikTB4nTPSIHaAbZaqKeqIYB7Ip1n/OvgN5AE9hLz08d3EyLVRH+LyoKfDvR26SUeP
-         Ggwo7azjtYWZPev4HZPO/g0Ui/r1WmrpyJjFJajqDyxGO69+PUxjfPigsPECfz/c/mKU
-         0hH5vzvYZBaxGDXFAyf2FiKGkvc+g3GP53Bz4=
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=/YkJCPAEzy9lvOQKx0L5i2HCzqQLZCPvdJzlwKqKMEM=;
+        b=fHdjhnCW9k6koHGoL8t0LOjJFnL9DQxPvu/mqvFIyz74CqTTFK5blmbV8pDrWfCJ2p
+         xaGBIItbNHH+AjmvHGPtX0i6hlhwZWjX/48k1q0qQneg7qfoOm/RGvUYPPLLs5jEh+Am
+         +MMMyBPVojm5Pfxvz1rGjef4YjE/7F/x9D29k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Fe2hsCdbxN1ij2HP4oggs60CZPKRq8in1lb+QkY/nqo=;
-        b=JW2yxKT8slhTbg4ATcGQclImipYpMKBsnv62Ccxyjk2ClPTH86si27yM+balvInYGQ
-         K9HZuxwNPrsxIJw+cYPZ3tZgSkBVIniIUh1PiQtUzkfvYyFoTdPDtd46nzoNTBg4wb/D
-         3KyTBUtNV4wTtNbipAYY0N1ag2cP0cQAjg6kBYT7jy40eP8P0QsicY+HDHfMXOCHBFJT
-         JdqOYbv0LTYmrgS5zFlRXo2SQXZxVW8lAYxI2U6YTdMDRP63SSNSQp9e/I/PcY+nRot1
-         rF8ihrUcU3iLfDrHDF7Oog/gnoe5hF7PL90JvC1rOoKwQO+jDsHkm9n5BBmymexumaS5
-         +gjg==
-X-Gm-Message-State: AOAM532H9vaTnqGnBkJrLU1w0fbubwCVDax20NWOZNazx4WT0G9+/eEE
-	UOHPkA8GxYYhWI8p9eY7ZH/Vkfs3++g2Yhceh6E=
-X-Google-Smtp-Source: ABdhPJybHDR+rwS5BataoX0weUhRuleDucNLDhHs+gIIGUgBpftAAxgiThB8021yyAhm964JoV33b5jxB2TzSNca8W4=
-X-Received: by 2002:a05:620a:29ce:b0:648:ad12:789 with SMTP id
- s14-20020a05620a29ce00b00648ad120789mr5644170qkp.347.1645432321827; Mon, 21
- Feb 2022 00:32:01 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=/YkJCPAEzy9lvOQKx0L5i2HCzqQLZCPvdJzlwKqKMEM=;
+        b=Bqe2UQlRCvCTXYAqM6Ho9IUpVa2l4pMOt/qbja0R+jjFXXgx8CbtFcZA/zO3fztEyp
+         ZoPE0+ZveOXdHeEBU+bh/NXoJAJQpEdHqiCs0UQg4CoS+GmdAFLFM2pW9LbsHpMO/hHt
+         jIJs/vvP1NOxPE0G6Ym3/1mwoO97YjV79MOAzfTm/SbXO9I2YBim0ADBvOFjvywrdSap
+         IXSLaScBeL+DvPSKwn456b9aMYhZFqGLZLzjx7lgdPgzBS8P1NZDBG7T5HG9M2jgHE7l
+         qS3kn8dIteBBKaJlbhA+IbcCFGC+98IUYuEI4FbPR8BFrgmjlzYnjrChO5lVvSZjlUip
+         3DtA==
+X-Gm-Message-State: AOAM532AGtHLQ44Y+JnGVaicWg/H6u5fBm3BQ5fKoMAj50sMmN5KdQ1a
+	gjAciBm1qcpQK0v4QwqtmwzhHl/mo0OTzDCSJrSuikm/2TU=
+X-Google-Smtp-Source: ABdhPJyn0WKGnhrzzpq1dvCmFMToH/JR7TwORUjkh/VfxntXGt87JDwSK+2FAU/rsYrtr9hW1TgvTzyVhYeQ6BCfaMI=
+X-Received: by 2002:a05:6214:d6e:b0:42d:7cb3:aa49 with SMTP id
+ 14-20020a0562140d6e00b0042d7cb3aa49mr14608483qvs.107.1645433888187; Mon, 21
+ Feb 2022 00:58:08 -0800 (PST)
 MIME-Version: 1.0
-References: <nick.hawkins@hpe.com> <20220216153632.40981-1-nick.hawkins@hpe.com>
- <CAK8P3a0NmyxrzxgfwfDXuFvhmc3OL_-yBj8PDdEHh-2qm4NVkw@mail.gmail.com>
- <PH0PR84MB17185157544CFEB1D8AE267088359@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <CAK8P3a1HuTMt5WmOw3aQcLwGZd_WQ5nsKZ2HFDPQ0CHFvKsygA@mail.gmail.com>
-In-Reply-To: <CAK8P3a1HuTMt5WmOw3aQcLwGZd_WQ5nsKZ2HFDPQ0CHFvKsygA@mail.gmail.com>
 From: Joel Stanley <joel@jms.id.au>
-Date: Mon, 21 Feb 2022 08:31:49 +0000
-Message-ID: <CACPK8XdXV4j=0kYbEJRki9ug6VeeK02ZrXRgqFd9gUu6kSpA=Q@mail.gmail.com>
-Subject: Re: [PATCH] [v3] arch: arm: boot: dts: Create HPE GXP Device Tree
-To: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 21 Feb 2022 08:57:57 +0000
+Message-ID: <CACPK8XcLpAA7b_hGea-Wc8H5eu9=YpPZ9b75nYF7rqMzDcMw9w@mail.gmail.com>
+Subject: [GIT PULL] ARM: aspeed: devicetree changes for 5.18
 List-Id: <soc.lore.kernel.org>
-Cc: "Hawkins, Nick" <nick.hawkins@hpe.com>, "Verdun, Jean-Marie" <verdun@hpe.com>, 
-	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>
+To: SoC Team <soc@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	linux-aspeed <linux-aspeed@lists.ozlabs.org>, Andrew Jeffery <andrew@aj.id.au>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 16 Feb 2022 at 16:51, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Feb 16, 2022 at 5:29 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
+Hello Soc maintainers,
 
-> > > +
-> > > +               vrom@58000000 {
-> > > +                       compatible = "mtd-ram";
-> >
-> > Same thing here, "vrom" is clearly not a standard name.
-> >
-> > NH: VROM is a Virtual ROM device that we use to create a memory mapping of a SPI flash content copy that is served to a host system. How should I rename it?
->
-> Not sure, I don't remember seeing this case so far. Adding Joel to Cc,
-> maybe he knows of
-> another BMC that does the same thing.
+A straightforward pull request of aspeed bits for v5.18.
 
-We have something similar. The aspeed systems map this over LPC, using
-FW cycles (aka memory accesses) over the LPC bus to read from the
-BMC's SPI NOR devices, or DRAM.
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07=
+:
 
-The device tree bindings we have are in the LPC document:
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
- Documentation/devicetree/bindings/mfd/aspeed-lpc.yaml
+are available in the Git repository at:
 
-It's the aspeed,ast2400-lpc-ctrl specifically. It takes a phandle to a
-reserved-memory node.
+  git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
+tags/aspeed-5.18-devicetree
 
-The kernel driver is at drivers/soc/aspeed/aspeed-lpc-ctrl.c. It
-exposes a character device that allows userspace to read and write to
-the memory window.
+for you to fetch changes up to 43fd3d4d95cee85e187e5c4ef1d991f77d4d928c:
 
-We have this very aspeed specific design because it was the first
-implementation in the kernel. Where possible, we should create a new
-unified API for doing this type of access, where each BMC can
-implement a backend. Now that we have GXP, Nuvoton and ASPEED it
-should be easier to pick out common functionality.
+  MAINTAINERS: ARM/WPCM450: Add 'W:' line with wiki (2022-02-21 13:00:50 +1=
+030)
 
-Cheers,
+----------------------------------------------------------------
+ASPEED device tree updates for 5.18
 
-Joel
+ - New machines
+
+  * Quanta S6Q AST2600 BMC
+  * Facebook's Bletchley is not new, but has a large update
+
+ - Small clenaups and additions for Everest, Rainier and Tacoma, and the
+   flash layout
+
+----------------------------------------------------------------
+Jonathan Neusch=C3=A4fer (8):
+      dt-bindings: arm/npcm: Add binding for global control registers (GCR)
+      MAINTAINERS: Match all of bindings/arm/npcm/ as part of NPCM architec=
+ture
+      ARM: dts: wpcm450: Add global control registers (GCR) node
+      ARM: dts: wpcm450: Add pinctrl and GPIO nodes
+      ARM: dts: wpcm450: Add pin functions
+      ARM: dts: wpcm450-supermicro-x9sci-ln4f: Add GPIO LEDs and buttons
+      ARM: dts: wpcm450: Add pinmux information to UART0
+      MAINTAINERS: ARM/WPCM450: Add 'W:' line with wiki
+
+ .../devicetree/bindings/arm/npcm/nuvoton,gcr.yaml  |  48 +++
+ MAINTAINERS                                        |   2 +
+ .../dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts  |  43 +++
+ arch/arm/boot/dts/nuvoton-wpcm450.dtsi             | 384 +++++++++++++++++=
+++++
+ 4 files changed, 477 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.=
+yaml
