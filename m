@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CACADC433F5
-	for <soc@archiver.kernel.org>; Tue, 22 Feb 2022 07:52:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2A73C433F5
+	for <soc@archiver.kernel.org>; Tue, 22 Feb 2022 07:52:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8E733C340EB; Tue, 22 Feb 2022 07:52:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A38E8C340E8;
-	Tue, 22 Feb 2022 07:52:46 +0000 (UTC)
+	id A9FB7C340EB; Tue, 22 Feb 2022 07:52:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E34C340F4;
+	Tue, 22 Feb 2022 07:52:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645516368;
-	bh=W/dGaDpjEmR/Mp33239tj3Ddrx48J5wp/pOUAnKy0yE=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=kTjNUnIvQLgbgk7iiiPks7LatvJQa+I6ryHEm9pG6o+2cF1K+5ooSuEbX8CQJWQYu
-	 3oNCm/M5xuwGkefBRuFeK7DO4kV4X1kMETG7VsYxxblVOWMCEOhfPHllTp6pWaTaVL
-	 AIR7SwPafXR+nsmN7CVh7aiLmzw709Fs9LTL/cDrZiCIXrmsXac7V4TRM+AUxSKXcD
-	 V1ZwbvPSJ+cAshxdwIv8Bz/vyJhAD1mHX5AO3ewDKpwPamuvZBp7wBO2Ns0KxuDXb8
-	 TDgT+gKGC15B6qUbd1ospvImyg3Dp7cqtduKqlMg11YNnODDkdE1vIzmNnKSt9BXfJ
-	 +Ly8s0zK4G7Xw==
+	s=k20201202; t=1645516370;
+	bh=Dd7Il5d/DNf7h0A2IDWNKmkk3GULoV8sDo6NfbLvU0g=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=hNWf20QdQxkloOc3AVeKNrUtzKA3EQ09EAQECxfDChp+Bfs4eCXvx/ylL5uU8jXJK
+	 xbwPW1W4Da0AYXIpDRBnPISHO8oUN3LxOPErwXu034sFl9wuOB4/mo3zAcc8fwzOvX
+	 zQAbCKhwPol6UvENt+NhEBDvhWBfe+kOvvPBoWKwPT1y+htjbTI5FMgnoBiPe8xwqs
+	 5NrymYNA4vcCOu9n4KsvU3sYl5yda+LI6v8IjzjoGuM81j7uqZccoi4ml+SAEI5Xjr
+	 UY48DWK1ip5k/zAd9pQqZxL6iCaJKVf8Ri2Ta2CgjZuATnp4Png9hZ/5IdwQCPqXgl
+	 HhFmqYzH5jsmg==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -31,73 +31,40 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/6] i.MX drivers update for 5.18
-Date: Tue, 22 Feb 2022 15:52:21 +0800
-Message-Id: <20220222075226.160187-1-shawnguo@kernel.org>
+Subject: [GIT PULL 2/6] i.MX SoC update for 5.18
+Date: Tue, 22 Feb 2022 15:52:22 +0800
+Message-Id: <20220222075226.160187-2-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220222075226.160187-1-shawnguo@kernel.org>
+References: <20220222075226.160187-1-shawnguo@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-Commit 7a7b1414ea9a ("dt-bindings: power: imx8mq: add defines for VPU
-blk-ctrl domains") on imx/bindings branch is merged here to resolve
-a dependency on VPU blk-ctrl domain defines.
-
-Please consider to pull, thanks!
-
-Shawn
-
-
-The following changes since commit 7a7b1414ea9a3641672be768afe16f583f0b76e7:
-
-  dt-bindings: power: imx8mq: add defines for VPU blk-ctrl domains (2022-02-11 10:49:26 +0800)
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-5.18
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-5.18
 
-for you to fetch changes up to e6cb5408289f4202f4088731a4ac98c7ffaedb9d:
+for you to fetch changes up to ed2e8e0ad593dc5235aa41fe61bfe0e8c3548ae4:
 
-  bus: imx-weim: add DT overlay support for WEIM bus (2022-02-22 14:55:12 +0800)
-
-----------------------------------------------------------------
-i.MX drivers update for 5.18:
-
-- Drop LS1021A device check from soc-imx driver as it's unneeded since
-  commit commit 4ebd29f91629 ("soc: imx: Register SoC device only on
-  i.MX boards").
-- Add support for power domains provided by the VPU blk-ctrl on the
-  i.MX8MQ.
-- Add resource owner management API which will be used to check whether
-  M4 is under control of Linux.
-- Add VPU MU resources support into SCU power domain driver.
-- Support DT overlay for WEIM bus driver with OF reconfiguration
-  notifier handler.
+  ARM: imx: Add initial support for i.MXRT10xx family (2022-01-28 17:46:42 +0800)
 
 ----------------------------------------------------------------
-Fabio Estevam (1):
-      soc: imx: Remove Layerscape check
+i.MX SoC update for 5.18:
 
-Ivan Bornyakov (1):
-      bus: imx-weim: add DT overlay support for WEIM bus
+- Add initial support for i.MXRT10xx family which features NXP's
+  implementation of the Arm Cortex-M7 core and in some case the
+  Arm Cortex-M4 core too.
 
-Lucas Stach (1):
-      soc: imx: imx8m-blk-ctrl: add i.MX8MQ VPU blk-ctrl
+----------------------------------------------------------------
+Giulio Benetti (1):
+      ARM: imx: Add initial support for i.MXRT10xx family
 
-Ming Qian (1):
-      firmware: imx: scu-pd: imx8q: add vpu mu resources
-
-Peng Fan (1):
-      firmware: imx: add get resource owner api
-
-Shawn Guo (1):
-      Merge commit '7a7b1414ea9a3641672be768afe16f583f0b76e7' into imx/drivers
-
- drivers/bus/imx-weim.c              | 135 +++++++++++++++++++++++++++++++++---
- drivers/firmware/imx/rm.c           |  45 ++++++++++++
- drivers/firmware/imx/scu-pd.c       |   4 ++
- drivers/soc/imx/imx8m-blk-ctrl.c    |  66 ++++++++++++++++++
- drivers/soc/imx/soc-imx.c           |   3 -
- include/linux/firmware/imx/svc/rm.h |   5 ++
- 6 files changed, 246 insertions(+), 12 deletions(-)
+ arch/arm/mach-imx/Kconfig      |  7 +++++++
+ arch/arm/mach-imx/Makefile     |  2 ++
+ arch/arm/mach-imx/mach-imxrt.c | 19 +++++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 arch/arm/mach-imx/mach-imxrt.c
