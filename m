@@ -1,77 +1,76 @@
-Return-Path: <SRS0=CGtJ=TG=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=qq9I=TG=gmail.com=romain.perier@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10D98C4332F
-	for <soc@archiver.kernel.org>; Wed, 23 Feb 2022 08:58:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C025C433F5
+	for <soc@archiver.kernel.org>; Wed, 23 Feb 2022 09:47:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ECFC9C340EF; Wed, 23 Feb 2022 08:58:53 +0000 (UTC)
-Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.kernel.org (Postfix) with ESMTP id 3B626C340E7;
-	Wed, 23 Feb 2022 08:58:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3B626C340E7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
-Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id 8F6F780A4;
-	Wed, 23 Feb 2022 08:57:56 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org,
-	linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL] Devicetree changes for omaps for v5.18
-Date: Wed, 23 Feb 2022 10:58:47 +0200
-Message-Id: <pull-1645606669-127734@atomide.com>
-X-Mailer: git-send-email 2.35.1
+	id 5381CC340F1; Wed, 23 Feb 2022 09:47:54 +0000 (UTC)
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B5734C340EC
+	for <soc@kernel.org>; Wed, 23 Feb 2022 09:47:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B5734C340EC
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f180.google.com with SMTP id x62so4132752vkg.6
+        for <soc@kernel.org>; Wed, 23 Feb 2022 01:47:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qMECgKMnAeJCt5deSyf/RWgwDprSNTJG/bLQ+2c8x/s=;
+        b=W16BFV+yPoxC7oosWCJnGIE6zE2NhbQ5rH8ubdnBX1QYMr3AabCQkm5TNU58ACZzru
+         1DJg81cLRBwuVi8Zo+jQ+ZjgvnnM55mIcNuiiSKqFKPmuugYU6uQvh1InJkSfuEChAco
+         h8ITvXMpluM2nydVBUXuUkyQFbJPUyrTPc/fIbt8XRxwEnmnqUsIFSvBLO0ww3mPOVde
+         DwnZ1bBTJ0hp3cHAqetZUTAIIAEyfQd5u9TRo6mkiOgjg8CVSG8wcJdAq79GcnyvIXLM
+         rPkh9zMIVG5CakL0MWWEnWOYW+npsFm4SIIFNsAbLQcwGb3nAYJHxdgJJH3Dxt8wGh3A
+         jD7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qMECgKMnAeJCt5deSyf/RWgwDprSNTJG/bLQ+2c8x/s=;
+        b=3Agne8Rm007TmL9wCtqmZ2a2mBWKoVRLLU6FbIVNK1iT7f7qKOelu5HzHgPlVecQpu
+         xIG8vMw8PCAb4SGUKaapmWusOcxALxnMmBr3SHhwoKM2Pdai0n+mr+GSFTc+sCO3pCcs
+         sL5j8oiWibMOXJI9zKK3g7PrTBZrDfw2XQFxzYHr0JwdCHT1YOV7GGpm9nSybNsknf7N
+         ETrANbxsyRmqyeurE4Hf84Wbo9Nf8djRqVoHf2HmaDxQqxepBADWESDMd38GCS8PtdI/
+         ppBLcghAL4xJfmtALEdJLUgxrkvNlH/4yVTuXjJ8oA6tnircqFmJmqVxUR92yqxxnK8q
+         oX+w==
+X-Gm-Message-State: AOAM532dSZCDv2EF4sSGd7OPoCwhMKp0+fhMIIBp0zAKiZK3LdjAecDj
+	VgX65PIa4QD541bBF3wlkrb/bvh0ODx8dgSHi/E=
+X-Google-Smtp-Source: ABdhPJxY3c10KObUfirZ0ArvlzSlRI9T5EqzLO2vj/PVnlD+24tG0PNw6xlCNqxvvBtxH0pI3R+ZGGeE6bqD7ORTGnw=
+X-Received: by 2002:a05:6122:788:b0:331:2063:3645 with SMTP id
+ k8-20020a056122078800b0033120633645mr12421979vkr.10.1645609672679; Wed, 23
+ Feb 2022 01:47:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220223064807.261878-1-daniel@0x0f.com>
+In-Reply-To: <20220223064807.261878-1-daniel@0x0f.com>
+From: Romain Perier <romain.perier@gmail.com>
+Date: Wed, 23 Feb 2022 10:47:42 +0100
+Message-ID: <CABgxDo+uF9pQ=sy7FEJ4WiYNpS3St9u3xDMt8MZNZXQF4kXSMg@mail.gmail.com>
+Subject: Re: [PATCH] ARM: mstar: Select ARM_ERRATA_814220
+To: Daniel Palmer <daniel@0x0f.com>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: "Tony Lindgren" <tony@atomide.com>
+Hi,
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+Le mer. 23 f=C3=A9vr. 2022 =C3=A0 07:48, Daniel Palmer <daniel@0x0f.com> a =
+=C3=A9crit :
+>
+> All of the SoCs that are supported so far are Cortex A7 r0p5.
+> So it seems like this errata is present.
+>
+> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+Reviewed-by: Romain Perier <romain.perier@gmail.com>
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.18/dt-signed
-
-for you to fetch changes up to 668e2f58ed8b1920143ea1072ad8d02440132306:
-
-  ARM: dts: am335x-sancloud-bbe-extended-wifi: New devicetree (2022-02-18 10:33:15 +0200)
-
-----------------------------------------------------------------
-Devicetree changes for omaps for v5.18
-
-Devicetree changes for omaps for v5.18:
-
-- The devicetree node naming for pdu001 RTC name gets corrected
-
-- For logicpd-torpedo baseboard, isp1763 USB controller gets added
-
-- New board variant for SanCloud BBE Extended WiFi gets added
-
-----------------------------------------------------------------
-Adam Ford (1):
-      ARM: dts: logicpd-torpedo: Add isp1763 support to baseboard
-
-Paul Barker (1):
-      ARM: dts: am335x-sancloud-bbe-extended-wifi: New devicetree
-
-Thierry Reding (1):
-      ARM: dts: am334x: pdu001: Use correct node name for RTC
-
- arch/arm/boot/dts/Makefile                         |   1 +
- arch/arm/boot/dts/am335x-pdu001.dts                |   2 +-
- .../boot/dts/am335x-sancloud-bbe-extended-wifi.dts | 113 +++++++++++++++++++++
- arch/arm/boot/dts/logicpd-torpedo-35xx-devkit.dts  |   8 ++
- arch/arm/boot/dts/logicpd-torpedo-37xx-devkit.dts  |   9 ++
- arch/arm/boot/dts/logicpd-torpedo-baseboard.dtsi   |  41 +++++++-
- 6 files changed, 172 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm/boot/dts/am335x-sancloud-bbe-extended-wifi.dts
+Regards,
+Romain
