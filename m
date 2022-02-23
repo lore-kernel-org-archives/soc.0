@@ -1,97 +1,95 @@
-Return-Path: <SRS0=YzVA=TG=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=z5GF=TG=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72354C433F5
-	for <soc@archiver.kernel.org>; Wed, 23 Feb 2022 16:22:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AE39C433EF
+	for <soc@archiver.kernel.org>; Wed, 23 Feb 2022 19:03:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3F30AC340F1; Wed, 23 Feb 2022 16:22:24 +0000 (UTC)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	id E5BD6C340EC; Wed, 23 Feb 2022 19:03:36 +0000 (UTC)
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8BEBAC340E7;
-	Wed, 23 Feb 2022 16:22:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8BEBAC340E7
+	by smtp.kernel.org (Postfix) with ESMTPS id E3DBDC340E7;
+	Wed, 23 Feb 2022 19:03:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E3DBDC340E7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f53.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so4684033wmp.5;
-        Wed, 23 Feb 2022 08:22:23 -0800 (PST)
+Received: by mail-pf1-f170.google.com with SMTP id z16so16278256pfh.3;
+        Wed, 23 Feb 2022 11:03:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SnE+WudaLLlXe/21f7Ie3oBqq+MidREoBIhzxdwLp6k=;
-        b=jbcrSNaRltckX5lyk408zPe1yRFc0yF0ehFTmMMqBvuqfB3964Lfe48UGW2ylNCe6V
-         ucBETD/KR89WLwnTDHWf5+Ex/9leQjnANgYltWcbToF3D/2MCU7eWQ5iVhUN4KJWcusS
-         4doEZjE3Og123Ov2E2QEDUX/2vBgeQ0c2D3HXpYzyObp7PJbE09iQHPbYmiwKVUHIeWT
-         V/IZ8RF4WRjP00j/lKQ01t9tLMs0B05X13PVhxx0GA5kc3b1Fle+5wOi4+bg3eDpQzTw
-         qUZP72njMfYPOaug+bTFMqM5d3lxj9thrWf12CLg7Yvvu/oLfm7q94Umv4rVS80cHQcP
-         ao+w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=M+ikUS2HXQGSZdemxaJfX0vveKZ/5VeOycL6B465U6E=;
+        b=GG7/aPu3rWPLCrcqfX/MtdHF1OgXJCOXAwRiVoJcrxEu1fdnzxPDQI3T5It2uKeMfu
+         Xq3t8JExNtHKemFUykYPQ5cRZ/qpX0dT02vKxwZCDebDvAxG54+6sQRqBAZs6xHTB7xT
+         zyjbK//LuqfHL11h2ogaay2bS/XLvwLC9Q/eWNnQ5w4MmGVY1qIfXVAizMoBXK+/Ktkb
+         3bKtqXNBei0Z1Orn0y7x5sXMHb0DGkUKeD4/oc8VHs+VubXCutNOrdW1O9xphbBdGSvV
+         pC8e/dtqH9R8VDCOB5fUt4DWsNbIyVKppYJwuJLS8Bb8UOCcbJUBd91FR92YiYZfGsj4
+         XK0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SnE+WudaLLlXe/21f7Ie3oBqq+MidREoBIhzxdwLp6k=;
-        b=PlX1CwhaEsshfCFRqLoYaEvYNRSa4bNvM0i2rg5/jR82ZcxNcH17C38dxUmmmfSJxJ
-         arKZZ+Met+F1xXFOgrR51C848pJ+IsnO0BpuCRrUMLTgBDEXca3L1FB/vS7hb4Mc0i2F
-         qT7DeOWcN5sRIcm25/jIh/JEx4x9MwiIER3niDlYnVAjQmg4kcNFpioGWoYnkrEKdTrm
-         fnCuHgWBLQ0c2ZpGczR2RCGUH8HHwwnbBs4QcMHaoqAz9NgMVT5HQV7UTjGZE8UQF9Hb
-         S/3lIZg/nBtrdl6fJTQRo69GQXlE1/neRXqWZTHw4kahan1zRm4KvT6tNspqJNIjjx90
-         V3Ww==
-X-Gm-Message-State: AOAM533u/SSKbeJZ7hGrPVzQy0D52AvK2GNezqTPBpCOlb4HyPrGNW5+
-	V8lXUktxuv5EQzx3oY4b+wOn2jjVmEI=
-X-Google-Smtp-Source: ABdhPJx6D71sd/JvA/8VP0qsMY062QL9s4mCFQAvm8EGoEifrsmu/+IzHaRDOHy+ddLSUHVKYADO8Q==
-X-Received: by 2002:a7b:cb44:0:b0:37c:4e2d:3bb2 with SMTP id v4-20020a7bcb44000000b0037c4e2d3bb2mr8139793wmj.96.1645633341454;
-        Wed, 23 Feb 2022 08:22:21 -0800 (PST)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id g6sm150194wrq.97.2022.02.23.08.22.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=M+ikUS2HXQGSZdemxaJfX0vveKZ/5VeOycL6B465U6E=;
+        b=ALuqgX0uBx5WlmU3sZIa+XcsOFnNAvydLd7Mhw8fMWKXaRV/VTeJMWKyGxdILu3pkL
+         Z9PNSdgn+npixRo3dM0g2ZdBi/JhKjVGK8IxVhHQGBnHVLoWIB2TCRMX9wMweOFSg8op
+         Inlen0kvoajEX58pgk7CbuSOlWYmCiBVotaglfySQBGDgWSIPkBE/6I4ZVM5ZdpnL7dF
+         7ekjW3rJTKxEGY961QRzmG58d+rxU8DnbEU4VnnmlwIn+UvCCgj8wCoEytMy1Wf48qQJ
+         XcUUcmqRWBkT5bcHQ9NwXc6LCcm3+ltoqr2mNCcLGyWbsPNSNG1yRZA6vqNa4qdn3vOi
+         JAjg==
+X-Gm-Message-State: AOAM531ee9KjUzvq1b6Ch5PBJbJEOInl15x2YfcdozcZ46pYgpmgEmf+
+	FR6ccdcrEPzL2MD5Za/DKIbNRWZ6J4g=
+X-Google-Smtp-Source: ABdhPJzIOAHE404bN7qZ0z4kLUHr0Uo2twhFBe+78QJPo4jSfLDYpDIPmIQ+q7rYcfgyKoomzbUDyQ==
+X-Received: by 2002:a63:e744:0:b0:370:25a8:bfed with SMTP id j4-20020a63e744000000b0037025a8bfedmr812276pgk.432.1645643015401;
+        Wed, 23 Feb 2022 11:03:35 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id p2sm215516pjo.38.2022.02.23.11.03.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 08:22:20 -0800 (PST)
-From: Thierry Reding <thierry.reding@gmail.com>
+        Wed, 23 Feb 2022 11:03:34 -0800 (PST)
+From: Florian Fainelli <f.fainelli@gmail.com>
+To: bcm-kernel-feedback-list@broadcom.com,
+	Stefan Wahren <stefan.wahren@i2se.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Nicolas Saenz Julienne <nsaenz@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] ARM: tegra: Fixes for v5.17-rc6
-Date: Wed, 23 Feb 2022 17:22:09 +0100
-Message-Id: <20220223162209.293722-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Cc: Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Phil Elwell <phil@raspberrypi.com>,
+	devicetree@vger.kernel.org,
+	soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org,
+	Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH] ARM: boot: dts: bcm2711: Fix HVS register range
+Date: Wed, 23 Feb 2022 11:03:32 -0800
+Message-Id: <20220223190332.3791516-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <1645272475-4096-1-git-send-email-stefan.wahren@i2se.com>
+References: <1645272475-4096-1-git-send-email-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi ARM SoC maintainers,
+On Sat, 19 Feb 2022 13:07:55 +0100, Stefan Wahren <stefan.wahren@i2se.com> wrote:
+> From: Maxime Ripard <maxime@cerno.tech>
+> 
+> While the HVS has the same context memory size in the BCM2711 than in
+> the previous SoCs, the range allocated to the registers doubled and it
+> now takes 16k + 16k, compared to 8k + 16k before.
+> 
+> The KMS driver will use the whole context RAM though, eventually
+> resulting in a pointer dereference error when we access the higher half
+> of the context memory since it hasn't been mapped.
+> 
+> Fixes: 4564363351e2 ("ARM: dts: bcm2711: Enable the display pipeline")
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> ---
 
-The following changes since commit bd048487af68a9782ebccc3af6606e9e0d7d9f8b:
-
-  ARM: tegra: Add host1x hotflush reset on Tegra124 (2021-12-17 14:55:32 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.17-arm-dt-fixes
-
-for you to fetch changes up to 8d3b01e0d4bb54368d73d0984466d72c2eeeac74:
-
-  ARM: tegra: Move panels to AUX bus (2022-02-23 13:26:00 +0100)
-
-Thanks,
-Thierry
-
-----------------------------------------------------------------
-ARM: tegra: Device tree fixes for v5.17-rc6
-
-This contains fixes for the eDP panel found on the Venice 2 and Nyan
-boards.
-
-----------------------------------------------------------------
-Thierry Reding (1):
-      ARM: tegra: Move panels to AUX bus
-
- arch/arm/boot/dts/tegra124-nyan-big.dts   | 15 +++++++++------
- arch/arm/boot/dts/tegra124-nyan-blaze.dts | 15 +++++++++------
- arch/arm/boot/dts/tegra124-venice2.dts    | 14 +++++++-------
- 3 files changed, 25 insertions(+), 19 deletions(-)
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/fixes, thanks!
+--
+Florian
