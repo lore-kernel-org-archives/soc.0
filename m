@@ -1,93 +1,69 @@
-Return-Path: <SRS0=bD00=TH=walle.cc=michael@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7634C433EF
-	for <soc@archiver.kernel.org>; Thu, 24 Feb 2022 14:55:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A043C433F5
+	for <soc@archiver.kernel.org>; Thu, 24 Feb 2022 22:00:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 78BF2C340EC; Thu, 24 Feb 2022 14:55:09 +0000 (UTC)
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 01601C340E9;
-	Thu, 24 Feb 2022 14:55:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01601C340E9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 7222122236;
-	Thu, 24 Feb 2022 15:55:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1645714505;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=T+nj1LXBgfdrS//vBjhL1t/BXLWyCGMXuhBk/lp7Sdg=;
-	b=ZYnGOLI3clP5LcOWs885rEZZGnWxdvib1aqxw55IsYSY9PxQ7EQ3Bc22QVXlmPvWSnY6bU
-	llsZXULjwETbIUxvEhbQFNcjm3epozqWTzSQ/jzJsnrAuELy3ctqnHRWN/eTvVGvkQwcNg
-	vAykG5noDJl9oVC+mWgON4IU3bDxT5U=
+	id E3128C340F1; Thu, 24 Feb 2022 22:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CB9A7C340E9
+	for <soc@kernel.org>; Thu, 24 Feb 2022 22:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1645740024;
+	bh=c3R60h+yO3yR9RkJgTVBj19CzoSUhG5V8N/rzL58sWA=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=MOGi6XE6/ZumsKTKXgkfXt7Qan4VoDpwl0ISO/vp/fllFHmZLlcQ8tlKZYxHqZN6T
+	 aaWklSa6R5rfn40ZR1mcGOJkaWOT2GewDeBSE95Tags3pdZX2FTADpswsPSUYoLOwd
+	 wUguYg03y2MRJDIj3wVBVK9MyCzO1EGlLUO9OQxGJlWwrJyQtvvKVhqg/YRcJmbl6i
+	 yDlX8PCX1ij1s/I65zGAWI92dGqly/pBm0+xhWOuiO2OIFr55gXI/Gpj9Px+bHPFGb
+	 ig6O8fIKvNDw0e8QqgH3FOg/zHE6XxY9IuVklzzCG51sPpuLQWxWB2FRPb4o9OR3cx
+	 oPuht8CE6Kfsg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A660CE6D453;
+	Thu, 24 Feb 2022 22:00:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date: Thu, 24 Feb 2022 15:55:05 +0100
-From: Michael Walle <michael@walle.cc>
-To: Nicolas Ferre <nicolas.ferre@microchip.com>
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <164574002461.25177.12590142400985407549.git-patchwork-summary@kernel.org>
+Date: Thu, 24 Feb 2022 22:00:24 +0000
 List-Id: <soc.lore.kernel.org>
-Cc: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>, arnd@arndb.de,
- alexandre.belloni@bootlin.com, olof@lixom.net, soc@kernel.org,
- robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- UNGLinuxDriver@microchip.com, Manohar.Puri@microchip.com
-Subject: Re: [PATCH v7] ARM: dts: add DT for lan966 SoC and 2-port board
- pcb8291
-In-Reply-To: <85566f97-dcfc-f477-1ebb-5cac955b791a@microchip.com>
-References: <20220221080858.14233-1-kavyasree.kotagiri@microchip.com>
- <3b4c56201a478876783e69243c901cd8@walle.cc>
- <85566f97-dcfc-f477-1ebb-5cac955b791a@microchip.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <413b29b8a2e7a73561f942d4b7c78b9b@walle.cc>
-X-Sender: michael@walle.cc
+To: soc@kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-Hi,
+Hello:
 
-Am 2022-02-24 15:51, schrieb Nicolas Ferre:
->>> +/ {
->>> +     model = "Microchip LAN966 family SoC";
->>> +     compatible = "microchip,lan966";
->> 
->> As mentioned earlier, this isn't a documented compatible string. So,
->> I guess without overwriting this in the board dts it will throw an
->> error with the dt schema validator. OTOH, there are many dtsi files
->> in arch/arm/boot/dts/ doing this. I don't know what is correct here.
-> 
-> I see it documented here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/arm/atmel-at91.yaml#n165
-> 
-> Isn't it what is expected?
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-That only documents
-   compatible = "microchip,lan9662-pcb8291", "microchip,lan9662", 
-"microchip,lan966";
+Patch: [GIT,PULL] Rockchip dts fixes for 5.17
+  Submitter: Heiko Stuebner <heiko@sntech.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=616682
+  Lore link: https://lore.kernel.org/r/1973741.CViHJPHrxy@phil
 
-But not the one above.
+Patch: [GIT,PULL] i.MX fixes for 5.17, round 2
+  Submitter: Shawn Guo <shawnguo@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=616157
+  Lore link: https://lore.kernel.org/r/20220221062921.GO2249@dragon
 
-> 
->> Everthing else looks good.
-> 
-> Thanks a lot for your reviews.
-> 
->> Reviewed-by: Michael Walle <michael@walle.cc>
-> 
-> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> I'm queuing it to at91-dt branch for reaching arm-soc in 5.18 merge 
-> window.
+Patch: [GIT,PULL] ARM: tegra: Fixes for v5.17-rc6
+  Submitter: Thierry Reding <thierry.reding@gmail.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=617227
+  Lore link: https://lore.kernel.org/r/20220223162209.293722-1-thierry.reding@gmail.com
 
-Nice, then I'm good to go for my patches on top of this :)
 
--michael
+Total patches: 3
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
