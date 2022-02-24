@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 351E8C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AB01C433FE
 	for <soc@archiver.kernel.org>; Thu, 24 Feb 2022 22:00:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0B8A7C340E9; Thu, 24 Feb 2022 22:00:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DFA3BC340F3;
+	id F31E3C340F5; Thu, 24 Feb 2022 22:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DD25EC340F2;
 	Thu, 24 Feb 2022 22:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1645740024;
-	bh=x8nfKm/wkisyEHq+Dp6IUtgbnHw6i3PCRFEIceqlCro=;
+	bh=bWGoODlKnB743LBhe81cwACjNci0MidqB/Q8CD4at9I=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=inmnfGWYmVruQR8E4YcVKu3YVHUmCxt2kGmp5wNS7tDcuCQHRgDmJQfUbxNBPMLHt
-	 VMPa3dCUoFG2UVuGeJ8Ogx4P2az93gxz4Hb0jXRjZOtZa5FN/oDDUYDg76hARlAby3
-	 iCL9vizn1sEE9HN29UfA96OPcxvYTRrywewV33IGKFBOXOdcbOs0332HIyBUOUiCvG
-	 ErQWM84s1ItLaa9PUoI2mkKgK+Tu5eK5ryJcQ6Eimv8a8nN8fejYYVDRBEK5La11a3
-	 Tex81bGDyP4Wku4BXjnMXYALdyYJ1Y2CKYkgok8n9kJaut/ION887rRS1peCkZ7U5H
-	 CXhUoM2YZz3rw==
+	b=qPTLgoV5FhJtua4hAcqyYBD8DXL9VFefjC8Dk7Jx/7G+ECWaq0TCMZJRXc4DfbrSx
+	 23qgDxQdCrGYzoLAhuKzU5YLkKRXYmS51nxUeRkpCT1e4AZVthDl1TTepFsVbKKNmN
+	 XTLcqQvWo6BSDEI2osRXLBqLyKUSDYYDyAYmw1jGs7Ih66R5xQ7XUUQXWdMZs26rJO
+	 ItDNOBtr+OPFGF/1lWanZ2T6WtNcqB7S8pPyQCY62/PFkkoAJTVA4UC7uTujkreiZK
+	 syEsq3fLpK1uQzlVIPaQMywe6CnOHf2YA9b0ooKp9r1rEeo53yWTOJiMrLHk3/NH0G
+	 QGWSoOuqDeH4w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C1C1CEAC081;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B92BBEAC09C;
 	Thu, 24 Feb 2022 22:00:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: tegra: Fixes for v5.17-rc6
+Subject: Re: [GIT PULL] i.MX fixes for 5.17, round 2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164574002479.25177.5346869877463490007.git-patchwork-notify@kernel.org>
+ <164574002475.25177.2651234236439732406.git-patchwork-notify@kernel.org>
 Date: Thu, 24 Feb 2022 22:00:24 +0000
-References: <20220223162209.293722-1-thierry.reding@gmail.com>
-In-Reply-To: <20220223162209.293722-1-thierry.reding@gmail.com>
-To: Thierry Reding <thierry.reding@gmail.com>
+References: <20220221062921.GO2249@dragon>
+In-Reply-To: <20220221062921.GO2249@dragon>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 23 Feb 2022 17:22:09 +0100 you wrote:
-> Hi ARM SoC maintainers,
+On Mon, 21 Feb 2022 14:29:21 +0800 you wrote:
+> The following changes since commit 754e0b0e35608ed5206d6a67a791563c631cec07:
 > 
-> The following changes since commit bd048487af68a9782ebccc3af6606e9e0d7d9f8b:
-> 
->   ARM: tegra: Add host1x hotflush reset on Tegra124 (2021-12-17 14:55:32 +0100)
+>   Linux 5.17-rc4 (2022-02-13 12:13:30 -0800)
 > 
 > are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.17-2
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: tegra: Fixes for v5.17-rc6
-    https://git.kernel.org/soc/soc/c/31c50bf184a4
+  - [GIT,PULL] i.MX fixes for 5.17, round 2
+    https://git.kernel.org/soc/soc/c/3f96885eb713
 
 You are awesome, thank you!
 -- 
