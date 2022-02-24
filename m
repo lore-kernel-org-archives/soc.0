@@ -1,65 +1,98 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <jernej@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2D84C433FE
-	for <soc@archiver.kernel.org>; Thu, 24 Feb 2022 22:00:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64B3BC433F5
+	for <soc@archiver.kernel.org>; Thu, 24 Feb 2022 22:52:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A94ECC340E9; Thu, 24 Feb 2022 22:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 85D19C340F3;
-	Thu, 24 Feb 2022 22:00:34 +0000 (UTC)
+	id 1100EC340EF; Thu, 24 Feb 2022 22:52:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF71C340E9;
+	Thu, 24 Feb 2022 22:52:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645740034;
-	bh=RtVhYLex2G5WetSD63uTht73oduw1PavR0e4c1+IWes=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=OP0neDlZyOfcP0MPKYO9bX+nzZaC0H2598FLhTCpsl1UavXPlbCFa2MUgCSky2j4n
-	 nZCP8lZ1CFXH3mZEgoyI966NQgHRzUG/NjXOoeDwwYO5rILyv2JUvY6GGi9gouptOH
-	 mi/CL7pIy8fTAjsAxnx4qi+moUZ4DJeN2GgcARvdjNdz0+GnwKC/ib4AgE8qCpJ1WP
-	 F8B5vVAacETV+Q1YVkn3tMVQEsoLbq9SoqNn+N9QNBGnV9MIxfP+KrZVc7WQ1T94hG
-	 c8mfK6bU/9IO8KiElXVjp1cau4CCy5N4LGEIe+v9CTJFic3T0fEVpUHSo36HF/kIau
-	 YnQ0su2OxiaiA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 683DFEAC081;
-	Thu, 24 Feb 2022 22:00:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: tegra: Fixes for v5.17-rc6
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <164574003442.25177.1561538865886947859.git-patchwork-notify@kernel.org>
-Date: Thu, 24 Feb 2022 22:00:34 +0000
-References: <20220223162209.293722-1-thierry.reding@gmail.com>
-In-Reply-To: <20220223162209.293722-1-thierry.reding@gmail.com>
-To: Thierry Reding <thierry.reding@gmail.com>
+	s=k20201202; t=1645743148;
+	bh=jFjzAyDU9RAqkrJmgIBbhHnbo0nB32DlkIyW/1JqGxQ=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=lnZddMNLpkU9UeDmJ0ZUbF8PNsPQZLLLx+fgn3ZOe9DrNSGmyTmI0Oj6aOXCS1+aS
+	 QRMlMACgbvRsl88duAg4auKqBoxCO+mzrVTjQ822DthgdMJ76XVRGezN3myqwXk5s3
+	 EDusgAPGNQrBljrdM5ZWUdBLKlUFSBpZoGtYCHeJbL/Na7pivKMnAP9d4YHBoPGq/v
+	 jXwModwqb0qySiVOtL7eP+flXwDj0NCXkOUIZDBlrqh+K5x3Y6aznDx/aXLX1uzqJo
+	 XFn1K03+JcuCbmIrB6luuQndd8GTIpK6NrE3K62ra5HKcwGfst4/4Y4tWoAr75HuBq
+	 Y9xzM0KmHlXyA==
+Date: Thu, 24 Feb 2022 23:52:23 +0100
+From: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+To: arm@kernel.org, soc@kernel.org
+Cc: mripard@kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev, wens@csie.org, jernej@kernel.org,
+	samuel@sholland.org
+Subject: [GIT PULL] Allwinner DT changes for 5.18
+Message-ID: <YhgMJ0AqaHopzaW3@kista.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hello:
+Hi!
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+Please pull following changes for next release.
 
-On Wed, 23 Feb 2022 17:22:09 +0100 you wrote:
-> Hi ARM SoC maintainers,
-> 
-> The following changes since commit bd048487af68a9782ebccc3af6606e9e0d7d9f8b:
-> 
->   ARM: tegra: Add host1x hotflush reset on Tegra124 (2021-12-17 14:55:32 +0100)
-> 
-> are available in the Git repository at:
-> 
-> [...]
+Best regards,
+Jernej
 
-Here is the summary with links:
-  - [GIT,PULL] ARM: tegra: Fixes for v5.17-rc6
-    https://git.kernel.org/soc/soc/c/31c50bf184a4
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-5.18-1
+
+for you to fetch changes up to ebdfc289a348fbc7fbc87c37b0cc156f78cc5f57:
+
+  MAINTAINERS: Update Allwinner SoCs maintainers (2022-02-24 19:27:23 +0100)
+
+----------------------------------------------------------------
+Usual round of DT patches for the 5.18 merge window, with:
+- DT fixes
+- ethernet0 alias for Nanopi NEO
+- r_uart node for H3/H5
+- eMMC and bluetooth nodes for Nanopi NEO air
+- updated maintainers for Allwinner SoCs
+- new board: A20-Marsboard
+
+----------------------------------------------------------------
+Baltazár Radics (1):
+      ARM: dts: sun8i: Add ethernet0 alias in Nanopi NEO's device tree
+
+Conley Lee (2):
+      ARM: dts: sun7i: Add A20-Marsboard
+      dt-bindings: arm: sunxi: add haoyu,a20-marsboard
+
+Jernej Skrabec (1):
+      MAINTAINERS: Update Allwinner SoCs maintainers
+
+Mans Rullgard (1):
+      ARM: dts: sunxi: h3/h5: add r_uart node
+
+Mikhail Rudenko (1):
+      ARM: dts: nanopi-neo-air: Add eMMC and bluetooth
+
+Paul Kocialkowski (1):
+      ARM: dts: sun8i: v3s: Move the csi1 block to follow address order
+
+Rob Herring (1):
+      ARM: dts: sun8i-h3: Drop args in 'thermal-sensors'
+
+ Documentation/devicetree/bindings/arm/sunxi.yaml |   5 +
+ MAINTAINERS                                      |   4 +-
+ arch/arm/boot/dts/Makefile                       |   1 +
+ arch/arm/boot/dts/sun7i-a20-haoyu-marsboard.dts  | 182 +++++++++++++++++++++++
+ arch/arm/boot/dts/sun8i-h3-nanopi-neo-air.dts    |  28 ++++
+ arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts        |   4 +
+ arch/arm/boot/dts/sun8i-h3.dtsi                  |   2 +-
+ arch/arm/boot/dts/sun8i-v3s.dtsi                 |  22 +--
+ arch/arm/boot/dts/sunxi-h3-h5.dtsi               |  18 +++
+ 9 files changed, 252 insertions(+), 14 deletions(-)
+ create mode 100644 arch/arm/boot/dts/sun7i-a20-haoyu-marsboard.dts
