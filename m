@@ -1,45 +1,48 @@
-Return-Path: <jernej@kernel.org>
+Return-Path: <SRS0=Lrvw=TH=sntech.de=heiko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64B3BC433F5
-	for <soc@archiver.kernel.org>; Thu, 24 Feb 2022 22:52:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38DDAC433F5
+	for <soc@archiver.kernel.org>; Thu, 24 Feb 2022 23:19:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1100EC340EF; Thu, 24 Feb 2022 22:52:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF71C340E9;
-	Thu, 24 Feb 2022 22:52:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1645743148;
-	bh=jFjzAyDU9RAqkrJmgIBbhHnbo0nB32DlkIyW/1JqGxQ=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=lnZddMNLpkU9UeDmJ0ZUbF8PNsPQZLLLx+fgn3ZOe9DrNSGmyTmI0Oj6aOXCS1+aS
-	 QRMlMACgbvRsl88duAg4auKqBoxCO+mzrVTjQ822DthgdMJ76XVRGezN3myqwXk5s3
-	 EDusgAPGNQrBljrdM5ZWUdBLKlUFSBpZoGtYCHeJbL/Na7pivKMnAP9d4YHBoPGq/v
-	 jXwModwqb0qySiVOtL7eP+flXwDj0NCXkOUIZDBlrqh+K5x3Y6aznDx/aXLX1uzqJo
-	 XFn1K03+JcuCbmIrB6luuQndd8GTIpK6NrE3K62ra5HKcwGfst4/4Y4tWoAr75HuBq
-	 Y9xzM0KmHlXyA==
-Date: Thu, 24 Feb 2022 23:52:23 +0100
-From: Jernej Skrabec <jernej@kernel.org>
+	id E9C60C340F3; Thu, 24 Feb 2022 23:19:26 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 61CC0C340EF;
+	Thu, 24 Feb 2022 23:19:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 61CC0C340EF
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=sntech.de
+Received: from [185.156.123.69] (helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <heiko@sntech.de>)
+	id 1nNNOH-0004FM-Cw; Fri, 25 Feb 2022 00:19:17 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: mripard@kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev, wens@csie.org, jernej@kernel.org,
-	samuel@sholland.org
-Subject: [GIT PULL] Allwinner DT changes for 5.18
-Message-ID: <YhgMJ0AqaHopzaW3@kista.localdomain>
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts64 changes for 5.18 #1
+Date: Fri, 25 Feb 2022 00:19:16 +0100
+Message-ID: <6456947.djgVdjDsCv@phil>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-Hi!
+Hi Arnd, Kevin, Olof,
 
-Please pull following changes for next release.
+please find below and in subsequent pull-requests
+Rockchip changes for for 5.18 .
 
-Best regards,
-Jernej
+Only the arm64-one is on the bigger side.
+
+Please pull!
+
+Thanks
+Heiko
 
 The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
@@ -47,52 +50,99 @@ The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-5.18-1
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v5.18-rockchip-dts64-1
 
-for you to fetch changes up to ebdfc289a348fbc7fbc87c37b0cc156f78cc5f57:
+for you to fetch changes up to a0024f55eb5b741b76a0b950f1222ddbab6a9fc9:
 
-  MAINTAINERS: Update Allwinner SoCs maintainers (2022-02-24 19:27:23 +0100)
-
-----------------------------------------------------------------
-Usual round of DT patches for the 5.18 merge window, with:
-- DT fixes
-- ethernet0 alias for Nanopi NEO
-- r_uart node for H3/H5
-- eMMC and bluetooth nodes for Nanopi NEO air
-- updated maintainers for Allwinner SoCs
-- new board: A20-Marsboard
+  arm64: dts: rockchip: align Google CROS EC PWM node name with dtschema (2022-02-24 00:07:56 +0100)
 
 ----------------------------------------------------------------
-Baltazár Radics (1):
-      ARM: dts: sun8i: Add ethernet0 alias in Nanopi NEO's device tree
+New boards: Pine64 PineNote ereader tablet and Bananapi-R2-Pro (both rk356x)
 
-Conley Lee (2):
-      ARM: dts: sun7i: Add A20-Marsboard
-      dt-bindings: arm: sunxi: add haoyu,a20-marsboard
+New peripherals for the rk356x-family (pdm-audio, gpu, another i2s, usb2)
 
-Jernej Skrabec (1):
-      MAINTAINERS: Update Allwinner SoCs maintainers
+A lot of additions to Quartz-A (connector-header, gpu, sdmmc1, io-domains,
+usb2) and rk3568-evb1-v10 (rk809-audio, cpu-regulator, gpu, tsadc, led,
+usb2, touchscreen).
 
-Mans Rullgard (1):
-      ARM: dts: sunxi: h3/h5: add r_uart node
+Fixes for the pwm-regulators, that used wrong names for their supplies
+as well adapting the cros-ec pwm nodes to a changed binding (going via
+the pwm tree).
 
-Mikhail Rudenko (1):
-      ARM: dts: nanopi-neo-air: Add eMMC and bluetooth
+And as sort of misc-changes, defined the logic-regulator on rk3399-puma
+as well as enabled the mali-gpu on the rk3399-firefly.
 
-Paul Kocialkowski (1):
-      ARM: dts: sun8i: v3s: Move the csi1 block to follow address order
+----------------------------------------------------------------
+Alex Bee (1):
+      arm64: dts: rockchip: add cooling map and trip points for gpu to rk356x
 
-Rob Herring (1):
-      ARM: dts: sun8i-h3: Drop args in 'thermal-sensors'
+Ezequiel Garcia (2):
+      arm64: dts: rockchip: add gpu node to rk356x
+      arm64: dts: rockchip: enable the gpu on quartz64-a
 
- Documentation/devicetree/bindings/arm/sunxi.yaml |   5 +
- MAINTAINERS                                      |   4 +-
- arch/arm/boot/dts/Makefile                       |   1 +
- arch/arm/boot/dts/sun7i-a20-haoyu-marsboard.dts  | 182 +++++++++++++++++++++++
- arch/arm/boot/dts/sun8i-h3-nanopi-neo-air.dts    |  28 ++++
- arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts        |   4 +
- arch/arm/boot/dts/sun8i-h3.dtsi                  |   2 +-
- arch/arm/boot/dts/sun8i-v3s.dtsi                 |  22 +--
- arch/arm/boot/dts/sunxi-h3-h5.dtsi               |  18 +++
- 9 files changed, 252 insertions(+), 14 deletions(-)
- create mode 100644 arch/arm/boot/dts/sun7i-a20-haoyu-marsboard.dts
+Frank Wunderlich (2):
+      dt-bindings: rockchip: Add BananaPi R2 Pro Board
+      arm64: dts: rockchip: Add Bananapi R2 Pro
+
+Heiko Stuebner (2):
+      arm64: dts: rockchip: define vdd_log on rk3399-puma
+      arm64: dts: rockchip: fix supplies for pwm regulators
+
+Krzysztof Kozlowski (1):
+      arm64: dts: rockchip: align Google CROS EC PWM node name with dtschema
+
+Michael Riesch (11):
+      arm64: dts: rockchip: fix vcc3v3_lcd{0,1}_n regulators in rk3568-evb1-10
+      arm64: dts: rockchip: add the touchscreen controller to rk3568-evb1-v10
+      arm64: dts: rockchip: add the i2s3_2ch node to rk356x
+      arm64: dts: rockchip: rename and sort the rk356x usb2 phy handles
+      arm64: dts: rockchip: add usb2 support to rk3568-evb1-v10
+      arm64: dts: rockchip: enable the gpu on rk3568-evb1-v10
+      arm64: dts: rockchip: enable the tsadc on rk3568-evb1-v10
+      arm64: dts: rockchip: enable work led on rk3568-evb1-v10
+      arm64: dts: rockchip: add the vdd_cpu regulator to rk3568-evb1-v10
+      arm64: dts: rockchip: set vdd_gpu regulator on rk3568-evb1-v10 to always on
+      arm64: dts: rockchip: enable rk809 audio codec on the rk3568 evb1-v10
+
+Michael Saunders (1):
+      arm64: dts: rockchip: enable the mali GPU on rk3399-firefly
+
+Peter Geis (5):
+      arm64: dts: rockchip: add usb2 nodes to rk3568 device tree
+      arm64: dts: rockchip: add Quartz64-A usb2 support
+      arm64: dts: rockchip: add Quartz64-A pmu_io_domains
+      arm64: dts: rockchip: add Quartz64-A sdmmc1 node
+      arm64: dts: rockchip: add Quartz64-A con40 hardware
+
+Samuel Holland (3):
+      dt-bindings: arm: rockchip: Add Pine64 PineNote board
+      arm64: dts: rockchip: Add pdm node to rk356x
+      arm64: dts: rockchip: Add Pine64 PineNote board
+
+ .../devicetree/bindings/arm/rockchip.yaml          |  13 +
+ arch/arm64/boot/dts/rockchip/Makefile              |   3 +
+ arch/arm64/boot/dts/rockchip/rk3399-firefly.dts    |   7 +-
+ .../boot/dts/rockchip/rk3399-gru-chromebook.dtsi   |   2 +-
+ .../boot/dts/rockchip/rk3399-khadas-edge.dtsi      |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-leez-p710.dts  |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-orangepi.dts   |   2 +-
+ .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi      |  11 +
+ arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-sapphire.dtsi  |   2 +-
+ .../boot/dts/rockchip/rk3566-pinenote-v1.1.dts     |  18 +
+ .../boot/dts/rockchip/rk3566-pinenote-v1.2.dts     |  18 +
+ arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi  | 639 +++++++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts | 136 +++++
+ arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts | 457 +++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts   | 205 ++++++-
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi           | 210 +++++++
+ 19 files changed, 1721 insertions(+), 12 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-pinenote-v1.1.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-pinenote-v1.2.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
+
+
+
