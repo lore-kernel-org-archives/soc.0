@@ -1,107 +1,110 @@
-Return-Path: <SRS0=yrDZ=TI=cerno.tech=maxime@kernel.org>
+Return-Path: <SRS0=3pCC=TI=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFCC6C433EF
-	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 08:21:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A43EC433FE
+	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 10:24:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 94698C36AE2; Fri, 25 Feb 2022 08:21:15 +0000 (UTC)
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 67069C340F5; Fri, 25 Feb 2022 10:24:48 +0000 (UTC)
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7441BC340E7;
-	Fri, 25 Feb 2022 08:21:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7441BC340E7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=cerno.tech
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=cerno.tech
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-	by mailout.nyi.internal (Postfix) with ESMTP id 137E45C01C1;
-	Fri, 25 Feb 2022 03:21:11 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 25 Feb 2022 03:21:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm2; bh=ZaFrC2HxiD2voL0XEad3KDb3smnYmstLZS5qZ8
-	YOuQo=; b=YXFCgz4Ih6NtyR3sPBu2n8qXjgDquykOTPOzfu6k51rNsqKiANfZ3h
-	bvFeU7abQU9iHENq1Q5CtLY/SGF90KbihDO/TQzUt2VEi58nJLewUbOn+WhlcBOt
-	UwQflwqlb/UgD4IuS+QvxneDr45sXqhnD3t8wpLp6QznzOTHpIWqiyOXBV/uqrbK
-	sQJH766qT28NkkGU5NqT4lTparJQ5Iii31gIYVVuokkI9/yz08Cn7CoqcuQSKqH/
-	WdupORwWgEkHps54NjLTBIhnd/gJgmAeBnwU9crHPtopemM2EUwJhjGpgw2IiY8X
-	sqmFKs7hx7RKNsrvxzVOKSYJfEkI+siQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=ZaFrC2HxiD2voL0XE
-	ad3KDb3smnYmstLZS5qZ8YOuQo=; b=G9hrAk2JHBfbO741TcyfhE8snxsz6/BhU
-	uvGLeXBKRgU7sPQNn7moW5/cgOuGXlEl+yMJS0qmLX/Xj9WyO58XBANmz6SGR4Cz
-	aYKxEZnuhoQsh9LaUaV4bKzrScg4j0PGuWGDE4ww76JkKbArfjlaxktHDzRyjTmg
-	z+eRLLkT6fq21ovfpxiMJxSnpuGWVGKlgfsOHesRyMIBXdTEWw8qqoElAnjp3mn2
-	6YuKoNjzuR8YBRdwwMaDAscC6JR+43aNSQSQLm1m05OHeHBEx41VDOq2Tp8xPDLI
-	X+sghraQFhKOsKIEd3q0oMq5+N2334QqS931XKvkfQUbkI0cxtRJA==
-X-ME-Sender: <xms:dpEYYhEIlaehYfFquwwtcSnKh7R8LLcBBlHzXRwS5YAociiC2VImng>
-    <xme:dpEYYmXRVbXzIj2DUtkcqhti_tRaG3T3JJVXE5DTjMuvvFchqMoyLQrpbc9_Q1jT7
-    gKGy-fkDtZrs9JxDGE>
-X-ME-Received: <xmr:dpEYYjI-J-bzpe_ievKVW8SqPdvVCY_-T5U3wAVPZnVWTDZuiwwsIVoFT_YO6hK6SU4oTSb7l_khXWqjIAVNxt6U0JDhBLteaFsyAec>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrleefgdduuddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:dpEYYnHTkTeCYZnnYrPqXD5RIxniGonhQc9cedZS4lBJM5vh_3iqyQ>
-    <xmx:dpEYYnVRftPnILzxhtc-9dW1ykRYP1g54xSiwiHD1-vcYgAp3qZ3xg>
-    <xmx:dpEYYiNpuphRgPF8tE5_E2zO5ZkQNjGjxFPgaIdcvTJ_mvs2qWmDYA>
-    <xmx:d5EYYte5BBHyqsq0IFOKT3Zw-Cp_K3FuJB-liafyW4Yf-GEE5juogA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 25 Feb 2022 03:21:10 -0500 (EST)
-Date: Fri, 25 Feb 2022 09:21:07 +0100
-From: Maxime Ripard <maxime@cerno.tech>
+	by smtp.kernel.org (Postfix) with ESMTPS id 28D2EC340E7
+	for <soc@kernel.org>; Fri, 25 Feb 2022 10:24:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 28D2EC340E7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:7d31:13ed:51c6:c7cc])
+	by albert.telenet-ops.be with bizsmtp
+	id zNQe2600C0mlTBr06NQeiQ; Fri, 25 Feb 2022 11:24:38 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1nNXmA-0020l2-18; Fri, 25 Feb 2022 11:24:38 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1nNXm9-00DHXc-GJ; Fri, 25 Feb 2022 11:24:37 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org, Jernej Skrabec <jernej@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	wens@csie.org, samuel@sholland.org
-Subject: Re: [GIT PULL] Allwinner DT changes for 5.18
-Message-ID: <20220225082107.pjeqpg75tkl3wxci@houat>
-References: <YhgMJ0AqaHopzaW3@kista.localdomain>
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL 1/2] Renesas ARM DT updates for v5.18 (take two)
+Date: Fri, 25 Feb 2022 11:24:33 +0100
+Message-Id: <cover.1645784466.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1645784465.git.geert+renesas@glider.be>
+References: <cover.1645784465.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="by5vcu3wu4uusknp"
-Content-Disposition: inline
-In-Reply-To: <YhgMJ0AqaHopzaW3@kista.localdomain>
+Content-Transfer-Encoding: 8bit
 
+The following changes since commit 5c65ad12785205d5c57bd92e19d0296f93c19e33:
 
---by5vcu3wu4uusknp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  arm64: dts: renesas: rzg2lc-smarc: Use SW_SD0_DEV_SEL macro for eMMC/SDHI device selection (2022-02-08 09:48:28 +0100)
 
-Hi Arnd, Olof,
+are available in the Git repository at:
 
-On Thu, Feb 24, 2022 at 11:52:23PM +0100, Jernej Skrabec wrote:
-> Hi!
->=20
-> Please pull following changes for next release.
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.18-tag2
 
-I'm stepping back, so you should expect the PR from Jernej and Samuel
-=66rom now on.
+for you to fetch changes up to 6a3b10e5c312cae4c1fc7a27bf9a030360999351:
 
-Maxime
+  ARM: dts: renesas: Align GPIO hog names with dtschema (2022-02-24 13:51:48 +0100)
 
---by5vcu3wu4uusknp
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+Renesas ARM DT updates for v5.18 (take two)
 
------BEGIN PGP SIGNATURE-----
+  - Document the use of the renesas-soc IRC channel,
+  - Watchdog support for the R-Car S4-8, RZ/N1D, and RZ/G2LC SoCs on the
+    Spider, RZN1D-DB, and RZ/G2LC SMARC EVK development boards,
+  - Miscellaneous fixes and improvements.
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYhiRcwAKCRDj7w1vZxhR
-xWzLAQDHjzeEZf57rDWwkIl9KSlcIs9LeVmJ5R4dGluuATtpvgD+JYCKJjr7lkuV
-wYslkpwbKes10LjyTLPPTl04Eng4fQo=
-=n2ff
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+Biju Das (1):
+      arm64: dts: renesas: rzg2lc-smarc-som: Enable watchdog
 
---by5vcu3wu4uusknp--
+Geert Uytterhoeven (4):
+      arm64: dts: renesas: r8a779f0: Add RWDT node
+      arm64: dts: renesas: spider-cpu: Enable watchdog timer
+      arm64: dts: renesas: Align GPIO hog names with dtschema
+      ARM: dts: renesas: Align GPIO hog names with dtschema
+
+Jean-Jacques Hiblot (3):
+      dt-bindings: clock: r9a06g032: Add the definition of the watchdog clock
+      ARM: dts: r9a06g032: Add the watchdog nodes
+      ARM: dts: r9a06g032-rzn1d400-db: Enable watchdog0 with a 60s timeout
+
+Nikita Yushchenko (1):
+      arm64: dts: renesas: ulcb-kf: fix wrong comment
+
+Sergey Shtylyov (2):
+      MAINTAINERS: Specify IRC channel for Renesas ARM32 port
+      MAINTAINERS: Specify IRC channel for Renesas ARM64 port
+
+ MAINTAINERS                                              |  2 ++
+ arch/arm/boot/dts/iwg20d-q7-common.dtsi                  |  2 +-
+ arch/arm/boot/dts/r8a7740-armadillo800eva.dts            |  2 +-
+ arch/arm/boot/dts/r8a7742-iwg21d-q7-dbcm-ca.dts          |  4 ++--
+ arch/arm/boot/dts/r8a7742-iwg21d-q7.dts                  |  4 ++--
+ arch/arm/boot/dts/r8a7742-iwg21m.dtsi                    |  2 +-
+ arch/arm/boot/dts/r8a77470-iwg23s-sbc.dts                |  2 +-
+ arch/arm/boot/dts/r9a06g032-rzn1d400-db.dts              |  5 +++++
+ arch/arm/boot/dts/r9a06g032.dtsi                         | 16 ++++++++++++++++
+ arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi      |  2 +-
+ arch/arm64/boot/dts/renesas/hihope-common.dtsi           |  2 +-
+ arch/arm64/boot/dts/renesas/hihope-rzg2-ex-lvds.dtsi     |  2 +-
+ .../arm64/boot/dts/renesas/r8a774c0-ek874-idk-2121wr.dts |  2 +-
+ arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi     |  5 +++++
+ arch/arm64/boot/dts/renesas/r8a779f0.dtsi                | 10 ++++++++++
+ arch/arm64/boot/dts/renesas/r9a07g054l2-smarc.dts        |  4 ++--
+ arch/arm64/boot/dts/renesas/rzg2l-smarc-pinfunction.dtsi |  4 ++--
+ .../arm64/boot/dts/renesas/rzg2lc-smarc-pinfunction.dtsi |  2 +-
+ arch/arm64/boot/dts/renesas/rzg2lc-smarc-som.dtsi        | 14 ++++++++++++++
+ arch/arm64/boot/dts/renesas/ulcb-kf.dtsi                 |  2 +-
+ include/dt-bindings/clock/r9a06g032-sysctrl.h            |  1 +
+ 21 files changed, 71 insertions(+), 18 deletions(-)
