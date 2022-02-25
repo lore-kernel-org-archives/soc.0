@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 567F9C433EF
-	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 11:32:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C25FC433EF
+	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 12:19:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1A0D4C340EF; Fri, 25 Feb 2022 11:32:29 +0000 (UTC)
+	id 13708C340E7; Fri, 25 Feb 2022 12:19:56 +0000 (UTC)
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id ECB53C340E7;
-	Fri, 25 Feb 2022 11:32:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ECB53C340E7
+	by smtp.kernel.org (Postfix) with ESMTPS id DE399C340F1;
+	Fri, 25 Feb 2022 12:19:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DE399C340F1
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1645788749; x=1677324749;
+  t=1645791594; x=1677327594;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=5UwFmzbyIUta6CR16913XuPjSW+SetjjS6+IwteKVXY=;
-  b=vV7jMLrbsbQaWw+rWCmTIGLwQQkqIKTVQgX49ZkxKF4J87xhPY/7c/Kp
-   lvVwfrhbNKYiobDdW+eY6Xt1Zr8S20ZJmdJd240J8xCCiZD0HZeXVBxpp
-   9nE7mKJ1JE9uyo6zewwisd3b4/4a35IvtLCWpjA9t+At37cpiYYuWBp80
-   EtCMWp824hcOkmqPaF6dIQG6E0OUhu4MNMtA4oTEmcZx+7WDGajOLl+Jb
-   SZwhe0pP+I18GLJL8ZzntWAOyx4ol7c2Mr7lAAQQpCn7XYSRON3IJxw4e
-   Be/m4f587KLiNXI9eIBBfBGYOCDeJsbGWTL0i4IpAKezVTxLo+wo0lpJI
+  bh=YhgrNVrQwjQIynq2blNcMbH5depjlPJlQS23JcppBuY=;
+  b=sU4IASAgSsMyL9Tdfc1FGqnwG4b7+f0JZqw9H0Z8/JA19YP6b/hc4/tW
+   +/p6/ZUCcBFLJyAybZDEc4zxOcnGbul2EZpa1QOQ5ByH1bOWm4qi3+g8W
+   iVm5p6X0Tsf7Z/wzk+2U32zUtRcaRint7KyKCwHTMqS5aav4gZdgXf8+8
+   DHkI5Uq3qKyNSk0aBBOL+YCDO+I+fLh7MbOIGFq4fEZ/y6qjudbsAUGc9
+   qdGba4utjyvMU97b4qlmfEenzPa44XrWG0zQwAzTEiYM59REo+YVwdU3j
+   9+7LiBV9rt13R1RgAj9DHrmJ7AVmJr/+59c+9I8k1kRKQ+fRJ5sk6NY3D
    w==;
 X-IronPort-AV: E=Sophos;i="5.90,136,1643698800"; 
-   d="scan'208";a="147275429"
+   d="scan'208";a="87014336"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Feb 2022 04:32:27 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Feb 2022 05:19:53 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 25 Feb 2022 04:32:26 -0700
-Received: from ness.home (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 25 Feb 2022 04:32:24 -0700
+ 15.1.2375.17; Fri, 25 Feb 2022 05:19:53 -0700
+Received: from ness.home (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 25 Feb 2022 05:19:50 -0700
 From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
@@ -48,10 +48,10 @@ CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
 	<linux-kernel@vger.kernel.org>, linux-arm-kernel
 	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
 	<alexandre.belloni@bootlin.com>, Claudiu Beznea
-	<claudiu.beznea@microchip.com>
-Subject: [GIT PULL] ARM: at91: defconfig for 5.18
-Date: Fri, 25 Feb 2022 12:32:20 +0100
-Message-ID: <20220225113220.51401-1-nicolas.ferre@microchip.com>
+	<claudiu.beznea@microchip.com>, Conor Dooley <conor.dooley@microchip.com>
+Subject: [GIT PULL] ARM: at91: soc for 5.18
+Date: Fri, 25 Feb 2022 13:19:43 +0100
+Message-ID: <20220225121943.71494-1-nicolas.ferre@microchip.com>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Organization: microchip
@@ -62,9 +62,10 @@ From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
 Arnd, Olof,
 
-Here are the defconfig changes for 5.18. Please pull.
+Here are the soc changes for 5.18 for two MPU families from Microchip: AT91 and
+Polarfire as we agreed with Conor and discussed with Arnd.
 
-Thanks, best regards,
+Please pull. Thanks, best regards,
   Nicolas
 
 The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
@@ -73,29 +74,44 @@ The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-defconfig-5.18
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-soc-5.18
 
-for you to fetch changes up to 2884f2dda70ac8659b2e15b8ba8b85fe7184b9f4:
+for you to fetch changes up to d0054a470c33902f5ae88835ed8a8ecc3cf8faa4:
 
-  ARM: configs: at91: sama7: add config for cpufreq (2022-02-25 12:20:43 +0100)
-
-----------------------------------------------------------------
-AT91 defconfig #1 for 5.18:
-
-- sama7 additions for NAND flash, crypto, cpuidle and cpufreq
+  soc: add microchip polarfire soc system controller (2022-02-25 12:50:59 +0100)
 
 ----------------------------------------------------------------
-Claudiu Beznea (2):
-      ARM: configs: at91: sama7: enable cpu idle
-      ARM: configs: at91: sama7: add config for cpufreq
+AT91 & POLARFIRE SoC #1 for 5.18:
 
-Tudor Ambarus (3):
-      ARM: configs: at91: sama7: Enable NAND / SMC
-      ARM: configs: at91: sama7: Enable UBIFS_FS
-      ARM: configs: at91: sama7: Enable crypto IPs and software algs
+- sama7g5: CPU idle support with CPUFreq operating points defined in DT
+- polarfire: addition of the soc system controller
 
- arch/arm/configs/sama7_defconfig | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+----------------------------------------------------------------
+Claudiu Beznea (5):
+      ARM: at91: ddr: remove CONFIG_SOC_SAMA7 dependency
+      ARM: at91: ddr: align macro definitions
+      ARM: at91: ddr: fix typo to align with datasheet naming
+      ARM: at91: PM: add cpu idle support for sama7g5
+      ARM: at91: Kconfig: select PM_OPP
+
+Conor Dooley (1):
+      soc: add microchip polarfire soc system controller
+
+ arch/arm/mach-at91/Kconfig                  |   1 +
+ arch/arm/mach-at91/pm.c                     |  27 +++-
+ arch/arm/mach-at91/pm_suspend.S             |   4 +-
+ drivers/soc/Kconfig                         |   1 +
+ drivers/soc/Makefile                        |   1 +
+ drivers/soc/microchip/Kconfig               |  10 ++
+ drivers/soc/microchip/Makefile              |   1 +
+ drivers/soc/microchip/mpfs-sys-controller.c | 194 ++++++++++++++++++++++++++++
+ include/linux/clk/at91_pmc.h                |   4 +
+ include/soc/at91/sama7-ddr.h                |  15 +--
+ include/soc/microchip/mpfs.h                |   4 +-
+ 11 files changed, 248 insertions(+), 14 deletions(-)
+ create mode 100644 drivers/soc/microchip/Kconfig
+ create mode 100644 drivers/soc/microchip/Makefile
+ create mode 100644 drivers/soc/microchip/mpfs-sys-controller.c
 
 -- 
 Nicolas Ferre
