@@ -1,86 +1,101 @@
-Return-Path: <SRS0=2Acm=TI=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=5OsZ=TI=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A11F2C433EF
-	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 11:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 567F9C433EF
+	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 11:32:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6AC75C340F1; Fri, 25 Feb 2022 11:20:52 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+	id 1A0D4C340EF; Fri, 25 Feb 2022 11:32:29 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E0324C340E7;
-	Fri, 25 Feb 2022 11:20:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E0324C340E7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M433w-1nNYeW2SJ6-0000Jl; Fri, 25 Feb 2022 12:20:48 +0100
-Received: by mail-wr1-f51.google.com with SMTP id s13so3957618wrb.6;
-        Fri, 25 Feb 2022 03:20:48 -0800 (PST)
-X-Gm-Message-State: AOAM531oyscCvz1ycjugo5JxISk+VZn+77hiLVs2il9OzuoGurrt5+EZ
-	rKLncEb5LSQ4BGPG5xWBtO7ESnbRMfSrzk61nII=
-X-Google-Smtp-Source: ABdhPJz6Sv6Vhh/XIVu7MkCYDgoQWagiA2O2Q0TopRL5dPjv2UrfovxrCvY3lRFoeExdFoiVYQQeG3layaHVGTRZZ2Y=
-X-Received: by 2002:adf:a446:0:b0:1ed:c41b:cf13 with SMTP id
- e6-20020adfa446000000b001edc41bcf13mr6102767wra.407.1645788047928; Fri, 25
- Feb 2022 03:20:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20220218092010.1327309-1-hasegawa-hitomi@fujitsu.com>
- <CAK8P3a027OWYrRDm3r930pYo+He7bqVSEpQKjM9od1W8ciamyw@mail.gmail.com>
- <OSZPR01MB70508B35657B539FF4FA28F6EB3B9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
- <OSZPR01MB7050EF799D97D05A8C4597E7EB3E9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSZPR01MB7050EF799D97D05A8C4597E7EB3E9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Fri, 25 Feb 2022 12:20:31 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0T1eP9a_1UhYRg0wHBsjyLLORoKB+44PAPM4zj3ryVcA@mail.gmail.com>
-Message-ID: <CAK8P3a0T1eP9a_1UhYRg0wHBsjyLLORoKB+44PAPM4zj3ryVcA@mail.gmail.com>
-Subject: Re: [PATCH] soc: fujitsu: Add A64FX diagnostic interrupt driver
-To: "hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id ECB53C340E7;
+	Fri, 25 Feb 2022 11:32:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ECB53C340E7
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1645788749; x=1677324749;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5UwFmzbyIUta6CR16913XuPjSW+SetjjS6+IwteKVXY=;
+  b=vV7jMLrbsbQaWw+rWCmTIGLwQQkqIKTVQgX49ZkxKF4J87xhPY/7c/Kp
+   lvVwfrhbNKYiobDdW+eY6Xt1Zr8S20ZJmdJd240J8xCCiZD0HZeXVBxpp
+   9nE7mKJ1JE9uyo6zewwisd3b4/4a35IvtLCWpjA9t+At37cpiYYuWBp80
+   EtCMWp824hcOkmqPaF6dIQG6E0OUhu4MNMtA4oTEmcZx+7WDGajOLl+Jb
+   SZwhe0pP+I18GLJL8ZzntWAOyx4ol7c2Mr7lAAQQpCn7XYSRON3IJxw4e
+   Be/m4f587KLiNXI9eIBBfBGYOCDeJsbGWTL0i4IpAKezVTxLo+wo0lpJI
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,136,1643698800"; 
+   d="scan'208";a="147275429"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Feb 2022 04:32:27 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 25 Feb 2022 04:32:26 -0700
+Received: from ness.home (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 25 Feb 2022 04:32:24 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"jirislaby@kernel.org" <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>, 
-	Olof Johansson <olof@lixom.net>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Sumit Garg <sumit.garg@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Hugpxyf1qMuILGYOS5E6hGf78MoLveP2eTaIqHVIugYw1Y+wuhL
- c8StmbOHPq4zGvaQng8IBgvNFNeg+e8pkcABUcfZNVK8f1sP4r8CmjsSQwW0WIrhg62kAh8
- RpXADnExoWY/PECqiOr9g0yICDOKizHDTqds39j9dVb4fe1kCxSjyhWgDiklKDU484md0SH
- GZ/eFan5CeiiH3Wl9atBA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rpf24B1M0dI=:TFc9DGtCG8FrFO3gC/BKZ1
- 8n2iU8cuV0ZL8TsRkD3yWZ/rdn7JaDoDIlwHRixkkMmpWdP3AuEGNb2Wt+qCgORwpH+C3CDSf
- d+kAGUEQqF36PO9ofJGZCZm7zCtnPC7HGDUr9pHOxfaUoIrpwH8/HtO9K+SSAmU+KPqc4hSzL
- hddQV8AOfwhSECef4//dj8pKJAnTyQMN5IkPOdnJhy4bQBLBayUHtpXvpssYpyzieZyV4a1PJ
- 3nDr6tPqvWZ+Q/dUoTm2ZxJ4Lkfg5TgrsQhzT/qUr33vgXwEbY2S6RRFX0gqxkC7gJv/JlxeW
- auLrAYQEcfAzRxZgxnEMYIcx9tIlV8ejIIfM1qKXSUE0G47RazLKaNuOdqYX8B9lYcJiRtLdQ
- Ks4mb5rWyHgsWCoDNk7Z9Kfz0i64ZnpMY0KnufTKIuyodUdy5O2VmFptN6EkJ0raarsjwKaAd
- 3gB1ozJW3SEyh2Izzgs195/tcWhMnJ2ARnOogIS3A7KBK+Vnc6/NN41mvHc7F5LRpMUzoXZ9c
- eBuVIoL6WKCQaW/xNdrNb84wSPdXX97933T2K9R7fDLtwXa92MPHLV65onCQBzMKDFjB5gDiN
- bikXFGJM0MrkpjgVfrBAP5splF+WQt80+p4oND3n4TVsATl6nHphpQAYWxkgu3Qs+Hy9G+weh
- JyWPWhLzFYTSC+JVw3wLwvklVLETvTEyLJXdu2WgmWL/1SJ3/oxd+QGcc/5DnNNjfPsYRP4xG
- WVfNYDBw86DcINLpHKxxqOMD+XB7Z8Gx0q19x22eQtZ79RkmA3qzaP4Kh5+bF+h1+pI2sSXih
- VGDmKcVjLioJKBVKfyfDEPDdjQ2St5NBg/Epx8M159W1x10m0Y=
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea
+	<claudiu.beznea@microchip.com>
+Subject: [GIT PULL] ARM: at91: defconfig for 5.18
+Date: Fri, 25 Feb 2022 12:32:20 +0100
+Message-ID: <20220225113220.51401-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Fri, Feb 25, 2022 at 11:35 AM hasegawa-hitomi@fujitsu.com
-<hasegawa-hitomi@fujitsu.com> wrote:
->
-> Hi Greg and Jiri,
->
-> I'm trying to implement a feature for A64FX that will panic when
-> a diagnostic interrupt is received.
-> Arnd suggested that handle_sysrq() should be used
-> but I'm wonderingif it's ok to call it in NMI.
-> Would you please let me know if we can call handle_sysrq() in NMI?
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-I see some work from Sumit Garg to make it possible, but this was never
-merged, so presumably it is not safe:
+Arnd, Olof,
 
-https://lore.kernel.org/linux-arm-kernel/CAFA6WYOWHgmYYt=KGXDh2hKiuy_rQbJfi279ev0+s-Qh7L21kA@mail.gmail.com/t/#m2b5006f08581448020eb24566927a104d0b95c44
+Here are the defconfig changes for 5.18. Please pull.
 
-Sumit has worked on some related areas as well, and may have additional
-ideas for you.
+Thanks, best regards,
+  Nicolas
 
-        Arnd
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-defconfig-5.18
+
+for you to fetch changes up to 2884f2dda70ac8659b2e15b8ba8b85fe7184b9f4:
+
+  ARM: configs: at91: sama7: add config for cpufreq (2022-02-25 12:20:43 +0100)
+
+----------------------------------------------------------------
+AT91 defconfig #1 for 5.18:
+
+- sama7 additions for NAND flash, crypto, cpuidle and cpufreq
+
+----------------------------------------------------------------
+Claudiu Beznea (2):
+      ARM: configs: at91: sama7: enable cpu idle
+      ARM: configs: at91: sama7: add config for cpufreq
+
+Tudor Ambarus (3):
+      ARM: configs: at91: sama7: Enable NAND / SMC
+      ARM: configs: at91: sama7: Enable UBIFS_FS
+      ARM: configs: at91: sama7: Enable crypto IPs and software algs
+
+ arch/arm/configs/sama7_defconfig | 29 +++++++++++++++++++++++++----
+ 1 file changed, 25 insertions(+), 4 deletions(-)
+
+-- 
+Nicolas Ferre
