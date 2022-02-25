@@ -4,57 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD2E3C3527C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B031FC4707F
 	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8D031C36AE7; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 778E0C34111;
+	id A457AC36AEC; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A2EAC36AE5;
 	Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1645809663;
-	bh=cZ/DXkEixht1Flmtkocb573jXrO6C9Hr51K6w4RVHxU=;
+	bh=0ocQilRmbguIEB0yldWELRGzAncNBPmLFV3oS5aDv7E=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=clq7Q2I/mDyC5KM9CDhFF8vdEaTtI0HE0eOXmMUuSXsFgYxgbCvLCEBYnCFBS52sl
-	 QRd5jo/PtsI04mRcCYz0Smg325JVOhsIkxqaFQXQnwEcow6pyfSElrTSx0OoQq1BMn
-	 Uaj73nhyTrSBLa8SSsK7NTvK7r3BpJ5yiWFIPGF2zXc+cK4uaMAsVyewHJLBY7soVS
-	 8MaV5hHNJI+cJicnKyxbiQCLEHm/Oqm0SWHZPb9ZEmnlY+lzs7ZV8ru4c8GO/kM9ND
-	 H37oH+rq8jEaYdLOmzOrUU0XWTBK+lA9HaplVeTN8R6PDgj1AuGy9XJuIy00YySbCA
-	 lUGvwWbvG38Xg==
+	b=MivO9N4hKDSU3OIdORCNdvgyZ8/GHKtTyDXZtgoRfLZiJIcf/DApuRorPd3a7coGy
+	 4T7aNtqFmGfwPIVu+NyFrUvgdymJ0/H+p36TW7MzavljnLW0jnjQ2z24iVewwxfz43
+	 ntpIeeWIaGLLyb8cm/FqFmX9I4n3m4ybuPICxZE4mcA1TSmNV/YaO73eeDOf3ztN93
+	 iBGO7QqddIiq/4C5v9ohvzH03i0ca6+4SJAlkK/ce5QC4cB2NQAF6osNrNRMbZVXuj
+	 SREic9prpLF5nUhmtSxV1jJD4/LveakK5EUGxIlE6tgzMwjgX8A15ljsMRxsN1inKz
+	 6aCZo2Cr1p6TQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 649EEF0383A;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 76D7AE6D453;
 	Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: at91: soc for 5.18
+Subject: Re: [PATCH] ARM: mstar: Select ARM_ERRATA_814220
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164580966340.15608.1846916733516722549.git-patchwork-notify@kernel.org>
+ <164580966348.15608.603399697792462328.git-patchwork-notify@kernel.org>
 Date: Fri, 25 Feb 2022 17:21:03 +0000
-References: <20220225121943.71494-1-nicolas.ferre@microchip.com>
-In-Reply-To: <20220225121943.71494-1-nicolas.ferre@microchip.com>
-To: Nicolas Ferre <nicolas.ferre@microchip.com>
+References: <20220223064807.261878-1-daniel@0x0f.com>
+In-Reply-To: <20220223064807.261878-1-daniel@0x0f.com>
+To: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 25 Feb 2022 13:19:43 +0100 you wrote:
-> From: Nicolas Ferre <nicolas.ferre@microchip.com>
+On Wed, 23 Feb 2022 15:48:07 +0900 you wrote:
+> All of the SoCs that are supported so far are Cortex A7 r0p5.
+> So it seems like this errata is present.
 > 
-> Arnd, Olof,
-> 
-> Here are the soc changes for 5.18 for two MPU families from Microchip: AT91 and
-> Polarfire as we agreed with Conor and discussed with Arnd.
+> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+> ---
+>  Arnd/Olof: Please apply this directly if acceptable.
+>  I don't think we'll have enough for a PR.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: at91: soc for 5.18
-    https://git.kernel.org/soc/soc/c/022e5220f272
+  - ARM: mstar: Select ARM_ERRATA_814220
+    https://git.kernel.org/soc/soc/c/16018c0d27ed
 
 You are awesome, thank you!
 -- 
