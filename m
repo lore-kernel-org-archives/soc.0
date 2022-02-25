@@ -4,60 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC718C4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBD10C433EF
 	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 15:50:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9BBB9C340F7; Fri, 25 Feb 2022 15:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 78775C340F1;
-	Fri, 25 Feb 2022 15:50:11 +0000 (UTC)
+	id 7E854C340F4; Fri, 25 Feb 2022 15:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5EC52C340F3
+	for <soc@kernel.org>; Fri, 25 Feb 2022 15:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1645804211;
-	bh=XlXrQMUDuCJAR4nTnzkd/k2x7Bsya4pU73hIGUoXTlY=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=kckS+xy7PJR5UXx73PueY06jbzHa4sXj8eiCQzowES1MFCMch16yjTFb2fC4pkjO6
-	 Lu4FQFmb+HuDhzQsDDKr1UARfZ9ro07fAffmIKfnUhRwBjpnkA11tZC63GmS7JVeEZ
-	 H8k+v7u5jw2agnVYkPcxexfr9CEava40hr7eAsps/fLZuOplkRefrEOq/2N/NMKRAE
-	 mWKAeCUXZYdzI6oRiotf46u0UhmiMHsoM+EZ8QWDCvMUlso0zIJtzgI/xv+angNvux
-	 vDiQ4Xx4VaDoXcRUMtHoYY2hGRULOVJjIJjmVwFg98uWVaTsQsYVAVv+kaDGkOR5DZ
-	 Ecx4aON/Oaz6w==
+	bh=uXZycuoywO5lBrwFyHyoAnV2A7K2gE4usq7Chmqu7Ko=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=Ab9HB+qPlp4pvIw7kNUzXIW99bn62/03VyNE3DyUOSMY65PCsRwUI5r+BL62DjcQf
+	 MJJTsgaQQfgpY3AU0OBuAVVvude2wwUQDMeRNAe6rOTBIOdTG1z7nk6gIZXOgNN+8E
+	 Vj5nczeG4J62JgBLVQK8oSmBcnd6YHAFWPqqOLHJMgXwvvzluWJd1dXQKZmAZvmBr2
+	 6r2LFP5RY2JJyPsvMbuMPiICws/j1Kif3hVUlKLXsZ1H4lbFi3FxM81mA3q5lD5uiO
+	 1AP4PY1Ctx7n/arPj097F+BDGtOjJx8bjc237ZTQpdUH/KGjl/J7T6KwXoSl1H3a+U
+	 zRpfzQBTA7nqw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4D1E6E6D4BB;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 39E08E6D453;
 	Fri, 25 Feb 2022 15:50:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Fixes for omaps
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164580421131.25553.13852413575112824598.git-patchwork-notify@kernel.org>
+ <164580421118.25553.6405361067175908792.git-patchwork-summary@kernel.org>
 Date: Fri, 25 Feb 2022 15:50:11 +0000
-References: <pull-1645606483-876944@atomide.com>
-In-Reply-To: <pull-1645606483-876944@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Wed, 23 Feb 2022 10:55:39 +0200 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
-> 
-> The following changes since commit 486343d3728be741db13854dc7e983c20cdd7c07:
-> 
->   Merge tag 'omap-for-v5.17/fixes-for-merge-window-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into arm/fixes (2022-02-07 17:42:44 +0100)
-> 
-> are available in the Git repository at:
-> 
-> [...]
+Patch: [GIT,PULL] soc/fsl drivers changes for fix (v5.17)
+  Submitter: Li Yang <leoyang.li@nxp.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=615929
+  Lore link: https://lore.kernel.org/r/20220219012208.21835-1-leoyang.li@nxp.com
 
-Here is the summary with links:
-  - [GIT,PULL] Fixes for omaps
-    https://git.kernel.org/soc/soc/c/f03f10a9823a
+Patch: [GIT,PULL] Fixes for omaps
+  Submitter: Tony Lindgren <tony@atomide.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=617057
+  Lore link: https://lore.kernel.org/r/pull-1645606483-876944@atomide.com
 
-You are awesome, thank you!
+
+Total patches: 2
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
