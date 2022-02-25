@@ -1,50 +1,131 @@
-Return-Path: <gregkh@linuxfoundation.org>
+Return-Path: <SRS0=5OsZ=TI=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3BCFC433F5
-	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 10:51:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 256B6C433F5
+	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 11:08:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 60E72C340F2; Fri, 25 Feb 2022 10:51:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC738C340E7;
-	Fri, 25 Feb 2022 10:51:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1645786289;
-	bh=RS/k+wRBAJ5qPtedjtTa37vIPkAlwStp54rw0F/Qs7k=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=zQsE1KHMtu6kVlW3omnarojHwWmSLAhGavzhvW8Fe8Pd3u5LXVbhcHcv0NwMQCEgy
-	 RnttiDlJ2FYvEIjPz76bFoJ2nru1Rw1nJedt8EbDSmbkdVRYdjeRUPGP6vvv8+ZhWU
-	 bj6kEkHbEByT/+QvHa2iYYm1GmJbTzDvnaHsLgo0=
-Date: Fri, 25 Feb 2022 11:51:26 +0100
-From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To: "hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>
+	id E4A30C340F1; Fri, 25 Feb 2022 11:07:59 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id C5E3CC340E7;
+	Fri, 25 Feb 2022 11:07:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C5E3CC340E7
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1645787279; x=1677323279;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8FsoNF2tMXyFoXs3+t8dZx7wo5mEegZv38u3HgPYn98=;
+  b=sDQgbHy3AoSD8800p9+zVedS4onqNIeDAsDAdcmvwF48N5k+TTfwFTMv
+   /vItT7sxWWV8ydZfO4KRoPy9w397cVJWSJ7z28qZbe3Pd+8mfvciq2T28
+   Eik3Mih1W7KntfylJcxLQiSNZVnxe3xr8zokNYA3gqrq+UpSREsrf5E79
+   R3F5sot6W2I+X47//1pSiBIXQ0rXRAAG7tanj/OXqOGKf3mU/DvfSA8PI
+   NUou9CeGvsBV34QjA25jaQbNwni5ZX+fWqQsYFDyCzxv+TCubZsJRfu16
+   v3TI0VTfjeFvHMmb0snLhnxcWiqjX7+3kHUJFZGKmUfvzNwRSRSIwZ6td
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,136,1643698800"; 
+   d="scan'208";a="147273535"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Feb 2022 04:07:58 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 25 Feb 2022 04:07:56 -0700
+Received: from ness.home (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 25 Feb 2022 04:07:54 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: "jirislaby@kernel.org" <jirislaby@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH] soc: fujitsu: Add A64FX diagnostic interrupt driver
-Message-ID: <Yhi0rrkSR63ZhjX1@kroah.com>
-References: <20220218092010.1327309-1-hasegawa-hitomi@fujitsu.com>
- <CAK8P3a027OWYrRDm3r930pYo+He7bqVSEpQKjM9od1W8ciamyw@mail.gmail.com>
- <OSZPR01MB70508B35657B539FF4FA28F6EB3B9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
- <OSZPR01MB7050EF799D97D05A8C4597E7EB3E9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea
+	<claudiu.beznea@microchip.com>, Kavyasree Kotagiri
+	<kavyasree.kotagiri@microchip.com>, Michael Walle <michael@walle.cc>,
+	"Horatiu Vultur" <horatiu.vultur@microchip.com>
+Subject: [GIT PULL] ARM: at91: dt for 5.18
+Date: Fri, 25 Feb 2022 12:07:35 +0100
+Message-ID: <20220225110735.18080-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OSZPR01MB7050EF799D97D05A8C4597E7EB3E9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Fri, Feb 25, 2022 at 10:35:10AM +0000, hasegawa-hitomi@fujitsu.com wrote:
-> Hi Greg and Jiri,
-> 
-> I'm trying to implement a feature for A64FX that will panic when
-> a diagnostic interrupt is received.
-> Arnd suggested that handle_sysrq() should be used
-> but I'm wonderingif it's ok to call it in NMI.
-> Would you please let me know if we can call handle_sysrq() in NMI?
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-I doubt it, but try it and see!
+Arnd, Olof,
+
+Here are the dt changes for 5.18. They include both at91 changes and lan966
+first DT patches which I'm happy to take as part of our pull request.
+
+Please pull. Thanks, best regards,
+  Nicolas
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-5.18
+
+for you to fetch changes up to 3c8a9c2e2daf51bd3dcaedd321ecc79f10227c41:
+
+  ARM: dts: at91: sama7g5: add opps (2022-02-25 11:32:22 +0100)
+
+----------------------------------------------------------------
+AT91 & LAN966 DT #1 for 5.18:
+
+- lan966x basic DT and associated evaluation board pcb8291 (2-ports)
+- documentation for an upcoming Kontron switch board featuring a LAN9668
+- one fix for an old bug we have with PMECC on sama5d2 in some corner
+  cases
+- sama7g5 and its EK: crypto, CAN and DVFS operating points
+
+----------------------------------------------------------------
+Claudiu Beznea (4):
+      ARM: dts: at91: remove status = "okay" from soc specific dtsi
+      ARM: dts: at91: fix low limit for CPU regulator
+      ARM: dts: at91: sama7g5ek: set regulator voltages for standby state
+      ARM: dts: at91: sama7g5: add opps
+
+Hari Prasath (2):
+      ARM: dts: at91: sama7g5: Add can controllers of sama7g5
+      ARM: dts: at91: sama7g5: Enable can0 and can1 support in sama7g5-ek
+
+Kavyasree Kotagiri (1):
+      ARM: dts: add DT for lan966 SoC and 2-port board pcb8291
+
+Michael Walle (1):
+      dt-bindings: arm: at91: add Kontron's new KSwitches
+
+Tudor Ambarus (3):
+      ARM: dts: at91: sama5d2: Fix PMERRLOC resource size
+      ARM: dts: at91: Use the generic "crypto" node name for the crypto IPs
+      ARM: dts: at91: sama7g5: Add crypto nodes
+
+ .../devicetree/bindings/arm/atmel-at91.yaml        |   9 +
+ arch/arm/boot/dts/Makefile                         |   2 +
+ arch/arm/boot/dts/at91-sama7g5ek.dts               |  32 ++-
+ arch/arm/boot/dts/lan966x-pcb8291.dts              |  64 ++++++
+ arch/arm/boot/dts/lan966x.dtsi                     | 237 +++++++++++++++++++++
+ arch/arm/boot/dts/sam9x60.dtsi                     |  10 +-
+ arch/arm/boot/dts/sama5d2.dtsi                     |  11 +-
+ arch/arm/boot/dts/sama5d3.dtsi                     |   6 +-
+ arch/arm/boot/dts/sama5d4.dtsi                     |   9 +-
+ arch/arm/boot/dts/sama7g5.dtsi                     | 169 ++++++++++++++-
+ 10 files changed, 522 insertions(+), 27 deletions(-)
+ create mode 100644 arch/arm/boot/dts/lan966x-pcb8291.dts
+ create mode 100644 arch/arm/boot/dts/lan966x.dtsi
+
+-- 
+Nicolas Ferre
