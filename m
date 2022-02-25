@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3EA3C46467
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76237C35276
 	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 976F0C36AEA; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 82241C34113;
+	id 6B326C3410C; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5621FC34105;
 	Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1645809663;
-	bh=6Ltpw4GxPD3Nkn3BQxRD9FiR/yhpv754DQwSmkrLnCY=;
+	bh=AqCkLX+Nkkk8KFZnkgobHin+ZlExrPTPXkKC9+8LPTQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=A6565iW1wRgNeWm+cJ9ho/GG1zxxKlxSIQM3HPC2Af/LtAf6fKq3c/4zhofSbMSw2
-	 UB9bWcnd5whCH7hDyakdbOiUjQfEI42OYSQ1oH4rAUBZWGuk0y53YAdGQ34nZUrb0A
-	 t4+ml0z1eDHQ0mozYWXBKOLdJZkWW4smTDst4060YGlgVDQwMonGtiJ5d/SMRZYZJl
-	 wK2+D5vE5e5kVK8OvBZ0bNqxsheNUtXZ3jNWeu3EJYtyB/VXRGL4/QaT0d4eKh28wj
-	 9Kuq2fckHPs52G357qekh9D6TmCLZxeCX022IJMepTQd03lZOKVUT1slT8MmyDBr+r
-	 oM0zlEnZKaYig==
+	b=i9aNA+x7HsKDihq+UXIe8lCOAguPh272o31+NJO1JW9w1AYrNHjvNVwdWzUjes56m
+	 quRYJaRb9rR7ng+77X38BRs9kHQD828PyKoRxsKtf/HGiudwVSvFZAr10B1frXlhx2
+	 WIB5Usj6FBsZpc+zcSCFKNz1ga5gxWiGOraSe50AZfXcLI8etoxn4++z0UOuqwVZOQ
+	 T2SWuqx/vk9pFGBS7gItambiL62r6kiCiQd9pl81XceybJhUnUs9Q4C1MHPI6SHt8T
+	 /HQnSVU8m9pSGwUw03wZPZGD0XrgTgdbY/TEyRmkW97RGqgUpw9OFTa23f0h2vgCjp
+	 VwFC68ZL0GEBw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6DB3CE6D4BB;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 412B6E6D4BB;
 	Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] arm64: dts: juno: Update for v5.18
+Subject: Re: [GIT PULL] Ux500 DTS updates for v5.18
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164580966344.15608.7701619955827036194.git-patchwork-notify@kernel.org>
+ <164580966326.15608.10790088814227247448.git-patchwork-notify@kernel.org>
 Date: Fri, 25 Feb 2022 17:21:03 +0000
-References: <20220222201812.3338619-1-sudeep.holla@arm.com>
-In-Reply-To: <20220222201812.3338619-1-sudeep.holla@arm.com>
-To: Sudeep Holla <Sudeep.Holla@arm.com>
+References: <CACRpkdaDcEqtSnWzRBnBHVweh2n=Dj3meHG9LND+K0Czb9ORGg@mail.gmail.com>
+In-Reply-To: <CACRpkdaDcEqtSnWzRBnBHVweh2n=Dj3meHG9LND+K0Czb9ORGg@mail.gmail.com>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 22 Feb 2022 20:18:12 +0000 you wrote:
-> Hi ARM SoC Team,
+On Fri, 11 Feb 2022 22:55:57 +0100 you wrote:
+> Hi SoC team,
 > 
-> Please pull !
+> please pull the following Ux500 DTS-related changes into the
+> SoC tree for v5.18! Details in the signed tag.
 > 
-> Regards,
-> Sudeep
+> Yours,
+> Linus Walleij
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] arm64: dts: juno: Update for v5.18
-    https://git.kernel.org/soc/soc/c/1b29d1c1faf3
+  - [GIT,PULL] Ux500 DTS updates for v5.18
+    https://git.kernel.org/soc/soc/c/7743b59fc033
 
 You are awesome, thank you!
 -- 
