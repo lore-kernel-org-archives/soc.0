@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57F09C41535
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3EA3C46467
 	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3EAC7C34102; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 295C3C340FE;
+	id 976F0C36AEA; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 82241C34113;
 	Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1645809663;
-	bh=Fl8bqYL+k7W23yThJzpVaw/Jwi2Nw+gdVHNrIL1M0VI=;
+	bh=6Ltpw4GxPD3Nkn3BQxRD9FiR/yhpv754DQwSmkrLnCY=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=umrxeYGttazcD+whyC6Ly6dBeHpvdGZCKAn8KtZzTLNZRt0NclSvcPF42Ax6mBdCT
-	 YcSp7Iunm6xyPwa3uxjmYwcuXFsx1RS93IYWiaaBT/MKKeC8IEd5qSefY61NCT7G1m
-	 tZotckS3Tf/cQnThBA96oAaE7wKwlufMNmpyVy+HajGC7D6IFEkQpPhNPWpJreQpv3
-	 U0LhsuybwLfQoH6vSmyBNYkTwI/sKEwS5PEZQXmoW/29/NEqBhS9bmrgTIidIj4Fn3
-	 aaw4P8fPYtLKqwdrntCacr1fOFJL1IagL81BpJfeEAOEBHg37+rGjxWm3SL5yw5vBj
-	 EELdn0xcFoIQQ==
+	b=A6565iW1wRgNeWm+cJ9ho/GG1zxxKlxSIQM3HPC2Af/LtAf6fKq3c/4zhofSbMSw2
+	 UB9bWcnd5whCH7hDyakdbOiUjQfEI42OYSQ1oH4rAUBZWGuk0y53YAdGQ34nZUrb0A
+	 t4+ml0z1eDHQ0mozYWXBKOLdJZkWW4smTDst4060YGlgVDQwMonGtiJ5d/SMRZYZJl
+	 wK2+D5vE5e5kVK8OvBZ0bNqxsheNUtXZ3jNWeu3EJYtyB/VXRGL4/QaT0d4eKh28wj
+	 9Kuq2fckHPs52G357qekh9D6TmCLZxeCX022IJMepTQd03lZOKVUT1slT8MmyDBr+r
+	 oM0zlEnZKaYig==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 127C4E6D4BB;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6DB3CE6D4BB;
 	Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] AMDTEE simplification for v5.18
+Subject: Re: [GIT PULL] arm64: dts: juno: Update for v5.18
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164580966307.15608.8907163745199495930.git-patchwork-notify@kernel.org>
+ <164580966344.15608.7701619955827036194.git-patchwork-notify@kernel.org>
 Date: Fri, 25 Feb 2022 17:21:03 +0000
-References: <20220218175632.GA926082@jade>
-In-Reply-To: <20220218175632.GA926082@jade>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+References: <20220222201812.3338619-1-sudeep.holla@arm.com>
+In-Reply-To: <20220222201812.3338619-1-sudeep.holla@arm.com>
+To: Sudeep Holla <Sudeep.Holla@arm.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 18 Feb 2022 18:56:32 +0100 you wrote:
-> Hello arm-soc maintainers,
+On Tue, 22 Feb 2022 20:18:12 +0000 you wrote:
+> Hi ARM SoC Team,
 > 
-> Please pull this small AMDTEE driver simplification to use the LIST_HEAD()
-> macro instead for a global variable.
+> Please pull !
 > 
-> Note that this isn't a usual Arm driver update. This targets AMD instead,
-> but is part of the TEE subsystem.
+> Regards,
+> Sudeep
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] AMDTEE simplification for v5.18
-    https://git.kernel.org/soc/soc/c/bc5ede20b8ec
+  - [GIT,PULL] arm64: dts: juno: Update for v5.18
+    https://git.kernel.org/soc/soc/c/1b29d1c1faf3
 
 You are awesome, thank you!
 -- 
