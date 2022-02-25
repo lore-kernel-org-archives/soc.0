@@ -4,59 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B02CEC3527D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD2E3C3527C
 	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A8368C36AEF; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 924FAC36AE9;
+	id 8D031C36AE7; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 778E0C34111;
 	Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1645809663;
-	bh=RWtev9PToALS+FMSpTsXmhAiLWwBH9C4rX+lSGeLaDY=;
+	bh=cZ/DXkEixht1Flmtkocb573jXrO6C9Hr51K6w4RVHxU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Nqb5zxHpuhjqjnDfT0qOUh24KLg8tU0Cy5gaZV5VPW8FD8SEkUIuLPhWaoz6gr7Kk
-	 r80EPMWxoNFXJGk8/LSMf2R3iR73C8JVe7xknovCUprQX3QpJqdHEgeQHA4UJPojuk
-	 eG4Hxtm712OOG3Xk+msZGKTlicaFIm2xtq+1TRwe86Iz4EMhAIoXy8a43xYCuLlxJk
-	 DqpWM+bxFpH7R/1G1EeX4wcKfoQbibvbqHPnvRJ7CzxmR4MH7uNhkK51+NuO1ojD8H
-	 REkiMFnvP3EzHKWCWckLaUAZUixUhqcfEycvqbudi6Zjf9aKND0MGfDC5VmmWWwtJw
-	 8JalWSUN9Ni8g==
+	b=clq7Q2I/mDyC5KM9CDhFF8vdEaTtI0HE0eOXmMUuSXsFgYxgbCvLCEBYnCFBS52sl
+	 QRd5jo/PtsI04mRcCYz0Smg325JVOhsIkxqaFQXQnwEcow6pyfSElrTSx0OoQq1BMn
+	 Uaj73nhyTrSBLa8SSsK7NTvK7r3BpJ5yiWFIPGF2zXc+cK4uaMAsVyewHJLBY7soVS
+	 8MaV5hHNJI+cJicnKyxbiQCLEHm/Oqm0SWHZPb9ZEmnlY+lzs7ZV8ru4c8GO/kM9ND
+	 H37oH+rq8jEaYdLOmzOrUU0XWTBK+lA9HaplVeTN8R6PDgj1AuGy9XJuIy00YySbCA
+	 lUGvwWbvG38Xg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7E7D8EAC09F;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 649EEF0383A;
 	Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 0/2] Renesas SoC updates for v5.18 (take two)
+Subject: Re: [GIT PULL] ARM: at91: soc for 5.18
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164580966351.15608.5405996312745957591.git-patchwork-notify@kernel.org>
+ <164580966340.15608.1846916733516722549.git-patchwork-notify@kernel.org>
 Date: Fri, 25 Feb 2022 17:21:03 +0000
-References: <cover.1645784465.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1645784465.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+References: <20220225121943.71494-1-nicolas.ferre@microchip.com>
+In-Reply-To: <20220225121943.71494-1-nicolas.ferre@microchip.com>
+To: Nicolas Ferre <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 25 Feb 2022 11:24:32 +0100 you wrote:
-> Hi SoC folks,
+On Fri, 25 Feb 2022 13:19:43 +0100 you wrote:
+> From: Nicolas Ferre <nicolas.ferre@microchip.com>
 > 
-> This is my second pull request for the inclusion of Renesas SoC updates
-> for v5.18.
+> Arnd, Olof,
 > 
-> It consists of two parts:
+> Here are the soc changes for 5.18 for two MPU families from Microchip: AT91 and
+> Polarfire as we agreed with Conor and discussed with Arnd.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] Renesas ARM DT updates for v5.18 (take two)
-    https://git.kernel.org/soc/soc/c/b10e270dc9ec
-  - [GIT,PULL,2/2] Renesas driver updates for v5.18 (take two)
-    https://git.kernel.org/soc/soc/c/f289f1d8a49f
+  - [GIT,PULL] ARM: at91: soc for 5.18
+    https://git.kernel.org/soc/soc/c/022e5220f272
 
 You are awesome, thank you!
 -- 
