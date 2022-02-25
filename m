@@ -4,63 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 449C1C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53679C4321E
 	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1A9BAC340F7; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F0B4BC340F5;
-	Fri, 25 Feb 2022 17:21:02 +0000 (UTC)
+	id 35F26C340FD; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 20649C340FB;
+	Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1645809663;
-	bh=6NSngzaz6kNrmknyKvFGEPtrZ2fEGP/5kqM7QeyHu+s=;
+	bh=vFo7Xwj6sOnyHvnIZLla4d2FLf/8PN+MYJ1R3N8WKb8=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ExLcapVsuo1YBWoeKU7gwE8wvil+Saase7u5lUKrrXESYuPDtBJdxHH+bn9qRpAW5
-	 VaWbjHn/dSM1vw3LxZTtZJclCvulX290+J+aLztVJee3Bvs+kYmIn+st5wqVg8elvc
-	 Hlb/AxQF06CZrr0+XAOraX/+BnaegHMpCcWDnXrDSk749xxI/3bK4zjd9wumWdOBig
-	 TlOEaiBPhQklPUeXtBaWw6Sup8Wb0qI31hcZEoSxWNsdPF8kJvF5tR3y9FU747SEZW
-	 y7Cb1a6dWTc14GQnwbfMuXQ+jFgzp1FG6DAZTmYmF5cBplQg+rLMe9Ylc363bz57ZN
-	 aqXZogwmSEkGw==
+	b=Kg2/Kum4cVQc8OwNum3y/mcKw6R7aqSr0b3ibXOPQ8Ri1J6VWLoxD9EJv/4fgR7Fk
+	 UYaHeZkIkUN6ohsCqQUvhEP0d9/JQ5dZuYeMbFIqoct72l192tJGqQYfynQE3/ZxQO
+	 mgO5lkEpXBbgwSbfs2RH2rH5smH5biBgTAj8g2ECBt2kVOO5h7wgAVfSrg7FKSt989
+	 QOaHPSSxtwnbXoDrcCZpBHu+8Gs1uwdIjC8dDOrJNn1giMgyaUjYpYvJLtujTpp/ap
+	 W0yac1aKTOgOoPMNv2ydgQLAORRii1bhzJPagrbTUGAs+1k8Yr8z6wk0BhYGm9BeQW
+	 OGogKqNb+V1TQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D7A8BF03839;
-	Fri, 25 Feb 2022 17:21:02 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 09296EAC09C;
+	Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 0/4] Renesas SoC updates for v5.18
+Subject: Re: [GIT PULL] Rockchip driver changes for 5.18 #1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164580966287.15608.12934206258097145149.git-patchwork-notify@kernel.org>
-Date: Fri, 25 Feb 2022 17:21:02 +0000
-References: <cover.1644587197.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1644587197.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+ <164580966303.15608.6247429396992314881.git-patchwork-notify@kernel.org>
+Date: Fri, 25 Feb 2022 17:21:03 +0000
+References: <9977257.a15B8eIVjX@phil>
+In-Reply-To: <9977257.a15B8eIVjX@phil>
+To: Heiko Stuebner <heiko@sntech.de>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 11 Feb 2022 14:52:10 +0100 you wrote:
-> Hi SoC folks,
+On Fri, 25 Feb 2022 00:20:26 +0100 you wrote:
+> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 > 
-> This is my first pull request for the inclusion of Renesas SoC updates
-> for v5.18.
+>   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 > 
-> It consists of 4 parts:
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v5.18-rockchip-drivers-1
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/4] Renesas ARM defconfig updates for v5.18
-    (no matching commit)
-  - [GIT,PULL,2/4] Renesas ARM DT updates for v5.18
-    https://git.kernel.org/soc/soc/c/3b34d3a9190f
-  - [GIT,PULL,3/4] Renesas driver updates for v5.18
-    https://git.kernel.org/soc/soc/c/15cc8d030cd7
-  - [GIT,PULL,4/4] Renesas DT binding updates for v5.18
-    https://git.kernel.org/soc/soc/c/8e9e1aeed2c9
+  - [GIT,PULL] Rockchip driver changes for 5.18 #1
+    https://git.kernel.org/soc/soc/c/581a1f8c9a32
 
 You are awesome, thank you!
 -- 
