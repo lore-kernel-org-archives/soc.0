@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CE89C4707A
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 632D4C3525B
 	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5D95FC3410A; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4191DC34104;
+	id 563CEC34108; Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3CF31C34101;
 	Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1645809663;
-	bh=Q+LewTUXtkZZ1SWhFi9zfbVBpLHAIzgq/dgvtDs+810=;
+	bh=8MYzX1ik4Cf7XV3nA8kVN5QdMqAaRwqnN9XapCfkUGY=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=MBGFz5fU4WQX0ghq2uXQhli2TD7xowdK4rIOhQY+/0DtRllTnTNBa5dpE0SPUJtwO
-	 jEh9Nt3fTrJTLhHAacbeE3awoTC/omUODWic+UbKJw+NboZTdyc8Mp0TcU2ozBcQab
-	 QT4bm8OXfh90ea4MHbuZBW1i40vQN8HJtqstADFLmdmRFnFtOG6We9oIelMHryYJxy
-	 NlYyzOLoblrcbdoQF/DF7XhG4Y6vCJN6Ri91XWYDMypxkGzVmiklR4DYtL7N6D73MW
-	 +V6bNRuIj70KA6Isty9pwV7zxKTUbpXHnr9NNvRAQKihwlnQkM0K4C37a2rlDix2yE
-	 wrEoWp382Ik4A==
+	b=Y5j266lTeNrn8LuQPNzLLpuBe2wFHJE0Cf+YSV2y2ZfEoL7lQhrmIgs7VWxLNOeN5
+	 XRyAIedHmQapg+EzUNI/Pr4nDemBhUNiuXeGzIiVS0ZUEX8hjRfoqQ/DXXOKCpFZ/C
+	 KA3YgKtl45QgImuJD2rMQMMv/Pn7CXwgImN3fJQclUtUUESZiz60GZf+3PgVSs/4CK
+	 c9TJIh+R0YcctP6Ornh4CtuM+qjOD8bNimeL70OOYlC/HkDvQ2qyf2g6oqgri0bjM/
+	 c3EQqjkXtetYTiWTZJiS1FKGlcLe7KNQPHp0rodypYaOMV/43LkLL8Wze8MUWKX5sz
+	 VVf9Z14mQda6A==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2E898F03839;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 255F1EAC09F;
 	Fri, 25 Feb 2022 17:21:03 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] STM32 DT changes for v5.18 #1
+Subject: Re: [GIT PULL] Rockchip dts32 changes for 5.18 #1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164580966318.15608.509994138728833956.git-patchwork-notify@kernel.org>
+ <164580966315.15608.4335984990738769804.git-patchwork-notify@kernel.org>
 Date: Fri, 25 Feb 2022 17:21:03 +0000
-References: <893924a9-bcc4-9fa9-4f8e-7f56e77f6854@foss.st.com>
-In-Reply-To: <893924a9-bcc4-9fa9-4f8e-7f56e77f6854@foss.st.com>
-To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+References: <19595245.eudUkVceaq@phil>
+In-Reply-To: <19595245.eudUkVceaq@phil>
+To: Heiko Stuebner <heiko@sntech.de>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,22 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 25 Feb 2022 16:07:00 +0100 you wrote:
-> Hi ARM SoC maintainers,
+On Fri, 25 Feb 2022 00:19:46 +0100 you wrote:
+> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 > 
-> Please consider this first round of STM32 DT updates for v5.18. A tiny
-> round2 will be sent next week.
-> Note that this PR introduces a new DT validation warning:
+>   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 > 
-> arch/arm/boot/dts/stm32mp135f-dk.dt.yaml:0:0:
-> /soc/interrupt-controller@5000d000: failed to match any schema with
-> compatible: ['st,stm32mp13-exti', ...
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v5.18-rockchip-dts32-1
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] STM32 DT changes for v5.18 #1
-    https://git.kernel.org/soc/soc/c/877d1d8112ae
+  - [GIT,PULL] Rockchip dts32 changes for 5.18 #1
+    https://git.kernel.org/soc/soc/c/5a29ea50fc63
 
 You are awesome, thank you!
 -- 
