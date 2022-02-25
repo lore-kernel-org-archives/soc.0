@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF0D5C433FE
-	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 16:47:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE26CC433F5
+	for <soc@archiver.kernel.org>; Fri, 25 Feb 2022 16:47:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AD483C340E7; Fri, 25 Feb 2022 16:47:50 +0000 (UTC)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	id B1400C340F2; Fri, 25 Feb 2022 16:47:53 +0000 (UTC)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 19ED9C340F1;
-	Fri, 25 Feb 2022 16:47:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 19ED9C340F1
+	by smtp.kernel.org (Postfix) with ESMTPS id 1AE31C340E7;
+	Fri, 25 Feb 2022 16:47:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1AE31C340E7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id d28so5408271wra.4;
-        Fri, 25 Feb 2022 08:47:49 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id v2-20020a7bcb42000000b0037b9d960079so2073405wmj.0;
+        Fri, 25 Feb 2022 08:47:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sEAbzHBtsMRbbB0Qh6txLc9CyFxKn7iPshhwUtVfgHQ=;
-        b=JDA4ZNE+ShzjxEoT7HCdrGSDHjmI4W53S9kDi82hQHtD1TB+0VeeJNszlJplwkiaLm
-         XaAnydo8W5AfInN8JidJLp24J45DPfRObUUNFtPKXZAd9HTIcXra5wL/+MtDk+9DOdXC
-         H36Gp4ELLLsPe2Fhaq/iK63MVgiqbmEeFNoR1YIWkAhcJ9zQ40gh/1MsCydWMzCpYkB3
-         FqJNbYkoIrB6dfmRDqVFXpoHJy5ff3kvfnduw/LU5uev+BnXKmXWY1hBoBV8NxQnlgmR
-         YsFBsMtxJ1KhZ7Rgr5SZBg9ODWRodMjbHfGGs8kuUOQOrfwPNaTjdtA5AkKAjmrnYyED
-         NIFA==
+        bh=hD6FBWW8TGRI8bjBMq/DwmPzCMaP/5KqoNaN3Rmzc0Y=;
+        b=jCmpHJkDeIl4puqOnr5hqJxhlhlNFaWx6qnqfi24+aD3EtRJUE9iWGzKchTfXvq9Qi
+         Jw4mPnhkKmrIryrnCgsFyN+94gXB4GtClp5UQ4XL/k7TKPE6715AJfg/QLeNKa3h0ggI
+         fBTIAeG25i18M+nufmN++VTYenugmAWgfg98a2LWqCACenzY04H3yI340Bd6DJHmn0U9
+         aiACJxEvWi86/lBs+flIiWLNmdMTshRLeb1+vZDnuxXOgQTz+vNdbV2A3mC9CrTB41Sq
+         h9y6w4NtUW5tk0woyQmNea0aPpavwSNRUR9xn8OnLSMO4lp4YAfeLETbHO90BTH3N+tc
+         Sxig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sEAbzHBtsMRbbB0Qh6txLc9CyFxKn7iPshhwUtVfgHQ=;
-        b=ezvmKhg/ao3EZ0CwkVccMrfcU/oUpx0AqOdO+zEz7XEI0UtQ1bONlsA3fy1pKymzYW
-         mhT3k22YAOnneRRMknLwG60jMyynkiXQtHy783XOm5ZvswCOJYb6LgKv9AXq4TVUnVjo
-         yD6PeGfGbB2dn9VA4j8q3dK/hqDe10XyJbt2DPx2kkKncVD8f1JyQh/fMttv5fy4EpMl
-         4gJXzXDaZ0SZ1EGT2qUWgg7BHgv9oN6bLWzHRxeP7IoWEr6jot2PtJtbqKbGwtNHGgiS
-         a4VmPdGB7yrx7gmV5awgilmZt/XxcZ+2rwM8nVFU/6a/JIlj2l1DziAjjNWwPzwFyvGI
-         SZMg==
-X-Gm-Message-State: AOAM532IH1SZ/37vmdpFZmJt0xPd0LFEB0OHL2ZAhxQ/O9vz/fEBI6qr
-	CIAl0++n4PBdo84syGqP1+GmSRVCqS0=
-X-Google-Smtp-Source: ABdhPJwriQC0+MVdvf+aMvzIUfh6lPOimFqwgYYwA+ZqNrems5vinnQzgGzPvup8iSKetAwW57IoQg==
-X-Received: by 2002:adf:9d84:0:b0:1ed:f546:bd8b with SMTP id p4-20020adf9d84000000b001edf546bd8bmr6442275wre.375.1645807668017;
-        Fri, 25 Feb 2022 08:47:48 -0800 (PST)
+        bh=hD6FBWW8TGRI8bjBMq/DwmPzCMaP/5KqoNaN3Rmzc0Y=;
+        b=O/xg+jvBtGNqPcmbF8lv301a0fV/xtrwuN3Ah6tMf/GslcCi3pTfTDeuQ9/gomf8Um
+         2MqzeHWobmTxU2p9GoFZF3hcBm8f4C2R7XLD/kAgnvtYFpCGVJJnVLm9BSu1eykrAq6A
+         mC6IKfbo/1hY/ACrWUvau17oTScYZNFXal4jpy0VxAXhn+HuLr/cP86Hz0XFqfZRjqiB
+         v7KAehqSTUUzvPPE4BpQx6mBhcP2+/WJUs449sSAv8uXn2Gu1L5TUifCCasMfpPzHlry
+         cy1aomelQ5HURh6BLCxyxSh40JHVkQ4ChusYwKgqJ7wvpFaM5+Pc129ClNIGDESO5Mp5
+         BKbw==
+X-Gm-Message-State: AOAM530skF+ndzZ2/mAP2Nzw3X1gScvi42VGGpsDXAuN8FgfFEirh9cW
+	Nhz6rHg3Gnwq01pmZN2XEi1nwFkDJ4I=
+X-Google-Smtp-Source: ABdhPJyq9w7VYOXIV9r07iuX+c4nUNhw0Aeaeu0MikSM9rcLfa/L9+DiMsbIZEu367xMdWs+c0waeA==
+X-Received: by 2002:a05:600c:6c5:b0:380:dda2:d562 with SMTP id b5-20020a05600c06c500b00380dda2d562mr3550075wmn.138.1645807670826;
+        Fri, 25 Feb 2022 08:47:50 -0800 (PST)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id f10-20020a05600c154a00b0037bbbc15ca7sm11923744wmg.36.2022.02.25.08.47.46
+        by smtp.gmail.com with ESMTPSA id f10-20020a05600c154a00b0037bbbc15ca7sm11923928wmg.36.2022.02.25.08.47.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 08:47:47 -0800 (PST)
+        Fri, 25 Feb 2022 08:47:49 -0800 (PST)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -57,9 +57,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/5] dt-bindings: Changes for v5.18-rc1
-Date: Fri, 25 Feb 2022 17:47:38 +0100
-Message-Id: <20220225164741.1064416-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/5] ARM: tegra: Device tree changes for v5.18-rc1
+Date: Fri, 25 Feb 2022 17:47:39 +0100
+Message-Id: <20220225164741.1064416-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220225164741.1064416-1-thierry.reding@gmail.com>
 References: <20220225164741.1064416-1-thierry.reding@gmail.com>
@@ -75,43 +75,46 @@ The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.18-dt-bindings
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.18-arm-dt
 
-for you to fetch changes up to a4ad66da3fccebdcbd53d55c035d5851b73f8bcb:
+for you to fetch changes up to 0092c25b541a5422d7e71892a13c55ee91abc34b:
 
-  dt-bindings: memory: Add Tegra234 PCIe memory (2022-02-24 20:00:25 +0100)
+  ARM: tegra: tamonten: Fix I2C3 pad setting (2022-02-25 14:45:43 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-dt-bindings: Changes for v5.18-rc1
+ARM: tegra: Device tree changes for v5.18-rc1
 
-This contains additions to various DT bindings includes (such as clocks,
-resets, power domains, memory controller clients and SMMU stream IDs)
-for Tegra234.
+The changes in this set are cleanups and fixes for 32-bit Tegra device
+tree files. With these, some json-schema validation errors are fixed.
 
 ----------------------------------------------------------------
-Akhil R (2):
-      dt-bindings: Add headers for Tegra234 I2C
-      dt-bindings: Add headers for Tegra234 PWM
+Dmitry Osipenko (3):
+      ARM: tegra: asus-tf101: Enable S/PDIF and HDMI audio
+      ARM: tegra: tf700t: Rename DSI node
+      ARM: tegra: paz00: Add MMC aliases
 
-Mohan Kumar (2):
-      dt-bindings: Add HDA support for Tegra234
-      dt-bindings: Document Tegra234 HDA support
+Julius Werner (1):
+      ARM: tegra: Update jedec,lpddr2 revision-id binding
 
-Sameer Pujar (1):
-      dt-bindings: Add Tegra234 APE support
+Oleksij Rempel (1):
+      ARM: tegra: Fix ethernet node names
 
-Vidya Sagar (3):
-      dt-bindings: Add Tegra234 PCIe clocks and resets
-      dt-bindings: power: Add Tegra234 PCIe power domains
-      dt-bindings: memory: Add Tegra234 PCIe memory
+Richard Leitner (1):
+      ARM: tegra: tamonten: Fix I2C3 pad setting
 
- .../bindings/sound/nvidia,tegra30-hda.yaml         |   3 +
- include/dt-bindings/clock/tegra234-clock.h         | 135 ++++++++++++++++++++-
- include/dt-bindings/memory/tegra234-mc.h           |  75 ++++++++++++
- include/dt-bindings/power/tegra234-powergate.h     |  22 ++++
- include/dt-bindings/reset/tegra234-reset.h         |  45 ++++++-
- 5 files changed, 277 insertions(+), 3 deletions(-)
- create mode 100644 include/dt-bindings/power/tegra234-powergate.h
+Svyatoslav Ryhel (1):
+      ARM: tegra: transformer: Drop reg-shift for Tegra HS UART
+
+ arch/arm/boot/dts/tegra20-asus-tf101.dts               | 12 +++++++++++-
+ arch/arm/boot/dts/tegra20-colibri.dtsi                 |  2 +-
+ arch/arm/boot/dts/tegra20-paz00.dts                    |  6 ++++--
+ arch/arm/boot/dts/tegra20-tamonten.dtsi                |  6 +++---
+ arch/arm/boot/dts/tegra30-asus-tf700t.dts              |  2 +-
+ arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi |  2 ++
+ arch/arm/boot/dts/tegra30-colibri.dtsi                 |  2 +-
+ arch/arm/boot/dts/tegra30-ouya.dts                     |  2 +-
+ arch/arm/boot/dts/tegra30-pegatron-chagall.dts         |  2 ++
+ 9 files changed, 26 insertions(+), 10 deletions(-)
