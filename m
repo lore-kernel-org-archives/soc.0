@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B1CCC433F5
-	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 15:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AAC1C433EF
+	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 15:17:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 37E27C340E7; Mon, 28 Feb 2022 15:17:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9031EC340F3;
-	Mon, 28 Feb 2022 15:17:11 +0000 (UTC)
+	id 36849C340EE; Mon, 28 Feb 2022 15:17:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A7EC340F4;
+	Mon, 28 Feb 2022 15:17:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646061433;
-	bh=P8hImRLDB7ZfS50bo83+vbX36f99DmRmsmlB+TiGQu4=;
+	s=k20201202; t=1646061435;
+	bh=ABF6dbrUaKzUlF/SwKAqqVq75hfXHE5SYlIHD/ePnBk=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YkoaP/gIaoNZTjE1CHdD8HwxrXqsifuZJDxcwcdeo7FnpIyBr69BrkOaKvpiBvQcE
-	 X0u/T2JZvUxt9iHSsdrQlv9jPY9P1rIXbJOem6V0Gb58MKs0Spyg/HM/eauAcAMHfu
-	 ZaLl+AlpHFNfI7PBg9UIlZ/rdnkeM1JSgjE4iXo/8oAT1ddFVw/jcQKKxPzN5KdxJ2
-	 cJmdJA1DPXRoDswsqxuGc2qQeQeMMbFYjuz5JEXX3Uzg1VK3EgPp29j+liapZVBKJc
-	 rs7/F+XVfXRByPeStrQNt7NB4mCTF0qflqNavEMr95bV0TrJiKQ9jV0oVGOuc9sZSl
-	 DkvnC8O7b41Mg==
+	b=dazKWcmNm+EPdtIxCcxyyYn1iQK/WXwfZocMZen7GSAHgrI+JYoFByL8LtKK6TkFU
+	 aNNr+8n0izxkzLuj6/uMJPT2C2XZbCKMaNfVd3LIu9/AJMJJZz1Pn01cs6hvGg/Cyj
+	 JujzP3VhRPfNCfadTCsScbYe4LIth9PxwnvmLm+ScAG9957/a4b08eP5+p3235Pr4O
+	 8LjjvN1Z+MZByoF57OCUxarD1dIFaK34FfyaIEdNg9PWA0qz8uQOWTfoEuAr7fX+9m
+	 1Jc2NeGU1ePDLE2Sn8V61uwqgNoWiH0spypBJ597sEjTqtzMJjLVzm0yKpNJPkiaYT
+	 Ca+wop4U8GTQQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
-	Neil Armstrong <narmstrong@baylibre.com>,
-	soc@kernel.org
+	soc@kernel.org,
+	Neil Armstrong <narmstrong@baylibre.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org
-Subject: Re: [GIT PULL] arm64: dts: amlogic updates for v5.18
-Date: Mon, 28 Feb 2022 16:16:38 +0100
-Message-Id: <164606116967.3364867.17248022329754081693.b4-ty@arndb.de>
+	linux-oxnas@groups.io
+Subject: Re: [PULL] oxnas DT for 5.18
+Date: Mon, 28 Feb 2022 16:16:39 +0100
+Message-Id: <164606117042.3364867.11066543511898094615.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <a7cd9937-d441-3e1f-9709-8e80cc8814f1@baylibre.com>
-References: <a7cd9937-d441-3e1f-9709-8e80cc8814f1@baylibre.com>
+In-Reply-To: <530fd72c-e28a-4d5e-cb8d-8b3fbc1df89a@baylibre.com>
+References: <530fd72c-e28a-4d5e-cb8d-8b3fbc1df89a@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 21 Feb 2022 12:38:47 +0100, Neil Armstrong wrote:
-> Here's a set of Amlogic ARM64 DT changes for v5.18.
-> 
-> Notably, this adds 5 new board and a new SoC family from Amlogic, and minor additions.
+On Mon, 28 Feb 2022 10:00:24 +0100, Neil Armstrong wrote:
+> Please pull this single change enabling ethernet on the OX810SE based board.
 > 
 > Neil
 > 
-> The following changes since commit 0a62b3cc0af9322e650fe89bea0bacdedf01960a:
+> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+> 
+>    Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: 3b364358cb9e46ec4a3c9d75f1b4ec8ec863f6e7
+merge commit: bb67752b505e269c3d527f8c57d1055235f58a81
 
        Arnd
