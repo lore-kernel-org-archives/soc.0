@@ -1,146 +1,103 @@
-Return-Path: <SRS0=M0Ae=TL=gmail.com=joel.stan@kernel.org>
+Return-Path: <SRS0=eFBj=TL=linaro.org=sumit.garg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3009C433F5
-	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 05:56:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E9E3C433EF
+	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 08:05:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7B289C340F1; Mon, 28 Feb 2022 05:56:44 +0000 (UTC)
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	id 06F94C340F1; Mon, 28 Feb 2022 08:05:59 +0000 (UTC)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B4B2CC340E7
-	for <soc@kernel.org>; Mon, 28 Feb 2022 05:56:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B4B2CC340E7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f48.google.com with SMTP id w7so11562998qvr.3
-        for <soc@kernel.org>; Sun, 27 Feb 2022 21:56:43 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 3A393C340F2
+	for <soc@kernel.org>; Mon, 28 Feb 2022 08:05:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3A393C340F2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f180.google.com with SMTP id s25so16230142lji.5
+        for <soc@kernel.org>; Mon, 28 Feb 2022 00:05:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=6xc8Wlk7+FaQnbhDm/63togy1hcoxDMaWox1JtA0XU8=;
-        b=MnpXaqrNLYda6gdjpPcqdmnNaF4ziI+u7yZbxS77qpgHnRAxVQmSm3AFEn8kqnIMas
-         ri4XXQrF7oCaG1H7k6+YH4SGLBXpJamW0KCDY+z+zoeBBhiNNXD3IMrR1+Gs5XIOsCOE
-         oeqOl/h/9SgGTikzEnkdu7bH2dQrDua0CPpGo=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qH7UqPayT5oaUTBU7kQaCR40s9AZiilL0cyOk7nWEfk=;
+        b=vmi9w5dJvill6iQB4QyeowMBPUBdCmijp9xq2eP82o3c2N7rH/TWHtjn3h+3w4EJD1
+         mnUFdvQF9ZTt5noYKh9EkQVeEEdDMUBb8aDT/imYI+FVdkXMX708R9IWhK1wNwAlb8EV
+         GLrAwqJ89AGTApk/vnbtmDey2c6/5pAwfonJYsULrAv67Aj0ttCUa0GqJLrGtIf3rO/M
+         Bz0SeXJC3HMMo+zD3zxkKUSdtZTlUhGPq5nlIMICD/VxiIQOKi+zeZSJ5FbreXaUqiSH
+         RxPTSDhWudn/WSMhqjSJcizTROPZt6hLHuapAK6fB4nRdCBLiERSgnHLhWO1FQkdR2f+
+         uOZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=6xc8Wlk7+FaQnbhDm/63togy1hcoxDMaWox1JtA0XU8=;
-        b=eksQtSsnTYD1aHHoJxt2fRnJJlTysEgsNaywTGPM6l+Yp6Rgm2uqmxBEX1Ipqq2y6E
-         bS1XRmeCAgm5/DCXJ8dlUYSus1xFrgc2YNQinvgOASAmICtBT//O/dACXWIh0qbBqZoa
-         c0vDA7SkwbHl62e/aHwAPezyst1r3ki/xVzsEPqIV1hSGNtpdheqXh99S+MtD1t0JOdr
-         lyUeFeCe6MSuRY1JRZGT4UEbTnNRoKIygNv4gzf88x7FupWAmXZDNoC3nv4AjYRoBGVP
-         AYXycttgfy7VRjUlmkOwVr1gQCGWhWAwGqtW9Oag2YwWH4EyDs6VOBxceyzmE0gI+xxD
-         Qzzw==
-X-Gm-Message-State: AOAM530bqUiJdXb9gz3BeAtRxaHdrfNXBytUjwnIVc6FFB6Bgj/ctAaa
-	RxI0vpKoJ3aa0iJ4by4hAm8CXH91DDPEWPufeys1zckvQhhjnA==
-X-Google-Smtp-Source: ABdhPJzDXu9DZCz+hqMVPfZ2AyE/cJra0N1jOLfN3vAnmS2EO8d8+f1POTjpJOshlctAIDo3t3e8HYECm4oOwLzh7Yk=
-X-Received: by 2002:a05:6214:19c4:b0:432:8bd1:d8d7 with SMTP id
- j4-20020a05621419c400b004328bd1d8d7mr13117126qvc.65.1646027801875; Sun, 27
- Feb 2022 21:56:41 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qH7UqPayT5oaUTBU7kQaCR40s9AZiilL0cyOk7nWEfk=;
+        b=inTodY6QmpOOEFimpn7YvL7GOFS/nuU1Pai6l/qxC6wSELVPP3NjRjhAkKT8N36BmE
+         jpCb2Mt+ic1tWRSJNCeMEURyc9xRqT9YRUTNuxYzjDFnHKiCMhh9o2w+PcqZuyNNp7SZ
+         a20mCRngdtfVtO4RXw8O+DEZPTFyge0oiiySlOAGzt5DfJOu6AOjzSmsaDazwOJEA2It
+         o6LxR+0rwZG+VH/Nel8fan1jPJJIklpP/bQQtoSGilCfyOkq10b8FTztEjVAcXGykwCm
+         c9tfYYi0soxTgGfZjYRhIjL/ST80pu7V7hs4v+JLQw+IDrqKknv6It1shaSWbI2GOp+6
+         iXUg==
+X-Gm-Message-State: AOAM532V4ch7EcGekBAs9PifNDWKZMUE5u0v0jSUnxXRtDsFCHmzRB8J
+	Pmuy9clwOXg0KAPt3FuIv0zYw68oW/y5/bIpk9arlw==
+X-Google-Smtp-Source: ABdhPJw+MMDt8ov0Fc43zExaO4e6jJLK8k4t02Jj0OyzwtYgfx9NmHVdlYCpchMD8hJN0vSvdzAYRHIc2bZgiIEj48k=
+X-Received: by 2002:a2e:8895:0:b0:246:3e9a:df64 with SMTP id
+ k21-20020a2e8895000000b002463e9adf64mr13683094lji.323.1646035555781; Mon, 28
+ Feb 2022 00:05:55 -0800 (PST)
 MIME-Version: 1.0
-From: Joel Stanley <joel@jms.id.au>
-Date: Mon, 28 Feb 2022 05:56:30 +0000
-Message-ID: <CACPK8XdUXy5cnEDKmNirtByNMBGCjXwZpdKqJ0ytc0f34vzbBA@mail.gmail.com>
-Subject: [GIT PULL v2] ARM: aspeed: devicetree changes for 5.18
+References: <20220218092010.1327309-1-hasegawa-hitomi@fujitsu.com>
+ <CAK8P3a027OWYrRDm3r930pYo+He7bqVSEpQKjM9od1W8ciamyw@mail.gmail.com>
+ <OSZPR01MB70508B35657B539FF4FA28F6EB3B9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
+ <OSZPR01MB7050EF799D97D05A8C4597E7EB3E9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
+ <CAK8P3a0T1eP9a_1UhYRg0wHBsjyLLORoKB+44PAPM4zj3ryVcA@mail.gmail.com>
+In-Reply-To: <CAK8P3a0T1eP9a_1UhYRg0wHBsjyLLORoKB+44PAPM4zj3ryVcA@mail.gmail.com>
+From: Sumit Garg <sumit.garg@linaro.org>
+Date: Mon, 28 Feb 2022 13:35:44 +0530
+Message-ID: <CAFA6WYMqO9rnHaYgyrY=+zV9saS1jrayiVoB_FwSm_yCBRhu5g@mail.gmail.com>
+Subject: Re: [PATCH] soc: fujitsu: Add A64FX diagnostic interrupt driver
+To: Arnd Bergmann <arnd@arndb.de>, 
+	"hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Cc: Andrew Jeffery <andrew@aj.id.au>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	linux-aspeed <linux-aspeed@lists.ozlabs.org>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"jirislaby@kernel.org" <jirislaby@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	SoC Team <soc@kernel.org>, Olof Johansson <olof@lixom.net>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Hello Soc maintainers,
+Hi Arnd, Hitomi,
 
-Here are the aspeed bits for v5.18, with the tag on the correct branch
-this time.
+On Fri, 25 Feb 2022 at 16:50, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Feb 25, 2022 at 11:35 AM hasegawa-hitomi@fujitsu.com
+> <hasegawa-hitomi@fujitsu.com> wrote:
+> >
+> > Hi Greg and Jiri,
+> >
+> > I'm trying to implement a feature for A64FX that will panic when
+> > a diagnostic interrupt is received.
+> > Arnd suggested that handle_sysrq() should be used
+> > but I'm wonderingif it's ok to call it in NMI.
+> > Would you please let me know if we can call handle_sysrq() in NMI?
+>
+> I see some work from Sumit Garg to make it possible, but this was never
+> merged, so presumably it is not safe:
+>
+> https://lore.kernel.org/linux-arm-kernel/CAFA6WYOWHgmYYt=KGXDh2hKiuy_rQbJfi279ev0+s-Qh7L21kA@mail.gmail.com/t/#m2b5006f08581448020eb24566927a104d0b95c44
+>
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+Yeah it had some tricky bits but it wasn't the reason for the work
+being stalled. Actually it turned out to be cumbersome to allow all
+8250 UARTs to be driven from NMI interrupts as well. But given this
+special diagnostic interrupt on A64FX turned as pseudo NMI, it
+shouldn't be that hard to test it with this [1] minimal patch.
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+[1] https://lkml.org/lkml/2022/2/28/83
 
-are available in the Git repository at:
+-Sumit
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
-tags/aspeed-5.18-devicetree-2
-
-for you to fetch changes up to 09603f805ab69dbf18015363c2a00001647e89f2:
-
-  ARM: dts: aspeed: p10bmc: Enable ftrace in ramoops buffer
-(2022-02-28 15:46:12 +1030)
-
-----------------------------------------------------------------
-ASPEED device tree updates for 5.18
-
- - New machines
-
-  * Quanta S6Q AST2600 BMC
-  * ASRock ROMED8HM3 AST2500 BMC, a half-width, single-socket Epyc
-    server board
-
- - Facebook's Bletchley has a large update for production hardware
-
- - Ampere's Mt Jade has a number of updates
-
- - Small clenaups and additions for Everest, Rainier and Tacoma, and the
-   flash layout
-
-----------------------------------------------------------------
-Andrew Geissler (2):
-      ARM: dts: aspeed: everest: Label reset-cause-pinhole GPIO
-      ARM: dts: aspeed: rainier: Label reset-cause-pinhole GPIO
-
-Andrew Jeffery (1):
-      ARM: dts: aspeed: tacoma: Clean up KCS nodes
-
-Eddie James (3):
-      ARM: dts: aspeed: rainier and everest: Enable UHCI
-      ARM: dts: aspeed: tacoma: Remove CFAM reset GPIO
-      ARM: dts: aspeed: p10bmc: Enable ftrace in ramoops buffer
-
-George Hung (1):
-      ARM: dts: aspeed: Add device tree for Quanta S6Q BMC
-
-Joel Stanley (3):
-      ARM: dts: aspeed: rainier: Remove SPI NOR controllers
-      ARM: dts: aspeed: rainer: Add RTC battery gpio name
-      ARM: dts: aspeed: everest: Add RTC battery gpio name
-
-Potin Lai (10):
-      ARM: dts: aspeed: bletchley: Switch sled numbering to 1-based
-      ARM: dts: aspeed: bletchley: Separate leds into multiple groups
-      ARM: dts: aspeed: bletchley: Update gpio-line-names
-      ARM: dts: aspeed: bletchley: Update fmc configurations
-      ARM: dts: aspeed: bletchley: Switch to spi-gpio for spi2
-      ARM: dts: aspeed: bletchley: Add interrupt support for sled io expander
-      ARM: dts: aspeed: bletchley: Add shunt-resistor for ADM1278
-      ARM: dts: aspeed: bletchley: Add INA230 sensor on each sled
-      ARM: dts: aspeed: bletchley: Enable mdio3 bus
-      ARM: dts: aspeed: bletchley: Cleanup redundant nodes
-
-Quan Nguyen (5):
-      ARM: dts: aspeed: mtjade: Enable secondary flash
-      ARM: dts: aspeed: mtjade: Update rtc-battery-voltage-read-enable pin
-      ARM: dts: aspeed: mtjade: Update host0-ready pin
-      ARM: dts: aspeed: mtjade: Rename GPIO hog nodes to match schema.
-      ARM: dts: aspeed: mtjade: Move all adc sensors into iio-hwmon node
-
-Zev Weiss (2):
-      ARM: dts: Fix OpenBMC flash layout label addresses
-      ARM: dts: aspeed: Add ASRock ROMED8HM3 BMC
-
- arch/arm/boot/dts/Makefile                         |   2 +
- arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts     |  26 +-
- arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts  | 259 +++++++++
- .../arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 320 +++++++----
- arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts       |  11 +-
- arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts       |  33 +-
- arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts        |  12 +-
- arch/arm/boot/dts/aspeed-bmc-quanta-s6q.dts        | 610 +++++++++++++++++++++
- arch/arm/boot/dts/openbmc-flash-layout-64.dtsi     |   2 +-
- arch/arm/boot/dts/openbmc-flash-layout.dtsi        |   2 +-
- 10 files changed, 1112 insertions(+), 165 deletions(-)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-quanta-s6q.dts
+> Sumit has worked on some related areas as well, and may have additional
+> ideas for you.
+>
+>         Arnd
